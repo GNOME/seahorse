@@ -25,9 +25,9 @@ AC_ARG_ENABLE(gpg-check,
 if test	"$DO_CHECK" = "yes"; then
   min_gnupg_version=1.2.1
   AC_PATH_PROG(GNUPG, gpg, no)
-  AC_MSG_CHECKING(for GnuPG >= $min_gnupg_version)
-  ok=no
-  if test "$GNUPG" != "no" ; then
+  ok="no"
+  if test "$GNUPG" != "no"; then
+  	AC_MSG_CHECKING(for GnuPG >= $min_gnupg_version)
   	req_major=`echo $min_gnupg_version | \
 		sed 's/\([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\)/\1/'`
 	req_minor=`echo $min_gnupg_version | \
@@ -41,14 +41,14 @@ if test	"$DO_CHECK" = "yes"; then
 		sed 's/^gpg (GnuPG) \([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\).*/\2/'`
 	micro=`echo $gnupg_version | \
 		sed 's/^gpg (GnuPG) \([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\).*/\3/'`
-  fi
 
-  if test "$major" -eq "$req_major"; then
-     if test "$minor" -eq "$req_minor"; then
-  	if test "$micro" -ge "$req_micro"; then
-	       ok=yes
-        fi
-     fi
+	  if test "$major" -eq "$req_major"; then
+	     if test "$minor" -eq "$req_minor"; then
+	  	if test "$micro" -ge "$req_micro"; then
+		       ok="yes"
+	        fi
+	     fi
+	  fi
   fi
   
   if test "$ok" = "yes"; then
@@ -63,15 +63,12 @@ fi
 dnl **********
 dnl GPGME
 dnl **********
-dnl The line below only checks for versions >= 0.3.14, so it doesn't 
-dnl is valid for us. Cloning part og gpgme.m4 macro here.
-dnl AM_PATH_GPGME(0.3.14)
 
+ok="no"
 min_gpgme_version=0.3.14
-AC_PATH_PROG(GPGME_CONFIG, gpgme-config, no)
-AC_MSG_CHECKING(for GPGME - version >= $min_gpgme_version)
-ok=no
-if test "$GPGME_CONFIG" != "no" ; then
+AC_PATH_PROG(GPGME_CONFIG, gpgme-config, "failed")
+if test $GPGME_CONFIG != "failed" ; then
+      AC_MSG_CHECKING(for GPGME - version >= $min_gpgme_version)
       req_major=`echo $min_gpgme_version | \
 		 sed 's/\([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\)/\1/'`
       req_minor=`echo $min_gpgme_version | \
@@ -85,21 +82,22 @@ if test "$GPGME_CONFIG" != "no" ; then
                  sed 's/\([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\).*/\2/'`
       micro=`echo $gpgme_config_version | \
 		 sed 's/\([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\).*/\3/'`
-fi
-if test "$major" -eq "$req_major"; then
-   if test "$minor" -eq "$req_minor"; then
-     if test "$micro" -ge "$req_micro"; then
-       ok=yes
-     fi
-   fi
+
+	if test "$major" -eq "$req_major"; then
+	   if test "$minor" -eq "$req_minor"; then
+	     if test "$micro" -ge "$req_micro"; then
+	       ok="yes"
+	     fi
+	   fi
+	fi
 fi
 
-if test $ok = yes; then
+if test $ok = "yes"; then
   GPGME_CFLAGS=`$GPGME_CONFIG --cflags`
   GPGME_LIBS=`$GPGME_CONFIG --libs`
   AC_MSG_RESULT(yes)
 else
-  AC_MSG_ERROR(Seahorse $min_gpgme_version needed)
+  AC_MSG_ERROR(GPGME $min_gpgme_version needed)
 fi
 
 
