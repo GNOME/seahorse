@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-04 15:55-0400\n"
-"PO-Revision-Date: 2004-10-04 22:06-0400\n"
+"POT-Creation-Date: 2004-10-09 11:13-0400\n"
+"PO-Revision-Date: 2004-10-09 22:06-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: English/Canada <adamw@FreeBSD.org>\n"
 "MIME-Version: 1.0\n"
@@ -192,7 +192,8 @@ msgstr ""
 msgid ""
 "This specifies the default key to use for certain operations, mainly signing."
 msgstr ""
-"This specifies the default key to use for certain operations (mainly signing)."
+"This specifies the default key to use for certain operations (mainly "
+"signing)."
 
 #: data/seahorse.schemas.in.h:24
 msgid "Whether to always encrypt to default key"
@@ -206,17 +207,27 @@ msgstr "Whether to use ASCII Armour"
 msgid "Whether to use canonical text mode"
 msgstr "Whether to use canonical text mode"
 
-#: libseahorse/seahorse-context.c:398
+#: libseahorse/seahorse-context.c:400
 #, c-format
 msgid "Loading key %d"
 msgstr "Loading key %d"
 
-#: libseahorse/seahorse-context.c:428
+#: libseahorse/seahorse-context.c:430
+#, c-format
+msgid "Loaded %d key pair"
+msgstr "Loaded %d key pair"
+
+#: libseahorse/seahorse-context.c:430
 #, c-format
 msgid "Loaded %d key pairs"
 msgstr "Loaded %d key pairs"
 
-#: libseahorse/seahorse-context.c:449
+#: libseahorse/seahorse-context.c:451
+#, c-format
+msgid "Loaded %d key"
+msgstr "Loaded %d key"
+
+#: libseahorse/seahorse-context.c:451
 #, c-format
 msgid "Loaded %d keys"
 msgstr "Loaded %d keys"
@@ -226,15 +237,15 @@ msgstr "Loaded %d keys"
 msgid "Loaded %d new keys"
 msgstr "Loaded %d new keys"
 
-#: libseahorse/seahorse-key-store.c:337
+#: libseahorse/seahorse-key-store.c:336
 msgid "Name"
 msgstr "Name"
 
-#: libseahorse/seahorse-key-store.c:340
+#: libseahorse/seahorse-key-store.c:339
 msgid "Key ID"
 msgstr "Key ID"
 
-#: libseahorse/seahorse-key-store.c:395
+#: libseahorse/seahorse-key-store.c:394
 #, c-format
 msgid "Listed %d keys"
 msgstr "Listed %d keys"
@@ -265,50 +276,60 @@ msgid "Passphrase for key"
 msgstr "Passphrase for key"
 
 #: libseahorse/seahorse-recipients-store.c:131
-#: src/seahorse-key-manager-store.c:290
+#: src/seahorse-key-manager-store.c:289
 msgid "Validity"
 msgstr "Validity"
 
-#: libseahorse/seahorse-recipients.c:77
+#: libseahorse/seahorse-recipients.c:82
 #, c-format
-msgid "Selected %d not fully valid keys and %d fully valid keys"
-msgstr "Selected %d not fully valid keys and %d fully valid keys"
+msgid "Selected %d keys"
+msgstr "Selected %d keys"
+
+#: libseahorse/seahorse-recipients.c:88
+#, c-format
+msgid "Selected %d not fully valid key"
+msgstr "Selected %d not fully valid key"
+
+#: libseahorse/seahorse-recipients.c:88
+#, c-format
+msgid "Selected %d keys (%d not fully valid)"
+msgstr "Selected %d keys (%d not fully valid)"
 
 #: libseahorse/seahorse-recipients.glade.h:1
 msgid "Choose Keys"
 msgstr "Choose Keys"
 
-#: libseahorse/seahorse-signatures.c:36
-msgid "Signing key not in key ring"
-msgstr "Signing key not in key ring"
-
-#: libseahorse/seahorse-signatures.c:40
-msgid "Bad Signature"
-msgstr "Bad Signature"
-
-#: libseahorse/seahorse-signatures.c:44
-msgid "Not a signature"
-msgstr "Not a signature"
-
-#: libseahorse/seahorse-signatures.c:48
-msgid "Verification Error"
-msgstr "Verification Error"
-
-#: libseahorse/seahorse-signatures.c:78
+#: libseahorse/seahorse-signatures.c:42
 msgid "Good, signing key expired"
 msgstr "Good, signing key expired"
 
-#: libseahorse/seahorse-signatures.c:81
+#: libseahorse/seahorse-signatures.c:46
 msgid "Good, signature expired"
 msgstr "Good, signature expired"
 
-#: libseahorse/seahorse-signatures.c:84
+#: libseahorse/seahorse-signatures.c:50
 msgid "Good, signing key certificate revoked"
 msgstr "Good, signing key certificate revoked"
 
-#: libseahorse/seahorse-signatures.c:87 src/seahorse-key-properties.c:364
+#: libseahorse/seahorse-signatures.c:54 src/seahorse-key-properties.c:364
 msgid "Good"
 msgstr "Good"
+
+#: libseahorse/seahorse-signatures.c:58
+msgid "Signing key not in key ring"
+msgstr "Signing key not in key ring"
+
+#: libseahorse/seahorse-signatures.c:61
+msgid "Bad Signature"
+msgstr "Bad Signature"
+
+#: libseahorse/seahorse-signatures.c:64
+msgid "Not a signature"
+msgstr "Not a signature"
+
+#: libseahorse/seahorse-signatures.c:67
+msgid "Verification Error"
+msgstr "Verification Error"
 
 #. created
 #: libseahorse/seahorse-signatures.glade.h:1 src/seahorse-key-properties.c:354
@@ -366,26 +387,26 @@ msgstr "Disabled"
 msgid "Revoked"
 msgstr "Revoked"
 
-#: plugins/nautilus/seahorse-pgp-preferences.c:29
+#: plugins/nautilus/seahorse-pgp-preferences.c:30
 #: plugins/nautilus/seahorse-pgp-preferences.desktop.in.h:2
 #: plugins/nautilus/seahorse-pgp-preferences.glade.h:1
 msgid "PGP Preferences"
 msgstr "PGP Preferences"
 
-#: plugins/nautilus/seahorse-pgp-preferences.c:45
-#: src/seahorse-preferences.c:54
+#: plugins/nautilus/seahorse-pgp-preferences.c:46
+#: src/seahorse-preferences.c:52
 msgid "_Ascii Armor"
 msgstr "_Ascii Armour"
 
-#: plugins/nautilus/seahorse-pgp-preferences.c:47
+#: plugins/nautilus/seahorse-pgp-preferences.c:48
 msgid "_Text Mode"
 msgstr "_Text Mode"
 
-#: plugins/nautilus/seahorse-pgp-preferences.c:49
+#: plugins/nautilus/seahorse-pgp-preferences.c:50
 msgid "_Encrypt to Self"
 msgstr "_Encrypt to Self"
 
-#: plugins/nautilus/seahorse-pgp-preferences.c:54
+#: plugins/nautilus/seahorse-pgp-preferences.c:55
 msgid "_Default Key:"
 msgstr "_Default Key:"
 
@@ -393,64 +414,68 @@ msgstr "_Default Key:"
 msgid "Configure PGP"
 msgstr "Configure PGP"
 
-#: src/main.c:41
+#: src/main.c:42
 msgid "Import keys from the file"
 msgstr "Import keys from the file"
 
-#: src/main.c:41 src/main.c:44 src/main.c:47 src/main.c:50 src/main.c:53
-#: src/main.c:56 src/main.c:59
+#: src/main.c:42 src/main.c:45 src/main.c:48 src/main.c:51 src/main.c:54
+#: src/main.c:57 src/main.c:60
 msgid "FILE"
 msgstr "FILE"
 
-#: src/main.c:44
+#: src/main.c:45
 msgid "Encrypt file"
 msgstr "Encrypt file"
 
-#: src/main.c:47
+#: src/main.c:48
 msgid "Sign file with default key"
 msgstr "Sign file with default key"
 
-#: src/main.c:50
+#: src/main.c:51
 msgid "Encrypt and sign file with default key"
 msgstr "Encrypt and sign file with default key"
 
-#: src/main.c:53
+#: src/main.c:54
 msgid "Decrypt encrypted file"
 msgstr "Decrypt encrypted file"
 
-#: src/main.c:56
+#: src/main.c:57
 msgid "Verify signature file"
 msgstr "Verify signature file"
 
-#: src/main.c:59
+#: src/main.c:60
 msgid "Decrypt encrypt file and verify any signatures it contains"
 msgstr "Decrypt encrypt file and verify any signatures it contains"
 
-#: src/main.c:127 src/seahorse.desktop.in.h:1
+#: src/main.c:129 src/seahorse.desktop.in.h:1
 msgid "GPG Keys Manager"
 msgstr "GPG Keys Manager"
 
-#: src/main.c:142
+#: src/main.c:144
+msgid "Imported key"
+msgstr "Imported key"
+
+#: src/main.c:145
 #, c-format
 msgid "Imported %d keys"
 msgstr "Imported %d keys"
 
-#: src/main.c:147
+#: src/main.c:151
 #, c-format
 msgid "Encrypt file is %s"
 msgstr "Encrypt file is %s"
 
-#: src/main.c:156
+#: src/main.c:162
 #, c-format
 msgid "Signature file is %s"
 msgstr "Signature file is %s"
 
-#: src/main.c:163
+#: src/main.c:170
 #, c-format
 msgid "Encrypted and signed file is %s"
 msgstr "Encrypted and signed file is %s"
 
-#: src/main.c:172 src/main.c:203
+#: src/main.c:181 src/main.c:212
 #, c-format
 msgid "Decrypted file is %s"
 msgstr "Decrypted file is %s"
@@ -586,7 +611,7 @@ msgstr "%s is a key pair! Do you still want to delete it?"
 msgid "Are you sure you want to permanently delete %s?"
 msgstr "Are you sure you want to permanently delete %s?"
 
-#: src/seahorse-delete.c:137
+#: src/seahorse-delete.c:135
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
 msgstr "Are you sure you want to permanently delete subkey %d of %s?"
@@ -723,7 +748,7 @@ msgstr "Email Address:"
 msgid "Enter Name - Must be at least five letters."
 msgstr "Enter Name - Must be at least five letters."
 
-#: src/seahorse-generate-druid.glade.h:11 src/seahorse-key-manager-store.c:294
+#: src/seahorse-generate-druid.glade.h:11 src/seahorse-key-manager-store.c:293
 msgid "Expiration Date"
 msgstr "Expiration Date"
 
@@ -754,8 +779,8 @@ msgid ""
 "private key will no longer sign messages or data."
 msgstr ""
 "Keys must be given an appropriate expiration date. For most people, the "
-"default option of \"never expires\" is sufficient. If you plan on using "
-"the key for only a certain period of time, i.e. for a specific project, you "
+"default option of \"never expires\" is sufficient. If you plan on using the "
+"key for only a certain period of time, i.e. for a specific project, you "
 "should pick an expiration date after the projected completion of your "
 "project. After the expiration date, your private key will still be able to "
 "decrypt messages or data encrypted with your public key. However, your "
@@ -1092,15 +1117,15 @@ msgstr "ELG"
 msgid "Expired"
 msgstr "Expired"
 
-#: src/seahorse-key-manager-store.c:298
+#: src/seahorse-key-manager-store.c:297
 msgid "Trust"
 msgstr "Trust"
 
-#: src/seahorse-key-manager-store.c:302
+#: src/seahorse-key-manager-store.c:301
 msgid "Length"
 msgstr "Length"
 
-#: src/seahorse-key-manager-store.c:306
+#: src/seahorse-key-manager-store.c:305
 msgid "Type"
 msgstr "Type"
 
@@ -1247,27 +1272,27 @@ msgstr "Your personal key"
 msgid "_Signatures:"
 msgstr "_Signatures:"
 
-#: src/seahorse-preferences.c:59
+#: src/seahorse-preferences.c:57
 msgid "PGP"
 msgstr "PGP"
 
-#: src/seahorse-preferences.c:66
+#: src/seahorse-preferences.c:64
 msgid "_Validity"
 msgstr "_Validity"
 
-#: src/seahorse-preferences.c:68 src/seahorse-sign.glade.h:13
+#: src/seahorse-preferences.c:66 src/seahorse-sign.glade.h:13
 msgid "_Expires"
 msgstr "_Expires"
 
-#: src/seahorse-preferences.c:70
+#: src/seahorse-preferences.c:68
 msgid "_Trust"
 msgstr "_Trust"
 
-#: src/seahorse-preferences.c:72
+#: src/seahorse-preferences.c:70
 msgid "_Length"
 msgstr "_Length"
 
-#: src/seahorse-preferences.c:74
+#: src/seahorse-preferences.c:72
 msgid "T_ype"
 msgstr "T_ype"
 
