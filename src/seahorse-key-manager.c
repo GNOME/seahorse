@@ -686,7 +686,6 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 	//features not available
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "add_photo"), FALSE);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "key_add_photo"), FALSE);
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "key_backup"), FALSE);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "gen_revoke"), FALSE);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "key_gen_revoke"), FALSE);
 
