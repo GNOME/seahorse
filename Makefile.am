@@ -14,7 +14,6 @@ EXTRA_DIST = \
 	TODO \
 	seahorse.spec \
 	seahorse.spec.in \
-	acinclude.m4 \
 	intltool-extract.in \
 	intltool-merge.in \
 	intltool-update.in \
