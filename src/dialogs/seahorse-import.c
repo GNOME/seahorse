@@ -29,18 +29,34 @@
 
 #define IMPORT_FILE "file"
 #define IMPORT_TEXT "text"
-#define IMPORT_SERVER "server"
+//#define IMPORT_SERVER "server"
 #define KEYID "keyid"
+#define OK "ok"
+
+static void
+file_changed (GtkEditable *editable, SeahorseWidget *swidget)
+{
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, OK),
+		(gnome_file_entry_get_full_path (GNOME_FILE_ENTRY (editable), TRUE) != NULL));
+}
 
 /* Import from file toggled */
 static void
 file_toggled (GtkToggleButton *togglebutton, SeahorseWidget *swidget)
 {
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, IMPORT_FILE),
-		gtk_toggle_button_get_active (togglebutton));
+	gboolean active;
+	GtkWidget *widget;
+	
+	active = gtk_toggle_button_get_active (togglebutton);
+	widget = glade_xml_get_widget (swidget->xml, IMPORT_FILE);
+	gtk_widget_set_sensitive (widget, active);
+	
+	if (active)
+		gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, OK),
+			(gnome_file_entry_get_full_path (GNOME_FILE_ENTRY (widget), TRUE) != NULL));
 }
 
-/* Import from server toggled */
+/* Import from server toggled *
 static void
 server_toggled (GtkToggleButton *togglebutton, SeahorseWidget *swidget)
 {
@@ -49,14 +65,33 @@ server_toggled (GtkToggleButton *togglebutton, SeahorseWidget *swidget)
 	
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, KEYID),
 		gtk_toggle_button_get_active (togglebutton));
+}*/
+
+static void
+text_changed (GtkTextBuffer *buffer, SeahorseWidget *swidget)
+{
+	GtkTextIter start, end;
+	
+	gtk_text_buffer_get_bounds (buffer, &start, &end);
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, OK),
+		strlen (gtk_text_buffer_get_text (buffer, &start, &end, FALSE)) > 0);
 }
 
 /* Import from text toggled */
 static void
 text_toggled (GtkToggleButton *togglebutton, SeahorseWidget *swidget)
 {
-	gtk_text_view_set_editable (GTK_TEXT_VIEW (glade_xml_get_widget (swidget->xml, IMPORT_TEXT)),
-		gtk_toggle_button_get_active (togglebutton));
+	gboolean active;
+	GtkTextView *view;
+	
+	active = gtk_toggle_button_get_active (togglebutton);
+	view = GTK_TEXT_VIEW (glade_xml_get_widget (swidget->xml, IMPORT_TEXT));
+	
+	gtk_text_view_set_editable (view, active);
+	
+	if (active)
+		gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, OK),
+			strlen (seahorse_util_get_text_view_text (view)) > 0);
 }
 
 /* Imports keys from specified data source */
@@ -97,12 +132,22 @@ void
 seahorse_import_show (SeahorseContext *sctx)
 {
 	SeahorseWidget *swidget;
+	GtkTextBuffer *buffer;
 	
 	swidget = seahorse_widget_new ("import", sctx);
 	g_return_if_fail (swidget != NULL);
 	
-	glade_xml_signal_connect_data (swidget->xml, "ok_clicked", G_CALLBACK (ok_clicked), swidget);
-	glade_xml_signal_connect_data (swidget->xml, "file_toggled", G_CALLBACK (file_toggled), swidget);
-	glade_xml_signal_connect_data (swidget->xml, "server_toggled", G_CALLBACK (server_toggled), swidget);
-	glade_xml_signal_connect_data (swidget->xml, "text_toggled", G_CALLBACK (text_toggled), swidget);
+	buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (glade_xml_get_widget (
+		swidget->xml, IMPORT_TEXT)));
+	g_signal_connect_after (buffer, "changed", G_CALLBACK (text_changed), swidget);
+	
+	glade_xml_signal_connect_data (swidget->xml, "ok_clicked",
+		G_CALLBACK (ok_clicked), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "file_toggled",
+		G_CALLBACK (file_toggled), swidget);
+	//glade_xml_signal_connect_data (swidget->xml, "server_toggled", G_CALLBACK (server_toggled), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "text_toggled",
+		G_CALLBACK (text_toggled), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "file_changed",
+		G_CALLBACK (file_changed), swidget);
 }

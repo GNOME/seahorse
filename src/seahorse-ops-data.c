@@ -44,10 +44,13 @@ seahorse_ops_data_import (SeahorseContext *sctx, const GpgmeData data)
 	success = (gpgme_op_import_ext (sctx->ctx, data, &keys) == GPGME_No_Error);
 	gpgme_data_release (data);
 	
-	if (success)
+	if (success && keys) {
 		seahorse_context_key_added (sctx);
+		seahorse_context_show_status (sctx, g_strdup_printf (_("Imported %d Keys: "), keys), success);
+	}
+	else
+		seahorse_context_show_progress (sctx, _("No keys imported"), -1);
 	
-	seahorse_context_show_status (sctx, g_strdup_printf (_("Imported %d Keys: "), keys), success);
 	return success;
 }
 
