@@ -54,4 +54,4 @@ void        seahorse_pgp_source_load            (SeahorsePGPSource *source,
 void        seahorse_pgp_source_load_matching   (SeahorsePGPSource *source,
                                                  const gchar *pattern);
 
-#endif /* __SEAHORSE_OPENPGP_SOURCE_H__ */
+#endif /* __SEAHORSE_PGP_SOURCE_H__ */
