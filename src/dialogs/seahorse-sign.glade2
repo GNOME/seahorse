@@ -5,7 +5,7 @@
 
 <widget class="GtkDialog" id="sign">
   <property name="visible">True</property>
-  <property name="title" translatable="yes">Sign Key</property>
+  <property name="title" translatable="yes"></property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
@@ -57,11 +57,65 @@
 	      <property name="can_default">True</property>
 	      <property name="has_default">True</property>
 	      <property name="can_focus">True</property>
-	      <property name="label">gtk-ok</property>
-	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="response_id">-5</property>
 	      <signal name="clicked" handler="ok_clicked" last_modification_time="Thu, 13 Feb 2003 04:27:46 GMT"/>
+
+	      <child>
+		<widget class="GtkAlignment" id="alignment1">
+		  <property name="visible">True</property>
+		  <property name="xalign">0.5</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xscale">0</property>
+		  <property name="yscale">0</property>
+
+		  <child>
+		    <widget class="GtkHBox" id="hbox1">
+		      <property name="visible">True</property>
+		      <property name="homogeneous">False</property>
+		      <property name="spacing">2</property>
+
+		      <child>
+			<widget class="GtkImage" id="image1">
+			  <property name="visible">True</property>
+			  <property name="stock">gtk-ok</property>
+			  <property name="icon_size">4</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+			<packing>
+			  <property name="padding">0</property>
+			  <property name="expand">False</property>
+			  <property name="fill">False</property>
+			</packing>
+		      </child>
+
+		      <child>
+			<widget class="GtkLabel" id="label4">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">_Sign</property>
+			  <property name="use_underline">True</property>
+			  <property name="use_markup">False</property>
+			  <property name="justify">GTK_JUSTIFY_LEFT</property>
+			  <property name="wrap">False</property>
+			  <property name="selectable">False</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+			<packing>
+			  <property name="padding">0</property>
+			  <property name="expand">False</property>
+			  <property name="fill">False</property>
+			</packing>
+		      </child>
+		    </widget>
+		  </child>
+		</widget>
+	      </child>
 	    </widget>
 	  </child>
 	</widget>
@@ -83,8 +137,8 @@
 	  <child>
 	    <widget class="GtkLabel" id="label3">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">How carefully have you checked this key:</property>
-	      <property name="use_underline">False</property>
+	      <property name="label" translatable="yes">_How carefully have you checked this key?</property>
+	      <property name="use_underline">True</property>
 	      <property name="use_markup">False</property>
 	      <property name="justify">GTK_JUSTIFY_LEFT</property>
 	      <property name="wrap">False</property>
@@ -93,27 +147,7 @@
 	      <property name="yalign">0.5</property>
 	      <property name="xpad">0</property>
 	      <property name="ypad">0</property>
-	    </widget>
-	    <packing>
-	      <property name="padding">0</property>
-	      <property name="expand">False</property>
-	      <property name="fill">False</property>
-	    </packing>
-	  </child>
-
-	  <child>
-	    <widget class="GtkLabel" id="key">
-	      <property name="visible">True</property>
-	      <property name="label" translatable="yes"></property>
-	      <property name="use_underline">False</property>
-	      <property name="use_markup">False</property>
-	      <property name="justify">GTK_JUSTIFY_LEFT</property>
-	      <property name="wrap">False</property>
-	      <property name="selectable">False</property>
-	      <property name="xalign">0</property>
-	      <property name="yalign">0.5</property>
-	      <property name="xpad">0</property>
-	      <property name="ypad">0</property>
+	      <property name="mnemonic_widget">checked</property>
 	    </widget>
 	    <packing>
 	      <property name="padding">0</property>
@@ -133,7 +167,7 @@
 
 	      <child>
 		<widget class="GtkCheckButton" id="expires">
-		  <property name="tooltip" translatable="yes">Signature expires with key</property>
+		  <property name="tooltip" translatable="yes">If signature expires with key</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">_Expires</property>
 		  <property name="use_underline">True</property>
@@ -155,7 +189,7 @@
 	      <child>
 		<widget class="GtkCheckButton" id="revocable">
 		  <property name="visible">True</property>
-		  <property name="tooltip" translatable="yes">Signature can be revoked</property>
+		  <property name="tooltip" translatable="yes">If signature can be revoked</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">_Revocable</property>
 		  <property name="use_underline">True</property>
@@ -186,6 +220,7 @@
 		      <child>
 			<widget class="GtkMenuItem" id="no_answer">
 			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Default answer</property>
 			  <property name="label" translatable="yes">No answer</property>
 			  <property name="use_underline">True</property>
 			</widget>
@@ -194,6 +229,7 @@
 		      <child>
 			<widget class="GtkMenuItem" id="no_check">
 			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Have not checked key</property>
 			  <property name="label" translatable="yes">Not at all</property>
 			  <property name="use_underline">True</property>
 			</widget>
@@ -202,6 +238,7 @@
 		      <child>
 			<widget class="GtkMenuItem" id="casual_check">
 			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Have casually checked key</property>
 			  <property name="label" translatable="yes">Casually</property>
 			  <property name="use_underline">True</property>
 			</widget>
@@ -210,6 +247,7 @@
 		      <child>
 			<widget class="GtkMenuItem" id="careful_check">
 			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Have checked key very carefully</property>
 			  <property name="label" translatable="yes">Very carefully</property>
 			  <property name="use_underline">True</property>
 			</widget>
@@ -230,7 +268,7 @@
 	      <child>
 		<widget class="GtkCheckButton" id="local">
 		  <property name="visible">True</property>
-		  <property name="tooltip" translatable="yes">Signature is not exported</property>
+		  <property name="tooltip" translatable="yes">If signature is local to the key ring and won't be exported with the key</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">_Local</property>
 		  <property name="use_underline">True</property>

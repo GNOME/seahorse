@@ -52,6 +52,7 @@ void
 seahorse_revoke_new (SeahorseContext *sctx, SeahorseKey *skey, const guint index)
 {
 	SeahorseWidget *swidget;
+	gchar *title;
 	
 	g_return_if_fail (sctx != NULL && SEAHORSE_IS_CONTEXT (sctx));
 	g_return_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey));
@@ -62,6 +63,15 @@ seahorse_revoke_new (SeahorseContext *sctx, SeahorseKey *skey, const guint index
 	
 	glade_xml_signal_connect_data (swidget->xml, "ok_clicked",
 		G_CALLBACK (ok_clicked), swidget);
+	
+	if (index)
+		title = g_strdup_printf (_("Revoke Subkey %d of %s"), index,
+			seahorse_key_get_userid (skey, 0));
+	else
+		title = g_strdup_printf (_("Revoke %s"), seahorse_key_get_userid (skey, 0));
+	
+	gtk_window_set_title (GTK_WINDOW (glade_xml_get_widget (swidget->xml,
+		swidget->name)), title);
 }
 
 void

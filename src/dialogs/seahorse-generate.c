@@ -28,6 +28,26 @@
 
 #define LENGTH "length"
 #define EXPIRES "expires"
+#define NAME "name"
+#define PASS "passphrase"
+#define CONFIRM "confirm"
+
+static void
+entry_changed (GtkEditable *editable, SeahorseWidget *swidget)
+{
+	gchar *name, *pass, *confirm;
+	gboolean ok;
+	
+	name = gtk_editable_get_chars (GTK_EDITABLE (glade_xml_get_widget (
+		swidget->xml, NAME)), 0, -1);
+	pass = gtk_editable_get_chars (GTK_EDITABLE (glade_xml_get_widget (
+		swidget->xml, PASS)), 0, -1);
+	confirm = gtk_editable_get_chars (GTK_EDITABLE (glade_xml_get_widget (
+		swidget->xml, CONFIRM)), 0, -1);
+	
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "ok"),
+		(strlen (name) >= 5 && strlen (pass) > 0 && g_str_equal (pass, confirm)));
+}
 
 /* Sets range of length spin button */
 static void
@@ -67,45 +87,16 @@ never_expires_toggled (GtkToggleButton *togglebutton, SeahorseWidget *swidget)
 static void
 ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 {
-	const gchar *name, *email, *comment, *passphrase, *confirm;
+	const gchar *name, *email, *comment, *pass, *confirm;
 	gint history, length;
 	SeahorseKeyType type;
 	time_t expires;
-	GtkWindow *parent;
+	GtkWidget *widget;
 	
-	name = gtk_entry_get_text (GTK_ENTRY (glade_xml_get_widget (swidget->xml, "name")));
+	name = gtk_entry_get_text (GTK_ENTRY (glade_xml_get_widget (swidget->xml, NAME)));
 	email = gtk_entry_get_text (GTK_ENTRY (glade_xml_get_widget (swidget->xml, "email")));
 	comment = gtk_entry_get_text (GTK_ENTRY (glade_xml_get_widget (swidget->xml, "comment")));
-	passphrase = gtk_entry_get_text (GTK_ENTRY (glade_xml_get_widget (swidget->xml, "passphrase")));
-	confirm = gtk_entry_get_text (GTK_ENTRY (glade_xml_get_widget (swidget->xml, "confirm")));
-	
-	parent = GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name));
-	
-	/* Check for valid entries */
-	if (g_str_equal (name, "")) {
-		seahorse_util_show_error (parent, _("You must enter a valid name"));
-		return;
-	}	
-	if (!seahorse_ops_key_check_email (email)) {
-		seahorse_util_show_error (parent, _("You must enter a valid email address"));
-		return;
-	}	
-	if (g_str_equal (comment, "")) {
-		seahorse_util_show_error (parent, _("You must enter a valid comment"));
-		return;
-	}	
-	if (g_str_equal (passphrase, "")) {
-		seahorse_util_show_error (parent, _("You must enter a valid passphrase"));
-		return;
-	}	
-	if (g_str_equal (confirm, "")) {
-		seahorse_util_show_error (parent, _("You must confirm your passphrase"));
-		return;
-	}
-	if (!g_str_equal (passphrase, confirm)) {
-		seahorse_util_show_error (parent, _("Passphrase & confirmation must match"));
-		return;
-	}
+	pass = gtk_entry_get_text (GTK_ENTRY (glade_xml_get_widget (swidget->xml, PASS)));
 	
 	length = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (
 		glade_xml_get_widget (swidget->xml, LENGTH)));
@@ -131,11 +122,14 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 		expires = gnome_date_edit_get_time (GNOME_DATE_EDIT (
 			glade_xml_get_widget (swidget->xml, EXPIRES)));
 	
-	gtk_widget_hide (GTK_WIDGET (parent));
-	seahorse_ops_key_generate (swidget->sctx, name, email, comment,
-		passphrase, type, length, expires);
-	gtk_widget_show (GTK_WIDGET (parent));
-	seahorse_widget_destroy (swidget);
+	widget = glade_xml_get_widget (swidget->xml, swidget->name);
+	gtk_widget_hide (widget);
+	
+	if (!seahorse_ops_key_generate (swidget->sctx, name, email, comment,
+	pass, type, length, expires))
+		gtk_widget_show (widget);
+	else
+		seahorse_widget_destroy (swidget);
 }
 
 void
@@ -146,7 +140,12 @@ seahorse_generate_show (SeahorseContext *sctx)
 	swidget = seahorse_widget_new ("generate", sctx);
 	g_return_if_fail (swidget != NULL);
 	
-	glade_xml_signal_connect_data (swidget->xml, "type_changed", G_CALLBACK (type_changed), swidget);
-	glade_xml_signal_connect_data (swidget->xml, "never_expires_toggled", G_CALLBACK (never_expires_toggled), swidget);
-	glade_xml_signal_connect_data (swidget->xml, "ok_clicked", G_CALLBACK (ok_clicked), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "type_changed",
+		G_CALLBACK (type_changed), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "never_expires_toggled",
+		G_CALLBACK (never_expires_toggled), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "ok_clicked",
+		G_CALLBACK (ok_clicked), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "entry_changed",
+		G_CALLBACK (entry_changed), swidget);
 }

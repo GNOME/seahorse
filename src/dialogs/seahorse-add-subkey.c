@@ -109,6 +109,9 @@ seahorse_add_subkey_new (SeahorseContext *sctx, SeahorseKey *skey)
 	swidget = seahorse_key_widget_new ("add-subkey", sctx, skey);
 	g_return_if_fail (swidget != NULL);
 	
+	gtk_window_set_title (GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)),
+		g_strdup_printf (_("Add subkey to %s"), seahorse_key_get_userid (skey, 0)));
+	
 	glade_xml_signal_connect_data (swidget->xml, "ok_clicked",
 		G_CALLBACK (ok_clicked), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "never_expires_toggled",

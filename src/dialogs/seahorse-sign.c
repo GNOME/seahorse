@@ -109,8 +109,15 @@ seahorse_sign_new (SeahorseContext *sctx, SeahorseKey *skey, const guint index)
 	swidget = seahorse_key_widget_new_with_index ("sign", sctx, skey, index);
 	g_return_if_fail (swidget != NULL);
 	
-	gtk_label_set_text (GTK_LABEL (glade_xml_get_widget (swidget->xml, "key")),
-		g_strdup_printf ("%s?", seahorse_key_get_userid (skey, 0)));
+	if (index)
+		question = g_strdup_printf (_("Sign user ID %s"),
+			seahorse_key_get_userid (skey, index));
+	else
+		question = g_strdup_printf (_("Sign all user IDs for %s"),
+			seahorse_key_get_userid (skey, 0));
+	
+	gtk_window_set_title (GTK_WINDOW (glade_xml_get_widget (swidget->xml,
+		swidget->name)), question);
 	
 	if (gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_EXPIRE, NULL, 0))
 		gtk_widget_show (glade_xml_get_widget (swidget->xml, EXPIRES));

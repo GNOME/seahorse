@@ -55,14 +55,70 @@
 	  <child>
 	    <widget class="GtkButton" id="ok">
 	      <property name="visible">True</property>
+	      <property name="sensitive">False</property>
+	      <property name="tooltip" translatable="yes">Generate a new key</property>
 	      <property name="can_default">True</property>
 	      <property name="has_default">True</property>
 	      <property name="can_focus">True</property>
-	      <property name="label">gtk-ok</property>
-	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="response_id">-5</property>
 	      <signal name="clicked" handler="ok_clicked" last_modification_time="Sun, 10 Nov 2002 19:54:32 GMT"/>
+
+	      <child>
+		<widget class="GtkAlignment" id="alignment1">
+		  <property name="visible">True</property>
+		  <property name="xalign">0.5</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xscale">0</property>
+		  <property name="yscale">0</property>
+
+		  <child>
+		    <widget class="GtkHBox" id="hbox1">
+		      <property name="visible">True</property>
+		      <property name="homogeneous">False</property>
+		      <property name="spacing">2</property>
+
+		      <child>
+			<widget class="GtkImage" id="image1">
+			  <property name="visible">True</property>
+			  <property name="stock">gtk-ok</property>
+			  <property name="icon_size">4</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+			<packing>
+			  <property name="padding">0</property>
+			  <property name="expand">False</property>
+			  <property name="fill">False</property>
+			</packing>
+		      </child>
+
+		      <child>
+			<widget class="GtkLabel" id="label44">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">_Generate</property>
+			  <property name="use_underline">True</property>
+			  <property name="use_markup">False</property>
+			  <property name="justify">GTK_JUSTIFY_LEFT</property>
+			  <property name="wrap">False</property>
+			  <property name="selectable">False</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+			<packing>
+			  <property name="padding">0</property>
+			  <property name="expand">False</property>
+			  <property name="fill">False</property>
+			</packing>
+		      </child>
+		    </widget>
+		  </child>
+		</widget>
+	      </child>
 	    </widget>
 	  </child>
 	</widget>
@@ -286,7 +342,7 @@
 	  <child>
 	    <widget class="GtkEntry" id="name">
 	      <property name="visible">True</property>
-	      <property name="tooltip" translatable="yes">Enter your full name</property>
+	      <property name="tooltip" translatable="yes">Must be at least 5 characters long</property>
 	      <property name="can_focus">True</property>
 	      <property name="has_focus">True</property>
 	      <property name="editable">True</property>
@@ -295,7 +351,8 @@
 	      <property name="text" translatable="yes"></property>
 	      <property name="has_frame">True</property>
 	      <property name="invisible_char" translatable="yes">*</property>
-	      <property name="activates_default">False</property>
+	      <property name="activates_default">True</property>
+	      <signal name="changed" handler="entry_changed" last_modification_time="Sat, 08 Mar 2003 21:46:59 GMT"/>
 	    </widget>
 	    <packing>
 	      <property name="left_attach">1</property>
@@ -309,7 +366,7 @@
 	  <child>
 	    <widget class="GtkEntry" id="email">
 	      <property name="visible">True</property>
-	      <property name="tooltip" translatable="yes">Enter a valid email address</property>
+	      <property name="tooltip" translatable="yes">Optional email address</property>
 	      <property name="can_focus">True</property>
 	      <property name="editable">True</property>
 	      <property name="visibility">True</property>
@@ -317,7 +374,7 @@
 	      <property name="text" translatable="yes"></property>
 	      <property name="has_frame">True</property>
 	      <property name="invisible_char" translatable="yes">*</property>
-	      <property name="activates_default">False</property>
+	      <property name="activates_default">True</property>
 	    </widget>
 	    <packing>
 	      <property name="left_attach">1</property>
@@ -331,7 +388,7 @@
 	  <child>
 	    <widget class="GtkEntry" id="comment">
 	      <property name="visible">True</property>
-	      <property name="tooltip" translatable="yes">Enter a comment to describe the key</property>
+	      <property name="tooltip" translatable="yes">Optional comment describing key</property>
 	      <property name="can_focus">True</property>
 	      <property name="editable">True</property>
 	      <property name="visibility">True</property>
@@ -339,7 +396,7 @@
 	      <property name="text" translatable="yes"></property>
 	      <property name="has_frame">True</property>
 	      <property name="invisible_char" translatable="yes">*</property>
-	      <property name="activates_default">False</property>
+	      <property name="activates_default">True</property>
 	    </widget>
 	    <packing>
 	      <property name="left_attach">1</property>
@@ -384,7 +441,8 @@
 	      <property name="text" translatable="yes"></property>
 	      <property name="has_frame">True</property>
 	      <property name="invisible_char" translatable="yes">*</property>
-	      <property name="activates_default">False</property>
+	      <property name="activates_default">True</property>
+	      <signal name="changed" handler="entry_changed" last_modification_time="Sat, 08 Mar 2003 21:47:07 GMT"/>
 	    </widget>
 	    <packing>
 	      <property name="left_attach">1</property>
@@ -486,7 +544,7 @@
 	  <child>
 	    <widget class="GtkEntry" id="confirm">
 	      <property name="visible">True</property>
-	      <property name="tooltip" translatable="yes">Confirm the entered passphrase</property>
+	      <property name="tooltip" translatable="yes">Confirmation of passphrase</property>
 	      <property name="can_focus">True</property>
 	      <property name="editable">True</property>
 	      <property name="visibility">False</property>
@@ -495,6 +553,7 @@
 	      <property name="has_frame">True</property>
 	      <property name="invisible_char" translatable="yes">*</property>
 	      <property name="activates_default">True</property>
+	      <signal name="changed" handler="entry_changed" last_modification_time="Sat, 08 Mar 2003 21:47:13 GMT"/>
 	    </widget>
 	    <packing>
 	      <property name="left_attach">1</property>

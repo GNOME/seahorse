@@ -27,14 +27,24 @@
 #include "seahorse-util.h"
 
 static void
+name_changed (GtkEditable *editable, SeahorseWidget *swidget)
+{
+	gchar *text;
+	
+	text = gtk_editable_get_chars (editable, 0, -1);
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "ok"),
+		strlen (text) >= 5);
+}
+
+static void
 ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 {
-	SeahorseKeyWidget *skwidget;
+	SeahorseKey *skey;
 	const gchar *name, *email, *comment;
-	GtkWindow *parent;
+	//GtkWindow *parent;
 	
-	parent = GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name));
-	skwidget = SEAHORSE_KEY_WIDGET (swidget);
+	//parent = GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name));
+	skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
 	
 	name = gtk_entry_get_text (GTK_ENTRY (
 		glade_xml_get_widget (swidget->xml, "name")));
@@ -43,7 +53,7 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 	comment = gtk_entry_get_text (GTK_ENTRY (
 		glade_xml_get_widget (swidget->xml, "comment")));
 	
-	/* Check entries */
+	/* Check entries *
 	if (strlen (name) < 5) {
 		seahorse_util_show_error (parent,
 			_("Name must be at least 5 characters long"));
@@ -53,9 +63,10 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 		seahorse_util_show_error (parent,
 			_("You must enter a valid email address"));
 		return;
-	}
+	}*/
 	
-	seahorse_ops_key_add_uid (swidget->sctx, skwidget->skey, name, email, comment);
+	seahorse_ops_key_add_uid (swidget->sctx, SEAHORSE_KEY_WIDGET (swidget)->skey,
+		name, email, comment);
 	seahorse_widget_destroy (swidget);
 }
 
@@ -74,6 +85,11 @@ seahorse_add_uid_new (SeahorseContext *sctx, SeahorseKey *skey)
 	swidget = seahorse_key_widget_new ("add-uid", sctx, skey);
 	g_return_if_fail (swidget != NULL);
 	
+	gtk_window_set_title (GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)),
+		g_strdup_printf (_("Add user ID to %s"), seahorse_key_get_userid (skey, 0)));
+	
 	glade_xml_signal_connect_data (swidget->xml, "ok_clicked",
 		G_CALLBACK (ok_clicked), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "name_changed",
+		G_CALLBACK (name_changed), swidget);
 }

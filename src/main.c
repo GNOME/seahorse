@@ -1,7 +1,7 @@
 /*
  * Seahorse
  *
- * Copyright (C) 2002 Jacob Perkins
+ * Copyright (C) 2003 Jacob Perkins
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,11 +42,8 @@ main (int argc, char **argv)
 		argc, argv, GNOME_PARAM_APP_DATADIR, DATA_DIR, NULL);
 	
 	sctx = seahorse_context_new ();
-	
 	gpgme_set_passphrase_cb (sctx->ctx, seahorse_passphrase_get, sctx->ctx);
-	
 	seahorse_key_manager_show (sctx);
-	
 	gtk_main ();
 	
 	return 0;

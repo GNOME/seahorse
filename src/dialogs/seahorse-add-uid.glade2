@@ -52,8 +52,10 @@
 	  </child>
 
 	  <child>
-	    <widget class="GtkButton" id="okbutton1">
+	    <widget class="GtkButton" id="ok">
 	      <property name="visible">True</property>
+	      <property name="sensitive">False</property>
+	      <property name="tooltip" translatable="yes">Create the new user ID</property>
 	      <property name="can_default">True</property>
 	      <property name="has_default">True</property>
 	      <property name="can_focus">True</property>
@@ -86,7 +88,7 @@
 	  <child>
 	    <widget class="GtkEntry" id="name">
 	      <property name="visible">True</property>
-	      <property name="tooltip" translatable="yes">Enter your full name</property>
+	      <property name="tooltip" translatable="yes">Must be at least 5 characters long</property>
 	      <property name="can_focus">True</property>
 	      <property name="has_focus">True</property>
 	      <property name="editable">True</property>
@@ -95,7 +97,8 @@
 	      <property name="text" translatable="yes"></property>
 	      <property name="has_frame">True</property>
 	      <property name="invisible_char" translatable="yes">*</property>
-	      <property name="activates_default">False</property>
+	      <property name="activates_default">True</property>
+	      <signal name="changed" handler="name_changed" last_modification_time="Sat, 08 Mar 2003 21:24:47 GMT"/>
 	    </widget>
 	    <packing>
 	      <property name="left_attach">1</property>
@@ -109,7 +112,7 @@
 	  <child>
 	    <widget class="GtkEntry" id="email">
 	      <property name="visible">True</property>
-	      <property name="tooltip" translatable="yes">Enter a valid email address</property>
+	      <property name="tooltip" translatable="yes">Optional email address</property>
 	      <property name="can_focus">True</property>
 	      <property name="editable">True</property>
 	      <property name="visibility">True</property>
@@ -117,7 +120,7 @@
 	      <property name="text" translatable="yes"></property>
 	      <property name="has_frame">True</property>
 	      <property name="invisible_char" translatable="yes">*</property>
-	      <property name="activates_default">False</property>
+	      <property name="activates_default">True</property>
 	    </widget>
 	    <packing>
 	      <property name="left_attach">1</property>
@@ -131,7 +134,7 @@
 	  <child>
 	    <widget class="GtkEntry" id="comment">
 	      <property name="visible">True</property>
-	      <property name="tooltip" translatable="yes">Enter a comment to describe the key</property>
+	      <property name="tooltip" translatable="yes">Optional comment describing key</property>
 	      <property name="can_focus">True</property>
 	      <property name="editable">True</property>
 	      <property name="visibility">True</property>

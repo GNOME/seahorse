@@ -76,7 +76,7 @@ seahorse_ops_key_delete (SeahorseContext *sctx, SeahorseKey *skey)
 gboolean
 seahorse_ops_key_generate (SeahorseContext *sctx, const gchar *name,
 			   const gchar *email, const gchar *comment,
-			   const gchar *passphrase, const SeahorseKeyType type,
+			   const gchar *pass, const SeahorseKeyType type,
 			   const guint length, const time_t expires)
 {
         gchar *common, *key_type, *start, *parms;
@@ -84,10 +84,8 @@ seahorse_ops_key_generate (SeahorseContext *sctx, const gchar *name,
 	const gchar *expires_date;
 	
 	g_return_val_if_fail (sctx != NULL && SEAHORSE_IS_CONTEXT (sctx), FALSE);
-	g_return_val_if_fail (name != NULL && !g_str_equal (name, ""), FALSE);
-	g_return_val_if_fail (email != NULL && seahorse_ops_key_check_email (email), FALSE);
-	g_return_val_if_fail (comment != NULL && !g_str_equal (comment, ""), FALSE);
-	g_return_val_if_fail (passphrase != NULL && !g_str_equal (passphrase, ""), FALSE);
+	g_return_val_if_fail (strlen (name) >= 5, FALSE);
+	g_return_val_if_fail (strlen (pass) > 0, FALSE);
 	
 	/* Check lengths for each type */
 	switch (type) {
@@ -111,16 +109,23 @@ seahorse_ops_key_generate (SeahorseContext *sctx, const gchar *name,
 		expires_date = "0";
 	
 	/* Common xml */
+	common = g_strdup_printf ("Name-Real: %s\nExpire-Date: %s\nPassphrase: %s\n"
+		"</GnupgKeyParms>", name, expires_date, pass);
+	if (strlen (email) > 0)
+		common = g_strdup_printf ("Name-Email: %s\n%s", email, common);
+	if (strlen (comment) > 0)
+		common = g_strdup_printf ("Name-Comment: %s\n%s", comment, common);
+	
+	/*
 	common = g_strdup_printf ("Name-Real: %s\nName-Comment: %s\nName-Email: %s\n"
 		"Expire-Date: %s\nPassphrase: %s\n</GnupgKeyParms>", name, comment, email,
-		expires_date, passphrase);
+		expires_date, passphrase);*/
 	
 	if (type == RSA_SIGN)
 		key_type = "Key-Type: RSA";
 	else
 		key_type = "Key-Type: DSA";
 	
-	/* More common xml */
 	start = g_strdup_printf ("<GnupgKeyParms format=\"internal\">\n%s\nKey-Length: ", key_type);
 	
 	/* Subkey xml */
@@ -896,7 +901,6 @@ seahorse_ops_key_add_uid (SeahorseContext *sctx, SeahorseKey *skey,
 	g_return_val_if_fail (sctx != NULL && SEAHORSE_IS_CONTEXT (sctx), FALSE);
 	g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), FALSE);
 	g_return_val_if_fail (name != NULL && strlen (name) >= 5, FALSE);
-	g_return_val_if_fail (email != NULL && seahorse_ops_key_check_email (email), FALSE);
 	
 	uid_parm = g_new (UidParm, 1);
 	uid_parm->name = name;
