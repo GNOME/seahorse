@@ -99,9 +99,18 @@ gpgme_subkey_t		seahorse_key_get_nth_subkey	(const SeahorseKey	*skey,
 const gchar*		seahorse_key_get_keyid		(const SeahorseKey	*skey,
 							 const guint		index);
 
-gchar*			seahorse_key_get_userid		(const SeahorseKey	*skey,
-							 const guint		index);
-                            
+gchar*          seahorse_key_get_userid	        (const SeahorseKey	*skey,
+                                                 const guint        index);
+
+gchar*          seahorse_key_get_userid_name    (const SeahorseKey	*skey,
+                                                 const guint        index);
+
+gchar*          seahorse_key_get_userid_email   (const SeahorseKey	*skey,
+                                                 const guint        index);
+
+gchar*          seahorse_key_get_userid_comment (const SeahorseKey	*skey,
+                                                 const guint        index);
+
 gpgme_user_id_t seahorse_key_get_nth_userid (const SeahorseKey *skey,
                              const guint        index);                            
 

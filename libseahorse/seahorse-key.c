@@ -305,6 +305,19 @@ seahorse_key_get_keyid (const SeahorseKey *skey, const guint index)
 		return NULL;
 }
 
+static gchar*
+convert_string (const gchar *str)
+{
+    if (!str)
+        return NULL;
+    
+	/* If not utf8 valid, assume latin 1 */
+	if (!g_utf8_validate (str, -1, NULL))
+		return g_convert (str, -1, "UTF-8", "ISO-8859-1", NULL, NULL, NULL);
+	else
+		return g_strdup (str);    
+}
+
 /**
  * seahorse_key_get_userid:
  * @skey: #SeahorseKey
@@ -319,24 +332,59 @@ seahorse_key_get_keyid (const SeahorseKey *skey, const guint index)
 gchar*
 seahorse_key_get_userid (const SeahorseKey *skey, const guint index)
 {
-	gpgme_user_id_t uid;
-	guint n;
-	
-	g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), NULL);
-	g_return_val_if_fail (skey->key != NULL, NULL);
+	gpgme_user_id_t uid = seahorse_key_get_nth_userid (skey, index);
+	return uid ? convert_string (uid->uid) : NULL;
+}
 
-	uid = skey->key->uids;
-	for (n = index; uid && n; n--)
-		uid = uid->next;
-	
-	if (!uid)
-		return NULL;
-	
-	/* If not utf8 valid, assume latin 1 */
-	if (!g_utf8_validate (uid->uid, -1, NULL))
-		return g_convert (uid->uid, -1, "UTF-8", "ISO-8859-1", NULL, NULL, NULL);
-	else
-		return g_strdup (uid->uid);
+/**
+ * seahorse_key_get_userid_name:
+ * @skey: #SeahorseKey
+ * @index: Which user ID
+ *
+ * Gets the formatted user ID name of @skey at @index.
+ *
+ * Returns: UTF8 valid name of @skey at @index,
+ * or NULL if @index is out of bounds.
+ **/
+gchar*
+seahorse_key_get_userid_name (const SeahorseKey *skey, const guint index)
+{
+	gpgme_user_id_t uid = seahorse_key_get_nth_userid (skey, index);
+	return uid ? convert_string (uid->name) : NULL;
+}
+
+/**
+ * seahorse_key_get_userid_email:
+ * @skey: #SeahorseKey
+ * @index: Which user ID
+ *
+ * Gets the formatted email of @skey at @index.
+ *
+ * Returns: UTF8 valid email of @skey at @index,
+ * or NULL if @index is out of bounds.
+ **/
+gchar*
+seahorse_key_get_userid_email (const SeahorseKey *skey, const guint index)
+{
+	gpgme_user_id_t uid = seahorse_key_get_nth_userid (skey, index);
+	return uid ? convert_string (uid->email) : NULL;
+}
+
+/**
+ * seahorse_key_get_userid_comment:
+ * @skey: #SeahorseKey
+ * @index: Which user ID
+ *
+ * Gets the formatted comment of @skey at @index.
+ *
+ * Returns: UTF8 valid comment of @skey at @index,
+ * or NULL if @index is out of bounds.
+ **/
+gchar*
+seahorse_key_get_userid_comment (const SeahorseKey *skey, const guint index)
+{
+	gpgme_user_id_t uid = seahorse_key_get_nth_userid (skey, index);
+	return uid ? convert_string (uid->comment) : NULL;
 }
 
 /**

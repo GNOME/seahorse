@@ -164,6 +164,81 @@ do_stat_button (gchar *label, const gchar *stock_id)
 }
 
 static void
+key_property_labels (SeahorseWidget *swidget)
+{
+    gchar dbuffer[G_ASCII_DTOSTR_BUF_SIZE];
+    gpgme_subkey_t subkey;
+    SeahorseKey *skey;
+    GtkWidget *w;
+    const gchar *label;
+    gchar *t, *x;
+
+    skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
+    subkey = skey->key->subkeys;
+    
+    w = glade_xml_get_widget (swidget->xml, "keyid");
+    label = seahorse_key_get_keyid (skey, 0); 
+    gtk_label_set_text (GTK_LABEL (w), label);
+    
+    w = glade_xml_get_widget (swidget->xml, "fingerprint");
+    label = seahorse_key_get_fingerprint (skey);  
+    gtk_label_set_text (GTK_LABEL (w), label);
+
+    w = glade_xml_get_widget (swidget->xml, "label_type");
+    label = gpgme_pubkey_algo_name(subkey->pubkey_algo);
+
+    if (label == NULL)
+        label = _("Unknown");
+    else if (g_str_equal ("ElG", label))
+        label = _("ElGamal");
+    gtk_label_set_text (GTK_LABEL (w), label);
+    
+    w = glade_xml_get_widget (swidget->xml, "label_created");
+    label = seahorse_util_get_date_string (subkey->timestamp); 
+    gtk_label_set_text (GTK_LABEL (w), label);
+
+    w = glade_xml_get_widget (swidget->xml, "label_strength");
+    g_ascii_dtostr(dbuffer, G_ASCII_DTOSTR_BUF_SIZE, subkey->length);
+    gtk_label_set_text (GTK_LABEL (w), dbuffer);
+    
+    w = glade_xml_get_widget (swidget->xml, "label_expires");
+    label = seahorse_util_get_date_string (subkey->expires);
+    if (g_str_equal("0", label))
+	    label = _("Never");
+    gtk_label_set_text (GTK_LABEL (w), label);
+    
+    w = glade_xml_get_widget (swidget->xml, "label_created");
+    label = seahorse_util_get_date_string (subkey->timestamp); 
+    gtk_label_set_text (GTK_LABEL (w), label);
+    
+    if ((t = seahorse_key_get_userid_name (skey, 0)) != NULL) {
+        w = glade_xml_get_widget (swidget->xml, "label_name");
+        gtk_label_set_text (GTK_LABEL (w), t);  
+        g_free (t);
+    }
+    
+    if ((t = seahorse_key_get_userid_email (skey, 0)) != NULL) {
+        w = glade_xml_get_widget (swidget->xml, "label_email");
+        gtk_label_set_text (GTK_LABEL (w), t);  
+        g_free (t);
+    }
+    
+    if ((t = seahorse_key_get_userid_comment (skey, 0)) != NULL) {
+        w = glade_xml_get_widget (swidget->xml, "label_comment");
+        gtk_label_set_text (GTK_LABEL (w), t);  
+        g_free (t);
+    }
+
+    t = seahorse_key_get_userid (skey, 0);
+    x = g_strdup_printf (_("%s Properties"), t);
+    g_free (t);
+    
+    w = glade_xml_get_widget (swidget->xml, swidget->name);
+    gtk_window_set_title (GTK_WINDOW (w), x);
+    g_free (x);
+}
+
+static void
 do_stats (SeahorseWidget *swidget, GtkTable *table, guint top, guint index, gpgme_subkey_t subkey)
 {
     SeahorseKey *skey;
@@ -206,14 +281,14 @@ do_stats (SeahorseWidget *swidget, GtkTable *table, guint top, guint index, gpgm
         str = _("Expired");
     do_stat_label (str, table, 1, top+3, FALSE, NULL, NULL);
     /* expires */
-    do_stat_label (_("Expiration Date:"), table, 0, top+2, FALSE, NULL, NULL);
+    do_stat_label (_("Expires:"), table, 0, top+2, FALSE, NULL, NULL);
  
    if (!SEAHORSE_IS_KEY_PAIR (skey)) {
         if (subkey->expires)
             do_stat_label (seahorse_util_get_date_string (subkey->expires),
                 table, 1, top+2, FALSE, NULL, NULL);
         else
-            do_stat_label (_("Never Expires"), table, 1, top+2, FALSE, NULL, NULL);
+            do_stat_label (_("Never"), table, 1, top+2, FALSE, NULL, NULL);
    } else {
         date_edit = gnome_date_edit_new (subkey->expires, FALSE, FALSE);
         gtk_widget_show (date_edit);
@@ -227,7 +302,7 @@ do_stats (SeahorseWidget *swidget, GtkTable *table, guint top, guint index, gpgm
             g_signal_connect_after (GNOME_DATE_EDIT (date_edit), "date_changed",
                 G_CALLBACK (subkey_expires_date_changed), swidget);
         
-        widget = gtk_check_button_new_with_mnemonic (_("Never E_xpires"));
+        widget = gtk_check_button_new_with_mnemonic (_("_Never"));
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), !subkey->expires);
         gtk_tooltips_set_tip (tips, widget, _("If key never expires"), NULL);
         gtk_widget_show (widget);
@@ -243,34 +318,8 @@ do_stats (SeahorseWidget *swidget, GtkTable *table, guint top, guint index, gpgm
             g_signal_connect_after (GTK_TOGGLE_BUTTON (widget), "toggled",
                 G_CALLBACK (never_expires_subkey_toggled), swidget);
     }
-}
-
-static void
-do_key_info (SeahorseWidget *swidget)
-{
-    SeahorseKey *skey;
-    GtkWidget *w;
-    gchar *t, *x;
-
-    skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
     
-    w = glade_xml_get_widget (swidget->xml, "fingerprint");
-    t = seahorse_key_get_fingerprint (skey); 
-    gtk_label_set_text (GTK_LABEL (w), t);
-    g_free (t);
-    
-    w = glade_xml_get_widget (swidget->xml, "userid");
-    t = seahorse_key_get_userid (skey, 0); 
-    gtk_label_set_text (GTK_LABEL (w), t);
-    
-    x = g_strdup_printf (_("%s Properties"), t);
-    g_free (t);
-    
-    w = glade_xml_get_widget (swidget->xml, swidget->name);
-    gtk_window_set_title (GTK_WINDOW (w), x);
-    g_free (x);
-}
-    
+}    
 
 static void
 passphrase_clicked (GtkWidget *widget, SeahorseWidget *swidget)
@@ -661,14 +710,14 @@ key_changed (SeahorseKey *skey, SeahorseKeyChange change, SeahorseWidget *swidge
 	switch (change) {
         case SKEY_CHANGE_ALL:
             do_uid_list (swidget);
-            do_key_info (swidget);
+            key_property_labels (swidget);
             do_signatures (swidget);
             do_signature_list (swidget);
             do_subkeys (swidget);
             break;
 		case SKEY_CHANGE_UIDS:
 			do_uid_list (swidget);
-            do_key_info (swidget);
+            key_property_labels (swidget);
 			break;
         case SKEY_CHANGE_SIGNERS:
             do_signatures (swidget);
@@ -697,6 +746,9 @@ properties_destroyed (GtkObject *object, SeahorseWidget *swidget)
     g_signal_handlers_disconnect_by_func (SEAHORSE_KEY_WIDGET (swidget)->skey,
                                           key_destroyed, swidget);
 }
+
+
+
 
 void
 seahorse_key_properties_new (SeahorseContext *sctx, SeahorseKey *skey)
@@ -728,11 +780,7 @@ seahorse_key_properties_new (SeahorseContext *sctx, SeahorseKey *skey)
     g_signal_connect_after (skey, "changed", G_CALLBACK (key_changed), swidget);
     g_signal_connect_after (skey, "destroy", G_CALLBACK (key_destroyed), swidget);
 	
-	do_stats (swidget, GTK_TABLE (glade_xml_get_widget (swidget->xml, "primary_table")), 3, 0,
-		      skey->key->subkeys);
-     
-    /* Main key info */
-    do_key_info (swidget);
+	key_property_labels (swidget);
      
     /* Change password button */
     if(SEAHORSE_IS_KEY_PAIR (skey)) {
