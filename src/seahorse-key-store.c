@@ -219,7 +219,7 @@ seahorse_key_store_context_destroyed (GtkObject *object, SeahorseKeyStore *sksto
 }
 
 /* Appends @skey */
->>>>>>> 1.7
+static void
 seahorse_key_store_key_added (SeahorseContext *sctx, SeahorseKey *skey, SeahorseKeyStore *skstore)
 {
 	seahorse_key_store_append (skstore, skey);
