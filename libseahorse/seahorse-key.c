@@ -22,10 +22,12 @@
 #include <gnome.h>
 
 #include "seahorse-key.h"
+#include "seahorse-key-source.h"
 
 enum {
 	PROP_0,
-	PROP_KEY
+	PROP_KEY,
+    PROP_KEY_SOURCE
 };
 
 enum {
@@ -87,6 +89,10 @@ seahorse_key_class_init (SeahorseKeyClass *klass)
 		g_param_spec_pointer ("key", "Gpgme Key",
 				      "Gpgme Key that this object represents",
 				      G_PARAM_READWRITE));
+    g_object_class_install_property (gobject_class, PROP_KEY_SOURCE,
+        g_param_spec_pointer ("key-source", "Gpgme Key",
+                      "Key Source that this key belongs to",
+                      G_PARAM_READWRITE));
 	
 	key_signals[CHANGED] = g_signal_new ("changed", G_OBJECT_CLASS_TYPE (gobject_class),
 		G_SIGNAL_RUN_LAST,  G_STRUCT_OFFSET (SeahorseKeyClass, changed),
@@ -114,9 +120,23 @@ seahorse_key_set_property (GObject *object, guint prop_id, const GValue *value, 
 	
 	switch (prop_id) {
 		case PROP_KEY:
+            if (skey->key)
+                gpgme_key_unref (skey->key);
 			skey->key = g_value_get_pointer (value);
-			gpgme_key_ref (skey->key);
+            if (skey->key) {
+    			gpgme_key_ref (skey->key);
+                seahorse_key_changed (skey, SKEY_CHANGE_ALL);
+            }
 			break;
+        case PROP_KEY_SOURCE:
+            if (skey->key_source != NULL)
+                g_object_remove_weak_pointer (G_OBJECT (skey->key_source), (gpointer*)&(skey->key_source));
+            skey->key_source = g_value_get_pointer (value);
+            if (skey->key_source != NULL) {
+                g_return_if_fail (SEAHORSE_IS_KEY_SOURCE (skey->key_source));
+                g_object_add_weak_pointer (G_OBJECT (skey->key_source), (gpointer*)&(skey->key_source));
+            }
+            break;
 		default:
 			break;
 	}
@@ -134,6 +154,9 @@ seahorse_key_get_property (GObject *object, guint prop_id,
 		case PROP_KEY:
 			g_value_set_pointer (value, skey->key);
 			break;
+        case PROP_KEY_SOURCE:
+            g_value_set_pointer (value, skey->key_source);
+            break;
 		default:
 			break;
 	}
@@ -148,9 +171,9 @@ seahorse_key_get_property (GObject *object, guint prop_id,
  * Returns: A new #SeahorseKey
  **/
 SeahorseKey*
-seahorse_key_new (gpgme_key_t key)
+seahorse_key_new (SeahorseKeySource *sksrc, gpgme_key_t key)
 {
-	return g_object_new (SEAHORSE_TYPE_KEY, "key", key, NULL);
+    return g_object_new (SEAHORSE_TYPE_KEY, "key", key, "key-source", sksrc, NULL);
 }
 
 /**
@@ -415,4 +438,42 @@ seahorse_key_get_trust (const SeahorseKey *skey)
 	if (skey->key->owner_trust <= SEAHORSE_VALIDITY_UNKNOWN)
 		return SEAHORSE_VALIDITY_UNKNOWN;
 	return skey->key->owner_trust;
+}
+
+/**
+ * seahorse_key_get_source
+ * @skey: The #SeahorseKey object
+ * 
+ * Gets the key source for the given key
+ * 
+ * Returns: A #SeahorseKeySource
+ **/
+struct _SeahorseKeySource* 
+seahorse_key_get_source  (const SeahorseKey *skey)
+{
+    g_return_val_if_fail (SEAHORSE_IS_KEY (skey), NULL);
+    g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (skey->key_source), NULL);
+    return skey->key_source;
+}
+
+/**
+ * seahorse_key_get_loaded_info
+ * @skey: The #SeahorseKey object
+ * 
+ * Determine the amount of info loaded in a key
+ * 
+ * Returns: A SeahorseKeyInfo value which determines what's loaded.
+ **/
+SeahorseKeyInfo 
+seahorse_key_get_loaded_info (SeahorseKey *skey)
+{
+    g_return_val_if_fail (SEAHORSE_IS_KEY (skey), SKEY_INFO_NONE);
+    
+    if (skey->key == NULL)
+        return SKEY_INFO_NONE;
+        
+    if (skey->key->keylist_mode & GPGME_KEYLIST_MODE_SIGS)
+        return SKEY_INFO_COMPLETE;
+        
+    return SKEY_INFO_NORMAL;
 }

@@ -20,30 +20,44 @@
  */
 
 #include <string.h>
+#include <eel/eel.h>
 
 #include "seahorse-op.h"
 #include "seahorse-util.h"
+#include "seahorse-context.h"
+#include "seahorse-key-source.h"
 #include "seahorse-vfs-data.h"
 
+/* Setup some basic GPGME context stuff before an operation */
+static void
+set_gpgme_opts (SeahorseKeySource *sksrc)
+{
+    gpgme_ctx_t ctx = sksrc->ctx;
+    gpgme_set_armor (ctx, eel_gconf_get_boolean (ARMOR_KEY));
+    gpgme_set_textmode (ctx, eel_gconf_get_boolean (TEXTMODE_KEY));
+}
+    
 /* helper function for importing @data. @data will be released.
  * returns number of keys imported or -1. */
 static gint
-import_data (SeahorseContext *sctx, gpgme_data_t data, gpgme_error_t *err)
+import_data (SeahorseKeySource *sksrc, gpgme_data_t data, gpgme_error_t *err)
 {
 	gint keys = 0;
-	SeahorseContext *new_ctx;
-	
-	new_ctx = seahorse_context_new ();
-	*err = gpgme_op_import (new_ctx->ctx, data);
+    gpgme_ctx_t new_ctx;
+
+    new_ctx = seahorse_key_source_new_context (sksrc);	
+    g_return_val_if_fail (new_ctx != NULL, -1);
+    
+	*err = gpgme_op_import (new_ctx, data);
 	if (GPG_IS_OK (*err)) {
-	        gpgme_import_result_t result = gpgme_op_import_result (new_ctx->ctx);
+        gpgme_import_result_t result = gpgme_op_import_result (new_ctx);
 		keys = result->considered;
 	}
 	gpgme_data_release (data);
-	seahorse_context_destroy (new_ctx);
+    gpgme_release (new_ctx);
 	
 	if (GPG_IS_OK (*err)) {
-		seahorse_context_keys_added (sctx, keys);
+        seahorse_key_source_refresh (sksrc, FALSE);
 		return keys;
 	}
 	else
@@ -52,7 +66,7 @@ import_data (SeahorseContext *sctx, gpgme_data_t data, gpgme_error_t *err)
 
 /**
  * seahorse_op_import_file:
- * @sctx: #SeahorseContext
+ * @sksrc: #SeahorseKeySource to import into
  * @path: Path of file to import
  * @err: Optional error value
  *
@@ -61,23 +75,23 @@ import_data (SeahorseContext *sctx, gpgme_data_t data, gpgme_error_t *err)
  * Returns: Number of keys imported or -1 if import fails
  **/
 gint
-seahorse_op_import_file (SeahorseContext *sctx, const gchar *path, gpgme_error_t *err)
+seahorse_op_import_file (SeahorseKeySource *sksrc, const gchar *path, gpgme_error_t *err)
 {
 	gpgme_data_t data;
 	gpgme_error_t error;
-	
+  
 	if (err == NULL)
 		err = &error;
 	/* new data from file */
     data = seahorse_vfs_data_create (path, FALSE, err);
     g_return_val_if_fail (data != NULL, -1);
 	
-	return import_data (sctx, data, err);
+	return import_data (sksrc, data, err);
 }
 
 /**
  * seahorse_op_import_text:
- * @sctx: #SeahorseContext
+ * @sksrc: #SeahorseKeySource to import into 
  * @text: Text to import
  * @err: Optional error value
  *
@@ -86,7 +100,7 @@ seahorse_op_import_file (SeahorseContext *sctx, const gchar *path, gpgme_error_t
  * Returns: Number of keys imported or -1 if import fails
  **/
 gint
-seahorse_op_import_text (SeahorseContext *sctx, const gchar *text, gpgme_error_t *err)
+seahorse_op_import_text (SeahorseKeySource *sksrc, const gchar *text, gpgme_error_t *err)
 {
 	gpgme_data_t data;
 	gpgme_error_t error;
@@ -100,43 +114,62 @@ seahorse_op_import_text (SeahorseContext *sctx, const gchar *text, gpgme_error_t
 	*err = gpgme_data_new_from_mem (&data, text, strlen (text), TRUE);
 	g_return_val_if_fail (GPG_IS_OK (*err), -1);
 	
-	return import_data (sctx, data, err);
+	return import_data (sksrc, data, err);
 }
 
-/* helper function for exporting @recips. @recips will be released.
- * returns exported data. */
+/* helper function for exporting @keys. returns exported data. */
 static gpgme_data_t
-export_data (SeahorseContext *sctx, gpgme_key_t *recips, gpgme_error_t *err)
+export_data (GList *keys, gboolean force_armor, gpgme_error_t *err)
 {
+    SeahorseKeySource *sksrc;
+    SeahorseKey *skey;
 	gpgme_data_t data = NULL;
-	gpgme_key_t *k;
     gpgme_error_t error;
+    gboolean old_armor;
+    GList *l;
    
-   if (err == NULL)
-       err = &error;
+    if (err == NULL)
+        err = &error;
        
 	*err = gpgme_data_new (&data);
 
-	k = recips;
-	while (*k) 
-        *err = gpgme_op_export (sctx->ctx, (*(k++))->subkeys->fpr, 0, data);
+    for (l = keys; l != NULL; l = g_list_next (l)) {
+       
+        g_return_val_if_fail (SEAHORSE_IS_KEY (l->data), data);
+        skey = SEAHORSE_KEY (l->data);
+       
+        sksrc = seahorse_key_get_source (skey);
+        g_return_val_if_fail (sksrc != NULL, data);
+
+        set_gpgme_opts (sksrc);
+        
+        if (force_armor) {
+            old_armor = gpgme_get_armor (sksrc->ctx);
+            gpgme_set_armor (sksrc->ctx, TRUE);
+        }
+        
+        *err = gpgme_op_export (sksrc->ctx, skey->key->subkeys->fpr, 0, data);
+        
+        if (force_armor)
+            gpgme_set_armor (sksrc->ctx, old_armor);
+        
+        g_return_val_if_fail (GPG_IS_OK (*err), data);
+    }
  
 	return data;
 }
 
 /**
  * seahorse_op_export_file:
- * @sctx: #SeahorseContext
+ * @keys: List of #SeahorseKey objects to export
  * @path: Path of a new file to export to
- * @recips: Keys to export
  * @err: Optional error value
  *
  * Tries to export @recips to the new file @path, saving an errors in @err.
  * @recips will be released upon completion.
  **/
 void
-seahorse_op_export_file (SeahorseContext *sctx, const gchar *path,
-			 gpgme_key_t * recips, gpgme_error_t *err)
+seahorse_op_export_file (GList *keys, const gchar *path, gpgme_error_t *err)
 {
 	gpgme_data_t data;
 	gpgme_error_t error;
@@ -144,7 +177,7 @@ seahorse_op_export_file (SeahorseContext *sctx, const gchar *path,
 	if (err == NULL)
 		err = &error;
 	/* export data */
-	data = export_data (sctx, recips, err);
+	data = export_data (keys, FALSE, err);
 	g_return_if_fail (GPG_IS_OK (*err));
 	/* write to file */
 	*err = seahorse_util_write_data_to_file (path, data);
@@ -152,8 +185,7 @@ seahorse_op_export_file (SeahorseContext *sctx, const gchar *path,
 
 /**
  * seahorse_op_export_text:
- * @sctx: #SeahorseContext
- * @recips: Keys to export
+ * @keys: List of #SeahorseKey objects to export
  * @err: Optional error value
  *
  * Tries to export @recips to text using seahorse_util_write_data_to_text(),
@@ -163,20 +195,16 @@ seahorse_op_export_file (SeahorseContext *sctx, const gchar *path,
  * Returns: The exported text or NULL if the operation fails
  **/
 gchar*
-seahorse_op_export_text (SeahorseContext *sctx, gpgme_key_t * recips, gpgme_error_t *err)
+seahorse_op_export_text (GList *keys, gpgme_error_t *err)
 {
 	gpgme_data_t data;
 	gpgme_error_t error;
-	gboolean armor;
 	
 	if (err == NULL)
 		err = &error;
 	
 	/* export data with armor */
-	armor = gpgme_get_armor (sctx->ctx);
-	gpgme_set_armor (sctx->ctx, TRUE);
-	data = export_data (sctx, recips, err);
-	gpgme_set_armor (sctx->ctx, armor);
+	data = export_data (keys, TRUE, err);
 	g_return_val_if_fail (GPG_IS_OK (*err), NULL);
 	
 	return seahorse_util_write_data_to_text (data);
@@ -190,30 +218,50 @@ typedef gpgme_error_t (* EncryptFunc) (gpgme_ctx_t ctx, gpgme_key_t recips[],
 /* helper function for encrypting @plain to @recips using @func. @plain and
  * @recips will be released. returns the encrypted data. */
 static gpgme_data_t
-encrypt_data_common (SeahorseContext *sctx, gpgme_data_t plain, gpgme_key_t * recips,
-		     EncryptFunc func, gpgme_error_t *err)
+encrypt_data_common (SeahorseKeySource *sksrc, GList *keys, gpgme_data_t plain, 
+                     EncryptFunc func, gpgme_error_t *err)
 {
+    SeahorseKey *skey;
 	gpgme_data_t cipher = NULL;
-	gpgme_key_t * key;
-	
+    gpgme_key_t *recips;
+    gchar *id;
+
 	/* if don't already have an error, do encrypt */
 	if (GPG_IS_OK (*err)) {
+
+        set_gpgme_opts (sksrc);
+        
+        /* Add the default key if set and necessary */
+        if (eel_gconf_get_boolean (ENCRYPTSELF_KEY)) {
+            id = eel_gconf_get_string (DEFAULT_KEY);        
+            if (id != NULL) {
+                skey = seahorse_key_source_get_key (sksrc, id, TRUE);
+                if (skey != NULL)
+                    keys = g_list_append (keys, skey);
+            }
+        }
+
+        /* Make keys into the right format */
+        recips = seahorse_util_list_to_keys (keys);
+        
 		*err = gpgme_data_new (&cipher);
 		if (GPG_IS_OK (*err))
-			*err = func (sctx->ctx, recips, GPGME_ENCRYPT_ALWAYS_TRUST, plain, cipher);
+			*err = func (sksrc->ctx, recips, GPGME_ENCRYPT_ALWAYS_TRUST, plain, cipher);
+         
+        seahorse_util_free_keys (recips);
 	}
 	/* release plain and recips */
 	gpgme_data_release (plain);
-	key = recips;
 	return cipher;
 }
 
 /* common file encryption helper to encrypt @path to @recips using @func.
  * returns the encrypted file's path. */
 static gchar*
-encrypt_file_common (SeahorseContext *sctx, const gchar *path, gpgme_key_t * recips,
-		     EncryptFunc func, gpgme_error_t *err)
+encrypt_file_common (GList *keys, const gchar *path, EncryptFunc func, 
+                     gpgme_error_t *err)
 {
+    SeahorseKeySource *sksrc;
 	gpgme_data_t plain, cipher;
 	gpgme_error_t error;
 	gchar *new_path = NULL;
@@ -221,13 +269,18 @@ encrypt_file_common (SeahorseContext *sctx, const gchar *path, gpgme_key_t * rec
 	if (err == NULL)
 		err = &error;
 
+    /* When S/MIME supported need to make sure all keys from the same source */       
+    g_return_val_if_fail (keys && SEAHORSE_IS_KEY (keys->data), NULL);
+    sksrc = seahorse_key_get_source (SEAHORSE_KEY (keys->data));
+    g_return_val_if_fail (sksrc != NULL, NULL);
+
     plain = seahorse_vfs_data_create (path, FALSE, err);
     g_return_val_if_fail (plain != NULL, NULL);
  
-	cipher = encrypt_data_common (sctx, plain, recips, func, err);
+	cipher = encrypt_data_common (sksrc, keys, plain, func, err);
 	g_return_val_if_fail (GPG_IS_OK (*err), NULL);
 	/* write cipher to file */
-	new_path = seahorse_util_add_suffix (sctx->ctx, path, SEAHORSE_CRYPT_SUFFIX);
+	new_path = seahorse_util_add_suffix (sksrc->ctx, path, SEAHORSE_CRYPT_SUFFIX);
 	*err = seahorse_util_write_data_to_file (new_path, cipher);
 	
 	/* free new_path if error */
@@ -242,22 +295,29 @@ encrypt_file_common (SeahorseContext *sctx, const gchar *path, gpgme_key_t * rec
 /* common text encryption helper to encrypt @text to @recips using @func.
  * ASCII Armor setting of @sctx is ignored. returns the encrypted text. */
 static gchar*
-encrypt_text_common (SeahorseContext *sctx, const gchar *text, gpgme_key_t * recips,
-		     EncryptFunc func, gpgme_error_t *err)
+encrypt_text_common (GList *keys, const gchar *text, EncryptFunc func, 
+                     gpgme_error_t *err)
 {
+    SeahorseKeySource *sksrc;
 	gpgme_data_t plain, cipher;
 	gpgme_error_t error;
 	gboolean armor;
 	
 	if (err == NULL)
 		err = &error;
+
+    /* When S/MIME supported need to make sure all keys from the same source */       
+    g_return_val_if_fail (keys && SEAHORSE_IS_KEY (keys->data), NULL);
+    sksrc = seahorse_key_get_source (SEAHORSE_KEY (keys->data));
+    g_return_val_if_fail (sksrc != NULL, NULL);
+    
 	/* new data form text */
 	*err = gpgme_data_new_from_mem (&plain, text, strlen (text), TRUE);
 	/* encrypt with armor */
-	armor = gpgme_get_armor (sctx->ctx);
-	gpgme_set_armor (sctx->ctx, TRUE);
-	cipher = encrypt_data_common (sctx, plain, recips, func, err);
-	gpgme_set_armor (sctx->ctx, armor);
+	armor = gpgme_get_armor (sksrc->ctx);
+	gpgme_set_armor (sksrc->ctx, TRUE);
+	cipher = encrypt_data_common (sksrc, keys, plain, func, err);
+	gpgme_set_armor (sksrc->ctx, armor);
 	g_return_val_if_fail (GPG_IS_OK (*err), NULL);
 	
 	return seahorse_util_write_data_to_text (cipher);
@@ -265,9 +325,8 @@ encrypt_text_common (SeahorseContext *sctx, const gchar *text, gpgme_key_t * rec
 
 /**
  * seahorse_op_encrypt_file:
- * @sctx: #SeahorseContext
+ * @keys: List of #SeahorseKey objects to encrypt to
  * @path: Path of file to encrypt
- * @recips: Keys to encrypt to
  * @err: Optional error value
  *
  * Tries to encrypt the file @path to @recips, saving any errors in @err.
@@ -278,17 +337,15 @@ encrypt_text_common (SeahorseContext *sctx, const gchar *text, gpgme_key_t * rec
  * Returns: The path of the encrypted file or NULL if encryption fails
  **/
 gchar*
-seahorse_op_encrypt_file (SeahorseContext *sctx, const gchar *path,
-			  gpgme_key_t * recips, gpgme_error_t *err)
+seahorse_op_encrypt_file (GList *keys, const gchar *path, gpgme_error_t *err)
 {
-	return encrypt_file_common (sctx, path, recips, gpgme_op_encrypt, err);
+	return encrypt_file_common (keys, path, gpgme_op_encrypt, err);
 }
 
 /**
  * seahorse_op_encrypt_text:
- * @sctx: #SeahorseContext
+ * @keys: List of #SeahorseKey objects to encrypt to
  * @text: Text to encrypt
- * @recips: Keys to encrypt with
  * @err: Optional error value
  *
  * Tries to encrypt @text to @recips, saving any errors in @err. The ASCII Armor
@@ -297,22 +354,37 @@ seahorse_op_encrypt_file (SeahorseContext *sctx, const gchar *path,
  * Returns: The encrypted text or NULL if encryption fails
  **/
 gchar*
-seahorse_op_encrypt_text (SeahorseContext *sctx, const gchar *text,
-			  gpgme_key_t * recips, gpgme_error_t *err)
+seahorse_op_encrypt_text (GList *keys, const gchar *text, gpgme_error_t *err)
 {
-	return encrypt_text_common (sctx, text, recips, gpgme_op_encrypt, err);
+	return encrypt_text_common (keys, text, gpgme_op_encrypt, err);
+}
+
+/* Helper function to set a key pair as the signer for its keysource */
+static void
+set_signer (SeahorseKeyPair *signer)
+{
+    SeahorseKeySource *sksrc;
+    
+    sksrc = seahorse_key_get_source (SEAHORSE_KEY (signer));
+    g_return_if_fail (sksrc != NULL);
+    
+    gpgme_signers_clear (sksrc->ctx);
+    gpgme_signers_add (sksrc->ctx, signer->secret);
 }
 
 /* helper function for signing @plain with @mode. @plain will be released.
  * returns the signed data. */
 static gpgme_data_t
-sign_data (SeahorseContext *sctx, gpgme_data_t plain, gpgme_sig_mode_t mode, gpgme_error_t *err)
+sign_data (SeahorseKeySource *sksrc, gpgme_data_t plain, gpgme_sig_mode_t mode, 
+           gpgme_error_t *err)
 {
 	gpgme_data_t sig = NULL;
-	
+
+    set_gpgme_opts (sksrc);
+
 	*err = gpgme_data_new (&sig);
 	if (GPG_IS_OK (*err))
-		*err = gpgme_op_sign (sctx->ctx, plain, sig, mode);
+		*err = gpgme_op_sign (sksrc->ctx, plain, sig, mode);
 	
 	gpgme_data_release (plain);
 	return sig;
@@ -320,7 +392,7 @@ sign_data (SeahorseContext *sctx, gpgme_data_t plain, gpgme_sig_mode_t mode, gpg
 
 /**
  * seahorse_op_sign_file:
- * @sctx: #SeahorseContext
+ * @signer: Key pair to sign with 
  * @path: Path of file to sign
  * @err: Optional error value
  *
@@ -332,23 +404,31 @@ sign_data (SeahorseContext *sctx, gpgme_data_t plain, gpgme_sig_mode_t mode, gpg
  * Returns: The path of the signature file or NULL if the operation fails
  **/
 gchar*
-seahorse_op_sign_file (SeahorseContext *sctx, const gchar *path, gpgme_error_t *err)
+seahorse_op_sign_file (SeahorseKeyPair *signer, const gchar *path, 
+                       gpgme_error_t *err)
 {
+    SeahorseKeySource *sksrc;
 	gpgme_data_t plain, sig;
 	gpgme_error_t error;
 	gchar *new_path = NULL;
 	
 	if (err == NULL)
 		err = &error;
+
+    sksrc = seahorse_key_get_source (SEAHORSE_KEY (signer));
+    g_return_val_if_fail (sksrc != NULL, NULL);
+    
 	/* new data from file */
     plain = seahorse_vfs_data_create (path, FALSE, err);
     g_return_val_if_fail (plain != NULL, NULL);
   
+    set_signer (signer);
+    
 	/* get detached signature */
-	sig = sign_data (sctx, plain, GPGME_SIG_MODE_DETACH, err);
+	sig = sign_data (sksrc, plain, GPGME_SIG_MODE_DETACH, err);
 	g_return_val_if_fail (GPG_IS_OK (*err), NULL);
 	/* write sig to file */
-	new_path = seahorse_util_add_suffix (sctx->ctx, path, SEAHORSE_SIG_SUFFIX);
+	new_path = seahorse_util_add_suffix (sksrc->ctx, path, SEAHORSE_SIG_SUFFIX);
 	*err = seahorse_util_write_data_to_file (new_path, sig);
 	
 	/* free new_path if error */
@@ -362,7 +442,7 @@ seahorse_op_sign_file (SeahorseContext *sctx, const gchar *path, gpgme_error_t *
 
 /**
  * seahorse_op_sign_text:
- * @sctx: #SeahorseContext
+ * @sksrc: SeahorseKeyStore to sign with 
  * @text: Text to sign
  * @err: Optional error value
  *
@@ -372,18 +452,26 @@ seahorse_op_sign_file (SeahorseContext *sctx, const gchar *path, gpgme_error_t *
  * Returns: The clear signed text or NULL if signing fails
  **/
 gchar*
-seahorse_op_sign_text (SeahorseContext *sctx, const gchar *text, gpgme_error_t *err)
+seahorse_op_sign_text (SeahorseKeyPair *signer, const gchar *text, 
+                       gpgme_error_t *err)
 {
+    SeahorseKeySource *sksrc;
 	gpgme_data_t plain, sig;
 	gpgme_error_t error;
 	
 	if (err == NULL)
 		err = &error;
+
+    sksrc = seahorse_key_get_source (SEAHORSE_KEY (signer));
+    g_return_val_if_fail (sksrc != NULL, NULL);
+    
+    set_signer (signer);
+            
 	/* new data from text */
 	*err = gpgme_data_new_from_mem (&plain, text, strlen (text), TRUE);
 	g_return_val_if_fail (GPG_IS_OK (*err), NULL);
 	/* clear sign data already ignores ASCII Armor */
-	sig = sign_data (sctx, plain, GPGME_SIG_MODE_CLEAR, err);
+	sig = sign_data (sksrc, plain, GPGME_SIG_MODE_CLEAR, err);
 	g_return_val_if_fail (GPG_IS_OK (*err), NULL);
 	
 	return seahorse_util_write_data_to_text (sig);
@@ -391,7 +479,7 @@ seahorse_op_sign_text (SeahorseContext *sctx, const gchar *text, gpgme_error_t *
 
 /**
  * seahorse_op_encrypt_sign_file:
- * @sctx: #SeahorseContext
+ * @keys: List of #SeahorseKey objects to encrypt to
  * @path: Path of file to encrypt and sign
  * @recips: Keys to encrypt with
  * @err: Optional error value
@@ -403,15 +491,16 @@ seahorse_op_sign_text (SeahorseContext *sctx, const gchar *text, gpgme_error_t *
  * Returns: The path of the encrypted and signed file, or NULL if the operation fails
  **/
 gchar*
-seahorse_op_encrypt_sign_file (SeahorseContext *sctx, const gchar *path,
-			       gpgme_key_t * recips, gpgme_error_t *err)
+seahorse_op_encrypt_sign_file (GList *keys, SeahorseKeyPair *signer, 
+                               const gchar *path, gpgme_error_t *err)
 {
-	return encrypt_file_common (sctx, path, recips, gpgme_op_encrypt_sign, err);
+    set_signer (signer);
+	return encrypt_file_common (keys, path, gpgme_op_encrypt_sign, err);
 }
 
 /**
  * seahorse_op_encrypt_sign_text:
- * @sctx: #SeahorseContext
+ * @keys: List of #SeahorseKey objects to encrypt to
  * @text: Text to encrypt and sign
  * @recips: Keys to encrypt with
  * @err: Optional error value
@@ -423,15 +512,16 @@ seahorse_op_encrypt_sign_file (SeahorseContext *sctx, const gchar *path,
  * Returns: The encrypted and signed text or NULL if the operation fails
  **/
 gchar*
-seahorse_op_encrypt_sign_text (SeahorseContext *sctx, const gchar *text,
-			       gpgme_key_t * recips, gpgme_error_t *err)
+seahorse_op_encrypt_sign_text (GList *keys, SeahorseKeyPair *signer, 
+                               const gchar *text, gpgme_error_t *err)
 {
-	return encrypt_text_common (sctx, text, recips, gpgme_op_encrypt_sign, err);
+    set_signer (signer);
+	return encrypt_text_common (keys, text, gpgme_op_encrypt_sign, err);
 }
 
 /**
  * seahorse_op_verify_file:
- * @sctx: #SeahorseContext
+ * @sksrc: #SeahorseKeySource to verify against
  * @path: Path of detached signature file
  * @status: Will contain the status of any verified signatures
  * @err: Optional error value
@@ -441,8 +531,8 @@ seahorse_op_encrypt_sign_text (SeahorseContext *sctx, const gchar *text,
  * The status of any verified signatures will be saved in @status.
  **/
 void
-seahorse_op_verify_file (SeahorseContext *sctx, const gchar *path, const gchar *original,
-			 gpgme_verify_result_t *status, gpgme_error_t *err)
+seahorse_op_verify_file (SeahorseKeySource *sksrc, const gchar *path, const gchar *original,
+                         gpgme_verify_result_t *status, gpgme_error_t *err)
 {
 	gpgme_data_t sig, plain;
 	gpgme_error_t error;
@@ -462,8 +552,8 @@ seahorse_op_verify_file (SeahorseContext *sctx, const gchar *path, const gchar *
 	}
  
 	/* verify sig file, release plain data */
-    *err = gpgme_op_verify (sctx->ctx, sig, plain, NULL);
-    *status = gpgme_op_verify_result (sctx->ctx);
+    *err = gpgme_op_verify (sksrc->ctx, sig, plain, NULL);
+    *status = gpgme_op_verify_result (sksrc->ctx);
     gpgme_data_release (sig); 
 	gpgme_data_release (plain);
 	g_return_if_fail (GPG_IS_OK (*err));
@@ -471,7 +561,7 @@ seahorse_op_verify_file (SeahorseContext *sctx, const gchar *path, const gchar *
 
 /**
  * seahorse_op_verify_text:
- * @sctx: #SeahorseContext
+ * @sksrc: #SeahorseKeySource to verify against
  * @text: Text to verify
  * @status: Will contain the status of any verified signatures
  * @err: Optional error value
@@ -483,8 +573,8 @@ seahorse_op_verify_file (SeahorseContext *sctx, const gchar *path, const gchar *
  * Returns: The verified text or NULL if the operation fails
  **/
 gchar*
-seahorse_op_verify_text (SeahorseContext *sctx, const gchar *text,
-			 gpgme_verify_result_t *status, gpgme_error_t *err)
+seahorse_op_verify_text (SeahorseKeySource *sksrc, const gchar *text,
+                         gpgme_verify_result_t *status, gpgme_error_t *err)
 {
 	gpgme_data_t sig, plain;
 	gpgme_error_t error;
@@ -503,13 +593,13 @@ seahorse_op_verify_text (SeahorseContext *sctx, const gchar *text,
 		g_return_val_if_reached (NULL);
 	}
 	/* verify data with armor */
-	armor = gpgme_get_armor (sctx->ctx);
-	gpgme_set_armor (sctx->ctx, TRUE);
+	armor = gpgme_get_armor (sksrc->ctx);
+	gpgme_set_armor (sksrc->ctx, TRUE);
     /* verify sig file, release plain data */
-    *err = gpgme_op_verify (sctx->ctx, sig, NULL, plain);
-    *status = gpgme_op_verify_result (sctx->ctx);
+    *err = gpgme_op_verify (sksrc->ctx, sig, NULL, plain);
+    *status = gpgme_op_verify_result (sksrc->ctx);
     gpgme_data_release (sig);     
-	gpgme_set_armor (sctx->ctx, armor);
+	gpgme_set_armor (sksrc->ctx, armor);
 	g_return_val_if_fail (GPG_IS_OK (*err), NULL);
 	/* return verified text */
 	return seahorse_util_write_data_to_text (plain);
@@ -518,17 +608,19 @@ seahorse_op_verify_text (SeahorseContext *sctx, const gchar *text,
 /* helper function to decrypt and verify @cipher. @cipher will be released.
  * returns the verified data. */
 static gpgme_data_t
-decrypt_verify_data (SeahorseContext *sctx, gpgme_data_t cipher,
-		     gpgme_verify_result_t *status, gpgme_error_t *err)
+decrypt_verify_data (SeahorseKeySource *sksrc, gpgme_data_t cipher,
+                     gpgme_verify_result_t *status, gpgme_error_t *err)
 {
 	gpgme_data_t plain;
+
+    set_gpgme_opts (sksrc);
 	
 	*err = gpgme_data_new (&plain);
 	if (GPG_IS_OK (*err))
-		*err = gpgme_op_decrypt_verify (sctx->ctx, cipher, plain);
+		*err = gpgme_op_decrypt_verify (sksrc->ctx, cipher, plain);
     
     if (status)
-    	*status = gpgme_op_verify_result (sctx->ctx);
+    	*status = gpgme_op_verify_result (sksrc->ctx);
      
 	gpgme_data_release (cipher);
 	return plain;
@@ -536,7 +628,7 @@ decrypt_verify_data (SeahorseContext *sctx, gpgme_data_t cipher,
 
 /**
  * seahorse_op_decrypt_verify_file:
- * @sctx: #SeahorseContext
+ * @sksrc: #SeahorseKeySource to verify against
  * @path: Path of file to decrypt and verify
  * @status: Will contain the status of any verified signatures
  * @err: Optional error value
@@ -549,8 +641,8 @@ decrypt_verify_data (SeahorseContext *sctx, gpgme_data_t cipher,
  * Returns: The path of the decrypted file or NULL if the operation fails
  **/
 gchar*
-seahorse_op_decrypt_verify_file (SeahorseContext *sctx, const gchar *path,
-				 gpgme_verify_result_t *status, gpgme_error_t *err)
+seahorse_op_decrypt_verify_file (SeahorseKeySource *sksrc, const gchar *path,
+                                 gpgme_verify_result_t *status, gpgme_error_t *err)
 {
 	gpgme_data_t cipher, plain;
 	gpgme_error_t error;
@@ -563,7 +655,7 @@ seahorse_op_decrypt_verify_file (SeahorseContext *sctx, const gchar *path,
     g_return_val_if_fail (plain != NULL, NULL);
 
 	/* verify data */
-	plain = decrypt_verify_data (sctx, cipher, status, err);
+	plain = decrypt_verify_data (sksrc, cipher, status, err);
 	g_return_val_if_fail (GPG_IS_OK (*err), NULL);
 	/* write data to new file */
 	new_path = seahorse_util_remove_suffix (path);
@@ -579,7 +671,7 @@ seahorse_op_decrypt_verify_file (SeahorseContext *sctx, const gchar *path,
 
 /**
  * seahorse_op_decrypt_verify_text:
- * @sctx: #SeahorseContext
+ * @sksrc: #SeahorseKeySource to verify against
  * @text: Text to decrypt and verify
  * @status: Will contain the status of any verified signatures
  * @err: Optional error value
@@ -591,8 +683,8 @@ seahorse_op_decrypt_verify_file (SeahorseContext *sctx, const gchar *path,
  * Returns: The decrypted text or NULL if the operation fails
  **/
 gchar*
-seahorse_op_decrypt_verify_text (SeahorseContext *sctx, const gchar *text,
-				 gpgme_verify_result_t *status, gpgme_error_t *err)
+seahorse_op_decrypt_verify_text (SeahorseKeySource *sksrc, const gchar *text,
+                                 gpgme_verify_result_t *status, gpgme_error_t *err)
 {
 	gpgme_data_t cipher, plain;
 	gpgme_error_t error;
@@ -604,10 +696,10 @@ seahorse_op_decrypt_verify_text (SeahorseContext *sctx, const gchar *text,
 	*err = gpgme_data_new_from_mem (&cipher, text, strlen (text), TRUE);
 	g_return_val_if_fail (GPG_IS_OK (*err), NULL);
 	/* get decrypted data with armor */
-	armor = gpgme_get_armor (sctx->ctx);
-	gpgme_set_armor (sctx->ctx, TRUE);
-	plain = decrypt_verify_data (sctx, cipher, status, err);
-	gpgme_set_armor (sctx->ctx, armor);
+	armor = gpgme_get_armor (sksrc->ctx);
+	gpgme_set_armor (sksrc->ctx, TRUE);
+	plain = decrypt_verify_data (sksrc, cipher, status, err);
+	gpgme_set_armor (sksrc->ctx, armor);
 	g_return_val_if_fail (GPG_IS_OK (*err), NULL);
 	/* return text of decrypted data */
 	return seahorse_util_write_data_to_text (plain);

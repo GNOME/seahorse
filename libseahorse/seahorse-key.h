@@ -34,8 +34,17 @@
 #define SEAHORSE_IS_KEY_CLASS(klass)	(GTK_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_KEY))
 #define SEAHORSE_KEY_GET_CLASS(obj)	(GTK_CHECK_GET_CLASS ((obj), SEAHORSE_TYPE_KEY, SeahorseKeyClass))
 
+/* Key info loaded */
+typedef enum {
+    SKEY_INFO_NONE,
+    SKEY_INFO_REMOTE,
+    SKEY_INFO_NORMAL,
+    SKEY_INFO_COMPLETE
+} SeahorseKeyInfo;
+
 /* Possible key changes */
 typedef enum {
+    SKEY_CHANGE_ALL,
 	SKEY_CHANGE_SIGNERS,
 	SKEY_CHANGE_PASS,
 	SKEY_CHANGE_TRUST,
@@ -46,6 +55,9 @@ typedef enum {
 	SKEY_CHANGE_SUBKEYS
 } SeahorseKeyChange;
 
+/* Forward declaration */
+struct _SeahorseKeySource;
+
 typedef struct _SeahorseKey SeahorseKey;
 typedef struct _SeahorseKeyClass SeahorseKeyClass;
 	
@@ -54,11 +66,8 @@ struct _SeahorseKey
 	GtkObject		parent;
 	
 	/*< public >*/
-	gpgme_key_t		key;
- 
-    /*< private >*/
-    gchar*          cached_userid;
-    gchar*          cached_fingerprint;
+	gpgme_key_t		  key;
+    struct _SeahorseKeySource *key_source;
 };
 
 struct _SeahorseKeyClass
@@ -72,7 +81,8 @@ struct _SeahorseKeyClass
 
 GType           seahorse_key_get_type (void);
 
-SeahorseKey*		seahorse_key_new		(gpgme_key_t		key);
+SeahorseKey*    seahorse_key_new            (struct _SeahorseKeySource *sksrc,
+                                             gpgme_key_t        key);
 
 void			seahorse_key_destroy		(SeahorseKey		*skey);
 
@@ -106,5 +116,9 @@ gboolean		seahorse_key_can_encrypt	(const SeahorseKey	*skey);
 const SeahorseValidity	seahorse_key_get_validity	(const SeahorseKey	*skey);
 
 const SeahorseValidity	seahorse_key_get_trust		(const SeahorseKey	*skey);
+
+struct _SeahorseKeySource*  seahorse_key_get_source    (const SeahorseKey *skey);
+
+SeahorseKeyInfo seahorse_key_get_loaded_info (SeahorseKey *skey);
 
 #endif /* __SEAHORSE_KEY_H__ */

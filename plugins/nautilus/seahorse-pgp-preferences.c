@@ -36,6 +36,8 @@ main (int argc, char **argv)
                 GNOME_PARAM_APP_DATADIR, DATA_DIR, NULL);
 	
 	sctx = seahorse_context_new ();
+    seahorse_context_load_keys (sctx, TRUE);
+   
 	swidget = seahorse_widget_new ("pgp-preferences", sctx);
 	
 	table = gtk_vbox_new (FALSE, 12);

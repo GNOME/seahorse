@@ -48,27 +48,27 @@ trust_changed (GtkOptionMenu *optionmenu, SeahorseWidget *swidget)
 	skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
 	
 	if (seahorse_key_get_trust (skey) != trust)
-		seahorse_key_op_set_trust (swidget->sctx, skey, trust);
+		seahorse_key_op_set_trust (skey, trust);
 }
 
 static void
 disabled_toggled (GtkToggleButton *togglebutton, SeahorseWidget *swidget)
 {
-	seahorse_key_op_set_disabled (swidget->sctx, SEAHORSE_KEY_WIDGET (swidget)->skey,
+	seahorse_key_op_set_disabled (SEAHORSE_KEY_WIDGET (swidget)->skey,
 		gtk_toggle_button_get_active (togglebutton));
 }
 
 static void
 primary_expires_date_changed (GnomeDateEdit *gde, SeahorseWidget *swidget)
 {
-    seahorse_key_pair_op_set_expires (swidget->sctx, SEAHORSE_KEY_PAIR (
+    seahorse_key_pair_op_set_expires (SEAHORSE_KEY_PAIR (
         SEAHORSE_KEY_WIDGET (swidget)->skey), 0, gnome_date_edit_get_time (gde));
 }
 
 static void
 subkey_expires_date_changed (GnomeDateEdit *gde, SeahorseWidget *swidget)
 {
-    seahorse_key_pair_op_set_expires (swidget->sctx, SEAHORSE_KEY_PAIR (
+    seahorse_key_pair_op_set_expires (SEAHORSE_KEY_PAIR (
         SEAHORSE_KEY_WIDGET (swidget)->skey), get_subkey_index (swidget),
         gnome_date_edit_get_time (gde));
 }
@@ -88,7 +88,7 @@ never_expires_primary_toggled (GtkToggleButton *togglebutton, SeahorseWidget *sw
     
     /* if want to never expire & expires, set to never expires */
     if (gtk_toggle_button_get_active (togglebutton) && skey->key->subkeys->expires) {
-        seahorse_key_pair_op_set_expires (swidget->sctx, SEAHORSE_KEY_PAIR (skey), 0, 0);
+        seahorse_key_pair_op_set_expires (SEAHORSE_KEY_PAIR (skey), 0, 0);
     }
 }
 
@@ -106,7 +106,7 @@ never_expires_subkey_toggled (GtkToggleButton *togglebutton, SeahorseWidget *swi
     
     /* if want to never expire & expires, set to never expires */
     if (gtk_toggle_button_get_active (togglebutton) && subkey->expires) {
-        seahorse_key_pair_op_set_expires (swidget->sctx, SEAHORSE_KEY_PAIR (skey), index, 0);
+        seahorse_key_pair_op_set_expires (SEAHORSE_KEY_PAIR (skey), index, 0);
     }
 }
 
@@ -273,7 +273,7 @@ passphrase_clicked (GtkWidget *widget, SeahorseWidget *swidget)
     skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
     
     if (SEAHORSE_IS_KEY_PAIR (skey))
-        seahorse_key_pair_op_change_pass (swidget->sctx, SEAHORSE_KEY_PAIR (skey));
+        seahorse_key_pair_op_change_pass (SEAHORSE_KEY_PAIR (skey));
 }
 
 static void
@@ -541,7 +541,7 @@ uid_primary_clicked (GtkWidget *widget, SeahorseWidget *swidget)
     
     index = get_selected_uid (swidget);
     if (index >= 1) {
-        err = seahorse_key_op_primary_uid (swidget->sctx, skey, index);
+        err = seahorse_key_op_primary_uid (skey, index);
         
         if (!GPG_IS_OK (err)) 
             seahorse_util_handle_error (err, _("Couldn't change primary user ID"));
@@ -653,6 +653,13 @@ static void
 key_changed (SeahorseKey *skey, SeahorseKeyChange change, SeahorseWidget *swidget)
 {
 	switch (change) {
+        case SKEY_CHANGE_ALL:
+            do_uid_list (swidget);
+            do_key_info (swidget);
+            do_signatures (swidget);
+            do_signature_list (swidget);
+            do_subkeys (swidget);
+            break;
 		case SKEY_CHANGE_UIDS:
 			do_uid_list (swidget);
             do_key_info (swidget);
@@ -661,7 +668,8 @@ key_changed (SeahorseKey *skey, SeahorseKeyChange change, SeahorseWidget *swidge
             do_signatures (swidget);
             do_signature_list (swidget);
             break;
-		case SKEY_CHANGE_SUBKEYS: case SKEY_CHANGE_EXPIRES:
+		case SKEY_CHANGE_SUBKEYS: 
+        case SKEY_CHANGE_EXPIRES:
 			do_subkeys (swidget);
 			break;
 		default:
@@ -670,24 +678,42 @@ key_changed (SeahorseKey *skey, SeahorseKeyChange change, SeahorseWidget *swidge
 }
 
 static void
+key_destroyed (GtkObject *object, SeahorseWidget *swidget)
+{
+    seahorse_widget_destroy (swidget);
+}
+
+static void
 properties_destroyed (GtkObject *object, SeahorseWidget *swidget)
 {
-	g_signal_handlers_disconnect_by_func (SEAHORSE_KEY_WIDGET (swidget)->skey,
-		key_changed, swidget);
+    g_signal_handlers_disconnect_by_func (SEAHORSE_KEY_WIDGET (swidget)->skey,
+                                          key_changed, swidget);
+    g_signal_handlers_disconnect_by_func (SEAHORSE_KEY_WIDGET (swidget)->skey,
+                                          key_destroyed, swidget);
 }
 
 void
 seahorse_key_properties_new (SeahorseContext *sctx, SeahorseKey *skey)
 {
+    SeahorseKeySource *sksrc;
 	SeahorseWidget *swidget;
 	GtkWidget *widget;
+    
+    /* Reload the key to make sure to get all the props */
+    sksrc = seahorse_key_get_source (skey);
+    g_return_if_fail (sksrc != NULL);
+        
+    skey = seahorse_key_source_get_key (sksrc, 
+                seahorse_key_get_id (skey->key), SKEY_INFO_COMPLETE);
+    g_return_if_fail (skey != NULL);                
 	
 	swidget = seahorse_key_widget_new ("key-properties", sctx, skey);
 	g_return_if_fail (swidget != NULL);
 	
 	widget = glade_xml_get_widget (swidget->xml, swidget->name);
 	g_signal_connect (GTK_OBJECT (widget), "destroy", G_CALLBACK (properties_destroyed), swidget);
-	g_signal_connect_after (skey, "changed", G_CALLBACK (key_changed), swidget);
+    g_signal_connect_after (skey, "changed", G_CALLBACK (key_changed), swidget);
+    g_signal_connect_after (skey, "destroy", G_CALLBACK (key_destroyed), swidget);
 	
 	do_stats (swidget, GTK_TABLE (glade_xml_get_widget (swidget->xml, "primary_table")), 3, 0,
 		skey->key->subkeys);

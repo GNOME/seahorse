@@ -54,7 +54,7 @@ menu_destroyed (GtkObject *object, SeahorseContext *sctx)
 GtkWidget*
 seahorse_default_key_control_new (SeahorseContext *sctx)
 {
-	GList *list = NULL;
+	GList *keys, *list = NULL;
 	GtkWidget *option, *menu;
 	gint index = 0, history = 0;
 	SeahorseKey *skey;
@@ -62,8 +62,9 @@ seahorse_default_key_control_new (SeahorseContext *sctx)
 	
 	menu = gtk_menu_new ();
 	default_key = eel_gconf_get_string (DEFAULT_KEY);
-	
-	for (list = seahorse_context_get_key_pairs (sctx); list != NULL; list = g_list_next (list)) {
+	keys = seahorse_context_get_key_pairs (sctx);
+ 
+	for (list = keys; list != NULL; list = g_list_next (list)) {
 		skey = SEAHORSE_KEY (list->data);
 		
 		if (!SEAHORSE_IS_KEY_PAIR (skey) || !seahorse_key_pair_can_sign (SEAHORSE_KEY_PAIR (skey)))
@@ -78,8 +79,10 @@ seahorse_default_key_control_new (SeahorseContext *sctx)
 		
 		index++;
 	}
+ 
+    g_list_free (keys);
     	
-	g_signal_connect_after (sctx, "add", G_CALLBACK (key_added), menu);
+	g_signal_connect_after (sctx, "added", G_CALLBACK (key_added), menu);
 	g_signal_connect_after (GTK_OBJECT (menu), "destroy",
 		G_CALLBACK (menu_destroyed), sctx);
 	

@@ -104,10 +104,14 @@ setup_file_types (GtkFileChooser* dialog)
 static void
 import_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
+    SeahorseKeySource *sksrc;
     GtkWidget *dialog;
     char* uri = NULL;
     gint keys;
     gpgme_error_t err;
+    
+    sksrc = seahorse_context_get_pri_source (swidget->sctx);
+    g_return_if_fail (sksrc != NULL);
     
     dialog = gtk_file_chooser_dialog_new (_("Import Key"), 
                 GTK_WINDOW(glade_xml_get_widget (swidget->xml, "key-manager")),
@@ -125,10 +129,10 @@ import_activate (GtkWidget *widget, SeahorseWidget *swidget)
     gtk_widget_destroy (dialog);
 
     if(uri) {
-        keys = seahorse_op_import_file (swidget->sctx, uri, &err);
+        keys = seahorse_op_import_file (sksrc, uri, &err);
         
         if (GPG_IS_OK (err))
-            seahorse_context_keys_added (swidget->sctx, keys);
+            seahorse_key_source_refresh (sksrc, FALSE);
         else
             seahorse_util_handle_error (err, _("Couldn't import keys from \"%s\""), 
                 seahorse_util_uri_get_last (uri));
@@ -141,15 +145,19 @@ import_activate (GtkWidget *widget, SeahorseWidget *swidget)
 static void
 clipboard_received (GtkClipboard *board, const gchar *text, SeahorseContext *sctx)
 {
+    SeahorseKeySource *sksrc;
     gpgme_error_t err;
     gint keys;
+    
+    sksrc = seahorse_context_get_pri_source (sctx);
+    g_return_if_fail (sksrc != NULL);
  
-    keys = seahorse_op_import_text (sctx, text, &err);
+    keys = seahorse_op_import_text (sksrc, text, &err);
  
     if (!GPG_IS_OK (err))
         seahorse_util_handle_error (err, _("Couldn't import keys from clipboard"));
     else if (keys > 0)
-        seahorse_context_keys_added (sctx, keys);
+        seahorse_key_source_refresh (sksrc, FALSE);
 }
 
 /* Pastes key from keyboard */
@@ -173,12 +181,15 @@ copy_activate (GtkWidget *widget, SeahorseWidget *swidget)
     GtkClipboard *board;
     gchar *text;
     gpgme_error_t err;
-    gpgme_key_t * recips;
+    GList *keys;
   
-    recips = seahorse_key_store_get_selected_recips (GTK_TREE_VIEW (
-        glade_xml_get_widget (swidget->xml, KEY_LIST)));
+    keys = seahorse_key_store_get_selected_keys (GTK_TREE_VIEW (
+                glade_xml_get_widget (swidget->xml, KEY_LIST)));
        
-    text = seahorse_op_export_text (swidget->sctx, recips, &err);
+    if (g_list_length (keys) == 0)
+        return;
+               
+    text = seahorse_op_export_text (keys, &err);
 
     if (!GPG_IS_OK (err))
         seahorse_util_handle_error (err, _("Couldn't export key to clipboard"));
@@ -209,7 +220,7 @@ export_activate (GtkWidget *widget, SeahorseWidget *swidget)
     GtkWidget *dialog;
     char* uri = NULL;
     gpgme_error_t err;
-    gpgme_key_t* recips;
+    GList *keys;
     
     dialog = gtk_file_chooser_dialog_new (_("Export Key"), 
                 GTK_WINDOW(glade_xml_get_widget (swidget->xml, "key-manager")),
@@ -256,12 +267,12 @@ export_activate (GtkWidget *widget, SeahorseWidget *swidget)
     gtk_widget_destroy (dialog);
 
     if(uri) {
-        recips = seahorse_key_store_get_selected_recips (GTK_TREE_VIEW (
+        keys = seahorse_key_store_get_selected_keys (GTK_TREE_VIEW (
             glade_xml_get_widget (swidget->xml, KEY_LIST)));
 
-        /* This frees recips */        
-        seahorse_op_export_file (swidget->sctx, uri, recips, &err); 
-        
+        seahorse_op_export_file (keys, uri, &err); 
+		g_list_free (keys);
+		        
         if (!GPG_IS_OK (err))
             seahorse_util_handle_error (err, _("Couldn't export key to \"%s\""),
                     seahorse_util_uri_get_last (uri));
@@ -299,7 +310,7 @@ change_passphrase_activate (GtkMenuItem *item, SeahorseWidget *swidget)
 	skey = seahorse_key_store_get_selected_key (GTK_TREE_VIEW (
 		glade_xml_get_widget (swidget->xml, KEY_LIST)));
 	if (skey != NULL && SEAHORSE_IS_KEY_PAIR (skey))
-		seahorse_key_pair_op_change_pass (swidget->sctx, SEAHORSE_KEY_PAIR (skey));
+		seahorse_key_pair_op_change_pass (SEAHORSE_KEY_PAIR (skey));
 }
 
 static void
@@ -606,6 +617,7 @@ static void
 target_drag_data_received (GtkWidget *widget, GdkDragContext *context, gint x, gint y,
                            GtkSelectionData *data, guint info, guint time, SeahorseContext *sctx)
 {
+    SeahorseKeySource *sksrc;
     gint keys = 0;
     gpgme_error_t err;
     gchar** uris;
@@ -613,9 +625,12 @@ target_drag_data_received (GtkWidget *widget, GdkDragContext *context, gint x, g
     
     g_return_if_fail (data != NULL);
     
+    sksrc = seahorse_context_get_pri_source (sctx);
+    g_return_if_fail (sksrc != NULL);
+    
     switch(info) {
     case TEXT_PLAIN:
-        keys = seahorse_op_import_text (sctx, data->data, &err);
+        keys = seahorse_op_import_text (sksrc, data->data, &err);
         break;
         
     case TEXT_URIS:
@@ -623,7 +638,7 @@ target_drag_data_received (GtkWidget *widget, GdkDragContext *context, gint x, g
         for(u = uris; *u; u++) {
             g_strstrip (*u);
             if ((*u)[0]) { /* Make sure it's not an empty line */
-                keys += seahorse_op_import_file (sctx, *u, &err);  
+                keys += seahorse_op_import_file (sksrc, *u, &err);  
                 if (!GPG_IS_OK (err)) {
                     seahorse_util_handle_error (err, _("Couldn't import key from \"%s\""),
                             seahorse_util_uri_get_last (*u));
@@ -640,7 +655,7 @@ target_drag_data_received (GtkWidget *widget, GdkDragContext *context, gint x, g
     } 
 
     if (keys > 0)
-        seahorse_context_keys_added (sctx, keys);        
+        seahorse_key_source_refresh (sksrc, FALSE);        
 }
 
 /* Refilter the keys when the filter text changes */
@@ -765,10 +780,9 @@ seahorse_key_manager_show (SeahorseContext *sctx)
     glade_xml_signal_connect_data(swidget->xml, "on_filter_changed",
                               G_CALLBACK(filter_changed), skstore);
 
-    seahorse_context_get_keys (sctx);                                 
-
-	if (seahorse_context_get_n_keys (sctx) == 0 && 
-	    seahorse_context_get_n_key_pairs (sctx) == 0) {
+    /* Although not all the keys have completed we'll know whether we have 
+     * any or not at this point */
+	if (seahorse_context_get_n_keys (sctx) == 0) {
 		w = glade_xml_get_widget (swidget->xml, "first-time-box");
 		gtk_widget_show (w);
 	}

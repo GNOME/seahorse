@@ -23,6 +23,7 @@
 
 #include "seahorse-widget.h"
 #include "seahorse-util.h"
+#include "seahorse-key-source.h"
 #include "seahorse-key-op.h"
 
 #define EXPIRES "expiration_date"
@@ -119,7 +120,7 @@ on_druidpagepassphrase_next (GnomeDruidPage *gnomedruidpage, GtkWidget *widget, 
 void
 on_druid_finish (GnomeDruidPage *gnomedruidpage, GtkWidget *widget, SeahorseWidget *swidget)
 {
-
+    SeahorseKeySource *sksrc;
 	const gchar *name, *email, *comment, *pass;
 	gint length;
 	SeahorseKeyType type;
@@ -153,8 +154,12 @@ on_druid_finish (GnomeDruidPage *gnomedruidpage, GtkWidget *widget, SeahorseWidg
 	
 	widget2 = glade_xml_get_widget (swidget->xml, swidget->name);
 	gtk_widget_hide (widget2);
+    
+    /* When we update to support S/MIME this will need to change */
+    sksrc = seahorse_context_get_pri_source (swidget->sctx);
+    g_return_if_fail (sksrc != NULL);
 	
-	err = seahorse_key_op_generate (swidget->sctx, name, email, comment,
+	err = seahorse_key_op_generate (sksrc, name, email, comment,
 		pass, type, length, expires);
 	if (!GPG_IS_OK (err)) {
 		gtk_widget_show (widget2);

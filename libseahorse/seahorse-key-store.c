@@ -39,6 +39,17 @@ static const GType col_types[] = {
     KEY_STORE_BASE_TYPES
 };
 
+struct _SeahorseKeyStorePriv {    
+    GHashTable              *rows;
+    
+    GtkTreeModelFilter      *filter;
+    GtkTreeModelSort        *sort;
+    
+    SeahorseKeyStoreMode    filter_mode;
+    gchar*                  filter_text;
+    guint                   filter_stag;
+};
+
 /* Internal data stored at 0 in the tree store in order to keep track
  * of the location, key-store and key.
  */
@@ -80,9 +91,11 @@ static void	seahorse_key_store_context_destroyed	(GtkObject		*object,
 static void	seahorse_key_store_key_added		(SeahorseContext	*sctx,
 							 SeahorseKey		*skey,
 							 SeahorseKeyStore	*skstore);
+static void seahorse_key_store_key_removed      (SeahorseContext    *sctx,
+                             SeahorseKey        *skey,
+                             SeahorseKeyStore   *skstore);
+                             
 /* Key signals */
-static void	seahorse_key_store_key_destroyed	(GtkObject		*object,
-							 SeahorseKeyRow		*skrow);
 static void	seahorse_key_store_key_changed		(SeahorseKey		*skey,
 							 SeahorseKeyChange	change,
 							 SeahorseKeyRow		*skrow);
@@ -91,6 +104,8 @@ static void	seahorse_key_row_new			(SeahorseKeyStore	*skstore,
 							 GtkTreeIter		*iter,
 							 SeahorseKey		*skey);
 static void	seahorse_key_row_remove			(SeahorseKeyRow		*skrow);
+
+static void seahorse_key_row_free           (SeahorseKeyRow     *skrow);
 
 /* Filter row method */
 static gboolean filter_callback              (GtkTreeModel *model,
@@ -169,6 +184,11 @@ seahorse_key_store_constructor (GType type, guint n_props, GObjectConstructParam
 {
     GObject* obj = G_OBJECT_CLASS (parent_class)->constructor (type, n_props, props);
     SeahorseKeyStore* skstore = SEAHORSE_KEY_STORE (obj);
+
+    /* init private vars */
+    skstore->priv = g_new0 (SeahorseKeyStorePriv, 1);
+    skstore->priv->rows = g_hash_table_new_full (g_direct_hash, g_direct_equal, 
+                                       NULL, (GDestroyNotify)seahorse_key_row_free);
  
     /* Setup the store */
     guint cols = SEAHORSE_KEY_STORE_GET_CLASS (skstore)->n_columns;
@@ -176,9 +196,9 @@ seahorse_key_store_constructor (GType type, guint n_props, GObjectConstructParam
     gtk_tree_store_set_column_types (GTK_TREE_STORE (obj), cols, types);
     
     /* Setup the sort and filter */
-    skstore->filter = GTK_TREE_MODEL_FILTER (gtk_tree_model_filter_new (GTK_TREE_MODEL (obj), NULL));
-    gtk_tree_model_filter_set_visible_func (skstore->filter, filter_callback, skstore, NULL);
-    skstore->sort = GTK_TREE_MODEL_SORT (gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (skstore->filter)));
+    skstore->priv->filter = GTK_TREE_MODEL_FILTER (gtk_tree_model_filter_new (GTK_TREE_MODEL (obj), NULL));
+    gtk_tree_model_filter_set_visible_func (skstore->priv->filter, filter_callback, skstore, NULL);
+    skstore->priv->sort = GTK_TREE_MODEL_SORT (gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (skstore->priv->filter)));
     
     return obj;
 }
@@ -197,12 +217,15 @@ seahorse_key_store_finalize (GObject *gobject)
 	g_object_unref (skstore->sctx);
 
     /* These were allocated in the constructor */
-    g_object_unref (skstore->sort);
-    g_object_unref (skstore->filter);
+    g_object_unref (skstore->priv->sort);
+    g_object_unref (skstore->priv->filter);
      
     /* Allocated in property setter */
-    g_free (skstore->filter_text); 
+    g_free (skstore->priv->filter_text); 
 	
+    /* The row cache */
+    g_hash_table_destroy (skstore->priv->rows);
+    
 	G_OBJECT_CLASS (parent_class)->finalize (gobject);
 }
 
@@ -210,8 +233,8 @@ seahorse_key_store_finalize (GObject *gobject)
 static gboolean
 refilter_now(SeahorseKeyStore* skstore)
 {
-    gtk_tree_model_filter_refilter (skstore->filter);
-    skstore->filter_stag = 0;
+    gtk_tree_model_filter_refilter (skstore->priv->filter);
+    skstore->priv->filter_stag = 0;
     return FALSE;
 }
 
@@ -219,9 +242,9 @@ refilter_now(SeahorseKeyStore* skstore)
 static void
 refilter_later(SeahorseKeyStore* skstore)
 {
-    if (skstore->filter_stag != 0)
-        g_source_remove (skstore->filter_stag);
-    skstore->filter_stag = g_timeout_add (200, (GSourceFunc)refilter_now, skstore);
+    if (skstore->priv->filter_stag != 0)
+        g_source_remove (skstore->priv->filter_stag);
+    skstore->priv->filter_stag = g_timeout_add (200, (GSourceFunc)refilter_now, skstore);
 }
 
 static void
@@ -240,14 +263,16 @@ seahorse_key_store_set_property (GObject *gobject, guint prop_id,
 			g_object_ref (skstore->sctx);
 			g_signal_connect_after (skstore->sctx, "destroy",
 				G_CALLBACK (seahorse_key_store_context_destroyed), skstore);
-			g_signal_connect_after (skstore->sctx, "add",
-				G_CALLBACK (seahorse_key_store_key_added), skstore);
+            g_signal_connect_after (skstore->sctx, "added",
+                G_CALLBACK (seahorse_key_store_key_added), skstore);
+            g_signal_connect_after (skstore->sctx, "removed",
+                G_CALLBACK (seahorse_key_store_key_removed), skstore);
 			break;
 			
 		/* The filtering mode */
         case PROP_MODE:
-            if (skstore->filter_mode != g_value_get_uint (value)) {
-                skstore->filter_mode = g_value_get_uint (value);
+            if (skstore->priv->filter_mode != g_value_get_uint (value)) {
+                skstore->priv->filter_mode = g_value_get_uint (value);
                 refilter_later (skstore);
             }
             break;
@@ -261,12 +286,12 @@ seahorse_key_store_set_property (GObject *gobject, guint prop_id,
              * we're in filtered mode (regardless of text or not)
              * then update the filter
              */
-            if ((skstore->filter_mode != KEY_STORE_MODE_FILTERED && t && t[0]) ||
-                (skstore->filter_mode == KEY_STORE_MODE_FILTERED)) {
-                skstore->filter_mode = KEY_STORE_MODE_FILTERED;
-                g_free (skstore->filter_text);
+            if ((skstore->priv->filter_mode != KEY_STORE_MODE_FILTERED && t && t[0]) ||
+                (skstore->priv->filter_mode == KEY_STORE_MODE_FILTERED)) {
+                skstore->priv->filter_mode = KEY_STORE_MODE_FILTERED;
+                g_free (skstore->priv->filter_text);
 				/* We always use lower case text (see filter_callback) */
-                skstore->filter_text = g_utf8_strdown (t, -1);
+                skstore->priv->filter_text = g_utf8_strdown (t, -1);
                 refilter_later (skstore);
             }
             break;
@@ -290,14 +315,14 @@ seahorse_key_store_get_property (GObject *gobject, guint prop_id,
 			
 		/* The filtering mode */
         case PROP_MODE:
-            g_value_set_uint (value, skstore->filter_mode);
+            g_value_set_uint (value, skstore->priv->filter_mode);
             break;
         
         /* The filter text. Note that we act as if we don't have any 
          * filter text when not in filtering mode */
         case PROP_FILTER:
             g_value_set_string (value, 
-                skstore->filter_mode == KEY_STORE_MODE_FILTERED ? skstore->filter_text : "");
+                skstore->priv->filter_mode == KEY_STORE_MODE_FILTERED ? skstore->priv->filter_text : "");
             break;
             
 		default:
@@ -340,6 +365,7 @@ seahorse_key_store_changed (SeahorseKeyStore *skstore, SeahorseKey *skey,
                                 GtkTreeIter *iter, SeahorseKeyChange change)
 {
 	switch (change) {
+        case SKEY_CHANGE_ALL:
 		case SKEY_CHANGE_UIDS:
 			SEAHORSE_KEY_STORE_GET_CLASS (skstore)->set (skstore, skey, iter);
 			break;
@@ -366,8 +392,11 @@ seahorse_key_store_key_added (SeahorseContext *sctx, SeahorseKey *skey, Seahorse
 
 /* Removes @skrow */
 static void
-seahorse_key_store_key_destroyed (GtkObject *object, SeahorseKeyRow *skrow)
+seahorse_key_store_key_removed (SeahorseContext *sctx, SeahorseKey *skey, SeahorseKeyStore *skstore)
 {
+    SeahorseKeyRow *skrow;
+    
+    skrow = (SeahorseKeyRow*)g_hash_table_lookup (skstore->priv->rows, skey);
 	seahorse_key_row_remove (skrow);
 }
 
@@ -415,7 +444,7 @@ set_sort_to (SeahorseKeyStore *skstore, const gchar *name)
     }
     
     if (id != -1) {
-        sort = GTK_TREE_SORTABLE (skstore->sort);
+        sort = GTK_TREE_SORTABLE (skstore->priv->sort);
         gtk_tree_sortable_set_sort_column_id (sort, id, ord);
     }
 }
@@ -460,7 +489,7 @@ static void
 check_toggled(GtkCellRendererToggle *cellrenderertoggle, gchar *path, gpointer user_data)
 {
     SeahorseKeyStore *skstore = SEAHORSE_KEY_STORE (user_data);
-    GtkTreeModel* fmodel = GTK_TREE_MODEL (skstore->sort);
+    GtkTreeModel* fmodel = GTK_TREE_MODEL (skstore->priv->sort);
     gboolean prev = FALSE;
     GtkTreeIter iter;
     GtkTreeIter child;
@@ -497,13 +526,27 @@ seahorse_key_row_new (SeahorseKeyStore *skstore, GtkTreeIter *iter, SeahorseKey 
     
 	skrow->skey = skey;
 	g_object_ref (skey);
-	g_signal_connect_after (GTK_OBJECT (skrow->skey), "destroy",
-		G_CALLBACK (seahorse_key_store_key_destroyed), skrow);
 	g_signal_connect_after (skrow->skey, "changed",
 		G_CALLBACK (seahorse_key_store_key_changed), skrow);
 
-	gtk_tree_store_set (GTK_TREE_STORE (skstore), iter, KEY_STORE_DATA, skrow, -1);
+    /* Put it in our row cache */
+    g_hash_table_replace (skstore->priv->rows, skey, skrow);
+
+    gtk_tree_store_set (GTK_TREE_STORE (skstore), iter, KEY_STORE_DATA, skrow, -1);
 }
+
+static void
+seahorse_key_row_free (SeahorseKeyRow *skrow)
+{
+    /* Unref key */
+    g_signal_handlers_disconnect_by_func (skrow->skey,
+             seahorse_key_store_key_changed, skrow);
+    g_object_unref (skrow->skey);
+  
+    gtk_tree_row_reference_free (skrow->ref);
+   
+    g_free (skrow);
+}    
 
 /* Calls virtual remove() for @skrow's location, disconnects and unrefs
  * key, then frees itself.
@@ -518,16 +561,9 @@ seahorse_key_row_remove (SeahorseKeyRow *skrow)
 	if (gtk_tree_model_get_iter (GTK_TREE_MODEL (skrow->skstore), &iter, path))
 		SEAHORSE_KEY_STORE_GET_CLASS (skrow->skstore)->remove (skrow->skstore, &iter);
 	gtk_tree_path_free (path);
- 
-	/* Unref key */
-	g_signal_handlers_disconnect_by_func (G_OBJECT (skrow->skey),
-		seahorse_key_store_key_destroyed, skrow);
-	g_signal_handlers_disconnect_by_func (skrow->skey,
-		seahorse_key_store_key_changed, skrow);
-	g_object_unref (skrow->skey);
-	
-	gtk_tree_row_reference_free (skrow->ref);
-	g_free (skrow);
+
+    /* This also frees the skrow */
+    g_return_if_fail(g_hash_table_remove (skrow->skstore->priv->rows, skrow->skey));
 }
 
 /**
@@ -548,8 +584,8 @@ seahorse_key_store_init (SeahorseKeyStore *skstore, GtkTreeView *view)
     seahorse_key_store_populate (skstore);
 
     /* The sorted model is the top level model */   
-    g_assert (GTK_IS_TREE_MODEL (skstore->sort));
-    gtk_tree_view_set_model (view, GTK_TREE_MODEL (skstore->sort));
+    g_assert (GTK_IS_TREE_MODEL (skstore->priv->sort));
+    gtk_tree_view_set_model (view, GTK_TREE_MODEL (skstore->priv->sort));
  
  	/* When using checks we add a check column */
     if (SEAHORSE_KEY_STORE_GET_CLASS (skstore)->use_check) {
@@ -568,7 +604,7 @@ seahorse_key_store_init (SeahorseKeyStore *skstore, GtkTreeView *view)
 
     if (SEAHORSE_KEY_STORE_GET_CLASS (skstore)->gconf_sort_key) {
         /* Also watch for sort-changed on the store */
-        g_signal_connect (skstore->sort, "sort-column-changed", G_CALLBACK (sort_changed), skstore);
+        g_signal_connect (skstore->priv->sort, "sort-column-changed", G_CALLBACK (sort_changed), skstore);
     }
 }
 
@@ -606,7 +642,7 @@ seahorse_key_store_destroy (SeahorseKeyStore *skstore)
 void
 seahorse_key_store_populate (SeahorseKeyStore *skstore)
 {
-	GList *list = NULL;
+	GList *keys, *list = NULL;
 	SeahorseKey *skey;
 	guint count = 1;
 	gdouble length;
@@ -617,7 +653,7 @@ seahorse_key_store_populate (SeahorseKeyStore *skstore)
     /* Don't precipitate a load */
     if (seahorse_context_get_n_keys (skstore->sctx) > 0) {
 
-    	list = seahorse_context_get_keys (skstore->sctx);
+    	keys = list = seahorse_context_get_keys (skstore->sctx);
     	length = g_list_length (list);
 	
     	while (list != NULL && (skey = list->data) != NULL) {
@@ -625,6 +661,8 @@ seahorse_key_store_populate (SeahorseKeyStore *skstore)
     		list = g_list_next (list);
     		count++;
     	}
+     
+        g_list_free (keys);
 	
     	seahorse_context_show_progress (skstore->sctx,
 	       	g_strdup_printf (_("Listed %d keys"), count), -1);
@@ -733,52 +771,6 @@ seahorse_key_store_append_column (GtkTreeView *view, const gchar *label, const g
     }  
     
 	return column;
-}
-
-/**
- * seahorse_key_store_get_selected_recips:
- * @view: #GtkTreeView with selection
- *
- * Gets a recipient list of the selected keys.
- *
- * Returns: A recipient list of the selected keys
- **/
-gpgme_key_t *
-seahorse_key_store_get_selected_recips (GtkTreeView *view)
-{
-	GList *list = NULL, *keys;
-	gpgme_key_t * recips;
-    SeahorseKeyStore* skstore;
-    SeahorseKeyPair *skpair;
-    gint n;
-    
-    g_return_val_if_fail (GTK_IS_TREE_VIEW (view), NULL);
-    skstore = key_store_from_model (gtk_tree_view_get_model (view));
-
-	list = seahorse_key_store_get_selected_keys (view);
-	g_return_val_if_fail (list != NULL, NULL);
-
-	/* do recipients list */
-	recips = g_new0(gpgme_key_t, g_list_length (list) + 2);
-    n = 0;
-   
-    /* Add the default key if set and necessary */
-    if (eel_gconf_get_boolean (ENCRYPTSELF_KEY)) {
-        skpair = seahorse_context_get_default_key (skstore->sctx);
-        if (skpair) {
-            gpgme_key_ref (SEAHORSE_KEY (skpair)->key);
-            recips[n++] = SEAHORSE_KEY (skpair)->key;
-        }
-    }
-            
-	for (keys = list; keys != NULL; keys = g_list_next (keys)) {
-        gpgme_key_ref (SEAHORSE_KEY (keys->data)->key);
-        recips[n++] = SEAHORSE_KEY (keys->data)->key;
-	}
-
-	/* free list, return */
-	g_list_free (list);
-	return recips;
 }
 
 /**
@@ -907,10 +899,10 @@ filter_callback (GtkTreeModel *model, GtkTreeIter *iter, gpointer data)
     gboolean ret = FALSE;
     
     /* Check the row requested */
-    switch (skstore->filter_mode)
+    switch (skstore->priv->filter_mode)
     {
     case KEY_STORE_MODE_FILTERED:
-        ret = row_contains_filtered_text (model, iter, skstore->filter_text);
+        ret = row_contains_filtered_text (model, iter, skstore->priv->filter_text);
         break;
         
     case KEY_STORE_MODE_SELECTED:
@@ -948,9 +940,9 @@ seahorse_key_store_get_base_iter(SeahorseKeyStore* skstore, GtkTreeIter* base_it
     GtkTreeIter i;
     
     g_return_if_fail (SEAHORSE_IS_KEY_STORE (skstore));
-    g_assert (skstore->sort && skstore->filter);
+    g_assert (skstore->priv->sort && skstore->priv->filter);
     
-    gtk_tree_model_sort_convert_iter_to_child_iter (skstore->sort, &i, (GtkTreeIter*)iter);
-    gtk_tree_model_filter_convert_iter_to_child_iter (skstore->filter, base_iter, &i);
+    gtk_tree_model_sort_convert_iter_to_child_iter (skstore->priv->sort, &i, (GtkTreeIter*)iter);
+    gtk_tree_model_filter_convert_iter_to_child_iter (skstore->priv->filter, base_iter, &i);
 }
 

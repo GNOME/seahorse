@@ -50,10 +50,6 @@ void		seahorse_revoke_new		(SeahorseContext	*sctx,
 						 SeahorseKey		*skey,
 						 const guint		index);
 
-const gchar*	seahorse_change_passphrase_get	(SeahorseContext	*sctx,
-						 const gchar		*desc,
-						 gpointer		*data);
-
 void        seahorse_sign_uid_show  (SeahorseContext *sctx, 
                         SeahorseKey *skey, 
                         const guint uid);

@@ -96,7 +96,9 @@ gchar*		seahorse_util_remove_suffix		(const gchar		*path);
 
 gchar**     seahorse_util_strvec_dup        (const gchar        **vec);
 
-void        seahorse_util_free_keys (gpgme_key_t* keys);
+gpgme_key_t* seahorse_util_list_to_keys      (GList *keys);
+
+void         seahorse_util_free_keys         (gpgme_key_t* keys);
 
 /* For checking GPG error codes */
 #define GPG_IS_OK(e)        (gpgme_err_code (e) == GPG_ERR_NO_ERROR)

@@ -85,6 +85,7 @@ never_expires_toggled (GtkToggleButton *togglebutton, SeahorseWidget *swidget)
 static void
 ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 {
+    SeahorseKeySource *sksrc;
 	const gchar *name, *email, *comment, *pass;
 	gint history, length;
 	SeahorseKeyType type;
@@ -124,8 +125,12 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 	widget = glade_xml_get_widget (swidget->xml, swidget->name);
 	gtk_widget_hide (widget);
 	
-	err = seahorse_key_op_generate (swidget->sctx, name, email, comment,
-		pass, type, length, expires);
+    /* When we update to support S/MIME this will need to change */
+    sksrc = seahorse_context_get_pri_source (swidget->sctx);
+    g_return_if_fail (sksrc != NULL);
+    	
+	err = seahorse_key_op_generate (sksrc, name, email, comment,
+		                            pass, type, length, expires);
 	if (!GPG_IS_OK (err)) {
 		gtk_widget_show (widget);
 		seahorse_util_handle_error (err, _("Couldn't generate key"));

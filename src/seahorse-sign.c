@@ -51,7 +51,7 @@ ok_clicked (SeahorseWidget *swidget)
 	glade_xml_get_widget (swidget->xml, "expires"))))
 		options = options | SIGN_EXPIRES;
 	
-	err = seahorse_key_op_sign (swidget->sctx, skwidget->skey, skwidget->index, check, options);
+	err = seahorse_key_op_sign (skwidget->skey, skwidget->index, check, options);
 	if (!GPG_IS_OK (err)) {
 		seahorse_util_handle_error (err, _("Couldn't sign key"));
 		return FALSE;

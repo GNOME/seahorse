@@ -34,8 +34,9 @@
 #define SEAHORSE_KEY_STORE_GET_CLASS(obj)	(GTK_CHECK_GET_CLASS ((obj), SEAHORSE_TYPE_KEY_STORE, SeahorseKeyStoreClass))
 
 typedef struct _SeahorseKeyStore SeahorseKeyStore;
+typedef struct _SeahorseKeyStorePriv SeahorseKeyStorePriv;
 typedef struct _SeahorseKeyStoreClass SeahorseKeyStoreClass;
-	
+
 typedef enum _SeahorseKeyStoreMode {
     KEY_STORE_MODE_ALL,
     KEY_STORE_MODE_SELECTED,
@@ -45,14 +46,11 @@ typedef enum _SeahorseKeyStoreMode {
 struct _SeahorseKeyStore {
 	GtkTreeStore		    parent;
  
+    /*< public >*/
 	SeahorseContext		    *sctx;
-
-    GtkTreeModelFilter      *filter;
-    GtkTreeModelSort        *sort;
     
-    SeahorseKeyStoreMode    filter_mode;
-    gchar*                  filter_text;
-    guint                   filter_stag;
+    /*< private >*/
+    SeahorseKeyStorePriv    *priv;
 };
 
 struct _SeahorseKeyStoreClass
@@ -140,8 +138,6 @@ SeahorseKey*		seahorse_key_store_get_key_from_path	(GtkTreeView		*view,
 GtkTreeViewColumn*	seahorse_key_store_append_column	(GtkTreeView		*view,
 								 const gchar		*name,
 								 const gint		index);
-
-gpgme_key_t *		seahorse_key_store_get_selected_recips	(GtkTreeView		*view);
 
 GList*			seahorse_key_store_get_selected_keys	(GtkTreeView		*view);
 

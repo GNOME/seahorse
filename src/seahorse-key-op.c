@@ -33,7 +33,7 @@
 
 /**
  * seahorse_key_op_generate:
- * @sctx: #SeahorseContext
+ * @sksrc: #SeahorseKeySource
  * @name: User ID name, must be at least 5 characters long
  * @email: Optional user ID email
  * @comment: Optional user ID comment
@@ -43,21 +43,21 @@
  * @expires: Expiration date of key
  *
  * Tries to generate a new key based on given parameters.
- * The generation operation is done with a new #SeahorseContext.
- * If the generation is successful, seahorse_context_keys_added() will be
- * called with @sctx.
+ * The generation operation is done with a new GPGME context
+ * If the generation is successful, seahorse_key_source_refresh() will be
+ * called with @sksrc.
  *
  * Returns: gpgme_error_t
  **/
 gpgme_error_t
-seahorse_key_op_generate (SeahorseContext *sctx, const gchar *name,
+seahorse_key_op_generate (SeahorseKeySource *sksrc, const gchar *name,
 			  const gchar *email, const gchar *comment,
 			  const gchar *passphrase, const SeahorseKeyType type,
 			  const guint length, const time_t expires)
 {
 	gchar *common, *key_type, *start, *parms, *expires_date;
-        gpgme_error_t err;
-	SeahorseContext *new_ctx;
+    gpgme_error_t err;
+	gpgme_ctx_t new_ctx;
 	
 	g_return_val_if_fail (strlen (name) >= 5, GPG_E (GPG_ERR_INV_VALUE));
 	
@@ -103,13 +103,15 @@ seahorse_key_op_generate (SeahorseContext *sctx, const gchar *name,
 					 start, DSA_MAX, length, common);
 	else
 		parms = g_strdup_printf ("%s%d\n%s", start, length, common);
-	
-	new_ctx = seahorse_context_new ();
-	err = gpgme_op_genkey (new_ctx->ctx, parms, NULL, NULL);
-	seahorse_context_destroy (new_ctx);
+
+    new_ctx = seahorse_key_source_new_context (sksrc);	
+    g_return_val_if_fail (new_ctx != NULL, GPG_E (GPG_ERR_GENERAL));
+    
+	err = gpgme_op_genkey (new_ctx, parms, NULL, NULL);
+    gpgme_release (new_ctx);
 	
 	if (GPG_IS_OK (err))
-		seahorse_context_keys_added (sctx, 1);
+        seahorse_key_source_refresh (sksrc, FALSE);
 	
 	/* Free xmls */
 	g_free (parms);
@@ -121,20 +123,23 @@ seahorse_key_op_generate (SeahorseContext *sctx, const gchar *name,
 
 /* helper function for deleting @skey */
 static gpgme_error_t
-op_delete (SeahorseContext *sctx, SeahorseKey *skey, gboolean secret)
+op_delete (SeahorseKey *skey, gboolean secret)
 {
+    SeahorseKeySource *sksrc;
 	gpgme_error_t err;
+    
+    sksrc = seahorse_key_get_source (skey);
+    g_return_val_if_fail (sksrc != NULL, GPG_E (GPG_ERR_INV_KEYRING));
 	
-	err = gpgme_op_delete (sctx->ctx, skey->key, secret);
+	err = gpgme_op_delete (sksrc->ctx, skey->key, secret);
 	if (GPG_IS_OK (err))
-		seahorse_key_destroy (skey);
+        seahorse_key_destroy (skey);
 	
 	return err;
 }
 
 /**
  * seahorse_key_op_delete:
- * @sctx: #SeahorseContext
  * @skey: #SeahorseKey to delete
  *
  * Tries to delete the key @skey.
@@ -142,14 +147,13 @@ op_delete (SeahorseContext *sctx, SeahorseKey *skey, gboolean secret)
  * Returns: gpgme_error_t
  **/
 gpgme_error_t
-seahorse_key_op_delete (SeahorseContext *sctx, SeahorseKey *skey)
+seahorse_key_op_delete (SeahorseKey *skey)
 {
-	return op_delete (sctx, skey, FALSE);
+	return op_delete (skey, FALSE);
 }
 
 /**
  * seahorse_key_pair_op_delete:
- * @sctx: #SeahorseContext
  * @skpair: #SeahorseKeyPair to delete
  *
  * Tries to delete the key pair @skpair.
@@ -157,9 +161,9 @@ seahorse_key_op_delete (SeahorseContext *sctx, SeahorseKey *skey)
  * Returns: gpgme_error_t
  **/
 gpgme_error_t
-seahorse_key_pair_op_delete (SeahorseContext *sctx, SeahorseKeyPair *skpair)
+seahorse_key_pair_op_delete (SeahorseKeyPair *skpair)
 {
-	return op_delete (sctx, SEAHORSE_KEY (skpair), TRUE);
+	return op_delete (SEAHORSE_KEY (skpair), TRUE);
 }
 
 /* Main key edit setup, structure, and a good deal of method content borrowed from gpa */
@@ -231,20 +235,24 @@ seahorse_key_op_edit (gpointer data, gpgme_status_code_t status,
 
 /* Common edit operation */
 static gpgme_error_t
-edit_key (SeahorseContext *sctx, SeahorseKey *skey, SeahorseEditParm *parms, SeahorseKeyChange change)
+edit_key (SeahorseKey *skey, SeahorseEditParm *parms, SeahorseKeyChange change)
 {
+    SeahorseKeySource *sksrc;
 	gpgme_data_t out;
 	gpgme_error_t err;
 	
+    sksrc = seahorse_key_get_source (skey);
+	g_return_val_if_fail (sksrc != NULL, GPG_E (GPG_ERR_INV_KEYRING));
+  
 	err = gpgme_data_new (&out);
 	g_return_val_if_fail (GPG_IS_OK (err), err);
 	/* do edit callback, release data */
-	err = gpgme_op_edit (sctx->ctx, skey->key, seahorse_key_op_edit, parms, out);
+	err = gpgme_op_edit (sksrc->ctx, skey->key, seahorse_key_op_edit, parms, out);
 	gpgme_data_release (out);
 	g_return_val_if_fail (GPG_IS_OK (err), err);
 	/* signal key */
 	seahorse_key_changed (skey, change);
-	seahorse_context_show_progress (sctx, _("Operation complete"), -1);
+	seahorse_key_source_show_progress (sksrc, _("Operation complete"), -1);
 	return err;
 }
 
@@ -410,7 +418,6 @@ sign_transit (guint current_state, gpgme_status_code_t status,
 
 /**
  * seahorse_key_op_sign:
- * @sctx: #SeahorseContext
  * @skey: #SeahorseKey to sign
  * @index: User ID to sign, 0 is all user IDs
  * @check: #SeahorseSignCheck
@@ -421,14 +428,13 @@ sign_transit (guint current_state, gpgme_status_code_t status,
  * Returns: Error value
  **/
 gpgme_error_t
-seahorse_key_op_sign (SeahorseContext *sctx, SeahorseKey *skey, const guint index,
-		      SeahorseSignCheck check, SeahorseSignOptions options)
+seahorse_key_op_sign (SeahorseKey *skey, const guint index,
+		              SeahorseSignCheck check, SeahorseSignOptions options)
 {
 	SignParm *sign_parm;
 	SeahorseEditParm *parms;
     gpgme_error_t err;
 	
-	g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), GPG_E (GPG_ERR_INV_ENGINE));
 	g_return_val_if_fail (SEAHORSE_IS_KEY (skey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
 	g_return_val_if_fail (index <= seahorse_key_get_num_uids (skey), GPG_E (GPG_ERR_INV_VALUE));
 	
@@ -447,7 +453,7 @@ seahorse_key_op_sign (SeahorseContext *sctx, SeahorseKey *skey, const guint inde
 	
 	parms = seahorse_edit_parm_new (SIGN_START, sign_action, sign_transit, sign_parm);
 	
-	err =  edit_key (sctx, skey, parms, SKEY_CHANGE_SIGNERS);
+	err =  edit_key (skey, parms, SKEY_CHANGE_SIGNERS);
  
     /* If it was already signed then it's not an error */
     if (!GPG_IS_OK (err) && gpgme_err_code (err) == GPG_ERR_EALREADY)
@@ -551,47 +557,25 @@ edit_pass_transit (guint current_state, gpgme_status_code_t status,
 	return next_state;
 }
 
-/* helper func for changing the passphrase */
-static gpgme_error_t
-edit_pass_get (SeahorseContext *sctx, const gchar *passphrase_hint, 
-                const char* passphrase_info, int flags, int fd)
-{
-    /* 
-     * Indicates a new password. Any better way to check without
-     * counting the passwords using a static counter?
-     */
-    if (passphrase_info && strlen(passphrase_info) < 16)
-        flags |= SEAHORSE_PASS_NEW;
-        
-	return seahorse_passphrase_get (sctx, passphrase_hint, passphrase_info,
-                                            flags, fd);
-}
-
 /**
  * seahorse_key_pair_op_change_pass:
- * @sctx: #SeahorseContext
  * @skpair: #SeahorseKeyPair whose passphrase to change
  *
- * Tries to change the passphrase of @skpair. Passphrase entry is done with
- * seahorse_passphrase_get() and seahorse_change_passphrase_get().
+ * Tries to change the passphrase of @skpair. 
  *
  * Returns: Error value
  **/
 gpgme_error_t
-seahorse_key_pair_op_change_pass (SeahorseContext *sctx, SeahorseKeyPair *skpair)
+seahorse_key_pair_op_change_pass (SeahorseKeyPair *skpair)
 {
 	SeahorseEditParm *parms;
 	gpgme_error_t err;
 	
-	g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), GPG_E (GPG_ERR_INV_ENGINE));
 	g_return_val_if_fail (SEAHORSE_IS_KEY_PAIR (skpair), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
 	
 	parms = seahorse_edit_parm_new (PASS_START, edit_pass_action, edit_pass_transit, NULL);
 	
-	/* change passphrase callback to helper func, edit key, change callback to regular func */
-	gpgme_set_passphrase_cb (sctx->ctx, (gpgme_passphrase_cb_t)edit_pass_get, sctx);
-	err = edit_key (sctx, SEAHORSE_KEY (skpair), parms, SKEY_CHANGE_PASS);
-	gpgme_set_passphrase_cb (sctx->ctx, (gpgme_passphrase_cb_t)seahorse_passphrase_get, sctx);
+	err = edit_key (SEAHORSE_KEY (skpair), parms, SKEY_CHANGE_PASS);
 	
 	return err;
 }
@@ -710,7 +694,6 @@ edit_trust_transit (guint current_state, gpgme_status_code_t status,
 
 /**
  * seahorse_key_op_set_trust:
- * @sctx: #SeahorseContext
  * @skey: #SeahorseKey whose trust will be changed
  * @trust: New trust value that must be at least SEAHORSE_VALIDITY_UNKNOWN.
  * If @skey is a #SeahorseKeyPair, then @trust cannot be SEAHORSE_VALIDITY_UNKNOWN.
@@ -721,11 +704,10 @@ edit_trust_transit (guint current_state, gpgme_status_code_t status,
  * Returns: Error value
  **/
 gpgme_error_t
-seahorse_key_op_set_trust (SeahorseContext *sctx, SeahorseKey *skey, SeahorseValidity trust)
+seahorse_key_op_set_trust (SeahorseKey *skey, SeahorseValidity trust)
 {
 	SeahorseEditParm *parms;
 	
-	g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), GPG_E (GPG_ERR_INV_ENGINE));
 	g_return_val_if_fail (SEAHORSE_IS_KEY (skey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
 	g_return_val_if_fail (trust >= GPGME_VALIDITY_UNKNOWN, GPG_E (GPG_ERR_INV_VALUE));
 	g_return_val_if_fail (seahorse_key_get_trust (skey) != trust, GPG_E (GPG_ERR_INV_VALUE));
@@ -738,7 +720,7 @@ seahorse_key_op_set_trust (SeahorseContext *sctx, SeahorseKey *skey, SeahorseVal
 	parms = seahorse_edit_parm_new (TRUST_START, edit_trust_action,
 		edit_trust_transit, (gpointer)trust);
 	
-	return edit_key (sctx, skey, parms, SKEY_CHANGE_TRUST);
+	return edit_key (skey, parms, SKEY_CHANGE_TRUST);
 }
 
 typedef enum {
@@ -812,7 +794,6 @@ edit_disable_transit (guint current_state, gpgme_status_code_t status,
 
 /**
  * seahorse_key_op_set_disabled:
- * @sctx: #SeahorseContext
  * @skey: #SeahorseKey to change
  * @disabled: New disabled state
  *
@@ -821,12 +802,11 @@ edit_disable_transit (guint current_state, gpgme_status_code_t status,
  * Returns: Error value
  **/
 gpgme_error_t
-seahorse_key_op_set_disabled (SeahorseContext *sctx, SeahorseKey *skey, gboolean disabled)
+seahorse_key_op_set_disabled (SeahorseKey *skey, gboolean disabled)
 {
 	gchar *command;
 	SeahorseEditParm *parms;
 	
-	g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), GPG_E (GPG_ERR_INV_ENGINE));
 	g_return_val_if_fail (SEAHORSE_IS_KEY (skey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
 	/* Make sure changing disabled */
 	g_return_val_if_fail (disabled != skey->key->disabled, GPG_E (GPG_ERR_INV_VALUE));
@@ -838,7 +818,7 @@ seahorse_key_op_set_disabled (SeahorseContext *sctx, SeahorseKey *skey, gboolean
 	
 	parms = seahorse_edit_parm_new (DISABLE_START, edit_disable_action, edit_disable_transit, command);
 	
-	return edit_key (sctx, skey, parms, SKEY_CHANGE_DISABLED);
+	return edit_key (skey, parms, SKEY_CHANGE_DISABLED);
 }
 
 typedef struct
@@ -963,7 +943,6 @@ edit_expire_transit (guint current_state, gpgme_status_code_t status,
 
 /**
  * seahorse_key_pair_op_set_expires:
- * @sctx: #SeahorseContext
  * @skpair: #SeahorseKeyPair whose expiration date to change
  * @index: Index of key to change, 0 being the primary key
  * @expires: New expiration date, 0 being never
@@ -973,7 +952,7 @@ edit_expire_transit (guint current_state, gpgme_status_code_t status,
  * Returns: Error value
  **/
 gpgme_error_t
-seahorse_key_pair_op_set_expires (SeahorseContext *sctx, SeahorseKeyPair *skpair,
+seahorse_key_pair_op_set_expires (SeahorseKeyPair *skpair,
 				  const guint index, const time_t expires)
 {
 	ExpireParm *exp_parm;
@@ -981,7 +960,6 @@ seahorse_key_pair_op_set_expires (SeahorseContext *sctx, SeahorseKeyPair *skpair
 	SeahorseKey *skey;
 	gpgme_subkey_t subkey;
 	
-	g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), GPG_E (GPG_ERR_INV_ENGINE));
 	g_return_val_if_fail (SEAHORSE_IS_KEY_PAIR (skpair), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
 	skey = SEAHORSE_KEY (skpair);
 	subkey = seahorse_key_get_nth_subkey (skey, index);
@@ -995,7 +973,7 @@ seahorse_key_pair_op_set_expires (SeahorseContext *sctx, SeahorseKeyPair *skpair
 	
 	parms = seahorse_edit_parm_new (EXPIRE_START, edit_expire_action, edit_expire_transit, exp_parm);
 	
-	return edit_key (sctx, skey, parms, SKEY_CHANGE_EXPIRES);
+	return edit_key (skey, parms, SKEY_CHANGE_EXPIRES);
 }
 
 typedef enum {
@@ -1106,7 +1084,6 @@ add_revoker_transit (guint current_state, gpgme_status_code_t status,
 
 /**
  * seahorse_key_pair_op_add_revoker:
- * @sctx: #SeahorseContext
  * @skpair: #SeahorseKeyPair to add a revoker to
  *
  * Tries to add the default key as a revoker for @skpair.
@@ -1114,21 +1091,17 @@ add_revoker_transit (guint current_state, gpgme_status_code_t status,
  * Returns: Error value
  **/
 gpgme_error_t
-seahorse_key_pair_op_add_revoker (SeahorseContext *sctx, SeahorseKeyPair *skpair)
+seahorse_key_pair_op_add_revoker (SeahorseKeyPair *skpair, SeahorseKeyPair *revoker)
 {
 	SeahorseEditParm *parms;
-	SeahorseKey *revoker;
 	
-	g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), GPG_E (GPG_ERR_INV_ENGINE));
-	g_return_val_if_fail (SEAHORSE_IS_KEY_PAIR (skpair), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
-	
-	revoker = SEAHORSE_KEY (seahorse_context_get_default_key (sctx));
-	g_return_val_if_fail (revoker != NULL, GPG_E (GPG_ERR_WRONG_KEY_USAGE));
+    g_return_val_if_fail (SEAHORSE_IS_KEY_PAIR (skpair), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
+    g_return_val_if_fail (SEAHORSE_IS_KEY_PAIR (revoker), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
 	
 	parms = seahorse_edit_parm_new (ADD_REVOKER_START, add_revoker_action,
-		add_revoker_transit, (gpointer)seahorse_key_get_id (revoker->key));
+		add_revoker_transit, (gpointer)seahorse_key_get_id (SEAHORSE_KEY (revoker)->key));
 	
-	return edit_key (sctx, SEAHORSE_KEY (skpair), parms, SKEY_CHANGE_REVOKERS);
+	return edit_key (SEAHORSE_KEY (skpair), parms, SKEY_CHANGE_REVOKERS);
 }
 
 typedef enum {
@@ -1257,7 +1230,6 @@ add_uid_transit (guint current_state, gpgme_status_code_t status,
 
 /**
  * seahorse_key_pair_op_add_uid:
- * @sctx: #SeahorseContext
  * @skpair: #SeahorseKeyPair to add a user ID to
  * @name: New user ID name. Must be at least 5 characters long
  * @email: Optional email address
@@ -1268,13 +1240,12 @@ add_uid_transit (guint current_state, gpgme_status_code_t status,
  * Returns: Error value
  **/
 gpgme_error_t
-seahorse_key_pair_op_add_uid (SeahorseContext *sctx, SeahorseKeyPair *skpair,
-			      const gchar *name, const gchar *email, const gchar *comment)
+seahorse_key_pair_op_add_uid (SeahorseKeyPair *skpair, const gchar *name, 
+                              const gchar *email, const gchar *comment)
 {
 	SeahorseEditParm *parms;
 	UidParm *uid_parm;
 	
-	g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), GPG_E (GPG_ERR_INV_ENGINE));
 	g_return_val_if_fail (SEAHORSE_IS_KEY_PAIR (skpair), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
 	g_return_val_if_fail (name != NULL && strlen (name) >= 5, GPG_E (GPG_ERR_INV_VALUE));
 	
@@ -1285,7 +1256,7 @@ seahorse_key_pair_op_add_uid (SeahorseContext *sctx, SeahorseKeyPair *skpair,
 	
 	parms = seahorse_edit_parm_new (ADD_UID_START, add_uid_action, add_uid_transit, uid_parm);
 	
-	return edit_key (sctx, SEAHORSE_KEY (skpair), parms, SKEY_CHANGE_UIDS);
+	return edit_key (SEAHORSE_KEY (skpair), parms, SKEY_CHANGE_UIDS);
 }
 
 typedef enum {
@@ -1416,7 +1387,6 @@ add_key_transit (guint current_state, gpgme_status_code_t status,
 
 /**
  * seahorse_key_pair_op_add_subkey:
- * @sctx: #SeahorseContext
  * @skpair: #SeahorseKeyPair to add a subkey to
  * @type: #SeahorseKeyType of new subkey, must be DSA, ELGAMAL, or an RSA type
  * @length: Length of new subkey, must be within #SeahorseKeyLength ranges for @type
@@ -1427,14 +1397,12 @@ add_key_transit (guint current_state, gpgme_status_code_t status,
  * Returns: Error value
  **/
 gpgme_error_t
-seahorse_key_pair_op_add_subkey (SeahorseContext *sctx, SeahorseKeyPair *skpair,
-				 const SeahorseKeyType type, const guint length,
-				 const time_t expires)
+seahorse_key_pair_op_add_subkey (SeahorseKeyPair *skpair, const SeahorseKeyType type, 
+                                 const guint length, const time_t expires)
 {
 	SeahorseEditParm *parms;
 	SubkeyParm *key_parm;
 	
-	g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), GPG_E (GPG_ERR_INV_ENGINE));
 	g_return_val_if_fail (SEAHORSE_IS_KEY_PAIR (skpair), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
 	
 	/* Check length range & type */
@@ -1460,7 +1428,7 @@ seahorse_key_pair_op_add_subkey (SeahorseContext *sctx, SeahorseKeyPair *skpair,
 	
 	parms = seahorse_edit_parm_new (ADD_KEY_START, add_key_action, add_key_transit, key_parm);
 	
-	return edit_key (sctx, SEAHORSE_KEY (skpair), parms, SKEY_CHANGE_SUBKEYS);
+	return edit_key (SEAHORSE_KEY (skpair), parms, SKEY_CHANGE_SUBKEYS);
 }
 
 typedef enum {
@@ -1568,7 +1536,6 @@ del_key_transit (guint current_state, gpgme_status_code_t status,
 
 /**
  * seahorse_key_op_del_subkey:
- * @sctx: #SeahorseContext
  * @skey: #SeahorseKey whose subkey to delete
  * @index: Index of subkey to delete, must be at least 1
  *
@@ -1577,18 +1544,17 @@ del_key_transit (guint current_state, gpgme_status_code_t status,
  * Returns: Error value
  **/
 gpgme_error_t
-seahorse_key_op_del_subkey (SeahorseContext *sctx, SeahorseKey *skey, const guint index)
+seahorse_key_op_del_subkey (SeahorseKey *skey, const guint index)
 {
 	SeahorseEditParm *parms;
 	
-	g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), GPG_E (GPG_ERR_INV_ENGINE));
 	g_return_val_if_fail (SEAHORSE_IS_KEY (skey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
 	g_return_val_if_fail (index >= 1 && index <= seahorse_key_get_num_subkeys (skey), GPG_E (GPG_ERR_INV_VALUE));
 	
 	parms = seahorse_edit_parm_new (DEL_KEY_START, del_key_action,
 		del_key_transit, (gpointer)index);
 	
-	return edit_key (sctx, skey, parms, SKEY_CHANGE_SUBKEYS);
+	return edit_key (skey, parms, SKEY_CHANGE_SUBKEYS);
 }
 
 typedef struct
@@ -1746,7 +1712,6 @@ rev_subkey_transit (guint current_state, gpgme_status_code_t status,
 
 /**
  * seahorse_key_op_revoke_subkey:
- * @sctx: #SeahorseContext
  * @skey: #SeahorseKey whose subkey to revoke
  * @index: Index of subkey to revoke, must be at least 1
  * @reason: #SeahorseRevokeReason for revoking the key
@@ -1757,14 +1722,13 @@ rev_subkey_transit (guint current_state, gpgme_status_code_t status,
  * Returns: Error value
  **/
 gpgme_error_t
-seahorse_key_op_revoke_subkey (SeahorseContext *sctx, SeahorseKey *skey, const guint index,
-			       SeahorseRevokeReason reason, const gchar *description)
+seahorse_key_op_revoke_subkey (SeahorseKey *skey, const guint index,
+			                   SeahorseRevokeReason reason, const gchar *description)
 {
 	RevSubkeyParm *rev_parm;
 	SeahorseEditParm *parms;
 	gpgme_subkey_t subkey;
 	
-	g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), GPG_E (GPG_ERR_INV_ENGINE));
 	g_return_val_if_fail (SEAHORSE_IS_KEY (skey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
 	/* Check index range */
 	g_return_val_if_fail (index >= 1 && index <= seahorse_key_get_num_subkeys (skey), GPG_E (GPG_ERR_INV_VALUE));
@@ -1780,7 +1744,7 @@ seahorse_key_op_revoke_subkey (SeahorseContext *sctx, SeahorseKey *skey, const g
 	parms = seahorse_edit_parm_new (REV_SUBKEY_START, rev_subkey_action,
 		rev_subkey_transit, rev_parm);
 	
-	return edit_key (sctx, skey, parms, SKEY_CHANGE_SUBKEYS);
+	return edit_key (skey, parms, SKEY_CHANGE_SUBKEYS);
 }
 
 typedef struct {
@@ -1892,14 +1856,12 @@ primary_transit (guint current_state, gpgme_status_code_t status,
 }
                 
 gpgme_error_t   
-seahorse_key_op_primary_uid (SeahorseContext *sctx, SeahorseKey *skey, 
-                                const guint index)
+seahorse_key_op_primary_uid (SeahorseKey *skey, const guint index)
 {
     PrimaryParm *pri_parm;
     SeahorseEditParm *parms;
     gpgme_user_id_t uid;
  
-    g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), GPG_E (GPG_ERR_INV_ENGINE));
     g_return_val_if_fail (SEAHORSE_IS_KEY (skey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
     
     /* Check index range */
@@ -1916,7 +1878,7 @@ seahorse_key_op_primary_uid (SeahorseContext *sctx, SeahorseKey *skey,
     parms = seahorse_edit_parm_new (PRIMARY_START, primary_action,
                 primary_transit, pri_parm);
  
-    return edit_key (sctx, skey, parms, SKEY_CHANGE_UIDS);    
+    return edit_key (skey, parms, SKEY_CHANGE_UIDS);    
 }
 
 
@@ -2044,14 +2006,12 @@ del_uid_transit (guint current_state, gpgme_status_code_t status,
 }
                 
 gpgme_error_t   
-seahorse_key_op_del_uid (SeahorseContext *sctx, SeahorseKey *skey, 
-                                const guint index)
+seahorse_key_op_del_uid (SeahorseKey *skey, const guint index)
 {
     DelUidParm *del_uid_parm;
     SeahorseEditParm *parms;
     gpgme_user_id_t uid;
  
-    g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), GPG_E (GPG_ERR_INV_ENGINE));
     g_return_val_if_fail (SEAHORSE_IS_KEY (skey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
     
     /* Check index range */
@@ -2068,5 +2028,5 @@ seahorse_key_op_del_uid (SeahorseContext *sctx, SeahorseKey *skey,
     parms = seahorse_edit_parm_new (DEL_UID_START, del_uid_action,
                 del_uid_transit, del_uid_parm);
  
-    return edit_key (sctx, skey, parms, SKEY_CHANGE_UIDS);    
+    return edit_key (skey, parms, SKEY_CHANGE_UIDS);    
 }

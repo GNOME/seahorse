@@ -104,8 +104,13 @@ seahorse_key_pair_set_property (GObject *object, guint prop_id,
 	
 	switch (prop_id) {
 		case PROP_SECRET:
-			skpair->secret = g_value_get_pointer (value);
-			gpgme_key_ref (skpair->secret);
+            if (skpair->secret)
+                gpgme_key_unref (skpair->secret);
+            skpair->secret = g_value_get_pointer (value);
+            if (skpair->secret) {
+                gpgme_key_ref (skpair->secret);
+                seahorse_key_changed (SEAHORSE_KEY (skpair), SKEY_CHANGE_ALL);
+            }        
 			break;
 		default:
 			break;
@@ -130,9 +135,10 @@ seahorse_key_pair_get_property (GObject *object, guint prop_id,
 }
 
 SeahorseKey*
-seahorse_key_pair_new (gpgme_key_t key, gpgme_key_t secret)
+seahorse_key_pair_new (SeahorseKeySource *sksrc, gpgme_key_t key, gpgme_key_t secret)
 {
-	return g_object_new (SEAHORSE_TYPE_KEY_PAIR, "key", key, "secret", secret, NULL);
+	return g_object_new (SEAHORSE_TYPE_KEY_PAIR, "key", key, "secret", secret, 
+                            "key-source", sksrc, NULL);
 }
 
 gboolean

@@ -122,6 +122,7 @@ read_uri_arguments (GnomeProgram *program)
 static guint
 do_import (SeahorseContext *sctx, const gchar **paths)
 {
+    SeahorseKeySource *sksrc;
     GtkWidget *dlg;
     gpgme_error_t err;
     gint keys = 0;
@@ -130,12 +131,15 @@ do_import (SeahorseContext *sctx, const gchar **paths)
     gchar *t;
     guint ret = 0;
     
+    sksrc = seahorse_context_get_pri_source (sctx);
+    g_return_val_if_fail (sksrc != NULL, 1);
+    
     /* Get all sub-folders etc... */
     uris = seahorse_util_uris_expand (paths);
     g_assert (uris != NULL);
      
     for (u = uris; *u; u++) {
-        keys += seahorse_op_import_file (sctx, *u, &err);
+        keys += seahorse_op_import_file (sksrc, *u, &err);
        
         if (!GPG_IS_OK (err)) {
             seahorse_util_handle_error (err, _("Couldn't import keys from \"%s\""),
@@ -160,9 +164,9 @@ do_import (SeahorseContext *sctx, const gchar **paths)
 
 /* Encrypt or sign the given set of paths */
 static guint 
-do_encrypt_base (SeahorseContext *sctx, const gchar **paths, SeahorseEncryptFunc func)
+do_encrypt_base (SeahorseContext *sctx, const gchar **paths, SeahorseKeyPair *signer)
 {
-    gpgme_key_t *recips = NULL;
+    GList *keys = NULL;
     gchar *new_path;
     gpgme_error_t err;
     gchar **uris = NULL;
@@ -175,12 +179,16 @@ do_encrypt_base (SeahorseContext *sctx, const gchar **paths, SeahorseEncryptFunc
     if(!uris)
         ret = 1;
     else {
-        recips = seahorse_recipients_get (sctx);
+        keys = seahorse_recipients_get (sctx);
            
-        if (recips != NULL) {
+        if (g_list_length (keys) > 0) {
             for(u = uris; *u; u++) {
-                new_path = func (sctx, *u, recips, &err);
-                g_free (new_path);            
+               
+                if (signer)
+                    new_path = seahorse_op_encrypt_sign_file (keys, signer, *u, &err);
+                else
+                    new_path = seahorse_op_encrypt_file (keys, *u, &err);
+                g_free (new_path);
     
                 if (!GPG_IS_OK (err)) {
                     seahorse_util_handle_error (err, _("Couldn't encrypt \"%s\""), 
@@ -190,7 +198,7 @@ do_encrypt_base (SeahorseContext *sctx, const gchar **paths, SeahorseEncryptFunc
                 }
             }
             
-            seahorse_util_free_keys (recips);
+            g_list_free (keys);
        }
 
         g_strfreev (uris);
@@ -203,30 +211,38 @@ do_encrypt_base (SeahorseContext *sctx, const gchar **paths, SeahorseEncryptFunc
 static guint
 do_encrypt (SeahorseContext *sctx, const gchar **paths)
 {
-    return do_encrypt_base (sctx, paths, seahorse_op_encrypt_file);
+    return do_encrypt_base (sctx, paths, NULL);
 }
 
 /* Encrypt and sign the given set of paths */
 static guint
 do_encrypt_sign (SeahorseContext *sctx, const gchar **paths)
 {
-    return do_encrypt_base (sctx, paths, seahorse_op_encrypt_sign_file);
+    return do_encrypt_base (sctx, paths, seahorse_context_get_default_key (sctx));
 }
 
 static guint
 do_sign (SeahorseContext *sctx, const gchar **paths)
 {
+    SeahorseKeySource *sksrc;
+    SeahorseKeyPair *signer;
     gpgme_error_t err;
     gchar **uris;
     gchar **u;
     gchar *new_path;
     guint ret = 0;
     
+    sksrc = seahorse_context_get_pri_source (sctx);
+    g_return_val_if_fail (sksrc != NULL, 1);
+    
+    signer = seahorse_context_get_default_key (sctx);
+    g_return_val_if_fail (signer != NULL, 1);
+    
     uris = seahorse_util_uris_expand (paths);
     g_assert (uris != NULL);
      
     for (u = uris; *u; u++) {
-        new_path = seahorse_op_sign_file (sctx, *u, &err);
+        new_path = seahorse_op_sign_file (signer, *u, &err);
         g_free(new_path);
         
         if (!GPG_IS_OK (err)) {
@@ -245,6 +261,7 @@ do_sign (SeahorseContext *sctx, const gchar **paths)
 static guint
 do_decrypt (SeahorseContext *sctx, const gchar **paths)
 {
+    SeahorseKeySource *sksrc;
     gpgme_verify_result_t status = NULL;
     SeahorseWidget *signatures = NULL;
     gpgme_error_t err;
@@ -252,12 +269,15 @@ do_decrypt (SeahorseContext *sctx, const gchar **paths)
     gchar **u;
     gchar *new_path;
     guint ret = 0;
-    
+	
+    sksrc = seahorse_context_get_pri_source (sctx);
+    g_return_val_if_fail (sksrc != NULL, 1);
+        
     uris = seahorse_util_uris_expand (paths);
     g_assert (uris != NULL);
      
     for (u = uris; *u; u++) {
-        new_path = seahorse_op_decrypt_verify_file (sctx, *u, &status, &err);
+        new_path = seahorse_op_decrypt_verify_file (sksrc, *u, &status, &err);
                 
         if (!GPG_IS_OK (err)) {
             seahorse_util_handle_error (err, _("Couldn't decrypt \"%s\""),
@@ -287,6 +307,7 @@ do_decrypt (SeahorseContext *sctx, const gchar **paths)
 static guint
 do_verify (SeahorseContext *sctx, const gchar **paths)
 {
+    SeahorseKeySource *sksrc;
     gpgme_verify_result_t status = NULL;
     SeahorseWidget *signatures = NULL;
     gchar *original = NULL;
@@ -297,7 +318,10 @@ do_verify (SeahorseContext *sctx, const gchar **paths)
     
     uris = seahorse_util_uris_expand (paths);
     g_assert (uris != NULL);
-     
+	
+    sksrc = seahorse_context_get_pri_source (sctx);
+    g_return_val_if_fail (sksrc != NULL, 1);
+         
     for (u = uris; *u; u++) {
 
         original = seahorse_util_remove_suffix (*u);
@@ -332,7 +356,7 @@ do_verify (SeahorseContext *sctx, const gchar **paths)
         }
         
         if (original) {
-            seahorse_op_verify_file (sctx, *u, original, &status, &err);
+            seahorse_op_verify_file (sksrc, *u, original, &status, &err);
             g_free (original);
 
             if (!GPG_IS_OK (err)) {
@@ -386,6 +410,7 @@ main (int argc, char **argv)
                     GNOME_PARAM_APP_DATADIR, DATA_DIR, NULL);
 
     sctx = seahorse_context_new ();
+    seahorse_context_load_keys (sctx, FALSE);
 
     if (mode != MODE_NONE) {
         gchar **uris = NULL;

@@ -26,8 +26,9 @@
 #include <gpgme.h>
 #include <time.h>
 
-#include "seahorse-context.h"
+#include "seahorse-key-source.h"
 #include "seahorse-key.h"
+#include "seahorse-key-pair.h"
 
 /* Key type options. */
 typedef enum {
@@ -101,75 +102,62 @@ typedef enum {
 	REVOKE_NOT_USED = 3
 } SeahorseRevokeReason;
 
-gpgme_error_t	seahorse_key_op_generate		(SeahorseContext	*sctx,
-							 const gchar		*name,
-							 const gchar		*email,
-							 const gchar		*comment,
-							 const gchar		*passphrase,
-							 const SeahorseKeyType	type,
-							 const guint		length,
-							 const time_t		expires);
+gpgme_error_t  seahorse_key_op_generate         (SeahorseKeySource  *sksrc,
+                                                 const gchar *name,
+                                                 const gchar *email,
+                                                 const gchar *comment,
+                                                 const gchar *passphrase,
+                                                 const SeahorseKeyType type,
+                                                 const guint length,
+                                                 const time_t expires);
 
-gpgme_error_t	seahorse_key_op_delete			(SeahorseContext	*sctx,
-							 SeahorseKey		*skey);
+gpgme_error_t  seahorse_key_op_delete           (SeahorseKey *skey);
 
-gpgme_error_t	seahorse_key_pair_op_delete		(SeahorseContext	*sctx,
-							 SeahorseKeyPair	*skpair);
+gpgme_error_t  seahorse_key_pair_op_delete      (SeahorseKeyPair *skpair);
 
-gpgme_error_t	seahorse_key_op_sign			(SeahorseContext	*sctx,
-							 SeahorseKey		*skey,
-							 const guint		index,
-							 SeahorseSignCheck	check,
-							 SeahorseSignOptions	options);
+gpgme_error_t  seahorse_key_op_sign             (SeahorseKey *skey,
+                                                 const guint index,
+                                                 SeahorseSignCheck check,
+                                                 SeahorseSignOptions options);
 
-gpgme_error_t	seahorse_key_pair_op_change_pass	(SeahorseContext	*sctx,
-							 SeahorseKeyPair	*skpair);
+gpgme_error_t  seahorse_key_pair_op_change_pass (SeahorseKeyPair *skpair);
 
-gpgme_error_t	seahorse_key_op_set_trust		(SeahorseContext	*sctx,
-							 SeahorseKey		*skey,
-							 SeahorseValidity	validity);
+gpgme_error_t  seahorse_key_op_set_trust        (SeahorseKey *skey,
+                                                 SeahorseValidity validity);
 
-gpgme_error_t	seahorse_key_op_set_disabled		(SeahorseContext	*sctx,
-							 SeahorseKey		*skey,
-							 gboolean		disabled);
+gpgme_error_t  seahorse_key_op_set_disabled     (SeahorseKey *skey,
+                                                 gboolean disabled);
 
-gpgme_error_t	seahorse_key_pair_op_set_expires	(SeahorseContext	*sctx,
-							 SeahorseKeyPair	*skpair,
-							 const guint		index,
-							 const time_t		expires);
+gpgme_error_t  seahorse_key_pair_op_set_expires (SeahorseKeyPair *skpair,
+                                                 const guint index,
+                                                 const time_t expires);
 
-gpgme_error_t	seahorse_key_pair_op_add_revoker	(SeahorseContext	*sctx,
-							 SeahorseKeyPair	*skpair);
+gpgme_error_t  seahorse_key_pair_op_add_revoker (SeahorseKeyPair *skpair, 
+                                                 SeahorseKeyPair *revoker);
 
-gpgme_error_t	seahorse_key_pair_op_add_uid		(SeahorseContext	*sctx,
-							 SeahorseKeyPair	*skpair,
-							 const gchar		*name,
-							 const gchar		*email,
-							 const gchar		*comment);
+gpgme_error_t  seahorse_key_pair_op_add_uid     (SeahorseKeyPair *skpair,
+                                                 const gchar *name,
+                                                 const gchar *email,
+                                                 const gchar *comment);
 
-gpgme_error_t   seahorse_key_op_primary_uid         (SeahorseContext    *sctx,
-                             SeahorseKey        *skey,
-                             const guint        index);
+gpgme_error_t  seahorse_key_op_primary_uid      (SeahorseKey *skey,
+                                                 const guint index);
 
-gpgme_error_t   seahorse_key_op_del_uid         (SeahorseContext    *sctx,
-                             SeahorseKey        *skey,
-                             const guint        index);
+gpgme_error_t  seahorse_key_op_del_uid          (SeahorseKey *skey,
+                                                 const guint index);
                              
-gpgme_error_t	seahorse_key_pair_op_add_subkey		(SeahorseContext	*sctx,
-							 SeahorseKeyPair	*skpair,
-							 const SeahorseKeyType	type,
-							 const guint		length,
-							 const time_t		expires);
+gpgme_error_t  seahorse_key_pair_op_add_subkey  (SeahorseKeyPair *skpair,
+                                                 const SeahorseKeyType type,
+                                                 const guint length,
+                                                 const time_t expires);
 
-gpgme_error_t	seahorse_key_op_del_subkey		(SeahorseContext	*sctx,
-							 SeahorseKey		*skey,
-							 const guint		index);
+gpgme_error_t  seahorse_key_op_del_subkey       (SeahorseKey *skey,
+                                                 const guint index);
 
-gpgme_error_t	seahorse_key_op_revoke_subkey		(SeahorseContext	*sctx,
-							 SeahorseKey		*skey,
-							 const guint		index,
-							 SeahorseRevokeReason	reason,
-							 const gchar		*description);
+gpgme_error_t  seahorse_key_op_revoke_subkey    (SeahorseKey *skey,
+                                                 const guint index,
+                                                 SeahorseRevokeReason reason,
+                                                 const gchar *description);
 
                              							 
 #endif /* __SEAHORSE_KEY_OP_H__ */

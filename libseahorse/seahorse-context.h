@@ -25,7 +25,9 @@
 #include <gtk/gtk.h>
 #include <gpgme.h>
 
+#include "seahorse-key.h"
 #include "seahorse-key-pair.h"
+#include "seahorse-key-source.h"
 
 #define PGP_SCHEMAS "/desktop/pgp"
 #define ARMOR_KEY PGP_SCHEMAS "/ascii_armor"
@@ -49,9 +51,6 @@ struct _SeahorseContext
 {
 	GtkObject		parent;
 	
-	/*< public >*/
-	gpgme_ctx_t		ctx;
-	
 	/*< private >*/
 	SeahorseContextPrivate	*priv;
 };
@@ -60,43 +59,49 @@ struct _SeahorseContextClass
 {
 	GtkObjectClass		parent_class;
 	
-	/* Signal emitted when @skey has been added to @sctx */
-	void 			(* add)				(SeahorseContext	*sctx,
-								 SeahorseKey		*skey);
-	
-	/* Signal emitted while an operation is in progress */
-	void			(* progress)			(SeahorseContext	*sctx,
-								 const gchar		*op,
-								 gdouble		fract);
+    /* Signal emitted when @skey has been added */
+    void             (* added)            (SeahorseContext     *sctx,
+                                          SeahorseKey        *skey);
+    
+    /* Signal emitted when @skey has been removed */
+    void             (* removed)         (SeahorseContext    *sctx,
+                                          SeahorseKey        *skey);
+                                         
+    /* Signal emitted while an operation is in progress */
+    void             (* progress)        (SeahorseContext    *sctx,
+                                          const gchar        *op,
+                                          gdouble            fract);
 };
 
-GType               seahorse_context_get_type ();
+GType                seahorse_context_get_type        (void);
 
-SeahorseContext*	seahorse_context_new			(void);
+SeahorseContext*     seahorse_context_new             (void);
 
-void			seahorse_context_destroy		(SeahorseContext	*sctx);
+void                 seahorse_context_destroy         (SeahorseContext    *sctx);
 
-guint           seahorse_context_get_n_keys     (SeahorseContext    *sctx);
+void                 seahorse_context_load_keys       (SeahorseContext    *sctx, 
+                                                       gboolean secret_only);
 
-GList*			seahorse_context_get_keys		(SeahorseContext	*sctx);
+guint                seahorse_context_get_n_keys      (SeahorseContext    *sctx);
 
-guint           seahorse_context_get_n_key_pairs   (SeahorseContext    *sctx);
+GList*               seahorse_context_get_keys        (SeahorseContext    *sctx);
 
-GList*			seahorse_context_get_key_pairs		(SeahorseContext	*sctx);
+guint                seahorse_context_get_n_key_pairs (SeahorseContext    *sctx);
 
-SeahorseKey*    seahorse_context_get_key		(SeahorseContext	*sctx,
-				                				 gpgme_key_t		key);
+GList*               seahorse_context_get_key_pairs   (SeahorseContext    *sctx);
 
-SeahorseKey*    seahorse_context_get_key_fpr    (SeahorseContext    *sctx,
-                                                 const char *fpr);
+SeahorseKey*         seahorse_context_get_key_fpr     (SeahorseContext    *sctx,
+                                                       const gchar *fpr);
 
-void			seahorse_context_show_progress		(SeahorseContext	*sctx,
-								 const gchar		*op,
-								 gdouble		fract);
+SeahorseKeyPair*     seahorse_context_get_default_key (SeahorseContext    *sctx);
 
-SeahorseKeyPair*	seahorse_context_get_default_key	(SeahorseContext	*sctx);
+SeahorseKeySource*   seahorse_context_get_pri_source  (SeahorseContext    *sctx);
 
-void			seahorse_context_keys_added		(SeahorseContext	*sctx,
-								 guint			num_keys);
+void                 seahorse_context_own_source      (SeahorseContext    *sctx,
+                                                       SeahorseKeySource  *sksrc);
+
+void                 seahorse_context_show_progress   (SeahorseContext    *sctx,
+                                                       const gchar        *msg, 
+                                                       double pos);
 
 #endif /* __SEAHORSE_CONTEXT_H__ */

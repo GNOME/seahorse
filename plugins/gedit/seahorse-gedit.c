@@ -176,9 +176,9 @@ encrypt_cb (BonoboUIComponent * uic, gpointer user_data,
     GeditView *view = gedit_get_active_view ();
     GeditDocument *doc;
     gpgme_error_t err = GPG_OK;
-    gpgme_key_t *recips;
     gchar *enctext = NULL;
     gchar *buffer;
+    GList *keys;
     gint start;
     gint end;
 
@@ -189,10 +189,10 @@ encrypt_cb (BonoboUIComponent * uic, gpointer user_data,
 
     /* Get the recipient list */
     gedit_debug (DEBUG_PLUGINS, "getting recipients");
-    recips = seahorse_recipients_get (sctx);
+    keys = seahorse_recipients_get (sctx);
 
     /* User may have cancelled */
-    if (recips == NULL)
+    if (g_list_length(keys) == 0)
         return;
 
     /* Get the text */
@@ -206,9 +206,9 @@ encrypt_cb (BonoboUIComponent * uic, gpointer user_data,
 
     /* Encrypt it */
     gedit_debug (DEBUG_PLUGINS, "encrypting text");
-    enctext = seahorse_op_encrypt_text (sctx, buffer, recips, &err);
+    enctext = seahorse_op_encrypt_text (keys, buffer, &err);
 
-    seahorse_util_free_keys (recips);
+    g_list_free (keys);
     g_free (buffer);
 
     if (!GPG_IS_OK (err)) {
@@ -228,10 +228,14 @@ encrypt_cb (BonoboUIComponent * uic, gpointer user_data,
 static guint
 import_keys (const gchar * text)
 {
+    SeahorseKeySource *sksrc;
     gpgme_error_t err;
     gint keys;
 
-    keys = seahorse_op_import_text (sctx, text, &err);
+    sksrc = seahorse_context_get_pri_source (sctx);
+    g_return_val_if_fail (sksrc != NULL, 0);
+    
+    keys = seahorse_op_import_text (sksrc, text, &err);
 
     if (!GPG_IS_OK (err)) {
         seahorse_util_handle_error (err, _("Couldn't import keys"));
@@ -250,10 +254,14 @@ import_keys (const gchar * text)
 static gchar*
 decrypt_text (const gchar * text, gpgme_verify_result_t *status)
 {
+    SeahorseKeySource *sksrc;
     gpgme_error_t err;
     gchar *rawtext = NULL;
+    
+    sksrc = seahorse_context_get_pri_source (sctx);
+    g_return_val_if_fail (sksrc != NULL, 0);
 
-    rawtext = seahorse_op_decrypt_verify_text (sctx, text, status, &err);
+    rawtext = seahorse_op_decrypt_verify_text (sksrc, text, status, &err);
 
     if (!GPG_IS_OK (err)) {
         seahorse_util_handle_error (err, _("Couldn't decrypt text"));
@@ -267,10 +275,14 @@ decrypt_text (const gchar * text, gpgme_verify_result_t *status)
 static gchar*
 verify_text (const gchar * text, gpgme_verify_result_t *status)
 {
+    SeahorseKeySource *sksrc;
     gpgme_error_t err;
     gchar *rawtext = NULL;
 
-    rawtext = seahorse_op_verify_text (sctx, text, status, &err);
+    sksrc = seahorse_context_get_pri_source (sctx);
+    g_return_val_if_fail (sksrc != NULL, 0);    
+
+    rawtext = seahorse_op_verify_text (sksrc, text, status, &err);
 
     if (!GPG_IS_OK (err)) {
         seahorse_util_handle_error (err, _("Couldn't decrypt text"));
@@ -436,6 +448,7 @@ sign_cb (BonoboUIComponent * uic, gpointer user_data,
     GeditView *view = gedit_get_active_view ();
     GeditDocument *doc;
     gpgme_error_t err = GPG_OK;
+    SeahorseKeyPair *signer;
     gchar *enctext = NULL;
     gchar *buffer;
     gint start;
@@ -456,9 +469,15 @@ sign_cb (BonoboUIComponent * uic, gpointer user_data,
 
     buffer = get_document_chars (doc, start, end);
 
+    signer = seahorse_context_get_default_key (sctx);
+    if (signer == NULL) {
+        seahorse_util_handle_error (GPG_E (GPG_ERR_NO_SECKEY), _("Couldn't sign text"));
+        return;
+    }
+
     /* Perform the signing */
     gedit_debug (DEBUG_PLUGINS, "signing text");
-    enctext = seahorse_op_sign_text (sctx, buffer, &err);
+    enctext = seahorse_op_sign_text (signer, buffer, &err);
     g_free (buffer);
 
     if (!GPG_IS_OK (err)) {
@@ -577,6 +596,7 @@ init (GeditPlugin * plugin)
     gedit_debug (DEBUG_PLUGINS, "inited");
 
     sctx = seahorse_context_new ();
+    seahorse_context_load_keys (sctx, FALSE);
     plugin->private_data = sctx;
 
     return PLUGIN_OK;

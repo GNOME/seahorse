@@ -35,7 +35,7 @@ gpgme_error_t
 seahorse_passphrase_get (SeahorseContext *sctx, const gchar *passphrase_hint, 
                             const char* passphrase_info, int prev_bad, int fd);
 
-gpgme_key_t *	seahorse_recipients_get	(SeahorseContext	*sctx);
+GList*      	seahorse_recipients_get	(SeahorseContext	*sctx);
 
 SeahorseWidget*	seahorse_signatures_new	(SeahorseContext	*sctx);
 

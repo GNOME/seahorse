@@ -135,7 +135,7 @@ update_filters (GObject* object, GParamSpec* arg, SeahorseWidget* swidget)
     g_free (filter);                                                
 }
 
-gpgme_key_t *
+GList*
 seahorse_recipients_get (SeahorseContext *sctx)
 {
 	SeahorseWidget *swidget;
@@ -144,7 +144,7 @@ seahorse_recipients_get (SeahorseContext *sctx)
 	GtkWidget *widget;
 	gint response;
 	gboolean done = FALSE;
-	gpgme_key_t * recips = NULL;
+    GList *keys = NULL;
     SeahorseKeyStore* skstore;
 	
 	swidget = seahorse_widget_new ("recipients", sctx);
@@ -168,9 +168,6 @@ seahorse_recipients_get (SeahorseContext *sctx)
     g_signal_connect (skstore, "notify", G_CALLBACK (update_filters), swidget);
     update_filters (G_OBJECT (skstore), NULL, swidget);
 
-    /* Start loading keys here */
-    seahorse_context_get_keys (sctx);
-                                        
 	widget = glade_xml_get_widget (swidget->xml, swidget->name);
 	while (!done) {
 		response = gtk_dialog_run (GTK_DIALOG (widget));
@@ -178,7 +175,7 @@ seahorse_recipients_get (SeahorseContext *sctx)
 			case GTK_RESPONSE_HELP:
 				break;
 			case GTK_RESPONSE_OK:
-				recips = seahorse_key_store_get_selected_recips (view);
+				keys = seahorse_key_store_get_selected_keys (view);
 			default:
 				done = TRUE;
 				break;
@@ -187,5 +184,5 @@ seahorse_recipients_get (SeahorseContext *sctx)
 	
     g_signal_handlers_disconnect_by_func (swidget->sctx, G_CALLBACK (show_progress), swidget);	
 	seahorse_widget_destroy (swidget);
-	return recips;
+	return keys;
 }

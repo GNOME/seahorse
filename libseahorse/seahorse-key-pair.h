@@ -23,6 +23,7 @@
 #define __SEAHORSE_KEY_PAIR_H__
 
 #include "seahorse-key.h"
+#include "seahorse-key-source.h"
 
 #define SEAHORSE_TYPE_KEY_PAIR			(seahorse_key_pair_get_type ())
 #define SEAHORSE_KEY_PAIR(obj)			(GTK_CHECK_CAST ((obj), SEAHORSE_TYPE_KEY_PAIR, SeahorseKeyPair))
@@ -48,8 +49,9 @@ struct _SeahorseKeyPairClass
 
 GType           seahorse_key_pair_get_type ();
 
-SeahorseKey*	seahorse_key_pair_new		(gpgme_key_t		key,
-						 gpgme_key_t		secret);
+SeahorseKey*    seahorse_key_pair_new       (SeahorseKeySource *sksrc,
+                                             gpgme_key_t        key,
+                                             gpgme_key_t        secret);
 
 gboolean	seahorse_key_pair_can_sign	(const SeahorseKeyPair	*skpair);
 

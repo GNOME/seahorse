@@ -250,14 +250,21 @@ seahorse_key_manager_store_changed (SeahorseKeyStore *skstore, SeahorseKey *skey
 				               GtkTreeIter *iter, SeahorseKeyChange change)
 {
 	switch (change) {
-		case SKEY_CHANGE_TRUST: case SKEY_CHANGE_EXPIRES:
+        case SKEY_CHANGE_ALL:
+		case SKEY_CHANGE_TRUST: 
+        case SKEY_CHANGE_EXPIRES:
 		case SKEY_CHANGE_DISABLED:
 			SEAHORSE_KEY_STORE_GET_CLASS (skstore)->set (skstore, skey, iter);
-			break;
+            if (change != SKEY_CHANGE_ALL)
+    			break;
+            /* conditional fall through */
+                        
 		/* Refresh uid iters, then let parent call set */
 		case SKEY_CHANGE_UIDS:
 			remove_uids (GTK_TREE_STORE (skstore), iter);
 			append_uids (GTK_TREE_STORE (skstore), iter, skey);
+            /* fall through */
+            
 		default:
 			parent_class->changed (skstore, skey, iter, change);
 			break;

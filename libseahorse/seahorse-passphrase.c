@@ -48,6 +48,9 @@ seahorse_passphrase_get (SeahorseContext *sctx, const gchar *passphrase_hint,
   
 	glade_xml_signal_connect_data (swidget->xml, "pass_changed",
 		G_CALLBACK (pass_changed), swidget);
+     
+    if (passphrase_info && strlen(passphrase_info) < 16)
+        flags |= SEAHORSE_PASS_NEW;        
 
 	split_uid = g_strsplit (passphrase_hint, " ", 2);
 
@@ -81,59 +84,4 @@ seahorse_passphrase_get (SeahorseContext *sctx, const gchar *passphrase_hint,
     
     g_free (pass);
     return err;
-}
-
-static void
-entry_changed (GtkEditable *editable, SeahorseWidget *swidget)
-{
-	gchar *pass, *confirm;
-	
-	pass = gtk_editable_get_chars (GTK_EDITABLE (glade_xml_get_widget (
-		swidget->xml, "pass")), 0, -1);
-	confirm = gtk_editable_get_chars (GTK_EDITABLE (glade_xml_get_widget (
-		swidget->xml, "confirm")), 0, -1);
-	
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "ok"),
-		strlen (pass) > 0 && g_str_equal (pass, confirm));
-}
-
-const gchar*
-seahorse_change_passphrase_get (SeahorseContext *sctx, const gchar *desc, gpointer *data)
-{
-	SeahorseWidget *swidget;
-	gint response;
-	gchar *pass;
-	
-	if (desc) {
-		swidget = seahorse_widget_new ("change-passphrase", sctx);
-		
-		if (swidget == NULL) {
-			gpgme_cancel (sctx->ctx);
-			return NULL;
-		}
-		
-		glade_xml_signal_connect_data (swidget->xml, "entry_changed",
-			G_CALLBACK (entry_changed), swidget);
-		
-		response = gtk_dialog_run (GTK_DIALOG (glade_xml_get_widget (
-			swidget->xml, swidget->name)));
-		pass = g_strdup (gtk_entry_get_text (GTK_ENTRY (glade_xml_get_widget (
-			swidget->xml, "pass"))));
-		seahorse_widget_destroy (swidget);
-		
-		if (response != GTK_RESPONSE_OK) {
-			gpgme_cancel (sctx->ctx);
-			g_free (pass);
-			return "";
-		}
-		
-		*data = pass;
-		return pass;
-	}
-	else if (*data) {
-		g_free (*data);
-		*data = NULL;
-	}
-	
-	return NULL;
 }

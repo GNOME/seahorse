@@ -74,8 +74,8 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 	comment = gtk_entry_get_text (GTK_ENTRY (
 		glade_xml_get_widget (swidget->xml, "comment")));
 	
-	err = seahorse_key_pair_op_add_uid (swidget->sctx, SEAHORSE_KEY_PAIR (skey),
-		name, email, comment);
+	err = seahorse_key_pair_op_add_uid (SEAHORSE_KEY_PAIR (skey),
+		                                name, email, comment);
 	if (!GPG_IS_OK (err))
 		seahorse_util_handle_error (err, _("Couldn't add user id"));
 	else

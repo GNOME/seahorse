@@ -721,6 +721,23 @@ seahorse_util_strvec_dup (const gchar** vec)
     return ret;
 }
 
+gpgme_key_t* 
+seahorse_util_list_to_keys (GList *keys)
+{
+    gpgme_key_t *recips;
+    int i;
+    
+    recips = g_new0 (gpgme_key_t, g_list_length (keys) + 1);
+    
+    for (i = 0; keys != NULL; keys = g_list_next (keys), i++) {
+        g_return_val_if_fail (SEAHORSE_IS_KEY (keys->data), recips);
+        recips[i] = SEAHORSE_KEY (keys->data)->key;
+        gpgme_key_ref (recips[i]);
+    }
+    
+    return recips;
+}
+
 void
 seahorse_util_free_keys (gpgme_key_t* keys)
 {
