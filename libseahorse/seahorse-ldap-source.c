@@ -935,6 +935,10 @@ send_callback (SeahorseOperation *op, LDAPMessage *result)
 
     r = ldap_parse_result (lop->ldap, result, &code, NULL, &message, NULL, NULL, 0);
     g_return_val_if_fail (r == LDAP_SUCCESS, FALSE);
+    
+    /* TODO: Somehow communicate this to the user */
+    if (code == LDAP_ALREADY_EXISTS)
+        code = LDAP_SUCCESS;
         
     if (code != LDAP_SUCCESS) 
         seahorse_operation_mark_done (SEAHORSE_OPERATION (lop), FALSE, 
