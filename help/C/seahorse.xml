@@ -3,7 +3,7 @@
 "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
 <!ENTITY legal SYSTEM "legal.xml">
 <!ENTITY appversion "0.6.0">
-<!ENTITY manrevision "2.0">
+<!ENTITY manrevision "1.0">
 <!ENTITY date "October 2002">
 <!ENTITY app "<application>seahorse</application>">
 ]>
@@ -61,18 +61,10 @@
 	<para>&app; is a Gnome2 frontend for <ulink url="www.gnupg.org" type="http">Gnu Privacy Guard</ulink>.
 	&app; provides the following features:</para>
 	<itemizedlist>
-		<listitem>
-			<para>Key Manager</para>
-		</listitem>
-		<listitem>
-			<para>Key Properties and Key Editing</para>
-		</listitem>
-		<listitem>
-			<para>Text Editor</para>
-		</listitem>
-		<listitem>
-			<para>File Manager</para>
-		</listitem>
+		<listitem><para><guilabel>Key Manager</guilabel></para></listitem>
+		<listitem><para><xref linkend="key-properties"/></para></listitem>
+		<listitem><para><xref linkend="text-editor"/></para></listitem>
+		<listitem><para><xref linkend="file-manager"/></para></listitem>
 	</itemizedlist>
 	<para>&app; is an application and a project.
 	The goal of the application is to provide an easy to use key manager and encryption capabilities.
@@ -92,7 +84,7 @@
 					<para>Choose
 					<menuchoice>
 						<guisubmenu>Other</guisubmenu>
-						<guimenuitem>Gnupg Key Manager</guimenuitem>
+						<guimenuitem>GPG Keys Manager</guimenuitem>
 					</menuchoice>.</para>
 				</listitem>
 				<listitem>
@@ -140,7 +132,7 @@
 which the application is designed. -->
 <sect1 id="usage">
 	<title>Usage</title>
-	<para>You can use the &app; application to perform the following tasks:
+	<para>You can use the &app; application to access the following features:
 		<itemizedlist>
 			<listitem><para><xref linkend="generate"/></para></listitem>
 			<listitem><para><xref linkend="export"/></para></listitem>
@@ -311,10 +303,94 @@ which the application is designed. -->
 	<sect2 id="file-manager">
 		<title>File Manager</title>
 		<para>To use the <guilabel>File Manager</guilabel>, choose
-		<menuchoice>
-			<guimenu>File</guimenu>
-			<guimenuitem>File Manager</guimenuitem>
-		</menuchoice>.</para>
+		<menuchoice><guimenu>File</guimenu><guimenuitem>File Manager</guimenuitem></menuchoice>
+		from the <guilabel>Key Manager</guilabel>.
+		The following operations are available for files:
+		<variablelist>
+			<varlistentry>
+				<term>Export</term>
+				<listitem>
+					<para>Enter a filename (the file does not have to exist), then select
+					<menuchoice><guimenu>Edit</guimenu><guimenuitem>Export</guimenuitem></menuchoice>.
+					The <xref linkend="recipients"/> dialog will appear, in which you can select the
+					<glossterm>keys</glossterm> to <glossterm>export</glossterm>.
+					When finished, the exported <glossterm>keys</glossterm> will be appended to the file.</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Import</term>
+				<listitem>
+					<para>Choose an existing file, then select
+					<menuchoice><guimenu>Edit</guimenu><guimenuitem>Import</guimenuitem></menuchoice>,
+					or click <guibutton>Import</guibutton>.
+					Any <glossterm>keys</glossterm> in the file will be added to the <glossterm>key ring</glossterm>.</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Sign</term>
+				<listitem>
+					<para>Choose an existing file to <glossterm>sign</glossterm>, then select
+					<menuchoice><guimenu>Edit</guimenu><guimenuitem>Sign</guimenuitem></menuchoice>,
+					or click <guibutton>Sign</guibutton>.
+					After confirming the <xref linkend="passphrase"/> to the <xref linkend="default-key"/>,
+					a <glossterm>detached signature</glossterm> file will be created with the same file name,
+					but with a <filename>.asc</filename> or <filename>.sig</filename> extension,
+					depending on whether <xref linkend="ascii-armor"/> is enabled.</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Encrypt</term>
+				<listitem>
+					<para>Choose an existing file to <glossterm>encrypt</glossterm>, then select
+					<menuchoice><guimenu>Edit</guimenu><guimenuitem>Encrypt</guimenuitem></menuchoice>,
+					or click <guibutton>Encrypt</guibutton>.
+					The <xref linkend="recipients"/> dialog will appear,
+					in which you can select the <glossterm>keys</glossterm> to <glossterm>encrypt</glossterm> to.
+					When finished, a new, <glossterm>encrypted</glossterm>, file will be created with the same name,
+					but with a <filename>.asc</filename> or <filename>.gpg</filename> extension, depending on whether <xref linkend="ascii-armor"/> is enabled.</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Decrypt</term>
+				<listitem>
+					<caution>You must have access to the <glossterm>secret key</glossterm> of one of the <glossterm>encryption keys</glossterm>
+					in your <glossterm>key ring</glossterm> in order to <glossterm>decrypt</glossterm> a file.</caution>
+					<para>Choose an <glossterm>encrypted</glossterm> file to <glossterm>decrypt</glossterm>.
+					<warning>The filename must have a <filename>.asc</filename> or <filename>.gpg</filename> extension.</warning>
+					After choosing the file, select <menuchoice><guimenu>Edit</guimenu><guimenuitem>Decrypt</guimenuitem></menuchoice>,
+					or click <guibutton>Decrypt</guibutton> and enter the <xref linkend="passphrase"/>.
+					If successful, a <glossterm>decrypted</glossterm> file will be created with the same name, but without the extension.</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Verify</term>
+				<listitem>
+					<caution>You must have the <glossterm>signing key</glossterm> in your <glossterm>key ring</glossterm>
+					in order to successfully <glossterm>verify</glossterm> a <glossterm>signature</glossterm>.</caution>
+					<para>Choose a <glossterm>detached signature</glossterm> file to <glossterm>verify</glossterm>.
+					<warning>The signature file must have a <filename>.asc</filename> or <filename>.sig</filename> extension,
+					and it must have the same name as the <glossterm>signed file</glossterm>, but without the extension.</warning>
+					<example>
+						<title>Choosing a Detached Signature File</title>
+						<para>Select <filename>foo.sig</filename> or <filename>foo.asc</filename>, where the
+						<glossterm>signed file</glossterm> <filename>foo</filename> is in the same directory.</para>
+					</example></para>
+					<para>After choosing the file, select <menuchoice><guimenu>Edit</guimenu><guimenuitem>Verify</guimenuitem></menuchoice>,
+					or click <guibutton>Verify</guibutton>.  If success, the <xref linkend="signatures"/> dialog will appear,
+					otherwise you will get an error message regarding how <glossterm>verification</glossterm> failed.</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Decrypt and Verify</term>
+				<listitem>
+					<para><glossterm>Decrypt and verify</glossterm> combines the <glossterm>decrypt</glossterm>
+					and <glossterm>verify</glossterm> operations by <glossterm>decrypting</glossterm> the file,
+					then <glossterm>verifying</glossterm> and <glossterm>signatures</glossterm> found.
+					To <glossterm>decrypt and verify</glossterm>, choose an <glossterm>encrypted</glossterm> file then select
+					<menuchoice><guimenu>Edit</guimenu><guimenuitem>Decrypt and Verify</guimenuitem></menuchoice>.</para>
+				</listitem>
+			</varlistentry>
+		</variablelist></para>
 	</sect2>
 	<sect2 id="key-properties">
 		<title>Key Properties</title>
@@ -326,76 +402,73 @@ which the application is designed. -->
 		or click <guibutton>Properties</guibutton>.
 		The <guilabel>Key Properties</guilabel> window is displayed.
 		The following properties are shown:
-			<variablelist>
-				<varlistentry>
-					<term>Fingerprint</term>
-					<listitem>
-						<para>The unique fingerprint of the key.</para>
-					</listitem>
-				</varlistentry>
-			</variablelist>
-		</para>
+		<variablelist>
+			<varlistentry>
+				<term>Fingerprint</term>
+				<listitem>
+					<para>The unique fingerprint of the key.</para>
+				</listitem>
+			</varlistentry>
+		</variablelist></para>
 		<sect3 id="trust">
 			<title>Owner Trust / Key Validity</title>
 			<para>The following <guilabel>Trust</guilabel> and <guilabel>Validity</guilabel> levels are available:
-				<itemizedlist>
-					<listitem><guilabel>Unknown</guilabel></listitem>
-					<listitem><guilabel>Never</guilabel></listitem>
-					<listitem><guilabel>Marginal</guilabel></listitem>
-					<listitem><guilabel>Full</guilabel></listitem>
-					<listitem><guilabel>Ultimate</guilabel></listitem>
-				</itemizedlist>
+			<itemizedlist>
+				<listitem><guilabel>Unknown</guilabel></listitem>
+				<listitem><guilabel>Never</guilabel></listitem>
+				<listitem><guilabel>Marginal</guilabel></listitem>
+				<listitem><guilabel>Full</guilabel></listitem>
+				<listitem><guilabel>Ultimate</guilabel></listitem>
+			</itemizedlist>
 			Personally generated keys are given <guilabel>Ultimate</guilabel> <guilabel>Trust</guilabel> and <guilabel>Validity</guilabel> by default.</para>
 		</sect3>
 		<sect3 id="key-attributes">
 			<title>Key Attributes</title>
 			<para> Attributes that exist for every key are:
-				<variablelist>
-					<varlistentry>
-						<term>Key ID</term>
-						<listitem>
-							<para>The key's ID.</para>
-						</listitem>
-					</varlistentry>
-					<varlistentry>
-						<term>Created</term>
-						<listitem>
-							<para>The creation date of the key.</para>
-						</listitem>
-					</varlistentry>
-				</variablelist>
-			</para>
+			<variablelist>
+				<varlistentry>
+					<term>Key ID</term>
+					<listitem>
+						<para>The key's ID.</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term>Created</term>
+					<listitem>
+						<para>The creation date of the key.</para>
+					</listitem>
+				</varlistentry>
+			</variablelist></para>
 		</sect3>
 		<sect3 id="key-type">
 			<title>Key Type</title>
 			<para>The key type is determined by it's <guilabel>Algorithm</guilabel>
 			and its other primary and sub keys.
 			The following algorithms are available:
-				<variablelist>
-					<varlistentry>
-						<term>DSA</term>
-						<listitem>
-							<para>This is the default type for a primary key in a key pair.
+			<variablelist>
+				<varlistentry>
+					<term>DSA</term>
+					<listitem>
+						<para>This is the default type for a primary key in a key pair.
 							It can also be a sub key.
 							The length ranges from 512 to 1024.</para>
-						</listitem>
-					</varlistentry>
-					<varlistentry>
-						<term>ElGamal</term>
-						<listitem>
-							<para>This key is only available as a sub key and is the default sub key type in a key pair.
-							The length ranges from 768 to 4096.</para>
-						</listitem>
-					</varlistentry>
-					<varlistentry>
-						<term>RSA</term>
-						<listitem>
-							<para>This key can be a primary key and a sub key.
-							The length ranges from 1024 to 4096.</para>
-						</listitem>
-					</varlistentry>
-				</variablelist>
-			</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term>ElGamal</term>
+					<listitem>
+						<para>This key is only available as a sub key and is the default sub key type in a key pair.
+						The length ranges from 768 to 4096.</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term>RSA</term>
+					<listitem>
+						<para>This key can be a primary key and a sub key.
+						The length ranges from 1024 to 4096.</para>
+					</listitem>
+				</varlistentry>
+			</variablelist></para>
 			<note>Keys without <guilabel>ElGamal</guilabel> subkeys do not have encryption capabilities.</note>
 		</sect3>
 		<sect3 id="key-expires">
@@ -405,66 +478,64 @@ which the application is designed. -->
 		<sect3 id="userid">
 			<title>User ID</title>
 			<para>A user ID consists of the following parts:
-				<variablelist>
-					<varlistentry>
-						<term>Name</term>
-						<listitem>
-							<para>A name or handle of key's owner.</para>
-						</listitem>
-					</varlistentry>
-					<varlistentry>
-						<term>Email</term>
-						<listitem>
-							<para>A (hopefully) valid email address associated with the key.</para>
-						</listitem>
-					</varlistentry>
-					<varlistentry>
-						<term>Comment</term>
-						<listitem>
-							<para>A comment about the key, or ID.</para>
-						</listitem>
-					</varlistentry>
-				</variablelist>
-			</para>
+			<variablelist>
+				<varlistentry>
+					<term>Name</term>
+					<listitem>
+						<para>A name or handle of key's owner.</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term>Email</term>
+					<listitem>
+						<para>A (hopefully) valid email address associated with the key.</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term>Comment</term>
+					<listitem>
+						<para>A comment about the key, or ID.</para>
+					</listitem>
+				</varlistentry>
+			</variablelist></para>
 		</sect3>
 		<para>Below the <xref linkend="userid"/> are the subkeys (if any).
 		Subkeys have the same <xref linkend="key-attributes"/> as a primary key,
 		but can also be deleted and revoked.</para>
 		<para>The following key operations are available:
-			<variablelist>
-				<varlistentry>
-					<term>Export</term>
-					<listitem>
-						<para><xref linkend="export"/></para>
-					</listitem>
-				</varlistentry>
-				<varlistentry>
-					<term>Delete</term>
-					<listitem>
-						<para>Select
-							<menuchoice>
-							<guimenu>File</guimenu>
-								<guimenuitem>Delete</guimenuitem>
-							</menuchoice>
-						to <xref linkend="delete"/></para>
-					</listitem>
-				</varlistentry>
-			</variablelist>
-		</para>
+		<variablelist>
+			<varlistentry>
+				<term>Export</term>
+				<listitem>
+					<para><xref linkend="export"/></para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Delete</term>
+				<listitem>
+					<para>Select
+					<menuchoice>
+						<guimenu>File</guimenu>
+						<guimenuitem>Delete</guimenuitem>
+					</menuchoice>
+					to <xref linkend="delete"/></para>
+				</listitem>
+			</varlistentry>
+		</variablelist></para>
 		<!-- sub sections (if possible) for key editing -->
 	</sect2>
 	<sect2 id="delete">
 		<title>Deleting a Key</title>
 		<para>To delete a key, choose
-			<menuchoice>
-				<guimenu>Edit</guimenu>
-				<guimenuitem>Delete</guimenuitem>
-			</menuchoice>.
+		<menuchoice>
+			<guimenu>Edit</guimenu>
+			<guimenuitem>Delete</guimenuitem>
+		</menuchoice>.
 		The <guilabel>Delete Key</guilabel> dialog is displayed.
 		Click <guibutton>Yes</guibutton> to delete the key.</para>
 	</sect2>
 	<sect3 id="passphrase">
-		<title>Passphrase Entry</title>
+		<title>Passphrase</title>
 		<para>This dialog is displayed when a passphrase must be entered.
 		The key for which the passphrase is needed is shown above the entry.</para>
 	</sect3>
@@ -486,30 +557,19 @@ which the application is designed. -->
 			<guimenu>Settings</guimenu>
 			<guimenuitem>Preferences</guimenuitem>
 		</menuchoice>.
-	The <guilabel>Preferences</guilabel> dialog is displayed.
-		<variablelist>
-			<varlistentry>
-				<term>Ascii Armor</term>
-				<listitem>
-					<para>Ascii armor ensures that data is encoded in ASCII text, not binary.
-					This is on by default.</para>
-				</listitem>
-			</varlistentry>
-			<varlistentry>
-				<term>Text Mode</term>
-				<listitem>
-					<para>Check this to use Canonical Text Mode.
-					This setting is not really necessary and doesn't have much effect.</para>
-				</listitem>
-			</varlistentry>
-			<varlistentry>
-				<term>Default Key</term>
-				<listitem>
-					<para>This is the default key to be used for signing.</para>
-				</listitem>
-			</varlistentry>
-	</variablelist>
-	</para>
+	The <guilabel>Preferences</guilabel> dialog is displayed.</para>
+	<sect2 id="ascii-armor">
+		<title>Ascii Armor</title>
+		<para>Ascii armor ensures that data is encoded as ASCII text, instead of binary.</para>
+	</sect2>
+	<sect2 id="text-mode">
+		<title>Text Mode</title>
+		<para></para>
+	</sect2>
+	<sect2 id="default-key">
+		<title>Default Signing Key</title>
+		<para>The <guilabel>Default Key</guilabel> is the default key for signature operations.</para>
+	</sect2>
 </sect1>
 <!-- ============= About ================================== -->
 <!-- This section contains info about the program (not docs), such as
