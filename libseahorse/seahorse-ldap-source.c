@@ -19,8 +19,6 @@
  * Boston, MA 02111-1307, USA.
  */
  
-#ifdef WITH_LDAP
-
 #include <stdlib.h>
 #include <libintl.h>
 #include <gnome.h>
@@ -34,6 +32,8 @@
 #include "seahorse-util.h"
 #include "seahorse-key.h"
 #include "seahorse-key-pair.h"
+
+#ifdef WITH_LDAP
 
 /* Amount of keys to load in a batch */
 #define DEFAULT_LOAD_BATCH 30
@@ -246,7 +246,7 @@ DECLARE_OPERATION (LDAP, ldap)
     LDAP *ldap;                     /* The LDAP connection */
     int ldap_op;                    /* The current LDAP async msg */
     guint stag;                     /* The tag for the idle event source */
-    OpLDAPCallback ldap_cb;         /* Callback for next async result 
+    OpLDAPCallback ldap_cb;         /* Callback for next async result */
     OpLDAPCallback chain_cb;        /* Callback when connection is done */
 END_DECLARE_OPERATION
 
@@ -468,7 +468,7 @@ done_bind_start_info (SeahorseOperation *op, LDAPMessage *result)
     /* Check if we need server info */
     sinfo = get_ldap_server_info (lop->lsrc, FALSE);
     if (sinfo != NULL)
-        return done_root_start_op (op, NULL);
+        return done_info_start_op (op, NULL);
         
     /* Retrieve the server info */
     lop->ldap_op = ldap_search (lop->ldap, "cn=PGPServerInfo", LDAP_SCOPE_BASE,
