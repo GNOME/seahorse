@@ -1,1171 +1,535 @@
 <?xml version="1.0"?>
-<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
 "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
-<!ENTITY legal SYSTEM "legal.xml">
-<!ENTITY appversion "0.7.0">
-<!ENTITY manrevision "2.1">
-<!ENTITY date "February 2003">
-<!ENTITY app "<application>seahorse</application>">
-<!ENTITY key "<glossterm linkend='key'>key</glossterm>">
-<!ENTITY keys "<glossterm baseform='key' linkend='key'>keys</glossterm>">
-<!ENTITY secret "<glossterm linkend='secret-key'>secret key</glossterm>">
-<!ENTITY subkey "<glossterm linkend='key-subkey'>subkey</glossterm>">
-<!ENTITY userid "<glossterm linkend='key-userid'>user ID</glossterm>">
-<!ENTITY expires "<glossterm linkend='key-expires'>expiration date</glossterm>">
-<!ENTITY type "<glossterm linkend='key-type'>type</glossterm>">
-<!ENTITY length "<glossterm linkend='key-length'>length</glossterm>">
+	<!ENTITY legal SYSTEM "legal.xml">
+	<!ENTITY appversion "0.7.0">
+	<!ENTITY manrevision "2.2">
+	<!ENTITY date "February 2003">
+	<!ENTITY app "<application>seahorse</application>">
+	<!ENTITY key "<glossterm>key</glossterm>">
 ]>
-<!-- =============Document Header ============================= -->
+
 <article id="index" lang="en">
-<articleinfo>
-	<title>&app; Manual V&manrevision;</title>
-	<copyright>
-		<year>2003</year>
-		<holder>Jacob Perkins</holder>
-	</copyright>
-	<publisher><publishername>Seahorse Project</publishername></publisher>
-	&legal;
-	<authorgroup>
-		<author>
-			<firstname>Jacob</firstname>
-			<surname>Perkins</surname>
-			<affiliation>
-				<orgname>Seahorse Project</orgname>
-				<!--<address><email>jap1@users.sourceforge.net</email></address>-->
-			</affiliation>
-		</author>
-	</authorgroup>
-	<revhistory>
-		<revision>
-			<revnumber>&app; Manual V&manrevision;</revnumber>
-			<date>&date;</date>
-			<revdescription>
-				<para role="author">Jacob Perkins
+	<articleinfo>
+		<title>&app; Manual V&manrevision;</title>
+		<copyright>
+			<year>2003</year>
+			<holder>Jacob Perkins</holder>
+		</copyright>
+		<publisher>
+			<publishername>Seahorse Project</publishername>
+		</publisher>
+		&legal;
+		<authorgroup>
+			<author>
+				<firstname>Jacob</firstname>
+				<surname>Perkins</surname>
+				<affiliation>
+					<orgname>Seahorse Project</orgname>
+					<!--
+					<address>
+						<email>jap1@users.sourceforge.net</email>
+					</address>
+					-->
+				</affiliation>
+			</author>
+		</authorgroup>
+		<revhistory>
+			<revision>
+				<revnumber>&app; Manual V&appversion;</revnumber>
+				<date>&date;</date>
+				<revdescription>
+					<para role="author">Jacob Perkins
+					<!--
 					<email>jap1@users.sourceforge.net</email>
-				</para>
-				<para role="publisher">Seahorse Project</para>
-			</revdescription>
-		</revision>
-	</revhistory>
-	<releaseinfo>This manual describes version &appversion; of &app;.</releaseinfo>
-	<legalnotice>
-		<title>Feedback</title>
-		<para>To report a bug or make a suggestion regarding the &app; application or this manual,
-		submit a report at <ulink url="http://bugzilla.gnome.org" type="http">Gnome bugzilla</ulink>.</para>
-	</legalnotice>
-</articleinfo>
-
-<indexterm zone="index">
-	<primary>&app;</primary>
-</indexterm>
-
-<!-- ============= Document Body ============================= -->
-<!-- ============= Introduction ============================== -->
-<sect1 id="introduction">
-	<title>Introduction</title>
-	<para>&app; is a GNOME2 frontend for <ulink url="http://www.gnupg.org" type="http">Gnu Privacy Guard</ulink>.
-	&app; provides the following components:</para>
-	<itemizedlist>
-		<listitem><para><guilabel>Key Manager</guilabel></para></listitem>
-		<listitem><para><xref linkend="key-properties"/></para></listitem>
-		<listitem><para><xref linkend="text-editor"/></para></listitem>
-		<listitem><para><xref linkend="file-manager"/></para></listitem>
-	</itemizedlist>
-	<para>&app; is an application and a project.
-	The primary goal of the &app; application is to provide an easy to use yet powerful key management tool.
-	The secondary goal is to provide basic encryption capabilities.
-	The goal of the project is to provide the &app; application,
-	along with plugins for GNOME applications to make encryption easy on the GNOME Desktop.</para>
-</sect1>
-
-<!-- =========== Getting Started ============================== -->
-<sect1 id="getting-started">
-	<title>Getting Started</title>
-	<sect2 id="start">
-		<title>To Start &app;</title>
-		<para>You can start &app; in the following ways:</para>
-		<variablelist>
-			<varlistentry>
-				<term><guimenu>Applications</guimenu> menu</term>
-				<listitem>
-					<para>Choose<menuchoice>
-						<guisubmenu>Other</guisubmenu> <guimenuitem>GPG Keys Manager</guimenuitem>
-					</menuchoice>.</para>
-				</listitem>
-				<listitem><para>Run &app; from the command line.</para></listitem>
-			</varlistentry>
-		</variablelist>
-	</sect2>
-	<sect2 id="when-start">
-		<title>When You Start &app;</title>
-		<para>When you start &app;,
-		the <guilabel>Key Manager</guilabel> is displayed.</para>
-		<figure id="key-manager-win">
-			<title>&app; Key Manager</title>
-			<screenshot><mediaobject><imageobject>
-				<imagedata fileref="figures/key-manager.png" format="PNG"/>
-			</imageobject></mediaobject></screenshot>
-		</figure>
-		<para>The <guilabel>Key Manager</guilabel> window contains the following elements:</para>
-		<variablelist>
-			<varlistentry>
-				<term>Menubar.</term>
-				<listitem>
-					<para>The menubar contains commands for accessing the various dialogs and windows.</para>
-				</listitem>
-			</varlistentry>
-			<varlistentry>
-				<term>Toolbar.</term>
-				<listitem>
-					<para>The toolbar only contains commands that affect
-					&keys;.</para>
-				</listitem>
-			</varlistentry>
-			<varlistentry>
-				<term>Key List.</term>
-				<listitem>
-					<para>The key list shows each &keys; in your
-					<glossterm linkend="key-ring">key ring</glossterm>. If a
-					&key; has multiple
-					<glossterm baseform="user ID" linkend="key-userid">User IDs</glossterm>,
-					then they are shown below the &key;.
-					Each <glossterm>key</glossterm> shows the following attributes:</para>
-					<itemizedlist>
-						<listitem><para><glossterm linkend="key-userid">Name</glossterm></para></listitem>
-						<listitem><para><guilabel>Key ID</guilabel></para></listitem>
-						<listitem><para><glossterm linkend="key-owner-trust">Trust</glossterm></para></listitem>
-						<listitem><para>&type;</para></listitem>
-						<listitem><para>&length;</para></listitem>
-					</itemizedlist>
-					<note>Only one &key; may be selected at a time.</note>
-				</listitem>				
-			</varlistentry>
-			<varlistentry>
-				<term>Statusbar.</term>
-				<listitem>
-					<para>The statusbar shows operation status messages.  Operations are either successful or fail.
-					It also shows the progress of a &key; generation operation.</para>
-				</listitem>
-			</varlistentry>
-		</variablelist>
-	</sect2>
-</sect1>
-<!-- ================ Usage ================================ -->
-<!-- Use this section to describe how to use the application to perform the tasks for 
-which the application is designed. -->
-<sect1 id="usage">
-	<title>Usage</title>
-	<para>You can use the &app; application to access the following features:
-	<itemizedlist>
-		<listitem><para><xref linkend="generate"/></para></listitem>
-		<listitem><para><xref linkend="import"/></para></listitem>
-		<listitem><para><xref linkend="export"/></para></listitem>
-		<listitem><para><xref linkend="text-editor"/></para></listitem>
-		<listitem><para><xref linkend="file-manager"/></para></listitem>
-		<listitem><para><xref linkend="key-properties"/></para></listitem>
-		<listitem><para><xref linkend="delete"/></para></listitem>
-	</itemizedlist></para>
-	<para>Any window with a menubar contains a <guimenu>View</guimenu> menu.
-	In the <guimenu>View</guimenu> menu, you may choose whether or not to view the
-	<guimenuitem>Toolbar</guimenuitem> or <guimenuitem>Statusbar</guimenuitem>
-	by selecting <menuchoice><guimenu>View</guimenu><guimenuitem>Toolbar</guimenuitem></menuchoice>
-	or <menuchoice><guimenu>View</guimenu><guimenuitem>Statusbar</guimenuitem></menuchoice>.</para>
-	<para>Any window with a statusbar will display status messages from operations.
-	The current or last focused statusbar can also display operation progress.</para>
-	<para>You can get help for a feature by clicking <guibutton>help</guibutton>
-	in the dialog or selecting the <guimenu>Help</guimenu> menu.</para>
-	<warning>While &app; is in use, do not make any changes to the
-	<glossterm linkend="key-ring">key ring</glossterm> with another program.
-	External changes could have unkown and possibly undesirable affects.</warning>
-<!-- ================ Usage Subsection ================================ -->
-	<sect2 id="generate">
-		<title>Generate</title>
-		<para>To generate a new &key;, choose 
-		<menuchoice><guimenu>File</guimenu><guimenuitem>New</guimenuitem></menuchoice>
-		from the <guilabel>Key Manager</guilabel>.
-		The <guilabel>Generate Key</guilabel> dialog is displayed.</para>
-		<note>If you do not already have a personal &key;,
-		generating one will allow you to <glossterm linkend="op-sign">sign</glossterm>
-		data, and allows others to send you <glossterm baseform="encrypt" linkend="op-encrypt">encrypted</glossterm> data.</note>
-		<figure id="generate-dlg">
-			<title>Generate Key Dialog</title>
-			<screenshot><mediaobject><imageobject>
-				<imagedata fileref="figures/generate.png" format="PNG"/>
-			</imageobject></mediaobject></screenshot>
-		</figure>
-		<para>You will need to enter:</para>
+					-->
+					</para>
+					<para role="publisher">Seahorse Project</para>
+				</revdescription>
+			</revision>
+		</revhistory>
+		<releaseinfo>This manual describes version &appversion; of &app;</releaseinfo>
+		<legalnotice>
+			<title>Feedback</title>
+			<para>To report a bug or make a suggestion regarding the
+			&app; application or this manual, follow the directions in the
+			<ulink url="ghelp:gnome-feedback" type="help">Gnome Feedback Page</ulink>.</para>
+		</legalnotice>
+	</articleinfo>
+	<indexterm zone="index">
+		<primary>&app;</primary>
+	</indexterm>
+	<sect1 id="introduction">
+		<title>Introduction</title>
+		<para>&app; is a GNOME2 frontend for
+		<ulink url="http://www.gnupg.org" type="http">Gnu Privacy Guard</ulink>.
+		&app; is designed to be an easy to use &key; management tool,
+		while providing basic <glossterm>encryption</glossterm> tools.
+		&app; provides to following features:</para>
 		<itemizedlist>
-			<listitem><para>Your full name,</para></listitem>
-			<listitem><para>Valid email address, and</para></listitem>
-			<listitem><para>Comment describing the &key;</para></listitem>
+			<listitem><para><xref linkend="generate"/></para></listitem>
+			<listitem><para><xref linkend="import"/></para></listitem>
+			<listitem><para><xref linkend="export"/></para></listitem>
+			<listitem><para><xref linkend="text-editor"/></para></listitem>
+			<listitem><para><xref linkend="file-manager"/></para></listitem>
+			<listitem><para><xref linkend="key-properties"/></para></listitem>
+			<listitem><para><xref linkend="signatures"/></para></listitem>
 		</itemizedlist>
-		<para>This information will be used to create your &userid;.
-		Next, you must choose a &type; and &length; for your &key;:</para>
-		<variablelist>
-			<varlistentry>
-				<term>DSA &amp; ElGamal</term>
-				<listitem>
-					<para>Choosing <guilabel>DSA &amp; ElGamal</guilabel> will generate a new &key; with a
-					<glossterm linkend="dsa-key">DSA</glossterm> primary key of &length; 1024
-					and an <glossterm linkend="elgamal-key">ElGamal</glossterm>
-					&subkey; whose &length; you can choose. This new &key;
-					can be used for <glossterm baseform="encrypt" linkend="op-encrypt">encryption</glossterm>
-					and <glossterm baseform="sign" linkend="op-sign">signing</glossterm>.
-					This is the default choice and should usually be selected.</para>
-				</listitem>
-			</varlistentry>
-			<varlistentry>
-				<term>DSA (sign only)</term>
-				<listitem>
-					<para>Choosing <guilabel>DSA (sign only)</guilabel> will generate
-					a new <glossterm linkend="dsa-key">DSA</glossterm> &key;
-					without a &subkey;. This new &key; can only be used for
-					<glossterm baseform="sign" linkend="op-sign">signing</glossterm>.</para>
-				</listitem>
-			</varlistentry>
-			<varlistentry>
-				<term>RSA (sign only)</term>
-				<listitem>
-					<para>Choosing <guilabel>RSA (sign only)</guilabel> will generate
-					a new <glossterm linkend="rsa-key">RSA</glossterm> &key;
-					without a &subkey;. This new &key; can only be used for
-					<glossterm baseform="sign" linkend="op-sign">signing</glossterm>.</para>
-				</listitem>
-			</varlistentry>
-		</variablelist>
-		<para>Now you must choose an &expires;. Usually this will be <guibutton>Never Expires</guibutton>,
-		unless there is a specific reason for having your &key;
-		<glossterm baseform="expiration date" linkend="key-expires">expire</glossterm>.</para>
-		<para>Finally, you must enter a passphrase for the &key; and confirm it.
-		This should be a pass<emphasis>phrase</emphasis> instead of a pass<emphasis>word</emphasis>.
-		When finished, click <guibutton>OK</guibutton> to generate the new &key;</para>
-		<caution>No other operation should be performed during &key; generation,
-		otherwise the process will be interrupted the &key; will not be generated.</caution>
-	</sect2>
-	<sect2 id="import">
-		<title>Import</title>
-		<para>To <glossterm linkend="op-import">import</glossterm>
-		&keys;, choose
-		<menuchoice><guimenu>File</guimenu><guimenuitem>Open...</guimenuitem></menuchoice>
-		from the <guilabel>Key Manager</guilabel>.
-		The <guilabel>Import Keys</guilabel> dialog is displayed.</para>
-		<figure id="import-dlg">
-			<title>Import Dialog</title>
-			<screenshot><mediaobject><imageobject>
-				<imagedata fileref="figures/import.png" format="PNG"/>
-			</imageobject></mediaobject></screenshot>
-		</figure>
-		<variablelist>
-			<varlistentry>
-				<term>Import from File</term>
-				<listitem>
-					<para>To <glossterm>import</glossterm> &keys;
-					from a file, select <guilabel>Import from File</guilabel>,
-					choose a file, then click <guibutton>OK</guibutton>.</para>
-				</listitem>
-			</varlistentry>
-			<varlistentry>
-				<term>Import from Server</term>
-				<listitem>
-					<para>Feature not yet available</para>
-				</listitem>
-			</varlistentry>
-			<varlistentry>
-				<term>Import from Text</term>
-				<listitem>
-					<para>To <glossterm linkend="op-import">import</glossterm> &keys;
-					from text, select <guilabel>Import from Text</guilabel>,
-					paste the text into the text area, then click <guibutton>OK</guibutton>.</para>
-					<warning>The text must be in <xref linkend="ascii-armor"/> encoding in order to be
-					<glossterm baseform="import" linkend="op-import">imported</glossterm> successfully.</warning>
-				</listitem>
-			</varlistentry>
-		</variablelist>
-	</sect2>
-	<sect2 id="export">
-		<title>Export</title>
-		<para>To <glossterm linkend="op-export">export</glossterm> a &key;
-		from the <guilabel>Key Manager</guilabel>, select a &key; from the list and choose 
-		<menuchoice><guimenu>File</guimenu><guimenuitem>Save As...</guimenuitem></menuchoice>
-		or click <guibutton>Save As</guibutton>. You can do the same from the <xref linkend="key-properties"/> of the
-		&key; you want to <glossterm linkend="op-export">export</glossterm>.
-		The <guilabel>Export Key</guilabel> dialog is displayed.</para>
-		<figure id="export-dlg">
-			<title>Export Dialog</title>
-			<screenshot><mediaobject><imageobject>
-				<imagedata fileref="figures/export.png" format="PNG"/>
-			</imageobject></mediaobject></screenshot>
-		</figure>
-		<variablelist>
-			<varlistentry>
-				<term>Export to File</term>
-				<listitem>
-					<para>To <glossterm linkend="op-export">export</glossterm> a &key; to a file,
-					select <guilabel>Export to File</guilabel>,
-					choose the filename, then click <guibutton>OK</guibutton>.</para>
-				</listitem>
-			</varlistentry>
-			<varlistentry>
-				<term>Export to Server</term>
-				<listitem>
-					<para>Feature not yet available</para>
-				</listitem>
-			</varlistentry>
-			<varlistentry>
-				<term>Export to Text</term>
-				<listitem>
-					<para>To <glossterm linkend="op-export">export</glossterm> a &key; to text,
-					select <guilabel>Export to Text</guilabel>, then click <guibutton>OK</guibutton>.
-					The exported &key; will be in the text area.</para>
-					<warning>If <xref linkend="ascii-armor"/> is not enabled,
-					<glossterm baseform="export" linkend="op-export">exported</glossterm>
-					text will not display properly.</warning>
-				</listitem>
-			</varlistentry>
-		</variablelist>
-	</sect2>
-	<sect2 id="text-editor">
-		<title>Text Editor</title>
-		<para>To use the text editor, choose
-		<menuchoice><guimenu>File</guimenu><guimenuitem>Text Editor</guimenuitem></menuchoice>
-		from the <guilabel>Key Manager</guilabel>.</para>
-		<figure id="text-editor-win">
-			<title>&app; Text Editor</title>
-			<screenshot><mediaobject><imageobject>
-				<imagedata fileref="figures/text-editor.png" format="PNG"/>
-			</imageobject></mediaobject></screenshot>
-		</figure>
-		<warning><xref linkend="ascii-armor"/> should be enabled while using the <guilabel>Text Editor</guilabel>.
-		Otherwise, text will not be displayed properly, rendering the <guilabel>Text Editor</guilabel> useless.</warning>
-		<para>The following operations are available for text:</para>
-		<variablelist>
-			<varlistentry>
-				<term>Import</term>
-				<listitem>
-					<para>Select
-					<menuchoice><guimenu>Edit</guimenu><guimenuitem>Import</guimenuitem></menuchoice>,
-					click <guibutton>Import</guibutton>, or right-click and select <guibutton>Import</guibutton>.
-					This will <glossterm linkend="op-import">import</glossterm> any &keys; contained in the text.</para>
-				</listitem>
-			</varlistentry>
-			<varlistentry>
-				<term>Export</term>
-				<listitem>
-					<para>Select
-					<menuchoice><guimenu>Edit</guimenu><guimenuitem>Export</guimenuitem></menuchoice>.
-					The <xref linkend="recipients"/> dialog will appear,
-					in which you can select &keys; to <glossterm linkend="op-export">export</glossterm>.
-					When finished, the chosen &keys; will be
-					<glossterm baseform="export" linkend="op-export">exported</glossterm> to the text.</para>
-				</listitem>
-			</varlistentry>
-			<varlistentry>
-				<term>Sign</term>
-				<listitem>
-					<para>Select
-					<menuchoice><guimenu>Edit</guimenu><guimenuitem>Sign</guimenuitem></menuchoice>,
-					click <guibutton>Sign</guibutton>, or right-click and select <guibutton>Sign</guibutton>.
-					After confirming the <xref linkend="passphrase"/> to the <xref linkend="default-key"/>,
-					the text will be <glossterm baseform="sign" linkend="op-sign">signed</glossterm>
-					with the <xref linkend="default-key"/>.</para>
-				</listitem>
-			</varlistentry>
-			<varlistentry>
-				<term>Clear Sign</term>
-				<listitem>
-					<para>Select
-					<menuchoice><guimenu>Edit</guimenu><guimenuitem>Clear Sign</guimenuitem></menuchoice>,
-					click <guibutton>Clear Sign</guibutton>, or right-click and select <guibutton>Clear Sign</guibutton>.
-					After confirming the <xref linkend="passphrase"/> to the <xref linkend="default-key"/>,
-					the text will be <glossterm baseform="sign" linkend="op-sign">clear signed</glossterm>
-					with the <xref linkend="default-key"/>.</para>
-				</listitem>
-			</varlistentry>
-			<varlistentry>
-				<term>Encrypt</term>
-				<listitem>
-					<para>Select
-					<menuchoice><guimenu>Edit</guimenu><guimenuitem>Encrypt</guimenuitem></menuchoice>,
-					click <guibutton>Encrypt</guibutton>, or right-click and select <guibutton>Encrypt</guibutton>.
-					The <xref linkend="recipients"/> dialog will appear,
-					in which you can select the &keys; to <glossterm linkend="op-encrypt">encrypt</glossterm> to.
-					When finished, the text will be
-					<glossterm baseform="encrypt" linkend="op-encrypt">encrypted</glossterm> to the selected &keys;.</para>
-				</listitem>
-			</varlistentry>
-			<varlistentry>
-				<term>Decrypt</term>
-				<listitem>
-					<para>Select
-					<menuchoice><guimenu>Edit</guimenu><guimenuitem>Decrypt</guimenuitem></menuchoice>,
-					click <guibutton>Decrypt</guibutton>, or right-click and select <guibutton>Decrypt</guibutton>
-					and enter the <xref linkend="passphrase"/> to one of the <xref linkend="recipients"/>
-					&keys;. If successful, the text will be
-					<glossterm baseform="decrypt" linkend="op-decrypt">decrypted</glossterm>.</para>
-				</listitem>
-			</varlistentry>
-			<varlistentry>
-				<term>Verify</term>
-				<listitem>
-					<caution>You must have the <glossterm>signing key</glossterm> in your
-					<glossterm>key ring</glossterm> in order to successfully
-					<glossterm>verify</glossterm> a <glossterm>signature</glossterm>.</caution>
-					<para>Select
-					<menuchoice><guimenu>Edit</guimenu><guimenuitem>Verify</guimenuitem></menuchoice>,
-					click <guibutton>Verify</guibutton>, or right-click and select <guibutton>Verify</guibutton>.
-					If successful, the <xref linkend="signatures"/> dialog will appear.
-					Otherwise, you will receive an error regarding how
-					<glossterm baseform="verify" linkend="op-verify">verification</glossterm> failed.</para>
-					<note>You must have the signing &key; in your <glossterm linkend="key-ring">key ring</glossterm>
-					in order to successfully <glossterm linkend="op-verify">verify</glossterm>
-					a <glossterm>signature</glossterm>.</note>
-				</listitem>
-			</varlistentry>
-			<varlistentry>
-				<term>Decrypt and Verify</term>
-				<listitem>
-					<para><glossterm>Decrypt and Verify</glossterm> combines the
-					<glossterm>decrypt</glossterm> and <glossterm>verify</glossterm>
-					operations by <glossterm>decrypting</glossterm>,
-					then <glossterm>verifying</glossterm> the text.
-					To <glossterm>decrypt and verify</glossterm>, select
-					<menuchoice><guimenu>Edit</guimenu><guimenuitem>Decrypt and Verify</guimenuitem></menuchoice>
-					or right-click and select <guibutton>Decrypt and Verify</guibutton>.</para>
-				</listitem>
-			</varlistentry>
-		</variablelist>
-	</sect2>
-	<sect2 id="file-manager">
-		<title>File Manager</title>
-		<para>To use the <guilabel>File Manager</guilabel>, choose
-		<menuchoice><guimenu>File</guimenu><guimenuitem>File Manager</guimenuitem></menuchoice>
-		from the <guilabel>Key Manager</guilabel>.
-		<figure id="file-manager-win">
-			<title>&app; File Manager</title>
-			<screenshot><mediaobject><imageobject>
-				<imagedata fileref="figures/file-manager.png" format="PNG"/>
-			</imageobject></mediaobject></screenshot>
-		</figure>
-		The following operations are available for files:
-		<variablelist>
-			<varlistentry>
-				<term>Import</term>
-				<listitem>
-					<para>Choose an existing file, then select
-					<menuchoice><guimenu>Edit</guimenu><guimenuitem>Import</guimenuitem></menuchoice>,
-					or click <guibutton>Import</guibutton>.
-					Any <glossterm>keys</glossterm> in the file will be added to the <glossterm>key ring</glossterm>.</para>
-				</listitem>
-			</varlistentry>
-			<varlistentry>
-				<term>Export</term>
-				<listitem>
-					<para>Enter a filename (the file does not have to exist), then select
-					<menuchoice><guimenu>Edit</guimenu><guimenuitem>Export</guimenuitem></menuchoice>.
-					The <xref linkend="recipients"/> dialog will appear, in which you can select the
-					<glossterm>keys</glossterm> to <glossterm>export</glossterm>.
-					When finished, the exported <glossterm>keys</glossterm> will be appended to the file.</para>
-				</listitem>
-			</varlistentry>
-			<varlistentry>
-				<term>Sign</term>
-				<listitem>
-					<para>Choose an existing file to <glossterm>sign</glossterm>, then select
-					<menuchoice><guimenu>Edit</guimenu><guimenuitem>Sign</guimenuitem></menuchoice>,
-					or click <guibutton>Sign</guibutton>.
-					After confirming the <xref linkend="passphrase"/> to the <xref linkend="default-key"/>,
-					a <glossterm>detached signature</glossterm> file will be created with the same file name,
-					but with a <filename>.asc</filename> or <filename>.sig</filename> extension,
-					depending on whether <xref linkend="ascii-armor"/> is enabled.</para>
-				</listitem>
-			</varlistentry>
-			<varlistentry>
-				<term>Encrypt</term>
-				<listitem>
-					<para>Choose an existing file to <glossterm>encrypt</glossterm>, then select
-					<menuchoice><guimenu>Edit</guimenu><guimenuitem>Encrypt</guimenuitem></menuchoice>,
-					or click <guibutton>Encrypt</guibutton>.
-					The <xref linkend="recipients"/> dialog will appear,
-					in which you can select the <glossterm>keys</glossterm> to <glossterm>encrypt</glossterm> to.
-					When finished, a new, <glossterm>encrypted</glossterm>, file will be created with the same name,
-					but with a <filename>.asc</filename> or <filename>.gpg</filename> extension, depending on whether <xref linkend="ascii-armor"/> is enabled.</para>
-				</listitem>
-			</varlistentry>
-			<varlistentry>
-				<term>Decrypt</term>
-				<listitem>
-					<caution>You must have access to the <glossterm>secret key</glossterm> of one of the <glossterm>encryption keys</glossterm>
-					in your <glossterm>key ring</glossterm> in order to <glossterm>decrypt</glossterm> a file.</caution>
-					<para>Choose an <glossterm>encrypted</glossterm> file to <glossterm>decrypt</glossterm>.
-					<warning>The filename must have a <filename>.asc</filename> or <filename>.gpg</filename> extension.</warning>
-					After choosing the file, select <menuchoice><guimenu>Edit</guimenu><guimenuitem>Decrypt</guimenuitem></menuchoice>,
-					or click <guibutton>Decrypt</guibutton> and enter the <xref linkend="passphrase"/>.
-					If successful, a <glossterm>decrypted</glossterm> file will be created with the same name, but without the extension.</para>
-				</listitem>
-			</varlistentry>
-			<varlistentry>
-				<term>Verify</term>
-				<listitem>
-					<caution>You must have the <glossterm>signing key</glossterm> in your <glossterm>key ring</glossterm>
-					in order to successfully <glossterm>verify</glossterm> a <glossterm>signature</glossterm>.</caution>
-					<para>Choose a <glossterm>detached signature</glossterm> file to <glossterm>verify</glossterm>.
-					<warning>The signature file must have a <filename>.asc</filename> or <filename>.sig</filename> extension,
-					and it must have the same name as the <glossterm>signed file</glossterm>, but without the extension.</warning>
-					<example>
-						<title>Choosing a Detached Signature File</title>
-						<para>Select <filename>foo.sig</filename> or <filename>foo.asc</filename>, where the
-						<glossterm>signed file</glossterm> <filename>foo</filename> is in the same directory.</para>
-					</example></para>
-					<para>After choosing the file, select <menuchoice><guimenu>Edit</guimenu><guimenuitem>Verify</guimenuitem></menuchoice>,
-					or click <guibutton>Verify</guibutton>.  If success, the <xref linkend="signatures"/> dialog will appear,
-					otherwise you will get an error message regarding how <glossterm>verification</glossterm> failed.</para>
-				</listitem>
-			</varlistentry>
-			<varlistentry>
-				<term>Decrypt and Verify</term>
-				<listitem>
-					<para><glossterm>Decrypt and verify</glossterm> combines the <glossterm>decrypt</glossterm>
-					and <glossterm>verify</glossterm> operations by <glossterm>decrypting</glossterm> the file,
-					then <glossterm>verifying</glossterm> and <glossterm>signatures</glossterm> found.
-					To <glossterm>decrypt and verify</glossterm>, choose an <glossterm>encrypted</glossterm> file then select
-					<menuchoice><guimenu>Edit</guimenu><guimenuitem>Decrypt and Verify</guimenuitem></menuchoice>.</para>
-				</listitem>
-			</varlistentry>
-		</variablelist></para>
-	</sect2>
-	<sect2 id="key-properties">
-		<title>Key Properties</title>
-		<para>To view &key; properties, select a &key; from the list and choose
-		<menuchoice><guimenu>Edit</guimenu><guimenuitem>Properties</guimenuitem></menuchoice>,
-		click <guibutton>Properties</guibutton>, or double-click the &key;.
-		The <guilabel>Key Properties</guilabel> window is displayed.</para>
-		<figure id="key-properties-win">
+		<note>Most &key; management features can be found in the <xref linkend="key-properties"/>.</note>
+	</sect1>
+	<sect1 id="getting-started">
+		<title>Getting Started</title>
+		<sect2 id="start">
+			<title>To Start &app;</title>
+			<para>You can start &app; in the following ways:</para>
+			<variablelist>
+				<varlistentry>
+					<term><guimenu>Applications</guimenu> menu</term>
+					<listitem>
+						<para>Choose
+						<menuchoice>
+							<guimenu>Other</guimenu>
+							<guimenuitem>GPG Keys Manager</guimenuitem>
+						</menuchoice>.</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term>Command Line</term>
+					<listitem>
+						<para>Type <command>seahorse</command>.</para>
+					</listitem>
+				</varlistentry>
+			</variablelist>
+		</sect2>
+		<sect2 id="when-start">
+			<title>When You Start &app;</title>
+			<para>When you start &app;, the <guilabel>Seahorse Key Manager</guilabel>
+			window is displayed.
+			<!--do figure-->
+			The window contains the following elements:</para>
+			<variablelist>
+				<varlistentry>
+					<term>Menubar</term>
+					<listitem>
+						<para>The menus allow you to access</para>
+					</listitem>
+				</varlistentry>
+			</variablelist>
+		</sect2>
+	</sect1>
+	<!-- sections organized so coincide with menus -->
+	<sect1 id="usage">
+		<title>Usage</title>
+		<para>Write me: features</para>
+		<sect2 id="generate">
+			<title>Generating a Key</title>
+			<para>Write me: generate</para>
+			<variablelist>
+				<varlistentry>
+					<term>Full Name</term>
+					<listitem>
+						<para>Write me</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term>Email Address</term>
+					<listitem>
+						<para>Write me</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term>Key Comment</term>
+					<listitem>
+						<para>Write me</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term>Key Type</term>
+					<listitem>
+						<para>Write me</para>
+						<variablelist>
+							<varlistentry>
+								<term>DSA &amp; ElGamal</term>
+								<listitem>
+									<para>Write me</para>
+								</listitem>
+							</varlistentry>
+							<varlistentry>
+								<term>DSA</term>
+								<listitem>
+									<para>Write me</para>
+								</listitem>
+							</varlistentry>
+							<varlistentry>
+								<term>RSA</term>
+								<listitem>
+									<para>Write me</para>
+								</listitem>
+							</varlistentry>
+						</variablelist>
+					</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term>Key Length</term>
+					<listitem>
+						<para>Write me</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term>Expiration Date</term>
+					<listitem>
+						<para>Write me</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term>Passphrase</term>
+					<listitem>
+						<para>Write me</para>
+					</listitem>
+				</varlistentry>
+			</variablelist>
+		</sect2>
+		<sect2 id="import">
+			<title>Importing Keys</title>
+			<para>Write me: import</para>
+			<variablelist>
+				<varlistentry>
+					<term>Import from File</term>
+					<listitem>
+						<para>Write me</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term>Import from Text</term>
+					<listitem>
+						<para>Write me</para>
+					</listitem>
+				</varlistentry>
+			</variablelist>
+		</sect2>
+		<sect2 id="key-properties">
 			<title>Key Properties</title>
-			<screenshot><mediaobject><imageobject>
-				<imagedata fileref="figures/key-properties.png" format="PNG"/>
-			</imageobject></mediaobject></screenshot>
-		</figure>
-		<para>The <guilabel>Key Properties</guilabel> window initially shows the
-		<glossterm baseform="key" linkend="key">key's</glossterm></para>
-		<itemizedlist>
-			<listitem><para><glossterm linkend="key-fingerprint">Fingerprint</glossterm>,</para></listitem>
-			<listitem><para><glossterm linkend="key-owner-trust">Owner Trust</glossterm>,</para></listitem>
-			<listitem><para><glossterm baseform="attributes" linkend="key-attributes">Key Attributes</glossterm>, and</para></listitem>
-			<listitem><para><xref linkend="userid-properties"/></para></listitem>
-		</itemizedlist>
-		<sect3 id="key-disable">
-			<title>Disable Key</title>
-			<para>You can disable a &key; by checking
-			<guibutton>Disabled</guibutton>. A disabled &key;
-			cannot be used for <glossterm linkend="op-encrypt">encryption</glossterm>.
-			Most &keys; should be left enabled.</para>
-		</sect3>
-		<sect3 id="change-owner-trust">
-			<title>Change Owner Trust</title>
-			<para>You can change the <glossterm linkend="key-owner-trust">owner trust</glossterm>
-			of a &key; by using the <guilabel>Owner Trust</guilabel>
-			option menu.</para>
-		</sect3>
-		<sect3 id="change-expires">
-			<title>Change Expiration Date</title>
-			<para>If the &key; has a &secret;, then you can change the &expires;.
-			If <guibutton>Never Expires</guibutton> is checked, then the &key; will never expire.
-			Otherwise, the date shown will be the &expires;.</para>
-			<note>Changing the &expires; requires a <xref linkend="passphrase"/>.</note>
-		</sect3>
-		<sect3 id="userid-properties">
-			<title>User ID Properties</title>
-			<para><glossterm baseform="user ID" linkend="key-userid">User IDs</glossterm> are shown below the
-			<glossterm baseform="attributes" linkend="key-attributes">primary key attributes</glossterm>.
-			If the &key; has a
-			&secret; and there is more than one
-			&userid;, then you can:</para>
-			<itemizedlist>
-				<listitem><para><xref linkend="primary-userid"/></para></listitem>
-				<listitem><para><xref linkend="delete-userid"/></para></listitem>
-			</itemizedlist>
-			<sect4 id="primary-userid">
-				<title>Set Primary User ID</title>
-				<para>Feature not yet available</para>
-			</sect4>
-			<sect4 id="delete-userid">
-				<title>Delete User ID</title>
-				<para>Feature not yet available</para>
-			</sect4>
-		</sect3>
-		<sect3 id="subkey-properties">
-			<title>Subkey Properties</title>
-			<para><glossterm baseform="subkey" linkend="key-subkey">Subkeys</glossterm>
-			are hidden by default. To show them, select
-			<menuchoice><guimenu>View</guimenu><guimenuitem>Subkeys</guimenuitem></menuchoice>.
-			If the &key; has <glossterm baseform="subkey" linkend="key-subkey">subkeys</glossterm>,
-			they will be shown below the <xref linkend="userid-properties"/>.</para>
-			<para>Each &subkey; shows its
-			<glossterm linkend="key-attributes">attributes</glossterm> and <guilabel>Status</guilabel>.
-			The <guilabel>Status</guilabel> can be:</para>
-			<itemizedlist>
-				<listitem><para>Good,</para></listitem>
-				<listitem><para>Revoked, or</para></listitem>
-				<listitem><para>Expired,</para></listitem>
-			</itemizedlist>
-			<para>depending on the state of the &subkey;.
-			If the &key; has a &secret;,
-			then you can:</para>
-			<itemizedlist>
-				<listitem><para><xref linkend="change-subkey-expires"/></para></listitem>
-				<listitem><para><xref linkend="revoke-subkey"/></para></listitem>
-				<listitem><para><xref linkend="delete-subkey"/></para></listitem>
-			</itemizedlist>
-			<sect4 id="change-subkey-expires">
-				<title>Change Subkey Expiration Date</title>
-				<para>As with the <xref linkend="change-expires"/> for the primary key,
-				a <glossterm baseform="subkey" linkend="key-subkey">subkey's</glossterm>
-				&expires; can be changed if the &key; has a &secret;.
-				If <guibutton>Never Expires</guibutton> is checked, then the &subkey; will never expire.
-				Otherwise, the date shown will be the &expires;.</para>
-				<note>Changing the &expires; requires a <xref linkend="passphrase"/>.</note>
-			</sect4>
-			<sect4 id="revoke-subkey">
-				<title>Revoke Subkey</title>
-				<para>The <guibutton>Revoke</guibutton> button will only
-				be shown if the &key; has not been
-				<glossterm baseform="revoke" linkend="op-revoke">revoked</glossterm> and has a &secret;.
-				Clicking <guibutton>Revoke</guibutton> will show the <xref linkend="revoke"/>
-				Dialog for the &subkey;.</para>
-				<note>Revoking a &subkey; requires a <xref linkend="passphrase"/>.</note>
-			</sect4>
-			<sect4 id="delete-subkey">
-				<title>Delete Subkey</title>
-				<para>If the &key; has a &secret;, then you can <xref linkend="delete"/> a &subkey;
-				by clicking on the <guibutton>Delete</guibutton> button.</para>
-				<note>Deleting a &subkey; requires a <xref linkend="passphrase"/>.</note>
-			</sect4>
-		</sect3>
-		<sect3 id="change-passphrase">
-			<title>Change Passphrase</title>
-			<para>If the &key; has a &secret;, you can change the
-			<glossterm baseform="key" linkend="key">key's</glossterm> passphrase by selecting
-			<menuchoice><guimenu>Edit</guimenu><guimenuitem>Change Passphrase</guimenuitem></menuchoice>.
-			The first time the <xref linkend="passphrase"/> Dialog appears is for entering
-			the current passphrase. The second time is for the new passphrase.</para>
-		</sect3>
-		<sect3 id="add-uid">
-			<title>Add User ID</title>
-			<para>If the &key; has a &secret;, you can select
-			<menuchoice><guimenu>Edit</guimenu><guimenuitem>Add User ID</guimenuitem></menuchoice>
-			to add a new &userid;. You must then enter the following:</para>
-			<itemizedlist>
-				<listitem><para>Your full name, which must be at least 5 characters long,</para></listitem>
-				<listitem><para>a valid email address,</para></listitem>
-				<listitem><para>and an optional comment describing the key</para></listitem>
-			</itemizedlist>
-			<note>Adding a &userid; requires a <xref linkend="passphrase"/>.</note>
-		</sect3>
-		<sect3 id="add-subkey">
-			<title>Add Subkey</title>
-			<para>If the &key; has a &secret;, you can select
-			<menuchoice><guimenu>Edit</guimenu><guimenuitem>Add Subkey</guimenuitem></menuchoice>
-			to add a new &subkey;. You must then choose from the following
-			<glossterm baseform="type" linkend="key-type">types</glossterm>:</para>
-			<itemizedlist>
-				<listitem><para><glossterm baseform="DSA" linkend="dsa-key">DSA (sign only)</glossterm></para></listitem>
-				<listitem><para><glossterm baseform="ElGamal" linkend="elgamal-key">ElGamal (encrypt only)</glossterm></para></listitem>
-				<listitem><para><glossterm baseform="RSA" linkend="rsa-key">RSA (sign only)</glossterm></para></listitem>
-				<listitem><para><glossterm baseform="RSA" linkend="rsa-key">RSA (encrypt only)</glossterm></para></listitem>
-			</itemizedlist>
-			<para>The available &length; ranges depend on the &type; selected.
-			Finally, you must choose an &expires;. It can be a specific date in the future,
-			or <guibutton>Never Expires</guibutton>.</para>
-			<note>Adding a &subkey; requires a <xref linkend="passphrase"/>.</note>
-		</sect3>
-	</sect2>
-	<sect2 id="delete">
-		<title>Delete</title>
-		<para>To delete a &key;, choose
-		<menuchoice><guimenu>Edit</guimenu><guimenuitem>Delete</guimenuitem></menuchoice>
-		or click <guibutton>Delete</guibutton> from the <guilabel>Key Manager</guilabel>
-		or <xref linkend="key-properties"/> of the &key; you want to delete.
-		The <guilabel>Delete Key</guilabel> dialog is displayed.
-		Click <guibutton>Yes</guibutton> to delete the &key;.</para>
-		<warning>This will permanently delete the selected &key; and cannot be undone.</warning>
-	</sect2>
-	<sect2 id="revoke">
-		<title>Revoke</title>
-		<para>If the &key; has a &secret;, then it or its
-		<glossterm baseform="subkey" linkend="key-subkey">subkeys</glossterm> can be
-		<glossterm baseform="revoke" linkend="op-revoke">revoked</glossterm>.
-		<glossterm baseform="revoke" linkend="op-revoke">Revocation</glossterm>
-		requires one of the following reasons:</para>
-		<variablelist>
-			<varlistentry>
-				<term>No Reason</term>
-				<listitem>
-					<para><guilabel>No Reason</guilabel> for
-					<glossterm baseform="revoke" linkend="op-revoke">revoking</glossterm>
-					the &key; or &subkey;</para>
-				</listitem>
-			</varlistentry>
-			<varlistentry>
-				<term>Compromised</term>
-				<listitem>
-					<para>The &key; or &subkey; has been compromised.</para>
-				</listitem>
-			</varlistentry>
-			<varlistentry>
-				<term>Superseded</term>
-				<listitem>
-					<para>The &key; or &subkey; has been replaced.</para>
-				</listitem>
-			</varlistentry>
-			<varlistentry>
-				<term>Not Used</term>
-				<listitem>
-					<para>The &key; or &subkey; is no longer used.</para>
-				</listitem>
-			</varlistentry>
-		</variablelist>
-		<para>and an optional <guilabel>Description</guilabel> of the
-		<glossterm baseform="revoke" linkend="op-revoke">revocation</glossterm>.</para>
-		<note><glossterm baseform="revoke" linkend="op-revoke">Revocation</glossterm>
-		requires a <xref linkend="passphrase"/>.</note>
-	</sect2>
-	<sect2 id="passphrase">
-		<title>Passphrase</title>
-		<para>This dialog is displayed when a <glossterm>passphrase</glossterm> must be entered,
-		usually to unlock a <glossterm>secret key</glossterm>.
-		<figure id="passphrase-dlg">
-			<title>Passphrase Dialog</title>
-			<screenshot><mediaobject><imageobject>
-				<imagedata fileref="figures/passphrase.png" format="PNG"/>
-			</imageobject></mediaobject></screenshot>
-		</figure>
-		The <glossterm>key</glossterm> for which the <glossterm>passphrase</glossterm> is needed is shown above the entry.</para>
-	</sect2>
-	<sect2 id="signatures">
-		<title>Signatures</title>
-		<para>This dialog shows information about a <glossterm>verified signature</glossterm>.
-		<figure id="signatures-dlg">
-			<title>Signature Dialog</title>
-			<screenshot><mediaobject><imageobject>
-				<imagedata fileref="figures/signature.png" format="PNG"/>
-			</imageobject></mediaobject></screenshot>
-		</figure>
-		<variablelist>
-			<varlistentry>
-				<term>Status</term>
-				<listitem>
-					<para>The status of the <glossterm>signature</glossterm>,
-					usually <guilabel>Good</guilabel>.</para>
-				</listitem>
-			</varlistentry>
-			<varlistentry>
-				<term>Created</term>
-				<listitem>
-					<para>Creation date of the <glossterm>signature</glossterm>.</para>
-				</listitem>
-			</varlistentry>
-			<varlistentry>
-				<term>Signer</term>
-				<listitem>
-					<para><glossterm>User ID</glossterm> of the <glossterm>signing key</glossterm>.</para>
-				</listitem>
-			</varlistentry>
-			<varlistentry>
-				<term>Key ID</term>
-				<listitem>
-					<para><glossterm>Key ID</glossterm> of the <glossterm>signing key</glossterm>.</para>
-				</listitem>
-			</varlistentry>
-		</variablelist></para>
-	</sect2>
-	<sect2 id="recipients">
-		<title>Recipients</title>
-		<para>Use this dialog to select multiple <glossterm>recipients</glossterm>.
-		Currently this used for exporting <glossterm>keys</glossterm> and encrypting data.
-		<figure id="recipients-dlg">
-			<title>Recipients Dialog</title>
-			<screenshot><mediaobject><imageobject>
-				<imagedata fileref="figures/recipients.png" format="PNG"/>
-			</imageobject></mediaobject></screenshot>
-		</figure>
-		The following information is shown for each key:
-		<itemizedlist>
-			<listitem><para><glossterm>Name</glossterm></para></listitem>
-			<listitem><para><glossterm>Key ID</glossterm></para></listitem>
-			<listitem><para><glossterm>Validity</glossterm></para></listitem>
-		</itemizedlist></para>
-		<caution><glossterm>Encryption</glossterm> requires that <glossterm>keys</glossterm>
-		are at least <glossterm>Fully Valid</glossterm>.</caution>
-	</sect2>
-</sect1>
-<sect1 id="preferences">
-	<title>Settings</title>
-	<para>To show the preferences, choose
-	<menuchoice><guimenu>Settings</guimenu><guimenuitem>Preferences</guimenuitem></menuchoice>
-	from any window with a menubar.
-	The <guilabel>Preferences</guilabel> dialog is displayed.
-	<figure id="preferences-dlg">
-		<title>Preferences Dialog</title>
-		<screenshot><mediaobject><imageobject>
-			<imagedata fileref="figures/preferences.png" format="PNG"/>
-		</imageobject></mediaobject></screenshot>
-	</figure></para>
-	<sect2 id="ascii-armor">
-		<title>Ascii Armor</title>
-		<para>Checking <glossterm><guilabel>Ascii Armor</guilabel></glossterm>
-		will ensure that data is encoded as ASCII text instead of binary.
-		This is necessary for the <xref linkend="text-editor"/> and any
-		other component using plain text.</para>
-	</sect2>
-	<sect2 id="text-mode">
-		<title>Text Mode</title>
-		<para>Checking <glossterm><guilabel>Text Mode</guilabel></glossterm>
-		will enable <glossterm>text mode</glossterm>.</para>
-	</sect2>
-	<sect2 id="default-key">
-		<title>Default Signing Key</title>
-		<para>This option menu allows you to choose the <glossterm>default signing key</glossterm>
-		for <glossterm>sign</glossterm> operations.  The only <glossterm>keys</glossterm>
-		shown are those that have a <glossterm>secret key</glossterm> and can <glossterm>sign</glossterm>.</para>
-	</sect2>
-</sect1>
-<!-- ============= About ================================== -->
-<!-- This section contains info about the program (not docs), such as
-author's name(s), web page, license, feedback address. This
-section is optional: primary place for this info is "About.." box of
-the program. However, if you do wish to include this info in the
-manual, this is the place to put it. Alternatively, you can put this information in the title page.-->
-<sect1 id="about">
-	<title>About &app;</title>
-	<para> &app; was written by Jacob Perkins.
-	To find more information about &app;, please visit the <ulink url="http://seahorse.sourceforge.net" type="http">Seahorse Webpage</ulink>.</para>
-	<para>To report a bug or make a suggestion regarding this application or this manual,
-	follow the directions in this <ulink url="ghelp:gnome-feedback" type="help">document</ulink>.</para>
-	<para> This program is distributed under the terms of the GNU General Public license as published by the Free Software Foundation;
-	either version 2 of the License, or (at your option) any later version.
-	A copy of this license can be found at this <ulink url="ghelp:gpl" type="help">link</ulink>,
-	or in the file COPYING included with the source code of this program.</para>
-</sect1>
-<sect1 id="appendices">
-	<title>Appendices</title>
-	<glossary>
-		<title>Glossary of Terms</title>
-		<para>Glossary of terms used in &app; and this manual,
-		which may be unfamiliar to those new to encryption.</para>
-		<glossdiv>
-			<title>Keys</title>
-			<para>This section describes keys and their various attributes.</para>
-			<glossentry id="dsa-key">
-				<glossterm>DSA Key</glossterm>
-				<glossdef>
-					<para>A DSA key can be a primary key, as well as a subkey.
-					It is the default primary key for newly created keys.
-					A DSA key provides signing capabilities.
-					The length ranges from 768 to 1024.</para>
-				</glossdef>
-			</glossentry>
-			<glossentry id="elgamal-key">
-				<glossterm>ElGamal Subkey</glossterm>
-				<glossdef>
-					<para>An ElGamal key can only be a subkey.
-					It is the default subkey for newly created keys.
-					An ElGamal subkey provides encryption capabilities.
-					The length ranges from 768 to 4096.</para>
-				</glossdef>
-			</glossentry>
-			<glossentry id="key-expires">
-				<glossterm>Expiration Date</glossterm>
-				<glossdef>
-					<para>Every key and subkey has an expiration date.
-					For most keys, this date is <emphasis>never</emphasis>.
-					If the key does expire, then it is no longer valid and must be replaced.</para>
-				</glossdef>
-			</glossentry>
-			<glossentry id="key-fingerprint">
-				<glossterm>Fingerprint</glossterm>
-				<glossdef>
-					<para>The fingerprint is a unique identifier for a key.
-					It is used to verify the identity of the key.</para>
-				</glossdef>
-			</glossentry>
-			<glossentry id="key">
-				<glossterm>Key</glossterm>
-				<glossdef>
-					<para>A key is an entity that has the following elements:</para>
-					<itemizedlist>
-						<listitem><para><glossseealso otherterm="public-key"/></para></listitem>
-						<listitem><para><glossseealso otherterm="secret-key"/></para></listitem>
-						<listitem><para><glossseealso otherterm="key-fingerprint"/></para></listitem>
-						<listitem><para><glossseealso otherterm="key-attributes"/></para></listitem>
-						<listitem><para><glossseealso otherterm="key-userid"/></para></listitem>
-						<listitem><para><glossseealso otherterm="key-subkey"/></para></listitem>
-						<listitem><para><glossseealso otherterm="key-owner-trust"/></para></listitem>
-					</itemizedlist>
-					<para>A key can also refer to the <emphasis>primary key</emphasis>,
-					or master key. This key that can be signed by others,
-					and any changes affect the entire key.</para>
-					<glossseealso otherterm="key-signature"/>
-				</glossdef>
-			</glossentry>
-			<glossentry id="key-attributes">
-				<glossterm>Key Attributes</glossterm>
-				<glossdef>
-					<para>Every key contains the following attributes:</para>
-					<itemizedlist>
-						<listitem><para>Key ID</para></listitem>
-						<listitem><para><glossseealso otherterm="key-type"/></para></listitem>
-						<listitem><para>Creation date</para></listitem>
-						<listitem><para><glossseealso otherterm="key-length"/></para></listitem>
-						<listitem><para><glossseealso otherterm="key-expires"/></para></listitem>
-					</itemizedlist>
-				</glossdef>
-			</glossentry>
-			<glossentry id="key-length">
-				<glossterm>Key Length</glossterm>
-				<glossdef>
-					<para>Except for a DSA key, the maximum key length is 4096.
-					For length ranges, see the specific key type.</para>
-					<glossseealso otherterm="dsa-key"/>
-					<glossseealso otherterm="elgamal-key"/>
-					<glossseealso otherterm="rsa-key"/>
-				</glossdef>
-			</glossentry>
-			<glossentry id="key-ring">
-				<glossterm>Key Ring</glossterm>
-				<glossdef>
-					<para>A key ring is a collection of keys.
-					The keys can be your personal keys and/or other's public keys.</para>
-					<glossseealso otherterm="key"/>
-				</glossdef>
-			</glossentry>
-			<glossentry id="key-signature">
-				<glossterm>Key Signature</glossterm>
-				<glossdef>
-					<para>A key signature shows that the signer has validated that key.
-					Every key should have a self-signature, otherwise it is invalid.
-					To verify a key signature, one must have the signed key
-					and the signing key in the key ring.
-					Key signatures are used in calculating a key's validity.</para>
-					<glossseealso otherterm="key-ring"/>
-					<glossseealso otherterm="key-validity"/>
-				</glossdef>
-			</glossentry>
-			<glossentry id="key-type">
-				<glossterm>Key Type</glossterm>
-				<glossdef>
-					<para>A key's type refers to the algorithm of the key.</para>
-					<glossseealso otherterm="dsa-key"/>
-					<glossseealso otherterm="elgamal-key"/>
-					<glossseealso otherterm="rsa-key"/>
-				</glossdef>
-			</glossentry>
-			<glossentry id="key-owner-trust">
-				<glossterm>Owner Trust</glossterm>
-				<glossdef>
-					<para>Owner trust is a measure of how much you trusts another's
-					key signatures. You may have validated someone's key by signing it,
-					but you do not necessarily trust their judgement in signing other keys.
-					Owner trust is a personal setting kept local to your key ring and cannot be exported.
-					Trust is used in calculating a key's validity.
-					There are currently 5 available trust levels:</para>
-					<variablelist>
-						<varlistentry>
-							<term>Ultimate</term>
-							<listitem>
-								<para>This is the highest trust level available.
-								It is reserved for your personal keys,
-								which you trust implicitly. Do not give this level of trust
-								to other keys unless you really know what you are doing.</para>
-							</listitem>
-						</varlistentry>
-						<varlistentry>
-							<term>Full</term>
-							<listitem>
-								<para>The owner really knows what they are doing and you trust
-								them enough that their signature is as good as your own.</para>
-							</listitem>
-						</varlistentry>
-						<varlistentry>
-							<term>Marginal</term>
-							<listitem>
-								<para>You trust the owner to properly sign keys,
-								but do not rely on their signature alone.</para>
-							</listitem>
-						</varlistentry>
-						<varlistentry>
-							<term>Never</term>
-							<listitem>
-								<para>You do not trust the owner at all.</para>
-							</listitem>
-						</varlistentry>
-						<varlistentry>
-							<term>Unknown</term>
-							<listitem>
-								<para>You are unsure of how much to trust the owner.
-								Imported keys that are not your own are given this
-								trust level by default.</para>
-							</listitem>
-						</varlistentry>
-					</variablelist>
-					<glossseealso otherterm="key-ring"/>
-					<glossseealso otherterm="key-validity"/>
-					<glossseealso otherterm="op-import"/>
-				</glossdef>
-			</glossentry>
-			<glossentry id="public-key">
-				<glossterm>Public Key</glossterm>
-				<glossdef>
-					<para>The public part of a key is shared with others.
-					Depending on the key's type, others can use it to
-					encrypt data to the key's owner and/or
-					verify signatures made by the key's owner.</para>
-					<glossseealso otherterm="key-type"/>
-					<glossseealso otherterm="op-encrypt"/>
-					<glossseealso otherterm="op-verify"/>
-					<glossseealso otherterm="op-sign"/>
-				</glossdef>
-			</glossentry>
-			<glossentry id="rsa-key">
-				<glossterm>RSA key</glossterm>
-				<glossdef>
-					<para>A RSA key can be a primary key or a subkey.
-					As a primary key, it provides signing capbilities.
-					As a subkey, it can provide signing or encryption capabilities.
-					The length ranges from 1024 to 4096.</para>
-				</glossdef>
-			</glossentry>
-			<glossentry id="secret-key">
-				<glossterm>Secret Key</glossterm>
-				<glossdef>
-					<para>The secret part of a key must be kept secure.
-					It is usually protected with a passphrase.
-					Depending on its type, the secret part of a key can be used to
-					decrypt data that has been encrypted with the public key and/or
-					sign data so that it can be verified with the public key.</para>
-					<glossseealso otherterm="op-decrypt"/>
-					<glossseealso otherterm="op-encrypt"/>
-					<glossseealso otherterm="op-sign"/>
-					<glossseealso otherterm="op-verify"/>
-					<glossseealso otherterm="public-key"/>
-				</glossdef>
-			</glossentry>
-			<glossentry id="key-subkey">
-				<glossterm>Subkey</glossterm>
-				<glossdef>
-					<para>A subkey provides additional functionality for a key.
-					Generally, the subkey is an ElGamal subkey, which allows others to encrypt to you.
-					Subkeys can be revoked and deleted. Keys can have multiple subkeys.</para>
-					<glossseealso otherterm="elgamal-key"/>
-					<glossseealso otherterm="key-attributes"/>
-					<glossseealso otherterm="op-revoke"/>
-				</glossdef>
-			</glossentry>
-			<glossentry id="key-userid">
-				<glossterm>User ID</glossterm>
-				<glossdef>
-					<para>A user ID has the following elements:</para>
-					<itemizedlist>
-						<listitem><para>Real Name</para></listitem>
-						<listitem><para>Email Address</para></listitem>
-						<listitem><para>Optional Comment</para></listitem>
-					</itemizedlist>
-					<para>Keys can have multiple user IDs for use in different contexts.</para>
-				</glossdef>
-			</glossentry>
-			<glossentry id="key-validity">
-				<glossterm>Validity</glossterm>
-				<glossdef>
-					<para>Key validity uses a <emphasis>web of trust</emphasis> model.
-					A key is valid if:</para>
-					<itemizedlist>
-						<listitem><para>you have signed it personally,</para></listitem>
-						<listitem><para>it has been signed by one fully trusted key, or</para></listitem>
-						<listitem><para>it has been signed by three marginally trusted keys</para></listitem>
-					</itemizedlist>
-					<para>and the path of signed keys leading back from the key is five steps or shorter.
-					The following validity levels are possible:</para>
-					<variablelist>
-						<varlistentry>
-							<term>Ultimate</term>
-							<listitem>
-								<para>The key is most likely yours and is fully valid.</para>
-							</listitem>
-						</varlistentry>
-						<varlistentry>
-							<term>Full</term>
-							<listitem>
-								<para>The key is not yours, but either you have signed it,
-								someone you trust has signed it, or enough people you
-								marginally trust have signed it.</para>
-							</listitem>
-						</varlistentry>
-						<varlistentry>
-							<term>Marginal</term>
-							<listitem>
-								<para>The key does not have enough marginally trusted signatures
-								and does not have a high enough trust level.</para>
-							</listitem>
-						</varlistentry>
-						<varlistentry>
-							<term>Unknown</term>
-							<listitem>
-								<para>The key has unknown trust and untrusted signatures.</para>
-							</listitem>
-						</varlistentry>
-					</variablelist>
-					<para>For examples of the <emphasis>web of trust</emphasis> and key validity,
-					see the <ulink url="http://www.gnupg.org/gph/en/manual.html" type="http">Gnu Privacy Handbook</ulink>.</para>
-					<glossseealso otherterm="key-signature"/>
-					<glossseealso otherterm="key-owner-trust"/>
-				</glossdef>
-			</glossentry>
-		</glossdiv>
-		<glossdiv>
-			<title>Operations</title>
-			<para>This section describes the various operations that can be performed.</para>
-			<glossentry id="op-decrypt">
-				<glossterm>Decrypt</glossterm>
-				<glossdef>
-					<para>Write me</para>
-				</glossdef>
-			</glossentry>
-			<glossentry id="op-encrypt">
-				<glossterm>Encrypt</glossterm>
-				<glossdef>
-					<para>Write me</para>
-				</glossdef>
-			</glossentry>
-			<glossentry id="op-export">
-				<glossterm>Export</glossterm>
-				<glossdef>
-					<para>Write me</para>
-				</glossdef>
-			</glossentry>
-			<glossentry id="op-import">
-				<glossterm>Import</glossterm>
-				<glossdef>
-					<para>Write me</para>
-				</glossdef>
-			</glossentry>
-			<glossentry id="op-revoke">
-				<glossterm>Revoke</glossterm>
-				<glossdef>
-					<para>Write me</para>
-				</glossdef>
-			</glossentry>
-			<glossentry id="op-sign">
-				<glossterm>Sign</glossterm>
-				<glossdef>
-					<para>Write me</para>
-				</glossdef>
-			</glossentry>
-			<glossentry id="op-verify">
-				<glossterm>Verify</glossterm>
-				<glossdef>
-					<para>Write me</para>
-				</glossdef>
-			</glossentry>
-		</glossdiv>
-	</glossary>
-</sect1>
+			<para>Write me: key-properties</para>
+			<variablelist>
+				<varlistentry>
+					<term>Fingerprint</term>
+					<listitem>
+						<para>Write me</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term>KeyID</term>
+					<listitem>
+						<para>Write me</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term>Type</term>
+					<listitem>
+						<para>Write me</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term>Created</term>
+					<listitem>
+						<para>Write me</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term>Length</term>
+					<listitem>
+						<para>Write me</para>
+					</listitem>
+				</varlistentry>
+			</variablelist>
+			<sect3 id="change-owner-trust">
+				<title>Changing Owner Trust</title>
+				<para>Write me: owner-trust</para>
+				<itemizedlist>
+					<listitem><para><guilabel>Unknown</guilabel></para></listitem>
+					<listitem><para><guilabel>Never</guilabel></para></listitem>
+					<listitem><para><guilabel>Marginal</guilabel></para></listitem>
+					<listitem><para><guilabel>Full</guilabel></para></listitem>
+					<listitem><para><guilabel>Ultimate</guilabel></para></listitem>
+				</itemizedlist>
+			</sect3>
+			<sect3 id="disable-key">
+				<title>Disabling a Key</title>
+				<para>Write me: disable</para>
+			</sect3>
+			<sect3 id="change-expires">
+				<title>Changing Expiration Date</title>
+				<para>Write me: expires</para>
+			</sect3>
+			<sect3 id="userid-properties">
+				<title>User IDs</title>
+				<para>Write me: userids</para>
+			</sect3>
+			<sect3 id="subkey-properties">
+				<title>Subkeys</title>
+				<para>Write me: subkeys</para>
+				<variablelist>
+					<varlistentry>
+						<term>KeyID</term>
+						<listitem>
+							<para>Write me</para>
+						</listitem>
+					</varlistentry>
+					<varlistentry>
+						<term>Type</term>
+						<listitem>
+							<para>Write me</para>
+						</listitem>
+					</varlistentry>
+					<varlistentry>
+						<term>Created</term>
+						<listitem>
+							<para>Write me</para>
+						</listitem>
+					</varlistentry>
+					<varlistentry>
+						<term>Length</term>
+						<listitem>
+							<para>Write me</para>
+						</listitem>
+					</varlistentry>
+					<varlistentry>
+						<term>Status</term>
+						<listitem>
+							<para>Write me</para>
+						</listitem>
+					</varlistentry>
+				</variablelist>
+				<sect4 id="change-subkey-expires">
+					<title>Changing a Subkey Expiration Date</title>
+					<para>Write me: subkey-expires</para>
+				</sect4>
+				<sect4 id="revoke-subkey">
+					<title>Revoking a Subkey</title>
+					<para>Write me: subkey-revoke</para>
+				</sect4>
+				<sect4 id="delete-subkey">
+					<title>Deleting a Subkey</title>
+					<para>Write me: subkey-delete</para>
+				</sect4>
+			</sect3>
+		</sect2>
+		<sect2 id="export">
+			<title>Exporting a Key</title>
+			<para>Write me: export</para>
+			<variablelist>
+				<varlistentry>
+					<term>Export to File</term>
+					<listitem>
+						<para>Write me</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term>Export to Text</term>
+					<listitem>
+						<para>Write me</para>
+					</listitem>
+				</varlistentry>
+			</variablelist>
+		</sect2>
+		<sect2 id="sign">
+			<title>Signing a Key</title>
+			<para>Write me: sign</para>
+			<variablelist>
+				<varlistentry>
+					<term>Checking the Key</term>
+					<listitem>
+						<para>Write me</para>
+						<itemizedlist>
+							<listitem><para><guilabel>No Answer</guilabel></para></listitem>
+							<listitem><para><guilabel>Not at all</guilabel></para></listitem>
+							<listitem><para><guilabel>Casually</guilabel></para></listitem>
+							<listitem><para><guilabel>Very carefully</guilabel></para></listitem>
+						</itemizedlist>
+					</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term>Signature Expiration</term>
+					<listitem>
+						<para>Write me</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term>Local Signature</term>
+					<listitem>
+						<para>Write me</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term>Revocable Signature</term>
+					<listitem>
+						<para>Write me</para>
+					</listitem>
+				</varlistentry>
+			</variablelist>
+		</sect2>
+		<sect2 id="delete">
+			<title>Deleting a Key</title>
+			<para>Write me: delete</para>
+		</sect2>
+		<sect2 id="change-passphrase">
+			<title>Changing a Passphrase</title>
+			<para>Write me: change passphrase</para>
+		</sect2>
+		<sect2 id="add-uid">
+			<title>Adding a User ID</title>
+			<para>Write me: add uid</para>
+			<variablelist>
+				<varlistentry>
+					<term>Full Name</term>
+					<listitem>
+						<para>Write me</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term>Email Address</term>
+					<listitem>
+						<para>Write me</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term>Key Comment</term>
+					<listitem>
+						<para>Write me</para>
+					</listitem>
+				</varlistentry>
+			</variablelist>
+		</sect2>
+		<sect2 id="add-subkey">
+			<title>Adding a Subkey</title>
+			<para>Write me: add subkey</para>
+			<variablelist>
+				<varlistentry>
+					<term>Key Type</term>
+					<listitem>
+						<para>Write me</para>
+						<variablelist>
+							<varlistentry>
+								<term>DSA</term>
+								<listitem>
+									<para>Write me</para>
+								</listitem>
+							</varlistentry>
+							<varlistentry>
+								<term>ElGamal</term>
+								<listitem>
+									<para>Write me</para>
+								</listitem>
+							</varlistentry>
+							<varlistentry>
+								<term>RSA</term>
+								<listitem>
+									<para>Write me</para>
+								</listitem>
+							</varlistentry>
+						</variablelist>
+					</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term>Key Length</term>
+					<listitem>
+						<para>Write me</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term>Expiration Date</term>
+					<listitem>
+						<para>Write me</para>
+					</listitem>
+				</varlistentry>
+			</variablelist>
+		</sect2>
+		<sect2 id="revoke">
+			<title>Revoking a Key</title>
+			<para>Write me</para>
+			<variablelist>
+				<varlistentry>
+					<term>Reason</term>
+					<listitem>
+						<para>Write me</para>
+						<variablelist>
+							<varlistentry>
+								<term>No Reason</term>
+								<listitem>
+									<para>Write me</para>
+								</listitem>
+							</varlistentry>
+							<varlistentry>
+								<term>Compromised</term>
+								<listitem>
+									<para>Write me</para>
+								</listitem>
+							</varlistentry>
+							<varlistentry>
+								<term>Superseded</term>
+								<listitem>
+									<para>Write me</para>
+								</listitem>
+							</varlistentry>
+							<varlistentry>
+								<term>Not Used</term>
+								<listitem>
+									<para>Write me</para>
+								</listitem>
+							</varlistentry>
+						</variablelist>
+					</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term>Description</term>
+					<listitem>
+						<para>Write me</para>
+					</listitem>
+				</varlistentry>
+			</variablelist>
+		</sect2>
+		<sect2 id="text-editor">
+			<title>Text Editor</title>
+			<para>Write me: text-editor</para>
+		</sect2>
+		<sect2 id="file-manager">
+			<title>File Manager</title>
+			<para>Write me: file-manager</para>
+		</sect2>
+		<sect2 id="recipients">
+			<title>Choosing Recipients</title>
+			<para>Write me: recipients</para>
+		</sect2>
+		<sect2 id="signatures">
+			<title>Verifying a Signature</title>
+			<para>Write me: signatures</para>
+		</sect2>
+	</sect1>
+	<sect1 id="preferences">
+		<title>Settings</title>
+		<para>Write me: preferences</para>
+		<sect2 id="ascii-armor">
+			<title>Ascii Armor</title>
+			<para>Write me</para>
+		</sect2>
+		<sect2 id="default-key">
+			<title>Default Key</title>
+			<para>Write me</para>
+		</sect2>
+	</sect1>
+	<sect1 id="about">
+		<title>About &app;</title>
+		<para> &app; was written by Jacob Perkins.
+		To find more information about &app;, please visit the 
+		<ulink url="http://seahorse.sourceforge.net" type="http">&app; web page</ulink>.</para>
+		<para>To report a bug or make a suggestion regarding this application or this manual,
+		follow the directions in this
+		<ulink url="ghelp:gnome-feedback" type="help">document</ulink>.</para>
+		<para> This program is distributed under the terms of the GNU
+		General Public license as published by the Free Software
+		Foundation; either version 2 of the License, or (at your option)
+		any later version. A copy of this license can be found at this
+		<ulink url="ghelp:gpl" type="help">link</ulink>, or in the file
+		COPYING included with the source code of this program.</para>
+	</sect1>
 </article>

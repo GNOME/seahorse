@@ -98,8 +98,7 @@ seahorse_sign_new (SeahorseContext *sctx, SeahorseKey *skey, const guint index)
 		question = g_strdup_printf (_("Are you sure you want to sign user ID %s for key %s?"),
 			seahorse_key_get_userid (skey, index - 1), seahorse_key_get_keyid (skey, 0));
 	
-	dialog = gtk_message_dialog_new (GTK_WINDOW (
-		glade_xml_get_widget (swidget->xml, swidget->name)), GTK_DIALOG_DESTROY_WITH_PARENT,
+	dialog = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
 		GTK_MESSAGE_QUESTION, GTK_BUTTONS_YES_NO, question);
 	response = gtk_dialog_run (GTK_DIALOG (dialog));
 	gtk_widget_destroy (dialog);
