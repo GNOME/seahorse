@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-03-31 09:19-0500\n"
+"POT-Creation-Date: 2005-03-31 10:37-0500\n"
 "PO-Revision-Date: 2005-03-31 22:06-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: Canadian English <adamw@gnome.org>\n"
@@ -243,6 +243,7 @@ msgid "Seahorse PGP verify operation"
 msgstr "Seahorse PGP verify operation"
 
 #: ../bonobo/Seahorse_PGP_File_Listener.server.in.in.h:11
+#: ../plugins/nautilus-ext/seahorse-nautilus.c:133
 msgid "Sign..."
 msgstr "Sign..."
 
@@ -939,6 +940,18 @@ msgstr "This plugin performs encryption operations on text."
 msgid "Configure key servers and other encryption settings"
 msgstr "Configure key servers and other encryption settings"
 
+#: ../plugins/nautilus-ext/seahorse-nautilus.c:126
+msgid "Encrypt..."
+msgstr "Encrypt..."
+
+#: ../plugins/nautilus-ext/seahorse-nautilus.c:127
+msgid "Encrypt the selected archive"
+msgstr "Encrypt the selected archive"
+
+#: ../plugins/nautilus-ext/seahorse-nautilus.c:134
+msgid "Sign the selected archive"
+msgstr "Sign the selected archive"
+
 #: ../src/main.c:49
 msgid "Import keys from the file"
 msgstr "Import keys from the file"
@@ -1186,6 +1199,32 @@ msgstr "Are you sure you want to permanently delete the '%s' user ID?"
 #: ../src/seahorse-delete.c:197
 msgid "Couldn't delete user id"
 msgstr "Could not delete user ID"
+
+#: ../src/seahorse-expires.c:62
+msgid "Couldn't change expiry date"
+msgstr "Couldn't change expiration date"
+
+#: ../src/seahorse-expires.c:115
+#, c-format
+msgid "Expiry for Subkey %d of %s"
+msgstr "Expiration for Subkey %d of %s"
+
+#: ../src/seahorse-expires.c:117
+#, c-format
+msgid "Expiry for %s"
+msgstr "Expiration for %s"
+
+#: ../src/seahorse-expires.glade.h:1
+msgid "C_hange"
+msgstr "C_hange"
+
+#: ../src/seahorse-expires.glade.h:2 ../src/seahorse-revoke.glade.h:12
+msgid "Revoke key"
+msgstr "Revoke key"
+
+#: ../src/seahorse-expires.glade.h:3
+msgid "This key should e_xpire on:"
+msgstr "This key should e_xpire on:"
 
 #: ../src/seahorse-generate-adv.c:141 ../src/seahorse-generate-druid.c:167
 msgid "Couldn't generate key"
@@ -2187,10 +2226,6 @@ msgstr "Re_voke"
 #: ../src/seahorse-revoke.glade.h:11
 msgid "Reason for revoking the key"
 msgstr "Reason for revoking the key"
-
-#: ../src/seahorse-revoke.glade.h:12
-msgid "Revoke key"
-msgstr "Revoke key"
 
 #: ../src/seahorse-revoke.glade.h:13
 msgid "Superseded"
