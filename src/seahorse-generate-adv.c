@@ -46,6 +46,10 @@ entry_changed (GtkEditable *editable, SeahorseWidget *swidget)
 	
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "ok"),
 		(strlen (name) >= 5 && strlen (pass) > 0 && g_str_equal (pass, confirm)));
+    
+    g_free (name);
+    g_free (pass);
+    g_free (confirm);
 }
 
 /* Sets range of length spin button */
