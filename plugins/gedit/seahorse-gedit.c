@@ -86,13 +86,6 @@ get_document_chars (GeditDocument *doc, gint start, gint end)
     return gtk_text_buffer_get_slice (GTK_TEXT_BUFFER (doc), &start_iter, &end_iter, TRUE);
 }
 
-static gint 
-get_document_length (GeditDocument *doc)
-{
-    g_return_val_if_fail (doc != NULL, FALSE);
-    return gtk_text_buffer_get_char_count (GTK_TEXT_BUFFER (doc));
-}
-
 static gboolean 
 get_document_selection (GeditDocument *doc, gint *start, gint *end)
 {
@@ -325,7 +318,7 @@ decrypt_cb (BonoboUIComponent * uic, gpointer user_data,
 
     if (!get_document_selection (doc, &sel_start, &sel_end)) {
         sel_start = 0;
-        sel_end = get_document_length (doc);
+        sel_end = gtk_text_buffer_get_char_count (GTK_TEXT_BUFFER (doc));
     }
 
     buffer = get_document_chars (doc, sel_start, sel_end);
@@ -498,7 +491,7 @@ update_ui (GeditPlugin * plugin, BonoboWindow * window)
     uic = gedit_get_ui_component_from_window (window);
     doc = gedit_get_active_document ();
 
-    sensitive = (doc && get_document_length (doc) > 0);
+    sensitive = (doc && gtk_text_buffer_get_char_count (GTK_TEXT_BUFFER (doc)) > 0);
 
     gedit_debug (DEBUG_PLUGINS, "updating UI");
     gedit_menus_set_verb_sensitive (uic, "/commands/" MENU_DEC_ITEM_NAME,
