@@ -929,10 +929,10 @@ seahorse_util_add_suffix (gpgme_ctx_t ctx, const gchar *path,
     gchar *uri;
     gchar *t;
 	
-	if (eel_gconf_get_boolean (ARMOR_KEY) || suffix == SEAHORSE_ASC_SUFFIX)
+	if (suffix == SEAHORSE_CRYPT_SUFFIX)
+        return eel_gconf_get_boolean (ARMOR_KEY) ? SEAHORSE_EXT_ASC : SEAHORSE_EXT_PGP;
+	if (suffix == SEAHORSE_ASC_SUFFIX)
 		ext = SEAHORSE_EXT_ASC;
-	else if (suffix == SEAHORSE_CRYPT_SUFFIX)
-		ext = SEAHORSE_EXT_PGP;
 	else
 		ext = SEAHORSE_EXT_SIG;
 	

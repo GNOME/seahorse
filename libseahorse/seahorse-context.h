@@ -32,7 +32,6 @@
 
 #define PGP_SCHEMAS "/desktop/pgp"
 #define ARMOR_KEY PGP_SCHEMAS "/ascii_armor"
-#define TEXTMODE_KEY PGP_SCHEMAS "/text_mode"
 #define DEFAULT_KEY PGP_SCHEMAS "/default_key"
 #define ENCRYPTSELF_KEY PGP_SCHEMAS "/encrypt_to_self"
 #define LASTSIGNER_KEY PGP_SCHEMAS "/last_signer"

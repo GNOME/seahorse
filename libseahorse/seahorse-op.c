@@ -29,15 +29,6 @@
 #include "seahorse-key-source.h"
 #include "seahorse-vfs-data.h"
 
-/* Setup some basic GPGME context stuff before an operation */
-static void
-set_gpgme_opts (SeahorseKeySource *sksrc)
-{
-    gpgme_ctx_t ctx = sksrc->ctx;
-    gpgme_set_armor (ctx, eel_gconf_get_boolean (ARMOR_KEY));
-    gpgme_set_textmode (ctx, eel_gconf_get_boolean (TEXTMODE_KEY));
-}
-    
 /* helper function for importing @data. @data will be released.
  * returns number of keys imported or -1. */
 static gint
@@ -253,7 +244,6 @@ encrypt_data_common (SeahorseKeySource *sksrc, GList *keys, gpgme_data_t plain,
 {
     SeahorseKey *skey;
     gpgme_key_t *recips;
-    gboolean old_armor;
     gchar *id;
 
 	/* if don't already have an error, do encrypt */
@@ -272,18 +262,9 @@ encrypt_data_common (SeahorseKeySource *sksrc, GList *keys, gpgme_data_t plain,
         /* Make keys into the right format */
         recips = seahorse_util_keylist_to_keys (keys);
         
-        set_gpgme_opts (sksrc);
-
-        if (force_armor) {
-            old_armor = gpgme_get_armor (sksrc->ctx);
-            gpgme_set_armor (sksrc->ctx, TRUE);
-        }
-              
+        gpgme_set_armor (sksrc->ctx, force_armor || eel_gconf_get_boolean (ARMOR_KEY));
 		*err = func (sksrc->ctx, recips, GPGME_ENCRYPT_ALWAYS_TRUST, plain, cipher);
         
-        if (force_armor)
-            gpgme_set_armor (sksrc->ctx, old_armor);
-         
         seahorse_util_free_keys (recips);
 	}
 	/* release plain  */
@@ -317,6 +298,7 @@ encrypt_file_common (GList *keys, const gchar *path, const gchar *epath,
         g_return_if_reached ();
     }
  
+    gpgme_set_textmode (sksrc->ctx, FALSE);
 	encrypt_data_common (sksrc, keys, plain, cipher, func, FALSE, err);
 	g_return_if_fail (GPG_IS_OK (*err));
 
@@ -349,6 +331,7 @@ encrypt_text_common (GList *keys, const gchar *text, EncryptFunc func,
     g_return_val_if_fail (GPG_IS_OK (*err), NULL);
    
 	/* encrypt with armor */
+    gpgme_set_textmode (sksrc->ctx, TRUE);    
 	encrypt_data_common (sksrc, keys, plain, cipher, func, TRUE, err);
 	g_return_val_if_fail (GPG_IS_OK (*err), NULL);
 	
@@ -406,10 +389,7 @@ static void
 sign_data (SeahorseKeySource *sksrc, gpgme_data_t plain, gpgme_data_t sig,
            gpgme_sig_mode_t mode, gpgme_error_t *err)
 {
-    set_gpgme_opts (sksrc);
-
 	*err = gpgme_op_sign (sksrc->ctx, plain, sig, mode);
-    	
 	gpgme_data_release (plain);
 }
 
@@ -450,6 +430,8 @@ seahorse_op_sign_file (SeahorseKeyPair *signer, const gchar *path,
     set_signer (signer);
     
 	/* get detached signature */
+    gpgme_set_textmode (sksrc->ctx, FALSE);
+    gpgme_set_armor (sksrc->ctx, eel_gconf_get_boolean (ARMOR_KEY));    
 	sign_data (sksrc, plain, sig, GPGME_SIG_MODE_DETACH, err);
 	g_return_if_fail (GPG_IS_OK (*err));
   
@@ -491,6 +473,8 @@ seahorse_op_sign_text (SeahorseKeyPair *signer, const gchar *text,
     g_return_val_if_fail (GPG_IS_OK (*err), NULL);    
     
 	/* clear sign data already ignores ASCII Armor */
+    gpgme_set_textmode (sksrc->ctx, TRUE);
+    gpgme_set_armor (sksrc->ctx, TRUE);
 	sign_data (sksrc, plain, sig, GPGME_SIG_MODE_CLEAR, err);
 	g_return_val_if_fail (GPG_IS_OK (*err), NULL);
 	
@@ -595,7 +579,6 @@ seahorse_op_verify_text (SeahorseKeySource *sksrc, const gchar *text,
 {
 	gpgme_data_t sig, plain;
 	gpgme_error_t error;
-	gboolean armor;
 	
 	if (err == NULL)
 		err = &error;
@@ -610,13 +593,11 @@ seahorse_op_verify_text (SeahorseKeySource *sksrc, const gchar *text,
 		g_return_val_if_reached (NULL);
 	}
 	/* verify data with armor */
-	armor = gpgme_get_armor (sksrc->ctx);
 	gpgme_set_armor (sksrc->ctx, TRUE);
     /* verify sig file, release plain data */
     *err = gpgme_op_verify (sksrc->ctx, sig, NULL, plain);
     *status = gpgme_op_verify_result (sksrc->ctx);
     gpgme_data_release (sig);     
-	gpgme_set_armor (sksrc->ctx, armor);
 	g_return_val_if_fail (GPG_IS_OK (*err), NULL);
 	/* return verified text */
 	return seahorse_util_write_data_to_text (plain);
@@ -628,8 +609,6 @@ decrypt_verify_data (SeahorseKeySource *sksrc, gpgme_data_t cipher,
                      gpgme_data_t plain, gpgme_verify_result_t *status, 
                      gpgme_error_t *err)
 {
-    set_gpgme_opts (sksrc);
-	
 	*err = gpgme_op_decrypt_verify (sksrc->ctx, cipher, plain);
         
     if (status)
@@ -694,7 +673,6 @@ seahorse_op_decrypt_verify_text (SeahorseKeySource *sksrc, const gchar *text,
 {
 	gpgme_data_t cipher, plain;
 	gpgme_error_t error;
-	gboolean armor;
 	
 	if (err == NULL)
 		err = &error;
@@ -706,10 +684,8 @@ seahorse_op_decrypt_verify_text (SeahorseKeySource *sksrc, const gchar *text,
     g_return_val_if_fail (GPG_IS_OK (*err), NULL);
     
 	/* get decrypted data with armor */
-	armor = gpgme_get_armor (sksrc->ctx);
 	gpgme_set_armor (sksrc->ctx, TRUE);
 	decrypt_verify_data (sksrc, cipher, plain, status, err);
-	gpgme_set_armor (sksrc->ctx, armor);
 	g_return_val_if_fail (GPG_IS_OK (*err), NULL);
 	/* return text of decrypted data */
 	return seahorse_util_write_data_to_text (plain);
