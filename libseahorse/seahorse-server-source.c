@@ -82,6 +82,10 @@ static void seahorse_server_source_class_init (SeahorseServerSourceClass *klass)
 static void seahorse_server_source_init       (SeahorseServerSource *ssrc);
 static void seahorse_server_source_dispose    (GObject *gobject);
 static void seahorse_server_source_finalize   (GObject *gobject);
+static void seahorse_server_get_property      (GObject *object,
+                                               guint prop_id,
+                                               GValue *value,
+                                               GParamSpec *pspec);
 static void seahorse_server_set_property      (GObject *object,
                                                guint prop_id,
                                                const GValue *value,
@@ -149,16 +153,18 @@ seahorse_server_source_class_init (SeahorseServerSourceClass *klass)
     gobject_class->dispose = seahorse_server_source_dispose;
     gobject_class->finalize = seahorse_server_source_finalize;
     gobject_class->set_property = seahorse_server_set_property;
+    gobject_class->get_property = seahorse_server_get_property;
     
     g_object_class_install_property (gobject_class, PROP_LOCAL_SOURCE,
-            g_param_spec_pointer ("local-source", "Local Source",
+            g_param_spec_object ("local-source", "Local Source",
                                   "Local Source that this represents",
+                                  SEAHORSE_TYPE_KEY_SOURCE,
                                   G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE));
                                   
     g_object_class_install_property (gobject_class, PROP_KEY_SERVER,
             g_param_spec_string ("key-server", "Key Server",
                                  "Key Server to search on", "",
-                                 G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE));
+                                 G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE));
 }
 
 /* init context, private vars, set prefs, connect signals */
@@ -245,7 +251,7 @@ seahorse_server_set_property (GObject *object, guint prop_id,
     switch (prop_id) {
     case PROP_LOCAL_SOURCE:
         g_return_if_fail (ssrc->priv->local == NULL);
-        ssrc->priv->local = g_value_get_pointer (value);
+        ssrc->priv->local = g_value_get_object (value);
         g_object_ref (ssrc->priv->local);
         sksrc->ctx = ssrc->priv->local->ctx;
         g_return_if_fail (gpgme_get_protocol(sksrc->ctx) == GPGME_PROTOCOL_OpenPGP);
@@ -259,6 +265,28 @@ seahorse_server_set_property (GObject *object, guint prop_id,
         break;
     }  
 }
+
+static void 
+seahorse_server_get_property (GObject *object, guint prop_id, GValue *value,
+                              GParamSpec *pspec)
+{
+    SeahorseServerSource *ssrc;
+ 
+    ssrc = SEAHORSE_SERVER_SOURCE (object);
+  
+    switch (prop_id) {
+    case PROP_LOCAL_SOURCE:
+        g_value_set_object (value, ssrc->priv->local);
+        break;
+    case PROP_KEY_SERVER:
+        g_value_set_string (value, ssrc->priv->server);
+        break;
+    default:
+        break;
+    }       
+  
+}
+
 
 /* --------------------------------------------------------------------------
  * HELPERS 
@@ -512,18 +540,19 @@ seahorse_search_operation_cancel (SeahorseOperation *operation)
 
 
 /* Called when a key is found and loaded from the keyserver */
-static void
+static gpgme_error_t
 keyserver_listed_key (gpgme_ctx_t ctx, gpgmex_keyserver_op_t op, gpgme_key_t key,
                       unsigned int total, void *userdata)
 {
     SeahorseSearchOperation *sop;
     
-    g_return_if_fail (SEAHORSE_IS_SEARCH_OPERATION (userdata));
+    g_return_val_if_fail (SEAHORSE_IS_SEARCH_OPERATION (userdata), GPG_E (GPG_ERR_INV_VALUE));
     sop = SEAHORSE_SEARCH_OPERATION (userdata);
     
     add_key_to_source (sop->ssrc, key);
     sop->loaded++;
     gpgmex_key_unref (key);
+    return GPG_OK;
 }
 
 /*
@@ -578,11 +607,12 @@ seahorse_search_operation_start (SeahorseServerSource *ssrc, const gchar *patter
     sop->ssrc = ssrc;
     g_object_ref (ssrc);
     
+    seahorse_operation_mark_start (SEAHORSE_OPERATION (sop));
+
     gpgmex_keyserver_start_list (SEAHORSE_KEY_SOURCE (ssrc)->ctx, priv->server, 
                                  pattern, GPGMEX_KEYLIST_REVOKED, keyserver_listed_key, 
                                  keyserver_list_done, sop, &(sop->kop));
 
-    seahorse_operation_mark_start (SEAHORSE_OPERATION (sop));
     return sop;
 }    
 

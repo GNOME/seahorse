@@ -86,18 +86,23 @@ void        gpgmex_key_unref         (gpgme_key_t key);
 typedef void*  gpgmex_keyserver_op_t;
 
 /* This callback is expected to use or unref key. */
-typedef void    (*gpgmex_keyserver_list_cb) (gpgme_ctx_t ctx,
-                                             gpgmex_keyserver_op_t op,
-                                             gpgme_key_t key,
-                                             unsigned int total,
-                                             void *userdata);
+typedef gpgme_error_t (*gpgmex_keyserver_list_cb)   (gpgme_ctx_t ctx,
+                                                     gpgmex_keyserver_op_t op,
+                                                     gpgme_key_t key,
+                                                     unsigned int total,
+                                                     void *userdata);
 
-typedef void    (*gpgmex_keyserver_done_cb) (gpgme_ctx_t ctx,
-                                             gpgmex_keyserver_op_t op,
-                                             gpgme_error_t status,
-                                             const char *message,
-                                             void *userdata);
-                                             
+typedef gpgme_error_t (*gpgmex_keyserver_get_cb)    (gpgme_ctx_t ctx,
+                                                     gpgmex_keyserver_op_t op,
+                                                     gpgme_data_t data,
+                                                     void *userdata);
+
+typedef void          (*gpgmex_keyserver_done_cb)   (gpgme_ctx_t ctx,
+                                                     gpgmex_keyserver_op_t op,
+                                                     gpgme_error_t status,
+                                                     const char *message,
+                                                     void *userdata);
+
 enum {
     GPGMEX_KEYLIST_REVOKED = 0x01,
     GPGMEX_KEYLIST_SUBKEYS = 0x02
@@ -114,20 +119,20 @@ void         gpgmex_keyserver_start_list      (gpgme_ctx_t ctx,
                                                void *userdata,
                                                gpgmex_keyserver_op_t *op);
 
-/* Retrieves the raw data for a key by fingerprint from a key server */
-void         gpgmex_keyserver_start_retrieve  (gpgme_ctx_t ctx, 
+/* Retrieves the raw data for keys by fingerprint from a key server */
+void         gpgmex_keyserver_start_get       (gpgme_ctx_t ctx, 
                                                const char *server, 
-                                               const char *fpr,
-                                               gpgme_data_t data,
+                                               const char **fpr,
+                                               gpgmex_keyserver_get_cb gcb,
                                                gpgmex_keyserver_done_cb dcb,
                                                void *userdata,
                                                gpgmex_keyserver_op_t *op);
 
-/* Uploads a key to the keyserver */
+/* Upload keys to the keyserver */
 void         gpgmex_keyserver_start_send      (gpgme_ctx_t ctx, 
                                                const char *server, 
-                                               const char *fpr,
-                                               gpgme_data_t data,
+                                               const char **fpr,
+                                               gpgme_data_t *data,
                                                gpgmex_keyserver_done_cb dcb,
                                                void *userdata,
                                                gpgmex_keyserver_op_t *op);

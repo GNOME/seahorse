@@ -38,7 +38,6 @@ struct _ServerOp;
 typedef struct _ServerOp ServerOp;
 
 typedef gboolean (*OpDataFunc) (ServerOp *op, gchar *line);
-typedef gpgme_error_t (*OpCompletionFunc) (ServerOp *op);
 typedef void (*OpDoneFunc) (ServerOp *op);
 
 #define READ_BATCH_SIZE 256
@@ -82,6 +81,9 @@ struct _ServerOp {
     /* The result code for this operation */
     gpgme_error_t status;
     
+    /* Whether the operation is completed/completing or not */
+    gboolean complete;
+    
     /* Plugin IO ------------------------------------------------------------ */
     
     /* The plugin child's process id */
@@ -115,11 +117,11 @@ struct _ServerOp {
 };
 
 /* A derived operation structure for retrieving keys */
-typedef struct _RetrieveOp {
-    ServerOp op;            /* The base struct */
-    gpgme_data_t data;      /* Puts all data here */
-    gboolean key_mode;      /* In the key or not */
-} RetrieveOp;
+typedef struct _KeyGetOp {
+    ServerOp op;                            /* The base struct */
+    gpgme_data_t data;                      /* Put key data here, or null when no key yet */
+    gpgmex_keyserver_get_cb get_cb;         /* Call with key data */
+} KeyGetOp;
 
 /* A derived operation structure for key listing */
 typedef struct _KeyListOp {
@@ -130,7 +132,164 @@ typedef struct _KeyListOp {
 
 
 /* -----------------------------------------------------------------------------
- *  KEY FUNCTIONALITY 
+ *  IO HANDLING 
+ */
+
+static void
+close_io (GIOChannel **io, guint* stag)
+{
+    g_return_if_fail (io && stag);
+    if (*io) {
+        g_io_channel_shutdown (*io, TRUE, NULL);
+        g_io_channel_unref (*io);
+        *io = NULL;
+    }
+    if (*stag) {
+        g_source_remove (*stag);
+        *stag = 0;
+    }
+}
+
+/* Called to complete any server op. In addition frees 
+ * the ServerOp */
+static void
+complete_op (ServerOp *op)
+{
+    const gchar *message = NULL;
+    int status = 0;
+    
+    /* Don't free operations twice */
+    if (op->complete)
+        return;
+        
+    op->complete = TRUE;
+    
+    /* At the end call the output function with a blank line */
+    if (op->datafunc)
+        (op->datafunc) (op, NULL);
+    
+    /* When we're failing we kill the program */
+    if (!GPG_IS_OK (op->status) && op->pid > 0)
+        kill ((pid_t)op->pid, SIGTERM);
+        
+    /* Wait for the process to exit, and check result */
+    if (waitpid((pid_t)op->pid, &status, 0) == -1)
+        g_critical ("couldn't wait on process");
+        
+    /* TODO: We really should be parsing the result code */
+    else if(!WIFEXITED(status) || WEXITSTATUS(status) != KEYSERVER_OK) {
+        /* The process failed, handle as a failure */
+        if (GPG_IS_OK (op->status)) {
+            op->status = GPG_E (GPG_ERR_KEYSERVER);
+            if (op->err_output)
+                message = op->err_output->str;
+        }
+    }
+
+    g_spawn_close_pid (op->pid);
+   
+    /* Call the user callback */
+    if (op->done_cb)
+        (op->done_cb) (op->ctx, op, op->status, message, op->userdata);
+    
+    /* Now go about freeing everything */
+    if (op->err_output)
+        g_string_free (op->err_output, TRUE);
+    
+    if (op->timeout_stag)
+        g_source_remove (op->timeout_stag);
+    
+    close_io (&(op->outio), &(op->outstag));
+    close_io (&(op->errio), &(op->errstag));
+    g_free (op);
+}
+
+static gboolean
+complete_op_later (ServerOp *op)
+{
+    complete_op (op);
+    return FALSE; /* Remove timeout source */
+}
+
+static gboolean
+premode_out_data (ServerOp *op, gchar *line)
+{
+    const gchar *t;
+    
+    g_strstrip (line);
+    
+    /* VERSION 0 */
+    if (g_str_has_prefix (line, VERSION_PREFIX)) {
+        t = line + strlen (VERSION_PREFIX);
+        while (*t && g_ascii_isspace (*t))
+            t++;
+        if (strcmp (t, PLUGIN_VERSION) != 0) {
+            op->status = GPG_E(GPG_ERR_INV_ENGINE);
+            complete_op (op);
+            return FALSE;
+        }
+    }
+    
+    /* Blank line */
+    else if (line[0] == 0)
+        op->pre_mode = FALSE;
+    
+    return TRUE;
+}
+
+/* Sends lines to the appropriate place based on the current
+ * operation. */
+static gboolean
+process_output_lines (ServerOp *op, gboolean flush)
+{
+    gboolean ret;
+    gchar *e;
+    gchar ch;
+    
+    /* Parse each line in the buffer individually */
+    while ((e = strchr (op->linebuf->str, '\n')) != NULL || flush) { 
+      
+        if (e != NULL) {
+            ch = e[1];
+            e[1] = 0;
+        } else
+            flush = FALSE;
+                 
+        if (op->pre_mode)
+            ret = premode_out_data (op, op->linebuf->str);
+        else if (op->datafunc)
+            ret = (op->datafunc) (op, op->linebuf->str);
+        else
+            ret = TRUE;
+            
+        if (e != NULL) {
+            e[1] = ch;
+            op->linebuf = g_string_erase (op->linebuf, 0, (e - op->linebuf->str) + 1);
+        }
+           
+        if (!ret)
+            return FALSE;
+    }
+    
+    return TRUE;
+}
+
+/* Called when a file descriptor closes to see if we're
+ * done with the child. Waits for child and completes if so */
+static void
+check_op_complete (ServerOp *op)
+{
+    if (op->outio || op->errio)
+        return;
+        
+    /* Flush any remaining output data */
+    process_output_lines (op, TRUE);
+        
+    complete_op (op);
+}
+
+/* -----------------------------------------------------------------------------
+ *  KEY LIST FUNCTIONALITY 
  */
 
 /* Key list field indexes */
@@ -161,7 +320,7 @@ parse_algo (const gchar *algo)
     return 0;
 }
 
-static void
+static gboolean
 parse_key_line (KeyListOp *kop, gchar *line)
 {
     gpgme_pubkey_algo_t algo;
@@ -170,6 +329,7 @@ parse_key_line (KeyListOp *kop, gchar *line)
     long int expires;
     unsigned int length;
     gpgme_key_t key;
+    gpgme_error_t gerr;
     
     gboolean invalid = FALSE;
     gchar **fields;
@@ -230,7 +390,7 @@ parse_key_line (KeyListOp *kop, gchar *line)
     
     if (invalid) {
         g_warning ("invalid key line from key server plugin: %s", line);
-        return;
+        return FALSE;
     }
     
     key = gpgmex_key_alloc ();
@@ -241,150 +401,15 @@ parse_key_line (KeyListOp *kop, gchar *line)
     g_strfreev (fields);
     
     g_assert (kop->list_cb);
-    (kop->list_cb) (kop->op.ctx, kop, key, kop->total, kop->op.userdata);
-}
- 
-/* -----------------------------------------------------------------------------
- *  IO HANDLING 
- */
-
-static void
-close_io (GIOChannel **io, guint* stag)
-{
-    g_return_if_fail (io && stag);
-    if (*io) {
-        g_io_channel_shutdown (*io, TRUE, NULL);
-        g_io_channel_unref (*io);
-        *io = NULL;
+    gerr = (kop->list_cb) (kop->op.ctx, kop, key, kop->total, kop->op.userdata);
+    if (!GPG_IS_OK (gerr)) {
+        kop->op.status = gerr;
+        complete_op (&(kop->op));
+        return FALSE;
     }
-    if (*stag) {
-        g_source_remove (*stag);
-        *stag = 0;
-    }
-}
-
-/* Called to complete any server op. In addition frees 
- * the ServerOp */
-static void
-complete_op (ServerOp *op)
-{
-    const gchar *message = NULL;
-    int status = 0;
-    
-    /* When we're failing we kill the program */
-    if (!GPG_IS_OK (op->status) && op->pid > 0)
-        kill ((pid_t)op->pid, SIGTERM);
-        
-    /* Wait for the process to exit, and check result */
-    if (waitpid((pid_t)op->pid, &status, 0) == -1)
-        g_critical ("couldn't wait on process");
-        
-    /* TODO: We really should be parsing the result code */
-    else if(!WIFEXITED(status) || WEXITSTATUS(status) != KEYSERVER_OK) {
-        /* The process failed, handle as a failure */
-        if (GPG_IS_OK (op->status)) {
-            op->status = GPG_E (GPG_ERR_KEYSERVER);
-            if (op->err_output)
-                message = op->err_output->str;
-        }
-    }
-
-    g_spawn_close_pid (op->pid);
-   
-    /* Call the user callback */
-    if (op->done_cb)
-        (op->done_cb) (op->ctx, op, op->status, message, op->userdata);
-    
-    /* Now go about freeing everything */
-    if (op->err_output)
-        g_string_free (op->err_output, TRUE);
-    
-    if (op->timeout_stag)
-        g_source_remove (op->timeout_stag);
-    
-    close_io (&(op->outio), &(op->outstag));
-    close_io (&(op->errio), &(op->errstag));
-    g_free (op);
-}
-
-static gboolean
-complete_op_later (ServerOp *op)
-{
-    complete_op (op);
-    return FALSE; /* Remove timeout source */
-}
-
-static gboolean
-premode_out_data (ServerOp *op, const gchar *line)
-{
-    const gchar *t;
-    
-    /* VERSION 0 */
-    if (g_str_has_prefix (line, VERSION_PREFIX)) {
-        t = line + strlen (VERSION_PREFIX);
-        while (*t && g_ascii_isspace (*t))
-            t++;
-        if (strcmp (t, PLUGIN_VERSION) != 0) {
-            op->status = GPG_E(GPG_ERR_INV_ENGINE);
-            complete_op (op);
-            return FALSE;
-        }
-    }
-    
-    /* Blank line */
-    else if (line[0] == 0)
-        op->pre_mode = FALSE;
     
     return TRUE;
 }
-
-/* Sends lines to the appropriate place based on the current
- * operation. */
-static gboolean
-process_output_lines (ServerOp *op, gboolean flush)
-{
-    gboolean ret;
-    gchar *e;
-    
-    /* Parse each line in the buffer individually */
-    while ((e = strchr (op->linebuf->str, '\n')) != NULL || flush) { 
-      
-        if (e != NULL)
-            *e = 0;
-        else
-            flush = FALSE;
-                 
-        if (op->pre_mode)
-            ret = premode_out_data (op, op->linebuf->str);
-        else if (op->datafunc)
-            ret = (op->datafunc) (op, op->linebuf->str);
-        else
-            ret = TRUE;
-            
-        if (e != NULL)
-            op->linebuf = g_string_erase (op->linebuf, 0, (e - op->linebuf->str) + 1);
-           
-        if (!ret)
-            return FALSE;
-    }
-
-    return TRUE;
-}
-
-/* Called when a file descriptor closes to see if we're
- * done with the child. Waits for child and completes if so */
-static void
-check_op_complete (ServerOp *op)
-{
-    if (op->outio || op->errio)
-        return;
-        
-    /* Flush any remaining output data */
-    process_output_lines (op, TRUE);
-        
-    complete_op (op);
-}
-
 /* Callback for a key search operation */
 static gboolean
 keylist_out_data (ServerOp *op, gchar *line)
@@ -392,7 +417,10 @@ keylist_out_data (ServerOp *op, gchar *line)
     KeyListOp *kop = (KeyListOp*)op;
 
     g_return_val_if_fail (kop != NULL, FALSE);
-    g_return_val_if_fail (line != NULL, FALSE);
+    
+    /* Is called with a null line at end */
+    if (line == NULL)
+        return TRUE;
   
     /* No use doing anything if nobody's listening */
     if (kop->list_cb == NULL)
@@ -409,34 +437,87 @@ keylist_out_data (ServerOp *op, gchar *line)
         kop->total = atoi (line);
         
     } else {
-        parse_key_line (kop, line);
+        return parse_key_line (kop, line);
     }
 
     return TRUE;
 }
 
+/* -----------------------------------------------------------------------------
+ *  KEY GET FUNCTIONALITY
+ */
+ 
 /* Callback for data from child when retrieving a key */
 static gboolean
-retrieve_out_data (ServerOp *op, gchar *line)
+keyget_out_data (ServerOp *op, gchar *line)
 {
-    RetrieveOp *rop = (RetrieveOp*)op;
-    
-    if (g_str_has_prefix (line, "-----BEGIN"))
-        rop->key_mode = TRUE;
-    else if (g_str_has_prefix (line, "-----END"))
-        rop->key_mode = FALSE;
+    KeyGetOp *gop = (KeyGetOp*)op;
+    gboolean newkey = FALSE;
+    gboolean donekey = FALSE;
+    gpgme_data_t data;
+    gpgme_error_t gerr;
 
-    if (rop->key_mode) {        
-        /* Append to our data block */
-        g_return_val_if_fail (rop->data != NULL, FALSE);
-        if (gpgme_data_write (rop->data, line, strlen(line)) == -1) {
+    /* No use doing anything if nobody's listening */
+    if (gop->get_cb == NULL)
+        return TRUE;
+    
+    if (line != NULL)
+    {  
+        if (g_str_has_prefix (line, "-----BEGIN"))
+            newkey = TRUE;
+        if (g_str_has_prefix (line, "-----END"))
+            donekey = TRUE;
+    }
+    
+    /* When a NULL line it means end */
+    if (gop->data != NULL && (line == NULL || newkey))
+        donekey = TRUE;
+        
+    if (donekey) {
+        g_return_val_if_fail (gop->data, FALSE);
+        g_return_val_if_fail (gop->get_cb, FALSE);
+
+        /* Write last bit to this data object */
+        if (gpgme_data_write (gop->data, line, strlen(line)) == -1) {
             g_critical ("couldn't write to data block");
             return FALSE;
         }
+        
+        /* Be careful with callbacks and state. The callback may cancel. */
+        data = gop->data;
+        gop->data = NULL;    
+        
+        gpgme_data_rewind (data);
+        
+        /* Ownership of data is transferred to callback */
+        gerr = (gop->get_cb)(op->ctx, op, data, op->userdata);
+        if (!GPG_IS_OK (gerr)) {
+            op->status = gerr;
+            complete_op (op);
+            return FALSE;
+        }
     }
-    
+
+    if (newkey) {
+        g_return_val_if_fail (gop->data == NULL, FALSE);
+        if (!GPG_IS_OK (gpgme_data_new (&(gop->data))))
+            g_return_val_if_reached (FALSE);
+    }
+
+    if (gop->data) {
+        if (gpgme_data_write (gop->data, line, strlen(line)) == -1) {
+            g_critical ("couldn't write to data block");
+            /* TODO: We should be setting status here */
+            return FALSE;
+        }
+    }
+
     return TRUE;
 }
+
+/* -----------------------------------------------------------------------------
+ *  IO
+ */
 
 static void
 buffer_error_message (ServerOp *op, const gchar *data)
@@ -791,15 +872,15 @@ start_operation (ServerOp *op, GPid pid, GIOChannel *output, GIOChannel *errout)
 }
 
 void       
-gpgmex_keyserver_start_retrieve (gpgme_ctx_t ctx, const char *server, const char *fpr,
-                                 gpgme_data_t data, gpgmex_keyserver_done_cb dcb, 
-                                 void *userdata, gpgmex_keyserver_op_t *op)
+gpgmex_keyserver_start_get (gpgme_ctx_t ctx, const char *server, const char **fpr,
+                            gpgmex_keyserver_get_cb gcb, gpgmex_keyserver_done_cb dcb, 
+                            void *userdata, gpgmex_keyserver_op_t *op)
 {
     GIOChannel *output;
     GIOChannel *errout;
     gpgme_error_t gerr = GPG_OK;
     GString *commands;
-    RetrieveOp *rop;
+    KeyGetOp *gop;
     gchar *plugin;
     gchar *cmds;
     GPid pid;
@@ -807,15 +888,16 @@ gpgmex_keyserver_start_retrieve (gpgme_ctx_t ctx, const char *server, const char
     g_return_if_fail (ctx != NULL);
     g_return_if_fail (gpgme_get_protocol(ctx) == GPGME_PROTOCOL_OpenPGP);
     g_return_if_fail (server != NULL && server[0] != 0);
-    g_return_if_fail (fpr != NULL && fpr[0] != 0);
+    g_return_if_fail (fpr != NULL && *fpr != NULL);
     
-    /* Setup retrieve stuff */        
-    rop = g_new0(RetrieveOp, 1);
-    rop->data = data;
+    /* Setup get stuff */        
+    gop = g_new0(KeyGetOp, 1);
+    gop->get_cb = gcb;
+    gop->data = NULL;
             
     /* And now the base stuff */
-    g_assert (((ServerOp*)rop) == &(rop->op));
-    setup_operation (&(rop->op), ctx, dcb, userdata, retrieve_out_data);
+    g_assert (((ServerOp*)gop) == &(gop->op));
+    setup_operation (&(gop->op), ctx, dcb, userdata, keyget_out_data);
                                  
     /* Start building command set */
     commands = g_string_sized_new (128);
@@ -827,7 +909,15 @@ gpgmex_keyserver_start_retrieve (gpgme_ctx_t ctx, const char *server, const char
     }
     
     if (GPG_IS_OK (gerr)) {
-        g_string_append_printf (commands, "COMMAND GET\n\n%s\n\n", fpr);
+        
+        g_string_append (commands, "COMMAND GET\n\n");
+        
+        while (*fpr) {
+            g_string_append_printf (commands, "%s\n", *fpr);
+            fpr++;
+        }
+        
+        g_string_append (commands, "\n");
         cmds = g_string_free (commands, FALSE);
         
         /* Now execute the command */
@@ -837,14 +927,14 @@ gpgmex_keyserver_start_retrieve (gpgme_ctx_t ctx, const char *server, const char
     }
         
     if (GPG_IS_OK (gerr)) 
-        start_operation (&(rop->op), pid, output, errout);    
+        start_operation (&(gop->op), pid, output, errout);    
     else {
-        rop->op.status = gerr;
-        g_timeout_add (0, (GSourceFunc)complete_op_later, &(rop->op));
+        gop->op.status = gerr;
+        g_timeout_add (0, (GSourceFunc)complete_op_later, &(gop->op));
     }
     
     if (op)
-        *op = &(rop->op);
+        *op = &(gop->op);
 }
 
 void       
