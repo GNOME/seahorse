@@ -8,14 +8,22 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-15 11:30-0400\n"
-"PO-Revision-Date: 2004-10-15 22:06-0400\n"
+"POT-Creation-Date: 2004-10-17 15:13-0400\n"
+"PO-Revision-Date: 2004-10-17 22:06-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: English/Canada <adamw@FreeBSD.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: agent/eggtrayicon.c:121
+msgid "Orientation"
+msgstr "Orientation"
+
+#: agent/eggtrayicon.c:122
+msgid "The orientation of the tray."
+msgstr "The orientation of the tray."
 
 #: agent/gtk-secure-entry.c:457
 msgid "Cursor Position"
@@ -57,7 +65,8 @@ msgstr "Invisible character"
 
 #: agent/gtk-secure-entry.c:498
 msgid "The character to use when masking entry contents (in \"password mode\")"
-msgstr "The character to use when masking entry contents (in \"password mode\")"
+msgstr ""
+"The character to use when masking entry contents (in \"password mode\")"
 
 #: agent/gtk-secure-entry.c:507
 msgid "Activates default"
@@ -102,28 +111,6 @@ msgstr "Select on focus"
 #: agent/gtk-secure-entry.c:694
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Whether to select the contents of an entry when it is focused"
-
-#: agent/seahorse-agent.c:124
-#, c-format
-msgid "couldn't modify gpg configuration: %s"
-msgstr "Could not modify GPG configuration: %s"
-
-#: agent/seahorse-agent.c:144
-msgid "couldn't fork process"
-msgstr "Could not fork process"
-
-#: agent/seahorse-agent.c:150
-msgid "couldn't create new process group"
-msgstr "Could not create new process group"
-
-#: agent/seahorse-agent.c:180
-#, c-format
-msgid "usage: seahorse-agent [-cdv]\n"
-msgstr "usage: seahorse-agent [-cdv]\n"
-
-#: agent/seahorse-agent.c:269
-msgid "couldn't drop privileges properly"
-msgstr "Could not drop privileges properly"
 
 #: agent/seahorse-agent-actions.c:97
 msgid "Password:"
@@ -181,6 +168,28 @@ msgstr "_Authorize"
 #: agent/seahorse-agent-status.c:126
 msgid "Cached GPG Keys"
 msgstr "Cached GPG Keys"
+
+#: agent/seahorse-agent.c:124
+#, c-format
+msgid "couldn't modify gpg configuration: %s"
+msgstr "Could not modify GPG configuration: %s"
+
+#: agent/seahorse-agent.c:144
+msgid "couldn't fork process"
+msgstr "Could not fork process"
+
+#: agent/seahorse-agent.c:150
+msgid "couldn't create new process group"
+msgstr "Could not create new process group"
+
+#: agent/seahorse-agent.c:180
+#, c-format
+msgid "usage: seahorse-agent [-cdv]\n"
+msgstr "usage: seahorse-agent [-cdv]\n"
+
+#: agent/seahorse-agent.c:269
+msgid "couldn't drop privileges properly"
+msgstr "Could not drop privileges properly"
 
 #: bonobo/Seahorse_PGP_File_Listener.server.in.in.h:1
 msgid "Decrypt..."
@@ -691,6 +700,18 @@ msgstr "PGP Encryption"
 msgid "The PGP encrypt plugin performs encryption operations on text."
 msgstr "The PGP encrypt plugin performs encryption operations on text."
 
+#: plugins/nautilus/seahorse-pgp-preferences-cache.c:342
+msgid "Couldn't open the Session Properties"
+msgstr "Could not open the Session Properties"
+
+#: plugins/nautilus/seahorse-pgp-preferences-cache.c:355
+msgid "Couldn't start the 'seahorse-agent' program"
+msgstr "Could not start the 'seahorse-agent' program"
+
+#: plugins/nautilus/seahorse-pgp-preferences-cache.c:357
+msgid "The 'seahorse-agent' program exited unsucessfully."
+msgstr "The 'seahorse-agent' program exited unsucessfully."
+
 #: plugins/nautilus/seahorse-pgp-preferences.c:33
 #: plugins/nautilus/seahorse-pgp-preferences.desktop.in.h:2
 #: plugins/nautilus/seahorse-pgp-preferences.glade.h:6
@@ -770,18 +791,6 @@ msgstr "_Ask me before using a cached password"
 msgid "_Expire passwords from memory after "
 msgstr "_Expire passwords from memory after "
 
-#: plugins/nautilus/seahorse-pgp-preferences-cache.c:342
-msgid "Couldn't open the Session Properties"
-msgstr "Could not open the Session Properties"
-
-#: plugins/nautilus/seahorse-pgp-preferences-cache.c:355
-msgid "Couldn't start the 'seahorse-agent' program"
-msgstr "Could not start the 'seahorse-agent' program"
-
-#: plugins/nautilus/seahorse-pgp-preferences-cache.c:357
-msgid "The 'seahorse-agent' program exited unsucessfully."
-msgstr "The 'seahorse-agent' program exited unsucessfully."
-
 #: src/main.c:47
 msgid "Import keys from the file"
 msgstr "Import keys from the file"
@@ -852,10 +861,6 @@ msgstr "Could not verify \"%s\""
 #: src/main.c:385 src/seahorse.desktop.in.h:1
 msgid "GPG Keys Manager"
 msgstr "GPG Keys Manager"
-
-#: src/seahorse.desktop.in.h:2
-msgid "Manage your GPG keys"
-msgstr "Manage your GPG keys"
 
 #: src/seahorse-add-subkey.c:109
 msgid "Couldn't add subkey"
@@ -1013,6 +1018,10 @@ msgstr "Are you sure you want to permanently delete the '%s' user ID?"
 #: src/seahorse-delete.c:198
 msgid "Couldn't delete user id"
 msgstr "Could not delete user ID"
+
+#: src/seahorse-generate-adv.c:131 src/seahorse-generate-druid.c:156
+msgid "Couldn't generate key"
+msgstr "Could not generate key"
 
 #: src/seahorse-generate-adv.glade.h:3
 msgid "Confirmation of passphrase"
@@ -1254,6 +1263,46 @@ msgstr "Select a method to generate your new key:"
 msgid "radio_druid"
 msgstr "radio_druid"
 
+#: src/seahorse-key-manager-store.c:135
+msgid "RSA"
+msgstr "RSA"
+
+#: src/seahorse-key-manager-store.c:137
+msgid "RSA-E"
+msgstr "RSA-E"
+
+#: src/seahorse-key-manager-store.c:139
+msgid "RSA-S"
+msgstr "RSA-S"
+
+#: src/seahorse-key-manager-store.c:141
+msgid "ELG-E"
+msgstr "ELG-E"
+
+#: src/seahorse-key-manager-store.c:143
+msgid "DSA"
+msgstr "DSA"
+
+#: src/seahorse-key-manager-store.c:145
+msgid "ELG"
+msgstr "ELG"
+
+#: src/seahorse-key-manager-store.c:199 src/seahorse-key-properties.c:200
+msgid "Expired"
+msgstr "Expired"
+
+#: src/seahorse-key-manager-store.c:320
+msgid "Trust"
+msgstr "Trust"
+
+#: src/seahorse-key-manager-store.c:324
+msgid "Length"
+msgstr "Length"
+
+#: src/seahorse-key-manager-store.c:328
+msgid "Type"
+msgstr "Type"
+
 #: src/seahorse-key-manager.c:84
 msgid "All PGP key files"
 msgstr "All PGP key files"
@@ -1482,46 +1531,6 @@ msgstr "_Sign"
 #: src/seahorse-key-manager.glade.h:44
 msgid "_Sign..."
 msgstr "_Sign..."
-
-#: src/seahorse-key-manager-store.c:135
-msgid "RSA"
-msgstr "RSA"
-
-#: src/seahorse-key-manager-store.c:137
-msgid "RSA-E"
-msgstr "RSA-E"
-
-#: src/seahorse-key-manager-store.c:139
-msgid "RSA-S"
-msgstr "RSA-S"
-
-#: src/seahorse-key-manager-store.c:141
-msgid "ELG-E"
-msgstr "ELG-E"
-
-#: src/seahorse-key-manager-store.c:143
-msgid "DSA"
-msgstr "DSA"
-
-#: src/seahorse-key-manager-store.c:145
-msgid "ELG"
-msgstr "ELG"
-
-#: src/seahorse-key-manager-store.c:199 src/seahorse-key-properties.c:200
-msgid "Expired"
-msgstr "Expired"
-
-#: src/seahorse-key-manager-store.c:320
-msgid "Trust"
-msgstr "Trust"
-
-#: src/seahorse-key-manager-store.c:324
-msgid "Length"
-msgstr "Length"
-
-#: src/seahorse-key-manager-store.c:328
-msgid "Type"
-msgstr "Type"
 
 #: src/seahorse-key-op.c:247
 msgid "Operation complete"
@@ -1963,3 +1972,7 @@ msgstr "_Local"
 #: src/seahorse-sign.glade.h:16
 msgid "_Revocable"
 msgstr "_Revocable"
+
+#: src/seahorse.desktop.in.h:2
+msgid "Manage your GPG keys"
+msgstr "Manage your GPG keys"
