@@ -159,6 +159,10 @@ void                seahorse_key_source_refresh_async    (SeahorseKeySource *sks
 
 SeahorseOperation*  seahorse_key_source_import           (SeahorseKeySource *sksrc,
                                                           gpgme_data_t data);
+                                                          
+gboolean            seahorse_key_source_import_sync      (SeahorseKeySource *sksrc,
+                                                          gpgme_data_t data,
+                                                          GError **err);
 
 SeahorseOperation*  seahorse_key_source_export           (SeahorseKeySource *sksrc,
                                                           GList *keys,

@@ -39,10 +39,6 @@ static void seahorse_key_source_init       (SeahorseKeySource *sksrc);
 static void seahorse_key_source_dispose    (GObject *gobject);
 static void seahorse_key_source_finalize   (GObject *gobject);
 
-/* Handlers */
-static void gpgme_progress (gpointer data, const gchar *what, gint type, 
-                            gint current, gint total);
-
 GType
 seahorse_key_source_get_type (void)
 {
@@ -349,6 +345,25 @@ seahorse_key_source_import (SeahorseKeySource *sksrc, gpgme_data_t data)
     return (*klass->import) (sksrc, data);  
 }
 
+gboolean            
+seahorse_key_source_import_sync (SeahorseKeySource *sksrc, gpgme_data_t data,
+                                 GError **err)
+{
+    SeahorseOperation *op;
+    gboolean ret;
+
+    op = seahorse_key_source_import (sksrc, data);
+    g_return_val_if_fail (op != NULL, FALSE);
+    
+    seahorse_operation_wait (op);
+    ret = seahorse_operation_is_successful (op);
+    if (!ret)
+        seahorse_operation_steal_error (op, err);
+    
+    g_object_unref (op);
+    return ret;    
+}
+
 SeahorseOperation* 
 seahorse_key_source_export (SeahorseKeySource *sksrc, GList *keys, 
                             gboolean complete, gpgme_data_t data)
@@ -362,17 +377,3 @@ seahorse_key_source_export (SeahorseKeySource *sksrc, GList *keys,
     return (*klass->export) (sksrc, keys, complete, data);    
 }
                                                
-/* Calc fraction, call ::show_progress() */
-static void
-gpgme_progress (gpointer data, const gchar *what, gint type, gint current, gint total)
-{
-   gdouble fract;
-
-    /* do fract */
-    if (total == 0)
-        fract = 0;
-    else if (current == 100 || total == current)
-       fract = -1;
-    else
-       fract = (gdouble)current / (gdouble)total;
-}
