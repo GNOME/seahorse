@@ -569,7 +569,7 @@ seahorse_agent_io_uninit ()
         g_iochannel = NULL;
         g_socket = -1;
 
-        g_clear_error (err);
+        g_clear_error (&err);
 
         /* Remove the socket */
         unlink (g_socket_name);

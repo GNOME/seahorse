@@ -334,8 +334,7 @@ handle_error (GError *err, const gchar *desc)
     else
         msg = g_strdup (err->message);
 
-    if (err)
-        g_error_free (err);
+    g_clear_error (&err);
 
     dialog = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR,
                                      GTK_BUTTONS_CLOSE, msg);

@@ -178,7 +178,7 @@ seahorse_util_handle_gerror (GError* err, const char* desc, ...)
         seahorse_util_show_error (NULL, t);
 
     g_free(t);
-    g_error_free(err);
+    g_clear_error (&err);
 }    
 
 /**
