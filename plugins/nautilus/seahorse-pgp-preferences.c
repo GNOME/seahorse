@@ -45,7 +45,7 @@ main (int argc, char **argv)
 #endif
 
     gnome_program_init (PACKAGE, VERSION, LIBGNOMEUI_MODULE, argc, argv,
-                GNOME_PARAM_HUMAN_READABLE_NAME, _("PGP Preferences"),
+                GNOME_PARAM_HUMAN_READABLE_NAME, _("Encryption Preferences"),
                 GNOME_PARAM_APP_DATADIR, DATA_DIR, NULL);
 	
 	sctx = seahorse_context_new ();

@@ -431,7 +431,7 @@ main (int argc, char **argv)
 
     program = gnome_program_init(PACKAGE, VERSION, LIBGNOMEUI_MODULE, argc, argv,
                     GNOME_PARAM_POPT_TABLE, options,
-                    GNOME_PARAM_HUMAN_READABLE_NAME, _("GPG Keys Manager"),
+                    GNOME_PARAM_HUMAN_READABLE_NAME, _("Encryption Key Manager"),
                     GNOME_PARAM_APP_DATADIR, DATA_DIR, NULL);
 
     sctx = seahorse_context_new ();

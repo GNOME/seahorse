@@ -45,17 +45,17 @@
 #define MENU_ENC_ITEM_LABEL      N_("_Encrypt...")
 #define MENU_ENC_ITEM_PATH       "/menu/Edit/EditOps_6/"
 #define MENU_ENC_ITEM_NAME       "Encrypt"
-#define MENU_ENC_ITEM_TIP        N_("PGP Encrypt the selected text")
+#define MENU_ENC_ITEM_TIP        N_("Encrypt the selected text")
 
 #define MENU_DEC_ITEM_LABEL      N_("Decr_ypt/Verify")
 #define MENU_DEC_ITEM_PATH       "/menu/Edit/EditOps_6/"
 #define MENU_DEC_ITEM_NAME       "Decrypt"
-#define MENU_DEC_ITEM_TIP        N_("Decrypt and/or Verify PGP text")
+#define MENU_DEC_ITEM_TIP        N_("Decrypt and/or Verify text")
 
 #define MENU_SIGN_ITEM_LABEL      N_("Sig_n...")
 #define MENU_SIGN_ITEM_PATH       "/menu/Edit/EditOps_6/"
 #define MENU_SIGN_ITEM_NAME       "Sign"
-#define MENU_SIGN_ITEM_TIP        N_("PGP Sign the selected text")
+#define MENU_SIGN_ITEM_TIP        N_("Sign the selected text")
 
 static SeahorseContext *sctx = NULL;
 
@@ -354,7 +354,7 @@ decrypt_cb (BonoboUIComponent * uic, gpointer user_data,
         if (type == SEAHORSE_TEXT_TYPE_NONE) {
             if (blocks == 0) 
                 gedit_warning (GTK_WINDOW (gedit_get_active_window ()),
-                           _("No PGP encrypted or signed text is selected."));
+                           _("No encrypted or signed text is selected."));
             break;
         }
         

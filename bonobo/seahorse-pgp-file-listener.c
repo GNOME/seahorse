@@ -86,5 +86,5 @@ static const BonoboActivationPluginObject plugin_list[] = {
 
 /* this registers the plugin list with bonobo */
 const BonoboActivationPlugin Bonobo_Plugin_info = {
-	plugin_list, "Seahorse PGP File Listener"
+	plugin_list, "Seahorse File Listener"
 };

@@ -770,7 +770,7 @@ void
 seahorse_util_chooser_show_key_files (GtkWidget *dialog)
 {
     GtkFileFilter* filter = gtk_file_filter_new ();
-    gtk_file_filter_set_name (filter, _("All PGP key files"));
+    gtk_file_filter_set_name (filter, _("All key files"));
     gtk_file_filter_add_mime_type (filter, "application/pgp-keys");    
     gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);    
     gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dialog), filter);

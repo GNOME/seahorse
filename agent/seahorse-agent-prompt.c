@@ -197,7 +197,7 @@ create_prompt_window (SeahorseAgentPassReq *pr)
 
     win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
-    gtk_window_set_title (GTK_WINDOW (win), _("GPG Password"));
+    gtk_window_set_title (GTK_WINDOW (win), _("Passphrase"));
     acc = gtk_accel_group_new ();
 
     g_signal_connect (G_OBJECT (win), "delete_event",

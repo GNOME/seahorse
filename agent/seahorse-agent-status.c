@@ -123,7 +123,7 @@ window_update_keys ()
         gtk_tree_view_set_model (tree, GTK_TREE_MODEL (store));
 
         /* Make the column */
-        column = gtk_tree_view_column_new_with_attributes (_("Cached GPG Keys"),
+        column = gtk_tree_view_column_new_with_attributes (_("Cached Encryption Keys"),
                                                            gtk_cell_renderer_text_new
                                                            (), "text", KEY_COLUMN,
                                                            NULL);
