@@ -447,8 +447,9 @@ seahorse_key_properties_new (SeahorseContext *sctx, SeahorseKey *skey)
 	
 	/* Hide edit menu if key doesn't have secret component */
 	if (!seahorse_context_key_has_secret (sctx, skey)) {
-		widget = glade_xml_get_widget (swidget->xml, "edit_menu");
-		gtk_widget_hide (widget);
+		gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "change_passphrase"), FALSE);
+		gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "add_uid"), FALSE);
+		gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "add_subkey"), FALSE);
 	}
 	
 	/* Primary key attributes */
@@ -488,4 +489,8 @@ seahorse_key_properties_new (SeahorseContext *sctx, SeahorseKey *skey)
 		G_CALLBACK (subkeys_activate), swidget);
 	
 	g_signal_connect_after (skey, "changed", G_CALLBACK (key_changed), swidget);
+	
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "sign"), FALSE);
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "add_revoker"), FALSE);
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "add_photo"), FALSE);
 }

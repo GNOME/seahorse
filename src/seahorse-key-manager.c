@@ -37,6 +37,9 @@
 #include "seahorse-validity.h"
 #include "seahorse-key-manager-store.h"
 #include "seahorse-file-manager.h"
+#include "seahorse-ops-key.h"
+#include "seahorse-add-uid.h"
+#include "seahorse-add-subkey.h"
 
 #define KEY_MANAGER "key-manager"
 #define KEY_LIST "key_list"
@@ -64,6 +67,24 @@ generate_activate (GtkWidget *widget, SeahorseWidget *swidget)
 	seahorse_generate_show (swidget->sctx);
 }
 
+/* Loads import dialog */
+static void
+import_activate (GtkWidget *widget, SeahorseWidget *swidget)
+{
+	seahorse_import_show (swidget->sctx);
+}
+
+/* Loads key properties if a key is selected */
+static void
+properties_activate (GtkWidget *widget, SeahorseWidget *swidget)
+{
+	SeahorseKey *skey;
+	
+	skey = seahorse_key_store_get_selected_key (GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, KEY_LIST)));
+	if (skey)
+		seahorse_key_properties_new (swidget->sctx, skey);
+}
+
 /* Loads export dialog if a key is selected */
 static void
 export_activate (GtkWidget *widget, SeahorseWidget *swidget)
@@ -75,11 +96,50 @@ export_activate (GtkWidget *widget, SeahorseWidget *swidget)
 		seahorse_export_new (swidget->sctx, skey);
 }
 
-/* Loads import dialog */
+/* Loads delete dialog if a key is selected */
 static void
-import_activate (GtkWidget *widget, SeahorseWidget *swidget)
+delete_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
-	seahorse_import_show (swidget->sctx);
+	SeahorseKey *skey;
+	
+	skey = seahorse_key_store_get_selected_key (GTK_TREE_VIEW (
+		glade_xml_get_widget (swidget->xml, KEY_LIST)));
+	if (skey)
+		seahorse_delete_key_new (GTK_WINDOW (glade_xml_get_widget (
+			swidget->xml, KEY_MANAGER)), swidget->sctx, skey);
+}
+
+static void
+change_passphrase_activate (GtkMenuItem *item, SeahorseWidget *swidget)
+{
+	SeahorseKey *skey;
+	
+	skey = seahorse_key_store_get_selected_key (GTK_TREE_VIEW (
+		glade_xml_get_widget (swidget->xml, KEY_LIST)));
+	if (skey)
+		seahorse_ops_key_change_pass (swidget->sctx, skey);
+}
+
+static void
+add_uid_activate (GtkMenuItem *item, SeahorseWidget *swidget)
+{
+	SeahorseKey *skey;
+	
+	skey = seahorse_key_store_get_selected_key (GTK_TREE_VIEW (
+		glade_xml_get_widget (swidget->xml, KEY_LIST)));
+	if (skey)
+		seahorse_add_uid_new (swidget->sctx, skey);
+}
+
+static void
+add_subkey_activate (GtkMenuItem *item, SeahorseWidget *swidget)
+{
+	SeahorseKey *skey;
+	
+	skey = seahorse_key_store_get_selected_key (GTK_TREE_VIEW (
+		glade_xml_get_widget (swidget->xml, KEY_LIST)));
+	if (skey)
+		seahorse_add_subkey_new (swidget->sctx, skey);
 }
 
 /* Loads text editor */
@@ -94,30 +154,6 @@ static void
 file_manager_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
 	seahorse_file_manager_show (swidget->sctx);
-}
-
-/* Loads key properties if a key is selected */
-static void
-properties_activate (GtkWidget *widget, SeahorseWidget *swidget)
-{
-	SeahorseKey *skey;
-	
-	skey = seahorse_key_store_get_selected_key (GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, KEY_LIST)));
-	if (skey)
-		seahorse_key_properties_new (swidget->sctx, skey);
-}
-
-/* Loads delete dialog if a key is selected */
-static void
-delete_activate (GtkWidget *widget, SeahorseWidget *swidget)
-{
-	SeahorseKey *skey;
-	
-	skey = seahorse_key_store_get_selected_key (GTK_TREE_VIEW (
-		glade_xml_get_widget (swidget->xml, KEY_LIST)));
-	if (skey)
-		seahorse_delete_key_new (GTK_WINDOW (glade_xml_get_widget (
-			swidget->xml, KEY_MANAGER)), swidget->sctx, skey);
 }
 
 /* Loads preferences dialog */
@@ -213,6 +249,7 @@ selection_changed (GtkTreeSelection *selection, SeahorseWidget *swidget)
 	/* do all key operation items */
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "properties_button"), sensitive);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "export_button"), sensitive);
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "delete_button"), sensitive);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "properties"), sensitive);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "export"), sensitive);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "delete"), sensitive);
@@ -251,40 +288,51 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 	/* construct key context menu */
 	glade_xml_construct (swidget->xml, SEAHORSE_GLADEDIR "seahorse-key-manager.glade2",
 		"context_menu", NULL);
-	
+	/* quit signals */
 	glade_xml_signal_connect_data (swidget->xml, "quit",
 		G_CALLBACK (quit), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "quit_event",
 		G_CALLBACK (delete_event), swidget);
+	/* key menu signals */
 	glade_xml_signal_connect_data (swidget->xml, "generate_activate",
 		G_CALLBACK (generate_activate), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "import_activate",
+		G_CALLBACK (import_activate), swidget);	
+	/* selected key signals */
+	glade_xml_signal_connect_data (swidget->xml, "properties_activate",
+		G_CALLBACK (properties_activate), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "export_activate",
 		G_CALLBACK (export_activate), swidget);
-	glade_xml_signal_connect_data (swidget->xml, "import_activate",
-		G_CALLBACK (import_activate), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "delete_activate",
+		G_CALLBACK (delete_activate), swidget);
+	/* selected key with secret signals */
+	glade_xml_signal_connect_data (swidget->xml, "change_passphrase_activate",
+		G_CALLBACK (change_passphrase_activate), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "add_uid_activate",
+		G_CALLBACK (add_uid_activate), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "add_subkey_activate",
+		G_CALLBACK (add_subkey_activate), swidget);
+	/* tool menu signals */	
 	glade_xml_signal_connect_data (swidget->xml, "text_editor_activate",
 		G_CALLBACK (text_editor_activate), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "file_manager_activate",
-		G_CALLBACK (file_manager_activate), swidget);		
-	glade_xml_signal_connect_data (swidget->xml, "properties_activate",
-		G_CALLBACK (properties_activate), swidget);
-	glade_xml_signal_connect_data (swidget->xml, "delete_activate",
-		G_CALLBACK (delete_activate), swidget);		
+		G_CALLBACK (file_manager_activate), swidget);	
+	/* other signals */	
 	glade_xml_signal_connect_data (swidget->xml, "preferences_activate",
 		G_CALLBACK (preferences_activate), swidget);
-	glade_xml_signal_connect_data (swidget->xml, "row_activated",
-		G_CALLBACK (row_activated), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "about_activate",
 		G_CALLBACK (about_activate), swidget);
+	/* tree view signals */	
+	glade_xml_signal_connect_data (swidget->xml, "row_activated",
+		G_CALLBACK (row_activated), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "key_list_button_pressed",
 		G_CALLBACK (key_list_button_pressed), swidget);
-	
+	/* do initial selected key settings */
 	view = GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, KEY_LIST));
 	seahorse_key_manager_store_new (sctx, view);
 	selection = gtk_tree_view_get_selection (view);
 	g_signal_connect_after (selection, "changed",
 		G_CALLBACK (selection_changed), swidget);
-	//do initial settings
 	selection_changed (selection, swidget);
 	
 	//features not available

@@ -32,24 +32,55 @@
 	      <property name="visible">True</property>
 
 	      <child>
-		<widget class="GtkMenuItem" id="file1">
+		<widget class="GtkMenuItem" id="key">
 		  <property name="visible">True</property>
-		  <property name="stock_item">GNOMEUIINFO_MENU_FILE_TREE</property>
+		  <property name="label" translatable="yes">_Key</property>
+		  <property name="use_underline">True</property>
 
 		  <child>
-		    <widget class="GtkMenu" id="file1_menu">
+		    <widget class="GtkMenu" id="key_menu">
 
 		      <child>
 			<widget class="GtkImageMenuItem" id="export">
 			  <property name="visible">True</property>
-			  <property name="stock_item">GNOMEUIINFO_MENU_SAVE_AS_ITEM</property>
-			  <signal name="activate" handler="export_activate" last_modification_time="Sun, 20 Oct 2002 17:21:20 GMT"/>
+			  <property name="tooltip" translatable="yes">Export key</property>
+			  <property name="label" translatable="yes">E_xport...</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="export_activate" last_modification_time="Wed, 12 Feb 2003 13:37:07 GMT"/>
+
+			  <child internal-child="image">
+			    <widget class="GtkImage" id="image514">
+			      <property name="visible">True</property>
+			      <property name="stock">gtk-save-as</property>
+			      <property name="icon_size">1</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
 			</widget>
 		      </child>
 
 		      <child>
-			<widget class="GtkMenuItem" id="separator12">
+			<widget class="GtkImageMenuItem" id="sign">
 			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Sign key</property>
+			  <property name="label" translatable="yes">_Sign...</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="sign_activate" last_modification_time="Wed, 12 Feb 2003 13:37:07 GMT"/>
+
+			  <child internal-child="image">
+			    <widget class="GtkImage" id="image515">
+			      <property name="visible">True</property>
+			      <property name="stock">gtk-index</property>
+			      <property name="icon_size">1</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
 			</widget>
 		      </child>
 
@@ -62,9 +93,125 @@
 			  <signal name="activate" handler="delete_activate" last_modification_time="Sun, 20 Oct 2002 17:33:05 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image455">
+			    <widget class="GtkImage" id="image516">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-delete</property>
+			      <property name="icon_size">1</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkMenuItem" id="separator15">
+			  <property name="visible">True</property>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkImageMenuItem" id="change_passphrase">
+			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Change key's passphrase</property>
+			  <property name="label" translatable="yes">_Change Passphrase...</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="change_passphrase_activate" last_modification_time="Wed, 12 Feb 2003 13:40:53 GMT"/>
+
+			  <child internal-child="image">
+			    <widget class="GtkImage" id="image517">
+			      <property name="visible">True</property>
+			      <property name="stock">gtk-copy</property>
+			      <property name="icon_size">1</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkImageMenuItem" id="add_uid">
+			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Add a new user ID to the key</property>
+			  <property name="label" translatable="yes">Add _User ID...</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="add_uid_activate" last_modification_time="Wed, 12 Feb 2003 13:40:53 GMT"/>
+
+			  <child internal-child="image">
+			    <widget class="GtkImage" id="image518">
+			      <property name="visible">True</property>
+			      <property name="stock">gnome-stock-text-unindent</property>
+			      <property name="icon_size">1</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkImageMenuItem" id="add_subkey">
+			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Add a new subkey to the key</property>
+			  <property name="label" translatable="yes">Add Sub_key...</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="add_subkey_activate" last_modification_time="Wed, 12 Feb 2003 13:40:53 GMT"/>
+
+			  <child internal-child="image">
+			    <widget class="GtkImage" id="image519">
+			      <property name="visible">True</property>
+			      <property name="stock">gtk-add</property>
+			      <property name="icon_size">1</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkImageMenuItem" id="add_photo">
+			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Add a photo ID to the key</property>
+			  <property name="label" translatable="yes">Add P_hoto ID...</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="add_photo_activate" last_modification_time="Wed, 12 Feb 2003 13:40:53 GMT"/>
+
+			  <child internal-child="image">
+			    <widget class="GtkImage" id="image520">
+			      <property name="visible">True</property>
+			      <property name="stock">gtk-select-color</property>
+			      <property name="icon_size">1</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkImageMenuItem" id="add_revoker">
+			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Add a revoker to the key</property>
+			  <property name="label" translatable="yes">Add _Revoker...</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="add_revoker_activate" last_modification_time="Wed, 12 Feb 2003 13:37:07 GMT"/>
+
+			  <child internal-child="image">
+			    <widget class="GtkImage" id="image521">
+			      <property name="visible">True</property>
+			      <property name="stock">gtk-cancel</property>
 			      <property name="icon_size">1</property>
 			      <property name="xalign">0.5</property>
 			      <property name="yalign">0.5</property>
@@ -94,107 +241,12 @@
 	      </child>
 
 	      <child>
-		<widget class="GtkMenuItem" id="edit_menu">
-		  <property name="visible">True</property>
-		  <property name="stock_item">GNOMEUIINFO_MENU_EDIT_TREE</property>
-
-		  <child>
-		    <widget class="GtkMenu" id="edit_menu_menu">
-
-		      <child>
-			<widget class="GtkImageMenuItem" id="change_passphrase">
-			  <property name="visible">True</property>
-			  <property name="tooltip" translatable="yes">Change key's passphrase</property>
-			  <property name="label" translatable="yes">Change _Passphrase...</property>
-			  <property name="use_underline">True</property>
-			  <signal name="activate" handler="change_passphrase_activate" last_modification_time="Wed, 18 Dec 2002 15:00:09 GMT"/>
-
-			  <child internal-child="image">
-			    <widget class="GtkImage" id="image456">
-			      <property name="visible">True</property>
-			      <property name="stock">gtk-copy</property>
-			      <property name="icon_size">1</property>
-			      <property name="xalign">0.5</property>
-			      <property name="yalign">0.5</property>
-			      <property name="xpad">0</property>
-			      <property name="ypad">0</property>
-			    </widget>
-			  </child>
-			</widget>
-		      </child>
-
-		      <child>
-			<widget class="GtkMenuItem" id="separator14">
-			  <property name="visible">True</property>
-			</widget>
-		      </child>
-
-		      <child>
-			<widget class="GtkImageMenuItem" id="add_uid">
-			  <property name="visible">True</property>
-			  <property name="tooltip" translatable="yes">Add a new user ID</property>
-			  <property name="label" translatable="yes">Add _User ID...</property>
-			  <property name="use_underline">True</property>
-			  <signal name="activate" handler="add_uid_activate" last_modification_time="Sun, 19 Jan 2003 21:31:50 GMT"/>
-
-			  <child internal-child="image">
-			    <widget class="GtkImage" id="image457">
-			      <property name="visible">True</property>
-			      <property name="stock">gnome-stock-text-indent</property>
-			      <property name="icon_size">1</property>
-			      <property name="xalign">0.5</property>
-			      <property name="yalign">0.5</property>
-			      <property name="xpad">0</property>
-			      <property name="ypad">0</property>
-			    </widget>
-			  </child>
-			</widget>
-		      </child>
-
-		      <child>
-			<widget class="GtkImageMenuItem" id="add_subkey1">
-			  <property name="visible">True</property>
-			  <property name="tooltip" translatable="yes">Add a new subkey</property>
-			  <property name="label" translatable="yes">Add _Subkey...</property>
-			  <property name="use_underline">True</property>
-			  <signal name="activate" handler="add_subkey_activate" last_modification_time="Thu, 30 Jan 2003 02:22:45 GMT"/>
-
-			  <child internal-child="image">
-			    <widget class="GtkImage" id="image458">
-			      <property name="visible">True</property>
-			      <property name="stock">gtk-add</property>
-			      <property name="icon_size">1</property>
-			      <property name="xalign">0.5</property>
-			      <property name="yalign">0.5</property>
-			      <property name="xpad">0</property>
-			      <property name="ypad">0</property>
-			    </widget>
-			  </child>
-			</widget>
-		      </child>
-		    </widget>
-		  </child>
-		</widget>
-	      </child>
-
-	      <child>
 		<widget class="GtkMenuItem" id="view1">
 		  <property name="visible">True</property>
 		  <property name="stock_item">GNOMEUIINFO_MENU_VIEW_TREE</property>
 
 		  <child>
 		    <widget class="GtkMenu" id="view1_menu">
-
-		      <child>
-			<widget class="GtkCheckMenuItem" id="toolbar">
-			  <property name="visible">True</property>
-			  <property name="tooltip" translatable="yes">View toolbar</property>
-			  <property name="label" translatable="yes">_Toolbar</property>
-			  <property name="use_underline">True</property>
-			  <property name="active">True</property>
-			  <signal name="activate" handler="toolbar_activate" last_modification_time="Sun, 20 Oct 2002 17:32:15 GMT"/>
-			</widget>
-		      </child>
 
 		      <child>
 			<widget class="GtkCheckMenuItem" id="statusbar">
@@ -246,7 +298,7 @@
 			  <accelerator key="F1" modifiers="0" signal="activate"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image459">
+			    <widget class="GtkImage" id="image522">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-help</property>
 			      <property name="icon_size">1</property>
@@ -271,49 +323,6 @@
 	  <property name="position">0</property>
 	  <property name="offset">0</property>
 	  <property name="behavior">BONOBO_DOCK_ITEM_BEH_EXCLUSIVE|BONOBO_DOCK_ITEM_BEH_NEVER_VERTICAL|BONOBO_DOCK_ITEM_BEH_LOCKED</property>
-	</packing>
-      </child>
-
-      <child>
-	<widget class="BonoboDockItem" id="tool_dock">
-	  <property name="visible">True</property>
-	  <property name="shadow_type">GTK_SHADOW_OUT</property>
-
-	  <child>
-	    <widget class="GtkToolbar" id="toolbar">
-	      <property name="visible">True</property>
-	      <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
-	      <property name="toolbar_style">GTK_TOOLBAR_BOTH</property>
-	      <property name="tooltips">True</property>
-
-	      <child>
-		<widget class="button" id="export_button">
-		  <property name="visible">True</property>
-		  <property name="tooltip" translatable="yes">Export key</property>
-		  <property name="label">gtk-save-as</property>
-		  <property name="use_stock">True</property>
-		  <signal name="clicked" handler="export_activate" last_modification_time="Sun, 20 Oct 2002 17:18:21 GMT"/>
-		</widget>
-	      </child>
-
-	      <child>
-		<widget class="button" id="delete_button">
-		  <property name="visible">True</property>
-		  <property name="tooltip" translatable="yes">Save File</property>
-		  <property name="label">gtk-delete</property>
-		  <property name="use_stock">True</property>
-		  <signal name="clicked" handler="delete_activate" last_modification_time="Mon, 21 Oct 2002 04:24:04 GMT"/>
-		</widget>
-	      </child>
-	    </widget>
-	  </child>
-	</widget>
-	<packing>
-	  <property name="placement">BONOBO_DOCK_TOP</property>
-	  <property name="band">1</property>
-	  <property name="position">0</property>
-	  <property name="offset">0</property>
-	  <property name="behavior">BONOBO_DOCK_ITEM_BEH_EXCLUSIVE</property>
 	</packing>
       </child>
 
