@@ -22,12 +22,8 @@
 #ifndef __SEAHORSE_PREFERENCES_H__
 #define __SEAHORSE_PREFERENCES_H__
 
-/* Preferences manager for Seahorse */
-
 #include "seahorse-context.h"
-#include "seahorse-key.h"
 
-/* Show preferences dialog */
 void		seahorse_preferences_show		(SeahorseContext	*sctx);
 
 #endif /* __SEAHORSE_PREFERENCES_H__ */

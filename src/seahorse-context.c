@@ -1,7 +1,7 @@
 /*
  * Seahorse
  *
- * Copyright (C) 2002 Jacob Perkins
+ * Copyright (C) 2003 Jacob Perkins
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,6 +44,12 @@ enum {
 static void	seahorse_context_class_init	(SeahorseContextClass	*klass);
 static void	seahorse_context_init		(SeahorseContext	*sctx);
 static void	seahorse_context_finalize	(GObject		*gobject);
+/* Key signals */
+static void	seahorse_context_key_destroyed	(GtkObject		*object,
+						 SeahorseContext	*sctx);
+static void	seahorse_context_key_changed	(SeahorseKey		*skey,
+						 SeahorseKeyChange	change,
+						 SeahorseContext	*sctx);
 
 static GtkObjectClass	*parent_class			= NULL;
 static guint		context_signals[LAST_SIGNAL]	= { 0 };
@@ -92,7 +98,7 @@ seahorse_context_class_init (SeahorseContextClass *klass)
 		NULL, NULL, g_cclosure_marshal_VOID__OBJECT, G_TYPE_NONE, 1, SEAHORSE_TYPE_KEY);
 }
 
-/* Initializes the gpgme context */
+/* Initializes the gpgme context & preferences */
 static void
 seahorse_context_init (SeahorseContext *sctx)
 {
@@ -113,53 +119,10 @@ seahorse_context_init (SeahorseContext *sctx)
 	err = gpgme_set_protocol (sctx->ctx, proto);
 	g_return_if_fail (err == GPGME_No_Error);
 	
-	gpgme_set_armor (sctx->ctx, gconf_client_get_bool (sctx->priv->gclient, ARMOR_KEY, NULL));
-	gpgme_set_textmode (sctx->ctx, gconf_client_get_bool (sctx->priv->gclient, TEXT_KEY, NULL));
-}
-
-/* A key has changed, so refresh the SeahorseKey's GpgmeKey */
-static void
-key_changed (SeahorseKey *skey, SeahorseKeyChange change, SeahorseContext *sctx)
-{
-	GpgmeKey key;
-	const gchar *keyid1 = NULL, *keyid2 = NULL;
-	
-	g_return_if_fail (gpgme_op_keylist_start (sctx->ctx, NULL, FALSE) == GPGME_No_Error);
-	
-	keyid1 = gpgme_key_get_string_attr (skey->key, GPGME_ATTR_KEYID, NULL, 0);
-	
-	while (gpgme_op_keylist_next (sctx->ctx, &key) == GPGME_No_Error) {
-		keyid2 = gpgme_key_get_string_attr (key, GPGME_ATTR_KEYID, NULL, 0);
-		
-		if (g_str_equal (keyid1, keyid2))
-			break;
-		/* Don't need key */
-		else
-			gpgme_key_unref (key);
-	}
-	
-	gpgme_op_keylist_end (sctx->ctx);
-	
-	g_return_if_fail (g_str_equal (keyid1, keyid2));
-	
-	/* Set to found key */
-	gpgme_key_unref (skey->key);
-	skey->key = key;
-}
-
-/* Remove key from key ring */
-static void
-key_destroyed (GtkObject *object, SeahorseContext *sctx)
-{
-	SeahorseKey *skey;
-	
-	skey = SEAHORSE_KEY (object);
-	sctx->priv->key_ring = g_list_remove (sctx->priv->key_ring, skey);
-	
-	g_signal_handlers_disconnect_by_func (skey, key_changed, sctx);
-	g_signal_handlers_disconnect_by_func (GTK_OBJECT (skey), key_destroyed, sctx);
-	
-	g_object_unref (skey);
+	gpgme_set_armor (sctx->ctx, gconf_client_get_bool (
+		sctx->priv->gclient, ARMOR_KEY, NULL));
+	gpgme_set_textmode (sctx->ctx, gconf_client_get_bool (
+		sctx->priv->gclient, TEXT_KEY, NULL));
 }
 
 /* Destroy all keys & key ring, release gpgme context */
@@ -169,17 +132,47 @@ seahorse_context_finalize (GObject *gobject)
 	SeahorseContext *sctx;
 	SeahorseKey *skey;
 	
-	g_return_if_fail (SEAHORSE_IS_CONTEXT (gobject));
-	
 	sctx = SEAHORSE_CONTEXT (gobject);
 	
-	while (sctx->priv->key_ring != NULL && (skey = sctx->priv->key_ring->data) != NULL && SEAHORSE_IS_KEY (skey))
+	while (sctx->priv->key_ring != NULL && (
+	skey = sctx->priv->key_ring->data) != NULL)
 		seahorse_key_destroy (skey);
 	
 	g_list_free (sctx->priv->key_ring);
 	gpgme_release (sctx->ctx);
 	
 	G_OBJECT_CLASS (parent_class)->finalize (gobject);
+}
+
+/* Remove key from key ring */
+static void
+seahorse_context_key_destroyed (GtkObject *object, SeahorseContext *sctx)
+{
+	SeahorseKey *skey;
+	
+	skey = SEAHORSE_KEY (object);
+	sctx->priv->key_ring = g_list_remove (sctx->priv->key_ring, skey);
+	
+	g_signal_handlers_disconnect_by_func (GTK_OBJECT (skey),
+		seahorse_context_key_destroyed, sctx);
+	g_signal_handlers_disconnect_by_func (skey,
+		seahorse_context_key_changed, sctx);
+	
+	g_object_unref (skey);
+}
+
+/* A key has changed, so refresh the SeahorseKey's GpgmeKey */
+static void
+seahorse_context_key_changed (SeahorseKey *skey, SeahorseKeyChange change, SeahorseContext *sctx)
+{
+	GpgmeKey key;
+	
+	g_return_if_fail (gpgme_op_keylist_start (sctx->ctx,
+		seahorse_key_get_keyid (skey, 0), FALSE) == GPGME_No_Error);
+	g_return_if_fail (gpgme_op_keylist_next (sctx->ctx, &key) == GPGME_No_Error);
+	gpgme_op_keylist_end (sctx->ctx);
+	gpgme_key_unref (skey->key);
+	skey->key = key;
 }
 
 /* Add a new SeahorseKey to the key ring */
@@ -192,12 +185,21 @@ add_key (SeahorseContext *sctx, GpgmeKey key)
 	g_object_ref (skey);
 	gtk_object_sink (GTK_OBJECT (skey));
 	
-	g_signal_connect_after (GTK_OBJECT (skey), "destroy", G_CALLBACK (key_destroyed), sctx);
-	g_signal_connect (skey, "changed", G_CALLBACK (key_changed), sctx);
+	g_signal_connect_after (GTK_OBJECT (skey), "destroy",
+		G_CALLBACK (seahorse_context_key_destroyed), sctx);
+	g_signal_connect (skey, "changed",
+		G_CALLBACK (seahorse_context_key_changed), sctx);
 	
 	return skey;
 }
 
+/**
+ * seahorse_context_new:
+ *
+ * Creates a new #SeahorseContext for managing the key ring and preferences.
+ *
+ * Returns: The new #SeahorseContext
+ **/
 SeahorseContext*
 seahorse_context_new (void)
 {
@@ -229,6 +231,12 @@ seahorse_context_new (void)
 	return sctx;
 }
 
+/**
+ * seahorse_context_destroy:
+ * @sctx: #SeahorseContext to destroy
+ *
+ * Emits the destroy signal for @sctx.
+ **/
 void
 seahorse_context_destroy (SeahorseContext *sctx)
 {
@@ -237,6 +245,14 @@ seahorse_context_destroy (SeahorseContext *sctx)
 	gtk_object_destroy (GTK_OBJECT (sctx));
 }
 
+/**
+ * seahorse_context_get_keys:
+ * @sctx: Current #SeahorseContext
+ *
+ * Gets the current key ring.
+ *
+ * Returns: A #GList of #SeahorseKeys
+ **/
 GList*
 seahorse_context_get_keys (const SeahorseContext *sctx)
 {
@@ -245,6 +261,15 @@ seahorse_context_get_keys (const SeahorseContext *sctx)
 	return sctx->priv->key_ring;
 }
 
+/**
+ * seahorse_context_get_key:
+ * @sctx: Current #SeahorseContext
+ * @key: GpgmeKey corresponding to the desired #SeahorseKey
+ *
+ * Gets the #SeahorseKey in the key ring corresponding to @key.
+ *
+ * Returns: The found #SeahorseKey, or NULL
+ **/
 SeahorseKey*
 seahorse_context_get_key (const SeahorseContext *sctx, GpgmeKey key)
 {
@@ -272,6 +297,14 @@ seahorse_context_get_key (const SeahorseContext *sctx, GpgmeKey key)
 	return skey;
 }
 
+/**
+ * seahorse_context_show_status:
+ * @sctx: Current #SeahorseContext
+ * @op: Operation performed
+ * @success: Whether @op was successful
+ *
+ * Emits the status signal for @op & @success.
+ **/
 void
 seahorse_context_show_status (const SeahorseContext *sctx, const gchar *op, gboolean success)
 {
@@ -292,6 +325,12 @@ seahorse_context_show_status (const SeahorseContext *sctx, const gchar *op, gboo
 	g_free (status);
 }
 
+/**
+ * seahorse_context_key_added
+ * @sctx: Current #SeahorseContext
+ *
+ * Causes @sctx to add a new keys to internal key ring.
+ **/
 void
 seahorse_context_key_added (SeahorseContext *sctx)
 {
@@ -316,6 +355,15 @@ seahorse_context_key_added (SeahorseContext *sctx)
 	}
 }
 
+/**
+ * seahorse_context_key_has_secret:
+ * @sctx: Current #SeahorseContext
+ * @skey: #SeahorseKey to check
+ *
+ * Checks if @skey has a secret part.
+ *
+ * Returns: %TRUE if @skey has a secret part, %FALSE otherwise
+ **/
 gboolean
 seahorse_context_key_has_secret (SeahorseContext *sctx, SeahorseKey *skey)
 {
@@ -336,6 +384,13 @@ seahorse_context_key_has_secret (SeahorseContext *sctx, SeahorseKey *skey)
 	return found;
 }
 
+/**
+ * seahorse_context_set_ascii_armor:
+ * @sctx: Current #SeahorseContext
+ * @ascii_armor: New ascii armor value
+ *
+ * Sets ascii armor attribute of @sctx to @ascii_armor and saves in gconf.
+ **/
 void
 seahorse_context_set_ascii_armor (SeahorseContext *sctx, gboolean ascii_armor)
 {
@@ -345,6 +400,13 @@ seahorse_context_set_ascii_armor (SeahorseContext *sctx, gboolean ascii_armor)
 	gconf_client_set_bool (sctx->priv->gclient, ARMOR_KEY, ascii_armor, NULL);
 }
 
+/**
+ * seahorse_context_set_text_mode:
+ * @sctx: Current #SeahorseContext
+ * @text_mode: New text mode value
+ *
+ * Sets text mode attribute of @sctx to @text_mode and saves in gconf.
+ **/
 void
 seahorse_context_set_text_mode (SeahorseContext *sctx, gboolean text_mode)
 {
@@ -354,6 +416,13 @@ seahorse_context_set_text_mode (SeahorseContext *sctx, gboolean text_mode)
 	gconf_client_set_bool (sctx->priv->gclient, TEXT_KEY, text_mode, NULL);
 }
 
+/**
+ * seahorse_context_set_signer:
+ * @sctx: Current #SeahorseContext
+ * @signer: New signer #SeahorseKey
+ *
+ * Sets signer attribute of @sctx to @signer.
+ **/
 void
 seahorse_context_set_signer (SeahorseContext *sctx, SeahorseKey *signer)
 {
@@ -366,6 +435,14 @@ seahorse_context_set_signer (SeahorseContext *sctx, SeahorseKey *signer)
 	gconf_client_set_string (sctx->priv->gclient, DEFAULT_KEY, seahorse_key_get_keyid (signer, 0), NULL);
 }
 
+/**
+ * seahorse_context_get_last_signer:
+ * @sctx: Current #SeahorseContext
+ *
+ * Gets the signing #SeahorseKey for @sctx
+ *
+ * Returns: The default signing #SeahorseKey
+ **/
 SeahorseKey*
 seahorse_context_get_last_signer (const SeahorseContext *sctx)
 {

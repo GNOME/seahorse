@@ -22,9 +22,6 @@
 #ifndef __SEAHORSE_CONTEXT_H__
 #define __SEAHORSE_CONTEXT_H__
 
-/* SeahorseContext is a wrapper for a GpgmeContext.  It caches the key ring as a list
- * and has signals for showing an operation's status and for when a key has been added. */
-
 #include <gtk/gtk.h>
 #include <gpgme.h>
 
@@ -46,7 +43,10 @@ struct _SeahorseContext
 {
 	GtkObject		parent;
 	
+	/*< public >*/
 	GpgmeCtx		ctx;
+	
+	/*< private >*/
 	SeahorseContextPrivate	*priv;
 };
 
@@ -54,53 +54,42 @@ struct _SeahorseContextClass
 {
 	GtkObjectClass		parent_class;
 	
-	/* Operation status signal */
+	/* Signal emitted to show the status of an operation */
 	void 			(* status)			(const SeahorseContext	*sctx,
 								 const gchar		*op);
 	
-	/* Key has been added to key ring signal */
+	/* Signal emitted when @skey has been added to @sctx */
 	void 			(* add)				(SeahorseContext	*sctx,
 								 SeahorseKey		*skey);
 };
 
-/* Creates a new context */
 SeahorseContext*	seahorse_context_new			(void);
 
-/* Emits the destroy signal for context */
 void			seahorse_context_destroy		(SeahorseContext	*sctx);
 
-/* Returns the cached key ring */
 GList*			seahorse_context_get_keys		(const SeahorseContext	*sctx);
 
-/* Sends the context an operation status message.  Emits the 'status' signal. */
 void			seahorse_context_show_status		(const SeahorseContext	*sctx,
 								 const gchar		*op,
 								 gboolean		success);
 
-/* Tells the context keys might have been added.  Emits the 'add' signal. */
 void			seahorse_context_key_added		(SeahorseContext	*sctx);
 
-/* Returns the SeahorseKey corresponding to the GpgmeKey, or NULL if not in key ring. */
 SeahorseKey*		seahorse_context_get_key		(const SeahorseContext	*sctx,
 								 GpgmeKey		key);
 
-/* Returns TRUE if the key has a secret key */
 gboolean		seahorse_context_key_has_secret		(SeahorseContext	*sctx,
 								 SeahorseKey		*skey);
 
-/* Sets ascii armor for context */
 void			seahorse_context_set_ascii_armor	(SeahorseContext	*sctx,
 								 gboolean		ascii_armor);
 
-/* Sets text mode for context */
 void			seahorse_context_set_text_mode		(SeahorseContext	*sctx,
 								 gboolean		text_mode);
 
-/* Sets default signing key for context */
 void			seahorse_context_set_signer		(SeahorseContext	*sctx,
 								 SeahorseKey		*signer);
 
-/* Returns default signing key for the context */
 SeahorseKey*		seahorse_context_get_last_signer	(const SeahorseContext	*sctx);
 
 #endif /* __SEAHORSE_CONTEXT_H__ */

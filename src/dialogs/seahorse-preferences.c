@@ -27,8 +27,6 @@
 #include "seahorse-widget.h"
 #include "seahorse-signer-menu.h"
 
-#define DEFAULT_OPTION "default_key"
-
 /* Toggles armor setting */
 static void
 armor_toggled (GtkToggleButton *togglebutton, SeahorseWidget *swidget)
@@ -43,6 +41,12 @@ text_mode_toggled (GtkToggleButton *togglebutton, SeahorseWidget *swidget)
 	seahorse_context_set_text_mode (swidget->sctx, gtk_toggle_button_get_active (togglebutton));
 }
 
+/**
+ * seahorse_preferences_show:
+ * @sctx: Current #SeahorseContext
+ *
+ * Creates a new or shows the current preferences dialog.
+ **/
 void
 seahorse_preferences_show (SeahorseContext *sctx)
 {	
@@ -54,6 +58,7 @@ seahorse_preferences_show (SeahorseContext *sctx)
 	swidget = seahorse_widget_new ("preferences", sctx);
 	g_return_if_fail (swidget != NULL);
 	
+	/* Do initial states */
 	widget = glade_xml_get_widget (swidget->xml, "ascii_armor");
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget),
 		gpgme_get_armor (sctx->ctx));

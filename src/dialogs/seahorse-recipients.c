@@ -175,7 +175,6 @@ add_recip (SeahorseWidget *swidget, GtkTreePath *path)
 			return;
 	}
 
-	
 	seahorse_key_store_remove (srecips->all_keys, path);
 	seahorse_key_store_append (srecips->recipient_keys, skey);
 	
