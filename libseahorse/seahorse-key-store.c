@@ -533,12 +533,31 @@ sort_changed(GtkTreeSortable *sort, gpointer user_data)
     }
 }
 
+/* Try to find our key store given a tree model */
+static SeahorseKeyStore* 
+key_store_from_model (GtkTreeModel *model)
+{
+	/* Sort models are what's set on the tree */
+    if (GTK_IS_TREE_MODEL_SORT (model)) {
+        model = gtk_tree_model_sort_get_model (GTK_TREE_MODEL_SORT (model));
+        model = gtk_tree_model_filter_get_model (GTK_TREE_MODEL_FILTER (model));
+    }
+    
+    if (SEAHORSE_IS_KEY_STORE (model))
+        return SEAHORSE_KEY_STORE (model);
+    
+    g_assert_not_reached ();
+    return NULL;
+}
+
 /* Called when a checkbox is toggled, toggle the value */
 static void
 check_toggled(GtkCellRendererToggle *cellrenderertoggle, gchar *path, gpointer user_data)
 {
-    SeahorseKeyStore *skstore = SEAHORSE_KEY_STORE (user_data);
+    GtkTreeView *view = GTK_TREE_VIEW (user_data);
+    SeahorseKeyStore *skstore = key_store_from_model (gtk_tree_view_get_model (view));
     GtkTreeModel* fmodel = GTK_TREE_MODEL (skstore->priv->sort);
+    GtkTreeSelection *selection;
     gboolean prev = FALSE;
     GtkTreeIter iter;
     GtkTreeIter child;
@@ -557,6 +576,9 @@ check_toggled(GtkCellRendererToggle *cellrenderertoggle, gchar *path, gpointer u
     g_value_unset (&v);    
     
     gtk_tree_store_set (GTK_TREE_STORE (skstore), &child, KEY_STORE_CHECK, prev ? FALSE : TRUE, -1);
+
+    selection = gtk_tree_view_get_selection (view);
+    g_signal_emit_by_name (selection, "changed");    
 }
 
 /* Creates a new #SeahorseKeyRow for listening to key signals */
@@ -685,7 +707,7 @@ seahorse_key_store_init (SeahorseKeyStore *skstore, GtkTreeView *view)
     if (SEAHORSE_KEY_STORE_GET_CLASS (skstore)->use_check) {
         GtkCellRenderer *renderer;
         renderer = gtk_cell_renderer_toggle_new ();
-        g_signal_connect (renderer, "toggled", G_CALLBACK (check_toggled), skstore);
+        g_signal_connect (renderer, "toggled", G_CALLBACK (check_toggled), view);
         col = gtk_tree_view_column_new_with_attributes ("", renderer, "active", KEY_STORE_CHECK, NULL);
         gtk_tree_view_column_set_resizable (col, FALSE);
         gtk_tree_view_append_column (view, col);
@@ -768,23 +790,6 @@ seahorse_key_store_populate (SeahorseKeyStore *skstore)
      
         g_list_free (keys);
     }
-}
-
-/* Try to find our key store given a tree model */
-static SeahorseKeyStore* 
-key_store_from_model (GtkTreeModel *model)
-{
-	/* Sort models are what's set on the tree */
-    if (GTK_IS_TREE_MODEL_SORT (model)) {
-        model = gtk_tree_model_sort_get_model (GTK_TREE_MODEL_SORT (model));
-        model = gtk_tree_model_filter_get_model (GTK_TREE_MODEL_FILTER (model));
-    }
-    
-    if (SEAHORSE_IS_KEY_STORE (model))
-        return SEAHORSE_KEY_STORE (model);
-    
-    g_assert_not_reached ();
-    return NULL;
 }
 
 /* Given an iterator find the associated key */

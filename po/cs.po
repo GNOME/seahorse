@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-23 11:40+0100\n"
+"POT-Creation-Date: 2005-02-03 19:44-0700\n"
 "PO-Revision-Date: 2005-01-23 15:22+0100\n"
 "Last-Translator: Miloslav Trmac <mitr@volny.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -452,13 +452,13 @@ msgid "Whether to use canonical text mode"
 msgstr "Jestli používat kanonický textový režim"
 
 #. Make the column
-#: libseahorse/seahorse-key-store.c:690 src/seahorse-key-properties.c:380
+#: libseahorse/seahorse-key-store.c:750 src/seahorse-key-properties.c:380
 #: src/seahorse-key-properties.c:474
 msgid "Name"
 msgstr "Jméno"
 
 #. Make the column
-#: libseahorse/seahorse-key-store.c:693 src/seahorse-key-properties.c:377
+#: libseahorse/seahorse-key-store.c:753 src/seahorse-key-properties.c:377
 msgid "Key ID"
 msgstr "ID klíče"
 
@@ -496,7 +496,7 @@ msgstr "Zadejte heslo pro '%s'"
 #: libseahorse/seahorse-recipients.glade.h:1 src/seahorse-add-uid.glade.h:1
 #: src/seahorse-change-passphrase.glade.h:1
 #: src/seahorse-generate-adv.glade.h:1 src/seahorse-generate-druid.glade.h:1
-#: src/seahorse-key-manager.glade.h:1 src/seahorse-keyserver-search.glade.h:1
+#: src/seahorse-keyserver-search.glade.h:1
 #: src/seahorse-multi-encrypt.glade.h:1 src/seahorse-revoke.glade.h:1
 msgid "*"
 msgstr "*"
@@ -633,7 +633,7 @@ msgid "Loading Keys..."
 msgstr "Načítám klíče..."
 
 #: libseahorse/seahorse-recipients-store.c:153
-#: src/seahorse-key-manager-store.c:284
+#: src/seahorse-key-manager-store.c:285
 msgid "Validity"
 msgstr "Platnost"
 
@@ -790,7 +790,7 @@ msgstr ""
 msgid "_Replace"
 msgstr "Na_hradit"
 
-#: libseahorse/seahorse-validity.c:31 src/seahorse-key-manager-store.c:147
+#: libseahorse/seahorse-validity.c:31 src/seahorse-key-manager-store.c:148
 #: src/seahorse-key-properties.glade.h:20
 msgid "Unknown"
 msgstr "Neznámý"
@@ -1146,21 +1146,21 @@ msgstr "Opravdu chcete navždy odstranit %s?"
 msgid "Couldn't delete key"
 msgstr "Nemohu odstranit klíč"
 
-#: src/seahorse-delete.c:136
+#: src/seahorse-delete.c:134
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
 msgstr "Opravdu chcete navždy odstranit podklíč %d z %s?"
 
-#: src/seahorse-delete.c:158
+#: src/seahorse-delete.c:156
 msgid "Couldn't delete subkey"
 msgstr "Nemohu odstranit podklíč"
 
-#: src/seahorse-delete.c:176
+#: src/seahorse-delete.c:174
 #, c-format
 msgid "Are you sure you want to permanently delete the '%s' user ID?"
 msgstr "Opravdu že chcete navždy odstranit ID uživatele '%s'?"
 
-#: src/seahorse-delete.c:199
+#: src/seahorse-delete.c:197
 msgid "Couldn't delete user id"
 msgstr "Nemohu odstranit id uživatele"
 
@@ -1253,7 +1253,7 @@ msgstr "E-mailová adresa:"
 msgid "Enter Name - Must be at least five letters."
 msgstr "Zadejte jméno - musí být alespoň pět písmen."
 
-#: src/seahorse-generate-druid.glade.h:13 src/seahorse-key-manager-store.c:288
+#: src/seahorse-generate-druid.glade.h:13 src/seahorse-key-manager-store.c:289
 msgid "Expiration Date"
 msgstr "Datum vypršení"
 
@@ -1298,7 +1298,7 @@ msgstr ""
 msgid "Medium Security"
 msgstr "Střední zabezpečení"
 
-#: src/seahorse-generate-druid.glade.h:22 src/seahorse-key-manager-store.c:191
+#: src/seahorse-generate-druid.glade.h:22 src/seahorse-key-manager-store.c:192
 #: src/seahorse-key-properties.c:216
 msgid "Never Expires"
 msgstr "Nikdy nevyprší"
@@ -1405,43 +1405,43 @@ msgstr "Vyberte metodu, kterou generovat váš nový klíč:"
 msgid "radio_druid"
 msgstr "radio_druid"
 
-#: src/seahorse-key-manager-store.c:135
+#: src/seahorse-key-manager-store.c:136
 msgid "RSA"
 msgstr "RSA"
 
-#: src/seahorse-key-manager-store.c:137
+#: src/seahorse-key-manager-store.c:138
 msgid "RSA-E"
 msgstr "RSA-E"
 
-#: src/seahorse-key-manager-store.c:139
+#: src/seahorse-key-manager-store.c:140
 msgid "RSA-S"
 msgstr "RSA-S"
 
-#: src/seahorse-key-manager-store.c:141
+#: src/seahorse-key-manager-store.c:142
 msgid "ELG-E"
 msgstr "ELG-E"
 
-#: src/seahorse-key-manager-store.c:143
+#: src/seahorse-key-manager-store.c:144
 msgid "DSA"
 msgstr "DSA"
 
-#: src/seahorse-key-manager-store.c:145
+#: src/seahorse-key-manager-store.c:146
 msgid "ELG"
 msgstr "ELG"
 
-#: src/seahorse-key-manager-store.c:184 src/seahorse-key-properties.c:206
+#: src/seahorse-key-manager-store.c:185 src/seahorse-key-properties.c:206
 msgid "Expired"
 msgstr "Vypršel"
 
-#: src/seahorse-key-manager-store.c:292
+#: src/seahorse-key-manager-store.c:293
 msgid "Trust"
 msgstr "Důvěřovat"
 
-#: src/seahorse-key-manager-store.c:296
+#: src/seahorse-key-manager-store.c:297
 msgid "Length"
 msgstr "Délka"
 
-#: src/seahorse-key-manager-store.c:300
+#: src/seahorse-key-manager-store.c:301
 msgid "Type"
 msgstr "Typ"
 
@@ -1470,234 +1470,234 @@ msgstr "Nemohu exportovat klíč do \"%s\""
 msgid "Backup Keyrings to Archive"
 msgstr "Zálohovat klíčenky do archivu"
 
-#: src/seahorse-key-manager.c:381
+#: src/seahorse-key-manager.c:399
 msgid "translator_credits"
 msgstr ""
 "Petr Domanský <doman@atlas.cz> Michal Bukovjan <bukm@centrum.cz> Miloslav "
 "Trmač <mitr@volny.cz>"
 
-#: src/seahorse-key-manager.c:401
+#: src/seahorse-key-manager.c:419
 msgid "seahorse"
 msgstr "seahorse"
 
-#: src/seahorse-key-manager.c:566
+#: src/seahorse-key-manager.c:584
 #, c-format
 msgid "Couldn't import key from \"%s\""
 msgstr "Nemohu importovat klíč z \"%s\""
 
-#: src/seahorse-key-manager.glade.h:2
+#: src/seahorse-key-manager.glade.h:1
 msgid "<big><b>First time options:</b></big>"
 msgstr "<big><b>Možnosti při prvním použití:</b></big>"
 
-#: src/seahorse-key-manager.glade.h:3
+#: src/seahorse-key-manager.glade.h:2
 msgid "Add P_hoto ID..."
 msgstr "Přidat _Foto ID..."
 
-#: src/seahorse-key-manager.glade.h:4
+#: src/seahorse-key-manager.glade.h:3
 msgid "Add Sub_key..."
 msgstr "Přidat pod_klíč..."
 
-#: src/seahorse-key-manager.glade.h:5
+#: src/seahorse-key-manager.glade.h:4
 msgid "Add _Revoker..."
 msgstr "Přidat _odvolávač..."
 
-#: src/seahorse-key-manager.glade.h:6
+#: src/seahorse-key-manager.glade.h:5
 msgid "Add _User ID..."
 msgstr "Přidat ID _uživatele..."
 
-#: src/seahorse-key-manager.glade.h:7
+#: src/seahorse-key-manager.glade.h:6
 msgid "Add a new subkey"
 msgstr "Přidat nový podklíč"
 
-#: src/seahorse-key-manager.glade.h:8
+#: src/seahorse-key-manager.glade.h:7
 msgid "Add a new user ID"
 msgstr "Přidat nové ID uživatele"
 
-#: src/seahorse-key-manager.glade.h:9
+#: src/seahorse-key-manager.glade.h:8
 msgid "Add a photo ID"
 msgstr "Přidat foto ID"
 
-#: src/seahorse-key-manager.glade.h:10
+#: src/seahorse-key-manager.glade.h:9
 msgid "Add the default key as a revoker"
 msgstr "Přidat implicitní klíč jako odvolávač"
 
-#: src/seahorse-key-manager.glade.h:11
+#: src/seahorse-key-manager.glade.h:10
 msgid "Backup all keys"
 msgstr "Zazálohovat všechny klíče"
 
-#: src/seahorse-key-manager.glade.h:12
+#: src/seahorse-key-manager.glade.h:11
 msgid "Change passphrase of secret key"
 msgstr "Změnit heslo tajného klíče"
 
-#: src/seahorse-key-manager.glade.h:13
+#: src/seahorse-key-manager.glade.h:12
 msgid "Collapse all listings"
 msgstr "Sbalit všechny výpisy"
 
-#: src/seahorse-key-manager.glade.h:14
+#: src/seahorse-key-manager.glade.h:13
 msgid "Create a new key"
 msgstr "Generovat nový klíč"
 
-#: src/seahorse-key-manager.glade.h:15
+#: src/seahorse-key-manager.glade.h:14
 msgid "Create a revocation certificate"
 msgstr "Vytvořit odvolávací certifikát"
 
-#: src/seahorse-key-manager.glade.h:16
+#: src/seahorse-key-manager.glade.h:15
 msgid "Delete key"
 msgstr "Smazat klíč"
 
-#: src/seahorse-key-manager.glade.h:17
+#: src/seahorse-key-manager.glade.h:16
 msgid "E_xport"
 msgstr "E_xportovat"
 
-#: src/seahorse-key-manager.glade.h:18
+#: src/seahorse-key-manager.glade.h:17
 msgid "E_xport..."
 msgstr "E_xportovat..."
 
-#: src/seahorse-key-manager.glade.h:19
+#: src/seahorse-key-manager.glade.h:18
 msgid "Expand all listings"
 msgstr "Rozbalit všechny výpisy"
 
-#: src/seahorse-key-manager.glade.h:20
+#: src/seahorse-key-manager.glade.h:19
 #: src/seahorse-keyserver-results.glade.h:2
 msgid "Export key"
 msgstr "Exportovat klíč"
 
-#: src/seahorse-key-manager.glade.h:21
+#: src/seahorse-key-manager.glade.h:20
 #: src/seahorse-keyserver-results.glade.h:3
 msgid "Export public key"
 msgstr "Exportovat veřejný klíč"
 
-#: src/seahorse-key-manager.glade.h:22
+#: src/seahorse-key-manager.glade.h:21
 msgid "Filter: "
 msgstr "Filtr: "
 
-#: src/seahorse-key-manager.glade.h:23
+#: src/seahorse-key-manager.glade.h:22
 msgid "Generate a new key of your own: "
 msgstr "Vygenerovat nový klíč: "
 
-#: src/seahorse-key-manager.glade.h:24
+#: src/seahorse-key-manager.glade.h:23
 msgid "Import existing keys from a file:"
 msgstr "Importovat existující klíče ze souboru:"
 
-#: src/seahorse-key-manager.glade.h:25
+#: src/seahorse-key-manager.glade.h:24
 msgid "Import keys"
 msgstr "Importovat klíče"
 
-#: src/seahorse-key-manager.glade.h:26
+#: src/seahorse-key-manager.glade.h:25
 #: src/seahorse-keyserver-results.glade.h:8
 msgid "Seahorse - GPG Key Manager"
 msgstr "Seahorse - Správce klíčů GPG"
 
-#: src/seahorse-key-manager.glade.h:27
+#: src/seahorse-key-manager.glade.h:26
 msgid "Search for keys on a key server"
 msgstr "Hledat klíče na serveru klíčů"
 
-#: src/seahorse-key-manager.glade.h:28
+#: src/seahorse-key-manager.glade.h:27
 #: src/seahorse-keyserver-results.glade.h:9
 msgid "Show Seahorse help"
 msgstr "Zobrazit nápovědu Seahorse"
 
-#: src/seahorse-key-manager.glade.h:29
+#: src/seahorse-key-manager.glade.h:28
 #: src/seahorse-keyserver-results.glade.h:10
 msgid "Show key properties"
 msgstr "Zobrazit vlastnosti klíče"
 
-#: src/seahorse-key-manager.glade.h:30
+#: src/seahorse-key-manager.glade.h:29
 #: src/seahorse-keyserver-results.glade.h:11
 msgid "Sign key"
 msgstr "Podepsat klíč"
 
-#: src/seahorse-key-manager.glade.h:31
+#: src/seahorse-key-manager.glade.h:30
 msgid "Sign public key"
 msgstr "Podepsat veřejný klíč"
 
-#: src/seahorse-key-manager.glade.h:32
+#: src/seahorse-key-manager.glade.h:31
 msgid "To get started with encryption you'll need keys."
 msgstr "Pro šifrování budete potřebovat klíče."
 
-#: src/seahorse-key-manager.glade.h:33
+#: src/seahorse-key-manager.glade.h:32
 msgid "_Backup Keyrings..."
 msgstr "_Zálohovat klíče..."
 
-#: src/seahorse-key-manager.glade.h:34
+#: src/seahorse-key-manager.glade.h:33
 msgid "_Change Passphrase..."
 msgstr "Změnit _heslo..."
 
-#: src/seahorse-key-manager.glade.h:35
+#: src/seahorse-key-manager.glade.h:34
 msgid "_Collapse All"
 msgstr "_Sbalit vše"
 
-#: src/seahorse-key-manager.glade.h:36
+#: src/seahorse-key-manager.glade.h:35
 #: src/seahorse-keyserver-results.glade.h:12
 msgid "_Contents"
 msgstr "O_bsah"
 
-#: src/seahorse-key-manager.glade.h:37
+#: src/seahorse-key-manager.glade.h:36
 msgid "_Copy"
 msgstr "_Kopírovat"
 
-#: src/seahorse-key-manager.glade.h:38
+#: src/seahorse-key-manager.glade.h:37
 #: src/seahorse-keyserver-results.glade.h:13
 msgid "_Copy Key"
 msgstr "_Kopírovat klíč"
 
-#: src/seahorse-key-manager.glade.h:39 src/seahorse-key-properties.glade.h:25
+#: src/seahorse-key-manager.glade.h:38 src/seahorse-key-properties.glade.h:25
 msgid "_Delete"
 msgstr "_Smazat"
 
-#: src/seahorse-key-manager.glade.h:40
+#: src/seahorse-key-manager.glade.h:39
 msgid "_Delete Key"
 msgstr "_Odstranit klíč"
 
-#: src/seahorse-key-manager.glade.h:41
+#: src/seahorse-key-manager.glade.h:40
 msgid "_Expand All"
 msgstr "_Rozbalit vše"
 
-#: src/seahorse-key-manager.glade.h:42
+#: src/seahorse-key-manager.glade.h:41
 msgid "_Find Remote Keys..."
 msgstr "_Hledat vzdálené klíče..."
 
-#: src/seahorse-key-manager.glade.h:43
+#: src/seahorse-key-manager.glade.h:42
 msgid "_Generate Revocation Certificate..."
 msgstr "Vy_generovat odvolávací certifikát..."
 
-#: src/seahorse-key-manager.glade.h:44
+#: src/seahorse-key-manager.glade.h:43
 #: src/seahorse-keyserver-results.glade.h:14
 msgid "_Import"
 msgstr "_Importovat"
 
-#: src/seahorse-key-manager.glade.h:45
+#: src/seahorse-key-manager.glade.h:44
 msgid "_Import..."
 msgstr "_Importovat..."
 
-#: src/seahorse-key-manager.glade.h:46
+#: src/seahorse-key-manager.glade.h:45
 #: src/seahorse-keyserver-results.glade.h:16
 msgid "_Key"
 msgstr "_Klíč..."
 
-#: src/seahorse-key-manager.glade.h:47
+#: src/seahorse-key-manager.glade.h:46
 msgid "_New..."
 msgstr "_Nový..."
 
-#: src/seahorse-key-manager.glade.h:48
+#: src/seahorse-key-manager.glade.h:47
 msgid "_Paste Key"
 msgstr "_Vložit klíč"
 
-#: src/seahorse-key-manager.glade.h:49
+#: src/seahorse-key-manager.glade.h:48
 #: src/seahorse-keyserver-results.glade.h:17
 msgid "_Properties"
 msgstr "_Vlastnosti"
 
-#: src/seahorse-key-manager.glade.h:50
+#: src/seahorse-key-manager.glade.h:49
 msgid "_Remote Search"
 msgstr "_Vzdálené hledání"
 
-#: src/seahorse-key-manager.glade.h:51 src/seahorse-key-properties.glade.h:28
+#: src/seahorse-key-manager.glade.h:50 src/seahorse-key-properties.glade.h:28
 #: src/seahorse-sign.glade.h:17
 msgid "_Sign"
 msgstr "Podep_sat"
 
-#: src/seahorse-key-manager.glade.h:52
+#: src/seahorse-key-manager.glade.h:51
 msgid "_Sign..."
 msgstr "Podep_sat..."
 

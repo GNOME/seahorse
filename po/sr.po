@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Seahorse\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-19 15:49-0600\n"
+"POT-Creation-Date: 2005-02-03 19:44-0700\n"
 "PO-Revision-Date: 2004-10-16 10:27+0200\n"
 "Last-Translator: Данило Шеган <danilo@prevod.org>\n"
 "Language-Team: Serbian (sr) <gnom@prevod.org>\n"
@@ -121,25 +121,27 @@ msgstr "Лозинка:"
 msgid "Please enter a password to use."
 msgstr "Унесите лозинку коју желите да користите."
 
-#: agent/seahorse-agent-cache.c:47
+#: agent/seahorse-agent-cache.c:46
 msgid "Unparseable Key ID"
 msgstr "Нерашчлањив ИБ кључа"
 
-#: agent/seahorse-agent-cache.c:48
+#: agent/seahorse-agent-cache.c:47
 msgid "Unknown/Invalid Key"
 msgstr "Непознат/неисправан кључ"
 
 #: agent/seahorse-agent-cache.glade.h:1
+msgid ""
+"<b>Warning</b>: Your system is not configured to cache passwords are in "
+"secure memory."
+msgstr ""
+
+#: agent/seahorse-agent-cache.glade.h:2
 msgid "Cached GPG Passwords"
 msgstr "ГПГ лозинке из оставе"
 
-#: agent/seahorse-agent-cache.glade.h:2
+#: agent/seahorse-agent-cache.glade.h:3
 msgid "Clear GPG password cache"
 msgstr "Очисти оставу ГПГ лозинки"
-
-#: agent/seahorse-agent-cache.glade.h:3
-msgid "WARNING: Your passwords are not being cached in secure memory."
-msgstr "УПОЗОРЕЊЕ: Ваше лозинке се не држе у безбедној меморији."
 
 #: agent/seahorse-agent-cache.glade.h:4
 msgid "_Clear Cache"
@@ -170,26 +172,32 @@ msgstr "О_власти"
 msgid "Cached GPG Keys"
 msgstr "ГПГ кључеви из оставе"
 
-#: agent/seahorse-agent.c:124
+#. Warn and put in defaults
+#: agent/seahorse-agent.c:100
+#, fuzzy
+msgid "couldn't read gpg configuration, will try to create"
+msgstr "не могу да изменим ГПГ подешавања: %s"
+
+#: agent/seahorse-agent.c:122
 #, c-format
 msgid "couldn't modify gpg configuration: %s"
 msgstr "не могу да изменим ГПГ подешавања: %s"
 
-#: agent/seahorse-agent.c:144
+#: agent/seahorse-agent.c:142
 msgid "couldn't fork process"
 msgstr "не могу да разделим процес"
 
-#: agent/seahorse-agent.c:150
+#: agent/seahorse-agent.c:148
 msgid "couldn't create new process group"
 msgstr "не могу да направим нову групу процеса"
 
 # bug: "usage: %s\n"
-#: agent/seahorse-agent.c:180
+#: agent/seahorse-agent.c:178
 #, c-format
 msgid "usage: seahorse-agent [-cdv]\n"
 msgstr "употреба: seahorse-agent [-cdv]\n"
 
-#: agent/seahorse-agent.c:269
+#: agent/seahorse-agent.c:276
 msgid "couldn't drop privileges properly"
 msgstr "не могу успешно да одбацим овлашћења"
 
@@ -246,38 +254,42 @@ msgid "Verify operation on PGP signed files"
 msgstr "Операције провере датотека потписаних помоћу ПГП-а"
 
 #: data/seahorse.schemas.in.h:1
+msgid "A list of key server URIs to search for remote PGP keys."
+msgstr ""
+
+#: data/seahorse.schemas.in.h:2
 msgid "Controls the visibility of the expires column for the key manager."
 msgstr "Контролише видљивост колоне за рок у управљачу кључевима."
 
-#: data/seahorse.schemas.in.h:2
+#: data/seahorse.schemas.in.h:3
 msgid "Controls the visibility of the length column for the key manager."
 msgstr "Контролише видљивост колоне за дужину у управљачу кључевима."
 
-#: data/seahorse.schemas.in.h:3
+#: data/seahorse.schemas.in.h:4
 msgid "Controls the visibility of the trust column for the key manager."
 msgstr "Контролише видљивост колоне за поверење у управљачу кључевима."
 
-#: data/seahorse.schemas.in.h:4
+#: data/seahorse.schemas.in.h:5
 msgid "Controls the visibility of the type column for the key manager."
 msgstr "Контролише видљивост колоне за тип у управљачу кључевима."
 
-#: data/seahorse.schemas.in.h:5
+#: data/seahorse.schemas.in.h:6
 msgid "Controls the visibility of the validity column for the key manager."
 msgstr "Контролише видљивост колоне за исправност у управљачу кључевима."
 
-#: data/seahorse.schemas.in.h:6
+#: data/seahorse.schemas.in.h:7
 msgid "Expire passwords in the cache"
 msgstr "Избаци лозинке из оставе"
 
-#: data/seahorse.schemas.in.h:7
+#: data/seahorse.schemas.in.h:8
 msgid "How often to show progress during listing"
 msgstr "Колико често приказати напредак при исписивању"
 
-#: data/seahorse.schemas.in.h:8
+#: data/seahorse.schemas.in.h:9
 msgid "ID of the default key"
 msgstr "ИБ подразумеваног кључа"
 
-#: data/seahorse.schemas.in.h:9
+#: data/seahorse.schemas.in.h:10
 msgid ""
 "If set to true, then all output from pgp operations will be ASCII text. "
 "Files will have a '.asc' extension."
@@ -285,7 +297,7 @@ msgstr ""
 "Уколико је постављено, онда сав излаз ПГП операција ће бити обичан текст. "
 "Датотеке ће имати „.asc“ на крају имена."
 
-#: data/seahorse.schemas.in.h:10
+#: data/seahorse.schemas.in.h:11
 msgid ""
 "If set to true, then output from certain pgp operations will be in canonical "
 "text mode. Text mode is generally only needed for RFC 2015 signatures. RFC "
@@ -295,7 +307,7 @@ msgstr ""
 "текстуалном облику. Текстуални облик је неопходан једино за RFC 2015 "
 "потписе. RFC 3156 уклања потребу за текстуалним обликом."
 
-#: data/seahorse.schemas.in.h:11
+#: data/seahorse.schemas.in.h:12
 msgid ""
 "If set to true, then the default key will always be added to an encryption "
 "recipients list."
@@ -303,38 +315,51 @@ msgstr ""
 "Уколико је постављено, онда ће се подразумевани кључ увек додавати у списак "
 "прималаца са шифровањем."
 
-#: data/seahorse.schemas.in.h:12
+#: data/seahorse.schemas.in.h:13
+msgid "Last keyserver search pattern"
+msgstr ""
+
+#: data/seahorse.schemas.in.h:14
+msgid "Last keyserver used"
+msgstr ""
+
+#: data/seahorse.schemas.in.h:15
+#, fuzzy
+msgid "PGP Key servers"
+msgstr "ПГП поставке"
+
+#: data/seahorse.schemas.in.h:16
 msgid "Prompt before using GPG passwords in cache"
 msgstr "Питај пре употребе ГПГ лозинки из оставе"
 
-#: data/seahorse.schemas.in.h:13
+#: data/seahorse.schemas.in.h:17
 msgid ""
 "Set to 'true' to have seahorse-agent prompt before giving out passwords it "
 "has cached."
 msgstr "Укључите ако желите да будете питани пре употребе лозинки из оставе"
 
-#: data/seahorse.schemas.in.h:14
+#: data/seahorse.schemas.in.h:18
 msgid "Show expires column in key manager"
 msgstr "Прикажи колону за рок у управљачу кључевима"
 
-#: data/seahorse.schemas.in.h:15
+#: data/seahorse.schemas.in.h:19
 msgid "Show length column in key manager"
 msgstr "Прикажи колону за дужину у управљачу кључевима"
 
-#: data/seahorse.schemas.in.h:16
+#: data/seahorse.schemas.in.h:20
 msgid "Show trust column in key manager"
 msgstr "Прикажи колону за поверење у управљачу кључевима"
 
-#: data/seahorse.schemas.in.h:17
+#: data/seahorse.schemas.in.h:21
 msgid "Show type column in key manager"
 msgstr "Прикажи колону за тип у управљачу кључевима"
 
-#: data/seahorse.schemas.in.h:18
+#: data/seahorse.schemas.in.h:22
 msgid "Show validity column in key manager"
 msgstr "Прикажи колону за исправност у управљачу кључевима"
 
 # bug: s/, Put/. Put/ (comma should be dot)
-#: data/seahorse.schemas.in.h:19
+#: data/seahorse.schemas.in.h:23
 msgid ""
 "Specify the column to sort the recipients window by. Columns are: 'name', "
 "'id' and 'validity', Put a '-' in front of the column name to sort in "
@@ -344,7 +369,7 @@ msgstr ""
 "„id“ и „validity“. Ставите „-“ испред имена колоне да ређате у опадајућем "
 "поретку."
 
-#: data/seahorse.schemas.in.h:20
+#: data/seahorse.schemas.in.h:24
 msgid ""
 "Specify the column to sort the seahorse key manager main window by. Columns "
 "are: 'name', 'id', 'validity', 'expires', 'trust', 'length' and 'type'. Put "
@@ -354,19 +379,29 @@ msgstr ""
 "„name“, „id“, „validity“, „expires“, „trust“, „length“ и „type“. Ставите „-“ "
 "испред имена колоне да ређате у опадајућем поретку."
 
-#: data/seahorse.schemas.in.h:21
+#: data/seahorse.schemas.in.h:25
 msgid "The column to sort the recipients by"
 msgstr "По којој колони ређати примаоце"
 
-#: data/seahorse.schemas.in.h:22
+#: data/seahorse.schemas.in.h:26
 msgid "The column to sort the seahorse keys by"
 msgstr "По којој колони ређати кључеве морског коња"
 
-#: data/seahorse.schemas.in.h:23
+#: data/seahorse.schemas.in.h:27
+msgid ""
+"The last keyserver a search was performed against. Or empty for all "
+"keyservers."
+msgstr ""
+
+#: data/seahorse.schemas.in.h:28
+msgid "The last search pattern searched for against a keyserver."
+msgstr ""
+
+#: data/seahorse.schemas.in.h:29
 msgid "The time (in minutes) to cache GPG passwords"
 msgstr "Време (минута) држања ГПГ лозинки у остави"
 
-#: data/seahorse.schemas.in.h:24
+#: data/seahorse.schemas.in.h:30
 msgid ""
 "This is the amount of time, specified in minutes, to cache GPG passwords in "
 "seahorse-agent."
@@ -374,12 +409,12 @@ msgstr ""
 "Ово је време, дато у минутима, колико ће ГПГ лозинке бити држане у остави "
 "агента морског коња."
 
-#: data/seahorse.schemas.in.h:25
+#: data/seahorse.schemas.in.h:31
 msgid ""
 "This option enables the GPG password cache in the seahorse-agent daemon."
 msgstr "Ова опција укључује оставу ГПГ лозинки."
 
-#: data/seahorse.schemas.in.h:26
+#: data/seahorse.schemas.in.h:32
 msgid ""
 "This specifies how often the progress signal is emitted during a listing "
 "operation. By default, the signal is emitted for every 20 keys processed. A "
@@ -389,7 +424,7 @@ msgstr ""
 "исписивања. Уобичајено, сигнал се емитује на сваких 20 обрађених кључева. "
 "Вредност -1 ће онемогућити емитовање сигнала."
 
-#: data/seahorse.schemas.in.h:27
+#: data/seahorse.schemas.in.h:33
 msgid ""
 "This specifies the default key to use for certain operations, mainly signing."
 msgstr ""
@@ -397,85 +432,67 @@ msgstr ""
 "првенствено за потписивање."
 
 # bug: s/peried/period/
-#: data/seahorse.schemas.in.h:28
+#: data/seahorse.schemas.in.h:34
 msgid ""
 "When set seahorse-agent expires GPG passwords in it's cache after a peried "
 "of time."
 msgstr ""
 "Ако је постављено, ГПГ лозинке се избацују из оставе након одређеног времена."
 
-#: data/seahorse.schemas.in.h:29
+#: data/seahorse.schemas.in.h:35
 msgid "Whether the GPG password cache is enabled"
 msgstr "Да ли је укључена остава ГПГ лозинки"
 
-#: data/seahorse.schemas.in.h:30
+#: data/seahorse.schemas.in.h:36
 msgid "Whether to always encrypt to default key"
 msgstr "Да ли да увек шифрује према уобичајеном кључу"
 
-#: data/seahorse.schemas.in.h:31
+#: data/seahorse.schemas.in.h:37
 msgid "Whether to use ASCII Armor"
 msgstr "Да ли да користи ASCII оклоп"
 
-#: data/seahorse.schemas.in.h:32
+#: data/seahorse.schemas.in.h:38
 msgid "Whether to use canonical text mode"
 msgstr "Да ли да користи канонски текст режим"
 
-#: libseahorse/seahorse-context.c:429
-#, c-format
-msgid "Loading key %d"
-msgstr "Учитава кључ %d"
-
-#: libseahorse/seahorse-context.c:454
-#, c-format
-msgid "Loaded %d key pair"
-msgid_plural "Loaded %d key pairs"
-msgstr[0] "Учитах %d пар кључева"
-msgstr[1] "Учитах %d пара кључева"
-msgstr[2] "Учитах %d парова кључева"
-
-#: libseahorse/seahorse-context.c:475
-#, c-format
-msgid "Loaded %d key"
-msgid_plural "Loaded %d keys"
-msgstr[0] "Учитах %d кључ"
-msgstr[1] "Учитах %d кључа"
-msgstr[2] "Учитах %d кључева"
-
-#: libseahorse/seahorse-context.c:702
-#, c-format
-msgid "Loaded %d new key"
-msgid_plural "Loaded %d new keys"
-msgstr[0] "Учитах %d нови кључ"
-msgstr[1] "Учитах %d нова кључа"
-msgstr[2] "Учитах %d нових кључева"
-
 #. Make the column
-#: libseahorse/seahorse-key-store.c:569 src/seahorse-key-properties.c:374
-#: src/seahorse-key-properties.c:468
+#: libseahorse/seahorse-key-store.c:750 src/seahorse-key-properties.c:380
+#: src/seahorse-key-properties.c:474
 msgid "Name"
 msgstr "Име"
 
 #. Make the column
-#: libseahorse/seahorse-key-store.c:572 src/seahorse-key-properties.c:371
+#: libseahorse/seahorse-key-store.c:753 src/seahorse-key-properties.c:377
 msgid "Key ID"
 msgstr "ID кључа"
 
-#: libseahorse/seahorse-key-store.c:635
+#: libseahorse/seahorse-ldap-source.c:651
 #, c-format
-msgid "Listed %d keys"
-msgstr "Исписао је %d кључева"
+msgid "Searching for keys containing '%s'..."
+msgstr ""
 
-#: libseahorse/seahorse-passphrase.c:57
+#. TODO: We can update a percentage when there's more than one key
+#: libseahorse/seahorse-ldap-source.c:825
+msgid "Retrieving remote keys..."
+msgstr ""
+
+#. TODO: We can update a percentage when there's more than one key
+#: libseahorse/seahorse-ldap-source.c:950
+#, fuzzy
+msgid "Sending keys to key server..."
+msgstr "Извези кључеве на сервер са кључевима"
+
+#: libseahorse/seahorse-passphrase.c:61
 #, c-format
 msgid "Bad passphrase! Try again for '%s'"
 msgstr "Лоша лозинка! Покушајте поново за „%s“"
 
-#: libseahorse/seahorse-passphrase.c:59
+#: libseahorse/seahorse-passphrase.c:63
 #, c-format
 msgid "Enter new passphrase for '%s'"
 msgstr "Унесите нову лозинку за „%s“"
 
-#: libseahorse/seahorse-passphrase.c:61
+#: libseahorse/seahorse-passphrase.c:65
 #, c-format
 msgid "Enter passphrase for '%s'"
 msgstr "Унесите лозинку за „%s“"
@@ -484,8 +501,8 @@ msgstr "Унесите лозинку за „%s“"
 #: libseahorse/seahorse-recipients.glade.h:1 src/seahorse-add-uid.glade.h:1
 #: src/seahorse-change-passphrase.glade.h:1
 #: src/seahorse-generate-adv.glade.h:1 src/seahorse-generate-druid.glade.h:1
-#: src/seahorse-key-manager.glade.h:1 src/seahorse-multi-encrypt.glade.h:1
-#: src/seahorse-revoke.glade.h:1
+#: src/seahorse-keyserver-search.glade.h:1
+#: src/seahorse-multi-encrypt.glade.h:1 src/seahorse-revoke.glade.h:1
 msgid "*"
 msgstr "*"
 
@@ -497,26 +514,183 @@ msgstr "Унесите лозинку"
 msgid "Passphrase for key"
 msgstr "Лозинка за кључ"
 
-#: libseahorse/seahorse-recipients-store.c:147
-#: src/seahorse-key-manager-store.c:312
+#: libseahorse/seahorse-prefs-cache.c:352
+msgid "Couldn't open the Session Properties"
+msgstr "Не могу да отворим особине сесије"
+
+#: libseahorse/seahorse-prefs-cache.c:365
+msgid "Couldn't start the 'seahorse-agent' program"
+msgstr "Не могу да покренем програм „seahorse-agent“"
+
+#: libseahorse/seahorse-prefs-cache.c:367
+msgid "The 'seahorse-agent' program exited unsucessfully."
+msgstr "Програм „seahorse-agent“ је неуспешно завршио."
+
+#: libseahorse/seahorse-prefs-cache.c:415
+msgid "Another password caching agent is running. Disabling cache preferences."
+msgstr ""
+
+#: libseahorse/seahorse-prefs.c:36
+#, fuzzy
+msgid "[Add a key server here]"
+msgstr "Ако кључ никад не истиче"
+
+#: libseahorse/seahorse-prefs.c:190
+msgid "URL"
+msgstr ""
+
+#: libseahorse/seahorse-prefs.c:315
+msgid "_Ascii Armor"
+msgstr "_Ascii оклоп"
+
+#: libseahorse/seahorse-prefs.c:317
+msgid "_Text Mode"
+msgstr "_Текст режим"
+
+#: libseahorse/seahorse-prefs.c:319
+msgid "_Encrypt to Self"
+msgstr "_Шифруј за себе"
+
+#: libseahorse/seahorse-prefs.glade.h:1
+msgid " minutes"
+msgstr " минута"
+
+#: libseahorse/seahorse-prefs.glade.h:2
+msgid ""
+"<b>Note:</b> The 'seahorse-agent' program was started. This program is "
+"necessary in order for caching of passwords. "
+msgstr ""
+"<b>Пажња:</b> Покренут је програм „seahorse-agent“. Овај програм је "
+"неопходан за држање лозинки."
+
+#: libseahorse/seahorse-prefs.glade.h:3
+msgid ""
+"<b>Warning:</b> The 'seahorse-agent' program is not running. This program is "
+"necessary in order for caching of passwords. "
+msgstr ""
+"<b>Упозорење:</b> Програм „seahorse-agent“ није покренут. Овај програм је "
+"неопходан за држање лозинки."
+
+#: libseahorse/seahorse-prefs.glade.h:4
+msgid "Cache _GPG passwords in memory"
+msgstr "Држи _ГПГ лозинке у меморији"
+
+#: libseahorse/seahorse-prefs.glade.h:5
+#, fuzzy
+msgid "Encryption Settings"
+msgstr "Шифруј и потпиши..."
+
+#: libseahorse/seahorse-prefs.glade.h:6
+#, fuzzy
+msgid "Key Servers"
+msgstr "Кључ никад не истиче"
+
+#: libseahorse/seahorse-prefs.glade.h:7
+#, fuzzy
+msgid "Key Servers:"
+msgstr "Кључ никад не истиче"
+
+#: libseahorse/seahorse-prefs.glade.h:8
+#: plugins/nautilus/seahorse-pgp-preferences.c:48
+#: plugins/nautilus/seahorse-pgp-preferences.desktop.in.h:2
+msgid "PGP Preferences"
+msgstr "ПГП поставке"
+
+#: libseahorse/seahorse-prefs.glade.h:9
+msgid "Password Cache"
+msgstr "Остава лозинки"
+
+#: libseahorse/seahorse-prefs.glade.h:10
+msgid "Session Properties"
+msgstr "Особине сесије"
+
+#: libseahorse/seahorse-prefs.glade.h:11
+msgid "Start seahorse-agent"
+msgstr "Покрени „seahorse-agent“"
+
+#: libseahorse/seahorse-prefs.glade.h:12
+msgid "You can add it to your Startup Programs in: "
+msgstr "Можете га додати међу ваше програме при покретању у:"
+
+#: libseahorse/seahorse-prefs.glade.h:13
+msgid "_Ask me before using a cached password"
+msgstr "_Питај ме пре употребе лозинке из оставе"
+
+#: libseahorse/seahorse-prefs.glade.h:14
+msgid "_Default Key:"
+msgstr "_Подразумевани кључ:"
+
+#: libseahorse/seahorse-prefs.glade.h:15
+msgid "_Expire passwords from memory after "
+msgstr "Из_баци лозинке из меморије након "
+
+#: libseahorse/seahorse-prefs.glade.h:16
+msgid "_Use default key to sign"
+msgstr ""
+
+#. TODO: We can use the GPGME progress to make this more accurate
+#: libseahorse/seahorse-pgp-source.c:524
+#, c-format
+msgid "Loaded %d key"
+msgid_plural "Loaded %d keys"
+msgstr[0] "Учитах %d кључ"
+msgstr[1] "Учитах %d кључа"
+msgstr[2] "Учитах %d кључева"
+
+#: libseahorse/seahorse-pgp-source.c:588
+#, fuzzy
+msgid "Loading Keys..."
+msgstr "Учитава кључ %d"
+
+#: libseahorse/seahorse-recipients-store.c:153
+#: src/seahorse-key-manager-store.c:285
 msgid "Validity"
 msgstr "Исправност"
 
-#: libseahorse/seahorse-recipients.c:81
-#, c-format
-msgid "Selected %d keys"
-msgid_plural "Selected %d keys"
+#: libseahorse/seahorse-recipients.c:54
+#, fuzzy, c-format
+msgid "Selected %d recipient"
+msgid_plural "Selected %d recipients"
 msgstr[0] "Изабран је %d кључ"
 msgstr[1] "Изабрана су %d кључа"
 msgstr[2] "Изабрано је %d кључева"
 
-#: libseahorse/seahorse-recipients.c:86 libseahorse/seahorse-recipients.c:90
-#, c-format
-msgid "Selected %d not fully valid key"
-msgid_plural "Selected %d keys (%d not fully valid)"
+#: libseahorse/seahorse-recipients.c:58
+#, fuzzy, c-format
+msgid "Selected %d not fully valid recipient"
+msgid_plural "Selected %d not fully valid recipients"
 msgstr[0] "Изабрано је %d кључева, %d није потпуно исправан"
 msgstr[1] "Изабрано је %d кључева, %d нису потпуно исправна"
 msgstr[2] "Изабрано је %d кључева, %d није потпуно исправно"
+
+#. TRANSLATOR: This string will become
+#. * "Selected %d recipients (%d not fully valid)"
+#: libseahorse/seahorse-recipients.c:66
+#, fuzzy, c-format
+msgid "Selected %d recipient "
+msgid_plural "Selected %d recipients "
+msgstr[0] "Изабран је %d кључ"
+msgstr[1] "Изабрана су %d кључа"
+msgstr[2] "Изабрано је %d кључева"
+
+#. TRANSLATOR: This string will become
+#. * "Selected %d recipients (%d not fully valid)"
+#: libseahorse/seahorse-recipients.c:71
+#, fuzzy, c-format
+msgid "(%d not fully valid)"
+msgid_plural "(%d not fully valid)"
+msgstr[0] "Изабрано је %d кључева, %d није потпуно исправан"
+msgstr[1] "Изабрано је %d кључева, %d нису потпуно исправна"
+msgstr[2] "Изабрано је %d кључева, %d није потпуно исправно"
+
+#. TRANSLATOR: "%s%s" are "Selected %d recipients (%d not fully valid)"
+#. * Swap order with "%2$s%1$s" if needed
+#. TRANSLATOR: "%s%s" are "You have selected %d files and %d folders"
+#. * Swap order with "%2$s%1$s" if needed
+#: libseahorse/seahorse-recipients.c:76 src/seahorse-process-multiple.c:58
+#, c-format
+msgid "%s%s"
+msgstr ""
 
 #: libseahorse/seahorse-recipients.glade.h:2
 msgid ""
@@ -533,49 +707,50 @@ msgid "Choose Keys"
 msgstr "Одабери кључеве"
 
 #: libseahorse/seahorse-recipients.glade.h:6
-msgid "Search for: "
+#, fuzzy
+msgid "Search _for: "
 msgstr "Тражи за:"
 
-#: libseahorse/seahorse-signatures.c:36
+#: libseahorse/seahorse-signatures.c:49
 msgid "[Unknown Key]"
 msgstr "[непознати кључ]"
 
-#: libseahorse/seahorse-signatures.c:59
+#: libseahorse/seahorse-signatures.c:66
 #, c-format
 msgid "%s: Good signature from (<b>expired</b>) '%s' on %s"
 msgstr "%s: добар потпис од (<b>истеклог</b>) „%s“ на %s"
 
-#: libseahorse/seahorse-signatures.c:63
+#: libseahorse/seahorse-signatures.c:70
 #, c-format
 msgid "%s: <b>Expired</b> signature from '%s' on %s"
 msgstr "%s: <b>Истекли</b> потпис од „%s“ на %s"
 
-#: libseahorse/seahorse-signatures.c:67
+#: libseahorse/seahorse-signatures.c:74
 #, c-format
 msgid "%s: Good signature from (<b>revoked</b>) '%s' on %s"
 msgstr "%s: добар потпис од (<b>повученог</b>) „%s“ на %s"
 
-#: libseahorse/seahorse-signatures.c:71
+#: libseahorse/seahorse-signatures.c:78
 #, c-format
 msgid "%s: Good signature from '%s' on %s"
 msgstr "%s: добар потпис од „%s“ на %s"
 
-#: libseahorse/seahorse-signatures.c:75
+#: libseahorse/seahorse-signatures.c:82
 #, c-format
 msgid "%s: Signing key not in key ring"
 msgstr "%s: Кључ за потпис није у кругу кључева"
 
-#: libseahorse/seahorse-signatures.c:78
+#: libseahorse/seahorse-signatures.c:85
 #, c-format
 msgid "%s: <b>Bad</b> signature"
 msgstr "%s: <b>Лош</b> потпис"
 
-#: libseahorse/seahorse-signatures.c:81
+#: libseahorse/seahorse-signatures.c:88
 #, c-format
 msgid "%s: Not a signature"
 msgstr "%s: Није потпис"
 
-#: libseahorse/seahorse-signatures.c:84
+#: libseahorse/seahorse-signatures.c:91
 #, c-format
 msgid "%s: Verification error"
 msgstr "%s: Грешка у провери"
@@ -588,11 +763,48 @@ msgstr "<big><b>Нађени потписи су пописани ниже:  </b
 msgid "Signature Verification"
 msgstr "Провера потписа"
 
-#: libseahorse/seahorse-util.c:125
+#: libseahorse/seahorse-util.c:127
 msgid "%Y-%m-%d"
 msgstr "%d.%m.%Y"
 
-#: libseahorse/seahorse-validity.c:31 src/seahorse-key-manager-store.c:147
+#: libseahorse/seahorse-util.c:701
+msgid "Couldn't run file-roller"
+msgstr "Не могу да покренем „file-roller“"
+
+#: libseahorse/seahorse-util.c:706
+msgid "The file-roller process did not complete successfully"
+msgstr "Процес „file-roller“ није успешно завршен"
+
+#: libseahorse/seahorse-util.c:746
+msgid "All PGP key files"
+msgstr "Све датотеке ПГП кључева"
+
+#: libseahorse/seahorse-util.c:752 libseahorse/seahorse-util.c:792
+msgid "All files"
+msgstr "Све датотеке"
+
+#: libseahorse/seahorse-util.c:785
+#, fuzzy
+msgid "Archive files"
+msgstr "Све датотеке"
+
+#: libseahorse/seahorse-util.c:814
+#, fuzzy
+msgid ""
+"<b>A file already exists with this name.</b>\n"
+"\n"
+"Do you want to replace it with a new file?"
+msgstr ""
+"Датотека овог имена већ постоји.\n"
+"\n"
+"Желите ли да је преснимите?"
+
+#: libseahorse/seahorse-util.c:817
+#, fuzzy
+msgid "_Replace"
+msgstr "Пресними"
+
+#: libseahorse/seahorse-validity.c:31 src/seahorse-key-manager-store.c:148
 #: src/seahorse-key-properties.glade.h:20
 msgid "Unknown"
 msgstr "Непознато"
@@ -617,72 +829,77 @@ msgstr "Највеће"
 msgid "Disabled"
 msgstr "Онемогућено"
 
-#: libseahorse/seahorse-validity.c:43 src/seahorse-key-properties.c:198
+#: libseahorse/seahorse-validity.c:43 src/seahorse-key-properties.c:204
 msgid "Revoked"
 msgstr "Повучен"
 
-#: plugins/gedit/seahorse-gedit.c:44
+#: libseahorse/seahorse-widget.c:210
+#, c-format
+msgid "Could not display help: %s"
+msgstr ""
+
+#: plugins/gedit/seahorse-gedit.c:45
 msgid "_Encrypt..."
 msgstr "_Шифруј..."
 
-#: plugins/gedit/seahorse-gedit.c:47
+#: plugins/gedit/seahorse-gedit.c:48
 msgid "PGP Encrypt the selected text"
 msgstr "Шифруј изабрани текст ПГП-ом"
 
-#: plugins/gedit/seahorse-gedit.c:49
+#: plugins/gedit/seahorse-gedit.c:50
 msgid "Decr_ypt/Verify"
 msgstr "_Дешифруј/провери"
 
-#: plugins/gedit/seahorse-gedit.c:52
+#: plugins/gedit/seahorse-gedit.c:53
 msgid "Decrypt and/or Verify PGP text"
 msgstr "Дешифруј и/или провери ПГП текст"
 
-#: plugins/gedit/seahorse-gedit.c:54
+#: plugins/gedit/seahorse-gedit.c:55
 msgid "Sig_n..."
 msgstr "По_тпиши..."
 
-#: plugins/gedit/seahorse-gedit.c:57
+#: plugins/gedit/seahorse-gedit.c:58
 msgid "PGP Sign the selected text"
 msgstr "Потпиши изабрани текст ПГП-ом"
 
-#: plugins/gedit/seahorse-gedit.c:107
+#: plugins/gedit/seahorse-gedit.c:220
 msgid "Couldn't encrypt text"
 msgstr "Не могу да шифрујем текст"
 
-#: plugins/gedit/seahorse-gedit.c:114
+#: plugins/gedit/seahorse-gedit.c:227
 msgid "Encrypted text"
 msgstr "Шифровани текст"
 
-#: plugins/gedit/seahorse-gedit.c:128
+#: plugins/gedit/seahorse-gedit.c:245
 msgid "Couldn't import keys"
 msgstr "Не могу да увезем кључеве"
 
-#: plugins/gedit/seahorse-gedit.c:133
+#: plugins/gedit/seahorse-gedit.c:248
 msgid "Keys found but not imported"
 msgstr "Кључеви су нађени али нису увежени"
 
-#: plugins/gedit/seahorse-gedit.c:150 plugins/gedit/seahorse-gedit.c:167
+#: plugins/gedit/seahorse-gedit.c:269 plugins/gedit/seahorse-gedit.c:290
 msgid "Couldn't decrypt text"
 msgstr "Не могу да дешифрујем текст"
 
-#: plugins/gedit/seahorse-gedit.c:231
+#: plugins/gedit/seahorse-gedit.c:353
 msgid "No PGP encrypted or signed text is selected."
 msgstr "Није изабран ПГП шифровани или потписани текст."
 
-#: plugins/gedit/seahorse-gedit.c:262
+#: plugins/gedit/seahorse-gedit.c:384
 msgid "Decrypted text"
 msgstr "Дешифровани текст"
 
-#: plugins/gedit/seahorse-gedit.c:269
+#: plugins/gedit/seahorse-gedit.c:391
 msgid "Verified text"
 msgstr "Проверени текст"
 
-#: plugins/gedit/seahorse-gedit.c:300
+#: plugins/gedit/seahorse-gedit.c:422
 #, c-format
 msgid "Block %d"
 msgstr "Блок %d"
 
-#: plugins/gedit/seahorse-gedit.c:315
+#: plugins/gedit/seahorse-gedit.c:437
 #, c-format
 msgid "Imported %d key"
 msgid_plural "Imported %d keys"
@@ -690,13 +907,21 @@ msgstr[0] "Увезох %d кључ"
 msgstr[1] "Увезох %d кључа"
 msgstr[2] "Увезох %d кључева"
 
-#: plugins/gedit/seahorse-gedit.c:359
+#: plugins/gedit/seahorse-gedit.c:475 plugins/gedit/seahorse-gedit.c:486
 msgid "Couldn't sign text"
 msgstr "Не могу да потпишем текст"
 
-#: plugins/gedit/seahorse-gedit.c:366
+#: plugins/gedit/seahorse-gedit.c:493
 msgid "Signed text"
 msgstr "Потписани текст"
+
+#: plugins/gedit/seahorse-gedit.schemas.in.h:1
+msgid "Enable the seahorse PGP encryption plugin for gedit."
+msgstr ""
+
+#: plugins/gedit/seahorse-gedit.schemas.in.h:2
+msgid "Enable the seahorse gedit plugin"
+msgstr ""
 
 #: plugins/gedit/seahorse-pgp.gedit-plugin.desktop.in.h:1
 msgid "PGP Encryption"
@@ -706,176 +931,104 @@ msgstr "ПГП шифровање"
 msgid "The PGP encrypt plugin performs encryption operations on text."
 msgstr "Додатак за ПГП шифровања обавља шифровање текста."
 
-#: plugins/nautilus/seahorse-pgp-preferences-cache.c:342
-msgid "Couldn't open the Session Properties"
-msgstr "Не могу да отворим особине сесије"
-
-#: plugins/nautilus/seahorse-pgp-preferences-cache.c:355
-msgid "Couldn't start the 'seahorse-agent' program"
-msgstr "Не могу да покренем програм „seahorse-agent“"
-
-#: plugins/nautilus/seahorse-pgp-preferences-cache.c:357
-msgid "The 'seahorse-agent' program exited unsucessfully."
-msgstr "Програм „seahorse-agent“ је неуспешно завршио."
-
-#: plugins/nautilus/seahorse-pgp-preferences.c:33
-#: plugins/nautilus/seahorse-pgp-preferences.desktop.in.h:2
-#: plugins/nautilus/seahorse-pgp-preferences.glade.h:6
-msgid "PGP Preferences"
-msgstr "ПГП поставке"
-
-#: plugins/nautilus/seahorse-pgp-preferences.c:49
-#: src/seahorse-preferences.c:52
-msgid "_Ascii Armor"
-msgstr "_Ascii оклоп"
-
-#: plugins/nautilus/seahorse-pgp-preferences.c:51
-msgid "_Text Mode"
-msgstr "_Текст режим"
-
-#: plugins/nautilus/seahorse-pgp-preferences.c:53
-msgid "_Encrypt to Self"
-msgstr "_Шифруј за себе"
-
-#: plugins/nautilus/seahorse-pgp-preferences.c:58
-msgid "_Default Key:"
-msgstr "_Подразумевани кључ:"
-
 #: plugins/nautilus/seahorse-pgp-preferences.desktop.in.h:1
 msgid "Configure PGP"
 msgstr "Подеси ПГП"
 
-#: plugins/nautilus/seahorse-pgp-preferences.glade.h:1
-msgid " minutes"
-msgstr " минута"
-
-#: plugins/nautilus/seahorse-pgp-preferences.glade.h:2
-msgid ""
-"<b>Note:</b> The 'seahorse-agent' program was started. This program is "
-"necessary in order for caching of passwords. "
-msgstr ""
-"<b>Пажња:</b> Покренут је програм „seahorse-agent“. Овај програм је "
-"неопходан за држање лозинки."
-
-#: plugins/nautilus/seahorse-pgp-preferences.glade.h:3
-msgid ""
-"<b>Warning:</b> The 'seahorse-agent' program is not running. This program is "
-"necessary in order for caching of passwords. "
-msgstr ""
-"<b>Упозорење:</b> Програм „seahorse-agent“ није покренут. Овај програм је "
-"неопходан за држање лозинки."
-
-#: plugins/nautilus/seahorse-pgp-preferences.glade.h:4
-msgid "Cache _GPG passwords in memory"
-msgstr "Држи _ГПГ лозинке у меморији"
-
-#: plugins/nautilus/seahorse-pgp-preferences.glade.h:5
-msgid "Nautilus Settings"
-msgstr "Подешавања Наутилуса"
-
-#: plugins/nautilus/seahorse-pgp-preferences.glade.h:7
-msgid "Password Cache"
-msgstr "Остава лозинки"
-
-#: plugins/nautilus/seahorse-pgp-preferences.glade.h:8
-msgid "Session Properties"
-msgstr "Особине сесије"
-
-#: plugins/nautilus/seahorse-pgp-preferences.glade.h:9
-msgid "Start seahorse-agent"
-msgstr "Покрени „seahorse-agent“"
-
-#: plugins/nautilus/seahorse-pgp-preferences.glade.h:10
-msgid "You can add it to your Startup Programs in: "
-msgstr "Можете га додати међу ваше програме при покретању у:"
-
-#: plugins/nautilus/seahorse-pgp-preferences.glade.h:11
-msgid "_Ask me before using a cached password"
-msgstr "_Питај ме пре употребе лозинке из оставе"
-
-#: plugins/nautilus/seahorse-pgp-preferences.glade.h:12
-msgid "_Expire passwords from memory after "
-msgstr "Из_баци лозинке из меморије након "
-
-#: src/main.c:47
+#: src/main.c:48
 msgid "Import keys from the file"
 msgstr "Увези кључеве из датотеке"
 
-#: src/main.c:50
+#: src/main.c:51
 msgid "Encrypt file"
 msgstr "Шифруј датотеку"
 
-#: src/main.c:53
+#: src/main.c:54
 msgid "Sign file with default key"
 msgstr "Потпиши датотеку помоћу уобичајеног кључа"
 
-#: src/main.c:56
+#: src/main.c:57
 msgid "Encrypt and sign file with default key"
 msgstr "Шифруј и потпиши датотеку помоћу уобичајеног кључа"
 
-#: src/main.c:59
+#: src/main.c:60
 msgid "Decrypt encrypted file"
 msgstr "Дешифруј шифровану датотеку"
 
-#: src/main.c:62
+#: src/main.c:63
 msgid "Verify signature file"
 msgstr "Провери датотеку потписа"
 
-#: src/main.c:65
+#: src/main.c:66
 #, fuzzy
 msgid "Read list of URIs on standard in"
 msgstr "Прочитај списак адреса на стандардном улазу"
 
-#: src/main.c:141 src/seahorse-key-manager.c:127
+#: src/main.c:146 src/seahorse-key-manager.c:112
 #, c-format
 msgid "Couldn't import keys from \"%s\""
 msgstr "Не могу да увезем кључеве из „%s“"
 
 # bug: plural-forms
-#: src/main.c:149
+#: src/main.c:154
 msgid "Imported key"
 msgstr "Увезох кључ"
 
 # bug: plural-forms
-#: src/main.c:150
+#: src/main.c:155
 #, c-format
 msgid "Imported %d keys"
 msgstr "Увезох %d кључева"
 
-#: src/main.c:186
+#: src/main.c:193
+#, fuzzy, c-format
+msgid "Choose Encrypted File Name for '%s'"
+msgstr "Изаберите изворну датотеку за „%s“"
+
+#: src/main.c:205
 #, c-format
 msgid "Couldn't encrypt \"%s\""
 msgstr "Не могу да шифрујем „%s“"
 
-#: src/main.c:233
+#: src/main.c:258
+#, fuzzy, c-format
+msgid "Choose Signature File Name for '%s'"
+msgstr "Изаберите изворну датотеку за „%s“"
+
+#: src/main.c:266
 #, c-format
 msgid "Couldn't sign \"%s\""
 msgstr "Не могу да потпишем „%s“"
 
-#: src/main.c:263
+#: src/main.c:298
+#, fuzzy, c-format
+msgid "Choose Decrypted File Name for '%s'"
+msgstr "Изаберите изворну датотеку за „%s“"
+
+#: src/main.c:305
 #, c-format
 msgid "Couldn't decrypt \"%s\""
 msgstr "Не могу да дешифрујем „%s“"
 
-#: src/main.c:311
+#: src/main.c:357
 #, c-format
 msgid "Choose Original File for '%s'"
 msgstr "Изаберите изворну датотеку за „%s“"
 
-#: src/main.c:339
+#: src/main.c:385
 #, c-format
 msgid "Couldn't verify \"%s\""
 msgstr "Не могу да проверим „%s“"
 
-#: src/main.c:385 src/seahorse.desktop.in.h:1
+#: src/main.c:431 src/seahorse.desktop.in.h:1
 msgid "GPG Keys Manager"
 msgstr "Управљач ГПГ кључевима"
 
-#: src/seahorse-add-subkey.c:109
+#: src/seahorse-add-subkey.c:110
 msgid "Couldn't add subkey"
 msgstr "Не могу да додам подкључ"
 
-#: src/seahorse-add-subkey.c:125
+#: src/seahorse-add-subkey.c:126
 #, c-format
 msgid "Add subkey to %s"
 msgstr "Додај подкључ за %s"
@@ -890,7 +1043,7 @@ msgstr "ElGamal (само шифровање)"
 
 #. expires
 #: src/seahorse-add-subkey.glade.h:3 src/seahorse-generate-adv.glade.h:6
-#: src/seahorse-generate-druid.glade.h:14 src/seahorse-key-properties.c:203
+#: src/seahorse-generate-druid.glade.h:14 src/seahorse-key-properties.c:209
 msgid "Expiration Date:"
 msgstr "Датум истека:"
 
@@ -899,7 +1052,7 @@ msgid "Generate a new subkey"
 msgstr "Направи нови подкључ"
 
 #: src/seahorse-add-subkey.glade.h:5 src/seahorse-generate-adv.glade.h:10
-#: src/seahorse-key-properties.c:226
+#: src/seahorse-key-properties.c:232
 msgid "If key never expires"
 msgstr "Ако кључ никад не истиче"
 
@@ -920,7 +1073,7 @@ msgid "Length of Key"
 msgstr "Дужина кључа"
 
 #: src/seahorse-add-subkey.glade.h:10 src/seahorse-generate-adv.glade.h:17
-#: src/seahorse-key-properties.c:224
+#: src/seahorse-key-properties.c:230
 msgid "Never E_xpires"
 msgstr "Никад не ис_тиче"
 
@@ -932,11 +1085,11 @@ msgstr "RSA (само шифровање)"
 msgid "RSA (sign only)"
 msgstr "RSA (само потпис)"
 
-#: src/seahorse-add-uid.c:80
+#: src/seahorse-add-uid.c:81
 msgid "Couldn't add user id"
 msgstr "Не могу да додам ИБ корисника"
 
-#: src/seahorse-add-uid.c:103
+#: src/seahorse-add-uid.c:104
 #, c-format
 msgid "Add user ID to %s"
 msgstr "Додај ИБ корисника у %s"
@@ -996,39 +1149,39 @@ msgstr "Унесите нову лозинку"
 msgid "New _Passphrase:"
 msgstr "Нова _лозинка:"
 
-#: src/seahorse-delete.c:38
+#: src/seahorse-delete.c:39
 #, c-format
 msgid "%s is a key pair! Do you still want to delete it?"
 msgstr "%s је пар кључева! Да ли и даље желите да га обришете?"
 
-#: src/seahorse-delete.c:69
+#: src/seahorse-delete.c:70
 #, c-format
 msgid "Are you sure you want to permanently delete %s?"
 msgstr "Да ли сте сигурни да желите трајно да уклоните %s?"
 
-#: src/seahorse-delete.c:115
+#: src/seahorse-delete.c:116
 msgid "Couldn't delete key"
 msgstr "Не могу да обришем кључ"
 
-#: src/seahorse-delete.c:135
+#: src/seahorse-delete.c:134
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
 msgstr "Да ли сте сигурни да желите да трајно уклоните подкључ %d од %s?"
 
-#: src/seahorse-delete.c:157
+#: src/seahorse-delete.c:156
 msgid "Couldn't delete subkey"
 msgstr "Не могу да обришем подкључ"
 
-#: src/seahorse-delete.c:175
+#: src/seahorse-delete.c:174
 #, c-format
 msgid "Are you sure you want to permanently delete the '%s' user ID?"
 msgstr "Сигурно желите трајно да уклоните ИБ корисника „%s“?"
 
-#: src/seahorse-delete.c:198
+#: src/seahorse-delete.c:197
 msgid "Couldn't delete user id"
 msgstr "Не могу да уклоним ИБ корисника"
 
-#: src/seahorse-generate-adv.c:131 src/seahorse-generate-druid.c:156
+#: src/seahorse-generate-adv.c:141 src/seahorse-generate-druid.c:167
 msgid "Couldn't generate key"
 msgstr "Не могу да направим кључ"
 
@@ -1117,7 +1270,7 @@ msgstr "Адреса е-поште:"
 msgid "Enter Name - Must be at least five letters."
 msgstr "Унесите име — мора бити бар пет слова."
 
-#: src/seahorse-generate-druid.glade.h:13 src/seahorse-key-manager-store.c:316
+#: src/seahorse-generate-druid.glade.h:13 src/seahorse-key-manager-store.c:289
 msgid "Expiration Date"
 msgstr "Датум истека"
 
@@ -1163,8 +1316,8 @@ msgstr ""
 msgid "Medium Security"
 msgstr "Средња безбедност"
 
-#: src/seahorse-generate-druid.glade.h:22 src/seahorse-key-manager-store.c:206
-#: src/seahorse-key-properties.c:210
+#: src/seahorse-generate-druid.glade.h:22 src/seahorse-key-manager-store.c:192
+#: src/seahorse-key-properties.c:216
 msgid "Never Expires"
 msgstr "Никад не истиче"
 
@@ -1269,90 +1422,72 @@ msgstr "Изаберите начин за прављење новог кључ�
 msgid "radio_druid"
 msgstr "radio_druid"
 
-#: src/seahorse-key-manager-store.c:135
+#: src/seahorse-key-manager-store.c:136
 msgid "RSA"
 msgstr "RSA"
 
-#: src/seahorse-key-manager-store.c:137
+#: src/seahorse-key-manager-store.c:138
 msgid "RSA-E"
 msgstr "RSA-E"
 
-#: src/seahorse-key-manager-store.c:139
+#: src/seahorse-key-manager-store.c:140
 msgid "RSA-S"
 msgstr "RSA-S"
 
-#: src/seahorse-key-manager-store.c:141
+#: src/seahorse-key-manager-store.c:142
 msgid "ELG-E"
 msgstr "ELG-E"
 
-#: src/seahorse-key-manager-store.c:143
+#: src/seahorse-key-manager-store.c:144
 msgid "DSA"
 msgstr "DSA"
 
-#: src/seahorse-key-manager-store.c:145
+#: src/seahorse-key-manager-store.c:146
 msgid "ELG"
 msgstr "ELG"
 
-#: src/seahorse-key-manager-store.c:199 src/seahorse-key-properties.c:200
+#: src/seahorse-key-manager-store.c:185 src/seahorse-key-properties.c:206
 msgid "Expired"
 msgstr "Истекао"
 
-#: src/seahorse-key-manager-store.c:320
+#: src/seahorse-key-manager-store.c:293
 msgid "Trust"
 msgstr "Поверење"
 
-#: src/seahorse-key-manager-store.c:324
+#: src/seahorse-key-manager-store.c:297
 msgid "Length"
 msgstr "Дужина"
 
-#: src/seahorse-key-manager-store.c:328
+#: src/seahorse-key-manager-store.c:301
 msgid "Type"
 msgstr "Тип"
 
-#: src/seahorse-key-manager.c:84
-msgid "All PGP key files"
-msgstr "Све датотеке ПГП кључева"
-
-#: src/seahorse-key-manager.c:92
-msgid "All files"
-msgstr "Све датотеке"
-
-#: src/seahorse-key-manager.c:106
+#: src/seahorse-key-manager.c:101
 msgid "Import Key"
 msgstr "Увези кључ"
 
-#: src/seahorse-key-manager.c:144
+#: src/seahorse-key-manager.c:133
 msgid "Couldn't import keys from clipboard"
 msgstr "Не могу да увезем кључеве из списка исечака"
 
-#: src/seahorse-key-manager.c:178
+#: src/seahorse-key-manager.c:170
 msgid "Couldn't export key to clipboard"
 msgstr "Не могу да извезем кључ у списак исечака"
 
-#: src/seahorse-key-manager.c:208
+#: src/seahorse-key-manager.c:200
 msgid "Export Key"
 msgstr "Извези кључ"
 
-#: src/seahorse-key-manager.c:225
-msgid ""
-"A file already exists with this name.\n"
-"\n"
-"Do you want to overwrite it?"
-msgstr ""
-"Датотека овог имена већ постоји.\n"
-"\n"
-"Желите ли да је преснимите?"
-
-#: src/seahorse-key-manager.c:228
-msgid "Replace"
-msgstr "Пресними"
-
-#: src/seahorse-key-manager.c:260
+#: src/seahorse-key-manager.c:213 src/seahorse-keyserver-results.c:129
 #, c-format
 msgid "Couldn't export key to \"%s\""
 msgstr "Не могу да извезем кључ у „%s“"
 
-#: src/seahorse-key-manager.c:371
+#: src/seahorse-key-manager.c:230
+msgid "Backup Keyrings to Archive"
+msgstr ""
+
+#: src/seahorse-key-manager.c:399
 msgid "translator_credits"
 msgstr ""
 "Душан Живојнов <calvin@verat.net>\n"
@@ -1360,14 +1495,18 @@ msgstr ""
 "\n"
 "Prevod.org — превод на српски језик."
 
-#: src/seahorse-key-manager.c:391
+#: src/seahorse-key-manager.c:419
 msgid "seahorse"
 msgstr "морски коњ"
 
-#: src/seahorse-key-manager.c:622
+#: src/seahorse-key-manager.c:584
 #, c-format
 msgid "Couldn't import key from \"%s\""
 msgstr "Не могу да увезем кључ из „%s“"
+
+#: src/seahorse-key-manager.glade.h:1
+msgid "<big><b>First time options:</b></big>"
+msgstr ""
 
 #: src/seahorse-key-manager.glade.h:2
 msgid "Add P_hoto ID..."
@@ -1402,7 +1541,8 @@ msgid "Add the default key as a revoker"
 msgstr "Додај уобичајени кључ ради повлачења"
 
 #: src/seahorse-key-manager.glade.h:10
-msgid "Backup key pair"
+#, fuzzy
+msgid "Backup all keys"
 msgstr "Резервни пар кључева"
 
 #: src/seahorse-key-manager.glade.h:11
@@ -1438,10 +1578,12 @@ msgid "Expand all listings"
 msgstr "Разгранај сав испис"
 
 #: src/seahorse-key-manager.glade.h:19
+#: src/seahorse-keyserver-results.glade.h:2
 msgid "Export key"
 msgstr "Извези кључ"
 
 #: src/seahorse-key-manager.glade.h:20
+#: src/seahorse-keyserver-results.glade.h:3
 msgid "Export public key"
 msgstr "Извези јавни кључ"
 
@@ -1450,171 +1592,208 @@ msgid "Filter: "
 msgstr "Филтер:"
 
 #: src/seahorse-key-manager.glade.h:22
+#, fuzzy
+msgid "Generate a new key of your own: "
+msgstr "Направи нови кључ"
+
+#: src/seahorse-key-manager.glade.h:23
+#, fuzzy
+msgid "Import existing keys from a file:"
+msgstr "Увези кључеве из датотеке"
+
+#: src/seahorse-key-manager.glade.h:24
 msgid "Import keys"
 msgstr "Увези кључеве"
 
-#: src/seahorse-key-manager.glade.h:23
+#: src/seahorse-key-manager.glade.h:25
+#: src/seahorse-keyserver-results.glade.h:8
 msgid "Seahorse - GPG Key Manager"
 msgstr "Морски коњ — GPG управник кључа"
 
-#: src/seahorse-key-manager.glade.h:24
+#: src/seahorse-key-manager.glade.h:26
+#, fuzzy
+msgid "Search for keys on a key server"
+msgstr "Извези кључеве на сервер са кључевима"
+
+#: src/seahorse-key-manager.glade.h:27
+#: src/seahorse-keyserver-results.glade.h:9
 msgid "Show Seahorse help"
 msgstr "Прикажи помоћ за Морског коња"
 
-#: src/seahorse-key-manager.glade.h:25
+#: src/seahorse-key-manager.glade.h:28
+#: src/seahorse-keyserver-results.glade.h:10
 msgid "Show key properties"
 msgstr "Прикажи особине кључа"
 
-#: src/seahorse-key-manager.glade.h:26
+#: src/seahorse-key-manager.glade.h:29
+#: src/seahorse-keyserver-results.glade.h:11
 msgid "Sign key"
 msgstr "Потпиши кључ"
 
-#: src/seahorse-key-manager.glade.h:27
+#: src/seahorse-key-manager.glade.h:30
 msgid "Sign public key"
 msgstr "Потпиши јавни кључ"
 
-#: src/seahorse-key-manager.glade.h:28
-msgid "_Backup..."
+#: src/seahorse-key-manager.glade.h:31
+msgid "To get started with encryption you'll need keys."
+msgstr ""
+
+#: src/seahorse-key-manager.glade.h:32
+#, fuzzy
+msgid "_Backup Keyrings..."
 msgstr "_Резервно..."
 
-#: src/seahorse-key-manager.glade.h:29
+#: src/seahorse-key-manager.glade.h:33
 msgid "_Change Passphrase..."
 msgstr "_Промени лозинку..."
 
-#: src/seahorse-key-manager.glade.h:30
+#: src/seahorse-key-manager.glade.h:34
 msgid "_Collapse All"
 msgstr "_Сажми све"
 
-#: src/seahorse-key-manager.glade.h:31
+#: src/seahorse-key-manager.glade.h:35
+#: src/seahorse-keyserver-results.glade.h:12
 msgid "_Contents"
 msgstr "_Садржај"
 
-#: src/seahorse-key-manager.glade.h:32
+#: src/seahorse-key-manager.glade.h:36
 msgid "_Copy"
 msgstr "_Умножи"
 
-#: src/seahorse-key-manager.glade.h:33
+#: src/seahorse-key-manager.glade.h:37
+#: src/seahorse-keyserver-results.glade.h:13
 msgid "_Copy Key"
 msgstr "У_множи кључ"
 
-#: src/seahorse-key-manager.glade.h:34 src/seahorse-key-properties.glade.h:25
+#: src/seahorse-key-manager.glade.h:38 src/seahorse-key-properties.glade.h:25
 msgid "_Delete"
 msgstr "_Обриши"
 
-#: src/seahorse-key-manager.glade.h:35
+#: src/seahorse-key-manager.glade.h:39
 msgid "_Delete Key"
 msgstr "Об_риши кључ"
 
-#: src/seahorse-key-manager.glade.h:36
+#: src/seahorse-key-manager.glade.h:40
 msgid "_Expand All"
 msgstr "_Разгранај све"
 
-#: src/seahorse-key-manager.glade.h:37
+#: src/seahorse-key-manager.glade.h:41
+msgid "_Find Remote Keys..."
+msgstr ""
+
+#: src/seahorse-key-manager.glade.h:42
 msgid "_Generate Revocation Certificate..."
 msgstr "_Направи сертификат за повлачење..."
 
-#: src/seahorse-key-manager.glade.h:38
+#: src/seahorse-key-manager.glade.h:43
+#: src/seahorse-keyserver-results.glade.h:14
+msgid "_Import"
+msgstr "_Увези"
+
+#: src/seahorse-key-manager.glade.h:44
 msgid "_Import..."
 msgstr "_Увези..."
 
-#: src/seahorse-key-manager.glade.h:39
+#: src/seahorse-key-manager.glade.h:45
+#: src/seahorse-keyserver-results.glade.h:16
 msgid "_Key"
 msgstr "_Кључ"
 
-#: src/seahorse-key-manager.glade.h:40
+#: src/seahorse-key-manager.glade.h:46
 msgid "_New..."
 msgstr "_Нови..."
 
-#: src/seahorse-key-manager.glade.h:41
+#: src/seahorse-key-manager.glade.h:47
 msgid "_Paste Key"
 msgstr "У_баци кључ"
 
-#: src/seahorse-key-manager.glade.h:42
+#: src/seahorse-key-manager.glade.h:48
+#: src/seahorse-keyserver-results.glade.h:17
 msgid "_Properties"
 msgstr "_Особине"
 
-#: src/seahorse-key-manager.glade.h:43 src/seahorse-key-properties.glade.h:28
+#: src/seahorse-key-manager.glade.h:49
+msgid "_Remote Search"
+msgstr ""
+
+#: src/seahorse-key-manager.glade.h:50 src/seahorse-key-properties.glade.h:28
 #: src/seahorse-sign.glade.h:17
 msgid "_Sign"
 msgstr "_Потпиши"
 
-#: src/seahorse-key-manager.glade.h:44
+#: src/seahorse-key-manager.glade.h:51
 msgid "_Sign..."
 msgstr "_Потпиши..."
 
-#: src/seahorse-key-op.c:247
-msgid "Operation complete"
-msgstr "Операција извршена"
-
 #. key id
-#: src/seahorse-key-properties.c:175
+#: src/seahorse-key-properties.c:179
 msgid "Key ID:"
 msgstr "ИБ кључа:"
 
-#: src/seahorse-key-properties.c:175
+#: src/seahorse-key-properties.c:179
 msgid "Key identifier"
 msgstr "Идентификатор кључа"
 
 #. type
-#: src/seahorse-key-properties.c:180
+#: src/seahorse-key-properties.c:184
 msgid "Type:"
 msgstr "Тип:"
 
-#: src/seahorse-key-properties.c:180
+#: src/seahorse-key-properties.c:184
 msgid "Algorithm"
 msgstr "Алгоритам"
 
 #. created
-#: src/seahorse-key-properties.c:186
+#: src/seahorse-key-properties.c:192
 msgid "Created:"
 msgstr "Направљено:"
 
-#: src/seahorse-key-properties.c:186
+#: src/seahorse-key-properties.c:192
 msgid "Key creation date"
 msgstr "Датум образовања кључа"
 
 #. length
-#: src/seahorse-key-properties.c:190
+#: src/seahorse-key-properties.c:196
 msgid "Length:"
 msgstr "Дужина:"
 
 #. status
-#: src/seahorse-key-properties.c:195
+#: src/seahorse-key-properties.c:201
 msgid "Status:"
 msgstr "Стање:"
 
-#: src/seahorse-key-properties.c:196
+#: src/seahorse-key-properties.c:202
 msgid "Good"
 msgstr "Добар"
 
-#: src/seahorse-key-properties.c:260
+#: src/seahorse-key-properties.c:266
 #, c-format
 msgid "%s Properties"
 msgstr "Особине за %s"
 
-#: src/seahorse-key-properties.c:296
+#: src/seahorse-key-properties.c:302
 msgid "All Signatures"
 msgstr "Сви потписи"
 
-#: src/seahorse-key-properties.c:547
+#: src/seahorse-key-properties.c:553
 msgid "Couldn't change primary user ID"
 msgstr "Не могу да променим ИБ основног корисника"
 
-#: src/seahorse-key-properties.c:620 src/seahorse-key-properties.glade.h:27
+#: src/seahorse-key-properties.c:626 src/seahorse-key-properties.glade.h:27
 msgid "_Revoke"
 msgstr "_Повуци"
 
-#: src/seahorse-key-properties.c:624
+#: src/seahorse-key-properties.c:630
 #, c-format
 msgid "Revoke subkey %d"
 msgstr "Повуци подкључ %d"
 
-#: src/seahorse-key-properties.c:633
+#: src/seahorse-key-properties.c:639
 #, c-format
 msgid "Subkey %d"
 msgstr "Подкључ %d"
 
-#: src/seahorse-key-properties.c:645
+#: src/seahorse-key-properties.c:651
 #, c-format
 msgid "Delete subkey %d"
 msgstr "Уклони подкључ %d"
@@ -1703,6 +1882,84 @@ msgstr "_Први"
 msgid "_Signatures:"
 msgstr "_Потпис:"
 
+#: src/seahorse-keyserver-results.c:87 src/seahorse-keyserver-results.c:156
+#, fuzzy
+msgid "Couldn't retrieve key data from key server"
+msgstr "Увезите кључеве од сервера са кључева"
+
+#: src/seahorse-keyserver-results.c:100
+#, fuzzy
+msgid "Couldn't import keys into keyring"
+msgstr "Не могу да увезем кључеве"
+
+#: src/seahorse-keyserver-results.c:121
+msgid "Save Remote Keys"
+msgstr ""
+
+#: src/seahorse-keyserver-results.c:217
+#, fuzzy, c-format
+msgid "Selected %d keys"
+msgstr "Изабран је %d кључ"
+
+#: src/seahorse-keyserver-results.c:301
+#, fuzzy
+msgid "Remote Keys"
+msgstr "Повуци кључ"
+
+#: src/seahorse-keyserver-results.c:303
+#, c-format
+msgid "Remote Keys Containing '%s'"
+msgstr ""
+
+#: src/seahorse-keyserver-results.glade.h:1
+#, fuzzy
+msgid "Copy the selected key to the clipboard"
+msgstr "Не могу да извезем кључ у списак исечака"
+
+#: src/seahorse-keyserver-results.glade.h:4
+msgid "Find Remote Keys on Key Servers"
+msgstr ""
+
+#: src/seahorse-keyserver-results.glade.h:5
+msgid "Find Remote Keys..."
+msgstr ""
+
+#: src/seahorse-keyserver-results.glade.h:6
+msgid "Import selected keys to local keyring"
+msgstr ""
+
+#: src/seahorse-keyserver-results.glade.h:7
+#, fuzzy
+msgid "Save the key to a file"
+msgstr "Извези кључеве у датотеку"
+
+#: src/seahorse-keyserver-results.glade.h:15
+#, fuzzy
+msgid "_Import to Keyring..."
+msgstr "_Увези..."
+
+#. The all key servers option
+#: src/seahorse-keyserver-search.c:195
+msgid "All Key Servers"
+msgstr ""
+
+#: src/seahorse-keyserver-search.glade.h:2
+msgid "Find Remote Keys"
+msgstr ""
+
+#: src/seahorse-keyserver-search.glade.h:3
+msgid "Search _for key containing:"
+msgstr ""
+
+#: src/seahorse-keyserver-search.glade.h:4
+msgid "Where to search:"
+msgstr ""
+
+#: src/seahorse-keyserver-search.glade.h:5
+#, fuzzy
+msgid "_Search"
+msgstr "Тражи за:"
+
 #: src/seahorse-multi-encrypt.glade.h:2
 msgid "<b>You have selected multiple files or folders</b>"
 msgstr "<b>Изабрали сте више датотека или директоријума</b>"
@@ -1739,27 +1996,41 @@ msgstr "Врста паковања:"
 msgid "encrypted-package.rar"
 msgstr "шифровани-пакет.rar"
 
-#: src/seahorse-preferences.c:57
-msgid "PGP"
-msgstr "ПГП"
+#: src/seahorse-pgp-encrypted.desktop.in.h:1
+msgid "Decrypt PGP File (Seahorse)"
+msgstr ""
 
-#: src/seahorse-preferences.c:64
+#: src/seahorse-pgp-signature.desktop.in.h:1
+#, fuzzy
+msgid "Verify PGP Signature (Seahorse)"
+msgstr "Провери датотеку потписа"
+
+#: src/seahorse-preferences.c:49 src/seahorse-preferences.glade.h:3
+msgid "Key Manager"
+msgstr "Управљач кључева"
+
+#: src/seahorse-preferences.c:54
+#, fuzzy
+msgid "Visible Columns:"
+msgstr "Приказане колоне"
+
+#: src/seahorse-preferences.c:63
 msgid "_Validity"
 msgstr "Испра_вност"
 
-#: src/seahorse-preferences.c:66 src/seahorse-sign.glade.h:13
+#: src/seahorse-preferences.c:65 src/seahorse-sign.glade.h:13
 msgid "_Expires"
 msgstr "Истич_е"
 
-#: src/seahorse-preferences.c:68
+#: src/seahorse-preferences.c:67
 msgid "_Trust"
 msgstr "П_оверење"
 
-#: src/seahorse-preferences.c:70
+#: src/seahorse-preferences.c:69
 msgid "_Length"
 msgstr "_Дужина"
 
-#: src/seahorse-preferences.c:72
+#: src/seahorse-preferences.c:71
 msgid "T_ype"
 msgstr "Т_ип"
 
@@ -1768,53 +2039,51 @@ msgid "Close Preferences"
 msgstr "Затвори поставке"
 
 #: src/seahorse-preferences.glade.h:2
-msgid "Key Manager"
-msgstr "Управљач кључева"
+#, fuzzy
+msgid "Default Key:"
+msgstr "_Подразумевани кључ:"
 
-#: src/seahorse-preferences.glade.h:3
+#: src/seahorse-preferences.glade.h:4
 msgid "Preferences Help"
 msgstr "Помоћ за поставке"
 
-#: src/seahorse-preferences.glade.h:4
+#: src/seahorse-preferences.glade.h:5
 msgid "Seahorse Preferences"
 msgstr "Поставке морског коња"
 
-#: src/seahorse-preferences.glade.h:5
+#: src/seahorse-preferences.glade.h:6
 msgid "Visible Columns"
 msgstr "Приказане колоне"
 
 # bug: plural-forms
-#: src/seahorse-process-multiple.c:49
-#, c-format
-msgid "You have selected %d files and %d folders"
-msgstr "Изабрали сте %d датотека и %d директоријума"
+#. TRANSLATOR: This string will become
+#. * "You have selected %d files and %d folders"
+#: src/seahorse-process-multiple.c:48
+#, fuzzy, c-format
+msgid "You have selected %d file "
+msgid_plural "You have selected %d files "
+msgstr[0] "Изабрали сте %d датотека"
+msgstr[1] "Изабрали сте %d датотека"
+msgstr[2] "Изабрали сте %d датотека"
 
-# bug: plural-forms
-#: src/seahorse-process-multiple.c:51
-#, c-format
-msgid "You have selected %d files and %d folder"
-msgstr "Изабрали сте %d датотека и %d директоријум"
-
-# bug: plural-forms
+#. TRANSLATOR: This string will become
+#. * "You have selected %d files and %d folders"
 #: src/seahorse-process-multiple.c:53
-#, c-format
-msgid "You have selected %d file and %d folders"
-msgstr "Изабрали сте %d датотеку и %d директоријума"
-
-# bug: plural-forms
-#: src/seahorse-process-multiple.c:55
-#, c-format
-msgid "You have selected %d file and %d folder"
-msgstr "Изабрали сте %d датотеку и %d директоријум"
+#, fuzzy, c-format
+msgid "and %d folder"
+msgid_plural "and %d folders"
+msgstr[0] "Изабрали сте %d директоријум"
+msgstr[1] "Изабрали сте %d директоријума"
+msgstr[2] "Изабрали сте %d директоријума"
 
 # bug: plural-forms
 #. should never be called for just one file
-#: src/seahorse-process-multiple.c:61
+#: src/seahorse-process-multiple.c:66
 #, c-format
 msgid "You have selected %d files"
 msgstr "Изабрали сте %d датотека"
 
-#: src/seahorse-process-multiple.c:65
+#: src/seahorse-process-multiple.c:70
 #, c-format
 msgid "You have selected %d folder"
 msgid_plural "You have selected %d folders"
@@ -1822,29 +2091,21 @@ msgstr[0] "Изабрали сте %d директоријум"
 msgstr[1] "Изабрали сте %d директоријума"
 msgstr[2] "Изабрали сте %d директоријума"
 
-#: src/seahorse-process-multiple.c:234
-msgid "Couldn't run file-roller"
-msgstr "Не могу да покренем „file-roller“"
-
-#: src/seahorse-process-multiple.c:239
-msgid "The file-roller process did not complete successfully"
-msgstr "Процес „file-roller“ није успешно завршен"
-
-#: src/seahorse-revoke.c:51
+#: src/seahorse-revoke.c:52
 msgid "Couldn't revoke subkey"
 msgstr "Не могу да повучем подкључ"
 
-#: src/seahorse-revoke.c:75
+#: src/seahorse-revoke.c:76
 #, c-format
 msgid "Revoke Subkey %d of %s"
 msgstr "Повуци подкључ %d од %s"
 
-#: src/seahorse-revoke.c:77
+#: src/seahorse-revoke.c:78
 #, c-format
 msgid "Revoke %s"
 msgstr "Повуци %s"
 
-#: src/seahorse-revoke.c:104
+#: src/seahorse-revoke.c:105
 #, c-format
 msgid ""
 "You are about to add %s as a revoker for %s. This operation cannot be "
@@ -1853,7 +2114,7 @@ msgstr ""
 "Управо ћете додати %s као повлачење за %s. Ова операција се не може "
 "опозвати! Да ли сте сигурни да желите да наставите?"
 
-#: src/seahorse-revoke.c:119
+#: src/seahorse-revoke.c:120
 msgid "Couldn't add revoker"
 msgstr "Не могу да додам опозивача"
 
@@ -1913,16 +2174,16 @@ msgstr "_Опис:"
 msgid "_Reason:"
 msgstr "_Разлог:"
 
-#: src/seahorse-sign.c:56
+#: src/seahorse-sign.c:57
 msgid "Couldn't sign key"
 msgstr "Не могу да потпишем кључ"
 
-#: src/seahorse-sign.c:80
+#: src/seahorse-sign.c:81
 #, c-format
 msgid "Are you sure you want to sign all user IDs for %s?"
 msgstr "Да ли сте сигурно да желите да потпишете све ИБ-е корисника за %s?"
 
-#: src/seahorse-sign.c:126
+#: src/seahorse-sign.c:127
 #, c-format
 msgid "Are you sure you want to sign the '%s' user ID?"
 msgstr "Сигурно да желите да потпишете све ИБ корисника „%s“?"
@@ -1992,6 +2253,49 @@ msgstr "Може се _повући"
 msgid "Manage your GPG keys"
 msgstr "Управљај својим GPG кључевима"
 
+#~ msgid "WARNING: Your passwords are not being cached in secure memory."
+#~ msgstr "УПОЗОРЕЊЕ: Ваше лозинке се не држе у безбедној меморији."
+
+#~ msgid "Loaded %d key pair"
+#~ msgid_plural "Loaded %d key pairs"
+#~ msgstr[0] "Учитах %d пар кључева"
+#~ msgstr[1] "Учитах %d пара кључева"
+#~ msgstr[2] "Учитах %d парова кључева"
+
+#~ msgid "Loaded %d new key"
+#~ msgid_plural "Loaded %d new keys"
+#~ msgstr[0] "Учитах %d нови кључ"
+#~ msgstr[1] "Учитах %d нова кључа"
+#~ msgstr[2] "Учитах %d нових кључева"
+
+#~ msgid "Listed %d keys"
+#~ msgstr "Исписао је %d кључева"
+
+#~ msgid "Nautilus Settings"
+#~ msgstr "Подешавања Наутилуса"
+
+#~ msgid "Operation complete"
+#~ msgstr "Операција извршена"
+
+#~ msgid "PGP"
+#~ msgstr "ПГП"
+
+# bug: plural-forms
+#~ msgid "You have selected %d files and %d folders"
+#~ msgstr "Изабрали сте %d датотека и %d директоријума"
+
+# bug: plural-forms
+#~ msgid "You have selected %d files and %d folder"
+#~ msgstr "Изабрали сте %d датотека и %d директоријум"
+
+# bug: plural-forms
+#~ msgid "You have selected %d file and %d folders"
+#~ msgstr "Изабрали сте %d датотеку и %d директоријума"
+
+# bug: plural-forms
+#~ msgid "You have selected %d file and %d folder"
+#~ msgstr "Изабрали сте %d датотеку и %d директоријум"
+
 #~ msgid ""
 #~ "Specify the column to sort the recipients window by. Columns are: 'name', "
 #~ "'id' and 'validity'. Put a '-' in front of the column name to sort in "
@@ -2010,9 +2314,6 @@ msgstr "Управљај својим GPG кључевима"
 
 #~ msgid "Encrypt each file sepаrately"
 #~ msgstr "Шифруј сваку датотеку засебно"
-
-#~ msgid "Encrypt And Sign..."
-#~ msgstr "Шифруј и потпиши..."
 
 #~ msgid "Controls the visibility of the key manager's statusbar."
 #~ msgstr "Контролише видљивост линије са стањем у управљачу кључевима."
@@ -2054,12 +2355,6 @@ msgstr "Управљај својим GPG кључевима"
 #~ msgid "Choose a file to export to"
 #~ msgstr "Одабери датотеку у коју ћеш извести"
 
-#~ msgid "Export keys to a file"
-#~ msgstr "Извези кључеве у датотеку"
-
-#~ msgid "Export keys to a key server"
-#~ msgstr "Извези кључеве на сервер са кључевима"
-
 #~ msgid "Export to _Clipboard:"
 #~ msgstr "Извози у списак _исечака:"
 
@@ -2084,9 +2379,6 @@ msgstr "Управљај својим GPG кључевима"
 #~ msgid "Expiration Date: "
 #~ msgstr "Датум истека: "
 
-#~ msgid "Key Never Expires"
-#~ msgstr "Кључ никад не истиче"
-
 #~ msgid "Seahorse GPG Key Generation Druid"
 #~ msgstr "Помоћник за израду ГПГ кључа из Морског коња"
 
@@ -2098,9 +2390,6 @@ msgstr "Управљај својим GPG кључевима"
 
 #~ msgid "Enter a unique key id"
 #~ msgstr "Унесите јединствени ID кључа"
-
-#~ msgid "Import a key from a key server"
-#~ msgstr "Увезите кључеве од сервера са кључева"
 
 #~ msgid "Import from _Clipboard:"
 #~ msgstr "Увези из _списка исечака:"
@@ -2119,9 +2408,6 @@ msgstr "Управљај својим GPG кључевима"
 
 #~ msgid "Select or enter a key server's web address"
 #~ msgstr "Одаберите или унесите веб адресу сервера са кључевима"
-
-#~ msgid "_Import"
-#~ msgstr "_Увези"
 
 #~ msgid "_Key ID:"
 #~ msgstr "ID _кључа:"
