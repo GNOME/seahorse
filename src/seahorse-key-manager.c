@@ -199,17 +199,43 @@ row_activated (GtkTreeView *treeview, GtkTreePath *path, GtkTreeViewColumn *arg2
 static void
 selection_changed (GtkTreeSelection *selection, SeahorseWidget *swidget)
 {
-	gboolean sensitive;
+	gboolean sensitive = FALSE,
+		 secret = FALSE;
+	SeahorseKey *skey = NULL;
 	
 	sensitive = gtk_tree_selection_get_selected (selection, NULL, NULL);
+	if (sensitive) {
+		skey = seahorse_key_store_get_selected_key (GTK_TREE_VIEW (
+			glade_xml_get_widget (swidget->xml, KEY_LIST)));
+		secret = seahorse_context_key_has_secret (swidget->sctx, skey);
+	}
 	
 	/* do all key operation items */
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "properties_button"), sensitive);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "export_button"), sensitive);
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "delete_button"), sensitive);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "properties"), sensitive);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "export"), sensitive);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "delete"), sensitive);
+	/* ops requiring a secret key */
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "change_passphrase"), secret);
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "add_uid"), secret);
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "add_subkey"), secret);
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "key_change_passphrase"), secret);
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "key_add_uid"), secret);
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "key_add_subkey"), secret);
+}
+
+static gboolean
+key_list_button_pressed (GtkWidget *widget, GdkEventButton *event, SeahorseWidget *swidget)
+{
+	GtkWidget *menu;
+	
+	if (event->button == 3) {
+		menu = glade_xml_get_widget (swidget->xml, "context_menu");
+		gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL, event->button, event->time);
+		gtk_widget_show (menu);
+	}
+	return FALSE;
 }
 
 void
@@ -221,6 +247,10 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 	
 	swidget = seahorse_widget_new_component (KEY_MANAGER, sctx);
 	gtk_object_sink (GTK_OBJECT (sctx));
+	
+	/* construct key context menu */
+	glade_xml_construct (swidget->xml, SEAHORSE_GLADEDIR "seahorse-key-manager.glade2",
+		"context_menu", NULL);
 	
 	glade_xml_signal_connect_data (swidget->xml, "quit",
 		G_CALLBACK (quit), swidget);
@@ -246,6 +276,8 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 		G_CALLBACK (row_activated), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "about_activate",
 		G_CALLBACK (about_activate), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "key_list_button_pressed",
+		G_CALLBACK (key_list_button_pressed), swidget);
 	
 	view = GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, KEY_LIST));
 	seahorse_key_manager_store_new (sctx, view);
@@ -254,4 +286,13 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 		G_CALLBACK (selection_changed), swidget);
 	//do initial settings
 	selection_changed (selection, swidget);
+	
+	//features not available
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "sign_button"), FALSE);
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "sign"), FALSE);
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "add_revoker"), FALSE);
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "add_photo"), FALSE);
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "key_sign"), FALSE);
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "key_add_revoker"), FALSE);
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "key_add_photo"), FALSE);
 }
