@@ -28,6 +28,7 @@
 
 #include "seahorse-gpgmex.h"
 #include "seahorse-pgp-source.h"
+#include "seahorse-operation.h"
 #include "seahorse-util.h"
 #include "seahorse-key.h"
 #include "seahorse-key-pair.h"
@@ -45,7 +46,7 @@ typedef struct _LoadContext {
     
 struct _SeahorsePGPSourcePrivate {
     GHashTable *keys;
-    GList *loaders;
+    GSList *operations;
 };
 
 /* GObject handlers */
@@ -169,7 +170,7 @@ seahorse_pgp_source_dispose (GObject *gobject)
     psrc = SEAHORSE_PGP_SOURCE (gobject);
     g_assert (psrc->priv);
     
-    /* Clear out all the loaders */
+    /* Clear out all operations */
     seahorse_key_source_stop (SEAHORSE_KEY_SOURCE (psrc));
 
     /* Release our references on the keys */
@@ -226,24 +227,24 @@ new_load_context (SeahorsePGPSource *psrc)
     lctx->stag = 0;
     return lctx;
 }
- 
-/* Free a load context, and take care of loose ends */
+
+/* Cleans up after a load context */
 static void
 free_load_context (LoadContext *lctx)
 {
     if (lctx) {
+        
         if (lctx->stag) 
             g_source_remove (lctx->stag);
-        if (lctx->psrc) {
-            gpgme_release (lctx->ctx);
-            g_object_unref (lctx->psrc);
-            lctx->psrc = NULL;
-        }
+
         if (lctx->checks)
             g_hash_table_destroy (lctx->checks);
+        
+        gpgme_release (lctx->ctx);
+        g_object_unref (lctx->psrc);
     }
     g_free (lctx);
-}
+}    
 
 /* Release a key from our internal tables and let the world know about it */
 static gboolean
@@ -267,6 +268,26 @@ remove_key_from_source (const gchar *id, SeahorseKey *dummy, SeahorsePGPSource *
         g_hash_table_remove (psrc->priv->keys, id);
         release_key_notify (id, skey, psrc);
     }
+}
+
+/* Called when a key load operation is done */
+static void 
+key_load_done (SeahorseOperation *operation, gboolean cancelled, gpointer userdata)
+{
+    LoadContext *lctx = (LoadContext*)userdata;
+
+    /* If we were a refresh loader, then we remove the keys we didn't find */
+    if (lctx->checks) 
+        g_hash_table_foreach (lctx->checks, (GHFunc)remove_key_from_source, lctx->psrc);
+    
+    gpgme_op_keylist_end (lctx->ctx);
+
+    /* Marks us as done as far as the key source is concerned */
+    lctx->psrc->priv->operations = 
+        seahorse_operation_list_remove (lctx->psrc->priv->operations, 
+                                        operation);    
+
+    free_load_context (lctx);                                        
 }
 
 /* A #SeahorseKey has changed. Update it. */
@@ -370,13 +391,15 @@ add_key_to_source (SeahorsePGPSource *psrc, gpgme_key_t key)
 
 /* Completes one batch of key loading */
 static gboolean
-keyload_handler (LoadContext *lctx)
+keyload_handler (SeahorseOperation *operation)
 {
     gpgme_key_t key;
-    gboolean done = FALSE;
     guint batch;
     const gchar *id;
+    LoadContext *lctx;
     
+    g_return_val_if_fail (SEAHORSE_IS_OPERATION (operation), FALSE);
+    lctx = seahorse_operation_get_data (LoadContext, operation);
     g_return_val_if_fail (SEAHORSE_IS_PGP_SOURCE (lctx->psrc), FALSE);
     
     /* We load until done if batch is zero */
@@ -385,8 +408,12 @@ keyload_handler (LoadContext *lctx)
     while (batch-- > 0) {
     
         if (!GPG_IS_OK (gpgme_op_keylist_next (lctx->ctx, &key))) {
-            done = TRUE;
-            break;
+
+            seahorse_key_source_show_progress (SEAHORSE_KEY_SOURCE (lctx->psrc), 
+                g_strdup_printf (ngettext("Loaded %d key", "Loaded %d keys", lctx->loaded), lctx->loaded), -1);
+                    
+            seahorse_operation_done (operation);
+            return FALSE; /* Remove event handler */
         }
         
         id = seahorse_key_get_id (key);
@@ -411,37 +438,16 @@ keyload_handler (LoadContext *lctx)
         lctx->loaded++;
     }
     
-    if (done) {
-        gpgme_op_keylist_end (lctx->ctx);
-        
-        /* Marks us as done as far as the key source is concerned */
-        lctx->psrc->priv->loaders = 
-                g_list_remove (lctx->psrc->priv->loaders, lctx);
-
-        seahorse_key_source_show_progress (SEAHORSE_KEY_SOURCE (lctx->psrc), 
-            g_strdup_printf (ngettext("Loaded %d key", "Loaded %d keys", lctx->loaded), lctx->loaded), -1);
-                
-        /* If we were a refresh loader, then we remove the keys we didn't find */
-        if (lctx->checks) 
-            g_hash_table_foreach (lctx->checks, (GHFunc)remove_key_from_source, lctx->psrc);
-        
-        free_load_context (lctx);
-        return FALSE; /* Remove event handler */
-        
-    /* More to do */        
-    } else {
-
-        if (lctx->stag == 0) {
-            lctx->psrc->priv->loaders = g_list_append (lctx->psrc->priv->loaders, lctx);
-        
-            /* If it returns TRUE (like any good GSourceFunc) it means
-             * it needs to stick around, so we register an idle handler */
-            lctx->stag = g_idle_add_full (G_PRIORITY_LOW, (GSourceFunc)keyload_handler, 
-                                          lctx, NULL);
-        }
+    /* More to do, so queue for next round */        
+    if (lctx->stag == 0) {
     
-        return TRUE; 
+        /* If it returns TRUE (like any good GSourceFunc) it means
+         * it needs to stick around, so we register an idle handler */
+        lctx->stag = g_idle_add_full (G_PRIORITY_LOW, (GSourceFunc)keyload_handler, 
+                                      operation, NULL);
     }
+    
+    return TRUE; 
 }
 
 /* Callback which copies keys ids into new hashtable */
@@ -464,10 +470,13 @@ static void
 load_keys (SeahorsePGPSource *psrc, const gchar *pattern, 
            gboolean secret, gboolean refresh, gboolean all)
 {
+    SeahorsePGPSourcePrivate *priv;
+    SeahorseOperation *operation;
     gpgme_error_t err;
     LoadContext *lctx;
     
     g_return_if_fail (SEAHORSE_IS_PGP_SOURCE (psrc));
+    priv = psrc->priv;
     
     lctx = new_load_context (psrc);
     g_return_if_fail (lctx != NULL);
@@ -490,13 +499,15 @@ load_keys (SeahorsePGPSource *psrc, const gchar *pattern,
         lctx->checks = g_hash_table_new_full (g_str_hash, g_str_equal,
                                               g_free, NULL);
         
-        g_hash_table_foreach (psrc->priv->keys, 
+        g_hash_table_foreach (priv->keys, 
                 secret ? (GHFunc)secret_key_ids_to_hash : (GHFunc)key_ids_to_hash, lctx->checks);
     }
     
     /* Run one iteration of the handler */
     /* Note that lctx is freed inside keylist_handler */
-    keyload_handler (lctx);
+    operation = seahorse_operation_new (key_load_done, lctx);
+    priv->operations = seahorse_operation_list_add (priv->operations, operation);
+    keyload_handler (operation);
 }  
 
 /* Callback for copying our internal key table to a list */
@@ -542,21 +553,12 @@ static void
 seahorse_pgp_source_stop (SeahorseKeySource *src)
 {
     SeahorsePGPSource *psrc;
-    LoadContext *lctx;
     gboolean found = FALSE;
-    GList *l;
     
     g_return_if_fail (SEAHORSE_IS_KEY_SOURCE (src));
     psrc = SEAHORSE_PGP_SOURCE (src);
-    
-    for (l = psrc->priv->loaders; l != NULL; l = g_list_next (l)) {
-        lctx = (LoadContext*)l->data;
-        free_load_context (lctx);
-        found = TRUE;
-    }
-    
-    g_list_free (psrc->priv->loaders);
-    psrc->priv->loaders = NULL;
+    seahorse_operation_list_cancel (psrc->priv->operations);
+    psrc->priv->operations = seahorse_operation_list_purge (psrc->priv->operations);
     
     if (found)
         seahorse_key_source_show_progress (src, _("Load Cancelled"), -1);
@@ -583,7 +585,9 @@ SeahorseKey*
 seahorse_pgp_source_get_key (SeahorseKeySource *src, const gchar *fpr, 
                              SeahorseKeyInfo info)
 {
+    SeahorseOperation *operation;
     SeahorsePGPSource *psrc;
+    SeahorsePGPSourcePrivate *priv;
     SeahorseKey *skey;
     LoadContext *lctx;
     gpgme_error_t err;
@@ -591,8 +595,9 @@ seahorse_pgp_source_get_key (SeahorseKeySource *src, const gchar *fpr,
     
     g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (src), NULL);
     psrc = SEAHORSE_PGP_SOURCE (src);
+    priv = psrc->priv;
     
-    skey = g_hash_table_lookup (psrc->priv->keys, fpr);
+    skey = g_hash_table_lookup (priv->keys, fpr);
     
     /* Make sure we have enough info on this key */
     if (skey && info <= seahorse_key_get_loaded_info(skey))
@@ -626,10 +631,12 @@ seahorse_pgp_source_get_key (SeahorseKeySource *src, const gchar *fpr,
     fingerprint = g_strdup (fpr);
        
     /* Run the load handler */
-    keyload_handler (lctx);
+    operation = seahorse_operation_new (key_load_done, lctx);
+    priv->operations = seahorse_operation_list_add (priv->operations, operation);
+    keyload_handler (operation);
         
     /* Try again with our lookup */
-    skey = g_hash_table_lookup (psrc->priv->keys, fingerprint);
+    skey = g_hash_table_lookup (priv->keys, fingerprint);
     g_free (fingerprint);
     
     return skey;
@@ -658,7 +665,7 @@ seahorse_pgp_source_get_state (SeahorseKeySource *src)
     g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (src), 0);
     psrc = SEAHORSE_PGP_SOURCE (src);
     
-    return psrc->priv->loaders ? SEAHORSE_KEY_SOURCE_LOADING : 0;
+    return psrc->priv->operations ? SEAHORSE_KEY_SOURCE_LOADING : 0;
 }
 
 static gpgme_ctx_t  
