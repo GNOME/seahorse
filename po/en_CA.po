@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-26 03:36-0500\n"
-"PO-Revision-Date: 2004-12-26 22:06-0400\n"
+"POT-Creation-Date: 2005-01-07 16:30-0500\n"
+"PO-Revision-Date: 2005-01-07 22:06-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: English/Canada <adamw@FreeBSD.org>\n"
 "MIME-Version: 1.0\n"
@@ -468,6 +468,21 @@ msgstr "Name"
 msgid "Key ID"
 msgstr "Key ID"
 
+#: libseahorse/seahorse-ldap-source.c:651
+#, c-format
+msgid "Searching for keys containing '%s'..."
+msgstr "Searching for keys containing '%s'..."
+
+#. TODO: We can update a percentage when there's more than one key
+#: libseahorse/seahorse-ldap-source.c:825
+msgid "Retrieving remote keys..."
+msgstr "Retrieving remote keys..."
+
+#. TODO: We can update a percentage when there's more than one key
+#: libseahorse/seahorse-ldap-source.c:950
+msgid "Sending keys to key server..."
+msgstr "Sending keys to key server..."
+
 #: libseahorse/seahorse-passphrase.c:61
 #, c-format
 msgid "Bad passphrase! Try again for '%s'"
@@ -635,12 +650,39 @@ msgid_plural "Selected %d keys"
 msgstr[0] "Selected %d key"
 msgstr[1] "Selected %d keys"
 
-#: libseahorse/seahorse-recipients.c:59 libseahorse/seahorse-recipients.c:63
+#: libseahorse/seahorse-recipients.c:58
 #, c-format
 msgid "Selected %d not fully valid key"
-msgid_plural "Selected %d keys (%d not fully valid)"
+msgid_plural "Selected %d not fully valid keys"
 msgstr[0] "Selected %d not fully valid key"
-msgstr[1] "Selected %d keys (%d not fully valid)"
+msgstr[1] "Selected %d not fully valid keys"
+
+#. TRANSLATOR: This string will become
+#. * "Selected %d keys and (%d not fully valid)"
+#: libseahorse/seahorse-recipients.c:66
+#, c-format
+msgid "Selected %d key "
+msgid_plural "Selected %d keys "
+msgstr[0] "Selected %d key "
+msgstr[1] "Selected %d keys "
+
+#. TRANSLATOR: This string will become
+#. * "Selected %d keys and (%d not fully valid)"
+#: libseahorse/seahorse-recipients.c:71
+#, c-format
+msgid "(%d not fully valid)"
+msgid_plural "(%d not fully valid)"
+msgstr[0] "(%d not fully valid)"
+msgstr[1] "(%d not fully valid)"
+
+#. TRANSLATOR: "%s%s" are "Selected %d keys and (%d not fully valid)"
+#. * Swap order with "%2$s%1$s" if needed
+#. TRANSLATOR: "%s%s" are "You have selected %d files and %d folders"
+#. * Swap order with "%2$s%1$s" if needed
+#: libseahorse/seahorse-recipients.c:76 src/seahorse-process-multiple.c:58
+#, c-format
+msgid "%s%s"
+msgstr "%s%s"
 
 #: libseahorse/seahorse-recipients.glade.h:2
 msgid ""
@@ -1976,33 +2018,31 @@ msgstr "Seahorse Preferences"
 msgid "Visible Columns"
 msgstr "Visible Columns"
 
-#: src/seahorse-process-multiple.c:46
-#, c-format
-msgid "You have selected %d files and %d folders"
-msgstr "You have selected %d files and %d folders"
-
+#. TRANSLATOR: This string will become
+#. * "You have selected %d files and %d folders"
 #: src/seahorse-process-multiple.c:48
 #, c-format
-msgid "You have selected %d files and %d folder"
-msgstr "You have selected %d files and %d folder"
+msgid "You have selected %d file "
+msgid_plural "You have selected %d files "
+msgstr[0] "You have selected %d file "
+msgstr[1] "You have selected %d files "
 
-#: src/seahorse-process-multiple.c:50
+#. TRANSLATOR: This string will become
+#. * "You have selected %d files and %d folders"
+#: src/seahorse-process-multiple.c:53
 #, c-format
-msgid "You have selected %d file and %d folders"
-msgstr "You have selected %d file and %d folders"
-
-#: src/seahorse-process-multiple.c:52
-#, c-format
-msgid "You have selected %d file and %d folder"
-msgstr "You have selected %d file and %d folder"
+msgid "and %d folder"
+msgid_plural "and %d folders"
+msgstr[0] "and %d folder"
+msgstr[1] "and %d folders"
 
 #. should never be called for just one file
-#: src/seahorse-process-multiple.c:58
+#: src/seahorse-process-multiple.c:66
 #, c-format
 msgid "You have selected %d files"
 msgstr "You have selected %d files"
 
-#: src/seahorse-process-multiple.c:62
+#: src/seahorse-process-multiple.c:70
 #, c-format
 msgid "You have selected %d folder"
 msgid_plural "You have selected %d folders"
