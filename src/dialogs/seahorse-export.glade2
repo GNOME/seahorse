@@ -58,6 +58,7 @@
 	  <child>
 	    <widget class="GtkButton" id="ok">
 	      <property name="visible">True</property>
+	      <property name="sensitive">False</property>
 	      <property name="tooltip" translatable="yes">Export Key to specified data</property>
 	      <property name="can_default">True</property>
 	      <property name="has_default">True</property>
@@ -119,6 +120,7 @@
 	      <property name="browse_dialog_title" translatable="yes">Choose a file to export to</property>
 	      <property name="directory_entry">False</property>
 	      <property name="modal">False</property>
+	      <signal name="changed" handler="file_changed" last_modification_time="Sat, 08 Feb 2003 01:02:31 GMT"/>
 
 	      <child internal-child="entry">
 		<widget class="GtkEntry" id="file_entry">
