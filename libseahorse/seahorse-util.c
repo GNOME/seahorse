@@ -732,7 +732,7 @@ seahorse_util_list_to_keys (GList *keys)
     for (i = 0; keys != NULL; keys = g_list_next (keys), i++) {
         g_return_val_if_fail (SEAHORSE_IS_KEY (keys->data), recips);
         recips[i] = SEAHORSE_KEY (keys->data)->key;
-        gpgme_key_ref (recips[i]);
+        seahorse_util_key_ref (recips[i]);
     }
     
     return recips;
@@ -743,6 +743,160 @@ seahorse_util_free_keys (gpgme_key_t* keys)
 {
     gpgme_key_t* k = keys;
     while (*k)
-        gpgme_key_unref (*(k++));
+        seahorse_util_key_unref (*(k++));
     g_free (keys);
+}
+
+/* Our special keylist mode flag */
+#define SEAHORSE_KEYLIST_MODE    0x04000000
+
+/* Because we really try to be good and not use internal
+ * fields in the gpgme_key_t structure: */
+typedef struct _sukey {
+    struct _gpgme_key key;
+    int refs;
+} sukey;
+
+gpgme_key_t 
+seahorse_util_key_alloc ()
+{
+    /* Allocate a gpgme_key_t structure without subkeys,
+     * signatures or uids, with all defaults */
+  
+    sukey* key;
+    
+    key = g_new0 (sukey, 1);
+    key->key.protocol = GPGME_PROTOCOL_OpenPGP;
+    key->key.keylist_mode = SEAHORSE_KEYLIST_MODE;
+    key->refs = 1;
+    return (gpgme_key_t)key;
+}
+
+void        
+seahorse_util_key_add_subkey (gpgme_key_t key, const char *fpr, guint flags, 
+                              long int timestamp, long int expires, 
+                              unsigned int length, gpgme_pubkey_algo_t algo)
+{
+    gpgme_subkey_t subkey;
+    gpgme_subkey_t sk;
+
+    g_return_if_fail (key != NULL);
+    g_return_if_fail (key->keylist_mode & SEAHORSE_KEYLIST_MODE);
+    
+    subkey = g_new0 (struct _gpgme_subkey, 1);
+    
+    subkey->fpr = g_strdup (fpr);
+    subkey->revoked = flags & SUKEY_FLAG_REVOKED;
+    subkey->disabled = flags & SUKEY_FLAG_DISABLED;
+    subkey->expired = expires > 0 && expires <= ((long int)time (NULL));
+    subkey->pubkey_algo = algo;
+    subkey->length = length;
+    subkey->timestamp = timestamp;
+    subkey->expires = expires;
+    
+    /* This isn't actually a valid keyid, but we don't use 
+     * this field in any case */
+    subkey->keyid = g_strdup("");
+      
+    if (!key->subkeys) {
+        /* Copy certain values into the key */
+        key->revoked = subkey->revoked;
+        key->expired = subkey->expired;
+        key->disabled = subkey->disabled;
+        key->subkeys = subkey;
+        
+    } else {
+        sk = key->subkeys;
+        while (sk->next != NULL)
+            sk = sk->next;
+        sk->next = subkey;   
+    }
+}
+
+void
+seahorse_util_key_add_uid (gpgme_key_t key, const gchar *uid, 
+                           guint flags)
+{
+    gpgme_user_id_t userid;
+    gpgme_user_id_t u;
+    
+    g_return_if_fail (key != NULL);
+    g_return_if_fail (key->keylist_mode & SEAHORSE_KEYLIST_MODE);
+
+    userid = g_new0 (struct _gpgme_user_id, 1);
+    userid->uid = g_strdup (uid);
+    userid->revoked = flags & SUKEY_FLAG_REVOKED;
+    
+    /* These aren't valid, but we don't use these fields */
+    userid->name = g_strdup ("");
+    userid->email = g_strdup ("");
+    userid->comment = g_strdup ("");
+    
+    if (!key->uids)
+        key->uids = userid;
+    else {
+        u = key->uids;
+        while (u->next != NULL)
+            u = u->next;
+        u->next = userid;
+    }
+}
+
+void        
+seahorse_util_key_ref (gpgme_key_t key)
+{
+    g_return_if_fail (key != NULL);
+    
+    if (key->keylist_mode & SEAHORSE_KEYLIST_MODE) 
+        ((sukey*)key)->refs++;
+    else
+        gpgme_key_ref (key);
+}
+    
+void        
+seahorse_util_key_unref (gpgme_key_t key)
+{
+    g_return_if_fail (key != NULL);
+    
+    if (key->keylist_mode & SEAHORSE_KEYLIST_MODE) {
+       
+        if (--(((sukey*)key)->refs) <= 0) {
+            gpgme_user_id_t nu;
+            gpgme_user_id_t u;
+            gpgme_subkey_t nsk;
+            gpgme_subkey_t sk;
+    
+            u = key->uids;
+            while (u) {
+                nu = u->next;
+                g_free (u->uid);
+                g_free (u->name);
+                g_free (u->email);
+                g_free (u->comment);
+                g_free (u);
+                u = nu;
+            }
+            
+            sk = key->subkeys;
+            while (sk) {
+                nsk = sk->next;
+                g_free (sk->fpr);
+                g_free (sk->keyid);
+                g_free (sk);
+                sk = nsk;
+            }
+    
+            g_free (key);        
+        }
+                
+    } else {
+        gpgme_key_unref (key);
+    }
+}
+
+gboolean
+seahorse_util_key_is_gpgme (gpgme_key_t key)
+{
+    g_return_val_if_fail (key != NULL, FALSE);
+    return !(key->keylist_mode & SEAHORSE_KEYLIST_MODE);
 }

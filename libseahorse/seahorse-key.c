@@ -90,7 +90,7 @@ seahorse_key_class_init (SeahorseKeyClass *klass)
 				      "Gpgme Key that this object represents",
 				      G_PARAM_READWRITE));
     g_object_class_install_property (gobject_class, PROP_KEY_SOURCE,
-        g_param_spec_pointer ("key-source", "Gpgme Key",
+        g_param_spec_pointer ("key-source", "Key Source",
                       "Key Source that this key belongs to",
                       G_PARAM_READWRITE));
 	
@@ -106,7 +106,7 @@ seahorse_key_finalize (GObject *gobject)
 	SeahorseKey *skey;
 	
 	skey = SEAHORSE_KEY (gobject);
-	gpgme_key_unref (skey->key);
+	seahorse_util_key_unref (skey->key);
 	
 	G_OBJECT_CLASS (parent_class)->finalize (gobject);
 }
@@ -121,10 +121,10 @@ seahorse_key_set_property (GObject *object, guint prop_id, const GValue *value, 
 	switch (prop_id) {
 		case PROP_KEY:
             if (skey->key)
-                gpgme_key_unref (skey->key);
+                seahorse_util_key_unref (skey->key);
 			skey->key = g_value_get_pointer (value);
             if (skey->key) {
-    			gpgme_key_ref (skey->key);
+    			seahorse_util_key_ref (skey->key);
                 seahorse_key_changed (skey, SKEY_CHANGE_ALL);
             }
 			break;

@@ -398,7 +398,7 @@ keyload_handler (LoadContext *lctx)
             if (!lctx->all && g_hash_table_lookup (lctx->psrc->priv->keys, id)) {
 
                 /* ... then just ignore */
-                gpgme_key_unref (key);
+                seahorse_util_key_unref (key);
                 continue;
             } 
         }

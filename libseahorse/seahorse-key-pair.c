@@ -89,7 +89,7 @@ seahorse_key_pair_finalize (GObject *gobject)
 	SeahorseKeyPair *skpair;
 	
 	skpair = SEAHORSE_KEY_PAIR (gobject);
-	gpgme_key_unref (skpair->secret);
+	seahorse_util_key_unref (skpair->secret);
 	
 	G_OBJECT_CLASS (parent_class)->finalize (gobject);
 }
@@ -105,10 +105,10 @@ seahorse_key_pair_set_property (GObject *object, guint prop_id,
 	switch (prop_id) {
 		case PROP_SECRET:
             if (skpair->secret)
-                gpgme_key_unref (skpair->secret);
+                seahorse_util_key_unref (skpair->secret);
             skpair->secret = g_value_get_pointer (value);
             if (skpair->secret) {
-                gpgme_key_ref (skpair->secret);
+                seahorse_util_key_ref (skpair->secret);
                 seahorse_key_changed (SEAHORSE_KEY (skpair), SKEY_CHANGE_ALL);
             }        
 			break;

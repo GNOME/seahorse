@@ -98,7 +98,35 @@ gchar**     seahorse_util_strvec_dup        (const gchar        **vec);
 
 gpgme_key_t* seahorse_util_list_to_keys      (GList *keys);
 
-void         seahorse_util_free_keys         (gpgme_key_t* keys);
+void        seahorse_util_free_keys         (gpgme_key_t* keys);
+
+/*
+ * Functions for allocating keys we find from sources other than 
+ * GPGME, like servers for example. 
+ * 
+ * Yes, we allocate gpgme_key_t structures and use them. The structure 
+ * is open, we play by the rules and don't use fields we're asked not 
+ * to. Of course we should never pass these structures to GPGME functions
+ * like gpgme_key_unref etc....
+ */
+
+#define SUKEY_FLAG_REVOKED  0x01
+#define SUKEY_FLAG_DISABLED 0x02
+
+gpgme_key_t seahorse_util_key_alloc         ();
+void        seahorse_util_key_add_subkey    (gpgme_key_t key,
+                                             const char *fpr,
+                                             guint flags,
+                                             long int timestamp,
+                                             long int expires,
+                                             unsigned int length,
+                                             gpgme_pubkey_algo_t algo);
+void        seahorse_util_key_add_uid       (gpgme_key_t key,
+                                             const gchar *uid,
+                                             guint flags);
+gboolean    seahorse_util_key_is_gpgme      (gpgme_key_t key);
+void        seahorse_util_key_ref           (gpgme_key_t key);
+void        seahorse_util_key_unref         (gpgme_key_t key);
 
 /* For checking GPG error codes */
 #define GPG_IS_OK(e)        (gpgme_err_code (e) == GPG_ERR_NO_ERROR)
