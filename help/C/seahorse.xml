@@ -15,9 +15,7 @@
 		<year>2003</year>
 		<holder>Jacob Perkins</holder>
 	</copyright>
-	<publisher>
-		<publishername>Seahorse Project</publishername>
-	</publisher>
+	<publisher><publishername>Seahorse Project</publishername></publisher>
 	&legal;
 	<authorgroup>
 		<author>
@@ -93,8 +91,8 @@
 	<sect2 id="when-start">
 		<title>When You Start &app;</title>
 		<para>When you start &app;,
-		the key manager is displayed.</para>
-		<para>The key manager window contains the following elements:</para>
+		the <guilabel>Key Manager</guilabel> is displayed.</para>
+		<para>The <guilabel>Key Manager</guilabel> window contains the following elements:</para>
 		<variablelist>
 			<varlistentry>
 				<term>Menubar.</term>
@@ -156,7 +154,7 @@ which the application is designed. -->
 	The current or last focused statusbar can also display operation progress.</para>
 	<para>You can get help for a feature by clicking <guibutton>help</guibutton>
 	in a dialog or selecting <menuchoice><guimenu>Help</guimenu></menuchoice>.</para>
-	<warning>While &app; is in use, do not make any changes to the key ring with another program.
+	<warning>While &app; is in use, do not make any changes to the <glossterm>key ring</glossterm> with another program.
 	External changes could have unkown and possibly undesirable affects.</warning>
 <!-- ================ Usage Subsection ================================ -->
 	<sect2 id="generate">
@@ -429,7 +427,7 @@ which the application is designed. -->
 	</sect2>
 	<sect2 id="key-properties">
 		<title>Key Properties</title>
-		<para>To view key properties, select a <glossterm>key</glossterm> from the list and choose
+		<para>To view <glossterm>key</glossterm> properties, select a <glossterm>key</glossterm> from the list and choose
 		<menuchoice><guimenu>Edit</guimenu><guimenuitem>Properties</guimenuitem></menuchoice>,
 		click <guibutton>Properties</guibutton>, or double-click the <glossterm>key</glossterm>.
 		The <guilabel>Key Properties</guilabel> window is displayed.
@@ -465,7 +463,7 @@ which the application is designed. -->
 			<para>If the <glossterm>key</glossterm> has a <glossterm>secret key</glossterm>,
 			the <glossterm>expiration</glossterm> is shown as a date editor and a
 			<guibutton>Never Expires</guibutton> checkbox.
-			These can be used to change the key's <glossterm>expiration</glossterm>.
+			These can be used to change the <glossterm  baseform="key">key's</glossterm> <glossterm>expiration</glossterm>.
 			Otherwise, the date is simply a label stating <guilabel>Never</guilabel>
 			or the exact date.</para>
 		</sect3>
@@ -489,7 +487,7 @@ which the application is designed. -->
 	</sect2>
 	<sect2 id="delete">
 		<title>Deleting a Key</title>
-		<para>To delete a key, choose
+		<para>To delete a <glossterm>key</glossterm>, choose
 		<menuchoice><guimenu>Edit</guimenu><guimenuitem>Delete</guimenuitem></menuchoice>
 		from the <guilabel>Key Manager</guilabel>, or click <guibutton>Delete</guibutton>.
 		You can do the same from the <xref linkend="key-properties"/> window
@@ -498,14 +496,15 @@ which the application is designed. -->
 		Click <guibutton>Yes</guibutton> to delete the <glossterm>key</glossterm>.</para>
 		<warning>This will permanently delete the <glossterm>key</glossterm> and cannot be undone.</warning>
 	</sect2>
-	<sect3 id="passphrase">
+	<sect2 id="passphrase">
 		<title>Passphrase</title>
-		<para>This dialog is displayed when a passphrase must be entered.
-		The key for which the passphrase is needed is shown above the entry.</para>
-	</sect3>
-	<sect3 id="signatures">
+		<para>This dialog is displayed when a <glossterm>passphrase</glossterm> must be entered,
+		usually to unlock a <glossterm>secret key</glossterm>.
+		The <glossterm>key</glossterm> for which the <glossterm>passphrase</glossterm> is needed is shown above the entry.</para>
+	</sect2>
+	<sect2 id="signatures">
 		<title>Signatures</title>
-		<para>This dialog shows information about a verified signature.
+		<para>This dialog shows information about a <glossterm>verified signature</glossterm>.
 		<variablelist>
 			<varlistentry>
 				<term>Status</term>
@@ -533,33 +532,44 @@ which the application is designed. -->
 				</listitem>
 			</varlistentry>
 		</variablelist></para>
-	</sect3>
-	<sect3 id="recipients">
+	</sect2>
+	<sect2 id="recipients">
 		<title>Recipients</title>
-		<para>Use this dialog to select multiple recipeints.
-		Currently this used for exporting keys and encrypting data.
-		Encryption requires that keys have at least <guilabel>Full Validity:</guilabel>.</para>
-	</sect3>
+		<para>Use this dialog to select multiple <glossterm>recipients</glossterm>.
+		Currently this used for exporting <glossterm>keys</glossterm> and encrypting data.
+		The following information is shown for each key:
+		<itemizedlist>
+			<listitem><para><glossterm>Name</glossterm></para></listitem>
+			<listitem><para><glossterm>Key ID</glossterm></para></listitem>
+			<listitem><para><glossterm>Validity</glossterm></para></listitem>
+		</itemizedlist></para>
+		<caution><glossterm>Encryption</glossterm> requires that <glossterm>keys</glossterm>
+		are at least <glossterm>Fully Valid</glossterm>.</caution>
+	</sect2>
 </sect1>
 <sect1 id="preferences">
 	<title>Settings</title>
 	<para>To show the preferences, choose
-		<menuchoice>
-			<guimenu>Settings</guimenu>
-			<guimenuitem>Preferences</guimenuitem>
-		</menuchoice>.
+	<menuchoice><guimenu>Settings</guimenu><guimenuitem>Preferences</guimenuitem></menuchoice>
+	from any window with a menubar.
 	The <guilabel>Preferences</guilabel> dialog is displayed.</para>
 	<sect2 id="ascii-armor">
 		<title>Ascii Armor</title>
-		<para>Ascii armor ensures that data is encoded as ASCII text, instead of binary.</para>
+		<para>Checking <glossterm><guilabel>Ascii Armor</guilabel></glossterm>
+		will ensure that data is encoded as ASCII text instead of binary.
+		This is necessary for the <xref linkend="text-editor"/> and 
+		part of <xref linkend="export"/> functionality.</para>
 	</sect2>
 	<sect2 id="text-mode">
 		<title>Text Mode</title>
-		<para></para>
+		<para>Checking <glossterm><guilabel>Text Mode</guilabel></glossterm>
+		will enable <glossterm>text mode</glossterm>.</para>
 	</sect2>
 	<sect2 id="default-key">
 		<title>Default Signing Key</title>
-		<para>The <guilabel>Default Key</guilabel> is the default key for signature operations.</para>
+		<para>This option menu allows you to choose the <glossterm>default signing key</glossterm>
+		for <glossterm>sign</glossterm> operations.  The only <glossterm>keys</glossterm>
+		shown are those that have a <glossterm>secret key</glossterm> and can <glossterm>sign</glossterm>.</para>
 	</sect2>
 </sect1>
 <!-- ============= About ================================== -->
@@ -570,7 +580,7 @@ the program. However, if you do wish to include this info in the
 manual, this is the place to put it. Alternatively, you can put this information in the title page.-->
 <sect1 id="about">
 	<title>About &app;</title>
-	<para> &app; was written by Jacob Perkins (<email>hacker@gnome.org</email>).
+	<para> &app; was written by Jacob Perkins (<email>jap1@users.sourceforge.net</email>).
 	To find more information about &app;, please visit the <ulink url="http://seahorse.sourceforge.net" type="http">Seahorse Webpage</ulink>.</para>
 	<para>To report a bug or make a suggestion regarding this application or this manual,
 	follow the directions in this <ulink url="ghelp:gnome-feedback" type="help">document</ulink>.</para>
@@ -578,5 +588,95 @@ manual, this is the place to put it. Alternatively, you can put this information
 	either version 2 of the License, or (at your option) any later version.
 	A copy of this license can be found at this <ulink url="ghelp:gpl" type="help">link</ulink>,
 	or in the file COPYING included with the source code of this program.</para>
-</sect1> 
+</sect1>
+<sect1 id="appendices">
+	<title>Appendices</title>
+	<glossary>
+		<title>Glossary of Terms</title>
+		<para>Glossary of terms used in &app; and this manual which may be unfamiliar to new users.
+		This section needs to be written.</para>
+		<glossdiv>
+			<title>Objects</title>
+			<para>Definitions of object used in encryption operations.</para>
+			<glossentry id="detached-signature-def">
+				<glossterm>Detached Signature</glossterm>
+				<glossdef>
+				</glossdef>
+			</glossentry>
+			<glossentry id="key-def">
+				<glossterm>Key</glossterm>
+				<glossdef>
+				</glossdef>
+			</glossentry>
+			<glossentry id="recipients-def">
+				<glossterm>Recipients</glossterm>
+				<glossdef>
+				</glossdef>
+			</glossentry>
+			<glossentry id="secret-key-def">
+				<glossterm>Secret Key</glossterm>
+				<glossdef>
+				</glossdef>
+			</glossentry>
+			<glossentry id="signature-def">
+				<glossterm>Signature</glossterm>
+				<glossdef>
+				</glossdef>
+			</glossentry>
+		</glossdiv>
+		<glossdiv>
+			<title>Operations</title>
+			<para>Definitions of crypto operations.</para>
+			<glossentry id="clear-sign-def">
+				<glossterm>Clear Sign</glossterm>
+				<glossdef>
+				</glossdef>
+			</glossentry>
+			<glossentry id="decrypt-def">
+				<glossterm>Decrypt</glossterm>
+				<glossdef>
+				</glossdef>
+			</glossentry>
+			<glossentry id="decrypt-verify=def">
+				<glossterm>Decrypt and Verify</glossterm>
+				<glossdef>
+				</glossdef>
+			</glossentry>
+			<glossentry id="detached-sign-def">
+				<glossterm>Detached Sign</glossterm>
+				<glossdef>
+				</glossdef>
+			</glossentry>
+			<glossentry id="encrypt-def">
+				<glossterm>Encrypt</glossterm>
+				<glossdef>
+				</glossdef>
+			</glossentry>
+			<glossentry id="export-def">
+				<glossterm>Export</glossterm>
+				<glossdef>
+				</glossdef>
+			</glossentry>
+			<glossentry id="import-def">
+				<glossterm>Import</glossterm>
+				<glossdef>
+				</glossdef>
+			</glossentry>
+			<glossentry id="sign-def">
+				<glossterm>Sign</glossterm>
+				<glossdef>
+				</glossdef>
+			</glossentry>
+			<glossentry id="verify-def">
+				<glossterm>Verify</glossterm>
+				<glossdef>
+				</glossdef>
+			</glossentry>
+		</glossdiv>
+		<glossdiv>
+			<title>Settings</title>
+			<para>Settings to control crypto operations.</para>
+		</glossdiv>
+	</glossary>
+</sect1>
 </article>

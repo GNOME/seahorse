@@ -22,6 +22,6 @@ USE_GNOME2_MACROS=1 . gnome-autogen.sh
 # If you don't have it, please do the following in some other dir:
 # cvs -z 4 -d :pserver:anoncvs@subversions.gnu.org:/cvsroot/config \
 # export -rHEAD config
-# and then copy both config.[guess,sub] files to the seahorse2 tree before 
+# and then copy both config.[guess,sub] files to the seahorse tree before 
 # calling 'make dist' target.
 # cp -f /usr/share/automake-1.6/config.[guess,sub] .
