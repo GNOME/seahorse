@@ -5,7 +5,12 @@ schemas_DATA = $(schemas_in_files:.schemas.in=.schemas)
 @INTLTOOL_SCHEMAS_RULE@
 
 install-data-local:
-	GCONF_CONFIG_SOURCE=$(GCONF_SCHEMA_CONFIG_SOURCE) gconftool-2 --makefile-install-rule $(schemas_DATA)
+	GCONF_CONFIG_SOURCE=$(GCONF_SCHEMA_CONFIG_SOURCE) gconftool-2 --makefile-install-rule $(schemas_DATA) || \
+	(echo ;\
+	echo "*****************************************************"; \
+	echo "Installation of schemas failed, install them manually"; \
+	echo "*****************************************************";)
+	@true
 
 @INTLTOOL_DESKTOP_RULE@
 
