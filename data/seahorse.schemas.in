@@ -121,37 +121,30 @@
 			</locale>
 		</schema>
 		<schema>
-			<key>/schemas/apps/seahorse/ui/statusbar_visible</key>
-			<applyto>/apps/seahorse/ui/statusbar_visible</applyto>
-			<owner>seahorse</owner>
-			<type>bool</type>
-			<default>TRUE</default>
-			<locale name="C">
-				<short>If the statusbar is visible</short>
-				<long>Controls the visibility of the key manager's statusbar.</long>
-			</locale>
-		</schema>
-		<schema>
-			<key>/schemas/apps/seahorse/ui/toolbar_visible</key>
-			<applyto>/apps/seahorse/ui/toolbar_visible</applyto>
-			<owner>seahorse</owner>
-			<type>bool</type>
-			<default>TRUE</default>
-			<locale name="C">
-				<short>If the toolbar is visible</short>
-				<long>Controls the visibility of the key manager's toolbar.</long>
-			</locale>
-		</schema>
-		<schema>
-			<key>/schemas/apps/seahorse/ui/toolbar_style</key>
-			<applyto>/apps/seahorse/ui/toolbar_style</applyto>
+			<key>/schemas/apps/seahorse/listing/sort_by</key>
+			<applyto>/apps/seahorse/listing/sort_by</applyto>
 			<owner>seahorse</owner>
 			<type>string</type>
-			<default>default</default>
+			<default>name</default>
 			<locale name="C">
-				<short>Style of toolbar buttons and labels</short>
-				<long>The toolbar button and label style. Options are
-				'default', 'both', 'both_horiz', 'icons', and 'text'.</long>
+				<short>The column to sort the seahorse keys by</short>
+				<long>Specify the column to sort the seahorse key manager main
+				window by. Columns are: 'name', 'id', 'validity', 'expires', 
+				'trust', 'length' and 'type'. Put a '-' in front of the column 
+				name to sort in descending order.</long>
+			</locale>
+		</schema>
+		<schema>
+			<key>/schemas/desktop/pgp/recipients/sort_by</key>
+			<applyto>/desktop/pgp/recipients/sort_by</applyto>
+			<owner>seahorse</owner>
+			<type>string</type>
+			<default>name</default>
+			<locale name="C">
+				<short>The column to sort the recipients by</short>
+				<long>Specify the column to sort the recipients window by. 
+				Columns are: 'name', 'id' and 'validity', Put a '-' in front of the 
+				column name to sort in descending order.</long>
 			</locale>
 		</schema>
 	</schemalist>

@@ -96,6 +96,43 @@ selection_changed (GtkTreeSelection *selection, SeahorseWidget *swidget)
 	g_list_free (list);
 }
 
+/* Called when mode dropdown changes */
+static void
+mode_changed (GtkWidget *widget, SeahorseKeyStore* skstore)
+{
+    gint active = gtk_combo_box_get_active (GTK_COMBO_BOX (widget));
+    if (active >= 0)
+        g_object_set (skstore, "mode", active, NULL);
+}
+
+/* Called when filter text box changes */
+static void
+filter_changed (GtkWidget *widget, SeahorseKeyStore* skstore)
+{
+    const gchar* text = gtk_entry_get_text (GTK_ENTRY (widget));
+    g_object_set (skstore, "filter", text, NULL);
+}
+
+/* Called when properties on the SeahorseKeyStore object change */
+static void
+update_filters (GObject* object, GParamSpec* arg, SeahorseWidget* swidget)
+{
+    guint mode;
+    gchar* filter;
+    GtkWidget* w;
+    
+   	/* Refresh combo box */
+    g_object_get (object, "mode", &mode, "filter", &filter, NULL);
+    w = glade_xml_get_widget (swidget->xml, "mode");
+    gtk_combo_box_set_active (GTK_COMBO_BOX (w), mode);
+    
+    /* Refresh the text filter */
+    w = glade_xml_get_widget (swidget->xml, "filter");
+    gtk_entry_set_text (GTK_ENTRY (w), filter ? filter : "");
+
+    g_free (filter);                                                
+}
+
 gpgme_key_t *
 seahorse_recipients_get (SeahorseContext *sctx)
 {
@@ -106,6 +143,7 @@ seahorse_recipients_get (SeahorseContext *sctx)
 	gint response;
 	gboolean done = FALSE;
 	gpgme_key_t * recips = NULL;
+    SeahorseKeyStore* skstore;
 	
 	swidget = seahorse_widget_new ("recipients", sctx);
 	g_return_val_if_fail (swidget != NULL, NULL);
@@ -114,11 +152,23 @@ seahorse_recipients_get (SeahorseContext *sctx)
 	
 	view = GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, VIEW));
 	selection = gtk_tree_view_get_selection (view);
-	gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
+	gtk_tree_selection_set_mode (selection, GTK_SELECTION_SINGLE);
 	g_signal_connect (selection, "changed",
 		G_CALLBACK (selection_changed), swidget);
-	seahorse_recipients_store_new (sctx, view);
-	
+        
+	skstore = seahorse_recipients_store_new (sctx, view);
+   
+    glade_xml_signal_connect_data (swidget->xml, "on_mode_changed", 
+                              G_CALLBACK (mode_changed), skstore);
+    glade_xml_signal_connect_data (swidget->xml, "on_filter_changed",
+                              G_CALLBACK (filter_changed), skstore);
+
+    g_signal_connect (skstore, "notify", G_CALLBACK (update_filters), swidget);
+    update_filters (G_OBJECT (skstore), NULL, swidget);
+
+    /* Start loading keys here */
+    seahorse_context_get_keys (sctx);
+                                        
 	widget = glade_xml_get_widget (swidget->xml, swidget->name);
 	while (!done) {
 		response = gtk_dialog_run (GTK_DIALOG (widget));

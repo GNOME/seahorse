@@ -27,32 +27,10 @@
 #include "seahorse-validity.h"
 #include "seahorse-util.h"
 
-const char* 
-get_algo_string (gpgme_pubkey_algo_t algo)
-{
-    /* TODO: Some of these strings need to be fixed */
-    switch (algo) {
-        case GPGME_PK_RSA:
-            return _("RSA");
-        case GPGME_PK_RSA_E:
-            return _("RSA-E");
-        case GPGME_PK_RSA_S:
-            return _("RSA-S");
-        case GPGME_PK_ELG_E:
-            return _("ELG-E");
-        case GPGME_PK_DSA:
-            return _("DSA");
-        case GPGME_PK_ELG:
-            return _("ELG");
-        default:
-            return _("Unknown");
-    }
-}
+#define KEY_MANAGER_SORT_KEY "/apps/seahorse/listing/sort_by"
 
 enum {
-	SKEY,
-	NAME,
-	KEYID,
+    KEY_STORE_BASE_COLUMNS,
 	VALIDITY_STR,
 	VALIDITY,
 	EXPIRES_STR,
@@ -64,20 +42,44 @@ enum {
 	COLS
 };
 
+static const gchar* col_ids[] = {
+    KEY_STORE_BASE_IDS,
+    "validity",
+    "validity",
+    "expires",
+    "expires",
+    "trust",
+    "trust",
+    "length",
+    "type"
+};
+
+static GType col_types[] = {
+    KEY_STORE_BASE_TYPES, 
+    G_TYPE_STRING,
+    G_TYPE_INT, 
+    G_TYPE_STRING, 
+    G_TYPE_LONG, 
+    G_TYPE_STRING, 
+    G_TYPE_INT,
+    G_TYPE_INT, 
+    G_TYPE_STRING
+};
+
 static void	seahorse_key_manager_store_class_init	(SeahorseKeyManagerStoreClass	*klass);
 
 static void	seahorse_key_manager_store_append	(SeahorseKeyStore		*skstore,
-							 SeahorseKey			*skey,
-							 GtkTreeIter			*iter);
-static void	seahorse_key_manager_store_set		(GtkTreeStore			*store,
-							 GtkTreeIter			*iter,
-							 SeahorseKey			*skey);
+                                                 SeahorseKey			*skey,
+                                                 GtkTreeIter			*iter);
+static void	seahorse_key_manager_store_set		(SeahorseKeyStore		*store,
+                                                 SeahorseKey            *skey,
+                                                 GtkTreeIter			*iter);
 static void	seahorse_key_manager_store_remove	(SeahorseKeyStore		*skstore,
-							 GtkTreeIter			*iter);
-static void	seahorse_key_manager_store_changed	(SeahorseKey			*skey,
-							 SeahorseKeyChange		change,
-							 SeahorseKeyStore		*skstore,
-							 GtkTreeIter			*iter);
+                                                 GtkTreeIter			*iter);
+static void	seahorse_key_manager_store_changed	(SeahorseKeyStore       *skstore,
+                                                 SeahorseKey			*skey,
+                                                 GtkTreeIter			*iter,
+                                                 SeahorseKeyChange      change);
 
 static SeahorseKeyStoreClass	*parent_class	= NULL;
 
@@ -116,6 +118,34 @@ seahorse_key_manager_store_class_init (SeahorseKeyManagerStoreClass *klass)
 	skstore_class->set = seahorse_key_manager_store_set;
 	skstore_class->remove = seahorse_key_manager_store_remove;
 	skstore_class->changed = seahorse_key_manager_store_changed;
+  
+  	/* Base class behavior and columns */
+    skstore_class->use_check = FALSE;
+    skstore_class->n_columns = COLS;
+    skstore_class->col_ids = col_ids;
+    skstore_class->col_types = col_types;
+    skstore_class->gconf_sort_key = KEY_MANAGER_SORT_KEY;
+}
+
+static const char* 
+get_algo_string (gpgme_pubkey_algo_t algo) {
+    /* TODO: Some of these strings need to be fixed */
+    switch (algo) {
+        case GPGME_PK_RSA:
+            return _("RSA");
+        case GPGME_PK_RSA_E:
+            return _("RSA-E");
+        case GPGME_PK_RSA_S:
+            return _("RSA-S");
+        case GPGME_PK_ELG_E:
+            return _("ELG-E");
+        case GPGME_PK_DSA:
+            return _("DSA");
+        case GPGME_PK_ELG:
+            return _("ELG");
+        default:
+            return _("Unknown");
+    }
 }
 
 /* Appends subkeys for @skey with @iter as parent */
@@ -154,7 +184,7 @@ seahorse_key_manager_store_append (SeahorseKeyStore *skstore, SeahorseKey *skey,
 
 /* Sets attributes for @skey at @iter and @skey's subkeys at @iter's children */
 static void
-seahorse_key_manager_store_set (GtkTreeStore *store, GtkTreeIter *iter, SeahorseKey *skey)
+seahorse_key_manager_store_set (SeahorseKeyStore *store, SeahorseKey *skey, GtkTreeIter *iter)
 {
 	GtkTreeIter child;
 	gint index = 1, max;
@@ -180,7 +210,7 @@ seahorse_key_manager_store_set (GtkTreeStore *store, GtkTreeIter *iter, Seahorse
 			expires = seahorse_util_get_date_string (expires_date);
 	}
 	
-	gtk_tree_store_set (store, iter,
+	gtk_tree_store_set (GTK_TREE_STORE (store), iter,
 		VALIDITY_STR, seahorse_validity_get_string (validity),
 		VALIDITY, validity,
 		EXPIRES_STR, expires,
@@ -193,17 +223,17 @@ seahorse_key_manager_store_set (GtkTreeStore *store, GtkTreeIter *iter, Seahorse
 	
 	max = seahorse_key_get_num_uids (skey);
 	
-	while (index < max && gtk_tree_model_iter_nth_child (
-	GTK_TREE_MODEL (store), &child, iter, index-1)) {
+	while (index < max && 
+        gtk_tree_model_iter_nth_child (GTK_TREE_MODEL (store), &child, iter, index-1)) {
         gchar *userid = seahorse_key_get_userid (skey, index);
-		gtk_tree_store_set (store, &child,
-			NAME, userid,
+		gtk_tree_store_set (GTK_TREE_STORE (store), &child,
+			KEY_STORE_NAME, userid,
 			TYPE, "UID", -1);
         g_free (userid);
 		index++;
 	}
 	
-	parent_class->set (store, iter, skey);
+	parent_class->set (store, skey, iter);
 }
 
 /* Removes subkeys, then does remove */
@@ -216,21 +246,20 @@ seahorse_key_manager_store_remove (SeahorseKeyStore *skstore, GtkTreeIter *iter)
 
 /* Refreshed @skey if trust has changed */
 static void
-seahorse_key_manager_store_changed (SeahorseKey *skey, SeahorseKeyChange change,
-				    SeahorseKeyStore *skstore, GtkTreeIter *iter)
+seahorse_key_manager_store_changed (SeahorseKeyStore *skstore, SeahorseKey *skey, 
+				               GtkTreeIter *iter, SeahorseKeyChange change)
 {
 	switch (change) {
 		case SKEY_CHANGE_TRUST: case SKEY_CHANGE_EXPIRES:
 		case SKEY_CHANGE_DISABLED:
-			SEAHORSE_KEY_STORE_GET_CLASS (skstore)->set (
-				GTK_TREE_STORE (skstore), iter, skey);
+			SEAHORSE_KEY_STORE_GET_CLASS (skstore)->set (skstore, skey, iter);
 			break;
 		/* Refresh uid iters, then let parent call set */
 		case SKEY_CHANGE_UIDS:
 			remove_uids (GTK_TREE_STORE (skstore), iter);
 			append_uids (GTK_TREE_STORE (skstore), iter, skey);
 		default:
-			parent_class->changed (skey, change, skstore, iter);
+			parent_class->changed (skstore, skey, iter, change);
 			break;
 	}
 }
@@ -277,14 +306,8 @@ seahorse_key_manager_store_new (SeahorseContext *sctx, GtkTreeView *view)
 	SeahorseKeyStore *skstore;
 	GtkTreeViewColumn *col;
 
-	GType columns[] = {
-	        G_TYPE_POINTER, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,
-		G_TYPE_INT, G_TYPE_STRING, G_TYPE_LONG, G_TYPE_STRING, G_TYPE_INT,
-		G_TYPE_INT, G_TYPE_STRING
-        };
-
 	skstore = g_object_new (SEAHORSE_TYPE_KEY_MANAGER_STORE, "ctx", sctx, NULL);
-	seahorse_key_store_init (skstore, view, COLS, columns);
+    seahorse_key_store_init (skstore, view);
 	
 	col = seahorse_key_store_append_column (view, _("Validity"), VALIDITY_STR);
 	gtk_tree_view_column_set_visible (col, eel_gconf_get_boolean (SHOW_VALIDITY_KEY));
@@ -308,8 +331,6 @@ seahorse_key_manager_store_new (SeahorseContext *sctx, GtkTreeView *view)
 	
 	eel_gconf_notification_add (LISTING_SCHEMAS, (GConfClientNotifyFunc)gconf_notification, view);
 	eel_gconf_monitor_add (LISTING_SCHEMAS);
-	
-	seahorse_context_get_keys (sctx);
 	
 	return skstore;
 }

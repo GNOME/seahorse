@@ -636,6 +636,13 @@ target_drag_data_received (GtkWidget *widget, GdkDragContext *context, gint x, g
         seahorse_context_keys_added (sctx, keys);        
 }
 
+/* Refilter the keys when the filter text changes */
+static void
+filter_changed (GtkWidget *widget, SeahorseKeyStore* skstore)
+{
+    const gchar* text = gtk_entry_get_text (GTK_ENTRY (widget));
+    g_object_set (skstore, "filter", text, NULL);
+}
 
 GtkWindow* 
 seahorse_key_manager_show (SeahorseContext *sctx)
@@ -644,6 +651,7 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 	GtkTreeView *view;
     GtkWidget* w;
 	GtkTreeSelection *selection;
+    SeahorseKeyStore *skstore;
 	
 	swidget = seahorse_widget_new ("key-manager", sctx);
 	gtk_object_sink (GTK_OBJECT (sctx));
@@ -729,7 +737,7 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 	gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
 	g_signal_connect (selection, "changed",
 		G_CALLBACK (selection_changed), swidget);
-	seahorse_key_manager_store_new (sctx, view);
+    skstore = seahorse_key_manager_store_new (sctx, view);
 	selection_changed (selection, swidget);
    
     w = glade_xml_get_widget (swidget->xml, "key-manager");
@@ -740,5 +748,10 @@ seahorse_key_manager_show (SeahorseContext *sctx)
     gtk_signal_connect (GTK_OBJECT (w), "drag_data_received",
             GTK_SIGNAL_FUNC (target_drag_data_received), sctx);
                         
+    /* For the filtering */
+    glade_xml_signal_connect_data(swidget->xml, "on_filter_changed",
+                              G_CALLBACK(filter_changed), skstore);
+
+    seahorse_context_get_keys (sctx);                                 
     return GTK_WINDOW (w);
 }
