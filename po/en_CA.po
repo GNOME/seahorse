@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-05 02:02-0500\n"
-"PO-Revision-Date: 2004-12-05 22:06-0400\n"
+"POT-Creation-Date: 2004-12-07 22:04-0500\n"
+"PO-Revision-Date: 2004-12-07 22:06-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: English/Canada <adamw@FreeBSD.org>\n"
 "MIME-Version: 1.0\n"
@@ -633,7 +633,7 @@ msgstr "Load Cancelled"
 msgid "Validity"
 msgstr "Validity"
 
-#: libseahorse/seahorse-recipients.c:81 src/seahorse-keyserver-results.c:152
+#: libseahorse/seahorse-recipients.c:81 src/seahorse-keyserver-results.c:215
 #, c-format
 msgid "Selected %d keys"
 msgid_plural "Selected %d keys"
@@ -733,7 +733,19 @@ msgstr "Could not run file-roller"
 msgid "The file-roller process did not complete successfully"
 msgstr "The file-roller process did not complete successfully"
 
-#: libseahorse/seahorse-util.c:730
+#: libseahorse/seahorse-util.c:746
+msgid "All PGP key files"
+msgstr "All PGP key files"
+
+#: libseahorse/seahorse-util.c:752 libseahorse/seahorse-util.c:792
+msgid "All files"
+msgstr "All files"
+
+#: libseahorse/seahorse-util.c:785
+msgid "Archive files"
+msgstr "Archive files"
+
+#: libseahorse/seahorse-util.c:814
 msgid ""
 "<b>A file already exists with this name.</b>\n"
 "\n"
@@ -743,7 +755,7 @@ msgstr ""
 "\n"
 "Do you want to replace it with a new file?"
 
-#: libseahorse/seahorse-util.c:733
+#: libseahorse/seahorse-util.c:817
 msgid "_Replace"
 msgstr "_Replace"
 
@@ -905,7 +917,7 @@ msgstr "Verify signature file"
 msgid "Read list of URIs on standard in"
 msgstr "Read list of URIs on standard input"
 
-#: src/main.c:146 src/seahorse-key-manager.c:183
+#: src/main.c:146 src/seahorse-key-manager.c:114
 #, c-format
 msgid "Couldn't import keys from \"%s\""
 msgstr "Could not import keys from \"%s\""
@@ -1404,52 +1416,40 @@ msgstr "Length"
 msgid "Type"
 msgstr "Type"
 
-#: src/seahorse-key-manager.c:95
-msgid "All PGP key files"
-msgstr "All PGP key files"
-
-#: src/seahorse-key-manager.c:103 src/seahorse-key-manager.c:144
-msgid "All files"
-msgstr "All files"
-
-#: src/seahorse-key-manager.c:137
-msgid "Archive files"
-msgstr "Archive files"
-
-#: src/seahorse-key-manager.c:162
+#: src/seahorse-key-manager.c:103
 msgid "Import Key"
 msgstr "Import Key"
 
-#: src/seahorse-key-manager.c:204
+#: src/seahorse-key-manager.c:135
 msgid "Couldn't import keys from clipboard"
 msgstr "Could not import keys from clipboard"
 
-#: src/seahorse-key-manager.c:241
+#: src/seahorse-key-manager.c:172
 msgid "Couldn't export key to clipboard"
 msgstr "Could not export key to clipboard"
 
-#: src/seahorse-key-manager.c:271
+#: src/seahorse-key-manager.c:202
 msgid "Export Key"
 msgstr "Export Key"
 
-#: src/seahorse-key-manager.c:292
+#: src/seahorse-key-manager.c:215 src/seahorse-keyserver-results.c:127
 #, c-format
 msgid "Couldn't export key to \"%s\""
 msgstr "Could not export key to \"%s\""
 
-#: src/seahorse-key-manager.c:309
+#: src/seahorse-key-manager.c:232
 msgid "Backup Keyrings to Archive"
 msgstr "Backup Keyrings to Archive"
 
-#: src/seahorse-key-manager.c:468
+#: src/seahorse-key-manager.c:383
 msgid "translator_credits"
 msgstr "Adam Weinberger <adamw@gnome.org>"
 
-#: src/seahorse-key-manager.c:488
+#: src/seahorse-key-manager.c:403
 msgid "seahorse"
 msgstr "seahorse"
 
-#: src/seahorse-key-manager.c:721
+#: src/seahorse-key-manager.c:636
 #, c-format
 msgid "Couldn't import key from \"%s\""
 msgstr "Could not import key from \"%s\""
@@ -1831,7 +1831,7 @@ msgstr "_Primary"
 msgid "_Signatures:"
 msgstr "_Signatures:"
 
-#: src/seahorse-keyserver-results.c:85
+#: src/seahorse-keyserver-results.c:85 src/seahorse-keyserver-results.c:154
 msgid "Couldn't retrieve key data from key server"
 msgstr "Could not retrieve key data from key server"
 
@@ -1839,11 +1839,15 @@ msgstr "Could not retrieve key data from key server"
 msgid "Couldn't import keys into keyring"
 msgstr "Could not import keys into keyring"
 
-#: src/seahorse-keyserver-results.c:268
+#: src/seahorse-keyserver-results.c:119
+msgid "Save Remote Keys"
+msgstr "Save Remote Keys"
+
+#: src/seahorse-keyserver-results.c:331
 msgid "Remote Keys"
 msgstr "Remote Keys"
 
-#: src/seahorse-keyserver-results.c:270
+#: src/seahorse-keyserver-results.c:333
 #, c-format
 msgid "Remote Keys Containing '%s'"
 msgstr "Remote Keys Containing '%s'"
