@@ -61,7 +61,7 @@ export_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
 	SeahorseWidget *srecips;
 
-	srecips = seahorse_recipients_new (swidget->sctx, FALSE);
+	srecips = seahorse_export_recipients_new (swidget->sctx);
 	seahorse_ops_file_export_multiple (swidget->sctx, get_file (swidget, FALSE),
 		seahorse_recipients_run (SEAHORSE_RECIPIENTS (srecips)));
 	seahorse_widget_destroy (srecips);
@@ -80,7 +80,7 @@ encrypt_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {	
 	SeahorseWidget *srecips;
 
-	srecips = seahorse_recipients_new (swidget->sctx, TRUE);
+	srecips = seahorse_encrypt_recipients_new (swidget->sctx);
 	seahorse_ops_file_encrypt (swidget->sctx, get_file (swidget, TRUE), seahorse_recipients_run (SEAHORSE_RECIPIENTS (srecips)));
 	seahorse_widget_destroy (srecips);
 }

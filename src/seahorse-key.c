@@ -1,7 +1,7 @@
 /*
  * Seahorse
  *
- * Copyright (C) 2002 Jacob Perkins
+ * Copyright (C) 2003 Jacob Perkins
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -164,7 +164,7 @@ seahorse_key_new (GpgmeKey key)
 void
 seahorse_key_destroy (SeahorseKey *skey)
 {
-	g_return_if_fail (GTK_IS_OBJECT (skey));
+	g_return_if_fail (skey != NULL && GTK_IS_OBJECT (skey));
 	
 	gtk_object_destroy (GTK_OBJECT (skey));
 }
@@ -179,7 +179,7 @@ seahorse_key_destroy (SeahorseKey *skey)
 void
 seahorse_key_changed (SeahorseKey *skey, SeahorseKeyChange change)
 {
-	g_return_if_fail (SEAHORSE_IS_KEY (skey));
+	g_return_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey));
 	
 	g_signal_emit (G_OBJECT (skey), key_signals[CHANGED], 0, change);
 }
@@ -199,7 +199,7 @@ seahorse_key_get_num_uids (const SeahorseKey *skey)
 	
 	g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), -1);
 	
-	while (seahorse_key_get_userid (skey, index))
+	while (gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_USERID, NULL, index))
 		index++;
 	
 	return index;
@@ -220,7 +220,7 @@ seahorse_key_get_num_subkeys (const SeahorseKey *skey)
 	
 	g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), -1);
 	
-	while (seahorse_key_get_keyid (skey, index+1))
+	while (gpgme_key_get_string_attr (skey->key, GPGME_ATTR_KEYID, NULL, index+1))
 		index++;
 	
 	return index;
@@ -240,15 +240,13 @@ const gchar*
 seahorse_key_get_keyid (const SeahorseKey *skey, const guint index)
 {
 	const gchar *keyid;
-	
+
 	g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), NULL);
 	
 	keyid = gpgme_key_get_string_attr (skey->key, GPGME_ATTR_KEYID, NULL, index);
+	g_return_val_if_fail (keyid != NULL, NULL);
 	
-	if (keyid != NULL)
-		return (keyid+8);
-	else
-		return NULL;
+	return (keyid+8);
 }
 
 /**
@@ -267,14 +265,28 @@ seahorse_key_get_userid (const SeahorseKey *skey, const guint index)
 {
 	const gchar *uid;
 	
-	uid = gpgme_key_get_string_attr (skey->key, GPGME_ATTR_USERID, NULL, index);
+	g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), NULL);
 	
-	if (uid == NULL)
-		return NULL;
+	uid = gpgme_key_get_string_attr (skey->key, GPGME_ATTR_USERID, NULL, index);
+	g_return_val_if_fail (uid != NULL, NULL);
 	
 	/* If not utf8 valid, assume latin 1 */
 	if (!g_utf8_validate (uid, -1, NULL))
 		uid = g_convert (uid, -1, "UTF-8", "ISO-8859-1", NULL, NULL, NULL);
 	
 	return uid;
+}
+
+gboolean
+seahorse_key_is_valid (const SeahorseKey *skey)
+{
+	g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), FALSE);
+	return !(gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_KEY_DISABLED, NULL, 0));
+}
+
+gboolean
+seahorse_key_can_encrypt (const SeahorseKey *skey)
+{
+	return (seahorse_key_is_valid (skey) &&
+		gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_CAN_ENCRYPT, NULL, 0));
 }

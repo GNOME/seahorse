@@ -36,7 +36,8 @@ seahorse_SOURCES = main.c \
 	seahorse-recipients-store.c seahorse-recipients-store.h \
 	seahorse-key-menu.c seahorse-key-menu.h \
 	seahorse-key-menu-item.c seahorse-key-menu-item.h \
-	seahorse-file-manager.c seahorse-file-manager.h
+	seahorse-file-manager.c seahorse-file-manager.h \
+	seahorse-encrypt-recipients-store.c seahorse-encrypt-recipients-store.h
 
 glade_DATA = seahorse-key-manager.glade2 \
 	seahorse-text-editor.glade2 \

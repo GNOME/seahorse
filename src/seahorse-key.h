@@ -22,10 +22,6 @@
 #ifndef __SEAHORSE_KEY_H__
 #define __SEAHORSE_KEY_H__
 
-/* SeahorseKey is a wrapper for a GpgmeKey that contains some extra data and signals.
- * SeahorseKey is a GtkObject in order to emit the 'destroy' signal, along with the 'changed' signal.
- * Any object or widget that contains a key should connect to these signals. */
-
 #include <gtk/gtk.h>
 #include <gpgme.h>
 
@@ -56,14 +52,18 @@ typedef struct _SeahorseKeyClass SeahorseKeyClass;
 struct _SeahorseKey
 {
 	GtkObject		parent;
+	
 	/*< public >*/
+	
 	GpgmeKey		key;
 };
 
 struct _SeahorseKeyClass
 {
 	GtkObjectClass		parent_class;
+	
 	/*< public >*/
+	
 	/* Signal emitted when one of the key's attributes has changed */
 	void 			(* changed)	(SeahorseKey		*skey,
 						 SeahorseKeyChange	change);
@@ -85,5 +85,9 @@ const gchar*	seahorse_key_get_keyid		(const SeahorseKey	*skey,
 
 const gchar*	seahorse_key_get_userid		(const SeahorseKey	*skey,
 						 const guint		index);
+
+gboolean	seahorse_key_is_valid		(const SeahorseKey	*skey);
+
+gboolean	seahorse_key_can_encrypt	(const SeahorseKey	*skey);
 
 #endif /* __SEAHORSE_KEY_H__ */

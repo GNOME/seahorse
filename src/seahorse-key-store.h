@@ -1,7 +1,7 @@
 /*
  * Seahorse
  *
- * Copyright (C) 2002 Jacob Perkins
+ * Copyright (C) 2003 Jacob Perkins
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,7 +40,6 @@
 
 typedef struct _SeahorseKeyStore SeahorseKeyStore;
 typedef struct _SeahorseKeyStoreClass SeahorseKeyStoreClass;
-typedef struct _SeahorseKeyRow SeahorseKeyRow;
 	
 struct _SeahorseKeyStore
 {
@@ -53,47 +52,52 @@ struct _SeahorseKeyStoreClass
 {
 	GtkTreeStoreClass	parent_class;
 	
-	/* Virtual method for setting row attributes, starting at parent iterator */
-	void			(*set)				(SeahorseKeyRow		*skrow,
-								 GtkTreeIter		*parent);
-	/* Virtual method for when a key has changed */
-	void			(*changed)			(SeahorseKey		*skey,
-								 SeahorseKeyChange	change,
-								 SeahorseKeyRow		*skrow);
+	/* Virtual method for appending a key. When subclass method finishes,
+	 * iter should be set to the parent of the new row. */
+	void			(* append)		(SeahorseKeyStore	*skstore,
+							 SeahorseKey		*skey,
+							 GtkTreeIter		*iter);
+
+	void			(* set)			(GtkTreeStore		*store,
+							 GtkTreeIter		*iter,
+							 SeahorseKey		*skey);
+	
+	/* Optional virtual method for removing a row. Only implement if iter
+	 * is a parent and has sub-iters. */
+	void			(* remove)		(SeahorseKeyStore	*skstore,
+							 GtkTreeIter		*iter);
+	
+	/* Virtual method for when the key at the row referenced by iter has changed. */
+	void			(* changed)		(SeahorseKey		*skey,
+							 SeahorseKeyChange	change,
+							 SeahorseKeyStore	*skstore,
+							 GtkTreeIter		*iter);
 };
 
-/* SeahorseKeyRow is a reference to a row in a tree store that contains a key. It is designed to be
- * used as a single object to be passed around by methods in SeahorseKeyStore and its subclasses.
- * It is not opaque so that sub classes can use it to get the key or store. */
-struct _SeahorseKeyRow
-{
-	GtkTreeStore		*store;
-	GtkTreeRowReference	*ref;
-	SeahorseKey		*skey;
-};
+void		seahorse_key_store_init			(SeahorseKeyStore	*skstore,
+							 GtkTreeView		*view,
+							 gint			cols,
+							 GType			*ccolumns);
 
-/* Transfer key row from current store to given key store, returning the new row */
-SeahorseKeyRow*		seahorse_key_row_transfer		(SeahorseKeyRow		*skrow,
-								 SeahorseKeyStore	*skstore);
+void		seahorse_key_store_destroy		(SeahorseKeyStore	*skstore);
 
-/* Removes all key rows from store */
-void			seahorse_key_store_destroy		(SeahorseKeyStore	*skstore);
+void		seahorse_key_store_populate		(SeahorseKeyStore	*skstore);
 
-/* Populates key store with current key ring */
-void			seahorse_key_store_populate		(SeahorseKeyStore	*skstore);
+GtkTreePath*	seahorse_key_store_get_selected_path	(GtkTreeView		*view);
 
-/* Sugar method for getting the selected key */
-SeahorseKey*		seahorse_key_store_get_selected_key	(GtkTreeView		*view);
+SeahorseKey*	seahorse_key_store_get_selected_key	(GtkTreeView		*view);
 
-/* Sugar method for getting the key at path */
-SeahorseKey*		seahorse_key_store_get_key_from_path	(GtkTreeView		*view,
-								 GtkTreePath		*path);
+SeahorseKey*	seahorse_key_store_get_key_from_path	(GtkTreeView		*view,
+							 GtkTreePath		*path);
 
-/* Sugar method for getting the selected key row */
-SeahorseKeyRow*		seahorse_key_store_get_selected_row	(GtkTreeView		*view);
+void		seahorse_key_store_append		(SeahorseKeyStore	*skstore,
+							 SeahorseKey		*skey);
 
-/* Returns the key row at path */
-SeahorseKeyRow*		seahorse_key_store_get_row_from_path	(GtkTreeView		*view,
-								 GtkTreePath		*path);
+void		seahorse_key_store_remove		(SeahorseKeyStore	*skstore,
+							 GtkTreePath		*path);
+
+void		seahorse_key_store_append_column	(GtkTreeView		*view,
+							 const gchar		*name,
+							 const gint		index);
 
 #endif /* __SEAHORSE_KEY_STORE_H__ */

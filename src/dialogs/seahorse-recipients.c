@@ -26,7 +26,7 @@
 #include "seahorse-util.h"
 #include "seahorse-ops-key.h"
 #include "seahorse-validity.h"
-#include "seahorse-recipients-store.h"
+#include "seahorse-encrypt-recipients-store.h"
 
 #define ALL "all_keys"
 #define RECIPIENTS "recipient_keys"
@@ -146,23 +146,17 @@ seahorse_recipients_get_property (GObject *object, guint prop_id, GValue *value,
 
 /* Moves key iter from right (non-recips) to left (recips) */
 static void
-add_recip (SeahorseWidget *swidget, SeahorseKeyRow *skrow)
+add_recip (SeahorseWidget *swidget, GtkTreePath *path)
 {
 	SeahorseRecipients *srecips;
 	GpgmeValidity validity;
 	GtkWidget *question;
 	gint response;
+	SeahorseKey *skey;
 	
 	srecips = SEAHORSE_RECIPIENTS (swidget);
 	
-	/* Check if need key that can encrypt */
-	if (srecips->need_validity && !gpgme_key_get_ulong_attr (skrow->skey->key, GPGME_ATTR_CAN_ENCRYPT, NULL, 0)) {
-		seahorse_util_show_error (GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)),
-			_("This key does not have encryption capability.\nIt cannot be added to the list."));
-		return;
-	}
-	
-	validity = gpgme_key_get_ulong_attr (skrow->skey->key, GPGME_ATTR_VALIDITY, NULL, 0);
+	validity = gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_VALIDITY, NULL, 0);
 	/* Check if need key to be fully valid */
 	if (srecips->need_validity && validity < GPGME_VALIDITY_FULL) {
 		question = gtk_message_dialog_new (
@@ -170,7 +164,7 @@ add_recip (SeahorseWidget *swidget, SeahorseKeyRow *skrow)
 			GTK_DIALOG_MODAL, GTK_MESSAGE_QUESTION, GTK_BUTTONS_YES_NO,
 			"%s\nis not a fully valid key.\n"
 			"Would you like to temporarily give it full validity for this operation?",
-			seahorse_key_get_userid (skrow->skey, 0));
+			seahorse_key_get_userid (skey, 0));
 		
 		response = gtk_dialog_run (GTK_DIALOG (question));
 		gtk_widget_destroy (question);
@@ -179,22 +173,29 @@ add_recip (SeahorseWidget *swidget, SeahorseKeyRow *skrow)
 		if (response != GTK_RESPONSE_YES)
 			return;
 	}
+
+	skey = seahorse_key_store_get_key_from_path (GTK_TREE_VIEW (
+		glade_xml_get_widget (swidget->xml, ALL)), path);
+	seahorse_key_store_remove (srecips->all_keys, path);
+	seahorse_key_store_append (srecips->recipient_keys, skey);
 	
-	skrow = seahorse_key_row_transfer (skrow, srecips->recipient_keys);
-	
-	seahorse_ops_key_recips_add (srecips->recips, skrow->skey);
+	seahorse_ops_key_recips_add (srecips->recips, skey);
 }
 
 /* Moves key from left (recips) to right (non-recips) */
 static void
-remove_recip (SeahorseWidget *swidget, SeahorseKeyRow *skrow)
+remove_recip (SeahorseWidget *swidget, GtkTreePath *path)
 {
 	GtkTreeModel *model;
 	GtkTreeIter iter;
 	SeahorseRecipients *srecips;
+	SeahorseKey *skey;
 	
 	srecips = SEAHORSE_RECIPIENTS (swidget);
-	skrow = seahorse_key_row_transfer (skrow, srecips->all_keys);
+	skey = seahorse_key_store_get_key_from_path (GTK_TREE_VIEW (
+		glade_xml_get_widget (swidget->xml, RECIPIENTS)), path);
+	seahorse_key_store_remove (srecips->recipient_keys, path);
+	seahorse_key_store_append (srecips->all_keys, skey);
 	
 	model = GTK_TREE_MODEL (srecips->recipient_keys);
 	
@@ -204,23 +205,27 @@ remove_recip (SeahorseWidget *swidget, SeahorseKeyRow *skrow)
 	
 	if (gtk_tree_model_get_iter_first (model, &iter)) {
 		do {
-			gtk_tree_model_get (model, &iter, 0, skrow, -1);
-			seahorse_ops_key_recips_add (srecips->recips, skrow->skey);
+			path = gtk_tree_model_get_path (model, &iter);
+			skey = seahorse_key_store_get_key_from_path (GTK_TREE_VIEW (
+				glade_xml_get_widget (swidget->xml, RECIPIENTS)), path);
+			seahorse_ops_key_recips_add (srecips->recips, skey);
 		} while (gtk_tree_model_iter_next (model, &iter));
 	}
 }
 
 /* Add recipient button clicked */
 static void
-add_clicked (GtkButton *button, SeahorseWidget *swidget){
-	add_recip (swidget, seahorse_key_store_get_selected_row (
+add_clicked (GtkButton *button, SeahorseWidget *swidget)
+{
+	add_recip (swidget, seahorse_key_store_get_selected_path (
 		GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, ALL))));
 }
 
 /* Remove recipient button clicked */
 static void
-remove_clicked (GtkButton *button, SeahorseWidget *swidget){
-	remove_recip (swidget, seahorse_key_store_get_selected_row (
+remove_clicked (GtkButton *button, SeahorseWidget *swidget)
+{
+	remove_recip (swidget, seahorse_key_store_get_selected_path (
 		GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, RECIPIENTS))));
 }
 
@@ -229,7 +234,7 @@ static void
 add_row_activated (GtkTreeView *view, GtkTreePath *path,
 		   GtkTreeViewColumn *arg2, SeahorseWidget *swidget)
 {
-	add_recip (swidget, seahorse_key_store_get_row_from_path (view, path));
+	add_recip (swidget, path);
 }
 
 /* Left (recip) key activated */
@@ -237,21 +242,19 @@ static void
 remove_row_activated (GtkTreeView *view, GtkTreePath *path,
 		      GtkTreeViewColumn *arg2, SeahorseWidget *swidget)
 {
-	remove_recip (swidget, seahorse_key_store_get_row_from_path (view, path));
+	remove_recip (swidget, path);
 }
 
-SeahorseWidget*
-seahorse_recipients_new (SeahorseContext *sctx, gboolean need_validity)
+static SeahorseWidget*
+seahorse_recipients_new (SeahorseContext *sctx, gboolean use_encrypt)
 {
 	SeahorseRecipients *srecips;
 	SeahorseWidget *swidget;
 	GtkTreeView *all_keys;
 	GtkTreeView *recips_keys;
-	GtkWidget *recipients;
-	gboolean done = FALSE;
 	
 	srecips = g_object_new (SEAHORSE_TYPE_RECIPIENTS, "name", "recipients", "ctx", sctx,
-		"validity", need_validity, NULL);
+		"validity", use_encrypt, NULL);
 	swidget = SEAHORSE_WIDGET (srecips);
 	
 	glade_xml_signal_connect_data (swidget->xml, "add_clicked",
@@ -265,16 +268,33 @@ seahorse_recipients_new (SeahorseContext *sctx, gboolean need_validity)
 	
 	/* Initialize key stores */
 	all_keys = GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, ALL));
-	srecips->all_keys = seahorse_recipients_store_new (sctx, all_keys);
-	seahorse_key_store_populate (srecips->all_keys);
-	
 	recips_keys = GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, RECIPIENTS));
-	srecips->recipient_keys = seahorse_recipients_store_new (sctx, recips_keys);
-	
-	recipients = glade_xml_get_widget (swidget->xml, swidget->name);
-	gtk_widget_show_all (recipients);
+
+	if (use_encrypt) {
+		srecips->all_keys = seahorse_encrypt_recipients_store_new (sctx, all_keys);
+		srecips->recipient_keys = seahorse_encrypt_recipients_store_new (sctx, recips_keys);
+	}
+	else {
+		srecips->all_keys = seahorse_recipients_store_new (sctx, all_keys);
+		srecips->recipient_keys = seahorse_recipients_store_new (sctx, recips_keys);
+	}
+
+	seahorse_key_store_populate (srecips->all_keys);
+	gtk_widget_show_all (glade_xml_get_widget (swidget->xml, swidget->name));
 
 	return swidget;
+}
+
+SeahorseWidget*
+seahorse_export_recipients_new (SeahorseContext *sctx)
+{
+	return seahorse_recipients_new (sctx, FALSE);
+}
+
+SeahorseWidget*
+seahorse_encrypt_recipients_new (SeahorseContext *sctx)
+{
+	return seahorse_recipients_new (sctx, TRUE);
 }
 
 GpgmeRecipients

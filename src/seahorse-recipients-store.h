@@ -1,7 +1,7 @@
 /*
  * Seahorse
  *
- * Copyright (C) 2002 Jacob Perkins
+ * Copyright (C) 2003 Jacob Perkins
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,9 +21,6 @@
 
 #ifndef __SEAHORSE_RECIPIENTS_STORE_H__
 #define __SEAHORSE_RECIPIENTS_STORE_H__
-
-/* KeyStore for recipients. Shows the recipient's
- * name, keyid, and validity */
 
 #include "seahorse-key-store.h"
 
@@ -45,9 +42,13 @@ struct _SeahorseRecipientsStore
 struct _SeahorseRecipientsStoreClass
 {
 	SeahorseKeyStoreClass	parent_class;
+	
+	/* Virtual method for deciding whether a key can be a recipient.
+	 * See seahorse_key_is_valid() and seahorse_key_can_encrypt(). */
+	gboolean		(* is_recip)		(const SeahorseKey	*skey);
+	
 };
 
-/* Creates a new RecipientsKeyStore in the tree view */
 SeahorseKeyStore*	seahorse_recipients_store_new	(SeahorseContext	*sctx,
 							 GtkTreeView		*view);
 

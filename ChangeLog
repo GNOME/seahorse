@@ -1,3 +1,17 @@
+2003-01-23  Jacob Perkins <jap1@users.sourceforge.net>
+
+	* seahorse-encrypt-recipients-store: Added
+	* seahorse-key-store:
+	* seahorse-recipients-store:
+	* seahorse-key-manager-store:
+	Redesign of key stores for extendability and listening to key changes
+	* seahorse-recipients: Modified to use new key-store setup,
+	replaced general ::new with ::export_recipients_new and
+	::encrypt_recipients_new
+	* seahorse-file-manager:
+	* seahorse-text-editor:
+	Modified to use new recipients setup
+
 2003-01-23  Jose Carlos Garcia Sogo <jsogo@debian.org>
 	
 	* configure.in: Added a working checking for GPGME 0.3.14 or greater
@@ -12,6 +26,8 @@
 	* Patches from bug #104166
 
 	* Released 0.6.0
+	
+	* seahorse-key: Added ::is_valid & ::can_encrypt; code cleanup & checks
 
 2003-01-19  Jacob Perkins <jap1@users.sourceforge.net>
 

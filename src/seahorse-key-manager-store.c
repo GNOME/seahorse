@@ -37,12 +37,23 @@ enum {
 
 static void	seahorse_key_manager_store_class_init	(SeahorseKeyManagerStoreClass	*klass);
 
-/* Virtual */
-static void	seahorse_key_manager_store_set		(SeahorseKeyRow			*skrow,
-							 GtkTreeIter			*parent);
-static void	seahorse_key_manager_store_key_changed	(SeahorseKey			*skey,
+static void	seahorse_key_manager_store_append	(SeahorseKeyStore		*skstore,
+							 SeahorseKey			*skey,
+							 GtkTreeIter			*iter);
+static void	seahorse_key_manager_store_set		(GtkTreeStore			*store,
+							 GtkTreeIter			*iter,
+							 SeahorseKey			*skey);
+static void	seahorse_key_manager_store_remove	(SeahorseKeyStore		*skstore,
+							 GtkTreeIter			*iter);
+static void	seahorse_key_manager_store_changed	(SeahorseKey			*skey,
 							 SeahorseKeyChange		change,
-							 SeahorseKeyRow			*skrow);
+							 SeahorseKeyStore		*skstore,
+							 GtkTreeIter			*iter);
+
+static void	seahorse_key_manager_store_set_attribs	(GtkTreeStore			*store,
+							 GtkTreeIter			*iter,
+							 SeahorseKey			*skey,
+							 guint				index);
 
 static SeahorseKeyStoreClass	*parent_class	= NULL;
 
@@ -77,99 +88,98 @@ seahorse_key_manager_store_class_init (SeahorseKeyManagerStoreClass *klass)
 	parent_class = g_type_class_peek_parent (klass);
 	skstore_class = SEAHORSE_KEY_STORE_CLASS (klass);
 	
+	skstore_class->append = seahorse_key_manager_store_append;
 	skstore_class->set = seahorse_key_manager_store_set;
-	skstore_class->changed = seahorse_key_manager_store_key_changed;
-}
-
-/* Sets attributes for row at iter using key index */
-static void
-set_attributes (SeahorseKeyRow *skrow, GtkTreeIter *iter, guint index)
-{
-	gtk_tree_store_set (skrow->store, iter,
-		SKEY, skrow,
-		NAME, seahorse_key_get_userid (skrow->skey, 0),
-		KEYID, seahorse_key_get_keyid (skrow->skey, index),
-		TRUST, seahorse_validity_get_trust_from_key (skrow->skey),
-		ALGO, gpgme_key_get_string_attr (skrow->skey->key, GPGME_ATTR_ALGO, NULL, index),
-		LENGTH, gpgme_key_get_ulong_attr (skrow->skey->key, GPGME_ATTR_LEN, NULL, index), -1);
+	skstore_class->remove = seahorse_key_manager_store_remove;
+	skstore_class->changed = seahorse_key_manager_store_changed;
 }
 
 static void
-seahorse_key_manager_store_set (SeahorseKeyRow *skrow, GtkTreeIter *parent)
+seahorse_key_manager_store_append (SeahorseKeyStore *skstore, SeahorseKey *skey, GtkTreeIter *iter)
 {
-	GtkTreeIter iter;
-	guint index = 1, max;
+	gtk_tree_store_append (GTK_TREE_STORE (skstore), iter, NULL);
+	parent_class->append (skstore, skey, iter);
+}
+
+static void
+remove_subkeys (GtkTreeStore *store, GtkTreeIter *iter)
+{
+	GtkTreeIter child;
+
+	while (gtk_tree_model_iter_children (GTK_TREE_MODEL (store), &child, iter))
+		gtk_tree_store_remove (store, &child);
+}
+
+static void
+seahorse_key_manager_store_set (GtkTreeStore *store, GtkTreeIter *iter, SeahorseKey *skey)
+{
+	GtkTreeIter child;
+	gint index = 1, max;
 	
-	set_attributes (skrow, parent, 0);
-	max = seahorse_key_get_num_subkeys (skrow->skey);
-	
-	/* Sub keys */
+	remove_subkeys (store, iter);
+	seahorse_key_manager_store_set_attribs (store, iter, skey, 0);
+	max = seahorse_key_get_num_subkeys (skey);
+
 	while (index <= max) {
-		gtk_tree_store_append (skrow->store, &iter, parent);
-		set_attributes (skrow, &iter, index);
+		gtk_tree_store_append (store, &child, iter);
+		seahorse_key_manager_store_set_attribs (store, iter, skey, index);
 		index++;
 	}
 }
 
-/* Sets primary attributes */
 static void
-seahorse_key_manager_store_key_changed (SeahorseKey *skey, SeahorseKeyChange change, SeahorseKeyRow *skrow)
+seahorse_key_manager_store_remove (SeahorseKeyStore *skstore, GtkTreeIter *iter)
 {
-	GtkTreeIter iter;
-	
-	g_return_if_fail (change == SKEY_CHANGE_TRUST);
-	g_return_if_fail (gtk_tree_model_get_iter (GTK_TREE_MODEL (skrow->store), &iter,
-		gtk_tree_row_reference_get_path (skrow->ref)));
-	set_attributes (skrow, &iter, 0);
+	remove_subkeys (GTK_TREE_STORE (skstore), iter);
+	parent_class->remove (skstore, iter);
+}
+
+static void
+seahorse_key_manager_store_changed (SeahorseKey *skey, SeahorseKeyChange change,
+				    SeahorseKeyStore *skstore, GtkTreeIter *iter)
+{
+	switch (change) {
+		case SKEY_CHANGE_TRUST:
+			SEAHORSE_KEY_STORE_GET_CLASS (skstore)->set (
+				GTK_TREE_STORE (skstore), iter, skey);
+			break;
+		default:
+			break;
+	}
+
+	parent_class->changed (skey, change, skstore, iter);
+}
+
+/* Sets attributes for row at iter using key index */
+static void
+seahorse_key_manager_store_set_attribs (GtkTreeStore *store, GtkTreeIter *iter,
+				       SeahorseKey *skey, guint index)
+{
+	gtk_tree_store_set (store, iter,
+		NAME, seahorse_key_get_userid (skey, 0),
+		KEYID, seahorse_key_get_keyid (skey, index),
+		TRUST, seahorse_validity_get_trust_from_key (skey),
+		ALGO, gpgme_key_get_string_attr (skey->key, GPGME_ATTR_ALGO, NULL, index),
+		LENGTH, gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_LEN, NULL, index), -1);
 }
 
 SeahorseKeyStore*
 seahorse_key_manager_store_new (SeahorseContext *sctx, GtkTreeView *view)
 {
-	GtkTreeStore *store;
-	GtkTreeViewColumn *column;
-        GtkCellRenderer *renderer;
+	SeahorseKeyStore *skstore;
 
-	static GType key_manager_columns[] = {
+	GType columns[] = {
 	        G_TYPE_POINTER, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INT
-						        };
-	store = g_object_new (SEAHORSE_TYPE_KEY_MANAGER_STORE, "ctx", sctx, NULL);
+        };
+
+	skstore = g_object_new (SEAHORSE_TYPE_KEY_MANAGER_STORE, "ctx", sctx, NULL);
+	seahorse_key_store_init (skstore, view, COLS, columns);
+
+	seahorse_key_store_append_column (view, _("Trust"), TRUST);
+	seahorse_key_store_append_column (view, _("Type"), ALGO);
+	seahorse_key_store_append_column (view, _("Length"), LENGTH);
 	
-	/* Do columns */
-	gtk_tree_store_set_column_types (store, COLS, key_manager_columns);
+	seahorse_key_store_populate (skstore);
 	
-	gtk_tree_view_set_model (view, GTK_TREE_MODEL (store));	
-	g_object_unref (store);
-	
-	renderer = gtk_cell_renderer_text_new ();
-	column = gtk_tree_view_column_new_with_attributes ("SeahorseKey", renderer, "text", SKEY, NULL);
-	
-	renderer = gtk_cell_renderer_text_new ();
-	column = gtk_tree_view_column_new_with_attributes (_("Name"), renderer, "text", NAME, NULL);
-	gtk_tree_view_column_set_resizable (column, TRUE);
-	gtk_tree_view_append_column (view, column);
-	
-	renderer = gtk_cell_renderer_text_new ();
-	column = gtk_tree_view_column_new_with_attributes (_("Key ID"), renderer, "text", KEYID, NULL);
-	gtk_tree_view_column_set_resizable (column, TRUE);
-	gtk_tree_view_append_column (view, column);
-	
-	renderer = gtk_cell_renderer_text_new ();
-	column = gtk_tree_view_column_new_with_attributes (_("Trust"), renderer, "text", TRUST, NULL);
-	gtk_tree_view_column_set_resizable (column, TRUE);
-	gtk_tree_view_append_column (view, column);
-	
-	renderer = gtk_cell_renderer_text_new ();
-	column = gtk_tree_view_column_new_with_attributes (_("Type"), renderer, "text", ALGO, NULL);
-	gtk_tree_view_column_set_resizable (column, TRUE);
-	gtk_tree_view_append_column (view, column);
-	
-	renderer = gtk_cell_renderer_text_new ();
-	column = gtk_tree_view_column_new_with_attributes (_("Length"), renderer, "text", LENGTH, NULL);
-	gtk_tree_view_column_set_resizable (column, TRUE);
-	gtk_tree_view_append_column (view, column);
-	
-	seahorse_key_store_populate (SEAHORSE_KEY_STORE (store));
-	
-	return SEAHORSE_KEY_STORE (store);
+	return skstore;
 }

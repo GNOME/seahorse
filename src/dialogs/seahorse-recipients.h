@@ -47,7 +47,10 @@ struct _SeahorseRecipients
 {
 	SeahorseWidget		parent;
 	
+	/*< public >*/
 	GpgmeRecipients		recips;
+
+	/*< private >*/
 	gboolean		need_validity;
 	SeahorseKeyStore	*all_keys;
 	SeahorseKeyStore	*recipient_keys;
@@ -58,12 +61,10 @@ struct _SeahorseRecipientsClass
 	SeahorseWidgetClass	parent_class;
 };
 
-/* Loads a new recipients dialog */
-SeahorseWidget*	seahorse_recipients_new (SeahorseContext	*sctx,
-					 gboolean		need_validity);
+SeahorseWidget*	seahorse_export_recipients_new (SeahorseContext		*sctx);
 
-/* Runs the recipients dialog until user is finished, returning the constructed recipient list or NULL.
- * Returned recipients will not be released if SeahorseRecipients is destroyed. */
+SeahorseWidget*	seahorse_encrypt_recipients_new	(SeahorseContext	*sctx);
+
 GpgmeRecipients	seahorse_recipients_run	(SeahorseRecipients	*srecips);
 
 #endif /* __SEAHORSE_RECIPIENTS_H__ */
