@@ -3,7 +3,7 @@ INCLUDES = \
 	-I$(top_builddir) \
 	-I$(top_srcdir) \
 	-I$(top_srcdir)/libseahorse \
-	$(SEAHORSE_CFLAGS) \
+	$(BONOBO_CFLAGS) \
 	-DDATA_DIR=\""$(datadir)"\"
 
 bonobodir = $(libdir)/bonobo
@@ -11,7 +11,7 @@ bonobo_LTLIBRARIES = libseahorse-pgp-file-listener.la
 
 libseahorse_pgp_file_listener_la_SOURCES = seahorse-pgp-file-listener.c
 
-libseahorse_pgp_file_listener_la_LIBADD = $(SEAHORSE_LIBS)
+libseahorse_pgp_file_listener_la_LIBADD = $(BONOBO_LIBS)
 libseahorse_pgp_file_listener_la_LDFLAGS = -module -avoid-version
 
 @INTLTOOL_SERVER_RULE@

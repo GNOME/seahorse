@@ -19,9 +19,7 @@ AC_CHECK_FUNCS(mlock)
 
 PKG_CHECK_MODULES(SEAHORSE, libgnomeui-2.0 libglade-2.0
 			    gtk+-2.0 >= 2.4.0 eel-2.0
-			    gnome-mime-data-2.0
-			    libbonobo-2.0 libbonoboui-2.0
-			    bonobo-activation-2.0 gnome-vfs-2.0)
+			    gnome-mime-data-2.0 gnome-vfs-2.0)
 
 PLUGIN_LIBTOOL_FLAGS="-module -avoid-version"
 AC_SUBST(PLUGIN_LIBTOOL_FLAGS)
@@ -225,6 +223,47 @@ fi
 
 
 dnl ***************
+dnl NAUTILUS
+dnl ***************
+
+# Allow nautilus plugin to be disabled
+AC_ARG_ENABLE(nautilus, 
+	    AC_HELP_STRING([--disable-nautilus],
+	    [Don't compile nautilus plugin]))
+
+with_nautilus_ext=
+with_nautilus=
+
+# Nautilus tests 
+if test "$enable_nautilus" = "no"; then
+	echo "disabling nautilus plugin"
+else
+	echo "enabling nautilus plugin..."
+	echo "checking for supported versions of nautilus..."
+
+	PKG_CHECK_MODULES(NAUTILUS, libnautilus-extension >= 2.9.0 glib-2.0 >= 2.6.0, , 
+        [PKG_CHECK_MODULES(BONOBO, libbonobo-2.0 libbonoboui-2.0 bonobo-activation-2.0 )])
+
+    # The new Nautilus extension
+    if test -n "$NAUTILUS_CFLAGS"; then
+        with_nautilus_ext=yes
+    	AC_SUBST(NAUTILUS_CFLAGS)
+	    AC_SUBST(NAUTILUS_LIBS)
+        
+    # The old Bonobo Nautilus extension
+    elif test -n "$BONOBO_CFLAGS"; then
+        with_nautilus=yes
+    	AC_SUBST(BONOBO_CFLAGS)
+	    AC_SUBST(BONOBO_LIBS)
+    fi
+
+fi
+
+AM_CONDITIONAL(WITH_NAUTILUS_EXT, test -n "$with_nautilus_ext")
+AM_CONDITIONAL(WITH_NAUTILUS, test -n "$with_nautilus")
+
+
+dnl ***************
 dnl AGENT
 dnl ***************
 
@@ -290,5 +329,6 @@ src/Makefile
 agent/Makefile
 plugins/Makefile
 plugins/nautilus/Makefile
+plugins/nautilus-ext/Makefile
 plugins/gedit/Makefile
 ])

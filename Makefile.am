@@ -6,7 +6,13 @@ else
 AGENT_DIR = 
 endif
 
-SUBDIRS = libseahorse bonobo src po data help pixmaps plugins $(AGENT_DIR)
+if WITH_NAUTILUS
+NAUTILUS_DIR = bonobo
+else
+NAUTILUS_DIR = 
+endif
+
+SUBDIRS = libseahorse src po data help pixmaps plugins $(AGENT_DIR) $(NAUTILUS_DIR)
 
 EXTRA_DIST = \
 	AUTHORS \
