@@ -24,6 +24,7 @@
 
 #include "config.h"
 #include "seahorse-prefs.h"
+#include "seahorse-util.h"
 #include "seahorse-check-button-control.h"
 #include "seahorse-default-key-control.h"
 
@@ -48,15 +49,6 @@ enum
     N_COLUMNS
 };
 
-/* Free a GSList along with string values */
-static void
-free_string_list (GSList *list)
-{
-    GSList *l;
-    for (l = list; l; l = l->next)
-        g_free (l->data);
-    g_slist_free (list);
-}
 
 /* Called when a cell has completed being edited */
 static void
@@ -138,7 +130,7 @@ save_keyservers (GtkTreeModel *model)
     
     eel_gconf_set_string_list (KEYSERVER_KEY, ks);
 
-    free_string_list (ks);
+    seahorse_util_string_slist_free (ks);
 }
 
 /* Called when values in a row changes */
@@ -279,7 +271,7 @@ setup_keyservers (SeahorseContext *sctx, SeahorseWidget *swidget)
     
     ks = eel_gconf_get_string_list (KEYSERVER_KEY);
     populate_keyservers (swidget, ks);
-    free_string_list(ks);
+    seahorse_util_string_slist_free (ks);
     
     treeview = GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, "keyservers"));
     model = gtk_tree_view_get_model (treeview);

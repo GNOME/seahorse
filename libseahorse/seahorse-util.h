@@ -107,6 +107,10 @@ gpgme_key_t* seahorse_util_list_to_keys      (GList *keys);
 
 void        seahorse_util_free_keys         (gpgme_key_t* keys);
 
+GSList*     seahorse_util_string_slist_free   (GSList *slist);
+
+GSList*     seahorse_util_string_slist_copy   (GSList *slist);
+
 #define     seahorse_util_wait_until(expr)          \
     while (!(expr)) {                               \
         g_thread_yield ();                          \

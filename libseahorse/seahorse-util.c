@@ -860,3 +860,24 @@ seahorse_util_free_keys (gpgme_key_t* keys)
         gpgmex_key_unref (*(k++));
     g_free (keys);
 }
+
+/* Free a GSList along with string values */
+GSList*
+seahorse_util_string_slist_free (GSList *list)
+{
+    GSList *l;
+    for (l = list; l; l = l->next)
+        g_free (l->data);
+    g_slist_free (list);
+    return NULL;
+}
+
+/* Copy a GSList along with string values */
+GSList*
+seahorse_util_string_slist_copy (GSList *list)
+{
+    GSList *l = NULL;
+    for ( ; list; list = g_slist_next(list))
+        l = g_slist_append (l, g_strdup(list->data));
+    return l;
+}   
