@@ -352,17 +352,6 @@ do_subkeys (SeahorseWidget *swidget)
 		if (SEAHORSE_IS_KEY_PAIR (skwidget->skey)) {
 			table = GTK_TABLE (gtk_table_new (4, 4, FALSE));
 			
-			do_stat_label (_("Status:"), table, 0, 3);
-			
-			if (gpgme_key_get_ulong_attr (skwidget->skey->key,
-			GPGME_ATTR_KEY_REVOKED, NULL, index))
-				do_stat_label (_("Revoked"), table, 1, 3);
-			else if (gpgme_key_get_ulong_attr (skwidget->skey->key,
-			GPGME_ATTR_KEY_EXPIRED, NULL, index))
-				do_stat_label (_("Expired"), table, 1, 3);
-			else
-				do_stat_label (_("Good"), table, 1, 3);
-			
 			/* Do revoke button */
 			if (!gpgme_key_get_ulong_attr (skwidget->skey->key,
 			GPGME_ATTR_KEY_REVOKED, NULL, index)) {
@@ -387,27 +376,9 @@ do_subkeys (SeahorseWidget *swidget)
 				gtk_widget_show_all (button);
 				gtk_table_attach (table, button, 2, 3, 3, 4, GTK_FILL, 0, 0, 0);
 			}
-			
-			/* Do delete button */
-			widget = gtk_button_new_from_stock (GTK_STOCK_DELETE);
-			g_signal_connect_after (GTK_BUTTON (widget), "clicked",
-				G_CALLBACK (del_subkey_clicked), swidget);
-			gtk_widget_show (widget);
-			gtk_table_attach (table, widget, 3, 4, 3, 4, GTK_FILL, 0, 0, 0);
 		}
-		else {
+		else
 			table = GTK_TABLE (gtk_table_new (3, 4, FALSE));
-			do_stat_label (_("Status:"), table, 2, 2);
-			
-			if (gpgme_key_get_ulong_attr (skwidget->skey->key,
-			GPGME_ATTR_KEY_REVOKED, NULL, index))
-				do_stat_label (_("Revoked"), table, 3, 2);
-			else if (gpgme_key_get_ulong_attr (skwidget->skey->key,
-			GPGME_ATTR_KEY_EXPIRED, NULL, index))
-				do_stat_label (_("Expired"), table, 3, 2);
-			else
-				do_stat_label (_("Good"), table, 3, 2);
-		}
 		
 		gtk_table_set_row_spacings (table, SPACING);
 		gtk_table_set_col_spacings (table, SPACING);
@@ -418,6 +389,22 @@ do_subkeys (SeahorseWidget *swidget)
 		gtk_widget_show_all (GTK_WIDGET (table));
 		
 		do_stats (swidget, table, 0, index);
+		
+		/* do status */
+		do_stat_label (_("Status:"), table, 0, 3);
+		if (gpgme_key_get_ulong_attr (skwidget->skey->key, GPGME_ATTR_KEY_REVOKED, NULL, index))
+			do_stat_label (_("Revoked"), table, 1, 3);
+		else if (gpgme_key_get_ulong_attr (skwidget->skey->key, GPGME_ATTR_KEY_EXPIRED, NULL, index))
+			do_stat_label (_("Expired"), table, 1, 3);
+		else
+			do_stat_label (_("Good"), table, 1, 3);
+		
+		/* Do delete button */
+		widget = gtk_button_new_from_stock (GTK_STOCK_DELETE);
+		g_signal_connect_after (GTK_BUTTON (widget), "clicked",
+			G_CALLBACK (del_subkey_clicked), swidget);
+		gtk_widget_show (widget);
+		gtk_table_attach (table, widget, 3, 4, 3, 4, GTK_FILL, 0, 0, 0);
 		
 		index++;
 	}
@@ -461,6 +448,7 @@ seahorse_key_properties_new (SeahorseContext *sctx, SeahorseKey *skey)
 		gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "change_passphrase"), FALSE);
 		gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "add_uid"), FALSE);
 		gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "add_subkey"), FALSE);
+		gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "add_revoker"), FALSE);
 	}
 	
 	/* Primary key attributes */

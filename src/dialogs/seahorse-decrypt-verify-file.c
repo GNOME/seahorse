@@ -34,14 +34,21 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 		glade_xml_get_widget (swidget->xml, swidget->name)));
 	
 	if (!seahorse_ops_file_check_suffix (file, SEAHORSE_CRYPT_FILE)) {
-		seahorse_util_show_error (NULL, _("You must choose an encrypted file ending in .gpg or .asc"));
+		seahorse_util_show_error (NULL,
+			_("You must choose an encrypted file ending in .gpg or .asc"));
 		return;
 	}
 	
 	if (seahorse_decrypt_verify_file (swidget->sctx, file))
 		seahorse_widget_destroy (swidget);
 }
-	
+
+/**
+ * seahorse_decrypt_verify_file_new:
+ * @sctx: #SeahorseContext
+ *
+ * Loads a file dialog for choosing a file to decrypt & verify.
+ **/
 void
 seahorse_decrypt_verify_file_new (SeahorseContext *sctx)
 {
@@ -54,6 +61,18 @@ seahorse_decrypt_verify_file_new (SeahorseContext *sctx)
 		G_CALLBACK (ok_clicked), swidget);
 }
 
+/**
+ * seahorse_decrypt_verify_file:
+ * @sctx: #SeahorseContext
+ * @file: Filename of file to decrypt & verify.
+ * Should have a .gpg or .asc extension.
+ *
+ * Tries to decrypt & verify @file using seahorse_ops_file_decrypt_verify,
+ * then shows a dialog with the decrypted file's location along with the
+ * signature status dialog from seahorse_signatures_new().
+ * 
+ * Returns: %TRUE if successful, %FALSE otherwise
+ **/
 gboolean
 seahorse_decrypt_verify_file (SeahorseContext *sctx, const gchar *file)
 {

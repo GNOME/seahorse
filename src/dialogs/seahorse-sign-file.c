@@ -41,7 +41,13 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 	if (seahorse_sign_file (swidget->sctx, file))
 		seahorse_widget_destroy (swidget);
 }
-	
+
+/**
+ * seahorse_sign_file_new:
+ * @sctx: #SeahorseContext
+ *
+ * Loads a file dialog for choosing a file to sign.
+ **/
 void
 seahorse_sign_file_new (SeahorseContext *sctx)
 {
@@ -54,6 +60,16 @@ seahorse_sign_file_new (SeahorseContext *sctx)
 		G_CALLBACK (ok_clicked), swidget);
 }
 
+/**
+ * seahorse_sign_file:
+ * @sctx: #SeahorseContext
+ * @file: Filename of file to sign
+ *
+ * Tries to create a signature file for @file using seahorse_ops_file_sign(),
+ * then shows a dialog with the new signatures file's location.
+ *
+ * Returns: %TRUE if successful, %FALSE otherwise
+ **/
 gboolean
 seahorse_sign_file (SeahorseContext *sctx, const gchar *file)
 {

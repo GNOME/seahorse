@@ -43,6 +43,12 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 		seahorse_widget_destroy (swidget);
 }
 
+/**
+ * seahorse_encrypt_file_new:
+ * @sctx: #SeahorseContext
+ *
+ * Loads a file dialog for choosing a file to encrypt.
+ **/
 void
 seahorse_encrypt_file_new (SeahorseContext *sctx)
 {
@@ -55,6 +61,17 @@ seahorse_encrypt_file_new (SeahorseContext *sctx)
 		G_CALLBACK (ok_clicked), swidget);
 }
 
+/**
+ * seahorse_encrypt_file:
+ * @sctx: #SeahorseContext
+ * @file: Filename of file to encrypt
+ *
+ * Gets recipients from #SeahorseEncryptRecipients, tries to encrypt @file
+ * using seahorse_ops_file_encrypt(), finally showing a dialog with the new
+ * encrypted file's location.
+ *
+ * Returns: %TRUE if successful, %FALSE otherwise
+ **/
 gboolean
 seahorse_encrypt_file (SeahorseContext *sctx, const gchar *file)
 {
@@ -66,7 +83,7 @@ seahorse_encrypt_file (SeahorseContext *sctx, const gchar *file)
 	recips = seahorse_recipients_run (SEAHORSE_RECIPIENTS (srecips));
 	seahorse_widget_destroy (srecips);
 	
-	if (seahorse_ops_file_encrypt (sctx, file, recips)) {
+	if (recips != NULL && seahorse_ops_file_encrypt (sctx, file, recips)) {
 		dialog = gtk_message_dialog_new (NULL, GTK_DIALOG_DESTROY_WITH_PARENT,
 			GTK_MESSAGE_INFO, GTK_BUTTONS_OK,
 			_("Encrypted file is %s"),
@@ -76,8 +93,10 @@ seahorse_encrypt_file (SeahorseContext *sctx, const gchar *file)
 		gtk_widget_show (dialog);
 		return TRUE;
 	}
-	else {
-		seahorse_util_show_error (NULL, g_strdup_printf (_("Could not encrypt %s"), file));
-		return FALSE;
+	else if (recips != NULL) {
+		seahorse_util_show_error (NULL, g_strdup_printf (
+			_("Could not encrypt %s"), file));
 	}
+	
+	return FALSE;
 }

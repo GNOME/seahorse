@@ -34,14 +34,21 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 		glade_xml_get_widget (swidget->xml, swidget->name)));
 	
 	if (!seahorse_ops_file_check_suffix (file, SEAHORSE_SIG_FILE)) {
-		seahorse_util_show_error (NULL, _("You must choose a signature file ending in .sig or .asc"));
+		seahorse_util_show_error (NULL,
+			_("You must choose a signature file ending in .sig or .asc"));
 		return;
 	}
 	
 	if (seahorse_verify_file (swidget->sctx, file))
 		seahorse_widget_destroy (swidget);
 }
-	
+
+/**
+ * seahorse_verify_file_new:
+ * @sctx: #SeahorseContext
+ *
+ * Loads a file dialog for choosing a signature file to verify.
+ **/
 void
 seahorse_verify_file_new (SeahorseContext *sctx)
 {
@@ -54,13 +61,26 @@ seahorse_verify_file_new (SeahorseContext *sctx)
 		G_CALLBACK (ok_clicked), swidget);
 }
 
+/**
+ * seahorse_verify_file:
+ * @sctx: #SeahorseContext
+ * @file: Filename of signature file to verify.
+ * Should have a .sig or .asc extension.
+ *
+ * Tries to verify @file using seahorse_ops_file_verify(), then shows
+ * the signature status dialog with seahorse_signatures_new().
+ *
+ * Returns: %TRUE if successful, %FALSE otherwise
+ **/
 gboolean
 seahorse_verify_file (SeahorseContext *sctx, const gchar *file)
 {
 	GpgmeSigStat status;
 	
-	if (seahorse_ops_file_verify (sctx, file, &status))
+	if (seahorse_ops_file_verify (sctx, file, &status)) {
 		seahorse_signatures_new (sctx, status);
+		return TRUE;
+	}
 	else {
 		seahorse_util_show_error (NULL, g_strdup_printf (_("Could not verify %s"), file));
 		return FALSE;

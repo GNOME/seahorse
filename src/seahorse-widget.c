@@ -278,20 +278,23 @@ seahorse_widget_show_progress (SeahorseContext *sctx, const gchar *op, gdouble f
 	GtkWidget *widget;
 	
 	widget = glade_xml_get_widget (swidget->xml, swidget->name);
-	gtk_widget_set_sensitive (widget, FALSE);
+	/* don't insensitize if last call */
+	if (fract != -1)
+		gtk_widget_set_sensitive (widget, FALSE);
 	
-	/* do status & progress */
 	if (swidget->component) {
+		/* do status */
 		status = GNOME_APPBAR (glade_xml_get_widget (swidget->xml, STATUS));
 		gnome_appbar_set_status (status, op);
 		progress = gnome_appbar_get_progress (status);
-		
+		/* do progress */
 		if (fract <= 1 && fract > 0)
 			gtk_progress_bar_set_fraction (progress, fract);
 		else if (fract != -1) {
 			gtk_progress_bar_set_pulse_step (progress, 0.05);
 			gtk_progress_bar_pulse (progress);
 		}
+		/* if fract == -1, cleanup progress */
 		else
 			gtk_progress_bar_set_fraction (progress, 0);
 	}

@@ -1134,6 +1134,8 @@ del_key_transit (guint current_state, GpgmeStatusCode status,
 			if (status == GPGME_STATUS_GET_BOOL && g_str_equal
 			(args, "keyedit.remove.subkey.okay"))
 				next_state = DEL_KEY_CONFIRM;
+			else if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
+				next_state = DEL_KEY_QUIT;
 			else {
 				next_state = DEL_KEY_ERROR;
 				*err = GPGME_General_Error;
