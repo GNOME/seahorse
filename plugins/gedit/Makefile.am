@@ -1,3 +1,8 @@
+
+@INTLTOOL_SCHEMAS_RULE@
+
+# PLUGIN ----------------------------------------------------------------
+
 plugindir = $(libdir)/gedit-2/plugins
 
 INCLUDES = \
@@ -22,4 +27,25 @@ plugin_in_files = seahorse-pgp.gedit-plugin.desktop.in
 
 plugin_DATA = $(plugin_in_files:.gedit-plugin.desktop.in=.gedit-plugin)
 
-EXTRA_DIST = $(plugin_DATA) 
+# SCHEMA -----------------------------------------------------------------
+
+schemasdir = $(GCONF_SCHEMA_FILE_DIR)
+schemas_in_files = seahorse-gedit.schemas.in
+schemas_DATA = $(schemas_in_files:.schemas.in=.schemas)
+
+if GCONF_SCHEMAS_INSTALL
+install-data-local:
+	@GCONF_CONFIG_SOURCE=$(GCONF_SCHEMA_CONFIG_SOURCE) gconftool-2 \
+		--makefile-install-rule $(schemas_DATA) || \
+		(echo ;\
+		echo "*****************************************************"; \
+		echo "Installation of schemas failed, install them manually"; \
+		echo "*****************************************************";)
+	@true
+else
+install-data-local:
+endif
+
+EXTRA_DIST = $(plugin_in_files) $(schemas_in_files)
+CLEANFILES = $(schemas_DATA) $(plugin_DATA)
+	
