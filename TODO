@@ -1,4 +1,4 @@
-TODO (last updated 2003-01-31)
+TODO (last updated 2003-02-03)
 ==============================
 
 Seahorse TODO list.
@@ -75,3 +75,17 @@ Future Features
 [ ] Visual trust diagram
 [ ] Complete usage & concept manual
 [ ] Other app plugins
+
+Non-tasked issues/todo
+----------------------
+
+1. Register with gnome-vfs so can do file ops in nautilus, similar to file-roller.
+However, due to the use of seahorse's preferences, a control-center capplet (is this the correct word?)
+should be provided.
+	.*: Import, Encrypt, Sign
+	.asc: Decrypt, Verify
+	.gpg: Decrypt
+	.sig: Verify
+2. Changing a key's owner trust may affect the validity of any keys it has signed.
+Since keys are cached, the signed key's validity may not be correct until it has been updated.
+3. Register a keys:/// uri, which could allow editing from within nautilus.

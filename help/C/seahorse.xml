@@ -2,9 +2,9 @@
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
 "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
 <!ENTITY legal SYSTEM "legal.xml">
-<!ENTITY appversion "0.6.0">
-<!ENTITY manrevision "2.0">
-<!ENTITY date "January 2003">
+<!ENTITY appversion "0.7.0">
+<!ENTITY manrevision "2.1">
+<!ENTITY date "February 2003">
 <!ENTITY app "<application>seahorse</application>">
 ]>
 <!-- =============Document Header ============================= -->
@@ -64,7 +64,7 @@
 		<listitem><para><xref linkend="file-manager"/></para></listitem>
 	</itemizedlist>
 	<para>&app; is an application and a project.
-	The primary goal of the &app; application is to provide an easy to use yet powerful key manager tool.
+	The primary goal of the &app; application is to provide an easy to use yet powerful key management tool.
 	The secondary goal is to provide basic encryption capabilities.
 	The goal of the project is to provide the &app; application,
 	along with plugins for GNOME applications to make encryption easy on the GNOME Desktop.</para>
@@ -509,15 +509,27 @@ which the application is designed. -->
 			Otherwise, the date is simply a label stating <guilabel>Never</guilabel>
 			or the exact date.</para>
 		</sect3>
-		<sect3 id="userid">
+		<sect3 id="userid-properties">
 			<title>User IDs</title>
 			<para>Below the <xref linkend="key-expires"/> is the list of <glossterm>user IDs</glossterm>.</para>
+			<sect4 id="userid-primary">
+			</sect4>
+			<sect4 id="userid-delete">
+			</sect4>
 		</sect3>
-		<sect3 id="subkeys">
+		<sect3 id="subkeys-properties">
 			<title>Sub Keys</title>
 			<para>Below the <xref linkend="userid"/> list is the list of <glossterm>sub keys</glossterm>.
 			<note>Not all <glossterm>keys</glossterm> have <glossterm>sub keys</glossterm>.</note>
 			<glossterm>Sub keys</glossterm> have <xref linkend="key-attributes"/>.</para>
+			<sect4 id="subkey-revoke">
+				<title>Revoking a Subkey</title>
+				<para>Write me</para>
+			</sect4>
+			<sect4 id="subkey-delete">
+				<title>Deleting a Subkey</title>
+				<para>Write me</para>
+			</sect4>
 		</sect3>
 		<sect3 id="change-passphrase">
 			<title>Change Passphrase</title>
@@ -525,6 +537,14 @@ which the application is designed. -->
 			you can select <menuchoice><guimenu>Edit</guimenu><guimenuitem>Change Passphrase</guimenuitem></menuchoice>.
 			The first <xref linkend="passphrase"/> entry is for the original <glossterm>passphrase</glossterm>,
 			the second <xref linkend="passphrase"/> entry is for the new <glossterm>passphrase</glossterm>.</para>
+		</sect3>
+		<sect3 id="add-uid">
+			<title>Adding a User ID</title>
+			<para>Write me</para>
+		</sect3>
+		<sect3 id="add-subkey">
+			<title>Adding a Subkey</title>
+			<para>Write me</para>
 		</sect3>
 	</sect2>
 	<sect2 id="delete">
@@ -659,89 +679,133 @@ manual, this is the place to put it. Alternatively, you can put this information
 	<title>Appendices</title>
 	<glossary>
 		<title>Glossary of Terms</title>
-		<para>Glossary of terms used in &app; and this manual which may be unfamiliar to new users.
-		This section needs to be written.</para>
+		<para>Glossary of terms used in &app; and this manual,
+		which may be unfamiliar to those new to encryption.</para>
 		<glossdiv>
-			<title>Objects</title>
-			<para>Definitions of object used in encryption operations.</para>
-			<glossentry id="detached-signature-def">
-				<glossterm>Detached Signature</glossterm>
+			<title>Keys</title>
+			<glossentry id="dsa-key">
+				<glossterm>DSA Key</glossterm>
 				<glossdef>
+					<para>A DSA key can be a primary key, as well as a subkey.
+					It is the default primary key for newly created keys.
+					A DSA key provides signing capabilities.
+					The length ranges from 768 to 1024.</para>
 				</glossdef>
 			</glossentry>
-			<glossentry id="key-def">
+			<glossentry id="elgamal-key">
+				<glossterm>ElGamal Subkey</glossterm>
+				<glossdef>
+					<para>An ElGamal key can only be a subkey.
+					It is the default subkey for newly created keys.
+					An ElGamal subkey provides encryption capabilities.
+					The length ranges from 768 to 4096.</para>
+				</glossdef>
+			</glossentry>
+			<glossentry id="key-expiration">
+				<glossterm>Expiration Date</glossterm>
+				<glossdef>
+					<para>Write me</para>
+				</glossdef>
+			</glossentry>
+			<glossentry id="key">
 				<glossterm>Key</glossterm>
 				<glossdef>
+					<para>Write me</para>
+					<glossseealso otherterm="public-key">Public Key</glossseealso>
+					<glossseealso otherterm="private-key">Private Key</glossseealso>
+					<glossseealso otherterm="key-attributes">Key Attributes</glossseealso>
 				</glossdef>
 			</glossentry>
-			<glossentry id="recipients-def">
-				<glossterm>Recipients</glossterm>
+			<glossentry id="key-attributes">
+				<glossterm>Key Attributes</glossterm>
 				<glossdef>
+					<para>Every key contains the following attributes:
+					<itemizedlist>
+						<listitem><para>Key ID</para></listitem>
+						<listitem><xref linkend="key-type"/></listitem>
+						<lisitem><para>Creation date</para></lisitem>
+						<listitem><xref linkend="key-length"/></listitem>
+						<listitem><xref linkend="key-expiration"/></listitem>
+					</itemizedlist></para>
 				</glossdef>
 			</glossentry>
-			<glossentry id="secret-key-def">
-				<glossterm>Secret Key</glossterm>
+			<glossentry id="key-ring">
+				<glossterm>Key Ring</glossterm>
 				<glossdef>
+					<para>A key ring is a collection of keys.
+					The keys can be your personal keys and/or other's public keys.</para>
+					<glossseealso otherterm="key">Key</glossseealso>
 				</glossdef>
 			</glossentry>
-			<glossentry id="signature-def">
-				<glossterm>Signature</glossterm>
+			<glossentry id="key-signature">
+				<glossterm>Key Signature</glossterm>
 				<glossdef>
+					<para>Write me</para>
 				</glossdef>
 			</glossentry>
-		</glossdiv>
-		<glossdiv>
-			<title>Operations</title>
-			<para>Definitions of crypto operations.</para>
-			<glossentry id="clear-sign-def">
-				<glossterm>Clear Sign</glossterm>
+			<glossentry id="key-length">
+				<glossterm>Length</glossterm>
 				<glossdef>
+					<para>Except for a DSA key, the maximum key length is 4096.</para>
+					<glossseealso otherterm="dsa-key">DSA</glossseealso>
+					<glossseealso otherterm="elgamal-key">ElGamal</glossseealso>
+					<glossseealso otherterm="rsa-key">RSA</glossseealso>
 				</glossdef>
 			</glossentry>
-			<glossentry id="decrypt-def">
-				<glossterm>Decrypt</glossterm>
+			<glossentry id="owner-trust">
+				<glossterm>Owner Trust</glossterm>
 				<glossdef>
+					<para>Write me</para>
 				</glossdef>
 			</glossentry>
-			<glossentry id="decrypt-verify=def">
-				<glossterm>Decrypt and Verify</glossterm>
+			<glossentry id="public-key">
+				<glossterm>Public Key</glossterm>
 				<glossdef>
+					<para>Write me</para>
 				</glossdef>
 			</glossentry>
-			<glossentry id="detached-sign-def">
-				<glossterm>Detached Sign</glossterm>
+			<glossentry id="private-key">
+				<glossterm>Private Key</glossterm>
 				<glossdef>
+					<para>Write me</para>
 				</glossdef>
 			</glossentry>
-			<glossentry id="encrypt-def">
-				<glossterm>Encrypt</glossterm>
+			<glossentry id="rsa-key">
+				<glossterm>RSA key</glossterm>
 				<glossdef>
+					<para>A RSA key can be a primary key or a subkey.
+					As a primary key, it provides signing capbilities.
+					As a subkey, it can provide signing or encryption capabilities.
+					The length ranges from 1024 to 4096.</para>
 				</glossdef>
 			</glossentry>
-			<glossentry id="export-def">
-				<glossterm>Export</glossterm>
+			<glossentry id="subkey">
+				<glossterm>Subkey</glossterm>
 				<glossdef>
+					<para>Write me</para>
 				</glossdef>
 			</glossentry>
-			<glossentry id="import-def">
-				<glossterm>Import</glossterm>
+			<glossentry id="key-type">
+				<glossterm>Type</glossterm>
 				<glossdef>
+					<para>A key's type refers to the algorithm of the key.</para>
+					<glossseealso otherterm="dsa-key">DSA</glossseealso>
+					<glossseealso otherterm="elgamal-key">ElGamal</glossseealso>
+					<glossseealso otherterm="rsa-key">RSA</glossseealso>
 				</glossdef>
 			</glossentry>
-			<glossentry id="sign-def">
-				<glossterm>Sign</glossterm>
+			<glossentry id="userid">
+				<glossterm>User ID</glossterm>
 				<glossdef>
+					<para>Write me</para>
 				</glossdef>
 			</glossentry>
-			<glossentry id="verify-def">
-				<glossterm>Verify</glossterm>
+			<glossentry id="validity">
+				<glossterm>Validity</glossterm>
 				<glossdef>
+					<para>Write me</para>
 				</glossdef>
 			</glossentry>
-		</glossdiv>
-		<glossdiv>
-			<title>Settings</title>
-			<para>Settings to control crypto operations.</para>
 		</glossdiv>
 	</glossary>
 </sect1>
