@@ -71,6 +71,7 @@ DECLARE_OPERATION (Load, load)
     /*< private >*/
     SeahorsePGPSource *psrc;        /* Key source to add keys to when found */
     gpgme_ctx_t ctx;                /* GPGME context we're loading from */
+    gboolean secret;                /* Loading secret keys */
     guint loaded;                   /* Number of keys we've loaded */
     guint batch;                    /* Number to load in a batch, or 0 for synchronous */
     guint stag;                     /* The event source handler id (for stopping a load) */
@@ -299,10 +300,12 @@ release_key (const gchar* id, SeahorseKey *skey, SeahorsePGPSource *psrc)
 }
 
 static gboolean
-have_key_in_source (SeahorsePGPSource *psrc, const gchar *id)
+have_key_in_source (SeahorsePGPSource *psrc, const gchar *id, gboolean secret)
 {
+    SeahorseKey *skey;
     g_return_val_if_fail (SEAHORSE_IS_PGP_SOURCE (psrc), FALSE);
-    return (g_hash_table_lookup (psrc->priv->keys, id) != NULL);
+    skey = SEAHORSE_KEY (g_hash_table_lookup (psrc->priv->keys, id));
+    return skey && (!secret || SEAHORSE_IS_KEY_PAIR (skey));
 }
 
 /* Add a key to our internal tables, possibly overwriting or combining with other keys  */
@@ -498,7 +501,7 @@ keyload_handler (SeahorseLoadOperation *lop)
             g_hash_table_remove (lop->checks, id);
 
             /* When not doing all keys and already have ... */
-            if (!lop->all && have_key_in_source (lop->psrc, id)) {
+            if (!lop->all && have_key_in_source (lop->psrc, id, lop->secret)) {
 
                 /* ... then just ignore */
                 gpgmex_key_unref (key);
@@ -557,6 +560,7 @@ seahorse_load_operation_start (SeahorsePGPSource *psrc, const gchar *pattern,
 
     lop = g_object_new (SEAHORSE_TYPE_LOAD_OPERATION, NULL);    
     lop->psrc = psrc;
+    lop->secret = secret;
     g_object_ref (psrc);
     
     /* When loading a specific key, we load extra info */
