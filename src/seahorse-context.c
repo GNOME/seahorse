@@ -23,6 +23,7 @@
 #include <gconf/gconf-client.h>
 
 #include "seahorse-context.h"
+#include "seahorse-key-pair.h"
 
 #define PREFERENCES "/apps/seahorse/preferences"
 #define ARMOR_KEY PREFERENCES "/ascii_armor"
@@ -31,7 +32,6 @@
 
 struct _SeahorseContextPrivate
 {
-	//GList *key_ring;
 	GConfClient *gclient;
 	GList *key_pairs;
 	GList *single_keys;
@@ -186,13 +186,29 @@ static void
 seahorse_context_key_changed (SeahorseKey *skey, SeahorseKeyChange change, SeahorseContext *sctx)
 {
 	GpgmeKey key;
+	SeahorseKeyPair *skpair;
 	
+	/* get key */
 	g_return_if_fail (gpgme_op_keylist_start (sctx->ctx,
-		seahorse_key_get_keyid (skey, 0), FALSE) == GPGME_No_Error);
+		gpgme_key_get_string_attr (skey->key, GPGME_ATTR_FPR, NULL, 0), FALSE) == GPGME_No_Error);
 	g_return_if_fail (gpgme_op_keylist_next (sctx->ctx, &key) == GPGME_No_Error);
 	gpgme_op_keylist_end (sctx->ctx);
+	/* set key */
 	gpgme_key_unref (skey->key);
 	skey->key = key;
+	
+	/* if is a pair */
+	if (SEAHORSE_IS_KEY_PAIR (skey)) {
+		skpair = SEAHORSE_KEY_PAIR (skey);
+		/* get key */
+		g_return_if_fail (gpgme_op_keylist_start (sctx->ctx,
+			gpgme_key_get_string_attr (skey->key, GPGME_ATTR_FPR, NULL, 0), TRUE) == GPGME_No_Error);
+		g_return_if_fail (gpgme_op_keylist_next (sctx->ctx, &key) == GPGME_No_Error);
+		gpgme_op_keylist_end (sctx->ctx);
+		/* set key */
+		gpgme_key_unref (skpair->secret);
+		skpair->secret = key;
+	}
 }
 
 /* Add a new SeahorseKey to the key ring */
@@ -202,26 +218,28 @@ add_key (GpgmeKey key, SeahorseContext *sctx)
 	SeahorseKey *skey;
 	GpgmeKey secret;
 	
-	/*** could get secret first, then do new_pair ***/
-	skey = seahorse_key_new (key);
+	g_return_if_fail (gpgme_op_keylist_start (sctx->ctx,
+		gpgme_key_get_string_attr (key, GPGME_ATTR_FPR, NULL, 0), TRUE) == GPGME_No_Error);
+	/* check if has secret, then do new pair */
+	if (gpgme_op_keylist_next (sctx->ctx, &secret) == GPGME_No_Error) {
+		skey = seahorse_key_pair_new (key, secret);
+		sctx->priv->key_pairs = g_list_append (sctx->priv->key_pairs, skey);
+		gpgme_key_unref (secret);
+	}
+	else {
+		skey = seahorse_key_new (key);
+		sctx->priv->single_keys = g_list_append (sctx->priv->single_keys, skey);
+	}
+	gpgme_op_keylist_end (sctx->ctx);
+	
 	g_object_ref (skey);
 	gtk_object_sink (GTK_OBJECT (skey));
+	gpgme_key_unref (key);
 	
 	g_signal_connect_after (GTK_OBJECT (skey), "destroy",
 		G_CALLBACK (seahorse_context_key_destroyed), sctx);
 	g_signal_connect (skey, "changed",
 		G_CALLBACK (seahorse_context_key_changed), sctx);
-	/* insert key into correct list */
-	g_return_if_fail (gpgme_op_keylist_start (sctx->ctx,
-		gpgme_key_get_string_attr (key, GPGME_ATTR_FPR, NULL, 0), TRUE) == GPGME_No_Error);
-	/* check if has secret */
-	if (gpgme_op_keylist_next (sctx->ctx, &secret) == GPGME_No_Error) {
-		sctx->priv->key_pairs = g_list_append (sctx->priv->key_pairs, skey);
-		gpgme_key_unref (secret);
-	}
-	else
-		sctx->priv->single_keys = g_list_append (sctx->priv->single_keys, skey);
-	gpgme_op_keylist_end (sctx->ctx);
 	
 	return skey;
 }

@@ -34,7 +34,6 @@ enum {
 };
 
 static void		seahorse_key_class_init		(SeahorseKeyClass	*klass);
-static void		seahorse_key_init		(SeahorseKey		*skey);
 static void		seahorse_key_finalize		(GObject		*gobject);
 static void		seahorse_key_set_property	(GObject		*object,
 							 guint			prop_id,
@@ -114,7 +113,6 @@ seahorse_key_set_property (GObject *object, guint prop_id, const GValue *value, 
 	skey = SEAHORSE_KEY (object);
 	
 	switch (prop_id) {
-		/* Sets the key and saves the primary name, # user ids, # subkeys */
 		case PROP_KEY:
 			skey->key = g_value_get_pointer (value);
 			gpgme_key_ref (skey->key);

@@ -21,6 +21,7 @@ seahorse_LDADD = \
 
 seahorse_SOURCES = main.c \
 	seahorse-key.c seahorse-key.h \
+	seahorse-key-pair.c seahorse-key-pair.h \
 	seahorse-context.c seahorse-context.h \
 	seahorse-widget.c seahorse-widget.h \
 	seahorse-key-manager.c seahorse-key-manager.h \
