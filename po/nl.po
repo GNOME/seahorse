@@ -4,20 +4,23 @@
 # Tino Meinen <a.t.meinen@chello.nl>, 2003.
 # ---
 # Armor			Harnas
-# Decrypt		Ontsleutelen
+# Decrypt		Ontsleutelen-> ontcijferen
 # Encrypt		Versleutelen
 # Passphrase		Wachtwoordfrase
 # Sign			Signeren of onderteken?
 # Trust			Vertrouwen
 # Validity		Geldigheid
-# Verify		Verifieren
+# Verify		Verifiëren
+# -------------
+# Deze vertaling moet nog eens goed nagekeken worden door iemand die hier veel
+# verstand van heeft.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Seahorse Gnome2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-07-16 16:00+0200\n"
-"PO-Revision-Date: 2003-07-01 03:06+0200\n"
+"POT-Creation-Date: 2003-08-17 20:54+0200\n"
+"PO-Revision-Date: 2003-08-18 01:54+0200\n"
 "Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
 "Language-Team: Dutch <vertaling@nl.linux.org>\n"
 "MIME-Version: 1.0\n"
@@ -26,16 +29,15 @@ msgstr ""
 
 #: bonobo/Seahorse_PGP_File_Listener.server.in.in.h:1
 msgid "Decrypt And Verify Signatures..."
-msgstr "Handtekeningen ontsleutelen & verifiëren..."
+msgstr "Handtekeningen ontcijferen & verifiëren..."
 
 #: bonobo/Seahorse_PGP_File_Listener.server.in.in.h:2
 msgid "Decrypt..."
-msgstr "Ontsleutelen..."
+msgstr "Ontcijferen..."
 
-# Brr: ontsleutelingsbewerkingen. wat is beter?
 #: bonobo/Seahorse_PGP_File_Listener.server.in.in.h:3
 msgid "Decryption operations on PGP encrypted files"
-msgstr "Ontsleutelingsbewerkingen op met PGP versleutelde bestanden"
+msgstr "Ontcijferingsbewerkingen op met PGP versleutelde bestanden"
 
 #: bonobo/Seahorse_PGP_File_Listener.server.in.in.h:4
 msgid "Encrypt And Sign..."
@@ -55,23 +57,23 @@ msgstr "Importeren"
 
 #: bonobo/Seahorse_PGP_File_Listener.server.in.in.h:8
 msgid "Import operation on PGP key files"
-msgstr ""
+msgstr "Importbewerking op PGP sleutelbestanden"
 
 #: bonobo/Seahorse_PGP_File_Listener.server.in.in.h:9
 msgid "Seahorse PGP decrypt operations"
-msgstr ""
+msgstr "Seahorse PGP ontcijferingsbewerkingen"
 
 #: bonobo/Seahorse_PGP_File_Listener.server.in.in.h:10
 msgid "Seahorse PGP encrypt and sign operations"
-msgstr ""
+msgstr "Seahorse PGP versleutelings en ondertekeningsbewerkingen"
 
 #: bonobo/Seahorse_PGP_File_Listener.server.in.in.h:11
 msgid "Seahorse PGP import operation"
-msgstr ""
+msgstr "Seahorse PGP importbewerking"
 
 #: bonobo/Seahorse_PGP_File_Listener.server.in.in.h:12
 msgid "Seahorse PGP verify operation"
-msgstr ""
+msgstr "Seahorse PGP verifiëringsbewerking"
 
 #: bonobo/Seahorse_PGP_File_Listener.server.in.in.h:13
 msgid "Sign..."
@@ -83,7 +85,7 @@ msgstr "Verifiëren"
 
 #: bonobo/Seahorse_PGP_File_Listener.server.in.in.h:15
 msgid "Verify operation on PGP signed files"
-msgstr ""
+msgstr "Verifiëringsbewerking op met PGP ondertekende bestanden"
 
 #: data/seahorse.schemas.in.h:1
 msgid "Controls the visibility of the expires column for the key manager."
@@ -117,7 +119,7 @@ msgstr ""
 
 #: data/seahorse.schemas.in.h:8
 msgid "How often to show progress during listing"
-msgstr ""
+msgstr "Hoe vaak voorgang wordt getoond tijdens opsomming"
 
 #: data/seahorse.schemas.in.h:9
 msgid "ID of the default key"
@@ -128,6 +130,8 @@ msgid ""
 "If set to true, then all output from pgp operations will be ASCII text. "
 "Files will have a '.asc' extension."
 msgstr ""
+"Indien waar, zal alle uitvoer van pgp-bewerkingen in ASCII-tekst zijn. "
+"Bestanden hebben dan de extensie '.asc'"
 
 #: data/seahorse.schemas.in.h:11
 msgid ""
@@ -135,12 +139,17 @@ msgid ""
 "text mode. Text mode is generally only needed for RFC 2015 signatures. RFC "
 "3156 removes the need for text mode."
 msgstr ""
+"Indien waar, zal de uitvoer van bepaalde pgp-bewerkingen in kanonieke "
+"tekstmodus zijn. Tekstmodus is normaal gesproken alleen nodig voor RFC 2015 "
+"handtekeningen. RFC 3156 ontdoet deze noodzaak voor tektmodus."
 
 #: data/seahorse.schemas.in.h:12
 msgid ""
 "If set to true, then the default key will always be added to an encryption "
 "recipients list."
 msgstr ""
+"Indien waar, zal de standaardsleutel altijd aan een versleutelings-"
+"geadresseerdenlijst worden toegevoegd."
 
 #: data/seahorse.schemas.in.h:13
 msgid "If the statusbar is visible"
@@ -189,6 +198,9 @@ msgid ""
 "operation. By default, the signal is emitted for every 20 keys processed. A "
 "value of -1 will cause the signal to never be emitted."
 msgstr ""
+"Dit geeft aan hoe vaak het voorgangssignaal wordt uitgezonden tijden een "
+"opsommingsbewerking. Standaard wordt het signaal na elke 20 toetsaanslagen "
+"uitgezonden. Bij een waarde van -1 zal het signaal nooit worden uitgezonden."
 
 #: data/seahorse.schemas.in.h:23
 msgid ""
@@ -275,7 +287,7 @@ msgstr "Geldigheid"
 #: libseahorse/seahorse-recipients.c:77
 #, c-format
 msgid "Selected %d not fully valid keys and %d fully valid keys"
-msgstr ""
+msgstr "%d niet volledig geldige en %d volledig geldige sleutels geselecteerd"
 
 #: libseahorse/seahorse-recipients.glade.h:1
 msgid "Choose Keys"
@@ -380,9 +392,10 @@ msgstr "_Ascii-harnas"
 msgid "_Text Mode"
 msgstr "_Tekstmodus"
 
+# wat betekent dit?
 #: plugins/nautilus/seahorse-pgp-preferences.c:49
 msgid "_Encrypt to Self"
-msgstr ""
+msgstr "_Versleutelen naar Zelf"
 
 #: plugins/nautilus/seahorse-pgp-preferences.c:54
 msgid "_Default Key:"
@@ -415,7 +428,7 @@ msgstr "Bestand versleutelen en signeren met standaardsleutel"
 
 #: src/main.c:53
 msgid "Decrypt encrypted file"
-msgstr "Een versleuteld bestand ontsleutelen"
+msgstr "Een versleuteld bestand ontcijferenen"
 
 #: src/main.c:56
 msgid "Verify signature file"
@@ -424,7 +437,7 @@ msgstr "Handtekeningbestand verifiëren"
 #: src/main.c:59
 msgid "Decrypt encrypt file and verify any signatures it contains"
 msgstr ""
-"Versleutelingsbestand ontsleutelen en de handtekeningen die het bevat "
+"Versleutelingsbestand ontcijferen en de handtekeningen die het bevat "
 "verifiëren"
 
 # Sleutelbeheer hier beter dan Sleutelbeheerder
@@ -457,7 +470,7 @@ msgstr "Versleutelde en gesigneerde bestand is %s"
 #: src/main.c:166 src/main.c:197
 #, c-format
 msgid "Decrypted file is %s"
-msgstr "Ontsleutelde bestand is %s"
+msgstr "Ontcijferde bestand is %s"
 
 #: src/seahorse.desktop.in.h:2
 msgid "Manage your GPG keys"
@@ -546,15 +559,13 @@ msgid "Must be at least 5 characters long"
 msgstr "Moet tenminste 5 tekens lang zijn"
 
 #: src/seahorse-add-uid.glade.h:7 src/seahorse-generate.glade.h:18
-#, fuzzy
 msgid "Optional comment describing key"
-msgstr "Opmerking invoeren voor beschrijving van de sleutel"
+msgstr "Optioneel commentaar als beschrijving van sleutel"
 
 # Optioneel? kun je ook geen emailadres hebben?
 #: src/seahorse-add-uid.glade.h:8 src/seahorse-generate.glade.h:19
-#, fuzzy
 msgid "Optional email address"
-msgstr "Extra emailadres"
+msgstr "Optioneel e-mailadres"
 
 #: src/seahorse-add-uid.glade.h:9 src/seahorse-generate.glade.h:22
 msgid "_Email Address:"
@@ -741,7 +752,7 @@ msgstr "S_ubsleutel toevoegen..."
 
 #: src/seahorse-key-manager.glade.h:3
 msgid "Add _Revoker..."
-msgstr ""
+msgstr "_Herroeper toevoegen..."
 
 #: src/seahorse-key-manager.glade.h:4
 msgid "Add _User ID..."
@@ -761,7 +772,7 @@ msgstr "Een foto-ID toevoegen"
 
 #: src/seahorse-key-manager.glade.h:8
 msgid "Add the default key as a revoker"
-msgstr ""
+msgstr "De standaard sleutel als herroeper toevoegen"
 
 #: src/seahorse-key-manager.glade.h:9
 msgid "Backup key pair"
@@ -773,7 +784,7 @@ msgstr "Wachtwoordfrase van geheime sleutel veranderen"
 
 #: src/seahorse-key-manager.glade.h:11
 msgid "Collapse all listings"
-msgstr ""
+msgstr "Alle opsommingen inklappen"
 
 #: src/seahorse-key-manager.glade.h:12
 msgid "Create a new key"
@@ -781,7 +792,7 @@ msgstr "Een nieuwe sleutel aanmaken"
 
 #: src/seahorse-key-manager.glade.h:13
 msgid "Create a revocation certificate"
-msgstr ""
+msgstr "Een herroepingscertificaar aanmaken"
 
 #: src/seahorse-key-manager.glade.h:14
 msgid "Delete key"
@@ -793,7 +804,7 @@ msgstr "E_xporteren..."
 
 #: src/seahorse-key-manager.glade.h:17
 msgid "Expand all listings"
-msgstr ""
+msgstr "Alle opsommingen uitklappen"
 
 #: src/seahorse-key-manager.glade.h:18
 msgid "Export key"
@@ -863,7 +874,7 @@ msgstr "_Breid aliasen uit"
 
 #: src/seahorse-key-manager.glade.h:34
 msgid "_Generate Revocation Certificate..."
-msgstr ""
+msgstr "Herroepingscertificaat _genereren..."
 
 #: src/seahorse-key-manager.glade.h:35
 msgid "_Import..."
@@ -966,9 +977,10 @@ msgstr "Hekjes"
 msgid "Compression"
 msgstr "Compressie"
 
+# is dit goed?
 #: src/seahorse-key-properties.c:337
 msgid "Key identifier"
-msgstr ""
+msgstr "Sleutel identificatie"
 
 #. type
 #: src/seahorse-key-properties.c:342
@@ -981,7 +993,7 @@ msgstr "Algoritme"
 
 #: src/seahorse-key-properties.c:348
 msgid "Key creation date"
-msgstr ""
+msgstr "Aanmaakdatum sleutel"
 
 #. length
 #: src/seahorse-key-properties.c:352
@@ -1022,7 +1034,7 @@ msgstr "_Uitgezet"
 
 #: src/seahorse-key-properties.glade.h:3
 msgid "Disabled keys cannot be used for operations"
-msgstr ""
+msgstr "Uitgezette sleutels kunnen niet gebruikt worden voor bewerkingen"
 
 #: src/seahorse-key-properties.glade.h:4
 msgid "Fingerprint:"
@@ -1055,10 +1067,11 @@ msgstr "Primaire sleutel"
 #: src/seahorse-key-properties.glade.h:14
 msgid "Trust placed in owner's ability to sign keys"
 msgstr ""
+"Vertrouwen gelegd in mogelijkheid van eigenaar om sleutels te ondertekenen"
 
 #: src/seahorse-key-properties.glade.h:16
 msgid "Unique key identifier"
-msgstr ""
+msgstr "Unieke sleutel identificatie"
 
 #: src/seahorse-key-properties.glade.h:18
 msgid "Your personal key"
@@ -1168,26 +1181,25 @@ msgid "Revoke %s"
 msgstr "%s herroepen"
 
 #: src/seahorse-revoke.c:98
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "You are about to add %s as a revoker for %s. This operation cannot be "
 "undone! Are you sure you want to continue?"
 msgstr ""
-"U staat op het punt om\n"
-"%s\n"
-"permanent uit uw sleutel-kring te verwijderen. Wilt u toch doorgaan?"
+"U staat op het punt om %s als een herroeper voor %s toe te voegen. Deze "
+"bewerking is onherroepbaar!  Wilt u toch doorgaan?"
 
 #: src/seahorse-revoke.glade.h:2
 msgid "Compromised"
-msgstr ""
+msgstr "Gecompromiteerd"
 
 #: src/seahorse-revoke.glade.h:3
 msgid "Key has been compromised"
-msgstr ""
+msgstr "Sleutel is gecompromiteerd"
 
 #: src/seahorse-revoke.glade.h:4
 msgid "Key has been superseded"
-msgstr ""
+msgstr "Sleutel is vervangen"
 
 #: src/seahorse-revoke.glade.h:5
 msgid "Key is no longer used"
@@ -1199,16 +1211,17 @@ msgstr "Geen reden"
 
 #: src/seahorse-revoke.glade.h:7
 msgid "No reason for revoking key"
-msgstr ""
+msgstr "Geen reden voor herroepen van sleutel"
 
 # ongebruikt
 #: src/seahorse-revoke.glade.h:8
 msgid "Not Used"
 msgstr "Niet gebruikt"
 
+# reden ipv beschrijving?
 #: src/seahorse-revoke.glade.h:9
 msgid "Optional description of revocation"
-msgstr ""
+msgstr "Optionele beschrijving van herroepen"
 
 #: src/seahorse-revoke.glade.h:10
 msgid "Re_voke"
@@ -1216,7 +1229,7 @@ msgstr "_Herroepen"
 
 #: src/seahorse-revoke.glade.h:11
 msgid "Reason for revoking the key"
-msgstr ""
+msgstr "Reden voor herroepen van de sleutel"
 
 #: src/seahorse-revoke.glade.h:12
 msgid "Revoke key"
@@ -1224,7 +1237,7 @@ msgstr "Sleutel herroepen"
 
 #: src/seahorse-revoke.glade.h:13
 msgid "Superseded"
-msgstr ""
+msgstr "Vervangen"
 
 #: src/seahorse-revoke.glade.h:14
 msgid "_Description:"
@@ -1273,6 +1286,8 @@ msgstr "Of de handtekening tegelijk met de sleutel verloopt"
 msgid ""
 "If signature is local to the key ring and won't be exported with the key"
 msgstr ""
+"Als de ondertekening lokaal is tot de sleutelring en niet met de sleutl zal "
+"worden geëxporteerd"
 
 #: src/seahorse-sign.glade.h:9
 msgid "No answer"
