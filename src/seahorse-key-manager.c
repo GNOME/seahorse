@@ -444,6 +444,10 @@ about_activate (GtkWidget *widget, SeahorseWidget *swidget)
 		"Jose Carlos Garcia Sogo <jsogo@users.sourceforge.net>",
 		"Jean Schurger <yshark@schurger.org>",
         "Nate Nielsen <nielsen@memberwebs.com>",
+        "",
+        "Contributions:",
+        "Adam Schreiber <sadam@clemson.edu>",
+        "Albrecht Dreß <albrecht.dress@arcor.de>",
 		NULL
 	};
 
