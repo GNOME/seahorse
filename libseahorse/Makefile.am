@@ -69,7 +69,7 @@ seahorse-marshal.c: seahorse-marshal.list $(GLIB_GENMARSHAL)
 glade_DATA = \
 	seahorse-passphrase.glade \
 	seahorse-recipients.glade \
-    seahorse-signer.glade
+    seahorse-signer.glade \
 	seahorse-signatures.glade \
 	seahorse-prefs.glade
 
