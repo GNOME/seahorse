@@ -119,7 +119,13 @@ seahorse_progress_appbar_add_operation (GtkWidget* appbar, SeahorseOperation *op
         operation_done (operation, appbar);
         return;
     }
-        
+
+    g_signal_connect (operation, "done", G_CALLBACK (operation_done), appbar);
+    g_signal_connect (operation, "progress", G_CALLBACK (operation_progress), appbar);
+    g_object_set_data_full (G_OBJECT (appbar), "operations", operation, 
+                                (GDestroyNotify)g_object_unref);
+    
+#if 0    
     mop = SEAHORSE_MULTI_OPERATION (g_object_get_data (G_OBJECT (appbar), "operations"));
     if (mop == NULL) {
         mop = seahorse_multi_operation_new ();
@@ -130,6 +136,7 @@ seahorse_progress_appbar_add_operation (GtkWidget* appbar, SeahorseOperation *op
     }
 
     seahorse_multi_operation_add (mop, operation);    
+#endif
 }
 
 /* -----------------------------------------------------------------------------
@@ -197,8 +204,8 @@ progress_destroy (SeahorseWidget *swidget, SeahorseOperation *operation)
     g_signal_handlers_disconnect_by_func (operation, operation_progress, swidget);
 }
 
-gboolean
-delayed_progress_show (SeahorseOperation *operation)
+static gboolean
+progress_show (SeahorseOperation *operation)
 {
     SeahorseWidget *swidget;
     SeahorseContext *sctx;
@@ -261,7 +268,7 @@ delayed_progress_show (SeahorseOperation *operation)
 
 void
 seahorse_progress_show (SeahorseContext *sctx, SeahorseOperation *operation,
-                        const gchar *title)
+                        const gchar *title, gboolean delayed)
 {    
     /* Unref in the timeout callback */
     g_object_ref (operation);
@@ -270,5 +277,10 @@ seahorse_progress_show (SeahorseContext *sctx, SeahorseOperation *operation,
                 title ? g_strdup (title) : NULL, (GDestroyNotify)g_free);
     
     /* Show the progress, after one second */
-    g_timeout_add (1000, (GSourceFunc)delayed_progress_show, operation);
+    if (delayed)
+        g_timeout_add (1000, (GSourceFunc)progress_show, operation);
+    
+    /* Right away */
+    else
+        progress_show (operation);
 }

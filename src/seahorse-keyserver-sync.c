@@ -108,6 +108,19 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 
     mop = seahorse_multi_operation_new ();
 
+    /* And now syncing keys from the servers */
+    ks = eel_gconf_get_string_list (KEYSERVER_KEY);
+    for (l = ks; l; l = g_slist_next (l)) {
+
+        sksrc = SEAHORSE_KEY_SOURCE (seahorse_server_source_new (lsksrc, (const gchar*)(l->data), NULL));
+        op = seahorse_key_source_export (sksrc, keys, FALSE, NULL);
+        g_return_if_fail (op != NULL);
+
+        g_signal_connect (op, "done", G_CALLBACK (sync_export_complete), sksrc);
+        seahorse_multi_operation_add (mop, op);
+    }
+    seahorse_util_string_slist_free (ks);
+    
     /* Publishing keys online */    
     keyserver = eel_gconf_get_string (PUBLISH_TO_KEY);
     if (keyserver && keyserver[0]) {
@@ -139,22 +152,10 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 
     g_free (keyserver);
     
-    /* And now syncing keys from the servers */
-    ks = eel_gconf_get_string_list (KEYSERVER_KEY);
-    for (l = ks; l; l = g_slist_next (l)) {
-
-        sksrc = SEAHORSE_KEY_SOURCE (seahorse_server_source_new (lsksrc, (const gchar*)(l->data), NULL));
-        op = seahorse_key_source_export (sksrc, keys, FALSE, NULL);
-        g_return_if_fail (op != NULL);
-
-        g_signal_connect (op, "done", G_CALLBACK (sync_export_complete), sksrc);
-        seahorse_multi_operation_add (mop, op);
-    }
-    seahorse_util_string_slist_free (ks);
-
     /* Show the progress window if necessary */
     if (!seahorse_operation_is_done (SEAHORSE_OPERATION (mop))) 
-        seahorse_progress_show (sctx, SEAHORSE_OPERATION (mop), _("Syncing keys..."));
+        seahorse_progress_show (sctx, SEAHORSE_OPERATION (mop), 
+                                _("Syncing keys..."), FALSE);
 }
 
 static void
