@@ -43,6 +43,8 @@ file_toggled (GtkToggleButton *togglebutton, SeahorseWidget *swidget)
 	
 	gtk_widget_set_sensitive (entry, active);
 	
+	/* Set OK sensitive if deselecting File or if selecting File and
+	 * there is some kind of file name */
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, OK), !active ||
 		(gnome_file_entry_get_full_path (GNOME_FILE_ENTRY (entry), FALSE) != NULL));
 }
@@ -58,7 +60,10 @@ server_toggled (GtkToggleButton *togglebutton, SeahorseWidget *swidget)
 static void
 file_changed (GtkEditable *editable, SeahorseWidget *swidget)
 {
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, OK), TRUE);
+	/* Set OK sensitive if some kind of filename exists */
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, OK),
+		gnome_file_entry_get_full_path (GNOME_FILE_ENTRY (
+		glade_xml_get_widget (swidget->xml, EXPORT_FILE)), FALSE) != NULL);
 }
 
 /* Exports key to data source */
