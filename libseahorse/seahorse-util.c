@@ -905,8 +905,10 @@ seahorse_util_add_suffix (gpgme_ctx_t ctx, const gchar *path,
             
         t = g_strdup_printf (prompt, seahorse_util_uri_get_last (uri));
         dialog = seahorse_util_chooser_save_new (t, NULL);
-        seahorse_util_chooser_show_key_files (dialog);
         g_free (t);
+
+        seahorse_util_chooser_show_key_files (dialog);
+		gtk_file_chooser_select_uri (GTK_FILE_CHOOSER (dialog), uri);
 
         g_free (uri);                
         uri = NULL;
@@ -939,9 +941,11 @@ seahorse_util_remove_suffix (const gchar *path, const gchar *prompt)
             
         t = g_strdup_printf (prompt, seahorse_util_uri_get_last (uri));
         dialog = seahorse_util_chooser_save_new (t, NULL);
-        seahorse_util_chooser_show_key_files (dialog);
         g_free (t);
 
+        seahorse_util_chooser_show_key_files (dialog);
+		gtk_file_chooser_select_uri (GTK_FILE_CHOOSER (dialog), uri);
+		
         g_free (uri);                
         uri = NULL;
             
@@ -1072,4 +1076,4 @@ seahorse_util_string_slist_copy (GSList *list)
     for ( ; list; list = g_slist_next(list))
         l = g_slist_append (l, g_strdup(list->data));
     return l;
-}   
+}
