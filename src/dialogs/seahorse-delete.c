@@ -24,21 +24,42 @@
 #include "seahorse-delete.h"
 #include "seahorse-ops-key.h"
 
-void
-seahorse_delete_new (GtkWindow *parent, SeahorseContext *sctx, SeahorseKey *skey)
+static gboolean
+warning (GtkWindow *parent, SeahorseKey *skey, const guint index)
 {
 	GtkWidget *warning;
 	gint response;
+	const gchar *message, *keyid;
 	
-	g_assert (sctx != NULL && skey != NULL);
+	g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), FALSE);
+	
+	if (index == 0)
+		message = _("Are you sure you want to permanently delete key %s, <i>%s</i>?");
+	else
+		message = _("Are you sure you want to permanently delete subkey %s for %s?");
 	
 	warning = gtk_message_dialog_new (parent, GTK_DIALOG_MODAL,
 		GTK_MESSAGE_WARNING, GTK_BUTTONS_YES_NO, g_strdup_printf (
-		_("You are about to permanently remove\n%s\nfrom your key ring."
-		"  Are you sure you want to continue?"), seahorse_key_get_userid (skey, 0)));
+		message, seahorse_key_get_keyid (skey, index),
+		seahorse_key_get_userid (skey, 0)));
+	
 	response = gtk_dialog_run (GTK_DIALOG (warning));
 	gtk_widget_destroy (warning);
-		
-	if (response == GTK_RESPONSE_YES)
+	
+	return (response == GTK_RESPONSE_YES);
+}
+
+void
+seahorse_delete_key_new (GtkWindow *parent, SeahorseContext *sctx, SeahorseKey *skey)
+{
+	if (warning (parent, skey, 0))
 		seahorse_ops_key_delete (sctx, skey);
+}
+
+void
+seahorse_delete_subkey_new (GtkWindow *parent, SeahorseContext *sctx,
+			    SeahorseKey *skey, const guint index)
+{
+	if (warning (parent, skey, index))
+		seahorse_ops_key_del_subkey (sctx, skey, index);
 }

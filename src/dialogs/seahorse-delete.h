@@ -27,11 +27,15 @@
 #include <gtk/gtk.h>
 
 #include "seahorse-context.h"
-#include "seahorse-key.h"
 
 /* Loads delete confirmation dialog */
-void	seahorse_delete_new	(GtkWindow		*parent,
-				 SeahorseContext	*sctx,
-				 SeahorseKey		*skey);
+void	seahorse_delete_key_new		(GtkWindow		*parent,
+					 SeahorseContext	*sctx,
+					 SeahorseKey		*skey);
+
+void	seahorse_delete_subkey_new	(GtkWindow		*parent,
+					 SeahorseContext	*sctx,
+					 SeahorseKey		*skey,
+					 const guint		index);
 
 #endif /* __SEAHORSE_DELETE_H__ */

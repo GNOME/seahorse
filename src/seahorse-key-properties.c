@@ -44,37 +44,26 @@
 static void
 export_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
-	SeahorseKeyWidget *skwidget;
-	
-	skwidget = SEAHORSE_KEY_WIDGET (swidget);
-	
-	seahorse_export_new (swidget->sctx, skwidget->skey);
+	seahorse_export_new (swidget->sctx, SEAHORSE_KEY_WIDGET (swidget)->skey);
 }
 
 /* Loads delete dialog */
 static void
 delete_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
-	SeahorseKeyWidget *skwidget;
-	
-	skwidget = SEAHORSE_KEY_WIDGET (swidget);
-	
-	seahorse_delete_new (NULL,
-		swidget->sctx, skwidget->skey);
+	seahorse_delete_key_new (NULL, swidget->sctx,
+		SEAHORSE_KEY_WIDGET (swidget)->skey);
 }
 
 /* Tries to change the key's owner trust */
 static void
 trust_changed (GtkOptionMenu *optionmenu, SeahorseWidget *swidget)
 {
-	SeahorseKeyWidget *skwidget;
-	guint history;
-	
-	skwidget = SEAHORSE_KEY_WIDGET (swidget);
-	history = gtk_option_menu_get_history (optionmenu);
-	seahorse_ops_key_set_trust (swidget->sctx, skwidget->skey, seahorse_validity_get_from_index (history));
+	seahorse_ops_key_set_trust (swidget->sctx, SEAHORSE_KEY_WIDGET (swidget)->skey,
+		seahorse_validity_get_from_index (gtk_option_menu_get_history (optionmenu)));
 }
 
+/* Primary key's never expires toggled */
 static void
 never_expires_primary_toggled (GtkToggleButton *togglebutton, SeahorseWidget *swidget)
 {
@@ -84,6 +73,7 @@ never_expires_primary_toggled (GtkToggleButton *togglebutton, SeahorseWidget *sw
 	}
 }
 
+/* Subkey's never expires toggled */
 static void
 never_expires_subkey_toggled (GtkToggleButton *togglebutton, SeahorseWidget *swidget)
 {	
@@ -127,10 +117,7 @@ set_date_edit_sensitive (GtkToggleButton *togglebutton, GtkWidget *widget)
 static void
 disabled_toggled (GtkToggleButton *togglebutton, SeahorseWidget *swidget)
 {
-	SeahorseKeyWidget *skwidget;
-	
-	skwidget = SEAHORSE_KEY_WIDGET (swidget);
-	seahorse_ops_key_set_disabled (swidget->sctx, skwidget->skey,
+	seahorse_ops_key_set_disabled (swidget->sctx, SEAHORSE_KEY_WIDGET (swidget)->skey,
 		gtk_toggle_button_get_active (togglebutton));
 }
 
@@ -138,12 +125,8 @@ disabled_toggled (GtkToggleButton *togglebutton, SeahorseWidget *swidget)
 static void
 change_passphrase_activate (GtkMenuItem *item, SeahorseWidget *swidget)
 {
-	SeahorseKeyWidget *skwidget;
-	
-	skwidget = SEAHORSE_KEY_WIDGET (swidget);
-	
-	/* Assume key has secret since item shouldn't be visible otherwise */
-	seahorse_ops_key_change_pass (swidget->sctx, skwidget->skey);
+	seahorse_ops_key_change_pass (swidget->sctx,
+		SEAHORSE_KEY_WIDGET (swidget)->skey);
 }
 
 static void
@@ -159,26 +142,25 @@ add_subkey_activate (GtkMenuItem *item, SeahorseWidget *swidget)
 }
 
 static void
+subkeys_activate (GtkMenuItem *item, SeahorseWidget *swidget)
+{
+	if (gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (item)))
+		gtk_widget_show (glade_xml_get_widget (swidget->xml, SUBKEYS));
+	else
+		gtk_widget_hide (glade_xml_get_widget (swidget->xml, SUBKEYS));
+}
+
+static void
 del_subkey_clicked (GtkButton *button, SeahorseWidget *swidget)
 {
-	GtkWidget *confirm;
-	guint index, response;
-	SeahorseKey *skey;
+	guint index;
 	
 	index = gtk_notebook_get_current_page (GTK_NOTEBOOK (
 		glade_xml_get_widget (swidget->xml, SUBKEYS))) + 1;
-	skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
 	
-	confirm = gtk_message_dialog_new (GTK_WINDOW (glade_xml_get_widget (
-		swidget->xml, swidget->name)), GTK_DIALOG_MODAL,
-		GTK_MESSAGE_WARNING, GTK_BUTTONS_YES_NO, g_strdup_printf (
-		_("Are you sure you want to delete subkey %s?"),
-		seahorse_key_get_keyid (skey, index)));
-	response = gtk_dialog_run (GTK_DIALOG (confirm));
-	gtk_widget_destroy (confirm);
-	
-	if (response == GTK_RESPONSE_YES)
-		seahorse_ops_key_del_subkey (swidget->sctx, skey, index);
+	seahorse_delete_subkey_new (GTK_WINDOW (glade_xml_get_widget (
+		swidget->xml, swidget->name)), swidget->sctx,
+		SEAHORSE_KEY_WIDGET (swidget)->skey, index);
 }
 
 static void
@@ -330,7 +312,7 @@ do_subkeys (SeahorseWidget *swidget)
 	SeahorseKeyWidget *skwidget;
 	GtkNotebook *notebook;
 	GtkTable *table;
-	GtkWidget *label, *widget;
+	GtkWidget *label, *widget, *button;
 	gint index = 1, max;
 	
 	notebook = GTK_NOTEBOOK (glade_xml_get_widget (swidget->xml, SUBKEYS));
@@ -346,22 +328,40 @@ do_subkeys (SeahorseWidget *swidget)
 		if (seahorse_context_key_has_secret (swidget->sctx, skwidget->skey)) {
 			table = GTK_TABLE (gtk_table_new (4, 4, FALSE));
 			
+			do_stat_label (_("Status:"), table, 0, 3);
+			
+			if (gpgme_key_get_ulong_attr (skwidget->skey->key,
+			GPGME_ATTR_KEY_REVOKED, NULL, index))
+				do_stat_label (_("Revoked"), table, 1, 3);
+			else if (gpgme_key_get_ulong_attr (skwidget->skey->key,
+			GPGME_ATTR_KEY_EXPIRED, NULL, index))
+				do_stat_label (_("Expired"), table, 1, 3);
+			else
+				do_stat_label (_("Good"), table, 1, 3);
+			
 			/* Do revoke button */
-			label = gtk_hbox_new (FALSE, 6);
-			/* Icon */
-			widget = gtk_image_new_from_stock (GTK_STOCK_CANCEL, GTK_ICON_SIZE_BUTTON);
-			gtk_container_add (GTK_CONTAINER (label), widget);
-			/* Label */
-			widget = gtk_label_new_with_mnemonic (_("_Revoke..."));
-			gtk_container_add (GTK_CONTAINER (label), widget);
-			/* Button */
-			widget = gtk_button_new ();
-			g_signal_connect_after (GTK_BUTTON (widget), "clicked",
-				G_CALLBACK (revoke_subkey_clicked), swidget);
-			/* Add label & icon, put in table */
-			gtk_container_add (GTK_CONTAINER (widget), label);
-			gtk_widget_show_all (widget);
-			gtk_table_attach (table, widget, 1, 2, 3, 4, GTK_FILL, 0, 0, 0);
+			if (!gpgme_key_get_ulong_attr (skwidget->skey->key,
+			GPGME_ATTR_KEY_REVOKED, NULL, index)) {
+				label = gtk_hbox_new (FALSE, 0);
+				/* Icon */
+				widget = gtk_image_new_from_stock (GTK_STOCK_CANCEL, GTK_ICON_SIZE_BUTTON);
+				gtk_container_add (GTK_CONTAINER (label), widget);
+				/* Label */
+				widget = gtk_label_new_with_mnemonic (_("_Revoke..."));
+				gtk_label_set_justify (GTK_LABEL (widget), GTK_JUSTIFY_LEFT);
+				gtk_container_add (GTK_CONTAINER (label), widget);
+				/* Alignment */
+				widget = gtk_alignment_new (0.5, 0.5, 0, 0);
+				gtk_container_add (GTK_CONTAINER (widget), label);
+				/* Button */
+				button = gtk_button_new ();
+				g_signal_connect_after (GTK_BUTTON (button), "clicked",
+					G_CALLBACK (revoke_subkey_clicked), swidget);
+				/* Add label & icon, put in table */
+				gtk_container_add (GTK_CONTAINER (button), widget);
+				gtk_widget_show_all (button);
+				gtk_table_attach (table, button, 2, 3, 3, 4, GTK_FILL, 0, 0, 0);
+			}
 			
 			/* Do delete button */
 			widget = gtk_button_new_from_stock (GTK_STOCK_DELETE);
@@ -370,8 +370,19 @@ do_subkeys (SeahorseWidget *swidget)
 			gtk_widget_show (widget);
 			gtk_table_attach (table, widget, 3, 4, 3, 4, GTK_FILL, 0, 0, 0);
 		}
-		else
+		else {
 			table = GTK_TABLE (gtk_table_new (3, 4, FALSE));
+			do_stat_label (_("Status:"), table, 2, 2);
+			
+			if (gpgme_key_get_ulong_attr (skwidget->skey->key,
+			GPGME_ATTR_KEY_REVOKED, NULL, index))
+				do_stat_label (_("Revoked"), table, 3, 2);
+			else if (gpgme_key_get_ulong_attr (skwidget->skey->key,
+			GPGME_ATTR_KEY_EXPIRED, NULL, index))
+				do_stat_label (_("Expired"), table, 3, 2);
+			else
+				do_stat_label (_("Good"), table, 3, 2);
+		}
 		
 		gtk_table_set_row_spacings (table, SPACING);
 		gtk_table_set_col_spacings (table, SPACING);
@@ -385,19 +396,16 @@ do_subkeys (SeahorseWidget *swidget)
 		
 		index++;
 	}
-	
-	gtk_widget_show (GTK_WIDGET (notebook));
 }
 
 static void
 key_changed (SeahorseKey *skey, SeahorseKeyChange change, SeahorseWidget *swidget)
 {
 	switch (change) {
-		/* Refresh user IDs */
 		case SKEY_CHANGE_UIDS:
 			do_uids (swidget);
 			break;
-		case SKEY_CHANGE_SUBKEYS:
+		case SKEY_CHANGE_SUBKEYS: case SKEY_CHANGE_EXPIRE:
 			do_subkeys (swidget);
 			break;
 		default:
@@ -450,7 +458,6 @@ seahorse_key_properties_new (SeahorseContext *sctx, SeahorseKey *skey)
 	widget = glade_xml_get_widget (swidget->xml, swidget->name);
 	gtk_window_set_title (GTK_WINDOW (widget), seahorse_key_get_userid (skey, 0));
 	
-	/* Have to connect some signals after so changes don't activate callbacks */
 	glade_xml_signal_connect_data (swidget->xml, "export_activate",
 		G_CALLBACK (export_activate), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "delete_activate",
@@ -465,6 +472,8 @@ seahorse_key_properties_new (SeahorseContext *sctx, SeahorseKey *skey)
 		G_CALLBACK (add_uid_activate), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "add_subkey_activate",
 		G_CALLBACK (add_subkey_activate), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "subkeys_activate",
+		G_CALLBACK (subkeys_activate), swidget);
 	
 	g_signal_connect_after (skey, "changed", G_CALLBACK (key_changed), swidget);
 }

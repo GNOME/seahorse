@@ -113,10 +113,11 @@ delete_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
 	SeahorseKey *skey;
 	
-	skey = seahorse_key_store_get_selected_key (GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, KEY_LIST)));
+	skey = seahorse_key_store_get_selected_key (GTK_TREE_VIEW (
+		glade_xml_get_widget (swidget->xml, KEY_LIST)));
 	if (skey)
-		seahorse_delete_new (GTK_WINDOW (glade_xml_get_widget (swidget->xml, KEY_MANAGER)),
-			swidget->sctx, skey);
+		seahorse_delete_key_new (GTK_WINDOW (glade_xml_get_widget (
+			swidget->xml, KEY_MANAGER)), swidget->sctx, skey);
 }
 
 /* Loads preferences dialog */
