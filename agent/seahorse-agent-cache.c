@@ -399,10 +399,13 @@ seahorse_agent_cache_getname (const gchar *id)
     g_return_val_if_fail (id != NULL, g_strdup (UNKNOWN_KEY));
         
     gpgme_get_key (g_ctx, id, &key, 0);
-    if (key == NULL)
-        return g_strdup (UNKNOWN_KEY);
+    if (key == NULL) {
+        gpgme_get_key (g_ctx, id, &key, 1);
+        if (key == NULL) 
+            return g_strdup (UNKNOWN_KEY);
+    }
 
-    userid = key->uids && key->uids->uid ? key->uids->uid : UNKNOWN_KEY;
+    userid = (key->uids && key->uids->uid) ? key->uids->uid : UNKNOWN_KEY;
     
     /* If not utf8 valid, assume latin 1 */
     if (!g_utf8_validate (userid, -1, NULL))
