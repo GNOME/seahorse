@@ -350,7 +350,8 @@ seahorse_key_source_import (SeahorseKeySource *sksrc, gpgme_data_t data)
 }
 
 SeahorseOperation* 
-seahorse_key_source_export (SeahorseKeySource *sksrc, GList *keys, gpgme_data_t data)
+seahorse_key_source_export (SeahorseKeySource *sksrc, GList *keys, 
+                            gboolean complete, gpgme_data_t data)
 {
     SeahorseKeySourceClass *klass;
     
@@ -358,7 +359,7 @@ seahorse_key_source_export (SeahorseKeySource *sksrc, GList *keys, gpgme_data_t 
     klass = SEAHORSE_KEY_SOURCE_GET_CLASS (sksrc);   
     g_return_val_if_fail (klass->export != NULL, NULL);
     
-    return (*klass->export) (sksrc, keys, data);    
+    return (*klass->export) (sksrc, keys, complete, data);    
 }
                                                
 /* Calc fraction, call ::show_progress() */

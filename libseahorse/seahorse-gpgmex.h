@@ -77,4 +77,12 @@ void        gpgmex_key_ref           (gpgme_key_t key);
 
 void        gpgmex_key_unref         (gpgme_key_t key);
 
+/* -----------------------------------------------------------------------------
+ * EXTRA FUNCTIONALITY
+ */
+
+gpgme_error_t gpgmex_op_export_secret  (gpgme_ctx_t ctx, 
+                                        const char *pattern,
+                                        gpgme_data_t keydata);
+
 #endif /* __SEAHORSE_GPGMEX_H__ */

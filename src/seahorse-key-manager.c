@@ -160,7 +160,7 @@ copy_activate (GtkWidget *widget, SeahorseWidget *swidget)
     if (g_list_length (keys) == 0)
         return;
                
-    text = seahorse_op_export_text (keys, &err);
+    text = seahorse_op_export_text (keys, FALSE, &err);
 
     if (text == NULL)
         seahorse_util_handle_error (err, _("Couldn't export key to clipboard"));
@@ -204,7 +204,7 @@ export_activate (GtkWidget *widget, SeahorseWidget *swidget)
     uri = seahorse_util_chooser_save_prompt (dialog);
     if(uri) {
 
-        seahorse_op_export_file (keys, uri, &err); 
+        seahorse_op_export_file (keys, FALSE, uri, &err); 
 		        
         if (err != NULL)
             seahorse_util_handle_error (err, _("Couldn't export key to \"%s\""),

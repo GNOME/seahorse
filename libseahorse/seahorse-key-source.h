@@ -107,6 +107,7 @@ typedef struct _SeahorseKeySourceClass {
      * export
      * @sksrc: The #SeahorseKeySource to export from.
      * @keys: A list of keys to export.
+     * @complete: Whether to export the secret key too.
      * @data: Optional data object to export to (not freed).
      *
      * Import keys into the key source. When operation is 'done' the result
@@ -115,7 +116,7 @@ typedef struct _SeahorseKeySourceClass {
      * Returns: The export operation
      */    
     SeahorseOperation* (*export) (SeahorseKeySource *sksrc, GList *keys, 
-                                  gpgme_data_t data);
+                                  gboolean complete, gpgme_data_t data);
     
 } SeahorseKeySourceClass;
 
@@ -161,6 +162,7 @@ SeahorseOperation*  seahorse_key_source_import           (SeahorseKeySource *sks
 
 SeahorseOperation*  seahorse_key_source_export           (SeahorseKeySource *sksrc,
                                                           GList *keys,
+                                                          gboolean complete,
                                                           gpgme_data_t data);                        
 
 #endif /* __SEAHORSE_KEY_SOURCE_H__ */

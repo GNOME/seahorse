@@ -978,6 +978,7 @@ static SeahorseOperation*  seahorse_ldap_source_import    (SeahorseKeySource *sk
                                                            gpgme_data_t data);
 static SeahorseOperation*  seahorse_ldap_source_export    (SeahorseKeySource *sksrc, 
                                                            GList *keys,     
+                                                           gboolean complete,
                                                            gpgme_data_t data);
                                                            
 static SeahorseKeySourceClass *parent_class = NULL;
@@ -1142,7 +1143,7 @@ seahorse_ldap_source_import (SeahorseKeySource *sksrc, gpgme_data_t data)
 
 static SeahorseOperation* 
 seahorse_ldap_source_export (SeahorseKeySource *sksrc, GList *keys, 
-                             gpgme_data_t data)
+                             gboolean complete, gpgme_data_t data)
 {
     SeahorseLDAPOperation *lop;
     SeahorseLDAPSource *lsrc;

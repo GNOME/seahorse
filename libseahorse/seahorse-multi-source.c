@@ -52,6 +52,7 @@ static SeahorseOperation*  seahorse_multi_source_import          (SeahorseKeySou
                                                                   gpgme_data_t data);
 static SeahorseOperation*  seahorse_multi_source_export          (SeahorseKeySource *sksrc, 
                                                                   GList *keys,
+                                                                  gboolean export,
                                                                   gpgme_data_t data);
 static GObjectClass *parent_class = NULL;
 
@@ -336,7 +337,8 @@ seahorse_multi_source_import (SeahorseKeySource *src, gpgme_data_t data)
 }
 
 static SeahorseOperation* 
-seahorse_multi_source_export (SeahorseKeySource *src, GList *keys, gpgme_data_t data)
+seahorse_multi_source_export (SeahorseKeySource *src, GList *keys, 
+                              gboolean complete, gpgme_data_t data)
 {
     SeahorseMultiSource *msrc;
 
@@ -344,7 +346,7 @@ seahorse_multi_source_export (SeahorseKeySource *src, GList *keys, gpgme_data_t 
     g_return_val_if_fail (msrc && msrc->sources, NULL);
     
     /* TODO: Move the multi key source export code here from seahorse-op.c */
-    return seahorse_key_source_export (SEAHORSE_KEY_SOURCE (msrc->sources->data), keys, data);
+    return seahorse_key_source_export (SEAHORSE_KEY_SOURCE (msrc->sources->data), keys, complete, data);
 }
 
 

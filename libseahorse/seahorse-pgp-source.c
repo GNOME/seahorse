@@ -127,6 +127,7 @@ static SeahorseOperation*  seahorse_pgp_source_import           (SeahorseKeySour
                                                                  gpgme_data_t data);
 static SeahorseOperation*  seahorse_pgp_source_export           (SeahorseKeySource *sksrc, 
                                                                  GList *keys,
+                                                                 gboolean complete, 
                                                                  gpgme_data_t data);
 
 /* Other forward decls */
@@ -888,7 +889,7 @@ seahorse_pgp_source_import (SeahorseKeySource *sksrc, gpgme_data_t data)
 
 static SeahorseOperation* 
 seahorse_pgp_source_export (SeahorseKeySource *sksrc, GList *keys, 
-                            gpgme_data_t data)
+                            gboolean complete, gpgme_data_t data)
 {
     SeahorseOperation *operation;
     SeahorsePGPSource *psrc;
@@ -937,6 +938,14 @@ seahorse_pgp_source_export (SeahorseKeySource *sksrc, GList *keys,
 
         if (!GPG_IS_OK (gerr))
             break;
+        
+        if (complete && SEAHORSE_IS_KEY_PAIR (skey)) {
+            gerr = gpgmex_op_export_secret (new_ctx, seahorse_key_pair_get_id (SEAHORSE_KEY_PAIR (skey)), 
+                                            data);
+            
+            if (!GPG_IS_OK (gerr))
+                break;
+        }
     }
 
     if (!GPG_IS_OK (gerr)) 

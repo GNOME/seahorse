@@ -42,12 +42,14 @@ gint        seahorse_op_import_text         (SeahorseKeySource  *sksrc,
                                              GError             **err);
 
 gboolean    seahorse_op_export_file         (GList              *keys,
+                                             gboolean           complete,
                                              const gchar        *path,
                                              GError             **err);
 
 gchar*      seahorse_op_export_text         (GList              *keys,
+                                             gboolean           complete,
                                              GError             **err);
-
+                                             
 void        seahorse_op_encrypt_file        (GList              *keys,
                                              const gchar        *path,
                                              const gchar        *epath,

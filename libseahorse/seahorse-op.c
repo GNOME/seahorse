@@ -125,8 +125,8 @@ seahorse_op_import_text (SeahorseKeySource *sksrc, const gchar *text, GError **e
 
 /* helper function for exporting @keys. */
 static gboolean
-export_data (GList *keys, gboolean force_armor, gpgme_data_t data,
-             GError **err)
+export_data (GList *keys, gboolean complete, gboolean force_armor, 
+             gpgme_data_t data, GError **err)
 {
     SeahorseKeySource *sksrc;
     SeahorseOperation *operation;
@@ -152,7 +152,7 @@ export_data (GList *keys, gboolean force_armor, gpgme_data_t data,
         g_return_val_if_fail (sksrc != NULL, FALSE);
         
         /* We pass our own data object, to which data is appended */
-        operation = seahorse_key_source_export (sksrc, keys, data);
+        operation = seahorse_key_source_export (sksrc, keys, complete, data);
         g_return_val_if_fail (operation != NULL, FALSE);
 
         g_list_free (keys);
@@ -178,6 +178,7 @@ export_data (GList *keys, gboolean force_armor, gpgme_data_t data,
 /**
  * seahorse_op_export_file:
  * @keys: List of #SeahorseKey objects to export
+ * @complete: Whether to export the private key or not.
  * @path: Path of a new file to export to
  * @err: Optional error value
  *
@@ -185,7 +186,8 @@ export_data (GList *keys, gboolean force_armor, gpgme_data_t data,
  * @recips will be released upon completion.
  **/
 gboolean
-seahorse_op_export_file (GList *keys, const gchar *path, GError **err)
+seahorse_op_export_file (GList *keys, gboolean complete, const gchar *path, 
+                         GError **err)
 {
 	gpgme_data_t data;
 	gpgme_error_t gerr;
@@ -199,7 +201,7 @@ seahorse_op_export_file (GList *keys, const gchar *path, GError **err)
     }
     
 	/* export data */
-	ret = export_data (keys, FALSE, data, err);
+	ret = export_data (keys, complete, FALSE, data, err);
     gpgme_data_release (data);
     return ret;
 }
@@ -207,6 +209,7 @@ seahorse_op_export_file (GList *keys, const gchar *path, GError **err)
 /**
  * seahorse_op_export_text:
  * @keys: List of #SeahorseKey objects to export
+ * @complete: Whether to export the private key or not.
  * @err: Optional error value
  *
  * Tries to export @recips to text using seahorse_util_write_data_to_text(),
@@ -216,7 +219,7 @@ seahorse_op_export_file (GList *keys, const gchar *path, GError **err)
  * Returns: The exported text or NULL if the operation fails
  **/
 gchar*
-seahorse_op_export_text (GList *keys, GError **err)
+seahorse_op_export_text (GList *keys, gboolean complete, GError **err)
 {
 	gpgme_data_t data;
 	gpgme_error_t gerr;
@@ -228,7 +231,7 @@ seahorse_op_export_text (GList *keys, GError **err)
     }  
     
 	/* export data with armor */
-	if (export_data (keys, TRUE, data, err)) {
+	if (export_data (keys, complete, TRUE, data, err)) {
     	return seahorse_util_write_data_to_text (data);
     } else {
         gpgme_data_release (data);

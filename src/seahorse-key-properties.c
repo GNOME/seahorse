@@ -332,6 +332,40 @@ passphrase_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 }
 
 static void
+export_clicked (GtkWidget *widget, SeahorseWidget *swidget)
+{
+    SeahorseKey *skey;
+    GtkWidget *dialog;
+    gchar* uri = NULL;
+    GError *err = NULL;
+    GList *keys = NULL;
+    
+    skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
+    if (!SEAHORSE_IS_KEY_PAIR (skey))
+        return;
+
+    keys = g_list_prepend (keys, skey);
+    
+    dialog = seahorse_util_chooser_save_new (_("Export Complete Key"), 
+                GTK_WINDOW(seahorse_widget_get_top (swidget)));
+    seahorse_util_chooser_show_key_files (dialog);
+    seahorse_util_chooser_set_filename (dialog, keys);
+    
+    uri = seahorse_util_chooser_save_prompt (dialog);
+    if(uri) {
+        seahorse_op_export_file (keys, TRUE, uri, &err);
+
+        if (err != NULL)
+            seahorse_util_handle_error (err, _("Couldn't export key to \"%s\""),
+                    seahorse_util_uri_get_last (uri));
+
+        g_free (uri);
+    }
+    
+    g_list_free (keys);
+}
+
+static void
 do_signatures (SeahorseWidget *swidget)
 {
     SeahorseKey *skey;
@@ -781,13 +815,21 @@ seahorse_key_properties_new (SeahorseContext *sctx, SeahorseKey *skey)
     g_signal_connect_after (skey, "destroy", G_CALLBACK (key_destroyed), swidget);
 	
 	key_property_labels (swidget);
-     
-    /* Change password button */
+    
+    /* Secret key stuff */    
     if(SEAHORSE_IS_KEY_PAIR (skey)) {
+        
+        /* Change password button */
         widget = glade_xml_get_widget (swidget->xml, "passphrase");
         gtk_widget_set_sensitive (widget, TRUE);
         glade_xml_signal_connect_data (swidget->xml, "passphrase_clicked",
                     G_CALLBACK (passphrase_clicked), swidget);
+
+        /* Export secret key button */
+        widget = glade_xml_get_widget (swidget->xml, "export_complete");
+        gtk_widget_set_sensitive (widget, TRUE);
+        glade_xml_signal_connect_data (swidget->xml, "export_clicked",
+                    G_CALLBACK (export_clicked), swidget);
     }
 
 	do_subkeys (swidget);
