@@ -1,7 +1,7 @@
 /*
  * Seahorse
  *
- * Copyright (C) 2002 Jacob Perkins
+ * Copyright (C) 2003 Jacob Perkins
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,59 +22,46 @@
 #ifndef __SEAHORSE_OPS_DATA_H__
 #define __SEAHORSE_OPS_DATA_H__
 
-/* Common data related operations used by seahorse-ops-file
- * and seahorse-ops-text.  Wraps around usage of GpgmeData. */
-
 #include <glib.h>
 #include <gpgme.h>
 
 #include "seahorse-context.h"
-#include "seahorse-key.h"
 
-/* Imports keys in data to key ring */
 gboolean	seahorse_ops_data_import		(SeahorseContext	*sctx,
 							 const GpgmeData	data);
 
-/* Exports key to data */
 gboolean	seahorse_ops_data_export		(const SeahorseContext	*sctx,
 							 GpgmeData		*data,
 							 const SeahorseKey	*skey);
 
-/* Exports keys in recips to data, releasing recips when finished. */
 gboolean	seahorse_ops_data_export_multiple	(const SeahorseContext	*sctx,
 							 GpgmeData		*data,
 							 GpgmeRecipients	recips);
 
-/* All operations below will release the first GpgmeData when finished. */
-
-/* Signs data in plain with current signers.  Signed data will be in sig. */
 gboolean	seahorse_ops_data_sign			(const SeahorseContext	*sctx,
 							 GpgmeData		plain,
 							 GpgmeData		*sig,
 							 GpgmeSigMode		mode);
 
-/* Encrypts data in plain to recips.  Encrypted data will be in cipher.
- * Release recipients when finished. */
 gboolean	seahorse_ops_data_encrypt		(const SeahorseContext	*sctx,
 							 GpgmeRecipients	recips,
 							 GpgmeData		plain,
 							 GpgmeData		*cipher);
 
-/* Decrypts data in cipher to plain */
+gboolean	seahorse_ops_data_encrypt_sign		(const SeahorseContext	*sctx,
+							 GpgmeRecipients	recips,
+							 GpgmeData		plain,
+							 GpgmeData		*cipher);
+
 gboolean	seahorse_ops_data_decrypt		(const SeahorseContext	*sctx,
 							 GpgmeData		cipher,
 							 GpgmeData		*plain);
 
-/* Verifies signatures in sig.  For files, plain is the data file.
- * For text, plain will contain the verified data.
- * Status will contain the overall status. */
 gboolean	seahorse_ops_data_verify		(const SeahorseContext	*sctx,
 							 GpgmeData		sig,
 							 GpgmeData		plain,
 							 GpgmeSigStat		*status);
 
-/* Decrypts and verifies cipher.  Status will have the overall verification status.
- * Plain will contain the decrypted (and verified) data. */
 gboolean	seahorse_ops_data_decrypt_verify	(const SeahorseContext	*sctx,
 							 GpgmeData		cipher,
 							 GpgmeData		*plain,

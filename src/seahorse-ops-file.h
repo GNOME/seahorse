@@ -26,11 +26,10 @@
 #include <gpgme.h>
 
 #include "seahorse-context.h"
-#include "seahorse-key.h"
 
 typedef enum {
-	SEAHORSE_SIG_FILE, /* Has a '.sig' suffix */
-	SEAHORSE_CRYPT_FILE /* Has a '.gpg' suffix */
+	SEAHORSE_SIG_FILE, /* Has a .asc or .sig suffix */
+	SEAHORSE_CRYPT_FILE /* Has a .asc or .gpg suffix */
 } SeahorseFileType;
 
 gchar*		seahorse_ops_file_add_suffix		(const gchar		*file,
@@ -58,6 +57,10 @@ gboolean	seahorse_ops_file_sign			(SeahorseContext	*sctx,
 							 const gchar		*file);
 
 gboolean	seahorse_ops_file_encrypt		(SeahorseContext	*sctx,
+							 const gchar		*file,
+							 GpgmeRecipients	recips);
+
+gboolean	seahorse_ops_file_encrypt_sign		(SeahorseContext	*sctx,
 							 const gchar		*file,
 							 GpgmeRecipients	recips);
 

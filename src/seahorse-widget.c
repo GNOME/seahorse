@@ -65,6 +65,11 @@ static gboolean		seahorse_widget_focus_in_event	(GtkWidget		*widget,
 							 GdkEventFocus		*event,
 							 SeahorseWidget		*swidget);
 
+static void		seahorse_widget_show_progress	(SeahorseContext	*sctx,
+							 const gchar		*op,
+							 gdouble		fract,
+							 SeahorseWidget		*swidget);
+
 static GObjectClass	*parent_class			= NULL;
 
 /* Hash of widgets with name as key */
@@ -136,6 +141,7 @@ seahorse_widget_finalize (GObject *gobject)
 	
 	g_signal_handlers_disconnect_by_func (swidget->sctx, seahorse_widget_destroyed, swidget);
 	g_signal_handlers_disconnect_by_func (swidget->sctx, seahorse_widget_show_status, swidget);
+	g_signal_handlers_disconnect_by_func (swidget->sctx, seahorse_widget_show_progress, swidget);
 	gtk_widget_destroy (glade_xml_get_widget (swidget->xml, swidget->name));
 	
 	g_free (swidget->xml);
@@ -181,18 +187,19 @@ seahorse_widget_set_property (GObject *object, guint prop_id, const GValue *valu
 			g_object_ref (G_OBJECT (swidget->sctx));
 			g_signal_connect_after (swidget->sctx, "destroy",
 				G_CALLBACK (seahorse_widget_destroyed), swidget);
+			g_signal_connect_after (swidget->sctx, "progress",
+				G_CALLBACK (seahorse_widget_show_progress), swidget);
 			break;
 		/* Connects component specific callbacks */
 		case PROP_COMPONENT:
-			if (g_value_get_boolean (value)) {
+			swidget->component = g_value_get_boolean (value);
+			if (swidget->component) {
 				glade_xml_signal_connect_data (swidget->xml, "toolbar_activate",
 					G_CALLBACK (seahorse_widget_show_bar),
 					glade_xml_get_widget (swidget->xml, "tool_dock"));
 				glade_xml_signal_connect_data (swidget->xml, "statusbar_activate",
 					G_CALLBACK (seahorse_widget_show_bar),
 					glade_xml_get_widget (swidget->xml, STATUS));
-				glade_xml_signal_connect_data (swidget->xml, "focus_in_event",
-					G_CALLBACK (seahorse_widget_focus_in_event), swidget);
 				g_signal_connect_after (swidget->sctx, STATUS,
 					G_CALLBACK (seahorse_widget_show_status), swidget);
 			}
@@ -214,6 +221,9 @@ seahorse_widget_get_property (GObject *object, guint prop_id, GValue *value, GPa
 			break;
 		case PROP_CTX:
 			g_value_set_object (value, swidget->sctx);
+			break;
+		case PROP_COMPONENT:
+			g_value_set_boolean (value, swidget->component);
 			break;
 		default:
 			break;
@@ -272,44 +282,32 @@ seahorse_widget_show_bar (GtkCheckMenuItem *checkmenuitem, GtkWidget *bar)
 		gtk_widget_hide (bar);
 }
 
-/* Gpgme callback to show an operation's progress */
 static void
-show_progress (gpointer widget, const gchar *what, gint type, gint current, gint total)
+seahorse_widget_show_progress (SeahorseContext *sctx, const gchar *op, gdouble fract, SeahorseWidget *swidget)
 {
-	SeahorseWidget *swidget;
 	GnomeAppBar *status;
 	GtkProgressBar *progress;
-	gdouble fract;
-	
-	swidget = SEAHORSE_WIDGET (widget);
-	status = GNOME_APPBAR (glade_xml_get_widget (swidget->xml, STATUS));
 	
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, swidget->name), FALSE);
 	
-	gnome_appbar_set_status (status, what);
-	progress = gnome_appbar_get_progress (status);
+	/* do status */
+	if (swidget->component) {
+		status = GNOME_APPBAR (glade_xml_get_widget (swidget->xml, STATUS));
+		gnome_appbar_set_status (status, op);
+		progress = gnome_appbar_get_progress (status);
 		
-	if (!current) {
-		gtk_progress_bar_set_pulse_step (progress, 0.05);
-		gtk_progress_bar_pulse (progress);
-	}
-	else {
-		fract = (gdouble) current / (gdouble) total;
-		gtk_progress_bar_set_fraction (progress, fract);
+		if (fract <= 0) {
+			gtk_progress_bar_set_pulse_step (progress, 0.05);
+			gtk_progress_bar_pulse (progress);
+		}
+		else
+			gtk_progress_bar_set_fraction (progress, fract);
 	}
 	
 	while (g_main_context_pending (NULL))
 		g_main_context_iteration (NULL, TRUE);
 	
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, swidget->name), TRUE);
-}
-
-/* Changes progress callback to current focused widget */
-static gboolean
-seahorse_widget_focus_in_event (GtkWidget *widget, GdkEventFocus *event, SeahorseWidget *swidget)
-{
-	gpgme_set_progress_cb (swidget->sctx->ctx, show_progress, swidget);
-	return TRUE;
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, swidget->name), fract == -1);
 }
 
 /* Common function for creating new widget */

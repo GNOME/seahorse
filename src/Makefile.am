@@ -19,6 +19,9 @@ seahorse_LDADD = \
 	dialogs/libdialogs.a \
 	$(SEAHORSE_LIBS)
 
+BUILT_SOURCES = \
+	seahorse-marshal.c seahorse-marshal.h
+
 seahorse_SOURCES = main.c \
 	seahorse-key.c seahorse-key.h \
 	seahorse-key-pair.c seahorse-key-pair.h \
@@ -39,10 +42,19 @@ seahorse_SOURCES = main.c \
 	seahorse-recipients-store.c seahorse-recipients-store.h \
 	seahorse-encrypt-recipients-store.c seahorse-encrypt-recipients-store.h \
 	seahorse-signer-menu.c seahorse-signer-menu.h \
-	seahorse-signer-menu-item.c seahorse-signer-menu-item.h
+	seahorse-signer-menu-item.c seahorse-signer-menu-item.h \
+	$(BUILT_SOURCES)
+
+seahorse-marshal.h: seahorse-marshal.list $(GLIB_GENMARSHAL)
+	$(GLIB_GENMARSHAL) $< --header --prefix=seahorse-marshal > $@
+
+seahorse-marshal.c: seahorse-marshal.list $(GLIB_GENMARSHAL)
+	echo "#include \"seahorse-marshal.h\"" > $@ && \
+	$(GLIB_GENMARSHAL) $< --body --prefix=seahorse-marshal >> $@
 
 glade_DATA = seahorse-key-manager.glade2 \
 	seahorse-text-editor.glade2 \
 	seahorse-key-properties.glade2
 
-EXTRA_DIST = $(glade_DATA)
+EXTRA_DIST = $(glade_DATA) \
+	fr-marshal.list

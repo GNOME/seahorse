@@ -1,7 +1,7 @@
 /*
  * Seahorse
  *
- * Copyright (C) 2002 Jacob Perkins
+ * Copyright (C) 2003 Jacob Perkins
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,7 +31,19 @@
 #define GPG ".gpg"
 #define SIG ".sig"
 
-/* Returns new file name with appropriate suffix */
+/**
+ * seahorse_ops_file_add_suffix:
+ * @file: Original filename
+ * @type: Type of suffix
+ * @sctx: #SeahorseContext
+ *
+ * Appends the correct suffix to @file, depending on @type and the ascii armor
+ * setting of @sctx.
+ * If ascii armor is enabled, the suffix will be .asc. Otherwise, it will be
+ * .sig for #SEAHORSE_SIG_FILE, or .gpg for #SEAHORSE_CRYPT_FILE.
+ *
+ * Returns: @file with a suffix
+ **/
 gchar*
 seahorse_ops_file_add_suffix (const gchar *file, SeahorseFileType type, SeahorseContext *sctx)
 {
@@ -43,7 +55,16 @@ seahorse_ops_file_add_suffix (const gchar *file, SeahorseFileType type, Seahorse
 		return g_strdup_printf ("%s%s", file, GPG);
 }
 
-/* Returns new file name with suffix removed */
+/**
+ * seahorse_ops_file_del_suffix:
+ * @file: Original filename
+ * @type: Type of suffix
+ *
+ * Checks @file with seahorse_ops_file_check_suffix(), then returns @file
+ * with the suffix removed.
+ *
+ * Returns: @file without a suffix, or NULL if @file had a bad suffix
+ **/
 gchar*
 seahorse_ops_file_del_suffix (const gchar *file, SeahorseFileType type)
 {
@@ -77,6 +98,16 @@ write_data (GpgmeData data, const gchar *file)
 	return TRUE;
 }
 
+/**
+ * seahorse_ops_file_check_suffix:
+ * @file: Filename to check
+ * @type: Suffix type
+ *
+ * Checks the suffix of @file against @type. The suffix must be .asc,
+ * or .sig for #SEAHORSE_SIG_FILE, or .gpg for #SEAHORSE_CRYPT_FILE.
+ *
+ * Returns: %TRUE if suffix is good, %FALSE otherwise
+ **/
 gboolean
 seahorse_ops_file_check_suffix (const gchar *file, SeahorseFileType type)
 {
@@ -91,21 +122,43 @@ seahorse_ops_file_check_suffix (const gchar *file, SeahorseFileType type)
 		g_pattern_match_simple (g_strdup_printf ("*%s", suffix), file));
 }
 
+/**
+ * seahorse_ops_file_import:
+ * @sctx: #SeahorseContext
+ * @file: Filename of file to import
+ *
+ * Imports @file using seahorse_ops_data_import().
+ * seahorse_context_show_status() will be called upon completion.
+ *
+ * Returns: %TRUE if successful, %FALSE otherwise
+ **/
 gboolean
 seahorse_ops_file_import (SeahorseContext *sctx, const gchar *file)
 {
 	GpgmeData data;
 	gboolean success;
 	
-	success = (gpgme_data_new_from_file (&data, file, TRUE) == GPGME_No_Error);
-	if (success)
-		success = seahorse_ops_data_import (sctx, data);
-	else
-		seahorse_context_show_status (sctx, _("Bad File, Import"), FALSE);
+	success = ((gpgme_data_new_from_file (&data, file, TRUE) == GPGME_No_Error) &&
+		seahorse_ops_data_import (sctx, data));
+	
+	if (!success)
+		gpgme_data_release (data);
 	
 	return success;
 }
 
+/**
+ * seahorse_ops_file_export:
+ * @sctx: #SeahorseContext
+ * @file: Filename of file to export to
+ * @skey: Key to export
+ *
+ * Sugar to export one key using seahorse_ops_file_export_multiple().
+ * Exports @skey to @file.
+ * Call seahorse_context_show_status() upon completion.
+ *
+ * Returns: %TRUE if successful, %FALSE otherwise
+ **/
 gboolean
 seahorse_ops_file_export (SeahorseContext *sctx, const gchar *file, const SeahorseKey *skey)
 {
@@ -115,10 +168,24 @@ seahorse_ops_file_export (SeahorseContext *sctx, const gchar *file, const Seahor
 	success = (seahorse_ops_data_export (sctx, &data, skey) &&
 		write_data (data, file));
 	
+	if (!success)
+		gpgme_data_release (data);
+	
 	seahorse_context_show_status (sctx, _("Export File"), success);
 	return success;
 }
 
+/**
+ * seahorse_ops_file_export_multiple:
+ * @sctx: #SeahorseContext
+ * @file: Filename of file to export to
+ * @recips: Keys to export
+ *
+ * Exports @recips to @file using seahorse_ops_data_export_multiple().
+ * Calls seahorse_context_show_status() upon completion.
+ *
+ * Returns: %TRUE if successful, %FALSE otherwise
+ **/
 gboolean
 seahorse_ops_file_export_multiple (SeahorseContext *sctx, const gchar *file, GpgmeRecipients recips)
 {
@@ -128,10 +195,26 @@ seahorse_ops_file_export_multiple (SeahorseContext *sctx, const gchar *file, Gpg
 	success = (seahorse_ops_data_export_multiple (sctx, &data, recips) &&
 		write_data (data, file));
 	
+	if (!success)
+		gpgme_data_release (data);
+	
 	seahorse_context_show_status (sctx, _("Export File"), success);
 	return success;
 }
 
+/**
+ * seahorse_ops_file_sign:
+ * @sctx: #SeahorseContext with signers
+ * @file: Filename of file to sign
+ *
+ * Signs file with signers in @sctx, using seahorse_ops_data_sign().
+ * Signed file will be stored at the same location as @file,
+ * but with a .sig or .asc extension, depending on the ascii armor setting
+ * of @sctx. See seahorse_ops_file_add_suffix() and #SEAHORSE_SIG_FILE.
+ * Calls seahorse_context_show_status() upon completion.
+ *
+ * Returns: %TRUE if successful, %FALSE otherwise
+ **/
 gboolean
 seahorse_ops_file_sign (SeahorseContext *sctx, const gchar *file)
 {
@@ -143,10 +226,29 @@ seahorse_ops_file_sign (SeahorseContext *sctx, const gchar *file)
 		seahorse_ops_data_sign (sctx, plain, &sig, GPGME_SIG_MODE_DETACH) &&
 		write_data (sig, seahorse_ops_file_add_suffix (file, SEAHORSE_SIG_FILE, sctx)));
 	
+	if (!success) {
+		gpgme_data_release (plain);
+		gpgme_data_release (sig);
+	}
+	
 	seahorse_context_show_status (sctx, _("Detached Signature"), success);
 	return success;
 }
 
+/**
+ * seahorse_ops_file_encrypt:
+ * @sctx: #SeahorseContext
+ * @file: Filename of file to encrypt
+ * @recips: Keys to encrypt to
+ *
+ * Encrypts @file to @recips using seahorse_ops_data_encrypt().
+ * Encrypted file will be stored at the same location as @file,
+ * but with a .gpg or .asc extension, depending on the ascii armor setting of
+ * @sctx. See seahorse_ops_file_add_suffix() and #SEAHORSE_CRYPT_FILE.
+ * Calls seahorse_context_show_status() upon completion.
+ *
+ * Returns: %TRUE if successful, %FALSE otherwise
+ **/
 gboolean
 seahorse_ops_file_encrypt (SeahorseContext *sctx, const gchar *file, GpgmeRecipients recips)
 {
@@ -158,10 +260,62 @@ seahorse_ops_file_encrypt (SeahorseContext *sctx, const gchar *file, GpgmeRecipi
 		seahorse_ops_data_encrypt (sctx, recips, plain, &cipher) &&
 		write_data (cipher, seahorse_ops_file_add_suffix (file, SEAHORSE_CRYPT_FILE, sctx)));
 	
+	if (!success) {
+		gpgme_data_release (plain);
+		gpgme_data_release (cipher);
+	}
+	
 	seahorse_context_show_status (sctx, _("Encrypt File"), success);
 	return success;
 }
 
+/**
+ * seahorse_ops_file_encrypt_sign:
+ * @sctx: #SeahorseContext with signers
+ * @file: Filename of file to encrypt and sign
+ * @recips: Keys to encrypt to
+ *
+ * Encrypts @file to @recips, then signs with signers in @sctx,
+ * using seahorse_ops_data_encrypt_sign(). Encrypted and signed file will be
+ * stored at the same location as @file, but with a .gpg or .asc extension,
+ * depending on the ascii armor setting of @sctx.
+ * See seahorse_ops_file_add_suffix() and #SEAHORSE_CRYPT_FILE.
+ * Calls seahorse_context_show_status() upon completion.
+ *
+ * Returns: %TRUE if successful, %FALSE otherwise
+ **/
+gboolean
+seahorse_ops_file_encrypt_sign (SeahorseContext *sctx, const gchar *file, GpgmeRecipients recips)
+{
+	GpgmeData plain;
+	GpgmeData cipher;
+	gboolean success;
+	
+	success = ((gpgme_data_new_from_file (&plain, file, TRUE) == GPGME_No_Error) &&
+		seahorse_ops_data_encrypt_sign (sctx, recips, plain, &cipher) &&
+		write_data (cipher, seahorse_ops_file_add_suffix (file, SEAHORSE_CRYPT_FILE, sctx)));
+	
+	if (!success) {
+		gpgme_data_release (plain);
+		gpgme_data_release (cipher);
+	}
+	
+	seahorse_context_show_status (sctx, _("Encrypt & Sign File"), success);
+	return success;
+}
+
+/**
+ * seahorse_ops_file_decrypt:
+ * @sctx: #SeahorseContext
+ * @file: Filename of encrypted file. The file's extension must be .gpg or .asc.
+ *
+ * Decrypts @file using seahorse_ops_data_decrypt(). The decrypted file will be
+ * stored at the same location as @file, but without the .gpg or .asc extension.
+ * See seahorse_ops_file_del_suffix() and #SEAHORSE_CRYPT_FILE.
+ * Calls seahorse_context_show_status() upon completion.
+ *
+ * Returns: %TRUE if successful, %FALSE otherwise
+ **/
 gboolean
 seahorse_ops_file_decrypt (SeahorseContext *sctx, const gchar *file)
 {
@@ -172,11 +326,29 @@ seahorse_ops_file_decrypt (SeahorseContext *sctx, const gchar *file)
 	success = ((gpgme_data_new_from_file (&cipher, file, TRUE) == GPGME_No_Error) &&
 		seahorse_ops_data_decrypt (sctx, cipher, &plain) &&
 		write_data (plain, seahorse_ops_file_del_suffix (file, SEAHORSE_CRYPT_FILE)));
+	
+	if (!success) {
+		gpgme_data_release (cipher);
+		gpgme_data_release (plain);
+	}
 
 	seahorse_context_show_status (sctx, _("Decrypt File"), success);
 	return success;
 }
 
+/**
+ * seahorse_ops_file_verify:
+ * @sctx: #SeahorseContext
+ * @file: Filename of signature file. The file's extension must be .sig or .asc.
+ * @status: Will contain the verification status of @file
+ *
+ * Verifies the signature @file, assuming the signed data file is @file without
+ * the extension, using seahorse_ops_file_del_suffix(), #SEAHORSE_SIG_FILE,
+ * and seahorse_ops_data_verify().
+ * Calls seahorse_context_show_status() upon completion.
+ *
+ * Returns: %TRUE if successful, %FALSE otherwise
+ **/
 gboolean
 seahorse_ops_file_verify (SeahorseContext *sctx, const gchar *file, GpgmeSigStat *status)
 {
@@ -191,10 +363,29 @@ seahorse_ops_file_verify (SeahorseContext *sctx, const gchar *file, GpgmeSigStat
 	
 	gpgme_data_release (plain);
 	
+	if (!success) {
+		gpgme_data_release (sig);
+		gpgme_data_release (plain);
+	}
+	
 	seahorse_context_show_status (sctx, _("Verify Signature File"), success);
 	return success;
 }
 
+/**
+ * seahorse_ops_file_decrypt_verify:
+ * @sctx: #SeahorseContext
+ * @file: Filename of encrypted, and possibly signed, file.
+ * The file's extension must be .gpg or .asc.
+ * @status: Will contain the verification status of any signatures in @file
+ *
+ * Decrypts @file, and verifies any signatures it contains.
+ * The decrypted data will be stored at the same location as @file,
+ * but without the .gpg or .asc extension.
+ * Calls seahorse_context_show_status() upon completion.
+ *
+ * Returns: %TRUE if successful, %FALSE otherwise
+ **/
 gboolean
 seahorse_ops_file_decrypt_verify (SeahorseContext *sctx, const gchar *file, GpgmeSigStat *status)
 {
@@ -205,6 +396,11 @@ seahorse_ops_file_decrypt_verify (SeahorseContext *sctx, const gchar *file, Gpgm
 	success = ((gpgme_data_new_from_file (&cipher, file, TRUE) == GPGME_No_Error) &&
 		seahorse_ops_data_decrypt_verify (sctx, cipher, &plain, status) &&
 		write_data (plain, seahorse_ops_file_del_suffix (file, SEAHORSE_CRYPT_FILE)));
+	
+	if (!success) {
+		gpgme_data_release (cipher);
+		gpgme_data_release (plain);
+	}
 	
 	seahorse_context_show_status (sctx, _("Decrypt & Verify File"), success);
 	return success;

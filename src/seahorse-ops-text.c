@@ -50,6 +50,16 @@ read_string (GpgmeData data, GString *string)
 	return TRUE;
 }
 
+/**
+ * seahorse_ops_text_import:
+ * @sctx: #SeahorseContext
+ * @text: Text to import
+ *
+ * Imports @text using seahorse_ops_data_import().
+ * seahorse_context_show_status() will be called upon completion.
+ *
+ * Returns: %TRUE if successful, %FALSE otherwise
+ **/
 gboolean
 seahorse_ops_text_import (SeahorseContext *sctx, const gchar *text)
 {
@@ -59,14 +69,23 @@ seahorse_ops_text_import (SeahorseContext *sctx, const gchar *text)
 		seahorse_ops_data_import (sctx, data));
 }
 
+/**
+ * seahorse_ops_text_export:
+ * @sctx: #SeahorseContext with ascii armor enabled
+ * @string: Will contain exported @
+ **/
 gboolean
 seahorse_ops_text_export (SeahorseContext *sctx, GString *string, const SeahorseKey *skey)
 {	
 	GpgmeData data;
 	gboolean success;
 	
-	success = (seahorse_ops_data_export (sctx, &data, skey) &&
+	success = (gpgme_get_armor (sctx->ctx) &&
+		seahorse_ops_data_export (sctx, &data, skey) &&
 		read_string (data, string));
+	
+	if (!success)
+		gpgme_data_release (data);
 	
 	seahorse_context_show_status (sctx, _("Export Text"), success);
 	return success;

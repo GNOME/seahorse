@@ -61,6 +61,10 @@ struct _SeahorseContextClass
 	/* Signal emitted when @skey has been added to @sctx */
 	void 			(* add)				(SeahorseContext	*sctx,
 								 SeahorseKey		*skey);
+	
+	void			(* progress)			(SeahorseContext	*sctx,
+								 const gchar		*op,
+								 gdouble		fract);
 };
 
 SeahorseContext*	seahorse_context_new			(void);
@@ -71,9 +75,13 @@ GList*			seahorse_context_get_keys		(SeahorseContext	*sctx);
 
 GList*			seahorse_context_get_key_pairs		(SeahorseContext	*sctx);
 
-void			seahorse_context_show_status		(const SeahorseContext	*sctx,
+void			seahorse_context_show_status		(SeahorseContext	*sctx,
 								 const gchar		*op,
 								 gboolean		success);
+
+void			seahorse_context_show_progress		(SeahorseContext	*sctx,
+								 const gchar		*op,
+								 gdouble		fract);
 
 void			seahorse_context_key_added		(SeahorseContext	*sctx);
 

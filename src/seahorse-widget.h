@@ -1,7 +1,7 @@
 /*
  * Seahorse
  *
- * Copyright (C) 2002 Jacob Perkins
+ * Copyright (C) 2003 Jacob Perkins
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,19 +22,6 @@
 #ifndef __SEAHORSE_WIDGET_H__
 #define __SEAHORSE_WIDGET_H__
 
-/* SeahorseWidget is used by almost every dialog and window in seahorse.
- * It is a conveniance wrapper for a GladeXML definition that will
- * connect common callback functions windows and dialogs.
- * Given a name, the xml file should be 'seahorse-name.glade2',
- * and the name of the main window widget should also be the given name.
- * Basic callbacks include: showing help and closing/deleting.
- * The callbacks names must be 'help', 'closed', and 'delete_event'.
- * A component will contain additional callbacks used in windows.
- * Component callbacks include: status display, progress display,
- * and changing the visibility of the status bar and menu bar.
- * These callback names are 'focus_in_event', 'toolbar_activate', and 'statusbar_activate'
- * with the toolbar and status bar having the names 'tool_dock' and 'status'. */
-
 #include <glib.h>
 #include <glade/glade-xml.h>
 
@@ -54,9 +41,15 @@ struct _SeahorseWidget
 {
 	GObject		parent;
 	
+	/*< public >*/
+	
 	GladeXML	*xml;
 	gchar		*name;
 	SeahorseContext	*sctx;
+	
+	/*< private >*/
+	
+	gboolean	component;
 };
 
 struct _SeahorseWidgetClass
@@ -64,21 +57,15 @@ struct _SeahorseWidgetClass
 	GObjectClass	parent_class;
 };
 
-/* Creates a new SeahorseWidget.  This will load/show the primary window
- * and set any common callback functions */
 SeahorseWidget*	seahorse_widget_new			(gchar			*name,
 							 SeahorseContext	*sctx);
 
-/* Same as seahorse_widget_new, but connects some extra callback funtions
- * that are used by main windows, such as status and progress display */
 SeahorseWidget*	seahorse_widget_new_component		(gchar			*name,
 							 SeahorseContext	*sctx);
 
-/* Creates new widget without checking if type already exists */
 SeahorseWidget*	seahorse_widget_new_allow_multiple	(gchar			*name,
 							 SeahorseContext	*sctx);
 
-/* Unrefs the SeahorseWidget.  Since dialogs don't ref, makes more sense. */
 void		seahorse_widget_destroy			(SeahorseWidget		*swidget);
 
 #endif /* __SEAHORSE_WIDGET_H__ */
