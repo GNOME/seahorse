@@ -51,8 +51,8 @@ gchar*		seahorse_util_add_suffix		(gpgme_ctx_t		ctx,
 gchar*		seahorse_util_remove_suffix		(const gchar		*path);
 
 /* For checking GPG error codes */
-#define GPG_IS_OK (e)       (gpgme_err_code (e) == GPG_ERR_NO_ERROR)
+#define GPG_IS_OK(e)        (gpgme_err_code (e) == GPG_ERR_NO_ERROR)
 #define GPG_OK              (gpgme_error (GPG_ERR_NO_ERROR))
-#define GPG_E (e)           (gpgme_error (e))
+#define GPG_E(e)            (gpgme_error (e))
 
 #endif /* __SEAHORSE_UTIL_H__ */
