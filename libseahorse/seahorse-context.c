@@ -453,6 +453,20 @@ do_key_list (SeahorseContext *sctx)
 }
 
 /**
+ * seahorse_context_get_n_keys
+ * 
+ * Gets the number of loaded keys.
+ * 
+ * Returns: The number of loaded keys.
+ */
+guint           
+seahorse_context_get_n_keys  (SeahorseContext    *sctx)
+{
+    return g_list_length (sctx->priv->key_pairs) + 
+           g_list_length (sctx->priv->single_keys);
+}
+
+/**
  * seahorse_context_get_keys:
  * @sctx: #SeahorseContext
  *
@@ -472,6 +486,19 @@ seahorse_context_get_keys (SeahorseContext *sctx)
 	
 	/* copy key_pairs since will append single_keys to list & key_pairs is small */
 	return g_list_concat (g_list_copy (sctx->priv->key_pairs), sctx->priv->single_keys);
+}
+
+/**
+ * seahorse_context_get_n_key_pairs
+ * 
+ * Gets the number of loaded key pairs.
+ * 
+ * Returns: The number of loaded key pairs.
+ */
+guint           
+seahorse_context_get_n_keys_pair  (SeahorseContext    *sctx)
+{
+    return g_list_length (sctx->priv->key_pairs);
 }
 
 /**

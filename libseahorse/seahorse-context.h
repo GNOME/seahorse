@@ -76,7 +76,11 @@ SeahorseContext*	seahorse_context_new			(void);
 
 void			seahorse_context_destroy		(SeahorseContext	*sctx);
 
+guint           seahorse_context_get_n_keys     (SeahorseContext    *sctx);
+
 GList*			seahorse_context_get_keys		(SeahorseContext	*sctx);
+
+guint           seahorse_context_get_n_keys_pairs   (SeahorseContext    *sctx);
 
 GList*			seahorse_context_get_key_pairs		(SeahorseContext	*sctx);
 

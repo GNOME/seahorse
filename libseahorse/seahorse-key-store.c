@@ -550,6 +550,8 @@ seahorse_key_store_init (SeahorseKeyStore *skstore, GtkTreeView *view)
 {
 	GtkTreeViewColumn *col;
 
+    seahorse_key_store_populate (skstore);
+
     /* The sorted model is the top level model */   
     g_assert (GTK_IS_TREE_MODEL (skstore->sort));
     gtk_tree_view_set_model (view, GTK_TREE_MODEL (skstore->sort));
@@ -617,17 +619,21 @@ seahorse_key_store_populate (SeahorseKeyStore *skstore)
 	
 	g_return_if_fail (SEAHORSE_IS_KEY_STORE (skstore));
 	
-	list = seahorse_context_get_keys (skstore->sctx);
-	length = g_list_length (list);
+    /* Don't precipitate a load */
+    if (seahorse_context_get_n_keys (skstore->sctx) > 0) {
+
+    	list = seahorse_context_get_keys (skstore->sctx);
+    	length = g_list_length (list);
 	
-	while (list != NULL && (skey = list->data) != NULL) {
-		SEAHORSE_KEY_STORE_GET_CLASS (skstore)->append (skstore, skey, &iter);
-		list = g_list_next (list);
-		count++;
-	}
+    	while (list != NULL && (skey = list->data) != NULL) {
+	       	SEAHORSE_KEY_STORE_GET_CLASS (skstore)->append (skstore, skey, &iter);
+    		list = g_list_next (list);
+    		count++;
+    	}
 	
-	seahorse_context_show_progress (skstore->sctx,
-		g_strdup_printf (_("Listed %d keys"), count), -1);
+    	seahorse_context_show_progress (skstore->sctx,
+	       	g_strdup_printf (_("Listed %d keys"), count), -1);
+    }
 }
 
 /* Try to find our key store given a tree model */
