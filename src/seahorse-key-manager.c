@@ -222,6 +222,18 @@ view_bar (GtkCheckMenuItem *item, const gchar *key)
 	eel_gconf_set_boolean (key, gtk_check_menu_item_get_active (item));
 }
 
+static void
+expand_all_activate (GtkMenuItem *item, SeahorseWidget *swidget)
+{
+	gtk_tree_view_expand_all (GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, KEY_LIST)));
+}
+
+static void
+collapse_all_activate (GtkMenuItem *item, SeahorseWidget *swidget)
+{
+	gtk_tree_view_collapse_all (GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, KEY_LIST)));
+}
+
 /* Shows about dialog */
 static void
 about_activate (GtkWidget *widget, SeahorseWidget *swidget)
@@ -556,6 +568,11 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 		G_CALLBACK (add_subkey_activate), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "add_revoker_activate",
 		G_CALLBACK (add_revoker_activate), swidget);
+	
+	glade_xml_signal_connect_data (swidget->xml, "expand_all_activate",
+		G_CALLBACK (expand_all_activate), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "collapse_all_activate",
+		G_CALLBACK (collapse_all_activate), swidget);
 	
 	//features not available
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "add_photo"), FALSE);
