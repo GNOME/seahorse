@@ -250,7 +250,10 @@ setup_check_control (SeahorseContext *ctx, SeahorseWidget *sw,
     GtkWidget *ctl;
     CtlLinkups *lu;
 
+    g_return_if_fail (sw != NULL);    
+
     ctl = glade_xml_get_widget (sw->xml, name);
+    g_return_if_fail (ctl != NULL);
 
     /* Hookup load events */
     lu = g_new0 (CtlLinkups, 1);
@@ -295,8 +298,11 @@ setup_spinner_control (SeahorseContext *ctx, SeahorseWidget *sw,
 {
     GtkWidget *ctl;
     CtlLinkups *lu;
+    
+    g_return_if_fail (sw != NULL);    
 
     ctl = glade_xml_get_widget (sw->xml, name);
+    g_return_if_fail (ctl != NULL);
 
     /* Hookup load events */
     lu = g_new0 (CtlLinkups, 1);
@@ -374,11 +380,18 @@ start_agent (GtkWidget *widget, gpointer data)
 void
 seahorse_pgp_preferences_cache (SeahorseContext *ctx, SeahorseWidget *widget)
 {
-    g_signal_connect_after (glade_xml_get_widget (widget->xml, "use-cache"),
-                            "toggled", G_CALLBACK (control_disable),
+    GtkWidget *w;
+    
+    g_return_if_fail (widget != NULL);
+
+    w = glade_xml_get_widget (widget->xml, "use-cache");
+    g_return_if_fail (w != NULL);
+    g_signal_connect_after (w , "toggled", G_CALLBACK (control_disable),
                             glade_xml_get_widget (widget->xml, "cache-options"));
-    g_signal_connect_after (glade_xml_get_widget (widget->xml, "expire"), "toggled",
-                            G_CALLBACK (control_disable),
+                            
+    w = glade_xml_get_widget (widget->xml, "expire");        
+    g_return_if_fail (w != NULL);
+    g_signal_connect_after (w , "toggled", G_CALLBACK (control_disable),
                             glade_xml_get_widget (widget->xml, "ttl"));
 
     setup_spinner_control (ctx, widget, "ttl", SETTING_TTL);
@@ -390,7 +403,9 @@ seahorse_pgp_preferences_cache (SeahorseContext *ctx, SeahorseWidget *widget)
       
     /* No agent running offer to start */
     case AGENT_NONE:
-        gtk_widget_show (glade_xml_get_widget (widget->xml, "agent-start"));
+        w = glade_xml_get_widget (widget->xml, "agent-start");
+        g_return_if_fail (w != NULL);
+        gtk_widget_show (w);
 
         glade_xml_signal_connect_data (widget->xml, "on_start_link",
                                        G_CALLBACK (start_agent),
@@ -402,7 +417,9 @@ seahorse_pgp_preferences_cache (SeahorseContext *ctx, SeahorseWidget *widget)
     /* We disable the agent preferences completely */
     case AGENT_OTHER:
         g_message (_("Another password caching agent is running. Disabling cache preferences."));
-        gtk_notebook_remove_page (GTK_NOTEBOOK (glade_xml_get_widget (widget->xml, "notebook")), 1);
+        w = glade_xml_get_widget (widget->xml, "notebook");
+        g_return_if_fail (w != NULL);
+        gtk_notebook_remove_page (GTK_NOTEBOOK (w), 1);
         break;
    
     /* Seahorse agent running, behave normally */
