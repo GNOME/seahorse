@@ -96,4 +96,6 @@ void			seahorse_context_set_signer		(SeahorseContext	*sctx,
 
 SeahorseKey*		seahorse_context_get_last_signer	(SeahorseContext	*sctx);
 
+gint			seahorse_context_get_progress_update	(SeahorseContext	*sctx);
+
 #endif /* __SEAHORSE_CONTEXT_H__ */

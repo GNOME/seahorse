@@ -35,5 +35,18 @@
 				Key servers only accept ascii armored keys.</long>
 			</locale>
 		</schema>
+		<schema>
+			<key>/schemas/apps/seahorse/listing/progress_update</key>
+			<applyto>/apps/seahorse/listing/progress_update</applyto>
+			<owner>seahorse</owner>
+			<type>int</type>
+			<default>20</default>
+			<locale name="C">
+				<short>Progress update for listing operations</short>
+				<long>When to emit a progress signal during a key listing operation.
+				The default is to update the progress bar every 20 keys.
+				-1 indicates never.</long>
+			</locale>
+		</schema>
 	</schemalist>
 </gconfschemafile>

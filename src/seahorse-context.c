@@ -26,10 +26,15 @@
 #include "seahorse-key-pair.h"
 #include "seahorse-marshal.h"
 
-#define PREFERENCES "/apps/seahorse/preferences"
-#define ARMOR_KEY PREFERENCES "/ascii_armor"
-#define TEXT_KEY PREFERENCES "/text_mode"
-#define DEFAULT_KEY PREFERENCES "/default_key_id"
+#define SCHEMA_ROOT "/apps/seahorse/"
+
+#define PREFERENCES SCHEMA_ROOT "preferences/"
+#define ARMOR_KEY PREFERENCES "ascii_armor"
+#define TEXT_KEY PREFERENCES "text_mode"
+#define DEFAULT_KEY PREFERENCES "default_key_id"
+
+#define LISTING SCHEMA_ROOT "listing/"
+#define PROGRESS_UPDATE LISTING "progress_update"
 
 struct _SeahorseContextPrivate
 {
@@ -246,8 +251,6 @@ add_key (GpgmeKey key, SeahorseContext *sctx)
 	g_return_if_fail (gpgme_op_keylist_start (sctx->ctx,
 		gpgme_key_get_string_attr (key, GPGME_ATTR_FPR, NULL, 0), TRUE) == GPGME_No_Error);
 	
-	seahorse_context_show_progress (sctx, _("Processing Keys"), 0);
-	
 	/* check if has secret, then do new pair */
 	if (gpgme_op_keylist_next (sctx->ctx, &secret) == GPGME_No_Error) {
 		skey = seahorse_key_pair_new (key, secret);
@@ -270,13 +273,6 @@ add_key (GpgmeKey key, SeahorseContext *sctx)
 		G_CALLBACK (seahorse_context_key_changed), sctx);
 	
 	return skey;
-}
-
-/* For each GFunc */
-static void
-add_each_key (GpgmeKey key, SeahorseContext *sctx)
-{
-	add_key (key, sctx);
 }
 
 /**
@@ -314,22 +310,38 @@ do_lists (SeahorseContext *sctx)
 	GpgmeKey key;
 	GList *keys = NULL;
 	guint count = 1;
+	gint progress_update;
+	gdouble length;
 	
 	if (!init_list) {
+		progress_update = seahorse_context_get_progress_update (sctx);
+		
 		g_return_if_fail (gpgme_op_keylist_start (sctx->ctx, NULL, FALSE) == GPGME_No_Error);
 		while (gpgme_op_keylist_next (sctx->ctx, &key) == GPGME_No_Error) {
 			/* show progress every 10 */
-			if (!(count % 10)) {
-				seahorse_context_show_progress (sctx,
-					g_strdup_printf (_("Loading key %d"), count), 0);
+			if (progress_update > 0 && !(count % progress_update)) {
+				seahorse_context_show_progress (sctx, g_strdup_printf (
+					_("Loading key %d"), count), 0);
 			}
 			
 			keys = g_list_append (keys, key);
 			count++;
 		}
 		gpgme_op_keylist_end (sctx->ctx);
-	
-		g_list_foreach (keys, (GFunc)add_each_key, sctx);
+		
+		count = 1;
+		length = g_list_length (keys);
+		
+		while (keys != NULL) {
+			if (progress_update > 0 && !(count % progress_update)) {
+				seahorse_context_show_progress (sctx, g_strdup_printf (
+					_("Processing Key %d"), count), (gdouble)count/length);
+			}
+			
+			add_key (keys->data, sctx);
+			keys = g_list_next (keys);
+			count++;
+		}
 		
 		init_list = TRUE;
 	}
@@ -560,4 +572,10 @@ seahorse_context_get_last_signer (SeahorseContext *sctx)
 	
 	key = gpgme_signers_enum (sctx->ctx, 0);
 	return seahorse_context_get_key (sctx, key);
+}
+
+gint
+seahorse_context_get_progress_update (SeahorseContext *sctx)
+{
+	return gconf_client_get_int (sctx->priv->gclient, PROGRESS_UPDATE, NULL);
 }

@@ -373,18 +373,19 @@ seahorse_key_store_populate (SeahorseKeyStore *skstore)
 	GList *list = NULL;
 	SeahorseKey *skey;
 	guint count = 1;
-	guint length;
+	gint progress_update;
+	gdouble length;
 	
 	g_return_if_fail (skstore != NULL && SEAHORSE_IS_KEY_STORE (skstore));
 	
 	list = seahorse_context_get_keys (skstore->sctx);
 	length = g_list_length (list);
+	progress_update = seahorse_context_get_progress_update (skstore->sctx);
 	
 	while (list != NULL && (skey = list->data) != NULL) {
-		if (!(count % 10)) {
-			seahorse_context_show_progress (skstore->sctx,
-				g_strdup_printf (_("Listing Key %d"), count),
-				(gdouble)count/(gdouble)length);
+		if (progress_update > 0 && !(count % progress_update)) {
+			seahorse_context_show_progress (skstore->sctx, g_strdup_printf (
+				_("Listing Key %d"), count), (gdouble)count/length);
 		}
 		
 		seahorse_key_store_append (skstore, skey);
@@ -393,7 +394,7 @@ seahorse_key_store_populate (SeahorseKeyStore *skstore)
 	}
 	
 	seahorse_context_show_progress (skstore->sctx,
-		g_strdup_printf (_("Listing Key %d"), count), -1);
+		g_strdup_printf (_("Loaded %d keys"), count), -1);
 }
 
 /**
