@@ -70,6 +70,9 @@ seahorse_util_get_date_string (const time_t time)
 	GDate *created_date;
 	gchar *created_string;
 	
+	if (time == 0)
+		return "0";
+	
 	created_date = g_date_new ();
 	g_date_set_time (created_date, time);
 	created_string = g_new (gchar, 11);

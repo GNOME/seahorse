@@ -18,7 +18,8 @@ libdialogs_a_SOURCES = \
 	seahorse-signatures.c seahorse-signatures.h \
 	seahorse-recipients.c seahorse-recipients.h \
 	seahorse-add-uid.c seahorse-add-uid.h \
-	seahorse-add-subkey.c seahorse-add-subkey.h
+	seahorse-add-subkey.c seahorse-add-subkey.h \
+	seahorse-revoke.c seahorse-revoke.h
 
 glade_DATA = \
 	seahorse-generate.glade2 \
@@ -28,6 +29,7 @@ glade_DATA = \
 	seahorse-signatures.glade2 \
 	seahorse-recipients.glade2 \
 	seahorse-add-uid.glade2 \
-	seahorse-add-subkey.glade2
+	seahorse-add-subkey.glade2 \
+	seahorse-revoke.glade2
 
 EXTRA_DIST = $(glade_DATA)

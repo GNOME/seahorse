@@ -1,11 +1,18 @@
+2003-01-31  Jacob Perkins  <jap1@users.sourceforge.net>
+
+	* seahorse-ops-key: Fixed up ::add_subkey, added ::revoke_subkey
+	* seahorse-revoke: Added
+	* seahorse-key-properties: Updated to revoke subkeys
+
 2003-01-30  Jacob Perkins  <jap1@users.sourceforge.net>
 
 	* seahorse-key-manager-store: Show user IDs instead of subkeys,
 	listen to SKEY_CHANGE_UIDS & refresh
 	* seahorse-key-store: ::append_column returns the column,
 	::init makes NAME column sortable
-	* seahorse-ops-key: ::add_subkey fixups, added ::del_subkey
-	* seahorse-key-properties: Updated to do subkey deletion
+	* seahorse-ops-key: ::add_subkey fixups, added ::del_subkey,
+	changed ::set_expires to accept an index for subkeys
+	* seahorse-key-properties: Updated to do subkey deletion & subkey expires
 
 2003-01-29  Jacob Perkins  <jap1@users.sourceforge.net>
 

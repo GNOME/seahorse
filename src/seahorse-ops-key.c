@@ -422,10 +422,17 @@ seahorse_ops_key_set_trust (SeahorseContext *sctx, SeahorseKey *skey, GpgmeValid
 	return edit_key (sctx, skey, parms, _("Change Trust"), SKEY_CHANGE_TRUST);
 }
 
+typedef struct
+{
+	guint	index;
+	time_t	expires;
+} ExpireParm;
+
 /* Edit primary expiration states */
 typedef enum
 {
 	EXPIRE_START,
+	EXPIRE_SELECT,
 	EXPIRE_COMMAND,
 	EXPIRE_DATE,
 	EXPIRE_QUIT,
@@ -437,16 +444,20 @@ typedef enum
 static GpgmeError
 edit_expire_action (guint state, gpointer data, const gchar **result)
 {
-	const gchar *date = data;
+	ExpireParm *parm = (ExpireParm*)data;
   
 	switch (state) {
+		case EXPIRE_SELECT:
+			*result = g_strdup_printf ("key %d", parm->index);
+			break;
 		/* Start the operation */
 		case EXPIRE_COMMAND:
 			*result = "expire";
 			break;
 		/* Send the new expire date */
 		case EXPIRE_DATE:
-			*result = date;
+			*result = (parm->expires) ?
+				seahorse_util_get_date_string (parm->expires) : "0";
 			break;
 		/* End the operation */
 		case EXPIRE_QUIT:
@@ -476,6 +487,14 @@ edit_expire_transit (guint current_state, GpgmeStatusCode status,
 	switch (current_state) {
 		case EXPIRE_START:
 			/* Need to enter command */
+			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
+				next_state = EXPIRE_SELECT;
+			else {
+				next_state = EXPIRE_ERROR;
+				*err = GPGME_General_Error;
+			}
+			break;
+		case EXPIRE_SELECT:
 			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
 				next_state = EXPIRE_COMMAND;
 			else {
@@ -536,24 +555,20 @@ edit_expire_transit (guint current_state, GpgmeStatusCode status,
  * Returns: %TRUE if successful, %FALSE otherwise
  **/
 gboolean
-seahorse_ops_key_set_expires (SeahorseContext *sctx, SeahorseKey *skey, time_t expires)
+seahorse_ops_key_set_expires (SeahorseContext *sctx, SeahorseKey *skey,
+			      guint index, time_t expires)
 {
-	const gchar *date;
+	ExpireParm *exp_parm;
 	SeahorseEditParm *parms;
 	
 	g_return_val_if_fail (sctx != NULL && SEAHORSE_IS_CONTEXT (sctx), FALSE);
 	g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), FALSE);
 	
-	if (expires)
-		date = seahorse_util_get_date_string (expires);
-	else
-		date = "0";
+	exp_parm = g_new (ExpireParm, 1);
+	exp_parm->index = index;
+	exp_parm->expires = expires;
 	
-	/* Make sure _changing_ expires */
-	g_return_val_if_fail (!g_str_equal (date, seahorse_util_get_date_string (
-		gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_EXPIRE, NULL, 0))), FALSE);
-	
-	parms = seahorse_edit_parm_new (EXPIRE_START, edit_expire_action, edit_expire_transit, (gchar*)date);
+	parms = seahorse_edit_parm_new (EXPIRE_START, edit_expire_action, edit_expire_transit, exp_parm);
 	
 	return edit_key (sctx, skey, parms, _("Change Expiration"), SKEY_CHANGE_EXPIRE);
 }
@@ -968,15 +983,8 @@ add_key_action (guint state, gpointer data, const gchar **result)
 			*result = g_strdup_printf ("%d", parm->length);
 			break;
 		case ADD_KEY_EXPIRES:
-			/* Get diff of expires & now in days */
-			if (parm->expires != 0) {
-				gulong expires;
-				/* Get diff in seconds, then time in days */
-				expires = (parm->expires - time (NULL))/86400;
-				*result = g_strdup_printf ("%d", expires);
-			}
-			else
-				*result = "0";
+			*result = (parm->expires) ?
+				seahorse_util_get_date_string (parm->expires) : "0";
 			break;
 		case ADD_KEY_PROGRESS:
 			break;
@@ -1216,4 +1224,170 @@ seahorse_ops_key_del_subkey (SeahorseContext *sctx, SeahorseKey *skey, const gui
 		del_key_transit, (gpointer)index);
 	
 	return edit_key (sctx, skey, parms, _("Delete Subkey"), SKEY_CHANGE_SUBKEYS);
+}
+
+typedef struct
+{
+	guint			index;
+	SeahorseRevokeReason	reason;
+	const gchar		*description;
+} RevSubkeyParm;
+
+typedef enum {
+	REV_SUBKEY_START,
+	REV_SUBKEY_SELECT,
+	REV_SUBKEY_COMMAND,
+	REV_SUBKEY_CONFIRM,
+	REV_SUBKEY_REASON,
+	REV_SUBKEY_DESCRIPTION,
+	REV_SUBKEY_ENDDESC,
+	REV_SUBKEY_QUIT,
+	REV_SUBKEY_ERROR
+} RevSubkeyStates;
+
+static GpgmeError
+rev_subkey_action (guint state, gpointer data, const gchar **result)
+{
+	RevSubkeyParm *parm = (RevSubkeyParm*)data;
+	
+	switch (state) {
+		case REV_SUBKEY_SELECT:
+			*result = g_strdup_printf ("key %d", parm->index);
+			break;
+		case REV_SUBKEY_COMMAND:
+			*result = "revkey";
+			break;
+		case REV_SUBKEY_CONFIRM:
+			*result = YES;
+			break;
+		case REV_SUBKEY_REASON:
+			*result = g_strdup_printf ("%d", parm->reason);
+			break;
+		case REV_SUBKEY_DESCRIPTION:
+			*result = g_strdup_printf ("%s\n", parm->description);
+			break;
+		case REV_SUBKEY_ENDDESC:
+			*result = "\n";
+			break;
+		case REV_SUBKEY_QUIT:
+			*result = QUIT;
+			break;
+		default:
+			return GPGME_General_Error;
+	}
+	
+	return GPGME_No_Error;
+}
+
+static guint
+rev_subkey_transit (guint current_state, GpgmeStatusCode status,
+		    const gchar *args, gpointer data, GpgmeError *err)
+{
+	guint next_state;
+	
+	g_print ("last state %d\n", current_state);
+	
+	switch (current_state) {
+		case REV_SUBKEY_START:
+			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
+				next_state = REV_SUBKEY_SELECT;
+			else {
+				next_state = REV_SUBKEY_ERROR;
+				*err = GPGME_General_Error;
+			}
+			break;
+		case REV_SUBKEY_SELECT:
+			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
+				next_state = REV_SUBKEY_COMMAND;
+			else {
+				next_state = REV_SUBKEY_ERROR;
+				*err = GPGME_General_Error;
+			}
+			break;
+		case REV_SUBKEY_COMMAND:
+			if (status == GPGME_STATUS_GET_BOOL && g_str_equal (args, "keyedit.revoke.subkey.okay"))
+				next_state = REV_SUBKEY_CONFIRM;
+			else {
+				next_state = REV_SUBKEY_ERROR;
+				*err = GPGME_General_Error;
+			}
+			break;
+		case REV_SUBKEY_CONFIRM:
+			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "ask_revocation_reason.code"))
+				next_state = REV_SUBKEY_REASON;
+			else if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
+				next_state = REV_SUBKEY_QUIT;
+			else {
+				next_state = REV_SUBKEY_ERROR;
+				*err = GPGME_General_Error;
+			}
+			break;
+		case REV_SUBKEY_REASON:
+			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "ask_revocation_reason.text"))
+				next_state = REV_SUBKEY_DESCRIPTION;
+			else {
+				next_state = REV_SUBKEY_ERROR;
+				*err = GPGME_General_Error;
+			}
+			break;
+		case REV_SUBKEY_DESCRIPTION:
+			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "ask_revocation_reason.text"))
+				next_state = REV_SUBKEY_ENDDESC;
+			else if (status == GPGME_STATUS_GET_BOOL && g_str_equal (args, "ask_revocation_reason.okay"))
+				next_state = REV_SUBKEY_CONFIRM;
+			else {
+				next_state = REV_SUBKEY_ERROR;
+				*err = GPGME_General_Error;
+			}
+			break;
+		case REV_SUBKEY_ENDDESC:
+			next_state = REV_SUBKEY_CONFIRM;
+			break;
+		case REV_SUBKEY_QUIT:
+			/* Quit, save */
+			if (status == GPGME_STATUS_GET_BOOL && g_str_equal (args, SAVE))
+				next_state = REV_SUBKEY_CONFIRM;
+			else {
+				next_state = REV_SUBKEY_ERROR;
+				*err = GPGME_General_Error;
+			}
+			break;
+		case REV_SUBKEY_ERROR:
+			/* Go to quit */
+			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
+				next_state = REV_SUBKEY_QUIT;
+			else
+				next_state = REV_SUBKEY_ERROR;
+			break;
+		default:
+			next_state = REV_SUBKEY_ERROR;
+			*err = GPGME_General_Error;
+			break;
+	}
+	
+	g_print ("next state %d\n", next_state);
+	
+	return next_state;
+}
+
+gboolean
+seahorse_ops_key_revoke_subkey (SeahorseContext *sctx, SeahorseKey *skey, const guint index,
+				SeahorseRevokeReason reason, const gchar *description)
+{
+	RevSubkeyParm *rev_parm;
+	SeahorseEditParm *parms;
+	
+	g_return_val_if_fail (sctx != NULL && SEAHORSE_IS_CONTEXT (sctx), FALSE);
+	g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), FALSE);
+	g_return_val_if_fail (index >= 1 && index <= seahorse_key_get_num_subkeys (skey), FALSE);
+	
+	rev_parm = g_new0 (RevSubkeyParm, 1);
+	rev_parm->index = index;
+	rev_parm->reason = reason;
+	rev_parm->description = description;
+	
+	parms = seahorse_edit_parm_new (REV_SUBKEY_START, rev_subkey_action,
+		rev_subkey_transit, rev_parm);
+	
+	return edit_key (sctx, skey, parms, _("Revoke Subkey"), SKEY_CHANGE_SUBKEYS);
 }

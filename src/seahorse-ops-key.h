@@ -73,6 +73,13 @@ typedef enum {
 	LENGTH_MAX = 4096
 } SeahorseKeyLength;
 
+typedef enum {
+	NO_REASON = 0,
+	COMPROMISED = 1,
+	SUPERSEDED = 2,
+	NOT_USED = 3
+} SeahorseRevokeReason;
+
 gboolean	seahorse_ops_key_delete		(SeahorseContext	*sctx,
 						 SeahorseKey		*skey);
 
@@ -102,6 +109,7 @@ gboolean	seahorse_ops_key_set_trust	(SeahorseContext	*sctx,
 
 gboolean	seahorse_ops_key_set_expires	(SeahorseContext	*sctx,
 						 SeahorseKey		*skey,
+						 guint			index,
 						 time_t			expires);
 
 gboolean	seahorse_ops_key_set_disabled	(SeahorseContext	*sctx,
@@ -128,5 +136,11 @@ gboolean	seahorse_ops_key_add_subkey	(SeahorseContext	*sctx,
 gboolean	seahorse_ops_key_del_subkey	(SeahorseContext	*sctx,
 						 SeahorseKey		*skey,
 						 const guint		index);
+
+gboolean	seahorse_ops_key_revoke_subkey	(SeahorseContext	*sctx,
+						 SeahorseKey		*skey,
+						 const guint		index,
+						 SeahorseRevokeReason	reason,
+						 const gchar		*description);
 
 #endif /* __SEAHORSE_OPS_KEY_H__ */

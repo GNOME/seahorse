@@ -31,6 +31,7 @@
 #include "seahorse-validity.h"
 #include "seahorse-add-uid.h"
 #include "seahorse-add-subkey.h"
+#include "seahorse-revoke.h"
 
 #define SPACING 12
 #define TRUST "trust"
@@ -74,50 +75,52 @@ trust_changed (GtkOptionMenu *optionmenu, SeahorseWidget *swidget)
 	seahorse_ops_key_set_trust (swidget->sctx, skwidget->skey, seahorse_validity_get_from_index (history));
 }
 
-/* Tries to change the key's primary expiration date */
 static void
-expires_date_changed (GnomeDateEdit *gde, SeahorseWidget *swidget)
+never_expires_primary_toggled (GtkToggleButton *togglebutton, SeahorseWidget *swidget)
 {
-	SeahorseKeyWidget *skwidget;
-	time_t expires;
-	
-	skwidget = SEAHORSE_KEY_WIDGET (swidget);
-	expires = gnome_date_edit_get_time (gde);
-	
-	/* Cannot set expiration to before NOW */
-	if (expires <= time (NULL)) {
-		g_signal_handlers_disconnect_by_func (gde, expires_date_changed, swidget);
-		gnome_date_edit_set_time (gde, time (NULL));
-		g_signal_connect_after (gde, "date_changed", G_CALLBACK (expires_date_changed), swidget);
+	if (gtk_toggle_button_get_active (togglebutton)) {
+		seahorse_ops_key_set_expires (swidget->sctx,
+			SEAHORSE_KEY_WIDGET (swidget)->skey, 0, 0);
 	}
-	else
-		seahorse_ops_key_set_expires (swidget->sctx, skwidget->skey, expires);
 }
 
 static void
-toggle_expires (GtkWidget *widget, gboolean never_expires)
-{
-	if (GNOME_IS_DATE_EDIT (widget)) {
-		gtk_widget_set_sensitive (widget, !never_expires);
+never_expires_subkey_toggled (GtkToggleButton *togglebutton, SeahorseWidget *swidget)
+{	
+	if (gtk_toggle_button_get_active (togglebutton)) {
+		gint index;
 		
-		if (never_expires)
-			gnome_date_edit_set_time (GNOME_DATE_EDIT (widget), time (NULL));
+		index = gtk_notebook_get_current_page (GTK_NOTEBOOK (
+			glade_xml_get_widget (swidget->xml, SUBKEYS))) + 1;
+		seahorse_ops_key_set_expires (swidget->sctx,
+			SEAHORSE_KEY_WIDGET (swidget)->skey, index, 0);
 	}
 }
 
-/* Tries to change whether the key expires */
 static void
-never_expires_toggled (GtkToggleButton *togglebutton, SeahorseWidget *swidget)
+primary_expires_date_changed (GnomeDateEdit *gde, SeahorseWidget *swidget)
 {
-	SeahorseKeyWidget *skwidget;
-	gboolean active;
+	seahorse_ops_key_set_expires (swidget->sctx,
+		SEAHORSE_KEY_WIDGET (swidget)->skey, 0,
+		gnome_date_edit_get_time (gde));
+}
+
+static void
+subkey_expires_date_changed (GnomeDateEdit *gde, SeahorseWidget *swidget)
+{
+	gint index;
 	
-	skwidget = SEAHORSE_KEY_WIDGET (swidget);
-	active = gtk_toggle_button_get_active (togglebutton);
-	
-	if (!active || (active && seahorse_ops_key_set_expires (swidget->sctx, skwidget->skey, 0)))
-		gtk_container_foreach (GTK_CONTAINER (glade_xml_get_widget (swidget->xml, "table")),
-			(GtkCallback)toggle_expires, (gpointer)active);
+	index = gtk_notebook_get_current_page (GTK_NOTEBOOK (
+		glade_xml_get_widget (swidget->xml, SUBKEYS))) + 1;
+	seahorse_ops_key_set_expires (swidget->sctx,
+		SEAHORSE_KEY_WIDGET (swidget)->skey, index,
+		gnome_date_edit_get_time (gde));
+}
+
+static void
+set_date_edit_sensitive (GtkToggleButton *togglebutton, GtkWidget *widget)
+{
+	gtk_widget_set_sensitive (widget, !gtk_toggle_button_get_active (togglebutton));
 }
 
 /* Changes disabled state of key */
@@ -178,6 +181,17 @@ del_subkey_clicked (GtkButton *button, SeahorseWidget *swidget)
 		seahorse_ops_key_del_subkey (swidget->sctx, skey, index);
 }
 
+static void
+revoke_subkey_clicked (GtkButton *button, SeahorseWidget *swidget)
+{
+	guint index;
+	
+	index = gtk_notebook_get_current_page (GTK_NOTEBOOK (
+		glade_xml_get_widget (swidget->xml, SUBKEYS))) + 1;
+	seahorse_revoke_subkey_new (swidget->sctx,
+		SEAHORSE_KEY_WIDGET (swidget)->skey, index);
+}
+
 /* Do a label */
 static void
 do_stat_label (const gchar *label, GtkTable *table, guint left, guint top)
@@ -199,7 +213,7 @@ do_stats (SeahorseWidget *swidget, GtkTable *table, guint top, guint index)
 {
 	SeahorseKey *skey;
 	time_t expires;
-	GtkWidget *widget;
+	GtkWidget *widget, *date_edit;
 	
 	skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
 	
@@ -224,26 +238,32 @@ do_stats (SeahorseWidget *swidget, GtkTable *table, guint top, guint index)
 			do_stat_label (_("Never Expires"), table, 1, top+2);
 	}
 	else {
-		widget = gnome_date_edit_new (expires, FALSE, FALSE);
-		gtk_widget_show (widget);
-		gtk_table_attach (table, widget, 1, 3, top+2, top+3, GTK_FILL, 0, 0, 0);
+		date_edit = gnome_date_edit_new (expires, FALSE, FALSE);
+		gtk_widget_show (date_edit);
+		gtk_table_attach (table, date_edit, 1, 3, top+2, top+3, GTK_FILL, 0, 0, 0);
+		gtk_widget_set_sensitive (date_edit, expires);
 		
-		if (index == 0) {
-			gtk_widget_set_sensitive (widget, expires);
-			g_signal_connect_after (widget, "date_changed", G_CALLBACK (expires_date_changed), swidget);
-		}
+		if (index == 0)
+			g_signal_connect_after (GNOME_DATE_EDIT (date_edit), "date_changed",
+				G_CALLBACK (primary_expires_date_changed), swidget);
 		else
-			gtk_widget_set_sensitive (widget, FALSE);
+			g_signal_connect_after (GNOME_DATE_EDIT (date_edit), "date_changed",
+				G_CALLBACK (subkey_expires_date_changed), swidget);
 		
 		widget = gtk_check_button_new_with_mnemonic (_("Never E_xpires"));
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), !expires);
 		gtk_widget_show (widget);
 		gtk_table_attach (table, widget, 3, 4, top+2, top+3, GTK_FILL, 0, 0, 0);
 		
+		g_signal_connect_after (GTK_TOGGLE_BUTTON (widget), "toggled",
+			G_CALLBACK (set_date_edit_sensitive), date_edit);
+		
 		if (index == 0)
-			g_signal_connect_after (widget, "toggled", G_CALLBACK (never_expires_toggled), swidget);
+			g_signal_connect_after (GTK_TOGGLE_BUTTON (widget), "toggled",
+				G_CALLBACK (never_expires_primary_toggled), swidget);
 		else
-			gtk_widget_set_sensitive (widget, FALSE);
+			g_signal_connect_after (GTK_TOGGLE_BUTTON (widget), "toggled",
+				G_CALLBACK (never_expires_subkey_toggled), swidget);
 	}
 }
 
@@ -326,10 +346,27 @@ do_subkeys (SeahorseWidget *swidget)
 		if (seahorse_context_key_has_secret (swidget->sctx, skwidget->skey)) {
 			table = GTK_TABLE (gtk_table_new (4, 4, FALSE));
 			
+			/* Do revoke button */
+			label = gtk_hbox_new (FALSE, 6);
+			/* Icon */
+			widget = gtk_image_new_from_stock (GTK_STOCK_CANCEL, GTK_ICON_SIZE_BUTTON);
+			gtk_container_add (GTK_CONTAINER (label), widget);
+			/* Label */
+			widget = gtk_label_new_with_mnemonic (_("_Revoke..."));
+			gtk_container_add (GTK_CONTAINER (label), widget);
+			/* Button */
+			widget = gtk_button_new ();
+			g_signal_connect_after (GTK_BUTTON (widget), "clicked",
+				G_CALLBACK (revoke_subkey_clicked), swidget);
+			/* Add label & icon, put in table */
+			gtk_container_add (GTK_CONTAINER (widget), label);
+			gtk_widget_show_all (widget);
+			gtk_table_attach (table, widget, 1, 2, 3, 4, GTK_FILL, 0, 0, 0);
+			
+			/* Do delete button */
 			widget = gtk_button_new_from_stock (GTK_STOCK_DELETE);
 			g_signal_connect_after (GTK_BUTTON (widget), "clicked",
 				G_CALLBACK (del_subkey_clicked), swidget);
-			//gtk_widget_set_sensitive (widget, FALSE);
 			gtk_widget_show (widget);
 			gtk_table_attach (table, widget, 3, 4, 3, 4, GTK_FILL, 0, 0, 0);
 		}
