@@ -121,8 +121,12 @@ AM_CONDITIONAL(WITH_GEDIT, test "$enable_gedit" != "no")
 if test "$enable_gedit" = "no"; then
 	echo "disabling gedit plugin"
 else
-	echo "enabling gedit plugin"
-	PKG_CHECK_MODULES(GEDIT, gedit-2.6 >= 2.6.0)
+	echo "enabling gedit plugin..."
+	echo "checking for supported versions of gedit..."
+	
+	PKG_CHECK_MODULES(GEDIT, gedit-2.8 >= 2.8.0, , 
+		[PKG_CHECK_MODULES(GEDIT, gedit-2.6 >= 2.6.0)])
+	
 	AC_SUBST(GEDIT_CFLAGS)
 fi
 
