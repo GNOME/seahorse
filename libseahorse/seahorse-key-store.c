@@ -753,19 +753,32 @@ seahorse_key_store_get_selected_recips (GtkTreeView *view)
 {
 	GList *list = NULL, *keys;
 	gpgme_key_t * recips;
-	gint n;
-	
-	g_return_val_if_fail (GTK_IS_TREE_VIEW (view), NULL);
-	
+    SeahorseKeyStore* skstore;
+    SeahorseKeyPair *skpair;
+    gint n;
+    
+    g_return_val_if_fail (GTK_IS_TREE_VIEW (view), NULL);
+    skstore = key_store_from_model (gtk_tree_view_get_model (view));
+
 	list = seahorse_key_store_get_selected_keys (view);
 	g_return_val_if_fail (list != NULL, NULL);
 
 	/* do recipients list */
-	recips = g_new0(gpgme_key_t, g_list_length (list) + 1);
-	n = 0;
+	recips = g_new0(gpgme_key_t, g_list_length (list) + 2);
+    n = 0;
+   
+    /* Add the default key if set and necessary */
+    if (eel_gconf_get_boolean (ENCRYPTSELF_KEY)) {
+        skpair = seahorse_context_get_default_key (skstore->sctx);
+        if (skpair) {
+            gpgme_key_ref (SEAHORSE_KEY (skpair)->key);
+            recips[n++] = SEAHORSE_KEY (skpair)->key;
+        }
+    }
+            
 	for (keys = list; keys != NULL; keys = g_list_next (keys)) {
-	        gpgme_key_ref (SEAHORSE_KEY (keys->data)->key);
-		recips[n++] = SEAHORSE_KEY (keys->data)->key;
+        gpgme_key_ref (SEAHORSE_KEY (keys->data)->key);
+        recips[n++] = SEAHORSE_KEY (keys->data)->key;
 	}
 
 	/* free list, return */
