@@ -34,11 +34,6 @@ void	seahorse_generate_adv_show	(SeahorseContext	*sctx);
 
 void	seahorse_generate_druid_show	(SeahorseContext	*sctx);
 
-void	seahorse_import_show		(SeahorseContext	*sctx);
-
-void	seahorse_export_show		(SeahorseContext	*sctx,
-					 gpgme_key_t *	recips);
-
 void	seahorse_delete_show		(SeahorseContext	*sctx,
 					 GList			*keys);
 

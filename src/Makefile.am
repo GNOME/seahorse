@@ -23,8 +23,6 @@ seahorse_SOURCES = main.c \
 	seahorse-generate-select.c \
 	seahorse-generate-druid.c \
 	seahorse-generate-adv.c \
-	seahorse-import.c \
-	seahorse-export.c \
 	seahorse-windows.h \
 	seahorse-key-properties.c \
 	seahorse-revoke.c \
@@ -44,8 +42,6 @@ glade_DATA = \
 	seahorse-revoke.glade \
 	seahorse-change-passphrase.glade \
 	seahorse-sign.glade \
-	seahorse-import.glade \
-	seahorse-export.glade \
 	seahorse-generate-select.glade \
 	seahorse-generate-druid.glade \
 	seahorse-generate-adv.glade \

@@ -23,6 +23,7 @@
 #include <gnome.h>
 #include <gconf/gconf-client.h>
 #include <eel/eel-gconf-extensions.h>
+#include <libgnomevfs/gnome-vfs.h>
 
 #include "seahorse-windows.h"
 #include "seahorse-widget.h"
@@ -33,11 +34,24 @@
 #include "seahorse-key-dialogs.h"
 #include "seahorse-key-op.h"
 #include "seahorse-key-widget.h"
+#include "seahorse-op.h"
 
 #define KEY_LIST "key_list"
 
 static guint signal_id = 0;
 static gulong hook_id = 0;
+
+/* Drag and trop target types */
+enum TargetTypes {
+    TEXT_PLAIN,
+    TEXT_URIS
+};
+
+/* Drag and drop targent entries */
+static const GtkTargetEntry target_entries[] = {
+   { "text/uri-list", 0, TEXT_URIS },
+   { "text/plain", 0, TEXT_PLAIN }
+};
 
 /* Quits seahorse */
 static void
@@ -62,11 +76,110 @@ generate_activate (GtkWidget *widget, SeahorseWidget *swidget)
 	seahorse_generate_select_show (swidget->sctx);
 }
 
+/* Setup our file types on a file chooser dialog */
+static void
+setup_file_types (GtkFileChooser* dialog)
+{
+    GtkFileFilter* filter = gtk_file_filter_new ();
+    gtk_file_filter_set_name (filter, _("All PGP key files"));
+    gtk_file_filter_add_pattern (filter, "*.asc");    
+    gtk_file_filter_add_pattern (filter, "*.key");    
+    gtk_file_filter_add_pattern (filter, "*.pkr");    
+    gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);    
+    gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dialog), filter);
+
+    filter = gtk_file_filter_new ();
+    gtk_file_filter_set_name (filter, _("All files"));
+    gtk_file_filter_add_pattern (filter, "*");    
+    gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);    
+}
+
 /* Loads import dialog */
 static void
 import_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
-	seahorse_import_show (swidget->sctx);
+    GtkWidget *dialog;
+    char* uri = NULL;
+    gint keys;
+    gpgme_error_t err;
+    
+    dialog = gtk_file_chooser_dialog_new (_("Import Key"), 
+                GTK_WINDOW(glade_xml_get_widget (swidget->xml, "key-manager")),
+                GTK_FILE_CHOOSER_ACTION_OPEN, 
+                GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+                NULL);
+
+    setup_file_types (GTK_FILE_CHOOSER (dialog));
+    gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (dialog), FALSE);
+     
+    if(gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
+        uri = gtk_file_chooser_get_uri (GTK_FILE_CHOOSER (dialog));
+        
+    gtk_widget_destroy (dialog);
+
+    if(uri) {
+        keys = seahorse_op_import_file (swidget->sctx, uri, &err);
+        g_free (uri);
+        
+        if (GPG_IS_OK (err))
+            seahorse_context_keys_added (swidget->sctx, keys);
+        else
+            seahorse_util_handle_error (err);
+    }
+}
+
+/* Callback for pasting from clipboard */
+static void
+clipboard_received (GtkClipboard *board, const gchar *text, SeahorseContext *sctx)
+{
+    gpgme_error_t err;
+    gint keys;
+ 
+    keys = seahorse_op_import_text (sctx, text, &err);
+ 
+    if (!GPG_IS_OK (err))
+        seahorse_util_handle_error (err);
+    else if (keys > 0)
+        seahorse_context_keys_added (sctx, keys);
+}
+
+/* Pastes key from keyboard */
+static void 
+paste_activate (GtkWidget *widget, SeahorseWidget *swidget)
+{
+    GdkAtom atom;
+    GtkClipboard *board;
+       
+    atom = gdk_atom_intern ("CLIPBOARD", FALSE);
+    board = gtk_clipboard_get (atom);
+    gtk_clipboard_request_text (board,
+         (GtkClipboardTextReceivedFunc)clipboard_received, swidget->sctx);
+}
+
+/* Copies key to clipboard */
+static void
+copy_activate (GtkWidget *widget, SeahorseWidget *swidget)
+{
+    GdkAtom atom;
+    GtkClipboard *board;
+    gchar *text;
+    gpgme_error_t err;
+    gpgme_key_t * recips;
+  
+    recips = seahorse_key_store_get_selected_recips (GTK_TREE_VIEW (
+        glade_xml_get_widget (swidget->xml, KEY_LIST)));
+       
+    text = seahorse_op_export_text (swidget->sctx, recips, &err);
+
+    if (!GPG_IS_OK (err))
+        seahorse_util_handle_error (err);
+    else if (text != NULL) {
+        atom = gdk_atom_intern ("CLIPBOARD", FALSE);
+        board = gtk_clipboard_get (atom);
+        gtk_clipboard_set_text (board, text, strlen (text));
+        g_free (text);
+    }
 }
 
 /* Loads key properties if a key is selected */
@@ -85,11 +198,66 @@ properties_activate (GtkWidget *widget, SeahorseWidget *swidget)
 static void
 export_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
-	gpgme_key_t * recips;
-	
-	recips = seahorse_key_store_get_selected_recips (GTK_TREE_VIEW (
-		glade_xml_get_widget (swidget->xml, KEY_LIST)));
-	seahorse_export_show (swidget->sctx, recips);
+    GtkWidget *dialog;
+    char* uri = NULL;
+    gpgme_error_t err;
+    gpgme_key_t* recips;
+    
+    dialog = gtk_file_chooser_dialog_new (_("Export Key"), 
+                GTK_WINDOW(glade_xml_get_widget (swidget->xml, "key-manager")),
+                GTK_FILE_CHOOSER_ACTION_SAVE, 
+                GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
+                NULL);
+
+    setup_file_types (GTK_FILE_CHOOSER(dialog));
+    gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (dialog), FALSE);
+     
+    while(gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT) {
+        GnomeVFSURI *u = gnome_vfs_uri_new (gtk_file_chooser_get_uri(GTK_FILE_CHOOSER(dialog)));
+        if (u != NULL) {
+            if (gnome_vfs_uri_exists(u)) {
+                GtkWidget* edlg;
+                edlg = gtk_message_dialog_new (GTK_WINDOW (dialog),
+                    GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_QUESTION,
+                    GTK_BUTTONS_NONE, _("A file already exists with this name.\n\nDo you want to overwrite it?"));
+                gtk_dialog_add_buttons (GTK_DIALOG (edlg), 
+                       GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                       _("Replace"), GTK_RESPONSE_ACCEPT);
+
+                gtk_dialog_set_default_response (GTK_DIALOG (edlg), GTK_RESPONSE_CANCEL);                    
+                
+                if (gtk_dialog_run (GTK_DIALOG (edlg)) == GTK_RESPONSE_ACCEPT)
+                    uri = gtk_file_chooser_get_uri (GTK_FILE_CHOOSER (dialog));
+
+                gtk_widget_destroy (edlg);
+
+            /* File doesn't exist */
+            } else {
+                uri = gtk_file_chooser_get_uri (GTK_FILE_CHOOSER (dialog));
+            }
+            
+            gnome_vfs_uri_unref (u);
+
+        }
+
+        if (uri != NULL)
+            break;
+    }
+
+    gtk_widget_destroy (dialog);
+
+    if(uri) {
+        recips = seahorse_key_store_get_selected_recips (GTK_TREE_VIEW (
+            glade_xml_get_widget (swidget->xml, KEY_LIST)));
+
+        /* This frees recips */        
+        seahorse_op_export_file (swidget->sctx, uri, recips, &err); 
+        g_free (uri);
+        
+        if (!GPG_IS_OK (err))
+            seahorse_util_handle_error (err);
+    }
 }
 
 static void
@@ -259,6 +427,7 @@ set_key_options_sensitive (SeahorseWidget *swidget, gboolean selected, gboolean 
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "delete"), selected);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "export_button"), selected);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "export"), selected);
+    gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "copy_key"), selected);
 	
 	/* items that can do single */
 	create = (skey != NULL && seahorse_key_widget_can_create ("key-properties", skey));
@@ -422,11 +591,53 @@ progress_hook (GSignalInvocationHint *hint, guint n_params, const GValue *params
 	return TRUE;
 }
 
+static void
+target_drag_data_received (GtkWidget *widget, GdkDragContext *context, gint x, gint y,
+                           GtkSelectionData *data, guint info, guint time, SeahorseContext *sctx)
+{
+    gint keys = 0;
+    gpgme_error_t err;
+    gchar** uris;
+    gchar** u;
+    
+    g_return_if_fail (data != NULL);
+    
+    switch(info) {
+    case TEXT_PLAIN:
+        keys = seahorse_op_import_text (sctx, data->data, &err);
+        break;
+        
+    case TEXT_URIS:
+        uris = g_strsplit (data->data, "\n", 0);
+        for(u = uris; *u; u++) {
+            g_strstrip (*u);
+            if ((*u)[0]) { /* Make sure it's not an empty line */
+                keys += seahorse_op_import_file (sctx, *u, &err);  
+                if(!GPG_IS_OK (err))
+                    break;
+            }
+        }
+        g_strfreev (uris);
+        break;
+        
+    default:
+        g_assert_not_reached ();
+        return;
+    } 
+
+    if (!GPG_IS_OK (err))
+        seahorse_util_handle_error (err);
+    else if (keys > 0)
+        seahorse_context_keys_added (sctx, keys);        
+}
+
+
 GtkWindow* 
 seahorse_key_manager_show (SeahorseContext *sctx)
 {
 	SeahorseWidget *swidget;
 	GtkTreeView *view;
+    GtkWidget* w;
 	GtkTreeSelection *selection;
 	
 	swidget = seahorse_widget_new ("key-manager", sctx);
@@ -478,6 +689,8 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 		G_CALLBACK (sign_activate), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "delete_activate",
 		G_CALLBACK (delete_activate), swidget);
+    glade_xml_signal_connect_data (swidget->xml, "copy_activate",
+        G_CALLBACK (copy_activate), swidget);      
 	/* selected key with secret signals */
 	glade_xml_signal_connect_data (swidget->xml, "change_passphrase_activate",
 		G_CALLBACK (change_passphrase_activate), swidget);
@@ -500,6 +713,8 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 	/* other signals */	
 	glade_xml_signal_connect_data (swidget->xml, "preferences_activate",
 		G_CALLBACK (preferences_activate), swidget);
+    glade_xml_signal_connect_data (swidget->xml, "paste_activate",
+       G_CALLBACK (paste_activate), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "about_activate",
 		G_CALLBACK (about_activate), swidget);
 	
@@ -512,5 +727,13 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 	seahorse_key_manager_store_new (sctx, view);
 	selection_changed (selection, swidget);
    
-    return GTK_WINDOW(glade_xml_get_widget (swidget->xml, "key-manager"));
+    w = glade_xml_get_widget (swidget->xml, "key-manager");
+    
+    /* Setup drops */
+    gtk_drag_dest_set (w, GTK_DEST_DEFAULT_ALL, target_entries, 
+            sizeof (target_entries) / sizeof (target_entries[0]), GDK_ACTION_COPY);
+    gtk_signal_connect (GTK_OBJECT (w), "drag_data_received",
+            GTK_SIGNAL_FUNC (target_drag_data_received), sctx);
+                        
+    return GTK_WINDOW (w);
 }
