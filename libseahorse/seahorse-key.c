@@ -476,5 +476,8 @@ seahorse_key_get_loaded_info (SeahorseKey *skey)
     if (skey->key->keylist_mode & GPGME_KEYLIST_MODE_SIGS)
         return SKEY_INFO_COMPLETE;
         
+    if (skey->key->keylist_mode & GPGME_KEYLIST_MODE_EXTERN)
+        return SKEY_INFO_REMOTE;        
+        
     return SKEY_INFO_NORMAL;
 }

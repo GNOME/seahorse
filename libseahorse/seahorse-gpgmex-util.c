@@ -47,7 +47,7 @@ gpgmex_key_alloc ()
     
     key = g_new0 (sukey, 1);
     key->key.protocol = GPGME_PROTOCOL_OpenPGP;
-    key->key.keylist_mode = SEAHORSE_KEYLIST_MODE;
+    key->key.keylist_mode = SEAHORSE_KEYLIST_MODE | GPGME_KEYLIST_MODE_EXTERN;
     key->refs = 1;
     return (gpgme_key_t)key;
 }
@@ -78,6 +78,7 @@ gpgmex_key_add_subkey (gpgme_key_t key, const char *fpr, guint flags,
                               unsigned int length, gpgme_pubkey_algo_t algo)
 {
     gpgme_subkey_t subkey;
+    guint n;
 
     g_return_if_fail (key != NULL);
     g_return_if_fail (key->keylist_mode & SEAHORSE_KEYLIST_MODE);
@@ -93,9 +94,14 @@ gpgmex_key_add_subkey (gpgme_key_t key, const char *fpr, guint flags,
     subkey->timestamp = timestamp;
     subkey->expires = expires;
     
-    /* This isn't actually a valid keyid, but we don't use 
-     * this field in any case */
-    subkey->keyid = g_strdup ("");
+    /* Figure out the key id */
+    n = strlen (fpr);
+    if (n >= 16)
+        fpr += n - 16;
+    else /* This string must be 16 characters long */
+        fpr = "INVALID INVALID ";
+        
+    subkey->keyid = g_strdup (fpr);
     
     add_subkey_to_key (key, subkey);
 }
@@ -195,7 +201,7 @@ gpgmex_key_unref (gpgme_key_t key)
     
     if (key->keylist_mode & SEAHORSE_KEYLIST_MODE) {
        
-        if (--(((sukey*)key)->refs) <= 0) {
+        if ((--(((sukey*)key)->refs)) <= 0) {
             gpgme_user_id_t nu;
             gpgme_user_id_t u;
             gpgme_subkey_t nsk;
