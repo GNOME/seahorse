@@ -1,15 +1,17 @@
 # French translation of seahorse.
-# Copyright (C) 2000,2003 Free Software Foundation, Inc.
+# Copyright (C) 2000-2004 Free Software Foundation, Inc.
+# This file is distributed under the same license as the seahorse package.
+#
 # Gaël Quéri <gqueri@mail.dotcom.fr>, 2000.
 # Stéphane Blondin <stephane.blondin@caramail.com>, 2003.
-# Christophe Merlet (RedFox) <redfox@redfoxcenter.org>. 2003.
+# Christophe Merlet (RedFox) <redfox@redfoxcenter.org>. 2003-2004.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse 0.7.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-09-20 12:09+0200\n"
-"PO-Revision-Date: 2003-09-20 11:46+0200\n"
+"POT-Creation-Date: 2004-02-29 13:02+0100\n"
+"PO-Revision-Date: 2004-02-29 12:29+0100\n"
 "Last-Translator: Christophe Merlet (RedFox) <redfox@redfoxcenter.org>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "MIME-Version: 1.0\n"
@@ -261,8 +263,8 @@ msgstr "Mauvaise phrase de passe ! Essayez de nouveau pour %s"
 
 #: libseahorse/seahorse-passphrase.glade.h:1 src/seahorse-add-uid.glade.h:1
 #: src/seahorse-change-passphrase.glade.h:1 src/seahorse-export.glade.h:1
-#: src/seahorse-generate.glade.h:1 src/seahorse-import.glade.h:1
-#: src/seahorse-revoke.glade.h:1
+#: src/seahorse-generate-adv.glade.h:1 src/seahorse-generate-druid.glade.h:1
+#: src/seahorse-import.glade.h:1 src/seahorse-revoke.glade.h:1
 msgid "*"
 msgstr "*"
 
@@ -472,7 +474,7 @@ msgstr "Gère vos clés GPG"
 msgid "Add subkey to %s"
 msgstr "Ajoute une sous-clé à %s"
 
-#: src/seahorse-add-subkey.glade.h:1 src/seahorse-generate.glade.h:5
+#: src/seahorse-add-subkey.glade.h:1 src/seahorse-generate-adv.glade.h:5
 msgid "DSA (sign only)"
 msgstr "DSA (signature seule)"
 
@@ -481,7 +483,7 @@ msgid "ElGamal (encrypt only)"
 msgstr "ElGamal (chiffrement seulement)"
 
 #. expires
-#: src/seahorse-add-subkey.glade.h:3 src/seahorse-generate.glade.h:6
+#: src/seahorse-add-subkey.glade.h:3 src/seahorse-generate-adv.glade.h:6
 #: src/seahorse-key-properties.c:364
 msgid "Expiration Date:"
 msgstr "Date d'expiration :"
@@ -490,28 +492,28 @@ msgstr "Date d'expiration :"
 msgid "Generate a new subkey"
 msgstr "Générer une nouvelle sous-clé"
 
-#: src/seahorse-add-subkey.glade.h:5 src/seahorse-generate.glade.h:10
+#: src/seahorse-add-subkey.glade.h:5 src/seahorse-generate-adv.glade.h:10
 #: src/seahorse-key-properties.c:390
 msgid "If key never expires"
 msgstr "Si la clé n'a pas une durée de vie limitée"
 
-#: src/seahorse-add-subkey.glade.h:6 src/seahorse-generate.glade.h:12
+#: src/seahorse-add-subkey.glade.h:6 src/seahorse-generate-adv.glade.h:12
 msgid "Key _Length:"
 msgstr "_Longueur de la clé :"
 
-#: src/seahorse-add-subkey.glade.h:7 src/seahorse-generate.glade.h:13
+#: src/seahorse-add-subkey.glade.h:7 src/seahorse-generate-adv.glade.h:13
 msgid "Key _Type:"
 msgstr "_Type de la clé :"
 
-#: src/seahorse-add-subkey.glade.h:8 src/seahorse-generate.glade.h:14
+#: src/seahorse-add-subkey.glade.h:8 src/seahorse-generate-adv.glade.h:14
 msgid "Key type / algorithm"
 msgstr "Type de la clé / algorithme"
 
-#: src/seahorse-add-subkey.glade.h:9 src/seahorse-generate.glade.h:15
+#: src/seahorse-add-subkey.glade.h:9 src/seahorse-generate-adv.glade.h:15
 msgid "Length of Key"
 msgstr "Longueur de la clé"
 
-#: src/seahorse-add-subkey.glade.h:10 src/seahorse-generate.glade.h:17
+#: src/seahorse-add-subkey.glade.h:10 src/seahorse-generate-adv.glade.h:17
 #: src/seahorse-key-properties.c:388
 msgid "Never E_xpires"
 msgstr "N'e_xpire jamais"
@@ -520,7 +522,7 @@ msgstr "N'e_xpire jamais"
 msgid "RSA (encrypt only)"
 msgstr "RSA (chiffrement seulement)"
 
-#: src/seahorse-add-subkey.glade.h:12 src/seahorse-generate.glade.h:21
+#: src/seahorse-add-subkey.glade.h:12 src/seahorse-generate-adv.glade.h:21
 msgid "RSA (sign only)"
 msgstr "RSA (signature seule)"
 
@@ -537,27 +539,29 @@ msgstr "Ajouter un identifiant d'utilisateur"
 msgid "Create the new user ID"
 msgstr "Créer le nouvel identifiant d'utilisateur"
 
-#: src/seahorse-add-uid.glade.h:4 src/seahorse-generate.glade.h:7
+#: src/seahorse-add-uid.glade.h:4 src/seahorse-generate-adv.glade.h:7
 msgid "Full _Name:"
 msgstr "_Nom complet :"
 
-#: src/seahorse-add-uid.glade.h:5 src/seahorse-generate.glade.h:11
+#: src/seahorse-add-uid.glade.h:5 src/seahorse-generate-adv.glade.h:11
 msgid "Key Co_mment:"
 msgstr "Co_mmentaire :"
 
-#: src/seahorse-add-uid.glade.h:6 src/seahorse-generate.glade.h:16
+#: src/seahorse-add-uid.glade.h:6 src/seahorse-generate-adv.glade.h:16
 msgid "Must be at least 5 characters long"
 msgstr "Doit être long d'au-moins 5 caractères"
 
-#: src/seahorse-add-uid.glade.h:7 src/seahorse-generate.glade.h:18
+#: src/seahorse-add-uid.glade.h:7 src/seahorse-generate-adv.glade.h:18
+#: src/seahorse-generate-druid.glade.h:20
 msgid "Optional comment describing key"
 msgstr "Commentaire décrivant la clé optionnel"
 
-#: src/seahorse-add-uid.glade.h:8 src/seahorse-generate.glade.h:19
+#: src/seahorse-add-uid.glade.h:8 src/seahorse-generate-adv.glade.h:19
+#: src/seahorse-generate-druid.glade.h:21
 msgid "Optional email address"
 msgstr "Adresse électronique  optionnelle"
 
-#: src/seahorse-add-uid.glade.h:9 src/seahorse-generate.glade.h:22
+#: src/seahorse-add-uid.glade.h:9 src/seahorse-generate-adv.glade.h:22
 msgid "_Email Address:"
 msgstr "_Adresse électronique :"
 
@@ -565,7 +569,8 @@ msgstr "_Adresse électronique :"
 msgid "Change Passphrase"
 msgstr "Changer la phrase de passe"
 
-#: src/seahorse-change-passphrase.glade.h:3 src/seahorse-generate.glade.h:2
+#: src/seahorse-change-passphrase.glade.h:3
+#: src/seahorse-generate-adv.glade.h:2
 msgid "Con_firm Passphrase:"
 msgstr "Con_firmer la phrase :"
 
@@ -586,12 +591,12 @@ msgstr "Nouvelle _phrase de passe :"
 msgid "%s is a key pair! Do you still want to delete it?"
 msgstr "%s est une paire de clés ! Voulez-vous quand même la supprimer ?"
 
-#: src/seahorse-delete.c:51
+#: src/seahorse-delete.c:66
 #, c-format
 msgid "Are you sure you want to permanently delete %s?"
 msgstr "Êtes-vous sûr de vouloir supprimer définitivement %s ?"
 
-#: src/seahorse-delete.c:104
+#: src/seahorse-delete.c:131
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
 msgstr ""
@@ -645,33 +650,242 @@ msgstr "Nom du fichier où exporter"
 msgid "www.keyserver.net/en"
 msgstr "www.keyserver.net/en"
 
-#: src/seahorse-generate.glade.h:3
+#: src/seahorse-generate-adv.glade.h:3
 msgid "Confirmation of passphrase"
 msgstr "Confirmation de la phrase de passe"
 
-#: src/seahorse-generate.glade.h:4
+#: src/seahorse-generate-adv.glade.h:4
 msgid "DSA & ElGamal"
 msgstr "DSA et ElGamal"
 
-#: src/seahorse-generate.glade.h:8
+#: src/seahorse-generate-adv.glade.h:8
 msgid "Generate a Key"
 msgstr "Générer une clé"
 
-#: src/seahorse-generate.glade.h:9
+#: src/seahorse-generate-adv.glade.h:9
 msgid "Generate a new key"
 msgstr "Générer une nouvelle clé"
 
-#: src/seahorse-generate.glade.h:20
+#: src/seahorse-generate-adv.glade.h:20 src/seahorse-generate-druid.glade.h:23
 msgid "Passphrase to secure key"
 msgstr "La phrase de passe servant à sécuriser la clé"
 
-#: src/seahorse-generate.glade.h:23
+#: src/seahorse-generate-adv.glade.h:23
 msgid "_Generate"
 msgstr "_Générer"
 
-#: src/seahorse-generate.glade.h:24
+#: src/seahorse-generate-adv.glade.h:24
 msgid "_Passphrase:"
 msgstr "_Phrase de passe :"
+
+#: src/seahorse-generate-druid.glade.h:2
+msgid ""
+"Before selecting apply to start key generation, please make sure all of your "
+"previous settings are correct."
+msgstr ""
+"Avant de sélectionner appliquer pour démarrer la génération de la clé, "
+"veuillez vous assurer que les réglages précédents sont corrects."
+
+#: src/seahorse-generate-druid.glade.h:3
+msgid ""
+"Choosing a passphrase is an integral part of creating a strong key.  Like a "
+"password, a passphrase should letters, numbers, and punctuation.  "
+"Additionally, a passphrase can contain spaces, meaning it can contain many "
+"words.  You should pick a rememberable phrase that contains punctuation.  "
+"Take this phrase, adjust the case of various letters, and change some of the "
+"letters into numbers or punctuation rmeiniscent of \"leet speak\", but don't "
+"make it so obscure to the point where you can't remember it."
+msgstr ""
+"Choisir une phrase de passe est une étape primordiale de la création d'une "
+"clé solide.  Comme un mot de passe, une phrase de passe doit contenir des "
+"lettres, des chiffres et des ponctuations. De plus, une phrase de passe peut "
+"contenir des espaces, ce qui signifie qu'elle peut contenir plusieurs mots. "
+"Vous devez choisir une phrase mémorisable qui contient des signes de "
+"ponctuation. Prenez cette phrase, ajustez la casse de plusieurs lettres, et "
+"modifiez quelques lettres en chiffres ou en signes de ponctuation, mais ne "
+"rendez pas votre phrase de passe si obscure au point que vous ne vous en "
+"souveniez plus."
+
+#: src/seahorse-generate-druid.glade.h:4
+msgid "Comment:"
+msgstr "Commentaire :"
+
+#: src/seahorse-generate-druid.glade.h:5
+msgid "Confirm"
+msgstr "Confirmer"
+
+#: src/seahorse-generate-druid.glade.h:6
+msgid "Confirm Passphrase: "
+msgstr "Confirmer la phrase de passe :"
+
+#: src/seahorse-generate-druid.glade.h:7
+msgid "Confirm passphrase"
+msgstr "Confirmer la phrase de passe"
+
+#: src/seahorse-generate-druid.glade.h:8
+msgid "Date the Key Expires"
+msgstr "Date d'expiration de la clé"
+
+#: src/seahorse-generate-druid.glade.h:9
+msgid "Email Address: "
+msgstr "Adresse électronique :"
+
+#: src/seahorse-generate-druid.glade.h:10
+msgid "Enter Name - Must be at least five letters."
+msgstr "Saisissez le nom - Doit être long d'au moins 5 lettres."
+
+#: src/seahorse-generate-druid.glade.h:11 src/seahorse-key-manager-store.c:269
+msgid "Expiration Date"
+msgstr "Date d'expiration"
+
+#: src/seahorse-generate-druid.glade.h:12
+msgid "Expiration Date: "
+msgstr "Date d'expiration : "
+
+#: src/seahorse-generate-druid.glade.h:13
+msgid "Extra High Security"
+msgstr "Extra haute sécurité"
+
+#: src/seahorse-generate-druid.glade.h:14
+msgid "Full Name: "
+msgstr "Nom complet :"
+
+#: src/seahorse-generate-druid.glade.h:15
+msgid "High Security"
+msgstr "Haute sécurité"
+
+#: src/seahorse-generate-druid.glade.h:16
+msgid "Key Never Expires"
+msgstr "La clé n'expire jamais"
+
+#: src/seahorse-generate-druid.glade.h:17
+msgid ""
+"Keys must be given an appropriate expiration date.  For most people, the "
+"default option of never expires is sufficent.  If you only plan on using the "
+"key for a certain period of time, i.e. for a specific project, you should "
+"pick an expiration date after the projected completion of your project.  "
+"After the expiration date, your private key will still be able to decrypt "
+"messages or data encrypted with your public key.  However, your private key "
+"will no longer sign messages or data."
+msgstr ""
+"Les clés doivent avoir une date d'expiration appropriée. Pour la plupart des "
+"gens, l'option par défaut de ne jamais expirer est suffisante. Si vous "
+"prévoyez de n'utiliser la clé que pour une certaine période de temps, par "
+"exemple pour un projet spécifique, vous devriez choisir une date "
+"d'expiration postérieure à la fin prévue du projet. Aprés la date "
+"d'expiration, votre clé privée sera toujours capable de déchiffrer les "
+"messages ou les données chiffré avec votre clé publique. Cependant, votre "
+"clé privé ne pourra plus signer les messages ou les données."
+
+#: src/seahorse-generate-druid.glade.h:18
+msgid "Medium Security"
+msgstr "Moyenne sécurité"
+
+#: src/seahorse-generate-druid.glade.h:19 src/seahorse-key-manager-store.c:154
+#: src/seahorse-key-properties.c:373
+msgid "Never Expires"
+msgstr "N'expire jamais"
+
+#: src/seahorse-generate-druid.glade.h:22
+msgid "Passphrase"
+msgstr "Phrase de passe"
+
+#: src/seahorse-generate-druid.glade.h:24
+msgid "Passphrase:"
+msgstr "Phrase de passe :"
+
+#: src/seahorse-generate-druid.glade.h:25
+msgid "Personal Information"
+msgstr "Informations personnelles"
+
+#: src/seahorse-generate-druid.glade.h:26
+msgid "Seahorse GPG Key Generation Druid"
+msgstr "Assistant de génération de clé GPG Seahorse"
+
+#: src/seahorse-generate-druid.glade.h:27
+msgid "Seahorse GPG Key Generation Druid Complete"
+msgstr "Assistant de génération de clé GPG Seahorse terminé"
+
+#: src/seahorse-generate-druid.glade.h:28
+msgid "Seahorse Key Generation Druid"
+msgstr "Assistant de génération de clés Seahorse"
+
+#: src/seahorse-generate-druid.glade.h:29
+msgid "Security Level"
+msgstr "Niveau de sécurité"
+
+#: src/seahorse-generate-druid.glade.h:30
+msgid ""
+"The Medium Security level is the default and should be acceptable for "
+"general everyday usage.  The High Security level should be selected if you "
+"know your data will be actively scrutinized.  The Extra High level should be "
+"selected if you know your data is actively scrutinized and will be under "
+"cryptographic attack. "
+msgstr ""
+"Le niveau de sécurité moyen et la valeur par défaut et est suffisant pour un "
+"usage général quotidien. Le haut niveau de sécurité devrait être sélectionné "
+"si vous savez que vos données peuvent être activement surveillées. Le niveau "
+"de sécurité extra haut devrait être sélectionné si vous savez que vos "
+"données sont activement surveillées et soumises à des attaques "
+"cryptographiques."
+
+#: src/seahorse-generate-druid.glade.h:31
+msgid "This druid will guide you through the steps of creating a GPG key pair."
+msgstr ""
+"Cet assistant vous guidera à travers les étapes nécessaire à la création "
+"d'une paire de clés GPG."
+
+#: src/seahorse-generate-druid.glade.h:32
+msgid ""
+"To create a key and tie it to your identity, the following information is "
+"needed: Full Name, Email Address, and Comment.  These values will be given "
+"to the name of your key in the following "
+"manner:                              Full Name (Comment) <email address>."
+msgstr ""
+"Pour créer une clé et la lier à votre identité, les informations suivantes "
+"sont nécessaire : Nom complet, adresse électronique, et commentaire. Ces "
+"valeurs seront données au nom de votre clé de la manière suivante :\n"
+"Nom complet (Commentaire) <adresse électronique>"
+
+#: src/seahorse-generate-druid.glade.h:33
+msgid "druidpage_pass"
+msgstr "druidpage_pass"
+
+#: src/seahorse-generate-druid.glade.h:34
+msgid "druidpage_pinfo"
+msgstr "druidpage_pinfo"
+
+#: src/seahorse-generate-druid.glade.h:35
+msgid "keygen_druid"
+msgstr "keygen_druid"
+
+#: src/seahorse-generate-select.glade.h:1
+msgid "Advanced"
+msgstr "Avancé"
+
+#: src/seahorse-generate-select.glade.h:2
+msgid "Druid"
+msgstr "Assistant"
+
+#: src/seahorse-generate-select.glade.h:3
+msgid "Generate a key via the druid."
+msgstr "Génère une clé via l'assistant."
+
+#: src/seahorse-generate-select.glade.h:4
+msgid "Generate a key with the advanced dialog."
+msgstr "Génère une clé avec la boîte de dialogue avancée."
+
+#: src/seahorse-generate-select.glade.h:5
+msgid "Method Select"
+msgstr "Sélection de la méthode"
+
+#: src/seahorse-generate-select.glade.h:6
+msgid "Select a method to generate your new key."
+msgstr "Sélectionnez une méthode pour générer votre nouvelle clé."
+
+#: src/seahorse-generate-select.glade.h:7
+msgid "radio_druid"
+msgstr "radio_druid"
 
 #: src/seahorse-import.glade.h:2
 msgid "Enter a unique key id"
@@ -789,7 +1003,7 @@ msgstr "Créer un certificat de révocation"
 
 #: src/seahorse-key-manager.glade.h:14
 msgid "Delete key"
-msgstr "Efface la clé"
+msgstr "Supprime la clé"
 
 #: src/seahorse-key-manager.glade.h:16
 msgid "E_xport..."
@@ -895,7 +1109,7 @@ msgstr "_Signer..."
 
 #: src/seahorse-key-manager.glade.h:41
 msgid "_Statusbar"
-msgstr "Barre d'_état"
+msgstr "Barre d'é_tat"
 
 #: src/seahorse-key-manager.glade.h:42
 msgid "_Toolbar"
@@ -904,14 +1118,6 @@ msgstr "Barre d'_outils"
 #: src/seahorse-key-manager-store.c:147 src/seahorse-key-properties.c:361
 msgid "Expired"
 msgstr "Expiré"
-
-#: src/seahorse-key-manager-store.c:154 src/seahorse-key-properties.c:373
-msgid "Never Expires"
-msgstr "N'expire jamais"
-
-#: src/seahorse-key-manager-store.c:269
-msgid "Expiration Date"
-msgstr "Date d'expiration"
 
 #: src/seahorse-key-manager-store.c:273
 msgid "Trust"
@@ -1010,7 +1216,7 @@ msgstr "Supprimer la sous-clé %d"
 #: src/seahorse-key-properties.c:534
 #, c-format
 msgid "%s Properties"
-msgstr "Propriétés %s"
+msgstr "Propriétés de %s"
 
 #: src/seahorse-key-properties.glade.h:1
 msgid "All"
@@ -1300,637 +1506,3 @@ msgstr "_Local"
 #: src/seahorse-sign.glade.h:16
 msgid "_Revocable"
 msgstr "_Révocable"
-
-#~ msgid ""
-#~ "If enabled, relevant output (file or text) will be encoded in ascii "
-#~ "armor. Output that is not in ascii armor is not viewable with a regular "
-#~ "text viewer. Key servers only accept ascii armored keys."
-#~ msgstr ""
-#~ "Si activé, la sortie utile (fichier ou texte) sera en encodée en armure "
-#~ "ascii. Les sorties n'étant pas en armure ascii ne sont pas regardables à "
-#~ "l'aide d'un  visualiseur de texte standard. Les serveurs de clés "
-#~ "acceptent uniquement les clés en armure ascii."
-
-#~ msgid "If enabled, relevant output will be in canonical text mode."
-#~ msgstr "Si activé, la sortie utile sera en mode texte canonique."
-
-#~ msgid "Use Ascii Armor"
-#~ msgstr "Utilise l'armure ascii"
-
-#, fuzzy
-#~ msgid "Select File To Decrypt"
-#~ msgstr "Sélectionner un fichier d'où importer"
-
-#, fuzzy
-#~ msgid "Could not decrypt and verify %s"
-#~ msgstr "Déchiffrer et vérifier"
-
-#, fuzzy
-#~ msgid "Select File To Decrypt And Verify"
-#~ msgstr "Déchiffrer et vérifier"
-
-#, fuzzy
-#~ msgid "Select File To Encrypt"
-#~ msgstr "Sélectionner un fichier d'où importer"
-
-#, fuzzy
-#~ msgid "Select File To Encrypt And Sign"
-#~ msgstr "Sélectionner un fichier d'où importer"
-
-#~ msgid ""
-#~ "Cannot export to \n"
-#~ "%s"
-#~ msgstr ""
-#~ "Ne peut exporter vers \n"
-#~ "%s"
-
-#~ msgid "Export Key: %s"
-#~ msgstr "Exporter la clé : %s"
-
-#~ msgid "Export"
-#~ msgstr "Exporter"
-
-#, fuzzy
-#~ msgid "Export key to a File"
-#~ msgstr "Exporte une(des) clé(s) vers le fichier"
-
-#, fuzzy
-#~ msgid "Export key to text"
-#~ msgstr "Exporte la clé vers un texte"
-
-#~ msgid "Export to _Text:"
-#~ msgstr "Exporter vers un _texte :"
-
-#~ msgid "Exported text"
-#~ msgstr "Texte exporté"
-
-#~ msgid "Import from _Text:"
-#~ msgstr "Importer depuis un _texte :"
-
-#~ msgid "Import keys from text"
-#~ msgstr "Importe une(des) clé(s) depuis le texte"
-
-#~ msgid "Default Signing Key"
-#~ msgstr "Clé de signature par défaut"
-
-#~ msgid "_Expiration Date"
-#~ msgstr "Date d'_expiration"
-
-#, fuzzy
-#~ msgid "Selected %d keys"
-#~ msgstr "Efface la clé sélectionnée"
-
-#, fuzzy
-#~ msgid "Add selected keys to recipient list"
-#~ msgstr "Ajoute une clé à la liste des destinataires"
-
-#~ msgid "Keys"
-#~ msgstr "Clés"
-
-#~ msgid "Recipients"
-#~ msgstr "Destinataires"
-
-#, fuzzy
-#~ msgid "Remove selected keys from recipient list"
-#~ msgstr "Supprime une clé de la liste des destinataires"
-
-#~ msgid "_Add"
-#~ msgstr "A_jouter"
-
-#~ msgid "_Remove"
-#~ msgstr "_Supprimer"
-
-#, fuzzy
-#~ msgid "Select File To Sign"
-#~ msgstr "Sélectionner un fichier"
-
-#, fuzzy
-#~ msgid "Sign user ID %s"
-#~ msgstr "Identifiant utilisateur %d"
-
-#, fuzzy
-#~ msgid "Select Signature File To Verify"
-#~ msgstr "Vérifie la signature du fichier"
-
-#, fuzzy
-#~ msgid "Loading key pair %d"
-#~ msgstr "Bien, la clé de signature a expiré"
-
-#~ msgid "%s Successful"
-#~ msgstr "%s a réussi"
-
-#~ msgid "%s Failed"
-#~ msgstr "%s a échoué"
-
-#, fuzzy
-#~ msgid "Create a signature file"
-#~ msgstr "Appose une signature"
-
-#, fuzzy
-#~ msgid "Decrypt & Ve_rify File"
-#~ msgstr "Déchiffrer et vérifier le fichier"
-
-#~ msgid "Decrypt and verify a file"
-#~ msgstr "Déchiffre et vérifie le fichier"
-
-#, fuzzy
-#~ msgid "E_ncrypt & Sign File"
-#~ msgstr "Chiffre le fichier"
-
-#, fuzzy
-#~ msgid "Text editor tool"
-#~ msgstr "Aide de l'éditeur de _texte"
-
-#~ msgid "_Decrypt File"
-#~ msgstr "_Déchiffrer le fichier"
-
-#~ msgid "_Encrypt File"
-#~ msgstr "_Chiffrer le fichier"
-
-#, fuzzy
-#~ msgid "_Sign File"
-#~ msgstr "_Signer"
-
-#, fuzzy
-#~ msgid "_Text Editor"
-#~ msgstr "Éditeur de _texte"
-
-#~ msgid "_Tools"
-#~ msgstr "_Outils"
-
-#, fuzzy
-#~ msgid "_Verify File"
-#~ msgstr "_Vérifier"
-
-#, fuzzy
-#~ msgid "No keys imported"
-#~ msgstr "Afficher les propriétés de la clé"
-
-#~ msgid "Export File"
-#~ msgstr "Exporter un fichier"
-
-#~ msgid "Detached Signature"
-#~ msgstr "Signature détachée"
-
-#~ msgid "Encrypt File"
-#~ msgstr "Chiffre le fichier"
-
-#, fuzzy
-#~ msgid "Encrypt & Sign File"
-#~ msgstr "Chiffre le fichier"
-
-#~ msgid "Decrypt File"
-#~ msgstr "Déchiffre le fichier"
-
-#~ msgid "Verify Signature File"
-#~ msgstr "Vérifie la signature du fichier"
-
-#~ msgid "Decrypt & Verify File"
-#~ msgstr "Déchiffrer et vérifier le fichier"
-
-#~ msgid "Delete Key"
-#~ msgstr "Effacer une clé"
-
-#~ msgid "Generate Key"
-#~ msgstr "Générer une clé"
-
-#~ msgid "Change Trust"
-#~ msgstr "Changer la confiance"
-
-#~ msgid "Change Expiration"
-#~ msgstr "Changer l'expiration"
-
-#~ msgid "Disable Key"
-#~ msgstr "Désactiver une clé"
-
-#~ msgid "Enable Key"
-#~ msgstr "Activer une clé"
-
-#~ msgid "Passphrase Change"
-#~ msgstr "Changement de phrase de passe"
-
-#, fuzzy
-#~ msgid "Delete Subkey"
-#~ msgstr "Efface la clé"
-
-#, fuzzy
-#~ msgid "Add Revoker"
-#~ msgstr "_Supprimer"
-
-#~ msgid "Export Text"
-#~ msgstr "Exporter un texte"
-
-#~ msgid "Sign"
-#~ msgstr "Signer"
-
-#~ msgid "Clear Sign"
-#~ msgstr "Signature claire"
-
-#~ msgid "Encrypt"
-#~ msgstr "Chiffrer"
-
-#~ msgid "Decrypt"
-#~ msgstr "Déchiffrer"
-
-#~ msgid "Verify Signature"
-#~ msgstr "Vérifier la signature"
-
-#~ msgid "Decrypt & Verify"
-#~ msgstr "Déchiffrer et vérifier"
-
-#~ msgid "Decrypt and Verify"
-#~ msgstr "Déchiffrer et vérifier"
-
-#~ msgid "_Verify"
-#~ msgstr "_Vérifier"
-
-#~ msgid "_Decrypt"
-#~ msgstr "_Déchiffrer"
-
-#~ msgid "_Encrypt"
-#~ msgstr "_Chiffrer"
-
-#~ msgid "C_lear Text Sign"
-#~ msgstr "Signer en c_lair"
-
-#~ msgid "Clear Text Sign"
-#~ msgstr "Signer en clair"
-
-#~ msgid "Decrypt text"
-#~ msgstr "Déchiffre le texte"
-
-#, fuzzy
-#~ msgid "Export keys to text"
-#~ msgstr "Exporte la clé vers un texte"
-
-#~ msgid "Make a clear text signature"
-#~ msgstr "Appose une signature en texte clair"
-
-#~ msgid "Make a signature"
-#~ msgstr "Appose une signature"
-
-#~ msgid "Seahorse Text Editor"
-#~ msgstr "Éditeur de texte Seahorse"
-
-#~ msgid "Show text editor help"
-#~ msgstr "Affiche l'aide de l'éditeur de texte"
-
-#~ msgid "Verify a signature"
-#~ msgstr "Vérifie la signature"
-
-#~ msgid "_Text Editor Help"
-#~ msgstr "Aide de l'éditeur de _texte"
-
-#~ msgid "Default Key ID"
-#~ msgstr "Identifiant de clé par défaut"
-
-#, fuzzy
-#~ msgid "You must enter a valid email address"
-#~ msgstr "Vous devez saisir une adresse électronique valide"
-
-#~ msgid "Enter your full name"
-#~ msgstr "Saisissez votre nom complet"
-
-#~ msgid "You must enter a valid name"
-#~ msgstr "Vous devez saisir un nom valide"
-
-#~ msgid "You must enter a valid comment"
-#~ msgstr "Vous devez saisir un commentaire valide"
-
-#~ msgid "You must enter a valid passphrase"
-#~ msgstr "Vous devez saisir une phrase de passe valide"
-
-#~ msgid "You must confirm your passphrase"
-#~ msgstr "Vous devez confirmer la phrase de passe"
-
-#~ msgid "Passphrase & confirmation must match"
-#~ msgstr "La phrase de passe et sa confirmation doivent correspondre"
-
-#~ msgid "Confirm the entered passphrase"
-#~ msgstr "Confirmation de la phrase de passe précédement saisie"
-
-#~ msgid ""
-#~ "Unknown suffix or bad file name.\n"
-#~ "File must exist and end with '.asc' or '.gpg'."
-#~ msgstr ""
-#~ "Suffixe inconnu ou mauvais nom de fichiers.\n"
-#~ "Le fichier doit exister et se terminer par « .asc » ou « .gpg »."
-
-#~ msgid "File to process"
-#~ msgstr "Fichier à traiter"
-
-#~ msgid "Make a detached signature"
-#~ msgstr "Appose une signature détachée"
-
-#~ msgid "Seahorse File Manager"
-#~ msgstr "Gestionnaire de fichiers seahorse"
-
-#~ msgid "Show file manager help"
-#~ msgstr "Affiche l'aide du gestionnaire de fichiers"
-
-#~ msgid "Verify a detached signature"
-#~ msgstr "Vérifie la signature détachée"
-
-#~ msgid "_File Manager Help"
-#~ msgstr "Aide du gestionnaire de _fichier"
-
-#, fuzzy
-#~ msgid "Add a new user ID to selected key"
-#~ msgstr "Efface la clé sélectionnée"
-
-#, fuzzy
-#~ msgid "Add a revoker to the selected key"
-#~ msgstr "Efface la clé sélectionnée"
-
-#~ msgid "Change key's passphrase"
-#~ msgstr "Change la phrase de passe de la clé"
-
-#, fuzzy
-#~ msgid "Change selected key's passphrase"
-#~ msgstr "Change la phrase de passe de la clé"
-
-#~ msgid "Delete selected key"
-#~ msgstr "Efface la clé sélectionnée"
-
-#, fuzzy
-#~ msgid "Export selected key"
-#~ msgstr "Efface la clé sélectionnée"
-
-#~ msgid "File _Manager"
-#~ msgstr "Gestionnaire de _fichier"
-
-#, fuzzy
-#~ msgid "File manager tool"
-#~ msgstr "Aide du gestionnaire de _fichier"
-
-#~ msgid "Statusbar"
-#~ msgstr "Barre d'état"
-
-#~ msgid "Enable/Disable Key"
-#~ msgstr "Activation/Désactivation d'une clé"
-
-#~ msgid "Key Properties"
-#~ msgstr "Propriétés de la clé :"
-
-#~ msgid "Key Properties Help"
-#~ msgstr "Aide des propriétés de clé"
-
-#~ msgid "Owner Trust"
-#~ msgstr "Confiance du propriétaire"
-
-#~ msgid "Show key properties help"
-#~ msgstr "Affiche l'aide sur les propriétés des clés"
-
-#, fuzzy
-#~ msgid "Unknown owner"
-#~ msgstr "Inconnue"
-
-#~ msgid "Bad File, Import"
-#~ msgstr "Mauvais fichier, importation"
-
-#~ msgid "Cancel Export"
-#~ msgstr "Annuler l'exportation"
-
-#~ msgid "Export Help"
-#~ msgstr "Aide sur l'exportation"
-
-#~ msgid "Export Key to specified data"
-#~ msgstr "Exporte la clé vers une donnée spécifiée"
-
-#~ msgid "Export a Key to a File"
-#~ msgstr "Exporte la clé vers un fichier"
-
-#~ msgid "Cancel Import"
-#~ msgstr "Annuler l'importation"
-
-#~ msgid "Import Key(s) from File"
-#~ msgstr "Importe une(des) clé(s) depuis un fichier"
-
-#~ msgid "Import Key(s) from Text"
-#~ msgstr "Importe une(des) clé(s) depuis un texte"
-
-#~ msgid "Key Import Help"
-#~ msgstr "Aide sur l'importation"
-
-#~ msgid "_Never Expires"
-#~ msgstr "_N'expire jamais"
-
-#~ msgid "Save File"
-#~ msgstr "Enregistrer le fichier"
-
-#~ msgid "Export keys"
-#~ msgstr "Exporter les clés"
-
-#, fuzzy
-#~ msgid "Create a detached signature with default key"
-#~ msgstr "Créer une signature détachée avec la clé par défaut"
-
-#, fuzzy
-#~ msgid "Decrypt _& Verify"
-#~ msgstr "Déchiffrer un fichier"
-
-#, fuzzy
-#~ msgid "Verify signed text"
-#~ msgstr "vérifier une signature"
-
-#, fuzzy
-#~ msgid "_Clear Sign"
-#~ msgstr "Signature c_laire"
-
-#, fuzzy
-#~ msgid "Seahorse Key for this item"
-#~ msgstr "Gestion des clés"
-
-#, fuzzy
-#~ msgid "Seahorse Context"
-#~ msgstr "Éditeur de _textes"
-
-#, fuzzy
-#~ msgid "Seahorse Key of this widget"
-#~ msgstr "Gestion des clés"
-
-#~ msgid "Public Key Ring"
-#~ msgstr "Porte-clés public"
-
-#~ msgid "Secret Key Ring"
-#~ msgstr "Porte-clés secret"
-
-#~ msgid "set the width of the window"
-#~ msgstr "changer la largeur de la fenêtre"
-
-#~ msgid "set the height of the window"
-#~ msgstr "changer la hauteur de la fenêtre"
-
-#~ msgid "set the horizontal position of the window"
-#~ msgstr "changer la position horizontale de la fenêtre"
-
-#~ msgid "set the vertical position of the window"
-#~ msgstr "changer la position verticale de la fenêtre"
-
-#~ msgid "encrypt"
-#~ msgstr "chiffrer"
-
-#~ msgid "decrypt"
-#~ msgstr "déchiffrer"
-
-#~ msgid "create ascii armored output"
-#~ msgstr "sortie avec armure ascii"
-
-#~ msgid "sign/encrypt for NAME"
-#~ msgstr "signer ou chiffrer pour NOM"
-
-#~ msgid "NAME(or EMAIL-ADDRESS)"
-#~ msgstr "NOM (ou adresse e-mail)"
-
-#~ msgid "use file FILE instead of stdin"
-#~ msgstr "utiliser le FICHIER à la place de l'entrée standard"
-
-#~ msgid "write output to file OUTFILE (using - will write to stdout)"
-#~ msgstr ""
-#~ "écrire la sortie vers le fichier SORTIE (- correspond à la sortie "
-#~ "standard)"
-
-#~ msgid "OUTFILE"
-#~ msgstr "SORTIE"
-
-#~ msgid "Sign & Encrypt"
-#~ msgstr "Signer et chiffrer"
-
-#~ msgid "_File"
-#~ msgstr "_Fichier"
-
-#~ msgid "_Clipboard"
-#~ msgstr "_Presse-papiers"
-
-#~ msgid " I_nput File... "
-#~ msgstr " Fichier d'_entrée... "
-
-#~ msgid "Te_xt Editor"
-#~ msgstr "Éditeur de te_xtes"
-
-#~ msgid "Textmode (_b)"
-#~ msgstr "_Mode texte"
-
-#~ msgid "Si_gn & Encrypt"
-#~ msgstr "Si_gner et chiffrer"
-
-#~ msgid " O_utput File... "
-#~ msgstr "Fichier de s_ortie..."
-
-#~ msgid "For username"
-#~ msgstr "Pour l'utilisateur"
-
-#~ msgid "Verify & Decrypt"
-#~ msgstr "Vérifier et chiffrer"
-
-#~ msgid "Verify & _Decrypt"
-#~ msgstr "Vérifier et _déchiffrer"
-
-#~ msgid "Copyright (c) 1999, 2000 Anthony Mulcahy"
-#~ msgstr "Copyright (c) 1999, 2000 Anthony Mulcahy"
-
-#~ msgid "A Gnome frontend for GnuPG"
-#~ msgstr "Une interface graphique Gnome pour GnuPG"
-
-#~ msgid "_Export Key"
-#~ msgstr "_Exporter une clé"
-
-#~ msgid ": "
-#~ msgstr ": "
-
-#~ msgid " : "
-#~ msgstr " : "
-
-#~ msgid "certserver.pgp.com"
-#~ msgstr "certserver.pgp.com"
-
-#~ msgid "S_elect File... "
-#~ msgstr "_Sélectionner un fichier..."
-
-#~ msgid "To Key _File"
-#~ msgstr "_Vers un fichier de clés"
-
-#~ msgid "Use Proxy"
-#~ msgstr "Utiliser un proxy"
-
-#~ msgid "From Key _File"
-#~ msgstr "À partir d'un _fichier de clés"
-
-#~ msgid "Key Size"
-#~ msgstr "Taille de clé"
-
-#~ msgid "0 (does not expire)"
-#~ msgstr "0 (n'expire pas)"
-
-#~ msgid ":"
-#~ msgstr ":"
-
-#~ msgid "Sign Key Locally"
-#~ msgstr "Signer une clé localement"
-
-#~ msgid "Permanently Delete Key?"
-#~ msgstr "Faut-il effacer la clé pour toujours ?"
-
-#~ msgid "Generate Key Druid"
-#~ msgstr "Druide de génération de clés"
-
-#~ msgid "No GnuPG Directory Found"
-#~ msgstr "Aucun répertoire GnuPG n'a été trouvé"
-
-#~ msgid ""
-#~ "Seahorse cannot find any GnuPG directory (\".gnupg\") which means that\n"
-#~ "either the GNUPG environment variable isn't properly set or else that "
-#~ "you\n"
-#~ "will need to generate a Public / Secret Key Pair if this is your first "
-#~ "time\n"
-#~ "using Seahorse (or GnuPG)."
-#~ msgstr ""
-#~ "Seahorse n'a pas pu trouver de répertoire GnuPG (« .gnupg ») ce qui "
-#~ "signifie\n"
-#~ "que la variable d'environnement GNUPG n'a pas été convenablement choisie\n"
-#~ "ou bien que vous devrez générer une paire de clés publique et secrète si\n"
-#~ "c'est la première fois que vous utilisez Seahorse (ou GnuPG)."
-
-#~ msgid "Generate Public / Secret Key Pair"
-#~ msgstr "Générer une paire de clés secrète et publique"
-
-#~ msgid "Public / Secret Key Pair Generated"
-#~ msgstr "La paire de clés publique et secrète a été générée"
-
-#~ msgid ""
-#~ "Your Public / Secret Key Pair have been generated and\n"
-#~ "saved to the \".gnupg\" directory.\n"
-#~ "\n"
-#~ "Please click \"Finish\" to start Seahorse."
-#~ msgstr ""
-#~ "Votre paire de clés publique et secrète a été générée et enregistrée\n"
-#~ "dans le répertoire « .gnupg ».\n"
-#~ "\n"
-#~ "Cliquez sur « Terminer » pour démarrer Seahorse."
-
-#~ msgid "Permanently Delete Signature?"
-#~ msgstr "Effacer la signature pour toujours ?"
-
-#~ msgid "Trust Fully"
-#~ msgstr "Faire pleinement confiance"
-
-#~ msgid " Trust Value : "
-#~ msgstr " Valeur de confiance : "
-
-#~ msgid "Don't Know"
-#~ msgstr "Aucune idée"
-
-#~ msgid "Adjust _Trust"
-#~ msgstr "Ajuster la _confiance"
-
-#~ msgid "_Generate Revoke"
-#~ msgstr "_Générer une révocation"
-
-#~ msgid "Permanently Delete UID?"
-#~ msgstr "Faut-il effacer le nom d'utilisateur pour toujours ?"
-
-#~ msgid "Couldn't find pixmap file: %s"
-#~ msgstr "Impossible de trouver le fichier pixmap: %s"
-
-#~ msgid "Couldn't create pixmap from file: %s"
-#~ msgstr "Impossible de créer un pixmap à partir du fichier: %s"
