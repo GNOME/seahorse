@@ -7,6 +7,9 @@
 #include "seahorse-check-button-control.h"
 #include "seahorse-default-key-control.h"
 
+/* From seahorse-pgp-preferences-cache.c */
+void seahorse_pgp_preferences_cache(SeahorseContext* ctx, SeahorseWidget* widget);
+
 static void
 destroyed (GtkObject *object, gpointer data)
 {
@@ -62,6 +65,8 @@ main (int argc, char **argv)
 	gtk_widget_show_all (table);
 	g_signal_connect (GTK_OBJECT (table), "destroy", G_CALLBACK (destroyed), NULL);
 	
+    seahorse_pgp_preferences_cache(sctx, swidget);
+  
 	gtk_main();
 	return 0;
 }

@@ -28,6 +28,7 @@ libseahorse_a_SOURCES = \
 	seahorse-validity.c seahorse-validity.h \
 	seahorse-check-button-control.c seahorse-check-button-control.h \
 	seahorse-default-key-control.c seahorse-default-key-control.h \
+	seahorse-gpg-options.c seahorse-gpg-options.h \
 	seahorse-passphrase.c \
 	seahorse-recipients.c \
 	seahorse-signatures.c \

@@ -1,6 +1,12 @@
 ## Process this file with automake to produce Makefile.in
 
-SUBDIRS = libseahorse bonobo src po data help pixmaps plugins
+if WITH_AGENT
+AGENT_DIR = agent
+else
+AGENT_DIR = 
+endif
+
+SUBDIRS = libseahorse bonobo src po data help pixmaps plugins $(AGENT_DIR)
 
 EXTRA_DIST = \
 	AUTHORS \
