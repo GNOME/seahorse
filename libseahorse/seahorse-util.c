@@ -2,6 +2,7 @@
  * Seahorse
  *
  * Copyright (C) 2003 Jacob Perkins
+ * Copyright (C) 2004-2005 Nate Nielsen
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -931,7 +932,7 @@ seahorse_util_add_suffix (gpgme_ctx_t ctx, const gchar *path,
 	
 	if (suffix == SEAHORSE_CRYPT_SUFFIX)
         ext = eel_gconf_get_boolean (ARMOR_KEY) ? SEAHORSE_EXT_ASC : SEAHORSE_EXT_PGP;
-	if (suffix == SEAHORSE_ASC_SUFFIX)
+	else if (suffix == SEAHORSE_ASC_SUFFIX)
 		ext = SEAHORSE_EXT_ASC;
 	else
 		ext = SEAHORSE_EXT_SIG;
@@ -1093,6 +1094,15 @@ seahorse_util_keylist_splice (GList *keys)
     return NULL;
 }
 
+gboolean    
+seahorse_util_string_equals (const gchar *s1, const gchar *s2)
+{
+    if (!s1 && !s2)
+        return TRUE;
+    if (!s1 || !s2)
+        return FALSE;
+    return g_str_equal (s1, s2);
+}
 
 /* Free a GSList along with string values */
 GSList*

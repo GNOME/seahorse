@@ -2,6 +2,7 @@
  * Seahorse
  *
  * Copyright (C) 2003 Jacob Perkins
+ * Copyright (C) 2004-2005 Nate Nielsen
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -134,6 +135,8 @@ GList*       seahorse_util_keylist_sort       (GList *keys);
 GList*       seahorse_util_keylist_splice     (GList *keys);
 
 void         seahorse_util_free_keys          (gpgme_key_t* keys);
+
+gboolean    seahorse_util_string_equals       (const gchar *s1, const gchar *s2);
 
 GSList*     seahorse_util_string_slist_free   (GSList *slist);
 
