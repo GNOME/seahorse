@@ -44,7 +44,7 @@
 /* Quits seahorse */
 static void
 quit (GtkWidget *widget, SeahorseWidget *swidget)
-{	
+{
 	seahorse_context_destroy (swidget->sctx);
 	gtk_exit (0);
 }

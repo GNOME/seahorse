@@ -178,6 +178,9 @@ add_recip (SeahorseWidget *swidget, GtkTreePath *path)
 	seahorse_key_store_remove (srecips->all_keys, path);
 	seahorse_key_store_append (srecips->recipient_keys, skey);
 	
+	if (gpgme_recipients_count (srecips->recips) == 0)
+		gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "ok"), TRUE);
+	
 	seahorse_ops_key_recips_add (srecips->recips, skey);
 }
 
@@ -210,6 +213,9 @@ remove_recip (SeahorseWidget *swidget, GtkTreePath *path)
 			seahorse_ops_key_recips_add (srecips->recips, skey);
 		} while (gtk_tree_model_iter_next (model, &iter));
 	}
+	
+	if (gpgme_recipients_count (srecips->recips) == 0)
+		gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "ok"), FALSE);
 }
 
 /* Add recipient button clicked */
@@ -244,6 +250,20 @@ remove_row_activated (GtkTreeView *view, GtkTreePath *path,
 	remove_recip (swidget, path);
 }
 
+static void
+all_keys_selection_changed (GtkTreeSelection *selection, SeahorseWidget *swidget)
+{
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "add"),
+		gtk_tree_selection_get_selected (selection, NULL, NULL));
+}
+
+static void
+recips_keys_selection_changed (GtkTreeSelection *selection, SeahorseWidget *swidget)
+{
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "remove"),
+		gtk_tree_selection_get_selected (selection, NULL, NULL));
+}
+
 /* Creates a new #SeahorseRecipients given @sctx and whether doing
  * encrypt recipients.
  */
@@ -254,6 +274,7 @@ seahorse_recipients_new (SeahorseContext *sctx, gboolean use_encrypt)
 	SeahorseWidget *swidget;
 	GtkTreeView *all_keys;
 	GtkTreeView *recips_keys;
+	GtkTreeSelection *selection;
 	
 	srecips = g_object_new (SEAHORSE_TYPE_RECIPIENTS, "name", "recipients", "ctx", sctx,
 		"validity", use_encrypt, NULL);
@@ -282,6 +303,13 @@ seahorse_recipients_new (SeahorseContext *sctx, gboolean use_encrypt)
 
 	seahorse_key_store_populate (srecips->all_keys);
 	gtk_widget_show_all (glade_xml_get_widget (swidget->xml, swidget->name));
+	/* listen to selection change */
+	selection = gtk_tree_view_get_selection (all_keys);
+	g_signal_connect_after (selection, "changed",
+		G_CALLBACK (all_keys_selection_changed), swidget);
+	selection = gtk_tree_view_get_selection (recips_keys);
+	g_signal_connect_after (selection, "changed",
+		G_CALLBACK (recips_keys_selection_changed), swidget);
 
 	return swidget;
 }
