@@ -213,6 +213,8 @@ seahorse_context_new (void)
 	g_return_if_fail (gpgme_op_keylist_start (sctx->ctx, NULL, FALSE) == GPGME_No_Error);
 	
 	keyid = gconf_client_get_string (sctx->priv->gclient, DEFAULT_KEY, NULL);
+	if (keyid == NULL)
+		keyid = "";
 	
 	/* Make key ring */
 	while (gpgme_op_keylist_next (sctx->ctx, &key) == GPGME_No_Error) {
