@@ -434,11 +434,14 @@ show_progress (SeahorseContext *sctx, const gchar *op, gdouble fract, SeahorseWi
 	else
 		gtk_progress_bar_set_fraction (progress, 0);
 	
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, KEY_LIST), sensitive);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "key"), sensitive);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "edit"), sensitive);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "tools"), sensitive);
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "tool_dock"), sensitive);
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "properties_button"), sensitive);
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "export_button"), sensitive);
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "sign_button"), sensitive);
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "delete_button"), sensitive);
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, KEY_LIST), sensitive);
 	
 	while (g_main_context_pending (NULL))
 		g_main_context_iteration (NULL, TRUE);
@@ -466,7 +469,7 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 	glade_xml_signal_connect_data (swidget->xml, "quit_event",
 		G_CALLBACK (delete_event), swidget);
 	
-	g_signal_connect_after (swidget->sctx, "progress", G_CALLBACK (show_progress), swidget);
+	g_signal_connect (swidget->sctx, "progress", G_CALLBACK (show_progress), swidget);
 	
 	/* init gclient */
 	eel_gconf_notification_add (KEY_UI, (GConfClientNotifyFunc) gconf_notification, swidget);
@@ -485,15 +488,7 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 	if (!visible)
 		gtk_widget_hide (glade_xml_get_widget (swidget->xml, "tool_dock"));
 	
-	/* init key list & selection settings */
-	view = GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, KEY_LIST));
-	selection = gtk_tree_view_get_selection (view);
-	g_signal_connect (selection, "changed",
-		G_CALLBACK (selection_changed), swidget);
-	seahorse_key_manager_store_new (sctx, view);
-	selection_changed (selection, swidget);
-	
-	/* init status bars after so that not hidden during startup */
+	/* init status bar */
 	widget = glade_xml_get_widget (swidget->xml, "view_statusbar");
 	visible = eel_gconf_get_boolean (STATUSBAR_VISIBLE);
 	glade_xml_signal_connect_data (swidget->xml, "statusbar_activate",
@@ -501,6 +496,20 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (widget), visible);
 	if (!visible)
 		gtk_widget_hide (glade_xml_get_widget (swidget->xml, "status"));
+	
+	/* other signals */	
+	glade_xml_signal_connect_data (swidget->xml, "preferences_activate",
+		G_CALLBACK (preferences_activate), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "about_activate",
+		G_CALLBACK (about_activate), swidget);
+	
+	/* init key list & selection settings */
+	view = GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, KEY_LIST));
+	selection = gtk_tree_view_get_selection (view);
+	g_signal_connect (selection, "changed",
+		G_CALLBACK (selection_changed), swidget);
+	seahorse_key_manager_store_new (sctx, view);
+	selection_changed (selection, swidget);
 	
 	/* key menu signals */
 	glade_xml_signal_connect_data (swidget->xml, "generate_activate",
@@ -522,11 +531,6 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 		G_CALLBACK (decrypt_verify_file_activate), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "text_editor_activate",
 		G_CALLBACK (text_editor_activate), swidget);	
-	/* other signals */	
-	glade_xml_signal_connect_data (swidget->xml, "preferences_activate",
-		G_CALLBACK (preferences_activate), swidget);
-	glade_xml_signal_connect_data (swidget->xml, "about_activate",
-		G_CALLBACK (about_activate), swidget);
 	/* tree view signals */	
 	glade_xml_signal_connect_data (swidget->xml, "row_activated",
 		G_CALLBACK (row_activated), swidget);

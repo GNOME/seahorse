@@ -192,7 +192,7 @@ seahorse_key_widget_create (gchar *name, SeahorseContext *sctx, SeahorseKey *ske
 		
 		/* Check if have key widgets hash */
 		if (widgets != NULL) {
-			swidget = g_hash_table_lookup (widgets, seahorse_key_get_keyid (skey, 0));
+			swidget = g_hash_table_lookup (widgets, seahorse_key_get_id (skey->key));
 			
 			/* If have widget, present */
 			if (swidget != NULL) {
@@ -216,7 +216,7 @@ seahorse_key_widget_create (gchar *name, SeahorseContext *sctx, SeahorseKey *ske
 	/* If widget doesn't already exist, create & insert into key widgets hash */
 	swidget = g_object_new (SEAHORSE_TYPE_KEY_WIDGET, "name", name, "ctx", sctx,
 		"key", skey, "index", index, NULL);
-	g_hash_table_insert (widgets, (gchar*)seahorse_key_get_keyid (skey, 0), swidget);
+	g_hash_table_insert (widgets, (gchar*)seahorse_key_get_id (skey->key), swidget);
 	
 	return swidget;
 }

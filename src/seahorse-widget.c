@@ -171,8 +171,10 @@ seahorse_widget_set_property (GObject *object, guint prop_id, const GValue *valu
 			g_object_ref (G_OBJECT (swidget->sctx));
 			g_signal_connect_after (swidget->sctx, "destroy",
 				G_CALLBACK (seahorse_widget_destroyed), swidget);
-			g_signal_connect_after (swidget->sctx, "progress",
-				G_CALLBACK (seahorse_widget_show_progress), swidget);
+			//a bit dirty, but easy
+			if (!g_str_equal (swidget->name, "key-manager"))
+				g_signal_connect (swidget->sctx, "progress",
+					G_CALLBACK (seahorse_widget_show_progress), swidget);
 			break;
 		default:
 			break;
