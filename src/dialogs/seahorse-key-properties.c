@@ -32,8 +32,14 @@
 static void
 trust_changed (GtkOptionMenu *optionmenu, SeahorseWidget *swidget)
 {
-	seahorse_ops_key_set_trust (swidget->sctx, SEAHORSE_KEY_WIDGET (swidget)->skey,
-		gtk_option_menu_get_history (optionmenu) + 1);
+	gint trust;
+	SeahorseKey *skey;
+	
+	trust = gtk_option_menu_get_history (optionmenu) + 1;
+	skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
+	
+	if (trust != gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_OTRUST, NULL, 0))
+		seahorse_ops_key_set_trust (swidget->sctx, skey, trust);
 }
 
 static void
@@ -43,20 +49,29 @@ disabled_toggled (GtkToggleButton *togglebutton, SeahorseWidget *swidget)
 		gtk_toggle_button_get_active (togglebutton));
 }
 
-static GtkWidget*
-do_stat_label (const gchar *label, GtkTable *table, guint left, guint top)
+static void
+do_stat_label (const gchar *label, GtkTable *table, guint left, guint top,
+	       gboolean selectable, GtkTooltips *tips, const gchar *tip)
 {
-	GtkWidget *widget;
-	GtkWidget *align;
+	GtkWidget *widget, *align;
 	
 	widget = gtk_label_new (label);
 	gtk_label_set_justify (GTK_LABEL (widget), GTK_JUSTIFY_LEFT);
+	gtk_label_set_selectable (GTK_LABEL (widget), selectable);
+	
 	align = gtk_alignment_new (0, 0.5, 0, 0);
 	gtk_container_add (GTK_CONTAINER (align), widget);
-	gtk_table_attach (table, align, left, left+1, top, top+1, GTK_FILL, 0, 0, 0);
-	gtk_widget_show_all (align);
 	
-	return widget;
+	if (tip != NULL) {
+		widget = gtk_event_box_new ();
+		gtk_container_add (GTK_CONTAINER (widget), align);
+		gtk_tooltips_set_tip (tips, widget, tip, NULL);
+	}
+	else
+		widget = align;
+	
+	gtk_table_attach (table, widget, left, left+1, top, top+1, GTK_FILL, 0, 0, 0);
+	gtk_widget_show_all (widget);
 }
 
 static GtkWidget*
@@ -102,8 +117,9 @@ do_uids (SeahorseWidget *swidget)
 	nb = GTK_NOTEBOOK (gtk_notebook_new ());
 	gtk_container_set_border_width (GTK_CONTAINER (nb), SPACING);
 	widget = gtk_label_new (_("User IDs"));
-	gtk_notebook_insert_page (GTK_NOTEBOOK (glade_xml_get_widget (swidget->xml,
-		NOTEBOOK)), GTK_WIDGET (nb), widget, 1);
+	align = glade_xml_get_widget (swidget->xml, NOTEBOOK);
+	gtk_notebook_remove_page (GTK_NOTEBOOK (align), 1);
+	gtk_notebook_insert_page (GTK_NOTEBOOK (align), GTK_WIDGET (nb), widget, 1);
 	/* foreach uid */
 	for (uid = 0; uid < max; uid++) {
 		/* add notebook page */
@@ -293,45 +309,50 @@ do_stats (SeahorseWidget *swidget, GtkTable *table, guint top, guint index)
 	SeahorseKey *skey;
 	time_t expires;
 	GtkWidget *widget, *date_edit;
-	GtkTooltips *tooltips;
+	GtkTooltips *tips;
+	const gchar *str;
 	
 	skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
-	tooltips = gtk_tooltips_new ();
+	tips = gtk_tooltips_new ();
 	/* key id */
-	widget = do_stat_label (_("Key ID:"), table, 0, top);
-	gtk_label_set_selectable (GTK_LABEL (widget), TRUE);
-	widget = do_stat_label (seahorse_key_get_keyid (skey, index), table, 1, top);
-	gtk_label_set_selectable (GTK_LABEL (widget), TRUE);
+	do_stat_label (_("Key ID:"), table, 0, top, FALSE, tips, _("Key identifier"));
+	
+	do_stat_label (seahorse_key_get_keyid (skey, index), table, 1, top, TRUE,
+		tips, gpgme_key_get_string_attr (skey->key, GPGME_ATTR_KEYID, NULL, index));
 	/* type */
-	do_stat_label (_("Type:"), table, 2, top);
-	do_stat_label (gpgme_key_get_string_attr (skey->key, GPGME_ATTR_ALGO, NULL,
-		index), table, 3, top);
+	do_stat_label (_("Type:"), table, 2, top, FALSE, tips, _("Algorithm"));
+	str = gpgme_key_get_string_attr (skey->key, GPGME_ATTR_ALGO, NULL, index);
+	if (g_str_equal ("ElG", str))
+		str = "ElGamal";
+	do_stat_label (str, table, 3, top, FALSE, NULL, NULL);
 	/* created */
-	do_stat_label (_("Created:"), table, 0, top+1);
+	do_stat_label (_("Created:"), table, 0, top+1, FALSE, tips, _("Key creation date"));
 	do_stat_label (seahorse_util_get_date_string (gpgme_key_get_ulong_attr (
-		skey->key, GPGME_ATTR_CREATED, NULL, index)), table, 1, top+1);
+		skey->key, GPGME_ATTR_CREATED, NULL, index)), table, 1, top+1, FALSE, NULL, NULL);
 	/* length */
-	do_stat_label (_("Length:"), table, 2, top+1);
+	do_stat_label (_("Length:"), table, 2, top+1, FALSE, NULL, NULL);
 	do_stat_label (g_strdup_printf ("%d", gpgme_key_get_ulong_attr (skey->key,
-		GPGME_ATTR_LEN, NULL, index)), table, 3, top+1);
+		GPGME_ATTR_LEN, NULL, index)), table, 3, top+1, FALSE, NULL, NULL);
 	/* status */
-	do_stat_label (_("Status:"), table, 0, top+3);
+	do_stat_label (_("Status:"), table, 0, top+3, FALSE, NULL, NULL);
+	str = _("Good");
 	if (gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_KEY_REVOKED, NULL, index))
-		do_stat_label (_("Revoked"), table, 1, top+3);
+		str = _("Revoked");
 	else if (gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_KEY_EXPIRED, NULL, index))
-		do_stat_label (_("Expired"), table, 1, top+3);
+		str = _("Expired");
 	else
-		do_stat_label (_("Good"), table, 1, top+3);
+	do_stat_label (str, table, 1, top+3, FALSE, NULL, NULL);
 	/* expires */
-	do_stat_label (_("Expiration Date:"), table, 0, top+2);
+	do_stat_label (_("Expiration Date:"), table, 0, top+2, FALSE, NULL, NULL);
 	
 	expires = gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_EXPIRE, NULL, index);
 	
 	if (!SEAHORSE_IS_KEY_PAIR (skey)) {
 		if (expires)
-			do_stat_label (seahorse_util_get_date_string (expires), table, 1, top+2);
+			do_stat_label (seahorse_util_get_date_string (expires),
+				table, 1, top+2, FALSE, NULL, NULL);
 		else
-			do_stat_label (_("Never Expires"), table, 1, top+2);
+			do_stat_label (_("Never Expires"), table, 1, top+2, FALSE, NULL, NULL);
 	}
 	else {
 		date_edit = gnome_date_edit_new (expires, FALSE, FALSE);
@@ -348,7 +369,7 @@ do_stats (SeahorseWidget *swidget, GtkTable *table, guint top, guint index)
 		
 		widget = gtk_check_button_new_with_mnemonic (_("Never E_xpires"));
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), !expires);
-		gtk_tooltips_set_tip (tooltips, widget, _("If key never expires"), NULL);
+		gtk_tooltips_set_tip (tips, widget, _("If key never expires"), NULL);
 		gtk_widget_show (widget);
 		gtk_table_attach (table, widget, 3, 4, top+2, top+3, GTK_FILL, 0, 0, 0);
 		
@@ -408,7 +429,8 @@ do_subkeys (SeahorseWidget *swidget)
 			widget = do_stat_button (_("_Revoke"), GTK_STOCK_CANCEL);
 			g_signal_connect_after (GTK_BUTTON (widget), "clicked",
 				G_CALLBACK (revoke_subkey_clicked), swidget);
-			gtk_tooltips_set_tip (tips, widget, _("Revoke Key"), NULL);
+			gtk_tooltips_set_tip (tips, widget, g_strdup_printf (
+				_("Revoke subkey %d"), key), NULL);
 			gtk_table_attach (table, widget, 2, 3, 3, 4, GTK_FILL, 0, 0, 0);
 		}
 		
@@ -427,6 +449,8 @@ do_subkeys (SeahorseWidget *swidget)
 		g_signal_connect_after (GTK_BUTTON (widget), "clicked",
 			G_CALLBACK (del_subkey_clicked), swidget);
 		gtk_widget_show (widget);
+		gtk_tooltips_set_tip (tips, widget, g_strdup_printf (
+			_("Delete subkey %d"), key), NULL);
 		gtk_table_attach (table, widget, 3, 4, 3, 4, GTK_FILL, 0, 0, 0);
 	}
 }
@@ -457,22 +481,26 @@ seahorse_key_properties_new (SeahorseContext *sctx, SeahorseKey *skey)
 	
 	g_signal_connect_after (skey, "changed", G_CALLBACK (key_changed), swidget);
 	
-	widget = glade_xml_get_widget (swidget->xml, "fingerprint");
-	gtk_label_set_text (GTK_LABEL (widget),
-		gpgme_key_get_string_attr (skey->key, GPGME_ATTR_FPR, NULL, 0));
-	
-	widget = glade_xml_get_widget (swidget->xml, "trust");
-	gtk_option_menu_set_history (GTK_OPTION_MENU (widget), seahorse_key_get_trust (skey)-1);
-	
-	widget = glade_xml_get_widget (swidget->xml, "disabled");
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget),
-		gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_KEY_DISABLED, NULL, 0));
-	
 	do_stats (swidget, GTK_TABLE (glade_xml_get_widget (swidget->xml, "primary_table")), 2, 0);
 	do_uids (swidget);
 	do_subkeys (swidget);
 	
-	widget = glade_xml_get_widget (swidget->xml, swidget->name);
+	gtk_label_set_text (GTK_LABEL (glade_xml_get_widget (swidget->xml, "fingerprint")),
+		seahorse_key_get_fingerprint (skey));
+	
+	/* disable trust options */
+	if (SEAHORSE_IS_KEY_PAIR (skey))
+		widget = glade_xml_get_widget (swidget->xml, "unknown");
+	else
+		widget = glade_xml_get_widget (swidget->xml, "ultimate");
+	gtk_widget_set_sensitive (widget, FALSE);
+	
+	gtk_option_menu_set_history (GTK_OPTION_MENU (glade_xml_get_widget (swidget->xml, "trust")),
+		seahorse_key_get_trust (skey) - 1);
+	
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (glade_xml_get_widget (swidget->xml, "disabled")),
+		gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_KEY_DISABLED, NULL, 0));
+	
 	gtk_window_set_title (GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)),
 		g_strdup_printf (_("%s Properties"), seahorse_key_get_userid (skey, 0)));
 	

@@ -91,6 +91,10 @@ const gchar*		seahorse_key_get_keyid		(const SeahorseKey	*skey,
 const gchar*		seahorse_key_get_userid		(const SeahorseKey	*skey,
 							 const guint		index);
 
+const gchar*		seahorse_key_get_fingerprint	(const SeahorseKey	*skey);
+
+const gchar*		seahorse_key_get_id		(GpgmeKey		key);
+
 gboolean		seahorse_key_is_valid		(const SeahorseKey	*skey);
 
 gboolean		seahorse_key_can_encrypt	(const SeahorseKey	*skey);

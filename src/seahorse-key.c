@@ -273,6 +273,19 @@ seahorse_key_get_userid (const SeahorseKey *skey, const guint index)
 	return uid;
 }
 
+const gchar*
+seahorse_key_get_fingerprint (const SeahorseKey *skey)
+{
+	//need to format
+	return gpgme_key_get_string_attr (skey->key, GPGME_ATTR_FPR, NULL, 0);
+}
+
+const gchar*
+seahorse_key_get_id (GpgmeKey key)
+{
+	return gpgme_key_get_string_attr (key, GPGME_ATTR_FPR, NULL, 0);
+}
+
 gboolean
 seahorse_key_is_valid (const SeahorseKey *skey)
 {

@@ -203,7 +203,7 @@ seahorse_context_key_changed (SeahorseKey *skey, SeahorseKeyChange change, Seaho
 	
 	/* get key */
 	g_return_if_fail (gpgme_op_keylist_start (sctx->ctx,
-		gpgme_key_get_string_attr (skey->key, GPGME_ATTR_FPR, NULL, 0), FALSE) == GPGME_No_Error);
+		seahorse_key_get_id (skey->key), FALSE) == GPGME_No_Error);
 	g_return_if_fail (gpgme_op_keylist_next (sctx->ctx, &key) == GPGME_No_Error);
 	gpgme_op_keylist_end (sctx->ctx);
 	/* set key */
@@ -214,7 +214,7 @@ seahorse_context_key_changed (SeahorseKey *skey, SeahorseKeyChange change, Seaho
 		skpair = SEAHORSE_KEY_PAIR (skey);
 		/* get key */
 		g_return_if_fail (gpgme_op_keylist_start (sctx->ctx,
-			gpgme_key_get_string_attr (skey->key, GPGME_ATTR_FPR, NULL, 0), TRUE) == GPGME_No_Error);
+			seahorse_key_get_id (skey->key), TRUE) == GPGME_No_Error);
 		g_return_if_fail (gpgme_op_keylist_next (sctx->ctx, &key) == GPGME_No_Error);
 		gpgme_op_keylist_end (sctx->ctx);
 		/* set key */
@@ -373,8 +373,8 @@ do_key_pairs (SeahorseContext *sctx)
 				_("Processing key pair %d"), count), count/length);
 		
 		/* create new key pair */
-		if ((gpgme_op_keylist_start (sctx->ctx, gpgme_key_get_string_attr (
-		keys->data, GPGME_ATTR_FPR, NULL, 0), FALSE) == GPGME_No_Error) &&
+		if ((gpgme_op_keylist_start (sctx->ctx, seahorse_key_get_id (
+		keys->data), FALSE) == GPGME_No_Error) &&
 		(gpgme_op_keylist_next (sctx->ctx, &key) == GPGME_No_Error)) {
 			add_key_pair (sctx, key, keys->data);
 			gpgme_op_keylist_end (sctx->ctx);
@@ -437,8 +437,8 @@ do_key_list (SeahorseContext *sctx)
 		
 		/* if there are more secret keys left and key has a secret part */
 		if (secret_count && (gpgme_op_keylist_start (sctx->ctx,
-		gpgme_key_get_string_attr (keys->data, GPGME_ATTR_FPR, NULL, 0),
-		TRUE) == GPGME_No_Error) && (gpgme_op_keylist_next (sctx->ctx, &key) == GPGME_No_Error)) {
+		seahorse_key_get_id (keys->data), TRUE) == GPGME_No_Error) &&
+		(gpgme_op_keylist_next (sctx->ctx, &key) == GPGME_No_Error)) {
 			gpgme_key_unref (key);
 			gpgme_key_unref (keys->data);
 			secret_count--;
@@ -520,11 +520,11 @@ seahorse_context_get_key (SeahorseContext *sctx, GpgmeKey key)
 	g_return_val_if_fail (key != NULL, NULL);
 	
 	list = seahorse_context_get_keys (sctx);
-	id1 = gpgme_key_get_string_attr (key, GPGME_ATTR_FPR, NULL, 0);
+	id1 = seahorse_key_get_id (key);
 	
 	/* Search by keyid */
 	while (list != NULL && (skey = list->data) != NULL) {
-		id2 = gpgme_key_get_string_attr (skey->key, GPGME_ATTR_FPR, NULL, 0);
+		id2 = seahorse_key_get_id (skey->key);
 		
 		if (g_str_equal (id1, id2))
 			break;
@@ -623,8 +623,8 @@ seahorse_context_key_added (SeahorseContext *sctx)
 	/* add any new keys */
 	while (keys != NULL) {
 		/* if has secret part */
-		if ((gpgme_op_keylist_start (sctx->ctx, gpgme_key_get_string_attr (
-		keys->data, GPGME_ATTR_FPR, NULL, 0), TRUE) == GPGME_No_Error) &&
+		if ((gpgme_op_keylist_start (sctx->ctx, seahorse_key_get_id (
+		keys->data), TRUE) == GPGME_No_Error) &&
 		gpgme_op_keylist_next (sctx->ctx, &key) == GPGME_No_Error) {
 			add_key_pair (sctx, keys->data, key);
 			gpgme_op_keylist_end (sctx->ctx);
@@ -678,7 +678,7 @@ seahorse_context_set_default_key (SeahorseContext *sctx, SeahorseKeyPair *skpair
 	g_return_if_fail (skpair != NULL && SEAHORSE_IS_KEY_PAIR (skpair));
 	
 	gconf_client_set_string (sctx->priv->gclient, DEFAULT_KEY,
-		gpgme_key_get_string_attr (SEAHORSE_KEY (skpair)->key, GPGME_ATTR_FPR, NULL, 0), NULL);
+		seahorse_key_get_id (skpair->secret), NULL);
 }
 
 /**

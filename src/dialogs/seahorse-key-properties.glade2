@@ -47,58 +47,8 @@
 		  <property name="column_spacing">12</property>
 
 		  <child>
-		    <widget class="GtkLabel" id="label3">
-		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Fingerprint:</property>
-		      <property name="use_underline">False</property>
-		      <property name="use_markup">False</property>
-		      <property name="justify">GTK_JUSTIFY_LEFT</property>
-		      <property name="wrap">False</property>
-		      <property name="selectable">False</property>
-		      <property name="xalign">0</property>
-		      <property name="yalign">0.5</property>
-		      <property name="xpad">0</property>
-		      <property name="ypad">0</property>
-		    </widget>
-		    <packing>
-		      <property name="left_attach">0</property>
-		      <property name="right_attach">1</property>
-		      <property name="top_attach">0</property>
-		      <property name="bottom_attach">1</property>
-		      <property name="x_options">fill</property>
-		      <property name="y_options"></property>
-		    </packing>
-		  </child>
-
-		  <child>
-		    <widget class="GtkLabel" id="label5">
-		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Owner _Trust:</property>
-		      <property name="use_underline">True</property>
-		      <property name="use_markup">False</property>
-		      <property name="justify">GTK_JUSTIFY_LEFT</property>
-		      <property name="wrap">False</property>
-		      <property name="selectable">False</property>
-		      <property name="xalign">0</property>
-		      <property name="yalign">0.5</property>
-		      <property name="xpad">0</property>
-		      <property name="ypad">0</property>
-		      <property name="mnemonic_widget">trust</property>
-		    </widget>
-		    <packing>
-		      <property name="left_attach">0</property>
-		      <property name="right_attach">1</property>
-		      <property name="top_attach">1</property>
-		      <property name="bottom_attach">2</property>
-		      <property name="x_options">fill</property>
-		      <property name="y_options"></property>
-		    </packing>
-		  </child>
-
-		  <child>
 		    <widget class="GtkOptionMenu" id="trust">
 		      <property name="visible">True</property>
-		      <property name="tooltip" translatable="yes">Trust of give owner and his/her signatures</property>
 		      <property name="can_focus">True</property>
 		      <property name="history">0</property>
 		      <signal name="changed" handler="trust_changed" last_modification_time="Sat, 08 Mar 2003 02:36:28 GMT"/>
@@ -107,40 +57,45 @@
 			<widget class="GtkMenu" id="menu1">
 
 			  <child>
-			    <widget class="GtkMenuItem" id="unknown1">
+			    <widget class="GtkMenuItem" id="unknown">
 			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">Owner is unknown</property>
 			      <property name="label" translatable="yes">Unknown</property>
 			      <property name="use_underline">True</property>
 			    </widget>
 			  </child>
 
 			  <child>
-			    <widget class="GtkMenuItem" id="never1">
+			    <widget class="GtkMenuItem" id="never">
 			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">Never trust owner</property>
 			      <property name="label" translatable="yes">Never</property>
 			      <property name="use_underline">True</property>
 			    </widget>
 			  </child>
 
 			  <child>
-			    <widget class="GtkMenuItem" id="marginal1">
+			    <widget class="GtkMenuItem" id="marginal">
 			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">Marginally trust owner</property>
 			      <property name="label" translatable="yes">Marginal</property>
 			      <property name="use_underline">True</property>
 			    </widget>
 			  </child>
 
 			  <child>
-			    <widget class="GtkMenuItem" id="full1">
+			    <widget class="GtkMenuItem" id="full">
 			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">Fully trust owner</property>
 			      <property name="label" translatable="yes">Full</property>
 			      <property name="use_underline">True</property>
 			    </widget>
 			  </child>
 
 			  <child>
-			    <widget class="GtkMenuItem" id="ultimate1">
+			    <widget class="GtkMenuItem" id="ultimate">
 			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">Your personal key</property>
 			      <property name="label" translatable="yes">Ultimate</property>
 			      <property name="use_underline">True</property>
 			    </widget>
@@ -203,6 +158,69 @@
 		      <property name="bottom_attach">1</property>
 		      <property name="x_options">fill</property>
 		      <property name="y_options"></property>
+		    </packing>
+		  </child>
+
+		  <child>
+		    <widget class="GtkEventBox" id="eventbox1">
+		      <property name="visible">True</property>
+		      <property name="tooltip" translatable="yes">Trust placed in owner's ability to sign keys</property>
+
+		      <child>
+			<widget class="GtkLabel" id="label8">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">Owner _Trust:</property>
+			  <property name="use_underline">True</property>
+			  <property name="use_markup">False</property>
+			  <property name="justify">GTK_JUSTIFY_LEFT</property>
+			  <property name="wrap">False</property>
+			  <property name="selectable">False</property>
+			  <property name="xalign">0</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			  <property name="mnemonic_widget">trust</property>
+			</widget>
+		      </child>
+		    </widget>
+		    <packing>
+		      <property name="left_attach">0</property>
+		      <property name="right_attach">1</property>
+		      <property name="top_attach">1</property>
+		      <property name="bottom_attach">2</property>
+		      <property name="x_options">fill</property>
+		      <property name="y_options">fill</property>
+		    </packing>
+		  </child>
+
+		  <child>
+		    <widget class="GtkEventBox" id="eventbox2">
+		      <property name="visible">True</property>
+		      <property name="tooltip" translatable="yes">Unique key identifier</property>
+
+		      <child>
+			<widget class="GtkLabel" id="label9">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">Fingerprint:</property>
+			  <property name="use_underline">False</property>
+			  <property name="use_markup">False</property>
+			  <property name="justify">GTK_JUSTIFY_LEFT</property>
+			  <property name="wrap">False</property>
+			  <property name="selectable">False</property>
+			  <property name="xalign">0</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+		      </child>
+		    </widget>
+		    <packing>
+		      <property name="left_attach">0</property>
+		      <property name="right_attach">1</property>
+		      <property name="top_attach">0</property>
+		      <property name="bottom_attach">1</property>
+		      <property name="x_options">fill</property>
+		      <property name="y_options">fill</property>
 		    </packing>
 		  </child>
 		</widget>
