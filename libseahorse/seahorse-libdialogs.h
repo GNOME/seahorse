@@ -19,30 +19,15 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <config.h>
-#include <gnome.h>
+#ifndef __SEAHORSE_LIBDIALOGS_H__
+#define __SEAHORSE_LIBDIALOGS_H__
+
+#include <glib.h>
 
 #include "seahorse-context.h"
-#include "seahorse-windows.h"
 
-/* Initializes context and preferences, then loads key manager */
-int
-main (int argc, char **argv)
-{
-	SeahorseContext *sctx;
+const gchar*	seahorse_passphrase_get	(SeahorseContext	*sctx,
+					 const gchar		*desc,
+					 gpointer		*data);
 
-#ifdef ENABLE_NLS	
-	bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
-	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
-	textdomain (GETTEXT_PACKAGE);
-#endif
-
-	gnome_program_init (PACKAGE, VERSION, LIBGNOMEUI_MODULE,
-		argc, argv, GNOME_PARAM_APP_DATADIR, DATA_DIR, NULL);
-	
-	sctx = seahorse_context_new ();
-	seahorse_key_manager_show (sctx);
-	gtk_main ();
-	
-	return 0;
-}
+#endif /* __SEAHORSE_LIBDIALOGS_H__ */

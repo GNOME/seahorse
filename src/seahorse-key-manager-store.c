@@ -195,8 +195,8 @@ seahorse_key_manager_store_changed (SeahorseKey *skey, SeahorseKeyChange change,
 				    SeahorseKeyStore *skstore, GtkTreeIter *iter)
 {
 	switch (change) {
-		case SKEY_CHANGE_TRUST: case SKEY_CHANGE_EXPIRE:
-		case SKEY_CHANGE_DISABLE:
+		case SKEY_CHANGE_TRUST: case SKEY_CHANGE_EXPIRES:
+		case SKEY_CHANGE_DISABLED:
 			SEAHORSE_KEY_STORE_GET_CLASS (skstore)->set (
 				GTK_TREE_STORE (skstore), iter, skey);
 			break;

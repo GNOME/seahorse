@@ -1,14 +1,30 @@
-SUBDIRS = dialogs
-
 gladedir = $(datadir)/seahorse/glade/
 localedir = $(datadir)/locale
 pixmapsdir = $(datadir)/pixmaps/
 
 bin_PROGRAMS = seahorse
 
+seahorse_SOURCES = main.c \
+	seahorse-key-widget.c seahorse-key-widget.h \
+	seahorse-key-manager-store.c seahorse-key-manager-store.h \
+	seahorse-key-op.c seahorse-key-op.h \
+	seahorse-preferences.c seahorse-preferences.h \
+	seahorse-key-manager.c \
+	seahorse-generate.c \
+	seahorse-import.c \
+	seahorse-export.c \
+	seahorse-windows.h \
+	seahorse-key-properties.c \
+	seahorse-revoke.c \
+	seahorse-sign.c \
+	seahorse-delete.c \
+	seahorse-add-uid.c \
+	seahorse-add-subkey.c \
+	seahorse-key-dialogs.h
+
 INCLUDES = -I$(top_builddir) \
 	-I$(top_srcdir) \
-	-I$(srcdir)/dialogs \
+	-I$(top_srcdir)/libseahorse \
 	$(SEAHORSE_CFLAGS) \
 	-DDATA_DIR=\""$(datadir)"\" \
 	-DSEAHORSE_GLADEDIR=\""$(gladedir)"\" \
@@ -16,43 +32,20 @@ INCLUDES = -I$(top_builddir) \
 	-DPIXMAPSDIR=\""$(pixmapsdir)"\"
 
 seahorse_LDADD = \
-	dialogs/libdialogs.a \
+	$(top_builddir)/libseahorse/libseahorse.a \
 	$(SEAHORSE_LIBS)
 
-BUILT_SOURCES = \
-	seahorse-marshal.c seahorse-marshal.h
+glade_DATA = \
+	seahorse-key-manager.glade \
+	seahorse-key-properties.glade \
+	seahorse-revoke.glade \
+	seahorse-change-passphrase.glade \
+	seahorse-sign.glade \
+	seahorse-import.glade \
+	seahorse-export.glade \
+	seahorse-generate.glade \
+	seahorse-preferences.glade \
+	seahorse-add-uid.glade \
+	seahorse-add-subkey.glade
 
-seahorse_SOURCES = main.c \
-	seahorse-key.c seahorse-key.h \
-	seahorse-key-pair.c seahorse-key-pair.h \
-	seahorse-context.c seahorse-context.h \
-	seahorse-widget.c seahorse-widget.h \
-	seahorse-key-manager.c seahorse-key-manager.h \
-	seahorse-util.c seahorse-util.h \
-	seahorse-key-widget.c seahorse-key-widget.h \
-	seahorse-ops-data.c seahorse-ops-data.h \
-	seahorse-ops-text.c seahorse-ops-text.h \
-	seahorse-ops-file.c seahorse-ops-file.h \
-	seahorse-ops-key.c seahorse-ops-key.h \
-	seahorse-text-editor.c seahorse-text-editor.h \
-	seahorse-validity.c seahorse-validity.h \
-	seahorse-key-store.c seahorse-key-store.h \
-	seahorse-key-manager-store.c seahorse-key-manager-store.h \
-	seahorse-recipients-store.c seahorse-recipients-store.h \
-	seahorse-encrypt-recipients-store.c seahorse-encrypt-recipients-store.h \
-	seahorse-signer-menu.c seahorse-signer-menu.h \
-	seahorse-signer-menu-item.c seahorse-signer-menu-item.h \
-	$(BUILT_SOURCES)
-
-seahorse-marshal.h: seahorse-marshal.list $(GLIB_GENMARSHAL)
-	$(GLIB_GENMARSHAL) $< --header --prefix=seahorse_marshal > $@
-
-seahorse-marshal.c: seahorse-marshal.list $(GLIB_GENMARSHAL)
-	echo "#include \"seahorse-marshal.h\"" > $@ && \
-	$(GLIB_GENMARSHAL) $< --body --prefix=seahorse_marshal >> $@
-
-glade_DATA = seahorse-key-manager.glade2 \
-	seahorse-text-editor.glade2
-
-EXTRA_DIST = $(glade_DATA) \
-	seahorse-marshal.list
+EXTRA_DIST = $(glade_DATA)

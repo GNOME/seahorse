@@ -19,30 +19,21 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <config.h>
-#include <gnome.h>
+#ifndef __SEAHORSE_VALIDITY_H__
+#define __SEAHORSE_VALIDITY_H__
 
-#include "seahorse-context.h"
-#include "seahorse-windows.h"
+#include <gtk/gtk.h>
 
-/* Initializes context and preferences, then loads key manager */
-int
-main (int argc, char **argv)
-{
-	SeahorseContext *sctx;
+typedef enum {
+	SEAHORSE_VALIDITY_REVOKED = -2,
+	SEAHORSE_VALIDITY_DISABLED = -1,
+	SEAHORSE_VALIDITY_UNKNOWN = 1,
+	SEAHORSE_VALIDITY_NEVER = 2,
+	SEAHORSE_VALIDITY_MARGINAL = 3,
+	SEAHORSE_VALIDITY_FULL = 4,
+	SEAHORSE_VALIDITY_ULTIMATE = 5
+} SeahorseValidity;
 
-#ifdef ENABLE_NLS	
-	bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
-	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
-	textdomain (GETTEXT_PACKAGE);
-#endif
+const gchar*	seahorse_validity_get_string	(SeahorseValidity	validity);
 
-	gnome_program_init (PACKAGE, VERSION, LIBGNOMEUI_MODULE,
-		argc, argv, GNOME_PARAM_APP_DATADIR, DATA_DIR, NULL);
-	
-	sctx = seahorse_context_new ();
-	seahorse_key_manager_show (sctx);
-	gtk_main ();
-	
-	return 0;
-}
+#endif /* __SEAHORSE_VALIDITY_H__ */

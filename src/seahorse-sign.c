@@ -1,0 +1,99 @@
+/*
+ * Seahorse
+ *
+ * Copyright (C) 2003 Jacob Perkins
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the
+ * Free Software Foundation, Inc.,
+ * 59 Temple Place, Suite 330,
+ * Boston, MA 02111-1307, USA.
+ */
+
+#include <gnome.h>
+
+#include "seahorse-windows.h"
+#include "seahorse-key-widget.h"
+#include "seahorse-key-op.h"
+#include "seahorse-util.h"
+
+static void
+ok_clicked (GtkButton *button, SeahorseWidget *swidget)
+{
+	SeahorseKeyWidget *skwidget;
+	SeahorseSignCheck check;
+	SeahorseSignOptions options = 0;
+	GpgmeError err;
+	
+	skwidget = SEAHORSE_KEY_WIDGET (swidget);
+	
+	check = gtk_option_menu_get_history (GTK_OPTION_MENU (
+		glade_xml_get_widget (swidget->xml, "checked")));
+	/* get local option */
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (
+	glade_xml_get_widget (swidget->xml, "local"))))
+		options = options | SIGN_LOCAL;
+	/* get revoke option */
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (
+	glade_xml_get_widget (swidget->xml, "revocable"))))
+		options = options | SIGN_NO_REVOKE;
+	/* get expires option */
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (
+	glade_xml_get_widget (swidget->xml, "expires"))))
+		options = options | SIGN_EXPIRES;
+	
+	err = seahorse_key_op_sign (swidget->sctx, skwidget->skey, skwidget->index, check, options);
+	seahorse_widget_destroy (swidget);
+}
+
+void
+seahorse_sign_show (SeahorseContext *sctx, GList *keys)
+{
+	GtkWidget *question;
+	gint response;
+	GList *list = NULL;
+	SeahorseKey *skey;
+	SeahorseWidget *swidget;
+	gboolean do_sign = TRUE;
+	
+	for (list = keys; list != NULL; list = g_list_next (keys)) {
+		skey = list->data;
+		
+		question = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
+			GTK_MESSAGE_QUESTION, GTK_BUTTONS_YES_NO,
+			_("Are you sure you want to sign all user IDs for %s?"),
+			seahorse_key_get_keyid (skey, 0));
+		response = gtk_dialog_run (GTK_DIALOG (question));
+		gtk_widget_destroy (question);
+		
+		if (response != GTK_RESPONSE_YES)
+			break;
+		
+		swidget = seahorse_key_widget_new_with_index ("sign", sctx, skey, 0);
+		g_return_if_fail (swidget != NULL);
+		
+		while (do_sign) {
+			response = gtk_dialog_run (GTK_DIALOG (
+				glade_xml_get_widget (swidget->xml, swidget->name)));
+			switch (response) {
+				case GTK_RESPONSE_HELP:
+					break;
+				case GTK_RESPONSE_OK:
+					ok_clicked (NULL, swidget);
+					break;
+				default:
+					do_sign = FALSE;
+					break;
+			}
+		}
+	}
+}

@@ -19,30 +19,17 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <config.h>
-#include <gnome.h>
+#ifndef __SEAHORSE_MARSHAL_H__
+#define __SEAHORSE_MARSHAL_H__
 
-#include "seahorse-context.h"
-#include "seahorse-windows.h"
+#include <glib-object.h>
 
-/* Initializes context and preferences, then loads key manager */
-int
-main (int argc, char **argv)
-{
-	SeahorseContext *sctx;
+extern void seahorse_marshal_VOID__STRING_DOUBLE (GClosure	*closure,
+						  GValue	*return_value,
+						  guint		n_param_values,
+						  const GValue	*param_values,
+						  gpointer	invocation_hint,
+						  gpointer	marshal_data);
 
-#ifdef ENABLE_NLS	
-	bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
-	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
-	textdomain (GETTEXT_PACKAGE);
-#endif
+#endif /* __SEAHORSE_MARSHAL_H__ */
 
-	gnome_program_init (PACKAGE, VERSION, LIBGNOMEUI_MODULE,
-		argc, argv, GNOME_PARAM_APP_DATADIR, DATA_DIR, NULL);
-	
-	sctx = seahorse_context_new ();
-	seahorse_key_manager_show (sctx);
-	gtk_main ();
-	
-	return 0;
-}

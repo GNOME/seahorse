@@ -19,30 +19,20 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <config.h>
-#include <gnome.h>
+#ifndef __SEAHORSE_PREFERENCES_H__
+#define __SEAHORSE_PREFERENCES_H__
 
 #include "seahorse-context.h"
-#include "seahorse-windows.h"
 
-/* Initializes context and preferences, then loads key manager */
-int
-main (int argc, char **argv)
-{
-	SeahorseContext *sctx;
+#define KEY_UI SCHEMA_ROOT "/ui"
+#define KEY_TOOLBAR_STYLE KEY_UI "/toolbar_style"
 
-#ifdef ENABLE_NLS	
-	bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
-	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
-	textdomain (GETTEXT_PACKAGE);
-#endif
+#define TOOLBAR_DEFAULT "default"
+#define TOOLBAR_BOTH "both"
+#define TOOLBAR_BOTH_HORIZ "both_horiz"
+#define TOOLBAR_ICONS "icons"
+#define TOOLBAR_TEXT "text"
 
-	gnome_program_init (PACKAGE, VERSION, LIBGNOMEUI_MODULE,
-		argc, argv, GNOME_PARAM_APP_DATADIR, DATA_DIR, NULL);
-	
-	sctx = seahorse_context_new ();
-	seahorse_key_manager_show (sctx);
-	gtk_main ();
-	
-	return 0;
-}
+void		seahorse_preferences_show		(SeahorseContext	*sctx);
+
+#endif /* __SEAHORSE_PREFERENCES_H__ */
