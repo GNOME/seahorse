@@ -1,16 +1,16 @@
 # Czech translation of seahorse
 # Copyright (C) 1996, 2003 Free Software Foundation, Inc.
-# Copyright (C) 2004 Miloslav Trmac <mitr@volny.cz>
+# Copyright (C) 2004, 2005 Miloslav Trmac <mitr@volny.cz>
 # Petr Domansky <doman@atlas.cz>, 2000.
 # Michal Bukovjan <bukm@centrum.cz>, 2003
-# Miloslav Trmac <mitr@volny.cz>, 2003, 2004.
+# Miloslav Trmac <mitr@volny.cz>, 2003, 2004, 2005.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-24 19:39+0100\n"
-"PO-Revision-Date: 2004-12-25 15:56+0100\n"
+"POT-Creation-Date: 2005-01-09 11:26+0100\n"
+"PO-Revision-Date: 2005-01-09 14:59+0100\n"
 "Last-Translator: Miloslav Trmac <mitr@volny.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -462,6 +462,21 @@ msgstr "Jméno"
 msgid "Key ID"
 msgstr "ID klíče"
 
+#: libseahorse/seahorse-ldap-source.c:651
+#, c-format
+msgid "Searching for keys containing '%s'..."
+msgstr "Hledám klíče obsahující '%s'..."
+
+#. TODO: We can update a percentage when there's more than one key
+#: libseahorse/seahorse-ldap-source.c:825
+msgid "Retrieving remote keys..."
+msgstr "Stahuji vzdálené klíče..."
+
+#. TODO: We can update a percentage when there's more than one key
+#: libseahorse/seahorse-ldap-source.c:950
+msgid "Sending keys to key server..."
+msgstr "Odesílám klíče na server klíčů..."
+
 #: libseahorse/seahorse-passphrase.c:61
 #, c-format
 msgid "Bad passphrase! Try again for '%s'"
@@ -630,13 +645,42 @@ msgstr[0] "Vybrán %d klíč"
 msgstr[1] "Vybrány %d klíče"
 msgstr[2] "Vybráno %d klíčů"
 
-#: libseahorse/seahorse-recipients.c:59 libseahorse/seahorse-recipients.c:63
+#: libseahorse/seahorse-recipients.c:58
 #, c-format
 msgid "Selected %d not fully valid key"
-msgid_plural "Selected %d keys (%d not fully valid)"
+msgid_plural "Selected %d not fully valid keys"
 msgstr[0] "Vybrán %d neúplně platný klíč"
-msgstr[1] "Vybráno %d klíčů (%d neúplně platné)"
-msgstr[2] "Vybráno %d klíčů (%d neúplně platných)"
+msgstr[1] "Vybrány %d neúplně platné klíče"
+msgstr[2] "Vybráno %d neúplně platných klíčů"
+
+#. TRANSLATOR: This string will become
+#. * "Selected %d keys and (%d not fully valid)"
+#: libseahorse/seahorse-recipients.c:66
+#, c-format
+msgid "Selected %d key "
+msgid_plural "Selected %d keys "
+msgstr[0] "Vybrán %d klíč "
+msgstr[1] "Vybrány %d klíče "
+msgstr[2] "Vybráno %d klíčů "
+
+#. TRANSLATOR: This string will become
+#. * "Selected %d keys and (%d not fully valid)"
+#: libseahorse/seahorse-recipients.c:71
+#, c-format
+msgid "(%d not fully valid)"
+msgid_plural "(%d not fully valid)"
+msgstr[0] "(%d neúplně platný)"
+msgstr[1] "(%d neúplně platné)"
+msgstr[2] "(%d neúplně platných)"
+
+#. TRANSLATOR: "%s%s" are "Selected %d keys and (%d not fully valid)"
+#. * Swap order with "%2$s%1$s" if needed
+#. TRANSLATOR: "%s%s" are "You have selected %d files and %d folders"
+#. * Swap order with "%2$s%1$s" if needed
+#: libseahorse/seahorse-recipients.c:76 src/seahorse-process-multiple.c:58
+#, c-format
+msgid "%s%s"
+msgstr "%s%s"
 
 #: libseahorse/seahorse-recipients.glade.h:2
 msgid ""
@@ -1972,33 +2016,33 @@ msgstr "Nastavení Seahorse"
 msgid "Visible Columns"
 msgstr "Viditelné sloupce"
 
-#: src/seahorse-process-multiple.c:46
-#, c-format
-msgid "You have selected %d files and %d folders"
-msgstr "Vybrali jste %d souborů a %d adresářů"
-
+#. TRANSLATOR: This string will become
+#. * "You have selected %d files and %d folders"
 #: src/seahorse-process-multiple.c:48
 #, c-format
-msgid "You have selected %d files and %d folder"
-msgstr "Vybrali jste %d souborů a %d adresář"
+msgid "You have selected %d file "
+msgid_plural "You have selected %d files "
+msgstr[0] "Vybrali jste %d soubor "
+msgstr[1] "Vybrali jste %d soubory "
+msgstr[2] "Vybrali jste %d souborů "
 
-#: src/seahorse-process-multiple.c:50
+#. TRANSLATOR: This string will become
+#. * "You have selected %d files and %d folders"
+#: src/seahorse-process-multiple.c:53
 #, c-format
-msgid "You have selected %d file and %d folders"
-msgstr "Vybrali jste %d soubor a %d adresář"
-
-#: src/seahorse-process-multiple.c:52
-#, c-format
-msgid "You have selected %d file and %d folder"
-msgstr "Vybrali jste %d soubor a %d adresář"
+msgid "and %d folder"
+msgid_plural "and %d folders"
+msgstr[0] "a %d adresář"
+msgstr[1] "a %d adresáře"
+msgstr[2] "a %d adresářů"
 
 #. should never be called for just one file
-#: src/seahorse-process-multiple.c:58
+#: src/seahorse-process-multiple.c:66
 #, c-format
 msgid "You have selected %d files"
 msgstr "Vybrali jste %d souborů"
 
-#: src/seahorse-process-multiple.c:62
+#: src/seahorse-process-multiple.c:70
 #, c-format
 msgid "You have selected %d folder"
 msgid_plural "You have selected %d folders"
@@ -2173,9 +2217,6 @@ msgstr "Správa vašich klíčů GPG"
 
 #~ msgid "Load Cancelled"
 #~ msgstr "Načítání přerušeno"
-
-#~ msgid "Searching for remote keys..."
-#~ msgstr "Hledám vzdálené klíče..."
 
 #~ msgid "Operation complete"
 #~ msgstr "Operace dokončena"
