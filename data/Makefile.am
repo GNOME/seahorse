@@ -1,9 +1,10 @@
-schemasdir = $(sysconfdir)/gconf/schemas
+schemas_dir = $(GCONF_SCHEMA_FILE_DIR)
 schemas_in_files = seahorse.schemas.in
 schemas_DATA = $(schemas_in_files:.schemas.in=.schemas)
 
 @INTLTOOL_SCHEMAS_RULE@
 
+if GCONF_SCHEMAS_INSTALL
 install-data-local:
 	@GCONF_CONFIG_SOURCE=$(GCONF_SCHEMA_CONFIG_SOURCE) gconftool-2 \
 		--makefile-install-rule $(schemas_DATA) || \
@@ -12,6 +13,9 @@ install-data-local:
 		echo "Installation of schemas failed, install them manually"; \
 		echo "*****************************************************";)
 	@true
+else
+install-data-local:
+endif
 
 @INTLTOOL_DESKTOP_RULE@
 
