@@ -143,7 +143,31 @@ seahorse_recipients_get_property (GObject *object, guint prop_id, GValue *value,
 	}
 }
 
-/* Moves key iter from right (non-recips) to left (recips) */
+static void
+transfer (SeahorseKeyStore *lhs, SeahorseKeyStore *rhs, GtkTreeView *view, GtkTreePath *path)
+{
+	SeahorseKey *skey;
+	
+	skey = seahorse_key_store_get_key_from_path (view, path);
+	seahorse_key_store_remove (lhs, path);
+	seahorse_key_store_append (rhs, skey);
+}
+
+static void
+set_all_buttons (SeahorseWidget *swidget)
+{
+	SeahorseRecipients *srecips;
+	GtkTreeIter iter;
+	
+	srecips = SEAHORSE_RECIPIENTS (swidget);
+	
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "add_all"),
+		gtk_tree_model_get_iter_first (GTK_TREE_MODEL (srecips->all_keys), &iter));
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "remove_all"),
+		gtk_tree_model_get_iter_first (GTK_TREE_MODEL (srecips->recipient_keys), &iter));
+}
+
+/* Moves key iter from right (non-recips) to left (recips) *
 static void
 add_recip (SeahorseWidget *swidget, GtkTreePath *path)
 {
@@ -158,7 +182,7 @@ add_recip (SeahorseWidget *swidget, GtkTreePath *path)
 		glade_xml_get_widget (swidget->xml, ALL)), path);
 	
 	validity = gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_VALIDITY, NULL, 0);
-	/* Check if need key to be fully valid */
+	/* Check if need key to be fully valid *
 	if (srecips->need_validity && validity < GPGME_VALIDITY_FULL) {
 		question = gtk_message_dialog_new (
 			GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)),
@@ -170,7 +194,7 @@ add_recip (SeahorseWidget *swidget, GtkTreePath *path)
 		response = gtk_dialog_run (GTK_DIALOG (question));
 		gtk_widget_destroy (question);
 		
-		/* If don't want key, return */
+		/* If don't want key, return *
 		if (response != GTK_RESPONSE_YES)
 			return;
 	}
@@ -184,7 +208,7 @@ add_recip (SeahorseWidget *swidget, GtkTreePath *path)
 	seahorse_ops_key_recips_add (srecips->recips, skey);
 }
 
-/* Moves key from left (recips) to right (non-recips) */
+/* Moves key from left (recips) to right (non-recips) *
 static void
 remove_recip (SeahorseWidget *swidget, GtkTreePath *path)
 {
@@ -201,7 +225,7 @@ remove_recip (SeahorseWidget *swidget, GtkTreePath *path)
 	
 	model = GTK_TREE_MODEL (srecips->recipient_keys);
 	
-	/* Need to rebuild recipients */
+	/* Need to rebuild recipients *
 	gpgme_recipients_release (srecips->recips);
 	g_return_if_fail (gpgme_recipients_new (&(srecips->recips)) == GPGME_No_Error);
 	
@@ -217,51 +241,114 @@ remove_recip (SeahorseWidget *swidget, GtkTreePath *path)
 	if (gpgme_recipients_count (srecips->recips) == 0)
 		gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "ok"), FALSE);
 }
-
+*/
 /* Add recipient button clicked */
 static void
 add_clicked (GtkButton *button, SeahorseWidget *swidget)
 {
-	add_recip (swidget, seahorse_key_store_get_selected_path (
-		GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, ALL))));
+	GtkTreeSelection *selection;
+	GList *list = NULL;
+	SeahorseRecipients *srecips;
+	GtkTreeView *view;
+	
+	view = GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, ALL));
+	selection = gtk_tree_view_get_selection (view);
+	list = gtk_tree_selection_get_selected_rows (selection, NULL);
+	srecips = SEAHORSE_RECIPIENTS (swidget);
+	
+	while (list != NULL) {
+		transfer (srecips->all_keys, srecips->recipient_keys, view, list->data);
+		gtk_tree_path_free (list->data);
+		list = g_list_next (list);
+	}
+	g_list_free (list);
+	
+	set_all_buttons (swidget);
 }
 
 /* Remove recipient button clicked */
 static void
 remove_clicked (GtkButton *button, SeahorseWidget *swidget)
 {
-	remove_recip (swidget, seahorse_key_store_get_selected_path (
-		GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, RECIPIENTS))));
+	GtkTreeSelection *selection;
+	GList *list = NULL;
+	SeahorseRecipients *srecips;
+	GtkTreeView *view;
+	
+	view = GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, RECIPIENTS));
+	selection = gtk_tree_view_get_selection (view);
+	list = gtk_tree_selection_get_selected_rows (selection, NULL);
+	srecips = SEAHORSE_RECIPIENTS (swidget);
+	
+	while (list != NULL) {
+		transfer (srecips->recipient_keys, srecips->all_keys, view, list->data);
+		list = g_list_next (list);
+	}
+	g_list_free (list);
+	
+	set_all_buttons (swidget);
 }
 
 /* Right (non-recip) key activated */
 static void
 add_row_activated (GtkTreeView *view, GtkTreePath *path,
-		   GtkTreeViewColumn *arg2, SeahorseWidget *swidget)
+		   GtkTreeViewColumn *arg2, SeahorseRecipients *srecips)
 {
-	add_recip (swidget, path);
+	transfer (srecips->all_keys, srecips->recipient_keys, view, path);
+	set_all_buttons (SEAHORSE_WIDGET (srecips));
 }
 
 /* Left (recip) key activated */
 static void
 remove_row_activated (GtkTreeView *view, GtkTreePath *path,
-		      GtkTreeViewColumn *arg2, SeahorseWidget *swidget)
+		      GtkTreeViewColumn *arg2, SeahorseRecipients *srecips)
 {
-	remove_recip (swidget, path);
+	transfer (srecips->recipient_keys, srecips->all_keys, view, path);
+	set_all_buttons (SEAHORSE_WIDGET (srecips));
+}
+
+static gboolean
+add_all_foreach (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, SeahorseWidget *swidget)
+{
+	SeahorseRecipients *srecips;
+	
+	srecips = SEAHORSE_RECIPIENTS (swidget);
+	transfer (srecips->all_keys, srecips->recipient_keys, GTK_TREE_VIEW (
+		glade_xml_get_widget (swidget->xml, ALL)), path);
+	return FALSE;
 }
 
 static void
-all_keys_selection_changed (GtkTreeSelection *selection, SeahorseWidget *swidget)
+add_all_clicked (GtkButton *button, SeahorseWidget *swidget)
 {
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "add"),
-		gtk_tree_selection_get_selected (selection, NULL, NULL));
+	gtk_tree_model_foreach (GTK_TREE_MODEL (SEAHORSE_RECIPIENTS (swidget)->all_keys),
+		(GtkTreeModelForeachFunc)add_all_foreach, swidget);
+	set_all_buttons (swidget);
+}
+
+static gboolean
+remove_all_foreach (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, SeahorseWidget *swidget)
+{
+	SeahorseRecipients *srecips;
+	
+	srecips = SEAHORSE_RECIPIENTS (swidget);
+	transfer (srecips->recipient_keys, srecips->all_keys, GTK_TREE_VIEW (
+		glade_xml_get_widget (swidget->xml, RECIPIENTS)), path);
+	return FALSE;
 }
 
 static void
-recips_keys_selection_changed (GtkTreeSelection *selection, SeahorseWidget *swidget)
+remove_all_clicked (GtkButton *button, SeahorseWidget *swidget)
 {
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "remove"),
-		gtk_tree_selection_get_selected (selection, NULL, NULL));
+	gtk_tree_model_foreach (GTK_TREE_MODEL (SEAHORSE_RECIPIENTS (swidget)->recipient_keys),
+		(GtkTreeModelForeachFunc)remove_all_foreach, swidget);
+	set_all_buttons (swidget);
+}
+
+static void
+selection_changed (GtkTreeSelection *selection, GtkWidget *widget)
+{
+	gtk_widget_set_sensitive (widget, gtk_tree_selection_count_selected_rows (selection) > 0);
 }
 
 /* Creates a new #SeahorseRecipients given @sctx and whether doing
@@ -288,6 +375,10 @@ seahorse_recipients_new (SeahorseContext *sctx, gboolean use_encrypt)
 		G_CALLBACK (add_row_activated), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "remove_row_activated",
 		G_CALLBACK (remove_row_activated), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "add_all_clicked",
+		G_CALLBACK (add_all_clicked), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "remove_all_clicked",
+		G_CALLBACK (remove_all_clicked), swidget);
 	
 	all_keys = GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, ALL));
 	recips_keys = GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, RECIPIENTS));
@@ -305,11 +396,13 @@ seahorse_recipients_new (SeahorseContext *sctx, gboolean use_encrypt)
 	gtk_widget_show_all (glade_xml_get_widget (swidget->xml, swidget->name));
 	/* listen to selection change */
 	selection = gtk_tree_view_get_selection (all_keys);
-	g_signal_connect_after (selection, "changed",
-		G_CALLBACK (all_keys_selection_changed), swidget);
+	gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
+	g_signal_connect_after (selection, "changed", G_CALLBACK (selection_changed),
+		glade_xml_get_widget (swidget->xml, "add"));
 	selection = gtk_tree_view_get_selection (recips_keys);
-	g_signal_connect_after (selection, "changed",
-		G_CALLBACK (recips_keys_selection_changed), swidget);
+	gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
+	g_signal_connect_after (selection, "changed", G_CALLBACK (selection_changed),
+		glade_xml_get_widget (swidget->xml, "remove"));
 
 	return swidget;
 }

@@ -45,11 +45,11 @@ seahorse_SOURCES = main.c \
 	$(BUILT_SOURCES)
 
 seahorse-marshal.h: seahorse-marshal.list $(GLIB_GENMARSHAL)
-	$(GLIB_GENMARSHAL) $< --header --prefix=seahorse-marshal > $@
+	$(GLIB_GENMARSHAL) $< --header --prefix=seahorse_marshal > $@
 
 seahorse-marshal.c: seahorse-marshal.list $(GLIB_GENMARSHAL)
 	echo "#include \"seahorse-marshal.h\"" > $@ && \
-	$(GLIB_GENMARSHAL) $< --body --prefix=seahorse-marshal >> $@
+	$(GLIB_GENMARSHAL) $< --body --prefix=seahorse_marshal >> $@
 
 glade_DATA = seahorse-key-manager.glade2 \
 	seahorse-text-editor.glade2

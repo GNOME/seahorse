@@ -119,6 +119,8 @@ do_uids (SeahorseWidget *swidget)
 	
 	if (max > 1) {
 		nb = GTK_NOTEBOOK (gtk_notebook_new ());
+		gtk_notebook_set_scrollable (nb, TRUE);
+		gtk_notebook_popup_enable (nb);
 		gtk_widget_show (GTK_WIDGET (nb));
 		gtk_container_set_border_width (GTK_CONTAINER (nb), SPACING);
 		gtk_notebook_insert_page (GTK_NOTEBOOK (widget), GTK_WIDGET (nb),
