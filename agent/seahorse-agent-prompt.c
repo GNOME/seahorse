@@ -112,7 +112,7 @@ constrain_size (GtkWidget *win, GtkRequisition *req, gpointer data)
 static void
 prompt_done_dialog (SeahorseAgentPassReq *pr, gboolean ok)
 {
-    const gchar *pass;
+    const gchar *pass = NULL;
     
     g_assert (g_current_win);
     gtk_widget_destroy (g_current_win);
