@@ -379,6 +379,7 @@ seahorse_prefs_new (SeahorseContext *sctx)
     /* To suppress warnings */
     removed = 0;
     
+    seahorse_widget_show (swidget);
     return swidget;
 }
 

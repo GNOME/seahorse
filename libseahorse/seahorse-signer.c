@@ -64,7 +64,9 @@ seahorse_signer_get (SeahorseContext *sctx)
     seahorse_default_key_control_select_id (sdkc, id);
     g_free (id); 
     
-	widget = glade_xml_get_widget (swidget->xml, swidget->name);
+	widget = seahorse_widget_get_top (swidget);
+    seahorse_widget_show (swidget);
+    
 	while (!done) {
 		response = gtk_dialog_run (GTK_DIALOG (widget));
 		switch (response) {

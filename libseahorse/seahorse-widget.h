@@ -52,16 +52,18 @@ struct _SeahorseWidgetClass
 	GObjectClass	parent_class;
 };
 
-GType           seahorse_widget_get_type ();
+GType            seahorse_widget_get_type ();
 
-SeahorseWidget*	seahorse_widget_new			(gchar			*name,
-							 SeahorseContext	*sctx);
+SeahorseWidget*  seahorse_widget_new                (gchar            *name,
+                                                     SeahorseContext  *sctx);
 
-SeahorseWidget*	seahorse_widget_new_allow_multiple	(gchar			*name,
-							 SeahorseContext	*sctx);
+SeahorseWidget*  seahorse_widget_new_allow_multiple (gchar            *name,
+                                                     SeahorseContext  *sctx);
 
-GtkWidget*      seahorse_widget_get_top     (SeahorseWidget     *swidget);
+GtkWidget*       seahorse_widget_get_top            (SeahorseWidget   *swidget);
 
-void		seahorse_widget_destroy			(SeahorseWidget		*swidget);
+void             seahorse_widget_show               (SeahorseWidget   *swidget);
+
+void             seahorse_widget_destroy            (SeahorseWidget   *swidget);
 
 #endif /* __SEAHORSE_WIDGET_H__ */

@@ -190,7 +190,9 @@ seahorse_recipients_get (SeahorseContext *sctx, SeahorseKeyPair **signer)
     g_signal_connect (skstore, "notify", G_CALLBACK (update_filters), swidget);
     update_filters (G_OBJECT (skstore), NULL, swidget);
 
-	widget = glade_xml_get_widget (swidget->xml, swidget->name);
+	widget = seahorse_widget_get_top (swidget);
+    seahorse_widget_show (swidget);
+    
 	while (!done) {
 		response = gtk_dialog_run (GTK_DIALOG (widget));
 		switch (response) {

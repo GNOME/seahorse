@@ -305,6 +305,13 @@ seahorse_widget_get_top     (SeahorseWidget     *swidget)
     g_return_val_if_fail (widget != NULL, NULL);
     return widget;
 }
+
+void
+seahorse_widget_show (SeahorseWidget *swidget)
+{
+    GtkWidget *widget = glade_xml_get_widget (swidget->xml, swidget->name);
+    gtk_widget_show (widget);
+}
  
 /**
  * seahorse_widget_destroy:

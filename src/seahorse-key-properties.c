@@ -837,4 +837,6 @@ seahorse_key_properties_new (SeahorseContext *sctx, SeahorseKey *skey)
 	
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (glade_xml_get_widget (swidget->xml, "disabled")),
 		                          skey->key->disabled);
+
+    seahorse_widget_show (swidget);    
 }
