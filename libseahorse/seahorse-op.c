@@ -92,6 +92,9 @@ seahorse_op_import_text (SeahorseContext *sctx, const gchar *text, gpgme_error_t
 	
 	if (err == NULL)
 		err = &error;
+
+    g_return_val_if_fail (text != NULL, 0);
+         
 	/* new data from text */
 	*err = gpgme_data_new_from_mem (&data, text, strlen (text), TRUE);
 	g_return_val_if_fail (GPG_IS_OK (*err), -1);
