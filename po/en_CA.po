@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-03-04 06:27-0500\n"
-"PO-Revision-Date: 2005-03-04 22:06-0400\n"
+"POT-Creation-Date: 2005-03-19 13:03-0500\n"
+"PO-Revision-Date: 2005-03-19 22:06-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: Canadian English <adamw@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -648,7 +648,7 @@ msgid "Loading Keys..."
 msgstr "Loading Keys..."
 
 #: libseahorse/seahorse-recipients-store.c:153
-#: src/seahorse-key-manager-store.c:285
+#: src/seahorse-key-manager-store.c:400
 msgid "Validity"
 msgstr "Validity"
 
@@ -780,31 +780,31 @@ msgstr "Choose Signing Key"
 msgid "%Y-%m-%d"
 msgstr "%Y-%m-%d"
 
-#: libseahorse/seahorse-util.c:716
-msgid "Couldn't run file-roller"
-msgstr "Could not run file-roller"
-
-#: libseahorse/seahorse-util.c:721
-msgid "The file-roller process did not complete successfully"
-msgstr "The file-roller process did not complete successfully"
-
-#: libseahorse/seahorse-util.c:763
-msgid "All PGP key files"
-msgstr "All PGP key files"
-
-#: libseahorse/seahorse-util.c:769 libseahorse/seahorse-util.c:809
-msgid "All files"
-msgstr "All files"
-
-#: libseahorse/seahorse-util.c:802
-msgid "Archive files"
-msgstr "Archive files"
-
-#: libseahorse/seahorse-util.c:826
+#: libseahorse/seahorse-util.c:416
 msgid "Multiple Keys"
 msgstr "Multiple Keys"
 
-#: libseahorse/seahorse-util.c:851
+#: libseahorse/seahorse-util.c:726
+msgid "Couldn't run file-roller"
+msgstr "Could not run file-roller"
+
+#: libseahorse/seahorse-util.c:731
+msgid "The file-roller process did not complete successfully"
+msgstr "The file-roller process did not complete successfully"
+
+#: libseahorse/seahorse-util.c:773
+msgid "All PGP key files"
+msgstr "All PGP key files"
+
+#: libseahorse/seahorse-util.c:779 libseahorse/seahorse-util.c:819
+msgid "All files"
+msgstr "All files"
+
+#: libseahorse/seahorse-util.c:812
+msgid "Archive files"
+msgstr "Archive files"
+
+#: libseahorse/seahorse-util.c:853
 msgid ""
 "<b>A file already exists with this name.</b>\n"
 "\n"
@@ -814,11 +814,11 @@ msgstr ""
 "\n"
 "Do you want to replace it with a new file?"
 
-#: libseahorse/seahorse-util.c:854
+#: libseahorse/seahorse-util.c:856
 msgid "_Replace"
 msgstr "_Replace"
 
-#: libseahorse/seahorse-validity.c:31 src/seahorse-key-manager-store.c:148
+#: libseahorse/seahorse-validity.c:31 src/seahorse-key-manager-store.c:160
 #: src/seahorse-key-properties.c:191 src/seahorse-key-properties.glade.h:30
 msgid "Unknown"
 msgstr "Unknown"
@@ -977,7 +977,7 @@ msgstr "Verify signature file"
 msgid "Read list of URIs on standard in"
 msgstr "Read list of URIs on standard input"
 
-#: src/main.c:147 src/seahorse-key-manager.c:110
+#: src/main.c:147 src/seahorse-key-manager.c:98
 #, c-format
 msgid "Couldn't import keys from \"%s\""
 msgstr "Could not import keys from \"%s\""
@@ -1280,7 +1280,7 @@ msgstr "Email Address:"
 msgid "Enter Name - Must be at least five letters."
 msgstr "Enter Name - Must be at least five letters."
 
-#: src/seahorse-generate-druid.glade.h:13 src/seahorse-key-manager-store.c:289
+#: src/seahorse-generate-druid.glade.h:13 src/seahorse-key-manager-store.c:404
 msgid "Expiration Date"
 msgstr "Expiration Date"
 
@@ -1326,7 +1326,7 @@ msgstr ""
 msgid "Medium Security"
 msgstr "Medium Security"
 
-#: src/seahorse-generate-druid.glade.h:22 src/seahorse-key-manager-store.c:192
+#: src/seahorse-generate-druid.glade.h:22 src/seahorse-key-manager-store.c:204
 msgid "Never Expires"
 msgstr "Never Expires"
 
@@ -1429,81 +1429,85 @@ msgstr "Select a method to generate your new key:"
 msgid "radio_druid"
 msgstr "radio_druid"
 
-#: src/seahorse-key-manager-store.c:136
+#: src/seahorse-key-manager-store.c:148
 msgid "RSA"
 msgstr "RSA"
 
-#: src/seahorse-key-manager-store.c:138
+#: src/seahorse-key-manager-store.c:150
 msgid "RSA-E"
 msgstr "RSA-E"
 
-#: src/seahorse-key-manager-store.c:140
+#: src/seahorse-key-manager-store.c:152
 msgid "RSA-S"
 msgstr "RSA-S"
 
-#: src/seahorse-key-manager-store.c:142
+#: src/seahorse-key-manager-store.c:154
 msgid "ELG-E"
 msgstr "ELG-E"
 
-#: src/seahorse-key-manager-store.c:144
+#: src/seahorse-key-manager-store.c:156
 msgid "DSA"
 msgstr "DSA"
 
-#: src/seahorse-key-manager-store.c:146
+#: src/seahorse-key-manager-store.c:158
 msgid "ELG"
 msgstr "ELG"
 
-#: src/seahorse-key-manager-store.c:185 src/seahorse-key-properties.c:281
+#: src/seahorse-key-manager-store.c:197 src/seahorse-key-properties.c:281
 msgid "Expired"
 msgstr "Expired"
 
-#: src/seahorse-key-manager-store.c:293
-msgid "Trust"
-msgstr "Trust"
+#: src/seahorse-key-manager-store.c:343
+msgid "Couldn't export key(s)"
+msgstr "Could not export key(s)"
 
-#: src/seahorse-key-manager-store.c:297
-msgid "Length"
-msgstr "Length"
-
-#: src/seahorse-key-manager-store.c:301
-msgid "Type"
-msgstr "Type"
-
-#: src/seahorse-key-manager.c:101
-msgid "Import Key"
-msgstr "Import Key"
-
-#: src/seahorse-key-manager.c:131
-msgid "Couldn't import keys from clipboard"
-msgstr "Could not import keys from clipboard"
-
-#: src/seahorse-key-manager.c:166
-msgid "Couldn't export key to clipboard"
-msgstr "Could not export key to clipboard"
-
-#: src/seahorse-key-manager.c:199
-msgid "Export Key"
-msgstr "Export Key"
-
-#: src/seahorse-key-manager.c:210 src/seahorse-key-properties.c:359
-#: src/seahorse-keyserver-results.c:130
+#: src/seahorse-key-manager-store.c:359 src/seahorse-key-manager.c:198
+#: src/seahorse-key-properties.c:359 src/seahorse-keyserver-results.c:130
 #, c-format
 msgid "Couldn't export key to \"%s\""
 msgstr "Could not export key to \"%s\""
 
-#: src/seahorse-key-manager.c:229
+#: src/seahorse-key-manager-store.c:408
+msgid "Trust"
+msgstr "Trust"
+
+#: src/seahorse-key-manager-store.c:412
+msgid "Length"
+msgstr "Length"
+
+#: src/seahorse-key-manager-store.c:416
+msgid "Type"
+msgstr "Type"
+
+#: src/seahorse-key-manager.c:89
+msgid "Import Key"
+msgstr "Import Key"
+
+#: src/seahorse-key-manager.c:119
+msgid "Couldn't import keys from clipboard"
+msgstr "Could not import keys from clipboard"
+
+#: src/seahorse-key-manager.c:154
+msgid "Couldn't export key to clipboard"
+msgstr "Could not export key to clipboard"
+
+#: src/seahorse-key-manager.c:187
+msgid "Export Key"
+msgstr "Export Key"
+
+#: src/seahorse-key-manager.c:217
 msgid "Backup Keyrings to Archive"
 msgstr "Backup Keyrings to Archive"
 
-#: src/seahorse-key-manager.c:398
+#: src/seahorse-key-manager.c:386
 msgid "translator_credits"
 msgstr "Adam Weinberger <adamw@gnome.org>"
 
-#: src/seahorse-key-manager.c:418
+#: src/seahorse-key-manager.c:406
 msgid "seahorse"
 msgstr "seahorse"
 
-#: src/seahorse-key-manager.c:583
+#: src/seahorse-key-manager.c:571
 #, c-format
 msgid "Couldn't import key from \"%s\""
 msgstr "Could not import key from \"%s\""
