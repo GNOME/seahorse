@@ -797,6 +797,10 @@ seahorse_key_properties_new (SeahorseContext *sctx, SeahorseKey *skey)
     if (remote) {
         gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "trust"), FALSE);
         gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "disabled"), FALSE);
+
+        /* Remove the signatures page (3rd page) */ 
+        widget = glade_xml_get_widget (swidget->xml, NOTEBOOK);
+        gtk_notebook_remove_page (GTK_NOTEBOOK (widget), 2);
         
     /* Stuff valid for local keys */
     } else {     

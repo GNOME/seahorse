@@ -129,6 +129,81 @@ gpgmex_key_copy_subkey (gpgme_key_t key, gpgme_subkey_t subkey)
     add_subkey_to_key (key, sk);
 }
 
+/* Copied from GPGME */
+static void
+parse_user_id (const gchar *uid, gchar **name, gchar **email, gchar **comment)
+{
+    gchar *src, *tail, *x;
+    int in_name = 0;
+    int in_email = 0;
+    int in_comment = 0;
+
+    x = tail = src = g_strdup (uid);
+    
+    while (*src) {
+        if (in_email) {
+	        if (*src == '<')
+	            /* Not legal but anyway.  */
+	            in_email++;
+	        else if (*src == '>') {
+	            if (!--in_email && !*email) {
+		            *email = tail;
+                    *src = 0;
+                    tail = src + 1;
+		        }
+	        }
+	    } else if (in_comment) {
+	        if (*src == '(')
+	            in_comment++;
+	        else if (*src == ')') {
+	            if (!--in_comment && !*comment) {
+		            *comment = tail;
+                    *src = 0;
+                    tail = src + 1;
+		        }
+	        }
+	    } else if (*src == '<') {
+	        if (in_name) {
+	            if (!*name) {
+		            *name = tail;
+                    *src = 0;
+                    tail = src + 1;
+		        }
+	            in_name = 0;
+	        }
+	        in_email = 1;
+	    } else if (*src == '(') {
+	        if (in_name) {
+	            if (!*name) {
+		            *name = tail;
+                    *src = 0;
+                    tail = src + 1;
+		        }
+	            in_name = 0;
+	        }
+	        in_comment = 1;
+	    } else if (!in_name && *src != ' ' && *src != '\t') {
+	        in_name = 1;
+	    }    
+        src++;
+    }
+ 
+    if (in_name) {
+        if (!*name) {
+	        *name = tail;
+            *src = 0;
+            tail = src + 1;
+	    }
+    }
+ 
+    /* Let unused parts point to an EOS.  */
+    *name = g_strdup (*name ? *name : "");
+    *email = g_strdup (*email ? *email : "");
+    *comment = g_strdup (*comment ? *comment : "");
+    
+    g_free (x);
+}
+
 static void
 add_uid_to_key (gpgme_key_t key, gpgme_user_id_t userid)
 {
@@ -157,11 +232,9 @@ gpgmex_key_add_uid (gpgme_key_t key, const gchar *uid,
     userid->uid = g_strdup (uid);
     userid->revoked = flags & GPGMEX_KEY_REVOKED;
     
-    /* These aren't valid, but we don't use these fields */
-    userid->name = g_strdup ("");
-    userid->email = g_strdup ("");
-    userid->comment = g_strdup ("");
-    
+    /* Parse out the parts of the uid */
+    parse_user_id (uid, &(userid->name), &(userid->email), &(userid->comment));
+   
     add_uid_to_key (key, userid);
 }
 
