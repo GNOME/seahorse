@@ -113,12 +113,14 @@ seahorse_widget_finalize (GObject *gobject)
 	swidget = SEAHORSE_WIDGET (gobject);
 	
 	/* Remove widget from hash and destroy hash if empty */
-	g_hash_table_remove (widgets, swidget->name);
-	if (g_hash_table_size == 0) {
-		g_hash_table_destroy (widgets);
-		widgets = NULL;
-	}
-	
+    if (widgets) {
+    	g_hash_table_remove (widgets, swidget->name);
+    	if (g_hash_table_size == 0) {
+    		g_hash_table_destroy (widgets);
+    		widgets = NULL;
+    	}
+    }
+    	
 	g_signal_handlers_disconnect_by_func (swidget->sctx, seahorse_widget_destroyed, swidget);
 	gtk_widget_destroy (glade_xml_get_widget (swidget->xml, swidget->name));
 	
