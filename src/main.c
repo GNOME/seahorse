@@ -23,6 +23,7 @@
 #include <gnome.h>
 #include <locale.h>
 
+#include "seahorse-gpgmex.h"
 #include "seahorse-context.h"
 #include "seahorse-windows.h"
 #include "seahorse-op.h"

@@ -25,6 +25,7 @@
 #include <eel/eel-gconf-extensions.h>
 #include <libgnomevfs/gnome-vfs.h>
 
+#include "seahorse-gpgmex.h"
 #include "seahorse-windows.h"
 #include "seahorse-widget.h"
 #include "seahorse-preferences.h"
@@ -477,8 +478,8 @@ about_activate (GtkWidget *widget, SeahorseWidget *swidget)
 	}
 
 	about = gnome_about_new (_("seahorse"), VERSION,
-		"Copyright \xc2\xa9 2002, 2003 Seahorse Project",
-		"http://seahorse.sourceforge.net",
+		"Copyright \xc2\xa9 2002, 2003, 2004 Seahorse Project",
+		"http://seahorse.sourceforge.net/",
 		(const char **)authors, (const char **)documenters,
 		strcmp (translator_credits, "translator_credits") != 0 ?
 			translator_credits : NULL,

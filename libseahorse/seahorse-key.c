@@ -21,6 +21,7 @@
 
 #include <gnome.h>
 
+#include "seahorse-gpgmex.h"
 #include "seahorse-key.h"
 #include "seahorse-key-source.h"
 
@@ -106,7 +107,7 @@ seahorse_key_finalize (GObject *gobject)
 	SeahorseKey *skey;
 	
 	skey = SEAHORSE_KEY (gobject);
-	seahorse_util_key_unref (skey->key);
+	gpgmex_key_unref (skey->key);
 	
 	G_OBJECT_CLASS (parent_class)->finalize (gobject);
 }
@@ -121,10 +122,10 @@ seahorse_key_set_property (GObject *object, guint prop_id, const GValue *value, 
 	switch (prop_id) {
 		case PROP_KEY:
             if (skey->key)
-                seahorse_util_key_unref (skey->key);
+                gpgmex_key_unref (skey->key);
 			skey->key = g_value_get_pointer (value);
             if (skey->key) {
-    			seahorse_util_key_ref (skey->key);
+    			gpgmex_key_ref (skey->key);
                 seahorse_key_changed (skey, SKEY_CHANGE_ALL);
             }
 			break;

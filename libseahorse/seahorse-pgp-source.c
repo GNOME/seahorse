@@ -26,6 +26,7 @@
 /* Amount of keys to load in a batch */
 #define DEFAULT_LOAD_BATCH 30
 
+#include "seahorse-gpgmex.h"
 #include "seahorse-pgp-source.h"
 #include "seahorse-util.h"
 #include "seahorse-key.h"
@@ -400,13 +401,13 @@ keyload_handler (LoadContext *lctx)
             if (!lctx->all && g_hash_table_lookup (lctx->psrc->priv->keys, id)) {
 
                 /* ... then just ignore */
-                seahorse_util_key_unref (key);
+                gpgmex_key_unref (key);
                 continue;
             } 
         }
         
         add_key_to_source (lctx->psrc, key);
-        seahorse_util_key_unref (key);
+        gpgmex_key_unref (key);
         lctx->loaded++;
     }
     

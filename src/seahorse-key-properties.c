@@ -22,6 +22,7 @@
 #include <gnome.h>
 #include <time.h>
 
+#include "seahorse-gpgmex.h"
 #include "seahorse-key-dialogs.h"
 #include "seahorse-key-widget.h"
 #include "seahorse-util.h"

@@ -25,12 +25,11 @@
 #include <time.h>
 
 #include <eel/eel.h>
-#include <gpgme.h>
 #include <gnome.h>
 
+#include "seahorse-gpgmex.h"
 #include "seahorse-agent.h"
 #include "seahorse-agent-secmem.h"
-#include "seahorse-util.h"
 
 /*
  * Implementation of the password cache. Note that only passwords

@@ -35,6 +35,7 @@
 #include <gedit/gedit-menus.h>
 #include <gedit/gedit-utils.h>
 
+#include "seahorse-gpgmex.h"
 #include "seahorse-util.h"
 #include "seahorse-context.h"
 #include "seahorse-libdialogs.h"

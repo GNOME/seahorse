@@ -26,6 +26,7 @@
 #include <string.h>
 #include <errno.h>
 
+#include "seahorse-gpgmex.h"
 #include "seahorse-util.h"
 #include "seahorse-context.h"
 #include "seahorse-gpg-options.h"

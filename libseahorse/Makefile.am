@@ -36,7 +36,7 @@ libseahorse_internal_la_SOURCES = \
 	seahorse-vfs-data.c seahorse-vfs-data.h \
 	seahorse-key-source.c seahorse-key-source.h \
 	seahorse-pgp-source.c seahorse-pgp-source.h \
-	gpgmex.h  gpgmex-util.c \
+	seahorse-gpgmex.h seahorse-gpgmex-util.c \
 	$(BUILT_SOURCES)
 
 seahorse-marshal.h: seahorse-marshal.list $(GLIB_GENMARSHAL)

@@ -26,6 +26,7 @@
 #include <gnome.h>
 #include <libgnomevfs/gnome-vfs.h>
 
+#include "seahorse-gpgmex.h"
 #include "seahorse-context.h"
 #include "seahorse-vfs-data.h"
 #include "seahorse-util.h"

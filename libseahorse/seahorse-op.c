@@ -22,6 +22,7 @@
 #include <string.h>
 #include <eel/eel.h>
 
+#include "seahorse-gpgmex.h"
 #include "seahorse-op.h"
 #include "seahorse-util.h"
 #include "seahorse-context.h"

@@ -21,6 +21,7 @@
 
 #include <gnome.h>
 
+#include "seahorse-gpgmex.h"
 #include "seahorse-widget.h"
 #include "seahorse-util.h"
 #include "seahorse-key-op.h"

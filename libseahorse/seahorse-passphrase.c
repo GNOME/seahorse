@@ -22,6 +22,7 @@
 #include <gnome.h>
 #include <glade/glade-xml.h>
 
+#include "seahorse-gpgmex.h"
 #include "seahorse-libdialogs.h"
 #include "seahorse-widget.h"
 #include "seahorse-util.h"
