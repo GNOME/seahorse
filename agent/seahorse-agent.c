@@ -45,6 +45,17 @@ gboolean g_displayvars = FALSE;
 gboolean g_cshell = FALSE;
 gboolean g_quit = FALSE;
 
+/* The GPG settings we modify */
+static const gchar *confs[4] = {
+    "gpg-agent-info",
+    "use-agent",
+    "no-agent",
+    NULL
+};
+    
+/* Previous gpg.conf settings */
+static gchar *prev_values[4];
+
 /* -----------------------------------------------------------------------------
  */
 
@@ -67,22 +78,7 @@ process_display (const char *sockname, pid_t pid)
 static void
 unprocess_gpg_conf ()
 {
-    const gchar *options[3];
-    gchar *values[3];
-
-    /* This notifies GPG about us */
-    options[0] = "gpg-agent-info";
-    values[0] = NULL;
-
-    /* Make sure not using the agent */
-    options[1] = "use-agent";
-    values[1] = NULL;
-
-    /* Make sure any of the following are removed */
-    options[2] = NULL;
-    values[2] = NULL;
-
-    seahorse_gpg_options_change_vals (options, values, NULL);
+    seahorse_gpg_options_change_vals (confs, prev_values, NULL);
 }
 
 /* Add our agent info to gpg.conf */
@@ -91,31 +87,34 @@ process_gpg_conf (const char *sockname, pid_t pid)
 {
     GError *error = NULL;
     gchar *agent_info;
-    const gchar *options[4];
     gchar *values[4];
     gboolean b;
 
     g_assert (sockname && sockname[0]);
+    memset (prev_values, 0, sizeof (prev_values));
+
+    /* Read in the current values for the options */
+    if (!seahorse_gpg_options_find_vals (confs, prev_values, &error)) {
+    
+        /* Warn and put in defaults */
+        warnx (_("couldn't read gpg configuration: %s"), 
+            error ? error->message : "");
+        g_error_free (error);
+    
+        prev_values[0] = NULL;  /* gpg-agent-info */
+        prev_values[1] = NULL;  /* use-agent */
+        prev_values[2] = NULL;  /* no-agent */
+        prev_values[3] = NULL;  /* null terminate */
+    }
 
     agent_info = g_strdup_printf ("%s:%lu:1", sockname, (unsigned long) pid);
-
-    /* This notifies GPG about us */
-    options[0] = "gpg-agent-info";
-    values[0] = agent_info;
-
-    /* Make sure it's using the agent */
-    options[1] = "use-agent";
-    values[1] = "";
-
-    /* Make sure any of the following are removed */
-    options[2] = "no-use-agent";
-    values[2] = NULL;
-
-    /* Null terminate the array */
-    options[3] = NULL;
-    values[3] = NULL;
-
-    b = seahorse_gpg_options_change_vals (options, values, &error);
+    
+    values[0] = agent_info;     /* gpg-agent-info */
+    values[1] = "";             /* use-agent */
+    values[2] = NULL;           /* no-use-agent */
+    values[3] = NULL;           /* null teriminate */
+    
+    b = seahorse_gpg_options_change_vals (confs, values, &error);
 
     g_free (agent_info);
 
