@@ -102,6 +102,65 @@ import_activate (GtkWidget *widget, SeahorseWidget *swidget)
 } 
 
 static void
+export_activate (GtkWidget *widget, SeahorseWidget *swidget)
+{
+    GtkWidget *dialog;
+    gchar* uri = NULL;
+    GError *err = NULL;
+    GList *keys;
+     
+    keys = seahorse_key_store_get_selected_keys (GTK_TREE_VIEW (
+                glade_xml_get_widget (swidget->xml, KEY_LIST)));
+
+    /* No keys, nothing to do */
+    if (keys == NULL)
+        return;
+        
+    dialog = seahorse_util_chooser_save_new (_("Save Remote Keys"), 
+                GTK_WINDOW(glade_xml_get_widget (swidget->xml, "keyserver-results")));
+    seahorse_util_chooser_show_key_files (dialog);
+                
+    uri = seahorse_util_chooser_save_prompt (dialog);
+
+    if(uri) {
+        if (!seahorse_op_export_file (keys, uri, &err))
+            seahorse_util_handle_error (err, _("Couldn't export key to \"%s\""),
+                                        seahorse_util_uri_get_last (uri));
+    }      
+
+    g_free (uri);
+    g_list_free (keys);
+}
+
+/* Copies key to clipboard */
+static void
+copy_activate (GtkWidget *widget, SeahorseWidget *swidget)
+{
+    GdkAtom atom;
+    GtkClipboard *board;
+    gchar *text;
+    GError *err = NULL;
+    GList *keys;
+  
+    keys = seahorse_key_store_get_selected_keys (GTK_TREE_VIEW (
+                glade_xml_get_widget (swidget->xml, KEY_LIST)));
+       
+    if (g_list_length (keys) == 0)
+        return;
+               
+    text = seahorse_op_export_text (keys, &err);
+
+    if (text == NULL)
+        seahorse_util_handle_error (err, _("Couldn't retrieve key data from key server"));
+    else {
+        atom = gdk_atom_intern ("CLIPBOARD", FALSE);
+        board = gtk_clipboard_get (atom);
+        gtk_clipboard_set_text (board, text, strlen (text));
+        g_free (text);
+    }
+}
+
+static void
 expand_all_activate (GtkMenuItem *item, SeahorseWidget *swidget)
 {
 	gtk_tree_view_expand_all (GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, KEY_LIST)));
@@ -125,27 +184,31 @@ row_activated (GtkTreeView *treeview, GtkTreePath *path, GtkTreeViewColumn *arg2
 }
 
 static void
-set_key_options_sensitive (SeahorseWidget *swidget, gboolean selected, gboolean secret, SeahorseKey *skey)
+set_key_options_sensitive (SeahorseWidget *swidget, guint selected, gboolean secret, SeahorseKey *skey)
 {
-    gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "properties"), selected);
-    gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "key_properties"), selected);
-    gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "properties_button"), selected);
-    gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "import"), selected);
-    gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "key_import"), selected);
-    gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "import_button"), selected);
+    gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "properties"), selected == 1);
+    gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "key_properties"), selected == 1);
+    gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "properties_button"), selected == 1);
+    gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "import"), selected > 0);
+    gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "key_import"), selected > 0);
+    gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "import_button"), selected > 0);
+    gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "export"), selected > 0);
+    gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "key_export"), selected > 0);
+    gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "export_button"), selected > 0);
+    gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "copy"), selected > 0);
+    gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "edit_copy"), selected > 0);
 }
 
 static void
 selection_changed (GtkTreeSelection *selection, SeahorseWidget *swidget)
 {
 	gint rows = 0;
-	gboolean selected = FALSE, secret = FALSE;
+	gboolean secret = FALSE;
 	SeahorseKey *skey = NULL;
 	
 	rows = gtk_tree_selection_count_selected_rows (selection);
-	selected = rows > 0;
 	
-	if (selected) {
+	if (rows > 0) {
 		GnomeAppBar *status;
 		
 		status = GNOME_APPBAR (glade_xml_get_widget (swidget->xml, "status"));
@@ -158,7 +221,7 @@ selection_changed (GtkTreeSelection *selection, SeahorseWidget *swidget)
 		secret = (skey != NULL && SEAHORSE_IS_KEY_PAIR (skey));
 	}
 	
-	set_key_options_sensitive (swidget, selected, secret, skey);
+	set_key_options_sensitive (swidget, rows, secret, skey);
 }
 
 static void
@@ -274,7 +337,7 @@ seahorse_keyserver_results_show (SeahorseContext *sctx, SeahorseKeySource *sksrc
 	/* construct key context menu */
 	glade_xml_construct (swidget->xml, SEAHORSE_GLADEDIR "seahorse-keyserver-results.glade",
 		                 "context_menu", NULL);
-	set_key_options_sensitive (swidget, FALSE, FALSE, NULL);
+	set_key_options_sensitive (swidget, 0, FALSE, NULL);
 	
 	glade_xml_signal_connect_data (swidget->xml, "expand_all_activate",
 		G_CALLBACK (expand_all_activate), swidget);
@@ -286,13 +349,12 @@ seahorse_keyserver_results_show (SeahorseContext *sctx, SeahorseKeySource *sksrc
         G_CALLBACK (search_activate), swidget);
     glade_xml_signal_connect_data (swidget->xml, "import_activate",
         G_CALLBACK (import_activate), swidget);
+    glade_xml_signal_connect_data (swidget->xml, "export_activate",
+        G_CALLBACK (export_activate), swidget);
+    glade_xml_signal_connect_data (swidget->xml, "copy_activate",
+        G_CALLBACK (copy_activate), swidget);
 
     /* Features not yet available */
-    gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "export"), FALSE);
-    gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "key_export"), FALSE);
-    gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "export_button"), FALSE);
-    gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "copy"), FALSE);
-    gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "edit_copy"), FALSE);
 		
 	/* tree view signals */	
 	glade_xml_signal_connect_data (swidget->xml, "row_activated",
