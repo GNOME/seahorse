@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-07 22:04-0500\n"
-"PO-Revision-Date: 2004-12-07 22:06-0400\n"
+"POT-Creation-Date: 2004-12-16 10:59-0500\n"
+"PO-Revision-Date: 2004-12-16 22:06-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: English/Canada <adamw@FreeBSD.org>\n"
 "MIME-Version: 1.0\n"
@@ -196,7 +196,7 @@ msgstr "Could not create new process group"
 msgid "usage: seahorse-agent [-cdv]\n"
 msgstr "usage: seahorse-agent [-cdv]\n"
 
-#: agent/seahorse-agent.c:271
+#: agent/seahorse-agent.c:276
 msgid "couldn't drop privileges properly"
 msgstr "Could not drop privileges properly"
 
@@ -458,20 +458,15 @@ msgid "Whether to use canonical text mode"
 msgstr "Whether to use canonical text mode"
 
 #. Make the column
-#: libseahorse/seahorse-key-store.c:617 src/seahorse-key-properties.c:380
+#: libseahorse/seahorse-key-store.c:615 src/seahorse-key-properties.c:380
 #: src/seahorse-key-properties.c:474
 msgid "Name"
 msgstr "Name"
 
 #. Make the column
-#: libseahorse/seahorse-key-store.c:620 src/seahorse-key-properties.c:377
+#: libseahorse/seahorse-key-store.c:618 src/seahorse-key-properties.c:377
 msgid "Key ID"
 msgstr "Key ID"
-
-#: libseahorse/seahorse-key-store.c:686
-#, c-format
-msgid "Listed %d keys"
-msgstr "Listed %d keys"
 
 #: libseahorse/seahorse-passphrase.c:61
 #, c-format
@@ -616,31 +611,31 @@ msgstr "_Expire passwords from memory after "
 msgid "_Use default key to sign"
 msgstr "_Use default key to sign"
 
-#: libseahorse/seahorse-pgp-source.c:495
+#. TODO: We can use the GPGME progress to make this more accurate
+#: libseahorse/seahorse-pgp-source.c:524
 #, c-format
 msgid "Loaded %d key"
 msgid_plural "Loaded %d keys"
 msgstr[0] "Loaded %d key"
 msgstr[1] "Loaded %d keys"
 
-#: libseahorse/seahorse-pgp-source.c:635
-#: libseahorse/seahorse-server-source.c:511
-msgid "Load Cancelled"
-msgstr "Load Cancelled"
+#: libseahorse/seahorse-pgp-source.c:588
+msgid "Loading Keys..."
+msgstr "Loading Keys..."
 
 #: libseahorse/seahorse-recipients-store.c:147
 #: src/seahorse-key-manager-store.c:321
 msgid "Validity"
 msgstr "Validity"
 
-#: libseahorse/seahorse-recipients.c:81 src/seahorse-keyserver-results.c:215
+#: libseahorse/seahorse-recipients.c:54 src/seahorse-keyserver-results.c:217
 #, c-format
 msgid "Selected %d keys"
 msgid_plural "Selected %d keys"
 msgstr[0] "Selected %d key"
 msgstr[1] "Selected %d keys"
 
-#: libseahorse/seahorse-recipients.c:86 libseahorse/seahorse-recipients.c:90
+#: libseahorse/seahorse-recipients.c:59 libseahorse/seahorse-recipients.c:63
 #, c-format
 msgid "Selected %d not fully valid key"
 msgid_plural "Selected %d keys (%d not fully valid)"
@@ -665,50 +660,46 @@ msgstr "Choose Keys"
 msgid "Search _for: "
 msgstr "Search _for: "
 
-#: libseahorse/seahorse-server-source.c:472
-msgid "Searching for remote keys..."
-msgstr "Searching for remote keys..."
-
-#: libseahorse/seahorse-signatures.c:48
+#: libseahorse/seahorse-signatures.c:49
 msgid "[Unknown Key]"
 msgstr "[Unknown Key]"
 
-#: libseahorse/seahorse-signatures.c:65
+#: libseahorse/seahorse-signatures.c:66
 #, c-format
 msgid "%s: Good signature from (<b>expired</b>) '%s' on %s"
 msgstr "%s: Good signature from (<b>expired</b>) '%s' on %s"
 
-#: libseahorse/seahorse-signatures.c:69
+#: libseahorse/seahorse-signatures.c:70
 #, c-format
 msgid "%s: <b>Expired</b> signature from '%s' on %s"
 msgstr "%s: <b>Expired</b> signature from '%s' on %s"
 
-#: libseahorse/seahorse-signatures.c:73
+#: libseahorse/seahorse-signatures.c:74
 #, c-format
 msgid "%s: Good signature from (<b>revoked</b>) '%s' on %s"
 msgstr "%s: Good signature from (<b>revoked</b>) '%s' on %s"
 
-#: libseahorse/seahorse-signatures.c:77
+#: libseahorse/seahorse-signatures.c:78
 #, c-format
 msgid "%s: Good signature from '%s' on %s"
 msgstr "%s: Good signature from '%s' on %s"
 
-#: libseahorse/seahorse-signatures.c:81
+#: libseahorse/seahorse-signatures.c:82
 #, c-format
 msgid "%s: Signing key not in key ring"
 msgstr "%s: Signing key not in key ring"
 
-#: libseahorse/seahorse-signatures.c:84
+#: libseahorse/seahorse-signatures.c:85
 #, c-format
 msgid "%s: <b>Bad</b> signature"
 msgstr "%s: <b>Bad</b> signature"
 
-#: libseahorse/seahorse-signatures.c:87
+#: libseahorse/seahorse-signatures.c:88
 #, c-format
 msgid "%s: Not a signature"
 msgstr "%s: Not a signature"
 
-#: libseahorse/seahorse-signatures.c:90
+#: libseahorse/seahorse-signatures.c:91
 #, c-format
 msgid "%s: Verification error"
 msgstr "%s: Verification error"
@@ -917,7 +908,7 @@ msgstr "Verify signature file"
 msgid "Read list of URIs on standard in"
 msgstr "Read list of URIs on standard input"
 
-#: src/main.c:146 src/seahorse-key-manager.c:114
+#: src/main.c:146 src/seahorse-key-manager.c:112
 #, c-format
 msgid "Couldn't import keys from \"%s\""
 msgstr "Could not import keys from \"%s\""
@@ -1416,40 +1407,40 @@ msgstr "Length"
 msgid "Type"
 msgstr "Type"
 
-#: src/seahorse-key-manager.c:103
+#: src/seahorse-key-manager.c:101
 msgid "Import Key"
 msgstr "Import Key"
 
-#: src/seahorse-key-manager.c:135
+#: src/seahorse-key-manager.c:133
 msgid "Couldn't import keys from clipboard"
 msgstr "Could not import keys from clipboard"
 
-#: src/seahorse-key-manager.c:172
+#: src/seahorse-key-manager.c:170
 msgid "Couldn't export key to clipboard"
 msgstr "Could not export key to clipboard"
 
-#: src/seahorse-key-manager.c:202
+#: src/seahorse-key-manager.c:200
 msgid "Export Key"
 msgstr "Export Key"
 
-#: src/seahorse-key-manager.c:215 src/seahorse-keyserver-results.c:127
+#: src/seahorse-key-manager.c:213 src/seahorse-keyserver-results.c:129
 #, c-format
 msgid "Couldn't export key to \"%s\""
 msgstr "Could not export key to \"%s\""
 
-#: src/seahorse-key-manager.c:232
+#: src/seahorse-key-manager.c:230
 msgid "Backup Keyrings to Archive"
 msgstr "Backup Keyrings to Archive"
 
-#: src/seahorse-key-manager.c:383
+#: src/seahorse-key-manager.c:381
 msgid "translator_credits"
 msgstr "Adam Weinberger <adamw@gnome.org>"
 
-#: src/seahorse-key-manager.c:403
+#: src/seahorse-key-manager.c:401
 msgid "seahorse"
 msgstr "seahorse"
 
-#: src/seahorse-key-manager.c:636
+#: src/seahorse-key-manager.c:566
 #, c-format
 msgid "Couldn't import key from \"%s\""
 msgstr "Could not import key from \"%s\""
@@ -1670,10 +1661,6 @@ msgstr "_Sign"
 msgid "_Sign..."
 msgstr "_Sign..."
 
-#: src/seahorse-key-op.c:256
-msgid "Operation complete"
-msgstr "Operation complete"
-
 #. key id
 #: src/seahorse-key-properties.c:179
 msgid "Key ID:"
@@ -1831,23 +1818,23 @@ msgstr "_Primary"
 msgid "_Signatures:"
 msgstr "_Signatures:"
 
-#: src/seahorse-keyserver-results.c:85 src/seahorse-keyserver-results.c:154
+#: src/seahorse-keyserver-results.c:87 src/seahorse-keyserver-results.c:156
 msgid "Couldn't retrieve key data from key server"
 msgstr "Could not retrieve key data from key server"
 
-#: src/seahorse-keyserver-results.c:98
+#: src/seahorse-keyserver-results.c:100
 msgid "Couldn't import keys into keyring"
 msgstr "Could not import keys into keyring"
 
-#: src/seahorse-keyserver-results.c:119
+#: src/seahorse-keyserver-results.c:121
 msgid "Save Remote Keys"
 msgstr "Save Remote Keys"
 
-#: src/seahorse-keyserver-results.c:331
+#: src/seahorse-keyserver-results.c:301
 msgid "Remote Keys"
 msgstr "Remote Keys"
 
-#: src/seahorse-keyserver-results.c:333
+#: src/seahorse-keyserver-results.c:303
 #, c-format
 msgid "Remote Keys Containing '%s'"
 msgstr "Remote Keys Containing '%s'"
