@@ -308,8 +308,6 @@ seahorse_key_store_init (SeahorseKeyStore *skstore, GtkTreeView *view,
 	gtk_tree_store_set_column_types (GTK_TREE_STORE (skstore),
 		cols, columns);
 	gtk_tree_view_set_model (view, GTK_TREE_MODEL (skstore));
-	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (skstore),
-		NAME, GTK_SORT_ASCENDING);
 	
 	seahorse_key_store_append_column (view, _("Name"), NAME);
 	seahorse_key_store_append_column (view, _("Key ID"), KEYID);
@@ -498,7 +496,4 @@ seahorse_key_store_append_column (GtkTreeView *view, const gchar *name, const gi
 	column = gtk_tree_view_column_new_with_attributes (name, renderer, "text", index, NULL);
 	gtk_tree_view_column_set_resizable (column, TRUE);
 	gtk_tree_view_append_column (view, column);
-	
-	if (index == NAME)
-		gtk_tree_view_column_set_sort_column_id (column, index);
 }

@@ -138,7 +138,7 @@ seahorse_key_manager_store_set (GtkTreeStore *store, GtkTreeIter *iter, Seahorse
 	max = seahorse_key_get_num_subkeys (skey);
 
 	while (index <= max && gtk_tree_model_iter_nth_child (
-	    GTK_TREE_MODEL (store), &child, iter, index-1)) {
+	GTK_TREE_MODEL (store), &child, iter, index-1)) {
 		seahorse_key_manager_store_set_attribs (store, &child, skey, index);
 		index++;
 	}
