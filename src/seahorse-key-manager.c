@@ -25,10 +25,7 @@
 
 #include "seahorse-key-manager.h"
 #include "seahorse-widget.h"
-#include "seahorse-key.h"
 #include "seahorse-generate.h"
-#include "seahorse-export.h"
-#include "seahorse-delete.h"
 #include "seahorse-preferences.h"
 #include "seahorse-import.h"
 #include "seahorse-text-editor.h"
@@ -38,9 +35,7 @@
 #include "seahorse-key-manager-store.h"
 #include "seahorse-file-manager.h"
 #include "seahorse-ops-key.h"
-#include "seahorse-add-uid.h"
-#include "seahorse-add-subkey.h"
-#include "seahorse-sign.h"
+#include "seahorse-key-dialogs.h"
 
 #define KEY_MANAGER "key-manager"
 #define KEY_LIST "key_list"
@@ -118,8 +113,7 @@ delete_activate (GtkWidget *widget, SeahorseWidget *swidget)
 	skey = seahorse_key_store_get_selected_key (GTK_TREE_VIEW (
 		glade_xml_get_widget (swidget->xml, KEY_LIST)));
 	if (skey)
-		seahorse_delete_key_new (GTK_WINDOW (glade_xml_get_widget (
-			swidget->xml, KEY_MANAGER)), swidget->sctx, skey);
+		seahorse_delete_new (swidget->sctx, skey, 0);
 }
 
 static void
@@ -153,6 +147,17 @@ add_subkey_activate (GtkMenuItem *item, SeahorseWidget *swidget)
 		glade_xml_get_widget (swidget->xml, KEY_LIST)));
 	if (skey)
 		seahorse_add_subkey_new (swidget->sctx, skey);
+}
+
+static void
+add_revoker_activate (GtkMenuItem *item, SeahorseWidget *swidget)
+{
+	SeahorseKey *skey;
+	
+	skey = seahorse_key_store_get_selected_key (GTK_TREE_VIEW (
+		glade_xml_get_widget (swidget->xml, KEY_LIST)));
+	if (skey)
+		seahorse_add_revoker_new (swidget->sctx, skey);
 }
 
 /* Loads text editor */
@@ -279,9 +284,11 @@ selection_changed (GtkTreeSelection *selection, SeahorseWidget *swidget)
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "change_passphrase"), secret);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "add_uid"), secret);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "add_subkey"), secret);
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "add_revoker"), secret);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "key_change_passphrase"), secret);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "key_add_uid"), secret);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "key_add_subkey"), secret);
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "key_add_revoker"), secret);
 }
 
 static gboolean
@@ -336,6 +343,8 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 		G_CALLBACK (add_uid_activate), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "add_subkey_activate",
 		G_CALLBACK (add_subkey_activate), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "add_revoker_activate",
+		G_CALLBACK (add_revoker_activate), swidget);
 	/* tool menu signals */	
 	glade_xml_signal_connect_data (swidget->xml, "text_editor_activate",
 		G_CALLBACK (text_editor_activate), swidget);
@@ -360,8 +369,6 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 	selection_changed (selection, swidget);
 	
 	//features not available
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "add_revoker"), FALSE);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "add_photo"), FALSE);
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "key_add_revoker"), FALSE);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "key_add_photo"), FALSE);
 }

@@ -1209,7 +1209,7 @@ typedef enum {
 	REV_SUBKEY_ENDDESC,
 	REV_SUBKEY_QUIT,
 	REV_SUBKEY_ERROR
-} RevSubkeyStates;
+} RevSubkeyState;
 
 static GpgmeError
 rev_subkey_action (guint state, gpointer data, const gchar **result)
@@ -1392,7 +1392,7 @@ typedef enum
 	SIGN_CHECK,
 	SIGN_QUIT,
 	SIGN_ERROR
-} SignStates;
+} SignState;
 
 static GpgmeError
 sign_action (guint state, gpointer data, const gchar **result)
@@ -1503,7 +1503,7 @@ sign_transit (guint current_state, GpgmeStatusCode status,
 				next_state = SIGN_ERROR;
 			break;
 		default:
-			next_state = REV_SUBKEY_ERROR;
+			next_state = SIGN_ERROR;
 			*err = GPGME_General_Error;
 			break;
 	}
@@ -1538,4 +1538,118 @@ seahorse_ops_key_sign (SeahorseContext *sctx, SeahorseKey *skey, const guint ind
 	parms = seahorse_edit_parm_new (SIGN_START, sign_action, sign_transit, sign_parm);
 	
 	return edit_key (sctx, skey, parms, _("Sign Key"), SKEY_CHANGE_SIGN);
+}
+
+typedef enum {
+	ADD_REVOKER_START,
+	ADD_REVOKER_COMMAND,
+	ADD_REVOKER_SELECT,
+	ADD_REVOKER_CONFIRM,
+	ADD_REVOKER_QUIT,
+	ADD_REVOKER_ERROR
+} AddRevokerState;
+
+static GpgmeError
+add_revoker_action (guint state, gpointer data, const gchar **result)
+{
+	gchar *keyid = (gchar*)data;
+	
+	switch (state) {
+		case ADD_REVOKER_COMMAND:
+			*result = "addrevoker";
+			break;
+		case ADD_REVOKER_SELECT:
+			*result = keyid;
+			break;
+		case ADD_REVOKER_CONFIRM:
+			*result = YES;
+			break;
+		case ADD_REVOKER_QUIT:
+			*result = QUIT;
+			break;
+		default:
+			return GPGME_General_Error;
+	}
+	
+	return GPGME_No_Error;
+}
+
+static guint
+add_revoker_transit (guint current_state, GpgmeStatusCode status,
+		     const gchar *args, gpointer data, GpgmeError *err)
+{
+	guint next_state;
+	
+	switch (current_state) {
+		case ADD_REVOKER_START:
+			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
+				next_state = ADD_REVOKER_COMMAND;
+			else {
+				next_state = ADD_REVOKER_ERROR;
+				*err = GPGME_General_Error;
+			}
+			break;
+		case ADD_REVOKER_COMMAND:
+			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "keyedit.add_revoker"))
+				next_state = ADD_REVOKER_SELECT;
+			else {
+				next_state = ADD_REVOKER_ERROR;
+				*err = GPGME_General_Error;
+			}
+			break;
+		case ADD_REVOKER_SELECT:
+			if (status == GPGME_STATUS_GET_BOOL && g_str_equal (args, "keyedit.add_revoker.okay"))
+				next_state = ADD_REVOKER_CONFIRM;
+			else {
+				next_state = ADD_REVOKER_ERROR;
+				*err = GPGME_General_Error;
+			}
+			break;
+		case ADD_REVOKER_CONFIRM:
+			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
+				next_state = ADD_REVOKER_QUIT;
+			else {
+				next_state = ADD_REVOKER_ERROR;
+				*err = GPGME_General_Error;
+			}
+			break;
+		case ADD_REVOKER_QUIT:
+			if (status == GPGME_STATUS_GET_BOOL && g_str_equal (args, SAVE))
+				next_state = ADD_REVOKER_CONFIRM;
+			else {
+				next_state = ADD_REVOKER_ERROR;
+				*err = GPGME_General_Error;
+			}
+			break;
+		case ADD_REVOKER_ERROR:
+			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
+				next_state = ADD_REVOKER_QUIT;
+			else
+				next_state = ADD_REVOKER_ERROR;
+			break;
+		default:
+			next_state = ADD_REVOKER_ERROR;
+			*err = GPGME_General_Error;
+			break;
+	}
+	
+	return next_state;
+}
+
+gboolean
+seahorse_ops_key_add_revoker (SeahorseContext *sctx, SeahorseKey *skey)
+{
+	SeahorseEditParm *parms;
+	SeahorseKey *signer;
+	
+	g_return_val_if_fail (sctx != NULL && SEAHORSE_IS_CONTEXT (sctx), FALSE);
+	g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), FALSE);
+	
+	signer = seahorse_context_get_last_signer (sctx);
+	g_return_val_if_fail (signer != NULL, FALSE);
+	
+	parms = seahorse_edit_parm_new (ADD_REVOKER_START, add_revoker_action,
+		add_revoker_transit, (gpointer)seahorse_key_get_keyid (signer, 0));
+	
+	return edit_key (sctx, skey, parms, _("Add Revoker"), SKEY_CHANGE_REVOKER);
 }

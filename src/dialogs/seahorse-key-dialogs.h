@@ -18,15 +18,36 @@
  * 59 Temple Place, Suite 330,
  * Boston, MA 02111-1307, USA.
  */
- 
-#ifndef __SEAHORSE_ADD_UID_H__
-#define __SEAHORSE_ADD_UID_H__
- 
-#include <glib.h>
- 
-#include "seahorse-context.h"
- 
-void	seahorse_add_uid_new	(SeahorseContext	*sctx,
- 				 SeahorseKey		*skey);
 
-#endif /* __SEAHORSE_ADD_UID_H__ */
+#ifndef __SEAHORSE_KEY_DIALOGS__
+#define __SEAHORSE_KEY_DIALOGS__
+
+#include <gtk/gtk.h>
+
+#include "seahorse-context.h"
+
+void	seahorse_add_revoker_new	(SeahorseContext	*sctx,
+					 SeahorseKey		*skey);
+
+void	seahorse_add_subkey_new		(SeahorseContext	*sctx,
+					 SeahorseKey		*skey);
+
+void	seahorse_add_uid_new		(SeahorseContext	*sctx,
+					 SeahorseKey		*skey);
+
+void	seahorse_delete_new		(SeahorseContext	*sctx,
+					 SeahorseKey		*skey,
+					 const guint		index);
+
+void	seahorse_export_new		(SeahorseContext	*sctx,
+					 SeahorseKey		*skey);
+
+void	seahorse_revoke_new		(SeahorseContext	*sctx,
+					 SeahorseKey		*skey,
+					 const guint		index);
+
+void	seahorse_sign_new		(SeahorseContext	*sctx,
+					 SeahorseKey		*skey,
+					 const guint		index);
+
+#endif /* __SEAHORSE_KEY_DIALOGS__ */

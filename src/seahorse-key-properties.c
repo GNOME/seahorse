@@ -26,12 +26,8 @@
 #include "seahorse-key-properties.h"
 #include "seahorse-key-widget.h"
 #include "seahorse-util.h"
-#include "seahorse-export.h"
-#include "seahorse-delete.h"
 #include "seahorse-validity.h"
-#include "seahorse-add-uid.h"
-#include "seahorse-add-subkey.h"
-#include "seahorse-revoke.h"
+#include "seahorse-key-dialogs.h"
 
 #define SPACING 12
 #define TRUST "trust"
@@ -57,8 +53,8 @@ sign_activate (GtkWidget *widget, SeahorseWidget *swidget)
 static void
 delete_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
-	seahorse_delete_key_new (NULL, swidget->sctx,
-		SEAHORSE_KEY_WIDGET (swidget)->skey);
+	seahorse_delete_new (swidget->sctx,
+		SEAHORSE_KEY_WIDGET (swidget)->skey, 0);
 }
 
 /* Tries to change the key's owner trust */
@@ -148,6 +144,12 @@ add_subkey_activate (GtkMenuItem *item, SeahorseWidget *swidget)
 }
 
 static void
+add_revoker_activate (GtkMenuItem *item, SeahorseWidget *swidget)
+{
+	seahorse_add_revoker_new (swidget->sctx, SEAHORSE_KEY_WIDGET (swidget)->skey);
+}
+
+static void
 subkeys_activate (GtkMenuItem *item, SeahorseWidget *swidget)
 {
 	if (gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (item)))
@@ -164,8 +166,7 @@ del_subkey_clicked (GtkButton *button, SeahorseWidget *swidget)
 	index = gtk_notebook_get_current_page (GTK_NOTEBOOK (
 		glade_xml_get_widget (swidget->xml, SUBKEYS))) + 1;
 	
-	seahorse_delete_subkey_new (GTK_WINDOW (glade_xml_get_widget (
-		swidget->xml, swidget->name)), swidget->sctx,
+	seahorse_delete_new (swidget->sctx,
 		SEAHORSE_KEY_WIDGET (swidget)->skey, index);
 }
 
@@ -176,12 +177,12 @@ revoke_subkey_clicked (GtkButton *button, SeahorseWidget *swidget)
 	
 	index = gtk_notebook_get_current_page (GTK_NOTEBOOK (
 		glade_xml_get_widget (swidget->xml, SUBKEYS))) + 1;
-	seahorse_revoke_subkey_new (swidget->sctx,
+	seahorse_revoke_new (swidget->sctx,
 		SEAHORSE_KEY_WIDGET (swidget)->skey, index);
 }
 
 /* Do a label */
-static void
+static GtkWidget*
 do_stat_label (const gchar *label, GtkTable *table, guint left, guint top)
 {
 	GtkWidget *widget;
@@ -193,6 +194,8 @@ do_stat_label (const gchar *label, GtkTable *table, guint left, guint top)
 	gtk_container_add (GTK_CONTAINER (align), widget);
 	gtk_table_attach (table, align, left, left+1, top, top+1, GTK_FILL, 0, 0, 0);
 	gtk_widget_show_all (align);
+	
+	return widget;
 }
 
 /* Do statistics common to primary and sub keys */
@@ -207,7 +210,8 @@ do_stats (SeahorseWidget *swidget, GtkTable *table, guint top, guint index)
 	skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
 	tooltips = gtk_tooltips_new ();
 	
-	do_stat_label (_("Key ID:"), table, 0, top);
+	widget = do_stat_label (_("Key ID:"), table, 0, top);
+	gtk_label_set_selectable (GTK_LABEL (widget), TRUE);
 	do_stat_label (seahorse_key_get_keyid (skey, index), table, 1, top);
 	do_stat_label (_("Type:"), table, 2, top);
 	do_stat_label (gpgme_key_get_string_attr (skey->key, GPGME_ATTR_ALGO, NULL, index), table, 3, top);
@@ -493,11 +497,12 @@ seahorse_key_properties_new (SeahorseContext *sctx, SeahorseKey *skey)
 		G_CALLBACK (add_uid_activate), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "add_subkey_activate",
 		G_CALLBACK (add_subkey_activate), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "add_revoker_activate",
+		G_CALLBACK (add_revoker_activate), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "subkeys_activate",
 		G_CALLBACK (subkeys_activate), swidget);
 	
 	g_signal_connect_after (skey, "changed", G_CALLBACK (key_changed), swidget);
 	
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "add_revoker"), FALSE);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "add_photo"), FALSE);
 }

@@ -21,7 +21,7 @@
 
 #include <gnome.h>
 
-#include "seahorse-export.h"
+#include "seahorse-key-dialogs.h"
 #include "seahorse-key-widget.h"
 #include "seahorse-ops-file.h"
 #include "seahorse-ops-text.h"

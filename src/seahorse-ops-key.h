@@ -173,4 +173,7 @@ gboolean	seahorse_ops_key_sign		(SeahorseContext	*sctx,
 						 SeahorseSignCheck	check,
 						 SeahorseSignOptions	options);
 
+gboolean	seahorse_ops_key_add_revoker	(SeahorseContext	*sctx,
+						 SeahorseKey		*skey);
+
 #endif /* __SEAHORSE_OPS_KEY_H__ */

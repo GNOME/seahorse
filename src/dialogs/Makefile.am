@@ -9,18 +9,19 @@ INCLUDES = -I$(top_srcdir) \
 noinst_LIBRARIES = libdialogs.a
 
 libdialogs_a_SOURCES = \
+	seahorse-add-subkey.c \
+	seahorse-add-uid.c \
+	seahorse-delete.c \
+	seahorse-export.c \
+	seahorse-revoke.c \
+	seahorse-sign.c \
+	seahorse-key-dialogs.h \
 	seahorse-generate.c seahorse-generate.h \
-	seahorse-export.c seahorse-export.h \
-	seahorse-delete.c seahorse-delete.h \
 	seahorse-preferences.c seahorse-preferences.h \
 	seahorse-import.c seahorse-import.h \
 	seahorse-passphrase.c seahorse-passphrase.h \
 	seahorse-signatures.c seahorse-signatures.h \
-	seahorse-recipients.c seahorse-recipients.h \
-	seahorse-add-uid.c seahorse-add-uid.h \
-	seahorse-add-subkey.c seahorse-add-subkey.h \
-	seahorse-revoke.c seahorse-revoke.h \
-	seahorse-sign.c seahorse-sign.h
+	seahorse-recipients.c seahorse-recipients.h
 
 glade_DATA = \
 	seahorse-generate.glade2 \

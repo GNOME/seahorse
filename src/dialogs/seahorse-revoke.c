@@ -21,64 +21,84 @@
  
 #include <gnome.h>
  
-#include "seahorse-revoke.h"
+#include "seahorse-key-dialogs.h"
 #include "seahorse-key-widget.h"
 #include "seahorse-ops-key.h"
 
-#define SUBKEY "subkey"
-#define REASON "reason"
-#define DESC "description"
-
 static void
-key_ok_clicked (GtkButton *button, SeahorseWidget *swidget)
+ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 {
-	
-}
-
-static void
-subkey_ok_clicked (GtkButton *button, SeahorseWidget *swidget)
-{
+	SeahorseKeyWidget *skwidget;
 	guint index;
 	SeahorseRevokeReason reason;
 	const gchar *description;
 	
-	index = (guint)g_object_steal_data (G_OBJECT (swidget), SUBKEY);
-	reason = gtk_option_menu_get_history (GTK_OPTION_MENU (
-		glade_xml_get_widget (swidget->xml, REASON)));
-	description = gtk_entry_get_text (GTK_ENTRY (
-		glade_xml_get_widget (swidget->xml, DESC)));
+	skwidget = SEAHORSE_KEY_WIDGET (swidget);
 	
-	seahorse_ops_key_revoke_subkey (swidget->sctx,
-		SEAHORSE_KEY_WIDGET (swidget)->skey, index, reason, description);
+	index = skwidget->index;
+	
+	reason = gtk_option_menu_get_history (GTK_OPTION_MENU (
+		glade_xml_get_widget (swidget->xml, "reason")));
+	description = gtk_entry_get_text (GTK_ENTRY (
+		glade_xml_get_widget (swidget->xml, "description")));
+	
+	if (skwidget->index != 0)
+		seahorse_ops_key_revoke_subkey (swidget->sctx, skwidget->skey,
+			skwidget->index, reason, description);
 	seahorse_widget_destroy (swidget);
 }
 
-static SeahorseWidget*
-revoke_new (SeahorseContext *sctx, SeahorseKey *skey)
+void
+seahorse_revoke_new (SeahorseContext *sctx, SeahorseKey *skey, const guint index)
 {
 	SeahorseWidget *swidget;
 	
-	swidget = seahorse_key_widget_new ("revoke", sctx, skey);
+	g_return_if_fail (sctx != NULL && SEAHORSE_IS_CONTEXT (sctx));
+	g_return_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey));
+	g_return_if_fail (index <= seahorse_key_get_num_subkeys (skey));
+	
+	swidget = seahorse_key_widget_new_with_index ("revoke", sctx, skey, index);
 	g_return_if_fail (swidget != NULL);
 	
-	return swidget;
-}
-
-void
-seahorse_revoke_key_new (SeahorseContext *sctx, SeahorseKey *skey)
-{
-	return;
-}
-
-void
-seahorse_revoke_subkey_new (SeahorseContext *sctx,
-			    SeahorseKey *skey, const guint index)
-{
-	SeahorseWidget *swidget;
-	
-	g_return_if_fail ((swidget = revoke_new (sctx, skey)) != NULL);
-	
-	g_object_set_data (G_OBJECT (swidget), SUBKEY, (gpointer)index);
 	glade_xml_signal_connect_data (swidget->xml, "ok_clicked",
-		G_CALLBACK (subkey_ok_clicked), swidget);
+		G_CALLBACK (ok_clicked), swidget);
+}
+
+void
+seahorse_add_revoker_new (SeahorseContext *sctx, SeahorseKey *skey)
+{
+	SeahorseKey *signer;
+	GtkWidget *dialog;
+	gint response;
+	gchar *message;
+	
+	g_return_if_fail (sctx != NULL && SEAHORSE_IS_CONTEXT (sctx));
+	g_return_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey));
+	
+	signer = seahorse_context_get_last_signer (sctx);
+	g_return_if_fail (signer != NULL);
+	
+	dialog = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
+		GTK_MESSAGE_WARNING, GTK_BUTTONS_YES_NO,
+		_("You are about to add %s as a revoker for %s."
+		" This operation cannot be undone! Are you sure you want to continue?"),
+		seahorse_key_get_userid (signer, 0), seahorse_key_get_userid (skey, 0));
+	response = gtk_dialog_run (GTK_DIALOG (dialog));
+	gtk_widget_destroy (dialog);
+	
+	if (response != GTK_RESPONSE_YES)
+		return;
+	
+	if (seahorse_ops_key_add_revoker (sctx, skey))
+		dialog = gtk_message_dialog_new (NULL, GTK_DIALOG_DESTROY_WITH_PARENT,
+			GTK_MESSAGE_INFO, GTK_BUTTONS_OK, _("%s can now revoke %s."),
+			seahorse_key_get_userid (signer, 0), seahorse_key_get_userid (skey, 0));
+	else
+		dialog = gtk_message_dialog_new (NULL, GTK_DIALOG_DESTROY_WITH_PARENT,
+			GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE,
+			_("Could not add %s as a revoker for %s"),
+			seahorse_key_get_userid (signer, 0), seahorse_key_get_userid (skey, 0));
+	g_signal_connect_swapped (GTK_OBJECT (dialog), "response",
+		G_CALLBACK (gtk_widget_destroy), GTK_OBJECT (dialog));
+	gtk_widget_show (dialog);
 }

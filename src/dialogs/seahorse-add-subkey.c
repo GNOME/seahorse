@@ -21,7 +21,7 @@
  
 #include <gnome.h>
  
-#include "seahorse-add-subkey.h"
+#include "seahorse-key-dialogs.h"
 #include "seahorse-key-widget.h"
 #include "seahorse-ops-key.h"
 
