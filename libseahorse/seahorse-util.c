@@ -623,6 +623,26 @@ seahorse_util_remove_suffix (const gchar *path)
 	return g_strndup (path, strlen (path) - 4);
 }
 
+gchar**
+seahorse_util_strvec_dup (const gchar** vec)
+{
+    gint len = 0;
+    gchar** ret;
+    const gchar** v;
+    
+    if (vec) {
+        for(v = vec; *v; v++)
+            len++;
+    }
+   
+    ret = (gchar**)g_new0(gchar*, len + 1);
+
+    while((--len) >= 0)
+        ret[len] = g_strdup(vec[len]);
+    
+    return ret;
+}
+
 void
 seahorse_util_free_keys (gpgme_key_t* keys)
 {

@@ -26,6 +26,7 @@
 #include <gpgme.h>
 
 #include "seahorse-context.h"
+#include "seahorse-widget.h"
 
 #define SEAHORSE_PASS_BAD    0x00000001
 #define SEAHORSE_PASS_NEW    0x01000000
@@ -36,7 +37,14 @@ seahorse_passphrase_get (SeahorseContext *sctx, const gchar *passphrase_hint,
 
 gpgme_key_t *	seahorse_recipients_get	(SeahorseContext	*sctx);
 
-GtkWindow*		seahorse_signatures_new	(SeahorseContext	*sctx,
-					 gpgme_verify_result_t	 status);
+SeahorseWidget*	seahorse_signatures_new	(SeahorseContext	*sctx);
+
+void            seahorse_signatures_add (SeahorseContext *sctx, 
+                                            SeahorseWidget *widget,
+                                            const gchar* data, 
+                                            gpgme_verify_result_t status);
+                            
+void            seahorse_signatures_run (SeahorseContext *sctx, 
+                                            SeahorseWidget *swidget);
 
 #endif /* __SEAHORSE_LIBDIALOGS_H__ */

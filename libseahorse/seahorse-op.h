@@ -79,6 +79,7 @@ gchar*		seahorse_op_encrypt_sign_text	(SeahorseContext	*sctx,
 
 void		seahorse_op_verify_file		(SeahorseContext	*sctx,
 						 const gchar		*path,
+                         const gchar        *original,
 						 gpgme_verify_result_t	*status,
 						 gpgme_error_t		*err);
 

@@ -82,6 +82,8 @@ gchar*		seahorse_util_add_suffix		(gpgme_ctx_t		ctx,
 
 gchar*		seahorse_util_remove_suffix		(const gchar		*path);
 
+gchar**     seahorse_util_strvec_dup        (const gchar        **vec);
+
 void        seahorse_util_free_keys (gpgme_key_t* keys);
 
 /* For checking GPG error codes */

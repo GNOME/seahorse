@@ -441,12 +441,11 @@ seahorse_op_encrypt_sign_text (SeahorseContext *sctx, const gchar *text,
  * The status of any verified signatures will be saved in @status.
  **/
 void
-seahorse_op_verify_file (SeahorseContext *sctx, const gchar *path,
+seahorse_op_verify_file (SeahorseContext *sctx, const gchar *path, const gchar *original,
 			 gpgme_verify_result_t *status, gpgme_error_t *err)
 {
 	gpgme_data_t sig, plain;
 	gpgme_error_t error;
-	gchar *plain_path;
 	
 	if (err == NULL)
 		err = &error;
@@ -454,10 +453,7 @@ seahorse_op_verify_file (SeahorseContext *sctx, const gchar *path,
     sig = seahorse_vfs_data_create (path, FALSE, err);
     g_return_if_fail (plain != NULL);
 
-	/* new data from plain file */
-	plain_path = seahorse_util_remove_suffix (path);
-    plain = seahorse_vfs_data_create (plain_path, FALSE, err);
-	g_free (plain_path);
+    plain = seahorse_vfs_data_create (original, FALSE, err);
   
 	/* release sig data if error */
 	if (!plain) {

@@ -29,87 +29,343 @@
 #include "seahorse-util.h"
 #include "seahorse-libdialogs.h"
 
-static gchar *import = NULL;
-static gchar *encrypt = NULL;
-static gchar *sign = NULL;
-static gchar *encrypt_sign = NULL;
-static gchar *decrypt = NULL;
-static gchar *verify = NULL;
+typedef enum _CmdLineMode {
+    MODE_NONE,
+    MODE_IMPORT,
+    MODE_ENCRYPT,
+    MODE_SIGN,
+    MODE_ENCRYPT_SIGN,
+    MODE_DECRYPT,
+    MODE_VERIFY
+} CmdLineMode;
+
+static gboolean read_uris = FALSE;
+static CmdLineMode mode = MODE_NONE; 
 
 static const struct poptOption options[] = {
-	{ "import", 'i', POPT_ARG_STRING, &import, 0,
-	  N_("Import keys from the file"), N_("FILE") },
+	{ "import", 'i', POPT_ARG_NONE | POPT_ARG_VAL, &mode, MODE_IMPORT,
+	  N_("Import keys from the file"), NULL },
 
-	{ "encrypt", 'e', POPT_ARG_STRING, &encrypt, 0,
-	  N_("Encrypt file"), N_("FILE") },
+	{ "encrypt", 'e', POPT_ARG_NONE | POPT_ARG_VAL, &mode, MODE_ENCRYPT,
+	  N_("Encrypt file"), NULL },
 
-	{ "sign", 's', POPT_ARG_STRING, &sign, 0,
-	  N_("Sign file with default key"), N_("FILE") },
+	{ "sign", 's', POPT_ARG_NONE | POPT_ARG_VAL, &mode, MODE_SIGN,
+	  N_("Sign file with default key"), NULL },
 	
-	{ "encrypt-sign", 'n', POPT_ARG_STRING, &encrypt_sign, 0,
-	  N_("Encrypt and sign file with default key"), N_("FILE") },
+	{ "encrypt-sign", 'n', POPT_ARG_NONE | POPT_ARG_VAL, &mode, MODE_ENCRYPT_SIGN,
+	  N_("Encrypt and sign file with default key"), NULL },
 	
-	{ "decrypt", 'd', POPT_ARG_STRING, &decrypt, 0,
-	  N_("Decrypt encrypted file"), N_("FILE") },
+	{ "decrypt", 'd', POPT_ARG_NONE | POPT_ARG_VAL, &mode, MODE_DECRYPT,
+	  N_("Decrypt encrypted file"), NULL },
 	
-	{ "verify", 'v', POPT_ARG_STRING, &verify, 0,
-	  N_("Verify signature file"), N_("FILE") },
+	{ "verify", 'v', POPT_ARG_NONE | POPT_ARG_VAL, &mode, MODE_VERIFY,
+	  N_("Verify signature file"), NULL },
+      
+    { "uri-list", 'T', POPT_ARG_NONE | POPT_ARG_VAL, &read_uris, TRUE,
+      N_("Read list of uris on stdin"), NULL },
 	
-	{ NULL, '\0', 0, NULL, 0 }
+	{ NULL, '\0', 0, NULL, 0, NULL, NULL }
 };
 
-static void
-show_info (const gchar *message)
+
+/* Returns a null terminated array of uris, use g_strfreev to free */
+static gchar** 
+read_uri_arguments (GnomeProgram *program)
 {
-	GtkWidget *widget;
-	
-	widget = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
-		GTK_MESSAGE_INFO, GTK_BUTTONS_OK, message);
-	gtk_dialog_run (GTK_DIALOG (widget));
-	gtk_widget_destroy (widget);
+    /* Read uris from stdin */
+    if (read_uris) {
+       
+        GIOChannel* io;
+        GArray* files;
+        gchar* line;
+
+        files = g_array_new (TRUE, TRUE, sizeof (gchar*));
+    
+        /* Opens a channel on stdin */
+        io = g_io_channel_unix_new (0);
+    
+        while (g_io_channel_read_line (io, &line, NULL, NULL, NULL) == G_IO_STATUS_NORMAL) {
+     
+            if (line == NULL)
+                continue;
+
+            g_strstrip(line);
+            if(line[0] == 0)
+            {
+                g_free(line);
+                continue;
+            }
+            
+            g_array_append_val(files, line);
+        }
+        
+        g_io_channel_unref (io);
+        return (gchar**)g_array_free (files, FALSE);
+        
+    /* Multiple arguments on command line */
+    } else {
+       
+        poptContext ctx;
+        GValue value = { 0, };
+
+        g_value_init (&value, G_TYPE_POINTER);
+        g_object_get_property (G_OBJECT (program), GNOME_PARAM_POPT_CONTEXT, &value);
+        
+        ctx = g_value_get_pointer (&value);
+        g_value_unset (&value);
+
+        return seahorse_util_strvec_dup (poptGetArgs(ctx));
+    }
 }
 
-static void
-do_encrypt (SeahorseContext *sctx, gchar *path,
-	    SeahorseEncryptFunc func, const gchar *message)
+/* Perform an import on the given set of paths */
+static guint
+do_import (SeahorseContext *sctx, const gchar **paths)
 {
-	gpgme_key_t * recips = NULL;
-	gchar *new_path;
-	gpgme_error_t err;
+    GtkWidget *dlg;
+    gpgme_error_t err;
+    gint keys = 0;
+    gchar **uris;
+    gchar **u;
+    gchar *t;
     guint ret = 0;
-		
-	recips = seahorse_recipients_get (sctx);
-		
-	if (recips == NULL) {
-		g_free (path);
-		exit (1);
-	}
-		
-	new_path = func (sctx, path, recips, &err);
-    seahorse_util_free_keys (recips);
-		
-	if (!GPG_IS_OK (err)) {
-		seahorse_util_handle_error (err, _("Couldn't encrypt \"%s\""), 
-            seahorse_util_uri_get_last (path));
-		ret = 1;
-	}
-	else {
-		show_info (g_strdup_printf (message, new_path));
-		g_free (new_path);
-	}
+    
+    /* Get all sub-folders etc... */
+    uris = seahorse_util_uris_expand (paths);
+    g_assert (uris != NULL);
+     
+    for (u = uris; *u; u++) {
+        keys += seahorse_op_import_file (sctx, *u, &err);
+       
+        if (!GPG_IS_OK (err)) {
+            seahorse_util_handle_error (err, _("Couldn't import keys from \"%s\""),
+                    seahorse_util_uri_get_last (*u));
+            ret = 1;
+            break;
+        }
+    }
 
-    g_free (path);
-    exit (ret);
+    if (ret == 0) {
+        t = g_strdup_printf (keys == 1 ? _("Imported key") : 
+                                    _("Imported %d keys"), keys);
+        dlg = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
+                             GTK_MESSAGE_INFO, GTK_BUTTONS_OK, t);
+        gtk_dialog_run (GTK_DIALOG (dlg));
+        gtk_widget_destroy (dlg);
+    }
+
+    g_strfreev(uris);
+    return ret;
+}
+
+/* Encrypt or sign the given set of paths */
+static guint 
+do_encrypt_base (SeahorseContext *sctx, const gchar **paths, SeahorseEncryptFunc func)
+{
+    gpgme_key_t *recips = NULL;
+    gchar *new_path;
+    gpgme_error_t err;
+    gchar **uris = NULL;
+    gchar **u;
+    guint ret = 0;
+
+    /* This can change the list of uris and optionally compress etc... */
+    uris = seahorse_process_multiple (sctx, paths, NULL);
+
+    if(!uris)
+        ret = 1;
+    else {
+        recips = seahorse_recipients_get (sctx);
+           
+        if (recips != NULL) {
+            for(u = uris; *u; u++) {
+                new_path = func (sctx, *u, recips, &err);
+                g_free (new_path);            
+    
+                if (!GPG_IS_OK (err)) {
+                    seahorse_util_handle_error (err, _("Couldn't encrypt \"%s\""), 
+                        seahorse_util_uri_get_last (*u));
+                    ret = 1;
+                    break;
+                }
+            }
+            
+            seahorse_util_free_keys (recips);
+       }
+
+        g_strfreev (uris);
+    }
+    
+    return ret;     
+}
+
+/* Encrypt the given set of paths */
+static guint
+do_encrypt (SeahorseContext *sctx, const gchar **paths)
+{
+    return do_encrypt_base (sctx, paths, seahorse_op_encrypt_file);
+}
+
+/* Encrypt and sign the given set of paths */
+static guint
+do_encrypt_sign (SeahorseContext *sctx, const gchar **paths)
+{
+    return do_encrypt_base (sctx, paths, seahorse_op_encrypt_sign_file);
+}
+
+static guint
+do_sign (SeahorseContext *sctx, const gchar **paths)
+{
+    gpgme_error_t err;
+    gchar **uris;
+    gchar **u;
+    gchar *new_path;
+    guint ret = 0;
+    
+    uris = seahorse_util_uris_expand (paths);
+    g_assert (uris != NULL);
+     
+    for (u = uris; *u; u++) {
+        new_path = seahorse_op_sign_file (sctx, *u, &err);
+        g_free(new_path);
+        
+        if (!GPG_IS_OK (err)) {
+            seahorse_util_handle_error (err, _("Couldn't sign \"%s\""),
+                seahorse_util_uri_get_last (*u));
+            ret = 1;
+            break;
+        }
+    }
+
+    g_strfreev(uris);    
+    return ret;
+}
+
+/* Decrypt the given set of paths */
+static guint
+do_decrypt (SeahorseContext *sctx, const gchar **paths)
+{
+    gpgme_verify_result_t status = NULL;
+    SeahorseWidget *signatures = NULL;
+    gpgme_error_t err;
+    gchar **uris;
+    gchar **u;
+    gchar *new_path;
+    guint ret = 0;
+    
+    uris = seahorse_util_uris_expand (paths);
+    g_assert (uris != NULL);
+     
+    for (u = uris; *u; u++) {
+        new_path = seahorse_op_decrypt_verify_file (sctx, *u, &status, &err);
+                
+        if (!GPG_IS_OK (err)) {
+            seahorse_util_handle_error (err, _("Couldn't decrypt \"%s\""),
+                    seahorse_util_uri_get_last (*u));
+            ret = 1;
+            break;
+        }
+        
+        if(status && status->signatures) {
+            if(!signatures)
+                signatures = seahorse_signatures_new (sctx);
+            seahorse_signatures_add (sctx, signatures, new_path, status);
+        }
+
+        g_free (new_path);
+    }
+    
+    g_strfreev (uris);    
+    
+    if (ret == 0 && signatures)
+        seahorse_signatures_run (sctx, signatures);
+        
+    return ret;
+}
+
+/* Verify the given set of paths. Prompt user if original files not found */
+static guint
+do_verify (SeahorseContext *sctx, const gchar **paths)
+{
+    gpgme_verify_result_t status = NULL;
+    SeahorseWidget *signatures = NULL;
+    gchar *original = NULL;
+    gpgme_error_t err;
+    gchar **uris;
+    gchar **u;
+    guint ret = 0;
+    
+    uris = seahorse_util_uris_expand (paths);
+    g_assert (uris != NULL);
+     
+    for (u = uris; *u; u++) {
+
+        original = seahorse_util_remove_suffix (*u);
+
+        /* The original file doesn't exist, prompt for it */
+        if (!seahorse_util_uri_exists (original)) {
+           
+            GtkWidget *dialog;
+            gchar *t;
+            
+            t = g_strdup_printf (_("Choose Original File for '%s'"), 
+                    seahorse_util_uri_get_last (*u));
+            
+            dialog = gtk_file_chooser_dialog_new (t, 
+                        NULL, GTK_FILE_CHOOSER_ACTION_OPEN, 
+                        GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                        GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+                        NULL);
+            
+            g_free (t);
+
+            gtk_file_chooser_set_uri (GTK_FILE_CHOOSER (dialog), original);
+            gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (dialog), FALSE);
+
+            g_free (original);                
+            original = NULL;
+            
+            if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT) 
+                original = gtk_file_chooser_get_uri (GTK_FILE_CHOOSER (dialog));
+                
+            gtk_widget_destroy (dialog);
+        }
+        
+        if (original) {
+            seahorse_op_verify_file (sctx, *u, original, &status, &err);
+            g_free (original);
+
+            if (!GPG_IS_OK (err)) {
+                seahorse_util_handle_error (err, _("Couldn't verify \"%s\""),
+                        seahorse_util_uri_get_last (*u));
+                ret = 1;
+                break;
+            }
+            
+            if (status && status->signatures) {
+                if(!signatures)
+                    signatures = seahorse_signatures_new (sctx);
+                seahorse_signatures_add (sctx, signatures, *u, status);
+            }
+        }
+    }
+    
+    g_strfreev (uris);    
+    
+    if (ret == 0 && signatures)
+        seahorse_signatures_run (sctx, signatures);
+        
+    return ret;
 }
 
 /* Initializes context and preferences, then loads key manager */
 int
 main (int argc, char **argv)
 {
+    GnomeProgram *program = NULL;
 	SeahorseContext *sctx;
-	gpgme_error_t err;
-	gchar *new_path;
-    GtkWindow* win = NULL;
+    GtkWindow* win;
+    int ret = 0;
 
 #ifdef ENABLE_NLS	
 	bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
@@ -124,93 +380,52 @@ main (int argc, char **argv)
 	gpgme_set_locale(NULL, LC_MESSAGES, setlocale(LC_MESSAGES, NULL));
 #endif
 
-	gnome_program_init (PACKAGE, VERSION, LIBGNOMEUI_MODULE, argc, argv,
-		GNOME_PARAM_POPT_TABLE, options,
-		GNOME_PARAM_HUMAN_READABLE_NAME, _("GPG Keys Manager"),
-		GNOME_PARAM_APP_DATADIR, DATA_DIR, NULL);
-	
-	sctx = seahorse_context_new ();
-	
-	if (import != NULL) {
-		gint keys;
-		
-		keys = seahorse_op_import_file (sctx, import, &err);
-		
-		if (!GPG_IS_OK (err)) {
-			seahorse_util_handle_error (err, _("Couldn't import keys from \"%s\""),
-                    seahorse_util_uri_get_last (import));
-			return 1;
-		}
-		else {
-			show_info (g_strdup_printf (keys == 1 ? _("Imported key") : 
-                                            _("Imported %d keys"), keys));
-			return 0;
-		}
-	}
- 
-	else if (encrypt != NULL) {
-		do_encrypt (sctx, encrypt, seahorse_op_encrypt_file, _("Encrypted file is %s"));
-    }
+    program = gnome_program_init(PACKAGE, VERSION, LIBGNOMEUI_MODULE, argc, argv,
+                    GNOME_PARAM_POPT_TABLE, options,
+                    GNOME_PARAM_HUMAN_READABLE_NAME, _("GPG Keys Manager"),
+                    GNOME_PARAM_APP_DATADIR, DATA_DIR, NULL);
+
+    sctx = seahorse_context_new ();
+
+    if (mode != MODE_NONE) {
+        gchar **uris = NULL;
+       
+        /* Load up all our arguments */
+        uris = read_uri_arguments(program);
     
-	else if (sign != NULL) {
-		new_path = seahorse_op_sign_file (sctx, sign, &err);
-		
-		if (!GPG_IS_OK (err)) {
-			seahorse_util_handle_error (err, _("Couldn't sign \"%s\""),
-                seahorse_util_uri_get_last (sign));
-			return 1;
-		}
-		else {
-			show_info (g_strdup_printf (_("Signature file is %s"), new_path));
-			g_free (new_path);
-			return 0;
-		}
-	}
- 
-	else if (encrypt_sign != NULL) {
-    	do_encrypt (sctx, encrypt_sign, seahorse_op_encrypt_sign_file,
-			_("Encrypted and signed file is %s"));
+        if(uris && uris[0]) {
+            switch (mode) {
+            case MODE_IMPORT:
+                ret = do_import (sctx, (const gchar**)uris);
+                break;
+            case MODE_ENCRYPT:
+                ret = do_encrypt (sctx, (const gchar**)uris);
+                break;
+            case MODE_SIGN:
+                ret = do_sign (sctx, (const gchar**)uris);
+                break;
+            case MODE_ENCRYPT_SIGN:
+                ret = do_encrypt_sign (sctx, (const gchar**)uris);
+                break;
+            case MODE_DECRYPT:
+                ret = do_decrypt (sctx, (const gchar**)uris);
+                break;
+            case MODE_VERIFY:
+                ret = do_verify (sctx, (const gchar**)uris);
+                break;
+            default:
+                g_assert_not_reached ();
+                break;
+            };
+                
+            g_strfreev (uris);
+        }
+        
+        return ret;
     }
-          
-	else if (decrypt != NULL) {
-        gpgme_verify_result_t status = NULL;
-        new_path = seahorse_op_decrypt_verify_file (sctx, decrypt, &status, &err);
-		
-		if (!GPG_IS_OK (err)) {
-			seahorse_util_handle_error (err, _("Couldn't decrypt \"%s\""),
-                    seahorse_util_uri_get_last (decrypt));
-			return 1;
-		}
-		else {
-			show_info (g_strdup_printf (_("Decrypted file is %s"), new_path));
-			g_free (new_path);
-          
-            if (status && status->signatures) 
-                win = seahorse_signatures_new (sctx, status);
-            else 
-                return 0;
-		}
-	}
  
-	else if (verify != NULL) {
-		gpgme_verify_result_t status;
-		
-		seahorse_op_verify_file (sctx, verify, &status, &err);
-		
-		if (!GPG_IS_OK (err)) {
-			seahorse_util_handle_error (err, _("Couldn't verify \"%s\""),
-                seahorse_util_uri_get_last (verify));
-			return 1;
-		}
-		else {
-			win = seahorse_signatures_new (sctx, status);
-		}
-	}
- 
-    if(!win)
-        win = seahorse_key_manager_show (sctx);
-    
-    g_signal_connect_after(G_OBJECT (win), "destroy", gtk_main_quit, NULL);
+    win = seahorse_key_manager_show (sctx);
+    g_signal_connect_after (G_OBJECT (win), "destroy", gtk_main_quit, NULL);
 	gtk_main ();
 	
 	return 0;

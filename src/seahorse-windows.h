@@ -40,4 +40,8 @@ void	seahorse_delete_show		(SeahorseContext	*sctx,
 void	seahorse_sign_show		(SeahorseContext	*sctx,
 					 GList			*keys);
 
+gchar** seahorse_process_multiple (SeahorseContext       *sctx, 
+                                   const gchar**         uris, 
+                                   const gchar*          glade);
+
 #endif /* __SEAHORSE_WINDOWS_H__ */

@@ -30,7 +30,8 @@ seahorse_SOURCES = main.c \
 	seahorse-delete.c \
 	seahorse-add-uid.c \
 	seahorse-add-subkey.c \
-	seahorse-key-dialogs.h
+	seahorse-key-dialogs.h \
+	seahorse-process-multiple.c
 
 seahorse_LDADD = \
 	$(top_builddir)/libseahorse/libseahorse.a \
@@ -47,7 +48,8 @@ glade_DATA = \
 	seahorse-generate-adv.glade \
 	seahorse-preferences.glade \
 	seahorse-add-uid.glade \
-	seahorse-add-subkey.glade
+	seahorse-add-subkey.glade \
+	seahorse-multi-encrypt.glade
 
 @INTLTOOL_DESKTOP_RULE@
 desktopdir = $(datadir)/applications
