@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-01 15:24+0200\n"
-"PO-Revision-Date: 2004-06-09 00:04+0200\n"
+"POT-Creation-Date: 2004-08-30 20:24+0200\n"
+"PO-Revision-Date: 2004-08-31 00:25+0200\n"
 "Last-Translator: Ivan Noris <vix@vazka.sk>\n"
 "Language-Team: Slovak <sk-i18n@linux.sk>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
 #: bonobo/Seahorse_PGP_File_Listener.server.in.in.h:1
 msgid "Decrypt And Verify Signatures..."
@@ -117,7 +117,8 @@ msgstr "ID štandardného kľúča"
 msgid ""
 "If set to true, then all output from pgp operations will be ASCII text. "
 "Files will have a '.asc' extension."
-msgstr "Ak je nastavenie true, výstupom všetkých operácií pgp bude ASCII text. "
+msgstr ""
+"Ak je nastavenie true, výstupom všetkých operácií pgp bude ASCII text. "
 "Súbory budú mať príponu '.asc'."
 
 #: data/seahorse.schemas.in.h:11
@@ -125,13 +126,18 @@ msgid ""
 "If set to true, then output from certain pgp operations will be in canonical "
 "text mode. Text mode is generally only needed for RFC 2015 signatures. RFC "
 "3156 removes the need for text mode."
-msgstr "Ak je nastavenie true, výstup určitých operácií pgp bude v kanonickom textovom režime. Textový režim je vyžadujú len podpisy RFC 2015. RFC 3156 odstraňuje potrebu textového režimu."
+msgstr ""
+"Ak je nastavenie true, výstup určitých operácií pgp bude v kanonickom "
+"textovom režime. Textový režim je vyžadujú len podpisy RFC 2015. RFC 3156 "
+"odstraňuje potrebu textového režimu."
 
 #: data/seahorse.schemas.in.h:12
 msgid ""
 "If set to true, then the default key will always be added to an encryption "
 "recipients list."
-msgstr "Ak je nastavenie true, štandardný kľúč sa vždy pridá do zoznamu príjemcov šifrovania."
+msgstr ""
+"Ak je nastavenie true, štandardný kľúč sa vždy pridá do zoznamu príjemcov "
+"šifrovania."
 
 #: data/seahorse.schemas.in.h:13
 msgid "If the statusbar is visible"
@@ -169,19 +175,25 @@ msgstr "Štýl tlačidiel na lište nástrojov a popisiek"
 msgid ""
 "The toolbar button and label style. Options are 'default', 'both', "
 "'both_horiz', 'icons', and 'text'."
-msgstr "Štýl tlačidiel a popisiek lišty. Prípustné hodnoty sú 'default', 'both', 'both_horiz', 'icons' a 'text'."
+msgstr ""
+"Štýl tlačidiel a popisiek lišty. Prípustné hodnoty sú 'default', 'both', "
+"'both_horiz', 'icons' a 'text'."
 
 #: data/seahorse.schemas.in.h:22
 msgid ""
 "This specifies how often the progress signal is emitted during a listing "
 "operation. By default, the signal is emitted for every 20 keys processed. A "
 "value of -1 will cause the signal to never be emitted."
-msgstr "Toto nastavenie určuje, ako často sa vysiela signál priebehu počas operácie výpisu. Štandardne sa signál vysiela po každých 20-tich kľúčoch. Hodnota -1 spôsobi, že sa signál nebude vysielať."
+msgstr ""
+"Toto nastavenie určuje, ako často sa vysiela signál priebehu počas operácie "
+"výpisu. Štandardne sa signál vysiela po každých 20-tich kľúčoch. Hodnota -1 "
+"spôsobi, že sa signál nebude vysielať."
 
 #: data/seahorse.schemas.in.h:23
 msgid ""
 "This specifies the default key to use for cerain operations, mainly signing."
-msgstr "Tu sa špecifikuje štandardný kľúč pre určité operácie, najmä podpisovanie."
+msgstr ""
+"Tu sa špecifikuje štandardný kľúč pre určité operácie, najmä podpisovanie."
 
 #: data/seahorse.schemas.in.h:24
 msgid "Whether to always encrypt to default key"
@@ -655,7 +667,9 @@ msgstr "_Heslo:"
 msgid ""
 "Before selecting apply to start key generation, please make sure all of your "
 "previous settings are correct."
-msgstr "Kým vyberiete Použiť na vygenerovanie kľúča, uistite sa prosím, že sú všetky vaše predchádzajúce nastavenia správne."
+msgstr ""
+"Kým vyberiete Použiť na vygenerovanie kľúča, uistite sa prosím, že sú všetky "
+"vaše predchádzajúce nastavenia správne."
 
 #: src/seahorse-generate-druid.glade.h:3
 msgid ""
@@ -666,7 +680,14 @@ msgid ""
 "Take this phrase, adjust the case of various letters, and change some of the "
 "letters into numbers or punctuation rmeiniscent of \"leet speak\", but don't "
 "make it so obscure to the point where you can't remember it."
-msgstr "Výber hesla je nedeliteľná súčasť vytvárania silného kľúča.  Heslo by malo obsahovať písmená, číslice a interpunkčné znaky.  Okrem toho môže obsahovať aj medzery, teda viacero slov.  Mali by ste si zvoliť zapamätateľný reťazec, ktorý obsahuje interpunkčné znaky.  V tomto reťazci upravte veľkosť rôznych písmen a zmeňte niektoré písmená na číslice alebo interpunkčné znaky pripomínajúce písmená. Pozor však na to, aby ste nevytvorili taký zložitý reťazec, ktorý si nebudete vedieť zapamätať."
+msgstr ""
+"Výber hesla je nedeliteľná súčasť vytvárania silného kľúča.  Heslo by malo "
+"obsahovať písmená, číslice a interpunkčné znaky.  Okrem toho môže obsahovať "
+"aj medzery, teda viacero slov.  Mali by ste si zvoliť zapamätateľný reťazec, "
+"ktorý obsahuje interpunkčné znaky.  V tomto reťazci upravte veľkosť rôznych "
+"písmen a zmeňte niektoré písmená na číslice alebo interpunkčné znaky "
+"pripomínajúce písmená. Pozor však na to, aby ste nevytvorili taký zložitý "
+"reťazec, ktorý si nebudete vedieť zapamätať."
 
 #: src/seahorse-generate-druid.glade.h:4
 msgid "Comment:"
@@ -729,7 +750,14 @@ msgid ""
 "After the expiration date, your private key will still be able to decrypt "
 "messages or data encrypted with your public key.  However, your private key "
 "will no longer sign messages or data."
-msgstr "Pre kľúč musíte zadať vhodný čas platnosti.  Pre väčšinu ľudí postačuje štandardné nastavenie - platnosť kľúča nikdy nevyprší.  Ak plánujete používať kľúč iba určitý čas, napr. pre nejaký projekt, mali by ste si vybrať čas vypršania platnosti po predpokladanom termíne ukončenia vášho projektu.  Po vypršaní platnosti budete stále môcť dešifrovať správy alebo údaje šifrované vaším verejným kľúčom, nebude však možné použiť váš privátny kľúč na podpisovanie správ alebo údajov."
+msgstr ""
+"Pre kľúč musíte zadať vhodný čas platnosti.  Pre väčšinu ľudí postačuje "
+"štandardné nastavenie - platnosť kľúča nikdy nevyprší.  Ak plánujete "
+"používať kľúč iba určitý čas, napr. pre nejaký projekt, mali by ste si "
+"vybrať čas vypršania platnosti po predpokladanom termíne ukončenia vášho "
+"projektu.  Po vypršaní platnosti budete stále môcť dešifrovať správy alebo "
+"údaje šifrované vaším verejným kľúčom, nebude však možné použiť váš privátny "
+"kľúč na podpisovanie správ alebo údajov."
 
 #: src/seahorse-generate-druid.glade.h:18
 msgid "Medium Security"
@@ -775,7 +803,12 @@ msgid ""
 "know your data will be actively scrutinized.  The Extra High level should be "
 "selected if you know your data is actively scrutinized and will be under "
 "cryptographic attack. "
-msgstr "Stredná úroveň bezpečnosti (štandardné nastavenie) by mala byť prijateľná pre bežné každodenné použitie.  Vysokú úroveň bezpečnosti by ste mali zvoliť v prípade, že viete, že vaše údaje budú podrobené aktívnej analýze.  Zvlášť vysokú bezpečnosť by ste mali zvoliť v prípade, že viete, že vaše údaje budú podrobené aktívnej analýze a bude na ne podniknutý kryptografický útok. "
+msgstr ""
+"Stredná úroveň bezpečnosti (štandardné nastavenie) by mala byť prijateľná "
+"pre bežné každodenné použitie.  Vysokú úroveň bezpečnosti by ste mali zvoliť "
+"v prípade, že viete, že vaše údaje budú podrobené aktívnej analýze.  Zvlášť "
+"vysokú bezpečnosť by ste mali zvoliť v prípade, že viete, že vaše údaje budú "
+"podrobené aktívnej analýze a bude na ne podniknutý kryptografický útok. "
 
 #: src/seahorse-generate-druid.glade.h:31
 msgid "This druid will guide you through the steps of creating a GPG key pair."
@@ -788,7 +821,10 @@ msgid ""
 "to the name of your key in the following "
 "manner:                              Full Name (Comment) <email address>."
 msgstr ""
-"Na vytvorenie kľúča a jeho previazanie s vašou identitou sú požadované tieto informácie:celé meno, emailová adresa a komentár  Tieto hodnoty budú použité v mene vášho kľúča v tvare:                              Celé meno (Komentár) <emailová adresa>."
+"Na vytvorenie kľúča a jeho previazanie s vašou identitou sú požadované tieto "
+"informácie:celé meno, emailová adresa a komentár  Tieto hodnoty budú použité "
+"v mene vášho kľúča v tvare:                              Celé meno "
+"(Komentár) <emailová adresa>."
 
 #: src/seahorse-generate-druid.glade.h:33
 msgid "druidpage_pass"
@@ -892,7 +928,7 @@ msgstr "seahorse"
 
 #: src/seahorse-key-manager.glade.h:1
 msgid "Add P_hoto ID..."
-msgstr ""
+msgstr "Pridať _foto ID..."
 
 #: src/seahorse-key-manager.glade.h:2
 msgid "Add Sub_key..."
@@ -916,7 +952,7 @@ msgstr "Pridať nové ID používateľa"
 
 #: src/seahorse-key-manager.glade.h:7
 msgid "Add a photo ID"
-msgstr ""
+msgstr "Pridať foto ID"
 
 #: src/seahorse-key-manager.glade.h:8
 msgid "Add the default key as a revoker"
@@ -1318,7 +1354,9 @@ msgstr "Zneplatniť %s"
 msgid ""
 "You are about to add %s as a revoker for %s. This operation cannot be "
 "undone! Are you sure you want to continue?"
-msgstr "Chystáte sa pridať %s ako zneplatňovač pre %s. Túto operáciu nemožno odvolať! Naozaj chcete pokračovať?"
+msgstr ""
+"Chystáte sa pridať %s ako zneplatňovač pre %s. Túto operáciu nemožno "
+"odvolať! Naozaj chcete pokračovať?"
 
 #: src/seahorse-revoke.glade.h:2
 msgid "Compromised"
@@ -1441,4 +1479,3 @@ msgstr "_Lokálny"
 #: src/seahorse-sign.glade.h:16
 msgid "_Revocable"
 msgstr "_Zneplatniteľný"
-
