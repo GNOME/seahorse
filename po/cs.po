@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-09 11:26+0100\n"
-"PO-Revision-Date: 2005-01-09 14:59+0100\n"
+"POT-Creation-Date: 2005-01-23 11:40+0100\n"
+"PO-Revision-Date: 2005-01-23 15:22+0100\n"
 "Last-Translator: Miloslav Trmac <mitr@volny.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -452,13 +452,13 @@ msgid "Whether to use canonical text mode"
 msgstr "Jestli používat kanonický textový režim"
 
 #. Make the column
-#: libseahorse/seahorse-key-store.c:615 src/seahorse-key-properties.c:380
+#: libseahorse/seahorse-key-store.c:690 src/seahorse-key-properties.c:380
 #: src/seahorse-key-properties.c:474
 msgid "Name"
 msgstr "Jméno"
 
 #. Make the column
-#: libseahorse/seahorse-key-store.c:618 src/seahorse-key-properties.c:377
+#: libseahorse/seahorse-key-store.c:693 src/seahorse-key-properties.c:377
 msgid "Key ID"
 msgstr "ID klíče"
 
@@ -632,39 +632,39 @@ msgstr[2] "Načteno %d klíčů"
 msgid "Loading Keys..."
 msgstr "Načítám klíče..."
 
-#: libseahorse/seahorse-recipients-store.c:147
-#: src/seahorse-key-manager-store.c:321
+#: libseahorse/seahorse-recipients-store.c:153
+#: src/seahorse-key-manager-store.c:284
 msgid "Validity"
 msgstr "Platnost"
 
-#: libseahorse/seahorse-recipients.c:54 src/seahorse-keyserver-results.c:217
+#: libseahorse/seahorse-recipients.c:54
 #, c-format
-msgid "Selected %d keys"
-msgid_plural "Selected %d keys"
-msgstr[0] "Vybrán %d klíč"
-msgstr[1] "Vybrány %d klíče"
-msgstr[2] "Vybráno %d klíčů"
+msgid "Selected %d recipient"
+msgid_plural "Selected %d recipients"
+msgstr[0] "Vybrán %d příjemce"
+msgstr[1] "Vybráni %d příjemci"
+msgstr[2] "Vybráno %d příjemců"
 
 #: libseahorse/seahorse-recipients.c:58
 #, c-format
-msgid "Selected %d not fully valid key"
-msgid_plural "Selected %d not fully valid keys"
-msgstr[0] "Vybrán %d neúplně platný klíč"
-msgstr[1] "Vybrány %d neúplně platné klíče"
-msgstr[2] "Vybráno %d neúplně platných klíčů"
+msgid "Selected %d not fully valid recipient"
+msgid_plural "Selected %d not fully valid recipients"
+msgstr[0] "Vybrán %d neúplně platný příjemce"
+msgstr[1] "Vybráni %d neúplně platní příjemci"
+msgstr[2] "Vybráno %d neúplně platných příjemců"
 
 #. TRANSLATOR: This string will become
-#. * "Selected %d keys and (%d not fully valid)"
+#. * "Selected %d recipients (%d not fully valid)"
 #: libseahorse/seahorse-recipients.c:66
 #, c-format
-msgid "Selected %d key "
-msgid_plural "Selected %d keys "
-msgstr[0] "Vybrán %d klíč "
-msgstr[1] "Vybrány %d klíče "
-msgstr[2] "Vybráno %d klíčů "
+msgid "Selected %d recipient "
+msgid_plural "Selected %d recipients "
+msgstr[0] "Vybrán %d příjemce "
+msgstr[1] "Vybráni %d příjemci "
+msgstr[2] "Vybráno %d příjemců "
 
 #. TRANSLATOR: This string will become
-#. * "Selected %d keys and (%d not fully valid)"
+#. * "Selected %d recipients (%d not fully valid)"
 #: libseahorse/seahorse-recipients.c:71
 #, c-format
 msgid "(%d not fully valid)"
@@ -673,7 +673,7 @@ msgstr[0] "(%d neúplně platný)"
 msgstr[1] "(%d neúplně platné)"
 msgstr[2] "(%d neúplně platných)"
 
-#. TRANSLATOR: "%s%s" are "Selected %d keys and (%d not fully valid)"
+#. TRANSLATOR: "%s%s" are "Selected %d recipients (%d not fully valid)"
 #. * Swap order with "%2$s%1$s" if needed
 #. TRANSLATOR: "%s%s" are "You have selected %d files and %d folders"
 #. * Swap order with "%2$s%1$s" if needed
@@ -1253,7 +1253,7 @@ msgstr "E-mailová adresa:"
 msgid "Enter Name - Must be at least five letters."
 msgstr "Zadejte jméno - musí být alespoň pět písmen."
 
-#: src/seahorse-generate-druid.glade.h:13 src/seahorse-key-manager-store.c:325
+#: src/seahorse-generate-druid.glade.h:13 src/seahorse-key-manager-store.c:288
 msgid "Expiration Date"
 msgstr "Datum vypršení"
 
@@ -1298,7 +1298,7 @@ msgstr ""
 msgid "Medium Security"
 msgstr "Střední zabezpečení"
 
-#: src/seahorse-generate-druid.glade.h:22 src/seahorse-key-manager-store.c:206
+#: src/seahorse-generate-druid.glade.h:22 src/seahorse-key-manager-store.c:191
 #: src/seahorse-key-properties.c:216
 msgid "Never Expires"
 msgstr "Nikdy nevyprší"
@@ -1429,19 +1429,19 @@ msgstr "DSA"
 msgid "ELG"
 msgstr "ELG"
 
-#: src/seahorse-key-manager-store.c:199 src/seahorse-key-properties.c:206
+#: src/seahorse-key-manager-store.c:184 src/seahorse-key-properties.c:206
 msgid "Expired"
 msgstr "Vypršel"
 
-#: src/seahorse-key-manager-store.c:329
+#: src/seahorse-key-manager-store.c:292
 msgid "Trust"
 msgstr "Důvěřovat"
 
-#: src/seahorse-key-manager-store.c:333
+#: src/seahorse-key-manager-store.c:296
 msgid "Length"
 msgstr "Délka"
 
-#: src/seahorse-key-manager-store.c:337
+#: src/seahorse-key-manager-store.c:300
 msgid "Type"
 msgstr "Typ"
 
@@ -1869,6 +1869,11 @@ msgstr "Nemohu importovat klíče do klíčenky"
 #: src/seahorse-keyserver-results.c:121
 msgid "Save Remote Keys"
 msgstr "Uložit vzdálené klíče"
+
+#: src/seahorse-keyserver-results.c:217
+#, c-format
+msgid "Selected %d keys"
+msgstr "Vybráno %d klíčů"
 
 #: src/seahorse-keyserver-results.c:301
 msgid "Remote Keys"
