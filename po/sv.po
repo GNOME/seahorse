@@ -1,14 +1,14 @@
 # Swedish messages for seahorse.
-# Copyright (C) 2001, 2003 Free Software Foundation, Inc.
-# Christian Rose <menthos@menthos.com>, 2001, 2003.
+# Copyright (C) 2001, 2003, 2004 Free Software Foundation, Inc.
+# Christian Rose <menthos@menthos.com>, 2001, 2003, 2004.
 #
 # $Id$
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
-"POT-Creation-Date: 2003-05-02 00:59+0200\n"
-"PO-Revision-Date: 2003-05-02 01:00+0200\n"
+"POT-Creation-Date: 2004-04-02 03:35+0200\n"
+"PO-Revision-Date: 2004-04-02 03:35+0200\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -252,8 +252,8 @@ msgstr "Felaktig lösenfras! Försök igen för %s"
 
 #: libseahorse/seahorse-passphrase.glade.h:1 src/seahorse-add-uid.glade.h:1
 #: src/seahorse-change-passphrase.glade.h:1 src/seahorse-export.glade.h:1
-#: src/seahorse-generate.glade.h:1 src/seahorse-import.glade.h:1
-#: src/seahorse-revoke.glade.h:1
+#: src/seahorse-generate-adv.glade.h:1 src/seahorse-generate-druid.glade.h:1
+#: src/seahorse-import.glade.h:1 src/seahorse-revoke.glade.h:1
 msgid "*"
 msgstr "*"
 
@@ -369,6 +369,7 @@ msgid "PGP Preferences"
 msgstr "Inställningar för PGP"
 
 #: plugins/nautilus/seahorse-pgp-preferences.c:45
+#: src/seahorse-preferences.c:80
 msgid "_Ascii Armor"
 msgstr "_Ascii-pansar"
 
@@ -460,7 +461,7 @@ msgstr "Hantera dina GPG-nycklar"
 msgid "Add subkey to %s"
 msgstr "Lägg till undernyckel till %s"
 
-#: src/seahorse-add-subkey.glade.h:1 src/seahorse-generate.glade.h:5
+#: src/seahorse-add-subkey.glade.h:1 src/seahorse-generate-adv.glade.h:5
 msgid "DSA (sign only)"
 msgstr "DSA (endast signering)"
 
@@ -469,7 +470,7 @@ msgid "ElGamal (encrypt only)"
 msgstr "ElGamal (endast kryptering)"
 
 #. expires
-#: src/seahorse-add-subkey.glade.h:3 src/seahorse-generate.glade.h:6
+#: src/seahorse-add-subkey.glade.h:3 src/seahorse-generate-adv.glade.h:6
 #: src/seahorse-key-properties.c:364
 msgid "Expiration Date:"
 msgstr "Utgångsdatum:"
@@ -478,28 +479,28 @@ msgstr "Utgångsdatum:"
 msgid "Generate a new subkey"
 msgstr "Generera en ny undernyckel"
 
-#: src/seahorse-add-subkey.glade.h:5 src/seahorse-generate.glade.h:10
+#: src/seahorse-add-subkey.glade.h:5 src/seahorse-generate-adv.glade.h:10
 #: src/seahorse-key-properties.c:390
 msgid "If key never expires"
 msgstr "Om nyckeln aldrig går ut"
 
-#: src/seahorse-add-subkey.glade.h:6 src/seahorse-generate.glade.h:12
+#: src/seahorse-add-subkey.glade.h:6 src/seahorse-generate-adv.glade.h:12
 msgid "Key _Length:"
 msgstr "Nyckel_längd:"
 
-#: src/seahorse-add-subkey.glade.h:7 src/seahorse-generate.glade.h:13
+#: src/seahorse-add-subkey.glade.h:7 src/seahorse-generate-adv.glade.h:13
 msgid "Key _Type:"
 msgstr "Nyckel_typ:"
 
-#: src/seahorse-add-subkey.glade.h:8 src/seahorse-generate.glade.h:14
+#: src/seahorse-add-subkey.glade.h:8 src/seahorse-generate-adv.glade.h:14
 msgid "Key type / algorithm"
 msgstr "Nyckeltyp/algoritm"
 
-#: src/seahorse-add-subkey.glade.h:9 src/seahorse-generate.glade.h:15
+#: src/seahorse-add-subkey.glade.h:9 src/seahorse-generate-adv.glade.h:15
 msgid "Length of Key"
 msgstr "Nyckellängd"
 
-#: src/seahorse-add-subkey.glade.h:10 src/seahorse-generate.glade.h:17
+#: src/seahorse-add-subkey.glade.h:10 src/seahorse-generate-adv.glade.h:17
 #: src/seahorse-key-properties.c:388
 msgid "Never E_xpires"
 msgstr "Utgår _aldrig"
@@ -508,7 +509,7 @@ msgstr "Utgår _aldrig"
 msgid "RSA (encrypt only)"
 msgstr "RSA (endast kryptering)"
 
-#: src/seahorse-add-subkey.glade.h:12 src/seahorse-generate.glade.h:21
+#: src/seahorse-add-subkey.glade.h:12 src/seahorse-generate-adv.glade.h:21
 msgid "RSA (sign only)"
 msgstr "RSA (endast signering)"
 
@@ -525,27 +526,29 @@ msgstr "Lägg till användar-ID"
 msgid "Create the new user ID"
 msgstr "Skapa det nya användar-ID:t"
 
-#: src/seahorse-add-uid.glade.h:4 src/seahorse-generate.glade.h:7
+#: src/seahorse-add-uid.glade.h:4 src/seahorse-generate-adv.glade.h:7
 msgid "Full _Name:"
 msgstr "Fullständigt _namn:"
 
-#: src/seahorse-add-uid.glade.h:5 src/seahorse-generate.glade.h:11
+#: src/seahorse-add-uid.glade.h:5 src/seahorse-generate-adv.glade.h:11
 msgid "Key Co_mment:"
 msgstr "Nyckelko_mmentar:"
 
-#: src/seahorse-add-uid.glade.h:6 src/seahorse-generate.glade.h:16
+#: src/seahorse-add-uid.glade.h:6 src/seahorse-generate-adv.glade.h:16
 msgid "Must be at least 5 characters long"
 msgstr "Måste vara minst 5 tecken lång"
 
-#: src/seahorse-add-uid.glade.h:7 src/seahorse-generate.glade.h:18
+#: src/seahorse-add-uid.glade.h:7 src/seahorse-generate-adv.glade.h:18
+#: src/seahorse-generate-druid.glade.h:20
 msgid "Optional comment describing key"
 msgstr "Valfri kommentar som beskriver nyckeln"
 
-#: src/seahorse-add-uid.glade.h:8 src/seahorse-generate.glade.h:19
+#: src/seahorse-add-uid.glade.h:8 src/seahorse-generate-adv.glade.h:19
+#: src/seahorse-generate-druid.glade.h:21
 msgid "Optional email address"
 msgstr "Valfri e-postadress"
 
-#: src/seahorse-add-uid.glade.h:9 src/seahorse-generate.glade.h:22
+#: src/seahorse-add-uid.glade.h:9 src/seahorse-generate-adv.glade.h:22
 msgid "_Email Address:"
 msgstr "_E-postadress:"
 
@@ -553,7 +556,8 @@ msgstr "_E-postadress:"
 msgid "Change Passphrase"
 msgstr "Byt lösenfras"
 
-#: src/seahorse-change-passphrase.glade.h:3 src/seahorse-generate.glade.h:2
+#: src/seahorse-change-passphrase.glade.h:3
+#: src/seahorse-generate-adv.glade.h:2
 msgid "Con_firm Passphrase:"
 msgstr "_Bekräfta lösenfras:"
 
@@ -574,12 +578,12 @@ msgstr "Ny _lösenfras:"
 msgid "%s is a key pair! Do you still want to delete it?"
 msgstr "%s är ett nyckelpar! Vill du fortfarande ta bort det?"
 
-#: src/seahorse-delete.c:51
+#: src/seahorse-delete.c:66
 #, c-format
 msgid "Are you sure you want to permanently delete %s?"
 msgstr "Är du säker på att du vill ta bort %s permanent?"
 
-#: src/seahorse-delete.c:104
+#: src/seahorse-delete.c:131
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
 msgstr "Är du säker på att du vill ta bort undernyckel %d av %s permanent?"
@@ -632,33 +636,240 @@ msgstr "Namn på filen att exportera till"
 msgid "www.keyserver.net/en"
 msgstr "www.keyserver.net/en"
 
-#: src/seahorse-generate.glade.h:3
+#: src/seahorse-generate-adv.glade.h:3
 msgid "Confirmation of passphrase"
 msgstr "Bekräftelse av lösenfras"
 
-#: src/seahorse-generate.glade.h:4
+#: src/seahorse-generate-adv.glade.h:4
 msgid "DSA & ElGamal"
 msgstr "DSA och ElGamal"
 
-#: src/seahorse-generate.glade.h:8
+#: src/seahorse-generate-adv.glade.h:8
 msgid "Generate a Key"
 msgstr "Generera en nyckel"
 
-#: src/seahorse-generate.glade.h:9
+#: src/seahorse-generate-adv.glade.h:9
 msgid "Generate a new key"
 msgstr "Generera en ny nyckel"
 
-#: src/seahorse-generate.glade.h:20
+#: src/seahorse-generate-adv.glade.h:20 src/seahorse-generate-druid.glade.h:23
 msgid "Passphrase to secure key"
 msgstr "Lösenfras för att säkra nyckeln"
 
-#: src/seahorse-generate.glade.h:23
+#: src/seahorse-generate-adv.glade.h:23
 msgid "_Generate"
 msgstr "_Generera"
 
-#: src/seahorse-generate.glade.h:24
+#: src/seahorse-generate-adv.glade.h:24
 msgid "_Passphrase:"
 msgstr "_Lösenfras:"
+
+#: src/seahorse-generate-druid.glade.h:2
+msgid ""
+"Before selecting apply to start key generation, please make sure all of your "
+"previous settings are correct."
+msgstr ""
+"Innan du väljer att påbörja nyckelgenereringen bör du försäkra dig om att "
+"alla föregående inställningar är korrekta."
+
+#: src/seahorse-generate-druid.glade.h:3
+msgid ""
+"Choosing a passphrase is an integral part of creating a strong key.  Like a "
+"password, a passphrase should letters, numbers, and punctuation.  "
+"Additionally, a passphrase can contain spaces, meaning it can contain many "
+"words.  You should pick a rememberable phrase that contains punctuation.  "
+"Take this phrase, adjust the case of various letters, and change some of the "
+"letters into numbers or punctuation rmeiniscent of \"leet speak\", but don't "
+"make it so obscure to the point where you can't remember it."
+msgstr ""
+"Att välja en lösenfras är en viktig del i skapandet av en stark nyckel. "
+"Precis som ett lösenord kan en lösenfras innehålla bokstäver, siffror och "
+"skiljetecken. Dessutom kan en lösenfras innehålla blanksteg vilket innebär "
+"att det kan innehålla flera ord. Du bör välja en fras som du kan komma ihåg "
+"och som innehåller skiljetecken. Ta denna fras och justera användandet av "
+"gemener och versaler, och ändra även en del bokstäver till tal eller "
+"skiljetecken så att det liknar \"leet speak\", men gör det inte så obskyrt "
+"att du inte kommer ihåg det."
+
+#: src/seahorse-generate-druid.glade.h:4
+msgid "Comment:"
+msgstr "Kommentar:"
+
+#: src/seahorse-generate-druid.glade.h:5
+msgid "Confirm"
+msgstr "Bekräfta"
+
+#: src/seahorse-generate-druid.glade.h:6
+msgid "Confirm Passphrase: "
+msgstr "Bekräfta lösenfras: "
+
+#: src/seahorse-generate-druid.glade.h:7
+msgid "Confirm passphrase"
+msgstr "Bekräfta lösenfras"
+
+#: src/seahorse-generate-druid.glade.h:8
+msgid "Date the Key Expires"
+msgstr "Datumet då nyckeln utgår"
+
+#: src/seahorse-generate-druid.glade.h:9
+msgid "Email Address: "
+msgstr "E-postadress: "
+
+#: src/seahorse-generate-druid.glade.h:10
+msgid "Enter Name - Must be at least five letters."
+msgstr "Ange namnet - måste vara minst fem bokstäver."
+
+#: src/seahorse-generate-druid.glade.h:11 src/seahorse-key-manager-store.c:269
+msgid "Expiration Date"
+msgstr "Utgångsdatum"
+
+#: src/seahorse-generate-druid.glade.h:12
+msgid "Expiration Date: "
+msgstr "Utgångsdatum: "
+
+#: src/seahorse-generate-druid.glade.h:13
+msgid "Extra High Security"
+msgstr "Extra hög säkerhet"
+
+#: src/seahorse-generate-druid.glade.h:14
+msgid "Full Name: "
+msgstr "Fullständigt namn: "
+
+#: src/seahorse-generate-druid.glade.h:15
+msgid "High Security"
+msgstr "Hög säkerhet"
+
+#: src/seahorse-generate-druid.glade.h:16
+msgid "Key Never Expires"
+msgstr "Nyckeln utgår aldrig"
+
+#: src/seahorse-generate-druid.glade.h:17
+msgid ""
+"Keys must be given an appropriate expiration date.  For most people, the "
+"default option of never expires is sufficent.  If you only plan on using the "
+"key for a certain period of time, i.e. for a specific project, you should "
+"pick an expiration date after the projected completion of your project.  "
+"After the expiration date, your private key will still be able to decrypt "
+"messages or data encrypted with your public key.  However, your private key "
+"will no longer sign messages or data."
+msgstr ""
+"Nycklar måste ges ett lämpligt utgångsdatum. Standardalternativet att "
+"nyckeln aldrig går ut är tillräckligt för de flesta. Om du planerar att "
+"använda nyckeln under en viss tid, t.ex. för ett specifikt projekt, bör du "
+"välja ett utgångsdatum som är efter det beräknade slutdatumet för ditt "
+"projekt. Efter utgångsdatumet kommer din privata nyckel fortfarande kunna "
+"dekryptera meddelanden eller data som krypterats med din publika nyckel. Din "
+"privata nyckel kommer dock inte längre att kunna signera meddelanden eller "
+"data."
+
+#: src/seahorse-generate-druid.glade.h:18
+msgid "Medium Security"
+msgstr "Mellansäkerhet"
+
+#: src/seahorse-generate-druid.glade.h:19 src/seahorse-key-manager-store.c:154
+#: src/seahorse-key-properties.c:373
+msgid "Never Expires"
+msgstr "Utgår aldrig"
+
+#: src/seahorse-generate-druid.glade.h:22
+msgid "Passphrase"
+msgstr "Lösenfras"
+
+#: src/seahorse-generate-druid.glade.h:24
+msgid "Passphrase:"
+msgstr "Lösenfras:"
+
+#: src/seahorse-generate-druid.glade.h:25
+msgid "Personal Information"
+msgstr "Personlig information"
+
+#: src/seahorse-generate-druid.glade.h:26
+msgid "Seahorse GPG Key Generation Druid"
+msgstr "Seahorse GPG-nyckelgenereringsguide"
+
+#: src/seahorse-generate-druid.glade.h:27
+msgid "Seahorse GPG Key Generation Druid Complete"
+msgstr "Seahorse nyckelgenereringsguide klar"
+
+#: src/seahorse-generate-druid.glade.h:28
+msgid "Seahorse Key Generation Druid"
+msgstr "Seahorse nyckelgenereringsguide"
+
+#: src/seahorse-generate-druid.glade.h:29
+msgid "Security Level"
+msgstr "Säkerhetsnivå"
+
+#: src/seahorse-generate-druid.glade.h:30
+msgid ""
+"The Medium Security level is the default and should be acceptable for "
+"general everyday usage.  The High Security level should be selected if you "
+"know your data will be actively scrutinized.  The Extra High level should be "
+"selected if you know your data is actively scrutinized and will be under "
+"cryptographic attack. "
+msgstr ""
+"Mellansäkerhetsnivån är standardalternativet och bör vara acceptabelt för "
+"allmänt vardagsbruk. Den höga säkerhetsnivån bör väljas om du vet att dina "
+"data kommer att granskas aktivt. Den extra höga säkerhetsnivån bör du välja "
+"om du vet att dina data aktivt granskas och kommer att utsättas för "
+"kryptografiska attacker. "
+
+#: src/seahorse-generate-druid.glade.h:31
+msgid "This druid will guide you through the steps of creating a GPG key pair."
+msgstr ""
+"Denna guide kommer att hjälpa dig genom skapandet av ett GPG-nyckelpar."
+
+#: src/seahorse-generate-druid.glade.h:32
+msgid ""
+"To create a key and tie it to your identity, the following information is "
+"needed: Full Name, Email Address, and Comment.  These values will be given "
+"to the name of your key in the following "
+"manner:                              Full Name (Comment) <email address>."
+msgstr ""
+"Följande information behövs för att skapa en nyckel och knyta den till din "
+"identitet: Fullständigt namn, e-postadress och kommentar. Dessa värden "
+"kommer att ges till namnet på din nyckel på följande "
+"sätt:                              Fullständigt namn (kommentar) <e-"
+"postadress>."
+
+#: src/seahorse-generate-druid.glade.h:33
+msgid "druidpage_pass"
+msgstr "guidesidelösenord"
+
+#: src/seahorse-generate-druid.glade.h:34
+msgid "druidpage_pinfo"
+msgstr "guidesidepinfo"
+
+#: src/seahorse-generate-druid.glade.h:35
+msgid "keygen_druid"
+msgstr "nyckelgenereringsguide"
+
+#: src/seahorse-generate-select.glade.h:1
+msgid "Advanced"
+msgstr "Avancerat"
+
+#: src/seahorse-generate-select.glade.h:2
+msgid "Druid"
+msgstr "Guide"
+
+#: src/seahorse-generate-select.glade.h:3
+msgid "Generate a key via the druid."
+msgstr "Generera en nyckel med guiden."
+
+#: src/seahorse-generate-select.glade.h:4
+msgid "Generate a key with the advanced dialog."
+msgstr "Generera en nyckel med den avancerade dialogen."
+
+#: src/seahorse-generate-select.glade.h:5
+msgid "Method Select"
+msgstr "Metodval"
+
+#: src/seahorse-generate-select.glade.h:6
+msgid "Select a method to generate your new key."
+msgstr "Välj en metod för att generera din nya nyckel."
+
+#: src/seahorse-generate-select.glade.h:7
+msgid "radio_druid"
+msgstr "radioguide"
 
 #: src/seahorse-import.glade.h:2
 msgid "Enter a unique key id"
@@ -893,14 +1104,6 @@ msgstr "_Verktygsrad"
 msgid "Expired"
 msgstr "Utgången"
 
-#: src/seahorse-key-manager-store.c:154 src/seahorse-key-properties.c:373
-msgid "Never Expires"
-msgstr "Utgår aldrig"
-
-#: src/seahorse-key-manager-store.c:269
-msgid "Expiration Date"
-msgstr "Utgångsdatum"
-
 #: src/seahorse-key-manager-store.c:273
 msgid "Trust"
 msgstr "Tillit"
@@ -1055,6 +1258,30 @@ msgstr "Din personliga nyckel"
 #: src/seahorse-key-properties.glade.h:20
 msgid "_Signatures:"
 msgstr "_Signaturer:"
+
+#: src/seahorse-preferences.c:85
+msgid "PGP"
+msgstr "PGP"
+
+#: src/seahorse-preferences.c:104
+msgid "_Validity"
+msgstr "_Giltighet"
+
+#: src/seahorse-preferences.c:106 src/seahorse-sign.glade.h:13
+msgid "_Expires"
+msgstr "_Utgår"
+
+#: src/seahorse-preferences.c:108
+msgid "_Trust"
+msgstr "_Tillit"
+
+#: src/seahorse-preferences.c:110
+msgid "_Length"
+msgstr "_Längd"
+
+#: src/seahorse-preferences.c:112
+msgid "T_ype"
+msgstr "T_yp"
 
 #: src/seahorse-preferences.glade.h:1
 msgid "Close Preferences"
@@ -1251,10 +1478,6 @@ msgstr "Signera nyckel"
 msgid "Very carefully"
 msgstr "Väldigt noggrannt"
 
-#: src/seahorse-sign.glade.h:13
-msgid "_Expires"
-msgstr "_Utgår"
-
 #: src/seahorse-sign.glade.h:14
 msgid "_How carefully have you checked this key?"
 msgstr "_Hur noggrannt har du kontrollerat denna nyckel?"
@@ -1267,20 +1490,36 @@ msgstr "_Lokal"
 msgid "_Revocable"
 msgstr "_Återkallningsbar"
 
-#~ msgid "PGP"
-#~ msgstr "PGP"
+#~ msgid "Confirm Passphrase:"
+#~ msgstr "Bekräfta lösenfras:"
 
-#~ msgid "_Validity"
-#~ msgstr "_Giltighet"
+#~ msgid "Email Address:"
+#~ msgstr "E-postadress:"
 
-#~ msgid "_Trust"
-#~ msgstr "_Tillit"
+#~ msgid "Expiration date:"
+#~ msgstr "Utgångsdatum:"
 
-#~ msgid "_Length"
-#~ msgstr "_Längd"
+#~ msgid "Full Name:"
+#~ msgstr "Fullständigt namn:"
 
-#~ msgid "T_ype"
-#~ msgstr "T_yp"
+#~ msgid "Information"
+#~ msgstr "Information"
+
+#~ msgid "Security"
+#~ msgstr "Säkerhet"
+
+#~ msgid ""
+#~ "The Medium Security level is the default and should be acceptable for "
+#~ "general everyday usage.  The High Security level should be selected if "
+#~ "you know your data will be actively scrutinized.  The Extra High level "
+#~ "should be selected if you know your data is actively scrutinized and will "
+#~ "be under cryptographic attack."
+#~ msgstr ""
+#~ "Mellansäkerhetsnivån är standardalternativet och bör vara acceptabelt för "
+#~ "allmänt vardagsbruk. Den höga säkerhetsnivån bör väljas om du vet att "
+#~ "dina data kommer att granskas aktivt. Den extra höga säkerhetsnivån bör "
+#~ "du välja om du vet att dina data aktivt granskas och kommer att utsättas "
+#~ "för kryptografiska attacker."
 
 #~ msgid "GPG"
 #~ msgstr "GPG"
@@ -1348,14 +1587,8 @@ msgstr "_Återkallningsbar"
 #~ msgid "Create a new user ID"
 #~ msgstr "Skapa ett nytt användar-ID"
 
-#~ msgid "Key Comment:"
-#~ msgstr "Nyckelkommentar:"
-
 #~ msgid "Change _Passphrase"
 #~ msgstr "Byt _lösenfras"
-
-#~ msgid "Confirm Passphrase:"
-#~ msgstr "Bekräfta lösenfras:"
 
 #~ msgid "Export Key"
 #~ msgstr "Exportera nyckel"
@@ -1832,23 +2065,11 @@ msgstr "_Återkallningsbar"
 #~ msgid "Passphrase and confirmation must match"
 #~ msgstr "Lösenfrasen och bekräftelsen måste stämma överens"
 
-#~ msgid "Full Name:"
-#~ msgstr "Fullständigt namn:"
-
 #~ msgid "Key Length:"
 #~ msgstr "Nyckellängd:"
 
 #~ msgid "Key Type:"
 #~ msgstr "Nyckeltyp:"
-
-#~ msgid "Email Address:"
-#~ msgstr "E-postadress:"
-
-#~ msgid "Passphrase:"
-#~ msgstr "Lösenfras:"
-
-#~ msgid "Passphrase"
-#~ msgstr "Lösenfras"
 
 #~ msgid "Key"
 #~ msgstr "Nyckel"
@@ -2015,12 +2236,6 @@ msgstr "_Återkallningsbar"
 
 #~ msgid "Permanently Delete Key?"
 #~ msgstr "Ta bort nyckeln permanent?"
-
-#~ msgid "Information"
-#~ msgstr "Information"
-
-#~ msgid "Generate Key Druid"
-#~ msgstr "Guide för nyckelgenerering"
 
 #~ msgid "No GnuPG Directory Found"
 #~ msgstr "Ingen GnuPG-katalog hittades"
