@@ -53,6 +53,7 @@ libseahorse_internal_la_SOURCES = \
 	seahorse-gpgmex.h seahorse-gpgmex-util.c \
 	seahorse-prefs.c seahorse-prefs.h \
 	seahorse-operation.c seahorse-operation.h \
+	seahorse-progress.c seahorse-progress.h \
 	$(BUILT_SOURCES) \
 	$(AGENT_SRCS) \
 	$(KEYSERVER_SRCS) 

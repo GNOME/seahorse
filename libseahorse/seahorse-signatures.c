@@ -35,7 +35,8 @@ userid_for_fingerprint (SeahorseContext *sctx, const gchar *fingerprint)
     sksrc = seahorse_context_get_key_source (sctx);
     g_return_val_if_fail (sksrc != NULL, g_strdup (""));
     
-    key = seahorse_key_source_get_key (sksrc, fingerprint, SKEY_INFO_NORMAL);
+    /* TODO: Eventually we need to extend this to lookup keys remotely */
+    key = seahorse_key_source_get_key (sksrc, fingerprint);
 
     if (key != NULL) {
         userid = seahorse_key_get_userid (key, 0);

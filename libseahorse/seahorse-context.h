@@ -65,11 +65,6 @@ struct _SeahorseContext
 struct _SeahorseContextClass
 {
 	GtkObjectClass		parent_class;
-	
-    /* Signal emitted while an operation is in progress */
-    void             (* progress)        (SeahorseContext    *sctx,
-                                          const gchar        *op,
-                                          gdouble            fract);
 };
 
 GType                seahorse_context_get_type        (void);
@@ -87,9 +82,5 @@ SeahorseKeySource*   seahorse_context_get_key_source  (SeahorseContext    *sctx)
 
 void                 seahorse_context_own_source      (SeahorseContext    *sctx,
                                                        SeahorseKeySource  *sksrc);
-
-void                 seahorse_context_show_progress   (SeahorseContext    *sctx,
-                                                       const gchar        *msg, 
-                                                       double pos);
 
 #endif /* __SEAHORSE_CONTEXT_H__ */

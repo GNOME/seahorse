@@ -47,6 +47,10 @@ typedef struct _SeahorseKeySource {
 #define SEAHORSE_KEY_SOURCE_REMOTE  0x00000001
 #define SEAHORSE_KEY_SOURCE_LOADING 0x00000010
 
+/* Key types for refresh method below. These could never be fingerprints */
+#define SEAHORSE_KEY_SOURCE_NEW     "_new_"
+#define SEAHORSE_KEY_SOURCE_ALL     "_all_"
+
 typedef struct _SeahorseKeySourceClass {
     GtkObjectClass parent_class;
 
@@ -58,14 +62,16 @@ typedef struct _SeahorseKeySourceClass {
     /* Removed a key from this source */
     void (* removed) (SeahorseKeySource *sksrc, SeahorseKey *key);
     
-    /* Progress report or notice from the key source */
-    void (* progress) (SeahorseKeySource *sksrc, const gchar *msg, gdouble fract);
-    
 
     /* virtual methods ------------------------------------------------- */
 
-    /* Refresh our list of keys. Returns asynchronously */
-    void (*refresh) (SeahorseKeySource *sksrc, gboolean all);
+    /* Refresh our list of keys. If |key| is set to SEAHORSE_KEY_NEW, then looks 
+     * for new keys, if |key| is set to SEAHORSE_KEY_ALL refreshes all keys, 
+     * otherwise tries to load key with specific fingerprint. */
+    SeahorseOperation* (*refresh) (SeahorseKeySource *sksrc, const gchar *key);
+    
+    /* Get the loading operation */
+    SeahorseOperation* (*get_operation) (SeahorseKeySource *sksrc);
     
     /* Stop any loading operation in progress */
     void (*stop) (SeahorseKeySource *sksrc);
@@ -73,9 +79,8 @@ typedef struct _SeahorseKeySourceClass {
     /* Get the number of keys in the key source. */
     guint (*get_count) (SeahorseKeySource *sksrc, gboolean secret_only);
     
-    /* Get the key with given fingerprint. If load is set tries to load. Synchronous */
-    SeahorseKey* (*get_key) (SeahorseKeySource *sksrc, const gchar *fpr,
-                             SeahorseKeyInfo info);
+    /* Get the loaded key with given fingerprint. */
+    SeahorseKey* (*get_key) (SeahorseKeySource *sksrc, const gchar *fpr);
     
     /* Get a list of all the keys in the key source. No loading done */
     GList* (*get_keys) (SeahorseKeySource *sksrc, gboolean secret_only);
@@ -122,21 +127,15 @@ void        seahorse_key_source_added         (SeahorseKeySource *sksrc,
                                                SeahorseKey *key);
 void        seahorse_key_source_removed       (SeahorseKeySource *sksrc, 
                                                SeahorseKey *key);
-void        seahorse_key_source_show_progress (SeahorseKeySource *sksrc,
-                                               const gchar *msg, double pos);
 
 /* Method helper functions ------------------------------------------- */
-
-void         seahorse_key_source_refresh     (SeahorseKeySource *sksrc,
-                                              gboolean all);
 
 void         seahorse_key_source_stop        (SeahorseKeySource *sksrc);
 
 guint        seahorse_key_source_get_state   (SeahorseKeySource *sksrc);
 
 SeahorseKey* seahorse_key_source_get_key     (SeahorseKeySource *sksrc,
-                                              const gchar *fpr,
-                                              SeahorseKeyInfo info);
+                                              const gchar *fpr);
 
 GList*       seahorse_key_source_get_keys    (SeahorseKeySource *sksrc,
                                               gboolean secret_only);
@@ -144,13 +143,24 @@ GList*       seahorse_key_source_get_keys    (SeahorseKeySource *sksrc,
 guint        seahorse_key_source_get_count   (SeahorseKeySource *sksrc,
                                               gboolean secret_only);
 
-gpgme_ctx_t seahorse_key_source_new_context   (SeahorseKeySource *sksrc);
+gpgme_ctx_t  seahorse_key_source_new_context (SeahorseKeySource *sksrc);
 
-SeahorseOperation* seahorse_key_source_import (SeahorseKeySource *sksrc,
-                                               gpgme_data_t data);
+SeahorseOperation*  seahorse_key_source_get_operation    (SeahorseKeySource *sksrc);
 
-SeahorseOperation* seahorse_key_source_export (SeahorseKeySource *sksrc,
-                                               GList *keys,
-                                               gpgme_data_t data);                                               
+SeahorseOperation*  seahorse_key_source_refresh          (SeahorseKeySource *sksrc,
+                                                          const gchar *key);
+                                                          
+void                seahorse_key_source_refresh_sync     (SeahorseKeySource *sksrc,
+                                                          const gchar *key);                                                          
+
+void                seahorse_key_source_refresh_async    (SeahorseKeySource *sksrc,
+                                                          const gchar *key);                                                          
+
+SeahorseOperation*  seahorse_key_source_import           (SeahorseKeySource *sksrc,
+                                                          gpgme_data_t data);
+
+SeahorseOperation*  seahorse_key_source_export           (SeahorseKeySource *sksrc,
+                                                          GList *keys,
+                                                          gpgme_data_t data);                        
 
 #endif /* __SEAHORSE_KEY_SOURCE_H__ */

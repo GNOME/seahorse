@@ -714,8 +714,9 @@ seahorse_key_properties_new (SeahorseContext *sctx, SeahorseKey *skey)
         
     /* Don't trigger the import of remote keys if possible */
     if (!remote) {
-        skey = seahorse_key_source_get_key (sksrc, 
-                    seahorse_key_get_id (skey->key), SKEY_INFO_COMPLETE);
+        /* This causes the key source to get any specific info about the key */
+        seahorse_key_source_refresh_sync (sksrc, seahorse_key_get_id (skey->key));
+        skey = seahorse_key_source_get_key (sksrc, seahorse_key_get_id (skey->key));
         g_return_if_fail (skey != NULL);                
     }
 	

@@ -47,8 +47,7 @@ enum {
 struct _SeahorseServerSourcePrivate {
     SeahorseKeySource *local;
     GHashTable *keys;
-    GSList *operations;
-    guint progress_stag;
+    SeahorseOperation *operation;
     gchar *server;
     gchar *pattern;
 };
@@ -68,18 +67,19 @@ static void seahorse_server_set_property      (GObject *object,
                                                GParamSpec *pspec);
                                                
 /* SeahorseKeySource methods */
-static void         seahorse_server_source_refresh     (SeahorseKeySource *src,
-                                                        gboolean all);
 static void         seahorse_server_source_stop        (SeahorseKeySource *src);
 static guint        seahorse_server_source_get_state   (SeahorseKeySource *src);
 SeahorseKey*        seahorse_server_source_get_key     (SeahorseKeySource *source,
-                                                        const gchar *fpr,
-                                                        SeahorseKeyInfo info);
+                                                        const gchar *fpr);
 static GList*       seahorse_server_source_get_keys    (SeahorseKeySource *src,
                                                         gboolean secret_only);
 static guint        seahorse_server_source_get_count   (SeahorseKeySource *src,
                                                         gboolean secret_only);
 static gpgme_ctx_t  seahorse_server_source_new_context (SeahorseKeySource *src);
+
+static SeahorseOperation*  seahorse_server_source_get_operation     (SeahorseKeySource *sksrc);
+static SeahorseOperation*  seahorse_server_source_refresh           (SeahorseKeySource *src,
+                                                                     const gchar *fpr);
 
 /* Other forward decls */
 static gboolean release_key (const gchar* id, SeahorseKey *skey, SeahorseServerSource *ssrc);
@@ -124,6 +124,7 @@ seahorse_server_source_class_init (SeahorseServerSourceClass *klass)
     key_class->get_key = seahorse_server_source_get_key;
     key_class->get_keys = seahorse_server_source_get_keys;
     key_class->get_state = seahorse_server_source_get_state;
+    key_class->get_operation = seahorse_server_source_get_operation;
     key_class->new_context = seahorse_server_source_new_context;    
     
     gobject_class->dispose = seahorse_server_source_dispose;
@@ -155,6 +156,7 @@ seahorse_server_source_init (SeahorseServerSource *ssrc)
     /* init private vars */
     ssrc->priv = g_new0 (SeahorseServerSourcePrivate, 1);
     ssrc->priv->keys = g_hash_table_new (g_str_hash, g_str_equal);
+    ssrc->priv->operation = seahorse_operation_new_complete ();
 }
 
 /* dispose of all our internal references */
@@ -177,7 +179,12 @@ seahorse_server_source_dispose (GObject *gobject)
     g_assert (ssrc->priv);
     
     /* Clear out all the operations */
-    seahorse_key_source_stop (sksrc);
+    if (ssrc->priv->operation) {
+        if(!seahorse_operation_is_done (ssrc->priv->operation))
+            seahorse_operation_cancel (ssrc->priv->operation);
+        g_object_unref (ssrc->priv->operation);
+        ssrc->priv->operation = NULL;
+    }
 
     /* Release our references on the keys */
     g_hash_table_foreach_remove (ssrc->priv->keys, (GHRFunc)release_key, ssrc);
@@ -186,11 +193,6 @@ seahorse_server_source_dispose (GObject *gobject)
         g_object_unref(ssrc->priv->local);
         ssrc->priv->local = NULL;
         sksrc->ctx = NULL;
-    }
-    
-    if (ssrc->priv->progress_stag) {
-        g_source_remove (ssrc->priv->progress_stag);
-        ssrc->priv->progress_stag = 0;
     }
  
     G_OBJECT_CLASS (parent_class)->dispose (gobject);
@@ -211,7 +213,7 @@ seahorse_server_source_finalize (GObject *gobject)
     g_free (ssrc->priv->server);
     g_free (ssrc->priv->pattern);
     g_hash_table_destroy (ssrc->priv->keys);
-    g_assert (ssrc->priv->operations == NULL);
+    g_assert (ssrc->priv->operation == NULL);
     g_assert (ssrc->priv->local == NULL);
     
     g_free (ssrc->priv);
@@ -281,35 +283,6 @@ seahorse_server_get_property (GObject *object, guint prop_id, GValue *value,
  * HELPERS 
  */
  
-/* The progress timer */
-static gboolean
-progress_timer (SeahorseServerSource *ssrc)
-{
-    g_return_val_if_fail (SEAHORSE_IS_SERVER_SOURCE (ssrc), FALSE);
-    
-    if (ssrc->priv->operations) {
-        seahorse_key_source_show_progress (SEAHORSE_KEY_SOURCE (ssrc), NULL, 0);
-        return TRUE;
-    } else {
-        seahorse_key_source_show_progress (SEAHORSE_KEY_SOURCE (ssrc), NULL, -1);
-        ssrc->priv->progress_stag = 0;
-        return FALSE;
-    }
-}
-
-/* Starts an indeterminate progress timer */
-static void
-start_progress_notify (SeahorseServerSource *ssrc, const gchar *msg)
-{
-    g_return_if_fail (SEAHORSE_IS_SERVER_SOURCE (ssrc));
-        
-    seahorse_key_source_show_progress (SEAHORSE_KEY_SOURCE (ssrc), msg, 0);
-    
-    if (!ssrc->priv->progress_stag)
-        ssrc->priv->progress_stag = g_timeout_add (100, (GSourceFunc)progress_timer, ssrc);
-}
-
-
 /* Release a key from our internal tables and let the world know about it */
 static gboolean
 release_key_notify (const gchar *id, SeahorseKey *skey, SeahorseServerSource *ssrc)
@@ -447,68 +420,52 @@ keys_to_list (const gchar *id, SeahorseKey *skey, GList **l)
     *l = g_list_append (*l, skey);
 }
 
-/* Called when a key load operation is done */
-static void 
-keysearch_done (SeahorseOperation *operation, SeahorseServerSource *ssrc)
-{
-    g_return_if_fail (SEAHORSE_IS_SERVER_SOURCE (ssrc));
-
-    /* Marks us as done as far as the key source is concerned */
-    ssrc->priv->operations = 
-        seahorse_operation_list_remove (ssrc->priv->operations, operation);
-}
-
 void
-seahorse_server_source_add_operation (SeahorseServerSource *ssrc, SeahorseOperation *op)
+seahorse_server_source_set_operation (SeahorseServerSource *ssrc, SeahorseOperation *op)
 {
     g_return_if_fail (SEAHORSE_IS_SERVER_SOURCE (ssrc));
     g_return_if_fail (SEAHORSE_IS_OPERATION (op));
     
-    if (seahorse_operation_is_done (SEAHORSE_OPERATION (op))) {
-        g_object_unref (op);
-    } else {
-        ssrc->priv->operations = seahorse_operation_list_add (ssrc->priv->operations, op);
-        g_signal_connect (op, "done", G_CALLBACK (keysearch_done), ssrc);         
-        start_progress_notify (ssrc, _("Searching for remote keys..."));
-    }
+    if(ssrc->priv->operation)
+        g_object_unref (ssrc->priv->operation);
+    g_object_ref (op);
+    ssrc->priv->operation = op;
 }
 
 /* --------------------------------------------------------------------------
  * METHODS
  */
 
-static void         
-seahorse_server_source_refresh (SeahorseKeySource *src, gboolean all)
+static SeahorseOperation*
+seahorse_server_source_refresh (SeahorseKeySource *src, const gchar *key)
 {
     SeahorseServerSource *ssrc;
     
-    g_return_if_fail (SEAHORSE_IS_KEY_SOURCE (src));
+    g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (src), NULL);
     ssrc = SEAHORSE_SERVER_SOURCE (src);
 
-    if (all) {
+    if (g_str_equal (key, SEAHORSE_KEY_SOURCE_ALL)) {
         /* Stop all operations */
         seahorse_server_source_stop (src);
 
         /* Remove all keys */    
         g_hash_table_foreach_remove (ssrc->priv->keys, (GHRFunc)release_key_notify, ssrc);
     }
+    
+    /* We should never be called directly */
+    return NULL;
 }
 
 static void
 seahorse_server_source_stop (SeahorseKeySource *src)
 {
     SeahorseServerSource *ssrc;
-    gboolean found;
     
     g_return_if_fail (SEAHORSE_IS_KEY_SOURCE (src));
     ssrc = SEAHORSE_SERVER_SOURCE (src);
 
-    found = (ssrc->priv->operations != NULL);
-    seahorse_operation_list_cancel (ssrc->priv->operations);
-    ssrc->priv->operations = seahorse_operation_list_purge (ssrc->priv->operations);
-    
-    if (found)
-        seahorse_key_source_show_progress (src, _("Load Cancelled"), -1);
+    if(!seahorse_operation_is_done(ssrc->priv->operation))
+        seahorse_operation_cancel (ssrc->priv->operation);
 }
 
 static guint
@@ -529,46 +486,15 @@ seahorse_server_source_get_count (SeahorseKeySource *src,
 }
 
 SeahorseKey*        
-seahorse_server_source_get_key (SeahorseKeySource *src, const gchar *fpr, 
-                                SeahorseKeyInfo info)
+seahorse_server_source_get_key (SeahorseKeySource *src, const gchar *fpr)
 {
     SeahorseServerSource *ssrc;
-    SeahorseKey *skey;
-    gchar *fingerprint;
 
     g_return_val_if_fail (fpr != NULL && fpr[0] != 0, NULL);
     g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (src), NULL);
     ssrc = SEAHORSE_SERVER_SOURCE (src);
     
-    /*
-     * Note that there's no way to request a key from a keyserver
-     * by fingerprint through gpgkeys_* plugins. So we just resort
-     * to listing our searched keys. Now if they're asking for an 
-     * upgrade (ie: import) then we can do that :) 
-     */
-
-    skey = g_hash_table_lookup (ssrc->priv->keys, fpr);
-
-    /* If we have enough info on this key then just return */
-    if (skey && info <= seahorse_key_get_loaded_info(skey))
-        return skey;    
-     
-    /* Anything at this level or below we can't do much about */
-    if (info <= SKEY_INFO_REMOTE)
-        return skey;
-
-    /* We need to backup the fingerprint, as the old key can be freed */
-    fingerprint = g_strdup (fpr);
-           
-    /* See if our local key source has it */    
-    skey = seahorse_key_source_get_key (ssrc->priv->local, fpr, info);
-    
-    /* Now they want a key imported, lets try and do that */
-    /* TODO: We don't support key importing yet */
-    g_warning ("TODO: key importing not supported yet");
-       
-    g_free (fingerprint); 
-    return skey;
+    return g_hash_table_lookup (ssrc->priv->keys, fpr);
 }
 
 static GList*
@@ -593,13 +519,25 @@ seahorse_server_source_get_state (SeahorseKeySource *src)
 {
     SeahorseServerSource *ssrc;
     
-    g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (src), 0);
+    g_return_val_if_fail (SEAHORSE_IS_SERVER_SOURCE (src), 0);
     ssrc = SEAHORSE_SERVER_SOURCE (src);
     
     guint state = SEAHORSE_KEY_SOURCE_REMOTE;
-    if (ssrc->priv->operations)
+    if (!seahorse_operation_is_done (ssrc->priv->operation))
         state |= SEAHORSE_KEY_SOURCE_LOADING;
     return state;
+}
+
+SeahorseOperation*        
+seahorse_server_source_get_operation (SeahorseKeySource *sksrc)
+{
+    SeahorseServerSource *ssrc;
+    
+    g_return_val_if_fail (SEAHORSE_IS_SERVER_SOURCE (sksrc), NULL);
+    ssrc = SEAHORSE_SERVER_SOURCE (sksrc);
+    
+    g_object_ref (ssrc->priv->operation);
+    return ssrc->priv->operation;
 }
 
 static gpgme_ctx_t  

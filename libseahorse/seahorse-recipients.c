@@ -23,6 +23,8 @@
 #include <libintl.h>
 #include <gnome.h>
 
+#include "seahorse-operation.h"
+#include "seahorse-progress.h"
 #include "seahorse-libdialogs.h"
 #include "seahorse-widget.h"
 #include "seahorse-validity.h"
@@ -30,35 +32,6 @@
 
 #define VIEW "keys"
 #define OK "ok"
-
-static void
-show_progress (SeahorseContext *sctx, const gchar *op, gdouble fract, SeahorseWidget *swidget)
-{
-	GnomeAppBar *status;
-	GtkProgressBar *progress;
-	gboolean sensitive;
-
-	sensitive = (fract == -1);
-	
-	status = GNOME_APPBAR (glade_xml_get_widget (swidget->xml, "status"));
-	gnome_appbar_set_status (status, op);
-	progress = gnome_appbar_get_progress (status);
-	/* do progress */
-	if (fract <= 1 && fract > 0)
-		gtk_progress_bar_set_fraction (progress, fract);
-	else if (fract != -1) {
-		gtk_progress_bar_set_pulse_step (progress, 0.05);
-		gtk_progress_bar_pulse (progress);
-	}
-	/* if fract == -1, cleanup progress */
-	else
-		gtk_progress_bar_set_fraction (progress, 0);
-	
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, OK), sensitive);
-	
-	while (g_main_context_pending (NULL))
-		g_main_context_iteration (NULL, TRUE);
-}
 
 static void
 selection_changed (GtkTreeSelection *selection, SeahorseWidget *swidget)
@@ -139,6 +112,7 @@ GList*
 seahorse_recipients_get (SeahorseContext *sctx)
 {
 	SeahorseWidget *swidget;
+    SeahorseOperation *operation;
 	GtkTreeSelection *selection;
 	GtkTreeView *view;
 	GtkWidget *widget;
@@ -151,8 +125,6 @@ seahorse_recipients_get (SeahorseContext *sctx)
 	swidget = seahorse_widget_new ("recipients", sctx);
 	g_return_val_if_fail (swidget != NULL, NULL);
 	
-	g_signal_connect (swidget->sctx, "progress", G_CALLBACK (show_progress), swidget);
-	
 	view = GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, VIEW));
 	selection = gtk_tree_view_get_selection (view);
 	gtk_tree_selection_set_mode (selection, GTK_SELECTION_SINGLE);
@@ -161,6 +133,13 @@ seahorse_recipients_get (SeahorseContext *sctx)
         
     sksrc = seahorse_context_get_key_source (sctx);
     g_return_val_if_fail (sksrc != NULL, NULL);
+
+    /* Hook progress bar in */
+    operation = seahorse_key_source_get_operation (sksrc);
+    g_return_val_if_fail (operation != NULL, NULL);
+    
+    widget = glade_xml_get_widget (swidget->xml, "status");
+    seahorse_progress_appbar_add_operation (widget, operation);
         
 	skstore = seahorse_recipients_store_new (sksrc, view);
    
@@ -185,8 +164,7 @@ seahorse_recipients_get (SeahorseContext *sctx)
 				break;
 		}
 	}
-	
-    g_signal_handlers_disconnect_by_func (swidget->sctx, G_CALLBACK (show_progress), swidget);	
+ 	
 	seahorse_widget_destroy (swidget);
 	return keys;
 }

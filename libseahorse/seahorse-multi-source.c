@@ -24,6 +24,7 @@
 #include <gnome.h>
 
 #include "seahorse-multi-source.h"
+#include "seahorse-operation.h"
 #include "seahorse-util.h"
 #include "seahorse-key.h"
     
@@ -34,24 +35,24 @@ static void seahorse_multi_source_dispose    (GObject *gobject);
 static void seahorse_multi_source_finalize   (GObject *gobject);
 
 /* SeahorseKeySource methods */
-static void         seahorse_multi_source_refresh     (SeahorseKeySource *src,
-                                                       gboolean all);
 static void         seahorse_multi_source_stop        (SeahorseKeySource *src);
 static guint        seahorse_multi_source_get_state   (SeahorseKeySource *src);
-SeahorseKey*        seahorse_multi_source_get_key     (SeahorseKeySource *source,
-                                                       const gchar *fpr,
-                                                       SeahorseKeyInfo info);
+static SeahorseKey* seahorse_multi_source_get_key     (SeahorseKeySource *source,
+                                                       const gchar *fpr);
 static GList*       seahorse_multi_source_get_keys    (SeahorseKeySource *src,
                                                        gboolean secret_only);
 static guint        seahorse_multi_source_get_count   (SeahorseKeySource *src,
-                                                       gboolean secret_only);
+                                                       gboolean secret_only);                                                                                                              
 static gpgme_ctx_t  seahorse_multi_source_new_context (SeahorseKeySource *src);
 
-static SeahorseOperation* seahorse_multi_source_import  (SeahorseKeySource *sksrc, 
-                                                         gpgme_data_t data);
-static SeahorseOperation* seahorse_multi_source_export  (SeahorseKeySource *sksrc, 
-                                                         GList *keys,
-                                                         gpgme_data_t data);
+static SeahorseOperation*  seahorse_multi_source_get_operation   (SeahorseKeySource *src);
+static SeahorseOperation*  seahorse_multi_source_refresh         (SeahorseKeySource *src,
+                                                                  const gchar *key);
+static SeahorseOperation*  seahorse_multi_source_import          (SeahorseKeySource *sksrc, 
+                                                                  gpgme_data_t data);
+static SeahorseOperation*  seahorse_multi_source_export          (SeahorseKeySource *sksrc, 
+                                                                  GList *keys,
+                                                                  gpgme_data_t data);
 static GObjectClass *parent_class = NULL;
 
 /* Forward declaration */
@@ -97,6 +98,7 @@ seahorse_multi_source_class_init (SeahorseMultiSourceClass *klass)
     key_class->get_key = seahorse_multi_source_get_key;
     key_class->get_keys = seahorse_multi_source_get_keys;
     key_class->get_state = seahorse_multi_source_get_state;
+    key_class->get_operation = seahorse_multi_source_get_operation;
     key_class->new_context = seahorse_multi_source_new_context;    
     key_class->import = seahorse_multi_source_import;
     key_class->export = seahorse_multi_source_export;
@@ -160,19 +162,33 @@ seahorse_multi_source_finalize (GObject *gobject)
  * METHODS
  */
 
-static void         
-seahorse_multi_source_refresh (SeahorseKeySource *src, gboolean all)
+static SeahorseOperation*    
+seahorse_multi_source_refresh (SeahorseKeySource *src, const gchar *key)
 {
     SeahorseMultiSource *msrc;
+    SeahorseMultiOperation *mop;
     GSList *l;  
     
     msrc = SEAHORSE_MULTI_SOURCE (src);   
 
+    switch (g_slist_length (msrc->sources)) {
+    case 0:
+        return seahorse_operation_new_complete ();
+    case 1:
+        g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (msrc->sources->data), NULL);
+        return seahorse_key_source_refresh (SEAHORSE_KEY_SOURCE (msrc->sources->data), key);
+    }
+    
+    /* Multiple sources */
+    mop = seahorse_multi_operation_new ();
+    
     /* Go through our sources */
     for (l = msrc->sources; l != NULL; l = g_slist_next (l)) {
-        g_return_if_fail (SEAHORSE_IS_KEY_SOURCE (l->data));
-        seahorse_key_source_refresh (SEAHORSE_KEY_SOURCE (l->data), all);
-    }    
+        g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (l->data), NULL);
+        seahorse_multi_operation_add (mop, seahorse_key_source_refresh (SEAHORSE_KEY_SOURCE(l->data), key));
+    }
+
+    return SEAHORSE_OPERATION (mop);
 }
 
 static void
@@ -209,9 +225,8 @@ seahorse_multi_source_get_count (SeahorseKeySource *src,
     return n;
 }
 
-SeahorseKey*        
-seahorse_multi_source_get_key (SeahorseKeySource *src, const gchar *fpr, 
-                               SeahorseKeyInfo info)
+static SeahorseKey*        
+seahorse_multi_source_get_key (SeahorseKeySource *src, const gchar *fpr)
 {
     SeahorseMultiSource *msrc;
     SeahorseKey *skey = NULL;
@@ -222,7 +237,7 @@ seahorse_multi_source_get_key (SeahorseKeySource *src, const gchar *fpr,
     /* Go through our sources */
     for (l = msrc->sources; l != NULL; l = g_slist_next (l)) {
         g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (l->data), NULL);
-        skey = seahorse_key_source_get_key (SEAHORSE_KEY_SOURCE (l->data), fpr, info);
+        skey = seahorse_key_source_get_key (SEAHORSE_KEY_SOURCE (l->data), fpr);
         
         if (skey != NULL)
             break;
@@ -269,6 +284,35 @@ seahorse_multi_source_get_state (SeahorseKeySource *src)
     return state;
 }
 
+static SeahorseOperation*         
+seahorse_multi_source_get_operation (SeahorseKeySource *src)
+{
+    SeahorseMultiSource *msrc;
+    SeahorseMultiOperation *mop;
+    GSList *l;  
+    
+    msrc = SEAHORSE_MULTI_SOURCE (src);   
+    
+    switch (g_slist_length (msrc->sources)) {
+    case 0:
+        return seahorse_operation_new_complete ();
+    case 1:
+        g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (msrc->sources->data), NULL);
+        return seahorse_key_source_get_operation (SEAHORSE_KEY_SOURCE (msrc->sources->data));
+    }
+    
+    /* Multiple sources */
+    mop = seahorse_multi_operation_new ();
+    
+    /* Go through our sources */
+    for (l = msrc->sources; l != NULL; l = g_slist_next (l)) {
+        g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (l->data), NULL);
+        seahorse_multi_operation_add (mop, seahorse_key_source_get_operation (SEAHORSE_KEY_SOURCE(l->data)));
+    }    
+
+    return SEAHORSE_OPERATION (mop);    
+}
+
 static gpgme_ctx_t  
 seahorse_multi_source_new_context (SeahorseKeySource *src)
 {
@@ -298,7 +342,8 @@ seahorse_multi_source_export (SeahorseKeySource *src, GList *keys, gpgme_data_t 
 
     msrc = SEAHORSE_MULTI_SOURCE (src);   
     g_return_val_if_fail (msrc && msrc->sources, NULL);
-
+    
+    /* TODO: Move the multi key source export code here from seahorse-op.c */
     return seahorse_key_source_export (SEAHORSE_KEY_SOURCE (msrc->sources->data), keys, data);
 }
 
@@ -321,15 +366,6 @@ source_key_removed (SeahorseKeySource *sksrc, SeahorseKey *skey, SeahorseMultiSo
 {
     g_return_if_fail (SEAHORSE_IS_MULTI_SOURCE (msrc));
     seahorse_key_source_removed (SEAHORSE_KEY_SOURCE (msrc), skey);
-}
-
-/* Called when a key source we own has a status update */
-static void 
-source_progress (SeahorseKeySource *sksrc, const gchar *msg, double fract, 
-                 SeahorseMultiSource *msrc)
-{
-    g_return_if_fail (SEAHORSE_IS_MULTI_SOURCE (msrc));
-    seahorse_key_source_show_progress (SEAHORSE_KEY_SOURCE (msrc), msg, fract);
 }
 
 static void
@@ -367,7 +403,6 @@ release_key_source (SeahorseMultiSource *msrc, SeahorseKeySource *sksrc, gboolea
 {
     g_signal_handlers_disconnect_by_func (sksrc, source_key_added, msrc);
     g_signal_handlers_disconnect_by_func (sksrc, source_key_removed, msrc);
-    g_signal_handlers_disconnect_by_func (sksrc, source_progress, msrc);
 
     if (!quiet) 
         emit_keys_removed (msrc, sksrc);
@@ -435,7 +470,6 @@ seahorse_multi_source_add (SeahorseMultiSource *msrc, SeahorseKeySource *sksrc,
     /* Listen to the source */
     g_signal_connect (sksrc, "added", G_CALLBACK (source_key_added), msrc);             
     g_signal_connect (sksrc, "removed", G_CALLBACK (source_key_removed), msrc);             
-    g_signal_connect (sksrc, "progress", G_CALLBACK (source_progress), msrc);             
         
     emit_keys_added (msrc, sksrc);
 

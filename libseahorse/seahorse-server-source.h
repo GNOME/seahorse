@@ -52,10 +52,10 @@ GType        seahorse_server_source_get_type         (void);
 void         seahorse_server_source_add_key          (SeahorseServerSource *ssrc,
                                                       gpgme_key_t key);
 
-void         seahorse_server_source_add_operation    (SeahorseServerSource *ssrc,
+void         seahorse_server_source_set_operation    (SeahorseServerSource *ssrc,
                                                       SeahorseOperation *operation);
 
-SeahorseServerSource * seahorse_server_source_new    (SeahorseKeySource *locsrc,
+SeahorseServerSource* seahorse_server_source_new     (SeahorseKeySource *locsrc,
                                                       const gchar *server,
                                                       const gchar *pattern);
 

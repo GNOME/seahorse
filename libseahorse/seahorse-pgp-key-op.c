@@ -112,7 +112,7 @@ seahorse_key_op_generate (SeahorseKeySource *sksrc, const gchar *name,
     gpgme_release (new_ctx);
 	
 	if (GPG_IS_OK (err))
-        seahorse_key_source_refresh (sksrc, FALSE);
+        seahorse_key_source_refresh_async (sksrc, SEAHORSE_KEY_SOURCE_NEW);
 	
 	/* Free xmls */
 	g_free (parms);
@@ -253,7 +253,6 @@ edit_key (SeahorseKey *skey, SeahorseEditParm *parms, SeahorseKeyChange change)
 	g_return_val_if_fail (GPG_IS_OK (err), err);
 	/* signal key */
 	seahorse_key_changed (skey, change);
-	seahorse_key_source_show_progress (sksrc, _("Operation complete"), -1);
 	return err;
 }
 

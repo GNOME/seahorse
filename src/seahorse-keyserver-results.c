@@ -30,6 +30,8 @@
 #include "seahorse-operation.h"
 #include "seahorse-key.h"
 #include "seahorse-op.h"
+#include "seahorse-operation.h"
+#include "seahorse-progress.h"
 #include "seahorse-key-manager-store.h"
 #include "seahorse-key-widget.h"
 #include "seahorse-key-dialogs.h"
@@ -255,37 +257,6 @@ key_list_popup_menu (GtkWidget *widget, SeahorseWidget *swidget)
     return FALSE;
 }
 
-static void
-show_progress (SeahorseKeySource *sksrc, const gchar *op, gdouble fract, 
-               SeahorseWidget *swidget)
-{
-    GnomeAppBar *status;
-    GtkProgressBar *progress;
-
-    status = GNOME_APPBAR (glade_xml_get_widget (swidget->xml, "status"));
-    
-    if (op != NULL)
-        gnome_appbar_set_status (status, op);
-    
-    progress = gnome_appbar_get_progress (status);
-    
-    /* Progress */
-    if (fract <= 1 && fract > 0) {
-        gtk_progress_bar_set_fraction (progress, fract);
-        
-    /* Note that for our purposes, we totally ignore fract */
-    } else {
-       
-        if (seahorse_key_source_get_state (sksrc) & SEAHORSE_KEY_SOURCE_LOADING) {
-            gtk_progress_bar_set_pulse_step (progress, 0.05);
-            gtk_progress_bar_pulse (progress);
-        } else {
-            gtk_progress_bar_set_fraction (progress, 0);
-        }
-        
-    }
-}
-
 static void 
 window_destroyed (GtkWindow *window, SeahorseWidget *swidget)
 {
@@ -293,7 +264,6 @@ window_destroyed (GtkWindow *window, SeahorseWidget *swidget)
         SEAHORSE_KEY_SOURCE (g_object_get_data (G_OBJECT (swidget), "key-source"));
         
     seahorse_key_source_stop (sksrc);
-    g_signal_handlers_disconnect_by_func (sksrc, show_progress, swidget);
     g_object_unref (sksrc);
 }
 
@@ -310,16 +280,16 @@ seahorse_keyserver_results_show (SeahorseContext *sctx, SeahorseKeySource *sksrc
                                  const gchar *search)
 {
     GtkWindow *win;
+    SeahorseOperation *operation;
 	SeahorseWidget *swidget;
 	GtkTreeView *view;
 	GtkTreeSelection *selection;
     SeahorseKeyStore *skstore;
+    GtkWidget *w;
     gchar *title;
 	
 	swidget = seahorse_widget_new_allow_multiple ("keyserver-results", sctx);
     g_return_val_if_fail (swidget != NULL, NULL);
-    
-    g_signal_connect (sksrc, "progress", G_CALLBACK (show_progress), swidget);
     
     win = GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name));
     g_return_val_if_fail (win != NULL, NULL);
@@ -373,6 +343,13 @@ seahorse_keyserver_results_show (SeahorseContext *sctx, SeahorseKeySource *sksrc
 	gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
 	g_signal_connect (selection, "changed",
 		G_CALLBACK (selection_changed), swidget);
+
+    /* Hook progress bar in */
+    operation = seahorse_key_source_get_operation (sksrc);
+    g_return_val_if_fail (operation != NULL, win);
+    
+    w = glade_xml_get_widget (swidget->xml, "status");
+    seahorse_progress_appbar_add_operation (w, operation);
 
     skstore = seahorse_key_manager_store_new (sksrc, view);
 	selection_changed (selection, swidget);

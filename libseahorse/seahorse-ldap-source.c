@@ -647,6 +647,10 @@ start_search_operation (SeahorseLDAPSource *lsrc, const gchar *pattern)
     
     lop = seahorse_ldap_operation_start (lsrc, start_search);
     g_return_val_if_fail (lop != NULL, NULL);
+
+    t = g_strdup_printf (_("Searching for keys containing '%s'..."), pattern);
+    seahorse_operation_mark_progress (SEAHORSE_OPERATION (lop), t, -1);
+    g_free (t);
     
     g_object_set_data_full (G_OBJECT (lop), "filter", filter, g_free);
     return lop;
@@ -817,6 +821,9 @@ start_get_operation_multiple (SeahorseLDAPSource *lsrc, GSList *fingerprints,
         g_object_set_data (G_OBJECT (lop), "result", data);
     }
     
+    /* TODO: We can update a percentage when there's more than one key */
+    seahorse_operation_mark_progress (SEAHORSE_OPERATION (lop), _("Retrieving remote keys..."), -1);
+        
     g_object_set_data (G_OBJECT (lop), "fingerprints", fingerprints);
     g_object_set_data_full (G_OBJECT (lop), "fingerprints-full", fingerprints, 
                             (GDestroyNotify)seahorse_util_string_slist_free);
@@ -938,6 +945,9 @@ start_send_operation_multiple (SeahorseLDAPSource *lsrc, GSList *keys)
     
     lop = seahorse_ldap_operation_start (lsrc, send_key_to_ldap);
     g_return_val_if_fail (lop != NULL, NULL);
+
+    /* TODO: We can update a percentage when there's more than one key */    
+    seahorse_operation_mark_progress (SEAHORSE_OPERATION (lop), _("Sending keys to key server..."), -1);
     
     g_object_set_data (G_OBJECT (lop), "key-data", keys);
     g_object_set_data_full (G_OBJECT (lop), "key-data-full", keys, 
@@ -962,11 +972,8 @@ start_send_operation (SeahorseLDAPSource *lsrc, gchar *key)
 static void seahorse_ldap_source_class_init (SeahorseLDAPSourceClass *klass);
 
 /* SeahorseKeySource methods */
-static void                seahorse_ldap_source_refresh   (SeahorseKeySource *src,
-                                                           gboolean all);
-static SeahorseKey*        seahorse_ldap_source_get_key   (SeahorseKeySource *source,
-                                                           const gchar *fpr,
-                                                           SeahorseKeyInfo info);
+static SeahorseOperation*  seahorse_ldap_source_refresh   (SeahorseKeySource *src,
+                                                           const gchar *key);
 static SeahorseOperation*  seahorse_ldap_source_import    (SeahorseKeySource *sksrc, 
                                                            gpgme_data_t data);
 static SeahorseOperation*  seahorse_ldap_source_export    (SeahorseKeySource *sksrc, 
@@ -1003,46 +1010,56 @@ seahorse_ldap_source_class_init (SeahorseLDAPSourceClass *klass)
    
     key_class = SEAHORSE_KEY_SOURCE_CLASS (klass);
     key_class->refresh = seahorse_ldap_source_refresh;
-    key_class->get_key = seahorse_ldap_source_get_key;
     key_class->import = seahorse_ldap_source_import;
     key_class->export = seahorse_ldap_source_export;
 
     parent_class = g_type_class_peek_parent (klass);
 }
 
-static void         
-seahorse_ldap_source_refresh (SeahorseKeySource *src, gboolean all)
+static SeahorseOperation*
+seahorse_ldap_source_refresh (SeahorseKeySource *src, const gchar *key)
 {
+    SeahorseOperation *op;
     SeahorseLDAPOperation *lop;
     gchar *pattern = NULL;
     
-    g_return_if_fail (SEAHORSE_IS_KEY_SOURCE (src));
-    g_return_if_fail (SEAHORSE_IS_LDAP_SOURCE (src));
+    g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (src), NULL);
+    g_return_val_if_fail (SEAHORSE_IS_LDAP_SOURCE (src), NULL);
+    g_return_val_if_fail (key != NULL, NULL);
 
-    parent_class->refresh (src, all);
+    op = parent_class->refresh (src, key);
+    if (op != NULL)
+        return op;
     
-    /* Can't do anything but search all the keys */
-    if (!all)
-        return;
-
-    g_object_get (src, "pattern", &pattern, NULL);
-    g_return_if_fail (pattern && pattern[0]);
+    /* No way to find new keys */
+    if (g_str_equal (key, SEAHORSE_KEY_SOURCE_NEW))
+        return seahorse_operation_new_complete ();
+        
+    /* All keys, parent_class will have cleared */
+    else if(g_str_equal (key, SEAHORSE_KEY_SOURCE_ALL)) {
+        
+        g_object_get (src, "pattern", &pattern, NULL);
+        g_return_val_if_fail (pattern && pattern[0], NULL);
     
-    lop = start_search_operation (SEAHORSE_LDAP_SOURCE (src), pattern);
-    g_return_if_fail (lop != NULL);
+        lop = start_search_operation (SEAHORSE_LDAP_SOURCE (src), pattern);
+        g_return_val_if_fail (lop != NULL, NULL);
     
-    g_free (pattern);
+        g_free (pattern);
     
-    seahorse_server_source_add_operation (SEAHORSE_SERVER_SOURCE (src), 
-                                          SEAHORSE_OPERATION (lop));
-}
-
-static SeahorseKey*        
-seahorse_ldap_source_get_key (SeahorseKeySource *src, const gchar *fpr, 
-                                SeahorseKeyInfo info)
-{
-    /* TODO: Eventually we may want to implement importing here */
-    return parent_class->get_key (src, fpr, info);    
+        seahorse_server_source_set_operation (SEAHORSE_SERVER_SOURCE (src), 
+                                              SEAHORSE_OPERATION (lop));
+        return SEAHORSE_OPERATION (lop);
+        
+    /* Load a specific key */
+    } else {
+        
+        lop = start_search_operation_fpr (SEAHORSE_LDAP_SOURCE (src), key);
+        g_return_val_if_fail (lop != NULL, NULL);
+    
+        seahorse_server_source_set_operation (SEAHORSE_SERVER_SOURCE (src),
+                                              SEAHORSE_OPERATION (lop));
+        return SEAHORSE_OPERATION (lop);
+    }
 }
 
 /* Breaks out one block of data (usually a key) */

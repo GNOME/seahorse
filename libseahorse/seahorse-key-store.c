@@ -587,8 +587,6 @@ seahorse_key_row_remove (SeahorseKeyRow *skrow)
  * seahorse_key_store_init:
  * @skstore: #SeahorseKeyStore to initialize
  * @view: #GtkTreeView that will show @skstore
- * @cols: Number of columns to be in @view
- * @columns: Array of column types for @skstore
  *
  * Initializes @skstore with default columns and embeds in @view.
  * This must be called after creating a new #SeahorseKeyStore.
@@ -681,9 +679,6 @@ seahorse_key_store_populate (SeahorseKeyStore *skstore)
     	}
      
         g_list_free (keys);
-	
-    	seahorse_key_source_show_progress (skstore->sksrc,
-	       	g_strdup_printf (_("Listed %d keys"), count), -1);
     }
 }
 

@@ -28,7 +28,9 @@
 #include "seahorse-gpgmex.h"
 #include "seahorse-windows.h"
 #include "seahorse-widget.h"
+#include "seahorse-progress.h"
 #include "seahorse-preferences.h"
+#include "seahorse-operation.h"
 #include "seahorse-util.h"
 #include "seahorse-validity.h"
 #include "seahorse-key-manager-store.h"
@@ -42,9 +44,6 @@
 
 #define SEC_RING "/secring.gpg"
 #define PUB_RING "/pubring.gpg"
-
-static guint signal_id = 0;
-static gulong hook_id = 0;
 
 /* Drag and trop target types */
 enum TargetTypes {
@@ -62,7 +61,6 @@ static const GtkTargetEntry target_entries[] = {
 static void
 quit (GtkWidget *widget, SeahorseWidget *swidget)
 {
-	g_signal_remove_emission_hook (signal_id, hook_id);
 	seahorse_context_destroy (swidget->sctx);
 }
 
@@ -109,7 +107,7 @@ import_activate (GtkWidget *widget, SeahorseWidget *swidget)
         keys = seahorse_op_import_file (sksrc, uri, &err);
         
         if (keys >= 0)
-            seahorse_key_source_refresh (sksrc, FALSE);
+            seahorse_key_source_refresh_async (sksrc, SEAHORSE_KEY_SOURCE_NEW);
         else
             seahorse_util_handle_error (err, _("Couldn't import keys from \"%s\""), 
                 seahorse_util_uri_get_last (uri));
@@ -134,7 +132,7 @@ clipboard_received (GtkClipboard *board, const gchar *text, SeahorseContext *sct
     if (keys >= 0)
         seahorse_util_handle_error (err, _("Couldn't import keys from clipboard"));
     else if (keys > 0)
-        seahorse_key_source_refresh (sksrc, FALSE);
+        seahorse_key_source_refresh_async (sksrc, SEAHORSE_KEY_SOURCE_NEW);
 }
 
 /* Pastes key from keyboard */
@@ -538,74 +536,6 @@ gconf_notification (GConfClient *gclient, guint id, GConfEntry *entry, SeahorseW
      */
 }
 
-#if 0
-static void
-show_progress (SeahorseContext *sctx, const gchar *op, gdouble fract, SeahorseWidget *swidget)
-{
-	GnomeAppBar *status;
-	GtkProgressBar *progress;
-	gboolean sensitive;
-
-	sensitive = (fract == -1);
-	
-	status = GNOME_APPBAR (glade_xml_get_widget (swidget->xml, "status"));
-	gnome_appbar_set_status (status, op);
-	progress = gnome_appbar_get_progress (status);
-	/* do progress */
-	if (fract <= 1 && fract > 0)
-		gtk_progress_bar_set_fraction (progress, fract);
-	else if (fract != -1) {
-		gtk_progress_bar_set_pulse_step (progress, 0.05);
-		gtk_progress_bar_pulse (progress);
-	}
-	/* if fract == -1, cleanup progress */
-	else
-		gtk_progress_bar_set_fraction (progress, 0);
-	
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "key"), sensitive);
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "edit"), sensitive);
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "properties_button"), sensitive);
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "export_button"), sensitive);
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "sign_button"), sensitive);
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, KEY_LIST), sensitive);
-	
-	while (g_main_context_pending (NULL))
-		g_main_context_iteration (NULL, TRUE);
-}
-#endif
-
-/* params[0] = sctx, params[1] = op string, params[2] = fract */
-static gboolean
-progress_hook (GSignalInvocationHint *hint, guint n_params, const GValue *params, SeahorseWidget *swidget)
-{
-	GnomeAppBar *status;
-	GtkProgressBar *progress;
-	/* gboolean sensitive; */
-	gdouble fract;
-
-	fract = g_value_get_double (&params[2]);
-	/* sensitive = (fract == -1); */
-	
-	status = GNOME_APPBAR (glade_xml_get_widget (swidget->xml, "status"));
-	gnome_appbar_set_status (status, g_value_get_string (&params[1]));
-	progress = gnome_appbar_get_progress (status);
-	/* do progress */
-	if (fract <= 1 && fract > 0)
-		gtk_progress_bar_set_fraction (progress, fract);
-	else if (fract != -1) {
-		gtk_progress_bar_set_pulse_step (progress, 0.05);
-		gtk_progress_bar_pulse (progress);
-	}
-	/* if fract == -1, cleanup progress */
-	else
-		gtk_progress_bar_set_fraction (progress, 0);
-	
-	while (g_main_context_pending (NULL))
-		g_main_context_iteration (NULL, TRUE);
-	
-	return TRUE;
-}
-
 static void
 target_drag_data_received (GtkWidget *widget, GdkDragContext *context, gint x, gint y,
                            GtkSelectionData *data, guint info, guint time, SeahorseContext *sctx)
@@ -648,7 +578,7 @@ target_drag_data_received (GtkWidget *widget, GdkDragContext *context, gint x, g
     } 
 
     if (keys > 0)
-        seahorse_key_source_refresh (sksrc, FALSE);        
+        seahorse_key_source_refresh_async (sksrc, SEAHORSE_KEY_SOURCE_NEW);        
 }
 
 /* Refilter the keys when the filter text changes */
@@ -663,6 +593,7 @@ GtkWindow*
 seahorse_key_manager_show (SeahorseContext *sctx)
 {
     GtkWindow *win;
+    SeahorseOperation *operation;
 	SeahorseWidget *swidget;
 	GtkTreeView *view;
     GtkWidget* w;
@@ -746,11 +677,6 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 	glade_xml_signal_connect_data (swidget->xml, "add_revoker_activate",
 		G_CALLBACK (add_revoker_activate), swidget);
 	
-	//g_signal_connect (swidget->sctx, "progress", G_CALLBACK (show_progress), swidget);
-	signal_id = g_signal_lookup ("progress", G_OBJECT_CLASS_TYPE (G_OBJECT_CLASS (SEAHORSE_CONTEXT_GET_CLASS (sctx))));
-	hook_id = g_signal_add_emission_hook (signal_id, 0, (GSignalEmissionHook)progress_hook,
-		swidget, (GDestroyNotify)seahorse_widget_destroy);
-	
 	/* init gclient */
 	eel_gconf_notification_add (UI_SCHEMAS, (GConfClientNotifyFunc) gconf_notification, swidget);
 	
@@ -787,6 +713,13 @@ seahorse_key_manager_show (SeahorseContext *sctx)
     glade_xml_signal_connect_data(swidget->xml, "on_filter_changed",
                               G_CALLBACK(filter_changed), skstore);
 
+    /* Hook progress bar in */
+    operation = seahorse_key_source_get_operation (sksrc);
+    g_return_val_if_fail (operation != NULL, win);
+    
+    w = glade_xml_get_widget (swidget->xml, "status");
+    seahorse_progress_appbar_add_operation (w, operation);
+    
     /* Although not all the keys have completed we'll know whether we have 
      * any or not at this point */
 	if (seahorse_key_source_get_count (sksrc, FALSE) == 0) {

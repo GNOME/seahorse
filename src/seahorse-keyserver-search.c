@@ -46,7 +46,7 @@ start_keyserver_search (SeahorseMultiSource *msrc, SeahorseKeySource *lsksrc,
     g_return_if_fail (sksrc != NULL);
     
     seahorse_multi_source_add (msrc, sksrc, FALSE);
-    seahorse_key_source_refresh (sksrc, TRUE);
+    seahorse_key_source_refresh_async (sksrc, SEAHORSE_KEY_SOURCE_ALL);
 }
 
 static void
@@ -87,9 +87,6 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 
     /* Container for all the remote sources */
     msrc = seahorse_multi_source_new ();
-
-    /* Open the new result window */    
-    seahorse_keyserver_results_show (swidget->sctx, SEAHORSE_KEY_SOURCE (msrc), search);
             
     /* The default key server or null for all */
     if (keyserver != NULL && keyserver[0] != 0) {
@@ -100,6 +97,9 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
         for (; ks; ks = g_slist_next (ks))
             start_keyserver_search (msrc, lsksrc, (const gchar*)(ks->data), search);
     }
+
+    /* Open the new result window */    
+    seahorse_keyserver_results_show (swidget->sctx, SEAHORSE_KEY_SOURCE (msrc), search);
 
     seahorse_widget_destroy (swidget);
 }

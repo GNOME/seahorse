@@ -27,7 +27,6 @@
 enum {
     ADDED,
     REMOVED,
-    PROGRESS,
     LAST_SIGNAL
 };
 
@@ -81,9 +80,6 @@ seahorse_key_source_class_init (SeahorseKeySourceClass *klass)
     signals[REMOVED] = g_signal_new ("removed", SEAHORSE_TYPE_KEY_SOURCE, 
                 G_SIGNAL_RUN_FIRST, G_STRUCT_OFFSET (SeahorseKeySourceClass, removed),
                 NULL, NULL, g_cclosure_marshal_VOID__OBJECT, G_TYPE_NONE, 1, SEAHORSE_TYPE_KEY);
-    signals[PROGRESS] = g_signal_new ("progress", SEAHORSE_TYPE_KEY_SOURCE, 
-                G_SIGNAL_RUN_LAST, G_STRUCT_OFFSET (SeahorseKeySourceClass, progress),
-                NULL, NULL, seahorse_marshal_VOID__STRING_DOUBLE, G_TYPE_NONE, 2, G_TYPE_STRING, G_TYPE_DOUBLE);
 }
 
 /* Initialize the object */
@@ -145,39 +141,57 @@ seahorse_key_source_removed (SeahorseKeySource *sksrc, SeahorseKey* key)
     g_signal_emit (sksrc, signals[REMOVED], 0, key);
 }
 
-/**
- * seahorse_key_source_show_progress
- * @sksrc: A #SeahorseKeySource object
- * @op: A mesage to show
- * @pos: Progress bar indicator position (or -1)
- * 
- * Called by a #SeahorseKeySource when a progress or status changes
- **/
-void
-seahorse_key_source_show_progress (SeahorseKeySource *sksrc, const gchar *op, gdouble fract)
-{
-    g_return_if_fail (SEAHORSE_IS_KEY_SOURCE (sksrc));
-    g_signal_emit (sksrc, signals[PROGRESS], 0, op, fract);
-}
 
 /**
  * seahorse_key_source_refresh
  * @sksrc: A #SeahorseKeySource object
- * @all: Whether to refresh existing keys, or only find new, and remove old
+ * @key: The key to refresh or SEAHORSE_KEY_SOURCE_ALL, SEAHORSE_KEY_SOURCE_NEW 
  * 
- * Refreshes the #SeahorseKeySource's internal key listing. If new_key_hint
- * is non-zero then it just finds the specified number of new keys.
+ * Refreshes the #SeahorseKeySource's internal key listing. 
+ * 
+ * Returns the asynchronous key refresh operation. 
  **/   
-void
-seahorse_key_source_refresh (SeahorseKeySource *sksrc, gboolean all)
+SeahorseOperation*
+seahorse_key_source_refresh (SeahorseKeySource *sksrc, const gchar *key)
 {
     SeahorseKeySourceClass *klass;
     
-    g_return_if_fail (SEAHORSE_IS_KEY_SOURCE (sksrc));
+    g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (sksrc), NULL);
     klass = SEAHORSE_KEY_SOURCE_GET_CLASS (sksrc);
-    g_return_if_fail (klass->refresh != NULL);
+    g_return_val_if_fail (klass->refresh != NULL, NULL);
     
-    (*klass->refresh) (sksrc, all);    
+    return (*klass->refresh) (sksrc, key);    
+}
+
+/**
+ * seahorse_key_source_refresh_sync
+ * @sksrc: A #SeahorseKeySource object
+ * @key: The key to refresh or SEAHORSE_KEY_SOURCE_ALL, SEAHORSE_KEY_SOURCE_NEW 
+ * 
+ * Refreshes the #SeahorseKeySource's internal key listing, and waits for it to complete.
+ **/   
+void
+seahorse_key_source_refresh_sync (SeahorseKeySource *sksrc, const gchar *key)
+{
+    SeahorseOperation *op = seahorse_key_source_refresh (sksrc, key);
+    g_return_if_fail (op != NULL);
+    seahorse_operation_wait (op);
+    g_object_unref (op);
+}
+
+/**
+ * seahorse_key_source_refresh_sync
+ * @sksrc: A #SeahorseKeySource object
+ * @key: The key to refresh or SEAHORSE_KEY_SOURCE_ALL, SEAHORSE_KEY_SOURCE_NEW 
+ * 
+ * Refreshes the #SeahorseKeySource's internal key listing. Completes in the background.
+ **/   
+void
+seahorse_key_source_refresh_async (SeahorseKeySource *sksrc, const gchar *key)
+{
+    SeahorseOperation *op = seahorse_key_source_refresh (sksrc, key);
+    g_return_if_fail (op != NULL);
+    g_object_unref (op);
 }
 
 /**
@@ -225,17 +239,13 @@ seahorse_key_source_get_count (SeahorseKeySource *sksrc,
  * seahorse_key_source_get_key
  * @sksrc: A #SeahorseKeySource object
  * @fpr: The fingerprint of the desired key
- * @info: The amount of info to load for key.
  * 
- * Finds the specified key based on the fingerprint. If loaded and enough info
- * has already been loaded then just returns a cached version. If info is 
- * not SKEY_INFO_NONE, and key is not loaded then tries to load it.
+ * Finds the specified key based on the fingerprint, from the loaded set. 
  * 
  * Returns: The key or NULL if not found.
  **/
 SeahorseKey*
-seahorse_key_source_get_key (SeahorseKeySource *sksrc, const gchar *fpr,
-                             SeahorseKeyInfo info)
+seahorse_key_source_get_key (SeahorseKeySource *sksrc, const gchar *fpr)
 {
     SeahorseKeySourceClass *klass;
     
@@ -243,7 +253,7 @@ seahorse_key_source_get_key (SeahorseKeySource *sksrc, const gchar *fpr,
     klass = SEAHORSE_KEY_SOURCE_GET_CLASS (sksrc);
     g_return_val_if_fail (klass->get_key != NULL, NULL);
     
-    return (*klass->get_key) (sksrc, fpr, info);
+    return (*klass->get_key) (sksrc, fpr);
 }
 
 /**
@@ -286,6 +296,24 @@ seahorse_key_source_get_state (SeahorseKeySource *sksrc)
     g_return_val_if_fail (klass->get_state != NULL, 0);
     
     return (*klass->get_state) (sksrc);
+}
+
+/**
+ * seahorse_key_source_get_operation
+ * @sksrc: A #SeahorseKeySource object
+ * 
+ * Returns the current loading operation for the key source.
+ **/
+SeahorseOperation*        
+seahorse_key_source_get_operation (SeahorseKeySource *sksrc)
+{
+    SeahorseKeySourceClass *klass;
+    
+    g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (sksrc), 0);
+    klass = SEAHORSE_KEY_SOURCE_GET_CLASS (sksrc);   
+    g_return_val_if_fail (klass->get_operation != NULL, NULL);
+    
+    return (*klass->get_operation) (sksrc);    
 }
 
 /**
@@ -346,7 +374,4 @@ gpgme_progress (gpointer data, const gchar *what, gint type, gint current, gint 
        fract = -1;
     else
        fract = (gdouble)current / (gdouble)total;
- 
-    seahorse_key_source_show_progress (SEAHORSE_KEY_SOURCE (data), what, fract);
 }
-

@@ -31,16 +31,8 @@
 #include "seahorse-multi-source.h"
 #include "seahorse-pgp-source.h"
 
-#define PROGRESS_UPDATE PGP_SCHEMAS "/progress_update"
-//#define MAX_THREADS 5
-
 struct _SeahorseContextPrivate {
     SeahorseKeySource *source;
-};
-
-enum {
-	PROGRESS,
-	LAST_SIGNAL
 };
 
 static void	seahorse_context_class_init	(SeahorseContextClass *klass);
@@ -48,12 +40,7 @@ static void	seahorse_context_init		(SeahorseContext *sctx);
 static void	seahorse_context_dispose	(GObject *gobject);
 static void seahorse_context_finalize   (GObject *gobject);
 
-static void source_progress    (SeahorseKeySource *sksrc, const gchar *msg,
-                                double fract, SeahorseContext *sctx);
-
-
 static GtkObjectClass	*parent_class			= NULL;
-static guint		context_signals[LAST_SIGNAL]	= { 0 };
 
 GType
 seahorse_context_get_type (void)
@@ -87,13 +74,7 @@ seahorse_context_class_init (SeahorseContextClass *klass)
 	gobject_class = G_OBJECT_CLASS (klass);
 	
     gobject_class->dispose = seahorse_context_dispose;
-	gobject_class->finalize = seahorse_context_finalize;
-	
-	klass->progress = NULL;
-	
-	context_signals[PROGRESS] = g_signal_new ("progress", G_OBJECT_CLASS_TYPE (gobject_class),
-		G_SIGNAL_RUN_LAST, G_STRUCT_OFFSET (SeahorseContextClass, progress),
-		NULL, NULL, seahorse_marshal_VOID__STRING_DOUBLE, G_TYPE_NONE, 2, G_TYPE_STRING, G_TYPE_DOUBLE);
+	gobject_class->finalize = seahorse_context_finalize;	
 }
 
 /* init context, private vars, set prefs, connect signals */
@@ -105,7 +86,6 @@ seahorse_context_init (SeahorseContext *sctx)
 
     /* Our multi source */
     sctx->priv->source = SEAHORSE_KEY_SOURCE (seahorse_multi_source_new ());
-    g_signal_connect (sctx->priv->source, "progress", G_CALLBACK (source_progress), sctx);             
   
     /* Have gconf cache these sections */
     eel_gconf_monitor_add (PGP_SCHEMAS);
@@ -127,9 +107,6 @@ seahorse_context_dispose (GObject *gobject)
         
         /* Make sure to stop all loads */
         seahorse_key_source_stop (sctx->priv->source);
-        
-        /* Stop listening to the source */
-        g_signal_handlers_disconnect_by_func (G_OBJECT (sctx->priv->source), source_progress, sctx);
         
         g_object_unref (sctx->priv->source);
         sctx->priv->source = NULL;
@@ -214,8 +191,7 @@ seahorse_context_get_default_key (SeahorseContext *sctx)
     
     id = eel_gconf_get_string (DEFAULT_KEY);
     if (id != NULL && id[0]) 
-        skey = seahorse_key_source_get_key (sctx->priv->source, id, 
-                                            SKEY_INFO_NORMAL);
+        skey = seahorse_key_source_get_key (sctx->priv->source, id);
     g_free (id);
     
     if (SEAHORSE_IS_KEY_PAIR (skey))
@@ -256,25 +232,4 @@ seahorse_context_get_key_source (SeahorseContext *sctx)
 {
     g_return_val_if_fail (sctx->priv->source != NULL, NULL);
     return sctx->priv->source;
-}
-
-/**
- * seahorse_context_show_progress
- * @sctx: A #SeahorseContext object
- * @msg: A progress message
- * @pos: A position for the progress bar, or -1
- **/
-void 
-seahorse_context_show_progress (SeahorseContext *sctx, const gchar *msg, double pos)
-{
-    g_return_if_fail (SEAHORSE_IS_CONTEXT (sctx));
-    g_signal_emit (G_OBJECT (sctx), context_signals[PROGRESS], 0, msg, pos);  
-}    
-
-/* Called when a key source we own has a status update */
-static void 
-source_progress (SeahorseKeySource *sksrc, const gchar *msg, double fract, 
-                 SeahorseContext *sctx)
-{
-    seahorse_context_show_progress (sctx, msg, fract);
 }

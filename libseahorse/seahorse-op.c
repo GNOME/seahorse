@@ -260,7 +260,7 @@ encrypt_data_common (SeahorseKeySource *sksrc, GList *keys, gpgme_data_t plain,
         if (eel_gconf_get_boolean (ENCRYPTSELF_KEY)) {
             id = eel_gconf_get_string (DEFAULT_KEY);        
             if (id != NULL) {
-                skey = seahorse_key_source_get_key (sksrc, id, TRUE);
+                skey = seahorse_key_source_get_key (sksrc, id);
                 if (skey != NULL)
                     keys = g_list_append (keys, skey);
             }
