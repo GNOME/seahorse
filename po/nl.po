@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Seahorse Gnome2\n"
-"POT-Creation-Date: 2003-01-18 10:54+0100\n"
-"PO-Revision-Date: 2003-01-18 17:58+0100\n"
+"POT-Creation-Date: 2003-01-29 11:05+0100\n"
+"PO-Revision-Date: 2003-01-29 14:05+0100\n"
 "Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
 "Language-Team: Dutch <vertaling@nl.linux.org>\n"
 "MIME-Version: 1.0\n"
@@ -83,7 +83,7 @@ msgstr ""
 "Kan niet exporteren naar\n"
 "%s"
 
-#: src/dialogs/seahorse-export.c:113
+#: src/dialogs/seahorse-export.c:103
 #, c-format
 msgid "Export Key: %s"
 msgstr "Sleutel exporteren: %s"
@@ -106,7 +106,7 @@ msgstr "Een bestand kiezen waarnaar wordt geexporteerd"
 msgid "Export Help"
 msgstr "Export hulp"
 
-#: src/dialogs/seahorse-export.glade2.h:5 src/seahorse-key-manager.glade2.h:2
+#: src/dialogs/seahorse-export.glade2.h:5 src/seahorse-key-manager.glade2.h:4
 msgid "Export Key"
 msgstr "Sleutel exporteren"
 
@@ -155,32 +155,32 @@ msgstr "Bestandsnaam voor export"
 msgid "www.keyserver.net/en"
 msgstr "www.keyserver.net/en"
 
-#: src/dialogs/seahorse-generate.c:82
+#: src/dialogs/seahorse-generate.c:86
 msgid "You must fill in a valid name"
 msgstr "U moet een geldige naam invoeren"
 
-#: src/dialogs/seahorse-generate.c:86
+#: src/dialogs/seahorse-generate.c:90
 msgid "You must fill in a valid email address"
 msgstr "U moet een geldige emailadres invoeren"
 
-#: src/dialogs/seahorse-generate.c:90
+#: src/dialogs/seahorse-generate.c:94
 msgid "You must fill in a valid comment"
 msgstr "U moet een geldige opmerking invoeren"
 
-#: src/dialogs/seahorse-generate.c:94
+#: src/dialogs/seahorse-generate.c:98
 msgid "You must fill in a valid passphrase"
 msgstr "U moet een geldige wachtwoord-frase invoeren"
 
-#: src/dialogs/seahorse-generate.c:98
+#: src/dialogs/seahorse-generate.c:102
 msgid "You must confirm your passphrase"
 msgstr "U moet uw wachtwoord-frase bevestigen"
 
-#: src/dialogs/seahorse-generate.c:102
+#: src/dialogs/seahorse-generate.c:106
 msgid "Passphrase & confirmation must match"
 msgstr "Wachtwoord-frase & bevestinging moeten overeenkomen"
 
 #: src/dialogs/seahorse-generate.glade2.h:2
-msgid "C_onfirm Passphrase:"
+msgid "Con_firm Passphrase:"
 msgstr "Wachtwoord-frase _bevestigen:"
 
 #: src/dialogs/seahorse-generate.glade2.h:3
@@ -224,7 +224,7 @@ msgid "If key never expires"
 msgstr "Als sleutel nooit verloopt"
 
 #: src/dialogs/seahorse-generate.glade2.h:13
-msgid "Key _Comment:"
+msgid "Key Co_mment:"
 msgstr "Sleutel_opmerking:"
 
 #: src/dialogs/seahorse-generate.glade2.h:14
@@ -243,7 +243,7 @@ msgstr "Sleuteltype / algoritme"
 msgid "Length of Key"
 msgstr "Lengte van sleutel"
 
-#: src/dialogs/seahorse-generate.glade2.h:18 src/seahorse-key-properties.c:183
+#: src/dialogs/seahorse-generate.glade2.h:18 src/seahorse-key-properties.c:186
 msgid "Never Expires"
 msgstr "Verloopt nooit"
 
@@ -351,14 +351,6 @@ msgstr "_Standaardsleutel:"
 msgid "_Text Mode"
 msgstr "_Tekstmodus"
 
-#: src/dialogs/seahorse-recipients.c:161
-msgid ""
-"This key does not have encryption capability.\n"
-"It cannot be added to the list."
-msgstr ""
-"Deze sleutel heeft geen mogelijkheid voor versleuteling.\n"
-"Het kan niet aan de lijst worden toegevoegd."
-
 #: src/dialogs/seahorse-recipients.glade2.h:1
 msgid "Add key to recipient list"
 msgstr "Sleutel toevoegen aan geadresseerden-lijst"
@@ -416,12 +408,12 @@ msgid "Verification Error"
 msgstr "Verificatie-fout"
 
 #: src/dialogs/seahorse-signatures.glade2.h:1
-#: src/seahorse-key-properties.c:170
+#: src/seahorse-key-properties.c:172
 msgid "Created:"
 msgstr "Aangemaakt:"
 
 #: src/dialogs/seahorse-signatures.glade2.h:2
-#: src/seahorse-key-properties.c:166
+#: src/seahorse-key-properties.c:168
 msgid "Key ID:"
 msgstr "Sleutel-ID:"
 
@@ -437,17 +429,21 @@ msgstr "Gesigneerde:"
 msgid "Status:"
 msgstr "Status:"
 
-#: src/seahorse-context.c:283
+#: src/seahorse-context.c:285
 #, c-format
 msgid "%s Successful"
 msgstr "%s Succesvol"
 
-#: src/seahorse-context.c:285
+#: src/seahorse-context.c:287
 #, c-format
 msgid "%s Failed"
 msgstr "%s Mislukt"
 
-#: src/seahorse-file-manager.c:92
+#: src/seahorse-encrypt-recipients-store.c:136
+msgid "Validity"
+msgstr "Geldigheid"
+
+#: src/seahorse-file-manager.c:93
 msgid ""
 "Unknown suffix or bad file name.\n"
 "File must exist and end with '.asc' or '.gpg'."
@@ -514,142 +510,175 @@ msgstr "Seahorse bestandsbeheer"
 msgid "Select File"
 msgstr "Bestand selecteren"
 
-#: src/seahorse-file-manager.glade2.h:16 src/seahorse-ops-text.c:109
-#: src/seahorse-text-editor.glade2.h:16
+#: src/seahorse-file-manager.glade2.h:16
+msgid "Show file manager help"
+msgstr "_Bestandsbeheer hulp tonen"
+
+#: src/seahorse-file-manager.glade2.h:17 src/seahorse-ops-text.c:109
+#: src/seahorse-text-editor.glade2.h:17
 msgid "Sign"
 msgstr "Signeren"
 
-#: src/seahorse-file-manager.glade2.h:17 src/seahorse-text-editor.glade2.h:17
+#: src/seahorse-file-manager.glade2.h:18 src/seahorse-text-editor.glade2.h:18
 msgid "Verify"
 msgstr "Verifiëren"
 
-#: src/seahorse-file-manager.glade2.h:18
+#: src/seahorse-file-manager.glade2.h:19
 msgid "Verify a detached signature"
 msgstr "Een losse handtekening verifiëren"
 
-#: src/seahorse-file-manager.glade2.h:19 src/seahorse-text-editor.c:192
-#: src/seahorse-text-editor.glade2.h:19
+#: src/seahorse-file-manager.glade2.h:20 src/seahorse-key-manager.glade2.h:12
+#: src/seahorse-key-properties.glade2.h:13
+#: src/seahorse-text-editor.glade2.h:20
+msgid "View statusbar"
+msgstr "Statusbalk tonen"
+
+#: src/seahorse-file-manager.glade2.h:21 src/seahorse-key-manager.glade2.h:13
+#: src/seahorse-key-properties.glade2.h:14
+#: src/seahorse-text-editor.glade2.h:21
+msgid "View toolbar"
+msgstr "Werkbalk tonen"
+
+#: src/seahorse-file-manager.glade2.h:22 src/seahorse-text-editor.c:192
+#: src/seahorse-text-editor.glade2.h:22
 msgid "_Decrypt"
 msgstr "_Ontsleutelen"
 
-#: src/seahorse-file-manager.glade2.h:20 src/seahorse-text-editor.c:196
-#: src/seahorse-text-editor.glade2.h:20
+#: src/seahorse-file-manager.glade2.h:23 src/seahorse-text-editor.c:196
+#: src/seahorse-text-editor.glade2.h:23
 msgid "_Encrypt"
 msgstr "_Versleutelen"
 
-#: src/seahorse-file-manager.glade2.h:21
+#: src/seahorse-file-manager.glade2.h:24
 msgid "_File Manager Help"
 msgstr "_Bestandsbeheer hulp"
 
-#: src/seahorse-file-manager.glade2.h:22 src/seahorse-text-editor.c:208
-#: src/seahorse-text-editor.glade2.h:21
+#: src/seahorse-file-manager.glade2.h:25 src/seahorse-text-editor.c:208
+#: src/seahorse-text-editor.glade2.h:24
 msgid "_Import"
 msgstr "_Importeren"
 
-#: src/seahorse-file-manager.glade2.h:23 src/seahorse-text-editor.c:204
-#: src/seahorse-text-editor.glade2.h:22
+#: src/seahorse-file-manager.glade2.h:26 src/seahorse-text-editor.c:204
+#: src/seahorse-text-editor.glade2.h:25
 msgid "_Sign"
 msgstr "_Signeren"
 
-#: src/seahorse-file-manager.glade2.h:24 src/seahorse-text-editor.glade2.h:23
+#: src/seahorse-file-manager.glade2.h:27
+#: src/seahorse-key-properties.glade2.h:17
+#: src/seahorse-text-editor.glade2.h:26
 msgid "_Statusbar"
 msgstr "_Statusbalk"
 
-#: src/seahorse-file-manager.glade2.h:25 src/seahorse-text-editor.glade2.h:25
+#: src/seahorse-file-manager.glade2.h:28
+#: src/seahorse-key-properties.glade2.h:18
+#: src/seahorse-text-editor.glade2.h:28
 msgid "_Toolbar"
 msgstr "_Werkbalk"
 
-#: src/seahorse-file-manager.glade2.h:26 src/seahorse-text-editor.c:188
-#: src/seahorse-text-editor.glade2.h:26
+#: src/seahorse-file-manager.glade2.h:29 src/seahorse-text-editor.c:188
+#: src/seahorse-text-editor.glade2.h:29
 msgid "_Verify"
 msgstr "_Verifiëren"
 
-#: src/seahorse-key-manager-store.c:150 src/seahorse-recipients-store.c:126
-msgid "Name"
-msgstr "Naam"
-
-#: src/seahorse-key-manager-store.c:155 src/seahorse-recipients-store.c:131
-msgid "Key ID"
-msgstr "Sleutel-ID"
-
-#: src/seahorse-key-manager-store.c:160
+#: src/seahorse-key-manager-store.c:205
 msgid "Trust"
 msgstr "Vertrouwen"
 
-#: src/seahorse-key-manager-store.c:165
+#: src/seahorse-key-manager-store.c:206
 msgid "Type"
 msgstr "Type"
 
-#: src/seahorse-key-manager-store.c:170
+#: src/seahorse-key-manager-store.c:207
 msgid "Length"
 msgstr "Lengte"
 
-#: src/seahorse-key-manager.glade2.h:1 src/seahorse-ops-key.c:45
+#: src/seahorse-key-manager.glade2.h:1
+msgid "Create a new key"
+msgstr "Een nieuwe sleutel aanmaken"
+
+#: src/seahorse-key-manager.glade2.h:2 src/seahorse-ops-key.c:55
 msgid "Delete Key"
 msgstr "Sleutel verwijderen"
 
 #: src/seahorse-key-manager.glade2.h:3
+msgid "Delete selected key"
+msgstr "Geselecteerde sleutel verwijderen"
+
+#: src/seahorse-key-manager.glade2.h:5
 msgid "Seahorse Key Manager"
 msgstr "Seahorse sleutelbeheer"
 
-#: src/seahorse-key-manager.glade2.h:4
+#: src/seahorse-key-manager.glade2.h:6
 msgid "Show Key Properties"
 msgstr "Sleuteleigenschappen tonen"
 
-#: src/seahorse-key-manager.glade2.h:5 src/seahorse-key-properties.glade2.h:11
+#: src/seahorse-key-manager.glade2.h:7
+msgid "Show Seahorse help"
+msgstr "Seahorse hulp tonen"
+
+#: src/seahorse-key-manager.glade2.h:8
+msgid "Show the file manager"
+msgstr "Bestandsbeheer tonen"
+
+#: src/seahorse-key-manager.glade2.h:9
+msgid "Show the text editor"
+msgstr "Tekst-editor tonen"
+
+#: src/seahorse-key-manager.glade2.h:10
 msgid "Statusbar"
 msgstr "Statusbalk"
 
-#: src/seahorse-key-manager.glade2.h:6 src/seahorse-key-properties.glade2.h:12
+#: src/seahorse-key-manager.glade2.h:11
 msgid "Toolbar"
 msgstr "Werkbalk"
 
-#: src/seahorse-key-manager.glade2.h:7
+#: src/seahorse-key-manager.glade2.h:14
 msgid "_Contents"
 msgstr "_Inhoud"
 
-#: src/seahorse-key-manager.glade2.h:8 src/seahorse-key-properties.glade2.h:13
+#: src/seahorse-key-manager.glade2.h:15
+#: src/seahorse-key-properties.glade2.h:15
 msgid "_Delete"
 msgstr "_Verwijderen"
 
-#: src/seahorse-key-manager.glade2.h:9
+#: src/seahorse-key-manager.glade2.h:16
 msgid "_File Manager"
 msgstr "_Bestandsbeheer"
 
-#: src/seahorse-key-manager.glade2.h:10
+#: src/seahorse-key-manager.glade2.h:17
 msgid "_New"
 msgstr "_Nieuw"
 
-#: src/seahorse-key-manager.glade2.h:11
+#: src/seahorse-key-manager.glade2.h:18
 msgid "_Text Editor"
 msgstr "_Tekst-editor"
 
-#: src/seahorse-key-properties.c:168
+#: src/seahorse-key-properties.c:170
 msgid "Algorithm:"
 msgstr "Algoritme:"
 
-#: src/seahorse-key-properties.c:173
+#: src/seahorse-key-properties.c:175
 msgid "Length:"
 msgstr "Lengte:"
 
-#: src/seahorse-key-properties.c:176
+#: src/seahorse-key-properties.c:178
 msgid "Expires:"
 msgstr "Verloopt:"
 
-#: src/seahorse-key-properties.c:196
+#: src/seahorse-key-properties.c:200
 msgid "_Never Expires"
 msgstr "Verloopt _nooit"
 
-#: src/seahorse-key-properties.c:257
+#: src/seahorse-key-properties.c:239
+msgid "Primary"
+msgstr "Primaire"
+
+#: src/seahorse-key-properties.c:260
 #, c-format
 msgid "User ID %d"
 msgstr "Gebruikers-ID %d"
 
-#: src/seahorse-key-properties.c:262
-msgid "Primary"
-msgstr "Primaire"
-
-#: src/seahorse-key-properties.c:296
+#: src/seahorse-key-properties.c:301
 #, c-format
 msgid "Sub Key %d"
 msgstr "Sub-sleutel %d"
@@ -659,100 +688,116 @@ msgid "Change _Passphrase"
 msgstr "_Wachtwoord-frase veranderen"
 
 #: src/seahorse-key-properties.glade2.h:2
-msgid "Change this key's passphrase"
-msgstr "De wachtwoord-frase van deze sleutel veranderen"
+msgid "Change key's passphrase"
+msgstr "Wachtwoord-frase van de sleutel veranderen"
 
 #: src/seahorse-key-properties.glade2.h:3
+msgid "Delete key"
+msgstr "Sleutel verwijderen"
+
+#: src/seahorse-key-properties.glade2.h:4
 msgid "Enable/Disable Key"
 msgstr "Sleutel aanzetten/uitzetten"
 
-#: src/seahorse-key-properties.glade2.h:4
+#: src/seahorse-key-properties.glade2.h:5
 msgid "Export key"
 msgstr "Sleutel exporteren"
 
-#: src/seahorse-key-properties.glade2.h:5
+#: src/seahorse-key-properties.glade2.h:6
 msgid "Fingerprint:"
 msgstr "Vingerafdruk:"
 
-#: src/seahorse-key-properties.glade2.h:6
+#: src/seahorse-key-properties.glade2.h:7
 msgid "Key Properties"
 msgstr "Sleuteleigenschappen"
 
-#: src/seahorse-key-properties.glade2.h:7
+#: src/seahorse-key-properties.glade2.h:8
 msgid "Key Properties Help"
 msgstr "Sleuteleigenschappen hulp"
 
-#: src/seahorse-key-properties.glade2.h:8
+#: src/seahorse-key-properties.glade2.h:9
 msgid "Owner Trust"
 msgstr "Eigenaarvertrouwen"
 
-#: src/seahorse-key-properties.glade2.h:9
+#: src/seahorse-key-properties.glade2.h:10
 msgid "Owner _Trust:"
 msgstr "Eigenaarver_trouwen:"
 
-#: src/seahorse-key-properties.glade2.h:10
+#: src/seahorse-key-properties.glade2.h:11
 msgid "Save File"
 msgstr "Bestand opslaan"
 
-#: src/seahorse-key-properties.glade2.h:14
+#: src/seahorse-key-properties.glade2.h:12
+msgid "Show key properties help"
+msgstr "Sleuteleigenschappen-hulp tonen"
+
+#: src/seahorse-key-properties.glade2.h:16
 msgid "_Disabled"
 msgstr "_Uitgezet"
+
+#: src/seahorse-key-store.c:312
+msgid "Name"
+msgstr "Naam"
+
+#: src/seahorse-key-store.c:313
+msgid "Key ID"
+msgstr "Sleutel-ID"
 
 #: src/seahorse-ops-data.c:43
 #, c-format
 msgid "Imported %d Keys: "
 msgstr "%d sleutels geïmporteerd:"
 
-#: src/seahorse-ops-file.c:105
+#: src/seahorse-ops-file.c:104
 msgid "Bad File, Import"
 msgstr "Fout bestand, import"
 
 # export: werkwoord of bijv.nmwrd?
-#: src/seahorse-ops-file.c:119 src/seahorse-ops-file.c:132
+#: src/seahorse-ops-file.c:118 src/seahorse-ops-file.c:131
 msgid "Export File"
 msgstr "Bestand exporteren"
 
-#: src/seahorse-ops-file.c:147
+#: src/seahorse-ops-file.c:146
 msgid "Detached Signature"
 msgstr "Losse handtekening"
 
-#: src/seahorse-ops-file.c:162
+#: src/seahorse-ops-file.c:161
 msgid "Encrypt File"
 msgstr "Bestand versleutelen"
 
-#: src/seahorse-ops-file.c:177
+#: src/seahorse-ops-file.c:176
 msgid "Decrypt File"
 msgstr "Bestand ontsleutelen"
 
-#: src/seahorse-ops-file.c:194
+#: src/seahorse-ops-file.c:193
 msgid "Verify Signature File"
 msgstr "Handtekeningbestand verifiëren"
 
-#: src/seahorse-ops-file.c:209
+#: src/seahorse-ops-file.c:208
 msgid "Decrypt & Verify File"
 msgstr "Bestand ontsleutelen & verifiëren"
 
-#: src/seahorse-ops-key.c:96
+#: src/seahorse-ops-key.c:137
 msgid "Generate Key"
 msgstr "Sleutel genereren"
 
-#: src/seahorse-ops-key.c:353
+#: src/seahorse-ops-key.c:422
 msgid "Change Trust"
 msgstr "Vertrouwen veranderen"
 
-#: src/seahorse-ops-key.c:474
+#: src/seahorse-ops-key.c:558
 msgid "Change Expiration"
 msgstr "Verloopdatum veranderen"
 
-#: src/seahorse-ops-key.c:558
+#: src/seahorse-ops-key.c:655
 msgid "Disable Key"
 msgstr "Sleutel uitzetten"
 
-#: src/seahorse-ops-key.c:562
+#: src/seahorse-ops-key.c:659
 msgid "Enable Key"
 msgstr "Sleutel aanzetten"
 
-#: src/seahorse-ops-key.c:650
+#: src/seahorse-ops-key.c:766
 msgid "Passphrase Change"
 msgstr "Wachtwoord-frase verandering"
 
@@ -771,10 +816,6 @@ msgstr "Handtekenign verifiëren"
 #: src/seahorse-ops-text.c:184
 msgid "Decrypt & Verify"
 msgstr "Ontsleutelen & verifiëren"
-
-#: src/seahorse-recipients-store.c:136
-msgid "Validity"
-msgstr "Geldigheid"
 
 #: src/seahorse-text-editor.c:200 src/seahorse-text-editor.glade2.h:1
 msgid "C_lear Text Sign"
@@ -816,11 +857,15 @@ msgstr "Een handtekening aanmaken"
 msgid "Seahorse Text Editor"
 msgstr "Seahorse tekst-editor"
 
-#: src/seahorse-text-editor.glade2.h:18
+#: src/seahorse-text-editor.glade2.h:16
+msgid "Show text editor help"
+msgstr "Tekst-editor hulp tonen"
+
+#: src/seahorse-text-editor.glade2.h:19
 msgid "Verify a signature"
 msgstr "Een handtekening verifiëren"
 
-#: src/seahorse-text-editor.glade2.h:24
+#: src/seahorse-text-editor.glade2.h:27
 msgid "_Text Editor Help"
 msgstr "_Tekst-editor hulp"
 
