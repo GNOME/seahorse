@@ -78,8 +78,6 @@ static void
 seahorse_operation_init (SeahorseOperation *operation)
 {
     operation->done = FALSE;
-    operation->donefunc = NULL;
-    operation->userdata = NULL;
 }
 
 /* dispose of all our internal references */
@@ -106,52 +104,56 @@ seahorse_operation_finalize (GObject *gobject)
     G_OBJECT_CLASS (parent_class)->finalize (gobject);
 }
 
-SeahorseOperation*  
-seahorse_operation_new (SeahorseOperationDone donefunc, gpointer userdata)
-{
-    SeahorseOperation *operation;
-    operation = g_object_new (SEAHORSE_TYPE_OPERATION, NULL);
-    operation->donefunc = donefunc;
-    operation->userdata = userdata;
-    return operation;
-}
-
-void                
+void
 seahorse_operation_cancel (SeahorseOperation *operation)
 {
+    SeahorseOperationClass *klass;
+
     g_return_if_fail (SEAHORSE_IS_OPERATION (operation));
     g_return_if_fail (operation->done == FALSE);
 
 	g_object_ref (operation);
-    operation->done = TRUE;   
+ 
+    klass = SEAHORSE_OPERATION_GET_CLASS (operation);
+    g_return_if_fail (klass->cancel != NULL);
     
-    if (operation->donefunc) 
-        (operation->donefunc) (operation, TRUE, operation->userdata);
-
-    operation->userdata = NULL;
+    (*klass->cancel) (operation); 
+    
 	g_object_unref (operation);
 }
 
 void                
-seahorse_operation_done (SeahorseOperation *operation)
-{ 
+seahorse_operation_mark_start (SeahorseOperation *operation)
+{
+    g_return_if_fail (SEAHORSE_IS_OPERATION (operation));
+        
+    /* A running operation always refs itself */
+    g_object_ref (operation);
+    operation->done = FALSE;
+}
+
+void                
+seahorse_operation_mark_done (SeahorseOperation *operation)
+{
     g_return_if_fail (SEAHORSE_IS_OPERATION (operation));
     g_return_if_fail (operation->done == FALSE);
-
-	g_object_ref (operation);
-    operation->done = TRUE;
     
-    if (operation->donefunc) 
-        (operation->donefunc) (operation, FALSE, operation->userdata);
+    operation->done = TRUE;   
+    g_signal_emit (operation, signals[DONE], 0);
 
-    operation->userdata = NULL;
+    /* A running operation always refs itself */
     g_object_unref (operation);
-}
+}    
+
+
+/* -----------------------------------------------------------------------------
+ * OPERATION LIST
+ */
 
 GSList*             
 seahorse_operation_list_add (GSList *list, SeahorseOperation *operation)
 {
-    /* We assume ownership of the operation, so no need to ref */
+    /* This assumes the main reference */
     return g_slist_prepend (list, operation);
 }
 
