@@ -261,6 +261,61 @@ seahorse_util_write_data_to_text (gpgme_data_t data)
 }
 
 /** 
+ * seahorse_util_printf_fd:
+ * @fd: The file descriptor to write to
+ * @fmt: The data to write
+ *
+ * Returns: Whether the operation was successful or not.
+ **/
+gboolean 
+seahorse_util_print_fd (int fd, const char* s)
+{
+    /* Guarantee all data is written */
+    int r, l = strlen (s);
+
+    while (l > 0) {
+     
+        r = write (fd, s, l);
+        
+        if (r == -1) {
+            if (errno != EAGAIN && errno != EINTR) {
+                g_critical ("couldn't write data to socket: %s", strerror (errno));
+                return FALSE;
+            }
+            
+        } else {
+            s += r;
+            l -= r;
+        }
+    }
+    
+    return TRUE;
+}
+
+/** 
+ * seahorse_util_printf_fd:
+ * @fd: The file descriptor to write to
+ * @fmt: The printf format of the data to write
+ *
+ * Returns: Whether the operation was successful or not.
+ **/
+gboolean 
+seahorse_util_printf_fd (int fd, const char* fmt, ...)
+{
+    gchar* t;
+    va_list ap;
+    gboolean ret;
+    
+    va_start (ap, fmt);    
+    t = g_strdup_vprintf (fmt, ap);
+    va_end (ap);
+    
+    ret = seahorse_util_print_fd (fd, t);
+    g_free (t);
+    return ret;
+}
+
+/** 
  * seahorse_util_uri_get_last:
  * @uri: The uri to parse
  *

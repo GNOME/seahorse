@@ -54,6 +54,12 @@ gpgme_error_t	seahorse_util_write_data_to_file	(const gchar		*path,
 
 gchar*		seahorse_util_write_data_to_text	(gpgme_data_t		data);
 
+gboolean    seahorse_util_print_fd          (int fd, 
+                                             const char* data);
+
+gboolean    seahorse_util_printf_fd         (int fd, 
+                                             const char* data, ...);
+                                             
 gboolean    seahorse_util_uri_exists        (const gchar* uri);
 
 gchar*      seahorse_util_uri_unique        (const gchar* uri);

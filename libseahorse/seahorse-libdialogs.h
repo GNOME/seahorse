@@ -27,9 +27,12 @@
 
 #include "seahorse-context.h"
 
-const gchar*	seahorse_passphrase_get	(SeahorseContext	*sctx,
-					 const gchar		*desc,
-					 gpointer		*data);
+#define SEAHORSE_PASS_BAD    0x00000001
+#define SEAHORSE_PASS_NEW    0x01000000
+
+gpgme_error_t
+seahorse_passphrase_get (SeahorseContext *sctx, const gchar *passphrase_hint, 
+                            const char* passphrase_info, int prev_bad, int fd);
 
 gpgme_key_t *	seahorse_recipients_get	(SeahorseContext	*sctx);
 
