@@ -121,7 +121,6 @@ export_data (SeahorseContext *sctx, gpgme_key_t *recips, gpgme_error_t *err)
 	while (*k) 
         *err = gpgme_op_export (sctx->ctx, (*(k++))->subkeys->fpr, 0, data);
  
-    seahorse_util_free_keys(recips);
 	return data;
 }
 
