@@ -62,7 +62,7 @@ static const struct poptOption options[] = {
 	  N_("Verify signature file"), NULL },
       
     { "uri-list", 'T', POPT_ARG_NONE | POPT_ARG_VAL, &read_uris, TRUE,
-      N_("Read list of uris on stdin"), NULL },
+      N_("Read list of URIs on standard in"), NULL },
 	
 	{ NULL, '\0', 0, NULL, 0, NULL, NULL }
 };
