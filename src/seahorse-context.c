@@ -574,6 +574,14 @@ seahorse_context_get_last_signer (SeahorseContext *sctx)
 	return seahorse_context_get_key (sctx, key);
 }
 
+/**
+ * seahorse_context_get_progress_update:
+ * @sctx: #SeahorseContext
+ *
+ * Gets the progress update count.
+ *
+ * Returns: Progress update count
+ **/
 gint
 seahorse_context_get_progress_update (SeahorseContext *sctx)
 {

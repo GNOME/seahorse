@@ -26,24 +26,34 @@
 
 #include "seahorse-context.h"
 
-void		seahorse_sign_file_new		(SeahorseContext	*sctx);
+void		seahorse_encrypt_file_new		(SeahorseContext	*sctx);
 
-gboolean	seahorse_sign_file		(SeahorseContext	*sctx,
-						 const gchar		*file);
+gboolean	seahorse_encrypt_file			(SeahorseContext	*sctx,
+							 const gchar		*file);
 
-void		seahorse_verify_file_new	(SeahorseContext	*sctx);
+void		seahorse_sign_file_new			(SeahorseContext	*sctx);
 
-gboolean	seahorse_verify_file		(SeahorseContext	*sctx,
-						 const gchar		*file);
+gboolean	seahorse_sign_file			(SeahorseContext	*sctx,
+							 const gchar		*file);
 
-void		seahorse_encrypt_file_new	(SeahorseContext	*sctx);
+void		seahorse_encrypt_sign_file_new		(SeahorseContext	*sctx);
 
-gboolean	seahorse_encrypt_file		(SeahorseContext	*sctx,
-						 const gchar		*file);
+gboolean	seahorse_encrypt_sign_file		(SeahorseContext	*sctx,
+							 const gchar		*file);
 
-void		seahorse_decrypt_file_new	(SeahorseContext	*sctx);
+void		seahorse_decrypt_file_new		(SeahorseContext	*sctx);
 
-gboolean	seahorse_decrypt_file		(SeahorseContext	*sctx,
-						 const gchar		*file);
+gboolean	seahorse_decrypt_file			(SeahorseContext	*sctx,
+							 const gchar		*file);
+
+void		seahorse_verify_file_new		(SeahorseContext	*sctx);
+
+gboolean	seahorse_verify_file			(SeahorseContext	*sctx,
+							 const gchar		*file);
+
+void		seahorse_decrypt_verify_file_new	(SeahorseContext	*sctx);
+
+gboolean	seahorse_decrypt_verify_file		(SeahorseContext	*sctx,
+							 const gchar		*file);
 
 #endif /* __SEAHORSE_FILE_DIALOGS_H__ */

@@ -62,7 +62,7 @@
 			  <accelerator key="I" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image893">
+			    <widget class="GtkImage" id="image1093">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-open</property>
 			      <property name="icon_size">1</property>
@@ -90,7 +90,7 @@
 			  <signal name="activate" handler="properties_activate" last_modification_time="Wed, 12 Feb 2003 02:03:56 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image894">
+			    <widget class="GtkImage" id="image1094">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-properties</property>
 			      <property name="icon_size">1</property>
@@ -112,7 +112,7 @@
 			  <signal name="activate" handler="export_activate" last_modification_time="Wed, 12 Feb 2003 02:03:56 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image895">
+			    <widget class="GtkImage" id="image1095">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-save-as</property>
 			      <property name="icon_size">1</property>
@@ -134,7 +134,7 @@
 			  <signal name="activate" handler="sign_activate" last_modification_time="Wed, 12 Feb 2003 02:09:46 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image896">
+			    <widget class="GtkImage" id="image1096">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-index</property>
 			      <property name="icon_size">1</property>
@@ -156,7 +156,7 @@
 			  <signal name="activate" handler="delete_activate" last_modification_time="Wed, 12 Feb 2003 02:05:07 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image897">
+			    <widget class="GtkImage" id="image1097">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-delete</property>
 			      <property name="icon_size">1</property>
@@ -184,7 +184,7 @@
 			  <signal name="activate" handler="change_passphrase_activate" last_modification_time="Wed, 12 Feb 2003 02:07:49 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image898">
+			    <widget class="GtkImage" id="image1098">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-copy</property>
 			      <property name="icon_size">1</property>
@@ -206,7 +206,7 @@
 			  <signal name="activate" handler="add_uid_activate" last_modification_time="Wed, 12 Feb 2003 02:07:49 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image899">
+			    <widget class="GtkImage" id="image1099">
 			      <property name="visible">True</property>
 			      <property name="stock">gnome-stock-text-unindent</property>
 			      <property name="icon_size">1</property>
@@ -228,7 +228,7 @@
 			  <signal name="activate" handler="add_subkey_activate" last_modification_time="Wed, 12 Feb 2003 02:07:49 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image900">
+			    <widget class="GtkImage" id="image1100">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-add</property>
 			      <property name="icon_size">1</property>
@@ -250,7 +250,7 @@
 			  <signal name="activate" handler="add_photo_activate" last_modification_time="Wed, 12 Feb 2003 02:14:41 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image901">
+			    <widget class="GtkImage" id="image1101">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-select-color</property>
 			      <property name="icon_size">1</property>
@@ -272,7 +272,7 @@
 			  <signal name="activate" handler="add_revoker_activate" last_modification_time="Wed, 12 Feb 2003 02:13:03 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image902">
+			    <widget class="GtkImage" id="image1102">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-cancel</property>
 			      <property name="icon_size">1</property>
@@ -367,6 +367,29 @@
 		    <widget class="GtkMenu" id="tools_menu">
 
 		      <child>
+			<widget class="GtkImageMenuItem" id="encrypt_file">
+			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Encrypt a file</property>
+			  <property name="label" translatable="yes">_Encrypt File</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="encrypt_file_activate" last_modification_time="Tue, 18 Feb 2003 05:41:29 GMT"/>
+			  <accelerator key="E" modifiers="GDK_CONTROL_MASK" signal="activate"/>
+
+			  <child internal-child="image">
+			    <widget class="GtkImage" id="image1103">
+			      <property name="visible">True</property>
+			      <property name="stock">gtk-sort-ascending</property>
+			      <property name="icon_size">1</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+
+		      <child>
 			<widget class="GtkImageMenuItem" id="sign_file">
 			  <property name="visible">True</property>
 			  <property name="tooltip" translatable="yes">Create a signature file</property>
@@ -376,9 +399,60 @@
 			  <accelerator key="S" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image903">
+			    <widget class="GtkImage" id="image1104">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-index</property>
+			      <property name="icon_size">1</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkImageMenuItem" id="encrypt_sign">
+			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Encrypt and sign a file</property>
+			  <property name="label" translatable="yes">Encrypt &amp; Sign File</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="encrypt_sign_file_activate" last_modification_time="Sat, 01 Mar 2003 17:05:28 GMT"/>
+
+			  <child internal-child="image">
+			    <widget class="GtkImage" id="image1105">
+			      <property name="visible">True</property>
+			      <property name="stock">gtk-convert</property>
+			      <property name="icon_size">1</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkMenuItem" id="separator12">
+			  <property name="visible">True</property>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkImageMenuItem" id="decrypt_file">
+			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Decrypt a file</property>
+			  <property name="label" translatable="yes">_Decrypt File</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="decrypt_file_activate" last_modification_time="Tue, 18 Feb 2003 05:44:11 GMT"/>
+			  <accelerator key="D" modifiers="GDK_CONTROL_MASK" signal="activate"/>
+
+			  <child internal-child="image">
+			    <widget class="GtkImage" id="image1106">
+			      <property name="visible">True</property>
+			      <property name="stock">gtk-sort-descending</property>
 			      <property name="icon_size">1</property>
 			      <property name="xalign">0.5</property>
 			      <property name="yalign">0.5</property>
@@ -399,7 +473,7 @@
 			  <accelerator key="V" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image904">
+			    <widget class="GtkImage" id="image1107">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-apply</property>
 			      <property name="icon_size">1</property>
@@ -413,47 +487,17 @@
 		      </child>
 
 		      <child>
-			<widget class="GtkMenuItem" id="separator12">
+			<widget class="GtkImageMenuItem" id="decrypt_verify">
 			  <property name="visible">True</property>
-			</widget>
-		      </child>
-
-		      <child>
-			<widget class="GtkImageMenuItem" id="encrypt_file">
-			  <property name="visible">True</property>
-			  <property name="tooltip" translatable="yes">Encrypt a file</property>
-			  <property name="label" translatable="yes">_Encrypt File</property>
+			  <property name="tooltip" translatable="yes">Decrypt and verify a file</property>
+			  <property name="label" translatable="yes">Decrypt &amp; Verify File</property>
 			  <property name="use_underline">True</property>
-			  <signal name="activate" handler="encrypt_file_activate" last_modification_time="Tue, 18 Feb 2003 05:41:29 GMT"/>
-			  <accelerator key="E" modifiers="GDK_CONTROL_MASK" signal="activate"/>
+			  <signal name="activate" handler="decrypt_verify_file_activate" last_modification_time="Sat, 01 Mar 2003 17:05:28 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image905">
+			    <widget class="GtkImage" id="image1108">
 			      <property name="visible">True</property>
-			      <property name="stock">gtk-sort-ascending</property>
-			      <property name="icon_size">1</property>
-			      <property name="xalign">0.5</property>
-			      <property name="yalign">0.5</property>
-			      <property name="xpad">0</property>
-			      <property name="ypad">0</property>
-			    </widget>
-			  </child>
-			</widget>
-		      </child>
-
-		      <child>
-			<widget class="GtkImageMenuItem" id="decrypt_file">
-			  <property name="visible">True</property>
-			  <property name="tooltip" translatable="yes">Decrypt a file</property>
-			  <property name="label" translatable="yes">_Decrypt File</property>
-			  <property name="use_underline">True</property>
-			  <signal name="activate" handler="decrypt_file_activate" last_modification_time="Tue, 18 Feb 2003 05:44:11 GMT"/>
-			  <accelerator key="D" modifiers="GDK_CONTROL_MASK" signal="activate"/>
-
-			  <child internal-child="image">
-			    <widget class="GtkImage" id="image906">
-			      <property name="visible">True</property>
-			      <property name="stock">gtk-sort-descending</property>
+			      <property name="stock">gtk-spell-check</property>
 			      <property name="icon_size">1</property>
 			      <property name="xalign">0.5</property>
 			      <property name="yalign">0.5</property>
@@ -480,7 +524,7 @@
 			  <accelerator key="T" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image907">
+			    <widget class="GtkImage" id="image1109">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-justify-fill</property>
 			      <property name="icon_size">1</property>
@@ -515,7 +559,7 @@
 			  <accelerator key="F1" modifiers="0" signal="activate"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image908">
+			    <widget class="GtkImage" id="image1110">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-help</property>
 			      <property name="icon_size">1</property>

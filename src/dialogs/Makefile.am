@@ -20,6 +20,8 @@ libdialogs_a_SOURCES = \
 	seahorse-decrypt-file.c \
 	seahorse-sign-file.c \
 	seahorse-verify-file.c \
+	seahorse-encrypt-sign-file.c \
+	seahorse-decrypt-verify-file.c \
 	seahorse-file-dialogs.h \
 	seahorse-generate.c seahorse-generate.h \
 	seahorse-preferences.c seahorse-preferences.h \
@@ -42,6 +44,8 @@ glade_DATA = \
 	seahorse-encrypt-file.glade2 \
 	seahorse-decrypt-file.glade2 \
 	seahorse-sign-file.glade2 \
-	seahorse-verify-file.glade2
+	seahorse-verify-file.glade2 \
+	seahorse-encrypt-sign-file.glade2 \
+	seahorse-decrypt-verify-file.glade2
 
 EXTRA_DIST = $(glade_DATA)
