@@ -463,6 +463,11 @@ which the application is designed. -->
 	</sect2>
 	<sect2 id="key-properties">
 		<title>Key Properties</title>
+		<para>Write me</para>
+	</sect2>
+	<!--
+	<sect2 id="key-properties">
+		<title>Key Properties</title>
 		<para>To view <glossterm>key</glossterm> properties, select a <glossterm>key</glossterm> from the list and choose
 		<menuchoice><guimenu>Edit</guimenu><guimenuitem>Properties</guimenuitem></menuchoice>,
 		click <guibutton>Properties</guibutton>, or double-click the <glossterm>key</glossterm>.
@@ -479,7 +484,7 @@ which the application is designed. -->
 		Below the <glossterm>fingerprint</glossterm> is the <xref linkend="owner-trust"/>
 		and <xref linkend="key-disable"/>. Next is the primary <xref linkend="key-attributes"/>,
 		<xref linkend="userid"/> list, and <glossterm>sub key</glossterm> list with <xref linkend="key-attributes"/>.</para>
-		<sect3 id="owner-trust">
+		<sect3 id="owner-trust-properties">
 			<title>Owner Trust</title>
 			<para>Use the option menu to change the <glossterm>owner trust</glossterm> of the <glossterm>key</glossterm>.</para>
 		</sect3>
@@ -488,19 +493,7 @@ which the application is designed. -->
 			<para>Checking <guibutton>Disable</guibutton> will disable the <glossterm>key</glossterm>.
 			Most <glossterm>keys</glossterm> should be left enabled.</para>
 		</sect3>
-		<sect3 id="key-attributes">
-			<title>Key Attributes</title>
-			<para>Both <glossterm>primary keys</glossterm> and <glossterm>sub keys</glossterm>
-			have the following attributes:
-			<itemizedlist>
-				<listitem><para><glossterm>Key ID</glossterm></para></listitem>
-				<listitem><para><glossterm>Algorithm</glossterm></para></listitem>
-				<listitem><para>Creation date</para></listitem>
-				<listitem><para><glossterm>Length</glossterm></para></listitem>
-				<listitem><para><xref linkend="key-expires"/></para></listitem>
-			</itemizedlist></para>
-		</sect3>
-		<sect3 id="key-expires">
+		<sect3 id="expires-properties">
 			<title>Key Expiration</title>
 			<para>If the <glossterm>key</glossterm> has a <glossterm>secret key</glossterm>,
 			the <glossterm>expiration</glossterm> is shown as a date editor and a
@@ -546,7 +539,7 @@ which the application is designed. -->
 			<title>Adding a Subkey</title>
 			<para>Write me</para>
 		</sect3>
-	</sect2>
+	</sect2>-->
 	<sect2 id="delete">
 		<title>Deleting a Key</title>
 		<para>To delete a <glossterm>key</glossterm>, choose
@@ -683,6 +676,7 @@ manual, this is the place to put it. Alternatively, you can put this information
 		which may be unfamiliar to those new to encryption.</para>
 		<glossdiv>
 			<title>Keys</title>
+			<para>This section describes keys and their various attributes.</para>
 			<glossentry id="dsa-key">
 				<glossterm>DSA Key</glossterm>
 				<glossdef>
@@ -701,32 +695,53 @@ manual, this is the place to put it. Alternatively, you can put this information
 					The length ranges from 768 to 4096.</para>
 				</glossdef>
 			</glossentry>
-			<glossentry id="key-expiration">
+			<glossentry id="key-expires">
 				<glossterm>Expiration Date</glossterm>
 				<glossdef>
-					<para>Write me</para>
+					<para>Every key and subkey has an expiration date.
+					For most keys, this date is <emphasis>never</emphasis>.
+					If the key does expire, then it is no longer valid and must be replaced.</para>
 				</glossdef>
 			</glossentry>
 			<glossentry id="key">
 				<glossterm>Key</glossterm>
 				<glossdef>
-					<para>Write me</para>
-					<glossseealso otherterm="public-key">Public Key</glossseealso>
-					<glossseealso otherterm="private-key">Private Key</glossseealso>
-					<glossseealso otherterm="key-attributes">Key Attributes</glossseealso>
+					<para>A key is an entity that has the following elements:</para>
+					<itemizedlist>
+						<listitem><para><glossseealso otherterm="public-key"/></para></listitem>
+						<listitem><para><glossseealso otherterm="private-key"/></para></listitem>
+						<listitem><para><glossseealso otherterm="key-attributes"/></para></listitem>
+						<listitem><para><glossseealso otherterm="key-userid"/></para></listitem>
+						<listitem><para><glossseealso otherterm="key-subkey"/></para></listitem>
+						<listitem><para><glossseealso otherterm="key-owner-trust"/></para></listitem>
+					</itemizedlist>
+					<para>A key can also refer to the <emphasis>primary key</emphasis>,
+					or master key. This key that can be signed by others,
+					and any changes affect the entire key.</para>
+					<glossseealso otherterm="key-signature"/>
 				</glossdef>
 			</glossentry>
 			<glossentry id="key-attributes">
 				<glossterm>Key Attributes</glossterm>
 				<glossdef>
-					<para>Every key contains the following attributes:
+					<para>Every key contains the following attributes:</para>
 					<itemizedlist>
 						<listitem><para>Key ID</para></listitem>
-						<listitem><xref linkend="key-type"/></listitem>
-						<lisitem><para>Creation date</para></lisitem>
-						<listitem><xref linkend="key-length"/></listitem>
-						<listitem><xref linkend="key-expiration"/></listitem>
-					</itemizedlist></para>
+						<listitem><para><glossseealso otherterm="key-type"/></para></listitem>
+						<listitem><para>Creation date</para></listitem>
+						<listitem><para><glossseealso otherterm="key-length"/></para></listitem>
+						<listitem><para><glossseealso otherterm="key-expires"/></para></listitem>
+					</itemizedlist>
+				</glossdef>
+			</glossentry>
+			<glossentry id="key-length">
+				<glossterm>Key Length</glossterm>
+				<glossdef>
+					<para>Except for a DSA key, the maximum key length is 4096.
+					For length ranges, see the specific key type.</para>
+					<glossseealso otherterm="dsa-key"/>
+					<glossseealso otherterm="elgamal-key"/>
+					<glossseealso otherterm="rsa-key"/>
 				</glossdef>
 			</glossentry>
 			<glossentry id="key-ring">
@@ -734,40 +749,108 @@ manual, this is the place to put it. Alternatively, you can put this information
 				<glossdef>
 					<para>A key ring is a collection of keys.
 					The keys can be your personal keys and/or other's public keys.</para>
-					<glossseealso otherterm="key">Key</glossseealso>
+					<glossseealso otherterm="key"/>
 				</glossdef>
 			</glossentry>
 			<glossentry id="key-signature">
 				<glossterm>Key Signature</glossterm>
 				<glossdef>
-					<para>Write me</para>
+					<para>A key signature shows that the signer has validated that key.
+					To verify a key signature, one must have the signed key
+					and the signing key in the key ring.
+					Key signatures are used in calculating a key's validity.</para>
+					<glossseealso otherterm="key-ring"/>
+					<glossseealso otherterm="key-validity"/>
 				</glossdef>
 			</glossentry>
-			<glossentry id="key-length">
-				<glossterm>Length</glossterm>
+			<glossentry id="key-type">
+				<glossterm>Key Type</glossterm>
 				<glossdef>
-					<para>Except for a DSA key, the maximum key length is 4096.</para>
-					<glossseealso otherterm="dsa-key">DSA</glossseealso>
-					<glossseealso otherterm="elgamal-key">ElGamal</glossseealso>
-					<glossseealso otherterm="rsa-key">RSA</glossseealso>
+					<para>A key's type refers to the algorithm of the key.</para>
+					<glossseealso otherterm="dsa-key"/>
+					<glossseealso otherterm="elgamal-key"/>
+					<glossseealso otherterm="rsa-key"/>
 				</glossdef>
 			</glossentry>
-			<glossentry id="owner-trust">
+			<glossentry id="key-owner-trust">
 				<glossterm>Owner Trust</glossterm>
 				<glossdef>
-					<para>Write me</para>
+					<para>Owner trust is a measure of how much you trusts another's
+					key signatures. You may have validated someone's key by signing it,
+					but you do not necessarily trust their judgement in signing other keys.
+					Owner trust is a personal setting kept local to your key ring and cannot be exported.
+					Trust is used in calculating a key's validity.
+					There are currently 5 available trust levels:</para>
+					<variablelist>
+						<varlistentry>
+							<term>Ultimate</term>
+							<listitem>
+								<para>This is the highest trust level available.
+								It is reserved for your personal keys,
+								which you trust implicitly. Do not give this level of trust
+								to other keys unless you really know what you are doing.</para>
+							</listitem>
+						</varlistentry>
+						<varlistentry>
+							<term>Full</term>
+							<listitem>
+								<para>The owner really knows what they are doing and you trust
+								them enough that their signature is as good as your own.</para>
+							</listitem>
+						</varlistentry>
+						<varlistentry>
+							<term>Marginal</term>
+							<listitem>
+								<para>You trust the owner to properly sign keys,
+								but do not rely on their signature alone.</para>
+							</listitem>
+						</varlistentry>
+						<varlistentry>
+							<term>Never</term>
+							<listitem>
+								<para>You do not trust the owner at all.</para>
+							</listitem>
+						</varlistentry>
+						<varlistentry>
+							<term>Unknown</term>
+							<listitem>
+								<para>You are unsure of how much to trust the owner.
+								Imported keys that are not your own are given this
+								trust level by default.</para>
+							</listitem>
+						</varlistentry>
+					</variablelist>
+					<glossseealso otherterm="key-ring"/>
+					<glossseealso otherterm="key-validity"/>
+					<glossseealso otherterm="op-import"/>
 				</glossdef>
 			</glossentry>
 			<glossentry id="public-key">
 				<glossterm>Public Key</glossterm>
 				<glossdef>
-					<para>Write me</para>
+					<para>The public part of a key is shared with others.
+					Depending on the key's type, others can use it to
+					encrypt data to the key's owner and/or
+					verify signatures made by the key's owner.</para>
+					<glossseealso otherterm="key-type"/>
+					<glossseealso otherterm="op-encrypt"/>
+					<glossseealso otherterm="op-verify"/>
+					<glossseealso otherterm="op-sign"/>
 				</glossdef>
 			</glossentry>
 			<glossentry id="private-key">
 				<glossterm>Private Key</glossterm>
 				<glossdef>
-					<para>Write me</para>
+					<para>The private part of a key must be kept secure.
+					It is usually protected with a passphrase.
+					Depending on its type, the private part of a key can be used to
+					decrypt data that has been encrypted with the public key and/or
+					sign data so that it can be verified with the public key.</para>
+					<glossseealso otherterm="op-decrypt"/>
+					<glossseealso otherterm="op-encrypt"/>
+					<glossseealso otherterm="op-sign"/>
+					<glossseealso otherterm="op-verify"/>
+					<glossseealso otherterm="public-key"/>
 				</glossdef>
 			</glossentry>
 			<glossentry id="rsa-key">
@@ -779,29 +862,71 @@ manual, this is the place to put it. Alternatively, you can put this information
 					The length ranges from 1024 to 4096.</para>
 				</glossdef>
 			</glossentry>
-			<glossentry id="subkey">
+			<glossentry id="key-subkey">
 				<glossterm>Subkey</glossterm>
 				<glossdef>
-					<para>Write me</para>
+					<para>A subkey provides additional functionality for a key.
+					Generally, the subkey is an ElGamal subkey, which allows others to encrypt to you.
+					Subkeys can be revoked and deleted. Keys can have multiple subkeys.</para>
+					<glossseealso otherterm="elgamal-key"/>
+					<glossseealso otherterm="key-attributes"/>
+					<glossseealso otherterm="op-revoke"/>
 				</glossdef>
 			</glossentry>
-			<glossentry id="key-type">
-				<glossterm>Type</glossterm>
-				<glossdef>
-					<para>A key's type refers to the algorithm of the key.</para>
-					<glossseealso otherterm="dsa-key">DSA</glossseealso>
-					<glossseealso otherterm="elgamal-key">ElGamal</glossseealso>
-					<glossseealso otherterm="rsa-key">RSA</glossseealso>
-				</glossdef>
-			</glossentry>
-			<glossentry id="userid">
+			<glossentry id="key-userid">
 				<glossterm>User ID</glossterm>
 				<glossdef>
+					<para>A user ID has the following elements:</para>
+					<itemizedlist>
+						<listitem><para>Real Name</para></listitem>
+						<listitem><para>Email Address</para></listitem>
+						<listitem><para>Optional Comment</para></listitem>
+					</itemizedlist>
+					<para>Keys can have multiple user IDs for use in different contexts.</para>
+				</glossdef>
+			</glossentry>
+			<glossentry id="key-validity">
+				<glossterm>Validity</glossterm>
+				<glossdef>
 					<para>Write me</para>
 				</glossdef>
 			</glossentry>
-			<glossentry id="validity">
-				<glossterm>Validity</glossterm>
+		</glossdiv>
+		<glossdiv>
+			<title>Operations</title>
+			<para>This section describes the various operations that can be performed.</para>
+			<glossentry id="op-decrypt">
+				<glossterm>Decrypt</glossterm>
+				<glossdef>
+					<para>Write me</para>
+				</glossdef>
+			</glossentry>
+			<glossentry id="op-encrypt">
+				<glossterm>Encrypt</glossterm>
+				<glossdef>
+					<para>Write me</para>
+				</glossdef>
+			</glossentry>
+			<glossentry id="op-import">
+				<glossterm>Import</glossterm>
+				<glossdef>
+					<para>Write me</para>
+				</glossdef>
+			</glossentry>
+			<glossentry id="op-revoke">
+				<glossterm>Revoke</glossterm>
+				<glossdef>
+					<para>Write me</para>
+				</glossdef>
+			</glossentry>
+			<glossentry id="op-sign">
+				<glossterm>Sign</glossterm>
+				<glossdef>
+					<para>Write me</para>
+				</glossdef>
+			</glossentry>
+			<glossentry id="op-verify">
+				<glossterm>Verify</glossterm>
 				<glossdef>
 					<para>Write me</para>
 				</glossdef>

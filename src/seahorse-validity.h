@@ -23,7 +23,6 @@
 #define __SEAHORSE_VALIDITY_H__
 
 #include <gtk/gtk.h>
-#include <gpgme.h>
 
 typedef enum {
 	SEAHORSE_VALIDITY_UNKNOWN = 1,
