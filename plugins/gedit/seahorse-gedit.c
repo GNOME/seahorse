@@ -136,18 +136,15 @@ replace_selected_text (GeditDocument *doc, const gchar *replace)
 {
     GtkTextIter iter;
     GtkTextIter sel_bound;
-    gchar *converted_replace;
 
     g_return_if_fail (GEDIT_IS_DOCUMENT (doc));
     g_return_if_fail (replace != NULL);
 
     if (!gtk_text_buffer_get_selection_bounds (GTK_TEXT_BUFFER (doc),           
                                                   &iter, &sel_bound)) {
-        gedit_debug (DEBUG_DOCUMENT, "There is no selected text");
+        gedit_debug (DEBUG_PLUGINS, "There is no selected text");
         return;
     }
-
-    converted_replace = gedit_utils_convert_search_text (replace);
 
     gtk_text_buffer_begin_user_action (GTK_TEXT_BUFFER (doc));
 
@@ -156,12 +153,13 @@ replace_selected_text (GeditDocument *doc, const gchar *replace)
     gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (doc),            
                    &iter, gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (doc)));
 
-    if (*converted_replace != '\0')
+    g_printerr ("%s\n", replace);
+
+    if (*replace != '\0')
         gtk_text_buffer_insert (GTK_TEXT_BUFFER (doc), &iter,
-                 converted_replace, strlen (converted_replace));
+                 replace, strlen (replace));
 
     gtk_text_buffer_end_user_action (GTK_TEXT_BUFFER (doc));
-    g_free (converted_replace);
 }
 
 /* -----------------------------------------------------------------------------
@@ -173,7 +171,7 @@ static void
 encrypt_cb (BonoboUIComponent * uic, gpointer user_data,
             const gchar * verbname)
 {
-    GeditView *view = gedit_get_active_view ();
+    GeditView *view = GEDIT_VIEW (gedit_get_active_view ());
     GeditDocument *doc;
     gpgme_error_t err = GPG_OK;
     gchar *enctext = NULL;
@@ -195,14 +193,15 @@ encrypt_cb (BonoboUIComponent * uic, gpointer user_data,
     if (g_list_length(keys) == 0)
         return;
 
-    /* Get the text */
+    /* Get the document text */
     doc = gedit_view_get_document (view);
 
-    if (get_document_selection (doc, &start, &end)) {
-        buffer = get_document_chars (doc, start, end);
-    } else {
-        buffer = get_document_chars (doc, 0, -1);
+    if (!get_document_selection (doc, &start, &end)) {
+        start = 0;
+        end = -1;
     }
+    
+    buffer = get_document_chars (doc, start, end);    
 
     /* Encrypt it */
     gedit_debug (DEBUG_PLUGINS, "encrypting text");
@@ -297,7 +296,7 @@ static void
 decrypt_cb (BonoboUIComponent * uic, gpointer user_data,
             const gchar * verbname)
 {
-    GeditView *view = gedit_get_active_view ();
+    GeditView *view = GEDIT_VIEW (gedit_get_active_view ());
     GeditDocument *doc;
     
     gchar *buffer;              /* The text selected */
@@ -445,7 +444,7 @@ static void
 sign_cb (BonoboUIComponent * uic, gpointer user_data,
          const gchar * verbname)
 {
-    GeditView *view = gedit_get_active_view ();
+    GeditView *view = GEDIT_VIEW (gedit_get_active_view ());
     GeditDocument *doc;
     gpgme_error_t err = GPG_OK;
     SeahorseKeyPair *signer;
