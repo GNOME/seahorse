@@ -25,6 +25,7 @@
 #include <sys/wait.h>
 
 #include <gnome.h>
+#include <eel/eel.h>
 #include <libgnomevfs/gnome-vfs.h>
 
 #include "seahorse-gpgmex.h"
@@ -914,7 +915,7 @@ seahorse_util_check_suffix (const gchar *path, SeahorseSuffix suffix)
  *
  * Constructs a new path for a file based on @path plus a suffix determined by
  * @suffix and the ASCII Armor setting of @ctx. If ASCII Armor is enabled, the
- * suffix will be '.asc'. Otherwise the suffix will be '.gpg' if @suffix is
+ * suffix will be '.asc'. Otherwise the suffix will be '.pgp' if @suffix is
  * %SEAHORSE_CRYPT_SUFFIX or '.sig' if @suffix is %SEAHORSE_SIG_SUFFIX.
  *
  * Returns: A new path with the suffix appended to @path. NULL if prompt cancelled
@@ -928,7 +929,7 @@ seahorse_util_add_suffix (gpgme_ctx_t ctx, const gchar *path,
     gchar *uri;
     gchar *t;
 	
-	if (gpgme_get_armor (ctx) || suffix == SEAHORSE_ASC_SUFFIX)
+	if (eel_gconf_get_boolean (ARMOR_KEY) || suffix == SEAHORSE_ASC_SUFFIX)
 		ext = SEAHORSE_EXT_ASC;
 	else if (suffix == SEAHORSE_CRYPT_SUFFIX)
 		ext = SEAHORSE_EXT_PGP;
