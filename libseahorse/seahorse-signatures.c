@@ -141,5 +141,6 @@ seahorse_signatures_run (SeahorseContext *sctx, SeahorseWidget *swidget)
 {
     GtkWidget *w; 
     w = glade_xml_get_widget (swidget->xml, "signatures");
+    seahorse_widget_show (swidget);
     gtk_dialog_run (GTK_DIALOG (w));
 }    
