@@ -42,9 +42,6 @@ typedef struct _SeahorseRecipientsClass SeahorseRecipientsClass;
 struct _SeahorseRecipients
 {
 	SeahorseWidget		parent;
-	
-	/*< public >*/
-	GpgmeRecipients		recips;
 
 	/*< private >*/
 	gboolean		need_validity;

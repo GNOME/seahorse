@@ -39,6 +39,9 @@
 #define TEXT_MODE PREFERENCES "/text_mode"
 #define DEFAULT_KEY PREFERENCES "/default_key_id"
 
+#define RECIPIENTS SCHEMA_ROOT "/recipients"
+#define VALIDITY_THRESHOLD RECIPIENTS "/validity_threshold"
+
 #define KEY_UI SCHEMA_ROOT "/ui"
 #define KEY_TOOLBAR_STYLE KEY_UI "/toolbar_style"
 
