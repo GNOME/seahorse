@@ -273,11 +273,28 @@ seahorse_key_get_userid (const SeahorseKey *skey, const guint index)
 	return uid;
 }
 
-const gchar*
+gchar*
 seahorse_key_get_fingerprint (const SeahorseKey *skey)
 {
-	//need to format
-	return gpgme_key_get_string_attr (skey->key, GPGME_ATTR_FPR, NULL, 0);
+	const gchar *raw;
+	GString *string;
+	guint index, len;
+	gchar *fpr;
+	
+	raw = gpgme_key_get_string_attr (skey->key, GPGME_ATTR_FPR, NULL, 0);
+	string = g_string_new ("");
+	len = strlen (raw);
+	
+	for (index = 0; index < len; index++) {
+		if (index > 0 && index % 4 == 0)
+			g_string_append (string, " ");
+		g_string_append_c (string, raw[index]);
+	}
+	
+	fpr = string->str;
+	g_string_free (string, FALSE);
+	
+	return fpr;
 }
 
 const gchar*
