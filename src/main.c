@@ -108,6 +108,7 @@ main (int argc, char **argv)
 	SeahorseContext *sctx;
 	gpgme_error_t err;
 	gchar *new_path;
+    GtkWindow* win = NULL;
 
 #ifdef ENABLE_NLS	
 	bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
@@ -143,9 +144,12 @@ main (int argc, char **argv)
 			return 0;
 		}
 	}
-	if (encrypt != NULL)
+ 
+	else if (encrypt != NULL) {
 		do_encrypt (sctx, encrypt, seahorse_op_encrypt_file, _("Encrypt file is %s"));
-	if (sign != NULL) {
+    }
+    
+	else if (sign != NULL) {
 		new_path = seahorse_op_sign_file (sctx, sign, &err);
 		
 		if (!GPG_IS_OK (err)) {
@@ -158,10 +162,13 @@ main (int argc, char **argv)
 			return 0;
 		}
 	}
-	if (encrypt_sign != NULL)
-		do_encrypt (sctx, encrypt_sign, seahorse_op_encrypt_sign_file,
+ 
+	else if (encrypt_sign != NULL) {
+    	do_encrypt (sctx, encrypt_sign, seahorse_op_encrypt_sign_file,
 			_("Encrypted and signed file is %s"));
-	if (decrypt != NULL) {
+    }
+          
+	else if (decrypt != NULL) {
 		new_path = seahorse_op_decrypt_file (sctx, decrypt, &err);
 		
 		if (!GPG_IS_OK (err)) {
@@ -174,7 +181,8 @@ main (int argc, char **argv)
 			return 0;
 		}
 	}
-	if (verify != NULL) {
+ 
+	else if (verify != NULL) {
 		gpgme_verify_result_t status;
 		
 		seahorse_op_verify_file (sctx, verify, &status, &err);
@@ -184,12 +192,11 @@ main (int argc, char **argv)
 			return 1;
 		}
 		else {
-			seahorse_signatures_new (sctx, status);
-			gtk_main();
-			return 0;
+			win = seahorse_signatures_new (sctx, status);
 		}
 	}
-	if (decrypt_verify != NULL) {
+ 
+    else if (decrypt_verify != NULL) {
 		gpgme_verify_result_t status;
 		
 		new_path = seahorse_op_decrypt_verify_file (sctx,
@@ -203,13 +210,14 @@ main (int argc, char **argv)
 			show_info (g_strdup_printf (_("Decrypted file is %s"), new_path));
 			g_free (new_path);
 			
-			seahorse_signatures_new (sctx, status);
-			gtk_main();
-			return 0;
+			win = seahorse_signatures_new (sctx, status);
 		}
 	}
-	
-	seahorse_key_manager_show (sctx);
+    
+    if(!win)
+        win = seahorse_key_manager_show (sctx);
+    
+    g_signal_connect_after(G_OBJECT (win), "destroy", gtk_main_quit, NULL);
 	gtk_main ();
 	
 	return 0;

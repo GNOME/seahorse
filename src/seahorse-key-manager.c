@@ -44,7 +44,6 @@ quit (GtkWidget *widget, SeahorseWidget *swidget)
 {
 	g_signal_remove_emission_hook (signal_id, hook_id);
 	seahorse_context_destroy (swidget->sctx);
-	gtk_exit (0);
 }
 
 /* Quits seahorse */
@@ -420,7 +419,7 @@ progress_hook (GSignalInvocationHint *hint, guint n_params, const GValue *params
 	return TRUE;
 }
 
-void
+GtkWindow* 
 seahorse_key_manager_show (SeahorseContext *sctx)
 {
 	SeahorseWidget *swidget;
@@ -511,4 +510,6 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 		G_CALLBACK (selection_changed), swidget);
 	seahorse_key_manager_store_new (sctx, view);
 	selection_changed (selection, swidget);
+   
+    return GTK_WINDOW(glade_xml_get_widget (swidget->xml, "key-manager"));
 }

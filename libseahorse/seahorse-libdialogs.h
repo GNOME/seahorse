@@ -33,7 +33,7 @@ const gchar*	seahorse_passphrase_get	(SeahorseContext	*sctx,
 
 gpgme_key_t *	seahorse_recipients_get	(SeahorseContext	*sctx);
 
-void		seahorse_signatures_new	(SeahorseContext	*sctx,
+GtkWindow*		seahorse_signatures_new	(SeahorseContext	*sctx,
 					 gpgme_verify_result_t	 status);
 
 #endif /* __SEAHORSE_LIBDIALOGS_H__ */

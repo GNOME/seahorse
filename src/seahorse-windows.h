@@ -26,7 +26,7 @@
 
 #include "seahorse-context.h"
 
-void	seahorse_key_manager_show	(SeahorseContext	*sctx);
+GtkWindow*	seahorse_key_manager_show	(SeahorseContext	*sctx);
 
 void	seahorse_generate_select_show	(SeahorseContext	*sctx);
 
