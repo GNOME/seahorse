@@ -635,12 +635,15 @@ seahorse_context_get_default_key (SeahorseContext *sctx)
 	const gchar *id1;
 	
 	key = gpgme_signers_enum (sctx->ctx, 0);
-	id1 = seahorse_key_get_id (key);
-	g_print ("default key: %s\n", id1);
+  
+    if (key) {
+    	id1 = seahorse_key_get_id (key);
+    	g_print ("default key: %s\n", id1);
    
-    skey = seahorse_context_get_key_fpr (sctx, id1);
-    if (SEAHORSE_IS_KEY_PAIR (skey))
-        return SEAHORSE_KEY_PAIR (skey);
+        skey = seahorse_context_get_key_fpr (sctx, id1);
+        if (SEAHORSE_IS_KEY_PAIR (skey))
+            return SEAHORSE_KEY_PAIR (skey);
+    }
     
     return NULL;
 }
