@@ -190,20 +190,20 @@ seahorse_key_manager_store_set (SeahorseKeyStore *store, SeahorseKey *skey, GtkT
 	gint index = 1, max;
 	SeahorseValidity validity, trust;
 	gulong expires_date;
-	const gchar *expires;
+	gchar *expires;
 	
 	validity = seahorse_key_get_validity (skey);
 	trust = seahorse_key_get_trust (skey);
 	
 	if (skey->key->expired) {
-		expires = _("Expired");
+		expires = g_strdup (_("Expired"));
 		expires_date = -1;
 	}
 	else {
 		expires_date = skey->key->subkeys->expires;
 		
 		if (expires_date == 0) {
-			expires = _("Never Expires");
+			expires = g_strdup (_("Never Expires"));
 			expires_date = G_MAXLONG;
 		}
 		else
@@ -220,6 +220,8 @@ seahorse_key_manager_store_set (SeahorseKeyStore *store, SeahorseKey *skey, GtkT
 		LENGTH, skey->key->subkeys->length,
 		TYPE, get_algo_string (skey->key->subkeys->pubkey_algo),
 		-1);
+     
+    g_free (expires);
 	
 	max = seahorse_key_get_num_uids (skey);
 	
