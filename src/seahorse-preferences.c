@@ -63,7 +63,7 @@ void
 seahorse_preferences_show (SeahorseContext *sctx)
 {	
 	SeahorseWidget *swidget;
-	GtkWidget *widget;
+	GtkWidget *widget, *child;
 	gchar *key_style;
 	gint history = 0;
 	
@@ -72,12 +72,14 @@ seahorse_preferences_show (SeahorseContext *sctx)
 	swidget = seahorse_widget_new ("preferences", sctx);
 	g_return_if_fail (swidget != NULL);
 	
-	widget = gtk_vbox_new (FALSE, 12);
+	widget = gtk_table_new (2, 1, FALSE);
+	gtk_table_set_row_spacings (GTK_TABLE (widget), 12);
 	gtk_container_set_border_width (GTK_CONTAINER (widget), 12);
 	
-	gtk_container_add (GTK_CONTAINER (widget), seahorse_check_button_control_new (
-		_("_Ascii Armor"), ARMOR_KEY));
-	gtk_container_add (GTK_CONTAINER (widget), seahorse_default_key_control_new (swidget->sctx));
+	gtk_table_attach (GTK_TABLE (widget), seahorse_check_button_control_new (
+		_("_Ascii Armor"), ARMOR_KEY), 0, 1, 0, 1, GTK_FILL, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (widget), seahorse_default_key_control_new (swidget->sctx),
+		0, 1, 1, 2, GTK_FILL, 0, 0, 0);
 	
 	gtk_notebook_prepend_page (GTK_NOTEBOOK (glade_xml_get_widget (swidget->xml, "notebook")),
 		widget, gtk_label_new (_("PGP")));
