@@ -389,9 +389,8 @@ static void
 set_sort_to (SeahorseKeyStore *skstore, const gchar *name)
 {
     GtkTreeSortable* sort;
-    gint i, curid, id = -1;
+    gint i, id = -1;
     GtkSortType ord = GTK_SORT_ASCENDING;
-    GtkSortType curord;
     const gchar* n;
     
     /* Prefix with a minus means descending */
@@ -407,7 +406,7 @@ set_sort_to (SeahorseKeyStore *skstore, const gchar *name)
     }
     
     /* Find the column id */
-    for (i = 0; i < SEAHORSE_KEY_STORE_GET_CLASS (skstore)->n_columns; i++) {
+    for (i = SEAHORSE_KEY_STORE_GET_CLASS (skstore)->n_columns - 1; i >= 0 ; i--) {
         n = SEAHORSE_KEY_STORE_GET_CLASS (skstore)->col_ids[i];
         if (n && g_ascii_strcasecmp (name, n) == 0) {
             id = i;
@@ -417,11 +416,7 @@ set_sort_to (SeahorseKeyStore *skstore, const gchar *name)
     
     if (id != -1) {
         sort = GTK_TREE_SORTABLE (skstore->sort);
-
-        /* Make sure it's actually changed before changing */
-        if (!gtk_tree_sortable_get_sort_column_id (sort, &curid, &curord) ||
-            curid != id || curord != ord)
-            gtk_tree_sortable_set_sort_column_id (sort, id, ord);
+        gtk_tree_sortable_set_sort_column_id (sort, id, ord);
     }
 }
 
