@@ -1,13 +1,14 @@
 # Seahorse ja.po.
-# Copyright (C) 1999-2003 Free Software Foundation, Inc.
+# Copyright (C) 1999-2004 Free Software Foundation, Inc.
 # Anthony Mulcahy <anthony@kcn.ne.jp>, 1999, 2000.
-# Takeshi Aihana <aihana@gnome.gr.jp>, 2000-2003.
+# Takeshi Aihana <aihana@gnome.gr.jp>, 2000-2004.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse HEAD\n"
-"POT-Creation-Date: 2003-05-03 13:31+0900\n"
-"PO-Revision-Date: 2003-05-03 13:30+0900\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-04-04 00:29+0900\n"
+"PO-Revision-Date: 2004-04-04 00:28+0900\n"
 "Last-Translator: Takeshi AIHANA <aihana@gnome.gr.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -247,8 +248,8 @@ msgstr "パスワードが正しくありません！ %s を再試行して下�
 
 #: libseahorse/seahorse-passphrase.glade.h:1 src/seahorse-add-uid.glade.h:1
 #: src/seahorse-change-passphrase.glade.h:1 src/seahorse-export.glade.h:1
-#: src/seahorse-generate.glade.h:1 src/seahorse-import.glade.h:1
-#: src/seahorse-revoke.glade.h:1
+#: src/seahorse-generate-adv.glade.h:1 src/seahorse-generate-druid.glade.h:1
+#: src/seahorse-import.glade.h:1 src/seahorse-revoke.glade.h:1
 msgid "*"
 msgstr "*"
 
@@ -382,7 +383,7 @@ msgstr "デフォルトの鍵(_D):"
 
 #: plugins/nautilus/seahorse-pgp-preferences.desktop.in.h:1
 msgid "Configure PGP"
-msgstr "PGP 設定"
+msgstr "PGP (Pretty Good Privacy) を設定します"
 
 #: src/main.c:41
 msgid "Import keys from the file"
@@ -455,7 +456,7 @@ msgstr "GnuPG の鍵を管理するツールです"
 msgid "Add subkey to %s"
 msgstr "%s へのサブキーの追加"
 
-#: src/seahorse-add-subkey.glade.h:1 src/seahorse-generate.glade.h:5
+#: src/seahorse-add-subkey.glade.h:1 src/seahorse-generate-adv.glade.h:5
 msgid "DSA (sign only)"
 msgstr "DSA (署名のみ)"
 
@@ -464,7 +465,7 @@ msgid "ElGamal (encrypt only)"
 msgstr "ElGamal (暗号化のみ)"
 
 #. expires
-#: src/seahorse-add-subkey.glade.h:3 src/seahorse-generate.glade.h:6
+#: src/seahorse-add-subkey.glade.h:3 src/seahorse-generate-adv.glade.h:6
 #: src/seahorse-key-properties.c:364
 msgid "Expiration Date:"
 msgstr "有効期限:"
@@ -473,28 +474,28 @@ msgstr "有効期限:"
 msgid "Generate a new subkey"
 msgstr "新しいサブキーを生成します"
 
-#: src/seahorse-add-subkey.glade.h:5 src/seahorse-generate.glade.h:10
+#: src/seahorse-add-subkey.glade.h:5 src/seahorse-generate-adv.glade.h:10
 #: src/seahorse-key-properties.c:390
 msgid "If key never expires"
 msgstr "鍵の有効期限を設定しない場合にチェックします"
 
-#: src/seahorse-add-subkey.glade.h:6 src/seahorse-generate.glade.h:12
+#: src/seahorse-add-subkey.glade.h:6 src/seahorse-generate-adv.glade.h:12
 msgid "Key _Length:"
 msgstr "鍵の長さ(_L):"
 
-#: src/seahorse-add-subkey.glade.h:7 src/seahorse-generate.glade.h:13
+#: src/seahorse-add-subkey.glade.h:7 src/seahorse-generate-adv.glade.h:13
 msgid "Key _Type:"
 msgstr "鍵の種類(_T):"
 
-#: src/seahorse-add-subkey.glade.h:8 src/seahorse-generate.glade.h:14
+#: src/seahorse-add-subkey.glade.h:8 src/seahorse-generate-adv.glade.h:14
 msgid "Key type / algorithm"
 msgstr "鍵の種類 / 暗号化アルゴリズムを選択します"
 
-#: src/seahorse-add-subkey.glade.h:9 src/seahorse-generate.glade.h:15
+#: src/seahorse-add-subkey.glade.h:9 src/seahorse-generate-adv.glade.h:15
 msgid "Length of Key"
 msgstr "鍵の長さを指定します"
 
-#: src/seahorse-add-subkey.glade.h:10 src/seahorse-generate.glade.h:17
+#: src/seahorse-add-subkey.glade.h:10 src/seahorse-generate-adv.glade.h:17
 #: src/seahorse-key-properties.c:388
 msgid "Never E_xpires"
 msgstr "有効期限を設定しない(_X)"
@@ -503,7 +504,7 @@ msgstr "有効期限を設定しない(_X)"
 msgid "RSA (encrypt only)"
 msgstr "RSA (暗号化のみ)"
 
-#: src/seahorse-add-subkey.glade.h:12 src/seahorse-generate.glade.h:21
+#: src/seahorse-add-subkey.glade.h:12 src/seahorse-generate-adv.glade.h:21
 msgid "RSA (sign only)"
 msgstr "RSA (署名のみ)"
 
@@ -520,27 +521,29 @@ msgstr "ユーザ IDの追加"
 msgid "Create the new user ID"
 msgstr "新しいユーザ ID を生成します"
 
-#: src/seahorse-add-uid.glade.h:4 src/seahorse-generate.glade.h:7
+#: src/seahorse-add-uid.glade.h:4 src/seahorse-generate-adv.glade.h:7
 msgid "Full _Name:"
 msgstr "氏名(_N):"
 
-#: src/seahorse-add-uid.glade.h:5 src/seahorse-generate.glade.h:11
+#: src/seahorse-add-uid.glade.h:5 src/seahorse-generate-adv.glade.h:11
 msgid "Key Co_mment:"
 msgstr "鍵のコメント(_M):"
 
-#: src/seahorse-add-uid.glade.h:6 src/seahorse-generate.glade.h:16
+#: src/seahorse-add-uid.glade.h:6 src/seahorse-generate-adv.glade.h:16
 msgid "Must be at least 5 characters long"
-msgstr "名前は 5 文字以上にして下さい"
+msgstr "名前は 5文字以上にして下さい"
 
-#: src/seahorse-add-uid.glade.h:7 src/seahorse-generate.glade.h:18
+#: src/seahorse-add-uid.glade.h:7 src/seahorse-generate-adv.glade.h:18
+#: src/seahorse-generate-druid.glade.h:20
 msgid "Optional comment describing key"
 msgstr "オプションで鍵の説明を入力します"
 
-#: src/seahorse-add-uid.glade.h:8 src/seahorse-generate.glade.h:19
+#: src/seahorse-add-uid.glade.h:8 src/seahorse-generate-adv.glade.h:19
+#: src/seahorse-generate-druid.glade.h:21
 msgid "Optional email address"
 msgstr "オプションで E-メール・アドレスを入力します"
 
-#: src/seahorse-add-uid.glade.h:9 src/seahorse-generate.glade.h:22
+#: src/seahorse-add-uid.glade.h:9 src/seahorse-generate-adv.glade.h:22
 msgid "_Email Address:"
 msgstr "E-メール・アドレス(_E):"
 
@@ -548,7 +551,8 @@ msgstr "E-メール・アドレス(_E):"
 msgid "Change Passphrase"
 msgstr "パスフレーズの変更"
 
-#: src/seahorse-change-passphrase.glade.h:3 src/seahorse-generate.glade.h:2
+#: src/seahorse-change-passphrase.glade.h:3
+#: src/seahorse-generate-adv.glade.h:2
 msgid "Con_firm Passphrase:"
 msgstr "パスフレーズの確認(_F):"
 
@@ -569,12 +573,12 @@ msgstr "新しいパスフレーズ(_P):"
 msgid "%s is a key pair! Do you still want to delete it?"
 msgstr "%s は鍵ペアです！ 本当に削除しても宜しいですか？"
 
-#: src/seahorse-delete.c:51
+#: src/seahorse-delete.c:66
 #, c-format
 msgid "Are you sure you want to permanently delete %s?"
 msgstr "本当に鍵 %s を永久に削除しても宜しいですか？"
 
-#: src/seahorse-delete.c:104
+#: src/seahorse-delete.c:131
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
 msgstr "本当にサブキー %s (%s) を永久に削除しても宜しいですか？"
@@ -627,33 +631,235 @@ msgstr "書き出すファイル名を入力します"
 msgid "www.keyserver.net/en"
 msgstr "www.keyserver.net/en"
 
-#: src/seahorse-generate.glade.h:3
+#: src/seahorse-generate-adv.glade.h:3
 msgid "Confirmation of passphrase"
 msgstr "上で入力したパスフレーズの確認です"
 
-#: src/seahorse-generate.glade.h:4
+#: src/seahorse-generate-adv.glade.h:4
 msgid "DSA & ElGamal"
 msgstr "DSA と ElGamal"
 
-#: src/seahorse-generate.glade.h:8
+#: src/seahorse-generate-adv.glade.h:8
 msgid "Generate a Key"
 msgstr "鍵の生成"
 
-#: src/seahorse-generate.glade.h:9
+#: src/seahorse-generate-adv.glade.h:9
 msgid "Generate a new key"
 msgstr "新しい鍵を生成します"
 
-#: src/seahorse-generate.glade.h:20
+#: src/seahorse-generate-adv.glade.h:20 src/seahorse-generate-druid.glade.h:23
 msgid "Passphrase to secure key"
 msgstr "セキュアな鍵のパスフレーズを入力します"
 
-#: src/seahorse-generate.glade.h:23
+#: src/seahorse-generate-adv.glade.h:23
 msgid "_Generate"
 msgstr "鍵の生成(_G)"
 
-#: src/seahorse-generate.glade.h:24
+#: src/seahorse-generate-adv.glade.h:24
 msgid "_Passphrase:"
 msgstr "パスフレーズ(_P):"
+
+#: src/seahorse-generate-druid.glade.h:2
+msgid ""
+"Before selecting apply to start key generation, please make sure all of your "
+"previous settings are correct."
+msgstr ""
+"[適用] ボタンをクリックすると、鍵の生成を開始します。その前に、前のステップま"
+"で設定した内容が正しいかもう一度確認して下さい。"
+
+#: src/seahorse-generate-druid.glade.h:3
+msgid ""
+"Choosing a passphrase is an integral part of creating a strong key.  Like a "
+"password, a passphrase should letters, numbers, and punctuation.  "
+"Additionally, a passphrase can contain spaces, meaning it can contain many "
+"words.  You should pick a rememberable phrase that contains punctuation.  "
+"Take this phrase, adjust the case of various letters, and change some of the "
+"letters into numbers or punctuation rmeiniscent of \"leet speak\", but don't "
+"make it so obscure to the point where you can't remember it."
+msgstr ""
+"パスフレーズの選択は強力な鍵を生成するのに欠かせないステップです。パスワード"
+"のように、パスフレーズは文字、数字、句読点で構成して下さい。加えて、パスフ"
+"レーズには空白も含めることが可能です。つまりたくさんの単語を含めることができ"
+"ます。まず最初に、記憶することが可能な (句読点を含んだ) 字句を用意して下さ"
+"い。次にこの字句に対して、文字を大文字にしたり、文字のいくつかを数字に変更し"
+"たり、\"leet speek (アルファベットを似た形の数字や記号で置き換える) = l33t "
+"sp34k\" にしてみて下さい。ただし、覚えられないくらい複雑にはしないように。"
+
+#: src/seahorse-generate-druid.glade.h:4
+msgid "Comment:"
+msgstr "コメント:"
+
+#: src/seahorse-generate-druid.glade.h:5
+msgid "Confirm"
+msgstr "確認"
+
+#: src/seahorse-generate-druid.glade.h:6
+msgid "Confirm Passphrase: "
+msgstr "パスフレーズの確認:"
+
+#: src/seahorse-generate-druid.glade.h:7
+msgid "Confirm passphrase"
+msgstr "新しパスフレーズの確認です"
+
+#: src/seahorse-generate-druid.glade.h:8
+msgid "Date the Key Expires"
+msgstr "鍵の有効期限を選択して下さい"
+
+#: src/seahorse-generate-druid.glade.h:9
+msgid "Email Address: "
+msgstr "E-メール・アドレス:"
+
+#: src/seahorse-generate-druid.glade.h:10
+msgid "Enter Name - Must be at least five letters."
+msgstr "名前は 5文字以上にして下さい"
+
+#: src/seahorse-generate-druid.glade.h:11 src/seahorse-key-manager-store.c:269
+msgid "Expiration Date"
+msgstr "有効期限"
+
+#: src/seahorse-generate-druid.glade.h:12
+msgid "Expiration Date: "
+msgstr "有効期限: "
+
+#: src/seahorse-generate-druid.glade.h:13
+msgid "Extra High Security"
+msgstr "超-セキュリティ"
+
+#: src/seahorse-generate-druid.glade.h:14
+msgid "Full Name: "
+msgstr "氏名:"
+
+#: src/seahorse-generate-druid.glade.h:15
+msgid "High Security"
+msgstr "高-セキュリティ"
+
+#: src/seahorse-generate-druid.glade.h:16
+msgid "Key Never Expires"
+msgstr "有効期限を設定しない"
+
+#: src/seahorse-generate-druid.glade.h:17
+msgid ""
+"Keys must be given an appropriate expiration date.  For most people, the "
+"default option of never expires is sufficent.  If you only plan on using the "
+"key for a certain period of time, i.e. for a specific project, you should "
+"pick an expiration date after the projected completion of your project.  "
+"After the expiration date, your private key will still be able to decrypt "
+"messages or data encrypted with your public key.  However, your private key "
+"will no longer sign messages or data."
+msgstr ""
+"鍵には適切な有効期限をもうけなければなりません。多くの場合、デフォルトの \"有"
+"効期限を設定しない\" で十分です。鍵を使用する期限がはっきりとしている場合にの"
+"み、たとえば、特定のプロジェクトで使用するといった場合は、プロジェクト完了後"
+"の日付を有効期限にして下さい。有効期限を過ぎても、あなたの秘密鍵には公開鍵を"
+"使ってメッセージを解読したり、暗号化したデータを解読する能力があります。ただ"
+"し、秘密鍵を使ってメッセージやデータに署名することはできません。"
+
+#: src/seahorse-generate-druid.glade.h:18
+msgid "Medium Security"
+msgstr "中-セキュリティ"
+
+#: src/seahorse-generate-druid.glade.h:19 src/seahorse-key-manager-store.c:154
+#: src/seahorse-key-properties.c:373
+msgid "Never Expires"
+msgstr "有効期限を設定しない"
+
+#: src/seahorse-generate-druid.glade.h:22
+msgid "Passphrase"
+msgstr "パスフレーズ"
+
+#: src/seahorse-generate-druid.glade.h:24
+msgid "Passphrase:"
+msgstr "パスフレーズ:"
+
+#: src/seahorse-generate-druid.glade.h:25
+msgid "Personal Information"
+msgstr "個人情報"
+
+#: src/seahorse-generate-druid.glade.h:26
+msgid "Seahorse GPG Key Generation Druid"
+msgstr "Seahorse GPG 鍵生成ドルイド"
+
+#: src/seahorse-generate-druid.glade.h:27
+msgid "Seahorse GPG Key Generation Druid Complete"
+msgstr "Seahorse GPG 鍵生成ドルイドの完了"
+
+#: src/seahorse-generate-druid.glade.h:28
+msgid "Seahorse Key Generation Druid"
+msgstr "Seahorse 鍵生成ドルイド"
+
+#: src/seahorse-generate-druid.glade.h:29
+msgid "Security Level"
+msgstr "セキュリティのレベル"
+
+#: src/seahorse-generate-druid.glade.h:30
+msgid ""
+"The Medium Security level is the default and should be acceptable for "
+"general everyday usage.  The High Security level should be selected if you "
+"know your data will be actively scrutinized.  The Extra High level should be "
+"selected if you know your data is actively scrutinized and will be under "
+"cryptographic attack. "
+msgstr ""
+"\"中-セキュリティ\" がデフォルトで、日常的に受け入れることが可能なレベルで"
+"す。\"高-セキュリティ\" は、あなたのデータが頻繁に調べられる可能性がある場合"
+"に選択するレベルです。\"超-セキュリティ\" レベルは、あなたのデータが頻繁に調"
+"べられる可能性があり、かつ暗号化の弱点をついた攻撃 (cryptographic attack) の"
+"下にさらされる可能性がある場合に選択して下さい。"
+
+#: src/seahorse-generate-druid.glade.h:31
+msgid "This druid will guide you through the steps of creating a GPG key pair."
+msgstr "このドルイドは GPG 鍵ペアの生成をステップをふんでお手伝いします。"
+
+#: src/seahorse-generate-druid.glade.h:32
+msgid ""
+"To create a key and tie it to your identity, the following information is "
+"needed: Full Name, Email Address, and Comment.  These values will be given "
+"to the name of your key in the following "
+"manner:                              Full Name (Comment) <email address>."
+msgstr ""
+"鍵の生成とあなたの身元情報への関連づけを行うには \"氏名\"、\"E-メール・アドレ"
+"ス\"、\"コメント\" といった情報が必要になります。これらの値は次のようなルール"
+"で生成する鍵に反映されます:\n"
+"氏名 (コメント) <E-メール・アドレス>"
+
+#: src/seahorse-generate-druid.glade.h:33
+msgid "druidpage_pass"
+msgstr "druidpage_pass"
+
+#: src/seahorse-generate-druid.glade.h:34
+msgid "druidpage_pinfo"
+msgstr "druidpage_pinfo"
+
+#: src/seahorse-generate-druid.glade.h:35
+msgid "keygen_druid"
+msgstr "keygen_druid"
+
+#: src/seahorse-generate-select.glade.h:1
+msgid "Advanced"
+msgstr "上級向け"
+
+#: src/seahorse-generate-select.glade.h:2
+msgid "Druid"
+msgstr "鍵生成ドルイド"
+
+#: src/seahorse-generate-select.glade.h:3
+msgid "Generate a key via the druid."
+msgstr "ドルイドを使って鍵を生成します"
+
+#: src/seahorse-generate-select.glade.h:4
+msgid "Generate a key with the advanced dialog."
+msgstr "(上級者向け) 必要な項目を入力して鍵を生成します"
+
+#: src/seahorse-generate-select.glade.h:5
+msgid "Method Select"
+msgstr "生成方法の選択"
+
+#: src/seahorse-generate-select.glade.h:6
+msgid "Select a method to generate your new key."
+msgstr "新しい鍵を生成する方法を選択して下さい。"
+
+#: src/seahorse-generate-select.glade.h:7
+msgid "radio_druid"
+msgstr "radio_druid"
 
 #: src/seahorse-import.glade.h:2
 msgid "Enter a unique key id"
@@ -710,8 +916,9 @@ msgstr "鍵のID(_K):"
 #: src/seahorse-key-manager.c:210
 msgid "translator_credits"
 msgstr ""
-"Takeshi AIHANA <aihana@gnome.gr.jp>\n"
-"Anthony Mulcahy <anthony@kcn.ne.jp>"
+"相花 毅 <aihana@gnome.gr.jp>\n"
+"Anthony Mulcahy <anthony@kcn.ne.jp>\n"
+"日本GNOMEユーザー会 <http://www.gnome.gr.jp>"
 
 #: src/seahorse-key-manager.c:230
 msgid "seahorse"
@@ -887,14 +1094,6 @@ msgstr "ツールバー(_T)"
 msgid "Expired"
 msgstr "期限切れ"
 
-#: src/seahorse-key-manager-store.c:154 src/seahorse-key-properties.c:373
-msgid "Never Expires"
-msgstr "有効期限を設定しない"
-
-#: src/seahorse-key-manager-store.c:269
-msgid "Expiration Date"
-msgstr "有効期限"
-
 #: src/seahorse-key-manager-store.c:273
 msgid "Trust"
 msgstr "信頼度"
@@ -1004,7 +1203,7 @@ msgstr "無効にする(_A)"
 
 #: src/seahorse-key-properties.glade.h:3
 msgid "Disabled keys cannot be used for operations"
-msgstr "無効にした鍵は処理では使用しません"
+msgstr "鍵を無効にすると処理の対象になりません"
 
 #: src/seahorse-key-properties.glade.h:4
 msgid "Fingerprint:"
