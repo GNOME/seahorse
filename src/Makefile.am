@@ -35,7 +35,6 @@ seahorse_SOURCES = main.c \
 	seahorse-ops-file.c seahorse-ops-file.h \
 	seahorse-ops-key.c seahorse-ops-key.h \
 	seahorse-text-editor.c seahorse-text-editor.h \
-	seahorse-key-properties.c seahorse-key-properties.h \
 	seahorse-validity.c seahorse-validity.h \
 	seahorse-key-store.c seahorse-key-store.h \
 	seahorse-key-manager-store.c seahorse-key-manager-store.h \
@@ -53,8 +52,7 @@ seahorse-marshal.c: seahorse-marshal.list $(GLIB_GENMARSHAL)
 	$(GLIB_GENMARSHAL) $< --body --prefix=seahorse-marshal >> $@
 
 glade_DATA = seahorse-key-manager.glade2 \
-	seahorse-text-editor.glade2 \
-	seahorse-key-properties.glade2
+	seahorse-text-editor.glade2
 
 EXTRA_DIST = $(glade_DATA) \
 	seahorse-marshal.list

@@ -189,6 +189,7 @@ seahorse_key_manager_store_new (SeahorseContext *sctx, GtkTreeView *view)
 {
 	SeahorseKeyStore *skstore;
 	GtkTreeViewColumn *column;
+	GList *list = NULL;
 
 	GType columns[] = {
 	        G_TYPE_POINTER, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INT
@@ -205,7 +206,8 @@ seahorse_key_manager_store_new (SeahorseContext *sctx, GtkTreeView *view)
 	seahorse_key_store_append_column (view, _("Type"), ALGO);
 	seahorse_key_store_append_column (view, _("Length"), LENGTH);
 	
-	seahorse_key_store_populate (skstore);
+	//seahorse_key_store_populate (skstore);
+	list = seahorse_context_get_keys (sctx);
 	
 	return skstore;
 }

@@ -54,10 +54,6 @@ SeahorseWidget*	seahorse_key_widget_new			(gchar			*name,
 							 SeahorseContext	*sctx,
 							 SeahorseKey		*skey);
 
-SeahorseWidget*	seahorse_key_widget_new_component	(gchar			*name,
-							 SeahorseContext	*sctx,
-							 SeahorseKey		*skey);
-
 SeahorseWidget*	seahorse_key_widget_new_with_index	(gchar			*name,
 							 SeahorseContext	*sctx,
 							 SeahorseKey		*skey,

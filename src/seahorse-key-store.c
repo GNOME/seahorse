@@ -394,7 +394,7 @@ seahorse_key_store_populate (SeahorseKeyStore *skstore)
 	}
 	
 	seahorse_context_show_progress (skstore->sctx,
-		g_strdup_printf (_("Loaded %d keys"), count), -1);
+		g_strdup_printf (_("Listed %d keys"), count), -1);
 }
 
 /**

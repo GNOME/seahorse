@@ -15,6 +15,7 @@ libdialogs_a_SOURCES = \
 	seahorse-export.c \
 	seahorse-revoke.c \
 	seahorse-sign.c \
+	seahorse-key-properties.c \
 	seahorse-key-dialogs.h \
 	seahorse-encrypt-file.c \
 	seahorse-decrypt-file.c \
@@ -41,6 +42,7 @@ glade_DATA = \
 	seahorse-add-subkey.glade2 \
 	seahorse-revoke.glade2 \
 	seahorse-sign.glade2 \
+	seahorse-key-properties.glade2 \
 	seahorse-encrypt-file.glade2 \
 	seahorse-decrypt-file.glade2 \
 	seahorse-sign-file.glade2 \

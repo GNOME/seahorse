@@ -181,8 +181,7 @@ seahorse_key_widget_destroyed (GtkObject *skey, SeahorseKeyWidget *skwidget)
 }
 
 static SeahorseWidget*
-seahorse_key_widget_create (gchar *name, SeahorseContext *sctx,
-			    SeahorseKey *skey, guint index, gboolean component)
+seahorse_key_widget_create (gchar *name, SeahorseContext *sctx, SeahorseKey *skey, guint index)
 {
 	SeahorseWidget *swidget;
 	GHashTable *widgets;
@@ -216,7 +215,7 @@ seahorse_key_widget_create (gchar *name, SeahorseContext *sctx,
 	
 	/* If widget doesn't already exist, create & insert into key widgets hash */
 	swidget = g_object_new (SEAHORSE_TYPE_KEY_WIDGET, "name", name, "ctx", sctx,
-		"component", component, "key", skey, "index", index, NULL);
+		"key", skey, "index", index, NULL);
 	g_hash_table_insert (widgets, (gchar*)seahorse_key_get_keyid (skey, 0), swidget);
 	
 	return swidget;
@@ -225,18 +224,12 @@ seahorse_key_widget_create (gchar *name, SeahorseContext *sctx,
 SeahorseWidget*
 seahorse_key_widget_new (gchar *name, SeahorseContext *sctx, SeahorseKey *skey)
 {
-	return seahorse_key_widget_create (name, sctx, skey, 0, FALSE);
-}
-
-SeahorseWidget*
-seahorse_key_widget_new_component (gchar *name, SeahorseContext *sctx, SeahorseKey *skey)
-{
-	return seahorse_key_widget_create (name, sctx, skey, 0, TRUE);
+	return seahorse_key_widget_create (name, sctx, skey, 0);
 }
 
 SeahorseWidget*
 seahorse_key_widget_new_with_index (gchar *name, SeahorseContext *sctx,
 				    SeahorseKey *skey, guint index)
 {
-	return seahorse_key_widget_create (name, sctx, skey, index, FALSE);
+	return seahorse_key_widget_create (name, sctx, skey, index);
 }

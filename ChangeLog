@@ -1,10 +1,15 @@
 2003-02-07  Jacob Perkins  <jap1@users.sourceforge.net>
 
 	* seahorse-key-manager: Refined startup
-	* seahorse-widget: Removed ::new_component
-	* seahorse-text-editor:
-	* seahorse-key-properties:
-	No longer uses seahorse_widget_new_component
+	* seahorse-widget:
+	* seahorse-key-widget:
+	Removed ::new_component
+	* seahorse-text-editor: No longer uses seahorse_widget_new_component
+	* configure.in: Require gtk+-2.2
+	* seahorse-key-properties: Moved to dialogs, now a property window,
+	moved uids to own tab, added prefs to uids, subkeys are separate tabs,
+	signatures part of primary key
+	* seahorse-context: ::finalize doesn't list keys if are none
 
 2003-02-06  Jacob Perkins  <jap1@users.sourceforge.net>
 

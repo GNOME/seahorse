@@ -26,6 +26,9 @@
 
 #include "seahorse-context.h"
 
+void	seahorse_key_properties_new	(SeahorseContext	*sctx,
+					 SeahorseKey		*skey);
+
 void	seahorse_add_revoker_new	(SeahorseContext	*sctx,
 					 SeahorseKey		*skey);
 

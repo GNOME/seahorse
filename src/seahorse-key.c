@@ -216,8 +216,6 @@ seahorse_key_get_num_subkeys (const SeahorseKey *skey)
 {
 	gint index = 0;
 	
-	g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), -1);
-	
 	while (gpgme_key_get_string_attr (skey->key, GPGME_ATTR_KEYID, NULL, index+1))
 		index++;
 	

@@ -29,7 +29,6 @@
 #include "seahorse-preferences.h"
 #include "seahorse-import.h"
 #include "seahorse-text-editor.h"
-#include "seahorse-key-properties.h"
 #include "seahorse-util.h"
 #include "seahorse-validity.h"
 #include "seahorse-key-manager-store.h"
@@ -37,7 +36,6 @@
 #include "seahorse-key-dialogs.h"
 #include "seahorse-file-dialogs.h"
 #include "seahorse-key-pair.h"
-#include "libbonoboui.h"
 
 #define KEY_LIST "key_list"
 

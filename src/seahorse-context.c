@@ -157,7 +157,7 @@ seahorse_context_finalize (GObject *gobject)
 	GList *list = NULL;
 	
 	sctx = SEAHORSE_CONTEXT (gobject);
-	list = seahorse_context_get_keys (sctx);
+	list = g_list_concat (g_list_copy (sctx->priv->key_pairs), sctx->priv->single_keys);
 	/* destroy all keys */
 	while (list != NULL && (skey = list->data) != NULL) {
 		seahorse_key_destroy (skey);
@@ -306,6 +306,8 @@ add_key (SeahorseContext *sctx, SeahorseKey *skey)
 		G_CALLBACK (seahorse_context_key_destroyed), sctx);
 	g_signal_connect (skey, "changed",
 		G_CALLBACK (seahorse_context_key_changed), sctx);
+	
+	g_signal_emit (G_OBJECT (sctx), context_signals[ADD], 0, skey);
 }
 
 /* creates and adds a new key */
@@ -354,8 +356,8 @@ do_key_pairs (SeahorseContext *sctx)
 	g_return_if_fail (gpgme_op_keylist_start (sctx->ctx, NULL, TRUE) == GPGME_No_Error);
 	while (gpgme_op_keylist_next (sctx->ctx, &key) == GPGME_No_Error) {
 		if (progress_update > 0 && !(count % progress_update))
-			seahorse_context_show_progress (sctx,
-				g_strdup_printf (_("Loading key pair %d"), count), 0);
+			seahorse_context_show_progress (sctx, g_strdup_printf (
+				_("Loading key pair %d"), count), 0);
 		
 		keys = g_list_append (keys, key);
 		count++;
@@ -367,8 +369,8 @@ do_key_pairs (SeahorseContext *sctx)
 	/* get corresponding public keys */
 	while (keys != NULL) {
 		if (progress_update > 0 && !(count % progress_update))
-			seahorse_context_show_progress (sctx,
-				g_strdup_printf (_("Processing key pair %d"), count), count/length);
+			seahorse_context_show_progress (sctx, g_strdup_printf (
+				_("Processing key pair %d"), count), count/length);
 		
 		/* create new key pair */
 		if ((gpgme_op_keylist_start (sctx->ctx, gpgme_key_get_string_attr (
@@ -387,6 +389,8 @@ do_key_pairs (SeahorseContext *sctx)
 	}
 	
 	did_pairs = TRUE;
+	seahorse_context_show_progress (sctx, g_strdup_printf (
+		_("Loaded %d key pairs"), count), -1);
 }
 
 /* loads single keys, doing pairs first */
@@ -415,8 +419,8 @@ do_key_list (SeahorseContext *sctx)
 	while (gpgme_op_keylist_next (sctx->ctx, &key) == GPGME_No_Error) {
 		/* show progress */
 		if (progress_update > 0 && !(count % progress_update))
-			seahorse_context_show_progress (sctx,
-				g_strdup_printf (_("Loading key %d"), count), 0);
+			seahorse_context_show_progress (sctx, g_strdup_printf (
+				_("Loading key %d"), count), 0);
 			
 		keys = g_list_append (keys, key);
 		count++;
@@ -428,8 +432,8 @@ do_key_list (SeahorseContext *sctx)
 	/* add keys to list */
 	while (keys != NULL) {
 		if (progress_update > 0 && !(count % progress_update))
-			seahorse_context_show_progress (sctx,
-				g_strdup_printf (_("Processing key %d"), count), count/length);
+			seahorse_context_show_progress (sctx, g_strdup_printf (
+				_("Processing key %d"), count), count/length);
 		
 		/* if there are more secret keys left and key has a secret part */
 		if (secret_count && (gpgme_op_keylist_start (sctx->ctx,
@@ -449,6 +453,8 @@ do_key_list (SeahorseContext *sctx)
 	}
 	
 	did_keys = TRUE;
+	seahorse_context_show_progress (sctx, g_strdup_printf (
+		_("Loading %d keys"), count), -1);
 }
 
 /**
@@ -626,7 +632,6 @@ seahorse_context_key_added (SeahorseContext *sctx)
 		else
 			add_single_key (sctx, keys->data);
 		
-		g_signal_emit (G_OBJECT (sctx), context_signals[ADD], 0, skey);
 		keys = g_list_next (keys);
 	}
 }
