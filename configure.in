@@ -25,15 +25,9 @@ ALL_LINGUAS="cs da de es fi fr ja nl no ru sl sv tr uk zh_CN"
 
 GETTEXT_PACKAGE=seahorse
 AC_SUBST(GETTEXT_PACKAGE)
-AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE")
+AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE", [Name of the gettext domain.])
 
 AM_GLIB_GNU_GETTEXT
-
-if test "x${prefix}" = "xNONE"; then
-  AC_DEFINE_UNQUOTED(LOCALEDIR, "${ac_default_prefix}/${DATADIRNAME}/locale")
-else
-  AC_DEFINE_UNQUOTED(LOCALEDIR, "${prefix}/${DATADIRNAME}/locale")
-fi
 
 dnl ******************************
 

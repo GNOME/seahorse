@@ -18,9 +18,9 @@
  * 59 Temple Place, Suite 330,
  * Boston, MA 02111-1307, USA.
  */
+#include <config.h>
 #include <gnome.h>
 
-#include <config.h>
 #include "seahorse-context.h"
 #include "seahorse-key-manager.h"
 #include "seahorse-preferences.h"
@@ -31,11 +31,13 @@ int
 main (int argc, char **argv)
 {
 	SeahorseContext *sctx;
-	
+
+#ifdef ENABLE_NLS	
 	bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
 	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 	textdomain (GETTEXT_PACKAGE);
-	
+#endif
+
 	gnome_program_init (PACKAGE, VERSION, LIBGNOMEUI_MODULE,
 		argc, argv, GNOME_PARAM_APP_DATADIR, DATA_DIR, NULL);
 	
