@@ -62,7 +62,7 @@ make_message (guint folders, guint files)
 
     } else if (folders > 0) {
         return g_strdup_printf (
-            ngettext (_("You have selected %d folder"), _("You have selected %d folders"), folders), folders);
+            ngettext ("You have selected %d folder", "You have selected %d folders", folders), folders);
 
     } else {
         g_assert_not_reached ();

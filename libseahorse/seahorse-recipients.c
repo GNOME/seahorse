@@ -78,16 +78,16 @@ selection_changed (GtkTreeSelection *selection, SeahorseWidget *swidget)
  
     if(invalid == 0) {
         msg = g_strdup_printf(
-            ngettext(_("Selected %d keys"), _("Selected %d keys"), selected), selected);
+            ngettext("Selected %d keys", "Selected %d keys", selected), selected);
             
     /* For translators */
     } else if (invalid == 1) {
         msg = g_strdup_printf (
-            ngettext(_("Selected %d not fully valid key"), _("Selected %d keys (%d not fully valid)"), selected), selected, invalid);
+            ngettext("Selected %d not fully valid key", "Selected %d keys (%d not fully valid)", selected), selected, invalid);
             
     } else {
         msg = g_strdup_printf (
-            ngettext(_("Selected %d not fully valid key"), _("Selected %d keys (%d not fully valid)"), selected), selected, invalid);
+            ngettext("Selected %d not fully valid key", "Selected %d keys (%d not fully valid)", selected), selected, invalid);
     }
         
 	gnome_appbar_set_status (GNOME_APPBAR (glade_xml_get_widget (swidget->xml, "status")), msg);

@@ -427,7 +427,7 @@ do_key_pairs (SeahorseContext *sctx)
 	
 	did_pairs = TRUE;
 	seahorse_context_show_progress (sctx, g_strdup_printf (
-		ngettext(_("Loaded %d key pair"), _("Loaded %d key pairs"), total), total), -1);
+		ngettext("Loaded %d key pair", "Loaded %d key pairs", total), total), -1);
 }
 
 /* loads single keys, doing pairs first */
@@ -448,7 +448,7 @@ do_key_list (SeahorseContext *sctx)
 	
 	did_keys = TRUE;
 	seahorse_context_show_progress (sctx, g_strdup_printf (
-		ngettext(_("Loaded %d key"), _("Loaded %d keys"), total), total), -1);
+		ngettext("Loaded %d key", "Loaded %d keys", total), total), -1);
 	
 }
 
@@ -664,5 +664,5 @@ seahorse_context_keys_added (SeahorseContext *sctx, guint num_keys)
 	
 	/* show status */
 	seahorse_context_show_progress (sctx, g_strdup_printf (
-		ngettext (_("Loaded %d new key"), _("Loaded %d new keys"), num_keys), num_keys), -1);
+		ngettext ("Loaded %d new key", "Loaded %d new keys", num_keys), num_keys), -1);
 }
