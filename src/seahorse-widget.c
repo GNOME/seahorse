@@ -105,7 +105,7 @@ seahorse_widget_class_init (SeahorseWidgetClass *klass)
 	gobject_class->get_property = seahorse_widget_get_property;
 	
 	g_object_class_install_property (gobject_class, PROP_NAME,
-		g_param_spec_string ("name", _"Widget name",
+		g_param_spec_string ("name", "Widget name",
 				     "Name of glade file and main widget",
 				     NULL, G_PARAM_READWRITE));
 	g_object_class_install_property (gobject_class, PROP_CTX,
