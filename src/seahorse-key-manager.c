@@ -226,12 +226,12 @@ export_activate (GtkWidget *widget, SeahorseWidget *swidget)
         if (u != NULL) {
             if (gnome_vfs_uri_exists(u)) {
                 GtkWidget* edlg;
-                edlg = gtk_message_dialog_new (GTK_WINDOW (dialog),
+                edlg = gtk_message_dialog_new_with_markup (GTK_WINDOW (dialog),
                     GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_QUESTION,
-                    GTK_BUTTONS_NONE, _("A file already exists with this name.\n\nDo you want to overwrite it?"));
+                    GTK_BUTTONS_NONE, _("<b>A file already exists with this name.</b>\n\nDo you want to replace it with the one you are saving?"));
                 gtk_dialog_add_buttons (GTK_DIALOG (edlg), 
                        GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                       _("Replace"), GTK_RESPONSE_ACCEPT);
+                       _("Replace"), GTK_RESPONSE_ACCEPT, NULL);
 
                 gtk_dialog_set_default_response (GTK_DIALOG (edlg), GTK_RESPONSE_CANCEL);                    
                 
