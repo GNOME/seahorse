@@ -24,7 +24,6 @@
 #include "seahorse-context.h"
 #include "seahorse-key-manager.h"
 #include "seahorse-preferences.h"
-#include "seahorse-passphrase.h"
 
 /* Initializes context and preferences, then loads key manager */
 int

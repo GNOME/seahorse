@@ -49,6 +49,7 @@ glade_DATA = \
 	seahorse-verify-file.glade2 \
 	seahorse-encrypt-sign-file.glade2 \
 	seahorse-decrypt-verify-file.glade2 \
-	seahorse-passphrase.glade2
+	seahorse-passphrase.glade2 \
+	seahorse-change-passphrase.glade2
 
 EXTRA_DIST = $(glade_DATA)

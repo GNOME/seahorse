@@ -57,4 +57,8 @@ const gchar*	seahorse_passphrase_get		(SeahorseContext	*sctx,
 						 const gchar		*desc,
 						 gpointer		*data);
 
+const gchar*	seahorse_change_passphrase_get	(SeahorseContext	*sctx,
+						 const gchar		*desc,
+						 gpointer		*data);
+
 #endif /* __SEAHORSE_KEY_DIALOGS__ */

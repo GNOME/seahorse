@@ -26,6 +26,7 @@
 #include "seahorse-context.h"
 #include "seahorse-key.h"
 #include "seahorse-util.h"
+#include "seahorse-key-dialogs.h"
 
 #define PROMPT "keyedit.prompt"
 #define QUIT "quit"
@@ -718,6 +719,23 @@ edit_pass_transit (guint current_state, GpgmeStatusCode status,
 	return next_state;
 }
 
+static const gchar*
+edit_pass_get (SeahorseContext *sctx, const gchar *desc, gpointer *data)
+{
+	static gint count = 0;
+	
+	if (!desc)
+		return NULL;
+	if (desc[0] == 'E')
+		count++;
+	if (count == 1)
+		return seahorse_passphrase_get (sctx, desc, data);
+	else {
+		count = 0;
+		return seahorse_change_passphrase_get (sctx, desc, data);
+	}
+}
+
 /**
  * seahorse_ops_key_change_pass:
  * @sctx: Current context
@@ -732,18 +750,16 @@ gboolean
 seahorse_ops_key_change_pass (SeahorseContext *sctx, SeahorseKey *skey)
 {
 	SeahorseEditParm *parms;
-	GpgmePassphraseCb callback = NULL;
+	gboolean success;
 	
 	g_return_val_if_fail (sctx != NULL && SEAHORSE_IS_CONTEXT (sctx), FALSE);
 	g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), FALSE);
 	
-	/* Check if have passphrase callback */
-	gpgme_get_passphrase_cb (sctx->ctx, &callback, NULL);
-	g_return_val_if_fail (callback != NULL, FALSE);
-	
 	parms = seahorse_edit_parm_new (PASS_START, edit_pass_action, edit_pass_transit, NULL);
 	
-	return edit_key (sctx, skey, parms, _("Passphrase Change"), SKEY_CHANGE_PASS);
+	gpgme_set_passphrase_cb (sctx->ctx, (GpgmePassphraseCb)edit_pass_get, sctx);
+	success = edit_key (sctx, skey, parms, _("Passphrase Change"), SKEY_CHANGE_PASS);
+	gpgme_set_passphrase_cb (sctx->ctx, (GpgmePassphraseCb)seahorse_passphrase_get, sctx);
 }
 
 /**
