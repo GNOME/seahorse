@@ -7,14 +7,16 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Seahorse 0.6\n"
-"POT-Creation-Date: 2003-08-19 03:10+0200\n"
-"PO-Revision-Date: 2003-08-19 03:09+0200\n"
-"Last-Translator: Dušan Živojnov <calvin@verat.net>\n"
+"Project-Id-Version: Seahorse\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-01-15 00:55+0100\n"
+"PO-Revision-Date: 2004-01-15 02:12+0100\n"
+"Last-Translator: Danilo Šegan <danilo@prevod.org>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3;    plural=n%10==1 && n%100!=11 ? 0 :    n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
 #: bonobo/Seahorse_PGP_File_Listener.server.in.in.h:1
 msgid "Decrypt And Verify Signatures..."
@@ -254,8 +256,8 @@ msgstr "Loša lozinka! Pokušajte ponovo za %s"
 
 #: libseahorse/seahorse-passphrase.glade.h:1 src/seahorse-add-uid.glade.h:1
 #: src/seahorse-change-passphrase.glade.h:1 src/seahorse-export.glade.h:1
-#: src/seahorse-generate.glade.h:1 src/seahorse-import.glade.h:1
-#: src/seahorse-revoke.glade.h:1
+#: src/seahorse-generate-adv.glade.h:1 src/seahorse-generate-druid.glade.h:1
+#: src/seahorse-import.glade.h:1 src/seahorse-revoke.glade.h:1
 msgid "*"
 msgstr "*"
 
@@ -430,28 +432,30 @@ msgstr "Dešifruj šifrovanu datoteku i proveri sve potpise koje ona sadrži"
 msgid "GPG Keys Manager"
 msgstr "GPG Upravljač ključeva"
 
-# bug: plural-forms
 #: src/main.c:136
 #, c-format
-msgid "Imported %d keys"
-msgstr "Uvezao %d ključeva"
+msgid "Imported %d key"
+msgid_plural "Imported %d keys"
+msgstr[0] "Uvezoh %d ključ"
+msgstr[1] "Uvezoh %d ključa"
+msgstr[2] "Uvezoh %d ključeva"
 
-#: src/main.c:141
+#: src/main.c:143
 #, c-format
 msgid "Encrypt file is %s"
 msgstr "Šifrovana datoteka je %s"
 
-#: src/main.c:150
+#: src/main.c:152
 #, c-format
 msgid "Signature file is %s"
 msgstr "Datoteka sa potpisom je %s"
 
-#: src/main.c:157
+#: src/main.c:159
 #, c-format
 msgid "Encrypted and signed file is %s"
 msgstr "Šifrovana i potpisana datoteka je %s"
 
-#: src/main.c:166 src/main.c:197
+#: src/main.c:168 src/main.c:199
 #, c-format
 msgid "Decrypted file is %s"
 msgstr "Dešifrovana datoteka je %s"
@@ -465,7 +469,7 @@ msgstr "Upravljaj svojim GPG ključevima"
 msgid "Add subkey to %s"
 msgstr "Dodaj podključ za %s"
 
-#: src/seahorse-add-subkey.glade.h:1 src/seahorse-generate.glade.h:5
+#: src/seahorse-add-subkey.glade.h:1 src/seahorse-generate-adv.glade.h:5
 msgid "DSA (sign only)"
 msgstr "DSA (samo potpis)"
 
@@ -474,7 +478,7 @@ msgid "ElGamal (encrypt only)"
 msgstr "ElGamal (samo šifrovanje)"
 
 #. expires
-#: src/seahorse-add-subkey.glade.h:3 src/seahorse-generate.glade.h:6
+#: src/seahorse-add-subkey.glade.h:3 src/seahorse-generate-adv.glade.h:6
 #: src/seahorse-key-properties.c:364
 msgid "Expiration Date:"
 msgstr "Datum isteka:"
@@ -483,28 +487,28 @@ msgstr "Datum isteka:"
 msgid "Generate a new subkey"
 msgstr "Napravi novi podključ"
 
-#: src/seahorse-add-subkey.glade.h:5 src/seahorse-generate.glade.h:10
+#: src/seahorse-add-subkey.glade.h:5 src/seahorse-generate-adv.glade.h:10
 #: src/seahorse-key-properties.c:390
 msgid "If key never expires"
 msgstr "Ako ključ nikad ne ističe"
 
-#: src/seahorse-add-subkey.glade.h:6 src/seahorse-generate.glade.h:12
+#: src/seahorse-add-subkey.glade.h:6 src/seahorse-generate-adv.glade.h:12
 msgid "Key _Length:"
 msgstr "_Dužina ključa:"
 
-#: src/seahorse-add-subkey.glade.h:7 src/seahorse-generate.glade.h:13
+#: src/seahorse-add-subkey.glade.h:7 src/seahorse-generate-adv.glade.h:13
 msgid "Key _Type:"
 msgstr "_Tip ključa:"
 
-#: src/seahorse-add-subkey.glade.h:8 src/seahorse-generate.glade.h:14
+#: src/seahorse-add-subkey.glade.h:8 src/seahorse-generate-adv.glade.h:14
 msgid "Key type / algorithm"
 msgstr "Tip ključa / algoritam"
 
-#: src/seahorse-add-subkey.glade.h:9 src/seahorse-generate.glade.h:15
+#: src/seahorse-add-subkey.glade.h:9 src/seahorse-generate-adv.glade.h:15
 msgid "Length of Key"
 msgstr "Dužina ključa"
 
-#: src/seahorse-add-subkey.glade.h:10 src/seahorse-generate.glade.h:17
+#: src/seahorse-add-subkey.glade.h:10 src/seahorse-generate-adv.glade.h:17
 #: src/seahorse-key-properties.c:388
 msgid "Never E_xpires"
 msgstr "Nikad ne is_tiče"
@@ -513,7 +517,7 @@ msgstr "Nikad ne is_tiče"
 msgid "RSA (encrypt only)"
 msgstr "RSA (samo šifrovanje)"
 
-#: src/seahorse-add-subkey.glade.h:12 src/seahorse-generate.glade.h:21
+#: src/seahorse-add-subkey.glade.h:12 src/seahorse-generate-adv.glade.h:21
 msgid "RSA (sign only)"
 msgstr "RSA (samo potpis)"
 
@@ -530,27 +534,29 @@ msgstr "Dodaj ID korisnika"
 msgid "Create the new user ID"
 msgstr "Napravi novi ID korisnika"
 
-#: src/seahorse-add-uid.glade.h:4 src/seahorse-generate.glade.h:7
+#: src/seahorse-add-uid.glade.h:4 src/seahorse-generate-adv.glade.h:7
 msgid "Full _Name:"
 msgstr "Ime i _prezime:"
 
-#: src/seahorse-add-uid.glade.h:5 src/seahorse-generate.glade.h:11
+#: src/seahorse-add-uid.glade.h:5 src/seahorse-generate-adv.glade.h:11
 msgid "Key Co_mment:"
 msgstr "Ko_mentar ključa:"
 
-#: src/seahorse-add-uid.glade.h:6 src/seahorse-generate.glade.h:16
+#: src/seahorse-add-uid.glade.h:6 src/seahorse-generate-adv.glade.h:16
 msgid "Must be at least 5 characters long"
 msgstr "Mora biti dužine bar 5 znakova"
 
-#: src/seahorse-add-uid.glade.h:7 src/seahorse-generate.glade.h:18
+#: src/seahorse-add-uid.glade.h:7 src/seahorse-generate-adv.glade.h:18
+#: src/seahorse-generate-druid.glade.h:20
 msgid "Optional comment describing key"
 msgstr "Neobavezna primedba za opis ključa"
 
-#: src/seahorse-add-uid.glade.h:8 src/seahorse-generate.glade.h:19
+#: src/seahorse-add-uid.glade.h:8 src/seahorse-generate-adv.glade.h:19
+#: src/seahorse-generate-druid.glade.h:21
 msgid "Optional email address"
 msgstr "Neobavezna adresa e-pošte"
 
-#: src/seahorse-add-uid.glade.h:9 src/seahorse-generate.glade.h:22
+#: src/seahorse-add-uid.glade.h:9 src/seahorse-generate-adv.glade.h:22
 msgid "_Email Address:"
 msgstr "Adresa _e-pošte:"
 
@@ -558,7 +564,8 @@ msgstr "Adresa _e-pošte:"
 msgid "Change Passphrase"
 msgstr "Promeni lozinku"
 
-#: src/seahorse-change-passphrase.glade.h:3 src/seahorse-generate.glade.h:2
+#: src/seahorse-change-passphrase.glade.h:3
+#: src/seahorse-generate-adv.glade.h:2
 msgid "Con_firm Passphrase:"
 msgstr "Po_tvrdite lozinku:"
 
@@ -579,12 +586,12 @@ msgstr "Nova _lozinka:"
 msgid "%s is a key pair! Do you still want to delete it?"
 msgstr "%s je par ključeva! Da li i dalje želite da ga obrišete?"
 
-#: src/seahorse-delete.c:51
+#: src/seahorse-delete.c:66
 #, c-format
 msgid "Are you sure you want to permanently delete %s?"
 msgstr "Da li ste sigurni da želite trajno da uklonite %s?"
 
-#: src/seahorse-delete.c:104
+#: src/seahorse-delete.c:131
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
 msgstr "Da li ste sigurni da želite da trajno uklonite podključ %d od %s?"
@@ -637,33 +644,213 @@ msgstr "Ime datoteke u koju će se izvesti"
 msgid "www.keyserver.net/en"
 msgstr "www.keyserver.net/en"
 
-#: src/seahorse-generate.glade.h:3
+#: src/seahorse-generate-adv.glade.h:3
 msgid "Confirmation of passphrase"
 msgstr "Potvrda lozinke"
 
-#: src/seahorse-generate.glade.h:4
+#: src/seahorse-generate-adv.glade.h:4
 msgid "DSA & ElGamal"
 msgstr "DSA i ElGamal"
 
-#: src/seahorse-generate.glade.h:8
+#: src/seahorse-generate-adv.glade.h:8
 msgid "Generate a Key"
 msgstr "Napravi ključ"
 
-#: src/seahorse-generate.glade.h:9
+#: src/seahorse-generate-adv.glade.h:9
 msgid "Generate a new key"
 msgstr "Napravi novi ključ"
 
-#: src/seahorse-generate.glade.h:20
+#: src/seahorse-generate-adv.glade.h:20 src/seahorse-generate-druid.glade.h:23
 msgid "Passphrase to secure key"
 msgstr "Lozinka za zaštitu ključa"
 
-#: src/seahorse-generate.glade.h:23
+#: src/seahorse-generate-adv.glade.h:23
 msgid "_Generate"
 msgstr "_Napravi"
 
-#: src/seahorse-generate.glade.h:24
+#: src/seahorse-generate-adv.glade.h:24
 msgid "_Passphrase:"
 msgstr "_Lozinka:"
+
+#: src/seahorse-generate-druid.glade.h:2
+msgid ""
+"Before selecting apply to start key generation, please make sure all of your "
+"previous settings are correct."
+msgstr "Pre započinjanja obrazovanja ključa. proverite da li su vaša prethodna podešavanja ispravna."
+
+#: src/seahorse-generate-druid.glade.h:3
+msgid ""
+"Choosing a passphrase is an integral part of creating a strong key.  Like a "
+"password, a passphrase should letters, numbers, and punctuation.  "
+"Additionally, a passphrase can contain spaces, meaning it can contain many "
+"words.  You should pick a rememberable phrase that contains punctuation.  "
+"Take this phrase, adjust the case of various letters, and change some of the "
+"letters into numbers or punctuation rmeiniscent of \"leet speak\", but don't "
+"make it so obscure to the point where you can't remember it."
+msgstr "Izbor lozinke je sastavni deo izrade dobrog ključa. Kao za svaku lozinku, koristite slova, brojeve i znake interpunkcije. Dodatno, ove lozinke mogu sadržati i razmake, što znači da se mogu sastojati iz više reči.  Izaberite izraz koji se lako pamti i koji sadrži znake interpunkcije.  Uzmite ovaj izraz, promenite veličinu nekih slova, izmenite neka slova u brojeve ili znake interpunkcije tako da liči na „3li7ni“ žargon, ali nemojte ga učiniti takvim da ga i sami zaboravite."
+
+#: src/seahorse-generate-druid.glade.h:4
+msgid "Comment:"
+msgstr "Komentar:"
+
+#: src/seahorse-generate-druid.glade.h:5
+msgid "Confirm"
+msgstr "Potvrdi"
+
+#: src/seahorse-generate-druid.glade.h:6
+msgid "Confirm Passphrase: "
+msgstr "Potvrdi lozinku:"
+
+#: src/seahorse-generate-druid.glade.h:7
+msgid "Confirm passphrase"
+msgstr "Potvrdi lozinku"
+
+#: src/seahorse-generate-druid.glade.h:8
+msgid "Date the Key Expires"
+msgstr "Datum isteka ključa"
+
+#: src/seahorse-generate-druid.glade.h:9
+msgid "Email Address: "
+msgstr "E-adresa: "
+
+#: src/seahorse-generate-druid.glade.h:10
+msgid "Enter Name - Must be at least five letters."
+msgstr "Unesite ime — mora biti bar pet slova."
+
+#: src/seahorse-generate-druid.glade.h:11 src/seahorse-key-manager-store.c:269
+msgid "Expiration Date"
+msgstr "Datum isteka"
+
+#: src/seahorse-generate-druid.glade.h:12
+msgid "Expiration Date: "
+msgstr "Datum isteka: "
+
+#: src/seahorse-generate-druid.glade.h:13
+msgid "Extra High Security"
+msgstr "Veoma dobra bezbednost"
+
+#: src/seahorse-generate-druid.glade.h:14
+msgid "Full Name: "
+msgstr "Puno ime:"
+
+#: src/seahorse-generate-druid.glade.h:15
+msgid "High Security"
+msgstr "Dobra bezbednost"
+
+#: src/seahorse-generate-druid.glade.h:16
+msgid "Key Never Expires"
+msgstr "Ključ nikad ne ističe"
+
+#: src/seahorse-generate-druid.glade.h:17
+msgid ""
+"Keys must be given an appropriate expiration date.  For most people, the "
+"default option of never expires is sufficent.  If you only plan on using the "
+"key for a certain period of time, i.e. for a specific project, you should "
+"pick an expiration date after the projected completion of your project.  "
+"After the expiration date, your private key will still be able to decrypt "
+"messages or data encrypted with your public key.  However, your private key "
+"will no longer sign messages or data."
+msgstr "Ključevi moraju imati odgovarajući datum isteka.  Za većinu ljudi, podrazumevana mogućnost da ključ nikada ne istekne je dovoljna.  Ukoliko želite da ključ koristite na određeno vreme, npr. za naročiti poduhvat, izaberite datum isteka nakon planiranog završetka vašeg poduhvata. Nakon datuma isteka, vaš privatni ključ će i dalje moći da dešifruje poruke ili podatke šifrovane vašim javnim ključem. Međutim, vaš privatni ključ neće više moći da potpisuje poruke ili podatke."
+
+#: src/seahorse-generate-druid.glade.h:18
+msgid "Medium Security"
+msgstr "Srednja bezbednost"
+
+#: src/seahorse-generate-druid.glade.h:19 src/seahorse-key-manager-store.c:154
+#: src/seahorse-key-properties.c:373
+msgid "Never Expires"
+msgstr "Nikad ne ističe"
+
+#: src/seahorse-generate-druid.glade.h:22
+msgid "Passphrase"
+msgstr "Lozinka"
+
+#: src/seahorse-generate-druid.glade.h:24
+msgid "Passphrase:"
+msgstr "Lozinka:"
+
+#: src/seahorse-generate-druid.glade.h:25
+msgid "Personal Information"
+msgstr "Lični podaci"
+
+#: src/seahorse-generate-druid.glade.h:26
+msgid "Seahorse GPG Key Generation Druid"
+msgstr "Pomoćnik za izradu GPG ključa iz Morskog konja"
+
+#: src/seahorse-generate-druid.glade.h:27
+msgid "Seahorse GPG Key Generation Druid Complete"
+msgstr "Završio je pomoćnik za izradu GPG ključa iz Morskog konja"
+
+#: src/seahorse-generate-druid.glade.h:28
+msgid "Seahorse Key Generation Druid"
+msgstr "Pomoćnik za izradu ključa iz Morskog konja"
+
+#: src/seahorse-generate-druid.glade.h:29
+msgid "Security Level"
+msgstr "Nivo bezbednosti"
+
+#: src/seahorse-generate-druid.glade.h:30
+msgid ""
+"The Medium Security level is the default and should be acceptable for "
+"general everyday usage.  The High Security level should be selected if you "
+"know your data will be actively scrutinized.  The Extra High level should be "
+"selected if you know your data is actively scrutinized and will be under "
+"cryptographic attack. "
+msgstr "Nivo srednje bezbednosti je podrazumevan i verovatno prihvatljiv za svakodnevni rad.  Nivo dobre bezbednosti treba koristiti kada znate da će vaši podaci biti detaljno pregledani.  Naročito dobar nivo bezbednosti koristite ako znate da vaše podatke prate i obrađuju kriptografski."
+
+#: src/seahorse-generate-druid.glade.h:31
+msgid "This druid will guide you through the steps of creating a GPG key pair."
+msgstr "Ovaj pomoćnik će vas provesti kroz korake izrade para GPG ključeva."
+
+#: src/seahorse-generate-druid.glade.h:32
+msgid ""
+"To create a key and tie it to your identity, the following information is "
+"needed: Full Name, Email Address, and Comment.  These values will be given "
+"to the name of your key in the following "
+"manner:                              Full Name (Comment) <email address>."
+msgstr ""
+"Da napravite ključ i vežete ga za vašu ličnost, neophodni su sledeći podaci: ime i prezime, e-adresa i primedba.  Ove vrednosti će predstavljati ime vašeg ključa na sledeći način:\n"
+"Ime Prezime (Primedba) <adresa e-pošte>."
+
+#: src/seahorse-generate-druid.glade.h:33
+msgid "druidpage_pass"
+msgstr "druidpage_pass"
+
+#: src/seahorse-generate-druid.glade.h:34
+msgid "druidpage_pinfo"
+msgstr "druidpage_pinfo"
+
+#: src/seahorse-generate-druid.glade.h:35
+msgid "keygen_druid"
+msgstr "keygen_druid"
+
+#: src/seahorse-generate-select.glade.h:1
+msgid "Advanced"
+msgstr "Napredno"
+
+#: src/seahorse-generate-select.glade.h:2
+msgid "Druid"
+msgstr "Pomoćnik"
+
+#: src/seahorse-generate-select.glade.h:3
+msgid "Generate a key via the druid."
+msgstr "Napravi ključ uz pomoćnika."
+
+#: src/seahorse-generate-select.glade.h:4
+msgid "Generate a key with the advanced dialog."
+msgstr "Napravi ključ pomoću naprednog prozorčeta."
+
+#: src/seahorse-generate-select.glade.h:5
+msgid "Method Select"
+msgstr "Izbor načina"
+
+#: src/seahorse-generate-select.glade.h:6
+msgid "Select a method to generate your new key."
+msgstr "Izaberite način za obrazovanje vašeg ključa."
+
+#: src/seahorse-generate-select.glade.h:7
+msgid "radio_druid"
+msgstr "radio_druid"
 
 #: src/seahorse-import.glade.h:2
 msgid "Enter a unique key id"
@@ -898,14 +1085,6 @@ msgstr "_Alatke"
 #: src/seahorse-key-manager-store.c:147 src/seahorse-key-properties.c:361
 msgid "Expired"
 msgstr "Istekao"
-
-#: src/seahorse-key-manager-store.c:154 src/seahorse-key-properties.c:373
-msgid "Never Expires"
-msgstr "Nikad ne ističe"
-
-#: src/seahorse-key-manager-store.c:269
-msgid "Expiration Date"
-msgstr "Datum isteka"
 
 #: src/seahorse-key-manager-store.c:273
 msgid "Trust"
