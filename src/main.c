@@ -141,7 +141,8 @@ main (int argc, char **argv)
 			return 1;
 		}
 		else {
-			show_info (g_strdup_printf (_("Imported %d keys"), keys));
+			show_info (g_strdup_printf (keys == 1 ? _("Imported key") : 
+                                            _("Imported %d keys"), keys));
 			return 0;
 		}
 	}

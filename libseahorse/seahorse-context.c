@@ -21,6 +21,7 @@
 
 #include <gnome.h>
 #include <eel/eel.h>
+#include <libintl.h>
 
 #include "seahorse-context.h"
 #include "seahorse-marshal.h"
@@ -425,7 +426,7 @@ do_key_pairs (SeahorseContext *sctx)
 	
 	did_pairs = TRUE;
 	seahorse_context_show_progress (sctx, g_strdup_printf (
-		_("Loaded %d key pairs"), total), -1);
+		ngettext(_("Loaded %d key pair"), _("Loaded %d key pairs"), total), total), -1);
 }
 
 /* loads single keys, doing pairs first */
@@ -446,7 +447,7 @@ do_key_list (SeahorseContext *sctx)
 	
 	did_keys = TRUE;
 	seahorse_context_show_progress (sctx, g_strdup_printf (
-		_("Loaded %d keys"), total), -1);
+		ngettext(_("Loaded %d key"), _("Loaded %d keys"), total), total), -1);
 	
 }
 

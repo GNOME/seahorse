@@ -20,6 +20,7 @@
  */
 
 #include <gnome.h>
+#include <libintl.h>
 
 #include "seahorse-libdialogs.h"
 #include "seahorse-widget.h"
@@ -63,7 +64,8 @@ selection_changed (GtkTreeSelection *selection, SeahorseWidget *swidget)
 {
 	GList *list = NULL, *keys = NULL;
 	gint selected = 0, invalid = 0;
-	
+	gchar* msg;
+   
 	list = seahorse_key_store_get_selected_keys (GTK_TREE_VIEW (
 		glade_xml_get_widget (swidget->xml, VIEW)));
 	selected = g_list_length (list);
@@ -72,10 +74,22 @@ selection_changed (GtkTreeSelection *selection, SeahorseWidget *swidget)
 		if (seahorse_key_get_validity (keys->data) < SEAHORSE_VALIDITY_FULL)
 			invalid++;
 	}
-	
-	gnome_appbar_set_status (GNOME_APPBAR (glade_xml_get_widget (swidget->xml, "status")),
-		g_strdup_printf (_("Selected %d not fully valid keys and %d fully valid keys"),
-			invalid, selected - invalid));
+ 
+    if(invalid == 0)
+    {
+        msg = g_strdup_printf(
+            ngettext(_("Selected %d keys"), _("Selected %d keys"), selected), selected);
+    }
+    
+    else 
+    {
+        msg = g_strdup_printf(
+            ngettext(_("Selected %d not fully valid key"), _("Selected %d keys (%d not fully valid)"), selected), selected, invalid);
+    }
+        
+	gnome_appbar_set_status (GNOME_APPBAR (glade_xml_get_widget (swidget->xml, "status")), msg);
+    g_free(msg);
+
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, OK), selected > 0);
 	
 	g_list_free (list);
