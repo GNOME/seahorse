@@ -1,51 +1,68 @@
 <gconfschemafile>
 	<schemalist>
 		<schema>
-			<key>/schemas/apps/seahorse/preferences/default_key</key>
-			<applyto>/apps/seahorse/preferences/default_key</applyto>
-			<owner>seahorse</owner>
-			<type>string</type>
-			<default></default>
-			<locale name="C">
-				<short>Default Key</short>
-				<long>ID of the default key to use for signing and adding a revoker.</long>
-			</locale>
-		</schema>
-		<schema>
-			<key>/schemas/apps/seahorse/preferences/text_mode</key>
-			<applyto>/apps/seahorse/preferences/text_mode</applyto>
+			<key>/schemas/desktop/pgp/ascii_armor</key>
+			<applyto>/desktop/pgp/ascii_armor</applyto>
 			<owner>seahorse</owner>
 			<type>bool</type>
 			<default>FALSE</default>
 			<locale name="C">
-				<short>Use Canonical Text Mode</short>
-				<long>If enabled, relevant output will be in canonical text mode.</long>
+				<short>Whether to use ASCII Armor</short>
+				<long>If set to true, then all output from pgp
+				operations will be ASCII text. Files will have
+				a '.asc' extension.</long>
 			</locale>
 		</schema>
 		<schema>
-			<key>/schemas/apps/seahorse/preferences/ascii_armor</key>
-			<applyto>/apps/seahorse/preferences/ascii_armor</applyto>
+			<key>/schemas/desktop/pgp/text_mode</key>
+			<applyto>/desktop/pgp/text_mode</applyto>
 			<owner>seahorse</owner>
 			<type>bool</type>
-			<default>TRUE</default>
+			<default>FALSE</default>
 			<locale name="C">
-				<short>Use Ascii Armor</short>
-				<long>If enabled, relevant output (file or text) will be encoded in ascii armor.
-				Output that is not in ascii armor is not viewable with a regular text viewer.
-				Key servers only accept ascii armored keys.</long>
+				<short>Whether to use canonical text mode</short>
+				<long>If set to true, then output from certain
+				pgp operations will be in canonical text mode.
+				Text mode is generally only needed for RFC 2015 signatures.
+				RFC 3156 removes the need for text mode.</long>
 			</locale>
 		</schema>
 		<schema>
-			<key>/schemas/apps/seahorse/listing/progress_update</key>
-			<applyto>/apps/seahorse/listing/progress_update</applyto>
+			<key>/schemas/desktop/pgp/default_key</key>
+			<applyto>/desktop/pgp/default_key</applyto>
+			<owner>seahorse</owner>
+			<type>string</type>
+			<default></default>
+			<locale name="C">
+				<short>ID of the default key</short>
+				<long>This specifies the default key to use for
+				cerain operations, mainly signing.</long>
+			</locale>
+		</schema>
+		<schema>
+			<key>/schemas/desktop/pgp/encrypt_to_self</key>
+			<applyto>/desktop/pgp/encrypt_to_self</applyto>
+			<owner>seahorse</owner>
+			<type>bool</type>
+			<default>FALSE</default>
+			<locale name="C">
+				<short>Whether to always encrypt to default key</short>
+				<long>If set to true, then the default key will
+				always be added to an encryption recipients list.</long>
+			</locale>
+		</schema>
+		<schema>
+			<key>/schemas/desktop/pgp/progress_update</key>
+			<applyto>/desktop/pgp/progress_update</applyto>
 			<owner>seahorse</owner>
 			<type>int</type>
 			<default>20</default>
 			<locale name="C">
-				<short>Progress update for listing operations</short>
-				<long>When to emit a progress signal during a key listing operation.
-				The default is to update the progress bar every 20 keys.
-				-1 indicates never.</long>
+				<short>How often to show progress during listing</short>
+				<long>This specifies how often the progress signal
+				is emitted during a listing operation. By default,
+				the signal is emitted for every 20 keys processed.
+				A value of -1 will cause the signal to never be emitted.</long>
 			</locale>
 		</schema>
 		<schema>
@@ -135,20 +152,6 @@
 				<short>Style of toolbar buttons and labels</short>
 				<long>The toolbar button and label style. Options are
 				'default', 'both', 'both_horiz', 'icons', and 'text'.</long>
-			</locale>
-		</schema>
-		<schema>
-			<key>/schemas/apps/seahorse/recipients/validity_threshold</key>
-			<applyto>/apps/seahorse/recipients/validity_threshold</applyto>
-			<owner>seahorse</owner>
-			<type>int</type>
-			<default>10</default>
-			<locale name="C">
-				<short>Threshold for asking about validity</short>
-				<long>For encryption recipients, if more keys than
-				the threshold are selected, only one dialog will
-				be used to confirm validity. Otherwise the user
-				must confirm the validity for each key.</long>
 			</locale>
 		</schema>
 	</schemalist>

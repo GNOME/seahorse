@@ -27,6 +27,11 @@
 
 #include "seahorse-context.h"
 
+typedef gchar*	(*SeahorseEncryptFunc)	(SeahorseContext	*sctx,
+					 const gchar		*data,
+					 GpgmeRecipients	recips,
+					 GpgmeError		*err);
+
 gint		seahorse_op_import_file		(SeahorseContext	*sctx,
 						 const gchar		*path,
 						 GpgmeError		*err);

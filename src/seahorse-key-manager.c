@@ -35,8 +35,8 @@
 
 #define KEY_LIST "key_list"
 
-#define STATUSBAR_VISIBLE KEY_UI "/statusbar_visible"
-#define TOOLBAR_VISIBLE KEY_UI "/toolbar_visible"
+#define STATUSBAR_VISIBLE UI_SCHEMAS "/statusbar_visible"
+#define TOOLBAR_VISIBLE UI_SCHEMAS "/toolbar_visible"
 
 #define GNOME_INTERFACE "/desktop/gnome/interface"
 #define GNOME_TOOLBAR_STYLE GNOME_INTERFACE "/toolbar_style"
@@ -368,11 +368,11 @@ gconf_notification (GConfClient *gclient, guint id, GConfEntry *entry, SeahorseW
 			gtk_widget_hide (widget);
 	}
 	else if (g_str_equal (key, GNOME_TOOLBAR_STYLE) &&
-	g_str_equal (TOOLBAR_DEFAULT, eel_gconf_get_string (KEY_TOOLBAR_STYLE))) {
+	g_str_equal (TOOLBAR_DEFAULT, eel_gconf_get_string (TOOLBAR_STYLE_KEY))) {
 		set_toolbar_style (GTK_TOOLBAR (glade_xml_get_widget (swidget->xml, "toolbar")),
 			gconf_value_get_string (value));
 	}
-	else if (g_str_equal (key, KEY_TOOLBAR_STYLE)) {
+	else if (g_str_equal (key, TOOLBAR_STYLE_KEY)) {
 		widget = glade_xml_get_widget (swidget->xml, "toolbar");
 		
 		/* if changed to default, use system settings */
@@ -445,8 +445,8 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 	g_signal_connect (swidget->sctx, "progress", G_CALLBACK (show_progress), swidget);
 	
 	/* init gclient */
-	eel_gconf_notification_add (KEY_UI, (GConfClientNotifyFunc) gconf_notification, swidget);
-	eel_gconf_monitor_add (KEY_UI);
+	eel_gconf_notification_add (UI_SCHEMAS, (GConfClientNotifyFunc) gconf_notification, swidget);
+	eel_gconf_monitor_add (UI_SCHEMAS);
 	eel_gconf_notification_add (GNOME_INTERFACE, (GConfClientNotifyFunc) gconf_notification, swidget);
 	eel_gconf_monitor_add (GNOME_INTERFACE);
 	
@@ -454,7 +454,7 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 	glade_xml_signal_connect_data (swidget->xml, "toolbar_activate",
 		G_CALLBACK (view_bar), TOOLBAR_VISIBLE);
 	set_toolbar_style (GTK_TOOLBAR (glade_xml_get_widget (swidget->xml, "toolbar")),
-		eel_gconf_get_string (KEY_TOOLBAR_STYLE));
+		eel_gconf_get_string (TOOLBAR_STYLE_KEY));
 	visible = eel_gconf_get_boolean (TOOLBAR_VISIBLE);
 	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (
 		glade_xml_get_widget (swidget->xml, "view_toolbar")), visible);

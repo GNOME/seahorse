@@ -24,32 +24,23 @@
 
 #include "seahorse-context.h"
 
-#define SCHEMA_ROOT "/apps/seahorse"
+#define SEAHORSE_SCHEMAS "/apps/seahorse"
 
-#define PREFERENCES SCHEMA_ROOT "/preferences"
-#define ASCII_ARMOR PREFERENCES "/ascii_armor"
-#define TEXT_MODE PREFERENCES "/text_mode"
-#define DEFAULT_KEY PREFERENCES "/default_key_id"
+#define LISTING_SCHEMAS SEAHORSE_SCHEMAS "/listing"
+#define SHOW_VALIDITY_KEY LISTING_SCHEMAS "/show_validity"
+#define SHOW_EXPIRES_KEY LISTING_SCHEMAS "/show_expires"
+#define SHOW_TRUST_KEY LISTING_SCHEMAS "/show_trust"
+#define SHOW_LENGTH_KEY LISTING_SCHEMAS "/show_length"
+#define SHOW_TYPE_KEY LISTING_SCHEMAS "/show_type"
 
-#define LISTING SCHEMA_ROOT "/listing"
-#define SHOW_VALIDITY LISTING "/show_validity"
-#define SHOW_EXPIRES LISTING "/show_expires"
-#define SHOW_TRUST LISTING "/show_trust"
-#define SHOW_LENGTH LISTING "/show_length"
-#define SHOW_TYPE LISTING "/show_type"
-#define PROGRESS_UPDATE LISTING "/progress_update"
-
-#define KEY_UI SCHEMA_ROOT "/ui"
-#define KEY_TOOLBAR_STYLE KEY_UI "/toolbar_style"
+#define UI_SCHEMAS SEAHORSE_SCHEMAS "/ui"
+#define TOOLBAR_STYLE_KEY UI_SCHEMAS "/toolbar_style"
 
 #define TOOLBAR_DEFAULT "default"
 #define TOOLBAR_BOTH "both"
 #define TOOLBAR_BOTH_HORIZ "both_horiz"
 #define TOOLBAR_ICONS "icons"
 #define TOOLBAR_TEXT "text"
-
-#define RECIPIENTS SCHEMA_ROOT "/recipients"
-#define VALIDITY_THRESHOLD RECIPIENTS "/validity_threshold"
 
 void		seahorse_preferences_show		(SeahorseContext	*sctx);
 

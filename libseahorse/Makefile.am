@@ -27,7 +27,6 @@ libseahorse_a_SOURCES = \
 
 INCLUDES = -I$(top_builddir) \
 	-I$(top_srcdir) \
-	-I$(top_srcdir)/src \
 	-I$(top_srcdir)/libseahorse \
 	$(SEAHORSE_CFLAGS) \
 	-DDATA_DIR=\""$(datadir)"\" \

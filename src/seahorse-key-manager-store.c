@@ -220,15 +220,15 @@ gconf_notification (GConfClient *gclient, guint id, GConfEntry *entry, GtkTreeVi
 	key = gconf_entry_get_key (entry);
 	value = gconf_entry_get_value (entry);
 	
-	if (g_str_equal (key, SHOW_VALIDITY))
+	if (g_str_equal (key, SHOW_VALIDITY_KEY))
 		col = gtk_tree_view_get_column (view, VALIDITY_STR-1);
-	else if (g_str_equal (key, SHOW_EXPIRES))
+	else if (g_str_equal (key, SHOW_EXPIRES_KEY))
 		col = gtk_tree_view_get_column (view, EXPIRES_STR-2);
-	else if (g_str_equal (key, SHOW_TRUST))
+	else if (g_str_equal (key, SHOW_TRUST_KEY))
 		col = gtk_tree_view_get_column (view, TRUST_STR-3);
-	else if (g_str_equal (key, SHOW_LENGTH))
+	else if (g_str_equal (key, SHOW_LENGTH_KEY))
 		col = gtk_tree_view_get_column (view, LENGTH-4);
-	else if (g_str_equal (key, SHOW_TYPE))
+	else if (g_str_equal (key, SHOW_TYPE_KEY))
 		col = gtk_tree_view_get_column (view, TYPE-4);
 	else
 		return;
@@ -263,27 +263,27 @@ seahorse_key_manager_store_new (SeahorseContext *sctx, GtkTreeView *view)
 	seahorse_key_store_init (skstore, view, COLS, columns);
 	
 	col = seahorse_key_store_append_column (view, _("Validity"), VALIDITY_STR);
-	gtk_tree_view_column_set_visible (col, eel_gconf_get_boolean (SHOW_VALIDITY));
+	gtk_tree_view_column_set_visible (col, eel_gconf_get_boolean (SHOW_VALIDITY_KEY));
 	gtk_tree_view_column_set_sort_column_id (col, VALIDITY);
 	
 	col = seahorse_key_store_append_column (view, _("Expiration Date"), EXPIRES_STR);
-	gtk_tree_view_column_set_visible (col, eel_gconf_get_boolean (SHOW_EXPIRES));
+	gtk_tree_view_column_set_visible (col, eel_gconf_get_boolean (SHOW_EXPIRES_KEY));
 	gtk_tree_view_column_set_sort_column_id (col, EXPIRES);
 
 	col = seahorse_key_store_append_column (view, _("Trust"), TRUST_STR);
-	gtk_tree_view_column_set_visible (col, eel_gconf_get_boolean (SHOW_TRUST));
+	gtk_tree_view_column_set_visible (col, eel_gconf_get_boolean (SHOW_TRUST_KEY));
 	gtk_tree_view_column_set_sort_column_id (col, TRUST);
 	
 	col = seahorse_key_store_append_column (view, _("Length"), LENGTH);
-	gtk_tree_view_column_set_visible (col, eel_gconf_get_boolean (SHOW_LENGTH));
+	gtk_tree_view_column_set_visible (col, eel_gconf_get_boolean (SHOW_LENGTH_KEY));
 	gtk_tree_view_column_set_sort_column_id (col, LENGTH);
 	
 	col = seahorse_key_store_append_column (view, _("Type"), TYPE);
-	gtk_tree_view_column_set_visible (col, eel_gconf_get_boolean (SHOW_TYPE));
+	gtk_tree_view_column_set_visible (col, eel_gconf_get_boolean (SHOW_TYPE_KEY));
 	gtk_tree_view_column_set_sort_column_id (col, TYPE);
 	
-	eel_gconf_notification_add (LISTING, (GConfClientNotifyFunc)gconf_notification, view);
-	eel_gconf_monitor_add (LISTING);
+	eel_gconf_notification_add (LISTING_SCHEMAS, (GConfClientNotifyFunc)gconf_notification, view);
+	eel_gconf_monitor_add (LISTING_SCHEMAS);
 	
 	seahorse_context_get_keys (sctx);
 	

@@ -25,9 +25,9 @@
 #include "seahorse-context.h"
 #include "seahorse-marshal.h"
 #include "seahorse-libdialogs.h"
-#include "seahorse-preferences.h"
 
-#define MAX_THREADS 5
+#define PROGRESS_UPDATE PGP_SCHEMAS "/progress_update"
+//#define MAX_THREADS 5
 
 struct _SeahorseContextPrivate
 {
@@ -147,13 +147,13 @@ seahorse_context_init (SeahorseContext *sctx)
 	/* init signer */
 	set_gpgme_signer (sctx, eel_gconf_get_string (DEFAULT_KEY));
 	/* set prefs */
-	gpgme_set_armor (sctx->ctx, eel_gconf_get_boolean (ASCII_ARMOR));
-	gpgme_set_textmode (sctx->ctx, eel_gconf_get_boolean (TEXT_MODE));
+	gpgme_set_armor (sctx->ctx, eel_gconf_get_boolean (ARMOR_KEY));
+	gpgme_set_textmode (sctx->ctx, eel_gconf_get_boolean (TEXTMODE_KEY));
 	/* do callbacks */
 	gpgme_set_passphrase_cb (sctx->ctx, (GpgmePassphraseCb)seahorse_passphrase_get, sctx);
 	gpgme_set_progress_cb (sctx->ctx, gpgme_progress, sctx);
-	eel_gconf_notification_add (PREFERENCES, (GConfClientNotifyFunc)gconf_notification, sctx);
-	eel_gconf_monitor_add (PREFERENCES);
+	eel_gconf_notification_add (PGP_SCHEMAS, (GConfClientNotifyFunc)gconf_notification, sctx);
+	eel_gconf_monitor_add (PGP_SCHEMAS);
 }
 
 /* destroy all keys, free private vars */
@@ -162,15 +162,13 @@ seahorse_context_finalize (GObject *gobject)
 {
 	SeahorseContext *sctx;
 	SeahorseKey *skey;
-	GList *list = NULL;
+	GList *list = NULL, *keys = NULL;
 	
 	sctx = SEAHORSE_CONTEXT (gobject);
-	list = g_list_concat (g_list_copy (sctx->priv->key_pairs), sctx->priv->single_keys);
-	/* destroy all keys */
-	while (list != NULL && (skey = list->data) != NULL) {
-		seahorse_key_destroy (skey);
-		list = g_list_next (list);
-	}
+	list = g_list_concat (g_list_copy (sctx->priv->key_pairs), g_list_copy (sctx->priv->single_keys));
+	
+	for (keys = list; keys != NULL; keys = g_list_next (keys))
+		seahorse_key_destroy (keys->data);
 	
 	g_list_free (sctx->priv->key_pairs);
 	//g_mutex_free (sctx->priv->pair_mutex);
@@ -269,9 +267,9 @@ gconf_notification (GConfClient *gclient, guint id, GConfEntry *entry, SeahorseC
 	const gchar *key = gconf_entry_get_key (entry);
 	GConfValue *value = gconf_entry_get_value (entry);
 	
-	if (g_str_equal (key, ASCII_ARMOR))
+	if (g_str_equal (key, ARMOR_KEY))
 		gpgme_set_armor (sctx->ctx, gconf_value_get_bool (value));
-	else if (g_str_equal (key, TEXT_MODE))
+	else if (g_str_equal (key, TEXTMODE_KEY))
 		gpgme_set_textmode (sctx->ctx, gconf_value_get_bool (value));
 	else if (g_str_equal (key, DEFAULT_KEY))
 		set_gpgme_signer (sctx, gconf_value_get_string (value));
@@ -506,27 +504,24 @@ seahorse_context_get_key_pairs (SeahorseContext *sctx)
 SeahorseKey*
 seahorse_context_get_key (SeahorseContext *sctx, GpgmeKey key)
 {
-	GList *list;
+	GList *list = NULL, *keys = NULL;
 	SeahorseKey *skey = NULL;
 	const gchar *id1, *id2 = "";
 	
-	g_return_val_if_fail (sctx != NULL && SEAHORSE_IS_CONTEXT (sctx), NULL);
+	g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), NULL);
 	g_return_val_if_fail (key != NULL, NULL);
 	
 	list = seahorse_context_get_keys (sctx);
 	id1 = seahorse_key_get_id (key);
 	
-	/* Search by keyid */
-	while (list != NULL && (skey = list->data) != NULL) {
-		id2 = seahorse_key_get_id (skey->key);
-		
-		if (g_str_equal (id1, id2))
+	for (keys = list; keys != NULL; keys = g_list_next (keys)) {
+		id2 = seahorse_key_get_id (SEAHORSE_KEY (keys->data)->key);
+		if (id2 != NULL && g_str_equal (id1, id2))
 			break;
-		
-		list = g_list_next (list);
 	}
 	
 	gpgme_key_unref (key);
+	g_list_free (list);
 	
 	if (!g_str_equal (id1, id2))
 		return NULL;

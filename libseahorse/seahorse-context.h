@@ -27,7 +27,10 @@
 
 #include "seahorse-key-pair.h"
 
-
+#define PGP_SCHEMAS "/desktop/pgp"
+#define ARMOR_KEY PGP_SCHEMAS "/ascii_armor"
+#define TEXTMODE_KEY PGP_SCHEMAS "/text_mode"
+#define DEFAULT_KEY PGP_SCHEMAS "/default_key"
 
 #define SEAHORSE_TYPE_CONTEXT			(seahorse_context_get_type ())
 #define SEAHORSE_CONTEXT(obj)			(GTK_CHECK_CAST ((obj), SEAHORSE_TYPE_CONTEXT, SeahorseContext))

@@ -23,7 +23,6 @@
 
 #include "seahorse-signer-menu.h"
 #include "seahorse-signer-menu-item.h"
-#include "seahorse-preferences.h"
 
 enum {
 	PROP_0,
@@ -208,32 +207,33 @@ void
 seahorse_signer_menu_new (SeahorseContext *sctx, GtkOptionMenu *optionmenu)
 {
 	GtkWidget *widget;
-	GList *list = NULL;
+	GList *list = NULL, *keys = NULL;
 	SeahorseKeyPair *skpair, *signer = NULL;
 	gint index = 0, history = 0;
+	const gchar *id1 = "", *id2;
 	
 	widget = g_object_new (SEAHORSE_TYPE_SIGNER_MENU, "ctx", sctx, NULL);
 	
 	list = seahorse_context_get_key_pairs (sctx);
 	signer = seahorse_context_get_default_key (sctx);
 	
-	while (list != NULL && (skpair = list->data) != NULL) {
+	if (signer != NULL)
+		id1 = seahorse_key_get_id (SEAHORSE_KEY (signer)->key);
+	
+	/* append all keys that can sign */
+	for (keys = list; keys != NULL; keys = g_list_next (keys)) {
+		skpair = keys->data;
 		if (seahorse_key_pair_can_sign (skpair)) {
 			append_key (SEAHORSE_SIGNER_MENU (widget), skpair);
-			/* if no signer, activate first */
-			if (signer == NULL && index == 0)
-				gtk_menu_item_activate (GTK_MENU_ITEM (widget));
-			/* else check if is signer */
-			else if (signer != NULL && g_str_equal (
-			seahorse_key_get_keyid (SEAHORSE_KEY (skpair), 0),
-			seahorse_key_get_keyid (SEAHORSE_KEY (signer), 0)))
+			id2 = seahorse_key_get_id (SEAHORSE_KEY (skpair)->key);
+			/* if equal, set history to index of current pair */
+			if (g_str_equal (id1, id2))
 				history = index;
-			
 			index++;
 		}
-		
-		list = g_list_next (list);
 	}
+	
+	g_list_free (list);
 	
 	gtk_option_menu_set_menu (optionmenu, widget);
 	gtk_option_menu_set_history (optionmenu, history);
