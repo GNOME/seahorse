@@ -32,6 +32,7 @@ seahorse_SOURCES = main.c \
 	seahorse-windows.h \
 	seahorse-key-properties.c \
 	seahorse-revoke.c \
+    seahorse-expires.c \
 	seahorse-sign.c \
 	seahorse-delete.c \
 	seahorse-add-uid.c \
@@ -48,6 +49,7 @@ glade_DATA = \
 	seahorse-key-manager.glade \
 	seahorse-key-properties.glade \
 	seahorse-revoke.glade \
+    seahorse-expires.glade \
 	seahorse-change-passphrase.glade \
 	seahorse-sign.glade \
 	seahorse-generate-select.glade \

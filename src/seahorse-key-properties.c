@@ -62,59 +62,6 @@ disabled_toggled (GtkToggleButton *togglebutton, SeahorseWidget *swidget)
 }
 
 static void
-primary_expires_date_changed (GnomeDateEdit *gde, SeahorseWidget *swidget)
-{
-    seahorse_key_pair_op_set_expires (SEAHORSE_KEY_PAIR (
-        SEAHORSE_KEY_WIDGET (swidget)->skey), 0, gnome_date_edit_get_time (gde));
-}
-
-static void
-subkey_expires_date_changed (GnomeDateEdit *gde, SeahorseWidget *swidget)
-{
-    seahorse_key_pair_op_set_expires (SEAHORSE_KEY_PAIR (
-        SEAHORSE_KEY_WIDGET (swidget)->skey), get_subkey_index (swidget),
-        gnome_date_edit_get_time (gde));
-}
-
-static void
-set_date_edit_sensitive (GtkToggleButton *togglebutton, GtkWidget *widget)
-{
-    gtk_widget_set_sensitive (widget, !gtk_toggle_button_get_active (togglebutton));
-}
-
-static void
-never_expires_primary_toggled (GtkToggleButton *togglebutton, SeahorseWidget *swidget)
-{
-    SeahorseKey *skey;
- 
-    skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
-    
-    /* if want to never expire & expires, set to never expires */
-    if (gtk_toggle_button_get_active (togglebutton) && skey->key->subkeys->expires) {
-        seahorse_key_pair_op_set_expires (SEAHORSE_KEY_PAIR (skey), 0, 0);
-    }
-}
-
-static void
-never_expires_subkey_toggled (GtkToggleButton *togglebutton, SeahorseWidget *swidget)
-{
-    SeahorseKey *skey;
-    gint index;
-    gpgme_subkey_t subkey;
- 
-    skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
-    index = get_subkey_index (swidget);
-
-    subkey = seahorse_key_get_nth_subkey (skey, index);
-    g_return_if_fail (subkey != NULL);
-    
-    /* if want to never expire & expires, set to never expires */
-    if (gtk_toggle_button_get_active (togglebutton) && subkey->expires) {
-        seahorse_key_pair_op_set_expires (SEAHORSE_KEY_PAIR (skey), index, 0);
-    }
-}
-
-static void
 do_stat_label (const gchar *label, GtkTable *table, guint left, guint top,
 	       gboolean selectable, GtkTooltips *tips, const gchar *tip)
 {
@@ -239,10 +186,20 @@ key_property_labels (SeahorseWidget *swidget)
 }
 
 static void
+expiry_clicked (GtkWidget *widget, SeahorseWidget *swidget)
+{
+    SeahorseKey *skey;
+    skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
+    
+    if (SEAHORSE_IS_KEY_PAIR (skey))
+        seahorse_expires_new(swidget->sctx, skey, get_subkey_index(swidget));
+}
+
+static void
 do_stats (SeahorseWidget *swidget, GtkTable *table, guint top, guint index, gpgme_subkey_t subkey)
 {
     SeahorseKey *skey;
-    GtkWidget *widget, *date_edit;
+    GtkWidget *widget;
     GtkTooltips *tips;
     const gchar *str;
     gchar * buf;
@@ -283,40 +240,20 @@ do_stats (SeahorseWidget *swidget, GtkTable *table, guint top, guint index, gpgm
     /* expires */
     do_stat_label (_("Expires:"), table, 0, top+2, FALSE, NULL, NULL);
  
-   if (!SEAHORSE_IS_KEY_PAIR (skey)) {
-        if (subkey->expires)
-            do_stat_label (seahorse_util_get_date_string (subkey->expires),
-                table, 1, top+2, FALSE, NULL, NULL);
-        else
-            do_stat_label (_("Never"), table, 1, top+2, FALSE, NULL, NULL);
-   } else {
-        date_edit = gnome_date_edit_new (subkey->expires, FALSE, FALSE);
-        gtk_widget_show (date_edit);
-        gtk_table_attach (table, date_edit, 1, 2, top+2, top+3, GTK_FILL, 0, 0, 0);
-        gtk_widget_set_sensitive (date_edit, subkey->expires);
-     
-        if (index == 0)
-            g_signal_connect_after (GNOME_DATE_EDIT (date_edit), "date_changed",
-                G_CALLBACK (primary_expires_date_changed), swidget);
-        else
-            g_signal_connect_after (GNOME_DATE_EDIT (date_edit), "date_changed",
-                G_CALLBACK (subkey_expires_date_changed), swidget);
-        
-        widget = gtk_check_button_new_with_mnemonic (_("_Never"));
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), !subkey->expires);
-        gtk_tooltips_set_tip (tips, widget, _("If key never expires"), NULL);
+    if (subkey->expires)
+        do_stat_label (seahorse_util_get_date_string (subkey->expires),
+                       table, 1, top+2, FALSE, NULL, NULL);
+    else
+        do_stat_label (_("Never"), table, 1, top+2, FALSE, NULL, NULL);
+    
+    if (SEAHORSE_IS_KEY_PAIR (skey)) {
+        widget = gtk_button_new_with_mnemonic(_("Change Expiry Date"));
+        gtk_button_set_relief (GTK_BUTTON (widget), GTK_RELIEF_HALF);
         gtk_widget_show (widget);
-        gtk_table_attach (table, widget, 2, 3, top+2, top+3, GTK_FILL, 0, 0, 0);
+        gtk_table_attach (table, widget, 2, 3, top + 2, top + 3, GTK_FILL, 0, 0, 0);
        
-        g_signal_connect_after (GTK_TOGGLE_BUTTON (widget), "toggled",
-            G_CALLBACK (set_date_edit_sensitive), date_edit);
-      
-        if (index == 0)
-            g_signal_connect_after (GTK_TOGGLE_BUTTON (widget), "toggled",
-                G_CALLBACK (never_expires_primary_toggled), swidget);
-        else
-            g_signal_connect_after (GTK_TOGGLE_BUTTON (widget), "toggled",
-                G_CALLBACK (never_expires_subkey_toggled), swidget);
+        g_signal_connect_after (GTK_BUTTON (widget), "clicked", 
+                                G_CALLBACK (expiry_clicked), swidget);      
     }
     
 }    

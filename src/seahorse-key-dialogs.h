@@ -32,6 +32,10 @@ void		seahorse_key_properties_new	(SeahorseContext	*sctx,
 void		seahorse_add_revoker_new	(SeahorseContext	*sctx,
 						 SeahorseKey		*skey);
 
+void        seahorse_expires_new        (SeahorseContext *sctx, 
+                         SeahorseKey *skey, 
+                         const guint index);
+                         
 void		seahorse_add_subkey_new		(SeahorseContext	*sctx,
 						 SeahorseKey		*skey);
 
