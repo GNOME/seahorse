@@ -174,8 +174,7 @@ append_key (SeahorseSignerMenu *smenu, SeahorseKey *skey)
 {
 	GtkWidget *widget;
 	
-	if (seahorse_key_can_sign (skey) && 
-	seahorse_context_key_has_secret (smenu->sctx, skey)) {
+	if (seahorse_key_can_sign (skey)) {
 		widget = seahorse_signer_menu_item_new (skey);
 		gtk_menu_shell_append (GTK_MENU_SHELL (smenu), widget);
 		g_signal_connect_after (GTK_MENU_ITEM (widget), "activate",
@@ -209,7 +208,7 @@ seahorse_signer_menu_new (SeahorseContext *sctx, GtkOptionMenu *optionmenu)
 	
 	widget = g_object_new (SEAHORSE_TYPE_SIGNER_MENU, "ctx", sctx, NULL);
 	
-	list = seahorse_context_get_keys (sctx);
+	list = seahorse_context_get_key_pairs (sctx);
 	signer = seahorse_context_get_last_signer (sctx);
 	
 	while (list != NULL && (skey = list->data) != NULL) {

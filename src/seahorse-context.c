@@ -31,8 +31,10 @@
 
 struct _SeahorseContextPrivate
 {
-	GList *key_ring;
+	//GList *key_ring;
 	GConfClient *gclient;
+	GList *key_pairs;
+	GList *single_keys;
 };
 
 enum {
@@ -102,23 +104,32 @@ seahorse_context_class_init (SeahorseContextClass *klass)
 static void
 seahorse_context_init (SeahorseContext *sctx)
 {
-	GpgmeProtocol proto;
-	GpgmeError err;
+	GpgmeProtocol proto = GPGME_PROTOCOL_OpenPGP;
+	gchar *keyid;
+	GpgmeKey key;
 	
+	g_return_if_fail (gpgme_engine_check_version (proto) == GPGME_No_Error);
+	g_return_if_fail (gpgme_new (&sctx->ctx) == GPGME_No_Error);
+	g_return_if_fail (gpgme_set_protocol (sctx->ctx, proto) == GPGME_No_Error);
+	
+	/* init private vars */
 	sctx->priv = g_new0 (SeahorseContextPrivate, 1);
-	
+	sctx->priv->single_keys = NULL;
+	sctx->priv->key_pairs = NULL;
 	sctx->priv->gclient = gconf_client_get_default ();
 	
-	proto = GPGME_PROTOCOL_OpenPGP;
-	err = gpgme_engine_check_version (proto);
-	g_return_if_fail (err == GPGME_No_Error);
+	/* init listing */
+	keyid = gconf_client_get_string (sctx->priv->gclient, DEFAULT_KEY, NULL);
+	gpgme_set_keylist_mode (sctx->ctx, GPGME_KEYLIST_MODE_LOCAL);
 	
-	err = gpgme_new (&(sctx->ctx));
-	g_return_if_fail (err == GPGME_No_Error);
+	/* set signer */
+	g_return_if_fail (gpgme_op_keylist_start (sctx->ctx, keyid, TRUE) == GPGME_No_Error);
+	if (gpgme_op_keylist_next (sctx->ctx, &key) == GPGME_No_Error)
+		gpgme_signers_add (sctx->ctx, key);
+	g_return_if_fail (gpgme_op_keylist_end (sctx->ctx) == GPGME_No_Error);
+	gpgme_key_unref (key);
 	
-	err = gpgme_set_protocol (sctx->ctx, proto);
-	g_return_if_fail (err == GPGME_No_Error);
-	
+	/* set prefs */
 	gpgme_set_armor (sctx->ctx, gconf_client_get_bool (
 		sctx->priv->gclient, ARMOR_KEY, NULL));
 	gpgme_set_textmode (sctx->ctx, gconf_client_get_bool (
@@ -131,14 +142,19 @@ seahorse_context_finalize (GObject *gobject)
 {
 	SeahorseContext *sctx;
 	SeahorseKey *skey;
+	GList *list = NULL;
 	
 	sctx = SEAHORSE_CONTEXT (gobject);
+	list = seahorse_context_get_keys (sctx);
 	
-	while (sctx->priv->key_ring != NULL && (
-	skey = sctx->priv->key_ring->data) != NULL)
+	while (list != NULL && (skey = list->data) != NULL) {
 		seahorse_key_destroy (skey);
+		list = g_list_next (list);
+	}
 	
-	g_list_free (sctx->priv->key_ring);
+	g_list_free (sctx->priv->key_pairs);
+	g_list_free (sctx->priv->single_keys);
+	g_free (sctx->priv->gclient);
 	gpgme_release (sctx->ctx);
 	
 	G_OBJECT_CLASS (parent_class)->finalize (gobject);
@@ -151,7 +167,11 @@ seahorse_context_key_destroyed (GtkObject *object, SeahorseContext *sctx)
 	SeahorseKey *skey;
 	
 	skey = SEAHORSE_KEY (object);
-	sctx->priv->key_ring = g_list_remove (sctx->priv->key_ring, skey);
+	
+	if (seahorse_context_key_has_secret (sctx, skey))
+		sctx->priv->key_pairs = g_list_remove (sctx->priv->key_pairs, skey);
+	else
+		sctx->priv->single_keys = g_list_remove (sctx->priv->single_keys, skey);
 	
 	g_signal_handlers_disconnect_by_func (GTK_OBJECT (skey),
 		seahorse_context_key_destroyed, sctx);
@@ -177,10 +197,12 @@ seahorse_context_key_changed (SeahorseKey *skey, SeahorseKeyChange change, Seaho
 
 /* Add a new SeahorseKey to the key ring */
 static SeahorseKey*
-add_key (SeahorseContext *sctx, GpgmeKey key)
+add_key (GpgmeKey key, SeahorseContext *sctx)
 {
 	SeahorseKey *skey;
-		
+	GpgmeKey secret;
+	
+	/*** could get secret first, then do new_pair ***/
 	skey = seahorse_key_new (key);
 	g_object_ref (skey);
 	gtk_object_sink (GTK_OBJECT (skey));
@@ -189,8 +211,25 @@ add_key (SeahorseContext *sctx, GpgmeKey key)
 		G_CALLBACK (seahorse_context_key_destroyed), sctx);
 	g_signal_connect (skey, "changed",
 		G_CALLBACK (seahorse_context_key_changed), sctx);
+	/* insert key into correct list */
+	g_return_if_fail (gpgme_op_keylist_start (sctx->ctx,
+		gpgme_key_get_string_attr (key, GPGME_ATTR_FPR, NULL, 0), TRUE) == GPGME_No_Error);
+	/* check if has secret */
+	if (gpgme_op_keylist_next (sctx->ctx, &secret) == GPGME_No_Error) {
+		sctx->priv->key_pairs = g_list_append (sctx->priv->key_pairs, skey);
+		gpgme_key_unref (secret);
+	}
+	else
+		sctx->priv->single_keys = g_list_append (sctx->priv->single_keys, skey);
+	gpgme_op_keylist_end (sctx->ctx);
 	
 	return skey;
+}
+
+static void
+add_each_key (GpgmeKey key, SeahorseContext *sctx)
+{
+	add_key (key, sctx);
 }
 
 /**
@@ -203,32 +242,7 @@ add_key (SeahorseContext *sctx, GpgmeKey key)
 SeahorseContext*
 seahorse_context_new (void)
 {
-	SeahorseContext *sctx;
-	GpgmeKey key; 
-	GList *list = NULL;
-	gchar *keyid = "";
-	SeahorseKey *skey;
-	
-	sctx = g_object_new (SEAHORSE_TYPE_CONTEXT, NULL);
-	gpgme_set_keylist_mode (sctx->ctx, GPGME_KEYLIST_MODE_LOCAL);
-	
-	g_return_if_fail (gpgme_op_keylist_start (sctx->ctx, NULL, FALSE) == GPGME_No_Error);
-	
-	keyid = gconf_client_get_string (sctx->priv->gclient, DEFAULT_KEY, NULL);
-	if (keyid == NULL)
-		keyid = "";
-	
-	/* Make key ring */
-	while (gpgme_op_keylist_next (sctx->ctx, &key) == GPGME_No_Error) {
-		skey = add_key (sctx, key);
-		list = g_list_append (list, skey);
-		
-		if (g_str_equal (keyid, seahorse_key_get_keyid (skey, 0)))
-			seahorse_context_set_signer (sctx, skey);
-	}
-	sctx->priv->key_ring = g_list_first (list);
-	
-	return sctx;
+	return g_object_new (SEAHORSE_TYPE_CONTEXT, NULL);
 }
 
 /**
@@ -245,6 +259,27 @@ seahorse_context_destroy (SeahorseContext *sctx)
 	gtk_object_destroy (GTK_OBJECT (sctx));
 }
 
+static gboolean
+do_lists (SeahorseContext *sctx)
+{
+	static gboolean init_list = FALSE;
+	GpgmeKey key;
+	GList *keys = NULL;
+	
+	if (!init_list) {
+		g_return_if_fail (gpgme_op_keylist_start (sctx->ctx, NULL, FALSE) == GPGME_No_Error);
+		while (gpgme_op_keylist_next (sctx->ctx, &key) == GPGME_No_Error)
+			keys = g_list_append (keys, key);
+		gpgme_op_keylist_end (sctx->ctx);
+	
+		g_list_foreach (keys, (GFunc)add_each_key, sctx);
+		
+		init_list = TRUE;
+	}
+	
+	return init_list;
+}
+
 /**
  * seahorse_context_get_keys:
  * @sctx: Current #SeahorseContext
@@ -254,11 +289,26 @@ seahorse_context_destroy (SeahorseContext *sctx)
  * Returns: A #GList of #SeahorseKeys
  **/
 GList*
-seahorse_context_get_keys (const SeahorseContext *sctx)
+seahorse_context_get_keys (SeahorseContext *sctx)
 {
-	g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx) && sctx->priv != NULL, NULL);
+	static gboolean init_list = FALSE;
 	
-	return sctx->priv->key_ring;
+	if (!init_list)
+		init_list = do_lists (sctx);
+	
+	/* copy key_pairs since will append single_keys to list & key_pairs is small */
+	return g_list_concat (g_list_copy (sctx->priv->key_pairs), sctx->priv->single_keys);
+}
+
+GList*
+seahorse_context_get_key_pairs (SeahorseContext *sctx)
+{
+	static gboolean init_list = FALSE;
+	
+	if (!init_list)
+		init_list = do_lists (sctx);
+	
+	return sctx->priv->key_pairs;
 }
 
 /**
@@ -271,7 +321,7 @@ seahorse_context_get_keys (const SeahorseContext *sctx)
  * Returns: The found #SeahorseKey, or NULL
  **/
 SeahorseKey*
-seahorse_context_get_key (const SeahorseContext *sctx, GpgmeKey key)
+seahorse_context_get_key (SeahorseContext *sctx, GpgmeKey key)
 {
 	GList *list;
 	SeahorseKey *skey = NULL;
@@ -338,20 +388,19 @@ seahorse_context_key_added (SeahorseContext *sctx)
 	GList *list;
 	SeahorseKey *skey;
 	
-	g_return_if_fail (SEAHORSE_IS_CONTEXT (sctx));
+	g_return_if_fail (sctx != NULL && SEAHORSE_IS_CONTEXT (sctx));
         g_return_if_fail (gpgme_op_keylist_start (sctx->ctx, NULL, FALSE) == GPGME_No_Error);	
 	
-	list = sctx->priv->key_ring;
+	list = seahorse_context_get_keys (sctx);
 	
 	/* Go to end of cached list, then add any keys remaining in the gpgme keylist */
 	while (gpgme_op_keylist_next (sctx->ctx, &key) == GPGME_No_Error) {
 		if (list == NULL) {
-			skey = add_key (sctx, key);
-			sctx->priv->key_ring = g_list_append (sctx->priv->key_ring, skey);
+			skey = add_key (key, sctx);
 			g_signal_emit (G_OBJECT (sctx), context_signals[ADD], 0, skey);
-			list = g_list_last (sctx->priv->key_ring);
 		}
-		list = g_list_next (list);
+		else
+			list = g_list_next (list);
 	}
 }
 
@@ -367,21 +416,10 @@ seahorse_context_key_added (SeahorseContext *sctx)
 gboolean
 seahorse_context_key_has_secret (SeahorseContext *sctx, SeahorseKey *skey)
 {
-	GpgmeKey key = NULL;
-	gboolean found;
+	g_return_val_if_fail (sctx != NULL && SEAHORSE_IS_CONTEXT (sctx), FALSE);
+	g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), FALSE);
 	
-	g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), FALSE);
-	g_return_val_if_fail (SEAHORSE_IS_KEY (skey), FALSE);
-	
-	/* Look for key by keyid */
-	g_return_val_if_fail (gpgme_op_keylist_start (sctx->ctx,
-		seahorse_key_get_keyid (skey, 0), TRUE) == GPGME_No_Error, FALSE);
-	
-	found = ((gpgme_op_keylist_next (sctx->ctx, &key) == GPGME_No_Error) && key != NULL);
-	gpgme_key_unref (key);
-	
-	gpgme_op_keylist_end (sctx->ctx);
-	return found;
+	return (g_list_find (sctx->priv->key_pairs, skey) != NULL);
 }
 
 /**
@@ -444,7 +482,7 @@ seahorse_context_set_signer (SeahorseContext *sctx, SeahorseKey *signer)
  * Returns: The default signing #SeahorseKey
  **/
 SeahorseKey*
-seahorse_context_get_last_signer (const SeahorseContext *sctx)
+seahorse_context_get_last_signer (SeahorseContext *sctx)
 {
 	GpgmeKey key;
 	

@@ -67,7 +67,9 @@ SeahorseContext*	seahorse_context_new			(void);
 
 void			seahorse_context_destroy		(SeahorseContext	*sctx);
 
-GList*			seahorse_context_get_keys		(const SeahorseContext	*sctx);
+GList*			seahorse_context_get_keys		(SeahorseContext	*sctx);
+
+GList*			seahorse_context_get_key_pairs		(SeahorseContext	*sctx);
 
 void			seahorse_context_show_status		(const SeahorseContext	*sctx,
 								 const gchar		*op,
@@ -75,7 +77,7 @@ void			seahorse_context_show_status		(const SeahorseContext	*sctx,
 
 void			seahorse_context_key_added		(SeahorseContext	*sctx);
 
-SeahorseKey*		seahorse_context_get_key		(const SeahorseContext	*sctx,
+SeahorseKey*		seahorse_context_get_key		(SeahorseContext	*sctx,
 								 GpgmeKey		key);
 
 gboolean		seahorse_context_key_has_secret		(SeahorseContext	*sctx,
@@ -90,6 +92,6 @@ void			seahorse_context_set_text_mode		(SeahorseContext	*sctx,
 void			seahorse_context_set_signer		(SeahorseContext	*sctx,
 								 SeahorseKey		*signer);
 
-SeahorseKey*		seahorse_context_get_last_signer	(const SeahorseContext	*sctx);
+SeahorseKey*		seahorse_context_get_last_signer	(SeahorseContext	*sctx);
 
 #endif /* __SEAHORSE_CONTEXT_H__ */
