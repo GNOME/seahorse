@@ -1,1189 +1,1478 @@
 # Copyright (C) 2000 Free Software Foundation, Inc.
 # Yuri Syrota <rasta@renome.rovno.ua>, 2000.
+# Maxim Dziumanenko <mvd@mylinux.com.ua>, 2004
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
-"POT-Creation-Date: 2003-02-13 16:46+0200\n"
-"PO-Revision-Date: 2003-02-13 05:53--500\n"
-"Last-Translator: Yuriy Syrota <yuri@renome.rovno.ua>\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-04-21 18:26+0300\n"
+"PO-Revision-Date: 2004-04-21 18:25+0200\n"
+"Last-Translator: Maxim Dziumanenko <mvd@mylinux.com.ua>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: data/seahorse.desktop.in.h:1
-#, fuzzy
-msgid "GPG Keys Manager"
-msgstr "Менеджер ключів"
-
-#: data/seahorse.desktop.in.h:2
-msgid "Manage your GPG keys"
-msgstr "Керування вашими ключами GPG"
-
-#: data/seahorse.schemas.in.h:1
-#, fuzzy
-msgid "Default Key ID"
-msgstr "Типовий ключ"
-
-#: data/seahorse.schemas.in.h:2
-msgid "If enabled, relevant output (file or text) will be encoded in ascii armor. Output that is not in ascii armor is not viewable with a regular text viewer. Key servers only accept ascii armored keys."
-msgstr ""
-
-#: data/seahorse.schemas.in.h:3
-msgid "If enabled, relevant output will be in canonical text mode."
-msgstr ""
-
-#: data/seahorse.schemas.in.h:4
-msgid "The key ID of the default key to use for operations such as signing."
-msgstr ""
-
-#: data/seahorse.schemas.in.h:5
-#: src/dialogs/seahorse-preferences.glade2.h:5
-msgid "Use Ascii Armor"
-msgstr ""
-
-#: data/seahorse.schemas.in.h:6
-#: src/dialogs/seahorse-preferences.glade2.h:6
-#, fuzzy
-msgid "Use Canonical Text Mode"
-msgstr "канонічний вввід у текстовому режимі"
-
-#: src/dialogs/seahorse-add-subkey.glade2.h:1
-#: src/seahorse-ops-key.c:1074
-msgid "Add Subkey"
-msgstr ""
-
-#: src/dialogs/seahorse-add-subkey.glade2.h:2
-#: src/dialogs/seahorse-generate.glade2.h:5
-#, fuzzy
-msgid "DSA (sign only)"
-msgstr "2) DSA (лише підпис)"
-
-#: src/dialogs/seahorse-add-subkey.glade2.h:3
-msgid "ElGamal (encrypt only)"
-msgstr ""
-
-#: src/dialogs/seahorse-add-subkey.glade2.h:4
-#: src/dialogs/seahorse-generate.glade2.h:9
-#: src/seahorse-key-properties.c:220
-msgid "Expiration Date:"
-msgstr "Дата закінчення дії:"
-
-#: src/dialogs/seahorse-add-subkey.glade2.h:5
-#: src/dialogs/seahorse-generate.glade2.h:12
-#: src/seahorse-key-properties.c:245
-msgid "If key never expires"
-msgstr "Якщо дія ключа ніколи не закінчується"
-
-#: src/dialogs/seahorse-add-subkey.glade2.h:6
-#: src/dialogs/seahorse-generate.glade2.h:14
-msgid "Key _Length:"
-msgstr "_Довжина ключа:"
-
-#: src/dialogs/seahorse-add-subkey.glade2.h:7
-#: src/dialogs/seahorse-generate.glade2.h:15
-msgid "Key _Type:"
-msgstr "_Тип ключа:"
-
-#: src/dialogs/seahorse-add-subkey.glade2.h:8
-#: src/dialogs/seahorse-generate.glade2.h:16
-msgid "Key type / algorithm"
-msgstr "Тип/алгоритм ключа"
-
-#: src/dialogs/seahorse-add-subkey.glade2.h:9
-#: src/dialogs/seahorse-generate.glade2.h:17
-msgid "Length of Key"
-msgstr "Довжина ключа"
-
-#: src/dialogs/seahorse-add-subkey.glade2.h:10
-#: src/dialogs/seahorse-generate.glade2.h:18
-#: src/seahorse-key-properties.c:243
-#, fuzzy
-msgid "Never E_xpires"
-msgstr "Ніколи не закінчується"
-
-#: src/dialogs/seahorse-add-subkey.glade2.h:11
-#, fuzzy
-msgid "RSA (encrypt only)"
-msgstr "2) DSA (лише підпис)"
-
-#: src/dialogs/seahorse-add-subkey.glade2.h:12
-#: src/dialogs/seahorse-generate.glade2.h:20
-#, fuzzy
-msgid "RSA (sign only)"
-msgstr "2) DSA (лише підпис)"
-
-#: src/dialogs/seahorse-add-uid.c:49
-msgid "Name must be at least 5 characters long"
-msgstr ""
-
-#: src/dialogs/seahorse-add-uid.c:54
-#: src/dialogs/seahorse-generate.c:90
-#, fuzzy
-msgid "You must enter a valid email address"
-msgstr "Необхідно ввести правдиву електронну адресу"
-
-#: src/dialogs/seahorse-add-uid.glade2.h:1
-#: src/dialogs/seahorse-export.glade2.h:1
-#: src/dialogs/seahorse-generate.glade2.h:1
-#: src/dialogs/seahorse-import.glade2.h:1
-#: src/dialogs/seahorse-revoke.glade2.h:1
-#: src/seahorse-file-manager.glade2.h:1
-msgid "*"
-msgstr "*"
-
-#: src/dialogs/seahorse-add-uid.glade2.h:2
-#: src/seahorse-ops-key.c:907
-msgid "Add User ID"
-msgstr ""
-
-#: src/dialogs/seahorse-add-uid.glade2.h:3
-#: src/dialogs/seahorse-generate.glade2.h:6
-msgid "Enter a comment to describe the key"
-msgstr ""
-
-#: src/dialogs/seahorse-add-uid.glade2.h:4
-#: src/dialogs/seahorse-generate.glade2.h:7
-msgid "Enter a valid email address"
-msgstr "Введіть правдиву електронну адресу"
-
-#: src/dialogs/seahorse-add-uid.glade2.h:5
-#: src/dialogs/seahorse-generate.glade2.h:8
-msgid "Enter your full name"
-msgstr ""
-
-#: src/dialogs/seahorse-add-uid.glade2.h:6
-#: src/dialogs/seahorse-generate.glade2.h:10
-msgid "Full _Name:"
-msgstr ""
-
-#: src/dialogs/seahorse-add-uid.glade2.h:7
-#: src/dialogs/seahorse-generate.glade2.h:13
-#, fuzzy
-msgid "Key Co_mment:"
-msgstr "Коментар"
-
-#: src/dialogs/seahorse-add-uid.glade2.h:8
-#: src/dialogs/seahorse-generate.glade2.h:21
-msgid "_Email Address:"
-msgstr "_Електронна адреса"
-
-#: src/dialogs/seahorse-delete.c:37
-#, c-format
-msgid "Are you sure you want to permanently delete key %s, %s?"
-msgstr ""
-
-#: src/dialogs/seahorse-delete.c:39
-#, c-format
-msgid "Are you sure you want to permanently delete subkey %s for %s?"
-msgstr ""
-
-#: src/dialogs/seahorse-export.c:101
-#, c-format
-msgid "Cannot export to \n"
-"%s"
-msgstr ""
-
-#: src/dialogs/seahorse-export.c:123
-#, fuzzy, c-format
-msgid "Export Key: %s"
-msgstr "Экспортувати ключ"
-
-#: src/dialogs/seahorse-export.glade2.h:2
-msgid "Choose a file to export to"
-msgstr ""
-
-#: src/dialogs/seahorse-export.glade2.h:3
-msgid "Export Key"
-msgstr "Експортувати ключ"
-
-#: src/dialogs/seahorse-export.glade2.h:4
-#, fuzzy
-msgid "Export key to a File"
-msgstr "Експортувати ключі у файл"
-
-#: src/dialogs/seahorse-export.glade2.h:5
-msgid "Export key to a key server"
-msgstr ""
-
-#: src/dialogs/seahorse-export.glade2.h:6
-#, fuzzy
-msgid "Export key to text"
-msgstr "Експорт ключа у текст"
-
-#: src/dialogs/seahorse-export.glade2.h:7
-msgid "Export to _File:"
-msgstr "Експорт у _файл:"
-
-#: src/dialogs/seahorse-export.glade2.h:8
-msgid "Export to _Server:"
-msgstr "Експорт на _сервер:"
-
-#: src/dialogs/seahorse-export.glade2.h:9
-msgid "Export to _Text:"
-msgstr "Експорт у _текст:"
-
-#: src/dialogs/seahorse-export.glade2.h:10
-msgid "Exported text"
-msgstr "Експортований ключ"
-
-#: src/dialogs/seahorse-export.glade2.h:11
-msgid "Key server web address"
-msgstr ""
-
-#: src/dialogs/seahorse-export.glade2.h:12
-msgid "Name of file to export to"
-msgstr ""
-
-#: src/dialogs/seahorse-export.glade2.h:13
-#: src/dialogs/seahorse-import.glade2.h:13
-msgid "www.keyserver.net/en"
-msgstr "www.keyserver.net"
-
-#: src/dialogs/seahorse-generate.c:86
-#, fuzzy
-msgid "You must enter a valid name"
-msgstr "Необхідно ввести правдиву електронну адресу"
-
-#: src/dialogs/seahorse-generate.c:94
-#, fuzzy
-msgid "You must enter a valid comment"
-msgstr "Необхідно ввести правдиву електронну адресу"
-
-#: src/dialogs/seahorse-generate.c:98
-#, fuzzy
-msgid "You must enter a valid passphrase"
-msgstr "Необхідно ввести правдиву електронну адресу"
-
-#: src/dialogs/seahorse-generate.c:102
-msgid "You must confirm your passphrase"
-msgstr ""
-
-#: src/dialogs/seahorse-generate.c:106
-msgid "Passphrase & confirmation must match"
-msgstr ""
-
-#: src/dialogs/seahorse-generate.glade2.h:2
-#, fuzzy
-msgid "Con_firm Passphrase:"
-msgstr "Парольна фраза"
-
-#: src/dialogs/seahorse-generate.glade2.h:3
-msgid "Confirm the entered passphrase"
-msgstr ""
-
-#: src/dialogs/seahorse-generate.glade2.h:4
-#, fuzzy
-msgid "DSA & ElGamal"
-msgstr "1) DSA & ElGamal (типово)"
-
-#: src/dialogs/seahorse-generate.glade2.h:11
-msgid "Generate a Key"
-msgstr "Створити ключ"
-
-#: src/dialogs/seahorse-generate.glade2.h:19
-msgid "Passphrase to secure key"
-msgstr ""
-
-#: src/dialogs/seahorse-generate.glade2.h:22
-#, fuzzy
-msgid "_Passphrase:"
-msgstr "Парольна фраза"
-
-#: src/dialogs/seahorse-import.glade2.h:2
-msgid "Enter a unique key id"
-msgstr "Введіть унікальний ідентифікатор ключа"
-
-#: src/dialogs/seahorse-import.glade2.h:3
-msgid "Import Key(s)"
-msgstr "Імпорт ключів"
-
-#: src/dialogs/seahorse-import.glade2.h:4
-msgid "Import a key from a key server"
-msgstr "Імпортувати ключа з сервера ключів"
-
-#: src/dialogs/seahorse-import.glade2.h:5
-msgid "Import from _File:"
-msgstr "Імпорт з _файла:"
-
-#: src/dialogs/seahorse-import.glade2.h:6
-msgid "Import from _Server:"
-msgstr "Імпорт з _сервера:"
-
-#: src/dialogs/seahorse-import.glade2.h:7
-msgid "Import from _Text:"
-msgstr "Імпорт з _тексту:"
-
-#: src/dialogs/seahorse-import.glade2.h:8
-#: src/seahorse-file-manager.glade2.h:12
-msgid "Import keys from a file"
-msgstr "Імпортувати ключі з файла"
-
-#: src/dialogs/seahorse-import.glade2.h:9
-#: src/seahorse-text-editor.glade2.h:12
-msgid "Import keys from text"
-msgstr "Імпортувати ключі з тексту"
-
-#: src/dialogs/seahorse-import.glade2.h:10
-#, fuzzy
-msgid "Select File to Import"
-msgstr "Вибрати файл"
-
-#: src/dialogs/seahorse-import.glade2.h:11
-msgid "Select or enter a key server's web address"
-msgstr ""
-
-#: src/dialogs/seahorse-import.glade2.h:12
-#, fuzzy
-msgid "_Key ID:"
-msgstr "Ідентифікатор ключа"
-
-#: src/dialogs/seahorse-passphrase.c:41
-#, fuzzy
-msgid "Enter Passphrase"
-msgstr "Парольна фраза"
-
-#: src/dialogs/seahorse-preferences.glade2.h:1
-#, fuzzy
-msgid "Close Preferences"
-msgstr "Налаштування..."
-
-#: src/dialogs/seahorse-preferences.glade2.h:2
-#, fuzzy
-msgid "Default Signing Key"
-msgstr "Типовий ключ"
-
-#: src/dialogs/seahorse-preferences.glade2.h:3
-#, fuzzy
-msgid "Preferences Help"
-msgstr "Налаштування..."
-
-#: src/dialogs/seahorse-preferences.glade2.h:4
-#, fuzzy
-msgid "Seahorse Preferences"
-msgstr "Налаштування..."
-
-#: src/dialogs/seahorse-preferences.glade2.h:7
-msgid "_Ascii Armor"
-msgstr ""
-
-#: src/dialogs/seahorse-preferences.glade2.h:8
-#, fuzzy
-msgid "_Default Key:"
-msgstr "Типовий ключ"
-
-#: src/dialogs/seahorse-preferences.glade2.h:9
-#, fuzzy
-msgid "_Text Mode"
-msgstr "Редактор тексту"
-
-#: src/dialogs/seahorse-recipients.glade2.h:1
-msgid "Add key to recipient list"
-msgstr ""
-
-#: src/dialogs/seahorse-recipients.glade2.h:2
-msgid "Choose Keys"
-msgstr ""
-
-#: src/dialogs/seahorse-recipients.glade2.h:3
-msgid "Keys"
-msgstr "Ключі"
-
-#: src/dialogs/seahorse-recipients.glade2.h:4
-msgid "Recipients"
-msgstr ""
-
-#: src/dialogs/seahorse-recipients.glade2.h:5
-msgid "Remove key from recipient list"
-msgstr ""
-
-#: src/dialogs/seahorse-recipients.glade2.h:6
-msgid "_Add"
-msgstr "_Додати"
-
-#: src/dialogs/seahorse-recipients.glade2.h:7
-msgid "_Remove"
-msgstr "_Вилучити"
-
-#: src/dialogs/seahorse-revoke.glade2.h:2
-msgid "Compromised"
-msgstr ""
-
-#: src/dialogs/seahorse-revoke.glade2.h:3
-msgid "Key has been compromised"
-msgstr ""
-
-#: src/dialogs/seahorse-revoke.glade2.h:4
-msgid "Key has been superseded"
-msgstr ""
-
-#: src/dialogs/seahorse-revoke.glade2.h:5
-msgid "Key is no longer used"
-msgstr ""
-
-#: src/dialogs/seahorse-revoke.glade2.h:6
-msgid "No Reason"
-msgstr ""
-
-#: src/dialogs/seahorse-revoke.glade2.h:7
-msgid "No reason for revoking key"
-msgstr ""
-
-#: src/dialogs/seahorse-revoke.glade2.h:8
-msgid "Not Used"
-msgstr ""
-
-#: src/dialogs/seahorse-revoke.glade2.h:9
-msgid "Optional revocation description"
-msgstr ""
-
-#: src/dialogs/seahorse-revoke.glade2.h:10
-msgid "Reason for revoking key"
-msgstr ""
-
-#: src/dialogs/seahorse-revoke.glade2.h:11
-#: src/seahorse-key-properties.c:379
-#, fuzzy
-msgid "Revoke Key"
-msgstr "Стерти ключ"
-
-#: src/dialogs/seahorse-revoke.glade2.h:12
-msgid "Superseded"
-msgstr ""
-
-#: src/dialogs/seahorse-revoke.glade2.h:13
-#, fuzzy
-msgid "_Description:"
-msgstr "Розшифрувати"
-
-#: src/dialogs/seahorse-revoke.glade2.h:14
-msgid "_Reason:"
-msgstr ""
-
-#: src/dialogs/seahorse-signatures.c:45
-msgid "Good, signing key expired"
-msgstr ""
-
-#: src/dialogs/seahorse-signatures.c:48
-msgid "Multiple Signatures"
-msgstr ""
-
-#: src/dialogs/seahorse-signatures.c:51
-#: src/seahorse-key-properties.c:359
-#: src/seahorse-key-properties.c:404
-msgid "Good"
-msgstr ""
-
-#: src/dialogs/seahorse-signatures.c:65
-msgid "Signing key not in key ring"
-msgstr ""
-
-#: src/dialogs/seahorse-signatures.c:69
-msgid "Bad Signature"
-msgstr "Поганий підпис"
-
-#: src/dialogs/seahorse-signatures.c:73
-msgid "Not a signature"
-msgstr "Не підпис"
-
-#: src/dialogs/seahorse-signatures.c:77
-msgid "Verification Error"
-msgstr "Помилка перевірки"
-
-#: src/dialogs/seahorse-signatures.glade2.h:1
-#: src/seahorse-key-properties.c:214
-msgid "Created:"
-msgstr "Створено:"
-
-#: src/dialogs/seahorse-signatures.glade2.h:2
-#: src/seahorse-key-properties.c:210
-msgid "Key ID:"
-msgstr "Ідентифікатор ключа:"
-
-#: src/dialogs/seahorse-signatures.glade2.h:3
-msgid "Signature"
-msgstr "Підпис"
-
-#: src/dialogs/seahorse-signatures.glade2.h:4
-msgid "Signer:"
-msgstr "Підписав:"
-
-#: src/dialogs/seahorse-signatures.glade2.h:5
-#: src/seahorse-key-properties.c:350
-#: src/seahorse-key-properties.c:395
-msgid "Status:"
-msgstr "Стан:"
-
-#: src/seahorse-context.c:318
-#, c-format
-msgid "%s Successful"
-msgstr ""
-
-#: src/seahorse-context.c:320
-#, c-format
-msgid "%s Failed"
-msgstr ""
-
-#: src/seahorse-encrypt-recipients-store.c:136
-msgid "Validity"
-msgstr ""
-
-#: src/seahorse-file-manager.c:93
-msgid "Unknown suffix or bad file name.\n"
-"File must exist and end with '.asc' or '.gpg'."
-msgstr ""
-
-#: src/seahorse-file-manager.glade2.h:2
-#: src/seahorse-ops-text.c:144
-#: src/seahorse-text-editor.glade2.h:3
-msgid "Decrypt"
-msgstr "Розшифрувати"
-
-#: src/seahorse-file-manager.glade2.h:3
-msgid "Decrypt a file"
-msgstr "Розшифрувати файл"
-
-#: src/seahorse-file-manager.glade2.h:4
-#: src/seahorse-text-editor.c:184
-#: src/seahorse-text-editor.glade2.h:4
-msgid "Decrypt and Verify"
-msgstr "Розшифрувати і перевірити"
-
-#: src/seahorse-file-manager.glade2.h:5
-msgid "Decrypt and verify a file"
-msgstr "Розшифрувати і перевірити файл"
-
-#: src/seahorse-file-manager.glade2.h:6
-#: src/seahorse-key-manager.glade2.h:18
-#: src/seahorse-text-editor.glade2.h:7
-msgid "E_xport"
-msgstr "_Експорт"
-
-#: src/seahorse-file-manager.glade2.h:7
-#: src/seahorse-ops-text.c:129
-#: src/seahorse-text-editor.glade2.h:8
-msgid "Encrypt"
-msgstr "Зашифрувати"
-
-#: src/seahorse-file-manager.glade2.h:8
-msgid "Encrypt a file"
-msgstr "Зашифрувати файл"
-
-#: src/seahorse-file-manager.glade2.h:9
-msgid "Export keys to a file"
-msgstr "Експортувати ключі у файл"
-
-#: src/seahorse-file-manager.glade2.h:10
-msgid "File to process"
-msgstr "Файл для обробки"
-
-#: src/seahorse-file-manager.glade2.h:11
-#: src/seahorse-text-editor.glade2.h:11
+#: bonobo/Seahorse_PGP_File_Listener.server.in.in.h:1
+msgid "Decrypt And Verify Signatures..."
+msgstr "Розшифрувати і перевірити підписи..."
+
+#: bonobo/Seahorse_PGP_File_Listener.server.in.in.h:2
+msgid "Decrypt..."
+msgstr "Розшифрувати..."
+
+#: bonobo/Seahorse_PGP_File_Listener.server.in.in.h:3
+msgid "Decryption operations on PGP encrypted files"
+msgstr "Операції розшифровування файлів, що зашифровані PGP"
+
+#: bonobo/Seahorse_PGP_File_Listener.server.in.in.h:4
+msgid "Encrypt And Sign..."
+msgstr "Шифрування та підписування..."
+
+#: bonobo/Seahorse_PGP_File_Listener.server.in.in.h:5
+msgid "Encrypt and sign operations on files"
+msgstr "Операції шифрування та підписування файлів"
+
+#: bonobo/Seahorse_PGP_File_Listener.server.in.in.h:6
+msgid "Encrypt..."
+msgstr "Шифрувати...."
+
+#: bonobo/Seahorse_PGP_File_Listener.server.in.in.h:7
 msgid "Import"
 msgstr "Імпорт"
 
-#: src/seahorse-file-manager.glade2.h:13
-msgid "Make a detached signature"
-msgstr "Зробити відділений підпис"
+#: bonobo/Seahorse_PGP_File_Listener.server.in.in.h:8
+msgid "Import operation on PGP key files"
+msgstr "Операція імпорту файлів ключів PGP"
 
-#: src/seahorse-file-manager.glade2.h:14
-msgid "Seahorse File Manager"
-msgstr ""
+#: bonobo/Seahorse_PGP_File_Listener.server.in.in.h:9
+msgid "Seahorse PGP decrypt operations"
+msgstr "Seahorse операції розшифровування PGP"
 
-#: src/seahorse-file-manager.glade2.h:15
-msgid "Select File"
-msgstr "Вибрати файл"
+#: bonobo/Seahorse_PGP_File_Listener.server.in.in.h:10
+msgid "Seahorse PGP encrypt and sign operations"
+msgstr "Seahorse операції шифрування та підписування PGP"
 
-#: src/seahorse-file-manager.glade2.h:16
-msgid "Show file manager help"
-msgstr "Показати довідку файлового менеджера"
+#: bonobo/Seahorse_PGP_File_Listener.server.in.in.h:11
+msgid "Seahorse PGP import operation"
+msgstr "Seahorse операції імпорту PGP"
 
-#: src/seahorse-file-manager.glade2.h:17
-#: src/seahorse-ops-text.c:109
-#: src/seahorse-text-editor.glade2.h:17
-msgid "Sign"
-msgstr "Підписати"
+#: bonobo/Seahorse_PGP_File_Listener.server.in.in.h:12
+msgid "Seahorse PGP verify operation"
+msgstr "Seahorse операції перевірки PGP"
 
-#: src/seahorse-file-manager.glade2.h:18
-#: src/seahorse-text-editor.glade2.h:18
+#: bonobo/Seahorse_PGP_File_Listener.server.in.in.h:13
+msgid "Sign..."
+msgstr "Підписати..."
+
+#: bonobo/Seahorse_PGP_File_Listener.server.in.in.h:14
 msgid "Verify"
 msgstr "Перевірити"
 
-#: src/seahorse-file-manager.glade2.h:19
-msgid "Verify a detached signature"
-msgstr "Перевірити відділений підпис"
+#: bonobo/Seahorse_PGP_File_Listener.server.in.in.h:15
+msgid "Verify operation on PGP signed files"
+msgstr "Операція перевірки файлів, що підписані PGP"
 
-#: src/seahorse-file-manager.glade2.h:20
-#: src/seahorse-key-manager.glade2.h:35
-#: src/seahorse-key-properties.glade2.h:33
-#: src/seahorse-text-editor.glade2.h:20
-msgid "View statusbar"
-msgstr "Показати панель стану"
+#: data/seahorse.schemas.in.h:1
+msgid "Controls the visibility of the expires column for the key manager."
+msgstr "Визначає видимість стовпчика скінчення терміну дії ключа у менеджері ключів."
 
-#: src/seahorse-file-manager.glade2.h:21
-#: src/seahorse-key-manager.glade2.h:36
-#: src/seahorse-text-editor.glade2.h:21
-msgid "View toolbar"
-msgstr "Показати пенал"
+#: data/seahorse.schemas.in.h:2
+msgid "Controls the visibility of the key manager's statusbar."
+msgstr "Визначає видимість рядка стану у менеджері ключів."
 
-#: src/seahorse-file-manager.glade2.h:22
-#: src/seahorse-text-editor.c:192
-#: src/seahorse-text-editor.glade2.h:22
-msgid "_Decrypt"
-msgstr "Розшифрувати"
+#: data/seahorse.schemas.in.h:3
+msgid "Controls the visibility of the key manager's toolbar."
+msgstr "Визначає видимість панелі інструментів у менеджері ключів."
 
-#: src/seahorse-file-manager.glade2.h:23
-#: src/seahorse-text-editor.c:196
-#: src/seahorse-text-editor.glade2.h:23
-msgid "_Encrypt"
-msgstr "Зашифрувати"
+#: data/seahorse.schemas.in.h:4
+msgid "Controls the visibility of the length column for the key manager."
+msgstr "Визначає видимість стовпчика довжини ключа у менеджері ключів."
 
-#: src/seahorse-file-manager.glade2.h:24
-#, fuzzy
-msgid "_File Manager Help"
-msgstr "Менеджер ключів"
+#: data/seahorse.schemas.in.h:5
+msgid "Controls the visibility of the trust column for the key manager."
+msgstr "Визначає видимість стовпчика довіри ключа у менеджері ключів."
 
-#: src/seahorse-file-manager.glade2.h:25
-#: src/seahorse-text-editor.c:208
-#: src/seahorse-text-editor.glade2.h:24
-msgid "_Import"
-msgstr "_Імпорт"
+#: data/seahorse.schemas.in.h:6
+msgid "Controls the visibility of the type column for the key manager."
+msgstr "Визначає видимість стовпчика типу ключа у менеджері ключів."
 
-#: src/seahorse-file-manager.glade2.h:26
-#: src/seahorse-key-manager.glade2.h:44
-#: src/seahorse-text-editor.c:204
-#: src/seahorse-text-editor.glade2.h:25
-msgid "_Sign"
-msgstr "Підписати"
+#: data/seahorse.schemas.in.h:7
+msgid "Controls the visibility of the validity column for the key manager."
+msgstr "Визначає видимість стовпчика дійсності ключа у менеджері ключів."
 
-#: src/seahorse-file-manager.glade2.h:27
-#: src/seahorse-key-properties.glade2.h:39
-#: src/seahorse-text-editor.glade2.h:26
-msgid "_Statusbar"
-msgstr "Панель _стану"
+#: data/seahorse.schemas.in.h:8
+msgid "How often to show progress during listing"
+msgstr "Як часто показувати перебіг при перегляді"
 
-#: src/seahorse-file-manager.glade2.h:28
-#: src/seahorse-text-editor.glade2.h:28
-msgid "_Toolbar"
-msgstr "_Пенал"
+#: data/seahorse.schemas.in.h:9
+msgid "ID of the default key"
+msgstr "Ідентифікатор типового ключа"
 
-#: src/seahorse-file-manager.glade2.h:29
-#: src/seahorse-text-editor.c:188
-#: src/seahorse-text-editor.glade2.h:29
-msgid "_Verify"
-msgstr "Перевірити"
-
-#: src/seahorse-key-manager-store.c:200
-#, fuzzy
-msgid "Trust"
-msgstr "Не довіряти"
-
-#: src/seahorse-key-manager-store.c:205
-msgid "Type"
-msgstr "Тип"
-
-#: src/seahorse-key-manager-store.c:206
-msgid "Length"
-msgstr "Довжина"
-
-#: src/seahorse-key-manager.c:198
-msgid "translator_credits"
-msgstr "Юрій Сирота <yuriy@beer.com>"
-
-#: src/seahorse-key-manager.c:218
-msgid "seahorse"
-msgstr "морський коник"
-
-#: src/seahorse-key-manager.glade2.h:1
-#: src/seahorse-key-properties.glade2.h:1
-msgid "Add P_hoto ID..."
+#: data/seahorse.schemas.in.h:10
+msgid ""
+"If set to true, then all output from pgp operations will be ASCII text. "
+"Files will have a '.asc' extension."
 msgstr ""
+"Якщо встановлено, тоді весь вивід від pgp операцій буде у вигляді ASCII тексту. "
+"Файли матимуть розширення '.asc'."
 
-#: src/seahorse-key-manager.glade2.h:2
-#: src/seahorse-key-properties.glade2.h:2
-msgid "Add Sub_key..."
+#: data/seahorse.schemas.in.h:11
+msgid ""
+"If set to true, then output from certain pgp operations will be in canonical "
+"text mode. Text mode is generally only needed for RFC 2015 signatures. RFC "
+"3156 removes the need for text mode."
 msgstr ""
+"Якщо встановлено, тоді весь вивід від певних pgp операцій буде у канонічному текстовому режимі. "
+"Взагалі, текстовий режим потрібен лише для RFC 2015 підписів. RFC "
+"3156 скасовує необхідність текстового режиму."
 
-#: src/seahorse-key-manager.glade2.h:3
-#: src/seahorse-key-properties.glade2.h:3
-msgid "Add _Revoker..."
+#: data/seahorse.schemas.in.h:12
+msgid ""
+"If set to true, then the default key will always be added to an encryption "
+"recipients list."
 msgstr ""
+"Якщо встановлено, до списку отримувачів шифрування буде завжди додаватись типовий ключ."
 
-#: src/seahorse-key-manager.glade2.h:4
-#: src/seahorse-key-properties.glade2.h:4
-msgid "Add _User ID..."
+#: data/seahorse.schemas.in.h:13
+msgid "If the statusbar is visible"
+msgstr "Видимість рядка стану"
+
+#: data/seahorse.schemas.in.h:14
+msgid "If the toolbar is visible"
+msgstr "Видимість панелі інструментів"
+
+#: data/seahorse.schemas.in.h:15
+msgid "Show expires column in key manager"
+msgstr "Показ у менеджері ключів стовпчика терміну дії"
+
+#: data/seahorse.schemas.in.h:16
+msgid "Show length column in key manager"
+msgstr "Показ у менеджері ключів стовпчика довжини"
+
+#: data/seahorse.schemas.in.h:17
+msgid "Show trust column in key manager"
+msgstr "Показ у менеджері ключів стовпчика довіри"
+
+#: data/seahorse.schemas.in.h:18
+msgid "Show type column in key manager"
+msgstr "Показ у менеджері ключів стовпчика типу ключа"
+
+#: data/seahorse.schemas.in.h:19
+msgid "Show validity column in key manager"
+msgstr "Показ у менеджері ключів стовпчика дійсності ключа"
+
+#: data/seahorse.schemas.in.h:20
+msgid "Style of toolbar buttons and labels"
+msgstr "Стиль кнопок та позначок панелі інструментів"
+
+#: data/seahorse.schemas.in.h:21
+msgid ""
+"The toolbar button and label style. Options are 'default', 'both', "
+"'both_horiz', 'icons', and 'text'."
 msgstr ""
+"Стиль кнопок та позначок панелі інструментів. Можливі варіанти 'default' (типовий), 'both' (обидва), "
+"'both_horiz' (обидва горизонтально), 'icons' (значки), та 'text' (текст)."
 
-#: src/seahorse-key-manager.glade2.h:5
-#, fuzzy
-msgid "Add a new subkey to selected key"
-msgstr "Стерти вибраний ключ"
-
-#: src/seahorse-key-manager.glade2.h:6
-#: src/seahorse-key-properties.glade2.h:5
-msgid "Add a new subkey to the key"
+#: data/seahorse.schemas.in.h:22
+msgid ""
+"This specifies how often the progress signal is emitted during a listing "
+"operation. By default, the signal is emitted for every 20 keys processed. A "
+"value of -1 will cause the signal to never be emitted."
 msgstr ""
+"Вказує як часто подається сигнал перебігу при операції заповнення списку. "
+"Типово, сигнал подається через кожні 20 оброблених ключів. Значення -1 "
+"призводить до вимикання подавання сигналу."
 
-#: src/seahorse-key-manager.glade2.h:7
-#, fuzzy
-msgid "Add a new user ID to selected key"
-msgstr "Стерти вибраний ключ"
-
-#: src/seahorse-key-manager.glade2.h:8
-#: src/seahorse-key-properties.glade2.h:6
-msgid "Add a new user ID to the key"
+#: data/seahorse.schemas.in.h:23
+msgid ""
+"This specifies the default key to use for cerain operations, mainly signing."
 msgstr ""
+"Визначає типовий ключ для деяких операцій, головним чином підписування."
 
-#: src/seahorse-key-manager.glade2.h:9
-#, fuzzy
-msgid "Add a photo ID to selected key"
-msgstr "Стерти вибраний ключ"
+#: data/seahorse.schemas.in.h:24
+msgid "Whether to always encrypt to default key"
+msgstr "Чи завжди шифрувати типовий ключ"
 
-#: src/seahorse-key-manager.glade2.h:10
-#: src/seahorse-key-properties.glade2.h:7
-msgid "Add a photo ID to the key"
-msgstr ""
+#: data/seahorse.schemas.in.h:25
+msgid "Whether to use ASCII Armor"
+msgstr "Використовувати ASCII захист"
 
-#: src/seahorse-key-manager.glade2.h:11
-#: src/seahorse-key-properties.glade2.h:8
-msgid "Add a revoker to the key"
-msgstr ""
+#: data/seahorse.schemas.in.h:26
+msgid "Whether to use canonical text mode"
+msgstr "Чи використовувати канонічний текстовий режим"
 
-#: src/seahorse-key-manager.glade2.h:12
-#, fuzzy
-msgid "Add a revoker to the selected key"
-msgstr "Стерти вибраний ключ"
-
-#: src/seahorse-key-manager.glade2.h:13
-#: src/seahorse-key-properties.glade2.h:9
-#, fuzzy
-msgid "Change key's passphrase"
-msgstr "Парольна фраза"
-
-#: src/seahorse-key-manager.glade2.h:14
-#, fuzzy
-msgid "Change selected key's passphrase"
-msgstr "Парольна фраза"
-
-#: src/seahorse-key-manager.glade2.h:15
-msgid "Create a new key"
-msgstr "Створити новий ключ"
-
-#: src/seahorse-key-manager.glade2.h:16
-#: src/seahorse-key-properties.glade2.h:10
-msgid "Delete key"
-msgstr "Стерти ключ"
-
-#: src/seahorse-key-manager.glade2.h:17
-msgid "Delete selected key"
-msgstr "Стерти вибраний ключ"
-
-#: src/seahorse-key-manager.glade2.h:19
-#: src/seahorse-key-properties.glade2.h:11
-msgid "E_xport..."
-msgstr "_Експорт..."
-
-#: src/seahorse-key-manager.glade2.h:20
-#: src/seahorse-key-properties.glade2.h:13
-msgid "Export key"
-msgstr "Експортувати ключ"
-
-#: src/seahorse-key-manager.glade2.h:21
-msgid "Export selected key"
-msgstr "Експорт вибраного ключа..."
-
-#: src/seahorse-key-manager.glade2.h:22
-msgid "File _Manager"
-msgstr "_Файловий менеджер"
-
-#: src/seahorse-key-manager.glade2.h:23
-msgid "File manager tool"
-msgstr "Засіб керування файлами"
-
-#: src/seahorse-key-manager.glade2.h:24
-msgid "Import keys"
-msgstr "Імпорт ключів"
-
-#: src/seahorse-key-manager.glade2.h:25
-#, fuzzy
-msgid "Seahorse Key Manager"
-msgstr "Менеджер ключів"
-
-#: src/seahorse-key-manager.glade2.h:26
-#, fuzzy
-msgid "Show Seahorse help"
-msgstr "Менеджер ключів"
-
-#: src/seahorse-key-manager.glade2.h:27
-msgid "Show key properties"
-msgstr ""
-
-#: src/seahorse-key-manager.glade2.h:28
-#: src/seahorse-key-properties.glade2.h:26
-msgid "Sign key"
-msgstr "Підписати ключ"
-
-#: src/seahorse-key-manager.glade2.h:29
-msgid "Sign selected key"
-msgstr "Підписати вибраний ключ"
-
-#: src/seahorse-key-manager.glade2.h:30
-msgid "Statusbar"
-msgstr "Панель стану"
-
-#: src/seahorse-key-manager.glade2.h:31
-#, fuzzy
-msgid "Text _Editor"
-msgstr "Редактор тексту"
-
-#: src/seahorse-key-manager.glade2.h:32
-#, fuzzy
-msgid "Text editor tool"
-msgstr "Редактор тексту"
-
-#: src/seahorse-key-manager.glade2.h:33
-msgid "Toolbar"
-msgstr "Пенал"
-
-#: src/seahorse-key-manager.glade2.h:34
-msgid "View selected key's properties"
-msgstr ""
-
-#: src/seahorse-key-manager.glade2.h:37
-#: src/seahorse-key-properties.glade2.h:34
-#, fuzzy
-msgid "_Change Passphrase..."
-msgstr "Парольна фраза"
-
-#: src/seahorse-key-manager.glade2.h:38
-msgid "_Contents"
-msgstr "_Зміст"
-
-#: src/seahorse-key-manager.glade2.h:39
-#: src/seahorse-key-properties.glade2.h:35
-msgid "_Delete"
-msgstr "Стерти"
-
-#: src/seahorse-key-manager.glade2.h:40
-msgid "_Import..."
-msgstr "_Імпорт..."
-
-#: src/seahorse-key-manager.glade2.h:41
-#: src/seahorse-key-properties.glade2.h:37
-msgid "_Key"
-msgstr "_Ключ"
-
-#: src/seahorse-key-manager.glade2.h:42
-msgid "_New..."
-msgstr "_Новий..."
-
-#: src/seahorse-key-manager.glade2.h:43
-msgid "_Properties"
-msgstr ""
-
-#: src/seahorse-key-manager.glade2.h:45
-#: src/seahorse-key-properties.glade2.h:38
-msgid "_Sign..."
-msgstr "_Підписати..."
-
-#: src/seahorse-key-manager.glade2.h:46
-#, fuzzy
-msgid "_Tools"
-msgstr "_Пенал"
-
-#: src/seahorse-key-properties.c:212
-msgid "Type:"
-msgstr "Тип:"
-
-#: src/seahorse-key-properties.c:217
-msgid "Length:"
-msgstr "Довжина:"
-
-#: src/seahorse-key-properties.c:228
-msgid "Never Expires"
-msgstr "Ніколи не закінчується"
-
-#: src/seahorse-key-properties.c:290
-msgid "_Primary"
-msgstr ""
-
-#: src/seahorse-key-properties.c:291
-msgid "Set as primary User ID"
-msgstr ""
-
-#: src/seahorse-key-properties.c:312
+#: libseahorse/seahorse-context.c:397
 #, c-format
-msgid "User ID %d"
-msgstr ""
+msgid "Loading key %d"
+msgstr "Завантаження ключа %d"
 
-#: src/seahorse-key-properties.c:354
-#: src/seahorse-key-properties.c:399
-msgid "Revoked"
-msgstr ""
-
-#: src/seahorse-key-properties.c:357
-#: src/seahorse-key-properties.c:402
-#, fuzzy
-msgid "Expired"
-msgstr "Термін дії:"
-
-#. Label
-#: src/seahorse-key-properties.c:369
-#, fuzzy
-msgid "_Revoke"
-msgstr "_Вилучити"
-
-#: src/seahorse-key-properties.c:411
+#: libseahorse/seahorse-context.c:427
 #, c-format
-msgid "Subkey %d"
-msgstr ""
+msgid "Loaded %d key pairs"
+msgstr "Завантажено %d пар ключів"
 
-#: src/seahorse-key-properties.glade2.h:12
-msgid "Enable/Disable Key"
-msgstr ""
+#: libseahorse/seahorse-context.c:448
+#, c-format
+msgid "Loaded %d keys"
+msgstr "Завантажено %d ключ"
 
-#: src/seahorse-key-properties.glade2.h:14
-msgid "Fingerprint:"
-msgstr ""
+#: libseahorse/seahorse-context.c:640
+#, c-format
+msgid "Loaded %d new keys"
+msgstr "Завантажено %d нових ключів"
 
-#: src/seahorse-key-properties.glade2.h:15
-#: src/seahorse-validity.c:42
-msgid "Full"
-msgstr ""
-
-#: src/seahorse-key-properties.glade2.h:16
-msgid "Fully trust owner"
-msgstr ""
-
-#: src/seahorse-key-properties.glade2.h:17
-msgid "Key Properties"
-msgstr ""
-
-#: src/seahorse-key-properties.glade2.h:18
-msgid "Key Properties Help"
-msgstr ""
-
-#: src/seahorse-key-properties.glade2.h:19
-#: src/seahorse-validity.c:39
-msgid "Marginal"
-msgstr ""
-
-#: src/seahorse-key-properties.glade2.h:20
-msgid "Marginally trust owner"
-msgstr ""
-
-#: src/seahorse-key-properties.glade2.h:21
-#: src/seahorse-validity.c:36
-msgid "Never"
-msgstr "Ніколи"
-
-#: src/seahorse-key-properties.glade2.h:22
-msgid "Never trust owner"
-msgstr ""
-
-#: src/seahorse-key-properties.glade2.h:23
-#, fuzzy
-msgid "Owner Trust"
-msgstr "Не довіряти"
-
-#: src/seahorse-key-properties.glade2.h:24
-msgid "Owner _Trust:"
-msgstr ""
-
-#: src/seahorse-key-properties.glade2.h:25
-msgid "Show key properties help"
-msgstr ""
-
-#: src/seahorse-key-properties.glade2.h:27
-msgid "Sub_keys"
-msgstr ""
-
-#: src/seahorse-key-properties.glade2.h:28
-#: src/seahorse-validity.c:45
-msgid "Ultimate"
-msgstr ""
-
-#: src/seahorse-key-properties.glade2.h:29
-msgid "Ultimately trust owner"
-msgstr ""
-
-#: src/seahorse-key-properties.glade2.h:30
-#: src/seahorse-validity.c:33
-msgid "Unknown"
-msgstr ""
-
-#: src/seahorse-key-properties.glade2.h:31
-msgid "Unknown owner"
-msgstr ""
-
-#: src/seahorse-key-properties.glade2.h:32
-msgid "View Subkeys"
-msgstr ""
-
-#: src/seahorse-key-properties.glade2.h:36
-msgid "_Disabled"
-msgstr ""
-
-#: src/seahorse-key-store.c:333
+#: libseahorse/seahorse-key-store.c:335
 msgid "Name"
 msgstr "Ім'я"
 
-#: src/seahorse-key-store.c:336
+#: libseahorse/seahorse-key-store.c:338
 msgid "Key ID"
 msgstr "Ідентифікатор ключа"
 
-#: src/seahorse-ops-data.c:43
-#, fuzzy, c-format
-msgid "Imported %d Keys: "
-msgstr "Імпортувати ключ"
+#: libseahorse/seahorse-key-store.c:393
+#, c-format
+msgid "Listed %d keys"
+msgstr "Внесено в список %d ключів"
 
-#: src/seahorse-ops-file.c:104
-msgid "Bad File, Import"
-msgstr ""
+#: libseahorse/seahorse-passphrase.c:56
+#, c-format
+msgid "Enter passphrase for %s"
+msgstr "Введення парольної фрази для %s"
 
-#: src/seahorse-ops-file.c:118
-#: src/seahorse-ops-file.c:131
-msgid "Export File"
-msgstr "Експортувати файл"
+#: libseahorse/seahorse-passphrase.c:60
+#, c-format
+msgid "Bad passphrase! Try again for %s"
+msgstr "Неправильна парольна фраза! Спробуйте ще раз для %s"
 
-#: src/seahorse-ops-file.c:146
-msgid "Detached Signature"
-msgstr "Відділений підпис"
+#: libseahorse/seahorse-passphrase.glade.h:1 src/seahorse-add-uid.glade.h:1
+#: src/seahorse-change-passphrase.glade.h:1 src/seahorse-export.glade.h:1
+#: src/seahorse-generate-adv.glade.h:1 src/seahorse-generate-druid.glade.h:1
+#: src/seahorse-import.glade.h:1 src/seahorse-revoke.glade.h:1
+msgid "*"
+msgstr "*"
 
-#: src/seahorse-ops-file.c:161
-msgid "Encrypt File"
+#: libseahorse/seahorse-passphrase.glade.h:2
+msgid "Enter Passphrase"
+msgstr "Введення парольної фрази"
+
+#: libseahorse/seahorse-passphrase.glade.h:3
+msgid "Passphrase for key"
+msgstr "Парольна фраза для ключа"
+
+#: libseahorse/seahorse-recipients-store.c:131
+#: src/seahorse-key-manager-store.c:265
+msgid "Validity"
+msgstr "Дійсність"
+
+#: libseahorse/seahorse-recipients.c:77
+#, c-format
+msgid "Selected %d not fully valid keys and %d fully valid keys"
+msgstr "Виділено %d не повністю дійсних ключів та %d повністю дійсних ключів"
+
+#: libseahorse/seahorse-recipients.glade.h:1
+msgid "Choose Keys"
+msgstr "Вибір ключів"
+
+#: libseahorse/seahorse-signatures.c:36
+msgid "Signing key not in key ring"
+msgstr "Ключ підпису не у комплекті ключів"
+
+#: libseahorse/seahorse-signatures.c:40
+msgid "Bad Signature"
+msgstr "Неправильний підпис"
+
+#: libseahorse/seahorse-signatures.c:44
+msgid "Not a signature"
+msgstr "Не підпис"
+
+#: libseahorse/seahorse-signatures.c:48
+msgid "Verification Error"
+msgstr "Помилка при перевірці"
+
+#: libseahorse/seahorse-signatures.c:75
+msgid "Good, signing key expired"
+msgstr "Правильний, термін дії ключа підпису вийшов"
+
+#: libseahorse/seahorse-signatures.c:78
+msgid "Multiple Signatures"
+msgstr "Декілька підписів"
+
+#: libseahorse/seahorse-signatures.c:81 src/seahorse-key-properties.c:357
+msgid "Good"
+msgstr "Правильний"
+
+#. created
+#: libseahorse/seahorse-signatures.glade.h:1 src/seahorse-key-properties.c:348
+msgid "Created:"
+msgstr "Створено:"
+
+#. key id
+#: libseahorse/seahorse-signatures.glade.h:2 src/seahorse-key-properties.c:337
+msgid "Key ID:"
+msgstr "Ідентифікатор ключа:"
+
+#: libseahorse/seahorse-signatures.glade.h:3
+msgid "Signature Verification"
+msgstr "Перевірка підпису"
+
+#: libseahorse/seahorse-signatures.glade.h:4
+msgid "Signer:"
+msgstr "Підписано:"
+
+#. status
+#: libseahorse/seahorse-signatures.glade.h:5 src/seahorse-key-properties.c:356
+msgid "Status:"
+msgstr "Стан:"
+
+#: libseahorse/seahorse-util.c:91
+msgid "%Y-%m-%d"
+msgstr "%d-%M-%Y"
+
+#: libseahorse/seahorse-validity.c:31 src/seahorse-key-properties.glade.h:17
+msgid "Unknown"
+msgstr "Невідомо"
+
+#: libseahorse/seahorse-validity.c:33 src/seahorse-key-properties.glade.h:9
+msgid "Never"
+msgstr "Ніколи"
+
+#: libseahorse/seahorse-validity.c:35 src/seahorse-key-properties.glade.h:7
+msgid "Marginal"
+msgstr "Незначна"
+
+#: libseahorse/seahorse-validity.c:37 src/seahorse-key-properties.glade.h:5
+msgid "Full"
+msgstr "Повна"
+
+#: libseahorse/seahorse-validity.c:39 src/seahorse-key-properties.glade.h:15
+msgid "Ultimate"
+msgstr "Максимальна"
+
+#: libseahorse/seahorse-validity.c:41
+msgid "Disabled"
+msgstr "Вимкнений"
+
+#: libseahorse/seahorse-validity.c:43 src/seahorse-key-properties.c:359
+msgid "Revoked"
+msgstr "Відкликаний"
+
+#: plugins/nautilus/seahorse-pgp-preferences.c:29
+#: plugins/nautilus/seahorse-pgp-preferences.desktop.in.h:2
+#: plugins/nautilus/seahorse-pgp-preferences.glade.h:1
+msgid "PGP Preferences"
+msgstr "Настройки PGP"
+
+#: plugins/nautilus/seahorse-pgp-preferences.c:45
+#: src/seahorse-preferences.c:80
+msgid "_Ascii Armor"
+msgstr "_Ascii захист"
+
+#: plugins/nautilus/seahorse-pgp-preferences.c:47
+msgid "_Text Mode"
+msgstr "_Текстовий режим"
+
+#: plugins/nautilus/seahorse-pgp-preferences.c:49
+msgid "_Encrypt to Self"
+msgstr "_Зашифрувати для себе"
+
+#: plugins/nautilus/seahorse-pgp-preferences.c:54
+msgid "_Default Key:"
+msgstr "_Типовий ключ:"
+
+#: plugins/nautilus/seahorse-pgp-preferences.desktop.in.h:1
+msgid "Configure PGP"
+msgstr "Настройка PGP"
+
+#: src/main.c:41
+msgid "Import keys from the file"
+msgstr "Імпортувати ключі з файлу"
+
+#: src/main.c:41 src/main.c:44 src/main.c:47 src/main.c:50 src/main.c:53
+#: src/main.c:56 src/main.c:59
+msgid "FILE"
+msgstr "ФАЙЛ"
+
+#: src/main.c:44
+msgid "Encrypt file"
 msgstr "Зашифрувати файл"
 
-#: src/seahorse-ops-file.c:176
-msgid "Decrypt File"
-msgstr "Розшифрувати файл"
+#: src/main.c:47
+msgid "Sign file with default key"
+msgstr "Підписати файл типовим ключем"
 
-#: src/seahorse-ops-file.c:193
-msgid "Verify Signature File"
-msgstr "Перевірити файл підпису"
+#: src/main.c:50
+msgid "Encrypt and sign file with default key"
+msgstr "Зашифрувати та підписати типовим ключем"
 
-#: src/seahorse-ops-file.c:208
-msgid "Decrypt & Verify File"
-msgstr "Розшифрувати і перевірити файл"
+#: src/main.c:53
+msgid "Decrypt encrypted file"
+msgstr "Розшифрувати шифрований файл"
 
-#: src/seahorse-ops-key.c:55
-msgid "Delete Key"
-msgstr "Стерти ключ"
+#: src/main.c:56
+msgid "Verify signature file"
+msgstr "Перевірити підпису файлу"
 
-#: src/seahorse-ops-key.c:137
-msgid "Generate Key"
-msgstr "Створити ключ"
+#: src/main.c:59
+msgid "Decrypt encrypt file and verify any signatures it contains"
+msgstr "Розшифрувати шифрований файл та перевірити будь-які підписи, які він містить"
 
-#: src/seahorse-ops-key.c:402
-msgid "Change Trust"
+#: src/main.c:121 src/seahorse.desktop.in.h:1
+msgid "GPG Keys Manager"
+msgstr "Менеджер ключів GPG"
+
+#: src/main.c:136
+#, c-format
+msgid "Imported %d keys"
+msgstr "Імпортовано %d ключів"
+
+#: src/main.c:141
+#, c-format
+msgid "Encrypt file is %s"
+msgstr "Шифрований файл - %s"
+
+#: src/main.c:150
+#, c-format
+msgid "Signature file is %s"
+msgstr "Файл підпису - %s"
+
+#: src/main.c:157
+#, c-format
+msgid "Encrypted and signed file is %s"
+msgstr "Шифрований та підписаний файл - %s"
+
+#: src/main.c:166 src/main.c:197
+#, c-format
+msgid "Decrypted file is %s"
+msgstr "Розшифрований файл - %s"
+
+#: src/seahorse.desktop.in.h:2
+msgid "Manage your GPG keys"
+msgstr "Керування вашими ключами GPG"
+
+#: src/seahorse-add-subkey.c:123
+#, c-format
+msgid "Add subkey to %s"
+msgstr "Додати підключ до %s"
+
+#: src/seahorse-add-subkey.glade.h:1 src/seahorse-generate-adv.glade.h:5
+msgid "DSA (sign only)"
+msgstr "DSA (лише підпис)"
+
+#: src/seahorse-add-subkey.glade.h:2
+msgid "ElGamal (encrypt only)"
+msgstr "ElGamal (лише шифрування)"
+
+#. expires
+#: src/seahorse-add-subkey.glade.h:3 src/seahorse-generate-adv.glade.h:6
+#: src/seahorse-key-properties.c:364
+msgid "Expiration Date:"
+msgstr "Дата закінчення дії:"
+
+#: src/seahorse-add-subkey.glade.h:4
+msgid "Generate a new subkey"
+msgstr "Створити новий підключ"
+
+#: src/seahorse-add-subkey.glade.h:5 src/seahorse-generate-adv.glade.h:10
+#: src/seahorse-key-properties.c:390
+msgid "If key never expires"
+msgstr "Якщо дія ключа ніколи не закінчується"
+
+#: src/seahorse-add-subkey.glade.h:6 src/seahorse-generate-adv.glade.h:12
+msgid "Key _Length:"
+msgstr "Дов_жина ключа:"
+
+#: src/seahorse-add-subkey.glade.h:7 src/seahorse-generate-adv.glade.h:13
+msgid "Key _Type:"
+msgstr "Т_ип ключа:"
+
+#: src/seahorse-add-subkey.glade.h:8 src/seahorse-generate-adv.glade.h:14
+msgid "Key type / algorithm"
+msgstr "Тип/алгоритм ключа"
+
+#: src/seahorse-add-subkey.glade.h:9 src/seahorse-generate-adv.glade.h:15
+msgid "Length of Key"
+msgstr "Довжина ключа"
+
+#: src/seahorse-add-subkey.glade.h:10 src/seahorse-generate-adv.glade.h:17
+#: src/seahorse-key-properties.c:388
+msgid "Never E_xpires"
+msgstr "Ніколи _не закінчується термін дії"
+
+#: src/seahorse-add-subkey.glade.h:11
+msgid "RSA (encrypt only)"
+msgstr "RSA (лише шифрування)"
+
+#: src/seahorse-add-subkey.glade.h:12 src/seahorse-generate-adv.glade.h:21
+msgid "RSA (sign only)"
+msgstr "RSA (лише підпис)"
+
+#: src/seahorse-add-uid.c:101
+#, c-format
+msgid "Add user ID to %s"
+msgstr "Додавання ідентифікатора користувача до %s"
+
+#: src/seahorse-add-uid.glade.h:2
+msgid "Add User ID"
+msgstr "Додавання ідентифікатора користувача"
+
+#: src/seahorse-add-uid.glade.h:3
+msgid "Create the new user ID"
+msgstr "Створити новий ідентифікатор користувача"
+
+#: src/seahorse-add-uid.glade.h:4 src/seahorse-generate-adv.glade.h:7
+msgid "Full _Name:"
+msgstr "Повне _ім'я:"
+
+#: src/seahorse-add-uid.glade.h:5 src/seahorse-generate-adv.glade.h:11
+msgid "Key Co_mment:"
+msgstr "_Коментар до ключа:"
+
+#: src/seahorse-add-uid.glade.h:6 src/seahorse-generate-adv.glade.h:16
+msgid "Must be at least 5 characters long"
+msgstr "Довжина повинна бути не менша ніж 5 символів"
+
+#: src/seahorse-add-uid.glade.h:7 src/seahorse-generate-adv.glade.h:18
+#: src/seahorse-generate-druid.glade.h:20
+msgid "Optional comment describing key"
+msgstr "Необов'язковий коментар з описом ключа"
+
+#: src/seahorse-add-uid.glade.h:8 src/seahorse-generate-adv.glade.h:19
+#: src/seahorse-generate-druid.glade.h:21
+msgid "Optional email address"
+msgstr "Необов'язкова електронна адреса"
+
+#: src/seahorse-add-uid.glade.h:9 src/seahorse-generate-adv.glade.h:22
+msgid "_Email Address:"
+msgstr "_Електронна адреса"
+
+#: src/seahorse-change-passphrase.glade.h:2
+msgid "Change Passphrase"
+msgstr "Зміна парольної фрази"
+
+#: src/seahorse-change-passphrase.glade.h:3
+#: src/seahorse-generate-adv.glade.h:2
+msgid "Con_firm Passphrase:"
+msgstr "Підт_вердження парольної фрази:"
+
+#: src/seahorse-change-passphrase.glade.h:4
+msgid "Confirm new passphrase"
+msgstr "Підтвердіть парольну фразу"
+
+#: src/seahorse-change-passphrase.glade.h:5
+msgid "Enter new passphrase"
+msgstr "Введіть нову парольну фразу"
+
+#: src/seahorse-change-passphrase.glade.h:6
+msgid "New _Passphrase:"
+msgstr "_Нова парольна фраза:"
+
+#: src/seahorse-delete.c:36
+#, c-format
+msgid "%s is a key pair! Do you still want to delete it?"
+msgstr "%s є парою ключів! Однак бажаєте видалити?"
+
+#: src/seahorse-delete.c:66
+#, c-format
+msgid "Are you sure you want to permanently delete %s?"
+msgstr "Ви впевнені, що бажаєте остаточно видалити %s?"
+
+#: src/seahorse-delete.c:131
+#, c-format
+msgid "Are you sure you want to permanently delete subkey %d of %s?"
+msgstr "Ви впевнені, що бажаєте остаточно видалити підключ %d з %s?"
+
+#: src/seahorse-export.glade.h:2
+msgid "Choose a file to export to"
+msgstr "Виберіть файл для експорту"
+
+#: src/seahorse-export.glade.h:3 src/seahorse-key-manager.glade.h:15
+msgid "E_xport"
+msgstr "_Експорт"
+
+#: src/seahorse-export.glade.h:4
+msgid "Export Keys"
+msgstr "Експорт ключа"
+
+#: src/seahorse-export.glade.h:5
+msgid "Export keys to a file"
+msgstr "Експортувати ключі у файл"
+
+#: src/seahorse-export.glade.h:6
+msgid "Export keys to a key server"
+msgstr "Експортувати ключ на сервер ключів"
+
+#: src/seahorse-export.glade.h:7
+msgid "Export keys to clipboard"
+msgstr "Експортувати ключі у буфер обміну"
+
+#: src/seahorse-export.glade.h:8
+msgid "Export to _Clipboard:"
+msgstr "Експорт у _буфер обміну"
+
+#: src/seahorse-export.glade.h:9
+msgid "Export to _File:"
+msgstr "Експорт у _файл:"
+
+#: src/seahorse-export.glade.h:10
+msgid "Export to _Server:"
+msgstr "Експорт на с_ервер:"
+
+#: src/seahorse-export.glade.h:11
+msgid "Key server web address"
+msgstr "Адреса сервера ключів"
+
+#: src/seahorse-export.glade.h:12
+msgid "Name of file to export to"
+msgstr "Назва файлу для експорту"
+
+#: src/seahorse-export.glade.h:13 src/seahorse-import.glade.h:15
+msgid "www.keyserver.net/en"
+msgstr "www.keyserver.net/en"
+
+#: src/seahorse-generate-adv.glade.h:3
+msgid "Confirmation of passphrase"
+msgstr "Підтвердження парольної фрази"
+
+#: src/seahorse-generate-adv.glade.h:4
+msgid "DSA & ElGamal"
+msgstr "DSA та ElGamal"
+
+#: src/seahorse-generate-adv.glade.h:8
+msgid "Generate a Key"
+msgstr "Створення ключа"
+
+#: src/seahorse-generate-adv.glade.h:9
+msgid "Generate a new key"
+msgstr "Створити новий ключ"
+
+#: src/seahorse-generate-adv.glade.h:20 src/seahorse-generate-druid.glade.h:23
+msgid "Passphrase to secure key"
+msgstr "Парольна фраза для захисту ключа"
+
+#: src/seahorse-generate-adv.glade.h:23
+msgid "_Generate"
+msgstr "С_творити"
+
+#: src/seahorse-generate-adv.glade.h:24
+msgid "_Passphrase:"
+msgstr "_Парольна фраза:"
+
+#: src/seahorse-generate-druid.glade.h:2
+msgid ""
+"Before selecting apply to start key generation, please make sure all of your "
+"previous settings are correct."
 msgstr ""
+"Перед натисканням кнопки \"Застосувати\", переконайтесь, що всі введені вами "
+"параметри коректні."
 
-#: src/seahorse-ops-key.c:543
-msgid "Change Expiration"
-msgstr "Змінити термін дії"
+#: src/seahorse-generate-druid.glade.h:3
+msgid ""
+"Choosing a passphrase is an integral part of creating a strong key.  Like a "
+"password, a passphrase should letters, numbers, and punctuation.  "
+"Additionally, a passphrase can contain spaces, meaning it can contain many "
+"words.  You should pick a rememberable phrase that contains punctuation.  "
+"Take this phrase, adjust the case of various letters, and change some of the "
+"letters into numbers or punctuation rmeiniscent of \"leet speak\", but don't "
+"make it so obscure to the point where you can't remember it."
+msgstr ""
+"Вибір парольної фрази є невід'ємною частиною створення надійного ключа. Як і пароль "
+"парольна фраза повинна містити символи, числа та знаки пунктуації.  "
+"Крім того, парольна фраза може містити пробіли, це означає, що вона може "
+"складатись з кількох слів. Необхідно вибрати фразу зі знаками пунктуації, яку "
+"ви легко запам'ятаєте. Вибравши фразу, замініть у ній регістр деяких літер, "
+"та перетворіть деякі літери у числа або знаки пунктуації, але не змінюйте її на стільки, "
+"що ви не зможете пригадати її."
 
-#: src/seahorse-ops-key.c:633
-msgid "Disable Key"
-msgstr "Заборонити ключ"
+#: src/seahorse-generate-druid.glade.h:4
+msgid "Comment:"
+msgstr "Коментар:"
 
-#: src/seahorse-ops-key.c:637
-msgid "Enable Key"
-msgstr "Дозволити ключ"
+#: src/seahorse-generate-druid.glade.h:5
+msgid "Confirm"
+msgstr "Підтвердження"
 
-#: src/seahorse-ops-key.c:740
-#, fuzzy
-msgid "Passphrase Change"
+#: src/seahorse-generate-druid.glade.h:6
+msgid "Confirm Passphrase: "
+msgstr "Підтвердження парольної фрази: "
+
+#: src/seahorse-generate-druid.glade.h:7
+msgid "Confirm passphrase"
+msgstr "Підтвердіть парольну фразу"
+
+#: src/seahorse-generate-druid.glade.h:8
+msgid "Date the Key Expires"
+msgstr "Дата закінчення терміну дії"
+
+#: src/seahorse-generate-druid.glade.h:9
+msgid "Email Address: "
+msgstr "Електронна адреса: "
+
+#: src/seahorse-generate-druid.glade.h:10
+msgid "Enter Name - Must be at least five letters."
+msgstr "Введіть ім'я - повинно складатись принаймні з п'яти символів."
+
+#: src/seahorse-generate-druid.glade.h:11 src/seahorse-key-manager-store.c:269
+msgid "Expiration Date"
+msgstr "Дата закінчення терміну дії"
+
+#: src/seahorse-generate-druid.glade.h:12
+msgid "Expiration Date: "
+msgstr "Дата закінчення дії:"
+
+#: src/seahorse-generate-druid.glade.h:13
+msgid "Extra High Security"
+msgstr "Дуже висока безпека"
+
+#: src/seahorse-generate-druid.glade.h:14
+msgid "Full Name: "
+msgstr "Повне ім'я: "
+
+#: src/seahorse-generate-druid.glade.h:15
+msgid "High Security"
+msgstr "Висока безпека"
+
+#: src/seahorse-generate-druid.glade.h:16
+msgid "Key Never Expires"
+msgstr "Термін дії ключа ніколи не закінчується"
+
+#: src/seahorse-generate-druid.glade.h:17
+msgid ""
+"Keys must be given an appropriate expiration date.  For most people, the "
+"default option of never expires is sufficent.  If you only plan on using the "
+"key for a certain period of time, i.e. for a specific project, you should "
+"pick an expiration date after the projected completion of your project.  "
+"After the expiration date, your private key will still be able to decrypt "
+"messages or data encrypted with your public key.  However, your private key "
+"will no longer sign messages or data."
+msgstr ""
+"Ключі повинні мати відповідний термін дії. Для більшості користувачів "
+"підійде типовий варіант - ключ без обмеження терміну дії. Якщо ви плануєте використовувати "
+"ключ протягом деякого проміжку часу, наприклад, у певному проекті, слід "
+"вибрати час закінчення дії ключа після завершення вашого проекту. "
+"Після закінчення терміну дії, ваш приватний ключ все ще може використовуватись "
+"для розшифровування повідомлень або даних, зашифрованих вашим публічним ключем. "
+"Але його буде неможливо використати для підписування повідомлень чи даних."
+
+#: src/seahorse-generate-druid.glade.h:18
+msgid "Medium Security"
+msgstr "Середня безпека"
+
+#: src/seahorse-generate-druid.glade.h:19 src/seahorse-key-manager-store.c:154
+#: src/seahorse-key-properties.c:373
+msgid "Never Expires"
+msgstr "Ніколи не закінчується"
+
+#: src/seahorse-generate-druid.glade.h:22
+msgid "Passphrase"
 msgstr "Парольна фраза"
 
-#: src/seahorse-ops-key.c:1191
-#, fuzzy
-msgid "Delete Subkey"
-msgstr "Стерти ключ"
+#: src/seahorse-generate-druid.glade.h:24
+msgid "Passphrase:"
+msgstr "Парольна фраза:"
 
-#: src/seahorse-ops-key.c:1373
-msgid "Revoke Subkey"
+#: src/seahorse-generate-druid.glade.h:25
+msgid "Personal Information"
+msgstr "Особиста інформація"
+
+#: src/seahorse-generate-druid.glade.h:26
+msgid "Seahorse GPG Key Generation Druid"
+msgstr "Помічник з генерування GPG ключів"
+
+#: src/seahorse-generate-druid.glade.h:27
+msgid "Seahorse GPG Key Generation Druid Complete"
+msgstr "Помічник з генерування GPG ключів: завершення"
+
+#: src/seahorse-generate-druid.glade.h:28
+msgid "Seahorse Key Generation Druid"
+msgstr "Помічник генерування ключів"
+
+#: src/seahorse-generate-druid.glade.h:29
+msgid "Security Level"
+msgstr "Рівень безпеки"
+
+#: src/seahorse-generate-druid.glade.h:30
+msgid ""
+"The Medium Security level is the default and should be acceptable for "
+"general everyday usage.  The High Security level should be selected if you "
+"know your data will be actively scrutinized.  The Extra High level should be "
+"selected if you know your data is actively scrutinized and will be under "
+"cryptographic attack. "
 msgstr ""
+"Середній рівень безпеки є типовим. Він повинен підійти для щоденного використання. "
+"Якщо ви знаєте, що ваші дані будуть ретельно досліджуватись, слід вибрати високий рівень безпеки."
+"Дуже високий рівень безпеки слід вибирати, якщо вам відомо, що ваші дані "
+"будуть ретельно досліджуватись та зазнають спроби криптографічного злому."
 
-#: src/seahorse-ops-key.c:1521
-#, fuzzy
+#: src/seahorse-generate-druid.glade.h:31
+msgid "This druid will guide you through the steps of creating a GPG key pair."
+msgstr "Цей помічник проведе вас по кроках створення пари GPG ключів."
+
+#: src/seahorse-generate-druid.glade.h:32
+msgid ""
+"To create a key and tie it to your identity, the following information is "
+"needed: Full Name, Email Address, and Comment.  These values will be given "
+"to the name of your key in the following "
+"manner:                              Full Name (Comment) <email address>."
+msgstr ""
+"Для створення ключа та пов'язування його з вашою особою, необхідно ввести "
+"наступну інформацію: повне ім'я, адресу електронної пошти та коментар. З цих значень "
+"буде сформовано назву вашого ключа у наступному порядку:  Повне ім'я (коментар) <електронна адреса>."
+
+#: src/seahorse-generate-druid.glade.h:33
+msgid "druidpage_pass"
+msgstr "druidpage_pass"
+
+#: src/seahorse-generate-druid.glade.h:34
+msgid "druidpage_pinfo"
+msgstr "druidpage_pinfo"
+
+#: src/seahorse-generate-druid.glade.h:35
+msgid "keygen_druid"
+msgstr "keygen_druid"
+
+#: src/seahorse-generate-select.glade.h:1
+msgid "Advanced"
+msgstr "Розширений"
+
+#: src/seahorse-generate-select.glade.h:2
+msgid "Druid"
+msgstr "Помічник"
+
+#: src/seahorse-generate-select.glade.h:3
+msgid "Generate a key via the druid."
+msgstr "Створити ключ за допомогою помічника."
+
+#: src/seahorse-generate-select.glade.h:4
+msgid "Generate a key with the advanced dialog."
+msgstr "Створити ключ за допомогою розширеного діалогу."
+
+#: src/seahorse-generate-select.glade.h:5
+msgid "Method Select"
+msgstr "Вибір метода"
+
+#: src/seahorse-generate-select.glade.h:6
+msgid "Select a method to generate your new key."
+msgstr "Виберіть метод створення вашого нового ключа."
+
+#: src/seahorse-generate-select.glade.h:7
+msgid "radio_druid"
+msgstr "radio_druid"
+
+#: src/seahorse-import.glade.h:2
+msgid "Enter a unique key id"
+msgstr "Введіть унікальний ідентифікатор ключа"
+
+#: src/seahorse-import.glade.h:3
+msgid "Import Key(s)"
+msgstr "Імпорт ключів"
+
+#: src/seahorse-import.glade.h:4
+msgid "Import a key from a key server"
+msgstr "Імпортувати ключа з сервера ключів"
+
+#: src/seahorse-import.glade.h:5
+msgid "Import from _Clipboard:"
+msgstr "Імпорт з _буферу обміну:"
+
+#: src/seahorse-import.glade.h:6
+msgid "Import from _File:"
+msgstr "Імпорт з _файла:"
+
+#: src/seahorse-import.glade.h:7
+msgid "Import from _Server:"
+msgstr "Імпорт з с_ервера:"
+
+#: src/seahorse-import.glade.h:8
+msgid "Import keys from a file"
+msgstr "Імпортувати ключі з файла"
+
+#: src/seahorse-import.glade.h:9
+msgid "Import keys from clipboard"
+msgstr "Імпортувати ключі з буферу обміну"
+
+#: src/seahorse-import.glade.h:10
+msgid "Import keys from selected source"
+msgstr "Імпортувати ключі з вибраного джерела"
+
+#: src/seahorse-import.glade.h:11
+msgid "Select File to Import"
+msgstr "Вибір файлу для імпорту"
+
+#: src/seahorse-import.glade.h:12
+msgid "Select or enter a key server's web address"
+msgstr "Виберіть або введіть веб-адресу сервера ключів"
+
+#: src/seahorse-import.glade.h:13
+msgid "_Import"
+msgstr "_Імпорт"
+
+#: src/seahorse-import.glade.h:14
+msgid "_Key ID:"
+msgstr "_Ідентифікатор ключа:"
+
+#: src/seahorse-key-manager.c:210
+msgid "translator_credits"
+msgstr ""
+"Юрій Сирота <yuriy@beer.com>\n"
+"Максим Дзюманенко <mvd@mylinux.com.ua>"
+
+#: src/seahorse-key-manager.c:230
+msgid "seahorse"
+msgstr "морський коник"
+
+#: src/seahorse-key-manager.glade.h:1
+msgid "Add P_hoto ID..."
+msgstr "Додати _фото ідентифікатор..."
+
+#: src/seahorse-key-manager.glade.h:2
+msgid "Add Sub_key..."
+msgstr "Додати підкл_юч..."
+
+#: src/seahorse-key-manager.glade.h:3
+msgid "Add _Revoker..."
+msgstr "Додати _відкликання..."
+
+#: src/seahorse-key-manager.glade.h:4
+msgid "Add _User ID..."
+msgstr "Додати ідентифікатор _користувача"
+
+#: src/seahorse-key-manager.glade.h:5
+msgid "Add a new subkey"
+msgstr "Стерти новий підключ"
+
+#: src/seahorse-key-manager.glade.h:6
+msgid "Add a new user ID"
+msgstr "Додати новий ідентифікатор користувача"
+
+#: src/seahorse-key-manager.glade.h:7
+msgid "Add a photo ID"
+msgstr "Додати фото ідентифікатор"
+
+#: src/seahorse-key-manager.glade.h:8
+msgid "Add the default key as a revoker"
+msgstr "Додати типовий ключ як ключ відкликання"
+
+#: src/seahorse-key-manager.glade.h:9
+msgid "Backup key pair"
+msgstr "Створити резервну копію"
+
+#: src/seahorse-key-manager.glade.h:10
+msgid "Change passphrase of secret key"
+msgstr "Змінити пароль таємного ключа"
+
+#: src/seahorse-key-manager.glade.h:11
+msgid "Collapse all listings"
+msgstr "Згорнути всі списки"
+
+#: src/seahorse-key-manager.glade.h:12
+msgid "Create a new key"
+msgstr "Створити новий ключ"
+
+#: src/seahorse-key-manager.glade.h:13
+msgid "Create a revocation certificate"
+msgstr "Створити сертифікат відкликання"
+
+#: src/seahorse-key-manager.glade.h:14
+msgid "Delete key"
+msgstr "Видалити ключ"
+
+#: src/seahorse-key-manager.glade.h:16
+msgid "E_xport..."
+msgstr "_Експорт..."
+
+#: src/seahorse-key-manager.glade.h:17
+msgid "Expand all listings"
+msgstr "Розгорнути всі списки"
+
+#: src/seahorse-key-manager.glade.h:18
+msgid "Export key"
+msgstr "Експортувати ключ"
+
+#: src/seahorse-key-manager.glade.h:19
+msgid "Export public key"
+msgstr "Експортувати публічний ключ"
+
+#: src/seahorse-key-manager.glade.h:20
+msgid "Import keys"
+msgstr "Імпортувати ключі"
+
+#: src/seahorse-key-manager.glade.h:21
+msgid "Seahorse - GPG Key Manager"
+msgstr "Seahorse - Менеджер GPG ключів"
+
+#: src/seahorse-key-manager.glade.h:22
+msgid "Show Seahorse help"
+msgstr "Показати довідку з Seahorse"
+
+#: src/seahorse-key-manager.glade.h:23
+msgid "Show key properties"
+msgstr "Показати властивості ключа"
+
+#: src/seahorse-key-manager.glade.h:24
+msgid "Sign key"
+msgstr "Підписати ключ"
+
+#: src/seahorse-key-manager.glade.h:25
+msgid "Sign public key"
+msgstr "Підписати публічний ключ"
+
+#: src/seahorse-key-manager.glade.h:26
+msgid "View statusbar"
+msgstr "Показати рядок стану"
+
+#: src/seahorse-key-manager.glade.h:27
+msgid "View toolbar"
+msgstr "Показати панель інструментів"
+
+#: src/seahorse-key-manager.glade.h:28
+msgid "_Backup..."
+msgstr "_Резервне копіювання..."
+
+#: src/seahorse-key-manager.glade.h:29
+msgid "_Change Passphrase..."
+msgstr "З_міна парольної фрази..."
+
+#: src/seahorse-key-manager.glade.h:30
+msgid "_Collapse All"
+msgstr "_Згорнути все"
+
+#: src/seahorse-key-manager.glade.h:31
+msgid "_Contents"
+msgstr "_Зміст"
+
+#: src/seahorse-key-manager.glade.h:32
+msgid "_Delete"
+msgstr "В_идалити"
+
+#: src/seahorse-key-manager.glade.h:33
+msgid "_Expand All"
+msgstr "_Розгорнути все"
+
+#: src/seahorse-key-manager.glade.h:34
+msgid "_Generate Revocation Certificate..."
+msgstr "С_творити сертифікат відкликання..."
+
+#: src/seahorse-key-manager.glade.h:35
+msgid "_Import..."
+msgstr "_Імпорт..."
+
+#: src/seahorse-key-manager.glade.h:36
+msgid "_Key"
+msgstr "_Ключ"
+
+#: src/seahorse-key-manager.glade.h:37
+msgid "_New..."
+msgstr "_Створити..."
+
+#: src/seahorse-key-manager.glade.h:38
+msgid "_Properties"
+msgstr "В_ластивості"
+
+#. do sign
+#: src/seahorse-key-manager.glade.h:39 src/seahorse-key-properties.c:168
+#: src/seahorse-sign.glade.h:17
+msgid "_Sign"
+msgstr "_Підписати"
+
+#: src/seahorse-key-manager.glade.h:40
+msgid "_Sign..."
+msgstr "_Підписати..."
+
+#: src/seahorse-key-manager.glade.h:41
+msgid "_Statusbar"
+msgstr "Рядок _стану"
+
+#: src/seahorse-key-manager.glade.h:42
+msgid "_Toolbar"
+msgstr "_Панель інструментів"
+
+#: src/seahorse-key-manager-store.c:147 src/seahorse-key-properties.c:361
+msgid "Expired"
+msgstr "Термін вийшов"
+
+#: src/seahorse-key-manager-store.c:273
+msgid "Trust"
+msgstr "Довіряти"
+
+#: src/seahorse-key-manager-store.c:277
+msgid "Length"
+msgstr "Довжина"
+
+#: src/seahorse-key-manager-store.c:281
+msgid "Type"
+msgstr "Тип"
+
+#: src/seahorse-key-op.c:247
+msgid "Operation complete"
+msgstr "Операція завершена"
+
+#: src/seahorse-key-properties.c:128
+msgid "User IDs"
+msgstr "Ідентифікатор користувача"
+
+#: src/seahorse-key-properties.c:139
+#, c-format
+msgid "User ID %d"
+msgstr "Ідентифікатор користувача %d"
+
+#: src/seahorse-key-properties.c:143
+msgid "User ID"
+msgstr "Ідентифікатор користувача"
+
+#: src/seahorse-key-properties.c:160
+msgid "_Primary"
+msgstr "_Головний"
+
+#. callback
+#: src/seahorse-key-properties.c:162
+msgid "Set as primary User ID"
+msgstr "Встановити як головний ідентифікатор користувача"
+
+#. **** do ciphers ****
+#: src/seahorse-key-properties.c:180
+msgid "Ciphers"
+msgstr "Шифри"
+
+#. **** do hashes ****
+#: src/seahorse-key-properties.c:219
+msgid "Hashes"
+msgstr "Хеші"
+
+#. **** do compression ****
+#: src/seahorse-key-properties.c:242
+msgid "Compression"
+msgstr "Стиснення"
+
+#: src/seahorse-key-properties.c:337
+msgid "Key identifier"
+msgstr "Ідентифікатор ключа"
+
+#. type
+#: src/seahorse-key-properties.c:342
+msgid "Type:"
+msgstr "Тип:"
+
+#: src/seahorse-key-properties.c:342
+msgid "Algorithm"
+msgstr "Алгоритм"
+
+#: src/seahorse-key-properties.c:348
+msgid "Key creation date"
+msgstr "Дата створення ключа"
+
+#. length
+#: src/seahorse-key-properties.c:352
+msgid "Length:"
+msgstr "Довжина:"
+
+#: src/seahorse-key-properties.c:448 src/seahorse-key-properties.glade.h:19
+msgid "_Revoke"
+msgstr "Від_кликати"
+
+#: src/seahorse-key-properties.c:452
+#, c-format
+msgid "Revoke subkey %d"
+msgstr "Відкликати підключ %d"
+
+#: src/seahorse-key-properties.c:461
+#, c-format
+msgid "Subkey %d"
+msgstr "Підключ %d"
+
+#: src/seahorse-key-properties.c:473
+#, c-format
+msgid "Delete subkey %d"
+msgstr "Видалити підключ %d"
+
+#: src/seahorse-key-properties.c:534
+#, c-format
+msgid "%s Properties"
+msgstr "Властивості %s"
+
+#: src/seahorse-key-properties.glade.h:1
+msgid "All"
+msgstr "Всі"
+
+#: src/seahorse-key-properties.glade.h:2
+msgid "Dis_abled"
+msgstr "_Вимкнений"
+
+#: src/seahorse-key-properties.glade.h:3
+msgid "Disabled keys cannot be used for operations"
+msgstr "Вимкнені ключі не можуть використовуватись для роботи"
+
+#: src/seahorse-key-properties.glade.h:4
+msgid "Fingerprint:"
+msgstr "Відбиток:"
+
+#: src/seahorse-key-properties.glade.h:6
+msgid "Fully trust owner"
+msgstr "Повна довіра власнику"
+
+#: src/seahorse-key-properties.glade.h:8
+msgid "Marginally trust owner"
+msgstr "Незначна довіра власнику"
+
+#: src/seahorse-key-properties.glade.h:10
+msgid "Never trust owner"
+msgstr "Не довіряти власнику"
+
+#: src/seahorse-key-properties.glade.h:11
+msgid "Owner _Trust:"
+msgstr "Дов_іра власнику:"
+
+#: src/seahorse-key-properties.glade.h:12
+msgid "Owner is unknown"
+msgstr "Власник невідомий"
+
+#: src/seahorse-key-properties.glade.h:13
+msgid "Primary Key"
+msgstr "Головний ключ"
+
+#: src/seahorse-key-properties.glade.h:14
+msgid "Trust placed in owner's ability to sign keys"
+msgstr "Довіра впливає на здатність власника підписувати ключі"
+
+#: src/seahorse-key-properties.glade.h:16
+msgid "Unique key identifier"
+msgstr "Унікальний ідентифікатор ключа"
+
+#: src/seahorse-key-properties.glade.h:18
+msgid "Your personal key"
+msgstr "Ваш особистий ключ"
+
+#: src/seahorse-key-properties.glade.h:20
+msgid "_Signatures:"
+msgstr "_Підписи:"
+
+#: src/seahorse-preferences.c:85
+msgid "PGP"
+msgstr "PGP"
+
+#: src/seahorse-preferences.c:104
+msgid "_Validity"
+msgstr "Д_ійсність"
+
+#: src/seahorse-preferences.c:106 src/seahorse-sign.glade.h:13
+msgid "_Expires"
+msgstr "_Закінчується термін"
+
+#: src/seahorse-preferences.c:108
+msgid "_Trust"
+msgstr "До_віра"
+
+#: src/seahorse-preferences.c:110
+msgid "_Length"
+msgstr "_Довжина"
+
+#: src/seahorse-preferences.c:112
+msgid "T_ype"
+msgstr "_Тип"
+
+#: src/seahorse-preferences.glade.h:1
+msgid "Close Preferences"
+msgstr "Закрити настройки"
+
+#: src/seahorse-preferences.glade.h:2
+msgid "Desktop Default"
+msgstr "З настройок стільниці"
+
+#: src/seahorse-preferences.glade.h:3
+msgid "Icons Only"
+msgstr "Лише значки"
+
+#: src/seahorse-preferences.glade.h:4
+msgid "Key Manager"
+msgstr "Менеджер ключів"
+
+#: src/seahorse-preferences.glade.h:5
+msgid "Only show icons"
+msgstr "Показувати лише значки"
+
+#: src/seahorse-preferences.glade.h:6
+msgid "Only show text"
+msgstr "Показувати лише текст"
+
+#: src/seahorse-preferences.glade.h:7
+msgid "Preferences Help"
+msgstr "Довідка з настройок"
+
+#: src/seahorse-preferences.glade.h:8
+msgid "Seahorse Preferences"
+msgstr "Настройки Seahorse"
+
+#: src/seahorse-preferences.glade.h:9
+msgid "Show text below icons"
+msgstr "Показувати текст під значками"
+
+#: src/seahorse-preferences.glade.h:10
+msgid "Show text beside icons"
+msgstr "Показувати текст поруч зі значками"
+
+#: src/seahorse-preferences.glade.h:11
+msgid "Text Below Icons"
+msgstr "Текст під значками"
+
+#: src/seahorse-preferences.glade.h:12
+msgid "Text Beside Icons"
+msgstr "Текст поруч зі значками"
+
+#: src/seahorse-preferences.glade.h:13
+msgid "Text Only"
+msgstr "Лише текст"
+
+#: src/seahorse-preferences.glade.h:14
+msgid "Toolbar _Style:"
+msgstr "Стиль _панелі інструментів:"
+
+#: src/seahorse-preferences.glade.h:15
+msgid "Use system settings"
+msgstr "Використовувати системне значення"
+
+#: src/seahorse-preferences.glade.h:16
+msgid "Visible Columns"
+msgstr "Видимі стовпчики"
+
+#: src/seahorse-revoke.c:73
+#, c-format
+msgid "Revoke Subkey %d of %s"
+msgstr "Відкликання підключа %d з %s"
+
+#: src/seahorse-revoke.c:76
+#, c-format
+msgid "Revoke %s"
+msgstr "Відкликання %s"
+
+#: src/seahorse-revoke.c:98
+#, c-format
+msgid ""
+"You are about to add %s as a revoker for %s. This operation cannot be "
+"undone! Are you sure you want to continue?"
+msgstr ""
+"Ви намагаєтесь додати %s як ключ відкликання до %s. Цю операцію неможливо "
+"скасувати! Ви впевнені, що бажаєте продовжити?"
+
+#: src/seahorse-revoke.glade.h:2
+msgid "Compromised"
+msgstr "Скомпрометований"
+
+#: src/seahorse-revoke.glade.h:3
+msgid "Key has been compromised"
+msgstr "Ключ був скомпрометований"
+
+#: src/seahorse-revoke.glade.h:4
+msgid "Key has been superseded"
+msgstr "Ключ був замінений"
+
+#: src/seahorse-revoke.glade.h:5
+msgid "Key is no longer used"
+msgstr "Ключ вже не використовується"
+
+#: src/seahorse-revoke.glade.h:6
+msgid "No Reason"
+msgstr "Немає причини"
+
+#: src/seahorse-revoke.glade.h:7
+msgid "No reason for revoking key"
+msgstr "Причина відкликання ключа не зазначена"
+
+#: src/seahorse-revoke.glade.h:8
+msgid "Not Used"
+msgstr "Не використовується"
+
+#: src/seahorse-revoke.glade.h:9
+msgid "Optional description of revocation"
+msgstr "Необов'язковий опис відкликання"
+
+#: src/seahorse-revoke.glade.h:10
+msgid "Re_voke"
+msgstr "_Відкликати"
+
+#: src/seahorse-revoke.glade.h:11
+msgid "Reason for revoking the key"
+msgstr "Причина відкликання ключа"
+
+#: src/seahorse-revoke.glade.h:12
+msgid "Revoke key"
+msgstr "Відкликати ключ"
+
+#: src/seahorse-revoke.glade.h:13
+msgid "Superseded"
+msgstr "Замінений"
+
+#: src/seahorse-revoke.glade.h:14
+msgid "_Description:"
+msgstr "_Опис:"
+
+#: src/seahorse-revoke.glade.h:15
+msgid "_Reason:"
+msgstr "_Причина:"
+
+#: src/seahorse-sign.c:80
+#, c-format
+msgid "Are you sure you want to sign all user IDs for %s?"
+msgstr "Ви впевнені, що бажаєте підписати всі ідентифікатори користувача для %s?"
+
+#: src/seahorse-sign.glade.h:1
+msgid "Casually"
+msgstr "Недбало"
+
+#: src/seahorse-sign.glade.h:2
+msgid "Default answer"
+msgstr "Типова відповідь"
+
+#: src/seahorse-sign.glade.h:3
+msgid "Have casually checked key"
+msgstr "Ключ був перевірений поверхнево"
+
+#: src/seahorse-sign.glade.h:4
+msgid "Have checked key very carefully"
+msgstr "Ключ був ретельно перевірений"
+
+#: src/seahorse-sign.glade.h:5
+msgid "Have not checked key"
+msgstr "Ключ не був перевірений"
+
+#: src/seahorse-sign.glade.h:6
+msgid "If signature can be revoked"
+msgstr "Чи може підпис бути відкликаним"
+
+#: src/seahorse-sign.glade.h:7
+msgid "If signature expires with key"
+msgstr "Чи термін дії підпису закінчується з терміном дії ключа"
+
+#: src/seahorse-sign.glade.h:8
+msgid ""
+"If signature is local to the key ring and won't be exported with the key"
+msgstr ""
+"Чи є підпис локальним для комплекту ключів та не буде експортуватись з ключем"
+
+#: src/seahorse-sign.glade.h:9
+msgid "No answer"
+msgstr "Немає відповіді"
+
+#: src/seahorse-sign.glade.h:10
+msgid "Not at all"
+msgstr "Не перевірявся"
+
+#: src/seahorse-sign.glade.h:11
 msgid "Sign Key"
-msgstr "Підписати"
+msgstr "Підписати ключ"
 
-#: src/seahorse-ops-text.c:71
-#: src/seahorse-ops-text.c:86
-msgid "Export Text"
-msgstr "Експортувати текст"
+#: src/seahorse-sign.glade.h:12
+msgid "Very carefully"
+msgstr "Дуже ретельно"
 
-#: src/seahorse-ops-text.c:115
-#, fuzzy
-msgid "Clear Sign"
-msgstr "Очистити підпис"
+#: src/seahorse-sign.glade.h:14
+msgid "_How carefully have you checked this key?"
+msgstr "_Наскільки ретельно ви перевірили цей ключ?"
 
-#: src/seahorse-ops-text.c:168
-msgid "Verify Signature"
-msgstr "Перевірити підпис"
+#: src/seahorse-sign.glade.h:15
+msgid "_Local"
+msgstr "_Локальний"
 
-#: src/seahorse-ops-text.c:184
-msgid "Decrypt & Verify"
-msgstr "Розшифрувати і перевірити"
-
-#: src/seahorse-text-editor.c:200
-#: src/seahorse-text-editor.glade2.h:1
-#, fuzzy
-msgid "C_lear Text Sign"
-msgstr "Очистити підпис"
-
-#: src/seahorse-text-editor.glade2.h:2
-#, fuzzy
-msgid "Clear Text Sign"
-msgstr "Очистити підпис"
-
-#: src/seahorse-text-editor.glade2.h:5
-msgid "Decrypt and verify a signatur"
-msgstr "Розшифрувати і перевірити підпис"
-
-#: src/seahorse-text-editor.glade2.h:6
-msgid "Decrypt text"
-msgstr "Розшифрувати текст"
-
-#: src/seahorse-text-editor.glade2.h:9
-msgid "Encrypt text"
-msgstr "Зашифрувати текст"
-
-#: src/seahorse-text-editor.glade2.h:10
-#, fuzzy
-msgid "Export keys to text"
-msgstr "Експорт ключа у текст"
-
-#: src/seahorse-text-editor.glade2.h:13
-msgid "Make a clear text signature"
-msgstr "Зробити простий текстовий підпис"
-
-#: src/seahorse-text-editor.glade2.h:14
-msgid "Make a signature"
-msgstr "Зробити підпис"
-
-#: src/seahorse-text-editor.glade2.h:15
-#, fuzzy
-msgid "Seahorse Text Editor"
-msgstr "Редактор тексту"
-
-#: src/seahorse-text-editor.glade2.h:16
-#, fuzzy
-msgid "Show text editor help"
-msgstr "Редактор тексту"
-
-#: src/seahorse-text-editor.glade2.h:19
-msgid "Verify a signature"
-msgstr "Перевірити підпис"
-
-#: src/seahorse-text-editor.glade2.h:27
-#, fuzzy
-msgid "_Text Editor Help"
-msgstr "Редактор тексту"
-
-#: src/seahorse-util.c:79
-msgid "%Y-%m-%d"
-msgstr "%Y-%m-%d"
-
+#: src/seahorse-sign.glade.h:16
+msgid "_Revocable"
+msgstr "Може _відкликатись"
