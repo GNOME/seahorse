@@ -163,7 +163,6 @@ seahorse_key_manager_store_changed (SeahorseKey *skey, SeahorseKeyChange change,
 				GTK_TREE_STORE (skstore), iter, skey);
 			break;
 		default:
-			parent_class->changed (skey, change, skstore, iter);
 			break;
 	}
 }

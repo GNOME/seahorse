@@ -102,7 +102,6 @@ seahorse_recipients_store_changed (SeahorseKey *skey, SeahorseKeyChange change,
 				SEAHORSE_KEY_STORE_GET_CLASS (skstore)->remove (skstore, iter);
 			break;
 		default:
-			parent_class->changed (skey, change, skstore, iter);
 			break;
 	}
 }

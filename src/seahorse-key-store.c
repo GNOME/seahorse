@@ -64,10 +64,6 @@ static void	seahorse_key_store_set			(GtkTreeStore		*store,
 							 SeahorseKey		*skey);
 static void	seahorse_key_store_remove_iter		(SeahorseKeyStore	*skstore,
 							 GtkTreeIter		*iter);
-static void	seahorse_key_store_changed		(SeahorseKey		*skey,
-							 SeahorseKeyChange	change,
-							 SeahorseKeyStore	*skstore,
-							 GtkTreeIter		*iter);
 /* Context signals */
 static void	seahorse_key_store_context_destroyed	(GtkObject		*object,
 							 SeahorseKeyStore	*skstore);
@@ -76,6 +72,9 @@ static void	seahorse_key_store_key_added		(SeahorseContext	*sctx,
 							 SeahorseKeyStore	*skstore);
 /* Key signals */
 static void	seahorse_key_store_key_destroyed	(GtkObject		*object,
+							 SeahorseKeyRow		*skrow);
+static void	seahorse_key_store_key_changed		(SeahorseKey		*skey,
+							 SeahorseKeyChange	change,
 							 SeahorseKeyRow		*skrow);
 /* Key Row methods */
 static void	seahorse_key_row_new			(SeahorseKeyStore	*skstore,
@@ -123,6 +122,7 @@ seahorse_key_store_class_init (SeahorseKeyStoreClass *klass)
 	klass->append = seahorse_key_store_append_key;
 	klass->set = seahorse_key_store_set;
 	klass->remove = seahorse_key_store_remove_iter;
+	klass->changed = NULL;
 	
 	g_object_class_install_property (gobject_class, PROP_CTX,
 		g_param_spec_object ("ctx", "Seahorse Context",
