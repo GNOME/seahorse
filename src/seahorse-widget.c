@@ -161,6 +161,7 @@ seahorse_widget_set_property (GObject *object, guint prop_id, const GValue *valu
 			swidget->name = g_value_dup_string (value);
 			swidget->xml = glade_xml_new (g_strdup_printf ("%sseahorse-%s.glade2",
 				SEAHORSE_GLADEDIR, swidget->name), swidget->name, NULL);
+			g_assert (swidget->xml != NULL);
 			
 			glade_xml_signal_connect_data (swidget->xml, "closed",
 				G_CALLBACK (seahorse_widget_closed), swidget);

@@ -126,7 +126,6 @@ seahorse_key_manager_store_key_changed (SeahorseKey *skey, SeahorseKeyChange cha
 SeahorseKeyStore*
 seahorse_key_manager_store_new (SeahorseContext *sctx, GtkTreeView *view)
 {
-	SeahorseKeyStore *skstore;
 	GtkTreeStore *store;
 	GtkTreeViewColumn *column;
         GtkCellRenderer *renderer;
@@ -134,8 +133,7 @@ seahorse_key_manager_store_new (SeahorseContext *sctx, GtkTreeView *view)
 	static GType key_manager_columns[] = {
 	        G_TYPE_POINTER, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INT
 						        };
-	skstore = g_object_new (SEAHORSE_TYPE_KEY_MANAGER_STORE, "ctx", sctx, NULL);
-	store = GTK_TREE_STORE (skstore);
+	store = g_object_new (SEAHORSE_TYPE_KEY_MANAGER_STORE, "ctx", sctx, NULL);
 	
 	/* Do columns */
 	gtk_tree_store_set_column_types (store, COLS, key_manager_columns);
@@ -171,7 +169,7 @@ seahorse_key_manager_store_new (SeahorseContext *sctx, GtkTreeView *view)
 	gtk_tree_view_column_set_resizable (column, TRUE);
 	gtk_tree_view_append_column (view, column);
 	
-	seahorse_key_store_populate (skstore);
+	seahorse_key_store_populate (SEAHORSE_KEY_STORE (store));
 	
-	return skstore;
+	return SEAHORSE_KEY_STORE (store);
 }
