@@ -35,9 +35,11 @@
 
 /* Available key types for key generation */
 typedef enum {
-	DSA_ELGAMAL,
-	DSA,
-	RSA
+	DSA_ELGAMAL = 1,
+	DSA = 2,
+	ELGAMAL = 3,
+	RSA_SIGN = 5,
+	RSA_ENCRYPT = 6
 } SeahorseKeyType;
 
 /* Possible lengths of keys */
@@ -93,5 +95,13 @@ gboolean	seahorse_ops_key_set_disabled	(SeahorseContext	*sctx,
 /* Begins passphrase changing dialogs for key */
 gboolean	seahorse_ops_key_change_pass	(SeahorseContext	*sctx,
 						 SeahorseKey		*skey);
+
+gboolean	seahorse_ops_key_check_email	(const gchar		*email);
+
+gboolean	seahorse_ops_key_add_uid	(SeahorseContext	*sctx,
+						 SeahorseKey		*skey,
+						 const gchar		*name,
+						 const gchar		*email,
+						 const gchar		*comment);
 
 #endif /* __SEAHORSE_OPS_KEY_H__ */

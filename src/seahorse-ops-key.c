@@ -32,6 +32,16 @@
 #define SAVE "keyedit.save.okay"
 #define YES "Y"
 
+/**
+ * seahorse_ops_key_delete:
+ * @sctx: Current context
+ * @skey: Key to delete
+ *
+ * Deletes key, removing it from the context and emitting the key's destroy
+ * signal.
+ *
+ * Returns: TRUE if key is deleted, FALSE otherwise
+ **/
 gboolean
 seahorse_ops_key_delete (SeahorseContext *sctx, SeahorseKey *skey)
 {
@@ -46,22 +56,54 @@ seahorse_ops_key_delete (SeahorseContext *sctx, SeahorseKey *skey)
 	return success;
 }
 
+/**
+ * seahorse_ops_key_generate:
+ * @sctx: The current context
+ * @name: Name for the new key
+ * @email: Email address for new key
+ * @comment: New key comment
+ * @passphrase: Passphrase for new key
+ * @type: Key type, must be %DSA_ELGAMAL, %DSA, or %RSA_SIGN
+ * @length: Length of key, must within #SeahorseKeyLength restraints,
+ * depending on @type
+ * @expires: Expiration date, 0 is never
+ *
+ * Generates a new key.  @sctx will add the new key and emit the key added
+ * signal.
+ *
+ * Returns: TRUE if operation is successful, FALSE otherwise.
+ **/
 gboolean
 seahorse_ops_key_generate (SeahorseContext *sctx, const gchar *name,
 			   const gchar *email, const gchar *comment,
 			   const gchar *passphrase, const SeahorseKeyType type,
 			   const guint length, const time_t expires)
 {
-        gchar *common;
-        gchar *key_type;
-        gchar *start;
-        gchar *parms;
+        gchar *common, *key_type, *start, *parms;
         gboolean success;
 	const gchar *expires_date;
 	
-	/* Texts cannot be empty */
-	g_assert (!g_str_equal (name, "") && !g_str_equal (email, "") &&
-		  !g_str_equal (comment, "") && !g_str_equal (passphrase, ""));
+	g_return_val_if_fail (sctx != NULL && SEAHORSE_IS_CONTEXT (sctx), FALSE);
+	g_return_val_if_fail (name != NULL && !g_str_equal (name, ""), FALSE);
+	g_return_val_if_fail (email != NULL && seahorse_ops_key_check_email (email), FALSE);
+	g_return_val_if_fail (comment != NULL && !g_str_equal (comment, ""), FALSE);
+	g_return_val_if_fail (passphrase != NULL && !g_str_equal (passphrase, ""), FALSE);
+	
+	/* Check lengths for each type */
+	switch (type) {
+		case DSA_ELGAMAL:
+			g_return_val_if_fail (length >= ELGAMAL_MIN && length <= LENGTH_MAX, FALSE);
+			break;
+		case DSA:
+			g_return_val_if_fail (length >= DSA_MIN && length <= DSA_MAX, FALSE);
+			break;
+		case RSA_SIGN:
+			g_return_val_if_fail (length >= RSA_MIN && length <= LENGTH_MAX, FALSE);
+			break;
+		default:
+			g_return_val_if_reached (FALSE);
+			break;
+	}
 	
 	if (expires != 0)
 		expires_date = seahorse_util_get_date_string (expires);
@@ -73,7 +115,7 @@ seahorse_ops_key_generate (SeahorseContext *sctx, const gchar *name,
 		"Expire-Date: %s\nPassphrase: %s\n</GnupgKeyParms>", name, comment, email,
 		expires_date, passphrase);
 	
-	if (type == RSA)
+	if (type == RSA_SIGN)
 		key_type = "Key-Type: RSA";
 	else
 		key_type = "Key-Type: DSA";
@@ -92,7 +134,6 @@ seahorse_ops_key_generate (SeahorseContext *sctx, const gchar *name,
 	
 	if (success)
 		seahorse_context_key_added (sctx);
-	
 	seahorse_context_show_status (sctx, _("Generate Key"), success);
 	
 	/* Free xmls */
@@ -648,4 +689,170 @@ seahorse_ops_key_change_pass (SeahorseContext *sctx, SeahorseKey *skey)
 	parms = seahorse_edit_parm_new (PASS_START, edit_pass_action, edit_pass_transit, NULL);
 	
 	return edit_key (sctx, skey, parms, _("Passphrase Change"), SKEY_CHANGE_PASS);
+}
+
+/**
+ * seahorse_ops_key_check_email:
+ * @email: Email entry to check
+ *
+ * Checks if @email appears to be a valid email address.
+ *
+ * Returns: TRUE if @email appears valid, FALSE otherwise
+ **/
+gboolean
+seahorse_ops_key_check_email (const gchar *email)
+{
+	return g_pattern_match_simple ("?*@?*", email);
+}
+
+typedef enum {
+	ADD_UID_START,
+	ADD_UID_COMMAND,
+	ADD_UID_NAME,
+	ADD_UID_EMAIL,
+	ADD_UID_COMMENT,
+	ADD_UID_QUIT,
+	ADD_UID_SAVE,
+	ADD_UID_ERROR
+} AddUidState;
+
+typedef struct
+{
+	const gchar	*name;
+	const gchar	*email;
+	const gchar	*comment;
+} UidParm;
+
+static GpgmeError
+add_uid_action (guint state, gpointer data, const gchar **result)
+{
+	UidParm *parm = (UidParm*)data;
+	
+	switch (state) {
+		case ADD_UID_COMMAND:
+			*result = "adduid";
+			break;
+		case ADD_UID_NAME:
+			*result = parm->name;
+			break;
+		case ADD_UID_EMAIL:
+			*result = parm->email;
+			break;
+		case ADD_UID_COMMENT:
+			*result = parm->comment;
+			break;
+		case ADD_UID_QUIT:
+			*result = QUIT;
+			break;
+		case ADD_UID_SAVE:
+			*result = YES;
+			break;
+		default:
+			return GPGME_General_Error;
+	}
+	
+	return GPGME_No_Error;
+}
+
+static guint
+add_uid_transit (guint current_state, GpgmeStatusCode status, const gchar *args, gpointer data, GpgmeError *err)
+{
+	guint next_state;
+	
+	switch (current_state) {
+		case ADD_UID_START:
+			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
+				next_state = ADD_UID_COMMAND;
+			else {
+				next_state = ADD_UID_ERROR;
+				*err = GPGME_General_Error;
+			}
+			break;
+		case ADD_UID_COMMAND:
+			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "keygen.name"))
+				next_state = ADD_UID_NAME;
+			else {
+				next_state = ADD_UID_ERROR;
+				*err = GPGME_General_Error;
+			}
+			break;
+		case ADD_UID_NAME:
+			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "keygen.email"))
+				next_state = ADD_UID_EMAIL;
+			else {
+				next_state = ADD_UID_ERROR;
+				*err = GPGME_General_Error;
+			}
+			break;
+		case ADD_UID_EMAIL:
+			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "keygen.comment"))
+				next_state = ADD_UID_COMMENT;
+			else {
+				next_state = ADD_UID_ERROR;
+				*err = GPGME_General_Error;
+			}
+			break;
+		case ADD_UID_COMMENT:
+			next_state = ADD_UID_QUIT;
+			break;
+		case ADD_UID_QUIT:
+			/* Quit, save */
+			if (status == GPGME_STATUS_GET_BOOL && g_str_equal (args, SAVE))
+				next_state = ADD_UID_SAVE;
+			else {
+				next_state = ADD_UID_ERROR;
+				*err = GPGME_General_Error;
+			}
+			break;
+		case ADD_UID_ERROR:
+			/* Go to quit */
+			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
+				next_state = ADD_UID_QUIT;
+			else
+				next_state = ADD_UID_ERROR;
+			break;
+		default:
+			next_state = ADD_UID_ERROR;
+			*err = GPGME_General_Error;
+			break;
+	}
+	
+	return next_state;
+}
+
+/**
+ * seahorse_ops_key_add_uid:
+ * @sctx: Current context
+ * @skey: Key to edit
+ * @name: New user ID name. Must be at least 5 characters long.
+ * @email: New user ID email. Must appear to be a valid email address.
+ * @comment: New user ID comment. Not required.
+ *
+ * Creates a new user ID for @skey.  The new ID will be the last user ID,
+ * unless the primary user ID has not be specifically chosen, in which case
+ * the new ID will become the primary ID.  @skey will the changed signal for
+ * user IDs.
+ *
+ * Returns: TRUE if successful, FALSE otherwise
+ **/
+gboolean
+seahorse_ops_key_add_uid (SeahorseContext *sctx, SeahorseKey *skey,
+			  const gchar *name, const gchar *email, const gchar *comment)
+{
+	SeahorseEditParm *parms;
+	UidParm *uid_parm;
+	
+	g_return_val_if_fail (sctx != NULL && SEAHORSE_IS_CONTEXT (sctx), FALSE);
+	g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), FALSE);
+	g_return_val_if_fail (name != NULL && strlen (name) >= 5, FALSE);
+	g_return_val_if_fail (email != NULL && seahorse_ops_key_check_email (email), FALSE);
+	
+	uid_parm = g_new (UidParm, 1);
+	uid_parm->name = name;
+	uid_parm->email = email;
+	uid_parm->comment = comment;
+	
+	parms = seahorse_edit_parm_new (ADD_UID_START, add_uid_action, add_uid_transit, uid_parm);
+	
+	return edit_key (sctx, skey, parms, _("User ID added"), SKEY_CHANGE_UID);
 }

@@ -26,7 +26,6 @@
 #include "seahorse-context.h"
 #include "seahorse-key.h"
 #include "seahorse-ops-data.h"
-#include "seahorse-preferences.h"
 
 #define ASC ".asc"
 #define GPG ".gpg"

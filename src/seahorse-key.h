@@ -41,7 +41,8 @@ typedef enum {
 	SKEY_CHANGE_TRUST,
 	SKEY_CHANGE_EXPIRE,
 	SKEY_CHANGE_DISABLE,
-	SKEY_CHANGE_PASS
+	SKEY_CHANGE_PASS,
+	SKEY_CHANGE_UID
 } SeahorseKeyChange;
 
 typedef struct _SeahorseKey SeahorseKey;
