@@ -143,7 +143,6 @@ static void
 window_show ()
 {
     GtkWidget *w;
-    GtkImage *img;
     
     if (g_window) {
         w = glade_xml_get_widget (g_window->xml, g_window->name);

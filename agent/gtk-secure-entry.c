@@ -1893,11 +1893,13 @@ gtk_secure_entry_delete_cb(GtkSecureEntry * entry)
       gtk_editable_delete_text(editable, start, end);
 }
 
+#if UNUSED
 static void
 gtk_secure_entry_toggle_overwrite(GtkSecureEntry * entry)
 {
     entry->overwrite_mode = !entry->overwrite_mode;
 }
+#endif
 
 static void
 gtk_secure_entry_real_activate(GtkSecureEntry * entry)
@@ -3155,7 +3157,7 @@ gtk_secure_entry_get_layout_offsets(GtkSecureEntry * entry,
   *y += text_area_y;
 }
 
-
+#if UNUSED
 /* Quick hack of a popup menu
  */
 static void
@@ -3165,7 +3167,7 @@ activate_cb(GtkWidget * menuitem, GtkSecureEntry * entry)
    g_object_get_data(G_OBJECT(menuitem), "gtk-signal");
     g_signal_emit_by_name(entry, signal);
 }
-
+#endif
 
 static gboolean
 gtk_secure_entry_mnemonic_activate(GtkWidget * widget,
@@ -3175,7 +3177,7 @@ gtk_secure_entry_mnemonic_activate(GtkWidget * widget,
     return TRUE;
 }
 
-
+#if UNUSED
 static void
 unichar_chosen_func(const char *text, gpointer data)
 {
@@ -3183,6 +3185,7 @@ unichar_chosen_func(const char *text, gpointer data)
 
     gtk_secure_entry_enter_text(entry, text);
 }
+#endif
 
 /* We display the cursor when
  *

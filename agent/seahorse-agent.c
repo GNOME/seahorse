@@ -251,7 +251,7 @@ prepare_logging ()
     g_log_set_handler ("Glib", flags, log_handler, NULL);
     g_log_set_handler ("Gtk", flags, log_handler, NULL);
     g_log_set_handler ("Gnome", flags, log_handler, NULL);
-}                
+}
 
 int
 main (int argc, char *argv[])
@@ -263,6 +263,11 @@ main (int argc, char *argv[])
 
     /* We need to drop privileges completely for security */
 #if defined(HAVE_SETRESUID) && defined(HAVE_SETRESGID)
+
+    /* Not in header files for all OSs, even where present */
+    int setresuid(uid_t ruid, uid_t euid, uid_t suid);
+    int setresgid(gid_t rgid, gid_t egid, gid_t sgid);
+  
     if (setresuid (getuid (), getuid (), getuid ()) == -1 ||
         setresgid (getgid (), getgid (), getgid ()) == -1)
 #else
