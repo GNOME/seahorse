@@ -1,7 +1,7 @@
 # Dutch translation of seahorse.
 # Copyright (C) 2003 The Free Software Foundation, Inc.
 # This file is distributed under the same license as the seahorse package.
-# Tino Meinen <a.t.meinen@chello.nl>, 2003, 2004
+# Tino Meinen <a.t.meinen@chello.nl>, 2003, 2004, 2005
 # ---
 # armor			harnas
 # decrypt		ontsleutelen-> ontcijferen
@@ -21,10 +21,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Seahorse Gnome2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-05 12:36+0100\n"
-"PO-Revision-Date: 2004-12-05 22:49+0100\n"
+"POT-Creation-Date: 2005-01-07 19:27+0100\n"
+"PO-Revision-Date: 2005-01-08 02:09+0100\n"
 "Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
-"Language-Team: Dutch <vertaling@nl.linux.org>\n"
+"Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -213,7 +213,7 @@ msgstr "kon geen nieuwe procesgroep aanmaken"
 msgid "usage: seahorse-agent [-cdv]\n"
 msgstr "gebruik: seahorse-agent[-cdv]\n"
 
-#: agent/seahorse-agent.c:271
+#: agent/seahorse-agent.c:276
 msgid "couldn't drop privileges properly"
 msgstr "kon rechten niet op juist wijze verlagen"
 
@@ -271,7 +271,7 @@ msgstr "Verifiëringsbewerking op met PGP ondertekende bestanden"
 
 #: data/seahorse.schemas.in.h:1
 msgid "A list of key server URIs to search for remote PGP keys."
-msgstr ""
+msgstr "Een lijst met sleutelserver URIs te doorzoeken voor PGP-sleutels op afstand."
 
 #: data/seahorse.schemas.in.h:2
 msgid "Controls the visibility of the expires column for the key manager."
@@ -377,19 +377,20 @@ msgstr "Type-kolom tonen in de sleutelbeheerder"
 msgid "Show validity column in key manager"
 msgstr "Geldigheid-kolom tonen in de sleutelbeheerder"
 
+# engels: er staat een komma ipv een punt voor:  Put
 #: data/seahorse.schemas.in.h:23
 msgid ""
 "Specify the column to sort the recipients window by. Columns are: 'name', "
 "'id' and 'validity', Put a '-' in front of the column name to sort in "
 "descending order."
-msgstr ""
+msgstr "Geef de kolom waarop gesorteerd wordt in het geadresseerden-venster. Kolommen zijn: 'naam', 'id' en 'geldigheid'. Zet een '-' voor de kolomnaam om in omgekeerde volgorde te sorteren."
 
 #: data/seahorse.schemas.in.h:24
 msgid ""
 "Specify the column to sort the seahorse key manager main window by. Columns "
 "are: 'name', 'id', 'validity', 'expires', 'trust', 'length' and 'type'. Put "
 "a '-' in front of the column name to sort in descending order."
-msgstr ""
+msgstr "Geef de kolom waarop gesorteerd wordt in het seahorse sleutelserverbeheer hoofdvenster.  Kolommen zijn: 'naam', 'id', 'geldigheid', 'verloopt', 'vertrouwen', 'lengte' en 'type'.  Zet een '-' voor de kolomnaam om in omgekeerde volgorde te sorteren.\""
 
 #: data/seahorse.schemas.in.h:25
 msgid "The column to sort the recipients by"
@@ -403,11 +404,11 @@ msgstr "De kolom waarmee de seahorse-sleutels worden gesorteerd"
 msgid ""
 "The last keyserver a search was performed against. Or empty for all "
 "keyservers."
-msgstr ""
+msgstr "De vorige sleutelserver waarop een zoekopdracht is uitgevoerd. Of leeg voor alle sleutelservers."
 
 #: data/seahorse.schemas.in.h:28
 msgid "The last search pattern searched for against a keyserver."
-msgstr ""
+msgstr "Het vorige gebruikte zoekpatroon voor een sleutelserver."
 
 #: data/seahorse.schemas.in.h:29
 msgid "The time (in minutes) to cache GPG passwords"
@@ -470,20 +471,30 @@ msgid "Whether to use canonical text mode"
 msgstr "Of canonieke tekstmodus moet worden gebruikt"
 
 #. Make the column
-#: libseahorse/seahorse-key-store.c:617 src/seahorse-key-properties.c:380
+#: libseahorse/seahorse-key-store.c:615 src/seahorse-key-properties.c:380
 #: src/seahorse-key-properties.c:474
 msgid "Name"
 msgstr "Naam"
 
 #. Make the column
-#: libseahorse/seahorse-key-store.c:620 src/seahorse-key-properties.c:377
+#: libseahorse/seahorse-key-store.c:618 src/seahorse-key-properties.c:377
 msgid "Key ID"
 msgstr "Sleutel-ID"
 
-#: libseahorse/seahorse-key-store.c:686
+#: libseahorse/seahorse-ldap-source.c:651
 #, c-format
-msgid "Listed %d keys"
-msgstr "%d sleutels opgesomd"
+msgid "Searching for keys containing '%s'..."
+msgstr "Zoeken naar sleutels die '%s' bevatten..."
+
+#. TODO: We can update a percentage when there's more than one key
+#: libseahorse/seahorse-ldap-source.c:825
+msgid "Retrieving remote keys..."
+msgstr "Ophalen van sleutels op afstand..."
+
+#. TODO: We can update a percentage when there's more than one key
+#: libseahorse/seahorse-ldap-source.c:950
+msgid "Sending keys to key server..."
+msgstr "Sleutels verzenden naar sleutelserver..."
 
 # onjuist/foutief
 #: libseahorse/seahorse-passphrase.c:61
@@ -561,17 +572,18 @@ msgstr "_Versleutelen naar Zelf"
 msgid " minutes"
 msgstr " minuten"
 
+# te cachen/in de buffer op te slaan
 #: libseahorse/seahorse-prefs.glade.h:2
 msgid ""
 "<b>Note:</b> The 'seahorse-agent' program was started. This program is "
 "necessary in order for caching of passwords. "
-msgstr ""
+msgstr "<b>Let op:</b> Het programma 'seahorse-agent' is opgestart. Dit programma is nodig om wachtwoorden in de buffer op te slaan."
 
 #: libseahorse/seahorse-prefs.glade.h:3
 msgid ""
 "<b>Warning:</b> The 'seahorse-agent' program is not running. This program is "
 "necessary in order for caching of passwords. "
-msgstr ""
+msgstr "<b>Waarschuwing:</b>  Het programma 'seahorse-agent' is niet opgestart. Dit programma is nodig om wachtwoorden in de buffer op te slaan."
 
 #: libseahorse/seahorse-prefs.glade.h:4
 msgid "Cache _GPG passwords in memory"
@@ -629,17 +641,17 @@ msgstr "_Wachtwoorden in het geheugen laten verlopen na "
 msgid "_Use default key to sign"
 msgstr "_Gebruik standaardsleutel om te signeren"
 
-#: libseahorse/seahorse-pgp-source.c:495
+#. TODO: We can use the GPGME progress to make this more accurate
+#: libseahorse/seahorse-pgp-source.c:524
 #, c-format
 msgid "Loaded %d key"
 msgid_plural "Loaded %d keys"
 msgstr[0] "%d sleutel geladen"
 msgstr[1] "%d sleutels geladen"
 
-#: libseahorse/seahorse-pgp-source.c:635
-#: libseahorse/seahorse-server-source.c:511
-msgid "Load Cancelled"
-msgstr "Laden geannuleerd"
+#: libseahorse/seahorse-pgp-source.c:588
+msgid "Loading Keys..."
+msgstr "Sleutels laden..."
 
 #: libseahorse/seahorse-recipients-store.c:147
 #: src/seahorse-key-manager-store.c:321
@@ -647,19 +659,46 @@ msgid "Validity"
 msgstr "Geldigheid"
 
 # engels fout: enkelvoud bevat ook de meervoudsvorm
-#: libseahorse/seahorse-recipients.c:81 src/seahorse-keyserver-results.c:152
+#: libseahorse/seahorse-recipients.c:54 src/seahorse-keyserver-results.c:217
 #, c-format
 msgid "Selected %d keys"
 msgid_plural "Selected %d keys"
 msgstr[0] "%d sleutel geselecteerd"
 msgstr[1] "%d sleutels geselecteerd"
 
-#: libseahorse/seahorse-recipients.c:86 libseahorse/seahorse-recipients.c:90
+#: libseahorse/seahorse-recipients.c:58
 #, c-format
 msgid "Selected %d not fully valid key"
-msgid_plural "Selected %d keys (%d not fully valid)"
+msgid_plural "Selected %d not fully valid keys"
 msgstr[0] "%d niet volledig geldige sleutel geselecteerd"
-msgstr[1] "%d sleutels geselecteerd (waarvan %d niet volledig geldige)"
+msgstr[1] "%d niet volledig geldige sleutels geselecteerd"
+
+#. TRANSLATOR: This string will become
+#. * "Selected %d keys and (%d not fully valid)"
+#: libseahorse/seahorse-recipients.c:66
+#, c-format
+msgid "Selected %d key "
+msgid_plural "Selected %d keys "
+msgstr[0] "%d sleutel geselecteerd"
+msgstr[1] "%d sleutels geselecteerd"
+
+#. TRANSLATOR: This string will become
+#. * "Selected %d keys and (%d not fully valid)"
+#: libseahorse/seahorse-recipients.c:71
+#, c-format
+msgid "(%d not fully valid)"
+msgid_plural "(%d not fully valid)"
+msgstr[0] "(%d niet volledig geldig)"
+msgstr[1] "(%d niet volledig geldige)"
+
+#. TRANSLATOR: "%s%s" are "Selected %d keys and (%d not fully valid)"
+#. * Swap order with "%2$s%1$s" if needed
+#. TRANSLATOR: "%s%s" are "You have selected %d files and %d folders"
+#. * Swap order with "%2$s%1$s" if needed
+#: libseahorse/seahorse-recipients.c:76 src/seahorse-process-multiple.c:58
+#, c-format
+msgid "%s%s"
+msgstr "%s%s"
 
 #: libseahorse/seahorse-recipients.glade.h:2
 msgid ""
@@ -679,50 +718,46 @@ msgstr "Sleutels kiezen"
 msgid "Search _for: "
 msgstr "_Zoeken naar: "
 
-#: libseahorse/seahorse-server-source.c:472
-msgid "Searching for remote keys..."
-msgstr "Zoeken naar sleutels op afstand..."
-
-#: libseahorse/seahorse-signatures.c:48
+#: libseahorse/seahorse-signatures.c:49
 msgid "[Unknown Key]"
 msgstr "[Onbekende sleutel]"
 
-#: libseahorse/seahorse-signatures.c:65
+#: libseahorse/seahorse-signatures.c:66
 #, c-format
 msgid "%s: Good signature from (<b>expired</b>) '%s' on %s"
 msgstr "%s: Juiste handtekening van (<b>verlopen</b>) '%s' op %s"
 
-#: libseahorse/seahorse-signatures.c:69
+#: libseahorse/seahorse-signatures.c:70
 #, c-format
 msgid "%s: <b>Expired</b> signature from '%s' on %s"
 msgstr "%s: <b>Verlopen</b> handtekening van '%s' op %s"
 
-#: libseahorse/seahorse-signatures.c:73
+#: libseahorse/seahorse-signatures.c:74
 #, c-format
 msgid "%s: Good signature from (<b>revoked</b>) '%s' on %s"
 msgstr "%s: Juiste handtekening van (<b>herroepen</b>) '%s' op %s"
 
-#: libseahorse/seahorse-signatures.c:77
+#: libseahorse/seahorse-signatures.c:78
 #, c-format
 msgid "%s: Good signature from '%s' on %s"
 msgstr "%s: Juiste handtekening van '%s' op %s"
 
-#: libseahorse/seahorse-signatures.c:81
+#: libseahorse/seahorse-signatures.c:82
 #, c-format
 msgid "%s: Signing key not in key ring"
 msgstr "%s: Handtekening-sleutel niet in sleutelbos"
 
-#: libseahorse/seahorse-signatures.c:84
+#: libseahorse/seahorse-signatures.c:85
 #, c-format
 msgid "%s: <b>Bad</b> signature"
 msgstr "%s: <b>Foutieve</b> handtekening"
 
-#: libseahorse/seahorse-signatures.c:87
+#: libseahorse/seahorse-signatures.c:88
 #, c-format
 msgid "%s: Not a signature"
 msgstr "%s: Geen handtekening"
 
-#: libseahorse/seahorse-signatures.c:90
+#: libseahorse/seahorse-signatures.c:91
 #, c-format
 msgid "%s: Verification error"
 msgstr "%s: Verificatie-fout"
@@ -747,7 +782,19 @@ msgstr "Kon file-roller niet uitvoeren"
 msgid "The file-roller process did not complete successfully"
 msgstr "Het file-roller proces is niet juist voltooid"
 
-#: libseahorse/seahorse-util.c:730
+#: libseahorse/seahorse-util.c:746
+msgid "All PGP key files"
+msgstr "Alle PGP-sleutel bestanden"
+
+#: libseahorse/seahorse-util.c:752 libseahorse/seahorse-util.c:792
+msgid "All files"
+msgstr "Alle bestanden"
+
+#: libseahorse/seahorse-util.c:785
+msgid "Archive files"
+msgstr "Archiefbestanden"
+
+#: libseahorse/seahorse-util.c:814
 msgid ""
 "<b>A file already exists with this name.</b>\n"
 "\n"
@@ -757,7 +804,7 @@ msgstr ""
 "\n"
 "Wilt u het vervangen door een nieuw bestand?"
 
-#: libseahorse/seahorse-util.c:733
+#: libseahorse/seahorse-util.c:817
 msgid "_Replace"
 msgstr "_Vervangen"
 
@@ -874,11 +921,11 @@ msgstr "Ondertekende tekst"
 
 #: plugins/gedit/seahorse-gedit.schemas.in.h:1
 msgid "Enable the seahorse PGP encryption plugin for gedit."
-msgstr ""
+msgstr "De plugin seahorse PGP versleuteling aanzetten voor gedit."
 
 #: plugins/gedit/seahorse-gedit.schemas.in.h:2
 msgid "Enable the seahorse gedit plugin"
-msgstr ""
+msgstr "De seahorse plugin voor gedit aanzetten"
 
 #: plugins/gedit/seahorse-pgp.gedit-plugin.desktop.in.h:1
 msgid "PGP Encryption"
@@ -922,7 +969,7 @@ msgstr "Handtekeningbestand verifiëren"
 msgid "Read list of URIs on standard in"
 msgstr "Lijst met URI's lezen op de standaard invoer"
 
-#: src/main.c:146 src/seahorse-key-manager.c:183
+#: src/main.c:146 src/seahorse-key-manager.c:112
 #, c-format
 msgid "Couldn't import keys from \"%s\""
 msgstr "Kon sleutels niet importeren van \"%s\""
@@ -1441,56 +1488,44 @@ msgstr "Lengte"
 msgid "Type"
 msgstr "Type"
 
-#: src/seahorse-key-manager.c:95
-msgid "All PGP key files"
-msgstr "Alle PGP-sleutel bestanden"
-
-#: src/seahorse-key-manager.c:103 src/seahorse-key-manager.c:144
-msgid "All files"
-msgstr "Alle bestanden"
-
-#: src/seahorse-key-manager.c:137
-msgid "Archive files"
-msgstr "Archiefbestanden"
-
-#: src/seahorse-key-manager.c:162
+#: src/seahorse-key-manager.c:101
 msgid "Import Key"
 msgstr "Sleutel importeren"
 
-#: src/seahorse-key-manager.c:204
+#: src/seahorse-key-manager.c:133
 msgid "Couldn't import keys from clipboard"
 msgstr "Kon sleutels niet van het klembord importeren"
 
-#: src/seahorse-key-manager.c:241
+#: src/seahorse-key-manager.c:170
 msgid "Couldn't export key to clipboard"
 msgstr "Kon sleutels niet naar het klembord exporteren"
 
-#: src/seahorse-key-manager.c:271
+#: src/seahorse-key-manager.c:200
 msgid "Export Key"
 msgstr "Sleutel exporteren"
 
-#: src/seahorse-key-manager.c:292
+#: src/seahorse-key-manager.c:213 src/seahorse-keyserver-results.c:129
 #, c-format
 msgid "Couldn't export key to \"%s\""
 msgstr "Kon sleutel niet exporteren naar \"%s\""
 
-#: src/seahorse-key-manager.c:309
+#: src/seahorse-key-manager.c:230
 msgid "Backup Keyrings to Archive"
 msgstr "Backup maken van sleutelbossen in archief"
 
-#: src/seahorse-key-manager.c:468
+#: src/seahorse-key-manager.c:381
 msgid "translator_credits"
 msgstr ""
-"Vincent van Adrighem\n"
 "Tino Meinen\n"
+"Vincent van Adrighem\n"
 "\n"
 "Kijk voor meer info op http://nl.gnome.org/"
 
-#: src/seahorse-key-manager.c:488
+#: src/seahorse-key-manager.c:401
 msgid "seahorse"
 msgstr "seahorse"
 
-#: src/seahorse-key-manager.c:721
+#: src/seahorse-key-manager.c:566
 #, c-format
 msgid "Couldn't import key from \"%s\""
 msgstr "Kon sleutel niet importeren van \"%s\""
@@ -1713,10 +1748,6 @@ msgstr "_Ondertekenen"
 msgid "_Sign..."
 msgstr "_Ondertekenen..."
 
-#: src/seahorse-key-op.c:256
-msgid "Operation complete"
-msgstr "Bewerking voltooid"
-
 #. key id
 #: src/seahorse-key-properties.c:179
 msgid "Key ID:"
@@ -1876,22 +1907,26 @@ msgstr "_Primaire"
 msgid "_Signatures:"
 msgstr "_Handtekeningen:"
 
-#: src/seahorse-keyserver-results.c:85
+#: src/seahorse-keyserver-results.c:87 src/seahorse-keyserver-results.c:156
 msgid "Couldn't retrieve key data from key server"
 msgstr "Kon de sleutelgegevens niet van de sleutelserver halen"
 
-#: src/seahorse-keyserver-results.c:98
+#: src/seahorse-keyserver-results.c:100
 msgid "Couldn't import keys into keyring"
 msgstr "Kon sleutels niet importeren naar sleutelbos"
 
-#: src/seahorse-keyserver-results.c:268
+#: src/seahorse-keyserver-results.c:121
+msgid "Save Remote Keys"
+msgstr "Sleutels op afstand opslaan"
+
+#: src/seahorse-keyserver-results.c:301
 msgid "Remote Keys"
 msgstr "Sleutels op afstand"
 
-#: src/seahorse-keyserver-results.c:270
+#: src/seahorse-keyserver-results.c:303
 #, c-format
 msgid "Remote Keys Containing '%s'"
-msgstr ""
+msgstr "Sleutels op afstand bevattende '%s'"
 
 #: src/seahorse-keyserver-results.glade.h:1
 msgid "Copy the selected key to the clipboard"
@@ -1960,7 +1995,7 @@ msgstr "Elk bestand afzonderlijk versleutelen"
 
 #: src/seahorse-multi-encrypt.glade.h:6
 msgid "Encrypt packed together in a package"
-msgstr ""
+msgstr "Versleuteling samengepakt in een pakket"
 
 #: src/seahorse-multi-encrypt.glade.h:7
 msgid "Package Name:"
@@ -1973,6 +2008,14 @@ msgstr "Verpakking:"
 #: src/seahorse-multi-encrypt.glade.h:9
 msgid "encrypted-package.rar"
 msgstr "versleuteld-pakket.rar"
+
+#: src/seahorse-pgp-encrypted.desktop.in.h:1
+msgid "Decrypt PGP File (Seahorse)"
+msgstr "PGP-bestand ontcijferen (Seahorse)"
+
+#: src/seahorse-pgp-signature.desktop.in.h:1
+msgid "Verify PGP Signature (Seahorse)"
+msgstr "PGP-handtekening verifiëren (Seahorse)"
 
 #: src/seahorse-preferences.c:49 src/seahorse-preferences.glade.h:3
 msgid "Key Manager"
@@ -2023,33 +2066,31 @@ msgstr "Seahorse voorkeuren"
 msgid "Visible Columns"
 msgstr "Zichtbare kolommen"
 
-#: src/seahorse-process-multiple.c:46
-#, c-format
-msgid "You have selected %d files and %d folders"
-msgstr "U heeft %d bestanden en %d mappen geselecteerd"
-
+#. TRANSLATOR: This string will become
+#. * "You have selected %d files and %d folders"
 #: src/seahorse-process-multiple.c:48
 #, c-format
-msgid "You have selected %d files and %d folder"
-msgstr "U heeft %d bestanden en %d map geselecteerd"
+msgid "You have selected %d file "
+msgid_plural "You have selected %d files "
+msgstr[0] "U heeft %d bestand geselecteerd"
+msgstr[1] "U heeft %d bestanden geselecteerd"
 
-#: src/seahorse-process-multiple.c:50
+#. TRANSLATOR: This string will become
+#. * "You have selected %d files and %d folders"
+#: src/seahorse-process-multiple.c:53
 #, c-format
-msgid "You have selected %d file and %d folders"
-msgstr "U heeft %d bestand en %d mappen geselecteerd"
-
-#: src/seahorse-process-multiple.c:52
-#, c-format
-msgid "You have selected %d file and %d folder"
-msgstr "U heeft %d bestand en %d map geselecteerd"
+msgid "and %d folder"
+msgid_plural "and %d folders"
+msgstr[0] "en %d map"
+msgstr[1] "en %d mappen"
 
 #. should never be called for just one file
-#: src/seahorse-process-multiple.c:58
+#: src/seahorse-process-multiple.c:66
 #, c-format
 msgid "You have selected %d files"
 msgstr "U heeft %d bestanden geselecteerd"
 
-#: src/seahorse-process-multiple.c:62
+#: src/seahorse-process-multiple.c:70
 #, c-format
 msgid "You have selected %d folder"
 msgid_plural "You have selected %d folders"
@@ -2225,6 +2266,27 @@ msgstr "Her_roepbaar"
 #: src/seahorse.desktop.in.h:2
 msgid "Manage your GPG keys"
 msgstr "Uw GPG-sleutels beheren"
+
+#~ msgid "Listed %d keys"
+#~ msgstr "%d sleutels opgesomd"
+
+#~ msgid "Load Cancelled"
+#~ msgstr "Laden geannuleerd"
+
+#~ msgid "Operation complete"
+#~ msgstr "Bewerking voltooid"
+
+#~ msgid "You have selected %d files and %d folders"
+#~ msgstr "U heeft %d bestanden en %d mappen geselecteerd"
+
+#~ msgid "You have selected %d files and %d folder"
+#~ msgstr "U heeft %d bestanden en %d map geselecteerd"
+
+#~ msgid "You have selected %d file and %d folders"
+#~ msgstr "U heeft %d bestand en %d mappen geselecteerd"
+
+#~ msgid "You have selected %d file and %d folder"
+#~ msgstr "U heeft %d bestand en %d map geselecteerd"
 
 #~ msgid "Nautilus Settings"
 #~ msgstr "Nautilus instellingen"
