@@ -147,6 +147,14 @@ gpgme_error_t	seahorse_key_pair_op_add_uid		(SeahorseContext	*sctx,
 							 const gchar		*email,
 							 const gchar		*comment);
 
+gpgme_error_t   seahorse_key_op_primary_uid         (SeahorseContext    *sctx,
+                             SeahorseKey        *skey,
+                             const guint        index);
+
+gpgme_error_t   seahorse_key_op_del_uid         (SeahorseContext    *sctx,
+                             SeahorseKey        *skey,
+                             const guint        index);
+                             
 gpgme_error_t	seahorse_key_pair_op_add_subkey		(SeahorseContext	*sctx,
 							 SeahorseKeyPair	*skpair,
 							 const SeahorseKeyType	type,
@@ -162,5 +170,6 @@ gpgme_error_t	seahorse_key_op_revoke_subkey		(SeahorseContext	*sctx,
 							 const guint		index,
 							 SeahorseRevokeReason	reason,
 							 const gchar		*description);
-							 
+
+                             							 
 #endif /* __SEAHORSE_KEY_OP_H__ */

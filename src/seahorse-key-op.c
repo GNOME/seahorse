@@ -1800,3 +1800,289 @@ seahorse_key_op_revoke_subkey (SeahorseContext *sctx, SeahorseKey *skey, const g
 	
 	return edit_key (sctx, skey, parms, SKEY_CHANGE_SUBKEYS);
 }
+
+typedef struct {
+    guint           index;
+} PrimaryParm;
+
+typedef enum {
+    PRIMARY_START,
+    PRIMARY_SELECT,
+    PRIMARY_COMMAND,
+    PRIMARY_QUIT,
+    PRIMARY_SAVE,
+    PRIMARY_ERROR
+} PrimaryState;
+
+/* action helper for setting primary uid */
+static gpgme_error_t
+primary_action (guint state, gpointer data, int fd)
+{
+    PrimaryParm *parm = (PrimaryParm*)data;
+    
+    switch (state) {
+    case PRIMARY_SELECT:
+        /* Note that the GPG id is not 0 based */
+        printf_fd (fd, "uid %d", parm->index);
+        break;
+    case PRIMARY_COMMAND:
+        print_fd (fd, "primary");
+        break;
+    case PRIMARY_QUIT:
+        print_fd (fd, QUIT);
+        break;
+    case PRIMARY_SAVE:
+        print_fd (fd, YES);
+        break;
+    default:
+        g_return_val_if_reached (GPG_E (GPG_ERR_GENERAL));
+        break;
+    }
+  
+    return GPG_OK;
+}
+
+/* transition helper for setting primary key */
+static guint
+primary_transit (guint current_state, gpgme_status_code_t status,
+            const gchar *args, gpointer data, gpgme_error_t *err)
+{
+    guint next_state;
+  
+    switch (current_state) {
+    
+    /* start, select key */
+    case PRIMARY_START:
+        if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
+            next_state = PRIMARY_SELECT;
+        else {
+            *err = GPG_E (GPG_ERR_GENERAL);
+            g_return_val_if_reached (PRIMARY_ERROR);
+        }
+        break;
+
+    /* selected key, do command */
+    case PRIMARY_SELECT:
+        if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
+            next_state = PRIMARY_COMMAND;
+        else {
+            *err = GPG_E (GPG_ERR_GENERAL);
+            g_return_val_if_reached (PRIMARY_ERROR);
+        }
+        break;
+
+    /* did command, quit */
+    case PRIMARY_COMMAND:
+        if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
+            next_state = PRIMARY_QUIT;
+        else {
+            *err = GPG_E (GPG_ERR_GENERAL);
+            g_return_val_if_reached (PRIMARY_ERROR);
+        }
+        break;
+        
+    /* quitting so save */
+    case PRIMARY_QUIT:        
+        if (status == GPGME_STATUS_GET_BOOL && g_str_equal (args, SAVE))
+            next_state = PRIMARY_SAVE;
+        else {
+            *err = GPG_E (GPG_ERR_GENERAL);
+            g_return_val_if_reached (PRIMARY_ERROR);
+        }
+        break;
+
+    /* error, quit */
+    case PRIMARY_ERROR:
+        if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
+            next_state = PRIMARY_QUIT;
+        else
+            next_state = PRIMARY_ERROR;
+        break;
+        
+    default:
+        *err = GPG_E (GPG_ERR_GENERAL);
+        g_return_val_if_reached (PRIMARY_ERROR);
+        break;
+    }
+    
+    return next_state;
+}
+                
+gpgme_error_t   
+seahorse_key_op_primary_uid (SeahorseContext *sctx, SeahorseKey *skey, 
+                                const guint index)
+{
+    PrimaryParm *pri_parm;
+    SeahorseEditParm *parms;
+    gpgme_user_id_t uid;
+ 
+    g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), GPG_E (GPG_ERR_INV_ENGINE));
+    g_return_val_if_fail (SEAHORSE_IS_KEY (skey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
+    
+    /* Check index range */
+    g_return_val_if_fail (index >= 1 && index <= seahorse_key_get_num_uids (skey), GPG_E (GPG_ERR_INV_VALUE));
+
+    /* Make sure not revoked */
+    uid = seahorse_key_get_nth_userid (skey, index - 1);
+    g_return_val_if_fail (uid != NULL && !uid->revoked && !uid->invalid, 
+                            GPG_E (GPG_ERR_INV_VALUE));
+  
+    pri_parm = g_new0 (PrimaryParm, 1);
+    pri_parm->index = index;
+   
+    parms = seahorse_edit_parm_new (PRIMARY_START, primary_action,
+                primary_transit, pri_parm);
+ 
+    return edit_key (sctx, skey, parms, SKEY_CHANGE_UIDS);    
+}
+
+
+typedef struct {
+    guint           index;
+} DelUidParm;
+
+typedef enum {
+    DEL_UID_START,
+    DEL_UID_SELECT,
+    DEL_UID_COMMAND,
+    DEL_UID_CONFIRM,
+    DEL_UID_QUIT,
+    DEL_UID_SAVE,
+    DEL_UID_ERROR
+} DelUidState;
+
+/* action helper for removing a uid */
+static gpgme_error_t
+del_uid_action (guint state, gpointer data, int fd)
+{
+    DelUidParm *parm = (DelUidParm*)data;
+    
+    switch (state) {
+    case DEL_UID_SELECT:
+        printf_fd (fd, "uid %d", parm->index);
+        break;
+    case DEL_UID_COMMAND:
+        print_fd (fd, "deluid");
+        break;
+    case DEL_UID_CONFIRM:
+        print_fd (fd, YES);
+        break;
+    case DEL_UID_QUIT:
+        print_fd (fd, QUIT);
+        break;
+    case DEL_UID_SAVE:
+        print_fd (fd, YES);
+        break;
+    default:
+        g_return_val_if_reached (GPG_E (GPG_ERR_GENERAL));
+        break;
+    }
+  
+    return GPG_OK;
+}
+
+/* transition helper for setting deleting a uid */
+static guint
+del_uid_transit (guint current_state, gpgme_status_code_t status,
+            const gchar *args, gpointer data, gpgme_error_t *err)
+{
+    guint next_state;
+  
+    switch (current_state) {
+    
+    /* start, select key */
+    case DEL_UID_START:
+        if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
+            next_state = DEL_UID_SELECT;
+        else {
+            *err = GPG_E (GPG_ERR_GENERAL);
+            g_return_val_if_reached (DEL_UID_ERROR);
+        }
+        break;
+
+    /* selected key, do command */
+    case DEL_UID_SELECT:
+        if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
+            next_state = DEL_UID_COMMAND;
+        else {
+            *err = GPG_E (GPG_ERR_GENERAL);
+            g_return_val_if_reached (DEL_UID_ERROR);
+        }
+        break;
+
+    /* did command, confirm */
+    case DEL_UID_COMMAND:
+        if (status == GPGME_STATUS_GET_BOOL && g_str_equal (args, "keyedit.remove.uid.okay"))
+            next_state = DEL_UID_CONFIRM;
+        else if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
+            next_state = DEL_UID_QUIT;
+        else {
+            *err = GPG_E (GPG_ERR_GENERAL);
+            g_return_val_if_reached (REV_SUBKEY_ERROR);
+        }
+        break;
+
+    /* confirmed, quit */
+    case DEL_UID_CONFIRM:
+        if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
+            next_state = DEL_UID_QUIT;
+        else {
+            *err = GPG_E (GPG_ERR_GENERAL);
+            g_return_val_if_reached (DEL_UID_ERROR);
+        }
+        break;
+                
+    /* quitted so save */
+    case DEL_UID_QUIT:        
+        if (status == GPGME_STATUS_GET_BOOL && g_str_equal (args, SAVE))
+            next_state = DEL_UID_SAVE;
+        else {
+            *err = GPG_E (GPG_ERR_GENERAL);
+            g_return_val_if_reached (REV_SUBKEY_ERROR);
+        }
+        break;
+
+    /* error, quit */
+    case DEL_UID_ERROR:
+        if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
+            next_state = DEL_UID_QUIT;
+        else
+            next_state = DEL_UID_ERROR;
+        break;
+        
+    default:
+        *err = GPG_E (GPG_ERR_GENERAL);
+        g_return_val_if_reached (DEL_UID_ERROR);
+        break;
+    }
+    
+    return next_state;
+}
+                
+gpgme_error_t   
+seahorse_key_op_del_uid (SeahorseContext *sctx, SeahorseKey *skey, 
+                                const guint index)
+{
+    DelUidParm *del_uid_parm;
+    SeahorseEditParm *parms;
+    gpgme_user_id_t uid;
+ 
+    g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), GPG_E (GPG_ERR_INV_ENGINE));
+    g_return_val_if_fail (SEAHORSE_IS_KEY (skey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
+    
+    /* Check index range */
+    g_return_val_if_fail (index >= 1 && index <= seahorse_key_get_num_uids (skey), GPG_E (GPG_ERR_INV_VALUE));
+
+    /* Make sure not revoked */
+    uid = seahorse_key_get_nth_userid (skey, index - 1);
+    g_return_val_if_fail (uid != NULL && !uid->revoked && !uid->invalid, 
+                            GPG_E (GPG_ERR_INV_VALUE));
+  
+    del_uid_parm = g_new0 (DelUidParm, 1);
+    del_uid_parm->index = index;
+   
+    parms = seahorse_edit_parm_new (DEL_UID_START, del_uid_action,
+                del_uid_transit, del_uid_parm);
+ 
+    return edit_key (sctx, skey, parms, SKEY_CHANGE_UIDS);    
+}
