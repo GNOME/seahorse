@@ -138,7 +138,7 @@ seahorse_key_widget_set_property (GObject *object, guint prop_id,
 		case PROP_KEY:
 			skwidget->skey = g_value_get_object (value);
 			g_object_ref (skwidget->skey);
-			g_signal_connect (GTK_OBJECT (skwidget->skey), "destroy",
+			g_signal_connect_after (GTK_OBJECT (skwidget->skey), "destroy",
 				G_CALLBACK (seahorse_key_widget_destroyed), skwidget);
 			break;
 		default:
@@ -215,15 +215,10 @@ SeahorseWidget*
 seahorse_key_widget_new (gchar *name, SeahorseContext *sctx, SeahorseKey *skey)
 {
 	return seahorse_key_widget_create (name, sctx, skey, FALSE);
-	
-	//return g_object_new (SEAHORSE_TYPE_KEY_WIDGET, "name", name, "ctx", sctx, "key", skey,  NULL);
 }
 
 SeahorseWidget*
 seahorse_key_widget_new_component (gchar *name, SeahorseContext *sctx, SeahorseKey *skey)
 {
 	return seahorse_key_widget_create (name, sctx, skey, TRUE);
-	
-	/*return g_object_new (SEAHORSE_TYPE_KEY_WIDGET, "name", name, "ctx", sctx,
-		"component", TRUE, "key", skey, NULL);*/
 }

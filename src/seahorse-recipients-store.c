@@ -1,7 +1,7 @@
 /*
  * Seahorse
  *
- * Copyright (C) 2002 Jacob Perkins
+ * Copyright (C) 2003 Jacob Perkins
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,21 +25,21 @@
 
 /* Columns in the tree view */
 enum {
-	SKEY,
+	DATA,
 	NAME,
 	KEYID,
-	VALIDITY,
 	COLS
 };
 
 static void	seahorse_recipients_store_class_init	(SeahorseRecipientsStoreClass	*klass);
 
-/* Virtual methods */
-static void	seahorse_recipients_store_set		(SeahorseKeyRow			*skrow,
-							 GtkTreeIter			*parent);
-static void	seahorse_recipients_store_key_changed	(SeahorseKey			*skey,
+static void	seahorse_recipients_store_append	(SeahorseKeyStore		*skstore,
+							 SeahorseKey			*skey,
+							 GtkTreeIter			*iter);
+static void	seahorse_recipients_store_changed	(SeahorseKey			*skey,
 							 SeahorseKeyChange		change,
-							 SeahorseKeyRow			*skrow);
+							 SeahorseKeyStore		*skstore,
+							 GtkTreeIter			*iter);
 
 static SeahorseKeyStoreClass	*parent_class	= NULL;
 
@@ -74,68 +74,61 @@ seahorse_recipients_store_class_init (SeahorseRecipientsStoreClass *klass)
 	parent_class = g_type_class_peek_parent (klass);
 	skstore_class = SEAHORSE_KEY_STORE_CLASS (klass);
 	
-	skstore_class->set = seahorse_recipients_store_set;
-	skstore_class->changed = seahorse_recipients_store_key_changed;
+	skstore_class->append = seahorse_recipients_store_append;
+	skstore_class->changed = seahorse_recipients_store_changed;
+	
+	klass->is_recip = seahorse_key_is_valid;
 }
 
-/* Sets attributes for row starting at iter */
+/* Checks if @skey is a valid recipient before appending */
 static void
-set_attributes (SeahorseKeyRow *skrow, GtkTreeIter *iter)
+seahorse_recipients_store_append (SeahorseKeyStore *skstore,
+				  SeahorseKey *skey, GtkTreeIter *iter)
 {
-	gtk_tree_store_set (skrow->store, iter,
-		SKEY, skrow,
-		NAME, seahorse_key_get_userid (skrow->skey, 0),
-		KEYID, seahorse_key_get_keyid (skrow->skey, 0),
-		VALIDITY, seahorse_validity_get_validity_from_key (skrow->skey), -1);
+	if (SEAHORSE_RECIPIENTS_STORE_GET_CLASS (skstore)->is_recip (skey)) {
+		gtk_tree_store_append (GTK_TREE_STORE (skstore), iter, NULL);
+		parent_class->append (skstore, skey, iter);
+	}
 }
 
+/* Removes @skey if has been disabled */
 static void
-seahorse_recipients_store_set (SeahorseKeyRow *skrow, GtkTreeIter *parent)
+seahorse_recipients_store_changed (SeahorseKey *skey, SeahorseKeyChange change,
+				   SeahorseKeyStore *skstore, GtkTreeIter *iter)
 {
-	set_attributes (skrow, parent);
+	switch (change) {
+		case SKEY_CHANGE_DISABLE:
+			if (!(SEAHORSE_RECIPIENTS_STORE_GET_CLASS (skstore)->is_recip (skey)))
+				SEAHORSE_KEY_STORE_GET_CLASS (skstore)->remove (skstore, iter);
+			break;
+		default:
+			parent_class->changed (skey, change, skstore, iter);
+			break;
+	}
 }
 
-static void
-seahorse_recipients_store_key_changed (SeahorseKey *skey, SeahorseKeyChange change, SeahorseKeyRow *skrow)
-{}
-
+/**
+ * seahorse_recipients_store_new:
+ * @sctx: Current #SeahorseContext
+ * @view: #GtkTreeView that will show the new #SeahorseRecipientsStore
+ *
+ * Creates a new #SeahorseRecipientsStore and embeds in @view.
+ * A regular recipients store is appropriate for export recipients.
+ * Shown attributes are Name and KeyID.
+ *
+ * Returns: The new #SeahorseKeyStore
+ **/
 SeahorseKeyStore*
 seahorse_recipients_store_new (SeahorseContext *sctx, GtkTreeView *view)
 {
 	SeahorseKeyStore *skstore;
-	GtkTreeStore *store;
-	GtkTreeViewColumn *column;
-        GtkCellRenderer *renderer;
-	static GType recipients_columns[] = {
-	        G_TYPE_POINTER, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING
+	
+	GType columns[] = {
+	        G_TYPE_POINTER, G_TYPE_STRING, G_TYPE_STRING
 	};
 	
 	skstore = g_object_new (SEAHORSE_TYPE_RECIPIENTS_STORE, "ctx", sctx, NULL);
-	store = GTK_TREE_STORE (skstore);
-	
-	/* Initialize the tree view columns */
-	gtk_tree_store_set_column_types (store, COLS, recipients_columns);
-	
-	gtk_tree_view_set_model (view, GTK_TREE_MODEL (store));	
-	g_object_unref (store);
-	
-	renderer = gtk_cell_renderer_text_new ();
-	column = gtk_tree_view_column_new_with_attributes ("SeahorseKey", renderer, "text", SKEY, NULL);
-	
-	renderer = gtk_cell_renderer_text_new ();
-	column = gtk_tree_view_column_new_with_attributes (_("Name"), renderer, "text", NAME, NULL);
-	gtk_tree_view_column_set_resizable (column, TRUE);
-	gtk_tree_view_append_column (view, column);
-	
-	renderer = gtk_cell_renderer_text_new ();
-	column = gtk_tree_view_column_new_with_attributes (_("Key ID"), renderer, "text", KEYID, NULL);
-	gtk_tree_view_column_set_resizable (column, TRUE);
-	gtk_tree_view_append_column (view, column);
-	
-	renderer = gtk_cell_renderer_text_new ();
-	column = gtk_tree_view_column_new_with_attributes (_("Validity"), renderer, "text", VALIDITY, NULL);
-	gtk_tree_view_column_set_resizable (column, TRUE);
-	gtk_tree_view_append_column (view, column);
-	
+	seahorse_key_store_init (skstore, view, COLS, columns);
+
 	return skstore;
 }

@@ -1,3 +1,55 @@
+2003-01-25  Jacob Perkins <jap1@users.sourceforge.net>
+
+	* seahorse-signer-menu: Replaces key-menu, does all signer handling
+	for preferences
+	* seahorse-signer-menu-item: Replaces key-menu-item, handles key
+	signals for signer-menu
+	* seahorse-key-menu:
+	* seahorse-key-menu-item:
+	Removed
+	* seahorse-preferences: Updated to use signer-menu
+
+2003-01-24  Bastien Nocera  <hadess@hadess.net>
+
+	* src/dialogs/seahorse-add-uid.glade2:
+	* src/dialogs/seahorse-export.glade2:
+	* src/dialogs/seahorse-generate.glade2:
+	* src/dialogs/seahorse-import.glade2:
+	* src/dialogs/seahorse-preferences.glade2:
+	* src/dialogs/seahorse-recipients.glade2:
+	* src/dialogs/seahorse-signatures.glade2:
+	* src/seahorse-file-manager.glade2:
+	* src/seahorse-key-manager.glade2:
+	* src/seahorse-key-properties.glade2:
+	* src/seahorse-text-editor.glade2: remove the separators, use
+	automatic horizontal scrollbars, fix the spacing in dialogs,
+	add an icon for all the windows
+	* src/seahorse-widget.c: (seahorse_widget_set_property): fix a memleak
+
+2003-01-24  Jacob Perkins <jap1@users.sourceforge.net>
+
+	* seahorse-key-store: Fixes and cleanups so keys & context are
+	correctly finalized by listening to context's destroy signal, comments
+	* seahorse-key-manager: Modified ::quit to reflect key-store changes
+	* seahorse-key-manager-store: Doesn't remove subkeys when refreshing
+	* seahorse-recipients-store:
+	* seahorse-encrypt-recipients-store:
+	Updated all key-store subclasses for more efficient key change listening
+
+2003-01-23  Jacob Perkins <jap1@users.sourceforge.net>
+
+	* seahorse-encrypt-recipients-store: Added
+	* seahorse-key-store:
+	* seahorse-recipients-store:
+	* seahorse-key-manager-store:
+	Redesign of key stores for extendability and listening to key changes
+	* seahorse-recipients: Modified to use new key-store setup,
+	replaced general ::new with ::export_recipients_new and
+	::encrypt_recipients_new, bug fixes
+	* seahorse-file-manager:
+	* seahorse-text-editor:
+	Modified to use new recipients setup
+
 2003-01-23  Jose Carlos Garcia Sogo <jsogo@debian.org>
 	
 	* configure.in: Added a working checking for GPGME 0.3.14 or greater
@@ -12,15 +64,36 @@
 	* Patches from bug #104166
 
 	* Released 0.6.0
+	
+	* seahorse-key: Added ::is_valid & ::can_encrypt; code cleanup & checks
 
 2003-01-19  Jacob Perkins <jap1@users.sourceforge.net>
 
 	* seahorse-recipients: Fixed bug by removing delete_event
 	* seahorse-widget: Added assert for glade xml
+	* seahorse-ops-key: Added to comments to ::delete; added ::add_uid
+	& ::check_email; ::generate now checks email; general cleanups &
+	gtk-doc comments
+	* seahorse-generate: Checks email before generation, changed mnemonics
+	* Added seahorse-add-uid
+	* seahorse-file-manager:
+	* seahorse-text-editor:
+	* seahorse-key-manager:
+	Added more tooltips
+	* seahorse-key: Removed SeahorseKeyPrivate; ::num_uids & ::num_subkeys
+	now calculate on demand; gtk-doc comments
+	* seahorse-export: Listens to uid changes
 
 2003-01-18  Jacob Perkins <jap1@users.sourceforge.net>
 
 	* seahorse-context: Bug fix in ::new
+	* seahorse-key-properties: Simplified/prepared for key edit ops with
+	::do_uids & ::do_subkeys
+	* seahorse-ops-key: Set key type numbers to correspond to gnupg;
+	cleaned up & added checks to ::generate
+	* seahorse-generate: Set length increments to multiples of 32,
+	updated for new key types
+
 
 2003-01-17  Jacob Perkins <jap1@users.sourceforge.net>
 

@@ -1,7 +1,7 @@
 /*
  * Seahorse
  *
- * Copyright (C) 2002 Jacob Perkins
+ * Copyright (C) 2003 Jacob Perkins
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,10 +21,6 @@
 
 #ifndef __SEAHORSE_RECIPIENTS_H__
 #define __SEAHORSE_RECIPIENTS_H__
-
-/* SeahorseRecipients is a SeahorseWidget for constructing a GpgmeRecipients list.
- * It contains a recipient list, two key stores,
- * and can prompt user if key's must be at least Fully Valid. */
 
 #include <glib.h>
 #include <gpgme.h>
@@ -47,7 +43,10 @@ struct _SeahorseRecipients
 {
 	SeahorseWidget		parent;
 	
+	/*< public >*/
 	GpgmeRecipients		recips;
+
+	/*< private >*/
 	gboolean		need_validity;
 	SeahorseKeyStore	*all_keys;
 	SeahorseKeyStore	*recipient_keys;
@@ -58,12 +57,10 @@ struct _SeahorseRecipientsClass
 	SeahorseWidgetClass	parent_class;
 };
 
-/* Loads a new recipients dialog */
-SeahorseWidget*	seahorse_recipients_new (SeahorseContext	*sctx,
-					 gboolean		need_validity);
+SeahorseWidget*	seahorse_export_recipients_new (SeahorseContext		*sctx);
 
-/* Runs the recipients dialog until user is finished, returning the constructed recipient list or NULL.
- * Returned recipients will not be released if SeahorseRecipients is destroyed. */
-GpgmeRecipients	seahorse_recipients_run	(SeahorseRecipients	*srecips);
+SeahorseWidget*	seahorse_encrypt_recipients_new	(SeahorseContext	*sctx);
+
+GpgmeRecipients	seahorse_recipients_run		(SeahorseRecipients	*srecips);
 
 #endif /* __SEAHORSE_RECIPIENTS_H__ */

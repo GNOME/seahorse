@@ -1,7 +1,7 @@
 /*
  * Seahorse
  *
- * Copyright (C) 2002 Jacob Perkins
+ * Copyright (C) 2003 Jacob Perkins
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,6 +32,16 @@
 #define SAVE "keyedit.save.okay"
 #define YES "Y"
 
+/**
+ * seahorse_ops_key_delete:
+ * @sctx: Current context
+ * @skey: Key to delete
+ *
+ * Deletes key, removing it from the context and emitting the key's destroy
+ * signal.
+ *
+ * Returns: %TRUE if key is deleted, %FALSE otherwise
+ **/
 gboolean
 seahorse_ops_key_delete (SeahorseContext *sctx, SeahorseKey *skey)
 {
@@ -46,22 +56,54 @@ seahorse_ops_key_delete (SeahorseContext *sctx, SeahorseKey *skey)
 	return success;
 }
 
+/**
+ * seahorse_ops_key_generate:
+ * @sctx: The current context
+ * @name: Name for the new key
+ * @email: Email address for new key
+ * @comment: New key comment
+ * @passphrase: Passphrase for new key
+ * @type: #SeahorseKeyType, must be #DSA_ELGAMAL, #DSA, or #RSA_SIGN
+ * @length: Length of key, must be within #SeahorseKeyLength restraints,
+ * depending on @type
+ * @expires: Expiration date, 0 is never
+ *
+ * Generates a new key.  @sctx will add the new key and emit the key added
+ * signal.
+ *
+ * Returns: %TRUE if operation is successful, %FALSE otherwise.
+ **/
 gboolean
 seahorse_ops_key_generate (SeahorseContext *sctx, const gchar *name,
 			   const gchar *email, const gchar *comment,
 			   const gchar *passphrase, const SeahorseKeyType type,
 			   const guint length, const time_t expires)
 {
-        gchar *common;
-        gchar *key_type;
-        gchar *start;
-        gchar *parms;
+        gchar *common, *key_type, *start, *parms;
         gboolean success;
 	const gchar *expires_date;
 	
-	/* Texts cannot be empty */
-	g_assert (!g_str_equal (name, "") && !g_str_equal (email, "") &&
-		  !g_str_equal (comment, "") && !g_str_equal (passphrase, ""));
+	g_return_val_if_fail (sctx != NULL && SEAHORSE_IS_CONTEXT (sctx), FALSE);
+	g_return_val_if_fail (name != NULL && !g_str_equal (name, ""), FALSE);
+	g_return_val_if_fail (email != NULL && seahorse_ops_key_check_email (email), FALSE);
+	g_return_val_if_fail (comment != NULL && !g_str_equal (comment, ""), FALSE);
+	g_return_val_if_fail (passphrase != NULL && !g_str_equal (passphrase, ""), FALSE);
+	
+	/* Check lengths for each type */
+	switch (type) {
+		case DSA_ELGAMAL:
+			g_return_val_if_fail (length >= ELGAMAL_MIN && length <= LENGTH_MAX, FALSE);
+			break;
+		case DSA:
+			g_return_val_if_fail (length >= DSA_MIN && length <= DSA_MAX, FALSE);
+			break;
+		case RSA_SIGN:
+			g_return_val_if_fail (length >= RSA_MIN && length <= LENGTH_MAX, FALSE);
+			break;
+		default:
+			g_return_val_if_reached (FALSE);
+			break;
+	}
 	
 	if (expires != 0)
 		expires_date = seahorse_util_get_date_string (expires);
@@ -73,7 +115,7 @@ seahorse_ops_key_generate (SeahorseContext *sctx, const gchar *name,
 		"Expire-Date: %s\nPassphrase: %s\n</GnupgKeyParms>", name, comment, email,
 		expires_date, passphrase);
 	
-	if (type == RSA)
+	if (type == RSA_SIGN)
 		key_type = "Key-Type: RSA";
 	else
 		key_type = "Key-Type: DSA";
@@ -92,7 +134,6 @@ seahorse_ops_key_generate (SeahorseContext *sctx, const gchar *name,
 	
 	if (success)
 		seahorse_context_key_added (sctx);
-	
 	seahorse_context_show_status (sctx, _("Generate Key"), success);
 	
 	/* Free xmls */
@@ -115,6 +156,15 @@ seahorse_ops_key_import_server (SeahorseContext *sctx, const gchar *keyid, const
 	return FALSE;
 }
 
+/**
+ * seahorse_ops_key_recips_add:
+ * @recips: Current recipients list
+ * @skey: Key to add to @recips
+ *
+ * Adds @skey to @recips with full validity.
+ *
+ * Returns: %TRUE if successful, %FALSE otherwise
+ **/
 gboolean
 seahorse_ops_key_recips_add (GpgmeRecipients recips, const SeahorseKey *skey)
 {
@@ -122,12 +172,11 @@ seahorse_ops_key_recips_add (GpgmeRecipients recips, const SeahorseKey *skey)
 	gboolean success;
 	
 	g_return_val_if_fail (recips != NULL, FALSE);
-	g_return_val_if_fail (SEAHORSE_IS_KEY (skey), FALSE);
-	
-	name = gpgme_key_get_string_attr (skey->key, GPGME_ATTR_KEYID, NULL, 0);
+	g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), FALSE);
 	
 	//FULL seems to be minimum acceptable
-	success = (gpgme_recipients_add_name_with_validity (recips, name, GPGME_VALIDITY_FULL) == GPGME_No_Error);
+	success = (gpgme_recipients_add_name_with_validity (recips,
+		seahorse_key_get_keyid (skey, 0), GPGME_VALIDITY_FULL) == GPGME_No_Error);
 	
 	return success;
 }
@@ -157,7 +206,8 @@ typedef struct
 
 /* Creates new edit parameters with defaults */
 static SeahorseEditParm*
-seahorse_edit_parm_new (guint state, SeahorseEditAction action, SeahorseEditTransit transit, gpointer data)
+seahorse_edit_parm_new (guint state, SeahorseEditAction action,
+			SeahorseEditTransit transit, gpointer data)
 {
 	SeahorseEditParm *parms;
 	
@@ -173,7 +223,8 @@ seahorse_edit_parm_new (guint state, SeahorseEditAction action, SeahorseEditTran
 
 /* Edit callback for gpgme */
 static GpgmeError
-seahorse_ops_key_edit (gpointer data, GpgmeStatusCode status, const gchar *args, const gchar **result)
+seahorse_ops_key_edit (gpointer data, GpgmeStatusCode status,
+		       const gchar *args, const gchar **result)
 {
 	SeahorseEditParm *parms = (SeahorseEditParm*)data;
 	
@@ -200,7 +251,8 @@ seahorse_ops_key_edit (gpointer data, GpgmeStatusCode status, const gchar *args,
 
 /* Common edit operations */
 static gboolean
-edit_key (SeahorseContext *sctx, SeahorseKey *skey, SeahorseEditParm *parms, const gchar *op, SeahorseKeyChange change)
+edit_key (SeahorseContext *sctx, SeahorseKey *skey, SeahorseEditParm *parms,
+	  const gchar *op, SeahorseKeyChange change)
 {
 	GpgmeData out = NULL;
 	gboolean success;
@@ -269,7 +321,8 @@ edit_trust_action (guint state, gpointer data, const gchar **result)
 
 /* Edit owner trust transits */
 static guint
-edit_trust_transit (guint current_state, GpgmeStatusCode status, const gchar *args, gpointer data, GpgmeError *err)
+edit_trust_transit (guint current_state, GpgmeStatusCode status,
+		    const gchar *args, gpointer data, GpgmeError *err)
 {
 	guint next_state;
 	
@@ -338,17 +391,33 @@ edit_trust_transit (guint current_state, GpgmeStatusCode status, const gchar *ar
 	return next_state;
 }
 
+/**
+ * seahorse_ops_key_set_trust:
+ * @sctx: Current context
+ * @skey: Key to change
+ * @trust: New trust value for @skey
+ *
+ * Sets @skey trust to @trust.
+ *
+ * Returns: %TRUE if successful, %FALSE otherwise
+ **/
 gboolean
 seahorse_ops_key_set_trust (SeahorseContext *sctx, SeahorseKey *skey, GpgmeValidity trust)
 {
 	SeahorseEditParm *parms;
-	gchar *trust_strings[] = {"1", "2", "3", "4", "5"};
+	static gchar *trust_strings[] = {"1", "2", "3", "4", "5"};
+	guint index;
 	
-	g_return_val_if_fail (seahorse_validity_get_index (trust) != seahorse_validity_get_index (
+	g_return_val_if_fail (sctx != NULL && SEAHORSE_IS_CONTEXT (sctx), FALSE);
+	g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), FALSE);
+	
+	index = seahorse_validity_get_index (trust);
+	/* Make sure _changing_ trust */
+	g_return_val_if_fail (index != seahorse_validity_get_index (
 		gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_OTRUST, NULL, 0)), FALSE);
 	
-	parms = seahorse_edit_parm_new (TRUST_START, edit_trust_action, edit_trust_transit,
-		trust_strings[seahorse_validity_get_index (trust)]);
+	parms = seahorse_edit_parm_new (TRUST_START, edit_trust_action,
+		edit_trust_transit, trust_strings[index]);
 	
 	return edit_key (sctx, skey, parms, _("Change Trust"), SKEY_CHANGE_TRUST);
 }
@@ -399,7 +468,8 @@ edit_expire_action (guint state, gpointer data, const gchar **result)
 
 /* Edit primary expiration transits */
 static guint
-edit_expire_transit (guint current_state, GpgmeStatusCode status, const gchar *args, gpointer data, GpgmeError *err)
+edit_expire_transit (guint current_state, GpgmeStatusCode status,
+		     const gchar *args, gpointer data, GpgmeError *err)
 {
 	guint next_state;
  
@@ -455,17 +525,31 @@ edit_expire_transit (guint current_state, GpgmeStatusCode status, const gchar *a
 	return next_state;
 }
 
+/**
+ * seahorse_ops_key_set_expires:
+ * @sctx: Current context
+ * @skey: Key to change
+ * @expires: New expiration time for @skey. 0 is never.
+ *
+ * Changes expiration date of @skey to @expires.
+ *
+ * Returns: %TRUE if successful, %FALSE otherwise
+ **/
 gboolean
 seahorse_ops_key_set_expires (SeahorseContext *sctx, SeahorseKey *skey, time_t expires)
 {
 	const gchar *date;
 	SeahorseEditParm *parms;
 	
+	g_return_val_if_fail (sctx != NULL && SEAHORSE_IS_CONTEXT (sctx), FALSE);
+	g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), FALSE);
+	
 	if (expires)
 		date = seahorse_util_get_date_string (expires);
 	else
 		date = "0";
 	
+	/* Make sure _changing_ expires */
 	g_return_val_if_fail (!g_str_equal (date, seahorse_util_get_date_string (
 		gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_EXPIRE, NULL, 0))), FALSE);
 	
@@ -506,7 +590,8 @@ edit_disable_action (guint state, gpointer data, const gchar **result)
 
 /* Edit disable/enable transits */
 static guint
-edit_disable_transit (guint current_state, GpgmeStatusCode status, const gchar *args, gpointer data, GpgmeError *err)
+edit_disable_transit (guint current_state, GpgmeStatusCode status,
+		      const gchar *args, gpointer data, GpgmeError *err)
 {
 	guint next_state;
 	
@@ -544,14 +629,26 @@ edit_disable_transit (guint current_state, GpgmeStatusCode status, const gchar *
 	return next_state;
 }
 
+/**
+ * seahorse_ops_key_set_disabled:
+ * @sctx: Current context
+ * @skey: Key to change
+ * @disabled: Whether or not @skey should be disabled
+ *
+ * Disables or enables @skey depending on @disabled.
+ *
+ * Returns: %TRUE if successful, %FALSE otherwise
+ **/
 gboolean
 seahorse_ops_key_set_disabled (SeahorseContext *sctx, SeahorseKey *skey, gboolean disabled)
 {
-	gchar *command;
+	gchar *command, *op;
 	SeahorseEditParm *parms;
-	gchar *op;
 	
-	g_return_val_if_fail (disabled != gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_KEY_DISABLED, NULL, 0), FALSE);
+	g_return_val_if_fail (sctx != NULL && SEAHORSE_IS_CONTEXT (sctx), FALSE);
+	g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), FALSE);
+	g_return_val_if_fail (disabled != gpgme_key_get_ulong_attr (
+		skey->key, GPGME_ATTR_KEY_DISABLED, NULL, 0), FALSE);
 	
 	if (disabled) {
 		command = "disable";
@@ -598,7 +695,8 @@ edit_pass_action (guint state, gpointer data, const gchar **result)
 
 /* Passphrase change transits */
 static guint
-edit_pass_transit (guint current_state, GpgmeStatusCode status, const gchar *args, gpointer data, GpgmeError *err)
+edit_pass_transit (guint current_state, GpgmeStatusCode status,
+		   const gchar *args, gpointer data, GpgmeError *err)
 {
 	guint next_state;
 	
@@ -640,12 +738,44 @@ edit_pass_transit (guint current_state, GpgmeStatusCode status, const gchar *arg
 	return next_state;
 }
 
+/**
+ * seahorse_ops_key_change_pass:
+ * @sctx: Current context
+ * @skey: Key to change
+ *
+ * Allows user to change the passphrase for @skey.  Gpgme passphrase callback
+ * must be set for @sctx.
+ *
+ * Returns: %TRUE if successful, %FALSE otherwise.
+ **/
 gboolean
 seahorse_ops_key_change_pass (SeahorseContext *sctx, SeahorseKey *skey)
 {
 	SeahorseEditParm *parms;
+	GpgmePassphraseCb callback = NULL;
+	
+	g_return_val_if_fail (sctx != NULL && SEAHORSE_IS_CONTEXT (sctx), FALSE);
+	g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), FALSE);
+	
+	/* Check if have passphrase callback */
+	gpgme_get_passphrase_cb (sctx->ctx, &callback, NULL);
+	g_return_val_if_fail (callback != NULL, FALSE);
 	
 	parms = seahorse_edit_parm_new (PASS_START, edit_pass_action, edit_pass_transit, NULL);
 	
 	return edit_key (sctx, skey, parms, _("Passphrase Change"), SKEY_CHANGE_PASS);
+}
+
+/**
+ * seahorse_ops_key_check_email:
+ * @email: Email entry to check
+ *
+ * Checks if @email appears to be a valid email address.
+ *
+ * Returns: %TRUE if @email appears valid, %FALSE otherwise
+ **/
+gboolean
+seahorse_ops_key_check_email (const gchar *email)
+{
+	return g_pattern_match_simple ("?*@?*", email);
 }

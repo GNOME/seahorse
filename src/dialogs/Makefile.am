@@ -24,6 +24,7 @@ glade_DATA = about.glade2 \
 	seahorse-preferences.glade2 \
 	seahorse-import.glade2 \
 	seahorse-signatures.glade2 \
-	seahorse-recipients.glade2
+	seahorse-recipients.glade2 \
+	seahorse-add-uid.glade2
 
 EXTRA_DIST = $(glade_DATA)

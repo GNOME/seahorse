@@ -1,7 +1,7 @@
 /*
  * Seahorse
  *
- * Copyright (C) 2002 Jacob Perkins
+ * Copyright (C) 2003 Jacob Perkins
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@
 
 #include "seahorse-preferences.h"
 #include "seahorse-widget.h"
-#include "seahorse-key-menu.h"
+#include "seahorse-signer-menu.h"
 
 #define DEFAULT_OPTION "default_key"
 
@@ -43,70 +43,30 @@ text_mode_toggled (GtkToggleButton *togglebutton, SeahorseWidget *swidget)
 	seahorse_context_set_text_mode (swidget->sctx, gtk_toggle_button_get_active (togglebutton));
 }
 
-/* Sets default signer to currently selected */
-static void
-seahorse_preferences_default_key_selected (SeahorseKeyMenu *skmenu, SeahorseKey *skey, SeahorseWidget *swidget)
-{
-	seahorse_context_set_signer (swidget->sctx, skey);
-}
-
 void
 seahorse_preferences_show (SeahorseContext *sctx)
 {	
 	SeahorseWidget *swidget;
 	GtkWidget *widget;
-	GtkWidget *menu;
-	GList *list = NULL;
-	gint index = 0;
-	SeahorseKey *skey;
-	SeahorseKey *signer;
-	const gchar *keyid;
+	
+	g_return_if_fail (sctx != NULL && SEAHORSE_IS_CONTEXT (sctx));
 	
 	swidget = seahorse_widget_new ("preferences", sctx);
 	g_return_if_fail (swidget != NULL);
 	
 	widget = glade_xml_get_widget (swidget->xml, "ascii_armor");
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), gpgme_get_armor (swidget->sctx->ctx));
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget),
+		gpgme_get_armor (sctx->ctx));
 	
 	widget = glade_xml_get_widget (swidget->xml, "text_mode");
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), gpgme_get_textmode (swidget->sctx->ctx));
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget),
+		gpgme_get_textmode (sctx->ctx));
 	
-	widget = glade_xml_get_widget (swidget->xml, DEFAULT_OPTION);
-	menu = seahorse_key_menu_new (TRUE, sctx);
-	gtk_option_menu_set_menu (GTK_OPTION_MENU (widget), menu);
+	seahorse_signer_menu_new (sctx, GTK_OPTION_MENU (
+		glade_xml_get_widget (swidget->xml, "default_key")));
 	
-	signer = seahorse_context_get_last_signer (sctx);
-	list = seahorse_context_get_keys (sctx);
-	
-	if (signer != NULL) {
-		keyid = seahorse_key_get_keyid (signer, 0);
-	
-		while (list != NULL && (skey = list->data) != NULL) {
-			list = g_list_next (list);
-			
-			if (!seahorse_context_key_has_secret (sctx, skey))
-				continue;
-			
-			if (g_str_equal (keyid, seahorse_key_get_keyid (skey, 0)))
-				break;
-			
-			index++;
-		}
-	}
-	else {
-		while (list != NULL && (skey = list->data) != NULL) {
-			if (seahorse_context_key_has_secret (sctx, skey)) {
-				seahorse_context_set_signer (sctx, skey);
-				break;
-			}
-			list = g_list_next (list);
-		}
-	}
-	
-	gtk_option_menu_set_history (GTK_OPTION_MENU (widget), index);
-	
-	glade_xml_signal_connect_data (swidget->xml, "armor_toggled", G_CALLBACK (armor_toggled), swidget);
-	glade_xml_signal_connect_data (swidget->xml, "text_mode_toggled", G_CALLBACK (text_mode_toggled), swidget);
-	
-	g_signal_connect (SEAHORSE_KEY_MENU (menu), "selected", G_CALLBACK (seahorse_preferences_default_key_selected), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "armor_toggled",
+		G_CALLBACK (armor_toggled), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "text_mode_toggled",
+		G_CALLBACK (text_mode_toggled), swidget);
 }

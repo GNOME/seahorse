@@ -152,6 +152,7 @@ static void
 seahorse_widget_set_property (GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec)
 {
 	SeahorseWidget *swidget;
+	char *path;
 	
 	swidget = SEAHORSE_WIDGET (object);
 	
@@ -159,8 +160,10 @@ seahorse_widget_set_property (GObject *object, guint prop_id, const GValue *valu
 		/* Loads xml definition from name, connects common callbacks */
 		case PROP_NAME:
 			swidget->name = g_value_dup_string (value);
-			swidget->xml = glade_xml_new (g_strdup_printf ("%sseahorse-%s.glade2",
-				SEAHORSE_GLADEDIR, swidget->name), swidget->name, NULL);
+			path = g_strdup_printf ("%sseahorse-%s.glade2",
+					SEAHORSE_GLADEDIR, swidget->name);
+			swidget->xml = glade_xml_new (path, swidget->name, NULL);
+			g_free (path);
 			g_assert (swidget->xml != NULL);
 			
 			glade_xml_signal_connect_data (swidget->xml, "closed",
@@ -173,7 +176,8 @@ seahorse_widget_set_property (GObject *object, guint prop_id, const GValue *valu
 		case PROP_CTX:
 			swidget->sctx = g_value_get_object (value);
 			g_object_ref (G_OBJECT (swidget->sctx));
-			g_signal_connect (swidget->sctx, "destroy", G_CALLBACK (seahorse_widget_destroyed), swidget);
+			g_signal_connect_after (swidget->sctx, "destroy",
+				G_CALLBACK (seahorse_widget_destroyed), swidget);
 			break;
 		/* Connects component specific callbacks */
 		case PROP_COMPONENT:
@@ -186,7 +190,7 @@ seahorse_widget_set_property (GObject *object, guint prop_id, const GValue *valu
 					glade_xml_get_widget (swidget->xml, STATUS));
 				glade_xml_signal_connect_data (swidget->xml, "focus_in_event",
 					G_CALLBACK (seahorse_widget_focus_in_event), swidget);
-				g_signal_connect (swidget->sctx, STATUS,
+				g_signal_connect_after (swidget->sctx, STATUS,
 					G_CALLBACK (seahorse_widget_show_status), swidget);
 			}
 			break;

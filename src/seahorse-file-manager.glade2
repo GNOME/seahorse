@@ -13,6 +13,7 @@
   <property name="modal">False</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
+  <property name="icon">seahorse.png</property>
   <property name="enable_layout_config">True</property>
   <signal name="delete_event" handler="delete_event" last_modification_time="Sat, 07 Dec 2002 03:05:07 GMT"/>
   <signal name="focus_in_event" handler="focus_in_event" last_modification_time="Sat, 07 Dec 2002 03:05:15 GMT"/>
@@ -68,7 +69,7 @@
 			  <signal name="activate" handler="import_activate" last_modification_time="Sat, 07 Dec 2002 01:44:53 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image51">
+			    <widget class="GtkImage" id="image65">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-revert-to-saved</property>
 			      <property name="icon_size">1</property>
@@ -90,7 +91,7 @@
 			  <signal name="activate" handler="export_activate" last_modification_time="Sat, 07 Dec 2002 01:46:57 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image52">
+			    <widget class="GtkImage" id="image66">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-save-as</property>
 			      <property name="icon_size">1</property>
@@ -118,7 +119,7 @@
 			  <signal name="activate" handler="sign_activate" last_modification_time="Sat, 07 Dec 2002 01:46:57 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image53">
+			    <widget class="GtkImage" id="image67">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-index</property>
 			      <property name="icon_size">1</property>
@@ -146,7 +147,7 @@
 			  <signal name="activate" handler="encrypt_activate" last_modification_time="Sat, 07 Dec 2002 01:46:57 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image54">
+			    <widget class="GtkImage" id="image68">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-sort-ascending</property>
 			      <property name="icon_size">1</property>
@@ -174,7 +175,7 @@
 			  <signal name="activate" handler="decrypt_activate" last_modification_time="Sat, 07 Dec 2002 01:46:57 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image55">
+			    <widget class="GtkImage" id="image69">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-sort-descending</property>
 			      <property name="icon_size">1</property>
@@ -196,7 +197,7 @@
 			  <signal name="activate" handler="verify_activate" last_modification_time="Sat, 07 Dec 2002 01:46:57 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image56">
+			    <widget class="GtkImage" id="image70">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-apply</property>
 			      <property name="icon_size">1</property>
@@ -218,7 +219,7 @@
 			  <signal name="activate" handler="decrypt_verify_activate" last_modification_time="Sat, 07 Dec 2002 01:46:57 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image57">
+			    <widget class="GtkImage" id="image71">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-spell-check</property>
 			      <property name="icon_size">1</property>
@@ -266,6 +267,7 @@
 		      <child>
 			<widget class="GtkCheckMenuItem" id="toolbar">
 			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">View toolbar</property>
 			  <property name="label" translatable="yes">_Toolbar</property>
 			  <property name="use_underline">True</property>
 			  <property name="active">True</property>
@@ -276,6 +278,7 @@
 		      <child>
 			<widget class="GtkCheckMenuItem" id="statusbar">
 			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">View statusbar</property>
 			  <property name="label" translatable="yes">_Statusbar</property>
 			  <property name="use_underline">True</property>
 			  <property name="active">True</property>
@@ -298,12 +301,13 @@
 		      <child>
 			<widget class="GtkImageMenuItem" id="help">
 			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Show file manager help</property>
 			  <property name="label" translatable="yes">_File Manager Help</property>
 			  <property name="use_underline">True</property>
 			  <signal name="activate" handler="help" last_modification_time="Sat, 07 Dec 2002 01:44:53 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image58">
+			    <widget class="GtkImage" id="image72">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-help</property>
 			      <property name="icon_size">1</property>
@@ -334,11 +338,10 @@
       <child>
 	<widget class="BonoboDockItem" id="tool_dock">
 	  <property name="visible">True</property>
-	  <property name="shadow_type">GTK_SHADOW_OUT</property>
+	  <property name="shadow_type">GTK_SHADOW_NONE</property>
 
 	  <child>
 	    <widget class="GtkToolbar" id="toolbar1">
-	      <property name="border_width">1</property>
 	      <property name="visible">True</property>
 	      <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
 	      <property name="toolbar_style">GTK_TOOLBAR_BOTH</property>

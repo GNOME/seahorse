@@ -1,7 +1,7 @@
 /*
  * Seahorse
  *
- * Copyright (C) 2002 Jacob Perkins
+ * Copyright (C) 2003 Jacob Perkins
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,9 +21,6 @@
 
 #ifndef __SEAHORSE_KEY_MANAGER_STORE_H__
 #define __SEAHORSE_KEY_MANAGER_STORE_H__
-
-/* SeahorseKeyManagerStore is a SeahorseKeyStore.
- * It shows key manager specific key attributes. */
 
 #include "seahorse-key-store.h"
 
@@ -47,7 +44,6 @@ struct _SeahorseKeyManagerStoreClass
 	SeahorseKeyStoreClass	parent_class;
 };
 
-/* Create a new key manager store in the tree view */
 SeahorseKeyStore*	seahorse_key_manager_store_new	(SeahorseContext	*sctx,
 							 GtkTreeView		*view);
 

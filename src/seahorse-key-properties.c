@@ -140,6 +140,15 @@ change_passphrase_activate (GtkMenuItem *item, SeahorseWidget *swidget)
 	seahorse_ops_key_change_pass (swidget->sctx, skwidget->skey);
 }
 
+static void
+add_uid_activate (GtkMenuItem *item, SeahorseWidget *swidget)
+{
+	SeahorseKeyWidget *skwidget;
+	
+	skwidget = SEAHORSE_KEY_WIDGET (swidget);
+	seahorse_add_uid_new (swidget->sctx, skwidget->skey);
+}
+
 /* Do a label */
 static void
 do_stat_label (const gchar *label, GtkTable *table, guint left, guint top)
@@ -366,6 +375,4 @@ seahorse_key_properties_new (SeahorseContext *sctx, SeahorseKey *skey)
 		G_CALLBACK (disabled_toggled), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "change_passphrase_activate",
 		G_CALLBACK (change_passphrase_activate), swidget);
-	glade_xml_signal_connect_data (swidget->xml, "add_uid_activate",
-		G_CALLBACK (add_uid_activate), swidget);
 }

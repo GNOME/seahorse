@@ -5,7 +5,6 @@
 <requires lib="gnome"/>
 
 <widget class="GtkDialog" id="export">
-  <property name="border_width">12</property>
   <property name="visible">True</property>
   <property name="title" translatable="yes">Export Key</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
@@ -13,7 +12,8 @@
   <property name="modal">False</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
-  <property name="has_separator">True</property>
+  <property name="icon">seahorse.png</property>
+  <property name="has_separator">False</property>
   <signal name="delete_event" handler="delete_event" last_modification_time="Fri, 10 Jan 2003 08:52:47 GMT"/>
 
   <child internal-child="vbox">
@@ -80,6 +80,7 @@
 
       <child>
 	<widget class="GtkTable" id="table1">
+	  <property name="border_width">12</property>
 	  <property name="visible">True</property>
 	  <property name="n_rows">3</property>
 	  <property name="n_columns">2</property>
@@ -223,9 +224,11 @@
 
 	  <child>
 	    <widget class="GtkScrolledWindow" id="scrolledwindow1">
+	      <property name="width_request">200</property>
+	      <property name="height_request">77</property>
 	      <property name="visible">True</property>
 	      <property name="can_focus">True</property>
-	      <property name="hscrollbar_policy">GTK_POLICY_ALWAYS</property>
+	      <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
 	      <property name="vscrollbar_policy">GTK_POLICY_ALWAYS</property>
 	      <property name="shadow_type">GTK_SHADOW_NONE</property>
 	      <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
