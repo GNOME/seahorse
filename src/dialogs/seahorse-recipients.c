@@ -144,11 +144,11 @@ seahorse_recipients_get_property (GObject *object, guint prop_id, GValue *value,
 }
 
 static void
-transfer (SeahorseKeyStore *lhs, SeahorseKeyStore *rhs, GtkTreeView *view, GtkTreePath *path)
+transfer (SeahorseKeyStore *lhs, SeahorseKeyStore *rhs, GtkTreePath *path)
 {
 	SeahorseKey *skey;
 	
-	skey = seahorse_key_store_get_key_from_path (view, path);
+	skey = seahorse_key_store_get_key_from_model (GTK_TREE_MODEL (lhs), path);
 	seahorse_key_store_remove (lhs, path);
 	seahorse_key_store_append (rhs, skey);
 }
@@ -158,13 +158,18 @@ set_all_buttons (SeahorseWidget *swidget)
 {
 	SeahorseRecipients *srecips;
 	GtkTreeIter iter;
+	gboolean sensitive;
 	
 	srecips = SEAHORSE_RECIPIENTS (swidget);
 	
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "add_all"),
 		gtk_tree_model_get_iter_first (GTK_TREE_MODEL (srecips->all_keys), &iter));
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "remove_all"),
-		gtk_tree_model_get_iter_first (GTK_TREE_MODEL (srecips->recipient_keys), &iter));
+	sensitive = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (
+		srecips->recipient_keys), &iter);
+	gtk_widget_set_sensitive (glade_xml_get_widget (
+		swidget->xml, "remove_all"), sensitive);
+	gtk_widget_set_sensitive (glade_xml_get_widget (
+		swidget->xml, "ok"), sensitive);
 }
 
 /* Moves key iter from right (non-recips) to left (recips) *
@@ -257,8 +262,8 @@ add_clicked (GtkButton *button, SeahorseWidget *swidget)
 	srecips = SEAHORSE_RECIPIENTS (swidget);
 	
 	while (list != NULL) {
-		transfer (srecips->all_keys, srecips->recipient_keys, view, list->data);
-		gtk_tree_path_free (list->data);
+		transfer (srecips->all_keys, srecips->recipient_keys, list->data);
+		//gtk_tree_path_free (list->data);
 		list = g_list_next (list);
 	}
 	g_list_free (list);
@@ -281,7 +286,8 @@ remove_clicked (GtkButton *button, SeahorseWidget *swidget)
 	srecips = SEAHORSE_RECIPIENTS (swidget);
 	
 	while (list != NULL) {
-		transfer (srecips->recipient_keys, srecips->all_keys, view, list->data);
+		transfer (srecips->recipient_keys, srecips->all_keys, list->data);
+		//gtk_tree_path_free (list->data);
 		list = g_list_next (list);
 	}
 	g_list_free (list);
@@ -294,7 +300,7 @@ static void
 add_row_activated (GtkTreeView *view, GtkTreePath *path,
 		   GtkTreeViewColumn *arg2, SeahorseRecipients *srecips)
 {
-	transfer (srecips->all_keys, srecips->recipient_keys, view, path);
+	transfer (srecips->all_keys, srecips->recipient_keys, path);
 	set_all_buttons (SEAHORSE_WIDGET (srecips));
 }
 
@@ -303,7 +309,7 @@ static void
 remove_row_activated (GtkTreeView *view, GtkTreePath *path,
 		      GtkTreeViewColumn *arg2, SeahorseRecipients *srecips)
 {
-	transfer (srecips->recipient_keys, srecips->all_keys, view, path);
+	transfer (srecips->recipient_keys, srecips->all_keys, path);
 	set_all_buttons (SEAHORSE_WIDGET (srecips));
 }
 
@@ -313,9 +319,8 @@ add_all_foreach (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, Seah
 	SeahorseRecipients *srecips;
 	
 	srecips = SEAHORSE_RECIPIENTS (swidget);
-	transfer (srecips->all_keys, srecips->recipient_keys, GTK_TREE_VIEW (
-		glade_xml_get_widget (swidget->xml, ALL)), path);
-	return FALSE;
+	transfer (srecips->all_keys, srecips->recipient_keys, path);
+	//return FALSE;
 }
 
 static void
@@ -332,8 +337,7 @@ remove_all_foreach (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, S
 	SeahorseRecipients *srecips;
 	
 	srecips = SEAHORSE_RECIPIENTS (swidget);
-	transfer (srecips->recipient_keys, srecips->all_keys, GTK_TREE_VIEW (
-		glade_xml_get_widget (swidget->xml, RECIPIENTS)), path);
+	transfer (srecips->recipient_keys, srecips->all_keys, path);
 	return FALSE;
 }
 
@@ -435,6 +439,13 @@ seahorse_encrypt_recipients_new (SeahorseContext *sctx)
 	return seahorse_recipients_new (sctx, TRUE);
 }
 
+static gboolean
+recipients_foreach (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, GpgmeRecipients recips)
+{
+	seahorse_ops_key_recips_add (recips, seahorse_key_store_get_key_from_model (model, path));
+	return FALSE;
+}
+
 /**
  * seahorse_recipients_run:
  * @srecips: #SeahorseRecipients to run
@@ -447,30 +458,33 @@ seahorse_encrypt_recipients_new (SeahorseContext *sctx)
 GpgmeRecipients
 seahorse_recipients_run (SeahorseRecipients *srecips)
 {	
-	GtkWidget *recipients;
 	SeahorseWidget *swidget;
 	gint response;
 	gboolean done = FALSE;
+	GpgmeRecipients recips;
 
 	swidget = SEAHORSE_WIDGET (srecips);
-	recipients = glade_xml_get_widget (swidget->xml, swidget->name);
+	g_return_val_if_fail (gpgme_recipients_new (&recips) == GPGME_No_Error, NULL);
 	
 	while (!done) {
-		response = gtk_dialog_run (GTK_DIALOG (recipients));
+		response = gtk_dialog_run (GTK_DIALOG (glade_xml_get_widget (
+			swidget->xml, swidget->name)));
 		
 		switch (response) {
 			case GTK_RESPONSE_HELP:
 				break;
 			case GTK_RESPONSE_OK:
 				done = TRUE;
+				gtk_tree_model_foreach (GTK_TREE_MODEL (srecips->recipient_keys),
+					(GtkTreeModelForeachFunc)recipients_foreach, recips);
 				break;
 			default:
-				gpgme_recipients_release (srecips->recips);
+				gpgme_recipients_release (recips);
 				srecips->recips = NULL;
 				done = TRUE;
 				break;
 		}
 	}
 	
-	return srecips->recips;
+	return recips;
 }

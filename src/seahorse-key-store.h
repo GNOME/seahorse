@@ -95,6 +95,9 @@ SeahorseKey*		seahorse_key_store_get_selected_key	(GtkTreeView		*view);
 SeahorseKey*		seahorse_key_store_get_key_from_path	(GtkTreeView		*view,
 								 GtkTreePath		*path);
 
+SeahorseKey*		seahorse_key_store_get_key_from_model	(GtkTreeModel		*model,
+								 GtkTreePath		*path);
+
 void			seahorse_key_store_append		(SeahorseKeyStore	*skstore,
 								 SeahorseKey		*skey);
 

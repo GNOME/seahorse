@@ -470,6 +470,16 @@ seahorse_key_store_get_key_from_path (GtkTreeView *view, GtkTreePath *path)
 	return skrow->skey;
 }
 
+SeahorseKey*
+seahorse_key_store_get_key_from_model (GtkTreeModel *model, GtkTreePath *path)
+{
+	SeahorseKeyRow *skrow;
+	
+	skrow = get_row_from_path (model, path);
+	g_return_val_if_fail (skrow != NULL, NULL);
+	return skrow->skey;
+}
+
 /**
  * seahorse_key_store_append:
  * @skstore: #SeahorseKeyStore to append @skey to
