@@ -28,6 +28,7 @@ enum {
 	DATA,
 	NAME,
 	KEYID,
+	VALIDITY_STR,
 	VALIDITY,
 	COLS
 };
@@ -87,8 +88,13 @@ seahorse_encrypt_recipients_store_class_init (SeahorseEncryptRecipientsStoreClas
 static void
 seahorse_encrypt_recipients_store_set (GtkTreeStore *store, GtkTreeIter *iter, SeahorseKey *skey)
 {
+	SeahorseValidity validity;
+	
+	validity = seahorse_key_get_validity (skey);
+	
 	gtk_tree_store_set (store, iter,
-		VALIDITY, seahorse_validity_get_string (seahorse_key_get_validity (skey)), -1);
+		VALIDITY_STR, seahorse_validity_get_string (validity),
+		VALIDITY, validity, -1);
 	SEAHORSE_KEY_STORE_CLASS (parent_class)->set (store, iter, skey);
 }
 
@@ -127,16 +133,14 @@ seahorse_encrypt_recipients_store_new (SeahorseContext *sctx, GtkTreeView *view)
 	GtkTreeViewColumn *column;
 	
 	GType columns[] = {
-	        G_TYPE_POINTER, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING
+	        G_TYPE_POINTER, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INT
 	};
 	
 	skstore = g_object_new (SEAHORSE_TYPE_ENCRYPT_RECIPIENTS_STORE, "ctx", sctx, NULL);
 	seahorse_key_store_init (skstore, view, COLS, columns);
 
-	column = seahorse_key_store_append_column (view, _("Validity"), VALIDITY);
+	column = seahorse_key_store_append_column (view, _("Validity"), VALIDITY_STR);
 	gtk_tree_view_column_set_sort_column_id (column, VALIDITY);
-	gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (skstore), VALIDITY,
-		(GtkTreeIterCompareFunc)seahorse_validity_compare, (gpointer)VALIDITY, NULL);
 	
 	return skstore;
 }

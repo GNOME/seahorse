@@ -25,6 +25,8 @@
 #include <gtk/gtk.h>
 
 typedef enum {
+	SEAHORSE_VALIDITY_REVOKED = -2,
+	SEAHORSE_VALIDITY_DISABLED = -1,
 	SEAHORSE_VALIDITY_UNKNOWN = 1,
 	SEAHORSE_VALIDITY_NEVER = 2,
 	SEAHORSE_VALIDITY_MARGINAL = 3,
@@ -33,10 +35,5 @@ typedef enum {
 } SeahorseValidity;
 
 const gchar*	seahorse_validity_get_string	(SeahorseValidity	validity);
-
-gint		seahorse_validity_compare	(GtkTreeModel		*model,
-						 GtkTreeIter		*a,
-						 GtkTreeIter		*b,
-						 guint			index);
 
 #endif /* __SEAHORSE_VALIDITY_H__ */

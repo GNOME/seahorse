@@ -173,7 +173,7 @@
 	    </widget>
 	    <packing>
 	      <property name="tab_expand">False</property>
-	      <property name="tab_fill">True</property>
+	      <property name="tab_fill">False</property>
 	    </packing>
 	  </child>
 
@@ -314,14 +314,61 @@
 		      <property name="border_width">12</property>
 		      <property name="visible">True</property>
 		      <property name="n_rows">1</property>
-		      <property name="n_columns">3</property>
+		      <property name="n_columns">5</property>
 		      <property name="homogeneous">False</property>
 		      <property name="row_spacing">12</property>
 		      <property name="column_spacing">12</property>
 
 		      <child>
+			<widget class="GtkCheckButton" id="show_type">
+			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">If type column is visible</property>
+			  <property name="can_focus">True</property>
+			  <property name="label" translatable="yes">T_ype</property>
+			  <property name="use_underline">True</property>
+			  <property name="relief">GTK_RELIEF_NORMAL</property>
+			  <property name="active">False</property>
+			  <property name="inconsistent">False</property>
+			  <property name="draw_indicator">True</property>
+			  <signal name="toggled" handler="show_type_toggled" last_modification_time="Sun, 09 Mar 2003 04:00:32 GMT"/>
+			</widget>
+			<packing>
+			  <property name="left_attach">4</property>
+			  <property name="right_attach">5</property>
+			  <property name="top_attach">0</property>
+			  <property name="bottom_attach">1</property>
+			  <property name="x_options">fill</property>
+			  <property name="y_options"></property>
+			</packing>
+		      </child>
+
+		      <child>
+			<widget class="GtkCheckButton" id="show_length">
+			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">If length column is visible</property>
+			  <property name="can_focus">True</property>
+			  <property name="label" translatable="yes">_Length</property>
+			  <property name="use_underline">True</property>
+			  <property name="relief">GTK_RELIEF_NORMAL</property>
+			  <property name="active">False</property>
+			  <property name="inconsistent">False</property>
+			  <property name="draw_indicator">True</property>
+			  <signal name="toggled" handler="show_length_toggled" last_modification_time="Sun, 09 Mar 2003 04:00:40 GMT"/>
+			</widget>
+			<packing>
+			  <property name="left_attach">3</property>
+			  <property name="right_attach">4</property>
+			  <property name="top_attach">0</property>
+			  <property name="bottom_attach">1</property>
+			  <property name="x_options">fill</property>
+			  <property name="y_options"></property>
+			</packing>
+		      </child>
+
+		      <child>
 			<widget class="GtkCheckButton" id="show_trust">
 			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">If trust column is visible</property>
 			  <property name="can_focus">True</property>
 			  <property name="label" translatable="yes">_Trust</property>
 			  <property name="use_underline">True</property>
@@ -332,8 +379,8 @@
 			  <signal name="toggled" handler="show_trust_toggled" last_modification_time="Sun, 09 Mar 2003 04:00:14 GMT"/>
 			</widget>
 			<packing>
-			  <property name="left_attach">0</property>
-			  <property name="right_attach">1</property>
+			  <property name="left_attach">2</property>
+			  <property name="right_attach">3</property>
 			  <property name="top_attach">0</property>
 			  <property name="bottom_attach">1</property>
 			  <property name="x_options">fill</property>
@@ -342,16 +389,17 @@
 		      </child>
 
 		      <child>
-			<widget class="GtkCheckButton" id="show_type">
+			<widget class="GtkCheckButton" id="show_expires">
 			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">If expiration date column is visible</property>
 			  <property name="can_focus">True</property>
-			  <property name="label" translatable="yes">T_ype</property>
+			  <property name="label" translatable="yes">_Expiration Date</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
 			  <property name="active">False</property>
 			  <property name="inconsistent">False</property>
 			  <property name="draw_indicator">True</property>
-			  <signal name="toggled" handler="show_type_toggled" last_modification_time="Sun, 09 Mar 2003 04:00:32 GMT"/>
+			  <signal name="toggled" handler="show_expires_toggled" last_modification_time="Thu, 13 Mar 2003 15:21:02 GMT"/>
 			</widget>
 			<packing>
 			  <property name="left_attach">1</property>
@@ -364,20 +412,21 @@
 		      </child>
 
 		      <child>
-			<widget class="GtkCheckButton" id="show_length">
+			<widget class="GtkCheckButton" id="show_validity">
 			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">If validity column is visible</property>
 			  <property name="can_focus">True</property>
-			  <property name="label" translatable="yes">_Length</property>
+			  <property name="label" translatable="yes">_Validity</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
-			  <property name="active">False</property>
+			  <property name="active">True</property>
 			  <property name="inconsistent">False</property>
 			  <property name="draw_indicator">True</property>
-			  <signal name="toggled" handler="show_length_toggled" last_modification_time="Sun, 09 Mar 2003 04:00:40 GMT"/>
+			  <signal name="toggled" handler="show_validity_toggled" last_modification_time="Thu, 13 Mar 2003 15:20:51 GMT"/>
 			</widget>
 			<packing>
-			  <property name="left_attach">2</property>
-			  <property name="right_attach">3</property>
+			  <property name="left_attach">0</property>
+			  <property name="right_attach">1</property>
 			  <property name="top_attach">0</property>
 			  <property name="bottom_attach">1</property>
 			  <property name="x_options">fill</property>

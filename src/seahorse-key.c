@@ -320,6 +320,10 @@ get_validity_attr (const SeahorseKey *skey, GpgmeAttr attr)
 const SeahorseValidity
 seahorse_key_get_validity (const SeahorseKey *skey)
 {
+	if (gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_KEY_REVOKED, NULL, 0))
+		return SEAHORSE_VALIDITY_REVOKED;
+	if (gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_KEY_DISABLED, NULL, 0))
+		return SEAHORSE_VALIDITY_DISABLED;
 	return get_validity_attr (skey, GPGME_ATTR_VALIDITY);
 }
 

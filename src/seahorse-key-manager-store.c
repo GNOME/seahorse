@@ -24,14 +24,21 @@
 
 #include "seahorse-key-manager-store.h"
 #include "seahorse-preferences.h"
+#include "seahorse-validity.h"
+#include "seahorse-util.h"
 
 enum {
 	SKEY,
 	NAME,
 	KEYID,
+	VALIDITY_STR,
+	VALIDITY,
+	EXPIRES_STR,
+	EXPIRES,
+	TRUST_STR,
 	TRUST,
-	TYPE,
 	LENGTH,
+	TYPE,
 	COLS
 };
 
@@ -129,11 +136,37 @@ seahorse_key_manager_store_set (GtkTreeStore *store, GtkTreeIter *iter, Seahorse
 {
 	GtkTreeIter child;
 	gint index = 1, max;
+	SeahorseValidity validity, trust;
+	gulong expires_date;
+	const gchar *expires;
+	
+	validity = seahorse_key_get_validity (skey);
+	trust = seahorse_key_get_trust (skey);
+	
+	if (gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_KEY_EXPIRED, NULL, 0)) {
+		expires = _("Expired");
+		expires_date = -1;
+	}
+	else {
+		expires_date = gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_EXPIRE, NULL, 0);
+		
+		if (expires_date == 0) {
+			expires = _("Never Expires");
+			expires_date = G_MAXLONG;
+		}
+		else
+			expires = seahorse_util_get_date_string (expires_date);
+	}
 	
 	gtk_tree_store_set (store, iter,
-		TRUST, seahorse_validity_get_string (seahorse_key_get_trust (skey)),
-		TYPE, gpgme_key_get_string_attr (skey->key, GPGME_ATTR_ALGO, NULL, 0),
-		LENGTH, gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_LEN, NULL, 0), -1);
+		VALIDITY_STR, seahorse_validity_get_string (validity),
+		VALIDITY, validity,
+		EXPIRES_STR, expires,
+		EXPIRES, expires_date,
+		TRUST_STR, seahorse_validity_get_string (trust),
+		TRUST, trust,
+		LENGTH, gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_LEN, NULL, 0),
+		TYPE, gpgme_key_get_string_attr (skey->key, GPGME_ATTR_ALGO, NULL, 0), -1);
 	
 	max = seahorse_key_get_num_uids (skey);
 	
@@ -162,7 +195,8 @@ seahorse_key_manager_store_changed (SeahorseKey *skey, SeahorseKeyChange change,
 				    SeahorseKeyStore *skstore, GtkTreeIter *iter)
 {
 	switch (change) {
-		case SKEY_CHANGE_TRUST:
+		case SKEY_CHANGE_TRUST: case SKEY_CHANGE_EXPIRE:
+		case SKEY_CHANGE_DISABLE:
 			SEAHORSE_KEY_STORE_GET_CLASS (skstore)->set (
 				GTK_TREE_STORE (skstore), iter, skey);
 			break;
@@ -186,12 +220,16 @@ gconf_notification (GConfClient *gclient, guint id, GConfEntry *entry, GtkTreeVi
 	key = gconf_entry_get_key (entry);
 	value = gconf_entry_get_value (entry);
 	
-	if (g_str_equal (key, SHOW_TRUST))
-		col = gtk_tree_view_get_column (view, TRUST-1);
-	else if (g_str_equal (key, SHOW_TYPE))
-		col = gtk_tree_view_get_column (view, TYPE-1);
+	if (g_str_equal (key, SHOW_VALIDITY))
+		col = gtk_tree_view_get_column (view, VALIDITY_STR-1);
+	else if (g_str_equal (key, SHOW_EXPIRES))
+		col = gtk_tree_view_get_column (view, EXPIRES_STR-2);
+	else if (g_str_equal (key, SHOW_TRUST))
+		col = gtk_tree_view_get_column (view, TRUST_STR-3);
 	else if (g_str_equal (key, SHOW_LENGTH))
-		col = gtk_tree_view_get_column (view, LENGTH-1);
+		col = gtk_tree_view_get_column (view, LENGTH-4);
+	else if (g_str_equal (key, SHOW_TYPE))
+		col = gtk_tree_view_get_column (view, TYPE-4);
 	else
 		return;
 	
@@ -216,23 +254,33 @@ seahorse_key_manager_store_new (SeahorseContext *sctx, GtkTreeView *view)
 	GList *list = NULL;
 
 	GType columns[] = {
-	        G_TYPE_POINTER, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INT
+	        G_TYPE_POINTER, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,
+		G_TYPE_INT, G_TYPE_STRING, G_TYPE_LONG, G_TYPE_STRING, G_TYPE_INT,
+		G_TYPE_INT, G_TYPE_STRING
         };
 
 	skstore = g_object_new (SEAHORSE_TYPE_KEY_MANAGER_STORE, "ctx", sctx, NULL);
 	seahorse_key_store_init (skstore, view, COLS, columns);
-
-	col = seahorse_key_store_append_column (view, _("Trust"), TRUST);
-	gtk_tree_view_column_set_sort_column_id (col, TRUST);
-	gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (skstore), TRUST,
-		(GtkTreeIterCompareFunc)seahorse_validity_compare, (gpointer)TRUST, NULL);
-	gtk_tree_view_column_set_visible (col, eel_gconf_get_boolean (SHOW_TRUST));
 	
-	col = seahorse_key_store_append_column (view, _("Type"), TYPE);
-	gtk_tree_view_column_set_visible (col, eel_gconf_get_boolean (SHOW_TYPE));
+	col = seahorse_key_store_append_column (view, _("Validity"), VALIDITY_STR);
+	gtk_tree_view_column_set_visible (col, eel_gconf_get_boolean (SHOW_VALIDITY));
+	gtk_tree_view_column_set_sort_column_id (col, VALIDITY);
+	
+	col = seahorse_key_store_append_column (view, _("Expiration Date"), EXPIRES_STR);
+	gtk_tree_view_column_set_visible (col, eel_gconf_get_boolean (SHOW_EXPIRES));
+	gtk_tree_view_column_set_sort_column_id (col, EXPIRES);
+
+	col = seahorse_key_store_append_column (view, _("Trust"), TRUST_STR);
+	gtk_tree_view_column_set_visible (col, eel_gconf_get_boolean (SHOW_TRUST));
+	gtk_tree_view_column_set_sort_column_id (col, TRUST);
 	
 	col = seahorse_key_store_append_column (view, _("Length"), LENGTH);
 	gtk_tree_view_column_set_visible (col, eel_gconf_get_boolean (SHOW_LENGTH));
+	gtk_tree_view_column_set_sort_column_id (col, LENGTH);
+	
+	col = seahorse_key_store_append_column (view, _("Type"), TYPE);
+	gtk_tree_view_column_set_visible (col, eel_gconf_get_boolean (SHOW_TYPE));
+	gtk_tree_view_column_set_sort_column_id (col, TYPE);
 	
 	eel_gconf_notification_add (LISTING, (GConfClientNotifyFunc)gconf_notification, view);
 	eel_gconf_monitor_add (LISTING);

@@ -27,9 +27,11 @@
 #define SCHEMA_ROOT "/apps/seahorse"
 
 #define LISTING SCHEMA_ROOT "/listing"
+#define SHOW_VALIDITY LISTING "/show_validity"
+#define SHOW_EXPIRES LISTING "/show_expires"
 #define SHOW_TRUST LISTING "/show_trust"
-#define SHOW_TYPE LISTING "/show_type"
 #define SHOW_LENGTH LISTING "/show_length"
+#define SHOW_TYPE LISTING "/show_type"
 #define PROGRESS_UPDATE LISTING "/progress_update"
 
 #define PREFERENCES SCHEMA_ROOT "/preferences"

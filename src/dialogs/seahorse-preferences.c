@@ -116,11 +116,15 @@ seahorse_preferences_show (SeahorseContext *sctx)
 		swidget->xml, "key_toolbar")), history);
 	
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (glade_xml_get_widget (
+		swidget->xml, "show_validity")), eel_gconf_get_boolean (SHOW_VALIDITY));
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (glade_xml_get_widget (
+		swidget->xml, "show_expires")), eel_gconf_get_boolean (SHOW_EXPIRES));
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (glade_xml_get_widget (
 		swidget->xml, "show_trust")), eel_gconf_get_boolean (SHOW_TRUST));
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (glade_xml_get_widget (
-		swidget->xml, "show_type")), eel_gconf_get_boolean (SHOW_TYPE));
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (glade_xml_get_widget (
 		swidget->xml, "show_length")), eel_gconf_get_boolean (SHOW_LENGTH));
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (glade_xml_get_widget (
+		swidget->xml, "show_type")), eel_gconf_get_boolean (SHOW_TYPE));
 	
 	glade_xml_signal_connect_data (swidget->xml, "armor_toggled",
 		G_CALLBACK (button_toggled), ASCII_ARMOR);
@@ -128,10 +132,14 @@ seahorse_preferences_show (SeahorseContext *sctx)
 		G_CALLBACK (button_toggled), TEXT_MODE);
 	glade_xml_signal_connect_data (swidget->xml, "key_toolbar_changed",
 		G_CALLBACK (key_toolbar_changed), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "show_validity_toggled",
+		G_CALLBACK (button_toggled), SHOW_VALIDITY);
+	glade_xml_signal_connect_data (swidget->xml, "show_expires_toggled",
+		G_CALLBACK (button_toggled), SHOW_EXPIRES);
 	glade_xml_signal_connect_data (swidget->xml, "show_trust_toggled",
 		G_CALLBACK (button_toggled), SHOW_TRUST);
-	glade_xml_signal_connect_data (swidget->xml, "show_type_toggled",
-		G_CALLBACK (button_toggled), SHOW_TYPE);
 	glade_xml_signal_connect_data (swidget->xml, "show_length_toggled",
 		G_CALLBACK (button_toggled), SHOW_LENGTH);
+	glade_xml_signal_connect_data (swidget->xml, "show_type_toggled",
+		G_CALLBACK (button_toggled), SHOW_TYPE);
 }
