@@ -219,18 +219,17 @@ typedef gpgme_error_t (* EncryptFunc) (gpgme_ctx_t ctx, gpgme_key_t recips[],
  * @recips will be released. returns the encrypted data. */
 static gpgme_data_t
 encrypt_data_common (SeahorseKeySource *sksrc, GList *keys, gpgme_data_t plain, 
-                     EncryptFunc func, gpgme_error_t *err)
+                     EncryptFunc func, gboolean force_armor, gpgme_error_t *err)
 {
     SeahorseKey *skey;
 	gpgme_data_t cipher = NULL;
     gpgme_key_t *recips;
+    gboolean old_armor;
     gchar *id;
 
 	/* if don't already have an error, do encrypt */
 	if (GPG_IS_OK (*err)) {
 
-        set_gpgme_opts (sksrc);
-        
         /* Add the default key if set and necessary */
         if (eel_gconf_get_boolean (ENCRYPTSELF_KEY)) {
             id = eel_gconf_get_string (DEFAULT_KEY);        
@@ -245,12 +244,24 @@ encrypt_data_common (SeahorseKeySource *sksrc, GList *keys, gpgme_data_t plain,
         recips = seahorse_util_list_to_keys (keys);
         
 		*err = gpgme_data_new (&cipher);
-		if (GPG_IS_OK (*err))
+		if (GPG_IS_OK (*err)) {
+          
+            set_gpgme_opts (sksrc);
+    
+            if (force_armor) {
+                old_armor = gpgme_get_armor (sksrc->ctx);
+                gpgme_set_armor (sksrc->ctx, TRUE);
+            }
+                  
 			*err = func (sksrc->ctx, recips, GPGME_ENCRYPT_ALWAYS_TRUST, plain, cipher);
+            
+            if (force_armor)
+                gpgme_set_armor (sksrc->ctx, old_armor);
+        }
          
         seahorse_util_free_keys (recips);
 	}
-	/* release plain and recips */
+	/* release plain  */
 	gpgme_data_release (plain);
 	return cipher;
 }
@@ -277,7 +288,7 @@ encrypt_file_common (GList *keys, const gchar *path, EncryptFunc func,
     plain = seahorse_vfs_data_create (path, FALSE, err);
     g_return_val_if_fail (plain != NULL, NULL);
  
-	cipher = encrypt_data_common (sksrc, keys, plain, func, err);
+	cipher = encrypt_data_common (sksrc, keys, plain, func, FALSE, err);
 	g_return_val_if_fail (GPG_IS_OK (*err), NULL);
 	/* write cipher to file */
 	new_path = seahorse_util_add_suffix (sksrc->ctx, path, SEAHORSE_CRYPT_SUFFIX);
@@ -301,7 +312,6 @@ encrypt_text_common (GList *keys, const gchar *text, EncryptFunc func,
     SeahorseKeySource *sksrc;
 	gpgme_data_t plain, cipher;
 	gpgme_error_t error;
-	gboolean armor;
 	
 	if (err == NULL)
 		err = &error;
@@ -314,10 +324,7 @@ encrypt_text_common (GList *keys, const gchar *text, EncryptFunc func,
 	/* new data form text */
 	*err = gpgme_data_new_from_mem (&plain, text, strlen (text), TRUE);
 	/* encrypt with armor */
-	armor = gpgme_get_armor (sksrc->ctx);
-	gpgme_set_armor (sksrc->ctx, TRUE);
-	cipher = encrypt_data_common (sksrc, keys, plain, func, err);
-	gpgme_set_armor (sksrc->ctx, armor);
+	cipher = encrypt_data_common (sksrc, keys, plain, func, TRUE, err);
 	g_return_val_if_fail (GPG_IS_OK (*err), NULL);
 	
 	return seahorse_util_write_data_to_text (cipher);
