@@ -339,7 +339,6 @@ seahorse_key_manager_store_new (SeahorseContext *sctx, GtkTreeView *view)
 	gtk_tree_view_column_set_sort_column_id (col, TYPE);
 	
 	eel_gconf_notification_add (LISTING_SCHEMAS, (GConfClientNotifyFunc)gconf_notification, view);
-	eel_gconf_monitor_add (LISTING_SCHEMAS);
 	
 	return skstore;
 }

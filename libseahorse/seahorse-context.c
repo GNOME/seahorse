@@ -116,6 +116,10 @@ seahorse_context_init (SeahorseContext *sctx)
 {
 	/* init private vars */
 	sctx->priv = g_new0 (SeahorseContextPrivate, 1);
+  
+    /* Have gconf cache these sections */
+    eel_gconf_monitor_add (PGP_SCHEMAS);
+    eel_gconf_monitor_add (SEAHORSE_SCHEMAS);  
 }
 
 /* release all references */
@@ -154,7 +158,11 @@ seahorse_context_finalize (GObject *gobject)
 	
 	sctx = SEAHORSE_CONTEXT (gobject);
 	g_free (sctx->priv);
-	
+
+    /* Remove from gconf cache */
+    eel_gconf_monitor_remove (PGP_SCHEMAS);
+    eel_gconf_monitor_remove (SEAHORSE_SCHEMAS);
+    	
 	G_OBJECT_CLASS (parent_class)->finalize (gobject);
 }
    

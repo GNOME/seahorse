@@ -79,7 +79,6 @@ seahorse_check_button_control_finalize (GObject *gobject)
 	
 	control = SEAHORSE_CHECK_BUTTON_CONTROL (gobject);
 	
-	eel_gconf_monitor_remove (control->gconf_key);
 	eel_gconf_notification_remove (control->notify_id);
 	
 	g_free (control->gconf_key);
@@ -100,7 +99,6 @@ seahorse_check_button_control_set_property (GObject *object, guint prop_id,
 			control->gconf_key = g_strdup (g_value_get_string (value));
 			control->notify_id = eel_gconf_notification_add (control->gconf_key,
 				seahorse_check_button_control_gconf_notify, control);
-			eel_gconf_monitor_add (control->gconf_key);
 			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (control),
 				eel_gconf_get_boolean (control->gconf_key));
 			break;

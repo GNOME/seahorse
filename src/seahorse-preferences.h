@@ -24,8 +24,6 @@
 
 #include "seahorse-context.h"
 
-#define SEAHORSE_SCHEMAS "/apps/seahorse"
-
 #define LISTING_SCHEMAS SEAHORSE_SCHEMAS "/listing"
 #define SHOW_VALIDITY_KEY LISTING_SCHEMAS "/show_validity"
 #define SHOW_EXPIRES_KEY LISTING_SCHEMAS "/show_expires"

@@ -816,7 +816,6 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 	
 	/* init gclient */
 	eel_gconf_notification_add (UI_SCHEMAS, (GConfClientNotifyFunc) gconf_notification, swidget);
-	eel_gconf_monitor_add (UI_SCHEMAS);
 	
 	/* first time signals */
 	glade_xml_signal_connect_data (swidget->xml, "import_button_clicked",
