@@ -22,6 +22,7 @@
 #include <stdlib.h>
 #include <libintl.h>
 #include <gnome.h>
+#include <libgnomevfs/gnome-vfs.h>
 
 /* Amount of keys to load in a batch */
 #define DEFAULT_LOAD_BATCH 200
@@ -33,7 +34,16 @@
 #include "seahorse-key.h"
 #include "seahorse-key-pair.h"
 #include "seahorse-libdialogs.h"
+#include "seahorse-gpg-options.h"
 
+/* Set to one to print refresh/monitoring status on console */
+#define DEBUG_REFRESH_CODE 0
+
+#if DEBUG_REFRESH_CODE
+#define DEBUG_REFRESH(x)    g_printerr(x)
+#else
+#define DEBUG_REFRESH(x)
+#endif
 
 /* Initialise a GPGME context for PGP keys */
 static gpgme_error_t
@@ -87,8 +97,10 @@ IMPLEMENT_OPERATION (Load, load)
  */
     
 struct _SeahorsePGPSourcePrivate {
-    GHashTable *keys;
-    SeahorseMultiOperation *operations;
+    GHashTable *keys;                       /* All the keys currently loaded */
+    guint scheduled_refresh;                /* Source for refresh timeout */
+    GnomeVFSMonitorHandle *monitor_handle;  /* For monitoring the .gnupg directory */
+    SeahorseMultiOperation *operations;     /* A list of all current operations */
 };
 
 /* GObject handlers */
@@ -118,8 +130,16 @@ static SeahorseOperation*  seahorse_pgp_source_export           (SeahorseKeySour
                                                                  gpgme_data_t data);
 
 /* Other forward decls */
-static gboolean release_key (const gchar* id, SeahorseKey *skey, SeahorsePGPSource *psrc);
-
+static gboolean            release_key                          (const gchar* id, 
+                                                                 SeahorseKey *skey, 
+                                                                 SeahorsePGPSource *psrc);
+static void                monitor_gpg_homedir                  (GnomeVFSMonitorHandle *handle, 
+                                                                 const gchar *monitor_uri,
+                                                                 const gchar *info_uri, 
+                                                                 GnomeVFSMonitorEventType event_type,
+                                                                 gpointer user_data);
+static void                cancel_scheduled_refresh             (SeahorsePGPSource *psrc);
+                                                                 
 static GObjectClass *parent_class = NULL;
 
 GType
@@ -174,6 +194,10 @@ static void
 seahorse_pgp_source_init (SeahorsePGPSource *psrc)
 {
     gpgme_error_t err;
+    const gchar *gpg_homedir;
+    GnomeVFSResult res;
+    gchar *uri;
+    
     err = init_gpgme (&(SEAHORSE_KEY_SOURCE (psrc)->ctx));
     g_return_if_fail (GPG_IS_OK (err));
     
@@ -184,6 +208,23 @@ seahorse_pgp_source_init (SeahorsePGPSource *psrc)
     
     /* Note that we free our own key values, but keys are free automatically */
     psrc->priv->keys = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+
+    psrc->priv->scheduled_refresh = 0;
+    psrc->priv->monitor_handle = NULL;
+    
+    gpg_homedir = seahorse_gpg_homedir ();
+    uri = gnome_vfs_make_uri_canonical (gpg_homedir);
+    g_return_if_fail (uri != NULL);
+    
+    res = gnome_vfs_monitor_add (&(psrc->priv->monitor_handle), uri, 
+                                 GNOME_VFS_MONITOR_DIRECTORY, 
+                                 monitor_gpg_homedir, psrc);
+    g_free (uri);
+    
+    if (res != GNOME_VFS_OK) {
+        psrc->priv->monitor_handle = NULL;        
+        g_return_if_reached ();
+    }
 }
 
 /* dispose of all our internal references */
@@ -211,6 +252,13 @@ seahorse_pgp_source_dispose (GObject *gobject)
         psrc->priv->operations = NULL;
     }
 
+    cancel_scheduled_refresh (psrc);    
+    
+    if (psrc->priv->monitor_handle) {
+        gnome_vfs_monitor_cancel (psrc->priv->monitor_handle);
+        psrc->priv->monitor_handle = NULL;
+    }
+
     /* Release our references on the keys */
     g_hash_table_foreach_remove (psrc->priv->keys, (GHRFunc)release_key, psrc);
  
@@ -225,6 +273,10 @@ seahorse_pgp_source_finalize (GObject *gobject)
   
     psrc = SEAHORSE_PGP_SOURCE (gobject);
     g_assert (psrc->priv);
+    
+    /* All monitoring and scheduling should be done */
+    g_assert (psrc->priv->scheduled_refresh == 0);
+    g_assert (psrc->priv->monitor_handle == 0);
     
     /* We should have no keys at this point */
     g_assert (g_hash_table_size (psrc->priv->keys) == 0);
@@ -395,6 +447,58 @@ count_secret_keys (const gchar *id, SeahorseKey *skey, guint *n)
         (*n)++;
 }
 
+/* -----------------------------------------------------------------------------
+ *  GPG HOME DIR MONITORING
+ */
+
+static gboolean
+scheduled_refresh (gpointer data)
+{
+    SeahorsePGPSource *psrc = SEAHORSE_PGP_SOURCE (data);
+
+    DEBUG_REFRESH ("scheduled refresh event ocurring now\n");
+    cancel_scheduled_refresh (psrc);
+    seahorse_key_source_refresh_async (SEAHORSE_KEY_SOURCE (psrc), SEAHORSE_KEY_SOURCE_ALL);    
+    
+    return FALSE; /* don't run again */    
+}
+
+static gboolean
+scheduled_dummy (gpointer data)
+{
+    SeahorsePGPSource *psrc = SEAHORSE_PGP_SOURCE (data);
+    DEBUG_REFRESH ("dummy refresh event occurring now\n");
+    psrc->priv->scheduled_refresh = 0;
+    return FALSE; /* don't run again */    
+}
+
+static void
+cancel_scheduled_refresh (SeahorsePGPSource *psrc)
+{
+    if (psrc->priv->scheduled_refresh != 0) {
+        DEBUG_REFRESH ("cancelling scheduled refresh event\n");
+        g_source_remove (psrc->priv->scheduled_refresh);
+        psrc->priv->scheduled_refresh = 0;
+    }
+}
+        
+static void
+monitor_gpg_homedir (GnomeVFSMonitorHandle *handle, const gchar *monitor_uri,
+                     const gchar *info_uri, GnomeVFSMonitorEventType event_type,
+                     gpointer user_data)
+{
+    SeahorsePGPSource *psrc = SEAHORSE_PGP_SOURCE (user_data);
+    
+    if (g_str_has_suffix (info_uri, SEAHORSE_EXT_GPG) && 
+        (event_type == GNOME_VFS_MONITOR_EVENT_CREATED || 
+         event_type == GNOME_VFS_MONITOR_EVENT_CHANGED ||
+         event_type == GNOME_VFS_MONITOR_EVENT_DELETED)) {
+        if (psrc->priv->scheduled_refresh == 0) {
+            DEBUG_REFRESH ("scheduling refresh event due to file changes\n");
+            psrc->priv->scheduled_refresh = g_timeout_add (500, scheduled_refresh, psrc);
+        }
+    }
+}
 
 /* --------------------------------------------------------------------------
  *  OPERATION STUFF 
@@ -611,18 +715,25 @@ seahorse_pgp_source_refresh (SeahorseKeySource *src, const gchar *key)
     g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (src), NULL);
     psrc = SEAHORSE_PGP_SOURCE (src);
     
+    /* Schedule a dummy refresh. This blocks all monitoring for a while */
+    cancel_scheduled_refresh (psrc);
+    psrc->priv->scheduled_refresh = g_timeout_add (500, scheduled_dummy, psrc);
+    DEBUG_REFRESH ("scheduled a dummy refresh\n");
+    
     ref = g_str_equal (key, SEAHORSE_KEY_SOURCE_NEW);
     all = g_str_equal (key, SEAHORSE_KEY_SOURCE_ALL);
     
     if (ref || all) 
         key = NULL;
 
+    DEBUG_REFRESH ("refreshing keys...\n");
+
     /* Secret keys */
-    lop = seahorse_load_operation_start (psrc, key, FALSE, ref, all);
+    lop = seahorse_load_operation_start (psrc, key, FALSE, TRUE, all);
     seahorse_multi_operation_add (psrc->priv->operations, SEAHORSE_OPERATION (lop));
 
     /* Public keys */
-    lop = seahorse_load_operation_start (psrc, key, TRUE, ref, all);
+    lop = seahorse_load_operation_start (psrc, key, TRUE, TRUE, all);
     seahorse_multi_operation_add (psrc->priv->operations, SEAHORSE_OPERATION (lop));
 
     g_object_ref (psrc->priv->operations);

@@ -41,6 +41,10 @@ typedef enum {
     SEAHORSE_TEXT_TYPE_SIGNED
 } SeahorseTextType;
 
+#define SEAHORSE_EXT_ASC ".asc"
+#define SEAHORSE_EXT_SIG ".sig"
+#define SEAHORSE_EXT_GPG ".gpg"
+
 gchar*		seahorse_util_get_date_string		(const time_t		time);
 
 #define SEAHORSE_GPGME_ERROR  (seahorse_util_gpgme_error_domain())

@@ -60,10 +60,6 @@ static const SeahorsePGPHeader seahorse_pgp_headers[] = {
         SEAHORSE_TEXT_TYPE_KEY
     }
 };
-     
-#define ASC ".asc"
-#define SIG ".sig"
-#define GPG ".gpg"
 
 void
 seahorse_util_show_error (GtkWindow *parent, const gchar *message)
@@ -861,11 +857,11 @@ seahorse_util_check_suffix (const gchar *path, SeahorseSuffix suffix)
 	gchar *ext;
 	
 	if (suffix == SEAHORSE_SIG_SUFFIX)
-		ext = SIG;
+		ext = SEAHORSE_EXT_SIG;
 	else
-		ext = GPG;
+		ext = SEAHORSE_EXT_GPG;
 	
-	return (g_pattern_match_simple (g_strdup_printf ("*%s", ASC), path) ||
+	return (g_pattern_match_simple (g_strdup_printf ("*%s", SEAHORSE_EXT_ASC), path) ||
 		g_pattern_match_simple (g_strdup_printf ("*%s", ext), path));
 }
 
@@ -893,11 +889,11 @@ seahorse_util_add_suffix (gpgme_ctx_t ctx, const gchar *path,
     gchar *t;
 	
 	if (gpgme_get_armor (ctx) || suffix == SEAHORSE_ASC_SUFFIX)
-		ext = ASC;
+		ext = SEAHORSE_EXT_ASC;
 	else if (suffix == SEAHORSE_CRYPT_SUFFIX)
-		ext = GPG;
+		ext = SEAHORSE_EXT_GPG;
 	else
-		ext = SIG;
+		ext = SEAHORSE_EXT_SIG;
 	
 	uri = g_strdup_printf ("%s%s", path, ext);
     
