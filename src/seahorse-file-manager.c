@@ -62,7 +62,8 @@ export_activate (GtkWidget *widget, SeahorseWidget *swidget)
 	SeahorseWidget *srecips;
 
 	srecips = seahorse_recipients_new (swidget->sctx, FALSE);
-	seahorse_ops_file_export_multiple (swidget->sctx, get_file (swidget, FALSE), seahorse_recipients_run (SEAHORSE_RECIPIENTS (srecips)));
+	seahorse_ops_file_export_multiple (swidget->sctx, get_file (swidget, FALSE),
+		seahorse_recipients_run (SEAHORSE_RECIPIENTS (srecips)));
 	seahorse_widget_destroy (srecips);
 }
 

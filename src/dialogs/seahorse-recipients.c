@@ -285,7 +285,7 @@ seahorse_recipients_run (SeahorseRecipients *srecips)
 	gint response;
 	gboolean done = FALSE;
 
-	swidget = SEAHORSE_WIDGET (swidget);
+	swidget = SEAHORSE_WIDGET (srecips);
 	recipients = glade_xml_get_widget (swidget->xml, swidget->name);
 	
 	while (!done) {
