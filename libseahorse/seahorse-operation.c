@@ -100,6 +100,11 @@ seahorse_operation_finalize (GObject *gobject)
     SeahorseOperation *operation;
     operation = SEAHORSE_OPERATION (gobject);
     g_assert (operation->done);
+    
+    if (operation->error) {
+        g_error_free (operation->error);
+        operation->error = NULL;
+    }
         
     G_OBJECT_CLASS (parent_class)->finalize (gobject);
 }
@@ -123,6 +128,24 @@ seahorse_operation_cancel (SeahorseOperation *operation)
 }
 
 void                
+seahorse_operation_steal_error (SeahorseOperation *operation, GError **err)
+{
+    g_return_if_fail (err == NULL || *err == NULL);
+    if (err) {
+        *err = operation->error;
+        operation->error = NULL;
+    }
+}
+
+void                
+seahorse_operation_copy_error  (SeahorseOperation *operation, GError **err)
+{
+    g_return_if_fail (err == NULL || *err == NULL);
+    if (err) 
+        *err = operation->error ? g_error_copy (operation->error) : NULL;
+}
+
+void                
 seahorse_operation_mark_start (SeahorseOperation *operation)
 {
     g_return_if_fail (SEAHORSE_IS_OPERATION (operation));
@@ -133,12 +156,15 @@ seahorse_operation_mark_start (SeahorseOperation *operation)
 }
 
 void                
-seahorse_operation_mark_done (SeahorseOperation *operation)
+seahorse_operation_mark_done (SeahorseOperation *operation, gboolean cancelled,
+                              GError *error)
 {
     g_return_if_fail (SEAHORSE_IS_OPERATION (operation));
     g_return_if_fail (operation->done == FALSE);
     
     operation->done = TRUE;   
+    operation->cancelled = cancelled;
+    operation->error = error;
     g_signal_emit (operation, signals[DONE], 0);
 
     /* A running operation always refs itself */

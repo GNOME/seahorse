@@ -464,7 +464,7 @@ seahorse_load_operation_cancel (SeahorseOperation *operation)
     SeahorseLoadOperation *lop = SEAHORSE_LOAD_OPERATION (operation);    
 
     gpgme_op_keylist_end (lop->ctx);
-    seahorse_operation_mark_done (operation);
+    seahorse_operation_mark_done (operation, TRUE, NULL);
 }
 
 /* Completes one batch of key loading */
@@ -492,7 +492,7 @@ keyload_handler (SeahorseLoadOperation *lop)
             if (lop->checks) 
                 g_hash_table_foreach (lop->checks, (GHFunc)remove_key_from_source, lop->psrc);
             
-            seahorse_operation_mark_done (SEAHORSE_OPERATION (lop));         
+            seahorse_operation_mark_done (SEAHORSE_OPERATION (lop), FALSE, NULL);         
             return FALSE; /* Remove event handler */
         }
         

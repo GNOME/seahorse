@@ -42,6 +42,8 @@ typedef struct _SeahorseOperation {
     
     /*< public >*/
     gboolean done;
+    gboolean cancelled;
+    GError *error;
 
 } SeahorseOperation;
 
@@ -68,12 +70,25 @@ void                seahorse_operation_cancel     (SeahorseOperation *operation)
 
 #define             seahorse_operation_is_done(operation) \
                                                   ((operation)->done) 
+                                                  
+#define             seahorse_operation_is_cancelled(operation) \
+                                                  ((operation)->cancelled)
+                                                  
+#define             seahorse_operation_is_successful(operation) \
+                                                  ((operation)->error == NULL)                                                                 
+
+void                seahorse_operation_steal_error (SeahorseOperation *operation,
+                                                    GError **err);
+
+void                seahorse_operation_copy_error  (SeahorseOperation *operation,
+                                                    GError **err);
 
 /* Helpers for Derived ----------------------------------------------- */
 
 void                seahorse_operation_mark_start (SeahorseOperation *operation);
 
-void                seahorse_operation_mark_done  (SeahorseOperation *operation);
+void                seahorse_operation_mark_done  (SeahorseOperation *operation,
+                                                   gboolean cancelled, GError *error);
 
 /* Helpers for Multiple Operations ----------------------------------- */
 
@@ -135,7 +150,7 @@ seahorse_xx_operation_finalize (GObject *gobject)
 static void 
 seahorse_xx_operation_cancel (SeahorseOperation *operation)
 {
-    seahorse_operation_mark_done (operation);
+    seahorse_operation_mark_done (operation, TRUE, NULL);
 }
  
  *
@@ -153,9 +168,9 @@ seahorse_xx_operation_cancel (SeahorseOperation *operation)
         SeahorseOperation parent;                                                   \
 
 #define END_DECLARE_OPERATION                                                       \
-    }; 
+    };                                                                              \
 
-#define IMPLEMENT_OPERATION(Opx, opx)                                                      \
+#define IMPLEMENT_OPERATION_EX(Opx, opx)                                                        \
     static void seahorse_##opx##_operation_class_init (Seahorse##Opx##OperationClass *klass);   \
     static void seahorse_##opx##_operation_init       (Seahorse##Opx##Operation *lop);          \
     static void seahorse_##opx##_operation_dispose    (GObject *gobject);                       \
@@ -183,6 +198,24 @@ seahorse_xx_operation_cancel (SeahorseOperation *operation)
         op_class->cancel = seahorse_##opx##_operation_cancel;                                   \
         gobject_class->dispose = seahorse_##opx##_operation_dispose;                            \
         gobject_class->finalize = seahorse_##opx##_operation_finalize;                          \
+        
+#define END_IMPLEMENT_OPERATION_EX                                                              \
     }                                                                                           \
+
+#define IMPLEMENT_OPERATION_PROPS(Opx, opx)                                                     \
+    static void seahorse_##opx##_operation_set_property (GObject *gobject, guint prop_id,       \
+                        const GValue *value, GParamSpec *pspec);                                \
+    static void seahorse_##opx##_operation_get_property (GObject *gobject, guint prop_id,       \
+                        GValue *value, GParamSpec *pspec);                                      \
+    IMPLEMENT_OPERATION_EX(Opx, opx)                                                            \
+        gobject_class->set_property = seahorse_##opx##_operation_set_property;                  \
+        gobject_class->get_property = seahorse_##opx##_operation_get_property;                  \
+    
+#define END_IMPLEMENT_OPERATION_PROPS                                                           \
+    END_IMPLEMENT_OPERATION_EX                                                                  \
+    
+#define IMPLEMENT_OPERATION(Opx, opx)                                                           \
+    IMPLEMENT_OPERATION_EX(Opx, opx)                                                            \
+    END_IMPLEMENT_OPERATION_EX                                                                  \
     
 #endif /* __SEAHORSE_OPERATION_H__ */

@@ -507,7 +507,7 @@ seahorse_search_operation_cancel (SeahorseOperation *operation)
         gpgmex_keyserver_cancel (kop);
     }
 
-    seahorse_operation_mark_done (operation);
+    seahorse_operation_mark_done (operation, TRUE, NULL);
 }
 
 
@@ -536,6 +536,7 @@ keyserver_list_done (gpgme_ctx_t ctx, gpgmex_keyserver_op_t op, gpgme_error_t st
                      const char *message, void *userdata)
 {
     SeahorseSearchOperation *sop;
+    GError *err = NULL;
     gchar *t;
     
     g_return_if_fail (SEAHORSE_IS_SEARCH_OPERATION (userdata));
@@ -553,12 +554,13 @@ keyserver_list_done (gpgme_ctx_t ctx, gpgmex_keyserver_op_t op, gpgme_error_t st
         
         t = g_strdup_printf (_("Couldn't search keyserver: %s"), message ? message : "");
         g_warning (t);
+        seahorse_util_gpgme_to_error (status, &err);
     }
         
     seahorse_key_source_show_progress (SEAHORSE_KEY_SOURCE (sop->ssrc), t, -1);
     g_free (t);
     
-    seahorse_operation_mark_done (SEAHORSE_OPERATION (sop));
+    seahorse_operation_mark_done (SEAHORSE_OPERATION (sop), FALSE, err);
 }
 
 static SeahorseSearchOperation*
