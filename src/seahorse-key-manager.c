@@ -196,26 +196,62 @@ row_activated (GtkTreeView *treeview, GtkTreePath *path, GtkTreeViewColumn *arg2
 		seahorse_key_properties_new (swidget->sctx, skey);
 }
 
+static void
+selection_changed (GtkTreeSelection *selection, SeahorseWidget *swidget)
+{
+	gboolean sensitive;
+	
+	sensitive = gtk_tree_selection_get_selected (selection, NULL, NULL);
+	
+	/* do all key operation items */
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "properties_button"), sensitive);
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "export_button"), sensitive);
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "delete_button"), sensitive);
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "properties"), sensitive);
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "export"), sensitive);
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "delete"), sensitive);
+}
+
 void
 seahorse_key_manager_show (SeahorseContext *sctx)
 {
 	SeahorseWidget *swidget;
+	GtkTreeView *view;
+	GtkTreeSelection *selection;
 	
 	swidget = seahorse_widget_new_component (KEY_MANAGER, sctx);
 	gtk_object_sink (GTK_OBJECT (sctx));
 	
-	glade_xml_signal_connect_data (swidget->xml, "quit", G_CALLBACK (quit), swidget);
-	glade_xml_signal_connect_data (swidget->xml, "quit_event", G_CALLBACK (delete_event), swidget);
-	glade_xml_signal_connect_data (swidget->xml, "generate_activate", G_CALLBACK (generate_activate), swidget);
-	glade_xml_signal_connect_data (swidget->xml, "export_activate", G_CALLBACK (export_activate), swidget);
-	glade_xml_signal_connect_data (swidget->xml, "import_activate", G_CALLBACK (import_activate), swidget);
-	glade_xml_signal_connect_data (swidget->xml, "text_editor_activate", G_CALLBACK (text_editor_activate), swidget);
-	glade_xml_signal_connect_data (swidget->xml, "file_manager_activate", G_CALLBACK (file_manager_activate), swidget);		
-	glade_xml_signal_connect_data (swidget->xml, "properties_activate", G_CALLBACK (properties_activate), swidget);
-	glade_xml_signal_connect_data (swidget->xml, "delete_activate", G_CALLBACK (delete_activate), swidget);		
-	glade_xml_signal_connect_data (swidget->xml, "preferences_activate", G_CALLBACK (preferences_activate), swidget);
-	glade_xml_signal_connect_data (swidget->xml, "row_activated", G_CALLBACK (row_activated), swidget);
-	glade_xml_signal_connect_data (swidget->xml, "about_activate", G_CALLBACK (about_activate), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "quit",
+		G_CALLBACK (quit), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "quit_event",
+		G_CALLBACK (delete_event), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "generate_activate",
+		G_CALLBACK (generate_activate), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "export_activate",
+		G_CALLBACK (export_activate), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "import_activate",
+		G_CALLBACK (import_activate), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "text_editor_activate",
+		G_CALLBACK (text_editor_activate), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "file_manager_activate",
+		G_CALLBACK (file_manager_activate), swidget);		
+	glade_xml_signal_connect_data (swidget->xml, "properties_activate",
+		G_CALLBACK (properties_activate), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "delete_activate",
+		G_CALLBACK (delete_activate), swidget);		
+	glade_xml_signal_connect_data (swidget->xml, "preferences_activate",
+		G_CALLBACK (preferences_activate), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "row_activated",
+		G_CALLBACK (row_activated), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "about_activate",
+		G_CALLBACK (about_activate), swidget);
 	
-	seahorse_key_manager_store_new (sctx, GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, KEY_LIST)));
+	view = GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, KEY_LIST));
+	seahorse_key_manager_store_new (sctx, view);
+	selection = gtk_tree_view_get_selection (view);
+	g_signal_connect_after (selection, "changed",
+		G_CALLBACK (selection_changed), swidget);
+	//do initial settings
+	selection_changed (selection, swidget);
 }
