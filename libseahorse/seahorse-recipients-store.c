@@ -48,12 +48,14 @@ static const GType col_types[] = {
 
 static void	seahorse_recipients_store_class_init	(SeahorseRecipientsStoreClass	*klass);
 
-static void	seahorse_recipients_store_append	(SeahorseKeyStore		*skstore,
-                                                 SeahorseKey			*skey,
-                                                 GtkTreeIter			*iter);
-static void	seahorse_recipients_store_set		(SeahorseKeyStore		*store,
-                                                 SeahorseKey            *skey,
-                                                 GtkTreeIter			*iter);
+static gboolean	seahorse_recipients_store_append	(SeahorseKeyStore		*skstore,
+                                                     SeahorseKey			*skey,
+                                                     guint                  uid,
+                                                     GtkTreeIter			*iter);
+static void	    seahorse_recipients_store_set		(SeahorseKeyStore		*store,
+                                                     SeahorseKey            *skey,
+                                                     guint                  uid,
+                                                     GtkTreeIter			*iter);
 
 static SeahorseKeyStoreClass	*parent_class	= NULL;
 
@@ -100,19 +102,23 @@ seahorse_recipients_store_class_init (SeahorseRecipientsStoreClass *klass)
 }
 
 /* Checks if @skey is a valid recipient before appending */
-static void
-seahorse_recipients_store_append (SeahorseKeyStore *skstore, SeahorseKey *skey,
-				                    GtkTreeIter *iter)
+static gboolean
+seahorse_recipients_store_append (SeahorseKeyStore *skstore, SeahorseKey *skey, 
+                                  guint uid, GtkTreeIter *iter)
 {
 	if (seahorse_key_can_encrypt (skey)) {
-		gtk_tree_store_append (GTK_TREE_STORE (skstore), iter, NULL);
-		parent_class->append (skstore, skey, iter);
+        gtk_tree_store_append (GTK_TREE_STORE (skstore), iter, NULL);
+        parent_class->append (skstore, skey, uid, iter);
+        return TRUE;
 	}
+ 
+    return FALSE;
 }
 
 /* Sets the validity attribute */
 static void
-seahorse_recipients_store_set (SeahorseKeyStore *skstore, SeahorseKey *skey, GtkTreeIter *iter)
+seahorse_recipients_store_set (SeahorseKeyStore *skstore, SeahorseKey *skey, 
+                               guint uid, GtkTreeIter *iter)
 {
 	SeahorseValidity validity;
 	
@@ -121,7 +127,7 @@ seahorse_recipients_store_set (SeahorseKeyStore *skstore, SeahorseKey *skey, Gtk
 	gtk_tree_store_set (GTK_TREE_STORE (skstore), iter,
 		VALIDITY_STR, seahorse_validity_get_string (validity),
 		VALIDITY, validity, -1);
-	SEAHORSE_KEY_STORE_CLASS (parent_class)->set (skstore, skey, iter);
+	SEAHORSE_KEY_STORE_CLASS (parent_class)->set (skstore, skey, uid, iter);
 }
 
 /**

@@ -51,27 +51,27 @@ selection_changed (GtkTreeSelection *selection, SeahorseWidget *swidget)
  
     if(invalid == 0) {
         msg = g_strdup_printf(
-            ngettext("Selected %d keys", "Selected %d keys", selected), selected);
+            ngettext("Selected %d recipient", "Selected %d recipients", selected), selected);
             
     /* For translators */
     } else if (invalid == selected) {
-        msg = g_strdup_printf (ngettext("Selected %d not fully valid key", 
-                                        "Selected %d not fully valid keys", selected), 
+        msg = g_strdup_printf (ngettext("Selected %d not fully valid recipient", 
+                                        "Selected %d not fully valid recipients", selected), 
                                selected);
 
     } else {
        
         /* TRANSLATOR: This string will become
-          * "Selected %d keys and (%d not fully valid)" */
-        s1 = g_strdup_printf(ngettext("Selected %d key ", "Selected %d keys ", selected),
+          * "Selected %d recipients (%d not fully valid)" */
+        s1 = g_strdup_printf(ngettext("Selected %d recipient ", "Selected %d recipients ", selected),
                              selected);
 
         /* TRANSLATOR: This string will become
-         * "Selected %d keys and (%d not fully valid)" */
+         * "Selected %d recipients (%d not fully valid)" */
         s2 = g_strdup_printf(ngettext("(%d not fully valid)", "(%d not fully valid)", invalid),
                              invalid);
 
-        /* TRANSLATOR: "%s%s" are "Selected %d keys and (%d not fully valid)"
+        /* TRANSLATOR: "%s%s" are "Selected %d recipients (%d not fully valid)"
          * Swap order with "%2$s%1$s" if needed */
         msg = g_strdup_printf(_("%s%s"), s1, s2);  
         

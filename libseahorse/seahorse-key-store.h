@@ -56,37 +56,33 @@ struct _SeahorseKeyStore {
 struct _SeahorseKeyStoreClass
 {
 	GtkTreeStoreClass	parent_class;
-	
-	/* Virtual method for appending a key. When subclass method finishes,
-	 * iter should be set to the parent of the new row.
-	 * This is needed since not every key should always be added and
-	 * some stores will display subkeys.
-	 */
-    void           (* append)  (SeahorseKeyStore  *skstore,
-                                SeahorseKey          *skey,
-                                GtkTreeIter         *iter);	
+    
+   /* Virtual method for appending a key/uid. When subclass method finishes,
+    * iter should be set to the parent of the new row.
+    * This is needed since not every key/uid should always be added.
+    */
+    gboolean       (* append)   (SeahorseKeyStore   *skstore,
+                                 SeahorseKey        *skey,
+                                 guint              uid,
+                                 GtkTreeIter        *iter); 
                                  
-	/* Virtual method for setting the key's attributes. Name and KeyID are
-	 * set by the key-store, so implementation in subclasses is optional.
-	 */
-    void            (* set)     (SeahorseKeyStore  *skstore,
-                                  SeahorseKey       *skey,
-                                 GtkTreeIter       *iter);
-	
-	/* Optional virtual method for removing a row. Only implement if iter
-	 * is a parent and has sub-iters that also need to be removed.
-	 */
-    void            (* remove)  (SeahorseKeyStore  *skstore,
-                                GtkTreeIter       *iter);
-	
-	/* Virtual method for when the key at iter has changed. Key-store
-	 * will already do user ID changes, so implementation is optional
-	 * depending on displayed attributes.
-	 */
-	void			(* changed)			(SeahorseKeyStore *skstore,
-                                 SeahorseKey		*skey,
-								 GtkTreeIter        *iter,
-                                 SeahorseKeyChange	change);
+    /* Virtual method for setting the key's attributes. Name and KeyID are
+     * set by the key-store, so implementation in subclasses is optional.
+     */
+    void            (* set)     (SeahorseKeyStore   *skstore,
+                                 SeahorseKey        *skey,
+                                 guint              uid,
+                                 GtkTreeIter        *iter);
+ 
+   /* Virtual method for when the key at iter has changed. Key-store
+   * will already do user ID changes, so implementation is optional
+   * depending on displayed attributes.
+   */
+    void            (* changed) (SeahorseKeyStore   *skstore,
+                                 SeahorseKey        *skey,
+                                 guint              uid,
+                                 GtkTreeIter        *iter,
+                                 SeahorseKeyChange  change);
                                
     gboolean        use_check;  /* use the check column */
     guint           n_columns;  /* Number of columns */
@@ -101,34 +97,35 @@ enum {
     KEY_STORE_CHECK,
     KEY_STORE_NAME,
     KEY_STORE_KEYID,
+    KEY_STORE_UID,
     KEY_STORE_NCOLS
 };
 
 /* For use as first enum in base class' column index list */
 #define KEY_STORE_BASE_COLUMNS \
-            X_BASE_COLS = KEY_STORE_KEYID       
+            X_BASE_COLS = KEY_STORE_UID       
 
 /* For use as first item in base class' column id list */
 #define KEY_STORE_BASE_IDS   \
             NULL,            \
             NULL,            \
             "name",          \
-            "id"
+            "id",            \
+            NULL
             
 /* For use in base class' type list */            
 #define KEY_STORE_BASE_TYPES \
             G_TYPE_POINTER,  \
             G_TYPE_BOOLEAN,  \
             G_TYPE_STRING,   \
-            G_TYPE_STRING
+            G_TYPE_STRING,   \
+            G_TYPE_INT
             
 
 GType           seahorse_key_store_get_type ();
 
 void			seahorse_key_store_init			(SeahorseKeyStore	*skstore,
 								 GtkTreeView		*view);
-
-void			seahorse_key_store_destroy		(SeahorseKeyStore	*skstore);
 
 void			seahorse_key_store_populate		(SeahorseKeyStore	*skstore);
 
