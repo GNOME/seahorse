@@ -47,4 +47,36 @@ Bonobo stuff, such as property pages, should go in the bonobo module.
 * src: The main app code. This currently includes the main window & dialogs,
 along with code that hasn't been deemed necessary to include in libseahorse.
 
-last updated 2004-11-02
+
+USING THE GPG EXECUTABLE DIRECTLY
+
+Unless absolutely necessary seahorse limits itself to using the functionality 
+found in the GPGME library. This is to prevent maintenance, versioning, syntax
+and regression problems that arise from parsing the gpg executable output 
+directly. 
+
+In some cases the GPGME doesn't have a given feature that is necessary for 
+Seahorse's operation. This may be due to the GPGME developers not having 
+implemented that feature yet, or refusal to implement a given feature. In 
+these cases direct use of GPG is permitted. Such cases must be documented 
+below, and must be discussed before hand on the seahorse-devel mailing list.
+
+ o seahorse-agent implements a gpg-agent compatible assuan interface. It also
+   depends on figuring out where the GPG home directory is and modifying 
+   GPG options (see below).
+   - agent/*
+   
+ o The Backup Keyrings feature accesses the ~/.gnupg/pubring.gpg and 
+   ~/.gnupg/secring.gpg files directly. 
+   - src/seahorse-key-manager.c
+   
+ o There is code which modifies the ~/.gnupg/gpg.conf GPG configuration file. 
+   - libseahorse/seahorse-gpg-options.c
+   
+ o Photo ID support
+   - (not yet implemented) 
+   
+ o Export Secret Key Support 
+   - (not yet implemented)
+
+last updated 2005-02-09
