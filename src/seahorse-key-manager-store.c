@@ -310,12 +310,12 @@ gconf_notification (GConfClient *gclient, guint id, GConfEntry *entry, GtkTreeVi
  * Returns: The new #SeahorseKeyStore
  **/
 SeahorseKeyStore*
-seahorse_key_manager_store_new (SeahorseContext *sctx, GtkTreeView *view)
+seahorse_key_manager_store_new (SeahorseKeySource *sksrc, GtkTreeView *view)
 {
 	SeahorseKeyStore *skstore;
 	GtkTreeViewColumn *col;
 
-	skstore = g_object_new (SEAHORSE_TYPE_KEY_MANAGER_STORE, "ctx", sctx, NULL);
+	skstore = g_object_new (SEAHORSE_TYPE_KEY_MANAGER_STORE, "key-source", sksrc, NULL);
     seahorse_key_store_init (skstore, view);
 	
 	col = seahorse_key_store_append_column (view, _("Validity"), VALIDITY_STR);

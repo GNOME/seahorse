@@ -44,7 +44,7 @@ struct _SeahorseKeyManagerStoreClass
 	SeahorseKeyStoreClass	parent_class;
 };
 
-SeahorseKeyStore*	seahorse_key_manager_store_new	(SeahorseContext	*sctx,
-							 GtkTreeView		*view);
+SeahorseKeyStore*	seahorse_key_manager_store_new	(SeahorseKeySource	*sksrc,
+							                         GtkTreeView        *view);
 
 #endif /* __SEAHORSE_KEY_MANAGER_STORE_H__ */

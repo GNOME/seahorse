@@ -136,12 +136,12 @@ seahorse_recipients_store_set (SeahorseKeyStore *skstore, SeahorseKey *skey, Gtk
  * Returns: The new #SeahorseKeyStore
  **/
 SeahorseKeyStore*
-seahorse_recipients_store_new (SeahorseContext *sctx, GtkTreeView *view)
+seahorse_recipients_store_new (SeahorseKeySource *sksrc, GtkTreeView *view)
 {
 	SeahorseKeyStore *skstore;
 	GtkTreeViewColumn *column;
 	
-	skstore = g_object_new (SEAHORSE_TYPE_RECIPIENTS_STORE, "ctx", sctx, NULL);
+	skstore = g_object_new (SEAHORSE_TYPE_RECIPIENTS_STORE, "key-source", sksrc, NULL);
 	seahorse_key_store_init (skstore, view);
 	
 	column = seahorse_key_store_append_column (view, _("Validity"), VALIDITY_STR);

@@ -132,7 +132,7 @@ do_import (SeahorseContext *sctx, const gchar **paths)
     gchar *t;
     guint ret = 0;
     
-    sksrc = seahorse_context_get_pri_source (sctx);
+    sksrc = seahorse_context_get_key_source (sctx);
     g_return_val_if_fail (sksrc != NULL, 1);
     
     /* Get all sub-folders etc... */
@@ -233,7 +233,7 @@ do_sign (SeahorseContext *sctx, const gchar **paths)
     gchar *new_path;
     guint ret = 0;
     
-    sksrc = seahorse_context_get_pri_source (sctx);
+    sksrc = seahorse_context_get_key_source (sctx);
     g_return_val_if_fail (sksrc != NULL, 1);
     
     signer = seahorse_context_get_default_key (sctx);
@@ -271,7 +271,7 @@ do_decrypt (SeahorseContext *sctx, const gchar **paths)
     gchar *new_path;
     guint ret = 0;
 	
-    sksrc = seahorse_context_get_pri_source (sctx);
+    sksrc = seahorse_context_get_key_source (sctx);
     g_return_val_if_fail (sksrc != NULL, 1);
         
     uris = seahorse_util_uris_expand (paths);
@@ -320,7 +320,7 @@ do_verify (SeahorseContext *sctx, const gchar **paths)
     uris = seahorse_util_uris_expand (paths);
     g_assert (uris != NULL);
 	
-    sksrc = seahorse_context_get_pri_source (sctx);
+    sksrc = seahorse_context_get_key_source (sctx);
     g_return_val_if_fail (sksrc != NULL, 1);
          
     for (u = uris; *u; u++) {

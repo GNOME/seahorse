@@ -146,6 +146,7 @@ seahorse_recipients_get (SeahorseContext *sctx)
 	gboolean done = FALSE;
     GList *keys = NULL;
     SeahorseKeyStore* skstore;
+    SeahorseKeySource *sksrc;
 	
 	swidget = seahorse_widget_new ("recipients", sctx);
 	g_return_val_if_fail (swidget != NULL, NULL);
@@ -158,7 +159,10 @@ seahorse_recipients_get (SeahorseContext *sctx)
 	g_signal_connect (selection, "changed",
 		G_CALLBACK (selection_changed), swidget);
         
-	skstore = seahorse_recipients_store_new (sctx, view);
+    sksrc = seahorse_context_get_key_source (sctx);
+    g_return_val_if_fail (sksrc != NULL, NULL);
+        
+	skstore = seahorse_recipients_store_new (sksrc, view);
    
     glade_xml_signal_connect_data (swidget->xml, "on_mode_changed", 
                               G_CALLBACK (mode_changed), skstore);

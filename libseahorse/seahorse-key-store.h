@@ -47,7 +47,7 @@ struct _SeahorseKeyStore {
 	GtkTreeStore		    parent;
  
     /*< public >*/
-	SeahorseContext		    *sctx;
+	SeahorseKeySource	    *sksrc;
     
     /*< private >*/
     SeahorseKeyStorePriv    *priv;

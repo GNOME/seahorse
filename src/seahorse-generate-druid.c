@@ -157,7 +157,7 @@ on_druid_finish (GnomeDruidPage *gnomedruidpage, GtkWidget *widget, SeahorseWidg
 	gtk_widget_hide (widget2);
     
     /* When we update to support S/MIME this will need to change */
-    sksrc = seahorse_context_get_pri_source (swidget->sctx);
+    sksrc = seahorse_context_get_key_source (swidget->sctx);
     g_return_if_fail (sksrc != NULL);
 	
 	err = seahorse_key_op_generate (sksrc, name, email, comment,

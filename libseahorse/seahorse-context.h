@@ -64,14 +64,6 @@ struct _SeahorseContextClass
 {
 	GtkObjectClass		parent_class;
 	
-    /* Signal emitted when @skey has been added */
-    void             (* added)            (SeahorseContext     *sctx,
-                                          SeahorseKey        *skey);
-    
-    /* Signal emitted when @skey has been removed */
-    void             (* removed)         (SeahorseContext    *sctx,
-                                          SeahorseKey        *skey);
-                                         
     /* Signal emitted while an operation is in progress */
     void             (* progress)        (SeahorseContext    *sctx,
                                           const gchar        *op,
@@ -87,20 +79,9 @@ void                 seahorse_context_destroy         (SeahorseContext    *sctx)
 void                 seahorse_context_load_keys       (SeahorseContext    *sctx, 
                                                        gboolean secret_only);
 
-guint                seahorse_context_get_n_keys      (SeahorseContext    *sctx);
-
-GList*               seahorse_context_get_keys        (SeahorseContext    *sctx);
-
-guint                seahorse_context_get_n_key_pairs (SeahorseContext    *sctx);
-
-GList*               seahorse_context_get_key_pairs   (SeahorseContext    *sctx);
-
-SeahorseKey*         seahorse_context_get_key_fpr     (SeahorseContext    *sctx,
-                                                       const gchar *fpr);
-
 SeahorseKeyPair*     seahorse_context_get_default_key (SeahorseContext    *sctx);
 
-SeahorseKeySource*   seahorse_context_get_pri_source  (SeahorseContext    *sctx);
+SeahorseKeySource*   seahorse_context_get_key_source  (SeahorseContext    *sctx);
 
 void                 seahorse_context_own_source      (SeahorseContext    *sctx,
                                                        SeahorseKeySource  *sksrc);

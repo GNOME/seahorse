@@ -42,6 +42,7 @@ libseahorse_internal_la_SOURCES = \
 	seahorse-vfs-data.c seahorse-vfs-data.h \
 	seahorse-key-source.c seahorse-key-source.h \
 	seahorse-pgp-source.c seahorse-pgp-source.h \
+	seahorse-multi-source.c seahorse-multi-source.h \
 	seahorse-gpgmex.h seahorse-gpgmex-util.c \
 	seahorse-prefs.c seahorse-prefs.h \
 	seahorse-operation.c seahorse-operation.h \

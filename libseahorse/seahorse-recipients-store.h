@@ -45,7 +45,7 @@ struct _SeahorseRecipientsStoreClass
 	
 };
 
-SeahorseKeyStore*	seahorse_recipients_store_new	(SeahorseContext	*sctx,
-							 GtkTreeView		*view);
+SeahorseKeyStore*   seahorse_recipients_store_new   (SeahorseKeySource  *sksrc,
+                                                     GtkTreeView        *view);
 
 #endif /* __SEAHORSE_RECIPIENTS_STORE_H__ */

@@ -28,19 +28,25 @@
 static gchar*
 userid_for_fingerprint (SeahorseContext *sctx, const gchar *fingerprint)
 {
+    SeahorseKeySource *sksrc;
     SeahorseKey *key;
-    gchar *userid;
+    gchar *userid = NULL;
+    
+    sksrc = seahorse_context_get_key_source (sctx);
+    g_return_val_if_fail (sksrc != NULL, g_strdup (""));
+    
+    key = seahorse_key_source_get_key (sksrc, fingerprint, SKEY_INFO_NORMAL);
 
-    key = seahorse_context_get_key_fpr (sctx, fingerprint);
-    if (key == NULL) 
-        userid = g_strdup (_("[Unknown Key]"));
-    else
+    if (key != NULL) {
         userid = seahorse_key_get_userid (key, 0);
-    
-    /* Fix up the id, so it doesn't think it's markup */
-    g_strdelimit (userid, "<", '(');
-    g_strdelimit (userid, ">", ')');
-    
+
+        /* Fix up the id, so it doesn't think it's markup */
+        g_strdelimit (userid, "<", '(');
+        g_strdelimit (userid, ">", ')');
+        
+    } else 
+        userid = g_strdup (_("[Unknown Key]"));
+            
     return userid;
 }
     

@@ -156,7 +156,7 @@ import_activate (GtkWidget *widget, SeahorseWidget *swidget)
     gint keys;
     gpgme_error_t err;
     
-    sksrc = seahorse_context_get_pri_source (swidget->sctx);
+    sksrc = seahorse_context_get_key_source (swidget->sctx);
     g_return_if_fail (sksrc != NULL);
     
     dialog = gtk_file_chooser_dialog_new (_("Import Key"), 
@@ -195,7 +195,7 @@ clipboard_received (GtkClipboard *board, const gchar *text, SeahorseContext *sct
     gpgme_error_t err;
     gint keys;
     
-    sksrc = seahorse_context_get_pri_source (sctx);
+    sksrc = seahorse_context_get_key_source (sctx);
     g_return_if_fail (sksrc != NULL);
  
     keys = seahorse_op_import_text (sksrc, text, &err);
@@ -697,7 +697,7 @@ target_drag_data_received (GtkWidget *widget, GdkDragContext *context, gint x, g
     
     g_return_if_fail (data != NULL);
     
-    sksrc = seahorse_context_get_pri_source (sctx);
+    sksrc = seahorse_context_get_key_source (sctx);
     g_return_if_fail (sksrc != NULL);
     
     switch(info) {
@@ -741,15 +741,22 @@ filter_changed (GtkWidget *widget, SeahorseKeyStore* skstore)
 GtkWindow* 
 seahorse_key_manager_show (SeahorseContext *sctx)
 {
+    GtkWindow *win;
 	SeahorseWidget *swidget;
 	GtkTreeView *view;
     GtkWidget* w;
 	GtkTreeSelection *selection;
     SeahorseKeyStore *skstore;
+    SeahorseKeySource *sksrc;
 	
 	swidget = seahorse_widget_new ("key-manager", sctx);
 	gtk_object_sink (GTK_OBJECT (sctx));
-	
+
+    win = GTK_WINDOW (glade_xml_get_widget (swidget->xml, "key-manager"));
+
+    sksrc = seahorse_context_get_key_source (sctx);
+    g_return_val_if_fail (sksrc != NULL, win);
+    	
 	/* construct key context menu */
 	glade_xml_construct (swidget->xml, SEAHORSE_GLADEDIR "seahorse-key-manager.glade",
 		"context_menu", NULL);
@@ -838,15 +845,13 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 	gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
 	g_signal_connect (selection, "changed",
 		G_CALLBACK (selection_changed), swidget);
-    skstore = seahorse_key_manager_store_new (sctx, view);
+    skstore = seahorse_key_manager_store_new (sksrc, view);
 	selection_changed (selection, swidget);
    
-    w = glade_xml_get_widget (swidget->xml, "key-manager");
-    
     /* Setup drops */
-    gtk_drag_dest_set (w, GTK_DEST_DEFAULT_ALL, target_entries, 
+    gtk_drag_dest_set (GTK_WIDGET (win), GTK_DEST_DEFAULT_ALL, target_entries, 
             sizeof (target_entries) / sizeof (target_entries[0]), GDK_ACTION_COPY);
-    gtk_signal_connect (GTK_OBJECT (w), "drag_data_received",
+    gtk_signal_connect (GTK_OBJECT (win), "drag_data_received",
             GTK_SIGNAL_FUNC (target_drag_data_received), sctx);
                         
     /* For the filtering */
@@ -855,10 +860,10 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 
     /* Although not all the keys have completed we'll know whether we have 
      * any or not at this point */
-	if (seahorse_context_get_n_keys (sctx) == 0) {
+	if (seahorse_key_source_get_count (sksrc, FALSE) == 0) {
 		w = glade_xml_get_widget (swidget->xml, "first-time-box");
 		gtk_widget_show (w);
 	}
 	
-    return GTK_WINDOW (w);
+    return win;
 }

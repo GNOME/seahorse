@@ -26,7 +26,7 @@
 
 enum {
 	PROP_0,
-	PROP_CTX,
+	PROP_KEY_SOURCE,
     PROP_MODE,
     PROP_FILTER
 };
@@ -63,7 +63,9 @@ typedef struct
 static void	seahorse_key_store_class_init		(SeahorseKeyStoreClass	*klass);
 static GObject* seahorse_key_store_constructor  (GType type, guint n_props, 
                                              GObjectConstructParam* props);
-static void	seahorse_key_store_finalize		(GObject		*gobject);
+static void seahorse_key_store_dispose          (GObject       *gobject);
+static void	seahorse_key_store_finalize		    (GObject       *gobject);
+
 static void	seahorse_key_store_set_property		(GObject		*gobject,
 							 guint			prop_id,
 							 const GValue		*value,
@@ -85,15 +87,14 @@ static void	seahorse_key_store_changed      (SeahorseKeyStore   *skstore,
                                              SeahorseKey        *skey,
                                              GtkTreeIter        *iter,
                                              SeahorseKeyChange  change);
-/* Context signals */
-static void	seahorse_key_store_context_destroyed	(GtkObject		*object,
-							 SeahorseKeyStore	*skstore);
-static void	seahorse_key_store_key_added		(SeahorseContext	*sctx,
-							 SeahorseKey		*skey,
-							 SeahorseKeyStore	*skstore);
-static void seahorse_key_store_key_removed      (SeahorseContext    *sctx,
-                             SeahorseKey        *skey,
-                             SeahorseKeyStore   *skstore);
+
+/* Key source signals */
+static void seahorse_key_store_key_added    (SeahorseKeySource  *sksrc,
+                                             SeahorseKey        *skey,
+                                             SeahorseKeyStore   *skstore);
+static void seahorse_key_store_key_removed  (SeahorseKeySource  *sksrc,
+                                             SeahorseKey        *skey,
+                                             SeahorseKeyStore   *skstore);
                              
 /* Key signals */
 static void	seahorse_key_store_key_changed		(SeahorseKey		*skey,
@@ -146,7 +147,8 @@ seahorse_key_store_class_init (SeahorseKeyStoreClass *klass)
 	gobject_class = G_OBJECT_CLASS (klass);
 	
     gobject_class->constructor = seahorse_key_store_constructor;
-	gobject_class->finalize = seahorse_key_store_finalize;
+    gobject_class->finalize = seahorse_key_store_finalize;
+    gobject_class->dispose = seahorse_key_store_dispose;
 	gobject_class->set_property = seahorse_key_store_set_property;
 	gobject_class->get_property = seahorse_key_store_get_property;
 	
@@ -161,10 +163,10 @@ seahorse_key_store_class_init (SeahorseKeyStoreClass *klass)
     klass->col_types = col_types;
     klass->col_ids = col_ids;
 	
-	g_object_class_install_property (gobject_class, PROP_CTX,
-		g_param_spec_object ("ctx", "Seahorse Context",
-				     "Current Seahorse Context to use",
-				     SEAHORSE_TYPE_CONTEXT, G_PARAM_READWRITE));
+	g_object_class_install_property (gobject_class, PROP_KEY_SOURCE,
+		g_param_spec_object ("key-source", "Seahorse Key Source",
+				     "Current Seahorse Key Source to use",
+				     SEAHORSE_TYPE_KEY_SOURCE, G_PARAM_READWRITE));
                     
     g_object_class_install_property (gobject_class, PROP_MODE,
         g_param_spec_uint ("mode", "Key Store Mode",
@@ -202,6 +204,34 @@ seahorse_key_store_constructor (GType type, guint n_props, GObjectConstructParam
     
     return obj;
 }
+
+/* dispose of all our internal references */
+static void
+seahorse_key_store_dispose (GObject *gobject)
+{
+    SeahorseKeyStore *skstore;
+    
+    /*
+     * Note that after this executes the rest of the object should
+     * still work without a segfault. This basically nullifies the 
+     * object, but doesn't free it.
+     * 
+     * This function should also be able to run multiple times.
+     */
+
+    skstore = SEAHORSE_KEY_STORE (gobject);  
+
+    if (skstore->sksrc) {
+        g_signal_handlers_disconnect_by_func (skstore->sksrc, 
+                                seahorse_key_store_key_added, skstore);
+        g_signal_handlers_disconnect_by_func (skstore->sksrc, 
+                                seahorse_key_store_key_removed, skstore);
+        g_object_unref (skstore->sksrc);        
+        skstore->sksrc = NULL;
+    }
+    
+    G_OBJECT_CLASS (parent_class)->dispose (gobject);
+}
     
 static void
 seahorse_key_store_finalize (GObject *gobject)
@@ -209,13 +239,8 @@ seahorse_key_store_finalize (GObject *gobject)
 	SeahorseKeyStore *skstore;
 	
 	skstore = SEAHORSE_KEY_STORE (gobject);
-	
-	g_signal_handlers_disconnect_by_func (GTK_OBJECT (skstore->sctx),
-		seahorse_key_store_context_destroyed, skstore);
-	g_signal_handlers_disconnect_by_func (skstore->sctx,
-		seahorse_key_store_key_added, skstore);
-	g_object_unref (skstore->sctx);
-
+    g_assert (skstore->sksrc == NULL);
+    	
     /* These were allocated in the constructor */
     g_object_unref (skstore->priv->sort);
     g_object_unref (skstore->priv->filter);
@@ -257,15 +282,14 @@ seahorse_key_store_set_property (GObject *gobject, guint prop_id,
 	skstore = SEAHORSE_KEY_STORE (gobject);
 	
 	switch (prop_id) {
-		/* Connects to context signals */
-		case PROP_CTX:
-			skstore->sctx = g_value_get_object (value);
-			g_object_ref (skstore->sctx);
-			g_signal_connect_after (skstore->sctx, "destroy",
-				G_CALLBACK (seahorse_key_store_context_destroyed), skstore);
-            g_signal_connect_after (skstore->sctx, "added",
+		/* Connects to key source signals */
+		case PROP_KEY_SOURCE:
+            g_return_if_fail (skstore->sksrc == NULL);
+			skstore->sksrc = g_value_get_object (value);
+			g_object_ref (skstore->sksrc);
+            g_signal_connect_after (skstore->sksrc, "added",
                 G_CALLBACK (seahorse_key_store_key_added), skstore);
-            g_signal_connect_after (skstore->sctx, "removed",
+            g_signal_connect_after (skstore->sksrc, "removed",
                 G_CALLBACK (seahorse_key_store_key_removed), skstore);
 			break;
 			
@@ -309,8 +333,8 @@ seahorse_key_store_get_property (GObject *gobject, guint prop_id,
 	skstore = SEAHORSE_KEY_STORE (gobject);
 	
 	switch (prop_id) {
-		case PROP_CTX:
-			g_value_set_object (value, skstore->sctx);
+		case PROP_KEY_SOURCE:
+			g_value_set_object (value, skstore->sksrc);
 			break;
 			
 		/* The filtering mode */
@@ -374,16 +398,9 @@ seahorse_key_store_changed (SeahorseKeyStore *skstore, SeahorseKey *skey,
 	}
 }
 
-/* Destroys @skstore */
-static void
-seahorse_key_store_context_destroyed (GtkObject *object, SeahorseKeyStore *skstore)
-{
-	seahorse_key_store_destroy (skstore);
-}
-
 /* Appends @skey */
 static void
-seahorse_key_store_key_added (SeahorseContext *sctx, SeahorseKey *skey, SeahorseKeyStore *skstore)
+seahorse_key_store_key_added (SeahorseKeySource *sksrc, SeahorseKey *skey, SeahorseKeyStore *skstore)
 {
 	GtkTreeIter iter;
 	
@@ -392,7 +409,7 @@ seahorse_key_store_key_added (SeahorseContext *sctx, SeahorseKey *skey, Seahorse
 
 /* Removes @skrow */
 static void
-seahorse_key_store_key_removed (SeahorseContext *sctx, SeahorseKey *skey, SeahorseKeyStore *skstore)
+seahorse_key_store_key_removed (SeahorseKeySource *sksrc, SeahorseKey *skey, SeahorseKeyStore *skstore)
 {
     SeahorseKeyRow *skrow;
     
@@ -648,12 +665,13 @@ seahorse_key_store_populate (SeahorseKeyStore *skstore)
 	gdouble length;
 	GtkTreeIter iter;
 	
-	g_return_if_fail (SEAHORSE_IS_KEY_STORE (skstore));
+    g_return_if_fail (SEAHORSE_IS_KEY_STORE (skstore));
+    g_return_if_fail (SEAHORSE_IS_KEY_SOURCE (skstore->sksrc));
 	
     /* Don't precipitate a load */
-    if (seahorse_context_get_n_keys (skstore->sctx) > 0) {
+    if (seahorse_key_source_get_count (skstore->sksrc, FALSE) > 0) {
 
-    	keys = list = seahorse_context_get_keys (skstore->sctx);
+    	keys = list = seahorse_key_source_get_keys (skstore->sksrc, FALSE);
     	length = g_list_length (list);
 	
     	while (list != NULL && (skey = list->data) != NULL) {
@@ -664,7 +682,7 @@ seahorse_key_store_populate (SeahorseKeyStore *skstore)
      
         g_list_free (keys);
 	
-    	seahorse_context_show_progress (skstore->sctx,
+    	seahorse_key_source_show_progress (skstore->sksrc,
 	       	g_strdup_printf (_("Listed %d keys"), count), -1);
     }
 }
@@ -812,15 +830,14 @@ seahorse_key_store_get_selected_keys (GtkTreeView *view)
         
     	selection = gtk_tree_view_get_selection (view);
     	paths = gtk_tree_selection_get_selected_rows (selection, NULL);
-	    g_return_val_if_fail (paths != NULL && g_list_length (paths) > 0, NULL);
 	
     	/* make key list */
 	    for (list = paths; list != NULL; list = g_list_next (list))
 		    keys = g_list_append (keys, seahorse_key_store_get_key_from_path (view, list->data));
             
-	   /* free selected paths */
-	   g_list_foreach (paths, (GFunc)gtk_tree_path_free, NULL);
-	   g_list_free (paths);
+        /* free selected paths */
+        g_list_foreach (paths, (GFunc)gtk_tree_path_free, NULL);
+        g_list_free (paths);
     }
 	 
     return keys;

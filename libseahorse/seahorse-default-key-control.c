@@ -46,9 +46,9 @@ key_added (SeahorseContext *sctx, SeahorseKey *skey, GtkWidget *menu)
 }
 
 static void
-menu_destroyed (GtkObject *object, SeahorseContext *sctx)
+menu_destroyed (GtkObject *object, SeahorseKeySource *sksrc)
 {
-	g_signal_handlers_disconnect_by_func (sctx, key_added, GTK_WIDGET (object));
+	g_signal_handlers_disconnect_by_func (sksrc, key_added, GTK_WIDGET (object));
 }
 
 GtkWidget*
@@ -57,35 +57,41 @@ seahorse_default_key_control_new (SeahorseContext *sctx)
 	GList *keys, *list = NULL;
 	GtkWidget *option, *menu;
 	gint index = 0, history = 0;
+    SeahorseKeySource *sksrc;
 	SeahorseKey *skey;
 	const gchar *default_key;
 	
 	menu = gtk_menu_new ();
 	default_key = eel_gconf_get_string (DEFAULT_KEY);
-	keys = seahorse_context_get_key_pairs (sctx);
- 
-	for (list = keys; list != NULL; list = g_list_next (list)) {
-		skey = SEAHORSE_KEY (list->data);
-		
-		if (!SEAHORSE_IS_KEY_PAIR (skey) || !seahorse_key_pair_can_sign (SEAHORSE_KEY_PAIR (skey)))
-			continue;
-		
-		key_added (sctx, skey, menu);
-		
-        if (default_key) {
-    		if (g_str_equal (default_key, seahorse_key_get_id (SEAHORSE_KEY_PAIR (skey)->secret)))
-    	   		history = index;
-        }
-		
-		index++;
-	}
- 
-    g_list_free (keys);
-    	
-	g_signal_connect_after (sctx, "added", G_CALLBACK (key_added), menu);
-	g_signal_connect_after (GTK_OBJECT (menu), "destroy",
-		G_CALLBACK (menu_destroyed), sctx);
-	
+
+    sksrc = seahorse_context_get_key_source (sctx);
+    
+    if (sksrc) {    
+        keys = seahorse_key_source_get_keys (sksrc, TRUE);
+        
+    	for (list = keys; list != NULL; list = g_list_next (list)) {
+    		skey = SEAHORSE_KEY (list->data);
+    		
+    		if (!SEAHORSE_IS_KEY_PAIR (skey) || !seahorse_key_pair_can_sign (SEAHORSE_KEY_PAIR (skey)))
+    			continue;
+    		
+    		key_added (sctx, skey, menu);
+    		
+            if (default_key) {
+        		if (g_str_equal (default_key, seahorse_key_get_id (SEAHORSE_KEY_PAIR (skey)->secret)))
+        	   		history = index;
+            }
+    		
+    		index++;
+    	}
+     
+        g_list_free (keys);
+
+        g_signal_connect_after (sksrc, "added", G_CALLBACK (key_added), menu);
+        g_signal_connect_after (GTK_OBJECT (menu), "destroy",
+                                G_CALLBACK (menu_destroyed), sksrc);
+    }
+        	
 	option = gtk_option_menu_new ();
 	gtk_option_menu_set_menu (GTK_OPTION_MENU (option), menu);
 	gtk_widget_show (menu);
