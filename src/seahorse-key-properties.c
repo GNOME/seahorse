@@ -1,7 +1,7 @@
 /*
  * Seahorse
  *
- * Copyright (C) 2002 Jacob Perkins
+ * Copyright (C) 2003 Jacob Perkins
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -140,6 +140,15 @@ change_passphrase_activate (GtkMenuItem *item, SeahorseWidget *swidget)
 	seahorse_ops_key_change_pass (swidget->sctx, skwidget->skey);
 }
 
+static void
+add_uid_activate (GtkMenuItem *item, SeahorseWidget *swidget)
+{
+	SeahorseKeyWidget *skwidget;
+	
+	skwidget = SEAHORSE_KEY_WIDGET (swidget);
+	seahorse_add_uid_new (swidget->sctx, skwidget->skey);
+}
+
 /* Do a label */
 static void
 do_stat_label (const gchar *label, GtkTable *table, guint left, guint top)
@@ -212,7 +221,7 @@ do_stats (SeahorseWidget *swidget, GtkTable *table, guint top, guint index)
 static void
 clear_notebook (GtkNotebook *notebook)
 {
-	while (gtk_notebook_get_current_page (notebook) != -1)
+	while (gtk_notebook_get_current_page (notebook) >= 0)
 		gtk_notebook_remove_page (notebook, 0);
 }
 
@@ -310,6 +319,27 @@ do_subkeys (SeahorseWidget *swidget)
 	gtk_widget_show (GTK_WIDGET (notebook));
 }
 
+static void
+key_changed (SeahorseKey *skey, SeahorseKeyChange change, SeahorseWidget *swidget)
+{
+	switch (change) {
+		/* Refresh user IDs */
+		case SKEY_CHANGE_UIDS:
+			do_uids (swidget);
+			break;
+		default:
+			break;
+	}
+}
+
+/**
+ * seahorse_key_properties_new:
+ * @sctx: Current #SeahorseContext
+ * @skey: #SeahorseKey
+ *
+ * Creates a new #SeahorseKeyWidget dialog for showing @skey's properties
+ * and possibly editing @skey's attributes.
+ **/
 void
 seahorse_key_properties_new (SeahorseContext *sctx, SeahorseKey *skey)
 {
@@ -348,9 +378,18 @@ seahorse_key_properties_new (SeahorseContext *sctx, SeahorseKey *skey)
 	gtk_window_set_title (GTK_WINDOW (widget), seahorse_key_get_userid (skey, 0));
 	
 	/* Have to connect some signals after so changes don't activate callbacks */
-	glade_xml_signal_connect_data (swidget->xml, "export_activate", G_CALLBACK (export_activate), swidget);
-	glade_xml_signal_connect_data (swidget->xml, "delete_activate", G_CALLBACK (delete_activate), swidget);
-	glade_xml_signal_connect_data (swidget->xml, "trust_changed", G_CALLBACK (trust_changed), swidget);
-	glade_xml_signal_connect_data (swidget->xml, "disabled_toggled", G_CALLBACK (disabled_toggled), swidget);
-	glade_xml_signal_connect_data (swidget->xml, "change_passphrase_activate", G_CALLBACK (change_passphrase_activate), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "export_activate",
+		G_CALLBACK (export_activate), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "delete_activate",
+		G_CALLBACK (delete_activate), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "trust_changed",
+		G_CALLBACK (trust_changed), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "disabled_toggled",
+		G_CALLBACK (disabled_toggled), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "change_passphrase_activate",
+		G_CALLBACK (change_passphrase_activate), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "add_uid_activate",
+		G_CALLBACK (add_uid_activate), swidget);
+	
+	g_signal_connect_after (skey, "changed", G_CALLBACK (key_changed), swidget);
 }

@@ -1,7 +1,7 @@
 /*
  * Seahorse
  *
- * Copyright (C) 2002 Jacob Perkins
+ * Copyright (C) 2003 Jacob Perkins
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -930,5 +930,5 @@ seahorse_ops_key_add_uid (SeahorseContext *sctx, SeahorseKey *skey,
 	
 	parms = seahorse_edit_parm_new (ADD_UID_START, add_uid_action, add_uid_transit, uid_parm);
 	
-	return edit_key (sctx, skey, parms, _("User ID added"), SKEY_CHANGE_UID);
+	return edit_key (sctx, skey, parms, _("User ID added"), SKEY_CHANGE_UIDS);
 }
