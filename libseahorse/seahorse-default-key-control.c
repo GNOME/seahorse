@@ -26,11 +26,14 @@ static void
 key_added (SeahorseContext *sctx, SeahorseKey *skey, GtkWidget *menu)
 {
 	GtkWidget *item;
+    gchar *userid;
 	
 	if (!SEAHORSE_IS_KEY_PAIR (skey) || !seahorse_key_pair_can_sign (SEAHORSE_KEY_PAIR (skey)))
 		return;
 	
-	item = gtk_menu_item_new_with_label (seahorse_key_get_userid (skey, 0));
+    userid = seahorse_key_get_userid (skey, 0);
+    item = gtk_menu_item_new_with_label (userid);
+    g_free (userid);
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 	gtk_widget_show (item);
 	

@@ -88,7 +88,7 @@ properties_activate (GtkWidget *widget, SeahorseWidget *swidget)
 static void
 export_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
-	GpgmeRecipients recips;
+	gpgme_key_t * recips;
 	
 	recips = seahorse_key_store_get_selected_recips (GTK_TREE_VIEW (
 		glade_xml_get_widget (swidget->xml, KEY_LIST)));

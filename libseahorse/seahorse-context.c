@@ -25,6 +25,7 @@
 #include "seahorse-context.h"
 #include "seahorse-marshal.h"
 #include "seahorse-libdialogs.h"
+#include "seahorse-util.h"
 
 #define PROGRESS_UPDATE PGP_SCHEMAS "/progress_update"
 //#define MAX_THREADS 5
@@ -114,20 +115,20 @@ seahorse_context_class_init (SeahorseContextClass *klass)
 		NULL, NULL, seahorse_marshal_VOID__STRING_DOUBLE, G_TYPE_NONE, 2, G_TYPE_STRING, G_TYPE_DOUBLE);
 }
 
-static GpgmeError
-init_gpgme (GpgmeCtx *ctx)
+static gpgme_error_t
+init_gpgme (gpgme_ctx_t *ctx)
 {
-	GpgmeProtocol proto = GPGME_PROTOCOL_OpenPGP;
-	GpgmeError err;
+	gpgme_protocol_t proto = GPGME_PROTOCOL_OpenPGP;
+	gpgme_error_t err;
 	
 	err = gpgme_engine_check_version (proto);
-	g_return_val_if_fail (err == GPGME_No_Error, err);
+	g_return_val_if_fail (GPG_IS_OK (err), err);
 	
 	err = gpgme_new (ctx);
-	g_return_val_if_fail (err == GPGME_No_Error, err);
+	g_return_val_if_fail (GPG_IS_OK (err), err);
 	
 	err = gpgme_set_protocol (*ctx, proto);
-	g_return_val_if_fail (err == GPGME_No_Error, err);
+	g_return_val_if_fail (GPG_IS_OK (err), err);
 	
 	gpgme_set_keylist_mode (*ctx, GPGME_KEYLIST_MODE_LOCAL);
 	return err;
@@ -137,7 +138,7 @@ init_gpgme (GpgmeCtx *ctx)
 static void
 seahorse_context_init (SeahorseContext *sctx)
 {
-	g_return_if_fail (init_gpgme (&sctx->ctx) == GPGME_No_Error);
+	g_return_if_fail (GPG_IS_OK (init_gpgme (&sctx->ctx)));
 	/* init private vars */
 	sctx->priv = g_new0 (SeahorseContextPrivate, 1);
 	sctx->priv->key_pairs = NULL;
@@ -150,7 +151,7 @@ seahorse_context_init (SeahorseContext *sctx)
 	gpgme_set_armor (sctx->ctx, eel_gconf_get_boolean (ARMOR_KEY));
 	gpgme_set_textmode (sctx->ctx, eel_gconf_get_boolean (TEXTMODE_KEY));
 	/* do callbacks */
-	gpgme_set_passphrase_cb (sctx->ctx, (GpgmePassphraseCb)seahorse_passphrase_get, sctx);
+	gpgme_set_passphrase_cb (sctx->ctx, (gpgme_passphrase_cb_t)seahorse_passphrase_get, sctx);
 	gpgme_set_progress_cb (sctx->ctx, gpgme_progress, sctx);
 	eel_gconf_notification_add (PGP_SCHEMAS, (GConfClientNotifyFunc)gconf_notification, sctx);
 	eel_gconf_monitor_add (PGP_SCHEMAS);
@@ -201,17 +202,17 @@ seahorse_context_key_destroyed (GtkObject *object, SeahorseContext *sctx)
 	g_object_unref (skey);
 }
 
-/* refresh key's GpgmeKey(s) */
+/* refresh key's gpgme_key_t(s) */
 static void
 seahorse_context_key_changed (SeahorseKey *skey, SeahorseKeyChange change, SeahorseContext *sctx)
 {
-	GpgmeKey key;
+	gpgme_key_t key;
 	SeahorseKeyPair *skpair;
 	
 	/* get key */
-	g_return_if_fail (gpgme_op_keylist_start (sctx->ctx,
-		seahorse_key_get_id (skey->key), FALSE) == GPGME_No_Error);
-	g_return_if_fail (gpgme_op_keylist_next (sctx->ctx, &key) == GPGME_No_Error);
+	g_return_if_fail (GPG_IS_OK (gpgme_op_keylist_start (sctx->ctx,
+		seahorse_key_get_id (skey->key), FALSE)));
+	g_return_if_fail (GPG_IS_OK (gpgme_op_keylist_next (sctx->ctx, &key)));
 	gpgme_op_keylist_end (sctx->ctx);
 	/* set key */
 	gpgme_key_unref (skey->key);
@@ -220,9 +221,9 @@ seahorse_context_key_changed (SeahorseKey *skey, SeahorseKeyChange change, Seaho
 	if (SEAHORSE_IS_KEY_PAIR (skey)) {
 		skpair = SEAHORSE_KEY_PAIR (skey);
 		/* get key */
-		g_return_if_fail (gpgme_op_keylist_start (sctx->ctx,
-			seahorse_key_get_id (skey->key), TRUE) == GPGME_No_Error);
-		g_return_if_fail (gpgme_op_keylist_next (sctx->ctx, &key) == GPGME_No_Error);
+		g_return_if_fail (GPG_IS_OK (gpgme_op_keylist_start (sctx->ctx,
+			 seahorse_key_get_id (skey->key), TRUE)));
+		g_return_if_fail (GPG_IS_OK (gpgme_op_keylist_next (sctx->ctx, &key)));
 		gpgme_op_keylist_end (sctx->ctx);
 		/* set key */
 		gpgme_key_unref (skpair->secret);
@@ -250,11 +251,11 @@ gpgme_progress (gpointer data, const gchar *what, gint type, gint current, gint 
 static void
 set_gpgme_signer (SeahorseContext *sctx, const gchar *id)
 {
-	GpgmeKey key;
+	gpgme_key_t key;
 	/* clear signers, get key, add key to signers */
 	gpgme_signers_clear (sctx->ctx);
-	g_return_if_fail (gpgme_op_keylist_start (sctx->ctx, id, TRUE) == GPGME_No_Error);
-	if (gpgme_op_keylist_next (sctx->ctx, &key) == GPGME_No_Error)
+	g_return_if_fail (GPG_IS_OK (gpgme_op_keylist_start (sctx->ctx, id, TRUE)));
+	if (GPG_IS_OK (gpgme_op_keylist_next (sctx->ctx, &key)))
 		gpgme_signers_add (sctx->ctx, key);
 	gpgme_op_keylist_end (sctx->ctx);
 	gpgme_key_unref (key);
@@ -319,17 +320,17 @@ add_key (SeahorseContext *sctx, SeahorseKey *skey)
 }
 
 static void
-process_key_pair (GpgmeKey secret, SeahorseContext *sctx)
+process_key_pair (gpgme_key_t secret, SeahorseContext *sctx)
 {
-	GpgmeCtx ctx;
-	GpgmeKey key;
+	gpgme_ctx_t ctx;
+	gpgme_key_t key;
 	SeahorseKey *skey;
 	
 	/* init context & listing */
-	g_return_if_fail (init_gpgme (&ctx) == GPGME_No_Error);
+	g_return_if_fail (GPG_IS_OK (init_gpgme (&ctx)));
 	/* if can do listing */
-	if (gpgme_op_keylist_start (ctx, seahorse_key_get_id (secret), FALSE) == GPGME_No_Error &&
-	    gpgme_op_keylist_next (ctx, &key) == GPGME_No_Error) {
+	if (GPG_IS_OK (gpgme_op_keylist_start (ctx, seahorse_key_get_id (secret), FALSE)) &&
+	    GPG_IS_OK (gpgme_op_keylist_next (ctx, &key))) {
 		/* do new key, release gpgme keys */
 		//g_mutex_lock (sctx->priv->pair_mutex);
 		skey = seahorse_key_pair_new (key, secret);
@@ -347,18 +348,18 @@ process_key_pair (GpgmeKey secret, SeahorseContext *sctx)
 }
 
 static void
-process_single_key (GpgmeKey key, SeahorseContext *sctx)
+process_single_key (gpgme_key_t key, SeahorseContext *sctx)
 {
-	GpgmeCtx ctx;
-	GpgmeKey secret;
+	gpgme_ctx_t ctx;
+	gpgme_key_t secret;
 	SeahorseKey *skey;
 	
 	/* init new context & listing */
-	g_return_if_fail (init_gpgme (&ctx) == GPGME_No_Error);
+	g_return_if_fail (GPG_IS_OK (init_gpgme (&ctx)));
 	/* if can do listing */
-	if (gpgme_op_keylist_start (ctx, seahorse_key_get_id (key), TRUE) == GPGME_No_Error) {
+	if (GPG_IS_OK (gpgme_op_keylist_start (ctx, seahorse_key_get_id (key), TRUE))) {
 		/* if got a secret, then already have so release */
-		if (gpgme_op_keylist_next (ctx, &secret) == GPGME_No_Error) {
+		if (GPG_IS_OK (gpgme_op_keylist_next (ctx, &secret))) {
 			gpgme_key_unref (secret);
 			gpgme_key_unref (key);
 		}
@@ -385,13 +386,13 @@ do_keys (SeahorseContext *sctx, GFunc process_func, guint initial_count)
 	//GThreadPool *pool;
 	guint count = initial_count + 1;
 	gint progress_update;
-	GpgmeKey key;
+	gpgme_key_t key;
 	
 	//pool = g_thread_pool_new (process_func, sctx, MAX_THREADS, TRUE, NULL);
 	progress_update = eel_gconf_get_integer (PROGRESS_UPDATE);
 	
 	/* get remaining keys */
-	while (gpgme_op_keylist_next (sctx->ctx, &key) == GPGME_No_Error) {
+	while (GPG_IS_OK (gpgme_op_keylist_next (sctx->ctx, &key))) {
 		if (progress_update > 0 && !(count % progress_update))
 			seahorse_context_show_progress (sctx, g_strdup_printf (
 				_("Loading key %d"), count), 0);
@@ -419,7 +420,7 @@ do_key_pairs (SeahorseContext *sctx)
 	if (did_pairs)
 		return;
 
-	g_return_if_fail (gpgme_op_keylist_start (sctx->ctx, NULL, TRUE) == GPGME_No_Error);
+	g_return_if_fail (GPG_IS_OK (gpgme_op_keylist_start (sctx->ctx, NULL, TRUE)));
 	total = do_keys (sctx, (GFunc)process_key_pair, 0);
 	
 	did_pairs = TRUE;
@@ -440,7 +441,7 @@ do_key_list (SeahorseContext *sctx)
 	if (sctx->priv->key_pairs == NULL)
 		do_key_pairs (sctx);
 	
-	g_return_if_fail (gpgme_op_keylist_start (sctx->ctx, NULL, FALSE) == GPGME_No_Error);
+	g_return_if_fail (GPG_IS_OK (gpgme_op_keylist_start (sctx->ctx, NULL, FALSE)));
 	total = do_keys (sctx, (GFunc)process_single_key, g_list_length (sctx->priv->key_pairs));
 	
 	did_keys = TRUE;
@@ -495,14 +496,14 @@ seahorse_context_get_key_pairs (SeahorseContext *sctx)
 /**
  * seahorse_context_get_key:
  * @sctx: Current #SeahorseContext
- * @key: GpgmeKey corresponding to the desired #SeahorseKey
+ * @key: gpgme_key_t corresponding to the desired #SeahorseKey
  *
  * Gets the #SeahorseKey in the key ring corresponding to @key.
  *
  * Returns: The found #SeahorseKey, or NULL
  **/
 SeahorseKey*
-seahorse_context_get_key (SeahorseContext *sctx, GpgmeKey key)
+seahorse_context_get_key (SeahorseContext *sctx, gpgme_key_t key)
 {
 	GList *list = NULL, *keys = NULL;
 	SeahorseKey *skey = NULL;
@@ -558,8 +559,8 @@ seahorse_context_show_progress (SeahorseContext *sctx, const gchar *op, gdouble 
 SeahorseKeyPair*
 seahorse_context_get_default_key (SeahorseContext *sctx)
 {
-	GpgmeKey key;
-	SeahorseKeyPair *skpair;
+	gpgme_key_t key;
+	SeahorseKeyPair *skpair = NULL;
 	GList *keys = NULL;
 	gboolean found = FALSE;
 	const gchar *id1 = "", *id2 = NULL;
@@ -587,14 +588,13 @@ static guint
 add_new_keys (SeahorseContext *sctx, gboolean secret, gint max, gint total, GFunc process_func)
 {
 	guint count;
-	GpgmeError err;
-	GpgmeKey key;
+	gpgme_key_t key;
 	
 	/* start listing */
-	g_return_if_fail (gpgme_op_keylist_start (sctx->ctx, NULL, secret) == GPGME_No_Error);
+	g_return_val_if_fail (GPG_IS_OK (gpgme_op_keylist_start (sctx->ctx, NULL, secret)), 0);
 	/* iterate through list until done or have done current keys */
 	for (count = 0; count < max; count++) {
-		if (gpgme_op_keylist_next (sctx->ctx, &key) != GPGME_No_Error)
+		if (!GPG_IS_OK (gpgme_op_keylist_next (sctx->ctx, &key)))
 			break;
 		else
 			gpgme_key_unref (key);

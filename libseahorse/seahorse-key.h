@@ -54,7 +54,11 @@ struct _SeahorseKey
 	GtkObject		parent;
 	
 	/*< public >*/
-	GpgmeKey		key;
+	gpgme_key_t		key;
+ 
+    /*< private >*/
+    gchar*          cached_userid;
+    gchar*          cached_fingerprint;
 };
 
 struct _SeahorseKeyClass
@@ -66,7 +70,7 @@ struct _SeahorseKeyClass
 							 SeahorseKeyChange	change);
 };
 
-SeahorseKey*		seahorse_key_new		(GpgmeKey		key);
+SeahorseKey*		seahorse_key_new		(gpgme_key_t		key);
 
 void			seahorse_key_destroy		(SeahorseKey		*skey);
 
@@ -77,15 +81,18 @@ const gint		seahorse_key_get_num_uids	(const SeahorseKey	*skey);
 
 const gint		seahorse_key_get_num_subkeys	(const SeahorseKey	*skey);
 
+gpgme_subkey_t		seahorse_key_get_nth_subkey	(const SeahorseKey	*skey,
+							 const guint		index);
+
 const gchar*		seahorse_key_get_keyid		(const SeahorseKey	*skey,
 							 const guint		index);
 
-const gchar*		seahorse_key_get_userid		(const SeahorseKey	*skey,
+gchar*			seahorse_key_get_userid		(const SeahorseKey	*skey,
 							 const guint		index);
 
 gchar*			seahorse_key_get_fingerprint	(const SeahorseKey	*skey);
 
-const gchar*		seahorse_key_get_id		(GpgmeKey		key);
+const gchar*		seahorse_key_get_id		(gpgme_key_t		key);
 
 gboolean		seahorse_key_is_valid		(const SeahorseKey	*skey);
 

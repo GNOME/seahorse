@@ -76,9 +76,9 @@ static void
 do_encrypt (SeahorseContext *sctx, gchar *path,
 	    SeahorseEncryptFunc func, const gchar *message)
 {
-	GpgmeRecipients recips = NULL;
+	gpgme_key_t * recips = NULL;
 	gchar *new_path;
-	GpgmeError err;
+	gpgme_error_t err;
 		
 	recips = seahorse_recipients_get (sctx);
 		
@@ -90,7 +90,7 @@ do_encrypt (SeahorseContext *sctx, gchar *path,
 	new_path = func (sctx, path, recips, &err);
 	g_free (path);
 		
-	if (err != GPGME_No_Error) {
+	if (!GPG_IS_OK (err)) {
 		seahorse_util_handle_error (err);
 		exit (1);
 	}
@@ -106,14 +106,20 @@ int
 main (int argc, char **argv)
 {
 	SeahorseContext *sctx;
-	GpgmeError err;
-	GtkWidget *widget;
+	gpgme_error_t err;
 	gchar *new_path;
 
 #ifdef ENABLE_NLS	
 	bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
 	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 	textdomain (GETTEXT_PACKAGE);
+#endif
+
+	g_message("init gpgme version %s", gpgme_check_version(NULL));
+
+#ifdef ENABLE_NLS	
+	gpgme_set_locale(NULL, LC_CTYPE, setlocale(LC_CTYPE, NULL));
+	gpgme_set_locale(NULL, LC_MESSAGES, setlocale(LC_MESSAGES, NULL));
 #endif
 
 	gnome_program_init (PACKAGE, VERSION, LIBGNOMEUI_MODULE, argc, argv,
@@ -128,7 +134,7 @@ main (int argc, char **argv)
 		
 		keys = seahorse_op_import_file (sctx, import, &err);
 		
-		if (err != GPGME_No_Error) {
+		if (!GPG_IS_OK (err)) {
 			seahorse_util_handle_error (err);
 			return 1;
 		}
@@ -142,7 +148,7 @@ main (int argc, char **argv)
 	if (sign != NULL) {
 		new_path = seahorse_op_sign_file (sctx, sign, &err);
 		
-		if (err != GPGME_No_Error) {
+		if (!GPG_IS_OK (err)) {
 			seahorse_util_handle_error (err);
 			return 1;
 		}
@@ -158,7 +164,7 @@ main (int argc, char **argv)
 	if (decrypt != NULL) {
 		new_path = seahorse_op_decrypt_file (sctx, decrypt, &err);
 		
-		if (err != GPGME_No_Error) {
+		if (!GPG_IS_OK (err)) {
 			seahorse_util_handle_error (err);
 			return 1;
 		}
@@ -169,11 +175,11 @@ main (int argc, char **argv)
 		}
 	}
 	if (verify != NULL) {
-		GpgmeSigStat status;
+		gpgme_verify_result_t status;
 		
 		seahorse_op_verify_file (sctx, verify, &status, &err);
 		
-		if (err != GPGME_No_Error) {
+		if (!GPG_IS_OK (err)) {
 			seahorse_util_handle_error (err);
 			return 1;
 		}
@@ -184,12 +190,12 @@ main (int argc, char **argv)
 		}
 	}
 	if (decrypt_verify != NULL) {
-		GpgmeSigStat status;
+		gpgme_verify_result_t status;
 		
 		new_path = seahorse_op_decrypt_verify_file (sctx,
 			decrypt_verify, &status, &err);
 		
-		if (err != GPGME_No_Error) {
+		if (!GPG_IS_OK (err)) {
 			seahorse_util_handle_error (err);
 			return 1;
 		}

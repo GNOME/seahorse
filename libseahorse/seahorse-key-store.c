@@ -203,9 +203,11 @@ seahorse_key_store_append_key (SeahorseKeyStore *skstore, SeahorseKey *skey, Gtk
 static void
 seahorse_key_store_set (GtkTreeStore *store, GtkTreeIter *iter, SeahorseKey *skey)
 {
+    gchar *userid = seahorse_key_get_userid (skey, 0);
 	gtk_tree_store_set (store, iter,
-		NAME, seahorse_key_get_userid (skey, 0),
+		NAME, userid,
 		KEYID, seahorse_key_get_keyid (skey, 0), -1);
+    g_free (userid);
 }
 
 /* Removes row at @iter from store */
@@ -456,33 +458,28 @@ seahorse_key_store_append_column (GtkTreeView *view, const gchar *name, const gi
  *
  * Returns: A recipient list of the selected keys
  **/
-GpgmeRecipients
+gpgme_key_t *
 seahorse_key_store_get_selected_recips (GtkTreeView *view)
 {
 	GList *list = NULL, *keys;
-	GpgmeRecipients recips;
-	GpgmeError err;
+	gpgme_key_t * recips;
+	gint n;
 	
 	g_return_val_if_fail (GTK_IS_TREE_VIEW (view), NULL);
 	
 	list = seahorse_key_store_get_selected_keys (view);
 	g_return_val_if_fail (list != NULL, NULL);
-	g_return_val_if_fail (gpgme_recipients_new (&recips) == GPGME_No_Error, NULL);
+
 	/* do recipients list */
+	recips = g_new0(gpgme_key_t, g_list_length (list) + 1);
+	n = 0;
 	for (keys = list; keys != NULL; keys = g_list_next (keys)) {
-		/* add key with full validity */
-		err = gpgme_recipients_add_name_with_validity (recips,
-			seahorse_key_get_id (SEAHORSE_KEY (keys->data)->key),
-			GPGME_VALIDITY_FULL);
-		/* if error, free recips */
-		if (err != GPGME_No_Error) {
-			gpgme_recipients_release (recips);
-			break;
-		}
+	        gpgme_key_ref (SEAHORSE_KEY (keys->data)->key);
+		recips[n++] = SEAHORSE_KEY (keys->data)->key;
 	}
+
 	/* free list, return */
 	g_list_free (list);
-	g_return_val_if_fail (err == GPGME_No_Error, NULL);
 	return recips;
 }
 

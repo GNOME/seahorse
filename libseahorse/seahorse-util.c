@@ -21,6 +21,7 @@
 
 #include <gnome.h>
 #include <time.h>
+#include <stdio.h>
 
 #include "seahorse-util.h"
 #include "seahorse-key.h"
@@ -99,7 +100,7 @@ seahorse_util_get_date_string (const time_t time)
  * Shows an error dialog for @err.
  **/
 void
-seahorse_util_handle_error (GpgmeError err)
+seahorse_util_handle_error (gpgme_error_t err)
 {
 	GtkWidget *dialog;
 	
@@ -118,33 +119,39 @@ seahorse_util_handle_error (GpgmeError err)
  *
  * Tries to write @data to the file @path. @data will be released upon completion.
  *
- * Returns: GPGME_No_Error if write is successful,
+ * Returns: GPG_ERR_NO_ERROR if write is successful,
  * GPGME_File_Error if the file could not be opened
  **/
-GpgmeError
-seahorse_util_write_data_to_file (const gchar *path, GpgmeData data)
+gpgme_error_t
+seahorse_util_write_data_to_file (const gchar *path, gpgme_data_t data)
 {
 	FILE *fp;
 	gchar *buffer;
 	gint nread;
+   
+    /* 
+     * TODO: gpgme_data_seek doesn't work for us right now
+     * probably because of different off_t sizes 
+     */
+    gpgme_data_rewind (data);
 	
 	fp = fopen (path, "w");
 	
 	if (fp == NULL) {
 		gpgme_data_release (data);
-		g_return_val_if_reached (GPGME_File_Error);
+		g_return_val_if_reached (gpgme_err_code_from_errno (errno));
 	}
 	
 	buffer = g_new0 (gchar, 128);
 	
-	while (gpgme_data_read (data, buffer, sizeof (buffer), &nread) == GPGME_No_Error)
+	while ((nread = gpgme_data_read (data, buffer, 128)) > 0)
 		fwrite (buffer, nread, 1, fp);
 	
 	fflush (fp);
 	fclose (fp);
 	gpgme_data_release (data);
 	
-	return GPGME_No_Error;
+	return GPG_OK;
 }
 
 /**
@@ -156,17 +163,23 @@ seahorse_util_write_data_to_file (const gchar *path, GpgmeData data)
  * Returns: The string read from data
  **/
 gchar*
-seahorse_util_write_data_to_text (GpgmeData data)
+seahorse_util_write_data_to_text (gpgme_data_t data)
 {
 	gint size = 128;
         gchar *buffer, *text;
         guint nread = 0;
 	GString *string;
 
+    /* 
+     * TODO: gpgme_data_seek doesn't work for us right now
+     * probably because of different off_t sizes 
+     */
+    gpgme_data_rewind (data);
+
 	string = g_string_new ("");
 	buffer = g_new (gchar, size);
 	
-	while (gpgme_data_read (data, buffer, size, &nread) == GPGME_No_Error)
+	while ((nread = gpgme_data_read (data, buffer, size)) > 0)
 		string = g_string_append_len (string, buffer, nread);
 	
 	gpgme_data_release (data);
@@ -213,7 +226,7 @@ seahorse_util_check_suffix (const gchar *path, SeahorseSuffix suffix)
  * Returns: A new path with the suffix appended to @path
  **/
 gchar*
-seahorse_util_add_suffix (GpgmeCtx ctx, const gchar *path, SeahorseSuffix suffix)
+seahorse_util_add_suffix (gpgme_ctx_t ctx, const gchar *path, SeahorseSuffix suffix)
 {
 	gchar *ext;
 	

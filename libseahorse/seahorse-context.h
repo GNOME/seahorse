@@ -50,7 +50,7 @@ struct _SeahorseContext
 	GtkObject		parent;
 	
 	/*< public >*/
-	GpgmeCtx		ctx;
+	gpgme_ctx_t		ctx;
 	
 	/*< private >*/
 	SeahorseContextPrivate	*priv;
@@ -79,7 +79,7 @@ GList*			seahorse_context_get_keys		(SeahorseContext	*sctx);
 GList*			seahorse_context_get_key_pairs		(SeahorseContext	*sctx);
 
 SeahorseKey*		seahorse_context_get_key		(SeahorseContext	*sctx,
-								 GpgmeKey		key);
+								 gpgme_key_t		key);
 
 void			seahorse_context_show_progress		(SeahorseContext	*sctx,
 								 const gchar		*op,

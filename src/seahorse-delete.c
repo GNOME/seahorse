@@ -30,12 +30,14 @@ ask_key_pair (SeahorseKeyPair *skpair)
 {
 	GtkWidget *warning, *delete_button, *cancel_button;
 	gint response;
+    gchar *userid;
 	
+    userid = seahorse_key_get_userid (SEAHORSE_KEY (skpair), 0);
 	warning = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
 		GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE,
-		_("%s is a key pair! Do you still want to delete it?"),
-		seahorse_key_get_userid (SEAHORSE_KEY (skpair), 0));
-		
+		_("%s is a key pair! Do you still want to delete it?"), userid);
+    g_free (userid);
+    
 	delete_button = gtk_button_new_from_stock(GTK_STOCK_DELETE);
 	cancel_button = gtk_button_new_from_stock(GTK_STOCK_CANCEL);
 	
@@ -58,12 +60,14 @@ ask_key (SeahorseKey *skey)
 {
 	GtkWidget *question, *delete_button, *cancel_button;
 	gint response;
+    gchar *userid;
 
 	//create widgets	
+    userid = seahorse_key_get_userid (skey, 0);
 	question = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
 		GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE,
-		_("Are you sure you want to permanently delete %s?"),
-		seahorse_key_get_userid (skey, 0));
+		_("Are you sure you want to permanently delete %s?"), userid);
+    g_free(userid);
 	delete_button = gtk_button_new_from_stock(GTK_STOCK_DELETE);
 	cancel_button = gtk_button_new_from_stock(GTK_STOCK_CANCEL);
 	
@@ -96,7 +100,7 @@ seahorse_delete_show (SeahorseContext *sctx, GList *keys)
 	GtkWidget *warning;
 	const gchar *message;
 	SeahorseKey *skey;
-	GpgmeError err;
+	gpgme_error_t err;
 	GList *list = NULL;
 	
 	g_return_if_fail (g_list_length (keys) > 0);
@@ -109,7 +113,7 @@ seahorse_delete_show (SeahorseContext *sctx, GList *keys)
 			else
 				err = seahorse_key_op_delete (sctx, skey);
 			
-			if (err != GPGME_No_Error)
+			if (!GPG_IS_OK (err))
 				seahorse_util_handle_error (err);
 		}
 		else
@@ -124,12 +128,15 @@ seahorse_delete_subkey_new (SeahorseContext *sctx, SeahorseKey *skey, const guin
 {
 	GtkWidget *question, *delete_button, *cancel_button;
 	gint response;
-	GpgmeError err;
+	gpgme_error_t err;
+    gchar *userid;
 	
+    userid = seahorse_key_get_userid (skey, 0);
 	question = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
 		GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE,
 		_("Are you sure you want to permanently delete subkey %d of %s?"),
-		index, seahorse_key_get_userid (skey, 0));
+		index, userid);
+    g_free (userid);
 	delete_button = gtk_button_new_from_stock(GTK_STOCK_DELETE);
 	cancel_button = gtk_button_new_from_stock(GTK_STOCK_CANCEL);
 
@@ -148,6 +155,6 @@ seahorse_delete_subkey_new (SeahorseContext *sctx, SeahorseKey *skey, const guin
 		return;
 	
 	err = seahorse_key_op_del_subkey (sctx, skey, index);
-	if (err != GPGME_No_Error)
+	if (!GPG_IS_OK (err))
 		seahorse_util_handle_error (err);
 }

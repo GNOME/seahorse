@@ -29,7 +29,7 @@
 #define EXPORT_FILE "file"
 #define OK "ok"
 
-static GpgmeRecipients recipients = NULL;
+static gpgme_key_t * recipients = NULL;
 
 /* Export to file toggled */
 static void
@@ -70,7 +70,7 @@ static void
 ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 {
 	GtkToggleButton *file_toggle;
-	GpgmeError err;
+	gpgme_error_t err;
 	
 	file_toggle = GTK_TOGGLE_BUTTON (glade_xml_get_widget (swidget->xml, "file_toggle"));
 	
@@ -100,7 +100,7 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 		}
 	}
 	
-	if (err != GPGME_No_Error)
+	if (!GPG_IS_OK (err))
 		seahorse_util_handle_error (err);
 	else
 		seahorse_widget_destroy (swidget);
@@ -114,7 +114,7 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
  * Creates a new #SeahorseKeyWidget dialog for exporting @recips.
  **/
 void
-seahorse_export_show (SeahorseContext *sctx, GpgmeRecipients recips)
+seahorse_export_show (SeahorseContext *sctx, gpgme_key_t * recips)
 {
 	SeahorseWidget *swidget;
 	

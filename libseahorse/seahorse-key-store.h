@@ -95,7 +95,7 @@ GtkTreeViewColumn*	seahorse_key_store_append_column	(GtkTreeView		*view,
 								 const gchar		*name,
 								 const gint		index);
 
-GpgmeRecipients		seahorse_key_store_get_selected_recips	(GtkTreeView		*view);
+gpgme_key_t *		seahorse_key_store_get_selected_recips	(GtkTreeView		*view);
 
 GList*			seahorse_key_store_get_selected_keys	(GtkTreeView		*view);
 

@@ -130,7 +130,7 @@ seahorse_key_pair_get_property (GObject *object, guint prop_id,
 }
 
 SeahorseKey*
-seahorse_key_pair_new (GpgmeKey key, GpgmeKey secret)
+seahorse_key_pair_new (gpgme_key_t key, gpgme_key_t secret)
 {
 	return g_object_new (SEAHORSE_TYPE_KEY_PAIR, "key", key, "secret", secret, NULL);
 }
@@ -141,5 +141,5 @@ seahorse_key_pair_can_sign (const SeahorseKeyPair *skpair)
 	g_return_val_if_fail (skpair != NULL && SEAHORSE_IS_KEY_PAIR (skpair), FALSE);
 	
 	return (seahorse_key_is_valid (SEAHORSE_KEY (skpair)) &&
-		gpgme_key_get_ulong_attr (SEAHORSE_KEY (skpair)->key, GPGME_ATTR_CAN_SIGN, NULL, 0));
+		SEAHORSE_KEY (skpair)->key->can_sign);
 }

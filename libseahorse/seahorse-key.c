@@ -148,7 +148,7 @@ seahorse_key_get_property (GObject *object, guint prop_id,
  * Returns: A new #SeahorseKey
  **/
 SeahorseKey*
-seahorse_key_new (GpgmeKey key)
+seahorse_key_new (gpgme_key_t key)
 {
 	return g_object_new (SEAHORSE_TYPE_KEY, "key", key, NULL);
 }
@@ -194,11 +194,16 @@ const gint
 seahorse_key_get_num_uids (const SeahorseKey *skey)
 {
 	gint index = 0;
-	
+	gpgme_user_id_t uid;
+
 	g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), -1);
-	
-	while (gpgme_key_get_string_attr (skey->key, GPGME_ATTR_USERID, NULL, index))
+	g_return_val_if_fail (skey->key != NULL, -1);
+		
+	uid = skey->key->uids;
+	while (uid) {
+		uid = uid->next;
 		index++;
+	}
 	
 	return index;
 }
@@ -215,12 +220,45 @@ const gint
 seahorse_key_get_num_subkeys (const SeahorseKey *skey)
 {
 	gint index = 0;
-	
-	while (gpgme_key_get_string_attr (skey->key, GPGME_ATTR_KEYID, NULL, index+1))
+	gpgme_subkey_t subkey;
+
+	g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), -1);
+	g_return_val_if_fail (skey->key != NULL, -1);
+
+	subkey = skey->key->subkeys;
+	while (subkey) {
+		subkey = subkey->next;
 		index++;
+	}
 	
 	return index;
 }
+
+/**
+ * seahorse_key_get_nth_subkey:
+ * @skey: #SeahorseKey
+ * @index: Which subkey
+ *
+ * Gets the the subkey at @index of @skey.
+ *
+ * Returns: subkey of @skey at @index, or NULL if @index is out of bounds
+ */
+gpgme_subkey_t
+seahorse_key_get_nth_subkey (const SeahorseKey *skey, const guint index)
+{
+	gpgme_subkey_t subkey;
+	guint n;
+
+	g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), NULL);
+	g_return_val_if_fail (skey->key != NULL, NULL);
+
+	subkey = skey->key->subkeys;
+	for (n = index; subkey && n; n--)
+		subkey = subkey->next;
+
+	return subkey;
+}
+
 
 /**
  * seahorse_key_get_keyid:
@@ -235,14 +273,12 @@ seahorse_key_get_num_subkeys (const SeahorseKey *skey)
 const gchar*
 seahorse_key_get_keyid (const SeahorseKey *skey, const guint index)
 {
-	const gchar *keyid;
+	gpgme_subkey_t subkey = seahorse_key_get_nth_subkey (skey, index);
 
-	g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), NULL);
-	
-	keyid = gpgme_key_get_string_attr (skey->key, GPGME_ATTR_KEYID, NULL, index);
-	g_return_val_if_fail (keyid != NULL, NULL);
-	
-	return (keyid+8);
+	if (subkey)
+		return subkey->keyid + 8;
+	else
+		return NULL;
 }
 
 /**
@@ -256,21 +292,27 @@ seahorse_key_get_keyid (const SeahorseKey *skey, const guint index)
  * Returns: UTF8 valid user ID of @skey at @index,
  * or NULL if @index is out of bounds.
  **/
-const gchar*
+gchar*
 seahorse_key_get_userid (const SeahorseKey *skey, const guint index)
 {
-	const gchar *uid;
+	gpgme_user_id_t uid;
+	guint n;
 	
 	g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), NULL);
+	g_return_val_if_fail (skey->key != NULL, NULL);
+
+	uid = skey->key->uids;
+	for (n = index; uid && n; n--)
+		uid = uid->next;
 	
-	uid = gpgme_key_get_string_attr (skey->key, GPGME_ATTR_USERID, NULL, index);
-	g_return_val_if_fail (uid != NULL, NULL);
+	if (!uid)
+		return NULL;
 	
 	/* If not utf8 valid, assume latin 1 */
-	if (!g_utf8_validate (uid, -1, NULL))
-		uid = g_convert (uid, -1, "UTF-8", "ISO-8859-1", NULL, NULL, NULL);
-	
-	return uid;
+	if (!g_utf8_validate (uid->uid, -1, NULL))
+		return g_convert (uid->uid, -1, "UTF-8", "ISO-8859-1", NULL, NULL, NULL);
+	else
+		return g_strdup (uid->uid);
 }
 
 gchar*
@@ -281,7 +323,12 @@ seahorse_key_get_fingerprint (const SeahorseKey *skey)
 	guint index, len;
 	gchar *fpr;
 	
-	raw = gpgme_key_get_string_attr (skey->key, GPGME_ATTR_FPR, NULL, 0);
+	g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), NULL);
+	g_return_val_if_fail (skey->key != NULL && skey->key->subkeys != NULL, NULL);
+
+	raw = skey->key->subkeys->fpr;
+	g_return_val_if_fail (raw != NULL, NULL);
+
 	string = g_string_new ("");
 	len = strlen (raw);
 	
@@ -298,54 +345,48 @@ seahorse_key_get_fingerprint (const SeahorseKey *skey)
 }
 
 const gchar*
-seahorse_key_get_id (GpgmeKey key)
+seahorse_key_get_id (gpgme_key_t key)
 {
-	return gpgme_key_get_string_attr (key, GPGME_ATTR_FPR, NULL, 0);
+	g_return_val_if_fail (key != NULL && key->subkeys != NULL, FALSE);
+	
+	return key->subkeys->fpr;
 }
 
 gboolean
 seahorse_key_is_valid (const SeahorseKey *skey)
 {
 	g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), FALSE);
+	g_return_val_if_fail (skey->key != NULL, FALSE);
 	
-	return (!(gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_KEY_DISABLED, NULL, 0)) &&
-		!(gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_KEY_EXPIRED, NULL, 0)) &&
-		!(gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_KEY_REVOKED, NULL, 0)) &&
-		!(gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_KEY_INVALID, NULL, 0)));
+	return (!skey->key->disabled && !skey->key->expired && !skey->key->revoked &&
+		!skey->key->invalid);
 }
 
 gboolean
 seahorse_key_can_encrypt (const SeahorseKey *skey)
 {
-	return (seahorse_key_is_valid (skey) &&
-		gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_CAN_ENCRYPT, NULL, 0));
-}
-
-const SeahorseValidity
-get_validity_attr (const SeahorseKey *skey, GpgmeAttr attr)
-{
-	GpgmeValidity validity;
-	
-	g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), -1);
-	
-	validity = gpgme_key_get_ulong_attr (skey->key, attr, NULL, 0);
-	
-	return (validity <= SEAHORSE_VALIDITY_UNKNOWN) ?
-		SEAHORSE_VALIDITY_UNKNOWN : validity;
+	return (seahorse_key_is_valid (skey) &&	skey->key->can_encrypt);
 }
 
 const SeahorseValidity
 seahorse_key_get_validity (const SeahorseKey *skey)
 {
-	if (gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_KEY_REVOKED, NULL, 0))
+	g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), SEAHORSE_VALIDITY_UNKNOWN);
+	g_return_val_if_fail (skey->key != NULL, SEAHORSE_VALIDITY_UNKNOWN);
+
+	if (skey->key->revoked)
 		return SEAHORSE_VALIDITY_REVOKED;
-	if (gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_KEY_DISABLED, NULL, 0))
+	if (skey->key->disabled)
 		return SEAHORSE_VALIDITY_DISABLED;
-	return get_validity_attr (skey, GPGME_ATTR_VALIDITY);
+	if (skey->key->uids->validity <= SEAHORSE_VALIDITY_UNKNOWN)
+		return SEAHORSE_VALIDITY_UNKNOWN;
+	return skey->key->uids->validity;
 }
 
 const SeahorseValidity
 seahorse_key_get_trust (const SeahorseKey *skey)
 {
-	return get_validity_attr (skey, GPGME_ATTR_OTRUST);
+	if (skey->key->owner_trust <= SEAHORSE_VALIDITY_UNKNOWN)
+		return SEAHORSE_VALIDITY_UNKNOWN;
+	return skey->key->owner_trust;
 }

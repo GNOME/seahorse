@@ -120,7 +120,7 @@ on_druid_finish (GnomeDruidPage *gnomedruidpage, GtkWidget *widget, SeahorseWidg
 	time_t expires;
 	gboolean low, med, high, e_high;
 	GtkWidget *widget2;
-	GpgmeError err;
+	gpgme_error_t err;
 	
 	name = gtk_entry_get_text (GTK_ENTRY (glade_xml_get_widget (swidget->xml, NAME)));
 	email = gtk_entry_get_text (GTK_ENTRY (glade_xml_get_widget (swidget->xml, EMAIL)));
@@ -151,7 +151,7 @@ on_druid_finish (GnomeDruidPage *gnomedruidpage, GtkWidget *widget, SeahorseWidg
 	
 	err = seahorse_key_op_generate (swidget->sctx, name, email, comment,
 		pass, type, length, expires);
-	if (err != GPGME_No_Error) {
+	if (!GPG_IS_OK (err)) {
 		gtk_widget_show (widget2);
 		seahorse_util_handle_error (err);
 	}

@@ -32,7 +32,7 @@ ok_clicked (SeahorseWidget *swidget)
 	SeahorseKeyWidget *skwidget;
 	SeahorseSignCheck check;
 	SeahorseSignOptions options = 0;
-	GpgmeError err;
+	gpgme_error_t err;
 	
 	skwidget = SEAHORSE_KEY_WIDGET (swidget);
 	
@@ -52,7 +52,7 @@ ok_clicked (SeahorseWidget *swidget)
 		options = options | SIGN_EXPIRES;
 	
 	err = seahorse_key_op_sign (swidget->sctx, skwidget->skey, skwidget->index, check, options);
-	if (err != GPGME_No_Error) {
+	if (!GPG_IS_OK (err)) {
 		seahorse_util_handle_error (err);
 		return FALSE;
 	}

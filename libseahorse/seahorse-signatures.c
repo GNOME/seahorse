@@ -26,21 +26,21 @@
 #include "seahorse-util.h"
 
 static void
-sig_error (GpgmeSigStat status)
+sig_error (gpgme_error_t status)
 {
 	gchar *label;
 	GtkWidget *widget;
 	
-	switch (status) {
-		case GPGME_SIG_STAT_NOKEY:
+	switch (gpgme_err_code (status)) {
+		case GPG_ERR_NO_PUBKEY:
 			label = _("Signing key not in key ring");
 			break;
 		/* Bad sig */
-		case GPGME_SIG_STAT_BAD:
+		case GPG_ERR_BAD_SIGNATURE:
 			label = _("Bad Signature");
 			break;
 		/* Not a signature */
-		case GPGME_SIG_STAT_NOSIG:
+		case GPG_ERR_NO_DATA:
 			label =   _("Not a signature");
 			break;
 		/* Other */
@@ -56,26 +56,32 @@ sig_error (GpgmeSigStat status)
 }
 
 void
-seahorse_signatures_new (SeahorseContext *sctx, GpgmeSigStat status)
+seahorse_signatures_new (SeahorseContext *sctx, gpgme_verify_result_t status)
 {
 	SeahorseWidget *swidget;
-	GpgmeKey key;
+	gpgme_key_t key;
 	SeahorseKey *skey;
 	gchar *label;
 	
-	switch (status) {
+	switch (gpgme_err_code (status->signatures->status)) {
 		/* If sig is good or there are multiple sigs, show */
-		case GPGME_SIG_STAT_GOOD: GPGME_SIG_STAT_GOOD_EXPKEY: GPGME_SIG_STAT_DIFF:	
+	        case GPG_ERR_NO_ERROR:
+	        case GPG_ERR_SIG_EXPIRED:
+	        case GPG_ERR_KEY_EXPIRED:
+	        case GPG_ERR_CERT_REVOKED: {
+			gchar * userid;
+
 			swidget = seahorse_widget_new_allow_multiple ("signatures", sctx);
-			gpgme_get_sig_key (sctx->ctx, 0, &key);
-			skey = seahorse_context_get_key (sctx, key);
-				
-			switch (status) {
-				case GPGME_SIG_STAT_GOOD_EXPKEY:
+
+			switch (gpgme_err_code (status->signatures->status)) {
+				case GPG_ERR_KEY_EXPIRED:
 					label = _("Good, signing key expired");
 					break;
-				case GPGME_SIG_STAT_DIFF:
-					label = _("Multiple Signatures");
+				case GPG_ERR_SIG_EXPIRED:
+					label = _("Good, signature expired");
+					break;
+				case GPG_ERR_CERT_REVOKED:
+					label = _("Good, signing key certificate revoked");
 					break;
 				default:
 					label = _("Good");
@@ -84,14 +90,21 @@ seahorse_signatures_new (SeahorseContext *sctx, GpgmeSigStat status)
 				
 			gtk_label_set_text (GTK_LABEL (glade_xml_get_widget (swidget->xml, "status")), label);
 			gtk_label_set_text (GTK_LABEL (glade_xml_get_widget (swidget->xml, "created")),
-				seahorse_util_get_date_string (gpgme_get_sig_ulong_attr (sctx->ctx, 0, GPGME_ATTR_CREATED, 0)));
+				seahorse_util_get_date_string (status->signatures->timestamp));
+
+            gpgme_get_key (sctx->ctx, status->signatures->fpr, &key, 0);
+            skey = seahorse_context_get_key (sctx, key);
+			userid = seahorse_key_get_userid (skey, 0);
 			gtk_label_set_text (GTK_LABEL (glade_xml_get_widget (swidget->xml, "signer")),
-				seahorse_key_get_userid (skey, 0));
+				userid);
+			g_free (userid);
 			gtk_label_set_text (GTK_LABEL (glade_xml_get_widget (swidget->xml, "keyid")),
 				seahorse_key_get_keyid (skey, 0));
+			/* gpgme_key_unref (key); */
 			break;
+		}
 		default:
-			sig_error (status);
+			sig_error (status->signatures->status);
 			break;
 	}
 }

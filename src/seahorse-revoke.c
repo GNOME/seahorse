@@ -33,7 +33,7 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 	guint index;
 	SeahorseRevokeReason reason;
 	const gchar *description;
-	GpgmeError err;
+	gpgme_error_t err;
 	
 	skwidget = SEAHORSE_KEY_WIDGET (swidget);
 	
@@ -47,7 +47,7 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 	if (skwidget->index != 0) {
 		err = seahorse_key_op_revoke_subkey (swidget->sctx, skwidget->skey,
 			skwidget->index, reason, description);
-		if (err != GPGME_No_Error)
+		if (!GPG_IS_OK (err))
 			seahorse_util_handle_error (err);
 	}
 	seahorse_widget_destroy (swidget);
@@ -58,6 +58,7 @@ seahorse_revoke_new (SeahorseContext *sctx, SeahorseKey *skey, const guint index
 {
 	SeahorseWidget *swidget;
 	gchar *title;
+    gchar *userid;
 	
 	g_return_if_fail (sctx != NULL && SEAHORSE_IS_CONTEXT (sctx));
 	g_return_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey));
@@ -69,12 +70,13 @@ seahorse_revoke_new (SeahorseContext *sctx, SeahorseKey *skey, const guint index
 	glade_xml_signal_connect_data (swidget->xml, "ok_clicked",
 		G_CALLBACK (ok_clicked), swidget);
 	
+    userid = seahorse_key_get_userid (skey, 0);
 	if (index)
-		title = g_strdup_printf (_("Revoke Subkey %d of %s"), index,
-			seahorse_key_get_userid (skey, 0));
+		title = g_strdup_printf (_("Revoke Subkey %d of %s"), index, userid);
 	else
-		title = g_strdup_printf (_("Revoke %s"), seahorse_key_get_userid (skey, 0));
-	
+		title = g_strdup_printf (_("Revoke %s"), userid);
+	g_free (userid);
+   
 	gtk_window_set_title (GTK_WINDOW (glade_xml_get_widget (swidget->xml,
 		swidget->name)), title);
 }
@@ -85,7 +87,8 @@ seahorse_add_revoker_new (SeahorseContext *sctx, SeahorseKey *skey)
 	SeahorseKeyPair *skpair;
 	GtkWidget *dialog;
 	gint response;
-	GpgmeError err;
+	gpgme_error_t err;
+    gchar *userid1, *userid2;
 	
 	g_return_if_fail (sctx != NULL && SEAHORSE_IS_CONTEXT (sctx));
 	g_return_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey));
@@ -93,13 +96,18 @@ seahorse_add_revoker_new (SeahorseContext *sctx, SeahorseKey *skey)
 	skpair = seahorse_context_get_default_key (sctx);
 	g_return_if_fail (skpair != NULL);
 	
+    userid1 = seahorse_key_get_userid (SEAHORSE_KEY (skpair), 0);
+    userid2 = seahorse_key_get_userid (skey, 0);
+
 	dialog = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
 		GTK_MESSAGE_WARNING, GTK_BUTTONS_YES_NO,
 		_("You are about to add %s as a revoker for %s."
 		" This operation cannot be undone! Are you sure you want to continue?"),
-		seahorse_key_get_userid (SEAHORSE_KEY (skpair), 0),
-		seahorse_key_get_userid (skey, 0));
+		userid1, userid2);
 	
+    g_free (userid1);
+    g_free (userid2);
+    
 	response = gtk_dialog_run (GTK_DIALOG (dialog));
 	gtk_widget_destroy (dialog);
 	
@@ -107,6 +115,6 @@ seahorse_add_revoker_new (SeahorseContext *sctx, SeahorseKey *skey)
 		return;
 	
 	err = seahorse_key_pair_op_add_revoker (sctx, SEAHORSE_KEY_PAIR (skey));
-	if (err != GPGME_No_Error)
+	if (!GPG_IS_OK (err))
 		seahorse_util_handle_error (err);
 }

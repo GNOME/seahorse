@@ -38,7 +38,7 @@ struct _SeahorseKeyPair
 {
 	SeahorseKey		parent;
 	
-	GpgmeKey		secret;
+	gpgme_key_t		secret;
 };
 
 struct _SeahorseKeyPairClass
@@ -46,8 +46,8 @@ struct _SeahorseKeyPairClass
 	SeahorseKeyClass	parent_class;
 };
 
-SeahorseKey*	seahorse_key_pair_new		(GpgmeKey		key,
-						 GpgmeKey		secret);
+SeahorseKey*	seahorse_key_pair_new		(gpgme_key_t		key,
+						 gpgme_key_t		secret);
 
 gboolean	seahorse_key_pair_can_sign	(const SeahorseKeyPair	*skpair);
 

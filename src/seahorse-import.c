@@ -62,12 +62,12 @@ clipboard_toggled (GtkToggleButton *togglebutton, SeahorseWidget *swidget)
 static void
 clipboard_received (GtkClipboard *board, const gchar *text, SeahorseContext *sctx)
 {
-	GpgmeError err;
+	gpgme_error_t err;
 	gint keys;
 	
 	keys = seahorse_op_import_text (sctx, text, &err);
 	
-	if (err != GPGME_No_Error)
+	if (!GPG_IS_OK (err))
 		seahorse_util_handle_error (err);
 	else if (keys > 0)
 		seahorse_context_keys_added (sctx, keys);
@@ -78,7 +78,7 @@ static void
 ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 {
 	GtkWidget *file_toggle;
-	GpgmeError err;
+	gpgme_error_t err;
 	gint keys;
 	
 	file_toggle = glade_xml_get_widget (swidget->xml, "file_toggle");
@@ -92,7 +92,7 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 		file_string = gnome_file_entry_get_full_path (file, TRUE);
 		
 		keys = seahorse_op_import_file (swidget->sctx, file_string, &err);
-		if (err != GPGME_No_Error)
+		if (!GPG_IS_OK (err))
 			seahorse_util_handle_error (err);
 		else {
 			seahorse_widget_destroy (swidget);

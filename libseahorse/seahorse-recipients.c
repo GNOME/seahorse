@@ -81,7 +81,7 @@ selection_changed (GtkTreeSelection *selection, SeahorseWidget *swidget)
 	g_list_free (list);
 }
 
-GpgmeRecipients
+gpgme_key_t *
 seahorse_recipients_get (SeahorseContext *sctx)
 {
 	SeahorseWidget *swidget;
@@ -90,7 +90,7 @@ seahorse_recipients_get (SeahorseContext *sctx)
 	GtkWidget *widget;
 	gint response;
 	gboolean done = FALSE;
-	GpgmeRecipients recips = NULL;
+	gpgme_key_t * recips = NULL;
 	
 	swidget = seahorse_widget_new ("recipients", sctx);
 	g_return_val_if_fail (swidget != NULL, NULL);

@@ -31,6 +31,44 @@
 #define SAVE "keyedit.save.okay"
 #define YES "Y"
 
+/* Writes given string to file descriptor */
+static void 
+print_fd (int fd, const char* s)
+{
+    /* Guarantee all data is written */
+    int r, l = strlen (s);
+
+    while (l > 0) {
+     
+        r = write (fd, s, l);
+        
+        if (r == -1) {
+            if (errno != EAGAIN && errno != EINTR) {
+                g_critical ("couldn't write data to socket: %s", strerror (errno));
+                return;
+            }
+            
+        } else {
+            s += r;
+            l -= r;
+        }
+    }
+}
+
+/* printf given args to file descriptor */
+static void 
+printf_fd (int fd, const char* fmt, ...)
+{
+    gchar* t;
+    va_list ap;
+    va_start (ap, fmt);    
+    t = g_strdup_vprintf (fmt, ap);
+    va_end (ap);
+    
+    print_fd (fd, t);
+    g_free (t);
+}
+
 /**
  * seahorse_key_op_generate:
  * @sctx: #SeahorseContext
@@ -47,33 +85,33 @@
  * If the generation is successful, seahorse_context_keys_added() will be
  * called with @sctx.
  *
- * Returns: GpgmeError
+ * Returns: gpgme_error_t
  **/
-GpgmeError
+gpgme_error_t
 seahorse_key_op_generate (SeahorseContext *sctx, const gchar *name,
 			  const gchar *email, const gchar *comment,
 			  const gchar *passphrase, const SeahorseKeyType type,
 			  const guint length, const time_t expires)
 {
 	gchar *common, *key_type, *start, *parms, *expires_date;
-        GpgmeError err;
+        gpgme_error_t err;
 	SeahorseContext *new_ctx;
 	
-	g_return_val_if_fail (strlen (name) >= 5, GPGME_Invalid_Value);
+	g_return_val_if_fail (strlen (name) >= 5, GPG_E (GPG_ERR_INV_VALUE));
 	
 	/* Check lengths for each type */
 	switch (type) {
 		case DSA_ELGAMAL:
-			g_return_val_if_fail (length >= ELGAMAL_MIN && length <= LENGTH_MAX, GPGME_Invalid_Value);
+			g_return_val_if_fail (length >= ELGAMAL_MIN && length <= LENGTH_MAX, GPG_E (GPG_ERR_INV_VALUE));
 			break;
 		case DSA:
-			g_return_val_if_fail (length >= DSA_MIN && length <= DSA_MAX, GPGME_Invalid_Value);
+			g_return_val_if_fail (length >= DSA_MIN && length <= DSA_MAX, GPG_E (GPG_ERR_INV_VALUE));
 			break;
 		case RSA_SIGN:
-			g_return_val_if_fail (length >= RSA_MIN && length <= LENGTH_MAX, GPGME_Invalid_Value);
+			g_return_val_if_fail (length >= RSA_MIN && length <= LENGTH_MAX, GPG_E (GPG_ERR_INV_VALUE));
 			break;
 		default:
-			g_return_val_if_reached (GPGME_Invalid_Value);
+			g_return_val_if_reached (GPG_E (GPG_ERR_INV_VALUE));
 			break;
 	}
 	
@@ -108,7 +146,7 @@ seahorse_key_op_generate (SeahorseContext *sctx, const gchar *name,
 	err = gpgme_op_genkey (new_ctx->ctx, parms, NULL, NULL);
 	seahorse_context_destroy (new_ctx);
 	
-	if (err == GPGME_No_Error)
+	if (GPG_IS_OK (err))
 		seahorse_context_keys_added (sctx, 1);
 	
 	/* Free xmls */
@@ -120,13 +158,13 @@ seahorse_key_op_generate (SeahorseContext *sctx, const gchar *name,
 }
 
 /* helper function for deleting @skey */
-static GpgmeError
+static gpgme_error_t
 op_delete (SeahorseContext *sctx, SeahorseKey *skey, gboolean secret)
 {
-	GpgmeError err;
+	gpgme_error_t err;
 	
 	err = gpgme_op_delete (sctx->ctx, skey->key, secret);
-	if (err == GPGME_No_Error)
+	if (GPG_IS_OK (err))
 		seahorse_key_destroy (skey);
 	
 	return err;
@@ -139,9 +177,9 @@ op_delete (SeahorseContext *sctx, SeahorseKey *skey, gboolean secret)
  *
  * Tries to delete the key @skey.
  *
- * Returns: GpgmeError
+ * Returns: gpgme_error_t
  **/
-GpgmeError
+gpgme_error_t
 seahorse_key_op_delete (SeahorseContext *sctx, SeahorseKey *skey)
 {
 	return op_delete (sctx, skey, FALSE);
@@ -154,9 +192,9 @@ seahorse_key_op_delete (SeahorseContext *sctx, SeahorseKey *skey)
  *
  * Tries to delete the key pair @skpair.
  *
- * Returns: GpgmeError
+ * Returns: gpgme_error_t
  **/
-GpgmeError
+gpgme_error_t
 seahorse_key_pair_op_delete (SeahorseContext *sctx, SeahorseKeyPair *skpair)
 {
 	return op_delete (sctx, SEAHORSE_KEY (skpair), TRUE);
@@ -165,21 +203,21 @@ seahorse_key_pair_op_delete (SeahorseContext *sctx, SeahorseKeyPair *skpair)
 /* Main key edit setup, structure, and a good deal of method content borrowed from gpa */
 
 /* Edit action function */
-typedef GpgmeError	(*SeahorseEditAction) 	(guint			state,
+typedef gpgme_error_t	(*SeahorseEditAction) 	(guint			state,
 						 gpointer 		data,
-						 const gchar		**result);
+						 gint                   fd);
 /* Edit transit function */
 typedef guint		(*SeahorseEditTransit)	(guint			current_state,
-						 GpgmeStatusCode	status,
+						 gpgme_status_code_t	status,
 						 const gchar		*args,
 						 gpointer		data,
-						 GpgmeError		*err);
+						 gpgme_error_t		*err);
 
 /* Edit parameters */
 typedef struct
 {
 	guint 			state;
-	GpgmeError		err;
+	gpgme_error_t		err;
 	SeahorseEditAction	action;
 	SeahorseEditTransit	transit;
 	gpointer		data;
@@ -195,7 +233,7 @@ seahorse_edit_parm_new (guint state, SeahorseEditAction action,
 	
 	parms = g_new0 (SeahorseEditParm, 1);
 	parms->state = state;
-	parms->err = GPGME_No_Error;
+	parms->err = GPG_OK;
 	parms->action = action;
 	parms->transit = transit;
 	parms->data = data;
@@ -204,9 +242,9 @@ seahorse_edit_parm_new (guint state, SeahorseEditAction action,
 }
 
 /* Edit callback for gpgme */
-static GpgmeError
-seahorse_key_op_edit (gpointer data, GpgmeStatusCode status,
-		      const gchar *args, const gchar **result)
+static gpgme_error_t
+seahorse_key_op_edit (gpointer data, gpgme_status_code_t status,
+		      const gchar *args, int fd)
 {
 	SeahorseEditParm *parms = (SeahorseEditParm*)data;
 	
@@ -223,25 +261,29 @@ seahorse_key_op_edit (gpointer data, GpgmeStatusCode status,
 	parms->state = parms->transit (parms->state, status, args, parms->data, &parms->err);
 	
 	/* Choose the action based on the state */
-	if (parms->err == GPGME_No_Error)
-		parms->err = parms->action (parms->state, parms->data, result);
+	if (GPG_IS_OK (parms->err))
+    {
+		parms->err = parms->action (parms->state, parms->data, fd);
+        if (GPG_IS_OK (parms->err))
+            print_fd (fd, "\n");
+    }
 	
 	return parms->err;
 }
 
 /* Common edit operation */
-static GpgmeError
+static gpgme_error_t
 edit_key (SeahorseContext *sctx, SeahorseKey *skey, SeahorseEditParm *parms, SeahorseKeyChange change)
 {
-	GpgmeData out;
-	GpgmeError err;
+	gpgme_data_t out;
+	gpgme_error_t err;
 	
 	err = gpgme_data_new (&out);
-	g_return_val_if_fail (err == GPGME_No_Error, err);
+	g_return_val_if_fail (GPG_IS_OK (err), err);
 	/* do edit callback, release data */
 	err = gpgme_op_edit (sctx->ctx, skey->key, seahorse_key_op_edit, parms, out);
 	gpgme_data_release (out);
-	g_return_val_if_fail (err == GPGME_No_Error, err);
+	g_return_val_if_fail (GPG_IS_OK (err), err);
 	/* signal key */
 	seahorse_key_changed (skey, change);
 	seahorse_context_show_progress (sctx, _("Operation complete"), -1);
@@ -269,43 +311,43 @@ typedef enum
 } SignState;
 
 /* action helper for signing a key */
-static GpgmeError
-sign_action (guint state, gpointer data, const gchar **result)
+static gpgme_error_t
+sign_action (guint state, gpointer data, int fd)
 {
 	SignParm *parm = (SignParm*)data;
 	
 	switch (state) {
 		/* select uid */
 		case SIGN_UID:
-			*result = g_strdup_printf ("uid %d", parm->index);
+            printf_fd (fd, "uid %d", parm->index);
 			break;
 		case SIGN_COMMAND:
-			*result = parm->command;
+            print_fd (fd, parm->command);
 			break;
 		/* if expires */
 		case SIGN_EXPIRE:
-			*result = (parm->expire) ? YES : "N";
+            print_fd (fd, (parm->expire) ? YES : "N");
 			break;
 		case SIGN_CONFIRM:
-			*result = YES;
+            print_fd (fd, YES);
 			break;
 		case SIGN_CHECK:
-			*result = g_strdup_printf ("%d", parm->check);
+            printf_fd (fd, "%d", parm->check);
 			break;
 		case SIGN_QUIT:
-			*result = QUIT;
+            print_fd (fd, QUIT);
 			break;
 		default:
-			return GPGME_General_Error;
+			return GPG_E (GPG_ERR_GENERAL);
 	}
 	
-	return GPGME_No_Error;
+	return GPG_OK;
 }
 
 /* transition helper for signing a key */
 static guint
-sign_transit (guint current_state, GpgmeStatusCode status,
-	      const gchar *args, gpointer data, GpgmeError *err)
+sign_transit (guint current_state, gpgme_status_code_t status,
+	      const gchar *args, gpointer data, gpgme_error_t *err)
 {
 	guint next_state;
 	
@@ -316,7 +358,7 @@ sign_transit (guint current_state, GpgmeStatusCode status,
 				next_state = SIGN_UID;
 			else {
 				next_state = SIGN_ERROR;
-				*err = GPGME_General_Error;
+				*err = GPG_E (GPG_ERR_GENERAL);
 			}
 			break;
 		/* selected uid, go to command */
@@ -325,7 +367,7 @@ sign_transit (guint current_state, GpgmeStatusCode status,
 				next_state = SIGN_COMMAND;
 			else {
 				next_state = SIGN_ERROR;
-				*err = GPGME_General_Error;
+				*err = GPG_E (GPG_ERR_GENERAL);
 			}
 			break;
 		case SIGN_COMMAND:
@@ -340,7 +382,7 @@ sign_transit (guint current_state, GpgmeStatusCode status,
 				next_state = SIGN_CHECK;
 			else {
 				next_state = SIGN_ERROR;
-				*err = GPGME_General_Error;
+				*err = GPG_E (GPG_ERR_GENERAL);
 			}
 			break;
 		/* did expire, go to check */
@@ -349,7 +391,7 @@ sign_transit (guint current_state, GpgmeStatusCode status,
 				next_state = SIGN_CHECK;
 			else {
 				next_state = SIGN_ERROR;
-				*err = GPGME_General_Error;
+				*err = GPG_E (GPG_ERR_GENERAL);
 			}
 			break;
 		case SIGN_CONFIRM:
@@ -364,7 +406,7 @@ sign_transit (guint current_state, GpgmeStatusCode status,
 				next_state = SIGN_QUIT;
 			else {
 				next_state = SIGN_ERROR;
-				*err = GPGME_General_Error;
+				*err = GPG_E (GPG_ERR_GENERAL);
 			}
 			break;
 		/* did check, go to confirm */
@@ -373,7 +415,7 @@ sign_transit (guint current_state, GpgmeStatusCode status,
 				next_state = SIGN_CONFIRM;
 			else {
 				next_state = SIGN_ERROR;
-				*err = GPGME_General_Error;
+				*err = GPG_E (GPG_ERR_GENERAL);
 			}
 			break;
 		/* quit, go to confirm to save */
@@ -382,7 +424,7 @@ sign_transit (guint current_state, GpgmeStatusCode status,
 				next_state = SIGN_CONFIRM;
 			else {
 				next_state = SIGN_ERROR;
-				*err = GPGME_General_Error;
+				*err = GPG_E (GPG_ERR_GENERAL);
 			}
 			break;
 		/* error, go to quit */
@@ -394,7 +436,7 @@ sign_transit (guint current_state, GpgmeStatusCode status,
 			break;
 		default:
 			next_state = SIGN_ERROR;
-			*err = GPGME_General_Error;
+			*err = GPG_E (GPG_ERR_GENERAL);
 			break;
 	}
 	
@@ -413,16 +455,16 @@ sign_transit (guint current_state, GpgmeStatusCode status,
  *
  * Returns: Error value
  **/
-GpgmeError
+gpgme_error_t
 seahorse_key_op_sign (SeahorseContext *sctx, SeahorseKey *skey, const guint index,
 		      SeahorseSignCheck check, SeahorseSignOptions options)
 {
 	SignParm *sign_parm;
 	SeahorseEditParm *parms;
 	
-	g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), GPGME_Invalid_Engine);
-	g_return_val_if_fail (SEAHORSE_IS_KEY (skey), GPGME_Invalid_Key);
-	g_return_val_if_fail (index <= seahorse_key_get_num_uids (skey), GPGME_Invalid_Value);
+	g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), GPG_E (GPG_ERR_INV_ENGINE));
+	g_return_val_if_fail (SEAHORSE_IS_KEY (skey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
+	g_return_val_if_fail (index <= seahorse_key_get_num_uids (skey), GPG_E (GPG_ERR_INV_VALUE));
 	
 	sign_parm = g_new (SignParm, 1);
 	sign_parm->index = index;
@@ -451,30 +493,30 @@ typedef enum {
 } PassState;
 
 /* action helper for changing passphrase */
-static GpgmeError
-edit_pass_action (guint state, gpointer data, const gchar **result)
+static gpgme_error_t
+edit_pass_action (guint state, gpointer data, int fd)
 {
 	switch (state) {
 		case PASS_COMMAND:
-			*result = "passwd";
+            print_fd (fd, "passwd");
 			break;
 		case PASS_QUIT:
-			*result = QUIT;
+            print_fd (fd, QUIT);
 			break;
 		case PASS_SAVE:
-			*result = YES;
+            print_fd (fd, YES);
 			break;
 		default:
-			return GPGME_General_Error;
+			return GPG_E (GPG_ERR_GENERAL);
 	}
 	
-	return GPGME_No_Error;
+	return GPG_OK;
 }
 
 /* transition helper for changing passphrase */
 static guint
-edit_pass_transit (guint current_state, GpgmeStatusCode status,
-		   const gchar *args, gpointer data, GpgmeError *err)
+edit_pass_transit (guint current_state, gpgme_status_code_t status,
+		   const gchar *args, gpointer data, gpgme_error_t *err)
 {
 	guint next_state;
 	
@@ -485,7 +527,7 @@ edit_pass_transit (guint current_state, GpgmeStatusCode status,
 				next_state = PASS_COMMAND;
 			else {
 				next_state = PASS_ERROR;
-				*err = GPGME_General_Error;
+				*err = GPG_E (GPG_ERR_GENERAL);
 			}
 			break;
 		/* did command, go to quit */
@@ -498,7 +540,7 @@ edit_pass_transit (guint current_state, GpgmeStatusCode status,
 				next_state = PASS_SAVE;
 			else {
 				next_state = PASS_ERROR;
-				*err = GPGME_General_Error;
+				*err = GPG_E (GPG_ERR_GENERAL);
 			}
 			break;
 		/* error, go to quit */
@@ -510,7 +552,7 @@ edit_pass_transit (guint current_state, GpgmeStatusCode status,
 			break;
 		default:
 			next_state = PASS_ERROR;
-			*err = GPGME_General_Error;
+			*err = GPG_E (GPG_ERR_GENERAL);
 			break;
 	}
 	
@@ -549,21 +591,21 @@ edit_pass_get (SeahorseContext *sctx, const gchar *desc, gpointer *data)
  *
  * Returns: Error value
  **/
-GpgmeError
+gpgme_error_t
 seahorse_key_pair_op_change_pass (SeahorseContext *sctx, SeahorseKeyPair *skpair)
 {
 	SeahorseEditParm *parms;
-	GpgmeError err;
+	gpgme_error_t err;
 	
-	g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), GPGME_Invalid_Engine);
-	g_return_val_if_fail (SEAHORSE_IS_KEY_PAIR (skpair), GPGME_Invalid_Key);
+	g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), GPG_E (GPG_ERR_INV_ENGINE));
+	g_return_val_if_fail (SEAHORSE_IS_KEY_PAIR (skpair), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
 	
 	parms = seahorse_edit_parm_new (PASS_START, edit_pass_action, edit_pass_transit, NULL);
 	
 	/* change passphrase callback to helper func, edit key, change callback to regular func */
-	gpgme_set_passphrase_cb (sctx->ctx, (GpgmePassphraseCb)edit_pass_get, sctx);
+	gpgme_set_passphrase_cb (sctx->ctx, (gpgme_passphrase_cb_t)edit_pass_get, sctx);
 	err = edit_key (sctx, SEAHORSE_KEY (skpair), parms, SKEY_CHANGE_PASS);
-	gpgme_set_passphrase_cb (sctx->ctx, (GpgmePassphraseCb)seahorse_passphrase_get, sctx);
+	gpgme_set_passphrase_cb (sctx->ctx, (gpgme_passphrase_cb_t)seahorse_passphrase_get, sctx);
 	
 	return err;
 }
@@ -579,39 +621,39 @@ typedef enum
 } TrustState;
 
 /* action helper for setting trust of a key */
-static GpgmeError
-edit_trust_action (guint state, gpointer data, const gchar **result)
+static gpgme_error_t
+edit_trust_action (guint state, gpointer data, int fd)
 {
 	SeahorseValidity trust = (SeahorseValidity)data;
 	
 	switch (state) {
 		/* enter command */
 		case TRUST_COMMAND:
-			*result = "trust";
+            print_fd (fd, "trust");
 			break;
 		/* enter numeric trust value */
 		case TRUST_VALUE:
-			*result = g_strdup_printf ("%d", trust);
+            printf_fd (fd, "%d", trust);
 			break;
 		/* confirm ultimate or if save */
 		case TRUST_CONFIRM:
-			*result = YES;
+            print_fd (fd, YES);
 			break;
 		/* quit */
 		case TRUST_QUIT:
-			*result = QUIT;
+            print_fd (fd, QUIT);
 			break;
 		default:
-			return GPGME_General_Error;
+			return GPG_E (GPG_ERR_GENERAL);
 	}
 	
-	return GPGME_No_Error;
+	return GPG_OK;
 }
 
 /* transition helper for setting trust of a key */
 static guint
-edit_trust_transit (guint current_state, GpgmeStatusCode status,
-		    const gchar *args, gpointer data, GpgmeError *err)
+edit_trust_transit (guint current_state, gpgme_status_code_t status,
+		    const gchar *args, gpointer data, gpgme_error_t *err)
 {
 	guint next_state;
 	
@@ -622,7 +664,7 @@ edit_trust_transit (guint current_state, GpgmeStatusCode status,
 				next_state = TRUST_COMMAND;
 			else {
 				next_state = TRUST_ERROR;
-				*err = GPGME_General_Error;
+				*err = GPG_E (GPG_ERR_GENERAL);
 			}
 			break;
 		/* did command, next is value */
@@ -631,7 +673,7 @@ edit_trust_transit (guint current_state, GpgmeStatusCode status,
 				next_state = TRUST_VALUE;
 			else {
 				next_state = TRUST_ERROR;
-				*err = GPGME_General_Error;
+				*err = GPG_E (GPG_ERR_GENERAL);
 			}
 			break;
 		/* did value, go to quit or confirm ultimate */
@@ -642,7 +684,7 @@ edit_trust_transit (guint current_state, GpgmeStatusCode status,
 				next_state = TRUST_CONFIRM;
 			else {
 				next_state = TRUST_ERROR;
-				*err = GPGME_General_Error;
+				*err = GPG_E (GPG_ERR_GENERAL);
 			}
 			break;
 		/* did confirm ultimate, go to quit */
@@ -651,7 +693,7 @@ edit_trust_transit (guint current_state, GpgmeStatusCode status,
 				next_state = TRUST_QUIT;
 			else {
 				next_state = TRUST_ERROR;
-				*err = GPGME_General_Error;
+				*err = GPG_E (GPG_ERR_GENERAL);
 			}
 			break;
 		/* did quit, go to confirm to finish op */
@@ -660,7 +702,7 @@ edit_trust_transit (guint current_state, GpgmeStatusCode status,
 				next_state = TRUST_CONFIRM;
 			else {
 				next_state = TRUST_ERROR;
-				*err = GPGME_General_Error;
+				*err = GPG_E (GPG_ERR_GENERAL);
 			}
 			break;
 		/* error, go to quit */
@@ -672,7 +714,7 @@ edit_trust_transit (guint current_state, GpgmeStatusCode status,
 			break;
 		default:
 			next_state = TRUST_ERROR;
-			*err = GPGME_General_Error;
+			*err = GPG_E (GPG_ERR_GENERAL);
 			break;
 	}
 	
@@ -691,20 +733,20 @@ edit_trust_transit (guint current_state, GpgmeStatusCode status,
  *
  * Returns: Error value
  **/
-GpgmeError
+gpgme_error_t
 seahorse_key_op_set_trust (SeahorseContext *sctx, SeahorseKey *skey, SeahorseValidity trust)
 {
 	SeahorseEditParm *parms;
 	
-	g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), GPGME_Invalid_Engine);
-	g_return_val_if_fail (SEAHORSE_IS_KEY (skey), GPGME_Invalid_Key);
-	g_return_val_if_fail (trust >= GPGME_VALIDITY_UNKNOWN, GPGME_Invalid_Value);
-	g_return_val_if_fail (seahorse_key_get_trust (skey) != trust, GPGME_Invalid_Value);
+	g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), GPG_E (GPG_ERR_INV_ENGINE));
+	g_return_val_if_fail (SEAHORSE_IS_KEY (skey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
+	g_return_val_if_fail (trust >= GPGME_VALIDITY_UNKNOWN, GPG_E (GPG_ERR_INV_VALUE));
+	g_return_val_if_fail (seahorse_key_get_trust (skey) != trust, GPG_E (GPG_ERR_INV_VALUE));
 	
 	if (SEAHORSE_IS_KEY_PAIR (skey))
-		g_return_val_if_fail (trust != SEAHORSE_VALIDITY_UNKNOWN, GPGME_Invalid_Value);
+		g_return_val_if_fail (trust != SEAHORSE_VALIDITY_UNKNOWN, GPG_E (GPG_ERR_INV_VALUE));
 	else
-		g_return_val_if_fail (trust != SEAHORSE_VALIDITY_ULTIMATE, GPGME_Invalid_Value);
+		g_return_val_if_fail (trust != SEAHORSE_VALIDITY_ULTIMATE, GPG_E (GPG_ERR_INV_VALUE));
 	
 	parms = seahorse_edit_parm_new (TRUST_START, edit_trust_action,
 		edit_trust_transit, (gpointer)trust);
@@ -720,29 +762,29 @@ typedef enum {
 } DisableState;
 
 /* action helper for disable/enable a key */
-static GpgmeError
-edit_disable_action (guint state, gpointer data, const gchar **result)
+static gpgme_error_t
+edit_disable_action (guint state, gpointer data, int fd)
 {
 	const gchar *command = data;
 	
 	switch (state) {
 		case DISABLE_COMMAND:
-			*result = command;
+            print_fd (fd, command);
 			break;
 		case DISABLE_QUIT:
-			*result = QUIT;
+            print_fd (fd, QUIT);
 			break;
 		default:
 			break;
 	}
 	
-	return GPGME_No_Error;
+	return GPG_OK;
 }
 
 /* transition helper for disable/enable a key */
 static guint
-edit_disable_transit (guint current_state, GpgmeStatusCode status,
-		      const gchar *args, gpointer data, GpgmeError *err)
+edit_disable_transit (guint current_state, gpgme_status_code_t status,
+		      const gchar *args, gpointer data, gpgme_error_t *err)
 {
 	guint next_state;
 	
@@ -753,7 +795,7 @@ edit_disable_transit (guint current_state, GpgmeStatusCode status,
 				next_state = DISABLE_COMMAND;
 			else {
 				next_state = DISABLE_ERROR;
-				*err = GPGME_General_Error;
+				*err = GPG_E (GPG_ERR_GENERAL);
 			}
 			break;
 		/* did command, quit */
@@ -762,7 +804,7 @@ edit_disable_transit (guint current_state, GpgmeStatusCode status,
 				next_state = DISABLE_QUIT;
 			else {
 				next_state = DISABLE_ERROR;
-				*err = GPGME_General_Error;
+				*err = GPG_E (GPG_ERR_GENERAL);
 			}
 		/* error, quit */
 		case DISABLE_ERROR:
@@ -773,7 +815,7 @@ edit_disable_transit (guint current_state, GpgmeStatusCode status,
 			break;
 		default:
 			next_state = DISABLE_ERROR;
-			*err = GPGME_General_Error;
+			*err = GPG_E (GPG_ERR_GENERAL);
 			break;
 	}
 	
@@ -790,17 +832,16 @@ edit_disable_transit (guint current_state, GpgmeStatusCode status,
  *
  * Returns: Error value
  **/
-GpgmeError
+gpgme_error_t
 seahorse_key_op_set_disabled (SeahorseContext *sctx, SeahorseKey *skey, gboolean disabled)
 {
 	gchar *command;
 	SeahorseEditParm *parms;
 	
-	g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), GPGME_Invalid_Engine);
-	g_return_val_if_fail (SEAHORSE_IS_KEY (skey), GPGME_Invalid_Key);
+	g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), GPG_E (GPG_ERR_INV_ENGINE));
+	g_return_val_if_fail (SEAHORSE_IS_KEY (skey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
 	/* Make sure changing disabled */
-	g_return_val_if_fail (disabled != gpgme_key_get_ulong_attr (
-		skey->key, GPGME_ATTR_KEY_DISABLED, NULL, 0), GPGME_Invalid_Value);
+	g_return_val_if_fail (disabled != skey->key->disabled, GPG_E (GPG_ERR_INV_VALUE));
 	/* Get command and op */
 	if (disabled)
 		command = "disable";
@@ -830,42 +871,42 @@ typedef enum
 } ExpireState;
 
 /* action helper for changing expiration date of a key */
-static GpgmeError
-edit_expire_action (guint state, gpointer data, const gchar **result)
+static gpgme_error_t
+edit_expire_action (guint state, gpointer data, int fd)
 {
 	ExpireParm *parm = (ExpireParm*)data;
   
 	switch (state) {
 		/* selected key */
 		case EXPIRE_SELECT:
-			*result = g_strdup_printf ("key %d", parm->index);
+            printf_fd (fd, "key %d", parm->index);
 			break;
 		case EXPIRE_COMMAND:
-			*result = "expire";
+            print_fd (fd, "expire");
 			break;
 		/* set date */
 		case EXPIRE_DATE:
-			*result = (parm->expires) ?
-				seahorse_util_get_date_string (parm->expires) : "0";
+            print_fd (fd, (parm->expires) ?
+				seahorse_util_get_date_string (parm->expires) : "0");
 			break;
 		case EXPIRE_QUIT:
-			*result = QUIT;
+            print_fd (fd, QUIT);
 			break;
 		case EXPIRE_SAVE:
-			*result = YES;
+            print_fd (fd, YES);
 			break;
 		case EXPIRE_ERROR:
 			break;
 		default:
-			return GPGME_General_Error;
+			return GPG_E (GPG_ERR_GENERAL);
 	}
-	return GPGME_No_Error;
+	return GPG_OK;
 }
 
 /* transition helper for changing expiration date of a key */
 static guint
-edit_expire_transit (guint current_state, GpgmeStatusCode status,
-		     const gchar *args, gpointer data, GpgmeError *err)
+edit_expire_transit (guint current_state, gpgme_status_code_t status,
+		     const gchar *args, gpointer data, gpgme_error_t *err)
 {
 	guint next_state;
  
@@ -876,7 +917,7 @@ edit_expire_transit (guint current_state, GpgmeStatusCode status,
 				next_state = EXPIRE_SELECT;
 			else {
 				next_state = EXPIRE_ERROR;
-				*err = GPGME_General_Error;
+				*err = GPG_E (GPG_ERR_GENERAL);
 			}
 			break;
 		/* selected key, do command */
@@ -885,7 +926,7 @@ edit_expire_transit (guint current_state, GpgmeStatusCode status,
 				next_state = EXPIRE_COMMAND;
 			else {
 				next_state = EXPIRE_ERROR;
-				*err = GPGME_General_Error;
+				*err = GPG_E (GPG_ERR_GENERAL);
 			}
 			break;
 		/* did command, set expires */
@@ -894,7 +935,7 @@ edit_expire_transit (guint current_state, GpgmeStatusCode status,
 				next_state = EXPIRE_DATE;
 			else {
 				next_state = EXPIRE_ERROR;
-				*err = GPGME_General_Error;
+				*err = GPG_E (GPG_ERR_GENERAL);
 			}
 			break;
 		/* set expires, quit */
@@ -903,7 +944,7 @@ edit_expire_transit (guint current_state, GpgmeStatusCode status,
 				next_state = EXPIRE_QUIT;
 			else {
 				next_state = EXPIRE_ERROR;
-				*err = GPGME_General_Error;
+				*err = GPG_E (GPG_ERR_GENERAL);
 			}
 			break;
 		/* quit, save */
@@ -912,7 +953,7 @@ edit_expire_transit (guint current_state, GpgmeStatusCode status,
 				next_state = EXPIRE_SAVE;
 			else {
 				next_state = EXPIRE_ERROR;
-				*err = GPGME_General_Error;
+				*err = GPG_E (GPG_ERR_GENERAL);
 			}
 			break;
 		/* error, quit */
@@ -924,7 +965,7 @@ edit_expire_transit (guint current_state, GpgmeStatusCode status,
 			break;
 		default:
 			next_state = EXPIRE_ERROR;
-			*err = GPGME_General_Error;
+			*err = GPG_E (GPG_ERR_GENERAL);
 			break;
 	}
 	return next_state;
@@ -941,20 +982,22 @@ edit_expire_transit (guint current_state, GpgmeStatusCode status,
  *
  * Returns: Error value
  **/
-GpgmeError
+gpgme_error_t
 seahorse_key_pair_op_set_expires (SeahorseContext *sctx, SeahorseKeyPair *skpair,
 				  const guint index, const time_t expires)
 {
 	ExpireParm *exp_parm;
 	SeahorseEditParm *parms;
 	SeahorseKey *skey;
+	gpgme_subkey_t subkey;
 	
-	g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), GPGME_Invalid_Engine);
-	g_return_val_if_fail (SEAHORSE_IS_KEY_PAIR (skpair), GPGME_Invalid_Key);
+	g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), GPG_E (GPG_ERR_INV_ENGINE));
+	g_return_val_if_fail (SEAHORSE_IS_KEY_PAIR (skpair), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
 	skey = SEAHORSE_KEY (skpair);
+	subkey = seahorse_key_get_nth_subkey (skey, index);
+
 	/* Make sure changing expires */
-	g_return_val_if_fail (expires != gpgme_key_get_ulong_attr (skey->key,
-		GPGME_ATTR_EXPIRE, NULL, index), FALSE);
+	g_return_val_if_fail (subkey != NULL && expires != subkey->expires, FALSE);
 	
 	exp_parm = g_new (ExpireParm, 1);
 	exp_parm->index = index;
@@ -975,36 +1018,36 @@ typedef enum {
 } AddRevokerState;
 
 /* action helper for adding a revoker */
-static GpgmeError
-add_revoker_action (guint state, gpointer data, const gchar **result)
+static gpgme_error_t
+add_revoker_action (guint state, gpointer data, int fd)
 {
 	gchar *keyid = (gchar*)data;
 	
 	switch (state) {
 		case ADD_REVOKER_COMMAND:
-			*result = "addrevoker";
+            print_fd (fd, "addrevoker");
 			break;
 		/* select revoker */
 		case ADD_REVOKER_SELECT:
-			*result = keyid;
+            print_fd (fd, keyid);
 			break;
 		case ADD_REVOKER_CONFIRM:
-			*result = YES;
+            print_fd (fd, YES);
 			break;
 		case ADD_REVOKER_QUIT:
-			*result = QUIT;
+            print_fd (fd, QUIT);
 			break;
 		default:
-			return GPGME_General_Error;
+			return GPG_E (GPG_ERR_GENERAL);
 	}
 	
-	return GPGME_No_Error;
+	return GPG_OK;
 }
 
 /* transition helper for adding a revoker */
 static guint
-add_revoker_transit (guint current_state, GpgmeStatusCode status,
-		     const gchar *args, gpointer data, GpgmeError *err)
+add_revoker_transit (guint current_state, gpgme_status_code_t status,
+		     const gchar *args, gpointer data, gpgme_error_t *err)
 {
 	guint next_state;
 	
@@ -1015,7 +1058,7 @@ add_revoker_transit (guint current_state, GpgmeStatusCode status,
 				next_state = ADD_REVOKER_COMMAND;
 			else {
 				next_state = ADD_REVOKER_ERROR;
-				*err = GPGME_General_Error;
+				*err = GPG_E (GPG_ERR_GENERAL);
 			}
 			break;
 		/* did command, select revoker */
@@ -1024,7 +1067,7 @@ add_revoker_transit (guint current_state, GpgmeStatusCode status,
 				next_state = ADD_REVOKER_SELECT;
 			else {
 				next_state = ADD_REVOKER_ERROR;
-				*err = GPGME_General_Error;
+				*err = GPG_E (GPG_ERR_GENERAL);
 			}
 			break;
 		/* selected revoker, confirm */
@@ -1033,7 +1076,7 @@ add_revoker_transit (guint current_state, GpgmeStatusCode status,
 				next_state = ADD_REVOKER_CONFIRM;
 			else {
 				next_state = ADD_REVOKER_ERROR;
-				*err = GPGME_General_Error;
+				*err = GPG_E (GPG_ERR_GENERAL);
 			}
 			break;
 		/* confirmed, quit */
@@ -1042,7 +1085,7 @@ add_revoker_transit (guint current_state, GpgmeStatusCode status,
 				next_state = ADD_REVOKER_QUIT;
 			else {
 				next_state = ADD_REVOKER_ERROR;
-				*err = GPGME_General_Error;
+				*err = GPG_E (GPG_ERR_GENERAL);
 			}
 			break;
 		/* quit, confirm(=save) */
@@ -1051,7 +1094,7 @@ add_revoker_transit (guint current_state, GpgmeStatusCode status,
 				next_state = ADD_REVOKER_CONFIRM;
 			else {
 				next_state = ADD_REVOKER_ERROR;
-				*err = GPGME_General_Error;
+				*err = GPG_E (GPG_ERR_GENERAL);
 			}
 			break;
 		/* error, quit */
@@ -1063,7 +1106,7 @@ add_revoker_transit (guint current_state, GpgmeStatusCode status,
 			break;
 		default:
 			next_state = ADD_REVOKER_ERROR;
-			*err = GPGME_General_Error;
+			*err = GPG_E (GPG_ERR_GENERAL);
 			break;
 	}
 	
@@ -1079,17 +1122,17 @@ add_revoker_transit (guint current_state, GpgmeStatusCode status,
  *
  * Returns: Error value
  **/
-GpgmeError
+gpgme_error_t
 seahorse_key_pair_op_add_revoker (SeahorseContext *sctx, SeahorseKeyPair *skpair)
 {
 	SeahorseEditParm *parms;
 	SeahorseKey *revoker;
 	
-	g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), GPGME_Invalid_Engine);
-	g_return_val_if_fail (SEAHORSE_IS_KEY_PAIR (skpair), GPGME_Invalid_Key);
+	g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), GPG_E (GPG_ERR_INV_ENGINE));
+	g_return_val_if_fail (SEAHORSE_IS_KEY_PAIR (skpair), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
 	
 	revoker = SEAHORSE_KEY (seahorse_context_get_default_key (sctx));
-	g_return_val_if_fail (revoker != NULL, GPGME_Invalid_Key);
+	g_return_val_if_fail (revoker != NULL, GPG_E (GPG_ERR_WRONG_KEY_USAGE));
 	
 	parms = seahorse_edit_parm_new (ADD_REVOKER_START, add_revoker_action,
 		add_revoker_transit, (gpointer)seahorse_key_get_id (revoker->key));
@@ -1116,41 +1159,41 @@ typedef struct
 } UidParm;
 
 /* action helper for adding a new user ID */
-static GpgmeError
-add_uid_action (guint state, gpointer data, const gchar **result)
+static gpgme_error_t
+add_uid_action (guint state, gpointer data, int fd)
 {
 	UidParm *parm = (UidParm*)data;
 	
 	switch (state) {
 		case ADD_UID_COMMAND:
-			*result = "adduid";
+            print_fd (fd, "adduid");
 			break;
 		case ADD_UID_NAME:
-			*result = parm->name;
+            print_fd (fd, parm->name);
 			break;
 		case ADD_UID_EMAIL:
-			*result = parm->email;
+            print_fd (fd, parm->email);
 			break;
 		case ADD_UID_COMMENT:
-			*result = parm->comment;
+            print_fd (fd, parm->comment);
 			break;
 		case ADD_UID_QUIT:
-			*result = QUIT;
+            print_fd (fd, QUIT);
 			break;
 		case ADD_UID_SAVE:
-			*result = YES;
+            print_fd (fd, YES);
 			break;
 		default:
-			return GPGME_General_Error;
+			return GPG_E (GPG_ERR_GENERAL);
 	}
 	
-	return GPGME_No_Error;
+	return GPG_OK;
 }
 
 /* transition helper for adding a new user ID */
 static guint
-add_uid_transit (guint current_state, GpgmeStatusCode status,
-		 const gchar *args, gpointer data, GpgmeError *err)
+add_uid_transit (guint current_state, gpgme_status_code_t status,
+		 const gchar *args, gpointer data, gpgme_error_t *err)
 {
 	guint next_state;
 	
@@ -1161,7 +1204,7 @@ add_uid_transit (guint current_state, GpgmeStatusCode status,
 				next_state = ADD_UID_COMMAND;
 			else {
 				next_state = ADD_UID_ERROR;
-				*err = GPGME_General_Error;
+				*err = GPG_E (GPG_ERR_GENERAL);
 			}
 			break;
 		/* did command, do name */
@@ -1170,7 +1213,7 @@ add_uid_transit (guint current_state, GpgmeStatusCode status,
 				next_state = ADD_UID_NAME;
 			else {
 				next_state = ADD_UID_ERROR;
-				*err = GPGME_General_Error;
+				*err = GPG_E (GPG_ERR_GENERAL);
 			}
 			break;
 		/* did name, do email */
@@ -1179,7 +1222,7 @@ add_uid_transit (guint current_state, GpgmeStatusCode status,
 				next_state = ADD_UID_EMAIL;
 			else {
 				next_state = ADD_UID_ERROR;
-				*err = GPGME_General_Error;
+				*err = GPG_E (GPG_ERR_GENERAL);
 			}
 			break;
 		/* did email, do comment */
@@ -1188,7 +1231,7 @@ add_uid_transit (guint current_state, GpgmeStatusCode status,
 				next_state = ADD_UID_COMMENT;
 			else {
 				next_state = ADD_UID_ERROR;
-				*err = GPGME_General_Error;
+				*err = GPG_E (GPG_ERR_GENERAL);
 			}
 			break;
 		/* did comment, quit */
@@ -1201,7 +1244,7 @@ add_uid_transit (guint current_state, GpgmeStatusCode status,
 				next_state = ADD_UID_SAVE;
 			else {
 				next_state = ADD_UID_ERROR;
-				*err = GPGME_General_Error;
+				*err = GPG_E (GPG_ERR_GENERAL);
 			}
 			break;
 		/* error, quit */
@@ -1213,7 +1256,7 @@ add_uid_transit (guint current_state, GpgmeStatusCode status,
 			break;
 		default:
 			next_state = ADD_UID_ERROR;
-			*err = GPGME_General_Error;
+			*err = GPG_E (GPG_ERR_GENERAL);
 			break;
 	}
 	
@@ -1232,16 +1275,16 @@ add_uid_transit (guint current_state, GpgmeStatusCode status,
  *
  * Returns: Error value
  **/
-GpgmeError
+gpgme_error_t
 seahorse_key_pair_op_add_uid (SeahorseContext *sctx, SeahorseKeyPair *skpair,
 			      const gchar *name, const gchar *email, const gchar *comment)
 {
 	SeahorseEditParm *parms;
 	UidParm *uid_parm;
 	
-	g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), GPGME_Invalid_Engine);
-	g_return_val_if_fail (SEAHORSE_IS_KEY_PAIR (skpair), GPGME_Invalid_Key);
-	g_return_val_if_fail (name != NULL && strlen (name) >= 5, GPGME_Invalid_Value);
+	g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), GPG_E (GPG_ERR_INV_ENGINE));
+	g_return_val_if_fail (SEAHORSE_IS_KEY_PAIR (skpair), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
+	g_return_val_if_fail (name != NULL && strlen (name) >= 5, GPG_E (GPG_ERR_INV_VALUE));
 	
 	uid_parm = g_new (UidParm, 1);
 	uid_parm->name = name;
@@ -1272,43 +1315,43 @@ typedef struct
 } SubkeyParm;
 
 /* action helper for adding a subkey */
-static GpgmeError
-add_key_action (guint state, gpointer data, const gchar **result)
+static gpgme_error_t
+add_key_action (guint state, gpointer data, int fd)
 {
 	SubkeyParm *parm = (SubkeyParm*)data;
 	
 	switch (state) {
 		case ADD_KEY_COMMAND:
-			*result = "addkey";
+            print_fd (fd, "addkey");
 			break;
 		case ADD_KEY_TYPE:
-			*result = g_strdup_printf ("%d", parm->type);
+            printf_fd (fd, "%d", parm->type);
 			break;
 		case ADD_KEY_LENGTH:
-			*result = g_strdup_printf ("%d", parm->length);
+            printf_fd (fd, "%d", parm->length);
 			break;
 		/* Get exact date or 0 */
 		case ADD_KEY_EXPIRES:
-			*result = (parm->expires) ?
-				seahorse_util_get_date_string (parm->expires) : "0";
+            print_fd (fd, (parm->expires) ?
+				seahorse_util_get_date_string (parm->expires) : "0");
 			break;
 		case ADD_KEY_QUIT:
-			*result = QUIT;
+            print_fd (fd, QUIT);
 			break;
 		case ADD_KEY_SAVE:
-			*result = YES;
+            print_fd (fd, YES);
 			break;
 		default:
-			return GPGME_General_Error;
+			return GPG_E (GPG_ERR_GENERAL);
 	}
 	
-	return GPGME_No_Error;
+	return GPG_OK;
 }
 
 /* transition helper for adding a subkey */
 static guint
-add_key_transit (guint current_state, GpgmeStatusCode status,
-		 const gchar *args, gpointer data, GpgmeError *err)
+add_key_transit (guint current_state, gpgme_status_code_t status,
+		 const gchar *args, gpointer data, gpgme_error_t *err)
 {
 	guint next_state;
 
@@ -1319,7 +1362,7 @@ add_key_transit (guint current_state, GpgmeStatusCode status,
 				next_state = ADD_KEY_COMMAND;
 			else {
 				next_state = ADD_KEY_ERROR;
-				*err = GPGME_General_Error;
+				*err = GPG_E (GPG_ERR_GENERAL);
 			}
 			break;
 		/* did command, do type */
@@ -1328,7 +1371,7 @@ add_key_transit (guint current_state, GpgmeStatusCode status,
 				next_state = ADD_KEY_TYPE;
 			else {
 				next_state = ADD_KEY_ERROR;
-				*err = GPGME_General_Error;
+				*err = GPG_E (GPG_ERR_GENERAL);
 			}
 			break;
 		/* did type, do length */
@@ -1337,7 +1380,7 @@ add_key_transit (guint current_state, GpgmeStatusCode status,
 				next_state = ADD_KEY_LENGTH;
 			else {
 				next_state = ADD_KEY_ERROR;
-				*err = GPGME_General_Error;
+				*err = GPG_E (GPG_ERR_GENERAL);
 			}
 			break;
 		/* did length, do expires */
@@ -1346,7 +1389,7 @@ add_key_transit (guint current_state, GpgmeStatusCode status,
 				next_state = ADD_KEY_EXPIRES;
 			else {
 				next_state = ADD_KEY_ERROR;
-				*err = GPGME_General_Error;
+				*err = GPG_E (GPG_ERR_GENERAL);
 			}
 			break;
 		/* did expires, quit */
@@ -1359,7 +1402,7 @@ add_key_transit (guint current_state, GpgmeStatusCode status,
 				next_state = ADD_KEY_SAVE;
 			else {
 				next_state = ADD_KEY_ERROR;
-				*err = GPGME_General_Error;
+				*err = GPG_E (GPG_ERR_GENERAL);
 			}
 			break;
 		/* error, quit */
@@ -1371,7 +1414,7 @@ add_key_transit (guint current_state, GpgmeStatusCode status,
 			break;
 		default:
 			next_state = ADD_KEY_ERROR;
-			*err = GPGME_General_Error;
+			*err = GPG_E (GPG_ERR_GENERAL);
 			break;
 	}
 	
@@ -1390,7 +1433,7 @@ add_key_transit (guint current_state, GpgmeStatusCode status,
  *
  * Returns: Error value
  **/
-GpgmeError
+gpgme_error_t
 seahorse_key_pair_op_add_subkey (SeahorseContext *sctx, SeahorseKeyPair *skpair,
 				 const SeahorseKeyType type, const guint length,
 				 const time_t expires)
@@ -1398,22 +1441,22 @@ seahorse_key_pair_op_add_subkey (SeahorseContext *sctx, SeahorseKeyPair *skpair,
 	SeahorseEditParm *parms;
 	SubkeyParm *key_parm;
 	
-	g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), GPGME_Invalid_Engine);
-	g_return_val_if_fail (SEAHORSE_IS_KEY_PAIR (skpair), GPGME_Invalid_Key);
+	g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), GPG_E (GPG_ERR_INV_ENGINE));
+	g_return_val_if_fail (SEAHORSE_IS_KEY_PAIR (skpair), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
 	
 	/* Check length range & type */
 	switch (type) {
 		case DSA:
-			g_return_val_if_fail (length >= DSA_MIN && length <= DSA_MAX, GPGME_Invalid_Value);
+			g_return_val_if_fail (length >= DSA_MIN && length <= DSA_MAX, GPG_E (GPG_ERR_INV_VALUE));
 			break;
 		case ELGAMAL:
-			g_return_val_if_fail (length >= ELGAMAL_MIN && length <= LENGTH_MAX, GPGME_Invalid_Value);
+			g_return_val_if_fail (length >= ELGAMAL_MIN && length <= LENGTH_MAX, GPG_E (GPG_ERR_INV_VALUE));
 			break;
 		case RSA_SIGN: case RSA_ENCRYPT:
-			g_return_val_if_fail (length >= RSA_MIN && length <= LENGTH_MAX, GPGME_Invalid_Value);
+			g_return_val_if_fail (length >= RSA_MIN && length <= LENGTH_MAX, GPG_E (GPG_ERR_INV_VALUE));
 			break;
 		default:
-			g_return_val_if_reached (GPGME_Invalid_Value);
+			g_return_val_if_reached (GPG_E (GPG_ERR_INV_VALUE));
 			break;
 	}
 	
@@ -1437,34 +1480,34 @@ typedef enum {
 } DelKeyState;
 
 /* action helper for deleting a subkey */
-static GpgmeError
-del_key_action (guint state, gpointer data, const gchar **result)
+static gpgme_error_t
+del_key_action (guint state, gpointer data, int fd)
 {
 	switch (state) {
 		/* select key */
 		case DEL_KEY_SELECT:
-			*result = g_strdup_printf ("key %d", (guint)data);
+            printf_fd (fd, "key %d", (guint)data);
 			break;
 		case DEL_KEY_COMMAND:
-			*result = "delkey";
+            print_fd (fd, "delkey");
 			break;
 		case DEL_KEY_CONFIRM:
-			*result = YES;
+            print_fd (fd, YES);
 			break;
 		case DEL_KEY_QUIT:
-			*result = QUIT;
+            print_fd (fd, QUIT);
 			break;
 		default:
-			return GPGME_General_Error;
+			return GPG_E (GPG_ERR_GENERAL);
 	}
 	
-	return GPGME_No_Error;
+	return GPG_OK;
 }
 
 /* transition helper for deleting a subkey */
 static guint
-del_key_transit (guint current_state, GpgmeStatusCode status,
-		 const gchar *args, gpointer data, GpgmeError *err)
+del_key_transit (guint current_state, gpgme_status_code_t status,
+		 const gchar *args, gpointer data, gpgme_error_t *err)
 {
 	guint next_state;
 
@@ -1475,7 +1518,7 @@ del_key_transit (guint current_state, GpgmeStatusCode status,
 				next_state = DEL_KEY_SELECT;
 			else {
 				next_state = DEL_KEY_ERROR;
-				*err = GPGME_General_Error;
+				*err = GPG_E (GPG_ERR_GENERAL);
 			}
 			break;
 		/* selected key, do command */
@@ -1484,7 +1527,7 @@ del_key_transit (guint current_state, GpgmeStatusCode status,
 				next_state = DEL_KEY_COMMAND;
 			else {
 				next_state = DEL_KEY_ERROR;
-				*err = GPGME_General_Error;
+				*err = GPG_E (GPG_ERR_GENERAL);
 			}
 			break;
 		case DEL_KEY_COMMAND:
@@ -1497,7 +1540,7 @@ del_key_transit (guint current_state, GpgmeStatusCode status,
 				next_state = DEL_KEY_QUIT;
 			else {
 				next_state = DEL_KEY_ERROR;
-				*err = GPGME_General_Error;
+				*err = GPG_E (GPG_ERR_GENERAL);
 			}
 			break;
 		/* confirmed, quit */
@@ -1510,7 +1553,7 @@ del_key_transit (guint current_state, GpgmeStatusCode status,
 				next_state = DEL_KEY_CONFIRM;
 			else {
 				next_state = DEL_KEY_ERROR;
-				*err = GPGME_General_Error;
+				*err = GPG_E (GPG_ERR_GENERAL);
 			}
 			break;
 		/* error, quit */
@@ -1522,7 +1565,7 @@ del_key_transit (guint current_state, GpgmeStatusCode status,
 			break;
 		default:
 			next_state = DEL_KEY_ERROR;
-			*err = GPGME_General_Error;
+			*err = GPG_E (GPG_ERR_GENERAL);
 			break;
 	}
 	
@@ -1539,14 +1582,14 @@ del_key_transit (guint current_state, GpgmeStatusCode status,
  *
  * Returns: Error value
  **/
-GpgmeError
+gpgme_error_t
 seahorse_key_op_del_subkey (SeahorseContext *sctx, SeahorseKey *skey, const guint index)
 {
 	SeahorseEditParm *parms;
 	
-	g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), GPGME_Invalid_Engine);
-	g_return_val_if_fail (SEAHORSE_IS_KEY (skey), GPGME_Invalid_Key);
-	g_return_val_if_fail (index >= 1 && index <= seahorse_key_get_num_subkeys (skey), GPGME_Invalid_Value);
+	g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), GPG_E (GPG_ERR_INV_ENGINE));
+	g_return_val_if_fail (SEAHORSE_IS_KEY (skey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
+	g_return_val_if_fail (index >= 1 && index <= seahorse_key_get_num_subkeys (skey), GPG_E (GPG_ERR_INV_VALUE));
 	
 	parms = seahorse_edit_parm_new (DEL_KEY_START, del_key_action,
 		del_key_transit, (gpointer)index);
@@ -1574,45 +1617,45 @@ typedef enum {
 } RevSubkeyState;
 
 /* action helper for revoking a subkey */
-static GpgmeError
-rev_subkey_action (guint state, gpointer data, const gchar **result)
+static gpgme_error_t
+rev_subkey_action (guint state, gpointer data, int fd)
 {
 	RevSubkeyParm *parm = (RevSubkeyParm*)data;
 	
 	switch (state) {
 		case REV_SUBKEY_SELECT:
-			*result = g_strdup_printf ("key %d", parm->index);
+            printf_fd (fd, "key %d", parm->index);
 			break;
 		case REV_SUBKEY_COMMAND:
-			*result = "revkey";
+            print_fd (fd, "revkey");
 			break;
 		case REV_SUBKEY_CONFIRM:
-			*result = YES;
+            print_fd (fd, YES);
 			break;
 		case REV_SUBKEY_REASON:
-			*result = g_strdup_printf ("%d", parm->reason);
+            printf_fd (fd, "%d", parm->reason);
 			break;
 		case REV_SUBKEY_DESCRIPTION:
-			*result = g_strdup_printf ("%s\n", parm->description);
+            printf_fd (fd, "%s\n", parm->description);
 			break;
 		/* Need empty line */
 		case REV_SUBKEY_ENDDESC:
-			*result = "\n";
+            print_fd (fd, "\n");
 			break;
 		case REV_SUBKEY_QUIT:
-			*result = QUIT;
+            print_fd (fd, QUIT);
 			break;
 		default:
-			g_return_val_if_reached (GPGME_General_Error);
+			g_return_val_if_reached (GPG_E (GPG_ERR_GENERAL));
 	}
 	
-	return GPGME_No_Error;
+	return GPG_OK;
 }
 
 /* transition helper for revoking a subkey */
 static guint
-rev_subkey_transit (guint current_state, GpgmeStatusCode status,
-		    const gchar *args, gpointer data, GpgmeError *err)
+rev_subkey_transit (guint current_state, gpgme_status_code_t status,
+		    const gchar *args, gpointer data, gpgme_error_t *err)
 {
 	guint next_state;
 	
@@ -1623,7 +1666,7 @@ rev_subkey_transit (guint current_state, GpgmeStatusCode status,
 				next_state = REV_SUBKEY_SELECT;
 			else {
 				next_state = REV_SUBKEY_ERROR;
-				*err = GPGME_General_Error;
+				*err = GPG_E (GPG_ERR_GENERAL);
 			}
 			break;
 		/* selected key, do command */
@@ -1632,7 +1675,7 @@ rev_subkey_transit (guint current_state, GpgmeStatusCode status,
 				next_state = REV_SUBKEY_COMMAND;
 			else {
 				next_state = REV_SUBKEY_ERROR;
-				*err = GPGME_General_Error;
+				*err = GPG_E (GPG_ERR_GENERAL);
 			}
 			break;
 		/* did command, confirm */
@@ -1641,7 +1684,7 @@ rev_subkey_transit (guint current_state, GpgmeStatusCode status,
 				next_state = REV_SUBKEY_CONFIRM;
 			else {
 				next_state = REV_SUBKEY_ERROR;
-				*err = GPGME_General_Error;
+				*err = GPG_E (GPG_ERR_GENERAL);
 			}
 			break;
 		case REV_SUBKEY_CONFIRM:
@@ -1653,7 +1696,7 @@ rev_subkey_transit (guint current_state, GpgmeStatusCode status,
 				next_state = REV_SUBKEY_QUIT;
 			else {
 				next_state = REV_SUBKEY_ERROR;
-				*err = GPGME_General_Error;
+				*err = GPG_E (GPG_ERR_GENERAL);
 			}
 			break;
 		/* did reason, do description */
@@ -1662,7 +1705,7 @@ rev_subkey_transit (guint current_state, GpgmeStatusCode status,
 				next_state = REV_SUBKEY_DESCRIPTION;
 			else {
 				next_state = REV_SUBKEY_ERROR;
-				*err = GPGME_General_Error;
+				*err = GPG_E (GPG_ERR_GENERAL);
 			}
 			break;
 		case REV_SUBKEY_DESCRIPTION:
@@ -1674,7 +1717,7 @@ rev_subkey_transit (guint current_state, GpgmeStatusCode status,
 				next_state = REV_SUBKEY_CONFIRM;
 			else {
 				next_state = REV_SUBKEY_ERROR;
-				*err = GPGME_General_Error;
+				*err = GPG_E (GPG_ERR_GENERAL);
 			}
 			break;
 		/* ended description, confirm */
@@ -1687,7 +1730,7 @@ rev_subkey_transit (guint current_state, GpgmeStatusCode status,
 				next_state = REV_SUBKEY_CONFIRM;
 			else {
 				next_state = REV_SUBKEY_ERROR;
-				*err = GPGME_General_Error;
+				*err = GPG_E (GPG_ERR_GENERAL);
 			}
 			break;
 		/* error, quit */
@@ -1699,7 +1742,7 @@ rev_subkey_transit (guint current_state, GpgmeStatusCode status,
 			break;
 		default:
 			next_state = REV_SUBKEY_ERROR;
-			*err = GPGME_General_Error;
+			*err = GPG_E (GPG_ERR_GENERAL);
 			break;
 	}
 	
@@ -1718,20 +1761,21 @@ rev_subkey_transit (guint current_state, GpgmeStatusCode status,
  *
  * Returns: Error value
  **/
-GpgmeError
+gpgme_error_t
 seahorse_key_op_revoke_subkey (SeahorseContext *sctx, SeahorseKey *skey, const guint index,
 			       SeahorseRevokeReason reason, const gchar *description)
 {
 	RevSubkeyParm *rev_parm;
 	SeahorseEditParm *parms;
+	gpgme_subkey_t subkey;
 	
-	g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), GPGME_Invalid_Engine);
-	g_return_val_if_fail (SEAHORSE_IS_KEY (skey), GPGME_Invalid_Key);
+	g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), GPG_E (GPG_ERR_INV_ENGINE));
+	g_return_val_if_fail (SEAHORSE_IS_KEY (skey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
 	/* Check index range */
-	g_return_val_if_fail (index >= 1 && index <= seahorse_key_get_num_subkeys (skey), GPGME_Invalid_Value);
+	g_return_val_if_fail (index >= 1 && index <= seahorse_key_get_num_subkeys (skey), GPG_E (GPG_ERR_INV_VALUE));
 	/* Make sure not revoked */
-	g_return_val_if_fail (!gpgme_key_get_ulong_attr (skey->key,
-		GPGME_ATTR_KEY_REVOKED, NULL, index), GPGME_Invalid_Value);
+	subkey = seahorse_key_get_nth_subkey (skey, index);
+	g_return_val_if_fail (subkey != NULL && !subkey->revoked, GPG_E (GPG_ERR_INV_VALUE));
 	
 	rev_parm = g_new0 (RevSubkeyParm, 1);
 	rev_parm->index = index;

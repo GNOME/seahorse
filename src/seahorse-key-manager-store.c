@@ -27,6 +27,28 @@
 #include "seahorse-validity.h"
 #include "seahorse-util.h"
 
+const char* 
+get_algo_string (gpgme_pubkey_algo_t algo)
+{
+    /* TODO: Some of these strings need to be fixed */
+    switch (algo) {
+        case GPGME_PK_RSA:
+            return _("RSA");
+        case GPGME_PK_RSA_E:
+            return _("RSA-E");
+        case GPGME_PK_RSA_S:
+            return _("RSA-S");
+        case GPGME_PK_ELG_E:
+            return _("ELG-E");
+        case GPGME_PK_DSA:
+            return _("DSA");
+        case GPGME_PK_ELG:
+            return _("ELG");
+        default:
+            return _("Unknown");
+    }
+}
+
 enum {
 	SKEY,
 	NAME,
@@ -143,12 +165,12 @@ seahorse_key_manager_store_set (GtkTreeStore *store, GtkTreeIter *iter, Seahorse
 	validity = seahorse_key_get_validity (skey);
 	trust = seahorse_key_get_trust (skey);
 	
-	if (gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_KEY_EXPIRED, NULL, 0)) {
+	if (skey->key->expired) {
 		expires = _("Expired");
 		expires_date = -1;
 	}
 	else {
-		expires_date = gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_EXPIRE, NULL, 0);
+		expires_date = skey->key->subkeys->expires;
 		
 		if (expires_date == 0) {
 			expires = _("Never Expires");
@@ -165,16 +187,19 @@ seahorse_key_manager_store_set (GtkTreeStore *store, GtkTreeIter *iter, Seahorse
 		EXPIRES, expires_date,
 		TRUST_STR, seahorse_validity_get_string (trust),
 		TRUST, trust,
-		LENGTH, gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_LEN, NULL, 0),
-		TYPE, gpgme_key_get_string_attr (skey->key, GPGME_ATTR_ALGO, NULL, 0), -1);
+		LENGTH, skey->key->subkeys->length,
+		TYPE, get_algo_string (skey->key->subkeys->pubkey_algo),
+		-1);
 	
 	max = seahorse_key_get_num_uids (skey);
 	
 	while (index < max && gtk_tree_model_iter_nth_child (
 	GTK_TREE_MODEL (store), &child, iter, index-1)) {
+        gchar *userid = seahorse_key_get_userid (skey, index);
 		gtk_tree_store_set (store, &child,
-			NAME, seahorse_key_get_userid (skey, index),
+			NAME, userid,
 			TYPE, "UID", -1);
+        g_free (userid);
 		index++;
 	}
 	

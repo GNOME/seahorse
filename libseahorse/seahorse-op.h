@@ -29,80 +29,80 @@
 
 typedef gchar*	(*SeahorseEncryptFunc)	(SeahorseContext	*sctx,
 					 const gchar		*data,
-					 GpgmeRecipients	recips,
-					 GpgmeError		*err);
+					 gpgme_key_t *	recips,
+					 gpgme_error_t		*err);
 
 gint		seahorse_op_import_file		(SeahorseContext	*sctx,
 						 const gchar		*path,
-						 GpgmeError		*err);
+						 gpgme_error_t		*err);
 
 gint		seahorse_op_import_text		(SeahorseContext	*sctx,
 						 const gchar		*text,
-						 GpgmeError		*err);
+						 gpgme_error_t		*err);
 
 void		seahorse_op_export_file		(SeahorseContext	*sctx,
 						 const gchar		*path,
-						 GpgmeRecipients	recips,
-						 GpgmeError		*err);
+						 gpgme_key_t *	recips,
+						 gpgme_error_t		*err);
 
 gchar*		seahorse_op_export_text		(SeahorseContext	*sctx,
-						 GpgmeRecipients	recips,
-						 GpgmeError		*err);
+						 gpgme_key_t *	recips,
+						 gpgme_error_t		*err);
 
 gchar*		seahorse_op_encrypt_file	(SeahorseContext	*sctx,
 						 const gchar		*path,
-						 GpgmeRecipients	recips,
-						 GpgmeError		*err);
+						 gpgme_key_t *	recips,
+						 gpgme_error_t		*err);
 
 gchar*		seahorse_op_encrypt_text	(SeahorseContext	*sctx,
 						 const gchar		*text,
-						 GpgmeRecipients	recips,
-						 GpgmeError		*err);
+						 gpgme_key_t *	recips,
+						 gpgme_error_t		*err);
 
 gchar*		seahorse_op_sign_file		(SeahorseContext	*sctx,
 						 const gchar		*path,
-						 GpgmeError		*err);
+						 gpgme_error_t		*err);
 
 gchar*		seahorse_op_sign_text		(SeahorseContext	*sctx,
 						 const gchar		*text,
-						 GpgmeError		*err);
+						 gpgme_error_t		*err);
 
 gchar*		seahorse_op_encrypt_sign_file	(SeahorseContext	*sctx,
 						 const gchar		*path,
-						 GpgmeRecipients	recips,
-						 GpgmeError		*err);
+						 gpgme_key_t *	recips,
+						 gpgme_error_t		*err);
 
 gchar*		seahorse_op_encrypt_sign_text	(SeahorseContext	*sctx,
 						 const gchar		*text,
-						 GpgmeRecipients	recips,
-						 GpgmeError		*err);
+						 gpgme_key_t *	recips,
+						 gpgme_error_t		*err);
 
 gchar*		seahorse_op_decrypt_file	(SeahorseContext	*sctx,
 						 const gchar		*path,
-						 GpgmeError		*err);
+						 gpgme_error_t		*err);
 
 gchar*		seahorse_op_decrypt_text	(SeahorseContext	*sctx,
 						 const gchar		*text,
-						 GpgmeError		*err);
+						 gpgme_error_t		*err);
 
 void		seahorse_op_verify_file		(SeahorseContext	*sctx,
 						 const gchar		*path,
-						 GpgmeSigStat		*status,
-						 GpgmeError		*err);
+						 gpgme_verify_result_t	*status,
+						 gpgme_error_t		*err);
 
 gchar*		seahorse_op_verify_text		(SeahorseContext	*sctx,
 						 const gchar		*text,
-						 GpgmeSigStat		*status,
-						 GpgmeError		*err);
+						 gpgme_verify_result_t	*status,
+						 gpgme_error_t		*err);
 
 gchar*		seahorse_op_decrypt_verify_file	(SeahorseContext	*sctx,
 						 const gchar		*path,
-						 GpgmeSigStat		*status,
-						 GpgmeError		*err);
+						 gpgme_verify_result_t	*status,
+						 gpgme_error_t		*err);
 
 gchar*		seahorse_op_decrypt_verify_text	(SeahorseContext	*sctx,
 						 const gchar		*text,
-						 GpgmeSigStat		*status,
-						 GpgmeError		*err);
+						 gpgme_verify_result_t	*status,
+						 gpgme_error_t		*err);
 
 #endif /* __SEAHORSE_OP_H__ */
