@@ -315,6 +315,32 @@ seahorse_key_get_userid (const SeahorseKey *skey, const guint index)
 		return g_strdup (uid->uid);
 }
 
+/**
+ * seahorse_key_get_nth_userid:
+ * @skey: #SeahorseKey
+ * @index: Which userid
+ *
+ * Gets the the subkey at @index of @skey.
+ *
+ * Returns: subkey of @skey at @index, or NULL if @index is out of bounds
+ */
+gpgme_user_id_t  
+seahorse_key_get_nth_userid (const SeahorseKey *skey, const guint index)
+{
+    gpgme_user_id_t uid;
+    guint n;
+
+    g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), NULL);
+    g_return_val_if_fail (skey->key != NULL, NULL);
+
+    uid = skey->key->uids;
+    for (n = index; uid && n; n--)
+        uid = uid->next;
+
+    return uid;
+}    
+
+
 gchar*
 seahorse_key_get_fingerprint (const SeahorseKey *skey)
 {
