@@ -215,8 +215,9 @@ else
 	echo "enabling gedit plugin..."
 	echo "checking for supported versions of gedit..."
 	
-	PKG_CHECK_MODULES(GEDIT, gedit-2.8 >= 2.8.0, , 
-		[PKG_CHECK_MODULES(GEDIT, gedit-2.6 >= 2.6.0)])
+	PKG_CHECK_MODULES(GEDIT, gedit-2.10 >= 2.9.0, , 
+    	[PKG_CHECK_MODULES(GEDIT, gedit-2.8 >= 2.8.0, , 
+	    	[PKG_CHECK_MODULES(GEDIT, gedit-2.6 >= 2.6.0)])])
 	
 	AC_SUBST(GEDIT_CFLAGS)
 fi
