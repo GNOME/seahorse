@@ -1,7 +1,7 @@
 /*
  * Seahorse
  *
- * Copyright (C) 2002 Jacob Perkins
+ * Copyright (C) 2003 Jacob Perkins
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,7 +23,6 @@
 
 #include "seahorse-recipients.h"
 #include "seahorse-widget.h"
-#include "seahorse-util.h"
 #include "seahorse-ops-key.h"
 #include "seahorse-validity.h"
 #include "seahorse-encrypt-recipients-store.h"
@@ -246,6 +245,9 @@ remove_row_activated (GtkTreeView *view, GtkTreePath *path,
 	remove_recip (swidget, path);
 }
 
+/* Creates a new #SeahorseRecipients given @sctx and whether doing
+ * encrypt recipients.
+ */
 static SeahorseWidget*
 seahorse_recipients_new (SeahorseContext *sctx, gboolean use_encrypt)
 {
@@ -267,7 +269,6 @@ seahorse_recipients_new (SeahorseContext *sctx, gboolean use_encrypt)
 	glade_xml_signal_connect_data (swidget->xml, "remove_row_activated",
 		G_CALLBACK (remove_row_activated), swidget);
 	
-	/* Initialize key stores */
 	all_keys = GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, ALL));
 	recips_keys = GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, RECIPIENTS));
 
@@ -286,18 +287,43 @@ seahorse_recipients_new (SeahorseContext *sctx, gboolean use_encrypt)
 	return swidget;
 }
 
+/**
+ * seahorse_export_recipients_new:
+ * @sctx: Current #SeahorseContext
+ *
+ * Creates a new #SeahorseRecipients for exporting keys.
+ *
+ * Returns: The new #SeahorseWidget
+ **/
 SeahorseWidget*
 seahorse_export_recipients_new (SeahorseContext *sctx)
 {
 	return seahorse_recipients_new (sctx, FALSE);
 }
 
+/**
+ * seahorse_encrypt_recipients_new:
+ * @sctx: Current #SeahorseContext
+ *
+ * Creates a new #SeahorseRecipients for encrypting data with keys.
+ *
+ * Returns: The new #SeahorseWidget
+ **/
 SeahorseWidget*
 seahorse_encrypt_recipients_new (SeahorseContext *sctx)
 {
 	return seahorse_recipients_new (sctx, TRUE);
 }
 
+/**
+ * seahorse_recipients_run:
+ * @srecips: #SeahorseRecipients to run
+ *
+ * Runs the #SeahorseRecipients dialog until user finishes.
+ * @srecips must be destroyed after returning.
+ *
+ * Returns: The selected recipients, or NULL if none
+ **/
 GpgmeRecipients
 seahorse_recipients_run (SeahorseRecipients *srecips)
 {	

@@ -1,7 +1,7 @@
 /*
  * Seahorse
  *
- * Copyright (C) 2002 Jacob Perkins
+ * Copyright (C) 2003 Jacob Perkins
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,10 +21,6 @@
 
 #ifndef __SEAHORSE_RECIPIENTS_H__
 #define __SEAHORSE_RECIPIENTS_H__
-
-/* SeahorseRecipients is a SeahorseWidget for constructing a GpgmeRecipients list.
- * It contains a recipient list, two key stores,
- * and can prompt user if key's must be at least Fully Valid. */
 
 #include <glib.h>
 #include <gpgme.h>

@@ -22,11 +22,6 @@
 #ifndef __SEAHORSE_KEY_STORE_H__
 #define __SEAHORSE_KEY_STORE_H__
 
-/* SeahorseKeyStore is a GtkTreeStore.  It is an abstract class for storing and managing keys.
- * It does not deal with setting attributes or key changes.  It does remove keys when destroyed
- * and can return selected keys and/or locations.  By default, the store starts empty.
- * Key rows are assumed to be stored in column 0. */
-
 #include <gtk/gtk.h>
 
 #include "seahorse-context.h"
@@ -53,21 +48,31 @@ struct _SeahorseKeyStoreClass
 	GtkTreeStoreClass	parent_class;
 	
 	/* Virtual method for appending a key. When subclass method finishes,
-	 * iter should be set to the parent of the new row. */
+	 * iter should be set to the parent of the new row.
+	 * This is needed since not every key should always be added and
+	 * some stores will display subkeys.
+	 */
 	void			(* append)		(SeahorseKeyStore	*skstore,
 							 SeahorseKey		*skey,
 							 GtkTreeIter		*iter);
-
+	
+	/* Virtual method for setting the key's attributes. Name and KeyID are
+	 * set by the key-store, so implementation in subclasses is optional.
+	 */
 	void			(* set)			(GtkTreeStore		*store,
 							 GtkTreeIter		*iter,
 							 SeahorseKey		*skey);
 	
 	/* Optional virtual method for removing a row. Only implement if iter
-	 * is a parent and has sub-iters. */
+	 * is a parent and has sub-iters that also need to be removed.
+	 */
 	void			(* remove)		(SeahorseKeyStore	*skstore,
 							 GtkTreeIter		*iter);
 	
-	/* Virtual method for when the key at the row referenced by iter has changed. */
+	/* Virtual method for when the key at iter has changed. Key-store
+	 * will already do user ID changes, so implementation is optional
+	 * depending on displayed attributes.
+	 */
 	void			(* changed)		(SeahorseKey		*skey,
 							 SeahorseKeyChange	change,
 							 SeahorseKeyStore	*skstore,
