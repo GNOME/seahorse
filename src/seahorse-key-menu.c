@@ -96,13 +96,13 @@ seahorse_key_menu_class_init (SeahorseKeyMenuClass *klass)
 	container_class->remove = seahorse_key_menu_item_removed;
 	
 	g_object_class_install_property (gobject_class, PROP_SECRET,
-		g_param_spec_boolean ("secret", _("Menu Keys have Secret"),
-				      _("Whether the menu contains keys that have secret components"),
+		g_param_spec_boolean ("secret", "Menu Keys have Secret",
+				      "Whether the menu contains keys that have secret components",
 				      FALSE, G_PARAM_READWRITE));
 	
 	g_object_class_install_property (gobject_class, PROP_CTX,
-		g_param_spec_object ("ctx", _("Seahorse Context"),
-				     _("Current Seahorse Context to use"),
+		g_param_spec_object ("ctx", "Seahorse Context",
+				     "Current Seahorse Context to use",
 				     SEAHORSE_TYPE_CONTEXT, G_PARAM_READWRITE));
 	
 	menu_signals[SELECTED] = g_signal_new ("selected", G_OBJECT_CLASS_TYPE (gobject_class),

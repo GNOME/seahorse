@@ -105,16 +105,16 @@ seahorse_widget_class_init (SeahorseWidgetClass *klass)
 	gobject_class->get_property = seahorse_widget_get_property;
 	
 	g_object_class_install_property (gobject_class, PROP_NAME,
-		g_param_spec_string ("name", _("Widget name"),
-				     _("Name of glade file and main widget"),
+		g_param_spec_string ("name", _"Widget name",
+				     "Name of glade file and main widget",
 				     NULL, G_PARAM_READWRITE));
 	g_object_class_install_property (gobject_class, PROP_CTX,
-		g_param_spec_object ("ctx", _("Seahorse Context"),
-				     _("Current Seahorse Context to use"),
+		g_param_spec_object ("ctx", "Seahorse Context",
+				     "Current Seahorse Context to use",
 				     SEAHORSE_TYPE_CONTEXT, G_PARAM_READWRITE));
 	g_object_class_install_property (gobject_class, PROP_COMPONENT,
-		g_param_spec_boolean ("component", _("If Seahorse Component"),
-				      _("Seahorse Components are GnomeApps with extra signals"),
+		g_param_spec_boolean ("component", "If Seahorse Component",
+				      "Seahorse Components are GnomeApps with extra signals",
 				      FALSE, G_PARAM_READWRITE));
 }
 

@@ -80,8 +80,8 @@ seahorse_key_menu_item_class_init (SeahorseKeyMenuItemClass *klass)
 	gobject_class->get_property = seahorse_key_menu_item_get_property;
 	
 	g_object_class_install_property (gobject_class, PROP_KEY,
-		g_param_spec_object ("key", _("Seahorse Key"),
-				     _("Seahorse Key for this item"),
+		g_param_spec_object ("key", "Seahorse Key",
+				     "Seahorse Key for this item",
 				     SEAHORSE_TYPE_KEY, G_PARAM_READWRITE));
 }
 

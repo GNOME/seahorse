@@ -87,8 +87,8 @@ seahorse_recipients_class_init (SeahorseRecipientsClass *klass)
 	gobject_class->finalize = seahorse_recipients_finalize;
 	
 	g_object_class_install_property (gobject_class, PROP_VALIDITY,
-		g_param_spec_boolean ("validity", _("If need validity"),
-				      _("TRUE if recipients need to have full validity"),
+		g_param_spec_boolean ("validity", "If need validity",
+				      "TRUE if recipients need to have full validity",
 				      FALSE, G_PARAM_READWRITE));
 }
 

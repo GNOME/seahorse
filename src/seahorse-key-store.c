@@ -92,8 +92,8 @@ seahorse_key_store_class_init (SeahorseKeyStoreClass *klass)
 	klass->set = NULL;
 	
 	g_object_class_install_property (gobject_class, PROP_CTX,
-		g_param_spec_object ("ctx", _("Seahorse Context"),
-				     _("Current Seahorse Context to use"),
+		g_param_spec_object ("ctx", "Seahorse Context",
+				     "Current Seahorse Context to use",
 				     SEAHORSE_TYPE_CONTEXT, G_PARAM_READWRITE));
 }
 

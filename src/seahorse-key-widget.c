@@ -84,8 +84,8 @@ seahorse_key_widget_class_init (SeahorseKeyWidgetClass *klass)
 	gobject_class->get_property = seahorse_key_widget_get_property;
 	
 	g_object_class_install_property (gobject_class, PROP_KEY,
-		g_param_spec_object ("key",  _("Seahorse Key"),
-				     _("Seahorse Key of this widget"),
+		g_param_spec_object ("key",  "Seahorse Key",
+				     "Seahorse Key of this widget",
 				    SEAHORSE_TYPE_KEY, G_PARAM_READWRITE));
 }
 
