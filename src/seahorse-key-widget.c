@@ -23,6 +23,8 @@
 
 #include "seahorse-key-widget.h"
 
+#define PROPERTIES "key-properties"
+
 enum {
 	PROP_0,
 	PROP_KEY,
@@ -45,9 +47,10 @@ static void	seahorse_key_widget_destroyed		(GtkObject		*skey,
 
 static SeahorseWidgetClass	*parent_class		= NULL;
 
-/* Hash of key widget hashes with name as key.
- * Key widget hashes have keyid as key and widget as value. */
+/* Hash set of widget hash sets with the key's id as the key */
 static GHashTable		*types			= NULL;
+/* Hash set of window groups with the key's id as the key */
+static GHashTable		*groups			= NULL;
 
 GType
 seahorse_key_widget_get_type (void)
@@ -99,25 +102,39 @@ seahorse_key_widget_finalize (GObject *gobject)
 {
 	SeahorseWidget *swidget;
 	SeahorseKeyWidget *skwidget;
-	GHashTable *widgets;
+	GHashTable *widgets = NULL;
+	GtkWindowGroup *group = NULL;
+	const gchar *id;
+	GtkWidget *widget;
 	
 	skwidget = SEAHORSE_KEY_WIDGET (gobject);
 	swidget = SEAHORSE_WIDGET (skwidget);
 	
-	/* Remove widget from hash */
-	widgets = g_hash_table_lookup (types, swidget->name);
-	g_hash_table_remove (widgets, seahorse_key_get_id (skwidget->skey->key));
+	id = seahorse_key_get_id (skwidget->skey->key);
 	
-	/* Remove key widget hash from types & destroy if empty */
-	if (g_hash_table_size (widgets) == 0) {
-		g_hash_table_remove (types, swidget->name);
-		g_hash_table_destroy (widgets);
-		
-		/* Destroy types hash if empty */
-		if (g_hash_table_size (types) == 0) {
-			g_hash_table_destroy (types);
-			types = NULL;
+	/* get widgets hash from types */
+	widgets = g_hash_table_lookup (types, id);
+	/* if have a widgets hash, remove the widget */
+	if (widgets != NULL) {
+		g_hash_table_remove (widgets, swidget->name);
+		/* if there are no more widgets, remove the hash */
+		if (g_hash_table_size (widgets) == 0) {
+			g_hash_table_remove (types, id);
+			/* if there are no more keys, destroy types */
+			if (g_hash_table_size (types) == 0) {
+				g_hash_table_destroy (types);
+				types = NULL;
+			}
 		}
+	}
+	
+	/* get group from groups */
+	group = g_hash_table_lookup (groups, id);
+	/* if have a group, remove grab & window */
+	if (group != NULL) {
+		widget = glade_xml_get_widget (swidget->xml, swidget->name);
+		gtk_grab_remove (widget);
+		gtk_window_group_remove_window (group, GTK_WINDOW (widget));
 	}
 	
 	g_signal_handlers_disconnect_by_func (GTK_OBJECT (skwidget->skey),
@@ -180,43 +197,66 @@ seahorse_key_widget_destroyed (GtkObject *skey, SeahorseKeyWidget *skwidget)
 	seahorse_widget_destroy (SEAHORSE_WIDGET (skwidget));
 }
 
+/* Tries to create a new key widget given parameters.
+ * Makes use of hash sets to control which widgets can be created and how
+ * the focus is grabbed.
+ */
 static SeahorseWidget*
 seahorse_key_widget_create (gchar *name, SeahorseContext *sctx, SeahorseKey *skey, guint index)
 {
-	SeahorseWidget *swidget;
-	GHashTable *widgets;
+	SeahorseWidget *swidget = NULL;	//widget to lookup or create
+	GHashTable *widgets = NULL;	//hash of widgets from types
+	const gchar *id;		//hash key
+	GtkWindowGroup *group = NULL;	//window group from groups
+	GtkWidget *widget;		//main window widget of swidget
 	
-	/* Check if have types hash */
-	if (types != NULL) {
-		widgets = g_hash_table_lookup (types, name);
-		
-		/* Check if have key widgets hash */
-		if (widgets != NULL) {
-			swidget = g_hash_table_lookup (widgets, seahorse_key_get_id (skey->key));
-			
-			/* If have widget, present */
-			if (swidget != NULL) {
-				gtk_window_present (GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)));
-				return NULL;
-			}
-		}
-		/* Don't have any key widgets of type */
-		else {
-			widgets = g_hash_table_new ((GHashFunc)g_str_hash, (GCompareFunc)g_str_equal);
-			g_hash_table_insert (types, g_strdup (name), widgets);
-		}
+	id = seahorse_key_get_id (skey->key);
+	
+	/* if don't have a types hash, create one */
+	if (types == NULL)
+		types = g_hash_table_new_full ((GHashFunc)g_str_hash, (GCompareFunc)g_str_equal,
+			(GDestroyNotify)g_free, (GDestroyNotify)g_hash_table_destroy);
+	/* otherwise lookup the widgets hash for the key */
+	else
+		widgets = g_hash_table_lookup (types, id);
+	
+	/* if don't have a widgets hash for a key, create one and insert it */
+	if (widgets == NULL) {
+		widgets = g_hash_table_new_full ((GHashFunc)g_str_hash,
+			(GCompareFunc)g_str_equal, (GDestroyNotify)g_free, NULL);
+		g_hash_table_insert (types, g_strdup (id), widgets);
 	}
-	/* Don't have any widgets */
-	else {
-		types = g_hash_table_new ((GHashFunc)g_str_hash, (GCompareFunc)g_str_equal);
-		widgets = g_hash_table_new ((GHashFunc)g_str_hash, (GCompareFunc)g_str_equal);
-		g_hash_table_insert (types, g_strdup (name), widgets);
+	/* otherwise lookup the widget */
+	else
+		swidget = g_hash_table_lookup (widgets, name);
+	
+	/* if already have a widget of that type for the key, return null */
+	if (swidget != NULL)
+		return NULL;
+	
+	/* otherwise create a new widget & insert into widgets hash for the key */
+	swidget = g_object_new (SEAHORSE_TYPE_KEY_WIDGET, "name", name,
+		"ctx", sctx, "key", skey, "index", index, NULL);
+	g_hash_table_insert (widgets, g_strdup (name), swidget);
+	
+	/* if don't have a groups hash, create one */
+	if (groups == NULL)
+		groups = g_hash_table_new_full ((GHashFunc)g_str_hash, (GCompareFunc)g_str_equal,
+			(GDestroyNotify)g_free, (GDestroyNotify)g_object_unref);
+	/* otherwise lookup the group for that key */
+	else
+		group = g_hash_table_lookup (groups, id);
+	
+	/* if don't have a group for the key, create one and insert it */
+	if (group == NULL) {
+		group = gtk_window_group_new ();
+		g_hash_table_insert (groups, g_strdup (id), group);
 	}
 	
-	/* If widget doesn't already exist, create & insert into key widgets hash */
-	swidget = g_object_new (SEAHORSE_TYPE_KEY_WIDGET, "name", name, "ctx", sctx,
-		"key", skey, "index", index, NULL);
-	g_hash_table_insert (widgets, (gchar*)seahorse_key_get_id (skey->key), swidget);
+	/* get window, add it to the group, grab it, return it */
+	widget = glade_xml_get_widget (swidget->xml, swidget->name);
+	gtk_window_group_add_window (group, GTK_WINDOW (widget));
+	gtk_grab_add (widget);
 	
 	return swidget;
 }
@@ -232,4 +272,20 @@ seahorse_key_widget_new_with_index (gchar *name, SeahorseContext *sctx,
 				    SeahorseKey *skey, guint index)
 {
 	return seahorse_key_widget_create (name, sctx, skey, index);
+}
+
+gboolean
+seahorse_key_widget_can_create (gchar *name, SeahorseKey *skey)
+{
+	GHashTable *widgets = NULL;
+	
+	if (types == NULL)
+		return TRUE;
+	
+	widgets = g_hash_table_lookup (types, seahorse_key_get_id (skey->key));
+	
+	if (widgets == NULL)
+		return TRUE;
+	
+	return (g_hash_table_lookup (widgets, name) == NULL);
 }

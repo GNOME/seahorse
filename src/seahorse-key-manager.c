@@ -261,7 +261,7 @@ static void
 selection_changed (GtkTreeSelection *selection, SeahorseWidget *swidget)
 {
 	gint rows = 0;
-	gboolean selected = FALSE, single = FALSE, secret = FALSE;
+	gboolean selected = FALSE, single = FALSE, secret = FALSE, create = FALSE;
 	SeahorseKey *skey = NULL;
 	GtkTreeView *view;
 	
@@ -283,24 +283,33 @@ selection_changed (GtkTreeSelection *selection, SeahorseWidget *swidget)
 	}
 	
 	/* items that can do multiple */;
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "export_button"), selected);
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "sign_button"), selected);
+	create = (selected && seahorse_key_widget_can_create ("sign", skey));
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "sign_button"), create);
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "sign"), create);
+	
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "delete_button"), selected);
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "export"), selected);
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "sign"), selected);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "delete"), selected);
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "export_button"), selected);
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "export"), selected);
+	
 	/* items that can do single */
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "properties"), single);
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "properties_button"), single);
+	create = (single && seahorse_key_widget_can_create ("key-properties", skey));
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "key_properties"), create);
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "properties_button"), create);
+	
 	/* items that need a secret key */
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "change_passphrase"), secret);
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "add_uid"), secret);
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "add_subkey"), secret);
+	create = (secret && seahorse_key_widget_can_create ("add-uid", skey));
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "add_uid"), create);
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "key_add_uid"), create);
+	
+	create = (secret && seahorse_key_widget_can_create ("add-subkey", skey));
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "add_subkey"), create);
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "key_add_subkey"), create);
+	
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "add_revoker"), secret);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "key_change_passphrase"), secret);
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "key_add_uid"), secret);
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "key_add_subkey"), secret);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "key_add_revoker"), secret);
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "change_passphrase"), secret);
 }
 
 static void

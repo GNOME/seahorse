@@ -1,21 +1,27 @@
+2003-04-19  Jacob Perkins  <jap1@users.sourceforge.net>
+
+	* src/seahorse-key-properties: Bug fix in ::properies_destroyed
+	* src/seahorse-key-widget: Redid hash table so that dialogs are key modal,
+	added ::can_create, fixes bug #111126
+	* src/seahorse-key-manager: Added support for seahorse_key_widget_can_create()
+	in ::selection_changed
+	* src/seahorse-sign: Bug fixes so works properly: can do multiple,
+	fixed signals handling
+
 2003-04-16  Jacob Perkins  <jap1@users.sourceforge.net>
 
 	* libseahorse/seahorse-context: ::keys_added will not add keys to an empty list
 	* libseahorse/seahorse-widget: No longer connects to context progress
-	signal for insensitizing widget
+	signal for insensitizing widget, address bug #110923
 	* src/seahorse-key-manager: Does not insensitize buttons or key list,
-	listens to all progress signal emissions from any SeahorseContext
+	listens to all progress signal emissions from any SeahorseContext,
+	addresses bug #110923
 	* src/seahorse-key-op: ::generate does operation in a new context and
-	calls seahorse_context_keys_added()
+	calls seahorse_context_keys_added(), addresses bug #110923
 	* src/seahorse-generate: Removed call to seahorse_context_keys_added
-	* src/seahorse-op: ::import_data uses a new context & calls
+	* src/seahorse-op: ::import_data uses a new context & calls, addresses bug #110923
 	seahorse_context_keys_added()
-	* src/seahorse-add-subkey:
-	* src/seahorse-add-uid:
-	* src/seahorse-revoke:
-	* src/seahorse-sign:
-	Made dialogs modal so key editing ops will not conflict
-	* src/seahorse-key-properties: Disconnecs key changed signal, fixes bug 110430
+	* src/seahorse-key-properties: Disconnecs key changed signal, fixes bug #110430
 
 2003-04-14  Jacob Perkins  <jap1@users.sourceforge.net>
 

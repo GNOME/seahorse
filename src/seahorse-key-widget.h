@@ -58,5 +58,8 @@ SeahorseWidget*	seahorse_key_widget_new_with_index	(gchar			*name,
 							 SeahorseContext	*sctx,
 							 SeahorseKey		*skey,
 							 guint			index);
+
+gboolean	seahorse_key_widget_can_create		(gchar			*name,
+							 SeahorseKey		*skey);
 	
 #endif /* __SEAHORSE_KEY_WIDGET_H__ */

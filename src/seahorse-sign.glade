@@ -9,11 +9,10 @@
   <property name="title" translatable="yes">Sign Key</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
-  <property name="modal">True</property>
+  <property name="modal">False</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
   <property name="has_separator">False</property>
-  <signal name="delete_event" handler="delete_event" last_modification_time="Wed, 12 Feb 2003 15:09:14 GMT"/>
 
   <child internal-child="vbox">
     <widget class="GtkVBox" id="dialog-vbox1">
@@ -48,7 +47,6 @@
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="response_id">-6</property>
-	      <signal name="clicked" handler="closed" last_modification_time="Wed, 12 Feb 2003 15:09:03 GMT"/>
 	    </widget>
 	  </child>
 
@@ -60,7 +58,6 @@
 	      <property name="can_focus">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="response_id">-5</property>
-	      <signal name="clicked" handler="ok_clicked" last_modification_time="Thu, 13 Feb 2003 04:27:46 GMT"/>
 
 	      <child>
 		<widget class="GtkAlignment" id="alignment1">

@@ -493,8 +493,8 @@ key_changed (SeahorseKey *skey, SeahorseKeyChange change, SeahorseWidget *swidge
 static void
 properties_destroyed (GtkObject *object, SeahorseWidget *swidget)
 {
-	g_signal_handlers_disconnect_by_func ( SEAHORSE_KEY_WIDGET (swidget)->skey,
-		key_changed, swidget));
+	g_signal_handlers_disconnect_by_func (SEAHORSE_KEY_WIDGET (swidget)->skey,
+		key_changed, swidget);
 }
 
 void
