@@ -312,7 +312,6 @@ drag_end (GtkWidget *widget, GdkDragContext *context, gpointer data)
     if (t != NULL) /* Delete the files later */
         g_signal_connect (widget, "destroy", 
                     G_CALLBACK (cleanup_file), t);
-    g_free (t);
 
     t = (gchar*)g_object_get_data (G_OBJECT (widget), "drag-data");
     g_object_set_data (G_OBJECT (widget), "drag-data", NULL);

@@ -622,6 +622,9 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "gen_revoke"), FALSE);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "key_gen_revoke"), FALSE);
 
+	w = glade_xml_get_widget (swidget->xml, "toolbar");
+	gtk_toolbar_unset_style (GTK_TOOLBAR (w));
+
     glade_xml_signal_connect_data (swidget->xml, "backup_activate",
         G_CALLBACK (backup_activate), swidget);
 	

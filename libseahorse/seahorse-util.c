@@ -61,7 +61,7 @@ static const SeahorsePGPHeader seahorse_pgp_headers[] = {
     }
 };
 
-static const gchar *bad_filename_chars = "/\<>|";
+static const gchar *bad_filename_chars = "/\\<>|";
 
 void
 seahorse_util_show_error (GtkWindow *parent, const gchar *message)
@@ -408,7 +408,7 @@ seahorse_util_filename_for_keys (GList *keys)
         skey = SEAHORSE_KEY (keys->data);
         t = seahorse_key_get_userid_name (skey, 0);
         if (t == NULL) {
-            t = g_strdup (seahorse_key_get_id (skey));
+            t = g_strdup (seahorse_key_get_id (skey->key));
             if (strlen (t) > 8)
                 t[8] = 0;
         }
@@ -416,7 +416,8 @@ seahorse_util_filename_for_keys (GList *keys)
         t = g_strdup (_("Multiple Keys"));
     }
     
-    g_strdelimit (t, bad_filename_chars, "_");
+    g_strstrip (t);
+    g_strdelimit (t, bad_filename_chars, '_');
     r = g_strconcat (t, SEAHORSE_EXT_ASC, NULL);
     g_free (t);
     return r;
