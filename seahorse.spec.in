@@ -44,6 +44,8 @@ update-mime-database %{_datadir}/mime/ > /dev/null
 %{_bindir}/*
 %{_libdir}/bonobo/*.so
 %{_libdir}/bonobo/servers/*
+%{_libdir}/gedit-2/plugins/*.so
+%{_libdir}/gedit-2/plugins/*.gedit-plugin
 %{_libexecdir}/*
 %{_datadir}/%{name}
 %{_datadir}/applications/*
@@ -60,6 +62,9 @@ update-mime-database %{_datadir}/mime/ > /dev/null
 %changelog
 * Wed Oct 13 2004 Nate Nielsen <nielsen@memberwebs.com>
 - Added new mime info 
+
+* Tue Oct 12 2004 Nate Nielsen <nielsen@memberwebs.com>
+- Added the gedit plugin to the default manifest
 
 * Fri May 02 2003 Yanko Kaneti <yaneti@declera.com>
 - Add some new files to the manifest
