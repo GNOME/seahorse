@@ -45,7 +45,7 @@
 	<legalnotice>
 		<title>Feedback</title>
 		<para>To report a bug or make a suggestion regarding the &app; application or this manual,
-		submit a report at <ulink url="http://sourceforge.net/tracker/?group_id=3023" type="http">Seahorse Tracker page</ulink>.</para>
+		submit a report at <ulink url="http://bugzilla.gnome.org" type="http">Gnome bugzilla</ulink>.</para>
 	</legalnotice>
 </articleinfo>
 
@@ -105,13 +105,23 @@
 			<varlistentry>
 				<term>Toolbar.</term>
 				<listitem>
-					<para>The toolbar only contains commands that affect keys.</para>
+					<para>The toolbar only contains commands that affect <glossterm>keys</glossterm>.</para>
 				</listitem>
 			</varlistentry>
 			<varlistentry>
 				<term>Key List.</term>
 				<listitem>
-					<para>The key list shows the keys in your default key ring.</para>
+					<para>The key list shows the <glossterm>keys</glossterm> in your <glossterm>key ring</glossterm>.
+					Some <glossterm>keys</glossterm> also have <glossterm>sub keys</glossterm>.
+					Each <glossterm>key</glossterm> and <glossterm>sub key</glossterm> show the following attributes:
+					<itemizedlist>
+						<listitem><para><guilabel>Name</guilabel></para></listitem>
+						<listitem><para><glossterm>Key ID</glossterm></para></listitem>
+						<listitem><para><glossterm>Trust</glossterm></para></listitem>
+						<listitem><para><glossterm>Type</glossterm></para></listitem>
+						<listitem><para><glossterm>Length</glossterm></para></listitem>
+					</itemizedlist>
+					Only one <glossterm>key</glossterm> may be selected at a time.</para>
 				</listitem>				
 			</varlistentry>
 			<varlistentry>
@@ -129,62 +139,103 @@ which the application is designed. -->
 <sect1 id="usage">
 	<title>Usage</title>
 	<para>You can use the &app; application to access the following features:
-		<itemizedlist>
-			<listitem><para><xref linkend="generate"/></para></listitem>
-			<listitem><para><xref linkend="export"/></para></listitem>
-			<listitem><para><xref linkend="import"/></para></listitem>
-			<listitem><para><xref linkend="text-editor"/></para></listitem>
-			<listitem><para><xref linkend="file-manager"/></para></listitem>
-			<listitem><para><xref linkend="key-properties"/></para></listitem>
-			<listitem><para><xref linkend="delete"/></para></listitem>
-		</itemizedlist>
-		<warning>While &app; is in use, do not make any changes to the key ring with another program.
-		External changes could have unkown and possibly undesirable affects.</warning>
-	</para>
+	<itemizedlist>
+		<listitem><para><xref linkend="generate"/></para></listitem>
+		<listitem><para><xref linkend="export"/></para></listitem>
+		<listitem><para><xref linkend="import"/></para></listitem>
+		<listitem><para><xref linkend="text-editor"/></para></listitem>
+		<listitem><para><xref linkend="file-manager"/></para></listitem>
+		<listitem><para><xref linkend="key-properties"/></para></listitem>
+		<listitem><para><xref linkend="delete"/></para></listitem>
+	</itemizedlist></para>
+	<para>Any window with a menubar contains a <guimenu>View</guimenu> menu.
+	In the <guimenu>View</guimenu> menu, you may choose whether or not to view the
+	<guimenuitem>Toolbar</guimenuitem> or <guimenuitem>Statusbar</guimenuitem>.
+	Selecting either option will hide or show the selected component.</para>
+	<para>Any window with a statusbar will display status messages from operations.
+	The current or last focused statusbar can also display operation progress.</para>
+	<para>You can get help for a feature by clicking <guibutton>help</guibutton>
+	in a dialog or selecting <menuchoice><guimenu>Help</guimenu></menuchoice>.</para>
+	<warning>While &app; is in use, do not make any changes to the key ring with another program.
+	External changes could have unkown and possibly undesirable affects.</warning>
 <!-- ================ Usage Subsection ================================ -->
 	<sect2 id="generate">
 		<title>Generating a Key</title>
-		<para>To generate a key, choose 
-			<menuchoice>
-				<guimenu>File</guimenu>
-				<guimenuitem>New</guimenuitem>
-			</menuchoice>.
+		<para>To generate a new <glossterm>key</glossterm>, choose 
+		<menuchoice><guimenu>File</guimenu><guimenuitem>New</guimenuitem></menuchoice>
+		from the <guilabel>Key Manager</guilabel>.
 		The <guilabel>Generate Key</guilabel> dialog is displayed.
-		You will need to choose a <xref linkend="userid"/>, <xref linkend="key-type"/>, and <xref linkend="key-expires"/> a passphrase.</para>
+		You will need to enter your full name, a valid email address, and a comment describing the <glossterm>key</glossterm>.
+		This will create the <glossterm>primary user ID</glossterm>.
+		You will then need to choose a <glossterm>key type</glossterm> and a <glossterm>key length</glossterm>.
+		The range of the <glossterm>length</glossterm> depends on the type selected.
+		Then you must choose a <glossterm>key expiration</glossterm> date, or have the <glossterm>key</glossterm> never expire.
+		When finished, click <guibutton>OK</guibutton>.</para>
+		<warning>No other operations should be performed during <glossterm>key</glossterm> generation.
+		Doing so will stop the generation process prematurely.</warning>
+	</sect2>
+	<sect2 id="import">
+		<title>Importing Keys</title>
+		<para>To <glossterm>import</glossterm> <glossterm>keys</glossterm>, choose
+		<menuchoice><guimenu>File</guimenu><guimenuitem>Open...</guimenuitem></menuchoice>
+		from the <guilabel>Key Manager</guilabel>.
+		The <guilabel>Import Keys</guilabel> dialog is displayed.
+		<variablelist>
+			<varlistentry>
+				<term>Import from a file</term>
+				<listitem>
+					<para>To <glossterm>import</glossterm> <glossterm>keys</glossterm>
+					from a file, select <guilabel>Import from File</guilabel>,
+					choose a file, then click <guibutton>OK</guibutton>.</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Import from text</term>
+				<listitem>
+					<para>To <glossterm>import</glossterm> <glossterm>keys</glossterm>
+					from text, select <guilabel>Import from Text</guilabel>,
+					paste the text into the text area, then click <guibutton>OK</guibutton>.</para>
+					<warning>The text must be <glossterm>ascii armored</glossterm>
+					in order to be imported successfully.</warning>
+				</listitem>
+			</varlistentry>
+		</variablelist></para>
 	</sect2>
 	<sect2 id="export">
 		<title>Exporting a Key</title>
-		<para>To export a key, select a key from the list and then choose 
-			<menuchoice>
-				<guimenu>File</guimenu>
-				<guimenuitem>Save As</guimenuitem>
-			</menuchoice>,
+		<para>To <glossterm>export</glossterm> a <glossterm>key</glossterm> from the <guilabel>Key Manager</guilabel>,
+		select a <glossterm>key</glossterm> from the list and then choose 
+		<menuchoice><guimenu>File</guimenu><guimenuitem>Save As...</guimenuitem></menuchoice>
 		or click <guibutton>Save As</guibutton>.
+		You can do the same from the <xref linkend="key-properties"/> of the
+		<glossterm>key</glossterm> you want to <glossterm>export</glossterm>.
 		The <guilabel>Export Key</guilabel> dialog is displayed.
-		Enter a filename, or select <guilabel>Export to Text</guilabel>, then click <guibutton>OK</guibutton>.
-		The public key will then be exported to the file or text.</para>
-		<warning>If <xref linkend="ascii-armor"/> is not enabled, exported text will not display properly.</warning>
-	</sect2>
-	<sect2 id="import">
-		<title>Importing Key(s)</title>
-		<para>To import key(s), choose
-			<menuchoice>
-				<guimenu>File</guimenu>
-				<guimenuitem>Import</guimenuitem>
-			</menuchoice>.
-		The <guilabel>Import Key(s)</guilabel> dialog is displayed.
-		Enter a filename, or select <guilabel>Import from Text</guilabel> and paste the text in, then click <guibutton>OK</guibutton>.
-		If the file or text contains any keys, they will be imported into the key ring.
-		The status bar will show the number of keys imported.</para>
+		<variablelist>
+			<varlistentry>
+				<term>Export to File</term>
+				<listitem>
+					<para>To <glossterm>export</glossterm> a <glossterm>key</glossterm> to a file,
+					select <guilabel>Export to File</guilabel>,
+					choose the filename, then click <guibutton>OK</guibutton>.</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Export to Text</term>
+				<listitem>
+					<para>To <glossterm>export</glossterm> a <glossterm>key</glossterm> to text,
+					select <guilabel>Export to Text</guilabel>, then click <guibutton>OK</guibutton>.
+					The exported <glossterm>key</glossterm> will be in the text area.</para>
+					<warning>If <xref linkend="ascii-armor"/> is not enabled,
+					exported text will not display properly.</warning>
+				</listitem>
+			</varlistentry>
+		</variablelist></para>
 	</sect2>
 	<sect2 id="text-editor">
 		<title>Text Editor</title>
 		<para>To use the text editor, choose
-		<menuchoice>
-			<guimenu>File</guimenu>
-			<guimenuitem>Text Editor</guimenuitem>
-		</menuchoice>.
-		The <guilabel>Text Editor</guilabel> window is displayed.
+		<menuchoice><guimenu>File</guimenu><guimenuitem>Text Editor</guimenuitem></menuchoice>
+		from the <guilabel>Key Manager</guilabel>.
 		<warning><xref linkend="ascii-armor"/> should be enabled while using the <guilabel>Text Editor</guilabel>.
 		Otherwise, text will not be displayed properly, rendering the <guilabel>Text Editor</guilabel> useless.</warning>
 		The following operations are available for text:
@@ -193,105 +244,93 @@ which the application is designed. -->
 				<term>Import</term>
 				<listitem>
 					<para>Select
-					<menuchoice>
-						<guimenu>Edit</guimenu>
-						<guimenuitem>Import</guimenuitem>
-					</menuchoice>
-					or right-click and select <guilabel>Import</guilabel>.
-					This will import any keys contained in the current text.</para>
+					<menuchoice><guimenu>Edit</guimenu><guimenuitem>Import</guimenuitem></menuchoice>,
+					click <guibutton>Import</guibutton>,
+					or right-click and select <guibutton>Import</guibutton>.
+					This will <glossterm>import</glossterm> any <glossterm>keys</glossterm> contained in the text.</para>
 				</listitem>
 			</varlistentry>
 			<varlistentry>
 				<term>Export</term>
 				<listitem>
 					<para>Select
-					<menuchoice>
-						<guimenu>Edit</guimenu>
-						<guimenuitem>Export</guimenuitem>
-					</menuchoice>.
-					The <xref linkend="recipients"/> will come up.
-					When finished, the recipient's keys will be exported to the text.</para>
+					<menuchoice><guimenu>Edit</guimenu><guimenuitem>Export</guimenuitem></menuchoice>.
+					The <xref linkend="recipients"/> dialog will appear,
+					in which you can select <glossterm>keys</glossterm> to <glossterm>export</glossterm>.
+					When finished, the chosen <glossterm>keys</glossterm> will be exported to the text.</para>
 				</listitem>
 			</varlistentry>
 			<varlistentry>
 				<term>Sign</term>
 				<listitem>
 					<para>Select
-					<menuchoice>
-						<guimenu>Edit</guimenu>
-						<guimenuitem>Sign</guimenuitem>
-					</menuchoice>
-					or right-click and select <guilabel>Sign</guilabel>.
-					This will try to sign the current text with the <xref linkend="default-key"/>.
-					<xref linkend="passphrase"/> verification is needed for signing.
-					If successful, the text will be signed with your key.</para>
+					<menuchoice><guimenu>Edit</guimenu><guimenuitem>Sign</guimenuitem></menuchoice>,
+					click <guibutton>Sign</guibutton>,
+					or right-click and select <guibutton>Sign</guibutton>.
+					After confirming the <xref linkend="passphrase"/> to the <xref linkend="default-key"/>,
+					the text will be <glossterm>signed</glossterm>.</para>
 				</listitem>
 			</varlistentry>
 			<varlistentry>
 				<term>Clear Sign</term>
 				<listitem>
 					<para>Select
-					<menuchoice>
-						<guimenu>Edit</guimenu>
-						<guimenuitem>Clear Sign</guimenuitem>
-					</menuchoice>
-					or right-click and select <guilabel>Clear Sign</guilabel>.
-					This will try to clear sign the current text with the <xref linkend="default-key"/>.
-					<xref linkend="passphrase"/> verification is needed for signing.
-					If successful, the text will be enclosed by a signature.</para>
+					<menuchoice><guimenu>Edit</guimenu><guimenuitem>Clear Sign</guimenuitem></menuchoice>,
+					click <guibutton>Clear Sign</guibutton>,
+					or right-click and select <guibutton>Clear Sign</guibutton>.
+					After confirming the <xref linkend="passphrase"/> to the <xref linkend="default-key"/>,
+					the text will be <glossterm>clear signed</glossterm>.</para>
 				</listitem>
 			</varlistentry>
 			<varlistentry>
 				<term>Encrypt</term>
 				<listitem>
 					<para>Select
-					<menuchoice>
-						<guimenu>Edit</guimenu>
-						<guimenuitem>Encrypt</guimenuitem>
-					</menuchoice>
-					or right-click and select <guilabel>Encrypt</guilabel>.
-					The <xref linkend="recipients"/> will come up.
-					When finished, the text will be encrypted with the selected keys.</para>
+					<menuchoice><guimenu>Edit</guimenu><guimenuitem>Encrypt</guimenuitem></menuchoice>,
+					click <guibutton>Encrypt</guibutton>,
+					or right-click and select <guibutton>Encrypt</guibutton>.
+					The <xref linkend="recipients"/> dialog will appear,
+					in which you can select the <glossterm>keys</glossterm> to <glossterm>encrypt</glossterm> to.
+					When finished, the text will be <glossterm>encrypted</glossterm> to the selected <glossterm>keys</glossterm>.</para>
 				</listitem>
 			</varlistentry>
 			<varlistentry>
 				<term>Decrypt</term>
 				<listitem>
+					<caution>You must have access to the <glossterm>secret key</glossterm>
+					of one of the <glossterm>encryption keys</glossterm> in your
+					<glossterm>key ring</glossterm> in order to <glossterm>decrypt</glossterm> the text.</caution>
 					<para>Select
-					<menuchoice>
-						<guimenu>Edit</guimenu>
-						<guimenuitem>Decrypt</guimenuitem>
-					</menuchoice>
-					or right-click and select <guilabel>Decrypt</guilabel>.
-					This will try to decrypt the current text.
-					In order to decrypt the text, you must have access to the secret key of one of the <xref linkend="recipients"/>.
-					<xref linkend="passphrase"/> verification is needed for decryption.
-					If successful, the decrypted text will be displayed.</para>
+					<menuchoice><guimenu>Edit</guimenu><guimenuitem>Decrypt</guimenuitem></menuchoice>,
+					click <guibutton>Decrypt</guibutton>,
+					or right-click and select <guibutton>Decrypt</guibutton> and enter the <xref linkend="passphrase"/>.
+					If successful, the text will be <glossterm>decrypted</glossterm>.</para>
 				</listitem>
 			</varlistentry>
 			<varlistentry>
 				<term>Verify</term>
 				<listitem>
+					<caution>You must have the <glossterm>signing key</glossterm> in your
+					<glossterm>key ring</glossterm> in order to successfully
+					<glossterm>verify</glossterm> a <glossterm>signature</glossterm>.</caution>
 					<para>Select
-					<menuchoice>
-						<guimenu>Edit</guimenu>
-						<guimenuitem>Verify</guimenuitem>
-					</menuchoice>
-					or right-click and select <guilabel>Verify</guilabel>.
-					This will try to verify any <xref linkend="signatures"/> contained in the text.</para>
+					<menuchoice><guimenu>Edit</guimenu><guimenuitem>Verify</guimenuitem></menuchoice>,
+					click <guibutton>Verify</guibutton>,
+					or right-click and select <guibutton>Verify</guibutton>.
+					If successful, the <xref linkend="signatures"/> dialog will appear.
+					Otherwise, you will receive an error regarding how <glossterm>verification</glossterm> failed.</para>
 				</listitem>
 			</varlistentry>
 			<varlistentry>
 				<term>Decrypt and Verify</term>
 				<listitem>
-					<para>Select
-					<menuchoice>
-						<guimenu>Edit</guimenu>
-						<guimenuitem>Decrypt and Verify</guimenuitem>
-					</menuchoice>
-					or right-click and select <guilabel>Decrypt and Verify</guilabel>.
-					This will try to decrypt the current text, then verify any <xref linkend="signatures"/> found.
-					<xref linkend="passphrase"/> verification is needed for decryption.</para>
+					<para><glossterm>Decrypt and Verify</glossterm> combines the
+					<glossterm>decrypt</glossterm> and <glossterm>verify</glossterm>
+					operations by <glossterm>decrypting</glossterm>,
+					then <glossterm>verifying</glossterm> the text.
+					To <glossterm>decrypt and verify</glossterm>, select
+					<menuchoice><guimenu>Edit</guimenu><guimenuitem>Decrypt and Verify</guimenuitem></menuchoice>
+					or right-click and select <guibutton>Decrypt and Verify</guibutton>.</para>
 				</listitem>
 			</varlistentry>
 		</variablelist></para>
@@ -304,6 +343,15 @@ which the application is designed. -->
 		The following operations are available for files:
 		<variablelist>
 			<varlistentry>
+				<term>Import</term>
+				<listitem>
+					<para>Choose an existing file, then select
+					<menuchoice><guimenu>Edit</guimenu><guimenuitem>Import</guimenuitem></menuchoice>,
+					or click <guibutton>Import</guibutton>.
+					Any <glossterm>keys</glossterm> in the file will be added to the <glossterm>key ring</glossterm>.</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
 				<term>Export</term>
 				<listitem>
 					<para>Enter a filename (the file does not have to exist), then select
@@ -311,15 +359,6 @@ which the application is designed. -->
 					The <xref linkend="recipients"/> dialog will appear, in which you can select the
 					<glossterm>keys</glossterm> to <glossterm>export</glossterm>.
 					When finished, the exported <glossterm>keys</glossterm> will be appended to the file.</para>
-				</listitem>
-			</varlistentry>
-			<varlistentry>
-				<term>Import</term>
-				<listitem>
-					<para>Choose an existing file, then select
-					<menuchoice><guimenu>Edit</guimenu><guimenuitem>Import</guimenuitem></menuchoice>,
-					or click <guibutton>Import</guibutton>.
-					Any <glossterm>keys</glossterm> in the file will be added to the <glossterm>key ring</glossterm>.</para>
 				</listitem>
 			</varlistentry>
 			<varlistentry>
@@ -390,145 +429,74 @@ which the application is designed. -->
 	</sect2>
 	<sect2 id="key-properties">
 		<title>Key Properties</title>
-		<para>To view key properties, select a key from the list and choose
-		<menuchoice>
-			<guimenu>Edit</guimenu>
-			<guimenuitem>Properties</guimenuitem>
-		</menuchoice>,
-		or click <guibutton>Properties</guibutton>.
+		<para>To view key properties, select a <glossterm>key</glossterm> from the list and choose
+		<menuchoice><guimenu>Edit</guimenu><guimenuitem>Properties</guimenuitem></menuchoice>,
+		click <guibutton>Properties</guibutton>, or double-click the <glossterm>key</glossterm>.
 		The <guilabel>Key Properties</guilabel> window is displayed.
-		The following properties are shown:
-		<variablelist>
-			<varlistentry>
-				<term>Fingerprint</term>
-				<listitem>
-					<para>The unique fingerprint of the key.</para>
-				</listitem>
-			</varlistentry>
-		</variablelist></para>
-		<sect3 id="trust">
-			<title>Owner Trust / Key Validity</title>
-			<para>The following <guilabel>Trust</guilabel> and <guilabel>Validity</guilabel> levels are available:
-			<itemizedlist>
-				<listitem><guilabel>Unknown</guilabel></listitem>
-				<listitem><guilabel>Never</guilabel></listitem>
-				<listitem><guilabel>Marginal</guilabel></listitem>
-				<listitem><guilabel>Full</guilabel></listitem>
-				<listitem><guilabel>Ultimate</guilabel></listitem>
-			</itemizedlist>
-			Personally generated keys are given <guilabel>Ultimate</guilabel> <guilabel>Trust</guilabel> and <guilabel>Validity</guilabel> by default.</para>
+		From the <guilabel>Key Properties</guilabel> window, you can also access
+		<xref linkend="export"/> and <xref linkend="delete"/>.</para>
+		<para>The first attribute shown is the <glossterm>fingerprint</glossterm>.
+		Below the <glossterm>fingerprint</glossterm> is the <xref linkend="owner-trust"/>
+		and <xref linkend="key-disable"/>. Next is the primary <xref linkend="key-attributes"/>,
+		<xref linkend="userid"/> list, and <glossterm>sub key</glossterm> list with <xref linkend="key-attributes"/>.</para>
+		<sect3 id="owner-trust">
+			<title>Owner Trust</title>
+			<para>Use the option menu to change the <glossterm>owner trust</glossterm> of the <glossterm>key</glossterm>.</para>
+		</sect3>
+		<sect3 id="key-disable">
+			<title>Disable Key</title>
+			<para>Checking <guibutton>Disable</guibutton> will disable the <glossterm>key</glossterm>.
+			Most <glossterm>keys</glossterm> should be left enabled.</para>
 		</sect3>
 		<sect3 id="key-attributes">
 			<title>Key Attributes</title>
-			<para> Attributes that exist for every key are:
-			<variablelist>
-				<varlistentry>
-					<term>Key ID</term>
-					<listitem>
-						<para>The key's ID.</para>
-					</listitem>
-				</varlistentry>
-				<varlistentry>
-					<term>Created</term>
-					<listitem>
-						<para>The creation date of the key.</para>
-					</listitem>
-				</varlistentry>
-			</variablelist></para>
-		</sect3>
-		<sect3 id="key-type">
-			<title>Key Type</title>
-			<para>The key type is determined by it's <guilabel>Algorithm</guilabel>
-			and its other primary and sub keys.
-			The following algorithms are available:
-			<variablelist>
-				<varlistentry>
-					<term>DSA</term>
-					<listitem>
-						<para>This is the default type for a primary key in a key pair.
-							It can also be a sub key.
-							The length ranges from 512 to 1024.</para>
-					</listitem>
-				</varlistentry>
-				<varlistentry>
-					<term>ElGamal</term>
-					<listitem>
-						<para>This key is only available as a sub key and is the default sub key type in a key pair.
-						The length ranges from 768 to 4096.</para>
-					</listitem>
-				</varlistentry>
-				<varlistentry>
-					<term>RSA</term>
-					<listitem>
-						<para>This key can be a primary key and a sub key.
-						The length ranges from 1024 to 4096.</para>
-					</listitem>
-				</varlistentry>
-			</variablelist></para>
-			<note>Keys without <guilabel>ElGamal</guilabel> subkeys do not have encryption capabilities.</note>
+			<para>Both <glossterm>primary keys</glossterm> and <glossterm>sub keys</glossterm>
+			have the following attributes:
+			<itemizedlist>
+				<listitem><para><glossterm>Key ID</glossterm></para></listitem>
+				<listitem><para><glossterm>Algorithm</glossterm></para></listitem>
+				<listitem><para>Creation date</para></listitem>
+				<listitem><para><glossterm>Length</glossterm></para></listitem>
+				<listitem><para><xref linkend="key-expires"/></para></listitem>
+			</itemizedlist></para>
 		</sect3>
 		<sect3 id="key-expires">
 			<title>Key Expiration</title>
-			<para>Each key has a unique expiration date.  That date can be either an exact date or <guilabel>Never</guilabel>.</para>
+			<para>If the <glossterm>key</glossterm> has a <glossterm>secret key</glossterm>,
+			the <glossterm>expiration</glossterm> is shown as a date editor and a
+			<guibutton>Never Expires</guibutton> checkbox.
+			These can be used to change the key's <glossterm>expiration</glossterm>.
+			Otherwise, the date is simply a label stating <guilabel>Never</guilabel>
+			or the exact date.</para>
 		</sect3>
 		<sect3 id="userid">
-			<title>User ID</title>
-			<para>A user ID consists of the following parts:
-			<variablelist>
-				<varlistentry>
-					<term>Name</term>
-					<listitem>
-						<para>A name or handle of key's owner.</para>
-					</listitem>
-				</varlistentry>
-				<varlistentry>
-					<term>Email</term>
-					<listitem>
-						<para>A (hopefully) valid email address associated with the key.</para>
-					</listitem>
-				</varlistentry>
-				<varlistentry>
-					<term>Comment</term>
-					<listitem>
-						<para>A comment about the key, or ID.</para>
-					</listitem>
-				</varlistentry>
-			</variablelist></para>
+			<title>User IDs</title>
+			<para>Below the <xref linkend="key-expires"/> is the list of <glossterm>user IDs</glossterm>.</para>
 		</sect3>
-		<para>Below the <xref linkend="userid"/> are the subkeys (if any).
-		Subkeys have the same <xref linkend="key-attributes"/> as a primary key,
-		but can also be deleted and revoked.</para>
-		<para>The following key operations are available:
-		<variablelist>
-			<varlistentry>
-				<term>Export</term>
-				<listitem>
-					<para><xref linkend="export"/></para>
-				</listitem>
-			</varlistentry>
-			<varlistentry>
-				<term>Delete</term>
-				<listitem>
-					<para>Select
-					<menuchoice>
-						<guimenu>File</guimenu>
-						<guimenuitem>Delete</guimenuitem>
-					</menuchoice>
-					to <xref linkend="delete"/></para>
-				</listitem>
-			</varlistentry>
-		</variablelist></para>
-		<!-- sub sections (if possible) for key editing -->
+		<sect3 id="subkeys">
+			<title>Sub Keys</title>
+			<para>Below the <xref linkend="userid"/> list is the list of <glossterm>sub keys</glossterm>.
+			<note>Not all <glossterm>keys</glossterm> have <glossterm>sub keys</glossterm>.</note>
+			<glossterm>Sub keys</glossterm> have <xref linkend="key-attributes"/>.</para>
+		</sect3>
+		<sect3 id="change-passphrase">
+			<title>Change Passphrase</title>
+			<para>If the <glossterm>key</glossterm> has a <glossterm>secret key</glossterm>,
+			you can select <menuchoice><guimenu>Edit</guimenu><guimenuitem>Change Passphrase</guimenuitem></menuchoice>.
+			The first <xref linkend="passphrase"/> entry is for the original <glossterm>passphrase</glossterm>,
+			the second <xref linkend="passphrase"/> entry is for the new <glossterm>passphrase</glossterm>.</para>
+		</sect3>
 	</sect2>
 	<sect2 id="delete">
 		<title>Deleting a Key</title>
 		<para>To delete a key, choose
-		<menuchoice>
-			<guimenu>Edit</guimenu>
-			<guimenuitem>Delete</guimenuitem>
-		</menuchoice>.
+		<menuchoice><guimenu>Edit</guimenu><guimenuitem>Delete</guimenuitem></menuchoice>
+		from the <guilabel>Key Manager</guilabel>, or click <guibutton>Delete</guibutton>.
+		You can do the same from the <xref linkend="key-properties"/> window
+		of the <glossterm>key</glossterm> that you want to delete.
 		The <guilabel>Delete Key</guilabel> dialog is displayed.
-		Click <guibutton>Yes</guibutton> to delete the key.</para>
+		Click <guibutton>Yes</guibutton> to delete the <glossterm>key</glossterm>.</para>
+		<warning>This will permanently delete the <glossterm>key</glossterm> and cannot be undone.</warning>
 	</sect2>
 	<sect3 id="passphrase">
 		<title>Passphrase</title>
@@ -537,13 +505,40 @@ which the application is designed. -->
 	</sect3>
 	<sect3 id="signatures">
 		<title>Signatures</title>
-		<para>This dialog shows the signatures and their status of the verified data.</para>
+		<para>This dialog shows information about a verified signature.
+		<variablelist>
+			<varlistentry>
+				<term>Status</term>
+				<listitem>
+					<para>The status of the <glossterm>signature</glossterm>,
+					usually <guilabel>Good</guilabel>.</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Created</term>
+				<listitem>
+					<para>Creation date of the <glossterm>signature</glossterm>.</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Signer</term>
+				<listitem>
+					<para><glossterm>User ID</glossterm> of the <glossterm>signing key</glossterm>.</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Key ID</term>
+				<listitem>
+					<para><glossterm>Key ID</glossterm> of the <glossterm>signing key</glossterm>.</para>
+				</listitem>
+			</varlistentry>
+		</variablelist></para>
 	</sect3>
 	<sect3 id="recipients">
 		<title>Recipients</title>
 		<para>Use this dialog to select multiple recipeints.
 		Currently this used for exporting keys and encrypting data.
-		Encryption requires that keys have at least <guilabel>Full Validity:</guilabel> <xref linkend="trust"/>.</para>
+		Encryption requires that keys have at least <guilabel>Full Validity:</guilabel>.</para>
 	</sect3>
 </sect1>
 <sect1 id="preferences">

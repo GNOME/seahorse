@@ -45,7 +45,7 @@ static void	seahorse_context_class_init	(SeahorseContextClass	*klass);
 static void	seahorse_context_init		(SeahorseContext	*sctx);
 static void	seahorse_context_finalize	(GObject		*gobject);
 
-static GObjectClass	*parent_class			= NULL;
+static GtkObjectClass	*parent_class			= NULL;
 static guint		context_signals[LAST_SIGNAL]	= { 0 };
 
 GType
@@ -65,7 +65,7 @@ seahorse_context_get_type (void)
 			(GInstanceInitFunc) seahorse_context_init
 		};
 		
-		context_type = g_type_register_static (G_TYPE_OBJECT, "SeahorseContext", &context_info, 0);
+		context_type = g_type_register_static (GTK_TYPE_OBJECT, "SeahorseContext", &context_info, 0);
 	}
 	
 	return context_type;
@@ -179,7 +179,7 @@ seahorse_context_finalize (GObject *gobject)
 	g_list_free (sctx->priv->key_ring);
 	gpgme_release (sctx->ctx);
 	
-	parent_class->finalize (gobject);
+	G_OBJECT_CLASS (parent_class)->finalize (gobject);
 }
 
 /* Add a new SeahorseKey to the key ring */
@@ -225,6 +225,14 @@ seahorse_context_new (void)
 	sctx->priv->key_ring = g_list_first (list);
 	
 	return sctx;
+}
+
+void
+seahorse_context_destroy (SeahorseContext *sctx)
+{
+	g_return_if_fail (GTK_IS_OBJECT (sctx));
+	
+	gtk_object_destroy (GTK_OBJECT (sctx));
 }
 
 GList*

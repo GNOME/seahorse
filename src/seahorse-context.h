@@ -44,7 +44,7 @@ typedef struct _SeahorseContextPrivate SeahorseContextPrivate;
 	
 struct _SeahorseContext
 {
-	GObject			parent;
+	GtkObject		parent;
 	
 	GpgmeCtx		ctx;
 	SeahorseContextPrivate	*priv;
@@ -52,7 +52,7 @@ struct _SeahorseContext
 
 struct _SeahorseContextClass
 {
-	GObjectClass		parent_class;
+	GtkObjectClass		parent_class;
 	
 	/* Operation status signal */
 	void 			(* status)			(const SeahorseContext	*sctx,
@@ -65,6 +65,9 @@ struct _SeahorseContextClass
 
 /* Creates a new context */
 SeahorseContext*	seahorse_context_new			(void);
+
+/* Emits the destroy signal for context */
+void			seahorse_context_destroy		(SeahorseContext	*sctx);
 
 /* Returns the cached key ring */
 GList*			seahorse_context_get_keys		(const SeahorseContext	*sctx);

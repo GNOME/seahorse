@@ -160,7 +160,7 @@ seahorse_key_manager_store_new (SeahorseContext *sctx, GtkTreeView *view)
 	gtk_tree_view_append_column (view, column);
 	
 	renderer = gtk_cell_renderer_text_new ();
-	column = gtk_tree_view_column_new_with_attributes (_("Algorithm"), renderer, "text", ALGO, NULL);
+	column = gtk_tree_view_column_new_with_attributes (_("Type"), renderer, "text", ALGO, NULL);
 	gtk_tree_view_column_set_resizable (column, TRUE);
 	gtk_tree_view_append_column (view, column);
 	

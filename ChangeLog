@@ -5,6 +5,9 @@
 	Added hash table to key-widget to ensure only one dialog of each type per key, modified wins & dialogs appropriately
 	Signatures is now a widget, not a key-widget; removed option to show key properties; shows uid & keyid of signer
 	Added SeahorseWidget::new_allow_multiple to accomodate needs of Signatures
+	Changed 'Algorithm' to 'Type' in key manager store
+	Changed context to GtkObject for destroy signal, re-added SeahorseContext::destroy
+	Widgets now listen to context's destroy signal, destroying self when called so context & keys always finalized
 
 	9 Jan 2003; Jacob Perkins <jap1@users.sourceforge.net>
 	

@@ -45,15 +45,11 @@ static void
 quit (GtkWidget *widget, SeahorseWidget *swidget)
 {	
 	GtkTreeModel *model;
-	SeahorseContext *sctx;
 	
 	model = gtk_tree_view_get_model (GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, KEY_LIST)));
 	seahorse_key_store_destroy (SEAHORSE_KEY_STORE (model));
 	
-	/* unref context since widget has own ref */
-	g_object_unref (swidget->sctx);
-	
-	seahorse_widget_destroy (swidget);
+	seahorse_context_destroy (swidget->sctx);
 	
 	gtk_exit (0);
 }
@@ -159,6 +155,7 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 	SeahorseWidget *swidget;
 	
 	swidget = seahorse_widget_new_component (KEY_MANAGER, sctx);
+	gtk_object_sink (GTK_OBJECT (sctx));
 	
 	glade_xml_signal_connect_data (swidget->xml, "quit", G_CALLBACK (quit), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "quit_event", G_CALLBACK (delete_event), swidget);

@@ -52,6 +52,9 @@ static void		seahorse_widget_closed		(GtkWidget		*widget,
 static gboolean		seahorse_widget_delete_event	(GtkWidget		*widget,
 							 GdkEvent		*event,
 							 SeahorseWidget		*swidget);
+static void		seahorse_widget_destroyed	(GtkObject		*object,
+							 SeahorseWidget		*swidget);
+							 
 /* component signal functions */
 static void		seahorse_widget_show_status	(const SeahorseContext	*sctx,
 							 const gchar		*status,
@@ -131,6 +134,7 @@ seahorse_widget_finalize (GObject *gobject)
 		widgets = NULL;
 	}
 	
+	g_signal_handlers_disconnect_by_func (swidget->sctx, seahorse_widget_destroyed, swidget);
 	g_signal_handlers_disconnect_by_func (swidget->sctx, seahorse_widget_show_status, swidget);
 	gtk_widget_destroy (glade_xml_get_widget (swidget->xml, swidget->name));
 	
@@ -168,6 +172,7 @@ seahorse_widget_set_property (GObject *object, guint prop_id, const GValue *valu
 		case PROP_CTX:
 			swidget->sctx = g_value_get_object (value);
 			g_object_ref (G_OBJECT (swidget->sctx));
+			g_signal_connect (swidget->sctx, "destroy", G_CALLBACK (seahorse_widget_destroyed), swidget);
 			break;
 		/* Connects component specific callbacks */
 		case PROP_COMPONENT:
@@ -227,6 +232,13 @@ static gboolean
 seahorse_widget_delete_event (GtkWidget *widget, GdkEvent *event, SeahorseWidget *swidget)
 {
 	seahorse_widget_closed (widget, swidget);
+}
+
+/* Destroy widget when context is destroyed */
+static void
+seahorse_widget_destroyed (GtkObject *object, SeahorseWidget *swidget)
+{
+	seahorse_widget_destroy (swidget);
 }
 
 /* Shows status in the window's status bar */
