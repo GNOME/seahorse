@@ -146,7 +146,9 @@ seahorse_pgp_source_init (SeahorsePGPSource *psrc)
     
     /* init private vars */
     psrc->priv = g_new0 (SeahorsePGPSourcePrivate, 1);
-    psrc->priv->keys = g_hash_table_new (g_str_hash, g_str_equal);
+    
+    /* Note that we free our own key values, but keys are free automatically */
+    psrc->priv->keys = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 }
 
 /* dispose of all our internal references */
@@ -354,7 +356,7 @@ add_key_to_source (SeahorsePGPSource *psrc, gpgme_key_t key)
         remove_key_from_source (id, prev, psrc);
         
     /* Add to lookups */ 
-    g_hash_table_replace (psrc->priv->keys, (gpointer)id, skey);     
+    g_hash_table_replace (psrc->priv->keys, g_strdup (id), skey);     
 
     /* This stuff is 'undone' in release_key */
     g_object_ref (skey);
@@ -404,6 +406,7 @@ keyload_handler (LoadContext *lctx)
         }
         
         add_key_to_source (lctx->psrc, key);
+        seahorse_util_key_unref (key);
         lctx->loaded++;
     }
     
@@ -444,7 +447,7 @@ keyload_handler (LoadContext *lctx)
 static void
 key_ids_to_hash (const gchar *id, SeahorseKey *skey, GHashTable *ht)
 {
-    g_hash_table_insert (ht, g_strdup(id), NULL);
+    g_hash_table_insert (ht, g_strdup (id), NULL);
 }
 
 /* Callback which copies secret key ids into new hashtable */
@@ -583,6 +586,7 @@ seahorse_pgp_source_get_key (SeahorseKeySource *src, const gchar *fpr,
     SeahorseKey *skey;
     LoadContext *lctx;
     gpgme_error_t err;
+    gchar *fingerprint;
     
     g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (src), NULL);
     psrc = SEAHORSE_PGP_SOURCE (src);
@@ -616,12 +620,17 @@ seahorse_pgp_source_get_key (SeahorseKeySource *src, const gchar *fpr,
         
     /* Set the batch size to zero which forces it to be synchronous */
     lctx->batch = 0;
+    
+    /* We need to backup the fingerprint, as the old key can be freed */
+    fingerprint = g_strdup (fpr);
        
     /* Run the load handler */
     keyload_handler (lctx);
         
     /* Try again with our lookup */
-    skey = g_hash_table_lookup (psrc->priv->keys, fpr);
+    skey = g_hash_table_lookup (psrc->priv->keys, fingerprint);
+    g_free (fingerprint);
+    
     return skey;
 }
 
