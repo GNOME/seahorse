@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-09 11:13-0400\n"
-"PO-Revision-Date: 2004-10-09 22:06-0400\n"
+"POT-Creation-Date: 2004-10-12 01:16-0400\n"
+"PO-Revision-Date: 2004-10-12 22:06-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: English/Canada <adamw@FreeBSD.org>\n"
 "MIME-Version: 1.0\n"
@@ -261,9 +261,9 @@ msgid "Bad passphrase! Try again for %s"
 msgstr "Bad passphrase! Try again for %s"
 
 #: libseahorse/seahorse-passphrase.glade.h:1 src/seahorse-add-uid.glade.h:1
-#: src/seahorse-change-passphrase.glade.h:1 src/seahorse-export.glade.h:1
+#: src/seahorse-change-passphrase.glade.h:1
 #: src/seahorse-generate-adv.glade.h:1 src/seahorse-generate-druid.glade.h:1
-#: src/seahorse-import.glade.h:1 src/seahorse-revoke.glade.h:1
+#: src/seahorse-revoke.glade.h:1
 msgid "*"
 msgstr "*"
 
@@ -299,37 +299,41 @@ msgstr "Selected %d keys (%d not fully valid)"
 msgid "Choose Keys"
 msgstr "Choose Keys"
 
-#: libseahorse/seahorse-signatures.c:42
+#: libseahorse/seahorse-signatures.c:43
 msgid "Good, signing key expired"
 msgstr "Good, signing key expired"
 
-#: libseahorse/seahorse-signatures.c:46
+#: libseahorse/seahorse-signatures.c:47
 msgid "Good, signature expired"
 msgstr "Good, signature expired"
 
-#: libseahorse/seahorse-signatures.c:50
+#: libseahorse/seahorse-signatures.c:51
 msgid "Good, signing key certificate revoked"
 msgstr "Good, signing key certificate revoked"
 
-#: libseahorse/seahorse-signatures.c:54 src/seahorse-key-properties.c:364
+#: libseahorse/seahorse-signatures.c:55 src/seahorse-key-properties.c:364
 msgid "Good"
 msgstr "Good"
 
-#: libseahorse/seahorse-signatures.c:58
+#: libseahorse/seahorse-signatures.c:59
 msgid "Signing key not in key ring"
 msgstr "Signing key not in key ring"
 
-#: libseahorse/seahorse-signatures.c:61
+#: libseahorse/seahorse-signatures.c:62
 msgid "Bad Signature"
 msgstr "Bad Signature"
 
-#: libseahorse/seahorse-signatures.c:64
+#: libseahorse/seahorse-signatures.c:65
 msgid "Not a signature"
 msgstr "Not a signature"
 
-#: libseahorse/seahorse-signatures.c:67
+#: libseahorse/seahorse-signatures.c:68
 msgid "Verification Error"
 msgstr "Verification Error"
+
+#: libseahorse/seahorse-signatures.c:72
+msgid "No signature"
+msgstr "No signature"
 
 #. created
 #: libseahorse/seahorse-signatures.glade.h:1 src/seahorse-key-properties.c:354
@@ -354,7 +358,7 @@ msgstr "Signer:"
 msgid "Status:"
 msgstr "Status:"
 
-#: libseahorse/seahorse-util.c:92
+#: libseahorse/seahorse-util.c:96
 msgid "%Y-%m-%d"
 msgstr "%Y-%m-%d"
 
@@ -414,75 +418,100 @@ msgstr "_Default Key:"
 msgid "Configure PGP"
 msgstr "Configure PGP"
 
-#: src/main.c:42
+#: src/main.c:41
 msgid "Import keys from the file"
 msgstr "Import keys from the file"
 
-#: src/main.c:42 src/main.c:45 src/main.c:48 src/main.c:51 src/main.c:54
-#: src/main.c:57 src/main.c:60
+#: src/main.c:41 src/main.c:44 src/main.c:47 src/main.c:50 src/main.c:53
+#: src/main.c:56
 msgid "FILE"
 msgstr "FILE"
 
-#: src/main.c:45
+#: src/main.c:44
 msgid "Encrypt file"
 msgstr "Encrypt file"
 
-#: src/main.c:48
+#: src/main.c:47
 msgid "Sign file with default key"
 msgstr "Sign file with default key"
 
-#: src/main.c:51
+#: src/main.c:50
 msgid "Encrypt and sign file with default key"
 msgstr "Encrypt and sign file with default key"
 
-#: src/main.c:54
+#: src/main.c:53
 msgid "Decrypt encrypted file"
 msgstr "Decrypt encrypted file"
 
-#: src/main.c:57
+#: src/main.c:56
 msgid "Verify signature file"
 msgstr "Verify signature file"
 
-#: src/main.c:60
-msgid "Decrypt encrypt file and verify any signatures it contains"
-msgstr "Decrypt encrypt file and verify any signatures it contains"
+#: src/main.c:92
+#, c-format
+msgid "Couldn't encrypt \"%s\""
+msgstr "Could not encrypt \"%s\""
 
 #: src/main.c:129 src/seahorse.desktop.in.h:1
 msgid "GPG Keys Manager"
 msgstr "GPG Keys Manager"
 
-#: src/main.c:144
+#: src/main.c:140 src/seahorse-key-manager.c:127
+#, c-format
+msgid "Couldn't import keys from \"%s\""
+msgstr "Could not import keys from \"%s\""
+
+#: src/main.c:145
 msgid "Imported key"
 msgstr "Imported key"
 
-#: src/main.c:145
+#: src/main.c:146
 #, c-format
 msgid "Imported %d keys"
 msgstr "Imported %d keys"
 
-#: src/main.c:151
+#: src/main.c:152
 #, c-format
-msgid "Encrypt file is %s"
-msgstr "Encrypt file is %s"
+msgid "Encrypted file is %s"
+msgstr "Encrypted file is %s"
 
-#: src/main.c:162
+#: src/main.c:159
+#, c-format
+msgid "Couldn't sign \"%s\""
+msgstr "Could not sign \"%s\""
+
+#: src/main.c:164
 #, c-format
 msgid "Signature file is %s"
 msgstr "Signature file is %s"
 
-#: src/main.c:170
+#: src/main.c:172
 #, c-format
 msgid "Encrypted and signed file is %s"
 msgstr "Encrypted and signed file is %s"
 
-#: src/main.c:181 src/main.c:212
+#: src/main.c:180
+#, c-format
+msgid "Couldn't decrypt \"%s\""
+msgstr "Could not decrypt \"%s\""
+
+#: src/main.c:185
 #, c-format
 msgid "Decrypted file is %s"
 msgstr "Decrypted file is %s"
 
+#: src/main.c:201
+#, c-format
+msgid "Couldn't verify \"%s\""
+msgstr "Could not verify \"%s\""
+
 #: src/seahorse.desktop.in.h:2
 msgid "Manage your GPG keys"
 msgstr "Manage your GPG keys"
+
+#: src/seahorse-add-subkey.c:109
+msgid "Couldn't add subkey"
+msgstr "Could not add subkey"
 
 #: src/seahorse-add-subkey.c:125
 #, c-format
@@ -540,6 +569,10 @@ msgstr "RSA (encrypt only)"
 #: src/seahorse-add-subkey.glade.h:12 src/seahorse-generate-adv.glade.h:21
 msgid "RSA (sign only)"
 msgstr "RSA (sign only)"
+
+#: src/seahorse-add-uid.c:80
+msgid "Couldn't add user id"
+msgstr "Could not add user ID"
 
 #: src/seahorse-add-uid.c:103
 #, c-format
@@ -611,58 +644,18 @@ msgstr "%s is a key pair! Do you still want to delete it?"
 msgid "Are you sure you want to permanently delete %s?"
 msgstr "Are you sure you want to permanently delete %s?"
 
+#: src/seahorse-delete.c:115
+msgid "Couldn't delete key"
+msgstr "Could not delete key"
+
 #: src/seahorse-delete.c:135
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
 msgstr "Are you sure you want to permanently delete subkey %d of %s?"
 
-#: src/seahorse-export.glade.h:2
-msgid "Choose a file to export to"
-msgstr "Choose a file to export to"
-
-#: src/seahorse-export.glade.h:3 src/seahorse-key-manager.glade.h:15
-msgid "E_xport"
-msgstr "E_xport"
-
-#: src/seahorse-export.glade.h:4
-msgid "Export Keys"
-msgstr "Export Keys"
-
-#: src/seahorse-export.glade.h:5
-msgid "Export keys to a file"
-msgstr "Export keys to a file"
-
-#: src/seahorse-export.glade.h:6
-msgid "Export keys to a key server"
-msgstr "Export keys to a key server"
-
-#: src/seahorse-export.glade.h:7
-msgid "Export keys to clipboard"
-msgstr "Export keys to clipboard"
-
-#: src/seahorse-export.glade.h:8
-msgid "Export to _Clipboard:"
-msgstr "Export to _Clipboard:"
-
-#: src/seahorse-export.glade.h:9
-msgid "Export to _File:"
-msgstr "Export to _File:"
-
-#: src/seahorse-export.glade.h:10
-msgid "Export to _Server:"
-msgstr "Export to _Server:"
-
-#: src/seahorse-export.glade.h:11
-msgid "Key server web address"
-msgstr "Key server web address"
-
-#: src/seahorse-export.glade.h:12
-msgid "Name of file to export to"
-msgstr "Name of file to export to"
-
-#: src/seahorse-export.glade.h:13 src/seahorse-import.glade.h:15
-msgid "www.keyserver.net/en"
-msgstr "www.keyserver.net/en"
+#: src/seahorse-delete.c:157
+msgid "Couldn't delete subkey"
+msgstr "Could not delete subkey"
 
 #: src/seahorse-generate-adv.glade.h:3
 msgid "Confirmation of passphrase"
@@ -879,65 +872,61 @@ msgstr "Method Select"
 msgid "Select a method to generate your new key."
 msgstr "Select a method to generate your new key."
 
-#: src/seahorse-import.glade.h:2
-msgid "Enter a unique key id"
-msgstr "Enter a unique key id"
+#: src/seahorse-key-manager.c:84
+msgid "All PGP key files"
+msgstr "All PGP key files"
 
-#: src/seahorse-import.glade.h:3
-msgid "Import Key(s)"
-msgstr "Import Key(s)"
+#: src/seahorse-key-manager.c:92
+msgid "All files"
+msgstr "All files"
 
-#: src/seahorse-import.glade.h:4
-msgid "Import a key from a key server"
-msgstr "Import a key from a key server"
+#: src/seahorse-key-manager.c:106
+msgid "Import Key"
+msgstr "Import Key"
 
-#: src/seahorse-import.glade.h:5
-msgid "Import from _Clipboard:"
-msgstr "Import from _Clipboard:"
+#: src/seahorse-key-manager.c:144
+msgid "Couldn't import keys from clipboard"
+msgstr "Could not import keys from clipboard"
 
-#: src/seahorse-import.glade.h:6
-msgid "Import from _File:"
-msgstr "Import from _File:"
+#: src/seahorse-key-manager.c:178
+msgid "Couldn't export key to clipboard"
+msgstr "Could not export key to clipboard"
 
-#: src/seahorse-import.glade.h:7
-msgid "Import from _Server:"
-msgstr "Import from _Server:"
+#: src/seahorse-key-manager.c:208
+msgid "Export Key"
+msgstr "Export Key"
 
-#: src/seahorse-import.glade.h:8
-msgid "Import keys from a file"
-msgstr "Import keys from a file"
+#: src/seahorse-key-manager.c:225
+msgid ""
+"A file already exists with this name.\n"
+"\n"
+"Do you want to overwrite it?"
+msgstr ""
+"A file already exists with this name.\n"
+"\n"
+"Do you want to overwrite it?"
 
-#: src/seahorse-import.glade.h:9
-msgid "Import keys from clipboard"
-msgstr "Import keys from clipboard"
+#: src/seahorse-key-manager.c:228
+msgid "Replace"
+msgstr "Replace"
 
-#: src/seahorse-import.glade.h:10
-msgid "Import keys from selected source"
-msgstr "Import keys from selected source"
+#: src/seahorse-key-manager.c:260
+#, c-format
+msgid "Couldn't export key to \"%s\""
+msgstr "Could not export key to \"%s\""
 
-#: src/seahorse-import.glade.h:11
-msgid "Select File to Import"
-msgstr "Select File to Import"
-
-#: src/seahorse-import.glade.h:12
-msgid "Select or enter a key server's web address"
-msgstr "Select or enter a key server's web address"
-
-#: src/seahorse-import.glade.h:13
-msgid "_Import"
-msgstr "_Import"
-
-#: src/seahorse-import.glade.h:14
-msgid "_Key ID:"
-msgstr "_Key ID:"
-
-#: src/seahorse-key-manager.c:198
+#: src/seahorse-key-manager.c:370
 msgid "translator_credits"
 msgstr "Adam Weinberger <adamw@gnome.org>"
 
-#: src/seahorse-key-manager.c:218
+#: src/seahorse-key-manager.c:390
 msgid "seahorse"
 msgstr "seahorse"
+
+#: src/seahorse-key-manager.c:621
+#, c-format
+msgid "Couldn't import key from \"%s\""
+msgstr "Could not import key from \"%s\""
 
 #: src/seahorse-key-manager.glade.h:1
 msgid "Add P_hoto ID..."
@@ -994,6 +983,10 @@ msgstr "Create a revocation certificate"
 #: src/seahorse-key-manager.glade.h:14
 msgid "Delete key"
 msgstr "Delete key"
+
+#: src/seahorse-key-manager.glade.h:15
+msgid "E_xport"
+msgstr "E_xport"
 
 #: src/seahorse-key-manager.glade.h:16
 msgid "E_xport..."
@@ -1052,40 +1045,56 @@ msgid "_Contents"
 msgstr "_Contents"
 
 #: src/seahorse-key-manager.glade.h:30
+msgid "_Copy"
+msgstr "_Copy"
+
+#: src/seahorse-key-manager.glade.h:31
+msgid "_Copy Key"
+msgstr "_Copy Key"
+
+#: src/seahorse-key-manager.glade.h:32
 msgid "_Delete"
 msgstr "_Delete"
 
-#: src/seahorse-key-manager.glade.h:31
+#: src/seahorse-key-manager.glade.h:33
+msgid "_Delete Key"
+msgstr "_Delete Key"
+
+#: src/seahorse-key-manager.glade.h:34
 msgid "_Expand All"
 msgstr "_Expand All"
 
-#: src/seahorse-key-manager.glade.h:32
+#: src/seahorse-key-manager.glade.h:35
 msgid "_Generate Revocation Certificate..."
 msgstr "_Generate Revocation Certificate..."
 
-#: src/seahorse-key-manager.glade.h:33
+#: src/seahorse-key-manager.glade.h:36
 msgid "_Import..."
 msgstr "_Import..."
 
-#: src/seahorse-key-manager.glade.h:34
+#: src/seahorse-key-manager.glade.h:37
 msgid "_Key"
 msgstr "_Key"
 
-#: src/seahorse-key-manager.glade.h:35
+#: src/seahorse-key-manager.glade.h:38
 msgid "_New..."
 msgstr "_New..."
 
-#: src/seahorse-key-manager.glade.h:36
+#: src/seahorse-key-manager.glade.h:39
+msgid "_Paste Key"
+msgstr "_Paste Key"
+
+#: src/seahorse-key-manager.glade.h:40
 msgid "_Properties"
 msgstr "_Properties"
 
 #. do sign
-#: src/seahorse-key-manager.glade.h:37 src/seahorse-key-properties.c:172
+#: src/seahorse-key-manager.glade.h:41 src/seahorse-key-properties.c:172
 #: src/seahorse-sign.glade.h:17
 msgid "_Sign"
 msgstr "_Sign"
 
-#: src/seahorse-key-manager.glade.h:38
+#: src/seahorse-key-manager.glade.h:42
 msgid "_Sign..."
 msgstr "_Sign..."
 
@@ -1316,6 +1325,10 @@ msgstr "Seahorse Preferences"
 msgid "Visible Columns"
 msgstr "Visible Columns"
 
+#: src/seahorse-revoke.c:51
+msgid "Couldn't revoke subkey"
+msgstr "Could not revoke subkey"
+
 #: src/seahorse-revoke.c:75
 #, c-format
 msgid "Revoke Subkey %d of %s"
@@ -1334,6 +1347,10 @@ msgid ""
 msgstr ""
 "You are about to add %s as a revoker for %s. This operation cannot be "
 "undone! Are you sure you want to continue?"
+
+#: src/seahorse-revoke.c:119
+msgid "Couldn't add revoker"
+msgstr "Could not add revoker"
 
 #: src/seahorse-revoke.glade.h:2
 msgid "Compromised"
@@ -1390,6 +1407,10 @@ msgstr "_Description:"
 #: src/seahorse-revoke.glade.h:15
 msgid "_Reason:"
 msgstr "_Reason:"
+
+#: src/seahorse-sign.c:56
+msgid "Couldn't sign key"
+msgstr "Could not sign key"
 
 #: src/seahorse-sign.c:80
 #, c-format
