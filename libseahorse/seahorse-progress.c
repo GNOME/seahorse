@@ -108,10 +108,8 @@ operation_done (SeahorseOperation *operation, GtkWidget *appbar)
 }
 
 void 
-seahorse_progress_appbar_add_operation (GtkWidget* appbar, SeahorseOperation *operation)
+seahorse_progress_appbar_set_operation (GtkWidget* appbar, SeahorseOperation *operation)
 {
-    SeahorseMultiOperation *mop;
-    
     g_return_if_fail (GNOME_IS_APPBAR (appbar));
     g_return_if_fail (SEAHORSE_IS_OPERATION (operation));
     
@@ -124,19 +122,9 @@ seahorse_progress_appbar_add_operation (GtkWidget* appbar, SeahorseOperation *op
     g_signal_connect (operation, "progress", G_CALLBACK (operation_progress), appbar);
     g_object_set_data_full (G_OBJECT (appbar), "operations", operation, 
                                 (GDestroyNotify)g_object_unref);
-    
-#if 0    
-    mop = SEAHORSE_MULTI_OPERATION (g_object_get_data (G_OBJECT (appbar), "operations"));
-    if (mop == NULL) {
-        mop = seahorse_multi_operation_new ();
-        g_signal_connect (mop, "done", G_CALLBACK (operation_done), appbar);
-        g_signal_connect (mop, "progress", G_CALLBACK (operation_progress), appbar);
-        g_object_set_data_full (G_OBJECT (appbar), "operations", mop, 
-                                (GDestroyNotify)g_object_unref);
-    }
 
-    seahorse_multi_operation_add (mop, operation);    
-#endif
+    operation_progress (operation, seahorse_operation_get_details (operation),
+                        seahorse_operation_get_progress (operation), appbar);
 }
 
 /* -----------------------------------------------------------------------------

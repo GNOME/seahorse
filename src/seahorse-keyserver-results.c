@@ -353,7 +353,7 @@ seahorse_keyserver_results_show (SeahorseContext *sctx, SeahorseKeySource *sksrc
     g_return_val_if_fail (operation != NULL, win);
     
     w = glade_xml_get_widget (swidget->xml, "status");
-    seahorse_progress_appbar_add_operation (w, operation);
+    seahorse_progress_appbar_set_operation (w, operation);
 
     skstore = seahorse_key_manager_store_new (sksrc, view);
 	selection_changed (selection, swidget);

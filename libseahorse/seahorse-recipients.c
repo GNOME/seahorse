@@ -178,7 +178,7 @@ seahorse_recipients_get (SeahorseContext *sctx, SeahorseKeyPair **signer)
     }
     
     widget = glade_xml_get_widget (swidget->xml, "status");
-    seahorse_progress_appbar_add_operation (widget, operation);
+    seahorse_progress_appbar_set_operation (widget, operation);
         
 	skstore = seahorse_recipients_store_new (sksrc, view);
    

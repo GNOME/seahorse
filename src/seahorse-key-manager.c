@@ -720,7 +720,7 @@ seahorse_key_manager_show (SeahorseContext *sctx)
     g_return_val_if_fail (operation != NULL, win);
     
     w = glade_xml_get_widget (swidget->xml, "status");
-    seahorse_progress_appbar_add_operation (w, operation);
+    seahorse_progress_appbar_set_operation (w, operation);
 
     /* Although not all the keys have completed we'll know whether we have 
      * any or not at this point */

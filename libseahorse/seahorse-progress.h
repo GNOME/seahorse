@@ -31,7 +31,7 @@
  * SEAHORSE APPBAR HOOKS
  */
 
-void          seahorse_progress_appbar_add_operation  (GtkWidget* appbar,
+void          seahorse_progress_appbar_set_operation  (GtkWidget* appbar,
                                                        SeahorseOperation *operation);
 
 void          seahorse_progress_show                  (SeahorseContext *sctx, 
