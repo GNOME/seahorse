@@ -77,6 +77,4 @@ seahorse_signatures_new (SeahorseContext *sctx, GpgmeSigStat status)
 			seahorse_util_show_error (NULL, _("Verification Error"));
 			break;
 	}
-	
-	g_print ("%s\n", gpgme_get_notation (sctx->ctx));
 }
