@@ -30,12 +30,19 @@ static gint
 import_data (SeahorseContext *sctx, GpgmeData data, GpgmeError *err)
 {
 	gint keys = 0;
+	SeahorseContext *new_ctx;
 	
-	*err = gpgme_op_import_ext (sctx->ctx, data, &keys);
+	new_ctx = seahorse_context_new ();
+	*err = gpgme_op_import_ext (new_ctx->ctx, data, &keys);
 	gpgme_data_release (data);
-	g_return_val_if_fail (*err == GPGME_No_Error, -1);
+	seahorse_context_destroy (new_ctx);
 	
-	return keys;
+	if (*err == GPGME_No_Error) {
+		seahorse_context_keys_added (sctx, keys);
+		return keys;
+	}
+	else
+		g_return_val_if_reached (-1);
 }
 
 /**
@@ -98,6 +105,7 @@ export_data (SeahorseContext *sctx, GpgmeRecipients recips, GpgmeError *err)
 	*err = gpgme_data_new (&data);
 	if (*err == GPGME_No_Error)
 		*err = gpgme_op_export (sctx->ctx, recips, data);
+
 	gpgme_recipients_release (recips);
 	
 	return data;

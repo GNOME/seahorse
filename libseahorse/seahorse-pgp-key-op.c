@@ -1,3 +1,23 @@
+/*
+ * Seahorse
+ *
+ * Copyright (C) 2003 Jacob Perkins
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the
+ * Free Software Foundation, Inc.,
+ * 59 Temple Place, Suite 330,
+ * Boston, MA 02111-1307, USA.
+ */
 
 #include <gnome.h>
 
@@ -23,6 +43,9 @@
  * @expires: Expiration date of key
  *
  * Tries to generate a new key based on given parameters.
+ * The generation operation is done with a new #SeahorseContext.
+ * If the generation is successful, seahorse_context_keys_added() will be
+ * called with @sctx.
  *
  * Returns: GpgmeError
  **/
@@ -34,6 +57,7 @@ seahorse_key_op_generate (SeahorseContext *sctx, const gchar *name,
 {
 	gchar *common, *key_type, *start, *parms, *expires_date;
         GpgmeError err;
+	SeahorseContext *new_ctx;
 	
 	g_return_val_if_fail (strlen (name) >= 5, GPGME_Invalid_Value);
 	
@@ -80,12 +104,16 @@ seahorse_key_op_generate (SeahorseContext *sctx, const gchar *name,
 	else
 		parms = g_strdup_printf ("%s%d\n%s", start, length, common);
 	
-	err = gpgme_op_genkey (sctx->ctx, parms, NULL, NULL);
+	new_ctx = seahorse_context_new ();
+	err = gpgme_op_genkey (new_ctx->ctx, parms, NULL, NULL);
+	seahorse_context_destroy (new_ctx);
+	
+	if (err == GPGME_No_Error)
+		seahorse_context_keys_added (sctx, 1);
 	
 	/* Free xmls */
 	g_free (parms);
 	g_free (start);
-	g_free (key_type);
 	g_free (common);
 	
 	return err;

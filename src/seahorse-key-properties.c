@@ -490,6 +490,13 @@ key_changed (SeahorseKey *skey, SeahorseKeyChange change, SeahorseWidget *swidge
 	}
 }
 
+static void
+properties_destroyed (GtkObject *object, SeahorseWidget *swidget)
+{
+	g_signal_handlers_disconnect_by_func ( SEAHORSE_KEY_WIDGET (swidget)->skey,
+		key_changed, swidget));
+}
+
 void
 seahorse_key_properties_new (SeahorseContext *sctx, SeahorseKey *skey)
 {
@@ -499,6 +506,8 @@ seahorse_key_properties_new (SeahorseContext *sctx, SeahorseKey *skey)
 	swidget = seahorse_key_widget_new ("key-properties", sctx, skey);
 	g_return_if_fail (swidget != NULL);
 	
+	widget = glade_xml_get_widget (swidget->xml, swidget->name);
+	g_signal_connect (GTK_OBJECT (widget), "destroy", G_CALLBACK (properties_destroyed), swidget);
 	g_signal_connect_after (skey, "changed", G_CALLBACK (key_changed), swidget);
 	
 	do_stats (swidget, GTK_TABLE (glade_xml_get_widget (swidget->xml, "primary_table")), 2, 0);

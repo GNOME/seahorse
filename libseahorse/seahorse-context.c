@@ -611,9 +611,11 @@ seahorse_context_keys_added (SeahorseContext *sctx, guint num_keys)
 	num_single = g_list_length (sctx->priv->single_keys);
 	
 	/* get new total after adding new secret keys */
-	total = add_new_keys (sctx, TRUE, num_pairs, num_pairs + num_single, (GFunc)process_key_pair);
+	if (sctx->priv->key_pairs != NULL)
+		total = add_new_keys (sctx, TRUE, num_pairs, num_pairs + num_single, (GFunc)process_key_pair);
 	/* add new public keys */
-	total = add_new_keys (sctx, FALSE, num_single, total, (GFunc)process_single_key);
+	if (sctx->priv->single_keys != NULL)
+		total = add_new_keys (sctx, FALSE, num_single, total, (GFunc)process_single_key);
 	
 	/* show status */
 	seahorse_context_show_progress (sctx, g_strdup_printf (

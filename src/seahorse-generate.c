@@ -131,10 +131,8 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 		gtk_widget_show (widget);
 		seahorse_util_handle_error (err);
 	}
-	else {
+	else
 		seahorse_widget_destroy (swidget);
-		seahorse_context_keys_added (swidget->sctx, 1);
-	}
 }
 
 void

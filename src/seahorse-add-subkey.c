@@ -69,6 +69,7 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 	guint type, length;
 	time_t expires;
 	GpgmeError err;
+	GtkWidget *widget;
 	
 	skwidget = SEAHORSE_KEY_WIDGET (swidget);
 	type = gtk_option_menu_get_history (GTK_OPTION_MENU (
@@ -98,10 +99,15 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 			break;
 	}
 	
+	widget = glade_xml_get_widget (swidget->xml, swidget->name);
+	gtk_widget_hide (widget);
 	err = seahorse_key_pair_op_add_subkey (swidget->sctx, SEAHORSE_KEY_PAIR (
 		skwidget->skey), real_type, length, expires);
-	if (err != GPGME_No_Error)
+	
+	if (err != GPGME_No_Error) {
+		gtk_widget_show (widget);
 		seahorse_util_handle_error (err);
+	}
 	seahorse_widget_destroy (swidget);
 }
 

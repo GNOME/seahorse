@@ -54,11 +54,6 @@ static gboolean		seahorse_widget_delete_event	(GtkWidget		*widget,
 static void		seahorse_widget_destroyed	(GtkObject		*object,
 							 SeahorseWidget		*swidget);
 
-static void		seahorse_widget_show_progress	(SeahorseContext	*sctx,
-							 const gchar		*op,
-							 gdouble		fract,
-							 SeahorseWidget		*swidget);
-
 static GObjectClass	*parent_class			= NULL;
 
 /* Hash of widgets with name as key */
@@ -125,7 +120,6 @@ seahorse_widget_finalize (GObject *gobject)
 	}
 	
 	g_signal_handlers_disconnect_by_func (swidget->sctx, seahorse_widget_destroyed, swidget);
-	g_signal_handlers_disconnect_by_func (swidget->sctx, seahorse_widget_show_progress, swidget);
 	gtk_widget_destroy (glade_xml_get_widget (swidget->xml, swidget->name));
 	
 	g_free (swidget->xml);
@@ -171,10 +165,6 @@ seahorse_widget_set_property (GObject *object, guint prop_id, const GValue *valu
 			g_object_ref (G_OBJECT (swidget->sctx));
 			g_signal_connect_after (swidget->sctx, "destroy",
 				G_CALLBACK (seahorse_widget_destroyed), swidget);
-			//a bit dirty, but easy
-			if (!g_str_equal (swidget->name, "key-manager"))
-				g_signal_connect (swidget->sctx, "progress",
-					G_CALLBACK (seahorse_widget_show_progress), swidget);
 			break;
 		default:
 			break;
@@ -229,13 +219,6 @@ static void
 seahorse_widget_destroyed (GtkObject *object, SeahorseWidget *swidget)
 {
 	seahorse_widget_destroy (swidget);
-}
-
-/* Shows operation progress if a component, otherwise just desensitizes window */
-static void
-seahorse_widget_show_progress (SeahorseContext *sctx, const gchar *op, gdouble fract, SeahorseWidget *swidget)
-{
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, swidget->name), fract == -1);
 }
 
 /**

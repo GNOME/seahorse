@@ -41,10 +41,14 @@
 #define GNOME_INTERFACE "/desktop/gnome/interface"
 #define GNOME_TOOLBAR_STYLE GNOME_INTERFACE "/toolbar_style"
 
+static guint signal_id = 0;
+static gulong hook_id = 0;
+
 /* Quits seahorse */
 static void
 quit (GtkWidget *widget, SeahorseWidget *swidget)
 {
+	g_signal_remove_emission_hook (signal_id, hook_id);
 	seahorse_context_destroy (swidget->sctx);
 	gtk_exit (0);
 }
@@ -384,7 +388,7 @@ gconf_notification (GConfClient *gclient, guint id, GConfEntry *entry, SeahorseW
 			set_toolbar_style (GTK_TOOLBAR (widget), gconf_value_get_string (value));
 	}
 }
-
+/*
 static void
 show_progress (SeahorseContext *sctx, const gchar *op, gdouble fract, SeahorseWidget *swidget)
 {
@@ -397,14 +401,14 @@ show_progress (SeahorseContext *sctx, const gchar *op, gdouble fract, SeahorseWi
 	status = GNOME_APPBAR (glade_xml_get_widget (swidget->xml, "status"));
 	gnome_appbar_set_status (status, op);
 	progress = gnome_appbar_get_progress (status);
-	/* do progress */
+	/* do progress *
 	if (fract <= 1 && fract > 0)
 		gtk_progress_bar_set_fraction (progress, fract);
 	else if (fract != -1) {
 		gtk_progress_bar_set_pulse_step (progress, 0.05);
 		gtk_progress_bar_pulse (progress);
 	}
-	/* if fract == -1, cleanup progress */
+	/* if fract == -1, cleanup progress *
 	else
 		gtk_progress_bar_set_fraction (progress, 0);
 	
@@ -418,6 +422,38 @@ show_progress (SeahorseContext *sctx, const gchar *op, gdouble fract, SeahorseWi
 	
 	while (g_main_context_pending (NULL))
 		g_main_context_iteration (NULL, TRUE);
+}
+*/
+/* params[0] = sctx, params[1] = op string, params[2] = fract */
+static gboolean
+progress_hook (GSignalInvocationHint *hint, guint n_params, const GValue *params, SeahorseWidget *swidget)
+{
+	GnomeAppBar *status;
+	GtkProgressBar *progress;
+	//gboolean sensitive;
+	gdouble fract;
+
+	fract = g_value_get_double (&params[2]);
+	//sensitive = (fract == -1);
+	
+	status = GNOME_APPBAR (glade_xml_get_widget (swidget->xml, "status"));
+	gnome_appbar_set_status (status, g_value_get_string (&params[1]));
+	progress = gnome_appbar_get_progress (status);
+	/* do progress */
+	if (fract <= 1 && fract > 0)
+		gtk_progress_bar_set_fraction (progress, fract);
+	else if (fract != -1) {
+		gtk_progress_bar_set_pulse_step (progress, 0.05);
+		gtk_progress_bar_pulse (progress);
+	}
+	/* if fract == -1, cleanup progress */
+	else
+		gtk_progress_bar_set_fraction (progress, 0);
+	
+	while (g_main_context_pending (NULL))
+		g_main_context_iteration (NULL, TRUE);
+	
+	return TRUE;
 }
 
 void
@@ -442,7 +478,10 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 	glade_xml_signal_connect_data (swidget->xml, "quit_event",
 		G_CALLBACK (delete_event), swidget);
 	
-	g_signal_connect (swidget->sctx, "progress", G_CALLBACK (show_progress), swidget);
+	//g_signal_connect (swidget->sctx, "progress", G_CALLBACK (show_progress), swidget);
+	signal_id = g_signal_lookup ("progress", G_OBJECT_CLASS_TYPE (G_OBJECT_CLASS (SEAHORSE_CONTEXT_GET_CLASS (sctx))));
+	hook_id = g_signal_add_emission_hook (signal_id, 0, (GSignalEmissionHook)progress_hook,
+		swidget, (GDestroyNotify)seahorse_widget_destroy);
 	
 	/* init gclient */
 	eel_gconf_notification_add (UI_SCHEMAS, (GConfClientNotifyFunc) gconf_notification, swidget);
