@@ -28,6 +28,7 @@
 #include <err.h>
 #include <unistd.h>
 #include <syslog.h>
+#include <fcntl.h>
 
 #include <gnome.h>
 
@@ -150,8 +151,13 @@ daemonize (const char *sockname)
             /* Close std descriptors */
             for (i = 0; i <= 2; i++)
                 close (i);
+            
+            /* Open stdin, stdout and stderr. GPGME doesn't work without this */
+            open ("/dev/null", O_RDONLY, 0666);
+            open ("/dev/null", O_WRONLY, 0666);
+            open ("/dev/null", O_WRONLY, 0666);
 
-            chdir ("/");
+            chdir ("/tmp");
             return;
         };
     }
