@@ -74,11 +74,33 @@ typedef enum {
 } SeahorseKeyLength;
 
 typedef enum {
-	NO_REASON = 0,
-	COMPROMISED = 1,
-	SUPERSEDED = 2,
-	NOT_USED = 3
+	/* No revocation reason */
+	REVOKE_NO_REASON = 0,
+	/* Key compromised */
+	REVOKE_COMPROMISED = 1,
+	/* Key replaced */
+	REVOKE_SUPERSEDED = 2,
+	/* Key no longer used */
+	REVOKE_NOT_USED = 3
 } SeahorseRevokeReason;
+
+typedef enum {
+	/* Unknown key check */
+	SIGN_CHECK_NO_ANSWER,
+	/* Key not checked */
+	SIGN_CHECK_NONE,
+	/* Key casually checked */
+	SIGN_CHECK_CASUAL,
+	/* Key carefully checked */
+	SIGN_CHECK_CAREFUL
+} SeahorseSignCheck;
+
+typedef enum {
+	/* If signature is local */
+	SIGN_LOCAL = 1 << 0,
+	/* If signature is non-revocable */
+	SIGN_NO_REVOKE = 1 << 1
+} SeahorseSignOptions;
 
 gboolean	seahorse_ops_key_delete		(SeahorseContext	*sctx,
 						 SeahorseKey		*skey);
@@ -142,5 +164,11 @@ gboolean	seahorse_ops_key_revoke_subkey	(SeahorseContext	*sctx,
 						 const guint		index,
 						 SeahorseRevokeReason	reason,
 						 const gchar		*description);
+
+gboolean	seahorse_ops_key_sign		(SeahorseContext	*sctx,
+						 SeahorseKey		*skey,
+						 const guint		index,
+						 SeahorseSignCheck	check,
+						 SeahorseSignOptions	options);
 
 #endif /* __SEAHORSE_OPS_KEY_H__ */

@@ -47,7 +47,9 @@ typedef enum {
 	/* User IDs have changed */
 	SKEY_CHANGE_UIDS,
 	/* Subkeys have changed */
-	SKEY_CHANGE_SUBKEYS
+	SKEY_CHANGE_SUBKEYS,
+	/* Key signatures have changed */
+	SKEY_CHANGE_SIGN
 } SeahorseKeyChange;
 
 typedef struct _SeahorseKey SeahorseKey;

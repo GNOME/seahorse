@@ -47,6 +47,12 @@ export_activate (GtkWidget *widget, SeahorseWidget *swidget)
 	seahorse_export_new (swidget->sctx, SEAHORSE_KEY_WIDGET (swidget)->skey);
 }
 
+static void
+sign_activate (GtkWidget *widget, SeahorseWidget *swidget)
+{
+	seahorse_sign_new (swidget->sctx, SEAHORSE_KEY_WIDGET (swidget)->skey, 0);
+}
+
 /* Loads delete dialog */
 static void
 delete_activate (GtkWidget *widget, SeahorseWidget *swidget)
@@ -473,6 +479,8 @@ seahorse_key_properties_new (SeahorseContext *sctx, SeahorseKey *skey)
 	
 	glade_xml_signal_connect_data (swidget->xml, "export_activate",
 		G_CALLBACK (export_activate), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "sign_activate",
+		G_CALLBACK (sign_activate), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "delete_activate",
 		G_CALLBACK (delete_activate), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "trust_changed",
@@ -490,7 +498,6 @@ seahorse_key_properties_new (SeahorseContext *sctx, SeahorseKey *skey)
 	
 	g_signal_connect_after (skey, "changed", G_CALLBACK (key_changed), swidget);
 	
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "sign"), FALSE);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "add_revoker"), FALSE);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "add_photo"), FALSE);
 }

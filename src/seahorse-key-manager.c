@@ -40,6 +40,7 @@
 #include "seahorse-ops-key.h"
 #include "seahorse-add-uid.h"
 #include "seahorse-add-subkey.h"
+#include "seahorse-sign.h"
 
 #define KEY_MANAGER "key-manager"
 #define KEY_LIST "key_list"
@@ -91,9 +92,21 @@ export_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
 	SeahorseKey *skey;
 	
-	skey = seahorse_key_store_get_selected_key (GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, KEY_LIST)));
+	skey = seahorse_key_store_get_selected_key (GTK_TREE_VIEW (
+		glade_xml_get_widget (swidget->xml, KEY_LIST)));
 	if (skey)
 		seahorse_export_new (swidget->sctx, skey);
+}
+
+static void
+sign_activate (GtkWidget *widget, SeahorseWidget *swidget)
+{
+	SeahorseKey *skey;
+	
+	skey = seahorse_key_store_get_selected_key (GTK_TREE_VIEW (
+		glade_xml_get_widget (swidget->xml, KEY_LIST)));
+	if (skey)
+		seahorse_sign_new (swidget->sctx, skey, 0);
 }
 
 /* Loads delete dialog if a key is selected */
@@ -249,9 +262,11 @@ selection_changed (GtkTreeSelection *selection, SeahorseWidget *swidget)
 	/* do all key operation items */
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "properties_button"), sensitive);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "export_button"), sensitive);
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "sign_button"), sensitive);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "delete_button"), sensitive);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "properties"), sensitive);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "export"), sensitive);
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "sign"), sensitive);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "delete"), sensitive);
 	/* ops requiring a secret key */
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "change_passphrase"), secret);
@@ -303,6 +318,8 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 		G_CALLBACK (properties_activate), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "export_activate",
 		G_CALLBACK (export_activate), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "sign_activate",
+		G_CALLBACK (sign_activate), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "delete_activate",
 		G_CALLBACK (delete_activate), swidget);
 	/* selected key with secret signals */
@@ -336,11 +353,8 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 	selection_changed (selection, swidget);
 	
 	//features not available
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "sign_button"), FALSE);
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "sign"), FALSE);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "add_revoker"), FALSE);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "add_photo"), FALSE);
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "key_sign"), FALSE);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "key_add_revoker"), FALSE);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "key_add_photo"), FALSE);
 }

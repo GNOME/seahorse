@@ -238,7 +238,8 @@ seahorse_ops_key_edit (gpointer data, GpgmeStatusCode status,
 	    status == GPGME_STATUS_SIGEXPIRED ||
 	    status == GPGME_STATUS_KEYEXPIRED ||
 	    status == GPGME_STATUS_PROGRESS ||
-	    status == GPGME_STATUS_KEY_CREATED)
+	    status == GPGME_STATUS_KEY_CREATED ||
+	    status == GPGME_STATUS_ALREADY_SIGNED)
 		return parms->err;
 
 	/* Choose the next state based on the current one and the input */
@@ -1370,4 +1371,152 @@ seahorse_ops_key_revoke_subkey (SeahorseContext *sctx, SeahorseKey *skey, const 
 		rev_subkey_transit, rev_parm);
 	
 	return edit_key (sctx, skey, parms, _("Revoke Subkey"), SKEY_CHANGE_SUBKEYS);
+}
+
+typedef struct
+{
+	guint			index;
+	SeahorseSignCheck	check;
+	gchar			*command;
+} SignParm;
+
+typedef enum
+{
+	SIGN_START,
+	SIGN_UID,
+	SIGN_COMMAND,
+	SIGN_CONFIRM,
+	SIGN_CHECK,
+	SIGN_QUIT,
+	SIGN_ERROR
+} SignStates;
+
+static GpgmeError
+sign_action (guint state, gpointer data, const gchar **result)
+{
+	SignParm *parm = (SignParm*)data;
+	
+	switch (state) {
+		case SIGN_UID:
+			*result = g_strdup_printf ("uid %d", parm->index);
+			break;
+		case SIGN_COMMAND:
+			*result = parm->command;
+			break;
+		case SIGN_CONFIRM:
+			*result = YES;
+			break;
+		case SIGN_CHECK:
+			*result = g_strdup_printf ("%d", parm->check);
+			break;
+		case SIGN_QUIT:
+			*result = QUIT;
+			break;
+		default:
+			return GPGME_General_Error;
+	}
+	
+	return GPGME_No_Error;
+}
+
+static guint
+sign_transit (guint current_state, GpgmeStatusCode status,
+	      const gchar *args, gpointer data, GpgmeError *err)
+{
+	guint next_state;
+	
+	switch (current_state) {
+		case SIGN_START:
+			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
+				next_state = SIGN_UID;
+			else {
+				next_state = SIGN_ERROR;
+				*err = GPGME_General_Error;
+			}
+			break;
+		case SIGN_UID:
+			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
+				next_state = SIGN_COMMAND;
+			else {
+				next_state = SIGN_ERROR;
+				*err = GPGME_General_Error;
+			}
+			break;
+		case SIGN_COMMAND:
+			if (status == GPGME_STATUS_GET_BOOL && g_str_equal (args, "keyedit.sign_all.okay"))
+				next_state = SIGN_CONFIRM;
+			else if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "sign_uid.class"))
+				next_state = SIGN_CHECK;
+			else {
+				next_state = SIGN_ERROR;
+				*err = GPGME_General_Error;
+			}
+			break;
+		case SIGN_CONFIRM:
+			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "sign_uid.class"))
+				next_state = SIGN_COMMAND;
+			else if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
+				next_state = SIGN_QUIT;
+			else {
+				next_state = SIGN_ERROR;
+				*err = GPGME_General_Error;
+			}
+			break;
+		case SIGN_CHECK:
+			if (status == GPGME_STATUS_GET_BOOL && g_str_equal (args, "sign_uid.okay"))
+				next_state = SIGN_CONFIRM;
+			else {
+				next_state = SIGN_ERROR;
+				*err = GPGME_General_Error;
+			}
+			break;
+		case SIGN_QUIT:
+			if (status == GPGME_STATUS_GET_BOOL && g_str_equal (args, SAVE))
+				next_state = SIGN_CONFIRM;
+			else {
+				next_state = SIGN_ERROR;
+				*err = GPGME_General_Error;
+			}
+			break;
+		case SIGN_ERROR:
+			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
+				next_state = SIGN_QUIT;
+			else
+				next_state = SIGN_ERROR;
+			break;
+		default:
+			next_state = REV_SUBKEY_ERROR;
+			*err = GPGME_General_Error;
+			break;
+	}
+	
+	return next_state;
+}
+
+gboolean
+seahorse_ops_key_sign (SeahorseContext *sctx, SeahorseKey *skey, const guint index,
+		       SeahorseSignCheck check, SeahorseSignOptions options)
+{
+	SignParm *sign_parm;
+	SeahorseEditParm *parms;
+	
+	g_return_val_if_fail (sctx != NULL && SEAHORSE_IS_CONTEXT (sctx), FALSE);
+	g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), FALSE);
+	g_return_val_if_fail (index <= seahorse_key_get_num_uids (skey), FALSE);
+	
+	sign_parm = g_new (SignParm, 1);
+	sign_parm->index = index;
+	sign_parm->check = check;
+	sign_parm->command = "sign";
+	
+	/* if sign is local */
+	if ((options & SIGN_LOCAL) != 0)
+		sign_parm->command = g_strdup_printf ("l%s", sign_parm->command);
+	/* if sign is non-revocable */
+	if ((options & SIGN_NO_REVOKE) != 0)
+		sign_parm->command = g_strdup_printf ("nr%s", sign_parm->command);
+	
+	parms = seahorse_edit_parm_new (SIGN_START, sign_action, sign_transit, sign_parm);
+	
+	return edit_key (sctx, skey, parms, _("Sign Key"), SKEY_CHANGE_SIGN);
 }
