@@ -65,7 +65,7 @@ delete_event (GtkWidget *widget, GdkEvent *event, SeahorseWidget *swidget)
 static void
 generate_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
-	seahorse_generate_show (swidget->sctx);
+	seahorse_generate_select_show (swidget->sctx);
 }
 
 /* Loads import dialog */

@@ -20,7 +20,9 @@ seahorse_SOURCES = main.c \
 	seahorse-key-op.c seahorse-key-op.h \
 	seahorse-preferences.c seahorse-preferences.h \
 	seahorse-key-manager.c \
-	seahorse-generate.c \
+	seahorse-generate-select.c \
+	seahorse-generate-druid.c \
+	seahorse-generate-adv.c \
 	seahorse-import.c \
 	seahorse-export.c \
 	seahorse-windows.h \
@@ -44,7 +46,9 @@ glade_DATA = \
 	seahorse-sign.glade \
 	seahorse-import.glade \
 	seahorse-export.glade \
-	seahorse-generate.glade \
+	seahorse-generate-select.glade \
+	seahorse-generate-druid.glade \
+	seahorse-generate-adv.glade \
 	seahorse-preferences.glade \
 	seahorse-add-uid.glade \
 	seahorse-add-subkey.glade

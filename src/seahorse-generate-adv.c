@@ -136,11 +136,11 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 }
 
 void
-seahorse_generate_show (SeahorseContext *sctx)
+seahorse_generate_adv_show (SeahorseContext *sctx)
 {	
 	SeahorseWidget *swidget;
 	
-	swidget = seahorse_widget_new ("generate", sctx);
+	swidget = seahorse_widget_new ("generate-adv", sctx);
 	g_return_if_fail (swidget != NULL);
 	
 	glade_xml_signal_connect_data (swidget->xml, "type_changed",

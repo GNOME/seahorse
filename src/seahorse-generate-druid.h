@@ -1,7 +1,7 @@
 /*
  * Seahorse
  *
- * Copyright (C) 2003 Jacob Perkins
+ * Copyright (C) 2003 Jacob Perkins, Adam Schreiber
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,15 +19,15 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#ifndef __SEAHORSE_GENERATE_H__
-#define __SEAHORSE_GENERATE_H__
+#ifndef __SEAHORSE_GENERATE_DRUID_H__
+#define __SEAHORSE_GENERATE_DRUID_H__
 
-/* SeahorseGenerate is a SeahorseWidget for generating a key */
+/* SeahorseGenerateDruid is a SeahorseWidget for generating a key by druid*/
 
 #include "seahorse-context.h"
 #include "seahorse-widget.h"
 
 /* Loads generate dialog */
-void	seahorse_generate_show	(SeahorseContext	*sctx);
+void	seahorse_generate_druid_show	(SeahorseContext	*sctx);
 
-#endif /* __SEAHORSE_GENERATE_H__ */
+#endif /* __SEAHORSE_GENERATE_DRUID_H__ */

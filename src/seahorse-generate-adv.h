@@ -19,30 +19,15 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#ifndef __SEAHORSE_WINDOWS_H__
-#define __SEAHORSE_WINDOWS_H__
+#ifndef __SEAHORSE_GENERATE_ADV_H__
+#define __SEAHORSE_GENERATE_ADV_H__
 
-#include <gpgme.h>
+/* SeahorseGenerate is a SeahorseWidget for generating a key */
 
 #include "seahorse-context.h"
+#include "seahorse-widget.h"
 
-void	seahorse_key_manager_show	(SeahorseContext	*sctx);
-
-void	seahorse_generate_select_show	(SeahorseContext	*sctx);
-
+/* Loads generate dialog */
 void	seahorse_generate_adv_show	(SeahorseContext	*sctx);
 
-void	seahorse_generate_druid_show	(SeahorseContext	*sctx);
-
-void	seahorse_import_show		(SeahorseContext	*sctx);
-
-void	seahorse_export_show		(SeahorseContext	*sctx,
-					 GpgmeRecipients	recips);
-
-void	seahorse_delete_show		(SeahorseContext	*sctx,
-					 GList			*keys);
-
-void	seahorse_sign_show		(SeahorseContext	*sctx,
-					 GList			*keys);
-
-#endif /* __SEAHORSE_WINDOWS_H__ */
+#endif /* __SEAHORSE_GENERATE_ADV_H__ */
