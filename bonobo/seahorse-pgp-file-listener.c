@@ -2,6 +2,7 @@
 #include <gnome.h>
 #include <bonobo.h>
 #include <bonobo-activation/bonobo-activation.h>
+#include <libgnomevfs/gnome-vfs-utils.h>
 
 /* helper method borrowed from file-roller */
 static gchar*
