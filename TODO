@@ -16,26 +16,23 @@ Also check bugzilla for other tasks.
 
 For 0.8 release
 ---------------
-[ ] Fix app dialogs
-[ ] Nautilus context menu / mime types
+[A] Fix app dialogs
+[A] Nautilus context menu / mime types
 [ ] Nautilus properties view for pgp/gpg files
-[ ] Command line ops to be used by context menu
-[ ] Fix libseahorse dialogs to work with command line ops
+[A] Command line ops to be used by context menu
+[A] Fix libseahorse dialogs to work with command line ops
 [ ] Gedit plugin
 [ ] Keys:// gnome-vfs view
 [ ] Migrate key-ops to libseahorse for keys://
-
-For 1.0 release
----------------
-[ ] Gpgsm support
-[ ] Migrate to Gpgme 0.4 while providing 0.3 compatability
-
-
-0.8 (Focus: Key management)
------------------------------
-
-[?] Require GPGME 0.4 (Resp: Jacob)
-[ ] Require GnuPG 1.2.2 (Resp: Jacob)
+[ ] Usability review (Resp: Jacob & Gnome Usability Team)
+[ ] Drag data in = import (Resp: Jacob)
+[ ] Drag keys out = export (Resp: Jacob)
+[?] Export key to server
+[?] Import key from server
+[A] Update help with new usage & more concepts (Resp: Jacob & Gnome Doc Team)
+[ ] Backup key-pair
+[ ] More refined key changes so that key-properties doesn't have to delete notebook pages
+[ ] Accessability review (Resp: Jacob & Gnome Usability Team)
 [A] Key edit operations (Resp: Jacob)
 	[X] Add uid
 	[X] Add subkey
@@ -52,70 +49,16 @@ For 1.0 release
 	[?] Add photo id (wait to show photo id)
 	[?] Show photo id
 	[?] User id preferences (requires gpg 1.2.2)
-[ ] Show key signatures (Resp: Jacob) (requires gpgme 0.4)
-[X] Show user IDs instead of subkeys in key manager (Resp: Jacob)
-[?] Export key to server
-[?] Import key from server
-[?] Make libseahorse; comment with gtk-doc (Resp: Jacob)
-[X] Nice fingerprint (Resp: Jacob)
-[X] Encrypt & Sign operation; update as necessary (Resp: Jacob)
-[A] Update help with new usage & more concepts (Resp: Jacob & Gnome Doc Team)
-[?] Icons for text editor popup (Resp: Jacob)
-[X] Don't list disabled or non-capable keys for encryption recipients (Resp: Jacob)
-[X] Key sorting by uid, trust & validity (Resp: Jacob)
-[X] Hide subkeys be default (Resp: Jacob)
-[X] Right click key menu (Resp: Jacob)
-[X] Create SeahorseKeyPair, is a SeahorseKey, has the secret GpgmeKey (Resp: Jacob)
-[X] Startup progress display (Resp: Jacob)
-[ ] Usability review (Resp: Jacob & Gnome Usability Team)
-[ ] Drag data in = import (Resp: Jacob)
-[ ] Drag key out = export (Resp: Jacob)
-[ ] Drag between recipients (Resp: Jacob)
-[X] Multiple key selection (Resp: Jacob)
-[X] Context gconf listener (Resp: Jacob)
-[?] Error check gconf & gnome help (Resp: Jacob)
-[ ] More refined key changes so that key-properties doesn't have to delete notebook pages
-[ ] Backup key-pair
-[ ] Command line operations (Resp: Jacob)
-[ ] Nautilus component (Resp: Jacob) (requires command line)
 
-1.0 (Focus: Gnome integration & usability)
---------------------------------------------
-
-[ ] Help glossary and more concepts (Resp: Jacob & Gnome Doc Team)
-[ ] Require Gnome2.2 (Resp: Jacob)
-[ ] Accessability review (Resp: Jacob & Gnome Usability Team)
-[?] If key's owner trust changes, must refresh all signed keys to recalc validity (wait for key signatures) (Resp: Jacob)
-
-Future Features
+For 1.0 release
 ---------------
-
-[ ] Gedit plugin
-[ ] Evolution component
-[ ] Bonoboize
-[ ] Visual trust diagram
-[ ] Complete usage & concept manual
-[ ] Balsa plugin
-[ ] Gaim plugin
-[ ] Some kind of component that can be detected at runtime that apps could use
-to encrypt files or text.  Maybe this would be an applet, or something similar
-to a viewer, but in actuality a Saver/Converter (?).
+[ ] Gpgsm support
+[ ] Migrate to Gpgme 0.4 while providing 0.3 compatability
 
 Non-tasked issues/todo
 ----------------------
 
-1. Register with gnome-vfs so can do file ops in nautilus, similar to file-roller.
-However, due to the use of seahorse's preferences, a control-center capplet (is this the correct word?)
-should be provided.
-	*: Import, Encrypt, Sign
-	.asc: Decrypt, Verify
-	.gpg: Decrypt
-	.sig: Verify
-	no file: Export
-2. Changing a key's owner trust may affect the validity of any keys it has signed.
+1. Changing a key's owner trust may affect the validity of any keys it has signed.
 Since keys are cached, the signed key's validity may not be correct until it has been updated.
 The context could do a second pass through the keys so that each key will listen
 to changes to those keys that have signed it.
-3. Register a keys:/// uri, which could allow editing from within nautilus.
-Keys would be listed with photos as icons.  If no photo, then do secret icon
-or non-secret icon.

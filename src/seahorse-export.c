@@ -131,4 +131,7 @@ seahorse_export_show (SeahorseContext *sctx, GpgmeRecipients recips)
 		G_CALLBACK (ok_clicked), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "file_changed",
 		G_CALLBACK (file_changed), swidget);
+	
+	gnome_file_entry_set_filename (GNOME_FILE_ENTRY (glade_xml_get_widget (swidget->xml, EXPORT_FILE)),
+		g_strdup_printf ("%s/%s.keys", g_get_home_dir(), g_get_user_name()));
 }
