@@ -114,29 +114,6 @@
 		  </child>
 
 		  <child>
-		    <widget class="GtkCheckButton" id="disabled">
-		      <property name="visible">True</property>
-		      <property name="tooltip" translatable="yes">Disabled keys cannot be used for operations</property>
-		      <property name="can_focus">True</property>
-		      <property name="label" translatable="yes">Dis_abled</property>
-		      <property name="use_underline">True</property>
-		      <property name="relief">GTK_RELIEF_NORMAL</property>
-		      <property name="active">False</property>
-		      <property name="inconsistent">False</property>
-		      <property name="draw_indicator">True</property>
-		      <signal name="toggled" handler="disabled_toggled" last_modification_time="Sat, 08 Mar 2003 02:37:04 GMT"/>
-		    </widget>
-		    <packing>
-		      <property name="left_attach">2</property>
-		      <property name="right_attach">3</property>
-		      <property name="top_attach">5</property>
-		      <property name="bottom_attach">6</property>
-		      <property name="x_options">fill</property>
-		      <property name="y_options"></property>
-		    </packing>
-		  </child>
-
-		  <child>
 		    <widget class="GtkLabel" id="fingerprint">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
@@ -223,6 +200,29 @@
 		      <property name="y_options">fill</property>
 		    </packing>
 		  </child>
+
+		  <child>
+		    <widget class="GtkCheckButton" id="disabled">
+		      <property name="visible">True</property>
+		      <property name="tooltip" translatable="yes">Disabled keys cannot be used for operations</property>
+		      <property name="can_focus">True</property>
+		      <property name="label" translatable="yes">Dis_abled</property>
+		      <property name="use_underline">True</property>
+		      <property name="relief">GTK_RELIEF_NORMAL</property>
+		      <property name="active">False</property>
+		      <property name="inconsistent">False</property>
+		      <property name="draw_indicator">True</property>
+		      <signal name="toggled" handler="disabled_toggled" last_modification_time="Sat, 08 Mar 2003 02:37:04 GMT"/>
+		    </widget>
+		    <packing>
+		      <property name="left_attach">2</property>
+		      <property name="right_attach">3</property>
+		      <property name="top_attach">1</property>
+		      <property name="bottom_attach">2</property>
+		      <property name="x_options">fill</property>
+		      <property name="y_options"></property>
+		    </packing>
+		  </child>
 		</widget>
 		<packing>
 		  <property name="padding">0</property>
@@ -258,37 +258,6 @@
 		    <packing>
 		      <property name="left_attach">0</property>
 		      <property name="right_attach">1</property>
-		      <property name="top_attach">0</property>
-		      <property name="bottom_attach">1</property>
-		      <property name="x_options">fill</property>
-		      <property name="y_options"></property>
-		    </packing>
-		  </child>
-
-		  <child>
-		    <widget class="GtkOptionMenu" id="sigs">
-		      <property name="visible">True</property>
-		      <property name="sensitive">False</property>
-		      <property name="can_focus">True</property>
-		      <property name="history">0</property>
-
-		      <child>
-			<widget class="GtkMenu" id="menu2">
-
-			  <child>
-			    <widget class="GtkMenuItem" id="all1">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">All</property>
-			      <property name="use_underline">True</property>
-			      <signal name="activate" handler="all_sigs_activate" last_modification_time="Sat, 08 Mar 2003 02:31:31 GMT"/>
-			    </widget>
-			  </child>
-			</widget>
-		      </child>
-		    </widget>
-		    <packing>
-		      <property name="left_attach">1</property>
-		      <property name="right_attach">2</property>
 		      <property name="top_attach">0</property>
 		      <property name="bottom_attach">1</property>
 		      <property name="x_options">fill</property>
@@ -416,6 +385,37 @@
 		      <property name="bottom_attach">2</property>
 		      <property name="x_options">fill</property>
 		      <property name="y_options">fill</property>
+		    </packing>
+		  </child>
+
+		  <child>
+		    <widget class="GtkOptionMenu" id="sigs">
+		      <property name="visible">True</property>
+		      <property name="sensitive">False</property>
+		      <property name="can_focus">True</property>
+		      <property name="history">0</property>
+
+		      <child>
+			<widget class="GtkMenu" id="menu2">
+
+			  <child>
+			    <widget class="GtkMenuItem" id="all1">
+			      <property name="visible">True</property>
+			      <property name="label" translatable="yes">All</property>
+			      <property name="use_underline">True</property>
+			      <signal name="activate" handler="all_sigs_activate" last_modification_time="Sat, 08 Mar 2003 02:31:31 GMT"/>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+		    </widget>
+		    <packing>
+		      <property name="left_attach">1</property>
+		      <property name="right_attach">2</property>
+		      <property name="top_attach">0</property>
+		      <property name="bottom_attach">1</property>
+		      <property name="x_options">fill</property>
+		      <property name="y_options"></property>
 		    </packing>
 		  </child>
 		</widget>

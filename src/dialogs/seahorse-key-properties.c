@@ -114,19 +114,31 @@ do_uids (SeahorseWidget *swidget)
 	max = seahorse_key_get_num_uids (skey);
 	tips = gtk_tooltips_new ();
 	/* do uid page */
-	nb = GTK_NOTEBOOK (gtk_notebook_new ());
-	gtk_container_set_border_width (GTK_CONTAINER (nb), SPACING);
-	widget = gtk_label_new (_("User IDs"));
-	align = glade_xml_get_widget (swidget->xml, NOTEBOOK);
-	gtk_notebook_remove_page (GTK_NOTEBOOK (align), 1);
-	gtk_notebook_insert_page (GTK_NOTEBOOK (align), GTK_WIDGET (nb), widget, 1);
+	widget = glade_xml_get_widget (swidget->xml, NOTEBOOK);
+	gtk_notebook_remove_page (GTK_NOTEBOOK (widget), 1);
+	
+	if (max > 1) {
+		nb = GTK_NOTEBOOK (gtk_notebook_new ());
+		gtk_widget_show (GTK_WIDGET (nb));
+		gtk_container_set_border_width (GTK_CONTAINER (nb), SPACING);
+		gtk_notebook_insert_page (GTK_NOTEBOOK (widget), GTK_WIDGET (nb),
+			gtk_label_new (_("User IDs")), 1);
+	}
+	
 	/* foreach uid */
 	for (uid = 0; uid < max; uid++) {
 		/* add notebook page */
 		box = GTK_CONTAINER (gtk_vbox_new (FALSE, SPACING));
 		gtk_container_set_border_width (box, SPACING);
-		widget = gtk_label_new (g_strdup_printf (_("User ID %d"), uid+1));
-		gtk_notebook_append_page (nb, GTK_WIDGET (box), widget);
+		
+		if (max > 1) {
+			gtk_notebook_append_page (nb, GTK_WIDGET (box),
+				gtk_label_new (g_strdup_printf (_("User ID %d"), uid+1)));
+		}
+		else {
+			gtk_notebook_insert_page (GTK_NOTEBOOK (widget), GTK_WIDGET (box),
+				gtk_label_new (_("User ID")), 1);
+		}
 		
 		/***** do uid label & options *****/
 		
@@ -241,9 +253,9 @@ do_uids (SeahorseWidget *swidget)
 		widget = gtk_check_button_new_with_mnemonic ("Z_LIB");
 		gtk_widget_set_sensitive (widget, FALSE);
 		gtk_table_attach (table, widget, 2, 3, 0, 1, GTK_FILL, 0, 0, 0);
+		
+		gtk_widget_show_all (GTK_WIDGET (box));
 	}
-	
-	gtk_widget_show_all (GTK_WIDGET (nb));
 }
 
 static gint
@@ -340,7 +352,6 @@ do_stats (SeahorseWidget *swidget, GtkTable *table, guint top, guint index)
 		str = _("Revoked");
 	else if (gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_KEY_EXPIRED, NULL, index))
 		str = _("Expired");
-	else
 	do_stat_label (str, table, 1, top+3, FALSE, NULL, NULL);
 	/* expires */
 	do_stat_label (_("Expiration Date:"), table, 0, top+2, FALSE, NULL, NULL);
@@ -357,7 +368,7 @@ do_stats (SeahorseWidget *swidget, GtkTable *table, guint top, guint index)
 	else {
 		date_edit = gnome_date_edit_new (expires, FALSE, FALSE);
 		gtk_widget_show (date_edit);
-		gtk_table_attach (table, date_edit, 1, 3, top+2, top+3, GTK_FILL, 0, 0, 0);
+		gtk_table_attach (table, date_edit, 1, 2, top+2, top+3, GTK_FILL, 0, 0, 0);
 		gtk_widget_set_sensitive (date_edit, expires);
 		
 		if (index == 0)
@@ -371,7 +382,7 @@ do_stats (SeahorseWidget *swidget, GtkTable *table, guint top, guint index)
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), !expires);
 		gtk_tooltips_set_tip (tips, widget, _("If key never expires"), NULL);
 		gtk_widget_show (widget);
-		gtk_table_attach (table, widget, 3, 4, top+2, top+3, GTK_FILL, 0, 0, 0);
+		gtk_table_attach (table, widget, 2, 3, top+2, top+3, GTK_FILL, 0, 0, 0);
 		
 		g_signal_connect_after (GTK_TOGGLE_BUTTON (widget), "toggled",
 			G_CALLBACK (set_date_edit_sensitive), date_edit);
@@ -408,6 +419,7 @@ do_subkeys (SeahorseWidget *swidget)
 	GtkNotebook *nb;
 	GtkTable *table;
 	GtkWidget *widget;
+	gint left = 0;
 	
 	skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
 	max = seahorse_key_get_num_subkeys (skey);
@@ -422,7 +434,7 @@ do_subkeys (SeahorseWidget *swidget)
 	
 	/* foreach subkey */
 	for (key = 1; key <= max; key++) {
-		table = GTK_TABLE (gtk_table_new (4, 4, FALSE));
+		table = GTK_TABLE (gtk_table_new (5, 4, FALSE));
 		/* if do revoke button */
 		if (SEAHORSE_IS_KEY_PAIR (skey) && !gpgme_key_get_ulong_attr (
 		skey->key, GPGME_ATTR_KEY_REVOKED, NULL, key)) {
@@ -431,7 +443,8 @@ do_subkeys (SeahorseWidget *swidget)
 				G_CALLBACK (revoke_subkey_clicked), swidget);
 			gtk_tooltips_set_tip (tips, widget, g_strdup_printf (
 				_("Revoke subkey %d"), key), NULL);
-			gtk_table_attach (table, widget, 2, 3, 3, 4, GTK_FILL, 0, 0, 0);
+			gtk_table_attach (table, widget, 0, 1, 4, 5, GTK_FILL, 0, 0, 0);
+			left = 1;
 		}
 		
 		gtk_table_set_row_spacings (table, SPACING);
@@ -451,7 +464,7 @@ do_subkeys (SeahorseWidget *swidget)
 		gtk_widget_show (widget);
 		gtk_tooltips_set_tip (tips, widget, g_strdup_printf (
 			_("Delete subkey %d"), key), NULL);
-		gtk_table_attach (table, widget, 3, 4, 3, 4, GTK_FILL, 0, 0, 0);
+		gtk_table_attach (table, widget, left, left+1, 4, 5, GTK_FILL, 0, 0, 0);
 	}
 }
 

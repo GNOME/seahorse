@@ -91,7 +91,7 @@ seahorse_key_widget_class_init (SeahorseKeyWidgetClass *klass)
 	g_object_class_install_property (gobject_class, PROP_INDEX,
 		g_param_spec_uint ("index", "Attribute index",
 				   "Index of attribute in key, 0 being none",
-				   0, 0, 0, G_PARAM_READWRITE));
+				   0, G_MAXUINT, 0, G_PARAM_READWRITE));
 }
 
 static void
