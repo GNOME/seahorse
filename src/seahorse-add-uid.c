@@ -26,14 +26,36 @@
 #include "seahorse-key-op.h"
 #include "seahorse-util.h"
 
+#define NAME "name"
+#define EMAIL "email"
+
+static void
+check_ok (SeahorseWidget *swidget)
+{
+	const gchar *name, *email;
+	
+	/* must be at least 5 characters */
+	name = gtk_entry_get_text (GTK_ENTRY (
+		glade_xml_get_widget (swidget->xml, NAME)));
+	/* must be empty or be *@* */
+	email = gtk_entry_get_text (GTK_ENTRY (
+		glade_xml_get_widget (swidget->xml, EMAIL)));
+	
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "ok"),
+		strlen (name) >= 5 && (strlen (email) == 0  ||
+		(g_pattern_match_simple ("?*@?*", email))));
+}
+
 static void
 name_changed (GtkEditable *editable, SeahorseWidget *swidget)
 {
-	gchar *text;
-	
-	text = gtk_editable_get_chars (editable, 0, -1);
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "ok"),
-		strlen (text) >= 5);
+	check_ok (swidget);
+}
+
+static void
+email_changed (GtkEditable *editable, SeahorseWidget *swidget)
+{
+	check_ok (swidget);
 }
 
 static void
@@ -46,9 +68,9 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 	skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
 	
 	name = gtk_entry_get_text (GTK_ENTRY (
-		glade_xml_get_widget (swidget->xml, "name")));
+		glade_xml_get_widget (swidget->xml, NAME)));
 	email = gtk_entry_get_text (GTK_ENTRY (
-		glade_xml_get_widget (swidget->xml, "email")));
+		glade_xml_get_widget (swidget->xml, EMAIL)));
 	comment = gtk_entry_get_text (GTK_ENTRY (
 		glade_xml_get_widget (swidget->xml, "comment")));
 	
@@ -82,4 +104,6 @@ seahorse_add_uid_new (SeahorseContext *sctx, SeahorseKey *skey)
 		G_CALLBACK (ok_clicked), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "name_changed",
 		G_CALLBACK (name_changed), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "email_changed",
+		G_CALLBACK (email_changed), swidget);
 }
