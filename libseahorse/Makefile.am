@@ -17,9 +17,9 @@ BUILT_SOURCES = \
 	seahorse-marshal.c seahorse-marshal.h
 
 if WITH_AGENT
-AGENT_SOURCES = seahorse-prefs-cache.c
+AGENT_SRCS = seahorse-prefs-cache.c
 else
-AGENT_SOURCES = 
+AGENT_SRCS = 
 endif
 
 libseahorse_internal_la_SOURCES = \
@@ -45,7 +45,7 @@ libseahorse_internal_la_SOURCES = \
 	seahorse-gpgmex.h seahorse-gpgmex-util.c \
 	seahorse-prefs.c seahorse-prefs.h \
 	$(BUILT_SOURCES) \
-	$(AGENT_SOURCES)
+	$(AGENT_SRCS)
 
 seahorse-marshal.h: seahorse-marshal.list $(GLIB_GENMARSHAL)
 	$(GLIB_GENMARSHAL) $< --header --prefix=seahorse_marshal > $@
