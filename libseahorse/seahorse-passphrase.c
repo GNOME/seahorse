@@ -44,7 +44,7 @@ seahorse_passphrase_get (SeahorseContext *sctx, const gchar *passphrase_hint,
     gpgme_error_t err;
 	gchar *pass, **split_uid, *label;
 	
-	swidget = seahorse_widget_new ("passphrase", sctx);
+	swidget = seahorse_widget_new_allow_multiple ("passphrase", sctx);
 	g_return_val_if_fail (swidget != NULL, GPG_E (GPG_ERR_GENERAL));
   
 	glade_xml_signal_connect_data (swidget->xml, "pass_changed",

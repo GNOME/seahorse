@@ -32,6 +32,9 @@
 #define SAVE "keyedit.save.okay"
 #define YES "Y"
 
+#define PRINT(args)  if(!seahorse_util_print_fd args) return GPG_E (GPG_ERR_GENERAL)
+#define PRINTF(args) if(!seahorse_util_printf_fd args) return GPG_E (GPG_ERR_GENERAL)
+
 /**
  * seahorse_key_op_generate:
  * @sksrc: #SeahorseKeySource
@@ -285,29 +288,29 @@ sign_action (guint state, gpointer data, int fd)
 	switch (state) {
 		/* select uid */
 		case SIGN_UID:
-            seahorse_util_printf_fd (fd, "uid %d", parm->index);
+            PRINTF ((fd, "uid %d", parm->index));
 			break;
 		case SIGN_COMMAND:
-            seahorse_util_print_fd (fd, parm->command);
+            PRINT ((fd, parm->command));
 			break;
 		/* if expires */
 		case SIGN_EXPIRE:
-            seahorse_util_print_fd (fd, (parm->expire) ? YES : "N");
+            PRINT ((fd, (parm->expire) ? YES : "N"));
 			break;
 		case SIGN_CONFIRM:
-            seahorse_util_print_fd (fd, YES);
+            PRINT ((fd, YES));
 			break;
 		case SIGN_CHECK:
-            seahorse_util_printf_fd (fd, "%d", parm->check);
+            PRINTF ((fd, "%d", parm->check));
 			break;
 		case SIGN_QUIT:
-            seahorse_util_print_fd (fd, QUIT);
+            PRINT ((fd, QUIT));
 			break;
 		default:
 			return GPG_E (GPG_ERR_GENERAL);
 	}
 	
-    seahorse_util_print_fd (fd, "\n");
+    PRINT ((fd, "\n"));
 	return GPG_OK;
 }
 
@@ -477,22 +480,22 @@ edit_pass_action (guint state, gpointer data, int fd)
 {
 	switch (state) {
 		case PASS_COMMAND:
-            seahorse_util_print_fd (fd, "passwd");
+            PRINT ((fd, "passwd"));
 			break;
         case PASS_PASSPHRASE:
             /* Do nothing */
             return GPG_OK;
 		case PASS_QUIT:
-            seahorse_util_print_fd (fd, QUIT);
+            PRINT ((fd, QUIT));
 			break;
 		case PASS_SAVE:
-            seahorse_util_print_fd (fd, YES);
+            PRINT ((fd, YES));
 			break;
 		default:
 			return GPG_E (GPG_ERR_GENERAL);
 	}
 	
-    seahorse_util_print_fd (fd, "\n");
+    PRINT ((fd, "\n"));
 	return GPG_OK;
 }
 
@@ -599,25 +602,25 @@ edit_trust_action (guint state, gpointer data, int fd)
 	switch (state) {
 		/* enter command */
 		case TRUST_COMMAND:
-            seahorse_util_print_fd (fd, "trust");
+            PRINT ((fd, "trust"));
 			break;
 		/* enter numeric trust value */
 		case TRUST_VALUE:
-            seahorse_util_printf_fd (fd, "%d", trust);
+            PRINTF ((fd, "%d", trust));
 			break;
 		/* confirm ultimate or if save */
 		case TRUST_CONFIRM:
-            seahorse_util_print_fd (fd, YES);
+            PRINT ((fd, YES));
 			break;
 		/* quit */
 		case TRUST_QUIT:
-            seahorse_util_print_fd (fd, QUIT);
+            PRINT ((fd, QUIT));
 			break;
 		default:
 			return GPG_E (GPG_ERR_GENERAL);
 	}
 	
-    seahorse_util_print_fd (fd, "\n");
+    PRINT ((fd, "\n"));
 	return GPG_OK;
 }
 
@@ -738,16 +741,16 @@ edit_disable_action (guint state, gpointer data, int fd)
 	
 	switch (state) {
 		case DISABLE_COMMAND:
-            seahorse_util_print_fd (fd, command);
+            PRINT ((fd, command));
 			break;
 		case DISABLE_QUIT:
-            seahorse_util_print_fd (fd, QUIT);
+            PRINT ((fd, QUIT));
 			break;
 		default:
 			break;
 	}
 	
-    seahorse_util_print_fd (fd, "\n");
+    PRINT ((fd, "\n"));
 	return GPG_OK;
 }
 
@@ -847,21 +850,21 @@ edit_expire_action (guint state, gpointer data, int fd)
 	switch (state) {
 		/* selected key */
 		case EXPIRE_SELECT:
-            seahorse_util_printf_fd (fd, "key %d", parm->index);
+            PRINTF ((fd, "key %d", parm->index));
 			break;
 		case EXPIRE_COMMAND:
-            seahorse_util_print_fd (fd, "expire");
+            PRINT ((fd, "expire"));
 			break;
 		/* set date */
 		case EXPIRE_DATE:
-            seahorse_util_print_fd (fd, (parm->expires) ?
-				seahorse_util_get_date_string (parm->expires) : "0");
+            PRINT ((fd, (parm->expires) ?
+				seahorse_util_get_date_string (parm->expires) : "0"));
 			break;
 		case EXPIRE_QUIT:
-            seahorse_util_print_fd (fd, QUIT);
+            PRINT ((fd, QUIT));
 			break;
 		case EXPIRE_SAVE:
-            seahorse_util_print_fd (fd, YES);
+            PRINT ((fd, YES));
 			break;
 		case EXPIRE_ERROR:
 			break;
@@ -869,7 +872,7 @@ edit_expire_action (guint state, gpointer data, int fd)
 			return GPG_E (GPG_ERR_GENERAL);
 	}
 
-    seahorse_util_print_fd (fd, "\n");
+    PRINT ((fd, "\n"));
 	return GPG_OK;
 }
 
@@ -993,23 +996,23 @@ add_revoker_action (guint state, gpointer data, int fd)
 	
 	switch (state) {
 		case ADD_REVOKER_COMMAND:
-            seahorse_util_print_fd (fd, "addrevoker");
+            PRINT ((fd, "addrevoker"));
 			break;
 		/* select revoker */
 		case ADD_REVOKER_SELECT:
-            seahorse_util_print_fd (fd, keyid);
+            PRINT ((fd, keyid));
 			break;
 		case ADD_REVOKER_CONFIRM:
-            seahorse_util_print_fd (fd, YES);
+            PRINT ((fd, YES));
 			break;
 		case ADD_REVOKER_QUIT:
-            seahorse_util_print_fd (fd, QUIT);
+            PRINT ((fd, QUIT));
 			break;
 		default:
 			return GPG_E (GPG_ERR_GENERAL);
 	}
 	
-    seahorse_util_print_fd (fd, "\n");
+    PRINT ((fd, "\n"));
 	return GPG_OK;
 }
 
@@ -1130,28 +1133,28 @@ add_uid_action (guint state, gpointer data, int fd)
 	
 	switch (state) {
 		case ADD_UID_COMMAND:
-            seahorse_util_print_fd (fd, "adduid");
+            PRINT ((fd, "adduid"));
 			break;
 		case ADD_UID_NAME:
-            seahorse_util_print_fd (fd, parm->name);
+            PRINT ((fd, parm->name));
 			break;
 		case ADD_UID_EMAIL:
-            seahorse_util_print_fd (fd, parm->email);
+            PRINT ((fd, parm->email));
 			break;
 		case ADD_UID_COMMENT:
-            seahorse_util_print_fd (fd, parm->comment);
+            PRINT ((fd, parm->comment));
 			break;
 		case ADD_UID_QUIT:
-            seahorse_util_print_fd (fd, QUIT);
+            PRINT ((fd, QUIT));
 			break;
 		case ADD_UID_SAVE:
-            seahorse_util_print_fd (fd, YES);
+            PRINT ((fd, YES));
 			break;
 		default:
 			return GPG_E (GPG_ERR_GENERAL);
 	}
 	
-    seahorse_util_print_fd (fd, "\n");
+    PRINT ((fd, "\n"));
 	return GPG_OK;
 }
 
@@ -1285,30 +1288,30 @@ add_key_action (guint state, gpointer data, int fd)
 	
 	switch (state) {
 		case ADD_KEY_COMMAND:
-            seahorse_util_print_fd (fd, "addkey");
+            PRINT ((fd, "addkey"));
 			break;
 		case ADD_KEY_TYPE:
-            seahorse_util_printf_fd (fd, "%d", parm->type);
+            PRINTF ((fd, "%d", parm->type));
 			break;
 		case ADD_KEY_LENGTH:
-            seahorse_util_printf_fd (fd, "%d", parm->length);
+            PRINTF ((fd, "%d", parm->length));
 			break;
 		/* Get exact date or 0 */
 		case ADD_KEY_EXPIRES:
-            seahorse_util_print_fd (fd, (parm->expires) ?
-				seahorse_util_get_date_string (parm->expires) : "0");
+            PRINT ((fd, (parm->expires) ?
+				seahorse_util_get_date_string (parm->expires) : "0"));
 			break;
 		case ADD_KEY_QUIT:
-            seahorse_util_print_fd (fd, QUIT);
+            PRINT ((fd, QUIT));
 			break;
 		case ADD_KEY_SAVE:
-            seahorse_util_print_fd (fd, YES);
+            PRINT ((fd, YES));
 			break;
 		default:
 			return GPG_E (GPG_ERR_GENERAL);
 	}
 	
-    seahorse_util_print_fd (fd, "\n");
+    PRINT ((fd, "\n"));
 	return GPG_OK;
 }
 
@@ -1447,22 +1450,22 @@ del_key_action (guint state, gpointer data, int fd)
 	switch (state) {
 		/* select key */
 		case DEL_KEY_SELECT:
-            seahorse_util_printf_fd (fd, "key %d", (guint)data);
+            PRINTF ((fd, "key %d", (guint)data));
 			break;
 		case DEL_KEY_COMMAND:
-            seahorse_util_print_fd (fd, "delkey");
+            PRINT ((fd, "delkey"));
 			break;
 		case DEL_KEY_CONFIRM:
-            seahorse_util_print_fd (fd, YES);
+            PRINT ((fd, YES));
 			break;
 		case DEL_KEY_QUIT:
-            seahorse_util_print_fd (fd, QUIT);
+            PRINT ((fd, QUIT));
 			break;
 		default:
 			return GPG_E (GPG_ERR_GENERAL);
 	}
 	
-    seahorse_util_print_fd (fd, "\n");
+    PRINT ((fd, "\n"));
 	return GPG_OK;
 }
 
@@ -1584,32 +1587,32 @@ rev_subkey_action (guint state, gpointer data, int fd)
 	
 	switch (state) {
 		case REV_SUBKEY_SELECT:
-            seahorse_util_printf_fd (fd, "key %d", parm->index);
+            PRINTF ((fd, "key %d", parm->index));
 			break;
 		case REV_SUBKEY_COMMAND:
-            seahorse_util_print_fd (fd, "revkey");
+            PRINT ((fd, "revkey"));
 			break;
 		case REV_SUBKEY_CONFIRM:
-            seahorse_util_print_fd (fd, YES);
+            PRINT ((fd, YES));
 			break;
 		case REV_SUBKEY_REASON:
-            seahorse_util_printf_fd (fd, "%d", parm->reason);
+            PRINTF ((fd, "%d", parm->reason));
 			break;
 		case REV_SUBKEY_DESCRIPTION:
-            seahorse_util_printf_fd (fd, "%s\n", parm->description);
+            PRINTF ((fd, "%s\n", parm->description));
 			break;
 		/* Need empty line */
 		case REV_SUBKEY_ENDDESC:
-            seahorse_util_print_fd (fd, "\n");
+            PRINT ((fd, "\n"));
 			break;
 		case REV_SUBKEY_QUIT:
-            seahorse_util_print_fd (fd, QUIT);
+            PRINT ((fd, QUIT));
 			break;
 		default:
 			g_return_val_if_reached (GPG_E (GPG_ERR_GENERAL));
 	}
 	
-    seahorse_util_print_fd (fd, "\n");
+    PRINT ((fd, "\n"));
 	return GPG_OK;
 }
 
@@ -1769,23 +1772,23 @@ primary_action (guint state, gpointer data, int fd)
     switch (state) {
     case PRIMARY_SELECT:
         /* Note that the GPG id is not 0 based */
-        seahorse_util_printf_fd (fd, "uid %d", parm->index);
+        PRINTF ((fd, "uid %d", parm->index));
         break;
     case PRIMARY_COMMAND:
-        seahorse_util_print_fd (fd, "primary");
+        PRINT ((fd, "primary"));
         break;
     case PRIMARY_QUIT:
-        seahorse_util_print_fd (fd, QUIT);
+        PRINT ((fd, QUIT));
         break;
     case PRIMARY_SAVE:
-        seahorse_util_print_fd (fd, YES);
+        PRINT ((fd, YES));
         break;
     default:
         g_return_val_if_reached (GPG_E (GPG_ERR_GENERAL));
         break;
     }
   
-    seahorse_util_print_fd (fd, "\n");
+    PRINT ((fd, "\n"));
     return GPG_OK;
 }
 
@@ -1904,26 +1907,26 @@ del_uid_action (guint state, gpointer data, int fd)
     
     switch (state) {
     case DEL_UID_SELECT:
-        seahorse_util_printf_fd (fd, "uid %d", parm->index);
+        PRINTF ((fd, "uid %d", parm->index));
         break;
     case DEL_UID_COMMAND:
-        seahorse_util_print_fd (fd, "deluid");
+        PRINT ((fd, "deluid"));
         break;
     case DEL_UID_CONFIRM:
-        seahorse_util_print_fd (fd, YES);
+        PRINT ((fd, YES));
         break;
     case DEL_UID_QUIT:
-        seahorse_util_print_fd (fd, QUIT);
+        PRINT ((fd, QUIT));
         break;
     case DEL_UID_SAVE:
-        seahorse_util_print_fd (fd, YES);
+        PRINT ((fd, YES));
         break;
     default:
         g_return_val_if_reached (GPG_E (GPG_ERR_GENERAL));
         break;
     }
   
-    seahorse_util_print_fd (fd, "\n");
+    PRINT ((fd, "\n"));
     return GPG_OK;
 }
 
