@@ -20,7 +20,7 @@ key_added (SeahorseContext *sctx, SeahorseKey *skey, GtkWidget *menu)
 {
 	GtkWidget *item;
 	
-	if (!SEAHORSE_IS_KEY_PAIR (skey) && !seahorse_key_pair_can_sign (SEAHORSE_KEY_PAIR (skey)))
+	if (!SEAHORSE_IS_KEY_PAIR (skey) || !seahorse_key_pair_can_sign (SEAHORSE_KEY_PAIR (skey)))
 		return;
 	
 	item = gtk_menu_item_new_with_label (seahorse_key_get_userid (skey, 0));
@@ -31,6 +31,12 @@ key_added (SeahorseContext *sctx, SeahorseKey *skey, GtkWidget *menu)
 		(gchar*)seahorse_key_get_id (SEAHORSE_KEY_PAIR (skey)->secret));
 	g_signal_connect_after (GTK_OBJECT (skey), "destroy",
 		G_CALLBACK (key_destroyed), item);
+}
+
+static void
+menu_destroyed (GtkObject *object, SeahorseContext *sctx)
+{
+	g_signal_handlers_disconnect_by_func (sctx, key_added, GTK_WIDGET (object));
 }
 
 GtkWidget*
@@ -60,6 +66,8 @@ seahorse_default_key_control_new (SeahorseContext *sctx)
 	}
 	
 	g_signal_connect_after (sctx, "add", G_CALLBACK (key_added), menu);
+	g_signal_connect_after (GTK_OBJECT (menu), "destroy",
+		G_CALLBACK (menu_destroyed), sctx);
 	
 	option = gtk_option_menu_new ();
 	gtk_option_menu_set_menu (GTK_OPTION_MENU (option), menu);
