@@ -272,7 +272,7 @@ complete_op (ServerOp *op)
     int status = 0;
     
     /* When we're failing we kill the program */
-    if (!GPG_IS_OK (op->status))
+    if (!GPG_IS_OK (op->status) && op->pid > 0)
         kill ((pid_t)op->pid, SIGTERM);
         
     /* Wait for the process to exit, and check result */
