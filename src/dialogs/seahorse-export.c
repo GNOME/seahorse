@@ -103,6 +103,7 @@ seahorse_export_new (SeahorseContext *sctx, SeahorseKey *skey)
 	GtkWindow *export_dialog;
 	
 	swidget = seahorse_key_widget_new ("export", sctx, skey);
+	g_return_if_fail (swidget != NULL);
 	
 	glade_xml_signal_connect_data (swidget->xml, "file_toggled", G_CALLBACK (file_toggled), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "server_toggled", G_CALLBACK (server_toggled), swidget);	

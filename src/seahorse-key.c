@@ -107,7 +107,7 @@ seahorse_key_init (SeahorseKey *skey)
 	skey->priv = g_new0 (SeahorseKeyPrivate, 1);
 }
 
-/* Unrefs gpgme key */
+/* Unrefs gpgme key and frees data */
 static void
 seahorse_key_finalize (GObject *gobject)
 {
@@ -135,11 +135,12 @@ seahorse_key_set_property (GObject *object, guint prop_id, const GValue *value, 
 			skey->key = g_value_get_pointer (value);
 			gpgme_key_ref (skey->key);
 			
+			/* counts uids */
 			while (gpgme_key_get_string_attr (skey->key, GPGME_ATTR_NAME, NULL, id))
 				id++;
-			
 			skey->priv->num_uids = id;
 			
+			/* counts subkeys */
 			id = 0;
 			while (gpgme_key_get_string_attr (skey->key, GPGME_ATTR_KEYID, NULL, id+1))
 				id++;
@@ -171,11 +172,7 @@ seahorse_key_get_property (GObject *object, guint prop_id,
 SeahorseKey*
 seahorse_key_new (GpgmeKey key)
 {
-	SeahorseKey *skey;
-	
-	skey = g_object_new (SEAHORSE_TYPE_KEY, "key", key, NULL);
-	
-	return skey;
+	return g_object_new (SEAHORSE_TYPE_KEY, "key", key, NULL);
 }
 
 void

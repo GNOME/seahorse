@@ -33,6 +33,22 @@
 #include "seahorse-context.h"
 #include "seahorse-key.h"
 
+/* Available key types for key generation */
+typedef enum {
+	DSA_ELGAMAL,
+	DSA,
+	RSA
+} SeahorseKeyType;
+
+/* Possible lengths of keys */
+typedef enum {
+	DSA_MIN = 512,
+	DSA_MAX = 1024,
+	ELGAMAL_MIN = 768,
+	RSA_MIN = 1024,
+	LENGTH_MAX = 4096
+} SeahorseKeyLength;
+
 /* Removes key from key ring, then destroys it. */
 gboolean	seahorse_ops_key_delete		(SeahorseContext	*sctx,
 						 SeahorseKey		*skey);
@@ -44,7 +60,7 @@ gboolean	seahorse_ops_key_generate	(SeahorseContext	*sctx,
 						 const gchar		*comment,
 						 const gchar		*passphrase,
 						 const SeahorseKeyType	type,
-						 const gint		length,
+						 const guint		length,
 						 const time_t		expires);
 
 gboolean	seahorse_ops_key_export_server	(SeahorseContext	*sctx,

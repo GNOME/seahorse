@@ -1,5 +1,20 @@
 *seahorse-0.6.0 (6 Jan 2003)
 
+	10 Jan 2003; Jacob Perkins <jap1@users.sourceforge.net>
+	
+	Added hash table to key-widget to ensure only one dialog of each type per key, modified wins & dialogs appropriately
+	Signatures is now a widget, not a key-widget; removed option to show key properties; shows uid & keyid of signer
+	Added SeahorseWidget::new_allow_multiple to accomodate needs of Signatures
+
+	9 Jan 2003; Jacob Perkins <jap1@users.sourceforge.net>
+	
+	Moved SeahorseKeyType & SeahorseKeyLength to ops-key
+	Removed SeahorseContext::destroy since only unrefs
+	Ref counting code audit, minor changes to following:
+		key, context, widget, key-widget, key-menu, key-menu-item, recipients
+	Added delete_event to all dialogs so destroyed properly
+	Added hash table to widget in order to ensure only one dialog of each type, modified wins & dialogs appropriately
+
 	7 Jan 2003; Jacob Perkins <jap1@users.sourceforge.net>
 	
 	Changed key properties so primary expiration date widget is not a date editor for key's without secret part

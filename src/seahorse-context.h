@@ -22,7 +22,7 @@
 #ifndef __SEAHORSE_CONTEXT_H__
 #define __SEAHORSE_CONTEXT_H__
 
-/* SeahorseContext is a wrapper for a GpgmeContext.  It caches the key ring
+/* SeahorseContext is a wrapper for a GpgmeContext.  It caches the key ring as a list
  * and has signals for showing an operation's status and for when a key has been added. */
 
 #include <gtk/gtk.h>
@@ -66,9 +66,6 @@ struct _SeahorseContextClass
 /* Creates a new context */
 SeahorseContext*	seahorse_context_new			(void);
 
-/* Destroys the context and all keys contained */
-void			seahorse_context_destroy		(SeahorseContext	*sctx);
-
 /* Returns the cached key ring */
 GList*			seahorse_context_get_keys		(const SeahorseContext	*sctx);
 
@@ -100,6 +97,7 @@ void			seahorse_context_set_text_mode		(SeahorseContext	*sctx,
 void			seahorse_context_set_signer		(SeahorseContext	*sctx,
 								 SeahorseKey		*signer);
 
-SeahorseKey*		seahorse_context_get_signer		(const SeahorseContext	*sctx);
+/* Returns default signing key for the context */
+SeahorseKey*		seahorse_context_get_last_signer	(const SeahorseContext	*sctx);
 
 #endif /* __SEAHORSE_CONTEXT_H__ */

@@ -24,7 +24,7 @@
 
 /* SeahorseWidget is used by almost every dialog and window in seahorse.
  * It is a conveniance wrapper for a GladeXML definition that will
- * connect common callback functions for basic dialogs.
+ * connect common callback functions windows and dialogs.
  * Given a name, the xml file should be 'seahorse-name.glade2',
  * and the name of the main window widget should also be the given name.
  * Basic callbacks include: showing help and closing/deleting.
@@ -66,15 +66,19 @@ struct _SeahorseWidgetClass
 
 /* Creates a new SeahorseWidget.  This will load/show the primary window
  * and set any common callback functions */
-SeahorseWidget*	seahorse_widget_new		(gchar			*name,
-						 SeahorseContext	*sctx);
+SeahorseWidget*	seahorse_widget_new			(gchar			*name,
+							 SeahorseContext	*sctx);
 
 /* Same as seahorse_widget_new, but connects some extra callback funtions
  * that are used by main windows, such as status and progress display */
-SeahorseWidget*	seahorse_widget_new_component	(gchar			*name,
-						 SeahorseContext	*sctx);
+SeahorseWidget*	seahorse_widget_new_component		(gchar			*name,
+							 SeahorseContext	*sctx);
 
-/* Unrefs the SeahorseWidget */
-void		seahorse_widget_destroy		(SeahorseWidget		*swidget);
+/* Creates new widget without checking if type already exists */
+SeahorseWidget*	seahorse_widget_new_allow_multiple	(gchar			*name,
+							 SeahorseContext	*sctx);
+
+/* Unrefs the SeahorseWidget.  Since dialogs don't ref, makes more sense. */
+void		seahorse_widget_destroy			(SeahorseWidget		*swidget);
 
 #endif /* __SEAHORSE_WIDGET_H__ */

@@ -50,7 +50,9 @@ quit (GtkWidget *widget, SeahorseWidget *swidget)
 	model = gtk_tree_view_get_model (GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, KEY_LIST)));
 	seahorse_key_store_destroy (SEAHORSE_KEY_STORE (model));
 	
-	seahorse_context_destroy (swidget->sctx);
+	/* unref context since widget has own ref */
+	g_object_unref (swidget->sctx);
+	
 	seahorse_widget_destroy (swidget);
 	
 	gtk_exit (0);

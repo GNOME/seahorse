@@ -50,7 +50,7 @@ gboolean
 seahorse_ops_key_generate (SeahorseContext *sctx, const gchar *name,
 			   const gchar *email, const gchar *comment,
 			   const gchar *passphrase, const SeahorseKeyType type,
-			   const gint length, const time_t expires)
+			   const guint length, const time_t expires)
 {
         gchar *common;
         gchar *key_type;

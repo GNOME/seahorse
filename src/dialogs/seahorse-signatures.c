@@ -23,57 +23,42 @@
 
 #include "seahorse-signatures.h"
 #include "seahorse-util.h"
-#include "seahorse-key-properties.h"
-#include "seahorse-key-widget.h"
-
-/* Load key's properties */
-static void
-view_key_clicked (GtkButton *button, SeahorseWidget *swidget)
-{
-	SeahorseKeyWidget *skwidget;
-	
-	skwidget = SEAHORSE_KEY_WIDGET (swidget);
-	
-	seahorse_key_properties_new (swidget->sctx, skwidget->skey);
-}
+#include "seahorse-widget.h"
 
 void
-seahorse_signatures_new (SeahorseContext *sctx, GpgmeSigStat status, gboolean show_key)
+seahorse_signatures_new (SeahorseContext *sctx, GpgmeSigStat status)
 {
 	SeahorseWidget *swidget;
 	GpgmeKey key;
+	SeahorseKey *skey;
 	gchar *label;
 	
 	switch (status) {
 		/* If sig is good or there are multiple sigs, show */
 		case GPGME_SIG_STAT_GOOD: GPGME_SIG_STAT_GOOD_EXPKEY: GPGME_SIG_STAT_DIFF:
-			if (gpgme_get_sig_key (sctx->ctx, 0, &key) == GPGME_No_Error) {
-				swidget = seahorse_key_widget_new ("signatures", sctx, seahorse_context_get_key (sctx, key));
+			swidget = seahorse_widget_new_allow_multiple ("signatures", sctx);
+			gpgme_get_sig_key (sctx->ctx, 0, &key);
+			skey = seahorse_context_get_key (sctx, key);
 				
-				switch (status) {
-					case GPGME_SIG_STAT_GOOD_EXPKEY:
-						label = _("Good, signing key expired");
-						break;
-					case GPGME_SIG_STAT_DIFF:
-						label = _("Multiple Signatures");
-						break;
-					default:
-						label = _("Good");
-						break;
-				}
-				
-				gtk_label_set_text (GTK_LABEL (glade_xml_get_widget (swidget->xml, "status")), label);
-				gtk_label_set_text (GTK_LABEL (glade_xml_get_widget (swidget->xml, "created")),
-					seahorse_util_get_date_string (gpgme_get_sig_ulong_attr (sctx->ctx, 0, GPGME_ATTR_CREATED, 0)));
-				
-				if (show_key) {
-					gtk_widget_show (glade_xml_get_widget (swidget->xml, "view_key"));
-					glade_xml_signal_connect_data (swidget->xml, "view_key_clicked",
-						G_CALLBACK (view_key_clicked), swidget);
-				}
+			switch (status) {
+				case GPGME_SIG_STAT_GOOD_EXPKEY:
+					label = _("Good, signing key expired");
+					break;
+				case GPGME_SIG_STAT_DIFF:
+					label = _("Multiple Signatures");
+					break;
+				default:
+					label = _("Good");
+					break;
 			}
-			else
-				seahorse_util_show_error (NULL, _("Cannot get signing key."));
+				
+			gtk_label_set_text (GTK_LABEL (glade_xml_get_widget (swidget->xml, "status")), label);
+			gtk_label_set_text (GTK_LABEL (glade_xml_get_widget (swidget->xml, "created")),
+				seahorse_util_get_date_string (gpgme_get_sig_ulong_attr (sctx->ctx, 0, GPGME_ATTR_CREATED, 0)));
+			gtk_label_set_text (GTK_LABEL (glade_xml_get_widget (swidget->xml, "signer")),
+				seahorse_key_get_userid (skey, 0));
+			gtk_label_set_text (GTK_LABEL (glade_xml_get_widget (swidget->xml, "keyid")),
+				seahorse_key_get_keyid (skey, 0));
 			break;
 		/* Don't have key */
 		case GPGME_SIG_STAT_NOKEY:
@@ -92,4 +77,6 @@ seahorse_signatures_new (SeahorseContext *sctx, GpgmeSigStat status, gboolean sh
 			seahorse_util_show_error (NULL, _("Verification Error"));
 			break;
 	}
+	
+	g_print ("%s\n", gpgme_get_notation (sctx->ctx));
 }

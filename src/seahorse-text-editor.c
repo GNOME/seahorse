@@ -100,11 +100,11 @@ text_op (gint op, gpointer data, SeahorseWidget *swidget)
 			break;
 		case VERIFY:
 			success = seahorse_ops_text_verify (swidget->sctx, string, &status);
-			seahorse_signatures_new (swidget->sctx, status, TRUE);
+			seahorse_signatures_new (swidget->sctx, status);
 			break;
 		case DECRYPT_VERIFY:
 			success = seahorse_ops_text_decrypt_verify (swidget->sctx, string, &status);
-			seahorse_signatures_new (swidget->sctx, status, TRUE);
+			seahorse_signatures_new (swidget->sctx, status);
 			break;
 		default:
 			break;
@@ -215,16 +215,10 @@ populate_popup (GtkWidget *widget, GtkMenu *menu, SeahorseWidget *swidget)
 void
 seahorse_text_editor_show (SeahorseContext *sctx)
 {
-	static SeahorseWidget *swidget = NULL;
-	
-	if (swidget != NULL) {
-		gtk_window_present (GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)));
-		return;
-	}
+	SeahorseWidget *swidget;
 	
 	swidget = seahorse_widget_new_component ("text-editor", sctx);
-	
-	g_object_add_weak_pointer (G_OBJECT (swidget), (gpointer)&swidget);
+	g_return_if_fail (swidget != NULL);
 	
 	glade_xml_signal_connect_data (swidget->xml, "preferences_activate",
 		G_CALLBACK (preferences_activate), swidget);

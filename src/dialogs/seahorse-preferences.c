@@ -53,7 +53,7 @@ seahorse_preferences_default_key_selected (SeahorseKeyMenu *skmenu, SeahorseKey 
 void
 seahorse_preferences_show (SeahorseContext *sctx)
 {	
-	static SeahorseWidget *swidget = NULL;
+	SeahorseWidget *swidget;
 	GtkWidget *widget;
 	GtkWidget *menu;
 	GList *list = NULL;
@@ -61,14 +61,9 @@ seahorse_preferences_show (SeahorseContext *sctx)
 	SeahorseKey *skey;
 	SeahorseKey *signer;
 	const gchar *keyid;
-
-	if (swidget != NULL) {
-		gtk_window_present (GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)));
-		return;
-	}
-		
+	
 	swidget = seahorse_widget_new ("preferences", sctx);
-	g_object_add_weak_pointer (G_OBJECT (swidget), (gpointer)&swidget);
+	g_return_if_fail (swidget != NULL);
 	
 	widget = glade_xml_get_widget (swidget->xml, "ascii_armor");
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), gpgme_get_armor (swidget->sctx->ctx));
@@ -80,7 +75,7 @@ seahorse_preferences_show (SeahorseContext *sctx)
 	menu = seahorse_key_menu_new (TRUE, sctx);
 	gtk_option_menu_set_menu (GTK_OPTION_MENU (widget), menu);
 	
-	signer = seahorse_context_get_signer (sctx);
+	signer = seahorse_context_get_last_signer (sctx);
 	list = seahorse_context_get_keys (sctx);
 	
 	if (signer != NULL) {

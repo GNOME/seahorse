@@ -100,18 +100,6 @@ seahorse_key_menu_item_finalize (GObject *gobject)
 	G_OBJECT_CLASS (parent_class)->finalize (gobject);
 }
 
-/* Removes itself from the menu if the SeahorseKey is destroyed. */
-static void
-seahorse_key_menu_item_key_destroyed (GtkObject *object, SeahorseKeyMenuItem *skitem)
-{
-	GtkWidget *widget;
-	
-	widget = GTK_WIDGET (skitem);
-	
-	gtk_container_remove (GTK_CONTAINER (widget->parent), widget);
-	g_object_unref (object);
-}
-
 static void
 seahorse_key_menu_item_set_property (GObject *object, guint prop_id,
 				     const GValue *value, GParamSpec *pspec)
@@ -158,6 +146,19 @@ seahorse_key_menu_item_get_property (GObject *object, guint prop_id,
 		default:
 			break;
 	}
+}
+
+/* Removes itself from the menu if the SeahorseKey is destroyed. */
+static void
+seahorse_key_menu_item_key_destroyed (GtkObject *object, SeahorseKeyMenuItem *skitem)
+{
+	GtkWidget *widget;
+	
+	widget = GTK_WIDGET (skitem);
+	
+	/* Remove & unref key */
+	gtk_container_remove (GTK_CONTAINER (widget->parent), widget);
+	g_object_unref (object);
 }
 
 GtkWidget*

@@ -32,7 +32,6 @@
 
 /* Load a new signature dialog */
 void	seahorse_signatures_new			(SeahorseContext	*sctx,
-						 GpgmeSigStat		status,
-						 gboolean		show_key);
+						 GpgmeSigStat		status);
 
 #endif /* __SEAHORSE_SIGNATURES_H__ */

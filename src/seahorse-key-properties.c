@@ -221,6 +221,7 @@ seahorse_key_properties_new (SeahorseContext *sctx, SeahorseKey *skey)
 	gboolean has_secret;
 	
 	swidget = seahorse_key_widget_new_component ("key-properties", sctx, skey);
+	g_return_if_fail (swidget != NULL);
 	
 	/* Hide edit menu if key doesn't have secret component */
 	if (!seahorse_context_key_has_secret (sctx, skey)) {

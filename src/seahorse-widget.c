@@ -64,6 +64,9 @@ static gboolean		seahorse_widget_focus_in_event	(GtkWidget		*widget,
 
 static GObjectClass	*parent_class			= NULL;
 
+/* Hash of widgets with name as key */
+static GHashTable	*widgets			= NULL;
+
 GType
 seahorse_widget_get_type (void)
 {
@@ -120,6 +123,13 @@ seahorse_widget_finalize (GObject *gobject)
 	SeahorseWidget *swidget;
 	
 	swidget = SEAHORSE_WIDGET (gobject);
+	
+	/* Remove widget from hash and destroy hash if empty */
+	g_hash_table_remove (widgets, swidget->name);
+	if (g_hash_table_size == 0) {
+		g_hash_table_destroy (widgets);
+		widgets = NULL;
+	}
 	
 	g_signal_handlers_disconnect_by_func (swidget->sctx, seahorse_widget_show_status, swidget);
 	gtk_widget_destroy (glade_xml_get_widget (swidget->xml, swidget->name));
@@ -246,6 +256,7 @@ show_progress (gpointer widget, const gchar *what, gint type, gint current, gint
 	SeahorseWidget *swidget;
 	GnomeAppBar *status;
 	GtkProgressBar *progress;
+	gdouble fract;
 	
 	swidget = SEAHORSE_WIDGET (widget);
 	status = GNOME_APPBAR (glade_xml_get_widget (swidget->xml, STATUS));
@@ -260,8 +271,6 @@ show_progress (gpointer widget, const gchar *what, gint type, gint current, gint
 		gtk_progress_bar_pulse (progress);
 	}
 	else {
-		gdouble fract;
-		
 		fract = (gdouble) current / (gdouble) total;
 		gtk_progress_bar_set_fraction (progress, fract);
 	}
@@ -280,24 +289,51 @@ seahorse_widget_focus_in_event (GtkWidget *widget, GdkEventFocus *event, Seahors
 	return TRUE;
 }
 
-SeahorseWidget*
-seahorse_widget_new (gchar *name, SeahorseContext *sctx)
+/* Common function for creating new widget */
+static SeahorseWidget*
+seahorse_widget_create (gchar *name, SeahorseContext *sctx, gboolean component)
 {
 	SeahorseWidget *swidget;
 	
-	swidget = g_object_new (SEAHORSE_TYPE_WIDGET, "name", name, "ctx", sctx, NULL);
+	g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), NULL);
+	
+	/* Check if have widget hash */
+	if (widgets != NULL) {
+		swidget = g_hash_table_lookup (widgets, name);
+		
+		/* If widget already exists, present */
+		if (swidget != NULL) {
+			gtk_window_present (GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)));
+			return NULL;
+		}
+	}
+	/* Else create new widget hash */
+	else
+		widgets = g_hash_table_new ((GHashFunc)g_str_hash, (GCompareFunc)g_str_equal);
+	
+	/* If widget doesn't already exist, create & insert into hash */
+	swidget = g_object_new (SEAHORSE_TYPE_WIDGET, "name", name, "ctx", sctx, "component", component, NULL);
+	g_hash_table_insert (widgets, g_strdup (name), swidget);
 	
 	return swidget;
 }
 
 SeahorseWidget*
+seahorse_widget_new (gchar *name, SeahorseContext *sctx)
+{
+	return seahorse_widget_create (name, sctx, FALSE);
+}
+
+SeahorseWidget*
 seahorse_widget_new_component (gchar *name, SeahorseContext *sctx)
 {
-	SeahorseWidget *swidget;
-	
-	swidget = g_object_new (SEAHORSE_TYPE_WIDGET, "name", name, "ctx", sctx, "component", TRUE, NULL);	
-	
-	return swidget;
+	return seahorse_widget_create (name, sctx, TRUE);	
+}
+
+SeahorseWidget*
+seahorse_widget_new_allow_multiple (gchar *name, SeahorseContext *sctx)
+{
+	return g_object_new (SEAHORSE_TYPE_WIDGET, "name", name, "ctx", sctx, NULL);
 }
 
 void

@@ -3,8 +3,8 @@
 "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
 <!ENTITY legal SYSTEM "legal.xml">
 <!ENTITY appversion "0.6.0">
-<!ENTITY manrevision "1.0">
-<!ENTITY date "October 2002">
+<!ENTITY manrevision "2.0">
+<!ENTITY date "January 2003">
 <!ENTITY app "<application>seahorse</application>">
 ]>
 <!-- =============Document Header ============================= -->
@@ -12,14 +12,13 @@
 <articleinfo>
 	<title>&app; Manual V&manrevision;</title>
 	<copyright>
-		<year>2002</year>
+		<year>2003</year>
 		<holder>Jacob Perkins</holder>
 	</copyright>
 	<publisher>
 		<publishername>Seahorse Project</publishername>
 	</publisher>
 	&legal;
-
 	<authorgroup>
 		<author>
 			<firstname>Jacob</firstname>
@@ -59,7 +58,7 @@
 <sect1 id="introduction">
 	<title>Introduction</title>
 	<para>&app; is a Gnome2 frontend for <ulink url="www.gnupg.org" type="http">Gnu Privacy Guard</ulink>.
-	&app; provides the following features:</para>
+	&app; provides the following components:</para>
 	<itemizedlist>
 		<listitem><para><guilabel>Key Manager</guilabel></para></listitem>
 		<listitem><para><xref linkend="key-properties"/></para></listitem>
@@ -67,8 +66,10 @@
 		<listitem><para><xref linkend="file-manager"/></para></listitem>
 	</itemizedlist>
 	<para>&app; is an application and a project.
-	The goal of the application is to provide an easy to use key manager and encryption capabilities.
-	The goal of the project is to provide applications and plugins to make encryption easier for the gnome desktop.</para>
+	The primary goal of the &app; application is to provide an easy to use yet powerful key manager tool.
+	The secondary goal is to provide basic encryption capabilities.
+	The goal of the project is to provide the &app; application,
+	along with plugins for Gnome applications to make encryption easy on the Gnome Desktop.</para>
 </sect1>
 
 <!-- =========== Getting Started ============================== -->
@@ -81,19 +82,14 @@
 			<varlistentry>
 				<term><guimenu>Applications</guimenu> menu</term>
 				<listitem>
-					<para>Choose
-					<menuchoice>
-						<guisubmenu>Other</guisubmenu>
-						<guimenuitem>GPG Keys Manager</guimenuitem>
+					<para>Choose<menuchoice>
+						<guisubmenu>Other</guisubmenu> <guimenuitem>GPG Keys Manager</guimenuitem>
 					</menuchoice>.</para>
 				</listitem>
-				<listitem>
-					<para>Run &app; from the command line.</para>
-				</listitem>
+				<listitem><para>Run &app; from the command line.</para></listitem>
 			</varlistentry>
 		</variablelist>
 	</sect2>
-
 	<sect2 id="when-start">
 		<title>When You Start &app;</title>
 		<para>When you start &app;,

@@ -44,6 +44,10 @@ static void	seahorse_key_widget_destroyed		(GtkObject		*skey,
 
 static SeahorseWidgetClass	*parent_class		= NULL;
 
+/* Hash of key widget hashes with name as key.
+ * Key widget hashes have keyid as key and widget as value. */
+static GHashTable		*types			= NULL;
+
 GType
 seahorse_key_widget_get_type (void)
 {
@@ -88,9 +92,28 @@ seahorse_key_widget_class_init (SeahorseKeyWidgetClass *klass)
 static void
 seahorse_key_widget_finalize (GObject *gobject)
 {
+	SeahorseWidget *swidget;
 	SeahorseKeyWidget *skwidget;
+	GHashTable *widgets;
 	
 	skwidget = SEAHORSE_KEY_WIDGET (gobject);
+	swidget = SEAHORSE_WIDGET (skwidget);
+	
+	/* Remove widget from hash */
+	widgets = g_hash_table_lookup (types, swidget->name);
+	g_hash_table_remove (widgets, seahorse_key_get_keyid (skwidget->skey, 0));
+	
+	/* Remove key widget hash from types & destroy if empty */
+	if (g_hash_table_size (widgets) == 0) {
+		g_hash_table_remove (types, swidget->name);
+		g_hash_table_destroy (widgets);
+		
+		/* Destroy types hash if empty */
+		if (g_hash_table_size (types) == 0) {
+			g_hash_table_destroy (types);
+			types = NULL;
+		}
+	}
 	
 	g_signal_handlers_disconnect_by_func (GTK_OBJECT (skwidget->skey),
 		seahorse_key_widget_destroyed, skwidget);
@@ -147,22 +170,60 @@ seahorse_key_widget_destroyed (GtkObject *skey, SeahorseKeyWidget *skwidget)
 	seahorse_widget_destroy (SEAHORSE_WIDGET (skwidget));
 }
 
+static SeahorseWidget*
+seahorse_key_widget_create (gchar *name, SeahorseContext *sctx, SeahorseKey *skey, gboolean component)
+{
+	SeahorseWidget *swidget;
+	GHashTable *widgets;
+	
+	/* Check if have types hash */
+	if (types != NULL) {
+		widgets = g_hash_table_lookup (types, name);
+		
+		/* Check if have key widgets hash */
+		if (widgets != NULL) {
+			swidget = g_hash_table_lookup (widgets, seahorse_key_get_keyid (skey, 0));
+			
+			/* If have widget, present */
+			if (swidget != NULL) {
+				gtk_window_present (GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)));
+				return NULL;
+			}
+		}
+		/* Don't have any key widgets of type */
+		else {
+			widgets = g_hash_table_new ((GHashFunc)g_str_hash, (GCompareFunc)g_str_equal);
+			g_hash_table_insert (types, g_strdup (name), widgets);
+		}
+	}
+	/* Don't have any widgets */
+	else {
+		types = g_hash_table_new ((GHashFunc)g_str_hash, (GCompareFunc)g_str_equal);
+		widgets = g_hash_table_new ((GHashFunc)g_str_hash, (GCompareFunc)g_str_equal);
+		g_hash_table_insert (types, g_strdup (name), widgets);
+	}
+	
+	/* If widget doesn't already exist, create & insert into key widgets hash */
+	swidget = g_object_new (SEAHORSE_TYPE_KEY_WIDGET, "name", name,
+		"ctx", sctx, "component", component, "key", skey, NULL);
+	g_hash_table_insert (widgets, (gchar*)seahorse_key_get_keyid (skey, 0), swidget);
+	
+	return swidget;
+}
+
 SeahorseWidget*
 seahorse_key_widget_new (gchar *name, SeahorseContext *sctx, SeahorseKey *skey)
 {
-	SeahorseKeyWidget *skwidget;
+	return seahorse_key_widget_create (name, sctx, skey, FALSE);
 	
-	skwidget = g_object_new (SEAHORSE_TYPE_KEY_WIDGET,
-		"name", name, "ctx", sctx, "key", skey,  NULL);
-	return SEAHORSE_WIDGET (skwidget);
+	//return g_object_new (SEAHORSE_TYPE_KEY_WIDGET, "name", name, "ctx", sctx, "key", skey,  NULL);
 }
 
 SeahorseWidget*
 seahorse_key_widget_new_component (gchar *name, SeahorseContext *sctx, SeahorseKey *skey)
 {
-	SeahorseKeyWidget *skwidget;
+	return seahorse_key_widget_create (name, sctx, skey, TRUE);
 	
-	skwidget = g_object_new (SEAHORSE_TYPE_KEY_WIDGET, "name", name,
-		"ctx", sctx, "component", TRUE, "key", skey, NULL);
-	return SEAHORSE_WIDGET (skwidget);
+	/*return g_object_new (SEAHORSE_TYPE_KEY_WIDGET, "name", name, "ctx", sctx,
+		"component", TRUE, "key", skey, NULL);*/
 }

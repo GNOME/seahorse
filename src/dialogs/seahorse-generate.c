@@ -121,16 +121,10 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 void
 seahorse_generate_show (SeahorseContext *sctx)
 {	
-	static SeahorseWidget *swidget = NULL;
-	
-	if (swidget != NULL) {
-		gtk_window_present (GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)));
-		return;
-	}
+	SeahorseWidget *swidget;
 	
 	swidget = seahorse_widget_new ("generate", sctx);
-	
-	g_object_add_weak_pointer (G_OBJECT (swidget), (gpointer)&swidget);
+	g_return_if_fail (swidget != NULL);
 	
 	glade_xml_signal_connect_data (swidget->xml, "type_changed", G_CALLBACK (type_changed), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "never_expires_toggled", G_CALLBACK (never_expires_toggled), swidget);

@@ -104,8 +104,6 @@ static void
 seahorse_recipients_finalize (GObject *gobject)
 {
 	SeahorseRecipients *srecips;
-	SeahorseKeyStore *all_keys;
-	SeahorseKeyStore *recipient_keys;
 	
 	srecips = SEAHORSE_RECIPIENTS (gobject);
 	seahorse_key_store_destroy (srecips->all_keys);
@@ -296,10 +294,12 @@ seahorse_recipients_run (SeahorseRecipients *srecips)
 		switch (response) {
 			case GTK_RESPONSE_HELP:
 				break;
-			case GTK_RESPONSE_CANCEL:
+			case GTK_RESPONSE_OK:
+				done = TRUE;
+				break;
+			default:
 				gpgme_recipients_release (srecips->recips);
 				srecips->recips = NULL;
-			default:
 				done = TRUE;
 				break;
 		}

@@ -117,7 +117,7 @@ verify_activate (GtkWidget *widget, SeahorseWidget *swidget)
 	
 	if (seahorse_ops_file_check_suffix (file, SIG_FILE)) {
 		seahorse_ops_file_verify (swidget->sctx, file, &status);
-		seahorse_signatures_new (swidget->sctx, status, TRUE);
+		seahorse_signatures_new (swidget->sctx, status);
 	}
 	else
 		show_suffix_error (swidget);
@@ -134,7 +134,7 @@ decrypt_verify_activate (GtkWidget *widget, SeahorseWidget *swidget)
 	
 	if (seahorse_ops_file_check_suffix (file, CRYPT_FILE)) {
 		seahorse_ops_file_decrypt_verify (swidget->sctx, file, &status);
-		seahorse_signatures_new (swidget->sctx, status, TRUE);
+		seahorse_signatures_new (swidget->sctx, status);
 	}
 	else
 		show_suffix_error (swidget);
@@ -143,16 +143,10 @@ decrypt_verify_activate (GtkWidget *widget, SeahorseWidget *swidget)
 void
 seahorse_file_manager_show (SeahorseContext *sctx)
 {
-	static SeahorseWidget *swidget = NULL;
-	
-	if (swidget != NULL) {
-		gtk_window_present (GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)));
-		return;
-	}
+	SeahorseWidget *swidget;
 	
 	swidget = seahorse_widget_new_component ("file-manager", sctx);
-	
-	g_object_add_weak_pointer (G_OBJECT (swidget), (gpointer)&swidget);
+	g_return_if_fail (swidget != NULL);
 	
 	glade_xml_signal_connect_data (swidget->xml, "preferences_activate",
 		G_CALLBACK (preferences_activate), swidget);

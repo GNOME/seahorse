@@ -34,7 +34,7 @@ enum {
 
 static void	seahorse_recipients_store_class_init	(SeahorseRecipientsStoreClass	*klass);
 
-/* Virtual */
+/* Virtual methods */
 static void	seahorse_recipients_store_set		(SeahorseKeyRow			*skrow,
 							 GtkTreeIter			*parent);
 static void	seahorse_recipients_store_key_changed	(SeahorseKey			*skey,

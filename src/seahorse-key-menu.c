@@ -139,31 +139,6 @@ append_key (SeahorseKeyMenu *skmenu, SeahorseKey *skey)
 	gtk_widget_show_all (item);
 }
 
-/* Appends key to menu */
-static void
-seahorse_key_menu_add_key (SeahorseContext *sctx, SeahorseKey *skey, SeahorseKeyMenu *skmenu)
-{
-	append_key (skmenu, skey);}
-
-/* Emit the 'selected' signal when a key item has been activated */
-static void
-seahorse_key_menu_item_activated (GtkMenuItem *menuitem, SeahorseKeyMenu *skmenu)
-{
-	SeahorseKeyMenuItem *skitem;
-	
-	skitem = SEAHORSE_KEY_MENU_ITEM (menuitem);
-	g_signal_emit (G_OBJECT (skmenu), menu_signals[SELECTED], 0, skitem->skey);
-}
-
-/* Disconnect the key item's activate signal */
-static void
-seahorse_key_menu_item_removed (GtkContainer *container, GtkWidget *widget)
-{
-	g_signal_handlers_disconnect_by_func (GTK_MENU_ITEM (widget), seahorse_key_menu_item_activated, SEAHORSE_KEY_MENU (container));
-	
-	GTK_CONTAINER_CLASS (parent_class)->remove (container, widget);
-}
-
 static void
 seahorse_key_menu_set_property (GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec)
 {
@@ -215,13 +190,40 @@ seahorse_key_menu_get_property (GObject *object, guint prop_id, GValue *value, G
 	}
 }
 
+/* Appends key to menu */
+static void
+seahorse_key_menu_add_key (SeahorseContext *sctx, SeahorseKey *skey, SeahorseKeyMenu *skmenu)
+{
+	append_key (skmenu, skey);
+}
+
+/* Emit the 'selected' signal when a key item has been activated */
+static void
+seahorse_key_menu_item_activated (GtkMenuItem *menuitem, SeahorseKeyMenu *skmenu)
+{
+	SeahorseKeyMenuItem *skitem;
+	
+	skitem = SEAHORSE_KEY_MENU_ITEM (menuitem);
+	g_signal_emit (G_OBJECT (skmenu), menu_signals[SELECTED], 0, skitem->skey);
+}
+
+/* Disconnect the key item's activate signal */
+static void
+seahorse_key_menu_item_removed (GtkContainer *container, GtkWidget *widget)
+{
+	g_signal_handlers_disconnect_by_func (GTK_MENU_ITEM (widget), seahorse_key_menu_item_activated, SEAHORSE_KEY_MENU (container));
+	
+	GTK_CONTAINER_CLASS (parent_class)->remove (container, widget);
+}
+
+
 GtkWidget*
 seahorse_key_menu_new (gboolean have_secret, SeahorseContext *sctx)
 {
 	GtkWidget *widget;
 	
 	widget = g_object_new (SEAHORSE_TYPE_KEY_MENU, "secret", have_secret, "ctx", sctx, NULL);
-	
 	gtk_widget_show_all (widget);
+	
 	return widget;
 }

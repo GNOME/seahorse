@@ -23,7 +23,7 @@
 #define __SEAHORSE_KEY_H__
 
 /* SeahorseKey is a wrapper for a GpgmeKey that contains some extra data and signals.
- * The signals are 'destroy' (from GtkObject) and 'changed', for when a key is changed.
+ * SeahorseKey is a GtkObject in order to emit the 'destroy' signal, along with the 'changed' signal.
  * Any object or widget that contains a key should connect to these signals. */
 
 #include <gtk/gtk.h>
@@ -35,22 +35,6 @@
 #define SEAHORSE_IS_KEY(obj)		(GTK_CHECK_TYPE ((obj), SEAHORSE_TYPE_KEY))
 #define SEAHORSE_IS_KEY_CLASS(klass)	(GTK_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_KEY))
 #define SEAHORSE_KEY_GET_CLASS(obj)	(GTK_CHECK_GET_CLASS ((obj), SEAHORSE_TYPE_KEY, SeahorseKeyClass))
-
-/* Available key types for key generation */
-typedef enum {
-	DSA_ELGAMAL,
-	DSA,
-	RSA
-} SeahorseKeyType;
-
-/* Possible lengths of keys */
-typedef enum {
-	DSA_MIN = 512,
-	DSA_MAX = 1024,
-	ELGAMAL_MIN = 768,
-	RSA_MIN = 1024,
-	LENGTH_MAX = 4096
-} SeahorseKeyLength;
 
 /* Possible key changes */
 typedef enum {
@@ -76,7 +60,7 @@ struct _SeahorseKeyClass
 {
 	GtkObjectClass		parent_class;
 	
-	/* One of the key's attributes has changed */
+	/* Signal emitted when one of the key's attributes has changed */
 	void 			(* changed)	(SeahorseKey		*skey,
 						 SeahorseKeyChange	change);
 };
@@ -84,7 +68,7 @@ struct _SeahorseKeyClass
 /* Constructs a new SeahorseKey */
 SeahorseKey*	seahorse_key_new		(GpgmeKey		key);
 
-/* Destroys a SeahorseKey.  Emits the 'destroy' signal. */
+/* Emits the 'destroy' signal. */
 void		seahorse_key_destroy		(SeahorseKey		*skey);
 
 /* Called by key edit operations.  Emits the 'changed' signal. */
