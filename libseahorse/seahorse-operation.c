@@ -122,12 +122,14 @@ seahorse_operation_cancel (SeahorseOperation *operation)
     g_return_if_fail (SEAHORSE_IS_OPERATION (operation));
     g_return_if_fail (operation->done == FALSE);
 
+	g_object_ref (operation);
     operation->done = TRUE;   
     
     if (operation->donefunc) 
         (operation->donefunc) (operation, TRUE, operation->userdata);
 
     operation->userdata = NULL;
+	g_object_unref (operation);
 }
 
 void                
@@ -136,12 +138,14 @@ seahorse_operation_done (SeahorseOperation *operation)
     g_return_if_fail (SEAHORSE_IS_OPERATION (operation));
     g_return_if_fail (operation->done == FALSE);
 
+	g_object_ref (operation);
     operation->done = TRUE;
     
     if (operation->donefunc) 
         (operation->donefunc) (operation, FALSE, operation->userdata);
 
     operation->userdata = NULL;
+    g_object_unref (operation);
 }
 
 GSList*             
@@ -171,8 +175,10 @@ seahorse_operation_list_cancel (GSList *list)
 {
     SeahorseOperation *operation;
     
-    for ( ; list; list = g_slist_next (list)) {
+    while (list) {
         operation = SEAHORSE_OPERATION (list->data);
+        list = g_slist_next (list);
+        
         if (!seahorse_operation_is_done (operation))
             seahorse_operation_cancel (operation);
     }
