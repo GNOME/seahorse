@@ -44,6 +44,7 @@ libseahorse_internal_la_SOURCES = \
 	seahorse-pgp-source.c seahorse-pgp-source.h \
 	seahorse-gpgmex.h seahorse-gpgmex-util.c \
 	seahorse-prefs.c seahorse-prefs.h \
+	seahorse-operation.c seahorse-operation.h \
 	$(BUILT_SOURCES) \
 	$(AGENT_SRCS)
 
