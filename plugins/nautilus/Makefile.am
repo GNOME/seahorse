@@ -9,9 +9,15 @@ INCLUDES = -I$(top_builddir) \
 
 bin_PROGRAMS = seahorse-pgp-preferences
 
+if WITH_AGENT
+AGENT_SRCS = seahorse-pgp-preferences-cache.c
+else
+AGENT_SRCS = 
+endif
+
 seahorse_pgp_preferences_SOURCES = \
 	seahorse-pgp-preferences.c \
-	seahorse-pgp-preferences-cache.c
+	$(AGENT_SRCS)
 	
 seahorse_pgp_preferences_LDADD = \
 	$(top_builddir)/libseahorse/libseahorse.a \
