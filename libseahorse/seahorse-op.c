@@ -202,7 +202,7 @@ encrypt_data_common (SeahorseContext *sctx, gpgme_data_t plain, gpgme_key_t * re
 	/* release plain and recips */
 	gpgme_data_release (plain);
 	key = recips;
-	while (key)
+	while (*key)
 	        gpgme_key_unref (*key++);
 	g_free (recips);
 	return cipher;

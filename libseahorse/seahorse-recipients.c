@@ -118,6 +118,7 @@ seahorse_recipients_get (SeahorseContext *sctx)
 		}
 	}
 	
+    g_signal_handlers_disconnect_by_func (swidget->sctx, G_CALLBACK (show_progress), swidget);	
 	seahorse_widget_destroy (swidget);
 	return recips;
 }
