@@ -1,5 +1,4 @@
 
-#include <gnome.h>
 #include <bonobo.h>
 #include <bonobo-activation/bonobo-activation.h>
 #include <libgnomevfs/gnome-vfs-utils.h>
