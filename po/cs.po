@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-28 11:36+0200\n"
-"PO-Revision-Date: 2004-10-28 17:17+0200\n"
+"POT-Creation-Date: 2004-10-31 20:44+0100\n"
+"PO-Revision-Date: 2004-11-01 00:48+0100\n"
 "Last-Translator: Miloslav Trmac <mitr@volny.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -132,7 +132,9 @@ msgstr "Neznámý/neplatný klíč"
 msgid ""
 "<b>Warning</b>: Your system is not configured to cache passwords are in "
 "secure memory."
-msgstr "<b>Varování</b>: Váš systém není nastaven pro kešování hesel v zabezpečené paměti."
+msgstr ""
+"<b>Varování</b>: Váš systém není nastaven pro kešování hesel v zabezpečené "
+"paměti."
 
 #: agent/seahorse-agent-cache.glade.h:2
 msgid "Cached GPG Passwords"
@@ -173,29 +175,28 @@ msgstr "Kešované klíče GPG"
 
 #. Warn and put in defaults
 #: agent/seahorse-agent.c:100
-#, c-format
-msgid "couldn't read gpg configuration: %s"
-msgstr "nemohu číst nastavení gpg: %s"
+msgid "couldn't read gpg configuration, will try to create"
+msgstr "nemohu číst nastavení gpg, zkusím je vytvořit"
 
-#: agent/seahorse-agent.c:123
+#: agent/seahorse-agent.c:122
 #, c-format
 msgid "couldn't modify gpg configuration: %s"
 msgstr "nemohu změnit nastavení gpg: %s"
 
-#: agent/seahorse-agent.c:143
+#: agent/seahorse-agent.c:142
 msgid "couldn't fork process"
 msgstr "nemohu fork proces"
 
-#: agent/seahorse-agent.c:149
+#: agent/seahorse-agent.c:148
 msgid "couldn't create new process group"
 msgstr "nemohu vytvořit novou skupinu procesů"
 
-#: agent/seahorse-agent.c:179
+#: agent/seahorse-agent.c:178
 #, c-format
 msgid "usage: seahorse-agent [-cdv]\n"
 msgstr "použití: seahorse-agent [-cdv]\n"
 
-#: agent/seahorse-agent.c:272
+#: agent/seahorse-agent.c:271
 msgid "couldn't drop privileges properly"
 msgstr "nemohu se správně vzdát oprávnění"
 
@@ -422,62 +423,33 @@ msgstr "Jestli používat ASCII Armor"
 msgid "Whether to use canonical text mode"
 msgstr "Jestli používat kanonický textový režim"
 
-#: libseahorse/seahorse-context.c:429
-#, c-format
-msgid "Loading key %d"
-msgstr "Načítám klíč %d"
-
-#: libseahorse/seahorse-context.c:454
-#, c-format
-msgid "Loaded %d key pair"
-msgid_plural "Loaded %d key pairs"
-msgstr[0] "Načten %d pár klíčů"
-msgstr[1] "Načteny %d páry klíčů"
-msgstr[2] "Načteno %d párů klíčů"
-
-#: libseahorse/seahorse-context.c:475
-#, c-format
-msgid "Loaded %d key"
-msgid_plural "Loaded %d keys"
-msgstr[0] "Načten %d klíč"
-msgstr[1] "Načteny %d klíče"
-msgstr[2] "Načteno %d klíčů"
-
-#: libseahorse/seahorse-context.c:703
-#, c-format
-msgid "Loaded %d new key"
-msgid_plural "Loaded %d new keys"
-msgstr[0] "Načten %d nový klíč"
-msgstr[1] "Načteny %d nové klíče"
-msgstr[2] "Načteno %d nových klíčů"
-
 #. Make the column
-#: libseahorse/seahorse-key-store.c:564 src/seahorse-key-properties.c:374
+#: libseahorse/seahorse-key-store.c:600 src/seahorse-key-properties.c:374
 #: src/seahorse-key-properties.c:468
 msgid "Name"
 msgstr "Jméno"
 
 #. Make the column
-#: libseahorse/seahorse-key-store.c:567 src/seahorse-key-properties.c:371
+#: libseahorse/seahorse-key-store.c:603 src/seahorse-key-properties.c:371
 msgid "Key ID"
 msgstr "ID klíče"
 
-#: libseahorse/seahorse-key-store.c:630
+#: libseahorse/seahorse-key-store.c:668
 #, c-format
 msgid "Listed %d keys"
 msgstr "Vypsáno %d klíčů"
 
-#: libseahorse/seahorse-passphrase.c:57
+#: libseahorse/seahorse-passphrase.c:60
 #, c-format
 msgid "Bad passphrase! Try again for '%s'"
 msgstr "Špatné heslo! Zkuste to znovu pro '%s'"
 
-#: libseahorse/seahorse-passphrase.c:59
+#: libseahorse/seahorse-passphrase.c:62
 #, c-format
 msgid "Enter new passphrase for '%s'"
 msgstr "Zadejte nové heslo pro '%s'"
 
-#: libseahorse/seahorse-passphrase.c:61
+#: libseahorse/seahorse-passphrase.c:64
 #, c-format
 msgid "Enter passphrase for '%s'"
 msgstr "Zadejte heslo pro '%s'"
@@ -500,7 +472,7 @@ msgid "Passphrase for key"
 msgstr "Heslo pro klíč"
 
 #: libseahorse/seahorse-recipients-store.c:147
-#: src/seahorse-key-manager-store.c:312
+#: src/seahorse-key-manager-store.c:319
 msgid "Validity"
 msgstr "Platnost"
 
@@ -655,36 +627,36 @@ msgstr "Nemohu zašifrovat text"
 msgid "Encrypted text"
 msgstr "Zašifrovaný text"
 
-#: plugins/gedit/seahorse-gedit.c:237
+#: plugins/gedit/seahorse-gedit.c:241
 msgid "Couldn't import keys"
 msgstr "Nemohu importovat klíče"
 
-#: plugins/gedit/seahorse-gedit.c:242
+#: plugins/gedit/seahorse-gedit.c:246
 msgid "Keys found but not imported"
 msgstr "Klíče nalezeny, ale neimportovány"
 
-#: plugins/gedit/seahorse-gedit.c:259 plugins/gedit/seahorse-gedit.c:276
+#: plugins/gedit/seahorse-gedit.c:267 plugins/gedit/seahorse-gedit.c:288
 msgid "Couldn't decrypt text"
 msgstr "Nemohu dešifrovat text"
 
-#: plugins/gedit/seahorse-gedit.c:339
+#: plugins/gedit/seahorse-gedit.c:351
 msgid "No PGP encrypted or signed text is selected."
 msgstr "Není vybrán text šifrovaný nebo podepsaný s PGP."
 
-#: plugins/gedit/seahorse-gedit.c:370
+#: plugins/gedit/seahorse-gedit.c:382
 msgid "Decrypted text"
 msgstr "Dešifrovaný text"
 
-#: plugins/gedit/seahorse-gedit.c:377
+#: plugins/gedit/seahorse-gedit.c:389
 msgid "Verified text"
 msgstr "Ověřený text"
 
-#: plugins/gedit/seahorse-gedit.c:408
+#: plugins/gedit/seahorse-gedit.c:420
 #, c-format
 msgid "Block %d"
 msgstr "Blok %d"
 
-#: plugins/gedit/seahorse-gedit.c:423
+#: plugins/gedit/seahorse-gedit.c:435
 #, c-format
 msgid "Imported %d key"
 msgid_plural "Imported %d keys"
@@ -692,11 +664,11 @@ msgstr[0] "Importován %d klíč"
 msgstr[1] "Importovány %d klíče"
 msgstr[2] "Importováno %d klíčů"
 
-#: plugins/gedit/seahorse-gedit.c:466
+#: plugins/gedit/seahorse-gedit.c:474 plugins/gedit/seahorse-gedit.c:485
 msgid "Couldn't sign text"
 msgstr "Nemohu podepsat text"
 
-#: plugins/gedit/seahorse-gedit.c:473
+#: plugins/gedit/seahorse-gedit.c:492
 msgid "Signed text"
 msgstr "Podepsaný text"
 
@@ -708,19 +680,19 @@ msgstr "Šifrování PGP"
 msgid "The PGP encrypt plugin performs encryption operations on text."
 msgstr "Zásuvný modul šifrování PGP provádí operace šifrování s textem."
 
-#: plugins/nautilus/seahorse-pgp-preferences-cache.c:356
+#: plugins/nautilus/seahorse-pgp-preferences-cache.c:355
 msgid "Couldn't open the Session Properties"
 msgstr "Nemohu otevřít vlastnosti sezení"
 
-#: plugins/nautilus/seahorse-pgp-preferences-cache.c:369
+#: plugins/nautilus/seahorse-pgp-preferences-cache.c:368
 msgid "Couldn't start the 'seahorse-agent' program"
 msgstr "Nemohu spustit program 'seahorse-agent'"
 
-#: plugins/nautilus/seahorse-pgp-preferences-cache.c:371
+#: plugins/nautilus/seahorse-pgp-preferences-cache.c:370
 msgid "The 'seahorse-agent' program exited unsucessfully."
 msgstr "Program 'seahorse-agent' neúspěšně skončil."
 
-#: plugins/nautilus/seahorse-pgp-preferences-cache.c:419
+#: plugins/nautilus/seahorse-pgp-preferences-cache.c:418
 msgid "Another password caching agent is running. Disabling cache preferences."
 msgstr "Běží jiný agent kešování hesel. Zakazuji nastavení cache."
 
@@ -730,20 +702,19 @@ msgstr "Běží jiný agent kešování hesel. Zakazuji nastavení cache."
 msgid "PGP Preferences"
 msgstr "Nastavení PGP"
 
-#: plugins/nautilus/seahorse-pgp-preferences.c:51
-#: src/seahorse-preferences.c:52
+#: plugins/nautilus/seahorse-pgp-preferences.c:53
 msgid "_Ascii Armor"
 msgstr "Brnění _ASCII"
 
-#: plugins/nautilus/seahorse-pgp-preferences.c:53
+#: plugins/nautilus/seahorse-pgp-preferences.c:55
 msgid "_Text Mode"
 msgstr "_Textový režim"
 
-#: plugins/nautilus/seahorse-pgp-preferences.c:55
+#: plugins/nautilus/seahorse-pgp-preferences.c:57
 msgid "_Encrypt to Self"
 msgstr "Za_šifrovat pro sebe"
 
-#: plugins/nautilus/seahorse-pgp-preferences.c:60
+#: plugins/nautilus/seahorse-pgp-preferences.c:62
 msgid "_Default Key:"
 msgstr "_Implicitní klíč:"
 
@@ -831,46 +802,46 @@ msgstr "Ověřit soubor podpisu"
 msgid "Read list of URIs on standard in"
 msgstr "Číst seznam URI ze standardního vstupu"
 
-#: src/main.c:141 src/seahorse-key-manager.c:133
+#: src/main.c:145 src/seahorse-key-manager.c:137
 #, c-format
 msgid "Couldn't import keys from \"%s\""
 msgstr "Nemohu importovat klíče z \"%s\""
 
-#: src/main.c:149
+#: src/main.c:153
 msgid "Imported key"
 msgstr "Importován klíč"
 
-#: src/main.c:150
+#: src/main.c:154
 #, c-format
 msgid "Imported %d keys"
 msgstr "Importováno %d klíčů"
 
-#: src/main.c:186
+#: src/main.c:194
 #, c-format
 msgid "Couldn't encrypt \"%s\""
 msgstr "Nemohu zašifrovat \"%s\""
 
-#: src/main.c:233
+#: src/main.c:249
 #, c-format
 msgid "Couldn't sign \"%s\""
 msgstr "Nemohu podepsat \"%s\""
 
-#: src/main.c:263
+#: src/main.c:283
 #, c-format
 msgid "Couldn't decrypt \"%s\""
 msgstr "Nemohu dešifrovat \"%s\""
 
-#: src/main.c:311
+#: src/main.c:335
 #, c-format
 msgid "Choose Original File for '%s'"
 msgstr "Zvolte původní soubor pro '%s'"
 
-#: src/main.c:339
+#: src/main.c:363
 #, c-format
 msgid "Couldn't verify \"%s\""
 msgstr "Nemohu ověřit \"%s\""
 
-#: src/main.c:385 src/seahorse.desktop.in.h:1
+#: src/main.c:409 src/seahorse.desktop.in.h:1
 msgid "GPG Keys Manager"
 msgstr "Správce klíčů GPG"
 
@@ -1031,7 +1002,7 @@ msgstr "Opravdu že chcete navždy odstranit ID uživatele '%s'?"
 msgid "Couldn't delete user id"
 msgstr "Nemohu odstranit id uživatele"
 
-#: src/seahorse-generate-adv.c:131 src/seahorse-generate-druid.c:161
+#: src/seahorse-generate-adv.c:136 src/seahorse-generate-druid.c:166
 msgid "Couldn't generate key"
 msgstr "Nemohu vygenerovat klíč"
 
@@ -1120,7 +1091,7 @@ msgstr "E-mailová adresa:"
 msgid "Enter Name - Must be at least five letters."
 msgstr "Zadejte jméno - musí být alespoň pět písmen."
 
-#: src/seahorse-generate-druid.glade.h:13 src/seahorse-key-manager-store.c:316
+#: src/seahorse-generate-druid.glade.h:13 src/seahorse-key-manager-store.c:323
 msgid "Expiration Date"
 msgstr "Datum vypršení"
 
@@ -1300,15 +1271,15 @@ msgstr "ELG"
 msgid "Expired"
 msgstr "Vypršel"
 
-#: src/seahorse-key-manager-store.c:320
+#: src/seahorse-key-manager-store.c:327
 msgid "Trust"
 msgstr "Důvěřovat"
 
-#: src/seahorse-key-manager-store.c:324
+#: src/seahorse-key-manager-store.c:331
 msgid "Length"
 msgstr "Délka"
 
-#: src/seahorse-key-manager-store.c:328
+#: src/seahorse-key-manager-store.c:335
 msgid "Type"
 msgstr "Typ"
 
@@ -1320,23 +1291,23 @@ msgstr "Všechny soubory klíčů PGP"
 msgid "All files"
 msgstr "Všechny soubory"
 
-#: src/seahorse-key-manager.c:112
+#: src/seahorse-key-manager.c:116
 msgid "Import Key"
 msgstr "Importovat klíč"
 
-#: src/seahorse-key-manager.c:150
+#: src/seahorse-key-manager.c:158
 msgid "Couldn't import keys from clipboard"
 msgstr "Nemohu importovat klíče ze schránky"
 
-#: src/seahorse-key-manager.c:184
+#: src/seahorse-key-manager.c:195
 msgid "Couldn't export key to clipboard"
 msgstr "Nemohu exportovat klíč do schránky"
 
-#: src/seahorse-key-manager.c:214
+#: src/seahorse-key-manager.c:225
 msgid "Export Key"
 msgstr "Exportovat klíč"
 
-#: src/seahorse-key-manager.c:231
+#: src/seahorse-key-manager.c:242
 msgid ""
 "<b>A file already exists with this name.</b>\n"
 "\n"
@@ -1346,26 +1317,26 @@ msgstr ""
 "\n"
 "Chcete jej přepsat tím, který ukládáte?"
 
-#: src/seahorse-key-manager.c:234
+#: src/seahorse-key-manager.c:245
 msgid "Replace"
 msgstr "Nahradit"
 
-#: src/seahorse-key-manager.c:266
+#: src/seahorse-key-manager.c:277
 #, c-format
 msgid "Couldn't export key to \"%s\""
 msgstr "Nemohu exportovat klíč do \"%s\""
 
-#: src/seahorse-key-manager.c:377
+#: src/seahorse-key-manager.c:388
 msgid "translator_credits"
 msgstr ""
 "Petr Domanský <doman@atlas.cz> Michal Bukovjan <bukm@centrum.cz> Miloslav "
 "Trmač <mitr@volny.cz>"
 
-#: src/seahorse-key-manager.c:397
+#: src/seahorse-key-manager.c:408
 msgid "seahorse"
 msgstr "seahorse"
 
-#: src/seahorse-key-manager.c:628
+#: src/seahorse-key-manager.c:643
 #, c-format
 msgid "Couldn't import key from \"%s\""
 msgstr "Nemohu importovat klíč z \"%s\""
@@ -1563,7 +1534,7 @@ msgstr "Podep_sat"
 msgid "_Sign..."
 msgstr "Podep_sat..."
 
-#: src/seahorse-key-op.c:247
+#: src/seahorse-key-op.c:255
 msgid "Operation complete"
 msgstr "Operace dokončena"
 
@@ -1760,27 +1731,23 @@ msgstr "Balení:"
 msgid "encrypted-package.rar"
 msgstr "zašifrovaný-balíček.rar"
 
-#: src/seahorse-preferences.c:57
-msgid "PGP"
-msgstr "PGP"
-
-#: src/seahorse-preferences.c:64
+#: src/seahorse-preferences.c:55
 msgid "_Validity"
 msgstr "_Platnost"
 
-#: src/seahorse-preferences.c:66 src/seahorse-sign.glade.h:13
+#: src/seahorse-preferences.c:57 src/seahorse-sign.glade.h:13
 msgid "_Expires"
 msgstr "_Vyprší"
 
-#: src/seahorse-preferences.c:68
+#: src/seahorse-preferences.c:59
 msgid "_Trust"
 msgstr "_Důvěra"
 
-#: src/seahorse-preferences.c:70
+#: src/seahorse-preferences.c:61
 msgid "_Length"
 msgstr "_Délka"
 
-#: src/seahorse-preferences.c:72
+#: src/seahorse-preferences.c:63
 msgid "T_ype"
 msgstr "_Typ"
 
@@ -1789,18 +1756,22 @@ msgid "Close Preferences"
 msgstr "Zavřít nastavení"
 
 #: src/seahorse-preferences.glade.h:2
+msgid "Default Key:"
+msgstr "Implicitní klíč:"
+
+#: src/seahorse-preferences.glade.h:3
 msgid "Key Manager"
 msgstr "Správce klíčů"
 
-#: src/seahorse-preferences.glade.h:3
+#: src/seahorse-preferences.glade.h:4
 msgid "Preferences Help"
 msgstr "Nápověda nastavení"
 
-#: src/seahorse-preferences.glade.h:4
+#: src/seahorse-preferences.glade.h:5
 msgid "Seahorse Preferences"
 msgstr "Nastavení Seahorse"
 
-#: src/seahorse-preferences.glade.h:5
+#: src/seahorse-preferences.glade.h:6
 msgid "Visible Columns"
 msgstr "Viditelné sloupce"
 
@@ -2007,6 +1978,27 @@ msgstr "_Odvolatelný"
 #: src/seahorse.desktop.in.h:2
 msgid "Manage your GPG keys"
 msgstr "Správa vašich klíčů GPG"
+
+#~ msgid "Loading key %d"
+#~ msgstr "Načítám klíč %d"
+
+#~ msgid "Loaded %d key pair"
+#~ msgid_plural "Loaded %d key pairs"
+#~ msgstr[0] "Načten %d pár klíčů"
+#~ msgstr[1] "Načteny %d páry klíčů"
+#~ msgstr[2] "Načteno %d párů klíčů"
+
+#~ msgid "Loaded %d key"
+#~ msgid_plural "Loaded %d keys"
+#~ msgstr[0] "Načten %d klíč"
+#~ msgstr[1] "Načteny %d klíče"
+#~ msgstr[2] "Načteno %d klíčů"
+
+#~ msgid "Loaded %d new key"
+#~ msgid_plural "Loaded %d new keys"
+#~ msgstr[0] "Načten %d nový klíč"
+#~ msgstr[1] "Načteny %d nové klíče"
+#~ msgstr[2] "Načteno %d nových klíčů"
 
 #~ msgid "Key Never Expires"
 #~ msgstr "Klíč nikdy nevyprší"
