@@ -105,9 +105,13 @@ gchar*      seahorse_util_remove_suffix     (const gchar        *path,
 
 gchar**     seahorse_util_strvec_dup        (const gchar        **vec);
 
-gpgme_key_t* seahorse_util_list_to_keys      (GList *keys);
+gpgme_key_t* seahorse_util_keylist_to_keys    (GList *keys);
 
-void        seahorse_util_free_keys         (gpgme_key_t* keys);
+GList*       seahorse_util_keylist_sort       (GList *keys);
+
+GList*       seahorse_util_keylist_splice     (GList *keys);
+
+void         seahorse_util_free_keys          (gpgme_key_t* keys);
 
 GSList*     seahorse_util_string_slist_free   (GSList *slist);
 

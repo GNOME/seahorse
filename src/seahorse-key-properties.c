@@ -183,7 +183,9 @@ do_stats (SeahorseWidget *swidget, GtkTable *table, guint top, guint index, gpgm
     /* type */
     do_stat_label (_("Type:"), table, 2, top, FALSE, tips, _("Algorithm"));
     str = gpgme_pubkey_algo_name(subkey->pubkey_algo);
-    if (g_str_equal ("ElG", str))
+    if (str == NULL)
+        str = "Unknown";
+    else if (g_str_equal ("ElG", str))
         str = "ElGamal";
     do_stat_label (str, table, 3, top, FALSE, NULL, NULL);
     /* created */

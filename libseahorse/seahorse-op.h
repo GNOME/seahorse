@@ -35,18 +35,18 @@ typedef gchar*    (*SeahorseEncryptFunc)    (GList              *keys,
 
 gint        seahorse_op_import_file         (SeahorseKeySource  *sksrc,
                                              const gchar        *path,
-                                             gpgme_error_t      *err);
+                                             GError             **err);
 
 gint        seahorse_op_import_text         (SeahorseKeySource  *sksrc,
                                              const gchar        *text,
-                                             gpgme_error_t      *err);
+                                             GError             **err);
 
-void        seahorse_op_export_file         (GList              *keys,
+gboolean    seahorse_op_export_file         (GList              *keys,
                                              const gchar        *path,
-                                             gpgme_error_t      *err);
+                                             GError             **err);
 
 gchar*      seahorse_op_export_text         (GList              *keys,
-                                             gpgme_error_t      *err);
+                                             GError             **err);
 
 void        seahorse_op_encrypt_file        (GList              *keys,
                                              const gchar        *path,

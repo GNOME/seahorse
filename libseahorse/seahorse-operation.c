@@ -21,6 +21,7 @@
  
 #include <gnome.h>
 
+#include "seahorse-util.h"
 #include "seahorse-operation.h"
 
 enum {
@@ -143,6 +144,18 @@ seahorse_operation_copy_error  (SeahorseOperation *operation, GError **err)
     g_return_if_fail (err == NULL || *err == NULL);
     if (err) 
         *err = operation->error ? g_error_copy (operation->error) : NULL;
+}
+
+gpointer
+seahorse_operation_get_result (SeahorseOperation *operation)
+{
+    return g_object_get_data (G_OBJECT (operation), "result");
+}
+
+void                
+seahorse_operation_wait (SeahorseOperation *operation)
+{
+    seahorse_util_wait_until (operation->done);
 }
 
 void                

@@ -110,6 +110,12 @@ static guint        seahorse_pgp_source_get_count   (SeahorseKeySource *src,
                                                      gboolean secret_only);
 static gpgme_ctx_t  seahorse_pgp_source_new_context (SeahorseKeySource *src);
 
+static SeahorseOperation* seahorse_pgp_source_import    (SeahorseKeySource *sksrc, 
+                                                         gpgme_data_t data);
+static SeahorseOperation* seahorse_pgp_source_export    (SeahorseKeySource *sksrc, 
+                                                         GList *keys,
+                                                         gpgme_data_t data);
+
 /* Other forward decls */
 static gboolean release_key (const gchar* id, SeahorseKey *skey, SeahorsePGPSource *psrc);
 
@@ -154,6 +160,8 @@ seahorse_pgp_source_class_init (SeahorsePGPSourceClass *klass)
     key_class->get_keys = seahorse_pgp_source_get_keys;
     key_class->get_state = seahorse_pgp_source_get_state;
     key_class->new_context = seahorse_pgp_source_new_context;    
+    key_class->import = seahorse_pgp_source_import;
+    key_class->export = seahorse_pgp_source_export;
     
     gobject_class->dispose = seahorse_pgp_source_dispose;
     gobject_class->finalize = seahorse_pgp_source_finalize;
@@ -735,6 +743,123 @@ seahorse_pgp_source_new_context (SeahorseKeySource *src)
     gpgme_ctx_t ctx = NULL;
     g_return_val_if_fail (GPG_IS_OK (init_gpgme (&ctx)), NULL);
     return ctx;
+}
+
+static SeahorseOperation* 
+seahorse_pgp_source_import (SeahorseKeySource *sksrc, gpgme_data_t data)
+{
+    SeahorseOperation *operation;
+    SeahorsePGPSource *psrc;
+    gpgme_import_result_t results;
+    gpgme_import_status_t import;
+    SeahorseKey *skey;
+    gpgme_error_t gerr;
+    gpgme_ctx_t new_ctx;
+    GList *keys = NULL;
+    GError *err = NULL;
+    
+    g_return_val_if_fail (SEAHORSE_IS_PGP_SOURCE (sksrc), NULL);
+    psrc = SEAHORSE_PGP_SOURCE (sksrc);
+    
+    /* Eventually this should probably be asynchronous, but for now
+     * we leave it as a sync operation for simplicity. */
+     
+    new_ctx = seahorse_key_source_new_context (sksrc); 
+    g_return_val_if_fail (new_ctx != NULL, NULL);
+    
+    operation = g_object_new (SEAHORSE_TYPE_OPERATION, NULL);
+    seahorse_operation_mark_start (operation);
+    
+    gerr = gpgme_op_import (new_ctx, data);
+    if (GPG_IS_OK (gerr)) {
+        
+        /* Figure out which keys were imported */
+        results = gpgme_op_import_result (new_ctx);
+        if (results) {
+            for (import = results->imports; import; import = import->next) {
+                if (!GPG_IS_OK (import->result))
+                    continue;
+                    
+                skey = seahorse_key_source_get_key (sksrc, import->fpr, SKEY_INFO_NORMAL);
+                if (skey != NULL)
+                    keys = g_list_append (keys, skey);
+            }
+        }        
+        
+        g_object_set_data_full (G_OBJECT (operation), "result", keys, (GDestroyNotify)g_list_free);        
+        seahorse_operation_mark_done (operation, FALSE, NULL);
+
+        seahorse_key_source_refresh (sksrc, FALSE);
+        
+    } else {
+       
+        /* Marks the operation as failed */
+        seahorse_util_gpgme_to_error (gerr, &err);
+        seahorse_operation_mark_done (operation, FALSE, err);
+    }
+
+    gpgme_release (new_ctx);
+    return operation;                    
+}
+
+static SeahorseOperation* 
+seahorse_pgp_source_export (SeahorseKeySource *sksrc, GList *keys, 
+                            gpgme_data_t data)
+{
+    SeahorseOperation *operation;
+    SeahorsePGPSource *psrc;
+    SeahorseKey *skey;
+    gpgme_error_t gerr;
+    gpgme_ctx_t new_ctx;
+    GError *err = NULL;
+    GList *l;
+    
+    g_return_val_if_fail (SEAHORSE_IS_PGP_SOURCE (sksrc), NULL);
+    psrc = SEAHORSE_PGP_SOURCE (sksrc);
+    
+    /* Eventually this should probably be asynchronous, but for now
+     * we leave it as a sync operation for simplicity. */
+
+    operation = g_object_new (SEAHORSE_TYPE_OPERATION, NULL);
+    seahorse_operation_mark_start (operation);
+     
+    if (data == NULL) {
+        
+        /* Tie to operation when we create our own (auto-free) */
+        gerr = gpgme_data_new (&data);
+        g_return_val_if_fail (GPG_IS_OK (gerr), NULL);
+        g_object_set_data_full (G_OBJECT (operation), "result", data, 
+                               (GDestroyNotify)gpgme_data_release);        
+    } else {
+       
+        /* Don't free when people pass us their own data */
+        g_object_set_data (G_OBJECT (operation), "result", data);
+    }
+     
+    new_ctx = seahorse_key_source_new_context (sksrc); 
+    g_return_val_if_fail (new_ctx != NULL, NULL);
+
+    gpgme_set_armor (new_ctx, TRUE);
+    gpgme_set_textmode (new_ctx, TRUE);
+
+    for (l = keys; l != NULL; l = g_list_next (l)) {
+       
+        g_return_val_if_fail (SEAHORSE_IS_KEY (l->data), NULL);
+        skey = SEAHORSE_KEY (l->data);
+       
+        g_return_val_if_fail (seahorse_key_get_source (skey) == sksrc, NULL);
+
+        gerr = gpgme_op_export (new_ctx, seahorse_key_get_id (skey->key), 0, data);
+
+        if (!GPG_IS_OK (gerr))
+            break;
+    }
+
+    if (!GPG_IS_OK (gerr)) 
+        seahorse_util_gpgme_to_error (gerr, &err);
+                                 
+    seahorse_operation_mark_done (operation, FALSE, err);
+    return operation;    
 }
 
 /* -------------------------------------------------------------------------- 

@@ -23,6 +23,7 @@
 #define __SEAHORSE_SERVER_SOURCE_H__
 
 #include "seahorse-key-source.h"
+#include "seahorse-operation.h"
 
 #define SEAHORSE_TYPE_SERVER_SOURCE            (seahorse_server_source_get_type ())
 #define SEAHORSE_SERVER_SOURCE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_SERVER_SOURCE, SeahorseServerSource))
@@ -46,10 +47,18 @@ struct _SeahorseServerSourceClass {
     SeahorseKeySourceClass parent_class;
 };
 
-SeahorseServerSource* seahorse_server_source_new     (SeahorseKeySource *sksrc, 
-                                                      const gchar *server);
+GType        seahorse_server_source_get_type         (void);
 
-void             seahorse_server_source_search       (SeahorseServerSource *source,
+void         seahorse_server_source_add_key          (SeahorseServerSource *ssrc,
+                                                      gpgme_key_t key);
+
+void         seahorse_server_source_add_operation    (SeahorseServerSource *ssrc,
+                                                      SeahorseOperation *operation);
+
+SeahorseServerSource * seahorse_server_source_new    (SeahorseKeySource *locsrc,
+                                                      const gchar *server,
                                                       const gchar *pattern);
 
+gboolean    seahorse_server_source_valid_uri         (const gchar *server);
+                                                      
 #endif /* __SEAHORSE_SERVER_SOURCE_H__ */

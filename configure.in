@@ -112,22 +112,92 @@ else
   AC_MSG_ERROR(GPGME $min_gpgme_version or later needed)
 fi
 
-dnl Find keyserver plugins
-AC_PATH_PROG(gpgkeys_plugin, gpgkeys_ldap, ,
-             [${libdir}/gnupg:$PATH:/usr/libexec/gnupg:/usr/lib/gnupg])
+SEAHORSE_CFLAGS="$SEAHORSE_CFLAGS $GPGME_CFLAGS -O0"
+SEAHORSE_LIBS="$SEAHORSE_LIBS $GPGME_LIBS"
 
-AM_CONDITIONAL(WITH_KEYSERVER, test -n "$gpgkeys_plugin")
 
-if test -n "$gpgkeys_plugin"; then
+dnl ***************
+dnl LDAP [from gpg]
+dnl ***************
+
+AC_MSG_CHECKING([LDAP keyserver support])
+AC_ARG_ENABLE(ldap,
+[  --disable-ldap          disable LDAP keyserver interface],
+    try_ldap=$enableval, try_ldap=yes)
+AC_MSG_RESULT($try_ldap)
+
+dnl Must check for network library requirements before doing link tests
+dnl for ldap, for example. If ldap libs are static (or dynamic and without
+dnl ELF runtime link paths), then link will fail and LDAP support won't
+dnl be detected.
+
+AC_CHECK_FUNC(gethostbyname, , AC_CHECK_LIB(nsl, gethostbyname,
+	[NETLIBS="-lnsl $NETLIBS"]))
+AC_CHECK_FUNC(setsockopt, , AC_CHECK_LIB(socket, setsockopt,
+	[NETLIBS="-lsocket $NETLIBS"]))
+	
+dnl Try and link a LDAP test program to weed out unusable LDAP
+dnl libraries.  -lldap [-llber [-lresolv]] is for OpenLDAP.  OpenLDAP in
+dnl general is terrible with creating weird dependencies.  If all else
+dnl fails, the user can play guess-the-dependency by using something
+dnl like LDAP_LIBS="-lfoo" ./configure
+
+if test "$try_ldap" = yes ; then
+  for MY_LDAPLIBS in ${LDAP_LIBS+"$LDAP_LIBS"} "-lldap" "-lldap -llber" "-lldap -llber -lresolv"; do
+    _ldap_save_libs=$LIBS
+    LIBS="$MY_LDAPLIBS $NETLIBS $LIBS"
+
+    AC_MSG_CHECKING([whether LDAP via \"$MY_LDAPLIBS\" is present and sane])
+    AC_TRY_LINK([#include <ldap.h>],[ldap_open("foobar",1234);],
+                [cv_func_ldap_init=yes],[cv_func_ldap_init=no])
+    AC_MSG_RESULT([$cv_func_ldap_init])
+
+    if test $cv_func_ldap_init = no; then
+      AC_MSG_CHECKING([whether I can make LDAP be sane with lber.h])
+      AC_TRY_LINK([#include <lber.h>
+#include <ldap.h>],[ldap_open("foobar",1234);],
+         [cv_func_ldaplber_init=yes],[cv_func_ldaplber_init=no])
+      AC_MSG_RESULT([$cv_func_ldaplber_init])
+    fi
+
+    if test "$cv_func_ldaplber_init" = yes ; then
+       AC_DEFINE(NEED_LBER_H,1,[Define if the LDAP library requires including lber.h before ldap.h])
+    fi
+
+    if test "$cv_func_ldap_init" = yes || \
+  	test "$cv_func_ldaplber_init" = yes ; then
+       LDAP_LIBS=$MY_LDAPLIBS
+    fi
+
+    LIBS=$_ldap_save_libs
+
+    if test "$LDAP_LIBS" != ""; then 
+    	with_keyserver=yes
+		AC_DEFINE(WITH_LDAP, 1, [Support for LDAP operations])
+    	break
+    fi
+  done
+fi	
+
+SEAHORSE_LIBS="$SEAHORSE_LIBS $LDAP_LIBS"
+
+dnl ***************
+dnl KEYSERVER
+dnl ***************
+
+AM_CONDITIONAL(WITH_KEYSERVER, test -n "$with_keyserver")
+
+if test -n "$with_keyserver"; then
 	echo "enabling key server support"
 	AC_DEFINE(WITH_KEYSERVER, 1, [Support for key server actions])
-	AC_DEFINE_UNQUOTED(GPGKEYS_PLUGIN_PATH, "`dirname $gpgkeys_plugin`", [Path to GPG key plugins])
 else
 	echo "disabling key server support"
 fi
-             
-SEAHORSE_CFLAGS="$SEAHORSE_CFLAGS $GPGME_CFLAGS -O0"
-SEAHORSE_LIBS="$SEAHORSE_LIBS $GPGME_LIBS"
+
+
+dnl ***************
+dnl GEDIT
+dnl ***************
 
 # Allow gedit plugin to be disabled
 AC_ARG_ENABLE(gedit, 
@@ -149,6 +219,10 @@ else
 	AC_SUBST(GEDIT_CFLAGS)
 fi
 
+
+dnl ***************
+dnl AGENT
+dnl ***************
 
 # Allow agent to be disabled
 AC_ARG_ENABLE(agent, 

@@ -23,12 +23,10 @@
 #include <libintl.h>
 #include <gnome.h>
 
-/* Amount of keys to load in a batch */
-#define DEFAULT_LOAD_BATCH 30
-
 #include "config.h"
 #include "seahorse-gpgmex.h"
 #include "seahorse-operation.h"
+#include "seahorse-ldap-source.h"
 #include "seahorse-server-source.h"
 #include "seahorse-multi-source.h"
 #include "seahorse-util.h"
@@ -37,31 +35,11 @@
 
 enum {
     PROP_0,
+    PROP_PATTERN,
     PROP_KEY_SERVER,
     PROP_LOCAL_SOURCE
 };
 
-/* -----------------------------------------------------------------------------
- *  SEARCH OPERATION     
- */
- 
-#define SEAHORSE_TYPE_SEARCH_OPERATION            (seahorse_search_operation_get_type ())
-#define SEAHORSE_SEARCH_OPERATION(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_SEARCH_OPERATION, SeahorseSearchOperation))
-#define SEAHORSE_SEARCH_OPERATION_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_SEARCH_OPERATION, SeahorseSearchOperationClass))
-#define SEAHORSE_IS_SEARCH_OPERATION(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_SEARCH_OPERATION))
-#define SEAHORSE_IS_SEARCH_OPERATION_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_SEARCH_OPERATION))
-#define SEAHORSE_SEARCH_OPERATION_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_SEARCH_OPERATION, SeahorseSearchOperationClass))
-
-DECLARE_OPERATION (Search, search)
-    SeahorseServerSource *ssrc; /* The source to add keys to */
-    gpgmex_keyserver_op_t kop;  /* The keyserver operation */
-    gpgme_error_t status;       /* The status of the operation */
-    guint loaded;
-    gchar *message;             /* An error message */
-END_DECLARE_OPERATION 
-
-IMPLEMENT_OPERATION (Search, search)
-    
 /* -----------------------------------------------------------------------------
  *  SERVER SOURCE
  */
@@ -72,9 +50,7 @@ struct _SeahorseServerSourcePrivate {
     GSList *operations;
     guint progress_stag;
     gchar *server;
-        
-    /* Cache of the last stuff we looked up */
-    gchar *last_pattern;
+    gchar *pattern;
 };
 
 /* GObject handlers */
@@ -165,6 +141,11 @@ seahorse_server_source_class_init (SeahorseServerSourceClass *klass)
             g_param_spec_string ("key-server", "Key Server",
                                  "Key Server to search on", "",
                                  G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE));
+
+    g_object_class_install_property (gobject_class, PROP_PATTERN,
+            g_param_spec_string ("pattern", "Search Pattern",
+                                 "Key Server search pattern", "",
+                                 G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE));
 }
 
 /* init context, private vars, set prefs, connect signals */
@@ -228,7 +209,7 @@ seahorse_server_source_finalize (GObject *gobject)
     g_assert (g_hash_table_size (ssrc->priv->keys) == 0);
     
     g_free (ssrc->priv->server);
-    g_free (ssrc->priv->last_pattern);
+    g_free (ssrc->priv->pattern);
     g_hash_table_destroy (ssrc->priv->keys);
     g_assert (ssrc->priv->operations == NULL);
     g_assert (ssrc->priv->local == NULL);
@@ -261,6 +242,11 @@ seahorse_server_set_property (GObject *object, guint prop_id,
         ssrc->priv->server = g_strdup (g_value_get_string (value));
         g_return_if_fail (ssrc->priv->server && ssrc->priv->server[0] != 0);
         break;
+    case PROP_PATTERN:
+        g_return_if_fail (ssrc->priv->pattern == NULL);
+        ssrc->priv->pattern = g_strdup (g_value_get_string (value));
+        g_return_if_fail (ssrc->priv->pattern && ssrc->priv->pattern[0] != 0);
+        break;
     default:
         break;
     }  
@@ -280,6 +266,9 @@ seahorse_server_get_property (GObject *object, guint prop_id, GValue *value,
         break;
     case PROP_KEY_SERVER:
         g_value_set_string (value, ssrc->priv->server);
+        break;
+    case PROP_PATTERN:
+        g_value_set_string (value, ssrc->priv->pattern);
         break;
     default:
         break;
@@ -419,8 +408,8 @@ combine_keys (SeahorseServerSource *ssrc, SeahorseKey *skey, gpgme_key_t key)
 }
 
 /* Add a key to our internal tables, possibly overwriting or combining with other keys  */
-static void
-add_key_to_source (SeahorseServerSource *ssrc, gpgme_key_t key)
+void
+seahorse_server_source_add_key (SeahorseServerSource *ssrc, gpgme_key_t key)
 {
     SeahorseKey *prev;
     SeahorseKey *skey;
@@ -469,153 +458,20 @@ keysearch_done (SeahorseOperation *operation, SeahorseServerSource *ssrc)
         seahorse_operation_list_remove (ssrc->priv->operations, operation);
 }
 
-static void
-add_search_operation (SeahorseServerSource *ssrc, SeahorseSearchOperation *sop)
+void
+seahorse_server_source_add_operation (SeahorseServerSource *ssrc, SeahorseOperation *op)
 {
     g_return_if_fail (SEAHORSE_IS_SERVER_SOURCE (ssrc));
-    g_return_if_fail (SEAHORSE_IS_SEARCH_OPERATION (sop));
+    g_return_if_fail (SEAHORSE_IS_OPERATION (op));
     
-    if (seahorse_operation_is_done (SEAHORSE_OPERATION (sop))) {
-        g_object_unref (sop);
+    if (seahorse_operation_is_done (SEAHORSE_OPERATION (op))) {
+        g_object_unref (op);
     } else {
-        ssrc->priv->operations = seahorse_operation_list_add (ssrc->priv->operations, SEAHORSE_OPERATION (sop));
-        g_signal_connect (sop, "done", G_CALLBACK (keysearch_done), ssrc);         
+        ssrc->priv->operations = seahorse_operation_list_add (ssrc->priv->operations, op);
+        g_signal_connect (op, "done", G_CALLBACK (keysearch_done), ssrc);         
         start_progress_notify (ssrc, _("Searching for remote keys..."));
     }
 }
-
-
-/* -----------------------------------------------------------------------------
- *  SEARCH OPERATION STUFF 
- */
- 
-static void 
-seahorse_search_operation_init (SeahorseSearchOperation *sop)
-{
-    sop->status = GPG_OK;
-}
-
-static void 
-seahorse_search_operation_dispose (GObject *gobject)
-{
-    SeahorseSearchOperation *sop = SEAHORSE_SEARCH_OPERATION (gobject);
-    
-    if (sop->ssrc) {
-        g_object_unref (sop->ssrc);
-        sop->ssrc = NULL;
-    }
-    
-    G_OBJECT_CLASS (operation_parent_class)->dispose (gobject);  
-}
-
-static void 
-seahorse_search_operation_finalize (GObject *gobject)
-{
-    SeahorseSearchOperation *sop = SEAHORSE_SEARCH_OPERATION (gobject);
-
-    g_assert (sop->ssrc == NULL);
-        
-    if (sop->message)
-        g_free (sop->message);
-        
-    G_OBJECT_CLASS (operation_parent_class)->finalize (gobject);  
-}
-
-static void 
-seahorse_search_operation_cancel (SeahorseOperation *operation)
-{
-    SeahorseSearchOperation *sop;
-    
-    g_return_if_fail (SEAHORSE_IS_SEARCH_OPERATION (operation));
-    sop = SEAHORSE_SEARCH_OPERATION (operation);
-    
-    if (sop->kop) {
-        gpgmex_keyserver_op_t kop = sop->kop;
-        sop->kop = NULL;
-        gpgmex_keyserver_cancel (kop);
-    }
-
-    seahorse_operation_mark_done (operation, TRUE, NULL);
-}
-
-
-/* Called when a key is found and loaded from the keyserver */
-static gpgme_error_t
-keyserver_listed_key (gpgme_ctx_t ctx, gpgmex_keyserver_op_t op, gpgme_key_t key,
-                      unsigned int total, void *userdata)
-{
-    SeahorseSearchOperation *sop;
-    
-    g_return_val_if_fail (SEAHORSE_IS_SEARCH_OPERATION (userdata), GPG_E (GPG_ERR_INV_VALUE));
-    sop = SEAHORSE_SEARCH_OPERATION (userdata);
-    
-    add_key_to_source (sop->ssrc, key);
-    sop->loaded++;
-    gpgmex_key_unref (key);
-    return GPG_OK;
-}
-
-/*
- * This is called once a keyserver operation is done. This is the lower level
- * callback called by GPGMEX. It should mark its parent seahorse operation as
- * done.
- */
-static void
-keyserver_list_done (gpgme_ctx_t ctx, gpgmex_keyserver_op_t op, gpgme_error_t status,
-                     const char *message, void *userdata)
-{
-    SeahorseSearchOperation *sop;
-    GError *err = NULL;
-    gchar *t;
-    
-    g_return_if_fail (SEAHORSE_IS_SEARCH_OPERATION (userdata));
-    sop = SEAHORSE_SEARCH_OPERATION (userdata);
-
-    sop->status = status;
-    sop->kop = NULL;
-    
-    /* Successful completion */
-    if (GPG_IS_OK (status)) {
-        t = g_strdup_printf (ngettext("Found %d key", "Found %d keys", sop->loaded), sop->loaded);
-        
-    /* There was an error */            
-    } else {
-        
-        t = g_strdup_printf (_("Couldn't search keyserver: %s"), message ? message : "");
-        g_warning (t);
-        seahorse_util_gpgme_to_error (status, &err);
-    }
-        
-    seahorse_key_source_show_progress (SEAHORSE_KEY_SOURCE (sop->ssrc), t, -1);
-    g_free (t);
-    
-    seahorse_operation_mark_done (SEAHORSE_OPERATION (sop), FALSE, err);
-}
-
-static SeahorseSearchOperation*
-seahorse_search_operation_start (SeahorseServerSource *ssrc, const gchar *pattern)
-{
-    SeahorseServerSourcePrivate *priv;
-    SeahorseSearchOperation *sop;
-    
-    g_return_val_if_fail (SEAHORSE_IS_SERVER_SOURCE (ssrc), NULL);
-    priv = ssrc->priv;
-
-    g_return_val_if_fail (priv->server != NULL && priv->server[0] != 0, NULL);
-    
-    sop = g_object_new (SEAHORSE_TYPE_SEARCH_OPERATION, NULL);    
-    sop->ssrc = ssrc;
-    g_object_ref (ssrc);
-    
-    seahorse_operation_mark_start (SEAHORSE_OPERATION (sop));
-
-    gpgmex_keyserver_start_list (SEAHORSE_KEY_SOURCE (ssrc)->ctx, priv->server, 
-                                 pattern, GPGMEX_KEYLIST_REVOKED, keyserver_listed_key, 
-                                 keyserver_list_done, sop, &(sop->kop));
-
-    return sop;
-}    
-
 
 /* --------------------------------------------------------------------------
  * METHODS
@@ -626,20 +482,16 @@ seahorse_server_source_refresh (SeahorseKeySource *src, gboolean all)
 {
     SeahorseServerSource *ssrc;
     
-    g_return_if_fail (ssrc->priv->last_pattern);
-    g_return_if_fail (ssrc->priv->server);
     g_return_if_fail (SEAHORSE_IS_KEY_SOURCE (src));
-
     ssrc = SEAHORSE_SERVER_SOURCE (src);
 
-    /* Stop all operations */
-    seahorse_server_source_stop (src);
+    if (all) {
+        /* Stop all operations */
+        seahorse_server_source_stop (src);
 
-    /* Remove all keys */    
-    g_hash_table_foreach_remove (ssrc->priv->keys, (GHRFunc)release_key_notify, ssrc);
-    
-    /* Now start our load again */
-    seahorse_server_source_search (ssrc, ssrc->priv->last_pattern);
+        /* Remove all keys */    
+        g_hash_table_foreach_remove (ssrc->priv->keys, (GHRFunc)release_key_notify, ssrc);
+    }
 }
 
 static void
@@ -762,56 +614,75 @@ seahorse_server_source_new_context (SeahorseKeySource *src)
     return seahorse_key_source_new_context (ssrc->priv->local);
 }
 
-/* -------------------------------------------------------------------------- 
- * FUNCTIONS
- */
-
-/**
- * seahorse_server_source_new
- * @sksrc: A local source for this server source to be based on.
- * @server: The server to search
- * 
- * Creates a new Server key source
- * 
- * Returns: The key source.
- **/
-SeahorseServerSource*
-seahorse_server_source_new (SeahorseKeySource *sksrc, const gchar *server)
+/* Code adapted from GnuPG (file g10/keyserver.c) */
+static gboolean 
+parse_keyserver_uri (char *uri, const char **scheme, const char **host)
 {
-    g_return_val_if_fail (server != NULL, NULL);
-    g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (sksrc), NULL);
+    int assume_ldap = 0;
+
+    g_return_val_if_fail (uri != NULL, FALSE);
+    g_return_val_if_fail (scheme != NULL && host != NULL, FALSE);
+
+    *scheme = NULL;
+    *host = NULL;
+
+    /* Get the scheme */
+
+    *scheme = strsep(&uri, ":");
+    if (uri == NULL) {
+        /* Assume HKP if there is no scheme */
+        assume_ldap = 1;
+        uri = (char*)*scheme;
+        *scheme = "ldap";
+    }
+
+    if (assume_ldap || (uri[0] == '/' && uri[1] == '/')) {
+        /* Two slashes means network path. */
+
+        /* Skip over the "//", if any */
+        if (!assume_ldap)
+            uri += 2;
+
+        /* Get the host */
+        *host = strsep (&uri, "/");
+        if (*host[0] == '\0')
+            return FALSE;
+    }
+
+    if (*scheme[0] == '\0')
+        return FALSE;
+
+    return TRUE;
+}
+
+SeahorseServerSource* 
+seahorse_server_source_new (SeahorseKeySource *locsrc, const gchar *server,
+                            const gchar *pattern)
+{
+    SeahorseServerSource *ssrc = NULL;
+    const gchar *scheme;
+    const gchar *host;
+    gchar *uri;
     
-    if (SEAHORSE_IS_MULTI_SOURCE (sksrc)) {
-        sksrc = seahorse_multi_source_get_primary (SEAHORSE_MULTI_SOURCE (sksrc));
-        g_assert (sksrc != NULL);
+    g_return_val_if_fail (server && server[0], NULL);
+
+    uri = g_strdup (server);
+        
+    if (!parse_keyserver_uri (uri, &scheme, &host)) {
+        g_warning ("invalid uri passed: %s", server);
+    } else {
+        
+#ifdef WITH_LDAP        
+        if (g_ascii_strcasecmp (scheme, "ldap") == 0) 
+            ssrc = SEAHORSE_SERVER_SOURCE (seahorse_ldap_source_new (locsrc, host, pattern));
+        else
+#endif /* WITH_LDAP */
+            g_warning ("unsupported keyserver uri scheme: %s", scheme);
     }
     
-    return g_object_new (SEAHORSE_TYPE_SERVER_SOURCE, "local-source", sksrc, 
-                         "key-server", server, NULL);
-}   
-
-/**
- * seahorse_search_source_search
- * @psrc: The Server key source
- * @pattern: Pattern to match keys with
- * 
- * Starts a load operation on the key source for keys matching the pattern.
- **/
-void
-seahorse_server_source_search (SeahorseServerSource *ssrc, const gchar *pattern)
-{
-    SeahorseSearchOperation *sop;
-    gchar *t;
-    
-    g_return_if_fail (SEAHORSE_IS_SERVER_SOURCE (ssrc));
-    g_return_if_fail (pattern != NULL && pattern[0] != 0);
-    
-    /* Round about because we could be passed ssrc->priv->last_xxxx */
-
-    t = g_strdup (pattern);
-    g_free (ssrc->priv->last_pattern);
-    ssrc->priv->last_pattern = t;
-   
-    sop = seahorse_search_operation_start (ssrc, pattern);
-    add_search_operation (ssrc, sop);
+    g_free (uri);
+    return ssrc;
 }
+
+gboolean    
+seahorse_server_source_valid_uri         (const gchar *server);

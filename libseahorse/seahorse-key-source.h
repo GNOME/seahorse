@@ -26,6 +26,7 @@
 #include <gpgme.h>
 
 #include "seahorse-key.h"
+#include "seahorse-operation.h"
 
 #define SEAHORSE_TYPE_KEY_SOURCE            (seahorse_key_source_get_type ())
 #define SEAHORSE_KEY_SOURCE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_KEY_SOURCE, SeahorseKeySource))
@@ -85,6 +86,32 @@ typedef struct _SeahorseKeySourceClass {
     /* Get the flags for this key source */
     guint (*get_state) (SeahorseKeySource *sksrc);
     
+    /**
+     * import
+     * @sksrc: The #SeahorseKeySource to import into.
+     * @data: The data to import (not freed).
+     *
+     * Import keys into the key source. When operation is 'done' a GList of 
+     * updated keys may be found as the operation result. 
+     * 
+     * Returns: The import operation
+     */
+    SeahorseOperation* (*import) (SeahorseKeySource *sksrc, gpgme_data_t data);
+
+    /**
+     * export
+     * @sksrc: The #SeahorseKeySource to export from.
+     * @keys: A list of keys to export.
+     * @data: Optional data object to export to (not freed).
+     *
+     * Import keys into the key source. When operation is 'done' the result
+     * of the operation will be a gpgme_data_t 
+     * 
+     * Returns: The export operation
+     */    
+    SeahorseOperation* (*export) (SeahorseKeySource *sksrc, GList *keys, 
+                                  gpgme_data_t data);
+    
 } SeahorseKeySourceClass;
 
 GType       seahorse_key_source_get_type      (void);
@@ -117,7 +144,13 @@ GList*       seahorse_key_source_get_keys    (SeahorseKeySource *sksrc,
 guint        seahorse_key_source_get_count   (SeahorseKeySource *sksrc,
                                               gboolean secret_only);
 
-gpgme_ctx_t seahorse_key_source_new_context (SeahorseKeySource *sksrc);
+gpgme_ctx_t seahorse_key_source_new_context   (SeahorseKeySource *sksrc);
 
+SeahorseOperation* seahorse_key_source_import (SeahorseKeySource *sksrc,
+                                               gpgme_data_t data);
+
+SeahorseOperation* seahorse_key_source_export (SeahorseKeySource *sksrc,
+                                               GList *keys,
+                                               gpgme_data_t data);                                               
 
 #endif /* __SEAHORSE_KEY_SOURCE_H__ */

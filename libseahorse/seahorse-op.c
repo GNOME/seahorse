@@ -41,28 +41,32 @@ set_gpgme_opts (SeahorseKeySource *sksrc)
 /* helper function for importing @data. @data will be released.
  * returns number of keys imported or -1. */
 static gint
-import_data (SeahorseKeySource *sksrc, gpgme_data_t data, gpgme_error_t *err)
+import_data (SeahorseKeySource *sksrc, gpgme_data_t data, 
+             GError **err)
 {
+    SeahorseOperation *operation;
+    GList *keylist;
 	gint keys = 0;
-    gpgme_ctx_t new_ctx;
-
-    new_ctx = seahorse_key_source_new_context (sksrc);	
-    g_return_val_if_fail (new_ctx != NULL, -1);
     
-	*err = gpgme_op_import (new_ctx, data);
-	if (GPG_IS_OK (*err)) {
-        gpgme_import_result_t result = gpgme_op_import_result (new_ctx);
-		keys = result->considered;
-	}
-	gpgme_data_release (data);
-    gpgme_release (new_ctx);
-	
-	if (GPG_IS_OK (*err)) {
-        seahorse_key_source_refresh (sksrc, FALSE);
-		return keys;
-	}
-	else
-		g_return_val_if_reached (-1);
+    g_return_val_if_fail (!err || !err[0], -1);
+
+    operation = seahorse_key_source_import (sksrc, data);
+    g_return_val_if_fail (operation != NULL, -1);
+    
+    seahorse_operation_wait (operation);
+    
+    if (seahorse_operation_is_successful (operation)) {
+        keylist = (GList*)seahorse_operation_get_result (operation);
+        keys = g_list_length (keylist);
+    } else {
+        seahorse_operation_steal_error (operation, err);
+        keys = -1;
+    }
+    
+    g_object_unref (operation);
+    gpgme_data_release (data);
+
+    return keys;    
 }
 
 /**
@@ -76,17 +80,18 @@ import_data (SeahorseKeySource *sksrc, gpgme_data_t data, gpgme_error_t *err)
  * Returns: Number of keys imported or -1 if import fails
  **/
 gint
-seahorse_op_import_file (SeahorseKeySource *sksrc, const gchar *path, gpgme_error_t *err)
+seahorse_op_import_file (SeahorseKeySource *sksrc, const gchar *path, GError **err)
 {
 	gpgme_data_t data;
-	gpgme_error_t error;
+	gpgme_error_t gerr;
   
-	if (err == NULL)
-		err = &error;
 	/* new data from file */
-    data = seahorse_vfs_data_create (path, FALSE, err);
-    g_return_val_if_fail (data != NULL, -1);
-	
+    data = seahorse_vfs_data_create (path, FALSE, &gerr);
+    if (!GPG_IS_OK (gerr)) {
+        seahorse_util_gpgme_to_error (gerr, err);
+        return -1;
+    }
+    
 	return import_data (sksrc, data, err);
 }
 
@@ -101,59 +106,73 @@ seahorse_op_import_file (SeahorseKeySource *sksrc, const gchar *path, gpgme_erro
  * Returns: Number of keys imported or -1 if import fails
  **/
 gint
-seahorse_op_import_text (SeahorseKeySource *sksrc, const gchar *text, gpgme_error_t *err)
+seahorse_op_import_text (SeahorseKeySource *sksrc, const gchar *text, GError **err)
 {
 	gpgme_data_t data;
-	gpgme_error_t error;
+    gpgme_error_t gerr;
 	
-	if (err == NULL)
-		err = &error;
-
     g_return_val_if_fail (text != NULL, 0);
          
 	/* new data from text */
-	*err = gpgme_data_new_from_mem (&data, text, strlen (text), TRUE);
-	g_return_val_if_fail (GPG_IS_OK (*err), -1);
-	
+	gerr = gpgme_data_new_from_mem (&data, text, strlen (text), TRUE);
+    if (!GPG_IS_OK (gerr)) {
+        seahorse_util_gpgme_to_error (gerr, err);
+        g_return_val_if_reached (-1);
+    }	
+    
 	return import_data (sksrc, data, err);
 }
 
 /* helper function for exporting @keys. */
-static void
+static gboolean
 export_data (GList *keys, gboolean force_armor, gpgme_data_t data,
-             gpgme_error_t *err)
+             GError **err)
 {
     SeahorseKeySource *sksrc;
+    SeahorseOperation *operation;
+    gboolean ret = TRUE;
     SeahorseKey *skey;
-    gpgme_error_t error;
-    gboolean old_armor;
-    GList *l;
-   
-    if (err == NULL)
-        err = &error;
-       
-    for (l = keys; l != NULL; l = g_list_next (l)) {
-       
-        g_return_if_fail (SEAHORSE_IS_KEY (l->data));
-        skey = SEAHORSE_KEY (l->data);
-       
-        sksrc = seahorse_key_get_source (skey);
-        g_return_if_fail (sksrc != NULL);
+    GList *next;
+    
+    keys = g_list_copy (keys);
 
-        set_gpgme_opts (sksrc);
+    /* Sort by key source */
+    keys = seahorse_util_keylist_sort (keys);
+    
+    while (keys) {
+     
+        /* Break off one set (same keysource) */
+        next = seahorse_util_keylist_splice (keys);
+
+        g_return_val_if_fail (SEAHORSE_IS_KEY (keys->data), FALSE);
+        skey = SEAHORSE_KEY (keys->data);
+
+        /* Export from this key source */        
+        sksrc = seahorse_key_get_source (skey);
+        g_return_val_if_fail (sksrc != NULL, FALSE);
         
-        if (force_armor) {
-            old_armor = gpgme_get_armor (sksrc->ctx);
-            gpgme_set_armor (sksrc->ctx, TRUE);
-        }
+        /* We pass our own data object, to which data is appended */
+        operation = seahorse_key_source_export (sksrc, keys, data);
+        g_return_val_if_fail (operation != NULL, FALSE);
+
+        g_list_free (keys);
+        keys = next;
         
-        *err = gpgme_op_export (sksrc->ctx, seahorse_key_get_id (skey->key), 0, data);
+        seahorse_operation_wait (operation);
+    
+        if (!seahorse_operation_is_successful (operation)) {
+            seahorse_operation_steal_error (operation, err);
+
+            /* Ignore the rest, break loop */
+            g_list_free (keys);
+            keys = NULL;
+            ret = FALSE;
+        }        
         
-        if (force_armor)
-            gpgme_set_armor (sksrc->ctx, old_armor);
-        
-        g_return_if_fail (GPG_IS_OK (*err));
-    }
+        g_object_unref (operation);
+    } 
+    
+    return ret;
 }
 
 /**
@@ -165,25 +184,24 @@ export_data (GList *keys, gboolean force_armor, gpgme_data_t data,
  * Tries to export @recips to the new file @path, saving an errors in @err.
  * @recips will be released upon completion.
  **/
-void
-seahorse_op_export_file (GList *keys, const gchar *path, gpgme_error_t *err)
+gboolean
+seahorse_op_export_file (GList *keys, const gchar *path, GError **err)
 {
 	gpgme_data_t data;
-	gpgme_error_t error;
+	gpgme_error_t gerr;
+    gboolean ret;
 	
-	if (err == NULL)
-		err = &error;
-
     /* Open the appropriate file */
-    data = seahorse_vfs_data_create (path, TRUE, err);
-    g_return_if_fail (GPG_IS_OK (*err));
-            
+    data = seahorse_vfs_data_create (path, TRUE, &gerr);
+    if (!GPG_IS_OK (gerr)) {
+        seahorse_util_gpgme_to_error (gerr, err);
+        return FALSE;
+    }
+    
 	/* export data */
-	export_data (keys, FALSE, data, err);
-	g_return_if_fail (GPG_IS_OK (*err));
-  
-    /* Close the file */
+	ret = export_data (keys, FALSE, data, err);
     gpgme_data_release (data);
+    return ret;
 }
 
 /**
@@ -198,22 +216,24 @@ seahorse_op_export_file (GList *keys, const gchar *path, gpgme_error_t *err)
  * Returns: The exported text or NULL if the operation fails
  **/
 gchar*
-seahorse_op_export_text (GList *keys, gpgme_error_t *err)
+seahorse_op_export_text (GList *keys, GError **err)
 {
 	gpgme_data_t data;
-	gpgme_error_t error;
-	
-	if (err == NULL)
-		err = &error;
+	gpgme_error_t gerr;
         
-    *err = gpgme_data_new (&data);
-    g_return_val_if_fail (GPG_IS_OK (*err), NULL);
+    gerr = gpgme_data_new (&data);
+    if (!GPG_IS_OK (gerr)) {
+        seahorse_util_gpgme_to_error (gerr, err);
+        g_return_val_if_reached (NULL);
+    }  
     
 	/* export data with armor */
-	export_data (keys, TRUE, data, err);
-	g_return_val_if_fail (GPG_IS_OK (*err), NULL);
-	
-	return seahorse_util_write_data_to_text (data);
+	if (export_data (keys, TRUE, data, err)) {
+    	return seahorse_util_write_data_to_text (data);
+    } else {
+        gpgme_data_release (data);
+        return NULL;
+    }
 }
 
 /* common encryption function definition. */
@@ -247,7 +267,7 @@ encrypt_data_common (SeahorseKeySource *sksrc, GList *keys, gpgme_data_t plain,
         }
 
         /* Make keys into the right format */
-        recips = seahorse_util_list_to_keys (keys);
+        recips = seahorse_util_keylist_to_keys (keys);
         
         set_gpgme_opts (sksrc);
 

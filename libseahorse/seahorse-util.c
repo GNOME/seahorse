@@ -890,7 +890,7 @@ seahorse_util_strvec_dup (const gchar** vec)
 }
 
 gpgme_key_t* 
-seahorse_util_list_to_keys (GList *keys)
+seahorse_util_keylist_to_keys (GList *keys)
 {
     gpgme_key_t *recips;
     int i;
@@ -914,6 +914,62 @@ seahorse_util_free_keys (gpgme_key_t* keys)
         gpgmex_key_unref (*(k++));
     g_free (keys);
 }
+
+static gint 
+sort_keys_by_source (SeahorseKey *k1, SeahorseKey *k2)
+{
+    SeahorseKeySource *sk1, *sk2;
+    
+    g_return_val_if_fail (SEAHORSE_IS_KEY (k1), 0);
+    g_return_val_if_fail (SEAHORSE_IS_KEY (k2), 0);
+    
+    sk1 = seahorse_key_get_source (k1);
+    sk2 = seahorse_key_get_source (k2);
+    
+    if (sk1 == sk2)
+        return 0;
+    
+    return sk1 < sk2 ? -1 : 1;
+}
+
+GList*        
+seahorse_util_keylist_sort (GList *keys)
+{
+    return g_list_sort (keys, (GCompareFunc)sort_keys_by_source);
+}
+
+GList*       
+seahorse_util_keylist_splice (GList *keys)
+{
+    SeahorseKeySource *psk = NULL;
+    SeahorseKeySource *sk;
+    GList *prev = NULL;
+    
+    /* Note that the keylist must be sorted */
+    
+    for ( ; keys; keys = g_list_next (keys)) {
+     
+        g_return_val_if_fail (SEAHORSE_IS_KEY (keys->data), NULL);
+        sk = seahorse_key_get_source (SEAHORSE_KEY (keys->data));
+        
+        /* Found a disconuity */
+        if (psk && sk != psk) {
+            g_assert (prev != NULL);
+            
+            /* Break the list */
+            prev->next = NULL;
+            
+            /* And return the new list */
+            return keys;
+        }
+        
+        psk = sk;
+        prev = keys;
+    }
+    
+    return NULL;
+}
+
 
 /* Free a GSList along with string values */
 GSList*

@@ -23,8 +23,8 @@ AGENT_SRCS =
 endif
 
 if WITH_KEYSERVER
-KEYSERVER_SRCS = seahorse-server-source.c seahorse-server-source.h seahorse-gpgmex-keyserver.c 
-KEYSERVER_SRCS += seahorse-keyserver-op.c seahorse-keyserver-op.h
+KEYSERVER_SRCS = seahorse-server-source.c seahorse-server-source.h 
+KEYSERVER_SRCS += seahorse-ldap-source.c seahorse-ldap-source.h
 else
 KEYSERVER_SRCS = 
 endif

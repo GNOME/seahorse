@@ -309,6 +309,30 @@ seahorse_key_source_new_context (SeahorseKeySource *sksrc)
     return (*klass->new_context) (sksrc);  
 }
 
+SeahorseOperation* 
+seahorse_key_source_import (SeahorseKeySource *sksrc, gpgme_data_t data)
+{
+    SeahorseKeySourceClass *klass;
+    
+    g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (sksrc), NULL);
+    klass = SEAHORSE_KEY_SOURCE_GET_CLASS (sksrc);   
+    g_return_val_if_fail (klass->import != NULL, NULL);
+    
+    return (*klass->import) (sksrc, data);  
+}
+
+SeahorseOperation* 
+seahorse_key_source_export (SeahorseKeySource *sksrc, GList *keys, gpgme_data_t data)
+{
+    SeahorseKeySourceClass *klass;
+    
+    g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (sksrc), NULL);
+    klass = SEAHORSE_KEY_SOURCE_GET_CLASS (sksrc);   
+    g_return_val_if_fail (klass->export != NULL, NULL);
+    
+    return (*klass->export) (sksrc, keys, data);    
+}
+                                               
 /* Calc fraction, call ::show_progress() */
 static void
 gpgme_progress (gpointer data, const gchar *what, gint type, gint current, gint total)

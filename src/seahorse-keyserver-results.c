@@ -27,9 +27,9 @@
 #include "seahorse-widget.h"
 #include "seahorse-preferences.h"
 #include "seahorse-util.h"
-#include "seahorse-keyserver-op.h"
 #include "seahorse-operation.h"
 #include "seahorse-key.h"
+#include "seahorse-op.h"
 #include "seahorse-key-manager-store.h"
 #include "seahorse-key-widget.h"
 #include "seahorse-key-dialogs.h"
@@ -61,71 +61,16 @@ properties_activate (GtkWidget *widget, SeahorseWidget *swidget)
 		seahorse_key_properties_new (swidget->sctx, skey);
 }
 
-static GHashTable*
-split_keys_by_server (GList *keys)
-{
-    SeahorseKeySource *sksrc;
-    SeahorseKey *skey;
-    GHashTable *tbl;
-    gchar *server;
-    GList *k;
-    
-    tbl = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
-    for (; keys; keys = g_list_next (keys)) {
-        
-        skey = SEAHORSE_KEY (keys->data);
-        sksrc = seahorse_key_get_source (skey);
-        
-        server = NULL;
-        g_object_get (sksrc, "key-server", &server, NULL);
-        
-        if (server == NULL)
-            continue;
-      
-        k = (GList*)g_hash_table_lookup (tbl, server);
-        k = g_list_prepend (k, skey);
-        g_hash_table_replace (tbl, server, k);
-    }   
-    
-    return tbl;
-}
-
-static void
-import_done (SeahorseOperation *operation, SeahorseKeySource *sksrc)
-{
-    GError *err = NULL;
-    g_return_if_fail (SEAHORSE_IS_OPERATION (operation));
- 
-    if (!seahorse_operation_is_successful (operation)) {
-        seahorse_operation_steal_error (operation, &err);
-        seahorse_util_handle_gerror (err, _("Couldn't import keys from key server"));
-    }
-}
-
-static void
-import_keyserver_keys (gchar *server, GList *keys, SeahorseKeySource *sksrc)
-{
-    SeahorseOperation *operation;
-    
-    g_return_if_fail (server && server[0]);
-    g_return_if_fail (SEAHORSE_IS_KEY_SOURCE (sksrc));
-    
-    if (keys == NULL)
-        return;
-    
-    /* TODO: We really should be doing something with the operation
-     * like monitoring progress etc... */
-    operation = seahorse_keyserver_op_import (sksrc, keys, server);
-    g_signal_connect (operation, "done", G_CALLBACK (import_done), sksrc);
-    g_object_unref (operation);
-}
-
 static void
 import_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
-    GHashTable *keys_by_server;
     SeahorseKeySource *sksrc;
+    gpgme_error_t gerr;
+    gpgme_data_t data;
+    GError *err = NULL;
+    gchar *text;
     GList *keys;
+    guint n;
     
     keys = seahorse_key_store_get_selected_keys (GTK_TREE_VIEW (
                 glade_xml_get_widget (swidget->xml, KEY_LIST)));
@@ -134,19 +79,27 @@ import_activate (GtkWidget *widget, SeahorseWidget *swidget)
     if (keys == NULL)
         return;
 
-    /* Returns a hash table of lists of keys, indexed on server name */                        
-    keys_by_server = split_keys_by_server (keys);
-    g_return_if_fail (keys_by_server != NULL);
-
+    text = seahorse_op_export_text (keys, &err);
     g_list_free (keys);
+    if (text == NULL) {
+        seahorse_util_handle_gerror (err, _("Couldn't retrieve key data from key server"));
+        return;
+    } 
     
+    gerr = gpgme_data_new_from_mem (&data, text, strlen (text), 0);
+    g_return_if_fail (GPG_IS_OK (gerr));
+
     /* The default key source */
     sksrc = seahorse_context_get_key_source (swidget->sctx);
+    g_return_if_fail (sksrc != NULL);
     
-    /* This frees the individual lists in the hash table */
-    g_hash_table_foreach (keys_by_server, (GHFunc)import_keyserver_keys, sksrc);
-    g_hash_table_destroy (keys_by_server);
-}
+    n = seahorse_op_import_text (sksrc, text, &err);
+    if (n == -1) 
+        seahorse_util_handle_gerror (err, _("Couldn't import keys into keyring"));
+
+    gpgme_data_release (data);
+    g_free (text);
+} 
 
 static void
 expand_all_activate (GtkMenuItem *item, SeahorseWidget *swidget)

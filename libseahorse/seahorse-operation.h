@@ -83,6 +83,10 @@ void                seahorse_operation_steal_error (SeahorseOperation *operation
 void                seahorse_operation_copy_error  (SeahorseOperation *operation,
                                                     GError **err);
 
+void                seahorse_operation_wait        (SeahorseOperation *operation);
+
+gpointer            seahorse_operation_get_result  (SeahorseOperation *operation);
+
 /* Helpers for Derived ----------------------------------------------- */
 
 void                seahorse_operation_mark_start (SeahorseOperation *operation);

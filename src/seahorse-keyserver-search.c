@@ -40,12 +40,13 @@ static void
 start_keyserver_search (SeahorseMultiSource *msrc, SeahorseKeySource *lsksrc,
                         const gchar *keyserver, const gchar *search)
 {
-    SeahorseServerSource *ssrc;
+    SeahorseKeySource *sksrc;
     
-    ssrc = seahorse_server_source_new (lsksrc, keyserver);
-    seahorse_multi_source_add (msrc, SEAHORSE_KEY_SOURCE (ssrc), FALSE);
-
-    seahorse_server_source_search (ssrc, search);
+    sksrc = SEAHORSE_KEY_SOURCE (seahorse_server_source_new (lsksrc, keyserver, search));
+    g_return_if_fail (sksrc != NULL);
+    
+    seahorse_multi_source_add (msrc, sksrc, FALSE);
+    seahorse_key_source_refresh (sksrc, TRUE);
 }
 
 static void

@@ -47,6 +47,11 @@ static guint        seahorse_multi_source_get_count   (SeahorseKeySource *src,
                                                        gboolean secret_only);
 static gpgme_ctx_t  seahorse_multi_source_new_context (SeahorseKeySource *src);
 
+static SeahorseOperation* seahorse_multi_source_import  (SeahorseKeySource *sksrc, 
+                                                         gpgme_data_t data);
+static SeahorseOperation* seahorse_multi_source_export  (SeahorseKeySource *sksrc, 
+                                                         GList *keys,
+                                                         gpgme_data_t data);
 static GObjectClass *parent_class = NULL;
 
 /* Forward declaration */
@@ -93,6 +98,8 @@ seahorse_multi_source_class_init (SeahorseMultiSourceClass *klass)
     key_class->get_keys = seahorse_multi_source_get_keys;
     key_class->get_state = seahorse_multi_source_get_state;
     key_class->new_context = seahorse_multi_source_new_context;    
+    key_class->import = seahorse_multi_source_import;
+    key_class->export = seahorse_multi_source_export;
     
     gobject_class->dispose = seahorse_multi_source_dispose;
     gobject_class->finalize = seahorse_multi_source_finalize;
@@ -272,6 +279,29 @@ seahorse_multi_source_new_context (SeahorseKeySource *src)
 
     return seahorse_key_source_new_context (SEAHORSE_KEY_SOURCE (msrc->sources->data));
 }
+
+static SeahorseOperation* 
+seahorse_multi_source_import (SeahorseKeySource *src, gpgme_data_t data)
+{
+    SeahorseMultiSource *msrc;
+
+    msrc = SEAHORSE_MULTI_SOURCE (src);   
+    g_return_val_if_fail (msrc && msrc->sources, NULL);
+
+    return seahorse_key_source_import (SEAHORSE_KEY_SOURCE (msrc->sources->data), data);
+}
+
+static SeahorseOperation* 
+seahorse_multi_source_export (SeahorseKeySource *src, GList *keys, gpgme_data_t data)
+{
+    SeahorseMultiSource *msrc;
+
+    msrc = SEAHORSE_MULTI_SOURCE (src);   
+    g_return_val_if_fail (msrc && msrc->sources, NULL);
+
+    return seahorse_key_source_export (SEAHORSE_KEY_SOURCE (msrc->sources->data), keys, data);
+}
+
 
 /* -------------------------------------------------------------------------- 
  * HELPERS
