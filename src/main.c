@@ -24,6 +24,9 @@
 
 #include "seahorse-context.h"
 #include "seahorse-windows.h"
+#include "seahorse-op.h"
+#include "seahorse-util.h"
+#include "seahorse-libdialogs.h"
 
 static gchar *import = NULL;
 static gchar *encrypt = NULL;
@@ -63,6 +66,9 @@ int
 main (int argc, char **argv)
 {
 	SeahorseContext *sctx;
+	GpgmeError err;
+	GtkWidget *widget;
+	gchar *new_path;
 
 #ifdef ENABLE_NLS	
 	bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
@@ -78,32 +84,140 @@ main (int argc, char **argv)
 	sctx = seahorse_context_new ();
 	
 	if (import != NULL) {
-		g_printf ("import file %s\n", import);
-		return 0;
+		gint keys;
+		
+		keys = seahorse_op_import_file (sctx, import, &err);
+		
+		if (err != GPGME_No_Error) {
+			seahorse_util_handle_error (err);
+			return 1;
+		}
+		else {
+			widget = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
+				GTK_MESSAGE_INFO, GTK_BUTTONS_OK,
+				_("Imported %d keys"), keys);
+			gtk_dialog_run (GTK_DIALOG (widget));
+			gtk_widget_destroy (widget);
+			return 0;
+		}
 	}
 	if (encrypt != NULL) {
-		g_printf ("encrypt file %s\n", encrypt);
-		return 0;
+		GpgmeRecipients recips = NULL;
+		
+		recips = seahorse_recipients_get (sctx);
+		
+		if (recips == NULL)
+			return 1;
+		
+		new_path = seahorse_op_encrypt_file (sctx, encrypt, recips, &err);
+		
+		if (err != GPGME_No_Error) {
+			seahorse_util_handle_error (err);
+			return 1;
+		}
+		else {
+			widget = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
+				GTK_MESSAGE_INFO, GTK_BUTTONS_OK,
+				_("Encrypted file is %s"), new_path);
+			gtk_dialog_run (GTK_DIALOG (widget));
+			gtk_widget_destroy (widget);
+			g_free (new_path);
+			return 0;
+		}
 	}
 	if (sign != NULL) {
-		g_printf ("sign file %s\n", sign);
-		return 0;
+		new_path = seahorse_op_sign_file (sctx, sign, &err);
+		
+		if (err != GPGME_No_Error) {
+			seahorse_util_handle_error (err);
+			return 1;
+		}
+		else {
+			widget = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
+				GTK_MESSAGE_INFO, GTK_BUTTONS_OK,
+				_("Signature file is %s"), new_path);
+			gtk_dialog_run (GTK_DIALOG (widget));
+			gtk_widget_destroy (widget);
+			g_free (new_path);
+			return 0;
+		}
 	}
 	if (encrypt_sign != NULL) {
-		g_printf ("encrypt & sign file %s\n", encrypt_sign);
-		return 0;
+		GpgmeRecipients recips = NULL;
+		
+		recips = seahorse_recipients_get (sctx);
+		
+		if (recips == NULL)
+			return 1;
+		
+		new_path = seahorse_op_encrypt_sign_file (sctx, encrypt_sign, recips, &err);
+		
+		if (err != GPGME_No_Error) {
+			seahorse_util_handle_error (err);
+			return 1;
+		}
+		else {
+			widget = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
+				GTK_MESSAGE_INFO, GTK_BUTTONS_OK,
+				_("Encrypted and signed file is %s"), new_path);
+			gtk_dialog_run (GTK_DIALOG (widget));
+			gtk_widget_destroy (widget);
+			g_free (new_path);
+			return 0;
+		}
 	}
 	if (decrypt != NULL) {
-		g_printf ("decrypt file %s\n", decrypt);
-		return 0;
+		new_path = seahorse_op_decrypt_file (sctx, decrypt, &err);
+		
+		if (err != GPGME_No_Error) {
+			seahorse_util_handle_error (err);
+			return 1;
+		}
+		else {
+			widget = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
+				GTK_MESSAGE_INFO, GTK_BUTTONS_OK,
+				_("Decrypted file is %s"), new_path);
+			gtk_dialog_run (GTK_DIALOG (widget));
+			gtk_widget_destroy (widget);
+			g_free (new_path);
+			return 0;
+		}
 	}
 	if (verify != NULL) {
-		g_printf ("verify file %s\n", verify);
-		return 0;
+		GpgmeSigStat status;
+		
+		seahorse_op_verify_file (sctx, verify, &status, &err);
+		
+		if (err != GPGME_No_Error) {
+			seahorse_util_handle_error (err);
+			return 1;
+		}
+		else {
+			seahorse_signatures_new (sctx, status);
+			gtk_main();
+			return 0;
+		}
 	}
 	if (decrypt_verify != NULL) {
-		g_printf ("decrypt & verify file %s\n", decrypt_verify);
-		return 0;
+		GpgmeSigStat status;
+		
+		new_path = seahorse_op_decrypt_verify_file (sctx, decrypt_verify,
+			&status, &err);
+		
+		if (err != GPGME_No_Error) {
+			seahorse_util_handle_error (err);
+			return 1;
+		}
+		else {
+			widget = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
+				GTK_MESSAGE_INFO, GTK_BUTTONS_OK,
+				_("Decrypted file is %s"), new_path);
+			gtk_dialog_run (GTK_DIALOG (widget));
+			gtk_widget_destroy (widget);
+			seahorse_signatures_new (sctx, status);
+			gtk_main();
+			return 0;
+		}
 	}
 	
 	seahorse_key_manager_show (sctx);

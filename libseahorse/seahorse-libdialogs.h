@@ -23,11 +23,17 @@
 #define __SEAHORSE_LIBDIALOGS_H__
 
 #include <glib.h>
+#include <gpgme.h>
 
 #include "seahorse-context.h"
 
 const gchar*	seahorse_passphrase_get	(SeahorseContext	*sctx,
 					 const gchar		*desc,
 					 gpointer		*data);
+
+GpgmeRecipients	seahorse_recipients_get	(SeahorseContext	*sctx);
+
+void		seahorse_signatures_new	(SeahorseContext	*sctx,
+					 GpgmeSigStat		status);
 
 #endif /* __SEAHORSE_LIBDIALOGS_H__ */

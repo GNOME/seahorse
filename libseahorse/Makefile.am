@@ -14,16 +14,20 @@ libseahorse_a_SOURCES = \
 	seahorse-widget.c seahorse-widget.h \
 	seahorse-op.c seahorse-op.h \
 	seahorse-key-store.c seahorse-key-store.h \
+	seahorse-recipients-store.c seahorse-recipients-store.h \
 	seahorse-signer-menu-item.c seahorse-signer-menu-item.h \
 	seahorse-signer-menu.c seahorse-signer-menu.h \
 	seahorse-util.c seahorse-util.h \
 	seahorse-validity.c seahorse-validity.h \
 	seahorse-passphrase.c \
+	seahorse-recipients.c \
+	seahorse-signatures.c \
 	seahorse-libdialogs.h \
 	$(BUILT_SOURCES)
 
 INCLUDES = -I$(top_builddir) \
 	-I$(top_srcdir) \
+	-I$(top_srcdir)/src \
 	-I$(top_srcdir)/libseahorse \
 	$(SEAHORSE_CFLAGS) \
 	-DDATA_DIR=\""$(datadir)"\" \
@@ -39,7 +43,9 @@ seahorse-marshal.c: seahorse-marshal.list $(GLIB_GENMARSHAL)
 	$(GLIB_GENMARSHAL) $< --body --prefix=seahorse_marshal >> $@
 
 glade_DATA = \
-	seahorse-passphrase.glade
+	seahorse-passphrase.glade \
+	seahorse-recipients.glade \
+	seahorse-signatures.glade
 
 EXTRA_DIST = $(glade_DATA) \
 	seahorse-marshal.list

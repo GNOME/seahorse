@@ -43,10 +43,6 @@ struct _SeahorseRecipientsStoreClass
 {
 	SeahorseKeyStoreClass	parent_class;
 	
-	/* Virtual method for deciding whether a key can be a recipient.
-	 * See seahorse_key_is_valid() and seahorse_key_can_encrypt(). */
-	gboolean		(* is_recip)		(const SeahorseKey	*skey);
-	
 };
 
 SeahorseKeyStore*	seahorse_recipients_store_new	(SeahorseContext	*sctx,

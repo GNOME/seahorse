@@ -32,14 +32,6 @@ typedef enum {
 	SEAHORSE_ASC_SUFFIX
 } SeahorseSuffix;
 
-void		seahorse_util_show_error		(GtkWindow		*parent,
-							 const gchar 		*message);
-
-gchar*		seahorse_util_get_text_view_text	(GtkTextView		*view);
-
-void		seahorse_util_set_text_view_string	(GtkTextView		*view,
-							 GString		*string);
-
 gchar*		seahorse_util_get_date_string		(const time_t		time);
 
 void		seahorse_util_handle_error		(GpgmeError		err);

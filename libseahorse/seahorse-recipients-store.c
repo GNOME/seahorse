@@ -28,6 +28,8 @@ enum {
 	DATA,
 	NAME,
 	KEYID,
+	VALIDITY_STR,
+	VALIDITY,
 	COLS
 };
 
@@ -36,10 +38,9 @@ static void	seahorse_recipients_store_class_init	(SeahorseRecipientsStoreClass	*
 static void	seahorse_recipients_store_append	(SeahorseKeyStore		*skstore,
 							 SeahorseKey			*skey,
 							 GtkTreeIter			*iter);
-static void	seahorse_recipients_store_changed	(SeahorseKey			*skey,
-							 SeahorseKeyChange		change,
-							 SeahorseKeyStore		*skstore,
-							 GtkTreeIter			*iter);
+static void	seahorse_recipients_store_set		(GtkTreeStore			*store,
+							 GtkTreeIter			*iter,
+							 SeahorseKey			*skey);
 
 static SeahorseKeyStoreClass	*parent_class	= NULL;
 
@@ -75,36 +76,32 @@ seahorse_recipients_store_class_init (SeahorseRecipientsStoreClass *klass)
 	skstore_class = SEAHORSE_KEY_STORE_CLASS (klass);
 	
 	skstore_class->append = seahorse_recipients_store_append;
-	skstore_class->changed = seahorse_recipients_store_changed;
-	
-	klass->is_recip = seahorse_key_is_valid;
+	skstore_class->set = seahorse_recipients_store_set;
 }
 
 /* Checks if @skey is a valid recipient before appending */
 static void
-seahorse_recipients_store_append (SeahorseKeyStore *skstore,
-				  SeahorseKey *skey, GtkTreeIter *iter)
+seahorse_recipients_store_append (SeahorseKeyStore *skstore, SeahorseKey *skey,
+				  GtkTreeIter *iter)
 {
-	if (SEAHORSE_RECIPIENTS_STORE_GET_CLASS (skstore)->is_recip (skey)) {
+	if (seahorse_key_can_encrypt (skey)) {
 		gtk_tree_store_append (GTK_TREE_STORE (skstore), iter, NULL);
 		parent_class->append (skstore, skey, iter);
 	}
 }
 
-/* Removes @skey if has been disabled */
+/* Sets the validity attribute */
 static void
-seahorse_recipients_store_changed (SeahorseKey *skey, SeahorseKeyChange change,
-				   SeahorseKeyStore *skstore, GtkTreeIter *iter)
+seahorse_recipients_store_set (GtkTreeStore *store, GtkTreeIter *iter, SeahorseKey *skey)
 {
-	switch (change) {
-		case SKEY_CHANGE_DISABLE:
-			if (!(SEAHORSE_RECIPIENTS_STORE_GET_CLASS (skstore)->is_recip (skey)))
-				SEAHORSE_KEY_STORE_GET_CLASS (skstore)->remove (skstore, iter);
-			break;
-		default:
-			parent_class->changed (skey, change, skstore, iter);
-			break;
-	}
+	SeahorseValidity validity;
+	
+	validity = seahorse_key_get_validity (skey);
+	
+	gtk_tree_store_set (store, iter,
+		VALIDITY_STR, seahorse_validity_get_string (validity),
+		VALIDITY, validity, -1);
+	SEAHORSE_KEY_STORE_CLASS (parent_class)->set (store, iter, skey);
 }
 
 /**
@@ -122,13 +119,19 @@ SeahorseKeyStore*
 seahorse_recipients_store_new (SeahorseContext *sctx, GtkTreeView *view)
 {
 	SeahorseKeyStore *skstore;
+	GtkTreeViewColumn *column;
 	
 	GType columns[] = {
-	        G_TYPE_POINTER, G_TYPE_STRING, G_TYPE_STRING
+	         G_TYPE_POINTER, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INT
 	};
 	
 	skstore = g_object_new (SEAHORSE_TYPE_RECIPIENTS_STORE, "ctx", sctx, NULL);
 	seahorse_key_store_init (skstore, view, COLS, columns);
+	
+	column = seahorse_key_store_append_column (view, _("Validity"), VALIDITY_STR);
+	gtk_tree_view_column_set_sort_column_id (column, VALIDITY);
 
+	seahorse_context_get_keys (sctx);
+	
 	return skstore;
 }

@@ -21,9 +21,39 @@
 
 #include <gnome.h>
 
-#include "seahorse-signatures.h"
-#include "seahorse-util.h"
+#include "seahorse-libdialogs.h"
 #include "seahorse-widget.h"
+#include "seahorse-util.h"
+
+static void
+sig_error (GpgmeSigStat status)
+{
+	gchar *label;
+	GtkWidget *widget;
+	
+	switch (status) {
+		case GPGME_SIG_STAT_NOKEY:
+			label = _("Signing key not in key ring");
+			break;
+		/* Bad sig */
+		case GPGME_SIG_STAT_BAD:
+			label = _("Bad Signature");
+			break;
+		/* Not a signature */
+		case GPGME_SIG_STAT_NOSIG:
+			label =   _("Not a signature");
+			break;
+		/* Other */
+		default:
+			label = _("Verification Error");
+			break;
+	}
+	
+	widget = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
+		GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, label);
+	gtk_dialog_run (GTK_DIALOG (widget));
+	gtk_widget_destroy (widget);
+}
 
 void
 seahorse_signatures_new (SeahorseContext *sctx, GpgmeSigStat status)
@@ -35,7 +65,7 @@ seahorse_signatures_new (SeahorseContext *sctx, GpgmeSigStat status)
 	
 	switch (status) {
 		/* If sig is good or there are multiple sigs, show */
-		case GPGME_SIG_STAT_GOOD: GPGME_SIG_STAT_GOOD_EXPKEY: GPGME_SIG_STAT_DIFF:
+		case GPGME_SIG_STAT_GOOD: GPGME_SIG_STAT_GOOD_EXPKEY: GPGME_SIG_STAT_DIFF:	
 			swidget = seahorse_widget_new_allow_multiple ("signatures", sctx);
 			gpgme_get_sig_key (sctx->ctx, 0, &key);
 			skey = seahorse_context_get_key (sctx, key);
@@ -60,21 +90,8 @@ seahorse_signatures_new (SeahorseContext *sctx, GpgmeSigStat status)
 			gtk_label_set_text (GTK_LABEL (glade_xml_get_widget (swidget->xml, "keyid")),
 				seahorse_key_get_keyid (skey, 0));
 			break;
-		/* Don't have key */
-		case GPGME_SIG_STAT_NOKEY:
-			seahorse_util_show_error (NULL, _("Signing key not in key ring"));
-			break;
-		/* Bad sig */
-		case GPGME_SIG_STAT_BAD:
-			seahorse_util_show_error (NULL, _("Bad Signature"));
-			break;
-		/* Not a signature */
-		case GPGME_SIG_STAT_NOSIG:
-			seahorse_util_show_error (NULL, _("Not a signature"));
-			break;
-		/* Other */
 		default:
-			seahorse_util_show_error (NULL, _("Verification Error"));
+			sig_error (status);
 			break;
 	}
 }
