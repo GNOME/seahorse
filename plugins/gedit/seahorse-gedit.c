@@ -184,8 +184,19 @@ encrypt_cb (BonoboUIComponent * uic, gpointer user_data,
     gedit_debug (DEBUG_PLUGINS, "");
     g_assert (SEAHORSE_IS_CONTEXT (sctx));
 
-    g_return_if_fail (view);
+    g_return_if_fail (view != NULL);
+    doc = gedit_view_get_document (view);
 
+    /* 
+     * We get the selection bounds before getting recipients.
+     * This is because in some cases the selection is removed
+     * once we start messing with recipients.
+     */
+    if (!get_document_selection (doc, &start, &end)) {
+        start = 0;
+        end = -1;
+    }
+    
     /* Get the recipient list */
     gedit_debug (DEBUG_PLUGINS, "getting recipients");
     keys = seahorse_recipients_get (sctx);
@@ -195,13 +206,6 @@ encrypt_cb (BonoboUIComponent * uic, gpointer user_data,
         return;
 
     /* Get the document text */
-    doc = gedit_view_get_document (view);
-
-    if (!get_document_selection (doc, &start, &end)) {
-        start = 0;
-        end = -1;
-    }
-    
     buffer = get_document_chars (doc, start, end);    
 
     /* Encrypt it */
@@ -458,8 +462,6 @@ sign_cb (BonoboUIComponent * uic, gpointer user_data,
     g_assert (SEAHORSE_IS_CONTEXT (sctx));
 
     g_return_if_fail (view);
-
-    /* Get the document text */
     doc = gedit_view_get_document (view);
 
     if (!get_document_selection (doc, &start, &end)) {
@@ -467,6 +469,7 @@ sign_cb (BonoboUIComponent * uic, gpointer user_data,
         end = -1;
     }
 
+    /* Get the document text */
     buffer = get_document_chars (doc, start, end);
 
     signer = seahorse_context_get_default_key (sctx);
