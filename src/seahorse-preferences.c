@@ -25,6 +25,7 @@
 #include "seahorse-preferences.h"
 #include "seahorse-widget.h"
 #include "seahorse-check-button-control.h"
+#include "seahorse-default-key-control.h"
 
 static void
 key_toolbar_changed (GtkOptionMenu *option, SeahorseWidget *swidget)
@@ -73,8 +74,10 @@ seahorse_preferences_show (SeahorseContext *sctx)
 	
 	widget = gtk_vbox_new (FALSE, 12);
 	gtk_container_set_border_width (GTK_CONTAINER (widget), 12);
+	
 	gtk_container_add (GTK_CONTAINER (widget), seahorse_check_button_control_new (
 		_("_Ascii Armor"), ARMOR_KEY));
+	gtk_container_add (GTK_CONTAINER (widget), seahorse_default_key_control_new (swidget->sctx));
 	
 	gtk_notebook_prepend_page (GTK_NOTEBOOK (glade_xml_get_widget (swidget->xml, "notebook")),
 		widget, gtk_label_new (_("PGP")));

@@ -27,6 +27,7 @@ libseahorse_a_SOURCES = \
 	seahorse-util.c seahorse-util.h \
 	seahorse-validity.c seahorse-validity.h \
 	seahorse-check-button-control.c seahorse-check-button-control.h \
+	seahorse-default-key-control.c seahorse-default-key-control.h \
 	seahorse-passphrase.c \
 	seahorse-recipients.c \
 	seahorse-signatures.c \
