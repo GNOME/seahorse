@@ -106,9 +106,7 @@ import_activate (GtkWidget *widget, SeahorseWidget *swidget)
     if(uri) {
         keys = seahorse_op_import_file (sksrc, uri, &err);
         
-        if (keys >= 0)
-            seahorse_key_source_refresh_async (sksrc, SEAHORSE_KEY_SOURCE_NEW);
-        else
+        if (err != NULL)
             seahorse_util_handle_error (err, _("Couldn't import keys from \"%s\""), 
                 seahorse_util_uri_get_last (uri));
                 
@@ -129,10 +127,8 @@ clipboard_received (GtkClipboard *board, const gchar *text, SeahorseContext *sct
  
     keys = seahorse_op_import_text (sksrc, text, &err);
  
-    if (keys >= 0)
+    if (err != NULL)
         seahorse_util_handle_error (err, _("Couldn't import keys from clipboard"));
-    else if (keys > 0)
-        seahorse_key_source_refresh_async (sksrc, SEAHORSE_KEY_SOURCE_NEW);
 }
 
 /* Pastes key from keyboard */
@@ -580,7 +576,7 @@ target_drag_data_received (GtkWidget *widget, GdkDragContext *context, gint x, g
             g_strstrip (*u);
             if ((*u)[0]) { /* Make sure it's not an empty line */
                 keys += seahorse_op_import_file (sksrc, *u, &err);  
-                if (keys < 0) {
+                if (err != NULL) {
                     seahorse_util_handle_error (err, _("Couldn't import key from \"%s\""),
                             seahorse_util_uri_get_last (*u));
                     break;
@@ -594,9 +590,6 @@ target_drag_data_received (GtkWidget *widget, GdkDragContext *context, gint x, g
         g_assert_not_reached ();
         return;
     } 
-
-    if (keys > 0)
-        seahorse_key_source_refresh_async (sksrc, SEAHORSE_KEY_SOURCE_NEW);        
 }
 
 /* Refilter the keys when the filter text changes */
