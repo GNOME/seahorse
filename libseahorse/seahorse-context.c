@@ -132,7 +132,7 @@ init_gpgme (gpgme_ctx_t *ctx)
 	err = gpgme_set_protocol (*ctx, proto);
 	g_return_val_if_fail (GPG_IS_OK (err), err);
 	
-	gpgme_set_keylist_mode (*ctx, GPGME_KEYLIST_MODE_LOCAL);
+	gpgme_set_keylist_mode (*ctx, GPGME_KEYLIST_MODE_LOCAL | GPGME_KEYLIST_MODE_SIGS);
 	return err;
 }
 
