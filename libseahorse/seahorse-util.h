@@ -142,6 +142,8 @@ GSList*     seahorse_util_string_slist_free   (GSList *slist);
 
 GSList*     seahorse_util_string_slist_copy   (GSList *slist);
 
+gboolean    seahorse_util_string_slist_equal   (GSList *sl1, GSList *sl2);
+
 #define     seahorse_util_wait_until(expr)          \
     while (!(expr)) {                               \
         g_thread_yield ();                          \

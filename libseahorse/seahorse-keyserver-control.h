@@ -45,6 +45,8 @@ struct _SeahorseKeyserverControl {
     GtkComboBox *combo;
     GSList *keyservers;
     guint notify_id;
+    guint notify_id_list;
+    gboolean changed;
 };
 
 struct _SeahorseKeyserverControlClass {

@@ -1124,3 +1124,17 @@ seahorse_util_string_slist_copy (GSList *list)
         l = g_slist_append (l, g_strdup(list->data));
     return l;
 }
+
+/* Compare two string GSLists */
+gboolean    
+seahorse_util_string_slist_equal (GSList *l1, GSList *l2)
+{
+    while (l1 && l2) {
+        if (!g_str_equal ((const gchar*)l1->data, (const gchar*)l2->data))
+            break;
+        l1 = g_slist_next (l1);
+        l2 = g_slist_next (l2);
+    }
+    
+    return !l1 && !l2;   
+}

@@ -33,7 +33,8 @@ enum {
 };
 
 /* Forward declaration */
-static void populate_combo (SeahorseKeyserverControl *combo, gboolean first);
+static void populate_combo (SeahorseKeyserverControl *combo, gboolean gconf,
+                            gboolean force);
 
 static void    seahorse_keyserver_control_class_init      (SeahorseKeyserverControlClass *klass);
 static void    seahorse_keyserver_control_init            (SeahorseKeyserverControl *skc);
@@ -94,6 +95,18 @@ keyserver_changed (GtkComboBox *widget, SeahorseKeyserverControl *skc)
     }
 }
 
+static void
+gconf_notify (GConfClient *client, guint id, GConfEntry *entry, gpointer data)
+{
+    SeahorseKeyserverControl *skc = SEAHORSE_KEYSERVER_CONTROL (data);   
+    const gchar *key = gconf_entry_get_key (entry);
+
+    if (g_str_equal (KEYSERVER_KEY, key))
+        populate_combo (skc, FALSE, FALSE);
+    else if (skc->gconf_key && g_str_equal (skc->gconf_key, key))
+        populate_combo (skc, TRUE, FALSE);    
+}
+
 static void    
 seahorse_keyserver_control_init (SeahorseKeyserverControl *skc)
 {
@@ -101,19 +114,9 @@ seahorse_keyserver_control_init (SeahorseKeyserverControl *skc)
     gtk_container_add (GTK_CONTAINER (skc), GTK_WIDGET (skc->combo));
     gtk_widget_show (GTK_WIDGET (skc->combo));
  
-    populate_combo (skc, TRUE);
+    populate_combo (skc, TRUE, TRUE);
     g_signal_connect (skc->combo, "changed", G_CALLBACK (keyserver_changed), skc);
-}
-
-static void
-gconf_notify (GConfClient *client, guint id, GConfEntry *entry, gpointer data)
-{
-    SeahorseKeyserverControl *skc;
-
-    if (g_str_equal (KEYSERVER_KEY, gconf_entry_get_key (entry))) {
-        skc = SEAHORSE_KEYSERVER_CONTROL (data);   
-        populate_combo (skc, FALSE);    
-    }
+    skc->notify_id_list = eel_gconf_notification_add (KEYSERVER_KEY, gconf_notify, skc);
 }
 
 static void
@@ -132,13 +135,14 @@ seahorse_keyserver_control_set_property (GObject *object, guint prop_id,
         control->gconf_key = t ? g_strdup (t) : NULL;
         if (control->gconf_key) 
             control->notify_id = eel_gconf_notification_add (control->gconf_key, gconf_notify, control);
+        populate_combo (control, TRUE, TRUE);
         break;
         
     case PROP_NONE_OPTION:
         g_free (control->none_option);
         t = g_value_get_string (value);
         control->none_option = t ? g_strdup (t) : NULL;
-        populate_combo (control, FALSE);
+        populate_combo (control, TRUE, TRUE);
         break;
         
     default:
@@ -182,58 +186,68 @@ seahorse_keyserver_control_finalize (GObject *gobject)
         skc->notify_id = 0;
     }
 
+    if (skc->notify_id_list >= 0) {
+        eel_gconf_notification_remove (skc->notify_id_list);
+        skc->notify_id_list = 0;
+    }
+
+    g_free (skc->gconf_key);    
     G_OBJECT_CLASS (parent_class)->finalize (gobject);
 }
 
 static void
-populate_combo (SeahorseKeyserverControl *skc, gboolean first)
+populate_combo (SeahorseKeyserverControl *skc, gboolean gconf, gboolean force)
 {
-    GSList *l;
+    GSList *l, *ks;
     gint i, n;
     gchar *chosen = NULL;
 
-    if (first) {
-
-        if (skc->gconf_key)
-            chosen = eel_gconf_get_string (skc->gconf_key);
-        
-    /* Not first time */
-    } else {
-           
-        i = g_slist_length (skc->keyservers);
-        
-        /* Get the selection so we can set it back */
+    /* Get the appropriate selection */
+    if (gconf && skc->gconf_key)
+        chosen = eel_gconf_get_string (skc->gconf_key);
+    else {
         n = gtk_combo_box_get_active (skc->combo);
-        if (n > 0 && n <= i)
+        if (n > 0 && n <= g_slist_length (skc->keyservers))
             chosen = g_strdup ((gchar*)g_slist_nth_data (skc->keyservers, n - 1));
-        
-        seahorse_util_string_slist_free (skc->keyservers);
-        skc->keyservers = NULL;
+    }
+
+    /* Retreieve the key server list and make sure it's changed */
+    ks = eel_gconf_get_string_list (KEYSERVER_KEY);
+    ks = g_slist_sort (ks, (GCompareFunc)g_utf8_collate);
+    if (force || !seahorse_util_string_slist_equal (ks, skc->keyservers)) {
         
         /* Remove saved data */
-        while (i-- >= 0)
+        for (i = g_slist_length (skc->keyservers) + 1; i >= 0; i--)
             gtk_combo_box_remove_text (skc->combo, 0);
-    }
+
+        /* Reload all the data */
+        seahorse_util_string_slist_free (skc->keyservers);
+        skc->keyservers = ks;
+        ks = NULL;
         
-    /* The all key servers option */
-    if (skc->none_option)
-        gtk_combo_box_prepend_text (skc->combo, skc->none_option);
+        /* The all key servers option */
+        if (skc->none_option)
+            gtk_combo_box_prepend_text (skc->combo, skc->none_option);
     
-    /* The data, sorted */
-    skc->keyservers = eel_gconf_get_string_list (KEYSERVER_KEY);
-    skc->keyservers = g_slist_sort (skc->keyservers, (GCompareFunc)g_utf8_collate);
-    
-    n = 0;
-    
-    for (i = 0, l = skc->keyservers; l != NULL; l = g_slist_next (l)) {
-        if (chosen && g_utf8_collate ((gchar*)l->data, chosen) == 0)
-            n = i + (skc->none_option ? 1 : 0);
-        gtk_combo_box_append_text (skc->combo, (gchar*)l->data);
+        for (l = skc->keyservers; l != NULL; l = g_slist_next (l)) 
+            gtk_combo_box_append_text (skc->combo, (gchar*)l->data);
+    }
+
+    if (chosen) {
+
+        n = (skc->none_option ? 0 : -1);
+        
+        for (i = 0, l = skc->keyservers; l != NULL; l = g_slist_next (l), i++) {
+            if (g_utf8_collate ((gchar*)l->data, chosen) == 0)
+                n = i + (skc->none_option ? 1 : 0);
+        }
+        
+        g_free (chosen);
+        if (gtk_combo_box_get_active (skc->combo) != n)
+            gtk_combo_box_set_active (skc->combo, n);
     }
     
-    g_free (chosen);
-    if (gtk_combo_box_get_active (skc->combo) != n)
-        gtk_combo_box_set_active (skc->combo, n);
+    seahorse_util_string_slist_free (ks);
 }
 
 SeahorseKeyserverControl*  
