@@ -96,6 +96,4 @@ void			seahorse_context_set_default_key	(SeahorseContext	*sctx,
 
 SeahorseKeyPair*	seahorse_context_get_default_key	(SeahorseContext	*sctx);
 
-gint			seahorse_context_get_progress_update	(SeahorseContext	*sctx);
-
 #endif /* __SEAHORSE_CONTEXT_H__ */

@@ -324,14 +324,14 @@ void
 seahorse_key_store_init (SeahorseKeyStore *skstore, GtkTreeView *view,
 			 gint cols, GType *columns)
 {
-	GtkTreeViewColumn *column;
+	GtkTreeViewColumn *col;
 	
 	gtk_tree_store_set_column_types (GTK_TREE_STORE (skstore),
 		cols, columns);
 	gtk_tree_view_set_model (view, GTK_TREE_MODEL (skstore));
 	
-	column = seahorse_key_store_append_column (view, _("Name"), NAME);
-	gtk_tree_view_column_set_sort_column_id (column, NAME);
+	col = seahorse_key_store_append_column (view, _("Name"), NAME);
+	gtk_tree_view_column_set_sort_column_id (col, NAME);
 	
 	seahorse_key_store_append_column (view, _("Key ID"), KEYID);
 }
@@ -373,21 +373,15 @@ seahorse_key_store_populate (SeahorseKeyStore *skstore)
 	GList *list = NULL;
 	SeahorseKey *skey;
 	guint count = 1;
-	gint progress_update;
+	//gint progress_update;
 	gdouble length;
 	
 	g_return_if_fail (skstore != NULL && SEAHORSE_IS_KEY_STORE (skstore));
 	
 	list = seahorse_context_get_keys (skstore->sctx);
 	length = g_list_length (list);
-	progress_update = seahorse_context_get_progress_update (skstore->sctx);
 	
 	while (list != NULL && (skey = list->data) != NULL) {
-		if (progress_update > 0 && !(count % progress_update)) {
-			seahorse_context_show_progress (skstore->sctx, g_strdup_printf (
-				_("Listing Key %d"), count), (gdouble)count/length);
-		}
-		
 		seahorse_key_store_append (skstore, skey);
 		list = g_list_next (list);
 		count++;

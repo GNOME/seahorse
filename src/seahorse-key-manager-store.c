@@ -20,15 +20,17 @@
  */
 
 #include <gnome.h>
+#include <eel/eel.h>
 
 #include "seahorse-key-manager-store.h"
+#include "seahorse-preferences.h"
 
 enum {
 	SKEY,
 	NAME,
 	KEYID,
 	TRUST,
-	ALGO,
+	TYPE,
 	LENGTH,
 	COLS
 };
@@ -130,7 +132,7 @@ seahorse_key_manager_store_set (GtkTreeStore *store, GtkTreeIter *iter, Seahorse
 	
 	gtk_tree_store_set (store, iter,
 		TRUST, seahorse_validity_get_string (seahorse_key_get_trust (skey)),
-		ALGO, gpgme_key_get_string_attr (skey->key, GPGME_ATTR_ALGO, NULL, 0),
+		TYPE, gpgme_key_get_string_attr (skey->key, GPGME_ATTR_ALGO, NULL, 0),
 		LENGTH, gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_LEN, NULL, 0), -1);
 	
 	max = seahorse_key_get_num_uids (skey);
@@ -139,7 +141,7 @@ seahorse_key_manager_store_set (GtkTreeStore *store, GtkTreeIter *iter, Seahorse
 	GTK_TREE_MODEL (store), &child, iter, index-1)) {
 		gtk_tree_store_set (store, &child,
 			NAME, seahorse_key_get_userid (skey, index),
-			ALGO, "UID", -1);
+			TYPE, "UID", -1);
 		index++;
 	}
 	
@@ -174,6 +176,28 @@ seahorse_key_manager_store_changed (SeahorseKey *skey, SeahorseKeyChange change,
 	}
 }
 
+static void
+gconf_notification (GConfClient *gclient, guint id, GConfEntry *entry, GtkTreeView *view)
+{
+	const gchar *key;
+	GConfValue *value;
+	GtkTreeViewColumn *col;
+	
+	key = gconf_entry_get_key (entry);
+	value = gconf_entry_get_value (entry);
+	
+	if (g_str_equal (key, SHOW_TRUST))
+		col = gtk_tree_view_get_column (view, TRUST-1);
+	else if (g_str_equal (key, SHOW_TYPE))
+		col = gtk_tree_view_get_column (view, TYPE-1);
+	else if (g_str_equal (key, SHOW_LENGTH))
+		col = gtk_tree_view_get_column (view, LENGTH-1);
+	else
+		return;
+	
+	gtk_tree_view_column_set_visible (col, gconf_value_get_bool (value));
+}
+
 /**
  * seahorse_key_manager_store_new:
  * @sctx: Current #SeahorseContext
@@ -188,7 +212,7 @@ SeahorseKeyStore*
 seahorse_key_manager_store_new (SeahorseContext *sctx, GtkTreeView *view)
 {
 	SeahorseKeyStore *skstore;
-	GtkTreeViewColumn *column;
+	GtkTreeViewColumn *col;
 	GList *list = NULL;
 
 	GType columns[] = {
@@ -198,16 +222,22 @@ seahorse_key_manager_store_new (SeahorseContext *sctx, GtkTreeView *view)
 	skstore = g_object_new (SEAHORSE_TYPE_KEY_MANAGER_STORE, "ctx", sctx, NULL);
 	seahorse_key_store_init (skstore, view, COLS, columns);
 
-	column = seahorse_key_store_append_column (view, _("Trust"), TRUST);
-	gtk_tree_view_column_set_sort_column_id (column, TRUST);
+	col = seahorse_key_store_append_column (view, _("Trust"), TRUST);
+	gtk_tree_view_column_set_sort_column_id (col, TRUST);
 	gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (skstore), TRUST,
 		(GtkTreeIterCompareFunc)seahorse_validity_compare, (gpointer)TRUST, NULL);
+	gtk_tree_view_column_set_visible (col, eel_gconf_get_boolean (SHOW_TRUST));
 	
-	seahorse_key_store_append_column (view, _("Type"), ALGO);
-	seahorse_key_store_append_column (view, _("Length"), LENGTH);
+	col = seahorse_key_store_append_column (view, _("Type"), TYPE);
+	gtk_tree_view_column_set_visible (col, eel_gconf_get_boolean (SHOW_TYPE));
 	
-	//seahorse_key_store_populate (skstore);
-	list = seahorse_context_get_keys (sctx);
+	col = seahorse_key_store_append_column (view, _("Length"), LENGTH);
+	gtk_tree_view_column_set_visible (col, eel_gconf_get_boolean (SHOW_LENGTH));
+	
+	eel_gconf_notification_add (LISTING, (GConfClientNotifyFunc) gconf_notification, view);
+	eel_gconf_monitor_add (LISTING);
+	
+	seahorse_context_get_keys (sctx);
 	
 	return skstore;
 }

@@ -22,6 +22,7 @@
 #include <config.h>
 #include <gnome.h>
 #include <gconf/gconf-client.h>
+#include <eel/eel-gconf-extensions.h>
 
 #include "seahorse-key-manager.h"
 #include "seahorse-widget.h"
@@ -39,21 +40,16 @@
 
 #define KEY_LIST "key_list"
 
-#define UI "/apps/seahorse/ui"
-#define STATUSBAR_VISIBLE UI "/statusbar_visible"
-#define TOOLBAR_VISIBLE UI "/toolbar_visible"
-#define TOOLBAR_STYLE UI "/toolbar_style"
+#define STATUSBAR_VISIBLE KEY_UI "/statusbar_visible"
+#define TOOLBAR_VISIBLE KEY_UI "/toolbar_visible"
 
 #define GNOME_INTERFACE "/desktop/gnome/interface"
 #define GNOME_TOOLBAR_STYLE GNOME_INTERFACE "/toolbar_style"
-
-static GConfClient	*gclient	= NULL;
 
 /* Quits seahorse */
 static void
 quit (GtkWidget *widget, SeahorseWidget *swidget)
 {
-	g_object_unref (gclient);
 	seahorse_context_destroy (swidget->sctx);
 	gtk_exit (0);
 }
@@ -223,7 +219,7 @@ preferences_activate (GtkWidget *widget, SeahorseWidget *swidget)
 static void
 view_bar (GtkCheckMenuItem *item, const gchar *key)
 {
-	gconf_client_set_bool (gclient, key, gtk_check_menu_item_get_active (item), NULL);
+	eel_gconf_set_boolean (key, gtk_check_menu_item_get_active (item));
 }
 
 /* Shows about dialog */
@@ -361,13 +357,13 @@ key_list_popup_menu (GtkWidget *widget, SeahorseWidget *swidget)
 static void
 set_toolbar_style (GtkToolbar *toolbar, const gchar *style)
 {
-	if (g_str_equal (style, "both"))
+	if (g_str_equal (style, TOOLBAR_BOTH))
 		gtk_toolbar_set_style (toolbar, GTK_TOOLBAR_BOTH);
-	else if (g_str_equal (style, "both_horiz"))
+	else if (g_str_equal (style, TOOLBAR_BOTH_HORIZ))
 		gtk_toolbar_set_style (toolbar, GTK_TOOLBAR_BOTH_HORIZ);
-	else if (g_str_equal (style, "text"))
+	else if (g_str_equal (style, TOOLBAR_TEXT))
 		gtk_toolbar_set_style (toolbar, GTK_TOOLBAR_TEXT);
-	else if (g_str_equal (style, "icons"))
+	else if (g_str_equal (style, TOOLBAR_ICONS))
 		gtk_toolbar_set_style (toolbar, GTK_TOOLBAR_ICONS);
 }
 
@@ -398,17 +394,17 @@ gconf_notification (GConfClient *gclient, guint id, GConfEntry *entry, SeahorseW
 			gtk_widget_hide (widget);
 	}
 	else if (g_str_equal (key, GNOME_TOOLBAR_STYLE) &&
-	g_str_equal ("default", gconf_client_get_string (gclient, TOOLBAR_STYLE, NULL))) {
+	g_str_equal (TOOLBAR_DEFAULT, eel_gconf_get_string (KEY_TOOLBAR_STYLE))) {
 		set_toolbar_style (GTK_TOOLBAR (glade_xml_get_widget (swidget->xml, "toolbar")),
 			gconf_value_get_string (value));
 	}
-	else if (g_str_equal (key, TOOLBAR_STYLE)) {
+	else if (g_str_equal (key, KEY_TOOLBAR_STYLE)) {
 		widget = glade_xml_get_widget (swidget->xml, "toolbar");
 		
 		/* if changed to default, use system settings */
-		if (g_str_equal (gconf_value_get_string (value), "default")) {
+		if (g_str_equal (gconf_value_get_string (value), TOOLBAR_DEFAULT)) {
 			set_toolbar_style (GTK_TOOLBAR (widget),
-				gconf_client_get_string (gclient, GNOME_TOOLBAR_STYLE, NULL));
+				eel_gconf_get_string (GNOME_TOOLBAR_STYLE));
 		}
 		else
 			set_toolbar_style (GTK_TOOLBAR (widget), gconf_value_get_string (value));
@@ -473,20 +469,19 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 	g_signal_connect_after (swidget->sctx, "progress", G_CALLBACK (show_progress), swidget);
 	
 	/* init gclient */
-	gclient = gconf_client_get_default ();
-	gconf_client_notify_add (gclient, UI,
-		(GConfClientNotifyFunc) gconf_notification, swidget, NULL, NULL);
-	gconf_client_add_dir (gclient, UI, GCONF_CLIENT_PRELOAD_ONELEVEL, NULL);
-	gconf_client_notify_add (gclient, GNOME_INTERFACE,
-		(GConfClientNotifyFunc) gconf_notification, swidget, NULL, NULL);
-	gconf_client_add_dir (gclient, GNOME_INTERFACE, GCONF_CLIENT_PRELOAD_ONELEVEL, NULL);
+	eel_gconf_notification_add (KEY_UI, (GConfClientNotifyFunc) gconf_notification, swidget);
+	eel_gconf_monitor_add (KEY_UI);
+	eel_gconf_notification_add (GNOME_INTERFACE, (GConfClientNotifyFunc) gconf_notification, swidget);
+	eel_gconf_monitor_add (GNOME_INTERFACE);
 	
 	/* init toolbar */
-	widget = glade_xml_get_widget (swidget->xml, "view_toolbar");
-	visible = gconf_client_get_bool (gclient, TOOLBAR_VISIBLE, NULL);
 	glade_xml_signal_connect_data (swidget->xml, "toolbar_activate",
 		G_CALLBACK (view_bar), TOOLBAR_VISIBLE);
-	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (widget), visible);
+	set_toolbar_style (GTK_TOOLBAR (glade_xml_get_widget (swidget->xml, "toolbar")),
+		eel_gconf_get_string (KEY_TOOLBAR_STYLE));
+	visible = eel_gconf_get_boolean (TOOLBAR_VISIBLE);
+	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (
+		glade_xml_get_widget (swidget->xml, "view_toolbar")), visible);
 	if (!visible)
 		gtk_widget_hide (glade_xml_get_widget (swidget->xml, "tool_dock"));
 	
@@ -500,7 +495,7 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 	
 	/* init status bars after so that not hidden during startup */
 	widget = glade_xml_get_widget (swidget->xml, "view_statusbar");
-	visible = gconf_client_get_bool (gclient, STATUSBAR_VISIBLE, NULL);
+	visible = eel_gconf_get_boolean (STATUSBAR_VISIBLE);
 	glade_xml_signal_connect_data (swidget->xml, "statusbar_activate",
 		G_CALLBACK (view_bar), STATUSBAR_VISIBLE);
 	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (widget), visible);

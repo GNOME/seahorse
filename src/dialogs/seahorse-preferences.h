@@ -24,6 +24,22 @@
 
 #include "seahorse-context.h"
 
+#define SCHEMA_ROOT "/apps/seahorse"
+
+#define KEY_UI SCHEMA_ROOT "/ui"
+#define KEY_TOOLBAR_STYLE KEY_UI "/toolbar_style"
+
+#define TOOLBAR_DEFAULT "default"
+#define TOOLBAR_BOTH "both"
+#define TOOLBAR_BOTH_HORIZ "both_horiz"
+#define TOOLBAR_ICONS "icons"
+#define TOOLBAR_TEXT "text"
+
+#define LISTING SCHEMA_ROOT "/listing"
+#define SHOW_TRUST LISTING "/show_trust"
+#define SHOW_TYPE LISTING "/show_type"
+#define SHOW_LENGTH LISTING "/show_length"
+
 void		seahorse_preferences_show		(SeahorseContext	*sctx);
 
 #endif /* __SEAHORSE_PREFERENCES_H__ */

@@ -21,6 +21,7 @@
 
 #include <gnome.h>
 #include <gconf/gconf-client.h>
+#include <eel/eel.h>
 
 #include "seahorse-context.h"
 #include "seahorse-marshal.h"
@@ -350,7 +351,7 @@ do_key_pairs (SeahorseContext *sctx)
 	if (did_pairs)
 		return;
 	
-	progress_update = seahorse_context_get_progress_update (sctx);
+	progress_update = eel_gconf_get_integer (PROGRESS_UPDATE);
 	
 	/* get secret keys */
 	g_return_if_fail (gpgme_op_keylist_start (sctx->ctx, NULL, TRUE) == GPGME_No_Error);
@@ -412,7 +413,7 @@ do_key_list (SeahorseContext *sctx)
 		do_key_pairs (sctx);
 	
 	secret_count = g_list_length (sctx->priv->key_pairs);
-	progress_update = seahorse_context_get_progress_update (sctx);
+	progress_update = eel_gconf_get_integer (PROGRESS_UPDATE);
 	
 	/* get public keys */
 	g_return_if_fail (gpgme_op_keylist_start (sctx->ctx, NULL, FALSE) == GPGME_No_Error);
@@ -607,7 +608,7 @@ seahorse_context_key_added (SeahorseContext *sctx)
         g_return_if_fail (gpgme_op_keylist_start (sctx->ctx, NULL, FALSE) == GPGME_No_Error);	
 	
 	list = seahorse_context_get_keys (sctx);
-	progress_update = seahorse_context_get_progress_update (sctx);
+	progress_update = eel_gconf_get_integer (PROGRESS_UPDATE);
 	
 	/* go to end of list, then build list containing new keys */
 	while (gpgme_op_keylist_next (sctx->ctx, &key) == GPGME_No_Error) {
@@ -696,18 +697,4 @@ seahorse_context_get_default_key (SeahorseContext *sctx)
 	
 	key = gpgme_signers_enum (sctx->ctx, 0);
 	return SEAHORSE_KEY_PAIR (seahorse_context_get_key (sctx, key));
-}
-
-/**
- * seahorse_context_get_progress_update:
- * @sctx: #SeahorseContext
- *
- * Gets the progress update count.
- *
- * Returns: Progress update count
- **/
-gint
-seahorse_context_get_progress_update (SeahorseContext *sctx)
-{
-	return gconf_client_get_int (sctx->priv->gclient, PROGRESS_UPDATE, NULL);
 }

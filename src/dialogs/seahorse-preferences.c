@@ -20,12 +20,17 @@
  */
 
 #include <gnome.h>
-#include <gconf/gconf-client.h>
-#include <gpgme.h>
+#include <eel/eel.h>
 
 #include "seahorse-preferences.h"
 #include "seahorse-widget.h"
 #include "seahorse-signer-menu.h"
+
+static void
+show_col_toggled (GtkToggleButton *togglebutton, gchar *key)
+{
+	eel_gconf_set_boolean (key, gtk_toggle_button_get_active (togglebutton));
+}
 
 /* Toggles armor setting */
 static void
@@ -41,6 +46,32 @@ text_mode_toggled (GtkToggleButton *togglebutton, SeahorseWidget *swidget)
 	seahorse_context_set_text_mode (swidget->sctx, gtk_toggle_button_get_active (togglebutton));
 }
 
+static void
+key_toolbar_changed (GtkOptionMenu *option, SeahorseWidget *swidget)
+{
+	gchar *str;
+	
+	switch (gtk_option_menu_get_history (option)) {
+		case 1:
+			str = TOOLBAR_BOTH;
+			break;
+		case 2:
+			str = TOOLBAR_BOTH_HORIZ;
+			break;
+		case 3:
+			str = TOOLBAR_ICONS;
+			break;
+		case 4:
+			str = TOOLBAR_TEXT;
+			break;
+		default:
+			str = TOOLBAR_DEFAULT;
+			break;
+	}
+	
+	eel_gconf_set_string (KEY_TOOLBAR_STYLE, str);
+}
+
 /**
  * seahorse_preferences_show:
  * @sctx: Current #SeahorseContext
@@ -52,6 +83,8 @@ seahorse_preferences_show (SeahorseContext *sctx)
 {	
 	SeahorseWidget *swidget;
 	GtkWidget *widget;
+	gchar *key_style;
+	gint history = 0;
 	
 	g_return_if_fail (sctx != NULL && SEAHORSE_IS_CONTEXT (sctx));
 	
@@ -70,8 +103,35 @@ seahorse_preferences_show (SeahorseContext *sctx)
 	seahorse_signer_menu_new (sctx, GTK_OPTION_MENU (
 		glade_xml_get_widget (swidget->xml, "default_key")));
 	
+	key_style = eel_gconf_get_string (KEY_TOOLBAR_STYLE);
+	if (g_str_equal (key_style, TOOLBAR_BOTH))
+		history = 1;
+	else if (g_str_equal (key_style, TOOLBAR_BOTH_HORIZ))
+		history = 2;
+	else if (g_str_equal (key_style, TOOLBAR_ICONS))
+		history = 3;
+	else if (g_str_equal (key_style, TOOLBAR_TEXT))
+		history = 4;
+	gtk_option_menu_set_history (GTK_OPTION_MENU (glade_xml_get_widget (
+		swidget->xml, "key_toolbar")), history);
+	
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (glade_xml_get_widget (
+		swidget->xml, "show_trust")), eel_gconf_get_boolean (SHOW_TRUST));
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (glade_xml_get_widget (
+		swidget->xml, "show_type")), eel_gconf_get_boolean (SHOW_TYPE));
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (glade_xml_get_widget (
+		swidget->xml, "show_length")), eel_gconf_get_boolean (SHOW_LENGTH));
+	
 	glade_xml_signal_connect_data (swidget->xml, "armor_toggled",
 		G_CALLBACK (armor_toggled), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "text_mode_toggled",
 		G_CALLBACK (text_mode_toggled), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "key_toolbar_changed",
+		G_CALLBACK (key_toolbar_changed), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "show_trust_toggled",
+		G_CALLBACK (show_col_toggled), SHOW_TRUST);
+	glade_xml_signal_connect_data (swidget->xml, "show_type_toggled",
+		G_CALLBACK (show_col_toggled), SHOW_TYPE);
+	glade_xml_signal_connect_data (swidget->xml, "show_length_toggled",
+		G_CALLBACK (show_col_toggled), SHOW_LENGTH);
 }
