@@ -723,17 +723,19 @@ seahorse_pgp_source_refresh (SeahorseKeySource *src, const gchar *key)
     ref = g_str_equal (key, SEAHORSE_KEY_SOURCE_NEW);
     all = g_str_equal (key, SEAHORSE_KEY_SOURCE_ALL);
     
-    if (ref || all) 
+    if (ref || all) {
+        ref = TRUE;
         key = NULL;
+    }
 
     DEBUG_REFRESH ("refreshing keys...\n");
 
     /* Secret keys */
-    lop = seahorse_load_operation_start (psrc, key, FALSE, TRUE, all);
+    lop = seahorse_load_operation_start (psrc, key, FALSE, ref, all);
     seahorse_multi_operation_add (psrc->priv->operations, SEAHORSE_OPERATION (lop));
 
     /* Public keys */
-    lop = seahorse_load_operation_start (psrc, key, TRUE, TRUE, all);
+    lop = seahorse_load_operation_start (psrc, key, TRUE, ref, all);
     seahorse_multi_operation_add (psrc->priv->operations, SEAHORSE_OPERATION (lop));
 
     g_object_ref (psrc->priv->operations);
