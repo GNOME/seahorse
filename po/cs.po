@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-20 20:56+0200\n"
-"PO-Revision-Date: 2004-10-20 21:54+0200\n"
+"POT-Creation-Date: 2004-10-25 03:34+0200\n"
+"PO-Revision-Date: 2004-10-25 10:08+0200\n"
 "Last-Translator: Miloslav Trmac <mitr@volny.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -76,7 +76,9 @@ msgstr "Aktivuje implicitní"
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
-msgstr "Jestli aktivovat implicitní widget (například implicitní tlačítko v dialogu) když je stisknut Enter"
+msgstr ""
+"Jestli aktivovat implicitní widget (například implicitní tlačítko v dialogu) "
+"když je stisknut Enter"
 
 #: agent/gtk-secure-entry.c:514
 msgid "Width in chars"
@@ -167,25 +169,31 @@ msgstr "_Autorizovat"
 msgid "Cached GPG Keys"
 msgstr "Kešované klíče GPG"
 
-#: agent/seahorse-agent.c:124
+#. Warn and put in defaults
+#: agent/seahorse-agent.c:100
+#, c-format
+msgid "couldn't read gpg configuration: %s"
+msgstr "nemohu číst nastavení gpg: %s"
+
+#: agent/seahorse-agent.c:123
 #, c-format
 msgid "couldn't modify gpg configuration: %s"
 msgstr "nemohu změnit nastavení gpg: %s"
 
-#: agent/seahorse-agent.c:144
+#: agent/seahorse-agent.c:143
 msgid "couldn't fork process"
 msgstr "nemohu fork proces"
 
-#: agent/seahorse-agent.c:150
+#: agent/seahorse-agent.c:149
 msgid "couldn't create new process group"
 msgstr "nemohu vytvořit novou skupinu procesů"
 
-#: agent/seahorse-agent.c:180
+#: agent/seahorse-agent.c:179
 #, c-format
 msgid "usage: seahorse-agent [-cdv]\n"
 msgstr "použití: seahorse-agent [-cdv]\n"
 
-#: agent/seahorse-agent.c:269
+#: agent/seahorse-agent.c:272
 msgid "couldn't drop privileges properly"
 msgstr "nemohu se správně vzdát oprávnění"
 
@@ -307,7 +315,9 @@ msgstr "Ptát se před používáním hesel GPG z keše"
 msgid ""
 "Set to 'true' to have seahorse-agent prompt before giving out passwords it "
 "has cached."
-msgstr "Nastavte na 'true', aby se seahorse-agent ptal před předáváním kešovaných hesel."
+msgstr ""
+"Nastavte na 'true', aby se seahorse-agent ptal před předáváním kešovaných "
+"hesel."
 
 #: data/seahorse.schemas.in.h:14
 msgid "Show expires column in key manager"
@@ -390,7 +400,9 @@ msgstr "Toto určuje implicitní klíč pro jisté operace, hlavně podepisován
 msgid ""
 "When set seahorse-agent expires GPG passwords in it's cache after a peried "
 "of time."
-msgstr "Je-li nastaveno, seahorse-agent po určitém čase ruší platnost hesel GPG v jeho cache."
+msgstr ""
+"Je-li nastaveno, seahorse-agent po určitém čase ruší platnost hesel GPG v "
+"jeho cache."
 
 #: data/seahorse.schemas.in.h:29
 msgid "Whether the GPG password cache is enabled"
@@ -429,7 +441,7 @@ msgstr[0] "Načten %d klíč"
 msgstr[1] "Načteny %d klíče"
 msgstr[2] "Načteno %d klíčů"
 
-#: libseahorse/seahorse-context.c:702
+#: libseahorse/seahorse-context.c:700
 #, c-format
 msgid "Loaded %d new key"
 msgid_plural "Loaded %d new keys"
@@ -438,17 +450,17 @@ msgstr[1] "Načteny %d nové klíče"
 msgstr[2] "Načteno %d nových klíčů"
 
 #. Make the column
-#: libseahorse/seahorse-key-store.c:569 src/seahorse-key-properties.c:374
+#: libseahorse/seahorse-key-store.c:564 src/seahorse-key-properties.c:374
 #: src/seahorse-key-properties.c:468
 msgid "Name"
 msgstr "Jméno"
 
 #. Make the column
-#: libseahorse/seahorse-key-store.c:572 src/seahorse-key-properties.c:371
+#: libseahorse/seahorse-key-store.c:567 src/seahorse-key-properties.c:371
 msgid "Key ID"
 msgstr "ID klíče"
 
-#: libseahorse/seahorse-key-store.c:635
+#: libseahorse/seahorse-key-store.c:630
 #, c-format
 msgid "Listed %d keys"
 msgstr "Vypsáno %d klíčů"
@@ -694,38 +706,42 @@ msgstr "Šifrování PGP"
 msgid "The PGP encrypt plugin performs encryption operations on text."
 msgstr "Zásuvný modul šifrování PGP provádí operace šifrování s textem."
 
-#: plugins/nautilus/seahorse-pgp-preferences-cache.c:342
+#: plugins/nautilus/seahorse-pgp-preferences-cache.c:350
 msgid "Couldn't open the Session Properties"
 msgstr "Nemohu otevřít vlastnosti sezení"
 
-#: plugins/nautilus/seahorse-pgp-preferences-cache.c:355
+#: plugins/nautilus/seahorse-pgp-preferences-cache.c:363
 msgid "Couldn't start the 'seahorse-agent' program"
 msgstr "Nemohu spustit program 'seahorse-agent'"
 
-#: plugins/nautilus/seahorse-pgp-preferences-cache.c:357
+#: plugins/nautilus/seahorse-pgp-preferences-cache.c:365
 msgid "The 'seahorse-agent' program exited unsucessfully."
 msgstr "Program 'seahorse-agent' neúspěšně skončil."
 
-#: plugins/nautilus/seahorse-pgp-preferences.c:33
+#: plugins/nautilus/seahorse-pgp-preferences-cache.c:404
+msgid "Another password caching agent is running. Disabling cache preferences."
+msgstr "Běží jiný agent kešování hesel. Zakazuji nastavení cache."
+
+#: plugins/nautilus/seahorse-pgp-preferences.c:35
 #: plugins/nautilus/seahorse-pgp-preferences.desktop.in.h:2
 #: plugins/nautilus/seahorse-pgp-preferences.glade.h:6
 msgid "PGP Preferences"
 msgstr "Nastavení PGP"
 
-#: plugins/nautilus/seahorse-pgp-preferences.c:49
+#: plugins/nautilus/seahorse-pgp-preferences.c:51
 #: src/seahorse-preferences.c:52
 msgid "_Ascii Armor"
 msgstr "Brnění _ASCII"
 
-#: plugins/nautilus/seahorse-pgp-preferences.c:51
+#: plugins/nautilus/seahorse-pgp-preferences.c:53
 msgid "_Text Mode"
 msgstr "_Textový režim"
 
-#: plugins/nautilus/seahorse-pgp-preferences.c:53
+#: plugins/nautilus/seahorse-pgp-preferences.c:55
 msgid "_Encrypt to Self"
 msgstr "Za_šifrovat pro sebe"
 
-#: plugins/nautilus/seahorse-pgp-preferences.c:58
+#: plugins/nautilus/seahorse-pgp-preferences.c:60
 msgid "_Default Key:"
 msgstr "_Implicitní klíč:"
 
@@ -741,13 +757,17 @@ msgstr " minut"
 msgid ""
 "<b>Note:</b> The 'seahorse-agent' program was started. This program is "
 "necessary in order for caching of passwords. "
-msgstr "<b>Upozornění:</b> Byl spuštěn program 'seahorse-agent'. Tento program je potřeba pro kešování hesel."
+msgstr ""
+"<b>Upozornění:</b> Byl spuštěn program 'seahorse-agent'. Tento program je "
+"potřeba pro kešování hesel."
 
 #: plugins/nautilus/seahorse-pgp-preferences.glade.h:3
 msgid ""
 "<b>Warning:</b> The 'seahorse-agent' program is not running. This program is "
 "necessary in order for caching of passwords. "
-msgstr "<b>Varování:</b> Program 'seahorse-agent' neběží. Tento program je potřeba pro kešování hesel."
+msgstr ""
+"<b>Varování:</b> Program 'seahorse-agent' neběží. Tento program je potřeba "
+"pro kešování hesel."
 
 #: plugins/nautilus/seahorse-pgp-preferences.glade.h:4
 msgid "Cache _GPG passwords in memory"
@@ -1009,7 +1029,7 @@ msgstr "Opravdu že chcete navždy odstranit ID uživatele '%s'?"
 msgid "Couldn't delete user id"
 msgstr "Nemohu odstranit id uživatele"
 
-#: src/seahorse-generate-adv.c:131 src/seahorse-generate-druid.c:156
+#: src/seahorse-generate-adv.c:131 src/seahorse-generate-druid.c:161
 msgid "Couldn't generate key"
 msgstr "Nemohu vygenerovat klíč"
 
@@ -1061,9 +1081,14 @@ msgid ""
 "letters into numbers or punctuation, reminiscent of \"leet speak\", but "
 "don't make it so obscure to the point where you can't remember it."
 msgstr ""
-"Volba hesla je nedílnou součástí tvorby silného klíče. Heslo by mělo obsahovat písmena, číslice a interpunkci. Navíc může heslo obsahovat mezery, takže může obsahovat mnoho slov. \n"
+"Volba hesla je nedílnou součástí tvorby silného klíče. Heslo by mělo "
+"obsahovat písmena, číslice a interpunkci. Navíc může heslo obsahovat mezery, "
+"takže může obsahovat mnoho slov. \n"
 "\n"
-"Měli byste zvolit zapamatovatelnou frázi, která obsahuje interpunkci. Začněte s touto frází, upravte velikost různých písmen a nahraďte některá písmena číslicemi nebo interpunkcí podobně jako \"leet speak\", ale nevytvořte něco tak obskurního, abyste si to nemohli zapamatovat."
+"Měli byste zvolit zapamatovatelnou frázi, která obsahuje interpunkci. "
+"Začněte s touto frází, upravte velikost různých písmen a nahraďte některá "
+"písmena číslicemi nebo interpunkcí podobně jako \"leet speak\", ale "
+"nevytvořte něco tak obskurního, abyste si to nemohli zapamatovat."
 
 #: src/seahorse-generate-druid.glade.h:6
 msgid "Comment:"
@@ -1172,9 +1197,12 @@ msgid ""
 "actively scrutinized.  The Extra High level should be selected if you know "
 "your data is actively scrutinized and will be under cryptographic attack."
 msgstr ""
-"Střední úroveň zabezpečení je implicitní a měla by být přijatelná pro obecné každodenní použití. \n"
+"Střední úroveň zabezpečení je implicitní a měla by být přijatelná pro obecné "
+"každodenní použití. \n"
 "\n"
-"Vysoká úroveň zabezpečení by měla být zvolena, pokud víte, že vaše data budou aktivně zkoumána. Extra vysoká úroveň by měla být zvolena, pokud víte, že vaše data jsou aktivně zkoumána a bude se na ně kryptograficky útočit."
+"Vysoká úroveň zabezpečení by měla být zvolena, pokud víte, že vaše data "
+"budou aktivně zkoumána. Extra vysoká úroveň by měla být zvolena, pokud víte, "
+"že vaše data jsou aktivně zkoumána a bude se na ně kryptograficky útočit."
 
 #: src/seahorse-generate-druid.glade.h:34
 msgid ""
@@ -1191,7 +1219,8 @@ msgid ""
 "\n"
 "Full Name (Comment) <email address>."
 msgstr ""
-"Pro vytvoření klíče a jeho svázání s vaší identitou jsou potřeba následující informace: Plné jméno, e-mailová adresa a poznámka. \n"
+"Pro vytvoření klíče a jeho svázání s vaší identitou jsou potřeba následující "
+"informace: Plné jméno, e-mailová adresa a poznámka. \n"
 "\n"
 "Tyto hodnoty budou uvedeny v názvu vašeho klíče v následujícím tvaru:\n"
 "\n"
@@ -1814,7 +1843,9 @@ msgstr "Odvolat %s"
 msgid ""
 "You are about to add %s as a revoker for %s. This operation cannot be "
 "undone! Are you sure you want to continue?"
-msgstr "Chystáte se přidat %s jako odvolávač pro klíč %s. Tato operace nemůže být vrácena zpět! Opravdu chcete pokračovat?"
+msgstr ""
+"Chystáte se přidat %s jako odvolávač pro klíč %s. Tato operace nemůže být "
+"vrácena zpět! Opravdu chcete pokračovat?"
 
 #: src/seahorse-revoke.c:119
 msgid "Couldn't add revoker"
