@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-19 15:49-0600\n"
-"PO-Revision-Date: 2004-10-19 22:06-0400\n"
+"POT-Creation-Date: 2004-10-25 13:25-0400\n"
+"PO-Revision-Date: 2004-10-25 22:06-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: English/Canada <adamw@FreeBSD.org>\n"
 "MIME-Version: 1.0\n"
@@ -169,25 +169,31 @@ msgstr "_Authorize"
 msgid "Cached GPG Keys"
 msgstr "Cached GPG Keys"
 
-#: agent/seahorse-agent.c:124
+#. Warn and put in defaults
+#: agent/seahorse-agent.c:100
+#, c-format
+msgid "couldn't read gpg configuration: %s"
+msgstr "Could not read GPG configuration: %s"
+
+#: agent/seahorse-agent.c:123
 #, c-format
 msgid "couldn't modify gpg configuration: %s"
 msgstr "Could not modify GPG configuration: %s"
 
-#: agent/seahorse-agent.c:144
+#: agent/seahorse-agent.c:143
 msgid "couldn't fork process"
 msgstr "Could not fork process"
 
-#: agent/seahorse-agent.c:150
+#: agent/seahorse-agent.c:149
 msgid "couldn't create new process group"
 msgstr "Could not create new process group"
 
-#: agent/seahorse-agent.c:180
+#: agent/seahorse-agent.c:179
 #, c-format
 msgid "usage: seahorse-agent [-cdv]\n"
 msgstr "usage: seahorse-agent [-cdv]\n"
 
-#: agent/seahorse-agent.c:269
+#: agent/seahorse-agent.c:272
 msgid "couldn't drop privileges properly"
 msgstr "Could not drop privileges properly"
 
@@ -439,7 +445,7 @@ msgid_plural "Loaded %d keys"
 msgstr[0] "Loaded %d key"
 msgstr[1] "Loaded %d keys"
 
-#: libseahorse/seahorse-context.c:702
+#: libseahorse/seahorse-context.c:700
 #, c-format
 msgid "Loaded %d new key"
 msgid_plural "Loaded %d new keys"
@@ -447,17 +453,17 @@ msgstr[0] "Loaded %d new key"
 msgstr[1] "Loaded %d new keys"
 
 #. Make the column
-#: libseahorse/seahorse-key-store.c:569 src/seahorse-key-properties.c:374
+#: libseahorse/seahorse-key-store.c:564 src/seahorse-key-properties.c:374
 #: src/seahorse-key-properties.c:468
 msgid "Name"
 msgstr "Name"
 
 #. Make the column
-#: libseahorse/seahorse-key-store.c:572 src/seahorse-key-properties.c:371
+#: libseahorse/seahorse-key-store.c:567 src/seahorse-key-properties.c:371
 msgid "Key ID"
 msgstr "Key ID"
 
-#: libseahorse/seahorse-key-store.c:635
+#: libseahorse/seahorse-key-store.c:630
 #, c-format
 msgid "Listed %d keys"
 msgstr "Listed %d keys"
@@ -700,38 +706,42 @@ msgstr "PGP Encryption"
 msgid "The PGP encrypt plugin performs encryption operations on text."
 msgstr "The PGP encrypt plugin performs encryption operations on text."
 
-#: plugins/nautilus/seahorse-pgp-preferences-cache.c:342
+#: plugins/nautilus/seahorse-pgp-preferences-cache.c:350
 msgid "Couldn't open the Session Properties"
 msgstr "Could not open the Session Properties"
 
-#: plugins/nautilus/seahorse-pgp-preferences-cache.c:355
+#: plugins/nautilus/seahorse-pgp-preferences-cache.c:363
 msgid "Couldn't start the 'seahorse-agent' program"
 msgstr "Could not start the 'seahorse-agent' program"
 
-#: plugins/nautilus/seahorse-pgp-preferences-cache.c:357
+#: plugins/nautilus/seahorse-pgp-preferences-cache.c:365
 msgid "The 'seahorse-agent' program exited unsucessfully."
 msgstr "The 'seahorse-agent' program exited unsucessfully."
 
-#: plugins/nautilus/seahorse-pgp-preferences.c:33
+#: plugins/nautilus/seahorse-pgp-preferences-cache.c:404
+msgid "Another password caching agent is running. Disabling cache preferences."
+msgstr "Another password caching agent is running. Disabling cache preferences."
+
+#: plugins/nautilus/seahorse-pgp-preferences.c:35
 #: plugins/nautilus/seahorse-pgp-preferences.desktop.in.h:2
 #: plugins/nautilus/seahorse-pgp-preferences.glade.h:6
 msgid "PGP Preferences"
 msgstr "PGP Preferences"
 
-#: plugins/nautilus/seahorse-pgp-preferences.c:49
+#: plugins/nautilus/seahorse-pgp-preferences.c:51
 #: src/seahorse-preferences.c:52
 msgid "_Ascii Armor"
 msgstr "_Ascii Armour"
 
-#: plugins/nautilus/seahorse-pgp-preferences.c:51
+#: plugins/nautilus/seahorse-pgp-preferences.c:53
 msgid "_Text Mode"
 msgstr "_Text Mode"
 
-#: plugins/nautilus/seahorse-pgp-preferences.c:53
+#: plugins/nautilus/seahorse-pgp-preferences.c:55
 msgid "_Encrypt to Self"
 msgstr "_Encrypt to Self"
 
-#: plugins/nautilus/seahorse-pgp-preferences.c:58
+#: plugins/nautilus/seahorse-pgp-preferences.c:60
 msgid "_Default Key:"
 msgstr "_Default Key:"
 
@@ -1019,7 +1029,7 @@ msgstr "Are you sure you want to permanently delete the '%s' user ID?"
 msgid "Couldn't delete user id"
 msgstr "Could not delete user ID"
 
-#: src/seahorse-generate-adv.c:131 src/seahorse-generate-druid.c:156
+#: src/seahorse-generate-adv.c:131 src/seahorse-generate-druid.c:161
 msgid "Couldn't generate key"
 msgstr "Could not generate key"
 
