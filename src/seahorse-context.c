@@ -341,7 +341,7 @@ seahorse_context_set_ascii_armor (SeahorseContext *sctx, gboolean ascii_armor)
 {
 	g_return_if_fail (SEAHORSE_IS_CONTEXT (sctx));
 	
-	gpgme_set_textmode (sctx->ctx, ascii_armor);
+	gpgme_set_armor (sctx->ctx, ascii_armor);
 	gconf_client_set_bool (sctx->priv->gclient, ARMOR_KEY, ascii_armor, NULL);
 }
 
