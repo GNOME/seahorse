@@ -15,6 +15,51 @@ AM_GCONF_SOURCE_2
 
 PKG_CHECK_MODULES(SEAHORSE, libgnomeui-2.0 libglade-2.0)
 
+dnl **************
+dnl GnuPG >= 1.2.x
+dnl **************
+AC_ARG_ENABLE(gpg-check, 
+	AC_HELP_STRING([--disable-gpg-check], [check GPG version (default is yes)]),
+	DO_CHECK=$enableval, DO_CHECK=yes)
+	
+if test	"$DO_CHECK" = "yes"; then
+  min_gnupg_version=1.2.1
+  AC_PATH_PROG(GNUPG, gpg, no)
+  AC_MSG_CHECKING(for GnuPG >= $min_gnupg_version)
+  ok=no
+  if test "$GNUPG" != "no" ; then
+  	req_major=`echo $min_gnupg_version | \
+		sed 's/\([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\)/\1/'`
+	req_minor=`echo $min_gnupg_version | \
+		sed 's/\([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\)/\2/'`
+	req_micro=`echo $min_gnupg_version | \
+		sed 's/\([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\)/\3/'`
+	gnupg_version=`$GNUPG --version | grep gpg`
+	major=`echo $gnupg_version | \
+		sed 's/^gpg (GnuPG) \([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\).*/\1/'`
+	minor=`echo $gnupg_version | \
+		sed 's/^gpg (GnuPG) \([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\).*/\2/'`
+	micro=`echo $gnupg_version | \
+		sed 's/^gpg (GnuPG) \([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\).*/\3/'`
+  fi
+
+  if test "$major" -eq "$req_major"; then
+     if test "$minor" -eq "$req_minor"; then
+  	if test "$micro" -ge "$req_micro"; then
+	       ok=yes
+        fi
+     fi
+  fi
+  
+  if test "$ok" = "yes"; then
+	AC_MSG_RESULT(yes)
+  else
+	AC_MSG_ERROR(GnuPG not found. Please install version $min_gnupg_version or greater)
+  fi
+
+fi
+
+
 dnl **********
 dnl GPGME
 dnl **********
