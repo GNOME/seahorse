@@ -24,6 +24,10 @@ mimedir = $(datadir)/mime/packages
 mime_DATA = seahorse.xml
 
 install-data-local:
+	mkdir -p $(datadir)/mime/packages/
+	update-mime-database $(datadir)/mime/
+    
+uninstall-local:
 	update-mime-database $(datadir)/mime/
 	
 @INTLTOOL_DESKTOP_RULE@
