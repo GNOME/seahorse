@@ -29,4 +29,5 @@ EXTRA_DIST = \
 	$(desktop_in_files) \
 	$(glade_DATA)
 
-CLEANFILES = $(desktop_DATA)
+CLEANFILES = *.gladep* *.bak \
+	$(desktop_DATA)
