@@ -108,7 +108,9 @@ seahorse_key_source_finalize (GObject *gobject)
     SeahorseKeySource *sksrc;
   
     sksrc = SEAHORSE_KEY_SOURCE (gobject);
-    gpgme_release (sksrc->ctx);
+    
+    if (sksrc->ctx)
+        gpgme_release (sksrc->ctx);
         
     G_OBJECT_CLASS (parent_class)->finalize (gobject);
 }

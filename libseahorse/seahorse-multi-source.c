@@ -143,6 +143,9 @@ seahorse_multi_source_finalize (GObject *gobject)
     msrc = SEAHORSE_MULTI_SOURCE (gobject);
     g_assert (msrc->sources == NULL);
     
+    /* We don't own our key source, and parent class tries to free */
+    SEAHORSE_KEY_SOURCE(msrc)->ctx = NULL;
+    
     G_OBJECT_CLASS (parent_class)->finalize (gobject);
 }
 
