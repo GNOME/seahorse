@@ -37,7 +37,7 @@ listener_callback (BonoboListener *listener, const gchar *event_name,
 	else if (g_str_equal (event_name, "Sign")) 
 		cmd_option = "--sign";
 	else if (g_str_equal (event_name, "EncryptSign")) 
-		cmd_option = "--encrypt";
+		cmd_option = "--encrypt-sign";
 	else if (g_str_equal (event_name, "Decrypt")) 
 		cmd_option = "--decrypt";
 	else if (g_str_equal (event_name, "Verify")) 
