@@ -930,7 +930,7 @@ seahorse_ops_key_add_uid (SeahorseContext *sctx, SeahorseKey *skey,
 	
 	parms = seahorse_edit_parm_new (ADD_UID_START, add_uid_action, add_uid_transit, uid_parm);
 	
-	return edit_key (sctx, skey, parms, _("User ID added"), SKEY_CHANGE_UIDS);
+	return edit_key (sctx, skey, parms, _("Add User ID"), SKEY_CHANGE_UIDS);
 }
 
 typedef enum {
@@ -973,7 +973,6 @@ add_key_action (guint state, gpointer data, const gchar **result)
 				gulong expires;
 				/* Get diff in seconds, then time in days */
 				expires = (parm->expires - time (NULL))/86400;
-				
 				*result = g_strdup_printf ("%d", expires);
 			}
 			else
@@ -1044,7 +1043,6 @@ add_key_transit (guint current_state, GpgmeStatusCode status,
 			else if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
 				next_state = ADD_KEY_QUIT;
 			else {
-				g_print ("args: %s\n", args);
 				next_state = ADD_KEY_ERROR;
 				*err = GPGME_General_Error;
 			}
@@ -1107,4 +1105,115 @@ seahorse_ops_key_add_subkey (SeahorseContext *sctx, SeahorseKey *skey,
 	parms = seahorse_edit_parm_new (ADD_KEY_START, add_key_action, add_key_transit, key_parm);
 	
 	return edit_key (sctx, skey, parms, _("Add Subkey"), SKEY_CHANGE_SUBKEYS);
+}
+
+typedef enum {
+	DEL_KEY_START,
+	DEL_KEY_SELECT,
+	DEL_KEY_COMMAND,
+	DEL_KEY_CONFIRM,
+	DEL_KEY_QUIT,
+	DEL_KEY_SAVE,
+	DEL_KEY_ERROR
+} DelKeyState;
+
+static GpgmeError
+del_key_action (guint state, gpointer data, const gchar **result)
+{
+	switch (state) {
+		case DEL_KEY_SELECT:
+			*result = g_strdup_printf ("key %d", (guint)data);
+			break;
+		case DEL_KEY_COMMAND:
+			*result = "delkey";
+			break;
+		case DEL_KEY_CONFIRM:
+			*result = YES;
+			break;
+		case DEL_KEY_QUIT:
+			*result = QUIT;
+			break;
+		case DEL_KEY_SAVE:
+			*result = YES;
+			break;
+		default:
+			return GPGME_General_Error;
+	}
+	
+	return GPGME_No_Error;
+}
+
+static guint
+del_key_transit (guint current_state, GpgmeStatusCode status,
+		 const gchar *args, gpointer data, GpgmeError *err)
+{
+	guint next_state;
+
+	switch (current_state) {
+		case DEL_KEY_START:
+			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
+				next_state = DEL_KEY_SELECT;
+			else {
+				next_state = DEL_KEY_ERROR;
+				*err = GPGME_General_Error;
+			}
+			break;
+		case DEL_KEY_SELECT:
+			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
+				next_state = DEL_KEY_COMMAND;
+			else {
+				next_state = DEL_KEY_ERROR;
+				*err = GPGME_General_Error;
+			}
+			break;
+		case DEL_KEY_COMMAND:
+			if (status == GPGME_STATUS_GET_BOOL && g_str_equal
+			(args, "keyedit.remove.subkey.okay"))
+				next_state = DEL_KEY_CONFIRM;
+			else {
+				next_state = DEL_KEY_ERROR;
+				*err = GPGME_General_Error;
+			}
+			break;
+		case DEL_KEY_CONFIRM:
+			next_state = DEL_KEY_QUIT;
+			break;
+		case DEL_KEY_QUIT:
+			/* Quit, save */
+			if (status == GPGME_STATUS_GET_BOOL && g_str_equal (args, SAVE))
+				next_state = DEL_KEY_SAVE;
+			else {
+				next_state = DEL_KEY_ERROR;
+				*err = GPGME_General_Error;
+			}
+			break;
+		case DEL_KEY_ERROR:
+			/* Go to quit */
+			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
+				next_state = DEL_KEY_QUIT;
+			else
+				next_state = DEL_KEY_ERROR;
+			break;
+		default:
+			next_state = DEL_KEY_ERROR;
+			*err = GPGME_General_Error;
+			break;
+	}
+	
+	return next_state;
+}
+
+gboolean
+seahorse_ops_key_del_subkey (SeahorseContext *sctx, SeahorseKey *skey, const guint index)
+{
+	SeahorseEditParm *parms;
+	
+	g_return_val_if_fail (sctx != NULL && SEAHORSE_IS_CONTEXT (sctx), FALSE);
+	g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), FALSE);
+	g_return_val_if_fail (index >= 1 && index <= seahorse_key_get_num_subkeys (skey), FALSE);
+	
+	parms = seahorse_edit_parm_new (DEL_KEY_START, del_key_action,
+		del_key_transit, (gpointer)index);
+	
+	return edit_key (sctx, skey, parms, _("Delete Subkey"), SKEY_CHANGE_SUBKEYS);
 }

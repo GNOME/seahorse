@@ -154,7 +154,8 @@ seahorse_signer_menu_item_changed (SeahorseKey *skey, SeahorseKeyChange change,
 				   SeahorseSignerMenuItem *sitem)
 {
 	switch (change) {
-		case SKEY_CHANGE_EXPIRE: SKEY_CHANGE_DISABLE:
+		case SKEY_CHANGE_EXPIRE: case SKEY_CHANGE_DISABLE:
+		case SKEY_CHANGE_SUBKEYS:
 			if (!seahorse_key_can_sign (skey))
 				gtk_widget_destroy (GTK_WIDGET (sitem));
 			break;

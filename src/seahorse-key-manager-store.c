@@ -90,7 +90,7 @@ seahorse_key_manager_store_class_init (SeahorseKeyManagerStoreClass *klass)
 
 /* Appends subkeys for @skey with @iter as parent */
 static void
-append_subkeys (GtkTreeStore *store, GtkTreeIter *iter, SeahorseKey *skey)
+append_uids (GtkTreeStore *store, GtkTreeIter *iter, SeahorseKey *skey)
 {
 	gint index = 1, max;
 	GtkTreeIter child;
@@ -105,7 +105,7 @@ append_subkeys (GtkTreeStore *store, GtkTreeIter *iter, SeahorseKey *skey)
 
 /* Remove subkeys where @iter is the parent */
 static void
-remove_subkeys (GtkTreeStore *store, GtkTreeIter *iter)
+remove_uids (GtkTreeStore *store, GtkTreeIter *iter)
 {
 	GtkTreeIter child;
 
@@ -118,7 +118,7 @@ static void
 seahorse_key_manager_store_append (SeahorseKeyStore *skstore, SeahorseKey *skey, GtkTreeIter *iter)
 {
 	gtk_tree_store_append (GTK_TREE_STORE (skstore), iter, NULL);
-	append_subkeys (GTK_TREE_STORE (skstore), iter, skey);
+	append_uids (GTK_TREE_STORE (skstore), iter, skey);
 	parent_class->append (skstore, skey, iter);
 }
 
@@ -151,7 +151,7 @@ seahorse_key_manager_store_set (GtkTreeStore *store, GtkTreeIter *iter, Seahorse
 static void
 seahorse_key_manager_store_remove (SeahorseKeyStore *skstore, GtkTreeIter *iter)
 {
-	remove_subkeys (GTK_TREE_STORE (skstore), iter);
+	remove_uids (GTK_TREE_STORE (skstore), iter);
 	parent_class->remove (skstore, iter);
 }
 
@@ -165,6 +165,10 @@ seahorse_key_manager_store_changed (SeahorseKey *skey, SeahorseKeyChange change,
 			SEAHORSE_KEY_STORE_GET_CLASS (skstore)->set (
 				GTK_TREE_STORE (skstore), iter, skey);
 			break;
+		/* Refresh uid iters, then let parent call set */
+		case SKEY_CHANGE_UIDS:
+			remove_uids (GTK_TREE_STORE (skstore), iter);
+			append_uids (GTK_TREE_STORE (skstore), iter, skey);
 		default:
 			parent_class->changed (skey, change, skstore, iter);
 			break;

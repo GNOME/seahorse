@@ -37,6 +37,7 @@
 #define EXPIRES "expires"
 #define NEVER_EXPIRES "never_expires"
 #define DISABLED "disabled"
+#define SUBKEYS "subkeys"
 
 /* Loads export dialog */
 static void
@@ -152,6 +153,29 @@ static void
 add_subkey_activate (GtkMenuItem *item, SeahorseWidget *swidget)
 {
 	seahorse_add_subkey_new (swidget->sctx, SEAHORSE_KEY_WIDGET (swidget)->skey);
+}
+
+static void
+del_subkey_clicked (GtkButton *button, SeahorseWidget *swidget)
+{
+	GtkWidget *confirm;
+	guint index, response;
+	SeahorseKey *skey;
+	
+	index = gtk_notebook_get_current_page (GTK_NOTEBOOK (
+		glade_xml_get_widget (swidget->xml, SUBKEYS))) + 1;
+	skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
+	
+	confirm = gtk_message_dialog_new (GTK_WINDOW (glade_xml_get_widget (
+		swidget->xml, swidget->name)), GTK_DIALOG_MODAL,
+		GTK_MESSAGE_WARNING, GTK_BUTTONS_YES_NO, g_strdup_printf (
+		_("Are you sure you want to delete subkey %s?"),
+		seahorse_key_get_keyid (skey, index)));
+	response = gtk_dialog_run (GTK_DIALOG (confirm));
+	gtk_widget_destroy (confirm);
+	
+	if (response == GTK_RESPONSE_YES)
+		seahorse_ops_key_del_subkey (swidget->sctx, skey, index);
 }
 
 /* Do a label */
@@ -289,19 +313,23 @@ do_subkeys (SeahorseWidget *swidget)
 	GtkWidget *label, *widget;
 	gint index = 1, max;
 	
-	notebook = GTK_NOTEBOOK (glade_xml_get_widget (swidget->xml, "subkeys"));
+	notebook = GTK_NOTEBOOK (glade_xml_get_widget (swidget->xml, SUBKEYS));
 	clear_notebook (notebook);
 	
 	skwidget = SEAHORSE_KEY_WIDGET (swidget);
 	max = seahorse_key_get_num_subkeys (skwidget->skey);
+	
+	if (max <= 0)
+		return;
 	
 	while (index <= max) {
 		if (seahorse_context_key_has_secret (swidget->sctx, skwidget->skey)) {
 			table = GTK_TABLE (gtk_table_new (4, 4, FALSE));
 			
 			widget = gtk_button_new_from_stock (GTK_STOCK_DELETE);
-			//set callback
-			gtk_widget_set_sensitive (widget, FALSE);
+			g_signal_connect_after (GTK_BUTTON (widget), "clicked",
+				G_CALLBACK (del_subkey_clicked), swidget);
+			//gtk_widget_set_sensitive (widget, FALSE);
 			gtk_widget_show (widget);
 			gtk_table_attach (table, widget, 3, 4, 3, 4, GTK_FILL, 0, 0, 0);
 		}

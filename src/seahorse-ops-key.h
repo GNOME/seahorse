@@ -125,4 +125,8 @@ gboolean	seahorse_ops_key_add_subkey	(SeahorseContext	*sctx,
 						 const guint		length,
 						 const time_t		expires);
 
+gboolean	seahorse_ops_key_del_subkey	(SeahorseContext	*sctx,
+						 SeahorseKey		*skey,
+						 const guint		index);
+
 #endif /* __SEAHORSE_OPS_KEY_H__ */
