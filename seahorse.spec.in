@@ -24,7 +24,12 @@ export GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL=1
 %makeinstall
 %find_lang seahorse
 unset GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL
-[ "$RPM_BUILD_ROOT" != "/" ] &&  rm -rf ${RPM_BUILD_ROOT}/var/scrollkeeper
+if [ "$RPM_BUILD_ROOT" != "/" ]; then
+	rm -rf ${RPM_BUILD_ROOT}/var/scrollkeeper
+	( cd ${RPM_BUILD_ROOT}/%{_datadir}/mime/ && rm -rf XMLnamespaces globs mime application magic )
+	find ${RPM_BUILD_ROOT} -type f -name "*.la" -exec rm -f {} ';'
+	find ${RPM_BUILD_ROOT} -type f -name "*.a" -exec rm -f {} ';'
+fi
 
 %clean
 [ "$RPM_BUILD_ROOT" != "/" ] && rm -rf ${RPM_BUILD_ROOT}
@@ -46,7 +51,6 @@ update-mime-database %{_datadir}/mime/ > /dev/null
 %{_libdir}/bonobo/servers/*
 %{_libdir}/gedit-2/plugins/*.so
 %{_libdir}/gedit-2/plugins/*.gedit-plugin
-%{_libexecdir}/*
 %{_datadir}/%{name}
 %{_datadir}/applications/*
 %{_datadir}/omf/%{name}
@@ -60,6 +64,10 @@ update-mime-database %{_datadir}/mime/ > /dev/null
 %doc AUTHORS COPYING NEWS README TODO
 
 %changelog
+* Wed Oct 26 2004 Nate Nielsen <nielsen@memberwebs.com>
+- Remove *.a and *.la from RPM_BUILD_ROOT
+- Remove updated mime database from RPM_BUILD_ROOT
+
 * Wed Oct 13 2004 Nate Nielsen <nielsen@memberwebs.com>
 - Added new mime info 
 
