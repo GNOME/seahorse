@@ -363,7 +363,7 @@ seahorse_agent_cache_set (const gchar *id, const gchar *pass,
     it->stamp = cache ? time (NULL) : 0;
     it->locked = lock ? TRUE : FALSE;
 
-    g_hash_table_insert (g_cache, it->id, it);
+    g_hash_table_replace (g_cache, it->id, it);
 
     /* UI hooks */
     seahorse_agent_status_update ();
