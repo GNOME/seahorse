@@ -70,14 +70,15 @@ static void
 ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 {
 	GtkToggleButton *file_toggle;
-	GtkWidget *export_file;
-	const gchar *path;
 	GpgmeError err;
 	
 	file_toggle = GTK_TOGGLE_BUTTON (glade_xml_get_widget (swidget->xml, "file_toggle"));
 	
 	/* Export to file */
 	if (gtk_toggle_button_get_active (file_toggle)) {
+		GtkWidget *export_file;
+		const gchar *path;
+		
 		export_file = glade_xml_get_widget (swidget->xml, EXPORT_FILE);
 		path = gnome_file_entry_get_full_path (GNOME_FILE_ENTRY (export_file), FALSE);
 		
@@ -85,7 +86,18 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 	}
 	/* Export to clipboard */
 	else {
-		/* do struff */
+		GdkAtom atom;
+		GtkClipboard *board;
+		gchar *text;
+		
+		text = seahorse_op_export_text (swidget->sctx, recipients, &err);
+		
+		if (text != NULL) {
+			atom = gdk_atom_intern ("CLIPBOARD", FALSE);
+			board = gtk_clipboard_get (atom);
+			gtk_clipboard_set_text (board, text, strlen (text));
+			g_free (text);
+		}
 	}
 	
 	if (err != GPGME_No_Error)
@@ -114,7 +126,7 @@ seahorse_export_show (SeahorseContext *sctx, GpgmeRecipients recips)
 	glade_xml_signal_connect_data (swidget->xml, "file_toggled",
 		G_CALLBACK (file_toggled), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "clipboard_toggled",
-		G_CALLBACK (file_toggled), swidget);
+		G_CALLBACK (clipboard_toggled), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "ok_clicked",
 		G_CALLBACK (ok_clicked), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "file_changed",

@@ -87,7 +87,6 @@ seahorse_key_op_generate (SeahorseContext *sctx, const gchar *name,
 	g_free (start);
 	g_free (key_type);
 	g_free (common);
-	g_free (expires_date);
 	
 	return err;
 }
@@ -217,6 +216,7 @@ edit_key (SeahorseContext *sctx, SeahorseKey *skey, SeahorseEditParm *parms, Sea
 	g_return_val_if_fail (err == GPGME_No_Error, err);
 	/* signal key */
 	seahorse_key_changed (skey, change);
+	seahorse_context_show_progress (sctx, _("Operation complete"), -1);
 	return err;
 }
 
@@ -670,7 +670,7 @@ seahorse_key_op_set_trust (SeahorseContext *sctx, SeahorseKey *skey, SeahorseVal
 	
 	g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), GPGME_Invalid_Engine);
 	g_return_val_if_fail (SEAHORSE_IS_KEY (skey), GPGME_Invalid_Key);
-	g_return_val_if_fail (trust < GPGME_VALIDITY_UNKNOWN, GPGME_Invalid_Value);
+	g_return_val_if_fail (trust >= GPGME_VALIDITY_UNKNOWN, GPGME_Invalid_Value);
 	g_return_val_if_fail (seahorse_key_get_trust (skey) != trust, GPGME_Invalid_Value);
 	
 	if (SEAHORSE_IS_KEY_PAIR (skey))
@@ -780,7 +780,6 @@ seahorse_key_op_set_disabled (SeahorseContext *sctx, SeahorseKey *skey, gboolean
 		command = "enable";
 	
 	parms = seahorse_edit_parm_new (DISABLE_START, edit_disable_action, edit_disable_transit, command);
-	g_free (command);
 	
 	return edit_key (sctx, skey, parms, SKEY_CHANGE_DISABLED);
 }

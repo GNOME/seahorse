@@ -27,7 +27,7 @@
 #include "seahorse-libdialogs.h"
 #include "seahorse-preferences.h"
 
-#define MAX_THREADS 10
+#define MAX_THREADS 5
 
 struct _SeahorseContextPrivate
 {
@@ -320,54 +320,32 @@ add_key (SeahorseContext *sctx, SeahorseKey *skey)
 	g_signal_emit (G_OBJECT (sctx), context_signals[ADD], 0, skey);
 }
 
-/* creates and adds a new key pair */
-static void
-add_key_pair (SeahorseContext *sctx, GpgmeKey key, GpgmeKey secret)
-{
-	SeahorseKey *skey;
-	
-	/* do new key, release gpgme keys */
-	skey = seahorse_key_pair_new (key, secret);
-	gpgme_key_unref (key);
-	gpgme_key_unref (secret);
-	/* add key to list */
-	g_mutex_lock (sctx->priv->pair_mutex);
-	sctx->priv->key_pairs = g_list_append (sctx->priv->key_pairs, skey);
-	add_key (sctx, skey);
-	g_mutex_unlock (sctx->priv->pair_mutex);
-}
-
 static void
 process_key_pair (GpgmeKey secret, SeahorseContext *sctx)
 {
 	GpgmeCtx ctx;
 	GpgmeKey key;
+	SeahorseKey *skey;
 	
 	/* init context & listing */
 	g_return_if_fail (init_gpgme (&ctx) == GPGME_No_Error);
 	/* if can do listing */
 	if (gpgme_op_keylist_start (ctx, seahorse_key_get_id (secret), FALSE) == GPGME_No_Error &&
 	    gpgme_op_keylist_next (ctx, &key) == GPGME_No_Error) {
-		add_key_pair (sctx, key, secret);
-		gpgme_op_keylist_end (ctx);
+		/* do new key, release gpgme keys */
+		g_mutex_lock (sctx->priv->pair_mutex);
+		skey = seahorse_key_pair_new (key, secret);
+		gpgme_key_unref (key);
+		gpgme_key_unref (secret);
+		/* add key to list */
+		sctx->priv->key_pairs = g_list_append (sctx->priv->key_pairs, skey);
+		add_key (sctx, skey);
+		g_mutex_unlock (sctx->priv->pair_mutex);
+		/* end listing */
 	}
-	gpgme_release (ctx);
-}
-
-/* creates and adds a new key */
-static void
-add_single_key (SeahorseContext *sctx, GpgmeKey key)
-{
-	SeahorseKey *skey;
 	
-	/* do new key, release gpgme key */
-	skey = seahorse_key_new (key);
-	gpgme_key_unref (key);
-	/* add key to list */
-	g_mutex_lock (sctx->priv->single_mutex);
-	sctx->priv->single_keys = g_list_append (sctx->priv->single_keys, skey);
-	add_key (sctx, skey);
-	g_mutex_unlock (sctx->priv->single_mutex);
+	gpgme_op_keylist_end (ctx);
+	gpgme_release (ctx);
 }
 
 static void
@@ -375,6 +353,7 @@ process_single_key (GpgmeKey key, SeahorseContext *sctx)
 {
 	GpgmeCtx ctx;
 	GpgmeKey secret;
+	SeahorseKey *skey;
 	
 	/* init new context & listing */
 	g_return_if_fail (init_gpgme (&ctx) == GPGME_No_Error);
@@ -384,13 +363,52 @@ process_single_key (GpgmeKey key, SeahorseContext *sctx)
 		if (gpgme_op_keylist_next (ctx, &secret) == GPGME_No_Error) {
 			gpgme_key_unref (secret);
 			gpgme_key_unref (key);
-			gpgme_op_keylist_end (ctx);
 		}
 		/* otherwise don't have, add */
-		else
-			add_single_key (sctx, key);
+		else {
+			/* do new key, release gpgme key */
+			g_mutex_lock (sctx->priv->single_mutex);
+			skey = seahorse_key_new (key);
+			gpgme_key_unref (key);
+			/* add key to list */
+			sctx->priv->single_keys = g_list_append (sctx->priv->single_keys, skey);
+			add_key (sctx, skey);
+			g_mutex_unlock (sctx->priv->single_mutex);
+		}
 	}
+	
+	gpgme_op_keylist_end (ctx);
 	gpgme_release (ctx);
+}
+
+static guint
+do_keys (SeahorseContext *sctx, GFunc process_func, guint initial_count)
+{
+	//GThreadPool *pool;
+	guint count = initial_count + 1;
+	gint progress_update;
+	GpgmeKey key;
+	
+	//pool = g_thread_pool_new (process_func, sctx, MAX_THREADS, TRUE, NULL);
+	progress_update = eel_gconf_get_integer (PROGRESS_UPDATE);
+	
+	/* get remaining keys */
+	while (gpgme_op_keylist_next (sctx->ctx, &key) == GPGME_No_Error) {
+		if (progress_update > 0 && !(count % progress_update))
+			seahorse_context_show_progress (sctx, g_strdup_printf (
+				_("Loading key %d"), count), 0);
+		/* process key */
+		//g_thread_pool_push (pool, key, NULL);
+		process_func (key, sctx);
+		count++;
+	}
+	
+	gpgme_op_keylist_end (sctx->ctx);
+	/* wait for key processing to finish */
+	//g_thread_pool_free (pool, FALSE, TRUE);
+	//g_thread_pool_stop_unused_threads ();
+	
+	return count;
 }
 
 /* loads key pairs */
@@ -398,37 +416,17 @@ static void
 do_key_pairs (SeahorseContext *sctx)
 {
 	static gboolean did_pairs = FALSE;
-	GpgmeKey key;
-	guint count = 1;
-	gint progress_update;
-	gdouble length;
-	GThreadPool *pool;
+	guint total = 0;
 	
 	if (did_pairs)
 		return;
 
 	g_return_if_fail (gpgme_op_keylist_start (sctx->ctx, NULL, TRUE) == GPGME_No_Error);
-	
-	pool = g_thread_pool_new ((GFunc)process_key_pair, sctx, MAX_THREADS, TRUE, NULL);
-	progress_update = eel_gconf_get_integer (PROGRESS_UPDATE);
-	
-	/* get secret keys */
-	while (gpgme_op_keylist_next (sctx->ctx, &key) == GPGME_No_Error) {
-		if (progress_update > 0 && !(count % progress_update))
-			seahorse_context_show_progress (sctx, g_strdup_printf (
-				_("Loading key pair %d"), count), 0);
-		/* process key */
-		g_thread_pool_push (pool, key, NULL);
-		count++;
-	}
-	
-	/* wait for key processing to finish */
-	g_thread_pool_free (pool, FALSE, TRUE);
-	g_thread_pool_stop_unused_threads ();
+	total = do_keys (sctx, (GFunc)process_key_pair, 0);
 	
 	did_pairs = TRUE;
 	seahorse_context_show_progress (sctx, g_strdup_printf (
-		_("Loaded %d key pairs"), count), -1);
+		_("Loaded %d key pairs"), total), -1);
 }
 
 /* loads single keys, doing pairs first */
@@ -436,11 +434,7 @@ static void
 do_key_list (SeahorseContext *sctx)
 {
 	static gboolean did_keys = FALSE;
-	GpgmeKey key;
-	guint count = 1;
-	gint progress_update;
-	gdouble length;
-	GThreadPool *pool;
+	guint total = 0;
 	
 	if (did_keys)
 		return;
@@ -449,27 +443,11 @@ do_key_list (SeahorseContext *sctx)
 		do_key_pairs (sctx);
 	
 	g_return_if_fail (gpgme_op_keylist_start (sctx->ctx, NULL, FALSE) == GPGME_No_Error);
-	
-	pool = g_thread_pool_new ((GFunc)process_single_key, sctx, MAX_THREADS, TRUE, NULL);
-	progress_update = eel_gconf_get_integer (PROGRESS_UPDATE);
-	
-	/* get public keys */
-	while (gpgme_op_keylist_next (sctx->ctx, &key) == GPGME_No_Error) {
-		/* show progress */
-		if (progress_update > 0 && !(count % progress_update))
-			seahorse_context_show_progress (sctx, g_strdup_printf (
-				_("Loading key %d"), count), 0);
-			
-		g_thread_pool_push (pool, key, NULL);
-		count++;
-	}
-	
-	g_thread_pool_free (pool, FALSE, TRUE);
-	g_thread_pool_stop_unused_threads ();
+	total = do_keys (sctx, (GFunc)process_single_key, g_list_length (sctx->priv->key_pairs));
 	
 	did_keys = TRUE;
 	seahorse_context_show_progress (sctx, g_strdup_printf (
-		_("Loading %d keys"), count), -1);
+		_("Loading %d keys"), total), -1);
 	
 }
 
@@ -591,44 +569,58 @@ seahorse_context_get_default_key (SeahorseContext *sctx)
 	return SEAHORSE_KEY_PAIR (seahorse_context_get_key (sctx, key));
 }
 
+/* common func for adding new keys */
+static guint
+add_new_keys (SeahorseContext *sctx, gboolean secret, gint max, gint total, GFunc process_func)
+{
+	guint count;
+	GpgmeError err;
+	GpgmeKey key;
+	
+	/* start listing */
+	g_return_if_fail (gpgme_op_keylist_start (sctx->ctx, NULL, secret) == GPGME_No_Error);
+	/* iterate through list until done or have done current keys */
+	for (count = 0; count < max; count++) {
+		if (gpgme_op_keylist_next (sctx->ctx, &key) != GPGME_No_Error)
+			break;
+		else
+			gpgme_key_unref (key);
+	}
+	
+	/* if did all current keys, then try add any remaining */
+	if (count == max)
+		return do_keys (sctx, process_func, total);
+	/* otherwise end listing, return current total */
+	else {
+		gpgme_op_keylist_end (sctx->ctx);
+		return total;
+	}
+}
+
+/**
+ * seahorse_context_keys_added:
+ * @sctx: #SeahorseContext
+ *
+ * Tries to add any new keys.
+ **/
 void
 seahorse_context_keys_added (SeahorseContext *sctx, guint num_keys)
 {
-	GpgmeKey key;
-	GList *list, *keys = NULL;
-	SeahorseKey *skey;
-	gint progress_update;
-	guint count = 1;
+	gint num_pairs, num_single;
+	guint total;
 	
-	g_return_if_fail (sctx != NULL && SEAHORSE_IS_CONTEXT (sctx));
-        g_return_if_fail (gpgme_op_keylist_start (sctx->ctx, NULL, FALSE) == GPGME_No_Error);	
+	g_return_if_fail (num_keys > 0);
 	
-	list = seahorse_context_get_keys (sctx);
-	progress_update = eel_gconf_get_integer (PROGRESS_UPDATE);
+	/* get current lengths */
+	num_pairs = g_list_length (sctx->priv->key_pairs);
+	num_single = g_list_length (sctx->priv->single_keys);
 	
-	/* go to end of list, then build list containing new keys */
-	while (gpgme_op_keylist_next (sctx->ctx, &key) == GPGME_No_Error) {
-		if (progress_update > 0 && !(count % progress_update))
-			seahorse_context_show_progress (sctx, _("Processing new key"), 0);
-		if (list == NULL)
-			keys = g_list_append (keys, key);
-		else
-			list = g_list_next (list);
-		count++;
-	}
+	/* get new total after adding new secret keys */
+	total = add_new_keys (sctx, TRUE, num_pairs, num_pairs + num_single, (GFunc)process_key_pair);
+	/* add new public keys */
+	total = add_new_keys (sctx, FALSE, num_single, total, (GFunc)process_single_key);
 	
-	/* add any new keys */
-	while (keys != NULL) {
-		/* if has secret part */
-		if ((gpgme_op_keylist_start (sctx->ctx, seahorse_key_get_id (
-		keys->data), TRUE) == GPGME_No_Error) &&
-		gpgme_op_keylist_next (sctx->ctx, &key) == GPGME_No_Error) {
-			add_key_pair (sctx, keys->data, key);
-			gpgme_op_keylist_end (sctx->ctx);
-		}
-		else
-			add_single_key (sctx, keys->data);
-		
-		keys = g_list_next (keys);
-	}
+	/* show status */
+	seahorse_context_show_progress (sctx, g_strdup_printf (
+		_("Loaded %d new keys"), num_keys), -1);
 }

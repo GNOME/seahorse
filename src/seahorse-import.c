@@ -59,6 +59,20 @@ clipboard_toggled (GtkToggleButton *togglebutton, SeahorseWidget *swidget)
 		gtk_toggle_button_get_active (togglebutton));
 }
 
+static void
+clipboard_received (GtkClipboard *board, const gchar *text, SeahorseContext *sctx)
+{
+	GpgmeError err;
+	gint keys;
+	
+	keys = seahorse_op_import_text (sctx, text, &err);
+	
+	if (err != GPGME_No_Error)
+		seahorse_util_handle_error (err);
+	else if (keys > 0)
+		seahorse_context_keys_added (sctx, keys);
+}
+
 /* Imports keys from specified data source */
 static void
 ok_clicked (GtkButton *button, SeahorseWidget *swidget)
@@ -87,7 +101,14 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 	}
 	/* Import from text */
 	else {
-		/* do stuff */
+		GdkAtom atom;
+		GtkClipboard *board;
+		
+		atom = gdk_atom_intern ("CLIPBOARD", FALSE);
+		board = gtk_clipboard_get (atom);
+		gtk_clipboard_request_text (board,
+			(GtkClipboardTextReceivedFunc)clipboard_received, swidget->sctx);
+		seahorse_widget_destroy (swidget);
 	}
 }
 

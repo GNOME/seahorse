@@ -54,7 +54,10 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 	
 	err = seahorse_key_pair_op_add_uid (swidget->sctx, SEAHORSE_KEY_PAIR (skey),
 		name, email, comment);
-	seahorse_widget_destroy (swidget);
+	if (err != GPGME_No_Error)
+		seahorse_util_handle_error (err);
+	else
+		seahorse_widget_destroy (swidget);
 }
 
 /**
