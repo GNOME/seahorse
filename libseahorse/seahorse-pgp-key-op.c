@@ -357,8 +357,8 @@ sign_transit (guint current_state, gpgme_status_code_t status,
 			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
 				next_state = SIGN_UID;
 			else {
-				next_state = SIGN_ERROR;
-				*err = GPG_E (GPG_ERR_GENERAL);
+                *err = GPG_E (GPG_ERR_GENERAL);
+                g_return_val_if_reached (SIGN_ERROR);
 			}
 			break;
 		/* selected uid, go to command */
@@ -366,8 +366,8 @@ sign_transit (guint current_state, gpgme_status_code_t status,
 			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
 				next_state = SIGN_COMMAND;
 			else {
-				next_state = SIGN_ERROR;
-				*err = GPG_E (GPG_ERR_GENERAL);
+                *err = GPG_E (GPG_ERR_GENERAL);
+                g_return_val_if_reached (SIGN_ERROR);
 			}
 			break;
 		case SIGN_COMMAND:
@@ -380,9 +380,14 @@ sign_transit (guint current_state, gpgme_status_code_t status,
 			/*  need to do check */
 			else if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "sign_uid.class"))
 				next_state = SIGN_CHECK;
-			else {
-				next_state = SIGN_ERROR;
-				*err = GPG_E (GPG_ERR_GENERAL);
+            /* if it's already signed then send back an error */
+            else if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT)) {
+                next_state = SIGN_ERROR;
+                *err = GPG_E (GPG_ERR_EALREADY);
+            /* All other stuff is unexpected */
+            } else {
+                *err = GPG_E (GPG_ERR_GENERAL);
+                g_return_val_if_reached (SIGN_ERROR);
 			}
 			break;
 		/* did expire, go to check */
@@ -390,8 +395,8 @@ sign_transit (guint current_state, gpgme_status_code_t status,
 			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "sign_uid.class"))
 				next_state = SIGN_CHECK;
 			else {
-				next_state = SIGN_ERROR;
-				*err = GPG_E (GPG_ERR_GENERAL);
+                *err = GPG_E (GPG_ERR_GENERAL);
+                g_return_val_if_reached (SIGN_ERROR);
 			}
 			break;
 		case SIGN_CONFIRM:
@@ -405,8 +410,8 @@ sign_transit (guint current_state, gpgme_status_code_t status,
 			else if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
 				next_state = SIGN_QUIT;
 			else {
-				next_state = SIGN_ERROR;
-				*err = GPG_E (GPG_ERR_GENERAL);
+                *err = GPG_E (GPG_ERR_GENERAL);
+                g_return_val_if_reached (SIGN_ERROR);
 			}
 			break;
 		/* did check, go to confirm */
@@ -414,8 +419,8 @@ sign_transit (guint current_state, gpgme_status_code_t status,
 			if (status == GPGME_STATUS_GET_BOOL && g_str_equal (args, "sign_uid.okay"))
 				next_state = SIGN_CONFIRM;
 			else {
-				next_state = SIGN_ERROR;
-				*err = GPG_E (GPG_ERR_GENERAL);
+                *err = GPG_E (GPG_ERR_GENERAL);
+                g_return_val_if_reached (SIGN_ERROR);
 			}
 			break;
 		/* quit, go to confirm to save */
@@ -423,8 +428,8 @@ sign_transit (guint current_state, gpgme_status_code_t status,
 			if (status == GPGME_STATUS_GET_BOOL && g_str_equal (args, SAVE))
 				next_state = SIGN_CONFIRM;
 			else {
-				next_state = SIGN_ERROR;
 				*err = GPG_E (GPG_ERR_GENERAL);
+                g_return_val_if_reached (SIGN_ERROR);
 			}
 			break;
 		/* error, go to quit */
@@ -434,9 +439,10 @@ sign_transit (guint current_state, gpgme_status_code_t status,
 			else
 				next_state = SIGN_ERROR;
 			break;
+          
 		default:
-			next_state = SIGN_ERROR;
-			*err = GPG_E (GPG_ERR_GENERAL);
+            *err = GPG_E (GPG_ERR_GENERAL);
+            g_return_val_if_reached (SIGN_ERROR);
 			break;
 	}
 	
@@ -461,6 +467,7 @@ seahorse_key_op_sign (SeahorseContext *sctx, SeahorseKey *skey, const guint inde
 {
 	SignParm *sign_parm;
 	SeahorseEditParm *parms;
+    gpgme_error_t err;
 	
 	g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), GPG_E (GPG_ERR_INV_ENGINE));
 	g_return_val_if_fail (SEAHORSE_IS_KEY (skey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
@@ -481,7 +488,13 @@ seahorse_key_op_sign (SeahorseContext *sctx, SeahorseKey *skey, const guint inde
 	
 	parms = seahorse_edit_parm_new (SIGN_START, sign_action, sign_transit, sign_parm);
 	
-	return edit_key (sctx, skey, parms, SKEY_CHANGE_SIGNERS);
+	err =  edit_key (sctx, skey, parms, SKEY_CHANGE_SIGNERS);
+ 
+    /* If it was already signed then it's not an error */
+    if (!GPG_IS_OK (err) && gpgme_err_code (err) == GPG_ERR_EALREADY)
+        err = GPG_OK;
+    
+    return err;
 }
 
 typedef enum {
@@ -526,8 +539,8 @@ edit_pass_transit (guint current_state, gpgme_status_code_t status,
 			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
 				next_state = PASS_COMMAND;
 			else {
-				next_state = PASS_ERROR;
-				*err = GPG_E (GPG_ERR_GENERAL);
+                *err = GPG_E (GPG_ERR_GENERAL);
+                g_return_val_if_reached (PASS_ERROR);
 			}
 			break;
 		/* did command, go to quit */
@@ -539,8 +552,8 @@ edit_pass_transit (guint current_state, gpgme_status_code_t status,
 			if (status == GPGME_STATUS_GET_BOOL && g_str_equal (args, SAVE))
 				next_state = PASS_SAVE;
 			else {
-				next_state = PASS_ERROR;
-				*err = GPG_E (GPG_ERR_GENERAL);
+                *err = GPG_E (GPG_ERR_GENERAL);
+                g_return_val_if_reached (PASS_ERROR);
 			}
 			break;
 		/* error, go to quit */
@@ -551,8 +564,8 @@ edit_pass_transit (guint current_state, gpgme_status_code_t status,
 				next_state = PASS_ERROR;
 			break;
 		default:
-			next_state = PASS_ERROR;
-			*err = GPG_E (GPG_ERR_GENERAL);
+            *err = GPG_E (GPG_ERR_GENERAL);
+            g_return_val_if_reached (PASS_ERROR);
 			break;
 	}
 	
@@ -663,8 +676,8 @@ edit_trust_transit (guint current_state, gpgme_status_code_t status,
 			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
 				next_state = TRUST_COMMAND;
 			else {
-				next_state = TRUST_ERROR;
-				*err = GPG_E (GPG_ERR_GENERAL);
+                *err = GPG_E (GPG_ERR_GENERAL);
+                g_return_val_if_reached (TRUST_ERROR);
 			}
 			break;
 		/* did command, next is value */
@@ -672,8 +685,8 @@ edit_trust_transit (guint current_state, gpgme_status_code_t status,
 			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "edit_ownertrust.value"))
 				next_state = TRUST_VALUE;
 			else {
-				next_state = TRUST_ERROR;
-				*err = GPG_E (GPG_ERR_GENERAL);
+                *err = GPG_E (GPG_ERR_GENERAL);
+                g_return_val_if_reached (TRUST_ERROR);
 			}
 			break;
 		/* did value, go to quit or confirm ultimate */
@@ -683,8 +696,8 @@ edit_trust_transit (guint current_state, gpgme_status_code_t status,
 			else if (status == GPGME_STATUS_GET_BOOL && g_str_equal (args, "edit_ownertrust.set_ultimate.okay"))
 				next_state = TRUST_CONFIRM;
 			else {
-				next_state = TRUST_ERROR;
-				*err = GPG_E (GPG_ERR_GENERAL);
+                *err = GPG_E (GPG_ERR_GENERAL);
+                g_return_val_if_reached (TRUST_ERROR);
 			}
 			break;
 		/* did confirm ultimate, go to quit */
@@ -692,8 +705,8 @@ edit_trust_transit (guint current_state, gpgme_status_code_t status,
 			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
 				next_state = TRUST_QUIT;
 			else {
-				next_state = TRUST_ERROR;
-				*err = GPG_E (GPG_ERR_GENERAL);
+                *err = GPG_E (GPG_ERR_GENERAL);
+                g_return_val_if_reached (TRUST_ERROR);
 			}
 			break;
 		/* did quit, go to confirm to finish op */
@@ -701,8 +714,8 @@ edit_trust_transit (guint current_state, gpgme_status_code_t status,
 			if (status == GPGME_STATUS_GET_BOOL && g_str_equal (args, SAVE))
 				next_state = TRUST_CONFIRM;
 			else {
-				next_state = TRUST_ERROR;
-				*err = GPG_E (GPG_ERR_GENERAL);
+                *err = GPG_E (GPG_ERR_GENERAL);
+                g_return_val_if_reached (TRUST_ERROR);
 			}
 			break;
 		/* error, go to quit */
@@ -713,8 +726,8 @@ edit_trust_transit (guint current_state, gpgme_status_code_t status,
 				next_state = TRUST_ERROR;
 			break;
 		default:
-			next_state = TRUST_ERROR;
-			*err = GPG_E (GPG_ERR_GENERAL);
+            *err = GPG_E (GPG_ERR_GENERAL);
+            g_return_val_if_reached (TRUST_ERROR);
 			break;
 	}
 	
@@ -794,8 +807,8 @@ edit_disable_transit (guint current_state, gpgme_status_code_t status,
 			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
 				next_state = DISABLE_COMMAND;
 			else {
-				next_state = DISABLE_ERROR;
-				*err = GPG_E (GPG_ERR_GENERAL);
+                *err = GPG_E (GPG_ERR_GENERAL);
+                g_return_val_if_reached (DISABLE_ERROR);
 			}
 			break;
 		/* did command, quit */
@@ -803,8 +816,8 @@ edit_disable_transit (guint current_state, gpgme_status_code_t status,
 			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
 				next_state = DISABLE_QUIT;
 			else {
-				next_state = DISABLE_ERROR;
-				*err = GPG_E (GPG_ERR_GENERAL);
+                *err = GPG_E (GPG_ERR_GENERAL);
+                g_return_val_if_reached (DISABLE_ERROR);
 			}
 		/* error, quit */
 		case DISABLE_ERROR:
@@ -814,8 +827,8 @@ edit_disable_transit (guint current_state, gpgme_status_code_t status,
 				next_state = DISABLE_ERROR;
 			break;
 		default:
-			next_state = DISABLE_ERROR;
-			*err = GPG_E (GPG_ERR_GENERAL);
+            *err = GPG_E (GPG_ERR_GENERAL);
+            g_return_val_if_reached (DISABLE_ERROR);
 			break;
 	}
 	
@@ -916,8 +929,8 @@ edit_expire_transit (guint current_state, gpgme_status_code_t status,
 			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
 				next_state = EXPIRE_SELECT;
 			else {
-				next_state = EXPIRE_ERROR;
-				*err = GPG_E (GPG_ERR_GENERAL);
+                *err = GPG_E (GPG_ERR_GENERAL);
+                g_return_val_if_reached (EXPIRE_ERROR);
 			}
 			break;
 		/* selected key, do command */
@@ -925,8 +938,8 @@ edit_expire_transit (guint current_state, gpgme_status_code_t status,
 			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
 				next_state = EXPIRE_COMMAND;
 			else {
-				next_state = EXPIRE_ERROR;
-				*err = GPG_E (GPG_ERR_GENERAL);
+                *err = GPG_E (GPG_ERR_GENERAL);
+                g_return_val_if_reached (EXPIRE_ERROR);
 			}
 			break;
 		/* did command, set expires */
@@ -934,8 +947,8 @@ edit_expire_transit (guint current_state, gpgme_status_code_t status,
 			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "keygen.valid"))
 				next_state = EXPIRE_DATE;
 			else {
-				next_state = EXPIRE_ERROR;
-				*err = GPG_E (GPG_ERR_GENERAL);
+                *err = GPG_E (GPG_ERR_GENERAL);
+                g_return_val_if_reached (EXPIRE_ERROR);
 			}
 			break;
 		/* set expires, quit */
@@ -943,8 +956,8 @@ edit_expire_transit (guint current_state, gpgme_status_code_t status,
 			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
 				next_state = EXPIRE_QUIT;
 			else {
-				next_state = EXPIRE_ERROR;
-				*err = GPG_E (GPG_ERR_GENERAL);
+                *err = GPG_E (GPG_ERR_GENERAL);
+                g_return_val_if_reached (EXPIRE_ERROR);
 			}
 			break;
 		/* quit, save */
@@ -952,8 +965,8 @@ edit_expire_transit (guint current_state, gpgme_status_code_t status,
 			if (status == GPGME_STATUS_GET_BOOL && g_str_equal (args, SAVE))
 				next_state = EXPIRE_SAVE;
 			else {
-				next_state = EXPIRE_ERROR;
-				*err = GPG_E (GPG_ERR_GENERAL);
+                *err = GPG_E (GPG_ERR_GENERAL);
+                g_return_val_if_reached (EXPIRE_ERROR);
 			}
 			break;
 		/* error, quit */
@@ -964,8 +977,8 @@ edit_expire_transit (guint current_state, gpgme_status_code_t status,
 				next_state = EXPIRE_ERROR;
 			break;
 		default:
-			next_state = EXPIRE_ERROR;
-			*err = GPG_E (GPG_ERR_GENERAL);
+            *err = GPG_E (GPG_ERR_GENERAL);
+            g_return_val_if_reached (EXPIRE_ERROR);
 			break;
 	}
 	return next_state;
@@ -1057,8 +1070,8 @@ add_revoker_transit (guint current_state, gpgme_status_code_t status,
 			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
 				next_state = ADD_REVOKER_COMMAND;
 			else {
-				next_state = ADD_REVOKER_ERROR;
-				*err = GPG_E (GPG_ERR_GENERAL);
+                *err = GPG_E (GPG_ERR_GENERAL);
+                g_return_val_if_reached (ADD_REVOKER_ERROR);
 			}
 			break;
 		/* did command, select revoker */
@@ -1066,8 +1079,8 @@ add_revoker_transit (guint current_state, gpgme_status_code_t status,
 			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "keyedit.add_revoker"))
 				next_state = ADD_REVOKER_SELECT;
 			else {
-				next_state = ADD_REVOKER_ERROR;
-				*err = GPG_E (GPG_ERR_GENERAL);
+                *err = GPG_E (GPG_ERR_GENERAL);
+                g_return_val_if_reached (ADD_REVOKER_ERROR);
 			}
 			break;
 		/* selected revoker, confirm */
@@ -1075,8 +1088,8 @@ add_revoker_transit (guint current_state, gpgme_status_code_t status,
 			if (status == GPGME_STATUS_GET_BOOL && g_str_equal (args, "keyedit.add_revoker.okay"))
 				next_state = ADD_REVOKER_CONFIRM;
 			else {
-				next_state = ADD_REVOKER_ERROR;
-				*err = GPG_E (GPG_ERR_GENERAL);
+                *err = GPG_E (GPG_ERR_GENERAL);
+                g_return_val_if_reached (ADD_REVOKER_ERROR);
 			}
 			break;
 		/* confirmed, quit */
@@ -1084,8 +1097,8 @@ add_revoker_transit (guint current_state, gpgme_status_code_t status,
 			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
 				next_state = ADD_REVOKER_QUIT;
 			else {
-				next_state = ADD_REVOKER_ERROR;
-				*err = GPG_E (GPG_ERR_GENERAL);
+                *err = GPG_E (GPG_ERR_GENERAL);
+                g_return_val_if_reached (ADD_REVOKER_ERROR);
 			}
 			break;
 		/* quit, confirm(=save) */
@@ -1093,8 +1106,8 @@ add_revoker_transit (guint current_state, gpgme_status_code_t status,
 			if (status == GPGME_STATUS_GET_BOOL && g_str_equal (args, SAVE))
 				next_state = ADD_REVOKER_CONFIRM;
 			else {
-				next_state = ADD_REVOKER_ERROR;
-				*err = GPG_E (GPG_ERR_GENERAL);
+                *err = GPG_E (GPG_ERR_GENERAL);
+                g_return_val_if_reached (ADD_REVOKER_ERROR);
 			}
 			break;
 		/* error, quit */
@@ -1105,8 +1118,8 @@ add_revoker_transit (guint current_state, gpgme_status_code_t status,
 				next_state = ADD_REVOKER_ERROR;
 			break;
 		default:
-			next_state = ADD_REVOKER_ERROR;
-			*err = GPG_E (GPG_ERR_GENERAL);
+            *err = GPG_E (GPG_ERR_GENERAL);
+            g_return_val_if_reached (ADD_REVOKER_ERROR);
 			break;
 	}
 	
@@ -1203,8 +1216,8 @@ add_uid_transit (guint current_state, gpgme_status_code_t status,
 			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
 				next_state = ADD_UID_COMMAND;
 			else {
-				next_state = ADD_UID_ERROR;
-				*err = GPG_E (GPG_ERR_GENERAL);
+                *err = GPG_E (GPG_ERR_GENERAL);
+                g_return_val_if_reached (ADD_UID_ERROR);
 			}
 			break;
 		/* did command, do name */
@@ -1212,8 +1225,8 @@ add_uid_transit (guint current_state, gpgme_status_code_t status,
 			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "keygen.name"))
 				next_state = ADD_UID_NAME;
 			else {
-				next_state = ADD_UID_ERROR;
-				*err = GPG_E (GPG_ERR_GENERAL);
+                *err = GPG_E (GPG_ERR_GENERAL);
+                g_return_val_if_reached (ADD_UID_ERROR);
 			}
 			break;
 		/* did name, do email */
@@ -1221,8 +1234,8 @@ add_uid_transit (guint current_state, gpgme_status_code_t status,
 			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "keygen.email"))
 				next_state = ADD_UID_EMAIL;
 			else {
-				next_state = ADD_UID_ERROR;
-				*err = GPG_E (GPG_ERR_GENERAL);
+                *err = GPG_E (GPG_ERR_GENERAL);
+                g_return_val_if_reached (ADD_UID_ERROR);
 			}
 			break;
 		/* did email, do comment */
@@ -1230,8 +1243,8 @@ add_uid_transit (guint current_state, gpgme_status_code_t status,
 			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "keygen.comment"))
 				next_state = ADD_UID_COMMENT;
 			else {
-				next_state = ADD_UID_ERROR;
-				*err = GPG_E (GPG_ERR_GENERAL);
+                *err = GPG_E (GPG_ERR_GENERAL);
+                g_return_val_if_reached (ADD_UID_ERROR);
 			}
 			break;
 		/* did comment, quit */
@@ -1243,8 +1256,8 @@ add_uid_transit (guint current_state, gpgme_status_code_t status,
 			if (status == GPGME_STATUS_GET_BOOL && g_str_equal (args, SAVE))
 				next_state = ADD_UID_SAVE;
 			else {
-				next_state = ADD_UID_ERROR;
-				*err = GPG_E (GPG_ERR_GENERAL);
+                *err = GPG_E (GPG_ERR_GENERAL);
+                g_return_val_if_reached (ADD_UID_ERROR);
 			}
 			break;
 		/* error, quit */
@@ -1255,8 +1268,8 @@ add_uid_transit (guint current_state, gpgme_status_code_t status,
 				next_state = ADD_UID_ERROR;
 			break;
 		default:
-			next_state = ADD_UID_ERROR;
-			*err = GPG_E (GPG_ERR_GENERAL);
+            *err = GPG_E (GPG_ERR_GENERAL);
+            g_return_val_if_reached (ADD_UID_ERROR);
 			break;
 	}
 	
@@ -1361,8 +1374,8 @@ add_key_transit (guint current_state, gpgme_status_code_t status,
 			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
 				next_state = ADD_KEY_COMMAND;
 			else {
-				next_state = ADD_KEY_ERROR;
-				*err = GPG_E (GPG_ERR_GENERAL);
+                *err = GPG_E (GPG_ERR_GENERAL);
+                g_return_val_if_reached (ADD_KEY_ERROR);
 			}
 			break;
 		/* did command, do type */
@@ -1370,8 +1383,8 @@ add_key_transit (guint current_state, gpgme_status_code_t status,
 			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "keygen.algo"))
 				next_state = ADD_KEY_TYPE;
 			else {
-				next_state = ADD_KEY_ERROR;
-				*err = GPG_E (GPG_ERR_GENERAL);
+                *err = GPG_E (GPG_ERR_GENERAL);
+                g_return_val_if_reached (ADD_KEY_ERROR);
 			}
 			break;
 		/* did type, do length */
@@ -1379,8 +1392,8 @@ add_key_transit (guint current_state, gpgme_status_code_t status,
 			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "keygen.size"))
 				next_state = ADD_KEY_LENGTH;
 			else {
-				next_state = ADD_KEY_ERROR;
-				*err = GPG_E (GPG_ERR_GENERAL);
+                *err = GPG_E (GPG_ERR_GENERAL);
+                g_return_val_if_reached (ADD_KEY_ERROR);
 			}
 			break;
 		/* did length, do expires */
@@ -1388,8 +1401,8 @@ add_key_transit (guint current_state, gpgme_status_code_t status,
 			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "keygen.valid"))
 				next_state = ADD_KEY_EXPIRES;
 			else {
-				next_state = ADD_KEY_ERROR;
-				*err = GPG_E (GPG_ERR_GENERAL);
+                *err = GPG_E (GPG_ERR_GENERAL);
+                g_return_val_if_reached (ADD_KEY_ERROR);
 			}
 			break;
 		/* did expires, quit */
@@ -1401,8 +1414,8 @@ add_key_transit (guint current_state, gpgme_status_code_t status,
 			if (status == GPGME_STATUS_GET_BOOL && g_str_equal (args, SAVE))
 				next_state = ADD_KEY_SAVE;
 			else {
-				next_state = ADD_KEY_ERROR;
-				*err = GPG_E (GPG_ERR_GENERAL);
+                *err = GPG_E (GPG_ERR_GENERAL);
+                g_return_val_if_reached (ADD_KEY_ERROR);
 			}
 			break;
 		/* error, quit */
@@ -1413,8 +1426,8 @@ add_key_transit (guint current_state, gpgme_status_code_t status,
 				next_state = ADD_KEY_ERROR;
 			break;
 		default:
-			next_state = ADD_KEY_ERROR;
-			*err = GPG_E (GPG_ERR_GENERAL);
+            *err = GPG_E (GPG_ERR_GENERAL);
+            g_return_val_if_reached (ADD_KEY_ERROR);
 			break;
 	}
 	
@@ -1517,8 +1530,8 @@ del_key_transit (guint current_state, gpgme_status_code_t status,
 			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
 				next_state = DEL_KEY_SELECT;
 			else {
-				next_state = DEL_KEY_ERROR;
-				*err = GPG_E (GPG_ERR_GENERAL);
+                *err = GPG_E (GPG_ERR_GENERAL);
+                g_return_val_if_reached (DEL_KEY_ERROR);
 			}
 			break;
 		/* selected key, do command */
@@ -1526,8 +1539,8 @@ del_key_transit (guint current_state, gpgme_status_code_t status,
 			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
 				next_state = DEL_KEY_COMMAND;
 			else {
-				next_state = DEL_KEY_ERROR;
-				*err = GPG_E (GPG_ERR_GENERAL);
+                *err = GPG_E (GPG_ERR_GENERAL);
+                g_return_val_if_reached (DEL_KEY_ERROR);
 			}
 			break;
 		case DEL_KEY_COMMAND:
@@ -1539,8 +1552,8 @@ del_key_transit (guint current_state, gpgme_status_code_t status,
 			else if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
 				next_state = DEL_KEY_QUIT;
 			else {
-				next_state = DEL_KEY_ERROR;
-				*err = GPG_E (GPG_ERR_GENERAL);
+                *err = GPG_E (GPG_ERR_GENERAL);
+                g_return_val_if_reached (DEL_KEY_ERROR);
 			}
 			break;
 		/* confirmed, quit */
@@ -1552,8 +1565,8 @@ del_key_transit (guint current_state, gpgme_status_code_t status,
 			if (status == GPGME_STATUS_GET_BOOL && g_str_equal (args, SAVE))
 				next_state = DEL_KEY_CONFIRM;
 			else {
-				next_state = DEL_KEY_ERROR;
-				*err = GPG_E (GPG_ERR_GENERAL);
+                *err = GPG_E (GPG_ERR_GENERAL);
+                g_return_val_if_reached (DEL_KEY_ERROR);
 			}
 			break;
 		/* error, quit */
@@ -1564,8 +1577,8 @@ del_key_transit (guint current_state, gpgme_status_code_t status,
 				next_state = DEL_KEY_ERROR;
 			break;
 		default:
-			next_state = DEL_KEY_ERROR;
-			*err = GPG_E (GPG_ERR_GENERAL);
+            *err = GPG_E (GPG_ERR_GENERAL);
+            g_return_val_if_reached (DEL_KEY_ERROR);
 			break;
 	}
 	
@@ -1665,8 +1678,8 @@ rev_subkey_transit (guint current_state, gpgme_status_code_t status,
 			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
 				next_state = REV_SUBKEY_SELECT;
 			else {
-				next_state = REV_SUBKEY_ERROR;
-				*err = GPG_E (GPG_ERR_GENERAL);
+                *err = GPG_E (GPG_ERR_GENERAL);
+                g_return_val_if_reached (REV_SUBKEY_ERROR);
 			}
 			break;
 		/* selected key, do command */
@@ -1674,8 +1687,8 @@ rev_subkey_transit (guint current_state, gpgme_status_code_t status,
 			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
 				next_state = REV_SUBKEY_COMMAND;
 			else {
-				next_state = REV_SUBKEY_ERROR;
-				*err = GPG_E (GPG_ERR_GENERAL);
+                *err = GPG_E (GPG_ERR_GENERAL);
+                g_return_val_if_reached (REV_SUBKEY_ERROR);
 			}
 			break;
 		/* did command, confirm */
@@ -1683,8 +1696,8 @@ rev_subkey_transit (guint current_state, gpgme_status_code_t status,
 			if (status == GPGME_STATUS_GET_BOOL && g_str_equal (args, "keyedit.revoke.subkey.okay"))
 				next_state = REV_SUBKEY_CONFIRM;
 			else {
-				next_state = REV_SUBKEY_ERROR;
-				*err = GPG_E (GPG_ERR_GENERAL);
+                *err = GPG_E (GPG_ERR_GENERAL);
+                g_return_val_if_reached (REV_SUBKEY_ERROR);
 			}
 			break;
 		case REV_SUBKEY_CONFIRM:
@@ -1695,8 +1708,8 @@ rev_subkey_transit (guint current_state, gpgme_status_code_t status,
 			else if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
 				next_state = REV_SUBKEY_QUIT;
 			else {
-				next_state = REV_SUBKEY_ERROR;
-				*err = GPG_E (GPG_ERR_GENERAL);
+                *err = GPG_E (GPG_ERR_GENERAL);
+                g_return_val_if_reached (REV_SUBKEY_ERROR);
 			}
 			break;
 		/* did reason, do description */
@@ -1704,8 +1717,8 @@ rev_subkey_transit (guint current_state, gpgme_status_code_t status,
 			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "ask_revocation_reason.text"))
 				next_state = REV_SUBKEY_DESCRIPTION;
 			else {
-				next_state = REV_SUBKEY_ERROR;
-				*err = GPG_E (GPG_ERR_GENERAL);
+                *err = GPG_E (GPG_ERR_GENERAL);
+                g_return_val_if_reached (REV_SUBKEY_ERROR);
 			}
 			break;
 		case REV_SUBKEY_DESCRIPTION:
@@ -1716,8 +1729,8 @@ rev_subkey_transit (guint current_state, gpgme_status_code_t status,
 			else if (status == GPGME_STATUS_GET_BOOL && g_str_equal (args, "ask_revocation_reason.okay"))
 				next_state = REV_SUBKEY_CONFIRM;
 			else {
-				next_state = REV_SUBKEY_ERROR;
-				*err = GPG_E (GPG_ERR_GENERAL);
+                *err = GPG_E (GPG_ERR_GENERAL);
+                g_return_val_if_reached (REV_SUBKEY_ERROR);
 			}
 			break;
 		/* ended description, confirm */
@@ -1729,8 +1742,8 @@ rev_subkey_transit (guint current_state, gpgme_status_code_t status,
 			if (status == GPGME_STATUS_GET_BOOL && g_str_equal (args, SAVE))
 				next_state = REV_SUBKEY_CONFIRM;
 			else {
-				next_state = REV_SUBKEY_ERROR;
-				*err = GPG_E (GPG_ERR_GENERAL);
+                *err = GPG_E (GPG_ERR_GENERAL);
+                g_return_val_if_reached (REV_SUBKEY_ERROR);
 			}
 			break;
 		/* error, quit */
@@ -1741,8 +1754,8 @@ rev_subkey_transit (guint current_state, gpgme_status_code_t status,
 				next_state = REV_SUBKEY_ERROR;
 			break;
 		default:
-			next_state = REV_SUBKEY_ERROR;
-			*err = GPG_E (GPG_ERR_GENERAL);
+            *err = GPG_E (GPG_ERR_GENERAL);
+            g_return_val_if_reached (REV_SUBKEY_ERROR);
 			break;
 	}
 	
