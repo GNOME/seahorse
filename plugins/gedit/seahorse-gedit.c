@@ -58,6 +58,123 @@
 
 static SeahorseContext *sctx = NULL;
 
+/* -----------------------------------------------------------------------------
+ * HELPER FUNCTIONS 
+ * 
+ * These helper functions are for manipulating the GEditDocument, which is 
+ * actually a GtkTextView. This is a little more complicated than just calling 
+ * gedit_document_* but is needed for for compatibility purposes. (bug# 156368)
+ */
+ 
+static gchar *
+get_document_chars (GeditDocument *doc, gint start, gint end)
+{
+    GtkTextIter start_iter;
+    GtkTextIter end_iter;
+
+    g_return_val_if_fail (GEDIT_IS_DOCUMENT (doc), NULL);
+    g_return_val_if_fail (start >= 0, NULL);
+    g_return_val_if_fail ((end > start) || (end < 0), NULL);
+
+    gtk_text_buffer_get_iter_at_offset (GTK_TEXT_BUFFER (doc), &start_iter, start);
+
+    if (end < 0)
+        gtk_text_buffer_get_end_iter (GTK_TEXT_BUFFER (doc), &end_iter);
+    else
+        gtk_text_buffer_get_iter_at_offset (GTK_TEXT_BUFFER (doc), &end_iter, end);
+
+    return gtk_text_buffer_get_slice (GTK_TEXT_BUFFER (doc), &start_iter, &end_iter, TRUE);
+}
+
+static gint 
+get_document_length (GeditDocument *doc)
+{
+    g_return_val_if_fail (doc != NULL, FALSE);
+    return gtk_text_buffer_get_char_count (GTK_TEXT_BUFFER (doc));
+}
+
+static gboolean 
+get_document_selection (GeditDocument *doc, gint *start, gint *end)
+{
+    gboolean ret;
+    GtkTextIter iter;
+    GtkTextIter sel_bound;
+
+    g_return_val_if_fail (GEDIT_IS_DOCUMENT (doc), FALSE);
+
+    ret = gtk_text_buffer_get_selection_bounds (GTK_TEXT_BUFFER (doc),          
+                                                &iter, &sel_bound);
+
+    gtk_text_iter_order (&iter, &sel_bound);    
+
+    if (start != NULL)
+        *start = gtk_text_iter_get_offset (&iter); 
+
+    if (end != NULL)
+        *end = gtk_text_iter_get_offset (&sel_bound); 
+
+    return ret;
+}
+
+static void
+set_document_selection (GeditDocument *doc, gint start, gint end)
+{
+    GtkTextIter start_iter;
+    GtkTextIter end_iter;
+
+    g_return_if_fail (GEDIT_IS_DOCUMENT (doc));
+    g_return_if_fail (start >= 0);
+    g_return_if_fail ((end > start) || (end < 0));
+
+    gtk_text_buffer_get_iter_at_offset (GTK_TEXT_BUFFER (doc), &start_iter, start);
+
+    if (end < 0)
+        gtk_text_buffer_get_end_iter (GTK_TEXT_BUFFER (doc), &end_iter);
+    else
+        gtk_text_buffer_get_iter_at_offset (GTK_TEXT_BUFFER (doc), &end_iter, end);
+
+    gtk_text_buffer_place_cursor (GTK_TEXT_BUFFER (doc), &end_iter);
+    gtk_text_buffer_move_mark_by_name (GTK_TEXT_BUFFER (doc),
+                                        "selection_bound", &start_iter);
+}
+
+static void
+replace_selected_text (GeditDocument *doc, const gchar *replace)
+{
+    GtkTextIter iter;
+    GtkTextIter sel_bound;
+    gchar *converted_replace;
+
+    g_return_if_fail (GEDIT_IS_DOCUMENT (doc));
+    g_return_if_fail (replace != NULL);
+
+    if (!gtk_text_buffer_get_selection_bounds (GTK_TEXT_BUFFER (doc),           
+                                                  &iter, &sel_bound)) {
+        gedit_debug (DEBUG_DOCUMENT, "There is no selected text");
+        return;
+    }
+
+    converted_replace = gedit_utils_convert_search_text (replace);
+
+    gtk_text_buffer_begin_user_action (GTK_TEXT_BUFFER (doc));
+
+    gtk_text_buffer_delete_selection (GTK_TEXT_BUFFER (doc), FALSE, TRUE);
+
+    gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (doc),            
+                   &iter, gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (doc)));
+
+    if (*converted_replace != '\0')
+        gtk_text_buffer_insert (GTK_TEXT_BUFFER (doc), &iter,
+                 converted_replace, strlen (converted_replace));
+
+    gtk_text_buffer_end_user_action (GTK_TEXT_BUFFER (doc));
+    g_free (converted_replace);
+}
+
+/* -----------------------------------------------------------------------------
+ * CRYPT CALLBACKS
+ */
+
 /* Callback for encrypt menu item */
 static void
 encrypt_cb (BonoboUIComponent * uic, gpointer user_data,
@@ -87,12 +204,11 @@ encrypt_cb (BonoboUIComponent * uic, gpointer user_data,
 
     /* Get the text */
     doc = gedit_view_get_document (view);
-    buffer = gedit_document_get_chars (doc, 0, -1);
 
-    if (gedit_document_get_selection (doc, &start, &end)) {
-        buffer = gedit_document_get_chars (doc, start, end);
+    if (get_document_selection (doc, &start, &end)) {
+        buffer = get_document_chars (doc, start, end);
     } else {
-        buffer = gedit_document_get_chars (doc, 0, -1);
+        buffer = get_document_chars (doc, 0, -1);
     }
 
     /* Encrypt it */
@@ -109,8 +225,8 @@ encrypt_cb (BonoboUIComponent * uic, gpointer user_data,
     }
 
     /* And finish up */
-    gedit_document_set_selection (doc, start, end);
-    gedit_document_replace_selected_text (doc, enctext);
+    set_document_selection (doc, start, end);
+    replace_selected_text (doc, enctext);
     gedit_utils_flash (_("Encrypted text"));
     g_free (enctext);
 }
@@ -206,14 +322,13 @@ decrypt_cb (BonoboUIComponent * uic, gpointer user_data,
 
     /* Get the document text */
     doc = gedit_view_get_document (view);
-    buffer = gedit_document_get_chars (doc, 0, -1);
 
-    if (!gedit_document_get_selection (doc, &sel_start, &sel_end)) {
+    if (!get_document_selection (doc, &sel_start, &sel_end)) {
         sel_start = 0;
-        sel_end = gedit_document_get_char_count (doc);
+        sel_end = get_document_length (doc);
     }
 
-    buffer = gedit_document_get_chars (doc, sel_start, sel_end);
+    buffer = get_document_chars (doc, sel_start, sel_end);
     
 
     last = buffer;
@@ -278,10 +393,10 @@ decrypt_cb (BonoboUIComponent * uic, gpointer user_data,
         if (rawtext) {
 
             /* Replace the current block */
-            gedit_document_set_selection (doc, block_pos, block_pos + block_len);
+            set_document_selection (doc, block_pos, block_pos + block_len);
             
             /* With the new text */
-            gedit_document_replace_selected_text (doc, rawtext);
+            replace_selected_text (doc, rawtext);
 
             /* And update our book keeping */
             raw_len = strlen (rawtext);
@@ -340,14 +455,13 @@ sign_cb (BonoboUIComponent * uic, gpointer user_data,
 
     /* Get the document text */
     doc = gedit_view_get_document (view);
-    buffer = gedit_document_get_chars (doc, 0, -1);
 
-    if (!gedit_document_get_selection (doc, &start, &end)) {
+    if (!get_document_selection (doc, &start, &end)) {
         start = 0;
         end = -1;
     }
 
-    buffer = gedit_document_get_chars (doc, start, end);
+    buffer = get_document_chars (doc, start, end);
 
     /* Perform the signing */
     gedit_debug (DEBUG_PLUGINS, "signing text");
@@ -361,11 +475,15 @@ sign_cb (BonoboUIComponent * uic, gpointer user_data,
     }
 
     /* Finish up */
-    gedit_document_set_selection (doc, start, end);
-    gedit_document_replace_selected_text (doc, enctext);
+    set_document_selection (doc, start, end);
+    replace_selected_text (doc, enctext);
     gedit_utils_flash (_("Signed text"));
     g_free (enctext);
 }
+
+/* -----------------------------------------------------------------------------
+ * UI STUFF
+ */
 
 /* Called by gedit when time to update the UI */
 G_MODULE_EXPORT GeditPluginState
@@ -380,7 +498,7 @@ update_ui (GeditPlugin * plugin, BonoboWindow * window)
     uic = gedit_get_ui_component_from_window (window);
     doc = gedit_get_active_document ();
 
-    sensitive = (doc && gedit_document_get_char_count (doc) > 0);
+    sensitive = (doc && get_document_length (doc) > 0);
 
     gedit_debug (DEBUG_PLUGINS, "updating UI");
     gedit_menus_set_verb_sensitive (uic, "/commands/" MENU_DEC_ITEM_NAME,
@@ -440,6 +558,10 @@ deactivate (GeditPlugin * plugin)
                                       MENU_DEC_ITEM_NAME);
     return PLUGIN_OK;
 }
+
+/* -----------------------------------------------------------------------------
+ * PLUGIN BASICS
+ */
 
 /* Called once by gedit when the plugin is destroyed */
 G_MODULE_EXPORT GeditPluginState
