@@ -155,6 +155,8 @@ add_recip (SeahorseWidget *swidget, GtkTreePath *path)
 	SeahorseKey *skey;
 	
 	srecips = SEAHORSE_RECIPIENTS (swidget);
+	skey = seahorse_key_store_get_key_from_path (GTK_TREE_VIEW (
+		glade_xml_get_widget (swidget->xml, ALL)), path);
 	
 	validity = gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_VALIDITY, NULL, 0);
 	/* Check if need key to be fully valid */
@@ -174,8 +176,7 @@ add_recip (SeahorseWidget *swidget, GtkTreePath *path)
 			return;
 	}
 
-	skey = seahorse_key_store_get_key_from_path (GTK_TREE_VIEW (
-		glade_xml_get_widget (swidget->xml, ALL)), path);
+	
 	seahorse_key_store_remove (srecips->all_keys, path);
 	seahorse_key_store_append (srecips->recipient_keys, skey);
 	

@@ -122,7 +122,7 @@ seahorse_key_manager_store_set (GtkTreeStore *store, GtkTreeIter *iter, Seahorse
 
 	while (index <= max) {
 		gtk_tree_store_append (store, &child, iter);
-		seahorse_key_manager_store_set_attribs (store, iter, skey, index);
+		seahorse_key_manager_store_set_attribs (store, &child, skey, index);
 		index++;
 	}
 }

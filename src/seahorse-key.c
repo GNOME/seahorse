@@ -99,7 +99,8 @@ static void
 seahorse_key_finalize (GObject *gobject)
 {
 	SeahorseKey *skey;
-	
+	g_print ("finalizing key\n");
+	g_print ("%s\n", seahorse_key_get_userid (skey, 0));
 	skey = SEAHORSE_KEY (gobject);
 	gpgme_key_unref (skey->key);
 	
@@ -199,7 +200,7 @@ seahorse_key_get_num_uids (const SeahorseKey *skey)
 	
 	g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), -1);
 	
-	while (gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_USERID, NULL, index))
+	while (gpgme_key_get_string_attr (skey->key, GPGME_ATTR_USERID, NULL, index))
 		index++;
 	
 	return index;

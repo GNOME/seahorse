@@ -355,16 +355,19 @@ seahorse_key_store_get_key_from_path (GtkTreeView *view, GtkTreePath *path)
 {
 	SeahorseKeyRow *skrow;
 	GtkTreeModel *model;
-	GtkTreeIter iter;
+	GtkTreeIter iter, parent;
 	
 	g_return_val_if_fail (view != NULL && GTK_IS_TREE_VIEW (view), NULL);
 	g_return_val_if_fail (path != NULL, NULL);
 
-	while (gtk_tree_path_up (path))
-		continue;
+	//while (gtk_tree_path_up (path))
+		//continue;
 	
 	model = gtk_tree_view_get_model (view);
 	g_return_val_if_fail (gtk_tree_model_get_iter (model, &iter, path), NULL);
+	
+	if (gtk_tree_model_iter_parent (model, &parent, &iter))
+		iter = parent;
 	gtk_tree_model_get (model, &iter, SKROW, &skrow, -1);
 	
 	return skrow->skey;
