@@ -1,15 +1,16 @@
-# translation of cs.po to Czech
-# Czech translations for the GNU seahorse
+# Czech translation of seahorse
 # Copyright (C) 1996, 2003 Free Software Foundation, Inc.
+# Copyright (C) 2004 Miloslav Trmac <mitr@volny.cz>
 # Petr Domansky <doman@atlas.cz>, 2000.
 # Michal Bukovjan <bukm@centrum.cz>, 2003
-# Miloslav Trmac <mitr@volny.cz>, 2003.
+# Miloslav Trmac <mitr@volny.cz>, 2003, 2004.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse VERSION\n"
-"POT-Creation-Date: 2003-05-09 05:35+0200\n"
-"PO-Revision-Date: 2003-05-09 22:47+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-01-13 05:31+0100\n"
+"PO-Revision-Date: 2004-01-13 15:37+0100\n"
 "Last-Translator: Miloslav Trmac <mitr@volny.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -116,20 +117,27 @@ msgstr "ID implicitního klíče"
 msgid ""
 "If set to true, then all output from pgp operations will be ASCII text. "
 "Files will have a '.asc' extension."
-msgstr "Je-li nastaveno na true, bude všechen výstup z operací pgp ASCII text. Soubory budou mít příponu '.asc'."
+msgstr ""
+"Je-li nastaveno na true, bude všechen výstup z operací pgp ASCII text. "
+"Soubory budou mít příponu '.asc'."
 
 #: data/seahorse.schemas.in.h:11
 msgid ""
 "If set to true, then output from certain pgp operations will be in canonical "
 "text mode. Text mode is generally only needed for RFC 2015 signatures. RFC "
 "3156 removes the need for text mode."
-msgstr "Je-li nastaveno na true, bude výstup z jistých operací pgp v kanonickém textovém režimu. Textový režim je obecně potřeba jen pro podpisy RFC 2015. RFC 3156 odstraňuje potřebu textového režimu."
+msgstr ""
+"Je-li nastaveno na true, bude výstup z jistých operací pgp v kanonickém "
+"textovém režimu. Textový režim je obecně potřeba jen pro podpisy RFC 2015. "
+"RFC 3156 odstraňuje potřebu textového režimu."
 
 #: data/seahorse.schemas.in.h:12
 msgid ""
 "If set to true, then the default key will always be added to an encryption "
 "recipients list."
-msgstr "Je-li nastaveno na true, bude implicitní klíč vždy přidán do seznamu příjemců šifrování."
+msgstr ""
+"Je-li nastaveno na true, bude implicitní klíč vždy přidán do seznamu "
+"příjemců šifrování."
 
 #: data/seahorse.schemas.in.h:13
 msgid "If the statusbar is visible"
@@ -167,14 +175,19 @@ msgstr "Styl tlačítek a jmenovek nástrojové lišty"
 msgid ""
 "The toolbar button and label style. Options are 'default', 'both', "
 "'both_horiz', 'icons', and 'text'."
-msgstr "Styl tlačítek a jmenovek nástrojové lišty. Možnosti jsou 'default', 'both', 'both_horiz', 'icons' a 'text'."
+msgstr ""
+"Styl tlačítek a jmenovek nástrojové lišty. Možnosti jsou 'default', 'both', "
+"'both_horiz', 'icons' a 'text'."
 
 #: data/seahorse.schemas.in.h:22
 msgid ""
 "This specifies how often the progress signal is emitted during a listing "
 "operation. By default, the signal is emitted for every 20 keys processed. A "
 "value of -1 will cause the signal to never be emitted."
-msgstr "Toto určuje, jak často je při operaci výpisu vysílán signál průběhu. Implicitně je signál vyslán pro každých 20 zpracovaných klíčů. Hodnota -1 způsobí, že signál nebude vysílán nikdy."
+msgstr ""
+"Toto určuje, jak často je při operaci výpisu vysílán signál průběhu. "
+"Implicitně je signál vyslán pro každých 20 zpracovaných klíčů. Hodnota -1 "
+"způsobí, že signál nebude vysílán nikdy."
 
 #: data/seahorse.schemas.in.h:23
 msgid ""
@@ -238,8 +251,8 @@ msgstr "Špatné heslo! Zkuste to znovu pro %s"
 
 #: libseahorse/seahorse-passphrase.glade.h:1 src/seahorse-add-uid.glade.h:1
 #: src/seahorse-change-passphrase.glade.h:1 src/seahorse-export.glade.h:1
-#: src/seahorse-generate.glade.h:1 src/seahorse-import.glade.h:1
-#: src/seahorse-revoke.glade.h:1
+#: src/seahorse-generate-adv.glade.h:1 src/seahorse-generate-druid.glade.h:1
+#: src/seahorse-import.glade.h:1 src/seahorse-revoke.glade.h:1
 msgid "*"
 msgstr "*"
 
@@ -446,7 +459,7 @@ msgstr "Správa vašich klíčů GPG"
 msgid "Add subkey to %s"
 msgstr "Přidat podklíč k %s"
 
-#: src/seahorse-add-subkey.glade.h:1 src/seahorse-generate.glade.h:5
+#: src/seahorse-add-subkey.glade.h:1 src/seahorse-generate-adv.glade.h:5
 msgid "DSA (sign only)"
 msgstr "DSA (jen pro podpis)"
 
@@ -455,7 +468,7 @@ msgid "ElGamal (encrypt only)"
 msgstr "ElGamal (jen pro zašifrování)"
 
 #. expires
-#: src/seahorse-add-subkey.glade.h:3 src/seahorse-generate.glade.h:6
+#: src/seahorse-add-subkey.glade.h:3 src/seahorse-generate-adv.glade.h:6
 #: src/seahorse-key-properties.c:364
 msgid "Expiration Date:"
 msgstr "Datum vypršení platnosti:"
@@ -464,28 +477,28 @@ msgstr "Datum vypršení platnosti:"
 msgid "Generate a new subkey"
 msgstr "Vygenerovat nový podklíč"
 
-#: src/seahorse-add-subkey.glade.h:5 src/seahorse-generate.glade.h:10
+#: src/seahorse-add-subkey.glade.h:5 src/seahorse-generate-adv.glade.h:10
 #: src/seahorse-key-properties.c:390
 msgid "If key never expires"
 msgstr "Pokud klíč nikdy nevyprší"
 
-#: src/seahorse-add-subkey.glade.h:6 src/seahorse-generate.glade.h:12
+#: src/seahorse-add-subkey.glade.h:6 src/seahorse-generate-adv.glade.h:12
 msgid "Key _Length:"
 msgstr "Dé_lka klíče:"
 
-#: src/seahorse-add-subkey.glade.h:7 src/seahorse-generate.glade.h:13
+#: src/seahorse-add-subkey.glade.h:7 src/seahorse-generate-adv.glade.h:13
 msgid "Key _Type:"
 msgstr "_Typ klíče:"
 
-#: src/seahorse-add-subkey.glade.h:8 src/seahorse-generate.glade.h:14
+#: src/seahorse-add-subkey.glade.h:8 src/seahorse-generate-adv.glade.h:14
 msgid "Key type / algorithm"
 msgstr "Typ klíče / algoritmus"
 
-#: src/seahorse-add-subkey.glade.h:9 src/seahorse-generate.glade.h:15
+#: src/seahorse-add-subkey.glade.h:9 src/seahorse-generate-adv.glade.h:15
 msgid "Length of Key"
 msgstr "Délka klíče"
 
-#: src/seahorse-add-subkey.glade.h:10 src/seahorse-generate.glade.h:17
+#: src/seahorse-add-subkey.glade.h:10 src/seahorse-generate-adv.glade.h:17
 #: src/seahorse-key-properties.c:388
 msgid "Never E_xpires"
 msgstr "Nikdy ne_vyprší"
@@ -494,7 +507,7 @@ msgstr "Nikdy ne_vyprší"
 msgid "RSA (encrypt only)"
 msgstr "RSA (jen pro zašifrování)"
 
-#: src/seahorse-add-subkey.glade.h:12 src/seahorse-generate.glade.h:21
+#: src/seahorse-add-subkey.glade.h:12 src/seahorse-generate-adv.glade.h:21
 msgid "RSA (sign only)"
 msgstr "RSA (jen pro podpis)"
 
@@ -511,35 +524,38 @@ msgstr "Přidat ID uživatele"
 msgid "Create the new user ID"
 msgstr "Vytvořit nové ID uživatele"
 
-#: src/seahorse-add-uid.glade.h:4 src/seahorse-generate.glade.h:7
+#: src/seahorse-add-uid.glade.h:4 src/seahorse-generate-adv.glade.h:7
 msgid "Full _Name:"
 msgstr "Celé jmé_no:"
 
-#: src/seahorse-add-uid.glade.h:5 src/seahorse-generate.glade.h:11
+#: src/seahorse-add-uid.glade.h:5 src/seahorse-generate-adv.glade.h:11
 msgid "Key Co_mment:"
 msgstr "_Komentář klíče:"
 
-#: src/seahorse-add-uid.glade.h:6 src/seahorse-generate.glade.h:16
+#: src/seahorse-add-uid.glade.h:6 src/seahorse-generate-adv.glade.h:16
 msgid "Must be at least 5 characters long"
 msgstr "Musí být alespoň 5 znaků dlouhé"
 
-#: src/seahorse-add-uid.glade.h:7 src/seahorse-generate.glade.h:18
+#: src/seahorse-add-uid.glade.h:7 src/seahorse-generate-adv.glade.h:18
+#: src/seahorse-generate-druid.glade.h:20
 msgid "Optional comment describing key"
 msgstr "Nepovinná poznámka popisující klíč"
 
-#: src/seahorse-add-uid.glade.h:8 src/seahorse-generate.glade.h:19
+#: src/seahorse-add-uid.glade.h:8 src/seahorse-generate-adv.glade.h:19
+#: src/seahorse-generate-druid.glade.h:21
 msgid "Optional email address"
-msgstr "Nepovinná emailová adresa"
+msgstr "Nepovinná e-mailová adresa"
 
-#: src/seahorse-add-uid.glade.h:9 src/seahorse-generate.glade.h:22
+#: src/seahorse-add-uid.glade.h:9 src/seahorse-generate-adv.glade.h:22
 msgid "_Email Address:"
-msgstr "_Emailová adresa:"
+msgstr "_E-mailová adresa:"
 
 #: src/seahorse-change-passphrase.glade.h:2
 msgid "Change Passphrase"
 msgstr "Změnit heslo"
 
-#: src/seahorse-change-passphrase.glade.h:3 src/seahorse-generate.glade.h:2
+#: src/seahorse-change-passphrase.glade.h:3
+#: src/seahorse-generate-adv.glade.h:2
 msgid "Con_firm Passphrase:"
 msgstr "P_otvrdit heslo:"
 
@@ -560,12 +576,12 @@ msgstr "Nové _heslo:"
 msgid "%s is a key pair! Do you still want to delete it?"
 msgstr "%s je pár klíčů! Stále jej chcete odstranit?"
 
-#: src/seahorse-delete.c:51
+#: src/seahorse-delete.c:66
 #, c-format
 msgid "Are you sure you want to permanently delete %s?"
 msgstr "Jste si jisti, že chcete navždy odstranit %s?"
 
-#: src/seahorse-delete.c:104
+#: src/seahorse-delete.c:131
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
 msgstr "Jste si jisti, že chcete navždy odstranit podklíč %d z %s?"
@@ -618,33 +634,212 @@ msgstr "Název souboru pro export"
 msgid "www.keyserver.net/en"
 msgstr "www.keyserver.net/en"
 
-#: src/seahorse-generate.glade.h:3
+#: src/seahorse-generate-adv.glade.h:3
 msgid "Confirmation of passphrase"
 msgstr "Potvrzení hesla"
 
-#: src/seahorse-generate.glade.h:4
+#: src/seahorse-generate-adv.glade.h:4
 msgid "DSA & ElGamal"
 msgstr "DSA & ElGamal"
 
-#: src/seahorse-generate.glade.h:8
+#: src/seahorse-generate-adv.glade.h:8
 msgid "Generate a Key"
 msgstr "Generovat klíč"
 
-#: src/seahorse-generate.glade.h:9
+#: src/seahorse-generate-adv.glade.h:9
 msgid "Generate a new key"
 msgstr "Vygenerovat nový klíč"
 
-#: src/seahorse-generate.glade.h:20
+#: src/seahorse-generate-adv.glade.h:20 src/seahorse-generate-druid.glade.h:23
 msgid "Passphrase to secure key"
 msgstr "Heslo k zajištění klíče"
 
-#: src/seahorse-generate.glade.h:23
+#: src/seahorse-generate-adv.glade.h:23
 msgid "_Generate"
 msgstr "Vy_generovat"
 
-#: src/seahorse-generate.glade.h:24
+#: src/seahorse-generate-adv.glade.h:24
 msgid "_Passphrase:"
 msgstr "_Heslo:"
+
+#: src/seahorse-generate-druid.glade.h:2
+msgid ""
+"Before selecting apply to start key generation, please make sure all of your "
+"previous settings are correct."
+msgstr "Před spuštěním generování klíče zvolením Použít se prosím přesvědčte, že všechna vaše dřívější nastavení jsou správně."
+
+# FIXME: should letters -> should contain letters
+#: src/seahorse-generate-druid.glade.h:3
+msgid ""
+"Choosing a passphrase is an integral part of creating a strong key.  Like a "
+"password, a passphrase should letters, numbers, and punctuation.  "
+"Additionally, a passphrase can contain spaces, meaning it can contain many "
+"words.  You should pick a rememberable phrase that contains punctuation.  "
+"Take this phrase, adjust the case of various letters, and change some of the "
+"letters into numbers or punctuation rmeiniscent of \"leet speak\", but don't "
+"make it so obscure to the point where you can't remember it."
+msgstr "Volba hesla je nedílnou součástí tvorby silného klíče. Heslo by mělo obsahovat písmena, číslice a interpunkci. Navíc může heslo obsahovat mezery, takže může obsahovat mnoho slov. Měli byste zvolit zapamatovatelnou frázi, která obsahuje interpunkci. Začněte s touto frází, upravte velikost různých písmen a nahraďte některá písmena číslicemi nebo interpunkcí podobně jako \"leet speak\", ale nevytvořte něco tak obskurního, abyste si to nemohli zapamatovat."
+
+#: src/seahorse-generate-druid.glade.h:4
+msgid "Comment:"
+msgstr "Poznámka:"
+
+#: src/seahorse-generate-druid.glade.h:5
+msgid "Confirm"
+msgstr "Potvrdit"
+
+#: src/seahorse-generate-druid.glade.h:6
+msgid "Confirm Passphrase: "
+msgstr "Potvrďte heslo: "
+
+#: src/seahorse-generate-druid.glade.h:7
+msgid "Confirm passphrase"
+msgstr "Potvrdit heslo"
+
+#: src/seahorse-generate-druid.glade.h:8
+msgid "Date the Key Expires"
+msgstr "Datum, kdy klíč nevyprší"
+
+#: src/seahorse-generate-druid.glade.h:9
+msgid "Email Address: "
+msgstr "E-mailová adresa: "
+
+#: src/seahorse-generate-druid.glade.h:10
+msgid "Enter Name - Must be at least five letters."
+msgstr "Zadejte jméno - musí být alespoň pět písmen."
+
+#: src/seahorse-generate-druid.glade.h:11 src/seahorse-key-manager-store.c:269
+msgid "Expiration Date"
+msgstr "Datum vypršení"
+
+#: src/seahorse-generate-druid.glade.h:12
+msgid "Expiration Date: "
+msgstr "Datum vypršení platnosti: "
+
+#: src/seahorse-generate-druid.glade.h:13
+msgid "Extra High Security"
+msgstr "Extra vysoké zabezpečení"
+
+#: src/seahorse-generate-druid.glade.h:14
+msgid "Full Name: "
+msgstr "Celé jméno:"
+
+#: src/seahorse-generate-druid.glade.h:15
+msgid "High Security"
+msgstr "Vysoké zabezpečení"
+
+#: src/seahorse-generate-druid.glade.h:16
+msgid "Key Never Expires"
+msgstr "Klíč nikdy nevyprší"
+
+#: src/seahorse-generate-druid.glade.h:17
+msgid ""
+"Keys must be given an appropriate expiration date.  For most people, the "
+"default option of never expires is sufficent.  If you only plan on using the "
+"key for a certain period of time, i.e. for a specific project, you should "
+"pick an expiration date after the projected completion of your project.  "
+"After the expiration date, your private key will still be able to decrypt "
+"messages or data encrypted with your public key.  However, your private key "
+"will no longer sign messages or data."
+msgstr "Klíče musí mít vhodné datum vypršení. Pro většinu lidí stačí implicitní nastavení \"nikdy nevyprší\". Pokud plánujete používat klíč jen na určité období, např. pro konkrétní projekt, měli byste zvolit datum vypršení po plánovaném dokončení svého projektu. Po datu vypršení bude váš soukromý klíč stále moci dešifrovat zprávy nebo data šifrovaná vaším veřejným klíčem, ale už nebude podepisovat zprávy ani data."
+
+#: src/seahorse-generate-druid.glade.h:18
+msgid "Medium Security"
+msgstr "Střední zabezpečení"
+
+#: src/seahorse-generate-druid.glade.h:19 src/seahorse-key-manager-store.c:154
+#: src/seahorse-key-properties.c:373
+msgid "Never Expires"
+msgstr "Nikdy nevyprší"
+
+#: src/seahorse-generate-druid.glade.h:22
+msgid "Passphrase"
+msgstr "Heslo"
+
+#: src/seahorse-generate-druid.glade.h:24
+msgid "Passphrase:"
+msgstr "Heslo:"
+
+#: src/seahorse-generate-druid.glade.h:25
+msgid "Personal Information"
+msgstr "Osobní informace"
+
+#: src/seahorse-generate-druid.glade.h:26
+msgid "Seahorse GPG Key Generation Druid"
+msgstr "Seharose Druid pro generování GPG klíče"
+
+#: src/seahorse-generate-druid.glade.h:27
+msgid "Seahorse GPG Key Generation Druid Complete"
+msgstr "Seharose Druid pro generování GPG klíče dokončen"
+
+#: src/seahorse-generate-druid.glade.h:28
+msgid "Seahorse Key Generation Druid"
+msgstr "Seharose Druid pro generování klíče"
+
+#: src/seahorse-generate-druid.glade.h:29
+msgid "Security Level"
+msgstr "Úroveň zabezpečení"
+
+#: src/seahorse-generate-druid.glade.h:30
+msgid ""
+"The Medium Security level is the default and should be acceptable for "
+"general everyday usage.  The High Security level should be selected if you "
+"know your data will be actively scrutinized.  The Extra High level should be "
+"selected if you know your data is actively scrutinized and will be under "
+"cryptographic attack. "
+msgstr "Střední úroveň zabezpečení je impliciní a měla by být přijatelná pro obecné každodenní použití. Vysoká úroveň zabezpečení by měla být zvolena, pokud víte, že vaše data budou aktivně zkoumána. Extra vysoká úroveň by měla být zvolena, pokud víte, že vaše data jsou aktivně zkoumána a bude se na ně kryptograficky útočit."
+
+#: src/seahorse-generate-druid.glade.h:31
+msgid "This druid will guide you through the steps of creating a GPG key pair."
+msgstr "Tento druid vás provede vytvořením páru klíčů GPG."
+
+#: src/seahorse-generate-druid.glade.h:32
+msgid ""
+"To create a key and tie it to your identity, the following information is "
+"needed: Full Name, Email Address, and Comment.  These values will be given "
+"to the name of your key in the following "
+"manner:                              Full Name (Comment) <email address>."
+msgstr "Pro vytvoření klíče a jeho svázání s vaší identitou jsou potřeba následující informace: Plné jméno, e-mailová adresa a poznámka. Tyto hodnoty budou uvedeny v názvu vašeho klíče v následujícím dvaru:                              Plné Jméno (Poznámka) <e-mailová adresa>."
+
+#: src/seahorse-generate-druid.glade.h:33
+msgid "druidpage_pass"
+msgstr "druidpage_pass"
+
+#: src/seahorse-generate-druid.glade.h:34
+msgid "druidpage_pinfo"
+msgstr "druidpage_pinfo"
+
+#: src/seahorse-generate-druid.glade.h:35
+msgid "keygen_druid"
+msgstr "keygen_druid"
+
+#: src/seahorse-generate-select.glade.h:1
+msgid "Advanced"
+msgstr "Pokročilé"
+
+#: src/seahorse-generate-select.glade.h:2
+msgid "Druid"
+msgstr "Druid"
+
+#: src/seahorse-generate-select.glade.h:3
+msgid "Generate a key via the druid."
+msgstr "Vygenerovat klíč s pomocí druida."
+
+#: src/seahorse-generate-select.glade.h:4
+msgid "Generate a key with the advanced dialog."
+msgstr "Vygenerovat klíč s pokročilým dialogem."
+
+#: src/seahorse-generate-select.glade.h:5
+msgid "Method Select"
+msgstr "Výběr metody"
+
+#: src/seahorse-generate-select.glade.h:6
+msgid "Select a method to generate your new key."
+msgstr "Vyberte metodu, kterou generovat váš nový klíč."
+
+#: src/seahorse-generate-select.glade.h:7
+msgid "radio_druid"
+msgstr "radio_druid"
 
 #: src/seahorse-import.glade.h:2
 msgid "Enter a unique key id"
@@ -700,7 +895,9 @@ msgstr "ID _klíče:"
 
 #: src/seahorse-key-manager.c:210
 msgid "translator_credits"
-msgstr "Petr Domanský <doman@atlas.cz> Michal Bukovjan <bukm@centrum.cz> Miloslav Trmač <mitr@volny.cz>"
+msgstr ""
+"Petr Domanský <doman@atlas.cz> Michal Bukovjan <bukm@centrum.cz> Miloslav "
+"Trmač <mitr@volny.cz>"
 
 #: src/seahorse-key-manager.c:230
 msgid "seahorse"
@@ -875,14 +1072,6 @@ msgstr "Nás_trojová lišta"
 #: src/seahorse-key-manager-store.c:147 src/seahorse-key-properties.c:361
 msgid "Expired"
 msgstr "Vypršel"
-
-#: src/seahorse-key-manager-store.c:154 src/seahorse-key-properties.c:373
-msgid "Never Expires"
-msgstr "Nikdy nevyprší"
-
-#: src/seahorse-key-manager-store.c:269
-msgid "Expiration Date"
-msgstr "Datum vypršení"
 
 #: src/seahorse-key-manager-store.c:273
 msgid "Trust"
@@ -1142,7 +1331,9 @@ msgstr "Odvolat %s"
 msgid ""
 "You are about to add %s as a revoker for %s. This operation cannot be "
 "undone! Are you sure you want to continue?"
-msgstr "Chystáte se přidat %s jako odvolávač pro klíč %s. Tato operace nemůže být vrácena zpět! Jste si jisti, že chcete pokračovat?"
+msgstr ""
+"Chystáte se přidat %s jako odvolávač pro klíč %s. Tato operace nemůže být "
+"vrácena zpět! Jste si jisti, že chcete pokračovat?"
 
 #: src/seahorse-revoke.glade.h:2
 msgid "Compromised"
