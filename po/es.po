@@ -2,10 +2,12 @@
 # Copyright (C) 2002, 2003.
 # This file is distributed under the same license as the Seahorse package.
 # José Carlos García Sogo <jsogo@debian.org>, 2002, 2003
+# Q&A, Germán Poo-Caamaño <gpoo@ubiobio.cl>, 2003
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: 0.6.0\n"
-"POT-Creation-Date: 2003-01-26 12:15+0100\n"
+"POT-Creation-Date: 2003-02-03 17:05-0300\n"
 "PO-Revision-Date: 2003-01-26 12:14+0100\n"
 "Last-Translator: José Carlos García Sogo <jsogo@debian.org>\n"
 "Language-Team: Spanish <gnome-es@gnome.org>\n"
@@ -23,7 +25,7 @@ msgstr "Gestiona sus llaves GPG"
 
 #: data/seahorse.schemas.in.h:1
 msgid "Default Key ID"
-msgstr "Llave por defecto"
+msgstr "Llave predeterminada"
 
 #: data/seahorse.schemas.in.h:2
 msgid ""
@@ -31,90 +33,142 @@ msgid ""
 "Output that is not in ascii armor is not viewable with a regular text "
 "viewer. Key servers only accept ascii armored keys."
 msgstr ""
-"Si está habilitada. La salida (fichero o texto) se codificará con armadura "
-"ascii. La salida no codificada de este modo, no se puede ver con un visor de "
-"texto normal. Los servidores de llaves sólo las aceptan con armadura ascii."
+"Si está habilitada. La salida (archivo o texto) se codificará con armadura "
+"ASCII. La salida no codificada de este modo, no se puede ver con un visor de "
+"texto normal. Los servidores de llaves sólo las aceptan con armadura ASCII."
 
 #: data/seahorse.schemas.in.h:3
 msgid "If enabled, relevant output will be in canonical text mode."
-msgstr ""
-"Si está habilitada, la salida estará sólo en el modo de texto canónico."
+msgstr "Si está habilitada, la salida estará sólo en el modo de texto canónico."
 
 #: data/seahorse.schemas.in.h:4
 msgid "The key ID of the default key to use for operations such as signing."
-msgstr "El identificador de la llave que desea usar por defecto para firmar."
+msgstr "El identificador de la llave predeterminada que desea usar para firmar."
 
 #: data/seahorse.schemas.in.h:5 src/dialogs/seahorse-preferences.glade2.h:5
 msgid "Use Ascii Armor"
-msgstr "Armadura Ascii"
+msgstr "Armadura ASCII"
 
 #: data/seahorse.schemas.in.h:6 src/dialogs/seahorse-preferences.glade2.h:6
 msgid "Use Canonical Text Mode"
 msgstr "Usar modo de texto canónico"
 
-#: src/dialogs/about.glade2.h:1
-msgid "2002, Seahorse Project"
-msgstr "2003, Seahorse Projec"
+#: src/dialogs/seahorse-add-subkey.glade2.h:1 src/seahorse-ops-key.c:1073
+msgid "Add Subkey"
+msgstr "Añadir subllave"
 
-#: src/dialogs/about.glade2.h:2
-msgid "http://seahorse.sourceforge.net"
-msgstr "http://seahorse.sourceforge.net"
+#: src/dialogs/seahorse-add-subkey.glade2.h:2
+#: src/dialogs/seahorse-generate.glade2.h:5
+msgid "DSA (sign only)"
+msgstr "DSA (sólo firmar)"
+
+#: src/dialogs/seahorse-add-subkey.glade2.h:3
+msgid "ElGamal (encrypt only)"
+msgstr "ElGamal (encripta solamente)"
+
+#: src/dialogs/seahorse-add-subkey.glade2.h:4
+#: src/dialogs/seahorse-generate.glade2.h:9 src/seahorse-key-properties.c:214
+msgid "Expiration Date:"
+msgstr "Fecha de expiración:"
+
+#: src/dialogs/seahorse-add-subkey.glade2.h:5
+#: src/dialogs/seahorse-generate.glade2.h:12 src/seahorse-key-properties.c:239
+msgid "If key never expires"
+msgstr "Si la clave no expira"
+
+#: src/dialogs/seahorse-add-subkey.glade2.h:6
+#: src/dialogs/seahorse-generate.glade2.h:14
+msgid "Key _Length:"
+msgstr "_Tamaño:"
+
+#: src/dialogs/seahorse-add-subkey.glade2.h:7
+#: src/dialogs/seahorse-generate.glade2.h:15
+msgid "Key _Type:"
+msgstr "_Tipo:"
+
+#: src/dialogs/seahorse-add-subkey.glade2.h:8
+#: src/dialogs/seahorse-generate.glade2.h:16
+msgid "Key type / algorithm"
+msgstr "Tipo de clave / algoritmo"
+
+#: src/dialogs/seahorse-add-subkey.glade2.h:9
+#: src/dialogs/seahorse-generate.glade2.h:17
+msgid "Length of Key"
+msgstr "Longitud de la clave"
+
+#: src/dialogs/seahorse-add-subkey.glade2.h:10
+#: src/dialogs/seahorse-generate.glade2.h:18 src/seahorse-key-properties.c:237
+msgid "Never E_xpires"
+msgstr "Nunca _expira"
+
+#: src/dialogs/seahorse-add-subkey.glade2.h:11
+msgid "RSA (encrypt only)"
+msgstr "RSA (encripta solamente)"
+
+#: src/dialogs/seahorse-add-subkey.glade2.h:12
+#: src/dialogs/seahorse-generate.glade2.h:20
+msgid "RSA (sign only)"
+msgstr "RSA (sólo firmar)"
 
 #: src/dialogs/seahorse-add-uid.c:49
 msgid "Name must be at least 5 characters long"
 msgstr "El nombre debe tener al menos 5 caracteres"
 
-#: src/dialogs/seahorse-add-uid.c:54
+#: src/dialogs/seahorse-add-uid.c:54 src/dialogs/seahorse-generate.c:90
 msgid "You must enter a valid email address"
 msgstr "Debe introducir una dirección de correo válida"
 
 #: src/dialogs/seahorse-add-uid.glade2.h:1
 #: src/dialogs/seahorse-export.glade2.h:1
 #: src/dialogs/seahorse-generate.glade2.h:1
-#: src/dialogs/seahorse-import.glade2.h:1 src/seahorse-file-manager.glade2.h:1
+#: src/dialogs/seahorse-import.glade2.h:1
+#: src/dialogs/seahorse-revoke.glade2.h:1 src/seahorse-file-manager.glade2.h:1
 msgid "*"
 msgstr "*"
 
-#: src/dialogs/seahorse-add-uid.glade2.h:2
-#: src/seahorse-key-properties.glade2.h:1
+#: src/dialogs/seahorse-add-uid.glade2.h:2 src/seahorse-ops-key.c:906
 msgid "Add User ID"
 msgstr "Añadir identificador"
 
 #: src/dialogs/seahorse-add-uid.glade2.h:3
-msgid "Co_mment:"
-msgstr "Co_mentario:"
+#: src/dialogs/seahorse-generate.glade2.h:6
+msgid "Enter a comment to describe the key"
+msgstr "Introduzca un comentario para describir la clave"
 
 #: src/dialogs/seahorse-add-uid.glade2.h:4
+#: src/dialogs/seahorse-generate.glade2.h:7
+msgid "Enter a valid email address"
+msgstr "Introduzca una dirección de correo válida"
+
+#: src/dialogs/seahorse-add-uid.glade2.h:5
+#: src/dialogs/seahorse-generate.glade2.h:8
+msgid "Enter your full name"
+msgstr "Introduzca su nombre completo"
+
+#: src/dialogs/seahorse-add-uid.glade2.h:6
 #: src/dialogs/seahorse-generate.glade2.h:10
 msgid "Full _Name:"
 msgstr "_Nombre:"
 
-#: src/dialogs/seahorse-add-uid.glade2.h:5
-msgid "Full name. Must be at least 5 characters."
-msgstr "Nombre completo. Debe tener al menos 5 caracteres"
-
-#: src/dialogs/seahorse-add-uid.glade2.h:6
-msgid "Optional comment"
-msgstr "Comentario opcional"
-
 #: src/dialogs/seahorse-add-uid.glade2.h:7
-msgid "Valid email address"
-msgstr "Dirección de correo válida"
+#: src/dialogs/seahorse-generate.glade2.h:13
+msgid "Key Co_mment:"
+msgstr "Co_mentario:"
 
 #: src/dialogs/seahorse-add-uid.glade2.h:8
-msgid "_Email:"
+#: src/dialogs/seahorse-generate.glade2.h:21
+msgid "_Email Address:"
 msgstr "_Email:"
 
 #: src/dialogs/seahorse-delete.c:37
 #, c-format
-msgid ""
-"You are about to permanently remove\n"
-"%s\n"
-"from your key ring.  Are you sure you want to continue?"
-msgstr ""
-"Está a punto de borrar permanentemente\n"
-"%s\n"
-"de su anillo de llaves. ¿Está seguro de que quiere continuar?"
+msgid "Are you sure you want to permanently delete key %s, %s?"
+msgstr "¿Está seguro que desea eliminar en forma permanente la llave %s, %s?"
+
+#: src/dialogs/seahorse-delete.c:39
+#, c-format
+msgid "Are you sure you want to permanently delete subkey %s for %s?"
+msgstr "¿Está seguro que desea eliminar en forma permanente la subllave %s para %s?"
 
 #: src/dialogs/seahorse-export.c:81
 #, c-format
@@ -122,7 +176,7 @@ msgid ""
 "Cannot export to \n"
 "%s"
 msgstr ""
-"No pude exportar a \n"
+"No se pudo exportar a \n"
 "%s"
 
 #: src/dialogs/seahorse-export.c:103
@@ -131,80 +185,64 @@ msgid "Export Key: %s"
 msgstr "Exportar llave: %s"
 
 #: src/dialogs/seahorse-export.glade2.h:2
-msgid "Cancel Export"
-msgstr "Cancelar exportar"
-
-#: src/dialogs/seahorse-export.glade2.h:3
 msgid "Choose a file to export to"
-msgstr "Escoja el fichero en el que exportar"
+msgstr "Escoja el archivo al cual exportar"
 
-#: src/dialogs/seahorse-export.glade2.h:4
-msgid "Export Help"
-msgstr "Ayuda para exportar"
-
-#: src/dialogs/seahorse-export.glade2.h:5 src/seahorse-key-manager.glade2.h:4
+#: src/dialogs/seahorse-export.glade2.h:3 src/seahorse-key-manager.glade2.h:4
 msgid "Export Key"
 msgstr "Exportar llave"
 
-#: src/dialogs/seahorse-export.glade2.h:6
-msgid "Export Key to Text"
-msgstr "Exportar a texto"
+#: src/dialogs/seahorse-export.glade2.h:4
+msgid "Export key to a File"
+msgstr "Exportar llave a un archivo"
 
-#: src/dialogs/seahorse-export.glade2.h:7
-msgid "Export Key to specified data"
-msgstr "Exportar llave"
-
-#: src/dialogs/seahorse-export.glade2.h:8
-msgid "Export a Key to a File"
-msgstr "Exportar a un fichero"
-
-#: src/dialogs/seahorse-export.glade2.h:9
+#: src/dialogs/seahorse-export.glade2.h:5
 msgid "Export key to a key server"
 msgstr "Exportar a un servidor de llaves"
 
-#: src/dialogs/seahorse-export.glade2.h:10
-msgid "Export to _File:"
-msgstr "Exportar a un _fichero:"
+#: src/dialogs/seahorse-export.glade2.h:6
+msgid "Export key to text"
+msgstr "Exportar llave a texto"
 
-#: src/dialogs/seahorse-export.glade2.h:11
+#: src/dialogs/seahorse-export.glade2.h:7
+msgid "Export to _File:"
+msgstr "Exportar a un _archivo:"
+
+#: src/dialogs/seahorse-export.glade2.h:8
 msgid "Export to _Server:"
 msgstr "Exportar a un _servidor:"
 
-#: src/dialogs/seahorse-export.glade2.h:12
+#: src/dialogs/seahorse-export.glade2.h:9
 msgid "Export to _Text:"
 msgstr "Exportar en _texto"
 
-#: src/dialogs/seahorse-export.glade2.h:13
+#: src/dialogs/seahorse-export.glade2.h:10
 msgid "Exported text"
 msgstr "Texto exportado"
 
-#: src/dialogs/seahorse-export.glade2.h:14
+#: src/dialogs/seahorse-export.glade2.h:11
 msgid "Key server web address"
-msgstr "Dirección del servidor de claves"
+msgstr "Dirección del servidor de llaves"
 
-#: src/dialogs/seahorse-export.glade2.h:15
+#: src/dialogs/seahorse-export.glade2.h:12
 msgid "Name of file to export to"
-msgstr "Escoja el fichero a exportar"
+msgstr "Escoja el archivo a exportar"
 
-#: src/dialogs/seahorse-export.glade2.h:16
-#: src/dialogs/seahorse-import.glade2.h:16
+#: src/dialogs/seahorse-export.glade2.h:13
+#: src/dialogs/seahorse-import.glade2.h:13
 msgid "www.keyserver.net/en"
 msgstr "www.keyserver.net/es"
 
 #: src/dialogs/seahorse-generate.c:86
-msgid "You must fill in a valid name"
+msgid "You must enter a valid name"
 msgstr "Debe introducir un nombre válido"
 
-#: src/dialogs/seahorse-generate.c:90
-msgid "You must fill in a valid email address"
-msgstr "Debe introducir una dirección de correo válida"
-
 #: src/dialogs/seahorse-generate.c:94
-msgid "You must fill in a valid comment"
-msgstr "Debe introducir un comentario"
+msgid "You must enter a valid comment"
+msgstr "Debe introducir un comentario válido"
 
 #: src/dialogs/seahorse-generate.c:98
-msgid "You must fill in a valid passphrase"
+msgid "You must enter a valid passphrase"
 msgstr "Debe introducir una contraseña válida"
 
 #: src/dialogs/seahorse-generate.c:102
@@ -217,7 +255,7 @@ msgstr "La contraseña y la confirmación no coinciden"
 
 #: src/dialogs/seahorse-generate.glade2.h:2
 msgid "Con_firm Passphrase:"
-msgstr "Con_firme contraseña"
+msgstr "Con_firme contraseña:"
 
 #: src/dialogs/seahorse-generate.glade2.h:3
 msgid "Confirm the entered passphrase"
@@ -227,131 +265,64 @@ msgstr "Confirme contraseña"
 msgid "DSA & ElGamal"
 msgstr "DSA & ElGamal"
 
-#: src/dialogs/seahorse-generate.glade2.h:5
-msgid "DSA (sign only)"
-msgstr "DSA (sólo firmar)"
-
-#: src/dialogs/seahorse-generate.glade2.h:6
-msgid "Enter a comment to describe the key"
-msgstr "Introduzca un comentario para describir la clave"
-
-#: src/dialogs/seahorse-generate.glade2.h:7
-msgid "Enter a valid email address"
-msgstr "Introduzca una dirección de correo válida"
-
-#: src/dialogs/seahorse-generate.glade2.h:8
-msgid "Enter your full name"
-msgstr "Introduzca su nombre completo"
-
-#: src/dialogs/seahorse-generate.glade2.h:9
-msgid "Expiration Date:"
-msgstr "Fecha de expiración:"
-
 #: src/dialogs/seahorse-generate.glade2.h:11
 msgid "Generate a Key"
-msgstr "Generar clave"
-
-#: src/dialogs/seahorse-generate.glade2.h:12
-msgid "If key never expires"
-msgstr "Si la clave no expira"
-
-#: src/dialogs/seahorse-generate.glade2.h:13
-msgid "Key Co_mment:"
-msgstr "Co_mentario:"
-
-#: src/dialogs/seahorse-generate.glade2.h:14
-msgid "Key _Length:"
-msgstr "_Tamaño:"
-
-#: src/dialogs/seahorse-generate.glade2.h:15
-msgid "Key _Type:"
-msgstr "_Tipo:"
-
-#: src/dialogs/seahorse-generate.glade2.h:16
-msgid "Key type / algorithm"
-msgstr "Tipo de clave / algoritmo"
-
-#: src/dialogs/seahorse-generate.glade2.h:17
-msgid "Length of Key"
-msgstr "Longitud de la clave"
-
-#: src/dialogs/seahorse-generate.glade2.h:18 src/seahorse-key-properties.c:195
-msgid "Never Expires"
-msgstr "Nunca Expira"
+msgstr "Generar llave"
 
 #: src/dialogs/seahorse-generate.glade2.h:19
 msgid "Passphrase to secure key"
-msgstr "Contraseña para asegurar su clave"
-
-#: src/dialogs/seahorse-generate.glade2.h:20
-msgid "RSA (sign only)"
-msgstr "RSA (sólo firmar)"
-
-#: src/dialogs/seahorse-generate.glade2.h:21
-msgid "_Email Address:"
-msgstr "_Email:"
+msgstr "Contraseña para asegurar su llave"
 
 #: src/dialogs/seahorse-generate.glade2.h:22
 msgid "_Passphrase:"
-msgstr "Contraseña:"
+msgstr "_Contraseña:"
 
 #: src/dialogs/seahorse-import.glade2.h:2
-msgid "Cancel Import"
-msgstr "Cancelar la importación"
+msgid "Enter a unique key id"
+msgstr "Introduzca un identificador de llave"
 
 #: src/dialogs/seahorse-import.glade2.h:3
-msgid "Enter a unique key id"
-msgstr "Introduzca un identificador de clave"
+msgid "Import Key(s)"
+msgstr "Importar llave(s)"
 
 #: src/dialogs/seahorse-import.glade2.h:4
-msgid "Import Key(s)"
-msgstr "Importar claves"
+msgid "Import a key from a key server"
+msgstr "Importar desde un servidor de llaves"
 
 #: src/dialogs/seahorse-import.glade2.h:5
-msgid "Import Key(s) from File"
-msgstr "Importar claves de un fichero"
+msgid "Import from _File:"
+msgstr "Importar desde un _archivo:"
 
 #: src/dialogs/seahorse-import.glade2.h:6
-msgid "Import Key(s) from Text"
-msgstr "Importar claves en texto"
+msgid "Import from _Server:"
+msgstr "Importar desde un _servidor:"
 
 #: src/dialogs/seahorse-import.glade2.h:7
-msgid "Import a key from a key server"
-msgstr "Importar claves en texto"
+msgid "Import from _Text:"
+msgstr "Importar desde _texto:"
 
 #: src/dialogs/seahorse-import.glade2.h:8
-msgid "Import from _File:"
-msgstr "Importar _fichero:"
+#: src/seahorse-file-manager.glade2.h:12
+msgid "Import keys from a file"
+msgstr "Importar llaves desde un archivo"
 
-#: src/dialogs/seahorse-import.glade2.h:9
-msgid "Import from _Server:"
-msgstr "Importar de un servidor:"
+#: src/dialogs/seahorse-import.glade2.h:9 src/seahorse-text-editor.glade2.h:12
+msgid "Import keys from text"
+msgstr "Importar llaves del texto"
 
 #: src/dialogs/seahorse-import.glade2.h:10
-msgid "Import from _Text:"
-msgstr "Importar _texto:"
+msgid "Select File to Import"
+msgstr "Seleccione el archivo a importar"
 
 #: src/dialogs/seahorse-import.glade2.h:11
-msgid "Import key(s) from specified source"
-msgstr "Importar claves de un fichero"
+msgid "Select or enter a key server's web address"
+msgstr "Seleccione o introduzca la dirección de un servidor de llaves"
 
 #: src/dialogs/seahorse-import.glade2.h:12
-msgid "Key Import Help"
-msgstr "Ayuda para importar claves"
-
-#: src/dialogs/seahorse-import.glade2.h:13
-msgid "Select File to Import"
-msgstr "Seleccione el fichero"
-
-#: src/dialogs/seahorse-import.glade2.h:14
-msgid "Select or enter a key server's web address"
-msgstr "Seleccione o introduzca la dirección de un servidor de claves"
-
-#: src/dialogs/seahorse-import.glade2.h:15
 msgid "_Key ID:"
 msgstr "_Identificador:"
 
-#: src/dialogs/seahorse-passphrase.c:43
+#: src/dialogs/seahorse-passphrase.c:40
 msgid "Enter Passphrase"
 msgstr "Introduzca contraseña"
 
@@ -361,11 +332,11 @@ msgstr "Cerrar preferencias"
 
 #: src/dialogs/seahorse-preferences.glade2.h:2
 msgid "Default Signing Key"
-msgstr "Clave por defecto para firmar"
+msgstr "Clave predeterminada para firmar"
 
 #: src/dialogs/seahorse-preferences.glade2.h:3
 msgid "Preferences Help"
-msgstr "Ayuda para preferencias"
+msgstr "Ayuda de las preferencias"
 
 #: src/dialogs/seahorse-preferences.glade2.h:4
 msgid "Seahorse Preferences"
@@ -373,11 +344,11 @@ msgstr "Preferencias"
 
 #: src/dialogs/seahorse-preferences.glade2.h:7
 msgid "_Ascii Armor"
-msgstr "_Armadura Ascii"
+msgstr "_Armadura ASCII"
 
 #: src/dialogs/seahorse-preferences.glade2.h:8
 msgid "_Default Key:"
-msgstr "Clave por _defecto:"
+msgstr "Clave pre_determinada:"
 
 #: src/dialogs/seahorse-preferences.glade2.h:9
 msgid "_Text Mode"
@@ -385,7 +356,7 @@ msgstr "_Modo de texto"
 
 #: src/dialogs/seahorse-recipients.glade2.h:1
 msgid "Add key to recipient list"
-msgstr "Añadir una clave a la lista de recipientes"
+msgstr "Añadir una clave a la lista de destinatarios"
 
 #: src/dialogs/seahorse-recipients.glade2.h:2
 msgid "Choose Keys"
@@ -397,11 +368,11 @@ msgstr "Claves"
 
 #: src/dialogs/seahorse-recipients.glade2.h:4
 msgid "Recipients"
-msgstr "Recipientes"
+msgstr "Destinatarios"
 
 #: src/dialogs/seahorse-recipients.glade2.h:5
 msgid "Remove key from recipient list"
-msgstr "Borrar clave de la lista de recipientes"
+msgstr "Borrar llave de la lista de destinatarios"
 
 #: src/dialogs/seahorse-recipients.glade2.h:6
 msgid "_Add"
@@ -411,15 +382,68 @@ msgstr "_Añadir"
 msgid "_Remove"
 msgstr "_Borrar"
 
+#: src/dialogs/seahorse-revoke.glade2.h:2
+msgid "Compromised"
+msgstr "Comprometida"
+
+#: src/dialogs/seahorse-revoke.glade2.h:3
+msgid "Key has been compromised"
+msgstr "La llave ha sido comprometida"
+
+#: src/dialogs/seahorse-revoke.glade2.h:4
+msgid "Key has been superseded"
+msgstr ""
+
+#: src/dialogs/seahorse-revoke.glade2.h:5
+msgid "Key is no longer used"
+msgstr "La llave ya no se encuentra en uso"
+
+#: src/dialogs/seahorse-revoke.glade2.h:6
+msgid "No Reason"
+msgstr "No hay motivos"
+
+#: src/dialogs/seahorse-revoke.glade2.h:7
+msgid "No reason for revoking key"
+msgstr "No hay motivos para revocar la llave"
+
+#: src/dialogs/seahorse-revoke.glade2.h:8
+msgid "Not Used"
+msgstr "Sin uso"
+
+#: src/dialogs/seahorse-revoke.glade2.h:9
+msgid "Optional revocation description"
+msgstr "Descripción opcional de revocación"
+
+#: src/dialogs/seahorse-revoke.glade2.h:10
+msgid "Reason for revoking key"
+msgstr "Razón de revocación de la llave"
+
+#: src/dialogs/seahorse-revoke.glade2.h:11 src/seahorse-key-properties.c:365
+msgid "Revoke Key"
+msgstr "Revocar llave"
+
+#: src/dialogs/seahorse-revoke.glade2.h:12
+msgid "Superseded"
+msgstr ""
+
+#: src/dialogs/seahorse-revoke.glade2.h:13
+msgid "_Description:"
+msgstr "_Descripción:"
+
+#: src/dialogs/seahorse-revoke.glade2.h:14
+msgid "_Reason:"
+msgstr "_Razón:"
+
 #: src/dialogs/seahorse-signatures.c:45
 msgid "Good, signing key expired"
-msgstr "Bien, la clave para firmar ha expirado"
+msgstr "Bien, la llave para firmar ha expirado"
 
 #: src/dialogs/seahorse-signatures.c:48
 msgid "Multiple Signatures"
 msgstr "Firmas múltiples"
 
-#: src/dialogs/seahorse-signatures.c:51
+#: src/dialogs/seahorse-signatures.c:51 src/seahorse-key-properties.c:345
+#: src/seahorse-key-properties.c:390
 msgid "Good"
 msgstr "Buena"
 
@@ -429,23 +453,23 @@ msgstr "La llave para firmar no está en el anillo"
 
 #: src/dialogs/seahorse-signatures.c:69
 msgid "Bad Signature"
-msgstr "Firma INCORRECTA"
+msgstr "Firma incorrecta"
 
 #: src/dialogs/seahorse-signatures.c:73
 msgid "Not a signature"
-msgstr "No es una firmas"
+msgstr "No es una firma"
 
 #: src/dialogs/seahorse-signatures.c:77
 msgid "Verification Error"
 msgstr "Verificar error"
 
 #: src/dialogs/seahorse-signatures.glade2.h:1
-#: src/seahorse-key-properties.c:181
+#: src/seahorse-key-properties.c:208
 msgid "Created:"
 msgstr "Creada:"
 
 #: src/dialogs/seahorse-signatures.glade2.h:2
-#: src/seahorse-key-properties.c:177
+#: src/seahorse-key-properties.c:204
 msgid "Key ID:"
 msgstr "Identificador:"
 
@@ -458,18 +482,19 @@ msgid "Signer:"
 msgstr "Firma de:"
 
 #: src/dialogs/seahorse-signatures.glade2.h:5
+#: src/seahorse-key-properties.c:336 src/seahorse-key-properties.c:381
 msgid "Status:"
 msgstr "Estado:"
 
-#: src/seahorse-context.c:285
+#: src/seahorse-context.c:318
 #, c-format
 msgid "%s Successful"
 msgstr "%s realizado"
 
-#: src/seahorse-context.c:287
+#: src/seahorse-context.c:320
 #, c-format
 msgid "%s Failed"
-msgstr "%s falló"
+msgstr "%s ha fallado"
 
 #: src/seahorse-encrypt-recipients-store.c:136
 msgid "Validity"
@@ -481,7 +506,7 @@ msgid ""
 "File must exist and end with '.asc' or '.gpg'."
 msgstr ""
 "Sufijo desconocido a nombre de archivo incorrecto.\n"
-"El fichero debe existir y terminar en '.asc' o '.gpg'."
+"El archivo debe existir y terminar en '.asc' o '.gpg'."
 
 #: src/seahorse-file-manager.glade2.h:2 src/seahorse-ops-text.c:144
 #: src/seahorse-text-editor.glade2.h:3
@@ -490,7 +515,7 @@ msgstr "Descifrar"
 
 #: src/seahorse-file-manager.glade2.h:3
 msgid "Decrypt a file"
-msgstr "Descifrar un fichero"
+msgstr "Descifrar un archivo"
 
 #: src/seahorse-file-manager.glade2.h:4 src/seahorse-text-editor.c:184
 #: src/seahorse-text-editor.glade2.h:4
@@ -508,15 +533,15 @@ msgstr "E_xportar"
 #: src/seahorse-file-manager.glade2.h:7 src/seahorse-ops-text.c:129
 #: src/seahorse-text-editor.glade2.h:8
 msgid "Encrypt"
-msgstr "Cifrar"
+msgstr "Encriptar"
 
 #: src/seahorse-file-manager.glade2.h:8
 msgid "Encrypt a file"
-msgstr "Cifrar un fichero"
+msgstr "Encriptar un archivo"
 
 #: src/seahorse-file-manager.glade2.h:9
 msgid "Export keys to a file"
-msgstr "Exportar a un fichero"
+msgstr "Exportar a un archivo"
 
 #: src/seahorse-file-manager.glade2.h:10
 msgid "File to process"
@@ -525,10 +550,6 @@ msgstr "Archivo a procesar"
 #: src/seahorse-file-manager.glade2.h:11 src/seahorse-text-editor.glade2.h:11
 msgid "Import"
 msgstr "Importar"
-
-#: src/seahorse-file-manager.glade2.h:12
-msgid "Import keys from a file"
-msgstr "Importar llaves de un archivo"
 
 #: src/seahorse-file-manager.glade2.h:13
 msgid "Make a detached signature"
@@ -560,16 +581,16 @@ msgid "Verify a detached signature"
 msgstr "Verificar una firma suelta"
 
 #: src/seahorse-file-manager.glade2.h:20 src/seahorse-key-manager.glade2.h:12
-#: src/seahorse-key-properties.glade2.h:15
+#: src/seahorse-key-properties.glade2.h:29
 #: src/seahorse-text-editor.glade2.h:20
 msgid "View statusbar"
 msgstr "Ver barra de estado"
 
 #: src/seahorse-file-manager.glade2.h:21 src/seahorse-key-manager.glade2.h:13
-#: src/seahorse-key-properties.glade2.h:16
+#: src/seahorse-key-properties.glade2.h:30
 #: src/seahorse-text-editor.glade2.h:21
 msgid "View toolbar"
-msgstr "Barra de herramientas"
+msgstr "Ver barra de herramientas"
 
 #: src/seahorse-file-manager.glade2.h:22 src/seahorse-text-editor.c:192
 #: src/seahorse-text-editor.glade2.h:22
@@ -579,7 +600,7 @@ msgstr "_Descifrar"
 #: src/seahorse-file-manager.glade2.h:23 src/seahorse-text-editor.c:196
 #: src/seahorse-text-editor.glade2.h:23
 msgid "_Encrypt"
-msgstr "_Cifrar"
+msgstr "En_criptar"
 
 #: src/seahorse-file-manager.glade2.h:24
 msgid "_File Manager Help"
@@ -596,13 +617,13 @@ msgid "_Sign"
 msgstr "_Firmar"
 
 #: src/seahorse-file-manager.glade2.h:27
-#: src/seahorse-key-properties.glade2.h:19
+#: src/seahorse-key-properties.glade2.h:33
 #: src/seahorse-text-editor.glade2.h:26
 msgid "_Statusbar"
 msgstr "Barra de e_stado"
 
 #: src/seahorse-file-manager.glade2.h:28
-#: src/seahorse-key-properties.glade2.h:20
+#: src/seahorse-key-properties.glade2.h:34
 #: src/seahorse-text-editor.glade2.h:28
 msgid "_Toolbar"
 msgstr "Barra de _herramientas"
@@ -612,21 +633,31 @@ msgstr "Barra de _herramientas"
 msgid "_Verify"
 msgstr "_Verificar"
 
-#: src/seahorse-key-manager-store.c:206
+#: src/seahorse-key-manager-store.c:200
 msgid "Trust"
 msgstr "Credibilidad"
 
-#: src/seahorse-key-manager-store.c:207
+#: src/seahorse-key-manager-store.c:205
 msgid "Type"
 msgstr "Tipo"
 
-#: src/seahorse-key-manager-store.c:208
+#: src/seahorse-key-manager-store.c:206
 msgid "Length"
 msgstr "Tamaño"
 
+#: src/seahorse-key-manager.c:149
+msgid "translator_credits"
+msgstr ""
+"José Carlos García Sogo <jsogo@debian.org>\n"
+"Germán Poo-Caamaño <gpoo@ubiobio.cl>"
+
+#: src/seahorse-key-manager.c:169
+msgid "seahorse"
+msgstr "seahorse"
+
 #: src/seahorse-key-manager.glade2.h:1
 msgid "Create a new key"
-msgstr "Generar clave"
+msgstr "Generar una nueva llave"
 
 #: src/seahorse-key-manager.glade2.h:2 src/seahorse-ops-key.c:55
 msgid "Delete Key"
@@ -634,7 +665,7 @@ msgstr "Borrar llave"
 
 #: src/seahorse-key-manager.glade2.h:3
 msgid "Delete selected key"
-msgstr "Borrar llave"
+msgstr "Borrar llave seleccionada"
 
 #: src/seahorse-key-manager.glade2.h:5
 msgid "Seahorse Key Manager"
@@ -654,7 +685,7 @@ msgstr "Gestor de archivos"
 
 #: src/seahorse-key-manager.glade2.h:9
 msgid "Show the text editor"
-msgstr "Editor de texto"
+msgstr "Mostrar el editor de texto"
 
 #: src/seahorse-key-manager.glade2.h:10
 msgid "Statusbar"
@@ -669,13 +700,13 @@ msgid "_Contents"
 msgstr "_Contenido"
 
 #: src/seahorse-key-manager.glade2.h:15
-#: src/seahorse-key-properties.glade2.h:17
+#: src/seahorse-key-properties.glade2.h:31
 msgid "_Delete"
 msgstr "_Borrar"
 
 #: src/seahorse-key-manager.glade2.h:16
 msgid "_File Manager"
-msgstr "Gestor de archivos"
+msgstr "_Gestor de archivos"
 
 #: src/seahorse-key-manager.glade2.h:17
 msgid "_New"
@@ -683,91 +714,164 @@ msgstr "_Nueva"
 
 #: src/seahorse-key-manager.glade2.h:18
 msgid "_Text Editor"
-msgstr "E_ditor"
+msgstr "E_ditor de texto"
 
-#: src/seahorse-key-properties.c:179
-msgid "Algorithm:"
-msgstr "Algoritmo:"
+#: src/seahorse-key-properties.c:206
+msgid "Type:"
+msgstr "Tipo:"
 
-#: src/seahorse-key-properties.c:184
+#: src/seahorse-key-properties.c:211
 msgid "Length:"
 msgstr "Tamaño:"
 
-#: src/seahorse-key-properties.c:187
-msgid "Expires:"
-msgstr "Expira:"
+#: src/seahorse-key-properties.c:222
+msgid "Never Expires"
+msgstr "Nunca Expira"
 
-#: src/seahorse-key-properties.c:209
-msgid "_Never Expires"
-msgstr "_Nunca Expira"
+#: src/seahorse-key-properties.c:284
+msgid "_Primary"
+msgstr "_Primario"
 
-#: src/seahorse-key-properties.c:248
-msgid "Primary"
-msgstr "Primario"
+#: src/seahorse-key-properties.c:285
+msgid "Set as primary User ID"
+msgstr "Definir como identificador de usuario primario"
 
-#: src/seahorse-key-properties.c:269
+#: src/seahorse-key-properties.c:306
 #, c-format
 msgid "User ID %d"
 msgstr "Identificador de usuario %d"
 
-#: src/seahorse-key-properties.c:310
+#: src/seahorse-key-properties.c:340 src/seahorse-key-properties.c:385
+msgid "Revoked"
+msgstr "Revocada"
+
+#: src/seahorse-key-properties.c:343 src/seahorse-key-properties.c:388
+msgid "Expired"
+msgstr "Expirada"
+
+#. Label
+#: src/seahorse-key-properties.c:355
+msgid "_Revoke"
+msgstr "_Revocar"
+
+#: src/seahorse-key-properties.c:397
 #, c-format
-msgid "Sub Key %d"
-msgstr "Subclave %d"
+msgid "Subkey %d"
+msgstr "Subllave %d"
+
+#: src/seahorse-key-properties.glade2.h:1
+msgid "Add _Subkey..."
+msgstr "Añadir _subllave..."
 
 #: src/seahorse-key-properties.glade2.h:2
+msgid "Add _User ID..."
+msgstr "Añadir identificador de _usuario..."
+
+#: src/seahorse-key-properties.glade2.h:3
+msgid "Add a new subkey"
+msgstr "Añadir una nueva subllave"
+
+#: src/seahorse-key-properties.glade2.h:4
 msgid "Add a new user ID"
 msgstr "Añadir un nuevo identificador de usuario"
 
-#: src/seahorse-key-properties.glade2.h:3
-msgid "Change _Passphrase"
-msgstr "Introduzca contraseña"
+#: src/seahorse-key-properties.glade2.h:5
+msgid "Change _Passphrase..."
+msgstr "Introduzca _contraseña..."
 
-#: src/seahorse-key-properties.glade2.h:4
+#: src/seahorse-key-properties.glade2.h:6
 msgid "Change key's passphrase"
 msgstr "Cambiar la contraseña de esta llave"
 
-#: src/seahorse-key-properties.glade2.h:5
+#: src/seahorse-key-properties.glade2.h:7
 msgid "Delete key"
 msgstr "Borrar llave"
 
-#: src/seahorse-key-properties.glade2.h:6
+#: src/seahorse-key-properties.glade2.h:8
 msgid "Enable/Disable Key"
-msgstr "Habilitar/Deshabilitar"
+msgstr "Habilitar/deshabilitar llave"
 
-#: src/seahorse-key-properties.glade2.h:7
+#: src/seahorse-key-properties.glade2.h:9
 msgid "Export key"
 msgstr "Exportar llave"
 
-#: src/seahorse-key-properties.glade2.h:8
+#: src/seahorse-key-properties.glade2.h:10
 msgid "Fingerprint:"
 msgstr "Fingerprint:"
 
-#: src/seahorse-key-properties.glade2.h:9
+#: src/seahorse-key-properties.glade2.h:11 src/seahorse-validity.c:42
+msgid "Full"
+msgstr "Completa"
+
+#: src/seahorse-key-properties.glade2.h:12
+msgid "Fully trust owner"
+msgstr ""
+
+#: src/seahorse-key-properties.glade2.h:13
 msgid "Key Properties"
 msgstr "Propiedades"
 
-#: src/seahorse-key-properties.glade2.h:10
+#: src/seahorse-key-properties.glade2.h:14
 msgid "Key Properties Help"
 msgstr "Ayuda para las propiedades"
 
-#: src/seahorse-key-properties.glade2.h:11
+#: src/seahorse-key-properties.glade2.h:15 src/seahorse-validity.c:39
+msgid "Marginal"
+msgstr "Marginal"
+
+#: src/seahorse-key-properties.glade2.h:16
+msgid "Marginally trust owner"
+msgstr ""
+
+#: src/seahorse-key-properties.glade2.h:17 src/seahorse-validity.c:36
+msgid "Never"
+msgstr "Nunca"
+
+#: src/seahorse-key-properties.glade2.h:18
+msgid "Never trust owner"
+msgstr ""
+
+#: src/seahorse-key-properties.glade2.h:19
 msgid "Owner Trust"
 msgstr "Credibilidad"
 
-#: src/seahorse-key-properties.glade2.h:12
+#: src/seahorse-key-properties.glade2.h:20
 msgid "Owner _Trust:"
 msgstr "_Credibilidad:"
 
-#: src/seahorse-key-properties.glade2.h:13
+#: src/seahorse-key-properties.glade2.h:21
 msgid "Save File"
-msgstr "Grabar fichero"
+msgstr "Guardar archivo"
 
-#: src/seahorse-key-properties.glade2.h:14
+#: src/seahorse-key-properties.glade2.h:22
 msgid "Show key properties help"
 msgstr "Mostrar ayuda de las propiedades"
 
-#: src/seahorse-key-properties.glade2.h:18
+#: src/seahorse-key-properties.glade2.h:23
+msgid "Sub_keys"
+msgstr "Sub_llaves"
+
+#: src/seahorse-key-properties.glade2.h:24 src/seahorse-validity.c:45
+msgid "Ultimate"
+msgstr "Absoluta"
+
+#: src/seahorse-key-properties.glade2.h:25
+msgid "Ultimately trust owner"
+msgstr "Credibilidad absoluta"
+
+#: src/seahorse-key-properties.glade2.h:26 src/seahorse-validity.c:33
+msgid "Unknown"
+msgstr "Desconocida"
+
+#: src/seahorse-key-properties.glade2.h:27
+msgid "Unknown owner"
+msgstr "Propietario desconocido"
+
+#: src/seahorse-key-properties.glade2.h:28
+msgid "View Subkeys"
+msgstr "Ver subllaves"
+
+#: src/seahorse-key-properties.glade2.h:32
 msgid "_Disabled"
 msgstr "_Deshabilitada"
 
@@ -775,22 +879,22 @@ msgstr "_Deshabilitada"
 msgid "Name"
 msgstr "Nombre"
 
-#: src/seahorse-key-store.c:334
+#: src/seahorse-key-store.c:336
 msgid "Key ID"
 msgstr "Identificador"
 
 #: src/seahorse-ops-data.c:43
 #, c-format
 msgid "Imported %d Keys: "
-msgstr "Importar %d claves: "
+msgstr "Importar %d llaves: "
 
 #: src/seahorse-ops-file.c:104
 msgid "Bad File, Import"
-msgstr "Fichero incorrecto, importar"
+msgstr "Archivo incorrecto, importar"
 
 #: src/seahorse-ops-file.c:118 src/seahorse-ops-file.c:131
 msgid "Export File"
-msgstr "Exportar a un fichero"
+msgstr "Exportar a un archivo"
 
 #: src/seahorse-ops-file.c:146
 msgid "Detached Signature"
@@ -798,7 +902,7 @@ msgstr "Firma suelta"
 
 #: src/seahorse-ops-file.c:161
 msgid "Encrypt File"
-msgstr "Codificar archivo"
+msgstr "Encriptar archivo"
 
 #: src/seahorse-ops-file.c:176
 msgid "Decrypt File"
@@ -816,29 +920,33 @@ msgstr "Descifrar y verificar el archivo"
 msgid "Generate Key"
 msgstr "Generar llave"
 
-#: src/seahorse-ops-key.c:422
+#: src/seahorse-ops-key.c:401
 msgid "Change Trust"
 msgstr "Cambiar credibilidad"
 
-#: src/seahorse-ops-key.c:558
+#: src/seahorse-ops-key.c:542
 msgid "Change Expiration"
 msgstr "Cambiar expiración"
 
-#: src/seahorse-ops-key.c:655
+#: src/seahorse-ops-key.c:632
 msgid "Disable Key"
 msgstr "Deshabilitar llave"
 
-#: src/seahorse-ops-key.c:659
+#: src/seahorse-ops-key.c:636
 msgid "Enable Key"
 msgstr "Habilitar llave"
 
-#: src/seahorse-ops-key.c:766
+#: src/seahorse-ops-key.c:739
 msgid "Passphrase Change"
 msgstr "Cambiar contraseña"
 
-#: src/seahorse-ops-key.c:933
-msgid "User ID added"
-msgstr "Idetificador de usuario añadido"
+#: src/seahorse-ops-key.c:1190
+msgid "Delete Subkey"
+msgstr "Borrar subllave"
+
+#: src/seahorse-ops-key.c:1372
+msgid "Revoke Subkey"
+msgstr "Revocar subllave"
 
 #: src/seahorse-ops-text.c:71 src/seahorse-ops-text.c:86
 msgid "Export Text"
@@ -866,7 +974,7 @@ msgstr "Firma en texto claro"
 
 #: src/seahorse-text-editor.glade2.h:5
 msgid "Decrypt and verify a signatur"
-msgstr "Descifrar y verificar"
+msgstr "Descifrar y verificar una firma"
 
 #: src/seahorse-text-editor.glade2.h:6
 msgid "Decrypt text"
@@ -874,19 +982,15 @@ msgstr "Descifrar texto"
 
 #: src/seahorse-text-editor.glade2.h:9
 msgid "Encrypt text"
-msgstr "Cifrar texto"
+msgstr "Encriptar texto"
 
 #: src/seahorse-text-editor.glade2.h:10
-msgid "Export keys"
-msgstr "Exportar llaves"
-
-#: src/seahorse-text-editor.glade2.h:12
-msgid "Import keys from text"
-msgstr "Importar llaves del texto"
+msgid "Export keys to text"
+msgstr "Exportar llaves a texto"
 
 #: src/seahorse-text-editor.glade2.h:13
 msgid "Make a clear text signature"
-msgstr "Hacer una firma en texto claro"
+msgstr "Firmar en texto claro"
 
 #: src/seahorse-text-editor.glade2.h:14
 msgid "Make a signature"
@@ -898,7 +1002,7 @@ msgstr "Editor de texto Seahorse"
 
 #: src/seahorse-text-editor.glade2.h:16
 msgid "Show text editor help"
-msgstr "Ayuda del Editor"
+msgstr "Ayuda del editor de texto"
 
 #: src/seahorse-text-editor.glade2.h:19
 msgid "Verify a signature"
@@ -906,215 +1010,9 @@ msgstr "Verificar una firma"
 
 #: src/seahorse-text-editor.glade2.h:27
 msgid "_Text Editor Help"
-msgstr "Ayuda del Edi_tor"
+msgstr "Ayuda del edi_tor de texto"
 
-#: src/seahorse-util.c:76
+#: src/seahorse-util.c:79
 msgid "%Y-%m-%d"
 msgstr "%d-%m-%Y"
 
-#: src/seahorse-validity.c:33
-msgid "Unknown"
-msgstr "Desconocida"
-
-#: src/seahorse-validity.c:36
-msgid "Never"
-msgstr "Nunca"
-
-#: src/seahorse-validity.c:39
-msgid "Marginal"
-msgstr "Marginal"
-
-#: src/seahorse-validity.c:42
-msgid "Full"
-msgstr "Completa"
-
-#: src/seahorse-validity.c:45
-msgid "Ultimate"
-msgstr "Absoluta"
-
-#~ msgid "translator_credits"
-#~ msgstr "José Carlos García Sogo <jsogo@debian.org>"
-
-#~ msgid ""
-#~ "This key does not have encryption capability.\n"
-#~ "It cannot be added to the list."
-#~ msgstr ""
-#~ "Esta clave no puede codificar.\n"
-#~ "No se pudo añadir a la lista"
-
-#~ msgid "created"
-#~ msgstr "creada"
-
-#~ msgid "keyid"
-#~ msgstr "llave"
-
-#~ msgid "signer"
-#~ msgstr "Firma de"
-
-#~ msgid "status"
-#~ msgstr "estado"
-
-#~ msgid "Create a detached signature with default key"
-#~ msgstr "Firmar suelta con la llave por defecto"
-
-#~ msgid "Decrypt _& Verify"
-#~ msgstr "Descifrar _y verificar"
-
-#~ msgid "_Manual"
-#~ msgstr "_Manual"
-
-#~ msgid "fpr"
-#~ msgstr "fpr"
-
-#~ msgid "Clear sign text with default key"
-#~ msgstr "Firmar en claro con la llave por defecto"
-
-#~ msgid "Decrypt encrypted text"
-#~ msgstr "Descifrar texto"
-
-#~ msgid "Sign text with default key"
-#~ msgstr "Firmar texto con la llave por defecto"
-
-#~ msgid "Verify signed text"
-#~ msgstr "Verificar texto firmado"
-
-#~ msgid "_Clear Sign"
-#~ msgstr "Firmar en _claro"
-
-#~ msgid "If need validity"
-#~ msgstr "Si necesita validez"
-
-#~ msgid "TRUE if recipients need to have full validity"
-#~ msgstr "VERDADERO si los recipientes necesitan tener validez total"
-
-#~ msgid "Seahorse Key for this item"
-#~ msgstr "Llave Seahorse para este objeto"
-
-#~ msgid "Whether the menu contains keys that have secret components"
-#~ msgstr "Si el menú contiene claves con componentes secretos"
-
-#~ msgid "Seahorse Context"
-#~ msgstr "Contexto Seahorse"
-
-#~ msgid "Seahorse Key of this widget"
-#~ msgstr "Llave Seahorse de este widget"
-
-#~ msgid "Gpgme Key"
-#~ msgstr "Llave Gpgme"
-
-#~ msgid "If the key never expires"
-#~ msgstr "La clave no expira"
-
-#~ msgid "algo"
-#~ msgstr "algoritmo"
-
-#~ msgid "id"
-#~ msgstr "id"
-
-#~ msgid "length"
-#~ msgstr "longitud"
-
-#~ msgid "label"
-#~ msgstr "etiqueta"
-
-#~ msgid "Import Text"
-#~ msgstr "Importar texto"
-
-#~ msgid "Import File"
-#~ msgstr "Importar fichero"
-
-#~ msgid "Signature %d"
-#~ msgstr "Firma %d"
-
-#~ msgid "Bad"
-#~ msgstr "Malo"
-
-#~ msgid "No Key to Verify"
-#~ msgstr "No hay clave para verificar"
-
-#~ msgid "Error"
-#~ msgstr "Error"
-
-#~ msgid "_View Signing Key"
-#~ msgstr "_Ver clave de la firma"
-
-#~ msgid "Key _Properties"
-#~ msgstr "_Propiedades de las claves"
-
-#~ msgid "Refresh List of Keys"
-#~ msgstr "Refrescar lista"
-
-#~ msgid "_Delete Key"
-#~ msgstr "_Borrar clave"
-
-#~ msgid "_Export Key"
-#~ msgstr "_Exportar clave"
-
-#~ msgid "_Generate Key"
-#~ msgstr "_Generar clave"
-
-#~ msgid "_Import Key(s)"
-#~ msgstr "_Importar claves"
-
-#~ msgid "_Refresh List"
-#~ msgstr "_Refrescar"
-
-#~ msgid "Encode Key in Ascii Armor (recommended)"
-#~ msgstr "Codificar con armadura Ascii (recomendado)"
-
-#~ msgid "_Key to Export:"
-#~ msgstr "_Clave a exportar:"
-
-#~ msgid "2002, Jacob Perkins"
-#~ msgstr "2002, Jacob Perkins"
-
-#~ msgid "DSA"
-#~ msgstr "DSA"
-
-#~ msgid "RSA"
-#~ msgstr "RSA"
-
-#~ msgid "Attributes"
-#~ msgstr "Atributos"
-
-#~ msgid "Can Certify"
-#~ msgstr "Puede certificar"
-
-#~ msgid "Can Encrypt"
-#~ msgstr "Puede encriptar"
-
-#~ msgid "Can Sign"
-#~ msgstr "Puede firmar"
-
-#~ msgid "If Key Can Encrypt"
-#~ msgstr "Si puede encriptar"
-
-#~ msgid "If Key Can Sign"
-#~ msgstr "Si puede firmar"
-
-#~ msgid "Revoked"
-#~ msgstr "Revocada"
-
-#~ msgid "Set P_hoto ID"
-#~ msgstr "Asignar f_oto"
-
-#~ msgid "Undefined"
-#~ msgstr "Sin definir"
-
-#~ msgid "_Photo ID"
-#~ msgstr "F_oto"
-
-#~ msgid "fingerprint"
-#~ msgstr "fingerprint"
-
-#~ msgid "Use Ascii Armor (recommended)"
-#~ msgstr "Usar Armadura Ascii (recomendado)"
-
-#~ msgid "Import Key(s) in Text"
-#~ msgstr "Importar claves en texto"
-
-#~ msgid "Sign Text"
-#~ msgstr "Fimar texto"
-
-#~ msgid "Clear Sign Text"
-#~ msgstr "Fimar en claro"
