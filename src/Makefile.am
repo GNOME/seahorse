@@ -13,7 +13,7 @@ INCLUDES = -I$(top_builddir) \
 	-DSEAHORSE_GLADEDIR=\""$(gladedir)"\" \
 	-DLOCALEDIR=\"$(localedir)\"
 
-seahorse_LDADD = -lgpgme \
+seahorse_LDADD = \
 	dialogs/libdialogs.a \
 	$(SEAHORSE_LIBS)
 

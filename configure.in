@@ -14,8 +14,18 @@ AM_PROG_LIBTOOL
 AM_GCONF_SOURCE_2
 
 PKG_CHECK_MODULES(SEAHORSE, libgnomeui-2.0 libglade-2.0)
+
+dnl **********
+dnl GPGME
+dnl **********
+AM_PATH_GPGME(0.3.14)
+
+SEAHORSE_CFLAGS="$SEAHORSE_CFLAGS $GPGME_CFLAGS"
+SEAHORSE_LIBS="$SEAHORSE_LIBS $GPGME_LIBS"
+
 AC_SUBST(SEAHORSE_CFLAGS)
 AC_SUBST(SEAHORSE_LIBS)
+
 
 dnl *******************
 dnl ***** gettext *****
