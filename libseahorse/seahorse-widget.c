@@ -195,11 +195,25 @@ seahorse_widget_get_property (GObject *object, guint prop_id, GValue *value, GPa
 static void
 seahorse_widget_show_help (GtkWidget *widget, SeahorseWidget *swidget)
 {
-	//error check help
-	if (g_str_equal (swidget->name, "key-manager"))
-		gnome_help_display (PACKAGE, "toc", NULL);
-	else
-		gnome_help_display (PACKAGE, swidget->name, NULL);
+    GError *err = NULL;
+
+    if (g_str_equal (swidget->name, "key-manager"))
+        gnome_help_display (PACKAGE, NULL, &err);
+    else
+       gnome_help_display (PACKAGE, swidget->name, &err);
+
+    if (err != NULL) {
+        GtkWidget *dialog;
+
+        dialog = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, 
+                                         GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, 
+                                         _("Could not display help: %s"),
+                                         err->message);
+        g_signal_connect (G_OBJECT (dialog), "response",
+                          G_CALLBACK (gtk_widget_destroy), NULL);
+        gtk_widget_show (dialog);
+        g_error_free (err);
+    }
 }
 
 /* Destroys widget */
