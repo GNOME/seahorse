@@ -20,17 +20,11 @@
  */
 
 #include <gnome.h>
-#include <libbonoboui.h>
 #include <eel/eel.h>
 
 #include "seahorse-preferences.h"
 #include "seahorse-widget.h"
-
-static void
-button_toggled (GtkToggleButton *togglebutton, gchar *key)
-{
-	eel_gconf_set_boolean (key, gtk_toggle_button_get_active (togglebutton));
-}
+#include "seahorse-check-button-control.h"
 
 static void
 key_toolbar_changed (GtkOptionMenu *option, SeahorseWidget *swidget)
@@ -77,13 +71,10 @@ seahorse_preferences_show (SeahorseContext *sctx)
 	swidget = seahorse_widget_new ("preferences", sctx);
 	g_return_if_fail (swidget != NULL);
 	
-	widget = bonobo_widget_new_control ("OAFIID:Seahorse_PGP_Controls", NULL);
-	gtk_widget_show (widget);
-	
-	bonobo_widget_set_property (BONOBO_WIDGET (widget), "ascii_armor",
-		BONOBO_ARG_BOOLEAN, CORBA_TRUE, NULL);
-	bonobo_widget_set_property (BONOBO_WIDGET (widget), "default_key",
-		BONOBO_ARG_BOOLEAN, CORBA_TRUE, NULL);
+	widget = gtk_vbox_new (FALSE, 12);
+	gtk_container_set_border_width (GTK_CONTAINER (widget), 12);
+	gtk_container_add (GTK_CONTAINER (widget), seahorse_check_button_control_new (
+		_("_Ascii Armor"), ARMOR_KEY));
 	
 	gtk_notebook_prepend_page (GTK_NOTEBOOK (glade_xml_get_widget (swidget->xml, "notebook")),
 		widget, gtk_label_new (_("PGP")));
@@ -100,27 +91,23 @@ seahorse_preferences_show (SeahorseContext *sctx)
 	gtk_option_menu_set_history (GTK_OPTION_MENU (glade_xml_get_widget (
 		swidget->xml, "key_toolbar")), history);
 	
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (glade_xml_get_widget (
-		swidget->xml, "show_validity")), eel_gconf_get_boolean (SHOW_VALIDITY_KEY));
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (glade_xml_get_widget (
-		swidget->xml, "show_expires")), eel_gconf_get_boolean (SHOW_EXPIRES_KEY));
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (glade_xml_get_widget (
-		swidget->xml, "show_trust")), eel_gconf_get_boolean (SHOW_TRUST_KEY));
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (glade_xml_get_widget (
-		swidget->xml, "show_length")), eel_gconf_get_boolean (SHOW_LENGTH_KEY));
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (glade_xml_get_widget (
-		swidget->xml, "show_type")), eel_gconf_get_boolean (SHOW_TYPE_KEY));
+	widget = gtk_hbox_new (FALSE, 12);
+	gtk_container_set_border_width (GTK_CONTAINER (widget), 12);
+	gtk_container_add (GTK_CONTAINER (glade_xml_get_widget (swidget->xml, "frame")), widget);
+	
+	gtk_container_add (GTK_CONTAINER (widget), seahorse_check_button_control_new (
+		_("_Validity"), SHOW_VALIDITY_KEY));
+	gtk_container_add (GTK_CONTAINER (widget), seahorse_check_button_control_new (
+		_("_Expires"), SHOW_EXPIRES_KEY));
+	gtk_container_add (GTK_CONTAINER (widget), seahorse_check_button_control_new (
+		_("_Trust"), SHOW_TRUST_KEY));
+	gtk_container_add (GTK_CONTAINER (widget), seahorse_check_button_control_new (
+		_("_Length"), SHOW_LENGTH_KEY));
+	gtk_container_add (GTK_CONTAINER (widget), seahorse_check_button_control_new (
+		_("T_ype"), SHOW_TYPE_KEY));
 	
 	glade_xml_signal_connect_data (swidget->xml, "key_toolbar_changed",
 		G_CALLBACK (key_toolbar_changed), swidget);
-	glade_xml_signal_connect_data (swidget->xml, "show_validity_toggled",
-		G_CALLBACK (button_toggled), SHOW_VALIDITY_KEY);
-	glade_xml_signal_connect_data (swidget->xml, "show_expires_toggled",
-		G_CALLBACK (button_toggled), SHOW_EXPIRES_KEY);
-	glade_xml_signal_connect_data (swidget->xml, "show_trust_toggled",
-		G_CALLBACK (button_toggled), SHOW_TRUST_KEY);
-	glade_xml_signal_connect_data (swidget->xml, "show_length_toggled",
-		G_CALLBACK (button_toggled), SHOW_LENGTH_KEY);
-	glade_xml_signal_connect_data (swidget->xml, "show_type_toggled",
-		G_CALLBACK (button_toggled), SHOW_TYPE_KEY);
+		
+	gtk_widget_show_all (glade_xml_get_widget (swidget->xml, swidget->name));
 }

@@ -29,6 +29,10 @@ main (int argc, char **argv)
 	
 	swidget = seahorse_widget_new ("pgp-preferences", seahorse_context_new ());
 	table = gtk_table_new (2, 3, FALSE);
+	gtk_table_set_row_spacings (GTK_TABLE (table), 12);
+	gtk_table_set_col_spacings (GTK_TABLE (table), 12);
+	gtk_container_set_border_width (GTK_CONTAINER (table), 12);
+	
 	gtk_container_add (GTK_CONTAINER (glade_xml_get_widget (swidget->xml, "vbox")), table);
 	
 	gtk_table_attach (GTK_TABLE (table), seahorse_check_button_control_new (_("_Ascii Armor"),
