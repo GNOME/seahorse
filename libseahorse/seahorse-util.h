@@ -34,6 +34,12 @@ typedef enum {
 
 gchar*		seahorse_util_get_date_string		(const time_t		time);
 
+#define SEAHORSE_GPGME_ERROR  (seahorse_util_gpgme_error_domain())
+GQuark      seahorse_util_gpgme_error_domain();
+
+void        seahorse_util_gpgme_to_error        (gpgme_error_t gerr, 
+                                                 GError** err);
+
 void        seahorse_util_show_error            (GtkWindow          *parent,
                                                  const char*        msg);
                                                  

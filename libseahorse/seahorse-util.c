@@ -152,7 +152,32 @@ seahorse_util_handle_gerror (GError* err, const char* desc, ...)
     g_error_free(err);
 }    
 
+/**
+ * seahorse_util_gpgme_error_domain
+ * Returns: The GError domain for gpgme errors
+ **/
+GQuark
+seahorse_util_gpgme_error_domain ()
+{
+    static GQuark q = 0;
+    if(q == 0)
+        q = g_quark_from_static_string ("seahorse-gpgme-error");
+    return q;
+}
 
+/**
+ * seahorse_util_gpgme_to_error
+ * @gerr GPGME error
+ * @err  Resulting GError object
+ **/
+void    
+seahorse_util_gpgme_to_error(gpgme_error_t gerr, GError** err)
+{
+    /* Make sure this is actually an error */
+    g_assert(!GPG_IS_OK(gerr));
+    g_set_error(err, SEAHORSE_GPGME_ERROR, gpgme_err_code(gerr), 
+                            "%s", gpgme_strerror(gerr));
+}
 
 /**
  * seahorse_util_write_data_to_file:
