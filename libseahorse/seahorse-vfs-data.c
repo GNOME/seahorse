@@ -512,7 +512,7 @@ seahorse_vfs_data_create(const gchar *uri, gboolean write, gpg_error_t* err)
     {
         int fd;
         
-        fd = open(local, write ? O_CREAT | O_RDWR : O_RDONLY, 0644);
+        fd = open(local, write ? O_CREAT | O_TRUNC | O_RDWR : O_RDONLY, 0644);
         
         if(fd == -1)
         {
