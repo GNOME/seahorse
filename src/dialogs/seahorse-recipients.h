@@ -65,6 +65,6 @@ SeahorseWidget*	seahorse_export_recipients_new (SeahorseContext		*sctx);
 
 SeahorseWidget*	seahorse_encrypt_recipients_new	(SeahorseContext	*sctx);
 
-GpgmeRecipients	seahorse_recipients_run	(SeahorseRecipients	*srecips);
+GpgmeRecipients	seahorse_recipients_run		(SeahorseRecipients	*srecips);
 
 #endif /* __SEAHORSE_RECIPIENTS_H__ */

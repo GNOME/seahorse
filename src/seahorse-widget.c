@@ -173,7 +173,8 @@ seahorse_widget_set_property (GObject *object, guint prop_id, const GValue *valu
 		case PROP_CTX:
 			swidget->sctx = g_value_get_object (value);
 			g_object_ref (G_OBJECT (swidget->sctx));
-			g_signal_connect (swidget->sctx, "destroy", G_CALLBACK (seahorse_widget_destroyed), swidget);
+			g_signal_connect_after (swidget->sctx, "destroy",
+				G_CALLBACK (seahorse_widget_destroyed), swidget);
 			break;
 		/* Connects component specific callbacks */
 		case PROP_COMPONENT:
@@ -186,7 +187,7 @@ seahorse_widget_set_property (GObject *object, guint prop_id, const GValue *valu
 					glade_xml_get_widget (swidget->xml, STATUS));
 				glade_xml_signal_connect_data (swidget->xml, "focus_in_event",
 					G_CALLBACK (seahorse_widget_focus_in_event), swidget);
-				g_signal_connect (swidget->sctx, STATUS,
+				g_signal_connect_after (swidget->sctx, STATUS,
 					G_CALLBACK (seahorse_widget_show_status), swidget);
 			}
 			break;

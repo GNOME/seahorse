@@ -66,6 +66,8 @@ static void	seahorse_key_store_changed		(SeahorseKey		*skey,
 							 SeahorseKeyStore	*skstore,
 							 GtkTreeIter		*iter);
 
+static void	seahorse_key_store_context_destroyed	(GtkObject		*object,
+							 SeahorseKeyStore	*skstore);
 static void	seahorse_key_store_key_added		(SeahorseContext	*sctx,
 							 SeahorseKey		*skey,
 							 SeahorseKeyStore	*skstore);
@@ -136,7 +138,11 @@ seahorse_key_store_finalize (GObject *gobject)
 	SeahorseKeyStore *skstore;
 	
 	skstore = SEAHORSE_KEY_STORE (gobject);
-	g_signal_handlers_disconnect_by_func (skstore->sctx, seahorse_key_store_key_added, skstore);
+	
+	g_signal_handlers_disconnect_by_func (GTK_OBJECT (skstore->sctx),
+		seahorse_key_store_context_destroyed, skstore);
+	g_signal_handlers_disconnect_by_func (skstore->sctx,
+		seahorse_key_store_key_added, skstore);
 	g_object_unref (skstore->sctx);
 	
 	G_OBJECT_CLASS (parent_class)->finalize (gobject);
@@ -156,6 +162,8 @@ seahorse_key_store_set_property (GObject *gobject, guint prop_id,
 		case PROP_CTX:
 			skstore->sctx = g_value_get_object (value);
 			g_object_ref (skstore->sctx);
+			g_signal_connect_after (skstore->sctx, "destroy",
+				G_CALLBACK (seahorse_key_store_context_destroyed), skstore);
 			g_signal_connect_after (skstore->sctx, "add",
 				G_CALLBACK (seahorse_key_store_key_added), skstore);
 			break;
@@ -217,6 +225,12 @@ seahorse_key_store_changed (SeahorseKey *skey, SeahorseKeyChange change,
 }
 
 static void
+seahorse_key_store_context_destroyed (GtkObject *object, SeahorseKeyStore *skstore)
+{
+	seahorse_key_store_destroy (skstore);
+}
+
+static void
 seahorse_key_store_key_added (SeahorseContext *sctx, SeahorseKey *skey, SeahorseKeyStore *skstore)
 {
 	seahorse_key_store_append (skstore, skey);
@@ -269,7 +283,8 @@ seahorse_key_row_remove (SeahorseKeyRow *skrow)
 	GtkTreePath *path;
 
 	path = gtk_tree_row_reference_get_path (skrow->ref);
-	seahorse_key_store_remove (skrow->skstore, path);
+	if (gtk_tree_model_get_iter (GTK_TREE_MODEL (skrow->skstore), &iter, path))
+		SEAHORSE_KEY_STORE_GET_CLASS (skrow->skstore)->remove (skrow->skstore, &iter);
 	
 	/* Unref key */
 	g_signal_handlers_disconnect_by_func (G_OBJECT (skrow->skey),
@@ -289,7 +304,7 @@ seahorse_key_store_init (SeahorseKeyStore *skstore, GtkTreeView *view,
 	gtk_tree_store_set_column_types (GTK_TREE_STORE (skstore),
 		cols, columns);
 	gtk_tree_view_set_model (view, GTK_TREE_MODEL (skstore));
-	g_object_unref (skstore);
+	//g_object_unref (skstore);
 
 	seahorse_key_store_append_column (view, _("Name"), NAME);
 	seahorse_key_store_append_column (view, _("Key ID"), KEYID);
@@ -301,14 +316,14 @@ seahorse_key_store_destroy (SeahorseKeyStore *skstore)
 	SeahorseKeyRow *skrow;
 	GtkTreeIter iter;
 	
-	g_return_if_fail (skstore != NULL && SEAHORSE_IS_KEY_STORE (skstore));
-	
 	if (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (skstore), &iter)) {
 		do {
 			gtk_tree_model_get (GTK_TREE_MODEL (skstore), &iter, SKROW, &skrow, -1);
 			seahorse_key_row_remove (skrow);
-		} while (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (skstore), &iter));
+		} while (GTK_IS_TREE_MODEL (skstore) &&
+			 gtk_tree_model_get_iter_first (GTK_TREE_MODEL (skstore), &iter));
 	}
+	g_object_unref (skstore);
 }
 
 void
@@ -350,6 +365,20 @@ seahorse_key_store_get_selected_key (GtkTreeView *view)
 	return seahorse_key_store_get_key_from_path (view, path);
 }
 
+static SeahorseKeyRow*
+get_row_from_path (GtkTreeModel *model, GtkTreePath *path)
+{
+	GtkTreeIter iter, parent;
+	SeahorseKeyRow *skrow;
+	
+	g_return_val_if_fail (gtk_tree_model_get_iter (model, &iter, path), NULL);
+	if (gtk_tree_model_iter_parent (model, &parent, &iter))
+		iter = parent;
+	gtk_tree_model_get (model, &iter, SKROW, &skrow, -1);
+	
+	return skrow;
+}
+
 SeahorseKey*
 seahorse_key_store_get_key_from_path (GtkTreeView *view, GtkTreePath *path)
 {
@@ -359,16 +388,9 @@ seahorse_key_store_get_key_from_path (GtkTreeView *view, GtkTreePath *path)
 	
 	g_return_val_if_fail (view != NULL && GTK_IS_TREE_VIEW (view), NULL);
 	g_return_val_if_fail (path != NULL, NULL);
-
-	//while (gtk_tree_path_up (path))
-		//continue;
 	
-	model = gtk_tree_view_get_model (view);
-	g_return_val_if_fail (gtk_tree_model_get_iter (model, &iter, path), NULL);
-	
-	if (gtk_tree_model_iter_parent (model, &parent, &iter))
-		iter = parent;
-	gtk_tree_model_get (model, &iter, SKROW, &skrow, -1);
+	skrow = get_row_from_path (gtk_tree_view_get_model (view), path);
+	g_return_val_if_fail (skrow != NULL, NULL);
 	
 	return skrow->skey;
 }
@@ -387,13 +409,15 @@ seahorse_key_store_append (SeahorseKeyStore *skstore, SeahorseKey *skey)
 void
 seahorse_key_store_remove (SeahorseKeyStore *skstore, GtkTreePath *path)
 {
-	GtkTreeIter iter;
+	SeahorseKeyRow *skrow;
 
 	g_return_if_fail (skstore != NULL && SEAHORSE_IS_KEY_STORE (skstore));
 	g_return_if_fail (path != NULL);
 	
-	g_return_if_fail (gtk_tree_model_get_iter (GTK_TREE_MODEL (skstore), &iter, path));
-	SEAHORSE_KEY_STORE_GET_CLASS (skstore)->remove (skstore, &iter);
+	skrow = get_row_from_path (GTK_TREE_MODEL (skstore), path);
+	g_return_if_fail (skrow != NULL);
+	
+	seahorse_key_row_remove (skrow);
 }
 
 void

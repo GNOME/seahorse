@@ -44,13 +44,7 @@
 static void
 quit (GtkWidget *widget, SeahorseWidget *swidget)
 {	
-	GtkTreeModel *model;
-	
-	model = gtk_tree_view_get_model (GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, KEY_LIST)));
-	seahorse_key_store_destroy (SEAHORSE_KEY_STORE (model));
-	
 	seahorse_context_destroy (swidget->sctx);
-	
 	gtk_exit (0);
 }
 
