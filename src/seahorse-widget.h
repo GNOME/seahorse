@@ -42,13 +42,11 @@ struct _SeahorseWidget
 	GObject		parent;
 	
 	/*< public >*/
-	
 	GladeXML	*xml;
 	gchar		*name;
 	SeahorseContext	*sctx;
 	
 	/*< private >*/
-	
 	gboolean	component;
 };
 

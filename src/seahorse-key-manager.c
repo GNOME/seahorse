@@ -36,6 +36,7 @@
 #include "seahorse-ops-key.h"
 #include "seahorse-key-dialogs.h"
 #include "seahorse-file-dialogs.h"
+#include "seahorse-key-pair.h"
 
 #define KEY_MANAGER "key-manager"
 #define KEY_LIST "key_list"
@@ -285,7 +286,7 @@ selection_changed (GtkTreeSelection *selection, SeahorseWidget *swidget)
 	if (sensitive) {
 		skey = seahorse_key_store_get_selected_key (GTK_TREE_VIEW (
 			glade_xml_get_widget (swidget->xml, KEY_LIST)));
-		secret = seahorse_context_key_has_secret (swidget->sctx, skey);
+		secret = SEAHORSE_IS_KEY_PAIR (skey);
 	}
 	
 	/* do all key operation items */

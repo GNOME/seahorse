@@ -28,6 +28,7 @@
 #include "seahorse-util.h"
 #include "seahorse-validity.h"
 #include "seahorse-key-dialogs.h"
+#include "seahorse-key-pair.h"
 
 #define SPACING 12
 #define TRUST "trust"
@@ -225,7 +226,7 @@ do_stats (SeahorseWidget *swidget, GtkTable *table, guint top, guint index)
 	
 	expires = gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_EXPIRE, NULL, index);
 	
-	if (!seahorse_context_key_has_secret (swidget->sctx, skey)) {
+	if (!SEAHORSE_IS_KEY_PAIR (skey)) {
 		if (expires)
 			do_stat_label (seahorse_util_get_date_string (expires), table, 1, top+2);
 		else
@@ -288,7 +289,7 @@ do_uids (SeahorseWidget *swidget)
 	tooltips = gtk_tooltips_new ();
 	
 	while (index < max) {
-		if (max > 1 && seahorse_context_key_has_secret (swidget->sctx, skwidget->skey)) {
+		if (max > 1 && SEAHORSE_IS_KEY_PAIR (skwidget->skey)) {
 			table = GTK_TABLE (gtk_table_new (2, 2, FALSE));
 			
 			widget = gtk_radio_button_new_with_mnemonic (group, _("_Primary"));
@@ -348,7 +349,7 @@ do_subkeys (SeahorseWidget *swidget)
 		gtk_widget_show (widget);
 	
 	while (index <= max) {
-		if (seahorse_context_key_has_secret (swidget->sctx, skwidget->skey)) {
+		if (SEAHORSE_IS_KEY_PAIR (skwidget->skey)) {
 			table = GTK_TABLE (gtk_table_new (4, 4, FALSE));
 			
 			do_stat_label (_("Status:"), table, 0, 3);
@@ -456,7 +457,7 @@ seahorse_key_properties_new (SeahorseContext *sctx, SeahorseKey *skey)
 	g_return_if_fail (swidget != NULL);
 	
 	/* Hide edit menu if key doesn't have secret component */
-	if (!seahorse_context_key_has_secret (sctx, skey)) {
+	if (!SEAHORSE_IS_KEY_PAIR(skey)) {
 		gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "change_passphrase"), FALSE);
 		gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "add_uid"), FALSE);
 		gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "add_subkey"), FALSE);

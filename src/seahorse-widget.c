@@ -269,6 +269,7 @@ seahorse_widget_show_bar (GtkCheckMenuItem *checkmenuitem, GtkWidget *bar)
 		gtk_widget_hide (bar);
 }
 
+/* Shows operation progress if a component, otherwise just desensitizes window */
 static void
 seahorse_widget_show_progress (SeahorseContext *sctx, const gchar *op, gdouble fract, SeahorseWidget *swidget)
 {
@@ -279,7 +280,7 @@ seahorse_widget_show_progress (SeahorseContext *sctx, const gchar *op, gdouble f
 	widget = glade_xml_get_widget (swidget->xml, swidget->name);
 	gtk_widget_set_sensitive (widget, FALSE);
 	
-	/* do status */
+	/* do status & progress */
 	if (swidget->component) {
 		status = GNOME_APPBAR (glade_xml_get_widget (swidget->xml, STATUS));
 		gnome_appbar_set_status (status, op);
@@ -330,24 +331,57 @@ seahorse_widget_create (gchar *name, SeahorseContext *sctx, gboolean component)
 	return swidget;
 }
 
+/**
+ * seahorse_widget_new:
+ * @name: Name of widget, filename part of glade file, and name of main window
+ * @sctx: #SeahorseContext
+ *
+ * Creates a new #SeahorseWidget.
+ *
+ * Returns: The new #SeahorseWidget, or NULL if the widget already exists
+ **/
 SeahorseWidget*
 seahorse_widget_new (gchar *name, SeahorseContext *sctx)
 {
 	return seahorse_widget_create (name, sctx, FALSE);
 }
 
+/**
+ * seahorse_widget_new:
+ * @name: Name of widget, filename part of glade file, and name of main window
+ * @sctx: #SeahorseContext
+ *
+ * Creates a new #SeahorseWidget with component properties.
+ *
+ * Returns: The new #SeahorseWidget, or NULL if the widget already exists
+ **/
 SeahorseWidget*
 seahorse_widget_new_component (gchar *name, SeahorseContext *sctx)
 {
 	return seahorse_widget_create (name, sctx, TRUE);	
 }
 
+/**
+ * seahorse_widget_new:
+ * @name: Name of widget, filename part of glade file, and name of main window
+ * @sctx: #SeahorseContext
+ *
+ * Creates a new #SeahorseWidget without checking if it already exists.
+ *
+ * Returns: The new #SeahorseWidget
+ **/
 SeahorseWidget*
 seahorse_widget_new_allow_multiple (gchar *name, SeahorseContext *sctx)
 {
 	return g_object_new (SEAHORSE_TYPE_WIDGET, "name", name, "ctx", sctx, NULL);
 }
 
+/**
+ * seahorse_widget_destroy:
+ * @swidget: #SeahorseWidget to destroy
+ *
+ * Unrefs @swidget.
+ **/
 void
 seahorse_widget_destroy (SeahorseWidget *swidget)
 {

@@ -58,6 +58,7 @@ struct _SeahorseContextClass
 	void 			(* add)				(SeahorseContext	*sctx,
 								 SeahorseKey		*skey);
 	
+	/* Signal emitted while an operation is in progress */
 	void			(* progress)			(SeahorseContext	*sctx,
 								 const gchar		*op,
 								 gdouble		fract);
@@ -71,6 +72,11 @@ GList*			seahorse_context_get_keys		(SeahorseContext	*sctx);
 
 GList*			seahorse_context_get_key_pairs		(SeahorseContext	*sctx);
 
+SeahorseKey*		seahorse_context_get_key		(SeahorseContext	*sctx,
+								 GpgmeKey		key);
+
+void			seahorse_context_key_added		(SeahorseContext	*sctx);
+
 void			seahorse_context_show_status		(SeahorseContext	*sctx,
 								 const gchar		*op,
 								 gboolean		success);
@@ -78,14 +84,6 @@ void			seahorse_context_show_status		(SeahorseContext	*sctx,
 void			seahorse_context_show_progress		(SeahorseContext	*sctx,
 								 const gchar		*op,
 								 gdouble		fract);
-
-void			seahorse_context_key_added		(SeahorseContext	*sctx);
-
-SeahorseKey*		seahorse_context_get_key		(SeahorseContext	*sctx,
-								 GpgmeKey		key);
-
-gboolean		seahorse_context_key_has_secret		(SeahorseContext	*sctx,
-								 SeahorseKey		*skey);
 
 void			seahorse_context_set_ascii_armor	(SeahorseContext	*sctx,
 								 gboolean		ascii_armor);

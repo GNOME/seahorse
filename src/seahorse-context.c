@@ -53,7 +53,7 @@ static void	seahorse_context_key_destroyed	(GtkObject		*object,
 static void	seahorse_context_key_changed	(SeahorseKey		*skey,
 						 SeahorseKeyChange	change,
 						 SeahorseContext	*sctx);
-
+/* gpgme callbacks */
 static void	gpgme_progress			(gpointer		data,
 						 const gchar		*what,
 						 gint			type,
@@ -169,7 +169,7 @@ seahorse_context_finalize (GObject *gobject)
 	G_OBJECT_CLASS (parent_class)->finalize (gobject);
 }
 
-/* Remove key from key ring */
+/* Remove key from its list */
 static void
 seahorse_context_key_destroyed (GtkObject *object, SeahorseContext *sctx)
 {
@@ -220,6 +220,7 @@ seahorse_context_key_changed (SeahorseKey *skey, SeahorseKeyChange change, Seaho
 	}
 }
 
+/* Calc fraction, call ::show_progress() */
 static void
 gpgme_progress (gpointer data, const gchar *what, gint type, gint current, gint total)
 {
@@ -271,6 +272,7 @@ add_key (GpgmeKey key, SeahorseContext *sctx)
 	return skey;
 }
 
+/* For each GFunc */
 static void
 add_each_key (GpgmeKey key, SeahorseContext *sctx)
 {
@@ -304,6 +306,7 @@ seahorse_context_destroy (SeahorseContext *sctx)
 	gtk_object_destroy (GTK_OBJECT (sctx));
 }
 
+/* Initializes key lists */
 static gboolean
 do_lists (SeahorseContext *sctx)
 {
@@ -315,6 +318,7 @@ do_lists (SeahorseContext *sctx)
 	if (!init_list) {
 		g_return_if_fail (gpgme_op_keylist_start (sctx->ctx, NULL, FALSE) == GPGME_No_Error);
 		while (gpgme_op_keylist_next (sctx->ctx, &key) == GPGME_No_Error) {
+			/* show progress every 10 */
 			if (!(count % 10)) {
 				seahorse_context_show_progress (sctx,
 					g_strdup_printf (_("Loading key %d"), count), 0);
@@ -330,18 +334,16 @@ do_lists (SeahorseContext *sctx)
 		init_list = TRUE;
 	}
 	
-	seahorse_context_show_progress (sctx, _("Loaded all keys"), -1);
-	
 	return init_list;
 }
 
 /**
  * seahorse_context_get_keys:
- * @sctx: Current #SeahorseContext
+ * @sctx: #SeahorseContext
  *
- * Gets the current key ring.
+ * Gets the complete key ring.
  *
- * Returns: A #GList of #SeahorseKeys
+ * Returns: A #GList of #SeahorseKey
  **/
 GList*
 seahorse_context_get_keys (SeahorseContext *sctx)
@@ -355,6 +357,14 @@ seahorse_context_get_keys (SeahorseContext *sctx)
 	return g_list_concat (g_list_copy (sctx->priv->key_pairs), sctx->priv->single_keys);
 }
 
+/**
+ * seahorse_context_get_key_pairs:
+ * @sctx: #SeahorseContext
+ *
+ * Gets the secret key ring
+ *
+ * Returns: A #GList of #SeahorseKeyPair
+ **/
 GList*
 seahorse_context_get_key_pairs (SeahorseContext *sctx)
 {
@@ -408,7 +418,8 @@ seahorse_context_get_key (SeahorseContext *sctx, GpgmeKey key)
  * @op: Operation performed
  * @success: Whether @op was successful
  *
- * Emits the status signal for @op & @success.
+ * Generates the status message, the calls seahorse_context_show_progress()
+ * with the message and -1.
  **/
 void
 seahorse_context_show_status (SeahorseContext *sctx, const gchar *op, gboolean success)
@@ -430,6 +441,16 @@ seahorse_context_show_status (SeahorseContext *sctx, const gchar *op, gboolean s
 	g_free (status);
 }
 
+/**
+ * seahorse_context_show_progress:
+ * @sctx: #SeahorseContext
+ * @op: Operation message to display
+ * @fract: Fract should have one of 3 values: 0 < fract <= 1 will show
+ * the progress as a fraction of the total progress; fract == -1 signifies
+ * that the operation is complete; any other value will pulse the progress.
+ *
+ * Emits the progress signal for @sctx.
+ **/
 void
 seahorse_context_show_progress (SeahorseContext *sctx, const gchar *op, gdouble fract)
 {
@@ -442,7 +463,8 @@ seahorse_context_show_progress (SeahorseContext *sctx, const gchar *op, gdouble 
  * seahorse_context_key_added
  * @sctx: Current #SeahorseContext
  *
- * Causes @sctx to add a new keys to internal key ring.
+ * Causes @sctx to add any new #SeahorseKey to the key ring.
+ * Emits add signal for @sctx.
  **/
 void
 seahorse_context_key_added (SeahorseContext *sctx)
@@ -456,6 +478,7 @@ seahorse_context_key_added (SeahorseContext *sctx)
 	
 	list = seahorse_context_get_keys (sctx);
 	
+	/* go to end of list, then build list containing new keys */
 	while (gpgme_op_keylist_next (sctx->ctx, &key) == GPGME_No_Error) {
 		if (list == NULL)
 			keys = g_list_append (keys, key);
@@ -463,29 +486,12 @@ seahorse_context_key_added (SeahorseContext *sctx)
 			list = g_list_next (list);
 	}
 	
+	/* add any new keys */
 	while (keys != NULL) {
 		skey = add_key (keys->data, sctx);
 		g_signal_emit (G_OBJECT (sctx), context_signals[ADD], 0, skey);
 		keys = g_list_next (keys);
 	}
-}
-
-/**
- * seahorse_context_key_has_secret:
- * @sctx: Current #SeahorseContext
- * @skey: #SeahorseKey to check
- *
- * Checks if @skey has a secret part.
- *
- * Returns: %TRUE if @skey has a secret part, %FALSE otherwise
- **/
-gboolean
-seahorse_context_key_has_secret (SeahorseContext *sctx, SeahorseKey *skey)
-{
-	g_return_val_if_fail (sctx != NULL && SEAHORSE_IS_CONTEXT (sctx), FALSE);
-	g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), FALSE);
-	
-	return (g_list_find (sctx->priv->key_pairs, skey) != NULL);
 }
 
 /**
@@ -525,7 +531,7 @@ seahorse_context_set_text_mode (SeahorseContext *sctx, gboolean text_mode)
  * @sctx: Current #SeahorseContext
  * @signer: New signer #SeahorseKey
  *
- * Sets signer attribute of @sctx to @signer.
+ * Sets signer attribute of @sctx to @signer and saves in gconf.
  **/
 void
 seahorse_context_set_signer (SeahorseContext *sctx, SeahorseKey *signer)
