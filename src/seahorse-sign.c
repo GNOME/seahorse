@@ -54,7 +54,7 @@ ok_clicked (SeahorseWidget *swidget)
 	
 	err = seahorse_key_op_sign (skwidget->skey, skwidget->index, check, options);
 	if (!GPG_IS_OK (err)) {
-		seahorse_util_handle_error (err, _("Couldn't sign key"));
+		seahorse_util_handle_gpgme (err, _("Couldn't sign key"));
 		return FALSE;
 	}
 	else {

@@ -52,10 +52,10 @@ void        seahorse_util_gpgme_to_error        (gpgme_error_t gerr,
 void        seahorse_util_show_error            (GtkWindow          *parent,
                                                  const char*        msg);
                                                  
-void        seahorse_util_handle_error          (gpgme_error_t      err,
+void        seahorse_util_handle_gpgme          (gpgme_error_t      err,
                                                  const gchar*       desc, ...);
 
-void        seahorse_util_handle_gerror         (GError*            err,
+void        seahorse_util_handle_error          (GError*            err,
                                                  const char*        desc, ...);
                                                  
 gpgme_error_t	seahorse_util_write_data_to_file	(const gchar		*path,

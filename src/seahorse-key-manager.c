@@ -153,8 +153,8 @@ import_activate (GtkWidget *widget, SeahorseWidget *swidget)
     SeahorseKeySource *sksrc;
     GtkWidget *dialog;
     char* uri = NULL;
+    GError *err = NULL;
     gint keys;
-    gpgme_error_t err;
     
     sksrc = seahorse_context_get_key_source (swidget->sctx);
     g_return_if_fail (sksrc != NULL);
@@ -177,7 +177,7 @@ import_activate (GtkWidget *widget, SeahorseWidget *swidget)
     if(uri) {
         keys = seahorse_op_import_file (sksrc, uri, &err);
         
-        if (GPG_IS_OK (err))
+        if (keys >= 0)
             seahorse_key_source_refresh (sksrc, FALSE);
         else
             seahorse_util_handle_error (err, _("Couldn't import keys from \"%s\""), 
@@ -192,7 +192,7 @@ static void
 clipboard_received (GtkClipboard *board, const gchar *text, SeahorseContext *sctx)
 {
     SeahorseKeySource *sksrc;
-    gpgme_error_t err;
+    GError *err;
     gint keys;
     
     sksrc = seahorse_context_get_key_source (sctx);
@@ -200,7 +200,7 @@ clipboard_received (GtkClipboard *board, const gchar *text, SeahorseContext *sct
  
     keys = seahorse_op_import_text (sksrc, text, &err);
  
-    if (!GPG_IS_OK (err))
+    if (keys >= 0)
         seahorse_util_handle_error (err, _("Couldn't import keys from clipboard"));
     else if (keys > 0)
         seahorse_key_source_refresh (sksrc, FALSE);
@@ -226,7 +226,7 @@ copy_activate (GtkWidget *widget, SeahorseWidget *swidget)
     GdkAtom atom;
     GtkClipboard *board;
     gchar *text;
-    gpgme_error_t err;
+    GError *err = NULL;
     GList *keys;
   
     keys = seahorse_key_store_get_selected_keys (GTK_TREE_VIEW (
@@ -237,9 +237,9 @@ copy_activate (GtkWidget *widget, SeahorseWidget *swidget)
                
     text = seahorse_op_export_text (keys, &err);
 
-    if (!GPG_IS_OK (err))
+    if (text == NULL)
         seahorse_util_handle_error (err, _("Couldn't export key to clipboard"));
-    else if (text != NULL) {
+    else {
         atom = gdk_atom_intern ("CLIPBOARD", FALSE);
         board = gtk_clipboard_get (atom);
         gtk_clipboard_set_text (board, text, strlen (text));
@@ -265,7 +265,7 @@ export_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
     GtkWidget *dialog;
     gchar* uri = NULL;
-    gpgme_error_t err;
+    GError *err = NULL;
     GList *keys;
     
     dialog = gtk_file_chooser_dialog_new (_("Export Key"), 
@@ -288,7 +288,7 @@ export_activate (GtkWidget *widget, SeahorseWidget *swidget)
         seahorse_op_export_file (keys, uri, &err); 
 		g_list_free (keys);
 		        
-        if (!GPG_IS_OK (err))
+        if (err != NULL)
             seahorse_util_handle_error (err, _("Couldn't export key to \"%s\""),
                     seahorse_util_uri_get_last (uri));
                     
@@ -697,7 +697,7 @@ target_drag_data_received (GtkWidget *widget, GdkDragContext *context, gint x, g
 {
     SeahorseKeySource *sksrc;
     gint keys = 0;
-    gpgme_error_t err;
+    GError *err = NULL;
     gchar** uris;
     gchar** u;
     
@@ -717,7 +717,7 @@ target_drag_data_received (GtkWidget *widget, GdkDragContext *context, gint x, g
             g_strstrip (*u);
             if ((*u)[0]) { /* Make sure it's not an empty line */
                 keys += seahorse_op_import_file (sksrc, *u, &err);  
-                if (!GPG_IS_OK (err)) {
+                if (keys < 0) {
                     seahorse_util_handle_error (err, _("Couldn't import key from \"%s\""),
                             seahorse_util_uri_get_last (*u));
                     break;

@@ -164,7 +164,7 @@ on_druid_finish (GnomeDruidPage *gnomedruidpage, GtkWidget *widget, SeahorseWidg
 		pass, type, length, expires);
 	if (!GPG_IS_OK (err)) {
 		gtk_widget_show (widget2);
-		seahorse_util_handle_error (err, _("Couldn't generate key"));
+		seahorse_util_handle_gpgme (err, _("Couldn't generate key"));
 	}
 	else
 		gtk_widget_destroy (widget2);

@@ -125,7 +125,7 @@ do_import (SeahorseContext *sctx, const gchar **paths)
 {
     SeahorseKeySource *sksrc;
     GtkWidget *dlg;
-    gpgme_error_t err;
+    GError *err = NULL;
     gint keys = 0;
     gchar **uris;
     gchar **u;
@@ -142,7 +142,7 @@ do_import (SeahorseContext *sctx, const gchar **paths)
     for (u = uris; *u; u++) {
         keys += seahorse_op_import_file (sksrc, *u, &err);
        
-        if (!GPG_IS_OK (err)) {
+        if (err != NULL) {
             seahorse_util_handle_error (err, _("Couldn't import keys from \"%s\""),
                     seahorse_util_uri_get_last (*u));
             ret = 1;
@@ -202,7 +202,7 @@ do_encrypt_base (SeahorseContext *sctx, const gchar **paths, SeahorseKeyPair *si
                 g_free (new_path);
     
                 if (!GPG_IS_OK (err)) {
-                    seahorse_util_handle_error (err, _("Couldn't encrypt \"%s\""), 
+                    seahorse_util_handle_gpgme (err, _("Couldn't encrypt \"%s\""), 
                         seahorse_util_uri_get_last (*u));
                     ret = 1;
                     break;
@@ -263,7 +263,7 @@ do_sign (SeahorseContext *sctx, const gchar **paths)
         g_free(new_path);
         
         if (!GPG_IS_OK (err)) {
-            seahorse_util_handle_error (err, _("Couldn't sign \"%s\""),
+            seahorse_util_handle_gpgme (err, _("Couldn't sign \"%s\""),
                 seahorse_util_uri_get_last (*u));
             ret = 1;
             break;
@@ -302,7 +302,7 @@ do_decrypt (SeahorseContext *sctx, const gchar **paths)
         seahorse_op_decrypt_verify_file (sksrc, *u, new_path, &status, &err);
                 
         if (!GPG_IS_OK (err)) {
-            seahorse_util_handle_error (err, _("Couldn't decrypt \"%s\""),
+            seahorse_util_handle_gpgme (err, _("Couldn't decrypt \"%s\""),
                     seahorse_util_uri_get_last (*u));
             ret = 1;
             break;
@@ -382,7 +382,7 @@ do_verify (SeahorseContext *sctx, const gchar **paths)
             g_free (original);
 
             if (!GPG_IS_OK (err)) {
-                seahorse_util_handle_error (err, _("Couldn't verify \"%s\""),
+                seahorse_util_handle_gpgme (err, _("Couldn't verify \"%s\""),
                         seahorse_util_uri_get_last (*u));
                 ret = 1;
                 break;

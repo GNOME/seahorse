@@ -49,7 +49,7 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 		err = seahorse_key_op_revoke_subkey (skwidget->skey, skwidget->index, 
                                              reason, description);
 		if (!GPG_IS_OK (err))
-			seahorse_util_handle_error (err, _("Couldn't revoke subkey"));
+			seahorse_util_handle_gpgme (err, _("Couldn't revoke subkey"));
 	}
 	seahorse_widget_destroy (swidget);
 }
@@ -117,5 +117,5 @@ seahorse_add_revoker_new (SeahorseContext *sctx, SeahorseKey *skey)
 	
 	err = seahorse_key_pair_op_add_revoker (SEAHORSE_KEY_PAIR (skey), skpair);
 	if (!GPG_IS_OK (err))
-		seahorse_util_handle_error (err, _("Couldn't add revoker"));
+		seahorse_util_handle_gpgme (err, _("Couldn't add revoker"));
 }

@@ -217,7 +217,7 @@ encrypt_cb (BonoboUIComponent * uic, gpointer user_data,
 
     if (!GPG_IS_OK (err)) {
         g_assert (!enctext);
-        seahorse_util_handle_error (err, _("Couldn't encrypt text"));
+        seahorse_util_handle_gpgme (err, _("Couldn't encrypt text"));
         return;
     }
 
@@ -233,7 +233,7 @@ static guint
 import_keys (const gchar * text)
 {
     SeahorseKeySource *sksrc;
-    gpgme_error_t err;
+    GError *err = NULL;
     gint keys;
 
     sksrc = seahorse_context_get_key_source (sctx);
@@ -241,12 +241,10 @@ import_keys (const gchar * text)
     
     keys = seahorse_op_import_text (sksrc, text, &err);
 
-    if (!GPG_IS_OK (err)) {
+    if (keys < 0) {
         seahorse_util_handle_error (err, _("Couldn't import keys"));
         return 0;
-    }
-
-    if (keys == 0) {    
+    } else if (keys == 0) {    
         gedit_utils_flash (_("Keys found but not imported"));
         return 0;
     } else {
@@ -268,7 +266,7 @@ decrypt_text (const gchar * text, gpgme_verify_result_t *status)
     rawtext = seahorse_op_decrypt_verify_text (sksrc, text, status, &err);
 
     if (!GPG_IS_OK (err)) {
-        seahorse_util_handle_error (err, _("Couldn't decrypt text"));
+        seahorse_util_handle_gpgme (err, _("Couldn't decrypt text"));
         return NULL;
     }
 
@@ -289,7 +287,7 @@ verify_text (const gchar * text, gpgme_verify_result_t *status)
     rawtext = seahorse_op_verify_text (sksrc, text, status, &err);
 
     if (!GPG_IS_OK (err)) {
-        seahorse_util_handle_error (err, _("Couldn't decrypt text"));
+        seahorse_util_handle_gpgme (err, _("Couldn't decrypt text"));
         return NULL;
     }
 
@@ -474,7 +472,7 @@ sign_cb (BonoboUIComponent * uic, gpointer user_data,
 
     signer = seahorse_context_get_default_key (sctx);
     if (signer == NULL) {
-        seahorse_util_handle_error (GPG_E (GPG_ERR_NO_SECKEY), _("Couldn't sign text"));
+        seahorse_util_handle_gpgme (GPG_E (GPG_ERR_NO_SECKEY), _("Couldn't sign text"));
         return;
     }
 
@@ -485,7 +483,7 @@ sign_cb (BonoboUIComponent * uic, gpointer user_data,
 
     if (!GPG_IS_OK (err)) {
         g_assert (!enctext);
-        seahorse_util_handle_error (err, _("Couldn't sign text"));
+        seahorse_util_handle_gpgme (err, _("Couldn't sign text"));
         return;
     }
 

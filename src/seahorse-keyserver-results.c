@@ -82,7 +82,7 @@ import_activate (GtkWidget *widget, SeahorseWidget *swidget)
     text = seahorse_op_export_text (keys, &err);
     g_list_free (keys);
     if (text == NULL) {
-        seahorse_util_handle_gerror (err, _("Couldn't retrieve key data from key server"));
+        seahorse_util_handle_error (err, _("Couldn't retrieve key data from key server"));
         return;
     } 
     
@@ -95,7 +95,7 @@ import_activate (GtkWidget *widget, SeahorseWidget *swidget)
     
     n = seahorse_op_import_text (sksrc, text, &err);
     if (n == -1) 
-        seahorse_util_handle_gerror (err, _("Couldn't import keys into keyring"));
+        seahorse_util_handle_error (err, _("Couldn't import keys into keyring"));
 
     gpgme_data_release (data);
     g_free (text);

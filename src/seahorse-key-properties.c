@@ -550,7 +550,7 @@ uid_primary_clicked (GtkWidget *widget, SeahorseWidget *swidget)
         err = seahorse_key_op_primary_uid (skey, index);
         
         if (!GPG_IS_OK (err)) 
-            seahorse_util_handle_error (err, _("Couldn't change primary user ID"));
+            seahorse_util_handle_gpgme (err, _("Couldn't change primary user ID"));
     }
 }
 

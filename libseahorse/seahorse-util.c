@@ -129,13 +129,13 @@ seahorse_util_get_date_string (const time_t time)
 }
 
 /**
- * seahorse_util_handle_error:
+ * seahorse_util_handle_gpgme:
  * @err: Error value
  *
  * Shows an error dialog for @err.
  **/
 void
-seahorse_util_handle_error (gpgme_error_t err, const char* desc, ...)
+seahorse_util_handle_gpgme (gpgme_error_t err, const char* desc, ...)
 {
     gchar *t = NULL;
   
@@ -156,7 +156,7 @@ seahorse_util_handle_error (gpgme_error_t err, const char* desc, ...)
 }
 
 void
-seahorse_util_handle_gerror (GError* err, const char* desc, ...)
+seahorse_util_handle_error (GError* err, const char* desc, ...)
 {
     gchar *t = NULL;
     va_list ap;
@@ -698,7 +698,7 @@ seahorse_util_uris_package (const gchar* package, const char** uris)
     }
     
     if (!r) {
-        seahorse_util_handle_gerror(err, _("Couldn't run file-roller"));
+        seahorse_util_handle_error(err, _("Couldn't run file-roller"));
         return FALSE;   
     }
     

@@ -113,7 +113,7 @@ seahorse_delete_show (SeahorseContext *sctx, GList *keys)
 				err = seahorse_key_op_delete (skey);
 			
 			if (!GPG_IS_OK (err))
-				seahorse_util_handle_error (err, _("Couldn't delete key"));
+				seahorse_util_handle_gpgme (err, _("Couldn't delete key"));
 		}
 		else
 			break;
@@ -155,7 +155,7 @@ seahorse_delete_subkey_new (SeahorseContext *sctx, SeahorseKey *skey, const guin
 	
 	err = seahorse_key_op_del_subkey (skey, index);
 	if (!GPG_IS_OK (err))
-		seahorse_util_handle_error (err, _("Couldn't delete subkey"));
+		seahorse_util_handle_gpgme (err, _("Couldn't delete subkey"));
 }
 
 void
@@ -196,5 +196,5 @@ seahorse_delete_userid_show (SeahorseContext *sctx, SeahorseKey *skey, const gui
     
     err = seahorse_key_op_del_uid (skey, index);
     if (!GPG_IS_OK (err))
-        seahorse_util_handle_error (err, _("Couldn't delete user id"));
+        seahorse_util_handle_gpgme (err, _("Couldn't delete user id"));
 }
