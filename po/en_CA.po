@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-04 11:35-0400\n"
+"POT-Creation-Date: 2004-10-04 15:55-0400\n"
 "PO-Revision-Date: 2004-10-04 22:06-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: English/Canada <adamw@FreeBSD.org>\n"
@@ -190,9 +190,9 @@ msgstr ""
 
 #: data/seahorse.schemas.in.h:23
 msgid ""
-"This specifies the default key to use for cerain operations, mainly signing."
+"This specifies the default key to use for certain operations, mainly signing."
 msgstr ""
-"This specifies the default key to use for cerain operations, mainly signing."
+"This specifies the default key to use for certain operations (mainly signing)."
 
 #: data/seahorse.schemas.in.h:24
 msgid "Whether to always encrypt to default key"
@@ -206,17 +206,17 @@ msgstr "Whether to use ASCII Armour"
 msgid "Whether to use canonical text mode"
 msgstr "Whether to use canonical text mode"
 
-#: libseahorse/seahorse-context.c:397
+#: libseahorse/seahorse-context.c:398
 #, c-format
 msgid "Loading key %d"
 msgstr "Loading key %d"
 
-#: libseahorse/seahorse-context.c:427
+#: libseahorse/seahorse-context.c:428
 #, c-format
 msgid "Loaded %d key pairs"
 msgstr "Loaded %d key pairs"
 
-#: libseahorse/seahorse-context.c:448
+#: libseahorse/seahorse-context.c:449
 #, c-format
 msgid "Loaded %d keys"
 msgstr "Loaded %d keys"
@@ -226,15 +226,15 @@ msgstr "Loaded %d keys"
 msgid "Loaded %d new keys"
 msgstr "Loaded %d new keys"
 
-#: libseahorse/seahorse-key-store.c:335
+#: libseahorse/seahorse-key-store.c:337
 msgid "Name"
 msgstr "Name"
 
-#: libseahorse/seahorse-key-store.c:338
+#: libseahorse/seahorse-key-store.c:340
 msgid "Key ID"
 msgstr "Key ID"
 
-#: libseahorse/seahorse-key-store.c:393
+#: libseahorse/seahorse-key-store.c:395
 #, c-format
 msgid "Listed %d keys"
 msgstr "Listed %d keys"
@@ -265,7 +265,7 @@ msgid "Passphrase for key"
 msgstr "Passphrase for key"
 
 #: libseahorse/seahorse-recipients-store.c:131
-#: src/seahorse-key-manager-store.c:265
+#: src/seahorse-key-manager-store.c:290
 msgid "Validity"
 msgstr "Validity"
 
@@ -294,25 +294,29 @@ msgstr "Not a signature"
 msgid "Verification Error"
 msgstr "Verification Error"
 
-#: libseahorse/seahorse-signatures.c:75
+#: libseahorse/seahorse-signatures.c:78
 msgid "Good, signing key expired"
 msgstr "Good, signing key expired"
 
-#: libseahorse/seahorse-signatures.c:78
-msgid "Multiple Signatures"
-msgstr "Multiple Signatures"
+#: libseahorse/seahorse-signatures.c:81
+msgid "Good, signature expired"
+msgstr "Good, signature expired"
 
-#: libseahorse/seahorse-signatures.c:81 src/seahorse-key-properties.c:357
+#: libseahorse/seahorse-signatures.c:84
+msgid "Good, signing key certificate revoked"
+msgstr "Good, signing key certificate revoked"
+
+#: libseahorse/seahorse-signatures.c:87 src/seahorse-key-properties.c:364
 msgid "Good"
 msgstr "Good"
 
 #. created
-#: libseahorse/seahorse-signatures.glade.h:1 src/seahorse-key-properties.c:348
+#: libseahorse/seahorse-signatures.glade.h:1 src/seahorse-key-properties.c:354
 msgid "Created:"
 msgstr "Created:"
 
 #. key id
-#: libseahorse/seahorse-signatures.glade.h:2 src/seahorse-key-properties.c:337
+#: libseahorse/seahorse-signatures.glade.h:2 src/seahorse-key-properties.c:343
 msgid "Key ID:"
 msgstr "Key ID:"
 
@@ -325,15 +329,16 @@ msgid "Signer:"
 msgstr "Signer:"
 
 #. status
-#: libseahorse/seahorse-signatures.glade.h:5 src/seahorse-key-properties.c:356
+#: libseahorse/seahorse-signatures.glade.h:5 src/seahorse-key-properties.c:363
 msgid "Status:"
 msgstr "Status:"
 
-#: libseahorse/seahorse-util.c:91
+#: libseahorse/seahorse-util.c:92
 msgid "%Y-%m-%d"
 msgstr "%Y-%m-%d"
 
-#: libseahorse/seahorse-validity.c:31 src/seahorse-key-properties.glade.h:17
+#: libseahorse/seahorse-validity.c:31 src/seahorse-key-manager-store.c:48
+#: src/seahorse-key-properties.glade.h:17
 msgid "Unknown"
 msgstr "Unknown"
 
@@ -357,7 +362,7 @@ msgstr "Ultimate"
 msgid "Disabled"
 msgstr "Disabled"
 
-#: libseahorse/seahorse-validity.c:43 src/seahorse-key-properties.c:359
+#: libseahorse/seahorse-validity.c:43 src/seahorse-key-properties.c:366
 msgid "Revoked"
 msgstr "Revoked"
 
@@ -368,7 +373,7 @@ msgid "PGP Preferences"
 msgstr "PGP Preferences"
 
 #: plugins/nautilus/seahorse-pgp-preferences.c:45
-#: src/seahorse-preferences.c:80
+#: src/seahorse-preferences.c:54
 msgid "_Ascii Armor"
 msgstr "_Ascii Armour"
 
@@ -421,31 +426,31 @@ msgstr "Verify signature file"
 msgid "Decrypt encrypt file and verify any signatures it contains"
 msgstr "Decrypt encrypt file and verify any signatures it contains"
 
-#: src/main.c:121 src/seahorse.desktop.in.h:1
+#: src/main.c:127 src/seahorse.desktop.in.h:1
 msgid "GPG Keys Manager"
 msgstr "GPG Keys Manager"
 
-#: src/main.c:136
+#: src/main.c:142
 #, c-format
 msgid "Imported %d keys"
 msgstr "Imported %d keys"
 
-#: src/main.c:141
+#: src/main.c:147
 #, c-format
 msgid "Encrypt file is %s"
 msgstr "Encrypt file is %s"
 
-#: src/main.c:150
+#: src/main.c:156
 #, c-format
 msgid "Signature file is %s"
 msgstr "Signature file is %s"
 
-#: src/main.c:157
+#: src/main.c:163
 #, c-format
 msgid "Encrypted and signed file is %s"
 msgstr "Encrypted and signed file is %s"
 
-#: src/main.c:166 src/main.c:197
+#: src/main.c:172 src/main.c:203
 #, c-format
 msgid "Decrypted file is %s"
 msgstr "Decrypted file is %s"
@@ -454,7 +459,7 @@ msgstr "Decrypted file is %s"
 msgid "Manage your GPG keys"
 msgstr "Manage your GPG keys"
 
-#: src/seahorse-add-subkey.c:123
+#: src/seahorse-add-subkey.c:125
 #, c-format
 msgid "Add subkey to %s"
 msgstr "Add subkey to %s"
@@ -469,7 +474,7 @@ msgstr "ElGamal (encrypt only)"
 
 #. expires
 #: src/seahorse-add-subkey.glade.h:3 src/seahorse-generate-adv.glade.h:6
-#: src/seahorse-key-properties.c:364
+#: src/seahorse-generate-druid.glade.h:12 src/seahorse-key-properties.c:371
 msgid "Expiration Date:"
 msgstr "Expiration Date:"
 
@@ -478,7 +483,7 @@ msgid "Generate a new subkey"
 msgstr "Generate a new subkey"
 
 #: src/seahorse-add-subkey.glade.h:5 src/seahorse-generate-adv.glade.h:10
-#: src/seahorse-key-properties.c:390
+#: src/seahorse-key-properties.c:395
 msgid "If key never expires"
 msgstr "If key never expires"
 
@@ -499,7 +504,7 @@ msgid "Length of Key"
 msgstr "Length of Key"
 
 #: src/seahorse-add-subkey.glade.h:10 src/seahorse-generate-adv.glade.h:17
-#: src/seahorse-key-properties.c:388
+#: src/seahorse-key-properties.c:393
 msgid "Never E_xpires"
 msgstr "Never E_xpires"
 
@@ -511,7 +516,7 @@ msgstr "RSA (encrypt only)"
 msgid "RSA (sign only)"
 msgstr "RSA (sign only)"
 
-#: src/seahorse-add-uid.c:101
+#: src/seahorse-add-uid.c:103
 #, c-format
 msgid "Add user ID to %s"
 msgstr "Add user ID to %s"
@@ -571,17 +576,17 @@ msgstr "Enter new passphrase"
 msgid "New _Passphrase:"
 msgstr "New _Passphrase:"
 
-#: src/seahorse-delete.c:36
+#: src/seahorse-delete.c:38
 #, c-format
 msgid "%s is a key pair! Do you still want to delete it?"
 msgstr "%s is a key pair! Do you still want to delete it?"
 
-#: src/seahorse-delete.c:66
+#: src/seahorse-delete.c:69
 #, c-format
 msgid "Are you sure you want to permanently delete %s?"
 msgstr "Are you sure you want to permanently delete %s?"
 
-#: src/seahorse-delete.c:131
+#: src/seahorse-delete.c:137
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
 msgstr "Are you sure you want to permanently delete subkey %d of %s?"
@@ -672,21 +677,23 @@ msgstr ""
 
 #: src/seahorse-generate-druid.glade.h:3
 msgid ""
-"Choosing a passphrase is an integral part of creating a strong key.  Like a "
-"password, a passphrase should letters, numbers, and punctuation.  "
+"Choosing a passphrase is an integral part of creating a strong key. Like a "
+"password, a passphrase should contain letters, numbers, and punctuation. "
 "Additionally, a passphrase can contain spaces, meaning it can contain many "
-"words.  You should pick a rememberable phrase that contains punctuation.  "
-"Take this phrase, adjust the case of various letters, and change some of the "
-"letters into numbers or punctuation rmeiniscent of \"leet speak\", but don't "
-"make it so obscure to the point where you can't remember it."
+"words. You should pick a phrase that is easy to rememeber and contains "
+"punctuation. Take this phrase, adjust the case of various letters, and "
+"change some of the letters into numbers or punctuation, reminiscent of "
+"\"leet speak\", but don't make it so obscure to the point where you can't "
+"remember it."
 msgstr ""
-"Choosing a passphrase is an integral part of creating a strong key.  Like a "
-"password, a passphrase should letters, numbers, and punctuation.  "
+"Choosing a passphrase is an integral part of creating a strong key. Like a "
+"password, a passphrase should contain letters, numbers, and punctuation. "
 "Additionally, a passphrase can contain spaces, meaning it can contain many "
-"words.  You should pick a rememberable phrase that contains punctuation.  "
-"Take this phrase, adjust the case of various letters, and change some of the "
-"letters into numbers or punctuation reminiscent of \"l33t speak\", but do "
-"not make it so obscure to the point where you cannot remember it."
+"words. You should pick a phrase that is easy to rememeber and contains "
+"punctuation. Take this phrase, adjust the case of various letters, and "
+"change some of the letters into numbers or punctuation, reminiscent of "
+"\"leet speak\", but don't make it so obscure to the point where you can't "
+"remember it."
 
 #: src/seahorse-generate-druid.glade.h:4
 msgid "Comment:"
@@ -697,8 +704,8 @@ msgid "Confirm"
 msgstr "Confirm"
 
 #: src/seahorse-generate-druid.glade.h:6
-msgid "Confirm Passphrase: "
-msgstr "Confirm Passphrase: "
+msgid "Confirm Passphrase:"
+msgstr "Confirm Passphrase:"
 
 #: src/seahorse-generate-druid.glade.h:7
 msgid "Confirm passphrase"
@@ -709,28 +716,24 @@ msgid "Date the Key Expires"
 msgstr "Date the Key Expires"
 
 #: src/seahorse-generate-druid.glade.h:9
-msgid "Email Address: "
-msgstr "Email Address: "
+msgid "Email Address:"
+msgstr "Email Address:"
 
 #: src/seahorse-generate-druid.glade.h:10
 msgid "Enter Name - Must be at least five letters."
 msgstr "Enter Name - Must be at least five letters."
 
-#: src/seahorse-generate-druid.glade.h:11 src/seahorse-key-manager-store.c:269
+#: src/seahorse-generate-druid.glade.h:11 src/seahorse-key-manager-store.c:294
 msgid "Expiration Date"
 msgstr "Expiration Date"
-
-#: src/seahorse-generate-druid.glade.h:12
-msgid "Expiration Date: "
-msgstr "Expiration Date: "
 
 #: src/seahorse-generate-druid.glade.h:13
 msgid "Extra High Security"
 msgstr "Extra High Security"
 
 #: src/seahorse-generate-druid.glade.h:14
-msgid "Full Name: "
-msgstr "Full Name: "
+msgid "Full Name:"
+msgstr "Full Name:"
 
 #: src/seahorse-generate-druid.glade.h:15
 msgid "High Security"
@@ -742,28 +745,28 @@ msgstr "Key Never Expires"
 
 #: src/seahorse-generate-druid.glade.h:17
 msgid ""
-"Keys must be given an appropriate expiration date.  For most people, the "
-"default option of never expires is sufficent.  If you only plan on using the "
-"key for a certain period of time, i.e. for a specific project, you should "
-"pick an expiration date after the projected completion of your project.  "
-"After the expiration date, your private key will still be able to decrypt "
-"messages or data encrypted with your public key.  However, your private key "
-"will no longer sign messages or data."
+"Keys must be given an appropriate expiration date. For most people, the "
+"default option of \"never expires\" is sufficient. If you only plan on using "
+"the key for a certain period of time, i.e. for a specific project, you "
+"should pick an expiration date after the projected completion of your "
+"project. After the expiration date, your private key will still be able to "
+"decrypt messages or data encrypted with your public key. However, your "
+"private key will no longer sign messages or data."
 msgstr ""
-"Keys must be given an appropriate expiration date.  For most people, the "
-"default option of never expires is sufficent.  If you only plan on using the "
-"key for a certain period of time, i.e. for a specific project, you should "
-"pick an expiration date after the projected completion of your project.  "
-"After the expiration date, your private key will still be able to decrypt "
-"messages or data encrypted with your public key.  However, your private key "
-"will no longer sign messages or data."
+"Keys must be given an appropriate expiration date. For most people, the "
+"default option of \"never expires\" is sufficient. If you plan on using "
+"the key for only a certain period of time, i.e. for a specific project, you "
+"should pick an expiration date after the projected completion of your "
+"project. After the expiration date, your private key will still be able to "
+"decrypt messages or data encrypted with your public key. However, your "
+"private key will no longer sign messages or data."
 
 #: src/seahorse-generate-druid.glade.h:18
 msgid "Medium Security"
 msgstr "Medium Security"
 
-#: src/seahorse-generate-druid.glade.h:19 src/seahorse-key-manager-store.c:154
-#: src/seahorse-key-properties.c:373
+#: src/seahorse-generate-druid.glade.h:19 src/seahorse-key-manager-store.c:176
+#: src/seahorse-key-properties.c:378
 msgid "Never Expires"
 msgstr "Never Expires"
 
@@ -801,13 +804,13 @@ msgid ""
 "general everyday usage.  The High Security level should be selected if you "
 "know your data will be actively scrutinized.  The Extra High level should be "
 "selected if you know your data is actively scrutinized and will be under "
-"cryptographic attack. "
+"cryptographic attack."
 msgstr ""
 "The Medium Security level is the default and should be acceptable for "
 "general everyday usage.  The High Security level should be selected if you "
 "know your data will be actively scrutinized.  The Extra High level should be "
 "selected if you know your data is actively scrutinized and will be under "
-"cryptographic attack. "
+"cryptographic attack."
 
 #: src/seahorse-generate-druid.glade.h:31
 msgid ""
@@ -826,18 +829,6 @@ msgstr ""
 "needed: Full Name, Email Address, and Comment.  These values will be given "
 "to the name of your key in the following "
 "manner:                              Full Name (Comment) <email address>."
-
-#: src/seahorse-generate-druid.glade.h:33
-msgid "druidpage_pass"
-msgstr "druidpage_pass"
-
-#: src/seahorse-generate-druid.glade.h:34
-msgid "druidpage_pinfo"
-msgstr "druidpage_pinfo"
-
-#: src/seahorse-generate-druid.glade.h:35
-msgid "keygen_druid"
-msgstr "keygen_druid"
 
 #: src/seahorse-generate-select.glade.h:1
 msgid "Advanced"
@@ -862,10 +853,6 @@ msgstr "Method Select"
 #: src/seahorse-generate-select.glade.h:6
 msgid "Select a method to generate your new key."
 msgstr "Select a method to generate your new key."
-
-#: src/seahorse-generate-select.glade.h:7
-msgid "radio_druid"
-msgstr "radio_druid"
 
 #: src/seahorse-import.glade.h:2
 msgid "Enter a unique key id"
@@ -919,11 +906,11 @@ msgstr "_Import"
 msgid "_Key ID:"
 msgstr "_Key ID:"
 
-#: src/seahorse-key-manager.c:210
+#: src/seahorse-key-manager.c:198
 msgid "translator_credits"
 msgstr "Adam Weinberger <adamw@gnome.org>"
 
-#: src/seahorse-key-manager.c:230
+#: src/seahorse-key-manager.c:218
 msgid "seahorse"
 msgstr "seahorse"
 
@@ -1024,92 +1011,100 @@ msgid "Sign public key"
 msgstr "Sign public key"
 
 #: src/seahorse-key-manager.glade.h:26
-msgid "View statusbar"
-msgstr "View statusbar"
-
-#: src/seahorse-key-manager.glade.h:27
-msgid "View toolbar"
-msgstr "View toolbar"
-
-#: src/seahorse-key-manager.glade.h:28
 msgid "_Backup..."
 msgstr "_Backup..."
 
-#: src/seahorse-key-manager.glade.h:29
+#: src/seahorse-key-manager.glade.h:27
 msgid "_Change Passphrase..."
 msgstr "_Change Passphrase..."
 
-#: src/seahorse-key-manager.glade.h:30
+#: src/seahorse-key-manager.glade.h:28
 msgid "_Collapse All"
 msgstr "_Collapse All"
 
-#: src/seahorse-key-manager.glade.h:31
+#: src/seahorse-key-manager.glade.h:29
 msgid "_Contents"
 msgstr "_Contents"
 
-#: src/seahorse-key-manager.glade.h:32
+#: src/seahorse-key-manager.glade.h:30
 msgid "_Delete"
 msgstr "_Delete"
 
-#: src/seahorse-key-manager.glade.h:33
+#: src/seahorse-key-manager.glade.h:31
 msgid "_Expand All"
 msgstr "_Expand All"
 
-#: src/seahorse-key-manager.glade.h:34
+#: src/seahorse-key-manager.glade.h:32
 msgid "_Generate Revocation Certificate..."
 msgstr "_Generate Revocation Certificate..."
 
-#: src/seahorse-key-manager.glade.h:35
+#: src/seahorse-key-manager.glade.h:33
 msgid "_Import..."
 msgstr "_Import..."
 
-#: src/seahorse-key-manager.glade.h:36
+#: src/seahorse-key-manager.glade.h:34
 msgid "_Key"
 msgstr "_Key"
 
-#: src/seahorse-key-manager.glade.h:37
+#: src/seahorse-key-manager.glade.h:35
 msgid "_New..."
 msgstr "_New..."
 
-#: src/seahorse-key-manager.glade.h:38
+#: src/seahorse-key-manager.glade.h:36
 msgid "_Properties"
 msgstr "_Properties"
 
 #. do sign
-#: src/seahorse-key-manager.glade.h:39 src/seahorse-key-properties.c:168
+#: src/seahorse-key-manager.glade.h:37 src/seahorse-key-properties.c:172
 #: src/seahorse-sign.glade.h:17
 msgid "_Sign"
 msgstr "_Sign"
 
-#: src/seahorse-key-manager.glade.h:40
+#: src/seahorse-key-manager.glade.h:38
 msgid "_Sign..."
 msgstr "_Sign..."
 
-#: src/seahorse-key-manager.glade.h:41
-msgid "_Statusbar"
-msgstr "_Statusbar"
+#: src/seahorse-key-manager-store.c:36
+msgid "RSA"
+msgstr "RSA"
 
-#: src/seahorse-key-manager.glade.h:42
-msgid "_Toolbar"
-msgstr "_Toolbar"
+#: src/seahorse-key-manager-store.c:38
+msgid "RSA-E"
+msgstr "RSA-E"
 
-#: src/seahorse-key-manager-store.c:147 src/seahorse-key-properties.c:361
+#: src/seahorse-key-manager-store.c:40
+msgid "RSA-S"
+msgstr "RSA-S"
+
+#: src/seahorse-key-manager-store.c:42
+msgid "ELG-E"
+msgstr "ELG-E"
+
+#: src/seahorse-key-manager-store.c:44
+msgid "DSA"
+msgstr "DSA"
+
+#: src/seahorse-key-manager-store.c:46
+msgid "ELG"
+msgstr "ELG"
+
+#: src/seahorse-key-manager-store.c:169 src/seahorse-key-properties.c:368
 msgid "Expired"
 msgstr "Expired"
 
-#: src/seahorse-key-manager-store.c:273
+#: src/seahorse-key-manager-store.c:298
 msgid "Trust"
 msgstr "Trust"
 
-#: src/seahorse-key-manager-store.c:277
+#: src/seahorse-key-manager-store.c:302
 msgid "Length"
 msgstr "Length"
 
-#: src/seahorse-key-manager-store.c:281
+#: src/seahorse-key-manager-store.c:306
 msgid "Type"
 msgstr "Type"
 
-#: src/seahorse-key-op.c:247
+#: src/seahorse-key-op.c:289
 msgid "Operation complete"
 msgstr "Operation complete"
 
@@ -1117,81 +1112,81 @@ msgstr "Operation complete"
 msgid "User IDs"
 msgstr "User IDs"
 
-#: src/seahorse-key-properties.c:139
+#: src/seahorse-key-properties.c:141
 #, c-format
 msgid "User ID %d"
 msgstr "User ID %d"
 
-#: src/seahorse-key-properties.c:143
+#: src/seahorse-key-properties.c:145
 msgid "User ID"
 msgstr "User ID"
 
-#: src/seahorse-key-properties.c:160
+#: src/seahorse-key-properties.c:164
 msgid "_Primary"
 msgstr "_Primary"
 
 #. callback
-#: src/seahorse-key-properties.c:162
+#: src/seahorse-key-properties.c:166
 msgid "Set as primary User ID"
 msgstr "Set as primary User ID"
 
 #. **** do ciphers ****
-#: src/seahorse-key-properties.c:180
+#: src/seahorse-key-properties.c:184
 msgid "Ciphers"
 msgstr "Ciphers"
 
 #. **** do hashes ****
-#: src/seahorse-key-properties.c:219
+#: src/seahorse-key-properties.c:223
 msgid "Hashes"
 msgstr "Hashes"
 
 #. **** do compression ****
-#: src/seahorse-key-properties.c:242
+#: src/seahorse-key-properties.c:246
 msgid "Compression"
 msgstr "Compression"
 
-#: src/seahorse-key-properties.c:337
+#: src/seahorse-key-properties.c:343
 msgid "Key identifier"
 msgstr "Key identifier"
 
 #. type
-#: src/seahorse-key-properties.c:342
+#: src/seahorse-key-properties.c:348
 msgid "Type:"
 msgstr "Type:"
 
-#: src/seahorse-key-properties.c:342
+#: src/seahorse-key-properties.c:348
 msgid "Algorithm"
 msgstr "Algorithm"
 
-#: src/seahorse-key-properties.c:348
+#: src/seahorse-key-properties.c:354
 msgid "Key creation date"
 msgstr "Key creation date"
 
 #. length
-#: src/seahorse-key-properties.c:352
+#: src/seahorse-key-properties.c:358
 msgid "Length:"
 msgstr "Length:"
 
-#: src/seahorse-key-properties.c:448 src/seahorse-key-properties.glade.h:19
+#: src/seahorse-key-properties.c:454 src/seahorse-key-properties.glade.h:19
 msgid "_Revoke"
 msgstr "_Revoke"
 
-#: src/seahorse-key-properties.c:452
+#: src/seahorse-key-properties.c:458
 #, c-format
 msgid "Revoke subkey %d"
 msgstr "Revoke subkey %d"
 
-#: src/seahorse-key-properties.c:461
+#: src/seahorse-key-properties.c:467
 #, c-format
 msgid "Subkey %d"
 msgstr "Subkey %d"
 
-#: src/seahorse-key-properties.c:473
+#: src/seahorse-key-properties.c:479
 #, c-format
 msgid "Delete subkey %d"
 msgstr "Delete subkey %d"
 
-#: src/seahorse-key-properties.c:534
+#: src/seahorse-key-properties.c:547
 #, c-format
 msgid "%s Properties"
 msgstr "%s Properties"
@@ -1252,27 +1247,27 @@ msgstr "Your personal key"
 msgid "_Signatures:"
 msgstr "_Signatures:"
 
-#: src/seahorse-preferences.c:85
+#: src/seahorse-preferences.c:59
 msgid "PGP"
 msgstr "PGP"
 
-#: src/seahorse-preferences.c:104
+#: src/seahorse-preferences.c:66
 msgid "_Validity"
 msgstr "_Validity"
 
-#: src/seahorse-preferences.c:106 src/seahorse-sign.glade.h:13
+#: src/seahorse-preferences.c:68 src/seahorse-sign.glade.h:13
 msgid "_Expires"
 msgstr "_Expires"
 
-#: src/seahorse-preferences.c:108
+#: src/seahorse-preferences.c:70
 msgid "_Trust"
 msgstr "_Trust"
 
-#: src/seahorse-preferences.c:110
+#: src/seahorse-preferences.c:72
 msgid "_Length"
 msgstr "_Length"
 
-#: src/seahorse-preferences.c:112
+#: src/seahorse-preferences.c:74
 msgid "T_ype"
 msgstr "T_ype"
 
@@ -1281,76 +1276,32 @@ msgid "Close Preferences"
 msgstr "Close Preferences"
 
 #: src/seahorse-preferences.glade.h:2
-msgid "Desktop Default"
-msgstr "Desktop Default"
-
-#: src/seahorse-preferences.glade.h:3
-msgid "Icons Only"
-msgstr "Icons Only"
-
-#: src/seahorse-preferences.glade.h:4
 msgid "Key Manager"
 msgstr "Key Manager"
 
-#: src/seahorse-preferences.glade.h:5
-msgid "Only show icons"
-msgstr "Only show icons"
-
-#: src/seahorse-preferences.glade.h:6
-msgid "Only show text"
-msgstr "Only show text"
-
-#: src/seahorse-preferences.glade.h:7
+#: src/seahorse-preferences.glade.h:3
 msgid "Preferences Help"
 msgstr "Preferences Help"
 
-#: src/seahorse-preferences.glade.h:8
+#: src/seahorse-preferences.glade.h:4
 msgid "Seahorse Preferences"
 msgstr "Seahorse Preferences"
 
-#: src/seahorse-preferences.glade.h:9
-msgid "Show text below icons"
-msgstr "Show text below icons"
-
-#: src/seahorse-preferences.glade.h:10
-msgid "Show text beside icons"
-msgstr "Show text beside icons"
-
-#: src/seahorse-preferences.glade.h:11
-msgid "Text Below Icons"
-msgstr "Text Below Icons"
-
-#: src/seahorse-preferences.glade.h:12
-msgid "Text Beside Icons"
-msgstr "Text Beside Icons"
-
-#: src/seahorse-preferences.glade.h:13
-msgid "Text Only"
-msgstr "Text Only"
-
-#: src/seahorse-preferences.glade.h:14
-msgid "Toolbar _Style:"
-msgstr "Toolbar _Style:"
-
-#: src/seahorse-preferences.glade.h:15
-msgid "Use system settings"
-msgstr "Use system settings"
-
-#: src/seahorse-preferences.glade.h:16
+#: src/seahorse-preferences.glade.h:5
 msgid "Visible Columns"
 msgstr "Visible Columns"
 
-#: src/seahorse-revoke.c:73
+#: src/seahorse-revoke.c:75
 #, c-format
 msgid "Revoke Subkey %d of %s"
 msgstr "Revoke Subkey %d of %s"
 
-#: src/seahorse-revoke.c:76
+#: src/seahorse-revoke.c:77
 #, c-format
 msgid "Revoke %s"
 msgstr "Revoke %s"
 
-#: src/seahorse-revoke.c:98
+#: src/seahorse-revoke.c:104
 #, c-format
 msgid ""
 "You are about to add %s as a revoker for %s. This operation cannot be "
