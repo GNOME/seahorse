@@ -26,21 +26,22 @@
 #include "seahorse-key-pair.h"
 #include "seahorse-marshal.h"
 
-#define SCHEMA_ROOT "/apps/seahorse/"
+#define SCHEMA_ROOT "/apps/seahorse"
 
-#define PREFERENCES SCHEMA_ROOT "preferences/"
-#define ARMOR_KEY PREFERENCES "ascii_armor"
-#define TEXT_KEY PREFERENCES "text_mode"
-#define DEFAULT_KEY PREFERENCES "default_key_id"
+#define PREFERENCES SCHEMA_ROOT "/preferences"
+#define ARMOR_KEY PREFERENCES "/ascii_armor"
+#define TEXT_KEY PREFERENCES "/text_mode"
+#define DEFAULT_KEY PREFERENCES "/default_key_id"
 
-#define LISTING SCHEMA_ROOT "listing/"
-#define PROGRESS_UPDATE LISTING "progress_update"
+#define LISTING SCHEMA_ROOT "/listing"
+#define PROGRESS_UPDATE LISTING "/progress_update"
 
 struct _SeahorseContextPrivate
 {
 	GConfClient *gclient;
 	GList *key_pairs;
 	GList *single_keys;
+	guint connection_id;
 };
 
 enum {
@@ -58,12 +59,19 @@ static void	seahorse_context_key_destroyed	(GtkObject		*object,
 static void	seahorse_context_key_changed	(SeahorseKey		*skey,
 						 SeahorseKeyChange	change,
 						 SeahorseContext	*sctx);
-/* gpgme callbacks */
+/* gpgme functions */
 static void	gpgme_progress			(gpointer		data,
 						 const gchar		*what,
 						 gint			type,
 						 gint			current,
 						 gint			total);
+static void	set_gpgme_signer		(SeahorseContext	*sctx,
+						 const gchar		*keyid);
+/* gconf notification */
+static void	gconf_notification		(GConfClient		*gclient,
+						 guint			id,
+						 GConfEntry		*entry,
+						 SeahorseContext	*sctx);
 
 static GtkObjectClass	*parent_class			= NULL;
 static guint		context_signals[LAST_SIGNAL]	= { 0 };
@@ -117,8 +125,6 @@ static void
 seahorse_context_init (SeahorseContext *sctx)
 {
 	GpgmeProtocol proto = GPGME_PROTOCOL_OpenPGP;
-	gchar *keyid;
-	GpgmeKey key;
 	
 	g_return_if_fail (gpgme_engine_check_version (proto) == GPGME_No_Error);
 	g_return_if_fail (gpgme_new (&sctx->ctx) == GPGME_No_Error);
@@ -131,15 +137,8 @@ seahorse_context_init (SeahorseContext *sctx)
 	sctx->priv->gclient = gconf_client_get_default ();
 	
 	/* init listing */
-	keyid = gconf_client_get_string (sctx->priv->gclient, DEFAULT_KEY, NULL);
 	gpgme_set_keylist_mode (sctx->ctx, GPGME_KEYLIST_MODE_LOCAL);
-	
-	/* set signer */
-	g_return_if_fail (gpgme_op_keylist_start (sctx->ctx, keyid, TRUE) == GPGME_No_Error);
-	if (gpgme_op_keylist_next (sctx->ctx, &key) == GPGME_No_Error)
-		gpgme_signers_add (sctx->ctx, key);
-	g_return_if_fail (gpgme_op_keylist_end (sctx->ctx) == GPGME_No_Error);
-	gpgme_key_unref (key);
+	set_gpgme_signer (sctx, gconf_client_get_string (sctx->priv->gclient, DEFAULT_KEY, NULL));
 	
 	/* set prefs */
 	gpgme_set_armor (sctx->ctx, gconf_client_get_bool (
@@ -148,6 +147,12 @@ seahorse_context_init (SeahorseContext *sctx)
 		sctx->priv->gclient, TEXT_KEY, NULL));
 	
 	gpgme_set_progress_cb (sctx->ctx, gpgme_progress, sctx);
+	
+	/* set gconf listener */
+	sctx->priv->connection_id = gconf_client_notify_add (sctx->priv->gclient,
+		PREFERENCES, (GConfClientNotifyFunc)gconf_notification, sctx, NULL, NULL);
+	gconf_client_add_dir (sctx->priv->gclient, PREFERENCES,
+		GCONF_CLIENT_PRELOAD_ONELEVEL, NULL);
 }
 
 /* Destroy all keys & key ring, release gpgme context */
@@ -168,7 +173,7 @@ seahorse_context_finalize (GObject *gobject)
 	
 	g_list_free (sctx->priv->key_pairs);
 	g_list_free (sctx->priv->single_keys);
-	g_free (sctx->priv->gclient);
+	g_object_unref (sctx->priv->gclient);
 	gpgme_release (sctx->ctx);
 	
 	G_OBJECT_CLASS (parent_class)->finalize (gobject);
@@ -239,6 +244,33 @@ gpgme_progress (gpointer data, const gchar *what, gint type, gint current, gint 
 		fract = (gdouble)current / (gdouble)total;
 	
 	seahorse_context_show_progress (SEAHORSE_CONTEXT (data), what, fract);
+}
+
+static void
+set_gpgme_signer (SeahorseContext *sctx, const gchar *keyid)
+{
+	GpgmeKey key;
+	
+	gpgme_signers_clear (sctx->ctx);
+	g_return_if_fail (gpgme_op_keylist_start (sctx->ctx, keyid, TRUE) == GPGME_No_Error);
+	if (gpgme_op_keylist_next (sctx->ctx, &key) == GPGME_No_Error)
+		gpgme_signers_add (sctx->ctx, key);
+	gpgme_op_keylist_end (sctx->ctx);
+	gpgme_key_unref (key);
+}
+
+static void
+gconf_notification (GConfClient *gclient, guint id, GConfEntry *entry, SeahorseContext *sctx)
+{
+	const gchar *key = gconf_entry_get_key (entry);
+	GConfValue *value = gconf_entry_get_value (entry);
+	
+	if (g_str_equal (key, ARMOR_KEY))
+		gpgme_set_armor (sctx->ctx, gconf_value_get_bool (value));
+	else if (g_str_equal (key, TEXT_KEY))
+		gpgme_set_textmode (sctx->ctx, gconf_value_get_bool (value));
+	else if (g_str_equal (key, DEFAULT_KEY))
+		set_gpgme_signer (sctx, gconf_value_get_string (value));
 }
 
 /* Add a new SeahorseKey to the key ring */
