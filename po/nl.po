@@ -9,6 +9,7 @@
 # encryption		versleuteling
 # key ring		sleutelbos
 # passphrase		wachtwoordfrase
+# recipient		ontvanger/geadresseerde
 # sign			signeren/?ondertekenen
 # trust			vertrouwen
 # validity		geldigheid
@@ -21,8 +22,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Seahorse Gnome2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-07 19:27+0100\n"
-"PO-Revision-Date: 2005-01-08 02:09+0100\n"
+"POT-Creation-Date: 2005-01-31 12:25+0100\n"
+"PO-Revision-Date: 2005-01-31 22:07+0100\n"
 "Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
@@ -271,7 +272,8 @@ msgstr "Verifiëringsbewerking op met PGP ondertekende bestanden"
 
 #: data/seahorse.schemas.in.h:1
 msgid "A list of key server URIs to search for remote PGP keys."
-msgstr "Een lijst met sleutelserver URIs te doorzoeken voor PGP-sleutels op afstand."
+msgstr ""
+"Een lijst met sleutelserver URIs te doorzoeken voor PGP-sleutels op afstand."
 
 #: data/seahorse.schemas.in.h:2
 msgid "Controls the visibility of the expires column for the key manager."
@@ -383,14 +385,21 @@ msgid ""
 "Specify the column to sort the recipients window by. Columns are: 'name', "
 "'id' and 'validity', Put a '-' in front of the column name to sort in "
 "descending order."
-msgstr "Geef de kolom waarop gesorteerd wordt in het geadresseerden-venster. Kolommen zijn: 'naam', 'id' en 'geldigheid'. Zet een '-' voor de kolomnaam om in omgekeerde volgorde te sorteren."
+msgstr ""
+"Geef de kolom waarop gesorteerd wordt in het geadresseerden-venster. "
+"Kolommen zijn: 'naam', 'id' en 'geldigheid'. Zet een '-' voor de kolomnaam "
+"om in omgekeerde volgorde te sorteren."
 
 #: data/seahorse.schemas.in.h:24
 msgid ""
 "Specify the column to sort the seahorse key manager main window by. Columns "
 "are: 'name', 'id', 'validity', 'expires', 'trust', 'length' and 'type'. Put "
 "a '-' in front of the column name to sort in descending order."
-msgstr "Geef de kolom waarop gesorteerd wordt in het seahorse sleutelserverbeheer hoofdvenster.  Kolommen zijn: 'naam', 'id', 'geldigheid', 'verloopt', 'vertrouwen', 'lengte' en 'type'.  Zet een '-' voor de kolomnaam om in omgekeerde volgorde te sorteren.\""
+msgstr ""
+"Geef de kolom waarop gesorteerd wordt in het seahorse sleutelserverbeheer "
+"hoofdvenster.  Kolommen zijn: 'naam', 'id', 'geldigheid', 'verloopt', "
+"'vertrouwen', 'lengte' en 'type'.  Zet een '-' voor de kolomnaam om in "
+"omgekeerde volgorde te sorteren.\""
 
 #: data/seahorse.schemas.in.h:25
 msgid "The column to sort the recipients by"
@@ -404,7 +413,9 @@ msgstr "De kolom waarmee de seahorse-sleutels worden gesorteerd"
 msgid ""
 "The last keyserver a search was performed against. Or empty for all "
 "keyservers."
-msgstr "De vorige sleutelserver waarop een zoekopdracht is uitgevoerd. Of leeg voor alle sleutelservers."
+msgstr ""
+"De vorige sleutelserver waarop een zoekopdracht is uitgevoerd. Of leeg voor "
+"alle sleutelservers."
 
 #: data/seahorse.schemas.in.h:28
 msgid "The last search pattern searched for against a keyserver."
@@ -471,13 +482,13 @@ msgid "Whether to use canonical text mode"
 msgstr "Of canonieke tekstmodus moet worden gebruikt"
 
 #. Make the column
-#: libseahorse/seahorse-key-store.c:615 src/seahorse-key-properties.c:380
+#: libseahorse/seahorse-key-store.c:728 src/seahorse-key-properties.c:380
 #: src/seahorse-key-properties.c:474
 msgid "Name"
 msgstr "Naam"
 
 #. Make the column
-#: libseahorse/seahorse-key-store.c:618 src/seahorse-key-properties.c:377
+#: libseahorse/seahorse-key-store.c:731 src/seahorse-key-properties.c:377
 msgid "Key ID"
 msgstr "Sleutel-ID"
 
@@ -577,13 +588,17 @@ msgstr " minuten"
 msgid ""
 "<b>Note:</b> The 'seahorse-agent' program was started. This program is "
 "necessary in order for caching of passwords. "
-msgstr "<b>Let op:</b> Het programma 'seahorse-agent' is opgestart. Dit programma is nodig om wachtwoorden in de buffer op te slaan."
+msgstr ""
+"<b>Let op:</b> Het programma 'seahorse-agent' is opgestart. Dit programma is "
+"nodig om wachtwoorden in de buffer op te slaan."
 
 #: libseahorse/seahorse-prefs.glade.h:3
 msgid ""
 "<b>Warning:</b> The 'seahorse-agent' program is not running. This program is "
 "necessary in order for caching of passwords. "
-msgstr "<b>Waarschuwing:</b>  Het programma 'seahorse-agent' is niet opgestart. Dit programma is nodig om wachtwoorden in de buffer op te slaan."
+msgstr ""
+"<b>Waarschuwing:</b>  Het programma 'seahorse-agent' is niet opgestart. Dit "
+"programma is nodig om wachtwoorden in de buffer op te slaan."
 
 #: libseahorse/seahorse-prefs.glade.h:4
 msgid "Cache _GPG passwords in memory"
@@ -653,37 +668,36 @@ msgstr[1] "%d sleutels geladen"
 msgid "Loading Keys..."
 msgstr "Sleutels laden..."
 
-#: libseahorse/seahorse-recipients-store.c:147
-#: src/seahorse-key-manager-store.c:321
+#: libseahorse/seahorse-recipients-store.c:153
+#: src/seahorse-key-manager-store.c:285
 msgid "Validity"
 msgstr "Geldigheid"
 
-# engels fout: enkelvoud bevat ook de meervoudsvorm
-#: libseahorse/seahorse-recipients.c:54 src/seahorse-keyserver-results.c:217
+#: libseahorse/seahorse-recipients.c:54
 #, c-format
-msgid "Selected %d keys"
-msgid_plural "Selected %d keys"
-msgstr[0] "%d sleutel geselecteerd"
-msgstr[1] "%d sleutels geselecteerd"
+msgid "Selected %d recipient"
+msgid_plural "Selected %d recipients"
+msgstr[0] "%d ontvanger geselecteerd"
+msgstr[1] "%d ontvangers geselecteerd"
 
 #: libseahorse/seahorse-recipients.c:58
 #, c-format
-msgid "Selected %d not fully valid key"
-msgid_plural "Selected %d not fully valid keys"
-msgstr[0] "%d niet volledig geldige sleutel geselecteerd"
-msgstr[1] "%d niet volledig geldige sleutels geselecteerd"
+msgid "Selected %d not fully valid recipient"
+msgid_plural "Selected %d not fully valid recipients"
+msgstr[0] "%d niet volledig geldige ontvanger geselecteerd"
+msgstr[1] "%d niet volledig geldige ontvangers geselecteerd"
 
 #. TRANSLATOR: This string will become
-#. * "Selected %d keys and (%d not fully valid)"
+#. * "Selected %d recipients (%d not fully valid)"
 #: libseahorse/seahorse-recipients.c:66
 #, c-format
-msgid "Selected %d key "
-msgid_plural "Selected %d keys "
-msgstr[0] "%d sleutel geselecteerd"
-msgstr[1] "%d sleutels geselecteerd"
+msgid "Selected %d recipient "
+msgid_plural "Selected %d recipients "
+msgstr[0] "%d ontvanger geselecteerd"
+msgstr[1] "%d ontvangers geselecteerd"
 
 #. TRANSLATOR: This string will become
-#. * "Selected %d keys and (%d not fully valid)"
+#. * "Selected %d recipients (%d not fully valid)"
 #: libseahorse/seahorse-recipients.c:71
 #, c-format
 msgid "(%d not fully valid)"
@@ -691,7 +705,7 @@ msgid_plural "(%d not fully valid)"
 msgstr[0] "(%d niet volledig geldig)"
 msgstr[1] "(%d niet volledig geldige)"
 
-#. TRANSLATOR: "%s%s" are "Selected %d keys and (%d not fully valid)"
+#. TRANSLATOR: "%s%s" are "Selected %d recipients (%d not fully valid)"
 #. * Swap order with "%2$s%1$s" if needed
 #. TRANSLATOR: "%s%s" are "You have selected %d files and %d folders"
 #. * Swap order with "%2$s%1$s" if needed
@@ -808,7 +822,7 @@ msgstr ""
 msgid "_Replace"
 msgstr "_Vervangen"
 
-#: libseahorse/seahorse-validity.c:31 src/seahorse-key-manager-store.c:147
+#: libseahorse/seahorse-validity.c:31 src/seahorse-key-manager-store.c:148
 #: src/seahorse-key-properties.glade.h:20
 msgid "Unknown"
 msgstr "Onbekend"
@@ -1287,7 +1301,7 @@ msgid "Enter Name - Must be at least five letters."
 msgstr "Naam invoeren - moet minimaal vijf letters zijn."
 
 # expiratiedatum?
-#: src/seahorse-generate-druid.glade.h:13 src/seahorse-key-manager-store.c:325
+#: src/seahorse-generate-druid.glade.h:13 src/seahorse-key-manager-store.c:289
 msgid "Expiration Date"
 msgstr "Verloopdatum"
 
@@ -1334,7 +1348,7 @@ msgstr ""
 msgid "Medium Security"
 msgstr "Gemiddelde beveiliging"
 
-#: src/seahorse-generate-druid.glade.h:22 src/seahorse-key-manager-store.c:206
+#: src/seahorse-generate-druid.glade.h:22 src/seahorse-key-manager-store.c:192
 #: src/seahorse-key-properties.c:216
 msgid "Never Expires"
 msgstr "Verloopt nooit"
@@ -1448,43 +1462,43 @@ msgstr "Kies een methode om uw nieuwe sleutel te genereren:"
 msgid "radio_druid"
 msgstr "radio_assistent"
 
-#: src/seahorse-key-manager-store.c:135
+#: src/seahorse-key-manager-store.c:136
 msgid "RSA"
 msgstr "RSA"
 
-#: src/seahorse-key-manager-store.c:137
+#: src/seahorse-key-manager-store.c:138
 msgid "RSA-E"
 msgstr "RSA-E"
 
-#: src/seahorse-key-manager-store.c:139
+#: src/seahorse-key-manager-store.c:140
 msgid "RSA-S"
 msgstr "RSA-S"
 
-#: src/seahorse-key-manager-store.c:141
+#: src/seahorse-key-manager-store.c:142
 msgid "ELG-E"
 msgstr "ELG-E"
 
-#: src/seahorse-key-manager-store.c:143
+#: src/seahorse-key-manager-store.c:144
 msgid "DSA"
 msgstr "DSA"
 
-#: src/seahorse-key-manager-store.c:145
+#: src/seahorse-key-manager-store.c:146
 msgid "ELG"
 msgstr "ELG"
 
-#: src/seahorse-key-manager-store.c:199 src/seahorse-key-properties.c:206
+#: src/seahorse-key-manager-store.c:185 src/seahorse-key-properties.c:206
 msgid "Expired"
 msgstr "Verlopen"
 
-#: src/seahorse-key-manager-store.c:329
+#: src/seahorse-key-manager-store.c:293
 msgid "Trust"
 msgstr "Vertrouwen"
 
-#: src/seahorse-key-manager-store.c:333
+#: src/seahorse-key-manager-store.c:297
 msgid "Length"
 msgstr "Lengte"
 
-#: src/seahorse-key-manager-store.c:337
+#: src/seahorse-key-manager-store.c:301
 msgid "Type"
 msgstr "Type"
 
@@ -1918,6 +1932,11 @@ msgstr "Kon sleutels niet importeren naar sleutelbos"
 #: src/seahorse-keyserver-results.c:121
 msgid "Save Remote Keys"
 msgstr "Sleutels op afstand opslaan"
+
+#: src/seahorse-keyserver-results.c:217
+#, c-format
+msgid "Selected %d keys"
+msgstr "%d sleutels geselecteerd"
 
 #: src/seahorse-keyserver-results.c:301
 msgid "Remote Keys"
