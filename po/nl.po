@@ -1,7 +1,7 @@
 # Dutch translation of seahorse.
 # Copyright (C) 2003 The Free Software Foundation, Inc.
 # This file is distributed under the same license as the seahorse package.
-# Tino Meinen <a.t.meinen@chello.nl>, 2003.
+# Tino Meinen <a.t.meinen@chello.nl>, 2003, 2004
 # ---
 # Armor			Harnas
 # Decrypt		Ontsleutelen-> ontcijferen
@@ -19,8 +19,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Seahorse Gnome2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-16 21:37+0100\n"
-"PO-Revision-Date: 2004-01-17 04:21+0100\n"
+"POT-Creation-Date: 2004-01-27 04:47+0100\n"
+"PO-Revision-Date: 2004-01-27 16:13+0100\n"
 "Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
 "Language-Team: Dutch <vertaling@nl.linux.org>\n"
 "MIME-Version: 1.0\n"
@@ -205,7 +205,9 @@ msgstr ""
 #: data/seahorse.schemas.in.h:23
 msgid ""
 "This specifies the default key to use for cerain operations, mainly signing."
-msgstr "Dit is de standaardsleutel die wordt gebruikt voor bepaalde bewerkingen, voornamelijk ondertekenen."
+msgstr ""
+"Dit is de standaardsleutel die wordt gebruikt voor bepaalde bewerkingen, "
+"voornamelijk ondertekenen."
 
 #: data/seahorse.schemas.in.h:24
 msgid "Whether to always encrypt to default key"
@@ -687,9 +689,19 @@ msgstr "_Wachtwoordfrase:"
 msgid ""
 "Before selecting apply to start key generation, please make sure all of your "
 "previous settings are correct."
-msgstr "Voordat u nu gaat toepassen om de sleutel te genereren, moet u controleren of al uw vorige instellingen correct zijn. "
+msgstr ""
+"Voordat u nu gaat toepassen om de sleutel te genereren, moet u controleren "
+"of al uw vorige instellingen correct zijn. "
 
-# dit zit nog vol met Engelse taalfouten
+# Choosing a passphrase is an integral part of creating a strong key.  As
+# with passwords, a passphrase should contain letters, numbers, and
+# punctuation.  Additionally, a passphrase can contain spaces, meaning it can
+# contain many words.  You should pick a phrase that you can remember well,
+# and that contains punctuation.  
+# Then take this phrase, adjust the case of various letters, and change some
+# of the letters into numbers or punctuation, reminiscent of \"leet speak\.
+# But don't make it obscure to the point where you can't remember it!
+# de oorspronkelijke versie zat vol met Engelse taalfouten
 #: src/seahorse-generate-druid.glade.h:3
 msgid ""
 "Choosing a passphrase is an integral part of creating a strong key.  Like a "
@@ -699,7 +711,7 @@ msgid ""
 "Take this phrase, adjust the case of various letters, and change some of the "
 "letters into numbers or punctuation rmeiniscent of \"leet speak\", but don't "
 "make it so obscure to the point where you can't remember it."
-msgstr ""
+msgstr "Het kiezen van een wachtwoordfrase is een belangrijk onderdeel bij het aanmaken van een sterke sleutel.  Net als bij eeen wachtwoord, behoort een wachtwoordfrase letters, cijfers en leestekens te bevatten. Bovendien kan een wachtwoordfrase spaties bevatten zodat het uit meerdere woorden kan bestaan. Eigenlijk zou u eerst een frase moeten verzinnen die u goed kunt onthouden en die leestekens bevat.  Vervolgens zou u in deze frase bepaalde letters moeten veranderen in hoofdletters, of in cijfers, zoals dit ook bij \"leet speak\" gebeurt. Maar let wel dat u het niet zo gek maakt dat u het niet meer kunt onthouden."
 
 # Commentaar beter?
 #: src/seahorse-generate-druid.glade.h:4
@@ -764,7 +776,7 @@ msgid ""
 "After the expiration date, your private key will still be able to decrypt "
 "messages or data encrypted with your public key.  However, your private key "
 "will no longer sign messages or data."
-msgstr ""
+msgstr "Sleutels behoren een geschikte verloopdatum te hebben. Voor de meeste mensen is de standaard waarde: verloopt nooit, voldoende.  Als u van plan bent de sleutel slechts voor een bepaalde tijd te gebruiken, bijvoorbeeld voor een specifiek project, kiest u een verloopdatum die later is dat datum waarop uw project eindigt. Na de verloopdatum zal uw persoonlijke sleutel nog steeds berichten en gegevens kunnen ontcijferen die met uw publieke sleutel zijn versleuteld. Uw persoonlijke sleutel zal echter geen berichten of gegevens meer kunnen signeren."
 
 #: src/seahorse-generate-druid.glade.h:18
 msgid "Medium Security"
@@ -810,11 +822,13 @@ msgid ""
 "know your data will be actively scrutinized.  The Extra High level should be "
 "selected if you know your data is actively scrutinized and will be under "
 "cryptographic attack. "
-msgstr ""
+msgstr "Gemiddelde beveiliging is de standaard en is acceptabel voor het normale dagelijkse gebruik. Hoge beveiliging moet worden gekozen als u weet dat uw gegevens actief worden onderzocht. Extra hoge beveiliging moet worden geselecteerd als u weet dat uw gegevens actief worden onderzocht en cryptografisch zullen worden aangevallen."
 
 #: src/seahorse-generate-druid.glade.h:31
 msgid "This druid will guide you through the steps of creating a GPG key pair."
-msgstr "Deze assistent zal u helpen bij de verschillende stappen die nodig zijn om een GPG-sleutelpaar aan te maken."
+msgstr ""
+"Deze assistent zal u helpen bij de verschillende stappen die nodig zijn om "
+"een GPG-sleutelpaar aan te maken."
 
 #: src/seahorse-generate-druid.glade.h:32
 msgid ""
@@ -822,19 +836,27 @@ msgid ""
 "needed: Full Name, Email Address, and Comment.  These values will be given "
 "to the name of your key in the following "
 "manner:                              Full Name (Comment) <email address>."
-msgstr "Om een sleutel aan te maken en deze te verbinden met uw identiteit is de volgende informatie benodigd: Volledige naam, Emailadres, en Opmerkingen.  Deze waarden zullen op de volgende wijze aan de naam van uw sleutelring worden gegeven:                             Volledige naam (Opmerkingen) <emailadres>"
+msgstr ""
+"Om een sleutel aan te maken en deze te verbinden met uw identiteit is de "
+"volgende informatie benodigd: Volledige naam, Emailadres, en Opmerkingen.  "
+"Deze waarden zullen op de volgende wijze aan de naam van uw sleutelring "
+"worden gegeven:                             Volledige naam (Opmerkingen) "
+"<emailadres>"
 
+# moet dit vertaald worden?
 #: src/seahorse-generate-druid.glade.h:33
 msgid "druidpage_pass"
-msgstr ""
+msgstr "druidpage_pass"
 
+# moet dit vertaald worden?
 #: src/seahorse-generate-druid.glade.h:34
 msgid "druidpage_pinfo"
-msgstr ""
+msgstr "druidpage_pinfo"
 
+# moet dit vertaald worden?
 #: src/seahorse-generate-druid.glade.h:35
 msgid "keygen_druid"
-msgstr ""
+msgstr "keygen_druid"
 
 #: src/seahorse-generate-select.glade.h:1
 msgid "Advanced"
