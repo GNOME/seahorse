@@ -55,10 +55,10 @@ GtkWidget*
 seahorse_default_key_control_new (SeahorseContext *sctx)
 {
 	GList *list = NULL;
-	GtkWidget *option, *menu, *item;
+	GtkWidget *option, *menu;
 	gint index = 0, history = 0;
 	SeahorseKey *skey;
-	const gchar *default_key, *id;
+	const gchar *default_key;
 	
 	menu = gtk_menu_new ();
 	default_key = eel_gconf_get_string (DEFAULT_KEY);
@@ -67,7 +67,7 @@ seahorse_default_key_control_new (SeahorseContext *sctx)
 		skey = SEAHORSE_KEY (list->data);
 		
 		if (!SEAHORSE_IS_KEY_PAIR (skey) || !seahorse_key_pair_can_sign (SEAHORSE_KEY_PAIR (skey)))
-			return;
+			return NULL;
 		
 		key_added (sctx, skey, menu);
 		

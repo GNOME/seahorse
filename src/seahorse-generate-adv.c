@@ -35,7 +35,6 @@ static void
 entry_changed (GtkEditable *editable, SeahorseWidget *swidget)
 {
 	gchar *name, *pass, *confirm;
-	gboolean ok;
 	
 	name = gtk_editable_get_chars (GTK_EDITABLE (glade_xml_get_widget (
 		swidget->xml, NAME)), 0, -1);
@@ -86,7 +85,7 @@ never_expires_toggled (GtkToggleButton *togglebutton, SeahorseWidget *swidget)
 static void
 ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 {
-	const gchar *name, *email, *comment, *pass, *confirm;
+	const gchar *name, *email, *comment, *pass;
 	gint history, length;
 	SeahorseKeyType type;
 	time_t expires;

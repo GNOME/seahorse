@@ -212,6 +212,7 @@ static gboolean
 seahorse_widget_delete_event (GtkWidget *widget, GdkEvent *event, SeahorseWidget *swidget)
 {
 	seahorse_widget_closed (widget, swidget);
+    return FALSE; /* propogate event */
 }
 
 /* Destroy widget when context is destroyed */

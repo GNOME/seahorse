@@ -162,7 +162,6 @@ static void
 seahorse_context_finalize (GObject *gobject)
 {
 	SeahorseContext *sctx;
-	SeahorseKey *skey;
 	GList *list = NULL, *keys = NULL;
 	
 	sctx = SEAHORSE_CONTEXT (gobject);

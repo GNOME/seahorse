@@ -50,6 +50,8 @@ struct _SeahorseKeyWidgetClass
 	SeahorseWidgetClass	parent_class;
 };
 
+GType           seahorse_key_widget_get_type ();
+
 SeahorseWidget*	seahorse_key_widget_new			(gchar			*name,
 							 SeahorseContext	*sctx,
 							 SeahorseKey		*skey);

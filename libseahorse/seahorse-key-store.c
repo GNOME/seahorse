@@ -155,7 +155,6 @@ seahorse_key_store_set_property (GObject *gobject, guint prop_id,
 				 const GValue *value, GParamSpec *pspec)
 {
 	SeahorseKeyStore *skstore;
-	GtkTreeView *view;
 	
 	skstore = SEAHORSE_KEY_STORE (gobject);
 	

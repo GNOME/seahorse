@@ -70,6 +70,8 @@ struct _SeahorseKeyClass
 							 SeahorseKeyChange	change);
 };
 
+GType           seahorse_key_get_type (void);
+
 SeahorseKey*		seahorse_key_new		(gpgme_key_t		key);
 
 void			seahorse_key_destroy		(SeahorseKey		*skey);

@@ -52,6 +52,8 @@ struct _SeahorseWidgetClass
 	GObjectClass	parent_class;
 };
 
+GType           seahorse_widget_get_type ();
+
 SeahorseWidget*	seahorse_widget_new			(gchar			*name,
 							 SeahorseContext	*sctx);
 

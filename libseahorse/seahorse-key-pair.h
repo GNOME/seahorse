@@ -46,6 +46,8 @@ struct _SeahorseKeyPairClass
 	SeahorseKeyClass	parent_class;
 };
 
+GType           seahorse_key_pair_get_type ();
+
 SeahorseKey*	seahorse_key_pair_new		(gpgme_key_t		key,
 						 gpgme_key_t		secret);
 

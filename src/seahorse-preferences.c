@@ -37,9 +37,7 @@ void
 seahorse_preferences_show (SeahorseContext *sctx)
 {	
 	SeahorseWidget *swidget;
-	GtkWidget *widget, *child;
-	gchar *key_style;
-	gint history = 0;
+	GtkWidget *widget;
 	
 	g_return_if_fail (sctx != NULL && SEAHORSE_IS_CONTEXT (sctx));
 	

@@ -97,8 +97,6 @@ ask_key (SeahorseKey *skey)
 void
 seahorse_delete_show (SeahorseContext *sctx, GList *keys)
 {
-	GtkWidget *warning;
-	const gchar *message;
 	SeahorseKey *skey;
 	gpgme_error_t err;
 	GList *list = NULL;

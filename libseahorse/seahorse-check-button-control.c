@@ -10,7 +10,6 @@ enum {
 };
 
 static void	seahorse_check_button_control_class_init	(SeahorseCheckButtonControlClass	*klass);
-static void	seahorse_check_button_control_init		(SeahorseCheckButtonControl		*control);
 static void	seahorse_check_button_control_finalize		(GObject				*gobject);
 static void	seahorse_check_button_control_set_property	(GObject				*object,
 								 guint					prop_id,

@@ -70,6 +70,8 @@ struct _SeahorseContextClass
 								 gdouble		fract);
 };
 
+GType               seahorse_context_get_type ();
+
 SeahorseContext*	seahorse_context_new			(void);
 
 void			seahorse_context_destroy		(SeahorseContext	*sctx);

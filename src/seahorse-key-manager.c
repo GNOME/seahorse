@@ -32,6 +32,7 @@
 #include "seahorse-key-manager-store.h"
 #include "seahorse-key-dialogs.h"
 #include "seahorse-key-op.h"
+#include "seahorse-key-widget.h"
 
 #define KEY_LIST "key_list"
 
@@ -285,7 +286,6 @@ selection_changed (GtkTreeSelection *selection, SeahorseWidget *swidget)
 	gint rows = 0;
 	gboolean selected = FALSE, secret = FALSE;
 	SeahorseKey *skey = NULL;
-	GtkTreeView *view;
 	
 	rows = gtk_tree_selection_count_selected_rows (selection);
 	selected = rows > 0;
@@ -333,6 +333,8 @@ key_list_popup_menu (GtkWidget *widget, SeahorseWidget *swidget)
 	skey = seahorse_key_store_get_selected_key (GTK_TREE_VIEW (widget));
 	if (skey != NULL)
 		show_context_menu (swidget, 0, gtk_get_current_event_time ());
+       
+    return FALSE;
 }
 
 
@@ -341,7 +343,6 @@ gconf_notification (GConfClient *gclient, guint id, GConfEntry *entry, SeahorseW
 {
 	const gchar *key;
 	GConfValue *value;
-	GtkWidget *widget;
 	
 	key = gconf_entry_get_key (entry);
 	value = gconf_entry_get_value (entry);
@@ -351,7 +352,8 @@ gconf_notification (GConfClient *gclient, guint id, GConfEntry *entry, SeahorseW
      * we'll get more, so leaving this code here... 
      */
 }
-/*
+
+#if 0
 static void
 show_progress (SeahorseContext *sctx, const gchar *op, gdouble fract, SeahorseWidget *swidget)
 {
@@ -364,14 +366,14 @@ show_progress (SeahorseContext *sctx, const gchar *op, gdouble fract, SeahorseWi
 	status = GNOME_APPBAR (glade_xml_get_widget (swidget->xml, "status"));
 	gnome_appbar_set_status (status, op);
 	progress = gnome_appbar_get_progress (status);
-	/* do progress *
+	/* do progress */
 	if (fract <= 1 && fract > 0)
 		gtk_progress_bar_set_fraction (progress, fract);
 	else if (fract != -1) {
 		gtk_progress_bar_set_pulse_step (progress, 0.05);
 		gtk_progress_bar_pulse (progress);
 	}
-	/* if fract == -1, cleanup progress *
+	/* if fract == -1, cleanup progress */
 	else
 		gtk_progress_bar_set_fraction (progress, 0);
 	
@@ -386,18 +388,19 @@ show_progress (SeahorseContext *sctx, const gchar *op, gdouble fract, SeahorseWi
 	while (g_main_context_pending (NULL))
 		g_main_context_iteration (NULL, TRUE);
 }
-*/
+#endif
+
 /* params[0] = sctx, params[1] = op string, params[2] = fract */
 static gboolean
 progress_hook (GSignalInvocationHint *hint, guint n_params, const GValue *params, SeahorseWidget *swidget)
 {
 	GnomeAppBar *status;
 	GtkProgressBar *progress;
-	//gboolean sensitive;
+	/* gboolean sensitive; */
 	gdouble fract;
 
 	fract = g_value_get_double (&params[2]);
-	//sensitive = (fract == -1);
+	/* sensitive = (fract == -1); */
 	
 	status = GNOME_APPBAR (glade_xml_get_widget (swidget->xml, "status"));
 	gnome_appbar_set_status (status, g_value_get_string (&params[1]));
@@ -425,8 +428,6 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 	SeahorseWidget *swidget;
 	GtkTreeView *view;
 	GtkTreeSelection *selection;
-	GtkWidget *widget;
-	gboolean visible;
 	
 	swidget = seahorse_widget_new ("key-manager", sctx);
 	gtk_object_sink (GTK_OBJECT (sctx));

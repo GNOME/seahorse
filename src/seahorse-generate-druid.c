@@ -43,7 +43,7 @@
 #define DRUID_PINFO "druidpage_pinfo"
 #define DRUID_PASS "druidpage_pass"
 
-/*
+#if 0
 void
 on_name_changed (GtkEditable *editable, SeahorseWidget *swidget)
 {
@@ -57,10 +57,11 @@ on_name_changed (GtkEditable *editable, SeahorseWidget *swidget)
 void
 passphrase_changed (GtkEditable *editable, SeahorseWidget *swidget)
 {
-	/*GnomeDruid *gnomedruid;
+	GnomeDruid *gnomedruid;
 	gnomedruid = GNOME_DRUID (glade_xml_get_widget (swidget->xml, DRUID));
 	gnome_druid_set_buttons_sensitive(gnomedruid, TRUE, FALSE, TRUE, TRUE);
-}*/
+}
+#endif
 
 
 void
@@ -114,11 +115,10 @@ void
 on_druid_finish (GnomeDruidPage *gnomedruidpage, GtkWidget *widget, SeahorseWidget *swidget)
 {
 
-	const gchar *name, *email, *comment, *pass, *confirm;
+	const gchar *name, *email, *comment, *pass;
 	gint length;
 	SeahorseKeyType type;
 	time_t expires;
-	gboolean low, med, high, e_high;
 	GtkWidget *widget2;
 	gpgme_error_t err;
 	

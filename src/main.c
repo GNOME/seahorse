@@ -21,6 +21,7 @@
 
 #include <config.h>
 #include <gnome.h>
+#include <locale.h>
 
 #include "seahorse-context.h"
 #include "seahorse-windows.h"

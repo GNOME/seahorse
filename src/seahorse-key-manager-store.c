@@ -276,7 +276,6 @@ seahorse_key_manager_store_new (SeahorseContext *sctx, GtkTreeView *view)
 {
 	SeahorseKeyStore *skstore;
 	GtkTreeViewColumn *col;
-	GList *list = NULL;
 
 	GType columns[] = {
 	        G_TYPE_POINTER, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,

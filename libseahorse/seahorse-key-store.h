@@ -79,6 +79,8 @@ struct _SeahorseKeyStoreClass
 								 GtkTreeIter		*iter);
 };
 
+GType           seahorse_key_store_get_type ();
+
 void			seahorse_key_store_init			(SeahorseKeyStore	*skstore,
 								 GtkTreeView		*view,
 								 gint			cols,

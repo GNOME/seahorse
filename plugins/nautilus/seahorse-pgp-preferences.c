@@ -1,6 +1,7 @@
 
 #include <gnome.h>
 #include <config.h>
+#include <locale.h>
 
 #include "seahorse-widget.h"
 #include "seahorse-check-button-control.h"

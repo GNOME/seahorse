@@ -24,6 +24,8 @@
 #include "seahorse-widget.h"
 #include "seahorse-util.h"
 #include "seahorse-key-op.h"
+#include "seahorse-generate-adv.h"
+#include "seahorse-generate-druid.h"
 
 #define DRUID "radio_druid"
 #define ADV "radio_adv"
