@@ -54,6 +54,7 @@ struct _SeahorseAgentConn {
     gint stag;                  /* glib source tag */
     gboolean input;             /* Whether in input mode or not */
     GIOChannel *iochannel;      /* Io channel for connection */
+    gboolean terminal_ok;        /* Whether this is from the current display */
 };
 
 /* -----------------------------------------------------------------------------
@@ -71,6 +72,8 @@ struct _SeahorseAgentConn {
 #define ASS_OPTION  "OPTION"
 #define ASS_GETPASS "GET_PASSPHRASE"
 #define ASS_CLRPASS "CLEAR_PASSPHRASE"
+
+#define ASS_OPT_DISPLAY "display="
 
 /* Responses */
 #define ASS_OK      "OK "
@@ -261,7 +264,32 @@ process_line (SeahorseAgentConn *cn, gchar *string)
     cn->input = FALSE;
 
     if (strcasecmp (string, ASS_OPTION) == 0) {
-        /* We don't do anything with the options right now */
+        gchar *option;
+        
+        split_arguments (args, &option, NULL);
+        
+        if (!option) {
+            seahorse_agent_io_reply (cn, FALSE, "105 parameter error");
+            g_warning ("received invalid option argument");
+            return;
+        }
+            
+        /* 
+         * If the option is a display option we make sure it's 
+         * the same as our display. Otherwise we don't answer.
+         */
+        if (g_ascii_strncasecmp (option, ASS_OPT_DISPLAY, KL (ASS_OPT_DISPLAY)) == 0) {
+            option += KL (ASS_OPT_DISPLAY);
+            if (g_ascii_strcasecmp (option, g_getenv("DISPLAY")) == 0) {
+                cn->terminal_ok = TRUE;
+            } else {
+                g_warning ("received request different display: %s", option);
+                seahorse_agent_io_reply (cn, FALSE, "105 parameter conflict");
+                return;
+            }
+        }
+        
+        /* We don't do anything with the other options right now */
         seahorse_agent_io_reply (cn, TRUE, NULL);
     }
 
@@ -271,6 +299,13 @@ process_line (SeahorseAgentConn *cn, gchar *string)
         gchar *prompt;
         gchar *description;
 
+        /* We don't answer this unless it's from the right terminal */
+        if (!cn->terminal_ok) {
+            seahorse_agent_io_reply (cn, FALSE, "113 Server Resource Problem");
+            g_warning ("received passphrase request from wrong terminal");
+            return;
+        }
+                
         split_arguments (args, &id, &errmsg, &prompt, &description, NULL);
 
         if (!id || !errmsg || !prompt || !description) {
@@ -293,6 +328,14 @@ process_line (SeahorseAgentConn *cn, gchar *string)
 
     else if (strcasecmp (string, ASS_CLRPASS) == 0) {
         gchar *id;
+
+        /* We don't answer this unless it's from the right terminal */
+        if (!cn->terminal_ok) {
+            seahorse_agent_io_reply (cn, FALSE, "113 Server Resource Problem");
+            g_warning ("received passphrase request from wrong terminal");
+            return;
+        }
+
         split_arguments (args, &id, NULL);
 
         if (!id) {
