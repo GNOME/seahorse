@@ -559,7 +559,7 @@ seahorse_op_verify_file (SeahorseKeySource *sksrc, const gchar *path, const gcha
     sig = seahorse_vfs_data_create (path, SEAHORSE_VFS_READ, err);
     g_return_if_fail (plain != NULL);
 
-    plain = seahorse_vfs_data_create (original, SEAHORSE_VFS_WRITE | SEAHORSE_VFS_DELAY, err);
+    plain = seahorse_vfs_data_create (original, SEAHORSE_VFS_READ, err);
 	if (!plain) {
 		gpgme_data_release (sig);
 		g_return_if_reached ();
