@@ -1,37 +1,90 @@
-context:
-	gconf listener
-	gconf error checking(?)
-key:
-	remove SeahorseKeyPrivate; dynamically generate # uids & subkeys
-	nice fingerprint
-widget:
-	help error checking(?)
-ops-key:
-	edit key ops:
-		add uid, delete uid, set uid primary
-		add subkey, delete subkey, change subkey expire
-		sign key, gen revoke cert
-	key server ops: import, export
-key-properties:
-	edit key dialogs: add uid, add subkey, sign key, gen revoke cert
-	key sigs (gpgme-0.4)
-ops-data/file/text:
-	encrypt & sign
-key-manager:
-	sorting
-	drag in = import
-	drag key out = export
-	right click key menu
-	visible if has secret
-recipients:
-	sorting
-	drag between lists
-	for encrypt ops, only show keys that can
-text-editor:
-	icons for popups
-command-line:
-	file ops (see nautilus)
-nautilus:
-	component using file ops
-help:
-	define terms
+TODO (last updated 2003-01-14)
+==============================
+
+Seahorse TODO list.
+Since seahorse releases are currently feature based,
+tasks are organized by MINOR version and have a feature focus.
+The goal is to complete the tasks, then release that version.
+Tasks are always subject to change
+
+A = assigned
+X = finished
+? = not required, maybe not possible or worth effort
+
+Contact a maintainer if you'd like to be responsible for a task.
+Also check bugzilla for other tasks.
+
+0.6.0
+-----
+
+[A] Remove g_return_if_fail/g_assert if error not critical
+[A] Screenshots on website (Resp: Jacob)
+[ ] Convert help to html; put on website (Resp: Jacob)
+[ ] Update website (Resp: Jacob)
+[X] Convert package docs to gnome style (Resp: Jacob)
+[ ] Test
+[A] Package releases:
+	[A] deb (Resp: Jose)
+	[A] rpm (Resp: Jean)
+	[A] tar (Resp: Jacob)
+	[A] ebuild (Resp: Jacob)
+[A] Post news/update to: website, project site, sf gnome foundry,
+    sf espanol foundry, gnomedesktop.com, freshmeat.net, gnome software map,
+    seahorse lists, gnupg lists (Resp: Jacob)
+
+0.7.0 (Focus: Key management)
+-----------------------------
+
+[ ] Require GPGME 0.4 (Resp: Jacob); update as necessary
+[ ] Key edit operations (Resp: Jacob)
+	[ ] Add uid
+	[ ] Add subkey
+	[ ] Sign key
+	[?] Delete subkey
+	[?] Change subkey expires
+	[?] Add revoker
+	[?] Delete signature
+	[?] Revoke signature
+	[?] Revoke subkey
+	[?] Delete subkey
+	[?] Delete uid
+	[?] Set primary uid
+	[?] Add photo id
+	[?] Show photo id
+[ ] Add necessary dialogs for ops (Resp: Jacob)
+[ ] Update key properties for operations (Resp: Jacob)
+[ ] Update key for operations (Resp: Jacob)
+[ ] Update objects listening to key (Resp: Jacob)
+[ ] Show key signatures (Resp: Jacob)
+[?] Export key to server
+[?] Import key from server
+[ ] Make libseahorse; comment with gtk-doc (Resp: Jacob)
+[ ] Context gconf listener (Resp: Jacob)
+[ ] Error check gconf & gnome help (Resp: Jacob)
+[ ] Nice fingerprint (Resp: Jacob)
+[ ] Encrypt & Sign operation; update as necessary
+
+0.8.0 (Focus: Gnome integration & usability)
+--------------------------------------------
+
+[ ] Key sorting (Resp: Jacob)
+[ ] Command line operations (Resp: Jacob)
+[ ] Nautilus component (Resp: Jacob)
+[ ] Drag data in = import (Resp: Jacob)
+[ ] Drag key out = export (Resp: Jacob)
+[ ] Right click key menu (Resp: Jacob)
+[ ] Icons in list (Resp: Jacob)
+[ ] Drag between recipients (Resp: Jacob)
+[?] Multiple key selection (Resp: Jacob)
+[ ] Help glossary and more concepts (Resp: Jacob & Gnome Doc Team)
+[ ] Usability review (Resp: Gnome Usability Team)
+
+Future Features
+---------------
+
+[ ] Gedit plugin
+[ ] Evolution component
+[ ] Bonoboize
+[ ] Visual trust diagram
+[ ] Complete usage & concept manual
+[ ] Other app plugins

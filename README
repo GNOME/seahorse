@@ -1,46 +1,54 @@
-Seahorse is a gnome2 interface for gnupg.
-It uses gpgme as the backend.
+Seahorse: a Gnome interface for GnuPG.
+This describes version 0.6.0
 
-The goal of the Seahorse app is to be a powerful tool for key management and encryption functionality.
-The goal of the Seahorse Project is to provide useful, easy to use encryption software for the gnome desktop.
-Other than the Seahorse app, this includes plugins for gedit, pluggable bonobo components, desktop integration, nautilus scripts, and mail client integration.
+Seahorse is a graphical interface for Gnu Privacy Guard.
+Its goal is to provide an easy to use Key Management Tool,
+along with an easy to use interface for encryption operations.
+While not complete yet, Seahorse also strives to be integrated into the
+Gnome Desktop Environment, which will allow users to perform operations
+from their regular applications, not necessarily Seahorse.
+The following features are currently available:
+	
+	* Text and File Operations:
+		- Import keys
+		- Export keys
+		- Sign (clear sign with text)
+		- Encrypt
+		- Decrypt
+		- Verify a signature
+	* Key Management Features:
+		- Export a key
+		- Delete a key
+		- View key properties
+		- Change a key's owner trust
+		- Change a key's expiration date
+		- Enable / Disable a key
+		- Change a key's passphrase
+	* Preferences:
+		- Ascii Armor
+		- Default signer
 
-If you'd like to help, visit the project page at http://sourceforge.net/projects/seahorse.
+For more detailed information about features and their uses,
+see the included help manual or the homepage.
 
-Currently Seahorse has 3 main components: the key manager, text editor, and file manager.
-There is also the key properties window, which supports some key editing operations.
+After installing, please give us feedback by subscribing to the seahorse-user
+mailing list, posting a message to the forums on sourceforge,
+or submitting feature requests or bugs to bugzilla.gnome.org.
 
-Key management features:
-	key deletion
-	key generation
-	show key properties
-	export key to a selected source
-	import keys from a selected source
+Dependencies: To install Seahorse, you need the following:
+	* Gnome2 libraries including Gtk-2 and GConf
+	* GPGME version 0.3.14.  Other versions may be incompatable.
+	* GnuPG version 1.2.  Earlier versions may be incompatable.
 
-Text editor features:
-	import keys from text
-	export keys to text (supports multiple keys)
-	sign and clear sign text
-	encrypt text (supports multiple recipients)
-	decrypt text
-	verify text & view the signature (only supports a single signature)
+Install: To install Seahorse, type:
+	./configure
+	make
+	make install
+See INSTALL for more information.
 
-File manager features:
-	import keys from a file
-	export keys to a file (supports multiple keys)
-	create a detached signature file
-	encrypt a file (supports multiple recipients)
-	decrypt a file
-	verify a detached signature file & view the signature (only supports a single signature)
+Homepage: http://seahorse.sourceforge.net
 
-Key properties features:
-	extended key information
-	enable/disable key
-	change primary key's expiration date
-	change key's owner trust
-	change key's passphrase
-	export key to a selected source
-	delete key
+License: Seahorse is released under the GPL.  See COPYING for more info.
 
-Seahorse preferences also keeps track of the default signing key and whether or not to have output ascii armored.
-For a more detailed feature list by versions, see NEWS
+	
+	- Seahorse Team

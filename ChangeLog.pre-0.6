@@ -1,0 +1,359 @@
+*seahorse-0.4.4 (16 Dec 2002)
+
+	20 Dec 2002; Jacob Perkins <jap1@users.sourceforge.net>
+	
+	Removed default_key schema, preferences now only uses default_key_id pref.
+	Reworked preferences appropriately
+
+	19 Dec 2002; Jacob Perkins <jap1@users.sourceforge.net>
+	
+	Preferences now only shows keys with a secret key
+
+	18 Dec 2002; Jacob Perkins <jap1@users.sourceforge.net>
+	
+	Added seahorse-key::get_userid to get utf8 valid ids
+	Removed seahorse-key::get_name in favor of ::get_userid
+	Added stubs for changing a key's passphrase
+	Added passphrase changing operation: needs some usability work due to gpgme's status line
+	Hide key-properties edit menu if don't have secret key
+	
+	17 Dec 2002; Jacob Perkins <jap1@users.sourceforge.net>
+	
+	Completed key-store transition
+	Desensitize main window while an operation (generate) is in progress
+	Added stubs for key server ops in seahorse-ops-key::export_server & ::import_server
+	Added key count & bad file to import status
+	
+	16 Dec 2002; Jacob Perkins <jap1@users.sourceforge.net>
+	
+	Made columns resizable
+	Niced keyid
+	Removed key-iters, functionality now internal to key-store & subclasses, modified other appropriately
+	Lots of cleanup due to key-iter removal
+
+*seahorse-0.4.3 (11 Dec 2002)
+
+	15 Dec 2002; Jacob Perkins <jap1@users.sourceforge.net>
+	
+	Added comments
+	Bug fixes in seahorse-sub-key-iter::removed, seahorse-validity::load_menu
+	Key manager cleanup
+	Bug fixes in seahorse-key-properties::key_changed
+	Bug fixes in seahorse-key-store::get_selected_iter & ::op_clicked
+	Passphrase entry activates default
+	Import dialog cleanup
+	Generate dialog cleanup
+	Export dialog cleanup
+	Stopped export & import from popping file selection dialogs back up
+
+	14 Dec 2002; Jacob Perkins <jap1@users.sourceforge.net>
+	
+	Fixed bug causing every other key edit op to fail
+	Edit trust op complete
+	Added expire date edit
+	Usability changes to key properties: remove unnecessary expiration widgets
+	added edit op to enable/disable a key
+
+	13 Dec 2002; Jacob Perkins <jap1@users.sourceforge.net>
+
+	Bug fixes & changes in recipients & configure.in so works with >= gnome-2.1
+	seahorse-sub-key-iter bug fix so no crash on close
+	seahorse-validity updates so can ignore GPGME_VALIDITY_UNDEFINED
+	interface changes for trust editing
+	can now edit a key's trust, also has appropriate signals for key related widgets, need some bug fixes
+
+	11 Dec 2002; Jacob Perkins <jap1@users.sourceforge.net>
+	
+	Added .sig file suffix to file manager & ops, modified appropriately
+	Bug fixes/code changes so can cancel passphrase entry without crashing, remove
+
+*seahorse-0.4.2 (9 Dec 2002)
+
+	10 Dec 2002; Jacob Perkins <jap1@users.sourceforge.net>
+	
+	SeahorseSignatures inherits from SeahorseWidget, only shows first signature for now
+	Bug fixes for preferences and key-iter
+
+	9 Dec 2002; Jacob Perkins <jap1@users.sourceforge.net>
+	
+	Add context function to get current SeahorseKey instance of a GpgmeKey
+
+*seahorse-0.4.1 (7 Dec 2002)
+
+	9 Dec 2002; Jacob Perkins <jap1@users.sourceforge.net>
+	
+	Add error dialog in file manager if file has bad suffix
+
+	8 Dec 2002; Jacob Perkins <jap1@users.sourceforge.net>
+	
+	Move text & file ops common to ops-data
+	Memory cleanup with gpgme_data_release
+	Bug fix to stop somewhat random segfaults on close
+
+	7 Dec 2002; Jacob Perkins <jap1@users.sourceforge.net>
+	
+	Initial filemanager interface
+	Basic file op functions done
+	Can view detached signatures
+	preferences updated with bug fixes for toggles and accessors
+
+*seahorse-0.4.0 (5 Dec 2002)
+
+	5 Dec 2002; Jacob Perkins <jap1@users.sourceforge.net>
+	
+	help doc updates, version bump
+
+*seahorse-0.3.7 (4 Nov 2002)
+
+	24 Nov 2002; Jacob Perkins <jap1@users.sourceforge.net>
+	
+	added key iters and key stores
+	modified key manager and recipients to use new objects
+	fixed RSA key gen crash
+	changed generate dialog from druid to entries
+	removed refresh list option from key manager
+	improved list management in context
+	improved signal handling for keys and context
+	added key menu and key menu items
+	updated preferences to reflect menu objects
+	general bug fixes
+
+	9 Nov 2002; Jacob Perkins <jap1@users.sourceforge.net>
+	
+	object improvements: add finalize
+	cleanup, fixes so compiles with gcc2
+	modified text-editor shortcuts so not conflict with text shortcuts
+	text editor popup menu
+	removed non-functional buttons & menu items
+	bugfixes
+	
+	4 Nov 2002; Jacob Perkins <jap1@users.sourceforge.net>
+	
+	help doc updates
+	slight code formatting changes (k&r compliant)
+	preferences now stores keyid so default doesn't change if key ring does
+
+*seahorse-0.3.6 (30 Oct 2002)
+
+	3 Nov 2002; Jacob Perkins <jap1@users.sourceforge.net>
+	
+	preferences fixups
+	recipients for encryption
+	add recips with validity if necessary
+	ops cleanups
+	updates to use seahorse-validity
+	
+	2 Nov 2002; Jacob Perkins <jap1@users.sourceforge.net>
+	
+	generate dialog usability improvements
+	move most text ops to GString
+	multiple recipients (export)
+	
+	31 Oct 2002; Jacob Perkins <jap1@users.sourceforge.net>
+	
+	key changed signal implemented: current use is only for delete
+	
+	30 Oct 2002; Jacob Perkins <jap1@users.sourceforge.net>
+	
+	completed progress bar callback: last/currently focused component will have active progress bar
+	added & completed context changed callback:
+		widgets with a key list can connect in order to refresh list when key ring changes
+	
+	28 Oct 2002; Jacob Perkins <jap1@users.sourceforge.net>
+	
+	added & completed status bar display callbacks: all components will display current status
+
+*seahorse-0.3.5 (28 Oct 2002)
+
+	28 Oct 2002; Jacob Perkins <jap1@users.sourceforge.net>
+
+	.desktop and seahorse.png from Jean integrated
+	basic (very) help doc
+	internal structs inherit from gtkobject so can emit signals, have inheritance
+	move interface to HIG compliance
+	code reformatting/renaming so clearer
+
+*seahorse-0.3.4 (14 Oct 2002)
+
+	14 Oct 2002; Jacob Perkins <jap1@users.sourceforge.net>
+	
+	added text-editor code and interface
+	passphrase callback with gpgme and seahorse-passphrase
+	added seahorse-signatures to view verified signatures and signing key
+
+*seahorse-0.3.3 (13 Oct 2002)
+
+	13 Oct 2002; Jacob Perkins <jap1@users.sourceforge.net>
+
+	added seahorse schemas, make file updates to install
+	add seahorse-preferences
+	updated export to use preferences
+	removed default key from seahorse-context since now part of preferences
+
+*seahorse-0.3.2 (12 Oct 2002)
+
+	13 Oct 2002; Jacob Perkins <jap1@users.sourceforge.net>:
+	
+	simplified widget names and signal names in various dialogs
+	
+	12 Oct 2002; Jacob Perkins <jap1@users.sourceforge.net>:
+	
+	key properties dialog with all available functions, but most not implemented
+
+*seahorse-0.3.1 (5 Oct 2002)
+
+	6 Oct 2002; Jacob Perkins <jap1@users.sourceforge.net>:
+	
+	generate, export to file & text, import from file & text
+	status display and progress bar functionality
+	auto-refresh key-list after generate and delete
+	passphrase callback, only used now for confirming a passphrase for key generation
+
+*seahorse-0.3.0 (28 Sep 2002)
+	
+	4 Oct 2002; Jacob Perkins <jap1@users.sourceforge.net>:
+
+	Massive code restructuring begins
+	Can disregard most of the entries below, only saving them for historical purposes
+	Key manager is functional, minus dialogs:
+		key listing
+		key list refresh
+		key deletion
+	Using libglade
+
+	29 Sep 2002; Jacob Perkins <jap1@users.sourceforge.net>:
+	
+	Code docs using doxygen, currently just comments.
+	
+	28 Sep 2002: Jacob Perkins <jap1@users.sourceforge.net>:
+	
+	Interface rewrite, code separation & cleanup, package restructuring
+	glade files are in glade/
+	util* provides interface independent utilities
+	key.* provides key operations such as generate, delete, export
+	data.* provides crypto operations such as import, encrypt, sign, decrypt, verify
+	text_editor.* is a basic text editor used mainly to implement text crypto ops
+	key_manager.* is the main seahorse key manager window
+	
+	text editor:
+		all crypto / data / key functions work except:
+			cannot encrypt to untrusted keys
+			decrypt & verify will decrypt but not verify, though verification immediately afterwards does work
+	
+	key manager:
+		changed button & menu layout
+		disabled export/import to/from server since not implemented
+		cleaned up look and feel of dialogs
+	
+	util:
+		contains key properties, signature status, passphrase callback
+		removed un-implemented function buttons
+
+*seahorse-0.2.5 (11 Sep 2002)
+
+	20 Sep 2002: Jacob Perkins <jap1@users.sourceforge.net> text editor:
+	
+	All crypto functions should work, still need to fixup verification process to show more signature info.
+	Passphrase callback works.
+	Can also import and export keys.
+	
+	16 Sep 2002; Jacob Perkins <jap1@users.sourceforge.net> keymanager:
+	
+	Text editor, that can encrypt, import, and should be able to do clear sign,
+	but passphrase callback not finished yet
+	Import also has text field
+	Misc code updates
+	
+	14 Sep 2002; Jacob Perkins <jap1@users.sourceforge.net> keymanager:
+	
+	Edit key shows all key info including subkeys, ids
+	All editable attributes are sensitive, but not yet functional
+	seahorsekey contains editing functions, currently stubs
+	
+	12 Sep 2002; Jacob Perkins <jap1@users.sourceforge.net> keymanager:
+	
+	Edit key interface updates
+	Edit key subkey tabs
+	
+	11 Sep 2002; Jacob Perkins <jap1@users.sourceforge.net> keymanager:
+	
+	Moved import functions from seahorsekey to seahorsedata
+	Edit key dialog updates, now can show multiple user ids, more buttons
+	Expiration date in generate is now a gnome_date_edit
+
+*seahorse-0.2.4 (9 Sep 2002)
+
+	9 Sep 2002; Jacob Perkins <jap1@users.sourceforge.net> keymanager:
+	
+	Edit key dialog show info from gpgme for primary key
+	Editable attributes for keys are sensitive, but no editing functionality yet
+	Import keys from file seems to work fine
+	Progress bar now pulses fine for generation
+	Export key to file will append the key to a file (ascii armor recommended)
+	
+	9 Sep 2002; Jacob Perkins <jap1@users.sourceforge.net> docs:
+	
+	Changed NEWS to reflect 'vision'
+	Updated TODO
+
+*seahorse-0.2.3 (8 Sep 2002)
+
+	8 Sep 2002; Jacob Perkins <jap1@users.sourceforge.net> keymanager:
+	
+	Generate key fixups so does correct type
+	SeahorseKey and key listing simplification
+	Only working on new gnupg (1.1.x) support, which will delete keys
+	Export stubs can get data but need to write/send data to file/server
+	Key listing updates to show subkeys and key algorithm
+	Basic import from file works, not much testing though
+
+*seahorse-0.2.2 (5 Sep 2002)
+
+	4 Sep 2002; Jacob Perkins <jap1@users.sourceforge.net> package:
+	
+	Fixed up configure.in and Makefile.am's so configure should work properly and not cause problems.
+	
+	3 Sep 2002; Jacob Perkins <jap1@users.sourceforge.net> keymanager:
+
+	Added some code for exporting, no io to file or keyserver yet.
+
+*seahorse-0.2.1 (4 Sep 2002)
+
+	4 Sep 2002; Jacob Perkins <jap1@users.sourceforge.net> keymanager:
+	
+	Removed symlinks in package. Should generate a key for most user options
+	(not key type, maybe length). Might delete a key if using gnupg 1.1.x,
+	but cannot delete key if using gnupg 1.0.x.
+
+*seahorse-0.2.0 (31 Aug 2002)
+
+	31 Aug 2002; Jacob Perkins <jap1@users.sourceforge.net> keymanager:
+	
+	Preferences save/load on/from disk,
+	relevant dialogs default to choices in preferences,
+	went to back to querying gpgme for key info instead of holding keys in a list
+	
+
+*seahorse-0.1.4 (29 Aug 2002)
+
+	29 Aug 2002; Jacob Perkins <jap1@users.sourceforge.net> keymanager:
+
+	Secret keys listed below public keys in main listing
+
+*seahorse-0.1.2 (27 Aug 2002)
+
+	26 Aug 2002; Jacob Perkins <jap1@users.sourceforge.net> seahorse2-0.1.2:
+	
+	Key listing in dialogs, using checkboxes if multiple keys can be selected
+
+*seahorse-0.1.1 (26 Aug 2002)
+	
+	26 Aug 2002; Jacob Perkins <jap1@users.sourceforge.net> seahorse2-0.1.1:
+	
+	Key listing in main window
+
+*seahorse2-0.1.0 (24 Aug 2002)
+
+	24 Aug 2002; Jacob Perkins <jap1@users.sourceforge.net> seahorse2-0.1.0:
+	
+	Basic interface complete. No encryption functionality.
