@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-04 12:06+0200\n"
-"PO-Revision-Date: 2004-10-04 15:35+0200\n"
+"POT-Creation-Date: 2004-10-05 04:39+0200\n"
+"PO-Revision-Date: 2004-10-05 12:11+0200\n"
 "Last-Translator: Miloslav Trmac <mitr@volny.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -191,8 +191,8 @@ msgstr ""
 
 #: data/seahorse.schemas.in.h:23
 msgid ""
-"This specifies the default key to use for cerain operations, mainly signing."
-msgstr "Toto určuje implicitní klíč por jistí operace, hlavně podepisování."
+"This specifies the default key to use for certain operations, mainly signing."
+msgstr "Toto určuje implicitní klíč pro jisté operace, hlavně podepisování."
 
 #: data/seahorse.schemas.in.h:24
 msgid "Whether to always encrypt to default key"
@@ -206,17 +206,17 @@ msgstr "Jestli používat ASCII Armor"
 msgid "Whether to use canonical text mode"
 msgstr "Jestli používat kanonický textový režim"
 
-#: libseahorse/seahorse-context.c:397
+#: libseahorse/seahorse-context.c:398
 #, c-format
 msgid "Loading key %d"
 msgstr "Načítám klíč %d"
 
-#: libseahorse/seahorse-context.c:427
+#: libseahorse/seahorse-context.c:428
 #, c-format
 msgid "Loaded %d key pairs"
 msgstr "Načteno %d párů klíčů"
 
-#: libseahorse/seahorse-context.c:448
+#: libseahorse/seahorse-context.c:449
 #, c-format
 msgid "Loaded %d keys"
 msgstr "Načteno %d klíčů"
@@ -226,15 +226,15 @@ msgstr "Načteno %d klíčů"
 msgid "Loaded %d new keys"
 msgstr "Načteno %d nových klíčů"
 
-#: libseahorse/seahorse-key-store.c:335
+#: libseahorse/seahorse-key-store.c:337
 msgid "Name"
 msgstr "Jméno"
 
-#: libseahorse/seahorse-key-store.c:338
+#: libseahorse/seahorse-key-store.c:340
 msgid "Key ID"
 msgstr "ID klíče"
 
-#: libseahorse/seahorse-key-store.c:393
+#: libseahorse/seahorse-key-store.c:395
 #, c-format
 msgid "Listed %d keys"
 msgstr "Vypsáno %d klíčů"
@@ -265,7 +265,7 @@ msgid "Passphrase for key"
 msgstr "Heslo pro klíč"
 
 #: libseahorse/seahorse-recipients-store.c:131
-#: src/seahorse-key-manager-store.c:265
+#: src/seahorse-key-manager-store.c:290
 msgid "Validity"
 msgstr "Platnost"
 
@@ -294,25 +294,29 @@ msgstr "Není podpis"
 msgid "Verification Error"
 msgstr "Chyba ověření"
 
-#: libseahorse/seahorse-signatures.c:75
+#: libseahorse/seahorse-signatures.c:78
 msgid "Good, signing key expired"
 msgstr "V pořádku, podpisový klíč vypršel"
 
-#: libseahorse/seahorse-signatures.c:78
-msgid "Multiple Signatures"
-msgstr "Více podpisů"
+#: libseahorse/seahorse-signatures.c:81
+msgid "Good, signature expired"
+msgstr "V pořádku, podpis vypršel"
 
-#: libseahorse/seahorse-signatures.c:81 src/seahorse-key-properties.c:357
+#: libseahorse/seahorse-signatures.c:84
+msgid "Good, signing key certificate revoked"
+msgstr "V pořádku, certifikát podpisového klíče byl odvolán"
+
+#: libseahorse/seahorse-signatures.c:87 src/seahorse-key-properties.c:364
 msgid "Good"
 msgstr "V pořádku"
 
 #. created
-#: libseahorse/seahorse-signatures.glade.h:1 src/seahorse-key-properties.c:348
+#: libseahorse/seahorse-signatures.glade.h:1 src/seahorse-key-properties.c:354
 msgid "Created:"
 msgstr "Vytvořen:"
 
 #. key id
-#: libseahorse/seahorse-signatures.glade.h:2 src/seahorse-key-properties.c:337
+#: libseahorse/seahorse-signatures.glade.h:2 src/seahorse-key-properties.c:343
 msgid "Key ID:"
 msgstr "ID klíče:"
 
@@ -325,15 +329,16 @@ msgid "Signer:"
 msgstr "Podepsáno:"
 
 #. status
-#: libseahorse/seahorse-signatures.glade.h:5 src/seahorse-key-properties.c:356
+#: libseahorse/seahorse-signatures.glade.h:5 src/seahorse-key-properties.c:363
 msgid "Status:"
 msgstr "Stav:"
 
-#: libseahorse/seahorse-util.c:91
+#: libseahorse/seahorse-util.c:92
 msgid "%Y-%m-%d"
 msgstr "%d. %m. %Y"
 
-#: libseahorse/seahorse-validity.c:31 src/seahorse-key-properties.glade.h:17
+#: libseahorse/seahorse-validity.c:31 src/seahorse-key-manager-store.c:48
+#: src/seahorse-key-properties.glade.h:17
 msgid "Unknown"
 msgstr "Neznámý"
 
@@ -357,7 +362,7 @@ msgstr "Neochvějná důvěryhodnost"
 msgid "Disabled"
 msgstr "Zakázáno"
 
-#: libseahorse/seahorse-validity.c:43 src/seahorse-key-properties.c:359
+#: libseahorse/seahorse-validity.c:43 src/seahorse-key-properties.c:366
 msgid "Revoked"
 msgstr "Odvolaný"
 
@@ -368,7 +373,7 @@ msgid "PGP Preferences"
 msgstr "Nastavení PGP"
 
 #: plugins/nautilus/seahorse-pgp-preferences.c:45
-#: src/seahorse-preferences.c:80
+#: src/seahorse-preferences.c:54
 msgid "_Ascii Armor"
 msgstr "Brnění _ASCII"
 
@@ -421,31 +426,31 @@ msgstr "Ověřit soubor podpisu"
 msgid "Decrypt encrypt file and verify any signatures it contains"
 msgstr "Dešifrovat šifrovaný soubor a ověřit podpisy, které obsahuje"
 
-#: src/main.c:121 src/seahorse.desktop.in.h:1
+#: src/main.c:127 src/seahorse.desktop.in.h:1
 msgid "GPG Keys Manager"
 msgstr "Správce klíčů GPG"
 
-#: src/main.c:136
+#: src/main.c:142
 #, c-format
 msgid "Imported %d keys"
 msgstr "Importováno %d klíčů"
 
-#: src/main.c:141
+#: src/main.c:147
 #, c-format
 msgid "Encrypt file is %s"
 msgstr "Zašifrovaný soubor je %s"
 
-#: src/main.c:150
+#: src/main.c:156
 #, c-format
 msgid "Signature file is %s"
 msgstr "Soubor s podpisem je %s"
 
-#: src/main.c:157
+#: src/main.c:163
 #, c-format
 msgid "Encrypted and signed file is %s"
 msgstr "Zašifrovaný a podepsaný soubor je %s"
 
-#: src/main.c:166 src/main.c:197
+#: src/main.c:172 src/main.c:203
 #, c-format
 msgid "Decrypted file is %s"
 msgstr "Dešifrovaný soubor je %s"
@@ -454,7 +459,7 @@ msgstr "Dešifrovaný soubor je %s"
 msgid "Manage your GPG keys"
 msgstr "Správa vašich klíčů GPG"
 
-#: src/seahorse-add-subkey.c:123
+#: src/seahorse-add-subkey.c:125
 #, c-format
 msgid "Add subkey to %s"
 msgstr "Přidat podklíč k %s"
@@ -469,7 +474,7 @@ msgstr "ElGamal (jen pro zašifrování)"
 
 #. expires
 #: src/seahorse-add-subkey.glade.h:3 src/seahorse-generate-adv.glade.h:6
-#: src/seahorse-key-properties.c:364
+#: src/seahorse-generate-druid.glade.h:12 src/seahorse-key-properties.c:371
 msgid "Expiration Date:"
 msgstr "Datum vypršení platnosti:"
 
@@ -478,7 +483,7 @@ msgid "Generate a new subkey"
 msgstr "Vygenerovat nový podklíč"
 
 #: src/seahorse-add-subkey.glade.h:5 src/seahorse-generate-adv.glade.h:10
-#: src/seahorse-key-properties.c:390
+#: src/seahorse-key-properties.c:395
 msgid "If key never expires"
 msgstr "Pokud klíč nikdy nevyprší"
 
@@ -499,7 +504,7 @@ msgid "Length of Key"
 msgstr "Délka klíče"
 
 #: src/seahorse-add-subkey.glade.h:10 src/seahorse-generate-adv.glade.h:17
-#: src/seahorse-key-properties.c:388
+#: src/seahorse-key-properties.c:393
 msgid "Never E_xpires"
 msgstr "Nikdy ne_vyprší"
 
@@ -511,7 +516,7 @@ msgstr "RSA (jen pro zašifrování)"
 msgid "RSA (sign only)"
 msgstr "RSA (jen pro podpis)"
 
-#: src/seahorse-add-uid.c:101
+#: src/seahorse-add-uid.c:103
 #, c-format
 msgid "Add user ID to %s"
 msgstr "Přidat ID uživatele k %s"
@@ -571,17 +576,17 @@ msgstr "Zadejte nové heslo"
 msgid "New _Passphrase:"
 msgstr "Nové _heslo:"
 
-#: src/seahorse-delete.c:36
+#: src/seahorse-delete.c:38
 #, c-format
 msgid "%s is a key pair! Do you still want to delete it?"
 msgstr "%s je pár klíčů! Stále jej chcete odstranit?"
 
-#: src/seahorse-delete.c:66
+#: src/seahorse-delete.c:69
 #, c-format
 msgid "Are you sure you want to permanently delete %s?"
 msgstr "Jste si jisti, že chcete navždy odstranit %s?"
 
-#: src/seahorse-delete.c:131
+#: src/seahorse-delete.c:137
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
 msgstr "Jste si jisti, že chcete navždy odstranit podklíč %d z %s?"
@@ -670,24 +675,17 @@ msgstr ""
 "Před spuštěním generování klíče zvolením Použít se prosím přesvědčte, že "
 "všechna vaše dřívější nastavení jsou správně."
 
-# FIXME: should letters -> should contain letters
 #: src/seahorse-generate-druid.glade.h:3
 msgid ""
-"Choosing a passphrase is an integral part of creating a strong key.  Like a "
-"password, a passphrase should letters, numbers, and punctuation.  "
+"Choosing a passphrase is an integral part of creating a strong key. Like a "
+"password, a passphrase should contain letters, numbers, and punctuation. "
 "Additionally, a passphrase can contain spaces, meaning it can contain many "
-"words.  You should pick a rememberable phrase that contains punctuation.  "
-"Take this phrase, adjust the case of various letters, and change some of the "
-"letters into numbers or punctuation rmeiniscent of \"leet speak\", but don't "
-"make it so obscure to the point where you can't remember it."
-msgstr ""
-"Volba hesla je nedílnou součástí tvorby silného klíče. Heslo by mělo "
-"obsahovat písmena, číslice a interpunkci. Navíc může heslo obsahovat mezery, "
-"takže může obsahovat mnoho slov. Měli byste zvolit zapamatovatelnou frázi, "
-"která obsahuje interpunkci. Začněte s touto frází, upravte velikost různých "
-"písmen a nahraďte některá písmena číslicemi nebo interpunkcí podobně jako "
-"\"leet speak\", ale nevytvořte něco tak obskurního, abyste si to nemohli "
-"zapamatovat."
+"words. You should pick a phrase that is easy to rememeber and contains "
+"punctuation. Take this phrase, adjust the case of various letters, and "
+"change some of the letters into numbers or punctuation, reminiscent of "
+"\"leet speak\", but don't make it so obscure to the point where you can't "
+"remember it."
+msgstr "Volba hesla je nedílnou součástí tvorby silného klíče. Heslo by mělo obsahovat písmena, číslice a interpunkci. Navíc může heslo obsahovat mezery, takže může obsahovat mnoho slov. Měli byste zvolit zapamatovatelnou frázi, která obsahuje interpunkci. Začněte s touto frází, upravte velikost různých písmen a nahraďte některá písmena číslicemi nebo interpunkcí podobně jako \"leet speak\", ale nevytvořte něco tak obskurního, abyste si to nemohli zapamatovat."
 
 #: src/seahorse-generate-druid.glade.h:4
 msgid "Comment:"
@@ -698,8 +696,8 @@ msgid "Confirm"
 msgstr "Potvrdit"
 
 #: src/seahorse-generate-druid.glade.h:6
-msgid "Confirm Passphrase: "
-msgstr "Potvrďte heslo: "
+msgid "Confirm Passphrase:"
+msgstr "Potvrďte heslo:"
 
 #: src/seahorse-generate-druid.glade.h:7
 msgid "Confirm passphrase"
@@ -710,27 +708,23 @@ msgid "Date the Key Expires"
 msgstr "Datum, kdy klíč nevyprší"
 
 #: src/seahorse-generate-druid.glade.h:9
-msgid "Email Address: "
-msgstr "E-mailová adresa: "
+msgid "Email Address:"
+msgstr "E-mailová adresa:"
 
 #: src/seahorse-generate-druid.glade.h:10
 msgid "Enter Name - Must be at least five letters."
 msgstr "Zadejte jméno - musí být alespoň pět písmen."
 
-#: src/seahorse-generate-druid.glade.h:11 src/seahorse-key-manager-store.c:269
+#: src/seahorse-generate-druid.glade.h:11 src/seahorse-key-manager-store.c:294
 msgid "Expiration Date"
 msgstr "Datum vypršení"
-
-#: src/seahorse-generate-druid.glade.h:12
-msgid "Expiration Date: "
-msgstr "Datum vypršení platnosti: "
 
 #: src/seahorse-generate-druid.glade.h:13
 msgid "Extra High Security"
 msgstr "Extra vysoké zabezpečení"
 
 #: src/seahorse-generate-druid.glade.h:14
-msgid "Full Name: "
+msgid "Full Name:"
 msgstr "Celé jméno:"
 
 #: src/seahorse-generate-druid.glade.h:15
@@ -743,27 +737,21 @@ msgstr "Klíč nikdy nevyprší"
 
 #: src/seahorse-generate-druid.glade.h:17
 msgid ""
-"Keys must be given an appropriate expiration date.  For most people, the "
-"default option of never expires is sufficent.  If you only plan on using the "
-"key for a certain period of time, i.e. for a specific project, you should "
-"pick an expiration date after the projected completion of your project.  "
-"After the expiration date, your private key will still be able to decrypt "
-"messages or data encrypted with your public key.  However, your private key "
-"will no longer sign messages or data."
-msgstr ""
-"Klíče musí mít vhodné datum vypršení. Pro většinu lidí stačí implicitní "
-"nastavení \"nikdy nevyprší\". Pokud plánujete používat klíč jen na určité "
-"období, např. pro konkrétní projekt, měli byste zvolit datum vypršení po "
-"plánovaném dokončení svého projektu. Po datu vypršení bude váš soukromý klíč "
-"stále moci dešifrovat zprávy nebo data šifrovaná vaším veřejným klíčem, ale "
-"už nebude podepisovat zprávy ani data."
+"Keys must be given an appropriate expiration date. For most people, the "
+"default option of \"never expires\" is sufficient. If you only plan on using "
+"the key for a certain period of time, i.e. for a specific project, you "
+"should pick an expiration date after the projected completion of your "
+"project. After the expiration date, your private key will still be able to "
+"decrypt messages or data encrypted with your public key. However, your "
+"private key will no longer sign messages or data."
+msgstr "Klíče musí mít vhodné datum vypršení. Pro většinu lidí stačí implicitní nastavení \"nikdy nevyprší\". Pokud plánujete používat klíč jen na určité období, např. pro konkrétní projekt, měli byste zvolit datum vypršení po plánovaném dokončení svého projektu. Po datu vypršení bude váš soukromý klíč stále moci dešifrovat zprávy nebo data šifrovaná vaším veřejným klíčem, ale už nebude podepisovat zprávy ani data."
 
 #: src/seahorse-generate-druid.glade.h:18
 msgid "Medium Security"
 msgstr "Střední zabezpečení"
 
-#: src/seahorse-generate-druid.glade.h:19 src/seahorse-key-manager-store.c:154
-#: src/seahorse-key-properties.c:373
+#: src/seahorse-generate-druid.glade.h:19 src/seahorse-key-manager-store.c:176
+#: src/seahorse-key-properties.c:378
 msgid "Never Expires"
 msgstr "Nikdy nevyprší"
 
@@ -801,13 +789,8 @@ msgid ""
 "general everyday usage.  The High Security level should be selected if you "
 "know your data will be actively scrutinized.  The Extra High level should be "
 "selected if you know your data is actively scrutinized and will be under "
-"cryptographic attack. "
-msgstr ""
-"Střední úroveň zabezpečení je implicitní a měla by být přijatelná pro obecné "
-"každodenní použití. Vysoká úroveň zabezpečení by měla být zvolena, pokud "
-"víte, že vaše data budou aktivně zkoumána. Extra vysoká úroveň by měla být "
-"zvolena, pokud víte, že vaše data jsou aktivně zkoumána a bude se na ně "
-"kryptograficky útočit."
+"cryptographic attack."
+msgstr "Střední úroveň zabezpečení je implicitní a měla by být přijatelná pro obecné každodenní použití. Vysoká úroveň zabezpečení by měla být zvolena, pokud víte, že vaše data budou aktivně zkoumána. Extra vysoká úroveň by měla být zvolena, pokud víte, že vaše data jsou aktivně zkoumána a bude se na ně kryptograficky útočit."
 
 #: src/seahorse-generate-druid.glade.h:31
 msgid ""
@@ -825,18 +808,6 @@ msgstr ""
 "informace: Plné jméno, e-mailová adresa a poznámka. Tyto hodnoty budou "
 "uvedeny v názvu vašeho klíče v následujícím "
 "tvaru:                              Plné Jméno (Poznámka) <e-mailová adresa>."
-
-#: src/seahorse-generate-druid.glade.h:33
-msgid "druidpage_pass"
-msgstr "druidpage_pass"
-
-#: src/seahorse-generate-druid.glade.h:34
-msgid "druidpage_pinfo"
-msgstr "druidpage_pinfo"
-
-#: src/seahorse-generate-druid.glade.h:35
-msgid "keygen_druid"
-msgstr "keygen_druid"
 
 #: src/seahorse-generate-select.glade.h:1
 msgid "Advanced"
@@ -861,10 +832,6 @@ msgstr "Výběr metody"
 #: src/seahorse-generate-select.glade.h:6
 msgid "Select a method to generate your new key."
 msgstr "Vyberte metodu, kterou generovat váš nový klíč."
-
-#: src/seahorse-generate-select.glade.h:7
-msgid "radio_druid"
-msgstr "radio_druid"
 
 #: src/seahorse-import.glade.h:2
 msgid "Enter a unique key id"
@@ -918,13 +885,13 @@ msgstr "_Importovat"
 msgid "_Key ID:"
 msgstr "ID _klíče:"
 
-#: src/seahorse-key-manager.c:210
+#: src/seahorse-key-manager.c:198
 msgid "translator_credits"
 msgstr ""
 "Petr Domanský <doman@atlas.cz> Michal Bukovjan <bukm@centrum.cz> Miloslav "
 "Trmač <mitr@volny.cz>"
 
-#: src/seahorse-key-manager.c:230
+#: src/seahorse-key-manager.c:218
 msgid "seahorse"
 msgstr "seahorse"
 
@@ -1025,92 +992,100 @@ msgid "Sign public key"
 msgstr "Podepsat veřejný klíč"
 
 #: src/seahorse-key-manager.glade.h:26
-msgid "View statusbar"
-msgstr "Zobrazovat stavovou lištu"
-
-#: src/seahorse-key-manager.glade.h:27
-msgid "View toolbar"
-msgstr "Zobrazovat nástrojovou lištu"
-
-#: src/seahorse-key-manager.glade.h:28
 msgid "_Backup..."
 msgstr "_Zálohovat..."
 
-#: src/seahorse-key-manager.glade.h:29
+#: src/seahorse-key-manager.glade.h:27
 msgid "_Change Passphrase..."
 msgstr "Změnit _heslo..."
 
-#: src/seahorse-key-manager.glade.h:30
+#: src/seahorse-key-manager.glade.h:28
 msgid "_Collapse All"
 msgstr "_Sbalit vše"
 
-#: src/seahorse-key-manager.glade.h:31
+#: src/seahorse-key-manager.glade.h:29
 msgid "_Contents"
 msgstr "O_bsah"
 
-#: src/seahorse-key-manager.glade.h:32
+#: src/seahorse-key-manager.glade.h:30
 msgid "_Delete"
 msgstr "_Smazat"
 
-#: src/seahorse-key-manager.glade.h:33
+#: src/seahorse-key-manager.glade.h:31
 msgid "_Expand All"
 msgstr "_Rozbalit vše"
 
-#: src/seahorse-key-manager.glade.h:34
+#: src/seahorse-key-manager.glade.h:32
 msgid "_Generate Revocation Certificate..."
 msgstr "Vy_generovat odvolávací certifikát..."
 
-#: src/seahorse-key-manager.glade.h:35
+#: src/seahorse-key-manager.glade.h:33
 msgid "_Import..."
 msgstr "_Importovat..."
 
-#: src/seahorse-key-manager.glade.h:36
+#: src/seahorse-key-manager.glade.h:34
 msgid "_Key"
 msgstr "_Klíč..."
 
-#: src/seahorse-key-manager.glade.h:37
+#: src/seahorse-key-manager.glade.h:35
 msgid "_New..."
 msgstr "_Nový..."
 
-#: src/seahorse-key-manager.glade.h:38
+#: src/seahorse-key-manager.glade.h:36
 msgid "_Properties"
 msgstr "_Vlastnosti"
 
 #. do sign
-#: src/seahorse-key-manager.glade.h:39 src/seahorse-key-properties.c:168
+#: src/seahorse-key-manager.glade.h:37 src/seahorse-key-properties.c:172
 #: src/seahorse-sign.glade.h:17
 msgid "_Sign"
 msgstr "Podep_sat"
 
-#: src/seahorse-key-manager.glade.h:40
+#: src/seahorse-key-manager.glade.h:38
 msgid "_Sign..."
 msgstr "Podep_sat..."
 
-#: src/seahorse-key-manager.glade.h:41
-msgid "_Statusbar"
-msgstr "_Stavová lišta"
+#: src/seahorse-key-manager-store.c:36
+msgid "RSA"
+msgstr "RSA"
 
-#: src/seahorse-key-manager.glade.h:42
-msgid "_Toolbar"
-msgstr "Nás_trojová lišta"
+#: src/seahorse-key-manager-store.c:38
+msgid "RSA-E"
+msgstr "RSA-E"
 
-#: src/seahorse-key-manager-store.c:147 src/seahorse-key-properties.c:361
+#: src/seahorse-key-manager-store.c:40
+msgid "RSA-S"
+msgstr "RSA-S"
+
+#: src/seahorse-key-manager-store.c:42
+msgid "ELG-E"
+msgstr "ELG-E"
+
+#: src/seahorse-key-manager-store.c:44
+msgid "DSA"
+msgstr "DSA"
+
+#: src/seahorse-key-manager-store.c:46
+msgid "ELG"
+msgstr "ELG"
+
+#: src/seahorse-key-manager-store.c:169 src/seahorse-key-properties.c:368
 msgid "Expired"
 msgstr "Vypršel"
 
-#: src/seahorse-key-manager-store.c:273
+#: src/seahorse-key-manager-store.c:298
 msgid "Trust"
 msgstr "Důvěřovat"
 
-#: src/seahorse-key-manager-store.c:277
+#: src/seahorse-key-manager-store.c:302
 msgid "Length"
 msgstr "Délka"
 
-#: src/seahorse-key-manager-store.c:281
+#: src/seahorse-key-manager-store.c:306
 msgid "Type"
 msgstr "Typ"
 
-#: src/seahorse-key-op.c:247
+#: src/seahorse-key-op.c:289
 msgid "Operation complete"
 msgstr "Operace dokončena"
 
@@ -1118,81 +1093,81 @@ msgstr "Operace dokončena"
 msgid "User IDs"
 msgstr "ID uživatele"
 
-#: src/seahorse-key-properties.c:139
+#: src/seahorse-key-properties.c:141
 #, c-format
 msgid "User ID %d"
 msgstr "ID uživatele %d"
 
-#: src/seahorse-key-properties.c:143
+#: src/seahorse-key-properties.c:145
 msgid "User ID"
 msgstr "ID uživatele"
 
-#: src/seahorse-key-properties.c:160
+#: src/seahorse-key-properties.c:164
 msgid "_Primary"
 msgstr "_Primární"
 
 #. callback
-#: src/seahorse-key-properties.c:162
+#: src/seahorse-key-properties.c:166
 msgid "Set as primary User ID"
 msgstr "Nastavit jako primární ID uživatele"
 
 #. **** do ciphers ****
-#: src/seahorse-key-properties.c:180
+#: src/seahorse-key-properties.c:184
 msgid "Ciphers"
 msgstr "Šifry"
 
 #. **** do hashes ****
-#: src/seahorse-key-properties.c:219
+#: src/seahorse-key-properties.c:223
 msgid "Hashes"
 msgstr "Hashe"
 
 #. **** do compression ****
-#: src/seahorse-key-properties.c:242
+#: src/seahorse-key-properties.c:246
 msgid "Compression"
 msgstr "Komprese"
 
-#: src/seahorse-key-properties.c:337
+#: src/seahorse-key-properties.c:343
 msgid "Key identifier"
 msgstr "Identifikátor klíče"
 
 #. type
-#: src/seahorse-key-properties.c:342
+#: src/seahorse-key-properties.c:348
 msgid "Type:"
 msgstr "Typ:"
 
-#: src/seahorse-key-properties.c:342
+#: src/seahorse-key-properties.c:348
 msgid "Algorithm"
 msgstr "Algoritmus"
 
-#: src/seahorse-key-properties.c:348
+#: src/seahorse-key-properties.c:354
 msgid "Key creation date"
 msgstr "Datum vytvoření klíče"
 
 #. length
-#: src/seahorse-key-properties.c:352
+#: src/seahorse-key-properties.c:358
 msgid "Length:"
 msgstr "Délka:"
 
-#: src/seahorse-key-properties.c:448 src/seahorse-key-properties.glade.h:19
+#: src/seahorse-key-properties.c:454 src/seahorse-key-properties.glade.h:19
 msgid "_Revoke"
 msgstr "_Odvolat"
 
-#: src/seahorse-key-properties.c:452
+#: src/seahorse-key-properties.c:458
 #, c-format
 msgid "Revoke subkey %d"
 msgstr "Odvolat podklíč %d"
 
-#: src/seahorse-key-properties.c:461
+#: src/seahorse-key-properties.c:467
 #, c-format
 msgid "Subkey %d"
 msgstr "Podklíč %d"
 
-#: src/seahorse-key-properties.c:473
+#: src/seahorse-key-properties.c:479
 #, c-format
 msgid "Delete subkey %d"
 msgstr "Odstranit podklíč %d"
 
-#: src/seahorse-key-properties.c:534
+#: src/seahorse-key-properties.c:547
 #, c-format
 msgid "%s Properties"
 msgstr "Vlastnosti %s"
@@ -1253,27 +1228,27 @@ msgstr "Váš osobní klíč"
 msgid "_Signatures:"
 msgstr "_Podpisy:"
 
-#: src/seahorse-preferences.c:85
+#: src/seahorse-preferences.c:59
 msgid "PGP"
 msgstr "PGP"
 
-#: src/seahorse-preferences.c:104
+#: src/seahorse-preferences.c:66
 msgid "_Validity"
 msgstr "_Platnost"
 
-#: src/seahorse-preferences.c:106 src/seahorse-sign.glade.h:13
+#: src/seahorse-preferences.c:68 src/seahorse-sign.glade.h:13
 msgid "_Expires"
 msgstr "_Vyprší"
 
-#: src/seahorse-preferences.c:108
+#: src/seahorse-preferences.c:70
 msgid "_Trust"
 msgstr "_Důvěra"
 
-#: src/seahorse-preferences.c:110
+#: src/seahorse-preferences.c:72
 msgid "_Length"
 msgstr "_Délka"
 
-#: src/seahorse-preferences.c:112
+#: src/seahorse-preferences.c:74
 msgid "T_ype"
 msgstr "_Typ"
 
@@ -1282,76 +1257,32 @@ msgid "Close Preferences"
 msgstr "Zavřít nastavení"
 
 #: src/seahorse-preferences.glade.h:2
-msgid "Desktop Default"
-msgstr "Implicitní nastavení prostředí"
-
-#: src/seahorse-preferences.glade.h:3
-msgid "Icons Only"
-msgstr "Jen ikony"
-
-#: src/seahorse-preferences.glade.h:4
 msgid "Key Manager"
 msgstr "Správce klíčů"
 
-#: src/seahorse-preferences.glade.h:5
-msgid "Only show icons"
-msgstr "Zobrazovat jen ikony"
-
-#: src/seahorse-preferences.glade.h:6
-msgid "Only show text"
-msgstr "Zobrazovat jen text"
-
-#: src/seahorse-preferences.glade.h:7
+#: src/seahorse-preferences.glade.h:3
 msgid "Preferences Help"
 msgstr "Nápověda nastavení"
 
-#: src/seahorse-preferences.glade.h:8
+#: src/seahorse-preferences.glade.h:4
 msgid "Seahorse Preferences"
 msgstr "Nastavení Seahorse"
 
-#: src/seahorse-preferences.glade.h:9
-msgid "Show text below icons"
-msgstr "Zobrazovat text pod ikonami"
-
-#: src/seahorse-preferences.glade.h:10
-msgid "Show text beside icons"
-msgstr "Zobrazovat text vedle ikon"
-
-#: src/seahorse-preferences.glade.h:11
-msgid "Text Below Icons"
-msgstr "Text pod ikonami"
-
-#: src/seahorse-preferences.glade.h:12
-msgid "Text Beside Icons"
-msgstr "Text vedle ikon"
-
-#: src/seahorse-preferences.glade.h:13
-msgid "Text Only"
-msgstr "Jen text"
-
-#: src/seahorse-preferences.glade.h:14
-msgid "Toolbar _Style:"
-msgstr "_Styl nástrojové lišty:"
-
-#: src/seahorse-preferences.glade.h:15
-msgid "Use system settings"
-msgstr "Používat nastavení systému"
-
-#: src/seahorse-preferences.glade.h:16
+#: src/seahorse-preferences.glade.h:5
 msgid "Visible Columns"
 msgstr "Viditelné sloupce"
 
-#: src/seahorse-revoke.c:73
+#: src/seahorse-revoke.c:75
 #, c-format
 msgid "Revoke Subkey %d of %s"
 msgstr "Odvolat podklíč %d z %s"
 
-#: src/seahorse-revoke.c:76
+#: src/seahorse-revoke.c:77
 #, c-format
 msgid "Revoke %s"
 msgstr "Odvolat %s"
 
-#: src/seahorse-revoke.c:98
+#: src/seahorse-revoke.c:104
 #, c-format
 msgid ""
 "You are about to add %s as a revoker for %s. This operation cannot be "
@@ -1481,3 +1412,54 @@ msgstr "_Místní"
 #: src/seahorse-sign.glade.h:16
 msgid "_Revocable"
 msgstr "_Odvolatelný"
+
+#~ msgid "Multiple Signatures"
+#~ msgstr "Více podpisů"
+
+#~ msgid "Expiration Date: "
+#~ msgstr "Datum vypršení platnosti: "
+
+#~ msgid "View statusbar"
+#~ msgstr "Zobrazovat stavovou lištu"
+
+#~ msgid "View toolbar"
+#~ msgstr "Zobrazovat nástrojovou lištu"
+
+#~ msgid "_Statusbar"
+#~ msgstr "_Stavová lišta"
+
+#~ msgid "_Toolbar"
+#~ msgstr "Nás_trojová lišta"
+
+#~ msgid "Desktop Default"
+#~ msgstr "Implicitní nastavení prostředí"
+
+#~ msgid "Icons Only"
+#~ msgstr "Jen ikony"
+
+#~ msgid "Only show icons"
+#~ msgstr "Zobrazovat jen ikony"
+
+#~ msgid "Only show text"
+#~ msgstr "Zobrazovat jen text"
+
+#~ msgid "Show text below icons"
+#~ msgstr "Zobrazovat text pod ikonami"
+
+#~ msgid "Show text beside icons"
+#~ msgstr "Zobrazovat text vedle ikon"
+
+#~ msgid "Text Below Icons"
+#~ msgstr "Text pod ikonami"
+
+#~ msgid "Text Beside Icons"
+#~ msgstr "Text vedle ikon"
+
+#~ msgid "Text Only"
+#~ msgstr "Jen text"
+
+#~ msgid "Toolbar _Style:"
+#~ msgstr "_Styl nástrojové lišty:"
+
+#~ msgid "Use system settings"
+#~ msgstr "Používat nastavení systému"
