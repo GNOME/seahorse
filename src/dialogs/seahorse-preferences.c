@@ -32,20 +32,6 @@ button_toggled (GtkToggleButton *togglebutton, gchar *key)
 	eel_gconf_set_boolean (key, gtk_toggle_button_get_active (togglebutton));
 }
 
-/* Toggles armor setting *
-static void
-armor_toggled (GtkToggleButton *togglebutton, SeahorseWidget *swidget)
-{
-	seahorse_context_set_ascii_armor (swidget->sctx, gtk_toggle_button_get_active (togglebutton));
-}
-
-/* Toggles text mode setting *
-static void
-text_mode_toggled (GtkToggleButton *togglebutton, SeahorseWidget *swidget)
-{
-	seahorse_context_set_text_mode (swidget->sctx, gtk_toggle_button_get_active (togglebutton));
-}
-*/
 static void
 key_toolbar_changed (GtkOptionMenu *option, SeahorseWidget *swidget)
 {

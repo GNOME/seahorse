@@ -106,7 +106,7 @@ seahorse_key_widget_finalize (GObject *gobject)
 	
 	/* Remove widget from hash */
 	widgets = g_hash_table_lookup (types, swidget->name);
-	g_hash_table_remove (widgets, seahorse_key_get_keyid (skwidget->skey, 0));
+	g_hash_table_remove (widgets, seahorse_key_get_id (skwidget->skey->key));
 	
 	/* Remove key widget hash from types & destroy if empty */
 	if (g_hash_table_size (widgets) == 0) {
