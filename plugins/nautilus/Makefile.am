@@ -9,15 +9,7 @@ INCLUDES = -I$(top_builddir) \
 
 bin_PROGRAMS = seahorse-pgp-preferences
 
-if WITH_AGENT
-AGENT_SRCS = seahorse-pgp-preferences-cache.c
-else
-AGENT_SRCS = 
-endif
-
-seahorse_pgp_preferences_SOURCES = \
-	seahorse-pgp-preferences.c \
-	$(AGENT_SRCS)
+seahorse_pgp_preferences_SOURCES = seahorse-pgp-preferences.c 
 	
 seahorse_pgp_preferences_LDADD = \
 	$(top_builddir)/libseahorse/libseahorse-internal.la \
@@ -39,13 +31,11 @@ desktopdir = $(datadir)/control-center-2.0/capplets
 desktop_in_files = seahorse-pgp-preferences.desktop.in
 desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 
-glade_DATA = seahorse-pgp-preferences.glade
 
 EXTRA_DIST = \
 	$(mime_DATA) \
 	$(mimeinfo_DATA) \
-	$(desktop_in_files) \
-	$(glade_DATA)
+	$(desktop_in_files) 
 
-CLEANFILES = *.gladep* *.bak \
+CLEANFILES = *.bak \
 	$(desktop_DATA)

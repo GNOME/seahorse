@@ -22,10 +22,10 @@
 #include <gnome.h>
 #include <eel/eel.h>
 
+#include "seahorse-prefs.h"
 #include "seahorse-preferences.h"
 #include "seahorse-widget.h"
 #include "seahorse-check-button-control.h"
-#include "seahorse-default-key-control.h"
 
 /**
  * seahorse_preferences_show:
@@ -37,30 +37,39 @@ void
 seahorse_preferences_show (SeahorseContext *sctx)
 {	
 	SeahorseWidget *swidget;
+    GtkWidget *label;
+    GtkWidget *tab;
+    GtkWidget *box;
 	GtkWidget *widget;
 	
 	g_return_if_fail (sctx != NULL && SEAHORSE_IS_CONTEXT (sctx));
 	
-	swidget = seahorse_widget_new ("preferences", sctx);
-	g_return_if_fail (swidget != NULL);
+    swidget = seahorse_prefs_new (sctx);
+    
+    label = gtk_label_new (_("Key Manager"));
+
+    tab = gtk_vbox_new (FALSE, 12); 
+    gtk_container_set_border_width (GTK_CONTAINER (tab), 12);
+    
+    widget = gtk_frame_new (_("Visible Columns:"));
+    gtk_container_add (GTK_CONTAINER (tab), widget);
+    gtk_box_set_child_packing (GTK_BOX (tab), widget, FALSE, TRUE, 0, GTK_PACK_START);
+    
+    box = gtk_hbox_new (FALSE, 12);
+    gtk_container_set_border_width (GTK_CONTAINER (box), 12);
+    gtk_container_add (GTK_CONTAINER (widget), box);    
+    
+	gtk_container_add (GTK_CONTAINER (box), 
+            seahorse_check_button_control_new (_("_Validity"), SHOW_VALIDITY_KEY));
+	gtk_container_add (GTK_CONTAINER (box), 
+            seahorse_check_button_control_new (_("_Expires"), SHOW_EXPIRES_KEY));
+	gtk_container_add (GTK_CONTAINER (box), 
+            seahorse_check_button_control_new (_("_Trust"), SHOW_TRUST_KEY));
+	gtk_container_add (GTK_CONTAINER (box), 
+            seahorse_check_button_control_new (_("_Length"), SHOW_LENGTH_KEY));
+	gtk_container_add (GTK_CONTAINER (box), 
+            seahorse_check_button_control_new (_("T_ype"), SHOW_TYPE_KEY));
 	
-    gtk_container_add (GTK_CONTAINER (glade_xml_get_widget (swidget->xml, "def-key-box")), 
-                        seahorse_default_key_control_new (swidget->sctx));
-	
-	widget = gtk_hbox_new (FALSE, 12);
-	gtk_container_set_border_width (GTK_CONTAINER (widget), 12);
-	gtk_container_add (GTK_CONTAINER (glade_xml_get_widget (swidget->xml, "frame")), widget);
-	
-	gtk_container_add (GTK_CONTAINER (widget), seahorse_check_button_control_new (
-		_("_Validity"), SHOW_VALIDITY_KEY));
-	gtk_container_add (GTK_CONTAINER (widget), seahorse_check_button_control_new (
-		_("_Expires"), SHOW_EXPIRES_KEY));
-	gtk_container_add (GTK_CONTAINER (widget), seahorse_check_button_control_new (
-		_("_Trust"), SHOW_TRUST_KEY));
-	gtk_container_add (GTK_CONTAINER (widget), seahorse_check_button_control_new (
-		_("_Length"), SHOW_LENGTH_KEY));
-	gtk_container_add (GTK_CONTAINER (widget), seahorse_check_button_control_new (
-		_("T_ype"), SHOW_TYPE_KEY));
-	
-	gtk_widget_show_all (glade_xml_get_widget (swidget->xml, swidget->name));
+	gtk_widget_show_all (tab);
+    seahorse_prefs_add_tab (swidget, label, tab);
 }

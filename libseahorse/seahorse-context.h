@@ -36,6 +36,7 @@
 #define ENCRYPTSELF_KEY PGP_SCHEMAS "/encrypt_to_self"
 #define MULTI_EXTENSION_KEY PGP_SCHEMAS "/package_extension"
 #define MULTI_SEPERATE_KEY PGP_SCHEMAS "/multi_seperate"
+#define KEYSERVER_KEY PGP_SCHEMAS "/keyservers"
 
 #define SEAHORSE_SCHEMAS "/apps/seahorse"
 

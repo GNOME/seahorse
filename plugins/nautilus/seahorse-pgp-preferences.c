@@ -1,16 +1,30 @@
+/*
+ * Seahorse
+ *
+ * Copyright (C) 2004 Nate Nielsen
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the
+ * Free Software Foundation, Inc.,
+ * 59 Temple Place, Suite 330,
+ * Boston, MA 02111-1307, USA.
+ */
 
 #include <gnome.h>
 #include <config.h>
 #include <locale.h>
 
-#include "seahorse-widget.h"
-#include "seahorse-check-button-control.h"
-#include "seahorse-default-key-control.h"
-
-#ifdef WITH_AGENT
-/* From seahorse-pgp-preferences-cache.c */
-void seahorse_pgp_preferences_cache(SeahorseContext* ctx, SeahorseWidget* widget);
-#endif
+#include "seahorse-context.h"
+#include "seahorse-prefs.h"
 
 static void
 destroyed (GtkObject *object, gpointer data)
@@ -22,7 +36,6 @@ int
 main (int argc, char **argv)
 {
 	SeahorseWidget *swidget;
-	GtkWidget *table, *label, *widget, *control;
 	SeahorseContext *sctx;
 
 #ifdef ENABLE_NLS
@@ -31,51 +44,17 @@ main (int argc, char **argv)
         textdomain (GETTEXT_PACKAGE);          
 #endif
 
-        gnome_program_init (PACKAGE, VERSION, LIBGNOMEUI_MODULE, argc, argv,
+    gnome_program_init (PACKAGE, VERSION, LIBGNOMEUI_MODULE, argc, argv,
                 GNOME_PARAM_HUMAN_READABLE_NAME, _("PGP Preferences"),
                 GNOME_PARAM_APP_DATADIR, DATA_DIR, NULL);
 	
 	sctx = seahorse_context_new ();
     seahorse_context_load_keys (sctx, TRUE);
    
-	swidget = seahorse_widget_new ("pgp-preferences", sctx);
+    swidget = seahorse_prefs_new (sctx);
+	g_signal_connect (seahorse_widget_get_top (swidget), "destroy", 
+                      G_CALLBACK (destroyed), NULL);
 	
-	table = gtk_vbox_new (FALSE, 12);
-	gtk_container_set_border_width (GTK_CONTAINER (table), 12);
-	gtk_container_add (GTK_CONTAINER (glade_xml_get_widget (swidget->xml, "vbox")), table);
-	
-	widget = gtk_table_new (1, 3, FALSE);
-	gtk_table_set_row_spacings (GTK_TABLE (widget), 12);
-	gtk_table_set_col_spacings (GTK_TABLE (widget), 12);
-	gtk_container_add (GTK_CONTAINER (table), widget);
-	
-	gtk_table_attach (GTK_TABLE (widget), seahorse_check_button_control_new (
-		_("_Ascii Armor"), ARMOR_KEY), 0, 1, 0, 1, GTK_FILL, 0, 0, 0);
-	gtk_table_attach (GTK_TABLE (widget), seahorse_check_button_control_new (
-		_("_Text Mode"), TEXTMODE_KEY), 1, 2, 0, 1, GTK_FILL, 0, 0, 0);
-	gtk_table_attach (GTK_TABLE (widget), seahorse_check_button_control_new (
-		_("_Encrypt to Self"), ENCRYPTSELF_KEY), 2, 3, 0, 1, GTK_FILL, 0, 0, 0);
-		
-	widget = gtk_hbox_new (FALSE, 12);
-	gtk_container_add (GTK_CONTAINER (table), widget);
-	
-	label = gtk_label_new_with_mnemonic (_("_Default Key:"));
-	gtk_container_add (GTK_CONTAINER (widget), label);
-	
-	control = seahorse_default_key_control_new (sctx);
-	gtk_label_set_mnemonic_widget (GTK_LABEL (label), control);
-	gtk_container_add (GTK_CONTAINER (widget), control);
-	
-	gtk_widget_show_all (table);
-	g_signal_connect (GTK_OBJECT (table), "destroy", G_CALLBACK (destroyed), NULL);
-	
-#ifdef WITH_AGENT	
-    seahorse_pgp_preferences_cache(sctx, swidget);
-#else
-    widget = glade_xml_get_widget (swidget->xml, "notebook");
-    gtk_notebook_remove_page (GTK_NOTEBOOK (widget), 1);
-#endif
-  
 	gtk_main();
 	return 0;
 }
