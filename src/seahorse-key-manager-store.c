@@ -44,9 +44,9 @@ guint seahorse_n_targets =
 enum {
     KEY_STORE_BASE_COLUMNS,
 	VALIDITY_STR,
-	EXPIRES_STR,
 	TRUST_STR,
 	TYPE,
+	EXPIRES_STR,
     VALIDITY,
     EXPIRES,
     TRUST,
@@ -56,9 +56,9 @@ enum {
 static const gchar* col_ids[] = {
     KEY_STORE_BASE_IDS,
     "validity",
-    "expires",
     "trust",
     "type",
+    "expires",
     "validity",
     "expires",
     "trust"
@@ -164,7 +164,9 @@ seahorse_key_manager_store_set (SeahorseKeyStore *store, SeahorseKey *skey,
 	gulong expires_date;
 	gchar *expires;
     gchar *type;
-
+	
+	parent_class->set (store, skey, uid, iter);
+    
     if (uid == 0) {
     	
     	validity = seahorse_key_get_validity (skey);
@@ -178,7 +180,7 @@ seahorse_key_manager_store_set (SeahorseKeyStore *store, SeahorseKey *skey,
     		expires_date = skey->key->subkeys->expires;
     		
     		if (expires_date == 0) {
-    			expires = g_strdup (_("Never Expires"));
+    			expires = g_strdup ("");
     			expires_date = G_MAXLONG;
     		}
     		else
@@ -189,15 +191,15 @@ seahorse_key_manager_store_set (SeahorseKeyStore *store, SeahorseKey *skey,
             type = _("Private PGP Key");
         else 
             type = _("Public PGP Key");
-    	
+        
     	gtk_tree_store_set (GTK_TREE_STORE (store), iter,
-    		VALIDITY_STR, seahorse_validity_get_string (validity),
+    		VALIDITY_STR, validity == SEAHORSE_VALIDITY_UNKNOWN ? "" : seahorse_validity_get_string (validity),
     		VALIDITY, validity,
-    		EXPIRES_STR, expires,
-    		EXPIRES, expires_date,
-    		TRUST_STR, seahorse_validity_get_string (trust),
+    		TRUST_STR, trust == SEAHORSE_VALIDITY_UNKNOWN ? "" : seahorse_validity_get_string (trust),
     		TRUST, trust,
     		TYPE, type,
+    		EXPIRES_STR, expires,
+    		EXPIRES, expires_date,
     		-1);
          
         g_free (expires);
@@ -205,11 +207,9 @@ seahorse_key_manager_store_set (SeahorseKeyStore *store, SeahorseKey *skey,
     } else {
 
 		gtk_tree_store_set (GTK_TREE_STORE (store), iter,
-			TYPE, _("User ID"), -1);
+			TYPE, _("User ID"), KEY_STORE_KEYID, "", -1);
 
 	}
-	
-	parent_class->set (store, skey, uid, iter);
 }
 
 /* Refreshed @skey if trust has changed */
@@ -242,12 +242,12 @@ gconf_notification (GConfClient *gclient, guint id, GConfEntry *entry, GtkTreeVi
 	
 	if (g_str_equal (key, SHOW_VALIDITY_KEY))
 		col = gtk_tree_view_get_column (view, VALIDITY_STR - 4);
-	else if (g_str_equal (key, SHOW_EXPIRES_KEY))
-		col = gtk_tree_view_get_column (view, EXPIRES_STR - 4);
 	else if (g_str_equal (key, SHOW_TRUST_KEY))
 		col = gtk_tree_view_get_column (view, TRUST_STR - 4);
 	else if (g_str_equal (key, SHOW_TYPE_KEY))
 		col = gtk_tree_view_get_column (view, TYPE - 4);
+	else if (g_str_equal (key, SHOW_EXPIRES_KEY))
+		col = gtk_tree_view_get_column (view, EXPIRES_STR - 4);
 	else
 		return;
 	
@@ -380,10 +380,6 @@ seahorse_key_manager_store_new (SeahorseKeySource *sksrc, GtkTreeView *view)
 	gtk_tree_view_column_set_visible (col, eel_gconf_get_boolean (SHOW_VALIDITY_KEY));
 	gtk_tree_view_column_set_sort_column_id (col, VALIDITY);
 	
-	col = seahorse_key_store_append_column (view, _("Expiration Date"), EXPIRES_STR);
-	gtk_tree_view_column_set_visible (col, eel_gconf_get_boolean (SHOW_EXPIRES_KEY));
-	gtk_tree_view_column_set_sort_column_id (col, EXPIRES);
-
 	col = seahorse_key_store_append_column (view, _("Trust"), TRUST_STR);
 	gtk_tree_view_column_set_visible (col, eel_gconf_get_boolean (SHOW_TRUST_KEY));
 	gtk_tree_view_column_set_sort_column_id (col, TRUST);
@@ -391,6 +387,10 @@ seahorse_key_manager_store_new (SeahorseKeySource *sksrc, GtkTreeView *view)
 	col = seahorse_key_store_append_column (view, _("Type"), TYPE);
 	gtk_tree_view_column_set_visible (col, eel_gconf_get_boolean (SHOW_TYPE_KEY));
 	gtk_tree_view_column_set_sort_column_id (col, TYPE);
+
+	col = seahorse_key_store_append_column (view, _("Expiration Date"), EXPIRES_STR);
+	gtk_tree_view_column_set_visible (col, eel_gconf_get_boolean (SHOW_EXPIRES_KEY));
+	gtk_tree_view_column_set_sort_column_id (col, EXPIRES);
 	
 	eel_gconf_notification_add (LISTING_SCHEMAS, (GConfClientNotifyFunc)gconf_notification, view);
 
