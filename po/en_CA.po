@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-29 10:48-0500\n"
-"PO-Revision-Date: 2004-11-29 22:06-0400\n"
+"POT-Creation-Date: 2004-12-03 00:54-0500\n"
+"PO-Revision-Date: 2004-12-03 22:06-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: English/Canada <adamw@FreeBSD.org>\n"
 "MIME-Version: 1.0\n"
@@ -624,7 +624,7 @@ msgstr[0] "Loaded %d key"
 msgstr[1] "Loaded %d keys"
 
 #: libseahorse/seahorse-pgp-source.c:627
-#: libseahorse/seahorse-server-source.c:610
+#: libseahorse/seahorse-server-source.c:659
 msgid "Load Cancelled"
 msgstr "Load Cancelled"
 
@@ -633,7 +633,7 @@ msgstr "Load Cancelled"
 msgid "Validity"
 msgstr "Validity"
 
-#: libseahorse/seahorse-recipients.c:81 src/seahorse-keyserver-results.c:106
+#: libseahorse/seahorse-recipients.c:81 src/seahorse-keyserver-results.c:199
 #, c-format
 msgid "Selected %d keys"
 msgid_plural "Selected %d keys"
@@ -662,21 +662,21 @@ msgid "Choose Keys"
 msgstr "Choose Keys"
 
 #: libseahorse/seahorse-recipients.glade.h:6
-msgid "Search for: "
-msgstr "Search for: "
+msgid "Search _for: "
+msgstr "Search _for: "
 
-#: libseahorse/seahorse-server-source.c:448
+#: libseahorse/seahorse-server-source.c:483
 msgid "Searching for remote keys..."
 msgstr "Searching for remote keys..."
 
-#: libseahorse/seahorse-server-source.c:533
+#: libseahorse/seahorse-server-source.c:579
 #, c-format
 msgid "Found %d key"
 msgid_plural "Found %d keys"
 msgstr[0] "Found %d key"
 msgstr[1] "Found %d keys"
 
-#: libseahorse/seahorse-server-source.c:538
+#: libseahorse/seahorse-server-source.c:584
 #, c-format
 msgid "Couldn't search keyserver: %s"
 msgstr "Could not search keyserver: %s"
@@ -749,11 +749,11 @@ msgstr "The file-roller process did not complete successfully"
 msgid ""
 "<b>A file already exists with this name.</b>\n"
 "\n"
-"Do you want to replace it with the one you are saving?"
+"Do you want to replace it with a new file?"
 msgstr ""
 "<b>A file already exists with this name.</b>\n"
 "\n"
-"Do you want to replace it with the one you are saving?"
+"Do you want to replace it with a new file?"
 
 #: libseahorse/seahorse-util.c:733
 msgid "_Replace"
@@ -931,32 +931,47 @@ msgstr "Imported key"
 msgid "Imported %d keys"
 msgstr "Imported %d keys"
 
-#: src/main.c:195
+#: src/main.c:193
+#, c-format
+msgid "Choose Encrypted File Name for '%s'"
+msgstr "Choose Encrypted File Name for '%s'"
+
+#: src/main.c:205
 #, c-format
 msgid "Couldn't encrypt \"%s\""
 msgstr "Could not encrypt \"%s\""
 
-#: src/main.c:250
+#: src/main.c:258
+#, c-format
+msgid "Choose Signature File Name for '%s'"
+msgstr "Choose Signature File Name for '%s'"
+
+#: src/main.c:266
 #, c-format
 msgid "Couldn't sign \"%s\""
 msgstr "Could not sign \"%s\""
 
-#: src/main.c:284
+#: src/main.c:298
+#, c-format
+msgid "Choose Decrypted File Name for '%s'"
+msgstr "Choose Decrypted File Name for '%s'"
+
+#: src/main.c:305
 #, c-format
 msgid "Couldn't decrypt \"%s\""
 msgstr "Could not decrypt \"%s\""
 
-#: src/main.c:336
+#: src/main.c:357
 #, c-format
 msgid "Choose Original File for '%s'"
 msgstr "Choose Original File for '%s'"
 
-#: src/main.c:364
+#: src/main.c:385
 #, c-format
 msgid "Couldn't verify \"%s\""
 msgstr "Could not verify \"%s\""
 
-#: src/main.c:410 src/seahorse.desktop.in.h:1
+#: src/main.c:431 src/seahorse.desktop.in.h:1
 msgid "GPG Keys Manager"
 msgstr "GPG Keys Manager"
 
@@ -1828,11 +1843,15 @@ msgstr "_Primary"
 msgid "_Signatures:"
 msgstr "_Signatures:"
 
-#: src/seahorse-keyserver-results.c:222
+#: src/seahorse-keyserver-results.c:101
+msgid "Couldn't import keys from key server"
+msgstr "Could not import keys from key server"
+
+#: src/seahorse-keyserver-results.c:315
 msgid "Remote Keys"
 msgstr "Remote Keys"
 
-#: src/seahorse-keyserver-results.c:224
+#: src/seahorse-keyserver-results.c:317
 #, c-format
 msgid "Remote Keys Containing '%s'"
 msgstr "Remote Keys Containing '%s'"
