@@ -18,16 +18,6 @@ else
 install-data-local:
 endif
 
-@INTLTOOL_DESKTOP_RULE@
+EXTRA_DIST = $(schemas_in_files)
 
-desktopdir = $(datadir)/applications
-desktop_in_files = seahorse.desktop.in
-desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
-
-EXTRA_DIST = \
-	$(schemas_in_files) \
-	$(desktop_in_files)
-
-CLEANFILES = \
-	$(desktop_DATA) \
-	$(schemas_DATA)
+CLEANFILES = $(schemas_DATA)

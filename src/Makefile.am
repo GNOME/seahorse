@@ -49,6 +49,14 @@ glade_DATA = \
 	seahorse-add-uid.glade \
 	seahorse-add-subkey.glade
 
-EXTRA_DIST = $(glade_DATA)
+@INTLTOOL_DESKTOP_RULE@
+desktopdir = $(datadir)/applications
+desktop_in_files = seahorse.desktop.in
+desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 
-CLEANFILES = *.gladep* *.bak
+EXTRA_DIST = \
+	$(glade_DATA) \
+	$(desktop_in_files)
+
+CLEANFILES = *.gladep* *.bak \
+	$(desktop_DATA)
