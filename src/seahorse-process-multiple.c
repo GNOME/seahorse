@@ -179,70 +179,6 @@ prepare_dialog (SeahorseContext *sctx, const gchar* glade, const gchar* msg,
     return swidget;
 }
 
-/* package the given set of uris in an archive */
-static gboolean
-package_uris (SeahorseContext *sctx, const gchar* package, const char** uris)
-{
-    GError* err = NULL;
-    gchar *out = NULL;
-    gint status;
-    gboolean r;
-    GString *str;
-    gchar *cmd;
-    gchar *t;
-    gchar *x;
-    
-    t = gnome_vfs_get_local_path_from_uri (package);
-    x = g_shell_quote(t);
-    g_free(t);
-    
-    /* create execution */
-    str = g_string_new ("");
-    g_string_printf (str, "file-roller --add-to=%s", x);
-    g_free(x);
-    
-    while(*uris) {
-        /* We should never be passed any remote uris at this point */
-        x = gnome_vfs_make_uri_canonical (*uris);
-        
-        t = gnome_vfs_get_local_path_from_uri (x);
-        g_free(x);
-        
-        g_return_val_if_fail (t != NULL, FALSE);
-
-        x = g_shell_quote(t);
-        g_free(t);
-
-        g_string_append_printf (str, " %s", x);
-        g_free(x);
-        
-        uris++;
-    }
-        
-    /* Execute the command */
-    cmd = g_string_free (str, FALSE);
-    r = g_spawn_command_line_sync (cmd, &out, NULL, &status, &err);
-    g_free (cmd); 
-    
-    if(out)
-    {
-        g_print(out);
-        g_free(out);
-    }
-    
-    if (!r) {
-        seahorse_util_handle_gerror(err, _("Couldn't run file-roller"));
-        return FALSE;   
-    }
-    
-    if(!(WIFEXITED(status) && WEXITSTATUS(status) == 0)) {
-        seahorse_util_show_error(NULL, _("The file-roller process did not complete successfully"));
-        return FALSE;
-    }
-    
-    return TRUE;        
-}
-
 /* Get the package name and selection */
 static gchar*
 get_results (SeahorseContext *sctx, SeahorseWidget *swidget)
@@ -376,7 +312,7 @@ seahorse_process_multiple(SeahorseContext *sctx, const gchar **uris, const gchar
             /* Make a new path based on the first uri */
             t = g_strconcat (pkg_uri, "/", package, NULL);
     
-            if (package_uris (sctx, t, uris)) {
+            if (seahorse_util_uris_package (t, uris)) {
                 ret = g_new0 (gchar*, 2);
                 ret[0] = t;
                 t = NULL;

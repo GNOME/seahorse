@@ -26,6 +26,8 @@
 #include <time.h>
 #include <gpgme.h>
 
+#include "seahorse-context.h"
+
 typedef enum {
 	SEAHORSE_CRYPT_SUFFIX,
 	SEAHORSE_SIG_SUFFIX,
@@ -84,6 +86,9 @@ const gchar* seahorse_util_uri_get_last     (const gchar* uri);
 const gchar* seahorse_util_uri_split_last   (gchar* uri);
 
 gchar**     seahorse_util_uris_expand       (const gchar **uris);
+
+gboolean    seahorse_util_uris_package      (const gchar* package, 
+                                             const char** uris);
 
 gboolean	seahorse_util_check_suffix		(const gchar		*path,
 							 SeahorseSuffix		suffix);

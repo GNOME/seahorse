@@ -22,6 +22,7 @@
 #include <gnome.h>
 #include <time.h>
 #include <stdio.h>
+#include <sys/wait.h>
 
 #include <gnome.h>
 #include <libgnomevfs/gnome-vfs.h>
@@ -635,6 +636,79 @@ seahorse_util_uris_expand (const gchar** uris)
     
     return (gchar**)g_array_free (files, FALSE);            
 }
+
+/**
+ * seahorse_util_uris_package
+ * @package: Package uri
+ * @uris: null-terminated array of uris to package 
+ * 
+ * Package uris into an archive. The uris must be local.
+ * 
+ * Returns: Success or failure
+ */
+gboolean
+seahorse_util_uris_package (const gchar* package, const char** uris)
+{
+    GError* err = NULL;
+    gchar *out = NULL;
+    gint status;
+    gboolean r;
+    GString *str;
+    gchar *cmd;
+    gchar *t;
+    gchar *x;
+    
+    t = gnome_vfs_get_local_path_from_uri (package);
+    x = g_shell_quote(t);
+    g_free(t);
+    
+    /* create execution */
+    str = g_string_new ("");
+    g_string_printf (str, "file-roller --add-to=%s", x);
+    g_free(x);
+    
+    while(*uris) {
+        /* We should never be passed any remote uris at this point */
+        x = gnome_vfs_make_uri_canonical (*uris);
+        
+        t = gnome_vfs_get_local_path_from_uri (x);
+        g_free(x);
+        
+        g_return_val_if_fail (t != NULL, FALSE);
+
+        x = g_shell_quote(t);
+        g_free(t);
+
+        g_string_append_printf (str, " %s", x);
+        g_free(x);
+        
+        uris++;
+    }
+        
+    /* Execute the command */
+    cmd = g_string_free (str, FALSE);
+    r = g_spawn_command_line_sync (cmd, &out, NULL, &status, &err);
+    g_free (cmd); 
+    
+    if(out)
+    {
+        g_print(out);
+        g_free(out);
+    }
+    
+    if (!r) {
+        seahorse_util_handle_gerror(err, _("Couldn't run file-roller"));
+        return FALSE;   
+    }
+    
+    if(!(WIFEXITED(status) && WEXITSTATUS(status) == 0)) {
+        seahorse_util_show_error(NULL, _("The file-roller process did not complete successfully"));
+        return FALSE;
+    }
+    
+    return TRUE;        
+}
+
 
 /**
  * seahorse_util_check_suffix:
