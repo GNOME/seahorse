@@ -245,6 +245,13 @@ row_activated (GtkTreeView *treeview, GtkTreePath *path, GtkTreeViewColumn *arg2
 		seahorse_key_properties_new (swidget->sctx, skey);
 }
 
+static gboolean
+key_press_event (GtkWidget *widget, GdkEventKey *event, SeahorseWidget *swidget)
+{
+	delete_activate (widget, swidget);
+	return FALSE;
+}
+
 static void
 selection_changed (GtkTreeSelection *selection, SeahorseWidget *swidget)
 {

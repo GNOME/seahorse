@@ -490,6 +490,8 @@
 		  <property name="label">gtk-properties</property>
 		  <property name="use_stock">True</property>
 		  <signal name="clicked" handler="properties_activate" last_modification_time="Sun, 13 Oct 2002 16:26:28 GMT"/>
+		  <accelerator key="Return" modifiers="0" signal="clicked"/>
+		  <accelerator key="KP_Enter" modifiers="0" signal="clicked"/>
 		</widget>
 	      </child>
 
@@ -522,6 +524,7 @@
 		  <property name="label">gtk-delete</property>
 		  <property name="use_stock">True</property>
 		  <signal name="clicked" handler="delete_activate" last_modification_time="Wed, 12 Feb 2003 13:51:59 GMT"/>
+		  <accelerator key="Delete" modifiers="0" signal="clicked"/>
 		</widget>
 	      </child>
 	    </widget>
@@ -550,6 +553,7 @@
 	      <property name="border_width">12</property>
 	      <property name="visible">True</property>
 	      <property name="can_focus">True</property>
+	      <property name="events">GDK_KEY_PRESS_MASK</property>
 	      <property name="headers_visible">True</property>
 	      <property name="rules_hint">True</property>
 	      <property name="reorderable">False</property>
