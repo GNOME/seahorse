@@ -40,15 +40,23 @@ scrollkeeper-update
 %files -f %{name}.lang
 %defattr(-, root, root)
 %{_bindir}/*
+%{_libdir}/bonobo/*.so
+%{_libdir}/bonobo/servers/*
+%{_libexecdir}/*
 %{_datadir}/%{name}
 %{_datadir}/applications/*
 %{_datadir}/omf/%{name}
 %{_datadir}/pixmaps/*
 %{_datadir}/gnome/help/%{name}
+%{_datadir}/control-center-2.0/capplets/*
+%{_datadir}/mime-info/*
 %{_sysconfdir}/gconf/schemas/*
 %doc AUTHORS COPYING NEWS README TODO
 
 %changelog
+* Fri May 02 2003 Yanko Kaneti <yaneti@declera.com>
+- Add some new files to the manifest
+
 * Wed Jan 15 2002 Jean Schurger <yshark@schurger.org>
 - Scrollkeeper stuff
 - locales install by %find_lang
