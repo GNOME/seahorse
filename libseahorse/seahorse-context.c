@@ -559,9 +559,27 @@ SeahorseKeyPair*
 seahorse_context_get_default_key (SeahorseContext *sctx)
 {
 	GpgmeKey key;
+	SeahorseKeyPair *skpair;
+	GList *keys = NULL;
+	gboolean found = FALSE;
+	const gchar *id1 = "", *id2 = NULL;
 	
 	key = gpgme_signers_enum (sctx->ctx, 0);
-	return SEAHORSE_KEY_PAIR (seahorse_context_get_key (sctx, key));
+	id1 = seahorse_key_get_id (key);
+	g_print ("default key: %s\n", id1);
+	
+	for (keys = seahorse_context_get_key_pairs (sctx); keys != NULL; keys = g_list_next (keys)) {
+		skpair = keys->data;
+		id2 = seahorse_key_get_id (skpair->secret);
+		if (g_str_equal (id1, id2)) {
+			g_print ("found\n");
+			found = TRUE;
+			break;
+		}
+	}
+	gpgme_key_unref (key);
+	
+	return found ? skpair : NULL;
 }
 
 /* common func for adding new keys */

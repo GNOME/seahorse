@@ -20,8 +20,10 @@
  */
 
 #include <gnome.h>
+#include <eel/eel.h>
 
 #include "seahorse-signer-menu-item.h"
+#include "seahorse-context.h"
 
 enum {
 	PROP_0,
@@ -38,6 +40,7 @@ static void	seahorse_signer_menu_item_get_property	(GObject			*gobject,
 							 guint				prop_id,
 							 GValue				*value,
 							 GParamSpec			*pspec);
+static void	seahorse_signer_menu_item_activate	(GtkMenuItem			*item);
 /* Key signals */
 static void	seahorse_signer_menu_item_destroyed	(GtkObject			*object,
 							 SeahorseSignerMenuItem		*sitem);
@@ -74,13 +77,17 @@ static void
 seahorse_signer_menu_item_class_init (SeahorseSignerMenuItemClass *klass)
 {
 	GObjectClass *gobject_class;
+	GtkMenuItemClass *item_class;
 	
 	parent_class = g_type_class_peek_parent (klass);
 	gobject_class = G_OBJECT_CLASS (klass);
+	item_class = GTK_MENU_ITEM_CLASS (klass);
 	
 	gobject_class->finalize = seahorse_signer_menu_item_finalize;
 	gobject_class->set_property = seahorse_signer_menu_item_set_property;
 	gobject_class->get_property = seahorse_signer_menu_item_get_property;
+	
+	item_class->activate = seahorse_signer_menu_item_activate;
 	
 	g_object_class_install_property (gobject_class, PROP_KEY,
 		g_param_spec_object ("key", "Seahorse Key",
@@ -141,6 +148,17 @@ seahorse_signer_menu_item_get_property (GObject *gobject, guint prop_id,
 		default:
 			break;
 	}
+}
+
+static void
+seahorse_signer_menu_item_activate (GtkMenuItem *item)
+{
+	SeahorseSignerMenuItem *sitem;
+	
+	sitem = SEAHORSE_SIGNER_MENU_ITEM (item);
+	eel_gconf_set_string (DEFAULT_KEY, seahorse_key_get_id (sitem->skpair->secret));
+	
+	GTK_MENU_ITEM_CLASS (parent_class)->activate (item);
 }
 
 static void

@@ -39,17 +39,11 @@ static void	seahorse_signer_menu_get_property	(GObject			*gobject,
 							 guint				prop_id,
 							 GValue				*value,
 							 GParamSpec			*pspec);
-
-static void	seahorse_signer_menu_remove		(GtkContainer			*container,
-							 GtkWidget			*widget);
 /* Context signals */
 static void	seahorse_signer_menu_context_destroyed	(GtkObject			*object,
 							 SeahorseSignerMenu		*smenu);
 static void	seahorse_signer_menu_key_added		(SeahorseContext		*sctx,
 							 SeahorseKey			*skey,
-							 SeahorseSignerMenu		*smenu);
-/* Item signal */
-static void	seahorse_signer_menu_item_activate	(GtkMenuItem			*item,
 							 SeahorseSignerMenu		*smenu);
 
 static GtkMenuClass	*parent_class	= NULL;
@@ -81,17 +75,13 @@ static void
 seahorse_signer_menu_class_init (SeahorseSignerMenuClass *klass)
 {
 	GObjectClass *gobject_class;
-	GtkContainerClass *container_class;
 	
 	parent_class = g_type_class_peek_parent (klass);
 	gobject_class = G_OBJECT_CLASS (klass);
-	container_class = GTK_CONTAINER_CLASS (klass);
 	
 	gobject_class->finalize = seahorse_signer_menu_finalize;
 	gobject_class->set_property = seahorse_signer_menu_set_property;
 	gobject_class->get_property = seahorse_signer_menu_get_property;
-	
-	container_class->remove = seahorse_signer_menu_remove;
 	
 	g_object_class_install_property (gobject_class, PROP_CTX,
 		g_param_spec_object ("ctx", "Seahorse Context",
@@ -155,15 +145,6 @@ seahorse_signer_menu_get_property (GObject *gobject, guint prop_id,
 }
 
 static void
-seahorse_signer_menu_remove (GtkContainer *container, GtkWidget *widget)
-{
-	g_signal_handlers_disconnect_by_func (GTK_MENU_ITEM (widget),
-		seahorse_signer_menu_item_activate, SEAHORSE_SIGNER_MENU (container));
-	
-	GTK_CONTAINER_CLASS (parent_class)->remove (container, widget);
-}
-
-static void
 seahorse_signer_menu_context_destroyed (GtkObject *object, SeahorseSignerMenu *smenu)
 {
 	gtk_widget_destroy (GTK_WIDGET (smenu));
@@ -176,8 +157,6 @@ append_key (SeahorseSignerMenu *smenu, SeahorseKeyPair *skpair)
 	
 	widget = seahorse_signer_menu_item_new (skpair);
 	gtk_menu_shell_append (GTK_MENU_SHELL (smenu), widget);
-	g_signal_connect_after (GTK_MENU_ITEM (widget), "activate",
-		G_CALLBACK (seahorse_signer_menu_item_activate), smenu);
 }
 
 static void
@@ -191,16 +170,6 @@ seahorse_signer_menu_key_added (SeahorseContext *sctx, SeahorseKey *skey,
 		if (seahorse_key_pair_can_sign (skpair))
 			append_key (smenu, skpair);
 	}
-}
-
-static void
-seahorse_signer_menu_item_activate (GtkMenuItem *item, SeahorseSignerMenu *smenu)
-{
-	SeahorseKeyPair *skpair;
-	
-	skpair = SEAHORSE_SIGNER_MENU_ITEM (item)->skpair;
-	
-	eel_gconf_set_string (DEFAULT_KEY, seahorse_key_get_id (skpair->secret));
 }
 
 void
@@ -218,17 +187,20 @@ seahorse_signer_menu_new (SeahorseContext *sctx, GtkOptionMenu *optionmenu)
 	signer = seahorse_context_get_default_key (sctx);
 	
 	if (signer != NULL)
-		id1 = seahorse_key_get_id (SEAHORSE_KEY (signer)->key);
+		id1 = seahorse_key_get_id (signer->secret);
 	
 	/* append all keys that can sign */
 	for (keys = list; keys != NULL; keys = g_list_next (keys)) {
 		skpair = keys->data;
 		if (seahorse_key_pair_can_sign (skpair)) {
 			append_key (SEAHORSE_SIGNER_MENU (widget), skpair);
-			id2 = seahorse_key_get_id (SEAHORSE_KEY (skpair)->key);
+			id2 = seahorse_key_get_id (skpair->secret);
+			g_print ("id1: %s\nid2: %s\n", id1, id2);
 			/* if equal, set history to index of current pair */
-			if (g_str_equal (id1, id2))
+			if (g_str_equal (id1, id2)) {
+				g_print ("setting history to %d\n", index);
 				history = index;
+			}
 			index++;
 		}
 	}

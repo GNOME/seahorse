@@ -22,8 +22,6 @@
 #include "seahorse-op.h"
 #include "seahorse-util.h"
 
-#define ENCRYPTSELF_KEY PGP_SCHEMAS "/encrypt_to_self"
-
 /* helper function for importing @data. @data will be released.
  * returns number of keys imported or -1. */
 static gint

@@ -1,3 +1,13 @@
+2003-04-22  Jacob Perkins  <jap1@users.sourceforge.net>
+
+	* libseahorse/seahorse-op.c: Removed ENCRYPTSELF_KEY
+	* libseahorse/seahorse-context.h: Added ENCRYPTSELF_KEY
+	* configure.in: Added bonobo dependencies
+	* libseahorse/Seahorse_PGP_Controls.server.in.in:
+	* libseahorse/seahorse-pgp-controls:
+	* plugins/nautilus/seahorse-pgp-preferences:
+	Added
+
 2003-04-19  Jacob Perkins  <jap1@users.sourceforge.net>
 
 	* src/seahorse-key-properties: Bug fix in ::properies_destroyed
@@ -10,6 +20,8 @@
 	* src/seahorse-export: Default export file name is ${HOMEDIR}/${USERNAME}.keys,
 	fixes bug #108577
 	* src/seahorse-add-uid: Checks email address, fixes bug #110429
+	* src/seahorse-add-subkey: Insensitize dialog during operation so that
+	no other key ops can be performed
 
 2003-04-16  Jacob Perkins  <jap1@users.sourceforge.net>
 

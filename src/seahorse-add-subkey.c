@@ -100,15 +100,15 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 	}
 	
 	widget = glade_xml_get_widget (swidget->xml, swidget->name);
-	gtk_widget_hide (widget);
+	gtk_widget_set_sensitive (widget, FALSE);
 	err = seahorse_key_pair_op_add_subkey (swidget->sctx, SEAHORSE_KEY_PAIR (
 		skwidget->skey), real_type, length, expires);
+	gtk_widget_set_sensitive (widget, TRUE);
 	
-	if (err != GPGME_No_Error) {
-		gtk_widget_show (widget);
+	if (err != GPGME_No_Error)
 		seahorse_util_handle_error (err);
-	}
-	seahorse_widget_destroy (swidget);
+	else
+		seahorse_widget_destroy (swidget);
 }
 
 void
