@@ -18,7 +18,7 @@ libdialogs_a_SOURCES = \
 	seahorse-signatures.c seahorse-signatures.h \
 	seahorse-recipients.c seahorse-recipients.h
 
-glade_DATA = about.glade2 \
+glade_DATA = \
 	seahorse-generate.glade2 \
 	seahorse-export.glade2 \
 	seahorse-preferences.glade2 \
