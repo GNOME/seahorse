@@ -716,6 +716,7 @@ seahorse_util_chooser_save_new (const gchar *title, GtkWindow *parent)
                 GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
                 NULL);
 
+    gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
     gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (dialog), FALSE);
     return dialog;
 }
@@ -731,6 +732,7 @@ seahorse_util_chooser_open_new (const gchar *title, GtkWindow *parent)
                 GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
                 NULL);
 
+    gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
     gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (dialog), FALSE);
     return dialog;
 }
