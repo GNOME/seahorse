@@ -8,6 +8,5 @@ glade_DATA = seahorse.png
 appicon_DATA = seahorse.png
 appicondir = $(datadir)/pixmaps
 
-EXTRA_DIST = ChangeLog \
-	$(glade_DATA) \
+EXTRA_DIST = $(glade_DATA) \
 	$(appicon_DATA)

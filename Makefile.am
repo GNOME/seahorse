@@ -12,7 +12,6 @@ EXTRA_DIST = \
 	README \
 	THANKS \
 	TODO \
-	VERSION \
 	intltool-extract.in \
 	intltool-merge.in \
 	intltool-update.in \
