@@ -61,6 +61,8 @@ static const SeahorsePGPHeader seahorse_pgp_headers[] = {
     }
 };
 
+static const gchar *bad_filename_chars = "/\<>|";
+
 void
 seahorse_util_show_error (GtkWindow *parent, const gchar *message)
 {
@@ -392,6 +394,24 @@ seahorse_util_detect_text (const gchar *text, gint len, const gchar **start,
     
     return SEAHORSE_TEXT_TYPE_NONE;
 }
+
+gchar*      
+seahorse_util_filename_for_key (SeahorseKey *skey)
+{
+    gchar *t;
+    g_return_val_if_fail (SEAHORSE_IS_KEY (skey), NULL);
+    
+    t = seahorse_key_get_userid_name (skey, 0);
+    if (t == NULL) {
+        t = g_strdup (seahorse_key_get_id (skey->key));
+        if (strlen (t) > 8)
+                t[8] = 0;
+    }
+    
+    g_strdelimit (t, bad_filename_chars, "_");
+    return g_strconcat (t, SEAHORSE_EXT_ASC, NULL);
+}
+
 
 /** 
  * seahorse_util_uri_get_last:
@@ -790,7 +810,27 @@ seahorse_util_chooser_show_archive_files (GtkWidget *dialog)
     gtk_file_filter_add_pattern (filter, "*");    
     gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);   
 }
-        
+
+void
+seahorse_util_chooser_set_filename (GtkWidget *dialog, GList *keys)
+{
+    gchar *t = NULL;
+    
+    switch (g_list_length (keys)) {
+    case 0:
+        break;
+    case 1:
+        t = seahorse_util_filename_for_key (SEAHORSE_KEY (keys->data));
+        break;
+    default:
+        t = g_strdup (_("Multiple Keys"));
+        break;    
+    }
+    
+    if (t != NULL)
+        gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), t);
+}
+    
 gchar*      
 seahorse_util_chooser_save_prompt (GtkWidget *dialog)
 {

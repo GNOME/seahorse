@@ -77,7 +77,9 @@ SeahorseTextType  seahorse_util_detect_text (const gchar *text,
                                              gint len, 
                                              const gchar **start, 
                                              const gchar **end);
-                                                                                              
+                             
+gchar*      seahorse_util_filename_for_key  (SeahorseKey *skey);
+                                             
 gboolean    seahorse_util_uri_exists        (const gchar* uri);
 
 gchar*      seahorse_util_uri_unique        (const gchar* uri);
@@ -103,7 +105,10 @@ GtkWidget*  seahorse_util_chooser_save_new              (const gchar *title,
 void        seahorse_util_chooser_show_key_files        (GtkWidget *dialog);
 
 void        seahorse_util_chooser_show_archive_files    (GtkWidget *dialog);
-                                                 
+
+void        seahorse_util_chooser_set_filename          (GtkWidget *dialog, 
+                                                         GList *keys);
+
 gchar*      seahorse_util_chooser_open_prompt           (GtkWidget *dialog);
 
 gchar*      seahorse_util_chooser_save_prompt           (GtkWidget *dialog);

@@ -192,18 +192,19 @@ export_activate (GtkWidget *widget, SeahorseWidget *swidget)
     gchar* uri = NULL;
     GError *err = NULL;
     GList *keys;
+
+    keys = seahorse_key_store_get_selected_keys (GTK_TREE_VIEW (
+                        glade_xml_get_widget (swidget->xml, KEY_LIST)));
     
     dialog = seahorse_util_chooser_save_new (_("Export Key"), 
                 GTK_WINDOW(glade_xml_get_widget (swidget->xml, "key-manager")));
     seahorse_util_chooser_show_key_files (dialog);
+    seahorse_util_chooser_set_filename (dialog, keys);
      
     uri = seahorse_util_chooser_save_prompt (dialog);
     if(uri) {
-        keys = seahorse_key_store_get_selected_keys (GTK_TREE_VIEW (
-            glade_xml_get_widget (swidget->xml, KEY_LIST)));
 
         seahorse_op_export_file (keys, uri, &err); 
-		g_list_free (keys);
 		        
         if (err != NULL)
             seahorse_util_handle_error (err, _("Couldn't export key to \"%s\""),
@@ -211,6 +212,8 @@ export_activate (GtkWidget *widget, SeahorseWidget *swidget)
                     
         g_free (uri);
     }
+    
+    g_list_free (keys);
 }
 
 /*Archives public and private keyrings*/

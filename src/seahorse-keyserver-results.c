@@ -121,6 +121,7 @@ export_activate (GtkWidget *widget, SeahorseWidget *swidget)
     dialog = seahorse_util_chooser_save_new (_("Save Remote Keys"), 
                 GTK_WINDOW(glade_xml_get_widget (swidget->xml, "keyserver-results")));
     seahorse_util_chooser_show_key_files (dialog);
+    seahorse_util_chooser_set_filename (dialog, keys);
                 
     uri = seahorse_util_chooser_save_prompt (dialog);
 
