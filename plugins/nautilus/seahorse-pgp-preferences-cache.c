@@ -39,6 +39,11 @@
 #define SETTING_EXPIRE      "/apps/seahorse/agent/cache_expire"
 #define SETTING_AUTH        "/apps/seahorse/agent/cache_authorize"
 
+typedef enum {
+    AGENT_NONE,
+    AGENT_OTHER,
+    AGENT_SEAHORSE
+} AgentType;
 
 /* -----------------------------------------------------------------------------
  *  SEAHORSE-AGENT CHECKS
@@ -57,10 +62,10 @@ is_pid_running (pid_t pid)
 }
 
 /* Check if the server at the other end of the socket is seahorse-agent */
-static gboolean
+static AgentType
 check_agent_id (int fd)
 {
-    gboolean ret = FALSE;
+    AgentType ret = AGENT_NONE;
     GIOChannel *io;
     gchar *t;
 
@@ -69,18 +74,20 @@ check_agent_id (int fd)
     /* Server always sends a response first */
     if (g_io_channel_read_line (io, &t, NULL, NULL, NULL) == G_IO_STATUS_NORMAL && t) {
         g_strstrip (t);
-        ret = g_str_has_prefix (t, "OK");
+        if (g_str_has_prefix (t, "OK"))
+            ret = AGENT_OTHER;
         g_free (t);
 
         /* Send back request for info */
-        if (ret &&
+        if (ret != AGENT_NONE &&
             g_io_channel_write_chars (io, "AGENT_ID\n", -1, NULL,
                                       NULL) == G_IO_STATUS_NORMAL
             && g_io_channel_flush (io, NULL) == G_IO_STATUS_NORMAL
             && g_io_channel_read_line (io, &t, NULL, NULL,
                                        NULL) == G_IO_STATUS_NORMAL && t) {
             g_strstrip (t);
-            ret = g_str_has_prefix (t, "OK seahorse-agent");
+            if (g_str_has_prefix (t, "OK seahorse-agent"))
+                ret = AGENT_SEAHORSE;
             g_free (t);
         }
     }
@@ -91,11 +98,11 @@ check_agent_id (int fd)
 }
 
 /* Open a connection to seahorse-agent */
-static gboolean
-is_agent_listening (const gchar *sockname)
+static AgentType
+get_listening_agent_type (const gchar *sockname)
 {
     struct sockaddr_un addr;
-    gboolean ret = FALSE;
+    AgentType ret = AGENT_NONE;
     int len;
     int fd;
 
@@ -117,10 +124,10 @@ is_agent_listening (const gchar *sockname)
 }
 
 /* Given an agent info string make sure it's running and is seahorse-agent */
-static gboolean
+static AgentType
 check_agent_info (const gchar *agent_info)
 {
-    gboolean ret;
+    AgentType ret = AGENT_NONE;
     gchar **info;
     gchar **t;
     int i;
@@ -153,18 +160,19 @@ check_agent_info (const gchar *agent_info)
         };
     }
 
-    ret = (version == 1 && pid != 0 && is_pid_running (pid) &&
-           is_agent_listening (socket));
+    if (version == 1 && pid != 0 && is_pid_running (pid))
+        ret = get_listening_agent_type (socket);
+        
     g_strfreev (info);
     return ret;
 }
 
 /* Check if the agent is running */
-static gboolean
-is_agent_running ()
+static AgentType
+which_agent_running ()
 {
     gchar *value = NULL;
-    gboolean ret;
+    AgentType ret;
 
     /* Seahorse edits gpg.conf by default */
     seahorse_gpg_options_find ("gpg-agent-info", &value, NULL);
@@ -179,7 +187,7 @@ is_agent_running ()
     if (value != NULL)
         return check_agent_info (value);
 
-    return FALSE;
+    return AGENT_NONE;
 }
 
 /* -----------------------------------------------------------------------------
@@ -378,14 +386,31 @@ seahorse_pgp_preferences_cache (SeahorseContext *ctx, SeahorseWidget *widget)
     setup_check_control (ctx, widget, "expire", SETTING_EXPIRE);
     setup_check_control (ctx, widget, "authorize", SETTING_AUTH);
 
-    if (!is_agent_running ()) {
+    switch (which_agent_running ()) {
+      
+    /* No agent running offer to start */
+    case AGENT_NONE:
         gtk_widget_show (glade_xml_get_widget (widget->xml, "agent-start"));
 
         glade_xml_signal_connect_data (widget->xml, "on_start_link",
                                        G_CALLBACK (start_agent),
-                                       glade_xml_get_widget (widget->xml,
-                                                             "agent-started"));
+                                       glade_xml_get_widget (widget->xml, "agent-started"));
         glade_xml_signal_connect_data (widget->xml, "on_session_link",
                                        G_CALLBACK (show_session_properties), NULL);
-    }
+        break;
+    
+    /* We disable the agent preferences completely */
+    case AGENT_OTHER:
+        g_message (_("Another password caching agent is running. Disabling cache preferences."));
+        gtk_notebook_remove_page (GTK_NOTEBOOK (glade_xml_get_widget (widget->xml, "notebook")), 1);
+        break;
+   
+    /* Seahorse agent running, behave normally */
+    case AGENT_SEAHORSE:
+        break;
+        
+    default:
+        g_assert_not_reached ();
+        break;
+    };
 }
