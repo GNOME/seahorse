@@ -258,6 +258,7 @@ edit_key (SeahorseContext *sctx, SeahorseKey *skey, SeahorseEditParm *parms,
 	  const gchar *op, SeahorseKeyChange change)
 {
 	GpgmeData out = NULL;
+	GpgmeError err;
 	gboolean success;
 	
 	/* Run edit op */
@@ -1376,8 +1377,9 @@ seahorse_ops_key_revoke_subkey (SeahorseContext *sctx, SeahorseKey *skey, const 
 typedef struct
 {
 	guint			index;
-	SeahorseSignCheck	check;
 	gchar			*command;
+	gboolean		expire;
+	SeahorseSignCheck	check;
 } SignParm;
 
 typedef enum
@@ -1385,6 +1387,7 @@ typedef enum
 	SIGN_START,
 	SIGN_UID,
 	SIGN_COMMAND,
+	SIGN_EXPIRE,
 	SIGN_CONFIRM,
 	SIGN_CHECK,
 	SIGN_QUIT,
@@ -1402,6 +1405,9 @@ sign_action (guint state, gpointer data, const gchar **result)
 			break;
 		case SIGN_COMMAND:
 			*result = parm->command;
+			break;
+		case SIGN_EXPIRE:
+			*result = (parm->expire) ? YES : "N";
 			break;
 		case SIGN_CONFIRM:
 			*result = YES;
@@ -1445,7 +1451,17 @@ sign_transit (guint current_state, GpgmeStatusCode status,
 		case SIGN_COMMAND:
 			if (status == GPGME_STATUS_GET_BOOL && g_str_equal (args, "keyedit.sign_all.okay"))
 				next_state = SIGN_CONFIRM;
+			else if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "sign_uid.expire"))
+				next_state = SIGN_EXPIRE;
 			else if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "sign_uid.class"))
+				next_state = SIGN_CHECK;
+			else {
+				next_state = SIGN_ERROR;
+				*err = GPGME_General_Error;
+			}
+			break;
+		case SIGN_EXPIRE:
+			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "sign_uid.class"))
 				next_state = SIGN_CHECK;
 			else {
 				next_state = SIGN_ERROR;
@@ -1454,7 +1470,9 @@ sign_transit (guint current_state, GpgmeStatusCode status,
 			break;
 		case SIGN_CONFIRM:
 			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "sign_uid.class"))
-				next_state = SIGN_COMMAND;
+				next_state = SIGN_CHECK;
+			else if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "sign_uid.expire"))
+				next_state = SIGN_EXPIRE;
 			else if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
 				next_state = SIGN_QUIT;
 			else {
@@ -1506,6 +1524,7 @@ seahorse_ops_key_sign (SeahorseContext *sctx, SeahorseKey *skey, const guint ind
 	
 	sign_parm = g_new (SignParm, 1);
 	sign_parm->index = index;
+	sign_parm->expire = ((options & SIGN_EXPIRES) != 0);
 	sign_parm->check = check;
 	sign_parm->command = "sign";
 	

@@ -23,16 +23,18 @@
 #include "seahorse-key-widget.h"
 #include "seahorse-ops-key.h"
 
-#define INDEX "index"
+#define EXPIRES "expires"
 
 static void
 ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 {
-	guint index;
+	SeahorseKeyWidget *skwidget;
 	SeahorseSignCheck check;
 	SeahorseSignOptions options = 0;
+	GpgmeError err;
 	
-	index = (guint)g_object_steal_data (G_OBJECT (swidget), INDEX);
+	skwidget = SEAHORSE_KEY_WIDGET (swidget);
+	
 	check = gtk_option_menu_get_history (GTK_OPTION_MENU (
 		glade_xml_get_widget (swidget->xml, "checked")));
 	/* get local option */
@@ -43,9 +45,13 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (
 	glade_xml_get_widget (swidget->xml, "revocable"))))
 		options = options | SIGN_NO_REVOKE;
+	/* get expires option */
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (
+	glade_xml_get_widget (swidget->xml, "expires"))))
+		options = options | SIGN_EXPIRES;
 	
-	seahorse_ops_key_sign (swidget->sctx, SEAHORSE_KEY_WIDGET (swidget)->skey,
-		index, check, options);
+	err = seahorse_ops_key_sign (swidget->sctx, skwidget->skey, skwidget->index, check, options);
+	g_print ("%s\n", gpgme_strerror (err));
 	seahorse_widget_destroy (swidget);
 }
 
@@ -54,10 +60,14 @@ seahorse_sign_new (SeahorseContext *sctx, SeahorseKey *skey, const guint index)
 {
 	SeahorseWidget *swidget;
 	
-	swidget = seahorse_key_widget_new ("sign", sctx, skey);
+	swidget = seahorse_key_widget_new_with_index ("sign", sctx, skey, index);
 	g_return_if_fail (swidget != NULL);
 	
-	g_object_set_data (G_OBJECT (swidget), INDEX, (gpointer)index);
+	gtk_label_set_text (GTK_LABEL (glade_xml_get_widget (swidget->xml, "key")),
+		g_strdup_printf ("%s?", seahorse_key_get_userid (skey, 0)));
+	
+	if (gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_EXPIRE, NULL, 0))
+		gtk_widget_show (glade_xml_get_widget (swidget->xml, EXPIRES));
 	
 	glade_xml_signal_connect_data (swidget->xml, "ok_clicked",
 		G_CALLBACK (ok_clicked), swidget);

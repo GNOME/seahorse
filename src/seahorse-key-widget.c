@@ -1,7 +1,7 @@
 /*
  * Seahorse
  *
- * Copyright (C) 2002 Jacob Perkins
+ * Copyright (C) 2003 Jacob Perkins
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +25,8 @@
 
 enum {
 	PROP_0,
-	PROP_KEY
+	PROP_KEY,
+	PROP_INDEX
 };
 
 static void	seahorse_key_widget_class_init		(SeahorseKeyWidgetClass	*klass);
@@ -87,6 +88,10 @@ seahorse_key_widget_class_init (SeahorseKeyWidgetClass *klass)
 		g_param_spec_object ("key",  "Seahorse Key",
 				     "Seahorse Key of this widget",
 				    SEAHORSE_TYPE_KEY, G_PARAM_READWRITE));
+	g_object_class_install_property (gobject_class, PROP_INDEX,
+		g_param_spec_uint ("index", "Attribute index",
+				   "Index of attribute in key, 0 being none",
+				   0, 0, 0, G_PARAM_READWRITE));
 }
 
 static void
@@ -141,6 +146,9 @@ seahorse_key_widget_set_property (GObject *object, guint prop_id,
 			g_signal_connect_after (GTK_OBJECT (skwidget->skey), "destroy",
 				G_CALLBACK (seahorse_key_widget_destroyed), skwidget);
 			break;
+		case PROP_INDEX:
+			skwidget->index = g_value_get_uint (value);
+			break;
 		default:
 			break;
 	}
@@ -158,6 +166,8 @@ seahorse_key_widget_get_property (GObject *object, guint prop_id,
 		case PROP_KEY:
 			g_value_set_object (value, skwidget->skey);
 			break;
+		case PROP_INDEX:
+			g_value_set_uint (value, skwidget->index);
 		default:
 			break;
 	}
@@ -171,7 +181,8 @@ seahorse_key_widget_destroyed (GtkObject *skey, SeahorseKeyWidget *skwidget)
 }
 
 static SeahorseWidget*
-seahorse_key_widget_create (gchar *name, SeahorseContext *sctx, SeahorseKey *skey, gboolean component)
+seahorse_key_widget_create (gchar *name, SeahorseContext *sctx,
+			    SeahorseKey *skey, guint index, gboolean component)
 {
 	SeahorseWidget *swidget;
 	GHashTable *widgets;
@@ -204,8 +215,8 @@ seahorse_key_widget_create (gchar *name, SeahorseContext *sctx, SeahorseKey *ske
 	}
 	
 	/* If widget doesn't already exist, create & insert into key widgets hash */
-	swidget = g_object_new (SEAHORSE_TYPE_KEY_WIDGET, "name", name,
-		"ctx", sctx, "component", component, "key", skey, NULL);
+	swidget = g_object_new (SEAHORSE_TYPE_KEY_WIDGET, "name", name, "ctx", sctx,
+		"component", component, "key", skey, "index", index, NULL);
 	g_hash_table_insert (widgets, (gchar*)seahorse_key_get_keyid (skey, 0), swidget);
 	
 	return swidget;
@@ -214,11 +225,18 @@ seahorse_key_widget_create (gchar *name, SeahorseContext *sctx, SeahorseKey *ske
 SeahorseWidget*
 seahorse_key_widget_new (gchar *name, SeahorseContext *sctx, SeahorseKey *skey)
 {
-	return seahorse_key_widget_create (name, sctx, skey, FALSE);
+	return seahorse_key_widget_create (name, sctx, skey, 0, FALSE);
 }
 
 SeahorseWidget*
 seahorse_key_widget_new_component (gchar *name, SeahorseContext *sctx, SeahorseKey *skey)
 {
-	return seahorse_key_widget_create (name, sctx, skey, TRUE);
+	return seahorse_key_widget_create (name, sctx, skey, 0, TRUE);
+}
+
+SeahorseWidget*
+seahorse_key_widget_new_with_index (gchar *name, SeahorseContext *sctx,
+				    SeahorseKey *skey, guint index)
+{
+	return seahorse_key_widget_create (name, sctx, skey, index, FALSE);
 }

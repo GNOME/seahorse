@@ -1,7 +1,7 @@
 /*
  * Seahorse
  *
- * Copyright (C) 2002 Jacob Perkins
+ * Copyright (C) 2003 Jacob Perkins
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,9 +21,6 @@
 
 #ifndef __SEAHORSE_KEY_WIDGET_H__
 #define __SEAHORSE_KEY_WIDGET_H__
-
-/* SeahorseKeyWidget is a SeahorseWidget that contains a SeahorseKey.
- * It connects to the key's destroy signal in order to destroy itself if the key is. */
 
 #include <glib.h>
 
@@ -45,6 +42,7 @@ struct _SeahorseKeyWidget
 	SeahorseWidget		parent;
 	
 	SeahorseKey		*skey;
+	guint			index;
 };
 
 struct _SeahorseKeyWidgetClass
@@ -52,14 +50,17 @@ struct _SeahorseKeyWidgetClass
 	SeahorseWidgetClass	parent_class;
 };
 
-/* Creates a new key widget */
 SeahorseWidget*	seahorse_key_widget_new			(gchar			*name,
 							 SeahorseContext	*sctx,
 							 SeahorseKey		*skey);
 
-/* Creates a new key widget component */
 SeahorseWidget*	seahorse_key_widget_new_component	(gchar			*name,
 							 SeahorseContext	*sctx,
 							 SeahorseKey		*skey);
+
+SeahorseWidget*	seahorse_key_widget_new_with_index	(gchar			*name,
+							 SeahorseContext	*sctx,
+							 SeahorseKey		*skey,
+							 guint			index);
 	
 #endif /* __SEAHORSE_KEY_WIDGET_H__ */

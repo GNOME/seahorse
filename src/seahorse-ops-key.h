@@ -99,7 +99,9 @@ typedef enum {
 	/* If signature is local */
 	SIGN_LOCAL = 1 << 0,
 	/* If signature is non-revocable */
-	SIGN_NO_REVOKE = 1 << 1
+	SIGN_NO_REVOKE = 1 << 1,
+	/* If signature expires with key */
+	SIGN_EXPIRES = 1 << 2
 } SeahorseSignOptions;
 
 gboolean	seahorse_ops_key_delete		(SeahorseContext	*sctx,
