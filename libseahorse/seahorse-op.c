@@ -23,6 +23,7 @@
 
 #include "seahorse-op.h"
 #include "seahorse-util.h"
+#include "seahorse-vfs-data.h"
 
 /* helper function for importing @data. @data will be released.
  * returns number of keys imported or -1. */
@@ -68,8 +69,8 @@ seahorse_op_import_file (SeahorseContext *sctx, const gchar *path, gpgme_error_t
 	if (err == NULL)
 		err = &error;
 	/* new data from file */
-	*err = gpgme_data_new_from_file (&data, path, TRUE);
-	g_return_val_if_fail (GPG_IS_OK (*err), -1);
+    data = seahorse_vfs_data_create (path, FALSE, err);
+    g_return_val_if_fail (data != NULL, -1);
 	
 	return import_data (sctx, data, err);
 }
@@ -105,21 +106,22 @@ seahorse_op_import_text (SeahorseContext *sctx, const gchar *text, gpgme_error_t
 /* helper function for exporting @recips. @recips will be released.
  * returns exported data. */
 static gpgme_data_t
-export_data (SeahorseContext *sctx, gpgme_key_t * recips, gpgme_error_t *err)
+export_data (SeahorseContext *sctx, gpgme_key_t *recips, gpgme_error_t *err)
 {
 	gpgme_data_t data = NULL;
-	gpgme_key_t * key;
-
+	gpgme_key_t *k;
+    gpgme_error_t error;
+   
+   if (err == NULL)
+       err = &error;
+       
 	*err = gpgme_data_new (&data);
 
-	key = recips;
-	while (key) {
-	        if (GPG_IS_OK (*err))
-		        *err = gpgme_op_export (sctx->ctx, (*key)->subkeys->fpr, 0, data);
-	        gpgme_key_unref (*key++);
-	}
-	g_free (recips);
-	
+	k = recips;
+	while (*k) 
+        *err = gpgme_op_export (sctx->ctx, (*(k++))->subkeys->fpr, 0, data);
+ 
+    seahorse_util_free_keys(recips);
 	return data;
 }
 
@@ -147,7 +149,6 @@ seahorse_op_export_file (SeahorseContext *sctx, const gchar *path,
 	g_return_if_fail (GPG_IS_OK (*err));
 	/* write to file */
 	*err = seahorse_util_write_data_to_file (path, data);
-	g_return_if_fail (GPG_IS_OK (*err));
 }
 
 /**
@@ -223,8 +224,10 @@ encrypt_file_common (SeahorseContext *sctx, const gchar *path, gpgme_key_t * rec
 	
 	if (err == NULL)
 		err = &error;
-	/* new data from file, encrypt */
-	*err = gpgme_data_new_from_file (&plain, path, TRUE);
+
+    plain = seahorse_vfs_data_create (path, FALSE, err);
+    g_return_val_if_fail (plain != NULL, NULL);
+ 
 	cipher = encrypt_data_common (sctx, plain, recips, func, err);
 	g_return_val_if_fail (GPG_IS_OK (*err), NULL);
 	/* write cipher to file */
@@ -342,8 +345,9 @@ seahorse_op_sign_file (SeahorseContext *sctx, const gchar *path, gpgme_error_t *
 	if (err == NULL)
 		err = &error;
 	/* new data from file */
-	*err = gpgme_data_new_from_file (&plain, path, TRUE);
-	g_return_val_if_fail (GPG_IS_OK (*err), NULL);
+    plain = seahorse_vfs_data_create (path, FALSE, err);
+    g_return_val_if_fail (plain != NULL, NULL);
+  
 	/* get detached signature */
 	sig = sign_data (sctx, plain, GPGME_SIG_MODE_DETACH, err);
 	g_return_val_if_fail (GPG_IS_OK (*err), NULL);
@@ -465,8 +469,9 @@ seahorse_op_decrypt_file (SeahorseContext *sctx, const gchar *path, gpgme_error_
 	if (err == NULL)
 		err = &error;
 	/* new data from file */
-	*err = gpgme_data_new_from_file (&cipher, path, TRUE);
-	g_return_val_if_fail (GPG_IS_OK (*err), NULL);
+    cipher = seahorse_vfs_data_create (path, FALSE, err);
+    g_return_val_if_fail (plain != NULL, NULL);
+
 	/* decrypt data */
 	plain = decrypt_data (sctx, cipher, err);
 	g_return_val_if_fail (GPG_IS_OK (*err), NULL);
@@ -539,14 +544,16 @@ seahorse_op_verify_file (SeahorseContext *sctx, const gchar *path,
 	if (err == NULL)
 		err = &error;
 	/* new data from sig file */
-	*err = gpgme_data_new_from_file (&sig, path, TRUE);
-	g_return_if_fail (GPG_IS_OK (*err));
+    sig = seahorse_vfs_data_create (path, FALSE, err);
+    g_return_if_fail (plain != NULL);
+
 	/* new data from plain file */
 	plain_path = seahorse_util_remove_suffix (path);
-	*err = gpgme_data_new_from_file (&plain, plain_path, TRUE);
+    plain = seahorse_vfs_data_create (plain_path, FALSE, err);
 	g_free (plain_path);
+  
 	/* release sig data if error */
-	if (!GPG_IS_OK (*err)) {
+	if (!plain) {
 		gpgme_data_release (sig);
 		g_return_if_reached ();
 	}
@@ -648,8 +655,9 @@ seahorse_op_decrypt_verify_file (SeahorseContext *sctx, const gchar *path,
 	if (err == NULL)
 		err = &error;
 	/* new data from file */
-	*err = gpgme_data_new_from_file (&cipher, path, TRUE);
-	g_return_val_if_fail (GPG_IS_OK (*err), NULL);
+    cipher = seahorse_vfs_data_create (path, FALSE, err);
+    g_return_val_if_fail (plain != NULL, NULL);
+
 	/* verify data */
 	plain = decrypt_verify_data (sctx, cipher, status, err);
 	g_return_val_if_fail (GPG_IS_OK (*err), NULL);

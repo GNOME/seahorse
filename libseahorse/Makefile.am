@@ -32,6 +32,7 @@ libseahorse_a_SOURCES = \
 	seahorse-recipients.c \
 	seahorse-signatures.c \
 	seahorse-libdialogs.h \
+	seahorse-vfs-data.c seahorse-vfs-data.h \
 	$(BUILT_SOURCES)
 
 seahorse-marshal.h: seahorse-marshal.list $(GLIB_GENMARSHAL)

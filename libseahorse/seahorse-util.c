@@ -25,6 +25,7 @@
 
 #include "seahorse-util.h"
 #include "seahorse-key.h"
+#include "seahorse-vfs-data.h"
 
 #define ASC ".asc"
 #define SIG ".sig"
@@ -125,7 +126,8 @@ seahorse_util_handle_error (gpgme_error_t err)
 gpgme_error_t
 seahorse_util_write_data_to_file (const gchar *path, gpgme_data_t data)
 {
-	FILE *fp;
+    gpgme_error_t err = GPG_OK;
+	gpgme_data_t file;
 	gchar *buffer;
 	gint nread;
    
@@ -135,23 +137,26 @@ seahorse_util_write_data_to_file (const gchar *path, gpgme_data_t data)
      */
     gpgme_data_rewind (data);
 	
-	fp = fopen (path, "w");
+    file = seahorse_vfs_data_create (path, TRUE, &err);
+    if(file != NULL)
+    {
+    	buffer = g_new0 (gchar, 128);
+    	
+    	while ((nread = gpgme_data_read (data, buffer, 128)) > 0)
+        {
+            if(gpgme_data_write (file, buffer, nread) < 0)
+            {
+                gpg_err_code_t e = gpg_err_code_from_errno (errno);
+                err = GPG_E (e);                
+                break;
+            }
+        }
+    }
 	
-	if (fp == NULL) {
-		gpgme_data_release (data);
-		g_return_val_if_reached (gpgme_err_code_from_errno (errno));
-	}
-	
-	buffer = g_new0 (gchar, 128);
-	
-	while ((nread = gpgme_data_read (data, buffer, 128)) > 0)
-		fwrite (buffer, nread, 1, fp);
-	
-	fflush (fp);
-	fclose (fp);
+    gpgme_data_release (file);
 	gpgme_data_release (data);
 	
-	return GPG_OK;
+	return err;
 }
 
 /**
@@ -252,4 +257,13 @@ gchar*
 seahorse_util_remove_suffix (const gchar *path)
 {
 	return g_strndup (path, strlen (path) - 4);
+}
+
+void
+seahorse_util_free_keys (gpgme_key_t* keys)
+{
+    gpgme_key_t* k = keys;
+    while (*k)
+        gpgme_key_unref (*(k++));
+    g_free (keys);
 }
