@@ -195,6 +195,20 @@ gpg_options_init (GError **err)
 }
 
 /**
+ * seahorse_gpg_homedir
+ * 
+ * Returns: The home dir that GPG uses for it's keys and configuration
+ **/
+const gchar*
+seahorse_gpg_homedir ()
+{
+    /* THis shouldn't normally fail, and as such we return an invalid 
+     * directory to avoid NULL memory access */
+    g_return_val_if_fail (gpg_options_init (NULL), "/invalid/gpg/dir");
+    return gpg_homedir;
+}
+
+/**
  * seahorse_gpg_options_find
  * 
  * @option: The option to find

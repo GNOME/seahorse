@@ -24,6 +24,8 @@
 
 #include <glib.h>
 
+const gchar * seahorse_gpg_homedir ();
+
 gboolean seahorse_gpg_options_find(const gchar* option, 
                                 gchar** value, GError** err);
                                 
