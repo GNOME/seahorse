@@ -36,13 +36,12 @@ ask_key_pair (SeahorseKeyPair *skpair)
 		_("%s is a key pair! Do you still want to delete it?"),
 		seahorse_key_get_userid (SEAHORSE_KEY (skpair), 0));
 		
-	delete_button = gtk_button_new_with_label("Delete");
-	cancel_button = gtk_button_new_with_label("Cancel");
-	
+	delete_button = gtk_button_new_from_stock(GTK_STOCK_DELETE);
+	cancel_button = gtk_button_new_from_stock(GTK_STOCK_CANCEL);
 	
 	//add widgets to action area
-	gtk_dialog_add_action_widget(GTK_DIALOG(warning), GTK_BUTTON (delete_button), GTK_RESPONSE_ACCEPT);
-	gtk_dialog_add_action_widget(GTK_DIALOG(warning), GTK_BUTTON (cancel_button), GTK_RESPONSE_REJECT);
+	gtk_dialog_add_action_widget(GTK_DIALOG(warning), GTK_WIDGET (cancel_button), GTK_RESPONSE_REJECT);
+	gtk_dialog_add_action_widget(GTK_DIALOG(warning), GTK_WIDGET (delete_button), GTK_RESPONSE_ACCEPT);
 	
 	//show widgets
 	gtk_widget_show (delete_button);
@@ -65,12 +64,13 @@ ask_key (SeahorseKey *skey)
 		GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE,
 		_("Are you sure you want to permanently delete %s?"),
 		seahorse_key_get_userid (skey, 0));
-	delete_button = gtk_button_new_with_label("Delete");
-	cancel_button = gtk_button_new_with_label("Cancel");
-
+	delete_button = gtk_button_new_from_stock(GTK_STOCK_DELETE);
+	cancel_button = gtk_button_new_from_stock(GTK_STOCK_CANCEL);
+	
+	
 	//add widgets to action area
-	gtk_dialog_add_action_widget(GTK_DIALOG(question), GTK_BUTTON (delete_button), GTK_RESPONSE_ACCEPT);
-	gtk_dialog_add_action_widget(GTK_DIALOG(question), GTK_BUTTON (cancel_button), GTK_RESPONSE_REJECT);
+	gtk_dialog_add_action_widget(GTK_DIALOG(question), GTK_WIDGET (cancel_button), GTK_RESPONSE_REJECT);
+	gtk_dialog_add_action_widget(GTK_DIALOG(question), GTK_WIDGET (delete_button), GTK_RESPONSE_ACCEPT);
 	
 	//show widgets
 	gtk_widget_show (delete_button);
@@ -130,12 +130,12 @@ seahorse_delete_subkey_new (SeahorseContext *sctx, SeahorseKey *skey, const guin
 		GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE,
 		_("Are you sure you want to permanently delete subkey %d of %s?"),
 		index, seahorse_key_get_userid (skey, 0));
-	delete_button = gtk_button_new_with_label("Delete");
-	cancel_button = gtk_button_new_with_label("Cancel");
+	delete_button = gtk_button_new_from_stock(GTK_STOCK_DELETE);
+	cancel_button = gtk_button_new_from_stock(GTK_STOCK_CANCEL);
 
 	//add widgets to action area
-	gtk_dialog_add_action_widget(GTK_DIALOG(question), GTK_BUTTON (delete_button), GTK_RESPONSE_ACCEPT);
-	gtk_dialog_add_action_widget(GTK_DIALOG(question), GTK_BUTTON (cancel_button), GTK_RESPONSE_REJECT);
+	gtk_dialog_add_action_widget(GTK_DIALOG(question), GTK_WIDGET (cancel_button), GTK_RESPONSE_REJECT);
+	gtk_dialog_add_action_widget(GTK_DIALOG(question), GTK_WIDGET (delete_button), GTK_RESPONSE_ACCEPT);
 	
 	//show widgets
 	gtk_widget_show (delete_button);

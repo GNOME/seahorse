@@ -33,8 +33,8 @@ on_method_ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 	GtkToggleButton *druid, *adv;
 	GtkWidget *widget;
 	
-	druid = glade_xml_get_widget (swidget->xml, DRUID);
-	adv = glade_xml_get_widget (swidget->xml, ADV);
+	druid = GTK_TOGGLE_BUTTON(glade_xml_get_widget (swidget->xml, DRUID));
+	adv = GTK_TOGGLE_BUTTON(glade_xml_get_widget (swidget->xml, ADV));
 	
 	widget = glade_xml_get_widget (swidget->xml, swidget->name);
 	gtk_widget_hide (widget);
