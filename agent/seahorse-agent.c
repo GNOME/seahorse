@@ -97,8 +97,7 @@ process_gpg_conf (const char *sockname, pid_t pid)
     if (!seahorse_gpg_options_find_vals (confs, prev_values, &error)) {
     
         /* Warn and put in defaults */
-        warnx (_("couldn't read gpg configuration: %s"), 
-            error ? error->message : "");
+        warnx (_("couldn't read gpg configuration, will try to create"));
 	  	g_clear_error (&error);
     
         prev_values[0] = NULL;  /* gpg-agent-info */
@@ -122,7 +121,7 @@ process_gpg_conf (const char *sockname, pid_t pid)
         g_assert (error);
         errx (1, _("couldn't modify gpg configuration: %s"),
               error ? error->message : "");
-        g_clear_error (error);
+        g_clear_error (&error);
     }
 }
 

@@ -36,6 +36,21 @@
 static gchar gpg_homedir[MAXPATHLEN];
 static gboolean gpg_options_inited = FALSE;
 
+static GIOChannel *
+create_file (const gchar *file, mode_t mode, GError **err)
+{
+    int fd;
+    g_assert (err && !*err);
+    
+    if ((fd = open (file, O_CREAT | O_EXCL | O_RDWR, mode)) == -1) {
+        g_set_error (err, G_IO_CHANNEL_ERROR, g_io_channel_error_from_errno (errno),
+                     strerror (errno));     
+        return NULL;
+    }
+    
+    return g_io_channel_unix_new (fd);     
+}
+
 /* Finds and opens a relevant configuration file, creates if not found */
 static GIOChannel *
 open_config_file (gboolean read, GError **err)
@@ -70,7 +85,7 @@ open_config_file (gboolean read, GError **err)
             }
             
             if (*err == NULL) {
-                ret = g_io_channel_new_file (conf, "w+", err);
+                ret = create_file (conf, 0600, err);
                 created = TRUE;
             }
 
