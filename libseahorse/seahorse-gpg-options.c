@@ -32,7 +32,7 @@
 #include "seahorse-gpg-options.h"
 
 #define  GPG_CONF_HEADER    "# FILE CREATED BY SEAHORSE\n\n"
-#define  GPG_VERSION_PREFIX   "1.2."
+#define  GPG_VERSION_PREFIX   "1."
 
 static gchar gpg_homedir[MAXPATHLEN];
 static gboolean gpg_options_inited = FALSE;
