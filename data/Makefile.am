@@ -2,6 +2,9 @@ schemasdir = $(GCONF_SCHEMA_FILE_DIR)
 schemas_in_files = seahorse.schemas.in
 schemas_DATA = $(schemas_in_files:.schemas.in=.schemas)
 
+mimedir = $(datadir)/mime-info
+mime_DATA = seahorse.mime
+
 @INTLTOOL_SCHEMAS_RULE@
 
 if GCONF_SCHEMAS_INSTALL
@@ -25,5 +28,5 @@ desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 
 EXTRA_DIST = \
 	$(schemas_in_files) \
-	$(desktop_in_files)
-	
+	$(desktop_in_files) \
+	$(mime_DATA)

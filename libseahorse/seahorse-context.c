@@ -32,10 +32,10 @@
 struct _SeahorseContextPrivate
 {
 	GList *key_pairs;
-	GMutex *pair_mutex;
+	//GMutex *pair_mutex;
 	
 	GList *single_keys;
-	GMutex *single_mutex;
+	//GMutex *single_mutex;
 };
 
 enum {
@@ -141,9 +141,9 @@ seahorse_context_init (SeahorseContext *sctx)
 	/* init private vars */
 	sctx->priv = g_new0 (SeahorseContextPrivate, 1);
 	sctx->priv->key_pairs = NULL;
-	sctx->priv->pair_mutex = g_mutex_new ();
+	//sctx->priv->pair_mutex = g_mutex_new ();
 	sctx->priv->single_keys = NULL;
-	sctx->priv->single_mutex = g_mutex_new ();
+	//sctx->priv->single_mutex = g_mutex_new ();
 	/* init signer */
 	set_gpgme_signer (sctx, eel_gconf_get_string (DEFAULT_KEY));
 	/* set prefs */
@@ -173,9 +173,9 @@ seahorse_context_finalize (GObject *gobject)
 	}
 	
 	g_list_free (sctx->priv->key_pairs);
-	g_mutex_free (sctx->priv->pair_mutex);
+	//g_mutex_free (sctx->priv->pair_mutex);
 	g_list_free (sctx->priv->single_keys);
-	g_mutex_free (sctx->priv->single_mutex);
+	//g_mutex_free (sctx->priv->single_mutex);
 	g_free (sctx->priv);
 	gpgme_release (sctx->ctx);
 	
@@ -333,14 +333,14 @@ process_key_pair (GpgmeKey secret, SeahorseContext *sctx)
 	if (gpgme_op_keylist_start (ctx, seahorse_key_get_id (secret), FALSE) == GPGME_No_Error &&
 	    gpgme_op_keylist_next (ctx, &key) == GPGME_No_Error) {
 		/* do new key, release gpgme keys */
-		g_mutex_lock (sctx->priv->pair_mutex);
+		//g_mutex_lock (sctx->priv->pair_mutex);
 		skey = seahorse_key_pair_new (key, secret);
 		gpgme_key_unref (key);
 		gpgme_key_unref (secret);
 		/* add key to list */
 		sctx->priv->key_pairs = g_list_append (sctx->priv->key_pairs, skey);
 		add_key (sctx, skey);
-		g_mutex_unlock (sctx->priv->pair_mutex);
+		//g_mutex_unlock (sctx->priv->pair_mutex);
 		/* end listing */
 	}
 	
@@ -367,13 +367,13 @@ process_single_key (GpgmeKey key, SeahorseContext *sctx)
 		/* otherwise don't have, add */
 		else {
 			/* do new key, release gpgme key */
-			g_mutex_lock (sctx->priv->single_mutex);
+			//g_mutex_lock (sctx->priv->single_mutex);
 			skey = seahorse_key_new (key);
 			gpgme_key_unref (key);
 			/* add key to list */
 			sctx->priv->single_keys = g_list_append (sctx->priv->single_keys, skey);
 			add_key (sctx, skey);
-			g_mutex_unlock (sctx->priv->single_mutex);
+			//g_mutex_unlock (sctx->priv->single_mutex);
 		}
 	}
 	
@@ -447,7 +447,7 @@ do_key_list (SeahorseContext *sctx)
 	
 	did_keys = TRUE;
 	seahorse_context_show_progress (sctx, g_strdup_printf (
-		_("Loading %d keys"), total), -1);
+		_("Loaded %d keys"), total), -1);
 	
 }
 

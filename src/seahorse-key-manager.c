@@ -265,6 +265,13 @@ selection_changed (GtkTreeSelection *selection, SeahorseWidget *swidget)
 	selected = rows > 0;
 	single = rows == 1;
 	
+	if (selected) {
+		GnomeAppBar *status;
+		
+		status = GNOME_APPBAR (glade_xml_get_widget (swidget->xml, "status"));
+		gnome_appbar_set_status (status, g_strdup_printf ("Selected %d keys", rows));
+	}
+	
 	if (single) {
 		skey = seahorse_key_store_get_selected_key (GTK_TREE_VIEW (
 			glade_xml_get_widget (swidget->xml, KEY_LIST)));

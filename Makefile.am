@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 
-SUBDIRS = libseahorse src po data help pixmaps
+SUBDIRS = libseahorse src po data help pixmaps plugins
 
 EXTRA_DIST = \
 	AUTHORS \
