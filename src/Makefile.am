@@ -12,6 +12,12 @@ INCLUDES = -I$(top_builddir) \
 	-DLOCALEDIR=\"$(localedir)\" \
 	-DPIXMAPSDIR=\""$(pixmapsdir)"\"
 
+if WITH_KEYSERVER
+KEYSERVER_SRCS = seahorse-keyserver-search.c seahorse-keyserver-results.c
+else
+KEYSERVER_SRCS = 
+endif
+
 bin_PROGRAMS = seahorse
 
 seahorse_SOURCES = main.c \
@@ -31,7 +37,8 @@ seahorse_SOURCES = main.c \
 	seahorse-add-uid.c \
 	seahorse-add-subkey.c \
 	seahorse-key-dialogs.h \
-	seahorse-process-multiple.c
+	seahorse-process-multiple.c \
+	$(KEYSERVER_SRCS) 	
 
 seahorse_LDADD = \
 	$(top_builddir)/libseahorse/libseahorse-internal.la \
@@ -49,7 +56,9 @@ glade_DATA = \
 	seahorse-preferences.glade \
 	seahorse-add-uid.glade \
 	seahorse-add-subkey.glade \
-	seahorse-multi-encrypt.glade
+	seahorse-multi-encrypt.glade \
+	seahorse-keyserver-search.glade \
+	seahorse-keyserver-results.glade
 
 @INTLTOOL_DESKTOP_RULE@
 desktopdir = $(datadir)/applications

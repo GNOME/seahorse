@@ -102,18 +102,6 @@
 			</locale>
 		</schema>
 		<schema>
-			<key>/schemas/desktop/pgp/keyservers</key>
-			<applyto>/desktop/pgp/keyservers</applyto>
-			<owner>seahorse</owner>
-			<type>list</type>
-			<list_type>string</list_type>
-			<default>[]</default>
-			<locale name="C">
-				<short>PGP Key servers</short>
-				<long>A list of key server URIs to search for remote PGP keys.</long>
-			</locale>
-		</schema>
-		<schema>
 			<key>/schemas/desktop/pgp/progress_update</key>
 			<applyto>/desktop/pgp/progress_update</applyto>
 			<owner>seahorse</owner>
@@ -209,5 +197,40 @@
 				column name to sort in descending order.</long>
 			</locale>
 		</schema>
+		<schema>
+			<key>/schemas/desktop/pgp/keyservers/all_keyservers</key>
+			<applyto>/desktop/pgp/keyservers/all_keyservers</applyto>
+			<owner>seahorse</owner>
+			<type>list</type>
+			<list_type>string</list_type>
+			<default>[]</default>
+			<locale name="C">
+				<short>PGP Key servers</short>
+				<long>A list of key server URIs to search for remote PGP keys.</long>
+			</locale>
+		</schema>		
+		<schema>
+			<key>/schemas/desktop/pgp/keyservers/keyserver</key>
+			<applyto>/desktop/pgp/keyservers/keyserver</applyto>
+			<owner>seahorse</owner>
+			<type>string</type>
+			<default></default>
+			<locale name="C">
+				<short>Last keyserver used</short>
+				<long>The last keyserver a search was performed against. 
+				Or empty for all keyservers.</long>
+			</locale>
+		</schema>		
+		<schema>
+			<key>/schemas/desktop/pgp/keyservers/search_text</key>
+			<applyto>/desktop/pgp/keyservers/search_text</applyto>
+			<owner>seahorse</owner>
+			<type>string</type>
+			<default></default>
+			<locale name="C">
+				<short>Last keyserver search pattern</short>
+				<long>The last search pattern searched for against a keyserver.</long>
+			</locale>
+		</schema>	
 	</schemalist>
 </gconfschemafile>

@@ -22,6 +22,12 @@ else
 AGENT_SRCS = 
 endif
 
+if WITH_KEYSERVER
+KEYSERVER_SRCS = seahorse-server-source.c seahorse-server-source.h seahorse-gpgmex-keyserver.c 
+else
+KEYSERVER_SRCS = 
+endif
+
 libseahorse_internal_la_SOURCES = \
 	seahorse-key.c seahorse-key.h \
 	seahorse-key-pair.c seahorse-key-pair.h \
@@ -47,7 +53,8 @@ libseahorse_internal_la_SOURCES = \
 	seahorse-prefs.c seahorse-prefs.h \
 	seahorse-operation.c seahorse-operation.h \
 	$(BUILT_SOURCES) \
-	$(AGENT_SRCS)
+	$(AGENT_SRCS) \
+	$(KEYSERVER_SRCS) 
 
 seahorse-marshal.h: seahorse-marshal.list $(GLIB_GENMARSHAL)
 	$(GLIB_GENMARSHAL) $< --header --prefix=seahorse_marshal > $@

@@ -702,14 +702,20 @@ seahorse_key_properties_new (SeahorseContext *sctx, SeahorseKey *skey)
     SeahorseKeySource *sksrc;
 	SeahorseWidget *swidget;
 	GtkWidget *widget;
+    gboolean remote;
+    
+    remote = seahorse_key_get_loaded_info (skey) == SKEY_INFO_REMOTE;
     
     /* Reload the key to make sure to get all the props */
     sksrc = seahorse_key_get_source (skey);
     g_return_if_fail (sksrc != NULL);
         
-    skey = seahorse_key_source_get_key (sksrc, 
-                seahorse_key_get_id (skey->key), SKEY_INFO_COMPLETE);
-    g_return_if_fail (skey != NULL);                
+    /* Don't trigger the import of remote keys if possible */
+    if (!remote) {
+        skey = seahorse_key_source_get_key (sksrc, 
+                    seahorse_key_get_id (skey->key), SKEY_INFO_COMPLETE);
+        g_return_if_fail (skey != NULL);                
+    }
 	
 	swidget = seahorse_key_widget_new ("key-properties", sctx, skey);
 	g_return_if_fail (swidget != NULL);
@@ -720,7 +726,7 @@ seahorse_key_properties_new (SeahorseContext *sctx, SeahorseKey *skey)
     g_signal_connect_after (skey, "destroy", G_CALLBACK (key_destroyed), swidget);
 	
 	do_stats (swidget, GTK_TABLE (glade_xml_get_widget (swidget->xml, "primary_table")), 3, 0,
-		skey->key->subkeys);
+		      skey->key->subkeys);
      
     /* Main key info */
     do_key_info (swidget);
@@ -734,43 +740,50 @@ seahorse_key_properties_new (SeahorseContext *sctx, SeahorseKey *skey)
     }
 
 	do_subkeys (swidget);
-    
-    /* Uid page */
-    widget = glade_xml_get_widget (swidget->xml, "uid-list");
-    g_signal_connect (gtk_tree_view_get_selection (GTK_TREE_VIEW (widget)), "changed",
-                G_CALLBACK (uid_sel_changed), swidget);
-    glade_xml_signal_connect_data (swidget->xml, "uid_add_clicked",
-                G_CALLBACK (uid_add_clicked), swidget);
-    glade_xml_signal_connect_data (swidget->xml, "uid_primary_clicked",
-                G_CALLBACK (uid_primary_clicked), swidget);
-    glade_xml_signal_connect_data (swidget->xml, "uid_sign_clicked",
-                G_CALLBACK (uid_sign_clicked), swidget);
-    glade_xml_signal_connect_data (swidget->xml, "uid_delete_clicked",
-                G_CALLBACK (uid_delete_clicked), swidget);
     do_uid_list (swidget);
 
-    
-    /* Signature setup */
-    do_signatures (swidget);
-    do_signature_list (swidget);
-    glade_xml_signal_connect_data (swidget->xml, "sigs_changed",
-          G_CALLBACK (signature_sel_changed), swidget);        
+    /* Disable stuff not appropriate for remote */
+    if (remote) {
+        gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "trust"), FALSE);
+        gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "disabled"), FALSE);
+        
+    /* Stuff valid for local keys */
+    } else {     
 
-	/* disable trust options */
-	if (SEAHORSE_IS_KEY_PAIR (skey))
-		widget = glade_xml_get_widget (swidget->xml, "unknown");
-	else
-		widget = glade_xml_get_widget (swidget->xml, "ultimate");
-	gtk_widget_set_sensitive (widget, FALSE);
-	
-	gtk_option_menu_set_history (GTK_OPTION_MENU (glade_xml_get_widget (swidget->xml, "trust")),
-		seahorse_key_get_trust (skey) - 1);
+        /* Uid page */
+        widget = glade_xml_get_widget (swidget->xml, "uid-list");
+        g_signal_connect (gtk_tree_view_get_selection (GTK_TREE_VIEW (widget)), "changed",
+                    G_CALLBACK (uid_sel_changed), swidget);
+        glade_xml_signal_connect_data (swidget->xml, "uid_add_clicked",
+                    G_CALLBACK (uid_add_clicked), swidget);
+        glade_xml_signal_connect_data (swidget->xml, "uid_primary_clicked",
+                    G_CALLBACK (uid_primary_clicked), swidget);
+        glade_xml_signal_connect_data (swidget->xml, "uid_sign_clicked",
+                    G_CALLBACK (uid_sign_clicked), swidget);
+        glade_xml_signal_connect_data (swidget->xml, "uid_delete_clicked",
+                    G_CALLBACK (uid_delete_clicked), swidget);
+                    
+        /* Signature setup */
+        do_signatures (swidget);
+        do_signature_list (swidget);
+        glade_xml_signal_connect_data (swidget->xml, "sigs_changed",
+                                       G_CALLBACK (signature_sel_changed), swidget);        
+
+        /* disable trust options */
+        if (SEAHORSE_IS_KEY_PAIR (skey))
+            widget = glade_xml_get_widget (swidget->xml, "unknown");
+        else
+            widget = glade_xml_get_widget (swidget->xml, "ultimate");
+        gtk_widget_set_sensitive (widget, FALSE);
+        
+    	gtk_option_menu_set_history (GTK_OPTION_MENU (glade_xml_get_widget (swidget->xml, "trust")),
+	                                 seahorse_key_get_trust (skey) - 1);
+        glade_xml_signal_connect_data (swidget->xml, "trust_changed",
+                                       G_CALLBACK (trust_changed), swidget);
+        glade_xml_signal_connect_data (swidget->xml, "disabled_toggled",
+                                       G_CALLBACK (disabled_toggled), swidget);
+    }
 	
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (glade_xml_get_widget (swidget->xml, "disabled")),
-		skey->key->disabled);
-	
-	glade_xml_signal_connect_data (swidget->xml, "trust_changed",
-		G_CALLBACK (trust_changed), swidget);
-	glade_xml_signal_connect_data (swidget->xml, "disabled_toggled",
-		G_CALLBACK (disabled_toggled), swidget);
+		                          skey->key->disabled);
 }

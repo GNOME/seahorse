@@ -115,25 +115,25 @@ END_DECLARE_OPERATION
 IMPLEMENT_OPERATION (Xx, xx)
  
 static void 
-seahorse_load_operation_init (SeahorseLoadOperation *lop)
+seahorse_xx_operation_init (SeahorseXxOperation *lop)
 {
 
 }
 
 static void 
-seahorse_load_operation_dispose (GObject *gobject)
+seahorse_xx_operation_dispose (GObject *gobject)
 {
     G_OBJECT_CLASS (operation_parent_class)->dispose (gobject);  
 }
 
 static void 
-seahorse_load_operation_finalize (GObject *gobject)
+seahorse_xx_operation_finalize (GObject *gobject)
 {
     G_OBJECT_CLASS (operation_parent_class)->finalize (gobject);  
 }
 
 static void 
-seahorse_load_operation_cancel (SeahorseOperation *operation)
+seahorse_xx_operation_cancel (SeahorseOperation *operation)
 {
     seahorse_operation_mark_done (operation);
 }

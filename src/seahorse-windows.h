@@ -28,6 +28,12 @@
 
 GtkWindow*	seahorse_key_manager_show	(SeahorseContext	*sctx);
 
+GtkWindow*  seahorse_keyserver_search_show      (SeahorseContext    *sctx);
+
+GtkWindow*  seahorse_keyserver_results_show     (SeahorseContext    *sctx,
+                                                 SeahorseKeySource  *sksrc,
+                                                 const gchar *search_text);
+
 void	seahorse_generate_select_show	(SeahorseContext	*sctx);
 
 void	seahorse_generate_adv_show	(SeahorseContext	*sctx);

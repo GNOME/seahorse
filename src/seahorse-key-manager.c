@@ -359,6 +359,14 @@ sign_activate (GtkWidget *widget, SeahorseWidget *swidget)
 	seahorse_sign_show (swidget->sctx, list);
 }
 
+#ifdef WITH_KEYSERVER
+static void
+search_activate (GtkWidget *widget, SeahorseWidget *swidget)
+{
+    seahorse_keyserver_search_show (swidget->sctx);
+}
+#endif
+
 /* Loads delete dialog if a key is selected */
 static void
 delete_activate (GtkWidget *widget, SeahorseWidget *swidget)
@@ -517,7 +525,6 @@ set_key_options_sensitive (SeahorseWidget *swidget, gboolean selected, gboolean 
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "sign_button"), create);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "sign"), create);
 	
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "delete_button"), selected);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "delete"), selected);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "export_button"), selected);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "export"), selected);
@@ -645,7 +652,6 @@ show_progress (SeahorseContext *sctx, const gchar *op, gdouble fract, SeahorseWi
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "properties_button"), sensitive);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "export_button"), sensitive);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "sign_button"), sensitive);
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "delete_button"), sensitive);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, KEY_LIST), sensitive);
 	
 	while (g_main_context_pending (NULL))
@@ -783,7 +789,16 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 		G_CALLBACK (generate_activate), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "import_activate",
 		G_CALLBACK (import_activate), swidget);
-	
+      
+    /* Keyserver stuff */
+#ifdef WITH_KEYSERVER      
+    glade_xml_signal_connect_data (swidget->xml, "search_activate",
+                                   G_CALLBACK (search_activate), swidget);
+#else
+    gtk_widget_hide (glade_xml_get_widget (swidget->xml, "search_button"));    
+    gtk_widget_hide (glade_xml_get_widget (swidget->xml, "keyserver_search"));    
+#endif	
+
 	glade_xml_signal_connect_data (swidget->xml, "expand_all_activate",
 		G_CALLBACK (expand_all_activate), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "collapse_all_activate",
