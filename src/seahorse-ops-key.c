@@ -1240,7 +1240,7 @@ rev_subkey_action (guint state, gpointer data, const gchar **result)
 			*result = QUIT;
 			break;
 		default:
-			return GPGME_General_Error;
+			g_return_val_if_reached (GPGME_General_Error);
 	}
 	
 	return GPGME_No_Error;
