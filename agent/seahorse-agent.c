@@ -99,7 +99,7 @@ process_gpg_conf (const char *sockname, pid_t pid)
         /* Warn and put in defaults */
         warnx (_("couldn't read gpg configuration: %s"), 
             error ? error->message : "");
-        g_error_free (error);
+	  	g_clear_error (&error);
     
         prev_values[0] = NULL;  /* gpg-agent-info */
         prev_values[1] = NULL;  /* use-agent */
@@ -122,7 +122,7 @@ process_gpg_conf (const char *sockname, pid_t pid)
         g_assert (error);
         errx (1, _("couldn't modify gpg configuration: %s"),
               error ? error->message : "");
-        g_error_free (error);
+        g_clear_error (error);
     }
 }
 

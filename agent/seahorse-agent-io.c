@@ -151,9 +151,7 @@ free_conn (SeahorseAgentConn *cn)
             g_source_remove (cn->stag);
 
         g_io_channel_shutdown (cn->iochannel, TRUE, &err);
-
-        if (err)
-            g_error_free (err);
+        g_clear_error (&err);
 
         cn->iochannel = 0;
         cn->stag = 0;
@@ -386,7 +384,7 @@ io_handler (GIOChannel *source, GIOCondition condition, gpointer data)
 
         if (err != NULL) {
             g_critical ("couldn't read from socket: %s", err->message);
-            g_error_free (err);
+            g_clear_error (&err);
             free_conn (cn);
             ret = FALSE;
         }
@@ -571,8 +569,7 @@ seahorse_agent_io_uninit ()
         g_iochannel = NULL;
         g_socket = -1;
 
-        if (err)
-            g_error_free (err);
+        g_clear_error (err);
 
         /* Remove the socket */
         unlink (g_socket_name);

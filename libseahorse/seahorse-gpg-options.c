@@ -30,7 +30,7 @@
 #include "seahorse-context.h"
 #include "seahorse-gpg-options.h"
 
-#define  GPG_CONF_HEADER    "# FILE AUTO CREATED BY SEAHORSE\n\n"
+#define  GPG_CONF_HEADER    "# FILE CREATED BY SEAHORSE\n\n"
 #define  GPG_VERSION_PREFIX   "1.2."
 
 static gchar gpg_homedir[MAXPATHLEN];
@@ -56,12 +56,29 @@ open_config_file (gboolean read, GError **err)
         opts = g_strconcat (gpg_homedir, "/options");
         if (g_file_test (opts, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_EXISTS)) {
             ret = g_io_channel_new_file (opts, read ? "r" : "r+", err);
-        }
 
         /* Neither of the above exists, so create ~/.gnupg/gpg.conf */
-        else {
-            ret = g_io_channel_new_file (conf, "w+", err);
-            created = TRUE;
+        } else if (!read) {
+            
+            /* Make sure directory exists */
+            if (!g_file_test (gpg_homedir, G_FILE_TEST_EXISTS)) {
+                if (mkdir (gpg_homedir, 0700) == -1) {
+                    g_set_error (err, G_IO_CHANNEL_ERROR, 
+                             g_io_channel_error_from_errno (errno),
+                             strerror (errno));     
+                }
+            }
+            
+            if (*err == NULL) {
+                ret = g_io_channel_new_file (conf, "w+", err);
+                created = TRUE;
+            }
+
+        /* No file was found and not creating */
+        } else {
+            g_set_error (err, G_IO_CHANNEL_ERROR,
+                         g_io_channel_error_from_errno (ENOENT),
+                         strerror (ENOENT));            
         }
     }
 
