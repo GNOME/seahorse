@@ -2,6 +2,7 @@
  * Seahorse
  *
  * Copyright (C) 2003 Jacob Perkins
+ * Copyright (C) 2004-2005 Nate Nielsen
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -143,10 +144,16 @@ seahorse_key_pair_new (SeahorseKeySource *sksrc, gpgme_key_t key, gpgme_key_t se
 }
 
 gboolean
-seahorse_key_pair_can_sign (const SeahorseKeyPair *skpair)
+seahorse_key_pair_can_sign (SeahorseKeyPair *skpair)
 {
 	g_return_val_if_fail (skpair != NULL && SEAHORSE_IS_KEY_PAIR (skpair), FALSE);
 	
 	return (seahorse_key_is_valid (SEAHORSE_KEY (skpair)) &&
 		SEAHORSE_KEY (skpair)->key->can_sign);
+}
+
+const gchar*    
+seahorse_key_pair_get_id (SeahorseKeyPair *skpair)
+{
+    return seahorse_key_get_id (skpair->secret);
 }

@@ -1,7 +1,7 @@
 /*
  * Seahorse
  *
- * Copyright (C) 2004 Nate Nielsen
+ * Copyright (C) 2004-2005 Nate Nielsen
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -173,6 +173,7 @@ encrypt_cb (BonoboUIComponent * uic, gpointer user_data,
             const gchar * verbname)
 {
     GeditView *view = GEDIT_VIEW (gedit_get_active_view ());
+    SeahorseKeyPair *signer = NULL;
     GeditDocument *doc;
     gpgme_error_t err = GPG_OK;
     gchar *enctext = NULL;
@@ -199,7 +200,7 @@ encrypt_cb (BonoboUIComponent * uic, gpointer user_data,
     
     /* Get the recipient list */
     gedit_debug (DEBUG_PLUGINS, "getting recipients");
-    keys = seahorse_recipients_get (sctx);
+    keys = seahorse_recipients_get (sctx, &signer);
 
     /* User may have cancelled */
     if (g_list_length(keys) == 0)
@@ -210,7 +211,10 @@ encrypt_cb (BonoboUIComponent * uic, gpointer user_data,
 
     /* Encrypt it */
     gedit_debug (DEBUG_PLUGINS, "encrypting text");
-    enctext = seahorse_op_encrypt_text (keys, buffer, &err);
+    if (signer == NULL)
+        enctext = seahorse_op_encrypt_text (keys, buffer, &err);
+    else
+        enctext = seahorse_op_encrypt_sign_text (keys, signer, buffer, &err);
 
     g_list_free (keys);
     g_free (buffer);

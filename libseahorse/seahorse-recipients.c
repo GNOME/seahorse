@@ -2,6 +2,7 @@
  * Seahorse
  *
  * Copyright (C) 2003 Jacob Perkins
+ * Copyright (C) 2004-2005 Nate Nielsen
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,6 +23,7 @@
 #include <stdlib.h>
 #include <libintl.h>
 #include <gnome.h>
+#include <eel/eel.h>
 
 #include "seahorse-operation.h"
 #include "seahorse-progress.h"
@@ -29,6 +31,7 @@
 #include "seahorse-widget.h"
 #include "seahorse-validity.h"
 #include "seahorse-recipients-store.h"
+#include "seahorse-default-key-control.h"
 
 #define VIEW "keys"
 #define OK "ok"
@@ -125,16 +128,18 @@ update_filters (GObject* object, GParamSpec* arg, SeahorseWidget* swidget)
 }
 
 GList*
-seahorse_recipients_get (SeahorseContext *sctx)
+seahorse_recipients_get (SeahorseContext *sctx, SeahorseKeyPair **signer)
 {
 	SeahorseWidget *swidget;
     SeahorseOperation *operation;
+    SeahorseDefaultKeyControl *sdkc;
 	GtkTreeSelection *selection;
 	GtkTreeView *view;
 	GtkWidget *widget;
 	gint response;
 	gboolean done = FALSE;
     GList *keys = NULL;
+    gchar *id;
     SeahorseKeyStore* skstore;
     SeahorseKeySource *sksrc;
 	
@@ -153,6 +158,24 @@ seahorse_recipients_get (SeahorseContext *sctx)
     /* Hook progress bar in */
     operation = seahorse_key_source_get_operation (sksrc);
     g_return_val_if_fail (operation != NULL, NULL);
+
+    /* If always using the default key for signing, then hide this section */
+    if (!signer || eel_gconf_get_boolean (SIGNDEFAULT_KEY)) {
+        widget = glade_xml_get_widget (swidget->xml, "sign_box");
+        gtk_widget_hide (widget);
+
+    /* Signing section */
+    } else {
+        widget = glade_xml_get_widget (swidget->xml, "sign_key_place");
+        sdkc = seahorse_default_key_control_new (sksrc, _("None (Don't sign)"));
+        gtk_container_add (GTK_CONTAINER (widget), GTK_WIDGET (sdkc));
+        gtk_widget_show_all (widget);    
+
+        /* Select the last key used */
+        id = eel_gconf_get_string (LASTSIGNER_KEY);
+        seahorse_default_key_control_select_id (sdkc, id);
+        g_free (id); 
+    }
     
     widget = glade_xml_get_widget (swidget->xml, "status");
     seahorse_progress_appbar_add_operation (widget, operation);
@@ -180,7 +203,18 @@ seahorse_recipients_get (SeahorseContext *sctx)
 				break;
 		}
 	}
- 	
+
+    if (keys && signer) {
+        if (eel_gconf_get_boolean (SIGNDEFAULT_KEY)) 
+            *signer = seahorse_context_get_default_key (sctx);
+        else 
+            *signer = seahorse_default_key_control_active (sdkc);
+
+        /* Save this as the last key signed with */
+        eel_gconf_set_string (LASTSIGNER_KEY, *signer == NULL ? 
+                "" : seahorse_key_pair_get_id (*signer));
+    }
+    
 	seahorse_widget_destroy (swidget);
 	return keys;
 }

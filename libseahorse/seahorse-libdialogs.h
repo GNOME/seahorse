@@ -2,6 +2,7 @@
  * Seahorse
  *
  * Copyright (C) 2003 Jacob Perkins
+ * Copyright (C) 2004-2005 Nate Nielsen
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +36,8 @@ gpgme_error_t
 seahorse_passphrase_get (SeahorseContext *sctx, const gchar *passphrase_hint, 
                             const char* passphrase_info, int prev_bad, int fd);
 
-GList*      	seahorse_recipients_get	(SeahorseContext	*sctx);
+GList*          seahorse_recipients_get (SeahorseContext    *sctx,
+                                         SeahorseKeyPair    **signkey);
 
 SeahorseWidget*	seahorse_signatures_new	(SeahorseContext	*sctx);
 

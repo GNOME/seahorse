@@ -166,8 +166,9 @@ do_import (SeahorseContext *sctx, const gchar **paths)
 
 /* Encrypt or sign the given set of paths */
 static guint 
-do_encrypt_base (SeahorseContext *sctx, const gchar **paths, SeahorseKeyPair *signer)
+do_encrypt_base (SeahorseContext *sctx, const gchar **paths, gboolean sign)
 {
+    SeahorseKeyPair *signer = NULL;
     SeahorseKeySource *sksrc;
     GList *keys = NULL;
     gchar *new_path;
@@ -185,7 +186,7 @@ do_encrypt_base (SeahorseContext *sctx, const gchar **paths, SeahorseKeyPair *si
     if(!uris)
         ret = 1;
     else {
-        keys = seahorse_recipients_get (sctx);
+        keys = seahorse_recipients_get (sctx, sign ? &signer : NULL);
            
         if (g_list_length (keys) > 0) {
             for(u = uris; *u; u++) {
@@ -223,14 +224,14 @@ do_encrypt_base (SeahorseContext *sctx, const gchar **paths, SeahorseKeyPair *si
 static guint
 do_encrypt (SeahorseContext *sctx, const gchar **paths)
 {
-    return do_encrypt_base (sctx, paths, NULL);
+    return do_encrypt_base (sctx, paths, FALSE);
 }
 
 /* Encrypt and sign the given set of paths */
 static guint
 do_encrypt_sign (SeahorseContext *sctx, const gchar **paths)
 {
-    return do_encrypt_base (sctx, paths, seahorse_context_get_default_key (sctx));
+    return do_encrypt_base (sctx, paths, TRUE);
 }
 
 static guint

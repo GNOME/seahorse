@@ -3,7 +3,6 @@
 
 #include "seahorse-check-button-control.h"
 
-
 enum {
 	PROP_0,
 	PROP_GCONF_KEY

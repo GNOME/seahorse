@@ -1,7 +1,7 @@
 /*
  * Seahorse
  *
- * Copyright (C) 2004 Nate Nielsen
+ * Copyright (C) 2004-2005 Nate Nielsen
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -293,6 +293,28 @@ setup_keyservers (SeahorseContext *sctx, SeahorseWidget *swidget)
 
 #endif /* WITH_KEYSERVER */
 
+static void
+default_key_changed (SeahorseDefaultKeyControl *sdkc, gpointer *data)
+{
+    const gchar *id = seahorse_default_key_control_active_id (sdkc);
+    eel_gconf_set_string (DEFAULT_KEY, id == NULL ? "" : id);    
+}
+
+static void
+gconf_notification (GConfClient *gclient, guint id, GConfEntry *entry, 
+                    SeahorseDefaultKeyControl *sdkc)
+{
+    const gchar *key_id = gconf_value_get_string (gconf_entry_get_value (entry));
+    seahorse_default_key_control_select_id (sdkc, key_id);
+}
+
+static void
+remove_gconf_notification (GObject *obj, gpointer data)
+{
+    guint gconf_id = GPOINTER_TO_INT (data);
+    eel_gconf_notification_remove (gconf_id);
+}
+
 /**
  * seahorse_prefs_new
  * @sctx: The SeahorseContext to work with
@@ -306,7 +328,9 @@ seahorse_prefs_new (SeahorseContext *sctx)
 {
     SeahorseWidget *swidget;
     GtkWidget *widget;
+    SeahorseDefaultKeyControl *sdkc;
     guint removed = 0;
+    guint gconf_id;
     
     swidget = seahorse_widget_new ("prefs", sctx);
     
@@ -319,10 +343,23 @@ seahorse_prefs_new (SeahorseContext *sctx)
             seahorse_check_button_control_new (_("_Encrypt to Self"), ENCRYPTSELF_KEY));
     gtk_widget_show_all (widget);
 
+    widget = glade_xml_get_widget (swidget->xml, "sign_to_default_box");
+    gtk_container_add (GTK_CONTAINER (widget),
+            seahorse_check_button_control_new (_("_Use default key to sign"), SIGNDEFAULT_KEY));
+    gtk_widget_show_all (widget);
+    
     widget = glade_xml_get_widget (swidget->xml, "default_key");
-    gtk_container_add (GTK_CONTAINER (widget), seahorse_default_key_control_new (sctx));
+
+    sdkc = seahorse_default_key_control_new (seahorse_context_get_key_source (sctx), NULL);
+    gtk_container_add (GTK_CONTAINER (widget), GTK_WIDGET (sdkc));
     gtk_widget_show_all (widget);
 
+    seahorse_default_key_control_select_id (sdkc, eel_gconf_get_string (DEFAULT_KEY));    
+    g_signal_connect (sdkc, "changed", G_CALLBACK (default_key_changed), NULL);
+
+    gconf_id = eel_gconf_notification_add (DEFAULT_KEY, (GConfClientNotifyFunc)gconf_notification, sdkc);
+    g_signal_connect (sdkc, "destroy", G_CALLBACK (remove_gconf_notification), GINT_TO_POINTER (gconf_id));
+    
 #ifdef WITH_AGENT   
     seahorse_prefs_cache (sctx, swidget);
 #else
