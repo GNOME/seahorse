@@ -15,6 +15,13 @@ key_destroyed (GtkObject *object, GtkWidget *widget)
 	gtk_widget_destroy (GTK_WIDGET (widget));
 }
 
+static void 
+item_destroyed (GtkObject *object, gpointer data)
+{
+    g_signal_handlers_disconnect_by_func(SEAHORSE_KEY_PAIR(data), 
+                key_destroyed, GTK_MENU_ITEM(object));
+}
+
 static void
 key_added (SeahorseContext *sctx, SeahorseKey *skey, GtkWidget *menu)
 {
@@ -31,6 +38,8 @@ key_added (SeahorseContext *sctx, SeahorseKey *skey, GtkWidget *menu)
 		(gchar*)seahorse_key_get_id (SEAHORSE_KEY_PAIR (skey)->secret));
 	g_signal_connect_after (GTK_OBJECT (skey), "destroy",
 		G_CALLBACK (key_destroyed), item);
+    g_signal_connect_after (GTK_MENU_ITEM (item), "destroy", 
+        G_CALLBACK (item_destroyed), skey); 
 }
 
 static void
