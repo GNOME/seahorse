@@ -36,37 +36,41 @@ seahorse_signatures_new (SeahorseContext *sctx, gpgme_verify_result_t status)
     gboolean good = FALSE;
     	
 	swidget = seahorse_widget_new_allow_multiple ("signatures", sctx);
-
-	switch (gpgme_err_code (status->signatures->status)) {
-		case GPG_ERR_KEY_EXPIRED:
-			label = _("Good, signing key expired");
-            good = TRUE;
-			break;
-		case GPG_ERR_SIG_EXPIRED:
-			label = _("Good, signature expired");
-            good = TRUE;
-			break;
-		case GPG_ERR_CERT_REVOKED:
-			label = _("Good, signing key certificate revoked");
-            good = TRUE;
-			break;
-		case GPG_ERR_NO_ERROR:
-			label = _("Good");
-            good = TRUE;
-			break;
-        case GPG_ERR_NO_PUBKEY:
-            label = _("Signing key not in key ring");
-            break;
-        case GPG_ERR_BAD_SIGNATURE:
-            label = _("Bad Signature");
-            break;
-        case GPG_ERR_NO_DATA:
-          label =   _("Not a signature");
-            break;
-        default:
-           label = _("Verification Error");
-           break;
-	}
+    
+    if (status->signatures) {
+    	switch (gpgme_err_code (status->signatures->status)) {
+    		case GPG_ERR_KEY_EXPIRED:
+    			label = _("Good, signing key expired");
+                good = TRUE;
+    			break;
+    		case GPG_ERR_SIG_EXPIRED:
+    			label = _("Good, signature expired");
+                good = TRUE;
+    			break;
+    		case GPG_ERR_CERT_REVOKED:
+    			label = _("Good, signing key certificate revoked");
+                good = TRUE;
+    			break;
+    		case GPG_ERR_NO_ERROR:
+    			label = _("Good");
+                good = TRUE;
+    			break;
+            case GPG_ERR_NO_PUBKEY:
+                label = _("Signing key not in key ring");
+                break;
+            case GPG_ERR_BAD_SIGNATURE:
+                label = _("Bad Signature");
+                break;
+            case GPG_ERR_NO_DATA:
+               label =   _("Not a signature");
+               break;
+            default:
+               label = _("Verification Error");
+               break;
+    	}
+    } else {
+        label = _("No signature");
+    }
 
     gtk_label_set_text (GTK_LABEL (glade_xml_get_widget (swidget->xml, "status")), label);
 
