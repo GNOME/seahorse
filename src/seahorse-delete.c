@@ -112,7 +112,7 @@ seahorse_delete_show (SeahorseContext *sctx, GList *keys)
 				err = seahorse_key_op_delete (sctx, skey);
 			
 			if (!GPG_IS_OK (err))
-				seahorse_util_handle_error (err);
+				seahorse_util_handle_error (err, _("Couldn't delete key"));
 		}
 		else
 			break;
@@ -154,5 +154,5 @@ seahorse_delete_subkey_new (SeahorseContext *sctx, SeahorseKey *skey, const guin
 	
 	err = seahorse_key_op_del_subkey (sctx, skey, index);
 	if (!GPG_IS_OK (err))
-		seahorse_util_handle_error (err);
+		seahorse_util_handle_error (err, _("Couldn't delete subkey"));
 }

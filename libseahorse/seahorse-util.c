@@ -40,7 +40,7 @@ seahorse_util_show_error (GtkWindow *parent, const gchar *message)
 	GtkWidget *error;
 	g_return_if_fail (!g_str_equal (message, ""));
 	
-	error = gtk_message_dialog_new (parent, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR,
+	error = gtk_message_dialog_new_with_markup (parent, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR,
 		GTK_BUTTONS_CLOSE, message);
 	
 	gtk_dialog_run (GTK_DIALOG (error));
@@ -104,17 +104,55 @@ seahorse_util_get_date_string (const time_t time)
  * Shows an error dialog for @err.
  **/
 void
-seahorse_util_handle_error (gpgme_error_t err)
+seahorse_util_handle_error (gpgme_error_t err, const char* desc, ...)
 {
-	GtkWidget *dialog;
-	
-	g_printerr ("%d", err);
-	
-	dialog = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR,
-		GTK_BUTTONS_CLOSE, gpgme_strerror (err));
-	gtk_dialog_run (GTK_DIALOG (dialog));
-	gtk_widget_destroy (dialog);
+    gchar *t = NULL;
+  
+    va_list ap;
+    va_start(ap, desc);
+  
+    if (desc) {
+        gchar *x = g_strdup_vprintf (desc, ap);
+        t = g_strconcat("<big><b>", x, "</b></big>\n\n", gpgme_strerror (err), NULL);
+    } else {
+        t = g_strdup (gpgme_strerror (err));
+    }
+    
+    va_end(ap);
+        
+    seahorse_util_show_error (NULL, t);
+    g_free(t);
 }
+
+void
+seahorse_util_handle_gerror (GError* err, const char* desc, ...)
+{
+    gchar *t = NULL;
+    va_list ap;
+    
+    if(!err)
+        return;
+
+    va_start(ap, desc);
+  
+    if (desc) {
+        gchar *x = g_strdup_vprintf (desc, ap);
+        t = g_strconcat("<big><b>", x, "</b></big>",
+                err->message ? "\n\n" : NULL, err->message, NULL);
+    } else if (err->message) {
+        t = g_strdup (err->message);
+    }
+    
+    va_end(ap);        
+    
+    if(t != NULL)
+        seahorse_util_show_error (NULL, t);
+
+    g_free(t);
+    g_error_free(err);
+}    
+
+
 
 /**
  * seahorse_util_write_data_to_file:

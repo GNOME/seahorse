@@ -120,12 +120,14 @@ import_activate (GtkWidget *widget, SeahorseWidget *swidget)
 
     if(uri) {
         keys = seahorse_op_import_file (swidget->sctx, uri, &err);
-        g_free (uri);
         
         if (GPG_IS_OK (err))
             seahorse_context_keys_added (swidget->sctx, keys);
         else
-            seahorse_util_handle_error (err);
+            seahorse_util_handle_error (err, _("Couldn't import keys from \"%s\""), 
+                seahorse_util_uri_get_last (uri));
+                
+        g_free (uri);
     }
 }
 
@@ -139,7 +141,7 @@ clipboard_received (GtkClipboard *board, const gchar *text, SeahorseContext *sct
     keys = seahorse_op_import_text (sctx, text, &err);
  
     if (!GPG_IS_OK (err))
-        seahorse_util_handle_error (err);
+        seahorse_util_handle_error (err, _("Couldn't import keys from clipboard"));
     else if (keys > 0)
         seahorse_context_keys_added (sctx, keys);
 }
@@ -173,7 +175,7 @@ copy_activate (GtkWidget *widget, SeahorseWidget *swidget)
     text = seahorse_op_export_text (swidget->sctx, recips, &err);
 
     if (!GPG_IS_OK (err))
-        seahorse_util_handle_error (err);
+        seahorse_util_handle_error (err, _("Couldn't export key to clipboard"));
     else if (text != NULL) {
         atom = gdk_atom_intern ("CLIPBOARD", FALSE);
         board = gtk_clipboard_get (atom);
@@ -253,10 +255,12 @@ export_activate (GtkWidget *widget, SeahorseWidget *swidget)
 
         /* This frees recips */        
         seahorse_op_export_file (swidget->sctx, uri, recips, &err); 
-        g_free (uri);
         
         if (!GPG_IS_OK (err))
-            seahorse_util_handle_error (err);
+            seahorse_util_handle_error (err, _("Couldn't export key to \"%s\""),
+                    seahorse_util_uri_get_last (uri));
+                    
+        g_free (uri);
     }
 }
 
@@ -613,8 +617,11 @@ target_drag_data_received (GtkWidget *widget, GdkDragContext *context, gint x, g
             g_strstrip (*u);
             if ((*u)[0]) { /* Make sure it's not an empty line */
                 keys += seahorse_op_import_file (sctx, *u, &err);  
-                if(!GPG_IS_OK (err))
+                if (!GPG_IS_OK (err)) {
+                    seahorse_util_handle_error (err, _("Couldn't import key from \"%s\""),
+                            seahorse_util_uri_get_last (*u));
                     break;
+                }
             }
         }
         g_strfreev (uris);
@@ -625,9 +632,7 @@ target_drag_data_received (GtkWidget *widget, GdkDragContext *context, gint x, g
         return;
     } 
 
-    if (!GPG_IS_OK (err))
-        seahorse_util_handle_error (err);
-    else if (keys > 0)
+    if (keys > 0)
         seahorse_context_keys_added (sctx, keys);        
 }
 

@@ -128,7 +128,7 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 		pass, type, length, expires);
 	if (!GPG_IS_OK (err)) {
 		gtk_widget_show (widget);
-		seahorse_util_handle_error (err);
+		seahorse_util_handle_error (err, _("Couldn't generate key"));
 	}
 	else
 		seahorse_widget_destroy (swidget);

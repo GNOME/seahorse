@@ -76,6 +76,7 @@ do_encrypt (SeahorseContext *sctx, gchar *path,
 	gpgme_key_t * recips = NULL;
 	gchar *new_path;
 	gpgme_error_t err;
+    guint ret = 0;
 		
 	recips = seahorse_recipients_get (sctx);
 		
@@ -86,17 +87,19 @@ do_encrypt (SeahorseContext *sctx, gchar *path,
 		
 	new_path = func (sctx, path, recips, &err);
     seahorse_util_free_keys (recips);
-	g_free (path);
 		
 	if (!GPG_IS_OK (err)) {
-		seahorse_util_handle_error (err);
-		exit (1);
+		seahorse_util_handle_error (err, _("Couldn't encrypt \"%s\""), 
+            seahorse_util_uri_get_last (path));
+		ret = 1;
 	}
 	else {
 		show_info (g_strdup_printf (message, new_path));
 		g_free (new_path);
-		exit (0);
 	}
+
+    g_free (path);
+    exit (ret);
 }
 
 /* Initializes context and preferences, then loads key manager */
@@ -134,7 +137,8 @@ main (int argc, char **argv)
 		keys = seahorse_op_import_file (sctx, import, &err);
 		
 		if (!GPG_IS_OK (err)) {
-			seahorse_util_handle_error (err);
+			seahorse_util_handle_error (err, _("Couldn't import keys from \"%s\""),
+                    seahorse_util_uri_get_last (import));
 			return 1;
 		}
 		else {
@@ -145,14 +149,15 @@ main (int argc, char **argv)
 	}
  
 	else if (encrypt != NULL) {
-		do_encrypt (sctx, encrypt, seahorse_op_encrypt_file, _("Encrypt file is %s"));
+		do_encrypt (sctx, encrypt, seahorse_op_encrypt_file, _("Encrypted file is %s"));
     }
     
 	else if (sign != NULL) {
 		new_path = seahorse_op_sign_file (sctx, sign, &err);
 		
 		if (!GPG_IS_OK (err)) {
-			seahorse_util_handle_error (err);
+			seahorse_util_handle_error (err, _("Couldn't sign \"%s\""),
+                seahorse_util_uri_get_last (sign));
 			return 1;
 		}
 		else {
@@ -172,7 +177,8 @@ main (int argc, char **argv)
         new_path = seahorse_op_decrypt_verify_file (sctx, decrypt, &status, &err);
 		
 		if (!GPG_IS_OK (err)) {
-			seahorse_util_handle_error (err);
+			seahorse_util_handle_error (err, _("Couldn't decrypt \"%s\""),
+                    seahorse_util_uri_get_last (decrypt));
 			return 1;
 		}
 		else {
@@ -192,7 +198,8 @@ main (int argc, char **argv)
 		seahorse_op_verify_file (sctx, verify, &status, &err);
 		
 		if (!GPG_IS_OK (err)) {
-			seahorse_util_handle_error (err);
+			seahorse_util_handle_error (err, _("Couldn't verify \"%s\""),
+                seahorse_util_uri_get_last (verify));
 			return 1;
 		}
 		else {

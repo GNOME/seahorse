@@ -77,7 +77,7 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 	err = seahorse_key_pair_op_add_uid (swidget->sctx, SEAHORSE_KEY_PAIR (skey),
 		name, email, comment);
 	if (!GPG_IS_OK (err))
-		seahorse_util_handle_error (err);
+		seahorse_util_handle_error (err, _("Couldn't add user id"));
 	else
 		seahorse_widget_destroy (swidget);
 }
