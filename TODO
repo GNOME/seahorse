@@ -1,11 +1,10 @@
-TODO (last updated 2003-01-18)
+TODO (last updated 2003-01-25)
 ==============================
 
 Seahorse TODO list.
-Since seahorse releases are currently feature based,
-tasks are organized by MINOR version and have a feature focus.
-The goal is to complete the tasks, then release that version.
-Tasks are always subject to change
+Items are listed under the stable release version goal.
+For example, items under 0.8.0 will be implemented in the 0.7 series,
+and items under 1.0 will be implemented in the 0.9 series.
 
 A = assigned
 X = finished
@@ -14,64 +13,43 @@ X = finished
 Contact a maintainer if you'd like to be responsible for a task.
 Also check bugzilla for other tasks.
 
-0.6.0
------
-
-[A] Remove g_return_if_fail/g_assert if error not critical
-[X] Screenshots on website (Resp: Jacob)
-[X] Convert help to html; put on website (Resp: Jacob)
-[A] Update website (Resp: Jacob)
-[X] Convert package docs to gnome style (Resp: Jacob)
-[A] Test (Resp: All)
-[A] Package releases:
-	[A] deb (Resp: Jose)
-	[A] rpm (Resp: Jean)
-	[A] tar (Resp: Jacob)
-	[A] ebuild (Resp: Jacob)
-[A] Post news/update to: website, project site, sf gnome foundry,
-    sf espanol foundry, gnomedesktop.com, freshmeat.net, gnome software map,
-    seahorse lists, gnupg lists (Resp: Jacob)
-
-0.7.0 (Focus: Key management)
+0.8 (Focus: Key management)
 -----------------------------
 
-[ ] Require GPGME 0.4 (Resp: Jacob); update as necessary
+[?] Require GPGME 0.4 (Resp: Jacob)
 [ ] Require GnuPG 1.2.2 (Resp: Jacob)
 [ ] Key edit operations (Resp: Jacob)
-	[A] Add uid
+	[X] Add uid
 	[ ] Add subkey
-	[ ] Sign key
+	[ ] Sign key (wait for signature listing)
 	[?] Delete subkey
 	[?] Change subkey expires
 	[?] Add revoker
-	[?] Delete signature
-	[?] Revoke signature
+	[?] Delete signature (requires gpgme 0.4)
+	[?] Revoke signature (requires gpgme 0.4)
 	[?] Revoke subkey
 	[?] Delete subkey
-	[ ] Delete uid
-	[ ] Set primary uid
+	[ ] Delete uid (requires gpg 1.2.2)
+	[ ] Set primary uid (requires gpg 1.2.2)
 	[?] Add photo id
 	[?] Show photo id
-[A] Add necessary dialogs for ops (Resp: Jacob)
-[A] Update key properties for operations (Resp: Jacob)
-[A] Update key for operations (Resp: Jacob)
-[A] Update objects listening to key (Resp: Jacob)
-[ ] Show key signatures (Resp: Jacob)
+[ ] Show key signatures (Resp: Jacob) (requires gpgme 0.4)
+[ ] Show user IDs instead of subkeys in key manager (Resp: Jacob)
 [?] Export key to server
 [?] Import key from server
 [A] Make libseahorse; comment with gtk-doc (Resp: Jacob)
 [ ] Context gconf listener (Resp: Jacob)
 [ ] Error check gconf & gnome help (Resp: Jacob)
 [ ] Nice fingerprint (Resp: Jacob)
-[ ] Encrypt & Sign operation; update as necessary
-[ ] Update help with new usage & more concepts
-[ ] Icons for text editor popup
-[ ] Don't list disabled or non-capable keys for encryption recipients
+[ ] Encrypt & Sign operation; update as necessary (Resp: Jacob)
+[ ] Update help with new usage & more concepts (Resp: Jacob & Gnome Doc Team)
+[ ] Icons for text editor popup (Resp: Jacob)
+[A] Don't list disabled or non-capable keys for encryption recipients (Resp: Jacob)
+[A] Key sorting (Resp: Jacob)
 
-0.9.0 (Focus: Gnome integration & usability)
+1.0 (Focus: Gnome integration & usability)
 --------------------------------------------
 
-[ ] Key sorting (Resp: Jacob)
 [ ] Command line operations (Resp: Jacob)
 [ ] Nautilus component (Resp: Jacob)
 [ ] Drag data in = import (Resp: Jacob)
