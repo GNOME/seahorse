@@ -397,7 +397,7 @@ create_auth_window (SeahorseAgentPassReq *pr)
         gtk_box_pack_start (GTK_BOX (box), w, TRUE, FALSE, 0);
     }
 
-    w = gtk_label_new (_("The password is cached in memory."));
+    w = gtk_label_new (_("The passphrase is cached in memory."));
     gtk_misc_set_alignment (GTK_MISC (w), 0.0, 0.5);
     gtk_label_set_line_wrap (GTK_LABEL (w), TRUE);
     gtk_box_pack_start (GTK_BOX (box), w, TRUE, FALSE, 0);

@@ -94,8 +94,8 @@ seahorse_agent_actions_getpass (SeahorseAgentConn * rq, gchar * id,
     memset (pr, 0, sizeof (*pr));
     pr->id = id ? g_strdup (id) : NULL;
     pr->errmsg = errmsg ? g_strdup (errmsg) : NULL;
-    pr->prompt = g_strdup (prompt ? prompt : _("Password:"));
-    pr->description = g_strdup (desc ? desc : _("Please enter a password to use."));
+    pr->prompt = g_strdup (prompt ? prompt : _("Passphrase:"));
+    pr->description = g_strdup (desc ? desc : _("Please enter a passphrase to use."));
     pr->request = rq;
     g_queue_push_head (g_queue, pr);
 

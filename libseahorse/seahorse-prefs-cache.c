@@ -412,7 +412,7 @@ seahorse_prefs_cache (SeahorseContext *ctx, SeahorseWidget *widget)
     
     /* We disable the agent preferences completely */
     case AGENT_OTHER:
-        g_message (_("Another password caching agent is running. Disabling cache preferences."));
+        g_message (_("Another passphrase caching agent is running. Disabling cache preferences."));
         w = glade_xml_get_widget (widget->xml, "notebook");
         g_return_if_fail (w != NULL);
         gtk_notebook_remove_page (GTK_NOTEBOOK (w), 1);
