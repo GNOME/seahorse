@@ -87,65 +87,6 @@ new_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 	seahorse_generate_druid_show (swidget->sctx);
 }
 
-/* Setup our file types on a file chooser dialog */
-static void
-setup_file_types (GtkFileChooser* dialog)
-{
-    GtkFileFilter* filter = gtk_file_filter_new ();
-    gtk_file_filter_set_name (filter, _("All PGP key files"));
-    gtk_file_filter_add_pattern (filter, "*.asc");    
-    gtk_file_filter_add_pattern (filter, "*.key");    
-    gtk_file_filter_add_pattern (filter, "*.pkr");    
-    gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);    
-    gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dialog), filter);
-
-    filter = gtk_file_filter_new ();
-    gtk_file_filter_set_name (filter, _("All files"));
-    gtk_file_filter_add_pattern (filter, "*");    
-    gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);    
-}
-
-/* Setup our file types on a file chooser dialog */
-static void
-setup_backup_file_types (GtkFileChooser* dialog)
-{
-    GtkFileFilter* filter;
-    int i;
-    
-    static const char *archive_mime_type[] = {
-        "application/x-ar",
-        "application/x-arj",
-        "application/x-bzip",
-        "application/x-bzip-compressed-tar",
-        "application/x-cd-image",
-        "application/x-compress",
-        "application/x-compressed-tar",
-        "application/x-gzip",
-        "application/x-java-archive",
-        "application/x-jar",
-        "application/x-lha",
-        "application/x-lzop",
-        "application/x-rar",
-        "application/x-rar-compressed",
-        "application/x-tar",
-        "application/x-zoo",
-        "application/zip",
-        "application/x-7zip"
-    };
-    
-    filter = gtk_file_filter_new ();
-    gtk_file_filter_set_name (filter, _("Archive files"));
-    for (i = 0; i < G_N_ELEMENTS (archive_mime_type); i++)
-        gtk_file_filter_add_mime_type (filter, archive_mime_type[i]);
-    gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);    
-    gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dialog), filter);
-
-    filter = gtk_file_filter_new ();
-    gtk_file_filter_set_name (filter, _("All files"));
-    gtk_file_filter_add_pattern (filter, "*");    
-    gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);    
-}
-
 /* Loads import dialog */
 static void
 import_activate (GtkWidget *widget, SeahorseWidget *swidget)
@@ -159,21 +100,11 @@ import_activate (GtkWidget *widget, SeahorseWidget *swidget)
     sksrc = seahorse_context_get_key_source (swidget->sctx);
     g_return_if_fail (sksrc != NULL);
     
-    dialog = gtk_file_chooser_dialog_new (_("Import Key"), 
-                GTK_WINDOW(glade_xml_get_widget (swidget->xml, "key-manager")),
-                GTK_FILE_CHOOSER_ACTION_OPEN, 
-                GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
-                NULL);
+    dialog = seahorse_util_chooser_open_new (_("Import Key"), 
+                GTK_WINDOW(glade_xml_get_widget (swidget->xml, "key-manager")));
+    seahorse_util_chooser_show_key_files (dialog);
 
-    setup_file_types (GTK_FILE_CHOOSER (dialog));
-    gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (dialog), FALSE);
-     
-    if(gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
-        uri = gtk_file_chooser_get_uri (GTK_FILE_CHOOSER (dialog));
-        
-    gtk_widget_destroy (dialog);
-
+    uri = seahorse_util_chooser_open_prompt (dialog);
     if(uri) {
         keys = seahorse_op_import_file (sksrc, uri, &err);
         
@@ -268,19 +199,11 @@ export_activate (GtkWidget *widget, SeahorseWidget *swidget)
     GError *err = NULL;
     GList *keys;
     
-    dialog = gtk_file_chooser_dialog_new (_("Export Key"), 
-                GTK_WINDOW(glade_xml_get_widget (swidget->xml, "key-manager")),
-                GTK_FILE_CHOOSER_ACTION_SAVE, 
-                GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
-                NULL);
-
-    setup_file_types (GTK_FILE_CHOOSER(dialog));
-    gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (dialog), FALSE);
+    dialog = seahorse_util_chooser_save_new (_("Export Key"), 
+                GTK_WINDOW(glade_xml_get_widget (swidget->xml, "key-manager")));
+    seahorse_util_chooser_show_key_files (dialog);
      
-    uri = seahorse_util_uri_choose_save (GTK_FILE_CHOOSER_DIALOG (dialog));
-    gtk_widget_destroy (dialog);
-
+    uri = seahorse_util_chooser_save_prompt (dialog);
     if(uri) {
         keys = seahorse_key_store_get_selected_keys (GTK_TREE_VIEW (
             glade_xml_get_widget (swidget->xml, KEY_LIST)));
@@ -306,19 +229,11 @@ backup_activate (GtkWidget *widget, SeahorseWidget *swidget)
     gchar *ext, *t;
     const gchar* home_dir = NULL;
     
-	dialog = gtk_file_chooser_dialog_new (_("Backup Keyrings to Archive"), 
-                            GTK_WINDOW(glade_xml_get_widget (swidget->xml, "key-manager")),
-                            GTK_FILE_CHOOSER_ACTION_SAVE, 
-                            GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                            GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
-                            NULL);
-	    	    	    
-    setup_backup_file_types (GTK_FILE_CHOOSER (dialog));
-    gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (dialog), TRUE);
+    dialog = seahorse_util_chooser_save_new (_("Backup Keyrings to Archive"), 
+                GTK_WINDOW(glade_xml_get_widget (swidget->xml, "key-manager")));
+    seahorse_util_chooser_show_archive_files (dialog);	    	    	    
 
-    uri = seahorse_util_uri_choose_save (GTK_FILE_CHOOSER_DIALOG (dialog));
-    gtk_widget_destroy (dialog);
-
+    uri = seahorse_util_chooser_save_prompt (dialog);
     if(uri)  {	    	
        
         /* Save the extension */

@@ -90,7 +90,19 @@ gchar**     seahorse_util_uris_expand       (const gchar **uris);
 gboolean    seahorse_util_uris_package      (const gchar* package, 
                                              const gchar** uris);
 
-gchar*      seahorse_util_uri_choose_save   (GtkFileChooserDialog *chooser);
+GtkWidget*  seahorse_util_chooser_open_new              (const gchar *title,
+                                                         GtkWindow *parent);
+
+GtkWidget*  seahorse_util_chooser_save_new              (const gchar *title,
+                                                         GtkWindow *parent);
+
+void        seahorse_util_chooser_show_key_files        (GtkWidget *dialog);
+
+void        seahorse_util_chooser_show_archive_files    (GtkWidget *dialog);
+                                                 
+gchar*      seahorse_util_chooser_open_prompt           (GtkWidget *dialog);
+
+gchar*      seahorse_util_chooser_save_prompt           (GtkWidget *dialog);
 
 gboolean	seahorse_util_check_suffix		(const gchar		*path,
                                              SeahorseSuffix     suffix);

@@ -710,22 +710,106 @@ seahorse_util_uris_package (const gchar* package, const char** uris)
     return TRUE;        
 }
 
+GtkWidget*
+seahorse_util_chooser_save_new (const gchar *title, GtkWindow *parent)
+{
+    GtkWidget *dialog;
+    
+    dialog = gtk_file_chooser_dialog_new (title, 
+                parent, GTK_FILE_CHOOSER_ACTION_SAVE, 
+                GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
+                NULL);
+
+    gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (dialog), FALSE);
+    return dialog;
+}
+
+GtkWidget*
+seahorse_util_chooser_open_new (const gchar *title, GtkWindow *parent)
+{
+    GtkWidget *dialog;
+    
+    dialog = gtk_file_chooser_dialog_new (title, 
+                parent, GTK_FILE_CHOOSER_ACTION_OPEN, 
+                GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+                NULL);
+
+    gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (dialog), FALSE);
+    return dialog;
+}
+void
+seahorse_util_chooser_show_key_files (GtkWidget *dialog)
+{
+    GtkFileFilter* filter = gtk_file_filter_new ();
+    gtk_file_filter_set_name (filter, _("All PGP key files"));
+    gtk_file_filter_add_mime_type (filter, "application/pgp-keys");    
+    gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);    
+    gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dialog), filter);
+
+    filter = gtk_file_filter_new ();
+    gtk_file_filter_set_name (filter, _("All files"));
+    gtk_file_filter_add_pattern (filter, "*");    
+    gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);       
+}
+    
+void
+seahorse_util_chooser_show_archive_files (GtkWidget *dialog)
+{
+    GtkFileFilter* filter;
+    int i;
+    
+    static const char *archive_mime_type[] = {
+        "application/x-ar",
+        "application/x-arj",
+        "application/x-bzip",
+        "application/x-bzip-compressed-tar",
+        "application/x-cd-image",
+        "application/x-compress",
+        "application/x-compressed-tar",
+        "application/x-gzip",
+        "application/x-java-archive",
+        "application/x-jar",
+        "application/x-lha",
+        "application/x-lzop",
+        "application/x-rar",
+        "application/x-rar-compressed",
+        "application/x-tar",
+        "application/x-zoo",
+        "application/zip",
+        "application/x-7zip"
+    };
+    
+    filter = gtk_file_filter_new ();
+    gtk_file_filter_set_name (filter, _("Archive files"));
+    for (i = 0; i < G_N_ELEMENTS (archive_mime_type); i++)
+        gtk_file_filter_add_mime_type (filter, archive_mime_type[i]);
+    gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);    
+    gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dialog), filter);
+
+    filter = gtk_file_filter_new ();
+    gtk_file_filter_set_name (filter, _("All files"));
+    gtk_file_filter_add_pattern (filter, "*");    
+    gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);   
+}
+        
 gchar*      
-seahorse_util_uri_choose_save (GtkFileChooserDialog *chooser)
+seahorse_util_chooser_save_prompt (GtkWidget *dialog)
 {
     GtkWidget* edlg;
     gchar *uri = NULL;
     
-    while (gtk_dialog_run (GTK_DIALOG (chooser)) == GTK_RESPONSE_ACCEPT) {
+    while (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT) {
      
-        uri = gtk_file_chooser_get_uri(GTK_FILE_CHOOSER (chooser));
+        uri = gtk_file_chooser_get_uri(GTK_FILE_CHOOSER (dialog));
 
         if (uri == NULL)
             continue;
             
         if (seahorse_util_uri_exists (uri)) {
 
-            edlg = gtk_message_dialog_new_with_markup (GTK_WINDOW (chooser),
+            edlg = gtk_message_dialog_new_with_markup (GTK_WINDOW (dialog),
                         GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_QUESTION,
                         GTK_BUTTONS_NONE, _("<b>A file already exists with this name.</b>\n\nDo you want to replace it with a new file?"));
             gtk_dialog_add_buttons (GTK_DIALOG (edlg), 
@@ -746,9 +830,21 @@ seahorse_util_uri_choose_save (GtkFileChooserDialog *chooser)
             break;
     }
   
+    gtk_widget_destroy (dialog);
     return uri;
 }
 
+gchar*      
+seahorse_util_chooser_open_prompt (GtkWidget *dialog)
+{
+    gchar *uri = NULL;
+    
+    if(gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
+        uri = gtk_file_chooser_get_uri (GTK_FILE_CHOOSER (dialog));
+        
+    gtk_widget_destroy (dialog);
+    return uri;
+}
 
 /**
  * seahorse_util_check_suffix:
@@ -808,21 +904,14 @@ seahorse_util_add_suffix (gpgme_ctx_t ctx, const gchar *path,
     if (prompt && seahorse_util_uri_exists (uri)) {
             
         t = g_strdup_printf (prompt, seahorse_util_uri_get_last (uri));
-        dialog = gtk_file_chooser_dialog_new (t, 
-                    NULL, GTK_FILE_CHOOSER_ACTION_SAVE, 
-                    GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                    GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
-                    NULL);
+        dialog = seahorse_util_chooser_save_new (t, NULL);
+        seahorse_util_chooser_show_key_files (dialog);
         g_free (t);
-
-        gtk_file_chooser_set_uri (GTK_FILE_CHOOSER (dialog), uri);
-        gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (dialog), FALSE);
 
         g_free (uri);                
         uri = NULL;
             
-        uri = seahorse_util_uri_choose_save (GTK_FILE_CHOOSER_DIALOG (dialog));
-        gtk_widget_destroy (dialog);
+        uri = seahorse_util_chooser_save_prompt (dialog);
     }
 
     return uri;         
@@ -849,21 +938,14 @@ seahorse_util_remove_suffix (const gchar *path, const gchar *prompt)
     if (prompt && seahorse_util_uri_exists (uri)) {
             
         t = g_strdup_printf (prompt, seahorse_util_uri_get_last (uri));
-        dialog = gtk_file_chooser_dialog_new (t, 
-                    NULL, GTK_FILE_CHOOSER_ACTION_SAVE, 
-                    GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                    GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
-                    NULL);
+        dialog = seahorse_util_chooser_save_new (t, NULL);
+        seahorse_util_chooser_show_key_files (dialog);
         g_free (t);
-
-        gtk_file_chooser_set_uri (GTK_FILE_CHOOSER (dialog), uri);
-        gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (dialog), FALSE);
 
         g_free (uri);                
         uri = NULL;
             
-        uri = seahorse_util_uri_choose_save (GTK_FILE_CHOOSER_DIALOG (dialog));
-        gtk_widget_destroy (dialog);
+        uri = seahorse_util_chooser_save_prompt (dialog);
     }   
     
     return uri;
