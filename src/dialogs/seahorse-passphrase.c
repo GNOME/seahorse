@@ -34,6 +34,7 @@ seahorse_passphrase_get (gpointer ctx, const gchar *desc, gpointer *r_hd)
 {
 	GtkWidget *dialog, *vbox, *description, *entry;
 	gint response;
+	gchar *pass;
 	
 	/* If need pass */
 	if (desc) {
@@ -58,16 +59,26 @@ seahorse_passphrase_get (gpointer ctx, const gchar *desc, gpointer *r_hd)
 		gtk_widget_show_all (dialog);
 		
 		response = gtk_dialog_run (GTK_DIALOG (dialog));
-		gtk_widget_hide (dialog);
+		//pass = g_strdup (gtk_entry_get_text (GTK_ENTRY (entry)));
+		gtk_widget_destroy (dialog);
 		
 		/* If entered pass */
-		if (response == GTK_RESPONSE_OK)
-			return (gtk_entry_get_text (GTK_ENTRY (entry)));
+		if (response == GTK_RESPONSE_OK) {
+			*r_hd = pass;
+			return pass;
+		}
 		/* Else cancel op */
 		else {
 			gpgme_cancel (ctx);
+			g_free (pass);
 			return "";
 		}
+	}
+	else if (*r_hd) {
+		pass = *r_hd;
+		g_free (pass);
+		*r_hd = NULL;
+		return NULL;
 	}
 	else
 		return NULL;

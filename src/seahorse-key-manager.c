@@ -153,7 +153,7 @@ about_activate (GtkWidget *widget, SeahorseWidget *swidget)
 		return;
 	}
 
-	pixbuf = gdk_pixbuf_new_from_file (SEAHORSE_GLADEDIR "seahorse.png", NULL);
+	pixbuf = gdk_pixbuf_new_from_file (PIXMAPSDIR "seahorse.png", NULL);
 	if (pixbuf != NULL) {
 		GdkPixbuf *temp_pixbuf = NULL;
 		

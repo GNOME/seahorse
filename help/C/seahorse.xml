@@ -7,6 +7,7 @@
 <!ENTITY date "February 2003">
 <!ENTITY app "<application>seahorse</application>">
 <!ENTITY key "<glossterm linkend='key'>key</glossterm>">
+<!ENTITY keys "<glossterm baseform='key' linkend='key'>keys</glossterm>">
 <!ENTITY secret "<glossterm linkend='secret-key'>secret key</glossterm>">
 <!ENTITY subkey "<glossterm linkend='key-subkey'>subkey</glossterm>">
 <!ENTITY userid "<glossterm linkend='key-userid'>user ID</glossterm>">
@@ -117,13 +118,13 @@
 				<term>Toolbar.</term>
 				<listitem>
 					<para>The toolbar only contains commands that affect
-					<glossterm baseform="key" linkend="key">keys</glossterm>.</para>
+					&keys;.</para>
 				</listitem>
 			</varlistentry>
 			<varlistentry>
 				<term>Key List.</term>
 				<listitem>
-					<para>The key list shows each <glossterm baseform="key" linkend="key">keys</glossterm> in your
+					<para>The key list shows each &keys; in your
 					<glossterm linkend="key-ring">key ring</glossterm>. If a
 					&key; has multiple
 					<glossterm baseform="user ID" linkend="key-userid">User IDs</glossterm>,
@@ -242,11 +243,12 @@ which the application is designed. -->
 		otherwise the process will be interrupted the &key; will not be generated.</caution>
 	</sect2>
 	<sect2 id="import">
-		<title>Importing Keys</title>
-		<para>To <glossterm>import</glossterm> <glossterm>keys</glossterm>, choose
+		<title>Import</title>
+		<para>To <glossterm linkend="op-import">import</glossterm>
+		&keys;, choose
 		<menuchoice><guimenu>File</guimenu><guimenuitem>Open...</guimenuitem></menuchoice>
 		from the <guilabel>Key Manager</guilabel>.
-		The <guilabel>Import Keys</guilabel> dialog is displayed.
+		The <guilabel>Import Keys</guilabel> dialog is displayed.</para>
 		<figure id="import-dlg">
 			<title>Import Dialog</title>
 			<screenshot><mediaobject><imageobject>
@@ -255,34 +257,39 @@ which the application is designed. -->
 		</figure>
 		<variablelist>
 			<varlistentry>
-				<term>Import from a file</term>
+				<term>Import from File</term>
 				<listitem>
-					<para>To <glossterm>import</glossterm> <glossterm>keys</glossterm>
+					<para>To <glossterm>import</glossterm> &keys;
 					from a file, select <guilabel>Import from File</guilabel>,
 					choose a file, then click <guibutton>OK</guibutton>.</para>
 				</listitem>
 			</varlistentry>
 			<varlistentry>
-				<term>Import from text</term>
+				<term>Import from Server</term>
 				<listitem>
-					<para>To <glossterm>import</glossterm> <glossterm>keys</glossterm>
-					from text, select <guilabel>Import from Text</guilabel>,
-					paste the text into the text area, then click <guibutton>OK</guibutton>.</para>
-					<warning>The text must be <glossterm>ascii armored</glossterm>
-					in order to be imported successfully.</warning>
+					<para>Feature not yet available</para>
 				</listitem>
 			</varlistentry>
-		</variablelist></para>
+			<varlistentry>
+				<term>Import from Text</term>
+				<listitem>
+					<para>To <glossterm linkend="op-import">import</glossterm> &keys;
+					from text, select <guilabel>Import from Text</guilabel>,
+					paste the text into the text area, then click <guibutton>OK</guibutton>.</para>
+					<warning>The text must be in <xref linkend="ascii-armor"/> encoding in order to be
+					<glossterm baseform="import" linkend="op-import">imported</glossterm> successfully.</warning>
+				</listitem>
+			</varlistentry>
+		</variablelist>
 	</sect2>
 	<sect2 id="export">
-		<title>Exporting a Key</title>
-		<para>To <glossterm>export</glossterm> a <glossterm>key</glossterm> from the <guilabel>Key Manager</guilabel>,
-		select a <glossterm>key</glossterm> from the list and then choose 
+		<title>Export</title>
+		<para>To <glossterm linkend="op-export">export</glossterm> a &key;
+		from the <guilabel>Key Manager</guilabel>, select a &key; from the list and choose 
 		<menuchoice><guimenu>File</guimenu><guimenuitem>Save As...</guimenuitem></menuchoice>
-		or click <guibutton>Save As</guibutton>.
-		You can do the same from the <xref linkend="key-properties"/> of the
-		<glossterm>key</glossterm> you want to <glossterm>export</glossterm>.
-		The <guilabel>Export Key</guilabel> dialog is displayed.
+		or click <guibutton>Save As</guibutton>. You can do the same from the <xref linkend="key-properties"/> of the
+		&key; you want to <glossterm linkend="op-export">export</glossterm>.
+		The <guilabel>Export Key</guilabel> dialog is displayed.</para>
 		<figure id="export-dlg">
 			<title>Export Dialog</title>
 			<screenshot><mediaobject><imageobject>
@@ -293,28 +300,35 @@ which the application is designed. -->
 			<varlistentry>
 				<term>Export to File</term>
 				<listitem>
-					<para>To <glossterm>export</glossterm> a <glossterm>key</glossterm> to a file,
+					<para>To <glossterm linkend="op-export">export</glossterm> a &key; to a file,
 					select <guilabel>Export to File</guilabel>,
 					choose the filename, then click <guibutton>OK</guibutton>.</para>
 				</listitem>
 			</varlistentry>
 			<varlistentry>
-				<term>Export to Text</term>
+				<term>Export to Server</term>
 				<listitem>
-					<para>To <glossterm>export</glossterm> a <glossterm>key</glossterm> to text,
-					select <guilabel>Export to Text</guilabel>, then click <guibutton>OK</guibutton>.
-					The exported <glossterm>key</glossterm> will be in the text area.</para>
-					<warning>If <xref linkend="ascii-armor"/> is not enabled,
-					exported text will not display properly.</warning>
+					<para>Feature not yet available</para>
 				</listitem>
 			</varlistentry>
-		</variablelist></para>
+			<varlistentry>
+				<term>Export to Text</term>
+				<listitem>
+					<para>To <glossterm linkend="op-export">export</glossterm> a &key; to text,
+					select <guilabel>Export to Text</guilabel>, then click <guibutton>OK</guibutton>.
+					The exported &key; will be in the text area.</para>
+					<warning>If <xref linkend="ascii-armor"/> is not enabled,
+					<glossterm baseform="export" linkend="op-export">exported</glossterm>
+					text will not display properly.</warning>
+				</listitem>
+			</varlistentry>
+		</variablelist>
 	</sect2>
 	<sect2 id="text-editor">
 		<title>Text Editor</title>
 		<para>To use the text editor, choose
 		<menuchoice><guimenu>File</guimenu><guimenuitem>Text Editor</guimenuitem></menuchoice>
-		from the <guilabel>Key Manager</guilabel>.
+		from the <guilabel>Key Manager</guilabel>.</para>
 		<figure id="text-editor-win">
 			<title>&app; Text Editor</title>
 			<screenshot><mediaobject><imageobject>
@@ -323,16 +337,15 @@ which the application is designed. -->
 		</figure>
 		<warning><xref linkend="ascii-armor"/> should be enabled while using the <guilabel>Text Editor</guilabel>.
 		Otherwise, text will not be displayed properly, rendering the <guilabel>Text Editor</guilabel> useless.</warning>
-		The following operations are available for text:
+		<para>The following operations are available for text:</para>
 		<variablelist>
 			<varlistentry>
 				<term>Import</term>
 				<listitem>
 					<para>Select
 					<menuchoice><guimenu>Edit</guimenu><guimenuitem>Import</guimenuitem></menuchoice>,
-					click <guibutton>Import</guibutton>,
-					or right-click and select <guibutton>Import</guibutton>.
-					This will <glossterm>import</glossterm> any <glossterm>keys</glossterm> contained in the text.</para>
+					click <guibutton>Import</guibutton>, or right-click and select <guibutton>Import</guibutton>.
+					This will <glossterm linkend="op-import">import</glossterm> any &keys; contained in the text.</para>
 				</listitem>
 			</varlistentry>
 			<varlistentry>
@@ -341,8 +354,9 @@ which the application is designed. -->
 					<para>Select
 					<menuchoice><guimenu>Edit</guimenu><guimenuitem>Export</guimenuitem></menuchoice>.
 					The <xref linkend="recipients"/> dialog will appear,
-					in which you can select <glossterm>keys</glossterm> to <glossterm>export</glossterm>.
-					When finished, the chosen <glossterm>keys</glossterm> will be exported to the text.</para>
+					in which you can select &keys; to <glossterm linkend="op-export">export</glossterm>.
+					When finished, the chosen &keys; will be
+					<glossterm baseform="export" linkend="op-export">exported</glossterm> to the text.</para>
 				</listitem>
 			</varlistentry>
 			<varlistentry>
@@ -350,10 +364,10 @@ which the application is designed. -->
 				<listitem>
 					<para>Select
 					<menuchoice><guimenu>Edit</guimenu><guimenuitem>Sign</guimenuitem></menuchoice>,
-					click <guibutton>Sign</guibutton>,
-					or right-click and select <guibutton>Sign</guibutton>.
+					click <guibutton>Sign</guibutton>, or right-click and select <guibutton>Sign</guibutton>.
 					After confirming the <xref linkend="passphrase"/> to the <xref linkend="default-key"/>,
-					the text will be <glossterm>signed</glossterm>.</para>
+					the text will be <glossterm baseform="sign" linkend="op-sign">signed</glossterm>
+					with the <xref linkend="default-key"/>.</para>
 				</listitem>
 			</varlistentry>
 			<varlistentry>
@@ -361,10 +375,10 @@ which the application is designed. -->
 				<listitem>
 					<para>Select
 					<menuchoice><guimenu>Edit</guimenu><guimenuitem>Clear Sign</guimenuitem></menuchoice>,
-					click <guibutton>Clear Sign</guibutton>,
-					or right-click and select <guibutton>Clear Sign</guibutton>.
+					click <guibutton>Clear Sign</guibutton>, or right-click and select <guibutton>Clear Sign</guibutton>.
 					After confirming the <xref linkend="passphrase"/> to the <xref linkend="default-key"/>,
-					the text will be <glossterm>clear signed</glossterm>.</para>
+					the text will be <glossterm baseform="sign" linkend="op-sign">clear signed</glossterm>
+					with the <xref linkend="default-key"/>.</para>
 				</listitem>
 			</varlistentry>
 			<varlistentry>
@@ -372,24 +386,22 @@ which the application is designed. -->
 				<listitem>
 					<para>Select
 					<menuchoice><guimenu>Edit</guimenu><guimenuitem>Encrypt</guimenuitem></menuchoice>,
-					click <guibutton>Encrypt</guibutton>,
-					or right-click and select <guibutton>Encrypt</guibutton>.
+					click <guibutton>Encrypt</guibutton>, or right-click and select <guibutton>Encrypt</guibutton>.
 					The <xref linkend="recipients"/> dialog will appear,
-					in which you can select the <glossterm>keys</glossterm> to <glossterm>encrypt</glossterm> to.
-					When finished, the text will be <glossterm>encrypted</glossterm> to the selected <glossterm>keys</glossterm>.</para>
+					in which you can select the &keys; to <glossterm linkend="op-encrypt">encrypt</glossterm> to.
+					When finished, the text will be
+					<glossterm baseform="encrypt" linkend="op-encrypt">encrypted</glossterm> to the selected &keys;.</para>
 				</listitem>
 			</varlistentry>
 			<varlistentry>
 				<term>Decrypt</term>
 				<listitem>
-					<caution>You must have access to the <glossterm>secret key</glossterm>
-					of one of the <glossterm>encryption keys</glossterm> in your
-					<glossterm>key ring</glossterm> in order to <glossterm>decrypt</glossterm> the text.</caution>
 					<para>Select
 					<menuchoice><guimenu>Edit</guimenu><guimenuitem>Decrypt</guimenuitem></menuchoice>,
-					click <guibutton>Decrypt</guibutton>,
-					or right-click and select <guibutton>Decrypt</guibutton> and enter the <xref linkend="passphrase"/>.
-					If successful, the text will be <glossterm>decrypted</glossterm>.</para>
+					click <guibutton>Decrypt</guibutton>, or right-click and select <guibutton>Decrypt</guibutton>
+					and enter the <xref linkend="passphrase"/> to one of the <xref linkend="recipients"/>
+					&keys;. If successful, the text will be
+					<glossterm baseform="decrypt" linkend="op-decrypt">decrypted</glossterm>.</para>
 				</listitem>
 			</varlistentry>
 			<varlistentry>
@@ -400,10 +412,13 @@ which the application is designed. -->
 					<glossterm>verify</glossterm> a <glossterm>signature</glossterm>.</caution>
 					<para>Select
 					<menuchoice><guimenu>Edit</guimenu><guimenuitem>Verify</guimenuitem></menuchoice>,
-					click <guibutton>Verify</guibutton>,
-					or right-click and select <guibutton>Verify</guibutton>.
+					click <guibutton>Verify</guibutton>, or right-click and select <guibutton>Verify</guibutton>.
 					If successful, the <xref linkend="signatures"/> dialog will appear.
-					Otherwise, you will receive an error regarding how <glossterm>verification</glossterm> failed.</para>
+					Otherwise, you will receive an error regarding how
+					<glossterm baseform="verify" linkend="op-verify">verification</glossterm> failed.</para>
+					<note>You must have the signing &key; in your <glossterm linkend="key-ring">key ring</glossterm>
+					in order to successfully <glossterm linkend="op-verify">verify</glossterm>
+					a <glossterm linkend="signature">signature</glossterm>.</note>
 				</listitem>
 			</varlistentry>
 			<varlistentry>
@@ -418,7 +433,7 @@ which the application is designed. -->
 					or right-click and select <guibutton>Decrypt and Verify</guibutton>.</para>
 				</listitem>
 			</varlistentry>
-		</variablelist></para>
+		</variablelist>
 	</sect2>
 	<sect2 id="file-manager">
 		<title>File Manager</title>
@@ -543,7 +558,7 @@ which the application is designed. -->
 			<para>You can disable a &key; by checking
 			<guibutton>Disabled</guibutton>. A disabled &key;
 			cannot be used for <glossterm linkend="op-encrypt">encryption</glossterm>.
-			Most <glossterm baseform="key" linkend="key">keys</glossterm> should be left enabled.</para>
+			Most &keys; should be left enabled.</para>
 		</sect3>
 		<sect3 id="change-owner-trust">
 			<title>Change Owner Trust</title>
@@ -799,8 +814,8 @@ which the application is designed. -->
 		<title>Ascii Armor</title>
 		<para>Checking <glossterm><guilabel>Ascii Armor</guilabel></glossterm>
 		will ensure that data is encoded as ASCII text instead of binary.
-		This is necessary for the <xref linkend="text-editor"/> and 
-		part of <xref linkend="export"/> functionality.</para>
+		This is necessary for the <xref linkend="text-editor"/> and any
+		other component using plain text.</para>
 	</sect2>
 	<sect2 id="text-mode">
 		<title>Text Mode</title>
@@ -927,6 +942,7 @@ manual, this is the place to put it. Alternatively, you can put this information
 				<glossterm>Key Signature</glossterm>
 				<glossdef>
 					<para>A key signature shows that the signer has validated that key.
+					Every key should have a self-signature, otherwise it is invalid.
 					To verify a key signature, one must have the signed key
 					and the signing key in the key ring.
 					Key signatures are used in calculating a key's validity.</para>
@@ -1115,6 +1131,12 @@ manual, this is the place to put it. Alternatively, you can put this information
 			</glossentry>
 			<glossentry id="op-encrypt">
 				<glossterm>Encrypt</glossterm>
+				<glossdef>
+					<para>Write me</para>
+				</glossdef>
+			</glossentry>
+			<glossentry id="op-export">
+				<glossterm>Export</glossterm>
 				<glossdef>
 					<para>Write me</para>
 				</glossdef>

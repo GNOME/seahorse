@@ -172,6 +172,9 @@ seahorse_widget_set_property (GObject *object, guint prop_id, const GValue *valu
 				G_CALLBACK (seahorse_widget_delete_event), swidget);
 			glade_xml_signal_connect_data (swidget->xml, "help",
 				G_CALLBACK (seahorse_widget_show_help), swidget);
+		
+			gtk_window_set_icon (GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)),
+				gdk_pixbuf_new_from_file (PIXMAPSDIR "seahorse.png", NULL));
 			break;
 		case PROP_CTX:
 			swidget->sctx = g_value_get_object (value);

@@ -2,6 +2,7 @@ SUBDIRS = dialogs
 
 gladedir = $(datadir)/seahorse/glade/
 localedir = $(datadir)/locale
+pixmapsdir = $(datadir)/pixmaps/
 
 bin_PROGRAMS = seahorse
 
@@ -11,7 +12,8 @@ INCLUDES = -I$(top_builddir) \
 	$(SEAHORSE_CFLAGS) \
 	-DDATA_DIR=\""$(datadir)"\" \
 	-DSEAHORSE_GLADEDIR=\""$(gladedir)"\" \
-	-DLOCALEDIR=\"$(localedir)\"
+	-DLOCALEDIR=\"$(localedir)\" \
+	-DPIXMAPSDIR=\""$(pixmapsdir)"\"
 
 seahorse_LDADD = \
 	dialogs/libdialogs.a \
