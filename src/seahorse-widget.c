@@ -140,7 +140,6 @@ seahorse_widget_finalize (GObject *gobject)
 	}
 	
 	g_signal_handlers_disconnect_by_func (swidget->sctx, seahorse_widget_destroyed, swidget);
-	g_signal_handlers_disconnect_by_func (swidget->sctx, seahorse_widget_show_status, swidget);
 	g_signal_handlers_disconnect_by_func (swidget->sctx, seahorse_widget_show_progress, swidget);
 	gtk_widget_destroy (glade_xml_get_widget (swidget->xml, swidget->name));
 	
@@ -200,8 +199,6 @@ seahorse_widget_set_property (GObject *object, guint prop_id, const GValue *valu
 				glade_xml_signal_connect_data (swidget->xml, "statusbar_activate",
 					G_CALLBACK (seahorse_widget_show_bar),
 					glade_xml_get_widget (swidget->xml, STATUS));
-				g_signal_connect_after (swidget->sctx, STATUS,
-					G_CALLBACK (seahorse_widget_show_status), swidget);
 			}
 			break;
 		default:
@@ -262,16 +259,6 @@ seahorse_widget_destroyed (GtkObject *object, SeahorseWidget *swidget)
 	seahorse_widget_destroy (swidget);
 }
 
-/* Shows status in the window's status bar */
-static void
-seahorse_widget_show_status (const SeahorseContext *sctx, const gchar *status, SeahorseWidget *swidget)
-{
-	GnomeAppBar *appbar;
-	
-	appbar = GNOME_APPBAR (glade_xml_get_widget (swidget->xml, STATUS));
-	gnome_appbar_set_status (appbar, status);
-}
-
 /* Toggles display of a window bar */
 static void
 seahorse_widget_show_bar (GtkCheckMenuItem *checkmenuitem, GtkWidget *bar)
@@ -287,8 +274,10 @@ seahorse_widget_show_progress (SeahorseContext *sctx, const gchar *op, gdouble f
 {
 	GnomeAppBar *status;
 	GtkProgressBar *progress;
+	GtkWidget *widget;
 	
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, swidget->name), FALSE);
+	widget = glade_xml_get_widget (swidget->xml, swidget->name);
+	gtk_widget_set_sensitive (widget, FALSE);
 	
 	/* do status */
 	if (swidget->component) {
@@ -296,18 +285,20 @@ seahorse_widget_show_progress (SeahorseContext *sctx, const gchar *op, gdouble f
 		gnome_appbar_set_status (status, op);
 		progress = gnome_appbar_get_progress (status);
 		
-		if (fract <= 0) {
+		if (fract <= 1 && fract > 0)
+			gtk_progress_bar_set_fraction (progress, fract);
+		else if (fract != -1) {
 			gtk_progress_bar_set_pulse_step (progress, 0.05);
 			gtk_progress_bar_pulse (progress);
 		}
 		else
-			gtk_progress_bar_set_fraction (progress, fract);
+			gtk_progress_bar_set_fraction (progress, 0);
 	}
 	
 	while (g_main_context_pending (NULL))
 		g_main_context_iteration (NULL, TRUE);
 	
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, swidget->name), fract == -1);
+	gtk_widget_set_sensitive (widget, fract == -1);
 }
 
 /* Common function for creating new widget */

@@ -39,7 +39,6 @@ struct _SeahorseContextPrivate
 };
 
 enum {
-	STATUS,
 	ADD,
 	PROGRESS,
 	LAST_SIGNAL
@@ -97,12 +96,9 @@ seahorse_context_class_init (SeahorseContextClass *klass)
 	
 	gobject_class->finalize = seahorse_context_finalize;
 	
-	klass->status = NULL;
 	klass->add = NULL;
+	klass->progress = NULL;
 	
-	context_signals[STATUS] = g_signal_new ("status", G_OBJECT_CLASS_TYPE (gobject_class),
-		G_SIGNAL_RUN_LAST,  G_STRUCT_OFFSET (SeahorseContextClass, status),
-		NULL, NULL, g_cclosure_marshal_VOID__STRING, G_TYPE_NONE, 1, G_TYPE_STRING);
 	context_signals[ADD] = g_signal_new ("add", G_OBJECT_CLASS_TYPE (gobject_class),
 		G_SIGNAL_RUN_LAST, G_STRUCT_OFFSET (SeahorseContextClass, add),
 		NULL, NULL, g_cclosure_marshal_VOID__OBJECT, G_TYPE_NONE, 1, SEAHORSE_TYPE_KEY);
@@ -430,7 +426,6 @@ seahorse_context_show_status (SeahorseContext *sctx, const gchar *op, gboolean s
 	g_print ("%s\n", status);
 	
 	seahorse_context_show_progress (sctx, status, -1);
-	//g_signal_emit (G_OBJECT (sctx), context_signals[STATUS], 0, status);
 	
 	g_free (status);
 }

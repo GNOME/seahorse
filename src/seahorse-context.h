@@ -54,10 +54,6 @@ struct _SeahorseContextClass
 {
 	GtkObjectClass		parent_class;
 	
-	/* Signal emitted to show the status of an operation */
-	void 			(* status)			(const SeahorseContext	*sctx,
-								 const gchar		*op);
-	
 	/* Signal emitted when @skey has been added to @sctx */
 	void 			(* add)				(SeahorseContext	*sctx,
 								 SeahorseKey		*skey);
