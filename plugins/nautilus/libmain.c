@@ -6,8 +6,10 @@
 
 #include "seahorse-component.h"
 
-#define VIEW_IID_ENCRYPT "OAFIID:Seahorse_Component_Encrypt"
-#define VIEW_IID_DECRYPT "OAFIID:Seahorse_Component_Decrypt"
+#define VIEW_IID_ALL "OAFIID:Seahorse_Component_All"
+#define VIEW_IID_ENCRYPTED "OAFIID:Seahorse_Component_Encrypted"
+#define VIEW_IID_SIGNATURE "OAFIID:Seahorse_Component_Signature"
+#define VIEW_IID_KEYS "OAFIID:Seahorse_Component_Keys"
 
 static CORBA_Object
 image_shlib_make_object (PortableServer_POA poa, const gchar *iid,
@@ -21,8 +23,10 @@ image_shlib_make_object (PortableServer_POA poa, const gchar *iid,
 }
 
 static const BonoboActivationPluginObject plugin_list[] = {
-	{ VIEW_IID_ENCRYPT, image_shlib_make_object },
-	{ VIEW_IID_DECRYPT, image_shlib_make_object },
+	{ VIEW_IID_ALL, image_shlib_make_object },
+	{ VIEW_IID_ENCRYPTED, image_shlib_make_object },
+	{ VIEW_IID_SIGNATURE, image_shlib_make_object },
+	{ VIEW_IID_KEYS, image_shlib_make_object },
 	{ NULL }
 };
 

@@ -6,11 +6,6 @@
 
 #include "seahorse-component.h"
 
-/*
-#include <config.h>
-#include <stdlib.h>
-*/
-
 static gchar*
 get_path_from_url (const gchar *url)
 {
