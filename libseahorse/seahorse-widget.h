@@ -60,6 +60,8 @@ SeahorseWidget*	seahorse_widget_new			(gchar			*name,
 SeahorseWidget*	seahorse_widget_new_allow_multiple	(gchar			*name,
 							 SeahorseContext	*sctx);
 
+GtkWidget*      seahorse_widget_get_top     (SeahorseWidget     *swidget);
+
 void		seahorse_widget_destroy			(SeahorseWidget		*swidget);
 
 #endif /* __SEAHORSE_WIDGET_H__ */

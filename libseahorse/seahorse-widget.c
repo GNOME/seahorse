@@ -291,6 +291,22 @@ seahorse_widget_new_allow_multiple (gchar *name, SeahorseContext *sctx)
 }
 
 /**
+ * seahorse_widget_get_top
+ * @swidget: The seahorse widget
+ * 
+ * Return the top level widget in this seahorse widget
+ *
+ * Returns: The top level widget
+ **/
+GtkWidget*      
+seahorse_widget_get_top     (SeahorseWidget     *swidget)
+{
+    GtkWidget *widget = glade_xml_get_widget (swidget->xml, swidget->name);
+    g_return_val_if_fail (widget != NULL, NULL);
+    return widget;
+}
+ 
+/**
  * seahorse_widget_destroy:
  * @swidget: #SeahorseWidget to destroy
  *
