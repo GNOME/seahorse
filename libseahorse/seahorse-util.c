@@ -727,7 +727,7 @@ seahorse_util_uri_choose_save (GtkFileChooserDialog *chooser)
 
             edlg = gtk_message_dialog_new_with_markup (GTK_WINDOW (chooser),
                         GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_QUESTION,
-                        GTK_BUTTONS_NONE, _("<b>A file already exists with this name.</b>\n\nDo you want to replace it with the one you are saving?"));
+                        GTK_BUTTONS_NONE, _("<b>A file already exists with this name.</b>\n\nDo you want to replace it with a new file?"));
             gtk_dialog_add_buttons (GTK_DIALOG (edlg), 
                         GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
                         _("_Replace"), GTK_RESPONSE_ACCEPT, NULL);
@@ -778,18 +778,23 @@ seahorse_util_check_suffix (const gchar *path, SeahorseSuffix suffix)
  * @ctx: Gpgme Context
  * @path: Path of an existing file
  * @suffix: Suffix type
+ * @prompt: Overwrite prompt text
  *
  * Constructs a new path for a file based on @path plus a suffix determined by
  * @suffix and the ASCII Armor setting of @ctx. If ASCII Armor is enabled, the
  * suffix will be '.asc'. Otherwise the suffix will be '.gpg' if @suffix is
  * %SEAHORSE_CRYPT_SUFFIX or '.sig' if @suffix is %SEAHORSE_SIG_SUFFIX.
  *
- * Returns: A new path with the suffix appended to @path
+ * Returns: A new path with the suffix appended to @path. NULL if prompt cancelled
  **/
 gchar*
-seahorse_util_add_suffix (gpgme_ctx_t ctx, const gchar *path, SeahorseSuffix suffix)
+seahorse_util_add_suffix (gpgme_ctx_t ctx, const gchar *path, 
+                          SeahorseSuffix suffix, const gchar *prompt)
 {
-	gchar *ext;
+    GtkWidget *dialog;
+    const gchar *ext;
+    gchar *uri;
+    gchar *t;
 	
 	if (gpgme_get_armor (ctx) || suffix == SEAHORSE_ASC_SUFFIX)
 		ext = ASC;
@@ -798,21 +803,70 @@ seahorse_util_add_suffix (gpgme_ctx_t ctx, const gchar *path, SeahorseSuffix suf
 	else
 		ext = SIG;
 	
-	return g_strdup_printf ("%s%s", path, ext);
+	uri = g_strdup_printf ("%s%s", path, ext);
+    
+    if (prompt && seahorse_util_uri_exists (uri)) {
+            
+        t = g_strdup_printf (prompt, seahorse_util_uri_get_last (uri));
+        dialog = gtk_file_chooser_dialog_new (t, 
+                    NULL, GTK_FILE_CHOOSER_ACTION_SAVE, 
+                    GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                    GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
+                    NULL);
+        g_free (t);
+
+        gtk_file_chooser_set_uri (GTK_FILE_CHOOSER (dialog), uri);
+        gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (dialog), FALSE);
+
+        g_free (uri);                
+        uri = NULL;
+            
+        uri = seahorse_util_uri_choose_save (GTK_FILE_CHOOSER_DIALOG (dialog));
+        gtk_widget_destroy (dialog);
+    }
+
+    return uri;         
 }
 
 /**
  * seahorse_util_remove_suffix:
  * @path: Path with a suffix
+ * @prompt:Overwrite prompt text
  *
  * Removes a suffix from @path. Does not check if @path actually has a suffix.
  *
- * Returns: @path without a suffix
+ * Returns: @path without a suffix. NULL if prompt cancelled
  **/
 gchar*
-seahorse_util_remove_suffix (const gchar *path)
+seahorse_util_remove_suffix (const gchar *path, const gchar *prompt)
 {
-	return g_strndup (path, strlen (path) - 4);
+    GtkWidget *dialog;
+    gchar *uri;
+    gchar *t;
+
+	uri =  g_strndup (path, strlen (path) - 4);
+   
+    if (prompt && seahorse_util_uri_exists (uri)) {
+            
+        t = g_strdup_printf (prompt, seahorse_util_uri_get_last (uri));
+        dialog = gtk_file_chooser_dialog_new (t, 
+                    NULL, GTK_FILE_CHOOSER_ACTION_SAVE, 
+                    GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                    GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
+                    NULL);
+        g_free (t);
+
+        gtk_file_chooser_set_uri (GTK_FILE_CHOOSER (dialog), uri);
+        gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (dialog), FALSE);
+
+        g_free (uri);                
+        uri = NULL;
+            
+        uri = seahorse_util_uri_choose_save (GTK_FILE_CHOOSER_DIALOG (dialog));
+        gtk_widget_destroy (dialog);
+    }   
+    
+    return uri;
 }
 
 gchar**

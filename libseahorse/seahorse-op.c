@@ -268,40 +268,32 @@ encrypt_data_common (SeahorseKeySource *sksrc, GList *keys, gpgme_data_t plain,
 }
 
 /* common file encryption helper to encrypt @path to @recips using @func.
- * returns the encrypted file's path. */
-static gchar*
-encrypt_file_common (GList *keys, const gchar *path, EncryptFunc func, 
-                     gpgme_error_t *err)
+static void
+encrypt_file_common (GList *keys, const gchar *path, const gchar *epath,
+                     EncryptFunc func, gpgme_error_t *err)
 {
     SeahorseKeySource *sksrc;
 	gpgme_data_t plain, cipher;
 	gpgme_error_t error;
-	gchar *new_path = NULL;
 	
 	if (err == NULL)
 		err = &error;
 
     /* When S/MIME supported need to make sure all keys from the same source */       
-    g_return_val_if_fail (keys && SEAHORSE_IS_KEY (keys->data), NULL);
+    g_return_if_fail (keys && SEAHORSE_IS_KEY (keys->data));
     sksrc = seahorse_key_get_source (SEAHORSE_KEY (keys->data));
-    g_return_val_if_fail (sksrc != NULL, NULL);
+    g_return_if_fail (sksrc != NULL);
 
     plain = seahorse_vfs_data_create (path, FALSE, err);
-    g_return_val_if_fail (plain != NULL, NULL);
+    g_return_if_fail (plain != NULL);
  
 	cipher = encrypt_data_common (sksrc, keys, plain, func, FALSE, err);
-	g_return_val_if_fail (GPG_IS_OK (*err), NULL);
+	g_return_if_fail (GPG_IS_OK (*err));
 	/* write cipher to file */
-	new_path = seahorse_util_add_suffix (sksrc->ctx, path, SEAHORSE_CRYPT_SUFFIX);
-	*err = seahorse_util_write_data_to_file (new_path, cipher);
+	*err = seahorse_util_write_data_to_file (epath, cipher);
 	
-	/* free new_path if error */
-	if (!GPG_IS_OK (*err)) {
-		g_free (new_path);
-		g_return_val_if_reached (NULL);
-	}
-	
-	return new_path;
+	if (!GPG_IS_OK (*err)) 
+		g_return_if_reached ();
 }
 
 /* common text encryption helper to encrypt @text to @recips using @func.
@@ -335,19 +327,16 @@ encrypt_text_common (GList *keys, const gchar *text, EncryptFunc func,
  * seahorse_op_encrypt_file:
  * @keys: List of #SeahorseKey objects to encrypt to
  * @path: Path of file to encrypt
+ * @epath: Path of file to write encrypted data
  * @err: Optional error value
  *
  * Tries to encrypt the file @path to @recips, saving any errors in @err.
- * The encrypted file's encoding and suffix depends on the ASCII Armor setting of @sctx.
- * If ASCII Armor is enabled, the suffix will be '.asc'. Otherwise it will be '.gpg'.
- * @recips will be released upon completion.
- *
- * Returns: The path of the encrypted file or NULL if encryption fails
  **/
-gchar*
-seahorse_op_encrypt_file (GList *keys, const gchar *path, gpgme_error_t *err)
+void
+seahorse_op_encrypt_file (GList *keys, const gchar *path, const gchar *epath,
+                          gpgme_error_t *err)
 {
-	return encrypt_file_common (keys, path, gpgme_op_encrypt, err);
+	return encrypt_file_common (keys, path, epath, gpgme_op_encrypt, err);
 }
 
 /**
@@ -402,50 +391,40 @@ sign_data (SeahorseKeySource *sksrc, gpgme_data_t plain, gpgme_sig_mode_t mode,
  * seahorse_op_sign_file:
  * @signer: Key pair to sign with 
  * @path: Path of file to sign
+ * @spath: Where to write the signature
  * @err: Optional error value
  *
  * Tries to create a detached signature file for the file @path, saving any errors
- * in @err. If ASCII Armor is enabled, the signature file will have a suffix of '.asc',
- * otherwise the suffix will be '.sig'. Signing will be done by the default key
- * of @sctx.
- *
- * Returns: The path of the signature file or NULL if the operation fails
+ * in @err. 
  **/
-gchar*
+void
 seahorse_op_sign_file (SeahorseKeyPair *signer, const gchar *path, 
-                       gpgme_error_t *err)
+                       const gchar *spath, gpgme_error_t *err)
 {
     SeahorseKeySource *sksrc;
 	gpgme_data_t plain, sig;
 	gpgme_error_t error;
-	gchar *new_path = NULL;
 	
 	if (err == NULL)
 		err = &error;
 
     sksrc = seahorse_key_get_source (SEAHORSE_KEY (signer));
-    g_return_val_if_fail (sksrc != NULL, NULL);
+    g_return_if_fail (sksrc != NULL);
     
 	/* new data from file */
     plain = seahorse_vfs_data_create (path, FALSE, err);
-    g_return_val_if_fail (plain != NULL, NULL);
+    g_return_if_fail (plain != NULL);
   
     set_signer (signer);
     
 	/* get detached signature */
 	sig = sign_data (sksrc, plain, GPGME_SIG_MODE_DETACH, err);
-	g_return_val_if_fail (GPG_IS_OK (*err), NULL);
+	g_return_if_fail (GPG_IS_OK (*err));
 	/* write sig to file */
-	new_path = seahorse_util_add_suffix (sksrc->ctx, path, SEAHORSE_SIG_SUFFIX);
-	*err = seahorse_util_write_data_to_file (new_path, sig);
+	*err = seahorse_util_write_data_to_file (spath, sig);
 	
-	/* free new_path if error */
-	if (!GPG_IS_OK (*err)) {
-		g_free (new_path);
-		g_return_val_if_reached (NULL);
-	}
-	
-	return new_path;
+	if (!GPG_IS_OK (*err))
+		g_return_if_reached ();
 }
 
 /**
@@ -489,21 +468,20 @@ seahorse_op_sign_text (SeahorseKeyPair *signer, const gchar *text,
  * seahorse_op_encrypt_sign_file:
  * @keys: List of #SeahorseKey objects to encrypt to
  * @path: Path of file to encrypt and sign
+ * @epath: Where to write encrypted data
  * @recips: Keys to encrypt with
  * @err: Optional error value
  *
  * Tries to encrypt and sign the file @path to @recips, saving any errors in @err.
  * Signing will be done with the default key of @sctx. @recips will be released
  * upon completion.
- *
- * Returns: The path of the encrypted and signed file, or NULL if the operation fails
  **/
-gchar*
+void
 seahorse_op_encrypt_sign_file (GList *keys, SeahorseKeyPair *signer, 
-                               const gchar *path, gpgme_error_t *err)
+                               const gchar *path, const gchar *epath, gpgme_error_t *err)
 {
     set_signer (signer);
-	return encrypt_file_common (keys, path, gpgme_op_encrypt_sign, err);
+	encrypt_file_common (keys, path, epath, gpgme_op_encrypt_sign, err);
 }
 
 /**
@@ -638,43 +616,35 @@ decrypt_verify_data (SeahorseKeySource *sksrc, gpgme_data_t cipher,
  * seahorse_op_decrypt_verify_file:
  * @sksrc: #SeahorseKeySource to verify against
  * @path: Path of file to decrypt and verify
+ * @path: Where to write the decrypted data
  * @status: Will contain the status of any verified signatures
  * @err: Optional error value
  *
  * Tries to decrypt and verify the file @path, saving any errors in @err. The
- * status of any verified signatures will be saved in @status. A new file
- * will be created to contain the decrypted data. Its path will be the same as
- * @path without the suffix.
- *
- * Returns: The path of the decrypted file or NULL if the operation fails
+ * status of any verified signatures will be saved in @status. 
  **/
-gchar*
-seahorse_op_decrypt_verify_file (SeahorseKeySource *sksrc, const gchar *path,
-                                 gpgme_verify_result_t *status, gpgme_error_t *err)
+void
+seahorse_op_decrypt_verify_file (SeahorseKeySource *sksrc, const gchar *path, 
+                                 const gchar *dpath, gpgme_verify_result_t *status, 
+                                 gpgme_error_t *err)
 {
 	gpgme_data_t cipher, plain;
 	gpgme_error_t error;
-	gchar *new_path = NULL;
 	
 	if (err == NULL)
 		err = &error;
 	/* new data from file */
     cipher = seahorse_vfs_data_create (path, FALSE, err);
-    g_return_val_if_fail (plain != NULL, NULL);
+    g_return_if_fail (plain != NULL);
 
 	/* verify data */
 	plain = decrypt_verify_data (sksrc, cipher, status, err);
-	g_return_val_if_fail (GPG_IS_OK (*err), NULL);
+	g_return_if_fail (GPG_IS_OK (*err));
 	/* write data to new file */
-	new_path = seahorse_util_remove_suffix (path);
-	*err = seahorse_util_write_data_to_file (new_path, plain);
+	*err = seahorse_util_write_data_to_file (dpath, plain);
 	/* free path if there is an error */
-	if (!GPG_IS_OK (*err)) {
-		g_free (new_path);
-		g_return_val_if_reached (NULL);
-	}
-	
-	return new_path;
+	if (!GPG_IS_OK (*err)) 
+		g_return_if_reached ();
 }
 
 /**

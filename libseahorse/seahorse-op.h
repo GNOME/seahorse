@@ -48,25 +48,28 @@ void        seahorse_op_export_file         (GList              *keys,
 gchar*      seahorse_op_export_text         (GList              *keys,
                                              gpgme_error_t      *err);
 
-gchar*      seahorse_op_encrypt_file        (GList              *keys,
+void        seahorse_op_encrypt_file        (GList              *keys,
                                              const gchar        *path,
+                                             const gchar        *epath,
                                              gpgme_error_t      *err);
 
 gchar*      seahorse_op_encrypt_text        (GList              *keys,
                                              const gchar        *text,
                                              gpgme_error_t      *err);
 
-gchar*      seahorse_op_sign_file           (SeahorseKeyPair    *signer,
+void        seahorse_op_sign_file           (SeahorseKeyPair    *signer,
                                              const gchar        *path,
+                                             const gchar        *spath,
                                              gpgme_error_t      *err);
 
 gchar*      seahorse_op_sign_text           (SeahorseKeyPair    *signer,
                                              const gchar        *text,
                                              gpgme_error_t      *err);
 
-gchar*      seahorse_op_encrypt_sign_file   (GList              *keys,
+void        seahorse_op_encrypt_sign_file   (GList              *keys,
                                              SeahorseKeyPair    *signer,
                                              const gchar        *path,
+                                             const gchar        *epath,
                                              gpgme_error_t      *err);
 
 gchar*      seahorse_op_encrypt_sign_text   (GList              *keys,
@@ -85,8 +88,9 @@ gchar*      seahorse_op_verify_text         (SeahorseKeySource  *sksrc,
                                              gpgme_verify_result_t *status,
                                              gpgme_error_t      *err);
 
-gchar*      seahorse_op_decrypt_verify_file (SeahorseKeySource  *sksrc,
+void        seahorse_op_decrypt_verify_file (SeahorseKeySource  *sksrc,
                                              const gchar        *path,
+                                             const gchar        *dpath,
                                              gpgme_verify_result_t *status,
                                              gpgme_error_t      *err);
 

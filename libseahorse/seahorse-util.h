@@ -93,13 +93,15 @@ gboolean    seahorse_util_uris_package      (const gchar* package,
 gchar*      seahorse_util_uri_choose_save   (GtkFileChooserDialog *chooser);
 
 gboolean	seahorse_util_check_suffix		(const gchar		*path,
-							 SeahorseSuffix		suffix);
+                                             SeahorseSuffix     suffix);
 
 gchar*		seahorse_util_add_suffix		(gpgme_ctx_t		ctx,
-							 const gchar		*path,
-							 SeahorseSuffix		suffix);
+                                             const gchar        *path,
+                                             SeahorseSuffix     suffix,
+                                             const gchar        *prompt);
 
-gchar*		seahorse_util_remove_suffix		(const gchar		*path);
+gchar*      seahorse_util_remove_suffix     (const gchar        *path,
+                                             const gchar        *prompt);
 
 gchar**     seahorse_util_strvec_dup        (const gchar        **vec);
 

@@ -167,6 +167,7 @@ do_import (SeahorseContext *sctx, const gchar **paths)
 static guint 
 do_encrypt_base (SeahorseContext *sctx, const gchar **paths, SeahorseKeyPair *signer)
 {
+    SeahorseKeySource *sksrc;
     GList *keys = NULL;
     gchar *new_path;
     gpgme_error_t err;
@@ -174,6 +175,9 @@ do_encrypt_base (SeahorseContext *sctx, const gchar **paths, SeahorseKeyPair *si
     gchar **u;
     guint ret = 0;
 
+    sksrc = seahorse_context_get_key_source (sctx);
+    g_return_val_if_fail (sksrc != NULL, 1);
+    
     /* This can change the list of uris and optionally compress etc... */
     uris = seahorse_process_multiple (sctx, paths, NULL);
 
@@ -185,10 +189,16 @@ do_encrypt_base (SeahorseContext *sctx, const gchar **paths, SeahorseKeyPair *si
         if (g_list_length (keys) > 0) {
             for(u = uris; *u; u++) {
                
+                new_path = seahorse_util_add_suffix (sksrc->ctx, *u, SEAHORSE_CRYPT_SUFFIX, 
+                                                     _("Choose Encrypted File Name for '%s'"));
+                if (!new_path) 
+                    break;
+                    
                 if (signer)
-                    new_path = seahorse_op_encrypt_sign_file (keys, signer, *u, &err);
+                    seahorse_op_encrypt_sign_file (keys, signer, *u, new_path, &err);
                 else
-                    new_path = seahorse_op_encrypt_file (keys, *u, &err);
+                    seahorse_op_encrypt_file (keys, *u, new_path, &err);
+                
                 g_free (new_path);
     
                 if (!GPG_IS_OK (err)) {
@@ -243,7 +253,13 @@ do_sign (SeahorseContext *sctx, const gchar **paths)
     g_assert (uris != NULL);
      
     for (u = uris; *u; u++) {
-        new_path = seahorse_op_sign_file (signer, *u, &err);
+      
+        new_path = seahorse_util_add_suffix (sksrc->ctx, *u, SEAHORSE_SIG_SUFFIX, 
+                                             _("Choose Signature File Name for '%s'"));
+        if (!new_path)
+            break;
+        
+        seahorse_op_sign_file (signer, *u, new_path, &err);
         g_free(new_path);
         
         if (!GPG_IS_OK (err)) {
@@ -278,7 +294,12 @@ do_decrypt (SeahorseContext *sctx, const gchar **paths)
     g_assert (uris != NULL);
      
     for (u = uris; *u; u++) {
-        new_path = seahorse_op_decrypt_verify_file (sksrc, *u, &status, &err);
+      
+        new_path = seahorse_util_remove_suffix (*u, _("Choose Decrypted File Name for '%s'"));
+        if(!new_path)
+            break;
+            
+        seahorse_op_decrypt_verify_file (sksrc, *u, new_path, &status, &err);
                 
         if (!GPG_IS_OK (err)) {
             seahorse_util_handle_error (err, _("Couldn't decrypt \"%s\""),
@@ -286,7 +307,7 @@ do_decrypt (SeahorseContext *sctx, const gchar **paths)
             ret = 1;
             break;
         }
-        
+    
         if(status && status->signatures) {
             if(!signatures)
                 signatures = seahorse_signatures_new (sctx);
@@ -325,7 +346,7 @@ do_verify (SeahorseContext *sctx, const gchar **paths)
          
     for (u = uris; *u; u++) {
 
-        original = seahorse_util_remove_suffix (*u);
+        original = seahorse_util_remove_suffix (*u, NULL);
 
         /* The original file doesn't exist, prompt for it */
         if (!seahorse_util_uri_exists (original)) {
