@@ -248,15 +248,15 @@ gconf_notification (GConfClient *gclient, guint id, GConfEntry *entry, GtkTreeVi
 	value = gconf_entry_get_value (entry);
 	
 	if (g_str_equal (key, SHOW_VALIDITY_KEY))
-		col = gtk_tree_view_get_column (view, VALIDITY_STR - 2);
+		col = gtk_tree_view_get_column (view, VALIDITY_STR - 4);
 	else if (g_str_equal (key, SHOW_EXPIRES_KEY))
-		col = gtk_tree_view_get_column (view, EXPIRES_STR - 2);
+		col = gtk_tree_view_get_column (view, EXPIRES_STR - 4);
 	else if (g_str_equal (key, SHOW_TRUST_KEY))
-		col = gtk_tree_view_get_column (view, TRUST_STR - 2);
+		col = gtk_tree_view_get_column (view, TRUST_STR - 4);
 	else if (g_str_equal (key, SHOW_LENGTH_KEY))
-		col = gtk_tree_view_get_column (view, LENGTH - 2);
+		col = gtk_tree_view_get_column (view, LENGTH - 4);
 	else if (g_str_equal (key, SHOW_TYPE_KEY))
-		col = gtk_tree_view_get_column (view, TYPE - 2);
+		col = gtk_tree_view_get_column (view, TYPE - 4);
 	else
 		return;
 	
