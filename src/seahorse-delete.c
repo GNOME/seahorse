@@ -156,3 +156,44 @@ seahorse_delete_subkey_new (SeahorseContext *sctx, SeahorseKey *skey, const guin
 	if (!GPG_IS_OK (err))
 		seahorse_util_handle_error (err, _("Couldn't delete subkey"));
 }
+
+void
+seahorse_delete_userid_show (SeahorseContext *sctx, SeahorseKey *skey, const guint index)
+{
+    GtkWidget *question, *delete_button, *cancel_button;
+    gint response;
+    gpgme_error_t err;
+    gchar *userid;
+  
+    /* UIDs are one based ... */
+    g_return_if_fail (index > 0);
+   
+    /* ... Except for when calling this, which is messed up */
+    userid = seahorse_key_get_userid (skey, index - 1);
+    question = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
+                        GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE,
+                        _("Are you sure you want to permanently delete the '%s' user ID?"),
+                        userid);
+    g_free (userid);
+    
+    delete_button = gtk_button_new_from_stock (GTK_STOCK_DELETE);
+    cancel_button = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
+
+    //add widgets to action area
+    gtk_dialog_add_action_widget(GTK_DIALOG(question), GTK_WIDGET (cancel_button), GTK_RESPONSE_REJECT);
+    gtk_dialog_add_action_widget(GTK_DIALOG(question), GTK_WIDGET (delete_button), GTK_RESPONSE_ACCEPT);
+   
+    //show widgets
+    gtk_widget_show (delete_button);
+    gtk_widget_show (cancel_button);
+       
+    response = gtk_dialog_run (GTK_DIALOG (question));
+    gtk_widget_destroy (question);
+ 
+    if (response != GTK_RESPONSE_ACCEPT)
+       return;
+    
+    err = seahorse_key_op_del_uid (sctx, skey, index);
+    if (!GPG_IS_OK (err))
+        seahorse_util_handle_error (err, _("Couldn't delete user id"));
+}

@@ -42,6 +42,10 @@ void		seahorse_delete_subkey_new	(SeahorseContext	*sctx,
 						 SeahorseKey		*skey,
 						 const guint		index);
 
+void        seahorse_delete_userid_show (SeahorseContext *sctx, 
+                         SeahorseKey *skey, 
+                         const guint index);
+
 void		seahorse_revoke_new		(SeahorseContext	*sctx,
 						 SeahorseKey		*skey,
 						 const guint		index);
@@ -49,5 +53,9 @@ void		seahorse_revoke_new		(SeahorseContext	*sctx,
 const gchar*	seahorse_change_passphrase_get	(SeahorseContext	*sctx,
 						 const gchar		*desc,
 						 gpointer		*data);
+
+void        seahorse_sign_uid_show  (SeahorseContext *sctx, 
+                        SeahorseKey *skey, 
+                        const guint uid);
 
 #endif /* __SEAHORSE_KEY_DIALOGS__ */

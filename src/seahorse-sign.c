@@ -106,3 +106,49 @@ seahorse_sign_show (SeahorseContext *sctx, GList *keys)
 		do_sign = TRUE;
 	}
 }
+
+void
+seahorse_sign_uid_show (SeahorseContext *sctx, SeahorseKey *skey, const guint uid)
+{
+    GtkWidget *question;
+    gint response;
+    SeahorseWidget *swidget;
+    gboolean do_sign = TRUE;
+    gchar *userid;
+    
+    /* UIDs are one based ... */
+    g_return_if_fail (uid > 0);
+   
+    /* ... Except for when calling this, which is messed up */
+    userid = seahorse_key_get_userid (skey, uid - 1);     
+    question = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
+                        GTK_MESSAGE_QUESTION, GTK_BUTTONS_YES_NO,
+                        _("Are you sure you want to sign the '%s' user ID?"),
+                        userid);
+    g_free (userid);
+
+    response = gtk_dialog_run (GTK_DIALOG (question));
+    gtk_widget_destroy (question);
+     
+    if (response != GTK_RESPONSE_YES)
+        return;
+     
+    swidget = seahorse_key_widget_new_with_index ("sign", sctx, skey, uid);
+    g_return_if_fail (swidget != NULL);
+        
+    while (do_sign) {
+        response = gtk_dialog_run (GTK_DIALOG (
+                glade_xml_get_widget (swidget->xml, swidget->name)));\
+        switch (response) {
+        case GTK_RESPONSE_HELP:
+            break;
+        case GTK_RESPONSE_OK:
+            do_sign = !ok_clicked (swidget);
+            break;
+        default:
+            do_sign = FALSE;
+            seahorse_widget_destroy (swidget);
+            break;
+        }
+    }
+}
