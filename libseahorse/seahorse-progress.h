@@ -25,13 +25,17 @@
 #include <gtk/gtk.h>
 
 #include "seahorse-operation.h"
+#include "seahorse-context.h"
 
 /* -----------------------------------------------------------------------------
  * SEAHORSE APPBAR HOOKS
  */
 
-void            seahorse_progress_appbar_add_operation      (GtkWidget* appbar,
-                                                             SeahorseOperation *operation);
+void          seahorse_progress_appbar_add_operation  (GtkWidget* appbar,
+                                                       SeahorseOperation *operation);
 
+void          seahorse_progress_show                  (SeahorseContext *sctx, 
+                                                       SeahorseOperation *operation,
+                                                       const gchar *title);
 
 #endif /* __SEAHORSE_PROGRESS_H__ */

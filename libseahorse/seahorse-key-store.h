@@ -144,6 +144,8 @@ GtkTreeViewColumn*	seahorse_key_store_append_column	(GtkTreeView		*view,
 								 const gchar		*name,
 								 const gint		index);
 
+GList*              seahorse_key_store_get_all_keys         (GtkTreeView        *view);
+
 GList*              seahorse_key_store_get_selected_keys    (GtkTreeView        *view);
 
 SeahorseKey*        seahorse_key_store_get_selected_key	    (GtkTreeView		*view,

@@ -25,9 +25,13 @@
 #include "seahorse-context.h"
 #include "seahorse-widget.h"
 
-SeahorseWidget *    seahorse_prefs_new     (SeahorseContext *sctx);
-void                seahorse_prefs_add_tab (SeahorseWidget *swidget,
-                                            GtkWidget *label,
-                                            GtkWidget *tab);
+SeahorseWidget *    seahorse_prefs_new          (SeahorseContext *sctx);
+
+void                seahorse_prefs_add_tab      (SeahorseWidget *swidget,
+                                                 GtkWidget *label,
+                                                 GtkWidget *tab);
+                                                 
+void                seahorse_prefs_select_tab   (SeahorseWidget *swidget,
+                                                 guint tab);
 
 #endif /* __SEAHORSE_PREFERENCES_H__ */                                                  

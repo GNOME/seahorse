@@ -4,11 +4,11 @@
 <glade-interface>
 <requires lib="gnome"/>
 
-<widget class="GtkDialog" id="keyserver-search">
+<widget class="GtkDialog" id="keyserver-sync">
   <property name="visible">True</property>
-  <property name="title" translatable="yes">Find Remote Keys</property>
+  <property name="title" translatable="yes">Sync Keys</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
-  <property name="window_position">GTK_WIN_POS_CENTER_ON_PARENT</property>
+  <property name="window_position">GTK_WIN_POS_CENTER</property>
   <property name="modal">False</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
@@ -122,18 +122,19 @@
 	  </child>
 
 	  <child>
-	    <widget class="GtkButton" id="search">
+	    <widget class="GtkButton" id="button2">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
 	      <property name="has_default">True</property>
 	      <property name="can_focus">True</property>
+	      <property name="has_focus">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
 	      <property name="response_id">-5</property>
 	      <signal name="clicked" handler="ok_clicked" last_modification_time="Wed, 31 Dec 2003 00:41:45 GMT"/>
 
 	      <child>
-		<widget class="GtkAlignment" id="alignment4">
+		<widget class="GtkAlignment" id="alignment2">
 		  <property name="visible">True</property>
 		  <property name="xalign">0.5</property>
 		  <property name="yalign">0.5</property>
@@ -145,15 +146,15 @@
 		  <property name="right_padding">0</property>
 
 		  <child>
-		    <widget class="GtkHBox" id="hbox7">
+		    <widget class="GtkHBox" id="hbox4">
 		      <property name="visible">True</property>
 		      <property name="homogeneous">False</property>
 		      <property name="spacing">2</property>
 
 		      <child>
-			<widget class="GtkImage" id="image5">
+			<widget class="GtkImage" id="image3">
 			  <property name="visible">True</property>
-			  <property name="stock">gtk-find</property>
+			  <property name="stock">gtk-network</property>
 			  <property name="icon_size">4</property>
 			  <property name="xalign">0.5</property>
 			  <property name="yalign">0.5</property>
@@ -168,9 +169,9 @@
 		      </child>
 
 		      <child>
-			<widget class="GtkLabel" id="label14">
+			<widget class="GtkLabel" id="label11">
 			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">_Search</property>
+			  <property name="label" translatable="yes">_Sync</property>
 			  <property name="use_underline">True</property>
 			  <property name="use_markup">False</property>
 			  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -222,7 +223,7 @@
 	      <child>
 		<widget class="GtkImage" id="image2">
 		  <property name="visible">True</property>
-		  <property name="stock">gtk-find</property>
+		  <property name="stock">gtk-network</property>
 		  <property name="icon_size">5</property>
 		  <property name="xalign">0.5</property>
 		  <property name="yalign">0.5</property>
@@ -237,22 +238,59 @@
 	      </child>
 
 	      <child>
-		<widget class="GtkLabel" id="publish-message">
+		<widget class="GtkVBox" id="vbox2">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">This will find keys for others on the Internet. These keys can then be imported into your local key ring.</property>
-		  <property name="use_underline">False</property>
-		  <property name="use_markup">False</property>
-		  <property name="justify">GTK_JUSTIFY_LEFT</property>
-		  <property name="wrap">True</property>
-		  <property name="selectable">False</property>
-		  <property name="xalign">0</property>
-		  <property name="yalign">0</property>
-		  <property name="xpad">0</property>
-		  <property name="ypad">0</property>
-		  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-		  <property name="width_chars">-1</property>
-		  <property name="single_line_mode">False</property>
-		  <property name="angle">0</property>
+		  <property name="homogeneous">False</property>
+		  <property name="spacing">0</property>
+
+		  <child>
+		    <widget class="GtkLabel" id="publish-message">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">This will publish the keys in your keyring so they're available for others to use. You'll also get any changes others have made since you received their keys.</property>
+		      <property name="use_underline">False</property>
+		      <property name="use_markup">False</property>
+		      <property name="justify">GTK_JUSTIFY_LEFT</property>
+		      <property name="wrap">True</property>
+		      <property name="selectable">False</property>
+		      <property name="xalign">0</property>
+		      <property name="yalign">0</property>
+		      <property name="xpad">0</property>
+		      <property name="ypad">0</property>
+		      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+		      <property name="width_chars">-1</property>
+		      <property name="single_line_mode">False</property>
+		      <property name="angle">0</property>
+		    </widget>
+		    <packing>
+		      <property name="padding">0</property>
+		      <property name="expand">False</property>
+		      <property name="fill">False</property>
+		    </packing>
+		  </child>
+
+		  <child>
+		    <widget class="GtkLabel" id="sync-message">
+		      <property name="label" translatable="yes">This will retrieve any changes others have made since you received their keys. No key server has been chosen for publishing, so your keys will not be made available to others.</property>
+		      <property name="use_underline">False</property>
+		      <property name="use_markup">False</property>
+		      <property name="justify">GTK_JUSTIFY_LEFT</property>
+		      <property name="wrap">True</property>
+		      <property name="selectable">False</property>
+		      <property name="xalign">0</property>
+		      <property name="yalign">0</property>
+		      <property name="xpad">0</property>
+		      <property name="ypad">0</property>
+		      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+		      <property name="width_chars">-1</property>
+		      <property name="single_line_mode">False</property>
+		      <property name="angle">0</property>
+		    </widget>
+		    <packing>
+		      <property name="padding">0</property>
+		      <property name="expand">False</property>
+		      <property name="fill">False</property>
+		    </packing>
+		  </child>
 		</widget>
 		<packing>
 		  <property name="padding">0</property>
@@ -269,56 +307,22 @@
 	  </child>
 
 	  <child>
-	    <widget class="GtkHBox" id="hbox6">
+	    <widget class="GtkLabel" id="detail-message">
 	      <property name="visible">True</property>
-	      <property name="homogeneous">False</property>
-	      <property name="spacing">12</property>
-
-	      <child>
-		<widget class="GtkLabel" id="label13">
-		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">_Search for keys containing: </property>
-		  <property name="use_underline">True</property>
-		  <property name="use_markup">False</property>
-		  <property name="justify">GTK_JUSTIFY_LEFT</property>
-		  <property name="wrap">False</property>
-		  <property name="selectable">False</property>
-		  <property name="xalign">0.5</property>
-		  <property name="yalign">0.5</property>
-		  <property name="xpad">0</property>
-		  <property name="ypad">0</property>
-		  <property name="mnemonic_widget">search-text</property>
-		  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-		  <property name="width_chars">-1</property>
-		  <property name="single_line_mode">False</property>
-		  <property name="angle">0</property>
-		</widget>
-		<packing>
-		  <property name="padding">0</property>
-		  <property name="expand">False</property>
-		  <property name="fill">False</property>
-		</packing>
-	      </child>
-
-	      <child>
-		<widget class="GtkEntry" id="search-text">
-		  <property name="visible">True</property>
-		  <property name="can_focus">True</property>
-		  <property name="has_focus">True</property>
-		  <property name="editable">True</property>
-		  <property name="visibility">True</property>
-		  <property name="max_length">0</property>
-		  <property name="text" translatable="yes"></property>
-		  <property name="has_frame">True</property>
-		  <property name="invisible_char">*</property>
-		  <property name="activates_default">False</property>
-		</widget>
-		<packing>
-		  <property name="padding">0</property>
-		  <property name="expand">True</property>
-		  <property name="fill">True</property>
-		</packing>
-	      </child>
+	      <property name="label" translatable="yes">&lt;b&gt;X keys are selected for syncing&lt;/b&gt;</property>
+	      <property name="use_underline">False</property>
+	      <property name="use_markup">True</property>
+	      <property name="justify">GTK_JUSTIFY_LEFT</property>
+	      <property name="wrap">True</property>
+	      <property name="selectable">False</property>
+	      <property name="xalign">0.5</property>
+	      <property name="yalign">0</property>
+	      <property name="xpad">0</property>
+	      <property name="ypad">0</property>
+	      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+	      <property name="width_chars">-1</property>
+	      <property name="single_line_mode">False</property>
+	      <property name="angle">0</property>
 	    </widget>
 	    <packing>
 	      <property name="padding">0</property>

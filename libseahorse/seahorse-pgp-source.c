@@ -630,7 +630,7 @@ keyload_handler (SeahorseLoadOperation *lop)
     
     /* TODO: We can use the GPGME progress to make this more accurate */
     t = g_strdup_printf (ngettext("Loaded %d key", "Loaded %d keys", lop->loaded), lop->loaded);
-    seahorse_operation_mark_progress (SEAHORSE_OPERATION (lop), t, -1);
+    seahorse_operation_mark_progress (SEAHORSE_OPERATION (lop), t, 0, 0);
     g_free (t);
     
     return TRUE; 
@@ -694,7 +694,7 @@ seahorse_load_operation_start (SeahorsePGPSource *psrc, const gchar *pattern,
     }
     
     seahorse_operation_mark_start (SEAHORSE_OPERATION (lop));
-    seahorse_operation_mark_progress (SEAHORSE_OPERATION (lop), _("Loading Keys..."), -1);
+    seahorse_operation_mark_progress (SEAHORSE_OPERATION (lop), _("Loading Keys..."), 0, 0);
     
     /* Run one iteration of the handler */
     keyload_handler (lop);

@@ -345,6 +345,9 @@ seahorse_keyserver_results_show (SeahorseContext *sctx, SeahorseKeySource *sksrc
 	g_signal_connect (selection, "changed",
 		G_CALLBACK (selection_changed), swidget);
 
+    /* Load the keys */
+    seahorse_key_source_refresh_async (sksrc, SEAHORSE_KEY_SOURCE_ALL);
+
     /* Hook progress bar in */
     operation = seahorse_key_source_get_operation (sksrc);
     g_return_val_if_fail (operation != NULL, win);

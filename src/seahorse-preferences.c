@@ -34,7 +34,7 @@
  * Creates a new or shows the current preferences dialog.
  **/
 void
-seahorse_preferences_show (SeahorseContext *sctx)
+seahorse_preferences_show (SeahorseContext *sctx, guint ntab)
 {	
 	SeahorseWidget *swidget;
     GtkWidget *label;
@@ -70,4 +70,6 @@ seahorse_preferences_show (SeahorseContext *sctx)
 	
 	gtk_widget_show_all (tab);
     seahorse_prefs_add_tab (swidget, label, tab);
+    
+    seahorse_prefs_select_tab (swidget, ntab);
 }

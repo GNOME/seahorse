@@ -25,6 +25,7 @@ endif
 if WITH_KEYSERVER
 KEYSERVER_SRCS = seahorse-server-source.c seahorse-server-source.h 
 KEYSERVER_SRCS += seahorse-ldap-source.c seahorse-ldap-source.h
+KEYSERVER_SRCS += seahorse-keyserver-control.c seahorse-keyserver-control.h
 else
 KEYSERVER_SRCS = 
 endif
@@ -71,7 +72,8 @@ glade_DATA = \
 	seahorse-recipients.glade \
     seahorse-signer.glade \
 	seahorse-signatures.glade \
-	seahorse-prefs.glade
+	seahorse-prefs.glade \
+	seahorse-progress.glade
 
 EXTRA_DIST = $(glade_DATA) \
 	seahorse-marshal.list 

@@ -27,6 +27,7 @@
 #include "seahorse-util.h"
 #include "seahorse-check-button-control.h"
 #include "seahorse-default-key-control.h"
+#include "seahorse-keyserver-control.h"
 
 /* From seahorse_preferences_cache.c */
 void seahorse_prefs_cache (SeahorseContext *ctx, SeahorseWidget *widget);
@@ -264,8 +265,10 @@ static void
 setup_keyservers (SeahorseContext *sctx, SeahorseWidget *swidget)
 {
     GtkTreeView *treeview;
+    SeahorseKeyserverControl *skc;
     GtkTreeModel *model;
     GtkTreeSelection *selection;
+    GtkWidget *w;
     GSList *ks;
     guint notify_id;
     
@@ -289,6 +292,13 @@ setup_keyservers (SeahorseContext *sctx, SeahorseWidget *swidget)
                        (GConfClientNotifyFunc)gconf_notify, swidget);
     g_signal_connect (seahorse_widget_get_top (swidget), "destroy", 
                         G_CALLBACK (gconf_unnotify), GINT_TO_POINTER (notify_id));
+                        
+    w = glade_xml_get_widget (swidget->xml, "keyserver-publish");
+    g_return_if_fail (w != NULL);
+    
+    skc = seahorse_keyserver_control_new (PUBLISH_TO_KEY, _("None: Don't publish keys"));
+    gtk_container_add (GTK_CONTAINER (w), GTK_WIDGET (skc));
+    gtk_widget_show_all (w);
 }
 
 #endif /* WITH_KEYSERVER */
@@ -389,3 +399,10 @@ seahorse_prefs_add_tab (SeahorseWidget *swidget, GtkWidget *label, GtkWidget *ta
     gtk_widget_show (label);
     gtk_notebook_prepend_page (GTK_NOTEBOOK (widget), tab, label);
 }
+
+void                
+seahorse_prefs_select_tab   (SeahorseWidget *swidget, guint tab)
+{
+    GtkWidget *widget = glade_xml_get_widget (swidget->xml, "notebook");
+    gtk_notebook_set_current_page (GTK_NOTEBOOK (widget), (gint)tab);
+}    

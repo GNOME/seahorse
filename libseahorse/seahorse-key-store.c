@@ -886,6 +886,17 @@ compare_pointers (gconstpointer a, gconstpointer b)
     return a > b ? 1 : -1;
 }
 
+GList*              
+seahorse_key_store_get_all_keys (GtkTreeView *view)
+{
+    SeahorseKeyStore* skstore;
+    
+    g_return_val_if_fail (GTK_IS_TREE_VIEW (view), NULL);
+    skstore = key_store_from_model (gtk_tree_view_get_model (view));
+    
+    return seahorse_key_source_get_keys (skstore->sksrc, FALSE);
+}
+
 /**
  * seahorse_key_store_get_selected_keys:
  * @view: #GtkTreeView with selection

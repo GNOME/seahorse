@@ -26,9 +26,12 @@
 
 #include "seahorse-context.h"
 
-GtkWindow*	seahorse_key_manager_show	(SeahorseContext	*sctx);
+GtkWindow*	seahorse_key_manager_show	        (SeahorseContext	*sctx);
 
 GtkWindow*  seahorse_keyserver_search_show      (SeahorseContext    *sctx);
+
+GtkWindow*  seahorse_keyserver_sync_show        (SeahorseContext *sctx, 
+                                                 GList *keys);
 
 GtkWindow*  seahorse_keyserver_results_show     (SeahorseContext    *sctx,
                                                  SeahorseKeySource  *sksrc,

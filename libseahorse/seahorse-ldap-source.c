@@ -92,7 +92,37 @@ get_ldap_server_info (SeahorseLDAPSource *lsrc, gboolean force)
  
 #define LDAP_ERROR_DOMAIN (get_ldap_error_domain())
 
-GQuark
+#ifdef _DEBUG
+
+static void
+dump_ldap_entry (LDAP *ld, LDAPMessage *res)
+{
+    BerElement *pos;
+    char **values;
+    char **v;
+    char *t;
+    
+    t = ldap_get_dn (ld, res);
+    g_printerr ("dn: %s\n", t);
+    ldap_memfree (t);
+    
+    for (t = ldap_first_attribute (ld, res, &pos); t; 
+         t = ldap_next_attribute (ld, res, pos)) {
+             
+        values = ldap_get_values (ld, res, t);
+        for (v = values; *v; v++) 
+            g_printerr ("%s: %s\n", t, *v);
+             
+        ldap_value_free (values);
+        ldap_memfree (t);
+    }
+    
+    ber_free (pos, 0);
+}
+
+#endif
+
+static GQuark
 get_ldap_error_domain ()
 {
     static GQuark q = 0;
@@ -259,6 +289,7 @@ IMPLEMENT_OPERATION (LDAP, ldap)
  
 static const char *kServerAttributes[] = {
     "basekeyspacedn",
+    "pgpbasekeyspacedn",
     "version",
     NULL
 };
@@ -336,11 +367,16 @@ seahorse_ldap_operation_cancel (SeahorseOperation *operation)
 static void
 fail_ldap_operation (SeahorseLDAPOperation *lop, int code)
 {
+    gchar *t;
+    
     if (code == 0)
         ldap_get_option (lop->ldap, LDAP_OPT_ERROR_NUMBER, &code);
-        
+    
+    g_object_get (lop->lsrc, "key-server", &t, NULL);
     seahorse_operation_mark_done (SEAHORSE_OPERATION (lop), FALSE, 
-            g_error_new_literal (LDAP_ERROR_DOMAIN, code, ldap_err2string(code)));
+            g_error_new (LDAP_ERROR_DOMAIN, code, _("Couldn't communicate with '%s': %s"), 
+                         t, ldap_err2string(code)));
+    g_free (t);
 }
 
 /* Gets called regularly to check for results of LDAP async work */
@@ -410,9 +446,16 @@ done_info_start_op (SeahorseOperation *op, LDAPMessage *result)
         
         /* If we have results then fill in the server info */
         if (r == LDAP_RES_SEARCH_ENTRY) {
+#ifdef _DEBUG
+            g_printerr ("[ldap] Server Info Result:\n");
+            dump_ldap_entry (lop->ldap, result);
+#endif      
+            /* NOTE: When adding attributes here make sure to add them to kServerAttributes */
             sinfo = g_new0 (LDAPServerInfo, 1);
             sinfo->version = get_int_attribute (lop->ldap, result, "version");
             sinfo->base_dn = get_string_attribute (lop->ldap, result, "basekeyspacedn");
+            if (!sinfo->base_dn)
+                sinfo->base_dn = get_string_attribute (lop->ldap, result, "pgpbasekeyspacedn");
             sinfo->key_attr = g_strdup (sinfo->version > 1 ? "pgpkeyv2" : "pgpkey");
             set_ldap_server_info (lop->lsrc, sinfo);
             
@@ -589,6 +632,10 @@ search_entry (SeahorseOperation *op, LDAPMessage *result)
      
     /* An LDAP entry */
     if (r == LDAP_RES_SEARCH_ENTRY) {
+#ifdef _DEBUG
+            g_printerr ("[ldap] Retrieved Key Entry:\n");
+            dump_ldap_entry (lop->ldap, result);
+#endif      
         parse_key_from_ldap_entry (lop, result);
         return TRUE;
         
@@ -597,10 +644,28 @@ search_entry (SeahorseOperation *op, LDAPMessage *result)
         lop->ldap_op = -1;
         r = ldap_parse_result (lop->ldap, result, &code, NULL, &message, NULL, NULL, 0);
         g_return_val_if_fail (r == LDAP_SUCCESS, FALSE);
-
-        seahorse_operation_mark_done (SEAHORSE_OPERATION (lop), FALSE, 
-                        code == LDAP_SUCCESS ? NULL : g_error_new_literal (LDAP_ERROR_DOMAIN, code, message));
+        
+        /* Error codes that we ignore */
+        switch (code) {
+        case LDAP_SIZELIMIT_EXCEEDED:
+            code = LDAP_SUCCESS;
+            break;
+        };
+        
+        /* Failure */
+        if (code != LDAP_SUCCESS) {
+            if (!message || !message[0]) 
+                fail_ldap_operation (lop, code);
+            else
+                seahorse_operation_mark_done (SEAHORSE_OPERATION (lop), FALSE, 
+                            g_error_new_literal (LDAP_ERROR_DOMAIN, code, message));
+            
+        /* Success */
+        } else {
+            seahorse_operation_mark_done (SEAHORSE_OPERATION (lop), FALSE, NULL);
+        }
         ldap_memfree (message);
+
         return FALSE;
     }       
 }
@@ -648,9 +713,11 @@ start_search_operation (SeahorseLDAPSource *lsrc, const gchar *pattern)
     lop = seahorse_ldap_operation_start (lsrc, start_search);
     g_return_val_if_fail (lop != NULL, NULL);
 
-    t = g_strdup_printf (_("Searching for keys containing '%s'..."), pattern);
-    seahorse_operation_mark_progress (SEAHORSE_OPERATION (lop), t, -1);
-    g_free (t);
+    if (!seahorse_operation_is_done (SEAHORSE_OPERATION (lop))) {
+        t = g_strdup_printf (_("Searching for keys containing '%s'..."), pattern);
+        seahorse_operation_mark_progress (SEAHORSE_OPERATION (lop), t, 0, 0);
+        g_free (t);
+    }
     
     g_object_set_data_full (G_OBJECT (lop), "filter", filter, g_free);
     return lop;
@@ -692,7 +759,6 @@ get_callback (SeahorseOperation *op, LDAPMessage *result)
     SeahorseLDAPOperation *lop = SEAHORSE_LDAP_OPERATION (op);  
     LDAPServerInfo *sinfo;
     gpgme_data_t data;
-    gpgme_error_t err;
     char *message;
     gchar *key;
     int code;
@@ -705,7 +771,11 @@ get_callback (SeahorseOperation *op, LDAPMessage *result)
      
     /* An LDAP Entry */
     if (r == LDAP_RES_SEARCH_ENTRY) {
-           
+        
+#ifdef _DEBUG
+        g_printerr ("[ldap] Retrieved Key Data:\n");
+        dump_ldap_entry (lop->ldap, result);
+#endif                 
         key = get_string_attribute (lop->ldap, result, sinfo->key_attr);
         
         if (key == NULL) {
@@ -714,15 +784,11 @@ get_callback (SeahorseOperation *op, LDAPMessage *result)
         }
         
         data = (gpgme_data_t)g_object_get_data (G_OBJECT (lop), "result");
-        if (data == NULL) {
-            err = gpgme_data_new (&data);
-            g_return_val_if_fail (data != NULL, FALSE);
-            g_object_set_data_full (G_OBJECT (lop), "result", data, 
-                                    (GDestroyNotify)gpgme_data_release);
-        }
-
+        g_return_val_if_fail (data != NULL, FALSE);
+        
         r = gpgme_data_write (data, key, strlen (key));
         g_return_val_if_fail (r != -1, FALSE);
+
         g_free (key);
         return TRUE;
 
@@ -809,21 +875,29 @@ start_get_operation_multiple (SeahorseLDAPSource *lsrc, GSList *fingerprints,
                               gpgme_data_t data)
 {
     SeahorseLDAPOperation *lop;
-
+    gpgme_error_t gerr;
+    
     g_return_val_if_fail (g_slist_length (fingerprints) > 0, NULL);
     
     lop = seahorse_ldap_operation_start (lsrc, get_key_from_ldap);
     g_return_val_if_fail (lop != NULL, NULL);
-    
-    
+        
     if (data) {
         /* Note that we don't auto-free this */
         g_object_set_data (G_OBJECT (lop), "result", data);
+    } else {
+        /* But when we auto create a data object then we free it */
+        gerr = gpgme_data_new (&data);
+        g_return_val_if_fail (data != NULL, NULL);
+        g_object_set_data_full (G_OBJECT (lop), "result", data, 
+                                (GDestroyNotify)gpgme_data_release);
     }
     
-    /* TODO: We can update a percentage when there's more than one key */
-    seahorse_operation_mark_progress (SEAHORSE_OPERATION (lop), _("Retrieving remote keys..."), -1);
-        
+    if (!seahorse_operation_is_done (SEAHORSE_OPERATION (lop))) {
+        /* TODO: We can update a percentage when there's more than one key */
+        seahorse_operation_mark_progress (SEAHORSE_OPERATION (lop), _("Retrieving remote keys..."), 0, 0);
+    }
+    
     g_object_set_data (G_OBJECT (lop), "fingerprints", fingerprints);
     g_object_set_data_full (G_OBJECT (lop), "fingerprints-full", fingerprints, 
                             (GDestroyNotify)seahorse_util_string_slist_free);
@@ -946,8 +1020,10 @@ start_send_operation_multiple (SeahorseLDAPSource *lsrc, GSList *keys)
     lop = seahorse_ldap_operation_start (lsrc, send_key_to_ldap);
     g_return_val_if_fail (lop != NULL, NULL);
 
-    /* TODO: We can update a percentage when there's more than one key */    
-    seahorse_operation_mark_progress (SEAHORSE_OPERATION (lop), _("Sending keys to key server..."), -1);
+    if (!seahorse_operation_is_done (SEAHORSE_OPERATION (lop))) {
+        /* TODO: We can update a percentage when there's more than one key */    
+        seahorse_operation_mark_progress (SEAHORSE_OPERATION (lop), _("Sending keys to key server..."), 0, 0);
+    }
     
     g_object_set_data (G_OBJECT (lop), "key-data", keys);
     g_object_set_data_full (G_OBJECT (lop), "key-data-full", keys, 
@@ -1034,7 +1110,7 @@ seahorse_ldap_source_refresh (SeahorseKeySource *src, const gchar *key)
     
     /* No way to find new keys */
     if (g_str_equal (key, SEAHORSE_KEY_SOURCE_NEW))
-        return seahorse_operation_new_complete ();
+        return seahorse_operation_new_complete (NULL);
         
     /* All keys, parent_class will have cleared */
     else if(g_str_equal (key, SEAHORSE_KEY_SOURCE_ALL)) {
@@ -1185,7 +1261,6 @@ seahorse_ldap_source_new (SeahorseKeySource *locsrc, const gchar *server,
     g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (locsrc) && 
                           !SEAHORSE_IS_SERVER_SOURCE (locsrc), NULL);
     g_return_val_if_fail (server && server[0], NULL);
-    g_return_val_if_fail (pattern && pattern[0], NULL);
     
     lsrc = g_object_new (SEAHORSE_TYPE_LDAP_SOURCE, "local-source", locsrc,
                          "key-server", server, "pattern", pattern, NULL);

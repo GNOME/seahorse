@@ -13,7 +13,7 @@ INCLUDES = -I$(top_builddir) \
 	-DPIXMAPSDIR=\""$(pixmapsdir)"\"
 
 if WITH_KEYSERVER
-KEYSERVER_SRCS = seahorse-keyserver-search.c seahorse-keyserver-results.c
+KEYSERVER_SRCS = seahorse-keyserver-search.c seahorse-keyserver-results.c seahorse-keyserver-sync.c
 else
 KEYSERVER_SRCS = 
 endif
@@ -60,7 +60,8 @@ glade_DATA = \
 	seahorse-add-subkey.glade \
 	seahorse-multi-encrypt.glade \
 	seahorse-keyserver-search.glade \
-	seahorse-keyserver-results.glade
+	seahorse-keyserver-results.glade \
+    seahorse-keyserver-sync.glade
 
 @INTLTOOL_DESKTOP_RULE@
 desktopdir = $(datadir)/applications

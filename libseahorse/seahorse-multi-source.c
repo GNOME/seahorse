@@ -174,7 +174,7 @@ seahorse_multi_source_refresh (SeahorseKeySource *src, const gchar *key)
 
     switch (g_slist_length (msrc->sources)) {
     case 0:
-        return seahorse_operation_new_complete ();
+        return seahorse_operation_new_complete (NULL);
     case 1:
         g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (msrc->sources->data), NULL);
         return seahorse_key_source_refresh (SEAHORSE_KEY_SOURCE (msrc->sources->data), key);
@@ -296,7 +296,7 @@ seahorse_multi_source_get_operation (SeahorseKeySource *src)
     
     switch (g_slist_length (msrc->sources)) {
     case 0:
-        return seahorse_operation_new_complete ();
+        return seahorse_operation_new_complete (NULL);
     case 1:
         g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (msrc->sources->data), NULL);
         return seahorse_key_source_get_operation (SEAHORSE_KEY_SOURCE (msrc->sources->data));

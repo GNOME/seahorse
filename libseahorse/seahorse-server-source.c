@@ -136,7 +136,7 @@ seahorse_server_source_class_init (SeahorseServerSourceClass *klass)
             g_param_spec_object ("local-source", "Local Source",
                                   "Local Source that this represents",
                                   SEAHORSE_TYPE_KEY_SOURCE,
-                                  G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE));
+                                  G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE));
                                   
     g_object_class_install_property (gobject_class, PROP_KEY_SERVER,
             g_param_spec_string ("key-server", "Key Server",
@@ -156,7 +156,7 @@ seahorse_server_source_init (SeahorseServerSource *ssrc)
     /* init private vars */
     ssrc->priv = g_new0 (SeahorseServerSourcePrivate, 1);
     ssrc->priv->keys = g_hash_table_new (g_str_hash, g_str_equal);
-    ssrc->priv->operation = seahorse_operation_new_complete ();
+    ssrc->priv->operation = seahorse_operation_new_complete (NULL);
 }
 
 /* dispose of all our internal references */
@@ -604,6 +604,9 @@ seahorse_server_source_new (SeahorseKeySource *locsrc, const gchar *server,
     
     g_return_val_if_fail (server && server[0], NULL);
 
+    if (!pattern || !pattern[0])
+        pattern = "invalid-key-pattern-51109ebe-b276-4b1c-84b6-64586e603e68";
+    
     uri = g_strdup (server);
         
     if (!parse_keyserver_uri (uri, &scheme, &host)) {
