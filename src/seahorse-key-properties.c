@@ -33,8 +33,10 @@
 static gint
 get_subkey_index (SeahorseWidget *swidget)
 {
-    return (gtk_notebook_get_current_page (GTK_NOTEBOOK (
-        glade_xml_get_widget (swidget->xml, NOTEBOOK))) - 1);
+    gint index = gtk_notebook_get_current_page (GTK_NOTEBOOK (
+        glade_xml_get_widget (swidget->xml, NOTEBOOK))) - 3;
+    g_return_val_if_fail (index >= 0, -1);
+    return index;        
 }
 
 
@@ -103,6 +105,7 @@ never_expires_subkey_toggled (GtkToggleButton *togglebutton, SeahorseWidget *swi
     index = get_subkey_index (swidget);
 
     subkey = seahorse_key_get_nth_subkey (skey, index);
+    g_return_if_fail (subkey != NULL);
     
     /* if want to never expire & expires, set to never expires */
     if (gtk_toggle_button_get_active (togglebutton) && subkey->expires) {
