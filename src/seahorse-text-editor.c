@@ -181,7 +181,7 @@ populate_popup (GtkWidget *widget, GtkMenu *menu, SeahorseWidget *swidget)
 	item = gtk_separator_menu_item_new ();
 	gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), item);
 	
-	item = gtk_menu_item_new_with_mnemonic (_("Decrypt _& Verify"));
+	item = gtk_menu_item_new_with_mnemonic (_("Decrypt and Verify"));
 	gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), item);
 	g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (decrypt_verify_activate), swidget);
 	
