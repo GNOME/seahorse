@@ -1,7 +1,7 @@
 # Copyright (C) 2001-2002 Free Software Foundation, Inc.
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # Aktualną wersję tego pliku możesz odnaleźć w repozytorium cvs.gnome.pl
-# (:pserver:anonymous@cvs.gnome.pl:/home/cvs, puste hasło)
+# (:pserver:anonymous@cvs.gnome.pl:/gnomepl, puste hasło)
 # Jeśli masz jakiekolwiek uwagi odnoszące się do tłumaczenia lub chcesz
 # pomóc w jego rozwijaniu i pielęgnowaniu, napisz do nas na adres:
 # translators@gnome.pl
@@ -10,10 +10,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-09-05 09:00+0200\n"
+"POT-Creation-Date: 2004-03-04 10:56+0100\n"
 "PO-Revision-Date: 2003-03-04 15:24+0100\n"
 "Last-Translator: GNOME PL Team <translators@gnome.pl>\n"
-"Language-Team: Polish <pl@li.org>\n"
+"Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -254,8 +254,8 @@ msgstr "Błedne hasło dla %s! Spróbuj ponownie."
 
 #: libseahorse/seahorse-passphrase.glade.h:1 src/seahorse-add-uid.glade.h:1
 #: src/seahorse-change-passphrase.glade.h:1 src/seahorse-export.glade.h:1
-#: src/seahorse-generate.glade.h:1 src/seahorse-import.glade.h:1
-#: src/seahorse-revoke.glade.h:1
+#: src/seahorse-generate-adv.glade.h:1 src/seahorse-generate-druid.glade.h:1
+#: src/seahorse-import.glade.h:1 src/seahorse-revoke.glade.h:1
 msgid "*"
 msgstr "*"
 
@@ -463,7 +463,7 @@ msgstr "Zarządza kluczami GPG"
 msgid "Add subkey to %s"
 msgstr "Dodaj podklucz do %s"
 
-#: src/seahorse-add-subkey.glade.h:1 src/seahorse-generate.glade.h:5
+#: src/seahorse-add-subkey.glade.h:1 src/seahorse-generate-adv.glade.h:5
 msgid "DSA (sign only)"
 msgstr "DSA (tylko podpis)"
 
@@ -472,7 +472,7 @@ msgid "ElGamal (encrypt only)"
 msgstr "ElGamal (tylko szyfrowanie)"
 
 #. expires
-#: src/seahorse-add-subkey.glade.h:3 src/seahorse-generate.glade.h:6
+#: src/seahorse-add-subkey.glade.h:3 src/seahorse-generate-adv.glade.h:6
 #: src/seahorse-key-properties.c:364
 msgid "Expiration Date:"
 msgstr "Data wygaśnięcia:"
@@ -481,28 +481,28 @@ msgstr "Data wygaśnięcia:"
 msgid "Generate a new subkey"
 msgstr "Generuje nowy podklucz"
 
-#: src/seahorse-add-subkey.glade.h:5 src/seahorse-generate.glade.h:10
+#: src/seahorse-add-subkey.glade.h:5 src/seahorse-generate-adv.glade.h:10
 #: src/seahorse-key-properties.c:390
 msgid "If key never expires"
 msgstr "Klucz nigdy nie wygasa"
 
-#: src/seahorse-add-subkey.glade.h:6 src/seahorse-generate.glade.h:12
+#: src/seahorse-add-subkey.glade.h:6 src/seahorse-generate-adv.glade.h:12
 msgid "Key _Length:"
 msgstr "Długośc k_lucza:"
 
-#: src/seahorse-add-subkey.glade.h:7 src/seahorse-generate.glade.h:13
+#: src/seahorse-add-subkey.glade.h:7 src/seahorse-generate-adv.glade.h:13
 msgid "Key _Type:"
 msgstr "_Rodzaj klucza:"
 
-#: src/seahorse-add-subkey.glade.h:8 src/seahorse-generate.glade.h:14
+#: src/seahorse-add-subkey.glade.h:8 src/seahorse-generate-adv.glade.h:14
 msgid "Key type / algorithm"
 msgstr "Rodzaj klucza / algorytm"
 
-#: src/seahorse-add-subkey.glade.h:9 src/seahorse-generate.glade.h:15
+#: src/seahorse-add-subkey.glade.h:9 src/seahorse-generate-adv.glade.h:15
 msgid "Length of Key"
 msgstr "Długość klucza"
 
-#: src/seahorse-add-subkey.glade.h:10 src/seahorse-generate.glade.h:17
+#: src/seahorse-add-subkey.glade.h:10 src/seahorse-generate-adv.glade.h:17
 #: src/seahorse-key-properties.c:388
 msgid "Never E_xpires"
 msgstr "Nigdy nie _wygasa"
@@ -511,7 +511,7 @@ msgstr "Nigdy nie _wygasa"
 msgid "RSA (encrypt only)"
 msgstr "RSA (tylko szyfrowanie)"
 
-#: src/seahorse-add-subkey.glade.h:12 src/seahorse-generate.glade.h:21
+#: src/seahorse-add-subkey.glade.h:12 src/seahorse-generate-adv.glade.h:21
 msgid "RSA (sign only)"
 msgstr "RSA (tylko podpis)"
 
@@ -528,27 +528,29 @@ msgstr "Dodaje identyfikator użytkownika"
 msgid "Create the new user ID"
 msgstr "Tworzy nowy identyfikator użytkownika"
 
-#: src/seahorse-add-uid.glade.h:4 src/seahorse-generate.glade.h:7
+#: src/seahorse-add-uid.glade.h:4 src/seahorse-generate-adv.glade.h:7
 msgid "Full _Name:"
 msgstr "Imię i _nazwisko:"
 
-#: src/seahorse-add-uid.glade.h:5 src/seahorse-generate.glade.h:11
+#: src/seahorse-add-uid.glade.h:5 src/seahorse-generate-adv.glade.h:11
 msgid "Key Co_mment:"
 msgstr "Ko_mentarz do klucza:"
 
-#: src/seahorse-add-uid.glade.h:6 src/seahorse-generate.glade.h:16
+#: src/seahorse-add-uid.glade.h:6 src/seahorse-generate-adv.glade.h:16
 msgid "Must be at least 5 characters long"
 msgstr "musi mieć długośc przynajmniej 5 znaków"
 
-#: src/seahorse-add-uid.glade.h:7 src/seahorse-generate.glade.h:18
+#: src/seahorse-add-uid.glade.h:7 src/seahorse-generate-adv.glade.h:18
+#: src/seahorse-generate-druid.glade.h:20
 msgid "Optional comment describing key"
 msgstr "Opcjonalny komentarz opisujący klucz"
 
-#: src/seahorse-add-uid.glade.h:8 src/seahorse-generate.glade.h:19
+#: src/seahorse-add-uid.glade.h:8 src/seahorse-generate-adv.glade.h:19
+#: src/seahorse-generate-druid.glade.h:21
 msgid "Optional email address"
 msgstr "Opcjonalny adres e-mail"
 
-#: src/seahorse-add-uid.glade.h:9 src/seahorse-generate.glade.h:22
+#: src/seahorse-add-uid.glade.h:9 src/seahorse-generate-adv.glade.h:22
 msgid "_Email Address:"
 msgstr "Adres _e-mail:"
 
@@ -556,7 +558,8 @@ msgstr "Adres _e-mail:"
 msgid "Change Passphrase"
 msgstr "Zmień hasło"
 
-#: src/seahorse-change-passphrase.glade.h:3 src/seahorse-generate.glade.h:2
+#: src/seahorse-change-passphrase.glade.h:3
+#: src/seahorse-generate-adv.glade.h:2
 msgid "Con_firm Passphrase:"
 msgstr "_Potwierdzenie hasła:"
 
@@ -577,12 +580,12 @@ msgstr "Nowe _hasło:"
 msgid "%s is a key pair! Do you still want to delete it?"
 msgstr "%s jest parą kluczy! Czy jesteś pewien, że chcesz ją usunąć?"
 
-#: src/seahorse-delete.c:51
+#: src/seahorse-delete.c:66
 #, c-format
 msgid "Are you sure you want to permanently delete %s?"
 msgstr "Czy na pewno chcesz na trwałe usunąć %s?"
 
-#: src/seahorse-delete.c:104
+#: src/seahorse-delete.c:131
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
 msgstr "Czy na pewno chcesz na trwałe usunąć podklucz %d klucza %s?"
@@ -635,33 +638,238 @@ msgstr "Nazwa pliku do eksportu"
 msgid "www.keyserver.net/en"
 msgstr "www.keyserver.net/en"
 
-#: src/seahorse-generate.glade.h:3
+#: src/seahorse-generate-adv.glade.h:3
 msgid "Confirmation of passphrase"
 msgstr "Potwierdzenie hasła"
 
-#: src/seahorse-generate.glade.h:4
+#: src/seahorse-generate-adv.glade.h:4
 msgid "DSA & ElGamal"
 msgstr "DSA i ElGamal"
 
-#: src/seahorse-generate.glade.h:8
+#: src/seahorse-generate-adv.glade.h:8
 msgid "Generate a Key"
 msgstr "Generowanie klucza"
 
-#: src/seahorse-generate.glade.h:9
+#: src/seahorse-generate-adv.glade.h:9
 msgid "Generate a new key"
 msgstr "Generuje nowy klucz"
 
-#: src/seahorse-generate.glade.h:20
+#: src/seahorse-generate-adv.glade.h:20 src/seahorse-generate-druid.glade.h:23
 msgid "Passphrase to secure key"
 msgstr "Wprowadź hasło zabezpieczające klucz"
 
-#: src/seahorse-generate.glade.h:23
+#: src/seahorse-generate-adv.glade.h:23
 msgid "_Generate"
 msgstr "_Generuj"
 
-#: src/seahorse-generate.glade.h:24
+#: src/seahorse-generate-adv.glade.h:24
 msgid "_Passphrase:"
 msgstr "_Hasło:"
+
+#: src/seahorse-generate-druid.glade.h:2
+msgid ""
+"Before selecting apply to start key generation, please make sure all of your "
+"previous settings are correct."
+msgstr ""
+"Przed wyborem \"zastosuj\" uruchamiającym generowanie klucza, upewnij się, "
+"że wszystkie poprzednie ustawienia są poprawne."
+
+#: src/seahorse-generate-druid.glade.h:3
+msgid ""
+"Choosing a passphrase is an integral part of creating a strong key.  Like a "
+"password, a passphrase should letters, numbers, and punctuation.  "
+"Additionally, a passphrase can contain spaces, meaning it can contain many "
+"words.  You should pick a rememberable phrase that contains punctuation.  "
+"Take this phrase, adjust the case of various letters, and change some of the "
+"letters into numbers or punctuation rmeiniscent of \"leet speak\", but don't "
+"make it so obscure to the point where you can't remember it."
+msgstr ""
+"Wybór hasła szyfrującego jest nieodłączną częścią tworzenia mocnego klucza. "
+"Hasło szyfrujące powinno zawierać litery, cyfry i znaki interpunkcyjne. "
+"Dodatkowo, hasło może zawierać spacje, co oznacza, że może składać się z "
+"wielu słów. Należy wybrać hasło dające się zapamiętać i zawierające znaki "
+"interpunkcyjne. W haśle należy pozmieniać wielkość różnych liter, pozmieniać "
+"część liter na cyfry lub inne pozostałe znaki nadając postać \"ż4r60nu"
+"\" (żargonu), ale nie należy przesadzać, gdyż tekst będzie zbyt trudny do "
+"zapamiętania."
+
+#: src/seahorse-generate-druid.glade.h:4
+msgid "Comment:"
+msgstr "Komentarz:"
+
+#: src/seahorse-generate-druid.glade.h:5
+msgid "Confirm"
+msgstr "Potwierdzenie"
+
+#: src/seahorse-generate-druid.glade.h:6
+msgid "Confirm Passphrase: "
+msgstr "Potwierdzenie hasła:"
+
+#: src/seahorse-generate-druid.glade.h:7
+msgid "Confirm passphrase"
+msgstr "Potwierdzenie hasła"
+
+#: src/seahorse-generate-druid.glade.h:8
+msgid "Date the Key Expires"
+msgstr "Data ważności klucza"
+
+#: src/seahorse-generate-druid.glade.h:9
+msgid "Email Address: "
+msgstr "Adres e-mail: "
+
+#: src/seahorse-generate-druid.glade.h:10
+msgid "Enter Name - Must be at least five letters."
+msgstr "Podaj nazwę - musi mieć conajmniej pięć liter."
+
+#: src/seahorse-generate-druid.glade.h:11 src/seahorse-key-manager-store.c:269
+msgid "Expiration Date"
+msgstr "Data wygaśnięcia"
+
+#: src/seahorse-generate-druid.glade.h:12
+msgid "Expiration Date: "
+msgstr "Data wygaśnięcia: "
+
+#: src/seahorse-generate-druid.glade.h:13
+msgid "Extra High Security"
+msgstr "Bardzo wysokie bezpieczeństwo"
+
+#: src/seahorse-generate-druid.glade.h:14
+msgid "Full Name: "
+msgstr "Imię i nazwisko: "
+
+#: src/seahorse-generate-druid.glade.h:15
+msgid "High Security"
+msgstr "Wysokie bezpieczeństwo"
+
+#: src/seahorse-generate-druid.glade.h:16
+msgid "Key Never Expires"
+msgstr "Klucz nie wygasa"
+
+#: src/seahorse-generate-druid.glade.h:17
+msgid ""
+"Keys must be given an appropriate expiration date.  For most people, the "
+"default option of never expires is sufficent.  If you only plan on using the "
+"key for a certain period of time, i.e. for a specific project, you should "
+"pick an expiration date after the projected completion of your project.  "
+"After the expiration date, your private key will still be able to decrypt "
+"messages or data encrypted with your public key.  However, your private key "
+"will no longer sign messages or data."
+msgstr ""
+"Klucz musi mieć podana datę wygaśnięcia. Dla większości osób, wystarczająca "
+"jest domyślna opcja \"nie wygasa\". Jeżeli klucz planowany jest do użycia "
+"przez pewien okres czasu, np. do konkretnego projektu, należy podać datę "
+"wygaśnięcia następującą po planowanej dacie zakończenia projektu. Po dacie "
+"wygaśnięcia, klucz prywatny ciągle będzie mógł odszyfrowywać wiadomości "
+"zakodowane przy użyciu klucza publicznego. Nie będzie jednak możliwości "
+"podpisania tym kluczem wiadomości lub danych."
+
+#: src/seahorse-generate-druid.glade.h:18
+msgid "Medium Security"
+msgstr "Średnie bezpieczeństwo"
+
+#: src/seahorse-generate-druid.glade.h:19 src/seahorse-key-manager-store.c:154
+#: src/seahorse-key-properties.c:373
+msgid "Never Expires"
+msgstr "Nie wygasa"
+
+#: src/seahorse-generate-druid.glade.h:22
+msgid "Passphrase"
+msgstr "Hasło"
+
+#: src/seahorse-generate-druid.glade.h:24
+msgid "Passphrase:"
+msgstr "Hasło:"
+
+#: src/seahorse-generate-druid.glade.h:25
+msgid "Personal Information"
+msgstr "Informacje osobiste"
+
+#: src/seahorse-generate-druid.glade.h:26
+msgid "Seahorse GPG Key Generation Druid"
+msgstr "Druid generowania klucza GPG"
+
+#: src/seahorse-generate-druid.glade.h:27
+msgid "Seahorse GPG Key Generation Druid Complete"
+msgstr "Druid generowania klucza GPG zakończył pracę"
+
+#: src/seahorse-generate-druid.glade.h:28
+msgid "Seahorse Key Generation Druid"
+msgstr "Drid generowania klucza"
+
+#: src/seahorse-generate-druid.glade.h:29
+msgid "Security Level"
+msgstr "Poziom bezpieczeństwa"
+
+#: src/seahorse-generate-druid.glade.h:30
+msgid ""
+"The Medium Security level is the default and should be acceptable for "
+"general everyday usage.  The High Security level should be selected if you "
+"know your data will be actively scrutinized.  The Extra High level should be "
+"selected if you know your data is actively scrutinized and will be under "
+"cryptographic attack. "
+msgstr ""
+"Średni poziom bezpieczeństwa jest domyślnym i powinien być wystarczający do "
+"codziennego użytku. Wysoki poziom bezpieczeństwa powinien zostać wybrany, "
+"gdy istnieje pewność, że dane są aktywnie analizowane. Bardzo wysoki poziom "
+"bezpieczeństwa powinien zostać wybrany, gdy dane są aktywnie analizowane i "
+"będzie przypuszczony na nie atak kryptograficzny."
+
+#: src/seahorse-generate-druid.glade.h:31
+msgid "This druid will guide you through the steps of creating a GPG key pair."
+msgstr ""
+"Druid pomoże przejść przez kroki potrzebne do utworzenia pary kluczy GPG."
+
+#: src/seahorse-generate-druid.glade.h:32
+msgid ""
+"To create a key and tie it to your identity, the following information is "
+"needed: Full Name, Email Address, and Comment.  These values will be given "
+"to the name of your key in the following "
+"manner:                              Full Name (Comment) <email address>."
+msgstr ""
+"Aby utworzyć klucz i powiązać go z informacją o użytkowniku, potrzebne są "
+"następujące dane: imię i nazwisko, adres e-mail, komentarz. Dane te zostaną "
+"dodane do nazwy klucza w następujący sposób                                "
+"Imię i nazwisko (komentaż) <adres e-mail>."
+
+#: src/seahorse-generate-druid.glade.h:33
+msgid "druidpage_pass"
+msgstr "druidpage_pass"
+
+#: src/seahorse-generate-druid.glade.h:34
+msgid "druidpage_pinfo"
+msgstr "druidpage_pinfo"
+
+#: src/seahorse-generate-druid.glade.h:35
+msgid "keygen_druid"
+msgstr "keygen_druid"
+
+#: src/seahorse-generate-select.glade.h:1
+msgid "Advanced"
+msgstr "Zaawansowane"
+
+#: src/seahorse-generate-select.glade.h:2
+msgid "Druid"
+msgstr "Druid"
+
+#: src/seahorse-generate-select.glade.h:3
+msgid "Generate a key via the druid."
+msgstr "Generowanie klucza za pomocą druida."
+
+#: src/seahorse-generate-select.glade.h:4
+msgid "Generate a key with the advanced dialog."
+msgstr "Generowanie klucza za pomocą zaawansowanego okna."
+
+#: src/seahorse-generate-select.glade.h:5
+msgid "Method Select"
+msgstr "Wybór metody"
+
+#: src/seahorse-generate-select.glade.h:6
+msgid "Select a method to generate your new key."
+msgstr "Wybór metody genrowania nowego klucza."
+
+#: src/seahorse-generate-select.glade.h:7
+msgid "radio_druid"
+msgstr "radio_druid"
 
 #: src/seahorse-import.glade.h:2
 msgid "Enter a unique key id"
@@ -892,14 +1100,6 @@ msgstr "Pasek _narzędzi"
 #: src/seahorse-key-manager-store.c:147 src/seahorse-key-properties.c:361
 msgid "Expired"
 msgstr "Wygasa"
-
-#: src/seahorse-key-manager-store.c:154 src/seahorse-key-properties.c:373
-msgid "Never Expires"
-msgstr "Nie wygasa"
-
-#: src/seahorse-key-manager-store.c:269
-msgid "Expiration Date"
-msgstr "Data wygaśnięcia"
 
 #: src/seahorse-key-manager-store.c:273
 msgid "Trust"
@@ -1288,115 +1488,3 @@ msgstr "_Lokalnie"
 #: src/seahorse-sign.glade.h:16
 msgid "_Revocable"
 msgstr "M_ożliwość unieważnienia"
-
-#~ msgid "Default Key ID"
-#~ msgstr "ID domyślnego klucza"
-
-#~ msgid "Use Ascii Armor"
-#~ msgstr "Użyj otoczki ASCII"
-
-#~ msgid ""
-#~ "Cannot export to \n"
-#~ "%s"
-#~ msgstr ""
-#~ "Nie udało się wyeksportować klucza do \n"
-#~ "%s"
-
-#~ msgid "Export Key: %s"
-#~ msgstr "Eksport klucza: %s"
-
-#~ msgid "Cancel Export"
-#~ msgstr "Anuluj eksport"
-
-#~ msgid "Export Help"
-#~ msgstr "Pomoc"
-
-#~ msgid "Export Key to Text"
-#~ msgstr "Eksportuje klucz do tekstu"
-
-#~ msgid "Export a Key to a File"
-#~ msgstr "Eksportuje klucz do pliku"
-
-#~ msgid "Export to _Text:"
-#~ msgstr "Eksportuj do _tekstu:"
-
-#~ msgid "Exported text"
-#~ msgstr "Wyeksportowany tekst"
-
-#~ msgid "You must fill in a valid name"
-#~ msgstr "Wpisz poprawną nazwę"
-
-#~ msgid "You must fill in a valid email address"
-#~ msgstr "Wpisz poprawny adres e-mail"
-
-#~ msgid "You must fill in a valid comment"
-#~ msgstr "Wpisz poprawny komentarz"
-
-#~ msgid "You must fill in a valid passphrase"
-#~ msgstr "Wpisz poprawne hasło"
-
-#~ msgid "You must confirm your passphrase"
-#~ msgstr "Wpisz potwierdzenie hasła"
-
-#~ msgid "Passphrase & confirmation must match"
-#~ msgstr "Hasło i potwierdzenie hasła muszą być identyczne"
-
-#~ msgid "Confirm the entered passphrase"
-#~ msgstr "Potwierdź wpisane hasło"
-
-#~ msgid "Enter your full name"
-#~ msgstr "Wpisz swoje imię i nazwisko"
-
-#~ msgid "Cancel Import"
-#~ msgstr "Anuluj import"
-
-#~ msgid "Import Key(s) from File"
-#~ msgstr "Importuje klucze z pliku"
-
-#~ msgid "Import Key(s) from Text"
-#~ msgstr "Importuje klucze z tekstu"
-
-#~ msgid "Import from _Text:"
-#~ msgstr "Import z _tekstu:"
-
-#~ msgid "Key Import Help"
-#~ msgstr "Pomoc importu kluczy"
-
-#~ msgid "Default Signing Key"
-#~ msgstr "Domyślny klucz do podpisywania"
-
-#~ msgid "Add key to recipient list"
-#~ msgstr "Dodaje klucz do listy odbiorców"
-
-#~ msgid "Recipients"
-#~ msgstr "Odbiorcy"
-
-#~ msgid "Remove key from recipient list"
-#~ msgstr "Usuwa klucz z listy odbiorców"
-
-#~ msgid "_Add"
-#~ msgstr "_Dodaj"
-
-#~ msgid "File to process"
-#~ msgstr "Plik do przetwarzania"
-
-#~ msgid "Make a detached signature"
-#~ msgstr "Tworzy podpis w oddzielnym pliku"
-
-#~ msgid "Seahorse File Manager"
-#~ msgstr "Zarządca plików Seahorse"
-
-#~ msgid "Select File"
-#~ msgstr "Wybierz plik"
-
-#~ msgid "Show file manager help"
-#~ msgstr "Pokaż pomoc zarządcy plików"
-
-#~ msgid "_File Manager Help"
-#~ msgstr "P_omoc zarządcy plików"
-
-#~ msgid "_Verify"
-#~ msgstr "_Weryfikuj"
-
-#~ msgid "Delete selected key"
-#~ msgstr "Usuwa zaznaczony klucz"
