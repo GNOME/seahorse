@@ -18,7 +18,45 @@ PKG_CHECK_MODULES(SEAHORSE, libgnomeui-2.0 libglade-2.0)
 dnl **********
 dnl GPGME
 dnl **********
-AM_PATH_GPGME(0.3.14)
+dnl The line below only checks for versions >= 0.3.14, so it doesn't 
+dnl is valid for us. Cloning part og gpgme.m4 macro here.
+dnl AM_PATH_GPGME(0.3.14)
+
+min_gpgme_version=0.3.14
+AC_PATH_PROG(GPGME_CONFIG, gpgme-config, no)
+AC_MSG_CHECKING(for GPGME - version >= $min_gpgme_version)
+ok=no
+if test "$GPGME_CONFIG" != "no" ; then
+      req_major=`echo $min_gpgme_version | \
+		 sed 's/\([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\)/\1/'`
+      req_minor=`echo $min_gpgme_version | \
+                 sed 's/\([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\)/\2/'`
+      req_micro=`echo $min_gpgme_version | \
+                 sed 's/\([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\)/\3/'`
+      gpgme_config_version=`$GPGME_CONFIG --version`
+      major=`echo $gpgme_config_version | \
+                 sed 's/\([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\).*/\1/'`
+      minor=`echo $gpgme_config_version | \
+                 sed 's/\([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\).*/\2/'`
+      micro=`echo $gpgme_config_version | \
+		 sed 's/\([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\).*/\3/'`
+fi
+if test "$major" -eq "$req_major"; then
+   if test "$minor" -eq "$req_minor"; then
+     if test "$micro" -ge "$req_micro"; then
+       ok=yes
+     fi
+   fi
+fi
+
+if test $ok = yes; then
+  GPGME_CFLAGS=`$GPGME_CONFIG --cflags`
+  GPGME_LIBS=`$GPGME_CONFIG --libs`
+  AC_MSG_RESULT(yes)
+else
+  AC_MSG_ERROR(Seahorse $min_gpgme_version needed)
+fi
+
 
 SEAHORSE_CFLAGS="$SEAHORSE_CFLAGS $GPGME_CFLAGS"
 SEAHORSE_LIBS="$SEAHORSE_LIBS $GPGME_LIBS"
