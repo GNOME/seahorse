@@ -175,6 +175,7 @@ do_uids (SeahorseWidget *swidget)
 		/***** do ciphers *****/
 		
 		widget = gtk_frame_new (_("Ciphers"));
+		gtk_frame_set_shadow_type (GTK_FRAME (widget), GTK_SHADOW_NONE);
 		gtk_container_add (box, widget);
 		table = GTK_TABLE (gtk_table_new (2, 4, FALSE));
 		gtk_table_set_row_spacings (table, SPACING);
@@ -213,6 +214,7 @@ do_uids (SeahorseWidget *swidget)
 		/***** do hashes *****/
 		
 		widget = gtk_frame_new (_("Hashes"));
+		gtk_frame_set_shadow_type (GTK_FRAME (widget), GTK_SHADOW_NONE);
 		gtk_container_add (box, widget);
 		table = GTK_TABLE (gtk_table_new (1, 3, FALSE));
 		gtk_table_set_row_spacings (table, SPACING);
@@ -235,6 +237,7 @@ do_uids (SeahorseWidget *swidget)
 		/***** do compression *****/
 		
 		widget = gtk_frame_new (_("Compression"));
+		gtk_frame_set_shadow_type (GTK_FRAME (widget), GTK_SHADOW_NONE);
 		gtk_container_add (box, widget);
 		table = GTK_TABLE (gtk_table_new (1, 3, FALSE));
 		gtk_table_set_row_spacings (table, SPACING);

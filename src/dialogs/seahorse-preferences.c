@@ -27,25 +27,25 @@
 #include "seahorse-signer-menu.h"
 
 static void
-show_col_toggled (GtkToggleButton *togglebutton, gchar *key)
+button_toggled (GtkToggleButton *togglebutton, gchar *key)
 {
 	eel_gconf_set_boolean (key, gtk_toggle_button_get_active (togglebutton));
 }
 
-/* Toggles armor setting */
+/* Toggles armor setting *
 static void
 armor_toggled (GtkToggleButton *togglebutton, SeahorseWidget *swidget)
 {
 	seahorse_context_set_ascii_armor (swidget->sctx, gtk_toggle_button_get_active (togglebutton));
 }
 
-/* Toggles text mode setting */
+/* Toggles text mode setting *
 static void
 text_mode_toggled (GtkToggleButton *togglebutton, SeahorseWidget *swidget)
 {
 	seahorse_context_set_text_mode (swidget->sctx, gtk_toggle_button_get_active (togglebutton));
 }
-
+*/
 static void
 key_toolbar_changed (GtkOptionMenu *option, SeahorseWidget *swidget)
 {
@@ -123,15 +123,15 @@ seahorse_preferences_show (SeahorseContext *sctx)
 		swidget->xml, "show_length")), eel_gconf_get_boolean (SHOW_LENGTH));
 	
 	glade_xml_signal_connect_data (swidget->xml, "armor_toggled",
-		G_CALLBACK (armor_toggled), swidget);
+		G_CALLBACK (button_toggled), ASCII_ARMOR);
 	glade_xml_signal_connect_data (swidget->xml, "text_mode_toggled",
-		G_CALLBACK (text_mode_toggled), swidget);
+		G_CALLBACK (button_toggled), TEXT_MODE);
 	glade_xml_signal_connect_data (swidget->xml, "key_toolbar_changed",
 		G_CALLBACK (key_toolbar_changed), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "show_trust_toggled",
-		G_CALLBACK (show_col_toggled), SHOW_TRUST);
+		G_CALLBACK (button_toggled), SHOW_TRUST);
 	glade_xml_signal_connect_data (swidget->xml, "show_type_toggled",
-		G_CALLBACK (show_col_toggled), SHOW_TYPE);
+		G_CALLBACK (button_toggled), SHOW_TYPE);
 	glade_xml_signal_connect_data (swidget->xml, "show_length_toggled",
-		G_CALLBACK (show_col_toggled), SHOW_LENGTH);
+		G_CALLBACK (button_toggled), SHOW_LENGTH);
 }

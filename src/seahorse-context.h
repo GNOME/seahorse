@@ -85,12 +85,6 @@ void			seahorse_context_show_progress		(SeahorseContext	*sctx,
 								 const gchar		*op,
 								 gdouble		fract);
 
-void			seahorse_context_set_ascii_armor	(SeahorseContext	*sctx,
-								 gboolean		ascii_armor);
-
-void			seahorse_context_set_text_mode		(SeahorseContext	*sctx,
-								 gboolean		text_mode);
-
 void			seahorse_context_set_default_key	(SeahorseContext	*sctx,
 								 SeahorseKeyPair	*skpair);
 

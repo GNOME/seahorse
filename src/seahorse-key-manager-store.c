@@ -234,7 +234,7 @@ seahorse_key_manager_store_new (SeahorseContext *sctx, GtkTreeView *view)
 	col = seahorse_key_store_append_column (view, _("Length"), LENGTH);
 	gtk_tree_view_column_set_visible (col, eel_gconf_get_boolean (SHOW_LENGTH));
 	
-	eel_gconf_notification_add (LISTING, (GConfClientNotifyFunc) gconf_notification, view);
+	eel_gconf_notification_add (LISTING, (GConfClientNotifyFunc)gconf_notification, view);
 	eel_gconf_monitor_add (LISTING);
 	
 	seahorse_context_get_keys (sctx);

@@ -62,7 +62,7 @@
 			  <accelerator key="I" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image1256">
+			    <widget class="GtkImage" id="image1481">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-open</property>
 			      <property name="icon_size">1</property>
@@ -90,7 +90,7 @@
 			  <signal name="activate" handler="properties_activate" last_modification_time="Wed, 12 Feb 2003 02:03:56 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image1257">
+			    <widget class="GtkImage" id="image1482">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-properties</property>
 			      <property name="icon_size">1</property>
@@ -112,13 +112,13 @@
 		      <child>
 			<widget class="GtkImageMenuItem" id="export">
 			  <property name="visible">True</property>
-			  <property name="tooltip" translatable="yes">Export key</property>
+			  <property name="tooltip" translatable="yes">Export public key</property>
 			  <property name="label" translatable="yes">E_xport...</property>
 			  <property name="use_underline">True</property>
 			  <signal name="activate" handler="export_activate" last_modification_time="Wed, 12 Feb 2003 02:03:56 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image1258">
+			    <widget class="GtkImage" id="image1483">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-save-as</property>
 			      <property name="icon_size">1</property>
@@ -134,13 +134,13 @@
 		      <child>
 			<widget class="GtkImageMenuItem" id="sign">
 			  <property name="visible">True</property>
-			  <property name="tooltip" translatable="yes">Sign key</property>
+			  <property name="tooltip" translatable="yes">Sign public key</property>
 			  <property name="label" translatable="yes">_Sign...</property>
 			  <property name="use_underline">True</property>
 			  <signal name="activate" handler="sign_activate" last_modification_time="Wed, 12 Feb 2003 02:09:46 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image1259">
+			    <widget class="GtkImage" id="image1484">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-index</property>
 			      <property name="icon_size">1</property>
@@ -156,13 +156,13 @@
 		      <child>
 			<widget class="GtkImageMenuItem" id="delete">
 			  <property name="visible">True</property>
-			  <property name="tooltip" translatable="yes">Delete selected key</property>
+			  <property name="tooltip" translatable="yes">Delete key</property>
 			  <property name="label" translatable="yes">_Delete</property>
 			  <property name="use_underline">True</property>
 			  <signal name="activate" handler="delete_activate" last_modification_time="Wed, 12 Feb 2003 02:05:07 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image1260">
+			    <widget class="GtkImage" id="image1485">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-delete</property>
 			      <property name="icon_size">1</property>
@@ -182,15 +182,37 @@
 		      </child>
 
 		      <child>
+			<widget class="GtkImageMenuItem" id="backup">
+			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Backup key pair</property>
+			  <property name="label" translatable="yes">_Backup...</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="backup_activate" last_modification_time="Sun, 09 Mar 2003 17:18:15 GMT"/>
+
+			  <child internal-child="image">
+			    <widget class="GtkImage" id="image1486">
+			      <property name="visible">True</property>
+			      <property name="stock">gtk-save</property>
+			      <property name="icon_size">1</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+
+		      <child>
 			<widget class="GtkImageMenuItem" id="change_passphrase">
 			  <property name="visible">True</property>
-			  <property name="tooltip" translatable="yes">Change key's passphrase</property>
+			  <property name="tooltip" translatable="yes">Change passphrase of secret key</property>
 			  <property name="label" translatable="yes">_Change Passphrase...</property>
 			  <property name="use_underline">True</property>
 			  <signal name="activate" handler="change_passphrase_activate" last_modification_time="Wed, 12 Feb 2003 02:07:49 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image1261">
+			    <widget class="GtkImage" id="image1487">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-copy</property>
 			      <property name="icon_size">1</property>
@@ -204,15 +226,43 @@
 		      </child>
 
 		      <child>
+			<widget class="GtkImageMenuItem" id="gen_revoke">
+			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Create a revocation certificate</property>
+			  <property name="label" translatable="yes">_Generate Revocation Certificate...</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="gen_revoke_activate" last_modification_time="Sun, 09 Mar 2003 17:20:29 GMT"/>
+
+			  <child internal-child="image">
+			    <widget class="GtkImage" id="image1488">
+			      <property name="visible">True</property>
+			      <property name="stock">gtk-paste</property>
+			      <property name="icon_size">1</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkMenuItem" id="separator16">
+			  <property name="visible">True</property>
+			</widget>
+		      </child>
+
+		      <child>
 			<widget class="GtkImageMenuItem" id="add_uid">
 			  <property name="visible">True</property>
-			  <property name="tooltip" translatable="yes">Add a new user ID to the key</property>
+			  <property name="tooltip" translatable="yes">Add a new user ID</property>
 			  <property name="label" translatable="yes">Add _User ID...</property>
 			  <property name="use_underline">True</property>
 			  <signal name="activate" handler="add_uid_activate" last_modification_time="Wed, 12 Feb 2003 02:07:49 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image1262">
+			    <widget class="GtkImage" id="image1489">
 			      <property name="visible">True</property>
 			      <property name="stock">gnome-stock-text-unindent</property>
 			      <property name="icon_size">1</property>
@@ -228,13 +278,13 @@
 		      <child>
 			<widget class="GtkImageMenuItem" id="add_subkey">
 			  <property name="visible">True</property>
-			  <property name="tooltip" translatable="yes">Add a new subkey to the key</property>
+			  <property name="tooltip" translatable="yes">Add a new subkey</property>
 			  <property name="label" translatable="yes">Add Sub_key...</property>
 			  <property name="use_underline">True</property>
 			  <signal name="activate" handler="add_subkey_activate" last_modification_time="Wed, 12 Feb 2003 02:07:49 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image1263">
+			    <widget class="GtkImage" id="image1490">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-add</property>
 			      <property name="icon_size">1</property>
@@ -250,13 +300,13 @@
 		      <child>
 			<widget class="GtkImageMenuItem" id="add_photo">
 			  <property name="visible">True</property>
-			  <property name="tooltip" translatable="yes">Add a photo ID to the key</property>
+			  <property name="tooltip" translatable="yes">Add a photo ID</property>
 			  <property name="label" translatable="yes">Add P_hoto ID...</property>
 			  <property name="use_underline">True</property>
 			  <signal name="activate" handler="add_photo_activate" last_modification_time="Wed, 12 Feb 2003 02:14:41 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image1264">
+			    <widget class="GtkImage" id="image1491">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-select-color</property>
 			      <property name="icon_size">1</property>
@@ -272,13 +322,13 @@
 		      <child>
 			<widget class="GtkImageMenuItem" id="add_revoker">
 			  <property name="visible">True</property>
-			  <property name="tooltip" translatable="yes">Add a revoker to the key</property>
+			  <property name="tooltip" translatable="yes">Add the default key as a revoker</property>
 			  <property name="label" translatable="yes">Add _Revoker...</property>
 			  <property name="use_underline">True</property>
 			  <signal name="activate" handler="add_revoker_activate" last_modification_time="Wed, 12 Feb 2003 02:13:03 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image1265">
+			    <widget class="GtkImage" id="image1492">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-cancel</property>
 			      <property name="icon_size">1</property>
@@ -382,7 +432,7 @@
 			  <accelerator key="E" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image1266">
+			    <widget class="GtkImage" id="image1493">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-sort-ascending</property>
 			      <property name="icon_size">1</property>
@@ -405,7 +455,7 @@
 			  <accelerator key="S" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image1267">
+			    <widget class="GtkImage" id="image1494">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-index</property>
 			      <property name="icon_size">1</property>
@@ -427,7 +477,7 @@
 			  <signal name="activate" handler="encrypt_sign_file_activate" last_modification_time="Sat, 01 Mar 2003 17:05:28 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image1268">
+			    <widget class="GtkImage" id="image1495">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-convert</property>
 			      <property name="icon_size">1</property>
@@ -456,7 +506,7 @@
 			  <accelerator key="D" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image1269">
+			    <widget class="GtkImage" id="image1496">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-sort-descending</property>
 			      <property name="icon_size">1</property>
@@ -479,7 +529,7 @@
 			  <accelerator key="V" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image1270">
+			    <widget class="GtkImage" id="image1497">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-apply</property>
 			      <property name="icon_size">1</property>
@@ -501,7 +551,7 @@
 			  <signal name="activate" handler="decrypt_verify_file_activate" last_modification_time="Sat, 01 Mar 2003 17:05:28 GMT"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image1271">
+			    <widget class="GtkImage" id="image1498">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-spell-check</property>
 			      <property name="icon_size">1</property>
@@ -530,7 +580,7 @@
 			  <accelerator key="T" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image1272">
+			    <widget class="GtkImage" id="image1499">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-justify-fill</property>
 			      <property name="icon_size">1</property>
@@ -565,7 +615,7 @@
 			  <accelerator key="F1" modifiers="0" signal="activate"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image1273">
+			    <widget class="GtkImage" id="image1500">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-help</property>
 			      <property name="icon_size">1</property>
@@ -721,13 +771,13 @@
   <child>
     <widget class="GtkImageMenuItem" id="key_properties">
       <property name="visible">True</property>
-      <property name="tooltip" translatable="yes">View selected key's properties</property>
+      <property name="tooltip" translatable="yes">Show key properties</property>
       <property name="label" translatable="yes">_Properties</property>
       <property name="use_underline">True</property>
       <signal name="activate" handler="properties_activate" last_modification_time="Wed, 12 Feb 2003 02:32:22 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1196">
+	<widget class="GtkImage" id="image1501">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-properties</property>
 	  <property name="icon_size">1</property>
@@ -749,13 +799,13 @@
   <child>
     <widget class="GtkImageMenuItem" id="key_export">
       <property name="visible">True</property>
-      <property name="tooltip" translatable="yes">Export selected key</property>
+      <property name="tooltip" translatable="yes">Export public key</property>
       <property name="label" translatable="yes">E_xport...</property>
       <property name="use_underline">True</property>
       <signal name="activate" handler="export_activate" last_modification_time="Wed, 12 Feb 2003 02:32:22 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1197">
+	<widget class="GtkImage" id="image1502">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-save-as</property>
 	  <property name="icon_size">1</property>
@@ -771,13 +821,13 @@
   <child>
     <widget class="GtkImageMenuItem" id="key_sign">
       <property name="visible">True</property>
-      <property name="tooltip" translatable="yes">Sign selected key</property>
+      <property name="tooltip" translatable="yes">Sign public key</property>
       <property name="label" translatable="yes">_Sign...</property>
       <property name="use_underline">True</property>
       <signal name="activate" handler="sign_activate" last_modification_time="Wed, 12 Feb 2003 02:32:22 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1198">
+	<widget class="GtkImage" id="image1503">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-index</property>
 	  <property name="icon_size">1</property>
@@ -793,13 +843,13 @@
   <child>
     <widget class="GtkImageMenuItem" id="key_delete">
       <property name="visible">True</property>
-      <property name="tooltip" translatable="yes">Delete selected key</property>
+      <property name="tooltip" translatable="yes">Delete key</property>
       <property name="label" translatable="yes">_Delete</property>
       <property name="use_underline">True</property>
       <signal name="activate" handler="delete_activate" last_modification_time="Wed, 12 Feb 2003 02:36:40 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1199">
+	<widget class="GtkImage" id="image1504">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-delete</property>
 	  <property name="icon_size">1</property>
@@ -819,15 +869,37 @@
   </child>
 
   <child>
+    <widget class="GtkImageMenuItem" id="key_backup">
+      <property name="visible">True</property>
+      <property name="tooltip" translatable="yes">Backup key pair</property>
+      <property name="label" translatable="yes">_Backup...</property>
+      <property name="use_underline">True</property>
+      <signal name="activate" handler="backup_activate" last_modification_time="Sun, 09 Mar 2003 17:30:27 GMT"/>
+
+      <child internal-child="image">
+	<widget class="GtkImage" id="image1505">
+	  <property name="visible">True</property>
+	  <property name="stock">gtk-save</property>
+	  <property name="icon_size">1</property>
+	  <property name="xalign">0.5</property>
+	  <property name="yalign">0.5</property>
+	  <property name="xpad">0</property>
+	  <property name="ypad">0</property>
+	</widget>
+      </child>
+    </widget>
+  </child>
+
+  <child>
     <widget class="GtkImageMenuItem" id="key_change_passphrase">
       <property name="visible">True</property>
-      <property name="tooltip" translatable="yes">Change selected key's passphrase</property>
+      <property name="tooltip" translatable="yes">Change passphrase of secret key</property>
       <property name="label" translatable="yes">_Change Passphrase...</property>
       <property name="use_underline">True</property>
       <signal name="activate" handler="change_passphrase_activate" last_modification_time="Wed, 12 Feb 2003 02:36:40 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1200">
+	<widget class="GtkImage" id="image1506">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-copy</property>
 	  <property name="icon_size">1</property>
@@ -841,15 +913,43 @@
   </child>
 
   <child>
+    <widget class="GtkImageMenuItem" id="key_gen_revoke">
+      <property name="visible">True</property>
+      <property name="tooltip" translatable="yes">Create a revocation certificate</property>
+      <property name="label" translatable="yes">_Generate Revocation Certificate...</property>
+      <property name="use_underline">True</property>
+      <signal name="activate" handler="gen_revoke_activate" last_modification_time="Sun, 09 Mar 2003 17:30:27 GMT"/>
+
+      <child internal-child="image">
+	<widget class="GtkImage" id="image1507">
+	  <property name="visible">True</property>
+	  <property name="stock">gtk-paste</property>
+	  <property name="icon_size">1</property>
+	  <property name="xalign">0.5</property>
+	  <property name="yalign">0.5</property>
+	  <property name="xpad">0</property>
+	  <property name="ypad">0</property>
+	</widget>
+      </child>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkMenuItem" id="separator17">
+      <property name="visible">True</property>
+    </widget>
+  </child>
+
+  <child>
     <widget class="GtkImageMenuItem" id="key_add_uid">
       <property name="visible">True</property>
-      <property name="tooltip" translatable="yes">Add a new user ID to selected key</property>
+      <property name="tooltip" translatable="yes">Add a new user ID</property>
       <property name="label" translatable="yes">Add _User ID...</property>
       <property name="use_underline">True</property>
       <signal name="activate" handler="add_uid_activate" last_modification_time="Wed, 12 Feb 2003 02:36:40 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1201">
+	<widget class="GtkImage" id="image1508">
 	  <property name="visible">True</property>
 	  <property name="stock">gnome-stock-text-unindent</property>
 	  <property name="icon_size">1</property>
@@ -865,13 +965,13 @@
   <child>
     <widget class="GtkImageMenuItem" id="key_add_subkey">
       <property name="visible">True</property>
-      <property name="tooltip" translatable="yes">Add a new subkey to selected key</property>
+      <property name="tooltip" translatable="yes">Add a new subkey</property>
       <property name="label" translatable="yes">Add Sub_key...</property>
       <property name="use_underline">True</property>
       <signal name="activate" handler="add_subkey_activate" last_modification_time="Wed, 12 Feb 2003 02:36:40 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1202">
+	<widget class="GtkImage" id="image1509">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-add</property>
 	  <property name="icon_size">1</property>
@@ -887,13 +987,13 @@
   <child>
     <widget class="GtkImageMenuItem" id="key_add_photo">
       <property name="visible">True</property>
-      <property name="tooltip" translatable="yes">Add a photo ID to selected key</property>
+      <property name="tooltip" translatable="yes">Add a photo ID</property>
       <property name="label" translatable="yes">Add P_hoto ID...</property>
       <property name="use_underline">True</property>
       <signal name="activate" handler="add_photo_activate" last_modification_time="Wed, 12 Feb 2003 02:36:40 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1203">
+	<widget class="GtkImage" id="image1510">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-select-color</property>
 	  <property name="icon_size">1</property>
@@ -909,13 +1009,13 @@
   <child>
     <widget class="GtkImageMenuItem" id="key_add_revoker">
       <property name="visible">True</property>
-      <property name="tooltip" translatable="yes">Add a revoker to the selected key</property>
+      <property name="tooltip" translatable="yes">Add the default key as a revoker</property>
       <property name="label" translatable="yes">Add _Revoker...</property>
       <property name="use_underline">True</property>
       <signal name="activate" handler="add_revoker_activate" last_modification_time="Wed, 12 Feb 2003 02:32:22 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1204">
+	<widget class="GtkImage" id="image1511">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-cancel</property>
 	  <property name="icon_size">1</property>

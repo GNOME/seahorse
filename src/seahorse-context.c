@@ -20,25 +20,14 @@
  */
 
 #include <gnome.h>
-#include <gconf/gconf-client.h>
 #include <eel/eel.h>
 
 #include "seahorse-context.h"
 #include "seahorse-marshal.h"
-
-#define SCHEMA_ROOT "/apps/seahorse"
-
-#define PREFERENCES SCHEMA_ROOT "/preferences"
-#define ARMOR_KEY PREFERENCES "/ascii_armor"
-#define TEXT_KEY PREFERENCES "/text_mode"
-#define DEFAULT_KEY PREFERENCES "/default_key_id"
-
-#define LISTING SCHEMA_ROOT "/listing"
-#define PROGRESS_UPDATE LISTING "/progress_update"
+#include "seahorse-preferences.h"
 
 struct _SeahorseContextPrivate
 {
-	GConfClient *gclient;
 	GList *key_pairs;
 	GList *single_keys;
 };
@@ -132,21 +121,16 @@ seahorse_context_init (SeahorseContext *sctx)
 	sctx->priv = g_new0 (SeahorseContextPrivate, 1);
 	sctx->priv->single_keys = NULL;
 	sctx->priv->key_pairs = NULL;
-	sctx->priv->gclient = gconf_client_get_default ();
 	/* init listing & signer */
 	gpgme_set_keylist_mode (sctx->ctx, GPGME_KEYLIST_MODE_LOCAL);
-	set_gpgme_signer (sctx, gconf_client_get_string (sctx->priv->gclient, DEFAULT_KEY, NULL));
+	set_gpgme_signer (sctx, eel_gconf_get_string (DEFAULT_KEY));
 	/* set prefs */
-	gpgme_set_armor (sctx->ctx, gconf_client_get_bool (
-		sctx->priv->gclient, ARMOR_KEY, NULL));
-	gpgme_set_textmode (sctx->ctx, gconf_client_get_bool (
-		sctx->priv->gclient, TEXT_KEY, NULL));
+	gpgme_set_armor (sctx->ctx, eel_gconf_get_boolean (ASCII_ARMOR));
+	gpgme_set_textmode (sctx->ctx, eel_gconf_get_boolean (TEXT_MODE));
 	/* do callbacks */
 	gpgme_set_progress_cb (sctx->ctx, gpgme_progress, sctx);
-	gconf_client_notify_add (sctx->priv->gclient,
-		PREFERENCES, (GConfClientNotifyFunc)gconf_notification, sctx, NULL, NULL);
-	gconf_client_add_dir (sctx->priv->gclient, PREFERENCES,
-		GCONF_CLIENT_PRELOAD_ONELEVEL, NULL);
+	eel_gconf_notification_add (PREFERENCES, (GConfClientNotifyFunc)gconf_notification, sctx);
+	eel_gconf_monitor_add (PREFERENCES);
 }
 
 /* destroy all keys, free private vars */
@@ -167,7 +151,6 @@ seahorse_context_finalize (GObject *gobject)
 	
 	g_list_free (sctx->priv->key_pairs);
 	g_list_free (sctx->priv->single_keys);
-	g_object_unref (sctx->priv->gclient);
 	g_free (sctx->priv);
 	gpgme_release (sctx->ctx);
 	
@@ -261,9 +244,9 @@ gconf_notification (GConfClient *gclient, guint id, GConfEntry *entry, SeahorseC
 	const gchar *key = gconf_entry_get_key (entry);
 	GConfValue *value = gconf_entry_get_value (entry);
 	
-	if (g_str_equal (key, ARMOR_KEY))
+	if (g_str_equal (key, ASCII_ARMOR))
 		gpgme_set_armor (sctx->ctx, gconf_value_get_bool (value));
-	else if (g_str_equal (key, TEXT_KEY))
+	else if (g_str_equal (key, TEXT_MODE))
 		gpgme_set_textmode (sctx->ctx, gconf_value_get_bool (value));
 	else if (g_str_equal (key, DEFAULT_KEY))
 		set_gpgme_signer (sctx, gconf_value_get_string (value));
@@ -638,34 +621,6 @@ seahorse_context_key_added (SeahorseContext *sctx)
 }
 
 /**
- * seahorse_context_set_ascii_armor:
- * @sctx: Current #SeahorseContext
- * @ascii_armor: New ascii armor value
- *
- * Sets ascii armor attribute of @sctx to @ascii_armor and saves in gconf.
- **/
-void
-seahorse_context_set_ascii_armor (SeahorseContext *sctx, gboolean ascii_armor)
-{
-	g_return_if_fail (sctx != NULL && SEAHORSE_IS_CONTEXT (sctx));
-	gconf_client_set_bool (sctx->priv->gclient, ARMOR_KEY, ascii_armor, NULL);
-}
-
-/**
- * seahorse_context_set_text_mode:
- * @sctx: Current #SeahorseContext
- * @text_mode: New text mode value
- *
- * Sets text mode attribute of @sctx to @text_mode and saves in gconf.
- **/
-void
-seahorse_context_set_text_mode (SeahorseContext *sctx, gboolean text_mode)
-{
-	g_return_if_fail (sctx != NULL && SEAHORSE_IS_CONTEXT (sctx));
-	gconf_client_set_bool (sctx->priv->gclient, TEXT_KEY, text_mode, NULL);
-}
-
-/**
  * seahorse_context_set_signer:
  * @sctx: Current #SeahorseContext
  * @signer: New signer #SeahorseKey
@@ -678,8 +633,7 @@ seahorse_context_set_default_key (SeahorseContext *sctx, SeahorseKeyPair *skpair
 	g_return_if_fail (sctx != NULL && SEAHORSE_IS_CONTEXT (sctx));
 	g_return_if_fail (skpair != NULL && SEAHORSE_IS_KEY_PAIR (skpair));
 	
-	gconf_client_set_string (sctx->priv->gclient, DEFAULT_KEY,
-		seahorse_key_get_id (skpair->secret), NULL);
+	eel_gconf_set_string (DEFAULT_KEY, seahorse_key_get_id (skpair->secret));
 }
 
 /**
