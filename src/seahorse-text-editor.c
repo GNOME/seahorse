@@ -197,7 +197,7 @@ populate_popup (GtkWidget *widget, GtkMenu *menu, SeahorseWidget *swidget)
 	gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), item);
 	g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (encrypt_activate), swidget);
 	
-	item = gtk_menu_item_new_with_mnemonic (_("C_lear Sign"));
+	item = gtk_menu_item_new_with_mnemonic (_("C_lear Text Sign"));
 	gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), item);
 	g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (clear_sign_activate), swidget);
 	

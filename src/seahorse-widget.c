@@ -217,7 +217,10 @@ static void
 seahorse_widget_show_help (GtkWidget *widget, SeahorseWidget *swidget)
 {
 	//error check help
-	gnome_help_display (PACKAGE, swidget->name, NULL);
+	if (g_str_equal (swidget->name, "key-manager"))
+		gnome_help_display (PACKAGE, "toc", NULL);
+	else
+		gnome_help_display (PACKAGE, swidget->name, NULL);
 }
 
 /* Destroys widget */
