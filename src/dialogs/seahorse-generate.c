@@ -109,7 +109,8 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 	
 	length = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (
 		glade_xml_get_widget (swidget->xml, LENGTH)));
-	history = gtk_option_menu_get_history (GTK_OPTION_MENU (glade_xml_get_widget (swidget->xml, "type")));
+	history = gtk_option_menu_get_history (GTK_OPTION_MENU (
+		glade_xml_get_widget (swidget->xml, "type")));
 	
 	switch (history) {
 		case 0:
@@ -123,13 +124,16 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 			break;
 	}
 	
-	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (glade_xml_get_widget (swidget->xml, "never_expires"))))
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (
+	glade_xml_get_widget (swidget->xml, "never_expires"))))
 		expires = 0;
 	else
-		expires = gnome_date_edit_get_time (GNOME_DATE_EDIT (glade_xml_get_widget (swidget->xml, EXPIRES)));
+		expires = gnome_date_edit_get_time (GNOME_DATE_EDIT (
+			glade_xml_get_widget (swidget->xml, EXPIRES)));
 	
 	gtk_widget_hide (GTK_WIDGET (parent));
-	seahorse_ops_key_generate (swidget->sctx, name, email, comment, passphrase, type, length, expires);
+	seahorse_ops_key_generate (swidget->sctx, name, email, comment,
+		passphrase, type, length, expires);
 	gtk_widget_show (GTK_WIDGET (parent));
 	seahorse_widget_destroy (swidget);
 }

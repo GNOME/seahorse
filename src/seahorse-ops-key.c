@@ -932,3 +932,179 @@ seahorse_ops_key_add_uid (SeahorseContext *sctx, SeahorseKey *skey,
 	
 	return edit_key (sctx, skey, parms, _("User ID added"), SKEY_CHANGE_UIDS);
 }
+
+typedef enum {
+	ADD_KEY_START,
+	ADD_KEY_COMMAND,
+	ADD_KEY_TYPE,
+	ADD_KEY_LENGTH,
+	ADD_KEY_EXPIRES,
+	ADD_KEY_PROGRESS,
+	ADD_KEY_QUIT,
+	ADD_KEY_SAVE,
+	ADD_KEY_ERROR
+} AddKeyState;
+
+typedef struct
+{
+	SeahorseKeyType	type;
+	guint		length;
+	time_t		expires;
+} SubkeyParm;
+
+static GpgmeError
+add_key_action (guint state, gpointer data, const gchar **result)
+{
+	SubkeyParm *parm = (SubkeyParm*)data;
+	
+	switch (state) {
+		case ADD_KEY_COMMAND:
+			*result = "addkey";
+			break;
+		case ADD_KEY_TYPE:
+			*result = g_strdup_printf ("%d", parm->type);
+			break;
+		case ADD_KEY_LENGTH:
+			*result = g_strdup_printf ("%d", parm->length);
+			break;
+		case ADD_KEY_EXPIRES:
+			/* Get diff of expires & now in days */
+			if (parm->expires != 0) {
+				gulong expires;
+				/* Get diff in seconds, then time in days */
+				expires = (parm->expires - time (NULL))/86400;
+				
+				*result = g_strdup_printf ("%d", expires);
+			}
+			else
+				*result = "0";
+			break;
+		case ADD_KEY_PROGRESS:
+			break;
+		case ADD_KEY_QUIT:
+			*result = QUIT;
+			break;
+		case ADD_KEY_SAVE:
+			*result = YES;
+			break;
+		default:
+			return GPGME_General_Error;
+	}
+	
+	return GPGME_No_Error;
+}
+
+static guint
+add_key_transit (guint current_state, GpgmeStatusCode status,
+		 const gchar *args, gpointer data, GpgmeError *err)
+{
+	guint next_state;
+
+	switch (current_state) {
+		case ADD_KEY_START:
+			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
+				next_state = ADD_KEY_COMMAND;
+			else {
+				next_state = ADD_KEY_ERROR;
+				*err = GPGME_General_Error;
+			}
+			break;
+		case ADD_KEY_COMMAND:
+			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "keygen.algo"))
+				next_state = ADD_KEY_TYPE;
+			else {
+				next_state = ADD_KEY_ERROR;
+				*err = GPGME_General_Error;
+			}
+			break;
+		case ADD_KEY_TYPE:
+			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "keygen.size"))
+				next_state = ADD_KEY_LENGTH;
+			else {
+				next_state = ADD_KEY_ERROR;
+				*err = GPGME_General_Error;
+			}
+			break;
+		case ADD_KEY_LENGTH:
+			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "keygen.valid"))
+				next_state = ADD_KEY_EXPIRES;
+			else {
+				next_state = ADD_KEY_ERROR;
+				*err = GPGME_General_Error;
+			}
+			break;
+		case ADD_KEY_EXPIRES:
+			next_state = ADD_KEY_PROGRESS;
+			break;
+		case ADD_KEY_PROGRESS:
+			/* Loop in PROGRESS while creating key */
+			if (status == GPGME_STATUS_PROGRESS ||
+			status == GPGME_STATUS_KEY_CREATED)
+				next_state = ADD_KEY_PROGRESS;
+			else if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
+				next_state = ADD_KEY_QUIT;
+			else {
+				g_print ("args: %s\n", args);
+				next_state = ADD_KEY_ERROR;
+				*err = GPGME_General_Error;
+			}
+			break;
+		case ADD_KEY_QUIT:
+			/* Quit, save */
+			if (status == GPGME_STATUS_GET_BOOL && g_str_equal (args, SAVE))
+				next_state = ADD_KEY_SAVE;
+			else {
+				next_state = ADD_KEY_ERROR;
+				*err = GPGME_General_Error;
+			}
+			break;
+		case ADD_KEY_ERROR:
+			/* Go to quit */
+			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
+				next_state = ADD_KEY_QUIT;
+			else
+				next_state = ADD_KEY_ERROR;
+			break;
+		default:
+			next_state = ADD_KEY_ERROR;
+			*err = GPGME_General_Error;
+			break;
+	}
+	
+	return next_state;
+}
+
+gboolean
+seahorse_ops_key_add_subkey (SeahorseContext *sctx, SeahorseKey *skey,
+			     const SeahorseKeyType type, const guint length, const time_t expires)
+{
+	SeahorseEditParm *parms;
+	SubkeyParm *key_parm;
+	
+	g_return_val_if_fail (sctx != NULL && SEAHORSE_IS_CONTEXT (sctx), FALSE);
+	g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), FALSE);
+	
+	switch (type) {
+		case DSA:
+			g_return_val_if_fail (length >= DSA_MIN && length <= DSA_MAX, FALSE);
+			break;
+		case ELGAMAL:
+			g_return_val_if_fail (length >= ELGAMAL_MIN && length <= LENGTH_MAX, FALSE);
+			break;
+		case RSA_SIGN: case RSA_ENCRYPT:
+			g_return_val_if_fail (length >= RSA_MIN && length <= LENGTH_MAX, FALSE);
+			break;
+		default:
+			g_return_val_if_reached (FALSE);
+			break;
+	}
+	
+	key_parm = g_new (SubkeyParm, 1);
+	key_parm->type = type;
+	key_parm->length = length;
+	key_parm->expires = expires;
+	
+	parms = seahorse_edit_parm_new (ADD_KEY_START, add_key_action, add_key_transit, key_parm);
+	
+	return edit_key (sctx, skey, parms, _("Add Subkey"), SKEY_CHANGE_SUBKEYS);
+}

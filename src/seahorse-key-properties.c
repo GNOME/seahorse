@@ -29,6 +29,8 @@
 #include "seahorse-export.h"
 #include "seahorse-delete.h"
 #include "seahorse-validity.h"
+#include "seahorse-add-uid.h"
+#include "seahorse-add-subkey.h"
 
 #define SPACING 12
 #define TRUST "trust"
@@ -143,10 +145,13 @@ change_passphrase_activate (GtkMenuItem *item, SeahorseWidget *swidget)
 static void
 add_uid_activate (GtkMenuItem *item, SeahorseWidget *swidget)
 {
-	SeahorseKeyWidget *skwidget;
-	
-	skwidget = SEAHORSE_KEY_WIDGET (swidget);
-	seahorse_add_uid_new (swidget->sctx, skwidget->skey);
+	seahorse_add_uid_new (swidget->sctx, SEAHORSE_KEY_WIDGET (swidget)->skey);
+}
+
+static void
+add_subkey_activate (GtkMenuItem *item, SeahorseWidget *swidget)
+{
+	seahorse_add_subkey_new (swidget->sctx, SEAHORSE_KEY_WIDGET (swidget)->skey);
 }
 
 /* Do a label */
@@ -176,7 +181,7 @@ do_stats (SeahorseWidget *swidget, GtkTable *table, guint top, guint index)
 	
 	do_stat_label (_("Key ID:"), table, 0, top);
 	do_stat_label (seahorse_key_get_keyid (skey, index), table, 1, top);
-	do_stat_label (_("Algorithm:"), table, 2, top);
+	do_stat_label (_("Type:"), table, 2, top);
 	do_stat_label (gpgme_key_get_string_attr (skey->key, GPGME_ATTR_ALGO, NULL, index), table, 3, top);
 	do_stat_label (_("Created:"), table, 0, top+1);
 	do_stat_label (seahorse_util_get_date_string (gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_CREATED, NULL, index)),
@@ -184,7 +189,7 @@ do_stats (SeahorseWidget *swidget, GtkTable *table, guint top, guint index)
 	do_stat_label (_("Length:"), table, 2, top+1);
 	do_stat_label (g_strdup_printf ("%d", gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_LEN, NULL, index)),
 		table, 3, top+1);
-	do_stat_label (_("Expires:"), table, 0, top+2);
+	do_stat_label (_("Expiration Date:"), table, 0, top+2);
 	
 	expires = gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_EXPIRE, NULL, index);
 	
@@ -206,7 +211,7 @@ do_stats (SeahorseWidget *swidget, GtkTable *table, guint top, guint index)
 		else
 			gtk_widget_set_sensitive (widget, FALSE);
 		
-		widget = gtk_check_button_new_with_mnemonic (_("_Never Expires"));
+		widget = gtk_check_button_new_with_mnemonic (_("Never E_xpires"));
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), !expires);
 		gtk_widget_show (widget);
 		gtk_table_attach (table, widget, 3, 4, top+2, top+3, GTK_FILL, 0, 0, 0);
@@ -245,7 +250,7 @@ do_uids (SeahorseWidget *swidget)
 		if (max > 1 && seahorse_context_key_has_secret (swidget->sctx, skwidget->skey)) {
 			table = GTK_TABLE (gtk_table_new (2, 2, FALSE));
 			
-			widget = gtk_radio_button_new_with_mnemonic (group, _("Primary"));
+			widget = gtk_radio_button_new_with_mnemonic (group, _("_Primary"));
 			group = g_slist_append (group, widget);
 			//callback
 			gtk_widget_set_sensitive (widget, FALSE);
@@ -327,6 +332,9 @@ key_changed (SeahorseKey *skey, SeahorseKeyChange change, SeahorseWidget *swidge
 		case SKEY_CHANGE_UIDS:
 			do_uids (swidget);
 			break;
+		case SKEY_CHANGE_SUBKEYS:
+			do_subkeys (swidget);
+			break;
 		default:
 			break;
 	}
@@ -390,6 +398,8 @@ seahorse_key_properties_new (SeahorseContext *sctx, SeahorseKey *skey)
 		G_CALLBACK (change_passphrase_activate), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "add_uid_activate",
 		G_CALLBACK (add_uid_activate), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "add_subkey_activate",
+		G_CALLBACK (add_subkey_activate), swidget);
 	
 	g_signal_connect_after (skey, "changed", G_CALLBACK (key_changed), swidget);
 }

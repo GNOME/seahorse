@@ -17,15 +17,17 @@ libdialogs_a_SOURCES = \
 	seahorse-passphrase.c seahorse-passphrase.h \
 	seahorse-signatures.c seahorse-signatures.h \
 	seahorse-recipients.c seahorse-recipients.h \
-	seahorse-add-uid.c seahorse-add-uid.h
+	seahorse-add-uid.c seahorse-add-uid.h \
+	seahorse-add-subkey.c seahorse-add-subkey.h
 
-glade_DATA = about.glade2 \
+glade_DATA = \
 	seahorse-generate.glade2 \
 	seahorse-export.glade2 \
 	seahorse-preferences.glade2 \
 	seahorse-import.glade2 \
 	seahorse-signatures.glade2 \
 	seahorse-recipients.glade2 \
-	seahorse-add-uid.glade2
+	seahorse-add-uid.glade2 \
+	seahorse-add-subkey.glade2
 
 EXTRA_DIST = $(glade_DATA)

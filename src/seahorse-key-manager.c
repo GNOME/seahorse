@@ -19,6 +19,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include <config.h>
 #include <gnome.h>
 #include <gpgme.h>
 
@@ -127,9 +128,60 @@ preferences_activate (GtkWidget *widget, SeahorseWidget *swidget)
 
 /* Shows about dialog */
 static void
-about_activate (GtkWidget *widget, gpointer user_data)
+about_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
-	glade_xml_new (SEAHORSE_GLADEDIR "about.glade2", "about", NULL);
+	static GtkWidget *about = NULL;
+	GdkPixbuf *pixbuf = NULL;
+
+	gchar *authors[] = {
+		"Jacob Perkins <jap1@users.sourceforge.net>",
+		"Jose Carlos Garcia Sogo <jsogo@users.sourceforge.net>",
+		"Jean Schurger <jk24@users.sourceforge.net>",
+		NULL
+	};
+
+	gchar *documenters[] = {
+		"Jacob Perkins <jap1@users.sourceforge.net>",
+		NULL
+	};
+
+	gchar *translator_credits = _("translator_credits");
+
+	if (about != NULL) {
+		gtk_window_present (GTK_WINDOW (about));
+		return;
+	}
+
+	pixbuf = gdk_pixbuf_new_from_file (SEAHORSE_GLADEDIR "seahorse.png", NULL);
+	if (pixbuf != NULL) {
+		GdkPixbuf *temp_pixbuf = NULL;
+		
+		temp_pixbuf = gdk_pixbuf_scale_simple (pixbuf,
+			gdk_pixbuf_get_width (pixbuf),
+			gdk_pixbuf_get_height (pixbuf),
+			GDK_INTERP_HYPER);
+		g_object_unref (pixbuf);
+
+		pixbuf = temp_pixbuf;
+	}
+
+	about = gnome_about_new (_("seahorse"), VERSION,
+		"Copyright \xc2\xa9 2002, 2003 Seahorse Project",
+		"http://seahorse.sourceforge.net",
+		(const char **)authors, (const char **)documenters,
+		strcmp (translator_credits, "translator_credits") != 0 ?
+			translator_credits : NULL,
+		pixbuf);
+	gtk_window_set_transient_for (GTK_WINDOW (about), GTK_WINDOW (
+		glade_xml_get_widget (swidget->xml, swidget->name)));
+	gtk_window_set_destroy_with_parent (GTK_WINDOW (about), TRUE);
+
+	if (pixbuf != NULL)
+		g_object_unref (pixbuf);
+
+	g_signal_connect (GTK_OBJECT (about), "destroy",
+		G_CALLBACK (gtk_widget_destroyed), &about);
+	gtk_widget_show (about);
 }
 
 /* Loads key properties of activated key */
@@ -162,7 +214,7 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 	glade_xml_signal_connect_data (swidget->xml, "delete_activate", G_CALLBACK (delete_activate), swidget);		
 	glade_xml_signal_connect_data (swidget->xml, "preferences_activate", G_CALLBACK (preferences_activate), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "row_activated", G_CALLBACK (row_activated), swidget);
-	glade_xml_signal_connect (swidget->xml, "about_activate", G_CALLBACK (about_activate));
+	glade_xml_signal_connect_data (swidget->xml, "about_activate", G_CALLBACK (about_activate), swidget);
 	
 	seahorse_key_manager_store_new (sctx, GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, KEY_LIST)));
 }

@@ -43,7 +43,9 @@ typedef enum {
 	/* Passphrase has changed */
 	SKEY_CHANGE_PASS,
 	/* User IDs have changed */
-	SKEY_CHANGE_UIDS
+	SKEY_CHANGE_UIDS,
+	/* Subkeys have changed */
+	SKEY_CHANGE_SUBKEYS
 } SeahorseKeyChange;
 
 typedef struct _SeahorseKey SeahorseKey;

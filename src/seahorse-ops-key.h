@@ -61,7 +61,7 @@ typedef enum {
 /* Length ranges for key types */
 typedef enum {
 	/* Length range for #DSA. */
-	DSA_MIN = 512,
+	DSA_MIN = 768,
 	DSA_MAX = 1024,
 	/* Minimum length for #ELGAMAL. Maximum length is #LENGTH_MAX. */
 	ELGAMAL_MIN = 768,
@@ -118,5 +118,11 @@ gboolean	seahorse_ops_key_add_uid	(SeahorseContext	*sctx,
 						 const gchar		*name,
 						 const gchar		*email,
 						 const gchar		*comment);
+
+gboolean	seahorse_ops_key_add_subkey	(SeahorseContext	*sctx,
+						 SeahorseKey		*skey,
+						 const SeahorseKeyType	type,
+						 const guint		length,
+						 const time_t		expires);
 
 #endif /* __SEAHORSE_OPS_KEY_H__ */
