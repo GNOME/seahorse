@@ -32,38 +32,38 @@
 enum {
     KEY_STORE_BASE_COLUMNS,
 	VALIDITY_STR,
-	VALIDITY,
 	EXPIRES_STR,
-	EXPIRES,
 	TRUST_STR,
-	TRUST,
 	LENGTH,
 	TYPE,
+    VALIDITY,
+    EXPIRES,
+    TRUST,
 	COLS
 };
 
 static const gchar* col_ids[] = {
     KEY_STORE_BASE_IDS,
     "validity",
-    "validity",
     "expires",
-    "expires",
-    "trust",
     "trust",
     "length",
-    "type"
+    "type",
+    "validity",
+    "expires",
+    "trust"
 };
 
 static GType col_types[] = {
     KEY_STORE_BASE_TYPES, 
     G_TYPE_STRING,
-    G_TYPE_INT, 
     G_TYPE_STRING, 
+    G_TYPE_STRING, 
+    G_TYPE_INT, 
+    G_TYPE_STRING,
+    G_TYPE_INT, 
     G_TYPE_LONG, 
-    G_TYPE_STRING, 
-    G_TYPE_INT,
-    G_TYPE_INT, 
-    G_TYPE_STRING
+    G_TYPE_INT
 };
 
 static void	seahorse_key_manager_store_class_init	(SeahorseKeyManagerStoreClass	*klass);
@@ -275,15 +275,15 @@ gconf_notification (GConfClient *gclient, guint id, GConfEntry *entry, GtkTreeVi
 	value = gconf_entry_get_value (entry);
 	
 	if (g_str_equal (key, SHOW_VALIDITY_KEY))
-		col = gtk_tree_view_get_column (view, VALIDITY_STR-1);
+		col = gtk_tree_view_get_column (view, VALIDITY_STR - 2);
 	else if (g_str_equal (key, SHOW_EXPIRES_KEY))
-		col = gtk_tree_view_get_column (view, EXPIRES_STR-2);
+		col = gtk_tree_view_get_column (view, EXPIRES_STR - 2);
 	else if (g_str_equal (key, SHOW_TRUST_KEY))
-		col = gtk_tree_view_get_column (view, TRUST_STR-3);
+		col = gtk_tree_view_get_column (view, TRUST_STR - 2);
 	else if (g_str_equal (key, SHOW_LENGTH_KEY))
-		col = gtk_tree_view_get_column (view, LENGTH-4);
+		col = gtk_tree_view_get_column (view, LENGTH - 2);
 	else if (g_str_equal (key, SHOW_TYPE_KEY))
-		col = gtk_tree_view_get_column (view, TYPE-4);
+		col = gtk_tree_view_get_column (view, TYPE - 2);
 	else
 		return;
 	
