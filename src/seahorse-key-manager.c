@@ -280,13 +280,6 @@ row_activated (GtkTreeView *treeview, GtkTreePath *path, GtkTreeViewColumn *arg2
 		seahorse_key_properties_new (swidget->sctx, skey);
 }
 
-static gboolean
-key_press_event (GtkWidget *widget, GdkEventKey *event, SeahorseWidget *swidget)
-{
-	delete_activate (widget, swidget);
-	return FALSE;
-}
-
 static void
 selection_changed (GtkTreeSelection *selection, SeahorseWidget *swidget)
 {
@@ -321,17 +314,33 @@ selection_changed (GtkTreeSelection *selection, SeahorseWidget *swidget)
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "key_add_revoker"), secret);
 }
 
-static gboolean
-key_list_button_pressed (GtkWidget *widget, GdkEventButton *event, SeahorseWidget *swidget)
+static void
+show_context_menu (SeahorseWidget *swidget, guint button, guint32 time)
 {
 	GtkWidget *menu;
 	
-	if (event->button == 3) {
-		menu = glade_xml_get_widget (swidget->xml, "context_menu");
-		gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL, event->button, event->time);
-		gtk_widget_show (menu);
-	}
+	menu = glade_xml_get_widget (swidget->xml, "context_menu");
+	gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL, button, time);
+	gtk_widget_show (menu);
+}
+
+static gboolean
+key_list_button_pressed (GtkWidget *widget, GdkEventButton *event, SeahorseWidget *swidget)
+{
+	if (event->button == 3)
+		show_context_menu (swidget, event->button, event->time);
+	
 	return FALSE;
+}
+
+static gboolean
+key_list_popup_menu (GtkWidget *widget, SeahorseWidget *swidget)
+{
+	SeahorseKey *skey;
+	
+	skey = seahorse_key_store_get_selected_key (GTK_TREE_VIEW (widget));
+	if (skey)
+		show_context_menu (swidget, 0, gtk_get_current_event_time ());
 }
 
 void
@@ -343,6 +352,8 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 	
 	swidget = seahorse_widget_new_component (KEY_MANAGER, sctx);
 	gtk_object_sink (GTK_OBJECT (sctx));
+	
+	view = GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, KEY_LIST));
 	
 	/* construct key context menu */
 	glade_xml_construct (swidget->xml, SEAHORSE_GLADEDIR "seahorse-key-manager.glade2",
@@ -400,8 +411,9 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 		G_CALLBACK (row_activated), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "key_list_button_pressed",
 		G_CALLBACK (key_list_button_pressed), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "key_list_popup_menu",
+		G_CALLBACK (key_list_popup_menu), swidget);
 	/* do initial selected key settings */
-	view = GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, KEY_LIST));
 	seahorse_key_manager_store_new (sctx, view);
 	selection = gtk_tree_view_get_selection (view);
 	g_signal_connect_after (selection, "changed",
