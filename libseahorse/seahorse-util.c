@@ -103,6 +103,8 @@ seahorse_util_handle_error (GpgmeError err)
 {
 	GtkWidget *dialog;
 	
+	g_printerr ("%d", err);
+	
 	dialog = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR,
 		GTK_BUTTONS_CLOSE, gpgme_strerror (err));
 	gtk_dialog_run (GTK_DIALOG (dialog));

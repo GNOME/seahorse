@@ -23,6 +23,7 @@
 
 #include "seahorse-signer-menu.h"
 #include "seahorse-signer-menu-item.h"
+#include "seahorse-preferences.h"
 
 enum {
 	PROP_0,
@@ -196,7 +197,11 @@ seahorse_signer_menu_key_added (SeahorseContext *sctx, SeahorseKey *skey,
 static void
 seahorse_signer_menu_item_activate (GtkMenuItem *item, SeahorseSignerMenu *smenu)
 {
-	seahorse_context_set_default_key (smenu->sctx, SEAHORSE_SIGNER_MENU_ITEM (item)->skpair);
+	SeahorseKeyPair *skpair;
+	
+	skpair = SEAHORSE_SIGNER_MENU_ITEM (item)->skpair;
+	
+	eel_gconf_set_string (DEFAULT_KEY, seahorse_key_get_id (skpair->secret));
 }
 
 void

@@ -27,23 +27,7 @@
 
 #include "seahorse-key-pair.h"
 
-#define SCHEMA_ROOT "/apps/seahorse"
 
-#define LISTING SCHEMA_ROOT "/listing"
-#define SHOW_VALIDITY LISTING "/show_validity"
-#define SHOW_EXPIRES LISTING "/show_expires"
-#define SHOW_TRUST LISTING "/show_trust"
-#define SHOW_LENGTH LISTING "/show_length"
-#define SHOW_TYPE LISTING "/show_type"
-#define PROGRESS_UPDATE LISTING "/progress_update"
-
-#define PREFERENCES SCHEMA_ROOT "/preferences"
-#define ASCII_ARMOR PREFERENCES "/ascii_armor"
-#define TEXT_MODE PREFERENCES "/text_mode"
-#define DEFAULT_KEY PREFERENCES "/default_key_id"
-
-#define RECIPIENTS SCHEMA_ROOT "/recipients"
-#define VALIDITY_THRESHOLD RECIPIENTS "/validity_threshold"
 
 #define SEAHORSE_TYPE_CONTEXT			(seahorse_context_get_type ())
 #define SEAHORSE_CONTEXT(obj)			(GTK_CHECK_CAST ((obj), SEAHORSE_TYPE_CONTEXT, SeahorseContext))
@@ -93,18 +77,9 @@ GList*			seahorse_context_get_key_pairs		(SeahorseContext	*sctx);
 SeahorseKey*		seahorse_context_get_key		(SeahorseContext	*sctx,
 								 GpgmeKey		key);
 
-void			seahorse_context_key_added		(SeahorseContext	*sctx);
-
-void			seahorse_context_show_status		(SeahorseContext	*sctx,
-								 const gchar		*op,
-								 gboolean		success);
-
 void			seahorse_context_show_progress		(SeahorseContext	*sctx,
 								 const gchar		*op,
 								 gdouble		fract);
-
-void			seahorse_context_set_default_key	(SeahorseContext	*sctx,
-								 SeahorseKeyPair	*skpair);
 
 SeahorseKeyPair*	seahorse_context_get_default_key	(SeahorseContext	*sctx);
 

@@ -68,40 +68,28 @@ seahorse_delete_show (SeahorseContext *sctx, GList *keys)
 {
 	GtkWidget *warning;
 	const gchar *message;
-	gint length;
 	SeahorseKey *skey;
 	GpgmeError err;
 	GList *list = NULL;
 	
-	length = g_list_length (keys);
-	g_return_if_fail (length > 0);
+	g_return_if_fail (g_list_length (keys) > 0);
 	
-	if (length == 1) {
-		skey = keys->data;
+	for (list = keys; list != NULL; list = g_list_next (list)) {
+		skey = list->data;
 		if (ask_key (skey)) {
 			if (SEAHORSE_IS_KEY_PAIR (skey))
 				err = seahorse_key_pair_op_delete (sctx, SEAHORSE_KEY_PAIR (skey));
 			else
 				err = seahorse_key_op_delete (sctx, skey);
+			
+			if (err != GPGME_No_Error)
+				seahorse_util_handle_error (err);
 		}
-	}
-	else {
-		for (list = keys; list != NULL; list = g_list_next (list)) {
-			skey = list->data;
-			if (ask_key (skey)) {
-				if (SEAHORSE_IS_KEY_PAIR (skey))
-					err = seahorse_key_pair_op_delete (sctx, SEAHORSE_KEY_PAIR (skey));
-				else
-					err = seahorse_key_op_delete (sctx, skey);
-			}
-			else
-				break;
-		}
+		else
+			break;
 	}
 	
 	g_list_free (keys);
-	if (err != GPGME_No_Error)
-		seahorse_util_handle_error (err);
 }
 
 void
