@@ -553,10 +553,11 @@ static void
 seahorse_pgp_source_stop (SeahorseKeySource *src)
 {
     SeahorsePGPSource *psrc;
-    gboolean found = FALSE;
+    gboolean found;
     
     g_return_if_fail (SEAHORSE_IS_KEY_SOURCE (src));
     psrc = SEAHORSE_PGP_SOURCE (src);
+    found = (psrc->priv->operations != NULL);
     seahorse_operation_list_cancel (psrc->priv->operations);
     psrc->priv->operations = seahorse_operation_list_purge (psrc->priv->operations);
     
