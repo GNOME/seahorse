@@ -52,13 +52,32 @@ gpgmex_key_alloc ()
     return (gpgme_key_t)key;
 }
 
+static void
+add_subkey_to_key (gpgme_key_t key, gpgme_subkey_t subkey)
+{
+    gpgme_subkey_t sk;
+    
+    if (!key->subkeys) {
+        /* Copy certain values into the key */
+        key->revoked = subkey->revoked;
+        key->expired = subkey->expired;
+        key->disabled = subkey->disabled;
+        key->subkeys = subkey;
+        
+    } else {
+        sk = key->subkeys;
+        while (sk->next != NULL)
+            sk = sk->next;
+        sk->next = subkey;   
+    }
+}
+
 void        
 gpgmex_key_add_subkey (gpgme_key_t key, const char *fpr, guint flags, 
                               long int timestamp, long int expires, 
                               unsigned int length, gpgme_pubkey_algo_t algo)
 {
     gpgme_subkey_t subkey;
-    gpgme_subkey_t sk;
 
     g_return_if_fail (key != NULL);
     g_return_if_fail (key->keylist_mode & SEAHORSE_KEYLIST_MODE);
@@ -76,29 +95,54 @@ gpgmex_key_add_subkey (gpgme_key_t key, const char *fpr, guint flags,
     
     /* This isn't actually a valid keyid, but we don't use 
      * this field in any case */
-    subkey->keyid = g_strdup("");
-      
-    if (!key->subkeys) {
-        /* Copy certain values into the key */
-        key->revoked = subkey->revoked;
-        key->expired = subkey->expired;
-        key->disabled = subkey->disabled;
-        key->subkeys = subkey;
-        
-    } else {
-        sk = key->subkeys;
-        while (sk->next != NULL)
-            sk = sk->next;
-        sk->next = subkey;   
-    }
+    subkey->keyid = g_strdup ("");
+    
+    add_subkey_to_key (key, subkey);
 }
+
+void 
+gpgmex_key_copy_subkey (gpgme_key_t key, gpgme_subkey_t subkey)
+{
+    gpgme_subkey_t sk;
+
+    g_return_if_fail (key != NULL);
+    g_return_if_fail (key->keylist_mode & SEAHORSE_KEYLIST_MODE);
+
+    sk = g_new0 (struct _gpgme_subkey, 1);
+    
+    sk->fpr = g_strdup (subkey->fpr);
+    sk->revoked = subkey->revoked;
+    sk->disabled = subkey->disabled;
+    sk->expired = subkey->expired;
+    sk->pubkey_algo = subkey->pubkey_algo;    
+    sk->length = subkey->length;
+    sk->timestamp = subkey->timestamp;
+    sk->expires = subkey->expires;
+    sk->keyid = g_strdup (subkey->keyid);
+    
+    add_subkey_to_key (key, sk);
+}
+
+static void
+add_uid_to_key (gpgme_key_t key, gpgme_user_id_t userid)
+{
+    gpgme_user_id_t u;
+    
+    if (!key->uids)
+        key->uids = userid;
+    else {
+        u = key->uids;
+        while (u->next != NULL)
+            u = u->next;
+        u->next = userid;
+    }
+}    
 
 void
 gpgmex_key_add_uid (gpgme_key_t key, const gchar *uid, 
                            guint flags)
 {
     gpgme_user_id_t userid;
-    gpgme_user_id_t u;
     
     g_return_if_fail (key != NULL);
     g_return_if_fail (key->keylist_mode & SEAHORSE_KEYLIST_MODE);
@@ -112,14 +156,25 @@ gpgmex_key_add_uid (gpgme_key_t key, const gchar *uid,
     userid->email = g_strdup ("");
     userid->comment = g_strdup ("");
     
-    if (!key->uids)
-        key->uids = userid;
-    else {
-        u = key->uids;
-        while (u->next != NULL)
-            u = u->next;
-        u->next = userid;
-    }
+    add_uid_to_key (key, userid);
+}
+
+void
+gpgmex_key_copy_uid (gpgme_key_t key, gpgme_user_id_t userid)
+{
+    gpgme_user_id_t u;
+    
+    g_return_if_fail (key != NULL);
+    g_return_if_fail (key->keylist_mode & SEAHORSE_KEYLIST_MODE);
+
+    u = g_new0 (struct _gpgme_user_id, 1);
+    u->uid = g_strdup (userid->uid);
+    u->revoked = userid->revoked;
+    u->name = g_strdup (userid->name);
+    u->email = g_strdup (userid->email);
+    u->comment = g_strdup (userid->comment);
+    
+    add_uid_to_key (key, u);
 }
 
 void        
