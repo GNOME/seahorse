@@ -1,7 +1,7 @@
 /*
  * Seahorse
  *
- * Copyright (C) 2003 Jacob Perkins
+ * Copyright (C) 2003 Jacob Perkins, Adam Schreiber
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,32 +28,59 @@
 static gboolean
 ask_key_pair (SeahorseKeyPair *skpair)
 {
-	GtkWidget *warning;
+	GtkWidget *warning, *delete_button, *cancel_button;
 	gint response;
 	
 	warning = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
-		GTK_MESSAGE_WARNING, GTK_BUTTONS_YES_NO,
+		GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE,
 		_("%s is a key pair! Do you still want to delete it?"),
 		seahorse_key_get_userid (SEAHORSE_KEY (skpair), 0));
+		
+	delete_button = gtk_button_new_with_label("Delete");
+	cancel_button = gtk_button_new_with_label("Cancel");
+	
+	
+	//add widgets to action area
+	gtk_dialog_add_action_widget(GTK_DIALOG(warning), GTK_BUTTON (delete_button), GTK_RESPONSE_ACCEPT);
+	gtk_dialog_add_action_widget(GTK_DIALOG(warning), GTK_BUTTON (cancel_button), GTK_RESPONSE_REJECT);
+	
+	//show widgets
+	gtk_widget_show (delete_button);
+	gtk_widget_show (cancel_button);
+	
 	response = gtk_dialog_run (GTK_DIALOG (warning));
 	gtk_widget_destroy (warning);
-	return (response == GTK_RESPONSE_YES);
+	
+	return (response == GTK_RESPONSE_ACCEPT);
 }
 
 static gboolean
 ask_key (SeahorseKey *skey)
 {
-	GtkWidget *question;
+	GtkWidget *question, *delete_button, *cancel_button;
 	gint response;
-	
+
+	//create widgets	
 	question = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
-		GTK_MESSAGE_QUESTION, GTK_BUTTONS_YES_NO,
+		GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE,
 		_("Are you sure you want to permanently delete %s?"),
 		seahorse_key_get_userid (skey, 0));
+	delete_button = gtk_button_new_with_label("Delete");
+	cancel_button = gtk_button_new_with_label("Cancel");
+
+	//add widgets to action area
+	gtk_dialog_add_action_widget(GTK_DIALOG(question), GTK_BUTTON (delete_button), GTK_RESPONSE_ACCEPT);
+	gtk_dialog_add_action_widget(GTK_DIALOG(question), GTK_BUTTON (cancel_button), GTK_RESPONSE_REJECT);
+	
+	//show widgets
+	gtk_widget_show (delete_button);
+	gtk_widget_show (cancel_button);
+
+	//run dialog
 	response = gtk_dialog_run (GTK_DIALOG (question));
 	gtk_widget_destroy (question);
-	
-	if (response == GTK_RESPONSE_YES) {
+
+	if (response == GTK_RESPONSE_ACCEPT) {
 		if (SEAHORSE_IS_KEY_PAIR (skey))
 			return ask_key_pair (SEAHORSE_KEY_PAIR (skey));
 		else
@@ -95,18 +122,29 @@ seahorse_delete_show (SeahorseContext *sctx, GList *keys)
 void
 seahorse_delete_subkey_new (SeahorseContext *sctx, SeahorseKey *skey, const guint index)
 {
-	GtkWidget *question;
+	GtkWidget *question, *delete_button, *cancel_button;
 	gint response;
 	GpgmeError err;
 	
 	question = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
-		GTK_MESSAGE_QUESTION, GTK_BUTTONS_YES_NO,
+		GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE,
 		_("Are you sure you want to permanently delete subkey %d of %s?"),
 		index, seahorse_key_get_userid (skey, 0));
+	delete_button = gtk_button_new_with_label("Delete");
+	cancel_button = gtk_button_new_with_label("Cancel");
+
+	//add widgets to action area
+	gtk_dialog_add_action_widget(GTK_DIALOG(question), GTK_BUTTON (delete_button), GTK_RESPONSE_ACCEPT);
+	gtk_dialog_add_action_widget(GTK_DIALOG(question), GTK_BUTTON (cancel_button), GTK_RESPONSE_REJECT);
+	
+	//show widgets
+	gtk_widget_show (delete_button);
+	gtk_widget_show (cancel_button);
+		
 	response = gtk_dialog_run (GTK_DIALOG (question));
 	gtk_widget_destroy (question);
 	
-	if (response != GTK_RESPONSE_YES)
+	if (response != GTK_RESPONSE_ACCEPT)
 		return;
 	
 	err = seahorse_key_op_del_subkey (sctx, skey, index);
