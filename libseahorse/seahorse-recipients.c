@@ -38,7 +38,7 @@ selection_changed (GtkTreeSelection *selection, SeahorseWidget *swidget)
 {
 	GList *list = NULL, *keys = NULL;
 	gint selected = 0, invalid = 0;
-	gchar* msg;
+	gchar *msg, *s1, *s2;
    
 	list = seahorse_key_store_get_selected_keys (GTK_TREE_VIEW (
 		glade_xml_get_widget (swidget->xml, VIEW)));
@@ -54,13 +54,29 @@ selection_changed (GtkTreeSelection *selection, SeahorseWidget *swidget)
             ngettext("Selected %d keys", "Selected %d keys", selected), selected);
             
     /* For translators */
-    } else if (invalid == 1) {
-        msg = g_strdup_printf (
-            ngettext("Selected %d not fully valid key", "Selected %d keys (%d not fully valid)", selected), selected, invalid);
-            
+    } else if (invalid == selected) {
+        msg = g_strdup_printf (ngettext("Selected %d not fully valid key", 
+                                        "Selected %d not fully valid keys", selected), 
+                               selected);
+
     } else {
-        msg = g_strdup_printf (
-            ngettext("Selected %d not fully valid key", "Selected %d keys (%d not fully valid)", selected), selected, invalid);
+       
+        /* TRANSLATOR: This string will become
+          * "Selected %d keys and (%d not fully valid)" */
+        s1 = g_strdup_printf(ngettext("Selected %d key ", "Selected %d keys ", selected),
+                             selected);
+
+        /* TRANSLATOR: This string will become
+         * "Selected %d keys and (%d not fully valid)" */
+        s2 = g_strdup_printf(ngettext("(%d not fully valid)", "(%d not fully valid)", invalid),
+                             invalid);
+
+        /* TRANSLATOR: "%s%s" are "Selected %d keys and (%d not fully valid)"
+         * Swap order with "%2$s%1$s" if needed */
+        msg = g_strdup_printf(_("%s%s"), s1, s2);  
+        
+        g_free (s1);
+        g_free (s2);     
     }
         
 	gnome_appbar_set_status (GNOME_APPBAR (glade_xml_get_widget (swidget->xml, "status")), msg);

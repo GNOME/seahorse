@@ -36,22 +36,30 @@
 static gchar* 
 make_message (guint folders, guint files)
 {
-    const gchar* t;
+    gchar *msg, *s1, *s2;
     
     g_assert(folders > 0 || files > 0);
     
+    /* Necessary hoopla for translations */
     if (folders > 0 && files > 0) {
-        /* Necessary hoopla for translations */
-        if (files > 1 && folders > 1)
-            t = _("You have selected %d files and %d folders");
-        else if (files > 1)
-            t = _("You have selected %d files and %d folder");
-        else if (folders > 1)
-            t = _("You have selected %d file and %d folders");
-        else 
-            t = _("You have selected %d file and %d folder");
+    	
+    	/* TRANSLATOR: This string will become
+   	     * "You have selected %d files and %d folders" */
+        s1 = g_strdup_printf(ngettext("You have selected %d file ", "You have selected %d files ", files),
+                             files);
+
+        /* TRANSLATOR: This string will become
+         * "You have selected %d files and %d folders" */
+        s2 = g_strdup_printf(ngettext("and %d folder", "and %d folders", folders),
+                             folders);
+
+        /* TRANSLATOR: "%s%s" are "You have selected %d files and %d folders"
+         * Swap order with "%2$s%1$s" if needed */
+        msg = g_strdup_printf(_("%s%s"), s1, s2);
         
-        return g_strdup_printf(t, files, folders);
+        g_free (s1);
+        g_free (s2);
+        return msg;
         
     } else if (files > 0) {
         g_assert (files > 1);    /* should never be called for just one file */
