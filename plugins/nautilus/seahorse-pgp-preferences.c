@@ -1,18 +1,21 @@
 
 #include <gnome.h>
 #include <config.h>
-#include <libbonoboui.h>
 
-capplet_response (GtkDialog *dialog, gint response, gpointer data)
+#include "seahorse-widget.h"
+#include "seahorse-check-button-control.h"
+
+static void
+destroyed (GtkObject *object, gpointer data)
 {
-	gtk_widget_destroy (GTK_WIDGET (dialog));
 	gtk_exit (0);
 }
 
 int
 main (int argc, char **argv)
 {
-	GtkWidget *widget, *control;
+	SeahorseWidget *swidget;
+	GtkWidget *table;
 
 #ifdef ENABLE_NLS
         bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
@@ -23,27 +26,21 @@ main (int argc, char **argv)
         gnome_program_init (PACKAGE, VERSION, LIBGNOMEUI_MODULE, argc, argv,
                 GNOME_PARAM_HUMAN_READABLE_NAME, _("PGP Preferences"),
                 GNOME_PARAM_APP_DATADIR, DATA_DIR, NULL);
-
-
-	widget = gtk_dialog_new_with_buttons ("PGP Preferences", NULL,
-		GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE, NULL);
-	g_signal_connect_after (GTK_DIALOG (widget), "response",
-		G_CALLBACK (capplet_response), NULL);
-
-	control = bonobo_widget_new_control ("OAFIID:Seahorse_PGP_Controls", NULL);
 	
-	bonobo_widget_set_property (BONOBO_WIDGET (control), "ascii_armor",
-		BONOBO_ARG_BOOLEAN, CORBA_TRUE, NULL);
-	bonobo_widget_set_property (BONOBO_WIDGET (control), "text_mode",
-		BONOBO_ARG_BOOLEAN, CORBA_TRUE, NULL);
-	bonobo_widget_set_property (BONOBO_WIDGET (control), "encrypt_self",
-		BONOBO_ARG_BOOLEAN, CORBA_TRUE, NULL);
-	bonobo_widget_set_property (BONOBO_WIDGET (control), "default_key",
-		BONOBO_ARG_BOOLEAN, CORBA_TRUE, NULL);
+	swidget = seahorse_widget_new ("pgp-preferences", seahorse_context_new ());
+	table = gtk_table_new (2, 3, FALSE);
+	gtk_container_add (GTK_CONTAINER (glade_xml_get_widget (swidget->xml, "vbox")), table);
 	
-	gtk_container_add (GTK_CONTAINER (GTK_DIALOG (widget)->vbox), control);
-
-	gtk_widget_show_all (widget);
+	gtk_table_attach (GTK_TABLE (table), seahorse_check_button_control_new (_("_Ascii Armor"),
+		ARMOR_KEY), 0, 1, 0, 1, GTK_FILL, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (table), seahorse_check_button_control_new (_("_Text Mode"),
+		TEXTMODE_KEY), 1, 2, 0, 1, GTK_FILL, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (table), seahorse_check_button_control_new (_("_Encrypt to Self"),
+		ENCRYPTSELF_KEY), 2, 3, 0, 1, GTK_FILL, 0, 0, 0);
+	
+	gtk_widget_show_all (table);
+	g_signal_connect (GTK_OBJECT (table), "destroy", G_CALLBACK (destroyed), NULL);
+	
 	gtk_main();
 	return 0;
 }

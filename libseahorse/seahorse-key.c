@@ -85,8 +85,8 @@ seahorse_key_class_init (SeahorseKeyClass *klass)
 	
 	g_object_class_install_property (gobject_class, PROP_KEY,
 		g_param_spec_pointer ("key", "Gpgme Key",
-				     "Gpgme Key that this object represents",
-				     G_PARAM_READWRITE));
+				      "Gpgme Key that this object represents",
+				      G_PARAM_READWRITE));
 	
 	key_signals[CHANGED] = g_signal_new ("changed", G_OBJECT_CLASS_TYPE (gobject_class),
 		G_SIGNAL_RUN_LAST,  G_STRUCT_OFFSET (SeahorseKeyClass, changed),

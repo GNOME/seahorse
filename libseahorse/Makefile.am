@@ -26,6 +26,7 @@ libseahorse_a_SOURCES = \
 	seahorse-recipients-store.c seahorse-recipients-store.h \
 	seahorse-util.c seahorse-util.h \
 	seahorse-validity.c seahorse-validity.h \
+	seahorse-check-button-control.c seahorse-check-button-control.h \
 	seahorse-passphrase.c \
 	seahorse-recipients.c \
 	seahorse-signatures.c \
