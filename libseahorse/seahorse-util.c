@@ -30,6 +30,35 @@
 #include "seahorse-key.h"
 #include "seahorse-vfs-data.h"
 
+typedef struct _SeahorsePGPHeader {
+    const gchar *header;
+    const gchar *footer;
+    SeahorseTextType type;
+} SeahorsePGPHeader;    
+
+static const SeahorsePGPHeader seahorse_pgp_headers[] = {
+    { 
+        "-----BEGIN PGP MESSAGE-----", 
+        "-----END PGP MESSAGE-----", 
+        SEAHORSE_TEXT_TYPE_MESSAGE 
+    }, 
+    {
+        "-----BEGIN PGP SIGNED MESSAGE-----",
+        "-----END PGP SIGNATURE-----",
+        SEAHORSE_TEXT_TYPE_SIGNED
+    }, 
+    {
+        "-----BEGIN PGP PUBLIC KEY BLOCK-----",
+        "-----END PGP PUBLIC KEY BLOCK-----",
+        SEAHORSE_TEXT_TYPE_KEY
+    }, 
+    {
+        "-----BEGIN PGP PRIVATE KEY BLOCK-----",
+        "-----END PGP PRIVATE KEY BLOCK-----",
+        SEAHORSE_TEXT_TYPE_KEY
+    }
+};
+     
 #define ASC ".asc"
 #define SIG ".sig"
 #define GPG ".gpg"
@@ -315,6 +344,58 @@ seahorse_util_printf_fd (int fd, const char* fmt, ...)
     return ret;
 }
 
+/**
+ * seahorse_util_detect_text
+ * @text: The text to process
+ * @len: Length of the text or -1 for null-terminated
+ * @start: Returns the start of detected area (pass NULL if not interested)
+ * @end: Returns the end of the detected area (pass NULL if not interested)
+ * 
+ * Auto detects what kind of PGP crypted data a given block is.
+ * 
+ * Returns: The type
+ **/
+SeahorseTextType    
+seahorse_util_detect_text (const gchar *text, gint len, const gchar **start, 
+                            const gchar **end)
+{
+    const SeahorsePGPHeader *header;
+    const gchar *pos = NULL;
+    const gchar *t;
+    int i;
+    
+    if (len == -1)
+        len = strlen (text);
+    
+    /* Find the first of the headers */
+    for (i = 0; i < (sizeof (seahorse_pgp_headers) / sizeof (seahorse_pgp_headers[0])); i++) {
+        t = g_strstr_len (text, len, seahorse_pgp_headers[i].header);
+        if (t != NULL) {
+            if (pos == NULL || (t < pos)) {
+                header = &(seahorse_pgp_headers[i]);
+                pos = t;
+            }
+        }
+    }
+    
+    if (pos != NULL) {
+        
+        if (start)
+            *start = pos;
+        
+        /* Find the end of that block */
+        t = g_strstr_len (pos, len - (pos - text), header->footer);
+        if (t != NULL && end)
+            *end = t + strlen(header->footer);
+        else if (end)
+            *end = NULL;
+            
+        return header->type;
+    }
+    
+    return SEAHORSE_TEXT_TYPE_NONE;
+}
+
 /** 
  * seahorse_util_uri_get_last:
  * @uri: The uri to parse
@@ -332,13 +413,10 @@ seahorse_util_uri_get_last (const gchar* uri)
     
     t = uri + strlen (uri);
     
-    if (t == uri)
-        return uri;
-        
-    if (*(t - 1) == '/')
+    if (*(t - 1) == '/' && t != uri)
         t--;
     
-    while (*(t - 1) != '/')
+    while (*(t - 1) != '/' && t != uri)
         t--;
     
     return t;

@@ -32,6 +32,13 @@ typedef enum {
 	SEAHORSE_ASC_SUFFIX
 } SeahorseSuffix;
 
+typedef enum {
+    SEAHORSE_TEXT_TYPE_NONE,
+    SEAHORSE_TEXT_TYPE_KEY,
+    SEAHORSE_TEXT_TYPE_MESSAGE,
+    SEAHORSE_TEXT_TYPE_SIGNED
+} SeahorseTextType;
+
 gchar*		seahorse_util_get_date_string		(const time_t		time);
 
 #define SEAHORSE_GPGME_ERROR  (seahorse_util_gpgme_error_domain())
@@ -59,7 +66,12 @@ gboolean    seahorse_util_print_fd          (int fd,
 
 gboolean    seahorse_util_printf_fd         (int fd, 
                                              const char* data, ...);
-                                             
+
+SeahorseTextType  seahorse_util_detect_text (const gchar *text, 
+                                             gint len, 
+                                             const gchar **start, 
+                                             const gchar **end);
+                                                                                              
 gboolean    seahorse_util_uri_exists        (const gchar* uri);
 
 gchar*      seahorse_util_uri_unique        (const gchar* uri);
