@@ -52,57 +52,57 @@ struct _SeahorseKeyStoreClass
 	 * This is needed since not every key should always be added and
 	 * some stores will display subkeys.
 	 */
-	void			(* append)		(SeahorseKeyStore	*skstore,
-							 SeahorseKey		*skey,
-							 GtkTreeIter		*iter);
+	void			(* append)			(SeahorseKeyStore	*skstore,
+								 SeahorseKey		*skey,
+								 GtkTreeIter		*iter);
 	
 	/* Virtual method for setting the key's attributes. Name and KeyID are
 	 * set by the key-store, so implementation in subclasses is optional.
 	 */
-	void			(* set)			(GtkTreeStore		*store,
-							 GtkTreeIter		*iter,
-							 SeahorseKey		*skey);
+	void			(* set)				(GtkTreeStore		*store,
+								 GtkTreeIter		*iter,
+								 SeahorseKey		*skey);
 	
 	/* Optional virtual method for removing a row. Only implement if iter
 	 * is a parent and has sub-iters that also need to be removed.
 	 */
-	void			(* remove)		(SeahorseKeyStore	*skstore,
-							 GtkTreeIter		*iter);
+	void			(* remove)			(SeahorseKeyStore	*skstore,
+								 GtkTreeIter		*iter);
 	
 	/* Virtual method for when the key at iter has changed. Key-store
 	 * will already do user ID changes, so implementation is optional
 	 * depending on displayed attributes.
 	 */
-	void			(* changed)		(SeahorseKey		*skey,
-							 SeahorseKeyChange	change,
-							 SeahorseKeyStore	*skstore,
-							 GtkTreeIter		*iter);
+	void			(* changed)			(SeahorseKey		*skey,
+								 SeahorseKeyChange	change,
+								 SeahorseKeyStore	*skstore,
+								 GtkTreeIter		*iter);
 };
 
-void		seahorse_key_store_init			(SeahorseKeyStore	*skstore,
-							 GtkTreeView		*view,
-							 gint			cols,
-							 GType			*ccolumns);
+void			seahorse_key_store_init			(SeahorseKeyStore	*skstore,
+								 GtkTreeView		*view,
+								 gint			cols,
+								 GType			*ccolumns);
 
-void		seahorse_key_store_destroy		(SeahorseKeyStore	*skstore);
+void			seahorse_key_store_destroy		(SeahorseKeyStore	*skstore);
 
-void		seahorse_key_store_populate		(SeahorseKeyStore	*skstore);
+void			seahorse_key_store_populate		(SeahorseKeyStore	*skstore);
 
-GtkTreePath*	seahorse_key_store_get_selected_path	(GtkTreeView		*view);
+GtkTreePath*		seahorse_key_store_get_selected_path	(GtkTreeView		*view);
 
-SeahorseKey*	seahorse_key_store_get_selected_key	(GtkTreeView		*view);
+SeahorseKey*		seahorse_key_store_get_selected_key	(GtkTreeView		*view);
 
-SeahorseKey*	seahorse_key_store_get_key_from_path	(GtkTreeView		*view,
-							 GtkTreePath		*path);
+SeahorseKey*		seahorse_key_store_get_key_from_path	(GtkTreeView		*view,
+								 GtkTreePath		*path);
 
-void		seahorse_key_store_append		(SeahorseKeyStore	*skstore,
-							 SeahorseKey		*skey);
+void			seahorse_key_store_append		(SeahorseKeyStore	*skstore,
+								 SeahorseKey		*skey);
 
-void		seahorse_key_store_remove		(SeahorseKeyStore	*skstore,
-							 GtkTreePath		*path);
+void			seahorse_key_store_remove		(SeahorseKeyStore	*skstore,
+								 GtkTreePath		*path);
 
-void		seahorse_key_store_append_column	(GtkTreeView		*view,
-							 const gchar		*name,
-							 const gint		index);
+GtkTreeViewColumn*	seahorse_key_store_append_column	(GtkTreeView		*view,
+								 const gchar		*name,
+								 const gint		index);
 
 #endif /* __SEAHORSE_KEY_STORE_H__ */

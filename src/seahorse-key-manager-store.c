@@ -49,11 +49,6 @@ static void	seahorse_key_manager_store_changed	(SeahorseKey			*skey,
 							 SeahorseKeyStore		*skstore,
 							 GtkTreeIter			*iter);
 
-static void	seahorse_key_manager_store_set_attribs	(GtkTreeStore			*store,
-							 GtkTreeIter			*iter,
-							 SeahorseKey			*skey,
-							 guint				index);
-
 static SeahorseKeyStoreClass	*parent_class	= NULL;
 
 GType
@@ -100,9 +95,9 @@ append_subkeys (GtkTreeStore *store, GtkTreeIter *iter, SeahorseKey *skey)
 	gint index = 1, max;
 	GtkTreeIter child;
 
-	max = seahorse_key_get_num_subkeys (skey);
+	max = seahorse_key_get_num_uids (skey);
 	
-	while (index <= max) {
+	while (index < max) {
 		gtk_tree_store_append (store, &child, iter);
 		index++;
 	}
@@ -134,14 +129,22 @@ seahorse_key_manager_store_set (GtkTreeStore *store, GtkTreeIter *iter, Seahorse
 	GtkTreeIter child;
 	gint index = 1, max;
 	
-	seahorse_key_manager_store_set_attribs (store, iter, skey, 0);
-	max = seahorse_key_get_num_subkeys (skey);
+	gtk_tree_store_set (store, iter,
+		TRUST, seahorse_validity_get_trust_from_key (skey),
+		ALGO, gpgme_key_get_string_attr (skey->key, GPGME_ATTR_ALGO, NULL, 0),
+		LENGTH, gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_LEN, NULL, 0), -1);
 	
-	while (index <= max && gtk_tree_model_iter_nth_child (
+	max = seahorse_key_get_num_uids (skey);
+	
+	while (index < max && gtk_tree_model_iter_nth_child (
 	GTK_TREE_MODEL (store), &child, iter, index-1)) {
-		seahorse_key_manager_store_set_attribs (store, &child, skey, index);
+		gtk_tree_store_set (store, &child,
+			NAME, seahorse_key_get_userid (skey, index),
+			ALGO, "UID", -1);
 		index++;
 	}
+	
+	parent_class->set (store, iter, skey);
 }
 
 /* Removes subkeys, then does remove */
@@ -166,19 +169,6 @@ seahorse_key_manager_store_changed (SeahorseKey *skey, SeahorseKeyChange change,
 			parent_class->changed (skey, change, skstore, iter);
 			break;
 	}
-}
-
-/* Sets attributes for row at @iter using @skey and @index */
-static void
-seahorse_key_manager_store_set_attribs (GtkTreeStore *store, GtkTreeIter *iter,
-				       SeahorseKey *skey, guint index)
-{
-	gtk_tree_store_set (store, iter,
-		NAME, seahorse_key_get_userid (skey, 0),
-		KEYID, seahorse_key_get_keyid (skey, index),
-		TRUST, seahorse_validity_get_trust_from_key (skey),
-		ALGO, gpgme_key_get_string_attr (skey->key, GPGME_ATTR_ALGO, NULL, index),
-		LENGTH, gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_LEN, NULL, index), -1);
 }
 
 /**
