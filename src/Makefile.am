@@ -50,3 +50,5 @@ glade_DATA = \
 	seahorse-add-subkey.glade
 
 EXTRA_DIST = $(glade_DATA)
+
+CLEANFILES = *.gladep* *.bak

@@ -17,8 +17,16 @@ seahorse_pgp_preferences_LDADD = \
 mimedir = $(datadir)/mime-info
 mime_DATA = seahorse.mime seahorse.keys
 
+@INTLTOOL_DESKTOP_RULE@
+desktopdir = $(datadir)/control-center-2.0/capplets
+desktop_in_files = seahorse-pgp-preferences.desktop.in
+desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
+
 glade_DATA = seahorse-pgp-preferences.glade
 
 EXTRA_DIST = \
 	$(mime_DATA) \
+	$(desktop_in_files) \
 	$(glade_DATA)
+
+CLEANFILES = $(desktop_DATA)
