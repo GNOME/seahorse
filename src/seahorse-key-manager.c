@@ -359,6 +359,7 @@ about_activate (GtkWidget *widget, SeahorseWidget *swidget)
 		"Jacob Perkins <jap1@users.sourceforge.net>",
 		"Jose Carlos Garcia Sogo <jsogo@users.sourceforge.net>",
 		"Jean Schurger <yshark@schurger.org>",
+        "Nate Nielsen <nielsen@memberwebs.com>",
 		NULL
 	};
 
