@@ -440,7 +440,7 @@ seahorse_key_properties_new (SeahorseContext *sctx, SeahorseKey *skey)
 	GtkWidget *widget;
 	GtkOptionMenu *option;
 	
-	swidget = seahorse_key_widget_new_component ("key-properties", sctx, skey);
+	swidget = seahorse_key_widget_new ("key-properties", sctx, skey);
 	g_return_if_fail (swidget != NULL);
 	
 	/* Hide edit menu if key doesn't have secret component */

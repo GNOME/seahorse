@@ -67,7 +67,7 @@ seahorse_revoke_new (SeahorseContext *sctx, SeahorseKey *skey, const guint index
 void
 seahorse_add_revoker_new (SeahorseContext *sctx, SeahorseKey *skey)
 {
-	SeahorseKey *signer;
+	SeahorseKeyPair *skpair;
 	GtkWidget *dialog;
 	gint response;
 	gchar *message;
@@ -75,14 +75,16 @@ seahorse_add_revoker_new (SeahorseContext *sctx, SeahorseKey *skey)
 	g_return_if_fail (sctx != NULL && SEAHORSE_IS_CONTEXT (sctx));
 	g_return_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey));
 	
-	signer = seahorse_context_get_last_signer (sctx);
-	g_return_if_fail (signer != NULL);
+	skpair = seahorse_context_get_default_key (sctx);
+	g_return_if_fail (skpair != NULL);
 	
 	dialog = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
 		GTK_MESSAGE_WARNING, GTK_BUTTONS_YES_NO,
 		_("You are about to add %s as a revoker for %s."
 		" This operation cannot be undone! Are you sure you want to continue?"),
-		seahorse_key_get_userid (signer, 0), seahorse_key_get_userid (skey, 0));
+		seahorse_key_get_userid (SEAHORSE_KEY (skpair), 0),
+		seahorse_key_get_userid (skey, 0));
+	
 	response = gtk_dialog_run (GTK_DIALOG (dialog));
 	gtk_widget_destroy (dialog);
 	
@@ -92,12 +94,15 @@ seahorse_add_revoker_new (SeahorseContext *sctx, SeahorseKey *skey)
 	if (seahorse_ops_key_add_revoker (sctx, skey))
 		dialog = gtk_message_dialog_new (NULL, GTK_DIALOG_DESTROY_WITH_PARENT,
 			GTK_MESSAGE_INFO, GTK_BUTTONS_OK, _("%s can now revoke %s."),
-			seahorse_key_get_userid (signer, 0), seahorse_key_get_userid (skey, 0));
+			seahorse_key_get_userid (SEAHORSE_KEY (skpair), 0),
+			seahorse_key_get_userid (skey, 0));
 	else
 		dialog = gtk_message_dialog_new (NULL, GTK_DIALOG_DESTROY_WITH_PARENT,
 			GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE,
 			_("Could not add %s as a revoker for %s"),
-			seahorse_key_get_userid (signer, 0), seahorse_key_get_userid (skey, 0));
+			seahorse_key_get_userid (SEAHORSE_KEY (skpair), 0),
+			seahorse_key_get_userid (skey, 0));
+	
 	g_signal_connect_swapped (GTK_OBJECT (dialog), "response",
 		G_CALLBACK (gtk_widget_destroy), GTK_OBJECT (dialog));
 	gtk_widget_show (dialog);

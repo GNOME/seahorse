@@ -62,15 +62,12 @@ struct _SeahorseKey
 	GtkObject		parent;
 	
 	/*< public >*/
-	
 	GpgmeKey		key;
 };
 
 struct _SeahorseKeyClass
 {
 	GtkObjectClass		parent_class;
-	
-	/*< public >*/
 	
 	/* Signal emitted when one of the key's attributes has changed */
 	void 			(* changed)		(SeahorseKey		*skey,
@@ -97,8 +94,6 @@ const gchar*		seahorse_key_get_userid		(const SeahorseKey	*skey,
 gboolean		seahorse_key_is_valid		(const SeahorseKey	*skey);
 
 gboolean		seahorse_key_can_encrypt	(const SeahorseKey	*skey);
-
-gboolean		seahorse_key_can_sign		(const SeahorseKey	*skey);
 
 const SeahorseValidity	seahorse_key_get_validity	(const SeahorseKey	*skey);
 

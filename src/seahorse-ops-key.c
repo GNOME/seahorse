@@ -1642,16 +1642,17 @@ gboolean
 seahorse_ops_key_add_revoker (SeahorseContext *sctx, SeahorseKey *skey)
 {
 	SeahorseEditParm *parms;
-	SeahorseKey *signer;
+	SeahorseKeyPair *skpair;
 	
 	g_return_val_if_fail (sctx != NULL && SEAHORSE_IS_CONTEXT (sctx), FALSE);
 	g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), FALSE);
 	
-	signer = seahorse_context_get_last_signer (sctx);
-	g_return_val_if_fail (signer != NULL, FALSE);
+	skpair = seahorse_context_get_default_key (sctx);
+	g_return_val_if_fail (skpair != NULL, FALSE);
 	
 	parms = seahorse_edit_parm_new (ADD_REVOKER_START, add_revoker_action,
-		add_revoker_transit, (gpointer)seahorse_key_get_keyid (signer, 0));
+		add_revoker_transit, (gpointer)gpgme_key_get_string_attr (
+		SEAHORSE_KEY (skpair)->key, GPGME_ATTR_FPR, NULL, 0));
 	
 	return edit_key (sctx, skey, parms, _("Add Revoker"), SKEY_CHANGE_REVOKER);
 }

@@ -24,7 +24,7 @@
 
 #include <gtk/gtk.h>
 
-#include "seahorse-key.h"
+#include "seahorse-key-pair.h"
 
 #define SEAHORSE_TYPE_SIGNER_MENU_ITEM			(seahorse_signer_menu_item_get_type ())
 #define SEAHORSE_SIGNER_MENU_ITEM(obj)			(GTK_CHECK_CAST ((obj), SEAHORSE_TYPE_SIGNER_MENU_ITEM, SeahorseSignerMenuItem))
@@ -40,7 +40,7 @@ struct _SeahorseSignerMenuItem
 {
 	GtkMenuItem		parent;
 	
-	SeahorseKey		*skey;
+	SeahorseKeyPair		*skpair;
 };
 
 struct _SeahorseSignerMenuItemClass
@@ -48,6 +48,6 @@ struct _SeahorseSignerMenuItemClass
 	GtkMenuItemClass	parent_class;
 };
 
-GtkWidget*	seahorse_signer_menu_item_new	(SeahorseKey	*skey);
+GtkWidget*	seahorse_signer_menu_item_new	(SeahorseKeyPair	*skpair);
 
 #endif /* __SEAHORSE_SIGNER_MENU_ITEM_H__ */

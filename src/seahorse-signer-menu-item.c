@@ -84,8 +84,8 @@ seahorse_signer_menu_item_class_init (SeahorseSignerMenuItemClass *klass)
 	
 	g_object_class_install_property (gobject_class, PROP_KEY,
 		g_param_spec_object ("key", "Seahorse Key",
-				     "Seahorse Key for this item",
-				     SEAHORSE_TYPE_KEY, G_PARAM_READWRITE));
+				     "Seahorse Key Pair for this item",
+				     SEAHORSE_TYPE_KEY_PAIR, G_PARAM_READWRITE));
 }
 
 static void
@@ -95,11 +95,11 @@ seahorse_signer_menu_item_finalize (GObject *gobject)
 	
 	sitem = SEAHORSE_SIGNER_MENU_ITEM (gobject);
 	
-	g_signal_handlers_disconnect_by_func (GTK_OBJECT (sitem->skey),
+	g_signal_handlers_disconnect_by_func (GTK_OBJECT (sitem->skpair),
 		seahorse_signer_menu_item_destroyed, sitem);
-	g_signal_handlers_disconnect_by_func (sitem->skey,
+	g_signal_handlers_disconnect_by_func (sitem->skpair,
 		seahorse_signer_menu_item_changed, sitem);
-	g_object_unref (sitem->skey);
+	g_object_unref (sitem->skpair);
 	
 	G_OBJECT_CLASS (parent_class)->finalize (gobject);
 }
@@ -114,11 +114,11 @@ seahorse_signer_menu_item_set_property (GObject *gobject, guint prop_id,
 	
 	switch (prop_id) {
 		case PROP_KEY:
-			sitem->skey = g_value_get_object (value);
-			g_object_ref (sitem->skey);
-			g_signal_connect_after (GTK_OBJECT (sitem->skey), "destroy",
+			sitem->skpair = g_value_get_object (value);
+			g_object_ref (sitem->skpair);
+			g_signal_connect_after (GTK_OBJECT (sitem->skpair), "destroy",
 				G_CALLBACK (seahorse_signer_menu_item_destroyed), sitem);
-			g_signal_connect_after (sitem->skey, "changed",
+			g_signal_connect_after (SEAHORSE_KEY (sitem->skpair), "changed",
 				G_CALLBACK (seahorse_signer_menu_item_changed), sitem);
 			break;
 		default:
@@ -136,7 +136,7 @@ seahorse_signer_menu_item_get_property (GObject *gobject, guint prop_id,
 	
 	switch (prop_id) {
 		case PROP_KEY:
-			g_value_set_object (value, sitem->skey);
+			g_value_set_object (value, sitem->skpair);
 			break;
 		default:
 			break;
@@ -156,7 +156,7 @@ seahorse_signer_menu_item_changed (SeahorseKey *skey, SeahorseKeyChange change,
 	switch (change) {
 		case SKEY_CHANGE_EXPIRE: case SKEY_CHANGE_DISABLE:
 		case SKEY_CHANGE_SUBKEYS:
-			if (!seahorse_key_can_sign (skey))
+			if (!seahorse_key_pair_can_sign (SEAHORSE_KEY_PAIR (skey)))
 				gtk_widget_destroy (GTK_WIDGET (sitem));
 			break;
 		case SKEY_CHANGE_UIDS:
@@ -169,13 +169,13 @@ seahorse_signer_menu_item_changed (SeahorseKey *skey, SeahorseKeyChange change,
 }
 
 GtkWidget*
-seahorse_signer_menu_item_new (SeahorseKey *skey)
+seahorse_signer_menu_item_new (SeahorseKeyPair *skpair)
 {
 	GtkWidget *widget, *label;
 	
-	widget = g_object_new (SEAHORSE_TYPE_SIGNER_MENU_ITEM, "key", skey, NULL);
+	widget = g_object_new (SEAHORSE_TYPE_SIGNER_MENU_ITEM, "key", skpair, NULL);
 	
-	label = gtk_label_new (seahorse_key_get_userid (skey, 0));
+	label = gtk_label_new (seahorse_key_get_userid (SEAHORSE_KEY (skpair), 0));
 	gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
 	gtk_container_add (GTK_CONTAINER (widget), label);
 	gtk_widget_show_all (widget);

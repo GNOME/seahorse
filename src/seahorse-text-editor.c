@@ -217,7 +217,7 @@ seahorse_text_editor_show (SeahorseContext *sctx)
 {
 	SeahorseWidget *swidget;
 	
-	swidget = seahorse_widget_new_component ("text-editor", sctx);
+	swidget = seahorse_widget_new ("text-editor", sctx);
 	g_return_if_fail (swidget != NULL);
 	
 	glade_xml_signal_connect_data (swidget->xml, "preferences_activate",

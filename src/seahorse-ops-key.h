@@ -22,10 +22,6 @@
 #ifndef __SEAHORSE_OPS_KEY_H__
 #define __SEAHORSE_OPS_KEY_H__
 
-/* Key related operations.  SeahorseKey cannot depend on a SeahorseContext,
- * so separate ops are necessary.  Functions return TRUE iff no errors occur.
- * When completed, functions send the operation status to context. */
-
 #include <glib.h>
 #include <gpgme.h>
 #include <time.h>

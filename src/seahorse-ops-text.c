@@ -81,10 +81,11 @@ seahorse_ops_text_export (SeahorseContext *sctx, GString *string, const Seahorse
 	gboolean success;
 	
 	success = (gpgme_get_armor (sctx->ctx) &&
-		seahorse_ops_data_export (sctx, &data, skey) &&
-		read_string (data, string));
+		seahorse_ops_data_export (sctx, &data, skey));
 	
-	if (!success)
+	if (success)
+		read_string (data, string);
+	else
 		gpgme_data_release (data);
 	
 	seahorse_context_show_status (sctx, _("Export Text"), success);

@@ -293,13 +293,6 @@ seahorse_key_can_encrypt (const SeahorseKey *skey)
 		gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_CAN_ENCRYPT, NULL, 0));
 }
 
-gboolean
-seahorse_key_can_sign (const SeahorseKey *skey)
-{
-	return (seahorse_key_is_valid (skey) &&
-		gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_CAN_SIGN, NULL, 0));
-}
-
 const SeahorseValidity
 get_validity_attr (const SeahorseKey *skey, GpgmeAttr attr)
 {

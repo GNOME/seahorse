@@ -30,8 +30,7 @@
 enum {
 	PROP_0,
 	PROP_NAME,
-	PROP_CTX,
-	PROP_COMPONENT
+	PROP_CTX
 };
 
 static void		seahorse_widget_class_init	(SeahorseWidgetClass	*klass);
@@ -53,16 +52,6 @@ static gboolean		seahorse_widget_delete_event	(GtkWidget		*widget,
 							 GdkEvent		*event,
 							 SeahorseWidget		*swidget);
 static void		seahorse_widget_destroyed	(GtkObject		*object,
-							 SeahorseWidget		*swidget);
-							 
-/* component signal functions */
-static void		seahorse_widget_show_status	(const SeahorseContext	*sctx,
-							 const gchar		*status,
-							 SeahorseWidget		*swidget);
-static void		seahorse_widget_show_bar	(GtkCheckMenuItem	*checkmenuitem,
-							 GtkWidget		*bar);
-static gboolean		seahorse_widget_focus_in_event	(GtkWidget		*widget,
-							 GdkEventFocus		*event,
 							 SeahorseWidget		*swidget);
 
 static void		seahorse_widget_show_progress	(SeahorseContext	*sctx,
@@ -117,10 +106,6 @@ seahorse_widget_class_init (SeahorseWidgetClass *klass)
 		g_param_spec_object ("ctx", "Seahorse Context",
 				     "Current Seahorse Context to use",
 				     SEAHORSE_TYPE_CONTEXT, G_PARAM_READWRITE));
-	g_object_class_install_property (gobject_class, PROP_COMPONENT,
-		g_param_spec_boolean ("component", "If Seahorse Component",
-				      "Seahorse Components are GnomeApps with extra signals",
-				      FALSE, G_PARAM_READWRITE));
 }
 
 /* Disconnects callbacks, destroys main window widget,
@@ -189,10 +174,6 @@ seahorse_widget_set_property (GObject *object, guint prop_id, const GValue *valu
 			g_signal_connect_after (swidget->sctx, "progress",
 				G_CALLBACK (seahorse_widget_show_progress), swidget);
 			break;
-		/* Connects component specific callbacks */
-		case PROP_COMPONENT:
-			swidget->component = g_value_get_boolean (value);
-			break;
 		default:
 			break;
 	}
@@ -210,9 +191,6 @@ seahorse_widget_get_property (GObject *object, guint prop_id, GValue *value, GPa
 			break;
 		case PROP_CTX:
 			g_value_set_object (value, swidget->sctx);
-			break;
-		case PROP_COMPONENT:
-			g_value_set_boolean (value, swidget->component);
 			break;
 		default:
 			break;
@@ -255,13 +233,20 @@ seahorse_widget_destroyed (GtkObject *object, SeahorseWidget *swidget)
 static void
 seahorse_widget_show_progress (SeahorseContext *sctx, const gchar *op, gdouble fract, SeahorseWidget *swidget)
 {
-	if (!swidget->component)
-		gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, swidget->name), fract == -1);
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, swidget->name), fract == -1);
 }
 
-/* Common function for creating new widget */
-static SeahorseWidget*
-seahorse_widget_create (gchar *name, SeahorseContext *sctx, gboolean component)
+/**
+ * seahorse_widget_new:
+ * @name: Name of widget, filename part of glade file, and name of main window
+ * @sctx: #SeahorseContext
+ *
+ * Creates a new #SeahorseWidget.
+ *
+ * Returns: The new #SeahorseWidget, or NULL if the widget already exists
+ **/
+SeahorseWidget*
+seahorse_widget_new (gchar *name, SeahorseContext *sctx)
 {
 	SeahorseWidget *swidget;
 	
@@ -282,40 +267,10 @@ seahorse_widget_create (gchar *name, SeahorseContext *sctx, gboolean component)
 		widgets = g_hash_table_new ((GHashFunc)g_str_hash, (GCompareFunc)g_str_equal);
 	
 	/* If widget doesn't already exist, create & insert into hash */
-	swidget = g_object_new (SEAHORSE_TYPE_WIDGET, "name", name, "ctx", sctx, "component", component, NULL);
+	swidget = g_object_new (SEAHORSE_TYPE_WIDGET, "name", name, "ctx", sctx, NULL);
 	g_hash_table_insert (widgets, g_strdup (name), swidget);
 	
 	return swidget;
-}
-
-/**
- * seahorse_widget_new:
- * @name: Name of widget, filename part of glade file, and name of main window
- * @sctx: #SeahorseContext
- *
- * Creates a new #SeahorseWidget.
- *
- * Returns: The new #SeahorseWidget, or NULL if the widget already exists
- **/
-SeahorseWidget*
-seahorse_widget_new (gchar *name, SeahorseContext *sctx)
-{
-	return seahorse_widget_create (name, sctx, FALSE);
-}
-
-/**
- * seahorse_widget_new:
- * @name: Name of widget, filename part of glade file, and name of main window
- * @sctx: #SeahorseContext
- *
- * Creates a new #SeahorseWidget with component properties.
- *
- * Returns: The new #SeahorseWidget, or NULL if the widget already exists
- **/
-SeahorseWidget*
-seahorse_widget_new_component (gchar *name, SeahorseContext *sctx)
-{
-	return seahorse_widget_create (name, sctx, TRUE);	
 }
 
 /**

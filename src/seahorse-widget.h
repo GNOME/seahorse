@@ -45,9 +45,6 @@ struct _SeahorseWidget
 	GladeXML	*xml;
 	gchar		*name;
 	SeahorseContext	*sctx;
-	
-	/*< private >*/
-	gboolean	component;
 };
 
 struct _SeahorseWidgetClass
@@ -56,9 +53,6 @@ struct _SeahorseWidgetClass
 };
 
 SeahorseWidget*	seahorse_widget_new			(gchar			*name,
-							 SeahorseContext	*sctx);
-
-SeahorseWidget*	seahorse_widget_new_component		(gchar			*name,
 							 SeahorseContext	*sctx);
 
 SeahorseWidget*	seahorse_widget_new_allow_multiple	(gchar			*name,

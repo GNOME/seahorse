@@ -25,7 +25,7 @@
 #include <gtk/gtk.h>
 #include <gpgme.h>
 
-#include "seahorse-key.h"
+#include "seahorse-key-pair.h"
 
 #define SEAHORSE_TYPE_CONTEXT			(seahorse_context_get_type ())
 #define SEAHORSE_CONTEXT(obj)			(GTK_CHECK_CAST ((obj), SEAHORSE_TYPE_CONTEXT, SeahorseContext))
@@ -91,10 +91,10 @@ void			seahorse_context_set_ascii_armor	(SeahorseContext	*sctx,
 void			seahorse_context_set_text_mode		(SeahorseContext	*sctx,
 								 gboolean		text_mode);
 
-void			seahorse_context_set_signer		(SeahorseContext	*sctx,
-								 SeahorseKey		*signer);
+void			seahorse_context_set_default_key	(SeahorseContext	*sctx,
+								 SeahorseKeyPair	*skpair);
 
-SeahorseKey*		seahorse_context_get_last_signer	(SeahorseContext	*sctx);
+SeahorseKeyPair*	seahorse_context_get_default_key	(SeahorseContext	*sctx);
 
 gint			seahorse_context_get_progress_update	(SeahorseContext	*sctx);
 

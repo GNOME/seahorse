@@ -361,39 +361,6 @@ key_list_popup_menu (GtkWidget *widget, SeahorseWidget *swidget)
 }
 
 static void
-show_progress (SeahorseContext *sctx, const gchar *op, gdouble fract, SeahorseWidget *swidget)
-{
-	GnomeAppBar *status;
-	GtkProgressBar *progress;
-	gboolean sensitive;
-
-	sensitive = (fract == -1);
-	
-	status = GNOME_APPBAR (glade_xml_get_widget (swidget->xml, "status"));
-	gnome_appbar_set_status (status, op);
-	progress = gnome_appbar_get_progress (status);
-	/* do progress */
-	if (fract <= 1 && fract > 0)
-		gtk_progress_bar_set_fraction (progress, fract);
-	else if (fract != -1) {
-		gtk_progress_bar_set_pulse_step (progress, 0.05);
-		gtk_progress_bar_pulse (progress);
-	}
-	/* if fract == -1, cleanup progress */
-	else
-		gtk_progress_bar_set_fraction (progress, 0);
-	
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, KEY_LIST), sensitive);
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "key"), sensitive);
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "edit"), sensitive);
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "tools"), sensitive);
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "tool_dock"), sensitive);
-	
-	while (g_main_context_pending (NULL))
-		g_main_context_iteration (NULL, TRUE);
-}
-
-static void
 set_toolbar_style (GtkToolbar *toolbar, const gchar *style)
 {
 	if (g_str_equal (style, "both"))
@@ -450,6 +417,39 @@ gconf_notification (GConfClient *gclient, guint id, GConfEntry *entry, SeahorseW
 	}
 }
 
+static void
+show_progress (SeahorseContext *sctx, const gchar *op, gdouble fract, SeahorseWidget *swidget)
+{
+	GnomeAppBar *status;
+	GtkProgressBar *progress;
+	gboolean sensitive;
+
+	sensitive = (fract == -1);
+	
+	status = GNOME_APPBAR (glade_xml_get_widget (swidget->xml, "status"));
+	gnome_appbar_set_status (status, op);
+	progress = gnome_appbar_get_progress (status);
+	/* do progress */
+	if (fract <= 1 && fract > 0)
+		gtk_progress_bar_set_fraction (progress, fract);
+	else if (fract != -1) {
+		gtk_progress_bar_set_pulse_step (progress, 0.05);
+		gtk_progress_bar_pulse (progress);
+	}
+	/* if fract == -1, cleanup progress */
+	else
+		gtk_progress_bar_set_fraction (progress, 0);
+	
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, KEY_LIST), sensitive);
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "key"), sensitive);
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "edit"), sensitive);
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "tools"), sensitive);
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "tool_dock"), sensitive);
+	
+	while (g_main_context_pending (NULL))
+		g_main_context_iteration (NULL, TRUE);
+}
+
 void
 seahorse_key_manager_show (SeahorseContext *sctx)
 {
@@ -459,14 +459,56 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 	GtkWidget *widget;
 	gboolean visible;
 	
-	swidget = seahorse_widget_new_component ("key-manager", sctx);
+	swidget = seahorse_widget_new ("key-manager", sctx);
 	gtk_object_sink (GTK_OBJECT (sctx));
+	
+	/* construct key context menu */
+	glade_xml_construct (swidget->xml, SEAHORSE_GLADEDIR "seahorse-key-manager.glade2",
+		"context_menu", NULL);
 	
 	/* quit signals */
 	glade_xml_signal_connect_data (swidget->xml, "quit",
 		G_CALLBACK (quit), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "quit_event",
 		G_CALLBACK (delete_event), swidget);
+	
+	g_signal_connect_after (swidget->sctx, "progress", G_CALLBACK (show_progress), swidget);
+	
+	/* init gclient */
+	gclient = gconf_client_get_default ();
+	gconf_client_notify_add (gclient, UI,
+		(GConfClientNotifyFunc) gconf_notification, swidget, NULL, NULL);
+	gconf_client_add_dir (gclient, UI, GCONF_CLIENT_PRELOAD_ONELEVEL, NULL);
+	gconf_client_notify_add (gclient, GNOME_INTERFACE,
+		(GConfClientNotifyFunc) gconf_notification, swidget, NULL, NULL);
+	gconf_client_add_dir (gclient, GNOME_INTERFACE, GCONF_CLIENT_PRELOAD_ONELEVEL, NULL);
+	
+	/* init toolbar */
+	widget = glade_xml_get_widget (swidget->xml, "view_toolbar");
+	visible = gconf_client_get_bool (gclient, TOOLBAR_VISIBLE, NULL);
+	glade_xml_signal_connect_data (swidget->xml, "toolbar_activate",
+		G_CALLBACK (view_bar), TOOLBAR_VISIBLE);
+	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (widget), visible);
+	if (!visible)
+		gtk_widget_hide (glade_xml_get_widget (swidget->xml, "tool_dock"));
+	
+	/* init key list & selection settings */
+	view = GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, KEY_LIST));
+	selection = gtk_tree_view_get_selection (view);
+	g_signal_connect (selection, "changed",
+		G_CALLBACK (selection_changed), swidget);
+	seahorse_key_manager_store_new (sctx, view);
+	selection_changed (selection, swidget);
+	
+	/* init status bars after so that not hidden during startup */
+	widget = glade_xml_get_widget (swidget->xml, "view_statusbar");
+	visible = gconf_client_get_bool (gclient, STATUSBAR_VISIBLE, NULL);
+	glade_xml_signal_connect_data (swidget->xml, "statusbar_activate",
+		G_CALLBACK (view_bar), STATUSBAR_VISIBLE);
+	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (widget), visible);
+	if (!visible)
+		gtk_widget_hide (glade_xml_get_widget (swidget->xml, "status"));
+	
 	/* key menu signals */
 	glade_xml_signal_connect_data (swidget->xml, "generate_activate",
 		G_CALLBACK (generate_activate), swidget);
@@ -499,52 +541,6 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 		G_CALLBACK (key_list_button_pressed), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "key_list_popup_menu",
 		G_CALLBACK (key_list_popup_menu), swidget);
-	
-	/* init gclient */
-	gclient = gconf_client_get_default ();
-	gconf_client_notify_add (gclient, UI,
-		(GConfClientNotifyFunc) gconf_notification, swidget, NULL, NULL);
-	gconf_client_add_dir (gclient, UI, GCONF_CLIENT_PRELOAD_ONELEVEL, NULL);
-	gconf_client_notify_add (gclient, GNOME_INTERFACE,
-		(GConfClientNotifyFunc) gconf_notification, swidget, NULL, NULL);
-	gconf_client_add_dir (gclient, GNOME_INTERFACE, GCONF_CLIENT_PRELOAD_ONELEVEL, NULL);
-	
-	/* init status bars */
-	widget = glade_xml_get_widget (swidget->xml, "view_statusbar");
-	visible = gconf_client_get_bool (gclient, STATUSBAR_VISIBLE, NULL);
-	glade_xml_signal_connect_data (swidget->xml, "statusbar_activate",
-		G_CALLBACK (view_bar), STATUSBAR_VISIBLE);
-	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (widget), visible);
-	if (!visible)
-		gtk_widget_hide (glade_xml_get_widget (swidget->xml, "status"));
-	
-	/* init toolbar */
-	widget = glade_xml_get_widget (swidget->xml, "view_toolbar");
-	visible = gconf_client_get_bool (gclient, TOOLBAR_VISIBLE, NULL);
-	glade_xml_signal_connect_data (swidget->xml, "toolbar_activate",
-		G_CALLBACK (view_bar), TOOLBAR_VISIBLE);
-	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (widget), visible);
-	if (!visible)
-		gtk_widget_hide (glade_xml_get_widget (swidget->xml, "tool_dock"));
-	
-	/* construct key context menu */
-	glade_xml_construct (swidget->xml, SEAHORSE_GLADEDIR "seahorse-key-manager.glade2",
-		"context_menu", NULL);
-	
-	//features not available
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "add_photo"), FALSE);
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "key_add_photo"), FALSE);
-	
-	g_signal_connect_after (swidget->sctx, "progress", G_CALLBACK (show_progress), swidget);
-	
-	/* do initial selected key settings */
-	view = GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, KEY_LIST));
-	selection = gtk_tree_view_get_selection (view);
-	g_signal_connect (selection, "changed",
-		G_CALLBACK (selection_changed), swidget);
-	seahorse_key_manager_store_new (sctx, view);
-	selection_changed (selection, swidget);
-	
 	/* selected key signals */
 	glade_xml_signal_connect_data (swidget->xml, "properties_activate",
 		G_CALLBACK (properties_activate), swidget);
@@ -563,4 +559,8 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 		G_CALLBACK (add_subkey_activate), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "add_revoker_activate",
 		G_CALLBACK (add_revoker_activate), swidget);
+	
+	//features not available
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "add_photo"), FALSE);
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "key_add_photo"), FALSE);
 }

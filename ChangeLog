@@ -1,3 +1,32 @@
+2003-02-07  Jacob Perkins  <jap1@users.sourceforge.net>
+
+	* seahorse-key-manager: Refined startup
+	* seahorse-widget: Removed ::new_component
+	* seahorse-text-editor:
+	* seahorse-key-properties:
+	No longer uses seahorse_widget_new_component
+
+2003-02-06  Jacob Perkins  <jap1@users.sourceforge.net>
+
+	* seahorse-widget: Removed component option/property
+
+2003-02-05  Jacob Perkins  <jap1@users.sourceforge.net>
+
+	* seahorse-context: Separated key-pair listing from non-pairs,
+	removed some code duplication, changed signer methods to
+	::(get|set)_default_key and use SeahorseKeyPair
+	* seahorse-signer-menu-item: Uses SeahorseKeyPair instead of SeahorseKey
+	* seahorse-key: Removed ::can_sign
+	* seahorse-key-pair: Added ::can_sign
+	* seahorse-signer-menu: Updated to use SeahorseKeyPair
+	* seahorse-ops-key: Updated for context changes
+	* data/seahorse.schemas.in: Changed default_key_id to default_key,
+	updated description
+
+2003-02-04  Jacob Perkins  <jap1@users.sourceforge.net>
+
+	* seahorse-widget: Removed unnecessary callbacks
+
 2003-02-03  Jacob Perkins  <jap1@users.sourceforge.net>
 
 	* seahorse-context: Added gconf notification for preferences

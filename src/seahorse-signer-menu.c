@@ -169,33 +169,34 @@ seahorse_signer_menu_context_destroyed (GtkObject *object, SeahorseSignerMenu *s
 	gtk_widget_destroy (GTK_WIDGET (smenu));
 }
 
-static gboolean
-append_key (SeahorseSignerMenu *smenu, SeahorseKey *skey)
+static void
+append_key (SeahorseSignerMenu *smenu, SeahorseKeyPair *skpair)
 {
 	GtkWidget *widget;
 	
-	if (seahorse_key_can_sign (skey)) {
-		widget = seahorse_signer_menu_item_new (skey);
-		gtk_menu_shell_append (GTK_MENU_SHELL (smenu), widget);
-		g_signal_connect_after (GTK_MENU_ITEM (widget), "activate",
-			G_CALLBACK (seahorse_signer_menu_item_activate), smenu);
-		return TRUE;
-	}
-	else
-		return FALSE;
+	widget = seahorse_signer_menu_item_new (skpair);
+	gtk_menu_shell_append (GTK_MENU_SHELL (smenu), widget);
+	g_signal_connect_after (GTK_MENU_ITEM (widget), "activate",
+		G_CALLBACK (seahorse_signer_menu_item_activate), smenu);
 }
 
 static void
 seahorse_signer_menu_key_added (SeahorseContext *sctx, SeahorseKey *skey,
 				SeahorseSignerMenu *smenu)
 {
-	append_key (smenu, skey);
+	SeahorseKeyPair *skpair;
+	
+	if (SEAHORSE_IS_KEY_PAIR (skey)) {
+		skpair = SEAHORSE_KEY_PAIR (skey);
+		if (seahorse_key_pair_can_sign (skpair))
+			append_key (smenu, skpair);
+	}
 }
 
 static void
 seahorse_signer_menu_item_activate (GtkMenuItem *item, SeahorseSignerMenu *smenu)
 {
-	seahorse_context_set_signer (smenu->sctx, SEAHORSE_SIGNER_MENU_ITEM (item)->skey);
+	seahorse_context_set_default_key (smenu->sctx, SEAHORSE_SIGNER_MENU_ITEM (item)->skpair);
 }
 
 void
@@ -203,24 +204,29 @@ seahorse_signer_menu_new (SeahorseContext *sctx, GtkOptionMenu *optionmenu)
 {
 	GtkWidget *widget;
 	GList *list = NULL;
-	SeahorseKey *skey, *signer = NULL;
+	SeahorseKeyPair *skpair, *signer = NULL;
 	gint index = 0, history = 0;
 	
 	widget = g_object_new (SEAHORSE_TYPE_SIGNER_MENU, "ctx", sctx, NULL);
 	
 	list = seahorse_context_get_key_pairs (sctx);
-	signer = seahorse_context_get_last_signer (sctx);
+	signer = seahorse_context_get_default_key (sctx);
 	
-	while (list != NULL && (skey = list->data) != NULL) {
-		if (append_key (SEAHORSE_SIGNER_MENU (widget), skey)) {
+	while (list != NULL && (skpair = list->data) != NULL) {
+		if (seahorse_key_pair_can_sign (skpair)) {
+			append_key (SEAHORSE_SIGNER_MENU (widget), skpair);
+			/* if no signer, activate first */
 			if (signer == NULL && index == 0)
 				gtk_menu_item_activate (GTK_MENU_ITEM (widget));
+			/* else check if is signer */
 			else if (signer != NULL && g_str_equal (
-			seahorse_key_get_keyid (skey, 0),
-			seahorse_key_get_keyid (signer, 0)))
+			seahorse_key_get_keyid (SEAHORSE_KEY (skpair), 0),
+			seahorse_key_get_keyid (SEAHORSE_KEY (signer), 0)))
 				history = index;
+			
 			index++;
 		}
+		
 		list = g_list_next (list);
 	}
 	
