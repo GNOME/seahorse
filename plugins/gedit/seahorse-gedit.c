@@ -474,11 +474,9 @@ sign_cb (BonoboUIComponent * uic, gpointer user_data,
     /* Get the document text */
     buffer = get_document_chars (doc, start, end);
 
-    signer = seahorse_context_get_default_key (sctx);
-    if (signer == NULL) {
-        seahorse_util_handle_gpgme (GPG_E (GPG_ERR_NO_SECKEY), _("Couldn't sign text"));
+    signer = seahorse_signer_get (sctx);
+    if (signer == NULL)
         return;
-    }
 
     /* Perform the signing */
     gedit_debug (DEBUG_PLUGINS, "signing text");

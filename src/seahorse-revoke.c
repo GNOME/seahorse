@@ -25,6 +25,7 @@
 #include "seahorse-key-dialogs.h"
 #include "seahorse-key-widget.h"
 #include "seahorse-key-op.h"
+#include "seahorse-libdialogs.h"
 #include "seahorse-util.h"
 
 static void
@@ -93,9 +94,10 @@ seahorse_add_revoker_new (SeahorseContext *sctx, SeahorseKey *skey)
 	
 	g_return_if_fail (sctx != NULL && SEAHORSE_IS_CONTEXT (sctx));
 	g_return_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey));
-	
-	skpair = seahorse_context_get_default_key (sctx);
-	g_return_if_fail (skpair != NULL);
+
+    skpair = seahorse_signer_get (sctx);
+    if (skpair == NULL)
+        return;
 	
     userid1 = seahorse_key_get_userid (SEAHORSE_KEY (skpair), 0);
     userid2 = seahorse_key_get_userid (skey, 0);

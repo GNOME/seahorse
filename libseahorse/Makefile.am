@@ -44,6 +44,7 @@ libseahorse_internal_la_SOURCES = \
 	seahorse-gpg-options.c seahorse-gpg-options.h \
 	seahorse-passphrase.c \
 	seahorse-recipients.c \
+    seahorse-signer.c \
 	seahorse-signatures.c \
 	seahorse-libdialogs.h \
 	seahorse-vfs-data.c seahorse-vfs-data.h \
@@ -68,6 +69,7 @@ seahorse-marshal.c: seahorse-marshal.list $(GLIB_GENMARSHAL)
 glade_DATA = \
 	seahorse-passphrase.glade \
 	seahorse-recipients.glade \
+    seahorse-signer.glade
 	seahorse-signatures.glade \
 	seahorse-prefs.glade
 

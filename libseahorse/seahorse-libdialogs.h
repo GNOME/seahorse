@@ -39,6 +39,8 @@ seahorse_passphrase_get (SeahorseContext *sctx, const gchar *passphrase_hint,
 GList*          seahorse_recipients_get (SeahorseContext    *sctx,
                                          SeahorseKeyPair    **signkey);
 
+SeahorseKeyPair* seahorse_signer_get    (SeahorseContext *sctx);
+
 SeahorseWidget*	seahorse_signatures_new	(SeahorseContext	*sctx);
 
 void            seahorse_signatures_add (SeahorseContext *sctx, 

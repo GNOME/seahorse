@@ -247,9 +247,10 @@ do_sign (SeahorseContext *sctx, const gchar **paths)
     
     sksrc = seahorse_context_get_key_source (sctx);
     g_return_val_if_fail (sksrc != NULL, 1);
-    
-    signer = seahorse_context_get_default_key (sctx);
-    g_return_val_if_fail (signer != NULL, 1);
+
+    signer = seahorse_signer_get (sctx);    
+    if (signer == NULL)
+        return 1;
     
     uris = seahorse_util_uris_expand (paths);
     g_assert (uris != NULL);
