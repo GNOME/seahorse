@@ -1,3 +1,4 @@
+figdir = figures
 docname = seahorse
 lang = C
 omffile = seahorse-C.omf
