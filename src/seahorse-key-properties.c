@@ -196,8 +196,10 @@ do_stats (SeahorseWidget *swidget, GtkTable *table, guint top, guint index)
 	SeahorseKey *skey;
 	time_t expires;
 	GtkWidget *widget, *date_edit;
+	GtkTooltips *tooltips;
 	
 	skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
+	tooltips = gtk_tooltips_new ();
 	
 	do_stat_label (_("Key ID:"), table, 0, top);
 	do_stat_label (seahorse_key_get_keyid (skey, index), table, 1, top);
@@ -234,6 +236,7 @@ do_stats (SeahorseWidget *swidget, GtkTable *table, guint top, guint index)
 		
 		widget = gtk_check_button_new_with_mnemonic (_("Never E_xpires"));
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), !expires);
+		gtk_tooltips_set_tip (tooltips, widget, _("If key never expires"), NULL);
 		gtk_widget_show (widget);
 		gtk_table_attach (table, widget, 3, 4, top+2, top+3, GTK_FILL, 0, 0, 0);
 		
@@ -265,18 +268,21 @@ do_uids (SeahorseWidget *swidget)
 	GtkWidget *label, *widget;
 	gint index = 0, max;
 	GSList *group = NULL;
+	GtkTooltips *tooltips;
 	
 	notebook = GTK_NOTEBOOK (glade_xml_get_widget (swidget->xml, "uids"));
 	clear_notebook (notebook);
 	
 	skwidget = SEAHORSE_KEY_WIDGET (swidget);
 	max = seahorse_key_get_num_uids (skwidget->skey);
+	tooltips = gtk_tooltips_new ();
 	
 	while (index < max) {
 		if (max > 1 && seahorse_context_key_has_secret (swidget->sctx, skwidget->skey)) {
 			table = GTK_TABLE (gtk_table_new (2, 2, FALSE));
 			
 			widget = gtk_radio_button_new_with_mnemonic (group, _("_Primary"));
+			gtk_tooltips_set_tip (tooltips, widget, _("Set as primary User ID"), NULL);
 			group = g_slist_append (group, widget);
 			//callback
 			gtk_widget_set_sensitive (widget, FALSE);
@@ -314,15 +320,14 @@ do_subkeys (SeahorseWidget *swidget)
 	GtkTable *table;
 	GtkWidget *label, *widget, *button;
 	gint index = 1, max;
+	GtkTooltips *tooltips;
 	
 	notebook = GTK_NOTEBOOK (glade_xml_get_widget (swidget->xml, SUBKEYS));
 	clear_notebook (notebook);
 	
 	skwidget = SEAHORSE_KEY_WIDGET (swidget);
 	max = seahorse_key_get_num_subkeys (skwidget->skey);
-	
-	if (max <= 0)
-		return;
+	tooltips = gtk_tooltips_new ();
 	
 	while (index <= max) {
 		if (seahorse_context_key_has_secret (swidget->sctx, skwidget->skey)) {
@@ -347,7 +352,7 @@ do_subkeys (SeahorseWidget *swidget)
 				widget = gtk_image_new_from_stock (GTK_STOCK_CANCEL, GTK_ICON_SIZE_BUTTON);
 				gtk_container_add (GTK_CONTAINER (label), widget);
 				/* Label */
-				widget = gtk_label_new_with_mnemonic (_("_Revoke..."));
+				widget = gtk_label_new_with_mnemonic (_("_Revoke"));
 				gtk_label_set_justify (GTK_LABEL (widget), GTK_JUSTIFY_LEFT);
 				gtk_container_add (GTK_CONTAINER (label), widget);
 				/* Alignment */
@@ -357,6 +362,7 @@ do_subkeys (SeahorseWidget *swidget)
 				button = gtk_button_new ();
 				g_signal_connect_after (GTK_BUTTON (button), "clicked",
 					G_CALLBACK (revoke_subkey_clicked), swidget);
+				gtk_tooltips_set_tip (tooltips, button, _("Revoke Key"), NULL);
 				/* Add label & icon, put in table */
 				gtk_container_add (GTK_CONTAINER (button), widget);
 				gtk_widget_show_all (button);
@@ -388,7 +394,7 @@ do_subkeys (SeahorseWidget *swidget)
 		gtk_table_set_col_spacings (table, SPACING);
 		gtk_container_set_border_width (GTK_CONTAINER (table), SPACING);
 		
-		label = gtk_label_new (g_strdup_printf (_("Sub Key %d"), index));
+		label = gtk_label_new (g_strdup_printf (_("Subkey %d"), index));
 		gtk_notebook_append_page (notebook, GTK_WIDGET (table), label);
 		gtk_widget_show_all (GTK_WIDGET (table));
 		

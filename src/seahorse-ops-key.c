@@ -236,7 +236,9 @@ seahorse_ops_key_edit (gpointer data, GpgmeStatusCode status,
 	    status == GPGME_STATUS_BAD_PASSPHRASE ||
 	    status == GPGME_STATUS_USERID_HINT ||
 	    status == GPGME_STATUS_SIGEXPIRED ||
-	    status == GPGME_STATUS_KEYEXPIRED)
+	    status == GPGME_STATUS_KEYEXPIRED ||
+	    status == GPGME_STATUS_PROGRESS ||
+	    status == GPGME_STATUS_KEY_CREATED)
 		return parms->err;
 
 	/* Choose the next state based on the current one and the input */
@@ -249,7 +251,7 @@ seahorse_ops_key_edit (gpointer data, GpgmeStatusCode status,
 	return parms->err;
 }
 
-/* Common edit operations */
+/* Common edit operation */
 static gboolean
 edit_key (SeahorseContext *sctx, SeahorseKey *skey, SeahorseEditParm *parms,
 	  const gchar *op, SeahorseKeyChange change)
@@ -257,9 +259,11 @@ edit_key (SeahorseContext *sctx, SeahorseKey *skey, SeahorseEditParm *parms,
 	GpgmeData out = NULL;
 	gboolean success;
 	
-	success = ((gpgme_data_new (&out) == GPGME_No_Error) &&
-		(gpgme_op_edit (sctx->ctx, skey->key, seahorse_ops_key_edit, parms, out) == GPGME_No_Error));
+	/* Run edit op */
+	success = ((gpgme_data_new (&out) == GPGME_No_Error) && (gpgme_op_edit (
+		sctx->ctx, skey->key, seahorse_ops_key_edit, parms, out) == GPGME_No_Error));
 	
+	/* Release data, notify key change */
 	if (out != NULL)
 		gpgme_data_release (out);
 	if (success)
@@ -269,49 +273,36 @@ edit_key (SeahorseContext *sctx, SeahorseKey *skey, SeahorseEditParm *parms,
 	return success;
 }
 
-/* Edit owner trust states */
 typedef enum
 {
 	TRUST_START,
 	TRUST_COMMAND,
 	TRUST_VALUE,
-	TRUST_REALLY_ULTIMATE,
+	TRUST_CONFIRM,
 	TRUST_QUIT,
-	TRUST_SAVE,
 	TRUST_ERROR
 } TrustState;
 
-/* Edit owner trust actions */
 static GpgmeError
 edit_trust_action (guint state, gpointer data, const gchar **result)
 {
 	const gchar *trust = data;
 	
 	switch (state) {
-		/* Start the operation */
 		case TRUST_COMMAND:
 			*result = "trust";
 			break;
-		/* Send the new trust date */
 		case TRUST_VALUE:
 			*result = trust;
 			break;
-		/* Really set to ultimate trust */
-		case TRUST_REALLY_ULTIMATE:
+		case TRUST_CONFIRM:
 			*result = YES;
 			break;
-		/* End the operation */
 		case TRUST_QUIT:
 			*result = QUIT;
 			break;
-		/* Save */
-		case TRUST_SAVE:
-			*result = YES;
-			break;
-		/* Special state: an error ocurred. Do nothing until we can quit */
 		case TRUST_ERROR:
 			break;
-		/* Can't happen */
 		default:
 			return GPGME_General_Error;
 	}
@@ -319,7 +310,6 @@ edit_trust_action (guint state, gpointer data, const gchar **result)
 	return GPGME_No_Error;
 }
 
-/* Edit owner trust transits */
 static guint
 edit_trust_transit (guint current_state, GpgmeStatusCode status,
 		    const gchar *args, gpointer data, GpgmeError *err)
@@ -328,7 +318,6 @@ edit_trust_transit (guint current_state, GpgmeStatusCode status,
 	
 	switch (current_state) {
 		case TRUST_START:
-			/* Need to enter command */
 			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
 				next_state = TRUST_COMMAND;
 			else {
@@ -337,7 +326,6 @@ edit_trust_transit (guint current_state, GpgmeStatusCode status,
 			}
 			break;
 		case TRUST_COMMAND:
-			/* Need to enter value */
 			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "edit_ownertrust.value"))
 				next_state = TRUST_VALUE;
 			else {
@@ -345,20 +333,18 @@ edit_trust_transit (guint current_state, GpgmeStatusCode status,
 				*err = GPGME_General_Error;
 			}
 			break;
+		/* Goes to QUIT or CONFIRM if doing ULTIMATE trust */
 		case TRUST_VALUE:
-			/* Entered value, quit */
 			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
 				next_state = TRUST_QUIT;
-			/* Confirm ultimate trust */
 			else if (status == GPGME_STATUS_GET_BOOL && g_str_equal (args, "edit_ownertrust.set_ultimate.okay"))
-				next_state = TRUST_REALLY_ULTIMATE;
+				next_state = TRUST_CONFIRM;
 			else {
 				next_state = TRUST_ERROR;
 				*err = GPGME_General_Error;
 			}
 			break;
-		case TRUST_REALLY_ULTIMATE:
-			/* Confirmed, quit */
+		case TRUST_CONFIRM:
 			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
 				next_state = TRUST_QUIT;
 			else {
@@ -367,16 +353,14 @@ edit_trust_transit (guint current_state, GpgmeStatusCode status,
 			}
 			break;
 		case TRUST_QUIT:
-			/* Quit, save changes */
 			if (status == GPGME_STATUS_GET_BOOL && g_str_equal (args, SAVE))
-				next_state = TRUST_SAVE;
+				next_state = TRUST_CONFIRM;
 			else {
 				next_state = TRUST_ERROR;
 				*err = GPGME_General_Error;
 			}
 			break;
 		case TRUST_ERROR:
-			/* Go to quit operation state */
 			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
 				next_state = TRUST_QUIT;
 			else
@@ -412,7 +396,7 @@ seahorse_ops_key_set_trust (SeahorseContext *sctx, SeahorseKey *skey, GpgmeValid
 	g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), FALSE);
 	
 	index = seahorse_validity_get_index (trust);
-	/* Make sure _changing_ trust */
+	/* Make sure changing trust */
 	g_return_val_if_fail (index != seahorse_validity_get_index (
 		gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_OTRUST, NULL, 0)), FALSE);
 	
@@ -428,7 +412,6 @@ typedef struct
 	time_t	expires;
 } ExpireParm;
 
-/* Edit primary expiration states */
 typedef enum
 {
 	EXPIRE_START,
@@ -440,7 +423,6 @@ typedef enum
 	EXPIRE_ERROR
 } ExpireState;
 
-/* Edit primary expiration actions */
 static GpgmeError
 edit_expire_action (guint state, gpointer data, const gchar **result)
 {
@@ -450,34 +432,27 @@ edit_expire_action (guint state, gpointer data, const gchar **result)
 		case EXPIRE_SELECT:
 			*result = g_strdup_printf ("key %d", parm->index);
 			break;
-		/* Start the operation */
 		case EXPIRE_COMMAND:
 			*result = "expire";
 			break;
-		/* Send the new expire date */
 		case EXPIRE_DATE:
 			*result = (parm->expires) ?
 				seahorse_util_get_date_string (parm->expires) : "0";
 			break;
-		/* End the operation */
 		case EXPIRE_QUIT:
 			*result = QUIT;
 			break;
-		/* Save */
 		case EXPIRE_SAVE:
 			*result = YES;
 			break;
-		/* Special state: an error ocurred. Do nothing until we can quit */
 		case EXPIRE_ERROR:
 			break;
-		/* Can't happen */
 		default:
 			return GPGME_General_Error;
 	}
 	return GPGME_No_Error;
 }
 
-/* Edit primary expiration transits */
 static guint
 edit_expire_transit (guint current_state, GpgmeStatusCode status,
 		     const gchar *args, gpointer data, GpgmeError *err)
@@ -486,7 +461,6 @@ edit_expire_transit (guint current_state, GpgmeStatusCode status,
  
 	switch (current_state) {
 		case EXPIRE_START:
-			/* Need to enter command */
 			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
 				next_state = EXPIRE_SELECT;
 			else {
@@ -503,7 +477,6 @@ edit_expire_transit (guint current_state, GpgmeStatusCode status,
 			}
 			break;
 		case EXPIRE_COMMAND:
-			/* Need to enter date */
 			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "keygen.valid"))
 				next_state = EXPIRE_DATE;
 			else {
@@ -512,7 +485,6 @@ edit_expire_transit (guint current_state, GpgmeStatusCode status,
 			}
 			break;
 		case EXPIRE_DATE:
-			/* Done, quit */
 			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
 				next_state = EXPIRE_QUIT;
 			else {
@@ -521,7 +493,6 @@ edit_expire_transit (guint current_state, GpgmeStatusCode status,
 			}
 			break;
 		case EXPIRE_QUIT:
-			/* Quit, save */
 			if (status == GPGME_STATUS_GET_BOOL && g_str_equal (args, SAVE))
 				next_state = EXPIRE_SAVE;
 			else {
@@ -530,7 +501,6 @@ edit_expire_transit (guint current_state, GpgmeStatusCode status,
 			}
 			break;
 		case EXPIRE_ERROR:
-			/* Go to quit operation state */
 			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
 				next_state = EXPIRE_QUIT;
 			else
@@ -546,11 +516,12 @@ edit_expire_transit (guint current_state, GpgmeStatusCode status,
 
 /**
  * seahorse_ops_key_set_expires:
- * @sctx: Current context
- * @skey: Key to change
- * @expires: New expiration time for @skey. 0 is never.
+ * @sctx: Current #SeahorseContext
+ * @skey: #SeahorseKey
+ * @index: Index of subkey, or 0 for primary key
+ * @expires: New expiration time.0 is never.
  *
- * Changes expiration date of @skey to @expires.
+ * Changes expiration date of @skey for key at @index to @expires.
  *
  * Returns: %TRUE if successful, %FALSE otherwise
  **/
@@ -563,6 +534,9 @@ seahorse_ops_key_set_expires (SeahorseContext *sctx, SeahorseKey *skey,
 	
 	g_return_val_if_fail (sctx != NULL && SEAHORSE_IS_CONTEXT (sctx), FALSE);
 	g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), FALSE);
+	/* Make sure changing expires */
+	g_return_val_if_fail (expires != gpgme_key_get_ulong_attr (skey->key,
+		GPGME_ATTR_EXPIRE, NULL, index), FALSE);
 	
 	exp_parm = g_new (ExpireParm, 1);
 	exp_parm->index = index;
@@ -573,7 +547,6 @@ seahorse_ops_key_set_expires (SeahorseContext *sctx, SeahorseKey *skey,
 	return edit_key (sctx, skey, parms, _("Change Expiration"), SKEY_CHANGE_EXPIRE);
 }
 
-/* Edit disable/enable states */
 typedef enum {
 	DISABLE_START,
 	DISABLE_COMMAND,
@@ -581,18 +554,15 @@ typedef enum {
 	DISABLE_ERROR
 } DisableState;
 
-/* Edit disable/enable actions */
 static GpgmeError
 edit_disable_action (guint state, gpointer data, const gchar **result)
 {
 	const gchar *command = data;
 	
 	switch (state) {
-		/* disable / enable */
 		case DISABLE_COMMAND:
 			*result = command;
 			break;
-		/* Quit */
 		case DISABLE_QUIT:
 			*result = QUIT;
 			break;
@@ -603,7 +573,6 @@ edit_disable_action (guint state, gpointer data, const gchar **result)
 	return GPGME_No_Error;
 }
 
-/* Edit disable/enable transits */
 static guint
 edit_disable_transit (guint current_state, GpgmeStatusCode status,
 		      const gchar *args, gpointer data, GpgmeError *err)
@@ -612,7 +581,6 @@ edit_disable_transit (guint current_state, GpgmeStatusCode status,
 	
 	switch (current_state) {
 		case DISABLE_START:
-			/* Need command */
 			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
 				next_state = DISABLE_COMMAND;
 			else {
@@ -621,7 +589,6 @@ edit_disable_transit (guint current_state, GpgmeStatusCode status,
 			}
 			break;
 		case DISABLE_COMMAND:
-			/* Done, quit */
 			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
 				next_state = DISABLE_QUIT;
 			else {
@@ -629,7 +596,6 @@ edit_disable_transit (guint current_state, GpgmeStatusCode status,
 				*err = GPGME_General_Error;
 			}
 		case DISABLE_ERROR:
-			/* Go to quit */
 			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
 				next_state = DISABLE_QUIT;
 			else
@@ -662,9 +628,10 @@ seahorse_ops_key_set_disabled (SeahorseContext *sctx, SeahorseKey *skey, gboolea
 	
 	g_return_val_if_fail (sctx != NULL && SEAHORSE_IS_CONTEXT (sctx), FALSE);
 	g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), FALSE);
+	/* Make sure changing disabled */
 	g_return_val_if_fail (disabled != gpgme_key_get_ulong_attr (
 		skey->key, GPGME_ATTR_KEY_DISABLED, NULL, 0), FALSE);
-	
+	/* Get command and op */
 	if (disabled) {
 		command = "disable";
 		op = _("Disable Key");
@@ -679,7 +646,6 @@ seahorse_ops_key_set_disabled (SeahorseContext *sctx, SeahorseKey *skey, gboolea
 	return edit_key (sctx, skey, parms, op, SKEY_CHANGE_DISABLE);
 }
 
-/* Passphrase change states.  These are all that are necessary if gpgme passphrase callback is set. */
 typedef enum {
 	PASS_START,
 	PASS_COMMAND,
@@ -688,7 +654,6 @@ typedef enum {
 	PASS_ERROR
 } PassState;
 
-/* Passphrase change actions */
 static GpgmeError
 edit_pass_action (guint state, gpointer data, const gchar **result)
 {
@@ -708,7 +673,6 @@ edit_pass_action (guint state, gpointer data, const gchar **result)
 	
 	return GPGME_No_Error;}
 
-/* Passphrase change transits */
 static guint
 edit_pass_transit (guint current_state, GpgmeStatusCode status,
 		   const gchar *args, gpointer data, GpgmeError *err)
@@ -724,7 +688,6 @@ edit_pass_transit (guint current_state, GpgmeStatusCode status,
 				*err = GPGME_General_Error;
 			}
 			break;
-		/* After entering command, gpgme will take care of rest with passphrase callbacks */
 		case PASS_COMMAND:
 			next_state = PASS_QUIT;
 			break;
@@ -954,7 +917,6 @@ typedef enum {
 	ADD_KEY_TYPE,
 	ADD_KEY_LENGTH,
 	ADD_KEY_EXPIRES,
-	ADD_KEY_PROGRESS,
 	ADD_KEY_QUIT,
 	ADD_KEY_SAVE,
 	ADD_KEY_ERROR
@@ -982,11 +944,10 @@ add_key_action (guint state, gpointer data, const gchar **result)
 		case ADD_KEY_LENGTH:
 			*result = g_strdup_printf ("%d", parm->length);
 			break;
+		/* Get exact date or 0 */
 		case ADD_KEY_EXPIRES:
 			*result = (parm->expires) ?
 				seahorse_util_get_date_string (parm->expires) : "0";
-			break;
-		case ADD_KEY_PROGRESS:
 			break;
 		case ADD_KEY_QUIT:
 			*result = QUIT;
@@ -1041,19 +1002,7 @@ add_key_transit (guint current_state, GpgmeStatusCode status,
 			}
 			break;
 		case ADD_KEY_EXPIRES:
-			next_state = ADD_KEY_PROGRESS;
-			break;
-		case ADD_KEY_PROGRESS:
-			/* Loop in PROGRESS while creating key */
-			if (status == GPGME_STATUS_PROGRESS ||
-			status == GPGME_STATUS_KEY_CREATED)
-				next_state = ADD_KEY_PROGRESS;
-			else if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
-				next_state = ADD_KEY_QUIT;
-			else {
-				next_state = ADD_KEY_ERROR;
-				*err = GPGME_General_Error;
-			}
+			next_state = ADD_KEY_QUIT;
 			break;
 		case ADD_KEY_QUIT:
 			/* Quit, save */
@@ -1080,9 +1029,22 @@ add_key_transit (guint current_state, GpgmeStatusCode status,
 	return next_state;
 }
 
+/**
+ * seahorse_ops_key_add_subkey:
+ * @sctx: Current #SeahorseContext
+ * @skey: #SeahorseKey
+ * @type: #SeahorseKeyType for new subkey
+ * @length: Length of new subkey, must be with #SeahorseKeyLength ranges for @type
+ * @expires: Expiration date, or 0 for never
+ *
+ * Creates a new subkey for @skey given @type, @length, and @expires.
+ *
+ * Returns: %TRUE if successful, %FALSE otherwise
+ **/
 gboolean
 seahorse_ops_key_add_subkey (SeahorseContext *sctx, SeahorseKey *skey,
-			     const SeahorseKeyType type, const guint length, const time_t expires)
+			     const SeahorseKeyType type, const guint length,
+			     const time_t expires)
 {
 	SeahorseEditParm *parms;
 	SubkeyParm *key_parm;
@@ -1090,6 +1052,7 @@ seahorse_ops_key_add_subkey (SeahorseContext *sctx, SeahorseKey *skey,
 	g_return_val_if_fail (sctx != NULL && SEAHORSE_IS_CONTEXT (sctx), FALSE);
 	g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), FALSE);
 	
+	/* Check length range & type */
 	switch (type) {
 		case DSA:
 			g_return_val_if_fail (length >= DSA_MIN && length <= DSA_MAX, FALSE);
@@ -1121,7 +1084,6 @@ typedef enum {
 	DEL_KEY_COMMAND,
 	DEL_KEY_CONFIRM,
 	DEL_KEY_QUIT,
-	DEL_KEY_SAVE,
 	DEL_KEY_ERROR
 } DelKeyState;
 
@@ -1140,9 +1102,6 @@ del_key_action (guint state, gpointer data, const gchar **result)
 			break;
 		case DEL_KEY_QUIT:
 			*result = QUIT;
-			break;
-		case DEL_KEY_SAVE:
-			*result = YES;
 			break;
 		default:
 			return GPGME_General_Error;
@@ -1189,7 +1148,7 @@ del_key_transit (guint current_state, GpgmeStatusCode status,
 		case DEL_KEY_QUIT:
 			/* Quit, save */
 			if (status == GPGME_STATUS_GET_BOOL && g_str_equal (args, SAVE))
-				next_state = DEL_KEY_SAVE;
+				next_state = DEL_KEY_CONFIRM;
 			else {
 				next_state = DEL_KEY_ERROR;
 				*err = GPGME_General_Error;
@@ -1211,6 +1170,16 @@ del_key_transit (guint current_state, GpgmeStatusCode status,
 	return next_state;
 }
 
+/**
+ * seahorse_ops_key_del_subkey:
+ * @sctx: Current #SeahorseContext
+ * @skey: #SeahorseKey
+ * @index: Index of subkey to delete. First subkey has index of 1.
+ *
+ * Deletes the subkey of @skey at @index.
+ *
+ * Returns: %TRUE if successful, %FALSE otherwise
+ **/
 gboolean
 seahorse_ops_key_del_subkey (SeahorseContext *sctx, SeahorseKey *skey, const guint index)
 {
@@ -1257,6 +1226,7 @@ rev_subkey_action (guint state, gpointer data, const gchar **result)
 		case REV_SUBKEY_COMMAND:
 			*result = "revkey";
 			break;
+		/* For saving or confirmation */
 		case REV_SUBKEY_CONFIRM:
 			*result = YES;
 			break;
@@ -1266,6 +1236,7 @@ rev_subkey_action (guint state, gpointer data, const gchar **result)
 		case REV_SUBKEY_DESCRIPTION:
 			*result = g_strdup_printf ("%s\n", parm->description);
 			break;
+		/* Need empty line */
 		case REV_SUBKEY_ENDDESC:
 			*result = "\n";
 			break;
@@ -1284,8 +1255,6 @@ rev_subkey_transit (guint current_state, GpgmeStatusCode status,
 		    const gchar *args, gpointer data, GpgmeError *err)
 {
 	guint next_state;
-	
-	g_print ("last state %d\n", current_state);
 	
 	switch (current_state) {
 		case REV_SUBKEY_START:
@@ -1312,6 +1281,7 @@ rev_subkey_transit (guint current_state, GpgmeStatusCode status,
 				*err = GPGME_General_Error;
 			}
 			break;
+		/* Goes to REASON or QUIT */
 		case REV_SUBKEY_CONFIRM:
 			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "ask_revocation_reason.code"))
 				next_state = REV_SUBKEY_REASON;
@@ -1330,6 +1300,7 @@ rev_subkey_transit (guint current_state, GpgmeStatusCode status,
 				*err = GPGME_General_Error;
 			}
 			break;
+		/* Goes to ENDDESC or CONFIRM */
 		case REV_SUBKEY_DESCRIPTION:
 			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "ask_revocation_reason.text"))
 				next_state = REV_SUBKEY_ENDDESC;
@@ -1365,11 +1336,21 @@ rev_subkey_transit (guint current_state, GpgmeStatusCode status,
 			break;
 	}
 	
-	g_print ("next state %d\n", next_state);
-	
 	return next_state;
 }
 
+/**
+ * seahorse_ops_key_revoke_subkey:
+ * @sctx: Current #SeahorseContext
+ * @skey: #SeahorseKey
+ * @index: Index of subkey for @skey. First subkey has index of 1.
+ * @reason: #SeahorseRevokeReason
+ * @description: Optional description of @reason
+ *
+ * Revokes subkey @index of @skey given the @reason and @description.
+ *
+ * Returns: %TRUE if successful, %FALSE otherwise
+ **/
 gboolean
 seahorse_ops_key_revoke_subkey (SeahorseContext *sctx, SeahorseKey *skey, const guint index,
 				SeahorseRevokeReason reason, const gchar *description)
@@ -1379,7 +1360,11 @@ seahorse_ops_key_revoke_subkey (SeahorseContext *sctx, SeahorseKey *skey, const 
 	
 	g_return_val_if_fail (sctx != NULL && SEAHORSE_IS_CONTEXT (sctx), FALSE);
 	g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), FALSE);
+	/* Check index range */
 	g_return_val_if_fail (index >= 1 && index <= seahorse_key_get_num_subkeys (skey), FALSE);
+	/* Make sure not revoked */
+	g_return_val_if_fail (!gpgme_key_get_ulong_attr (skey->key,
+		GPGME_ATTR_KEY_REVOKED, NULL, index), FALSE);
 	
 	rev_parm = g_new0 (RevSubkeyParm, 1);
 	rev_parm->index = index;

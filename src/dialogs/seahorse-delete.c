@@ -34,7 +34,7 @@ warning (GtkWindow *parent, SeahorseKey *skey, const guint index)
 	g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), FALSE);
 	
 	if (index == 0)
-		message = _("Are you sure you want to permanently delete key %s, <i>%s</i>?");
+		message = _("Are you sure you want to permanently delete key %s, %s?");
 	else
 		message = _("Are you sure you want to permanently delete subkey %s for %s?");
 	

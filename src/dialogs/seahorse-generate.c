@@ -83,19 +83,19 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 	
 	/* Check for valid entries */
 	if (g_str_equal (name, "")) {
-		seahorse_util_show_error (parent, _("You must fill in a valid name"));
+		seahorse_util_show_error (parent, _("You must enter a valid name"));
 		return;
 	}	
 	if (!seahorse_ops_key_check_email (email)) {
-		seahorse_util_show_error (parent, _("You must fill in a valid email address"));
+		seahorse_util_show_error (parent, _("You must enter a valid email address"));
 		return;
 	}	
 	if (g_str_equal (comment, "")) {
-		seahorse_util_show_error (parent, _("You must fill in a valid comment"));
+		seahorse_util_show_error (parent, _("You must enter a valid comment"));
 		return;
 	}	
 	if (g_str_equal (passphrase, "")) {
-		seahorse_util_show_error (parent, _("You must fill in a valid passphrase"));
+		seahorse_util_show_error (parent, _("You must enter a valid passphrase"));
 		return;
 	}	
 	if (g_str_equal (confirm, "")) {
