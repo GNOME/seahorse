@@ -22,7 +22,11 @@
 #ifndef __SEAHORSE_VFS_DATA__
 #define __SEAHORSE_VFS_DATA__
 
-gpgme_data_t seahorse_vfs_data_create (const gchar *uri, gboolean writeable, 
-                                                gpg_error_t* err);
+#define SEAHORSE_VFS_READ   0x00000000
+#define SEAHORSE_VFS_WRITE  0x00000001
+#define SEAHORSE_VFS_DELAY  0x00000010
+
+gpgme_data_t seahorse_vfs_data_create (const gchar *uri, guint mode, 
+                                       gpg_error_t* err);
 
 #endif /* __SEAHORSE_VFS_DATA__ */

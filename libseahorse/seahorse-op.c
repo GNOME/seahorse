@@ -86,7 +86,7 @@ seahorse_op_import_file (SeahorseKeySource *sksrc, const gchar *path, GError **e
 	gpgme_error_t gerr;
   
 	/* new data from file */
-    data = seahorse_vfs_data_create (path, FALSE, &gerr);
+    data = seahorse_vfs_data_create (path, SEAHORSE_VFS_READ, &gerr);
     if (!GPG_IS_OK (gerr)) {
         seahorse_util_gpgme_to_error (gerr, err);
         return -1;
@@ -192,7 +192,7 @@ seahorse_op_export_file (GList *keys, const gchar *path, GError **err)
     gboolean ret;
 	
     /* Open the appropriate file */
-    data = seahorse_vfs_data_create (path, TRUE, &gerr);
+    data = seahorse_vfs_data_create (path, SEAHORSE_VFS_WRITE, &gerr);
     if (!GPG_IS_OK (gerr)) {
         seahorse_util_gpgme_to_error (gerr, err);
         return FALSE;
@@ -305,10 +305,10 @@ encrypt_file_common (GList *keys, const gchar *path, const gchar *epath,
     sksrc = seahorse_key_get_source (SEAHORSE_KEY (keys->data));
     g_return_if_fail (sksrc != NULL);
 
-    plain = seahorse_vfs_data_create (path, FALSE, err);
+    plain = seahorse_vfs_data_create (path, SEAHORSE_VFS_READ, err);
     g_return_if_fail (plain != NULL);
     
-    cipher = seahorse_vfs_data_create (epath, TRUE, err);
+    cipher = seahorse_vfs_data_create (epath, SEAHORSE_VFS_WRITE | SEAHORSE_VFS_DELAY, err);
     if (!cipher) {
         gpgme_data_release (plain);
         g_return_if_reached ();
@@ -435,10 +435,10 @@ seahorse_op_sign_file (SeahorseKeyPair *signer, const gchar *path,
     g_return_if_fail (sksrc != NULL);
     
 	/* new data from file */
-    plain = seahorse_vfs_data_create (path, FALSE, err);
+    plain = seahorse_vfs_data_create (path, SEAHORSE_VFS_READ, err);
     g_return_if_fail (plain != NULL);
     
-    sig = seahorse_vfs_data_create (spath, TRUE, err);
+    sig = seahorse_vfs_data_create (spath, SEAHORSE_VFS_WRITE | SEAHORSE_VFS_DELAY, err);
     if (!sig) {
         gpgme_data_release (plain);
         g_return_if_reached ();
@@ -556,10 +556,10 @@ seahorse_op_verify_file (SeahorseKeySource *sksrc, const gchar *path, const gcha
 	if (err == NULL)
 		err = &error;
 	/* new data from sig file */
-    sig = seahorse_vfs_data_create (path, FALSE, err);
+    sig = seahorse_vfs_data_create (path, SEAHORSE_VFS_READ, err);
     g_return_if_fail (plain != NULL);
 
-    plain = seahorse_vfs_data_create (original, TRUE, err);
+    plain = seahorse_vfs_data_create (original, SEAHORSE_VFS_WRITE | SEAHORSE_VFS_DELAY, err);
 	if (!plain) {
 		gpgme_data_release (sig);
 		g_return_if_reached ();
@@ -657,10 +657,10 @@ seahorse_op_decrypt_verify_file (SeahorseKeySource *sksrc, const gchar *path,
 	if (err == NULL)
 		err = &error;
 	/* new data from file */
-    cipher = seahorse_vfs_data_create (path, FALSE, err);
+    cipher = seahorse_vfs_data_create (path, SEAHORSE_VFS_READ, err);
     g_return_if_fail (cipher != NULL);
     
-    plain = seahorse_vfs_data_create (dpath, TRUE, err);
+    plain = seahorse_vfs_data_create (dpath, SEAHORSE_VFS_WRITE | SEAHORSE_VFS_DELAY, err);
     if (!plain) {
         gpgme_data_release (cipher);
         g_return_if_reached ();

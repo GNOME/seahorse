@@ -52,8 +52,8 @@ typedef enum _VfsAsyncState
 VfsAsyncState;
 
 /* A handle for VFS work */
-typedef struct _VfsAsyncHandle
-{
+typedef struct _VfsAsyncHandle {
+    gchar *uri;                     /* The URI we're operating on */
     GnomeVFSAsyncHandle* handle;    /* Handle for operations */
     GtkWidget* widget;              /* Widget for progress and cancel */
     
@@ -63,8 +63,7 @@ typedef struct _VfsAsyncHandle
     GnomeVFSResult result;          /* Result of the current operation */
     gpointer buffer;                /* Current operation's buffer */
     GnomeVFSFileSize processed;     /* Number of bytes processed in current op */
-}
-VfsAsyncHandle;
+} VfsAsyncHandle;
 
 static void vfs_data_cancel(VfsAsyncHandle *ah);
 
@@ -191,27 +190,44 @@ vfs_data_open_done(GnomeVFSAsyncHandle *handle, GnomeVFSResult result,
     }
 }
 
+/* Open the given handle */
+static void
+vfs_data_open_helper (VfsAsyncHandle *ah, gboolean write)
+{
+    g_return_if_fail (ah->handle == NULL);
+    g_return_if_fail (ah->uri != NULL);
+    g_return_if_fail (ah->state == VFS_ASYNC_READY);
+    
+    if (write) {
+        /* Note that we always overwrite the file */
+        gnome_vfs_async_create (&(ah->handle), ah->uri, GNOME_VFS_OPEN_WRITE | GNOME_VFS_OPEN_RANDOM,
+                    FALSE, 0644, GNOME_VFS_PRIORITY_DEFAULT, vfs_data_open_done, ah);        
+    } else {
+        gnome_vfs_async_open (&(ah->handle), ah->uri, GNOME_VFS_OPEN_READ | GNOME_VFS_OPEN_RANDOM,
+                    GNOME_VFS_PRIORITY_DEFAULT, vfs_data_open_done, ah);
+    }
+
+    ah->state = VFS_ASYNC_PROCESSING;
+    ah->operation = VFS_OP_OPENING;        
+}
+
 /* Open the given URI */
 static VfsAsyncHandle* 
-vfs_data_open(const gchar* uri, gboolean write)
+vfs_data_open(const gchar* uri, gboolean write, gboolean delayed)
 {
     VfsAsyncHandle* ah;
 
+    /* We only support delayed opening of write files */
+    g_return_val_if_fail (write || !delayed, NULL);
+    
     ah = g_new0(VfsAsyncHandle, 1);
-    ah->state = VFS_ASYNC_PROCESSING;
-    ah->operation = VFS_OP_OPENING;
-
-    if(write)
-    {
-        /* Note that we always overwrite the file */
-        gnome_vfs_async_create(&(ah->handle), uri, GNOME_VFS_OPEN_WRITE | GNOME_VFS_OPEN_RANDOM,
-                FALSE, 0644, GNOME_VFS_PRIORITY_DEFAULT, vfs_data_open_done, ah);        
-    }
-    else
-    {
-        gnome_vfs_async_open(&(ah->handle), uri, GNOME_VFS_OPEN_READ | GNOME_VFS_OPEN_RANDOM,
-                GNOME_VFS_PRIORITY_DEFAULT, vfs_data_open_done, ah);
-    }
+    ah->state = VFS_ASYNC_READY;
+    ah->operation = VFS_OP_NONE;    
+    ah->uri = g_strdup (uri);
+    
+    /* Open the file right here and now if requested */
+    if (!delayed)
+        vfs_data_open_helper (ah, write);
     
     return ah;
 }
@@ -242,6 +258,8 @@ vfs_data_read(void *handle, void *buffer, size_t size)
     VfsAsyncHandle* ah = (VfsAsyncHandle*)handle;
     ssize_t sz = 0;
     
+    g_return_val_if_fail (ah->handle != NULL, -1);
+
     /* Just in case we have an operation, like open */
     if(!vfs_data_wait_results(ah, TRUE))
         return -1;
@@ -293,6 +311,10 @@ vfs_data_write(void *handle, const void *buffer, size_t size)
 {
     VfsAsyncHandle* ah = (VfsAsyncHandle*)handle;
     ssize_t sz = 0;
+
+    /* If the file isn't open yet, then do that now */
+    if (!ah->handle && ah->state == VFS_ASYNC_READY)
+        vfs_data_open_helper (ah, TRUE);
     
     /* Just in case we have an operation, like open */
     if(!vfs_data_wait_results(ah, TRUE))
@@ -344,6 +366,10 @@ vfs_data_seek(void *handle, off_t offset, int whence)
     VfsAsyncHandle* ah = (VfsAsyncHandle*)handle;
     GnomeVFSSeekPosition wh;
 
+    /* If the file isn't open yet, then do that now */
+    if (!ah->handle && ah->state == VFS_ASYNC_READY)
+        vfs_data_open_helper (ah, TRUE);
+        
     /* Just in case we have an operation, like open */
     if(!vfs_data_wait_results(ah, TRUE))
         return (off_t)-1;
@@ -396,24 +422,24 @@ vfs_data_cancel(VfsAsyncHandle *ah)
 {
     gboolean close = FALSE;
     
-    switch(ah->state)
-    {
-    case VFS_ASYNC_CANCELLED:
-        break;
+    if (ah->handle) {
+        switch (ah->state) {
+        case VFS_ASYNC_CANCELLED:
+            break;
 
-    case VFS_ASYNC_PROCESSING:
-        close = (ah->operation != VFS_OP_OPENING);
-        gnome_vfs_async_cancel(ah->handle);
-        vfs_data_wait_results(ah, FALSE);
-        break;
+        case VFS_ASYNC_PROCESSING:
+            close = (ah->operation != VFS_OP_OPENING);
+            gnome_vfs_async_cancel (ah->handle);
+            vfs_data_wait_results (ah, FALSE);
+            break;
         
-    case VFS_ASYNC_READY:
-        close = TRUE;
-        break;
-    };
+        case VFS_ASYNC_READY:
+            close = TRUE;
+            break;
+        };
+    }
     
-    if(close)
-    {
+    if (close) {
         gnome_vfs_async_close (ah->handle, vfs_data_close_done, NULL);
         ah->handle = NULL;
     }
@@ -427,8 +453,9 @@ vfs_data_release(void *handle)
 {
     VfsAsyncHandle* ah = (VfsAsyncHandle*)handle;
 
-    vfs_data_cancel(ah);
-    g_free(ah);
+    vfs_data_cancel (ah);
+    g_free (ah->uri);
+    g_free (ah);
 }
 
 /* GPGME vfs file operations */
@@ -441,108 +468,34 @@ static struct gpgme_data_cbs vfs_data_cbs =
 };
 
 /* -----------------------------------------------------------------------------
- * LOCAL OPERATIONS
- */
-
-static ssize_t
-fd_data_read(void *handle, void *buffer, size_t size)
-{
-    int fd = *((int*)handle);
-    return read (fd, buffer, size);
-}
-
-
-static ssize_t
-fd_data_write(void *handle, const void *buffer, size_t size)
-{
-    int fd = *((int*)handle);
-    return write (fd, buffer, size);
-}
-
-
-static off_t
-fd_data_seek(void *handle, off_t offset, int whence)
-{
-    int fd = *((int*)handle);
-    return lseek (fd, offset, whence);
-}
-
-static void
-fd_data_release(void *handle)
-{
-    int fd = *((int*)handle);
-    close(fd);
-    g_free(handle);     
-}
-
-static struct gpgme_data_cbs fd_data_cbs = 
-{
-    fd_data_read,
-    fd_data_write,
-    fd_data_seek,
-    fd_data_release
-};  
-
-/* -----------------------------------------------------------------------------
  */
  
 /* Create a data on the given uri, remote uris get gnome-vfs backends,
  * local uris get normal file access. */
 gpgme_data_t
-seahorse_vfs_data_create(const gchar *uri, gboolean write, gpg_error_t* err) 
+seahorse_vfs_data_create(const gchar *uri, guint mode, gpg_error_t* err) 
 {
     gpgme_error_t gerr;
-    gpgme_data_cbs_t cbs;
     gpgme_data_t ret = NULL;
     void* handle = NULL;
-    char* local;
     char* ruri;
     
-    if(!err)
+    if (!err)
         err = &gerr;
     
-    ruri = gnome_vfs_make_uri_canonical(uri);
-    local = gnome_vfs_get_local_path_from_uri(ruri);
-    
-    /* A local uri, we use simple IO */
-    if(local != NULL)
-    {
-        int fd;
-        
-        fd = open(local, write ? O_CREAT | O_TRUNC | O_RDWR : O_RDONLY, 0644);
-        
-        if(fd == -1)
-        {
-            gpg_err_code_t e = gpg_err_code_from_errno(errno);
-            *err = GPG_E(e);
-        }
-        else
-        {
-            handle = g_malloc0(sizeof(int));
-            *((int*)handle) = fd;
-            cbs = &fd_data_cbs;
-        }
-    }
-    
-    /* A remote uri, much more complex */
-    else
-    {
-        handle = vfs_data_open(ruri, write);
-        cbs = &vfs_data_cbs;
-    }
-    
-    if(handle)
-    {
-        *err = gpgme_data_new_from_cbs(&ret, cbs, handle);
-        if(!GPG_IS_OK(*err))
-        {
-            cbs->release(handle);
+    ruri = gnome_vfs_make_uri_canonical (uri);
+
+    handle = vfs_data_open (ruri, mode & SEAHORSE_VFS_WRITE, 
+                                  mode & SEAHORSE_VFS_DELAY);
+    if (handle) {
+        *err = gpgme_data_new_from_cbs (&ret, &vfs_data_cbs, handle);
+        if (!GPG_IS_OK (*err)) {
+            vfs_data_cbs.release (handle);
             ret = NULL;
         }
     }
     
-    g_free(ruri);
-    g_free(local);
+    g_free (ruri);
 
     return ret;
 }

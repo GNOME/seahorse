@@ -21,6 +21,7 @@
 
 #include <config.h>
 #include <gnome.h>
+#include <libgnomevfs/gnome-vfs.h>
 #include <locale.h>
 
 #include "seahorse-gpgmex.h"
@@ -467,13 +468,15 @@ main (int argc, char **argv)
                 
             g_strfreev (uris);
         }
-        
-        return ret;
-    }
- 
-    win = seahorse_key_manager_show (sctx);
-    g_signal_connect_after (G_OBJECT (win), "destroy", gtk_main_quit, NULL);
-	gtk_main ();
-	
-	return 0;
+
+    } else { 
+        win = seahorse_key_manager_show (sctx);
+        g_signal_connect_after (G_OBJECT (win), "destroy", gtk_main_quit, NULL);
+	    gtk_main ();
+	}
+    
+    if (gnome_vfs_initialized ())
+        gnome_vfs_shutdown ();
+    
+	return ret;
 }

@@ -230,9 +230,8 @@ seahorse_util_write_data_to_file (const gchar *path, gpgme_data_t data)
      */
     gpgme_data_rewind (data);
 	
-    file = seahorse_vfs_data_create (path, TRUE, &err);
-    if(file != NULL)
-    {
+    file = seahorse_vfs_data_create (path, SEAHORSE_VFS_WRITE, &err);
+    if (file != NULL) {
     	buffer = g_new0 (gchar, 128);
     	
     	while ((nread = gpgme_data_read (data, buffer, 128)) > 0)
