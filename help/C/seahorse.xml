@@ -6,6 +6,13 @@
 <!ENTITY manrevision "2.1">
 <!ENTITY date "February 2003">
 <!ENTITY app "<application>seahorse</application>">
+<!ENTITY key "<glossterm linkend='key'>key</glossterm>">
+<!ENTITY secret "<glossterm linkend='secret-key'>secret key</glossterm>">
+<!ENTITY subkey "<glossterm linkend='key-subkey'>subkey</glossterm>">
+<!ENTITY userid "<glossterm linkend='key-userid'>user ID</glossterm>">
+<!ENTITY expires "<glossterm linkend='key-expires'>expiration date</glossterm>">
+<!ENTITY type "<glossterm linkend='key-type'>type</glossterm>">
+<!ENTITY length "<glossterm linkend='key-length'>length</glossterm>">
 ]>
 <!-- =============Document Header ============================= -->
 <article id="index" lang="en">
@@ -23,7 +30,7 @@
 			<surname>Perkins</surname>
 			<affiliation>
 				<orgname>Seahorse Project</orgname>
-				<address><email>jap1@users.sourceforge.net</email></address>
+				<!--<address><email>jap1@users.sourceforge.net</email></address>-->
 			</affiliation>
 		</author>
 	</authorgroup>
@@ -109,29 +116,34 @@
 			<varlistentry>
 				<term>Toolbar.</term>
 				<listitem>
-					<para>The toolbar only contains commands that affect <glossterm>keys</glossterm>.</para>
+					<para>The toolbar only contains commands that affect
+					<glossterm baseform="key" linkend="key">keys</glossterm>.</para>
 				</listitem>
 			</varlistentry>
 			<varlistentry>
 				<term>Key List.</term>
 				<listitem>
-					<para>The key list shows the <glossterm>keys</glossterm> in your <glossterm>key ring</glossterm>.
-					Some <glossterm>keys</glossterm> also have <glossterm>sub keys</glossterm>.
-					Each <glossterm>key</glossterm> and <glossterm>sub key</glossterm> show the following attributes:
+					<para>The key list shows each <glossterm baseform="key" linkend="key">keys</glossterm> in your
+					<glossterm linkend="key-ring">key ring</glossterm>. If a
+					&key; has multiple
+					<glossterm baseform="user ID" linkend="key-userid">User IDs</glossterm>,
+					then they are shown below the &key;.
+					Each <glossterm>key</glossterm> shows the following attributes:</para>
 					<itemizedlist>
-						<listitem><para><guilabel>Name</guilabel></para></listitem>
-						<listitem><para><glossterm>Key ID</glossterm></para></listitem>
-						<listitem><para><glossterm>Trust</glossterm></para></listitem>
-						<listitem><para><glossterm>Type</glossterm></para></listitem>
-						<listitem><para><glossterm>Length</glossterm></para></listitem>
+						<listitem><para><glossterm linkend="key-userid">Name</glossterm></para></listitem>
+						<listitem><para><guilabel>Key ID</guilabel></para></listitem>
+						<listitem><para><glossterm linkend="key-owner-trust">Trust</glossterm></para></listitem>
+						<listitem><para>&type;</para></listitem>
+						<listitem><para>&length;</para></listitem>
 					</itemizedlist>
-					Only one <glossterm>key</glossterm> may be selected at a time.</para>
+					<note>Only one &key; may be selected at a time.</note>
 				</listitem>				
 			</varlistentry>
 			<varlistentry>
 				<term>Statusbar.</term>
 				<listitem>
-					<para>The statusbar shows operation status messages.  Operations are either successful or fail.</para>
+					<para>The statusbar shows operation status messages.  Operations are either successful or fail.
+					It also shows the progress of a &key; generation operation.</para>
 				</listitem>
 			</varlistentry>
 		</variablelist>
@@ -145,8 +157,8 @@ which the application is designed. -->
 	<para>You can use the &app; application to access the following features:
 	<itemizedlist>
 		<listitem><para><xref linkend="generate"/></para></listitem>
-		<listitem><para><xref linkend="export"/></para></listitem>
 		<listitem><para><xref linkend="import"/></para></listitem>
+		<listitem><para><xref linkend="export"/></para></listitem>
 		<listitem><para><xref linkend="text-editor"/></para></listitem>
 		<listitem><para><xref linkend="file-manager"/></para></listitem>
 		<listitem><para><xref linkend="key-properties"/></para></listitem>
@@ -154,35 +166,80 @@ which the application is designed. -->
 	</itemizedlist></para>
 	<para>Any window with a menubar contains a <guimenu>View</guimenu> menu.
 	In the <guimenu>View</guimenu> menu, you may choose whether or not to view the
-	<guimenuitem>Toolbar</guimenuitem> or <guimenuitem>Statusbar</guimenuitem>.
-	Selecting either option will hide or show the selected component.</para>
+	<guimenuitem>Toolbar</guimenuitem> or <guimenuitem>Statusbar</guimenuitem>
+	by selecting <menuchoice><guimenu>View</guimenu><guimenuitem>Toolbar</guimenuitem></menuchoice>
+	or <menuchoice><guimenu>View</guimenu><guimenuitem>Statusbar</guimenuitem></menuchoice>.</para>
 	<para>Any window with a statusbar will display status messages from operations.
 	The current or last focused statusbar can also display operation progress.</para>
 	<para>You can get help for a feature by clicking <guibutton>help</guibutton>
-	in a dialog or selecting <menuchoice><guimenu>Help</guimenu></menuchoice>.</para>
-	<warning>While &app; is in use, do not make any changes to the <glossterm>key ring</glossterm> with another program.
+	in the dialog or selecting the <guimenu>Help</guimenu> menu.</para>
+	<warning>While &app; is in use, do not make any changes to the
+	<glossterm linkend="key-ring">key ring</glossterm> with another program.
 	External changes could have unkown and possibly undesirable affects.</warning>
 <!-- ================ Usage Subsection ================================ -->
 	<sect2 id="generate">
-		<title>Generating a Key</title>
-		<para>To generate a new <glossterm>key</glossterm>, choose 
+		<title>Generate</title>
+		<para>To generate a new &key;, choose 
 		<menuchoice><guimenu>File</guimenu><guimenuitem>New</guimenuitem></menuchoice>
 		from the <guilabel>Key Manager</guilabel>.
-		The <guilabel>Generate Key</guilabel> dialog is displayed.
+		The <guilabel>Generate Key</guilabel> dialog is displayed.</para>
+		<note>If you do not already have a personal &key;,
+		generating one will allow you to <glossterm linkend="op-sign">sign</glossterm>
+		data, and allows others to send you <glossterm baseform="encrypt" linkend="op-encrypt">encrypted</glossterm> data.</note>
 		<figure id="generate-dlg">
 			<title>Generate Key Dialog</title>
 			<screenshot><mediaobject><imageobject>
 				<imagedata fileref="figures/generate.png" format="PNG"/>
 			</imageobject></mediaobject></screenshot>
 		</figure>
-		You will need to enter your full name, a valid email address, and a comment describing the <glossterm>key</glossterm>.
-		This will create the <glossterm>primary user ID</glossterm>.
-		You will then need to choose a <glossterm>key type</glossterm> and a <glossterm>key length</glossterm>.
-		The range of the <glossterm>length</glossterm> depends on the type selected.
-		Then you must choose a <glossterm>key expiration</glossterm> date, or have the <glossterm>key</glossterm> never expire.
-		When finished, click <guibutton>OK</guibutton>.</para>
-		<warning>No other operations should be performed during <glossterm>key</glossterm> generation.
-		Doing so will stop the generation process prematurely.</warning>
+		<para>You will need to enter:</para>
+		<itemizedlist>
+			<listitem><para>Your full name,</para></listitem>
+			<listitem><para>Valid email address, and</para></listitem>
+			<listitem><para>Comment describing the &key;</para></listitem>
+		</itemizedlist>
+		<para>This information will be used to create your &userid;.
+		Next, you must choose a &type; and &length; for your &key;:</para>
+		<variablelist>
+			<varlistentry>
+				<term>DSA &amp; ElGamal</term>
+				<listitem>
+					<para>Choosing <guilabel>DSA &amp; ElGamal</guilabel> will generate a new &key; with a
+					<glossterm linkend="dsa-key">DSA</glossterm> primary key of &length; 1024
+					and an <glossterm linkend="elgamal-key">ElGamal</glossterm>
+					&subkey; whose &length; you can choose. This new &key;
+					can be used for <glossterm baseform="encrypt" linkend="op-encrypt">encryption</glossterm>
+					and <glossterm baseform="sign" linkend="op-sign">signing</glossterm>.
+					This is the default choice and should usually be selected.</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>DSA (sign only)</term>
+				<listitem>
+					<para>Choosing <guilabel>DSA (sign only)</guilabel> will generate
+					a new <glossterm linkend="dsa-key">DSA</glossterm> &key;
+					without a &subkey;. This new &key; can only be used for
+					<glossterm baseform="sign" linkend="op-sign">signing</glossterm>.</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>RSA (sign only)</term>
+				<listitem>
+					<para>Choosing <guilabel>RSA (sign only)</guilabel> will generate
+					a new <glossterm linkend="rsa-key">RSA</glossterm> &key;
+					without a &subkey;. This new &key; can only be used for
+					<glossterm baseform="sign" linkend="op-sign">signing</glossterm>.</para>
+				</listitem>
+			</varlistentry>
+		</variablelist>
+		<para>Now you must choose an &expires;. Usually this will be <guibutton>Never Expires</guibutton>,
+		unless there is a specific reason for having your &key;
+		<glossterm baseform="expiration date" linkend="key-expires">expire</glossterm>.</para>
+		<para>Finally, you must enter a passphrase for the &key; and confirm it.
+		This should be a pass<emphasis>phrase</emphasis> instead of a pass<emphasis>word</emphasis>.
+		When finished, click <guibutton>OK</guibutton> to generate the new &key;</para>
+		<caution>No other operation should be performed during &key; generation,
+		otherwise the process will be interrupted the &key; will not be generated.</caution>
 	</sect2>
 	<sect2 id="import">
 		<title>Importing Keys</title>
@@ -463,10 +520,9 @@ which the application is designed. -->
 	</sect2>
 	<sect2 id="key-properties">
 		<title>Key Properties</title>
-		<para>To view <glossterm linkend="key">key</glossterm> properties,
-		select a <glossterm linkend="key">key</glossterm> from the list and choose
+		<para>To view &key; properties, select a &key; from the list and choose
 		<menuchoice><guimenu>Edit</guimenu><guimenuitem>Properties</guimenuitem></menuchoice>,
-		click <guibutton>Properties</guibutton>, or double-click the <glossterm linkend="key">key</glossterm>.
+		click <guibutton>Properties</guibutton>, or double-click the &key;.
 		The <guilabel>Key Properties</guilabel> window is displayed.</para>
 		<figure id="key-properties-win">
 			<title>Key Properties</title>
@@ -479,40 +535,36 @@ which the application is designed. -->
 		<itemizedlist>
 			<listitem><para><glossterm linkend="key-fingerprint">Fingerprint</glossterm>,</para></listitem>
 			<listitem><para><glossterm linkend="key-owner-trust">Owner Trust</glossterm>,</para></listitem>
-			<listitem><para><glossterm linkend="key-attributes">Key Attributes</glossterm>, and</para></listitem>
+			<listitem><para><glossterm baseform="attributes" linkend="key-attributes">Key Attributes</glossterm>, and</para></listitem>
 			<listitem><para><xref linkend="userid-properties"/></para></listitem>
 		</itemizedlist>
 		<sect3 id="key-disable">
 			<title>Disable Key</title>
-			<para>You can disable a <glossterm linkend="key">key</glossterm> by checking
-			<guibutton>Disabled</guibutton>. A disabled <glossterm linkend="key">key</glossterm>
+			<para>You can disable a &key; by checking
+			<guibutton>Disabled</guibutton>. A disabled &key;
 			cannot be used for <glossterm linkend="op-encrypt">encryption</glossterm>.
 			Most <glossterm baseform="key" linkend="key">keys</glossterm> should be left enabled.</para>
 		</sect3>
 		<sect3 id="change-owner-trust">
 			<title>Change Owner Trust</title>
 			<para>You can change the <glossterm linkend="key-owner-trust">owner trust</glossterm>
-			of a <glossterm linkend="key">key</glossterm> by using the <guilabel>Owner Trust</guilabel>
+			of a &key; by using the <guilabel>Owner Trust</guilabel>
 			option menu.</para>
 		</sect3>
 		<sect3 id="change-expires">
 			<title>Change Expiration Date</title>
-			<para>If the <glossterm linkend="key">key</glossterm> has a
-			<glossterm linkend="secret-key">secret key</glossterm>,
-			then you can change the <glossterm linkend="key-expires">expiration date</glossterm>.
-			If <guibutton>Never Expires</guibutton> is checked, then the
-			<glossterm linkend="key">key</glossterm> will never expire.
-			Otherwise, the date shown will be the <glossterm linkend="key-expires">expiration date</glossterm>.</para>
-			<note>Changing the <glossterm linkend="key-expires">expiration date</glossterm>
-			requires a <xref linkend="passphrase"/>.</note>
+			<para>If the &key; has a &secret;, then you can change the &expires;.
+			If <guibutton>Never Expires</guibutton> is checked, then the &key; will never expire.
+			Otherwise, the date shown will be the &expires;.</para>
+			<note>Changing the &expires; requires a <xref linkend="passphrase"/>.</note>
 		</sect3>
 		<sect3 id="userid-properties">
 			<title>User ID Properties</title>
-			<para><glossterm linkend="key-userid">User IDs</glossterm> are shown below the
-			<glossterm linkend="key-attributes">primary key attributes</glossterm>.
-			If the <glossterm linkend="key">key</glossterm> has a
-			<glossterm linkend="secret-key">secret key</glossterm> and there is more than one
-			<glossterm linkend="key-userid">User ID</glossterm>, then you can:</para>
+			<para><glossterm baseform="user ID" linkend="key-userid">User IDs</glossterm> are shown below the
+			<glossterm baseform="attributes" linkend="key-attributes">primary key attributes</glossterm>.
+			If the &key; has a
+			&secret; and there is more than one
+			&userid;, then you can:</para>
 			<itemizedlist>
 				<listitem><para><xref linkend="primary-userid"/></para></listitem>
 				<listitem><para><xref linkend="delete-userid"/></para></listitem>
@@ -528,12 +580,12 @@ which the application is designed. -->
 		</sect3>
 		<sect3 id="subkey-properties">
 			<title>Subkey Properties</title>
-			<para><glossterm linkend="key-subkey">Subkeys</glossterm>
+			<para><glossterm baseform="subkey" linkend="key-subkey">Subkeys</glossterm>
 			are hidden by default. To show them, select
 			<menuchoice><guimenu>View</guimenu><guimenuitem>Subkeys</guimenuitem></menuchoice>.
-			If the <glossterm linkend="key">key</glossterm> has <glossterm linkend="key-subkey">subkeys</glossterm>,
+			If the &key; has <glossterm baseform="subkey" linkend="key-subkey">subkeys</glossterm>,
 			they will be shown below the <xref linkend="userid-properties"/>.</para>
-			<para>Each <glossterm linkend="key-subkey">subkey</glossterm> shows its
+			<para>Each &subkey; shows its
 			<glossterm linkend="key-attributes">attributes</glossterm> and <guilabel>Status</guilabel>.
 			The <guilabel>Status</guilabel> can be:</para>
 			<itemizedlist>
@@ -541,8 +593,8 @@ which the application is designed. -->
 				<listitem><para>Revoked, or</para></listitem>
 				<listitem><para>Expired,</para></listitem>
 			</itemizedlist>
-			<para>depending on the state of the <glossterm linkend="key-subkey">subkey</glossterm>.
-			If the <glossterm linkend="key">key</glossterm> has a <glossterm linkend="secret-key">secret key</glossterm>,
+			<para>depending on the state of the &subkey;.
+			If the &key; has a &secret;,
 			then you can:</para>
 			<itemizedlist>
 				<listitem><para><xref linkend="change-subkey-expires"/></para></listitem>
@@ -553,99 +605,79 @@ which the application is designed. -->
 				<title>Change Subkey Expiration Date</title>
 				<para>As with the <xref linkend="change-expires"/> for the primary key,
 				a <glossterm baseform="subkey" linkend="key-subkey">subkey's</glossterm>
-				<glossterm linkend="key-expires">expiration date</glossterm>
-				can be changed if the <glossterm linkend="key">key</glossterm>
-				has a <glossterm linkend="secret-key">secret key</glossterm>.
-				If <guibutton>Never Expires</guibutton> is checked,
-				then the <glossterm linkend="key-subkey">subkey</glossterm> will never expire.
-				Otherwise, the date shown will be the <glossterm linkend="key-expires">expiration date</glossterm>.</para>
-				<note>Changing the <glossterm linkend="key-expires">expiration date</glossterm>
-				requires a <xref linkend="passphrase"/>.</note>
+				&expires; can be changed if the &key; has a &secret;.
+				If <guibutton>Never Expires</guibutton> is checked, then the &subkey; will never expire.
+				Otherwise, the date shown will be the &expires;.</para>
+				<note>Changing the &expires; requires a <xref linkend="passphrase"/>.</note>
 			</sect4>
 			<sect4 id="revoke-subkey">
 				<title>Revoke Subkey</title>
 				<para>The <guibutton>Revoke</guibutton> button will only
-				be shown if the <glossterm linkend="key"/> has not been
-				<glossterm linkend="op-revoke">revoked</glossterm> and has a
-				<glossterm linkend="secret-key">secret key</glossterm>.
+				be shown if the &key; has not been
+				<glossterm baseform="revoke" linkend="op-revoke">revoked</glossterm> and has a &secret;.
 				Clicking <guibutton>Revoke</guibutton> will show the <xref linkend="revoke"/>
-				Dialog for the <glossterm linkend="key-subkey">subkey</glossterm>.</para>
-				<note>Revoking a <glossterm linkend="key-subkey">subkey</glossterm>
-				requires a <xref linkend="passphrase"/>.</note>
+				Dialog for the &subkey;.</para>
+				<note>Revoking a &subkey; requires a <xref linkend="passphrase"/>.</note>
 			</sect4>
 			<sect4 id="delete-subkey">
 				<title>Delete Subkey</title>
-				<para>If the <glossterm linkend="key">key</glossterm>
-				has a <glossterm linkend="secret-key">secret key</glossterm>,
-				then you can <xref linkend="delete"/> a <glossterm linkend="key-subkey">subkey</glossterm>
+				<para>If the &key; has a &secret;, then you can <xref linkend="delete"/> a &subkey;
 				by clicking on the <guibutton>Delete</guibutton> button.</para>
-				<note>Deleting a <glossterm linkend="key-subkey">subkey</glossterm>
-				requires a <xref linkend="passphrase"/>.</note>
+				<note>Deleting a &subkey; requires a <xref linkend="passphrase"/>.</note>
 			</sect4>
 		</sect3>
 		<sect3 id="change-passphrase">
 			<title>Change Passphrase</title>
-			<para>If the <glossterm linkend="key">key</glossterm> has a
-			<glossterm linkend="secret-key">secret key</glossterm>,
-			you can change the <glossterm baseform="key" linkend="key">key's</glossterm>
-			passphrase by selecting
+			<para>If the &key; has a &secret;, you can change the
+			<glossterm baseform="key" linkend="key">key's</glossterm> passphrase by selecting
 			<menuchoice><guimenu>Edit</guimenu><guimenuitem>Change Passphrase</guimenuitem></menuchoice>.
 			The first time the <xref linkend="passphrase"/> Dialog appears is for entering
 			the current passphrase. The second time is for the new passphrase.</para>
 		</sect3>
 		<sect3 id="add-uid">
 			<title>Add User ID</title>
-			<para>If the <glossterm linkend="key">key</glossterm> has a
-			<glossterm linkend="secret-key">secret key</glossterm>, you can select
+			<para>If the &key; has a &secret;, you can select
 			<menuchoice><guimenu>Edit</guimenu><guimenuitem>Add User ID</guimenuitem></menuchoice>
-			to add a new <glossterm linkend="key-userid">User ID</glossterm>.
-			You must then enter the following:</para>
+			to add a new &userid;. You must then enter the following:</para>
 			<itemizedlist>
 				<listitem><para>Your full name, which must be at least 5 characters long,</para></listitem>
 				<listitem><para>a valid email address,</para></listitem>
 				<listitem><para>and an optional comment describing the key</para></listitem>
 			</itemizedlist>
-			<note>Adding a <glossterm linkend="key-userid">User ID</glossterm>
-			requires a <xref linkend="passphrase"/>.</note>
+			<note>Adding a &userid; requires a <xref linkend="passphrase"/>.</note>
 		</sect3>
 		<sect3 id="add-subkey">
 			<title>Add Subkey</title>
-			<para>If the <glossterm linkend="key">key</glossterm> has a
-			<glossterm linkend="secret-key">secret key</glossterm>, you can select
+			<para>If the &key; has a &secret;, you can select
 			<menuchoice><guimenu>Edit</guimenu><guimenuitem>Add Subkey</guimenuitem></menuchoice>
-			to add a new <glossterm linkend="key-subkey">subkey</glossterm>.
-			You must then choose from the following
-			<glossterm baseform="type" linkend="key-type">key types</glossterm>:</para>
+			to add a new &subkey;. You must then choose from the following
+			<glossterm baseform="type" linkend="key-type">types</glossterm>:</para>
 			<itemizedlist>
 				<listitem><para><glossterm baseform="DSA" linkend="dsa-key">DSA (sign only)</glossterm></para></listitem>
 				<listitem><para><glossterm baseform="ElGamal" linkend="elgamal-key">ElGamal (encrypt only)</glossterm></para></listitem>
 				<listitem><para><glossterm baseform="RSA" linkend="rsa-key">RSA (sign only)</glossterm></para></listitem>
 				<listitem><para><glossterm baseform="RSA" linkend="rsa-key">RSA (encrypt only)</glossterm></para></listitem>
 			</itemizedlist>
-			<para>The available <glossterm linkend="key-length">length</glossterm> ranges depend on the
-			<glossterm linkend="key-type">type</glossterm> selected.
-			Finally, you must choose an <glossterm linkend="key-expires">expiration date</glossterm>.
-			It can be a specific date in the future, or <guibutton>Never Expires</guibutton>.</para>
-			<note>Adding a <glossterm linkend="key-subkey">subkey</glossterm>
-			requires a <xref linkend="passphrase"/>.</note>
+			<para>The available &length; ranges depend on the &type; selected.
+			Finally, you must choose an &expires;. It can be a specific date in the future,
+			or <guibutton>Never Expires</guibutton>.</para>
+			<note>Adding a &subkey; requires a <xref linkend="passphrase"/>.</note>
 		</sect3>
 	</sect2>
 	<sect2 id="delete">
 		<title>Delete</title>
-		<para>To delete a <glossterm linkend="key">key</glossterm>, choose
+		<para>To delete a &key;, choose
 		<menuchoice><guimenu>Edit</guimenu><guimenuitem>Delete</guimenuitem></menuchoice>
 		or click <guibutton>Delete</guibutton> from the <guilabel>Key Manager</guilabel>
-		or <xref linkend="key-properties"/> of the <glossterm linkend="key">key</glossterm>
-		you want to delete. The <guilabel>Delete Key</guilabel> dialog is displayed.
-		Click <guibutton>Yes</guibutton> to delete the <glossterm linkend="key">key</glossterm>.</para>
-		<warning>This will permanently delete the selected <glossterm linkend="key">key</glossterm>
-		and cannot be undone.</warning>
+		or <xref linkend="key-properties"/> of the &key; you want to delete.
+		The <guilabel>Delete Key</guilabel> dialog is displayed.
+		Click <guibutton>Yes</guibutton> to delete the &key;.</para>
+		<warning>This will permanently delete the selected &key; and cannot be undone.</warning>
 	</sect2>
 	<sect2 id="revoke">
 		<title>Revoke</title>
-		<para>If the <glossterm linkend="key">key</glossterm> has a
-		<glossterm linkend="secret-key">secret key</glossterm>, then it or its
-		<glossterm linkend="key-subkey">subkeys</glossterm> can be
+		<para>If the &key; has a &secret;, then it or its
+		<glossterm baseform="subkey" linkend="key-subkey">subkeys</glossterm> can be
 		<glossterm baseform="revoke" linkend="op-revoke">revoked</glossterm>.
 		<glossterm baseform="revoke" linkend="op-revoke">Revocation</glossterm>
 		requires one of the following reasons:</para>
@@ -655,32 +687,25 @@ which the application is designed. -->
 				<listitem>
 					<para><guilabel>No Reason</guilabel> for
 					<glossterm baseform="revoke" linkend="op-revoke">revoking</glossterm>
-					the <glossterm linkend="key">key</glossterm> or
-					<glossterm linkend="key-subkey">subkey</glossterm></para>
+					the &key; or &subkey;</para>
 				</listitem>
 			</varlistentry>
 			<varlistentry>
 				<term>Compromised</term>
 				<listitem>
-					<para>The <glossterm linkend="key">key</glossterm> or
-					<glossterm linkend="key-subkey">subkey</glossterm>
-					has been <guilabel>Compromised</guilabel></para>
+					<para>The &key; or &subkey; has been compromised.</para>
 				</listitem>
 			</varlistentry>
 			<varlistentry>
 				<term>Superseded</term>
 				<listitem>
-					<para>The <glossterm linkend="key">key</glossterm> or
-					<glossterm linkend="key-subkey">subkey</glossterm>
-					has been replaced.</para>
+					<para>The &key; or &subkey; has been replaced.</para>
 				</listitem>
 			</varlistentry>
 			<varlistentry>
 				<term>Not Used</term>
 				<listitem>
-					<para>The <glossterm linkend="key">key</glossterm> or
-					<glossterm linkend="key-subkey">subkey</glossterm>
-					is no longer used.</para>
+					<para>The &key; or &subkey; is no longer used.</para>
 				</listitem>
 			</varlistentry>
 		</variablelist>
@@ -797,7 +822,7 @@ the program. However, if you do wish to include this info in the
 manual, this is the place to put it. Alternatively, you can put this information in the title page.-->
 <sect1 id="about">
 	<title>About &app;</title>
-	<para> &app; was written by Jacob Perkins (<email>jap1@users.sourceforge.net</email>).
+	<para> &app; was written by Jacob Perkins.
 	To find more information about &app;, please visit the <ulink url="http://seahorse.sourceforge.net" type="http">Seahorse Webpage</ulink>.</para>
 	<para>To report a bug or make a suggestion regarding this application or this manual,
 	follow the directions in this <ulink url="ghelp:gnome-feedback" type="help">document</ulink>.</para>
@@ -846,7 +871,6 @@ manual, this is the place to put it. Alternatively, you can put this information
 				<glossdef>
 					<para>The fingerprint is a unique identifier for a key.
 					It is used to verify the identity of the key.</para>
-					<glossseealso otherterm="key"/>
 				</glossdef>
 			</glossentry>
 			<glossentry id="key">
@@ -1074,7 +1098,7 @@ manual, this is the place to put it. Alternatively, you can put this information
 						</varlistentry>
 					</variablelist>
 					<para>For examples of the <emphasis>web of trust</emphasis> and key validity,
-					see the <ulink url="http://www.gnupg.org/gph" type="http">Gnu Privacy Handbook</ulink>.</para>
+					see the <ulink url="http://www.gnupg.org/gph/en/manual.html" type="http">Gnu Privacy Handbook</ulink>.</para>
 					<glossseealso otherterm="key-signature"/>
 					<glossseealso otherterm="key-owner-trust"/>
 				</glossdef>
