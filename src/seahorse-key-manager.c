@@ -238,7 +238,7 @@ about_activate (GtkWidget *widget, SeahorseWidget *swidget)
 	gchar *authors[] = {
 		"Jacob Perkins <jap1@users.sourceforge.net>",
 		"Jose Carlos Garcia Sogo <jsogo@users.sourceforge.net>",
-		"Jean Schurger <jk24@users.sourceforge.net>",
+		"Jean Schurger <yshark@schurger.org>",
 		NULL
 	};
 
