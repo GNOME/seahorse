@@ -362,6 +362,15 @@ seahorse_multi_source_new (void)
    return g_object_new (SEAHORSE_TYPE_MULTI_SOURCE, NULL);
 }   
 
+SeahorseKeySource*
+seahorse_multi_source_get_primary (SeahorseMultiSource *msrc)
+{
+    g_return_val_if_fail (SEAHORSE_IS_MULTI_SOURCE (msrc), NULL);
+    if (msrc->sources)
+        return SEAHORSE_KEY_SOURCE (msrc->sources->data);
+    return NULL;
+}
+
 /**
  * seahorse_multi_source_add
  * @msrc: The multi source

@@ -49,6 +49,9 @@ SeahorseMultiSource* seahorse_multi_source_new ();
 
 GType       seahorse_multi_source_get_type       (void);
 
+SeahorseKeySource*
+            seahorse_multi_source_get_primary    (SeahorseMultiSource *msrc);
+
 void        seahorse_multi_source_add            (SeahorseMultiSource *source,
                                                   SeahorseKeySource *sksrc,
                                                   gboolean important);
