@@ -57,4 +57,4 @@ glade_DATA = seahorse-key-manager.glade2 \
 	seahorse-key-properties.glade2
 
 EXTRA_DIST = $(glade_DATA) \
-	fr-marshal.list
+	seahorse-marshal.list
