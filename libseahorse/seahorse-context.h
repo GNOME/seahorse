@@ -35,7 +35,6 @@
 #define TEXTMODE_KEY PGP_SCHEMAS "/text_mode"
 #define DEFAULT_KEY PGP_SCHEMAS "/default_key"
 #define ENCRYPTSELF_KEY PGP_SCHEMAS "/encrypt_to_self"
-#define SIGNDEFAULT_KEY PGP_SCHEMAS "/sign_to_default"
 #define LASTSIGNER_KEY PGP_SCHEMAS "/last_signer"
 #define MULTI_EXTENSION_KEY PGP_SCHEMAS "/package_extension"
 #define MULTI_SEPERATE_KEY PGP_SCHEMAS "/multi_seperate"

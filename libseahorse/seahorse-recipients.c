@@ -160,7 +160,7 @@ seahorse_recipients_get (SeahorseContext *sctx, SeahorseKeyPair **signer)
     g_return_val_if_fail (operation != NULL, NULL);
 
     /* If always using the default key for signing, then hide this section */
-    if (!signer || eel_gconf_get_boolean (SIGNDEFAULT_KEY)) {
+    if (!signer || (*signer = seahorse_context_get_default_key (sctx)) != NULL) {
         widget = glade_xml_get_widget (swidget->xml, "sign_box");
         gtk_widget_hide (widget);
 
@@ -207,9 +207,7 @@ seahorse_recipients_get (SeahorseContext *sctx, SeahorseKeyPair **signer)
 	}
 
     if (keys && signer) {
-        if (eel_gconf_get_boolean (SIGNDEFAULT_KEY)) 
-            *signer = seahorse_context_get_default_key (sctx);
-        else 
+        if (!*signer) 
             *signer = seahorse_default_key_control_active (sdkc);
 
         /* Save this as the last key signed with */

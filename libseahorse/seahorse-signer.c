@@ -45,8 +45,9 @@ seahorse_signer_get (SeahorseContext *sctx)
     gboolean ok = FALSE;
     gchar *id;
     
-    if (eel_gconf_get_boolean (SIGNDEFAULT_KEY))
-        return seahorse_context_get_default_key (sctx);
+    signer = seahorse_context_get_default_key (sctx);
+    if (signer != NULL)
+        return signer;
 	
 	swidget = seahorse_widget_new ("signer", sctx);
 	g_return_val_if_fail (swidget != NULL, NULL);

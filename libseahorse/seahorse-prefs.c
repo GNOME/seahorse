@@ -343,14 +343,10 @@ seahorse_prefs_new (SeahorseContext *sctx)
             seahorse_check_button_control_new (_("_Encrypt to Self"), ENCRYPTSELF_KEY));
     gtk_widget_show_all (widget);
 
-    widget = glade_xml_get_widget (swidget->xml, "sign_to_default_box");
-    gtk_container_add (GTK_CONTAINER (widget),
-            seahorse_check_button_control_new (_("_Use default key to sign"), SIGNDEFAULT_KEY));
-    gtk_widget_show_all (widget);
-    
     widget = glade_xml_get_widget (swidget->xml, "default_key");
 
-    sdkc = seahorse_default_key_control_new (seahorse_context_get_key_source (sctx), NULL);
+    sdkc = seahorse_default_key_control_new (seahorse_context_get_key_source (sctx), 
+                                             _("None. Prompt for a key."));
     gtk_container_add (GTK_CONTAINER (widget), GTK_WIDGET (sdkc));
     gtk_widget_show_all (widget);
 
