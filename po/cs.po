@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-01 12:05+0100\n"
-"PO-Revision-Date: 2004-12-01 19:49+0100\n"
+"POT-Creation-Date: 2004-12-07 11:30+0100\n"
+"PO-Revision-Date: 2004-12-07 18:19+0100\n"
 "Last-Translator: Miloslav Trmac <mitr@volny.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -389,7 +389,9 @@ msgstr "Sloupec, podle kterého řadit klíče seahorse"
 msgid ""
 "The last keyserver a search was performed against. Or empty for all "
 "keyservers."
-msgstr "Poslední server klíčů, ve kterém se hledalo. Nebo prázdné pro všechny servery klíčů."
+msgstr ""
+"Poslední server klíčů, ve kterém se hledalo. Nebo prázdné pro všechny "
+"servery klíčů."
 
 #: data/seahorse.schemas.in.h:28
 msgid "The last search pattern searched for against a keyserver."
@@ -450,13 +452,13 @@ msgid "Whether to use canonical text mode"
 msgstr "Jestli používat kanonický textový režim"
 
 #. Make the column
-#: libseahorse/seahorse-key-store.c:617 src/seahorse-key-properties.c:378
-#: src/seahorse-key-properties.c:472
+#: libseahorse/seahorse-key-store.c:617 src/seahorse-key-properties.c:380
+#: src/seahorse-key-properties.c:474
 msgid "Name"
 msgstr "Jméno"
 
 #. Make the column
-#: libseahorse/seahorse-key-store.c:620 src/seahorse-key-properties.c:375
+#: libseahorse/seahorse-key-store.c:620 src/seahorse-key-properties.c:377
 msgid "Key ID"
 msgstr "ID klíče"
 
@@ -607,7 +609,7 @@ msgstr "_Odstraňovat hesla z paměti po "
 msgid "_Use default key to sign"
 msgstr "_Používat pro podpis implicitní klíč"
 
-#: libseahorse/seahorse-pgp-source.c:487
+#: libseahorse/seahorse-pgp-source.c:495
 #, c-format
 msgid "Loaded %d key"
 msgid_plural "Loaded %d keys"
@@ -615,8 +617,8 @@ msgstr[0] "Načten %d klíč"
 msgstr[1] "Načteny %d klíče"
 msgstr[2] "Načteno %d klíčů"
 
-#: libseahorse/seahorse-pgp-source.c:627
-#: libseahorse/seahorse-server-source.c:659
+#: libseahorse/seahorse-pgp-source.c:635
+#: libseahorse/seahorse-server-source.c:511
 msgid "Load Cancelled"
 msgstr "Načítání přerušeno"
 
@@ -625,7 +627,7 @@ msgstr "Načítání přerušeno"
 msgid "Validity"
 msgstr "Platnost"
 
-#: libseahorse/seahorse-recipients.c:81 src/seahorse-keyserver-results.c:199
+#: libseahorse/seahorse-recipients.c:81 src/seahorse-keyserver-results.c:215
 #, c-format
 msgid "Selected %d keys"
 msgid_plural "Selected %d keys"
@@ -659,22 +661,9 @@ msgstr "Vyberte klíče"
 msgid "Search _for: "
 msgstr "_Hledat: "
 
-#: libseahorse/seahorse-server-source.c:483
+#: libseahorse/seahorse-server-source.c:472
 msgid "Searching for remote keys..."
 msgstr "Hledám vzdálené klíče..."
-
-#: libseahorse/seahorse-server-source.c:579
-#, c-format
-msgid "Found %d key"
-msgid_plural "Found %d keys"
-msgstr[0] "Nalezen %d klíč"
-msgstr[1] "Nalezeny %d klíče"
-msgstr[2] "Nalezeno %d klíčů"
-
-#: libseahorse/seahorse-server-source.c:584
-#, c-format
-msgid "Couldn't search keyserver: %s"
-msgstr "Nemohu hledat na serveru klíčů: %s"
 
 #: libseahorse/seahorse-signatures.c:48
 msgid "[Unknown Key]"
@@ -740,17 +729,29 @@ msgstr "Nemohu spustit file-roller"
 msgid "The file-roller process did not complete successfully"
 msgstr "Proces file-roller neskončil úspěšně"
 
-#: libseahorse/seahorse-util.c:730
+#: libseahorse/seahorse-util.c:746
+msgid "All PGP key files"
+msgstr "Všechny soubory klíčů PGP"
+
+#: libseahorse/seahorse-util.c:752 libseahorse/seahorse-util.c:792
+msgid "All files"
+msgstr "Všechny soubory"
+
+#: libseahorse/seahorse-util.c:785
+msgid "Archive files"
+msgstr "Soubory archivů"
+
+#: libseahorse/seahorse-util.c:814
 msgid ""
 "<b>A file already exists with this name.</b>\n"
 "\n"
-"Do you want to replace it with the one you are saving?"
+"Do you want to replace it with a new file?"
 msgstr ""
 "<b>Již existuje soubor s tímto názvem.</b>\n"
 "\n"
-"Chcete jej přepsat tím, který ukládáte?"
+"Chcete jej nahradit novým souborem?"
 
-#: libseahorse/seahorse-util.c:733
+#: libseahorse/seahorse-util.c:817
 msgid "_Replace"
 msgstr "Na_hradit"
 
@@ -779,7 +780,7 @@ msgstr "Neochvějná důvěryhodnost"
 msgid "Disabled"
 msgstr "Zakázáno"
 
-#: libseahorse/seahorse-validity.c:43 src/seahorse-key-properties.c:202
+#: libseahorse/seahorse-validity.c:43 src/seahorse-key-properties.c:204
 msgid "Revoked"
 msgstr "Odvolaný"
 
@@ -824,32 +825,32 @@ msgstr "Zašifrovaný text"
 msgid "Couldn't import keys"
 msgstr "Nemohu importovat klíče"
 
-#: plugins/gedit/seahorse-gedit.c:250
+#: plugins/gedit/seahorse-gedit.c:248
 msgid "Keys found but not imported"
 msgstr "Klíče nalezeny, ale neimportovány"
 
-#: plugins/gedit/seahorse-gedit.c:271 plugins/gedit/seahorse-gedit.c:292
+#: plugins/gedit/seahorse-gedit.c:269 plugins/gedit/seahorse-gedit.c:290
 msgid "Couldn't decrypt text"
 msgstr "Nemohu dešifrovat text"
 
-#: plugins/gedit/seahorse-gedit.c:355
+#: plugins/gedit/seahorse-gedit.c:353
 msgid "No PGP encrypted or signed text is selected."
 msgstr "Není vybrán text šifrovaný nebo podepsaný s PGP."
 
-#: plugins/gedit/seahorse-gedit.c:386
+#: plugins/gedit/seahorse-gedit.c:384
 msgid "Decrypted text"
 msgstr "Dešifrovaný text"
 
-#: plugins/gedit/seahorse-gedit.c:393
+#: plugins/gedit/seahorse-gedit.c:391
 msgid "Verified text"
 msgstr "Ověřený text"
 
-#: plugins/gedit/seahorse-gedit.c:424
+#: plugins/gedit/seahorse-gedit.c:422
 #, c-format
 msgid "Block %d"
 msgstr "Blok %d"
 
-#: plugins/gedit/seahorse-gedit.c:439
+#: plugins/gedit/seahorse-gedit.c:437
 #, c-format
 msgid "Imported %d key"
 msgid_plural "Imported %d keys"
@@ -857,11 +858,11 @@ msgstr[0] "Importován %d klíč"
 msgstr[1] "Importovány %d klíče"
 msgstr[2] "Importováno %d klíčů"
 
-#: plugins/gedit/seahorse-gedit.c:477 plugins/gedit/seahorse-gedit.c:488
+#: plugins/gedit/seahorse-gedit.c:475 plugins/gedit/seahorse-gedit.c:486
 msgid "Couldn't sign text"
 msgstr "Nemohu podepsat text"
 
-#: plugins/gedit/seahorse-gedit.c:495
+#: plugins/gedit/seahorse-gedit.c:493
 msgid "Signed text"
 msgstr "Podepsaný text"
 
@@ -913,7 +914,7 @@ msgstr "Ověřit soubor podpisu"
 msgid "Read list of URIs on standard in"
 msgstr "Číst seznam URI ze standardního vstupu"
 
-#: src/main.c:146 src/seahorse-key-manager.c:183
+#: src/main.c:146 src/seahorse-key-manager.c:114
 #, c-format
 msgid "Couldn't import keys from \"%s\""
 msgstr "Nemohu importovat klíče z \"%s\""
@@ -927,32 +928,47 @@ msgstr "Importován klíč"
 msgid "Imported %d keys"
 msgstr "Importováno %d klíčů"
 
-#: src/main.c:195
+#: src/main.c:193
+#, c-format
+msgid "Choose Encrypted File Name for '%s'"
+msgstr "Zvolte název zašifrovaného souboru pro '%s'"
+
+#: src/main.c:205
 #, c-format
 msgid "Couldn't encrypt \"%s\""
 msgstr "Nemohu zašifrovat \"%s\""
 
-#: src/main.c:250
+#: src/main.c:258
+#, c-format
+msgid "Choose Signature File Name for '%s'"
+msgstr "Zvolte název souboru s podpisem pro '%s'"
+
+#: src/main.c:266
 #, c-format
 msgid "Couldn't sign \"%s\""
 msgstr "Nemohu podepsat \"%s\""
 
-#: src/main.c:284
+#: src/main.c:298
+#, c-format
+msgid "Choose Decrypted File Name for '%s'"
+msgstr "Zvolte název dešifrovaného souboru pro '%s'"
+
+#: src/main.c:305
 #, c-format
 msgid "Couldn't decrypt \"%s\""
 msgstr "Nemohu dešifrovat \"%s\""
 
-#: src/main.c:336
+#: src/main.c:357
 #, c-format
 msgid "Choose Original File for '%s'"
 msgstr "Zvolte původní soubor pro '%s'"
 
-#: src/main.c:364
+#: src/main.c:385
 #, c-format
 msgid "Couldn't verify \"%s\""
 msgstr "Nemohu ověřit \"%s\""
 
-#: src/main.c:410 src/seahorse.desktop.in.h:1
+#: src/main.c:431 src/seahorse.desktop.in.h:1
 msgid "GPG Keys Manager"
 msgstr "Správce klíčů GPG"
 
@@ -975,7 +991,7 @@ msgstr "ElGamal (jen pro zašifrování)"
 
 #. expires
 #: src/seahorse-add-subkey.glade.h:3 src/seahorse-generate-adv.glade.h:6
-#: src/seahorse-generate-druid.glade.h:14 src/seahorse-key-properties.c:207
+#: src/seahorse-generate-druid.glade.h:14 src/seahorse-key-properties.c:209
 msgid "Expiration Date:"
 msgstr "Datum vypršení platnosti:"
 
@@ -984,7 +1000,7 @@ msgid "Generate a new subkey"
 msgstr "Vygenerovat nový podklíč"
 
 #: src/seahorse-add-subkey.glade.h:5 src/seahorse-generate-adv.glade.h:10
-#: src/seahorse-key-properties.c:230
+#: src/seahorse-key-properties.c:232
 msgid "If key never expires"
 msgstr "Pokud klíč nikdy nevyprší"
 
@@ -1005,7 +1021,7 @@ msgid "Length of Key"
 msgstr "Délka klíče"
 
 #: src/seahorse-add-subkey.glade.h:10 src/seahorse-generate-adv.glade.h:17
-#: src/seahorse-key-properties.c:228
+#: src/seahorse-key-properties.c:230
 msgid "Never E_xpires"
 msgstr "Nikdy ne_vyprší"
 
@@ -1248,7 +1264,7 @@ msgid "Medium Security"
 msgstr "Střední zabezpečení"
 
 #: src/seahorse-generate-druid.glade.h:22 src/seahorse-key-manager-store.c:206
-#: src/seahorse-key-properties.c:214
+#: src/seahorse-key-properties.c:216
 msgid "Never Expires"
 msgstr "Nikdy nevyprší"
 
@@ -1378,7 +1394,7 @@ msgstr "DSA"
 msgid "ELG"
 msgstr "ELG"
 
-#: src/seahorse-key-manager-store.c:199 src/seahorse-key-properties.c:204
+#: src/seahorse-key-manager-store.c:199 src/seahorse-key-properties.c:206
 msgid "Expired"
 msgstr "Vypršel"
 
@@ -1394,54 +1410,42 @@ msgstr "Délka"
 msgid "Type"
 msgstr "Typ"
 
-#: src/seahorse-key-manager.c:95
-msgid "All PGP key files"
-msgstr "Všechny soubory klíčů PGP"
-
-#: src/seahorse-key-manager.c:103 src/seahorse-key-manager.c:144
-msgid "All files"
-msgstr "Všechny soubory"
-
-#: src/seahorse-key-manager.c:137
-msgid "Archive files"
-msgstr "Soubory archivů"
-
-#: src/seahorse-key-manager.c:162
+#: src/seahorse-key-manager.c:103
 msgid "Import Key"
 msgstr "Importovat klíč"
 
-#: src/seahorse-key-manager.c:204
+#: src/seahorse-key-manager.c:135
 msgid "Couldn't import keys from clipboard"
 msgstr "Nemohu importovat klíče ze schránky"
 
-#: src/seahorse-key-manager.c:241
+#: src/seahorse-key-manager.c:172
 msgid "Couldn't export key to clipboard"
 msgstr "Nemohu exportovat klíč do schránky"
 
-#: src/seahorse-key-manager.c:271
+#: src/seahorse-key-manager.c:202
 msgid "Export Key"
 msgstr "Exportovat klíč"
 
-#: src/seahorse-key-manager.c:292
+#: src/seahorse-key-manager.c:215 src/seahorse-keyserver-results.c:127
 #, c-format
 msgid "Couldn't export key to \"%s\""
 msgstr "Nemohu exportovat klíč do \"%s\""
 
-#: src/seahorse-key-manager.c:309
+#: src/seahorse-key-manager.c:232
 msgid "Backup Keyrings to Archive"
 msgstr "Zálohovat klíčenky do archivu"
 
-#: src/seahorse-key-manager.c:468
+#: src/seahorse-key-manager.c:383
 msgid "translator_credits"
 msgstr ""
 "Petr Domanský <doman@atlas.cz> Michal Bukovjan <bukm@centrum.cz> Miloslav "
 "Trmač <mitr@volny.cz>"
 
-#: src/seahorse-key-manager.c:488
+#: src/seahorse-key-manager.c:403
 msgid "seahorse"
 msgstr "seahorse"
 
-#: src/seahorse-key-manager.c:721
+#: src/seahorse-key-manager.c:636
 #, c-format
 msgid "Couldn't import key from \"%s\""
 msgstr "Nemohu importovat klíč z \"%s\""
@@ -1685,56 +1689,56 @@ msgid "Algorithm"
 msgstr "Algoritmus"
 
 #. created
-#: src/seahorse-key-properties.c:190
+#: src/seahorse-key-properties.c:192
 msgid "Created:"
 msgstr "Vytvořen:"
 
-#: src/seahorse-key-properties.c:190
+#: src/seahorse-key-properties.c:192
 msgid "Key creation date"
 msgstr "Datum vytvoření klíče"
 
 #. length
-#: src/seahorse-key-properties.c:194
+#: src/seahorse-key-properties.c:196
 msgid "Length:"
 msgstr "Délka:"
 
 #. status
-#: src/seahorse-key-properties.c:199
+#: src/seahorse-key-properties.c:201
 msgid "Status:"
 msgstr "Stav:"
 
-#: src/seahorse-key-properties.c:200
+#: src/seahorse-key-properties.c:202
 msgid "Good"
 msgstr "V pořádku"
 
-#: src/seahorse-key-properties.c:264
+#: src/seahorse-key-properties.c:266
 #, c-format
 msgid "%s Properties"
 msgstr "Vlastnosti %s"
 
-#: src/seahorse-key-properties.c:300
+#: src/seahorse-key-properties.c:302
 msgid "All Signatures"
 msgstr "Všechny podpisy"
 
-#: src/seahorse-key-properties.c:551
+#: src/seahorse-key-properties.c:553
 msgid "Couldn't change primary user ID"
 msgstr "Nemohu změnit primární ID uživatele"
 
-#: src/seahorse-key-properties.c:624 src/seahorse-key-properties.glade.h:27
+#: src/seahorse-key-properties.c:626 src/seahorse-key-properties.glade.h:27
 msgid "_Revoke"
 msgstr "_Odvolat"
 
-#: src/seahorse-key-properties.c:628
+#: src/seahorse-key-properties.c:630
 #, c-format
 msgid "Revoke subkey %d"
 msgstr "Odvolat podklíč %d"
 
-#: src/seahorse-key-properties.c:637
+#: src/seahorse-key-properties.c:639
 #, c-format
 msgid "Subkey %d"
 msgstr "Podklíč %d"
 
-#: src/seahorse-key-properties.c:649
+#: src/seahorse-key-properties.c:651
 #, c-format
 msgid "Delete subkey %d"
 msgstr "Odstranit podklíč %d"
@@ -1823,15 +1827,23 @@ msgstr "_Primární"
 msgid "_Signatures:"
 msgstr "_Podpisy:"
 
-#: src/seahorse-keyserver-results.c:101
-msgid "Couldn't import keys from key server"
-msgstr "Nemohu importovat klíče ze serveru klíčů"
+#: src/seahorse-keyserver-results.c:85 src/seahorse-keyserver-results.c:154
+msgid "Couldn't retrieve key data from key server"
+msgstr "Nemohu získat data klíče ze serveru klíčů"
 
-#: src/seahorse-keyserver-results.c:315
+#: src/seahorse-keyserver-results.c:98
+msgid "Couldn't import keys into keyring"
+msgstr "Nemohu importovat klíče do klíčenky"
+
+#: src/seahorse-keyserver-results.c:119
+msgid "Save Remote Keys"
+msgstr "Uložit vzdálené klíče"
+
+#: src/seahorse-keyserver-results.c:331
 msgid "Remote Keys"
 msgstr "Vzdálené klíče"
 
-#: src/seahorse-keyserver-results.c:317
+#: src/seahorse-keyserver-results.c:333
 #, c-format
 msgid "Remote Keys Containing '%s'"
 msgstr "Vzdálené klíče obsahující '%s'"
@@ -1861,7 +1873,7 @@ msgid "_Import to Keyring..."
 msgstr "_Importovat do klíčenky..."
 
 #. The all key servers option
-#: src/seahorse-keyserver-search.c:194
+#: src/seahorse-keyserver-search.c:195
 msgid "All Key Servers"
 msgstr "Všechny servery klíčů"
 
@@ -2160,6 +2172,15 @@ msgstr "_Odvolatelný"
 #: src/seahorse.desktop.in.h:2
 msgid "Manage your GPG keys"
 msgstr "Správa vašich klíčů GPG"
+
+#~ msgid "Found %d key"
+#~ msgid_plural "Found %d keys"
+#~ msgstr[0] "Nalezen %d klíč"
+#~ msgstr[1] "Nalezeny %d klíče"
+#~ msgstr[2] "Nalezeno %d klíčů"
+
+#~ msgid "Couldn't search keyserver: %s"
+#~ msgstr "Nemohu hledat na serveru klíčů: %s"
 
 #~ msgid "Nautilus Settings"
 #~ msgstr "Nastavení Nautilu"
