@@ -264,8 +264,12 @@ main (int argc, char *argv[])
     secmem_init (65536);
 
     /* We need to drop privileges completely for security */
+#if defined(HAVE_SETRESUID) && defined(HAVE_SETRESGID)
     if (setresuid (getuid (), getuid (), getuid ()) == -1 ||
         setresgid (getgid (), getgid (), getgid ()) == -1)
+#else
+    if (setuid (getuid ()) == -1 || setgid (getgid ()) == -1)
+#endif
         err (1, _("couldn't drop privileges properly"));
 
     gtk_init (&argc, &argv);
