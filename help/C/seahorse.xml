@@ -463,93 +463,231 @@ which the application is designed. -->
 	</sect2>
 	<sect2 id="key-properties">
 		<title>Key Properties</title>
-		<para>Write me</para>
-	</sect2>
-	<!--
-	<sect2 id="key-properties">
-		<title>Key Properties</title>
-		<para>To view <glossterm>key</glossterm> properties, select a <glossterm>key</glossterm> from the list and choose
+		<para>To view <glossterm linkend="key">key</glossterm> properties,
+		select a <glossterm linkend="key">key</glossterm> from the list and choose
 		<menuchoice><guimenu>Edit</guimenu><guimenuitem>Properties</guimenuitem></menuchoice>,
-		click <guibutton>Properties</guibutton>, or double-click the <glossterm>key</glossterm>.
-		The <guilabel>Key Properties</guilabel> window is displayed.
+		click <guibutton>Properties</guibutton>, or double-click the <glossterm linkend="key">key</glossterm>.
+		The <guilabel>Key Properties</guilabel> window is displayed.</para>
 		<figure id="key-properties-win">
 			<title>Key Properties</title>
 			<screenshot><mediaobject><imageobject>
 				<imagedata fileref="figures/key-properties.png" format="PNG"/>
 			</imageobject></mediaobject></screenshot>
 		</figure>
-		From the <guilabel>Key Properties</guilabel> window, you can also access
-		<xref linkend="export"/> and <xref linkend="delete"/>.</para>
-		<para>The first attribute shown is the <glossterm>fingerprint</glossterm>.
-		Below the <glossterm>fingerprint</glossterm> is the <xref linkend="owner-trust"/>
-		and <xref linkend="key-disable"/>. Next is the primary <xref linkend="key-attributes"/>,
-		<xref linkend="userid"/> list, and <glossterm>sub key</glossterm> list with <xref linkend="key-attributes"/>.</para>
-		<sect3 id="owner-trust-properties">
-			<title>Owner Trust</title>
-			<para>Use the option menu to change the <glossterm>owner trust</glossterm> of the <glossterm>key</glossterm>.</para>
-		</sect3>
+		<para>The <guilabel>Key Properties</guilabel> window initially shows the
+		<glossterm baseform="key" linkend="key">key's</glossterm></para>
+		<itemizedlist>
+			<listitem><para><glossterm linkend="key-fingerprint">Fingerprint</glossterm>,</para></listitem>
+			<listitem><para><glossterm linkend="key-owner-trust">Owner Trust</glossterm>,</para></listitem>
+			<listitem><para><glossterm linkend="key-attributes">Key Attributes</glossterm>, and</para></listitem>
+			<listitem><para><xref linkend="userid-properties"/></para></listitem>
+		</itemizedlist>
 		<sect3 id="key-disable">
 			<title>Disable Key</title>
-			<para>Checking <guibutton>Disable</guibutton> will disable the <glossterm>key</glossterm>.
-			Most <glossterm>keys</glossterm> should be left enabled.</para>
+			<para>You can disable a <glossterm linkend="key">key</glossterm> by checking
+			<guibutton>Disabled</guibutton>. A disabled <glossterm linkend="key">key</glossterm>
+			cannot be used for <glossterm linkend="op-encrypt">encryption</glossterm>.
+			Most <glossterm baseform="key" linkend="key">keys</glossterm> should be left enabled.</para>
 		</sect3>
-		<sect3 id="expires-properties">
-			<title>Key Expiration</title>
-			<para>If the <glossterm>key</glossterm> has a <glossterm>secret key</glossterm>,
-			the <glossterm>expiration</glossterm> is shown as a date editor and a
-			<guibutton>Never Expires</guibutton> checkbox.
-			These can be used to change the <glossterm  baseform="key">key's</glossterm> <glossterm>expiration</glossterm>.
-			Otherwise, the date is simply a label stating <guilabel>Never</guilabel>
-			or the exact date.</para>
+		<sect3 id="change-owner-trust">
+			<title>Change Owner Trust</title>
+			<para>You can change the <glossterm linkend="key-owner-trust">owner trust</glossterm>
+			of a <glossterm linkend="key">key</glossterm> by using the <guilabel>Owner Trust</guilabel>
+			option menu.</para>
+		</sect3>
+		<sect3 id="change-expires">
+			<title>Change Expiration Date</title>
+			<para>If the <glossterm linkend="key">key</glossterm> has a
+			<glossterm linkend="secret-key">secret key</glossterm>,
+			then you can change the <glossterm linkend="key-expires">expiration date</glossterm>.
+			If <guibutton>Never Expires</guibutton> is checked, then the
+			<glossterm linkend="key">key</glossterm> will never expire.
+			Otherwise, the date shown will be the <glossterm linkend="key-expires">expiration date</glossterm>.</para>
+			<note>Changing the <glossterm linkend="key-expires">expiration date</glossterm>
+			requires a <xref linkend="passphrase"/>.</note>
 		</sect3>
 		<sect3 id="userid-properties">
-			<title>User IDs</title>
-			<para>Below the <xref linkend="key-expires"/> is the list of <glossterm>user IDs</glossterm>.</para>
-			<sect4 id="userid-primary">
+			<title>User ID Properties</title>
+			<para><glossterm linkend="key-userid">User IDs</glossterm> are shown below the
+			<glossterm linkend="key-attributes">primary key attributes</glossterm>.
+			If the <glossterm linkend="key">key</glossterm> has a
+			<glossterm linkend="secret-key">secret key</glossterm> and there is more than one
+			<glossterm linkend="key-userid">User ID</glossterm>, then you can:</para>
+			<itemizedlist>
+				<listitem><para><xref linkend="primary-userid"/></para></listitem>
+				<listitem><para><xref linkend="delete-userid"/></para></listitem>
+			</itemizedlist>
+			<sect4 id="primary-userid">
+				<title>Set Primary User ID</title>
+				<para>Feature not yet available</para>
 			</sect4>
-			<sect4 id="userid-delete">
+			<sect4 id="delete-userid">
+				<title>Delete User ID</title>
+				<para>Feature not yet available</para>
 			</sect4>
 		</sect3>
-		<sect3 id="subkeys-properties">
-			<title>Sub Keys</title>
-			<para>Below the <xref linkend="userid"/> list is the list of <glossterm>sub keys</glossterm>.
-			<note>Not all <glossterm>keys</glossterm> have <glossterm>sub keys</glossterm>.</note>
-			<glossterm>Sub keys</glossterm> have <xref linkend="key-attributes"/>.</para>
-			<sect4 id="subkey-revoke">
-				<title>Revoking a Subkey</title>
-				<para>Write me</para>
+		<sect3 id="subkey-properties">
+			<title>Subkey Properties</title>
+			<para><glossterm linkend="key-subkey">Subkeys</glossterm>
+			are hidden by default. To show them, select
+			<menuchoice><guimenu>View</guimenu><guimenuitem>Subkeys</guimenuitem></menuchoice>.
+			If the <glossterm linkend="key">key</glossterm> has <glossterm linkend="key-subkey">subkeys</glossterm>,
+			they will be shown below the <xref linkend="userid-properties"/>.</para>
+			<para>Each <glossterm linkend="key-subkey">subkey</glossterm> shows its
+			<glossterm linkend="key-attributes">attributes</glossterm> and <guilabel>Status</guilabel>.
+			The <guilabel>Status</guilabel> can be:</para>
+			<itemizedlist>
+				<listitem><para>Good,</para></listitem>
+				<listitem><para>Revoked, or</para></listitem>
+				<listitem><para>Expired,</para></listitem>
+			</itemizedlist>
+			<para>depending on the state of the <glossterm linkend="key-subkey">subkey</glossterm>.
+			If the <glossterm linkend="key">key</glossterm> has a <glossterm linkend="secret-key">secret key</glossterm>,
+			then you can:</para>
+			<itemizedlist>
+				<listitem><para><xref linkend="change-subkey-expires"/></para></listitem>
+				<listitem><para><xref linkend="revoke-subkey"/></para></listitem>
+				<listitem><para><xref linkend="delete-subkey"/></para></listitem>
+			</itemizedlist>
+			<sect4 id="change-subkey-expires">
+				<title>Change Subkey Expiration Date</title>
+				<para>As with the <xref linkend="change-expires"/> for the primary key,
+				a <glossterm baseform="subkey" linkend="key-subkey">subkey's</glossterm>
+				<glossterm linkend="key-expires">expiration date</glossterm>
+				can be changed if the <glossterm linkend="key">key</glossterm>
+				has a <glossterm linkend="secret-key">secret key</glossterm>.
+				If <guibutton>Never Expires</guibutton> is checked,
+				then the <glossterm linkend="key-subkey">subkey</glossterm> will never expire.
+				Otherwise, the date shown will be the <glossterm linkend="key-expires">expiration date</glossterm>.</para>
+				<note>Changing the <glossterm linkend="key-expires">expiration date</glossterm>
+				requires a <xref linkend="passphrase"/>.</note>
 			</sect4>
-			<sect4 id="subkey-delete">
-				<title>Deleting a Subkey</title>
-				<para>Write me</para>
+			<sect4 id="revoke-subkey">
+				<title>Revoke Subkey</title>
+				<para>The <guibutton>Revoke</guibutton> button will only
+				be shown if the <glossterm linkend="key"/> has not been
+				<glossterm linkend="op-revoke">revoked</glossterm> and has a
+				<glossterm linkend="secret-key">secret key</glossterm>.
+				Clicking <guibutton>Revoke</guibutton> will show the <xref linkend="revoke"/>
+				Dialog for the <glossterm linkend="key-subkey">subkey</glossterm>.</para>
+				<note>Revoking a <glossterm linkend="key-subkey">subkey</glossterm>
+				requires a <xref linkend="passphrase"/>.</note>
+			</sect4>
+			<sect4 id="delete-subkey">
+				<title>Delete Subkey</title>
+				<para>If the <glossterm linkend="key">key</glossterm>
+				has a <glossterm linkend="secret-key">secret key</glossterm>,
+				then you can <xref linkend="delete"/> a <glossterm linkend="key-subkey">subkey</glossterm>
+				by clicking on the <guibutton>Delete</guibutton> button.</para>
+				<note>Deleting a <glossterm linkend="key-subkey">subkey</glossterm>
+				requires a <xref linkend="passphrase"/>.</note>
 			</sect4>
 		</sect3>
 		<sect3 id="change-passphrase">
 			<title>Change Passphrase</title>
-			<para>If the <glossterm>key</glossterm> has a <glossterm>secret key</glossterm>,
-			you can select <menuchoice><guimenu>Edit</guimenu><guimenuitem>Change Passphrase</guimenuitem></menuchoice>.
-			The first <xref linkend="passphrase"/> entry is for the original <glossterm>passphrase</glossterm>,
-			the second <xref linkend="passphrase"/> entry is for the new <glossterm>passphrase</glossterm>.</para>
+			<para>If the <glossterm linkend="key">key</glossterm> has a
+			<glossterm linkend="secret-key">secret key</glossterm>,
+			you can change the <glossterm baseform="key" linkend="key">key's</glossterm>
+			passphrase by selecting
+			<menuchoice><guimenu>Edit</guimenu><guimenuitem>Change Passphrase</guimenuitem></menuchoice>.
+			The first time the <xref linkend="passphrase"/> Dialog appears is for entering
+			the current passphrase. The second time is for the new passphrase.</para>
 		</sect3>
 		<sect3 id="add-uid">
-			<title>Adding a User ID</title>
-			<para>Write me</para>
+			<title>Add User ID</title>
+			<para>If the <glossterm linkend="key">key</glossterm> has a
+			<glossterm linkend="secret-key">secret key</glossterm>, you can select
+			<menuchoice><guimenu>Edit</guimenu><guimenuitem>Add User ID</guimenuitem></menuchoice>
+			to add a new <glossterm linkend="key-userid">User ID</glossterm>.
+			You must then enter the following:</para>
+			<itemizedlist>
+				<listitem><para>Your full name, which must be at least 5 characters long,</para></listitem>
+				<listitem><para>a valid email address,</para></listitem>
+				<listitem><para>and an optional comment describing the key</para></listitem>
+			</itemizedlist>
+			<note>Adding a <glossterm linkend="key-userid">User ID</glossterm>
+			requires a <xref linkend="passphrase"/>.</note>
 		</sect3>
 		<sect3 id="add-subkey">
-			<title>Adding a Subkey</title>
-			<para>Write me</para>
+			<title>Add Subkey</title>
+			<para>If the <glossterm linkend="key">key</glossterm> has a
+			<glossterm linkend="secret-key">secret key</glossterm>, you can select
+			<menuchoice><guimenu>Edit</guimenu><guimenuitem>Add Subkey</guimenuitem></menuchoice>
+			to add a new <glossterm linkend="key-subkey">subkey</glossterm>.
+			You must then choose from the following
+			<glossterm baseform="type" linkend="key-type">key types</glossterm>:</para>
+			<itemizedlist>
+				<listitem><para><glossterm baseform="DSA" linkend="dsa-key">DSA (sign only)</glossterm></para></listitem>
+				<listitem><para><glossterm baseform="ElGamal" linkend="elgamal-key">ElGamal (encrypt only)</glossterm></para></listitem>
+				<listitem><para><glossterm baseform="RSA" linkend="rsa-key">RSA (sign only)</glossterm></para></listitem>
+				<listitem><para><glossterm baseform="RSA" linkend="rsa-key">RSA (encrypt only)</glossterm></para></listitem>
+			</itemizedlist>
+			<para>The available <glossterm linkend="key-length">length</glossterm> ranges depend on the
+			<glossterm linkend="key-type">type</glossterm> selected.
+			Finally, you must choose an <glossterm linkend="key-expires">expiration date</glossterm>.
+			It can be a specific date in the future, or <guibutton>Never Expires</guibutton>.</para>
+			<note>Adding a <glossterm linkend="key-subkey">subkey</glossterm>
+			requires a <xref linkend="passphrase"/>.</note>
 		</sect3>
-	</sect2>-->
+	</sect2>
 	<sect2 id="delete">
-		<title>Deleting a Key</title>
-		<para>To delete a <glossterm>key</glossterm>, choose
+		<title>Delete</title>
+		<para>To delete a <glossterm linkend="key">key</glossterm>, choose
 		<menuchoice><guimenu>Edit</guimenu><guimenuitem>Delete</guimenuitem></menuchoice>
-		from the <guilabel>Key Manager</guilabel>, or click <guibutton>Delete</guibutton>.
-		You can do the same from the <xref linkend="key-properties"/> window
-		of the <glossterm>key</glossterm> that you want to delete.
-		The <guilabel>Delete Key</guilabel> dialog is displayed.
-		Click <guibutton>Yes</guibutton> to delete the <glossterm>key</glossterm>.</para>
-		<warning>This will permanently delete the <glossterm>key</glossterm> and cannot be undone.</warning>
+		or click <guibutton>Delete</guibutton> from the <guilabel>Key Manager</guilabel>
+		or <xref linkend="key-properties"/> of the <glossterm linkend="key">key</glossterm>
+		you want to delete. The <guilabel>Delete Key</guilabel> dialog is displayed.
+		Click <guibutton>Yes</guibutton> to delete the <glossterm linkend="key">key</glossterm>.</para>
+		<warning>This will permanently delete the selected <glossterm linkend="key">key</glossterm>
+		and cannot be undone.</warning>
+	</sect2>
+	<sect2 id="revoke">
+		<title>Revoke</title>
+		<para>If the <glossterm linkend="key">key</glossterm> has a
+		<glossterm linkend="secret-key">secret key</glossterm>, then it or its
+		<glossterm linkend="key-subkey">subkeys</glossterm> can be
+		<glossterm baseform="revoke" linkend="op-revoke">revoked</glossterm>.
+		<glossterm baseform="revoke" linkend="op-revoke">Revocation</glossterm>
+		requires one of the following reasons:</para>
+		<variablelist>
+			<varlistentry>
+				<term>No Reason</term>
+				<listitem>
+					<para><guilabel>No Reason</guilabel> for
+					<glossterm baseform="revoke" linkend="op-revoke">revoking</glossterm>
+					the <glossterm linkend="key">key</glossterm> or
+					<glossterm linkend="key-subkey">subkey</glossterm></para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Compromised</term>
+				<listitem>
+					<para>The <glossterm linkend="key">key</glossterm> or
+					<glossterm linkend="key-subkey">subkey</glossterm>
+					has been <guilabel>Compromised</guilabel></para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Superseded</term>
+				<listitem>
+					<para>The <glossterm linkend="key">key</glossterm> or
+					<glossterm linkend="key-subkey">subkey</glossterm>
+					has been replaced.</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Not Used</term>
+				<listitem>
+					<para>The <glossterm linkend="key">key</glossterm> or
+					<glossterm linkend="key-subkey">subkey</glossterm>
+					is no longer used.</para>
+				</listitem>
+			</varlistentry>
+		</variablelist>
+		<para>and an optional <guilabel>Description</guilabel> of the
+		<glossterm baseform="revoke" linkend="op-revoke">revocation</glossterm>.</para>
+		<note><glossterm baseform="revoke" linkend="op-revoke">Revocation</glossterm>
+		requires a <xref linkend="passphrase"/>.</note>
 	</sect2>
 	<sect2 id="passphrase">
 		<title>Passphrase</title>
@@ -703,13 +841,22 @@ manual, this is the place to put it. Alternatively, you can put this information
 					If the key does expire, then it is no longer valid and must be replaced.</para>
 				</glossdef>
 			</glossentry>
+			<glossentry id="key-fingerprint">
+				<glossterm>Fingerprint</glossterm>
+				<glossdef>
+					<para>The fingerprint is a unique identifier for a key.
+					It is used to verify the identity of the key.</para>
+					<glossseealso otherterm="key"/>
+				</glossdef>
+			</glossentry>
 			<glossentry id="key">
 				<glossterm>Key</glossterm>
 				<glossdef>
 					<para>A key is an entity that has the following elements:</para>
 					<itemizedlist>
 						<listitem><para><glossseealso otherterm="public-key"/></para></listitem>
-						<listitem><para><glossseealso otherterm="private-key"/></para></listitem>
+						<listitem><para><glossseealso otherterm="secret-key"/></para></listitem>
+						<listitem><para><glossseealso otherterm="key-fingerprint"/></para></listitem>
 						<listitem><para><glossseealso otherterm="key-attributes"/></para></listitem>
 						<listitem><para><glossseealso otherterm="key-userid"/></para></listitem>
 						<listitem><para><glossseealso otherterm="key-subkey"/></para></listitem>
@@ -838,21 +985,6 @@ manual, this is the place to put it. Alternatively, you can put this information
 					<glossseealso otherterm="op-sign"/>
 				</glossdef>
 			</glossentry>
-			<glossentry id="private-key">
-				<glossterm>Private Key</glossterm>
-				<glossdef>
-					<para>The private part of a key must be kept secure.
-					It is usually protected with a passphrase.
-					Depending on its type, the private part of a key can be used to
-					decrypt data that has been encrypted with the public key and/or
-					sign data so that it can be verified with the public key.</para>
-					<glossseealso otherterm="op-decrypt"/>
-					<glossseealso otherterm="op-encrypt"/>
-					<glossseealso otherterm="op-sign"/>
-					<glossseealso otherterm="op-verify"/>
-					<glossseealso otherterm="public-key"/>
-				</glossdef>
-			</glossentry>
 			<glossentry id="rsa-key">
 				<glossterm>RSA key</glossterm>
 				<glossdef>
@@ -860,6 +992,21 @@ manual, this is the place to put it. Alternatively, you can put this information
 					As a primary key, it provides signing capbilities.
 					As a subkey, it can provide signing or encryption capabilities.
 					The length ranges from 1024 to 4096.</para>
+				</glossdef>
+			</glossentry>
+			<glossentry id="secret-key">
+				<glossterm>Secret Key</glossterm>
+				<glossdef>
+					<para>The secret part of a key must be kept secure.
+					It is usually protected with a passphrase.
+					Depending on its type, the secret part of a key can be used to
+					decrypt data that has been encrypted with the public key and/or
+					sign data so that it can be verified with the public key.</para>
+					<glossseealso otherterm="op-decrypt"/>
+					<glossseealso otherterm="op-encrypt"/>
+					<glossseealso otherterm="op-sign"/>
+					<glossseealso otherterm="op-verify"/>
+					<glossseealso otherterm="public-key"/>
 				</glossdef>
 			</glossentry>
 			<glossentry id="key-subkey">
@@ -888,7 +1035,48 @@ manual, this is the place to put it. Alternatively, you can put this information
 			<glossentry id="key-validity">
 				<glossterm>Validity</glossterm>
 				<glossdef>
-					<para>Write me</para>
+					<para>Key validity uses a <emphasis>web of trust</emphasis> model.
+					A key is valid if:</para>
+					<itemizedlist>
+						<listitem><para>you have signed it personally,</para></listitem>
+						<listitem><para>it has been signed by one fully trusted key, or</para></listitem>
+						<listitem><para>it has been signed by three marginally trusted keys</para></listitem>
+					</itemizedlist>
+					<para>and the path of signed keys leading back from the key is five steps or shorter.
+					The following validity levels are possible:</para>
+					<variablelist>
+						<varlistentry>
+							<term>Ultimate</term>
+							<listitem>
+								<para>The key is most likely yours and is fully valid.</para>
+							</listitem>
+						</varlistentry>
+						<varlistentry>
+							<term>Full</term>
+							<listitem>
+								<para>The key is not yours, but either you have signed it,
+								someone you trust has signed it, or enough people you
+								marginally trust have signed it.</para>
+							</listitem>
+						</varlistentry>
+						<varlistentry>
+							<term>Marginal</term>
+							<listitem>
+								<para>The key does not have enough marginally trusted signatures
+								and does not have a high enough trust level.</para>
+							</listitem>
+						</varlistentry>
+						<varlistentry>
+							<term>Unknown</term>
+							<listitem>
+								<para>The key has unknown trust and untrusted signatures.</para>
+							</listitem>
+						</varlistentry>
+					</variablelist>
+					<para>For examples of the <emphasis>web of trust</emphasis> and key validity,
+					see the <ulink url="http://www.gnupg.org/gph" type="http">Gnu Privacy Handbook</ulink>.</para>
+					<glossseealso otherterm="key-signature"/>
+					<glossseealso otherterm="key-owner-trust"/>
 				</glossdef>
 			</glossentry>
 		</glossdiv>

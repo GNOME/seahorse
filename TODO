@@ -1,4 +1,4 @@
-TODO (last updated 2003-02-03)
+TODO (last updated 2003-02-07)
 ==============================
 
 Seahorse TODO list.
@@ -41,14 +41,14 @@ Also check bugzilla for other tasks.
 [A] Make libseahorse; comment with gtk-doc (Resp: Jacob)
 [ ] Nice fingerprint (Resp: Jacob)
 [ ] Encrypt & Sign operation; update as necessary (Resp: Jacob)
-[ ] Update help with new usage & more concepts (Resp: Jacob & Gnome Doc Team)
+[A] Update help with new usage & more concepts (Resp: Jacob & Gnome Doc Team)
 [ ] Icons for text editor popup (Resp: Jacob)
 [A] Don't list disabled or non-capable keys for encryption recipients (Resp: Jacob)
 [X] Key sorting by uid, trust & validity (Resp: Jacob)
-[A] Hide subkeys be default (Resp: Jacob)
+[X] Hide subkeys be default (Resp: Jacob)
 [ ] Icons in list for visual indication of key status (Resp: Jacob)
 [A] Right click key menu (Resp: Jacob)
-[?] If key's owner trust changes, must refresh all signed keys to recalc validity
+[?] If key's owner trust changes, must refresh all signed keys to recalc validity (wait for key signatures)
 
 1.0 (Focus: Gnome integration & usability)
 --------------------------------------------
@@ -82,10 +82,16 @@ Non-tasked issues/todo
 1. Register with gnome-vfs so can do file ops in nautilus, similar to file-roller.
 However, due to the use of seahorse's preferences, a control-center capplet (is this the correct word?)
 should be provided.
-	.*: Import, Encrypt, Sign
+	*: Import, Encrypt, Sign
 	.asc: Decrypt, Verify
 	.gpg: Decrypt
 	.sig: Verify
+	no file: Export
 2. Changing a key's owner trust may affect the validity of any keys it has signed.
 Since keys are cached, the signed key's validity may not be correct until it has been updated.
+The context could do a second pass through the keys so that each key will listen
+to changes to those keys that have signed it.
 3. Register a keys:/// uri, which could allow editing from within nautilus.
+4. Not every operation needs to be run with the main context. For example,
+signing does not necessarily require a complete key listing.
+Perhaps a new context should not automatically list keys, but instead do so on demand.
