@@ -15,6 +15,11 @@
   <property name="default_height">480</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
+  <property name="decorated">True</property>
+  <property name="skip_taskbar_hint">False</property>
+  <property name="skip_pager_hint">False</property>
+  <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
+  <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="enable_layout_config">True</property>
   <signal name="delete_event" handler="quit_event" last_modification_time="Mon, 28 Oct 2002 05:11:14 GMT"/>
 
@@ -578,52 +583,85 @@
 		  <property name="visible">True</property>
 		  <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
 		  <property name="tooltips">True</property>
-
-	      <child>
-		<widget class="button" id="properties_button">
-		  <property name="visible">True</property>
-		  <property name="tooltip" translatable="yes">Show key properties</property>
-		  <property name="label">gtk-properties</property>
-		  <property name="use_stock">True</property>
-		  <signal name="clicked" handler="properties_activate" last_modification_time="Sun, 13 Oct 2002 16:26:28 GMT"/>
-		  <accelerator key="Return" modifiers="0" signal="clicked"/>
-		  <accelerator key="KP_Enter" modifiers="0" signal="clicked"/>
-		</widget>
-	      </child>
-
-	      <child>
-		<widget class="button" id="export_button">
-		  <property name="visible">True</property>
-		  <property name="tooltip" translatable="yes">Export key</property>
-		  <property name="label" translatable="yes">E_xport</property>
-		  <property name="use_underline">True</property>
-		  <property name="stock_pixmap">gtk-save-as</property>
-		  <signal name="clicked" handler="export_activate" last_modification_time="Sun, 13 Oct 2002 16:26:33 GMT"/>
-		</widget>
-	      </child>
-
-	      <child>
-		<widget class="button" id="sign_button">
-		  <property name="visible">True</property>
-		  <property name="tooltip" translatable="yes">Sign key</property>
-		  <property name="label" translatable="yes">_Sign</property>
-		  <property name="use_underline">True</property>
-		  <property name="stock_pixmap">gtk-index</property>
-		  <signal name="clicked" handler="sign_activate" last_modification_time="Wed, 12 Feb 2003 02:26:29 GMT"/>
-		</widget>
-	      </child>
+		  <property name="show_arrow">True</property>
 
 		  <child>
-		    <widget class="button" id="search_button">
+		    <widget class="GtkToolButton" id="properties_button">
+		      <property name="visible">True</property>
+		      <property name="tooltip" translatable="yes">Show key properties</property>
+		      <property name="stock_id">gtk-properties</property>
+		      <property name="visible_horizontal">True</property>
+		      <property name="visible_vertical">True</property>
+		      <property name="is_important">False</property>
+		      <signal name="clicked" handler="properties_activate" last_modification_time="Sun, 13 Oct 2002 16:26:28 GMT"/>
+		      <accelerator key="Return" modifiers="0" signal="clicked"/>
+		      <accelerator key="KP_Enter" modifiers="0" signal="clicked"/>
+		    </widget>
+		    <packing>
+		      <property name="expand">False</property>
+		      <property name="homogeneous">True</property>
+		    </packing>
+		  </child>
+
+		  <child>
+		    <widget class="GtkToolButton" id="export_button">
+		      <property name="visible">True</property>
+		      <property name="tooltip" translatable="yes">Export key</property>
+		      <property name="label" translatable="yes">E_xport</property>
+		      <property name="use_underline">True</property>
+		      <property name="stock_id">gtk-save-as</property>
+		      <property name="visible_horizontal">True</property>
+		      <property name="visible_vertical">True</property>
+		      <property name="is_important">False</property>
+		      <signal name="clicked" handler="export_activate" last_modification_time="Sun, 13 Oct 2002 16:26:33 GMT"/>
+		    </widget>
+		    <packing>
+		      <property name="expand">False</property>
+		      <property name="homogeneous">True</property>
+		    </packing>
+		  </child>
+
+		  <child>
+		    <widget class="GtkToolButton" id="sign_button">
+		      <property name="visible">True</property>
+		      <property name="tooltip" translatable="yes">Sign key</property>
+		      <property name="label" translatable="yes">_Sign</property>
+		      <property name="use_underline">True</property>
+		      <property name="stock_id">gtk-index</property>
+		      <property name="visible_horizontal">True</property>
+		      <property name="visible_vertical">True</property>
+		      <property name="is_important">False</property>
+		      <signal name="clicked" handler="sign_activate" last_modification_time="Wed, 12 Feb 2003 02:26:29 GMT"/>
+		    </widget>
+		    <packing>
+		      <property name="expand">False</property>
+		      <property name="homogeneous">True</property>
+		    </packing>
+		  </child>
+
+		  <child>
+		    <widget class="GtkToolButton" id="search_button">
 		      <property name="visible">True</property>
 		      <property name="tooltip" translatable="yes">Search for keys on a key server</property>
 		      <property name="label" translatable="yes">_Remote Search</property>
 		      <property name="use_underline">True</property>
-			  <property name="stock_pixmap">gtk-find</property>
+		      <property name="stock_id">gtk-find</property>
+		      <property name="visible_horizontal">True</property>
+		      <property name="visible_vertical">True</property>
+		      <property name="is_important">False</property>
 		      <signal name="clicked" handler="search_activate" last_modification_time="Sat, 27 Nov 2004 20:13:12 GMT"/>
 		    </widget>
+		    <packing>
+		      <property name="expand">False</property>
+		      <property name="homogeneous">True</property>
+		    </packing>
 		  </child>
 		</widget>
+		<packing>
+		  <property name="padding">0</property>
+		  <property name="expand">True</property>
+		  <property name="fill">True</property>
+		</packing>
 	      </child>
 
 	      <child>
@@ -663,7 +701,7 @@
 		      <property name="max_length">0</property>
 		      <property name="text" translatable="yes"></property>
 		      <property name="has_frame">True</property>
-		      <property name="invisible_char" translatable="yes">*</property>
+		      <property name="invisible_char">*</property>
 		      <property name="activates_default">False</property>
 		      <signal name="changed" handler="on_filter_changed" last_modification_time="Thu, 07 Oct 2004 02:48:36 GMT"/>
 		    </widget>
