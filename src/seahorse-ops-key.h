@@ -105,7 +105,7 @@ gboolean	seahorse_ops_key_recips_add	(GpgmeRecipients	recips,
 
 gboolean	seahorse_ops_key_set_trust	(SeahorseContext	*sctx,
 						 SeahorseKey		*skey,
-						 GpgmeValidity		trust);
+						 SeahorseValidity	trust);
 
 gboolean	seahorse_ops_key_set_expires	(SeahorseContext	*sctx,
 						 SeahorseKey		*skey,

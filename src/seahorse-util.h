@@ -1,7 +1,7 @@
 /*
  * Seahorse
  *
- * Copyright (C) 2002 Jacob Perkins
+ * Copyright (C) 2003 Jacob Perkins
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,23 +22,17 @@
 #ifndef __SEAHORSE_UTIL_H__
 #define __SEAHORSE_UTIL_H__
 
-/* Miscellaneos utility functions used in multiple widgets or functions */
-
 #include <gtk/gtk.h>
 #include <time.h>
 
-/* Runs an error dialog with the given message */
-void		seahorse_util_show_error		(GtkWindow	*parent,
-							 const gchar 	*message);
+void		seahorse_util_show_error		(GtkWindow		*parent,
+							 const gchar 		*message);
 
-/* Returns the text contained in the text view */
-gchar*		seahorse_util_get_text_view_text	(GtkTextView	*view);
+gchar*		seahorse_util_get_text_view_text	(GtkTextView		*view);
 
-/* Sets the text view's text to the text contained in string */
-void		seahorse_util_set_text_view_string	(GtkTextView	*view,
-							 GString	*string);
+void		seahorse_util_set_text_view_string	(GtkTextView		*view,
+							 GString		*string);
 
-/* Returns a gpgme compatible string representation of the time */
-const gchar*	seahorse_util_get_date_string		(const time_t	time);
+const gchar*	seahorse_util_get_date_string		(const time_t		time);
 
 #endif /* __SEAHORSE_UTIL_H__ */

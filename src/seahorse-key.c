@@ -301,3 +301,28 @@ seahorse_key_can_sign (const SeahorseKey *skey)
 	return (seahorse_key_is_valid (skey) &&
 		gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_CAN_SIGN, NULL, 0));
 }
+
+const SeahorseValidity
+get_validity_attr (const SeahorseKey *skey, GpgmeAttr attr)
+{
+	GpgmeValidity validity;
+	
+	g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), -1);
+	
+	validity = gpgme_key_get_ulong_attr (skey->key, attr, NULL, 0);
+	
+	return (validity <= SEAHORSE_VALIDITY_UNKNOWN) ?
+		SEAHORSE_VALIDITY_UNKNOWN : validity;
+}
+
+const SeahorseValidity
+seahorse_key_get_validity (const SeahorseKey *skey)
+{
+	return get_validity_attr (skey, GPGME_ATTR_VALIDITY);
+}
+
+const SeahorseValidity
+seahorse_key_get_trust (const SeahorseKey *skey)
+{
+	return get_validity_attr (skey, GPGME_ATTR_OTRUST);
+}

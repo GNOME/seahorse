@@ -22,7 +22,6 @@
 #include <gnome.h>
 
 #include "seahorse-key-manager-store.h"
-#include "seahorse-validity.h"
 
 enum {
 	SKEY,
@@ -130,7 +129,7 @@ seahorse_key_manager_store_set (GtkTreeStore *store, GtkTreeIter *iter, Seahorse
 	gint index = 1, max;
 	
 	gtk_tree_store_set (store, iter,
-		TRUST, seahorse_validity_get_trust_from_key (skey),
+		TRUST, seahorse_validity_get_string (seahorse_key_get_trust (skey)),
 		ALGO, gpgme_key_get_string_attr (skey->key, GPGME_ATTR_ALGO, NULL, 0),
 		LENGTH, gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_LEN, NULL, 0), -1);
 	
@@ -189,6 +188,7 @@ SeahorseKeyStore*
 seahorse_key_manager_store_new (SeahorseContext *sctx, GtkTreeView *view)
 {
 	SeahorseKeyStore *skstore;
+	GtkTreeViewColumn *column;
 
 	GType columns[] = {
 	        G_TYPE_POINTER, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INT
@@ -197,7 +197,11 @@ seahorse_key_manager_store_new (SeahorseContext *sctx, GtkTreeView *view)
 	skstore = g_object_new (SEAHORSE_TYPE_KEY_MANAGER_STORE, "ctx", sctx, NULL);
 	seahorse_key_store_init (skstore, view, COLS, columns);
 
-	seahorse_key_store_append_column (view, _("Trust"), TRUST);
+	column = seahorse_key_store_append_column (view, _("Trust"), TRUST);
+	gtk_tree_view_column_set_sort_column_id (column, TRUST);
+	gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (skstore), TRUST,
+		(GtkTreeIterCompareFunc)seahorse_validity_compare, (gpointer)TRUST, NULL);
+	
 	seahorse_key_store_append_column (view, _("Type"), ALGO);
 	seahorse_key_store_append_column (view, _("Length"), LENGTH);
 	

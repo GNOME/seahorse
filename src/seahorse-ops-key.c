@@ -286,14 +286,14 @@ typedef enum
 static GpgmeError
 edit_trust_action (guint state, gpointer data, const gchar **result)
 {
-	const gchar *trust = data;
+	SeahorseValidity trust = (SeahorseValidity)data;
 	
 	switch (state) {
 		case TRUST_COMMAND:
 			*result = "trust";
 			break;
 		case TRUST_VALUE:
-			*result = trust;
+			*result = g_strdup_printf ("%d", trust);
 			break;
 		case TRUST_CONFIRM:
 			*result = YES;
@@ -386,22 +386,17 @@ edit_trust_transit (guint current_state, GpgmeStatusCode status,
  * Returns: %TRUE if successful, %FALSE otherwise
  **/
 gboolean
-seahorse_ops_key_set_trust (SeahorseContext *sctx, SeahorseKey *skey, GpgmeValidity trust)
+seahorse_ops_key_set_trust (SeahorseContext *sctx, SeahorseKey *skey, SeahorseValidity trust)
 {
 	SeahorseEditParm *parms;
-	static gchar *trust_strings[] = {"1", "2", "3", "4", "5"};
-	guint index;
 	
 	g_return_val_if_fail (sctx != NULL && SEAHORSE_IS_CONTEXT (sctx), FALSE);
 	g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), FALSE);
-	
-	index = seahorse_validity_get_index (trust);
 	/* Make sure changing trust */
-	g_return_val_if_fail (index != seahorse_validity_get_index (
-		gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_OTRUST, NULL, 0)), FALSE);
+	g_return_val_if_fail (trust != seahorse_key_get_trust (skey), FALSE);
 	
 	parms = seahorse_edit_parm_new (TRUST_START, edit_trust_action,
-		edit_trust_transit, trust_strings[index]);
+		edit_trust_transit, (gpointer)trust);
 	
 	return edit_key (sctx, skey, parms, _("Change Trust"), SKEY_CHANGE_TRUST);
 }

@@ -1,7 +1,7 @@
 /*
  * Seahorse
  *
- * Copyright (C) 2002 Jacob Perkins
+ * Copyright (C) 2003 Jacob Perkins
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,25 +23,25 @@
 
 #include "seahorse-validity.h"
 
-gchar*
-seahorse_validity_get_string (GpgmeValidity validity)
+const gchar*
+seahorse_validity_get_string (SeahorseValidity validity)
 {
 	gchar *string;
 	
 	switch (validity) {
-		case GPGME_VALIDITY_UNKNOWN:
+		case SEAHORSE_VALIDITY_UNKNOWN:
 			string = _("Unknown");
 			break;
-		case GPGME_VALIDITY_NEVER:
+		case SEAHORSE_VALIDITY_NEVER:
 			string = _("Never");
 			break;
-		case GPGME_VALIDITY_MARGINAL:
+		case SEAHORSE_VALIDITY_MARGINAL:
 			string = _("Marginal");
 			break;
-		case GPGME_VALIDITY_FULL:
+		case SEAHORSE_VALIDITY_FULL:
 			string = _("Full");
 			break;
-		case GPGME_VALIDITY_ULTIMATE:
+		case SEAHORSE_VALIDITY_ULTIMATE:
 			string = _("Ultimate");
 			break;
 		default:
@@ -52,64 +52,41 @@ seahorse_validity_get_string (GpgmeValidity validity)
 	return string;
 }
 
-gchar*
-seahorse_validity_get_validity_from_key (const SeahorseKey *skey)
+static guint
+get_from_string (const gchar *validity)
 {
-	GpgmeValidity validity;
-	
-	validity = gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_VALIDITY, NULL, 0);
-	return seahorse_validity_get_string (validity);
+	if (g_str_equal (validity, "Unknown"))
+		return SEAHORSE_VALIDITY_UNKNOWN;
+	if (g_str_equal (validity, "Never"))
+		return SEAHORSE_VALIDITY_NEVER;
+	if (g_str_equal (validity, "Marginal"))
+		return SEAHORSE_VALIDITY_MARGINAL;
+	if (g_str_equal (validity, "Full"))
+		return SEAHORSE_VALIDITY_FULL;
+	if (g_str_equal (validity, "Ultimate"))
+		return SEAHORSE_VALIDITY_ULTIMATE;
+	return 0;
 }
 
-gchar*
-seahorse_validity_get_trust_from_key (const SeahorseKey *skey)
-{
-	GpgmeValidity trust;
+gint
+seahorse_validity_compare (GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b, guint index)
+{	
+	const gchar *a_string, *b_string;
+	SeahorseValidity a_valid, b_valid;
 	
-	trust = gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_OTRUST, NULL, 0);
-	return seahorse_validity_get_string (trust);
-}
-
-void
-seahorse_validity_load_menu (GtkOptionMenu *option)
-{
-	GtkWidget *menu;
-	GpgmeValidity validity;
-	GtkWidget *item;
-	gchar *val;
+	gtk_tree_model_get (model, a, index, &a_string, -1);
+	gtk_tree_model_get (model, b, index, &b_string, -1);
 	
-	menu = gtk_menu_new ();
-	validity = GPGME_VALIDITY_UNKNOWN;
-	
-	while (validity <= GPGME_VALIDITY_ULTIMATE) {
-		val = seahorse_validity_get_string (validity);
-		if (val != NULL) {
-			item = gtk_menu_item_new_with_label (val);
-			gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-		}
-		
-		validity++;
-	}
-	
-	gtk_widget_show_all (menu);
-	gtk_option_menu_set_menu (option, menu);
-}
-
-guint
-seahorse_validity_get_index (GpgmeValidity validity)
-{
-	//undefined == unknown
-	if (validity <= 1)
+	if (a_string == NULL || b_string == NULL || g_str_equal (a_string, b_string))
 		return 0;
+	
+	a_valid = get_from_string (a_string);
+	b_valid = get_from_string (b_string);
+	
+	if (a_valid > b_valid)
+		return -1;
+	else if (a_valid < b_valid)
+		return 1;
 	else
-		return (validity-1);
-}
-
-GpgmeValidity
-seahorse_validity_get_from_index (guint index)
-{
-	if (index == 0)
-		return GPGME_VALIDITY_UNKNOWN;
-	else
-		return (index+1);
+		return 0;
 }

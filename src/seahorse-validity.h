@@ -1,7 +1,7 @@
 /*
  * Seahorse
  *
- * Copyright (C) 2002 Jacob Perkins
+ * Copyright (C) 2003 Jacob Perkins
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,30 +22,22 @@
 #ifndef __SEAHORSE_VALIDITY_H__
 #define __SEAHORSE_VALIDITY_H__
 
-/* These are common functions for working with a GpgmeValidity.
- * They ignore GPGME_VALIDITY_UNDEFINED */
-
 #include <gtk/gtk.h>
 #include <gpgme.h>
 
-#include "seahorse-key.h"
+typedef enum {
+	SEAHORSE_VALIDITY_UNKNOWN = 1,
+	SEAHORSE_VALIDITY_NEVER = 2,
+	SEAHORSE_VALIDITY_MARGINAL = 3,
+	SEAHORSE_VALIDITY_FULL = 4,
+	SEAHORSE_VALIDITY_ULTIMATE = 5
+} SeahorseValidity;
 
-/* Gets a string representation of the given validity */
-gchar*		seahorse_validity_get_string		(GpgmeValidity		validity);
+const gchar*	seahorse_validity_get_string	(SeahorseValidity	validity);
 
-/* Gets a string of the key's validity */
-gchar*		seahorse_validity_get_validity_from_key	(const SeahorseKey	*skey);
-
-/* Gets a string of the key's owner trust */
-gchar*		seahorse_validity_get_trust_from_key	(const SeahorseKey	*skey);
-
-/* Loads the option menu with menu items representing the available validities */
-void		seahorse_validity_load_menu		(GtkOptionMenu		*option);
-
-/* Gets the index of validity, ignoring UNDEFINED */
-guint		seahorse_validity_get_index		(GpgmeValidity		validity);
-
-/* Gets the validity given an index */
-GpgmeValidity	seahorse_validity_get_from_index	(guint			index);
+gint		seahorse_validity_compare	(GtkTreeModel		*model,
+						 GtkTreeIter		*a,
+						 GtkTreeIter		*b,
+						 guint			index);
 
 #endif /* __SEAHORSE_VALIDITY_H__ */

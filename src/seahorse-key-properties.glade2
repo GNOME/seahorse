@@ -435,8 +435,58 @@
 		  <property name="visible">True</property>
 		  <property name="tooltip" translatable="yes">Owner Trust</property>
 		  <property name="can_focus">True</property>
-		  <property name="history">-1</property>
+		  <property name="history">0</property>
 		  <signal name="changed" handler="trust_changed" last_modification_time="Sat, 14 Dec 2002 02:55:31 GMT"/>
+
+		  <child>
+		    <widget class="GtkMenu" id="menu1">
+
+		      <child>
+			<widget class="GtkMenuItem" id="unknown">
+			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Unknown owner</property>
+			  <property name="label" translatable="yes">Unknown</property>
+			  <property name="use_underline">True</property>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkMenuItem" id="never">
+			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Never trust owner</property>
+			  <property name="label" translatable="yes">Never</property>
+			  <property name="use_underline">True</property>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkMenuItem" id="marginal">
+			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Marginally trust owner</property>
+			  <property name="label" translatable="yes">Marginal</property>
+			  <property name="use_underline">True</property>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkMenuItem" id="full">
+			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Fully trust owner</property>
+			  <property name="label" translatable="yes">Full</property>
+			  <property name="use_underline">True</property>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkMenuItem" id="ultimate">
+			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Ultimately trust owner</property>
+			  <property name="label" translatable="yes">Ultimate</property>
+			  <property name="use_underline">True</property>
+			</widget>
+		      </child>
+		    </widget>
+		  </child>
 		</widget>
 		<packing>
 		  <property name="left_attach">1</property>

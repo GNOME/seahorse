@@ -60,7 +60,7 @@ static void
 trust_changed (GtkOptionMenu *optionmenu, SeahorseWidget *swidget)
 {
 	seahorse_ops_key_set_trust (swidget->sctx, SEAHORSE_KEY_WIDGET (swidget)->skey,
-		seahorse_validity_get_from_index (gtk_option_menu_get_history (optionmenu)));
+		gtk_option_menu_get_history (optionmenu) + 1);
 }
 
 /* Primary key's never expires toggled */
@@ -449,9 +449,7 @@ seahorse_key_properties_new (SeahorseContext *sctx, SeahorseKey *skey)
 		gpgme_key_get_string_attr (skey->key, GPGME_ATTR_FPR, NULL, 0));
 		
 	option = GTK_OPTION_MENU (glade_xml_get_widget (swidget->xml, TRUST));
-	seahorse_validity_load_menu (option);
-	gtk_option_menu_set_history (option, seahorse_validity_get_index (
-		gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_OTRUST, NULL, 0)));
+	gtk_option_menu_set_history (option, seahorse_key_get_trust (skey)-1);
 		
 	widget = glade_xml_get_widget (swidget->xml, DISABLED);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget),

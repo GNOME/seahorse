@@ -25,6 +25,8 @@
 #include <gtk/gtk.h>
 #include <gpgme.h>
 
+#include "seahorse-validity.h"
+
 #define SEAHORSE_TYPE_KEY		(seahorse_key_get_type ())
 #define SEAHORSE_KEY(obj)		(GTK_CHECK_CAST ((obj), SEAHORSE_TYPE_KEY, SeahorseKey))
 #define SEAHORSE_KEY_CLASS(klass)	(GTK_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_KEY, SeahorseKeyClass))
@@ -67,31 +69,35 @@ struct _SeahorseKeyClass
 	/*< public >*/
 	
 	/* Signal emitted when one of the key's attributes has changed */
-	void 			(* changed)	(SeahorseKey		*skey,
-						 SeahorseKeyChange	change);
+	void 			(* changed)		(SeahorseKey		*skey,
+							 SeahorseKeyChange	change);
 };
 
-SeahorseKey*	seahorse_key_new		(GpgmeKey		key);
+SeahorseKey*		seahorse_key_new		(GpgmeKey		key);
 
-void		seahorse_key_destroy		(SeahorseKey		*skey);
+void			seahorse_key_destroy		(SeahorseKey		*skey);
 
-void		seahorse_key_changed		(SeahorseKey		*skey,
-						 SeahorseKeyChange	change);
+void			seahorse_key_changed		(SeahorseKey		*skey,
+							 SeahorseKeyChange	change);
 
-const gint	seahorse_key_get_num_uids	(const SeahorseKey	*skey);
+const gint		seahorse_key_get_num_uids	(const SeahorseKey	*skey);
 
-const gint	seahorse_key_get_num_subkeys	(const SeahorseKey	*skey);
+const gint		seahorse_key_get_num_subkeys	(const SeahorseKey	*skey);
 
-const gchar*	seahorse_key_get_keyid		(const SeahorseKey	*skey,
-						 const guint		index);
+const gchar*		seahorse_key_get_keyid		(const SeahorseKey	*skey,
+							 const guint		index);
 
-const gchar*	seahorse_key_get_userid		(const SeahorseKey	*skey,
-						 const guint		index);
+const gchar*		seahorse_key_get_userid		(const SeahorseKey	*skey,
+							 const guint		index);
 
-gboolean	seahorse_key_is_valid		(const SeahorseKey	*skey);
+gboolean		seahorse_key_is_valid		(const SeahorseKey	*skey);
 
-gboolean	seahorse_key_can_encrypt	(const SeahorseKey	*skey);
+gboolean		seahorse_key_can_encrypt	(const SeahorseKey	*skey);
 
-gboolean	seahorse_key_can_sign		(const SeahorseKey	*skey);
+gboolean		seahorse_key_can_sign		(const SeahorseKey	*skey);
+
+const SeahorseValidity	seahorse_key_get_validity	(const SeahorseKey	*skey);
+
+const SeahorseValidity	seahorse_key_get_trust		(const SeahorseKey	*skey);
 
 #endif /* __SEAHORSE_KEY_H__ */
