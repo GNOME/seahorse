@@ -26,31 +26,35 @@
 
 #include "seahorse-context.h"
 
-void	seahorse_key_properties_new	(SeahorseContext	*sctx,
-					 SeahorseKey		*skey);
+void		seahorse_key_properties_new	(SeahorseContext	*sctx,
+						 SeahorseKey		*skey);
 
-void	seahorse_add_revoker_new	(SeahorseContext	*sctx,
-					 SeahorseKey		*skey);
+void		seahorse_add_revoker_new	(SeahorseContext	*sctx,
+						 SeahorseKey		*skey);
 
-void	seahorse_add_subkey_new		(SeahorseContext	*sctx,
-					 SeahorseKey		*skey);
+void		seahorse_add_subkey_new		(SeahorseContext	*sctx,
+						 SeahorseKey		*skey);
 
-void	seahorse_add_uid_new		(SeahorseContext	*sctx,
-					 SeahorseKey		*skey);
+void		seahorse_add_uid_new		(SeahorseContext	*sctx,
+						 SeahorseKey		*skey);
 
-void	seahorse_delete_new		(SeahorseContext	*sctx,
-					 SeahorseKey		*skey,
-					 const guint		index);
+void		seahorse_delete_new		(SeahorseContext	*sctx,
+						 SeahorseKey		*skey,
+						 const guint		index);
 
-void	seahorse_export_new		(SeahorseContext	*sctx,
-					 SeahorseKey		*skey);
+void		seahorse_export_new		(SeahorseContext	*sctx,
+						 SeahorseKey		*skey);
 
-void	seahorse_revoke_new		(SeahorseContext	*sctx,
-					 SeahorseKey		*skey,
-					 const guint		index);
+void		seahorse_revoke_new		(SeahorseContext	*sctx,
+						 SeahorseKey		*skey,
+						 const guint		index);
 
-void	seahorse_sign_new		(SeahorseContext	*sctx,
-					 SeahorseKey		*skey,
-					 const guint		index);
+void		seahorse_sign_new		(SeahorseContext	*sctx,
+						 SeahorseKey		*skey,
+						 const guint		index);
+
+const gchar*	seahorse_passphrase_get		(SeahorseContext	*sctx,
+						 const gchar		*desc,
+						 gpointer		*data);
 
 #endif /* __SEAHORSE_KEY_DIALOGS__ */

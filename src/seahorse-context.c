@@ -25,6 +25,7 @@
 #include "seahorse-context.h"
 #include "seahorse-marshal.h"
 #include "seahorse-preferences.h"
+#include "seahorse-key-dialogs.h"
 
 struct _SeahorseContextPrivate
 {
@@ -128,6 +129,7 @@ seahorse_context_init (SeahorseContext *sctx)
 	gpgme_set_armor (sctx->ctx, eel_gconf_get_boolean (ASCII_ARMOR));
 	gpgme_set_textmode (sctx->ctx, eel_gconf_get_boolean (TEXT_MODE));
 	/* do callbacks */
+	gpgme_set_passphrase_cb (sctx->ctx, (GpgmePassphraseCb)seahorse_passphrase_get, sctx);
 	gpgme_set_progress_cb (sctx->ctx, gpgme_progress, sctx);
 	eel_gconf_notification_add (PREFERENCES, (GConfClientNotifyFunc)gconf_notification, sctx);
 	eel_gconf_monitor_add (PREFERENCES);

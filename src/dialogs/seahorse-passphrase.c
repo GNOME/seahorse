@@ -22,64 +22,73 @@
 #include <gnome.h>
 #include <glade/glade-xml.h>
 
-#include "seahorse-passphrase.h"
-#include "seahorse-key-widget.h"
+#include "seahorse-key-dialogs.h"
+#include "seahorse-widget.h"
 #include "seahorse-ops-key.h"
 
 #define SPACING 12
 
-/* parts borrowed from gpa's passphrase_cb */
-const gchar*
-seahorse_passphrase_get (gpointer ctx, const gchar *desc, gpointer *r_hd)
+static void
+pass_changed (GtkEditable *editable, SeahorseWidget *swidget)
 {
-	GtkWidget *dialog, *vbox, *description, *entry;
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "ok"),
+		strlen (gtk_editable_get_chars (editable, 0, -1)) > 0);
+}
+
+const gchar*
+seahorse_passphrase_get (SeahorseContext *sctx, const gchar *desc, gpointer *data)
+{
+	SeahorseWidget *swidget;
 	gint response;
-	gchar *pass;
+	gchar *pass, **split_line, **split_uid, *label;
 	
-	/* If need pass */
 	if (desc) {
-		dialog = gtk_dialog_new_with_buttons (_("Enter Passphrase"), NULL, GTK_DIALOG_MODAL,
-			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_OK, GTK_RESPONSE_OK, NULL);
-		gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-			
-		vbox = gtk_vbox_new (FALSE, 12);
-		gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox), vbox);
-		gtk_container_set_border_width (GTK_CONTAINER (vbox), SPACING);
-			
-		description = gtk_label_new (desc);
-		gtk_container_add (GTK_CONTAINER (vbox), description);
+		swidget = seahorse_widget_new ("passphrase", sctx);
 		
-		/* Add pass entry */
-		entry = gtk_entry_new ();
-		gtk_entry_set_visibility (GTK_ENTRY (entry), FALSE);
-		gtk_widget_grab_focus (entry);
-		gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
-		gtk_container_add (GTK_CONTAINER (vbox), entry);
-		
-		gtk_widget_show_all (dialog);
-		
-		response = gtk_dialog_run (GTK_DIALOG (dialog));
-		pass = g_strdup (gtk_entry_get_text (GTK_ENTRY (entry)));
-		gtk_widget_destroy (dialog);
-		
-		/* If entered pass */
-		if (response == GTK_RESPONSE_OK) {
-			*r_hd = pass;
-			return pass;
+		if (swidget == NULL) {
+			gpgme_cancel (sctx->ctx);
+			return NULL;
 		}
-		/* Else cancel op */
+		
+		glade_xml_signal_connect_data (swidget->xml, "pass_changed",
+			G_CALLBACK (pass_changed), swidget);
+		
+		split_line = g_strsplit (desc, "\n", 3);
+		split_uid = g_strsplit (split_line[1], " ", 2);
+		if (g_str_equal (split_line[0], "ENTER"))
+			label = g_strdup_printf (_("Enter passphrase for %s"), split_uid[1]);
 		else {
-			gpgme_cancel (ctx);
+			gtk_image_set_from_stock (GTK_IMAGE (glade_xml_get_widget (
+				swidget->xml, "image")), GTK_STOCK_DIALOG_ERROR, GTK_ICON_SIZE_DIALOG);
+			label = g_strdup_printf (_("Bad passphrase! Try again for %s"), split_uid[1]);
+		}
+		
+		gtk_label_set_text (GTK_LABEL (glade_xml_get_widget (swidget->xml,
+			"description")), label);
+		
+		response = gtk_dialog_run (GTK_DIALOG (glade_xml_get_widget (
+			swidget->xml, swidget->name)));
+		pass = g_strdup (gtk_entry_get_text (GTK_ENTRY (
+			glade_xml_get_widget (swidget->xml, "pass"))));
+
+		seahorse_widget_destroy (swidget);
+		g_free (label);
+		g_free (split_uid);
+		g_free (split_line);
+		
+		if (response != GTK_RESPONSE_OK) {
+			gpgme_cancel (sctx->ctx);
 			g_free (pass);
 			return "";
 		}
+		
+		*data = pass;
+		return pass;
 	}
-	else if (*r_hd) {
-		pass = *r_hd;
-		g_free (pass);
-		*r_hd = NULL;
-		return NULL;
+	else if (*data) {
+		g_free (*data);
+		*data = NULL;
 	}
-	else
-		return NULL;
+	
+	return NULL;
 }

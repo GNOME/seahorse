@@ -42,7 +42,6 @@ main (int argc, char **argv)
 		argc, argv, GNOME_PARAM_APP_DATADIR, DATA_DIR, NULL);
 	
 	sctx = seahorse_context_new ();
-	gpgme_set_passphrase_cb (sctx->ctx, seahorse_passphrase_get, sctx->ctx);
 	seahorse_key_manager_show (sctx);
 	gtk_main ();
 	
