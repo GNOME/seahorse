@@ -26,8 +26,20 @@
 #include "seahorse-preferences.h"
 #include "seahorse-validity.h"
 #include "seahorse-util.h"
+#include "seahorse-op.h"
+#include "eggtreemultidnd.h"
 
 #define KEY_MANAGER_SORT_KEY "/apps/seahorse/listing/sort_by"
+
+/* Drag and drop targent entries */
+const GtkTargetEntry seahorse_target_entries[] = {
+    { "text/uri-list", 0, TEXT_URIS },
+    { "text/plain", 0, TEXT_PLAIN },
+    { "STRING", 0, TEXT_PLAIN }
+};
+
+guint seahorse_n_targets = 
+    sizeof (seahorse_target_entries) / sizeof (seahorse_target_entries[0]);
 
 enum {
     KEY_STORE_BASE_COLUMNS,
@@ -263,6 +275,110 @@ gconf_notification (GConfClient *gclient, guint id, GConfEntry *entry, GtkTreeVi
 	gtk_tree_view_column_set_visible (col, gconf_value_get_bool (value));
 }
 
+static void  
+drag_begin (GtkWidget *widget, GdkDragContext *context, gpointer data)
+{
+   	GList *keys = NULL;
+    GtkTreeView *view = GTK_TREE_VIEW (data);
+
+	g_printerr ("::DragBegin -->\n");
+  	keys = seahorse_key_store_get_selected_keys (view);
+    g_object_set_data (G_OBJECT (widget), "drag-keys", keys);    
+	g_printerr ("::DragBegin <--\n");
+}
+
+static void
+cleanup_file (GtkWidget *widget, gchar *file)
+{
+    g_return_if_fail (file != NULL);
+    g_printerr ("deleting temp file: %s\n", file);
+    unlink (file);
+    g_free (file);
+}
+
+static void  
+drag_end (GtkWidget *widget, GdkDragContext *context, gpointer data)
+{
+    GList *keys = NULL;
+    gchar *t;
+    
+	g_printerr ("::DragEnd -->\n");
+    keys = g_object_get_data (G_OBJECT (widget), "drag-keys");
+    g_object_set_data (G_OBJECT (widget), "drag-keys", NULL);
+    g_list_free (keys);
+    
+    t = (gchar*)g_object_get_data (G_OBJECT (widget), "drag-file");
+    g_object_set_data (G_OBJECT (widget), "drag-file", NULL);
+    if (t != NULL) /* Delete the files later */
+        g_signal_connect (widget, "destroy", 
+                    G_CALLBACK (cleanup_file), t);
+    g_free (t);
+
+    t = (gchar*)g_object_get_data (G_OBJECT (widget), "drag-data");
+    g_object_set_data (G_OBJECT (widget), "drag-data", NULL);
+    g_free (t);
+    
+    g_printerr ("::DragEnd <--\n");
+}
+
+static void  
+drag_data_get (GtkWidget *widget, GdkDragContext *context, 
+               GtkSelectionData *selection_data, guint info, 
+               guint time, gpointer data)
+{
+    gchar *t, *n;
+   	GList *keys = NULL;
+    GError *err = NULL;
+	g_printerr ("::DragDataGet %d -->\n", info); 
+
+    keys = (GList*)g_object_get_data (G_OBJECT (widget), "drag-keys");
+    if (keys == NULL)
+        return;
+
+    if (info == TEXT_PLAIN) {
+        t = (gchar*)g_object_get_data (G_OBJECT (widget), "drag-text");
+        
+        if (t == NULL) {
+            t = seahorse_op_export_text (keys, FALSE, &err);
+            if (t == NULL)
+                seahorse_util_handle_error (err, _("Couldn't export key(s)"));
+            g_object_set_data (G_OBJECT (widget), "drag-text", t);
+        }
+
+    } else {
+        t = (gchar*)g_object_get_data (G_OBJECT (widget), "drag-file");
+        
+        if (t == NULL) {
+            n = seahorse_util_filename_for_keys (keys);
+            g_return_if_fail (n != NULL);
+            t = g_build_filename(g_get_tmp_dir (), n, NULL);
+            g_free (n);
+        
+            seahorse_op_export_file (keys, FALSE, t, &err);         
+
+            if (err != NULL) {
+                seahorse_util_handle_error (err, _("Couldn't export key to \"%s\""),
+                                seahorse_util_uri_get_last (t));
+                g_free (t);
+                t = NULL;
+            }
+            
+            g_object_set_data (G_OBJECT (widget), "drag-file", t);
+        }
+    }
+    
+    if (t != NULL) {            
+        g_printerr ("%s\n", t);
+    	gtk_selection_data_set (selection_data, 
+	    			selection_data->target, 8, t, 
+				    strlen (t));
+    }
+    
+#ifdef DEBUG
+	g_printerr ("::DragDataGet <--\n");
+#endif
+}
+
 /**
  * seahorse_key_manager_store_new:
  * @sctx: Current #SeahorseContext
@@ -303,6 +419,20 @@ seahorse_key_manager_store_new (SeahorseKeySource *sksrc, GtkTreeView *view)
 	gtk_tree_view_column_set_sort_column_id (col, TYPE);
 	
 	eel_gconf_notification_add (LISTING_SCHEMAS, (GConfClientNotifyFunc)gconf_notification, view);
-	
+
+    /* Tree drag */
+	egg_tree_multi_drag_add_drag_support (view);    
+    
+    g_signal_connect (G_OBJECT (view), "drag_data_get",
+			    G_CALLBACK (drag_data_get), view);
+	g_signal_connect (G_OBJECT (view), "drag_begin", 
+                G_CALLBACK (drag_begin), view);
+	g_signal_connect (G_OBJECT (view), "drag_end", 
+                G_CALLBACK (drag_end), view);
+
+    gtk_drag_source_set (GTK_WIDGET (view), 
+                GDK_BUTTON1_MASK | GDK_BUTTON2_MASK,
+			    seahorse_target_entries, seahorse_n_targets, GDK_ACTION_MOVE);
+
 	return skstore;
 }

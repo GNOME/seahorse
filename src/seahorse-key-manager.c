@@ -45,18 +45,6 @@
 #define SEC_RING "/secring.gpg"
 #define PUB_RING "/pubring.gpg"
 
-/* Drag and trop target types */
-enum TargetTypes {
-    TEXT_PLAIN,
-    TEXT_URIS
-};
-
-/* Drag and drop targent entries */
-static const GtkTargetEntry target_entries[] = {
-   { "text/uri-list", 0, TEXT_URIS },
-   { "text/plain", 0, TEXT_PLAIN }
-};
-
 /* Quits seahorse */
 static void
 quit (GtkWidget *widget, SeahorseWidget *swidget)
@@ -628,7 +616,7 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 		"context_menu", NULL);
 	set_key_options_sensitive (swidget, FALSE, FALSE, NULL);
 	
-	//features not available
+	/* features not available */
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "add_photo"), FALSE);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "key_add_photo"), FALSE);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "gen_revoke"), FALSE);
@@ -670,6 +658,7 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 		G_CALLBACK (key_list_button_pressed), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "key_list_popup_menu",
 		G_CALLBACK (key_list_popup_menu), swidget);
+        
 	/* selected key signals */
 	glade_xml_signal_connect_data (swidget->xml, "properties_activate",
 		G_CALLBACK (properties_activate), swidget);
@@ -681,6 +670,7 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 		G_CALLBACK (delete_activate), swidget);
     glade_xml_signal_connect_data (swidget->xml, "copy_activate",
         G_CALLBACK (copy_activate), swidget);      
+        
 	/* selected key with secret signals */
 	glade_xml_signal_connect_data (swidget->xml, "change_passphrase_activate",
 		G_CALLBACK (change_passphrase_activate), swidget);
@@ -716,16 +706,16 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 		G_CALLBACK (selection_changed), swidget);
     skstore = seahorse_key_manager_store_new (sksrc, view);
 	selection_changed (selection, swidget);
-   
+
     /* Setup drops */
-    gtk_drag_dest_set (GTK_WIDGET (win), GTK_DEST_DEFAULT_ALL, target_entries, 
-            sizeof (target_entries) / sizeof (target_entries[0]), GDK_ACTION_COPY);
+    gtk_drag_dest_set (GTK_WIDGET (win), GTK_DEST_DEFAULT_ALL, 
+                seahorse_target_entries, seahorse_n_targets, GDK_ACTION_COPY);
     gtk_signal_connect (GTK_OBJECT (win), "drag_data_received",
-            GTK_SIGNAL_FUNC (target_drag_data_received), sctx);
+                GTK_SIGNAL_FUNC (target_drag_data_received), sctx);
                         
     /* For the filtering */
     glade_xml_signal_connect_data(swidget->xml, "on_filter_changed",
-                              G_CALLBACK(filter_changed), skstore);
+                G_CALLBACK(filter_changed), skstore);
 
     /* Hook progress bar in */
     operation = seahorse_key_source_get_operation (sksrc);
@@ -733,7 +723,7 @@ seahorse_key_manager_show (SeahorseContext *sctx)
     
     w = glade_xml_get_widget (swidget->xml, "status");
     seahorse_progress_appbar_add_operation (w, operation);
-    
+
     /* Although not all the keys have completed we'll know whether we have 
      * any or not at this point */
 	if (seahorse_key_source_get_count (sksrc, FALSE) == 0) {

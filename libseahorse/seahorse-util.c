@@ -396,22 +396,31 @@ seahorse_util_detect_text (const gchar *text, gint len, const gchar **start,
 }
 
 gchar*      
-seahorse_util_filename_for_key (SeahorseKey *skey)
+seahorse_util_filename_for_keys (GList *keys)
 {
-    gchar *t;
-    g_return_val_if_fail (SEAHORSE_IS_KEY (skey), NULL);
+    SeahorseKey *skey;
+    gchar *t, *r;
     
-    t = seahorse_key_get_userid_name (skey, 0);
-    if (t == NULL) {
-        t = g_strdup (seahorse_key_get_id (skey->key));
-        if (strlen (t) > 8)
+    g_return_val_if_fail (g_list_length (keys) > 0, NULL);
+
+    if (g_list_length (keys) == 1) {
+        g_return_val_if_fail (SEAHORSE_IS_KEY (keys->data), NULL);
+        skey = SEAHORSE_KEY (keys->data);
+        t = seahorse_key_get_userid_name (skey, 0);
+        if (t == NULL) {
+            t = g_strdup (seahorse_key_get_id (skey));
+            if (strlen (t) > 8)
                 t[8] = 0;
+        }
+    } else {
+        t = g_strdup (_("Multiple Keys"));
     }
     
     g_strdelimit (t, bad_filename_chars, "_");
-    return g_strconcat (t, SEAHORSE_EXT_ASC, NULL);
+    r = g_strconcat (t, SEAHORSE_EXT_ASC, NULL);
+    g_free (t);
+    return r;
 }
-
 
 /** 
  * seahorse_util_uri_get_last:
@@ -816,19 +825,11 @@ seahorse_util_chooser_set_filename (GtkWidget *dialog, GList *keys)
 {
     gchar *t = NULL;
     
-    switch (g_list_length (keys)) {
-    case 0:
-        break;
-    case 1:
-        t = seahorse_util_filename_for_key (SEAHORSE_KEY (keys->data));
-        break;
-    default:
-        t = g_strdup (_("Multiple Keys"));
-        break;    
-    }
-    
-    if (t != NULL)
+    if (g_list_length (keys) > 0) {
+        t = seahorse_util_filename_for_keys (keys);
         gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), t);
+        g_free (t);
+    }
 }
     
 gchar*      

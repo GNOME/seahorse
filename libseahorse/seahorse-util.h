@@ -78,7 +78,7 @@ SeahorseTextType  seahorse_util_detect_text (const gchar *text,
                                              const gchar **start, 
                                              const gchar **end);
                              
-gchar*      seahorse_util_filename_for_key  (SeahorseKey *skey);
+gchar*      seahorse_util_filename_for_keys (GList *keys);
                                              
 gboolean    seahorse_util_uri_exists        (const gchar* uri);
 

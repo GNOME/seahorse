@@ -25,7 +25,7 @@ seahorse_SOURCES = main.c \
 	seahorse-key-manager-store.c seahorse-key-manager-store.h \
 	seahorse-key-op.c seahorse-key-op.h \
 	seahorse-preferences.c seahorse-preferences.h \
-	seahorse-key-manager.c \
+	seahorse-key-manager.c eggtreemultidnd.c eggtreemultidnd.h \
 	seahorse-generate-select.c \
 	seahorse-generate-druid.c seahorse-generate-druid.h \
 	seahorse-generate-adv.c seahorse-generate-adv.h \
