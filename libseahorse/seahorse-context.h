@@ -34,6 +34,8 @@
 #define TEXTMODE_KEY PGP_SCHEMAS "/text_mode"
 #define DEFAULT_KEY PGP_SCHEMAS "/default_key"
 #define ENCRYPTSELF_KEY PGP_SCHEMAS "/encrypt_to_self"
+#define MULTI_EXTENSION_KEY PGP_SCHEMAS "/package_extension"
+#define MULTI_SEPERATE_KEY PGP_SCHEMAS "/multi_seperate"
 
 #define SEAHORSE_TYPE_CONTEXT			(seahorse_context_get_type ())
 #define SEAHORSE_CONTEXT(obj)			(GTK_CHECK_CAST ((obj), SEAHORSE_TYPE_CONTEXT, SeahorseContext))

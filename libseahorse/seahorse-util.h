@@ -88,7 +88,9 @@ const gchar* seahorse_util_uri_split_last   (gchar* uri);
 gchar**     seahorse_util_uris_expand       (const gchar **uris);
 
 gboolean    seahorse_util_uris_package      (const gchar* package, 
-                                             const char** uris);
+                                             const gchar** uris);
+
+gchar*      seahorse_util_uri_choose_save   (GtkFileChooserDialog *chooser);
 
 gboolean	seahorse_util_check_suffix		(const gchar		*path,
 							 SeahorseSuffix		suffix);

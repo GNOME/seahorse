@@ -709,6 +709,45 @@ seahorse_util_uris_package (const gchar* package, const char** uris)
     return TRUE;        
 }
 
+gchar*      
+seahorse_util_uri_choose_save (GtkFileChooserDialog *chooser)
+{
+    GtkWidget* edlg;
+    gchar *uri = NULL;
+    
+    while (gtk_dialog_run (GTK_DIALOG (chooser)) == GTK_RESPONSE_ACCEPT) {
+     
+        uri = gtk_file_chooser_get_uri(GTK_FILE_CHOOSER (chooser));
+
+        if (uri == NULL)
+            continue;
+            
+        if (seahorse_util_uri_exists (uri)) {
+
+            edlg = gtk_message_dialog_new_with_markup (GTK_WINDOW (chooser),
+                        GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_QUESTION,
+                        GTK_BUTTONS_NONE, _("<b>A file already exists with this name.</b>\n\nDo you want to replace it with the one you are saving?"));
+            gtk_dialog_add_buttons (GTK_DIALOG (edlg), 
+                        GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                        _("_Replace"), GTK_RESPONSE_ACCEPT, NULL);
+
+            gtk_dialog_set_default_response (GTK_DIALOG (edlg), GTK_RESPONSE_CANCEL);
+                  
+            if (gtk_dialog_run (GTK_DIALOG (edlg)) != GTK_RESPONSE_ACCEPT) {
+                g_free (uri);
+                uri = NULL;
+            }
+                
+            gtk_widget_destroy (edlg);
+        } 
+             
+        if (uri != NULL)
+            break;
+    }
+  
+    return uri;
+}
+
 
 /**
  * seahorse_util_check_suffix:

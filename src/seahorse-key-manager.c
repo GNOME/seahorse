@@ -35,8 +35,12 @@
 #include "seahorse-key-op.h"
 #include "seahorse-key-widget.h"
 #include "seahorse-op.h"
+#include "seahorse-gpg-options.h"
 
 #define KEY_LIST "key_list"
+
+#define SEC_RING "/secring.gpg"
+#define PUB_RING "/pubring.gpg"
 
 static guint signal_id = 0;
 static gulong hook_id = 0;
@@ -91,6 +95,47 @@ setup_file_types (GtkFileChooser* dialog)
     gtk_file_filter_add_pattern (filter, "*.asc");    
     gtk_file_filter_add_pattern (filter, "*.key");    
     gtk_file_filter_add_pattern (filter, "*.pkr");    
+    gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);    
+    gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dialog), filter);
+
+    filter = gtk_file_filter_new ();
+    gtk_file_filter_set_name (filter, _("All files"));
+    gtk_file_filter_add_pattern (filter, "*");    
+    gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);    
+}
+
+/* Setup our file types on a file chooser dialog */
+static void
+setup_backup_file_types (GtkFileChooser* dialog)
+{
+    GtkFileFilter* filter;
+    int i;
+    
+    static const char *archive_mime_type[] = {
+        "application/x-ar",
+        "application/x-arj",
+        "application/x-bzip",
+        "application/x-bzip-compressed-tar",
+        "application/x-cd-image",
+        "application/x-compress",
+        "application/x-compressed-tar",
+        "application/x-gzip",
+        "application/x-java-archive",
+        "application/x-jar",
+        "application/x-lha",
+        "application/x-lzop",
+        "application/x-rar",
+        "application/x-rar-compressed",
+        "application/x-tar",
+        "application/x-zoo",
+        "application/zip",
+        "application/x-7zip"
+    };
+    
+    filter = gtk_file_filter_new ();
+    gtk_file_filter_set_name (filter, _("Archive files"));
+    for (i = 0; i < G_N_ELEMENTS (archive_mime_type); i++)
+        gtk_file_filter_add_mime_type (filter, archive_mime_type[i]);
     gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);    
     gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dialog), filter);
 
@@ -218,7 +263,7 @@ static void
 export_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
     GtkWidget *dialog;
-    char* uri = NULL;
+    gchar* uri = NULL;
     gpgme_error_t err;
     GList *keys;
     
@@ -232,38 +277,7 @@ export_activate (GtkWidget *widget, SeahorseWidget *swidget)
     setup_file_types (GTK_FILE_CHOOSER(dialog));
     gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (dialog), FALSE);
      
-    while(gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT) {
-        GnomeVFSURI *u = gnome_vfs_uri_new (gtk_file_chooser_get_uri(GTK_FILE_CHOOSER(dialog)));
-        if (u != NULL) {
-            if (gnome_vfs_uri_exists(u)) {
-                GtkWidget* edlg;
-                edlg = gtk_message_dialog_new_with_markup (GTK_WINDOW (dialog),
-                    GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_QUESTION,
-                    GTK_BUTTONS_NONE, _("<b>A file already exists with this name.</b>\n\nDo you want to replace it with the one you are saving?"));
-                gtk_dialog_add_buttons (GTK_DIALOG (edlg), 
-                       GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                       _("Replace"), GTK_RESPONSE_ACCEPT, NULL);
-
-                gtk_dialog_set_default_response (GTK_DIALOG (edlg), GTK_RESPONSE_CANCEL);                    
-                
-                if (gtk_dialog_run (GTK_DIALOG (edlg)) == GTK_RESPONSE_ACCEPT)
-                    uri = gtk_file_chooser_get_uri (GTK_FILE_CHOOSER (dialog));
-
-                gtk_widget_destroy (edlg);
-
-            /* File doesn't exist */
-            } else {
-                uri = gtk_file_chooser_get_uri (GTK_FILE_CHOOSER (dialog));
-            }
-            
-            gnome_vfs_uri_unref (u);
-
-        }
-
-        if (uri != NULL)
-            break;
-    }
-
+    uri = seahorse_util_uri_choose_save (GTK_FILE_CHOOSER_DIALOG (dialog));
     gtk_widget_destroy (dialog);
 
     if(uri) {
@@ -278,6 +292,59 @@ export_activate (GtkWidget *widget, SeahorseWidget *swidget)
                     seahorse_util_uri_get_last (uri));
                     
         g_free (uri);
+    }
+}
+
+/*Archives public and private keyrings*/
+static void
+backup_activate (GtkWidget *widget, SeahorseWidget *swidget)
+{
+    GtkWidget *dialog;
+	gchar *uri = NULL;
+    gchar **uris;
+    gchar *ext, *t;
+    const gchar* home_dir = NULL;
+    
+	dialog = gtk_file_chooser_dialog_new (_("Backup Keyrings to Archive"), 
+                            GTK_WINDOW(glade_xml_get_widget (swidget->xml, "key-manager")),
+                            GTK_FILE_CHOOSER_ACTION_SAVE, 
+                            GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                            GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
+                            NULL);
+	    	    	    
+    setup_backup_file_types (GTK_FILE_CHOOSER (dialog));
+    gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (dialog), TRUE);
+
+    uri = seahorse_util_uri_choose_save (GTK_FILE_CHOOSER_DIALOG (dialog));
+    gtk_widget_destroy (dialog);
+
+    if(uri)  {	    	
+       
+        /* Save the extension */
+        t = strchr(uri, '.');
+        if(t != NULL) {
+            t++;
+            if(t[0] != 0) 
+                eel_gconf_set_string (MULTI_EXTENSION_KEY, t);
+        } else {
+            if ((ext = eel_gconf_get_string (MULTI_EXTENSION_KEY)) == NULL)
+    	        ext = g_strdup ("zip"); /* Yes this happens when the schema isn't installed */
+	        
+        	t = seahorse_util_uri_replace_ext (uri, ext);
+        	g_free(uri);
+        	g_free(ext);
+        	uri = t;
+        }
+	        
+    	home_dir = (const gchar*)seahorse_gpg_homedir();
+	    	
+        uris = g_new0 (gchar*, 3);
+    	uris[0] = g_strconcat (home_dir, PUB_RING, NULL);
+    	uris[1] = g_strconcat (home_dir, SEC_RING, NULL);
+	    	
+    	seahorse_util_uris_package (uri, (const gchar**)uris);
+
+        g_strfreev (uris);
     }
 }
 
@@ -686,10 +753,12 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 	//features not available
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "add_photo"), FALSE);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "key_add_photo"), FALSE);
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "backup"), FALSE);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "key_backup"), FALSE);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "gen_revoke"), FALSE);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "key_gen_revoke"), FALSE);
+
+    glade_xml_signal_connect_data (swidget->xml, "backup_activate",
+        G_CALLBACK (backup_activate), swidget);
 	
 	/* quit signals */
 	glade_xml_signal_connect_data (swidget->xml, "quit",

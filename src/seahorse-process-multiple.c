@@ -32,9 +32,6 @@
 #include "seahorse-context.h"
 #include "seahorse-util.h"
 
-#define MULTI_EXTENSION_KEY PGP_SCHEMAS "/package_extension"
-#define MULTI_SEPERATE_KEY PGP_SCHEMAS "/multi_seperate"
-
 /* Build a message for a given combination of files and folders */
 static gchar* 
 make_message (guint folders, guint files)
