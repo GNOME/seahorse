@@ -261,6 +261,8 @@ seahorse_key_row_new (SeahorseKeyStore *skstore, GtkTreeIter *iter, SeahorseKey 
 	g_object_ref (skey);
 	g_signal_connect_after (GTK_OBJECT (skrow->skey), "destroy",
 		G_CALLBACK (seahorse_key_store_key_destroyed), skrow);
+	g_signal_connect_after (skrow->skey, "changed",
+		G_CALLBACK (seahorse_key_store_key_changed), skrow);
 
 	gtk_tree_store_set (GTK_TREE_STORE (skstore), iter, SKROW, skrow, -1);
 }
@@ -281,6 +283,8 @@ seahorse_key_row_remove (SeahorseKeyRow *skrow)
 	/* Unref key */
 	g_signal_handlers_disconnect_by_func (G_OBJECT (skrow->skey),
 		seahorse_key_store_key_destroyed, skrow);
+	g_signal_handlers_disconnect_by_func (skrow->skey,
+		seahorse_key_store_key_changed, skrow);
 	g_object_unref (skrow->skey);
 	
 	gtk_tree_row_reference_free (skrow->ref);

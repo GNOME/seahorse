@@ -140,15 +140,6 @@ change_passphrase_activate (GtkMenuItem *item, SeahorseWidget *swidget)
 	seahorse_ops_key_change_pass (swidget->sctx, skwidget->skey);
 }
 
-static void
-add_uid_activate (GtkMenuItem *item, SeahorseWidget *swidget)
-{
-	SeahorseKeyWidget *skwidget;
-	
-	skwidget = SEAHORSE_KEY_WIDGET (swidget);
-	seahorse_add_uid_new (swidget->sctx, skwidget->skey);
-}
-
 /* Do a label */
 static void
 do_stat_label (const gchar *label, GtkTable *table, guint left, guint top)

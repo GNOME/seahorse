@@ -158,10 +158,6 @@ seahorse_signer_menu_item_changed (SeahorseKey *skey, SeahorseKeyChange change,
 			if (!seahorse_key_can_sign (skey))
 				gtk_widget_destroy (GTK_WIDGET (sitem));
 			break;
-		case SKEY_CHANGE_UIDS:
-			gtk_label_set_text (GTK_LABEL (gtk_bin_get_child (GTK_BIN (sitem))),
-				seahorse_key_get_userid (skey, 0));
-			break;
 		default:
 			break;
 	}

@@ -104,18 +104,6 @@ set_title (SeahorseWidget *swidget)
 		seahorse_key_get_userid (SEAHORSE_KEY_WIDGET (swidget)->skey, 0)));
 }
 
-static void
-key_changed (SeahorseKey *skey, SeahorseKeyChange change, SeahorseWidget *swidget)
-{
-	switch (change) {
-		case SKEY_CHANGE_UIDS:
-			set_title (swidget);
-			break;
-		default:
-			break;
-	}
-}
-
 /**
  * seahorse_export_new:
  * @sctx: Current #SeahorseContext
