@@ -329,6 +329,14 @@ do_subkeys (SeahorseWidget *swidget)
 	max = seahorse_key_get_num_subkeys (skwidget->skey);
 	tooltips = gtk_tooltips_new ();
 	
+	widget = glade_xml_get_widget (swidget->xml, "view_subkeys");
+	if (max == 0) {
+		gtk_widget_hide (widget);
+		gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (widget), FALSE);
+	}
+	else
+		gtk_widget_show (widget);
+	
 	while (index <= max) {
 		if (seahorse_context_key_has_secret (swidget->sctx, skwidget->skey)) {
 			table = GTK_TABLE (gtk_table_new (4, 4, FALSE));

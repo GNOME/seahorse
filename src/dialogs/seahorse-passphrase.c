@@ -59,7 +59,7 @@ seahorse_passphrase_get (gpointer ctx, const gchar *desc, gpointer *r_hd)
 		gtk_widget_show_all (dialog);
 		
 		response = gtk_dialog_run (GTK_DIALOG (dialog));
-		//pass = g_strdup (gtk_entry_get_text (GTK_ENTRY (entry)));
+		pass = g_strdup (gtk_entry_get_text (GTK_ENTRY (entry)));
 		gtk_widget_destroy (dialog);
 		
 		/* If entered pass */
