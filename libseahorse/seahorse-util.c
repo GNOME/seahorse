@@ -897,15 +897,12 @@ seahorse_util_chooser_open_prompt (GtkWidget *dialog)
 gboolean
 seahorse_util_check_suffix (const gchar *path, SeahorseSuffix suffix)
 {
-	gchar *ext;
-	
 	if (suffix == SEAHORSE_SIG_SUFFIX)
-		ext = SEAHORSE_EXT_SIG;
+        return g_str_has_suffix (path, SEAHORSE_EXT_SIG);
 	else
-		ext = SEAHORSE_EXT_GPG;
-	
-	return (g_pattern_match_simple (g_strdup_printf ("*%s", SEAHORSE_EXT_ASC), path) ||
-		g_pattern_match_simple (g_strdup_printf ("*%s", ext), path));
+        return g_str_has_suffix (path, SEAHORSE_EXT_PGP) ||
+               g_str_has_suffix (path, SEAHORSE_EXT_GPG) ||
+               g_str_has_suffix (path, SEAHORSE_EXT_ASC);
 }
 
 /**
@@ -934,13 +931,13 @@ seahorse_util_add_suffix (gpgme_ctx_t ctx, const gchar *path,
 	if (gpgme_get_armor (ctx) || suffix == SEAHORSE_ASC_SUFFIX)
 		ext = SEAHORSE_EXT_ASC;
 	else if (suffix == SEAHORSE_CRYPT_SUFFIX)
-		ext = SEAHORSE_EXT_GPG;
+		ext = SEAHORSE_EXT_PGP;
 	else
 		ext = SEAHORSE_EXT_SIG;
 	
 	uri = g_strdup_printf ("%s%s", path, ext);
     
-    if (prompt && seahorse_util_uri_exists (uri)) {
+    if (prompt && uri && seahorse_util_uri_exists (uri)) {
             
         t = g_strdup_printf (prompt, seahorse_util_uri_get_last (uri));
         dialog = seahorse_util_chooser_save_new (t, NULL);
@@ -976,7 +973,7 @@ seahorse_util_remove_suffix (const gchar *path, const gchar *prompt)
 
 	uri =  g_strndup (path, strlen (path) - 4);
    
-    if (prompt && seahorse_util_uri_exists (uri)) {
+    if (prompt && uri && seahorse_util_uri_exists (uri)) {
             
         t = g_strdup_printf (prompt, seahorse_util_uri_get_last (uri));
         dialog = seahorse_util_chooser_save_new (t, NULL);

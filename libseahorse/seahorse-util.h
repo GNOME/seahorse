@@ -43,6 +43,7 @@ typedef enum {
 
 #define SEAHORSE_EXT_ASC ".asc"
 #define SEAHORSE_EXT_SIG ".sig"
+#define SEAHORSE_EXT_PGP ".pgp"
 #define SEAHORSE_EXT_GPG ".gpg"
 
 gchar*		seahorse_util_get_date_string		(const time_t		time);
