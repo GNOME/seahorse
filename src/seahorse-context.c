@@ -41,7 +41,6 @@ struct _SeahorseContextPrivate
 	GConfClient *gclient;
 	GList *key_pairs;
 	GList *single_keys;
-	guint connection_id;
 };
 
 enum {
@@ -149,7 +148,7 @@ seahorse_context_init (SeahorseContext *sctx)
 	gpgme_set_progress_cb (sctx->ctx, gpgme_progress, sctx);
 	
 	/* set gconf listener */
-	sctx->priv->connection_id = gconf_client_notify_add (sctx->priv->gclient,
+	gconf_client_notify_add (sctx->priv->gclient,
 		PREFERENCES, (GConfClientNotifyFunc)gconf_notification, sctx, NULL, NULL);
 	gconf_client_add_dir (sctx->priv->gclient, PREFERENCES,
 		GCONF_CLIENT_PRELOAD_ONELEVEL, NULL);

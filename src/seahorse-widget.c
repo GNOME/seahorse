@@ -192,14 +192,6 @@ seahorse_widget_set_property (GObject *object, guint prop_id, const GValue *valu
 		/* Connects component specific callbacks */
 		case PROP_COMPONENT:
 			swidget->component = g_value_get_boolean (value);
-			if (swidget->component) {
-				glade_xml_signal_connect_data (swidget->xml, "toolbar_activate",
-					G_CALLBACK (seahorse_widget_show_bar),
-					glade_xml_get_widget (swidget->xml, "tool_dock"));
-				glade_xml_signal_connect_data (swidget->xml, "statusbar_activate",
-					G_CALLBACK (seahorse_widget_show_bar),
-					glade_xml_get_widget (swidget->xml, STATUS));
-			}
 			break;
 		default:
 			break;
@@ -259,50 +251,12 @@ seahorse_widget_destroyed (GtkObject *object, SeahorseWidget *swidget)
 	seahorse_widget_destroy (swidget);
 }
 
-/* Toggles display of a window bar */
-static void
-seahorse_widget_show_bar (GtkCheckMenuItem *checkmenuitem, GtkWidget *bar)
-{
-	if (gtk_check_menu_item_get_active (checkmenuitem))
-		gtk_widget_show (bar);
-	else
-		gtk_widget_hide (bar);
-}
-
 /* Shows operation progress if a component, otherwise just desensitizes window */
 static void
 seahorse_widget_show_progress (SeahorseContext *sctx, const gchar *op, gdouble fract, SeahorseWidget *swidget)
 {
-	GnomeAppBar *status;
-	GtkProgressBar *progress;
-	GtkWidget *widget;
-	
-	widget = glade_xml_get_widget (swidget->xml, swidget->name);
-	/* don't insensitize if last call */
-	if (fract != -1)
-		gtk_widget_set_sensitive (widget, FALSE);
-	
-	if (swidget->component) {
-		/* do status */
-		status = GNOME_APPBAR (glade_xml_get_widget (swidget->xml, STATUS));
-		gnome_appbar_set_status (status, op);
-		progress = gnome_appbar_get_progress (status);
-		/* do progress */
-		if (fract <= 1 && fract > 0)
-			gtk_progress_bar_set_fraction (progress, fract);
-		else if (fract != -1) {
-			gtk_progress_bar_set_pulse_step (progress, 0.05);
-			gtk_progress_bar_pulse (progress);
-		}
-		/* if fract == -1, cleanup progress */
-		else
-			gtk_progress_bar_set_fraction (progress, 0);
-	}
-	
-	while (g_main_context_pending (NULL))
-		g_main_context_iteration (NULL, TRUE);
-	
-	gtk_widget_set_sensitive (widget, fract == -1);
+	if (!swidget->component)
+		gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, swidget->name), fract == -1);
 }
 
 /* Common function for creating new widget */
