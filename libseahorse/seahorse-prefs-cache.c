@@ -207,9 +207,8 @@ control_destroy (GtkWidget *widget, gpointer data)
     CtlLinkups *lu = (CtlLinkups *) data;
     g_assert (lu->gconf_key);
     g_assert (lu->notify_id);
-
-    eel_gconf_monitor_remove (lu->gconf_key);
     eel_gconf_notification_remove (lu->notify_id);
+
     g_free (lu->gconf_key);
     g_free (lu);
 }
@@ -259,7 +258,6 @@ setup_check_control (SeahorseContext *ctx, SeahorseWidget *sw,
     lu = g_new0 (CtlLinkups, 1);
     lu->gconf_key = g_strdup (key);
     lu->notify_id = eel_gconf_notification_add (key, check_notify, ctl);
-    eel_gconf_monitor_add (key);
 
     /* Hookup save events */
     g_signal_connect (ctl, "toggled", G_CALLBACK (check_toggled), lu);
@@ -308,7 +306,6 @@ setup_spinner_control (SeahorseContext *ctx, SeahorseWidget *sw,
     lu = g_new0 (CtlLinkups, 1);
     lu->gconf_key = g_strdup (key);
     lu->notify_id = eel_gconf_notification_add (key, spinner_notify, ctl);
-    eel_gconf_monitor_add (key);
 
     /* Hookup save events */
     g_signal_connect (ctl, "changed", G_CALLBACK (spinner_changed), lu);
@@ -377,7 +374,7 @@ start_agent (GtkWidget *widget, gpointer data)
 
 /* Initialize the cache tab */
 void
-seahorse_pgp_preferences_cache (SeahorseContext *ctx, SeahorseWidget *widget)
+seahorse_prefs_cache (SeahorseContext *ctx, SeahorseWidget *widget)
 {
     GtkWidget *w;
     
