@@ -429,93 +429,6 @@ seahorse_op_encrypt_sign_text (SeahorseContext *sctx, const gchar *text,
 	return encrypt_text_common (sctx, text, recips, gpgme_op_encrypt_sign, err);
 }
 
-/* helper function to decrypt @cipher. @cipher will be released.
- * returns the decrypted data. */
-static gpgme_data_t
-decrypt_data (SeahorseContext *sctx, gpgme_data_t cipher, gpgme_error_t *err)
-{
-	gpgme_data_t plain = NULL;
-	
-	*err = gpgme_data_new (&plain);
-	
-	if (GPG_IS_OK (*err))
-		*err = gpgme_op_decrypt (sctx->ctx, cipher, plain);
-	
-	gpgme_data_release (cipher);
-	return plain;
-}
-
-/**
- * seahorse_op_decrypt_file:
- * @sctx: #SeahorseContext
- * @path: Path of file to decrypt
- * @err: Optional error value
- *
- * Tries to decrypt the file @path, saving any errors in @err.
- *
- * Returns: Path of the decrypted file or NULL if operation fails
- **/
-gchar*
-seahorse_op_decrypt_file (SeahorseContext *sctx, const gchar *path, gpgme_error_t *err)
-{
-	gpgme_data_t cipher, plain;
-	gpgme_error_t error;
-	gchar *new_path = NULL;
-	
-	if (err == NULL)
-		err = &error;
-	/* new data from file */
-    cipher = seahorse_vfs_data_create (path, FALSE, err);
-    g_return_val_if_fail (plain != NULL, NULL);
-
-	/* decrypt data */
-	plain = decrypt_data (sctx, cipher, err);
-	g_return_val_if_fail (GPG_IS_OK (*err), NULL);
-	/* write decrypt data to file */
-	new_path = seahorse_util_remove_suffix (path);
-	*err = seahorse_util_write_data_to_file (new_path, plain);
-	
-	/* free new_path if error */
-	if (!GPG_IS_OK (*err)) {
-		g_free (new_path);
-		g_return_val_if_reached (NULL);
-	}
-	
-	return new_path;
-}
-
-/**
- * seahorse_op_decrypt_text:
- * @sctx: #SeahorseContext
- * @text: Text to decrypt
- * @err: Optional error value
- *
- * Tries to decrypt @text, saving any errors in @err.
- *
- * Returns: The decrypted text or NULL if operation fails
- **/
-gchar*
-seahorse_op_decrypt_text (SeahorseContext *sctx, const gchar *text, gpgme_error_t *err)
-{
-	gpgme_data_t cipher, plain;
-	gpgme_error_t error;
-	gboolean armor;
-	
-	if (err == NULL)
-		err = &error;
-	/* new data from text */
-	*err = gpgme_data_new_from_mem (&cipher, text, strlen (text), TRUE);
-	g_return_val_if_fail (GPG_IS_OK (*err), NULL);
-	/* decrypt data with armor */
-	armor = gpgme_get_armor (sctx->ctx);
-	gpgme_set_armor (sctx->ctx, TRUE);
-	plain = decrypt_data (sctx, cipher, err);
-	gpgme_set_armor (sctx->ctx, armor);
-	g_return_val_if_fail (GPG_IS_OK (*err), NULL);
-	
-	return seahorse_util_write_data_to_text (plain);
-}
-
 /**
  * seahorse_op_verify_file:
  * @sctx: #SeahorseContext
@@ -534,8 +447,6 @@ seahorse_op_verify_file (SeahorseContext *sctx, const gchar *path,
 	gpgme_data_t sig, plain;
 	gpgme_error_t error;
 	gchar *plain_path;
-	
-	g_return_if_fail (seahorse_util_check_suffix (path, SEAHORSE_SIG_SUFFIX));
 	
 	if (err == NULL)
 		err = &error;
@@ -619,7 +530,10 @@ decrypt_verify_data (SeahorseContext *sctx, gpgme_data_t cipher,
 	*err = gpgme_data_new (&plain);
 	if (GPG_IS_OK (*err))
 		*err = gpgme_op_decrypt_verify (sctx->ctx, cipher, plain);
-	*status = gpgme_op_verify_result (sctx->ctx);
+    
+    if (status)
+    	*status = gpgme_op_verify_result (sctx->ctx);
+     
 	gpgme_data_release (cipher);
 	return plain;
 }
@@ -645,8 +559,6 @@ seahorse_op_decrypt_verify_file (SeahorseContext *sctx, const gchar *path,
 	gpgme_data_t cipher, plain;
 	gpgme_error_t error;
 	gchar *new_path = NULL;
-	
-	g_return_val_if_fail (seahorse_util_check_suffix (path, SEAHORSE_CRYPT_SUFFIX), NULL);
 	
 	if (err == NULL)
 		err = &error;

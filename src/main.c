@@ -35,7 +35,6 @@ static gchar *sign = NULL;
 static gchar *encrypt_sign = NULL;
 static gchar *decrypt = NULL;
 static gchar *verify = NULL;
-static gchar *decrypt_verify = NULL;
 
 static const struct poptOption options[] = {
 	{ "import", 'i', POPT_ARG_STRING, &import, 0,
@@ -55,9 +54,6 @@ static const struct poptOption options[] = {
 	
 	{ "verify", 'v', POPT_ARG_STRING, &verify, 0,
 	  N_("Verify signature file"), N_("FILE") },
-	
-	{ "decrypt-verify", 'r', POPT_ARG_STRING, &decrypt_verify, 0,
-	  N_("Decrypt encrypt file and verify any signatures it contains"), N_("FILE") },
 	
 	{ NULL, '\0', 0, NULL, 0 }
 };
@@ -172,7 +168,8 @@ main (int argc, char **argv)
     }
           
 	else if (decrypt != NULL) {
-		new_path = seahorse_op_decrypt_file (sctx, decrypt, &err);
+        gpgme_verify_result_t status = NULL;
+        new_path = seahorse_op_decrypt_verify_file (sctx, decrypt, &status, &err);
 		
 		if (!GPG_IS_OK (err)) {
 			seahorse_util_handle_error (err);
@@ -181,7 +178,11 @@ main (int argc, char **argv)
 		else {
 			show_info (g_strdup_printf (_("Decrypted file is %s"), new_path));
 			g_free (new_path);
-			return 0;
+          
+            if (status && status->signatures) 
+                win = seahorse_signatures_new (sctx, status);
+            else 
+                return 0;
 		}
 	}
  
@@ -199,24 +200,6 @@ main (int argc, char **argv)
 		}
 	}
  
-    else if (decrypt_verify != NULL) {
-		gpgme_verify_result_t status;
-		
-		new_path = seahorse_op_decrypt_verify_file (sctx,
-			decrypt_verify, &status, &err);
-		
-		if (!GPG_IS_OK (err)) {
-			seahorse_util_handle_error (err);
-			return 1;
-		}
-		else {
-			show_info (g_strdup_printf (_("Decrypted file is %s"), new_path));
-			g_free (new_path);
-			
-			win = seahorse_signatures_new (sctx, status);
-		}
-	}
-    
     if(!win)
         win = seahorse_key_manager_show (sctx);
     

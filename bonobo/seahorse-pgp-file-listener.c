@@ -65,8 +65,6 @@ listener_callback (BonoboListener *listener, const gchar *event_name,
 		cmd_option = g_strdup_printf ("--decrypt=\"%s\"", path);
 	else if (g_str_equal (event_name, "Verify")) 
 		cmd_option = g_strdup_printf ("--verify=\"%s\"", path);
-	else if (g_str_equal (event_name, "DecryptVerify")) 
-		cmd_option = g_strdup_printf ("--decrypt-verify=\"%s\"", path);
 
 	g_free (path);
        	g_string_append_printf (str, " %s ", cmd_option);

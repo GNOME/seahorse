@@ -77,14 +77,6 @@ gchar*		seahorse_op_encrypt_sign_text	(SeahorseContext	*sctx,
 						 gpgme_key_t *	recips,
 						 gpgme_error_t		*err);
 
-gchar*		seahorse_op_decrypt_file	(SeahorseContext	*sctx,
-						 const gchar		*path,
-						 gpgme_error_t		*err);
-
-gchar*		seahorse_op_decrypt_text	(SeahorseContext	*sctx,
-						 const gchar		*text,
-						 gpgme_error_t		*err);
-
 void		seahorse_op_verify_file		(SeahorseContext	*sctx,
 						 const gchar		*path,
 						 gpgme_verify_result_t	*status,
