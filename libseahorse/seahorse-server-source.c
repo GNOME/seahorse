@@ -268,6 +268,8 @@ seahorse_server_set_property (GObject *object, guint prop_id,
 static gboolean
 progress_timer (SeahorseServerSource *ssrc)
 {
+    g_return_val_if_fail (SEAHORSE_IS_SERVER_SOURCE (ssrc), FALSE);
+    
     if (ssrc->priv->operations) {
         seahorse_key_source_show_progress (SEAHORSE_KEY_SOURCE (ssrc), NULL, 0);
         return TRUE;
@@ -282,6 +284,8 @@ progress_timer (SeahorseServerSource *ssrc)
 static void
 start_progress_notify (SeahorseServerSource *ssrc, const gchar *msg)
 {
+    g_return_if_fail (SEAHORSE_IS_SERVER_SOURCE (ssrc));
+        
     seahorse_key_source_show_progress (SEAHORSE_KEY_SOURCE (ssrc), msg, 0);
     
     if (!ssrc->priv->progress_stag)
@@ -431,7 +435,7 @@ static void
 keysearch_done (SeahorseOperation *operation, SeahorseServerSource *ssrc)
 {
     g_return_if_fail (SEAHORSE_IS_SERVER_SOURCE (ssrc));
-    
+
     /* Marks us as done as far as the key source is concerned */
     ssrc->priv->operations = 
         seahorse_operation_list_remove (ssrc->priv->operations, operation);
@@ -440,6 +444,9 @@ keysearch_done (SeahorseOperation *operation, SeahorseServerSource *ssrc)
 static void
 add_search_operation (SeahorseServerSource *ssrc, SeahorseSearchOperation *sop)
 {
+    g_return_if_fail (SEAHORSE_IS_SERVER_SOURCE (ssrc));
+    g_return_if_fail (SEAHORSE_IS_SEARCH_OPERATION (sop));
+    
     if (seahorse_operation_is_done (SEAHORSE_OPERATION (sop))) {
         g_object_unref (sop);
     } else {
@@ -489,7 +496,10 @@ seahorse_search_operation_finalize (GObject *gobject)
 static void 
 seahorse_search_operation_cancel (SeahorseOperation *operation)
 {
-    SeahorseSearchOperation *sop = SEAHORSE_SEARCH_OPERATION (operation);
+    SeahorseSearchOperation *sop;
+    
+    g_return_if_fail (SEAHORSE_IS_SEARCH_OPERATION (operation));
+    sop = SEAHORSE_SEARCH_OPERATION (operation);
     
     if (sop->kop) {
         gpgmex_keyserver_op_t kop = sop->kop;
@@ -506,7 +516,10 @@ static void
 keyserver_listed_key (gpgme_ctx_t ctx, gpgmex_keyserver_op_t op, gpgme_key_t key,
                       unsigned int total, void *userdata)
 {
-    SeahorseSearchOperation *sop = SEAHORSE_SEARCH_OPERATION (userdata);
+    SeahorseSearchOperation *sop;
+    
+    g_return_if_fail (SEAHORSE_IS_SEARCH_OPERATION (userdata));
+    sop = SEAHORSE_SEARCH_OPERATION (userdata);
     
     add_key_to_source (sop->ssrc, key);
     sop->loaded++;
@@ -522,8 +535,11 @@ static void
 keyserver_list_done (gpgme_ctx_t ctx, gpgmex_keyserver_op_t op, gpgme_error_t status,
                      const char *message, void *userdata)
 {
-    SeahorseSearchOperation *sop = SEAHORSE_SEARCH_OPERATION (userdata);
+    SeahorseSearchOperation *sop;
     gchar *t;
+    
+    g_return_if_fail (SEAHORSE_IS_SEARCH_OPERATION (userdata));
+    sop = SEAHORSE_SEARCH_OPERATION (userdata);
 
     sop->status = status;
     sop->kop = NULL;
@@ -580,8 +596,8 @@ seahorse_server_source_refresh (SeahorseKeySource *src, gboolean all)
     
     g_return_if_fail (ssrc->priv->last_pattern);
     g_return_if_fail (ssrc->priv->server);
-    
     g_return_if_fail (SEAHORSE_IS_KEY_SOURCE (src));
+
     ssrc = SEAHORSE_SERVER_SOURCE (src);
 
     /* Stop all operations */
@@ -602,6 +618,7 @@ seahorse_server_source_stop (SeahorseKeySource *src)
     
     g_return_if_fail (SEAHORSE_IS_KEY_SOURCE (src));
     ssrc = SEAHORSE_SERVER_SOURCE (src);
+
     found = (ssrc->priv->operations != NULL);
     seahorse_operation_list_cancel (ssrc->priv->operations);
     ssrc->priv->operations = seahorse_operation_list_purge (ssrc->priv->operations);
@@ -635,6 +652,7 @@ seahorse_server_source_get_key (SeahorseKeySource *src, const gchar *fpr,
     SeahorseKey *skey;
     gchar *fingerprint;
 
+    g_return_val_if_fail (fpr != NULL && fpr[0] != 0, NULL);
     g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (src), NULL);
     ssrc = SEAHORSE_SERVER_SOURCE (src);
     
@@ -753,9 +771,11 @@ seahorse_server_source_search (SeahorseServerSource *ssrc, const gchar *pattern)
     SeahorseSearchOperation *sop;
     gchar *t;
     
+    g_return_if_fail (SEAHORSE_IS_SERVER_SOURCE (ssrc));
+    g_return_if_fail (pattern != NULL && pattern[0] != 0);
+    
     /* Round about because we could be passed ssrc->priv->last_xxxx */
 
-    g_return_if_fail (pattern != NULL);
     t = g_strdup (pattern);
     g_free (ssrc->priv->last_pattern);
     ssrc->priv->last_pattern = t;
