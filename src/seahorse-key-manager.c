@@ -183,7 +183,7 @@ properties_activate (GtkWidget *widget, SeahorseWidget *swidget)
 	SeahorseKey *skey;
 	
 	skey = seahorse_key_store_get_selected_key (GTK_TREE_VIEW (
-		glade_xml_get_widget (swidget->xml, KEY_LIST)));
+		glade_xml_get_widget (swidget->xml, KEY_LIST)), NULL);
 	if (skey != NULL)
 		seahorse_key_properties_new (swidget->sctx, skey);
 }
@@ -285,10 +285,28 @@ static void
 delete_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
 	GList *list = NULL;
+    GtkTreeView *view = 
+        GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, KEY_LIST));
 	
-	list = seahorse_key_store_get_selected_keys (GTK_TREE_VIEW (
-		glade_xml_get_widget (swidget->xml, KEY_LIST)));
-	seahorse_delete_show (swidget->sctx, list);
+	list = seahorse_key_store_get_selected_keys (view);
+    
+    /* Special behavior for a single selection */
+    if (g_list_length (list) == 1) {
+        SeahorseKey *skey;
+        guint uid;
+        
+        skey = seahorse_key_store_get_selected_key (view, &uid);
+        if (uid > 0) 
+            seahorse_delete_userid_show (swidget->sctx, skey, uid);
+        else    
+        	seahorse_delete_show (swidget->sctx, list);
+
+    /* Multiple keys */
+    } else {    
+	    seahorse_delete_show (swidget->sctx, list);
+    }
+    
+  	g_list_free (list);
 }
 
 static void
@@ -297,7 +315,7 @@ change_passphrase_activate (GtkMenuItem *item, SeahorseWidget *swidget)
 	SeahorseKey *skey;
 	
 	skey = seahorse_key_store_get_selected_key (GTK_TREE_VIEW (
-		glade_xml_get_widget (swidget->xml, KEY_LIST)));
+		glade_xml_get_widget (swidget->xml, KEY_LIST)), NULL);
 	if (skey != NULL && SEAHORSE_IS_KEY_PAIR (skey))
 		seahorse_key_pair_op_change_pass (SEAHORSE_KEY_PAIR (skey));
 }
@@ -308,7 +326,7 @@ add_uid_activate (GtkMenuItem *item, SeahorseWidget *swidget)
 	SeahorseKey *skey;
 	
 	skey = seahorse_key_store_get_selected_key (GTK_TREE_VIEW (
-		glade_xml_get_widget (swidget->xml, KEY_LIST)));
+		glade_xml_get_widget (swidget->xml, KEY_LIST)), NULL);
 	if (skey != NULL)
 		seahorse_add_uid_new (swidget->sctx, skey);
 }
@@ -319,7 +337,7 @@ add_subkey_activate (GtkMenuItem *item, SeahorseWidget *swidget)
 	SeahorseKey *skey;
 	
 	skey = seahorse_key_store_get_selected_key (GTK_TREE_VIEW (
-		glade_xml_get_widget (swidget->xml, KEY_LIST)));
+		glade_xml_get_widget (swidget->xml, KEY_LIST)), NULL);
 	if (skey != NULL)
 		seahorse_add_subkey_new (swidget->sctx, skey);
 }
@@ -330,7 +348,7 @@ add_revoker_activate (GtkMenuItem *item, SeahorseWidget *swidget)
 	SeahorseKey *skey;
 	
 	skey = seahorse_key_store_get_selected_key (GTK_TREE_VIEW (
-		glade_xml_get_widget (swidget->xml, KEY_LIST)));
+		glade_xml_get_widget (swidget->xml, KEY_LIST)), NULL);
 	if (skey != NULL)
 		seahorse_add_revoker_new (swidget->sctx, skey);
 }
@@ -423,7 +441,7 @@ row_activated (GtkTreeView *treeview, GtkTreePath *path, GtkTreeViewColumn *arg2
 {
 	SeahorseKey *skey;
 	
-	skey = seahorse_key_store_get_key_from_path (GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, KEY_LIST)), path);
+	skey = seahorse_key_store_get_key_from_path (GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, KEY_LIST)), path, NULL);
 	if (skey != NULL)
 		seahorse_key_properties_new (swidget->sctx, skey);
 }
@@ -482,7 +500,7 @@ selection_changed (GtkTreeSelection *selection, SeahorseWidget *swidget)
 	
 	if (rows == 1) {
 		skey = seahorse_key_store_get_selected_key (GTK_TREE_VIEW (
-			glade_xml_get_widget (swidget->xml, KEY_LIST)));
+			glade_xml_get_widget (swidget->xml, KEY_LIST)), NULL);
 		secret = (skey != NULL && SEAHORSE_IS_KEY_PAIR (skey));
 	}
 	
@@ -513,7 +531,7 @@ key_list_popup_menu (GtkWidget *widget, SeahorseWidget *swidget)
 {
 	SeahorseKey *skey;
 	
-	skey = seahorse_key_store_get_selected_key (GTK_TREE_VIEW (widget));
+	skey = seahorse_key_store_get_selected_key (GTK_TREE_VIEW (widget), NULL);
 	if (skey != NULL)
 		show_context_menu (swidget, 0, gtk_get_current_event_time ());
        

@@ -118,8 +118,6 @@ seahorse_delete_show (SeahorseContext *sctx, GList *keys)
 		else
 			break;
 	}
-	
-	g_list_free (keys);
 }
 
 void

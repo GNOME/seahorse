@@ -789,9 +789,9 @@ key_store_from_model (GtkTreeModel *model)
 
 /* Given an iterator find the associated key */
 static SeahorseKey*
-key_from_iterator (GtkTreeModel* model, GtkTreeIter* iter)
+key_from_iterator (GtkTreeModel* model, GtkTreeIter* iter, guint *uid)
 {
-    GtkTreeIter parent, i;
+    GtkTreeIter i;
     SeahorseKeyRow *skrow;
     
     /* Convert to base iter if necessary */
@@ -803,10 +803,9 @@ key_from_iterator (GtkTreeModel* model, GtkTreeIter* iter)
         model = GTK_TREE_MODEL (skstore);
     }
     
-    gtk_tree_model_get (model, 
-        gtk_tree_model_iter_parent (model, &parent, iter) ? &parent : iter, 
-        KEY_STORE_DATA, &skrow, -1);    
-    
+    gtk_tree_model_get (model, iter, 
+        KEY_STORE_DATA, &skrow, uid ? KEY_STORE_UID : -1, uid, -1);    
+
    return skrow->skey;
 }
 
@@ -822,7 +821,7 @@ key_from_iterator (GtkTreeModel* model, GtkTreeIter* iter)
  * Returns: The #SeahorseKey at @path in @view
  **/
 SeahorseKey*
-seahorse_key_store_get_key_from_path (GtkTreeView *view, GtkTreePath *path)
+seahorse_key_store_get_key_from_path (GtkTreeView *view, GtkTreePath *path, guint *uid)
 {
 	GtkTreeModel *model;
 	GtkTreeIter iter;
@@ -832,7 +831,7 @@ seahorse_key_store_get_key_from_path (GtkTreeView *view, GtkTreePath *path)
 	
 	model = gtk_tree_view_get_model (view);
 	g_return_val_if_fail (gtk_tree_model_get_iter (model, &iter, path), NULL);
-    return key_from_iterator (model, &iter);
+    return key_from_iterator (model, &iter, uid);
 }
 
 /**
@@ -909,7 +908,7 @@ seahorse_key_store_get_selected_keys (GtkTreeView *view)
                 check = FALSE;
                 gtk_tree_model_get (model, &iter, KEY_STORE_CHECK, &check, -1); 
                 if (check)
-                    keys = g_list_append (keys, key_from_iterator (model, &iter));
+                    keys = g_list_append (keys, key_from_iterator (model, &iter, NULL));
             } while (gtk_tree_model_iter_next (model, &iter));
         }
     }
@@ -924,7 +923,7 @@ seahorse_key_store_get_selected_keys (GtkTreeView *view)
 	
     	/* make key list */
 	    for (list = paths; list != NULL; list = g_list_next (list))
-		    keys = g_list_append (keys, seahorse_key_store_get_key_from_path (view, list->data));
+		    keys = g_list_append (keys, seahorse_key_store_get_key_from_path (view, list->data, NULL));
             
         /* free selected paths */
         g_list_foreach (paths, (GFunc)gtk_tree_path_free, NULL);
@@ -944,6 +943,7 @@ seahorse_key_store_get_selected_keys (GtkTreeView *view)
 /**
  * seahorse_key_store_get_selected_key:
  * @view: #GtkTreeView with selection
+ * @uid: Optionally return the selected uid here
  *
  * Sugar method for getting the selected #SeahorseKey from @view.
  *
@@ -951,22 +951,48 @@ seahorse_key_store_get_selected_keys (GtkTreeView *view)
  * more than one selection.
  **/
 SeahorseKey*
-seahorse_key_store_get_selected_key (GtkTreeView *view)
+seahorse_key_store_get_selected_key (GtkTreeView *view, guint *uid)
 {
-	GList *list = NULL;
-	SeahorseKey *skey;
+    SeahorseKeyStore* skstore;
+	SeahorseKey *skey = NULL;
 	
-	g_return_val_if_fail (GTK_IS_TREE_VIEW (view), NULL);
+    g_return_val_if_fail (GTK_IS_TREE_VIEW (view), NULL);
+    skstore = key_store_from_model (gtk_tree_view_get_model (view));
+    
+    if (SEAHORSE_KEY_STORE_GET_CLASS (skstore)->use_check) {
+        GtkTreeModel* model = GTK_TREE_MODEL (skstore);
+        GtkTreeIter iter;
+        gboolean check;
+            
+        if (gtk_tree_model_get_iter_first (model, &iter)) {
+            do {
+                check = FALSE;
+                gtk_tree_model_get (model, &iter, KEY_STORE_CHECK, &check, -1); 
+                if (check) {
+					skey = key_from_iterator (model, &iter, uid);
+					break;
+				}
+            } while (gtk_tree_model_iter_next (model, &iter));
+        }
+    }
+
+    /* Fall back if none checked, or not using checks */
+    if (skey == NULL) {
+    	GList *paths = NULL;
+        GtkTreeSelection *selection;	
+        
+    	selection = gtk_tree_view_get_selection (view);
+    	paths = gtk_tree_selection_get_selected_rows (selection, NULL);
 	
-	/* get selected keys */
-	list = seahorse_key_store_get_selected_keys (view);
-	g_return_val_if_fail (list != NULL, NULL);
-	g_return_val_if_fail (g_list_length (list) == 1, NULL);
-	
-	/* get first key, free list */
-	skey = list->data;
-	g_list_free (list);
-	
+    	/* make key list */
+		if (paths != NULL)
+		    skey = seahorse_key_store_get_key_from_path (view, paths->data, uid);
+            
+        /* free selected paths */
+        g_list_foreach (paths, (GFunc)gtk_tree_path_free, NULL);
+        g_list_free (paths);
+    }
+		
 	return skey;
 }
 

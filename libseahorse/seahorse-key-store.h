@@ -137,15 +137,17 @@ void			seahorse_key_store_init			(SeahorseKeyStore	*skstore,
 void			seahorse_key_store_populate		(SeahorseKeyStore	*skstore);
 
 SeahorseKey*		seahorse_key_store_get_key_from_path	(GtkTreeView		*view,
-								 GtkTreePath		*path);
+                                                             GtkTreePath		*path,
+                                                             guint              *uid);
 
 GtkTreeViewColumn*	seahorse_key_store_append_column	(GtkTreeView		*view,
 								 const gchar		*name,
 								 const gint		index);
 
-GList*			seahorse_key_store_get_selected_keys	(GtkTreeView		*view);
+GList*              seahorse_key_store_get_selected_keys    (GtkTreeView        *view);
 
-SeahorseKey*		seahorse_key_store_get_selected_key	(GtkTreeView		*view);
+SeahorseKey*        seahorse_key_store_get_selected_key	    (GtkTreeView		*view,
+                                                             guint              *uid);
 
 void                seahorse_key_store_get_base_iter(SeahorseKeyStore* skstore, 
                                 GtkTreeIter* base_iter, 
