@@ -74,11 +74,7 @@ vfs_data_wait_results(VfsAsyncHandle* ah, gboolean errors)
 {
     VfsAsyncOp op;
     
-    while(ah->state == VFS_ASYNC_PROCESSING)
-    {
-        g_thread_yield();
-        g_main_context_iteration(NULL, FALSE);
-    }
+    seahorse_util_wait_until (ah->state != VFS_ASYNC_PROCESSING);
 
     op = ah->operation;
     ah->operation = VFS_OP_NONE;

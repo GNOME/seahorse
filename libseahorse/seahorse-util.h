@@ -107,5 +107,10 @@ gpgme_key_t* seahorse_util_list_to_keys      (GList *keys);
 
 void        seahorse_util_free_keys         (gpgme_key_t* keys);
 
+#define     seahorse_util_wait_until(expr)          \
+    while (!(expr)) {                               \
+        g_thread_yield ();                          \
+        g_main_context_iteration (NULL, FALSE);     \
+    }                                               
 
 #endif /* __SEAHORSE_UTIL_H__ */
