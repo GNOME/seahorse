@@ -21,8 +21,8 @@ seahorse_SOURCES = main.c \
 	seahorse-preferences.c seahorse-preferences.h \
 	seahorse-key-manager.c \
 	seahorse-generate-select.c \
-	seahorse-generate-druid.c \
-	seahorse-generate-adv.c \
+	seahorse-generate-druid.c seahorse-generate-druid.h \
+	seahorse-generate-adv.c seahorse-generate-adv.h \
 	seahorse-windows.h \
 	seahorse-key-properties.c \
 	seahorse-revoke.c \
