@@ -135,6 +135,22 @@ seahorse_recipients_get_property (GObject *object, guint prop_id, GValue *value,
 	}
 }
 
+static guint
+num_not_valid (GList *list, GtkTreeView *view)
+{
+	guint count = 0;
+	SeahorseKey *skey;
+	
+	while (list != NULL) {
+		skey = seahorse_key_store_get_key_from_path (view, list->data);
+		if (seahorse_key_get_validity (skey) < SEAHORSE_VALIDITY_FULL)
+			count++;
+		list = g_list_next (list);
+	}
+	
+	return count;
+}
+
 static void
 set_all_buttons (SeahorseWidget *swidget)
 {
@@ -180,7 +196,7 @@ add_recip (SeahorseWidget *swidget, SeahorseKey *skey)
 }
 
 static gboolean
-add_all_recips (SeahorseWidget *swidget, gint length)
+add_all_recips (SeahorseWidget *swidget, gint length, guint count)
 {
 	GtkWidget *dialog;
 	gint response;
@@ -191,8 +207,8 @@ add_all_recips (SeahorseWidget *swidget, gint length)
 	dialog = gtk_message_dialog_new (GTK_WINDOW (glade_xml_get_widget (
 		swidget->xml, swidget->name)), GTK_DIALOG_MODAL, GTK_MESSAGE_QUESTION,
 		GTK_BUTTONS_YES_NO, _("You are about to add %d keys to the recipients list."
-		" Some of them may not be fully valid. Would you like to temporarily"
-		" give all %d keys full validity?"), length, length);
+		" %d of them are not be fully valid. Would you like to temporarily"
+		" give these %d keys full validity?"), length, count, count);
 	
 	response = gtk_dialog_run (GTK_DIALOG (dialog));
 	gtk_widget_destroy (dialog);
@@ -209,17 +225,17 @@ add_clicked (GtkButton *button, SeahorseRecipients *srecips)
 	GtkTreeView *view;
 	SeahorseWidget *swidget;
 	gboolean check_valid = FALSE;
-	gint length;
+	guint count;
 	
 	swidget = SEAHORSE_WIDGET (srecips);
 	view = GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, ALL));
 	selected = list = gtk_tree_selection_get_selected_rows (
 		gtk_tree_view_get_selection (view), NULL);
-	length = g_list_length (list);
+	count = num_not_valid (list, view);
 	
-	check_valid = (srecips->need_validity && length > eel_gconf_get_integer (VALIDITY_THRESHOLD));
+	check_valid = (srecips->need_validity && count > eel_gconf_get_integer (VALIDITY_THRESHOLD));
 	/* if above threshold but don't want to add */
-	if (check_valid && !add_all_recips (swidget, length)) {
+	if (check_valid && !add_all_recips (swidget, g_list_length (list), count)) {
 		g_list_foreach (list, (GFunc)gtk_tree_path_free, NULL);
 		g_list_free (list);
 		return;
@@ -320,17 +336,29 @@ remove_row_activated (GtkTreeView *view, GtkTreePath *path,
 static void
 all_selection_changed (GtkTreeSelection *selection, SeahorseWidget *swidget)
 {
-	gint count;
 	GtkStatusbar *status;
 	guint id;
+	GList *list;
+	gint length;
+	gchar *message;
 	
-	count = gtk_tree_selection_count_selected_rows (selection);
+	list = gtk_tree_selection_get_selected_rows (selection, NULL);
+	length = g_list_length (list);
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "add"),
-		count > 0);
+		length > 0);
+	
 	status = GTK_STATUSBAR (glade_xml_get_widget (swidget->xml, "all_status"));
 	id = gtk_statusbar_get_context_id (status, "selection");
 	gtk_statusbar_pop (status, id);
-	gtk_statusbar_push (status, id, g_strdup_printf (_("Selected %d keys"), count));	
+	
+	message = g_strdup_printf (_("Selected %d keys"), length);
+	if (SEAHORSE_RECIPIENTS (swidget)->need_validity) {
+		message = g_strdup_printf (_("%s, %d not fully valid"), message,
+			num_not_valid (list, GTK_TREE_VIEW (glade_xml_get_widget (
+			swidget->xml, ALL))));
+	}
+	
+	gtk_statusbar_push (status, id, message);	
 }
 
 static void
@@ -346,7 +374,9 @@ recips_selection_changed (GtkTreeSelection *selection, SeahorseWidget *swidget)
 	status = GTK_STATUSBAR (glade_xml_get_widget (swidget->xml, "recips_status"));
 	id = gtk_statusbar_get_context_id (status, "selection");
 	gtk_statusbar_pop (status, id);
-	gtk_statusbar_push (status, id, g_strdup_printf (_("Selected %d keys"), count));	
+	gtk_statusbar_push (status, id, g_strdup_printf (_("Selected %d out of %d keys"), count,
+		gtk_tree_model_iter_n_children (GTK_TREE_MODEL (SEAHORSE_RECIPIENTS (
+		swidget)->recipient_keys), NULL)));	
 }
 
 /* Creates a new #SeahorseRecipients given @sctx and whether doing
@@ -474,6 +504,7 @@ seahorse_recipients_run (SeahorseRecipients *srecips)
 				break;
 			default:
 				gpgme_recipients_release (recips);
+				recips = NULL;
 				done = TRUE;
 				break;
 		}
