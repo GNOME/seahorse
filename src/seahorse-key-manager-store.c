@@ -98,11 +98,13 @@ static void
 seahorse_key_manager_store_set (SeahorseKeyRow *skrow, GtkTreeIter *parent)
 {
 	GtkTreeIter iter;
-	guint index = 0;
+	guint index = 1, max;
 	
 	set_attributes (skrow, parent, 0);
+	max = seahorse_key_get_num_subkeys (skrow->skey);
+	
 	/* Sub keys */
-	while (index <= seahorse_key_get_num_subkeys (skrow->skey)) {
+	while (index <= max) {
 		gtk_tree_store_append (skrow->store, &iter, parent);
 		set_attributes (skrow, &iter, index);
 		index++;
