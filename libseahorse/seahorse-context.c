@@ -251,6 +251,7 @@ static void
 set_gpgme_signer (SeahorseContext *sctx, const gchar *id)
 {
 	gpgme_key_t key;
+    g_return_if_fail(id != NULL);
 	/* clear signers, get key, add key to signers */
 	gpgme_signers_clear (sctx->ctx);
 	g_return_if_fail (GPG_IS_OK (gpgme_op_keylist_start (sctx->ctx, id, TRUE)));

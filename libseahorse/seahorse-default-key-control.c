@@ -63,20 +63,22 @@ seahorse_default_key_control_new (SeahorseContext *sctx)
 	menu = gtk_menu_new ();
 	default_key = eel_gconf_get_string (DEFAULT_KEY);
 	
-	for (list = seahorse_context_get_key_pairs (sctx); list != NULL; list = g_list_next (list)) {
-		skey = SEAHORSE_KEY (list->data);
-		
-		if (!SEAHORSE_IS_KEY_PAIR (skey) || !seahorse_key_pair_can_sign (SEAHORSE_KEY_PAIR (skey)))
-			return NULL;
-		
-		key_added (sctx, skey, menu);
-		
-		if (g_str_equal (default_key, seahorse_key_get_id (SEAHORSE_KEY_PAIR (skey)->secret)))
-			history = index;
-		
-		index++;
-	}
-	
+    if (default_key) {
+    	for (list = seahorse_context_get_key_pairs (sctx); list != NULL; list = g_list_next (list)) {
+    		skey = SEAHORSE_KEY (list->data);
+    		
+    		if (!SEAHORSE_IS_KEY_PAIR (skey) || !seahorse_key_pair_can_sign (SEAHORSE_KEY_PAIR (skey)))
+    			return NULL;
+    		
+    		key_added (sctx, skey, menu);
+    		
+    		if (g_str_equal (default_key, seahorse_key_get_id (SEAHORSE_KEY_PAIR (skey)->secret)))
+    			history = index;
+    		
+    		index++;
+    	}
+    }
+    	
 	g_signal_connect_after (sctx, "add", G_CALLBACK (key_added), menu);
 	g_signal_connect_after (GTK_OBJECT (menu), "destroy",
 		G_CALLBACK (menu_destroyed), sctx);
