@@ -33,3 +33,5 @@ EXTRA_DIST = \
 CLEANFILES = *.gladep* *.bak \
 	$(desktop_DATA)
 	
+install-exec-hook:
+	chmod u+s $(bindir)/seahorse-agent
