@@ -35,9 +35,6 @@
 
 #define KEY_LIST "key_list"
 
-#define STATUSBAR_VISIBLE UI_SCHEMAS "/statusbar_visible"
-#define TOOLBAR_VISIBLE UI_SCHEMAS "/toolbar_visible"
-
 static guint signal_id = 0;
 static gulong hook_id = 0;
 
@@ -165,12 +162,6 @@ static void
 preferences_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
 	seahorse_preferences_show (swidget->sctx);
-}
-
-static void
-view_bar (GtkCheckMenuItem *item, const gchar *key)
-{
-	eel_gconf_set_boolean (key, gtk_check_menu_item_get_active (item));
 }
 
 static void
@@ -355,23 +346,11 @@ gconf_notification (GConfClient *gclient, guint id, GConfEntry *entry, SeahorseW
 	
 	key = gconf_entry_get_key (entry);
 	value = gconf_entry_get_value (entry);
-	
-	if (g_str_equal (key, STATUSBAR_VISIBLE)) {
-		widget = glade_xml_get_widget (swidget->xml, "status");
-		
-		if (gconf_value_get_bool (value))
-			gtk_widget_show (widget);
-		else
-			gtk_widget_hide (widget);
-	}
-	else if (g_str_equal (key, TOOLBAR_VISIBLE)) {
-		widget = glade_xml_get_widget (swidget->xml, "tool_dock");
-		
-		if (gconf_value_get_bool (value))
-			gtk_widget_show (widget);
-		else
-			gtk_widget_hide (widget);
-	}
+
+    /* 
+     * Removed last two gconf notification items, although I'm sure
+     * we'll get more, so leaving this code here... 
+     */
 }
 /*
 static void
@@ -517,24 +496,6 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 	/* init gclient */
 	eel_gconf_notification_add (UI_SCHEMAS, (GConfClientNotifyFunc) gconf_notification, swidget);
 	eel_gconf_monitor_add (UI_SCHEMAS);
-	
-	/* init toolbar */
-	glade_xml_signal_connect_data (swidget->xml, "toolbar_activate",
-		G_CALLBACK (view_bar), TOOLBAR_VISIBLE);
-	visible = eel_gconf_get_boolean (TOOLBAR_VISIBLE);
-	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (
-		glade_xml_get_widget (swidget->xml, "view_toolbar")), visible);
-	if (!visible)
-		gtk_widget_hide (glade_xml_get_widget (swidget->xml, "tool_dock"));
-	
-	/* init status bar */
-	widget = glade_xml_get_widget (swidget->xml, "view_statusbar");
-	visible = eel_gconf_get_boolean (STATUSBAR_VISIBLE);
-	glade_xml_signal_connect_data (swidget->xml, "statusbar_activate",
-		G_CALLBACK (view_bar), STATUSBAR_VISIBLE);
-	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (widget), visible);
-	if (!visible)
-		gtk_widget_hide (glade_xml_get_widget (swidget->xml, "status"));
 	
 	/* other signals */	
 	glade_xml_signal_connect_data (swidget->xml, "preferences_activate",
