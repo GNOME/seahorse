@@ -281,7 +281,11 @@ gboolean
 seahorse_key_is_valid (const SeahorseKey *skey)
 {
 	g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), FALSE);
-	return !(gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_KEY_DISABLED, NULL, 0));
+	
+	return (!(gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_KEY_DISABLED, NULL, 0)) &&
+		!(gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_KEY_EXPIRED, NULL, 0)) &&
+		!(gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_KEY_REVOKED, NULL, 0)) &&
+		!(gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_KEY_INVALID, NULL, 0)));
 }
 
 gboolean
@@ -289,4 +293,11 @@ seahorse_key_can_encrypt (const SeahorseKey *skey)
 {
 	return (seahorse_key_is_valid (skey) &&
 		gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_CAN_ENCRYPT, NULL, 0));
+}
+
+gboolean
+seahorse_key_can_sign (const SeahorseKey *skey)
+{
+	return (seahorse_key_is_valid (skey) &&
+		gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_CAN_SIGN, NULL, 0));
 }

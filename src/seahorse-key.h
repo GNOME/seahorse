@@ -90,4 +90,6 @@ gboolean	seahorse_key_is_valid		(const SeahorseKey	*skey);
 
 gboolean	seahorse_key_can_encrypt	(const SeahorseKey	*skey);
 
+gboolean	seahorse_key_can_sign		(const SeahorseKey	*skey);
+
 #endif /* __SEAHORSE_KEY_H__ */

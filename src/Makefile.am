@@ -34,10 +34,10 @@ seahorse_SOURCES = main.c \
 	seahorse-key-store.c seahorse-key-store.h \
 	seahorse-key-manager-store.c seahorse-key-manager-store.h \
 	seahorse-recipients-store.c seahorse-recipients-store.h \
-	seahorse-key-menu.c seahorse-key-menu.h \
-	seahorse-key-menu-item.c seahorse-key-menu-item.h \
 	seahorse-file-manager.c seahorse-file-manager.h \
-	seahorse-encrypt-recipients-store.c seahorse-encrypt-recipients-store.h
+	seahorse-encrypt-recipients-store.c seahorse-encrypt-recipients-store.h \
+	seahorse-signer-menu.c seahorse-signer-menu.h \
+	seahorse-signer-menu-item.c seahorse-signer-menu-item.h
 
 glade_DATA = seahorse-key-manager.glade2 \
 	seahorse-text-editor.glade2 \

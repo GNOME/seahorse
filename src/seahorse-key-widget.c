@@ -215,15 +215,10 @@ SeahorseWidget*
 seahorse_key_widget_new (gchar *name, SeahorseContext *sctx, SeahorseKey *skey)
 {
 	return seahorse_key_widget_create (name, sctx, skey, FALSE);
-	
-	//return g_object_new (SEAHORSE_TYPE_KEY_WIDGET, "name", name, "ctx", sctx, "key", skey,  NULL);
 }
 
 SeahorseWidget*
 seahorse_key_widget_new_component (gchar *name, SeahorseContext *sctx, SeahorseKey *skey)
 {
 	return seahorse_key_widget_create (name, sctx, skey, TRUE);
-	
-	/*return g_object_new (SEAHORSE_TYPE_KEY_WIDGET, "name", name, "ctx", sctx,
-		"component", TRUE, "key", skey, NULL);*/
 }
