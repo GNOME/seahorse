@@ -546,8 +546,7 @@ free_connections (gpointer data, gpointer user_data)
 void
 seahorse_agent_io_uninit ()
 {
-    if (g_connections);
-    {
+    if (g_connections) {
         g_list_foreach (g_connections, free_connections, NULL);
         g_list_free (g_connections);
         g_connections = NULL;
