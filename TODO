@@ -1,7 +1,7 @@
-TODO (last updated 2003-02-07)
+TODO (last updated 2003-04-29)
 ==============================
 
-Seahorse TODO list.
+Seahorse TODO list. Also check bugzilla.gnome.org for more specific bugs & enhancements.
 Items are listed under the stable release version goal.
 For example, items under 0.8.0 will be implemented in the 0.7 series,
 and items under 1.0 will be implemented in the 0.9 series.
@@ -10,8 +10,8 @@ A = assigned
 X = finished
 ? = not necessarily required, maybe not possible or worth effort
 
-Contact a maintainer if you'd like to be responsible for a task.
-Also check bugzilla for other tasks.
+Contact a maintainer on seahorse-devel@lists.sourceforge.net
+if you'd like to be responsible for a task.
 
 
 For 0.8 release
@@ -19,27 +19,21 @@ For 0.8 release
 [A] Bonoboize context to use factory/activation so that there is only
 	one context used for any/all processes, unless a new one is
 	specifically requested
-[A] Bonobo control for pgp settings: can be customized with properties:
-	"ascii_armor", boolean
-	"text_mode", boolean
-	"encrypt_self", boolean
-	"default_key", boolean
-[A] Fix app dialogs
-[A] Nautilus context menu / mime types
+[X] Fix app dialogs
+[X] Nautilus context menu / mime types
 [ ] Nautilus properties view for pgp/gpg files
-[A] Command line ops to be used by context menu
-[A] Fix libseahorse dialogs to work with command line ops
+[X] Command line ops to be used by context menu
 [ ] Gedit plugin
 [ ] Keys:// gnome-vfs view
-[ ] Migrate key-ops to libseahorse for keys://
+[?] Migrate key-ops to libseahorse for keys://
 [ ] Usability review (Resp: Jacob & Gnome Usability Team)
 [ ] Drag data in = import (Resp: Jacob)
 [ ] Drag keys out = export (Resp: Jacob)
 [?] Export key to server
 [?] Import key from server
-[A] Update help with new usage & more concepts (Resp: Jacob & Gnome Doc Team)
+[ ] Update help with new usage & more concepts (Resp: Jacob & Gnome Doc Team)
 [ ] Backup key-pair
-[ ] More refined key changes so that key-properties doesn't have to delete notebook pages
+[?] More refined key changes so that key-properties doesn't have to delete notebook pages
 [ ] Accessability review (Resp: Jacob & Gnome Usability Team)
 [A] Key edit operations (Resp: Jacob)
 	[X] Add uid
@@ -57,11 +51,12 @@ For 0.8 release
 	[?] Add photo id (wait to show photo id)
 	[?] Show photo id
 	[?] User id preferences (requires gpg 1.2.2)
+	[ ] Revoke user id
 
 For 1.0 release
 ---------------
 [ ] Gpgsm support
-[ ] Migrate to Gpgme 0.4 while providing 0.3 compatability
+[?] Migrate to Gpgme 0.4 while providing 0.3 compatability
 
 Non-tasked issues/todo
 ----------------------
@@ -69,4 +64,8 @@ Non-tasked issues/todo
 1. Changing a key's owner trust may affect the validity of any keys it has signed.
 Since keys are cached, the signed key's validity may not be correct until it has been updated.
 The context could do a second pass through the keys so that each key will listen
-to changes to those keys that have signed it.
+to changes to those keys that have signed it. An easy way out would be to inform
+the user that validity of any signed keys may not be correct until seahorse is restarted.
+However, if contexts are served, that would require killing all running seahorse related processes,
+which is less than ideal. A better way would be having an option to refresh the key lists,
+if doing key->key signalling is not feasible.
