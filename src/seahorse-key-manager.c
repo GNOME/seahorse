@@ -75,6 +75,12 @@ generate_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
 	seahorse_generate_select_show (swidget->sctx);
 }
+/* Loads Key generation assistant for first time users */
+static void
+new_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
+{
+	seahorse_generate_druid_show (swidget->sctx);
+}
 
 /* Setup our file types on a file chooser dialog */
 static void
@@ -724,6 +730,12 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 	eel_gconf_notification_add (UI_SCHEMAS, (GConfClientNotifyFunc) gconf_notification, swidget);
 	eel_gconf_monitor_add (UI_SCHEMAS);
 	
+	/* first time signals */
+	glade_xml_signal_connect_data (swidget->xml, "import_button_clicked",
+		G_CALLBACK (import_activate), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "new_button_clicked",
+		G_CALLBACK (new_button_clicked), swidget);
+		
 	/* other signals */	
 	glade_xml_signal_connect_data (swidget->xml, "preferences_activate",
 		G_CALLBACK (preferences_activate), swidget);
@@ -754,5 +766,12 @@ seahorse_key_manager_show (SeahorseContext *sctx)
                               G_CALLBACK(filter_changed), skstore);
 
     seahorse_context_get_keys (sctx);                                 
+
+	if (seahorse_context_get_n_keys (sctx) == 0 && 
+	    seahorse_context_get_n_key_pairs (sctx) == 0) {
+		w = glade_xml_get_widget (swidget->xml, "first-time-box");
+		gtk_widget_show (w);
+	}
+	
     return GTK_WINDOW (w);
 }
