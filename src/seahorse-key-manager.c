@@ -123,7 +123,7 @@ static void
 clipboard_received (GtkClipboard *board, const gchar *text, SeahorseContext *sctx)
 {
     SeahorseKeySource *sksrc;
-    GError *err;
+    GError *err = NULL;
     gint keys;
     
     sksrc = seahorse_context_get_key_source (sctx);
