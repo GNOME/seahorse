@@ -18,8 +18,6 @@ libseahorse_a_SOURCES = \
 	seahorse-op.c seahorse-op.h \
 	seahorse-key-store.c seahorse-key-store.h \
 	seahorse-recipients-store.c seahorse-recipients-store.h \
-	seahorse-signer-menu-item.c seahorse-signer-menu-item.h \
-	seahorse-signer-menu.c seahorse-signer-menu.h \
 	seahorse-util.c seahorse-util.h \
 	seahorse-validity.c seahorse-validity.h \
 	seahorse-passphrase.c \

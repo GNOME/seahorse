@@ -20,11 +20,11 @@
  */
 
 #include <gnome.h>
+#include <libbonoboui.h>
 #include <eel/eel.h>
 
 #include "seahorse-preferences.h"
 #include "seahorse-widget.h"
-#include "seahorse-signer-menu.h"
 
 static void
 button_toggled (GtkToggleButton *togglebutton, gchar *key)
@@ -77,17 +77,16 @@ seahorse_preferences_show (SeahorseContext *sctx)
 	swidget = seahorse_widget_new ("preferences", sctx);
 	g_return_if_fail (swidget != NULL);
 	
-	/* Do initial states */
-	widget = glade_xml_get_widget (swidget->xml, "ascii_armor");
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget),
-		gpgme_get_armor (sctx->ctx));
+	widget = bonobo_widget_new_control ("OAFIID:Seahorse_PGP_Controls", NULL);
+	gtk_widget_show (widget);
 	
-	widget = glade_xml_get_widget (swidget->xml, "text_mode");
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget),
-		gpgme_get_textmode (sctx->ctx));
+	bonobo_widget_set_property (BONOBO_WIDGET (widget), "ascii_armor",
+		BONOBO_ARG_BOOLEAN, CORBA_TRUE, NULL);
+	bonobo_widget_set_property (BONOBO_WIDGET (widget), "default_key",
+		BONOBO_ARG_BOOLEAN, CORBA_TRUE, NULL);
 	
-	seahorse_signer_menu_new (sctx, GTK_OPTION_MENU (
-		glade_xml_get_widget (swidget->xml, "default_key")));
+	gtk_notebook_prepend_page (GTK_NOTEBOOK (glade_xml_get_widget (swidget->xml, "notebook")),
+		widget, gtk_label_new (_("PGP")));
 	
 	key_style = eel_gconf_get_string (TOOLBAR_STYLE_KEY);
 	if (g_str_equal (key_style, TOOLBAR_BOTH))
@@ -112,10 +111,6 @@ seahorse_preferences_show (SeahorseContext *sctx)
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (glade_xml_get_widget (
 		swidget->xml, "show_type")), eel_gconf_get_boolean (SHOW_TYPE_KEY));
 	
-	glade_xml_signal_connect_data (swidget->xml, "armor_toggled",
-		G_CALLBACK (button_toggled), ARMOR_KEY);
-	glade_xml_signal_connect_data (swidget->xml, "text_mode_toggled",
-		G_CALLBACK (button_toggled), TEXTMODE_KEY);
 	glade_xml_signal_connect_data (swidget->xml, "key_toolbar_changed",
 		G_CALLBACK (key_toolbar_changed), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "show_validity_toggled",

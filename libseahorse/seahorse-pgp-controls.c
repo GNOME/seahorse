@@ -90,25 +90,25 @@ get_property (BonoboPropertyBag *pb, BonoboArg *arg, guint id,
 {
 	switch (id) {
 		case ASCII_ARMOR_PROP:
-			if (controls->ascii_armor != NULL)
+			if (GTK_WIDGET_VISIBLE (controls->ascii_armor))
 				BONOBO_ARG_SET_BOOLEAN (arg, CORBA_TRUE);
 			else
 				BONOBO_ARG_SET_BOOLEAN (arg, CORBA_FALSE);
 			break;
 		case TEXT_MODE_PROP:
-			if (controls->text_mode != NULL)
+			if (GTK_WIDGET_VISIBLE (controls->text_mode))
 				BONOBO_ARG_SET_BOOLEAN (arg, CORBA_TRUE);
 			else
 				BONOBO_ARG_SET_BOOLEAN (arg, CORBA_FALSE);
 			break;
 		case ENCRYPT_SELF_PROP:
-			if (controls->encrypt_self != NULL)
+			if (GTK_WIDGET_VISIBLE (controls->encrypt_self))
 				BONOBO_ARG_SET_BOOLEAN (arg, CORBA_TRUE);
 			else
 				BONOBO_ARG_SET_BOOLEAN (arg, CORBA_FALSE);
 			break;
 		case DEFAULT_KEY_PROP:
-			if (controls->default_key != NULL)
+			if (GTK_WIDGET_VISIBLE (controls->default_key))
 				BONOBO_ARG_SET_BOOLEAN (arg, CORBA_TRUE);
 			else
 				BONOBO_ARG_SET_BOOLEAN (arg, CORBA_FALSE);
@@ -122,100 +122,30 @@ static void
 set_property (BonoboPropertyBag *pb, const BonoboArg *arg, guint id,
 	      CORBA_Environment *ev, ControlTable *controls)
 {
-	SeahorseContext *sctx;
-	GList *keys;
-	GtkWidget *menu, *item;
-	const gchar *keyid;
-	gint index = 0, history = 0;
-	
 	switch (id) {
 		case ASCII_ARMOR_PROP:
-			if (BONOBO_ARG_GET_BOOLEAN (arg)) {
-				controls->ascii_armor = gtk_check_button_new_with_mnemonic (
-					_("_Ascii Armor"));
-				gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (controls->ascii_armor),
-					eel_gconf_get_boolean (ARMOR_KEY));
-				g_signal_connect_after (GTK_TOGGLE_BUTTON (controls->ascii_armor),
-					"toggled", G_CALLBACK (control_toggled), ARMOR_KEY);
+			if (BONOBO_ARG_GET_BOOLEAN (arg))
 				gtk_widget_show (controls->ascii_armor);
-				gtk_container_add (controls->hbox, controls->ascii_armor);
-			}
-			else if (controls->ascii_armor != NULL) {
-				gtk_widget_destroy (controls->ascii_armor);
-				controls->ascii_armor = NULL;
-			}
+			else
+				gtk_widget_hide (controls->ascii_armor);
 			break;
 		case TEXT_MODE_PROP:
-			if (BONOBO_ARG_GET_BOOLEAN (arg)) {
-				controls->text_mode = gtk_check_button_new_with_mnemonic (
-					_("_Text Mode"));
-				gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (controls->text_mode),
-					eel_gconf_get_boolean (TEXTMODE_KEY));
-				g_signal_connect_after (GTK_TOGGLE_BUTTON (controls->text_mode),
-					"toggled", G_CALLBACK (control_toggled), TEXTMODE_KEY);
+			if (BONOBO_ARG_GET_BOOLEAN (arg))
 				gtk_widget_show (controls->text_mode);
-				gtk_container_add (controls->hbox, controls->text_mode);
-			}
-			else if (controls->text_mode != NULL) {
-				gtk_widget_destroy (controls->text_mode);
-				controls->text_mode = NULL;
-			}
+			else
+				gtk_widget_hide (controls->text_mode);
 			break;
 		case ENCRYPT_SELF_PROP:
-			if (BONOBO_ARG_GET_BOOLEAN (arg)) {
-				controls->encrypt_self = gtk_check_button_new_with_mnemonic (
-					_("_Encrypt to Self"));
-				gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (controls->encrypt_self),
-					eel_gconf_get_boolean (ENCRYPTSELF_KEY));
-				g_signal_connect_after (GTK_TOGGLE_BUTTON (controls->encrypt_self),
-					"toggled", G_CALLBACK (control_toggled), ENCRYPTSELF_KEY);
+			if (BONOBO_ARG_GET_BOOLEAN (arg))
 				gtk_widget_show (controls->encrypt_self);
-				gtk_container_add (controls->hbox, controls->encrypt_self);
-			}
-			else if (controls->encrypt_self != NULL) {
-				gtk_widget_destroy (controls->encrypt_self);
-				controls->encrypt_self = NULL;
-			}
+			else
+				gtk_widget_hide (controls->encrypt_self);
 			break;
 		case DEFAULT_KEY_PROP:
-			if (BONOBO_ARG_GET_BOOLEAN (arg)) {
-				controls->default_key = gtk_option_menu_new ();
+			if (BONOBO_ARG_GET_BOOLEAN (arg))
 				gtk_widget_show (controls->default_key);
-				gtk_container_add (controls->vbox, controls->default_key);
-				
-				sctx = seahorse_context_new ();
-				g_object_set_data (G_OBJECT (controls->default_key),
-					MENU_SCTX, sctx);
-				
-				menu = gtk_menu_new ();
-				gtk_widget_show (menu);
-				gtk_option_menu_set_menu (GTK_OPTION_MENU (controls->default_key), menu);
-				
-				keys = seahorse_context_get_key_pairs (sctx);
-				keyid = eel_gconf_get_string (DEFAULT_KEY);
-				
-				for (; keys != NULL; keys = g_list_next (keys)) {
-					SeahorseKeyPair *skpair = keys->data;
-					item = gtk_menu_item_new_with_label (
-						seahorse_key_get_userid (SEAHORSE_KEY (skpair), 0));
-					gtk_widget_show (item);
-					gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-					g_signal_connect_after (item, "activate", G_CALLBACK (key_activate),
-						GTK_OPTION_MENU (controls->default_key));
-					
-					if (g_str_equal (keyid, seahorse_key_get_id (skpair->secret)))
-						history = index;
-					index++;
-				}
-				
-				gtk_option_menu_set_history (GTK_OPTION_MENU (controls->default_key), history);
-			}
-			else if (controls->default_key != NULL) {
-				sctx = g_object_steal_data (G_OBJECT (controls->default_key), MENU_SCTX);
-				seahorse_context_destroy (sctx);
-				gtk_widget_destroy (controls->default_key);
-				controls->default_key = NULL;
-			}
+			else
+				gtk_widget_hide (controls->default_key);
 			break;
 		default:
 			break;
@@ -229,18 +159,71 @@ seahorse_pgp_controls_new (void)
 	BonoboControl *control;
 	BonoboPropertyBag *pb;
 	BonoboArg *arg;
+	SeahorseContext *sctx;
+	GList *keys;
+	GtkWidget *menu, *item;
+	const gchar *keyid;
+	gint index = 0, history = 0;
 
 	g_print ("creating controls\n");
 	controls = g_new0 (ControlTable, 1);
 	
 	controls->hbox = GTK_CONTAINER (gtk_hbox_new (FALSE, 12));
-	//gtk_container_set_border_width (GTK_CONTAINER (controls->hbox), 12);
 	gtk_widget_show (GTK_WIDGET (controls->hbox));
 	
 	controls->vbox = GTK_CONTAINER (gtk_vbox_new (FALSE, 12));
 	gtk_container_set_border_width (GTK_CONTAINER (controls->vbox), 12);
 	gtk_widget_show (GTK_WIDGET (controls->vbox));
 	gtk_container_add (controls->vbox, GTK_WIDGET (controls->hbox));
+	
+	controls->ascii_armor = gtk_check_button_new_with_mnemonic (_("_Ascii Armor"));
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (controls->ascii_armor),
+		eel_gconf_get_boolean (ARMOR_KEY));
+	g_signal_connect_after (GTK_TOGGLE_BUTTON (controls->ascii_armor), "toggled",
+		G_CALLBACK (control_toggled), ARMOR_KEY);
+	gtk_container_add (controls->hbox, controls->ascii_armor);
+	
+	controls->text_mode = gtk_check_button_new_with_mnemonic (_("_Text Mode"));
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (controls->text_mode),
+		eel_gconf_get_boolean (TEXTMODE_KEY));
+	g_signal_connect_after (GTK_TOGGLE_BUTTON (controls->text_mode),"toggled",
+		G_CALLBACK (control_toggled), TEXTMODE_KEY);
+	gtk_container_add (controls->hbox, controls->text_mode);
+	
+	controls->encrypt_self = gtk_check_button_new_with_mnemonic (_("_Encrypt to Self"));
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (controls->encrypt_self),
+		eel_gconf_get_boolean (ENCRYPTSELF_KEY));
+	g_signal_connect_after (GTK_TOGGLE_BUTTON (controls->encrypt_self),"toggled",
+		G_CALLBACK (control_toggled), ENCRYPTSELF_KEY);
+	gtk_container_add (controls->hbox, controls->encrypt_self);
+	
+	controls->default_key = gtk_option_menu_new ();
+	gtk_container_add (controls->vbox, controls->default_key);
+				
+	sctx = seahorse_context_new ();
+	g_object_set_data (G_OBJECT (controls->default_key), MENU_SCTX, sctx);
+				
+	menu = gtk_menu_new ();
+	gtk_widget_show (menu);
+	gtk_option_menu_set_menu (GTK_OPTION_MENU (controls->default_key), menu);
+				
+	keys = seahorse_context_get_key_pairs (sctx);
+	keyid = eel_gconf_get_string (DEFAULT_KEY);
+				
+	for (; keys != NULL; keys = g_list_next (keys)) {
+		SeahorseKeyPair *skpair = keys->data;
+		item = gtk_menu_item_new_with_label (seahorse_key_get_userid (SEAHORSE_KEY (skpair), 0));
+		gtk_widget_show (item);
+		gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+		g_signal_connect_after (item, "activate", G_CALLBACK (key_activate),
+			GTK_OPTION_MENU (controls->default_key));
+					
+		if (g_str_equal (keyid, seahorse_key_get_id (skpair->secret)))
+			history = index;
+		index++;
+	}
+				
+	gtk_option_menu_set_history (GTK_OPTION_MENU (controls->default_key), history);
 
 	control = bonobo_control_new (GTK_WIDGET (controls->vbox));
 	

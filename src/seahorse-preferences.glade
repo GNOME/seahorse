@@ -2,6 +2,7 @@
 <!DOCTYPE glade-interface SYSTEM "http://glade.gnome.org/glade-2.0.dtd">
 
 <glade-interface>
+<requires lib="gnome"/>
 
 <widget class="GtkDialog" id="preferences">
   <property name="visible">True</property>
@@ -63,7 +64,7 @@
       </child>
 
       <child>
-	<widget class="GtkNotebook" id="notebook1">
+	<widget class="GtkNotebook" id="notebook">
 	  <property name="border_width">12</property>
 	  <property name="visible">True</property>
 	  <property name="can_focus">True</property>
@@ -72,129 +73,6 @@
 	  <property name="tab_pos">GTK_POS_TOP</property>
 	  <property name="scrollable">False</property>
 	  <property name="enable_popup">False</property>
-
-	  <child>
-	    <widget class="GtkTable" id="table1">
-	      <property name="border_width">12</property>
-	      <property name="visible">True</property>
-	      <property name="n_rows">2</property>
-	      <property name="n_columns">2</property>
-	      <property name="homogeneous">False</property>
-	      <property name="row_spacing">12</property>
-	      <property name="column_spacing">12</property>
-
-	      <child>
-		<widget class="GtkCheckButton" id="ascii_armor">
-		  <property name="visible">True</property>
-		  <property name="tooltip" translatable="yes">Use Ascii Armor</property>
-		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">_Ascii Armor</property>
-		  <property name="use_underline">True</property>
-		  <property name="relief">GTK_RELIEF_NORMAL</property>
-		  <property name="active">True</property>
-		  <property name="inconsistent">False</property>
-		  <property name="draw_indicator">True</property>
-		  <signal name="toggled" handler="armor_toggled" last_modification_time="Sun, 20 Oct 2002 07:47:49 GMT"/>
-		</widget>
-		<packing>
-		  <property name="left_attach">0</property>
-		  <property name="right_attach">1</property>
-		  <property name="top_attach">0</property>
-		  <property name="bottom_attach">1</property>
-		  <property name="x_options">fill</property>
-		  <property name="y_options"></property>
-		</packing>
-	      </child>
-
-	      <child>
-		<widget class="GtkCheckButton" id="text_mode">
-		  <property name="visible">True</property>
-		  <property name="tooltip" translatable="yes">Use Canonical Text Mode</property>
-		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">_Text Mode</property>
-		  <property name="use_underline">True</property>
-		  <property name="relief">GTK_RELIEF_NORMAL</property>
-		  <property name="active">False</property>
-		  <property name="inconsistent">False</property>
-		  <property name="draw_indicator">True</property>
-		  <signal name="toggled" handler="text_mode_toggled" last_modification_time="Sun, 20 Oct 2002 07:48:38 GMT"/>
-		</widget>
-		<packing>
-		  <property name="left_attach">1</property>
-		  <property name="right_attach">2</property>
-		  <property name="top_attach">0</property>
-		  <property name="bottom_attach">1</property>
-		  <property name="x_options">fill</property>
-		  <property name="y_options"></property>
-		</packing>
-	      </child>
-
-	      <child>
-		<widget class="GtkLabel" id="label1">
-		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">_Default Key:</property>
-		  <property name="use_underline">True</property>
-		  <property name="use_markup">False</property>
-		  <property name="justify">GTK_JUSTIFY_LEFT</property>
-		  <property name="wrap">False</property>
-		  <property name="selectable">False</property>
-		  <property name="xalign">0</property>
-		  <property name="yalign">0.5</property>
-		  <property name="xpad">0</property>
-		  <property name="ypad">0</property>
-		  <property name="mnemonic_widget">default_key</property>
-		</widget>
-		<packing>
-		  <property name="left_attach">0</property>
-		  <property name="right_attach">1</property>
-		  <property name="top_attach">1</property>
-		  <property name="bottom_attach">2</property>
-		  <property name="x_options">fill</property>
-		  <property name="y_options"></property>
-		</packing>
-	      </child>
-
-	      <child>
-		<widget class="GtkOptionMenu" id="default_key">
-		  <property name="visible">True</property>
-		  <property name="tooltip" translatable="yes">Default Signing Key</property>
-		  <property name="can_focus">True</property>
-		  <property name="history">-1</property>
-		</widget>
-		<packing>
-		  <property name="left_attach">1</property>
-		  <property name="right_attach">2</property>
-		  <property name="top_attach">1</property>
-		  <property name="bottom_attach">2</property>
-		  <property name="x_options">fill</property>
-		  <property name="y_options"></property>
-		</packing>
-	      </child>
-	    </widget>
-	    <packing>
-	      <property name="tab_expand">False</property>
-	      <property name="tab_fill">False</property>
-	    </packing>
-	  </child>
-
-	  <child>
-	    <widget class="GtkLabel" id="label1">
-	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">GPG</property>
-	      <property name="use_underline">False</property>
-	      <property name="use_markup">False</property>
-	      <property name="justify">GTK_JUSTIFY_LEFT</property>
-	      <property name="wrap">False</property>
-	      <property name="selectable">False</property>
-	      <property name="xalign">0.5</property>
-	      <property name="yalign">0.5</property>
-	      <property name="xpad">0</property>
-	      <property name="ypad">0</property>
-	    </widget>
-	    <packing>
-	      <property name="type">tab</property>
-	    </packing>
-	  </child>
 
 	  <child>
 	    <widget class="GtkVBox" id="vbox1">
