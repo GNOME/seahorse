@@ -35,10 +35,10 @@
 struct _SeahorseContextPrivate
 {
 	GList *key_pairs;
-	//GMutex *pair_mutex;
-	
 	GList *single_keys;
-	//GMutex *single_mutex;
+    GHashTable *lookups;
+    gboolean init_list;
+    gboolean init_pair_list;
 };
 
 enum {
@@ -141,12 +141,17 @@ static void
 seahorse_context_init (SeahorseContext *sctx)
 {
 	g_return_if_fail (GPG_IS_OK (init_gpgme (&sctx->ctx)));
+   
 	/* init private vars */
 	sctx->priv = g_new0 (SeahorseContextPrivate, 1);
 	sctx->priv->key_pairs = NULL;
-	//sctx->priv->pair_mutex = g_mutex_new ();
 	sctx->priv->single_keys = NULL;
-	//sctx->priv->single_mutex = g_mutex_new ();
+    sctx->priv->lookups = g_hash_table_new (g_str_hash, g_str_equal);
+
+    /* Whether or not we've listed yet */
+    sctx->priv->init_list = FALSE;
+    sctx->priv->init_pair_list = FALSE;
+    
 	/* init signer */
 	set_gpgme_signer (sctx, eel_gconf_get_string (DEFAULT_KEY));
 	/* set prefs */
@@ -173,9 +178,9 @@ seahorse_context_finalize (GObject *gobject)
 		seahorse_key_destroy (keys->data);
 	
 	g_list_free (sctx->priv->key_pairs);
-	//g_mutex_free (sctx->priv->pair_mutex);
 	g_list_free (sctx->priv->single_keys);
-	//g_mutex_free (sctx->priv->single_mutex);
+    g_hash_table_destroy (sctx->priv->lookups);
+    
 	g_free (sctx->priv);
 	gpgme_release (sctx->ctx);
 	
@@ -194,6 +199,10 @@ seahorse_context_key_destroyed (GtkObject *object, SeahorseContext *sctx)
 		sctx->priv->key_pairs = g_list_remove (sctx->priv->key_pairs, skey);
 	else
 		sctx->priv->single_keys = g_list_remove (sctx->priv->single_keys, skey);
+    
+    /* Remove from lookups */ 
+    g_hash_table_remove (sctx->priv->lookups, seahorse_key_get_id (skey->key));
+    
 	/* disconnect signals */
 	g_signal_handlers_disconnect_by_func (GTK_OBJECT (skey),
 		seahorse_context_key_destroyed, sctx);
@@ -209,6 +218,9 @@ seahorse_context_key_changed (SeahorseKey *skey, SeahorseKeyChange change, Seaho
 {
 	gpgme_key_t key;
 	SeahorseKeyPair *skpair;
+  
+    /* Remove from lookups */ 
+    g_hash_table_remove (sctx->priv->lookups, seahorse_key_get_id (skey->key));        
 	
 	/* get key */
 	g_return_if_fail (GPG_IS_OK (gpgme_op_keylist_start (sctx->ctx,
@@ -230,6 +242,10 @@ seahorse_context_key_changed (SeahorseKey *skey, SeahorseKeyChange change, Seaho
 		gpgme_key_unref (skpair->secret);
 		skpair->secret = key;
 	}
+ 
+    /* Add back to lookups */ 
+    g_hash_table_replace (sctx->priv->lookups, 
+        (gpointer)seahorse_key_get_id (skey->key), skey);        
 }
 
 /* Calc fraction, call ::show_progress() */
@@ -312,85 +328,98 @@ add_key (SeahorseContext *sctx, SeahorseKey *skey)
 	/* do refs */
 	g_object_ref (skey);
 	gtk_object_sink (GTK_OBJECT (skey));
+  
+    /* Add to lookups */ 
+    g_hash_table_replace (sctx->priv->lookups, 
+            (gpointer)seahorse_key_get_id (skey->key), skey);        
+    
 	/* do signals */
 	g_signal_connect_after (GTK_OBJECT (skey), "destroy",
 		G_CALLBACK (seahorse_context_key_destroyed), sctx);
 	g_signal_connect (skey, "changed",
 		G_CALLBACK (seahorse_context_key_changed), sctx);
+        
 	/* notify observers */
 	g_signal_emit (G_OBJECT (sctx), context_signals[ADD], 0, skey);
 }
 
-static void
+static SeahorseKey *
 process_key_pair (gpgme_key_t secret, SeahorseContext *sctx)
 {
 	gpgme_ctx_t ctx;
 	gpgme_key_t key;
 	SeahorseKey *skey;
+
+    /* If we already have the key then return */
+    if ((skey = g_hash_table_lookup (sctx->priv->lookups, seahorse_key_get_id (secret))) != NULL) {
+        gpgme_key_unref(secret);
+        return skey;
+    }
 	
 	/* init context & listing */
-	g_return_if_fail (GPG_IS_OK (init_gpgme (&ctx)));
+	g_return_val_if_fail (GPG_IS_OK (init_gpgme (&ctx)), NULL);
 	/* if can do listing */
 	if (GPG_IS_OK (gpgme_op_keylist_start (ctx, seahorse_key_get_id (secret), FALSE)) &&
 	    GPG_IS_OK (gpgme_op_keylist_next (ctx, &key))) {
 		/* do new key, release gpgme keys */
-		//g_mutex_lock (sctx->priv->pair_mutex);
 		skey = seahorse_key_pair_new (key, secret);
 		gpgme_key_unref (key);
 		gpgme_key_unref (secret);
 		/* add key to list */
 		sctx->priv->key_pairs = g_list_append (sctx->priv->key_pairs, skey);
 		add_key (sctx, skey);
-		//g_mutex_unlock (sctx->priv->pair_mutex);
 		/* end listing */
 	}
 	
 	gpgme_op_keylist_end (ctx);
 	gpgme_release (ctx);
+    return skey;
 }
 
-static void
+static SeahorseKey *
 process_single_key (gpgme_key_t key, SeahorseContext *sctx)
 {
 	gpgme_ctx_t ctx;
 	gpgme_key_t secret;
 	SeahorseKey *skey;
+    
+    /* If we already have the key then return */
+    if ((skey = g_hash_table_lookup (sctx->priv->lookups, seahorse_key_get_id (key))) != NULL) {
+        gpgme_key_unref(key);
+        return skey;
+    }
 	
 	/* init new context & listing */
-	g_return_if_fail (GPG_IS_OK (init_gpgme (&ctx)));
+	g_return_val_if_fail (GPG_IS_OK (init_gpgme (&ctx)), NULL);
 	/* if can do listing */
 	if (GPG_IS_OK (gpgme_op_keylist_start (ctx, seahorse_key_get_id (key), TRUE))) {
-		/* if got a secret, then already have so release */
+		/* if got a secret, then process as secret */
 		if (GPG_IS_OK (gpgme_op_keylist_next (ctx, &secret))) {
-			gpgme_key_unref (secret);
-			gpgme_key_unref (key);
+            skey = process_key_pair (secret, sctx); 
 		}
 		/* otherwise don't have, add */
 		else {
 			/* do new key, release gpgme key */
-			//g_mutex_lock (sctx->priv->single_mutex);
 			skey = seahorse_key_new (key);
 			gpgme_key_unref (key);
 			/* add key to list */
 			sctx->priv->single_keys = g_list_append (sctx->priv->single_keys, skey);
 			add_key (sctx, skey);
-			//g_mutex_unlock (sctx->priv->single_mutex);
 		}
 	}
 	
 	gpgme_op_keylist_end (ctx);
 	gpgme_release (ctx);
+    return skey;
 }
 
 static guint
 do_keys (SeahorseContext *sctx, GFunc process_func, guint initial_count)
 {
-	//GThreadPool *pool;
 	guint count = initial_count + 1;
 	gint progress_update;
 	gpgme_key_t key;
 	
-	//pool = g_thread_pool_new (process_func, sctx, MAX_THREADS, TRUE, NULL);
 	progress_update = eel_gconf_get_integer (PROGRESS_UPDATE);
 	
 	/* get remaining keys */
@@ -399,16 +428,11 @@ do_keys (SeahorseContext *sctx, GFunc process_func, guint initial_count)
 			seahorse_context_show_progress (sctx, g_strdup_printf (
 				_("Loading key %d"), count), 0);
 		/* process key */
-		//g_thread_pool_push (pool, key, NULL);
 		process_func (key, sctx);
 		count++;
 	}
 	
 	gpgme_op_keylist_end (sctx->ctx);
-	/* wait for key processing to finish */
-	//g_thread_pool_free (pool, FALSE, TRUE);
-	//g_thread_pool_stop_unused_threads ();
-	
 	return count;
 }
 
@@ -477,11 +501,10 @@ seahorse_context_get_n_keys  (SeahorseContext    *sctx)
 GList*
 seahorse_context_get_keys (SeahorseContext *sctx)
 {
-	static gboolean init_list = FALSE;
-	
-	if (!init_list) {
+	if (!sctx->priv->init_list) {
+        sctx->priv->init_list = TRUE;
+        sctx->priv->init_pair_list = TRUE;
 		do_key_list (sctx);
-		init_list = TRUE;
 	}
 	
 	/* copy key_pairs since will append single_keys to list & key_pairs is small */
@@ -512,15 +535,42 @@ seahorse_context_get_n_keys_pair  (SeahorseContext    *sctx)
 GList*
 seahorse_context_get_key_pairs (SeahorseContext *sctx)
 {
-	static gboolean init_list = FALSE;
-	
-	if (!init_list) {
+	if (!sctx->priv->init_pair_list) {
+        sctx->priv->init_pair_list = TRUE;
 		do_key_pairs (sctx);
-		init_list = TRUE;
 	}
 	
 	return sctx->priv->key_pairs;
 }
+
+/**
+ * seahorse_context_get_key_fpr
+ * @sctx: Current #SeahorseContext
+ * @fpr: A fingerprint to lookup
+ * 
+ * Given a fingerprint load or find the key.
+ * 
+ * Returns: The key or NULL if not found.
+ **/
+SeahorseKey*    
+seahorse_context_get_key_fpr (SeahorseContext *sctx, const char *fpr)
+{
+    SeahorseKey *skey;
+    gpgme_key_t key;
+    gpgme_error_t err;
+    
+    skey = g_hash_table_lookup (sctx->priv->lookups, fpr);
+    if (!skey) {
+        
+        err = gpgme_get_key (sctx->ctx, fpr, &key, 0);        
+        if (GPG_IS_OK (err)) {
+            skey = process_single_key (key, sctx);
+            g_assert (g_hash_table_lookup (sctx->priv->lookups, fpr) != NULL);
+        }
+    }
+    
+    return skey;
+}    
 
 /**
  * seahorse_context_get_key:
@@ -534,26 +584,20 @@ seahorse_context_get_key_pairs (SeahorseContext *sctx)
 SeahorseKey*
 seahorse_context_get_key (SeahorseContext *sctx, gpgme_key_t key)
 {
-	GList *list = NULL, *keys = NULL;
-	SeahorseKey *skey = NULL;
-	const gchar *id1, *id2 = "";
-	
-	g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), NULL);
-	g_return_val_if_fail (key != NULL, NULL);
-	
-	list = seahorse_context_get_keys (sctx);
-	id1 = seahorse_key_get_id (key);
-	
-	for (keys = list; keys != NULL; keys = g_list_next (keys)) {
-		id2 = seahorse_key_get_id (SEAHORSE_KEY (keys->data)->key);
-		if (id2 != NULL && g_str_equal (id1, id2))
-			break;
-	}
-	
-    if (keys)
-        skey = SEAHORSE_KEY (keys->data);
-        
-	g_list_free (list);
+    SeahorseKey *skey;
+    
+    g_return_val_if_fail (key->subkeys->fpr != NULL, NULL);
+    
+    skey = g_hash_table_lookup (sctx->priv->lookups, key->subkeys->fpr);
+    if (!skey) {
+       
+        /* This releases the ref, so we need to add ref*/
+        gpgme_key_ref (key);
+        skey = process_single_key (key, sctx);
+
+        g_assert (g_hash_table_lookup (sctx->priv->lookups, key->subkeys->fpr) != NULL);
+    }
+    
     return skey;
 }
 
@@ -586,28 +630,19 @@ seahorse_context_show_progress (SeahorseContext *sctx, const gchar *op, gdouble 
 SeahorseKeyPair*
 seahorse_context_get_default_key (SeahorseContext *sctx)
 {
-	gpgme_key_t key;
-	SeahorseKeyPair *skpair = NULL;
-	GList *keys = NULL;
-	gboolean found = FALSE;
-	const gchar *id1 = "", *id2 = NULL;
+    gpgme_key_t key;
+    SeahorseKey *skey;
+	const gchar *id1;
 	
 	key = gpgme_signers_enum (sctx->ctx, 0);
 	id1 = seahorse_key_get_id (key);
 	g_print ("default key: %s\n", id1);
-	
-	for (keys = seahorse_context_get_key_pairs (sctx); keys != NULL; keys = g_list_next (keys)) {
-		skpair = keys->data;
-		id2 = seahorse_key_get_id (skpair->secret);
-		if (g_str_equal (id1, id2)) {
-			g_print ("found\n");
-			found = TRUE;
-			break;
-		}
-	}
-	gpgme_key_unref (key);
-	
-	return found ? skpair : NULL;
+   
+    skey = seahorse_context_get_key_fpr (sctx, id1);
+    if (SEAHORSE_IS_KEY_PAIR (skey))
+        return SEAHORSE_KEY_PAIR (skey);
+    
+    return NULL;
 }
 
 /* common func for adding new keys */

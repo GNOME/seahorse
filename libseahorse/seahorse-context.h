@@ -84,8 +84,11 @@ guint           seahorse_context_get_n_keys_pairs   (SeahorseContext    *sctx);
 
 GList*			seahorse_context_get_key_pairs		(SeahorseContext	*sctx);
 
-SeahorseKey*		seahorse_context_get_key		(SeahorseContext	*sctx,
-								 gpgme_key_t		key);
+SeahorseKey*    seahorse_context_get_key		(SeahorseContext	*sctx,
+				                				 gpgme_key_t		key);
+
+SeahorseKey*    seahorse_context_get_key_fpr    (SeahorseContext    *sctx,
+                                                 const char *fpr);
 
 void			seahorse_context_show_progress		(SeahorseContext	*sctx,
 								 const gchar		*op,

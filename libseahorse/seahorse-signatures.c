@@ -28,13 +28,14 @@
 static gchar*
 userid_for_fingerprint (SeahorseContext *sctx, const gchar *fingerprint)
 {
-    gpgme_error_t err;
-    gpgme_key_t key;
+    SeahorseKey *key;
     gchar *userid;
-    
-    err = gpgme_get_key (sctx->ctx, fingerprint, &key, 0);
-    userid = g_strdup (key->uids && key->uids->uid ? key->uids->uid : _("[Unknown Key]"));
-    gpgme_key_unref (key);
+
+    key = seahorse_context_get_key_fpr (sctx, fingerprint);
+    if (key == NULL) 
+        userid = g_strdup (_("[Unknown Key]"));
+    else
+        userid = seahorse_key_get_userid (key, 0);
     
     /* Fix up the id, so it doesn't think it's markup */
     g_strdelimit (userid, "<", '(');
