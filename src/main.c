@@ -89,6 +89,7 @@ do_encrypt (SeahorseContext *sctx, gchar *path,
 	}
 		
 	new_path = func (sctx, path, recips, &err);
+    seahorse_util_free_keys (recips);
 	g_free (path);
 		
 	if (!GPG_IS_OK (err)) {
