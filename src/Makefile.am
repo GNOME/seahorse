@@ -34,7 +34,7 @@ seahorse_SOURCES = main.c \
 	seahorse-process-multiple.c
 
 seahorse_LDADD = \
-	$(top_builddir)/libseahorse/libseahorse.a \
+	$(top_builddir)/libseahorse/libseahorse-internal.la \
 	$(SEAHORSE_LIBS)
 
 glade_DATA = \

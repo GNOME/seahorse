@@ -20,7 +20,7 @@ seahorse_pgp_preferences_SOURCES = \
 	$(AGENT_SRCS)
 	
 seahorse_pgp_preferences_LDADD = \
-	$(top_builddir)/libseahorse/libseahorse.a \
+	$(top_builddir)/libseahorse/libseahorse-internal.la \
 	$(SEAHORSE_LIBS)
 
 # The old mime structure 

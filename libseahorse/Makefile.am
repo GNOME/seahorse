@@ -11,12 +11,12 @@ INCLUDES = -I$(top_builddir) \
 	-DLOCALEDIR=\"$(localedir)\" \
 	-DPIXMAPSDIR=\""$(pixmapsdir)"\"
 
-noinst_LIBRARIES = libseahorse.a
+lib_LTLIBRARIES = libseahorse-internal.la
 
 BUILT_SOURCES = \
 	seahorse-marshal.c seahorse-marshal.h
 
-libseahorse_a_SOURCES = \
+libseahorse_internal_la_SOURCES = \
 	seahorse-key.c seahorse-key.h \
 	seahorse-key-pair.c seahorse-key-pair.h \
 	seahorse-context.c seahorse-context.h \

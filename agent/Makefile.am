@@ -21,7 +21,7 @@ seahorse_agent_SOURCES = seahorse-agent.c seahorse-agent.h seahorse-agent-action
                          eggtrayicon.h eggtrayicon.c
 
 seahorse_agent_LDADD = \
-	$(top_builddir)/libseahorse/libseahorse.a \
+	$(top_builddir)/libseahorse/libseahorse-internal.la \
 	$(SEAHORSE_LIBS)
                          
 glade_DATA = \
