@@ -1,7 +1,7 @@
 /*
  * Seahorse
  *
- * Copyright (C) 2002 Jacob Perkins
+ * Copyright (C) 2003 Jacob Perkins
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -157,11 +157,13 @@ do_stat_label (const gchar *label, GtkTable *table, guint left, guint top)
 
 /* Do statistics common to primary and sub keys */
 static void
-do_stats (GtkTable *table, guint top, SeahorseKey *skey,
-	  guint index, gboolean has_secret, SeahorseWidget *swidget)
+do_stats (SeahorseWidget *swidget, GtkTable *table, guint top, guint index)
 {
+	SeahorseKey *skey;
 	time_t expires;
 	GtkWidget *widget;
+	
+	skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
 	
 	do_stat_label (_("Key ID:"), table, 0, top);
 	do_stat_label (seahorse_key_get_keyid (skey, index), table, 1, top);
@@ -177,10 +179,12 @@ do_stats (GtkTable *table, guint top, SeahorseKey *skey,
 	
 	expires = gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_EXPIRE, NULL, index);
 	
-	if (!has_secret && expires)
-		do_stat_label (seahorse_util_get_date_string (expires), table, 1, top+2);
-	else if (!has_secret && !expires)
-		do_stat_label (_("Never Expires"), table, 1, top+2);
+	if (!seahorse_context_key_has_secret (swidget->sctx, skey)) {
+		if (expires)
+			do_stat_label (seahorse_util_get_date_string (expires), table, 1, top+2);
+		else
+			do_stat_label (_("Never Expires"), table, 1, top+2);
+	}
 	else {
 		widget = gnome_date_edit_new (expires, FALSE, FALSE);
 		gtk_widget_show (widget);
@@ -205,20 +209,121 @@ do_stats (GtkTable *table, guint top, SeahorseKey *skey,
 	}
 }
 
+static void
+clear_notebook (GtkNotebook *notebook)
+{
+	while (gtk_notebook_get_current_page (notebook) >= 0)
+		gtk_notebook_remove_page (notebook, 0);
+}
+
+static void
+do_uids (SeahorseWidget *swidget)
+{
+	SeahorseKeyWidget *skwidget;
+	GtkNotebook *notebook;
+	GtkTable *table;
+	GtkWidget *label, *widget;
+	gint index = 0, max;
+	GSList *group = NULL;
+	
+	notebook = GTK_NOTEBOOK (glade_xml_get_widget (swidget->xml, "uids"));
+	clear_notebook (notebook);
+	
+	skwidget = SEAHORSE_KEY_WIDGET (swidget);
+	max = seahorse_key_get_num_uids (skwidget->skey);
+	
+	while (index < max) {
+		if (max > 1 && seahorse_context_key_has_secret (swidget->sctx, skwidget->skey)) {
+			table = GTK_TABLE (gtk_table_new (2, 2, FALSE));
+			
+			widget = gtk_radio_button_new_with_mnemonic (group, _("Primary"));
+			group = g_slist_append (group, widget);
+			//callback
+			gtk_widget_set_sensitive (widget, FALSE);
+			gtk_table_attach (table, widget, 0, 1, 1, 2, GTK_FILL, 0, 0, 0);
+		
+			widget = gtk_button_new_from_stock (GTK_STOCK_DELETE);
+			//callback
+			gtk_widget_set_sensitive (widget, FALSE);
+			gtk_table_attach (table, widget, 2, 3, 1, 2, GTK_FILL, 0, 0, 0);
+		}
+		else
+			table = GTK_TABLE (gtk_table_new (1, 2, FALSE));
+		
+		widget = gtk_label_new (seahorse_key_get_userid (skwidget->skey, index));
+		gtk_table_attach (table, widget, 0, 3, 0, 1, GTK_FILL, 0, 0, 0);
+		
+		gtk_table_set_row_spacings (table, SPACING);
+		gtk_table_set_col_spacings (table, SPACING);
+		gtk_container_set_border_width (GTK_CONTAINER (table), SPACING);
+		
+		label = gtk_label_new (g_strdup_printf (_("User ID %d"), (index+1)));
+		gtk_notebook_append_page (notebook, GTK_WIDGET (table), label);
+		
+		index++;
+	}
+	
+	gtk_widget_show_all (GTK_WIDGET (notebook));
+}
+
+static void
+do_subkeys (SeahorseWidget *swidget)
+{
+	SeahorseKeyWidget *skwidget;
+	GtkNotebook *notebook;
+	GtkTable *table;
+	GtkWidget *label, *widget;
+	gint index = 1, max;
+	
+	notebook = GTK_NOTEBOOK (glade_xml_get_widget (swidget->xml, "subkeys"));
+	clear_notebook (notebook);
+	
+	skwidget = SEAHORSE_KEY_WIDGET (swidget);
+	max = seahorse_key_get_num_subkeys (skwidget->skey);
+	
+	while (index <= max) {
+		if (seahorse_context_key_has_secret (swidget->sctx, skwidget->skey)) {
+			table = GTK_TABLE (gtk_table_new (4, 4, FALSE));
+			
+			widget = gtk_button_new_from_stock (GTK_STOCK_DELETE);
+			//set callback
+			gtk_widget_set_sensitive (widget, FALSE);
+			gtk_widget_show (widget);
+			gtk_table_attach (table, widget, 3, 4, 3, 4, GTK_FILL, 0, 0, 0);
+		}
+		else
+			table = GTK_TABLE (gtk_table_new (3, 4, FALSE));
+		
+		gtk_table_set_row_spacings (table, SPACING);
+		gtk_table_set_col_spacings (table, SPACING);
+		gtk_container_set_border_width (GTK_CONTAINER (table), SPACING);
+		
+		label = gtk_label_new (g_strdup_printf (_("Sub Key %d"), index));
+		gtk_notebook_append_page (notebook, GTK_WIDGET (table), label);
+		gtk_widget_show_all (GTK_WIDGET (table));
+		
+		do_stats (swidget, table, 0, index);
+		
+		index++;
+	}
+	
+	gtk_widget_show (GTK_WIDGET (notebook));
+}
+
+/**
+ * seahorse_key_properties_new:
+ * @sctx: Current #SeahorseContext
+ * @skey: #SeahorseKey
+ *
+ * Creates a new #SeahorseKeyWidget dialog for showing @skey's properties
+ * and possibly editing @skey's attributes.
+ **/
 void
 seahorse_key_properties_new (SeahorseContext *sctx, SeahorseKey *skey)
 {
 	SeahorseWidget *swidget;
 	GtkWidget *widget;
 	GtkOptionMenu *option;
-	GtkNotebook *notebook;
-	GtkWidget *label;
-	GtkTable *table;
-        time_t expires_date;
-        GtkContainer *vbox;
-        GSList *primary_group = NULL;
-	gint index = 0;
-	gboolean has_secret;
 	
 	swidget = seahorse_key_widget_new_component ("key-properties", sctx, skey);
 	g_return_if_fail (swidget != NULL);
@@ -243,89 +348,24 @@ seahorse_key_properties_new (SeahorseContext *sctx, SeahorseKey *skey)
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget),
 		gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_KEY_DISABLED, NULL, 0));
 	
-	has_secret = seahorse_context_key_has_secret (sctx, skey);
-	
-	do_stats (GTK_TABLE (glade_xml_get_widget (swidget->xml, "table")), 2, skey, 0, has_secret, swidget);
-	
-	/* User ids */
-	notebook = GTK_NOTEBOOK (gtk_notebook_new ());
-	vbox = GTK_CONTAINER (glade_xml_get_widget (swidget->xml, "vbox"));
-	gtk_container_add (vbox, GTK_WIDGET (notebook));
-	
-	while (index < seahorse_key_get_num_uids (skey)) {
-		
-		label = gtk_label_new (g_strdup_printf (_("User ID %d"), (index+1)));
-		
-		if (has_secret) {
-			table = GTK_TABLE (gtk_table_new (2, 2, FALSE));
-			
-			widget = gtk_radio_button_new_with_mnemonic (primary_group, _("Primary"));
-			primary_group = g_slist_append (primary_group, widget);
-			//callback
-			gtk_widget_set_sensitive (widget, FALSE);
-			gtk_table_attach (table, widget, 0, 1, 1, 2, GTK_FILL, 0, 0, 0);
-		
-			widget = gtk_button_new_from_stock (GTK_STOCK_DELETE);
-			//callback
-			gtk_widget_set_sensitive (widget, FALSE);
-			gtk_table_attach (table, widget, 2, 3, 1, 2, GTK_FILL, 0, 0, 0);
-		}
-		else
-			table = GTK_TABLE (gtk_table_new (1, 2, FALSE));
-		
-		gtk_table_set_row_spacings (table, SPACING);
-		gtk_table_set_col_spacings (table, SPACING);
-		gtk_container_set_border_width (GTK_CONTAINER (table), SPACING);
-		
-		gtk_notebook_append_page (notebook, GTK_WIDGET (table), label);
-		
-		widget = gtk_label_new (seahorse_key_get_userid (skey, index));
-		gtk_table_attach (table, widget, 0, 3, 0, 1, GTK_FILL, 0, 0, 0);
-		
-		index++;
-	}
-	gtk_widget_show_all (GTK_WIDGET (notebook));
-	
-	/* Sub keys */
-	notebook = GTK_NOTEBOOK (gtk_notebook_new ());
-	gtk_container_add (vbox, GTK_WIDGET (notebook));
-	
-	index = 1;
-	while (index <= seahorse_key_get_num_subkeys (skey)) {
-		
-		label = gtk_label_new (g_strdup_printf (_("Sub Key %d"), index));
-		
-		if (has_secret) {
-			table = GTK_TABLE (gtk_table_new (4, 4, FALSE));
-			
-			widget = gtk_button_new_from_stock (GTK_STOCK_DELETE);
-			//set callback
-			gtk_widget_set_sensitive (widget, FALSE);
-			gtk_widget_show (widget);
-			gtk_table_attach (table, widget, 3, 4, 3, 4, GTK_FILL, 0, 0, 0);
-		}
-		else
-			table = GTK_TABLE (gtk_table_new (3, 4, FALSE));
-		
-		gtk_table_set_row_spacings (table, SPACING);
-		gtk_table_set_col_spacings (table, SPACING);
-		gtk_container_set_border_width (GTK_CONTAINER (table), SPACING);
-		
-		gtk_notebook_append_page (notebook, GTK_WIDGET (table), label);
-		gtk_widget_show_all (GTK_WIDGET (notebook));
-		
-		do_stats (table, 0, skey, index, has_secret, swidget);
-		
-		index++;
-	}
+	do_stats (swidget, GTK_TABLE (glade_xml_get_widget (swidget->xml, "table")), 2, 0);
+	do_uids (swidget);
+	do_subkeys (swidget);
 	
 	widget = glade_xml_get_widget (swidget->xml, swidget->name);
 	gtk_window_set_title (GTK_WINDOW (widget), seahorse_key_get_userid (skey, 0));
 	
 	/* Have to connect some signals after so changes don't activate callbacks */
-	glade_xml_signal_connect_data (swidget->xml, "export_activate", G_CALLBACK (export_activate), swidget);
-	glade_xml_signal_connect_data (swidget->xml, "delete_activate", G_CALLBACK (delete_activate), swidget);
-	glade_xml_signal_connect_data (swidget->xml, "trust_changed", G_CALLBACK (trust_changed), swidget);
-	glade_xml_signal_connect_data (swidget->xml, "disabled_toggled", G_CALLBACK (disabled_toggled), swidget);
-	glade_xml_signal_connect_data (swidget->xml, "change_passphrase_activate", G_CALLBACK (change_passphrase_activate), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "export_activate",
+		G_CALLBACK (export_activate), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "delete_activate",
+		G_CALLBACK (delete_activate), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "trust_changed",
+		G_CALLBACK (trust_changed), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "disabled_toggled",
+		G_CALLBACK (disabled_toggled), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "change_passphrase_activate",
+		G_CALLBACK (change_passphrase_activate), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "add_uid_activate",
+		G_CALLBACK (add_uid_activate), swidget);
 }
