@@ -521,13 +521,11 @@ seahorse_context_get_key (SeahorseContext *sctx, gpgme_key_t key)
 			break;
 	}
 	
-	gpgme_key_unref (key);
+    if (keys)
+        skey = SEAHORSE_KEY (keys->data);
+        
 	g_list_free (list);
-	
-	if (!g_str_equal (id1, id2))
-		return NULL;
-	else
-		return skey;
+    return skey;
 }
 
 /**
