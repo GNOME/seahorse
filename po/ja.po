@@ -5,9 +5,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: seahorse 0.7.0\n"
-"POT-Creation-Date: 2003-01-25 23:39+0900\n"
-"PO-Revision-Date: 2003-01-25 23:39+0900\n"
+"Project-Id-Version: seahorse 0.6.1\n"
+"POT-Creation-Date: 2003-01-30 16:11+0900\n"
+"PO-Revision-Date: 2003-01-30 16:09+0900\n"
 "Last-Translator: Takeshi AIHANA <aihana@gnome.gr.jp>\n"
 "Language-Team: Japanese <translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -53,14 +53,6 @@ msgstr "ASCII 保護形式 (ASCII-Armor) を使用します"
 #: data/seahorse.schemas.in.h:6 src/dialogs/seahorse-preferences.glade2.h:6
 msgid "Use Canonical Text Mode"
 msgstr "カノニカル (古典的) テキスト形式を使用します"
-
-#: src/dialogs/about.glade2.h:1
-msgid "2002, Seahorse Project"
-msgstr "2002, Seahorse プロジェクト"
-
-#: src/dialogs/about.glade2.h:2
-msgid "http://seahorse.sourceforge.net"
-msgstr "http://seahorse.sourceforge.net/"
 
 #: src/dialogs/seahorse-delete.c:37
 #, c-format
@@ -241,7 +233,7 @@ msgstr "鍵の種類 / 暗号化アルゴリズムを選択します"
 msgid "Length of Key"
 msgstr "鍵の長さを指定します"
 
-#: src/dialogs/seahorse-generate.glade2.h:18 src/seahorse-key-properties.c:195
+#: src/dialogs/seahorse-generate.glade2.h:18 src/seahorse-key-properties.c:186
 msgid "Never Expires"
 msgstr "有効期限を設定しない"
 
@@ -406,12 +398,12 @@ msgid "Verification Error"
 msgstr "検証エラー"
 
 #: src/dialogs/seahorse-signatures.glade2.h:1
-#: src/seahorse-key-properties.c:181
+#: src/seahorse-key-properties.c:172
 msgid "Created:"
 msgstr "生成済み:"
 
 #: src/dialogs/seahorse-signatures.glade2.h:2
-#: src/seahorse-key-properties.c:177
+#: src/seahorse-key-properties.c:168
 msgid "Key ID:"
 msgstr "鍵のID:"
 
@@ -436,6 +428,10 @@ msgstr "%s は成功です"
 #, c-format
 msgid "%s Failed"
 msgstr "%s は失敗です"
+
+#: src/seahorse-encrypt-recipients-store.c:136
+msgid "Validity"
+msgstr "妥当性"
 
 #: src/seahorse-file-manager.c:93
 msgid ""
@@ -522,13 +518,13 @@ msgid "Verify a detached signature"
 msgstr "外した署名を検証します"
 
 #: src/seahorse-file-manager.glade2.h:20 src/seahorse-key-manager.glade2.h:12
-#: src/seahorse-key-properties.glade2.h:15
+#: src/seahorse-key-properties.glade2.h:13
 #: src/seahorse-text-editor.glade2.h:20
 msgid "View statusbar"
 msgstr "ステータスバーの表示"
 
 #: src/seahorse-file-manager.glade2.h:21 src/seahorse-key-manager.glade2.h:13
-#: src/seahorse-key-properties.glade2.h:16
+#: src/seahorse-key-properties.glade2.h:14
 #: src/seahorse-text-editor.glade2.h:21
 msgid "View toolbar"
 msgstr "ツールバーの表示"
@@ -558,13 +554,13 @@ msgid "_Sign"
 msgstr "署名(_S)"
 
 #: src/seahorse-file-manager.glade2.h:27
-#: src/seahorse-key-properties.glade2.h:19
+#: src/seahorse-key-properties.glade2.h:17
 #: src/seahorse-text-editor.glade2.h:26
 msgid "_Statusbar"
 msgstr "ステータスバー(_S)"
 
 #: src/seahorse-file-manager.glade2.h:28
-#: src/seahorse-key-properties.glade2.h:20
+#: src/seahorse-key-properties.glade2.h:18
 #: src/seahorse-text-editor.glade2.h:28
 msgid "_Toolbar"
 msgstr "ツールバー(_T)"
@@ -574,17 +570,25 @@ msgstr "ツールバー(_T)"
 msgid "_Verify"
 msgstr "署名確認(_V)"
 
-#: src/seahorse-key-manager-store.c:206
+#: src/seahorse-key-manager-store.c:205
 msgid "Trust"
 msgstr "信頼度"
 
-#: src/seahorse-key-manager-store.c:207
+#: src/seahorse-key-manager-store.c:206
 msgid "Type"
 msgstr "種類"
 
-#: src/seahorse-key-manager-store.c:208
+#: src/seahorse-key-manager-store.c:207
 msgid "Length"
 msgstr "鍵の長さ"
+
+#: src/seahorse-key-manager.c:148
+msgid "translator_credits"
+msgstr "Takeshi AIHANA <aihana@gnome.gr.jp>"
+
+#: src/seahorse-key-manager.c:168
+msgid "seahorse"
+msgstr "seahorse"
 
 #: src/seahorse-key-manager.glade2.h:1
 msgid "Create a new key"
@@ -631,7 +635,7 @@ msgid "_Contents"
 msgstr "目次(_C)"
 
 #: src/seahorse-key-manager.glade2.h:15
-#: src/seahorse-key-properties.glade2.h:17
+#: src/seahorse-key-properties.glade2.h:15
 msgid "_Delete"
 msgstr "削除(_D)"
 
@@ -647,101 +651,93 @@ msgstr "新規(_N)"
 msgid "_Text Editor"
 msgstr "テキストエディタ(_T)"
 
-#: src/seahorse-key-properties.c:179
+#: src/seahorse-key-properties.c:170
 msgid "Algorithm:"
 msgstr "アルゴリズム:"
 
-#: src/seahorse-key-properties.c:184
+#: src/seahorse-key-properties.c:175
 msgid "Length:"
 msgstr "長さ:"
 
-#: src/seahorse-key-properties.c:187
+#: src/seahorse-key-properties.c:178
 msgid "Expires:"
 msgstr "期限:"
 
-#: src/seahorse-key-properties.c:209
+#: src/seahorse-key-properties.c:200
 msgid "_Never Expires"
 msgstr "期限切れの指定なし(_N)"
 
-#: src/seahorse-key-properties.c:248
+#: src/seahorse-key-properties.c:239
 msgid "Primary"
 msgstr "プライマリ"
 
-#: src/seahorse-key-properties.c:269
+#: src/seahorse-key-properties.c:260
 #, c-format
 msgid "User ID %d"
 msgstr "ユーザ ID %d"
 
-#: src/seahorse-key-properties.c:310
+#: src/seahorse-key-properties.c:301
 #, c-format
 msgid "Sub Key %d"
 msgstr "サブの鍵 %d"
 
 #: src/seahorse-key-properties.glade2.h:1
-msgid "Add User ID"
-msgstr "ユーザ ID の追加"
-
-#: src/seahorse-key-properties.glade2.h:2
-msgid "Add a new user ID"
-msgstr "新しいユーザ ID を追加します"
-
-#: src/seahorse-key-properties.glade2.h:3
 msgid "Change _Passphrase"
 msgstr "パスフレーズの変更(_P)"
 
-#: src/seahorse-key-properties.glade2.h:4
+#: src/seahorse-key-properties.glade2.h:2
 msgid "Change key's passphrase"
 msgstr "この鍵のパスフレーズを変更します"
 
-#: src/seahorse-key-properties.glade2.h:5
+#: src/seahorse-key-properties.glade2.h:3
 msgid "Delete key"
 msgstr "鍵の削除"
 
-#: src/seahorse-key-properties.glade2.h:6
+#: src/seahorse-key-properties.glade2.h:4
 msgid "Enable/Disable Key"
 msgstr "鍵を有効または無効にします"
 
-#: src/seahorse-key-properties.glade2.h:7
+#: src/seahorse-key-properties.glade2.h:5
 msgid "Export key"
 msgstr "鍵のエキスポート"
 
-#: src/seahorse-key-properties.glade2.h:8
+#: src/seahorse-key-properties.glade2.h:6
 msgid "Fingerprint:"
 msgstr "指紋:"
 
-#: src/seahorse-key-properties.glade2.h:9
+#: src/seahorse-key-properties.glade2.h:7
 msgid "Key Properties"
 msgstr "鍵のプロパティ"
 
-#: src/seahorse-key-properties.glade2.h:10
+#: src/seahorse-key-properties.glade2.h:8
 msgid "Key Properties Help"
 msgstr "鍵のプロパティに関するヘルプです"
 
-#: src/seahorse-key-properties.glade2.h:11
+#: src/seahorse-key-properties.glade2.h:9
 msgid "Owner Trust"
 msgstr "所有者の信用度です"
 
-#: src/seahorse-key-properties.glade2.h:12
+#: src/seahorse-key-properties.glade2.h:10
 msgid "Owner _Trust:"
 msgstr "所有者の信用度(_T):"
 
-#: src/seahorse-key-properties.glade2.h:13
+#: src/seahorse-key-properties.glade2.h:11
 msgid "Save File"
 msgstr "ファイルの保存"
 
-#: src/seahorse-key-properties.glade2.h:14
+#: src/seahorse-key-properties.glade2.h:12
 msgid "Show key properties help"
 msgstr "鍵のプロパティを表示します"
 
-#: src/seahorse-key-properties.glade2.h:18
+#: src/seahorse-key-properties.glade2.h:16
 msgid "_Disabled"
 msgstr "無効にする(_D)"
 
-#: src/seahorse-key-store.c:331
+#: src/seahorse-key-store.c:312
 msgid "Name"
 msgstr "名前"
 
-#: src/seahorse-key-store.c:332
+#: src/seahorse-key-store.c:313
 msgid "Key ID"
 msgstr "鍵のID"
 
@@ -801,10 +797,6 @@ msgstr "鍵を有効にします"
 #: src/seahorse-ops-key.c:766
 msgid "Passphrase Change"
 msgstr "パスフレーズの変更"
-
-#: src/seahorse-ops-key.c:933
-msgid "User ID added"
-msgstr "ユーザ ID の追加"
 
 #: src/seahorse-ops-text.c:71 src/seahorse-ops-text.c:86
 msgid "Export Text"
