@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-01 15:05+0100\n"
-"PO-Revision-Date: 2005-01-01 15:13+0100\n"
+"POT-Creation-Date: 2005-01-07 23:27+0100\n"
+"PO-Revision-Date: 2005-01-07 23:31+0100\n"
 "Last-Translator: Francisco Javier F. Serrador <serrador@cvs.gnome.org>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -407,7 +407,9 @@ msgstr "La columna por la que ordenar las claves de seahorse"
 msgid ""
 "The last keyserver a search was performed against. Or empty for all "
 "keyservers."
-msgstr "El último servidor de claves donde se realizó una búsqueda. O vacío para todos los servidores de claves."
+msgstr ""
+"El último servidor de claves donde se realizó una búsqueda. O vacío para "
+"todos los servidores de claves."
 
 #: data/seahorse.schemas.in.h:28
 msgid "The last search pattern searched for against a keyserver."
@@ -481,6 +483,21 @@ msgstr "Nombre"
 #: libseahorse/seahorse-key-store.c:618 src/seahorse-key-properties.c:377
 msgid "Key ID"
 msgstr "Identificador"
+
+#: libseahorse/seahorse-ldap-source.c:651
+#, c-format
+msgid "Searching for keys containing '%s'..."
+msgstr "Buscando claves que contengan «%s»..."
+
+#. TODO: We can update a percentage when there's more than one key
+#: libseahorse/seahorse-ldap-source.c:825
+msgid "Retrieving remote keys..."
+msgstr "Obteniendo claves remotas..."
+
+#. TODO: We can update a percentage when there's more than one key
+#: libseahorse/seahorse-ldap-source.c:950
+msgid "Sending keys to key server..."
+msgstr "Enviando claves al servidor de claves..."
 
 #: libseahorse/seahorse-passphrase.c:61
 #, c-format
@@ -650,12 +667,39 @@ msgid_plural "Selected %d keys"
 msgstr[0] "%d clave seleccionada"
 msgstr[1] "%d claves seleccionadas"
 
-#: libseahorse/seahorse-recipients.c:59 libseahorse/seahorse-recipients.c:63
+#: libseahorse/seahorse-recipients.c:58
 #, c-format
 msgid "Selected %d not fully valid key"
-msgid_plural "Selected %d keys (%d not fully valid)"
+msgid_plural "Selected %d not fully valid keys"
 msgstr[0] "Seleccionó %d clave no completamente válida"
 msgstr[1] "Seleccionó %d claves no completamente válidas"
+
+#. TRANSLATOR: This string will become
+#. * "Selected %d keys and (%d not fully valid)"
+#: libseahorse/seahorse-recipients.c:66
+#, c-format
+msgid "Selected %d key "
+msgid_plural "Selected %d keys "
+msgstr[0] "Seleccionada %d clave"
+msgstr[1] "Seleccionadas %d claves"
+
+#. TRANSLATOR: This string will become
+#. * "Selected %d keys and (%d not fully valid)"
+#: libseahorse/seahorse-recipients.c:71
+#, c-format
+msgid "(%d not fully valid)"
+msgid_plural "(%d not fully valid)"
+msgstr[0] "(%d no completamente válida)"
+msgstr[1] "(%d no completamente válidas)"
+
+#. TRANSLATOR: "%s%s" are "Selected %d keys and (%d not fully valid)"
+#. * Swap order with "%2$s%1$s" if needed
+#. TRANSLATOR: "%s%s" are "You have selected %d files and %d folders"
+#. * Swap order with "%2$s%1$s" if needed
+#: libseahorse/seahorse-recipients.c:76 src/seahorse-process-multiple.c:58
+#, c-format
+msgid "%s%s"
+msgstr "%s%s"
 
 #: libseahorse/seahorse-recipients.glade.h:2
 msgid ""
@@ -1996,33 +2040,31 @@ msgstr "Preferencias"
 msgid "Visible Columns"
 msgstr "Columnas visibles"
 
-#: src/seahorse-process-multiple.c:46
-#, c-format
-msgid "You have selected %d files and %d folders"
-msgstr "Ha seleccionado %d archivos y %d carpetas"
-
+#. TRANSLATOR: This string will become
+#. * "You have selected %d files and %d folders"
 #: src/seahorse-process-multiple.c:48
 #, c-format
-msgid "You have selected %d files and %d folder"
-msgstr "Ha seleccionado %d archivos y %d carpeta"
+msgid "You have selected %d file "
+msgid_plural "You have selected %d files "
+msgstr[0] "Ha seleccionado %d archivo"
+msgstr[1] "Ha seleccionado %d archivos"
 
-#: src/seahorse-process-multiple.c:50
+#. TRANSLATOR: This string will become
+#. * "You have selected %d files and %d folders"
+#: src/seahorse-process-multiple.c:53
 #, c-format
-msgid "You have selected %d file and %d folders"
-msgstr "Ha seleccionado %d archivo y %d carpetas"
-
-#: src/seahorse-process-multiple.c:52
-#, c-format
-msgid "You have selected %d file and %d folder"
-msgstr "Ha seleccionado %d archivo y %d carpeta"
+msgid "and %d folder"
+msgid_plural "and %d folders"
+msgstr[0] "y %d carpeta"
+msgstr[1] "y %d carpetas"
 
 #. should never be called for just one file
-#: src/seahorse-process-multiple.c:58
+#: src/seahorse-process-multiple.c:66
 #, c-format
 msgid "You have selected %d files"
 msgstr "Ha seleccionado %d archivos"
 
-#: src/seahorse-process-multiple.c:62
+#: src/seahorse-process-multiple.c:70
 #, c-format
 msgid "You have selected %d folder"
 msgid_plural "You have selected %d folders"
@@ -2189,6 +2231,18 @@ msgstr "_Revocable"
 #: src/seahorse.desktop.in.h:2
 msgid "Manage your GPG keys"
 msgstr "Gestiona sus claves GPG"
+
+#~ msgid "You have selected %d files and %d folders"
+#~ msgstr "Ha seleccionado %d archivos y %d carpetas"
+
+#~ msgid "You have selected %d files and %d folder"
+#~ msgstr "Ha seleccionado %d archivos y %d carpeta"
+
+#~ msgid "You have selected %d file and %d folders"
+#~ msgstr "Ha seleccionado %d archivo y %d carpetas"
+
+#~ msgid "You have selected %d file and %d folder"
+#~ msgstr "Ha seleccionado %d archivo y %d carpeta"
 
 #~ msgid "Listed %d keys"
 #~ msgstr "%d claves listadas "
