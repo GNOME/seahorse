@@ -62,7 +62,9 @@ glade_DATA = \
 
 @INTLTOOL_DESKTOP_RULE@
 desktopdir = $(datadir)/applications
-desktop_in_files = seahorse.desktop.in
+desktop_in_files = seahorse.desktop.in \
+				   seahorse-pgp-encrypted.desktop.in \
+				   seahorse-pgp-signature.desktop.in
 desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 
 EXTRA_DIST = \
