@@ -66,8 +66,6 @@ seahorse_preferences_show (SeahorseContext *sctx)
 	gtk_container_add (GTK_CONTAINER (box), 
             seahorse_check_button_control_new (_("_Trust"), SHOW_TRUST_KEY));
 	gtk_container_add (GTK_CONTAINER (box), 
-            seahorse_check_button_control_new (_("_Length"), SHOW_LENGTH_KEY));
-	gtk_container_add (GTK_CONTAINER (box), 
             seahorse_check_button_control_new (_("T_ype"), SHOW_TYPE_KEY));
 	
 	gtk_widget_show_all (tab);

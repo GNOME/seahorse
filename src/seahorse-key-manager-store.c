@@ -46,7 +46,6 @@ enum {
 	VALIDITY_STR,
 	EXPIRES_STR,
 	TRUST_STR,
-	LENGTH,
 	TYPE,
     VALIDITY,
     EXPIRES,
@@ -59,7 +58,6 @@ static const gchar* col_ids[] = {
     "validity",
     "expires",
     "trust",
-    "length",
     "type",
     "validity",
     "expires",
@@ -71,7 +69,6 @@ static GType col_types[] = {
     G_TYPE_STRING,
     G_TYPE_STRING, 
     G_TYPE_STRING, 
-    G_TYPE_INT, 
     G_TYPE_STRING,
     G_TYPE_INT, 
     G_TYPE_LONG, 
@@ -140,27 +137,6 @@ seahorse_key_manager_store_class_init (SeahorseKeyManagerStoreClass *klass)
     skstore_class->gconf_sort_key = KEY_MANAGER_SORT_KEY;
 }
 
-static const char* 
-get_algo_string (gpgme_pubkey_algo_t algo) {
-    /* TODO: Some of these strings need to be fixed */
-    switch (algo) {
-        case GPGME_PK_RSA:
-            return _("RSA");
-        case GPGME_PK_RSA_E:
-            return _("RSA-E");
-        case GPGME_PK_RSA_S:
-            return _("RSA-S");
-        case GPGME_PK_ELG_E:
-            return _("ELG-E");
-        case GPGME_PK_DSA:
-            return _("DSA");
-        case GPGME_PK_ELG:
-            return _("ELG");
-        default:
-            return _("Unknown");
-    }
-}
-
 /* Do append for @skey & it's subkeys */
 static gboolean
 seahorse_key_manager_store_append (SeahorseKeyStore *skstore, SeahorseKey *skey, 
@@ -187,6 +163,7 @@ seahorse_key_manager_store_set (SeahorseKeyStore *store, SeahorseKey *skey,
 	SeahorseValidity validity, trust;
 	gulong expires_date;
 	gchar *expires;
+    gchar *type;
 
     if (uid == 0) {
     	
@@ -207,6 +184,11 @@ seahorse_key_manager_store_set (SeahorseKeyStore *store, SeahorseKey *skey,
     		else
     			expires = seahorse_util_get_date_string (expires_date);
     	}
+        
+        if (SEAHORSE_IS_KEY_PAIR (skey)) 
+            type = _("Private PGP Key");
+        else 
+            type = _("Public PGP Key");
     	
     	gtk_tree_store_set (GTK_TREE_STORE (store), iter,
     		VALIDITY_STR, seahorse_validity_get_string (validity),
@@ -215,8 +197,7 @@ seahorse_key_manager_store_set (SeahorseKeyStore *store, SeahorseKey *skey,
     		EXPIRES, expires_date,
     		TRUST_STR, seahorse_validity_get_string (trust),
     		TRUST, trust,
-    		LENGTH, skey->key->subkeys->length,
-    		TYPE, get_algo_string (skey->key->subkeys->pubkey_algo),
+    		TYPE, type,
     		-1);
          
         g_free (expires);
@@ -224,7 +205,7 @@ seahorse_key_manager_store_set (SeahorseKeyStore *store, SeahorseKey *skey,
     } else {
 
 		gtk_tree_store_set (GTK_TREE_STORE (store), iter,
-			TYPE, "UID", -1);
+			TYPE, _("User ID"), -1);
 
 	}
 	
@@ -265,8 +246,6 @@ gconf_notification (GConfClient *gclient, guint id, GConfEntry *entry, GtkTreeVi
 		col = gtk_tree_view_get_column (view, EXPIRES_STR - 4);
 	else if (g_str_equal (key, SHOW_TRUST_KEY))
 		col = gtk_tree_view_get_column (view, TRUST_STR - 4);
-	else if (g_str_equal (key, SHOW_LENGTH_KEY))
-		col = gtk_tree_view_get_column (view, LENGTH - 4);
 	else if (g_str_equal (key, SHOW_TYPE_KEY))
 		col = gtk_tree_view_get_column (view, TYPE - 4);
 	else
@@ -408,10 +387,6 @@ seahorse_key_manager_store_new (SeahorseKeySource *sksrc, GtkTreeView *view)
 	col = seahorse_key_store_append_column (view, _("Trust"), TRUST_STR);
 	gtk_tree_view_column_set_visible (col, eel_gconf_get_boolean (SHOW_TRUST_KEY));
 	gtk_tree_view_column_set_sort_column_id (col, TRUST);
-	
-	col = seahorse_key_store_append_column (view, _("Length"), LENGTH);
-	gtk_tree_view_column_set_visible (col, eel_gconf_get_boolean (SHOW_LENGTH_KEY));
-	gtk_tree_view_column_set_sort_column_id (col, LENGTH);
 	
 	col = seahorse_key_store_append_column (view, _("Type"), TYPE);
 	gtk_tree_view_column_set_visible (col, eel_gconf_get_boolean (SHOW_TYPE_KEY));
