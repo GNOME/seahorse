@@ -29,13 +29,22 @@
 
 #define EXPORT_FILE "file"
 #define EXPORT_SERVER "server"
+#define OK "ok"
 
 /* Export to file toggled */
 static void
 file_toggled (GtkToggleButton *togglebutton, SeahorseWidget *swidget)
 {
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, EXPORT_FILE),
-		gtk_toggle_button_get_active (togglebutton));
+	gboolean active;
+	GtkWidget *entry;
+	
+	active = gtk_toggle_button_get_active (togglebutton);
+	entry = glade_xml_get_widget (swidget->xml, EXPORT_FILE);
+	
+	gtk_widget_set_sensitive (entry, active);
+	
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, OK), !active ||
+		(gnome_file_entry_get_full_path (GNOME_FILE_ENTRY (entry), FALSE) != NULL));
 }
 
 /* Export to server toggled */
@@ -44,6 +53,12 @@ server_toggled (GtkToggleButton *togglebutton, SeahorseWidget *swidget)
 {
 	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, EXPORT_SERVER),
 		gtk_toggle_button_get_active (togglebutton));
+}
+
+static void
+file_changed (GtkEditable *editable, SeahorseWidget *swidget)
+{
+	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, OK), TRUE);
 }
 
 /* Exports key to data source */
@@ -131,9 +146,14 @@ seahorse_export_new (SeahorseContext *sctx, SeahorseKey *skey)
 	swidget = seahorse_key_widget_new ("export", sctx, skey);
 	g_return_if_fail (swidget != NULL);
 	
-	glade_xml_signal_connect_data (swidget->xml, "file_toggled", G_CALLBACK (file_toggled), swidget);
-	glade_xml_signal_connect_data (swidget->xml, "server_toggled", G_CALLBACK (server_toggled), swidget);	
-	glade_xml_signal_connect_data (swidget->xml, "ok_clicked", G_CALLBACK (ok_clicked), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "file_toggled",
+		G_CALLBACK (file_toggled), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "server_toggled",
+		G_CALLBACK (server_toggled), swidget);	
+	glade_xml_signal_connect_data (swidget->xml, "ok_clicked",
+		G_CALLBACK (ok_clicked), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "file_changed",
+		G_CALLBACK (file_changed), swidget);
 	
 	set_title (swidget);
 }
