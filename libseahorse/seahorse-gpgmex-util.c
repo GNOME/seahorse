@@ -23,6 +23,7 @@
 #include <string.h>
 #include <time.h>
 
+#include "config.h"
 #include "seahorse-gpgmex.h"
 #include <glib.h>
 
