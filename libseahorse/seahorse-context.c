@@ -637,5 +637,5 @@ seahorse_context_keys_added (SeahorseContext *sctx, guint num_keys)
 	
 	/* show status */
 	seahorse_context_show_progress (sctx, g_strdup_printf (
-		_("Loaded %d new keys"), num_keys), -1);
+		ngettext (_("Loaded %d new key"), _("Loaded %d new keys"), num_keys), num_keys), -1);
 }

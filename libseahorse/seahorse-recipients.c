@@ -76,15 +76,17 @@ selection_changed (GtkTreeSelection *selection, SeahorseWidget *swidget)
 			invalid++;
 	}
  
-    if(invalid == 0)
-    {
+    if(invalid == 0) {
         msg = g_strdup_printf(
             ngettext(_("Selected %d keys"), _("Selected %d keys"), selected), selected);
-    }
-    
-    else 
-    {
-        msg = g_strdup_printf(
+            
+    /* For translators */
+    } else if (invalid == 1) {
+        msg = g_strdup_printf (
+            ngettext(_("Selected %d not fully valid key"), _("Selected %d keys (%d not fully valid)"), selected), selected, invalid);
+            
+    } else {
+        msg = g_strdup_printf (
             ngettext(_("Selected %d not fully valid key"), _("Selected %d keys (%d not fully valid)"), selected), selected, invalid);
     }
         
