@@ -1,0 +1,531 @@
+<?xml version="1.0"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!ENTITY legal SYSTEM "legal.xml">
+<!ENTITY appversion "0.6.0">
+<!ENTITY manrevision "2.0">
+<!ENTITY date "October 2002">
+<!ENTITY app "<application>seahorse</application>">
+]>
+<!-- =============Document Header ============================= -->
+<article id="index" lang="en">
+<articleinfo>
+	<title>&app; Manual V&manrevision;</title>
+	<copyright>
+		<year>2002</year>
+		<holder>Jacob Perkins</holder>
+	</copyright>
+	<publisher>
+		<publishername>Seahorse Project</publishername>
+	</publisher>
+	&legal;
+
+	<authorgroup>
+		<author>
+			<firstname>Jacob</firstname>
+			<surname>Perkins</surname>
+			<affiliation>
+				<orgname>Seahorse Project</orgname>
+				<address><email>jap1@users.sourceforge.net</email></address>
+			</affiliation>
+		</author>
+	</authorgroup>
+	<revhistory>
+		<revision>
+			<revnumber>&app; Manual V&manrevision;</revnumber>
+			<date>&date;</date>
+			<revdescription>
+				<para role="author">Jacob Perkins
+					<email>jap1@users.sourceforge.net</email>
+				</para>
+				<para role="publisher">Seahorse Project</para>
+			</revdescription>
+		</revision>
+	</revhistory>
+	<releaseinfo>This manual describes version &appversion; of &app;.</releaseinfo>
+	<legalnotice>
+		<title>Feedback</title>
+		<para>To report a bug or make a suggestion regarding the &app; application or this manual,
+		submit a report at <ulink url="http://sourceforge.net/tracker/?group_id=3023" type="http">Seahorse Tracker page</ulink>.</para>
+	</legalnotice>
+</articleinfo>
+
+<indexterm zone="index">
+	<primary>&app;</primary>
+</indexterm>
+
+<!-- ============= Document Body ============================= -->
+<!-- ============= Introduction ============================== -->
+<sect1 id="introduction">
+	<title>Introduction</title>
+	<para>&app; is a Gnome2 frontend for <ulink url="www.gnupg.org" type="http">Gnu Privacy Guard</ulink>.
+	&app; provides the following features:</para>
+	<itemizedlist>
+		<listitem>
+			<para>Key Manager</para>
+		</listitem>
+		<listitem>
+			<para>Key Properties and Key Editing</para>
+		</listitem>
+		<listitem>
+			<para>Text Editor</para>
+		</listitem>
+		<listitem>
+			<para>File Manager</para>
+		</listitem>
+	</itemizedlist>
+	<para>&app; is an application and a project.
+	The goal of the application is to provide an easy to use key manager and encryption capabilities.
+	The goal of the project is to provide applications and plugins to make encryption easier for the gnome desktop.</para>
+</sect1>
+
+<!-- =========== Getting Started ============================== -->
+<sect1 id="getting-started">
+	<title>Getting Started</title>
+	<sect2 id="start">
+		<title>To Start &app;</title>
+		<para>You can start &app; in the following ways:</para>
+		<variablelist>
+			<varlistentry>
+				<term><guimenu>Applications</guimenu> menu</term>
+				<listitem>
+					<para>Choose
+					<menuchoice>
+						<guisubmenu>Other</guisubmenu>
+						<guimenuitem>Gnupg Key Manager</guimenuitem>
+					</menuchoice>.</para>
+				</listitem>
+				<listitem>
+					<para>Run &app; from the command line.</para>
+				</listitem>
+			</varlistentry>
+		</variablelist>
+	</sect2>
+
+	<sect2 id="when-start">
+		<title>When You Start &app;</title>
+		<para>When you start &app;,
+		the key manager is displayed.</para>
+		<para>The key manager window contains the following elements:</para>
+		<variablelist>
+			<varlistentry>
+				<term>Menubar.</term>
+				<listitem>
+					<para>The menubar contains commands for accessing the various dialogs and windows.</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Toolbar.</term>
+				<listitem>
+					<para>The toolbar only contains commands that affect keys.</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Key List.</term>
+				<listitem>
+					<para>The key list shows the keys in your default key ring.</para>
+				</listitem>				
+			</varlistentry>
+			<varlistentry>
+				<term>Statusbar.</term>
+				<listitem>
+					<para>The statusbar shows operation status messages.  Operations are either successful or fail.</para>
+				</listitem>
+			</varlistentry>
+		</variablelist>
+	</sect2>
+</sect1>
+<!-- ================ Usage ================================ -->
+<!-- Use this section to describe how to use the application to perform the tasks for 
+which the application is designed. -->
+<sect1 id="usage">
+	<title>Usage</title>
+	<para>You can use the &app; application to perform the following tasks:
+		<itemizedlist>
+			<listitem><para><xref linkend="generate"/></para></listitem>
+			<listitem><para><xref linkend="export"/></para></listitem>
+			<listitem><para><xref linkend="import"/></para></listitem>
+			<listitem><para><xref linkend="text-editor"/></para></listitem>
+			<listitem><para><xref linkend="file-manager"/></para></listitem>
+			<listitem><para><xref linkend="key-properties"/></para></listitem>
+			<listitem><para><xref linkend="delete"/></para></listitem>
+		</itemizedlist>
+		<warning>While &app; is in use, do not make any changes to the key ring with another program.
+		External changes could have unkown and possibly undesirable affects.</warning>
+	</para>
+<!-- ================ Usage Subsection ================================ -->
+	<sect2 id="generate">
+		<title>Generating a Key</title>
+		<para>To generate a key, choose 
+			<menuchoice>
+				<guimenu>File</guimenu>
+				<guimenuitem>New</guimenuitem>
+			</menuchoice>.
+		The <guilabel>Generate Key</guilabel> dialog is displayed.
+		You will need to choose a <xref linkend="userid"/>, <xref linkend="key-type"/>, and <xref linkend="key-expires"/> a passphrase.</para>
+	</sect2>
+	<sect2 id="export">
+		<title>Exporting a Key</title>
+		<para>To export a key, select a key from the list and then choose 
+			<menuchoice>
+				<guimenu>File</guimenu>
+				<guimenuitem>Save As</guimenuitem>
+			</menuchoice>,
+		or click <guibutton>Save As</guibutton>.
+		The <guilabel>Export Key</guilabel> dialog is displayed.
+		Enter a filename, or select <guilabel>Export to Text</guilabel>, then click <guibutton>OK</guibutton>.
+		The public key will then be exported to the file or text.</para>
+		<warning>If <xref linkend="ascii-armor"/> is not enabled, exported text will not display properly.</warning>
+	</sect2>
+	<sect2 id="import">
+		<title>Importing Key(s)</title>
+		<para>To import key(s), choose
+			<menuchoice>
+				<guimenu>File</guimenu>
+				<guimenuitem>Import</guimenuitem>
+			</menuchoice>.
+		The <guilabel>Import Key(s)</guilabel> dialog is displayed.
+		Enter a filename, or select <guilabel>Import from Text</guilabel> and paste the text in, then click <guibutton>OK</guibutton>.
+		If the file or text contains any keys, they will be imported into the key ring.
+		The status bar will show the number of keys imported.</para>
+	</sect2>
+	<sect2 id="text-editor">
+		<title>Text Editor</title>
+		<para>To use the text editor, choose
+		<menuchoice>
+			<guimenu>File</guimenu>
+			<guimenuitem>Text Editor</guimenuitem>
+		</menuchoice>.
+		The <guilabel>Text Editor</guilabel> window is displayed.
+		<warning><xref linkend="ascii-armor"/> should be enabled while using the <guilabel>Text Editor</guilabel>.
+		Otherwise, text will not be displayed properly, rendering the <guilabel>Text Editor</guilabel> useless.</warning>
+		The following operations are available for text:
+		<variablelist>
+			<varlistentry>
+				<term>Import</term>
+				<listitem>
+					<para>Select
+					<menuchoice>
+						<guimenu>Edit</guimenu>
+						<guimenuitem>Import</guimenuitem>
+					</menuchoice>
+					or right-click and select <guilabel>Import</guilabel>.
+					This will import any keys contained in the current text.</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Export</term>
+				<listitem>
+					<para>Select
+					<menuchoice>
+						<guimenu>Edit</guimenu>
+						<guimenuitem>Export</guimenuitem>
+					</menuchoice>.
+					The <xref linkend="recipients"/> will come up.
+					When finished, the recipient's keys will be exported to the text.</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Sign</term>
+				<listitem>
+					<para>Select
+					<menuchoice>
+						<guimenu>Edit</guimenu>
+						<guimenuitem>Sign</guimenuitem>
+					</menuchoice>
+					or right-click and select <guilabel>Sign</guilabel>.
+					This will try to sign the current text with the <xref linkend="default-key"/>.
+					<xref linkend="passphrase"/> verification is needed for signing.
+					If successful, the text will be signed with your key.</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Clear Sign</term>
+				<listitem>
+					<para>Select
+					<menuchoice>
+						<guimenu>Edit</guimenu>
+						<guimenuitem>Clear Sign</guimenuitem>
+					</menuchoice>
+					or right-click and select <guilabel>Clear Sign</guilabel>.
+					This will try to clear sign the current text with the <xref linkend="default-key"/>.
+					<xref linkend="passphrase"/> verification is needed for signing.
+					If successful, the text will be enclosed by a signature.</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Encrypt</term>
+				<listitem>
+					<para>Select
+					<menuchoice>
+						<guimenu>Edit</guimenu>
+						<guimenuitem>Encrypt</guimenuitem>
+					</menuchoice>
+					or right-click and select <guilabel>Encrypt</guilabel>.
+					The <xref linkend="recipients"/> will come up.
+					When finished, the text will be encrypted with the selected keys.</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Decrypt</term>
+				<listitem>
+					<para>Select
+					<menuchoice>
+						<guimenu>Edit</guimenu>
+						<guimenuitem>Decrypt</guimenuitem>
+					</menuchoice>
+					or right-click and select <guilabel>Decrypt</guilabel>.
+					This will try to decrypt the current text.
+					In order to decrypt the text, you must have access to the secret key of one of the <xref linkend="recipients"/>.
+					<xref linkend="passphrase"/> verification is needed for decryption.
+					If successful, the decrypted text will be displayed.</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Verify</term>
+				<listitem>
+					<para>Select
+					<menuchoice>
+						<guimenu>Edit</guimenu>
+						<guimenuitem>Verify</guimenuitem>
+					</menuchoice>
+					or right-click and select <guilabel>Verify</guilabel>.
+					This will try to verify any <xref linkend="signatures"/> contained in the text.</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Decrypt and Verify</term>
+				<listitem>
+					<para>Select
+					<menuchoice>
+						<guimenu>Edit</guimenu>
+						<guimenuitem>Decrypt and Verify</guimenuitem>
+					</menuchoice>
+					or right-click and select <guilabel>Decrypt and Verify</guilabel>.
+					This will try to decrypt the current text, then verify any <xref linkend="signatures"/> found.
+					<xref linkend="passphrase"/> verification is needed for decryption.</para>
+				</listitem>
+			</varlistentry>
+		</variablelist></para>
+	</sect2>
+	<sect2 id="file-manager">
+		<title>File Manager</title>
+		<para>To use the <guilabel>File Manager</guilabel>, choose
+		<menuchoice>
+			<guimenu>File</guimenu>
+			<guimenuitem>File Manager</guimenuitem>
+		</menuchoice>.</para>
+	</sect2>
+	<sect2 id="key-properties">
+		<title>Key Properties</title>
+		<para>To view key properties, select a key from the list and choose
+		<menuchoice>
+			<guimenu>Edit</guimenu>
+			<guimenuitem>Properties</guimenuitem>
+		</menuchoice>,
+		or click <guibutton>Properties</guibutton>.
+		The <guilabel>Key Properties</guilabel> window is displayed.
+		The following properties are shown:
+			<variablelist>
+				<varlistentry>
+					<term>Fingerprint</term>
+					<listitem>
+						<para>The unique fingerprint of the key.</para>
+					</listitem>
+				</varlistentry>
+			</variablelist>
+		</para>
+		<sect3 id="trust">
+			<title>Owner Trust / Key Validity</title>
+			<para>The following <guilabel>Trust</guilabel> and <guilabel>Validity</guilabel> levels are available:
+				<itemizedlist>
+					<listitem><guilabel>Unknown</guilabel></listitem>
+					<listitem><guilabel>Never</guilabel></listitem>
+					<listitem><guilabel>Marginal</guilabel></listitem>
+					<listitem><guilabel>Full</guilabel></listitem>
+					<listitem><guilabel>Ultimate</guilabel></listitem>
+				</itemizedlist>
+			Personally generated keys are given <guilabel>Ultimate</guilabel> <guilabel>Trust</guilabel> and <guilabel>Validity</guilabel> by default.</para>
+		</sect3>
+		<sect3 id="key-attributes">
+			<title>Key Attributes</title>
+			<para> Attributes that exist for every key are:
+				<variablelist>
+					<varlistentry>
+						<term>Key ID</term>
+						<listitem>
+							<para>The key's ID.</para>
+						</listitem>
+					</varlistentry>
+					<varlistentry>
+						<term>Created</term>
+						<listitem>
+							<para>The creation date of the key.</para>
+						</listitem>
+					</varlistentry>
+				</variablelist>
+			</para>
+		</sect3>
+		<sect3 id="key-type">
+			<title>Key Type</title>
+			<para>The key type is determined by it's <guilabel>Algorithm</guilabel>
+			and its other primary and sub keys.
+			The following algorithms are available:
+				<variablelist>
+					<varlistentry>
+						<term>DSA</term>
+						<listitem>
+							<para>This is the default type for a primary key in a key pair.
+							It can also be a sub key.
+							The length ranges from 512 to 1024.</para>
+						</listitem>
+					</varlistentry>
+					<varlistentry>
+						<term>ElGamal</term>
+						<listitem>
+							<para>This key is only available as a sub key and is the default sub key type in a key pair.
+							The length ranges from 768 to 4096.</para>
+						</listitem>
+					</varlistentry>
+					<varlistentry>
+						<term>RSA</term>
+						<listitem>
+							<para>This key can be a primary key and a sub key.
+							The length ranges from 1024 to 4096.</para>
+						</listitem>
+					</varlistentry>
+				</variablelist>
+			</para>
+			<note>Keys without <guilabel>ElGamal</guilabel> subkeys do not have encryption capabilities.</note>
+		</sect3>
+		<sect3 id="key-expires">
+			<title>Key Expiration</title>
+			<para>Each key has a unique expiration date.  That date can be either an exact date or <guilabel>Never</guilabel>.</para>
+		</sect3>
+		<sect3 id="userid">
+			<title>User ID</title>
+			<para>A user ID consists of the following parts:
+				<variablelist>
+					<varlistentry>
+						<term>Name</term>
+						<listitem>
+							<para>A name or handle of key's owner.</para>
+						</listitem>
+					</varlistentry>
+					<varlistentry>
+						<term>Email</term>
+						<listitem>
+							<para>A (hopefully) valid email address associated with the key.</para>
+						</listitem>
+					</varlistentry>
+					<varlistentry>
+						<term>Comment</term>
+						<listitem>
+							<para>A comment about the key, or ID.</para>
+						</listitem>
+					</varlistentry>
+				</variablelist>
+			</para>
+		</sect3>
+		<para>Below the <xref linkend="userid"/> are the subkeys (if any).
+		Subkeys have the same <xref linkend="key-attributes"/> as a primary key,
+		but can also be deleted and revoked.</para>
+		<para>The following key operations are available:
+			<variablelist>
+				<varlistentry>
+					<term>Export</term>
+					<listitem>
+						<para><xref linkend="export"/></para>
+					</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term>Delete</term>
+					<listitem>
+						<para>Select
+							<menuchoice>
+							<guimenu>File</guimenu>
+								<guimenuitem>Delete</guimenuitem>
+							</menuchoice>
+						to <xref linkend="delete"/></para>
+					</listitem>
+				</varlistentry>
+			</variablelist>
+		</para>
+		<!-- sub sections (if possible) for key editing -->
+	</sect2>
+	<sect2 id="delete">
+		<title>Deleting a Key</title>
+		<para>To delete a key, choose
+			<menuchoice>
+				<guimenu>Edit</guimenu>
+				<guimenuitem>Delete</guimenuitem>
+			</menuchoice>.
+		The <guilabel>Delete Key</guilabel> dialog is displayed.
+		Click <guibutton>Yes</guibutton> to delete the key.</para>
+	</sect2>
+	<sect3 id="passphrase">
+		<title>Passphrase Entry</title>
+		<para>This dialog is displayed when a passphrase must be entered.
+		The key for which the passphrase is needed is shown above the entry.</para>
+	</sect3>
+	<sect3 id="signatures">
+		<title>Signatures</title>
+		<para>This dialog shows the signatures and their status of the verified data.</para>
+	</sect3>
+	<sect3 id="recipients">
+		<title>Recipients</title>
+		<para>Use this dialog to select multiple recipeints.
+		Currently this used for exporting keys and encrypting data.
+		Encryption requires that keys have at least <guilabel>Full Validity:</guilabel> <xref linkend="trust"/>.</para>
+	</sect3>
+</sect1>
+<sect1 id="preferences">
+	<title>Settings</title>
+	<para>To show the preferences, choose
+		<menuchoice>
+			<guimenu>Settings</guimenu>
+			<guimenuitem>Preferences</guimenuitem>
+		</menuchoice>.
+	The <guilabel>Preferences</guilabel> dialog is displayed.
+		<variablelist>
+			<varlistentry>
+				<term>Ascii Armor</term>
+				<listitem>
+					<para>Ascii armor ensures that data is encoded in ASCII text, not binary.
+					This is on by default.</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Text Mode</term>
+				<listitem>
+					<para>Check this to use Canonical Text Mode.
+					This setting is not really necessary and doesn't have much effect.</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Default Key</term>
+				<listitem>
+					<para>This is the default key to be used for signing.</para>
+				</listitem>
+			</varlistentry>
+	</variablelist>
+	</para>
+</sect1>
+<!-- ============= About ================================== -->
+<!-- This section contains info about the program (not docs), such as
+author's name(s), web page, license, feedback address. This
+section is optional: primary place for this info is "About.." box of
+the program. However, if you do wish to include this info in the
+manual, this is the place to put it. Alternatively, you can put this information in the title page.-->
+<sect1 id="about">
+	<title>About &app;</title>
+	<para> &app; was written by Jacob Perkins (<email>hacker@gnome.org</email>).
+	To find more information about &app;, please visit the <ulink url="http://seahorse.sourceforge.net" type="http">Seahorse Webpage</ulink>.</para>
+	<para>To report a bug or make a suggestion regarding this application or this manual,
+	follow the directions in this <ulink url="ghelp:gnome-feedback" type="help">document</ulink>.</para>
+	<para> This program is distributed under the terms of the GNU General Public license as published by the Free Software Foundation;
+	either version 2 of the License, or (at your option) any later version.
+	A copy of this license can be found at this <ulink url="ghelp:gpl" type="help">link</ulink>,
+	or in the file COPYING included with the source code of this program.</para>
+</sect1> 
+</article>
