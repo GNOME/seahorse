@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-31 15:33-0500\n"
-"PO-Revision-Date: 2004-10-31 22:06-0400\n"
+"POT-Creation-Date: 2004-11-06 11:41-0500\n"
+"PO-Revision-Date: 2004-11-06 22:06-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: English/Canada <adamw@FreeBSD.org>\n"
 "MIME-Version: 1.0\n"
@@ -430,13 +430,13 @@ msgid "Whether to use canonical text mode"
 msgstr "Whether to use canonical text mode"
 
 #. Make the column
-#: libseahorse/seahorse-key-store.c:600 src/seahorse-key-properties.c:374
-#: src/seahorse-key-properties.c:468
+#: libseahorse/seahorse-key-store.c:600 src/seahorse-key-properties.c:377
+#: src/seahorse-key-properties.c:471
 msgid "Name"
 msgstr "Name"
 
 #. Make the column
-#: libseahorse/seahorse-key-store.c:603 src/seahorse-key-properties.c:371
+#: libseahorse/seahorse-key-store.c:603 src/seahorse-key-properties.c:374
 msgid "Key ID"
 msgstr "Key ID"
 
@@ -478,7 +478,7 @@ msgid "Passphrase for key"
 msgstr "Passphrase for key"
 
 #: libseahorse/seahorse-recipients-store.c:147
-#: src/seahorse-key-manager-store.c:319
+#: src/seahorse-key-manager-store.c:321
 msgid "Validity"
 msgstr "Validity"
 
@@ -566,9 +566,31 @@ msgstr "<big><b>Signatures found are listed below:  </b></big>"
 msgid "Signature Verification"
 msgstr "Signature Verification"
 
-#: libseahorse/seahorse-util.c:125
+#: libseahorse/seahorse-util.c:126
 msgid "%Y-%m-%d"
 msgstr "%Y-%m-%d"
+
+#: libseahorse/seahorse-util.c:700
+msgid "Couldn't run file-roller"
+msgstr "Could not run file-roller"
+
+#: libseahorse/seahorse-util.c:705
+msgid "The file-roller process did not complete successfully"
+msgstr "The file-roller process did not complete successfully"
+
+#: libseahorse/seahorse-util.c:729
+msgid ""
+"<b>A file already exists with this name.</b>\n"
+"\n"
+"Do you want to replace it with the one you are saving?"
+msgstr ""
+"<b>A file already exists with this name.</b>\n"
+"\n"
+"Do you want to replace it with the one you are saving?"
+
+#: libseahorse/seahorse-util.c:732
+msgid "_Replace"
+msgstr "_Replace"
 
 #: libseahorse/seahorse-validity.c:31 src/seahorse-key-manager-store.c:147
 #: src/seahorse-key-properties.glade.h:20
@@ -595,7 +617,7 @@ msgstr "Ultimate"
 msgid "Disabled"
 msgstr "Disabled"
 
-#: libseahorse/seahorse-validity.c:43 src/seahorse-key-properties.c:198
+#: libseahorse/seahorse-validity.c:43 src/seahorse-key-properties.c:201
 msgid "Revoked"
 msgstr "Revoked"
 
@@ -806,7 +828,7 @@ msgstr "Verify signature file"
 msgid "Read list of URIs on standard in"
 msgstr "Read list of URIs on standard input"
 
-#: src/main.c:145 src/seahorse-key-manager.c:137
+#: src/main.c:145 src/seahorse-key-manager.c:182
 #, c-format
 msgid "Couldn't import keys from \"%s\""
 msgstr "Could not import keys from \"%s\""
@@ -868,7 +890,7 @@ msgstr "ElGamal (encrypt only)"
 
 #. expires
 #: src/seahorse-add-subkey.glade.h:3 src/seahorse-generate-adv.glade.h:6
-#: src/seahorse-generate-druid.glade.h:14 src/seahorse-key-properties.c:203
+#: src/seahorse-generate-druid.glade.h:14 src/seahorse-key-properties.c:206
 msgid "Expiration Date:"
 msgstr "Expiration Date:"
 
@@ -877,7 +899,7 @@ msgid "Generate a new subkey"
 msgstr "Generate a new subkey"
 
 #: src/seahorse-add-subkey.glade.h:5 src/seahorse-generate-adv.glade.h:10
-#: src/seahorse-key-properties.c:226
+#: src/seahorse-key-properties.c:229
 msgid "If key never expires"
 msgstr "If key never expires"
 
@@ -898,7 +920,7 @@ msgid "Length of Key"
 msgstr "Length of Key"
 
 #: src/seahorse-add-subkey.glade.h:10 src/seahorse-generate-adv.glade.h:17
-#: src/seahorse-key-properties.c:224
+#: src/seahorse-key-properties.c:227
 msgid "Never E_xpires"
 msgstr "Never E_xpires"
 
@@ -1096,7 +1118,7 @@ msgstr "Email Address:"
 msgid "Enter Name - Must be at least five letters."
 msgstr "Enter Name - Must be at least five letters."
 
-#: src/seahorse-generate-druid.glade.h:13 src/seahorse-key-manager-store.c:323
+#: src/seahorse-generate-druid.glade.h:13 src/seahorse-key-manager-store.c:325
 msgid "Expiration Date"
 msgstr "Expiration Date"
 
@@ -1143,7 +1165,7 @@ msgid "Medium Security"
 msgstr "Medium Security"
 
 #: src/seahorse-generate-druid.glade.h:22 src/seahorse-key-manager-store.c:206
-#: src/seahorse-key-properties.c:210
+#: src/seahorse-key-properties.c:213
 msgid "Never Expires"
 msgstr "Never Expires"
 
@@ -1274,74 +1296,68 @@ msgstr "DSA"
 msgid "ELG"
 msgstr "ELG"
 
-#: src/seahorse-key-manager-store.c:199 src/seahorse-key-properties.c:200
+#: src/seahorse-key-manager-store.c:199 src/seahorse-key-properties.c:203
 msgid "Expired"
 msgstr "Expired"
 
-#: src/seahorse-key-manager-store.c:327
+#: src/seahorse-key-manager-store.c:329
 msgid "Trust"
 msgstr "Trust"
 
-#: src/seahorse-key-manager-store.c:331
+#: src/seahorse-key-manager-store.c:333
 msgid "Length"
 msgstr "Length"
 
-#: src/seahorse-key-manager-store.c:335
+#: src/seahorse-key-manager-store.c:337
 msgid "Type"
 msgstr "Type"
 
-#: src/seahorse-key-manager.c:90
+#: src/seahorse-key-manager.c:94
 msgid "All PGP key files"
 msgstr "All PGP key files"
 
-#: src/seahorse-key-manager.c:98
+#: src/seahorse-key-manager.c:102 src/seahorse-key-manager.c:143
 msgid "All files"
 msgstr "All files"
 
-#: src/seahorse-key-manager.c:116
+#: src/seahorse-key-manager.c:136
+msgid "Archive files"
+msgstr "Archive files"
+
+#: src/seahorse-key-manager.c:161
 msgid "Import Key"
 msgstr "Import Key"
 
-#: src/seahorse-key-manager.c:158
+#: src/seahorse-key-manager.c:203
 msgid "Couldn't import keys from clipboard"
 msgstr "Could not import keys from clipboard"
 
-#: src/seahorse-key-manager.c:195
+#: src/seahorse-key-manager.c:240
 msgid "Couldn't export key to clipboard"
 msgstr "Could not export key to clipboard"
 
-#: src/seahorse-key-manager.c:225
+#: src/seahorse-key-manager.c:270
 msgid "Export Key"
 msgstr "Export Key"
 
-#: src/seahorse-key-manager.c:242
-msgid ""
-"<b>A file already exists with this name.</b>\n"
-"\n"
-"Do you want to replace it with the one you are saving?"
-msgstr ""
-"<b>A file already exists with this name.</b>\n"
-"\n"
-"Do you want to replace it with the one you are saving?"
-
-#: src/seahorse-key-manager.c:245
-msgid "Replace"
-msgstr "Replace"
-
-#: src/seahorse-key-manager.c:277
+#: src/seahorse-key-manager.c:291
 #, c-format
 msgid "Couldn't export key to \"%s\""
 msgstr "Could not export key to \"%s\""
 
-#: src/seahorse-key-manager.c:388
+#: src/seahorse-key-manager.c:308
+msgid "Backup Keyrings to Archive"
+msgstr "Backup Keyrings to Archive"
+
+#: src/seahorse-key-manager.c:459
 msgid "translator_credits"
 msgstr "Adam Weinberger <adamw@gnome.org>"
 
-#: src/seahorse-key-manager.c:408
+#: src/seahorse-key-manager.c:479
 msgid "seahorse"
 msgstr "seahorse"
 
-#: src/seahorse-key-manager.c:643
+#: src/seahorse-key-manager.c:714
 #, c-format
 msgid "Couldn't import key from \"%s\""
 msgstr "Could not import key from \"%s\""
@@ -1383,8 +1399,8 @@ msgid "Add the default key as a revoker"
 msgstr "Add the default key as a revoker"
 
 #: src/seahorse-key-manager.glade.h:11
-msgid "Backup key pair"
-msgstr "Backup key pair"
+msgid "Backup all keys"
+msgstr "Backup all keys"
 
 #: src/seahorse-key-manager.glade.h:12
 msgid "Change passphrase of secret key"
@@ -1467,8 +1483,8 @@ msgid "To get started with encryption you'll need keys."
 msgstr "To get started with encryption, you will need keys."
 
 #: src/seahorse-key-manager.glade.h:32
-msgid "_Backup..."
-msgstr "_Backup..."
+msgid "_Backup Keyrings..."
+msgstr "_Backup Keyrings..."
 
 #: src/seahorse-key-manager.glade.h:33
 msgid "_Change Passphrase..."
@@ -1544,74 +1560,74 @@ msgid "Operation complete"
 msgstr "Operation complete"
 
 #. key id
-#: src/seahorse-key-properties.c:175
+#: src/seahorse-key-properties.c:178
 msgid "Key ID:"
 msgstr "Key ID:"
 
-#: src/seahorse-key-properties.c:175
+#: src/seahorse-key-properties.c:178
 msgid "Key identifier"
 msgstr "Key identifier"
 
 #. type
-#: src/seahorse-key-properties.c:180
+#: src/seahorse-key-properties.c:183
 msgid "Type:"
 msgstr "Type:"
 
-#: src/seahorse-key-properties.c:180
+#: src/seahorse-key-properties.c:183
 msgid "Algorithm"
 msgstr "Algorithm"
 
 #. created
-#: src/seahorse-key-properties.c:186
+#: src/seahorse-key-properties.c:189
 msgid "Created:"
 msgstr "Created:"
 
-#: src/seahorse-key-properties.c:186
+#: src/seahorse-key-properties.c:189
 msgid "Key creation date"
 msgstr "Key creation date"
 
 #. length
-#: src/seahorse-key-properties.c:190
+#: src/seahorse-key-properties.c:193
 msgid "Length:"
 msgstr "Length:"
 
 #. status
-#: src/seahorse-key-properties.c:195
+#: src/seahorse-key-properties.c:198
 msgid "Status:"
 msgstr "Status:"
 
-#: src/seahorse-key-properties.c:196
+#: src/seahorse-key-properties.c:199
 msgid "Good"
 msgstr "Good"
 
-#: src/seahorse-key-properties.c:260
+#: src/seahorse-key-properties.c:263
 #, c-format
 msgid "%s Properties"
 msgstr "%s Properties"
 
-#: src/seahorse-key-properties.c:296
+#: src/seahorse-key-properties.c:299
 msgid "All Signatures"
 msgstr "All Signatures"
 
-#: src/seahorse-key-properties.c:547
+#: src/seahorse-key-properties.c:550
 msgid "Couldn't change primary user ID"
 msgstr "Could not change primary user ID"
 
-#: src/seahorse-key-properties.c:620 src/seahorse-key-properties.glade.h:27
+#: src/seahorse-key-properties.c:623 src/seahorse-key-properties.glade.h:27
 msgid "_Revoke"
 msgstr "_Revoke"
 
-#: src/seahorse-key-properties.c:624
+#: src/seahorse-key-properties.c:627
 #, c-format
 msgid "Revoke subkey %d"
 msgstr "Revoke subkey %d"
 
-#: src/seahorse-key-properties.c:633
+#: src/seahorse-key-properties.c:636
 #, c-format
 msgid "Subkey %d"
 msgstr "Subkey %d"
 
-#: src/seahorse-key-properties.c:645
+#: src/seahorse-key-properties.c:648
 #, c-format
 msgid "Delete subkey %d"
 msgstr "Delete subkey %d"
@@ -1780,46 +1796,38 @@ msgstr "Seahorse Preferences"
 msgid "Visible Columns"
 msgstr "Visible Columns"
 
-#: src/seahorse-process-multiple.c:49
+#: src/seahorse-process-multiple.c:46
 #, c-format
 msgid "You have selected %d files and %d folders"
 msgstr "You have selected %d files and %d folders"
 
-#: src/seahorse-process-multiple.c:51
+#: src/seahorse-process-multiple.c:48
 #, c-format
 msgid "You have selected %d files and %d folder"
 msgstr "You have selected %d files and %d folder"
 
-#: src/seahorse-process-multiple.c:53
+#: src/seahorse-process-multiple.c:50
 #, c-format
 msgid "You have selected %d file and %d folders"
 msgstr "You have selected %d file and %d folders"
 
-#: src/seahorse-process-multiple.c:55
+#: src/seahorse-process-multiple.c:52
 #, c-format
 msgid "You have selected %d file and %d folder"
 msgstr "You have selected %d file and %d folder"
 
 #. should never be called for just one file
-#: src/seahorse-process-multiple.c:61
+#: src/seahorse-process-multiple.c:58
 #, c-format
 msgid "You have selected %d files"
 msgstr "You have selected %d files"
 
-#: src/seahorse-process-multiple.c:65
+#: src/seahorse-process-multiple.c:62
 #, c-format
 msgid "You have selected %d folder"
 msgid_plural "You have selected %d folders"
 msgstr[0] "You have selected %d folder"
 msgstr[1] "You have selected %d folders"
-
-#: src/seahorse-process-multiple.c:234
-msgid "Couldn't run file-roller"
-msgstr "Could not run file-roller"
-
-#: src/seahorse-process-multiple.c:239
-msgid "The file-roller process did not complete successfully"
-msgstr "The file-roller process did not complete successfully"
 
 #: src/seahorse-revoke.c:51
 msgid "Couldn't revoke subkey"
