@@ -16,7 +16,8 @@ libdialogs_a_SOURCES = \
 	seahorse-import.c seahorse-import.h \
 	seahorse-passphrase.c seahorse-passphrase.h \
 	seahorse-signatures.c seahorse-signatures.h \
-	seahorse-recipients.c seahorse-recipients.h
+	seahorse-recipients.c seahorse-recipients.h \
+	seahorse-add-uid.c seahorse-add-uid.h
 
 glade_DATA = about.glade2 \
 	seahorse-generate.glade2 \
@@ -24,6 +25,7 @@ glade_DATA = about.glade2 \
 	seahorse-preferences.glade2 \
 	seahorse-import.glade2 \
 	seahorse-signatures.glade2 \
-	seahorse-recipients.glade2
+	seahorse-recipients.glade2 \
+	seahorse-add-uid.glade2
 
 EXTRA_DIST = $(glade_DATA)

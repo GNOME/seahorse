@@ -18,16 +18,15 @@
  * 59 Temple Place, Suite 330,
  * Boston, MA 02111-1307, USA.
  */
-
-#ifndef __SEAHORSE_GENERATE_H__
-#define __SEAHORSE_GENERATE_H__
-
-/* SeahorseGenerate is a SeahorseWidget for generating a key */
-
+ 
+#ifndef __SEAHORSE_ADD_UID_H__
+#define __SEAHORSE_ADD_UID_H__
+ 
+#include <glib.h>
+ 
 #include "seahorse-context.h"
-#include "seahorse-widget.h"
+ 
+void	seahorse_add_uid_new	(SeahorseContext	*sctx,
+ 				 SeahorseKey		*skey);
 
-/* Loads generate dialog */
-void	seahorse_generate_show	(SeahorseContext	*sctx);
-
-#endif /* __SEAHORSE_GENERATE_H__ */
+#endif /* __SEAHORSE_ADD_UID_H__ */

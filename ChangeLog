@@ -3,19 +3,37 @@
 	* configure.in:
 	* src/Makefile.am:
 	Package updates from Jose
-
-2003-01-22  Jacob Perkins <jap1@users.sourceforge.net>
-
 	* Patches from bug #104166
+
+	* Released 0.6.0
 
 2003-01-19  Jacob Perkins <jap1@users.sourceforge.net>
 
 	* seahorse-recipients: Fixed bug by removing delete_event
 	* seahorse-widget: Added assert for glade xml
+	* seahorse-ops-key: Added to comments to ::delete; added ::add_uid
+	& ::check_email; ::generate now checks email; general cleanups &
+	gtk-doc comments
+	* seahorse-generate: Checks email before generation, changed mnemonics
+	* Added seahorse-add-uid
+	* seahorse-file-manager:
+	* seahorse-text-editor:
+	* seahorse-key-manager:
+	Added more tooltips
+	* seahorse-key: Removed SeahorseKeyPrivate; ::num_uids & ::num_subkeys
+	now calculate on demand; gtk-doc comments
+	* seahorse-export: Listens to uid changes
 
 2003-01-18  Jacob Perkins <jap1@users.sourceforge.net>
 
 	* seahorse-context: Bug fix in ::new
+	* seahorse-key-properties: Simplified/prepared for key edit ops with
+	::do_uids & ::do_subkeys
+	* seahorse-ops-key: Set key type numbers to correspond to gnupg;
+	cleaned up & added checks to ::generate
+	* seahorse-generate: Set length increments to multiples of 32,
+	updated for new key types
+
 
 2003-01-17  Jacob Perkins <jap1@users.sourceforge.net>
 

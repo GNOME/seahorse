@@ -1,7 +1,7 @@
 /*
  * Seahorse
  *
- * Copyright (C) 2002 Jacob Perkins
+ * Copyright (C) 2003 Jacob Perkins
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -96,11 +96,37 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 	}
 }
 
+static void
+set_title (SeahorseWidget *swidget)
+{
+	gtk_window_set_title (GTK_WINDOW (glade_xml_get_widget (swidget->xml,
+		swidget->name)), g_strdup_printf (_("Export Key: %s"),
+		seahorse_key_get_userid (SEAHORSE_KEY_WIDGET (swidget)->skey, 0)));
+}
+
+static void
+key_changed (SeahorseKey *skey, SeahorseKeyChange change, SeahorseWidget *swidget)
+{
+	switch (change) {
+		case SKEY_CHANGE_UIDS:
+			set_title (swidget);
+			break;
+		default:
+			break;
+	}
+}
+
+/**
+ * seahorse_export_new:
+ * @sctx: Current #SeahorseContext
+ * @skey: #SeahorseKey
+ *
+ * Creates a new #SeahorseKeyWidget dialog for exporting @skey.
+ **/
 void
 seahorse_export_new (SeahorseContext *sctx, SeahorseKey *skey)
 {
 	SeahorseWidget *swidget;
-	GtkWindow *export_dialog;
 	
 	swidget = seahorse_key_widget_new ("export", sctx, skey);
 	g_return_if_fail (swidget != NULL);
@@ -109,7 +135,5 @@ seahorse_export_new (SeahorseContext *sctx, SeahorseKey *skey)
 	glade_xml_signal_connect_data (swidget->xml, "server_toggled", G_CALLBACK (server_toggled), swidget);	
 	glade_xml_signal_connect_data (swidget->xml, "ok_clicked", G_CALLBACK (ok_clicked), swidget);
 	
-	export_dialog = GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name));
-	gtk_window_set_title (export_dialog, g_strdup_printf (_("Export Key: %s"), 
-		seahorse_key_get_userid (skey, 0)));
+	set_title (swidget);
 }

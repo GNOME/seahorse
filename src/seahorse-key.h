@@ -1,7 +1,7 @@
 /*
  * Seahorse
  *
- * Copyright (C) 2002 Jacob Perkins
+ * Copyright (C) 2003 Jacob Perkins
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,54 +38,51 @@
 
 /* Possible key changes */
 typedef enum {
+	/* Owner trust has changed */
 	SKEY_CHANGE_TRUST,
+	/* Expiration date has changed */
 	SKEY_CHANGE_EXPIRE,
+	/* Disabled state has changed */
 	SKEY_CHANGE_DISABLE,
-	SKEY_CHANGE_PASS
+	/* Passphrase has changed */
+	SKEY_CHANGE_PASS,
+	/* User IDs have changed */
+	SKEY_CHANGE_UIDS
 } SeahorseKeyChange;
 
 typedef struct _SeahorseKey SeahorseKey;
-typedef struct _SeahorseKeyClass SeahorseKeyClass;	
-typedef struct _SeahorseKeyPrivate SeahorseKeyPrivate;
+typedef struct _SeahorseKeyClass SeahorseKeyClass;
 	
 struct _SeahorseKey
 {
 	GtkObject		parent;
-	
+	/*< public >*/
 	GpgmeKey		key;
-	SeahorseKeyPrivate	*priv;
 };
 
 struct _SeahorseKeyClass
 {
 	GtkObjectClass		parent_class;
-	
+	/*< public >*/
 	/* Signal emitted when one of the key's attributes has changed */
 	void 			(* changed)	(SeahorseKey		*skey,
 						 SeahorseKeyChange	change);
 };
 
-/* Constructs a new SeahorseKey */
 SeahorseKey*	seahorse_key_new		(GpgmeKey		key);
 
-/* Emits the 'destroy' signal. */
 void		seahorse_key_destroy		(SeahorseKey		*skey);
 
-/* Called by key edit operations.  Emits the 'changed' signal. */
 void		seahorse_key_changed		(SeahorseKey		*skey,
 						 SeahorseKeyChange	change);
 
-/* Returns the number of user ids */
 const gint	seahorse_key_get_num_uids	(const SeahorseKey	*skey);
 
-/* Returns the number of sub keys */
 const gint	seahorse_key_get_num_subkeys	(const SeahorseKey	*skey);
 
-/* Returns the last 8 characters of the keyid */
 const gchar*	seahorse_key_get_keyid		(const SeahorseKey	*skey,
 						 const guint		index);
 
-/* Returns the formatted, utf8 valid, userid at index in key */
 const gchar*	seahorse_key_get_userid		(const SeahorseKey	*skey,
 						 const guint		index);
 
