@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse 0.7.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-07-19 19:02+0200\n"
-"PO-Revision-Date: 2003-07-19 17:06+0200\n"
+"POT-Creation-Date: 2003-09-20 12:09+0200\n"
+"PO-Revision-Date: 2003-09-20 11:46+0200\n"
 "Last-Translator: Christophe Merlet (RedFox) <redfox@redfoxcenter.org>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "MIME-Version: 1.0\n"
@@ -126,6 +126,8 @@ msgid ""
 "If set to true, then all output from pgp operations will be ASCII text. "
 "Files will have a '.asc' extension."
 msgstr ""
+"Si défini à vrai, toutes les sorties d'opérations PGP seront en texte ASCII. "
+"Les fichiers auront l'extension « .asc »."
 
 #: data/seahorse.schemas.in.h:11
 msgid ""
@@ -133,12 +135,17 @@ msgid ""
 "text mode. Text mode is generally only needed for RFC 2015 signatures. RFC "
 "3156 removes the need for text mode."
 msgstr ""
+"Si défini à vrai, alors la sorie de certaines opérations PGP sera en mode "
+"texte canonique. Le mode texte n'est généralement nécessaire que pour les "
+"signatures RFC 2015. La RFC 3156 supprime la nécessité du mode texte."
 
 #: data/seahorse.schemas.in.h:12
 msgid ""
 "If set to true, then the default key will always be added to an encryption "
 "recipients list."
 msgstr ""
+"Si défini à vrai, alors la clé par défaut sera toujours ajouté à la liste "
+"des destinataires de chiffrement"
 
 #: data/seahorse.schemas.in.h:13
 msgid "If the statusbar is visible"
@@ -177,6 +184,8 @@ msgid ""
 "The toolbar button and label style. Options are 'default', 'both', "
 "'both_horiz', 'icons', and 'text'."
 msgstr ""
+"Le style des boutons et étiquettes de la barre d'outils. Les options par "
+"défaut sont « default », « both », « both_horiz », « icons », et « text »."
 
 #: data/seahorse.schemas.in.h:22
 msgid ""
@@ -184,27 +193,28 @@ msgid ""
 "operation. By default, the signal is emitted for every 20 keys processed. A "
 "value of -1 will cause the signal to never be emitted."
 msgstr ""
+"Indique la fréquence d'émission du signal de progression émit lors d'une "
+"opération de listage. Par défaut, le signal est émis toutes les 20 clés "
+"traitées. Une valeur de -1 indique que le signal ne doit pas être émis."
 
 #: data/seahorse.schemas.in.h:23
-#, fuzzy
 msgid ""
 "This specifies the default key to use for cerain operations, mainly signing."
 msgstr ""
-"L'identifiant de la clé par défaut à utiliser pour les opérations comme la "
-"signature"
+"Spécifie la clé par défaut à utiliser pour certaines opérations comme la "
+"signature."
 
 #: data/seahorse.schemas.in.h:24
 msgid "Whether to always encrypt to default key"
-msgstr "Si il faut toujours chiffrer avec la clé par défaut"
+msgstr "Indique si il faut toujours chiffrer avec la clé par défaut"
 
 #: data/seahorse.schemas.in.h:25
 msgid "Whether to use ASCII Armor"
-msgstr "Si il faut utiliser une armure ASCII"
+msgstr "Indique si il faut utiliser une armure ASCII"
 
 #: data/seahorse.schemas.in.h:26
-#, fuzzy
 msgid "Whether to use canonical text mode"
-msgstr "Utilise le mode de texte canonique"
+msgstr "Indique si il faut utiliser le mode texte canonique"
 
 #: libseahorse/seahorse-context.c:397
 #, c-format
@@ -273,6 +283,8 @@ msgstr "Validité"
 #, c-format
 msgid "Selected %d not fully valid keys and %d fully valid keys"
 msgstr ""
+"%d clés pas complétement valides et %d clés complétement valides "
+"sélectionnées"
 
 #: libseahorse/seahorse-recipients.glade.h:1
 msgid "Choose Keys"
@@ -715,7 +727,9 @@ msgstr "Identifiant de la _clé :"
 
 #: src/seahorse-key-manager.c:210
 msgid "translator_credits"
-msgstr "Stéphane Blondin <stephane.blondin@caramail.com>"
+msgstr ""
+"Stéphane Blondin <stephane.blondin@caramail.com>\n"
+"Christophe Merlet (RedFox) <redfox@redfoxcenter.org>"
 
 #: src/seahorse-key-manager.c:230
 msgid "seahorse"
@@ -735,7 +749,7 @@ msgstr "Ajouter une _révocation..."
 
 #: src/seahorse-key-manager.glade.h:4
 msgid "Add _User ID..."
-msgstr "Ajouter un ID d'utilisateur..."
+msgstr "Ajouter un ID d'_utilisateur..."
 
 #: src/seahorse-key-manager.glade.h:5
 msgid "Add a new subkey"
@@ -763,7 +777,7 @@ msgstr "Modifier la phrase de passe de la clé secrète"
 
 #: src/seahorse-key-manager.glade.h:11
 msgid "Collapse all listings"
-msgstr ""
+msgstr "Réduire tous les listings"
 
 #: src/seahorse-key-manager.glade.h:12
 msgid "Create a new key"
@@ -783,7 +797,7 @@ msgstr "E_xporter..."
 
 #: src/seahorse-key-manager.glade.h:17
 msgid "Expand all listings"
-msgstr ""
+msgstr "Étendre tous les listings"
 
 #: src/seahorse-key-manager.glade.h:18
 msgid "Export key"
@@ -835,7 +849,7 @@ msgstr "Changer la _phrase de passe..."
 
 #: src/seahorse-key-manager.glade.h:30
 msgid "_Collapse All"
-msgstr ""
+msgstr "Tout _réduire"
 
 #: src/seahorse-key-manager.glade.h:31
 msgid "_Contents"
@@ -847,7 +861,7 @@ msgstr "_Supprimer"
 
 #: src/seahorse-key-manager.glade.h:33
 msgid "_Expand All"
-msgstr ""
+msgstr "Tout _étendre"
 
 #: src/seahorse-key-manager.glade.h:34
 msgid "_Generate Revocation Certificate..."
@@ -935,17 +949,17 @@ msgstr "_Primaire"
 #. callback
 #: src/seahorse-key-properties.c:162
 msgid "Set as primary User ID"
-msgstr ""
+msgstr "Définir come ID utilisateur primaire"
 
 #. **** do ciphers ****
 #: src/seahorse-key-properties.c:180
 msgid "Ciphers"
-msgstr ""
+msgstr "Ciphers"
 
 #. **** do hashes ****
 #: src/seahorse-key-properties.c:219
 msgid "Hashes"
-msgstr ""
+msgstr "Hachages"
 
 #. **** do compression ****
 #: src/seahorse-key-properties.c:242
@@ -954,7 +968,7 @@ msgstr "Compression"
 
 #: src/seahorse-key-properties.c:337
 msgid "Key identifier"
-msgstr ""
+msgstr "Identifiant de clé"
 
 #. type
 #: src/seahorse-key-properties.c:342
@@ -979,9 +993,9 @@ msgid "_Revoke"
 msgstr "_Révoquer"
 
 #: src/seahorse-key-properties.c:452
-#, fuzzy, c-format
+#, c-format
 msgid "Revoke subkey %d"
-msgstr "Sous-clé %d"
+msgstr "Révoquer la sous-clé %d"
 
 #: src/seahorse-key-properties.c:461
 #, c-format
@@ -1008,7 +1022,7 @@ msgstr "_Désactivé"
 
 #: src/seahorse-key-properties.glade.h:3
 msgid "Disabled keys cannot be used for operations"
-msgstr ""
+msgstr "Les clés désactivées ne peuvent être utilisées pour les opérations"
 
 #: src/seahorse-key-properties.glade.h:4
 msgid "Fingerprint:"
@@ -1016,15 +1030,15 @@ msgstr "Empreinte :"
 
 #: src/seahorse-key-properties.glade.h:6
 msgid "Fully trust owner"
-msgstr ""
+msgstr "Toujours avoir confiance dans le propriétaire"
 
 #: src/seahorse-key-properties.glade.h:8
 msgid "Marginally trust owner"
-msgstr ""
+msgstr "Faire moyennement confiance au propriétaire"
 
 #: src/seahorse-key-properties.glade.h:10
 msgid "Never trust owner"
-msgstr ""
+msgstr "Ne jamais avoir confiance dans le propriétaire"
 
 #: src/seahorse-key-properties.glade.h:11
 msgid "Owner _Trust:"
@@ -1040,11 +1054,11 @@ msgstr "Clé primaire"
 
 #: src/seahorse-key-properties.glade.h:14
 msgid "Trust placed in owner's ability to sign keys"
-msgstr ""
+msgstr "Confiance placé dans la possibilité du propriétaire à signer des clés"
 
 #: src/seahorse-key-properties.glade.h:16
 msgid "Unique key identifier"
-msgstr ""
+msgstr "Identifiant de clé unique"
 
 #: src/seahorse-key-properties.glade.h:18
 msgid "Your personal key"
@@ -1133,7 +1147,7 @@ msgstr "Seulement du texte"
 
 #: src/seahorse-preferences.glade.h:14
 msgid "Toolbar _Style:"
-msgstr "Style de barre d'outils :"
+msgstr "_Style de barre d'outils :"
 
 #: src/seahorse-preferences.glade.h:15
 msgid "Use system settings"
@@ -1154,14 +1168,13 @@ msgid "Revoke %s"
 msgstr "Révoquer %s"
 
 #: src/seahorse-revoke.c:98
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "You are about to add %s as a revoker for %s. This operation cannot be "
 "undone! Are you sure you want to continue?"
 msgstr ""
-"Vous êtes sur le point de supprimer définitivement\n"
-"%s\n"
-"de votre trousseau. Êtes-vous sûr de vouloir continuer ?"
+"Vous êtes sur le point d'ajouter %s comme révocateur pour %s. Cette "
+"opération ne peut être annulée. Êtes-vous sûr de vouloir continuer ?"
 
 #: src/seahorse-revoke.glade.h:2
 msgid "Compromised"
@@ -1173,7 +1186,7 @@ msgstr "La clé a été compromise"
 
 #: src/seahorse-revoke.glade.h:4
 msgid "Key has been superseded"
-msgstr ""
+msgstr "La clé a été supercédé"
 
 #: src/seahorse-revoke.glade.h:5
 msgid "Key is no longer used"
@@ -1209,7 +1222,7 @@ msgstr "Révoquer la clé"
 
 #: src/seahorse-revoke.glade.h:13
 msgid "Superseded"
-msgstr ""
+msgstr "Supercédé"
 
 #: src/seahorse-revoke.glade.h:14
 msgid "_Description:"
@@ -1223,10 +1236,11 @@ msgstr "_Raison :"
 #, c-format
 msgid "Are you sure you want to sign all user IDs for %s?"
 msgstr ""
+"Êtes-vous sûr de vouloir signer tous les identifiant utilisateur pour %s ?"
 
 #: src/seahorse-sign.glade.h:1
 msgid "Casually"
-msgstr ""
+msgstr "Par hasard"
 
 #: src/seahorse-sign.glade.h:2
 msgid "Default answer"
@@ -1234,28 +1248,30 @@ msgstr "Réponse par défaut"
 
 #: src/seahorse-sign.glade.h:3
 msgid "Have casually checked key"
-msgstr ""
+msgstr "A des clés cochées par hasard"
 
 #: src/seahorse-sign.glade.h:4
 msgid "Have checked key very carefully"
-msgstr ""
+msgstr "A des clés cochées consciencieusement"
 
 #: src/seahorse-sign.glade.h:5
 msgid "Have not checked key"
-msgstr ""
+msgstr "N'a pas de clés cochées"
 
 #: src/seahorse-sign.glade.h:6
 msgid "If signature can be revoked"
-msgstr ""
+msgstr "Si la signature peut être révoquée"
 
 #: src/seahorse-sign.glade.h:7
 msgid "If signature expires with key"
-msgstr ""
+msgstr "Si la signature expire avec la clé"
 
 #: src/seahorse-sign.glade.h:8
 msgid ""
 "If signature is local to the key ring and won't be exported with the key"
 msgstr ""
+"Si la signature est local à l'anneau de clé et ne peut être exportée avec la "
+"clé"
 
 #: src/seahorse-sign.glade.h:9
 msgid "No answer"
@@ -1271,11 +1287,11 @@ msgstr "Signer la clé"
 
 #: src/seahorse-sign.glade.h:12
 msgid "Very carefully"
-msgstr ""
+msgstr "Trés consciencieusement"
 
 #: src/seahorse-sign.glade.h:14
 msgid "_How carefully have you checked this key?"
-msgstr ""
+msgstr "_Avec quelle précaution avez-vous coché cette clé ?"
 
 #: src/seahorse-sign.glade.h:15
 msgid "_Local"
