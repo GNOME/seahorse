@@ -20,8 +20,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Seahorse Gnome2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-09-19 12:23+0200\n"
-"PO-Revision-Date: 2004-09-19 14:13+0200\n"
+"POT-Creation-Date: 2004-10-08 12:10+0200\n"
+"PO-Revision-Date: 2004-10-09 01:26+0200\n"
 "Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
 "Language-Team: Dutch <vertaling@nl.linux.org>\n"
 "MIME-Version: 1.0\n"
@@ -205,7 +205,7 @@ msgstr ""
 
 #: data/seahorse.schemas.in.h:23
 msgid ""
-"This specifies the default key to use for cerain operations, mainly signing."
+"This specifies the default key to use for certain operations, mainly signing."
 msgstr ""
 "Dit is de standaardsleutel die wordt gebruikt voor bepaalde bewerkingen, "
 "voornamelijk ondertekenen."
@@ -237,20 +237,20 @@ msgstr "%d sleutelparen geladen"
 msgid "Loaded %d keys"
 msgstr "%d sleutels geladen"
 
-#: libseahorse/seahorse-context.c:640
+#: libseahorse/seahorse-context.c:637
 #, c-format
 msgid "Loaded %d new keys"
 msgstr "%d nieuwe sleutels geladen"
 
-#: libseahorse/seahorse-key-store.c:335
+#: libseahorse/seahorse-key-store.c:336
 msgid "Name"
 msgstr "Naam"
 
-#: libseahorse/seahorse-key-store.c:338
+#: libseahorse/seahorse-key-store.c:339
 msgid "Key ID"
 msgstr "Sleutel-ID"
 
-#: libseahorse/seahorse-key-store.c:393
+#: libseahorse/seahorse-key-store.c:394
 #, c-format
 msgid "Listed %d keys"
 msgstr "%d sleutels opgesomd"
@@ -281,7 +281,7 @@ msgid "Passphrase for key"
 msgstr "Wachtwoordfrase voor sleutel"
 
 #: libseahorse/seahorse-recipients-store.c:131
-#: src/seahorse-key-manager-store.c:265
+#: src/seahorse-key-manager-store.c:289
 msgid "Validity"
 msgstr "Geldigheid"
 
@@ -294,41 +294,45 @@ msgstr "%d niet volledig geldige en %d volledig geldige sleutels geselecteerd"
 msgid "Choose Keys"
 msgstr "Sleutels kiezen"
 
-#: libseahorse/seahorse-signatures.c:36
-msgid "Signing key not in key ring"
-msgstr "Handtekening-sleutel niet in sleutelbos"
-
-#: libseahorse/seahorse-signatures.c:40
-msgid "Bad Signature"
-msgstr "Foute handtekening"
-
-#: libseahorse/seahorse-signatures.c:44
-msgid "Not a signature"
-msgstr "Geen handtekening"
-
-#: libseahorse/seahorse-signatures.c:48
-msgid "Verification Error"
-msgstr "Verificatie-fout"
-
-#: libseahorse/seahorse-signatures.c:75
+#: libseahorse/seahorse-signatures.c:42
 msgid "Good, signing key expired"
 msgstr "Goed, handtekening-sleutel verlopen"
 
-#: libseahorse/seahorse-signatures.c:78
-msgid "Multiple Signatures"
-msgstr "Meerdere handtekeningen"
+#: libseahorse/seahorse-signatures.c:46
+msgid "Good, signature expired"
+msgstr "Goed, handtekening verlopen"
 
-#: libseahorse/seahorse-signatures.c:81 src/seahorse-key-properties.c:357
+#: libseahorse/seahorse-signatures.c:50
+msgid "Good, signing key certificate revoked"
+msgstr "Goed, handtekening-sleutel certificaat ingetrokken"
+
+#: libseahorse/seahorse-signatures.c:54 src/seahorse-key-properties.c:364
 msgid "Good"
 msgstr "Goed"
 
+#: libseahorse/seahorse-signatures.c:58
+msgid "Signing key not in key ring"
+msgstr "Handtekening-sleutel niet in sleutelbos"
+
+#: libseahorse/seahorse-signatures.c:61
+msgid "Bad Signature"
+msgstr "Foute handtekening"
+
+#: libseahorse/seahorse-signatures.c:64
+msgid "Not a signature"
+msgstr "Geen handtekening"
+
+#: libseahorse/seahorse-signatures.c:67
+msgid "Verification Error"
+msgstr "Verificatie-fout"
+
 #. created
-#: libseahorse/seahorse-signatures.glade.h:1 src/seahorse-key-properties.c:348
+#: libseahorse/seahorse-signatures.glade.h:1 src/seahorse-key-properties.c:354
 msgid "Created:"
 msgstr "Aangemaakt:"
 
 #. key id
-#: libseahorse/seahorse-signatures.glade.h:2 src/seahorse-key-properties.c:337
+#: libseahorse/seahorse-signatures.glade.h:2 src/seahorse-key-properties.c:343
 msgid "Key ID:"
 msgstr "Sleutel-ID:"
 
@@ -342,15 +346,16 @@ msgid "Signer:"
 msgstr "Ondertekende:"
 
 #. status
-#: libseahorse/seahorse-signatures.glade.h:5 src/seahorse-key-properties.c:356
+#: libseahorse/seahorse-signatures.glade.h:5 src/seahorse-key-properties.c:363
 msgid "Status:"
 msgstr "Status:"
 
-#: libseahorse/seahorse-util.c:91
+#: libseahorse/seahorse-util.c:92
 msgid "%Y-%m-%d"
 msgstr "%Y-%m-%d"
 
-#: libseahorse/seahorse-validity.c:31 src/seahorse-key-properties.glade.h:17
+#: libseahorse/seahorse-validity.c:31 src/seahorse-key-manager-store.c:48
+#: src/seahorse-key-properties.glade.h:17
 msgid "Unknown"
 msgstr "Onbekend"
 
@@ -374,31 +379,31 @@ msgstr "Ultiem"
 msgid "Disabled"
 msgstr "Uitgeschakeld"
 
-#: libseahorse/seahorse-validity.c:43 src/seahorse-key-properties.c:359
+#: libseahorse/seahorse-validity.c:43 src/seahorse-key-properties.c:366
 msgid "Revoked"
 msgstr "Herroepen"
 
-#: plugins/nautilus/seahorse-pgp-preferences.c:29
+#: plugins/nautilus/seahorse-pgp-preferences.c:30
 #: plugins/nautilus/seahorse-pgp-preferences.desktop.in.h:2
 #: plugins/nautilus/seahorse-pgp-preferences.glade.h:1
 msgid "PGP Preferences"
 msgstr "PGP-voorkeuren"
 
-#: plugins/nautilus/seahorse-pgp-preferences.c:45
-#: src/seahorse-preferences.c:80
+#: plugins/nautilus/seahorse-pgp-preferences.c:46
+#: src/seahorse-preferences.c:52
 msgid "_Ascii Armor"
 msgstr "_Ascii-harnas"
 
-#: plugins/nautilus/seahorse-pgp-preferences.c:47
+#: plugins/nautilus/seahorse-pgp-preferences.c:48
 msgid "_Text Mode"
 msgstr "_Tekstmodus"
 
 # wat betekent dit?
-#: plugins/nautilus/seahorse-pgp-preferences.c:49
+#: plugins/nautilus/seahorse-pgp-preferences.c:50
 msgid "_Encrypt to Self"
 msgstr "_Versleutelen naar Zelf"
 
-#: plugins/nautilus/seahorse-pgp-preferences.c:54
+#: plugins/nautilus/seahorse-pgp-preferences.c:55
 msgid "_Default Key:"
 msgstr "_Standaardsleutel:"
 
@@ -406,69 +411,69 @@ msgstr "_Standaardsleutel:"
 msgid "Configure PGP"
 msgstr "PGP configureren"
 
-#: src/main.c:41
+#: src/main.c:42
 msgid "Import keys from the file"
 msgstr "Sleutels importeren van het bestand"
 
-#: src/main.c:41 src/main.c:44 src/main.c:47 src/main.c:50 src/main.c:53
-#: src/main.c:56 src/main.c:59
+#: src/main.c:42 src/main.c:45 src/main.c:48 src/main.c:51 src/main.c:54
+#: src/main.c:57 src/main.c:60
 msgid "FILE"
 msgstr "BESTAND"
 
-#: src/main.c:44
+#: src/main.c:45
 msgid "Encrypt file"
 msgstr "Bestand versleutelen"
 
-#: src/main.c:47
+#: src/main.c:48
 msgid "Sign file with default key"
 msgstr "Bestand signeren met standaardsleutel"
 
-#: src/main.c:50
+#: src/main.c:51
 msgid "Encrypt and sign file with default key"
 msgstr "Bestand versleutelen en signeren met standaardsleutel"
 
-#: src/main.c:53
+#: src/main.c:54
 msgid "Decrypt encrypted file"
 msgstr "Een versleuteld bestand ontcijferenen"
 
-#: src/main.c:56
+#: src/main.c:57
 msgid "Verify signature file"
 msgstr "Handtekeningbestand verifiëren"
 
-#: src/main.c:59
+#: src/main.c:60
 msgid "Decrypt encrypt file and verify any signatures it contains"
 msgstr ""
 "Versleutelingsbestand ontcijferen en de handtekeningen die het bevat "
 "verifiëren"
 
 # Sleutelbeheer hier beter dan Sleutelbeheerder
-#: src/main.c:121 src/seahorse.desktop.in.h:1
+#: src/main.c:129 src/seahorse.desktop.in.h:1
 msgid "GPG Keys Manager"
 msgstr "GPG Sleutelbeheer"
 
-#: src/main.c:136
+#: src/main.c:144
 #, c-format
 msgid "Imported %d keys"
 msgstr "%d sleutels geïmporteerd"
 
 # encrypt file is dus hier geen werkwoord
-#: src/main.c:141
+#: src/main.c:150
 #, c-format
 msgid "Encrypt file is %s"
 msgstr "Versleutelingsbestand is %s"
 
-#: src/main.c:150
+#: src/main.c:161
 #, c-format
 msgid "Signature file is %s"
 msgstr "Handtekeningbestand is %s"
 
 # ondertekende bestand klinkt hier mooier
-#: src/main.c:157
+#: src/main.c:169
 #, c-format
 msgid "Encrypted and signed file is %s"
 msgstr "Versleutelde en gesigneerde bestand is %s"
 
-#: src/main.c:166 src/main.c:197
+#: src/main.c:180 src/main.c:211
 #, c-format
 msgid "Decrypted file is %s"
 msgstr "Ontcijferde bestand is %s"
@@ -477,7 +482,7 @@ msgstr "Ontcijferde bestand is %s"
 msgid "Manage your GPG keys"
 msgstr "Uw GPG-sleutels beheren"
 
-#: src/seahorse-add-subkey.c:123
+#: src/seahorse-add-subkey.c:125
 #, c-format
 msgid "Add subkey to %s"
 msgstr "Subsleutel aan %s toevoegen"
@@ -492,7 +497,7 @@ msgstr "ElGamal (alleen versleutelen)"
 
 #. expires
 #: src/seahorse-add-subkey.glade.h:3 src/seahorse-generate-adv.glade.h:6
-#: src/seahorse-key-properties.c:364
+#: src/seahorse-generate-druid.glade.h:12 src/seahorse-key-properties.c:371
 msgid "Expiration Date:"
 msgstr "Expiratiedatum:"
 
@@ -501,7 +506,7 @@ msgid "Generate a new subkey"
 msgstr "Een nieuwe subsleutel genereren"
 
 #: src/seahorse-add-subkey.glade.h:5 src/seahorse-generate-adv.glade.h:10
-#: src/seahorse-key-properties.c:390
+#: src/seahorse-key-properties.c:395
 msgid "If key never expires"
 msgstr "Als sleutel nooit verloopt"
 
@@ -522,7 +527,7 @@ msgid "Length of Key"
 msgstr "Lengte van sleutel"
 
 #: src/seahorse-add-subkey.glade.h:10 src/seahorse-generate-adv.glade.h:17
-#: src/seahorse-key-properties.c:388
+#: src/seahorse-key-properties.c:393
 msgid "Never E_xpires"
 msgstr "Ver_loopt nooit"
 
@@ -534,7 +539,7 @@ msgstr "RSA (alleen versleutelen)"
 msgid "RSA (sign only)"
 msgstr "RSA (alleen ondertekenen)"
 
-#: src/seahorse-add-uid.c:101
+#: src/seahorse-add-uid.c:103
 #, c-format
 msgid "Add user ID to %s"
 msgstr "Gebruikers-ID aan %s toevoegen"
@@ -595,17 +600,17 @@ msgstr "Nieuwe wachtwoordfrase invoeren"
 msgid "New _Passphrase:"
 msgstr "Nieuwe_wachtwoordfrase:"
 
-#: src/seahorse-delete.c:36
+#: src/seahorse-delete.c:38
 #, c-format
 msgid "%s is a key pair! Do you still want to delete it?"
 msgstr "%s is een sleutelpaar! Wilt u het toch verwijderen?"
 
-#: src/seahorse-delete.c:66
+#: src/seahorse-delete.c:69
 #, c-format
 msgid "Are you sure you want to permanently delete %s?"
 msgstr "Weet u zeker dat u %s permanent wilt verwijderen?"
 
-#: src/seahorse-delete.c:131
+#: src/seahorse-delete.c:135
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
 msgstr "Weet u zeker dat u subsleutel %d van %s permanent wilt verwijderen?"
@@ -705,13 +710,14 @@ msgstr ""
 # de oorspronkelijke versie zat vol met Engelse taalfouten
 #: src/seahorse-generate-druid.glade.h:3
 msgid ""
-"Choosing a passphrase is an integral part of creating a strong key.  Like a "
-"password, a passphrase should letters, numbers, and punctuation.  "
+"Choosing a passphrase is an integral part of creating a strong key. Like a "
+"password, a passphrase should contain letters, numbers, and punctuation. "
 "Additionally, a passphrase can contain spaces, meaning it can contain many "
-"words.  You should pick a rememberable phrase that contains punctuation.  "
-"Take this phrase, adjust the case of various letters, and change some of the "
-"letters into numbers or punctuation rmeiniscent of \"leet speak\", but don't "
-"make it so obscure to the point where you can't remember it."
+"words. You should pick a phrase that is easy to rememeber and contains "
+"punctuation. Take this phrase, adjust the case of various letters, and "
+"change some of the letters into numbers or punctuation, reminiscent of "
+"\"leet speak\", but don't make it so obscure to the point where you can't "
+"remember it."
 msgstr ""
 "Het kiezen van een wachtwoordfrase is een belangrijk onderdeel bij het "
 "aanmaken van een sterke sleutel.  Net als bij eeen wachtwoord, behoort een "
@@ -733,8 +739,8 @@ msgid "Confirm"
 msgstr "Bevestigen"
 
 #: src/seahorse-generate-druid.glade.h:6
-msgid "Confirm Passphrase: "
-msgstr "Wachtwoordfrase bevestigen: "
+msgid "Confirm Passphrase:"
+msgstr "Wachtwoordfrase bevestigen:"
 
 #: src/seahorse-generate-druid.glade.h:7
 msgid "Confirm passphrase"
@@ -745,29 +751,25 @@ msgid "Date the Key Expires"
 msgstr "Datum waarop de sleutel verloopt"
 
 #: src/seahorse-generate-druid.glade.h:9
-msgid "Email Address: "
-msgstr "Emailadres: "
+msgid "Email Address:"
+msgstr "Emailadres:"
 
 #: src/seahorse-generate-druid.glade.h:10
 msgid "Enter Name - Must be at least five letters."
 msgstr "Naam invoeren - moet minimaal vijf letters zijn."
 
 # expiratiedatum?
-#: src/seahorse-generate-druid.glade.h:11 src/seahorse-key-manager-store.c:269
+#: src/seahorse-generate-druid.glade.h:11 src/seahorse-key-manager-store.c:293
 msgid "Expiration Date"
 msgstr "Verloopdatum"
-
-#: src/seahorse-generate-druid.glade.h:12
-msgid "Expiration Date: "
-msgstr "Verloopdatum: "
 
 #: src/seahorse-generate-druid.glade.h:13
 msgid "Extra High Security"
 msgstr "Extra hoge beveiliging"
 
 #: src/seahorse-generate-druid.glade.h:14
-msgid "Full Name: "
-msgstr "Volledige Naam: "
+msgid "Full Name:"
+msgstr "Volledige Naam:"
 
 #: src/seahorse-generate-druid.glade.h:15
 msgid "High Security"
@@ -779,13 +781,13 @@ msgstr "Sleutel verloopt nooit"
 
 #: src/seahorse-generate-druid.glade.h:17
 msgid ""
-"Keys must be given an appropriate expiration date.  For most people, the "
-"default option of never expires is sufficent.  If you only plan on using the "
-"key for a certain period of time, i.e. for a specific project, you should "
-"pick an expiration date after the projected completion of your project.  "
-"After the expiration date, your private key will still be able to decrypt "
-"messages or data encrypted with your public key.  However, your private key "
-"will no longer sign messages or data."
+"Keys must be given an appropriate expiration date. For most people, the "
+"default option of \"never expires\" is sufficient. If you only plan on using "
+"the key for a certain period of time, i.e. for a specific project, you "
+"should pick an expiration date after the projected completion of your "
+"project. After the expiration date, your private key will still be able to "
+"decrypt messages or data encrypted with your public key. However, your "
+"private key will no longer sign messages or data."
 msgstr ""
 "Sleutels behoren een geschikte verloopdatum te hebben. Voor de meeste mensen "
 "is de standaard waarde: verloopt nooit, voldoende.  Als u van plan bent de "
@@ -800,8 +802,8 @@ msgstr ""
 msgid "Medium Security"
 msgstr "Gemiddelde beveiliging"
 
-#: src/seahorse-generate-druid.glade.h:19 src/seahorse-key-manager-store.c:154
-#: src/seahorse-key-properties.c:373
+#: src/seahorse-generate-druid.glade.h:19 src/seahorse-key-manager-store.c:176
+#: src/seahorse-key-properties.c:378
 msgid "Never Expires"
 msgstr "Verloopt nooit"
 
@@ -818,15 +820,15 @@ msgid "Personal Information"
 msgstr "Persoonlijke informatie"
 
 #: src/seahorse-generate-druid.glade.h:26
-msgid "Seahorse GPG Key Generation Druid"
+msgid "Seahorse GPG Key Generation Assistant"
 msgstr "Seahorse GPG assistent voor sleutel genereren"
 
 #: src/seahorse-generate-druid.glade.h:27
-msgid "Seahorse GPG Key Generation Druid Complete"
+msgid "Seahorse GPG Key Generation Assistant Complete"
 msgstr "Seahorse GPG assistent voor sleutel genereren voltooid"
 
 #: src/seahorse-generate-druid.glade.h:28
-msgid "Seahorse Key Generation Druid"
+msgid "Seahorse Key Generation Assistant"
 msgstr "Seahorse assistent voor sleutel genereren"
 
 #: src/seahorse-generate-druid.glade.h:29
@@ -839,7 +841,7 @@ msgid ""
 "general everyday usage.  The High Security level should be selected if you "
 "know your data will be actively scrutinized.  The Extra High level should be "
 "selected if you know your data is actively scrutinized and will be under "
-"cryptographic attack. "
+"cryptographic attack."
 msgstr ""
 "Gemiddelde beveiliging is de standaard en is acceptabel voor het normale "
 "dagelijkse gebruik. Hoge beveiliging moet worden gekozen als u weet dat uw "
@@ -848,10 +850,9 @@ msgstr ""
 "cryptografisch zullen worden aangevallen."
 
 #: src/seahorse-generate-druid.glade.h:31
-msgid "This druid will guide you through the steps of creating a GPG key pair."
-msgstr ""
-"Deze assistent zal u helpen bij de verschillende stappen die nodig zijn om "
-"een GPG-sleutelpaar aan te maken."
+msgid ""
+"This assistant will guide you through the steps of creating a GPG key pair."
+msgstr "Deze assistent zal u helpen bij de verschillende stappen om een GPG-sleutelpaar aan te maken."
 
 #: src/seahorse-generate-druid.glade.h:32
 msgid ""
@@ -866,31 +867,16 @@ msgstr ""
 "worden gegeven:                             Volledige naam (Opmerkingen) "
 "<emailadres>"
 
-# moet dit vertaald worden?
-#: src/seahorse-generate-druid.glade.h:33
-msgid "druidpage_pass"
-msgstr "druidpage_pass"
-
-# moet dit vertaald worden?
-#: src/seahorse-generate-druid.glade.h:34
-msgid "druidpage_pinfo"
-msgstr "druidpage_pinfo"
-
-# moet dit vertaald worden?
-#: src/seahorse-generate-druid.glade.h:35
-msgid "keygen_druid"
-msgstr "keygen_druid"
-
 #: src/seahorse-generate-select.glade.h:1
 msgid "Advanced"
 msgstr "Geavanceerd"
 
 #: src/seahorse-generate-select.glade.h:2
-msgid "Druid"
+msgid "Assistant"
 msgstr "Assistent"
 
 #: src/seahorse-generate-select.glade.h:3
-msgid "Generate a key via the druid."
+msgid "Generate a key via the assistant."
 msgstr "Een sleutel genereren via de assistent."
 
 #: src/seahorse-generate-select.glade.h:4
@@ -904,10 +890,6 @@ msgstr "Methodeselectie"
 #: src/seahorse-generate-select.glade.h:6
 msgid "Select a method to generate your new key."
 msgstr "Kies een methode om uw nieuwe sleutel te genereren."
-
-#: src/seahorse-generate-select.glade.h:7
-msgid "radio_druid"
-msgstr "radio_assistent"
 
 #: src/seahorse-import.glade.h:2
 msgid "Enter a unique key id"
@@ -961,11 +943,11 @@ msgstr "_Importeren"
 msgid "_Key ID:"
 msgstr "_Sleutel-ID:"
 
-#: src/seahorse-key-manager.c:210
+#: src/seahorse-key-manager.c:198
 msgid "translator_credits"
 msgstr "Vincent van Adrighem"
 
-#: src/seahorse-key-manager.c:230
+#: src/seahorse-key-manager.c:218
 msgid "seahorse"
 msgstr "seahorse"
 
@@ -1065,95 +1047,101 @@ msgstr "Sleutel ondertekenen"
 msgid "Sign public key"
 msgstr "Publieke sleutel ondertekenen"
 
-# show statusbar ipv view?
 #: src/seahorse-key-manager.glade.h:26
-msgid "View statusbar"
-msgstr "Statusbalk tonen"
-
-# show ipv view
-#: src/seahorse-key-manager.glade.h:27
-msgid "View toolbar"
-msgstr "Werkbalk tonen"
-
-#: src/seahorse-key-manager.glade.h:28
 msgid "_Backup..."
 msgstr "_Backup..."
 
-#: src/seahorse-key-manager.glade.h:29
+#: src/seahorse-key-manager.glade.h:27
 msgid "_Change Passphrase..."
 msgstr "_Wachtwoordfrase veranderen..."
 
-#: src/seahorse-key-manager.glade.h:30
+#: src/seahorse-key-manager.glade.h:28
 msgid "_Collapse All"
 msgstr "Alle in_klappen"
 
-#: src/seahorse-key-manager.glade.h:31
+#: src/seahorse-key-manager.glade.h:29
 msgid "_Contents"
 msgstr "_Inhoud"
 
-#: src/seahorse-key-manager.glade.h:32
+#: src/seahorse-key-manager.glade.h:30
 msgid "_Delete"
 msgstr "_Verwijderen"
 
-#: src/seahorse-key-manager.glade.h:33
+#: src/seahorse-key-manager.glade.h:31
 msgid "_Expand All"
 msgstr "_Breid aliasen uit"
 
-#: src/seahorse-key-manager.glade.h:34
+#: src/seahorse-key-manager.glade.h:32
 msgid "_Generate Revocation Certificate..."
 msgstr "Herroepingscertificaat _genereren..."
 
-#: src/seahorse-key-manager.glade.h:35
+#: src/seahorse-key-manager.glade.h:33
 msgid "_Import..."
 msgstr "_Importeren..."
 
-#: src/seahorse-key-manager.glade.h:36
+#: src/seahorse-key-manager.glade.h:34
 msgid "_Key"
 msgstr "_Sleutel"
 
-#: src/seahorse-key-manager.glade.h:37
+#: src/seahorse-key-manager.glade.h:35
 msgid "_New..."
 msgstr "_Nieuw..."
 
-#: src/seahorse-key-manager.glade.h:38
+#: src/seahorse-key-manager.glade.h:36
 msgid "_Properties"
 msgstr "_Eigenschappen"
 
 #. do sign
-#: src/seahorse-key-manager.glade.h:39 src/seahorse-key-properties.c:168
+#: src/seahorse-key-manager.glade.h:37 src/seahorse-key-properties.c:172
 #: src/seahorse-sign.glade.h:17
 msgid "_Sign"
 msgstr "_Ondertekenen"
 
-#: src/seahorse-key-manager.glade.h:40
+#: src/seahorse-key-manager.glade.h:38
 msgid "_Sign..."
 msgstr "_Ondertekenen..."
 
-#: src/seahorse-key-manager.glade.h:41
-msgid "_Statusbar"
-msgstr "_Statusbalk"
+#: src/seahorse-key-manager-store.c:36
+msgid "RSA"
+msgstr "RSA"
 
-#: src/seahorse-key-manager.glade.h:42
-msgid "_Toolbar"
-msgstr "_Werkbalk"
+#: src/seahorse-key-manager-store.c:38
+msgid "RSA-E"
+msgstr "RSA-E"
 
-#: src/seahorse-key-manager-store.c:147 src/seahorse-key-properties.c:361
+#: src/seahorse-key-manager-store.c:40
+msgid "RSA-S"
+msgstr "RSA-S"
+
+#: src/seahorse-key-manager-store.c:42
+msgid "ELG-E"
+msgstr "ELG-E"
+
+#: src/seahorse-key-manager-store.c:44
+msgid "DSA"
+msgstr "DSA"
+
+#: src/seahorse-key-manager-store.c:46
+msgid "ELG"
+msgstr "ELG"
+
+#: src/seahorse-key-manager-store.c:169 src/seahorse-key-properties.c:368
 msgid "Expired"
 msgstr "Verlopen"
 
-#: src/seahorse-key-manager-store.c:273
+#: src/seahorse-key-manager-store.c:297
 msgid "Trust"
 msgstr "Vertrouwen"
 
-#: src/seahorse-key-manager-store.c:277
+#: src/seahorse-key-manager-store.c:301
 msgid "Length"
 msgstr "Lengte"
 
-#: src/seahorse-key-manager-store.c:281
+#: src/seahorse-key-manager-store.c:305
 msgid "Type"
 msgstr "Type"
 
-#: src/seahorse-key-op.c:247
+#: src/seahorse-key-op.c:289
 msgid "Operation complete"
 msgstr "Bewerking voltooid"
 
@@ -1161,83 +1149,83 @@ msgstr "Bewerking voltooid"
 msgid "User IDs"
 msgstr "Gebruikers-IDs"
 
-#: src/seahorse-key-properties.c:139
+#: src/seahorse-key-properties.c:141
 #, c-format
 msgid "User ID %d"
 msgstr "Gebruikers-ID %d"
 
-#: src/seahorse-key-properties.c:143
+#: src/seahorse-key-properties.c:145
 msgid "User ID"
 msgstr "Gebruikers-ID"
 
-#: src/seahorse-key-properties.c:160
+#: src/seahorse-key-properties.c:164
 msgid "_Primary"
 msgstr "_Primaire"
 
 # misschien beter: gebruiken ipv instellen?
 #. callback
-#: src/seahorse-key-properties.c:162
+#: src/seahorse-key-properties.c:166
 msgid "Set as primary User ID"
 msgstr "Instellen als primaire gebruikers-ID"
 
 #. **** do ciphers ****
-#: src/seahorse-key-properties.c:180
+#: src/seahorse-key-properties.c:184
 msgid "Ciphers"
 msgstr "Getallen"
 
 #. **** do hashes ****
-#: src/seahorse-key-properties.c:219
+#: src/seahorse-key-properties.c:223
 msgid "Hashes"
 msgstr "Hekjes"
 
 #. **** do compression ****
-#: src/seahorse-key-properties.c:242
+#: src/seahorse-key-properties.c:246
 msgid "Compression"
 msgstr "Compressie"
 
 # is dit goed?
-#: src/seahorse-key-properties.c:337
+#: src/seahorse-key-properties.c:343
 msgid "Key identifier"
 msgstr "Sleutel identificatie"
 
 #. type
-#: src/seahorse-key-properties.c:342
+#: src/seahorse-key-properties.c:348
 msgid "Type:"
 msgstr "Type:"
 
-#: src/seahorse-key-properties.c:342
+#: src/seahorse-key-properties.c:348
 msgid "Algorithm"
 msgstr "Algoritme"
 
-#: src/seahorse-key-properties.c:348
+#: src/seahorse-key-properties.c:354
 msgid "Key creation date"
 msgstr "Aanmaakdatum sleutel"
 
 #. length
-#: src/seahorse-key-properties.c:352
+#: src/seahorse-key-properties.c:358
 msgid "Length:"
 msgstr "Lengte:"
 
-#: src/seahorse-key-properties.c:448 src/seahorse-key-properties.glade.h:19
+#: src/seahorse-key-properties.c:454 src/seahorse-key-properties.glade.h:19
 msgid "_Revoke"
 msgstr "Her_roepen"
 
-#: src/seahorse-key-properties.c:452
+#: src/seahorse-key-properties.c:458
 #, c-format
 msgid "Revoke subkey %d"
 msgstr "Subsleutel %d herroepen"
 
-#: src/seahorse-key-properties.c:461
+#: src/seahorse-key-properties.c:467
 #, c-format
 msgid "Subkey %d"
 msgstr "Subsleutel %d"
 
-#: src/seahorse-key-properties.c:473
+#: src/seahorse-key-properties.c:479
 #, c-format
 msgid "Delete subkey %d"
 msgstr "Subsleutel %d verwijderen"
 
-#: src/seahorse-key-properties.c:534
+#: src/seahorse-key-properties.c:547
 #, c-format
 msgid "%s Properties"
 msgstr "%s Eigenschappen"
@@ -1299,28 +1287,28 @@ msgstr "Uw persoonlijke sleutel"
 msgid "_Signatures:"
 msgstr "_Handtekeningen:"
 
-#: src/seahorse-preferences.c:85
+#: src/seahorse-preferences.c:57
 msgid "PGP"
 msgstr "PGP"
 
 # validiteit
-#: src/seahorse-preferences.c:104
+#: src/seahorse-preferences.c:64
 msgid "_Validity"
 msgstr "_Geldigheid"
 
-#: src/seahorse-preferences.c:106 src/seahorse-sign.glade.h:13
+#: src/seahorse-preferences.c:66 src/seahorse-sign.glade.h:13
 msgid "_Expires"
 msgstr "Ver_loopt"
 
-#: src/seahorse-preferences.c:108
+#: src/seahorse-preferences.c:68
 msgid "_Trust"
 msgstr "Ver_trouwen"
 
-#: src/seahorse-preferences.c:110
+#: src/seahorse-preferences.c:70
 msgid "_Length"
 msgstr "_Lengte"
 
-#: src/seahorse-preferences.c:112
+#: src/seahorse-preferences.c:72
 msgid "T_ype"
 msgstr "T_ype"
 
@@ -1329,76 +1317,32 @@ msgid "Close Preferences"
 msgstr "Voorkeuren sluiten"
 
 #: src/seahorse-preferences.glade.h:2
-msgid "Desktop Default"
-msgstr "GNOME-standaard"
-
-#: src/seahorse-preferences.glade.h:3
-msgid "Icons Only"
-msgstr "Alleen pictogrammen"
-
-#: src/seahorse-preferences.glade.h:4
 msgid "Key Manager"
 msgstr "Sleutelbeheerder"
 
-#: src/seahorse-preferences.glade.h:5
-msgid "Only show icons"
-msgstr "Alleen pictogrammen tonen"
-
-#: src/seahorse-preferences.glade.h:6
-msgid "Only show text"
-msgstr "Alleen tekst tonen"
-
-#: src/seahorse-preferences.glade.h:7
+#: src/seahorse-preferences.glade.h:3
 msgid "Preferences Help"
 msgstr "Voorkeuren hulp"
 
-#: src/seahorse-preferences.glade.h:8
+#: src/seahorse-preferences.glade.h:4
 msgid "Seahorse Preferences"
 msgstr "Seahorse voorkeuren"
 
-#: src/seahorse-preferences.glade.h:9
-msgid "Show text below icons"
-msgstr "Tekst onder pictogrammen tonen"
-
-#: src/seahorse-preferences.glade.h:10
-msgid "Show text beside icons"
-msgstr "Tekst naast pictogrammen tonen"
-
-#: src/seahorse-preferences.glade.h:11
-msgid "Text Below Icons"
-msgstr "Tekst onder pictogrammen"
-
-#: src/seahorse-preferences.glade.h:12
-msgid "Text Beside Icons"
-msgstr "Tekst naast pictogrammen"
-
-#: src/seahorse-preferences.glade.h:13
-msgid "Text Only"
-msgstr "Aleen tekst"
-
-#: src/seahorse-preferences.glade.h:14
-msgid "Toolbar _Style:"
-msgstr "Werkbalk_stijl:"
-
-#: src/seahorse-preferences.glade.h:15
-msgid "Use system settings"
-msgstr "Systeeminstellingen gebruiken"
-
-#: src/seahorse-preferences.glade.h:16
+#: src/seahorse-preferences.glade.h:5
 msgid "Visible Columns"
 msgstr "Zichtbare kolommen"
 
-#: src/seahorse-revoke.c:73
+#: src/seahorse-revoke.c:75
 #, c-format
 msgid "Revoke Subkey %d of %s"
 msgstr "Subsleutel %d van %s herroepen"
 
-#: src/seahorse-revoke.c:76
+#: src/seahorse-revoke.c:77
 #, c-format
 msgid "Revoke %s"
 msgstr "%s herroepen"
 
-#: src/seahorse-revoke.c:98
+#: src/seahorse-revoke.c:104
 #, c-format
 msgid ""
 "You are about to add %s as a revoker for %s. This operation cannot be "
@@ -1503,7 +1447,9 @@ msgstr "Of de handtekening tegelijk met de sleutel verloopt"
 #: src/seahorse-sign.glade.h:8
 msgid ""
 "If signature is local to the key ring and won't be exported with the key"
-msgstr "Als de ondertekening lokaal is tot de sleutelbos en niet met de sleutl zal worden geëxporteerd"
+msgstr ""
+"Als de ondertekening lokaal is tot de sleutelbos en niet met de sleutl zal "
+"worden geëxporteerd"
 
 #: src/seahorse-sign.glade.h:9
 msgid "No answer"
@@ -1533,3 +1479,77 @@ msgstr "_Locaal"
 #: src/seahorse-sign.glade.h:16
 msgid "_Revocable"
 msgstr "Her_roepbaar"
+
+#~ msgid "Multiple Signatures"
+#~ msgstr "Meerdere handtekeningen"
+
+#~ msgid "Email Address: "
+#~ msgstr "Emailadres: "
+
+#~ msgid "Expiration Date: "
+#~ msgstr "Verloopdatum: "
+
+# moet dit vertaald worden?
+#~ msgid "druidpage_pass"
+#~ msgstr "druidpage_pass"
+
+# moet dit vertaald worden?
+#~ msgid "druidpage_pinfo"
+#~ msgstr "druidpage_pinfo"
+
+# moet dit vertaald worden?
+#~ msgid "keygen_druid"
+#~ msgstr "keygen_druid"
+
+#~ msgid "Druid"
+#~ msgstr "Assistent"
+
+#~ msgid "radio_druid"
+#~ msgstr "radio_assistent"
+
+# show statusbar ipv view?
+#~ msgid "View statusbar"
+#~ msgstr "Statusbalk tonen"
+
+# show ipv view
+#~ msgid "View toolbar"
+#~ msgstr "Werkbalk tonen"
+
+#~ msgid "_Statusbar"
+#~ msgstr "_Statusbalk"
+
+#~ msgid "_Toolbar"
+#~ msgstr "_Werkbalk"
+
+#~ msgid "Desktop Default"
+#~ msgstr "GNOME-standaard"
+
+#~ msgid "Icons Only"
+#~ msgstr "Alleen pictogrammen"
+
+#~ msgid "Only show icons"
+#~ msgstr "Alleen pictogrammen tonen"
+
+#~ msgid "Only show text"
+#~ msgstr "Alleen tekst tonen"
+
+#~ msgid "Show text below icons"
+#~ msgstr "Tekst onder pictogrammen tonen"
+
+#~ msgid "Show text beside icons"
+#~ msgstr "Tekst naast pictogrammen tonen"
+
+#~ msgid "Text Below Icons"
+#~ msgstr "Tekst onder pictogrammen"
+
+#~ msgid "Text Beside Icons"
+#~ msgstr "Tekst naast pictogrammen"
+
+#~ msgid "Text Only"
+#~ msgstr "Aleen tekst"
+
+#~ msgid "Toolbar _Style:"
+#~ msgstr "Werkbalk_stijl:"
+
+#~ msgid "Use system settings"
+#~ msgstr "Systeeminstellingen gebruiken"
