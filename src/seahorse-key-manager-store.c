@@ -1,7 +1,7 @@
 /*
  * Seahorse
  *
- * Copyright (C) 2002 Jacob Perkins
+ * Copyright (C) 2003 Jacob Perkins
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,7 +24,6 @@
 #include "seahorse-key-manager-store.h"
 #include "seahorse-validity.h"
 
-/* Tree view columns */
 enum {
 	SKEY,
 	NAME,
@@ -94,13 +93,22 @@ seahorse_key_manager_store_class_init (SeahorseKeyManagerStoreClass *klass)
 	skstore_class->changed = seahorse_key_manager_store_changed;
 }
 
+/* Appends subkeys for @skey with @iter as parent */
 static void
-seahorse_key_manager_store_append (SeahorseKeyStore *skstore, SeahorseKey *skey, GtkTreeIter *iter)
+append_subkeys (GtkTreeStore *store, GtkTreeIter *iter, SeahorseKey *skey)
 {
-	gtk_tree_store_append (GTK_TREE_STORE (skstore), iter, NULL);
-	parent_class->append (skstore, skey, iter);
+	gint index = 1, max;
+	GtkTreeIter child;
+
+	max = seahorse_key_get_num_subkeys (skey);
+	
+	while (index <= max) {
+		gtk_tree_store_append (store, &child, iter);
+		index++;
+	}
 }
 
+/* Remove subkeys where @iter is the parent */
 static void
 remove_subkeys (GtkTreeStore *store, GtkTreeIter *iter)
 {
@@ -110,23 +118,33 @@ remove_subkeys (GtkTreeStore *store, GtkTreeIter *iter)
 		gtk_tree_store_remove (store, &child);
 }
 
+/* Do append for @skey & it's subkeys */
+static void
+seahorse_key_manager_store_append (SeahorseKeyStore *skstore, SeahorseKey *skey, GtkTreeIter *iter)
+{
+	gtk_tree_store_append (GTK_TREE_STORE (skstore), iter, NULL);
+	append_subkeys (GTK_TREE_STORE (skstore), iter, skey);
+	parent_class->append (skstore, skey, iter);
+}
+
+/* Sets attributes for @skey at @iter and @skey's subkeys at @iter's children */
 static void
 seahorse_key_manager_store_set (GtkTreeStore *store, GtkTreeIter *iter, SeahorseKey *skey)
 {
 	GtkTreeIter child;
 	gint index = 1, max;
 	
-	remove_subkeys (store, iter);
 	seahorse_key_manager_store_set_attribs (store, iter, skey, 0);
 	max = seahorse_key_get_num_subkeys (skey);
 
-	while (index <= max) {
-		gtk_tree_store_append (store, &child, iter);
+	while (index <= max && gtk_tree_model_iter_nth_child (
+	    GTK_TREE_MODEL (store), &child, iter, index-1)) {
 		seahorse_key_manager_store_set_attribs (store, &child, skey, index);
 		index++;
 	}
 }
 
+/* Removes subkeys, then does remove */
 static void
 seahorse_key_manager_store_remove (SeahorseKeyStore *skstore, GtkTreeIter *iter)
 {
@@ -134,6 +152,7 @@ seahorse_key_manager_store_remove (SeahorseKeyStore *skstore, GtkTreeIter *iter)
 	parent_class->remove (skstore, iter);
 }
 
+/* Refreshed @skey if trust has changed */
 static void
 seahorse_key_manager_store_changed (SeahorseKey *skey, SeahorseKeyChange change,
 				    SeahorseKeyStore *skstore, GtkTreeIter *iter)
@@ -144,13 +163,12 @@ seahorse_key_manager_store_changed (SeahorseKey *skey, SeahorseKeyChange change,
 				GTK_TREE_STORE (skstore), iter, skey);
 			break;
 		default:
+			parent_class->changed (skey, change, skstore, iter);
 			break;
 	}
-
-	parent_class->changed (skey, change, skstore, iter);
 }
 
-/* Sets attributes for row at iter using key index */
+/* Sets attributes for row at @iter using @skey and @index */
 static void
 seahorse_key_manager_store_set_attribs (GtkTreeStore *store, GtkTreeIter *iter,
 				       SeahorseKey *skey, guint index)
@@ -163,6 +181,16 @@ seahorse_key_manager_store_set_attribs (GtkTreeStore *store, GtkTreeIter *iter,
 		LENGTH, gpgme_key_get_ulong_attr (skey->key, GPGME_ATTR_LEN, NULL, index), -1);
 }
 
+/**
+ * seahorse_key_manager_store_new:
+ * @sctx: Current #SeahorseContext
+ * @view: #GtkTreeView to show the new #SeahorseKeyManagerStore
+ *
+ * Creates a new #SeahorseKeyManagerStore.
+ * Shown attributes are Name, KeyID, Trust, Type, and Length.
+ *
+ * Returns: The new #SeahorseKeyStore
+ **/
 SeahorseKeyStore*
 seahorse_key_manager_store_new (SeahorseContext *sctx, GtkTreeView *view)
 {

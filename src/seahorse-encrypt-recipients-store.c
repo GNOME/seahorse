@@ -84,6 +84,7 @@ seahorse_encrypt_recipients_store_class_init (SeahorseEncryptRecipientsStoreClas
 	recipients_store_class->is_recip = seahorse_key_can_encrypt;
 }
 
+/* Sets the validity attribute */
 static void
 seahorse_encrypt_recipients_store_set (GtkTreeStore *store, GtkTreeIter *iter, SeahorseKey *skey)
 {
@@ -92,14 +93,34 @@ seahorse_encrypt_recipients_store_set (GtkTreeStore *store, GtkTreeIter *iter, S
 	SEAHORSE_KEY_STORE_CLASS (parent_class)->set (store, iter, skey);
 }
 
+/* Refreshed @skey if trust has changed */
 static void
 seahorse_encrypt_recipients_store_changed (SeahorseKey *skey, SeahorseKeyChange change,
-				   SeahorseKeyStore *skstore, GtkTreeIter *iter)
+					   SeahorseKeyStore *skstore, GtkTreeIter *iter)
 {
-	//wait for subkeys change
-	SEAHORSE_KEY_STORE_CLASS (parent_class)->changed (skey, change, skstore, iter);
+	switch (change) {
+		case SKEY_CHANGE_TRUST:
+			SEAHORSE_KEY_STORE_GET_CLASS (skstore)->set (
+				GTK_TREE_STORE (skstore), iter, skey);
+			break;
+		default:
+			SEAHORSE_KEY_STORE_CLASS (parent_class)->changed (
+				skey, change, skstore, iter);
+			break;
+	}
 }
 
+/**
+ * seahorse_encrypt_recipients_store_new:
+ * @sctx: Current #SeahorseContext
+ * @view: #GtkTreeView that will contain the new #SeahorseEncryptRecipientsStore
+ *
+ * Creates a new #SeahorseEncryptRecipientsStore and embeds it in @view.
+ * #SeahorseEncryptRecipientsStore should be used for encrypt recipients.
+ * Shown attributes are Name, KeyID, and Validity.
+ *
+ * Returns: The new #SeahorseKeyStore
+ **/
 SeahorseKeyStore*
 seahorse_encrypt_recipients_store_new (SeahorseContext *sctx, GtkTreeView *view)
 {

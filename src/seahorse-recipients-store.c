@@ -80,6 +80,7 @@ seahorse_recipients_store_class_init (SeahorseRecipientsStoreClass *klass)
 	klass->is_recip = seahorse_key_is_valid;
 }
 
+/* Checks if @skey is a valid recipient before appending */
 static void
 seahorse_recipients_store_append (SeahorseKeyStore *skstore,
 				  SeahorseKey *skey, GtkTreeIter *iter)
@@ -90,6 +91,7 @@ seahorse_recipients_store_append (SeahorseKeyStore *skstore,
 	}
 }
 
+/* Removes @skey if has been disabled */
 static void
 seahorse_recipients_store_changed (SeahorseKey *skey, SeahorseKeyChange change,
 				   SeahorseKeyStore *skstore, GtkTreeIter *iter)
@@ -100,12 +102,22 @@ seahorse_recipients_store_changed (SeahorseKey *skey, SeahorseKeyChange change,
 				SEAHORSE_KEY_STORE_GET_CLASS (skstore)->remove (skstore, iter);
 			break;
 		default:
+			parent_class->changed (skey, change, skstore, iter);
 			break;
 	}
-
-	parent_class->changed (skey, change, skstore, iter);
 }
 
+/**
+ * seahorse_recipients_store_new:
+ * @sctx: Current #SeahorseContext
+ * @view: #GtkTreeView that will show the new #SeahorseRecipientsStore
+ *
+ * Creates a new #SeahorseRecipientsStore and embeds in @view.
+ * A regular recipients store is appropriate for export recipients.
+ * Shown attributes are Name and KeyID.
+ *
+ * Returns: The new #SeahorseKeyStore
+ **/
 SeahorseKeyStore*
 seahorse_recipients_store_new (SeahorseContext *sctx, GtkTreeView *view)
 {

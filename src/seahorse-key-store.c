@@ -1,7 +1,7 @@
 /*
  * Seahorse
  *
- * Copyright (C) 2002 Jacob Perkins
+ * Copyright (C) 2003 Jacob Perkins
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,6 +35,9 @@ enum {
 	COLS
 };
 
+/* Internal data stored at 0 in the tree store in order to keep track
+ * of the location, key-store and key.
+ */
 typedef struct
 {
 	SeahorseKeyStore	*skstore;
@@ -52,7 +55,7 @@ static void	seahorse_key_store_get_property		(GObject		*gobject,
 							 guint			prop_id,
 							 GValue			*value,
 							 GParamSpec		*pspec);
-
+/* Virtual methods */
 static void	seahorse_key_store_append_key		(SeahorseKeyStore	*skstore,
 							 SeahorseKey		*skey,
 							 GtkTreeIter		*iter);
@@ -65,19 +68,19 @@ static void	seahorse_key_store_changed		(SeahorseKey		*skey,
 							 SeahorseKeyChange	change,
 							 SeahorseKeyStore	*skstore,
 							 GtkTreeIter		*iter);
-
+/* Context signals */
 static void	seahorse_key_store_context_destroyed	(GtkObject		*object,
 							 SeahorseKeyStore	*skstore);
 static void	seahorse_key_store_key_added		(SeahorseContext	*sctx,
 							 SeahorseKey		*skey,
 							 SeahorseKeyStore	*skstore);
-
+/* Key signals */
 static void	seahorse_key_store_key_destroyed	(GtkObject		*object,
 							 SeahorseKeyRow		*skrow);
 static void	seahorse_key_store_key_changed		(SeahorseKey		*skey,
 							 SeahorseKeyChange	change,
 							 SeahorseKeyRow		*skrow);
-
+/* Key Row methods */
 static void	seahorse_key_row_new			(SeahorseKeyStore	*skstore,
 							 GtkTreeIter		*iter,
 							 SeahorseKey		*skey);
@@ -131,7 +134,6 @@ seahorse_key_store_class_init (SeahorseKeyStoreClass *klass)
 				     SEAHORSE_TYPE_CONTEXT, G_PARAM_READWRITE));
 }
 
-/* Only release context, which will release keys, which will release key rows */
 static void
 seahorse_key_store_finalize (GObject *gobject)
 {
@@ -189,6 +191,7 @@ seahorse_key_store_get_property (GObject *gobject, guint prop_id,
 	}
 }
 
+/* Sets attributes then appends a new #SeahorseKeyRow */
 static void
 seahorse_key_store_append_key (SeahorseKeyStore *skstore, SeahorseKey *skey, GtkTreeIter *iter)
 {
@@ -196,6 +199,7 @@ seahorse_key_store_append_key (SeahorseKeyStore *skstore, SeahorseKey *skey, Gtk
 	seahorse_key_row_new (skstore, iter, skey);
 }
 
+/* Sets Name and KeyID */
 static void
 seahorse_key_store_set (GtkTreeStore *store, GtkTreeIter *iter, SeahorseKey *skey)
 {
@@ -204,12 +208,14 @@ seahorse_key_store_set (GtkTreeStore *store, GtkTreeIter *iter, SeahorseKey *ske
 		KEYID, seahorse_key_get_keyid (skey, 0), -1);
 }
 
+/* Removes row at @iter from store */
 static void
 seahorse_key_store_remove_iter (SeahorseKeyStore *skstore, GtkTreeIter *iter)
 {
 	gtk_tree_store_remove (GTK_TREE_STORE (skstore), iter);
 }
 
+/* Refreshes key if uids have changed */
 static void
 seahorse_key_store_changed (SeahorseKey *skey, SeahorseKeyChange change,
 			    SeahorseKeyStore *skstore, GtkTreeIter *iter)
@@ -224,24 +230,28 @@ seahorse_key_store_changed (SeahorseKey *skey, SeahorseKeyChange change,
 	}
 }
 
+/* Destroys @skstore */
 static void
 seahorse_key_store_context_destroyed (GtkObject *object, SeahorseKeyStore *skstore)
 {
 	seahorse_key_store_destroy (skstore);
 }
 
+/* Appends @skey */
 static void
 seahorse_key_store_key_added (SeahorseContext *sctx, SeahorseKey *skey, SeahorseKeyStore *skstore)
 {
 	seahorse_key_store_append (skstore, skey);
 }
 
+/* Removes @skrow */
 static void
 seahorse_key_store_key_destroyed (GtkObject *object, SeahorseKeyRow *skrow)
 {
 	seahorse_key_row_remove (skrow);
 }
 
+/* Gets location of @skey, then calls virtual changed() */
 static void
 seahorse_key_store_key_changed (SeahorseKey *skey, SeahorseKeyChange change, SeahorseKeyRow *skrow)
 {
@@ -253,6 +263,7 @@ seahorse_key_store_key_changed (SeahorseKey *skey, SeahorseKeyChange change, Sea
 	SEAHORSE_KEY_STORE_GET_CLASS (skrow->skstore)->changed (skey, change, skrow->skstore, &iter);
 }
 
+/* Creates a new #SeahorseKeyRow for listening to key signals */
 static void
 seahorse_key_row_new (SeahorseKeyStore *skstore, GtkTreeIter *iter, SeahorseKey *skey)
 {
@@ -275,7 +286,9 @@ seahorse_key_row_new (SeahorseKeyStore *skstore, GtkTreeIter *iter, SeahorseKey 
 	gtk_tree_store_set (GTK_TREE_STORE (skstore), iter, SKROW, skrow, -1);
 }
 
-/* Removes row's path from its store, frees path, unrefs key, then frees itself */
+/* Calls virtual remove() for @skrow's location, disconnects and unrefs
+ * key, then frees itself.
+ */
 static void
 seahorse_key_row_remove (SeahorseKeyRow *skrow)
 {
@@ -297,6 +310,16 @@ seahorse_key_row_remove (SeahorseKeyRow *skrow)
 	g_free (skrow);
 }
 
+/**
+ * seahorse_key_store_init:
+ * @skstore: #SeahorseKeyStore to initialize
+ * @view: #GtkTreeView that will show @skstore
+ * @cols: Number of columns to be in @view
+ * @columns: Array of column types for @skstore
+ *
+ * Initializes @skstore with default columns and embeds in @view.
+ * This must be called after creating a new #SeahorseKeyStore.
+ **/
 void
 seahorse_key_store_init (SeahorseKeyStore *skstore, GtkTreeView *view,
 			 gint cols, GType *columns)
@@ -304,12 +327,19 @@ seahorse_key_store_init (SeahorseKeyStore *skstore, GtkTreeView *view,
 	gtk_tree_store_set_column_types (GTK_TREE_STORE (skstore),
 		cols, columns);
 	gtk_tree_view_set_model (view, GTK_TREE_MODEL (skstore));
-	//g_object_unref (skstore);
 
 	seahorse_key_store_append_column (view, _("Name"), NAME);
 	seahorse_key_store_append_column (view, _("Key ID"), KEYID);
 }
 
+/**
+ * seahorse_key_store_destroy:
+ * @skstore: #SeahorseKeyStore to destroy
+ *
+ * Empties @skstore in order to unref any keys it contains.
+ * Also unrefs @skstore.  Call this method if @skstore does not exist
+ * for the life of the program.
+ **/
 void
 seahorse_key_store_destroy (SeahorseKeyStore *skstore)
 {
@@ -326,6 +356,13 @@ seahorse_key_store_destroy (SeahorseKeyStore *skstore)
 	g_object_unref (skstore);
 }
 
+/**
+ * seahorse_key_store_populate:
+ * @skstore: #SeahorseKeyStore to populate with #SeahorseKeys
+ *
+ * A new #SeahorseKeyStore is initially empty. Call this method to populate
+ * the #SeahorseKeyStore with #SeahorseKeys.
+ **/
 void
 seahorse_key_store_populate (SeahorseKeyStore *skstore)
 {
@@ -341,7 +378,14 @@ seahorse_key_store_populate (SeahorseKeyStore *skstore)
 	}
 }
 
-/* Returns the selected path */
+/**
+ * seahorse_key_store_get_selected_path:
+ * @view: #GtkTreeView with a selection
+ *
+ * Gets the selected #GtkTreePath in @view.
+ *
+ * Returns: The #GtkTreePath selected in @view.
+ **/
 GtkTreePath*
 seahorse_key_store_get_selected_path (GtkTreeView *view)
 {
@@ -356,6 +400,14 @@ seahorse_key_store_get_selected_path (GtkTreeView *view)
 	return gtk_tree_model_get_path (model, &iter);
 }
 
+/**
+ * seahorse_key_store_get_selected_key:
+ * @view: #GtkTreeView with a selection
+ *
+ * Gets the #SeahorseKey selected in @view.
+ *
+ * Returns: The #SeahorseKey selected in @view
+ **/
 SeahorseKey*
 seahorse_key_store_get_selected_key (GtkTreeView *view)
 {
@@ -365,6 +417,7 @@ seahorse_key_store_get_selected_key (GtkTreeView *view)
 	return seahorse_key_store_get_key_from_path (view, path);
 }
 
+/* Gets the #SeahorseKeyRow at @path in @model */
 static SeahorseKeyRow*
 get_row_from_path (GtkTreeModel *model, GtkTreePath *path)
 {
@@ -379,6 +432,15 @@ get_row_from_path (GtkTreeModel *model, GtkTreePath *path)
 	return skrow;
 }
 
+/**
+ * seahorse_key_store_get_key_from_path:
+ * @view: #GtkTreeView containing @path
+ * @path: #GtkTreePath containing a #SeahorseKey
+ *
+ * Gets the #SeahorseKey at @path in @view.
+ *
+ * Returns: The #SeahorseKey at @path in @view
+ **/
 SeahorseKey*
 seahorse_key_store_get_key_from_path (GtkTreeView *view, GtkTreePath *path)
 {
@@ -395,6 +457,13 @@ seahorse_key_store_get_key_from_path (GtkTreeView *view, GtkTreePath *path)
 	return skrow->skey;
 }
 
+/**
+ * seahorse_key_store_append:
+ * @skstore: #SeahorseKeyStore to append @skey to
+ * @skey: #SeahorseKey to append
+ *
+ * Appends @skey to @skstore.
+ **/
 void
 seahorse_key_store_append (SeahorseKeyStore *skstore, SeahorseKey *skey)
 {
@@ -406,6 +475,13 @@ seahorse_key_store_append (SeahorseKeyStore *skstore, SeahorseKey *skey)
 	SEAHORSE_KEY_STORE_GET_CLASS (skstore)->append (skstore, skey, &iter);
 }
 
+/**
+ * seahorse_key_store_remove:
+ * @skstore: #SeahorseKeyStore containg @path
+ * @path: #GtkTreePath to remove
+ *
+ * Removes #SeahorseKey at @path from @skstore.
+ **/
 void
 seahorse_key_store_remove (SeahorseKeyStore *skstore, GtkTreePath *path)
 {
@@ -420,6 +496,15 @@ seahorse_key_store_remove (SeahorseKeyStore *skstore, GtkTreePath *path)
 	seahorse_key_row_remove (skrow);
 }
 
+/**
+ * seahorse_key_store_append_column:
+ * @view: #GtkTreeView to append column to
+ * @name: Title of new column
+ * @index: Index of new column
+ *
+ * Creates a new #GtkTreeViewColumn with @name as the title,
+ * and appends it to @view at @index.
+ **/
 void
 seahorse_key_store_append_column (GtkTreeView *view, const gchar *name, const gint index)
 {
