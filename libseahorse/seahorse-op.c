@@ -148,7 +148,7 @@ export_data (GList *keys, gboolean force_armor, gpgme_error_t *err)
             gpgme_set_armor (sksrc->ctx, TRUE);
         }
         
-        *err = gpgme_op_export (sksrc->ctx, skey->key->subkeys->fpr, 0, data);
+        *err = gpgme_op_export (sksrc->ctx, seahorse_key_get_id (skey->key), 0, data);
         
         if (force_armor)
             gpgme_set_armor (sksrc->ctx, old_armor);
