@@ -33,29 +33,49 @@
 #include "seahorse-context.h"
 #include "seahorse-key.h"
 
-/* Available key types for key generation */
+/* Key types corresponding to gnupg numbering */
 typedef enum {
+	/* DSA key with ElGamal subkey. The DSA key will have length of 1024,
+	 * while the ElGamal length is variable within #ELGAMAL_MIN and
+	 * #LENGTH_MAX. Only used in seahorse_ops_key_generate().
+	 */
 	DSA_ELGAMAL = 1,
+	/* DSA key, sign only. Can be a subkey or a primary key.
+	 * See #DSA_MIN and #DSA_MAX.
+	 */
 	DSA = 2,
+	/* ElGamal subkey, encrypt only. See #ELGAMAL_MIN and #LENGTH_MAX.
+	 * Only used in seahorse_ops_key_add_subkey().
+	 */
 	ELGAMAL = 3,
+	/* RSA key, sign only. Can be a subkey or a primary key.
+	 * See #RSA_MIN and #RSA_MAX.
+	 */
 	RSA_SIGN = 5,
+	/* RSA subkey, encrypt only. See #RSA_MIN and #RSA_MAX.
+	 * Only used in seahorse_ops_key_add_subkey().
+	 */
 	RSA_ENCRYPT = 6
 } SeahorseKeyType;
 
-/* Possible lengths of keys */
+/* Length ranges for key types */
 typedef enum {
+	/* Length range for #DSA. */
 	DSA_MIN = 512,
 	DSA_MAX = 1024,
+	/* Minimum length for #ELGAMAL. Maximum length is #LENGTH_MAX. */
 	ELGAMAL_MIN = 768,
+	/* Minimum length of #RSA_SIGN and #RSA_ENCRYPT. Maximum length is
+	 * #LENGTH_MAX.
+	 */
 	RSA_MIN = 1024,
+	/* Maximum length for #ELGAMAL, #RSA_SIGN, and #RSA_ENCRYPT. */
 	LENGTH_MAX = 4096
 } SeahorseKeyLength;
 
-/* Removes key from key ring, then destroys it. */
 gboolean	seahorse_ops_key_delete		(SeahorseContext	*sctx,
 						 SeahorseKey		*skey);
 
-/* Generates a key with parameters, then adds it to key ring. */
 gboolean	seahorse_ops_key_generate	(SeahorseContext	*sctx,
 						 const gchar		*name,
 						 const gchar		*email,
@@ -73,26 +93,21 @@ gboolean	seahorse_ops_key_import_server	(SeahorseContext	*sctx,
 						 const gchar		*keyid,
 						 const gchar		*server);
 
-/* Adds key to recipient list, giving full validity if necessary. */
 gboolean	seahorse_ops_key_recips_add	(GpgmeRecipients	recips,
 						 const SeahorseKey	*skey);
 
-/* Sets key's owner trust to trust */
 gboolean	seahorse_ops_key_set_trust	(SeahorseContext	*sctx,
 						 SeahorseKey		*skey,
 						 GpgmeValidity		trust);
 
-/* Changes key's primary expiration date */
 gboolean	seahorse_ops_key_set_expires	(SeahorseContext	*sctx,
 						 SeahorseKey		*skey,
 						 time_t			expires);
 
-/* Enables/disables key */
 gboolean	seahorse_ops_key_set_disabled	(SeahorseContext	*sctx,
 						 SeahorseKey		*skey,
 						 gboolean		disabled);
 
-/* Begins passphrase changing dialogs for key */
 gboolean	seahorse_ops_key_change_pass	(SeahorseContext	*sctx,
 						 SeahorseKey		*skey);
 
