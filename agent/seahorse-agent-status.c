@@ -158,9 +158,12 @@ window_show ()
 
     w = glade_xml_get_widget (g_window->xml, g_window->name);
 
-    img = GTK_IMAGE (gtk_image_new_from_stock (GNOME_STOCK_AUTHENTICATION, GTK_ICON_SIZE_DIALOG));
+#if 0
+    /* TODO: We need to get this working somehow */
+    img = GTK_IMAGE (gtk_image_new_from_stock (GTK_STOCK_DIALOG_AUTHENTICATION, 
+                                                GTK_ICON_SIZE_DIALOG));
     gtk_window_set_icon (GTK_WINDOW (w), gtk_image_get_pixbuf (img));
-    g_object_unref (img);
+#endif
 
     g_signal_connect (G_OBJECT (w), "delete_event", G_CALLBACK (delete_event), NULL);
 
@@ -256,7 +259,6 @@ static void
 docklet_create ()
 {
     GtkWidget *box;
-    GdkPixbuf *pb;
 
     if (g_docklet) {
         /* 
@@ -279,10 +281,8 @@ docklet_create ()
      * encode this image and include in the code.
      */
 
-    g_image = gtk_image_new ();
-    pb = gdk_pixbuf_new_from_file (PIXMAPSDIR "/seahorse/lock.png", NULL);
-    if (pb != NULL)
-        gtk_image_set_from_pixbuf (GTK_IMAGE (g_image), pb);
+    g_image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_AUTHENTICATION, 
+                                        GTK_ICON_SIZE_LARGE_TOOLBAR);
 
     g_signal_connect (G_OBJECT (g_docklet), "destroy", G_CALLBACK (tray_destroyed),
                       NULL);
