@@ -16,6 +16,11 @@ libdialogs_a_SOURCES = \
 	seahorse-revoke.c \
 	seahorse-sign.c \
 	seahorse-key-dialogs.h \
+	seahorse-encrypt-file.c \
+	seahorse-decrypt-file.c \
+	seahorse-sign-file.c \
+	seahorse-verify-file.c \
+	seahorse-file-dialogs.h \
 	seahorse-generate.c seahorse-generate.h \
 	seahorse-preferences.c seahorse-preferences.h \
 	seahorse-import.c seahorse-import.h \
@@ -33,6 +38,10 @@ glade_DATA = \
 	seahorse-add-uid.glade2 \
 	seahorse-add-subkey.glade2 \
 	seahorse-revoke.glade2 \
-	seahorse-sign.glade2
+	seahorse-sign.glade2 \
+	seahorse-encrypt-file.glade2 \
+	seahorse-decrypt-file.glade2 \
+	seahorse-sign-file.glade2 \
+	seahorse-verify-file.glade2
 
 EXTRA_DIST = $(glade_DATA)

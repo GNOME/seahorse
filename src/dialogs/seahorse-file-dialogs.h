@@ -1,7 +1,7 @@
 /*
  * Seahorse
  *
- * Copyright (C) 2002 Jacob Perkins
+ * Copyright (C) 2003 Jacob Perkins
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,14 +19,31 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#ifndef __SEAHORSE_FILE_MANAGER_H__
-#define __SEAHORSE_FILE_MANAGER_H__
+#ifndef __SEAHORSE_FILE_DIALOGS_H__
+#define __SEAHORSE_FILE_DIALOGS_H__
 
-/* SeahorseFileManager is a SeahorseWidget component for file related operations */
+#include <gtk/gtk.h>
 
 #include "seahorse-context.h"
 
-/* Loads the Seahorse File Manager */
-void	seahorse_file_manager_show	(SeahorseContext	*sctx);
+void		seahorse_sign_file_new		(SeahorseContext	*sctx);
 
-#endif /* __SEAHORSE_FILE_MANAGER_H__ */
+gboolean	seahorse_sign_file		(SeahorseContext	*sctx,
+						 const gchar		*file);
+
+void		seahorse_verify_file_new	(SeahorseContext	*sctx);
+
+gboolean	seahorse_verify_file		(SeahorseContext	*sctx,
+						 const gchar		*file);
+
+void		seahorse_encrypt_file_new	(SeahorseContext	*sctx);
+
+gboolean	seahorse_encrypt_file		(SeahorseContext	*sctx,
+						 const gchar		*file);
+
+void		seahorse_decrypt_file_new	(SeahorseContext	*sctx);
+
+gboolean	seahorse_decrypt_file		(SeahorseContext	*sctx,
+						 const gchar		*file);
+
+#endif /* __SEAHORSE_FILE_DIALOGS_H__ */

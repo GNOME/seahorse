@@ -32,20 +32,20 @@
 #define SIG ".sig"
 
 /* Returns new file name with appropriate suffix */
-static gchar*
-add_suffix (const gchar *file, SeahorseFileType type, SeahorseContext *sctx)
+gchar*
+seahorse_ops_file_add_suffix (const gchar *file, SeahorseFileType type, SeahorseContext *sctx)
 {
 	if (gpgme_get_armor (sctx->ctx))
 		return g_strdup_printf ("%s%s", file, ASC);
-	else if (type == SIG_FILE)
+	else if (type == SEAHORSE_SIG_FILE)
 		return g_strdup_printf ("%s%s", file, SIG);
 	else
 		return g_strdup_printf ("%s%s", file, GPG);
 }
 
 /* Returns new file name with suffix removed */
-static gchar*
-del_suffix (const gchar *file, SeahorseFileType type)
+gchar*
+seahorse_ops_file_del_suffix (const gchar *file, SeahorseFileType type)
 {
 	if (seahorse_ops_file_check_suffix (file, type))
 		return g_strndup (file, strlen (file) - 4);
@@ -82,7 +82,7 @@ seahorse_ops_file_check_suffix (const gchar *file, SeahorseFileType type)
 {
 	gchar *suffix;
 	
-	if (type == SIG_FILE)
+	if (type == SEAHORSE_SIG_FILE)
 		suffix = SIG;
 	else
 		suffix = GPG;
@@ -141,7 +141,7 @@ seahorse_ops_file_sign (SeahorseContext *sctx, const gchar *file)
 	
 	success = ((gpgme_data_new_from_file (&plain, file, TRUE) == GPGME_No_Error) &&
 		seahorse_ops_data_sign (sctx, plain, &sig, GPGME_SIG_MODE_DETACH) &&
-		write_data (sig, add_suffix (file, SIG_FILE, sctx)));
+		write_data (sig, seahorse_ops_file_add_suffix (file, SEAHORSE_SIG_FILE, sctx)));
 	
 	seahorse_context_show_status (sctx, _("Detached Signature"), success);
 	return success;
@@ -156,7 +156,7 @@ seahorse_ops_file_encrypt (SeahorseContext *sctx, const gchar *file, GpgmeRecipi
 	
 	success = ((gpgme_data_new_from_file (&plain, file, TRUE) == GPGME_No_Error) &&
 		seahorse_ops_data_encrypt (sctx, recips, plain, &cipher) &&
-		write_data (cipher, add_suffix (file, CRYPT_FILE, sctx)));
+		write_data (cipher, seahorse_ops_file_add_suffix (file, SEAHORSE_CRYPT_FILE, sctx)));
 	
 	seahorse_context_show_status (sctx, _("Encrypt File"), success);
 	return success;
@@ -171,7 +171,7 @@ seahorse_ops_file_decrypt (SeahorseContext *sctx, const gchar *file)
 	
 	success = ((gpgme_data_new_from_file (&cipher, file, TRUE) == GPGME_No_Error) &&
 		seahorse_ops_data_decrypt (sctx, cipher, &plain) &&
-		write_data (plain, del_suffix (file, CRYPT_FILE)));
+		write_data (plain, seahorse_ops_file_del_suffix (file, SEAHORSE_CRYPT_FILE)));
 
 	seahorse_context_show_status (sctx, _("Decrypt File"), success);
 	return success;
@@ -184,7 +184,8 @@ seahorse_ops_file_verify (SeahorseContext *sctx, const gchar *file, GpgmeSigStat
 	GpgmeData plain;
 	gboolean success;
 	
-	success = ((gpgme_data_new_from_file (&plain, del_suffix (file, SIG_FILE), TRUE) == GPGME_No_Error) &&
+	success = ((gpgme_data_new_from_file (&plain,
+		seahorse_ops_file_del_suffix (file, SEAHORSE_SIG_FILE), TRUE) == GPGME_No_Error) &&
 		(gpgme_data_new_from_file (&sig, file, TRUE) == GPGME_No_Error) &&
 		seahorse_ops_data_verify (sctx, sig, plain, status));
 	
@@ -203,7 +204,7 @@ seahorse_ops_file_decrypt_verify (SeahorseContext *sctx, const gchar *file, Gpgm
 	
 	success = ((gpgme_data_new_from_file (&cipher, file, TRUE) == GPGME_No_Error) &&
 		seahorse_ops_data_decrypt_verify (sctx, cipher, &plain, status) &&
-		write_data (plain, del_suffix (file, CRYPT_FILE)));
+		write_data (plain, seahorse_ops_file_del_suffix (file, SEAHORSE_CRYPT_FILE)));
 	
 	seahorse_context_show_status (sctx, _("Decrypt & Verify File"), success);
 	return success;

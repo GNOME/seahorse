@@ -33,9 +33,9 @@
 #include "seahorse-util.h"
 #include "seahorse-validity.h"
 #include "seahorse-key-manager-store.h"
-#include "seahorse-file-manager.h"
 #include "seahorse-ops-key.h"
 #include "seahorse-key-dialogs.h"
+#include "seahorse-file-dialogs.h"
 
 #define KEY_MANAGER "key-manager"
 #define KEY_LIST "key_list"
@@ -160,18 +160,35 @@ add_revoker_activate (GtkMenuItem *item, SeahorseWidget *swidget)
 		seahorse_add_revoker_new (swidget->sctx, skey);
 }
 
-/* Loads text editor */
 static void
-text_editor_activate (GtkWidget *widget, SeahorseWidget *swidget)
+sign_file_activate (GtkMenuItem *item, SeahorseWidget *swidget)
 {
-	seahorse_text_editor_show (swidget->sctx);
+	seahorse_sign_file_new (swidget->sctx);
 }
 
-/* Loads file manager */
 static void
-file_manager_activate (GtkWidget *widget, SeahorseWidget *swidget)
+verify_file_activate (GtkMenuItem *item, SeahorseWidget *swidget)
 {
-	seahorse_file_manager_show (swidget->sctx);
+	seahorse_verify_file_new (swidget->sctx);
+}
+
+static void
+encrypt_file_activate (GtkMenuItem *item, SeahorseWidget *swidget)
+{
+	seahorse_encrypt_file_new (swidget->sctx);
+}
+
+static void
+decrypt_file_activate (GtkMenuItem *item, SeahorseWidget *swidget)
+{
+	seahorse_decrypt_file_new (swidget->sctx);
+}
+
+/* Loads text editor */
+static void
+text_editor_activate (GtkMenuItem *widget, SeahorseWidget *swidget)
+{
+	seahorse_text_editor_show (swidget->sctx);
 }
 
 /* Loads preferences dialog */
@@ -345,11 +362,17 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 		G_CALLBACK (add_subkey_activate), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "add_revoker_activate",
 		G_CALLBACK (add_revoker_activate), swidget);
-	/* tool menu signals */	
+	/* tool menu signals */
+	glade_xml_signal_connect_data (swidget->xml, "sign_file_activate",
+		G_CALLBACK (sign_file_activate), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "verify_file_activate",
+		G_CALLBACK (verify_file_activate), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "encrypt_file_activate",
+		G_CALLBACK (encrypt_file_activate), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "decrypt_file_activate",
+		G_CALLBACK (decrypt_file_activate), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "text_editor_activate",
-		G_CALLBACK (text_editor_activate), swidget);
-	glade_xml_signal_connect_data (swidget->xml, "file_manager_activate",
-		G_CALLBACK (file_manager_activate), swidget);	
+		G_CALLBACK (text_editor_activate), swidget);	
 	/* other signals */	
 	glade_xml_signal_connect_data (swidget->xml, "preferences_activate",
 		G_CALLBACK (preferences_activate), swidget);
