@@ -519,7 +519,7 @@ seahorse_context_get_keys (SeahorseContext *sctx)
  * Returns: The number of loaded key pairs.
  */
 guint           
-seahorse_context_get_n_keys_pair  (SeahorseContext    *sctx)
+seahorse_context_get_n_key_pairs  (SeahorseContext    *sctx)
 {
     return g_list_length (sctx->priv->key_pairs);
 }
