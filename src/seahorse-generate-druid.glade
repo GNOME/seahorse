@@ -10,8 +10,14 @@
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_CENTER</property>
   <property name="modal">False</property>
+  <property name="default_width">400</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
+  <property name="decorated">True</property>
+  <property name="skip_taskbar_hint">False</property>
+  <property name="skip_pager_hint">False</property>
+  <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
+  <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
 
   <child>
     <widget class="GnomeDruid" id="druid1">
@@ -19,7 +25,7 @@
       <property name="visible">True</property>
       <property name="show_help">False</property>
       <accessibility>
-	<atkproperty name="AtkObject::accessible_name">keygen_druid</atkproperty>
+	<atkproperty name="AtkObject::accessible_name" translatable="yes">keygen_druid</atkproperty>
       </accessibility>
       <signal name="cancel" handler="closed" last_modification_time="Wed, 31 Dec 2003 03:35:55 GMT"/>
 
@@ -27,9 +33,8 @@
 	<widget class="GnomeDruidPageEdge" id="druidpagestart1">
 	  <property name="visible">True</property>
 	  <property name="position">GNOME_EDGE_START</property>
-	  <property name="title" translatable="yes">Seahorse GPG Key Generation Assistant</property>
+	  <property name="title" translatable="yes">Key Generation Assistant</property>
 	  <property name="text" translatable="yes">This assistant will guide you through the steps of creating a GPG key pair.</property>
-	  <property name="logo">seahorse.png</property>
 	</widget>
       </child>
 
@@ -37,7 +42,6 @@
 	<widget class="GnomeDruidPageStandard" id="druidpagesecuritylevel">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Security Level</property>
-	  <property name="logo">seahorse.png</property>
 	  <signal name="prepare" handler="on_druidpagesecuritylevel_prepare" last_modification_time="Sun, 04 Jan 2004 21:18:04 GMT"/>
 
 	  <child internal-child="vbox">
@@ -45,12 +49,14 @@
 	      <property name="border_width">16</property>
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
-	      <property name="spacing">6</property>
+	      <property name="spacing">12</property>
 
 	      <child>
 		<widget class="GtkLabel" id="label1">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">The Medium Security level is the default and should be acceptable for general everyday usage.  The High Security level should be selected if you know your data will be actively scrutinized.  The Extra High level should be selected if you know your data is actively scrutinized and will be under cryptographic attack.</property>
+		  <property name="label" translatable="yes">The Medium Security level is the default and should be acceptable for general everyday usage.  
+
+The High Security level should be selected if you know your data will be actively scrutinized.  The Extra High level should be selected if you know your data is actively scrutinized and will be under cryptographic attack.</property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
 		  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -63,7 +69,7 @@
 		</widget>
 		<packing>
 		  <property name="padding">0</property>
-		  <property name="expand">True</property>
+		  <property name="expand">False</property>
 		  <property name="fill">True</property>
 		</packing>
 	      </child>
@@ -74,7 +80,7 @@
 		</widget>
 		<packing>
 		  <property name="padding">0</property>
-		  <property name="expand">True</property>
+		  <property name="expand">False</property>
 		  <property name="fill">True</property>
 		</packing>
 	      </child>
@@ -83,7 +89,7 @@
 		<widget class="GtkVBox" id="vbox1">
 		  <property name="visible">True</property>
 		  <property name="homogeneous">False</property>
-		  <property name="spacing">0</property>
+		  <property name="spacing">6</property>
 
 		  <child>
 		    <widget class="GtkRadioButton" id="med_security">
@@ -94,6 +100,7 @@
 		      <property name="label" translatable="yes">Medium Security</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
+		      <property name="focus_on_click">True</property>
 		      <property name="active">True</property>
 		      <property name="inconsistent">False</property>
 		      <property name="draw_indicator">True</property>
@@ -115,6 +122,7 @@
 		      <property name="label" translatable="yes">High Security</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
+		      <property name="focus_on_click">True</property>
 		      <property name="active">False</property>
 		      <property name="inconsistent">False</property>
 		      <property name="draw_indicator">True</property>
@@ -137,6 +145,7 @@
 		      <property name="label" translatable="yes">Extra High Security</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
+		      <property name="focus_on_click">True</property>
 		      <property name="active">False</property>
 		      <property name="inconsistent">False</property>
 		      <property name="draw_indicator">True</property>
@@ -154,7 +163,7 @@
 		</widget>
 		<packing>
 		  <property name="padding">0</property>
-		  <property name="expand">True</property>
+		  <property name="expand">False</property>
 		  <property name="fill">True</property>
 		</packing>
 	      </child>
@@ -167,9 +176,8 @@
 	<widget class="GnomeDruidPageStandard" id="druidpagestandard2">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Personal Information</property>
-	  <property name="logo">seahorse.png</property>
 	  <accessibility>
-	    <atkproperty name="AtkObject::accessible_name">druidpage_pinfo</atkproperty>
+	    <atkproperty name="AtkObject::accessible_name" translatable="yes">druidpage_pinfo</atkproperty>
 	  </accessibility>
 	  <signal name="next" handler="on_druidpagepersonalinfo_next" last_modification_time="Tue, 30 Dec 2003 22:03:45 GMT"/>
 
@@ -178,12 +186,16 @@
 	      <property name="border_width">16</property>
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
-	      <property name="spacing">6</property>
+	      <property name="spacing">12</property>
 
 	      <child>
 		<widget class="GtkLabel" id="label2">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">To create a key and tie it to your identity, the following information is needed: Full Name, Email Address, and Comment.  These values will be given to the name of your key in the following manner:                              Full Name (Comment) &lt;email address&gt;.</property>
+		  <property name="label" translatable="yes">To create a key and tie it to your identity, the following information is needed: Full Name, Email Address, and Comment.  
+
+These values will be given to the name of your key in the following manner:                              
+
+Full Name (Comment) &lt;email address&gt;.</property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
 		  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -207,7 +219,7 @@
 		</widget>
 		<packing>
 		  <property name="padding">0</property>
-		  <property name="expand">True</property>
+		  <property name="expand">False</property>
 		  <property name="fill">True</property>
 		</packing>
 	      </child>
@@ -218,8 +230,8 @@
 		  <property name="n_rows">3</property>
 		  <property name="n_columns">2</property>
 		  <property name="homogeneous">False</property>
-		  <property name="row_spacing">0</property>
-		  <property name="column_spacing">0</property>
+		  <property name="row_spacing">6</property>
+		  <property name="column_spacing">6</property>
 
 		  <child>
 		    <widget class="GtkLabel" id="label4">
@@ -381,9 +393,8 @@
 	<widget class="GnomeDruidPageStandard" id="druidpagepassphrase">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Passphrase</property>
-	  <property name="logo">seahorse.png</property>
 	  <accessibility>
-	    <atkproperty name="AtkObject::accessible_name">druidpage_pass</atkproperty>
+	    <atkproperty name="AtkObject::accessible_name" translatable="yes">druidpage_pass</atkproperty>
 	  </accessibility>
 	  <signal name="next" handler="on_druidpagepassphrase_next" last_modification_time="Tue, 30 Dec 2003 22:03:00 GMT"/>
 
@@ -398,12 +409,14 @@
 		<widget class="GtkVBox" id="vbox2">
 		  <property name="visible">True</property>
 		  <property name="homogeneous">False</property>
-		  <property name="spacing">0</property>
+		  <property name="spacing">12</property>
 
 		  <child>
 		    <widget class="GtkLabel" id="label8">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Choosing a passphrase is an integral part of creating a strong key. Like a password, a passphrase should contain letters, numbers, and punctuation. Additionally, a passphrase can contain spaces, meaning it can contain many words. You should pick a phrase that is easy to rememeber and contains punctuation. Take this phrase, adjust the case of various letters, and change some of the letters into numbers or punctuation, reminiscent of &quot;leet speak&quot;, but don't make it so obscure to the point where you can't remember it.</property>
+		      <property name="label" translatable="yes">Choosing a passphrase is an integral part of creating a strong key. Like a password, a passphrase should contain letters, numbers, and punctuation. Additionally, a passphrase can contain spaces, meaning it can contain many words. 
+
+You should pick a phrase that is easy to rememeber and contains punctuation. Take this phrase, adjust the case of various letters, and change some of the letters into numbers or punctuation, reminiscent of &quot;leet speak&quot;, but don't make it so obscure to the point where you can't remember it.</property>
 		      <property name="use_underline">False</property>
 		      <property name="use_markup">False</property>
 		      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -427,7 +440,7 @@
 		    </widget>
 		    <packing>
 		      <property name="padding">0</property>
-		      <property name="expand">True</property>
+		      <property name="expand">False</property>
 		      <property name="fill">True</property>
 		    </packing>
 		  </child>
@@ -438,8 +451,8 @@
 		      <property name="n_rows">2</property>
 		      <property name="n_columns">2</property>
 		      <property name="homogeneous">False</property>
-		      <property name="row_spacing">0</property>
-		      <property name="column_spacing">0</property>
+		      <property name="row_spacing">6</property>
+		      <property name="column_spacing">6</property>
 
 		      <child>
 			<widget class="GtkEntry" id="passphrase">
@@ -564,7 +577,6 @@
 	<widget class="GnomeDruidPageStandard" id="druidpagestandard4">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Expiration Date</property>
-	  <property name="logo">seahorse.png</property>
 	  <signal name="next" handler="on_druidpagestandard4_next" last_modification_time="Sun, 04 Jan 2004 17:26:54 GMT"/>
 
 	  <child internal-child="vbox">
@@ -578,7 +590,7 @@
 		<widget class="GtkVBox" id="vbox3">
 		  <property name="visible">True</property>
 		  <property name="homogeneous">False</property>
-		  <property name="spacing">0</property>
+		  <property name="spacing">12</property>
 
 		  <child>
 		    <widget class="GtkLabel" id="label10">
@@ -607,7 +619,7 @@
 		    </widget>
 		    <packing>
 		      <property name="padding">0</property>
-		      <property name="expand">True</property>
+		      <property name="expand">False</property>
 		      <property name="fill">True</property>
 		    </packing>
 		  </child>
@@ -616,7 +628,7 @@
 		    <widget class="GtkHBox" id="hbox1">
 		      <property name="visible">True</property>
 		      <property name="homogeneous">False</property>
-		      <property name="spacing">0</property>
+		      <property name="spacing">6</property>
 
 		      <child>
 			<widget class="GtkLabel" id="label9">
@@ -652,37 +664,35 @@
 			</widget>
 			<packing>
 			  <property name="padding">0</property>
-			  <property name="expand">True</property>
+			  <property name="expand">False</property>
 			  <property name="fill">True</property>
+			</packing>
+		      </child>
+
+		      <child>
+			<widget class="GtkCheckButton" id="never_expires">
+			  <property name="visible">True</property>
+			  <property name="can_focus">True</property>
+			  <property name="label" translatable="yes">Never Expires</property>
+			  <property name="use_underline">True</property>
+			  <property name="relief">GTK_RELIEF_NORMAL</property>
+			  <property name="focus_on_click">True</property>
+			  <property name="active">True</property>
+			  <property name="inconsistent">False</property>
+			  <property name="draw_indicator">True</property>
+			  <signal name="toggled" handler="never_expires_toggled" last_modification_time="Tue, 30 Dec 2003 20:53:00 GMT"/>
+			</widget>
+			<packing>
+			  <property name="padding">0</property>
+			  <property name="expand">False</property>
+			  <property name="fill">False</property>
 			</packing>
 		      </child>
 		    </widget>
 		    <packing>
 		      <property name="padding">0</property>
-		      <property name="expand">True</property>
-		      <property name="fill">True</property>
-		    </packing>
-		  </child>
-
-		  <child>
-		    <widget class="GtkCheckButton" id="never_expires">
-		      <property name="visible">True</property>
-		      <property name="can_focus">True</property>
-		      <property name="label" translatable="yes">Never Expires</property>
-		      <property name="use_underline">True</property>
-		      <property name="relief">GTK_RELIEF_NORMAL</property>
-		      <property name="active">True</property>
-		      <property name="inconsistent">False</property>
-		      <property name="draw_indicator">True</property>
-		      <accessibility>
-			<atkproperty name="AtkObject::accessible_description" translatable="yes">Key Never Expires</atkproperty>
-		      </accessibility>
-		      <signal name="toggled" handler="never_expires_toggled" last_modification_time="Tue, 30 Dec 2003 20:53:00 GMT"/>
-		    </widget>
-		    <packing>
-		      <property name="padding">59</property>
 		      <property name="expand">False</property>
-		      <property name="fill">False</property>
+		      <property name="fill">True</property>
 		    </packing>
 		  </child>
 		</widget>
@@ -701,9 +711,8 @@
 	<widget class="GnomeDruidPageEdge" id="druidpagefinish1">
 	  <property name="visible">True</property>
 	  <property name="position">GNOME_EDGE_FINISH</property>
-	  <property name="title" translatable="yes">Seahorse GPG Key Generation Assistant Complete</property>
+	  <property name="title" translatable="yes">Key Generation Assistant Complete</property>
 	  <property name="text" translatable="yes">Before selecting apply to start key generation, please make sure all of your previous settings are correct.</property>
-	  <property name="logo">seahorse.png</property>
 	  <signal name="finish" handler="on_druid_finish" last_modification_time="Tue, 30 Dec 2003 21:56:21 GMT"/>
 	  <signal name="prepare" handler="gtk_widget_show" last_modification_time="Sun, 04 Jan 2004 17:20:43 GMT"/>
 	</widget>
