@@ -121,6 +121,7 @@ seahorse_key_manager_store_class_init (SeahorseKeyManagerStoreClass *klass)
   
   	/* Base class behavior and columns */
     skstore_class->use_check = FALSE;
+    skstore_class->use_icon = TRUE;
     skstore_class->n_columns = COLS;
     skstore_class->col_ids = col_ids;
     skstore_class->col_types = col_types;

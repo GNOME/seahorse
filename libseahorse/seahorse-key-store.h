@@ -85,6 +85,7 @@ struct _SeahorseKeyStoreClass
                                  SeahorseKeyChange  change);
                                
     gboolean        use_check;  /* use the check column */
+    gboolean        use_icon;   /* display an icon for key pairs in the list */
     guint           n_columns;  /* Number of columns */
     const GType*    col_types;  /* Type of each column */
     const gchar**   col_ids;    /* schema identifier for each column */
@@ -95,6 +96,8 @@ struct _SeahorseKeyStoreClass
 enum {
     KEY_STORE_DATA,
     KEY_STORE_CHECK,
+    KEY_STORE_PAIR,
+    KEY_STORE_NOTPAIR,
     KEY_STORE_NAME,
     KEY_STORE_KEYID,
     KEY_STORE_UID,
@@ -109,6 +112,8 @@ enum {
 #define KEY_STORE_BASE_IDS   \
             NULL,            \
             NULL,            \
+            "pair",          \
+            NULL,            \
             "name",          \
             "id",            \
             NULL
@@ -116,6 +121,8 @@ enum {
 /* For use in base class' type list */            
 #define KEY_STORE_BASE_TYPES \
             G_TYPE_POINTER,  \
+            G_TYPE_BOOLEAN,  \
+            G_TYPE_BOOLEAN,  \
             G_TYPE_BOOLEAN,  \
             G_TYPE_STRING,   \
             G_TYPE_STRING,   \

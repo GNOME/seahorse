@@ -160,6 +160,7 @@ seahorse_key_store_class_init (SeahorseKeyStoreClass *klass)
   
   	/* Class defaults. Derived classes should override */
     klass->use_check = FALSE;
+    klass->use_icon = FALSE;
     klass->n_columns = KEY_STORE_NCOLS;
     klass->col_types = col_types;
     klass->col_ids = col_ids;
@@ -371,8 +372,11 @@ seahorse_key_store_set (SeahorseKeyStore *skstore, SeahorseKey *skey,
                         guint uid, GtkTreeIter *iter)
 {
     gchar *userid = seahorse_key_get_userid (skey, uid);
+    gboolean pair = SEAHORSE_IS_KEY_PAIR(skey);
 	gtk_tree_store_set (GTK_TREE_STORE (skstore), iter,
         KEY_STORE_CHECK, FALSE,
+        KEY_STORE_PAIR, uid == 0 ? pair : FALSE,
+        KEY_STORE_NOTPAIR, uid == 0 ? !pair : FALSE,
 		KEY_STORE_NAME, userid,
 		KEY_STORE_KEYID, seahorse_key_get_keyid (skey, 0),
         KEY_STORE_UID, uid, -1);
@@ -686,6 +690,40 @@ seahorse_key_store_init (SeahorseKeyStore *skstore, GtkTreeView *view)
         gtk_tree_view_column_set_resizable (col, FALSE);
         gtk_tree_view_append_column (view, col);
     }
+    
+    /* When using key pair icons, we add an icon column */
+    if (SEAHORSE_KEY_STORE_GET_CLASS (skstore)->use_icon) {
+    	GtkCellRenderer *secretPixbufRenderer = NULL, *keyPixbufRenderer = NULL;
+    	GdkPixbuf *secret_pixbuf = NULL, *key_pixbuf;
+    	
+    	secret_pixbuf = gdk_pixbuf_new_from_file(PIXMAPSDIR "seahorse-secret.png", NULL);
+    	secretPixbufRenderer = gtk_cell_renderer_pixbuf_new();
+    	g_object_set(secretPixbufRenderer,
+    				 "pixbuf", GDK_PIXBUF(secret_pixbuf),
+    				 NULL);
+    	
+    	key_pixbuf = gdk_pixbuf_new_from_file(PIXMAPSDIR "seahorse-key.png", NULL);
+    	keyPixbufRenderer = gtk_cell_renderer_pixbuf_new();
+    	g_object_set(keyPixbufRenderer,
+    				 "pixbuf", GDK_PIXBUF(key_pixbuf),
+    				 NULL);
+    				 			 
+    	col = gtk_tree_view_column_new_with_attributes ("", secretPixbufRenderer, 
+   												"visible", KEY_STORE_PAIR,
+   												NULL);
+
+   		gtk_tree_view_column_pack_end(col,
+   									  keyPixbufRenderer,
+   									  FALSE);
+   									  
+   		gtk_tree_view_column_add_attribute(col, keyPixbufRenderer,
+   												"visible",
+   												KEY_STORE_NOTPAIR); 										
+        gtk_tree_view_column_set_resizable (col, FALSE);
+        gtk_tree_view_append_column (view, col);
+        
+        gtk_tree_view_column_set_sort_column_id (col, KEY_STORE_PAIR);
+      }
       
 	col = seahorse_key_store_append_column (view, _("Name"), KEY_STORE_NAME);
 	gtk_tree_view_column_set_sort_column_id (col, KEY_STORE_NAME);
