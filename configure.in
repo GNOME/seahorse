@@ -115,6 +115,8 @@ dnl Find keyserver plugins
 AC_PATH_PROG(gpgkeys_plugin, gpgkeys_ldap, ,
              [${libdir}/gnupg:$PATH:/usr/libexec/gnupg:/usr/lib/gnupg])
 
+AM_CONDITIONAL(WITH_KEYSERVER, test -n "$gpgkeys_plugin")
+
 if test -n "$gpgkeys_plugin"; then
 	echo "enabling key server support"
 	AC_DEFINE(WITH_KEYSERVER, 1, [Support for key server actions])

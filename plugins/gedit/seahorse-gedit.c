@@ -232,7 +232,7 @@ import_keys (const gchar * text)
     gpgme_error_t err;
     gint keys;
 
-    sksrc = seahorse_context_get_pri_source (sctx);
+    sksrc = seahorse_context_get_key_source (sctx);
     g_return_val_if_fail (sksrc != NULL, 0);
     
     keys = seahorse_op_import_text (sksrc, text, &err);
@@ -258,7 +258,7 @@ decrypt_text (const gchar * text, gpgme_verify_result_t *status)
     gpgme_error_t err;
     gchar *rawtext = NULL;
     
-    sksrc = seahorse_context_get_pri_source (sctx);
+    sksrc = seahorse_context_get_key_source (sctx);
     g_return_val_if_fail (sksrc != NULL, 0);
 
     rawtext = seahorse_op_decrypt_verify_text (sksrc, text, status, &err);
@@ -279,7 +279,7 @@ verify_text (const gchar * text, gpgme_verify_result_t *status)
     gpgme_error_t err;
     gchar *rawtext = NULL;
 
-    sksrc = seahorse_context_get_pri_source (sctx);
+    sksrc = seahorse_context_get_key_source (sctx);
     g_return_val_if_fail (sksrc != NULL, 0);    
 
     rawtext = seahorse_op_verify_text (sksrc, text, status, &err);
