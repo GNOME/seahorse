@@ -76,16 +76,21 @@ gboolean
 on_druidpagepersonalinfo_next (GnomeDruidPage *gnomedruidpage, GtkWidget *widget, SeahorseWidget *swidget)
 {
 	gchar *name;
+	GtkWidget *msg_dialog;
 	
 	name = gtk_editable_get_chars (GTK_EDITABLE (glade_xml_get_widget (
 		swidget->xml, NAME)), 0, -1);
 		
-	if(strlen (name) < 5)
-	{
+	if (strlen (name) < 5) {
+		msg_dialog = gtk_message_dialog_new (NULL,
+                                                       GTK_DIALOG_MODAL,
+                                                       GTK_MESSAGE_WARNING,
+                                                       GTK_BUTTONS_CLOSE,
+                                                       "The key name must be greater than 4 characters in length.");
+		gtk_dialog_run (GTK_DIALOG (msg_dialog));
+		gtk_widget_destroy (msg_dialog);
 		return TRUE;
-	}
-  	else
-	{
+	} else {
 		return FALSE;
 	}
 }
