@@ -12,6 +12,7 @@ EXTRA_DIST = \
 	README \
 	THANKS \
 	TODO \
+	MAINTAINERS \
 	seahorse.spec \
 	seahorse.spec.in \
 	intltool-extract.in \
