@@ -38,9 +38,6 @@
 #define STATUSBAR_VISIBLE UI_SCHEMAS "/statusbar_visible"
 #define TOOLBAR_VISIBLE UI_SCHEMAS "/toolbar_visible"
 
-#define GNOME_INTERFACE "/desktop/gnome/interface"
-#define GNOME_TOOLBAR_STYLE GNOME_INTERFACE "/toolbar_style"
-
 static guint signal_id = 0;
 static gulong hook_id = 0;
 
@@ -348,18 +345,6 @@ key_list_popup_menu (GtkWidget *widget, SeahorseWidget *swidget)
 		show_context_menu (swidget, 0, gtk_get_current_event_time ());
 }
 
-static void
-set_toolbar_style (GtkToolbar *toolbar, const gchar *style)
-{
-	if (g_str_equal (style, TOOLBAR_BOTH))
-		gtk_toolbar_set_style (toolbar, GTK_TOOLBAR_BOTH);
-	else if (g_str_equal (style, TOOLBAR_BOTH_HORIZ))
-		gtk_toolbar_set_style (toolbar, GTK_TOOLBAR_BOTH_HORIZ);
-	else if (g_str_equal (style, TOOLBAR_TEXT))
-		gtk_toolbar_set_style (toolbar, GTK_TOOLBAR_TEXT);
-	else if (g_str_equal (style, TOOLBAR_ICONS))
-		gtk_toolbar_set_style (toolbar, GTK_TOOLBAR_ICONS);
-}
 
 static void
 gconf_notification (GConfClient *gclient, guint id, GConfEntry *entry, SeahorseWidget *swidget)
@@ -386,22 +371,6 @@ gconf_notification (GConfClient *gclient, guint id, GConfEntry *entry, SeahorseW
 			gtk_widget_show (widget);
 		else
 			gtk_widget_hide (widget);
-	}
-	else if (g_str_equal (key, GNOME_TOOLBAR_STYLE) &&
-	g_str_equal (TOOLBAR_DEFAULT, eel_gconf_get_string (TOOLBAR_STYLE_KEY))) {
-		set_toolbar_style (GTK_TOOLBAR (glade_xml_get_widget (swidget->xml, "toolbar")),
-			gconf_value_get_string (value));
-	}
-	else if (g_str_equal (key, TOOLBAR_STYLE_KEY)) {
-		widget = glade_xml_get_widget (swidget->xml, "toolbar");
-		
-		/* if changed to default, use system settings */
-		if (g_str_equal (gconf_value_get_string (value), TOOLBAR_DEFAULT)) {
-			set_toolbar_style (GTK_TOOLBAR (widget),
-				eel_gconf_get_string (GNOME_TOOLBAR_STYLE));
-		}
-		else
-			set_toolbar_style (GTK_TOOLBAR (widget), gconf_value_get_string (value));
 	}
 }
 /*
@@ -548,14 +517,10 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 	/* init gclient */
 	eel_gconf_notification_add (UI_SCHEMAS, (GConfClientNotifyFunc) gconf_notification, swidget);
 	eel_gconf_monitor_add (UI_SCHEMAS);
-	eel_gconf_notification_add (GNOME_INTERFACE, (GConfClientNotifyFunc) gconf_notification, swidget);
-	eel_gconf_monitor_add (GNOME_INTERFACE);
 	
 	/* init toolbar */
 	glade_xml_signal_connect_data (swidget->xml, "toolbar_activate",
 		G_CALLBACK (view_bar), TOOLBAR_VISIBLE);
-	set_toolbar_style (GTK_TOOLBAR (glade_xml_get_widget (swidget->xml, "toolbar")),
-		eel_gconf_get_string (TOOLBAR_STYLE_KEY));
 	visible = eel_gconf_get_boolean (TOOLBAR_VISIBLE);
 	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (
 		glade_xml_get_widget (swidget->xml, "view_toolbar")), visible);

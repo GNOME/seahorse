@@ -34,13 +34,6 @@
 #define SHOW_TYPE_KEY LISTING_SCHEMAS "/show_type"
 
 #define UI_SCHEMAS SEAHORSE_SCHEMAS "/ui"
-#define TOOLBAR_STYLE_KEY UI_SCHEMAS "/toolbar_style"
-
-#define TOOLBAR_DEFAULT "default"
-#define TOOLBAR_BOTH "both"
-#define TOOLBAR_BOTH_HORIZ "both_horiz"
-#define TOOLBAR_ICONS "icons"
-#define TOOLBAR_TEXT "text"
 
 void		seahorse_preferences_show		(SeahorseContext	*sctx);
 
