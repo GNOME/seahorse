@@ -1,31 +1,9 @@
-/*
- * Seahorse
- *
- * Copyright (C) 2003 Jacob Perkins
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the
- * Free Software Foundation, Inc.,
- * 59 Temple Place, Suite 330,
- * Boston, MA 02111-1307, USA.
- */
 
 #include <gnome.h>
-#include <libbonobo.h>
-#include <string.h>
-#include <libgnomevfs/gnome-vfs-utils.h>
+#include <bonobo.h>
+#include <bonobo-activation/bonobo-activation.h>
 
-#include "seahorse-component.h"
-
+/* helper method borrowed from file-roller */
 static gchar*
 get_path_from_url (const gchar *url)
 {
@@ -47,26 +25,25 @@ get_path_from_url (const gchar *url)
 	return path;
 }
 
+/* this is the listener callback when creating a new listener
+ * it is called when any registered events are activated
+ */
 static void
-impl_Bonobo_Listener_event (PortableServer_Servant servant, const CORBA_char *event_name,
-			    const CORBA_any *args, CORBA_Environment *ev)
+listener_callback (BonoboListener *listener, const gchar *event_name,
+		   const CORBA_any *any, CORBA_Environment *ev, gpointer data)
 {
-	SeahorseComponent *sc;
 	const CORBA_sequence_CORBA_string *list;
 	gchar *cmd, *path, *cmd_option;
 	GString *str;
 	//gint i;
 
-	sc = SEAHORSE_COMPONENT (bonobo_object_from_servant (servant));
-
 	/* not sure what this does */
-	if (!CORBA_TypeCode_equivalent (args->_type, TC_CORBA_sequence_CORBA_string, ev))
+	if (!CORBA_TypeCode_equivalent (any->_type, TC_CORBA_sequence_CORBA_string, ev))
 		return;
 
 	/* gets arg list ?? */
-	list = (CORBA_sequence_CORBA_string *)args->_value;
+	list = (CORBA_sequence_CORBA_string *)any->_value;
 
-	g_return_if_fail (sc != NULL);
 	g_return_if_fail (list != NULL);
 
 	/* get first path */
@@ -112,16 +89,30 @@ impl_Bonobo_Listener_event (PortableServer_Servant servant, const CORBA_char *ev
 	g_free (cmd_option);
 }
 
-static void
-seahorse_component_class_init (SeahorseComponentClass *class)
+/* this is the shared object factory method
+ * it is called when a registered server with the IID has an event
+ */
+static CORBA_Object
+shlib_make_object (PortableServer_POA poa, const gchar *iid,
+		   gpointer impl_ptr, CORBA_Environment *ev)
 {
-	POA_Bonobo_Listener__epv *epv = &class->epv;
-	epv->event = impl_Bonobo_Listener_event;
+	BonoboListener *listener;
+	
+	listener = bonobo_listener_new (listener_callback, NULL);
+	bonobo_activation_plugin_use (poa, impl_ptr);
+	return CORBA_Object_duplicate (BONOBO_OBJREF (listener), ev);
 }
 
-static void
-seahorse_component_init (SeahorseComponent *sc)
-{}
+/* this is the plugin list with the IID and activate callback */
+static const BonoboActivationPluginObject plugin_list[] = {
+	{ "OAFIID:Seahorse_PGP_File_All",	shlib_make_object },
+	{ "OAFIID:Seahorse_PGP_File_Encrypted",	shlib_make_object },
+	{ "OAFIID:Seahorse_PGP_File_Signed",	shlib_make_object },
+	{ "OAFIID:Seahorse_PGP_File_Keys",	shlib_make_object },
+	{ NULL }
+};
 
-BONOBO_TYPE_FUNC_FULL (SeahorseComponent, Bonobo_Listener,
-		       BONOBO_TYPE_OBJECT, seahorse_component);
+/* this registers the plugin list with bonobo */
+const BonoboActivationPlugin Bonobo_Plugin_info = {
+	plugin_list, "Seahorse PGP File Listener"
+};

@@ -1,5 +1,3 @@
-mimedir = $(datadir)/mime-info
-mime_DATA = seahorse.mime seahorse.keys
 
 @INTLTOOL_SCHEMAS_RULE@
 
@@ -28,8 +26,7 @@ desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 
 EXTRA_DIST = \
 	$(schemas_in_files) \
-	$(desktop_in_files) \
-	$(mime_DATA)
+	$(desktop_in_files)
 
 CLEANFILES = \
 	$(desktop_DATA) \

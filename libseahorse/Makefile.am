@@ -1,11 +1,17 @@
 
-noinst_LIBRARIES = libseahorse.a
-
-libexec_PROGRAMS = seahorse-pgp-controls
-
 gladedir = $(datadir)/seahorse/glade/
 localedir = $(datadir)/locale
 pixmapsdir = $(datadir)/pixmaps/
+
+INCLUDES = -I$(top_builddir) \
+	-I$(top_srcdir) \
+	$(SEAHORSE_CFLAGS) \
+	-DDATA_DIR=\""$(datadir)"\" \
+	-DSEAHORSE_GLADEDIR=\""$(gladedir)"\" \
+	-DLOCALEDIR=\"$(localedir)\" \
+	-DPIXMAPSDIR=\""$(pixmapsdir)"\"
+
+noinst_LIBRARIES = libseahorse.a
 
 BUILT_SOURCES = \
 	seahorse-marshal.c seahorse-marshal.h
@@ -26,29 +32,6 @@ libseahorse_a_SOURCES = \
 	seahorse-libdialogs.h \
 	$(BUILT_SOURCES)
 
-seahorse_pgp_controls_SOURCES = seahorse-pgp-controls.c
-seahorse_pgp_controls_LDADD = \
-	libseahorse.a \
-	$(SEAHORSE_LIBS)
-
-server_in_files = Seahorse_PGP_Controls.server.in.in
-
-serverdir = $(libdir)/bonobo/servers
-server_DATA = $(server_in_files:.server.in.in=.server)
-$(server_in_files:.server.in.in=.server.in): $(server_in_files)
-	sed -e "s|\@LIBEXECDIR\@|$(libexecdir)|" $< > $@
-
-@INTLTOOL_SERVER_RULE@
-
-INCLUDES = -I$(top_builddir) \
-	-I$(top_srcdir) \
-	-I$(top_srcdir)/libseahorse \
-	$(SEAHORSE_CFLAGS) \
-	-DDATA_DIR=\""$(datadir)"\" \
-	-DSEAHORSE_GLADEDIR=\""$(gladedir)"\" \
-	-DLOCALEDIR=\"$(localedir)\" \
-	-DPIXMAPSDIR=\""$(pixmapsdir)"\"
-
 seahorse-marshal.h: seahorse-marshal.list $(GLIB_GENMARSHAL)
 	$(GLIB_GENMARSHAL) $< --header --prefix=seahorse_marshal > $@
 
@@ -62,9 +45,4 @@ glade_DATA = \
 	seahorse-signatures.glade
 
 EXTRA_DIST = $(glade_DATA) \
-	$(server_in_files) \
 	seahorse-marshal.list
-
-CLEANFILES = \
-	$(server_DATA) \
-	$(server_DATA).in

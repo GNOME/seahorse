@@ -1,6 +1,16 @@
+
 gladedir = $(datadir)/seahorse/glade/
 localedir = $(datadir)/locale
 pixmapsdir = $(datadir)/pixmaps/
+
+INCLUDES = -I$(top_builddir) \
+	-I$(top_srcdir) \
+	-I$(top_srcdir)/libseahorse \
+	$(SEAHORSE_CFLAGS) \
+	-DDATA_DIR=\""$(datadir)"\" \
+	-DSEAHORSE_GLADEDIR=\""$(gladedir)"\" \
+	-DLOCALEDIR=\"$(localedir)\" \
+	-DPIXMAPSDIR=\""$(pixmapsdir)"\"
 
 bin_PROGRAMS = seahorse
 
@@ -21,15 +31,6 @@ seahorse_SOURCES = main.c \
 	seahorse-add-uid.c \
 	seahorse-add-subkey.c \
 	seahorse-key-dialogs.h
-
-INCLUDES = -I$(top_builddir) \
-	-I$(top_srcdir) \
-	-I$(top_srcdir)/libseahorse \
-	$(SEAHORSE_CFLAGS) \
-	-DDATA_DIR=\""$(datadir)"\" \
-	-DSEAHORSE_GLADEDIR=\""$(gladedir)"\" \
-	-DLOCALEDIR=\"$(localedir)\" \
-	-DPIXMAPSDIR=\""$(pixmapsdir)"\"
 
 seahorse_LDADD = \
 	$(top_builddir)/libseahorse/libseahorse.a \
