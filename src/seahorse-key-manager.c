@@ -642,8 +642,11 @@ seahorse_key_manager_show (SeahorseContext *sctx)
     glade_xml_signal_connect_data (swidget->xml, "sync_activate",
                                    G_CALLBACK (sync_activate), swidget);
 #else
+    gtk_widget_hide (glade_xml_get_widget (swidget->xml, "remote_menu"));    
     gtk_widget_hide (glade_xml_get_widget (swidget->xml, "search_button"));    
     gtk_widget_hide (glade_xml_get_widget (swidget->xml, "keyserver_search"));    
+    gtk_widget_hide (glade_xml_get_widget (swidget->xml, "keyserver_sync"));    
+    gtk_widget_hide (glade_xml_get_widget (swidget->xml, "key_sync"));    
 #endif	
 
 	glade_xml_signal_connect_data (swidget->xml, "expand_all_activate",
