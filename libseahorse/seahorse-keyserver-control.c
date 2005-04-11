@@ -265,8 +265,8 @@ seahorse_keyserver_control_selected (SeahorseKeyserverControl *skc)
     n = gtk_combo_box_get_active (skc->combo);
     g_return_val_if_fail (n >= 0, NULL);
     
-    if (n > 0)
-        return g_slist_nth_data (skc->keyservers, n - 1);
+    if (skc->none_option)
+        return n > 0 ? g_slist_nth_data (skc->keyservers, n - 1) : NULL;
     else 
-        return NULL; /* all key servers */
+        return g_slist_nth_data (skc->keyservers, n);
 }
