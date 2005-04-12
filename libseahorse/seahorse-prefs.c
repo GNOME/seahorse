@@ -346,7 +346,9 @@ seahorse_prefs_new (SeahorseContext *sctx)
     
     widget = glade_xml_get_widget (swidget->xml, "modes");
     gtk_container_add (GTK_CONTAINER (widget),
-            seahorse_check_button_control_new (_("_Encrypt to Self"), ENCRYPTSELF_KEY));
+        seahorse_check_button_control_new (_("_Encrypt to Self"), ENCRYPTSELF_KEY));
+    gtk_container_add (GTK_CONTAINER (widget),
+        seahorse_check_button_control_new (_("_Armor Encode Files"), ARMOR_KEY));
     gtk_widget_show_all (widget);
 
     widget = glade_xml_get_widget (swidget->xml, "default_key");
