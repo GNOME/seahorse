@@ -19,12 +19,11 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <eel/eel.h>
-
 #include "seahorse-util.h"
 #include "seahorse-context.h"
 #include "seahorse-keyserver-control.h"
 #include "seahorse-key-pair.h"
+#include "seahorse-gconf.h"
 
 enum {
 	PROP_0,
@@ -91,7 +90,7 @@ keyserver_changed (GtkComboBox *widget, SeahorseKeyserverControl *skc)
 {
     if (skc->gconf_key) {
         const gchar *t = seahorse_keyserver_control_selected (skc);
-        eel_gconf_set_string (skc->gconf_key, t ? t : "");
+        seahorse_gconf_set_string (skc->gconf_key, t ? t : "");
     }
 }
 
@@ -116,7 +115,7 @@ seahorse_keyserver_control_init (SeahorseKeyserverControl *skc)
  
     populate_combo (skc, TRUE, TRUE);
     g_signal_connect (skc->combo, "changed", G_CALLBACK (keyserver_changed), skc);
-    skc->notify_id_list = eel_gconf_notification_add (KEYSERVER_KEY, gconf_notify, skc);
+    skc->notify_id_list = seahorse_gconf_notify (KEYSERVER_KEY, gconf_notify, skc);
 }
 
 static void
@@ -129,12 +128,12 @@ seahorse_keyserver_control_set_property (GObject *object, guint prop_id,
     switch (prop_id) {
     case PROP_GCONF_KEY:
         if (control->notify_id)
-            eel_gconf_notification_remove (control->notify_id);
+            seahorse_gconf_unnotify (control->notify_id);
         g_free (control->gconf_key);
         t = g_value_get_string (value);
         control->gconf_key = t ? g_strdup (t) : NULL;
         if (control->gconf_key) 
-            control->notify_id = eel_gconf_notification_add (control->gconf_key, gconf_notify, control);
+            control->notify_id = seahorse_gconf_notify (control->gconf_key, gconf_notify, control);
         populate_combo (control, TRUE, TRUE);
         break;
         
@@ -182,12 +181,12 @@ seahorse_keyserver_control_finalize (GObject *gobject)
     }
     
     if (skc->notify_id >= 0) {
-        eel_gconf_notification_remove (skc->notify_id);
+        seahorse_gconf_unnotify (skc->notify_id);
         skc->notify_id = 0;
     }
 
     if (skc->notify_id_list >= 0) {
-        eel_gconf_notification_remove (skc->notify_id_list);
+        seahorse_gconf_unnotify (skc->notify_id_list);
         skc->notify_id_list = 0;
     }
 
@@ -204,7 +203,7 @@ populate_combo (SeahorseKeyserverControl *skc, gboolean gconf, gboolean force)
 
     /* Get the appropriate selection */
     if (gconf && skc->gconf_key)
-        chosen = eel_gconf_get_string (skc->gconf_key);
+        chosen = seahorse_gconf_get_string (skc->gconf_key);
     else {
         n = gtk_combo_box_get_active (skc->combo);
         if (n > 0 && n <= g_slist_length (skc->keyservers))
@@ -212,7 +211,7 @@ populate_combo (SeahorseKeyserverControl *skc, gboolean gconf, gboolean force)
     }
 
     /* Retreieve the key server list and make sure it's changed */
-    ks = eel_gconf_get_string_list (KEYSERVER_KEY);
+    ks = seahorse_gconf_get_string_list (KEYSERVER_KEY);
     ks = g_slist_sort (ks, (GCompareFunc)g_utf8_collate);
     if (force || !seahorse_util_string_slist_equal (ks, skc->keyservers)) {
         

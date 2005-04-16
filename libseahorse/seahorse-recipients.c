@@ -23,7 +23,6 @@
 #include <stdlib.h>
 #include <libintl.h>
 #include <gnome.h>
-#include <eel/eel.h>
 
 #include "seahorse-operation.h"
 #include "seahorse-progress.h"
@@ -32,6 +31,7 @@
 #include "seahorse-validity.h"
 #include "seahorse-recipients-store.h"
 #include "seahorse-default-key-control.h"
+#include "seahorse-gconf.h"
 
 #define VIEW "keys"
 #define OK "ok"
@@ -172,7 +172,7 @@ seahorse_recipients_get (SeahorseContext *sctx, SeahorseKeyPair **signer)
         gtk_widget_show_all (widget);    
 
         /* Select the last key used */
-        id = eel_gconf_get_string (LASTSIGNER_KEY);
+        id = seahorse_gconf_get_string (LASTSIGNER_KEY);
         seahorse_default_key_control_select_id (sdkc, id);
         g_free (id); 
     }
@@ -211,8 +211,8 @@ seahorse_recipients_get (SeahorseContext *sctx, SeahorseKeyPair **signer)
             *signer = seahorse_default_key_control_active (sdkc);
 
         /* Save this as the last key signed with */
-        eel_gconf_set_string (LASTSIGNER_KEY, *signer == NULL ? 
-                "" : seahorse_key_pair_get_id (*signer));
+        seahorse_gconf_set_string (LASTSIGNER_KEY, *signer == NULL ? 
+                        "" : seahorse_key_pair_get_id (*signer));
     }
     
 	seahorse_widget_destroy (swidget);

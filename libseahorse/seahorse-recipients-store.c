@@ -22,6 +22,7 @@
 #include <gnome.h>
 
 #include "seahorse-context.h"
+#include "seahorse-gconf.h"
 #include "seahorse-recipients-store.h"
 
 #define RECIPIENTS_SORT_KEY PGP_SCHEMAS "/recipients/sort_by"

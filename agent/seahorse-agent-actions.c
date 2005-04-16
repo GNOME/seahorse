@@ -24,8 +24,8 @@
 #include <string.h>
 
 #include <gnome.h>
-#include <eel/eel.h>
 
+#include "seahorse-gconf.h"
 #include "seahorse-agent.h"
 
 /*
@@ -78,7 +78,7 @@ seahorse_agent_actions_getpass (SeahorseAgentConn * rq, gchar * id,
 
     g_assert (rq != NULL);
 
-    if (id && !eel_gconf_get_boolean (SETTING_AUTH)) {
+    if (id && !seahorse_gconf_get_boolean (SETTING_AUTH)) {
         /* 
          * We don't need authorization, so if we have the password
          * just reply now, without going to the queue.
@@ -179,7 +179,7 @@ seahorse_agent_actions_nextgui ()
          */
         if (!pr->errmsg && pr->id && seahorse_agent_cache_has (pr->id, TRUE)) {
             /* Do we need to authorize with the user? */
-            if (eel_gconf_get_boolean (SETTING_AUTH))
+            if (seahorse_gconf_get_boolean (SETTING_AUTH))
                 seahorse_agent_prompt_auth (pr);
 
             /* Simple auto-authorize */

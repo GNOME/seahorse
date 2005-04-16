@@ -22,7 +22,6 @@
 #include <config.h>
 #include <gnome.h>
 #include <gconf/gconf-client.h>
-#include <eel/eel-gconf-extensions.h>
 #include <libgnomevfs/gnome-vfs.h>
 
 #include "seahorse-gpgmex.h"
@@ -39,6 +38,7 @@
 #include "seahorse-key-widget.h"
 #include "seahorse-op.h"
 #include "seahorse-gpg-options.h"
+#include "seahorse-gconf.h"
 
 #define KEY_LIST "key_list"
 
@@ -226,9 +226,9 @@ backup_activate (GtkWidget *widget, SeahorseWidget *swidget)
         if(t != NULL) {
             t++;
             if(t[0] != 0) 
-                eel_gconf_set_string (MULTI_EXTENSION_KEY, t);
+                seahorse_gconf_set_string (MULTI_EXTENSION_KEY, t);
         } else {
-            if ((ext = eel_gconf_get_string (MULTI_EXTENSION_KEY)) == NULL)
+            if ((ext = seahorse_gconf_get_string (MULTI_EXTENSION_KEY)) == NULL)
     	        ext = g_strdup ("zip"); /* Yes this happens when the schema isn't installed */
 	        
         	t = seahorse_util_uri_replace_ext (uri, ext);
@@ -683,7 +683,8 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 		G_CALLBACK (add_revoker_activate), swidget);
 	
 	/* init gclient */
-	eel_gconf_notification_add (UI_SCHEMAS, (GConfClientNotifyFunc) gconf_notification, swidget);
+	seahorse_gconf_notify_lazy (UI_SCHEMAS, (GConfClientNotifyFunc) gconf_notification, 
+                                swidget, GTK_WIDGET (win));
 	
 	/* first time signals */
 	glade_xml_signal_connect_data (swidget->xml, "import_button_clicked",

@@ -26,12 +26,12 @@
 #include <sys/wait.h>
 
 #include <gnome.h>
-#include <eel/eel.h>
 #include <libgnomevfs/gnome-vfs.h>
 
 #include "seahorse-gpgmex.h"
 #include "seahorse-util.h"
 #include "seahorse-key.h"
+#include "seahorse-gconf.h"
 #include "seahorse-vfs-data.h"
 
 typedef struct _SeahorsePGPHeader {
@@ -931,7 +931,7 @@ seahorse_util_add_suffix (gpgme_ctx_t ctx, const gchar *path,
     gchar *t;
 	
 	if (suffix == SEAHORSE_CRYPT_SUFFIX)
-        ext = eel_gconf_get_boolean (ARMOR_KEY) ? SEAHORSE_EXT_ASC : SEAHORSE_EXT_PGP;
+        ext = seahorse_gconf_get_boolean (ARMOR_KEY) ? SEAHORSE_EXT_ASC : SEAHORSE_EXT_PGP;
 	else if (suffix == SEAHORSE_ASC_SUFFIX)
 		ext = SEAHORSE_EXT_ASC;
 	else

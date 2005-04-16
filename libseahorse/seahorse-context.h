@@ -30,20 +30,6 @@
 #include "seahorse-key-pair.h"
 #include "seahorse-key-source.h"
 
-#define PGP_SCHEMAS "/desktop/pgp"
-#define ARMOR_KEY PGP_SCHEMAS "/ascii_armor"
-#define DEFAULT_KEY PGP_SCHEMAS "/default_key"
-#define ENCRYPTSELF_KEY PGP_SCHEMAS "/encrypt_to_self"
-#define LASTSIGNER_KEY PGP_SCHEMAS "/last_signer"
-#define MULTI_EXTENSION_KEY PGP_SCHEMAS "/package_extension"
-#define MULTI_SEPERATE_KEY PGP_SCHEMAS "/multi_seperate"
-#define KEYSERVER_KEY PGP_SCHEMAS "/keyservers/all_keyservers"
-#define LASTSERVER_KEY PGP_SCHEMAS "/keyservers/keyserver"
-#define LASTSEARCH_KEY PGP_SCHEMAS "/keyservers/search_text"
-#define PUBLISH_TO_KEY PGP_SCHEMAS "/keyservers/publish_to"
-
-#define SEAHORSE_SCHEMAS "/apps/seahorse"
-
 #define SEAHORSE_TYPE_CONTEXT			(seahorse_context_get_type ())
 #define SEAHORSE_CONTEXT(obj)			(GTK_CHECK_CAST ((obj), SEAHORSE_TYPE_CONTEXT, SeahorseContext))
 #define SEAHORSE_CONTEXT_CLASS(klass)		(GTK_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_CONTEXT, SeahorseContextClass))

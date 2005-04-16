@@ -20,7 +20,6 @@
  */
 
 #include <string.h>
-#include <eel/eel.h>
 
 #include "seahorse-gpgmex.h"
 #include "seahorse-op.h"
@@ -28,6 +27,7 @@
 #include "seahorse-context.h"
 #include "seahorse-key-source.h"
 #include "seahorse-vfs-data.h"
+#include "seahorse-gconf.h"
 
 /* helper function for importing @data. @data will be released.
  * returns number of keys imported or -1. */
@@ -250,8 +250,8 @@ encrypt_data_common (SeahorseKeySource *sksrc, GList *keys, gpgme_data_t plain,
 	if (GPG_IS_OK (*err)) {
 
         /* Add the default key if set and necessary */
-        if (eel_gconf_get_boolean (ENCRYPTSELF_KEY)) {
-            id = eel_gconf_get_string (DEFAULT_KEY);        
+        if (seahorse_gconf_get_boolean (ENCRYPTSELF_KEY)) {
+            id = seahorse_gconf_get_string (DEFAULT_KEY);        
             if (id != NULL) {
                 skey = seahorse_key_source_get_key (sksrc, id);
                 if (skey != NULL)
@@ -262,7 +262,7 @@ encrypt_data_common (SeahorseKeySource *sksrc, GList *keys, gpgme_data_t plain,
         /* Make keys into the right format */
         recips = seahorse_util_keylist_to_keys (keys);
         
-        gpgme_set_armor (sksrc->ctx, force_armor || eel_gconf_get_boolean (ARMOR_KEY));
+        gpgme_set_armor (sksrc->ctx, force_armor || seahorse_gconf_get_boolean (ARMOR_KEY));
 		*err = func (sksrc->ctx, recips, GPGME_ENCRYPT_ALWAYS_TRUST, plain, cipher);
         
         seahorse_util_free_keys (recips);
@@ -431,7 +431,7 @@ seahorse_op_sign_file (SeahorseKeyPair *signer, const gchar *path,
     
 	/* get detached signature */
     gpgme_set_textmode (sksrc->ctx, FALSE);
-    gpgme_set_armor (sksrc->ctx, eel_gconf_get_boolean (ARMOR_KEY));    
+    gpgme_set_armor (sksrc->ctx, seahorse_gconf_get_boolean (ARMOR_KEY));    
 	sign_data (sksrc, plain, sig, GPGME_SIG_MODE_DETACH, err);
 	g_return_if_fail (GPG_IS_OK (*err));
   

@@ -22,11 +22,11 @@
 #include <stdlib.h>
 #include <libintl.h>
 #include <gnome.h>
-#include <eel/eel.h>
 
 #include "seahorse-context.h"
 #include "seahorse-marshal.h"
 #include "seahorse-libdialogs.h"
+#include "seahorse-gconf.h"
 #include "seahorse-util.h"
 #include "seahorse-multi-source.h"
 #include "seahorse-pgp-source.h"
@@ -86,11 +86,7 @@ seahorse_context_init (SeahorseContext *sctx)
 
     /* Our multi source */
     sctx->priv->source = SEAHORSE_KEY_SOURCE (seahorse_multi_source_new ());
-  
-    /* Have gconf cache these sections */
-    eel_gconf_monitor_add (PGP_SCHEMAS);
-    eel_gconf_monitor_add (SEAHORSE_SCHEMAS);  
-    
+      
     /* The context is explicitly destroyed */
     g_object_ref (sctx);
 }
@@ -124,11 +120,7 @@ seahorse_context_finalize (GObject *gobject)
 	sctx = SEAHORSE_CONTEXT (gobject);
     g_assert (sctx->priv->source == NULL);
 	g_free (sctx->priv);
-
-    /* Remove from gconf cache */
-    eel_gconf_monitor_remove (PGP_SCHEMAS);
-    eel_gconf_monitor_remove (SEAHORSE_SCHEMAS);
-    	
+   	
 	G_OBJECT_CLASS (parent_class)->finalize (gobject);
 }
    
@@ -189,7 +181,7 @@ seahorse_context_get_default_key (SeahorseContext *sctx)
     SeahorseKey *skey = NULL;
     gchar *id;
     
-    id = eel_gconf_get_string (DEFAULT_KEY);
+    id = seahorse_gconf_get_string (DEFAULT_KEY);
     if (id != NULL && id[0]) 
         skey = seahorse_key_source_get_key (sctx->priv->source, id);
     g_free (id);

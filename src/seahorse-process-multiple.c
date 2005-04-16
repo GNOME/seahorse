@@ -25,11 +25,11 @@
 #include <libintl.h>
 
 #include <gnome.h>
-#include <eel/eel.h>
 #include <libgnomevfs/gnome-vfs.h>
 
 #include "seahorse-widget.h"
 #include "seahorse-context.h"
+#include "seahorse-gconf.h"
 #include "seahorse-util.h"
 
 /* Build a message for a given combination of files and folders */
@@ -163,7 +163,7 @@ prepare_dialog (SeahorseContext *sctx, const gchar* glade, const gchar* msg,
     /* The local stuff */        
     } else {
     
-        sep = eel_gconf_get_boolean (MULTI_SEPERATE_KEY);
+        sep = seahorse_gconf_get_boolean (MULTI_SEPERATE_KEY);
         
         /* Setup the package */
         w = glade_xml_get_widget (swidget->xml, "package-name");
@@ -195,7 +195,7 @@ get_results (SeahorseContext *sctx, SeahorseWidget *swidget)
     
     w = glade_xml_get_widget (swidget->xml, "do-separate");
     sep = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w));
-    eel_gconf_set_boolean (MULTI_SEPERATE_KEY, sep);
+    seahorse_gconf_set_boolean (MULTI_SEPERATE_KEY, sep);
               
     /* no packaging */                    
     if(!sep) { 
@@ -218,7 +218,7 @@ get_results (SeahorseContext *sctx, SeahorseWidget *swidget)
         {
             t++;
             if(t[0] != 0) 
-                eel_gconf_set_string (MULTI_EXTENSION_KEY, t);
+                seahorse_gconf_set_string (MULTI_EXTENSION_KEY, t);
         }
         
         return g_strdup(name);
@@ -271,7 +271,7 @@ seahorse_process_multiple(SeahorseContext *sctx, const gchar **uris, const gchar
         glade = "multi-encrypt";
         
     /* The package extension */
-    if ((ext = eel_gconf_get_string (MULTI_EXTENSION_KEY)) == NULL)
+    if ((ext = seahorse_gconf_get_string (MULTI_EXTENSION_KEY)) == NULL)
         ext = g_strdup ("zip"); /* Yes this happens when the schema isn't installed */    
         
     /* Figure out a good URI for our package */

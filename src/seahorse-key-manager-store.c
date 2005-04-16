@@ -20,13 +20,13 @@
  */
 
 #include <gnome.h>
-#include <eel/eel.h>
 
 #include "seahorse-key-manager-store.h"
 #include "seahorse-preferences.h"
 #include "seahorse-validity.h"
 #include "seahorse-util.h"
 #include "seahorse-op.h"
+#include "seahorse-gconf.h"
 #include "eggtreemultidnd.h"
 
 #define KEY_MANAGER_SORT_KEY "/apps/seahorse/listing/sort_by"
@@ -377,22 +377,23 @@ seahorse_key_manager_store_new (SeahorseKeySource *sksrc, GtkTreeView *view)
     seahorse_key_store_init (skstore, view);
 	
 	col = seahorse_key_store_append_column (view, _("Validity"), VALIDITY_STR);
-	gtk_tree_view_column_set_visible (col, eel_gconf_get_boolean (SHOW_VALIDITY_KEY));
+	gtk_tree_view_column_set_visible (col, seahorse_gconf_get_boolean (SHOW_VALIDITY_KEY));
 	gtk_tree_view_column_set_sort_column_id (col, VALIDITY);
 	
 	col = seahorse_key_store_append_column (view, _("Trust"), TRUST_STR);
-	gtk_tree_view_column_set_visible (col, eel_gconf_get_boolean (SHOW_TRUST_KEY));
+	gtk_tree_view_column_set_visible (col, seahorse_gconf_get_boolean (SHOW_TRUST_KEY));
 	gtk_tree_view_column_set_sort_column_id (col, TRUST);
 	
 	col = seahorse_key_store_append_column (view, _("Type"), TYPE);
-	gtk_tree_view_column_set_visible (col, eel_gconf_get_boolean (SHOW_TYPE_KEY));
+	gtk_tree_view_column_set_visible (col, seahorse_gconf_get_boolean (SHOW_TYPE_KEY));
 	gtk_tree_view_column_set_sort_column_id (col, TYPE);
 
 	col = seahorse_key_store_append_column (view, _("Expiration Date"), EXPIRES_STR);
-	gtk_tree_view_column_set_visible (col, eel_gconf_get_boolean (SHOW_EXPIRES_KEY));
+	gtk_tree_view_column_set_visible (col, seahorse_gconf_get_boolean (SHOW_EXPIRES_KEY));
 	gtk_tree_view_column_set_sort_column_id (col, EXPIRES);
-	
-	eel_gconf_notification_add (LISTING_SCHEMAS, (GConfClientNotifyFunc)gconf_notification, view);
+
+    seahorse_gconf_notify_lazy (LISTING_SCHEMAS, (GConfClientNotifyFunc)gconf_notification, 
+                                view, GTK_WIDGET (view));
 
     /* Tree drag */
 	egg_tree_multi_drag_add_drag_support (view);    

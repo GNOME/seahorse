@@ -19,9 +19,8 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <eel/eel.h>
-
 #include "seahorse-check-button-control.h"
+#include "seahorse-gconf.h"
 
 enum {
 	PROP_0,
@@ -116,10 +115,10 @@ seahorse_check_button_control_set_property (GObject *object, guint prop_id,
 	switch (prop_id) {
 		case PROP_GCONF_KEY:
 			control->gconf_key = g_strdup (g_value_get_string (value));
-			control->notify_id = eel_gconf_notification_add (control->gconf_key,
+			control->notify_id = seahorse_gconf_notify (control->gconf_key,
 				seahorse_check_button_control_gconf_notify, control);
 			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (control),
-				eel_gconf_get_boolean (control->gconf_key));
+				seahorse_gconf_get_boolean (control->gconf_key));
 			break;
 		default:
 			break;
@@ -150,7 +149,7 @@ seahorse_check_button_control_toggled (GtkToggleButton *toggle)
 	
 	control = SEAHORSE_CHECK_BUTTON_CONTROL (toggle);
 	
-	eel_gconf_set_boolean (control->gconf_key, gtk_toggle_button_get_active (toggle));
+	seahorse_gconf_set_boolean (control->gconf_key, gtk_toggle_button_get_active (toggle));
 }
 
 static void

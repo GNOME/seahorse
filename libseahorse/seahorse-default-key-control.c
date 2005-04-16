@@ -20,10 +20,9 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <eel/eel.h>
-
 #include "seahorse-default-key-control.h"
 #include "seahorse-key-pair.h"
+#include "seahorse-gconf.h"
 
 enum {
 	PROP_0,

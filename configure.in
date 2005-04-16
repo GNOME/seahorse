@@ -17,9 +17,8 @@ AC_CHECK_FUNCS(setresuid setresgid)
 AC_CHECK_FUNCS(strsep)
 AC_CHECK_FUNCS(mlock)
 
-PKG_CHECK_MODULES(SEAHORSE, libgnomeui-2.0 libglade-2.0
-			    gtk+-2.0 >= 2.4.0 eel-2.0
-			    gnome-mime-data-2.0 gnome-vfs-2.0)
+PKG_CHECK_MODULES(SEAHORSE, libgnomeui-2.0 libglade-2.0 gconf-2.0
+			      gtk+-2.0 >= 2.4.0 gnome-mime-data-2.0 gnome-vfs-2.0)
 
 PLUGIN_LIBTOOL_FLAGS="-module -avoid-version"
 AC_SUBST(PLUGIN_LIBTOOL_FLAGS)

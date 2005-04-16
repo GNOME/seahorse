@@ -20,7 +20,6 @@
  */
 
 #include <gnome.h>
-#include <eel/eel.h>
 
 #include "config.h"
 #include "seahorse-prefs.h"
@@ -28,6 +27,7 @@
 #include "seahorse-check-button-control.h"
 #include "seahorse-default-key-control.h"
 #include "seahorse-keyserver-control.h"
+#include "seahorse-gconf.h"
 
 /* From seahorse_preferences_cache.c */
 void seahorse_prefs_cache (SeahorseContext *ctx, SeahorseWidget *widget);
@@ -129,7 +129,7 @@ save_keyservers (GtkTreeModel *model)
         } while (gtk_tree_model_iter_next (model, &iter));
     }
     
-    eel_gconf_set_string_list (KEYSERVER_KEY, ks);
+    seahorse_gconf_set_string_list (KEYSERVER_KEY, ks);
 
     seahorse_util_string_slist_free (ks);
 }
@@ -257,7 +257,7 @@ gconf_notify (GConfClient *client, guint id, GConfEntry *entry, SeahorseWidget *
 static void
 gconf_unnotify (GtkWidget *widget, guint notify_id)
 {
-    eel_gconf_notification_remove (notify_id);
+    seahorse_gconf_unnotify (notify_id);
 }
 
 /* Perform keyserver page initialization */
@@ -272,7 +272,7 @@ setup_keyservers (SeahorseContext *sctx, SeahorseWidget *swidget)
     GSList *ks;
     guint notify_id;
     
-    ks = eel_gconf_get_string_list (KEYSERVER_KEY);
+    ks = seahorse_gconf_get_string_list (KEYSERVER_KEY);
     populate_keyservers (swidget, ks);
     seahorse_util_string_slist_free (ks);
     
@@ -288,8 +288,8 @@ setup_keyservers (SeahorseContext *sctx, SeahorseWidget *swidget)
     glade_xml_signal_connect_data (swidget->xml, "keyserver_remove_clicked",
             G_CALLBACK (keyserver_remove_clicked), swidget);
             
-    notify_id = eel_gconf_notification_add (KEYSERVER_KEY, 
-                       (GConfClientNotifyFunc)gconf_notify, swidget);
+    notify_id = seahorse_gconf_notify (KEYSERVER_KEY, (GConfClientNotifyFunc)gconf_notify, 
+                                       swidget);
     g_signal_connect (seahorse_widget_get_top (swidget), "destroy", 
                         G_CALLBACK (gconf_unnotify), GINT_TO_POINTER (notify_id));
                         
@@ -307,7 +307,7 @@ static void
 default_key_changed (SeahorseDefaultKeyControl *sdkc, gpointer *data)
 {
     const gchar *id = seahorse_default_key_control_active_id (sdkc);
-    eel_gconf_set_string (DEFAULT_KEY, id == NULL ? "" : id);    
+    seahorse_gconf_set_string (DEFAULT_KEY, id == NULL ? "" : id);    
 }
 
 static void
@@ -322,7 +322,7 @@ static void
 remove_gconf_notification (GObject *obj, gpointer data)
 {
     guint gconf_id = GPOINTER_TO_INT (data);
-    eel_gconf_notification_remove (gconf_id);
+    seahorse_gconf_unnotify (gconf_id);
 }
 
 /**
@@ -358,10 +358,10 @@ seahorse_prefs_new (SeahorseContext *sctx)
     gtk_container_add (GTK_CONTAINER (widget), GTK_WIDGET (sdkc));
     gtk_widget_show_all (widget);
 
-    seahorse_default_key_control_select_id (sdkc, eel_gconf_get_string (DEFAULT_KEY));    
+    seahorse_default_key_control_select_id (sdkc, seahorse_gconf_get_string (DEFAULT_KEY));    
     g_signal_connect (sdkc, "changed", G_CALLBACK (default_key_changed), NULL);
 
-    gconf_id = eel_gconf_notification_add (DEFAULT_KEY, (GConfClientNotifyFunc)gconf_notification, sdkc);
+    gconf_id = seahorse_gconf_notify (DEFAULT_KEY, (GConfClientNotifyFunc)gconf_notification, sdkc);
     g_signal_connect (sdkc, "destroy", G_CALLBACK (remove_gconf_notification), GINT_TO_POINTER (gconf_id));
     
 #ifdef WITH_AGENT   

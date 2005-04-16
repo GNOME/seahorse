@@ -20,9 +20,9 @@
  */
 
 #include <gnome.h>
-#include <eel/eel.h>
 
 #include "seahorse-prefs.h"
+#include "seahorse-gconf.h"
 #include "seahorse-preferences.h"
 #include "seahorse-widget.h"
 #include "seahorse-check-button-control.h"

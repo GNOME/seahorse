@@ -20,7 +20,6 @@
  */
 
 #include <gnome.h>
-#include <eel/eel.h>
 
 #include "seahorse-widget.h"
 #include "seahorse-gpgmex.h"
@@ -30,6 +29,7 @@
 #include "seahorse-preferences.h"
 #include "seahorse-server-source.h"
 #include "seahorse-multi-source.h"
+#include "seahorse-gconf.h"
 
 static void
 start_keyserver_search (SeahorseMultiSource *msrc, SeahorseKeySource *lsksrc,
@@ -58,7 +58,7 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
     search = gtk_entry_get_text (GTK_ENTRY (w));
     g_return_if_fail (search != NULL && search[0] != 0);
 
-    eel_gconf_set_string (LASTSEARCH_KEY, search);
+    seahorse_gconf_set_string (LASTSEARCH_KEY, search);
     
     /* This should be the default key source */
     lsksrc = seahorse_context_get_key_source (swidget->sctx);
@@ -68,7 +68,7 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
     msrc = seahorse_multi_source_new ();
             
     /* The default key server or null for all */
-    ks = eel_gconf_get_string_list (KEYSERVER_KEY);
+    ks = seahorse_gconf_get_string_list (KEYSERVER_KEY);
 
     for (l = ks; l; l = g_slist_next (l))
         start_keyserver_search (msrc, lsksrc, (const gchar*)(l->data), search);
@@ -123,7 +123,7 @@ seahorse_keyserver_search_show (SeahorseContext *sctx)
     w = glade_xml_get_widget (swidget->xml, "search-text");
     g_return_val_if_fail (w != NULL, win);
 
-    search = eel_gconf_get_string (LASTSEARCH_KEY);
+    search = seahorse_gconf_get_string (LASTSEARCH_KEY);
     if (search != NULL) {
         gtk_entry_set_text (GTK_ENTRY (w), search);
         g_free (search);

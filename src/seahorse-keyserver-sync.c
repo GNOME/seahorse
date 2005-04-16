@@ -21,7 +21,6 @@
 
 #include <libintl.h>
 #include <gnome.h>
-#include <eel/eel.h>
 
 #include "seahorse-widget.h"
 #include "seahorse-util.h"
@@ -33,6 +32,7 @@
 #include "seahorse-preferences.h"
 #include "seahorse-server-source.h"
 #include "seahorse-multi-source.h"
+#include "seahorse-gconf.h"
 
 static void 
 sync_import_complete (SeahorseOperation *op, SeahorseKeySource *sksrc)
@@ -42,7 +42,7 @@ sync_import_complete (SeahorseOperation *op, SeahorseKeySource *sksrc)
     if (!seahorse_operation_is_successful (op)) {
         seahorse_operation_steal_error (op, &err);
         seahorse_util_handle_error (err, _("Couldn't publish keys to server: %s"), 
-                                    eel_gconf_get_string (PUBLISH_TO_KEY));
+                                    seahorse_gconf_get_string (PUBLISH_TO_KEY));
     }    
     
     g_object_unref (sksrc);
@@ -109,7 +109,7 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
     mop = seahorse_multi_operation_new ();
 
     /* And now syncing keys from the servers */
-    ks = eel_gconf_get_string_list (KEYSERVER_KEY);
+    ks = seahorse_gconf_get_string_list (KEYSERVER_KEY);
     for (l = ks; l; l = g_slist_next (l)) {
 
         sksrc = SEAHORSE_KEY_SOURCE (seahorse_server_source_new (lsksrc, (const gchar*)(l->data), NULL));
@@ -122,7 +122,7 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
     seahorse_util_string_slist_free (ks);
     
     /* Publishing keys online */    
-    keyserver = eel_gconf_get_string (PUBLISH_TO_KEY);
+    keyserver = seahorse_gconf_get_string (PUBLISH_TO_KEY);
     if (keyserver && keyserver[0]) {
         
         gchar *exported;
@@ -173,7 +173,7 @@ update_message (SeahorseWidget *swidget)
     w = glade_xml_get_widget (swidget->xml, "publish-message");
     w2 = glade_xml_get_widget (swidget->xml, "sync-message");
 
-    t = eel_gconf_get_string (PUBLISH_TO_KEY);
+    t = seahorse_gconf_get_string (PUBLISH_TO_KEY);
     if (t && t[0]) {
         gtk_widget_show (w);
         gtk_widget_hide (w2);
@@ -199,7 +199,7 @@ static void
 unhook_notification (GtkWidget *widget, gpointer data)
 {
     guint notify_id = GPOINTER_TO_INT (data);
-    eel_gconf_notification_remove (notify_id);
+    seahorse_gconf_unnotify (notify_id);
 }
 
 /**
@@ -237,7 +237,7 @@ seahorse_keyserver_sync_show (SeahorseContext *sctx, GList *keys)
             
     /* The right help message */
     update_message (swidget);
-    notify_id = eel_gconf_notification_add (PUBLISH_TO_KEY, gconf_notify, swidget);
+    notify_id = seahorse_gconf_notify (PUBLISH_TO_KEY, gconf_notify, swidget);
     g_signal_connect (win, "destroy", G_CALLBACK (unhook_notification), 
                       GINT_TO_POINTER (notify_id));
 

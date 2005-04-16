@@ -24,9 +24,9 @@
 #include <string.h>
 #include <time.h>
 
-#include <eel/eel.h>
 #include <gnome.h>
 
+#include "seahorse-gconf.h"
 #include "seahorse-gpgmex.h"
 #include "seahorse-agent.h"
 #include "seahorse-agent-secmem.h"
@@ -97,14 +97,14 @@ seahorse_agent_cache_check (gpointer unused)
         return FALSE;
 
     if (g_hash_table_size (g_cache) > 0) {
-        if (!eel_gconf_get_boolean (SETTING_CACHE)) {
+        if (!seahorse_gconf_get_boolean (SETTING_CACHE)) {
             /* No caching */
             ttl = 0;
         }
 
-        else if (eel_gconf_get_boolean (SETTING_EXPIRE)) {
+        else if (seahorse_gconf_get_boolean (SETTING_EXPIRE)) {
             /* How long to cache. gconf has in minutes, we want seconds */
-            ttl = eel_gconf_get_integer (SETTING_TTL) * 60;
+            ttl = seahorse_gconf_get_integer (SETTING_TTL) * 60;
         }
 
         /* negative means cache indefinitely */
@@ -312,7 +312,7 @@ seahorse_agent_cache_set (const gchar *id, const gchar *pass,
     g_assert (pass && pass[0]);
 
     /* Whether to cache passwords or not */
-    cache = eel_gconf_get_boolean (SETTING_CACHE);
+    cache = seahorse_gconf_get_boolean (SETTING_CACHE);
 
     /* No need to even bother the cache in this case */
     if (!cache && !lock)

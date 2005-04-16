@@ -20,9 +20,9 @@
  */
 
 #include <gnome.h>
-#include <eel/eel.h>
 
 #include "seahorse-key-store.h"
+#include "seahorse-gconf.h"
 
 enum {
 	PROP_0,
@@ -521,7 +521,7 @@ sort_changed(GtkTreeSortable *sort, gpointer user_data)
             t = klass->col_ids[id];
             if (t != NULL) {
                 x = g_strconcat (ord == GTK_SORT_DESCENDING ? "-" : "", t, NULL);
-                eel_gconf_set_string (klass->gconf_sort_key, x);
+                seahorse_gconf_set_string (klass->gconf_sort_key, x);
                 g_free (x);
             }
         }
@@ -529,7 +529,7 @@ sort_changed(GtkTreeSortable *sort, gpointer user_data)
     
     /* No sort so save blank */
     else {
-        eel_gconf_set_string (klass->gconf_sort_key, "");
+        seahorse_gconf_set_string (klass->gconf_sort_key, "");
     }
 }
 
@@ -870,7 +870,7 @@ seahorse_key_store_append_column (GtkTreeView *view, const gchar *label, const g
     key = SEAHORSE_KEY_STORE_GET_CLASS (skstore)->gconf_sort_key;
     
     /* Update sort order in case the sorted column was added */
-    if (key && (sort = eel_gconf_get_string (key)) != NULL) {
+    if (key && (sort = seahorse_gconf_get_string (key)) != NULL) {
         set_sort_to (skstore, sort);
         g_free (sort);
     }  

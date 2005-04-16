@@ -27,12 +27,12 @@
 
 #include <signal.h>
 #include <stdlib.h>
-#include <eel/eel.h>
 #include <gnome.h>
 
 #include "seahorse-context.h"
 #include "seahorse-widget.h"
 #include "seahorse-gpg-options.h"
+#include "seahorse-gconf.h"
 
 #define SETTING_CACHE       "/apps/seahorse/agent/cache_enabled"
 #define SETTING_TTL         "/apps/seahorse/agent/cache_ttl"
@@ -207,7 +207,7 @@ control_destroy (GtkWidget *widget, gpointer data)
     CtlLinkups *lu = (CtlLinkups *) data;
     g_assert (lu->gconf_key);
     g_assert (lu->notify_id);
-    eel_gconf_notification_remove (lu->notify_id);
+    seahorse_gconf_unnotify (lu->notify_id);
 
     g_free (lu->gconf_key);
     g_free (lu);
@@ -227,9 +227,9 @@ static void
 check_toggled (GtkWidget *widget, gpointer data)
 {
     CtlLinkups *lu = (CtlLinkups *) data;
-    eel_gconf_set_boolean (lu->gconf_key,
-                           gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON
-                                                         (widget)));
+    seahorse_gconf_set_boolean (lu->gconf_key,
+                                gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON
+                                                              (widget)));
 }
 
 /* Change button based on gconf */
@@ -257,7 +257,7 @@ setup_check_control (SeahorseContext *ctx, SeahorseWidget *sw,
     /* Hookup load events */
     lu = g_new0 (CtlLinkups, 1);
     lu->gconf_key = g_strdup (key);
-    lu->notify_id = eel_gconf_notification_add (key, check_notify, ctl);
+    lu->notify_id = seahorse_gconf_notify (key, check_notify, ctl);
 
     /* Hookup save events */
     g_signal_connect (ctl, "toggled", G_CALLBACK (check_toggled), lu);
@@ -267,7 +267,7 @@ setup_check_control (SeahorseContext *ctx, SeahorseWidget *sw,
 
     /* Set initial value, and listen on events */
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ctl),
-                                  eel_gconf_get_boolean (key));
+                                  seahorse_gconf_get_boolean (key));
 }
 
 /* Change gconf based on spinner */
@@ -275,9 +275,9 @@ static void
 spinner_changed (GtkWidget *widget, gpointer data)
 {
     CtlLinkups *lu = (CtlLinkups *) data;
-    eel_gconf_set_integer (lu->gconf_key,
-                           gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON
-                                                             (widget)));
+    seahorse_gconf_set_integer (lu->gconf_key,
+                                gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON
+                                                                  (widget)));
 }
 
 /* Change spinner based on gconf */
@@ -305,7 +305,7 @@ setup_spinner_control (SeahorseContext *ctx, SeahorseWidget *sw,
     /* Hookup load events */
     lu = g_new0 (CtlLinkups, 1);
     lu->gconf_key = g_strdup (key);
-    lu->notify_id = eel_gconf_notification_add (key, spinner_notify, ctl);
+    lu->notify_id = seahorse_gconf_notify (key, spinner_notify, ctl);
 
     /* Hookup save events */
     g_signal_connect (ctl, "changed", G_CALLBACK (spinner_changed), lu);
@@ -314,7 +314,7 @@ setup_spinner_control (SeahorseContext *ctx, SeahorseWidget *sw,
     g_signal_connect (ctl, "destroy", G_CALLBACK (control_destroy), lu);
 
     /* Set initial value, and listen on events */
-    gtk_spin_button_set_value (GTK_SPIN_BUTTON (ctl), eel_gconf_get_integer (key));
+    gtk_spin_button_set_value (GTK_SPIN_BUTTON (ctl), seahorse_gconf_get_integer (key));
 }
 
 /* Basic GError handler */
