@@ -1,51 +1,41 @@
 If you want to hack on seahorse, please ask on seahorse-devel@lists.sourceforge.net.
 Patches are preferred, and should be submitted on bugzilla.gnome.org if possible.
 
-For a todo list, first check bugzilla, then look at TODO.
-I try to keep bugzilla updated with possibly enhancements and any current bugs
-since TODO is not updated as often as it should be.
-
-Translators are welcome to update translations, but committing
-to head is not recommended atm because it is not string stable.
-
-For those looking over the code, I realize some parts may not be very readable.
-I am happy to explain any confusing parts and add comments where they are missing,
-just ask on seahorse-devel.
+For a todo list, first check bugzilla, then look at TODO. Bugzilla is also updated 
+with possibe enhancements and any current bugs.
 
 Here is a description of the modules:
 
-* agent: GPG Password caching agent
+ o agent: GPG Password caching agent
 
-* bonobo: Bonobo servers. Currently there is the only the Nautilus Context Menu server.
-Future servers will be a SeahorseContext Factory to serve out-of-process contexts and nautilus properties pages.
-The rationale for the context factory is that only for specific operations is a new context needed.
-For everything else, using the same context allows signals to be emitted for all processes,
-and any new keys will be added in one process will be added in any others.
-The properties pages will be at least gpg files, which may include signature verification,
-and possibly a key-properties page for the keys:/// uri.
+ o bonobo: Bonobo servers. Currently there is the only the Nautilus Context Menu 
+   server. Bonobo is being phased out of usage, and as such nothing new should 
+   probably go in here.
 
-* data: Data files that need to be processed. Current this is just schemas.
-They are here because there will be multiple schemas files to separate the app and pgp settings.
+ o data: Data files that need to be processed. Current this is just schemas. They 
+   are here because there will be multiple schemas files to separate the app and 
+   pgp settings.
 
-* libseahorse: Common library code for seahorse. This should not depend on other code modules (read: not data),
-and other code modules should only depend on this (or bonobo servers).
-Any code that is depended on by multiple modules, such as src/ and plugins/nautilus,
-is placed here. Currently this includes SeahorseContext & keys, operations,
-and common dialogs.
+ o libseahorse: Common library code for seahorse. This should not depend on other 
+   code modules (read: not data), and other code modules should only depend on this 
+   (or bonobo servers). Any code that is depended on by multiple modules, such as 
+   src/ and plugins/nautilus, is placed here. Currently this includes 
+   SeahorseContext & keys, operations, and common dialogs.
 
-* plugins: Contains subdirs for any possible apps in which seahorse can provide a plugin.
-Currently this includes nautilus and gedit. Future possibilities are AbiWord and Gaim.
+ o plugins: Contains subdirs for any possible apps in which seahorse can provide 
+   a plugin. Currently this includes nautilus and gedit. Future possibilities are 
+   AbiWord and Gaim.
 
-* plugins/nautilus: This doesn't really contain nautilus targetted code,
-but nautilus/file-manager oriented code that doesn't go anywhere else.
-Currently this is just a control center capplet and mime data.
-Future plans are to add a keys:/// uri for browsing public keys
-Bonobo stuff, such as property pages, should go in the bonobo module.
+ o plugins/nautilus: This doesn't really contain nautilus targetted code, but 
+   nautilus/file-manager oriented code that doesn't go anywhere else. Currently 
+   this is just a control center capplet and mime data. 
 
-* plugins/gedit: The gedit plugin.
+ o plugins/nautilus-ext: An extension for Nautilus 2.10 and later.
 
-* src: The main app code. This currently includes the main window & dialogs,
-along with code that hasn't been deemed necessary to include in libseahorse.
+ o plugins/gedit: The gedit plugin.
+
+ o src: The main app code. This currently includes the main window & dialogs,
+   along with code that hasn't been deemed necessary to include in libseahorse.
 
 
 USING THE GPG EXECUTABLE DIRECTLY
@@ -79,4 +69,4 @@ below, and must be discussed before hand on the seahorse-devel mailing list.
  o Export Secret Key Support 
    - (not yet implemented)
 
-last updated 2005-02-09
+last updated 2005-04-16
