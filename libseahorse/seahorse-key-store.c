@@ -581,6 +581,35 @@ check_toggled(GtkCellRendererToggle *cellrenderertoggle, gchar *path, gpointer u
     g_signal_emit_by_name (selection, "changed");    
 }
 
+static void
+row_activated (GtkTreeView *treeview, GtkTreePath *path, GtkTreeViewColumn *arg2, 
+               SeahorseKeyStore *skstore)
+{
+    GtkTreeModel* fmodel = GTK_TREE_MODEL (skstore->priv->sort);
+    GtkTreeSelection *selection;
+    gboolean prev = FALSE;
+    GtkTreeIter iter;
+    GtkTreeIter child;
+    GValue v;
+
+    memset (&v, 0, sizeof(v));
+    g_return_if_fail (path != NULL);
+    g_return_if_fail (gtk_tree_model_get_iter (fmodel, &iter, path));
+    
+    /* We get notified in filtered coordinates, we have to convert those to base */
+    seahorse_key_store_get_base_iter (skstore, &child, &iter);
+ 
+    gtk_tree_model_get_value (GTK_TREE_MODEL (skstore), &child, KEY_STORE_CHECK, &v);
+    if(G_VALUE_TYPE (&v) == G_TYPE_BOOLEAN)
+        prev = g_value_get_boolean (&v);
+    g_value_unset (&v);    
+    
+    gtk_tree_store_set (GTK_TREE_STORE (skstore), &child, KEY_STORE_CHECK, prev ? FALSE : TRUE, -1);
+
+    selection = gtk_tree_view_get_selection (treeview);
+    g_signal_emit_by_name (selection, "changed");    
+}
+
 /* Creates a new #SeahorseKeyRow for listening to key signals */
 static void
 seahorse_key_row_add (SeahorseKeyStore *skstore, GtkTreeIter *iter, SeahorseKey *skey)
@@ -711,6 +740,7 @@ seahorse_key_store_init (SeahorseKeyStore *skstore, GtkTreeView *view)
         col = gtk_tree_view_column_new_with_attributes ("", renderer, "active", KEY_STORE_CHECK, NULL);
         gtk_tree_view_column_set_resizable (col, FALSE);
         gtk_tree_view_append_column (view, col);
+        g_signal_connect (view, "row_activated", G_CALLBACK (row_activated), skstore);
     }
     
     /* When using key pair icons, we add an icon column */

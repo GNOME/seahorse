@@ -107,6 +107,12 @@ filter_changed (GtkWidget *widget, SeahorseKeyStore* skstore)
     g_object_set (skstore, "filter", text, NULL);
 }
 
+static void
+filter_activated (GtkEntry *entry, GtkWidget *widget)
+{
+    gtk_widget_grab_focus (widget);
+}
+
 /* Called when properties on the SeahorseKeyStore object change */
 static void
 update_filters (GObject* object, GParamSpec* arg, SeahorseWidget* swidget)
@@ -186,6 +192,8 @@ seahorse_recipients_get (SeahorseContext *sctx, SeahorseKeyPair **signer)
                               G_CALLBACK (mode_changed), skstore);
     glade_xml_signal_connect_data (swidget->xml, "on_filter_changed",
                               G_CALLBACK (filter_changed), skstore);
+    glade_xml_signal_connect_data (swidget->xml, "on_filter_activate",
+                              G_CALLBACK (filter_activated), view);
 
     g_signal_connect (skstore, "notify", G_CALLBACK (update_filters), swidget);
     update_filters (G_OBJECT (skstore), NULL, swidget);
