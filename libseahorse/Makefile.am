@@ -22,9 +22,20 @@ else
 AGENT_SRCS = 
 endif
 
+if WITH_LDAP
+LDAP_SRCS = seahorse-ldap-source.c seahorse-ldap-source.h
+else
+LDAP_SRCS = 
+endif
+
+if WITH_HKP
+HKP_SRCS = seahorse-hkp-source.c seahorse-hkp-source.h
+else
+HKP_SRCS
+endif
+
 if WITH_KEYSERVER
 KEYSERVER_SRCS = seahorse-server-source.c seahorse-server-source.h 
-KEYSERVER_SRCS += seahorse-ldap-source.c seahorse-ldap-source.h
 KEYSERVER_SRCS += seahorse-keyserver-control.c seahorse-keyserver-control.h
 else
 KEYSERVER_SRCS = 
@@ -59,7 +70,10 @@ libseahorse_internal_la_SOURCES = \
     seahorse-gconf.c seahorse-gconf.h \
 	$(BUILT_SOURCES) \
 	$(AGENT_SRCS) \
-	$(KEYSERVER_SRCS) 
+	$(KEYSERVER_SRCS) \
+    $(LDAP_SRCS) \
+    $(HKP_SRCS)
+    
 
 seahorse-marshal.h: seahorse-marshal.list $(GLIB_GENMARSHAL)
 	$(GLIB_GENMARSHAL) $< --header --prefix=seahorse_marshal > $@

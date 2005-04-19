@@ -1,0 +1,60 @@
+/*
+ * Seahorse
+ *
+ * Copyright (C) 2005 Nate Nielsen
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the
+ * Free Software Foundation, Inc.,
+ * 59 Temple Place, Suite 330,
+ * Boston, MA 02111-1307, USA.
+ */
+
+#ifndef __SEAHORSE_HKP_SOURCE_H__
+#define __SEAHORSE_HKP_SOURCE_H__
+
+#include "config.h"
+#include "seahorse-server-source.h"
+
+#ifdef WITH_HKP
+
+#define SEAHORSE_TYPE_HKP_SOURCE            (seahorse_hkp_source_get_type ())
+#define SEAHORSE_HKP_SOURCE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_HKP_SOURCE, SeahorseHKPSource))
+#define SEAHORSE_HKP_SOURCE_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_HKP_SOURCE, SeahorseHKPSourceClass))
+#define SEAHORSE_IS_HKP_SOURCE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_HKP_SOURCE))
+#define SEAHORSE_IS_HKP_SOURCE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_HKP_SOURCE))
+#define SEAHORSE_HKP_SOURCE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_HKP_SOURCE, SeahorseHKPSourceClass))
+
+typedef struct _SeahorseHKPSource SeahorseHKPSource;
+typedef struct _SeahorseHKPSourceClass SeahorseHKPSourceClass;
+
+struct _SeahorseHKPSource {
+    SeahorseServerSource parent;
+    
+    /*< private >*/
+};
+
+struct _SeahorseHKPSourceClass {
+    SeahorseServerSourceClass parent_class;
+};
+
+GType                 seahorse_hkp_source_get_type (void);
+
+SeahorseHKPSource*    seahorse_hkp_source_new      (SeahorseKeySource *lsrc, 
+                                                    const gchar *server,
+                                                    const gchar *pattern);
+
+gboolean              seahorse_hkp_is_valid_uri    (const gchar *uri);
+
+#endif /* WITH_HKP */
+
+#endif /* __SEAHORSE_HKP_SOURCE_H__ */

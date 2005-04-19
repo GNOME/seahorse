@@ -182,7 +182,40 @@ if test "$try_ldap" = yes ; then
   done
 fi	
 
+AM_CONDITIONAL(WITH_LDAP, test "$with_ldap" = "yes")
 SEAHORSE_LIBS="$SEAHORSE_LIBS $LDAP_LIBS"
+
+
+dnl ***************
+dnl HKP (libsoup)
+dnl ***************
+
+# Allow hkp to be disabled 
+AC_ARG_ENABLE(hkp,
+        AC_HELP_STRING([--disable-hkp],
+        [disable HKP keyserver interface]))
+
+# HKP tests 
+if test "$enable_hkp" = "no"; then
+	echo "disabling HKP keyserver interface"
+else
+    
+	echo "checking for supported versions of libsoup..."
+	
+	PKG_CHECK_MODULES(SOUP, libsoup-2.2, 
+        [enable_hkp=yes],  
+        [enable_hkp=no])
+
+    if test "$enable_hkp" = yes; then
+        with_keyserver=yes
+		AC_DEFINE(WITH_HKP, 1, [Support for HKP operations])
+        SEAHORSE_LIBS="$SEAHORSE_LIBS $SOUP_LIBS"
+        SEAHORSE_CFLAGS="$SEAHORSE_CFLAGS $SOUP_CFLAGS"
+    fi
+fi
+
+AM_CONDITIONAL(WITH_HKP, test "$enable_hkp" = "yes")
+
 
 dnl ***************
 dnl KEYSERVER
@@ -348,6 +381,7 @@ GnuPG Version:           $gnupg_version
 GPGME Version:           $gpgme_config_version
 Keyserver Support:       $with_keyserver
   LDAP:                  $with_ldap
+  HKP:                   $enable_hkp
 Plugins: 
   Seahorse Agent:        $enable_agent
   GEdit:                 $enable_gedit

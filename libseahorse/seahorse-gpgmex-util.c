@@ -96,12 +96,16 @@ gpgmex_key_add_subkey (gpgme_key_t key, const char *fpr, guint flags,
     
     /* Figure out the key id */
     n = strlen (fpr);
-    if (n >= 16)
-        fpr += n - 16;
-    else /* This string must be 16 characters long */
+    if (n < 8) 
         fpr = "INVALID INVALID ";
-        
-    subkey->keyid = g_strdup (fpr);
+    if (n >= 16) {
+        fpr += n - 16;
+        subkey->keyid = g_strdup (fpr);
+    } else if (n < 16) {
+        subkey->keyid = g_new0 (char, 17);
+        memset (subkey->keyid, ' ', 16);
+        strcpy (subkey->keyid + (16 - n), fpr);
+    }
     
     add_subkey_to_key (key, subkey);
 }

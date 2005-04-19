@@ -268,7 +268,6 @@ escape_ldap_value (const gchar *v)
 #define SEAHORSE_IS_LDAP_OPERATION_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_LDAP_OPERATION))
 #define SEAHORSE_LDAP_OPERATION_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_LDAP_OPERATION, SeahorseLDAPOperationClass))
 
-/* This callback is expected to use or unref key. */
 typedef gboolean (*OpLDAPCallback)   (SeahorseOperation *op, LDAPMessage *result);
     
 DECLARE_OPERATION (LDAP, ldap)
@@ -1161,50 +1160,6 @@ seahorse_ldap_source_refresh (SeahorseKeySource *src, const gchar *key)
     }
 }
 
-/* Breaks out one block of data (usually a key) */
-static guint
-copy_gpgme_data (GString *buf, gpgme_data_t data, const gchar *start, 
-                 const gchar* end)
-{
-    const gchar *t;
-    guint copied = 0;
-    gchar ch;
-     
-    /* Look for the beginning */
-    t = start;
-    while (gpgme_data_read (data, &ch, 1) == 1) {
-        
-        /* Match next char */            
-        if (*t == ch)
-            t++;
-
-        /* Did we find the whole string? */
-        if (!*t) {
-            buf = g_string_append (buf, start);
-            copied += strlen (start);
-            break;
-        }
-    } 
-    
-    /* Look for the end */
-    t = end;
-    while (gpgme_data_read (data, &ch, 1) == 1) {
-        
-        /* Match next char */
-        if (*t == ch)
-            t++;
-        
-        buf = g_string_append_c (buf, ch);
-        copied++;
-                
-        /* Did we find the whole string? */
-        if (!*t)
-            break;
-    }
-    
-    return copied;
-}
-
 static SeahorseOperation* 
 seahorse_ldap_source_import (SeahorseKeySource *sksrc, gpgme_data_t data)
 {
@@ -1220,8 +1175,8 @@ seahorse_ldap_source_import (SeahorseKeySource *sksrc, gpgme_data_t data)
     for (;;) {
      
         buf = g_string_sized_new (2048);
-        len = copy_gpgme_data (buf, data, "-----BEGIN PGP PUBLIC KEY BLOCK-----",
-                                          "-----END PGP PUBLIC KEY BLOCK-----");
+        len = seahorse_util_read_data_block (buf, data, "-----BEGIN PGP PUBLIC KEY BLOCK-----",
+                                             "-----END PGP PUBLIC KEY BLOCK-----");
     
         if (len > 0) {
             keydata = g_slist_prepend (keydata, g_string_free (buf, FALSE));

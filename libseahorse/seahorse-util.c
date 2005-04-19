@@ -291,6 +291,61 @@ seahorse_util_write_data_to_text (gpgme_data_t data)
 }
 
 /** 
+ * seahorse_util_read_data_block
+ * 
+ * Breaks out one block of data (usually a key)
+ * 
+ * @buf: A string buffer to write the data to.
+ * @data: The GPGME data block to read from.
+ * @start: The start signature to look for.
+ * @end: The end signature to look for.
+ * 
+ * Returns: The number of bytes copied.
+ */
+guint
+seahorse_util_read_data_block (GString *buf, gpgme_data_t data, 
+                               const gchar *start, const gchar* end)
+{
+    const gchar *t;
+    guint copied = 0;
+    gchar ch;
+     
+    /* Look for the beginning */
+    t = start;
+    while (gpgme_data_read (data, &ch, 1) == 1) {
+        
+        /* Match next char */            
+        if (*t == ch)
+            t++;
+
+        /* Did we find the whole string? */
+        if (!*t) {
+            buf = g_string_append (buf, start);
+            copied += strlen (start);
+            break;
+        }
+    } 
+    
+    /* Look for the end */
+    t = end;
+    while (gpgme_data_read (data, &ch, 1) == 1) {
+        
+        /* Match next char */
+        if (*t == ch)
+            t++;
+        
+        buf = g_string_append_c (buf, ch);
+        copied++;
+                
+        /* Did we find the whole string? */
+        if (!*t)
+            break;
+    }
+    
+    return copied;
+}
+
+/** 
  * seahorse_util_printf_fd:
  * @fd: The file descriptor to write to
  * @fmt: The data to write

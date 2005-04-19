@@ -27,6 +27,7 @@
 #include "seahorse-gpgmex.h"
 #include "seahorse-operation.h"
 #include "seahorse-ldap-source.h"
+#include "seahorse-hkp-source.h"
 #include "seahorse-server-source.h"
 #include "seahorse-multi-source.h"
 #include "seahorse-util.h"
@@ -568,7 +569,7 @@ parse_keyserver_uri (char *uri, const char **scheme, const char **host)
 
     *scheme = strsep(&uri, ":");
     if (uri == NULL) {
-        /* Assume HKP if there is no scheme */
+        /* Assume LDAP if there is no scheme */
         assume_ldap = 1;
         uri = (char*)*scheme;
         *scheme = "ldap";
@@ -618,6 +619,13 @@ seahorse_server_source_new (SeahorseKeySource *locsrc, const gchar *server,
             ssrc = SEAHORSE_SERVER_SOURCE (seahorse_ldap_source_new (locsrc, host, pattern));
         else
 #endif /* WITH_LDAP */
+        
+#ifdef WITH_HKP
+        if (g_ascii_strcasecmp (scheme, "hkp") == 0)
+            ssrc = SEAHORSE_SERVER_SOURCE (seahorse_hkp_source_new (locsrc, host, pattern));
+        else
+#endif /* WITH_HKP */
+        
             g_warning ("unsupported keyserver uri scheme: %s", scheme);
     }
     
