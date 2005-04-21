@@ -31,7 +31,7 @@ endif
 if WITH_HKP
 HKP_SRCS = seahorse-hkp-source.c seahorse-hkp-source.h
 else
-HKP_SRCS
+HKP_SRCS =
 endif
 
 if WITH_KEYSERVER
