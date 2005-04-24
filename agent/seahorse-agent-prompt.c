@@ -296,6 +296,7 @@ create_prompt_window (SeahorseAgentPassReq *pr)
                              G_CALLBACK (gtk_widget_grab_default), G_OBJECT (w), 0);
 
     gtk_window_set_position (GTK_WINDOW (win), GTK_WIN_POS_CENTER);
+    gtk_window_set_keep_above(GTK_WINDOW (win), TRUE);
     gtk_widget_show_all (win);
     return win;
 }
@@ -423,6 +424,7 @@ create_auth_window (SeahorseAgentPassReq *pr)
     gtk_widget_grab_default (w);
 
     gtk_window_set_position (GTK_WINDOW (win), GTK_WIN_POS_CENTER);
+    gtk_window_set_keep_above(GTK_WINDOW (win), TRUE);
     gtk_widget_show_all (win);
     return win;
 }
