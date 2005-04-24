@@ -238,6 +238,10 @@ gconf_notification (GConfClient *gclient, guint id, GConfEntry *entry, GtkTreeVi
 	GtkTreeViewColumn *col;
 	
 	key = gconf_entry_get_key (entry);
+
+    g_return_if_fail (key != NULL);
+    g_return_if_fail (GTK_IS_TREE_VIEW (view));
+    
 	value = gconf_entry_get_value (entry);
 	
 	if (g_str_equal (key, SHOW_VALIDITY_KEY))
