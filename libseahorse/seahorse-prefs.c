@@ -27,6 +27,7 @@
 #include "seahorse-check-button-control.h"
 #include "seahorse-default-key-control.h"
 #include "seahorse-keyserver-control.h"
+#include "seahorse-server-source.h"
 #include "seahorse-gconf.h"
 
 /* From seahorse_preferences_cache.c */
@@ -34,19 +35,11 @@ void seahorse_prefs_cache (SeahorseContext *ctx, SeahorseWidget *widget);
 
 #ifdef WITH_KEYSERVER
 
-#define NEW_KEYSERVER_MSG _("[Add a key server here]")
 #define UPDATING_MODEL    "updating"
 
-/* 
- * Our tree store has two columns. The main one is just the keyserver
- * URI text. The other is a flag which is only set for the 'Add a 
- * keyserver' message. It lets us tell the difference between the two
- * types of rows and also color it appropriately.
- */
 enum 
 {
     KEYSERVER_COLUMN,
-    UNUSED_COLUMN,
     N_COLUMNS
 };
 
@@ -57,18 +50,14 @@ keyserver_cell_edited (GtkCellRendererText *cell, gchar *path, gchar *text,
                        GtkTreeModel *model)
 {
     GtkTreeIter iter;
-    gboolean unused;
+    
+    if (!seahorse_server_source_valid_uri (text)) {
+        seahorse_util_show_error (NULL, _("<b><big>Not a valid Key Server address.</big></b>\n\nFor help contact your system adminstrator or the administrator of the key server." ));
+        return;
+    }
     
     g_return_if_fail (gtk_tree_model_get_iter_from_string (model, &iter, path));
-    gtk_tree_model_get (model, &iter, UNUSED_COLUMN, &unused, -1);
-
-    /* If a message cell and the user left the text as the message, ignore */
-    if (unused && g_utf8_collate (text, NEW_KEYSERVER_MSG) == 0)
-        return;
-        
-    /* TODO: Validate text. It should be either a valid URL */
-    gtk_tree_store_set (GTK_TREE_STORE (model), &iter, KEYSERVER_COLUMN, text, 
-                                                       UNUSED_COLUMN, FALSE, -1);
+    gtk_tree_store_set (GTK_TREE_STORE (model), &iter, KEYSERVER_COLUMN, text, -1);
 }
 
 /* The selection changed on the tree */
@@ -85,11 +74,7 @@ keyserver_sel_changed (GtkTreeSelection *selection, SeahorseWidget *swidget)
 static void
 remove_row (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer data)
 {
-    gboolean unused;
-    gtk_tree_model_get (model, iter, UNUSED_COLUMN, &unused, -1);
-
-    if (!unused)
-        gtk_tree_store_remove (GTK_TREE_STORE (model), iter);
+    gtk_tree_store_remove (GTK_TREE_STORE (model), iter);
 }
 
 /* User wants to remove selected rows */
@@ -110,27 +95,18 @@ save_keyservers (GtkTreeModel *model)
 {
     GSList *ks = NULL;
     GtkTreeIter iter;
-    gboolean unused;
     gchar *v;
     
     if (gtk_tree_model_get_iter_first (model, &iter)) {
         
         do {
-            gtk_tree_model_get (model, &iter, KEYSERVER_COLUMN, &v, 
-                                              UNUSED_COLUMN, &unused, -1);
+            gtk_tree_model_get (model, &iter, KEYSERVER_COLUMN, &v, -1);
             g_return_if_fail (v != NULL);
-
-            if (unused) {            
-                g_free (v);
-                continue;
-            }
-            
             ks = g_slist_append (ks, v);
         } while (gtk_tree_model_iter_next (model, &iter));
     }
     
     seahorse_gconf_set_string_list (KEYSERVER_KEY, ks);
-
     seahorse_util_string_slist_free (ks);
 }
 
@@ -169,7 +145,6 @@ populate_keyservers (SeahorseWidget *swidget, GSList *ks)
     GtkTreeViewColumn *column;
     GtkTreeIter iter;
     gboolean cont;
-    gboolean unused;
     gchar *v;
         
     treeview = GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, "keyservers"));
@@ -179,18 +154,16 @@ populate_keyservers (SeahorseWidget *swidget, GSList *ks)
     /* This is our first time so create a store */
     if (!model) {
 
-        store = gtk_tree_store_new (N_COLUMNS, G_TYPE_STRING, G_TYPE_BOOLEAN);
+        store = gtk_tree_store_new (N_COLUMNS, G_TYPE_STRING);
         model = GTK_TREE_MODEL (store);
         gtk_tree_view_set_model (treeview, model);
 
         /* Make the column */
         renderer = gtk_cell_renderer_text_new ();
         g_object_set (renderer, "editable", TRUE, NULL);
-        g_object_set (renderer, "foreground", "DarkGray", NULL);
         g_signal_connect(renderer, "edited", G_CALLBACK (keyserver_cell_edited), store);
         column = gtk_tree_view_column_new_with_attributes (_("URL"), renderer , 
-                                        "text", KEYSERVER_COLUMN, 
-                                        "foreground-set", UNUSED_COLUMN, NULL);
+                                        "text", KEYSERVER_COLUMN, NULL);
         gtk_tree_view_append_column (treeview, column);        
     }
 
@@ -202,10 +175,9 @@ populate_keyservers (SeahorseWidget *swidget, GSList *ks)
      
     if (gtk_tree_model_get_iter_first (model, &iter)) {
         do {
-            gtk_tree_model_get (model, &iter, KEYSERVER_COLUMN, &v, 
-                                              UNUSED_COLUMN, &unused, -1);
+            gtk_tree_model_get (model, &iter, KEYSERVER_COLUMN, &v, -1);
             
-            if (!unused && ks && v && g_utf8_collate (ks->data, v) == 0) {
+            if (ks && v && g_utf8_collate (ks->data, v) == 0) {
                 ks = ks->next;
                 cont = gtk_tree_model_iter_next (model, &iter);
             } else {
@@ -220,15 +192,9 @@ populate_keyservers (SeahorseWidget *swidget, GSList *ks)
     /* Any remaining extra rows */           
     for ( ; ks; ks = ks->next) {
         gtk_tree_store_append (store, &iter, NULL);        
-        gtk_tree_store_set (store, &iter, KEYSERVER_COLUMN, (gchar*)ks->data, 
-                                          UNUSED_COLUMN, FALSE, -1);
+        gtk_tree_store_set (store, &iter, KEYSERVER_COLUMN, (gchar*)ks->data, -1);
     }
     
-    /* The message row */
-    gtk_tree_store_append (store, &iter, NULL);
-    gtk_tree_store_set (store, &iter, KEYSERVER_COLUMN, NEW_KEYSERVER_MSG, 
-                                      UNUSED_COLUMN, TRUE, -1);
-
     /* Done updating */
     g_object_set_data (G_OBJECT (model), UPDATING_MODEL, NULL);
 }
@@ -260,6 +226,156 @@ gconf_unnotify (GtkWidget *widget, guint notify_id)
     seahorse_gconf_unnotify (notify_id);
 }
 
+static gchar*
+calculate_keyserver_uri (SeahorseWidget *swidget)
+{
+    const gchar *scheme = NULL;
+    const gchar *host = NULL;
+    const gchar *port = NULL;
+    GtkWidget *widget;
+    GSList *types;
+    gint active;
+    gchar *uri;
+
+    /* Figure out the scheme */
+    widget = glade_xml_get_widget (swidget->xml, "keyserver-type");
+    g_return_val_if_fail (widget != NULL, NULL);
+
+    active = gtk_combo_box_get_active (GTK_COMBO_BOX (widget));
+    g_return_val_if_fail (active >= 0, NULL);
+    
+    types = g_object_get_data (G_OBJECT (swidget), "keyserver-types");
+    g_return_val_if_fail (types != NULL, NULL);
+    
+    scheme = (const gchar*)g_slist_nth_data (types, active);
+    if (scheme && !scheme[0])
+        scheme = NULL;
+    
+    /* The host */
+    widget = glade_xml_get_widget (swidget->xml, "keyserver-host");
+    g_return_val_if_fail (widget != NULL, NULL);
+    
+    host = gtk_entry_get_text (GTK_ENTRY (widget));
+    g_return_val_if_fail (host != NULL, NULL);
+    
+    /* Custom URI? */
+    if (scheme == NULL) {
+        if (seahorse_server_source_valid_uri (host))
+            return g_strdup (host);
+        return NULL;
+    }
+    
+    /* The port */
+    widget = glade_xml_get_widget (swidget->xml, "keyserver-port");
+    g_return_val_if_fail (widget != NULL, NULL);
+    
+    port = gtk_entry_get_text (GTK_ENTRY (widget));
+    if (port && !port[0])
+        port = NULL;
+    
+    uri = g_strdup_printf("%s://%s%s%s", scheme, host, port ? ":" : "", port ? port : "");
+    if (!seahorse_server_source_valid_uri (uri)) {
+        g_free (uri);
+        uri = NULL;
+    }
+
+    return uri; 
+}
+
+static void
+uri_changed (GtkWidget *button, SeahorseWidget *swidget)
+{
+    GtkWidget *widget;
+    GSList *types;
+    gchar *t;
+    gint active;
+
+    widget = glade_xml_get_widget (swidget->xml, "ok");
+    g_return_if_fail (widget != NULL);
+    
+    t = calculate_keyserver_uri (swidget);
+    gtk_widget_set_sensitive (widget, t != NULL);
+    g_free (t);
+
+    widget = glade_xml_get_widget (swidget->xml, "keyserver-type");
+    g_return_if_fail (widget != NULL);
+
+    /* Show or hide the port section based on whether 'custom' is selected */    
+    active = gtk_combo_box_get_active (GTK_COMBO_BOX (widget));
+    if (active > -1) {
+        
+        types = g_object_get_data (G_OBJECT (swidget), "keyserver-types");
+        g_return_if_fail (types != NULL);
+        
+        widget = glade_xml_get_widget (swidget->xml, "port-block");
+        g_return_if_fail (widget != NULL);
+        
+        t = (gchar*)g_slist_nth_data (types, active);
+        if (t && t[0])
+            gtk_widget_show (widget);
+        else
+            gtk_widget_hide (widget);
+    }
+}
+
+static void
+keyserver_add_clicked (GtkButton *button, SeahorseWidget *sw)
+{
+    SeahorseWidget *swidget;
+    GSList *types, *descriptions, *l;
+    GtkWidget *widget;
+    gint response;
+    gchar *result = NULL;
+    
+    GtkTreeView *treeview;
+    GtkTreeStore *store;
+    GtkTreeIter iter;
+    
+    swidget = seahorse_widget_new_allow_multiple ("add-keyserver", sw->sctx);
+	g_return_if_fail (swidget != NULL);
+    
+    widget = glade_xml_get_widget (swidget->xml, "keyserver-type");
+    g_return_if_fail (widget != NULL);
+    
+    /* The list of types, plus the null 'custom' type */
+    types = seahorse_server_source_get_types ();
+    types = g_slist_append (types, g_strdup (""));
+    g_object_set_data_full (G_OBJECT (swidget), "keyserver-types", types, 
+                            (GDestroyNotify)seahorse_util_string_slist_free);
+    
+    /* The description for the key server types, plus custom */
+    descriptions = seahorse_server_source_get_descriptions ();
+    descriptions = g_slist_append (descriptions, g_strdup (_("Custom")));
+    
+    gtk_combo_box_remove_text (GTK_COMBO_BOX (widget), 0);    
+    for (l = descriptions; l; l = g_slist_next (l))
+        gtk_combo_box_append_text (GTK_COMBO_BOX (widget), l->data);
+    gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
+    seahorse_util_string_slist_free (descriptions);
+
+    glade_xml_signal_connect_data (swidget->xml, "on_uri_changed", 
+                                   G_CALLBACK (uri_changed), swidget);
+
+    response = gtk_dialog_run (GTK_DIALOG (seahorse_widget_get_top (swidget)));
+    if (response == GTK_RESPONSE_ACCEPT) {
+        
+        result = calculate_keyserver_uri (swidget);
+        if (result != NULL) {        
+            
+            treeview = GTK_TREE_VIEW (glade_xml_get_widget (sw->xml, "keyservers"));
+            g_return_if_fail (treeview != NULL);
+            
+            store = GTK_TREE_STORE (gtk_tree_view_get_model (treeview));
+            gtk_tree_store_append (store, &iter, NULL);
+            gtk_tree_store_set (store, &iter, KEYSERVER_COLUMN, result, -1);
+        }
+        
+        g_free (result);
+    }
+        
+    seahorse_widget_destroy (swidget);
+}
+
 /* Perform keyserver page initialization */
 static void
 setup_keyservers (SeahorseContext *sctx, SeahorseWidget *swidget)
@@ -287,6 +403,8 @@ setup_keyservers (SeahorseContext *sctx, SeahorseWidget *swidget)
 
     glade_xml_signal_connect_data (swidget->xml, "keyserver_remove_clicked",
             G_CALLBACK (keyserver_remove_clicked), swidget);
+    glade_xml_signal_connect_data (swidget->xml, "keyserver_add_clicked",
+            G_CALLBACK (keyserver_add_clicked), swidget);
             
     notify_id = seahorse_gconf_notify (KEYSERVER_KEY, (GConfClientNotifyFunc)gconf_notify, 
                                        swidget);

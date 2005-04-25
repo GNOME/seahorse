@@ -1254,8 +1254,22 @@ seahorse_ldap_source_new (SeahorseKeySource *locsrc, const gchar *server,
 gboolean              
 seahorse_ldap_is_valid_uri (const gchar *uri)
 {
-    /* TODO: We need a full implementation */
-    return TRUE;
+    LDAPURLDesc *url;
+    int r;
+    
+    r = ldap_url_parse (uri, &url);
+    if (r == LDAP_URL_SUCCESS) {
+        
+        /* Some checks to make sure it's a simple URI */
+        if (!(url->lud_host && url->lud_host[0]) || 
+            (url->lud_dn && url->lud_dn[0]) || 
+            (url->lud_attrs || url->lud_attrs))
+            r = LDAP_URL_ERR_PARAM;
+        
+        ldap_free_urldesc (url);
+    }
+        
+    return r == LDAP_URL_SUCCESS;
 }
 
 #endif /* WITH_LDAP */

@@ -621,7 +621,9 @@ seahorse_server_source_new (SeahorseKeySource *locsrc, const gchar *server,
 #endif /* WITH_LDAP */
         
 #ifdef WITH_HKP
-        if (g_ascii_strcasecmp (scheme, "hkp") == 0)
+        if (g_ascii_strcasecmp (scheme, "hkp") == 0 || 
+            g_ascii_strcasecmp (scheme, "http") == 0 ||
+            g_ascii_strcasecmp (scheme, "https") == 0)
             ssrc = SEAHORSE_SERVER_SOURCE (seahorse_hkp_source_new (locsrc, host, pattern));
         else
 #endif /* WITH_HKP */
@@ -633,5 +635,42 @@ seahorse_server_source_new (SeahorseKeySource *locsrc, const gchar *server,
     return ssrc;
 }
 
-gboolean    
-seahorse_server_source_valid_uri         (const gchar *server);
+GSList*
+seahorse_server_source_get_types()
+{
+    GSList *types = NULL;
+#ifdef WITH_LDAP
+    types = g_slist_prepend(types, g_strdup("ldap"));
+#endif
+#ifdef WITH_HKP
+    types = g_slist_prepend(types, g_strdup("hkp"));
+#endif
+    return types;
+}
+
+GSList*
+seahorse_server_source_get_descriptions()
+{
+    GSList *descriptions = NULL;
+#ifdef WITH_LDAP
+    descriptions = g_slist_prepend(descriptions, g_strdup(_("LDAP Key Server")));
+#endif
+#ifdef WITH_HKP
+    descriptions = g_slist_prepend(descriptions, g_strdup(_("HTTP Key Server")));
+#endif
+    return descriptions;
+}
+
+gboolean
+seahorse_server_source_valid_uri (const gchar *uri)
+{
+#ifdef WITH_LDAP
+    if (seahorse_ldap_is_valid_uri (uri))
+        return TRUE;
+#endif
+#ifdef WITH_HKP
+    if (seahorse_hkp_is_valid_uri (uri))
+        return TRUE;
+#endif
+    return FALSE;
+}

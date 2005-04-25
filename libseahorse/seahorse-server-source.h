@@ -59,6 +59,9 @@ SeahorseServerSource* seahorse_server_source_new     (SeahorseKeySource *locsrc,
                                                       const gchar *server,
                                                       const gchar *pattern);
 
-gboolean    seahorse_server_source_valid_uri         (const gchar *server);
+GSList*     seahorse_server_source_get_types         ();
+GSList*     seahorse_server_source_get_descriptions  ();
+
+gboolean    seahorse_server_source_valid_uri         (const gchar *uri);
                                                       
 #endif /* __SEAHORSE_SERVER_SOURCE_H__ */

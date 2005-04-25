@@ -25,6 +25,8 @@
 #include "seahorse-key-pair.h"
 #include "seahorse-gconf.h"
 
+#define UPDATING    "updating"
+
 enum {
 	PROP_0,
     PROP_GCONF_KEY,
@@ -88,6 +90,10 @@ seahorse_keyserver_control_class_init (SeahorseKeyserverControlClass *klass)
 static void
 keyserver_changed (GtkComboBox *widget, SeahorseKeyserverControl *skc)
 {
+    /* If currently updating (see populate_combo) ignore */
+    if (g_object_get_data (G_OBJECT (skc), UPDATING) != NULL)
+        return;
+    
     if (skc->gconf_key) {
         const gchar *t = seahorse_keyserver_control_selected (skc);
         seahorse_gconf_set_string (skc->gconf_key, t ? t : "");
@@ -210,6 +216,9 @@ populate_combo (SeahorseKeyserverControl *skc, gboolean gconf, gboolean force)
             chosen = g_strdup ((gchar*)g_slist_nth_data (skc->keyservers, n - 1));
     }
 
+    /* Mark this so we can ignore events */
+    g_object_set_data (G_OBJECT (skc), UPDATING, GINT_TO_POINTER (1));
+    
     /* Retreieve the key server list and make sure it's changed */
     ks = seahorse_gconf_get_string_list (KEYSERVER_KEY);
     ks = g_slist_sort (ks, (GCompareFunc)g_utf8_collate);
@@ -247,6 +256,9 @@ populate_combo (SeahorseKeyserverControl *skc, gboolean gconf, gboolean force)
     }
     
     seahorse_util_string_slist_free (ks);
+    
+    /* Done updating */
+    g_object_set_data (G_OBJECT (skc), UPDATING, NULL);    
 }
 
 SeahorseKeyserverControl*  

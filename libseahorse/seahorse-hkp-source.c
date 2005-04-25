@@ -860,8 +860,33 @@ seahorse_hkp_source_new (SeahorseKeySource *locsrc, const gchar *server,
 gboolean              
 seahorse_hkp_is_valid_uri (const gchar *uri)
 {
-    /* TODO: We need a full implementation */
-    return TRUE;
+    SoupUri *soup;
+    gboolean ret = FALSE;
+    gchar *t;
+    
+    /* Replace 'hkp' with 'http' at the beginning of the URI */
+    if (strncasecmp (uri, "hkp:", 4) == 0) {
+        t = g_strdup_printf("http:%s", uri + 4);
+        soup = soup_uri_new (t);
+        g_free (t);
+        
+    /* Not 'hkp', but maybe 'http' */
+    } else {
+        soup = soup_uri_new (uri);
+    }
+    
+    if (soup) {
+        /* Must be http or https, have a host. No querystring, user, path, passwd etc... */
+        if ((soup->protocol == SOUP_PROTOCOL_HTTP || soup->protocol == SOUP_PROTOCOL_HTTPS) && 
+            (soup->host && soup->host[0]) && !(soup->passwd && soup->passwd[0]) && 
+            !(soup->query && soup->query[0]) && !(soup->user && soup->user[0]) && 
+            !(soup->fragment && soup->fragment[0]) && 
+            !(soup->path && soup->path[0] && !g_str_equal (soup->path, "/")))
+            ret = TRUE;
+        soup_uri_free (soup);
+    }
+
+    return ret;
 }
 
 #endif /* WITH_HKP */
