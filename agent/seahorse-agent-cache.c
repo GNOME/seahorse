@@ -39,10 +39,6 @@
  * if their TTL expires. 
  */
 
-#define SETTING_CACHE       "/apps/seahorse/agent/cache_enabled"
-#define SETTING_TTL         "/apps/seahorse/agent/cache_ttl"
-#define SETTING_EXPIRE      "/apps/seahorse/agent/cache_expire"
-
 #define UNPARSEABLE_KEY     _("Unparseable Key ID")
 #define UNKNOWN_KEY         _("Unknown/Invalid Key")
 #define TRANSIENT_ID        "TRANSIENT"

@@ -31,6 +31,15 @@
 #endif
 
 /* -----------------------------------------------------------------------------
+ * seahorse-agent gconf keys
+ */
+
+#define SETTING_AUTH 		"/apps/seahorse/agent/cache_authorize"
+#define SETTING_CACHE       "/apps/seahorse/agent/cache_enabled"
+#define SETTING_EXPIRE      "/apps/seahorse/agent/cache_expire"
+#define SETTING_TTL         "/apps/seahorse/agent/cache_ttl"
+
+/* -----------------------------------------------------------------------------
  * seahorse-agent-io.c
  */
 

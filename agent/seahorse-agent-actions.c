@@ -37,9 +37,6 @@
 static GQueue *g_queue = NULL;          /* The queue of SeahorseAgentPassReq items */
 static GMemChunk *g_memory = NULL;      /* Allocator for SeahorseAgentPassReq items */
 
-/* Whether to prompt authorize accesses to the cache or not */
-#define SETTING_AUTH "/apps/seahorse/agent/cache_authorize"
-
 /* -----------------------------------------------------------------------------
  * IMPLEMENTATION
  */

@@ -33,6 +33,7 @@
 #include <gnome.h>
 
 #include "seahorse-agent.h"
+#include "seahorse-check-button-control.h"
 #include "gtk-secure-entry.h"
 
 #define HIG_SMALL      6        /* gnome hig small space in pixels */
@@ -402,7 +403,12 @@ create_auth_window (SeahorseAgentPassReq *pr)
     gtk_misc_set_alignment (GTK_MISC (w), 0.0, 0.5);
     gtk_label_set_line_wrap (GTK_LABEL (w), TRUE);
     gtk_box_pack_start (GTK_BOX (box), w, TRUE, FALSE, 0);
-
+    
+    w = seahorse_check_button_control_new(_("Always ask me before using a cached passphrase"),
+    									  SETTING_AUTH);
+    
+    gtk_box_pack_start (GTK_BOX (box), w, TRUE, FALSE, 0);
+                                  
     bbox = gtk_hbutton_box_new ();
     gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox), GTK_BUTTONBOX_END);
     gtk_box_set_spacing (GTK_BOX (bbox), 6);
