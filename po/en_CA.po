@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-04-25 12:46-0400\n"
-"PO-Revision-Date: 2005-04-25 22:06-0400\n"
+"POT-Creation-Date: 2005-04-27 15:54-0400\n"
+"PO-Revision-Date: 2005-04-27 22:06-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: Canadian English <adamw@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -112,20 +112,27 @@ msgstr "Select on focus"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Whether to select the contents of an entry when it is focused"
 
-#: ../agent/seahorse-agent-actions.c:97
+#: ../agent/seahorse-agent-actions.c:94
 #: ../src/seahorse-generate-druid.glade.h:27
 msgid "Passphrase:"
 msgstr "Passphrase:"
 
-#: ../agent/seahorse-agent-actions.c:98
+#: ../agent/seahorse-agent-actions.c:95
 msgid "Please enter a passphrase to use."
 msgstr "Please enter a passphrase to use."
 
-#: ../agent/seahorse-agent-cache.c:46
+#.
+#. * Implementation of the password cache. Note that only passwords
+#. * are stored in secure memory, all else is allocated normally.
+#. *
+#. * Cache items can be locked which guarantees they'll stay around even
+#. * if their TTL expires.
+#.
+#: ../agent/seahorse-agent-cache.c:42
 msgid "Unparseable Key ID"
 msgstr "Unparseable Key ID"
 
-#: ../agent/seahorse-agent-cache.c:47
+#: ../agent/seahorse-agent-cache.c:43
 msgid "Unknown/Invalid Key"
 msgstr "Unknown/Invalid Key"
 
@@ -153,20 +160,24 @@ msgstr "_Clear Cache"
 msgid "_Show Window"
 msgstr "_Show Window"
 
-#: ../agent/seahorse-agent-prompt.c:200
+#: ../agent/seahorse-agent-prompt.c:201
 #: ../src/seahorse-generate-druid.glade.h:25
 msgid "Passphrase"
 msgstr "Passphrase"
 
-#: ../agent/seahorse-agent-prompt.c:366
+#: ../agent/seahorse-agent-prompt.c:367
 msgid "Authorize Password Access"
 msgstr "Authorize Password Access"
 
-#: ../agent/seahorse-agent-prompt.c:401
+#: ../agent/seahorse-agent-prompt.c:402
 msgid "The passphrase is cached in memory."
 msgstr "The passphrase is cached in memory."
 
-#: ../agent/seahorse-agent-prompt.c:418
+#: ../agent/seahorse-agent-prompt.c:407
+msgid "Always ask me before using a cached passphrase"
+msgstr "Always ask me before using a cached passphrase"
+
+#: ../agent/seahorse-agent-prompt.c:424
 msgid "_Authorize"
 msgstr "_Authorize"
 
