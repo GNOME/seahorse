@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-04-15 03:29+0000\n"
-"PO-Revision-Date: 2005-04-15 14:02+0200\n"
+"POT-Creation-Date: 2005-04-30 12:02+0000\n"
+"PO-Revision-Date: 2005-04-30 16:40+0200\n"
 "Last-Translator: Miloslav Trmac <mitr@volny.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -112,20 +112,27 @@ msgstr "Vybrat při aktivaci"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Jestli vybrat obsah pole, když se stane aktivní"
 
-#: ../agent/seahorse-agent-actions.c:97
+#: ../agent/seahorse-agent-actions.c:94
 #: ../src/seahorse-generate-druid.glade.h:27
 msgid "Passphrase:"
 msgstr "Heslo:"
 
-#: ../agent/seahorse-agent-actions.c:98
+#: ../agent/seahorse-agent-actions.c:95
 msgid "Please enter a passphrase to use."
 msgstr "Zadejte prosím heslo."
 
-#: ../agent/seahorse-agent-cache.c:46
+#.
+#. * Implementation of the password cache. Note that only passwords
+#. * are stored in secure memory, all else is allocated normally.
+#. *
+#. * Cache items can be locked which guarantees they'll stay around even
+#. * if their TTL expires.
+#.
+#: ../agent/seahorse-agent-cache.c:42
 msgid "Unparseable Key ID"
 msgstr "Nezpracovatelné ID klíče"
 
-#: ../agent/seahorse-agent-cache.c:47
+#: ../agent/seahorse-agent-cache.c:43
 msgid "Unknown/Invalid Key"
 msgstr "Neznámý/neplatný klíč"
 
@@ -153,20 +160,24 @@ msgstr "_Vymazat cache"
 msgid "_Show Window"
 msgstr "_Zobrazit okno"
 
-#: ../agent/seahorse-agent-prompt.c:200
+#: ../agent/seahorse-agent-prompt.c:201
 #: ../src/seahorse-generate-druid.glade.h:25
 msgid "Passphrase"
 msgstr "Heslo"
 
-#: ../agent/seahorse-agent-prompt.c:365
+#: ../agent/seahorse-agent-prompt.c:367
 msgid "Authorize Password Access"
 msgstr "Autorizovat přístup k heslu"
 
-#: ../agent/seahorse-agent-prompt.c:400
+#: ../agent/seahorse-agent-prompt.c:402
 msgid "The passphrase is cached in memory."
 msgstr "Heslo je kešováno v paměti."
 
-#: ../agent/seahorse-agent-prompt.c:417
+#: ../agent/seahorse-agent-prompt.c:407
+msgid "Always ask me before using a cached passphrase"
+msgstr "Vždy se mě ptát před použitím kešovaného hesla"
+
+#: ../agent/seahorse-agent-prompt.c:424
 msgid "_Authorize"
 msgstr "_Autorizovat"
 
@@ -291,7 +302,9 @@ msgstr "ID implicitního klíče"
 msgid ""
 "If set to true, then files encrypted with seahorse will be ASCII armor "
 "encoded."
-msgstr "Je-li nastaveno na true, soubory šifrované seahorse budou kódovány v ASCII armor."
+msgstr ""
+"Je-li nastaveno na true, soubory šifrované seahorse budou kódovány v ASCII "
+"armor."
 
 #: ../data/seahorse.schemas.in.h:10
 msgid ""
@@ -363,7 +376,10 @@ msgid ""
 "Specify the column to sort the seahorse key manager main window by. Columns "
 "are: 'name', 'id', 'validity', 'expires', 'trust', and 'type'. Put a '-' in "
 "front of the column name to sort in descending order."
-msgstr "Určení sloupce, podle kterého řadit hlavní okno spráce klíčů seahorse. Sloupce jsou 'name', 'id', 'validity', 'expires', 'trust', 'length' a 'type'. Řaďte sestupně umístěním '-' před název sloupce."
+msgstr ""
+"Určení sloupce, podle kterého řadit hlavní okno spráce klíčů seahorse. "
+"Sloupce jsou 'name', 'id', 'validity', 'expires', 'trust', 'length' a "
+"'type'. Řaďte sestupně umístěním '-' před název sloupce."
 
 #: ../data/seahorse.schemas.in.h:24
 msgid "The ID of the last secret key used to sign a message."
@@ -381,7 +397,9 @@ msgstr "Sloupec, podle kterého řadit klíče seahorse"
 msgid ""
 "The keyserver to publish PGP keys to. Or empty to suppress publishing of PGP "
 "keys."
-msgstr "Server klíčů, kam zveřejňovat PGP klíče. Nebo prázdné pro potlačení zveřejňování PGP klíčů."
+msgstr ""
+"Server klíčů, kam zveřejňovat PGP klíče. Nebo prázdné pro potlačení "
+"zveřejňování PGP klíčů."
 
 #: ../data/seahorse.schemas.in.h:28
 msgid ""
@@ -445,43 +463,100 @@ msgstr "Jestli vždy šifrovat pro implicitní klíč"
 msgid "Whether to use ASCII Armor"
 msgstr "Jestli používat ASCII Armor"
 
+#: ../libseahorse/seahorse-add-keyserver.glade.h:1
+#: ../libseahorse/seahorse-passphrase.glade.h:1
+#: ../libseahorse/seahorse-recipients.glade.h:1
+#: ../src/seahorse-add-uid.glade.h:1
+#: ../src/seahorse-change-passphrase.glade.h:1
+#: ../src/seahorse-generate-adv.glade.h:1
+#: ../src/seahorse-generate-druid.glade.h:1
+#: ../src/seahorse-key-manager.glade.h:1
+#: ../src/seahorse-multi-encrypt.glade.h:1 ../src/seahorse-revoke.glade.h:1
+msgid "*"
+msgstr "*"
+
+#: ../libseahorse/seahorse-add-keyserver.glade.h:2
+msgid ":"
+msgstr ":"
+
+#: ../libseahorse/seahorse-add-keyserver.glade.h:3
+msgid "Add Key Server"
+msgstr "Přidat server klíčů"
+
+#: ../libseahorse/seahorse-add-keyserver.glade.h:4
+msgid "Host:"
+msgstr "Počítač:"
+
+#: ../libseahorse/seahorse-add-keyserver.glade.h:5
+msgid "Key Server Type:"
+msgstr "Typ serveru klíčů:"
+
+#: ../libseahorse/seahorse-add-keyserver.glade.h:6
+msgid "The host name or address of the server."
+msgstr "Jméno nebo adresa serveru."
+
+#: ../libseahorse/seahorse-add-keyserver.glade.h:7
+msgid "The port to access the server on."
+msgstr "Port, na kterém přistupovat k serveru"
+
+#: ../libseahorse/seahorse-add-keyserver.glade.h:8
+msgid "initial temp item"
+msgstr "počáteční dočasná položka"
+
+#: ../libseahorse/seahorse-hkp-source.c:182
+#: ../libseahorse/seahorse-ldap-source.c:376
+#, c-format
+msgid "Couldn't communicate with '%s': %s"
+msgstr "Nemohu komunikovat s '%s': %s"
+
+#: ../libseahorse/seahorse-hkp-source.c:435
+msgid "Searching for keys..."
+msgstr "Hledám klíče..."
+
+#: ../libseahorse/seahorse-hkp-source.c:507
+#: ../libseahorse/seahorse-hkp-source.c:556
+msgid "Uploading keys..."
+msgstr "Odesílám klíče..."
+
+#: ../libseahorse/seahorse-hkp-source.c:672
+#, c-format
+msgid "Searching for keys on: %s"
+msgstr "Hledám klíče na: %s"
+
+#: ../libseahorse/seahorse-hkp-source.c:746
+#: ../libseahorse/seahorse-hkp-source.c:820
+#: ../libseahorse/seahorse-ldap-source.c:553
+#, c-format
+msgid "Connecting to: %s"
+msgstr "Připojuji se k: %s"
+
 #. Make the column
-#: ../libseahorse/seahorse-key-store.c:750
+#: ../libseahorse/seahorse-key-store.c:780
 #: ../src/seahorse-key-properties.c:401 ../src/seahorse-key-properties.c:495
 msgid "Name"
 msgstr "Jméno"
 
 #. Make the column
-#: ../libseahorse/seahorse-key-store.c:753
+#: ../libseahorse/seahorse-key-store.c:783
 #: ../src/seahorse-key-properties.c:398
 msgid "Key ID"
 msgstr "ID klíče"
 
-#: ../libseahorse/seahorse-ldap-source.c:377
-#, c-format
-msgid "Couldn't communicate with '%s': %s"
-msgstr "Nemohu komunikovat s '%s': %s"
-
-#: ../libseahorse/seahorse-ldap-source.c:554
-#, c-format
-msgid "Connecting to: %s"
-msgstr "Připojuji se k: %s"
-
-#: ../libseahorse/seahorse-ldap-source.c:727
+#: ../libseahorse/seahorse-ldap-source.c:726
 #, c-format
 msgid "Searching for keys containing '%s'..."
 msgstr "Hledám klíče obsahující '%s'..."
 
-#: ../libseahorse/seahorse-ldap-source.c:754
+#: ../libseahorse/seahorse-ldap-source.c:753
 #, c-format
 msgid "Searching for key id '%s'..."
 msgstr "Hledám id klíče '%s'..."
 
-#: ../libseahorse/seahorse-ldap-source.c:848
+#: ../libseahorse/seahorse-ldap-source.c:847
 msgid "Retrieving remote keys..."
 msgstr "Stahuji vzdálené klíče..."
 
-#: ../libseahorse/seahorse-ldap-source.c:992
+#: ../libseahorse/seahorse-ldap-source.c:991
 msgid "Sending keys to key server..."
 msgstr "Odesílám klíče na server klíčů..."
 
@@ -499,17 +574,6 @@ msgstr "Zadejte nové heslo pro '%s'"
 #, c-format
 msgid "Enter passphrase for '%s'"
 msgstr "Zadejte heslo pro '%s'"
-
-#: ../libseahorse/seahorse-passphrase.glade.h:1
-#: ../libseahorse/seahorse-recipients.glade.h:1
-#: ../src/seahorse-add-uid.glade.h:1
-#: ../src/seahorse-change-passphrase.glade.h:1
-#: ../src/seahorse-generate-adv.glade.h:1
-#: ../src/seahorse-generate-druid.glade.h:1
-#: ../src/seahorse-key-manager.glade.h:1
-#: ../src/seahorse-multi-encrypt.glade.h:1 ../src/seahorse-revoke.glade.h:1
-msgid "*"
-msgstr "*"
 
 #: ../libseahorse/seahorse-passphrase.glade.h:2
 msgid "Enter Passphrase"
@@ -536,27 +600,38 @@ msgid ""
 "Another passphrase caching agent is running. Disabling cache preferences."
 msgstr "Běží jiný agent kešování hesel. Zakazuji nastavení cache."
 
-#: ../libseahorse/seahorse-prefs.c:37
-msgid "[Add a key server here]"
-msgstr "[Sem přidejte server klíčů]"
+#: ../libseahorse/seahorse-prefs.c:55
+msgid ""
+"<b><big>Not a valid Key Server address.</big></b>\n"
+"\n"
+"For help contact your system adminstrator or the administrator of the key "
+"server."
+msgstr ""
+"<b><big>To není platná adresa serveru klíčů.</big></b>\n"
+"\n"
+"Pro nápovědu kontaktuje vašeho správce systému nebo správce serveru klíčů."
 
-#: ../libseahorse/seahorse-prefs.c:191
+#: ../libseahorse/seahorse-prefs.c:165
 msgid "URL"
 msgstr "URL"
 
-#: ../libseahorse/seahorse-prefs.c:299
+#: ../libseahorse/seahorse-prefs.c:348
+msgid "Custom"
+msgstr "Vlastní"
+
+#: ../libseahorse/seahorse-prefs.c:417
 msgid "None: Don't publish keys"
 msgstr "Žádný: nezveřejňovat klíče"
 
-#: ../libseahorse/seahorse-prefs.c:349
+#: ../libseahorse/seahorse-prefs.c:467
 msgid "_Encrypt to Self"
 msgstr "Za_šifrovat pro sebe"
 
-#: ../libseahorse/seahorse-prefs.c:351
+#: ../libseahorse/seahorse-prefs.c:469
 msgid "_Armor Encode Files"
 msgstr "_Kódovat soubory do armor"
 
-#: ../libseahorse/seahorse-prefs.c:357
+#: ../libseahorse/seahorse-prefs.c:475
 msgid "None. Prompt for a key."
 msgstr "Žádný. Ptát se na klíč."
 
@@ -568,7 +643,9 @@ msgstr " minut"
 msgid ""
 "<b>Note:</b> The 'seahorse-agent' program was started. This program is "
 "necessary in order for caching of passphrases. "
-msgstr "<b>Upozornění:</b> Byl spuštěn program 'seahorse-agent'. Tento program je potřeba pro kešování hesel."
+msgstr ""
+"<b>Upozornění:</b> Byl spuštěn program 'seahorse-agent'. Tento program je "
+"potřeba pro kešování hesel."
 
 #: ../libseahorse/seahorse-prefs.glade.h:3
 msgid ""
@@ -657,8 +734,8 @@ msgstr[2] "Načteno %d klíčů"
 msgid "Loading Keys..."
 msgstr "Načítám klíče..."
 
-#: ../libseahorse/seahorse-recipients-store.c:153
-#: ../src/seahorse-key-manager-store.c:379
+#: ../libseahorse/seahorse-recipients-store.c:154
+#: ../src/seahorse-key-manager-store.c:383
 msgid "Validity"
 msgstr "Platnost"
 
@@ -708,7 +785,7 @@ msgstr[2] "(%d neúplně platných)"
 msgid "%s%s"
 msgstr "%s%s"
 
-#: ../libseahorse/seahorse-recipients.c:170
+#: ../libseahorse/seahorse-recipients.c:176
 msgid "None (Don't sign)"
 msgstr "Žádný (nepodepisovat)"
 
@@ -734,6 +811,14 @@ msgstr "_Hledat: "
 #: ../libseahorse/seahorse-signer.glade.h:2
 msgid "_Sign message with key:"
 msgstr "_Podepsat zprávu klíčem:"
+
+#: ../libseahorse/seahorse-server-source.c:656
+msgid "LDAP Key Server"
+msgstr "Servery klíčů LDAP"
+
+#: ../libseahorse/seahorse-server-source.c:659
+msgid "HTTP Key Server"
+msgstr "Servery klíčů HTTP"
 
 #: ../libseahorse/seahorse-signatures.c:49
 msgid "[Unknown Key]"
@@ -795,31 +880,31 @@ msgstr "Zvolte podpisový klíč"
 msgid "%Y-%m-%d"
 msgstr "%d. %m. %Y"
 
-#: ../libseahorse/seahorse-util.c:418
+#: ../libseahorse/seahorse-util.c:473
 msgid "Multiple Keys"
 msgstr "Více klíčů"
 
-#: ../libseahorse/seahorse-util.c:728
+#: ../libseahorse/seahorse-util.c:783
 msgid "Couldn't run file-roller"
 msgstr "Nemohu spustit file-roller"
 
-#: ../libseahorse/seahorse-util.c:733
+#: ../libseahorse/seahorse-util.c:788
 msgid "The file-roller process did not complete successfully"
 msgstr "Proces file-roller neskončil úspěšně"
 
-#: ../libseahorse/seahorse-util.c:775
+#: ../libseahorse/seahorse-util.c:830
 msgid "All key files"
 msgstr "Všechny soubory klíčů"
 
-#: ../libseahorse/seahorse-util.c:781 ../libseahorse/seahorse-util.c:821
+#: ../libseahorse/seahorse-util.c:836 ../libseahorse/seahorse-util.c:876
 msgid "All files"
 msgstr "Všechny soubory"
 
-#: ../libseahorse/seahorse-util.c:814
+#: ../libseahorse/seahorse-util.c:869
 msgid "Archive files"
 msgstr "Soubory archivů"
 
-#: ../libseahorse/seahorse-util.c:855
+#: ../libseahorse/seahorse-util.c:910
 msgid ""
 "<b>A file already exists with this name.</b>\n"
 "\n"
@@ -829,7 +914,7 @@ msgstr ""
 "\n"
 "Chcete jej nahradit novým souborem?"
 
-#: ../libseahorse/seahorse-util.c:858
+#: ../libseahorse/seahorse-util.c:913
 msgid "_Replace"
 msgstr "Na_hradit"
 
@@ -1347,7 +1432,7 @@ msgid "Enter Name - Must be at least five letters."
 msgstr "Zadejte jméno - musí být alespoň pět písmen."
 
 #: ../src/seahorse-generate-druid.glade.h:13
-#: ../src/seahorse-key-manager-store.c:391
+#: ../src/seahorse-key-manager-store.c:395
 msgid "Expiration Date"
 msgstr "Datum vypršení"
 
@@ -1507,22 +1592,22 @@ msgstr "Veřejný PGP klíč"
 msgid "User ID"
 msgstr "ID uživatele"
 
-#: ../src/seahorse-key-manager-store.c:322
+#: ../src/seahorse-key-manager-store.c:326
 msgid "Couldn't export key(s)"
 msgstr "Nemohu exportovat klíče"
 
-#: ../src/seahorse-key-manager-store.c:338 ../src/seahorse-key-manager.c:198
+#: ../src/seahorse-key-manager-store.c:342 ../src/seahorse-key-manager.c:198
 #: ../src/seahorse-key-properties.c:297
 #: ../src/seahorse-keyserver-results.c:130
 #, c-format
 msgid "Couldn't export key to \"%s\""
 msgstr "Nemohu exportovat klíč do \"%s\""
 
-#: ../src/seahorse-key-manager-store.c:383
+#: ../src/seahorse-key-manager-store.c:387
 msgid "Trust"
 msgstr "Důvěřovat"
 
-#: ../src/seahorse-key-manager-store.c:387
+#: ../src/seahorse-key-manager-store.c:391
 msgid "Type"
 msgstr "Typ"
 
@@ -2056,7 +2141,9 @@ msgstr "Hledat vzdálené klíče"
 msgid ""
 "This will find keys for others on the Internet. These keys can then be "
 "imported into your local key ring."
-msgstr "Toto najde klíče jinýchna Internetu. Tyto klíče lze importovat do vaší místní klíčenky."
+msgstr ""
+"Toto najde klíče jinýchna Internetu. Tyto klíče lze importovat do vaší "
+"místní klíčenky."
 
 #: ../src/seahorse-keyserver-search.glade.h:3
 msgid "_Search"
@@ -2105,14 +2192,20 @@ msgid ""
 "This will publish the keys in your keyring so they're available for others "
 "to use. You'll also get any changes others have made since you received "
 "their keys."
-msgstr "Toto zveřejní klíče ve vaší klíčence, aby je mohli používat ostatní. Také získáte změny, které provedli ostatní od té doby, co jste přijali jejich klíče."
+msgstr ""
+"Toto zveřejní klíče ve vaší klíčence, aby je mohli používat ostatní. Také "
+"získáte změny, které provedli ostatní od té doby, co jste přijali jejich "
+"klíče."
 
 #: ../src/seahorse-keyserver-sync.glade.h:4
 msgid ""
 "This will retrieve any changes others have made since you received their "
 "keys. No key server has been chosen for publishing, so your keys will not be "
 "made available to others."
-msgstr "Toto získá změny, které provedli ostatní od té doby, co jste přijali jejich klíče. Pro zveřejňování nebyl zvolen server klíčů, takže vaše klíče nebudou zpřístupněny ostatním."
+msgstr ""
+"Toto získá změny, které provedli ostatní od té doby, co jste přijali jejich "
+"klíče. Pro zveřejňování nebyl zvolen server klíčů, takže vaše klíče nebudou "
+"zpřístupněny ostatním."
 
 #: ../src/seahorse-keyserver-sync.glade.h:5
 msgid "_Sync"
@@ -2398,6 +2491,9 @@ msgstr "_Odvolatelný"
 msgid "Manage your encryption keys"
 msgstr "Spravovat vaše šifrovací klíče"
 
+#~ msgid "[Add a key server here]"
+#~ msgstr "[Sem přidejte server klíčů]"
+
 #~ msgid "Cached GPG Passwords"
 #~ msgstr "Kešovaná hesla GPG"
 
@@ -2435,9 +2531,6 @@ msgstr "Spravovat vaše šifrovací klíče"
 #~ msgid "_Text Mode"
 #~ msgstr "_Textový režim"
 
-#~ msgid "Key Servers:"
-#~ msgstr "Servery klíčů:"
-
 #~ msgid "PGP Preferences"
 #~ msgstr "Nastavení PGP"
 
@@ -2455,9 +2548,6 @@ msgstr "Spravovat vaše šifrovací klíče"
 
 #~ msgid "_Never"
 #~ msgstr "_Nikdy"
-
-#~ msgid "All Key Servers"
-#~ msgstr "Všechny servery klíčů"
 
 #~ msgid "Where to search:"
 #~ msgstr "Kde hledat:"
