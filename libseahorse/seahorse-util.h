@@ -65,9 +65,11 @@ void        seahorse_util_handle_error          (GError*            err,
                                                  const char*        desc, ...);
                                                  
 gpgme_error_t	seahorse_util_write_data_to_file (const gchar       *path,
-							                     gpgme_data_t       data);
+							                     gpgme_data_t       data,
+                                                 gboolean           release);
 
-gchar*		seahorse_util_write_data_to_text	(gpgme_data_t       data);
+gchar*		seahorse_util_write_data_to_text	(gpgme_data_t       data,
+                                                 gboolean           release);
 
 guint       seahorse_util_read_data_block       (GString            *buf, 
                                                  gpgme_data_t       data, 

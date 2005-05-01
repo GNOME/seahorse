@@ -214,14 +214,16 @@ seahorse_util_gpgme_to_error(gpgme_error_t gerr, GError** err)
  * seahorse_util_write_data_to_file:
  * @path: Path of file to write to
  * @data: Data to write
+ * @release: Whether to release @data or not
  *
- * Tries to write @data to the file @path. @data will be released upon completion.
+ * Tries to write @data to the file @path. 
  *
  * Returns: GPG_ERR_NO_ERROR if write is successful,
  * GPGME_File_Error if the file could not be opened
  **/
 gpgme_error_t
-seahorse_util_write_data_to_file (const gchar *path, gpgme_data_t data)
+seahorse_util_write_data_to_file (const gchar *path, gpgme_data_t data, 
+                                  gboolean release)
 {
     gpgme_error_t err = GPG_OK;
 	gpgme_data_t file;
@@ -248,27 +250,29 @@ seahorse_util_write_data_to_file (const gchar *path, gpgme_data_t data)
             }
         }
     }
-	
-    gpgme_data_release (file);
-	gpgme_data_release (data);
-	
+
+    if (release)
+        gpgme_data_release (data);
+    
+    gpgme_data_release (file);	
 	return err;
 }
 
 /**
  * seahorse_util_write_data_to_text:
  * @data: Data to write
+ * @release: Whether to release @data or not
  *
- * Converts @data to a string. @data will be released upon completion.
+ * Converts @data to a string. 
  *
  * Returns: The string read from data
  **/
 gchar*
-seahorse_util_write_data_to_text (gpgme_data_t data)
+seahorse_util_write_data_to_text (gpgme_data_t data, gboolean release)
 {
 	gint size = 128;
-        gchar *buffer, *text;
-        guint nread = 0;
+    gchar *buffer, *text;
+    guint nread = 0;
 	GString *string;
 
     /* 
@@ -282,8 +286,10 @@ seahorse_util_write_data_to_text (gpgme_data_t data)
 	
 	while ((nread = gpgme_data_read (data, buffer, size)) > 0)
 		string = g_string_append_len (string, buffer, nread);
-	
-	gpgme_data_release (data);
+
+    if (release)
+        gpgme_data_release (data);
+    
 	text = string->str;
 	g_string_free (string, FALSE);
 	

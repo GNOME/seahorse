@@ -223,7 +223,7 @@ seahorse_op_export_text (GList *keys, gboolean complete, GError **err)
     
 	/* export data with armor */
 	if (export_data (keys, complete, TRUE, data, err)) {
-    	return seahorse_util_write_data_to_text (data);
+    	return seahorse_util_write_data_to_text (data, TRUE);
     } else {
         gpgme_data_release (data);
         return NULL;
@@ -335,7 +335,7 @@ encrypt_text_common (GList *keys, const gchar *text, EncryptFunc func,
 	encrypt_data_common (sksrc, keys, plain, cipher, func, TRUE, err);
 	g_return_val_if_fail (GPG_IS_OK (*err), NULL);
 	
-	return seahorse_util_write_data_to_text (cipher);
+	return seahorse_util_write_data_to_text (cipher, TRUE);
 }
 
 /**
@@ -478,7 +478,7 @@ seahorse_op_sign_text (SeahorseKeyPair *signer, const gchar *text,
 	sign_data (sksrc, plain, sig, GPGME_SIG_MODE_CLEAR, err);
 	g_return_val_if_fail (GPG_IS_OK (*err), NULL);
 	
-	return seahorse_util_write_data_to_text (sig);
+	return seahorse_util_write_data_to_text (sig, TRUE);
 }
 
 /**
@@ -600,7 +600,7 @@ seahorse_op_verify_text (SeahorseKeySource *sksrc, const gchar *text,
     gpgme_data_release (sig);     
 	g_return_val_if_fail (GPG_IS_OK (*err), NULL);
 	/* return verified text */
-	return seahorse_util_write_data_to_text (plain);
+	return seahorse_util_write_data_to_text (plain, TRUE);
 }
 
 /* helper function to decrypt and verify @cipher. @cipher will be released. */
@@ -688,5 +688,5 @@ seahorse_op_decrypt_verify_text (SeahorseKeySource *sksrc, const gchar *text,
 	decrypt_verify_data (sksrc, cipher, plain, status, err);
 	g_return_val_if_fail (GPG_IS_OK (*err), NULL);
 	/* return text of decrypted data */
-	return seahorse_util_write_data_to_text (plain);
+	return seahorse_util_write_data_to_text (plain, TRUE);
 }
