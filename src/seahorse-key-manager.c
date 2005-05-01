@@ -548,6 +548,7 @@ target_drag_data_received (GtkWidget *widget, GdkDragContext *context, gint x, g
     gchar** uris;
     gchar** u;
     
+    DBG_PRINT(("DragDataReceived -->\n"));
     g_return_if_fail (data != NULL);
     
     sksrc = seahorse_context_get_key_source (sctx);
@@ -576,8 +577,10 @@ target_drag_data_received (GtkWidget *widget, GdkDragContext *context, gint x, g
         
     default:
         g_assert_not_reached ();
-        return;
+        break;
     } 
+
+    DBG_PRINT(("DragDataReceived <--\n"));
 }
 
 /* Refilter the keys when the filter text changes */

@@ -20,6 +20,7 @@
  */
 
 #include <gnome.h>
+#include "config.h"
 
 #include "seahorse-key-manager-store.h"
 #include "seahorse-preferences.h"
@@ -27,6 +28,7 @@
 #include "seahorse-util.h"
 #include "seahorse-op.h"
 #include "seahorse-gconf.h"
+#include "seahorse-gpgmex.h"
 #include "eggtreemultidnd.h"
 
 #define KEY_MANAGER_SORT_KEY "/apps/seahorse/listing/sort_by"
@@ -259,94 +261,109 @@ gconf_notification (GConfClient *gclient, guint id, GConfEntry *entry, GtkTreeVi
 }
 
 static void  
-drag_begin (GtkWidget *widget, GdkDragContext *context, gpointer data)
+drag_begin (GtkWidget *widget, GdkDragContext *context, SeahorseKeyStore *skstore)
 {
+    GtkTreeView *view = GTK_TREE_VIEW (widget);
+    SeahorseKeySource *sksrc;
+    SeahorseOperation *op = NULL;
    	GList *keys = NULL;
-    GtkTreeView *view = GTK_TREE_VIEW (data);
 
-	g_printerr ("::DragBegin -->\n");
+    DBG_PRINT (("drag_begin -->\n"));
+    
+    g_object_get (G_OBJECT (skstore), "key-source", &sksrc, NULL);
+    g_return_if_fail (sksrc != NULL);
+    
   	keys = seahorse_key_store_get_selected_keys (view);
-    g_object_set_data (G_OBJECT (widget), "drag-keys", keys);    
-	g_printerr ("::DragBegin <--\n");
+    if(keys != NULL) {
+        op = seahorse_key_source_export (sksrc, keys, FALSE, NULL);
+        g_object_set_data_full (G_OBJECT (view), "drag-operation", op,
+                                (GDestroyNotify)g_object_unref);
+        g_object_set_data_full (G_OBJECT (view), "drag-keys", keys,
+                                (GDestroyNotify)g_list_free);
+        g_object_set_data (G_OBJECT (view), "drag-file", NULL);
+    }
+    
+    g_object_unref (sksrc);
+    DBG_PRINT (("drag_begin <--\n"));
 }
 
 static void
-cleanup_file (GtkWidget *widget, gchar *file)
+cleanup_file (gchar *file)
 {
     g_return_if_fail (file != NULL);
-    g_printerr ("deleting temp file: %s\n", file);
+    DBG_PRINT (("deleting temp file: %s\n", file));
     unlink (file);
     g_free (file);
 }
 
 static void  
-drag_end (GtkWidget *widget, GdkDragContext *context, gpointer data)
+drag_end (GtkWidget *widget, GdkDragContext *context, SeahorseKeyStore *skstore)
 {
-    GList *keys = NULL;
-    gchar *t;
+    DBG_PRINT (("drag_end -->\n"));
     
-	g_printerr ("::DragEnd -->\n");
-    keys = g_object_get_data (G_OBJECT (widget), "drag-keys");
+    /* This frees the operation and key list if present */
+    g_object_set_data (G_OBJECT (widget), "drag-operation", NULL);
     g_object_set_data (G_OBJECT (widget), "drag-keys", NULL);
-    g_list_free (keys);
-    
-    t = (gchar*)g_object_get_data (G_OBJECT (widget), "drag-file");
-    g_object_set_data (G_OBJECT (widget), "drag-file", NULL);
-    if (t != NULL) /* Delete the files later */
-        g_signal_connect (widget, "destroy", 
-                    G_CALLBACK (cleanup_file), t);
 
-    t = (gchar*)g_object_get_data (G_OBJECT (widget), "drag-data");
-    g_object_set_data (G_OBJECT (widget), "drag-data", NULL);
-    g_free (t);
-    
-    g_printerr ("::DragEnd <--\n");
+    DBG_PRINT (("drag_end <--\n"));
 }
 
 static void  
 drag_data_get (GtkWidget *widget, GdkDragContext *context, 
                GtkSelectionData *selection_data, guint info, 
-               guint time, gpointer data)
+               guint time, SeahorseKeyStore *skstore)
 {
+    SeahorseOperation *op;
     gchar *t, *n;
-   	GList *keys = NULL;
+    GList *keys;
     GError *err = NULL;
-	g_printerr ("::DragDataGet %d -->\n", info); 
+    gpgme_data_t data;
+    gpgme_error_t gerr;
 
-    keys = (GList*)g_object_get_data (G_OBJECT (widget), "drag-keys");
-    if (keys == NULL)
+    DBG_PRINT (("drag_data_get %d -->\n", info)); 
+    
+    op = (SeahorseOperation*)g_object_get_data (G_OBJECT (widget), "drag-operation");
+    if (op == NULL) {
+		DBG_PRINT (("No operation in drag"));
         return;
+    }
 
+    /* Make sure it's complete before we can return data */
+    seahorse_operation_wait (op);
+
+    if (!seahorse_operation_is_successful (op)) {
+        g_object_set_data (G_OBJECT (widget), "drag-operation", NULL);
+        seahorse_operation_copy_error (op, &err);
+        seahorse_util_handle_error (err, _("Couldn't retrieve key data"));
+        return;
+    }
+
+    data = (gpgme_data_t)seahorse_operation_get_result (op);
+    g_return_if_fail (data != NULL);
+    
     if (info == TEXT_PLAIN) {
-        t = (gchar*)g_object_get_data (G_OBJECT (widget), "drag-text");
-        
-        if (t == NULL) {
-            t = seahorse_op_export_text (keys, FALSE, &err);
-            if (t == NULL)
-                seahorse_util_handle_error (err, _("Couldn't export key(s)"));
-            g_object_set_data (G_OBJECT (widget), "drag-text", t);
-        }
+        t = seahorse_util_write_data_to_text (data, FALSE);
 
     } else {
         t = (gchar*)g_object_get_data (G_OBJECT (widget), "drag-file");
         
         if (t == NULL) {
+            keys = g_object_get_data (G_OBJECT (widget), "drag-keys");
+            g_return_if_fail (keys != NULL);
+            
             n = seahorse_util_filename_for_keys (keys);
             g_return_if_fail (n != NULL);
             t = g_build_filename(g_get_tmp_dir (), n, NULL);
             g_free (n);
-        
-            seahorse_op_export_file (keys, FALSE, t, &err);         
-
-            if (err != NULL) {
-                seahorse_util_handle_error (err, _("Couldn't export key to \"%s\""),
-                                seahorse_util_uri_get_last (t));
-                g_free (t);
-                t = NULL;
-            }
             
-            g_object_set_data (G_OBJECT (widget), "drag-file", t);
-        }
+            gerr = seahorse_util_write_data_to_file (t, data, FALSE);
+            g_return_if_fail (GPG_IS_OK (gerr));
+
+            g_object_set_data_full (G_OBJECT (widget), "drag-file", t,
+                                    (GDestroyNotify)cleanup_file);
+        } 
+        
+        t = g_strdup (t);
     }
     
     if (t != NULL) {            
@@ -355,10 +372,10 @@ drag_data_get (GtkWidget *widget, GdkDragContext *context,
 	    			selection_data->target, 8, t, 
 				    strlen (t));
     }
-    
-#ifdef DEBUG
-	g_printerr ("::DragDataGet <--\n");
-#endif
+
+    DBG_PRINT(("drag_data_get <--\n"));
+
+    g_free(t);
 }
 
 /**
@@ -403,15 +420,15 @@ seahorse_key_manager_store_new (SeahorseKeySource *sksrc, GtkTreeView *view)
 	egg_tree_multi_drag_add_drag_support (view);    
     
     g_signal_connect (G_OBJECT (view), "drag_data_get",
-			    G_CALLBACK (drag_data_get), view);
+			    G_CALLBACK (drag_data_get), skstore);
 	g_signal_connect (G_OBJECT (view), "drag_begin", 
-                G_CALLBACK (drag_begin), view);
+                G_CALLBACK (drag_begin), skstore);
 	g_signal_connect (G_OBJECT (view), "drag_end", 
-                G_CALLBACK (drag_end), view);
+                G_CALLBACK (drag_end), skstore);
 
     gtk_drag_source_set (GTK_WIDGET (view), 
                 GDK_BUTTON1_MASK | GDK_BUTTON2_MASK,
-			    seahorse_target_entries, seahorse_n_targets, GDK_ACTION_MOVE);
+			    seahorse_target_entries, seahorse_n_targets, GDK_ACTION_COPY);
 
 	return skstore;
 }

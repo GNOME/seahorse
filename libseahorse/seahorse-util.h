@@ -27,6 +27,7 @@
 #include <time.h>
 #include <gpgme.h>
 
+#include "config.h"
 #include "seahorse-context.h"
 
 typedef enum {
@@ -155,6 +156,12 @@ gboolean    seahorse_util_string_slist_equal   (GSList *sl1, GSList *sl2);
     while (!(expr)) {                               \
         g_thread_yield ();                          \
         g_main_context_iteration (NULL, FALSE);     \
-    }                                               
+    }
+
+#ifdef _DEBUG
+#define DBG_PRINT(x) g_printerr x
+#else
+#define DBG_PRINT(x)
+#endif
 
 #endif /* __SEAHORSE_UTIL_H__ */
