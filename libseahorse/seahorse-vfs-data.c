@@ -430,7 +430,6 @@ vfs_data_cancel(VfsAsyncHandle *ah)
         case VFS_ASYNC_PROCESSING:
             close = (ah->operation != VFS_OP_OPENING);
             gnome_vfs_async_cancel (ah->handle);
-            vfs_data_wait_results (ah, FALSE);
             break;
         
         case VFS_ASYNC_READY:
