@@ -306,7 +306,7 @@ parse_hkp_index (const gchar *response)
 
     gchar **lines, **l;
     gchar **v;
-    gchar *line;
+    gchar *line, *t;
     
     GList *keys = NULL;
     gpgme_key_t key = NULL;
@@ -321,8 +321,12 @@ parse_hkp_index (const gchar *response)
         /* Start a new key */
         if (g_ascii_strncasecmp (line, "pub ", 4) == 0) {
             
-            v = g_strsplit_set (line + 4, " ", 4);
-            if (!v[0] || !v[1] || !v[2] || !v[3]) {
+            t = line + 4;
+            while (*t && isspace (*t))
+                t++;
+            
+            v = g_strsplit_set (t, " ", 3);
+            if (!v[0] || !v[1] || !v[2]) {
                 g_warning ("Invalid key line from server: %s", line);
                 
             } else {
@@ -337,12 +341,16 @@ parse_hkp_index (const gchar *response)
                 keys = g_list_prepend (keys, key);
                 
                 /* Cut the length and fingerprint */
-                fpr = strchr (v[1], '/');
-                if (fpr != NULL)
+                fpr = strchr (v[0], '/');
+                if (fpr == NULL) {
+                    g_warning ("couldn't find key fingerprint in line from server: %s", line);
+                    fpr = "";
+                } else {
                     *(fpr++) = 0;
+                }
                 
                 /* Check out the key type */
-                switch (g_ascii_toupper (v[1][strlen(v[1]) - 1])) {
+                switch (g_ascii_toupper (v[0][strlen(v[0]) - 1])) {
                 case 'D':
                     algo = GPGME_PK_DSA;
                     break;
@@ -355,24 +363,24 @@ parse_hkp_index (const gchar *response)
                 };
 
                 /* Format the date for our parse function */
-                g_strdelimit (v[2], "/", '-');
+                g_strdelimit (v[1], "/", '-');
                 
                 /* Cleanup the UID */
-                g_strstrip (v[3]);
+                g_strstrip (v[2]);
             
-                if (g_ascii_strcasecmp (v[3], "*** KEY REVOKED ***") == 0) {
+                if (g_ascii_strcasecmp (v[2], "*** KEY REVOKED ***") == 0) {
                     flags |= GPGMEX_KEY_REVOKED;
                     has_uid = FALSE;
                 } 
                 
                 /* Add all the info to the key */
                 gpgmex_key_add_subkey (key, fpr, flags, 
-                                       parse_hkp_date (v[2]), 
-                                       0, strtol (v[1], NULL, 10), algo);
+                                       parse_hkp_date (v[1]), 
+                                       0, strtol (v[0], NULL, 10), algo);
 
                 /* And the UID if one was found */                
                 if (has_uid)
-                    gpgmex_key_add_uid (key, v[3], 0);
+                    gpgmex_key_add_uid (key, v[2], 0);
             }
             
             g_strfreev (v);
