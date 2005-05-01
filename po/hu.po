@@ -7,16 +7,16 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: seahorse.HEAD\n"
+"Project-Id-Version: seahorse.HEAD.hu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-04-23 12:02+0000\n"
-"PO-Revision-Date: 2005-04-24 00:37+0200\n"
+"POT-Creation-Date: 2005-04-27 20:03+0000\n"
+"PO-Revision-Date: 2005-04-29 21:25+0200\n"
 "Last-Translator: Gabor Kelemen <kelemeng@gnome.hu>\n"
 "Language-Team: Hungarian <gnome@gnome.hu>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.3.1\n"
+"X-Generator: KBabel 1.10\n"
 "Plural-Forms:  nplurals=1; plural=0;\n"
 
 #: ../agent/eggtrayicon.c:121
@@ -40,8 +40,7 @@ msgid "Selection Bound"
 msgstr "Kijelölés mérete"
 
 #: ../agent/gtk-secure-entry.c:468
-msgid ""
-"The position of the opposite end of the selection from the cursor in chars"
+msgid "The position of the opposite end of the selection from the cursor in chars"
 msgstr "A kijelölés szemközti vége a kurzortól számítva, karakterekben"
 
 #: ../agent/gtk-secure-entry.c:475
@@ -112,20 +111,27 @@ msgstr "Kijelölés fókuszba kerüléskor"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Ha a mező fókuszba kerül, tartalma ki legyen-e jelölve?"
 
-#: ../agent/seahorse-agent-actions.c:97
+#: ../agent/seahorse-agent-actions.c:94
 #: ../src/seahorse-generate-druid.glade.h:27
 msgid "Passphrase:"
 msgstr "Jelmondat:"
 
-#: ../agent/seahorse-agent-actions.c:98
+#: ../agent/seahorse-agent-actions.c:95
 msgid "Please enter a passphrase to use."
 msgstr "Kérem adja meg a használandó jelmondatot."
 
-#: ../agent/seahorse-agent-cache.c:46
+#.
+#. * Implementation of the password cache. Note that only passwords
+#. * are stored in secure memory, all else is allocated normally.
+#. *
+#. * Cache items can be locked which guarantees they'll stay around even
+#. * if their TTL expires.
+#.
+#: ../agent/seahorse-agent-cache.c:42
 msgid "Unparseable Key ID"
 msgstr "Feldolgozhatatlan kulcsazonosító"
 
-#: ../agent/seahorse-agent-cache.c:47
+#: ../agent/seahorse-agent-cache.c:43
 msgid "Unknown/Invalid Key"
 msgstr "Ismeretlen/érvénytelen kulcs"
 
@@ -153,20 +159,24 @@ msgstr "Gyorsítótár _törlése"
 msgid "_Show Window"
 msgstr "_Ablak megjelenítése"
 
-#: ../agent/seahorse-agent-prompt.c:200
+#: ../agent/seahorse-agent-prompt.c:201
 #: ../src/seahorse-generate-druid.glade.h:25
 msgid "Passphrase"
 msgstr "Jelmondat"
 
-#: ../agent/seahorse-agent-prompt.c:365
+#: ../agent/seahorse-agent-prompt.c:367
 msgid "Authorize Password Access"
 msgstr "Felhatalmazás jelszóhozzáféréshez"
 
-#: ../agent/seahorse-agent-prompt.c:400
+#: ../agent/seahorse-agent-prompt.c:402
 msgid "The passphrase is cached in memory."
 msgstr "A jelmondat egy memória-gyorsítótárban van."
 
-#: ../agent/seahorse-agent-prompt.c:417
+#: ../agent/seahorse-agent-prompt.c:407
+msgid "Always ask me before using a cached passphrase"
+msgstr "Kérdezzen, mielőtt egy gyorsítótárazott jelmondatot használ"
+
+#: ../agent/seahorse-agent-prompt.c:424
 msgid "_Authorize"
 msgstr "_Felhatalmazás"
 
@@ -257,8 +267,7 @@ msgstr "Ellenőrzési művelet PGP-vel aláírt fájlokon"
 
 #: ../data/seahorse.schemas.in.h:1
 msgid "A list of key server URIs to search for remote PGP keys."
-msgstr ""
-"A távoli kulcsok kereséséhez használt kulcskiszolgálók URI-jeinek listája."
+msgstr "A távoli kulcsok kereséséhez használt kulcskiszolgálók URI-jeinek listája."
 
 #: ../data/seahorse.schemas.in.h:2
 msgid "Controls the visibility of the expires column for the key manager."
@@ -416,8 +425,7 @@ msgstr ""
 "(percben megadva)."
 
 #: ../data/seahorse.schemas.in.h:32
-msgid ""
-"This option enables the GPG password cache in the seahorse-agent daemon."
+msgid "This option enables the GPG password cache in the seahorse-agent daemon."
 msgstr ""
 "Ez a lehetőség engedélyezi a GPG jelszavak gyorsítótárazását a seahorse-"
 "agent démonban."
@@ -434,8 +442,7 @@ msgstr ""
 "kerül kibocsátásra."
 
 #: ../data/seahorse.schemas.in.h:34
-msgid ""
-"This specifies the default key to use for certain operations, mainly signing."
+msgid "This specifies the default key to use for certain operations, mainly signing."
 msgstr ""
 "Ez megadja az alapértelmezett kulcsot bizonyos műveletekhez, főképp "
 "aláíráshoz."
@@ -460,6 +467,73 @@ msgstr "Mindig titkosítson-e az alapértelmezett kulccsal?"
 msgid "Whether to use ASCII Armor"
 msgstr "ASCII pajzs használata ki/be"
 
+#: ../libseahorse/seahorse-add-keyserver.glade.h:1
+#: ../libseahorse/seahorse-passphrase.glade.h:1
+#: ../libseahorse/seahorse-recipients.glade.h:1
+#: ../src/seahorse-add-uid.glade.h:1
+#: ../src/seahorse-change-passphrase.glade.h:1
+#: ../src/seahorse-generate-adv.glade.h:1
+#: ../src/seahorse-generate-druid.glade.h:1
+#: ../src/seahorse-key-manager.glade.h:1
+#: ../src/seahorse-multi-encrypt.glade.h:1 ../src/seahorse-revoke.glade.h:1
+msgid "*"
+msgstr "*"
+
+#: ../libseahorse/seahorse-add-keyserver.glade.h:2
+msgid ":"
+msgstr ":"
+
+#: ../libseahorse/seahorse-add-keyserver.glade.h:3
+msgid "Add Key Server"
+msgstr "Kulcskiszolgáló hozzáadása"
+
+#: ../libseahorse/seahorse-add-keyserver.glade.h:4
+msgid "Host:"
+msgstr "Gép:"
+
+#: ../libseahorse/seahorse-add-keyserver.glade.h:5
+msgid "Key Server Type:"
+msgstr "Kulcskiszolgáló típusa:"
+
+#: ../libseahorse/seahorse-add-keyserver.glade.h:6
+msgid "The host name or address of the server."
+msgstr "A kiszolgáló neve vagy címe."
+
+#: ../libseahorse/seahorse-add-keyserver.glade.h:7
+msgid "The port to access the server on."
+msgstr "A port, melyen a kiszolgáló elérhető."
+
+#: ../libseahorse/seahorse-add-keyserver.glade.h:8
+msgid "initial temp item"
+msgstr "kiinduló átmeneti elem"
+
+#: ../libseahorse/seahorse-hkp-source.c:182
+#: ../libseahorse/seahorse-ldap-source.c:376
+#, c-format
+msgid "Couldn't communicate with '%s': %s"
+msgstr "Nem lehet kommunikálni a következővel: \"%s\": %s"
+
+#: ../libseahorse/seahorse-hkp-source.c:435
+msgid "Searching for keys..."
+msgstr "Kulcsok keresése..."
+
+#: ../libseahorse/seahorse-hkp-source.c:507
+#: ../libseahorse/seahorse-hkp-source.c:556
+msgid "Uploading keys..."
+msgstr "Kulcsok feltöltése..."
+
+#: ../libseahorse/seahorse-hkp-source.c:672
+#, c-format
+msgid "Searching for keys on: %s"
+msgstr "Kulcsok keresése a következőn: %s"
+
+#: ../libseahorse/seahorse-hkp-source.c:746
+#: ../libseahorse/seahorse-hkp-source.c:820
+#: ../libseahorse/seahorse-ldap-source.c:553
+#, c-format
+msgid "Connecting to: %s"
+msgstr "Kapcsolódás a következőhöz: %s"
+
 #. Make the column
 #: ../libseahorse/seahorse-key-store.c:780
 #: ../src/seahorse-key-properties.c:401 ../src/seahorse-key-properties.c:495
@@ -471,16 +545,6 @@ msgstr "Név"
 #: ../src/seahorse-key-properties.c:398
 msgid "Key ID"
 msgstr "Kulcsazonosító"
-
-#: ../libseahorse/seahorse-ldap-source.c:376
-#, c-format
-msgid "Couldn't communicate with '%s': %s"
-msgstr "Nem lehet kommunikálni a következővel: \"%s\": %s"
-
-#: ../libseahorse/seahorse-ldap-source.c:553
-#, c-format
-msgid "Connecting to: %s"
-msgstr "Kapcsolódás a következőhöz: %s"
 
 #: ../libseahorse/seahorse-ldap-source.c:726
 #, c-format
@@ -515,17 +579,6 @@ msgstr "Írja be az új jelmondatot %s számára"
 msgid "Enter passphrase for '%s'"
 msgstr "Írja be a jelmondatot %s számára"
 
-#: ../libseahorse/seahorse-passphrase.glade.h:1
-#: ../libseahorse/seahorse-recipients.glade.h:1
-#: ../src/seahorse-add-uid.glade.h:1
-#: ../src/seahorse-change-passphrase.glade.h:1
-#: ../src/seahorse-generate-adv.glade.h:1
-#: ../src/seahorse-generate-druid.glade.h:1
-#: ../src/seahorse-key-manager.glade.h:1
-#: ../src/seahorse-multi-encrypt.glade.h:1 ../src/seahorse-revoke.glade.h:1
-msgid "*"
-msgstr "*"
-
 #: ../libseahorse/seahorse-passphrase.glade.h:2
 msgid "Enter Passphrase"
 msgstr "Írja be a jelmondatot"
@@ -547,33 +600,43 @@ msgid "The 'seahorse-agent' program exited unsucessfully."
 msgstr "A \"seahorse-agent\" program sikertelenül kilépett."
 
 #: ../libseahorse/seahorse-prefs-cache.c:415
-msgid ""
-"Another passphrase caching agent is running. Disabling cache preferences."
+msgid "Another passphrase caching agent is running. Disabling cache preferences."
 msgstr ""
 "Már fut egy másik jelmondat-gyorsítótárazó ügynök. Gyorsítótár beállításai "
 "kikapcsolva."
 
-#: ../libseahorse/seahorse-prefs.c:37
-msgid "[Add a key server here]"
-msgstr "[Itt adjon hozzá egy kulcskiszolgálót]"
+#: ../libseahorse/seahorse-prefs.c:55
+msgid ""
+"<b><big>Not a valid Key Server address.</big></b>\n"
+"\n"
+"For help contact your system adminstrator or the administrator of the key "
+"server."
+msgstr ""
+"<b><big>Érvénytelen kulcskiszolgáló-cím.</big></b>\n"
+"\n"
+"Segítségért vegye fel a kapcsolatot a rendszergazdával vagy a kulcskiszolgáló rendszergazdájával."
 
-#: ../libseahorse/seahorse-prefs.c:191
+#: ../libseahorse/seahorse-prefs.c:165
 msgid "URL"
 msgstr "URL"
 
-#: ../libseahorse/seahorse-prefs.c:299
+#: ../libseahorse/seahorse-prefs.c:348
+msgid "Custom"
+msgstr "Egyéni"
+
+#: ../libseahorse/seahorse-prefs.c:417
 msgid "None: Don't publish keys"
 msgstr "Nincs: ne tegye közzé a kulcsokat"
 
-#: ../libseahorse/seahorse-prefs.c:349
+#: ../libseahorse/seahorse-prefs.c:467
 msgid "_Encrypt to Self"
 msgstr "_Titkosítás magunknak"
 
-#: ../libseahorse/seahorse-prefs.c:351
+#: ../libseahorse/seahorse-prefs.c:469
 msgid "_Armor Encode Files"
 msgstr "Fájlok titkosítása _pajzzsal"
 
-#: ../libseahorse/seahorse-prefs.c:357
+#: ../libseahorse/seahorse-prefs.c:475
 msgid "None. Prompt for a key."
 msgstr "Nincs. Kulcs bekérése."
 
@@ -676,7 +739,7 @@ msgid "Loading Keys..."
 msgstr "Kulcsok betöltése..."
 
 #: ../libseahorse/seahorse-recipients-store.c:154
-#: ../src/seahorse-key-manager-store.c:379
+#: ../src/seahorse-key-manager-store.c:383
 msgid "Validity"
 msgstr "Érvényesség"
 
@@ -748,6 +811,14 @@ msgstr "Kere_sés: "
 #: ../libseahorse/seahorse-signer.glade.h:2
 msgid "_Sign message with key:"
 msgstr "Aláírás a kö_vetkező kulccsal:"
+
+#: ../libseahorse/seahorse-server-source.c:656
+msgid "LDAP Key Server"
+msgstr "LDAP kulcskiszolgáló"
+
+#: ../libseahorse/seahorse-server-source.c:659
+msgid "HTTP Key Server"
+msgstr "HTTP kulcskiszolgáló"
 
 #: ../libseahorse/seahorse-signatures.c:49
 msgid "[Unknown Key]"
@@ -1363,7 +1434,7 @@ msgid "Enter Name - Must be at least five letters."
 msgstr "Adja meg a nevet - Ez legalább 5 betűből álljon"
 
 #: ../src/seahorse-generate-druid.glade.h:13
-#: ../src/seahorse-key-manager-store.c:391
+#: ../src/seahorse-key-manager-store.c:395
 msgid "Expiration Date"
 msgstr "Lejárati idő"
 
@@ -1442,10 +1513,8 @@ msgstr ""
 "előzőeken túl tudja, hogy adatai kriptográfiai támadásnak lesznek kitéve."
 
 #: ../src/seahorse-generate-druid.glade.h:34
-msgid ""
-"This assistant will guide you through the steps of creating a PGP key pair."
-msgstr ""
-"Ez az asszisztens végigvezeti Önt egy PGP kulcspár előállításának lépésein."
+msgid "This assistant will guide you through the steps of creating a PGP key pair."
+msgstr "Ez az asszisztens végigvezeti Önt egy PGP kulcspár előállításának lépésein."
 
 #: ../src/seahorse-generate-druid.glade.h:35
 msgid ""
@@ -1525,22 +1594,22 @@ msgstr "Nyilvános PGP kulcs"
 msgid "User ID"
 msgstr "Felhasználóazonosító"
 
-#: ../src/seahorse-key-manager-store.c:322
+#: ../src/seahorse-key-manager-store.c:326
 msgid "Couldn't export key(s)"
 msgstr "Nem sikerült exportálni a kulcso(ka)t"
 
-#: ../src/seahorse-key-manager-store.c:338 ../src/seahorse-key-manager.c:198
+#: ../src/seahorse-key-manager-store.c:342 ../src/seahorse-key-manager.c:198
 #: ../src/seahorse-key-properties.c:297
 #: ../src/seahorse-keyserver-results.c:130
 #, c-format
 msgid "Couldn't export key to \"%s\""
 msgstr "Nem sikerült exportálni a kulcsot ide: \"%s\""
 
-#: ../src/seahorse-key-manager-store.c:383
+#: ../src/seahorse-key-manager-store.c:387
 msgid "Trust"
 msgstr "Megbízhatóság"
 
-#: ../src/seahorse-key-manager-store.c:387
+#: ../src/seahorse-key-manager-store.c:391
 msgid "Type"
 msgstr "Típus"
 
@@ -1684,8 +1753,7 @@ msgid "Publish and/or sync your keys with those online."
 msgstr "Kulcsainak közzététele és/vagy szinkronizálása az online lévőkkel."
 
 #: ../src/seahorse-key-manager.glade.h:28
-msgid ""
-"Publish the selected keys online, and sync any changes others have made."
+msgid "Publish the selected keys online, and sync any changes others have made."
 msgstr ""
 "A kijelölt kulcsok online közzététele és a mások által végrehajtott "
 "változtatások szinkronizálása."
@@ -2154,8 +2222,7 @@ msgstr "<b>Több fájlt vagy mappát jelölt ki</b>"
 msgid ""
 "Because the files are located remotely, each file will be encrypted "
 "seperately."
-msgstr ""
-"Mivel a fájlok távoli helyen vannak, minden fájl külön-külön lesz titkosítva."
+msgstr "Mivel a fájlok távoli helyen vannak, minden fájl külön-külön lesz titkosítva."
 
 #: ../src/seahorse-multi-encrypt.glade.h:4
 msgid "Encrypt Multiple Files"
@@ -2386,8 +2453,7 @@ msgid "If signature expires with key"
 msgstr "Ha az aláírás lejár a kulcscsal"
 
 #: ../src/seahorse-sign.glade.h:8
-msgid ""
-"If signature is local to the key ring and won't be exported with the key"
+msgid "If signature is local to the key ring and won't be exported with the key"
 msgstr "Ha az aláírás helyi a kulcstartóhoz és nem lesz exportálva a kulcscsal"
 
 #: ../src/seahorse-sign.glade.h:9
@@ -2421,3 +2487,4 @@ msgstr "_Visszavonható"
 #: ../src/seahorse.desktop.in.h:2
 msgid "Manage your encryption keys"
 msgstr "Titkosítási kulcsok kezelése"
+
