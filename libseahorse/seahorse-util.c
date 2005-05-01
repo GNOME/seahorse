@@ -240,15 +240,15 @@ seahorse_util_write_data_to_file (const gchar *path, gpgme_data_t data,
     if (file != NULL) {
     	buffer = g_new0 (gchar, 128);
     	
-    	while ((nread = gpgme_data_read (data, buffer, 128)) > 0)
-        {
-            if(gpgme_data_write (file, buffer, nread) < 0)
-            {
+    	while ((nread = gpgme_data_read (data, buffer, 128)) > 0) {
+            if(gpgme_data_write (file, buffer, nread) < 0) {
                 gpg_err_code_t e = gpg_err_code_from_errno (errno);
                 err = GPG_E (e);                
                 break;
             }
         }
+
+        g_free (buffer);
     }
 
     if (release)
