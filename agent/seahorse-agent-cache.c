@@ -305,7 +305,7 @@ seahorse_agent_cache_set (const gchar *id, const gchar *pass,
     if (id == NULL)
         id = TRANSIENT_ID;
 
-    g_assert (pass && pass[0]);
+    g_return_if_fail (pass != NULL);
 
     /* Whether to cache passwords or not */
     cache = seahorse_gconf_get_boolean (SETTING_CACHE);
