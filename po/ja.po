@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: seahorse HEAD\n"
+"Project-Id-Version: seahorse seahorse-0-8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-04-16 14:40+0900\n"
-"PO-Revision-Date: 2005-04-16 14:38+0900\n"
+"POT-Creation-Date: 2005-05-09 23:05+0900\n"
+"PO-Revision-Date: 2005-05-09 23:04+0900\n"
 "Last-Translator: Takeshi AIHANA <aihana@gnome.gr.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -111,20 +111,27 @@ msgid "Whether to select the contents of an entry when it is focused"
 msgstr ""
 "エントリがフォーカスされたら、その内容を選択されたものと見なすかどうかです"
 
-#: ../agent/seahorse-agent-actions.c:97
+#: ../agent/seahorse-agent-actions.c:94
 #: ../src/seahorse-generate-druid.glade.h:27
 msgid "Passphrase:"
 msgstr "パスフレーズ:"
 
-#: ../agent/seahorse-agent-actions.c:98
+#: ../agent/seahorse-agent-actions.c:95
 msgid "Please enter a passphrase to use."
 msgstr "パスワードを入力して下さい"
 
-#: ../agent/seahorse-agent-cache.c:46
+#.
+#. * Implementation of the password cache. Note that only passwords
+#. * are stored in secure memory, all else is allocated normally.
+#. *
+#. * Cache items can be locked which guarantees they'll stay around even
+#. * if their TTL expires.
+#.
+#: ../agent/seahorse-agent-cache.c:42
 msgid "Unparseable Key ID"
 msgstr "解析できない鍵 ID"
 
-#: ../agent/seahorse-agent-cache.c:47
+#: ../agent/seahorse-agent-cache.c:43
 msgid "Unknown/Invalid Key"
 msgstr "不明な鍵、または不正な鍵です"
 
@@ -152,20 +159,24 @@ msgstr "キャッシュのクリア(_C)"
 msgid "_Show Window"
 msgstr "ウィンドウの表示(_S)"
 
-#: ../agent/seahorse-agent-prompt.c:200
+#: ../agent/seahorse-agent-prompt.c:201
 #: ../src/seahorse-generate-druid.glade.h:25
 msgid "Passphrase"
 msgstr "パスフレーズ"
 
-#: ../agent/seahorse-agent-prompt.c:365
+#: ../agent/seahorse-agent-prompt.c:367
 msgid "Authorize Password Access"
 msgstr "認証パスワード・アクセス"
 
-#: ../agent/seahorse-agent-prompt.c:400
+#: ../agent/seahorse-agent-prompt.c:402
 msgid "The passphrase is cached in memory."
 msgstr "パスフレーズをメモリの中にキャッシュしました。"
 
-#: ../agent/seahorse-agent-prompt.c:417
+#: ../agent/seahorse-agent-prompt.c:407
+msgid "Always ask me before using a cached passphrase"
+msgstr "キャッシュしたパスフレーズを使用する前に警告します"
+
+#: ../agent/seahorse-agent-prompt.c:424
 msgid "_Authorize"
 msgstr "認証(_A)"
 
@@ -449,43 +460,100 @@ msgstr "常にデフォルトの鍵を暗号化するかどうか"
 msgid "Whether to use ASCII Armor"
 msgstr "ASCII 保護を使用するかどうか"
 
+#: ../libseahorse/seahorse-add-keyserver.glade.h:1
+#: ../libseahorse/seahorse-passphrase.glade.h:1
+#: ../libseahorse/seahorse-recipients.glade.h:1
+#: ../src/seahorse-add-uid.glade.h:1
+#: ../src/seahorse-change-passphrase.glade.h:1
+#: ../src/seahorse-generate-adv.glade.h:1
+#: ../src/seahorse-generate-druid.glade.h:1
+#: ../src/seahorse-key-manager.glade.h:1
+#: ../src/seahorse-multi-encrypt.glade.h:1 ../src/seahorse-revoke.glade.h:1
+msgid "*"
+msgstr "*"
+
+#: ../libseahorse/seahorse-add-keyserver.glade.h:2
+msgid ":"
+msgstr ":"
+
+#: ../libseahorse/seahorse-add-keyserver.glade.h:3
+msgid "Add Key Server"
+msgstr "鍵サーバの追加"
+
+#: ../libseahorse/seahorse-add-keyserver.glade.h:4
+msgid "Host:"
+msgstr "ホスト:"
+
+#: ../libseahorse/seahorse-add-keyserver.glade.h:5
+msgid "Key Server Type:"
+msgstr "鍵サーバの種類:"
+
+#: ../libseahorse/seahorse-add-keyserver.glade.h:6
+msgid "The host name or address of the server."
+msgstr "サーバのホスト名またはアドレスです"
+
+#: ../libseahorse/seahorse-add-keyserver.glade.h:7
+msgid "The port to access the server on."
+msgstr "アクセスするサーバのポート番号です"
+
+#: ../libseahorse/seahorse-add-keyserver.glade.h:8
+msgid "initial temp item"
+msgstr "initial temp item"
+
+#: ../libseahorse/seahorse-hkp-source.c:182
+#: ../libseahorse/seahorse-ldap-source.c:376
+#, c-format
+msgid "Couldn't communicate with '%s': %s"
+msgstr "'%s' と通信できませんでした: %s"
+
+#: ../libseahorse/seahorse-hkp-source.c:443
+msgid "Searching for keys..."
+msgstr "鍵の検索中..."
+
+#: ../libseahorse/seahorse-hkp-source.c:515
+#: ../libseahorse/seahorse-hkp-source.c:564
+msgid "Uploading keys..."
+msgstr "鍵の読み込み中..."
+
+#: ../libseahorse/seahorse-hkp-source.c:680
+#, c-format
+msgid "Searching for keys on: %s"
+msgstr "鍵の検索中: %s"
+
+#: ../libseahorse/seahorse-hkp-source.c:754
+#: ../libseahorse/seahorse-hkp-source.c:828
+#: ../libseahorse/seahorse-ldap-source.c:553
+#, c-format
+msgid "Connecting to: %s"
+msgstr "接続中: %s"
+
 #. Make the column
-#: ../libseahorse/seahorse-key-store.c:750
+#: ../libseahorse/seahorse-key-store.c:780
 #: ../src/seahorse-key-properties.c:401 ../src/seahorse-key-properties.c:495
 msgid "Name"
 msgstr "名前"
 
 #. Make the column
-#: ../libseahorse/seahorse-key-store.c:753
+#: ../libseahorse/seahorse-key-store.c:783
 #: ../src/seahorse-key-properties.c:398
 msgid "Key ID"
 msgstr "鍵のID"
 
-#: ../libseahorse/seahorse-ldap-source.c:377
-#, c-format
-msgid "Couldn't communicate with '%s': %s"
-msgstr "'%s' と通信できませんでした: %s"
-
-#: ../libseahorse/seahorse-ldap-source.c:554
-#, c-format
-msgid "Connecting to: %s"
-msgstr "接続中: %s"
-
-#: ../libseahorse/seahorse-ldap-source.c:727
+#: ../libseahorse/seahorse-ldap-source.c:726
 #, c-format
 msgid "Searching for keys containing '%s'..."
 msgstr "'%s' を含む鍵の検索中..."
 
-#: ../libseahorse/seahorse-ldap-source.c:754
+#: ../libseahorse/seahorse-ldap-source.c:753
 #, c-format
 msgid "Searching for key id '%s'..."
 msgstr "鍵 (ID='%s') の検索中..."
 
-#: ../libseahorse/seahorse-ldap-source.c:848
+#: ../libseahorse/seahorse-ldap-source.c:847
 msgid "Retrieving remote keys..."
 msgstr "リモートの鍵の取得中..."
 
-#: ../libseahorse/seahorse-ldap-source.c:992
+#: ../libseahorse/seahorse-ldap-source.c:991
 msgid "Sending keys to key server..."
 msgstr "鍵を鍵サーバへ転送中..."
 
@@ -503,17 +571,6 @@ msgstr "'%s' の新しいパスフレーズを入力して下さい"
 #, c-format
 msgid "Enter passphrase for '%s'"
 msgstr "'%s' のパスフレーズを入力して下さい"
-
-#: ../libseahorse/seahorse-passphrase.glade.h:1
-#: ../libseahorse/seahorse-recipients.glade.h:1
-#: ../src/seahorse-add-uid.glade.h:1
-#: ../src/seahorse-change-passphrase.glade.h:1
-#: ../src/seahorse-generate-adv.glade.h:1
-#: ../src/seahorse-generate-druid.glade.h:1
-#: ../src/seahorse-key-manager.glade.h:1
-#: ../src/seahorse-multi-encrypt.glade.h:1 ../src/seahorse-revoke.glade.h:1
-msgid "*"
-msgstr "*"
 
 #: ../libseahorse/seahorse-passphrase.glade.h:2
 msgid "Enter Passphrase"
@@ -542,27 +599,38 @@ msgstr ""
 "別のパスフレーズのキャッシュ・エージェントが実行中です (キャッシュの設定を無"
 "効にします)"
 
-#: ../libseahorse/seahorse-prefs.c:37
-msgid "[Add a key server here]"
-msgstr "[ここに追加する鍵サーバを入力して下さい]"
+#: ../libseahorse/seahorse-prefs.c:55
+msgid ""
+"<b><big>Not a valid Key Server address.</big></b>\n"
+"\n"
+"For help contact your system adminstrator or the administrator of the key "
+"server."
+msgstr ""
+"<b><big>鍵サーバのアドレスが正しくありません。</big></b>\n"
+"\n"
+"システム管理者または鍵サーバの管理者に問い合わせして下さい。"
 
-#: ../libseahorse/seahorse-prefs.c:191
+#: ../libseahorse/seahorse-prefs.c:165
 msgid "URL"
 msgstr "URL"
 
-#: ../libseahorse/seahorse-prefs.c:299
+#: ../libseahorse/seahorse-prefs.c:348
+msgid "Custom"
+msgstr "カスタム"
+
+#: ../libseahorse/seahorse-prefs.c:417
 msgid "None: Don't publish keys"
 msgstr "なし: 鍵を公開しない"
 
-#: ../libseahorse/seahorse-prefs.c:349
+#: ../libseahorse/seahorse-prefs.c:467
 msgid "_Encrypt to Self"
 msgstr "鍵そのものを暗号化する(_E)"
 
-#: ../libseahorse/seahorse-prefs.c:351
+#: ../libseahorse/seahorse-prefs.c:469
 msgid "_Armor Encode Files"
 msgstr "ファイルを ASCII 保護する(_A)"
 
-#: ../libseahorse/seahorse-prefs.c:357
+#: ../libseahorse/seahorse-prefs.c:475
 msgid "None. Prompt for a key."
 msgstr "なし (鍵に問い合わせる)"
 
@@ -664,8 +732,8 @@ msgstr[1] "%d 個の鍵を読み込みました"
 msgid "Loading Keys..."
 msgstr "鍵の読み込み中..."
 
-#: ../libseahorse/seahorse-recipients-store.c:153
-#: ../src/seahorse-key-manager-store.c:379
+#: ../libseahorse/seahorse-recipients-store.c:154
+#: ../src/seahorse-key-manager-store.c:400
 msgid "Validity"
 msgstr "妥当性"
 
@@ -711,7 +779,7 @@ msgstr[1] "(%d 個は完全に妥当ではありません)"
 msgid "%s%s"
 msgstr "%s%s"
 
-#: ../libseahorse/seahorse-recipients.c:170
+#: ../libseahorse/seahorse-recipients.c:176
 msgid "None (Don't sign)"
 msgstr "なし (署名しない)"
 
@@ -737,6 +805,14 @@ msgstr "検索(_F):"
 #: ../libseahorse/seahorse-signer.glade.h:2
 msgid "_Sign message with key:"
 msgstr "次のの鍵を使ってメッセージに署名する(_S):"
+
+#: ../libseahorse/seahorse-server-source.c:656
+msgid "LDAP Key Server"
+msgstr "LDAP 鍵サーバ"
+
+#: ../libseahorse/seahorse-server-source.c:659
+msgid "HTTP Key Server"
+msgstr "HTTP 鍵サーバ"
 
 #: ../libseahorse/seahorse-signatures.c:49
 msgid "[Unknown Key]"
@@ -799,31 +875,31 @@ msgstr "署名する鍵の選択"
 msgid "%Y-%m-%d"
 msgstr "%Y/%m/%d"
 
-#: ../libseahorse/seahorse-util.c:418
+#: ../libseahorse/seahorse-util.c:479
 msgid "Multiple Keys"
 msgstr "複数の鍵"
 
-#: ../libseahorse/seahorse-util.c:728
+#: ../libseahorse/seahorse-util.c:789
 msgid "Couldn't run file-roller"
 msgstr "`file-roller` を起動できませんでした"
 
-#: ../libseahorse/seahorse-util.c:733
+#: ../libseahorse/seahorse-util.c:794
 msgid "The file-roller process did not complete successfully"
 msgstr "プロセス `file-roller` の起動に失敗しました"
 
-#: ../libseahorse/seahorse-util.c:775
+#: ../libseahorse/seahorse-util.c:836
 msgid "All key files"
 msgstr "全ての鍵ファイル"
 
-#: ../libseahorse/seahorse-util.c:781 ../libseahorse/seahorse-util.c:821
+#: ../libseahorse/seahorse-util.c:842 ../libseahorse/seahorse-util.c:882
 msgid "All files"
 msgstr "全てのファイル"
 
-#: ../libseahorse/seahorse-util.c:814
+#: ../libseahorse/seahorse-util.c:875
 msgid "Archive files"
 msgstr "書庫ファイル"
 
-#: ../libseahorse/seahorse-util.c:855
+#: ../libseahorse/seahorse-util.c:916
 msgid ""
 "<b>A file already exists with this name.</b>\n"
 "\n"
@@ -833,7 +909,7 @@ msgstr ""
 "\n"
 "新しいファイルで置き換えてもよろしいですか？"
 
-#: ../libseahorse/seahorse-util.c:858
+#: ../libseahorse/seahorse-util.c:919
 msgid "_Replace"
 msgstr "上書きする(_R)"
 
@@ -1012,61 +1088,61 @@ msgstr "署名ファイルを検証する"
 msgid "Read list of URIs on standard in"
 msgstr "標準入力から URI のリストを読み込む"
 
-#: ../src/main.c:147 ../src/seahorse-key-manager.c:98
+#: ../src/main.c:149 ../src/seahorse-key-manager.c:98
 #, c-format
 msgid "Couldn't import keys from \"%s\""
 msgstr "\"%s\" から鍵をインポートできませんでした"
 
-#: ../src/main.c:155
+#: ../src/main.c:157
 msgid "Imported key"
 msgstr "鍵のインポートが完了しました"
 
-#: ../src/main.c:156
+#: ../src/main.c:158
 #, c-format
 msgid "Imported %d keys"
 msgstr "%d 個の鍵をインポートしました"
 
-#: ../src/main.c:195
+#: ../src/main.c:197
 #, c-format
 msgid "Choose Encrypted File Name for '%s'"
 msgstr "'%s' に対する暗号化したファイルを選択して下さい"
 
-#: ../src/main.c:207
+#: ../src/main.c:209
 #, c-format
 msgid "Couldn't encrypt \"%s\""
 msgstr "\"%s\" を暗号化できませんでした"
 
-#: ../src/main.c:261
+#: ../src/main.c:263
 #, c-format
 msgid "Choose Signature File Name for '%s'"
 msgstr "'%s' に対する署名ファイルを選択して下さい"
 
-#: ../src/main.c:269
+#: ../src/main.c:271
 #, c-format
 msgid "Couldn't sign \"%s\""
 msgstr "\"%s\" に署名できませんでした"
 
-#: ../src/main.c:301
+#: ../src/main.c:303
 #, c-format
 msgid "Choose Decrypted File Name for '%s'"
 msgstr "'%s' に対する暗号化解除したファイルを選択して下さい"
 
-#: ../src/main.c:308
+#: ../src/main.c:310
 #, c-format
 msgid "Couldn't decrypt \"%s\""
 msgstr "\"%s\" を解読できませんでした"
 
-#: ../src/main.c:360
+#: ../src/main.c:362
 #, c-format
 msgid "Choose Original File for '%s'"
 msgstr "'%s' のオリジナル・ファイルを選択して下さい"
 
-#: ../src/main.c:388
+#: ../src/main.c:390
 #, c-format
 msgid "Couldn't verify \"%s\""
 msgstr "\"%s\" を検証できませんでした"
 
-#: ../src/main.c:434 ../src/seahorse-key-manager.glade.h:19
+#: ../src/main.c:436 ../src/seahorse-key-manager.glade.h:19
 #: ../src/seahorse.desktop.in.h:1
 msgid "Encryption Key Manager"
 msgstr "暗号鍵マネージャ"
@@ -1352,7 +1428,7 @@ msgid "Enter Name - Must be at least five letters."
 msgstr "名前は 5文字以上にして下さい"
 
 #: ../src/seahorse-generate-druid.glade.h:13
-#: ../src/seahorse-key-manager-store.c:391
+#: ../src/seahorse-key-manager-store.c:412
 msgid "Expiration Date"
 msgstr "有効期限"
 
@@ -1499,39 +1575,32 @@ msgstr "新しい鍵を生成する方法を選択して下さい:"
 msgid "radio_druid"
 msgstr "radio_druid"
 
-#: ../src/seahorse-key-manager-store.c:176
+#: ../src/seahorse-key-manager-store.c:178
 #: ../src/seahorse-key-properties.c:239
 msgid "Expired"
 msgstr "期限切れ"
 
-#: ../src/seahorse-key-manager-store.c:191
+#: ../src/seahorse-key-manager-store.c:193
 msgid "Private PGP Key"
 msgstr "プライベートな PGP 鍵"
 
-#: ../src/seahorse-key-manager-store.c:193
+#: ../src/seahorse-key-manager-store.c:195
 msgid "Public PGP Key"
 msgstr "公開 PGP 鍵"
 
-#: ../src/seahorse-key-manager-store.c:210
+#: ../src/seahorse-key-manager-store.c:212
 msgid "User ID"
 msgstr "ユーザ ID"
 
-#: ../src/seahorse-key-manager-store.c:322
-msgid "Couldn't export key(s)"
-msgstr "鍵をエキスポートできませんでした"
+#: ../src/seahorse-key-manager-store.c:337
+msgid "Couldn't retrieve key data"
+msgstr "鍵データを取得できませんでした"
 
-#: ../src/seahorse-key-manager-store.c:338 ../src/seahorse-key-manager.c:198
-#: ../src/seahorse-key-properties.c:297
-#: ../src/seahorse-keyserver-results.c:130
-#, c-format
-msgid "Couldn't export key to \"%s\""
-msgstr "\"%s\" へ鍵をエキスポートできませんでした"
-
-#: ../src/seahorse-key-manager-store.c:383
+#: ../src/seahorse-key-manager-store.c:404
 msgid "Trust"
 msgstr "信頼度"
 
-#: ../src/seahorse-key-manager-store.c:387
+#: ../src/seahorse-key-manager-store.c:408
 msgid "Type"
 msgstr "種類"
 
@@ -1552,6 +1621,12 @@ msgstr "クリップボードへ鍵をエキスポートできませんでした
 msgid "Export Key"
 msgstr "鍵のエキスポート"
 
+#: ../src/seahorse-key-manager.c:198 ../src/seahorse-key-properties.c:297
+#: ../src/seahorse-keyserver-results.c:130
+#, c-format
+msgid "Couldn't export key to \"%s\""
+msgstr "\"%s\" へ鍵をエキスポートできませんでした"
+
 #: ../src/seahorse-key-manager.c:217
 msgid "Backup Keyrings to Archive"
 msgstr "キーリングを書庫へバックアップします"
@@ -1567,7 +1642,7 @@ msgstr ""
 msgid "seahorse"
 msgstr "Seahorse"
 
-#: ../src/seahorse-key-manager.c:568
+#: ../src/seahorse-key-manager.c:569
 #, c-format
 msgid "Couldn't import key from \"%s\""
 msgstr "\"%s\" から鍵をインポートできませんでした"
