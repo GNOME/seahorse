@@ -57,6 +57,21 @@ static const gchar *confs[4] = {
 /* Previous gpg.conf settings */
 static gchar *prev_values[4];
 
+static const struct poptOption options[] = {
+	{ "cshell", 'c', POPT_ARG_NONE | POPT_ARG_VAL, &g_cshell, TRUE,
+	  N_("Print variables in for a C type shell"), NULL },
+
+	{ "no-daemonize", 'd', POPT_ARG_NONE | POPT_ARG_VAL, &g_daemonize, FALSE,
+	  N_("Do not daemonize seahorse-agent"), NULL },
+
+	{ "variables", 'v', POPT_ARG_NONE | POPT_ARG_VAL, &g_displayvars, TRUE,
+	  N_("Display variables instead of editing gpg.conf"), NULL },
+	
+	POPT_AUTOHELP
+	
+	POPT_TABLEEND
+};
+
 /* -----------------------------------------------------------------------------
  */
 
@@ -179,13 +194,6 @@ daemonize (const char *sockname)
 }
 
 static void
-usage ()
-{
-    fprintf (stderr, _("usage: seahorse-agent [-cdv]\n"));
-    exit (2);
-}
-
-static void
 on_quit (int signal)
 {
     g_quit = 1;
@@ -260,11 +268,12 @@ prepare_logging ()
 }
 
 int
-main (int argc, char *argv[])
+main (int argc, char **argv)
 {
     int ch = 0;
     const char *sockname;
-
+	GnomeProgram *program = NULL;
+	
     secmem_init (65536);
 
     /* We need to drop privileges completely for security */
@@ -281,37 +290,10 @@ main (int argc, char *argv[])
 #endif
         err (1, _("couldn't drop privileges properly"));
 
-    gtk_init (&argc, &argv);
-
-    /* Parse the arguments nicely */
-    while ((ch = getopt (argc, argv, "cdv")) != -1) {
-        switch (ch) {
-            /* Uses a C type shell */
-        case 'c':
-            g_cshell = TRUE;
-            break;
-
-            /* Don't daemonize */
-        case 'd':
-            g_daemonize = FALSE;
-            break;
-
-            /* Edit GPG conf instead of displaying vars */
-        case 'v':
-            g_displayvars = FALSE;
-            break;
-
-        case '?':
-        default:
-            usage ();
-        };
-    }
-
-    argc -= optind;
-    argv += optind;
-
-    if (argc > 0)
-        usage ();
+	program = gnome_program_init(PACKAGE, VERSION, LIBGNOMEUI_MODULE, argc, argv,
+                    GNOME_PARAM_POPT_TABLE, options,
+                    GNOME_PARAM_HUMAN_READABLE_NAME, _("Encryption Passphrase Agent"),
+                    GNOME_PARAM_APP_DATADIR, DATA_DIR, NULL);
 
     if (seahorse_agent_io_socket (&sockname) == -1)
         return 1;               /* message already printed */
