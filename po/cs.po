@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-05-06 04:02+0000\n"
-"PO-Revision-Date: 2005-05-06 10:57+0200\n"
+"POT-Creation-Date: 2005-05-12 04:03+0000\n"
+"PO-Revision-Date: 2005-05-12 11:44+0200\n"
 "Last-Translator: Miloslav Trmac <mitr@volny.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -186,32 +186,43 @@ msgstr "_Autorizovat"
 msgid "Cached Encryption Keys"
 msgstr "Kešované šifrovací klíče"
 
+#: ../agent/seahorse-agent.c:62
+msgid "Print variables in for a C type shell"
+msgstr "Vypsat proměnné pro shell typu C"
+
+#: ../agent/seahorse-agent.c:65
+msgid "Do not daemonize seahorse-agent"
+msgstr "Nedémonizovat seahorse-agent"
+
+#: ../agent/seahorse-agent.c:68
+msgid "Display variables instead of editing gpg.conf"
+msgstr "Zobrazit proměnné místo úpravy gpg.conf"
+
 #. Warn and put in defaults
-#: ../agent/seahorse-agent.c:101
+#: ../agent/seahorse-agent.c:116
 msgid "couldn't read gpg configuration, will try to create"
 msgstr "nemohu číst nastavení gpg, zkusím je vytvořit"
 
-#: ../agent/seahorse-agent.c:123
+#: ../agent/seahorse-agent.c:138
 #, c-format
 msgid "couldn't modify gpg configuration: %s"
 msgstr "nemohu změnit nastavení gpg: %s"
 
-#: ../agent/seahorse-agent.c:143
+#: ../agent/seahorse-agent.c:158
 msgid "couldn't fork process"
 msgstr "nemohu fork proces"
 
-#: ../agent/seahorse-agent.c:149
+#: ../agent/seahorse-agent.c:164
 msgid "couldn't create new process group"
 msgstr "nemohu vytvořit novou skupinu procesů"
 
-#: ../agent/seahorse-agent.c:184
-#, c-format
-msgid "usage: seahorse-agent [-cdv]\n"
-msgstr "použití: seahorse-agent [-cdv]\n"
-
-#: ../agent/seahorse-agent.c:282
+#: ../agent/seahorse-agent.c:291
 msgid "couldn't drop privileges properly"
 msgstr "nemohu se správně vzdát oprávnění"
+
+#: ../agent/seahorse-agent.c:295
+msgid "Encryption Passphrase Agent"
+msgstr "Agent pro šifrovací heslo"
 
 #: ../bonobo/Seahorse_PGP_File_Listener.server.in.in.h:1
 msgid "Decrypt..."
@@ -1094,61 +1105,61 @@ msgstr "Ověřit soubor podpisu"
 msgid "Read list of URIs on standard in"
 msgstr "Číst seznam URI ze standardního vstupu"
 
-#: ../src/main.c:147 ../src/seahorse-key-manager.c:98
+#: ../src/main.c:149 ../src/seahorse-key-manager.c:98
 #, c-format
 msgid "Couldn't import keys from \"%s\""
 msgstr "Nemohu importovat klíče z \"%s\""
 
-#: ../src/main.c:155
+#: ../src/main.c:157
 msgid "Imported key"
 msgstr "Importován klíč"
 
-#: ../src/main.c:156
+#: ../src/main.c:158
 #, c-format
 msgid "Imported %d keys"
 msgstr "Importováno %d klíčů"
 
-#: ../src/main.c:195
+#: ../src/main.c:197
 #, c-format
 msgid "Choose Encrypted File Name for '%s'"
 msgstr "Zvolte název zašifrovaného souboru pro '%s'"
 
-#: ../src/main.c:207
+#: ../src/main.c:209
 #, c-format
 msgid "Couldn't encrypt \"%s\""
 msgstr "Nemohu zašifrovat \"%s\""
 
-#: ../src/main.c:261
+#: ../src/main.c:263
 #, c-format
 msgid "Choose Signature File Name for '%s'"
 msgstr "Zvolte název souboru s podpisem pro '%s'"
 
-#: ../src/main.c:269
+#: ../src/main.c:271
 #, c-format
 msgid "Couldn't sign \"%s\""
 msgstr "Nemohu podepsat \"%s\""
 
-#: ../src/main.c:301
+#: ../src/main.c:303
 #, c-format
 msgid "Choose Decrypted File Name for '%s'"
 msgstr "Zvolte název dešifrovaného souboru pro '%s'"
 
-#: ../src/main.c:308
+#: ../src/main.c:310
 #, c-format
 msgid "Couldn't decrypt \"%s\""
 msgstr "Nemohu dešifrovat \"%s\""
 
-#: ../src/main.c:360
+#: ../src/main.c:362
 #, c-format
 msgid "Choose Original File for '%s'"
 msgstr "Zvolte původní soubor pro '%s'"
 
-#: ../src/main.c:388
+#: ../src/main.c:390
 #, c-format
 msgid "Couldn't verify \"%s\""
 msgstr "Nemohu ověřit \"%s\""
 
-#: ../src/main.c:434 ../src/seahorse-key-manager.glade.h:19
+#: ../src/main.c:436 ../src/seahorse-key-manager.glade.h:19
 #: ../src/seahorse.desktop.in.h:1
 msgid "Encryption Key Manager"
 msgstr "Správce šifrovacích klíčů"
@@ -2489,6 +2500,9 @@ msgstr "_Odvolatelný"
 #: ../src/seahorse.desktop.in.h:2
 msgid "Manage your encryption keys"
 msgstr "Spravovat vaše šifrovací klíče"
+
+#~ msgid "usage: seahorse-agent [-cdv]\n"
+#~ msgstr "použití: seahorse-agent [-cdv]\n"
 
 #~ msgid "Couldn't export key(s)"
 #~ msgstr "Nemohu exportovat klíče"
