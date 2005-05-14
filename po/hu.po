@@ -7,10 +7,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: seahorse.HEAD.hu\n"
+"Project-Id-Version: seahorse.seahorse-0-8.hu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-04-27 20:03+0000\n"
-"PO-Revision-Date: 2005-04-29 21:25+0200\n"
+"POT-Creation-Date: 2005-05-14 12:05+0000\n"
+"PO-Revision-Date: 2005-05-14 21:09+0200\n"
 "Last-Translator: Gabor Kelemen <kelemeng@gnome.hu>\n"
 "Language-Team: Hungarian <gnome@gnome.hu>\n"
 "MIME-Version: 1.0\n"
@@ -185,32 +185,43 @@ msgstr "_Felhatalmazás"
 msgid "Cached Encryption Keys"
 msgstr "Gyorsítótárazott titkosítási kulcsok"
 
+#: ../agent/seahorse-agent.c:62
+msgid "Print variables in for a C type shell"
+msgstr ""
+
+#: ../agent/seahorse-agent.c:65
+msgid "Do not daemonize seahorse-agent"
+msgstr "Ne indítsa démonként a seahorse-agent-et"
+
+#: ../agent/seahorse-agent.c:68
+msgid "Display variables instead of editing gpg.conf"
+msgstr "Változók megjelenítése a gpg.conf szerkesztése helyett"
+
 #. Warn and put in defaults
-#: ../agent/seahorse-agent.c:101
+#: ../agent/seahorse-agent.c:116
 msgid "couldn't read gpg configuration, will try to create"
 msgstr "nem lehet olvasni a gpg beállításait, megpróbálom létrehozni"
 
-#: ../agent/seahorse-agent.c:123
+#: ../agent/seahorse-agent.c:138
 #, c-format
 msgid "couldn't modify gpg configuration: %s"
 msgstr "nem lehet módosítani a gpg beállításait: %s"
 
-#: ../agent/seahorse-agent.c:143
+#: ../agent/seahorse-agent.c:158
 msgid "couldn't fork process"
 msgstr "nem sikerült folyamatot indítani"
 
-#: ../agent/seahorse-agent.c:149
+#: ../agent/seahorse-agent.c:164
 msgid "couldn't create new process group"
 msgstr "nem sikerült új folyamatcsoportot létrehozni"
 
-#: ../agent/seahorse-agent.c:184
-#, c-format
-msgid "usage: seahorse-agent [-cdv]\n"
-msgstr "használat: seahorse-agent [-cdv]\n"
-
-#: ../agent/seahorse-agent.c:282
+#: ../agent/seahorse-agent.c:291
 msgid "couldn't drop privileges properly"
 msgstr "nem sikerült a jogosultságokat megfelelően eldobni"
+
+#: ../agent/seahorse-agent.c:295
+msgid "Encryption Passphrase Agent"
+msgstr "Titkosítási jelmondat ügynök"
 
 #: ../bonobo/Seahorse_PGP_File_Listener.server.in.in.h:1
 msgid "Decrypt..."
@@ -513,22 +524,22 @@ msgstr "kiinduló átmeneti elem"
 msgid "Couldn't communicate with '%s': %s"
 msgstr "Nem lehet kommunikálni a következővel: \"%s\": %s"
 
-#: ../libseahorse/seahorse-hkp-source.c:435
+#: ../libseahorse/seahorse-hkp-source.c:443
 msgid "Searching for keys..."
 msgstr "Kulcsok keresése..."
 
-#: ../libseahorse/seahorse-hkp-source.c:507
-#: ../libseahorse/seahorse-hkp-source.c:556
+#: ../libseahorse/seahorse-hkp-source.c:515
+#: ../libseahorse/seahorse-hkp-source.c:564
 msgid "Uploading keys..."
 msgstr "Kulcsok feltöltése..."
 
-#: ../libseahorse/seahorse-hkp-source.c:672
+#: ../libseahorse/seahorse-hkp-source.c:680
 #, c-format
 msgid "Searching for keys on: %s"
 msgstr "Kulcsok keresése a következőn: %s"
 
-#: ../libseahorse/seahorse-hkp-source.c:746
-#: ../libseahorse/seahorse-hkp-source.c:820
+#: ../libseahorse/seahorse-hkp-source.c:754
+#: ../libseahorse/seahorse-hkp-source.c:828
 #: ../libseahorse/seahorse-ldap-source.c:553
 #, c-format
 msgid "Connecting to: %s"
@@ -614,7 +625,8 @@ msgid ""
 msgstr ""
 "<b><big>Érvénytelen kulcskiszolgáló-cím.</big></b>\n"
 "\n"
-"Segítségért vegye fel a kapcsolatot a rendszergazdával vagy a kulcskiszolgáló rendszergazdájával."
+"Segítségért vegye fel a kapcsolatot a rendszergazdával vagy a "
+"kulcskiszolgáló rendszergazdájával."
 
 #: ../libseahorse/seahorse-prefs.c:165
 msgid "URL"
@@ -739,7 +751,7 @@ msgid "Loading Keys..."
 msgstr "Kulcsok betöltése..."
 
 #: ../libseahorse/seahorse-recipients-store.c:154
-#: ../src/seahorse-key-manager-store.c:383
+#: ../src/seahorse-key-manager-store.c:400
 msgid "Validity"
 msgstr "Érvényesség"
 
@@ -880,31 +892,31 @@ msgstr "Válassza ki az aláírókulcsot"
 msgid "%Y-%m-%d"
 msgstr "%Y. %m. %d"
 
-#: ../libseahorse/seahorse-util.c:473
+#: ../libseahorse/seahorse-util.c:479
 msgid "Multiple Keys"
 msgstr "Többszörös kulcsok"
 
-#: ../libseahorse/seahorse-util.c:783
+#: ../libseahorse/seahorse-util.c:789
 msgid "Couldn't run file-roller"
 msgstr "Nem sikerült futtatni a file-rollert"
 
-#: ../libseahorse/seahorse-util.c:788
+#: ../libseahorse/seahorse-util.c:794
 msgid "The file-roller process did not complete successfully"
 msgstr "A file-roller folyamat sikertelenül fejeződött be."
 
-#: ../libseahorse/seahorse-util.c:830
+#: ../libseahorse/seahorse-util.c:836
 msgid "All key files"
 msgstr "Minden kulcsfájl"
 
-#: ../libseahorse/seahorse-util.c:836 ../libseahorse/seahorse-util.c:876
+#: ../libseahorse/seahorse-util.c:842 ../libseahorse/seahorse-util.c:882
 msgid "All files"
 msgstr "Minden fájl"
 
-#: ../libseahorse/seahorse-util.c:869
+#: ../libseahorse/seahorse-util.c:875
 msgid "Archive files"
 msgstr "Archív fájlok"
 
-#: ../libseahorse/seahorse-util.c:910
+#: ../libseahorse/seahorse-util.c:916
 msgid ""
 "<b>A file already exists with this name.</b>\n"
 "\n"
@@ -914,7 +926,7 @@ msgstr ""
 "\n"
 "Le akarja cserélni az új fájllal?"
 
-#: ../libseahorse/seahorse-util.c:913
+#: ../libseahorse/seahorse-util.c:919
 msgid "_Replace"
 msgstr "_Csere"
 
@@ -1093,61 +1105,61 @@ msgstr "Aláírásfájl ellenőrzése"
 msgid "Read list of URIs on standard in"
 msgstr "URI lista olvasása a szabványos bemenetről"
 
-#: ../src/main.c:147 ../src/seahorse-key-manager.c:98
+#: ../src/main.c:149 ../src/seahorse-key-manager.c:98
 #, c-format
 msgid "Couldn't import keys from \"%s\""
 msgstr "Nem sikerült kulcsokat importálni a következőből: \"%s\""
 
-#: ../src/main.c:155
+#: ../src/main.c:157
 msgid "Imported key"
 msgstr "Importált kulcs"
 
-#: ../src/main.c:156
+#: ../src/main.c:158
 #, c-format
 msgid "Imported %d keys"
 msgstr "%d kulcs importálva"
 
-#: ../src/main.c:195
+#: ../src/main.c:197
 #, c-format
 msgid "Choose Encrypted File Name for '%s'"
 msgstr "Válassza ki a titkosított fájl nevét ehhez: \"%s\""
 
-#: ../src/main.c:207
+#: ../src/main.c:209
 #, c-format
 msgid "Couldn't encrypt \"%s\""
 msgstr "Nem sikerült titkosítani a következőt: \"%s\""
 
-#: ../src/main.c:261
+#: ../src/main.c:263
 #, c-format
 msgid "Choose Signature File Name for '%s'"
 msgstr "Válassza ki az aláírásfájl nevét ehhez: \"%s\""
 
-#: ../src/main.c:269
+#: ../src/main.c:271
 #, c-format
 msgid "Couldn't sign \"%s\""
 msgstr "Nem sikerült aláírni a következőt: \"%s\""
 
-#: ../src/main.c:301
+#: ../src/main.c:303
 #, c-format
 msgid "Choose Decrypted File Name for '%s'"
 msgstr "Válassza ki a visszafejtett fájl nevét ehhez: \"%s\""
 
-#: ../src/main.c:308
+#: ../src/main.c:310
 #, c-format
 msgid "Couldn't decrypt \"%s\""
 msgstr "Nem sikerült visszafejteni a következőt: \"%s\""
 
-#: ../src/main.c:360
+#: ../src/main.c:362
 #, c-format
 msgid "Choose Original File for '%s'"
 msgstr "Válassza ki az eredeti fájlt ehhez: \"%s\""
 
-#: ../src/main.c:388
+#: ../src/main.c:390
 #, c-format
 msgid "Couldn't verify \"%s\""
 msgstr "Nem sikerült ellenőrizni a következőt: \"%s\""
 
-#: ../src/main.c:434 ../src/seahorse-key-manager.glade.h:19
+#: ../src/main.c:436 ../src/seahorse-key-manager.glade.h:19
 #: ../src/seahorse.desktop.in.h:1
 msgid "Encryption Key Manager"
 msgstr "Titkosítási kulcsok kezelése"
@@ -1434,7 +1446,7 @@ msgid "Enter Name - Must be at least five letters."
 msgstr "Adja meg a nevet - Ez legalább 5 betűből álljon"
 
 #: ../src/seahorse-generate-druid.glade.h:13
-#: ../src/seahorse-key-manager-store.c:395
+#: ../src/seahorse-key-manager-store.c:412
 msgid "Expiration Date"
 msgstr "Lejárati idő"
 
@@ -1577,39 +1589,32 @@ msgstr "Válasszon ki egy eljárást az új kulcsának előállításához:"
 msgid "radio_druid"
 msgstr "radio_druid"
 
-#: ../src/seahorse-key-manager-store.c:176
+#: ../src/seahorse-key-manager-store.c:178
 #: ../src/seahorse-key-properties.c:239
 msgid "Expired"
 msgstr "Lejárt"
 
-#: ../src/seahorse-key-manager-store.c:191
+#: ../src/seahorse-key-manager-store.c:193
 msgid "Private PGP Key"
 msgstr "Titkos PGP kulcs"
 
-#: ../src/seahorse-key-manager-store.c:193
+#: ../src/seahorse-key-manager-store.c:195
 msgid "Public PGP Key"
 msgstr "Nyilvános PGP kulcs"
 
-#: ../src/seahorse-key-manager-store.c:210
+#: ../src/seahorse-key-manager-store.c:212
 msgid "User ID"
 msgstr "Felhasználóazonosító"
 
-#: ../src/seahorse-key-manager-store.c:326
-msgid "Couldn't export key(s)"
-msgstr "Nem sikerült exportálni a kulcso(ka)t"
+#: ../src/seahorse-key-manager-store.c:337
+msgid "Couldn't retrieve key data"
+msgstr "Nem sikerült letölteni a kulcsadatokat"
 
-#: ../src/seahorse-key-manager-store.c:342 ../src/seahorse-key-manager.c:198
-#: ../src/seahorse-key-properties.c:297
-#: ../src/seahorse-keyserver-results.c:130
-#, c-format
-msgid "Couldn't export key to \"%s\""
-msgstr "Nem sikerült exportálni a kulcsot ide: \"%s\""
-
-#: ../src/seahorse-key-manager-store.c:387
+#: ../src/seahorse-key-manager-store.c:404
 msgid "Trust"
 msgstr "Megbízhatóság"
 
-#: ../src/seahorse-key-manager-store.c:391
+#: ../src/seahorse-key-manager-store.c:408
 msgid "Type"
 msgstr "Típus"
 
@@ -1630,6 +1635,12 @@ msgstr "Nem sikerült exportálni a kulcsokat a vágólapra"
 msgid "Export Key"
 msgstr "Kulcs exportálása"
 
+#: ../src/seahorse-key-manager.c:198 ../src/seahorse-key-properties.c:297
+#: ../src/seahorse-keyserver-results.c:130
+#, c-format
+msgid "Couldn't export key to \"%s\""
+msgstr "Nem sikerült exportálni a kulcsot ide: \"%s\""
+
 #: ../src/seahorse-key-manager.c:217
 msgid "Backup Keyrings to Archive"
 msgstr "Kulcstartók biztonsági mentése archívumba"
@@ -1645,7 +1656,7 @@ msgstr ""
 msgid "seahorse"
 msgstr "seahorse"
 
-#: ../src/seahorse-key-manager.c:568
+#: ../src/seahorse-key-manager.c:569
 #, c-format
 msgid "Couldn't import key from \"%s\""
 msgstr "Nem sikerült importálni a kulcsot innen: \"%s\""
