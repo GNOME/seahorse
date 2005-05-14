@@ -41,6 +41,8 @@ seahorse_preferences_show (SeahorseContext *sctx, guint ntab)
     GtkWidget *tab;
     GtkWidget *box;
 	GtkWidget *widget;
+    GtkWidget *label2;
+    GtkWidget *align;
 	
 	g_return_if_fail (sctx != NULL && SEAHORSE_IS_CONTEXT (sctx));
 	
@@ -51,13 +53,21 @@ seahorse_preferences_show (SeahorseContext *sctx, guint ntab)
     tab = gtk_vbox_new (FALSE, 12); 
     gtk_container_set_border_width (GTK_CONTAINER (tab), 12);
     
-    widget = gtk_frame_new (_("Visible Columns:"));
+    label2 = gtk_label_new ("");
+    gtk_label_set_markup (GTK_LABEL (label2), g_markup_printf_escaped
+		   ("<b>%s</b>", "Visible Columns"));
+
+    widget = gtk_hbox_new (FALSE, 12);
+    gtk_box_pack_start (GTK_BOX (widget), label2, 0, 0, 0);
+
     gtk_container_add (GTK_CONTAINER (tab), widget);
-    gtk_box_set_child_packing (GTK_BOX (tab), widget, FALSE, TRUE, 0, GTK_PACK_START);
+    gtk_box_set_child_packing (GTK_BOX (tab), widget, FALSE, FALSE, 0, GTK_PACK_START);
     
     box = gtk_hbox_new (FALSE, 12);
-    gtk_container_set_border_width (GTK_CONTAINER (box), 12);
-    gtk_container_add (GTK_CONTAINER (widget), box);    
+    align = gtk_alignment_new (0.12, 0.0, 0.0, 0.0);
+    gtk_container_add (GTK_CONTAINER (align), box);
+    gtk_container_add (GTK_CONTAINER (tab), align);    
+    gtk_box_set_child_packing (GTK_BOX (tab), align, FALSE, FALSE, 0, GTK_PACK_START);
     
 	gtk_container_add (GTK_CONTAINER (box), 
             seahorse_check_button_control_new (_("_Validity"), SHOW_VALIDITY_KEY));
