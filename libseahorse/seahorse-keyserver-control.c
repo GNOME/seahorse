@@ -24,6 +24,7 @@
 #include "seahorse-keyserver-control.h"
 #include "seahorse-key-pair.h"
 #include "seahorse-gconf.h"
+#include "seahorse-server-source.h"
 
 #define UPDATING    "updating"
 
@@ -221,7 +222,9 @@ populate_combo (SeahorseKeyserverControl *skc, gboolean gconf, gboolean force)
     
     /* Retreieve the key server list and make sure it's changed */
     ks = seahorse_gconf_get_string_list (KEYSERVER_KEY);
+	ks = seahorse_server_source_purge_keyservers (ks);
     ks = g_slist_sort (ks, (GCompareFunc)g_utf8_collate);
+	
     if (force || !seahorse_util_string_slist_equal (ks, skc->keyservers)) {
         
         /* Remove saved data */
