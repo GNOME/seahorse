@@ -322,7 +322,7 @@ parse_hkp_index (const gchar *response)
         if (g_ascii_strncasecmp (line, "pub ", 4) == 0) {
             
             t = line + 4;
-            while (*t && isspace (*t))
+            while (*t && g_ascii_isspace (*t))
                 t++;
             
             v = g_strsplit_set (t, " ", 3);

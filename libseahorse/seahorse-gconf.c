@@ -19,6 +19,8 @@
  * Boston, MA 02111-1307, USA.
  */
  
+#include <stdlib.h>
+ 
 #include "seahorse-gconf.h"
 
 static GConfClient *global_gconf_client = NULL;
@@ -39,7 +41,6 @@ global_client_free (void)
 static gboolean
 handle_error (GError **error)
 {
-	char *message;
 	g_return_val_if_fail (error != NULL, FALSE);
 
 	if (*error != NULL) {
