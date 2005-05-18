@@ -214,6 +214,7 @@ gconf_notify (GConfClient *client, guint id, GConfEntry *entry, SeahorseWidget *
         for (ks = NULL, l = gconf_value_get_list (value); l; l = l->next) 
             ks = g_slist_append (ks, (gchar*)gconf_value_get_string (l->data));
         
+		ks = seahorse_server_source_purge_keyservers (ks);
         populate_keyservers (swidget, ks);
         g_slist_free (l); /* We don't own string values */
     }
@@ -389,6 +390,7 @@ setup_keyservers (SeahorseContext *sctx, SeahorseWidget *swidget)
     guint notify_id;
     
     ks = seahorse_gconf_get_string_list (KEYSERVER_KEY);
+	ks = seahorse_server_source_purge_keyservers (ks);
     populate_keyservers (swidget, ks);
     seahorse_util_string_slist_free (ks);
     

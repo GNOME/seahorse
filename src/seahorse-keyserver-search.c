@@ -67,8 +67,9 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
     /* Container for all the remote sources */
     msrc = seahorse_multi_source_new ();
             
-    /* The default key server or null for all */
+    /* Get the keyservers and cleanup the URIs */
     ks = seahorse_gconf_get_string_list (KEYSERVER_KEY);
+	ks = seahorse_server_source_purge_keyservers (ks);
 
     for (l = ks; l; l = g_slist_next (l))
         start_keyserver_search (msrc, lsksrc, (const gchar*)(l->data), search);

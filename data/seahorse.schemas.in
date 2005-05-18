@@ -97,20 +97,6 @@
                 <long>The ID of the last secret key used to sign a message.</long>
             </locale>
         </schema>
-        <schema>
-			<key>/schemas/desktop/pgp/progress_update</key>
-			<applyto>/desktop/pgp/progress_update</applyto>
-			<owner>seahorse</owner>
-			<type>int</type>
-			<default>20</default>
-			<locale name="C">
-				<short>How often to show progress during listing</short>
-				<long>This specifies how often the progress signal
-				is emitted during a listing operation. By default,
-				the signal is emitted for every 20 keys processed.
-				A value of -1 will cause the signal to never be emitted.</long>
-			</locale>
-		</schema>
 		<schema>
 			<key>/schemas/apps/seahorse/listing/show_validity</key>
 			<applyto>/apps/seahorse/listing/show_validity</applyto>
@@ -191,21 +177,11 @@
 			<default>[hkp://pgp.mit.edu:11371,ldap://keyserver.pgp.com,ldap://europe.keys.pgp.com:11370]</default>
 			<locale name="C">
 				<short>PGP Key servers</short>
-				<long>A list of key server URIs to search for remote PGP keys.</long>
+				<long>A list of key server URIs to search for remote PGP keys.
+				In later versions a display name can be included, by appending a 
+				space and then the name.</long>
 			</locale>
 		</schema>		
-		<schema>
-			<key>/schemas/desktop/pgp/keyservers/keyserver</key>
-			<applyto>/desktop/pgp/keyservers/keyserver</applyto>
-			<owner>seahorse</owner>
-			<type>string</type>
-			<default></default>
-			<locale name="C">
-				<short>Last keyserver used</short>
-				<long>The last keyserver a search was performed against. 
-				Or empty for all keyservers.</long>
-			</locale>
-		</schema>
 		<schema>
 			<key>/schemas/desktop/pgp/keyservers/publish_to</key>
 			<applyto>/desktop/pgp/keyservers/publish_to</applyto>

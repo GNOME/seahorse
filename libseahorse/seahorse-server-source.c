@@ -674,3 +674,18 @@ seahorse_server_source_valid_uri (const gchar *uri)
 #endif
     return FALSE;
 }
+
+GSList*		
+seahorse_server_source_purge_keyservers	(GSList *keyservers)
+{
+	GSList *l;
+	gchar *t;
+	
+	for (l = keyservers; l; l = g_slist_next (l)) {
+		t = strchr ((gchar*)l->data, ' ');
+		if (t != NULL)
+			*t = 0;
+	}
+	
+	return keyservers;
+}
