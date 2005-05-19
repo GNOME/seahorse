@@ -34,6 +34,8 @@
 #include <errno.h>
 #include <ctype.h>
 
+#include <gnome.h>
+
 #include "seahorse-agent.h"
 
 /*
@@ -88,14 +90,18 @@ struct _SeahorseAgentConn {
 int
 seahorse_agent_io_socket (const char **socketname)
 {
-    int len;
     struct sockaddr_un addr;
-
+    gchar *t;
+    int len;
+    
     g_assert (g_socket == -1);
 
-    /* Make the appropriate directory */
-    snprintf (g_socket_name, KL (g_socket_name), "%s/%s", _PATH_TMP, SOCKET_DIR);
+    /* We build put the socket in a directory called ~/.gnome2/seahorse-XXXXXX */
+    t = gnome_util_home_file (SOCKET_DIR);
+    strncpy (g_socket_name, t, KL (g_socket_name));
+    g_free (t);
 
+    /* Make the appropriate directory */
     if (!mkdtemp (g_socket_name)) {
         g_critical ("can't create directory: %s: %s", g_socket_name,
                     strerror (errno));

@@ -200,6 +200,18 @@ on_show_window_activate (GtkWidget *item, gpointer data)
     window_show ();
 }
 
+static void
+on_settings_activate (GtkWidget *item, gpointer data)
+{
+    GError *err = NULL;
+    g_spawn_command_line_async ("seahorse-pgp-preferences --cache", &err);
+    
+    if (err != NULL) {
+        g_warning ("couldn't execute seahorse-pgp-preferences: %s", err->message);
+        g_error_free (err);
+    }
+}
+
 /* Called when icon destroyed */
 static void
 tray_destroyed (GtkWidget *widget, void *data)
@@ -227,6 +239,8 @@ tray_clicked (GtkWidget *button, GdkEventButton *event, void *data)
                                        G_CALLBACK (on_clear_cache_activate), NULL);
         glade_xml_signal_connect_data (xml, "on_show_window_activate",
                                        G_CALLBACK (on_show_window_activate), NULL);
+        glade_xml_signal_connect_data (xml, "on_settings_activate",
+                                       G_CALLBACK (on_settings_activate), NULL);
 
         gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL,
                         event->button, gtk_get_current_event_time ());

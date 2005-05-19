@@ -857,6 +857,8 @@ seahorse_pgp_source_import (SeahorseKeySource *sksrc, gpgme_data_t data)
     
     gerr = gpgme_op_import (new_ctx, data);
     if (GPG_IS_OK (gerr)) {
+
+        seahorse_key_source_refresh_sync (sksrc, SEAHORSE_KEY_SOURCE_NEW);
         
         /* Figure out which keys were imported */
         results = gpgme_op_import_result (new_ctx);
@@ -873,8 +875,6 @@ seahorse_pgp_source_import (SeahorseKeySource *sksrc, gpgme_data_t data)
         
         g_object_set_data_full (G_OBJECT (operation), "result", keys, (GDestroyNotify)g_list_free);        
         seahorse_operation_mark_done (operation, FALSE, NULL);
-
-        seahorse_key_source_refresh_async (sksrc, SEAHORSE_KEY_SOURCE_NEW);
         
     } else {
        

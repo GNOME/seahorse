@@ -158,6 +158,7 @@ do_import (SeahorseContext *sctx, const gchar **paths)
                                     _("Imported %d keys"), keys);
         dlg = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
                              GTK_MESSAGE_INFO, GTK_BUTTONS_OK, t);
+        g_free (t);
         gtk_dialog_run (GTK_DIALOG (dlg));
         gtk_widget_destroy (dlg);
     }

@@ -47,6 +47,7 @@ seahorse_LDADD = \
 
 glade_DATA = \
 	seahorse-key-manager.glade \
+    seahorse-key-manager.ui \
 	seahorse-key-properties.glade \
 	seahorse-revoke.glade \
     seahorse-expires.glade \
@@ -61,13 +62,15 @@ glade_DATA = \
 	seahorse-multi-encrypt.glade \
 	seahorse-keyserver-search.glade \
 	seahorse-keyserver-results.glade \
-    seahorse-keyserver-sync.glade
+	seahorse-keyserver-results.ui \
+    seahorse-keyserver-sync.glade 
 
 @INTLTOOL_DESKTOP_RULE@
 desktopdir = $(datadir)/applications
 desktop_in_files = seahorse.desktop.in \
 				   seahorse-pgp-encrypted.desktop.in \
-				   seahorse-pgp-signature.desktop.in
+				   seahorse-pgp-signature.desktop.in \
+                   seahorse-pgp-keys.desktop.in 
 desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 
 EXTRA_DIST = \
