@@ -390,6 +390,10 @@ seahorse_keyserver_results_show (SeahorseContext *sctx, SeahorseKeySource *sksrc
 		G_CALLBACK (selection_changed), swidget);
     selection_changed (NULL, swidget);
 
+    /* To avoid flicker */
+    seahorse_widget_show (swidget);
+
+
     /* Load the keys */
     seahorse_key_source_refresh_async (sksrc, SEAHORSE_KEY_SOURCE_ALL);
 
@@ -402,6 +406,6 @@ seahorse_keyserver_results_show (SeahorseContext *sctx, SeahorseKeySource *sksrc
 
     skstore = seahorse_key_manager_store_new (sksrc, view);
 	selection_changed (selection, swidget);
-   
+
     return win;
 }

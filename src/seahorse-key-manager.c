@@ -740,6 +740,10 @@ seahorse_key_manager_show (SeahorseContext *sctx)
     skstore = seahorse_key_manager_store_new (sksrc, view);
 	selection_changed (selection, swidget);
 
+    /* To avoid flicker */
+    seahorse_widget_show (swidget);
+	
+
     /* Setup drops */
     gtk_drag_dest_set (GTK_WIDGET (win), GTK_DEST_DEFAULT_ALL, 
                 seahorse_target_entries, seahorse_n_targets, GDK_ACTION_COPY);
@@ -763,6 +767,6 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 		w = glade_xml_get_widget (swidget->xml, "first-time-box");
 		gtk_widget_show (w);
 	}
-	
+    
     return win;
 }

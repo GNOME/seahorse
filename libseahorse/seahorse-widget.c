@@ -337,7 +337,12 @@ seahorse_widget_get_top     (SeahorseWidget     *swidget)
 void
 seahorse_widget_show (SeahorseWidget *swidget)
 {
-    GtkWidget *widget = glade_xml_get_widget (swidget->xml, swidget->name);
+    GtkWidget *widget;
+
+    if (swidget->ui)
+        gtk_ui_manager_ensure_update (swidget->ui);
+
+    widget = glade_xml_get_widget (swidget->xml, swidget->name);
     gtk_widget_show (widget);
 }
  
