@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-05-04 01:45-0400\n"
-"PO-Revision-Date: 2005-05-04 22:06-0400\n"
+"POT-Creation-Date: 2005-05-19 14:56-0400\n"
+"PO-Revision-Date: 2005-05-19 22:06-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: Canadian English <adamw@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -186,32 +186,43 @@ msgstr "_Authorize"
 msgid "Cached Encryption Keys"
 msgstr "Cached Encryption Keys"
 
+#: ../agent/seahorse-agent.c:62
+msgid "Print variables in for a C type shell"
+msgstr "Print variables in for a C type shell"
+
+#: ../agent/seahorse-agent.c:65
+msgid "Do not daemonize seahorse-agent"
+msgstr "Do not daemonize seahorse-agent"
+
+#: ../agent/seahorse-agent.c:68
+msgid "Display variables instead of editing gpg.conf"
+msgstr "Display variables instead of editing gpg.conf"
+
 #. Warn and put in defaults
-#: ../agent/seahorse-agent.c:101
+#: ../agent/seahorse-agent.c:116
 msgid "couldn't read gpg configuration, will try to create"
 msgstr "Could not read GPG configuration; will try to create"
 
-#: ../agent/seahorse-agent.c:123
+#: ../agent/seahorse-agent.c:138
 #, c-format
 msgid "couldn't modify gpg configuration: %s"
 msgstr "Could not modify GPG configuration: %s"
 
-#: ../agent/seahorse-agent.c:143
+#: ../agent/seahorse-agent.c:158
 msgid "couldn't fork process"
 msgstr "Could not fork process"
 
-#: ../agent/seahorse-agent.c:149
+#: ../agent/seahorse-agent.c:164
 msgid "couldn't create new process group"
 msgstr "Could not create new process group"
 
-#: ../agent/seahorse-agent.c:184
-#, c-format
-msgid "usage: seahorse-agent [-cdv]\n"
-msgstr "usage: seahorse-agent [-cdv]\n"
-
-#: ../agent/seahorse-agent.c:282
+#: ../agent/seahorse-agent.c:291
 msgid "couldn't drop privileges properly"
 msgstr "Could not drop privileges properly"
+
+#: ../agent/seahorse-agent.c:295
+msgid "Encryption Passphrase Agent"
+msgstr "Encryption Passphrase Agent"
 
 #: ../bonobo/Seahorse_PGP_File_Listener.server.in.in.h:1
 msgid "Decrypt..."
@@ -267,8 +278,12 @@ msgid "Verify operation on PGP signed files"
 msgstr "Verify operation on PGP signed files"
 
 #: ../data/seahorse.schemas.in.h:1
-msgid "A list of key server URIs to search for remote PGP keys."
-msgstr "A list of key server URIs to search for remote PGP keys."
+msgid ""
+"A list of key server URIs to search for remote PGP keys. In later versions a "
+"display name can be included, by appending a space and then the name."
+msgstr ""
+"A list of key server URIs to search for remote PGP keys. In later versions a "
+"display name can be included, by appending a space and then the name."
 
 #: ../data/seahorse.schemas.in.h:2
 msgid "Controls the visibility of the expires column for the key manager."
@@ -291,14 +306,10 @@ msgid "Expire passwords in the cache"
 msgstr "Expire passwords in the cache"
 
 #: ../data/seahorse.schemas.in.h:7
-msgid "How often to show progress during listing"
-msgstr "How often to show progress during listing"
-
-#: ../data/seahorse.schemas.in.h:8
 msgid "ID of the default key"
 msgstr "ID of the default key"
 
-#: ../data/seahorse.schemas.in.h:9
+#: ../data/seahorse.schemas.in.h:8
 msgid ""
 "If set to true, then files encrypted with seahorse will be ASCII armor "
 "encoded."
@@ -306,7 +317,7 @@ msgstr ""
 "If set to true, then files encrypted with seahorse will be ASCII armour "
 "encoded."
 
-#: ../data/seahorse.schemas.in.h:10
+#: ../data/seahorse.schemas.in.h:9
 msgid ""
 "If set to true, then the default key will always be added to an encryption "
 "recipients list."
@@ -314,31 +325,27 @@ msgstr ""
 "If set to true, then the default key will always be added to an encryption "
 "recipients list."
 
-#: ../data/seahorse.schemas.in.h:11
+#: ../data/seahorse.schemas.in.h:10
 msgid "Last key used to sign a message."
 msgstr "Last key used to sign a message."
 
-#: ../data/seahorse.schemas.in.h:12
+#: ../data/seahorse.schemas.in.h:11
 msgid "Last keyserver search pattern"
 msgstr "Last keyserver search pattern"
 
-#: ../data/seahorse.schemas.in.h:13
-msgid "Last keyserver used"
-msgstr "Last keyserver used"
-
-#: ../data/seahorse.schemas.in.h:14
+#: ../data/seahorse.schemas.in.h:12
 msgid "PGP Key servers"
 msgstr "PGP Key servers"
 
-#: ../data/seahorse.schemas.in.h:15
+#: ../data/seahorse.schemas.in.h:13
 msgid "Prompt before using GPG passwords in cache"
 msgstr "Prompt before using GPG passwords in cache"
 
-#: ../data/seahorse.schemas.in.h:16
+#: ../data/seahorse.schemas.in.h:14
 msgid "Publish keys to this keyserver."
 msgstr "Publish keys to this keyserver."
 
-#: ../data/seahorse.schemas.in.h:17
+#: ../data/seahorse.schemas.in.h:15
 msgid ""
 "Set to 'true' to have seahorse-agent prompt before giving out passwords it "
 "has cached."
@@ -346,23 +353,23 @@ msgstr ""
 "Set to 'true' to have seahorse-agent prompt before giving out passwords it "
 "has cached."
 
-#: ../data/seahorse.schemas.in.h:18
+#: ../data/seahorse.schemas.in.h:16
 msgid "Show expires column in key manager"
 msgstr "Show expires column in key manager"
 
-#: ../data/seahorse.schemas.in.h:19
+#: ../data/seahorse.schemas.in.h:17
 msgid "Show trust column in key manager"
 msgstr "Show trust column in key manager"
 
-#: ../data/seahorse.schemas.in.h:20
+#: ../data/seahorse.schemas.in.h:18
 msgid "Show type column in key manager"
 msgstr "Show type column in key manager"
 
-#: ../data/seahorse.schemas.in.h:21
+#: ../data/seahorse.schemas.in.h:19
 msgid "Show validity column in key manager"
 msgstr "Show validity column in key manager"
 
-#: ../data/seahorse.schemas.in.h:22
+#: ../data/seahorse.schemas.in.h:20
 msgid ""
 "Specify the column to sort the recipients window by. Columns are: 'name', "
 "'id' and 'validity', Put a '-' in front of the column name to sort in "
@@ -372,7 +379,7 @@ msgstr ""
 "'id', and 'validity'. Put a '-' in front of the column name to sort in "
 "descending order."
 
-#: ../data/seahorse.schemas.in.h:23
+#: ../data/seahorse.schemas.in.h:21
 msgid ""
 "Specify the column to sort the seahorse key manager main window by. Columns "
 "are: 'name', 'id', 'validity', 'expires', 'trust', and 'type'. Put a '-' in "
@@ -382,19 +389,19 @@ msgstr ""
 "are: 'name', 'id', 'validity', 'expires', 'trust', and 'type'. Put a '-' in "
 "front of the column name to sort in descending order."
 
-#: ../data/seahorse.schemas.in.h:24
+#: ../data/seahorse.schemas.in.h:22
 msgid "The ID of the last secret key used to sign a message."
 msgstr "The ID of the last secret key used to sign a message."
 
-#: ../data/seahorse.schemas.in.h:25
+#: ../data/seahorse.schemas.in.h:23
 msgid "The column to sort the recipients by"
 msgstr "The column to sort the recipients by"
 
-#: ../data/seahorse.schemas.in.h:26
+#: ../data/seahorse.schemas.in.h:24
 msgid "The column to sort the seahorse keys by"
 msgstr "The column to sort the seahorse keys by"
 
-#: ../data/seahorse.schemas.in.h:27
+#: ../data/seahorse.schemas.in.h:25
 msgid ""
 "The keyserver to publish PGP keys to. Or empty to suppress publishing of PGP "
 "keys."
@@ -402,23 +409,15 @@ msgstr ""
 "The keyserver to publish PGP keys to, Or empty to suppress publishing of PGP "
 "keys."
 
-#: ../data/seahorse.schemas.in.h:28
-msgid ""
-"The last keyserver a search was performed against. Or empty for all "
-"keyservers."
-msgstr ""
-"The last keyserver a search was performed against, or empty for all "
-"keyservers."
-
-#: ../data/seahorse.schemas.in.h:29
+#: ../data/seahorse.schemas.in.h:26
 msgid "The last search pattern searched for against a keyserver."
 msgstr "The last search pattern searched for against a keyserver."
 
-#: ../data/seahorse.schemas.in.h:30
+#: ../data/seahorse.schemas.in.h:27
 msgid "The time (in minutes) to cache GPG passwords"
 msgstr "The time (in minutes) to cache GPG passwords"
 
-#: ../data/seahorse.schemas.in.h:31
+#: ../data/seahorse.schemas.in.h:28
 msgid ""
 "This is the amount of time, specified in minutes, to cache GPG passwords in "
 "seahorse-agent."
@@ -426,30 +425,20 @@ msgstr ""
 "This is the amount of time, specified in minutes, to cache GPG passwords in "
 "seahorse-agent."
 
-#: ../data/seahorse.schemas.in.h:32
+#: ../data/seahorse.schemas.in.h:29
 msgid ""
 "This option enables the GPG password cache in the seahorse-agent daemon."
 msgstr ""
 "This option enables the GPG password cache in the seahorse-agent daemon."
 
-#: ../data/seahorse.schemas.in.h:33
-msgid ""
-"This specifies how often the progress signal is emitted during a listing "
-"operation. By default, the signal is emitted for every 20 keys processed. A "
-"value of -1 will cause the signal to never be emitted."
-msgstr ""
-"This specifies how often the progress signal is emitted during a listing "
-"operation. By default, the signal is emitted for every 20 keys processed. A "
-"value of -1 will cause the signal to never be emitted."
-
-#: ../data/seahorse.schemas.in.h:34
+#: ../data/seahorse.schemas.in.h:30
 msgid ""
 "This specifies the default key to use for certain operations, mainly signing."
 msgstr ""
 "This specifies the default key to use for certain operations (mainly "
 "signing)."
 
-#: ../data/seahorse.schemas.in.h:35
+#: ../data/seahorse.schemas.in.h:31
 msgid ""
 "When set seahorse-agent expires GPG passwords in it's cache after a peried "
 "of time."
@@ -457,15 +446,15 @@ msgstr ""
 "When set, seahorse-agent expires GPG passwords in its cache after a peried "
 "of time."
 
-#: ../data/seahorse.schemas.in.h:36
+#: ../data/seahorse.schemas.in.h:32
 msgid "Whether the GPG password cache is enabled"
 msgstr "Whether the GPG password cache is enabled"
 
-#: ../data/seahorse.schemas.in.h:37
+#: ../data/seahorse.schemas.in.h:33
 msgid "Whether to always encrypt to default key"
 msgstr "Whether to always encrypt to default key"
 
-#: ../data/seahorse.schemas.in.h:38
+#: ../data/seahorse.schemas.in.h:34
 msgid "Whether to use ASCII Armor"
 msgstr "Whether to use ASCII Armour"
 
@@ -623,23 +612,23 @@ msgstr ""
 msgid "URL"
 msgstr "URL"
 
-#: ../libseahorse/seahorse-prefs.c:348
+#: ../libseahorse/seahorse-prefs.c:349
 msgid "Custom"
 msgstr "Custom"
 
-#: ../libseahorse/seahorse-prefs.c:417
+#: ../libseahorse/seahorse-prefs.c:419
 msgid "None: Don't publish keys"
 msgstr "None: Do not publish keys"
 
-#: ../libseahorse/seahorse-prefs.c:467
+#: ../libseahorse/seahorse-prefs.c:469
 msgid "_Encrypt to Self"
 msgstr "_Encrypt to Self"
 
-#: ../libseahorse/seahorse-prefs.c:469
+#: ../libseahorse/seahorse-prefs.c:471
 msgid "_Armor Encode Files"
 msgstr "_Armour Encode Files"
 
-#: ../libseahorse/seahorse-prefs.c:475
+#: ../libseahorse/seahorse-prefs.c:477
 msgid "None. Prompt for a key."
 msgstr "None. Prompt for a key."
 
@@ -1096,61 +1085,61 @@ msgstr "Verify signature file"
 msgid "Read list of URIs on standard in"
 msgstr "Read list of URIs on standard input"
 
-#: ../src/main.c:147 ../src/seahorse-key-manager.c:98
+#: ../src/main.c:149 ../src/seahorse-key-manager.c:98
 #, c-format
 msgid "Couldn't import keys from \"%s\""
 msgstr "Could not import keys from \"%s\""
 
-#: ../src/main.c:155
+#: ../src/main.c:157
 msgid "Imported key"
 msgstr "Imported key"
 
-#: ../src/main.c:156
+#: ../src/main.c:158
 #, c-format
 msgid "Imported %d keys"
 msgstr "Imported %d keys"
 
-#: ../src/main.c:195
+#: ../src/main.c:197
 #, c-format
 msgid "Choose Encrypted File Name for '%s'"
 msgstr "Choose Encrypted File Name for '%s'"
 
-#: ../src/main.c:207
+#: ../src/main.c:209
 #, c-format
 msgid "Couldn't encrypt \"%s\""
 msgstr "Could not encrypt \"%s\""
 
-#: ../src/main.c:261
+#: ../src/main.c:263
 #, c-format
 msgid "Choose Signature File Name for '%s'"
 msgstr "Choose Signature File Name for '%s'"
 
-#: ../src/main.c:269
+#: ../src/main.c:271
 #, c-format
 msgid "Couldn't sign \"%s\""
 msgstr "Could not sign \"%s\""
 
-#: ../src/main.c:301
+#: ../src/main.c:303
 #, c-format
 msgid "Choose Decrypted File Name for '%s'"
 msgstr "Choose Decrypted File Name for '%s'"
 
-#: ../src/main.c:308
+#: ../src/main.c:310
 #, c-format
 msgid "Couldn't decrypt \"%s\""
 msgstr "Could not decrypt \"%s\""
 
-#: ../src/main.c:360
+#: ../src/main.c:362
 #, c-format
 msgid "Choose Original File for '%s'"
 msgstr "Choose Original File for '%s'"
 
-#: ../src/main.c:388
+#: ../src/main.c:390
 #, c-format
 msgid "Couldn't verify \"%s\""
 msgstr "Could not verify \"%s\""
 
-#: ../src/main.c:434 ../src/seahorse-key-manager.glade.h:19
+#: ../src/main.c:436 ../src/seahorse-key-manager.glade.h:19
 #: ../src/seahorse.desktop.in.h:1
 msgid "Encryption Key Manager"
 msgstr "Encryption Key Manager"
@@ -2166,15 +2155,15 @@ msgstr "Could not publish keys to server: %s"
 msgid "Couldn't retrieve keys from server: %s"
 msgstr "Could not retrieve keys from server: %s"
 
-#: ../src/seahorse-keyserver-sync.c:134
+#: ../src/seahorse-keyserver-sync.c:136
 msgid "Couldn't export keys"
 msgstr "Could not export keys"
 
-#: ../src/seahorse-keyserver-sync.c:158
+#: ../src/seahorse-keyserver-sync.c:160
 msgid "Syncing keys..."
 msgstr "Syncing keys..."
 
-#: ../src/seahorse-keyserver-sync.c:230
+#: ../src/seahorse-keyserver-sync.c:232
 #, c-format
 msgid "<b>%d key is selected for syncing</b>"
 msgid_plural "<b>%d keys are selected for syncing</b>"
@@ -2257,27 +2246,23 @@ msgstr "Decrypt File"
 msgid "Verify Signature"
 msgstr "Verify Signature"
 
-#: ../src/seahorse-preferences.c:49 ../src/seahorse-preferences.glade.h:3
+#: ../src/seahorse-preferences.c:51 ../src/seahorse-preferences.glade.h:3
 msgid "Key Manager"
 msgstr "Key Manager"
 
-#: ../src/seahorse-preferences.c:54
-msgid "Visible Columns:"
-msgstr "Visible Columns:"
-
-#: ../src/seahorse-preferences.c:63
+#: ../src/seahorse-preferences.c:73
 msgid "_Validity"
 msgstr "_Validity"
 
-#: ../src/seahorse-preferences.c:65 ../src/seahorse-sign.glade.h:13
+#: ../src/seahorse-preferences.c:75 ../src/seahorse-sign.glade.h:13
 msgid "_Expires"
 msgstr "_Expires"
 
-#: ../src/seahorse-preferences.c:67
+#: ../src/seahorse-preferences.c:77
 msgid "_Trust"
 msgstr "_Trust"
 
-#: ../src/seahorse-preferences.c:69
+#: ../src/seahorse-preferences.c:79
 msgid "T_ype"
 msgstr "T_ype"
 
