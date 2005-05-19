@@ -376,15 +376,18 @@ start_agent (GtkWidget *widget, gpointer data)
 void
 seahorse_prefs_cache (SeahorseContext *ctx, SeahorseWidget *widget)
 {
-    GtkWidget *w;
+    GtkWidget *w, *w2;
     
     g_return_if_fail (widget != NULL);
+	
+	w2 = glade_xml_get_widget (widget->xml, "cache-options");
+    g_return_if_fail (w2 != NULL);
 
     w = glade_xml_get_widget (widget->xml, "use-cache");
     g_return_if_fail (w != NULL);
-    g_signal_connect_after (w , "toggled", G_CALLBACK (control_disable),
-                            glade_xml_get_widget (widget->xml, "cache-options"));
-                            
+    g_signal_connect_after (w , "toggled", G_CALLBACK (control_disable), w2);
+	control_disable (w, w2);
+	
     w = glade_xml_get_widget (widget->xml, "expire");        
     g_return_if_fail (w != NULL);
     g_signal_connect_after (w , "toggled", G_CALLBACK (control_disable),
