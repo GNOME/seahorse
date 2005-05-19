@@ -40,13 +40,30 @@
 #define SETTING_TTL         "/apps/seahorse/agent/cache_ttl"
 
 /* -----------------------------------------------------------------------------
+ * seahorse-agent.c
+ */
+
+/* Called from the original process before and after fork */
+void seahorse_agent_prefork ();
+void seahorse_agent_postfork (pid_t child);
+
+/* Called in the new child process */
+int seahorse_agent_init ();
+void seahorse_agent_uninit ();
+
+/* Global options to set from the command line */
+extern gboolean seahorse_agent_displayvars;
+extern gboolean seahorse_agent_cshell;
+
+/* -----------------------------------------------------------------------------
  * seahorse-agent-io.c
  */
 
 struct _SeahorseAgentConn;
 typedef struct _SeahorseAgentConn SeahorseAgentConn;
 
-int seahorse_agent_io_socket (const char **socketname);
+int seahorse_agent_io_socket ();
+const gchar* seahorse_agent_io_get_socket ();
 int seahorse_agent_io_init ();
 void seahorse_agent_io_uninit ();
 void seahorse_agent_io_reply (SeahorseAgentConn *rq, gboolean ok, const gchar *response);

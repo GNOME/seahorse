@@ -12,7 +12,16 @@ else
 NAUTILUS_DIR = 
 endif
 
-SUBDIRS = libseahorse src po data help pixmaps plugins $(AGENT_DIR) $(NAUTILUS_DIR)
+SUBDIRS = libseahorse \
+          src \
+          po \
+          data \
+          help \
+          pixmaps \
+          plugins \
+          $(NAUTILUS_DIR) \
+          $(AGENT_DIR) \
+          daemon 
 
 EXTRA_DIST = \
 	AUTHORS \

@@ -1,7 +1,7 @@
 /*
  * Seahorse
  *
- * Copyright (C) 2004 Nate Nielsen
+ * Copyright (C) 2004-2005 Nate Nielsen
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -83,12 +83,11 @@ struct _SeahorseAgentConn {
 #define ASS_ERR     "ERR "
 #define NL          "\n"
 
-/* -----------------------------------------------------------------------------
- */
+/* -------------------------------------------------------------------------- */
 
 /* Create the socket and fill in sockname with its path */
 int
-seahorse_agent_io_socket (const char **socketname)
+seahorse_agent_io_socket ()
 {
     struct sockaddr_un addr;
     gchar *t;
@@ -141,10 +140,13 @@ seahorse_agent_io_socket (const char **socketname)
     if (chmod(g_socket_name, 0600) == -1)
         g_warning ("couldn't set permissions on socket: %s", strerror (errno));
 
-    if (socketname)
-        *socketname = g_socket_name;
-
     return 0;
+}
+
+const gchar*
+seahorse_agent_io_get_socket ()
+{
+    return g_socket_name;
 }
 
 /* Free the given connection structure */
@@ -588,5 +590,5 @@ seahorse_agent_io_uninit ()
         }
 
         g_socket_name[0] = 0;
-    }
+    }    
 }

@@ -68,6 +68,7 @@ libseahorse_internal_la_SOURCES = \
 	seahorse-operation.c seahorse-operation.h \
 	seahorse-progress.c seahorse-progress.h \
     seahorse-gconf.c seahorse-gconf.h \
+    eggtrayicon.c eggtrayicon.h \
 	$(BUILT_SOURCES) \
 	$(AGENT_SRCS) \
 	$(KEYSERVER_SRCS) \

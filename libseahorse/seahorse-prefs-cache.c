@@ -61,7 +61,7 @@ is_pid_running (pid_t pid)
     return (kill (pid, SIGWINCH) != -1);
 }
 
-/* Check if the server at the other end of the socket is seahorse-agent */
+/* Check if the server at the other end of the socket is our agent */
 static AgentType
 check_agent_id (int fd)
 {
@@ -97,7 +97,7 @@ check_agent_id (int fd)
     return ret;
 }
 
-/* Open a connection to seahorse-agent */
+/* Open a connection to our agent */
 static AgentType
 get_listening_agent_type (const gchar *sockname)
 {
@@ -123,7 +123,7 @@ get_listening_agent_type (const gchar *sockname)
     return ret;
 }
 
-/* Given an agent info string make sure it's running and is seahorse-agent */
+/* Given an agent info string make sure it's running and is our agent */
 static AgentType
 check_agent_info (const gchar *agent_info)
 {
@@ -352,19 +352,19 @@ show_session_properties (GtkWidget *widget, gpointer data)
         handle_error (err, _("Couldn't open the Session Properties"));
 }
 
-/* Startup seahorse-agent */
+/* Startup our agent (seahorse-daemon) */
 static void
 start_agent (GtkWidget *widget, gpointer data)
 {
     GError *err = NULL;
     gint status;
 
-    g_spawn_command_line_sync ("seahorse-agent", NULL, NULL, &status, &err);
+    g_spawn_command_line_sync ("seahorse-daemon", NULL, NULL, &status, &err);
 
     if (err)
-        handle_error (err, _("Couldn't start the 'seahorse-agent' program"));
+        handle_error (err, _("Couldn't start the 'seahorse-daemon' program"));
     else if (!(WIFEXITED (status) && WEXITSTATUS (status) == 0))
-        handle_error (NULL, _("The 'seahorse-agent' program exited unsucessfully."));
+        handle_error (NULL, _("The 'seahorse-daemon' program exited unsucessfully."));
     else {
         /* Show the next message about starting up automatically */
         gtk_widget_hide (gtk_widget_get_parent (widget));
