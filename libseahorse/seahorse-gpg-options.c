@@ -37,106 +37,166 @@
 static gchar gpg_homedir[MAXPATHLEN];
 static gboolean gpg_options_inited = FALSE;
 
-static GIOChannel *
+static gboolean
 create_file (const gchar *file, mode_t mode, GError **err)
 {
     int fd;
     g_assert (err && !*err);
     
-    if ((fd = open (file, O_CREAT | O_EXCL | O_RDWR, mode)) == -1) {
+    if ((fd = open (file, O_CREAT | O_TRUNC | O_WRONLY, mode)) == -1) {
         g_set_error (err, G_IO_CHANNEL_ERROR, g_io_channel_error_from_errno (errno),
                      strerror (errno));     
-        return NULL;
+		return FALSE;
     }
-    
-    return g_io_channel_unix_new (fd);     
+
+	/* Write the header when we make a new file */
+	if (write (fd, GPG_CONF_HEADER, strlen (GPG_CONF_HEADER)) == -1) {
+        g_set_error (err, G_IO_CHANNEL_ERROR, g_io_channel_error_from_errno (errno),
+                     strerror (errno));     
+	}
+	
+	close (fd);
+    return *err ? FALSE : TRUE;
 }
 
-/* Finds and opens a relevant configuration file, creates if not found */
-static GIOChannel *
-open_config_file (gboolean read, GError **err)
+/* Finds relevant configuration file, creates if not found */
+static gchar *
+find_config_file (gboolean read, GError **err)
 {
-    GIOChannel *ret = NULL;
     gchar *conf = NULL;
-    gchar *opts = NULL;
-    gboolean created = FALSE;
 
     g_assert (gpg_options_inited);
+    g_assert (!err || !*err);
 
     /* Check for and open ~/.gnupg/gpg.conf */
     conf = g_strconcat (gpg_homedir, "/gpg.conf", NULL);
-    if (g_file_test (conf, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_EXISTS)) {
-        ret = g_io_channel_new_file (conf, read ? "r" : "r+", err);
-    } else {
-        /* Check for and open ~/.gnupg/options */
-        opts = g_strconcat (gpg_homedir, "/options");
-        if (g_file_test (opts, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_EXISTS)) {
-            ret = g_io_channel_new_file (opts, read ? "r" : "r+", err);
-
-        /* Neither of the above exists, so create ~/.gnupg/gpg.conf */
-        } else if (!read) {
-            
-            /* Make sure directory exists */
-            if (!g_file_test (gpg_homedir, G_FILE_TEST_EXISTS)) {
-                if (mkdir (gpg_homedir, 0700) == -1) {
-                    g_set_error (err, G_IO_CHANNEL_ERROR, 
-                             g_io_channel_error_from_errno (errno),
-                             strerror (errno));     
-                }
-            }
-            
-            if (*err == NULL) {
-                ret = create_file (conf, 0600, err);
-                created = TRUE;
-            }
-
-        /* No file was found and not creating */
-        } else {
-            g_set_error (err, G_IO_CHANNEL_ERROR,
-                         g_io_channel_error_from_errno (ENOENT),
-                         strerror (ENOENT));            
-        }
-    }
-
+    if (g_file_test (conf, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_EXISTS)) 
+        return conf;
     g_free (conf);
-    g_free (opts);
+    	
+    /* Check for and open ~/.gnupg/options */
+    conf = g_strconcat (gpg_homedir, "/options");
+    if (g_file_test (conf, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_EXISTS)) 
+        return conf;
+    g_free (conf);
 
-    if (ret) {
-        /* We don't want more than one writing at once */
-        if (flock (g_io_channel_unix_get_fd (ret), read ? LOCK_SH : LOCK_EX) == -1) {
-            g_set_error (err, G_IO_CHANNEL_ERROR,
-                         g_io_channel_error_from_errno (errno), strerror (errno));
-            g_io_channel_shutdown (ret, FALSE, NULL);
-            g_io_channel_unref (ret);
+    /* Make sure directory exists */
+    if (!g_file_test (gpg_homedir, G_FILE_TEST_EXISTS)) {
+        if (mkdir (gpg_homedir, 0700) == -1) {
+            g_set_error (err, G_IO_CHANNEL_ERROR, 
+                         g_io_channel_error_from_errno (errno),
+                         strerror (errno));     
             return NULL;
-        }
-
-        if (g_io_channel_set_encoding (ret, NULL, err) != G_IO_STATUS_NORMAL) {
-            g_io_channel_shutdown (ret, FALSE, NULL);
-            g_io_channel_unref (ret);
-            return NULL;
-        }
-
-        if (created) {
-            /* Write the header when we make a new file */
-            if (g_io_channel_write_chars (ret, GPG_CONF_HEADER, -1, NULL, err) !=
-                G_IO_STATUS_NORMAL
-                || g_io_channel_flush (ret, err) != G_IO_STATUS_NORMAL) {
-                g_io_channel_shutdown (ret, FALSE, NULL);
-                g_io_channel_unref (ret);
-                return NULL;
-            }
         }
     }
 
+    /* For writers just return the file name */
+    conf = g_strconcat (gpg_homedir, "/gpg.conf", NULL);	
+    if (!read)
+        return conf;
+
+    /* ... for readers we create ~/.gnupg/gpg.conf */
+    if (create_file (conf, 0600, err))
+        return conf;
+    g_free (conf);
+	
+    return NULL;
+}	
+
+static GArray*
+read_config_file (GError **err)
+{
+    GIOChannel *io;
+    GError *e = NULL;
+    GArray *ret;
+    gchar *conf;
+    gchar *line;
+
+    g_assert (!err || !*err);
+    if (!err)
+        err = &e;
+    
+    conf = find_config_file (TRUE, err);
+    if (conf == NULL)
+        return NULL;
+
+    io = g_io_channel_new_file (conf, "r", err);
+    g_free (conf);
+
+    if (io == NULL)
+        return NULL;        
+
+    g_io_channel_set_encoding (io, NULL, NULL);    
+    ret = g_array_new (FALSE, TRUE, sizeof (char*));
+
+    while (g_io_channel_read_line (io, &line, NULL, NULL, err) == G_IO_STATUS_NORMAL)
+        g_array_append_val (ret, line);
+
+    g_io_channel_unref (io);
+
+    if (*err != NULL) {
+        g_array_free (ret, TRUE);
+        return NULL;
+    }
+    
     return ret;
+}    
+
+static gboolean
+write_config_file (GArray *lines, GError **err)
+{
+    GError *e = NULL;
+    gchar *conf;
+    guint i;
+    int fd;
+
+    g_assert (!err || !*err);
+    if (!err)
+        err = &e;
+    
+    conf = find_config_file (FALSE, err);
+    if (conf == NULL)
+        return FALSE;
+
+    fd = open (conf, O_CREAT | O_TRUNC | O_WRONLY, 0700);
+    g_free (conf);
+
+    if (fd == -1) {
+        g_set_error (err, G_IO_CHANNEL_ERROR, g_io_channel_error_from_errno (errno),
+                     strerror (errno));     
+		return FALSE;
+    }
+
+    for (i = 0; i < lines->len; i++) {
+        const gchar *line = g_array_index (lines, const gchar*, i);
+        g_assert (line != NULL);        
+
+        if (write (fd, line, strlen (line)) == -1) {
+            g_set_error (err, G_IO_CHANNEL_ERROR, g_io_channel_error_from_errno (errno),
+                         strerror (errno));     
+            break;
+        }
+    }
+
+    close (fd);    
+    
+    return *err ? FALSE : TRUE;
+}
+
+static void
+free_string_array (GArray *lines)
+{
+    guint i;
+    for (i = 0; i < lines->len; i++)
+        g_free (g_array_index (lines, gchar*, i));
+    g_array_free (lines, TRUE);
 }
 
 #define HOME_PREFIX "\nHome: "
 
 /* Discovers .gnupg home directory by running gpg */
 static gboolean
-parse_home_directory (gpgme_engine_info_t engine, GError ** err)
+parse_home_directory (gpgme_engine_info_t engine, GError **err)
 {
     gboolean found = FALSE;
     gchar *sout = NULL;
@@ -284,30 +344,30 @@ seahorse_gpg_options_find_vals (const gchar *options[], gchar *values[],
                                 GError **err)
 {
     GError *e = NULL;
-    GIOChannel *io;
-    gchar *line = NULL;
+    GArray *lines;
     const gchar **opt;
+    gchar *line;
     gchar *t;
-    guint i;
-
-    if (!gpg_options_init (err))
-        return FALSE;
-
-    /* Because we use err locally */
+    guint i, j;
+    
+    g_assert (!err || !*err);
     if (!err)
         err = &e;
 
-    io = open_config_file (TRUE, err);
-    if (!io)
+    if (!gpg_options_init (err))
+        return FALSE;
+    
+    lines = read_config_file (err);
+    if (!lines)
         return FALSE;
 
     /* Clear out all values */
     for (i = 0, opt = options; *opt != NULL; opt++, i++)
         values[i] = NULL;
 
-    while (g_io_channel_read_line (io, &line, NULL, NULL, err) == G_IO_STATUS_NORMAL) {
-        if (!line)
-            continue;
+    for (j = 0; j < lines->len; j++) {
+        line = g_array_index (lines, gchar*, j);
+        g_assert (line != NULL);        
 
         g_strstrip (line);
 
@@ -333,21 +393,16 @@ seahorse_gpg_options_find_vals (const gchar *options[], gchar *values[],
                 }
             }
         }
-
-        g_free (line);
-        line = NULL;
     }
 
-    g_io_channel_unref (io);
-    g_free (line);
+    free_string_array (lines);
 
     return *err ? FALSE : TRUE;
 }
 
 /* Figure out needed changes to configuration file */
-static gboolean
-process_conf_edits (GIOChannel *io, GArray *lines, gint64 *position,
-                    const gchar *options[], gchar *values[], GError **err)
+static void
+process_conf_edits (GArray *lines, const gchar *options[], gchar *values[])
 {
     gboolean comment;
     const gchar **opt;
@@ -355,30 +410,19 @@ process_conf_edits (GIOChannel *io, GArray *lines, gint64 *position,
     gchar *n;
     gchar *line;
     gsize length;
-    gint64 last = 0;
-    gint64 pos = 0;
     gboolean ending = TRUE;
-    int i;
-    GIOStatus x;
+    guint i, j;
 
-    *position = -1;
-
-    while ((x =
-            g_io_channel_read_line (io, &line, &length, NULL,
-                                    err)) == G_IO_STATUS_NORMAL) {
-        if (length == 0) {
-            g_assert (line == NULL);
-            continue;
-        }
-
+    for (j = 0; j < lines->len; j++) {
+        line = g_array_index (lines, gchar*, j);
+        g_assert (line != NULL);        
+        length = strlen(line);
+        
         /* 
          * Does this line have an ending? 
          * We use this below when appending lines.
          */
         ending = (line[length - 1] == '\n');
-
-        last = pos;
-        pos += length;
         n = line;
 
         /* Don't use g_strstrip as we don't want to modify the line */
@@ -432,31 +476,18 @@ process_conf_edits (GIOChannel *io, GArray *lines, gint64 *position,
                     n = g_strconcat ("# ", n, NULL);
                 }
 
-                g_free (line);
                 line = n;
-
-                /* Make note of where we need to write from */
-                if (*position < 0)
-                    *position = last;
 
                 /* Done with this line */
                 break;
             }
         }
 
-        /* We've made changes so keep track of everything */
-        if (*position >= 0)
-            g_array_append_val (lines, line);
-
-        /* No changes yet, so discard */
-        else
-            g_free (line);
-
-        line = NULL;
+        if (g_array_index (lines, gchar*, j) != line) {
+            g_free (g_array_index (lines, gchar*, j));
+            g_array_index (lines, gchar*, j) = line;
+        }
     }
-
-    if (*err != NULL)
-        return FALSE;
 
     /* Append any that haven't been added but need to */
     for (i = 0, opt = options; *opt != NULL; *opt++, i++) {
@@ -478,13 +509,8 @@ process_conf_edits (GIOChannel *io, GArray *lines, gint64 *position,
                 n = g_strconcat (*opt, "\n", NULL);
 
             g_array_append_val (lines, n);
-
-            if (*position < 0)
-                *position = pos;
         }
     }
-
-    return TRUE;
 }
 
 /**
@@ -509,7 +535,7 @@ seahorse_gpg_options_change (const gchar *option, const gchar *value,
     options[0] = option;
     options[1] = NULL;
 
-    return seahorse_gpg_options_find_vals (options, (gchar **)&value, err);
+    return seahorse_gpg_options_change_vals (options, (gchar **)&value, err);
 }
 
 /**
@@ -530,62 +556,23 @@ seahorse_gpg_options_change_vals (const gchar *options[], gchar *values[],
                                   GError **err)
 {
     GError *e = NULL;
-    GIOChannel *io;
     GArray *lines;
-    gint64 position = -1;
-    const gchar *t;
-    int i;
-    off_t o;
-    gsize written;
+
+    g_assert (!err || !*err);
+    if (!err)
+        err = &e;
 
     if (!gpg_options_init (err))
         return FALSE;
 
-    if (!err)
-        err = &e;
-
-    io = open_config_file (FALSE, err);
-    if (!io)
+    lines = read_config_file (err);
+    if (!lines)
         return FALSE;
 
-    lines = g_array_new (FALSE, FALSE, sizeof (gchar *));
-
-    /* Seek to beginning */
-    if (g_io_channel_seek_position (io, 0LL, G_SEEK_SET, err) == G_IO_STATUS_NORMAL) {
-        if (process_conf_edits (io, lines, &position, options, values, err)) {
-            if (position >= 0 &&
-                g_io_channel_seek_position (io, position, G_SEEK_SET,
-                                            err) == G_IO_STATUS_NORMAL) {
-                /* Write out each line past modified position */
-                for (i = 0; i < lines->len; i++) {
-                    t = g_array_index (lines, gchar *, i);
-                    g_assert (t != NULL);
-
-                    if (g_io_channel_write_chars (io, t, -1, &written, err) !=
-                        G_IO_STATUS_NORMAL)
-                        break;
-
-                    position += written;
-                }
-
-                if (g_io_channel_flush (io, err) == G_IO_STATUS_NORMAL) {
-                    /* We have to cut off the file in case we removed data */
-                    o = (off_t) (position);
-                    if (ftruncate (g_io_channel_unix_get_fd (io), o) == -1) {
-                        g_set_error (err, G_IO_CHANNEL_ERROR,
-                                     g_io_channel_error_from_errno (errno),
-                                     strerror (errno));
-                    }
-                }
-            }
-        }
-    }
-
-    for (i = 0; i < lines->len; i++)
-        g_free (g_array_index (lines, gchar *, i));
-
-    g_array_free (lines, TRUE);
-    g_io_channel_unref (io);
-
+    process_conf_edits (lines, options, values);
+    
+    write_config_file (lines, err);
+    free_string_array (lines);
+    
     return *err ? FALSE : TRUE;
 }

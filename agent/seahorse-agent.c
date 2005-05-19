@@ -50,7 +50,7 @@ gboolean g_quit = FALSE;
 static const gchar *confs[4] = {
     "gpg-agent-info",
     "use-agent",
-    "no-agent",
+    "no-use-agent",
     NULL
 };
     
@@ -118,7 +118,7 @@ process_gpg_conf (const char *sockname, pid_t pid)
     
         prev_values[0] = NULL;  /* gpg-agent-info */
         prev_values[1] = NULL;  /* use-agent */
-        prev_values[2] = NULL;  /* no-agent */
+        prev_values[2] = NULL;  /* no-use-agent */
         prev_values[3] = NULL;  /* null terminate */
     }
 
@@ -270,7 +270,6 @@ prepare_logging ()
 int
 main (int argc, char **argv)
 {
-    int ch = 0;
     const char *sockname;
 	GnomeProgram *program = NULL;
 	
@@ -320,7 +319,6 @@ main (int argc, char **argv)
         return 1;               /* message already printed */
 
     gtk_main ();
-
     if (!g_displayvars)
         unprocess_gpg_conf ();
 
