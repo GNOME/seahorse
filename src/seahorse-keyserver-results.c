@@ -65,6 +65,18 @@ properties_activate (GtkWidget *widget, SeahorseWidget *swidget)
 }
 
 static void
+set_numbered_status (SeahorseWidget *swidget, const gchar *t1, const gchar *t2, guint num)
+{
+    GnomeAppBar *status;
+    gchar *msg;
+    
+    msg = g_strdup_printf (ngettext (t1, t2, num), num);
+    status = GNOME_APPBAR (glade_xml_get_widget (swidget->xml, "status"));
+	gnome_appbar_set_default (status, msg);
+    g_free (msg);
+}
+
+static void
 import_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
     SeahorseKeySource *sksrc;
@@ -99,6 +111,9 @@ import_activate (GtkWidget *widget, SeahorseWidget *swidget)
     n = seahorse_op_import_text (sksrc, text, &err);
     if (n == -1) 
         seahorse_util_handle_error (err, _("Couldn't import keys into keyring"));
+    else
+        set_numbered_status (swidget, _("Imported %d key into keyring"), 
+                                      _("Imported %d keys into keyring"), n);
 
     gpgme_data_release (data);
     g_free (text);
@@ -145,11 +160,13 @@ copy_activate (GtkWidget *widget, SeahorseWidget *swidget)
     gchar *text;
     GError *err = NULL;
     GList *keys;
+    guint num;
   
     keys = seahorse_key_store_get_selected_keys (GTK_TREE_VIEW (
                 glade_xml_get_widget (swidget->xml, KEY_LIST)));
        
-    if (g_list_length (keys) == 0)
+    num = g_list_length (keys);
+    if (num == 0)
         return;
                
     text = seahorse_op_export_text (keys, FALSE, &err);
@@ -161,6 +178,9 @@ copy_activate (GtkWidget *widget, SeahorseWidget *swidget)
         board = gtk_clipboard_get (atom);
         gtk_clipboard_set_text (board, text, strlen (text));
         g_free (text);
+
+        set_numbered_status (swidget, _("Copied %d key"), 
+                                      _("Copied %d keys"), num);
     }
 }
 
@@ -196,10 +216,8 @@ selection_changed (GtkTreeSelection *selection, SeahorseWidget *swidget)
 	rows = gtk_tree_selection_count_selected_rows (selection);
 	
 	if (rows > 0) {
-		GnomeAppBar *status;
-		
-		status = GNOME_APPBAR (glade_xml_get_widget (swidget->xml, "status"));
-		gnome_appbar_set_status (status, g_strdup_printf (_("Selected %d keys"), rows));
+        set_numbered_status (swidget, _("Selected %d key"), 
+                                      _("Selected %d keys"), rows);
 	}
 	
     actions = seahorse_widget_find_actions (swidget, "key");

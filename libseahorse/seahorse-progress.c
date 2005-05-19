@@ -77,8 +77,12 @@ operation_progress (SeahorseOperation *operation, const gchar *message,
   
     g_return_if_fail (GNOME_IS_APPBAR (appbar));
     
-    if (message != NULL)
-        gnome_appbar_set_status (GNOME_APPBAR (appbar), message);
+    if (message != NULL) {
+        if (message[0])
+            gnome_appbar_set_status (GNOME_APPBAR (appbar), message);
+        else
+            gnome_appbar_clear_stack (GNOME_APPBAR (appbar));
+    }
 
     progress = gnome_appbar_get_progress (GNOME_APPBAR (appbar));
         

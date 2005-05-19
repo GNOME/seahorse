@@ -76,6 +76,18 @@ new_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 	seahorse_generate_druid_show (swidget->sctx);
 }
 
+static void
+set_numbered_status (SeahorseWidget *swidget, const gchar *t1, const gchar *t2, guint num)
+{
+    GnomeAppBar *status;
+    gchar *msg;
+    
+    msg = g_strdup_printf (ngettext (t1, t2, num), num);
+    status = GNOME_APPBAR (glade_xml_get_widget (swidget->xml, "status"));
+	gnome_appbar_set_default (status, msg);
+    g_free (msg);
+}
+
 /* Loads import dialog */
 static void
 import_activate (GtkWidget *widget, SeahorseWidget *swidget)
@@ -100,26 +112,32 @@ import_activate (GtkWidget *widget, SeahorseWidget *swidget)
         if (err != NULL)
             seahorse_util_handle_error (err, _("Couldn't import keys from \"%s\""), 
                 seahorse_util_uri_get_last (uri));
-                
+        else 
+            set_numbered_status (swidget, _("Imported %d key"), 
+                                          _("Imported %d keys"), keys);
+
         g_free (uri);
     }
 }
 
 /* Callback for pasting from clipboard */
 static void
-clipboard_received (GtkClipboard *board, const gchar *text, SeahorseContext *sctx)
+clipboard_received (GtkClipboard *board, const gchar *text, SeahorseWidget *swidget)
 {
     SeahorseKeySource *sksrc;
     GError *err = NULL;
     gint keys;
     
-    sksrc = seahorse_context_get_key_source (sctx);
+    sksrc = seahorse_context_get_key_source (swidget->sctx);
     g_return_if_fail (sksrc != NULL);
  
     keys = seahorse_op_import_text (sksrc, text, &err);
  
     if (err != NULL)
         seahorse_util_handle_error (err, _("Couldn't import keys from clipboard"));
+    else
+        set_numbered_status (swidget, _("Imported %d key"), 
+                                      _("Imported %d keys"), keys);
 }
 
 /* Pastes key from keyboard */
@@ -132,7 +150,7 @@ paste_activate (GtkWidget *widget, SeahorseWidget *swidget)
     atom = gdk_atom_intern ("CLIPBOARD", FALSE);
     board = gtk_clipboard_get (atom);
     gtk_clipboard_request_text (board,
-         (GtkClipboardTextReceivedFunc)clipboard_received, swidget->sctx);
+         (GtkClipboardTextReceivedFunc)clipboard_received, swidget);
 }
 
 /* Copies key to clipboard */
@@ -144,11 +162,13 @@ copy_activate (GtkWidget *widget, SeahorseWidget *swidget)
     gchar *text;
     GError *err = NULL;
     GList *keys;
+    guint num;
   
     keys = seahorse_key_store_get_selected_keys (GTK_TREE_VIEW (
                 glade_xml_get_widget (swidget->xml, KEY_LIST)));
        
-    if (g_list_length (keys) == 0)
+    num = g_list_length (keys);
+    if (num == 0)
         return;
                
     text = seahorse_op_export_text (keys, FALSE, &err);
@@ -160,6 +180,9 @@ copy_activate (GtkWidget *widget, SeahorseWidget *swidget)
         board = gtk_clipboard_get (atom);
         gtk_clipboard_set_text (board, text, strlen (text));
         g_free (text);
+
+        set_numbered_status (swidget, _("Copied %d key"), 
+                                      _("Copied %d keys"), num);
     }
 }
 
@@ -441,10 +464,8 @@ selection_changed (GtkTreeSelection *selection, SeahorseWidget *swidget)
 	selected = rows > 0;
 	
 	if (selected) {
-		GnomeAppBar *status;
-		
-		status = GNOME_APPBAR (glade_xml_get_widget (swidget->xml, "status"));
-		gnome_appbar_set_status (status, g_strdup_printf ("Selected %d keys", rows));
+        set_numbered_status (swidget, _("Selected %d key"),
+                                      _("Selected %d keys"), rows);
 	}
 	
 	if (rows == 1) {
@@ -510,7 +531,7 @@ gconf_notification (GConfClient *gclient, guint id, GConfEntry *entry, SeahorseW
 
 static void
 target_drag_data_received (GtkWidget *widget, GdkDragContext *context, gint x, gint y,
-                           GtkSelectionData *data, guint info, guint time, SeahorseContext *sctx)
+                           GtkSelectionData *data, guint info, guint time, SeahorseWidget *swidget)
 {
     SeahorseKeySource *sksrc;
     gint keys = 0;
@@ -521,7 +542,7 @@ target_drag_data_received (GtkWidget *widget, GdkDragContext *context, gint x, g
     DBG_PRINT(("DragDataReceived -->\n"));
     g_return_if_fail (data != NULL);
     
-    sksrc = seahorse_context_get_key_source (sctx);
+    sksrc = seahorse_context_get_key_source (swidget->sctx);
     g_return_if_fail (sksrc != NULL);
     
     switch(info) {
@@ -535,11 +556,8 @@ target_drag_data_received (GtkWidget *widget, GdkDragContext *context, gint x, g
             g_strstrip (*u);
             if ((*u)[0]) { /* Make sure it's not an empty line */
                 keys += seahorse_op_import_file (sksrc, *u, &err);  
-                if (err != NULL) {
-                    seahorse_util_handle_error (err, _("Couldn't import key from \"%s\""),
-                            seahorse_util_uri_get_last (*u));
+                if (err != NULL)
                     break;
-                }
             }
         }
         g_strfreev (uris);
@@ -550,6 +568,13 @@ target_drag_data_received (GtkWidget *widget, GdkDragContext *context, gint x, g
         break;
     } 
 
+    if (err != NULL)
+        seahorse_util_handle_error (err, _("Couldn't import key from \"%s\""),
+                                    seahorse_util_uri_get_last (*u));
+    else
+        set_numbered_status (swidget, _("Imported %d key"), 
+                                      _("Imported %d keys"), keys);
+    
     DBG_PRINT(("DragDataReceived <--\n"));
 }
 
@@ -719,7 +744,7 @@ seahorse_key_manager_show (SeahorseContext *sctx)
     gtk_drag_dest_set (GTK_WIDGET (win), GTK_DEST_DEFAULT_ALL, 
                 seahorse_target_entries, seahorse_n_targets, GDK_ACTION_COPY);
     gtk_signal_connect (GTK_OBJECT (win), "drag_data_received",
-                GTK_SIGNAL_FUNC (target_drag_data_received), sctx);
+                GTK_SIGNAL_FUNC (target_drag_data_received), swidget);
                         
     /* For the filtering */
     glade_xml_signal_connect_data(swidget->xml, "on_filter_changed",
