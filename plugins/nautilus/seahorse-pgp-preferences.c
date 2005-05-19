@@ -23,8 +23,13 @@
 #include <config.h>
 #include <locale.h>
 
+#include "config.h"
 #include "seahorse-context.h"
 #include "seahorse-prefs.h"
+
+#ifdef WITH_AGENT
+static gboolean show_cache = FALSE;
+#endif
 
 static void
 destroyed (GtkObject *object, gpointer data)
@@ -32,19 +37,24 @@ destroyed (GtkObject *object, gpointer data)
 	gtk_exit (0);
 }
 
+static const struct poptOption options[] = {
+#ifdef WITH_AGENT    
+	{ "cache", 'c', POPT_ARG_NONE | POPT_ARG_VAL, &show_cache, TRUE,
+	    N_("For internal use"), NULL },
+#endif 
+        
+	POPT_AUTOHELP
+	POPT_TABLEEND
+};
+
 int
 main (int argc, char **argv)
 {
 	SeahorseWidget *swidget;
 	SeahorseContext *sctx;
 
-#ifdef ENABLE_NLS
-        bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
-        bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
-        textdomain (GETTEXT_PACKAGE);          
-#endif
-
     gnome_program_init (PACKAGE, VERSION, LIBGNOMEUI_MODULE, argc, argv,
+                GNOME_PARAM_POPT_TABLE, options,
                 GNOME_PARAM_HUMAN_READABLE_NAME, _("Encryption Preferences"),
                 GNOME_PARAM_APP_DATADIR, DATA_DIR, NULL);
 	
@@ -54,7 +64,12 @@ main (int argc, char **argv)
     swidget = seahorse_prefs_new (sctx);
 	g_signal_connect (seahorse_widget_get_top (swidget), "destroy", 
                       G_CALLBACK (destroyed), NULL);
-	
+
+#ifdef WITH_AGENT	
+    if (show_cache)
+        seahorse_prefs_select_tab (swidget, 1);
+#endif
+    
 	gtk_main();
 	return 0;
 }
