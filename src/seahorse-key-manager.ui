@@ -1,0 +1,61 @@
+<ui>
+    <menubar>
+        <menu name="Key" action="key-menu">
+            <menuitem action="key-generate"/>
+            <menuitem action="key-import-file"/>
+            <menuitem action="key-export-file"/>
+            <separator/>
+            <menuitem action="key-backup"/>
+            <separator/>
+            <menuitem action="key-properties"/>
+            <menuitem action="key-sign"/>
+            <menuitem action="key-add-userid"/>
+            <menuitem action="key-add-revoker"/>
+            <separator/>
+            <menuitem action="app-quit"/>
+        </menu>
+        <menu name="Edit" action="edit-menu">
+            <menuitem action="key-export-clipboard"/>
+            <menuitem action="key-import-clipboard"/>
+            <menuitem action="key-delete"/>
+            <separator/>
+            <menuitem action="app-preferences"/>
+        </menu>
+        <menu name="Remote" action="remote-menu">
+            <menuitem action="remote-find"/>
+            <menuitem action="remote-sync"/>
+        </menu>
+        <menu name="View" action="view-menu">
+            <menuitem action="view-expand-all"/>
+            <menuitem action="view-collapse-all"/>
+        </menu>
+        <menu name="Help" action="help-menu">
+            <menuitem action="help-show"/>
+            <menuitem action="app-about"/>
+        </menu> 
+
+    </menubar>
+  
+    <toolbar name="MainToolbar">
+        <placeholder name="ToolItems">
+            <toolitem action="key-properties"/>
+            <toolitem action="key-export-file"/>
+            <toolitem action="key-sign"/>
+            <toolitem action="remote-find"/>
+        </placeholder>
+    </toolbar>
+    
+    <popup name="KeyPopup">
+        <menuitem action="key-properties"/>
+        <separator/>
+        <menuitem action="key-export-file"/>
+        <menuitem action="key-export-clipboard"/>
+        <menuitem action="key-delete"/>
+        <menuitem action="remote-sync"/>
+        <separator/>
+        <menuitem action="key-sign"/>
+        <menuitem action="key-add-userid"/>
+        <menuitem action="key-add-revoker"/>
+    </popup>
+    
+</ui>

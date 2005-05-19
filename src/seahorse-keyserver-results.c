@@ -1,7 +1,7 @@
 /*
  * Seahorse
  *
- * Copyright (C) 2003 Jacob Perkins
+ * Copyright (C) 2004 - 2005 Nate Nielsen
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,8 @@
 
 #define KEY_LIST "key_list"
 
-/* Quits seahorse */
+/* SIGNAL CALLBACKS --------------------------------------------------------- */
+
 static void
 close_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
@@ -187,27 +188,10 @@ row_activated (GtkTreeView *treeview, GtkTreePath *path, GtkTreeViewColumn *arg2
 }
 
 static void
-set_key_options_sensitive (SeahorseWidget *swidget, guint selected, gboolean secret, SeahorseKey *skey)
-{
-    gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "properties"), selected == 1);
-    gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "key_properties"), selected == 1);
-    gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "properties_button"), selected == 1);
-    gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "import"), selected > 0);
-    gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "key_import"), selected > 0);
-    gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "import_button"), selected > 0);
-    gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "export"), selected > 0);
-    gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "key_export"), selected > 0);
-    gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "export_button"), selected > 0);
-    gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "copy"), selected > 0);
-    gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "edit_copy"), selected > 0);
-}
-
-static void
 selection_changed (GtkTreeSelection *selection, SeahorseWidget *swidget)
 {
+    GtkActionGroup *actions;
 	gint rows = 0;
-	gboolean secret = FALSE;
-	SeahorseKey *skey = NULL;
 	
 	rows = gtk_tree_selection_count_selected_rows (selection);
 	
@@ -218,21 +202,17 @@ selection_changed (GtkTreeSelection *selection, SeahorseWidget *swidget)
 		gnome_appbar_set_status (status, g_strdup_printf (_("Selected %d keys"), rows));
 	}
 	
-	if (rows == 1) {
-		skey = seahorse_key_store_get_selected_key (GTK_TREE_VIEW (
-			glade_xml_get_widget (swidget->xml, KEY_LIST)), NULL);
-		secret = (skey != NULL && SEAHORSE_IS_KEY_PAIR (skey));
-	}
-	
-	set_key_options_sensitive (swidget, rows, secret, skey);
+    actions = seahorse_widget_find_actions (swidget, "key");
+    gtk_action_group_set_sensitive (actions, rows > 0);
 }
 
 static void
 show_context_menu (SeahorseWidget *swidget, guint button, guint32 time)
 {
 	GtkWidget *menu;
-	
-	menu = glade_xml_get_widget (swidget->xml, "context_menu");
+    
+    menu = seahorse_widget_get_ui_widget (swidget, "/KeyPopup");
+    g_return_if_fail (menu != NULL);    
 	gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL, button, time);
 	gtk_widget_show (menu);
 }
@@ -268,6 +248,48 @@ window_destroyed (GtkWindow *window, SeahorseWidget *swidget)
     g_object_unref (sksrc);
 }
 
+static void
+help_activate (GtkWidget *widget, SeahorseWidget *swidget)
+{
+    seahorse_widget_show_help (swidget);
+}
+
+/* BUILDING THE MAIN WINDOW ------------------------------------------------- */
+
+static GtkActionEntry ui_entries[] = {
+    
+    /* Top menu items */
+    { "key-menu", NULL, N_("_Key") },
+    { "edit-menu", NULL, N_("_Edit") },
+    { "help-menu", NULL, N_("_Help") },
+    
+    { "app-close", GTK_STOCK_CLOSE, N_("_Close"), "<control>W",
+            N_("Close this window"), G_CALLBACK (close_activate) }, 
+    { "help-show", GTK_STOCK_HELP, N_("_Contents"), "F1",
+            N_("Show Seahorse help"), G_CALLBACK (help_activate) }, 
+
+    { "view-expand-all", GTK_STOCK_ADD, N_("_Expand All"), NULL,
+            N_("Expand all listings"), G_CALLBACK (expand_all_activate) }, 
+    { "view-collapse-all", GTK_STOCK_REMOVE, N_("_Collapse All"), NULL,
+            N_("Collapse all listings"), G_CALLBACK (collapse_all_activate) }, 
+};
+
+static GtkActionEntry public_entries[] = {
+    { "key-import-keyring", GTK_STOCK_ADD, N_("_Import"), "",
+            N_("Import selected keys to local keyring"), G_CALLBACK (import_activate) },
+    { "key-properties", GTK_STOCK_PROPERTIES, N_("P_roperties"), NULL,
+            N_("Show key properties"), G_CALLBACK (properties_activate) }, 
+    { "key-export-file", GTK_STOCK_SAVE_AS, N_("Save As..."), "<control><shift>S",
+            N_("Save selected keys as a file"), G_CALLBACK (export_activate) }, 
+    { "key-export-clipboard", GTK_STOCK_COPY, N_("_Copy Key"), "<control>C",
+            N_("Copy selected keys to the clipboard"), G_CALLBACK (copy_activate) }, 
+};
+
+static GtkActionEntry remote_entries[] = {
+    { "remote-find", GTK_STOCK_FIND, N_("_Find Remote Keys..."), "",
+            N_("Search for keys on a key server"), G_CALLBACK (search_activate) }, 
+};
+
 /**
  * seahorse_keyserver_results_show
  * @sctx: The SeahorseContext 
@@ -286,6 +308,8 @@ seahorse_keyserver_results_show (SeahorseContext *sctx, SeahorseKeySource *sksrc
 	GtkTreeView *view;
 	GtkTreeSelection *selection;
     SeahorseKeyStore *skstore;
+    GtkActionGroup *actions;
+    GtkAction *action;
     GtkWidget *w;
     gchar *title;
 	
@@ -305,28 +329,33 @@ seahorse_keyserver_results_show (SeahorseContext *sctx, SeahorseKeySource *sksrc
     gtk_window_set_title (win, title);
     g_free (title);
     
-	/* construct key context menu */
-	glade_xml_construct (swidget->xml, SEAHORSE_GLADEDIR "seahorse-keyserver-results.glade",
-		                 "context_menu", NULL);
-	set_key_options_sensitive (swidget, 0, FALSE, NULL);
-	
-	glade_xml_signal_connect_data (swidget->xml, "expand_all_activate",
-		G_CALLBACK (expand_all_activate), swidget);
-	glade_xml_signal_connect_data (swidget->xml, "collapse_all_activate",
-		G_CALLBACK (collapse_all_activate), swidget);
-    glade_xml_signal_connect_data (swidget->xml, "close_activate",
-        G_CALLBACK (close_activate), swidget);
-    glade_xml_signal_connect_data (swidget->xml, "search_activate",
-        G_CALLBACK (search_activate), swidget);
-    glade_xml_signal_connect_data (swidget->xml, "import_activate",
-        G_CALLBACK (import_activate), swidget);
-    glade_xml_signal_connect_data (swidget->xml, "export_activate",
-        G_CALLBACK (export_activate), swidget);
-    glade_xml_signal_connect_data (swidget->xml, "copy_activate",
-        G_CALLBACK (copy_activate), swidget);
+    /* General normal actions */
+    actions = gtk_action_group_new ("main");
+    gtk_action_group_add_actions (actions, ui_entries, 
+                                  G_N_ELEMENTS (ui_entries), swidget);
+    seahorse_widget_add_actions (swidget, actions);
 
-    /* Features not yet available */
-		
+    /* Actions that are allowed on all keys */
+    actions = gtk_action_group_new ("key");
+    gtk_action_group_add_actions (actions, public_entries, 
+                                  G_N_ELEMENTS (public_entries), swidget);
+    seahorse_widget_add_actions (swidget, actions);
+
+    /* Mark the properties toolbar button as important */
+    action = gtk_action_group_get_action (actions, "key-properties");
+    g_return_val_if_fail (action, win);
+    g_object_set (action, "is-important", TRUE, NULL);
+    
+    /* Mark the import toolbar button as important */
+    action = gtk_action_group_get_action (actions, "key-import-keyring");
+    g_return_val_if_fail (action, win);
+    g_object_set (action, "is-important", TRUE, NULL);
+    
+    actions = gtk_action_group_new ("remote");
+    gtk_action_group_add_actions (actions, remote_entries, 
+                                  G_N_ELEMENTS (remote_entries), swidget);
+    seahorse_widget_add_actions (swidget, actions);    
+
 	/* tree view signals */	
 	glade_xml_signal_connect_data (swidget->xml, "row_activated",
 		G_CALLBACK (row_activated), swidget);
@@ -334,9 +363,6 @@ seahorse_keyserver_results_show (SeahorseContext *sctx, SeahorseKeySource *sksrc
 		G_CALLBACK (key_list_button_pressed), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "key_list_popup_menu",
 		G_CALLBACK (key_list_popup_menu), swidget);
-	/* selected key signals */
-	glade_xml_signal_connect_data (swidget->xml, "properties_activate",
-		G_CALLBACK (properties_activate), swidget);
 
 	/* init key list & selection settings */
 	view = GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, KEY_LIST));
@@ -344,6 +370,7 @@ seahorse_keyserver_results_show (SeahorseContext *sctx, SeahorseKeySource *sksrc
 	gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
 	g_signal_connect (selection, "changed",
 		G_CALLBACK (selection_changed), swidget);
+    selection_changed (NULL, swidget);
 
     /* Load the keys */
     seahorse_key_source_refresh_async (sksrc, SEAHORSE_KEY_SOURCE_ALL);

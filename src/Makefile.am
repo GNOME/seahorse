@@ -47,6 +47,7 @@ seahorse_LDADD = \
 
 glade_DATA = \
 	seahorse-key-manager.glade \
+    seahorse-key-manager.ui \
 	seahorse-key-properties.glade \
 	seahorse-revoke.glade \
     seahorse-expires.glade \
@@ -61,7 +62,8 @@ glade_DATA = \
 	seahorse-multi-encrypt.glade \
 	seahorse-keyserver-search.glade \
 	seahorse-keyserver-results.glade \
-    seahorse-keyserver-sync.glade
+	seahorse-keyserver-results.ui \
+    seahorse-keyserver-sync.glade 
 
 @INTLTOOL_DESKTOP_RULE@
 desktopdir = $(datadir)/applications

@@ -2,6 +2,7 @@
  * Seahorse
  *
  * Copyright (C) 2003 Jacob Perkins
+ * Copyright (C) 2005 Nate Nielsen
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,6 +46,9 @@ struct _SeahorseWidget
 	GladeXML	*xml;
 	gchar		*name;
 	SeahorseContext	*sctx;
+    
+    /*< private >*/
+    GtkUIManager   *ui;
 };
 
 struct _SeahorseWidgetClass
@@ -64,6 +68,17 @@ GtkWidget*       seahorse_widget_get_top            (SeahorseWidget   *swidget);
 
 void             seahorse_widget_show               (SeahorseWidget   *swidget);
 
+void             seahorse_widget_show_help          (SeahorseWidget   *swidget);
+
 void             seahorse_widget_destroy            (SeahorseWidget   *swidget);
+
+GtkWidget*       seahorse_widget_get_ui_widget      (SeahorseWidget *swidget, 
+                                                     const gchar *path);
+
+void             seahorse_widget_add_actions        (SeahorseWidget   *swidget,
+                                                     GtkActionGroup   *actions);
+
+GtkActionGroup*  seahorse_widget_find_actions       (SeahorseWidget   *swidget, 
+                                                     const gchar *name);
 
 #endif /* __SEAHORSE_WIDGET_H__ */

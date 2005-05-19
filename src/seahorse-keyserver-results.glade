@@ -20,7 +20,6 @@
   <property name="skip_pager_hint">False</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
-  <property name="focus_on_map">True</property>
   <property name="enable_layout_config">True</property>
   <signal name="delete_event" handler="quit_event" last_modification_time="Mon, 28 Oct 2002 05:11:14 GMT"/>
 
@@ -35,199 +34,13 @@
 	  <property name="shadow_type">GTK_SHADOW_NONE</property>
 
 	  <child>
-	    <widget class="GtkMenuBar" id="menubar1">
+	    <widget class="GtkVBox" id="menu-placeholder">
 	      <property name="visible">True</property>
+	      <property name="homogeneous">False</property>
+	      <property name="spacing">0</property>
 
 	      <child>
-		<widget class="GtkMenuItem" id="key">
-		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">_Key</property>
-		  <property name="use_underline">True</property>
-
-		  <child>
-		    <widget class="GtkMenu" id="key_menu">
-
-		      <child>
-			<widget class="GtkImageMenuItem" id="key_import">
-			  <property name="visible">True</property>
-			  <property name="tooltip" translatable="yes">Import selected keys to local keyring</property>
-			  <property name="label" translatable="yes">_Import to Keyring...</property>
-			  <property name="use_underline">True</property>
-			  <signal name="activate" handler="import_activate" last_modification_time="Wed, 12 Feb 2003 02:03:56 GMT"/>
-			  <accelerator key="I" modifiers="GDK_CONTROL_MASK" signal="activate"/>
-
-			  <child internal-child="image">
-			    <widget class="GtkImage" id="image1874">
-			      <property name="visible">True</property>
-			      <property name="stock">gtk-add</property>
-			      <property name="icon_size">1</property>
-			      <property name="xalign">0.5</property>
-			      <property name="yalign">0.5</property>
-			      <property name="xpad">0</property>
-			      <property name="ypad">0</property>
-			    </widget>
-			  </child>
-			</widget>
-		      </child>
-
-		      <child>
-			<widget class="GtkImageMenuItem" id="key_export">
-			  <property name="visible">True</property>
-			  <property name="tooltip" translatable="yes">Export public key</property>
-			  <property name="stock_item">GNOMEUIINFO_MENU_SAVE_AS_ITEM</property>
-			  <signal name="activate" handler="export_activate" last_modification_time="Mon, 29 Nov 2004 00:22:43 GMT"/>
-			</widget>
-		      </child>
-
-		      <child>
-			<widget class="GtkSeparatorMenuItem" id="separator6">
-			  <property name="visible">True</property>
-			</widget>
-		      </child>
-
-		      <child>
-			<widget class="GtkImageMenuItem" id="key_search">
-			  <property name="visible">True</property>
-			  <property name="tooltip" translatable="yes">Find Remote Keys on Key Servers</property>
-			  <property name="label" translatable="yes">Find Remote Keys...</property>
-			  <property name="use_underline">True</property>
-			  <signal name="activate" handler="search_activate" last_modification_time="Mon, 29 Nov 2004 00:18:23 GMT"/>
-
-			  <child internal-child="image">
-			    <widget class="GtkImage" id="image1875">
-			      <property name="visible">True</property>
-			      <property name="stock">gtk-find</property>
-			      <property name="icon_size">1</property>
-			      <property name="xalign">0.5</property>
-			      <property name="yalign">0.5</property>
-			      <property name="xpad">0</property>
-			      <property name="ypad">0</property>
-			    </widget>
-			  </child>
-			</widget>
-		      </child>
-
-		      <child>
-			<widget class="GtkSeparatorMenuItem" id="separator15">
-			  <property name="visible">True</property>
-			</widget>
-		      </child>
-
-		      <child>
-			<widget class="GtkImageMenuItem" id="key_properties">
-			  <property name="visible">True</property>
-			  <property name="tooltip" translatable="yes">Show key properties</property>
-			  <property name="label" translatable="yes">_Properties</property>
-			  <property name="use_underline">True</property>
-			  <signal name="activate" handler="properties_activate" last_modification_time="Wed, 12 Feb 2003 02:03:56 GMT"/>
-
-			  <child internal-child="image">
-			    <widget class="GtkImage" id="image1876">
-			      <property name="visible">True</property>
-			      <property name="stock">gtk-properties</property>
-			      <property name="icon_size">1</property>
-			      <property name="xalign">0.5</property>
-			      <property name="yalign">0.5</property>
-			      <property name="xpad">0</property>
-			      <property name="ypad">0</property>
-			    </widget>
-			  </child>
-			</widget>
-		      </child>
-
-		      <child>
-			<widget class="GtkSeparatorMenuItem" id="separator7">
-			  <property name="visible">True</property>
-			</widget>
-		      </child>
-
-		      <child>
-			<widget class="GtkImageMenuItem" id="close">
-			  <property name="visible">True</property>
-			  <property name="stock_item">GNOMEUIINFO_MENU_CLOSE_ITEM</property>
-			  <signal name="activate" handler="close_activate" last_modification_time="Mon, 29 Nov 2004 00:24:56 GMT"/>
-			</widget>
-		      </child>
-		    </widget>
-		  </child>
-		</widget>
-	      </child>
-
-	      <child>
-		<widget class="GtkMenuItem" id="edit">
-		  <property name="visible">True</property>
-		  <property name="stock_item">GNOMEUIINFO_MENU_EDIT_TREE</property>
-
-		  <child>
-		    <widget class="GtkMenu" id="edit_menu">
-
-		      <child>
-			<widget class="GtkImageMenuItem" id="edit_copy">
-			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">_Copy Key</property>
-			  <property name="use_underline">True</property>
-			  <signal name="activate" handler="copy_activate" last_modification_time="Fri, 08 Oct 2004 18:32:14 GMT"/>
-			  <accelerator key="C" modifiers="GDK_CONTROL_MASK" signal="activate"/>
-
-			  <child internal-child="image">
-			    <widget class="GtkImage" id="image1877">
-			      <property name="visible">True</property>
-			      <property name="stock">gtk-copy</property>
-			      <property name="icon_size">1</property>
-			      <property name="xalign">0.5</property>
-			      <property name="yalign">0.5</property>
-			      <property name="xpad">0</property>
-			      <property name="ypad">0</property>
-			    </widget>
-			  </child>
-			</widget>
-		      </child>
-		    </widget>
-		  </child>
-		</widget>
-	      </child>
-
-	      <child>
-		<widget class="GtkMenuItem" id="help1">
-		  <property name="visible">True</property>
-		  <property name="stock_item">GNOMEUIINFO_MENU_HELP_TREE</property>
-
-		  <child>
-		    <widget class="GtkMenu" id="help1_menu">
-
-		      <child>
-			<widget class="GtkImageMenuItem" id="manual">
-			  <property name="visible">True</property>
-			  <property name="tooltip" translatable="yes">Show Seahorse help</property>
-			  <property name="label" translatable="yes">_Contents</property>
-			  <property name="use_underline">True</property>
-			  <signal name="activate" handler="help" last_modification_time="Fri, 18 Oct 2002 15:55:26 GMT"/>
-			  <accelerator key="F1" modifiers="0" signal="activate"/>
-
-			  <child internal-child="image">
-			    <widget class="GtkImage" id="image1878">
-			      <property name="visible">True</property>
-			      <property name="stock">gtk-help</property>
-			      <property name="icon_size">1</property>
-			      <property name="xalign">0.5</property>
-			      <property name="yalign">0.5</property>
-			      <property name="xpad">0</property>
-			      <property name="ypad">0</property>
-			    </widget>
-			  </child>
-			</widget>
-		      </child>
-
-		      <child>
-			<widget class="GtkImageMenuItem" id="about">
-			  <property name="visible">True</property>
-			  <property name="stock_item">GNOMEUIINFO_MENU_ABOUT_ITEM</property>
-			  <signal name="activate" handler="about_activate" last_modification_time="Sun, 13 Oct 2002 16:25:54 GMT"/>
-			</widget>
-		      </child>
-		    </widget>
-		  </child>
-		</widget>
+		<placeholder/>
 	      </child>
 	    </widget>
 	  </child>
@@ -247,61 +60,13 @@
 	  <property name="shadow_type">GTK_SHADOW_OUT</property>
 
 	  <child>
-	    <widget class="GtkToolbar" id="toolbar">
+	    <widget class="GtkVBox" id="toolbar-placeholder">
 	      <property name="visible">True</property>
-	      <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
-	      <property name="toolbar_style">GTK_TOOLBAR_BOTH_HORIZ</property>
-	      <property name="tooltips">True</property>
-	      <property name="show_arrow">True</property>
+	      <property name="homogeneous">False</property>
+	      <property name="spacing">0</property>
 
 	      <child>
-		<widget class="GtkToolButton" id="import_button">
-		  <property name="visible">True</property>
-		  <property name="tooltip" translatable="yes">Import Key</property>
-		  <property name="label" translatable="yes">_Import</property>
-		  <property name="use_underline">True</property>
-		  <property name="stock_id">gtk-add</property>
-		  <property name="visible_horizontal">True</property>
-		  <property name="visible_vertical">True</property>
-		  <property name="is_important">False</property>
-		  <signal name="clicked" handler="import_activate" last_modification_time="Wed, 15 Dec 2004 01:13:57 GMT"/>
-		</widget>
-		<packing>
-		  <property name="expand">False</property>
-		  <property name="homogeneous">True</property>
-		</packing>
-	      </child>
-
-	      <child>
-		<widget class="GtkToolButton" id="export_button">
-		  <property name="visible">True</property>
-		  <property name="tooltip" translatable="yes">Export key</property>
-		  <property name="stock_id">gtk-save-as</property>
-		  <property name="visible_horizontal">True</property>
-		  <property name="visible_vertical">True</property>
-		  <property name="is_important">False</property>
-		  <signal name="clicked" handler="export_activate" last_modification_time="Wed, 15 Dec 2004 01:14:03 GMT"/>
-		</widget>
-		<packing>
-		  <property name="expand">False</property>
-		  <property name="homogeneous">True</property>
-		</packing>
-	      </child>
-
-	      <child>
-		<widget class="GtkToolButton" id="properties_button">
-		  <property name="visible">True</property>
-		  <property name="tooltip" translatable="yes">Show key properties</property>
-		  <property name="stock_id">gtk-properties</property>
-		  <property name="visible_horizontal">True</property>
-		  <property name="visible_vertical">True</property>
-		  <property name="is_important">False</property>
-		  <signal name="clicked" handler="properties_activate" last_modification_time="Wed, 15 Dec 2004 01:14:09 GMT"/>
-		</widget>
-		<packing>
-		  <property name="expand">False</property>
-		  <property name="homogeneous">True</property>
-		</packing>
+		<placeholder/>
 	      </child>
 	    </widget>
 	  </child>
@@ -333,9 +98,6 @@
 	      <property name="rules_hint">True</property>
 	      <property name="reorderable">False</property>
 	      <property name="enable_search">True</property>
-	      <property name="fixed_height_mode">False</property>
-	      <property name="hover_selection">False</property>
-	      <property name="hover_expand">False</property>
 	      <signal name="row_activated" handler="row_activated" last_modification_time="Thu, 07 Nov 2002 04:38:39 GMT"/>
 	      <signal name="button_press_event" handler="key_list_button_pressed" last_modification_time="Wed, 12 Feb 2003 02:29:41 GMT"/>
 	      <signal name="popup_menu" handler="key_list_popup_menu" last_modification_time="Sun, 02 Mar 2003 19:43:39 GMT"/>
@@ -362,83 +124,6 @@
       <property name="expand">True</property>
       <property name="fill">True</property>
     </packing>
-  </child>
-</widget>
-
-<widget class="GtkMenu" id="context_menu">
-
-  <child>
-    <widget class="GtkImageMenuItem" id="copy">
-      <property name="visible">True</property>
-      <property name="tooltip" translatable="yes">Copy the selected key to the clipboard</property>
-      <property name="stock_item">GNOMEUIINFO_MENU_COPY_ITEM</property>
-      <signal name="activate" handler="copy_activate" last_modification_time="Mon, 29 Nov 2004 00:16:43 GMT"/>
-    </widget>
-  </child>
-
-  <child>
-    <widget class="GtkSeparatorMenuItem" id="separator14">
-      <property name="visible">True</property>
-    </widget>
-  </child>
-
-  <child>
-    <widget class="GtkImageMenuItem" id="import">
-      <property name="visible">True</property>
-      <property name="tooltip" translatable="yes">Import selected keys to local keyring</property>
-      <property name="label" translatable="yes">_Import to Keyring...</property>
-      <property name="use_underline">True</property>
-      <signal name="activate" handler="import_activate" last_modification_time="Mon, 29 Nov 2004 00:22:29 GMT"/>
-
-      <child internal-child="image">
-	<widget class="GtkImage" id="image1864">
-	  <property name="visible">True</property>
-	  <property name="stock">gtk-open</property>
-	  <property name="icon_size">1</property>
-	  <property name="xalign">0.5</property>
-	  <property name="yalign">0.5</property>
-	  <property name="xpad">0</property>
-	  <property name="ypad">0</property>
-	</widget>
-      </child>
-    </widget>
-  </child>
-
-  <child>
-    <widget class="GtkImageMenuItem" id="export">
-      <property name="visible">True</property>
-      <property name="tooltip" translatable="yes">Save the key to a file</property>
-      <property name="stock_item">GNOMEUIINFO_MENU_SAVE_AS_ITEM</property>
-      <signal name="activate" handler="export_activate" last_modification_time="Mon, 29 Nov 2004 00:22:29 GMT"/>
-    </widget>
-  </child>
-
-  <child>
-    <widget class="GtkSeparatorMenuItem" id="separator9">
-      <property name="visible">True</property>
-    </widget>
-  </child>
-
-  <child>
-    <widget class="GtkImageMenuItem" id="properties">
-      <property name="visible">True</property>
-      <property name="tooltip" translatable="yes">Show key properties</property>
-      <property name="label" translatable="yes">_Properties</property>
-      <property name="use_underline">True</property>
-      <signal name="activate" handler="properties_activate" last_modification_time="Wed, 12 Feb 2003 02:32:22 GMT"/>
-
-      <child internal-child="image">
-	<widget class="GtkImage" id="image1865">
-	  <property name="visible">True</property>
-	  <property name="stock">gtk-properties</property>
-	  <property name="icon_size">1</property>
-	  <property name="xalign">0.5</property>
-	  <property name="yalign">0.5</property>
-	  <property name="xpad">0</property>
-	  <property name="ypad">0</property>
-	</widget>
-      </child>
-    </widget>
   </child>
 </widget>
 
