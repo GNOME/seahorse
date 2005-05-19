@@ -54,6 +54,7 @@ typedef struct sa_cache_t {
 static GHashTable *g_cache = NULL;      /* Hash of ids to sa_cache_t */
 static GMemChunk *g_memory = NULL;      /* Memory for sa_cache_t's */
 static gpgme_ctx_t g_ctx = NULL;        /* Context for looking up ids */
+static guint g_notify_id = 0;			/* gconf notify id */
 
 /* -----------------------------------------------------------------------------
  */
@@ -132,6 +133,18 @@ destroy_cache_item (gpointer data)
     }
 }
 
+/* Called when the AUTH gconf key changes */
+static void
+gconf_notify (GConfClient *client, guint id, GConfEntry *entry, gpointer data)
+{
+	/* Clear the cache when someone changes the gconf AUTH setting to false */
+	if (g_str_equal (SETTING_AUTH, gconf_entry_get_key (entry))) {
+        if (!gconf_value_get_bool (gconf_entry_get_value (entry)))
+			seahorse_agent_cache_clearall (NULL);
+	}
+}
+
+
 /* Initialize the cache */
 void
 seahorse_agent_cache_init ()
@@ -159,6 +172,9 @@ seahorse_agent_cache_init ()
     g_return_if_fail (GPG_IS_OK (err));
    
     gpgme_set_keylist_mode (g_ctx, GPGME_KEYLIST_MODE_LOCAL);
+	
+	/* Listen for changes on the AUTH key */
+	g_notify_id = seahorse_gconf_notify (SETTING_AUTH, gconf_notify, NULL);
 }
 
 /* Uninitialize and free up cache memory */
@@ -181,6 +197,11 @@ seahorse_agent_cache_uninit ()
         gpgme_release (g_ctx);
         g_ctx = NULL;
     }
+	
+	if (g_notify_id) {
+		seahorse_gconf_unnotify (g_notify_id);
+		g_notify_id = 0;
+	}
 }
 
 /* Retrieve a password from the cache */
@@ -256,11 +277,13 @@ seahorse_agent_cache_clear (const gchar *id)
 static gboolean
 remove_cache_item (gpointer key, gpointer value, gpointer user_data)
 {
+    sa_cache_t *it = (sa_cache_t*) value;
+
     /* 
      * This is a simple callback for removing all 
      * items from a GHashTable. returning TRUE removes. 
      */
-    return TRUE;
+	return !it->locked;
 }
 
 /* Clear all items in the cache */
