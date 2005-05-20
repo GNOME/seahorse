@@ -15,13 +15,19 @@ INCLUDES = -I$(top_builddir) \
 
 bin_PROGRAMS = seahorse-daemon
 
+if WITH_AGENT
+AGENT_LIB = $(top_builddir)/agent/libseahorseagent.a
+else
+AGENT_LIB = 
+endif
+
 seahorse_daemon_SOURCES = \
         seahorse-daemon.c \
         seahorse-daemon.h 
 
 seahorse_daemon_LDADD = \
-    $(top_builddir)/agent/libseahorseagent.a \
 	$(top_builddir)/libseahorse/libseahorse-internal.la \
+    $(AGENT_LIB) \
 	$(SEAHORSE_LIBS) 
                          
 glade_DATA = 
