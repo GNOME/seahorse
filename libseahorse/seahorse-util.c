@@ -1165,6 +1165,33 @@ seahorse_util_string_equals (const gchar *s1, const gchar *s2)
     return g_str_equal (s1, s2);
 }
 
+gchar*
+seahorse_util_string_up_first (const gchar *orig)
+{
+    gchar *t, *t2, *ret;
+    
+    if (g_utf8_validate (orig, -1, NULL)) {
+        
+        t = g_utf8_find_next_char (orig, NULL); 
+        if (t != NULL) {
+            t2 = g_utf8_strup (orig, t - orig);
+            ret = g_strdup_printf ("%s%s", t2, t);
+            g_free (t2);
+            
+        /* Can't find first UTF8 char */
+        } else {
+            ret = g_strdup (orig);
+        }
+    
+    /* Just use ASCII functions when not UTF8 */        
+    } else {
+        ret = g_strdup (orig);
+        g_ascii_toupper (ret[0]);
+    }
+    
+    return ret;
+}
+    
 /* Free a GSList along with string values */
 GSList*
 seahorse_util_string_slist_free (GSList *list)

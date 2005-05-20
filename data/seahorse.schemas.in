@@ -49,6 +49,20 @@
 			</locale>
 		</schema>
 	</schemalist>
+    <schemalist>
+        <schema>
+			<key>/schemas/apps/seahorse/sharing/sharing_enabled</key>
+			<applyto>/apps/seahorse/sharing/sharing_enabled</applyto>
+			<owner>seahorse</owner>
+			<type>bool</type>
+			<default>FALSE</default>
+			<locale name="C">
+				<short>Enable DNS-SD sharing</short>
+				<long>Enables DNS-SD (OpenTalk) sharing of keys. seahorse-daemon 
+                must running and must be built with HKP and DNS-SD support.</long>
+			</locale>
+		</schema>
+    </schemalist>
 	<schemalist>
 		<schema>
 			<key>/schemas/desktop/pgp/ascii_armor</key>
@@ -205,5 +219,18 @@
 				<long>The last search pattern searched for against a keyserver.</long>
 			</locale>
 		</schema>	
+        <schema>
+			<key>/schemas/desktop/pgp/keyservers/search_keyservers</key>
+			<applyto>/desktop/pgp/keyservers/search_keyservers</applyto>
+ 			<owner>seahorse</owner>
+			<type>list</type>
+            <list_type>string</list_type>
+ 			<default>[]</default>
+ 			<locale name="C">
+				<short>Last keyservers used</short>
+ 				<long>The last keyserver a search was performed against 
+ 				or empty for all keyservers.</long>
+ 			</locale>
+        </schema>
 	</schemalist>
 </gconfschemafile>

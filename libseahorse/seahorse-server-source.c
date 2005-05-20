@@ -675,6 +675,28 @@ seahorse_server_source_valid_uri (const gchar *uri)
     return FALSE;
 }
 
+GSList*     
+seahorse_server_source_parse_keyservers (GSList *keyservers)
+{
+    GSList *names = NULL;
+    gchar *t;
+    
+    while (keyservers) {
+        t = strchr ((gchar*)keyservers->data, ' ');
+        if (t != NULL) {
+            *(t++) = 0;
+            g_strstrip (t);
+        } else {
+            t = (gchar*)keyservers->data;
+        }
+            
+        names = g_slist_append (names, g_strdup (t));
+        keyservers = g_slist_next (keyservers);
+    }
+    
+    return names;
+}
+
 GSList*		
 seahorse_server_source_purge_keyservers	(GSList *keyservers)
 {

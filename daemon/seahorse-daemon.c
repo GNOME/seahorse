@@ -230,12 +230,20 @@ int main(int argc, char* argv[])
     /* We log to the syslog */
     prepare_logging ();
 
+    /* Initialize the various daemon components */
 #ifdef WITH_AGENT
     seahorse_agent_init ();
 #endif    
+#ifdef WITH_SHARING
+    seahorse_sharing_init();
+#endif
 
     gtk_main ();
 
+    /* And now clean them all up */
+#ifdef WITH_SHARING
+    seahorse_sharing_cleanup();
+#endif
 #ifdef WITH_AGENT
     seahorse_agent_uninit ();
 #endif    

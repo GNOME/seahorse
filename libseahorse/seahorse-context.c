@@ -23,6 +23,8 @@
 #include <libintl.h>
 #include <gnome.h>
 
+#include "config.h"
+
 #include "seahorse-context.h"
 #include "seahorse-marshal.h"
 #include "seahorse-libdialogs.h"
@@ -30,9 +32,11 @@
 #include "seahorse-util.h"
 #include "seahorse-multi-source.h"
 #include "seahorse-pgp-source.h"
+#include "seahorse-dns-sd.h"
 
 struct _SeahorseContextPrivate {
     SeahorseKeySource *source;
+    SeahorseServiceDiscovery *discovery;
 };
 
 static void	seahorse_context_class_init	(SeahorseContextClass *klass);
@@ -86,7 +90,9 @@ seahorse_context_init (SeahorseContext *sctx)
 
     /* Our multi source */
     sctx->priv->source = SEAHORSE_KEY_SOURCE (seahorse_multi_source_new ());
-      
+
+    sctx->priv->discovery = seahorse_service_discovery_new ();
+    
     /* The context is explicitly destroyed */
     g_object_ref (sctx);
 }
@@ -107,7 +113,11 @@ seahorse_context_dispose (GObject *gobject)
         g_object_unref (sctx->priv->source);
         sctx->priv->source = NULL;
     }
-    
+
+    if (sctx->priv->discovery) 
+        g_object_unref (sctx->priv->discovery);
+    sctx->priv->discovery = NULL;
+
     G_OBJECT_CLASS (parent_class)->dispose (gobject);
 }
 
@@ -224,4 +234,19 @@ seahorse_context_get_key_source (SeahorseContext *sctx)
 {
     g_return_val_if_fail (sctx->priv->source != NULL, NULL);
     return sctx->priv->source;
+}
+
+/**
+ * seahorse_context_get_discovery
+ * @sctx: #SeahorseContext object
+ * 
+ * Gets the Service Discovery object for this context.
+ *
+ * Return: The Service Discovery object. 
+ */
+SeahorseServiceDiscovery*
+seahorse_context_get_discovery (SeahorseContext *sctx)
+{
+    g_return_val_if_fail (sctx->priv->discovery != NULL, NULL);
+    return sctx->priv->discovery;
 }

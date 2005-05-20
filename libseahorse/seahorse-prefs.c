@@ -33,6 +33,8 @@
 /* From seahorse_preferences_cache.c */
 void seahorse_prefs_cache (SeahorseContext *ctx, SeahorseWidget *widget);
 
+/* Key Server Prefs --------------------------------------------------------- */
+
 #ifdef WITH_KEYSERVER
 
 #define UPDATING_MODEL    "updating"
@@ -423,6 +425,20 @@ setup_keyservers (SeahorseContext *sctx, SeahorseWidget *swidget)
 
 #endif /* WITH_KEYSERVER */
 
+/* Key Sharing Prefs -------------------------------------------------------- */
+
+static void
+setup_sharing (SeahorseContext *sctx, SeahorseWidget *swidget)
+{
+    GtkWidget *widget;
+    widget = glade_xml_get_widget (swidget->xml, "enable-sharing-placeholder");
+    gtk_container_add (GTK_CONTAINER (widget),
+        seahorse_check_button_control_new (_("_Share my keys with others on my network"), KEYSHARING_KEY));
+    gtk_widget_show_all (widget);
+}
+
+/* -------------------------------------------------------------------------- */
+
 static void
 default_key_changed (SeahorseDefaultKeyControl *sdkc, gpointer *data)
 {
@@ -487,7 +503,7 @@ seahorse_prefs_new (SeahorseContext *sctx)
     seahorse_prefs_cache (sctx, swidget);
 #else
     widget = glade_xml_get_widget (swidget->xml, "cache-tab");
-    g_return_if_fail (GTK_IS_WIDGET (widget));
+    g_return_val_if_fail (GTK_IS_WIDGET (widget), swidget);
     seahorse_prefs_remove_tab (swidget, widget);
 #endif
 
@@ -495,9 +511,17 @@ seahorse_prefs_new (SeahorseContext *sctx)
     setup_keyservers (sctx, swidget);
 #else
     widget = glade_xml_get_widget (swidget->xml, "keyserver-tab");
-    g_return_if_fail (GTK_IS_WIDGET (widget));
+    g_return_val_if_fail (GTK_IS_WIDGET (widget), swidget);
     seahorse_prefs_remove_tab (swidget, widget);
 #endif
+
+#ifdef WITH_SHARING
+    setup_sharing (sctx, swidget);
+#else
+    widget = glade_xml_get_widget (swidget->xml, "sharing-tab");
+    g_return_val_if_fail (GTK_IS_WIDGET (widget), swidget);
+    seahorse_prefs_remove_tab (swidget, widget);
+#endif    
 
     seahorse_widget_show (swidget);
     return swidget;

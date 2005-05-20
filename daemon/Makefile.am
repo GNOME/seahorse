@@ -21,9 +21,16 @@ else
 AGENT_LIB = 
 endif
 
+if WITH_SHARING
+SHARING_SRCS = seahorse-hkp-server.c seahorse-sharing.c 
+else
+SHARING_SRCS = 
+endif
+
 seahorse_daemon_SOURCES = \
         seahorse-daemon.c \
-        seahorse-daemon.h 
+        seahorse-daemon.h \
+        $(SHARING_SRCS)
 
 seahorse_daemon_LDADD = \
 	$(top_builddir)/libseahorse/libseahorse-internal.la \

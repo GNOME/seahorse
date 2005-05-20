@@ -29,6 +29,7 @@
 #include "seahorse-key.h"
 #include "seahorse-key-pair.h"
 #include "seahorse-key-source.h"
+#include "seahorse-dns-sd.h"
 
 #define SEAHORSE_TYPE_CONTEXT			(seahorse_context_get_type ())
 #define SEAHORSE_CONTEXT(obj)			(GTK_CHECK_CAST ((obj), SEAHORSE_TYPE_CONTEXT, SeahorseContext))
@@ -70,5 +71,8 @@ SeahorseKeySource*   seahorse_context_get_key_source  (SeahorseContext    *sctx)
 
 void                 seahorse_context_own_source      (SeahorseContext    *sctx,
                                                        SeahorseKeySource  *sksrc);
+
+SeahorseServiceDiscovery*
+                     seahorse_context_get_discovery   (SeahorseContext    *sctx);
 
 #endif /* __SEAHORSE_CONTEXT_H__ */

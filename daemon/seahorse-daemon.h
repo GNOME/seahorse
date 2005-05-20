@@ -22,20 +22,33 @@
 #ifndef _SEAHORSE_DAEMON_H_
 #define _SEAHORSE_DAEMON_H_
 
+#include "config.h"
+
 /* seahorse-sharing.c ------------------------------------------------------- */
+
+#ifdef WITH_SHARING
 
 void                seahorse_sharing_init();
 
 void                seahorse_sharing_cleanup();
 
+#endif 
+
 /* seahorse-hkp-server.c ---------------------------------------------------- */
 
-gboolean            seahorse_hkp_server_start();
+#ifdef WITH_HKP
 
-void                seahorse_hkp_server_stop();
+gboolean            seahorse_hkp_server_start (GError **err);
 
-guint               seahorse_hkp_server_get_port();
+void                seahorse_hkp_server_stop ();
 
-gboolean            seahorse_hkp_server_is_running();
+guint               seahorse_hkp_server_get_port ();
+
+gboolean            seahorse_hkp_server_is_running ();
+
+#define HKP_SERVER_ERROR  (seahorse_hkp_server_error_domain ())
+GQuark              seahorse_hkp_server_error_domain ();
+
+#endif
 
 #endif /* _SEAHORSE_DAEMON_H_ */

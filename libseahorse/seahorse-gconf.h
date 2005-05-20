@@ -33,11 +33,12 @@
 #define MULTI_EXTENSION_KEY PGP_SCHEMAS "/package_extension"
 #define MULTI_SEPERATE_KEY PGP_SCHEMAS "/multi_seperate"
 #define KEYSERVER_KEY PGP_SCHEMAS "/keyservers/all_keyservers"
-#define LASTSERVER_KEY PGP_SCHEMAS "/keyservers/keyserver"
 #define LASTSEARCH_KEY PGP_SCHEMAS "/keyservers/search_text"
+#define LASTSERVERS_KEY PGP_SCHEMAS "/keyservers/search_keyservers"
 #define PUBLISH_TO_KEY PGP_SCHEMAS "/keyservers/publish_to"
 
 #define SEAHORSE_SCHEMAS "/apps/seahorse"
+#define KEYSHARING_KEY SEAHORSE_SCHEMAS "/sharing/sharing_enabled"
 
 void            seahorse_gconf_set_boolean       (const char         *key, 
                                                   gboolean           boolean_value);
