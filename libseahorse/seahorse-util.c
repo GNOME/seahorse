@@ -66,66 +66,24 @@ static const SeahorsePGPHeader seahorse_pgp_headers[] = {
 static const gchar *bad_filename_chars = "/\\<>|";
 
 void
-seahorse_util_show_error (GtkWindow *parent, const gchar *message)
+seahorse_util_show_error (GtkWindow *parent, const gchar *heading, const gchar *message)
 {
 	GtkWidget *error;
-	g_return_if_fail (!g_str_equal (message, ""));
+    gchar *t;
+    
+	g_return_if_fail (message);
+    
+    if (heading)
+        t = g_strconcat("<big><b>", heading, "</b></big>\n\n", message, NULL);
+    else
+        t = g_strdup (message);
 	
 	error = gtk_message_dialog_new_with_markup (parent, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR,
-		GTK_BUTTONS_CLOSE, message);
+		GTK_BUTTONS_CLOSE, t);
+    g_free (t);
 	
 	gtk_dialog_run (GTK_DIALOG (error));
 	gtk_widget_destroy (error);
-}
-
-gchar*
-seahorse_util_get_text_view_text (GtkTextView *view)
-{
-	GtkTextBuffer *buffer;
-	GtkTextIter start;                                                      
-        GtkTextIter end;
-	gchar *text;
-	
-        g_return_val_if_fail (view != NULL, "");	
-	
-	buffer = gtk_text_view_get_buffer (view);                                                
-        gtk_text_buffer_get_bounds (buffer, &start, &end);                      
-        text = gtk_text_buffer_get_text (buffer, &start, &end, FALSE);   
-        return text;
-}
-
-void
-seahorse_util_set_text_view_string (GtkTextView *view, GString *string)
-{
-        GtkTextBuffer *buffer;
-	g_return_if_fail (view != NULL && string != NULL);
-	
-	buffer = gtk_text_view_get_buffer (view);
-	gtk_text_buffer_set_text (buffer, string->str, string->len);
-}
-
-/** 
- * seahorse_util_get_date_string:
- * @time: Time value to parse
- *
- * Creates a string representation of @time.
- *
- * Returns: A string representing @time
- **/
-gchar*
-seahorse_util_get_date_string (const time_t time)
-{
-	GDate *created_date;
-	gchar *created_string;
-	
-	if (time == 0)
-		return "0";
-	
-	created_date = g_date_new ();
-	g_date_set_time (created_date, time);
-	created_string = g_new (gchar, 11);
-	g_date_strftime (created_string, 11, _("%Y-%m-%d"), created_date);
-	return created_string;
 }
 
 /**
@@ -138,20 +96,16 @@ void
 seahorse_util_handle_gpgme (gpgme_error_t err, const char* desc, ...)
 {
     gchar *t = NULL;
-  
+    
     va_list ap;
     va_start(ap, desc);
   
-    if (desc) {
-        gchar *x = g_strdup_vprintf (desc, ap);
-        t = g_strconcat("<big><b>", x, "</b></big>\n\n", gpgme_strerror (err), NULL);
-    } else {
-        t = g_strdup (gpgme_strerror (err));
-    }
-    
+    if (desc) 
+        t = g_strdup_vprintf (desc, ap);
+
     va_end(ap);
         
-    seahorse_util_show_error (NULL, t);
+    seahorse_util_show_error (NULL, t, gpgme_strerror (err));
     g_free(t);
 }
 
@@ -159,6 +113,7 @@ void
 seahorse_util_handle_error (GError* err, const char* desc, ...)
 {
     gchar *t = NULL;
+    
     va_list ap;
     
     if(!err)
@@ -166,20 +121,14 @@ seahorse_util_handle_error (GError* err, const char* desc, ...)
 
     va_start(ap, desc);
   
-    if (desc) {
-        gchar *x = g_strdup_vprintf (desc, ap);
-        t = g_strconcat("<big><b>", x, "</b></big>",
-                err->message ? "\n\n" : NULL, err->message, NULL);
-    } else if (err->message) {
-        t = g_strdup (err->message);
-    }
+    if (desc)
+        t = g_strdup_vprintf (desc, ap);
     
     va_end(ap);        
     
-    if(t != NULL)
-        seahorse_util_show_error (NULL, t);
-
+    seahorse_util_show_error (NULL, t, err->message ? err->message : "");
     g_free(t);
+    
     g_clear_error (&err);
 }    
 
@@ -208,6 +157,56 @@ seahorse_util_gpgme_to_error(gpgme_error_t gerr, GError** err)
     g_assert(!GPG_IS_OK(gerr));
     g_set_error(err, SEAHORSE_GPGME_ERROR, gpgme_err_code(gerr), 
                             "%s", gpgme_strerror(gerr));
+}
+
+/** 
+ * seahorse_util_get_date_string:
+ * @time: Time value to parse
+ *
+ * Creates a string representation of @time.
+ *
+ * Returns: A string representing @time
+ **/
+gchar*
+seahorse_util_get_date_string (const time_t time)
+{
+	GDate *created_date;
+	gchar *created_string;
+	
+	if (time == 0)
+		return "0";
+	
+	created_date = g_date_new ();
+	g_date_set_time (created_date, time);
+	created_string = g_new (gchar, 11);
+	g_date_strftime (created_string, 11, _("%Y-%m-%d"), created_date);
+	return created_string;
+}
+
+gchar*
+seahorse_util_get_text_view_text (GtkTextView *view)
+{
+	GtkTextBuffer *buffer;
+	GtkTextIter start;                                                      
+    GtkTextIter end;
+	gchar *text;
+	
+    g_return_val_if_fail (view != NULL, "");	
+	
+	buffer = gtk_text_view_get_buffer (view);                                                
+    gtk_text_buffer_get_bounds (buffer, &start, &end);                      
+    text = gtk_text_buffer_get_text (buffer, &start, &end, FALSE);   
+    return text;
+}
+
+void
+seahorse_util_set_text_view_string (GtkTextView *view, GString *string)
+{
+    GtkTextBuffer *buffer;
+	g_return_if_fail (view != NULL && string != NULL);
+	
+	buffer = gtk_text_view_get_buffer (view);
+	gtk_text_buffer_set_text (buffer, string->str, string->len);
 }
 
 /**
@@ -791,7 +790,8 @@ seahorse_util_uris_package (const gchar* package, const char** uris)
     }
     
     if(!(WIFEXITED(status) && WEXITSTATUS(status) == 0)) {
-        seahorse_util_show_error(NULL, _("The file-roller process did not complete successfully"));
+        seahorse_util_show_error(NULL, _("Couldn't package files"), 
+                                 _("The file-roller process did not complete successfully"));
         return FALSE;
     }
     

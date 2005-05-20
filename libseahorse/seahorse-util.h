@@ -57,7 +57,8 @@ void        seahorse_util_gpgme_to_error        (gpgme_error_t gerr,
                                                  GError** err);
 
 void        seahorse_util_show_error            (GtkWindow          *parent,
-                                                 const char*        msg);
+                                                 const gchar        *heading,
+                                                 const gchar        *message);
                                                  
 void        seahorse_util_handle_gpgme          (gpgme_error_t      err,
                                                  const gchar*       desc, ...);
