@@ -30,22 +30,29 @@
 #ifdef WITH_AGENT
 static gboolean show_cache = FALSE;
 #endif
-
-static void
-destroyed (GtkObject *object, gpointer data)
-{
-	gtk_exit (0);
-}
+#ifdef WITH_SHARING
+static gboolean show_sharing = FALSE;
+#endif
 
 static const struct poptOption options[] = {
 #ifdef WITH_AGENT    
 	{ "cache", 'c', POPT_ARG_NONE | POPT_ARG_VAL, &show_cache, TRUE,
 	    N_("For internal use"), NULL },
 #endif 
+#ifdef WITH_AGENT    
+	{ "sharing", 's', POPT_ARG_NONE | POPT_ARG_VAL, &show_sharing, TRUE,
+	    N_("For internal use"), NULL },
+#endif 
         
 	POPT_AUTOHELP
 	POPT_TABLEEND
 };
+
+static void
+destroyed (GtkObject *object, gpointer data)
+{
+	gtk_exit (0);
+}
 
 int
 main (int argc, char **argv)
@@ -68,6 +75,12 @@ main (int argc, char **argv)
 #ifdef WITH_AGENT	
     if (show_cache) {
         GtkWidget *tab = glade_xml_get_widget (swidget->xml, "cache-tab");
+        seahorse_prefs_select_tab (swidget, tab);
+    }
+#endif
+#ifdef WITH_SHARING	
+    if (show_sharing) {
+        GtkWidget *tab = glade_xml_get_widget (swidget->xml, "sharing-tab");
         seahorse_prefs_select_tab (swidget, tab);
     }
 #endif
