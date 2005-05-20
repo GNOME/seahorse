@@ -58,21 +58,6 @@ publish_reply (sw_discovery discovery, sw_discovery_publish_status status,
 	return SW_OKAY;
 }
 
-static gboolean
-howl_input (GIOChannel *io_channel, GIOCondition cond, gpointer callback_data)
-{
-	sw_discovery session = callback_data;
-	sw_salt salt;
-
-	if (sw_discovery_salt (session, &salt) == SW_OKAY) {
-		sw_salt_lock (salt);
-		sw_discovery_read_socket (session);
-		sw_salt_unlock (salt);
-	}
-    
-	return TRUE;
-}
-
 static void
 stop_publishing (void)
 {
@@ -89,6 +74,33 @@ stop_publishing (void)
 }
 
 static gboolean
+howl_input (GIOChannel *io_channel, GIOCondition cond, gpointer callback_data)
+{
+	sw_discovery session = callback_data;
+    sw_result result;
+	sw_salt salt;
+
+    result = sw_discovery_salt (session, &salt);
+    if (result != SW_OKAY) {
+        g_warning ("problem accessing discovery session");
+        stop_sharing ();
+        return FALSE;
+    }
+        
+    sw_salt_lock (salt);
+    result = sw_discovery_read_socket (session);
+    sw_salt_unlock (salt);
+    
+    if (result != SW_OKAY) {
+        g_warning ("problem reading from discovery socket");
+        stop_sharing ();
+        return FALSE;
+    }
+    
+	return TRUE;
+}
+
+static gboolean
 start_publishing (int port)
 {
 	GIOChannel *channel;
@@ -102,7 +114,8 @@ start_publishing (int port)
     
 	fd = sw_discovery_socket (howl_session);
 	channel = g_io_channel_unix_new (fd);
-	channel_notify_id = g_io_add_watch (channel, G_IO_IN, howl_input, howl_session);
+	channel_notify_id = g_io_add_watch (channel, G_IO_IN | G_IO_HUP | G_IO_NVAL, 
+                                        howl_input, howl_session);
 	g_io_channel_unref (channel);
     
     user_name = seahorse_util_string_up_first (g_get_user_name ());
@@ -244,15 +257,15 @@ start_sharing ()
     if (!seahorse_hkp_server_is_running ()) {
         
         if (!seahorse_hkp_server_start (&err)) {
-            seahorse_util_handle_error (err, _("Couldn't start the key sharing server."));
+            seahorse_util_handle_error (err, _("Couldn't share keys"));
             return;
         }
 
         if (!start_publishing (seahorse_hkp_server_get_port ())) {
             seahorse_hkp_server_stop ();
 
-            /* TODO: Do we need something more descriptive here? */
-            seahorse_util_show_error (NULL, _("Couldn't publish key sharing information."));
+            seahorse_util_show_error (NULL, _("Couldn't share keys"), 
+                                      _("Can't publish discovery information on the network."));
             return;
         }
     }
