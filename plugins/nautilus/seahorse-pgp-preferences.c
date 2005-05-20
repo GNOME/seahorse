@@ -66,8 +66,10 @@ main (int argc, char **argv)
                       G_CALLBACK (destroyed), NULL);
 
 #ifdef WITH_AGENT	
-    if (show_cache)
-        seahorse_prefs_select_tab (swidget, 1);
+    if (show_cache) {
+        GtkWidget *tab = glade_xml_get_widget (swidget->xml, "cache-tab");
+        seahorse_prefs_select_tab (swidget, tab);
+    }
 #endif
     
 	gtk_main();

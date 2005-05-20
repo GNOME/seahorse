@@ -362,7 +362,7 @@ add_revoker_activate (GtkMenuItem *item, SeahorseWidget *swidget)
 static void
 preferences_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
-	seahorse_preferences_show (swidget->sctx, 0);
+	seahorse_preferences_show (swidget->sctx, NULL);
 }
 
 static void

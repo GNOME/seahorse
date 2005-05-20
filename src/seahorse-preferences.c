@@ -30,11 +30,12 @@
 /**
  * seahorse_preferences_show:
  * @sctx: Current #SeahorseContext
+ * @tabid: The id of the tab to show
  *
  * Creates a new or shows the current preferences dialog.
  **/
 void
-seahorse_preferences_show (SeahorseContext *sctx, guint ntab)
+seahorse_preferences_show (SeahorseContext *sctx, const gchar *tabid)
 {	
 	SeahorseWidget *swidget;
     GtkWidget *label;
@@ -81,5 +82,8 @@ seahorse_preferences_show (SeahorseContext *sctx, guint ntab)
 	gtk_widget_show_all (tab);
     seahorse_prefs_add_tab (swidget, label, tab);
     
-    seahorse_prefs_select_tab (swidget, ntab);
+    if (tabid)
+        tab = glade_xml_get_widget (swidget->xml, tabid);
+    
+    seahorse_prefs_select_tab (swidget, tab);
 }

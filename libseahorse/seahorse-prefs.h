@@ -32,6 +32,12 @@ void                seahorse_prefs_add_tab      (SeahorseWidget *swidget,
                                                  GtkWidget *tab);
                                                  
 void                seahorse_prefs_select_tab   (SeahorseWidget *swidget,
-                                                 guint tab);
+                                                 GtkWidget *tab);
 
-#endif /* __SEAHORSE_PREFERENCES_H__ */                                                  
+void                seahorse_prefs_select_tabid (SeahorseWidget *swidget,
+                                                 const gchar *tab);
+
+void                seahorse_prefs_remove_tab   (SeahorseWidget *swidget,
+                                                 GtkWidget *tab);
+
+#endif /* __SEAHORSE_PREFERENCES_H__ */       

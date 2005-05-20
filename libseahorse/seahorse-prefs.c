@@ -459,7 +459,6 @@ seahorse_prefs_new (SeahorseContext *sctx)
     SeahorseWidget *swidget;
     GtkWidget *widget;
     SeahorseDefaultKeyControl *sdkc;
-    guint removed = 0;
     guint gconf_id;
     
     swidget = seahorse_widget_new ("prefs", sctx);
@@ -487,22 +486,19 @@ seahorse_prefs_new (SeahorseContext *sctx)
 #ifdef WITH_AGENT   
     seahorse_prefs_cache (sctx, swidget);
 #else
-    widget = glade_xml_get_widget (swidget->xml, "notebook");
-    gtk_notebook_remove_page (GTK_NOTEBOOK (widget), 1 - removed);
-    removed++;
+    widget = glade_xml_get_widget (swidget->xml, "cache-tab");
+    g_return_if_fail (GTK_IS_WIDGET (widget));
+    seahorse_prefs_remove_tab (swidget, widget);
 #endif
 
 #ifdef WITH_KEYSERVER
     setup_keyservers (sctx, swidget);
 #else
-    widget = glade_xml_get_widget (swidget->xml, "notebook");
-    gtk_notebook_remove_page (GTK_NOTEBOOK (widget), 2 - removed);
-    removed++;
+    widget = glade_xml_get_widget (swidget->xml, "keyserver-tab");
+    g_return_if_fail (GTK_IS_WIDGET (widget));
+    seahorse_prefs_remove_tab (swidget, widget);
 #endif
 
-    /* To suppress warnings */
-    removed = 0;
-    
     seahorse_widget_show (swidget);
     return swidget;
 }
@@ -523,8 +519,33 @@ seahorse_prefs_add_tab (SeahorseWidget *swidget, GtkWidget *label, GtkWidget *ta
 }
 
 void                
-seahorse_prefs_select_tab   (SeahorseWidget *swidget, guint tab)
+seahorse_prefs_select_tab (SeahorseWidget *swidget, GtkWidget *tab)
 {
-    GtkWidget *widget = glade_xml_get_widget (swidget->xml, "notebook");
-    gtk_notebook_set_current_page (GTK_NOTEBOOK (widget), (gint)tab);
+    GtkWidget *tabs;
+    gint pos;
+    
+    g_return_if_fail (GTK_IS_WIDGET (tab));
+    
+    tabs = glade_xml_get_widget (swidget->xml, "notebook");
+    g_return_if_fail (GTK_IS_NOTEBOOK (tabs));
+    
+    pos = gtk_notebook_page_num (GTK_NOTEBOOK (tabs), tab);
+    if (pos != -1)
+        gtk_notebook_set_current_page (GTK_NOTEBOOK (tabs), pos);
 }    
+
+void 
+seahorse_prefs_remove_tab (SeahorseWidget *swidget, GtkWidget *tab)
+{
+    GtkWidget *tabs;
+    gint pos;
+    
+    g_return_if_fail (GTK_IS_WIDGET (tab));
+    
+    tabs = glade_xml_get_widget (swidget->xml, "notebook");
+    g_return_if_fail (GTK_IS_NOTEBOOK (tabs));
+    
+    pos = gtk_notebook_page_num (GTK_NOTEBOOK (tabs), tab);
+    if (pos != -1)
+        gtk_notebook_remove_page (GTK_NOTEBOOK (tabs), pos);
+}

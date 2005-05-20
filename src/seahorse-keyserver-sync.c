@@ -163,7 +163,7 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 static void
 configure_clicked (GtkButton *button, SeahorseWidget *swidget)
 {
-    seahorse_preferences_show (swidget->sctx, 3);
+    seahorse_preferences_show (swidget->sctx, "keyserver-tab");
 }
 
 static void
