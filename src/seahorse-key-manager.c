@@ -41,7 +41,11 @@
 #include "seahorse-gpg-options.h"
 #include "seahorse-gconf.h"
 
-#define KEY_LIST "key_list"
+/* The various tabs */
+enum KeyManagerTabs {
+    TAB_PUBLIC = 1,
+    TAB_PRIVATE
+};
 
 #define SEC_RING "/secring.gpg"
 #define PUB_RING "/pubring.gpg"
@@ -63,18 +67,61 @@ delete_event (GtkWidget *widget, GdkEvent *event, SeahorseWidget *swidget)
 	return TRUE;
 }
 
-/* Loads generate dialog */
-static void
-generate_activate (GtkWidget *widget, SeahorseWidget *swidget)
+/* Get the currently selected key store */
+static guint
+get_current_tab (SeahorseWidget *swidget)
 {
-	seahorse_generate_select_show (swidget->sctx);
+    GtkNotebook *notebook;
+    GtkWidget *widget;
+    guint page;
+    
+    notebook = GTK_NOTEBOOK (glade_xml_get_widget (swidget->xml, "notebook"));
+    g_return_val_if_fail (GTK_IS_NOTEBOOK (notebook), 0);
+    
+    page = gtk_notebook_get_current_page (notebook);
+    g_return_val_if_fail (page >= 0, 0);
+    
+    widget = gtk_notebook_get_nth_page (notebook, page);
+    g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
+    
+    return GPOINTER_TO_INT (g_object_get_data (G_OBJECT (widget), "tab-id"));
 }
-/* Loads Key generation assistant for first time users */
-static void
-new_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
+
+static GtkTreeView*
+get_current_view (SeahorseWidget *swidget)
 {
-	seahorse_generate_druid_show (swidget->sctx);
+    const gchar *name;
+    
+    switch (get_current_tab (swidget)) {
+    case TAB_PUBLIC:
+        name = "pub-key-list";
+        break;
+    case TAB_PRIVATE:
+        name = "sec-key-list";
+        break;
+    default:
+        g_return_val_if_reached (NULL);
+        break;
+    };
+
+    return GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, name));
 }
+
+static GList*
+get_selected_keys (SeahorseWidget *swidget)
+{
+    GtkTreeView *view = get_current_view (swidget);
+    g_return_val_if_fail (view != NULL, NULL);
+    return seahorse_key_store_get_selected_keys (view);
+}
+
+static SeahorseKey*
+get_selected_key (SeahorseWidget *swidget, guint *uid)
+{
+    GtkTreeView *view = get_current_view (swidget);
+    g_return_val_if_fail (view != NULL, NULL);
+    return seahorse_key_store_get_selected_key (view, uid);
+}    
 
 static void
 set_numbered_status (SeahorseWidget *swidget, const gchar *t1, const gchar *t2, guint num)
@@ -86,6 +133,20 @@ set_numbered_status (SeahorseWidget *swidget, const gchar *t1, const gchar *t2, 
     status = GNOME_APPBAR (glade_xml_get_widget (swidget->xml, "status"));
 	gnome_appbar_set_default (status, msg);
     g_free (msg);
+}
+
+/* Loads generate dialog */
+static void
+generate_activate (GtkWidget *widget, SeahorseWidget *swidget)
+{
+	seahorse_generate_select_show (swidget->sctx);
+}
+
+/* Loads Key generation assistant for first time users */
+static void
+new_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
+{
+	seahorse_generate_druid_show (swidget->sctx);
 }
 
 /* Loads import dialog */
@@ -164,15 +225,15 @@ copy_activate (GtkWidget *widget, SeahorseWidget *swidget)
     GList *keys;
     guint num;
   
-    keys = seahorse_key_store_get_selected_keys (GTK_TREE_VIEW (
-                glade_xml_get_widget (swidget->xml, KEY_LIST)));
-       
+    keys = get_selected_keys (swidget);
     num = g_list_length (keys);
+    
     if (num == 0)
         return;
                
     text = seahorse_op_export_text (keys, FALSE, &err);
-
+    g_list_free (keys);
+    
     if (text == NULL)
         seahorse_util_handle_error (err, _("Couldn't export key to clipboard"));
     else {
@@ -190,10 +251,7 @@ copy_activate (GtkWidget *widget, SeahorseWidget *swidget)
 static void
 properties_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
-	SeahorseKey *skey;
-	
-	skey = seahorse_key_store_get_selected_key (GTK_TREE_VIEW (
-		glade_xml_get_widget (swidget->xml, KEY_LIST)), NULL);
+	SeahorseKey *skey = get_selected_key (swidget, NULL);
 	if (skey != NULL)
 		seahorse_key_properties_new (swidget->sctx, skey);
 }
@@ -207,8 +265,9 @@ export_activate (GtkWidget *widget, SeahorseWidget *swidget)
     GError *err = NULL;
     GList *keys;
 
-    keys = seahorse_key_store_get_selected_keys (GTK_TREE_VIEW (
-                        glade_xml_get_widget (swidget->xml, KEY_LIST)));
+    keys = get_selected_keys (swidget);
+    if (keys == NULL)
+        return;
     
     dialog = seahorse_util_chooser_save_new (_("Export Key"), 
                 GTK_WINDOW(glade_xml_get_widget (swidget->xml, "key-manager")));
@@ -278,11 +337,9 @@ backup_activate (GtkWidget *widget, SeahorseWidget *swidget)
 static void
 sign_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
-	GList *list = NULL;
-	
-	list = seahorse_key_store_get_selected_keys (GTK_TREE_VIEW (
-		glade_xml_get_widget (swidget->xml, KEY_LIST)));
-	seahorse_sign_show (swidget->sctx, list);
+    GList *keys = get_selected_keys (swidget);
+	seahorse_sign_show (swidget->sctx, keys);
+    g_list_free (keys);
 }
 
 #ifdef WITH_KEYSERVER
@@ -295,15 +352,13 @@ search_activate (GtkWidget *widget, SeahorseWidget *swidget)
 static void
 sync_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
-	GList *list = NULL;
-    GtkTreeView *view;
-    
-    view = GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, KEY_LIST));
-	
-	list = seahorse_key_store_get_selected_keys (view);
-    if (list == NULL)
-        list = seahorse_key_store_get_all_keys (view);
-    seahorse_keyserver_sync_show (swidget->sctx, list);
+	GList *keys = get_selected_keys (swidget);
+    if (keys == NULL) {
+        SeahorseKeySource *sksrc = seahorse_context_get_key_source (swidget->sctx);
+        keys = seahorse_key_source_get_keys (sksrc, FALSE);
+    }
+    seahorse_keyserver_sync_show (swidget->sctx, keys);
+    g_list_free (keys);
 }
 #endif
 
@@ -311,38 +366,31 @@ sync_activate (GtkWidget *widget, SeahorseWidget *swidget)
 static void
 delete_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
-	GList *list = NULL;
-    GtkTreeView *view = 
-        GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, KEY_LIST));
+	GList *keys = get_selected_keys (swidget);
 	
-	list = seahorse_key_store_get_selected_keys (view);
-    
     /* Special behavior for a single selection */
-    if (g_list_length (list) == 1) {
+    if (g_list_length (keys) == 1) {
         SeahorseKey *skey;
         guint uid;
         
-        skey = seahorse_key_store_get_selected_key (view, &uid);
+        skey = get_selected_key (swidget, &uid);
         if (uid > 0) 
             seahorse_delete_userid_show (swidget->sctx, skey, uid);
         else    
-        	seahorse_delete_show (swidget->sctx, list);
+        	seahorse_delete_show (swidget->sctx, keys);
 
     /* Multiple keys */
     } else {    
-	    seahorse_delete_show (swidget->sctx, list);
+	    seahorse_delete_show (swidget->sctx, keys);
     }
     
-  	g_list_free (list);
+  	g_list_free (keys);
 }
 
 static void
 add_uid_activate (GtkMenuItem *item, SeahorseWidget *swidget)
 {
-	SeahorseKey *skey;
-	
-	skey = seahorse_key_store_get_selected_key (GTK_TREE_VIEW (
-		glade_xml_get_widget (swidget->xml, KEY_LIST)), NULL);
+	SeahorseKey *skey = get_selected_key (swidget, NULL);
 	if (skey != NULL)
 		seahorse_add_uid_new (swidget->sctx, skey);
 }
@@ -350,10 +398,7 @@ add_uid_activate (GtkMenuItem *item, SeahorseWidget *swidget)
 static void
 add_revoker_activate (GtkMenuItem *item, SeahorseWidget *swidget)
 {
-	SeahorseKey *skey;
-	
-	skey = seahorse_key_store_get_selected_key (GTK_TREE_VIEW (
-		glade_xml_get_widget (swidget->xml, KEY_LIST)), NULL);
+	SeahorseKey *skey = get_selected_key (swidget, NULL);
 	if (skey != NULL)
 		seahorse_add_revoker_new (swidget->sctx, skey);
 }
@@ -368,13 +413,17 @@ preferences_activate (GtkWidget *widget, SeahorseWidget *swidget)
 static void
 expand_all_activate (GtkMenuItem *item, SeahorseWidget *swidget)
 {
-	gtk_tree_view_expand_all (GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, KEY_LIST)));
+    GtkTreeView *view = get_current_view (swidget);
+    if (view != NULL)
+	    gtk_tree_view_expand_all (view);
 }
 
 static void
 collapse_all_activate (GtkMenuItem *item, SeahorseWidget *swidget)
 {
-	gtk_tree_view_collapse_all (GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, KEY_LIST)));
+    GtkTreeView *view = get_current_view (swidget);
+    if (view != NULL)
+	    gtk_tree_view_collapse_all (view);
 }
 
 /* Shows about dialog */
@@ -442,26 +491,35 @@ about_activate (GtkWidget *widget, SeahorseWidget *swidget)
 
 /* Loads key properties of activated key */
 static void
-row_activated (GtkTreeView *treeview, GtkTreePath *path, GtkTreeViewColumn *arg2, SeahorseWidget *swidget)
+row_activated (GtkTreeView *treeview, GtkTreePath *path, GtkTreeViewColumn *arg2, 
+               SeahorseWidget *swidget)
 {
+    GtkTreeView *view = get_current_view (swidget);
 	SeahorseKey *skey;
+    
+    g_return_if_fail (view != NULL);
 	
-	skey = seahorse_key_store_get_key_from_path (GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, KEY_LIST)), path, NULL);
+	skey = seahorse_key_store_get_key_from_path (view, path, NULL);
 	if (skey != NULL)
 		seahorse_key_properties_new (swidget->sctx, skey);
 }
 
 static void
-selection_changed (GtkTreeSelection *selection, SeahorseWidget *swidget)
+selection_changed (GtkTreeSelection *notused, SeahorseWidget *swidget)
 {
+    GtkTreeView *view;
     GtkActionGroup *actions;
 	SeahorseKey *skey = NULL;
     gboolean selected = FALSE;
     gboolean secret = FALSE;
 	gint rows = 0;
-	
-	rows = gtk_tree_selection_count_selected_rows (selection);
-	selected = rows > 0;
+    
+    view = get_current_view (swidget);
+    if (view != NULL) {
+        GtkTreeSelection *selection = gtk_tree_view_get_selection (view);
+    	rows = gtk_tree_selection_count_selected_rows (selection);
+	    selected = rows > 0;
+    }
 	
 	if (selected) {
         set_numbered_status (swidget, _("Selected %d key"),
@@ -469,8 +527,7 @@ selection_changed (GtkTreeSelection *selection, SeahorseWidget *swidget)
 	}
 	
 	if (rows == 1) {
-		skey = seahorse_key_store_get_selected_key (GTK_TREE_VIEW (
-			glade_xml_get_widget (swidget->xml, KEY_LIST)), NULL);
+		skey = get_selected_key (swidget, NULL);
 		secret = (skey != NULL && SEAHORSE_IS_KEY_PAIR (skey));
 	}
     
@@ -493,7 +550,8 @@ show_context_menu (SeahorseWidget *swidget, guint button, guint32 time)
 }
 
 static gboolean
-key_list_button_pressed (GtkWidget *widget, GdkEventButton *event, SeahorseWidget *swidget)
+key_list_button_pressed (GtkWidget *widget, GdkEventButton *event, 
+                         SeahorseWidget *swidget)
 {
 	if (event->button == 3)
 		show_context_menu (swidget, event->button, event->time);
@@ -506,27 +564,11 @@ key_list_popup_menu (GtkWidget *widget, SeahorseWidget *swidget)
 {
 	SeahorseKey *skey;
 	
-	skey = seahorse_key_store_get_selected_key (GTK_TREE_VIEW (widget), NULL);
+	skey = get_selected_key (swidget, NULL);
 	if (skey != NULL)
 		show_context_menu (swidget, 0, gtk_get_current_event_time ());
        
     return FALSE;
-}
-
-
-static void
-gconf_notification (GConfClient *gclient, guint id, GConfEntry *entry, SeahorseWidget *swidget)
-{
-	const gchar *key;
-	GConfValue *value;
-	
-	key = gconf_entry_get_key (entry);
-	value = gconf_entry_get_value (entry);
-
-    /* 
-     * Removed last two gconf notification items, although I'm sure
-     * we'll get more, so leaving this code here... 
-     */
 }
 
 static void
@@ -584,6 +626,17 @@ filter_changed (GtkWidget *widget, SeahorseKeyStore* skstore)
 {
     const gchar* text = gtk_entry_get_text (GTK_ENTRY (widget));
     g_object_set (skstore, "filter", text, NULL);
+}
+
+/* Clear filter when the tab changes */
+static void
+tab_changed (GtkWidget *widget, GtkNotebookPage *page, guint page_num, 
+             SeahorseWidget *swidget)
+{
+    GtkWidget *entry = glade_xml_get_widget (swidget->xml, "filter");
+    g_return_if_fail (entry != NULL);
+    gtk_entry_set_text (GTK_ENTRY (entry), "");
+    selection_changed (NULL, swidget);
 }
 
 static void
@@ -657,16 +710,44 @@ static GtkActionEntry remote_entries[] = {
             N_("Publish and/or sync your keys with those online."), G_CALLBACK (sync_activate) }, 
 };
 
+void
+initialize_tab (SeahorseWidget *swidget, SeahorseKeySource *sksrc, const gchar *tabwidget, 
+                guint tabid, const gchar *viewwidget, guint keytypes)
+{
+    SeahorseKeyStore *skstore;
+	GtkTreeSelection *selection;
+	GtkTreeView *view;
+    GtkWidget *tab;
+    
+    tab = glade_xml_get_widget (swidget->xml, tabwidget);
+    g_return_if_fail (tab != NULL);
+    g_object_set_data (G_OBJECT (tab), "tab-id", GINT_TO_POINTER (tabid));
+    
+	/* init key list & selection settings */
+	view = GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, viewwidget));
+    g_return_if_fail (view != NULL);
+    
+	selection = gtk_tree_view_get_selection (view);
+	gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
+	g_signal_connect (selection, "changed", G_CALLBACK (selection_changed), swidget);
+    
+    /* Add new key store and associate it */
+    skstore = seahorse_key_manager_store_new (sksrc, view, keytypes);
+    g_object_set_data_full (G_OBJECT (view), "key-store", skstore, g_object_unref);
+    
+    /* For the filtering */
+    glade_xml_signal_connect_data(swidget->xml, "on_filter_changed",
+                                  G_CALLBACK(filter_changed), skstore);    
+}
+
 GtkWindow* 
 seahorse_key_manager_show (SeahorseContext *sctx)
 {
     GtkWindow *win;
     SeahorseOperation *operation;
 	SeahorseWidget *swidget;
-	GtkTreeView *view;
+
     GtkWidget *w;
-	GtkTreeSelection *selection;
-    SeahorseKeyStore *skstore;
     SeahorseKeySource *sksrc;
     GtkActionGroup *actions;
     GtkAction *action;
@@ -721,25 +802,20 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 	glade_xml_signal_connect_data (swidget->xml, "key_list_popup_menu",
 		G_CALLBACK (key_list_popup_menu), swidget);
         
-	/* init gclient */
-	seahorse_gconf_notify_lazy (UI_SCHEMAS, (GConfClientNotifyFunc) gconf_notification, 
-                                swidget, GTK_WIDGET (win));
-	
 	/* first time signals */
 	glade_xml_signal_connect_data (swidget->xml, "import_button_clicked",
 		G_CALLBACK (import_activate), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "new_button_clicked",
 		G_CALLBACK (new_button_clicked), swidget);
-		
-	/* init key list & selection settings */
-	view = GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, KEY_LIST));
-	selection = gtk_tree_view_get_selection (view);
-	gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
-	g_signal_connect (selection, "changed",
-		G_CALLBACK (selection_changed), swidget);
-    skstore = seahorse_key_manager_store_new (sksrc, view);
-	selection_changed (selection, swidget);
 
+    /* The notebook */
+    glade_xml_signal_connect_data (swidget->xml, "on_tab_changed", 
+                                  G_CALLBACK(tab_changed), swidget);    
+    
+    /* Initialize the tabs, and associate them up */
+    initialize_tab (swidget, sksrc, "pub-key-tab", TAB_PUBLIC, "pub-key-list", KEYTYPE_PUBLIC);
+    initialize_tab (swidget, sksrc, "sec-key-tab", TAB_PRIVATE, "sec-key-list", KEYTYPE_PRIVATE);
+    
     /* To avoid flicker */
     seahorse_widget_show (swidget);
 	
@@ -750,10 +826,6 @@ seahorse_key_manager_show (SeahorseContext *sctx)
     gtk_signal_connect (GTK_OBJECT (win), "drag_data_received",
                 GTK_SIGNAL_FUNC (target_drag_data_received), swidget);
                         
-    /* For the filtering */
-    glade_xml_signal_connect_data(swidget->xml, "on_filter_changed",
-                G_CALLBACK(filter_changed), skstore);
-
     /* Hook progress bar in */
     operation = seahorse_key_source_get_operation (sksrc);
     g_return_val_if_fail (operation != NULL, win);
@@ -767,6 +839,8 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 		w = glade_xml_get_widget (swidget->xml, "first-time-box");
 		gtk_widget_show (w);
 	}
+    
+	selection_changed (NULL, swidget);
     
     return win;
 }

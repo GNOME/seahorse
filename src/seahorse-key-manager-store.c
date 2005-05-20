@@ -44,6 +44,11 @@ guint seahorse_n_targets =
     sizeof (seahorse_target_entries) / sizeof (seahorse_target_entries[0]);
 
 enum {
+	PROP_0,
+	PROP_KEY_TYPES
+};
+
+enum {
     KEY_STORE_BASE_COLUMNS,
 	VALIDITY_STR,
 	TRUST_STR,
@@ -77,74 +82,129 @@ static GType col_types[] = {
     G_TYPE_INT
 };
 
-static void	seahorse_key_manager_store_class_init	(SeahorseKeyManagerStoreClass	*klass);
+static void	        class_init	                (SeahorseKeyManagerStoreClass	*klass);
 
-static gboolean seahorse_key_manager_store_append   (SeahorseKeyStore    *skstore,
-                                                     SeahorseKey         *skey,
-                                                     guint               uid,
-                                                     GtkTreeIter         *iter);
-static void     seahorse_key_manager_store_set      (SeahorseKeyStore    *store,
-                                                     SeahorseKey         *skey,
-                                                     guint               uid,
-                                                     GtkTreeIter         *iter);
-static void     seahorse_key_manager_store_changed  (SeahorseKeyStore    *skstore,
-                                                     SeahorseKey         *skey,
-                                                     guint               uid,
-                                                     GtkTreeIter         *iter,
-                                                     SeahorseKeyChange   change);
+static void	        set_property                (GObject            *gobject,
+                                                 guint              prop_id,
+                                                 const GValue       *value,
+                                                 GParamSpec         *pspec);
 
-static SeahorseKeyStoreClass	*parent_class	= NULL;
+static void	        get_property                (GObject            *gobject,
+                                                 guint              prop_id,
+                                                 GValue             *value,
+                                                 GParamSpec         *pspec);
+
+static gboolean     store_append                (SeahorseKeyStore    *skstore,
+                                                 SeahorseKey         *skey,
+                                                 guint               uid,
+                                                 GtkTreeIter         *iter);
+
+static void         store_set                   (SeahorseKeyStore    *store,
+                                                 SeahorseKey         *skey,
+                                                 guint               uid,
+                                                 GtkTreeIter         *iter);
+                                                 
+static void         store_changed               (SeahorseKeyStore    *skstore,
+                                                 SeahorseKey         *skey,
+                                                 guint               uid,
+                                                 GtkTreeIter         *iter,
+                                                 SeahorseKeyChange   change);
+
+static SeahorseKeyStoreClass *parent_class = NULL;
 
 GType
 seahorse_key_manager_store_get_type (void)
 {
-	static GType key_manager_store_type = 0;
+	static GType gtype = 0;
 	
-	if (!key_manager_store_type) {
-		static const GTypeInfo key_manager_store_info =
-		{
-			sizeof (SeahorseKeyManagerStoreClass),
-			NULL, NULL,
-			(GClassInitFunc) seahorse_key_manager_store_class_init,
-			NULL, NULL,
-			sizeof (SeahorseKeyManagerStore),
-			0, NULL
+	if (!gtype) {
+		static const GTypeInfo gtinfo = {
+			sizeof (SeahorseKeyManagerStoreClass), NULL, NULL,
+			(GClassInitFunc) class_init, NULL, NULL,
+			sizeof (SeahorseKeyManagerStore), 0, NULL
 		};
 		
-		key_manager_store_type = g_type_register_static (SEAHORSE_TYPE_KEY_STORE,
-			"SeahorseKeyManagerStore", &key_manager_store_info, 0);
+		gtype = g_type_register_static (SEAHORSE_TYPE_KEY_STORE,
+			                            "SeahorseKeyManagerStore", &gtinfo, 0);
 	}
 	
-	return key_manager_store_type;
+	return gtype;
 }
 
 static void
-seahorse_key_manager_store_class_init (SeahorseKeyManagerStoreClass *klass)
+class_init (SeahorseKeyManagerStoreClass *klass)
 {
-	SeahorseKeyStoreClass *skstore_class;
+    SeahorseKeyStoreClass *skstore_class;
+    GObjectClass *gobject_class;
 	
-	parent_class = g_type_class_peek_parent (klass);
+    parent_class = g_type_class_peek_parent (klass);
+    gobject_class = G_OBJECT_CLASS (klass);
 	skstore_class = SEAHORSE_KEY_STORE_CLASS (klass);
 	
-	skstore_class->append = seahorse_key_manager_store_append;
-	skstore_class->set = seahorse_key_manager_store_set;
-	skstore_class->changed = seahorse_key_manager_store_changed;
+    gobject_class->set_property = set_property;
+    gobject_class->get_property = get_property;
+    
+    skstore_class->append = store_append;
+    skstore_class->set = store_set;
+    skstore_class->changed = store_changed;
   
-  	/* Base class behavior and columns */
+    /* Base class behavior and columns */
     skstore_class->use_check = FALSE;
     skstore_class->use_icon = TRUE;
     skstore_class->n_columns = COLS;
     skstore_class->col_ids = col_ids;
     skstore_class->col_types = col_types;
     skstore_class->gconf_sort_key = KEY_MANAGER_SORT_KEY;
+    
+    g_object_class_install_property (gobject_class, PROP_KEY_TYPES,
+        g_param_spec_uint ("key-types", "Key types to display",
+                     "The type of keys to display", 0, G_MAXUINT, 0, 
+                     G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));    
+}
+
+static void
+set_property (GObject *gobject, guint prop_id, const GValue *value, GParamSpec *pspec)
+{
+    SeahorseKeyManagerStore *skstore = SEAHORSE_KEY_MANAGER_STORE (gobject);
+
+    switch (prop_id) {
+    case PROP_KEY_TYPES:
+        g_return_if_fail (skstore->keytypes == 0);
+        skstore->keytypes = g_value_get_uint (value);
+        break;
+
+    default:
+        break;
+    }
+}
+
+static void
+get_property (GObject *gobject, guint prop_id, GValue *value, GParamSpec *pspec)
+{
+    SeahorseKeyManagerStore *skstore = SEAHORSE_KEY_MANAGER_STORE (gobject);
+	
+    switch (prop_id) {
+    case PROP_KEY_TYPES:
+        g_value_set_uint (value, skstore->keytypes);
+        break;
+    };
 }
 
 /* Do append for @skey & it's subkeys */
 static gboolean
-seahorse_key_manager_store_append (SeahorseKeyStore *skstore, SeahorseKey *skey, 
-                                   guint uid, GtkTreeIter *iter)
+store_append (SeahorseKeyStore *skstore, SeahorseKey *skey, guint uid, GtkTreeIter *iter)
 {
+    SeahorseKeyManagerStore *skms = SEAHORSE_KEY_MANAGER_STORE (skstore);
+    gboolean keep = FALSE;
     GtkTreeIter child;
+    
+    if ((skms->keytypes & KEYTYPE_PUBLIC) && !SEAHORSE_IS_KEY_PAIR (skey))
+        keep = TRUE;
+    else if ((skms->keytypes & KEYTYPE_PRIVATE) && SEAHORSE_IS_KEY_PAIR (skey))
+        keep = TRUE;
+    
+    if (!keep)
+        return FALSE;
     
     if (uid == 0) {
     	gtk_tree_store_append (GTK_TREE_STORE (skstore), iter, NULL);
@@ -159,9 +219,9 @@ seahorse_key_manager_store_append (SeahorseKeyStore *skstore, SeahorseKey *skey,
 
 /* Sets attributes for @skey at @iter and @skey's subkeys at @iter's children */
 static void
-seahorse_key_manager_store_set (SeahorseKeyStore *store, SeahorseKey *skey, 
-                                guint uid, GtkTreeIter *iter)
+store_set (SeahorseKeyStore *store, SeahorseKey *skey, guint uid, GtkTreeIter *iter)
 {
+    SeahorseKeyManagerStore *skms = SEAHORSE_KEY_MANAGER_STORE (store);
 	SeahorseValidity validity, trust;
 	gulong expires_date;
 	gchar *expires;
@@ -189,10 +249,15 @@ seahorse_key_manager_store_set (SeahorseKeyStore *store, SeahorseKey *skey,
     			expires = seahorse_util_get_date_string (expires_date);
     	}
         
-        if (SEAHORSE_IS_KEY_PAIR (skey)) 
-            type = _("Private PGP Key");
-        else 
-            type = _("Public PGP Key");
+        /* Only differentiate if the view shows more than one type of key */
+        if ((skms->keytypes & KEYTYPE_PUBLIC) && (skms->keytypes & KEYTYPE_PRIVATE)) {
+            if (SEAHORSE_IS_KEY_PAIR (skey)) 
+                type = _("Private PGP Key");
+            else 
+                type = _("Public PGP Key");
+        } else {
+            type = _("PGP Key");
+        }
         
     	gtk_tree_store_set (GTK_TREE_STORE (store), iter,
     		VALIDITY_STR, validity == SEAHORSE_VALIDITY_UNKNOWN ? "" : seahorse_validity_get_string (validity),
@@ -216,8 +281,8 @@ seahorse_key_manager_store_set (SeahorseKeyStore *store, SeahorseKey *skey,
 
 /* Refreshed @skey if trust has changed */
 static void
-seahorse_key_manager_store_changed (SeahorseKeyStore *skstore, SeahorseKey *skey, 
-				                    guint uid, GtkTreeIter *iter, SeahorseKeyChange change)
+store_changed (SeahorseKeyStore *skstore, SeahorseKey *skey, guint uid, 
+               GtkTreeIter *iter, SeahorseKeyChange change)
 {
 	switch (change) {
         case SKEY_CHANGE_ALL:
@@ -235,29 +300,32 @@ seahorse_key_manager_store_changed (SeahorseKeyStore *skstore, SeahorseKey *skey
 static void
 gconf_notification (GConfClient *gclient, guint id, GConfEntry *entry, GtkTreeView *view)
 {
-	const gchar *key;
-	GConfValue *value;
-	GtkTreeViewColumn *col;
-	
-	key = gconf_entry_get_key (entry);
+    GtkTreeViewColumn *col = NULL;
+    GList *columns, *l;
+    GConfValue *value;
+    const gchar *key;
+    const gchar *t;
+
+    key = gconf_entry_get_key (entry);
 
     g_return_if_fail (key != NULL);
     g_return_if_fail (GTK_IS_TREE_VIEW (view));
     
-	value = gconf_entry_get_value (entry);
-	
-	if (g_str_equal (key, SHOW_VALIDITY_KEY))
-		col = gtk_tree_view_get_column (view, VALIDITY_STR - 4);
-	else if (g_str_equal (key, SHOW_TRUST_KEY))
-		col = gtk_tree_view_get_column (view, TRUST_STR - 4);
-	else if (g_str_equal (key, SHOW_TYPE_KEY))
-		col = gtk_tree_view_get_column (view, TYPE - 4);
-	else if (g_str_equal (key, SHOW_EXPIRES_KEY))
-		col = gtk_tree_view_get_column (view, EXPIRES_STR - 4);
-	else
-		return;
-	
-	gtk_tree_view_column_set_visible (col, gconf_value_get_bool (value));
+    columns = gtk_tree_view_get_columns (view);
+    for (l = columns; l; l = g_list_next (l)) {
+        t = (const gchar*)g_object_get_data (G_OBJECT (l->data), "gconf-key");
+        if (t && g_str_equal (t, key)) {
+            col = GTK_TREE_VIEW_COLUMN (l->data);
+            break;
+        }
+    }
+    
+    if (col != NULL) {	
+        value = gconf_entry_get_value (entry);
+        gtk_tree_view_column_set_visible (col, gconf_value_get_bool (value));
+    }
+    
+    g_list_free (columns);
 }
 
 static void  
@@ -389,27 +457,35 @@ drag_data_get (GtkWidget *widget, GdkDragContext *context,
  * Returns: The new #SeahorseKeyStore
  **/
 SeahorseKeyStore*
-seahorse_key_manager_store_new (SeahorseKeySource *sksrc, GtkTreeView *view)
+seahorse_key_manager_store_new (SeahorseKeySource *sksrc, GtkTreeView *view, 
+                                guint keytypes)
 {
 	SeahorseKeyStore *skstore;
 	GtkTreeViewColumn *col;
 
-	skstore = g_object_new (SEAHORSE_TYPE_KEY_MANAGER_STORE, "key-source", sksrc, NULL);
+	skstore = g_object_new (SEAHORSE_TYPE_KEY_MANAGER_STORE, "key-source", sksrc, 
+                                                             "key-types", keytypes, NULL);
     seahorse_key_store_init (skstore, view);
 	
-	col = seahorse_key_store_append_column (view, _("Validity"), VALIDITY_STR);
-	gtk_tree_view_column_set_visible (col, seahorse_gconf_get_boolean (SHOW_VALIDITY_KEY));
-	gtk_tree_view_column_set_sort_column_id (col, VALIDITY);
+    if (keytypes & KEYTYPE_PUBLIC) {
+    	col = seahorse_key_store_append_column (view, _("Validity"), VALIDITY_STR);
+        g_object_set_data (G_OBJECT (col), "gconf-key", SHOW_VALIDITY_KEY);
+	    gtk_tree_view_column_set_visible (col, seahorse_gconf_get_boolean (SHOW_VALIDITY_KEY));
+	    gtk_tree_view_column_set_sort_column_id (col, VALIDITY);
 	
-	col = seahorse_key_store_append_column (view, _("Trust"), TRUST_STR);
-	gtk_tree_view_column_set_visible (col, seahorse_gconf_get_boolean (SHOW_TRUST_KEY));
-	gtk_tree_view_column_set_sort_column_id (col, TRUST);
-	
+    	col = seahorse_key_store_append_column (view, _("Trust"), TRUST_STR);
+        g_object_set_data (G_OBJECT (col), "gconf-key", SHOW_TRUST_KEY);
+	    gtk_tree_view_column_set_visible (col, seahorse_gconf_get_boolean (SHOW_TRUST_KEY));
+	    gtk_tree_view_column_set_sort_column_id (col, TRUST);
+    }
+    
 	col = seahorse_key_store_append_column (view, _("Type"), TYPE);
+    g_object_set_data (G_OBJECT (col), "gconf-key", SHOW_TYPE_KEY);
 	gtk_tree_view_column_set_visible (col, seahorse_gconf_get_boolean (SHOW_TYPE_KEY));
 	gtk_tree_view_column_set_sort_column_id (col, TYPE);
 
 	col = seahorse_key_store_append_column (view, _("Expiration Date"), EXPIRES_STR);
+    g_object_set_data (G_OBJECT (col), "gconf-key", SHOW_EXPIRES_KEY);
 	gtk_tree_view_column_set_visible (col, seahorse_gconf_get_boolean (SHOW_EXPIRES_KEY));
 	gtk_tree_view_column_set_sort_column_id (col, EXPIRES);
 
@@ -426,8 +502,7 @@ seahorse_key_manager_store_new (SeahorseKeySource *sksrc, GtkTreeView *view)
 	g_signal_connect (G_OBJECT (view), "drag_end", 
                 G_CALLBACK (drag_end), skstore);
 
-    gtk_drag_source_set (GTK_WIDGET (view), 
-                GDK_BUTTON1_MASK | GDK_BUTTON2_MASK,
+    gtk_drag_source_set (GTK_WIDGET (view), GDK_BUTTON1_MASK | GDK_BUTTON2_MASK,
 			    seahorse_target_entries, seahorse_n_targets, GDK_ACTION_COPY);
 
 	return skstore;

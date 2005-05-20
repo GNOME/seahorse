@@ -170,7 +170,8 @@ copy_activate (GtkWidget *widget, SeahorseWidget *swidget)
         return;
                
     text = seahorse_op_export_text (keys, FALSE, &err);
-
+    g_list_free (keys);
+    
     if (text == NULL)
         seahorse_util_handle_error (err, _("Couldn't retrieve key data from key server"));
     else {
@@ -404,7 +405,8 @@ seahorse_keyserver_results_show (SeahorseContext *sctx, SeahorseKeySource *sksrc
     w = glade_xml_get_widget (swidget->xml, "status");
     seahorse_progress_appbar_set_operation (w, operation);
 
-    skstore = seahorse_key_manager_store_new (sksrc, view);
+    /* A new key store only showing public keys */
+    skstore = seahorse_key_manager_store_new (sksrc, view, KEYTYPE_PUBLIC);
 	selection_changed (selection, swidget);
 
     return win;

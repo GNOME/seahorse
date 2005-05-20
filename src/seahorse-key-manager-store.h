@@ -34,18 +34,25 @@
 typedef struct _SeahorseKeyManagerStore SeahorseKeyManagerStore;
 typedef struct _SeahorseKeyManagerStoreClass SeahorseKeyManagerStoreClass;
 	
-struct _SeahorseKeyManagerStore
-{
-	SeahorseKeyStore	parent;
+enum SeahorseKeyManagerStoreTypes {
+    KEYTYPE_PUBLIC = 0x00000001,
+    KEYTYPE_PRIVATE = 0x00000002
 };
 
-struct _SeahorseKeyManagerStoreClass
-{
-	SeahorseKeyStoreClass	parent_class;
+struct _SeahorseKeyManagerStore {
+    SeahorseKeyStore    parent;
+    
+    /*< public >*/
+    guint               keytypes;
+};
+
+struct _SeahorseKeyManagerStoreClass {
+    SeahorseKeyStoreClass	parent_class;
 };
 
 SeahorseKeyStore*	seahorse_key_manager_store_new	(SeahorseKeySource	*sksrc,
-							                         GtkTreeView        *view);
+							                         GtkTreeView        *view,
+                                                     guint              keytypes);
 
 /* Drag and trop target types */
 enum SeahorseTargetTypes {
