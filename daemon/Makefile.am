@@ -33,9 +33,9 @@ seahorse_daemon_SOURCES = \
         $(SHARING_SRCS)
 
 seahorse_daemon_LDADD = \
-	$(top_builddir)/libseahorse/libseahorse-internal.la \
     $(AGENT_LIB) \
-	$(SEAHORSE_LIBS) 
+	$(top_builddir)/libseahorse/libseahorse-internal.la \
+	$(SEAHORSE_LIBS)
                          
 glade_DATA = 
 
