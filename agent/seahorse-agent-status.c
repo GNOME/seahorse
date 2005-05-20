@@ -204,10 +204,10 @@ static void
 on_settings_activate (GtkWidget *item, gpointer data)
 {
     GError *err = NULL;
-    g_spawn_command_line_async ("seahorse-pgp-preferences --cache", &err);
+    g_spawn_command_line_async ("seahorse-preferences --cache", &err);
     
     if (err != NULL) {
-        g_warning ("couldn't execute seahorse-pgp-preferences: %s", err->message);
+        g_warning ("couldn't execute seahorse-preferences: %s", err->message);
         g_error_free (err);
     }
 }

@@ -7,11 +7,11 @@ INCLUDES = -I$(top_builddir) \
 	-DDATA_DIR=\""$(datadir)"\" \
 	-DSEAHORSE_GLADEDIR=\""$(gladedir)"\"
 
-bin_PROGRAMS = seahorse-pgp-preferences
+bin_PROGRAMS = seahorse-preferences
 
-seahorse_pgp_preferences_SOURCES = seahorse-pgp-preferences.c 
+seahorse_preferences_SOURCES = seahorse-pgp-preferences.c 
 	
-seahorse_pgp_preferences_LDADD = \
+seahorse_preferences_LDADD = \
 	$(top_builddir)/libseahorse/libseahorse-internal.la \
 	$(SEAHORSE_LIBS)
 
