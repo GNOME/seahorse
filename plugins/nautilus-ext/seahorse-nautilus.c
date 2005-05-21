@@ -127,13 +127,13 @@ seahorse_nautilus_get_file_items (NautilusMenuProvider *provider,
         return NULL;
      
      item = nautilus_menu_item_new ("NautilusSh::crypt", _("Encrypt..."),
-         ngettext ("Encrypt the selected file", "Encrypt the selected files", num), NULL);
+         ngettext ("Encrypt (and optionally sign) the selected file", "Encrypt the selected files", num), NULL);
      g_signal_connect (item, "activate", G_CALLBACK (crypt_callback), provider);
      g_object_set_data_full (G_OBJECT (item), "files", nautilus_file_info_list_copy (files),
                                  (GDestroyNotify) nautilus_file_info_list_free);
      items = g_list_append (items, item);
 
-     item = nautilus_menu_item_new ("NautilusSh::sign", _("Sign..."),
+     item = nautilus_menu_item_new ("NautilusSh::sign", _("Sign"),
          ngettext ("Sign the selected file", "Sign the selected files", num), NULL);
      g_signal_connect (item, "activate", G_CALLBACK (sign_callback), provider);
      g_object_set_data_full (G_OBJECT (item), "files", nautilus_file_info_list_copy (files),
