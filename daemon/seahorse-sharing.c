@@ -105,7 +105,8 @@ start_publishing (int port)
 {
 	GIOChannel *channel;
     sw_result result;
-    gchar *user_name;
+    const gchar *user_name;
+    gchar *t = NULL;
     gchar *share_name;
     int fd;
 
@@ -118,7 +119,9 @@ start_publishing (int port)
                                         howl_input, howl_session);
 	g_io_channel_unref (channel);
     
-    user_name = seahorse_util_string_up_first (g_get_user_name ());
+    user_name = g_get_real_name ();
+    if (!user_name || g_str_equal (user_name, "Unknown"))
+        user_name = t = seahorse_util_string_up_first (g_get_user_name ());
 
 	/* Translators: The %s will get filled in with the user name
 	   of the user, to form a genitive. If this is difficult to
@@ -130,7 +133,7 @@ start_publishing (int port)
 	   but not put the user name in the final string. This is to
 	   avoid the warning that msgfmt might otherwise generate. */
     share_name = g_strdup_printf (_("%s's encryption keys"), user_name);
-    g_free (user_name);
+    g_free (t);
     
     result = sw_discovery_publish (howl_session, 0, share_name, "_hkp._tcp",
 				                   NULL, NULL, port, /* text */"", 0,
