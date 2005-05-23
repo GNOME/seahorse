@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-05-20 11:57-0400\n"
-"PO-Revision-Date: 2005-05-20 22:06-0400\n"
+"POT-Creation-Date: 2005-05-23 18:52-0400\n"
+"PO-Revision-Date: 2005-05-23 22:06-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: Canadian English <adamw@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -233,20 +233,21 @@ msgid "Encryption Passphrase Agent"
 msgstr "Encryption Passphrase Agent"
 
 #: ../bonobo/Seahorse_PGP_File_Listener.server.in.in.h:1
-msgid "Decrypt..."
-msgstr "Decrypt..."
+msgid "Decrypt"
+msgstr "Decrypt"
 
 #: ../bonobo/Seahorse_PGP_File_Listener.server.in.in.h:2
 msgid "Decryption operations on PGP encrypted files"
 msgstr "Decryption operations on PGP encrypted files"
 
 #: ../bonobo/Seahorse_PGP_File_Listener.server.in.in.h:3
-msgid "Encrypt and Sign..."
-msgstr "Encrypt and Sign..."
-
-#: ../bonobo/Seahorse_PGP_File_Listener.server.in.in.h:4
 msgid "Encrypt and sign operations on files"
 msgstr "Encrypt and sign operations on files"
+
+#: ../bonobo/Seahorse_PGP_File_Listener.server.in.in.h:4
+#: ../plugins/nautilus-ext/seahorse-nautilus.c:129
+msgid "Encrypt..."
+msgstr "Encrypt..."
 
 #: ../bonobo/Seahorse_PGP_File_Listener.server.in.in.h:5
 msgid "Import"
@@ -274,8 +275,8 @@ msgstr "Seahorse PGP verify operation"
 
 #: ../bonobo/Seahorse_PGP_File_Listener.server.in.in.h:11
 #: ../plugins/nautilus-ext/seahorse-nautilus.c:136
-msgid "Sign..."
-msgstr "Sign..."
+msgid "Sign"
+msgstr "Sign"
 
 #: ../bonobo/Seahorse_PGP_File_Listener.server.in.in.h:12
 msgid "Verify"
@@ -892,19 +893,21 @@ msgstr "Could not run file-roller"
 msgid "The file-roller process did not complete successfully"
 msgstr "The file-roller process did not complete successfully"
 
-#: ../libseahorse/seahorse-util.c:836
+#. Filter for PGP keys. We also include *.asc, as in many
+#. cases that extension is associated with text/plain
+#: ../libseahorse/seahorse-util.c:839
 msgid "All key files"
 msgstr "All key files"
 
-#: ../libseahorse/seahorse-util.c:842 ../libseahorse/seahorse-util.c:882
+#: ../libseahorse/seahorse-util.c:846 ../libseahorse/seahorse-util.c:886
 msgid "All files"
 msgstr "All files"
 
-#: ../libseahorse/seahorse-util.c:875
+#: ../libseahorse/seahorse-util.c:879
 msgid "Archive files"
 msgstr "Archive files"
 
-#: ../libseahorse/seahorse-util.c:916
+#: ../libseahorse/seahorse-util.c:920
 msgid ""
 "<b>A file already exists with this name.</b>\n"
 "\n"
@@ -914,7 +917,7 @@ msgstr ""
 "\n"
 "Do you want to replace it with a new file?"
 
-#: ../libseahorse/seahorse-util.c:919
+#: ../libseahorse/seahorse-util.c:923
 msgid "_Replace"
 msgstr "_Replace"
 
@@ -1058,15 +1061,11 @@ msgstr "For internal use"
 msgid "Configure key servers and other encryption settings"
 msgstr "Configure key servers and other encryption settings"
 
-#: ../plugins/nautilus-ext/seahorse-nautilus.c:129
-msgid "Encrypt..."
-msgstr "Encrypt..."
-
 #: ../plugins/nautilus-ext/seahorse-nautilus.c:130
-msgid "Encrypt the selected file"
-msgid_plural "Encrypt the selected files"
-msgstr[0] "Encrypt the selected file"
-msgstr[1] "Encrypt the selected files"
+msgid "Encrypt (and optionally sign) the selected file"
+msgid_plural "Encrypt (and optionally sign) the selected files"
+msgstr[0] "Encrypt (and optionally sign) the selected file"
+msgstr[1] "Encrypt (and optionally sign) the selected files"
 
 #: ../plugins/nautilus-ext/seahorse-nautilus.c:137
 msgid "Sign the selected file"
