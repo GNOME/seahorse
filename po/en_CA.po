@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-05-20 11:54-0400\n"
-"PO-Revision-Date: 2005-05-20 22:06-0400\n"
+"POT-Creation-Date: 2005-05-23 13:15-0400\n"
+"PO-Revision-Date: 2005-05-23 22:06-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: Canadian English <adamw@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -249,6 +249,33 @@ msgstr "Verify"
 msgid "Verify operation on PGP signed files"
 msgstr "Verify operation on PGP signed files"
 
+#. Translators: The %s will get filled in with the user name
+#. of the user, to form a genitive. If this is difficult to
+#. translate correctly so that it will work correctly in your
+#. language, you may use something equivalent to
+#. "Shared keys of %s", or leave out the %s altogether.
+#. In the latter case, please put "%.0s" somewhere in the string,
+#. which will match the user name string passed by the C code,
+#. but not put the user name in the final string. This is to
+#. avoid the warning that msgfmt might otherwise generate.
+#: ../daemon/seahorse-sharing.c:135
+#, c-format
+msgid "%s's encryption keys"
+msgstr "%s's encryption keys"
+
+#. Stop Sharing menu item
+#: ../daemon/seahorse-sharing.c:195
+msgid "_Stop Sharing My Keys"
+msgstr "_Stop Sharing My Keys"
+
+#: ../daemon/seahorse-sharing.c:263 ../daemon/seahorse-sharing.c:270
+msgid "Couldn't share keys"
+msgstr "Could not share keys"
+
+#: ../daemon/seahorse-sharing.c:271
+msgid "Can't publish discovery information on the network."
+msgstr "Cannot publish discovery information on the network."
+
 #: ../data/seahorse.schemas.in.h:1
 msgid ""
 "A list of key server URIs to search for remote PGP keys. In later versions a "
@@ -274,14 +301,26 @@ msgid "Controls the visibility of the validity column for the key manager."
 msgstr "Controls the visibility of the validity column for the key manager."
 
 #: ../data/seahorse.schemas.in.h:6
+msgid "Enable DNS-SD sharing"
+msgstr "Enable DNS-SD sharing"
+
+#: ../data/seahorse.schemas.in.h:7
+msgid ""
+"Enables DNS-SD (OpenTalk) sharing of keys. seahorse-daemon must running and "
+"must be built with HKP and DNS-SD support."
+msgstr ""
+"Enables DNS-SD (OpenTalk) sharing of keys. seahorse-daemon must be running and "
+"must be built with HKP and DNS-SD support."
+
+#: ../data/seahorse.schemas.in.h:8
 msgid "Expire passwords in the cache"
 msgstr "Expire passwords in the cache"
 
-#: ../data/seahorse.schemas.in.h:7
+#: ../data/seahorse.schemas.in.h:9
 msgid "ID of the default key"
 msgstr "ID of the default key"
 
-#: ../data/seahorse.schemas.in.h:8
+#: ../data/seahorse.schemas.in.h:10
 msgid ""
 "If set to true, then files encrypted with seahorse will be ASCII armor "
 "encoded."
@@ -289,7 +328,7 @@ msgstr ""
 "If set to true, then files encrypted with seahorse will be ASCII armour "
 "encoded."
 
-#: ../data/seahorse.schemas.in.h:9
+#: ../data/seahorse.schemas.in.h:11
 msgid ""
 "If set to true, then the default key will always be added to an encryption "
 "recipients list."
@@ -297,27 +336,31 @@ msgstr ""
 "If set to true, then the default key will always be added to an encryption "
 "recipients list."
 
-#: ../data/seahorse.schemas.in.h:10
+#: ../data/seahorse.schemas.in.h:12
 msgid "Last key used to sign a message."
 msgstr "Last key used to sign a message."
 
-#: ../data/seahorse.schemas.in.h:11
+#: ../data/seahorse.schemas.in.h:13
 msgid "Last keyserver search pattern"
 msgstr "Last keyserver search pattern"
 
-#: ../data/seahorse.schemas.in.h:12
+#: ../data/seahorse.schemas.in.h:14
+msgid "Last keyservers used"
+msgstr "Last keyservers used"
+
+#: ../data/seahorse.schemas.in.h:15
 msgid "PGP Key servers"
 msgstr "PGP Key servers"
 
-#: ../data/seahorse.schemas.in.h:13
+#: ../data/seahorse.schemas.in.h:16
 msgid "Prompt before using GPG passwords in cache"
 msgstr "Prompt before using GPG passwords in cache"
 
-#: ../data/seahorse.schemas.in.h:14
+#: ../data/seahorse.schemas.in.h:17
 msgid "Publish keys to this keyserver."
 msgstr "Publish keys to this keyserver."
 
-#: ../data/seahorse.schemas.in.h:15
+#: ../data/seahorse.schemas.in.h:18
 msgid ""
 "Set to 'true' to have seahorse-agent prompt before giving out passwords it "
 "has cached."
@@ -325,23 +368,23 @@ msgstr ""
 "Set to 'true' to have seahorse-agent prompt before giving out passwords it "
 "has cached."
 
-#: ../data/seahorse.schemas.in.h:16
+#: ../data/seahorse.schemas.in.h:19
 msgid "Show expires column in key manager"
 msgstr "Show expires column in key manager"
 
-#: ../data/seahorse.schemas.in.h:17
+#: ../data/seahorse.schemas.in.h:20
 msgid "Show trust column in key manager"
 msgstr "Show trust column in key manager"
 
-#: ../data/seahorse.schemas.in.h:18
+#: ../data/seahorse.schemas.in.h:21
 msgid "Show type column in key manager"
 msgstr "Show type column in key manager"
 
-#: ../data/seahorse.schemas.in.h:19
+#: ../data/seahorse.schemas.in.h:22
 msgid "Show validity column in key manager"
 msgstr "Show validity column in key manager"
 
-#: ../data/seahorse.schemas.in.h:20
+#: ../data/seahorse.schemas.in.h:23
 msgid ""
 "Specify the column to sort the recipients window by. Columns are: 'name', "
 "'id' and 'validity', Put a '-' in front of the column name to sort in "
@@ -351,7 +394,7 @@ msgstr ""
 "'id', and 'validity'. Put a '-' in front of the column name to sort in "
 "descending order."
 
-#: ../data/seahorse.schemas.in.h:21
+#: ../data/seahorse.schemas.in.h:24
 msgid ""
 "Specify the column to sort the seahorse key manager main window by. Columns "
 "are: 'name', 'id', 'validity', 'expires', 'trust', and 'type'. Put a '-' in "
@@ -361,19 +404,19 @@ msgstr ""
 "are: 'name', 'id', 'validity', 'expires', 'trust', and 'type'. Put a '-' in "
 "front of the column name to sort in descending order."
 
-#: ../data/seahorse.schemas.in.h:22
+#: ../data/seahorse.schemas.in.h:25
 msgid "The ID of the last secret key used to sign a message."
 msgstr "The ID of the last secret key used to sign a message."
 
-#: ../data/seahorse.schemas.in.h:23
+#: ../data/seahorse.schemas.in.h:26
 msgid "The column to sort the recipients by"
 msgstr "The column to sort the recipients by"
 
-#: ../data/seahorse.schemas.in.h:24
+#: ../data/seahorse.schemas.in.h:27
 msgid "The column to sort the seahorse keys by"
 msgstr "The column to sort the seahorse keys by"
 
-#: ../data/seahorse.schemas.in.h:25
+#: ../data/seahorse.schemas.in.h:28
 msgid ""
 "The keyserver to publish PGP keys to. Or empty to suppress publishing of PGP "
 "keys."
@@ -381,15 +424,23 @@ msgstr ""
 "The keyserver to publish PGP keys to, Or empty to suppress publishing of PGP "
 "keys."
 
-#: ../data/seahorse.schemas.in.h:26
+#: ../data/seahorse.schemas.in.h:29
+msgid ""
+"The last keyserver a search was performed against or empty for all "
+"keyservers."
+msgstr ""
+"The last keyserver a search was performed against, or empty for all "
+"keyservers."
+
+#: ../data/seahorse.schemas.in.h:30
 msgid "The last search pattern searched for against a keyserver."
 msgstr "The last search pattern searched for against a keyserver."
 
-#: ../data/seahorse.schemas.in.h:27
+#: ../data/seahorse.schemas.in.h:31
 msgid "The time (in minutes) to cache GPG passwords"
 msgstr "The time (in minutes) to cache GPG passwords"
 
-#: ../data/seahorse.schemas.in.h:28
+#: ../data/seahorse.schemas.in.h:32
 msgid ""
 "This is the amount of time, specified in minutes, to cache GPG passwords in "
 "seahorse-agent."
@@ -397,20 +448,20 @@ msgstr ""
 "This is the amount of time, specified in minutes, to cache GPG passwords in "
 "seahorse-agent."
 
-#: ../data/seahorse.schemas.in.h:29
+#: ../data/seahorse.schemas.in.h:33
 msgid ""
 "This option enables the GPG password cache in the seahorse-agent daemon."
 msgstr ""
 "This option enables the GPG password cache in the seahorse-agent daemon."
 
-#: ../data/seahorse.schemas.in.h:30
+#: ../data/seahorse.schemas.in.h:34
 msgid ""
 "This specifies the default key to use for certain operations, mainly signing."
 msgstr ""
 "This specifies the default key to use for certain operations (mainly "
 "signing)."
 
-#: ../data/seahorse.schemas.in.h:31
+#: ../data/seahorse.schemas.in.h:35
 msgid ""
 "When set seahorse-agent expires GPG passwords in it's cache after a peried "
 "of time."
@@ -418,15 +469,15 @@ msgstr ""
 "When set, seahorse-agent expires GPG passwords in its cache after a peried "
 "of time."
 
-#: ../data/seahorse.schemas.in.h:32
+#: ../data/seahorse.schemas.in.h:36
 msgid "Whether the GPG password cache is enabled"
 msgstr "Whether the GPG password cache is enabled"
 
-#: ../data/seahorse.schemas.in.h:33
+#: ../data/seahorse.schemas.in.h:37
 msgid "Whether to always encrypt to default key"
 msgstr "Whether to always encrypt to default key"
 
-#: ../data/seahorse.schemas.in.h:34
+#: ../data/seahorse.schemas.in.h:38
 msgid "Whether to use ASCII Armor"
 msgstr "Whether to use ASCII Armour"
 
@@ -438,6 +489,7 @@ msgstr "Whether to use ASCII Armour"
 #: ../src/seahorse-generate-adv.glade.h:1
 #: ../src/seahorse-generate-druid.glade.h:1
 #: ../src/seahorse-key-manager.glade.h:1
+#: ../src/seahorse-keyserver-search.glade.h:1
 #: ../src/seahorse-multi-encrypt.glade.h:1 ../src/seahorse-revoke.glade.h:1
 msgid "*"
 msgstr "*"
@@ -568,39 +620,43 @@ msgid ""
 msgstr ""
 "Another passphrase-caching agent is running. Disabling cache preferences."
 
-#: ../libseahorse/seahorse-prefs.c:55
+#: ../libseahorse/seahorse-prefs.c:57
+msgid "Not a valid Key Server address."
+msgstr "Not a valid Key Server address."
+
+#: ../libseahorse/seahorse-prefs.c:58
 msgid ""
-"<b><big>Not a valid Key Server address.</big></b>\n"
-"\n"
 "For help contact your system adminstrator or the administrator of the key "
 "server."
 msgstr ""
-"<b><big>Not a valid Key Server address.</big></b>\n"
-"\n"
 "For help contact your system adminstrator or the administrator of the key "
 "server."
 
-#: ../libseahorse/seahorse-prefs.c:165
+#: ../libseahorse/seahorse-prefs.c:168
 msgid "URL"
 msgstr "URL"
 
-#: ../libseahorse/seahorse-prefs.c:349
+#: ../libseahorse/seahorse-prefs.c:352
 msgid "Custom"
 msgstr "Custom"
 
-#: ../libseahorse/seahorse-prefs.c:419
+#: ../libseahorse/seahorse-prefs.c:422
 msgid "None: Don't publish keys"
 msgstr "None: Do not publish keys"
 
-#: ../libseahorse/seahorse-prefs.c:468
+#: ../libseahorse/seahorse-prefs.c:437
+msgid "_Share my keys with others on my network"
+msgstr "_Share my keys with others on my network"
+
+#: ../libseahorse/seahorse-prefs.c:485
 msgid "_Encrypt to Self"
 msgstr "_Encrypt to Self"
 
-#: ../libseahorse/seahorse-prefs.c:470
+#: ../libseahorse/seahorse-prefs.c:487
 msgid "_Armor Encode Files"
 msgstr "_Armour Encode Files"
 
-#: ../libseahorse/seahorse-prefs.c:476
+#: ../libseahorse/seahorse-prefs.c:493
 msgid "None. Prompt for a key."
 msgstr "None. Prompt for a key."
 
@@ -629,7 +685,7 @@ msgid "Cache encryption _passphrases in memory"
 msgstr "Cache encryption _passphrases in memory"
 
 #: ../libseahorse/seahorse-prefs.glade.h:5
-#: ../plugins/nautilus/seahorse-pgp-preferences.c:58
+#: ../plugins/nautilus/seahorse-pgp-preferences.c:65
 #: ../plugins/nautilus/seahorse-pgp-preferences.desktop.in.h:2
 msgid "Encryption Preferences"
 msgstr "Encryption Preferences"
@@ -643,38 +699,56 @@ msgid "Key Servers"
 msgstr "Key Servers"
 
 #: ../libseahorse/seahorse-prefs.glade.h:8
+msgid "Key Sharing"
+msgstr "Key Sharing"
+
+#: ../libseahorse/seahorse-prefs.glade.h:9
 msgid "Password Cache"
 msgstr "Password Cache"
 
-#: ../libseahorse/seahorse-prefs.glade.h:9
+#: ../libseahorse/seahorse-prefs.glade.h:10
 msgid "Session Properties"
 msgstr "Session Properties"
 
-#: ../libseahorse/seahorse-prefs.glade.h:10
+#: ../libseahorse/seahorse-prefs.glade.h:11
+msgid ""
+"Sharing your keys allows other people on your network to use the keys you've "
+"collected. This means they can automatically encrypt things for you or those "
+"you know, without you having to send them your key.\n"
+"\n"
+"<b>Note:</b> Your personal keys will not be compromised."
+msgstr ""
+"Sharing your keys allows other people on your network to use the keys you have "
+"collected. This means they can automatically encrypt things for you or those "
+"you know, without you having to send them your key.\n"
+"\n"
+"<b>Note:</b> Your personal keys will not be compromised."
+
+#: ../libseahorse/seahorse-prefs.glade.h:14
 msgid "Start seahorse-daemon"
 msgstr "Start seahorse-daemon"
 
-#: ../libseahorse/seahorse-prefs.glade.h:11
+#: ../libseahorse/seahorse-prefs.glade.h:15
 msgid "You can add it to your Startup Programs in: "
 msgstr "You can add it to your Startup Programs in: "
 
-#: ../libseahorse/seahorse-prefs.glade.h:12
+#: ../libseahorse/seahorse-prefs.glade.h:16
 msgid "_Ask me before using a cached passphrase"
 msgstr "_Ask me before using a cached passphrase"
 
-#: ../libseahorse/seahorse-prefs.glade.h:13
+#: ../libseahorse/seahorse-prefs.glade.h:17
 msgid "_Default Signing Key:"
 msgstr "_Default Signing Key:"
 
-#: ../libseahorse/seahorse-prefs.glade.h:14
+#: ../libseahorse/seahorse-prefs.glade.h:18
 msgid "_Expire passphrases from memory after "
 msgstr "_Expire passphrases from memory after "
 
-#: ../libseahorse/seahorse-prefs.glade.h:15
+#: ../libseahorse/seahorse-prefs.glade.h:19
 msgid "_Find Keys Using:"
 msgstr "_Find Keys Using:"
 
-#: ../libseahorse/seahorse-prefs.glade.h:16
+#: ../libseahorse/seahorse-prefs.glade.h:20
 msgid "_Publish Keys To:"
 msgstr "_Publish Keys To:"
 
@@ -703,7 +777,7 @@ msgid "Loading Keys..."
 msgstr "Loading Keys..."
 
 #: ../libseahorse/seahorse-recipients-store.c:154
-#: ../src/seahorse-key-manager-store.c:400
+#: ../src/seahorse-key-manager-store.c:471
 msgid "Validity"
 msgstr "Validity"
 
@@ -840,17 +914,21 @@ msgstr "Signature Verification"
 msgid "Choose Signing Key"
 msgstr "Choose Signing Key"
 
-#: ../libseahorse/seahorse-util.c:127
+#: ../libseahorse/seahorse-util.c:182
 msgid "%Y-%m-%d"
 msgstr "%Y-%m-%d"
 
-#: ../libseahorse/seahorse-util.c:479
+#: ../libseahorse/seahorse-util.c:478
 msgid "Multiple Keys"
 msgstr "Multiple Keys"
 
-#: ../libseahorse/seahorse-util.c:789
+#: ../libseahorse/seahorse-util.c:788
 msgid "Couldn't run file-roller"
 msgstr "Could not run file-roller"
+
+#: ../libseahorse/seahorse-util.c:793
+msgid "Couldn't package files"
+msgstr "Could not package files"
 
 #: ../libseahorse/seahorse-util.c:794
 msgid "The file-roller process did not complete successfully"
@@ -982,8 +1060,8 @@ msgstr "Verified text"
 msgid "Block %d"
 msgstr "Block %d"
 
-#: ../plugins/gedit/seahorse-gedit.c:441 ../src/seahorse-key-manager.c:116
-#: ../src/seahorse-key-manager.c:139 ../src/seahorse-key-manager.c:575
+#: ../plugins/gedit/seahorse-gedit.c:441 ../src/seahorse-key-manager.c:177
+#: ../src/seahorse-key-manager.c:200 ../src/seahorse-key-manager.c:617
 #, c-format
 msgid "Imported %d key"
 msgid_plural "Imported %d keys"
@@ -1014,7 +1092,8 @@ msgstr "Text Encryption"
 msgid "This plugin performs encryption operations on text."
 msgstr "This plugin performs encryption operations on text."
 
-#: ../plugins/nautilus/seahorse-pgp-preferences.c:43
+#: ../plugins/nautilus/seahorse-pgp-preferences.c:40
+#: ../plugins/nautilus/seahorse-pgp-preferences.c:44
 msgid "For internal use"
 msgstr "For internal use"
 
@@ -1066,7 +1145,7 @@ msgstr "Verify signature file"
 msgid "Read list of URIs on standard in"
 msgstr "Read list of URIs on standard input"
 
-#: ../src/main.c:149 ../src/seahorse-key-manager.c:113
+#: ../src/main.c:149 ../src/seahorse-key-manager.c:174
 #, c-format
 msgid "Couldn't import keys from \"%s\""
 msgstr "Could not import keys from \"%s\""
@@ -1075,8 +1154,8 @@ msgstr "Could not import keys from \"%s\""
 msgid "Imported key"
 msgstr "Imported key"
 
-#: ../src/main.c:158 ../src/seahorse-key-manager.c:117
-#: ../src/seahorse-key-manager.c:140 ../src/seahorse-key-manager.c:576
+#: ../src/main.c:158 ../src/seahorse-key-manager.c:178
+#: ../src/seahorse-key-manager.c:201 ../src/seahorse-key-manager.c:618
 #, c-format
 msgid "Imported %d keys"
 msgstr "Imported %d keys"
@@ -1406,7 +1485,7 @@ msgid "Enter Name - Must be at least five letters."
 msgstr "Enter Name - Must be at least five letters."
 
 #: ../src/seahorse-generate-druid.glade.h:13
-#: ../src/seahorse-key-manager-store.c:412
+#: ../src/seahorse-key-manager-store.c:487
 msgid "Expiration Date"
 msgstr "Expiration Date"
 
@@ -1551,265 +1630,269 @@ msgstr "Select a method to generate your new key:"
 msgid "radio_druid"
 msgstr "radio_druid"
 
-#: ../src/seahorse-key-manager-store.c:178
+#: ../src/seahorse-key-manager-store.c:238
 #: ../src/seahorse-key-properties.c:239
 msgid "Expired"
 msgstr "Expired"
 
-#: ../src/seahorse-key-manager-store.c:193
+#: ../src/seahorse-key-manager-store.c:255
 msgid "Private PGP Key"
 msgstr "Private PGP Key"
 
-#: ../src/seahorse-key-manager-store.c:195
+#: ../src/seahorse-key-manager-store.c:257
 msgid "Public PGP Key"
 msgstr "Public PGP Key"
 
-#: ../src/seahorse-key-manager-store.c:212
+#: ../src/seahorse-key-manager-store.c:259
+msgid "PGP Key"
+msgstr "PGP Key"
+
+#: ../src/seahorse-key-manager-store.c:277
 msgid "User ID"
 msgstr "User ID"
 
-#: ../src/seahorse-key-manager-store.c:337
+#: ../src/seahorse-key-manager-store.c:405
 msgid "Couldn't retrieve key data"
 msgstr "Could not retrieve key data"
 
-#: ../src/seahorse-key-manager-store.c:404
+#: ../src/seahorse-key-manager-store.c:476
 msgid "Trust"
 msgstr "Trust"
 
-#: ../src/seahorse-key-manager-store.c:408
+#: ../src/seahorse-key-manager-store.c:482
 msgid "Type"
 msgstr "Type"
 
-#: ../src/seahorse-key-manager.c:104 ../src/seahorse-pgp-keys.desktop.in.h:1
+#: ../src/seahorse-key-manager.c:165 ../src/seahorse-pgp-keys.desktop.in.h:1
 msgid "Import Key"
 msgstr "Import Key"
 
-#: ../src/seahorse-key-manager.c:137
+#: ../src/seahorse-key-manager.c:198
 msgid "Couldn't import keys from clipboard"
 msgstr "Could not import keys from clipboard"
 
-#: ../src/seahorse-key-manager.c:177
+#: ../src/seahorse-key-manager.c:238
 msgid "Couldn't export key to clipboard"
 msgstr "Could not export key to clipboard"
 
-#: ../src/seahorse-key-manager.c:184 ../src/seahorse-keyserver-results.c:182
+#: ../src/seahorse-key-manager.c:245 ../src/seahorse-keyserver-results.c:183
 #, c-format
 msgid "Copied %d key"
 msgstr "Copied %d key"
 
-#: ../src/seahorse-key-manager.c:185 ../src/seahorse-keyserver-results.c:183
+#: ../src/seahorse-key-manager.c:246 ../src/seahorse-keyserver-results.c:184
 #, c-format
 msgid "Copied %d keys"
 msgstr "Copied %d keys"
 
-#: ../src/seahorse-key-manager.c:213
+#: ../src/seahorse-key-manager.c:272
 msgid "Export Key"
 msgstr "Export Key"
 
-#: ../src/seahorse-key-manager.c:224 ../src/seahorse-key-properties.c:297
+#: ../src/seahorse-key-manager.c:283 ../src/seahorse-key-properties.c:297
 #: ../src/seahorse-keyserver-results.c:146
 #, c-format
 msgid "Couldn't export key to \"%s\""
 msgstr "Could not export key to \"%s\""
 
-#: ../src/seahorse-key-manager.c:243
+#: ../src/seahorse-key-manager.c:302
 msgid "Backup Keyrings to Archive"
 msgstr "Backup Keyrings to Archive"
 
-#: ../src/seahorse-key-manager.c:404
+#: ../src/seahorse-key-manager.c:453
 msgid "translator_credits"
 msgstr "Adam Weinberger <adamw@gnome.org>"
 
-#: ../src/seahorse-key-manager.c:424
+#: ../src/seahorse-key-manager.c:473
 msgid "seahorse"
 msgstr "seahorse"
 
-#: ../src/seahorse-key-manager.c:467 ../src/seahorse-keyserver-results.c:219
+#: ../src/seahorse-key-manager.c:525 ../src/seahorse-keyserver-results.c:220
 #, c-format
 msgid "Selected %d key"
 msgstr "Selected %d key"
 
-#: ../src/seahorse-key-manager.c:468 ../src/seahorse-keyserver-results.c:220
+#: ../src/seahorse-key-manager.c:526 ../src/seahorse-keyserver-results.c:221
 #, c-format
 msgid "Selected %d keys"
 msgstr "Selected %d keys"
 
-#: ../src/seahorse-key-manager.c:572
+#: ../src/seahorse-key-manager.c:614
 #, c-format
 msgid "Couldn't import key from \"%s\""
 msgstr "Could not import key from \"%s\""
 
 #. Top menu items
-#: ../src/seahorse-key-manager.c:600 ../src/seahorse-keyserver-results.c:280
+#: ../src/seahorse-key-manager.c:653 ../src/seahorse-keyserver-results.c:281
 msgid "_Key"
 msgstr "_Key"
 
-#: ../src/seahorse-key-manager.c:601 ../src/seahorse-keyserver-results.c:281
+#: ../src/seahorse-key-manager.c:654 ../src/seahorse-keyserver-results.c:282
 msgid "_Edit"
 msgstr "_Edit"
 
-#: ../src/seahorse-key-manager.c:602
+#: ../src/seahorse-key-manager.c:655
 msgid "_View"
 msgstr "_View"
 
-#: ../src/seahorse-key-manager.c:603 ../src/seahorse-keyserver-results.c:282
+#: ../src/seahorse-key-manager.c:656 ../src/seahorse-keyserver-results.c:283
 msgid "_Help"
 msgstr "_Help"
 
 #. Key Actions
-#: ../src/seahorse-key-manager.c:606
+#: ../src/seahorse-key-manager.c:659
 msgid "_Create Key Pair..."
 msgstr "_Create Key Pair..."
 
-#: ../src/seahorse-key-manager.c:607
+#: ../src/seahorse-key-manager.c:660
 msgid "Create a new key pair"
 msgstr "Create a new key pair"
 
-#: ../src/seahorse-key-manager.c:608
+#: ../src/seahorse-key-manager.c:661
 msgid "_Import..."
 msgstr "_Import..."
 
-#: ../src/seahorse-key-manager.c:609
+#: ../src/seahorse-key-manager.c:662
 msgid "Import keys into your keyring from a file"
 msgstr "Import keys into your keyring from a file"
 
-#: ../src/seahorse-key-manager.c:610
+#: ../src/seahorse-key-manager.c:663
 msgid "_Backup Keyrings..."
 msgstr "_Backup Keyrings..."
 
-#: ../src/seahorse-key-manager.c:611
+#: ../src/seahorse-key-manager.c:664
 msgid "Backup all keys"
 msgstr "Backup all keys"
 
-#: ../src/seahorse-key-manager.c:612
+#: ../src/seahorse-key-manager.c:665
 msgid "Paste _Keys"
 msgstr "Paste _Keys"
 
-#: ../src/seahorse-key-manager.c:613
+#: ../src/seahorse-key-manager.c:666
 msgid "Import keys from the clipboard"
 msgstr "Import keys from the clipboard"
 
-#: ../src/seahorse-key-manager.c:615
+#: ../src/seahorse-key-manager.c:668
 msgid "_Quit"
 msgstr "_Quit"
 
-#: ../src/seahorse-key-manager.c:616
+#: ../src/seahorse-key-manager.c:669
 msgid "Close this program"
 msgstr "Close this program"
 
-#: ../src/seahorse-key-manager.c:617
+#: ../src/seahorse-key-manager.c:670
 msgid "Prefere_nces"
 msgstr "Prefere_nces"
 
-#: ../src/seahorse-key-manager.c:618
+#: ../src/seahorse-key-manager.c:671
 msgid "Change preferences for this program"
 msgstr "Change preferences for this program"
 
-#: ../src/seahorse-key-manager.c:619
+#: ../src/seahorse-key-manager.c:672
 msgid "_About"
 msgstr "_About"
 
-#: ../src/seahorse-key-manager.c:620
+#: ../src/seahorse-key-manager.c:673
 msgid "About this program"
 msgstr "About this program"
 
-#: ../src/seahorse-key-manager.c:622 ../src/seahorse-keyserver-results.c:289
+#: ../src/seahorse-key-manager.c:675 ../src/seahorse-keyserver-results.c:290
 msgid "_Expand All"
 msgstr "_Expand All"
 
-#: ../src/seahorse-key-manager.c:623 ../src/seahorse-keyserver-results.c:290
+#: ../src/seahorse-key-manager.c:676 ../src/seahorse-keyserver-results.c:291
 msgid "Expand all listings"
 msgstr "Expand all listings"
 
-#: ../src/seahorse-key-manager.c:624 ../src/seahorse-keyserver-results.c:291
+#: ../src/seahorse-key-manager.c:677 ../src/seahorse-keyserver-results.c:292
 msgid "_Collapse All"
 msgstr "_Collapse All"
 
-#: ../src/seahorse-key-manager.c:625 ../src/seahorse-keyserver-results.c:292
+#: ../src/seahorse-key-manager.c:678 ../src/seahorse-keyserver-results.c:293
 msgid "Collapse all listings"
 msgstr "Collapse all listings"
 
-#: ../src/seahorse-key-manager.c:627 ../src/seahorse-keyserver-results.c:286
+#: ../src/seahorse-key-manager.c:680 ../src/seahorse-keyserver-results.c:287
 msgid "_Contents"
 msgstr "_Contents"
 
-#: ../src/seahorse-key-manager.c:628 ../src/seahorse-keyserver-results.c:287
+#: ../src/seahorse-key-manager.c:681 ../src/seahorse-keyserver-results.c:288
 msgid "Show Seahorse help"
 msgstr "Show Seahorse help"
 
-#: ../src/seahorse-key-manager.c:632 ../src/seahorse-keyserver-results.c:298
+#: ../src/seahorse-key-manager.c:685 ../src/seahorse-keyserver-results.c:299
 msgid "P_roperties"
 msgstr "P_roperties"
 
-#: ../src/seahorse-key-manager.c:633 ../src/seahorse-keyserver-results.c:299
+#: ../src/seahorse-key-manager.c:686 ../src/seahorse-keyserver-results.c:300
 msgid "Show key properties"
 msgstr "Show key properties"
 
-#: ../src/seahorse-key-manager.c:634
+#: ../src/seahorse-key-manager.c:687
 msgid "E_xport..."
 msgstr "E_xport..."
 
-#: ../src/seahorse-key-manager.c:635
+#: ../src/seahorse-key-manager.c:688
 msgid "Export public key"
 msgstr "Export public key"
 
-#: ../src/seahorse-key-manager.c:636 ../src/seahorse-keyserver-results.c:302
+#: ../src/seahorse-key-manager.c:689 ../src/seahorse-keyserver-results.c:303
 msgid "_Copy Key"
 msgstr "_Copy Key"
 
-#: ../src/seahorse-key-manager.c:637 ../src/seahorse-keyserver-results.c:303
+#: ../src/seahorse-key-manager.c:690 ../src/seahorse-keyserver-results.c:304
 msgid "Copy selected keys to the clipboard"
 msgstr "Copy selected keys to the clipboard"
 
-#: ../src/seahorse-key-manager.c:638
+#: ../src/seahorse-key-manager.c:691
 msgid "_Sign..."
 msgstr "_Sign..."
 
-#: ../src/seahorse-key-manager.c:639
+#: ../src/seahorse-key-manager.c:692
 msgid "Sign public key"
 msgstr "Sign public key"
 
-#: ../src/seahorse-key-manager.c:640
+#: ../src/seahorse-key-manager.c:693
 msgid "_Delete Key"
 msgstr "_Delete Key"
 
-#: ../src/seahorse-key-manager.c:641
+#: ../src/seahorse-key-manager.c:694
 msgid "Delete selected keys"
 msgstr "Delete selected keys"
 
-#: ../src/seahorse-key-manager.c:645
+#: ../src/seahorse-key-manager.c:698
 msgid "Add _User ID..."
 msgstr "Add _User ID..."
 
-#: ../src/seahorse-key-manager.c:646
+#: ../src/seahorse-key-manager.c:699
 msgid "Add a new user ID"
 msgstr "Add a new user ID"
 
-#: ../src/seahorse-key-manager.c:647
+#: ../src/seahorse-key-manager.c:700
 msgid "Add _Revoker..."
 msgstr "Add _Revoker..."
 
-#: ../src/seahorse-key-manager.c:648
+#: ../src/seahorse-key-manager.c:701
 msgid "Add the default key as a revoker"
 msgstr "Add the default key as a revoker"
 
-#: ../src/seahorse-key-manager.c:653
+#: ../src/seahorse-key-manager.c:706
 msgid "_Remote"
 msgstr "_Remote"
 
-#: ../src/seahorse-key-manager.c:654 ../src/seahorse-keyserver-results.c:307
+#: ../src/seahorse-key-manager.c:707 ../src/seahorse-keyserver-results.c:308
 msgid "_Find Remote Keys..."
 msgstr "_Find Remote Keys..."
 
-#: ../src/seahorse-key-manager.c:655 ../src/seahorse-keyserver-results.c:308
+#: ../src/seahorse-key-manager.c:708 ../src/seahorse-keyserver-results.c:309
 msgid "Search for keys on a key server"
 msgstr "Search for keys on a key server"
 
-#: ../src/seahorse-key-manager.c:656
+#: ../src/seahorse-key-manager.c:709
 msgid "_Sync and Publish Keys..."
 msgstr "_Sync and Publish Keys..."
 
-#: ../src/seahorse-key-manager.c:657
+#: ../src/seahorse-key-manager.c:710
 msgid "Publish and/or sync your keys with those online."
 msgstr "Publish and/or sync your keys with those online."
 
@@ -1830,11 +1913,19 @@ msgid "Import existing keys from a file:"
 msgstr "Import existing keys from a file:"
 
 #: ../src/seahorse-key-manager.glade.h:7
+msgid "Keys I've Collected "
+msgstr "Collected Keys "
+
+#: ../src/seahorse-key-manager.glade.h:8
+msgid "My Personal Keys"
+msgstr "My Personal Keys"
+
+#: ../src/seahorse-key-manager.glade.h:9
 msgid "To get started with encryption you'll need keys."
 msgstr "To get started with encryption, you will need keys."
 
-#: ../src/seahorse-key-manager.glade.h:8
-#: ../src/seahorse-keyserver-results.c:296
+#: ../src/seahorse-key-manager.glade.h:10
+#: ../src/seahorse-keyserver-results.c:297
 msgid "_Import"
 msgstr "_Import"
 
@@ -2046,7 +2137,7 @@ msgid "_Signatures:"
 msgstr "_Signatures:"
 
 #: ../src/seahorse-keyserver-results.c:100
-#: ../src/seahorse-keyserver-results.c:175
+#: ../src/seahorse-keyserver-results.c:176
 msgid "Couldn't retrieve key data from key server"
 msgstr "Could not retrieve key data from key server"
 
@@ -2068,31 +2159,31 @@ msgstr "Imported %d keys into keyring"
 msgid "Save Remote Keys"
 msgstr "Save Remote Keys"
 
-#: ../src/seahorse-keyserver-results.c:284
+#: ../src/seahorse-keyserver-results.c:285
 msgid "_Close"
 msgstr "_Close"
 
-#: ../src/seahorse-keyserver-results.c:285
+#: ../src/seahorse-keyserver-results.c:286
 msgid "Close this window"
 msgstr "Close this window"
 
-#: ../src/seahorse-keyserver-results.c:297
+#: ../src/seahorse-keyserver-results.c:298
 msgid "Import selected keys to local keyring"
 msgstr "Import selected keys to local keyring"
 
-#: ../src/seahorse-keyserver-results.c:300
+#: ../src/seahorse-keyserver-results.c:301
 msgid "Save As..."
 msgstr "Save As..."
 
-#: ../src/seahorse-keyserver-results.c:301
+#: ../src/seahorse-keyserver-results.c:302
 msgid "Save selected keys as a file"
 msgstr "Save selected keys as a file"
 
-#: ../src/seahorse-keyserver-results.c:344
+#: ../src/seahorse-keyserver-results.c:345
 msgid "Remote Keys"
 msgstr "Remote Keys"
 
-#: ../src/seahorse-keyserver-results.c:346
+#: ../src/seahorse-keyserver-results.c:347
 #, c-format
 msgid "Remote Keys Containing '%s'"
 msgstr "Remote Keys Containing '%s'"
@@ -2101,11 +2192,19 @@ msgstr "Remote Keys Containing '%s'"
 msgid "Remote Encryption Keys"
 msgstr "Remote Encryption Keys"
 
-#: ../src/seahorse-keyserver-search.glade.h:1
+#: ../src/seahorse-keyserver-search.glade.h:2
+msgid "<b>Key Servers:</b>"
+msgstr "<b>Key Servers:</b>"
+
+#: ../src/seahorse-keyserver-search.glade.h:3
+msgid "<b>Shared Keys Near Me:</b>"
+msgstr "<b>Shared Keys Near Me:</b>"
+
+#: ../src/seahorse-keyserver-search.glade.h:4
 msgid "Find Remote Keys"
 msgstr "Find Remote Keys"
 
-#: ../src/seahorse-keyserver-search.glade.h:2
+#: ../src/seahorse-keyserver-search.glade.h:5
 msgid ""
 "This will find keys for others on the Internet. These keys can then be "
 "imported into your local key ring."
@@ -2113,11 +2212,15 @@ msgstr ""
 "This will find keys for others on the Internet. These keys can then be "
 "imported into your local key ring."
 
-#: ../src/seahorse-keyserver-search.glade.h:3
+#: ../src/seahorse-keyserver-search.glade.h:6
+msgid "Where to search:"
+msgstr "Where to search:"
+
+#: ../src/seahorse-keyserver-search.glade.h:7
 msgid "_Search"
 msgstr "_Search"
 
-#: ../src/seahorse-keyserver-search.glade.h:4
+#: ../src/seahorse-keyserver-search.glade.h:8
 msgid "_Search for keys containing: "
 msgstr "_Search for keys containing: "
 
