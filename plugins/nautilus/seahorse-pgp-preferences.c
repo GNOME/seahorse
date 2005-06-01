@@ -39,7 +39,7 @@ static const struct poptOption options[] = {
 	{ "cache", 'c', POPT_ARG_NONE | POPT_ARG_VAL, &show_cache, TRUE,
 	    N_("For internal use"), NULL },
 #endif 
-#ifdef WITH_AGENT    
+#ifdef WITH_SHARING   
 	{ "sharing", 's', POPT_ARG_NONE | POPT_ARG_VAL, &show_sharing, TRUE,
 	    N_("For internal use"), NULL },
 #endif 
