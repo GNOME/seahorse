@@ -25,7 +25,6 @@
 #include <stdio.h>
 #include <sys/wait.h>
 
-#include <gnome.h>
 #include <libgnomevfs/gnome-vfs.h>
 
 #include "seahorse-gpgmex.h"
@@ -746,6 +745,8 @@ seahorse_util_uris_package (const gchar* package, const char** uris)
     gchar *cmd;
     gchar *t;
     gchar *x;
+    GnomeVFSFileInfo *info;
+    GnomeVFSResult result;
     
     t = gnome_vfs_get_local_path_from_uri (package);
     x = g_shell_quote(t);
@@ -779,23 +780,32 @@ seahorse_util_uris_package (const gchar* package, const char** uris)
     r = g_spawn_command_line_sync (cmd, &out, NULL, &status, &err);
     g_free (cmd); 
     
-    if(out)
-    {
-        g_print(out);
-        g_free(out);
+    if (out) {
+        g_print (out);
+        g_free (out);
     }
     
     if (!r) {
-        seahorse_util_handle_error(err, _("Couldn't run file-roller"));
-        return FALSE;   
-    }
-    
-    if(!(WIFEXITED(status) && WEXITSTATUS(status) == 0)) {
-        seahorse_util_show_error(NULL, _("The file-roller process did not complete successfully"));
+        seahorse_util_handle_error (err, _("Couldn't run file-roller"));
         return FALSE;
     }
     
-    return TRUE;        
+    if (!(WIFEXITED (status) && WEXITSTATUS (status) == 0)) {
+        seahorse_util_show_error (NULL, _("The file-roller process did not complete successfully"));
+        return FALSE;
+    }
+    
+    info = gnome_vfs_file_info_new ();
+	info->permissions = GNOME_VFS_PERM_USER_READ | GNOME_VFS_PERM_USER_WRITE;
+	result = gnome_vfs_set_file_info (package, info, GNOME_VFS_SET_FILE_INFO_PERMISSIONS);
+    gnome_vfs_file_info_unref (info);
+	    
+	if (result != GNOME_VFS_OK) {
+    	seahorse_util_handle_error (err, _("Couldn't set permissions on backup file."));
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 GtkWidget*
