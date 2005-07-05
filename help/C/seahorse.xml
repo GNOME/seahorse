@@ -122,8 +122,7 @@
 		<itemizedlist>
 			<listitem><para><xref linkend="encrypt-te"/></para></listitem>
 			<listitem><para><xref linkend="sign-te"/></para></listitem>
-			<listitem><para><xref linkend="decrypt-te"/></para></listitem>
-			<listitem><para><xref linkend="verify-te"/></para></listitem>
+			<listitem><para><xref linkend="decrypt/verify-te"/></para></listitem>
 		</itemizedlist>
 		<!-- note>Most &key; management features can be found in the <xref linkend="key-properties"/>.</note -->
 	</sect1>
@@ -222,8 +221,8 @@
 								Enter your full name in the form
 								<programlisting>&lt;first&gt; &lt;last&gt;</programlisting>
 								A middle name or initial is optional.
-								You must enter at least 5 
-								characters in this field. 
+								<note>You must enter at least 5 
+								characters in this field.</note> 
 							</para>
 						</listitem>
 					</varlistentry>
@@ -235,8 +234,9 @@
 								people will locate your key on a
 								key server or other key provider.
 								Make sure it is correct before
-								continuing. It should be of the form 
-								<programlisting>&lt;user name&gt;@&lt;domain name&gt;</programlisting>
+								continuing. 
+								<note>It should be of the form 
+								<programlisting>&lt;user name&gt;@&lt;domain name&gt;</programlisting></note>
 							</para>
 						</listitem>
 					</varlistentry>
@@ -316,9 +316,9 @@
 								reasonable time to set it to is 6 
 								months.  You will have to generate a new 
 								key after this amount of time passes.  
-								Sign your new key with your old one 
+								<note>Sign your new key with your old one 
 								before it expires to preserve your trust 
-								status.
+								status.</note>
 							</para>
 						</listitem>
 					</varlistentry>
@@ -385,8 +385,9 @@
 					<guimenuitem>Backup Keyrings</guimenuitem>
 				</menuchoice>
 				.  Enter a file name with a valid archive extenision and specify the 
-				location to save the archive.  You can choose any of the archive types 
-				<application>file-roller</application> supports.
+				location to save the archive.  
+				<note>You can choose any of the archive types 
+				<application>file-roller</application> supports.</note>
 			</para>
 		</sect2>
 		<sect2 id="key-properties">
@@ -675,7 +676,58 @@
 	</sect1>
 	<sect1 id="text-editor">
 		<title>Text Editor</title>
-		<para>Write me: This section will detail using the gedit plug-in</para>
+		<para>
+			To enable the &project; plugin in <command>gedit</command> choose
+			<menuchoice>
+				<guimenu>Edit</guimenu>
+				<guimenuitem>Preferences</guimenuitem>
+			</menuchoice>
+			.  Then select the tab <guilabel>Plugin</guilabel> and check <guilabel>Text 
+			Encryption</guilabel>.
+		</para>
+		<sect2 id="encrypt-te">
+			<title>Encrypt Text</title>
+			<para>
+				To encrypt a selection of text, select the text you want to encrypt and 
+				choose
+				<menuchoice>
+					<guimenu>Edit</guimenu>
+					<guimenuitem>Encrypt</guimenuitem>
+				</menuchoice>
+				.  You will then be presented with a dialog containing a list of 
+				recipients.  Check the boxes next to the people you want to encrypt text 
+				to and press <guilabel>Ok</guilabel>. You can now copy or save the 
+				encrypted text.
+			</para>
+		</sect2>
+		<sect2 id="sign-te">
+			<title>Sign Text</title>
+			<para>
+				To sign a selection of text, select the text you want to sign and 
+				choose
+				<menuchoice>
+					<guimenu>Edit</guimenu>
+					<guimenuitem>Sign</guimenuitem>
+				</menuchoice>
+				.  You will then be prompted for the passphrase to your secret key. 	
+				After entering your passphrase you will be able copy or save the 
+				signed text.
+			</para>
+		</sect2>
+		<sect2 id="decrypt/verify-te">
+			<title>Decrypt/Verify Text</title>
+			<para>
+				To Decrypt and or Verify a selection of text, select the text you want 
+				to sign and choose
+				<menuchoice>
+					<guimenu>Edit</guimenu>
+					<guimenuitem>Decrypt/Verify</guimenuitem>
+				</menuchoice>
+				.  If you are decrypting text, you will then be prompted for the 
+				passphrase to your secret key. 	After entering your passphrase you
+				 will be able copy or save the decrypted text.
+			</para>
+		</sect2>
 	</sect1>
 	<sect1 id="prefs">
 		<title>Preferences</title>
