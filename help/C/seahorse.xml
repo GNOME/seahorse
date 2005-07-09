@@ -656,22 +656,43 @@
 	</sect1>
 	<sect1 id="file-manager">
 		<title>File Manager</title>
-		<para>Write me: This section will detail using the nautilus plug-in</para>
+		<para>
+			&project; offers integration with the GNOME file manager <command>nautilus</command>.  Because of this integration, you will be able to encrypt, decrypt, sign and verify files as well as import public keys from the file manager window without launching &app;.
+		</para>
 		<sect2 id="encrypt-fm">
 			<title>Encrypt Files</title>
-			<sect3 id="recipients">
-				<title>Choosing Recipients</title>
-				<para>Write me: recipients</para>
-			</sect3>
+			<para>
+				To encrypt files, select one or more files in the file manager, right 
+				click on any selected file and choose <guimenuitem>Encrypt</guimenuitem> 
+				from the context menu.  You will then be presented with a dialog 
+				allowing you to choose the people you would like to encrypt the file 
+				to.  Select them by marking the check box next to their name. Press 
+				<guibutton>OK</guibutton> to finish the process.
+			</para>
 		</sect2>
 		<sect2 id="sign-fm">
 			<title>Sign Files</title>
+			<para>
+				To sign files, select one or more files in the file manager, right 
+				click on any selected file and choose <guimenuitem>Sign</guimenuitem> 
+				from the context menu.  You will then be asked for your passphrase, if 
+				required.
+			</para>
 		</sect2>
 		<sect2 id="decrypt-fm">
 			<title>Decrypt Files</title>
+			<para>
+				To decrypt an encrypted file, double click on the appropriate file.  You will then be prompted for your passphrase, if required.
+			</para>
 		</sect2>
 		<sect2 id="verify-fm">
 			<title>Verify Signatures</title> 
+			<para>
+				To verify files, double click on the the detached signature file.
+			</para>
+			<note>Detached signature file names often take the form
+				<codelisting> &lt;file name to be verified&gt;.sig</codelisting>
+			</note>
 		</sect2>
 	</sect1>
 	<sect1 id="text-editor">
