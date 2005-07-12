@@ -11,7 +11,7 @@
 	<!ENTITY key "<glossterm>key</glossterm>">
 ]>
 
-<article id="index" lang="en">
+<article id="index" Lang="en">
 	<articleinfo>
 		<title>&project; Manual V&manrevision;</title>
 		<copyright>
@@ -390,7 +390,7 @@
 				<application>file-roller</application> supports.</note>
 			</para>
 		</sect2>
-		<sect2 id="key-properties">
+		<!--sect2 id="key-properties">
 			<title>Edit Key Properties</title>
 			<para>Write me: key-properties</para>
 			<variablelist>
@@ -652,7 +652,7 @@
 					</listitem>
 				</varlistentry>
 			</variablelist>
-		</sect2>
+		</sect2-->
 	</sect1>
 	<sect1 id="file-manager">
 		<title>File Manager</title>
@@ -751,30 +751,169 @@
 		</sect2>
 	</sect1>
 	<sect1 id="prefs">
-		<title>Preferences</title>
-		<para>Write me: preferences</para>
-		<sect2 id="ascii-armor">
-			<title>Ascii Armor</title>
-			<para>Write me</para>
+		<title>Encryption Preferences</title>
+		<para>
+			This section describes the preferences settable with
+			<menuchoice>
+				<guimenu>Desktop</guimenu>
+				<guimenuitem>Preferences</guimenuitem>
+				<guimenuitem>Encryption Preferences</guimenuitem>
+			</menuchoice> from the panel or
+			<menuchoice>
+				<guimenu>Edit</guimenu>
+				<guimenuitem>Preferences</guimenuitem>
+			</menuchoice> from within &app;.
+		</para>
+		<sect2 id="key-manager">
+			<title>Key Manager</title>
+			<para>These options control which columns are visible in the key manager.</para>
+			<sect3>
+				<title>Validity</title>
+				<para>
+					Validity is an indicator of how well you know the key belongs to 
+					the person claiming it as their own.  Do not mark a key as 
+					ultimately valid unless you are 100% sure it belongs to the 
+					appropriate person.  Validity affects the trustworthiness of a 
+					key's signature.
+				</para>
+			</sect3>
+			<sect3>
+				<title>Expires</title>
+				<para>
+					The date after which a key can no longer be used to encrypt to 	
+					or be used to make signatures.
+				</para>
+			</sect3>
+			<sect3>
+				<title>Trust</title>
+				<para>
+					This is the level at which you trust the person to verify the 
+					identity of other people when they sign keys and set the 
+					validity level correctly and with proper procedures.
+				</para>
+			</sect3>
+			<sect3>
+				<title>Type</title>
+				<para>
+					Whether the key is an OpenPGP key or a S/MIME certificate.  
+				</para>
+				<note>
+					Certificates are not yet supported.
+				</note>
+			</sect3>
 		</sect2>
-		<sect2 id="default-key">
-			<title>Default Key</title>
-			<para>Write me</para>
+		<sect2 id="encryption-settings">
+			<title>Encryption Settings</title>
+			<para>
+				This section describes settings affecting encrypting and signing 
+				files.				
+			</para>
+			<sect3>
+				<title>Encrypt to Self</title>
+				<para>
+					Sets whether or not you will be added to the recipients list for 
+					all files encrypted by &app;. 
+				</para>
+				<note>
+					If you don't select this and you don't select yourself as a 
+					recipient you will be unable to decrypt any files you encrypt.
+				</note>
+			</sect3>
+			<sect3>
+				<title>Armor Encode Files</title>
+				<para>
+					Whether or not files are ASCII armored or not when encrypted.  
+					Armoring encrypted files is generally a good idea because some 
+					binary files do not always make it through email intact.
+				</para>
+			</sect3>
+			<sect3>
+				<title>Default Signing Key</title>
+				<para>
+					This is the key that will be used by &app; to sign files.  It 
+					will also be the key that files will be encrypted to if 
+					<guilabel>Encrypt to Self</guilabel> is selected.
+				</para>
+			</sect3>
+		</sect2>
+		<sect2 id="password-cache">
+			<title>Password Cache</title>
+			<para>
+				Enabling &project;'s passphrase caching ability will allow you to 
+				perform many operations that require entering your passphrase without 
+				rentering it every time.  <command>seahorse-daemon</command> takes the 
+				place of <command>gpg-agent</command>.  Letting the cached passphrases 
+				expire is usually a good idea.  This will then require rentering your 
+				passphrase, but adds security.   
+			</para>
+		</sect2>
+		<sect2 id="key-servers">
+			<title>Key Servers</title>
+			<para>
+				Keep your and other's keys up to date by syncing keys periodically with 
+				remote keyservers.  Syncing will make sure that you have the latest 
+				signatures made on all of your keys so that the web of trust will be the 
+				most useful.
+			</para>
+			<sect3>
+				<title>Server Types</title>
+				<para>
+					&project; currently provides support for HKP and LDAP keyservers.
+				</para>
+			<sect4>
+				<title>HKP Servers</title>
+				<para>
+					HKP keyservers are ordinary web based keyservers such as the 
+					popular <ulink url="hkp://pgp.mit.edu:11371" type="hkp">hkp://
+					pgp.mit.edu:11371</ulink>; Also accessable at <ulink url="http://
+					pgp.mit.edu" type="http">http://pgp.mit.edu</ulink>.
+				</para>
+			</sect4>
+			<sect4>
+				<title>LDAP Keyservers</title>
+				<para>
+					LDAP keyservers are less common, but use the standard LDAP 
+					protocol to serve keys. <ulink url="ldap://keyserver.pgp.com" 
+					type="ldap">ldap://keyserver.pgp.com</ulink> is a good LDAP 
+					server. 
+				</para>
+			</sect4>
+			</sect3>
+		</sect2>
+		<sect2 id="key-sharing">
+			<title>Key Sharing</title>
+			<para>
+				Key Sharing is provided by DNS-SD also known as Bonjour or Rendevous.  
+				Enabling key sharing will add the local &app; users' public key rings 
+				to the remote search dialog.  Using these local "key servers" will most 
+				likely be faster than accessing remote servers.
+			</para>
+			<note>
+				To enable key sharing, you must have started <command>mDNSResponder
+				</command> before <command>seahorse-daemon</command>.
+			</note>
 		</sect2>
 	</sect1>
 	<sect1 id="about">
 		<title>About &app;</title>
-		<para> &app; was written by Jacob Perkins.  The current maintainer is Nate Nielsen.
-		To find more information about Seahorse, please visit the 
-		<ulink url="http://seahorse.sourceforge.net" type="http">&app; web page</ulink>.</para>
-		<para>To report a bug or make a suggestion regarding this application or this manual,
-		follow the directions in this
-		<ulink url="ghelp:gnome-feedback" type="help">document</ulink>.</para>
-		<para> This program is distributed under the terms of the GNU
-		General Public license as published by the Free Software
-		Foundation; either version 2 of the License, or (at your option)
-		any later version. A copy of this license can be found at this
-		<ulink url="ghelp:gpl" type="help">link</ulink>, or in the file
-		COPYING included with the source code of this program.</para>
+		<para> 
+			&project; was written by Jacob Perkins.  The current maintainer is Nate 
+			Nielsen.  This manual is by Adam Schreiber.  The project's web site was designed 
+			by Jim Pharis.	To find more information about Seahorse, please visit the 
+			<ulink url="http://seahorse.sourceforge.net" type="http">&project; web page</ulink>.
+		</para>
+		<para>
+			To report a bug or make a suggestion regarding this application or this manual,
+			follow the directions in this
+			<ulink url="ghelp:gnome-feedback" type="help">document</ulink>.
+		</para>
+		<para> 
+			This program is distributed under the terms of the GNU
+			General Public license as published by the Free Software
+			Foundation; either version 2 of the License, or (at your option)
+			any later version. A copy of this license can be found at this
+			<ulink url="ghelp:gpl" type="help">link</ulink>, or in the file
+			COPYING included with the source code of this program.
+		</para>
 	</sect1>
 </article>
