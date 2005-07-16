@@ -367,9 +367,54 @@ start_agent (GtkWidget *widget, gpointer data)
         handle_error (NULL, _("The 'seahorse-daemon' program exited unsucessfully."));
     else {
         /* Show the next message about starting up automatically */
-        gtk_widget_hide (gtk_widget_get_parent (widget));
+        gtk_widget_hide (gtk_widget_get_parent (gtk_widget_get_parent (widget)));
         gtk_widget_show (GTK_WIDGET (data));
     }
+}
+
+/* Generate the Hand Cursor */
+void
+set_hand_cursor_on_realize(GtkWidget *widget, gpointer user_data)
+{
+    GdkCursor *cursor;
+
+    cursor = gdk_cursor_new (GDK_HAND2);
+    gdk_window_set_cursor (GTK_BUTTON (widget)->event_window, cursor);
+    gdk_cursor_unref (cursor);
+}
+
+/* Find button label, underline and paint it blue. 
+ * TODO: Get the system theme link color and use that instead of default blue.
+ **/
+void
+paint_button_label_as_link (GtkButton *button, GtkLabel *label)
+{
+    const gchar * button_text;
+    gchar *markup;
+    
+    button_text = gtk_label_get_label (label);
+    
+    markup = g_strdup_printf ("<u>%s</u>", button_text);
+    gtk_label_set_markup (GTK_LABEL (label), markup);
+    g_free (markup);
+
+    GdkColor *link_color;
+    GdkColor blue = { 0, 0x0000, 0x0000, 0xffff }; /* Default color */
+
+    /* Could optionaly set link_color to the current theme color... */
+    link_color = &blue;
+
+    gtk_widget_modify_fg (GTK_WIDGET (label),
+                  GTK_STATE_NORMAL, link_color);
+    gtk_widget_modify_fg (GTK_WIDGET (label),
+                  GTK_STATE_ACTIVE, link_color);
+    gtk_widget_modify_fg (GTK_WIDGET (label),
+                  GTK_STATE_PRELIGHT, link_color);
+    gtk_widget_modify_fg (GTK_WIDGET (label),
+                  GTK_STATE_SELECTED, link_color);
+
+    if (link_color != &blue)
+        gdk_color_free (link_color);
 }
 
 /* Initialize the cache tab */
@@ -393,10 +438,39 @@ seahorse_prefs_cache (SeahorseContext *ctx, SeahorseWidget *widget)
     g_signal_connect_after (w , "toggled", G_CALLBACK (control_disable),
                             glade_xml_get_widget (widget->xml, "ttl"));
 
+    /* Setup daemon button visuals */
+    w = glade_xml_get_widget (widget->xml, "session-link");
+    g_return_if_fail (w != NULL);
+    
+    w2 = glade_xml_get_widget (widget->xml, "label-start-seahorse-daemon");
+    g_return_if_fail (w2 != NULL);
+    
+    paint_button_label_as_link (GTK_BUTTON (w), GTK_LABEL(w2));
+    g_signal_connect (GTK_WIDGET (w)
+                      , "realize"
+                      , G_CALLBACK (set_hand_cursor_on_realize)
+                      , NULL);
+
+    w = glade_xml_get_widget (widget->xml, "start-link");
+    g_return_if_fail (w != NULL);
+    
+    w2 = glade_xml_get_widget (widget->xml, "label-session-properties");
+    g_return_if_fail (w2 != NULL);
+    
+    paint_button_label_as_link (GTK_BUTTON (w), GTK_LABEL(w2));
+    g_signal_connect (GTK_WIDGET (w)
+                      , "realize"
+                      , G_CALLBACK (set_hand_cursor_on_realize)
+                      , NULL);
+    /* End -- Setup daemon button visuals */
+    
     setup_spinner_control (ctx, widget, "ttl", SETTING_TTL);
     setup_check_control (ctx, widget, "use-cache", SETTING_CACHE);
     setup_check_control (ctx, widget, "expire", SETTING_EXPIRE);
     setup_check_control (ctx, widget, "authorize", SETTING_AUTH);
+
+    glade_xml_signal_connect_data (widget->xml, "on_session_link",
+                                   G_CALLBACK (show_session_properties), NULL);
 
     switch (which_agent_running ()) {
       
@@ -409,8 +483,6 @@ seahorse_prefs_cache (SeahorseContext *ctx, SeahorseWidget *widget)
         glade_xml_signal_connect_data (widget->xml, "on_start_link",
                                        G_CALLBACK (start_agent),
                                        glade_xml_get_widget (widget->xml, "agent-started"));
-        glade_xml_signal_connect_data (widget->xml, "on_session_link",
-                                       G_CALLBACK (show_session_properties), NULL);
         break;
     
     /* We disable the agent preferences completely */
@@ -423,6 +495,7 @@ seahorse_prefs_cache (SeahorseContext *ctx, SeahorseWidget *widget)
    
     /* Seahorse agent running, behave normally */
     case AGENT_SEAHORSE:
+        gtk_widget_show (GTK_WIDGET (glade_xml_get_widget (widget->xml, "agent-started")));
         break;
         
     default:
