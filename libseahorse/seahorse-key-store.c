@@ -415,8 +415,9 @@ seahorse_key_store_key_added (SeahorseKeySource *sksrc, SeahorseKey *skey, Seaho
 static void
 seahorse_key_store_key_removed (SeahorseKeySource *sksrc, SeahorseKey *skey, SeahorseKeyStore *skstore)
 {
-    SeahorseKeyRow *skrow = (SeahorseKeyRow*)g_hash_table_lookup (skstore->priv->rows, skey);
-	seahorse_key_row_remove_all (skrow);
+	SeahorseKeyRow *skrow = (SeahorseKeyRow*)g_hash_table_lookup (skstore->priv->rows, skey);
+	if(skrow)
+		seahorse_key_row_remove_all (skrow);
 }
 
 /* Calls virtual |changed| for all relevant uids. adds new uids if necessary */
