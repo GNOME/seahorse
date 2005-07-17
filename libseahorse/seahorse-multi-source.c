@@ -367,6 +367,7 @@ static void
 source_key_removed (SeahorseKeySource *sksrc, SeahorseKey *skey, SeahorseMultiSource *msrc)
 {
     g_return_if_fail (SEAHORSE_IS_MULTI_SOURCE (msrc));
+    g_return_if_fail (SEAHORSE_IS_KEY (skey));
     seahorse_key_source_removed (SEAHORSE_KEY_SOURCE (msrc), skey);
 }
 
