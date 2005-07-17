@@ -416,7 +416,8 @@ static void
 seahorse_key_store_key_removed (SeahorseKeySource *sksrc, SeahorseKey *skey, SeahorseKeyStore *skstore)
 {
     SeahorseKeyRow *skrow = (SeahorseKeyRow*)g_hash_table_lookup (skstore->priv->rows, skey);
-	seahorse_key_row_remove_all (skrow);
+    if (skrow)
+	    seahorse_key_row_remove_all (skrow);
 }
 
 /* Calls virtual |changed| for all relevant uids. adds new uids if necessary */
@@ -828,6 +829,7 @@ key_from_iterator (GtkTreeModel* model, GtkTreeIter* iter, guint *uid)
 {
     GtkTreeIter i;
     SeahorseKeyRow *skrow;
+    SeahorseKey *return_key = NULL;
     
     /* Convert to base iter if necessary */
     if (!SEAHORSE_IS_KEY_STORE (model)) {
@@ -840,8 +842,9 @@ key_from_iterator (GtkTreeModel* model, GtkTreeIter* iter, guint *uid)
     
     gtk_tree_model_get (model, iter, 
         KEY_STORE_DATA, &skrow, uid ? KEY_STORE_UID : -1, uid, -1);    
-
-   return skrow->skey;
+    if (skrow)
+        return_key = skrow->skey;
+    return return_key;
 }
 
 
@@ -1132,4 +1135,3 @@ seahorse_key_store_get_base_iter(SeahorseKeyStore* skstore, GtkTreeIter* base_it
     gtk_tree_model_sort_convert_iter_to_child_iter (skstore->priv->sort, &i, (GtkTreeIter*)iter);
     gtk_tree_model_filter_convert_iter_to_child_iter (skstore->priv->filter, base_iter, &i);
 }
-
