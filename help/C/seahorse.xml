@@ -2,18 +2,18 @@
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
 "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
 	<!ENTITY legal SYSTEM "legal.xml">
-	<!ENTITY appversion "0.9.0">
+	<!ENTITY appversion "0.8.0">
 	<!ENTITY manrevision "3.0">
 	<!ENTITY date "July 2005">
 	<!ENTITY app "<application>seahorse</application>">
-	<!ENTITY daemon "<application>seahorse-daemon</application>">
+	<!ENTITY daemon "<application>seahorse-agent</application>">
 	<!ENTITY project "Seahorse">
 	<!ENTITY key "<glossterm>key</glossterm>">
 ]>
 
 <article id="index" Lang="en">
 	<articleinfo>
-		<title>&project; Manual V&manrevision;</title>
+		<title>&project; Manual</title>
 		<copyright>
 			<year>2005</year>
 			<holder>Jacob Perkins and Adam Schreiber</holder>
@@ -86,12 +86,11 @@
 		<title>Introduction</title>
 		<para>
 			&project; is a GNOME2 project that provides integration of 
-			<ulink url="http://www.gnupg.org" type="http">Gnu Privacy Guard (GPG)</ulink>
+			<ulink url="http://www.gnupg.org" type="http">Gnu Privacy Guard</ulink> (GPG)
 			with the <ulink url="http://www.gnome.org">GNOME</ulink> desktop.
 			&project; includes &app;, a GPG key management front end, 
 			&daemon;, a drop in replacement for <command>gpg-agent</command> as well as a 
-			DNS-SD HKP &key; server, and plug-ins for <guimenuitem>Text Editor
-			</guimenuitem> and <application>nautilus</application>.
+			plug-ins for <guimenuitem>Text Editor</guimenuitem> and <application>nautilus</application>.
 		</para> 
 		<para>
 			In <xref linkend="keymanager"/> learn how to perform the following tasks in 
@@ -879,19 +878,6 @@
 				</para>
 			</sect4>
 			</sect3>
-		</sect2>
-		<sect2 id="key-sharing">
-			<title>Key Sharing</title>
-			<para>
-				Key Sharing is provided by DNS-SD also known as Bonjour or Rendevous.  
-				Enabling key sharing will add the local &app; users' public key rings 
-				to the remote search dialog.  Using these local "key servers" will most 
-				likely be faster than accessing remote servers.
-			</para>
-			<note>
-				To enable key sharing, you must have started <command>mDNSResponder
-				</command> before <command>seahorse-daemon</command>.
-			</note>
 		</sect2>
 	</sect1>
 	<sect1 id="about">
