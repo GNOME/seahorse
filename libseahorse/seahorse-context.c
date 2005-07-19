@@ -232,6 +232,7 @@ seahorse_context_own_source (SeahorseContext *sctx, SeahorseKeySource *sksrc)
 SeahorseKeySource*   
 seahorse_context_get_key_source (SeahorseContext *sctx)
 {
+    g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), NULL);
     g_return_val_if_fail (sctx->priv->source != NULL, NULL);
     return sctx->priv->source;
 }
