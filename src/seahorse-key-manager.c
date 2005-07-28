@@ -285,16 +285,18 @@ sign_activate (GtkWidget *widget, SeahorseWidget *swidget)
 	seahorse_sign_show (swidget->sctx, list);
 }
 
-#ifdef WITH_KEYSERVER
 static void
 search_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
+#ifdef WITH_KEYSERVER
     seahorse_keyserver_search_show (swidget->sctx);
+#endif
 }
 
 static void
 sync_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
+#ifdef WITH_KEYSERVER
 	GList *list = NULL;
     GtkTreeView *view;
     
@@ -304,8 +306,8 @@ sync_activate (GtkWidget *widget, SeahorseWidget *swidget)
     if (list == NULL)
         list = seahorse_key_store_get_all_keys (view);
     seahorse_keyserver_sync_show (swidget->sctx, list);
-}
 #endif
+}
 
 /* Loads delete dialog if a key is selected */
 static void
@@ -649,7 +651,6 @@ static GtkActionEntry private_entries[] = {
 };
 
 static GtkActionEntry remote_entries[] = {
-
     { "remote-menu", NULL, N_("_Remote") },
     { "remote-find", GTK_STOCK_FIND, N_("_Find Remote Keys..."), "",
             N_("Search for keys on a key server"), G_CALLBACK (search_activate) }, 
