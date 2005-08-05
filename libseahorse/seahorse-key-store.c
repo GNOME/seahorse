@@ -371,14 +371,19 @@ static void
 seahorse_key_store_set (SeahorseKeyStore *skstore, SeahorseKey *skey, 
                         guint uid, GtkTreeIter *iter)
 {
-    gchar *userid = seahorse_key_get_userid (skey, uid);
-    gboolean pair = SEAHORSE_IS_KEY_PAIR(skey);
+    gchar *userid = seahorse_key_get_name (skey, uid);
+    gboolean sec = seahorse_key_get_keytype (skey) == SKEY_PRIVATE;
+    
+    const gchar *keyid = seahorse_key_get_keyid (skey);
+    if (strlen(keyid) > 8)
+        keyid = keyid + 8;
+        
 	gtk_tree_store_set (GTK_TREE_STORE (skstore), iter,
         KEY_STORE_CHECK, FALSE,
-        KEY_STORE_PAIR, uid == 0 ? pair : FALSE,
-        KEY_STORE_NOTPAIR, uid == 0 ? !pair : FALSE,
+        KEY_STORE_PAIR, uid == 0 ? sec : FALSE,
+        KEY_STORE_NOTPAIR, uid == 0 ? !sec : FALSE,
 		KEY_STORE_NAME, userid,
-		KEY_STORE_KEYID, seahorse_key_get_keyid (skey, 0),
+		KEY_STORE_KEYID, seahorse_key_get_keyid (skey),
         KEY_STORE_UID, uid, -1);
     g_free (userid);
 }
@@ -403,7 +408,7 @@ static void
 seahorse_key_store_key_added (SeahorseKeySource *sksrc, SeahorseKey *skey, SeahorseKeyStore *skstore)
 {
 	GtkTreeIter iter;
-	guint i, uids = seahorse_key_get_num_uids (skey);
+	guint i, uids = seahorse_key_get_num_names (skey);
  
     for (i = 0; i < uids; i++) {
     	if(!SEAHORSE_KEY_STORE_GET_CLASS (skstore)->append (skstore, skey, i, &iter))
@@ -430,7 +435,7 @@ seahorse_key_store_key_changed (SeahorseKey *skey, SeahorseKeyChange change, Sea
     GtkTreePath *path;
     
     old_uids = 0;
-    num_uids = seahorse_key_get_num_uids (skey);
+    num_uids = seahorse_key_get_num_names (skey);
     
     for (i = 0; i < skrow->refs->len; i++) {
         g_return_if_fail (g_ptr_array_index (skrow->refs, i) != NULL);

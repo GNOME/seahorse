@@ -195,12 +195,13 @@ static gboolean
 store_append (SeahorseKeyStore *skstore, SeahorseKey *skey, guint uid, GtkTreeIter *iter)
 {
     SeahorseKeyManagerStore *skms = SEAHORSE_KEY_MANAGER_STORE (skstore);
+    SeahorseKeyType ktype = seahorse_key_get_keytype (skey);
     gboolean keep = FALSE;
     GtkTreeIter child;
     
-    if ((skms->keytypes & KEYTYPE_PUBLIC) && !SEAHORSE_IS_KEY_PAIR (skey))
+    if ((skms->keytypes & KEYTYPE_PUBLIC) && ktype == SKEY_PUBLIC)
         keep = TRUE;
-    else if ((skms->keytypes & KEYTYPE_PRIVATE) && SEAHORSE_IS_KEY_PAIR (skey))
+    else if ((skms->keytypes & KEYTYPE_PRIVATE) && ktype == SKEY_PRIVATE)
         keep = TRUE;
     
     if (!keep)
@@ -234,12 +235,11 @@ store_set (SeahorseKeyStore *store, SeahorseKey *skey, guint uid, GtkTreeIter *i
     	validity = seahorse_key_get_validity (skey);
     	trust = seahorse_key_get_trust (skey);
     	
-    	if (skey->key->expired) {
+        if (seahorse_key_get_flags (skey) & SKEY_FLAG_EXPIRED) {
     		expires = g_strdup (_("Expired"));
     		expires_date = -1;
-    	}
-    	else {
-    		expires_date = skey->key->subkeys->expires;
+    	} else {
+    		expires_date = seahorse_key_get_expires (skey);
     		
     		if (expires_date == 0) {
     			expires = g_strdup ("");
@@ -251,7 +251,8 @@ store_set (SeahorseKeyStore *store, SeahorseKey *skey, guint uid, GtkTreeIter *i
         
         /* Only differentiate if the view shows more than one type of key */
         if ((skms->keytypes & KEYTYPE_PUBLIC) && (skms->keytypes & KEYTYPE_PRIVATE)) {
-            if (SEAHORSE_IS_KEY_PAIR (skey)) 
+            /* TODO: Once we get more than one type of key this is invalid */
+            if (seahorse_key_get_keytype (skey) == SKEY_PRIVATE) 
                 type = _("Private PGP Key");
             else 
                 type = _("Public PGP Key");

@@ -252,8 +252,8 @@ static void
 properties_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
 	SeahorseKey *skey = get_selected_key (swidget, NULL);
-	if (skey != NULL)
-		seahorse_key_properties_new (swidget->sctx, skey);
+	if (skey != NULL && SEAHORSE_IS_PGP_KEY (skey))
+		seahorse_key_properties_new (swidget->sctx, SEAHORSE_PGP_KEY (skey));
 }
 
 /* Loads export dialog if a key is selected */
@@ -374,10 +374,10 @@ delete_activate (GtkWidget *widget, SeahorseWidget *swidget)
         guint uid;
         
         skey = get_selected_key (swidget, &uid);
-        if (uid > 0) 
-            seahorse_delete_userid_show (swidget->sctx, skey, uid);
+        if (uid > 0 && SEAHORSE_IS_PGP_KEY (skey)) 
+            seahorse_delete_userid_show (swidget->sctx, SEAHORSE_PGP_KEY (skey), uid);
         else    
-        	seahorse_delete_show (swidget->sctx, keys);
+            seahorse_delete_show (swidget->sctx, keys);
 
     /* Multiple keys */
     } else {    
@@ -391,16 +391,16 @@ static void
 add_uid_activate (GtkMenuItem *item, SeahorseWidget *swidget)
 {
 	SeahorseKey *skey = get_selected_key (swidget, NULL);
-	if (skey != NULL)
-		seahorse_add_uid_new (swidget->sctx, skey);
+	if (skey != NULL && SEAHORSE_IS_PGP_KEY (skey))
+		seahorse_add_uid_new (swidget->sctx, SEAHORSE_PGP_KEY (skey));
 }
 
 static void
 add_revoker_activate (GtkMenuItem *item, SeahorseWidget *swidget)
 {
 	SeahorseKey *skey = get_selected_key (swidget, NULL);
-	if (skey != NULL)
-		seahorse_add_revoker_new (swidget->sctx, skey);
+	if (skey != NULL && SEAHORSE_IS_PGP_KEY (skey))
+		seahorse_add_revoker_new (swidget->sctx, SEAHORSE_PGP_KEY (skey));
 }
 
 /* Loads preferences dialog */
@@ -500,8 +500,8 @@ row_activated (GtkTreeView *treeview, GtkTreePath *path, GtkTreeViewColumn *arg2
     g_return_if_fail (view != NULL);
 	
 	skey = seahorse_key_store_get_key_from_path (view, path, NULL);
-	if (skey != NULL)
-		seahorse_key_properties_new (swidget->sctx, skey);
+	if (skey != NULL && SEAHORSE_IS_PGP_KEY (skey))
+		seahorse_key_properties_new (swidget->sctx, SEAHORSE_PGP_KEY (skey));
 }
 
 static void
@@ -528,7 +528,7 @@ selection_changed (GtkTreeSelection *notused, SeahorseWidget *swidget)
 	
 	if (rows == 1) {
 		skey = get_selected_key (swidget, NULL);
-		secret = (skey != NULL && SEAHORSE_IS_KEY_PAIR (skey));
+		secret = (skey != NULL && seahorse_key_get_keytype (skey) == SKEY_PRIVATE);
 	}
     
     actions = seahorse_widget_find_actions (swidget, "key");

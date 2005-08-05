@@ -31,10 +31,11 @@
 #include "seahorse-pgp-source.h"
 #include "seahorse-operation.h"
 #include "seahorse-util.h"
-#include "seahorse-key.h"
-#include "seahorse-key-pair.h"
+#include "seahorse-pgp-key.h"
 #include "seahorse-libdialogs.h"
 #include "seahorse-gpg-options.h"
+
+/* TODO: Verify properly that all keys we deal with are PGP keys */
 
 /* Set to one to print refresh/monitoring status on console */
 #define DEBUG_REFRESH_CODE 0
@@ -112,7 +113,7 @@ static void seahorse_pgp_source_finalize   (GObject *gobject);
 /* SeahorseKeySource methods */
 static void         seahorse_pgp_source_stop        (SeahorseKeySource *src);
 static guint        seahorse_pgp_source_get_state   (SeahorseKeySource *src);
-SeahorseKey*        seahorse_pgp_source_get_key     (SeahorseKeySource *source,
+static SeahorseKey* seahorse_pgp_source_get_key     (SeahorseKeySource *source,
                                                      const gchar *fpr);
 static GList*       seahorse_pgp_source_get_keys    (SeahorseKeySource *src,
                                                      gboolean secret_only);
@@ -326,7 +327,7 @@ key_changed (SeahorseKey *skey, SeahorseKeyChange change, SeahorsePGPSource *psr
      * need to reload in that case */
      
     if (change != SKEY_CHANGE_ALL)
-        seahorse_key_source_refresh_async (SEAHORSE_KEY_SOURCE (psrc), seahorse_key_get_id (skey->key));
+        seahorse_key_source_refresh_async (SEAHORSE_KEY_SOURCE (psrc), seahorse_key_get_keyid (skey));
 }
 
 /* A #SeahorseKey has been destroyed. Remove it */
@@ -336,7 +337,7 @@ key_destroyed (GObject *object, SeahorsePGPSource *psrc)
     SeahorseKey *skey;
     skey = SEAHORSE_KEY (object);
 
-    remove_key_from_source (seahorse_key_get_id (skey->key), skey, psrc);
+    remove_key_from_source (seahorse_key_get_keyid (skey), skey, psrc);
 }
 
 /* Release a key from our internal tables */
@@ -358,71 +359,50 @@ have_key_in_source (SeahorsePGPSource *psrc, const gchar *id, gboolean secret)
     SeahorseKey *skey;
     g_return_val_if_fail (SEAHORSE_IS_PGP_SOURCE (psrc), FALSE);
     skey = SEAHORSE_KEY (g_hash_table_lookup (psrc->priv->keys, id));
-    return skey && (!secret || SEAHORSE_IS_KEY_PAIR (skey));
+    return skey && (!secret || seahorse_key_get_keytype (skey) == SKEY_PRIVATE);
 }
 
 /* Add a key to our internal tables, possibly overwriting or combining with other keys  */
 static void
 add_key_to_source (SeahorsePGPSource *psrc, gpgme_key_t key)
 {
-    SeahorseKey *prev;
-    SeahorseKey *skey;
+    SeahorsePGPKey *prev;
+    SeahorsePGPKey *pkey;
     const gchar *id;
     
-    id = seahorse_key_get_id (key);
+    id = seahorse_pgp_key_get_id (key, 0);
     
     g_return_if_fail (SEAHORSE_IS_PGP_SOURCE (psrc));
     prev = g_hash_table_lookup (psrc->priv->keys, id);
     
     /* Check if we can just replace the key on the object */
     if (prev != NULL) {
-        if (key->secret && SEAHORSE_IS_KEY_PAIR (prev)) {
-            g_object_set (prev, "secret", key, NULL);
-            return;
-        } else if (!key->secret) {
-            g_object_set (prev, "key", key, NULL);
-            return;
-        }
+        if (key->secret) 
+            g_object_set (prev, "seckey", key, NULL);
+        else
+            g_object_set (prev, "pubkey", key, NULL);
+        return;
     }
-        
-    /* 
-     * When listing the keys we get public and private keys separately
-     * which is a bummer. We need to pair up any private keys with 
-     * their appropriate public keys. 
-     * 
-     * Because a secret key without a public key is an invalid state 
-     * as far as seahorse is concerned, we need to perform additional
-     * logic to find the public key immediately when a secret key is loaded.
-     */
-     
+
+    /* Create a new key with secret */    
     if (key->secret) {
+        pkey = seahorse_pgp_key_new (SEAHORSE_KEY_SOURCE (psrc), NULL, key);
 
-        /* We make a key pair. If no public key was present, then just 
-         * make a key pair with the secret key twice. The public key
-         * will be loaded later and fix it up. */
-        skey = seahorse_key_pair_new (SEAHORSE_KEY_SOURCE (psrc), 
-                                      prev ? prev->key : key, key);
-
+    /* Just a new public key */
     } else {
-       
-        /* A public key */
-        skey = seahorse_key_new (SEAHORSE_KEY_SOURCE (psrc), key);
+        pkey = seahorse_pgp_key_new (SEAHORSE_KEY_SOURCE (psrc), key, NULL);
     }
-
-    /* If we had a previous key then remove it */
-    if (prev) 
-        remove_key_from_source (id, prev, psrc);
-        
+ 
     /* Add to lookups */ 
-    g_hash_table_replace (psrc->priv->keys, g_strdup (id), skey);     
+    g_hash_table_replace (psrc->priv->keys, g_strdup (id), pkey);     
 
     /* This stuff is 'undone' in release_key */
-    g_object_ref (skey);
-    g_signal_connect (skey, "changed", G_CALLBACK (key_changed), psrc);             
-    g_signal_connect_after (skey, "destroy", G_CALLBACK (key_destroyed), psrc);            
+    g_object_ref (pkey);
+    g_signal_connect (pkey, "changed", G_CALLBACK (key_changed), psrc);             
+    g_signal_connect_after (pkey, "destroy", G_CALLBACK (key_destroyed), psrc);            
     
     /* notify observers */
-    seahorse_key_source_added (SEAHORSE_KEY_SOURCE (psrc), skey);
+    seahorse_key_source_added (SEAHORSE_KEY_SOURCE (psrc), SEAHORSE_KEY (pkey));
 }
 
 /* Callback for copying our internal key table to a list */
@@ -436,7 +416,7 @@ keys_to_list (const gchar *id, SeahorseKey *skey, GList **l)
 static void
 secret_keys_to_list (const gchar *id, SeahorseKey *skey, GList **l)
 {
-    if (SEAHORSE_IS_KEY_PAIR (skey))
+    if (skey->type == SKEY_PRIVATE)
         *l = g_list_append (*l, skey);
 }
 
@@ -444,7 +424,7 @@ secret_keys_to_list (const gchar *id, SeahorseKey *skey, GList **l)
 static void
 count_secret_keys (const gchar *id, SeahorseKey *skey, guint *n)
 {
-    if (SEAHORSE_IS_KEY_PAIR (skey))
+    if (skey->type == SKEY_PRIVATE)
         (*n)++;
 }
 
@@ -597,7 +577,7 @@ keyload_handler (SeahorseLoadOperation *lop)
             return FALSE; /* Remove event handler */
         }
         
-        id = seahorse_key_get_id (key);
+        id = seahorse_pgp_key_get_id (key, 0);
         
         /* During a refresh if only new or removed keys */
         if (lop->checks) {
@@ -648,7 +628,7 @@ key_ids_to_hash (const gchar *id, SeahorseKey *skey, GHashTable *ht)
 static void
 secret_key_ids_to_hash (const gchar *id, SeahorseKey *skey, GHashTable *ht)
 {
-    if (SEAHORSE_IS_KEY_PAIR (skey))
+    if (skey->type == SKEY_PRIVATE)
         g_hash_table_insert (ht, g_strdup(id), NULL);
 }
 
@@ -893,6 +873,7 @@ seahorse_pgp_source_export (SeahorseKeySource *sksrc, GList *keys,
 {
     SeahorseOperation *operation;
     SeahorsePGPSource *psrc;
+    SeahorsePGPKey *pkey;
     SeahorseKey *skey;
     gpgme_error_t gerr;
     gpgme_ctx_t new_ctx;
@@ -929,19 +910,21 @@ seahorse_pgp_source_export (SeahorseKeySource *sksrc, GList *keys,
 
     for (l = keys; l != NULL; l = g_list_next (l)) {
        
-        g_return_val_if_fail (SEAHORSE_IS_KEY (l->data), NULL);
-        skey = SEAHORSE_KEY (l->data);
-       
-        g_return_val_if_fail (seahorse_key_get_source (skey) == sksrc, NULL);
-
-        gerr = gpgme_op_export (new_ctx, seahorse_key_get_id (skey->key), 0, data);
+        g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (l->data), NULL);
+        pkey = SEAHORSE_PGP_KEY (l->data);
+        
+        skey = SEAHORSE_KEY (l->data);       
+        g_return_val_if_fail (skey->key_source == sksrc, NULL);
+        
+        gerr = gpgme_op_export (new_ctx, skey->keyid, 0, data);
 
         if (!GPG_IS_OK (gerr))
             break;
         
-        if (complete && SEAHORSE_IS_KEY_PAIR (skey)) {
-            gerr = gpgmex_op_export_secret (new_ctx, seahorse_key_pair_get_id (SEAHORSE_KEY_PAIR (skey)), 
-                                            data);
+        if (complete && skey->type == SKEY_PRIVATE) {
+            
+            gerr = gpgmex_op_export_secret (new_ctx, 
+                        seahorse_pgp_key_get_id (pkey->seckey, 0), data);
             
             if (!GPG_IS_OK (gerr))
                 break;

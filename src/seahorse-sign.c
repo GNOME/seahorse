@@ -52,7 +52,8 @@ ok_clicked (SeahorseWidget *swidget)
 	glade_xml_get_widget (swidget->xml, "expires"))))
 		options = options | SIGN_EXPIRES;
 	
-	err = seahorse_key_op_sign (skwidget->skey, skwidget->index, check, options);
+	err = seahorse_key_op_sign (SEAHORSE_PGP_KEY (skwidget->skey), 
+                                skwidget->index, check, options);
 	if (!GPG_IS_OK (err)) {
 		seahorse_util_handle_gpgme (err, _("Couldn't sign key"));
 		return FALSE;
@@ -69,24 +70,26 @@ seahorse_sign_show (SeahorseContext *sctx, GList *keys)
 	GtkWidget *question;
 	gint response;
 	GList *list = NULL;
-	SeahorseKey *skey;
+	SeahorsePGPKey *pkey;
 	SeahorseWidget *swidget;
 	gboolean do_sign = TRUE;
 	
 	for (list = keys; list != NULL; list = g_list_next (list)) {
-		skey = list->data;
+        g_return_if_fail (SEAHORSE_IS_PGP_KEY (list->data));
+		pkey = SEAHORSE_PGP_KEY (list->data);
 		
 		question = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
 			GTK_MESSAGE_QUESTION, GTK_BUTTONS_YES_NO,
 			_("Are you sure you want to sign all user IDs for %s?"),
-			seahorse_key_get_keyid (skey, 0));
+			seahorse_key_get_keyid (SEAHORSE_KEY (pkey)));
 		response = gtk_dialog_run (GTK_DIALOG (question));
 		gtk_widget_destroy (question);
 		
 		if (response != GTK_RESPONSE_YES)
 			break;
 		
-		swidget = seahorse_key_widget_new_with_index ("sign", sctx, skey, 0);
+		swidget = seahorse_key_widget_new_with_index ("sign", sctx, 
+                                                      SEAHORSE_KEY (pkey), 0);
 		g_return_if_fail (swidget != NULL);
 		
 		while (do_sign) {
@@ -109,7 +112,7 @@ seahorse_sign_show (SeahorseContext *sctx, GList *keys)
 }
 
 void
-seahorse_sign_uid_show (SeahorseContext *sctx, SeahorseKey *skey, const guint uid)
+seahorse_sign_uid_show (SeahorseContext *sctx, SeahorsePGPKey *pkey, guint uid)
 {
     GtkWidget *question;
     gint response;
@@ -121,7 +124,7 @@ seahorse_sign_uid_show (SeahorseContext *sctx, SeahorseKey *skey, const guint ui
     g_return_if_fail (uid > 0);
    
     /* ... Except for when calling this, which is messed up */
-    userid = seahorse_key_get_userid (skey, uid - 1);     
+    userid = seahorse_key_get_name (SEAHORSE_KEY (pkey), uid - 1);     
     question = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
                         GTK_MESSAGE_QUESTION, GTK_BUTTONS_YES_NO,
                         _("Are you sure you want to sign the '%s' user ID?"),
@@ -134,12 +137,13 @@ seahorse_sign_uid_show (SeahorseContext *sctx, SeahorseKey *skey, const guint ui
     if (response != GTK_RESPONSE_YES)
         return;
      
-    swidget = seahorse_key_widget_new_with_index ("sign", sctx, skey, uid);
+    swidget = seahorse_key_widget_new_with_index ("sign", sctx, 
+                                                  SEAHORSE_KEY (pkey), uid);
     g_return_if_fail (swidget != NULL);
         
     while (do_sign) {
         response = gtk_dialog_run (GTK_DIALOG (
-                glade_xml_get_widget (swidget->xml, swidget->name)));\
+                glade_xml_get_widget (swidget->xml, swidget->name)));
         switch (response) {
         case GTK_RESPONSE_HELP:
             break;

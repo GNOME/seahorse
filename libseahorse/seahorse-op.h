@@ -26,7 +26,6 @@
 #include <gpgme.h>
 
 #include "seahorse-key-source.h"
-#include "seahorse-key-pair.h"
 #include "seahorse-key.h"
 
 typedef gchar*    (*SeahorseEncryptFunc)    (GList              *keys,
@@ -59,23 +58,23 @@ gchar*      seahorse_op_encrypt_text        (GList              *keys,
                                              const gchar        *text,
                                              gpgme_error_t      *err);
 
-void        seahorse_op_sign_file           (SeahorseKeyPair    *signer,
+void        seahorse_op_sign_file           (SeahorseKey        *signer,
                                              const gchar        *path,
                                              const gchar        *spath,
                                              gpgme_error_t      *err);
 
-gchar*      seahorse_op_sign_text           (SeahorseKeyPair    *signer,
+gchar*      seahorse_op_sign_text           (SeahorseKey        *signer,
                                              const gchar        *text,
                                              gpgme_error_t      *err);
 
 void        seahorse_op_encrypt_sign_file   (GList              *keys,
-                                             SeahorseKeyPair    *signer,
+                                             SeahorseKey        *signer,
                                              const gchar        *path,
                                              const gchar        *epath,
                                              gpgme_error_t      *err);
 
 gchar*      seahorse_op_encrypt_sign_text   (GList              *keys,
-                                             SeahorseKeyPair    *signer,
+                                             SeahorseKey        *signer,
                                              const gchar        *text,
                                              gpgme_error_t      *err);
 

@@ -171,7 +171,7 @@ do_import (SeahorseContext *sctx, const gchar **paths)
 static guint 
 do_encrypt_base (SeahorseContext *sctx, const gchar **paths, gboolean sign)
 {
-    SeahorseKeyPair *signer = NULL;
+    SeahorseKey *signer = NULL;
     SeahorseKeySource *sksrc;
     GList *keys = NULL;
     gchar *new_path;
@@ -241,7 +241,7 @@ static guint
 do_sign (SeahorseContext *sctx, const gchar **paths)
 {
     SeahorseKeySource *sksrc;
-    SeahorseKeyPair *signer;
+    SeahorseKey *signer;
     gpgme_error_t err;
     gchar **uris;
     gchar **u;

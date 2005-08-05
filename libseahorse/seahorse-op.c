@@ -26,6 +26,7 @@
 #include "seahorse-util.h"
 #include "seahorse-context.h"
 #include "seahorse-key-source.h"
+#include "seahorse-pgp-key.h"
 #include "seahorse-vfs-data.h"
 #include "seahorse-gconf.h"
 
@@ -373,7 +374,7 @@ seahorse_op_encrypt_text (GList *keys, const gchar *text, gpgme_error_t *err)
 
 /* Helper function to set a key pair as the signer for its keysource */
 static void
-set_signer (SeahorseKeyPair *signer)
+set_signer (SeahorsePGPKey *signer)
 {
     SeahorseKeySource *sksrc;
     
@@ -381,7 +382,7 @@ set_signer (SeahorseKeyPair *signer)
     g_return_if_fail (sksrc != NULL);
     
     gpgme_signers_clear (sksrc->ctx);
-    gpgme_signers_add (sksrc->ctx, signer->secret);
+    gpgme_signers_add (sksrc->ctx, signer->seckey);
 }
 
 /* helper function for signing @plain with @mode. @plain will be released. */
@@ -404,12 +405,17 @@ sign_data (SeahorseKeySource *sksrc, gpgme_data_t plain, gpgme_data_t sig,
  * in @err. 
  **/
 void
-seahorse_op_sign_file (SeahorseKeyPair *signer, const gchar *path, 
+seahorse_op_sign_file (SeahorseKey *signer, const gchar *path, 
                        const gchar *spath, gpgme_error_t *err)
 {
     SeahorseKeySource *sksrc;
+    SeahorsePGPKey *pkey;
 	gpgme_data_t plain, sig;
 	gpgme_error_t error;
+
+    g_return_if_fail (signer && SEAHORSE_IS_PGP_KEY (signer));
+    g_return_if_fail (seahorse_key_get_flags (signer) & SKEY_FLAG_CAN_SIGN);
+    pkey = SEAHORSE_PGP_KEY (signer);
 	
 	if (err == NULL)
 		err = &error;
@@ -427,7 +433,7 @@ seahorse_op_sign_file (SeahorseKeyPair *signer, const gchar *path,
         g_return_if_reached ();
     }
   
-    set_signer (signer);
+    set_signer (pkey);
     
 	/* get detached signature */
     gpgme_set_textmode (sksrc->ctx, FALSE);
@@ -450,12 +456,17 @@ seahorse_op_sign_file (SeahorseKeyPair *signer, const gchar *path,
  * Returns: The clear signed text or NULL if signing fails
  **/
 gchar*
-seahorse_op_sign_text (SeahorseKeyPair *signer, const gchar *text, 
+seahorse_op_sign_text (SeahorseKey *signer, const gchar *text, 
                        gpgme_error_t *err)
 {
     SeahorseKeySource *sksrc;
+    SeahorsePGPKey *pkey;
 	gpgme_data_t plain, sig;
 	gpgme_error_t error;
+
+    g_return_val_if_fail (signer && SEAHORSE_IS_PGP_KEY (signer), NULL);
+    g_return_val_if_fail (seahorse_key_get_flags (signer) & SKEY_FLAG_CAN_SIGN, NULL);
+    pkey = SEAHORSE_PGP_KEY (signer);
 	
 	if (err == NULL)
 		err = &error;
@@ -463,7 +474,7 @@ seahorse_op_sign_text (SeahorseKeyPair *signer, const gchar *text,
     sksrc = seahorse_key_get_source (SEAHORSE_KEY (signer));
     g_return_val_if_fail (sksrc != NULL, NULL);
     
-    set_signer (signer);
+    set_signer (pkey);
             
 	/* new data from text */
 	*err = gpgme_data_new_from_mem (&plain, text, strlen (text), TRUE);
@@ -494,10 +505,13 @@ seahorse_op_sign_text (SeahorseKeyPair *signer, const gchar *text,
  * upon completion.
  **/
 void
-seahorse_op_encrypt_sign_file (GList *keys, SeahorseKeyPair *signer, 
+seahorse_op_encrypt_sign_file (GList *keys, SeahorseKey *signer, 
                                const gchar *path, const gchar *epath, gpgme_error_t *err)
 {
-    set_signer (signer);
+    g_return_if_fail (signer && SEAHORSE_IS_PGP_KEY (signer));
+    g_return_if_fail (seahorse_key_get_flags (signer) & SKEY_FLAG_CAN_SIGN);
+
+    set_signer (SEAHORSE_PGP_KEY (signer));
 	encrypt_file_common (keys, path, epath, gpgme_op_encrypt_sign, err);
 }
 
@@ -515,10 +529,13 @@ seahorse_op_encrypt_sign_file (GList *keys, SeahorseKeyPair *signer,
  * Returns: The encrypted and signed text or NULL if the operation fails
  **/
 gchar*
-seahorse_op_encrypt_sign_text (GList *keys, SeahorseKeyPair *signer, 
+seahorse_op_encrypt_sign_text (GList *keys, SeahorseKey *signer, 
                                const gchar *text, gpgme_error_t *err)
 {
-    set_signer (signer);
+    g_return_val_if_fail (signer && SEAHORSE_IS_PGP_KEY (signer), NULL);
+    g_return_val_if_fail (seahorse_key_get_flags (signer) & SKEY_FLAG_CAN_SIGN, NULL);
+
+    set_signer (SEAHORSE_PGP_KEY (signer));
 	return encrypt_text_common (keys, text, gpgme_op_encrypt_sign, err);
 }
 

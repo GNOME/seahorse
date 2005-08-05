@@ -43,7 +43,7 @@ endif
 
 libseahorse_internal_la_SOURCES = \
 	seahorse-key.c seahorse-key.h \
-	seahorse-key-pair.c seahorse-key-pair.h \
+	seahorse-pgp-key.c seahorse-pgp-key.h \
 	seahorse-context.c seahorse-context.h \
 	seahorse-widget.c seahorse-widget.h \
 	seahorse-op.c seahorse-op.h \

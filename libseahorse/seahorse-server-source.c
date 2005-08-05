@@ -31,8 +31,7 @@
 #include "seahorse-server-source.h"
 #include "seahorse-multi-source.h"
 #include "seahorse-util.h"
-#include "seahorse-key.h"
-#include "seahorse-key-pair.h"
+#include "seahorse-pgp-key.h"
 
 enum {
     PROP_0,
@@ -315,7 +314,7 @@ key_destroyed (GObject *object, SeahorseServerSource *ssrc)
     SeahorseKey *skey;
     skey = SEAHORSE_KEY (object);
 
-    remove_key_from_source (seahorse_key_get_id (skey->key), skey, ssrc);
+    remove_key_from_source (seahorse_key_get_keyid (skey), skey, ssrc);
 }
 
 /* Release a key from our internal tables */
@@ -332,13 +331,12 @@ release_key (const gchar* id, SeahorseKey *skey, SeahorseServerSource *ssrc)
 
 /* Combine information from one key and tack onto others */
 static void 
-combine_keys (SeahorseServerSource *ssrc, SeahorseKey *skey, gpgme_key_t key)
+combine_keys (SeahorseServerSource *ssrc, gpgme_key_t k, gpgme_key_t key)
 {
     gpgme_user_id_t uid;
     gpgme_user_id_t u;
     gpgme_subkey_t subkey;
     gpgme_subkey_t s;
-    gpgme_key_t k = skey->key; 
     gboolean found;
     
     g_return_if_fail (k != NULL);
@@ -386,32 +384,34 @@ void
 seahorse_server_source_add_key (SeahorseServerSource *ssrc, gpgme_key_t key)
 {
     SeahorseKey *prev;
-    SeahorseKey *skey;
+    SeahorsePGPKey *pkey;
     const gchar *id;
        
     g_return_if_fail (SEAHORSE_IS_SERVER_SOURCE (ssrc));
 
-    id = seahorse_key_get_id (key);
+    id = seahorse_pgp_key_get_id (key, 0);
     prev = g_hash_table_lookup (ssrc->priv->keys, id);
     
+    /* TODO: This function needs reworking after we get more key types */
     if (prev != NULL) {
-        combine_keys (ssrc, prev, key);
+        g_return_if_fail (SEAHORSE_IS_PGP_KEY (prev));
+        combine_keys (ssrc, SEAHORSE_PGP_KEY (prev)->pubkey, key);
         seahorse_key_changed (prev, SKEY_CHANGE_UIDS);
         return;    
     }
 
     /* A public key */
-    skey = seahorse_key_new (SEAHORSE_KEY_SOURCE (ssrc), key);
+    pkey = seahorse_pgp_key_new (SEAHORSE_KEY_SOURCE (ssrc), key, NULL);
 
     /* Add to lookups */ 
-    g_hash_table_replace (ssrc->priv->keys, (gpointer)id, skey);     
+    g_hash_table_replace (ssrc->priv->keys, (gpointer)id, pkey);     
 
     /* This stuff is 'undone' in release_key */
-    g_object_ref (skey);
-    g_signal_connect_after (skey, "destroy", G_CALLBACK (key_destroyed), ssrc);            
+    g_object_ref (pkey);
+    g_signal_connect_after (pkey, "destroy", G_CALLBACK (key_destroyed), ssrc);            
     
     /* notify observers */
-    seahorse_key_source_added (SEAHORSE_KEY_SOURCE (ssrc), skey);
+    seahorse_key_source_added (SEAHORSE_KEY_SOURCE (ssrc), SEAHORSE_KEY (pkey));
 }
  
 /* Callback for copying our internal key table to a list */

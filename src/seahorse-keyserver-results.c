@@ -29,6 +29,7 @@
 #include "seahorse-util.h"
 #include "seahorse-operation.h"
 #include "seahorse-key.h"
+#include "seahorse-pgp-key.h"
 #include "seahorse-op.h"
 #include "seahorse-operation.h"
 #include "seahorse-progress.h"
@@ -60,8 +61,10 @@ properties_activate (GtkWidget *widget, SeahorseWidget *swidget)
 	
 	skey = seahorse_key_store_get_selected_key (GTK_TREE_VIEW (
 		glade_xml_get_widget (swidget->xml, KEY_LIST)), NULL);
-	if (skey != NULL)
-		seahorse_key_properties_new (swidget->sctx, skey);
+    
+    /* TODO: Handle multiple types of keys here */
+	if (skey != NULL && SEAHORSE_IS_PGP_KEY (skey))
+		seahorse_key_properties_new (swidget->sctx, SEAHORSE_PGP_KEY (skey));
 }
 
 static void
@@ -204,8 +207,8 @@ row_activated (GtkTreeView *treeview, GtkTreePath *path, GtkTreeViewColumn *arg2
 	SeahorseKey *skey;
 	
 	skey = seahorse_key_store_get_key_from_path (GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, KEY_LIST)), path, NULL);
-	if (skey != NULL)
-		seahorse_key_properties_new (swidget->sctx, skey);
+	if (skey != NULL && SEAHORSE_IS_PGP_KEY (skey))
+		seahorse_key_properties_new (swidget->sctx, SEAHORSE_PGP_KEY (skey));
 }
 
 static void

@@ -32,6 +32,7 @@ static void
 ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 {
 	SeahorseKeyWidget *skwidget;
+    SeahorsePGPKey *pkey;
     gpgme_subkey_t subkey;
 	gpgme_error_t err;
     GtkWidget *w;
@@ -39,6 +40,7 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
     time_t expiry = 0;
 	
 	skwidget = SEAHORSE_KEY_WIDGET (swidget);
+    pkey = SEAHORSE_PGP_KEY (skwidget->skey);
 	index = skwidget->index;	
 
     w = glade_xml_get_widget (swidget->xml, "expire");    
@@ -52,11 +54,11 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
         expiry = mktime (&t);
     }
  
-    subkey = seahorse_key_get_nth_subkey (skwidget->skey, index);    
+    subkey = seahorse_pgp_key_get_nth_subkey (pkey, index);    
     g_return_if_fail (subkey != NULL);
     
     if (expiry != subkey->expires) {
-        err = seahorse_key_pair_op_set_expires (SEAHORSE_KEY_PAIR (skwidget->skey), index, expiry);
+        err = seahorse_key_pair_op_set_expires (pkey, index, expiry);
     
 		if (!GPG_IS_OK (err))
 			seahorse_util_handle_gpgme (err, _("Couldn't change expiry date"));
@@ -72,7 +74,7 @@ set_date_edit_sensitive (GtkToggleButton *togglebutton, GtkWidget *widget)
 }
 
 void
-seahorse_expires_new (SeahorseContext *sctx, SeahorseKey *skey, const guint index)
+seahorse_expires_new (SeahorseContext *sctx, SeahorsePGPKey *pkey, guint index)
 {
 	SeahorseWidget *swidget;
     gpgme_subkey_t subkey;
@@ -81,10 +83,11 @@ seahorse_expires_new (SeahorseContext *sctx, SeahorseKey *skey, const guint inde
     gchar *userid;
 	
 	g_return_if_fail (sctx != NULL && SEAHORSE_IS_CONTEXT (sctx));
-	g_return_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey));
-	g_return_if_fail (index <= seahorse_key_get_num_subkeys (skey));
+	g_return_if_fail (pkey != NULL && SEAHORSE_IS_PGP_KEY (pkey));
+	g_return_if_fail (index <= seahorse_pgp_key_get_num_subkeys (pkey));
 	
-	swidget = seahorse_key_widget_new_with_index ("expires", sctx, skey, index);
+	swidget = seahorse_key_widget_new_with_index ("expires", sctx, 
+                                                  SEAHORSE_KEY (pkey), index);
 	g_return_if_fail (swidget != NULL);
 	
 	glade_xml_signal_connect_data (swidget->xml, "ok_clicked",
@@ -95,7 +98,7 @@ seahorse_expires_new (SeahorseContext *sctx, SeahorseKey *skey, const guint inde
     date = glade_xml_get_widget (swidget->xml, "calendar");    
     g_return_if_fail (date != NULL);
     
-    subkey = seahorse_key_get_nth_subkey (skey, index);
+    subkey = seahorse_pgp_key_get_nth_subkey (pkey, index);
     g_return_if_fail (subkey != NULL);
 
     gtk_widget_set_sensitive (date, subkey->expires);
@@ -110,7 +113,7 @@ seahorse_expires_new (SeahorseContext *sctx, SeahorseKey *skey, const guint inde
         }
     }
 	
-    userid = seahorse_key_get_userid (skey, 0);
+    userid = seahorse_key_get_name (SEAHORSE_KEY (pkey), 0);
 	if (index)
 		title = g_strdup_printf (_("Expiry for Subkey %d of %s"), index, userid);
 	else
@@ -118,5 +121,5 @@ seahorse_expires_new (SeahorseContext *sctx, SeahorseKey *skey, const guint inde
 	g_free (userid);
    
 	gtk_window_set_title (GTK_WINDOW (glade_xml_get_widget (swidget->xml,
-		swidget->name)), title);
+		                  swidget->name)), title);
 }

@@ -39,7 +39,7 @@ userid_for_fingerprint (SeahorseContext *sctx, const gchar *fingerprint)
     key = seahorse_key_source_get_key (sksrc, fingerprint);
 
     if (key != NULL) {
-        userid = seahorse_key_get_userid (key, 0);
+        userid = seahorse_key_get_display_name (key);
 
         /* Fix up the id, so it doesn't think it's markup */
         g_strdelimit (userid, "<", '(');

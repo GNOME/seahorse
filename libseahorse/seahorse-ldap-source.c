@@ -30,8 +30,7 @@
 #include "seahorse-ldap-source.h"
 #include "seahorse-multi-source.h"
 #include "seahorse-util.h"
-#include "seahorse-key.h"
-#include "seahorse-key-pair.h"
+#include "seahorse-pgp-key.h"
 
 #ifdef WITH_LDAP
 
@@ -1208,7 +1207,7 @@ seahorse_ldap_source_export (SeahorseKeySource *sksrc, GList *keys,
     for ( ; keys; keys = g_list_next (keys)) {
         g_return_val_if_fail (SEAHORSE_IS_KEY (keys->data), NULL);
         fingerprints = g_slist_prepend (fingerprints,
-                g_strdup (seahorse_key_get_id (SEAHORSE_KEY (keys->data)->key)));
+                g_strdup (seahorse_key_get_keyid (SEAHORSE_KEY (keys->data))));
     }
     
     fingerprints = g_slist_reverse (fingerprints);

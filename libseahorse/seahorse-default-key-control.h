@@ -25,7 +25,6 @@
 
 #include <gtk/gtk.h>
 #include "seahorse-key-source.h"
-#include "seahorse-key-pair.h"
 
 #define SEAHORSE_TYPE_DEFAULT_KEY_CONTROL		(seahorse_default_key_control_get_type ())
 #define SEAHORSE_DEFAULT_KEY_CONTROL(obj)		(GTK_CHECK_CAST ((obj), SEAHORSE_TYPE_DEFAULT_KEY_CONTROL, SeahorseDefaultKeyControl))
@@ -55,9 +54,9 @@ void                        seahorse_default_key_control_select_id (SeahorseDefa
                                                                     const gchar *id);
 
 void                        seahorse_default_key_control_select    (SeahorseDefaultKeyControl *sdkc,
-                                                                    SeahorseKeyPair *skeypair);
+                                                                    SeahorseKey *skey);
 
-SeahorseKeyPair*            seahorse_default_key_control_active    (SeahorseDefaultKeyControl *sdkc);
+SeahorseKey*                seahorse_default_key_control_active    (SeahorseDefaultKeyControl *sdkc);
 
 const gchar*                seahorse_default_key_control_active_id (SeahorseDefaultKeyControl *sdkc);
 

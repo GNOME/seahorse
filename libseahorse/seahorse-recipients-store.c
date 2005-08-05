@@ -107,7 +107,7 @@ static gboolean
 seahorse_recipients_store_append (SeahorseKeyStore *skstore, SeahorseKey *skey, 
                                   guint uid, GtkTreeIter *iter)
 {
-	if (seahorse_key_can_encrypt (skey)) {
+	if (seahorse_key_get_flags (skey) & SKEY_FLAG_CAN_ENCRYPT) {
         gtk_tree_store_append (GTK_TREE_STORE (skstore), iter, NULL);
         parent_class->append (skstore, skey, uid, iter);
         return TRUE;

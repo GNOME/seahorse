@@ -110,7 +110,7 @@ seahorse_key_widget_finalize (GObject *gobject)
 	skwidget = SEAHORSE_KEY_WIDGET (gobject);
 	swidget = SEAHORSE_WIDGET (skwidget);
 	
-	id = seahorse_key_get_id (skwidget->skey->key);
+	id = seahorse_key_get_keyid (skwidget->skey);
 	
 	/* get widgets hash from types */
 	widgets = g_hash_table_lookup (types, id);
@@ -210,7 +210,7 @@ seahorse_key_widget_create (gchar *name, SeahorseContext *sctx, SeahorseKey *ske
 	GtkWindowGroup *group = NULL;	//window group from groups
 	GtkWidget *widget;		//main window widget of swidget
 	
-	id = seahorse_key_get_id (skey->key);
+	id = seahorse_key_get_keyid (skey);
 	
 	/* if don't have a types hash, create one */
 	if (types == NULL)
@@ -282,7 +282,7 @@ seahorse_key_widget_can_create (gchar *name, SeahorseKey *skey)
 	if (types == NULL)
 		return TRUE;
 	
-	widgets = g_hash_table_lookup (types, seahorse_key_get_id (skey->key));
+	widgets = g_hash_table_lookup (types, seahorse_key_get_keyid (skey));
 	
 	if (widgets == NULL)
 		return TRUE;

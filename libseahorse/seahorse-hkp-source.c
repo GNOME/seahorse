@@ -30,8 +30,7 @@
 #include "seahorse-hkp-source.h"
 #include "seahorse-multi-source.h"
 #include "seahorse-util.h"
-#include "seahorse-key.h"
-#include "seahorse-key-pair.h"
+#include "seahorse-pgp-key.h"
 
 #ifdef WITH_HKP
 
@@ -801,7 +800,7 @@ seahorse_hkp_source_export (SeahorseKeySource *sksrc, GList *keys,
         g_return_val_if_fail (SEAHORSE_IS_KEY (keys->data), NULL);
 
         /* Get the key id and limit it to 8 characters */
-        fpr = seahorse_key_get_id (SEAHORSE_KEY (keys->data)->key);
+        fpr = seahorse_key_get_keyid (SEAHORSE_KEY (keys->data));
         l = strlen (fpr);
         if (l > 8)
             fpr += (l - 8);

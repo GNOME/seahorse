@@ -32,13 +32,13 @@
 #include "seahorse-default-key-control.h"
 #include "seahorse-gconf.h"
 
-SeahorseKeyPair*
+SeahorseKey*
 seahorse_signer_get (SeahorseContext *sctx)
 {
 	SeahorseWidget *swidget;
     SeahorseKeySource *sksrc;
     SeahorseDefaultKeyControl *sdkc;
-    SeahorseKeyPair *signer = NULL;
+    SeahorseKey *signer = NULL;
 	GtkWidget *widget;
 	gint response;
 	gboolean done = FALSE;
@@ -86,7 +86,7 @@ seahorse_signer_get (SeahorseContext *sctx)
 
         /* Save this as the last key signed with */
         seahorse_gconf_set_string (LASTSIGNER_KEY, signer == NULL ? 
-                        "" : seahorse_key_pair_get_id (signer));
+                        "" : seahorse_key_get_keyid (signer));
     }
     
 	seahorse_widget_destroy (swidget);

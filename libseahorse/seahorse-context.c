@@ -185,7 +185,7 @@ seahorse_context_load_keys (SeahorseContext *sctx, gboolean secret_only)
  * 
  * Returns: the secret key that's the default key 
  */
-SeahorseKeyPair*
+SeahorseKey*
 seahorse_context_get_default_key (SeahorseContext *sctx)
 {
     SeahorseKey *skey = NULL;
@@ -195,11 +195,8 @@ seahorse_context_get_default_key (SeahorseContext *sctx)
     if (id != NULL && id[0]) 
         skey = seahorse_key_source_get_key (sctx->priv->source, id);
     g_free (id);
-    
-    if (SEAHORSE_IS_KEY_PAIR (skey))
-        return SEAHORSE_KEY_PAIR (skey);
-    
-    return NULL;
+
+    return skey;
 }
 
 /**

@@ -25,37 +25,38 @@
 #include <gtk/gtk.h>
 
 #include "seahorse-context.h"
+#include "seahorse-pgp-key.h"
 
-void		seahorse_key_properties_new	(SeahorseContext	*sctx,
-						 SeahorseKey		*skey);
+void        seahorse_key_properties_new (SeahorseContext    *sctx,
+                                         SeahorsePGPKey     *pkey);
 
-void		seahorse_add_revoker_new	(SeahorseContext	*sctx,
-						 SeahorseKey		*skey);
+void        seahorse_add_revoker_new    (SeahorseContext    *sctx,
+                                         SeahorsePGPKey     *pkey);
 
-void        seahorse_expires_new        (SeahorseContext *sctx, 
-                         SeahorseKey *skey, 
-                         const guint index);
-                         
-void		seahorse_add_subkey_new		(SeahorseContext	*sctx,
-						 SeahorseKey		*skey);
+void        seahorse_expires_new        (SeahorseContext    *sctx, 
+                                         SeahorsePGPKey     *pkey, 
+                                         guint index);
 
-void		seahorse_add_uid_new		(SeahorseContext	*sctx,
-						 SeahorseKey		*skey);
+void        seahorse_add_subkey_new     (SeahorseContext    *sctx,
+                                         SeahorsePGPKey     *pkey);
 
-void		seahorse_delete_subkey_new	(SeahorseContext	*sctx,
-						 SeahorseKey		*skey,
-						 const guint		index);
+void        seahorse_add_uid_new        (SeahorseContext    *sctx,
+                                         SeahorsePGPKey     *pkey);
 
-void        seahorse_delete_userid_show (SeahorseContext *sctx, 
-                         SeahorseKey *skey, 
-                         const guint index);
+void        seahorse_delete_subkey_new  (SeahorseContext	*sctx,
+                                         SeahorsePGPKey     *pkey,
+                                         guint              index);
 
-void		seahorse_revoke_new		(SeahorseContext	*sctx,
-						 SeahorseKey		*skey,
-						 const guint		index);
+void        seahorse_delete_userid_show (SeahorseContext    *sctx, 
+                                         SeahorsePGPKey     *pkey, 
+                                         guint              index);
 
-void        seahorse_sign_uid_show  (SeahorseContext *sctx, 
-                        SeahorseKey *skey, 
-                        const guint uid);
+void        seahorse_revoke_new         (SeahorseContext    *sctx,
+                                         SeahorsePGPKey     *pkey,
+                                         guint              index);
+
+void        seahorse_sign_uid_show      (SeahorseContext    *sctx, 
+                                         SeahorsePGPKey     *pkey, 
+                                         guint              uid);
 
 #endif /* __SEAHORSE_KEY_DIALOGS__ */

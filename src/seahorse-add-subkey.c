@@ -102,7 +102,7 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 	
 	widget = glade_xml_get_widget (swidget->xml, swidget->name);
 	gtk_widget_set_sensitive (widget, FALSE);
-	err = seahorse_key_pair_op_add_subkey (SEAHORSE_KEY_PAIR (skwidget->skey), 
+	err = seahorse_key_pair_op_add_subkey (SEAHORSE_PGP_KEY (skwidget->skey), 
                                            real_type, length, expires);
 	gtk_widget_set_sensitive (widget, TRUE);
 	
@@ -113,15 +113,15 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 }
 
 void
-seahorse_add_subkey_new (SeahorseContext *sctx, SeahorseKey *skey)
+seahorse_add_subkey_new (SeahorseContext *sctx, SeahorsePGPKey *pkey)
 {
 	SeahorseWidget *swidget;
     gchar *userid;
 	
-	swidget = seahorse_key_widget_new ("add-subkey", sctx, skey);
+	swidget = seahorse_key_widget_new ("add-subkey", sctx, SEAHORSE_KEY (pkey));
 	g_return_if_fail (swidget != NULL);
 	
-    userid = seahorse_key_get_userid (skey, 0);
+    userid = seahorse_key_get_name (SEAHORSE_KEY (pkey), 0);
 	gtk_window_set_title (GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)),
 		g_strdup_printf (_("Add subkey to %s"), userid));
     g_free (userid);

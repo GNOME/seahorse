@@ -21,7 +21,7 @@
  */
 
 #include "seahorse-default-key-control.h"
-#include "seahorse-key-pair.h"
+#include "seahorse-key.h"
 #include "seahorse-gconf.h"
 
 enum {
@@ -92,7 +92,7 @@ key_destroyed (GtkObject *object, GtkWidget *widget)
 static void 
 item_destroyed (GtkObject *object, gpointer data)
 {
-    g_signal_handlers_disconnect_by_func (SEAHORSE_KEY_PAIR (data), 
+    g_signal_handlers_disconnect_by_func (SEAHORSE_KEY (data), 
                 key_destroyed, GTK_MENU_ITEM (object));
 }
 
@@ -103,16 +103,16 @@ key_added (SeahorseKeySource *sksrc, SeahorseKey *skey, SeahorseDefaultKeyContro
     GtkWidget *item;
     gchar *userid;
     
-    if (!SEAHORSE_IS_KEY_PAIR (skey) || !seahorse_key_pair_can_sign (SEAHORSE_KEY_PAIR (skey)))
+    if (!SEAHORSE_IS_KEY (skey) || !(seahorse_key_get_flags (skey) & SKEY_FLAG_CAN_SIGN))
         return;
     
     menu = gtk_option_menu_get_menu (GTK_OPTION_MENU (sdkc));
     
-    userid = seahorse_key_get_userid (skey, 0);
+    userid = seahorse_key_get_display_name (skey);
     item = gtk_menu_item_new_with_label (userid);
     g_free (userid);
 
-    g_object_set_data (G_OBJECT (item), "secret-key", SEAHORSE_KEY_PAIR (skey));
+    g_object_set_data (G_OBJECT (item), "secret-key", skey);
 
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
     gtk_widget_show (item);
@@ -234,17 +234,17 @@ seahorse_default_key_control_new (SeahorseKeySource *sksrc, const gchar *none_op
 
 void                        
 seahorse_default_key_control_select (SeahorseDefaultKeyControl *sdkc, 
-                                     SeahorseKeyPair *skeypair)
+                                     SeahorseKey *skey)
 {
     seahorse_default_key_control_select_id (sdkc, 
-            skeypair == NULL ? NULL : seahorse_key_pair_get_id (skeypair));
+            skey == NULL ? NULL : seahorse_key_get_keyid (skey));
 }    
     
 void                        
 seahorse_default_key_control_select_id (SeahorseDefaultKeyControl *sdkc, 
                                         const gchar *id)
 {
-    SeahorseKeyPair *skp;
+    SeahorseKey *skey;
     GtkContainer *menu;
     GList *l, *children;
     const gchar *x;
@@ -262,15 +262,15 @@ seahorse_default_key_control_select_id (SeahorseDefaultKeyControl *sdkc,
     children = gtk_container_get_children (menu);
     
     for (i = 0, l = children; l != NULL; i++, l = g_list_next (l)) {
-        skp = SEAHORSE_KEY_PAIR (g_object_get_data (l->data, "secret-key"));
+        skey = SEAHORSE_KEY (g_object_get_data (l->data, "secret-key"));
         
         if (id == NULL) {
-            if (skp == NULL) {
+            if (skey == NULL) {
                 gtk_option_menu_set_history (GTK_OPTION_MENU (sdkc), i);
                 break;
             }
-        } else if (skp != NULL) {
-            x = seahorse_key_pair_get_id (skp);
+        } else if (skey != NULL) {
+            x = seahorse_key_get_keyid (skey);
             if (x != NULL && g_str_equal (x, id)) {
                 gtk_option_menu_set_history (GTK_OPTION_MENU (sdkc), i);
                 break;
@@ -281,10 +281,10 @@ seahorse_default_key_control_select_id (SeahorseDefaultKeyControl *sdkc,
     g_list_free (children);
 }
 
-SeahorseKeyPair*
+SeahorseKey*
 seahorse_default_key_control_active (SeahorseDefaultKeyControl *sdkc)
 {
-    SeahorseKeyPair *secret = NULL;
+    SeahorseKey *secret = NULL;
     GtkContainer *menu;
     GList *l, *children;
     guint i;
@@ -298,7 +298,7 @@ seahorse_default_key_control_active (SeahorseDefaultKeyControl *sdkc)
     
     for (i = 0, l = children; l != NULL; i++, l = g_list_next (l)) {
         if (i == gtk_option_menu_get_history (GTK_OPTION_MENU (sdkc))) {
-           secret = SEAHORSE_KEY_PAIR (g_object_get_data (l->data, "secret-key"));
+           secret = SEAHORSE_KEY (g_object_get_data (l->data, "secret-key"));
            break;
         }
     }
@@ -310,8 +310,8 @@ seahorse_default_key_control_active (SeahorseDefaultKeyControl *sdkc)
 const gchar*                
 seahorse_default_key_control_active_id (SeahorseDefaultKeyControl *sdkc)
 {
-    SeahorseKeyPair *skp = seahorse_default_key_control_active (sdkc);
-    return skp == NULL ? NULL : seahorse_key_pair_get_id (skp);
+    SeahorseKey *skey = seahorse_default_key_control_active (sdkc);
+    return skey == NULL ? NULL : seahorse_key_get_keyid (skey);
 }
 
 

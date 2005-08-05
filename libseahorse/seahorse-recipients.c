@@ -134,7 +134,7 @@ update_filters (GObject* object, GParamSpec* arg, SeahorseWidget* swidget)
 }
 
 GList*
-seahorse_recipients_get (SeahorseContext *sctx, SeahorseKeyPair **signer)
+seahorse_recipients_get (SeahorseContext *sctx, SeahorseKey **signer)
 {
 	SeahorseWidget *swidget;
     SeahorseOperation *operation;
@@ -220,7 +220,7 @@ seahorse_recipients_get (SeahorseContext *sctx, SeahorseKeyPair **signer)
 
         /* Save this as the last key signed with */
         seahorse_gconf_set_string (LASTSIGNER_KEY, *signer == NULL ? 
-                        "" : seahorse_key_pair_get_id (*signer));
+                        "" : seahorse_key_get_keyid (*signer));
     }
     
 	seahorse_widget_destroy (swidget);

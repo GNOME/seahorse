@@ -173,7 +173,7 @@ encrypt_cb (BonoboUIComponent * uic, gpointer user_data,
             const gchar * verbname)
 {
     GeditView *view = GEDIT_VIEW (gedit_get_active_view ());
-    SeahorseKeyPair *signer = NULL;
+    SeahorseKey *signer = NULL;
     GeditDocument *doc;
     gpgme_error_t err = GPG_OK;
     gchar *enctext = NULL;
@@ -454,7 +454,7 @@ sign_cb (BonoboUIComponent * uic, gpointer user_data,
     GeditView *view = GEDIT_VIEW (gedit_get_active_view ());
     GeditDocument *doc;
     gpgme_error_t err = GPG_OK;
-    SeahorseKeyPair *signer;
+    SeahorseKey *signer;
     gchar *enctext = NULL;
     gchar *buffer;
     gint start;

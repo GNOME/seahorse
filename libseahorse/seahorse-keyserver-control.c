@@ -22,7 +22,7 @@
 #include "seahorse-util.h"
 #include "seahorse-context.h"
 #include "seahorse-keyserver-control.h"
-#include "seahorse-key-pair.h"
+#include "seahorse-key.h"
 #include "seahorse-gconf.h"
 #include "seahorse-server-source.h"
 

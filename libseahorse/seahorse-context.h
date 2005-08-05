@@ -27,7 +27,6 @@
 #include <gpgme.h>
 
 #include "seahorse-key.h"
-#include "seahorse-key-pair.h"
 #include "seahorse-key-source.h"
 #include "seahorse-dns-sd.h"
 
@@ -65,7 +64,7 @@ void                 seahorse_context_destroy         (SeahorseContext    *sctx)
 void                 seahorse_context_load_keys       (SeahorseContext    *sctx, 
                                                        gboolean secret_only);
 
-SeahorseKeyPair*     seahorse_context_get_default_key (SeahorseContext    *sctx);
+SeahorseKey*         seahorse_context_get_default_key (SeahorseContext    *sctx);
 
 SeahorseKeySource*   seahorse_context_get_key_source  (SeahorseContext    *sctx);
 

@@ -2,6 +2,7 @@
  * Seahorse
  *
  * Copyright (C) 2003 Jacob Perkins
+ * Copyright (C) 2005 Nate Nielsen
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,14 +22,17 @@
 
 #include <gnome.h>
 
-#include "seahorse-gpgmex.h"
 #include "seahorse-key.h"
 #include "seahorse-key-source.h"
 
 enum {
 	PROP_0,
-	PROP_KEY,
-    PROP_KEY_SOURCE
+    PROP_KEY_SOURCE,
+    PROP_KEY_ID,
+    PROP_KEY_TYPE,
+    PROP_FLAGS,
+    PROP_LOCATION,
+    PROP_LOADED
 };
 
 enum {
@@ -36,145 +40,129 @@ enum {
 	LAST_SIGNAL
 };
 
-static void		seahorse_key_class_init		(SeahorseKeyClass	*klass);
-static void		seahorse_key_finalize		(GObject		*gobject);
-static void		seahorse_key_set_property	(GObject		*object,
-							 guint			prop_id,
-							 const GValue		*value,
-							 GParamSpec		*pspec);
-static void		seahorse_key_get_property	(GObject		*object,
-							 guint			prop_id,
-							 GValue			*value,
-							 GParamSpec		*pspec);
+static guint signals[LAST_SIGNAL] = { 0 };
+static GObjectClass *parent_class = NULL;
 
-static GtkObjectClass	*parent_class			= NULL;
-static guint		key_signals[LAST_SIGNAL]	= { 0 };
+/* GObject handlers */
+static void class_init        (SeahorseKeyClass *klass);
+static void object_finalize   (GObject *gobject);
+
+static void set_property      (GObject *object, guint prop_id, 
+                               const GValue *value, GParamSpec *pspec);
+static void get_property      (GObject *object, guint prop_id,
+                               GValue *value, GParamSpec *pspec);
 
 GType
 seahorse_key_get_type (void)
 {
-	static GType key_type = 0;
+	static GType gtype = 0;
 	
-	if (!key_type) {
-		static const GTypeInfo key_info =
-		{
-			sizeof (SeahorseKeyClass),
-			NULL, NULL,
-			(GClassInitFunc) seahorse_key_class_init,
-			NULL, NULL,
-			sizeof (SeahorseKey),
-			0, NULL
+	if (!gtype) {
+		static const GTypeInfo gtinfo = {
+			sizeof (SeahorseKeyClass), NULL, NULL,
+			(GClassInitFunc) class_init, NULL, NULL,
+			sizeof (SeahorseKey), 0, NULL
 		};
 		
-		key_type = g_type_register_static (GTK_TYPE_OBJECT, "SeahorseKey", &key_info, 0);
+		gtype = g_type_register_static (GTK_TYPE_OBJECT, "SeahorseKey", 
+                                        &gtinfo, 0);
 	}
 	
-	return key_type;
+	return gtype;
 }
 
 static void
-seahorse_key_class_init (SeahorseKeyClass *klass)
+class_init (SeahorseKeyClass *klass)
 {
-	GObjectClass *gobject_class;
+    GObjectClass *gobject_class;
 	
-	parent_class = g_type_class_peek_parent (klass);
-	gobject_class = G_OBJECT_CLASS (klass);
+    parent_class = g_type_class_peek_parent (klass);
+    gobject_class = G_OBJECT_CLASS (klass);
 	
-	gobject_class->finalize = seahorse_key_finalize;
-	gobject_class->set_property = seahorse_key_set_property;
-	gobject_class->get_property = seahorse_key_get_property;
+    gobject_class->finalize = object_finalize;
+    gobject_class->set_property = set_property;
+    gobject_class->get_property = get_property;
 	
 	klass->changed = NULL;
 	
-	g_object_class_install_property (gobject_class, PROP_KEY,
-		g_param_spec_pointer ("key", "Gpgme Key",
-				      "Gpgme Key that this object represents",
-				      G_PARAM_READWRITE));
     g_object_class_install_property (gobject_class, PROP_KEY_SOURCE,
-        g_param_spec_pointer ("key-source", "Key Source",
-                      "Key Source that this key belongs to",
-                      G_PARAM_READWRITE));
-	
-	key_signals[CHANGED] = g_signal_new ("changed", G_OBJECT_CLASS_TYPE (gobject_class),
+        g_param_spec_object ("key-source", "Key Source", "Key Source that this key belongs to", 
+                             SEAHORSE_TYPE_KEY_SOURCE, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+
+    g_object_class_install_property (gobject_class, PROP_KEY_ID,
+        g_param_spec_string ("key-id", "Key ID", "Key identifier", 
+                             "UNKNOWN ", G_PARAM_READABLE));
+    
+    g_object_class_install_property (gobject_class, PROP_KEY_TYPE,
+        g_param_spec_uint ("key-type", "Key Type", "Key type. See SeahorseKeyType", 
+                           0, G_MAXUINT, SKEY_INVALID, G_PARAM_READABLE));
+
+    g_object_class_install_property (gobject_class, PROP_FLAGS,
+        g_param_spec_uint ("flags", "Key Flags", "Flags on capabilities of key. See SeahorseKeyFlags", 
+                           0, G_MAXUINT, 0, G_PARAM_READABLE));
+
+    g_object_class_install_property (gobject_class, PROP_LOCATION,
+        g_param_spec_uint ("location", "Key Location", "Where the key is stored. See SeahorseKeyLoc", 
+                           0, G_MAXUINT, SKEY_LOC_UNKNOWN, G_PARAM_READABLE));
+
+    g_object_class_install_property (gobject_class, PROP_LOADED,
+        g_param_spec_uint ("loaded", "Loaded Information", "Which parts of the key are loaded. See SeahorseKeyLoaded", 
+                           0, G_MAXUINT, SKEY_INFO_NONE, G_PARAM_READABLE));
+
+	signals[CHANGED] = g_signal_new ("changed", G_OBJECT_CLASS_TYPE (gobject_class),
 		G_SIGNAL_RUN_LAST,  G_STRUCT_OFFSET (SeahorseKeyClass, changed),
 		NULL, NULL, g_cclosure_marshal_VOID__INT, G_TYPE_NONE, 1, G_TYPE_INT);
 }
 
 /* Unrefs gpgme key and frees data */
 static void
-seahorse_key_finalize (GObject *gobject)
+object_finalize (GObject *gobject)
 {
-	SeahorseKey *skey;
-	
-	skey = SEAHORSE_KEY (gobject);
-	gpgmex_key_unref (skey->key);
-	
 	G_OBJECT_CLASS (parent_class)->finalize (gobject);
 }
 
 static void
-seahorse_key_set_property (GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec)
+set_property (GObject *object, guint prop_id, const GValue *value, 
+              GParamSpec *pspec)
 {
-	SeahorseKey *skey;
+	SeahorseKey *skey = SEAHORSE_KEY (object);
 	
-	skey = SEAHORSE_KEY (object);
-	
-	switch (prop_id) {
-		case PROP_KEY:
-            if (skey->key)
-                gpgmex_key_unref (skey->key);
-			skey->key = g_value_get_pointer (value);
-            if (skey->key) {
-    			gpgmex_key_ref (skey->key);
-                seahorse_key_changed (skey, SKEY_CHANGE_ALL);
-            }
-			break;
-        case PROP_KEY_SOURCE:
-            if (skey->key_source != NULL)
-                g_object_remove_weak_pointer (G_OBJECT (skey->key_source), (gpointer*)&(skey->key_source));
-            skey->key_source = g_value_get_pointer (value);
-            if (skey->key_source != NULL) {
-                g_return_if_fail (SEAHORSE_IS_KEY_SOURCE (skey->key_source));
-                g_object_add_weak_pointer (G_OBJECT (skey->key_source), (gpointer*)&(skey->key_source));
-            }
-            break;
-		default:
-			break;
-	}
+    switch (prop_id) {
+    case PROP_KEY_SOURCE:
+        g_return_if_fail (!skey->key_source);
+        skey->key_source = g_value_get_object (value);
+        g_return_if_fail (SEAHORSE_IS_KEY_SOURCE (skey->key_source));
+        g_object_add_weak_pointer (G_OBJECT (skey->key_source), (gpointer*)&(skey->key_source));
+        break;
+    }
 }
 
 static void
-seahorse_key_get_property (GObject *object, guint prop_id,
-				  GValue *value, GParamSpec *pspec)
+get_property (GObject *object, guint prop_id, GValue *value, 
+              GParamSpec *pspec)
 {
-	SeahorseKey *skey;
+    SeahorseKey *skey = SEAHORSE_KEY (object);
 	
-	skey = SEAHORSE_KEY (object);
-	
-	switch (prop_id) {
-		case PROP_KEY:
-			g_value_set_pointer (value, skey->key);
-			break;
-        case PROP_KEY_SOURCE:
-            g_value_set_pointer (value, skey->key_source);
-            break;
-		default:
-			break;
-	}
-}
-
-/**
- * seahorse_key_new:
- * @key: Key to wrap
- *
- * Creates a new #SeahorseKey wrapper for @key.
- *
- * Returns: A new #SeahorseKey
- **/
-SeahorseKey*
-seahorse_key_new (SeahorseKeySource *sksrc, gpgme_key_t key)
-{
-    return g_object_new (SEAHORSE_TYPE_KEY, "key", key, "key-source", sksrc, NULL);
+    switch (prop_id) {
+    case PROP_KEY_SOURCE:
+        g_value_set_object (value, skey->key_source);
+        break;
+    case PROP_KEY_ID:
+        g_value_set_string (value, skey->keyid);
+        break;
+    case PROP_KEY_TYPE:
+        g_value_set_uint (value, skey->type);
+        break;
+    case PROP_FLAGS:
+        g_value_set_uint (value, skey->flags);
+        break;
+    case PROP_LOCATION:
+        g_value_set_uint (value, skey->location);
+        break;
+    case PROP_LOADED:
+        g_value_set_uint (value, skey->loaded);
+        break;
+    }
 }
 
 /**
@@ -186,9 +174,8 @@ seahorse_key_new (SeahorseKeySource *sksrc, gpgme_key_t key)
 void
 seahorse_key_destroy (SeahorseKey *skey)
 {
-	g_return_if_fail (skey != NULL && GTK_IS_OBJECT (skey));
-	
-	gtk_object_destroy (GTK_OBJECT (skey));
+    g_return_if_fail (skey != NULL && GTK_IS_OBJECT (skey));
+    gtk_object_destroy (GTK_OBJECT (skey));
 }
 
 /**
@@ -202,292 +189,15 @@ void
 seahorse_key_changed (SeahorseKey *skey, SeahorseKeyChange change)
 {
 	g_return_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey));
-	
-	g_signal_emit (G_OBJECT (skey), key_signals[CHANGED], 0, change);
+	g_signal_emit (G_OBJECT (skey), signals[CHANGED], 0, change);
 }
 
-/**
- * seahorse_key_get_num_uids:
- * @skey: #SeahorseKey
- *
- * Counts the number of user IDs for @skey.
- *
- * Returns: The number of user IDs for @skey, or -1 if error.
- **/
-const gint
-seahorse_key_get_num_uids (const SeahorseKey *skey)
+const gchar*      
+seahorse_key_get_keyid (SeahorseKey *skey)
 {
-	gint index = 0;
-	gpgme_user_id_t uid;
-
-	g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), -1);
-	g_return_val_if_fail (skey->key != NULL, -1);
-		
-	uid = skey->key->uids;
-	while (uid) {
-		uid = uid->next;
-		index++;
-	}
-	
-	return index;
-}
-
-/**
- * seahorse_key_get_num_subkeys:
- * @skey: #SeahorseKey
- *
- * Counts the number of subkeys for @skey.
- *
- * Returns: The number of subkeys for @skey, or -1 if error.
- **/
-const gint
-seahorse_key_get_num_subkeys (const SeahorseKey *skey)
-{
-	gint index = 0;
-	gpgme_subkey_t subkey;
-
-	g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), -1);
-	g_return_val_if_fail (skey->key != NULL, -1);
-
-	subkey = skey->key->subkeys;
-	while (subkey) {
-		subkey = subkey->next;
-		index++;
-	}
-	
-	return index;
-}
-
-/**
- * seahorse_key_get_nth_subkey:
- * @skey: #SeahorseKey
- * @index: Which subkey
- *
- * Gets the the subkey at @index of @skey.
- *
- * Returns: subkey of @skey at @index, or NULL if @index is out of bounds
- */
-gpgme_subkey_t
-seahorse_key_get_nth_subkey (const SeahorseKey *skey, const guint index)
-{
-	gpgme_subkey_t subkey;
-	guint n;
-
-	g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), NULL);
-	g_return_val_if_fail (skey->key != NULL, NULL);
-
-	subkey = skey->key->subkeys;
-	for (n = index; subkey && n; n--)
-		subkey = subkey->next;
-
-	return subkey;
-}
-
-
-/**
- * seahorse_key_get_keyid:
- * @skey: #SeahorseKey
- * @index: Which keyid
- *
- * Gets the formatted keyid of @skey at @index.
- * Borrowed from gpa.
- *
- * Returns: Keyid of @skey at @index, or NULL if @index is out of bounds
- **/
-const gchar*
-seahorse_key_get_keyid (const SeahorseKey *skey, const guint index)
-{
-	gpgme_subkey_t subkey = seahorse_key_get_nth_subkey (skey, index);
-
-	if (subkey)
-		return subkey->keyid + 8;
-	else
-		return NULL;
-}
-
-static gchar*
-convert_string (const gchar *str)
-{
-    if (!str)
-        return NULL;
-    
-	/* If not utf8 valid, assume latin 1 */
-	if (!g_utf8_validate (str, -1, NULL))
-		return g_convert (str, -1, "UTF-8", "ISO-8859-1", NULL, NULL, NULL);
-	else
-		return g_strdup (str);    
-}
-
-/**
- * seahorse_key_get_userid:
- * @skey: #SeahorseKey
- * @index: Which user ID
- *
- * Gets the formatted user ID of @skey at @index.
- * Concept borrowed from gpa.
- *
- * Returns: UTF8 valid user ID of @skey at @index,
- * or NULL if @index is out of bounds.
- **/
-gchar*
-seahorse_key_get_userid (const SeahorseKey *skey, const guint index)
-{
-	gpgme_user_id_t uid = seahorse_key_get_nth_userid (skey, index);
-	return uid ? convert_string (uid->uid) : NULL;
-}
-
-/**
- * seahorse_key_get_userid_name:
- * @skey: #SeahorseKey
- * @index: Which user ID
- *
- * Gets the formatted user ID name of @skey at @index.
- *
- * Returns: UTF8 valid name of @skey at @index,
- * or NULL if @index is out of bounds.
- **/
-gchar*
-seahorse_key_get_userid_name (const SeahorseKey *skey, const guint index)
-{
-	gpgme_user_id_t uid = seahorse_key_get_nth_userid (skey, index);
-	return uid ? convert_string (uid->name) : NULL;
-}
-
-/**
- * seahorse_key_get_userid_email:
- * @skey: #SeahorseKey
- * @index: Which user ID
- *
- * Gets the formatted email of @skey at @index.
- *
- * Returns: UTF8 valid email of @skey at @index,
- * or NULL if @index is out of bounds.
- **/
-gchar*
-seahorse_key_get_userid_email (const SeahorseKey *skey, const guint index)
-{
-	gpgme_user_id_t uid = seahorse_key_get_nth_userid (skey, index);
-	return uid ? convert_string (uid->email) : NULL;
-}
-
-/**
- * seahorse_key_get_userid_comment:
- * @skey: #SeahorseKey
- * @index: Which user ID
- *
- * Gets the formatted comment of @skey at @index.
- *
- * Returns: UTF8 valid comment of @skey at @index,
- * or NULL if @index is out of bounds.
- **/
-gchar*
-seahorse_key_get_userid_comment (const SeahorseKey *skey, const guint index)
-{
-	gpgme_user_id_t uid = seahorse_key_get_nth_userid (skey, index);
-	return uid ? convert_string (uid->comment) : NULL;
-}
-
-/**
- * seahorse_key_get_nth_userid:
- * @skey: #SeahorseKey
- * @index: Which userid
- *
- * Gets the the subkey at @index of @skey.
- *
- * Returns: subkey of @skey at @index, or NULL if @index is out of bounds
- */
-gpgme_user_id_t  
-seahorse_key_get_nth_userid (const SeahorseKey *skey, const guint index)
-{
-    gpgme_user_id_t uid;
-    guint n;
-
-    g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), NULL);
-    g_return_val_if_fail (skey->key != NULL, NULL);
-
-    uid = skey->key->uids;
-    for (n = index; uid && n; n--)
-        uid = uid->next;
-
-    return uid;
+	g_return_val_if_fail (skey && SEAHORSE_IS_KEY (skey), NULL);
+    return skey->keyid;
 }    
-
-
-gchar*
-seahorse_key_get_fingerprint (const SeahorseKey *skey)
-{
-	const gchar *raw;
-	GString *string;
-	guint index, len;
-	gchar *fpr;
-	
-	g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), NULL);
-	g_return_val_if_fail (skey->key != NULL && skey->key->subkeys != NULL, NULL);
-
-	raw = skey->key->subkeys->fpr;
-	g_return_val_if_fail (raw != NULL, NULL);
-
-	string = g_string_new ("");
-	len = strlen (raw);
-	
-	for (index = 0; index < len; index++) {
-		if (index > 0 && index % 4 == 0)
-			g_string_append (string, " ");
-		g_string_append_c (string, raw[index]);
-	}
-	
-	fpr = string->str;
-	g_string_free (string, FALSE);
-	
-	return fpr;
-}
-
-const gchar*
-seahorse_key_get_id (gpgme_key_t key)
-{
-	g_return_val_if_fail (key != NULL && key->subkeys != NULL, FALSE);
-	
-	return key->subkeys->fpr;
-}
-
-gboolean
-seahorse_key_is_valid (const SeahorseKey *skey)
-{
-	g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), FALSE);
-	g_return_val_if_fail (skey->key != NULL, FALSE);
-	
-	return (!skey->key->disabled && !skey->key->expired && !skey->key->revoked &&
-		!skey->key->invalid);
-}
-
-gboolean
-seahorse_key_can_encrypt (const SeahorseKey *skey)
-{
-	return (seahorse_key_is_valid (skey) &&	skey->key->can_encrypt);
-}
-
-const SeahorseValidity
-seahorse_key_get_validity (const SeahorseKey *skey)
-{
-	g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), SEAHORSE_VALIDITY_UNKNOWN);
-	g_return_val_if_fail (skey->key != NULL, SEAHORSE_VALIDITY_UNKNOWN);
-
-	if (skey->key->revoked)
-		return SEAHORSE_VALIDITY_REVOKED;
-	if (skey->key->disabled)
-		return SEAHORSE_VALIDITY_DISABLED;
-	if (skey->key->uids->validity <= SEAHORSE_VALIDITY_UNKNOWN)
-		return SEAHORSE_VALIDITY_UNKNOWN;
-	return skey->key->uids->validity;
-}
-
-const SeahorseValidity
-seahorse_key_get_trust (const SeahorseKey *skey)
-{
-	if (skey->key->owner_trust <= SEAHORSE_VALIDITY_UNKNOWN)
-		return SEAHORSE_VALIDITY_UNKNOWN;
-	return skey->key->owner_trust;
-}
 
 /**
  * seahorse_key_get_source
@@ -498,11 +208,18 @@ seahorse_key_get_trust (const SeahorseKey *skey)
  * Returns: A #SeahorseKeySource
  **/
 struct _SeahorseKeySource* 
-seahorse_key_get_source  (const SeahorseKey *skey)
+seahorse_key_get_source  (SeahorseKey *skey)
 {
     g_return_val_if_fail (SEAHORSE_IS_KEY (skey), NULL);
     g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (skey->key_source), NULL);
     return skey->key_source;
+}
+
+SeahorseKeyType
+seahorse_key_get_keytype (SeahorseKey *skey)
+{
+    g_return_val_if_fail (SEAHORSE_IS_KEY (skey), SKEY_INVALID);
+    return skey->type;
 }
 
 /**
@@ -514,18 +231,94 @@ seahorse_key_get_source  (const SeahorseKey *skey)
  * Returns: A SeahorseKeyInfo value which determines what's loaded.
  **/
 SeahorseKeyInfo 
-seahorse_key_get_loaded_info (SeahorseKey *skey)
+seahorse_key_get_loaded (SeahorseKey *skey)
 {
     g_return_val_if_fail (SEAHORSE_IS_KEY (skey), SKEY_INFO_NONE);
+    return skey->loaded;
+}
+
+SeahorseKeyLoc 
+seahorse_key_get_location (SeahorseKey *skey)
+{
+    g_return_val_if_fail (SEAHORSE_IS_KEY (skey), SKEY_LOC_UNKNOWN);
+    return skey->location;
+}
+
+guint
+seahorse_key_get_flags (SeahorseKey *skey)
+{
+    g_return_val_if_fail (SEAHORSE_IS_KEY (skey), 0);
+    return skey->flags;
+}
+
+guint
+seahorse_key_get_num_names (SeahorseKey *skey)
+{
+    SeahorseKeyClass *klass;
     
-    if (skey->key == NULL)
-        return SKEY_INFO_NONE;
-        
-    if (skey->key->keylist_mode & GPGME_KEYLIST_MODE_SIGS)
-        return SKEY_INFO_COMPLETE;
-        
-    if (skey->key->keylist_mode & GPGME_KEYLIST_MODE_EXTERN)
-        return SKEY_INFO_REMOTE;        
-        
-    return SKEY_INFO_NORMAL;
+    g_return_val_if_fail (SEAHORSE_IS_KEY (skey), 0);
+    klass = SEAHORSE_KEY_GET_CLASS (skey);
+    g_return_val_if_fail (klass->get_num_names != NULL, 0);
+    
+    return (*klass->get_num_names) (skey);
+}
+
+gchar*
+seahorse_key_get_name (SeahorseKey *skey, guint uid)
+{
+    SeahorseKeyClass *klass;
+    
+    g_return_val_if_fail (SEAHORSE_IS_KEY (skey), NULL);
+    klass = SEAHORSE_KEY_GET_CLASS (skey);
+    g_return_val_if_fail (klass->get_name, NULL);
+    
+    return (*klass->get_name) (skey, uid);
+}
+
+gchar*
+seahorse_key_get_display_name (SeahorseKey *skey)
+{
+    gchar *name;
+    g_object_get (skey, "display-name", &name, NULL);
+    return name;    
+}
+
+gchar*
+seahorse_key_get_simple_name (SeahorseKey *skey)
+{
+    gchar *name;
+    g_object_get (skey, "simple-name", &name, NULL);
+    return name;
+}
+
+gchar*
+seahorse_key_get_fingerprint (SeahorseKey *skey)
+{
+    gchar *fpr;
+    g_object_get (skey, "fingerprint", &fpr, NULL);
+    return fpr;
+}
+
+SeahorseValidity
+seahorse_key_get_validity (SeahorseKey *skey)
+{
+    guint validity;
+    g_object_get (skey, "validity", &validity, NULL);
+    return validity;
+}
+
+SeahorseValidity
+seahorse_key_get_trust (SeahorseKey *skey)
+{
+    guint validity;
+    g_object_get (skey, "trust", &validity, NULL);
+    return validity;
+}
+
+gulong
+seahorse_key_get_expires (SeahorseKey *skey)
+{
+    gulong expires;
+    g_object_get (skey, "expires", &expires, NULL);
+    return expires;
 }

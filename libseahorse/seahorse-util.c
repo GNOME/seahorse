@@ -30,6 +30,7 @@
 #include "seahorse-gpgmex.h"
 #include "seahorse-util.h"
 #include "seahorse-key.h"
+#include "seahorse-pgp-key.h"
 #include "seahorse-gconf.h"
 #include "seahorse-vfs-data.h"
 
@@ -467,9 +468,9 @@ seahorse_util_filename_for_keys (GList *keys)
     if (g_list_length (keys) == 1) {
         g_return_val_if_fail (SEAHORSE_IS_KEY (keys->data), NULL);
         skey = SEAHORSE_KEY (keys->data);
-        t = seahorse_key_get_userid_name (skey, 0);
+        t = seahorse_key_get_simple_name (skey);
         if (t == NULL) {
-            t = g_strdup (seahorse_key_get_id (skey->key));
+            t = g_strdup (seahorse_key_get_keyid (skey));
             if (strlen (t) > 8)
                 t[8] = 0;
         }
@@ -1088,6 +1089,8 @@ seahorse_util_strvec_dup (const gchar** vec)
     return ret;
 }
 
+/* TODO: This function no longer makes sense once we 
+   have multiple key and encryption types */
 gpgme_key_t* 
 seahorse_util_keylist_to_keys (GList *keys)
 {
@@ -1097,8 +1100,8 @@ seahorse_util_keylist_to_keys (GList *keys)
     recips = g_new0 (gpgme_key_t, g_list_length (keys) + 1);
     
     for (i = 0; keys != NULL; keys = g_list_next (keys), i++) {
-        g_return_val_if_fail (SEAHORSE_IS_KEY (keys->data), recips);
-        recips[i] = SEAHORSE_KEY (keys->data)->key;
+        g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (keys->data), recips);
+        recips[i] = SEAHORSE_PGP_KEY (keys->data)->pubkey;
         gpgmex_key_ref (recips[i]);
     }
     
