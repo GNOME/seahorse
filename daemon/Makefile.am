@@ -15,6 +15,8 @@ INCLUDES = -I$(top_builddir) \
 
 bin_PROGRAMS = seahorse-daemon
 
+BUILT_SOURCES = 
+
 if WITH_AGENT
 AGENT_LIB = $(top_builddir)/agent/libseahorseagent.a
 else
@@ -27,22 +29,35 @@ else
 SHARING_SRCS = 
 endif
 
+if WITH_DBUS
+DBUS_SRCS = seahorse-dbus-server.c seahorse-service.c seahorse-service.h
+BUILT_SOURCES += seahorse-dbus-bindings.h
+else
+DBUS_SRCS = 
+endif
+
 seahorse_daemon_SOURCES = \
-        seahorse-daemon.c \
-        seahorse-daemon.h \
-        $(SHARING_SRCS)
+		seahorse-daemon.c \
+		seahorse-daemon.h \
+		$(DBUS_SRCS) \
+		$(SHARING_SRCS)
 
 seahorse_daemon_LDADD = \
     $(AGENT_LIB) \
 	$(top_builddir)/libseahorse/libseahorse-internal.la \
 	$(SEAHORSE_LIBS)
-                         
+
 glade_DATA = 
 
 EXTRA_DIST = \
-	$(glade_DATA) 
+	$(glade_DATA) \
+    seahorse-dbus-bindings.h
 
 CLEANFILES = *.gladep* *.bak 
+
+# TODO: Look at evince to see what they did here. Something about --prefix
+seahorse-dbus-bindings.h: seahorse-dbus-bindings.xml
+	dbus-binding-tool --mode=glib-server --output=$@ $(srcdir)/$<
 
 install-exec-hook:
 	chmod u+s $(bindir)/seahorse-daemon

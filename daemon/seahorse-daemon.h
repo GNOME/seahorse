@@ -51,4 +51,14 @@ GQuark              seahorse_hkp_server_error_domain ();
 
 #endif
 
+/* seahorse-dbus-server.c --------------------------------------------------- */
+
+#ifdef WITH_DBUS
+
+gboolean            seahorse_dbus_server_init ();
+
+gboolean            seahorse_dbus_server_cleanup ();
+
+#endif 
+
 #endif /* _SEAHORSE_DAEMON_H_ */

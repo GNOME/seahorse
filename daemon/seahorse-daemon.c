@@ -231,22 +231,28 @@ int main(int argc, char* argv[])
     prepare_logging ();
 
     /* Initialize the various daemon components */
+#ifdef WITH_DBUS
+    seahorse_dbus_server_init ();
+#endif
 #ifdef WITH_AGENT
     seahorse_agent_init ();
 #endif    
 #ifdef WITH_SHARING
-    seahorse_sharing_init();
+    seahorse_sharing_init ();
 #endif
 
     gtk_main ();
 
     /* And now clean them all up */
 #ifdef WITH_SHARING
-    seahorse_sharing_cleanup();
+    seahorse_sharing_cleanup ();
 #endif
 #ifdef WITH_AGENT
     seahorse_agent_uninit ();
 #endif    
+#ifdef WITH_DBUS
+    seahorse_dbus_server_cleanup ();
+#endif
 
     return 0;
 }
