@@ -303,6 +303,25 @@ seahorse_pgp_source_get_property (GObject *object, guint prop_id, GValue *value,
  * HELPERS 
  */
 
+
+static void
+key_changed (SeahorseKey *skey, SeahorseKeyChange change, SeahorseKeySource *sksrc)
+{
+    /* TODO: We need to fix these key change flags. Currently the only thing
+     * that sets 'ALL' is when we replace a key in an skey. We don't 
+     * need to reload in that case */
+    
+    if (change != SKEY_CHANGE_ALL)
+        seahorse_key_source_load_async (sksrc, SKSRC_LOAD_KEY, 
+                                        seahorse_key_get_keyid (skey));
+}
+
+static void
+key_destroyed (SeahorseKey *skey, SeahorseKeySource *sksrc)
+{
+    g_signal_handlers_disconnect_by_func (skey, key_changed, sksrc);
+}
+
 /* Remove the given key from the context */
 static void
 remove_key_from_context (const gchar *id, SeahorseKey *dummy, SeahorsePGPSource *psrc)
@@ -376,6 +395,10 @@ add_key_to_context (SeahorsePGPSource *psrc, gpgme_key_t key)
                                 
         if (pkey == NULL)
             pkey = seahorse_pgp_key_new (SEAHORSE_KEY_SOURCE (psrc), key, NULL);
+        
+        /* We listen in to get notified of changes on this key */
+        g_signal_connect (pkey, "changed", G_CALLBACK (key_changed), SEAHORSE_KEY_SOURCE (psrc));
+        g_signal_connect (pkey, "destroy", G_CALLBACK (key_destroyed), SEAHORSE_KEY_SOURCE (psrc));
 
         /* Add to context */ 
         seahorse_context_add_key (SCTX_APP (), SEAHORSE_KEY (pkey));

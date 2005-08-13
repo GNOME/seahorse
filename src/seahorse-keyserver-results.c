@@ -322,15 +322,16 @@ gboolean
 filter_keyset (SeahorseKey *skey, const gchar* search)
 {
     gboolean match = FALSE;
-    gchar *name;
+    gchar *name, *t;
 
     name = seahorse_key_get_display_name (skey);
-    g_utf8_casefold (name, -1);
+    t = g_utf8_casefold (name, -1);
+    g_free (name);
     
-    if (strstr (name, search))
+    if (strstr (t, search))
         match = TRUE;
     
-    g_free (name);
+    g_free (t);
     return match;
 }
 
@@ -431,7 +432,7 @@ seahorse_keyserver_results_show (SeahorseOperation *op, const gchar *search)
     pred->etype = SKEY_PUBLIC;
     pred->location = SKEY_LOC_REMOTE;
     pred->custom = (SeahorseKeyPredFunc)filter_keyset;
-    pred->custom_data = t = g_strdup (search);
+    pred->custom_data = t = g_utf8_casefold (search, -1);
   
     /* Our keyset all nicely filtered */
     skset = seahorse_keyset_new_full (pred);

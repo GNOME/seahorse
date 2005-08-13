@@ -375,16 +375,6 @@ seahorse_context_remote_key_source (SeahorseContext *sctx, const gchar *uri)
 static void
 key_changed (SeahorseKey *skey, SeahorseKeyChange change, SeahorseContext *sctx)
 {
-    /* TODO: We need to fix these key change flags. Currently the only thing
-     * that sets 'ALL' is when we replace a key in an skey. We don't 
-     * need to reload in that case */
-    
-    if (change != SKEY_CHANGE_ALL) {
-        SeahorseKeySource *sksrc = seahorse_key_get_source (skey);
-        seahorse_key_source_load_async (sksrc, SKSRC_LOAD_KEY, 
-                                        seahorse_key_get_keyid (skey));
-    }
-    
     g_signal_emit (sctx, signals[CHANGED], 0, skey, change);
 }
 
