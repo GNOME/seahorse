@@ -415,6 +415,9 @@ seahorse_keyserver_results_show (SeahorseOperation *op, const gchar *search)
     g_signal_connect (selection, "changed",
         G_CALLBACK (selection_changed), swidget);
 
+    /* Set focus to the current key list */
+    gtk_widget_grab_focus (GTK_WIDGET (view));
+
     /* To avoid flicker */
     seahorse_widget_show (swidget);
 

@@ -814,10 +814,13 @@ seahorse_key_manager_show (SeahorseOperation *op)
     initialize_tab (swidget, "pub-key-tab", TAB_PUBLIC, "pub-key-list", SKEY_PUBLIC);
     initialize_tab (swidget, "sec-key-tab", TAB_PRIVATE, "sec-key-list", SKEY_PRIVATE);
     
+    /* Set focus to the current key list */
+    w = get_current_view (swidget);
+    gtk_widget_grab_focus (w);
+    
     /* To avoid flicker */
     seahorse_widget_show (swidget);
 	
-
     /* Setup drops */
     gtk_drag_dest_set (GTK_WIDGET (win), GTK_DEST_DEFAULT_ALL, 
                 seahorse_target_entries, seahorse_n_targets, GDK_ACTION_COPY);
