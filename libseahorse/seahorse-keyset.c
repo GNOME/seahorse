@@ -80,6 +80,9 @@ key_destroyed (SeahorseKey *skey, SeahorseKeyset *skset)
 static gboolean
 maybe_add_key (SeahorseKeyset *skset, SeahorseKey *skey)
 {
+    if (g_hash_table_lookup (skset->pv->keys, skey))
+        return FALSE;
+    
     if (!skset->pv->pred || !seahorse_key_predicate_match (skset->pv->pred, skey))
         return FALSE;
     
@@ -92,6 +95,9 @@ maybe_add_key (SeahorseKeyset *skset, SeahorseKey *skey)
 static gboolean
 maybe_remove_key (SeahorseKeyset *skset, SeahorseKey *skey)
 {
+    if (!g_hash_table_lookup (skset->pv->keys, skey))
+        return FALSE;
+    
     if (skset->pv->pred && seahorse_key_predicate_match (skset->pv->pred, skey))
         return FALSE;
     
