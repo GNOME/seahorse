@@ -256,7 +256,10 @@ seahorse_pgp_source_dispose (GObject *gobject)
         g_object_unref (l->data);
     g_list_free (psrc->pv->orphan_secret);
     psrc->pv->orphan_secret = NULL;
-
+    
+    if (psrc->gctx)
+        gpgme_release (psrc->gctx);
+    
     G_OBJECT_CLASS (parent_class)->dispose (gobject);
 }
 
@@ -515,6 +518,9 @@ seahorse_load_operation_finalize (GObject *gobject)
     g_assert (lop->stag == 0);
     g_assert (lop->psrc == NULL);
 
+    if (lop->ctx)
+        gpgme_release (lop->ctx);
+        
     G_OBJECT_CLASS (operation_parent_class)->finalize (gobject);  
 }
 
