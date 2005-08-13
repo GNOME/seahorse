@@ -2,6 +2,7 @@
  * Seahorse
  *
  * Copyright (C) 2003 Jacob Perkins
+ * Copyright (C) 2004,2005 Nate Nielsen
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,36 +28,27 @@
 #include "seahorse-context.h"
 #include "seahorse-pgp-key.h"
 
-void        seahorse_key_properties_new (SeahorseContext    *sctx,
-                                         SeahorsePGPKey     *pkey);
+void        seahorse_key_properties_new (SeahorsePGPKey     *pkey);
 
-void        seahorse_add_revoker_new    (SeahorseContext    *sctx,
-                                         SeahorsePGPKey     *pkey);
+void        seahorse_add_revoker_new    (SeahorsePGPKey     *pkey);
 
-void        seahorse_expires_new        (SeahorseContext    *sctx, 
-                                         SeahorsePGPKey     *pkey, 
+void        seahorse_expires_new        (SeahorsePGPKey     *pkey, 
                                          guint index);
 
-void        seahorse_add_subkey_new     (SeahorseContext    *sctx,
-                                         SeahorsePGPKey     *pkey);
+void        seahorse_add_subkey_new     (SeahorsePGPKey     *pkey);
 
-void        seahorse_add_uid_new        (SeahorseContext    *sctx,
-                                         SeahorsePGPKey     *pkey);
+void        seahorse_add_uid_new        (SeahorsePGPKey     *pkey);
 
-void        seahorse_delete_subkey_new  (SeahorseContext	*sctx,
-                                         SeahorsePGPKey     *pkey,
+void        seahorse_delete_subkey_new  (SeahorsePGPKey     *pkey,
                                          guint              index);
 
-void        seahorse_delete_userid_show (SeahorseContext    *sctx, 
-                                         SeahorsePGPKey     *pkey, 
+void        seahorse_delete_userid_show (SeahorsePGPKey     *pkey, 
                                          guint              index);
 
-void        seahorse_revoke_new         (SeahorseContext    *sctx,
-                                         SeahorsePGPKey     *pkey,
+void        seahorse_revoke_new         (SeahorsePGPKey     *pkey,
                                          guint              index);
 
-void        seahorse_sign_uid_show      (SeahorseContext    *sctx, 
-                                         SeahorsePGPKey     *pkey, 
+void        seahorse_sign_uid_show      (SeahorsePGPKey     *pkey, 
                                          guint              uid);
 
 #endif /* __SEAHORSE_KEY_DIALOGS__ */

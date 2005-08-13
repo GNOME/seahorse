@@ -65,7 +65,7 @@ ok_clicked (SeahorseWidget *swidget)
 }
 
 void
-seahorse_sign_show (SeahorseContext *sctx, GList *keys)
+seahorse_sign_show (GList *keys)
 {
 	GtkWidget *question;
 	gint response;
@@ -88,8 +88,7 @@ seahorse_sign_show (SeahorseContext *sctx, GList *keys)
 		if (response != GTK_RESPONSE_YES)
 			break;
 		
-		swidget = seahorse_key_widget_new_with_index ("sign", sctx, 
-                                                      SEAHORSE_KEY (pkey), 0);
+		swidget = seahorse_key_widget_new_with_index ("sign", SEAHORSE_KEY (pkey), 0);
 		g_return_if_fail (swidget != NULL);
 		
 		while (do_sign) {
@@ -112,7 +111,7 @@ seahorse_sign_show (SeahorseContext *sctx, GList *keys)
 }
 
 void
-seahorse_sign_uid_show (SeahorseContext *sctx, SeahorsePGPKey *pkey, guint uid)
+seahorse_sign_uid_show (SeahorsePGPKey *pkey, guint uid)
 {
     GtkWidget *question;
     gint response;
@@ -137,8 +136,7 @@ seahorse_sign_uid_show (SeahorseContext *sctx, SeahorsePGPKey *pkey, guint uid)
     if (response != GTK_RESPONSE_YES)
         return;
      
-    swidget = seahorse_key_widget_new_with_index ("sign", sctx, 
-                                                  SEAHORSE_KEY (pkey), uid);
+    swidget = seahorse_key_widget_new_with_index ("sign", SEAHORSE_KEY (pkey), uid);
     g_return_if_fail (swidget != NULL);
         
     while (do_sign) {

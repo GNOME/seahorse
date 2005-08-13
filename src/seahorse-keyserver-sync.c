@@ -31,7 +31,6 @@
 #include "seahorse-progress.h"
 #include "seahorse-preferences.h"
 #include "seahorse-server-source.h"
-#include "seahorse-multi-source.h"
 #include "seahorse-gconf.h"
 
 static void 
@@ -85,7 +84,6 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 {
     SeahorseKeySource *lsksrc;
     SeahorseKeySource *sksrc;
-    SeahorseContext *sctx;
     SeahorseMultiOperation *mop;
     SeahorseOperation *op;
     GError *err = NULL;
@@ -95,7 +93,6 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
     GList *keys;
     
     keys = (GList*)g_object_get_data (G_OBJECT (swidget), "publish-keys");
-    sctx = swidget->sctx;
     
     seahorse_widget_destroy (swidget);
     
@@ -103,7 +100,7 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
         return;
 
     /* This should be the default key source */
-    lsksrc = seahorse_context_get_key_source (swidget->sctx);
+    lsksrc = seahorse_context_find_key_source (SCTX_APP(), SKEY_PGP, SKEY_LOC_LOCAL);
     g_return_if_fail (lsksrc != NULL);
 
     mop = seahorse_multi_operation_new ();
@@ -113,13 +110,15 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 	ks = seahorse_server_source_purge_keyservers (ks);
 	
     for (l = ks; l; l = g_slist_next (l)) {
-
-        sksrc = SEAHORSE_KEY_SOURCE (seahorse_server_source_new (lsksrc, (const gchar*)(l->data), NULL));
+        
+        sksrc = seahorse_context_remote_key_source (SCTX_APP(), (const gchar*)(l->data));
+        g_return_if_fail (sksrc != NULL);
+        
         op = seahorse_key_source_export (sksrc, keys, FALSE, NULL);
         g_return_if_fail (op != NULL);
 
         g_signal_connect (op, "done", G_CALLBACK (sync_export_complete), sksrc);
-        seahorse_multi_operation_add (mop, op);
+        seahorse_multi_operation_take (mop, op);
     }
     seahorse_util_string_slist_free (ks);
     
@@ -139,7 +138,9 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
             gerr = gpgme_data_new_from_mem (&data, exported, strlen (exported), 0);
             g_return_if_fail (GPG_IS_OK (gerr));
 
-            sksrc = SEAHORSE_KEY_SOURCE (seahorse_server_source_new (lsksrc, keyserver, NULL));
+            sksrc = seahorse_context_remote_key_source (SCTX_APP (), keyserver);
+            g_return_if_fail (sksrc != NULL);
+            
             op = seahorse_key_source_import (sksrc, data);
             g_return_if_fail (op != NULL);
             
@@ -147,7 +148,7 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
             g_free (exported);
             
             g_signal_connect (op, "done", G_CALLBACK (sync_import_complete), sksrc);
-            seahorse_multi_operation_add (mop, op);
+            seahorse_multi_operation_take (mop, op);
         }
         
     }
@@ -156,14 +157,13 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
     
     /* Show the progress window if necessary */
     if (!seahorse_operation_is_done (SEAHORSE_OPERATION (mop))) 
-        seahorse_progress_show (sctx, SEAHORSE_OPERATION (mop), 
-                                _("Syncing keys..."), FALSE);
+        seahorse_progress_show (SEAHORSE_OPERATION (mop), _("Syncing keys..."), FALSE);
 }
 
 static void
 configure_clicked (GtkButton *button, SeahorseWidget *swidget)
 {
-    seahorse_preferences_show (swidget->sctx, "keyserver-tab");
+    seahorse_preferences_show ("keyserver-tab");
 }
 
 static void
@@ -206,7 +206,6 @@ unhook_notification (GtkWidget *widget, gpointer data)
 
 /**
  * seahorse_keyserver_sync_show
- * @sctx: The SeahorseContext
  * @keys: The keys to synchronize
  * 
  * Shows a synchronize window.
@@ -214,7 +213,7 @@ unhook_notification (GtkWidget *widget, gpointer data)
  * Returns the new window.
  **/
 GtkWindow*
-seahorse_keyserver_sync_show (SeahorseContext *sctx, GList *keys)
+seahorse_keyserver_sync_show (GList *keys)
 {	
 	SeahorseWidget *swidget;
     GtkWindow *win;
@@ -222,7 +221,7 @@ seahorse_keyserver_sync_show (SeahorseContext *sctx, GList *keys)
     guint n, notify_id;
     gchar *t;
     
-	swidget = seahorse_widget_new ("keyserver-sync", sctx);
+	swidget = seahorse_widget_new ("keyserver-sync");
 	g_return_val_if_fail (swidget != NULL, NULL);
     
     win = GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name));

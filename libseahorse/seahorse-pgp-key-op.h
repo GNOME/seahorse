@@ -26,7 +26,7 @@
 #include <gpgme.h>
 #include <time.h>
 
-#include "seahorse-key-source.h"
+#include "seahorse-pgp-source.h"
 #include "seahorse-pgp-key.h"
 
 /* Key type options. */
@@ -101,21 +101,21 @@ typedef enum {
 	REVOKE_NOT_USED = 3
 } SeahorseRevokeReason;
 
-gpgme_error_t  seahorse_key_op_generate         (SeahorseKeySource  *sksrc,
+gpgme_error_t  seahorse_key_op_generate         (SeahorsePGPSource  *sksrc,
                                                  const gchar *name,
                                                  const gchar *email,
                                                  const gchar *comment,
                                                  const gchar *passphrase,
-                                                 const SeahorseKeyEncType type,
-                                                 const guint length,
-                                                 const time_t expires);
+                                                 SeahorseKeyEncType type,
+                                                 guint length,
+                                                 time_t expires);
 
 gpgme_error_t  seahorse_key_op_delete           (SeahorsePGPKey *pkey);
 
 gpgme_error_t  seahorse_key_pair_op_delete      (SeahorsePGPKey *pkey);
 
 gpgme_error_t  seahorse_key_op_sign             (SeahorsePGPKey *pkey,
-                                                 const guint index,
+                                                 guint index,
                                                  SeahorseSignCheck check,
                                                  SeahorseSignOptions options);
 
@@ -128,8 +128,8 @@ gpgme_error_t  seahorse_key_op_set_disabled     (SeahorsePGPKey *pkey,
                                                  gboolean disabled);
 
 gpgme_error_t  seahorse_key_pair_op_set_expires (SeahorsePGPKey *pkey,
-                                                 const guint index,
-                                                 const time_t expires);
+                                                 guint index,
+                                                 time_t expires);
 
 gpgme_error_t  seahorse_key_pair_op_add_revoker (SeahorsePGPKey *pkey, 
                                                  SeahorsePGPKey *revoker);
@@ -140,21 +140,21 @@ gpgme_error_t  seahorse_key_pair_op_add_uid     (SeahorsePGPKey *pkey,
                                                  const gchar *comment);
 
 gpgme_error_t  seahorse_key_op_primary_uid      (SeahorsePGPKey *pkey,
-                                                 const guint index);
+                                                 guint index);
 
 gpgme_error_t  seahorse_key_op_del_uid          (SeahorsePGPKey *pkey,
-                                                 const guint index);
+                                                 guint index);
                              
 gpgme_error_t  seahorse_key_pair_op_add_subkey  (SeahorsePGPKey *pkey,
-                                                 const SeahorseKeyType type,
-                                                 const guint length,
-                                                 const time_t expires);
+                                                 SeahorseKeyEncType type,
+                                                 guint length,
+                                                 time_t expires);
 
 gpgme_error_t  seahorse_key_op_del_subkey       (SeahorsePGPKey *pkey,
-                                                 const guint index);
+                                                 guint index);
 
 gpgme_error_t  seahorse_key_op_revoke_subkey    (SeahorsePGPKey *pkey,
-                                                 const guint index,
+                                                 guint index,
                                                  SeahorseRevokeReason reason,
                                                  const gchar *description);
 

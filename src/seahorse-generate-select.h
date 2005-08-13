@@ -28,6 +28,6 @@
 #include "seahorse-widget.h"
 
 /* Loads generate dialog */
-void	seahorse_generate_select_show	(SeahorseContext	*sctx);
+void	seahorse_generate_select_show	(void);
 
 #endif /* __SEAHORSE_GENERATE_SELECT_H__ */

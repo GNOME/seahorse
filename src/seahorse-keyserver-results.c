@@ -50,7 +50,7 @@ close_activate (GtkWidget *widget, SeahorseWidget *swidget)
 static void
 search_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
-    seahorse_keyserver_search_show (swidget->sctx);
+    seahorse_keyserver_search_show ();
 }
 
 /* Loads key properties if a key is selected */
@@ -64,7 +64,7 @@ properties_activate (GtkWidget *widget, SeahorseWidget *swidget)
     
     /* TODO: Handle multiple types of keys here */
 	if (skey != NULL && SEAHORSE_IS_PGP_KEY (skey))
-		seahorse_key_properties_new (swidget->sctx, SEAHORSE_PGP_KEY (skey));
+		seahorse_key_properties_new (SEAHORSE_PGP_KEY (skey));
 }
 
 static void
@@ -108,10 +108,10 @@ import_activate (GtkWidget *widget, SeahorseWidget *swidget)
     g_return_if_fail (GPG_IS_OK (gerr));
 
     /* The default key source */
-    sksrc = seahorse_context_get_key_source (swidget->sctx);
-    g_return_if_fail (sksrc != NULL);
+    sksrc = seahorse_context_find_key_source (SCTX_APP(), SKEY_PGP, SKEY_LOC_LOCAL);
+    g_return_if_fail (sksrc && SEAHORSE_IS_PGP_SOURCE (sksrc));
     
-    n = seahorse_op_import_text (sksrc, text, &err);
+    n = seahorse_op_import_text (SEAHORSE_PGP_SOURCE (sksrc), text, &err);
     if (n == -1) 
         seahorse_util_handle_error (err, _("Couldn't import keys into keyring"));
     else
@@ -208,7 +208,7 @@ row_activated (GtkTreeView *treeview, GtkTreePath *path, GtkTreeViewColumn *arg2
 	
 	skey = seahorse_key_store_get_key_from_path (GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, KEY_LIST)), path, NULL);
 	if (skey != NULL && SEAHORSE_IS_PGP_KEY (skey))
-		seahorse_key_properties_new (swidget->sctx, SEAHORSE_PGP_KEY (skey));
+		seahorse_key_properties_new (SEAHORSE_PGP_KEY (skey));
 }
 
 static void
@@ -260,14 +260,20 @@ key_list_popup_menu (GtkWidget *widget, SeahorseWidget *swidget)
     return FALSE;
 }
 
+static void
+operation_done (SeahorseOperation *op, SeahorseWidget *swidget)
+{
+    g_object_set_data (G_OBJECT (swidget), "operation", NULL);
+}
+
 static void 
 window_destroyed (GtkWindow *window, SeahorseWidget *swidget)
 {
-    SeahorseKeySource *sksrc = 
-        SEAHORSE_KEY_SOURCE (g_object_get_data (G_OBJECT (swidget), "key-source"));
-        
-    seahorse_key_source_stop (sksrc);
-    g_object_unref (sksrc);
+    SeahorseOperation *op = 
+        SEAHORSE_OPERATION (g_object_get_data (G_OBJECT (swidget), "operation"));
+    
+    if (op && !seahorse_operation_is_done (op))
+        seahorse_operation_cancel (op);
 }
 
 static void
@@ -312,38 +318,54 @@ static GtkActionEntry remote_entries[] = {
             N_("Search for keys on a key server"), G_CALLBACK (search_activate) }, 
 };
 
+gboolean 
+filter_keyset (SeahorseKey *skey, const gchar* search)
+{
+    gboolean match = FALSE;
+    gchar *name;
+
+    name = seahorse_key_get_display_name (skey);
+    g_utf8_casefold (name, -1);
+    
+    if (strstr (name, search))
+        match = TRUE;
+    
+    g_free (name);
+    return match;
+}
+
 /**
  * seahorse_keyserver_results_show
- * @sctx: The SeahorseContext 
  * @sksrc: The SeahorseKeySource with the remote keys 
  * @search: The search text (for display in titles and such).
  * 
  * Returns the new window created.
  **/
 GtkWindow* 
-seahorse_keyserver_results_show (SeahorseContext *sctx, SeahorseKeySource *sksrc,
-                                 const gchar *search)
+seahorse_keyserver_results_show (SeahorseOperation *op, const gchar *search)
 {
+    SeahorseKeyStore *skstore;
+    SeahorseKeyPredicate *pred;
     GtkWindow *win;
-    SeahorseOperation *operation;
+    SeahorseKeyset *skset;
 	SeahorseWidget *swidget;
 	GtkTreeView *view;
 	GtkTreeSelection *selection;
-    SeahorseKeyStore *skstore;
     GtkActionGroup *actions;
     GtkAction *action;
     GtkWidget *w;
-    gchar *title;
+    gchar *title, *t;
 	
-	swidget = seahorse_widget_new_allow_multiple ("keyserver-results", sctx);
+	swidget = seahorse_widget_new_allow_multiple ("keyserver-results");
     g_return_val_if_fail (swidget != NULL, NULL);
     
     win = GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name));
     g_return_val_if_fail (win != NULL, NULL);
-
-    g_object_set_data (G_OBJECT (swidget), "key-source", sksrc);
-    g_signal_connect (win, "destroy", G_CALLBACK (window_destroyed), swidget);
     
+    g_object_set_data (G_OBJECT (swidget), "operation", op);    
+    g_signal_connect (op, "done", G_CALLBACK (operation_done), swidget);
+    g_signal_connect (win, "destroy", G_CALLBACK (window_destroyed), swidget);    
+
     if (!search)
         title = g_strdup (_("Remote Keys"));
     else 
@@ -379,38 +401,47 @@ seahorse_keyserver_results_show (SeahorseContext *sctx, SeahorseKeySource *sksrc
     seahorse_widget_add_actions (swidget, actions);    
 
 	/* tree view signals */	
-	glade_xml_signal_connect_data (swidget->xml, "row_activated",
-		G_CALLBACK (row_activated), swidget);
-	glade_xml_signal_connect_data (swidget->xml, "key_list_button_pressed",
-		G_CALLBACK (key_list_button_pressed), swidget);
-	glade_xml_signal_connect_data (swidget->xml, "key_list_popup_menu",
-		G_CALLBACK (key_list_popup_menu), swidget);
+    glade_xml_signal_connect_data (swidget->xml, "row_activated",
+        G_CALLBACK (row_activated), swidget);
+    glade_xml_signal_connect_data (swidget->xml, "key_list_button_pressed",
+        G_CALLBACK (key_list_button_pressed), swidget);
+    glade_xml_signal_connect_data (swidget->xml, "key_list_popup_menu",
+        G_CALLBACK (key_list_popup_menu), swidget);
 
-	/* init key list & selection settings */
-	view = GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, KEY_LIST));
-	selection = gtk_tree_view_get_selection (view);
-	gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
-	g_signal_connect (selection, "changed",
-		G_CALLBACK (selection_changed), swidget);
-    selection_changed (NULL, swidget);
+    /* init key list & selection settings */
+    view = GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, KEY_LIST));
+    selection = gtk_tree_view_get_selection (view);
+    gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
+    g_signal_connect (selection, "changed",
+        G_CALLBACK (selection_changed), swidget);
 
     /* To avoid flicker */
     seahorse_widget_show (swidget);
 
-
-    /* Load the keys */
-    seahorse_key_source_refresh_async (sksrc, SEAHORSE_KEY_SOURCE_ALL);
-
     /* Hook progress bar in */
-    operation = seahorse_key_source_get_operation (sksrc);
-    g_return_val_if_fail (operation != NULL, win);
-    
     w = glade_xml_get_widget (swidget->xml, "status");
-    seahorse_progress_appbar_set_operation (w, operation);
+    seahorse_progress_appbar_set_operation (w, op);
+    
+    /* Our predicate for filtering keys */
+    pred = g_new0 (SeahorseKeyPredicate, 1);
+    pred->ktype = SKEY_PGP;
+    pred->etype = SKEY_PUBLIC;
+    pred->location = SKEY_LOC_REMOTE;
+    pred->custom = (SeahorseKeyPredFunc)filter_keyset;
+    pred->custom_data = t = g_strdup (search);
+  
+    /* Our keyset all nicely filtered */
+    skset = seahorse_keyset_new_full (pred);
 
+    /* Free these when the keyset goes away */
+    g_object_set_data_full (G_OBJECT (skset), "search-text", t, g_free);
+    g_object_set_data_full (G_OBJECT (skset), "predicate", t, g_free);
+    
     /* A new key store only showing public keys */
-    skstore = seahorse_key_manager_store_new (sksrc, view, KEYTYPE_PUBLIC);
-	selection_changed (selection, swidget);
+    skstore = seahorse_key_manager_store_new (skset, view);
+    g_object_unref (skset);
+    
+    selection_changed (selection, swidget);
 
     return win;
 }

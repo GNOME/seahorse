@@ -58,17 +58,21 @@ int
 main (int argc, char **argv)
 {
 	SeahorseWidget *swidget;
-	SeahorseContext *sctx;
+    SeahorseOperation *op;
 
     gnome_program_init (PACKAGE, VERSION, LIBGNOMEUI_MODULE, argc, argv,
                 GNOME_PARAM_POPT_TABLE, options,
                 GNOME_PARAM_HUMAN_READABLE_NAME, _("Encryption Preferences"),
                 GNOME_PARAM_APP_DATADIR, DATA_DIR, NULL);
 	
-	sctx = seahorse_context_new ();
-    seahorse_context_load_keys (sctx, TRUE);
+    /* The default SeahorseContext */
+	seahorse_context_new (TRUE);
+    op = seahorse_context_load_local_keys (SCTX_APP ());
+    
+    /* Let operation take care of itself */
+    g_object_unref (op);
    
-    swidget = seahorse_prefs_new (sctx);
+    swidget = seahorse_prefs_new ();
 	g_signal_connect (seahorse_widget_get_top (swidget), "destroy", 
                       G_CALLBACK (destroyed), NULL);
 

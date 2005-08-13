@@ -28,7 +28,6 @@
 #include "seahorse-windows.h"
 #include "seahorse-preferences.h"
 #include "seahorse-server-source.h"
-#include "seahorse-multi-source.h"
 #include "seahorse-gconf.h"
 #include "seahorse-context.h"
 #include "seahorse-dns-sd.h"
@@ -295,25 +294,11 @@ refresh_shared_keys (SeahorseServiceDiscovery *ssd, const gchar *name, SeahorseW
 /* -------------------------------------------------------------------------- */
  
 static void
-start_keyserver_search (SeahorseMultiSource *msrc, SeahorseKeySource *lsksrc,
-                        const gchar *keyserver, const gchar *search)
-{
-    SeahorseKeySource *sksrc;
-    
-    sksrc = SEAHORSE_KEY_SOURCE (seahorse_server_source_new (lsksrc, keyserver, search));
-    g_return_if_fail (sksrc != NULL);
-    
-    seahorse_multi_source_add (msrc, sksrc, FALSE);
-}
-
-static void
 ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 {
-    SeahorseKeySource *lsksrc;
-    SeahorseMultiSource *msrc;
+    SeahorseOperation *op;
     KeyserverSelection *selection;
     const gchar *search;
-    GSList *l;
 	GtkWidget *w;
             
     w = glade_xml_get_widget (swidget->xml, "search-text");
@@ -324,24 +309,16 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
     g_return_if_fail (search != NULL && search[0] != 0);
     seahorse_gconf_set_string (LASTSEARCH_KEY, search);
     
-    /* This should be the default key source */
-    lsksrc = seahorse_context_get_key_source (swidget->sctx);
-    g_return_if_fail (lsksrc != NULL);
-
     /* The keyservers to search, and save for next time */    
     selection = get_keyserver_selection (swidget);
     g_return_if_fail (selection->uris != NULL);
     seahorse_gconf_set_string_list (LASTSERVERS_KEY, 
                                     selection->all ? NULL : selection->names);
-
-    /* Container for all the remote sources */
-    msrc = seahorse_multi_source_new ();
-            
-    for (l = selection->uris; l; l = g_slist_next (l))
-        start_keyserver_search (msrc, lsksrc, (const gchar*)(l->data), search);
+                                    
+    op = seahorse_context_load_remote_keys (SCTX_APP(), search);
     
     /* Open the new result window */    
-    seahorse_keyserver_results_show (swidget->sctx, SEAHORSE_KEY_SOURCE (msrc), search);
+    seahorse_keyserver_results_show (op, search);
 
     free_keyserver_selection (selection);
     seahorse_widget_destroy (swidget);
@@ -350,26 +327,25 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 static void
 configure_clicked (GtkButton *button, SeahorseWidget *swidget)
 {
-    seahorse_preferences_show (swidget->sctx, "keyserver-tab");
+    seahorse_preferences_show ("keyserver-tab");
 }
 
 static void
 cleanup_signals (GtkWidget *widget, SeahorseWidget *swidget)
 {
-    SeahorseServiceDiscovery *ssd = seahorse_context_get_discovery (swidget->sctx);
+    SeahorseServiceDiscovery *ssd = seahorse_context_get_discovery (SCTX_APP());
     g_signal_handlers_disconnect_by_func (ssd, refresh_shared_keys, swidget);
 }
 
 /**
  * seahorse_keyserver_search_show
- * @sctx: The SeahorseContext
  * 
  * Shows a remote search window.
  * 
  * Returns the new window.
  **/
 GtkWindow*
-seahorse_keyserver_search_show (SeahorseContext *sctx)
+seahorse_keyserver_search_show ()
 {	
     SeahorseServiceDiscovery *ssd;
 	SeahorseWidget *swidget;
@@ -377,7 +353,7 @@ seahorse_keyserver_search_show (SeahorseContext *sctx)
     GtkWidget *w;
     gchar *search;
         
-	swidget = seahorse_widget_new ("keyserver-search", sctx);
+	swidget = seahorse_widget_new ("keyserver-search");
 	g_return_val_if_fail (swidget != NULL, NULL);
  
     win = GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name));
@@ -406,7 +382,7 @@ seahorse_keyserver_search_show (SeahorseContext *sctx)
                                 swidget, GTK_WIDGET (win));
     
     /* Any shared keys to list */    
-    ssd = seahorse_context_get_discovery (swidget->sctx);
+    ssd = seahorse_context_get_discovery (SCTX_APP ());
     refresh_shared_keys (ssd, NULL, swidget);
     g_signal_connect (ssd, "added", G_CALLBACK (refresh_shared_keys), swidget);
     g_signal_connect (ssd, "removed", G_CALLBACK (refresh_shared_keys), swidget);

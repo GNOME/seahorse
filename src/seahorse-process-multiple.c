@@ -125,8 +125,7 @@ seperate_toggled (GtkWidget *widget, GtkWidget *package)
 
 /* Build the multiple file dialog */
 static SeahorseWidget*
-prepare_dialog (SeahorseContext *sctx, const gchar* glade, const gchar* msg, 
-                    gchar* pkguri, gboolean remote)
+prepare_dialog (const gchar* glade, const gchar* msg, gchar* pkguri, gboolean remote)
 {
     SeahorseWidget *swidget;
     const gchar* pkg;
@@ -136,10 +135,9 @@ prepare_dialog (SeahorseContext *sctx, const gchar* glade, const gchar* msg,
     gboolean sep;
     gint sel;
     
-    g_assert (sctx);
     g_assert (pkguri);
 
-    swidget = seahorse_widget_new ((gchar*)glade, sctx);
+    swidget = seahorse_widget_new ((gchar*)glade);
     g_return_val_if_fail (swidget != NULL, NULL);
     
     /* The main 'selected' message */
@@ -186,7 +184,7 @@ prepare_dialog (SeahorseContext *sctx, const gchar* glade, const gchar* msg,
 
 /* Get the package name and selection */
 static gchar*
-get_results (SeahorseContext *sctx, SeahorseWidget *swidget)
+get_results (SeahorseWidget *swidget)
 {
     const gchar* name;
     const gchar* t;
@@ -229,7 +227,6 @@ get_results (SeahorseContext *sctx, SeahorseWidget *swidget)
 
 /**
  * seahorse_process_multiple
- * @sctx: A valid SeahorseContext
  * @uris: null-terminated vector of URIs
  * @glade: The form to display, or NULL for default
  * 
@@ -239,7 +236,7 @@ get_results (SeahorseContext *sctx, SeahorseWidget *swidget)
  * Returns: Newly allocated null-terminated vector of URIs to encrypt
  **/
 gchar** 
-seahorse_process_multiple(SeahorseContext *sctx, const gchar **uris, const gchar *glade)
+seahorse_process_multiple(const gchar **uris, const gchar *glade)
 {
     SeahorseWidget *swidget;
     gboolean done = FALSE;
@@ -285,7 +282,7 @@ seahorse_process_multiple(SeahorseContext *sctx, const gchar **uris, const gchar
         
     /* This sets up but doesn't run the dialog */    
     t = make_message (folders, files);
-    swidget = prepare_dialog (sctx, glade, t, pkg_uri, remote);
+    swidget = prepare_dialog (glade, t, pkg_uri, remote);
     g_free (t);
     
     dlg = glade_xml_get_widget (swidget->xml, glade);
@@ -298,7 +295,7 @@ seahorse_process_multiple(SeahorseContext *sctx, const gchar **uris, const gchar
                 break;
             
             case GTK_RESPONSE_OK:
-                package = get_results (sctx, swidget);
+                package = get_results (swidget);
                 ok = TRUE;
                 /* Fall through */
                 

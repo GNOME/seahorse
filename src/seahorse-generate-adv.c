@@ -93,7 +93,7 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
     SeahorseKeySource *sksrc;
 	const gchar *name, *email, *comment, *pass;
 	gint history, length;
-	SeahorseKeyType type;
+	SeahorseKeyEncType type;
 	time_t expires;
 	GtkWidget *widget;
 	gpgme_error_t err;
@@ -131,10 +131,10 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 	gtk_widget_hide (widget);
 	
     /* When we update to support S/MIME this will need to change */
-    sksrc = seahorse_context_get_key_source (swidget->sctx);
-    g_return_if_fail (sksrc != NULL);
+    sksrc = seahorse_context_find_key_source (SCTX_APP (), SKEY_PGP, SKEY_LOC_LOCAL);
+    g_return_if_fail (sksrc && SEAHORSE_IS_PGP_SOURCE (sksrc));
     	
-	err = seahorse_key_op_generate (sksrc, name, email, comment,
+	err = seahorse_key_op_generate (SEAHORSE_PGP_SOURCE (sksrc), name, email, comment,
 		                            pass, type, length, expires);
 	if (!GPG_IS_OK (err)) {
 		gtk_widget_show (widget);
@@ -145,11 +145,11 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 }
 
 void
-seahorse_generate_adv_show (SeahorseContext *sctx)
+seahorse_generate_adv_show ()
 {	
 	SeahorseWidget *swidget;
 	
-	swidget = seahorse_widget_new ("generate-adv", sctx);
+	swidget = seahorse_widget_new ("generate-adv");
 	g_return_if_fail (swidget != NULL);
 	
 	glade_xml_signal_connect_data (swidget->xml, "type_changed",

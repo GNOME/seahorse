@@ -124,7 +124,7 @@ on_druid_finish (GnomeDruidPage *gnomedruidpage, GtkWidget *widget, SeahorseWidg
     SeahorseKeySource *sksrc;
 	const gchar *name, *email, *comment, *pass;
 	gint length;
-	SeahorseKeyType type;
+	SeahorseKeyEncType type;
 	time_t expires;
 	GtkWidget *widget2;
 	gpgme_error_t err;
@@ -157,11 +157,11 @@ on_druid_finish (GnomeDruidPage *gnomedruidpage, GtkWidget *widget, SeahorseWidg
 	gtk_widget_hide (widget2);
     
     /* When we update to support S/MIME this will need to change */
-    sksrc = seahorse_context_get_key_source (swidget->sctx);
-    g_return_if_fail (sksrc != NULL);
+    sksrc = seahorse_context_find_key_source (SCTX_APP(), SKEY_PGP, SKEY_LOC_LOCAL);
+    g_return_if_fail (sksrc && SEAHORSE_IS_PGP_SOURCE (sksrc));
 	
-	err = seahorse_key_op_generate (sksrc, name, email, comment,
-		pass, type, length, expires);
+	err = seahorse_key_op_generate (SEAHORSE_PGP_SOURCE (sksrc), name, email, comment,
+		                            pass, type, length, expires);
 	if (!GPG_IS_OK (err)) {
 		gtk_widget_show (widget2);
 		seahorse_util_handle_gpgme (err, _("Couldn't generate key"));
@@ -192,12 +192,12 @@ on_druidpagesecuritylevel_prepare(GnomeDruidPage *gnomedruidpage, GtkWidget *wid
 
 
 void
-seahorse_generate_druid_show (SeahorseContext *sctx)
+seahorse_generate_druid_show ()
 {	
 	SeahorseWidget *swidget;
 	GtkWidget *startpage;
 	
-	swidget = seahorse_widget_new ("generate-druid", sctx);
+	swidget = seahorse_widget_new ("generate-druid");
 	g_return_if_fail (swidget != NULL);
 	
 	startpage = glade_xml_get_widget (swidget->xml, "druidpagestart1");

@@ -2,6 +2,7 @@
  * Seahorse
  *
  * Copyright (C) 2003 Jacob Perkins
+ * Copyright (C) 2005 Nate Nielsen
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -198,9 +199,8 @@ expiry_clicked (GtkWidget *widget, SeahorseWidget *swidget)
     SeahorseKey *skey;
     skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
     
-    if (seahorse_key_get_keytype (skey) == SKEY_PRIVATE)
-        seahorse_expires_new (swidget->sctx, SEAHORSE_PGP_KEY (skey), 
-                              get_subkey_index(swidget));
+    if (seahorse_key_get_etype (skey) == SKEY_PRIVATE)
+        seahorse_expires_new (SEAHORSE_PGP_KEY (skey), get_subkey_index(swidget));
 }
 
 static void
@@ -257,7 +257,7 @@ do_stats (SeahorseWidget *swidget, GtkTable *table, guint top, guint index, gpgm
     else
         do_stat_label (_("Never"), table, 1, top+2, FALSE, NULL, NULL);
     
-    if (seahorse_key_get_keytype (skey) == SKEY_PRIVATE) {
+    if (seahorse_key_get_etype (skey) == SKEY_PRIVATE) {
         widget = gtk_button_new_with_mnemonic(_("Change Expiry Date"));
         gtk_button_set_relief (GTK_BUTTON (widget), GTK_RELIEF_HALF);
         gtk_widget_show (widget);
@@ -275,7 +275,7 @@ passphrase_clicked (GtkWidget *widget, SeahorseWidget *swidget)
     SeahorseKey *skey;
     skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
     
-    if (seahorse_key_get_keytype (skey) == SKEY_PRIVATE)
+    if (seahorse_key_get_etype (skey) == SKEY_PRIVATE)
         seahorse_key_pair_op_change_pass (SEAHORSE_PGP_KEY (skey));
 }
 
@@ -289,7 +289,7 @@ export_clicked (GtkWidget *widget, SeahorseWidget *swidget)
     GList *keys = NULL;
     
     skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
-    if (seahorse_key_get_keytype (skey) != SKEY_PRIVATE)
+    if (seahorse_key_get_etype (skey) != SKEY_PRIVATE)
         return;
 
     keys = g_list_prepend (keys, skey);
@@ -469,7 +469,7 @@ uid_sel_changed (GtkTreeSelection *selection, SeahorseWidget *swidget)
     skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
     pkey = SEAHORSE_PGP_KEY (skey);
     
-    secret = seahorse_key_get_keytype (skey) == SKEY_PRIVATE;
+    secret = seahorse_key_get_etype (skey) == SKEY_PRIVATE;
     uids = seahorse_pgp_key_get_num_userids (pkey);
 
     widget = glade_xml_get_widget (swidget->xml, "uid-add");
@@ -544,7 +544,7 @@ uid_add_clicked (GtkWidget *widget, SeahorseWidget *swidget)
     SeahorseKey *skey;
     
     skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
-    seahorse_add_uid_new (swidget->sctx, SEAHORSE_PGP_KEY (skey));
+    seahorse_add_uid_new (SEAHORSE_PGP_KEY (skey));
 }
 
 static gint
@@ -604,7 +604,7 @@ uid_sign_clicked (GtkWidget *widget, SeahorseWidget *swidget)
     
     index = get_selected_uid (swidget);
     if (index >= 1) 
-       seahorse_sign_uid_show (swidget->sctx, SEAHORSE_PGP_KEY (skey), index);
+       seahorse_sign_uid_show (SEAHORSE_PGP_KEY (skey), index);
 }
 
 static void 
@@ -617,23 +617,21 @@ uid_delete_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 
     index = get_selected_uid (swidget);
     if (index >= 1) 
-        seahorse_delete_userid_show (swidget->sctx, SEAHORSE_PGP_KEY (skey), index);
+        seahorse_delete_userid_show (SEAHORSE_PGP_KEY (skey), index);
 }
     
 static void
 del_subkey_clicked (GtkButton *button, SeahorseWidget *swidget)
 {
     SeahorseKey *skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
-	seahorse_delete_subkey_new (swidget->sctx, SEAHORSE_PGP_KEY (skey),
-		                        get_subkey_index (swidget));
+	seahorse_delete_subkey_new (SEAHORSE_PGP_KEY (skey), get_subkey_index (swidget));
 }
 
 static void
 revoke_subkey_clicked (GtkButton *button, SeahorseWidget *swidget)
 {
     SeahorseKey *skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
-	seahorse_revoke_new (swidget->sctx, SEAHORSE_PGP_KEY (skey),
-		                 get_subkey_index (swidget));
+	seahorse_revoke_new (SEAHORSE_PGP_KEY (skey), get_subkey_index (swidget));
 }
 
 static void
@@ -667,7 +665,7 @@ do_subkeys (SeahorseWidget *swidget)
 	for (key = 1; key <= max; key++) {
 		table = GTK_TABLE (gtk_table_new (5, 4, FALSE));
 		/* if do revoke button */
-		if (seahorse_key_get_keytype (skey) == SKEY_PRIVATE && !subkey->revoked) {
+		if (seahorse_key_get_etype (skey) == SKEY_PRIVATE && !subkey->revoked) {
 			widget = do_stat_button (_("_Revoke"), GTK_STOCK_CANCEL);
 			g_signal_connect_after (GTK_BUTTON (widget), "clicked",
 				G_CALLBACK (revoke_subkey_clicked), swidget);
@@ -744,17 +742,17 @@ properties_destroyed (GtkObject *object, SeahorseWidget *swidget)
 }
 
 void
-seahorse_key_properties_new (SeahorseContext *sctx, SeahorsePGPKey *pkey)
+seahorse_key_properties_new (SeahorsePGPKey *pkey)
 {
     SeahorseKey *skey = SEAHORSE_KEY (pkey);
     SeahorseKeySource *sksrc;
 	SeahorseWidget *swidget;
-    SeahorseKeyType ktype;
+    SeahorseKeyEType etype;
 	GtkWidget *widget;
     gboolean remote;
     
     remote = seahorse_key_get_loaded (skey) == SKEY_LOC_REMOTE;
-    ktype = seahorse_key_get_keytype (skey);
+    etype = seahorse_key_get_etype (skey);
     
     /* Reload the key to make sure to get all the props */
     sksrc = seahorse_key_get_source (skey);
@@ -763,12 +761,12 @@ seahorse_key_properties_new (SeahorseContext *sctx, SeahorsePGPKey *pkey)
     /* Don't trigger the import of remote keys if possible */
     if (!remote) {
         /* This causes the key source to get any specific info about the key */
-        seahorse_key_source_refresh_sync (sksrc, seahorse_key_get_keyid (skey));
-        skey = seahorse_key_source_get_key (sksrc, seahorse_key_get_keyid (skey));
+        seahorse_key_source_load_sync (sksrc, SKSRC_LOAD_KEY, seahorse_key_get_keyid (skey));
+        skey = seahorse_context_get_key (SCTX_APP(), sksrc, seahorse_key_get_keyid (skey));
         g_return_if_fail (skey != NULL);                
     }
 	
-	swidget = seahorse_key_widget_new ("key-properties", sctx, skey);
+	swidget = seahorse_key_widget_new ("key-properties", skey);
 	g_return_if_fail (swidget != NULL);
 	
 	widget = glade_xml_get_widget (swidget->xml, swidget->name);
@@ -779,7 +777,7 @@ seahorse_key_properties_new (SeahorseContext *sctx, SeahorsePGPKey *pkey)
 	key_property_labels (swidget);
     
     /* Secret key stuff */    
-    if(ktype == SKEY_PRIVATE) {
+    if(etype == SKEY_PRIVATE) {
         
         /* Change password button */
         widget = glade_xml_get_widget (swidget->xml, "passphrase");
@@ -829,7 +827,7 @@ seahorse_key_properties_new (SeahorseContext *sctx, SeahorsePGPKey *pkey)
                                        G_CALLBACK (signature_sel_changed), swidget);        
 
         /* disable trust options */
-        if (ktype == SKEY_PRIVATE)
+        if (etype == SKEY_PRIVATE)
             widget = glade_xml_get_widget (swidget->xml, "unknown");
         else
             widget = glade_xml_get_widget (swidget->xml, "ultimate");

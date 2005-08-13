@@ -37,31 +37,27 @@
 typedef struct _SeahorseKeyWidget SeahorseKeyWidget;
 typedef struct _SeahorseKeyWidgetClass SeahorseKeyWidgetClass;
 	
-struct _SeahorseKeyWidget
-{
+struct _SeahorseKeyWidget {
 	SeahorseWidget		parent;
 	
 	SeahorseKey		*skey;
 	guint			index;
 };
 
-struct _SeahorseKeyWidgetClass
-{
+struct _SeahorseKeyWidgetClass {
 	SeahorseWidgetClass	parent_class;
 };
 
-GType           seahorse_key_widget_get_type ();
+GType           seahorse_key_widget_get_type    (void);
 
-SeahorseWidget*	seahorse_key_widget_new			(gchar			*name,
-							 SeahorseContext	*sctx,
-							 SeahorseKey		*skey);
+SeahorseWidget*	seahorse_key_widget_new         (gchar              *name,
+                                                 SeahorseKey        *skey);
 
-SeahorseWidget*	seahorse_key_widget_new_with_index	(gchar			*name,
-							 SeahorseContext	*sctx,
-							 SeahorseKey		*skey,
-							 guint			index);
+SeahorseWidget*	seahorse_key_widget_new_with_index	(gchar          *name,
+                                                 SeahorseKey        *skey,
+                                                 guint              index);
 
-gboolean	seahorse_key_widget_can_create		(gchar			*name,
-							 SeahorseKey		*skey);
+gboolean        seahorse_key_widget_can_create  (gchar              *name,
+                                                 SeahorseKey        *skey);
 	
 #endif /* __SEAHORSE_KEY_WIDGET_H__ */

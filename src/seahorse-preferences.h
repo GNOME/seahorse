@@ -33,7 +33,6 @@
 
 #define UI_SCHEMAS SEAHORSE_SCHEMAS "/ui"
 
-void		seahorse_preferences_show		(SeahorseContext	*sctx,
-                                             const gchar        *tabid);
+void		seahorse_preferences_show		(const gchar        *tabid);
 
 #endif /* __SEAHORSE_PREFERENCES_H__ */

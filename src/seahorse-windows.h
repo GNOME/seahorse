@@ -2,6 +2,7 @@
  * Seahorse
  *
  * Copyright (C) 2003 Jacob Perkins
+ * Copyright (C) 2005 Nate Nielsen
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,31 +27,26 @@
 
 #include "seahorse-context.h"
 
-GtkWindow*	seahorse_key_manager_show	        (SeahorseContext	*sctx);
+GtkWindow*	seahorse_key_manager_show	        (SeahorseOperation *op);
 
-GtkWindow*  seahorse_keyserver_search_show      (SeahorseContext    *sctx);
+GtkWindow*  seahorse_keyserver_search_show      (void);
 
-GtkWindow*  seahorse_keyserver_sync_show        (SeahorseContext *sctx, 
-                                                 GList *keys);
+GtkWindow*  seahorse_keyserver_sync_show        (GList *keys);
 
-GtkWindow*  seahorse_keyserver_results_show     (SeahorseContext    *sctx,
-                                                 SeahorseKeySource  *sksrc,
+GtkWindow*  seahorse_keyserver_results_show     (SeahorseOperation *op,
                                                  const gchar *search_text);
 
-void	seahorse_generate_select_show	(SeahorseContext	*sctx);
+void        seahorse_generate_select_show       (void);
 
-void	seahorse_generate_adv_show	(SeahorseContext	*sctx);
+void        seahorse_generate_adv_show          (void);
 
-void	seahorse_generate_druid_show	(SeahorseContext	*sctx);
+void        seahorse_generate_druid_show        (void);
 
-void	seahorse_delete_show		(SeahorseContext	*sctx,
-					 GList			*keys);
+void        seahorse_delete_show                (GList *keys);
 
-void	seahorse_sign_show		(SeahorseContext	*sctx,
-					 GList			*keys);
+void        seahorse_sign_show                  (GList *keys);
 
-gchar** seahorse_process_multiple (SeahorseContext       *sctx, 
-                                   const gchar**         uris, 
-                                   const gchar*          glade);
+gchar**     seahorse_process_multiple           (const gchar **uris, 
+                                                 const gchar *glade);
 
 #endif /* __SEAHORSE_WINDOWS_H__ */

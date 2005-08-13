@@ -57,8 +57,6 @@
 #define MENU_SIGN_ITEM_NAME       "Sign"
 #define MENU_SIGN_ITEM_TIP        N_("Sign the selected text")
 
-static SeahorseContext *sctx = NULL;
-
 /* -----------------------------------------------------------------------------
  * HELPER FUNCTIONS 
  * 
@@ -154,8 +152,6 @@ replace_selected_text (GeditDocument *doc, const gchar *replace)
     gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (doc),            
                    &iter, gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (doc)));
 
-    g_printerr ("%s\n", replace);
-
     if (*replace != '\0')
         gtk_text_buffer_insert (GTK_TEXT_BUFFER (doc), &iter,
                  replace, strlen (replace));
@@ -173,7 +169,7 @@ encrypt_cb (BonoboUIComponent * uic, gpointer user_data,
             const gchar * verbname)
 {
     GeditView *view = GEDIT_VIEW (gedit_get_active_view ());
-    SeahorseKey *signer = NULL;
+    SeahorsePGPKey *signer = NULL;
     GeditDocument *doc;
     gpgme_error_t err = GPG_OK;
     gchar *enctext = NULL;
@@ -183,7 +179,6 @@ encrypt_cb (BonoboUIComponent * uic, gpointer user_data,
     gint end;
 
     gedit_debug (DEBUG_PLUGINS, "");
-    g_assert (SEAHORSE_IS_CONTEXT (sctx));
 
     g_return_if_fail (view != NULL);
     doc = gedit_view_get_document (view);
@@ -200,7 +195,7 @@ encrypt_cb (BonoboUIComponent * uic, gpointer user_data,
     
     /* Get the recipient list */
     gedit_debug (DEBUG_PLUGINS, "getting recipients");
-    keys = seahorse_recipients_get (sctx, &signer);
+    keys = seahorse_recipients_get (&signer);
 
     /* User may have cancelled */
     if (g_list_length(keys) == 0)
@@ -240,10 +235,10 @@ import_keys (const gchar * text)
     GError *err = NULL;
     gint keys;
 
-    sksrc = seahorse_context_get_key_source (sctx);
-    g_return_val_if_fail (sksrc != NULL, 0);
+    sksrc = seahorse_context_find_key_source (SCTX_APP (), SKEY_PGP, SKEY_LOC_LOCAL);
+    g_return_val_if_fail (sksrc && SEAHORSE_IS_PGP_SOURCE (sksrc), 0);
     
-    keys = seahorse_op_import_text (sksrc, text, &err);
+    keys = seahorse_op_import_text (SEAHORSE_PGP_SOURCE (sksrc), text, &err);
 
     if (keys < 0) {
         seahorse_util_handle_error (err, _("Couldn't import keys"));
@@ -264,10 +259,11 @@ decrypt_text (const gchar * text, gpgme_verify_result_t *status)
     gpgme_error_t err;
     gchar *rawtext = NULL;
     
-    sksrc = seahorse_context_get_key_source (sctx);
-    g_return_val_if_fail (sksrc != NULL, 0);
+    sksrc = seahorse_context_find_key_source (SCTX_APP (), SKEY_PGP, SKEY_LOC_LOCAL);
+    g_return_val_if_fail (sksrc && SEAHORSE_IS_PGP_SOURCE (sksrc), 0);
 
-    rawtext = seahorse_op_decrypt_verify_text (sksrc, text, status, &err);
+    rawtext = seahorse_op_decrypt_verify_text (SEAHORSE_PGP_SOURCE (sksrc), 
+                                               text, status, &err);
 
     if (!GPG_IS_OK (err)) {
         seahorse_util_handle_gpgme (err, _("Couldn't decrypt text"));
@@ -285,10 +281,10 @@ verify_text (const gchar * text, gpgme_verify_result_t *status)
     gpgme_error_t err;
     gchar *rawtext = NULL;
 
-    sksrc = seahorse_context_get_key_source (sctx);
-    g_return_val_if_fail (sksrc != NULL, 0);    
+    sksrc = seahorse_context_find_key_source (SCTX_APP (), SKEY_PGP, SKEY_LOC_LOCAL);
+    g_return_val_if_fail (sksrc && SEAHORSE_IS_PGP_SOURCE (sksrc), 0);    
 
-    rawtext = seahorse_op_verify_text (sksrc, text, status, &err);
+    rawtext = seahorse_op_verify_text (SEAHORSE_PGP_SOURCE (sksrc), text, status, &err);
 
     if (!GPG_IS_OK (err)) {
         seahorse_util_handle_gpgme (err, _("Couldn't decrypt text"));
@@ -327,7 +323,6 @@ decrypt_cb (BonoboUIComponent * uic, gpointer user_data,
     gpgme_verify_result_t status;   /* Signature status of last operation */
     
     gedit_debug (DEBUG_PLUGINS, "");
-    g_assert (SEAHORSE_IS_CONTEXT (sctx));
 
     g_return_if_fail (view);
 
@@ -421,10 +416,10 @@ decrypt_cb (BonoboUIComponent * uic, gpointer user_data,
                 gchar *t;
                 
                 if(!sigs) 
-                    sigs = seahorse_signatures_new (sctx);
+                    sigs = seahorse_signatures_new ();
                     
                 t = g_strdup_printf (_("Block %d"), blocks + 1);
-                seahorse_signatures_add (sctx, sigs, t, status);
+                seahorse_signatures_add (sigs, t, status);
                 g_free (t);
             }
             
@@ -443,7 +438,7 @@ decrypt_cb (BonoboUIComponent * uic, gpointer user_data,
     g_free (buffer);
     
     if (sigs)
-        seahorse_signatures_run (sctx, sigs);
+        seahorse_signatures_run (sigs);
 }
 
 /* Callback for the sign menu item */
@@ -454,14 +449,13 @@ sign_cb (BonoboUIComponent * uic, gpointer user_data,
     GeditView *view = GEDIT_VIEW (gedit_get_active_view ());
     GeditDocument *doc;
     gpgme_error_t err = GPG_OK;
-    SeahorseKey *signer;
+    SeahorsePGPKey *signer;
     gchar *enctext = NULL;
     gchar *buffer;
     gint start;
     gint end;
 
     gedit_debug (DEBUG_PLUGINS, "");
-    g_assert (SEAHORSE_IS_CONTEXT (sctx));
 
     g_return_if_fail (view);
     doc = gedit_view_get_document (view);
@@ -474,7 +468,7 @@ sign_cb (BonoboUIComponent * uic, gpointer user_data,
     /* Get the document text */
     buffer = get_document_chars (doc, start, end);
 
-    signer = seahorse_signer_get (sctx);
+    signer = seahorse_signer_get ();
     if (signer == NULL)
         return;
 
@@ -584,10 +578,7 @@ destroy (GeditPlugin * plugin)
 {
     gedit_debug (DEBUG_PLUGINS, "destroy");
 
-    if (sctx && SEAHORSE_IS_CONTEXT (sctx))
-        seahorse_context_destroy (sctx);
-
-    sctx = NULL;
+    seahorse_context_destroy (SCTX_APP ());
     plugin->private_data = NULL;
     return PLUGIN_OK;
 }
@@ -596,11 +587,18 @@ destroy (GeditPlugin * plugin)
 G_MODULE_EXPORT GeditPluginState
 init (GeditPlugin * plugin)
 {
+    SeahorseContext *sctx;
+    SeahorseOperation *op;
+    
     gedit_debug (DEBUG_PLUGINS, "inited");
 
-    sctx = seahorse_context_new ();
-    seahorse_context_load_keys (sctx, FALSE);
+    sctx = seahorse_context_new (TRUE);
+    op = seahorse_context_load_local_keys (sctx);
     plugin->private_data = sctx;
+    
+    /* Let operation take care of itself */
+    g_object_unref (op);
+
 
     return PLUGIN_OK;
 }

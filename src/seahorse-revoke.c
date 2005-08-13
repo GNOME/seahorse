@@ -56,18 +56,16 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 }
 
 void
-seahorse_revoke_new (SeahorseContext *sctx, SeahorsePGPKey *pkey, guint index)
+seahorse_revoke_new (SeahorsePGPKey *pkey, guint index)
 {
 	SeahorseWidget *swidget;
 	gchar *title;
     gchar *userid;
 	
-	g_return_if_fail (sctx != NULL && SEAHORSE_IS_CONTEXT (sctx));
 	g_return_if_fail (pkey != NULL && SEAHORSE_IS_PGP_KEY (pkey));
 	g_return_if_fail (index <= seahorse_pgp_key_get_num_subkeys (pkey));
 	
-	swidget = seahorse_key_widget_new_with_index ("revoke", sctx, 
-                                                  SEAHORSE_KEY (pkey), index);
+	swidget = seahorse_key_widget_new_with_index ("revoke", SEAHORSE_KEY (pkey), index);
 	g_return_if_fail (swidget != NULL);
 	
 	glade_xml_signal_connect_data (swidget->xml, "ok_clicked",
@@ -85,7 +83,7 @@ seahorse_revoke_new (SeahorseContext *sctx, SeahorsePGPKey *pkey, guint index)
 }
 
 void
-seahorse_add_revoker_new (SeahorseContext *sctx, SeahorsePGPKey *pkey)
+seahorse_add_revoker_new (SeahorsePGPKey *pkey)
 {
 	SeahorsePGPKey *revoker;
 	GtkWidget *dialog;
@@ -93,11 +91,10 @@ seahorse_add_revoker_new (SeahorseContext *sctx, SeahorsePGPKey *pkey)
 	gpgme_error_t err;
     gchar *userid1, *userid2;
 	
-	g_return_if_fail (sctx != NULL && SEAHORSE_IS_CONTEXT (sctx));
 	g_return_if_fail (pkey != NULL && SEAHORSE_IS_PGP_KEY (pkey));
 
     /* TODO: Limit to selecting only PGP keys */
-    revoker = SEAHORSE_PGP_KEY (seahorse_signer_get (sctx));
+    revoker = SEAHORSE_PGP_KEY (seahorse_signer_get ());
     if (revoker == NULL)
         return;
 	

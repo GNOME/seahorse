@@ -66,7 +66,7 @@ static void
 ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 {
 	SeahorseKeyWidget *skwidget;
-	SeahorseKeyType real_type;
+	SeahorseKeyEncType real_type;
 	guint type, length;
 	time_t expires;
 	gpgme_error_t err;
@@ -113,12 +113,12 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 }
 
 void
-seahorse_add_subkey_new (SeahorseContext *sctx, SeahorsePGPKey *pkey)
+seahorse_add_subkey_new (SeahorsePGPKey *pkey)
 {
 	SeahorseWidget *swidget;
     gchar *userid;
 	
-	swidget = seahorse_key_widget_new ("add-subkey", sctx, SEAHORSE_KEY (pkey));
+	swidget = seahorse_key_widget_new ("add-subkey", SEAHORSE_KEY (pkey));
 	g_return_if_fail (swidget != NULL);
 	
     userid = seahorse_key_get_name (SEAHORSE_KEY (pkey), 0);

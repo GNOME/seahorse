@@ -85,18 +85,17 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 
 /**
  * seahorse_add_uid_new:
- * @sctx: Current context
  * @skey: #SeahorseKey
  *
  * Creates a new #SeahorseKeyWidget dialog for adding a user ID to @skey.
  **/
 void
-seahorse_add_uid_new (SeahorseContext *sctx, SeahorsePGPKey *pkey)
+seahorse_add_uid_new (SeahorsePGPKey *pkey)
 {
 	SeahorseWidget *swidget;
     gchar *userid;
 	
-	swidget = seahorse_key_widget_new ("add-uid", sctx, SEAHORSE_KEY (pkey));
+	swidget = seahorse_key_widget_new ("add-uid", SEAHORSE_KEY (pkey));
 	g_return_if_fail (swidget != NULL);
 	
     userid = seahorse_key_get_name (SEAHORSE_KEY (pkey), 0);

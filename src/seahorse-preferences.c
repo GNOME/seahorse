@@ -2,6 +2,7 @@
  * Seahorse
  *
  * Copyright (C) 2003 Jacob Perkins
+ * Copyright (C) 2005 Jacob Perkins
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,13 +30,12 @@
 
 /**
  * seahorse_preferences_show:
- * @sctx: Current #SeahorseContext
  * @tabid: The id of the tab to show
  *
  * Creates a new or shows the current preferences dialog.
  **/
 void
-seahorse_preferences_show (SeahorseContext *sctx, const gchar *tabid)
+seahorse_preferences_show (const gchar *tabid)
 {	
 	SeahorseWidget *swidget;
     GtkWidget *label;
@@ -45,9 +45,7 @@ seahorse_preferences_show (SeahorseContext *sctx, const gchar *tabid)
     GtkWidget *label2;
     GtkWidget *align;
 	
-	g_return_if_fail (sctx != NULL && SEAHORSE_IS_CONTEXT (sctx));
-	
-    swidget = seahorse_prefs_new (sctx);
+    swidget = seahorse_prefs_new ();
     
     label = gtk_label_new (_("Key Manager"));
 

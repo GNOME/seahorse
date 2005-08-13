@@ -42,19 +42,19 @@ on_method_ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 	gtk_widget_hide (widget);
 	
 	if(druid->active){
-		seahorse_generate_druid_show (swidget->sctx);
+		seahorse_generate_druid_show ();
 	}else if(adv->active){
-		seahorse_generate_adv_show (swidget->sctx);
+		seahorse_generate_adv_show ();
 	}
 }
 
 
 void
-seahorse_generate_select_show (SeahorseContext *sctx)
+seahorse_generate_select_show ()
 {	
 	SeahorseWidget *swidget;
 	
-	swidget = seahorse_widget_new ("generate-select", sctx);
+	swidget = seahorse_widget_new ("generate-select");
 	g_return_if_fail (swidget != NULL);
 	
               

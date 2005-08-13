@@ -202,7 +202,7 @@ seahorse_key_widget_destroyed (GtkObject *skey, SeahorseKeyWidget *skwidget)
  * the focus is grabbed.
  */
 static SeahorseWidget*
-seahorse_key_widget_create (gchar *name, SeahorseContext *sctx, SeahorseKey *skey, guint index)
+seahorse_key_widget_create (gchar *name, SeahorseKey *skey, guint index)
 {
 	SeahorseWidget *swidget = NULL;	//widget to lookup or create
 	GHashTable *widgets = NULL;	//hash of widgets from types
@@ -236,7 +236,7 @@ seahorse_key_widget_create (gchar *name, SeahorseContext *sctx, SeahorseKey *ske
 	
 	/* otherwise create a new widget & insert into widgets hash for the key */
 	swidget = g_object_new (SEAHORSE_TYPE_KEY_WIDGET, "name", name,
-		"ctx", sctx, "key", skey, "index", index, NULL);
+		                    "key", skey, "index", index, NULL);
 	g_hash_table_insert (widgets, g_strdup (name), swidget);
 	
 	/* if don't have a groups hash, create one */
@@ -262,16 +262,15 @@ seahorse_key_widget_create (gchar *name, SeahorseContext *sctx, SeahorseKey *ske
 }
 
 SeahorseWidget*
-seahorse_key_widget_new (gchar *name, SeahorseContext *sctx, SeahorseKey *skey)
+seahorse_key_widget_new (gchar *name, SeahorseKey *skey)
 {
-	return seahorse_key_widget_create (name, sctx, skey, 0);
+	return seahorse_key_widget_create (name, skey, 0);
 }
 
 SeahorseWidget*
-seahorse_key_widget_new_with_index (gchar *name, SeahorseContext *sctx,
-				    SeahorseKey *skey, guint index)
+seahorse_key_widget_new_with_index (gchar *name, SeahorseKey *skey, guint index)
 {
-	return seahorse_key_widget_create (name, sctx, skey, index);
+	return seahorse_key_widget_create (name, skey, index);
 }
 
 gboolean

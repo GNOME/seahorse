@@ -86,7 +86,7 @@ ask_key (SeahorseKey *skey)
 	gtk_widget_destroy (question);
 
 	if (response == GTK_RESPONSE_ACCEPT) {
-		if (seahorse_key_get_keytype (skey) == SKEY_PRIVATE)
+		if (seahorse_key_get_etype (skey) == SKEY_PRIVATE)
 			return ask_key_pair (skey);
 		else
 			return TRUE;
@@ -96,7 +96,7 @@ ask_key (SeahorseKey *skey)
 }
 
 void
-seahorse_delete_show (SeahorseContext *sctx, GList *keys)
+seahorse_delete_show (GList *keys)
 {
 	SeahorseKey *skey;
 	gpgme_error_t err;
@@ -109,7 +109,7 @@ seahorse_delete_show (SeahorseContext *sctx, GList *keys)
 		if (ask_key (skey)) {
             
             /* TODO: We need to be able to handle different key types here */
-			if (seahorse_key_get_keytype (skey) == SKEY_PRIVATE)
+			if (seahorse_key_get_etype (skey) == SKEY_PRIVATE)
 				err = seahorse_key_pair_op_delete (SEAHORSE_PGP_KEY (skey));
 			else
 				err = seahorse_key_op_delete (SEAHORSE_PGP_KEY (skey));
@@ -122,7 +122,7 @@ seahorse_delete_show (SeahorseContext *sctx, GList *keys)
 }
 
 void
-seahorse_delete_subkey_new (SeahorseContext *sctx, SeahorsePGPKey *pkey, guint index)
+seahorse_delete_subkey_new (SeahorsePGPKey *pkey, guint index)
 {
 	GtkWidget *question, *delete_button, *cancel_button;
 	gint response;
@@ -159,7 +159,7 @@ seahorse_delete_subkey_new (SeahorseContext *sctx, SeahorsePGPKey *pkey, guint i
 }
 
 void
-seahorse_delete_userid_show (SeahorseContext *sctx, SeahorsePGPKey *pkey, guint index)
+seahorse_delete_userid_show (SeahorsePGPKey *pkey, guint index)
 {
     GtkWidget *question, *delete_button, *cancel_button;
     gint response;
