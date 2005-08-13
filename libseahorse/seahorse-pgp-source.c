@@ -24,9 +24,6 @@
 #include <gnome.h>
 #include <libgnomevfs/gnome-vfs.h>
 
-/* Amount of keys to load in a batch */
-#define DEFAULT_LOAD_BATCH 200
-
 #include "seahorse-gpgmex.h"
 #include "seahorse-pgp-source.h"
 #include "seahorse-operation.h"
@@ -37,20 +34,31 @@
 
 /* TODO: Verify properly that all keys we deal with are PGP keys */
 
+/* Override the DEBUG_REFRESH_ENABLE switch here */
+#define DEBUG_REFRESH_ENABLE 0
+
+#ifndef DEBUG_REFRESH_ENABLE
+#if _DEBUG
+#define DEBUG_REFRESH_ENABLE 1
+#else
+#define DEBUG_REFRESH_ENABLE 0
+#endif
+#endif
+
+#if DEBUG_REFRESH_ENABLE
+#define DEBUG_REFRESH(x)    g_printerr(x)
+#else
+#define DEBUG_REFRESH(x)
+#endif
+
+/* Amount of keys to load in a batch */
+#define DEFAULT_LOAD_BATCH 200
+
 enum {
 	PROP_0,
     PROP_KEY_TYPE,
     PROP_LOCATION
 };
-
-/* Set to one to print refresh/monitoring status on console */
-#define DEBUG_REFRESH_CODE 0
-
-#if DEBUG_REFRESH_CODE
-#define DEBUG_REFRESH(x)    g_printerr(x)
-#else
-#define DEBUG_REFRESH(x)
-#endif
 
 /* Initialise a GPGME context for PGP keys */
 static gpgme_error_t

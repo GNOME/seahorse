@@ -26,6 +26,23 @@
 #include "seahorse-marshal.h"
 #include "seahorse-operation.h"
 
+/* Override the DEBUG_OPERATION_ENABLE switch here */
+/* #define DEBUG_OPERATION_ENABLE 0 */
+
+#ifndef DEBUG_OPERATION_ENABLE
+#if _DEBUG
+#define DEBUG_OPERATION_ENABLE 1
+#else
+#define DEBUG_OPERATION_ENABLE 0
+#endif
+#endif
+
+#if DEBUG_OPERATION_ENABLE
+#define DEBUG_OPERATION(x) g_printerr x
+#else
+#define DEBUG_OPERATION(x) 
+#endif
+
 enum {
     DONE,
     PROGRESS,
@@ -392,10 +409,8 @@ multi_operation_progress (SeahorseOperation *operation, const gchar *message,
     /* One or two operations, simple */
     if (g_slist_length (list) <= 1) {
 
-#ifdef _DEBUG 
-        g_printerr ("[multi-operation 0x%08X] single progress: %s %d/%d\n", (guint)mop, 
-            seahorse_operation_get_details (operation), operation->current, operation->total);
-#endif
+        DEBUG_OPERATION (("[multi-operation 0x%08X] single progress: %s %d/%d\n", (guint)mop, 
+            seahorse_operation_get_details (operation), operation->current, operation->total));
         
         seahorse_operation_mark_progress (SEAHORSE_OPERATION (mop), 
                             seahorse_operation_get_details (operation), 
@@ -433,10 +448,8 @@ multi_operation_progress (SeahorseOperation *operation, const gchar *message,
 		    }
         }		
 
-#ifdef _DEBUG 
-        g_printerr ("[multi-operation 0x%08X] multi progress: %s %d/%d\n", (guint)mop, 
-                    message, (gint)current, (gint)total);
-#endif
+        DEBUG_OPERATION (("[multi-operation 0x%08X] multi progress: %s %d/%d\n", (guint)mop, 
+                    message, (gint)current, (gint)total));
         
         seahorse_operation_mark_progress (SEAHORSE_OPERATION (mop), message,
 	    								  current, total);
@@ -458,10 +471,8 @@ multi_operation_done (SeahorseOperation *op, SeahorseMultiOperation *mop)
     if (!seahorse_operation_is_successful (op) && !SEAHORSE_OPERATION (mop)->error)
         seahorse_operation_copy_error (op, &(SEAHORSE_OPERATION (mop)->error));
 
-#ifdef _DEBUG 
-    g_printerr ("[multi-operation 0x%08X] part complete (%d): 0x%08X/%s\n", (guint)mop, 
-                g_slist_length (mop->operations), (guint)op, seahorse_operation_get_details (op));
-#endif
+    DEBUG_OPERATION (("[multi-operation 0x%08X] part complete (%d): 0x%08X/%s\n", (guint)mop, 
+                g_slist_length (mop->operations), (guint)op, seahorse_operation_get_details (op)));
         
     /* Are we done with all of them? */
     for (l = mop->operations; l; l = g_slist_next (l)) {
@@ -475,9 +486,7 @@ multi_operation_done (SeahorseOperation *op, SeahorseMultiOperation *mop)
         return;
     }
 
-#ifdef _DEBUG 
-    g_printerr ("[multi-operation 0x%08X] complete\n", (guint)mop);
-#endif
+    DEBUG_OPERATION (("[multi-operation 0x%08X] complete\n", (guint)mop));
 
     /* Remove all the listeners */
     for (l = mop->operations; l; l = g_slist_next (l)) {
@@ -498,15 +507,11 @@ seahorse_multi_operation_take (SeahorseMultiOperation* mop, SeahorseOperation *o
     g_return_if_fail (SEAHORSE_IS_OPERATION (op));
     
     if(mop->operations == NULL) {
-#ifdef _DEBUG 
-        g_printerr ("[multi-operation 0x%08X] start\n", (guint)mop);
-#endif        
+        DEBUG_OPERATION (("[multi-operation 0x%08X] start\n", (guint)mop));
         seahorse_operation_mark_start (SEAHORSE_OPERATION (mop));
     }
     
-#ifdef _DEBUG
-    g_printerr ("[multi-operation 0x%08X] adding part: 0x%08X\n", (guint)mop, (guint)op);
-#endif
+    DEBUG_OPERATION (("[multi-operation 0x%08X] adding part: 0x%08X\n", (guint)mop, (guint)op));
     
     mop->operations = seahorse_operation_list_add (mop->operations, op);
     

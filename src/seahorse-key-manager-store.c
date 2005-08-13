@@ -376,7 +376,7 @@ drag_data_get (GtkWidget *widget, GdkDragContext *context,
     }
     
     if (t != NULL) {            
-        g_printerr ("%s\n", t);
+        DBG_PRINT (("%s\n", t));
     	gtk_selection_data_set (selection_data,  selection_data->target, 8, 
                                 (const guchar*)t, strlen (t));
     }

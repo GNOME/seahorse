@@ -33,6 +33,29 @@
 
 #ifdef WITH_HKP
 
+/* Override the DEBUG_HKP_ENABLE switch here */
+/* #define DEBUG_HKP_ENABLE 1 */
+
+#ifndef DEBUG_HKP_ENABLE
+#if _DEBUG
+#define DEBUG_HKP_ENABLE 1
+#else
+#define DEBUG_HKP_ENABLE 0
+#endif
+#endif
+
+#if DEBUG_HKP_ENABLE
+#define DEBUG_HKP(x) g_printerr x
+#define DEBUG_HEADER(a,b,c) dump_soup_header (a,b,c)
+#define DEBUG_REQUEST(a) dump_soup_request (a)
+#define DEBUG_RESPONSE(a) dump_soup_response (a)
+#else
+#define DEBUG_HKP(x) 
+#define DEBUG_HEADER(a,b,c)
+#define DEBUG_REQUEST(a)
+#define DEBUG_RESPONSE(a)
+#endif
+
 /* Amount of keys to load in a batch */
 #define DEFAULT_LOAD_BATCH 30
 
@@ -52,7 +75,7 @@ get_hkp_error_domain ()
     return q;
 }
 
-#ifdef _DEBUG
+#ifdef DEBUG_HKP_ENABLE
 
 static void
 dump_soup_header (const gchar *name, const gchar *value, gpointer user_data)
@@ -96,7 +119,7 @@ dump_soup_response (SoupMessage *msg)
     }    
 }
 
-#endif
+#endif /* DEBUG_HKP_ENABLE */
 
 /* -----------------------------------------------------------------------------
  *  HKP OPERATION     
@@ -413,10 +436,8 @@ refresh_callback (SoupMessage *msg, SeahorseHKPOperation *hop)
     GList *keys, *k;
     gchar *t;
     
-#ifdef _DEBUG
-    g_printerr ("[hkp] Search Result:\n");
-    dump_soup_response (msg);
-#endif      
+    DEBUG_HKP (("[hkp] Search Result:\n"));
+    DEBUG_RESPONSE (msg);
     
     if (SOUP_MESSAGE_IS_ERROR (msg)) {
         fail_hkp_operation (hop, msg->status_code, NULL);
@@ -487,10 +508,8 @@ send_callback (SoupMessage *msg, SeahorseHKPOperation *hop)
 {
     gchar *errmsg;
 
-#ifdef _DEBUG
-    g_printerr ("[hkp] Send Result:\n");
-    dump_soup_response (msg);
-#endif      
+    DEBUG_HKP (("[hkp] Send Result:\n"));
+    DEBUG_RESPONSE (msg);
     
     if (SOUP_MESSAGE_IS_ERROR (msg)) {
         fail_hkp_operation (hop, msg->status_code, NULL);
@@ -525,10 +544,8 @@ get_callback (SoupMessage *msg, SeahorseHKPOperation *hop)
     guint len;
     int r;
     
-#ifdef _DEBUG
-    g_printerr ("[hkp] Get Result:\n");
-    dump_soup_response (msg);
-#endif      
+    DEBUG_HKP (("[hkp] Get Result:\n"));
+    DEBUG_RESPONSE (msg);
     
     if (SOUP_MESSAGE_IS_ERROR (msg)) {
         fail_hkp_operation (hop, msg->status_code, NULL);
@@ -663,10 +680,8 @@ seahorse_hkp_source_load (SeahorseKeySource *src, SeahorseKeySourceLoad load,
     soup_session_queue_message (hop->session, message, 
                                 (SoupMessageCallbackFn)refresh_callback, hop);
 
-#ifdef _DEBUG
-    g_printerr ("[hkp] Search Request:\n");
-    dump_soup_request (message);
-#endif      
+    DEBUG_HKP (("[hkp] Search Request:\n"));
+    DEBUG_REQUEST (message);
     
     hop->total = hop->requests = 1;
     t = g_strdup_printf (_("Searching for keys on: %s"), server);
@@ -737,10 +752,8 @@ seahorse_hkp_source_import (SeahorseKeySource *sksrc, gpgme_data_t data)
                                     (SoupMessageCallbackFn)send_callback, hop);
         hop->requests++;
 
-#ifdef _DEBUG
-        g_printerr ("[hkp] Send Request:\n");
-        dump_soup_request (message);
-#endif      
+        DEBUG_HKP (("[hkp] Send Request:\n"));
+        DEBUG_REQUEST (message);
     }
 
     hop->total = hop->requests;
@@ -811,10 +824,8 @@ seahorse_hkp_source_export (SeahorseKeySource *sksrc, GList *keys,
 
         hop->requests++;
 
-#ifdef _DEBUG
-        g_printerr ("[hkp] Get Request:\n");
-        dump_soup_request (message);
-#endif              
+        DEBUG_HKP (("[hkp] Get Request:\n"));
+        DEBUG_REQUEST (message);
     }
     
     hop->total = hop->requests;

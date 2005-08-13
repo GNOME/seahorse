@@ -36,6 +36,23 @@
 
 #include "seahorse-dns-sd.h"
 
+/* Override the DEBUG_DNSSD_ENABLE switch here */
+/* #define DEBUG_DNSSD_ENABLE 1 */
+
+#ifndef DEBUG_DNSSD_ENABLE
+#if _DEBUG
+#define DEBUG_DNSSD_ENABLE 1
+#else
+#define DEBUG_DNSSD_ENABLE 0
+#endif
+#endif
+
+#if DEBUG_DNSSD_ENABLE
+#define DEBUG_DNSSD(x) g_printerr x
+#else
+#define DEBUG_DNSSD(x) 
+#endif
+
 #define HKP_SERVICE_TYPE "_hkp._tcp."
 
 /* 
@@ -160,7 +177,7 @@ resolve_callback (sw_discovery discovery, sw_discovery_oid oid, sw_uint32 interf
     
     g_hash_table_replace (ssd->services, service_name, service_uri);
     g_signal_emit (ssd, signals[ADDED], 0, service_name);
-    g_print ("DNS-SD added: %s %s\n", service_name, service_uri);
+    DEBUG_DNSSD (("DNS-SD added: %s %s\n", service_name, service_uri));
     
     /* One address is enough */
     sw_discovery_cancel (discovery, oid);   
@@ -192,7 +209,7 @@ browse_callback (sw_discovery discovery, sw_discovery_oid id,
         
         g_hash_table_remove (ssd->services, name);
         g_signal_emit (ssd, signals[REMOVED], 0, name);
-        g_print ("DNS-SD removed: %s\n", name);
+        DEBUG_DNSSD (("DNS-SD removed: %s\n", name));
         
     }
     

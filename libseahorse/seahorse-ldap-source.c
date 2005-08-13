@@ -33,6 +33,25 @@
 
 #ifdef WITH_LDAP
 
+/* Override the DEBUG_LDAP_ENABLE switch here */
+/* #define DEBUG_LDAP_ENABLE 1 */
+
+#ifndef DEBUG_LDAP_ENABLE
+#if _DEBUG
+#define DEBUG_LDAP_ENABLE 1
+#else
+#define DEBUG_LDAP_ENABLE 0
+#endif
+#endif
+
+#if DEBUG_LDAP_ENABLE
+#define DEBUG_LDAP(x) g_printerr x
+#define DEBUG_LDAP_ENTRY(a,b) dump_ldap_entry(a,b)
+#else
+#define DEBUG_LDAP(x) 
+#define DEBUG_LDAP_ENTRY(a,b) 
+#endif
+
 /* Amount of keys to load in a batch */
 #define DEFAULT_LOAD_BATCH 30
 
@@ -90,7 +109,7 @@ get_ldap_server_info (SeahorseLDAPSource *lsrc, gboolean force)
  
 #define LDAP_ERROR_DOMAIN (get_ldap_error_domain())
 
-#ifdef _DEBUG
+#if DEBUG_LDAP_ENABLE
 
 static void
 dump_ldap_entry (LDAP *ld, LDAPMessage *res)
@@ -443,10 +462,10 @@ done_info_start_op (SeahorseOperation *op, LDAPMessage *result)
         
         /* If we have results then fill in the server info */
         if (r == LDAP_RES_SEARCH_ENTRY) {
-#ifdef _DEBUG
-            g_printerr ("[ldap] Server Info Result:\n");
-            dump_ldap_entry (lop->ldap, result);
-#endif      
+
+            DEBUG_LDAP (("[ldap] Server Info Result:\n"));
+            DEBUG_LDAP_ENTRY (lop->ldap, result);
+
             /* NOTE: When adding attributes here make sure to add them to kServerAttributes */
             sinfo = g_new0 (LDAPServerInfo, 1);
             sinfo->version = get_int_attribute (lop->ldap, result, "version");
@@ -635,10 +654,10 @@ search_entry (SeahorseOperation *op, LDAPMessage *result)
      
     /* An LDAP entry */
     if (r == LDAP_RES_SEARCH_ENTRY) {
-#ifdef _DEBUG
-            g_printerr ("[ldap] Retrieved Key Entry:\n");
-            dump_ldap_entry (lop->ldap, result);
-#endif      
+        
+        DEBUG_LDAP (("[ldap] Retrieved Key Entry:\n"));
+        DEBUG_LDAP_ENTRY (lop->ldap, result);
+        
         parse_key_from_ldap_entry (lop, result);
         return TRUE;
         
@@ -780,10 +799,9 @@ get_callback (SeahorseOperation *op, LDAPMessage *result)
     /* An LDAP Entry */
     if (r == LDAP_RES_SEARCH_ENTRY) {
         
-#ifdef _DEBUG
-        g_printerr ("[ldap] Retrieved Key Data:\n");
-        dump_ldap_entry (lop->ldap, result);
-#endif                 
+        DEBUG_LDAP (("[ldap] Retrieved Key Data:\n"));
+        DEBUG_LDAP_ENTRY (lop->ldap, result);
+
         key = get_string_attribute (lop->ldap, result, sinfo->key_attr);
         
         if (key == NULL) {

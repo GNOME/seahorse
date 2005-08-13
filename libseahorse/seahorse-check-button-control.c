@@ -164,8 +164,6 @@ seahorse_check_button_control_gconf_notify (GConfClient *client, guint id,
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (control),
 			gconf_value_get_bool (gconf_entry_get_value (entry)));
 	}
-	else
-		g_print ("notify of %s\n", gconf_entry_get_key (entry));
 }
 
 GtkWidget*
