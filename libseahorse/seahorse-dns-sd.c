@@ -35,6 +35,8 @@
 #endif /* WITH_SHARING */
 
 #include "seahorse-dns-sd.h"
+#include "seahorse-context.h"
+#include "seahorse-server-source.h"
 
 /* Override the DEBUG_DNSSD_ENABLE switch here */
 /* #define DEBUG_DNSSD_ENABLE 1 */
@@ -149,6 +151,9 @@ resolve_callback (sw_discovery discovery, sw_discovery_oid oid, sw_uint32 interf
     gchar *service_uri;
     gchar *ipname;
     
+    /* One address is enough */
+    sw_discovery_cancel (discovery, oid);   
+    
     g_return_val_if_fail (SEAHORSE_IS_SERVICE_DISCOVERY (ssd), SW_DISCOVERY_E_BAD_PARAM);
 
     if (g_strcasecmp (HKP_SERVICE_TYPE, type) != 0)
@@ -177,11 +182,16 @@ resolve_callback (sw_discovery discovery, sw_discovery_oid oid, sw_uint32 interf
     
     g_hash_table_replace (ssd->services, service_name, service_uri);
     g_signal_emit (ssd, signals[ADDED], 0, service_name);
+    
+    /* Add it to the context */
+    if (!seahorse_context_remote_key_source (SCTX_APP (), service_uri)) {
+        SeahorseServerSource *ssrc = seahorse_server_source_new (service_uri);
+        g_return_val_if_fail (ssrc != NULL, SW_OKAY);
+        seahorse_context_add_key_source (SCTX_APP (), SEAHORSE_KEY_SOURCE (ssrc));
+    }
+    
     DEBUG_DNSSD (("DNS-SD added: %s %s\n", service_name, service_uri));
     
-    /* One address is enough */
-    sw_discovery_cancel (discovery, oid);   
-
     return SW_OKAY;    
 }
 
@@ -192,6 +202,7 @@ browse_callback (sw_discovery discovery, sw_discovery_oid id,
                  SeahorseServiceDiscovery *ssd)
 {
     sw_discovery_oid oid;
+    const gchar *uri;
 
     g_return_val_if_fail (SEAHORSE_IS_SERVICE_DISCOVERY (ssd), SW_DISCOVERY_E_BAD_PARAM);
     
@@ -207,6 +218,13 @@ browse_callback (sw_discovery discovery, sw_discovery_oid id,
         
     } else if (status == SW_DISCOVERY_BROWSE_REMOVE_SERVICE) {
         
+        /* Remove it from the context */
+        uri = g_hash_table_lookup (ssd->services, name);
+        if (uri != NULL) {
+            SeahorseKeySource *sksrc = seahorse_context_remote_key_source (SCTX_APP(), uri);
+            seahorse_context_remove_key_source (SCTX_APP(), sksrc);
+        }
+
         g_hash_table_remove (ssd->services, name);
         g_signal_emit (ssd, signals[REMOVED], 0, name);
         DEBUG_DNSSD (("DNS-SD removed: %s\n", name));
