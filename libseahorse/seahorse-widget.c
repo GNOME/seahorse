@@ -135,9 +135,10 @@ object_finalize (GObject *gobject)
     		widgets = NULL;
     	}
     }
-    	
+
 	g_signal_handlers_disconnect_by_func (SCTX_APP (), context_destroyed, swidget);
-	gtk_widget_destroy (glade_xml_get_widget (swidget->xml, swidget->name));
+    if (glade_xml_get_widget (swidget->xml, swidget->name))
+	    gtk_widget_destroy (glade_xml_get_widget (swidget->xml, swidget->name));
 	
 	g_free (swidget->xml);
 	swidget->xml = NULL;
