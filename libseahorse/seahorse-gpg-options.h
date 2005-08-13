@@ -19,6 +19,10 @@
  * Boston, MA 02111-1307, USA.
  */
 
+/** 
+ * A collection of functions for changing options in gpg.conf.
+ */
+
 #ifndef __SEAHORSE_GPG_OPTIONS_H__
 #define __SEAHORSE_GPG_OPTIONS_H__
 

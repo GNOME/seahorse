@@ -19,6 +19,24 @@
  * Boston, MA 02111-1307, USA.
  */
 
+/** 
+ * SeahorsePGPSource: A key source for PGP keys retrieved from GPGME. 
+ * 
+ * - Derived from SeahorseKeySource
+ * - Since GPGME represents secret keys as seperate from public keys, this
+ *   class takes care to combine them into one logical SeahorsePGPKey object. 
+ * - Adds the keys it loads to the SeahorseContext.
+ * - Eventually a lot of stuff from seahorse-op.* should probably be merged
+ *   into this class.
+ * - Monitors ~/.gnupg for changes and reloads the keyring as necessary.
+ * 
+ * Properties:
+ *  ktype: (GQuark) The ktype (ie: SKEY_PGP) of keys originating from this 
+           key source.
+ *  location: (SeahorseKeyLoc) The location of keys that come from this 
+ *         source. (ie: SKEY_LOC_LOCAL, SKEY_LOC_REMOTE)
+ */
+ 
 #ifndef __SEAHORSE_PGP_SOURCE_H__
 #define __SEAHORSE_PGP_SOURCE_H__
 

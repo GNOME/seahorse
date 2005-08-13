@@ -19,6 +19,13 @@
  * Boston, MA 02111-1307, USA.
  */
 
+/**
+ * SeahorseHKPSource: A key source which searches LDAP PGP key servers. 
+ * 
+ * - Derived from SeahorseServerSource.
+ * - Adds found keys to SeahorseContext. 
+ */
+ 
 #ifndef __SEAHORSE_LDAP_SOURCE_H__
 #define __SEAHORSE_LDAP_SOURCE_H__
 

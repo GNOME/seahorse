@@ -19,6 +19,10 @@
  * Boston, MA 02111-1307, USA.
  */
 
+/**
+ * Function for displaying the preferences dialog.
+ */
+ 
 #ifndef __SEAHORSE_PREFS_H__
 #define __SEAHORSE_PREFS_H__
 

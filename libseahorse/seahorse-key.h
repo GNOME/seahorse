@@ -20,6 +20,36 @@
  * Boston, MA 02111-1307, USA.
  */
 
+/**
+ * SeahorseKey: A base class for all keys.
+ * 
+ * - Keys have a bunch of cached properties that are used to sort, filter, 
+ *   find etc... These are stored in the SeahorseKey structure for fast 
+ *   access. The derived classes (ie: SeahorsePGPKey) keep these in sync 
+ *   whenever the key changes.
+ * - Each key keeps note of the SeahorseKeySource it came from.
+ *
+ * Signals:
+ *   destroy: The key was destroyed.
+ * 
+ * Properties:
+ *   key-source: (SeahorseKeySource) The key source this key came from.
+ *   key-id: (gchar*) The key identifier (ie: might be a fingerprint).
+ *   ktype: (GQuark) The type of key (ie: SKEY_PGP). 
+ *   etype: (SeahorseKeyEType) The encryption type (ie: SKEY_PUBLIC)
+ *   flags: (guint) Flags on the capabilities of the key (ie: SeahorseKeyFlags)
+ *   location: (SeahorseKeyLoc) The location this key is stored. (ie: SKEY_LOC_REMOTE)
+ *   loaded: (SeahorseKeyInfo) How much of the key is loaded (ie: SKEY_INFO_COMPLETE)
+ *   
+ * Properties derived classes must implement:
+ *   display-name: (gchar*) The display name for the key.
+ *   simple-name: (gchar*) Shortened display name for the key (for use in files etc...).
+ *   fingerprint: (gchar*) Displayable fingerprint for the key.
+ *   validity: (SeahorseValidity) The key validity.
+ *   trust: (SeahorseValidity) Trust for the key.
+ *   expires: (gulong) Date this key expires or 0.
+ */
+ 
 #ifndef __SEAHORSE_KEY_H__
 #define __SEAHORSE_KEY_H__
 
@@ -109,28 +139,9 @@ struct _SeahorseKeyClass {
     /* The number of UIDs on the key */
     guint             (*get_num_names)            (SeahorseKey  *skey);
     
-    /* Get the display name for the key or UID */
+    /* Get the display name for the specified UID */
     gchar*            (*get_name)                 (SeahorseKey  *skey,
                                                    guint        uid);
-
-    /* properties ------------------------------------------------------ 
-     *
-     * key-source: The key source
-     * key-id: The key id
-     * key-type: The key type 
-     * etype: The encryption type (public, private etc...)
-     * flags: The key flags
-     * location: The key location
-     * loaded: What part of the key is loaded
-     * 
-     * display-name: The display name
-     * simple-name: Simple name for the key (for use in files etc...)
-     * fingerprint: Fingerprint for the key 
-     * validity: The key validity 
-     * trust: Trust for the key 
-     * expired: Expired key
-     * expires: Date expires or 0
-     */
 };
 
 GType             seahorse_key_get_type (void);
@@ -178,6 +189,7 @@ gulong            seahorse_key_get_expires        (SeahorseKey        *skey);
  
 typedef gboolean (*SeahorseKeyPredFunc) (SeahorseKey *key, gpointer data);
 
+/* Used for searching, filtering keys */
 typedef struct _SeahorseKeyPredicate {
     
     /* Criteria */

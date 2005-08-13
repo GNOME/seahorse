@@ -19,6 +19,24 @@
  * Boston, MA 02111-1307, USA.
  */
 
+/**
+ * SeahorseServerSoruce: A base class for key sources that retrieve keys
+ * from remote key servers.
+ * 
+ * - Derived from SeahorseKeySource.
+ * - Also includes functions for parsing keyserver URIs and mapping them
+ *   to the appropriate key sources (such as SeahorseHKPSource)
+ * - There's some GPGME specific stuff in here that may eventually need to be 
+ *   moved elsewhere.
+ * 
+ * Properties:
+ *   key-type: (GQuark) The type of keys generated (ie: SKEY_PGP)
+ *   location: (gchar*) The location of keys from this key source (ie: SKEY_LOC_REMOTE)
+ *   key-server: (gchar*) The host:port of the keyserver to search.
+ *   uri: (gchar*) Only for remote key sources. The full URI of the keyserver 
+ *        being used. 
+ */
+ 
 #ifndef __SEAHORSE_SERVER_SOURCE_H__
 #define __SEAHORSE_SERVER_SOURCE_H__
 

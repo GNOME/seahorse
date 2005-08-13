@@ -20,6 +20,20 @@
  * Boston, MA 02111-1307, USA.
  */
 
+/**
+ * SeahorseWidget: A window created from a glade file.
+ * 
+ * - All SeahorseWidget objects are destroyed when the SeahorseContext 
+ *   goes bye-bye.
+ * - Implements fun GtkUIManager stuff.
+ * 
+ * Signals:
+ *   destroy: The window was destroyed.
+ *
+ * Properties: 
+ *   name: (gchar*) The name of the glade file to load. 
+ */
+ 
 #ifndef __SEAHORSE_WIDGET_H__
 #define __SEAHORSE_WIDGET_H__
 

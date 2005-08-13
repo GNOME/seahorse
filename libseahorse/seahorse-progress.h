@@ -19,6 +19,10 @@
  * Boston, MA 02111-1307, USA.
  */
 
+/**
+ * Functions for tying SeahorseOperation objects to the UI.
+ */
+ 
 #ifndef __SEAHORSE_PROGRESS_H__
 #define __SEAHORSE_PROGRESS_H__
 

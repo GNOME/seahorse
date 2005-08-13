@@ -18,6 +18,25 @@
  * 59 Temple Place, Suite 330,
  * Boston, MA 02111-1307, USA.
  */
+ 
+/**
+ * SeahorseKeySource: Base class for other key sources. 
+ * 
+ * - A generic interface for accessing key sources.
+ * - Eventually more functionality will be merged from seahorse-op.* into 
+ *   this class and derived classes. 
+ * - Each SeahorseKey has a weak pointer to the SeahorseKeySource that 
+ *   created it.
+ * 
+ * Properties base classes must implement:
+ *  ktype: (GQuark) The ktype (ie: SKEY_PGP) of keys originating from this 
+ *         key source.
+ *  location: (SeahorseKeyLoc) The location of keys that come from this 
+ *         source. (ie: SKEY_LOC_LOCAL, SKEY_LOC_REMOTE)
+ *  uri: (gchar*) Only for remote key sources. The full URI of the keyserver 
+ *         being used.
+ */
+
 
 #ifndef __SEAHORSE_KEY_SOURCE_H__
 #define __SEAHORSE_KEY_SOURCE_H__
@@ -58,11 +77,25 @@ typedef struct _SeahorseKeySourceClass {
 
     /* virtual methods ------------------------------------------------- */
 
-    /* Loads keys */
+    /**
+     * load
+     * @sksrc: The #SeahorseKeySource.
+     * @op: The type of load todo. See SeahorseKeySourceLoad.
+     * @match: Match text (valid for SKSRC_LOAD_KEY and SKSRC_LOAD_SEARCH ops).
+     * 
+     * Loads the requested keys, and add the keys to SeahorseContext. 
+     * 
+     * Returns: The load operation.
+     */
     SeahorseOperation* (*load) (SeahorseKeySource *sksrc, SeahorseKeySourceLoad op,
                                 const gchar *match);
     
-    /* Stop any loading operation in progress */
+    /**
+     * stop
+     * @sksrc: The #SeahorseKeySource.
+     * 
+     * Stops any operations in progress. (ie: load, import, export etc...)
+     */
     void (*stop) (SeahorseKeySource *sksrc);
     
     /* Get the flags for this key source */

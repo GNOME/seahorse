@@ -20,6 +20,10 @@
  * Boston, MA 02111-1307, USA.
  */
 
+/**
+ * Constructors for various dialogs used in libseahorse.
+ */
+ 
 #ifndef __SEAHORSE_LIBDIALOGS_H__
 #define __SEAHORSE_LIBDIALOGS_H__
 

@@ -19,6 +19,28 @@
  * Boston, MA 02111-1307, USA.
  */
 
+/**
+ * SeahorseKeyset: A subset list of the keys in the SeahorseContext. 
+ *
+ * - Used all over by various views to narrow in on the keys that they're 
+ *   interested in.
+ * - Originally was going to be called SeahorseView (database parlance) but 
+ *   that's far too confusing with overloaded terminology. 
+ * - Uses a SeahorseKeyPredicate to match keys.
+ * - Sends out events when keys get added and removed from it's view. Or a 
+ *   key in the view changes etc...
+ * - Supports per key event 'closures'. When a closure is set for a key, it's 
+ *   then passed as an argument to the 'changed' and 'removed' events.
+ * 
+ * Signals:
+ *   added: A key was added to this keyset.
+ *   removed: A key disappeared from this keyset.
+ *   changed: A key in the keyset changed.
+ * 
+ * Properties:
+ *   predicate: (SeahorseKeyPredicate) The predicate used for matching.
+ */
+ 
 #ifndef __SEAHORSE_KEYSET_H__
 #define __SEAHORSE_KEYSET_H__
 

@@ -19,6 +19,10 @@
  * 59 Temple Place, Suite 330,
  * Boston, MA 02111-1307, USA.
  */
+ 
+/**
+ * A bunch of miscellaneous utility functions.
+ */
 
 #ifndef __SEAHORSE_UTIL_H__
 #define __SEAHORSE_UTIL_H__

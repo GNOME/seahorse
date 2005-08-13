@@ -19,6 +19,11 @@
  * Boston, MA 02111-1307, USA.
  */
 
+/**
+ * A gpgme_data_t implementation which maps to a gnome-vfs handle.
+ * Allows for accessing data on remote machines (ie: smb, sftp)
+ */
+ 
 #ifndef __SEAHORSE_VFS_DATA__
 #define __SEAHORSE_VFS_DATA__
 

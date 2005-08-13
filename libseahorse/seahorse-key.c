@@ -51,7 +51,7 @@ enum {
 	PROP_0,
     PROP_KEY_SOURCE,
     PROP_KEY_ID,
-    PROP_KEY_TYPE,
+    PROP_KTYPE,
     PROP_ETYPE,
     PROP_FLAGS,
     PROP_LOCATION,
@@ -116,8 +116,8 @@ class_init (SeahorseKeyClass *klass)
         g_param_spec_string ("key-id", "Key ID", "Key identifier", 
                              "UNKNOWN ", G_PARAM_READABLE));
     
-    g_object_class_install_property (gobject_class, PROP_KEY_TYPE,
-        g_param_spec_uint ("key-type", "Key Type", "Key type", 
+    g_object_class_install_property (gobject_class, PROP_KTYPE,
+        g_param_spec_uint ("ktype", "Key Type", "Key type", 
                            0, G_MAXUINT, SKEY_INVALID, G_PARAM_READABLE));
 
     g_object_class_install_property (gobject_class, PROP_ETYPE,
@@ -177,7 +177,7 @@ get_property (GObject *object, guint prop_id, GValue *value,
     case PROP_KEY_ID:
         g_value_set_string (value, skey->keyid);
         break;
-    case PROP_KEY_TYPE:
+    case PROP_KTYPE:
         g_value_set_uint (value, skey->ktype);
         break;
     case PROP_ETYPE:

@@ -19,6 +19,18 @@
  * Boston, MA 02111-1307, USA.
  */
 
+/**
+ * SeahorseKeyStore: A GtkTreeStore for displaying keys in a table. 
+ * 
+ * - Gets its keys from a SeahorseKeyset.
+ * - Allows filtering by setting the "mode" and "filter" properties.
+ * - Sorts keys. 
+ * 
+ * Properties:
+ *   mode: (SeahorseKeyStoreMode) Setup the filtering mode. 
+ *   filter: (gchar*) Set the filter text for KEY_STORE_MODE_FILTERED. 
+ */
+ 
 #ifndef __SEAHORSE_KEY_STORE_H__
 #define __SEAHORSE_KEY_STORE_H__
 

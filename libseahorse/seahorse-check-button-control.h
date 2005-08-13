@@ -19,6 +19,16 @@
  * Boston, MA 02111-1307, USA.
  */
 
+/** 
+ * SeahorseCheckButtonControl: A checkbox widget which is tied to a 
+ * boolean gconf key. 
+ *
+ * - Derived from GtkCheckButton.
+ *
+ * Properties:
+ *   gconf-key: (gchar*) The GConf key to set and monitor.
+ */
+ 
 #ifndef __SEAHORSE_CHECK_BUTTON_CONTROL_H__
 #define __SEAHORSE_CHECK_BUTTON_CONTROL_H__
 

@@ -19,6 +19,11 @@
  * Boston, MA 02111-1307, USA.
  */
 
+/**
+ * A bunch of (mostly) PGP specific operations to be done on files
+ * text etc...
+ */
+ 
 #ifndef __SEAHORSE_OP_H__
 #define __SEAHORSE_OP_H__
 

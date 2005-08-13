@@ -19,6 +19,21 @@
  * Boston, MA 02111-1307, USA.
  */
 
+/**
+ * SeahorsePGPKey: Represents a PGP key loaded via GPGME.
+ * 
+ * - Derived from SeahorseKey
+ * - Stuff from seahorse-key-op.c should eventually be merged in here.
+ * 
+ * Properties:
+ *   display-name: (gchar*) The display name for the key.
+ *   simple-name: (gchar*) Shortened display name for the key (for use in files etc...).
+ *   fingerprint: (gchar*) Displayable fingerprint for the key.
+ *   validity: (SeahorseValidity) The key validity.
+ *   trust: (SeahorseValidity) Trust for the key.
+ *   expires: (gulong) Date this key expires or 0.
+ */
+ 
 #ifndef __SEAHORSE_PGP_KEY_H__
 #define __SEAHORSE_PGP_KEY_H__
 

@@ -20,6 +20,18 @@
  * Boston, MA 02111-1307, USA.
  */
 
+/** 
+ * SeahorseDefaultKeyControl: (misnamed) Shows a list of keys in a dropdown for 
+ * selection.
+ * 
+ * - Derived from GtkOptionMenu
+ * - Gets its list of keys from a SeahorseKeyset.
+ * 
+ * Properties:
+ *   keyset: (SeahorseKeyset) The keyset being used for listing keys.
+ *   none-option: (gchar*) The option text used for selection 'no key'
+ */
+ 
 #ifndef __SEAHORSE_DEFAULT_KEY_CONTROL_H__
 #define __SEAHORSE_DEFAULT_KEY_CONTROL_H__
 

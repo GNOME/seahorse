@@ -19,6 +19,10 @@
  * Boston, MA 02111-1307, USA.
  */
 
+/**
+ * For parsing and noting key validity, trust, etc...
+ */
+ 
 #ifndef __SEAHORSE_VALIDITY_H__
 #define __SEAHORSE_VALIDITY_H__
 

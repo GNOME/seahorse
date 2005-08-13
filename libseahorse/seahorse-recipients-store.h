@@ -19,6 +19,14 @@
  * Boston, MA 02111-1307, USA.
  */
 
+/**
+ * SeahorseRecipientsStore: A GtkTreeStore for displaying a set of recipients
+ * for selection.
+ * 
+ * - Derived from SeahorseKeyStore.
+ * - Used by the 'Choose Recipients' dialog.
+ */
+
 #ifndef __SEAHORSE_RECIPIENTS_STORE_H__
 #define __SEAHORSE_RECIPIENTS_STORE_H__
 

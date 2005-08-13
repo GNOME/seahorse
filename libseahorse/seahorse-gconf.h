@@ -19,6 +19,10 @@
  * Boston, MA 02111-1307, USA.
  */
  
+/** 
+ * A collection of functions for accessing gconf. Adapted from libeel. 
+ */
+  
 #include <glib.h>
 #include <gconf/gconf.h>
 #include <gconf/gconf-client.h>

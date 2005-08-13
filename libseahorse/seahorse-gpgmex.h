@@ -19,6 +19,10 @@
  * Boston, MA 02111-1307, USA.
  */
 
+/** 
+ * Extensions to GPGME for not yet or 'won't support' features.
+ */
+
 #ifndef __SEAHORSE_GPGMEX_H__
 #define __SEAHORSE_GPGMEX_H__
 

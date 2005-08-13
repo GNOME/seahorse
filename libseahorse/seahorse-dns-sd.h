@@ -19,6 +19,15 @@
  * Boston, MA 02111-1307, USA.
  */
 
+/** 
+ * SeahorseServiceDiscovery: Listens for DNS-SD shared keys on the network and 
+ * adds SeahorseKeySoruce objects to the SeahorseContext as necessary. 
+ *
+ * Signals:
+ *   added: A new shared key source was found.
+ *   removed: A shared key source went away.
+ */
+ 
 #ifndef __SEAHORSE_DNS_SD_H__
 #define __SEAHORSE_DNS_SD_H__
 

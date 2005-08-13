@@ -19,6 +19,14 @@
  * Boston, MA 02111-1307, USA.
  */
 
+/**
+ * SeahorseHKPSource: A key source which searches HTTP PGP key servers. 
+ * 
+ * - Derived from SeahorseServerSource.
+ * - Adds found keys to SeahorseContext. 
+ * - Used by SeahorseServiceDiscovery for retrieving shared keys.
+ */
+ 
 #ifndef __SEAHORSE_HKP_SOURCE_H__
 #define __SEAHORSE_HKP_SOURCE_H__
 

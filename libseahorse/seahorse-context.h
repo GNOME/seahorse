@@ -20,6 +20,23 @@
  * Boston, MA 02111-1307, USA.
  */
 
+/** 
+ * SeahorseContext: This is where all the action in a Seahorse process comes
+ * together. 
+ *
+ * - Usually there's only one SeahorseContext per process created by passing 
+ *   |TRUE| to |seahorse_context_new|, and accessed via the |SCTX_APP| macro.
+ * - Retains the list of all valid SeahorseKey objects. 
+ * - Has a collection of SeahorseKeySource objects which add keys to the 
+ *   SeahorseContext. 
+ * 
+ * Signals:
+ *   added: A key was added to the context.
+ *   removed: A key was removed from the context.
+ *   changed: A key changed.
+ *   destroy: The context was destroyed.
+ */
+ 
 #ifndef __SEAHORSE_CONTEXT_H__
 #define __SEAHORSE_CONTEXT_H__
 

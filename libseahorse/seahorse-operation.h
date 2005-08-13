@@ -19,6 +19,22 @@
  * Boston, MA 02111-1307, USA.
  */
 
+/**
+ * SeahorseOperation: An operation taking place over time. 
+ * 
+ * - Used all over to represent things like key loading operations, search 
+ *   etc...
+ * - SeahorseMultiOperation allows you to combine multiple operations into
+ *   a single one. Used when searching multiple key servers for example.
+ * - No idea why it's so complex, but it seems it needs to be that way.
+ * - Can be tied to a progress bar (see seahorse-progress.h)
+ * - Holds a reference to itself while the operation is in progress.
+ *
+ * Signals:
+ *   done: The operation is complete.
+ *   progress: The operation has progressed, or changed state somehow.
+ */
+ 
 #ifndef __SEAHORSE_OPERATION_H__
 #define __SEAHORSE_OPERATION_H__
 
