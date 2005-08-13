@@ -47,6 +47,7 @@ libseahorse_internal_la_SOURCES = \
 	seahorse-context.c seahorse-context.h \
 	seahorse-widget.c seahorse-widget.h \
 	seahorse-op.c seahorse-op.h \
+    seahorse-keyset.c seahorse-keyset.h \
 	seahorse-key-store.c seahorse-key-store.h \
 	seahorse-recipients-store.c seahorse-recipients-store.h \
 	seahorse-util.c seahorse-util.h \
@@ -62,7 +63,6 @@ libseahorse_internal_la_SOURCES = \
 	seahorse-vfs-data.c seahorse-vfs-data.h \
 	seahorse-key-source.c seahorse-key-source.h \
 	seahorse-pgp-source.c seahorse-pgp-source.h \
-	seahorse-multi-source.c seahorse-multi-source.h \
 	seahorse-gpgmex.h seahorse-gpgmex-op.c seahorse-gpgmex-util.c \
 	seahorse-prefs.c seahorse-prefs.h \
 	seahorse-operation.c seahorse-operation.h \

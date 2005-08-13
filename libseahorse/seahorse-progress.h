@@ -34,8 +34,7 @@
 void          seahorse_progress_appbar_set_operation  (GtkWidget* appbar,
                                                        SeahorseOperation *operation);
 
-void          seahorse_progress_show                  (SeahorseContext *sctx, 
-                                                       SeahorseOperation *operation,
+void          seahorse_progress_show                  (SeahorseOperation *operation,
                                                        const gchar *title,
                                                        gboolean delayed);
 

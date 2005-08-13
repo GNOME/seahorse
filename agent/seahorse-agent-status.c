@@ -151,9 +151,9 @@ window_show ()
     }
 
     if (!g_sctx)
-        g_sctx = seahorse_context_new ();
-
-    g_window = seahorse_widget_new ("agent-cache", g_sctx);
+        g_sctx = seahorse_context_new (TRUE);
+    
+    g_window = seahorse_widget_new ("agent-cache");
 
     w = glade_xml_get_widget (g_window->xml, g_window->name);
 

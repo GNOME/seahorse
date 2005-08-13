@@ -25,11 +25,34 @@
 #include "seahorse-key.h"
 #include "seahorse-key-source.h"
 
+gboolean 
+seahorse_key_predicate_match (SeahorseKeyPredicate *kl, SeahorseKey *skey)
+{
+    /* Now go for all the fields */
+    if (kl->ktype && kl->ktype != skey->ktype)
+        return FALSE;
+    if (kl->keyid && (!skey->keyid || !g_str_equal (kl->keyid, skey->keyid)))
+        return FALSE;
+    if (kl->location && kl->location != skey->location)
+        return FALSE;
+    if (kl->etype && kl->etype != skey->etype) 
+        return FALSE;
+    if (kl->flags && !(kl->flags & skey->flags))
+        return FALSE;
+    if (kl->sksrc && kl->sksrc != kl->sksrc)
+        return FALSE;
+    /* Any custom stuff last */
+    if (kl->custom && !((kl->custom)(skey, kl->custom_data)))
+        return FALSE;
+    return TRUE;
+}
+
 enum {
 	PROP_0,
     PROP_KEY_SOURCE,
     PROP_KEY_ID,
     PROP_KEY_TYPE,
+    PROP_ETYPE,
     PROP_FLAGS,
     PROP_LOCATION,
     PROP_LOADED
@@ -94,7 +117,11 @@ class_init (SeahorseKeyClass *klass)
                              "UNKNOWN ", G_PARAM_READABLE));
     
     g_object_class_install_property (gobject_class, PROP_KEY_TYPE,
-        g_param_spec_uint ("key-type", "Key Type", "Key type. See SeahorseKeyType", 
+        g_param_spec_uint ("key-type", "Key Type", "Key type", 
+                           0, G_MAXUINT, SKEY_INVALID, G_PARAM_READABLE));
+
+    g_object_class_install_property (gobject_class, PROP_ETYPE,
+        g_param_spec_uint ("etype", "Encrpyption Type", "Key encryption type", 
                            0, G_MAXUINT, SKEY_INVALID, G_PARAM_READABLE));
 
     g_object_class_install_property (gobject_class, PROP_FLAGS,
@@ -129,10 +156,10 @@ set_property (GObject *object, guint prop_id, const GValue *value,
 	
     switch (prop_id) {
     case PROP_KEY_SOURCE:
-        g_return_if_fail (!skey->key_source);
-        skey->key_source = g_value_get_object (value);
-        g_return_if_fail (SEAHORSE_IS_KEY_SOURCE (skey->key_source));
-        g_object_add_weak_pointer (G_OBJECT (skey->key_source), (gpointer*)&(skey->key_source));
+        g_return_if_fail (!skey->sksrc);
+        skey->sksrc = g_value_get_object (value);
+        g_return_if_fail (SEAHORSE_IS_KEY_SOURCE (skey->sksrc));
+        g_object_add_weak_pointer (G_OBJECT (skey->sksrc), (gpointer*)&(skey->sksrc));
         break;
     }
 }
@@ -145,14 +172,16 @@ get_property (GObject *object, guint prop_id, GValue *value,
 	
     switch (prop_id) {
     case PROP_KEY_SOURCE:
-        g_value_set_object (value, skey->key_source);
+        g_value_set_object (value, skey->sksrc);
         break;
     case PROP_KEY_ID:
         g_value_set_string (value, skey->keyid);
         break;
     case PROP_KEY_TYPE:
-        g_value_set_uint (value, skey->type);
+        g_value_set_uint (value, skey->ktype);
         break;
+    case PROP_ETYPE:
+        g_value_set_uint (value, skey->etype);
     case PROP_FLAGS:
         g_value_set_uint (value, skey->flags);
         break;
@@ -211,17 +240,23 @@ struct _SeahorseKeySource*
 seahorse_key_get_source  (SeahorseKey *skey)
 {
     g_return_val_if_fail (SEAHORSE_IS_KEY (skey), NULL);
-    g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (skey->key_source), NULL);
-    return skey->key_source;
+    g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (skey->sksrc), NULL);
+    return skey->sksrc;
 }
 
-SeahorseKeyType
-seahorse_key_get_keytype (SeahorseKey *skey)
+GQuark
+seahorse_key_get_ktype (SeahorseKey *skey)
+{
+    g_return_val_if_fail (SEAHORSE_IS_KEY (skey), SKEY_UNKNOWN);
+    return skey->ktype;
+}
+
+SeahorseKeyEType
+seahorse_key_get_etype (SeahorseKey *skey)
 {
     g_return_val_if_fail (SEAHORSE_IS_KEY (skey), SKEY_INVALID);
-    return skey->type;
+    return skey->etype;
 }
-
 /**
  * seahorse_key_get_loaded_info
  * @skey: The #SeahorseKey object

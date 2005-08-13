@@ -200,7 +200,6 @@ static gboolean
 progress_show (SeahorseOperation *operation)
 {
     SeahorseWidget *swidget;
-    SeahorseContext *sctx;
     GtkWidget *w;
     const gchar *title;
     gchar *t;
@@ -210,11 +209,8 @@ progress_show (SeahorseOperation *operation)
         g_object_unref (operation);
         return FALSE;
     }
-    
-    sctx = (SeahorseContext*)g_object_get_data (G_OBJECT (operation), "sctx");
-    g_return_val_if_fail (sctx != NULL, FALSE);
         
-  	swidget = seahorse_widget_new ("progress", sctx);
+  	swidget = seahorse_widget_new ("progress");
     g_return_val_if_fail (swidget != NULL, FALSE);
 
     /* Release our reference on the operation when this window is destroyed */    
@@ -259,12 +255,11 @@ progress_show (SeahorseOperation *operation)
 }
 
 void
-seahorse_progress_show (SeahorseContext *sctx, SeahorseOperation *operation,
-                        const gchar *title, gboolean delayed)
+seahorse_progress_show (SeahorseOperation *operation, const gchar *title, 
+                        gboolean delayed)
 {    
     /* Unref in the timeout callback */
     g_object_ref (operation);
-    g_object_set_data (G_OBJECT (operation), "sctx", sctx);
     g_object_set_data_full (G_OBJECT (operation), "title", 
                 title ? g_strdup (title) : NULL, (GDestroyNotify)g_free);
     

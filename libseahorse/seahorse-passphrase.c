@@ -2,6 +2,7 @@
  * Seahorse
  *
  * Copyright (C) 2003 Jacob Perkins
+ * Copyright (C) 2004 Nate Nielsen
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,8 +36,8 @@ pass_changed (GtkEditable *editable, SeahorseWidget *swidget)
 }
 
 gpgme_error_t
-seahorse_passphrase_get (SeahorseContext *sctx, const gchar *passphrase_hint, 
-                            const char* passphrase_info, int flags, int fd)
+seahorse_passphrase_get (gconstpointer dummy, const gchar *passphrase_hint, 
+                         const char* passphrase_info, int flags, int fd)
 {
 	SeahorseWidget *swidget;
     GtkWidget *widget;
@@ -44,7 +45,7 @@ seahorse_passphrase_get (SeahorseContext *sctx, const gchar *passphrase_hint,
     gpgme_error_t err;
 	gchar *pass, **split_uid, *label;
 	
-	swidget = seahorse_widget_new_allow_multiple ("passphrase", sctx);
+	swidget = seahorse_widget_new_allow_multiple ("passphrase");
 	g_return_val_if_fail (swidget != NULL, GPG_E (GPG_ERR_GENERAL));
   
 	glade_xml_signal_connect_data (swidget->xml, "pass_changed",

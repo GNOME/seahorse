@@ -492,7 +492,7 @@ multi_operation_done (SeahorseOperation *op, SeahorseMultiOperation *mop)
 }
 
 void                     
-seahorse_multi_operation_add (SeahorseMultiOperation* mop, SeahorseOperation *op)
+seahorse_multi_operation_take (SeahorseMultiOperation* mop, SeahorseOperation *op)
 {
     g_return_if_fail (SEAHORSE_IS_MULTI_OPERATION (mop));
     g_return_if_fail (SEAHORSE_IS_OPERATION (op));

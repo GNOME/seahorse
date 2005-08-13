@@ -29,15 +29,15 @@
 #include "seahorse-ldap-source.h"
 #include "seahorse-hkp-source.h"
 #include "seahorse-server-source.h"
-#include "seahorse-multi-source.h"
 #include "seahorse-util.h"
 #include "seahorse-pgp-key.h"
 
 enum {
     PROP_0,
-    PROP_PATTERN,
+    PROP_KEY_TYPE,
+    PROP_LOCATION,
     PROP_KEY_SERVER,
-    PROP_LOCAL_SOURCE
+    PROP_URI
 };
 
 /* -----------------------------------------------------------------------------
@@ -45,66 +45,29 @@ enum {
  */
  
 struct _SeahorseServerSourcePrivate {
-    SeahorseKeySource *local;
-    GHashTable *keys;
-    SeahorseOperation *operation;
+    SeahorseMultiOperation *mop;
     gchar *server;
-    gchar *pattern;
+    gchar *uri;
 };
 
+G_DEFINE_TYPE (SeahorseServerSource, seahorse_server_source, SEAHORSE_TYPE_KEY_SOURCE);
+
 /* GObject handlers */
-static void seahorse_server_source_class_init (SeahorseServerSourceClass *klass);
-static void seahorse_server_source_init       (SeahorseServerSource *ssrc);
 static void seahorse_server_source_dispose    (GObject *gobject);
 static void seahorse_server_source_finalize   (GObject *gobject);
-static void seahorse_server_get_property      (GObject *object,
-                                               guint prop_id,
-                                               GValue *value,
-                                               GParamSpec *pspec);
-static void seahorse_server_set_property      (GObject *object,
-                                               guint prop_id,
-                                               const GValue *value,
-                                               GParamSpec *pspec);
+static void seahorse_server_get_property      (GObject *object, guint prop_id,
+                                               GValue *value, GParamSpec *pspec);
+static void seahorse_server_set_property      (GObject *object, guint prop_id,
+                                               const GValue *value, GParamSpec *pspec);
                                                
 /* SeahorseKeySource methods */
 static void         seahorse_server_source_stop        (SeahorseKeySource *src);
 static guint        seahorse_server_source_get_state   (SeahorseKeySource *src);
-SeahorseKey*        seahorse_server_source_get_key     (SeahorseKeySource *source,
-                                                        const gchar *fpr);
-static GList*       seahorse_server_source_get_keys    (SeahorseKeySource *src,
-                                                        gboolean secret_only);
-static guint        seahorse_server_source_get_count   (SeahorseKeySource *src,
-                                                        gboolean secret_only);
-static gpgme_ctx_t  seahorse_server_source_new_context (SeahorseKeySource *src);
-
-static SeahorseOperation*  seahorse_server_source_get_operation     (SeahorseKeySource *sksrc);
-static SeahorseOperation*  seahorse_server_source_refresh           (SeahorseKeySource *src,
-                                                                     const gchar *fpr);
-
-/* Other forward decls */
-static gboolean release_key (const gchar* id, SeahorseKey *skey, SeahorseServerSource *ssrc);
+static SeahorseOperation*  seahorse_server_source_load (SeahorseKeySource *src,
+                                                        SeahorseKeySourceLoad load,
+                                                        const gchar *match);
 
 static GObjectClass *parent_class = NULL;
-
-GType
-seahorse_server_source_get_type (void)
-{
-    static GType server_source_type = 0;
- 
-    if (!server_source_type) {
-        
-        static const GTypeInfo server_source_info = {
-            sizeof (SeahorseServerSourceClass), NULL, NULL,
-            (GClassInitFunc) seahorse_server_source_class_init, NULL, NULL,
-            sizeof (SeahorseServerSource), 0, (GInstanceInitFunc) seahorse_server_source_init
-        };
-        
-        server_source_type = g_type_register_static (SEAHORSE_TYPE_KEY_SOURCE, 
-                                 "SeahorseServerSource", &server_source_info, 0);
-    }
-  
-    return server_source_type;
-}
 
 /* Initialize the basic class stuff */
 static void
@@ -118,34 +81,31 @@ seahorse_server_source_class_init (SeahorseServerSourceClass *klass)
     
     key_class = SEAHORSE_KEY_SOURCE_CLASS (klass);
         
-    key_class->refresh = seahorse_server_source_refresh;
+    key_class->load = seahorse_server_source_load;
     key_class->stop = seahorse_server_source_stop;
-    key_class->get_count = seahorse_server_source_get_count;
-    key_class->get_key = seahorse_server_source_get_key;
-    key_class->get_keys = seahorse_server_source_get_keys;
     key_class->get_state = seahorse_server_source_get_state;
-    key_class->get_operation = seahorse_server_source_get_operation;
-    key_class->new_context = seahorse_server_source_new_context;    
     
     gobject_class->dispose = seahorse_server_source_dispose;
     gobject_class->finalize = seahorse_server_source_finalize;
     gobject_class->set_property = seahorse_server_set_property;
     gobject_class->get_property = seahorse_server_get_property;
     
-    g_object_class_install_property (gobject_class, PROP_LOCAL_SOURCE,
-            g_param_spec_object ("local-source", "Local Source",
-                                  "Local Source that this represents",
-                                  SEAHORSE_TYPE_KEY_SOURCE,
-                                  G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE));
-                                  
+    g_object_class_install_property (gobject_class, PROP_KEY_TYPE,
+        g_param_spec_uint ("key-type", "Key Type", "Key type that originates from this key source.", 
+                           0, G_MAXUINT, SKEY_INVALID, G_PARAM_READABLE));
+
+    g_object_class_install_property (gobject_class, PROP_LOCATION,
+        g_param_spec_uint ("location", "Key Location", "Where the key is stored. See SeahorseKeyLoc", 
+                           0, G_MAXUINT, SKEY_LOC_UNKNOWN, G_PARAM_READABLE));    
+                           
     g_object_class_install_property (gobject_class, PROP_KEY_SERVER,
             g_param_spec_string ("key-server", "Key Server",
                                  "Key Server to search on", "",
                                  G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE));
 
-    g_object_class_install_property (gobject_class, PROP_PATTERN,
-            g_param_spec_string ("pattern", "Search Pattern",
-                                 "Key Server search pattern", "",
+    g_object_class_install_property (gobject_class, PROP_URI,
+            g_param_spec_string ("uri", "Key Server URI",
+                                 "Key Server full URI", "",
                                  G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE));
 }
 
@@ -155,8 +115,7 @@ seahorse_server_source_init (SeahorseServerSource *ssrc)
 {
     /* init private vars */
     ssrc->priv = g_new0 (SeahorseServerSourcePrivate, 1);
-    ssrc->priv->keys = g_hash_table_new (g_str_hash, g_str_equal);
-    ssrc->priv->operation = seahorse_operation_new_complete (NULL);
+    ssrc->priv->mop = seahorse_multi_operation_new ();
 }
 
 /* dispose of all our internal references */
@@ -179,20 +138,11 @@ seahorse_server_source_dispose (GObject *gobject)
     g_assert (ssrc->priv);
     
     /* Clear out all the operations */
-    if (ssrc->priv->operation) {
-        if(!seahorse_operation_is_done (ssrc->priv->operation))
-            seahorse_operation_cancel (ssrc->priv->operation);
-        g_object_unref (ssrc->priv->operation);
-        ssrc->priv->operation = NULL;
-    }
-
-    /* Release our references on the keys */
-    g_hash_table_foreach_remove (ssrc->priv->keys, (GHRFunc)release_key, ssrc);
-
-    if (ssrc->priv->local) {
-        g_object_unref(ssrc->priv->local);
-        ssrc->priv->local = NULL;
-        sksrc->ctx = NULL;
+    if (ssrc->priv->mop) {
+        if(!seahorse_operation_is_done (SEAHORSE_OPERATION (ssrc->priv->mop)))
+            seahorse_operation_cancel (SEAHORSE_OPERATION (ssrc->priv->mop));
+        g_object_unref (ssrc->priv->mop);
+        ssrc->priv->mop = NULL;
     }
  
     G_OBJECT_CLASS (parent_class)->dispose (gobject);
@@ -207,15 +157,9 @@ seahorse_server_source_finalize (GObject *gobject)
     ssrc = SEAHORSE_SERVER_SOURCE (gobject);
     g_assert (ssrc->priv);
     
-    /* We should have no keys at this point */
-    g_assert (g_hash_table_size (ssrc->priv->keys) == 0);
-    
     g_free (ssrc->priv->server);
-    g_free (ssrc->priv->pattern);
-    g_hash_table_destroy (ssrc->priv->keys);
-    g_assert (ssrc->priv->operation == NULL);
-    g_assert (ssrc->priv->local == NULL);
-    
+    g_free (ssrc->priv->uri);
+    g_assert (ssrc->priv->mop == NULL);    
     g_free (ssrc->priv);
  
     G_OBJECT_CLASS (parent_class)->finalize (gobject);
@@ -225,29 +169,18 @@ static void
 seahorse_server_set_property (GObject *object, guint prop_id, 
                               const GValue *value, GParamSpec *pspec)
 {
-    SeahorseServerSource *ssrc;
-    SeahorseKeySource *sksrc;
+    SeahorseServerSource *ssrc = SEAHORSE_SERVER_SOURCE (object);
  
-    ssrc = SEAHORSE_SERVER_SOURCE (object);
-    sksrc = SEAHORSE_KEY_SOURCE (object);
-  
     switch (prop_id) {
-    case PROP_LOCAL_SOURCE:
-        g_return_if_fail (ssrc->priv->local == NULL);
-        ssrc->priv->local = g_value_get_object (value);
-        g_object_ref (ssrc->priv->local);
-        sksrc->ctx = ssrc->priv->local->ctx;
-        g_return_if_fail (gpgme_get_protocol(sksrc->ctx) == GPGME_PROTOCOL_OpenPGP);
-        break;
     case PROP_KEY_SERVER:
         g_return_if_fail (ssrc->priv->server == NULL);
         ssrc->priv->server = g_strdup (g_value_get_string (value));
-        g_return_if_fail (ssrc->priv->server && ssrc->priv->server[0] != 0);
+        g_return_if_fail (ssrc->priv->server && ssrc->priv->server[0]);
         break;
-    case PROP_PATTERN:
-        g_return_if_fail (ssrc->priv->pattern == NULL);
-        ssrc->priv->pattern = g_strdup (g_value_get_string (value));
-        g_return_if_fail (ssrc->priv->pattern && ssrc->priv->pattern[0] != 0);
+    case PROP_URI:
+        g_return_if_fail (ssrc->priv->uri == NULL);
+        ssrc->priv->uri = g_strdup (g_value_get_string (value));
+        g_return_if_fail (ssrc->priv->uri && ssrc->priv->uri[0]);
         break;
     default:
         break;
@@ -258,76 +191,28 @@ static void
 seahorse_server_get_property (GObject *object, guint prop_id, GValue *value,
                               GParamSpec *pspec)
 {
-    SeahorseServerSource *ssrc;
- 
-    ssrc = SEAHORSE_SERVER_SOURCE (object);
+    SeahorseServerSource *ssrc = SEAHORSE_SERVER_SOURCE (object);
   
     switch (prop_id) {
-    case PROP_LOCAL_SOURCE:
-        g_value_set_object (value, ssrc->priv->local);
-        break;
     case PROP_KEY_SERVER:
         g_value_set_string (value, ssrc->priv->server);
         break;
-    case PROP_PATTERN:
-        g_value_set_string (value, ssrc->priv->pattern);
+    case PROP_URI:
+        g_value_set_string (value, ssrc->priv->uri);
         break;
-    default:
+    case PROP_KEY_TYPE:
+        g_value_set_uint (value, SKEY_PGP);
         break;
-    }       
-  
+    case PROP_LOCATION:
+        g_value_set_uint (value, SKEY_LOC_REMOTE);
+        break;
+    }        
 }
 
 
 /* --------------------------------------------------------------------------
  * HELPERS 
  */
- 
-/* Release a key from our internal tables and let the world know about it */
-static gboolean
-release_key_notify (const gchar *id, SeahorseKey *skey, SeahorseServerSource *ssrc)
-{
-    seahorse_key_source_removed (SEAHORSE_KEY_SOURCE (ssrc), skey);
-    release_key (id, skey, ssrc);
-    return TRUE;
-}
-
-/* Remove the given key from our source */
-static void
-remove_key_from_source (const gchar *id, SeahorseKey *dummy, SeahorseServerSource *ssrc)
-{
-    /* This function gets called as a GHRFunc on the lctx->checks 
-     * hashtable. That hash table doesn't contain any keys, only ids,
-     * so we lookup the key in the main hashtable, and use that */
-     
-    SeahorseKey *skey = g_hash_table_lookup (ssrc->priv->keys, id);
-    if (skey != NULL) {
-        g_hash_table_remove (ssrc->priv->keys, id);
-        release_key_notify (id, skey, ssrc);
-    }
-}
-
-/* A #SeahorseKey has been destroyed. Remove it */
-static void
-key_destroyed (GObject *object, SeahorseServerSource *ssrc)
-{
-    SeahorseKey *skey;
-    skey = SEAHORSE_KEY (object);
-
-    remove_key_from_source (seahorse_key_get_keyid (skey), skey, ssrc);
-}
-
-/* Release a key from our internal tables */
-static gboolean
-release_key (const gchar* id, SeahorseKey *skey, SeahorseServerSource *ssrc)
-{
-    g_return_val_if_fail (SEAHORSE_IS_KEY (skey), TRUE);
-    g_return_val_if_fail (SEAHORSE_IS_SERVER_SOURCE (ssrc), TRUE);
-    
-    g_signal_handlers_disconnect_by_func (skey, key_destroyed, ssrc);
-    g_object_unref (skey);
-    return TRUE;
-}
 
 /* Combine information from one key and tack onto others */
 static void 
@@ -379,7 +264,6 @@ combine_keys (SeahorseServerSource *ssrc, gpgme_key_t k, gpgme_key_t key)
     }
 }
 
-/* Add a key to our internal tables, possibly overwriting or combining with other keys  */
 void
 seahorse_server_source_add_key (SeahorseServerSource *ssrc, gpgme_key_t key)
 {
@@ -390,47 +274,30 @@ seahorse_server_source_add_key (SeahorseServerSource *ssrc, gpgme_key_t key)
     g_return_if_fail (SEAHORSE_IS_SERVER_SOURCE (ssrc));
 
     id = seahorse_pgp_key_get_id (key, 0);
-    prev = g_hash_table_lookup (ssrc->priv->keys, id);
+    prev = seahorse_context_get_key (SCTX_APP (), SEAHORSE_KEY_SOURCE (ssrc), id);
     
     /* TODO: This function needs reworking after we get more key types */
     if (prev != NULL) {
         g_return_if_fail (SEAHORSE_IS_PGP_KEY (prev));
         combine_keys (ssrc, SEAHORSE_PGP_KEY (prev)->pubkey, key);
         seahorse_key_changed (prev, SKEY_CHANGE_UIDS);
-        return;    
+        return;
     }
 
     /* A public key */
     pkey = seahorse_pgp_key_new (SEAHORSE_KEY_SOURCE (ssrc), key, NULL);
 
-    /* Add to lookups */ 
-    g_hash_table_replace (ssrc->priv->keys, (gpointer)id, pkey);     
-
-    /* This stuff is 'undone' in release_key */
-    g_object_ref (pkey);
-    g_signal_connect_after (pkey, "destroy", G_CALLBACK (key_destroyed), ssrc);            
-    
-    /* notify observers */
-    seahorse_key_source_added (SEAHORSE_KEY_SOURCE (ssrc), SEAHORSE_KEY (pkey));
+    /* Add to context */ 
+    seahorse_context_add_key (SCTX_APP (), SEAHORSE_KEY (pkey));
 }
  
-/* Callback for copying our internal key table to a list */
-static void
-keys_to_list (const gchar *id, SeahorseKey *skey, GList **l)
-{
-    *l = g_list_append (*l, skey);
-}
-
 void
-seahorse_server_source_set_operation (SeahorseServerSource *ssrc, SeahorseOperation *op)
+seahorse_server_source_take_operation (SeahorseServerSource *ssrc, SeahorseOperation *op)
 {
     g_return_if_fail (SEAHORSE_IS_SERVER_SOURCE (ssrc));
     g_return_if_fail (SEAHORSE_IS_OPERATION (op));
     
-    if(ssrc->priv->operation)
-        g_object_unref (ssrc->priv->operation);
-    g_object_ref (op);
-    ssrc->priv->operation = op;
+    seahorse_multi_operation_take (ssrc->priv->mop, op);
 }
 
 /* --------------------------------------------------------------------------
@@ -438,19 +305,24 @@ seahorse_server_source_set_operation (SeahorseServerSource *ssrc, SeahorseOperat
  */
 
 static SeahorseOperation*
-seahorse_server_source_refresh (SeahorseKeySource *src, const gchar *key)
+seahorse_server_source_load (SeahorseKeySource *src, SeahorseKeySourceLoad load,
+                             const gchar *match)
 {
     SeahorseServerSource *ssrc;
+    GList *keys, *l;
     
     g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (src), NULL);
     ssrc = SEAHORSE_SERVER_SOURCE (src);
 
-    if (g_str_equal (key, SEAHORSE_KEY_SOURCE_ALL)) {
+    if (load == SKSRC_LOAD_ALL) {
         /* Stop all operations */
         seahorse_server_source_stop (src);
 
-        /* Remove all keys */    
-        g_hash_table_foreach_remove (ssrc->priv->keys, (GHRFunc)release_key_notify, ssrc);
+        /* Remove all keys */
+        keys = seahorse_context_get_keys (SCTX_APP (), src);
+        for (l = keys; l; l = g_list_next (l))
+            seahorse_context_remove_key (SCTX_APP(), SEAHORSE_KEY (l->data));
+        g_list_free (keys);
     }
     
     /* We should never be called directly */
@@ -465,54 +337,8 @@ seahorse_server_source_stop (SeahorseKeySource *src)
     g_return_if_fail (SEAHORSE_IS_KEY_SOURCE (src));
     ssrc = SEAHORSE_SERVER_SOURCE (src);
 
-    if(!seahorse_operation_is_done(ssrc->priv->operation))
-        seahorse_operation_cancel (ssrc->priv->operation);
-}
-
-static guint
-seahorse_server_source_get_count (SeahorseKeySource *src,
-                                  gboolean secret_only)
-{
-    SeahorseServerSource *ssrc;
-    guint n = 0;
-    
-    g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (src), 0);
-    ssrc = SEAHORSE_SERVER_SOURCE (src);
-
-    /* Note that we don't deal with secret keys */    
-    if (!secret_only)
-        n = g_hash_table_size (ssrc->priv->keys);
-
-    return n;
-}
-
-SeahorseKey*        
-seahorse_server_source_get_key (SeahorseKeySource *src, const gchar *fpr)
-{
-    SeahorseServerSource *ssrc;
-
-    g_return_val_if_fail (fpr != NULL && fpr[0] != 0, NULL);
-    g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (src), NULL);
-    ssrc = SEAHORSE_SERVER_SOURCE (src);
-    
-    return g_hash_table_lookup (ssrc->priv->keys, fpr);
-}
-
-static GList*
-seahorse_server_source_get_keys (SeahorseKeySource *src,
-                                 gboolean secret_only)  
-{
-    SeahorseServerSource *ssrc;
-    GList *l = NULL;
-    
-    g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (src), NULL);
-    ssrc = SEAHORSE_SERVER_SOURCE (src);
-    
-    /* We never deal with secret keys */
-    if (!secret_only)
-        g_hash_table_foreach (ssrc->priv->keys, (GHFunc)keys_to_list, &l);
-        
-    return l;
+    if(!seahorse_operation_is_done(SEAHORSE_OPERATION (ssrc->priv->mop)))
+        seahorse_operation_cancel (SEAHORSE_OPERATION (ssrc->priv->mop));
 }
 
 static guint
@@ -523,34 +349,10 @@ seahorse_server_source_get_state (SeahorseKeySource *src)
     g_return_val_if_fail (SEAHORSE_IS_SERVER_SOURCE (src), 0);
     ssrc = SEAHORSE_SERVER_SOURCE (src);
     
-    guint state = SEAHORSE_KEY_SOURCE_REMOTE;
-    if (!seahorse_operation_is_done (ssrc->priv->operation))
-        state |= SEAHORSE_KEY_SOURCE_LOADING;
+    guint state = SKSRC_REMOTE;
+    if (!seahorse_operation_is_done (SEAHORSE_OPERATION (ssrc->priv->mop)))
+        state |= SKSRC_LOADING;
     return state;
-}
-
-SeahorseOperation*        
-seahorse_server_source_get_operation (SeahorseKeySource *sksrc)
-{
-    SeahorseServerSource *ssrc;
-    
-    g_return_val_if_fail (SEAHORSE_IS_SERVER_SOURCE (sksrc), NULL);
-    ssrc = SEAHORSE_SERVER_SOURCE (sksrc);
-    
-    g_object_ref (ssrc->priv->operation);
-    return ssrc->priv->operation;
-}
-
-static gpgme_ctx_t  
-seahorse_server_source_new_context (SeahorseKeySource *src)
-{
-    SeahorseServerSource *ssrc;
-    
-    g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (src), 0);
-    ssrc = SEAHORSE_SERVER_SOURCE (src);
-
-    /* We generate contexts from our local source */
-    return seahorse_key_source_new_context (ssrc->priv->local);
 }
 
 /* Code adapted from GnuPG (file g10/keyserver.c) */
@@ -595,8 +397,7 @@ parse_keyserver_uri (char *uri, const char **scheme, const char **host)
 }
 
 SeahorseServerSource* 
-seahorse_server_source_new (SeahorseKeySource *locsrc, const gchar *server,
-                            const gchar *pattern)
+seahorse_server_source_new (const gchar *server)
 {
     SeahorseServerSource *ssrc = NULL;
     const gchar *scheme;
@@ -604,19 +405,17 @@ seahorse_server_source_new (SeahorseKeySource *locsrc, const gchar *server,
     gchar *uri;
     
     g_return_val_if_fail (server && server[0], NULL);
-
-    if (!pattern || !pattern[0])
-        pattern = "invalid-key-pattern-51109ebe-b276-4b1c-84b6-64586e603e68";
     
     uri = g_strdup (server);
         
     if (!parse_keyserver_uri (uri, &scheme, &host)) {
         g_warning ("invalid uri passed: %s", server);
+        
     } else {
         
 #ifdef WITH_LDAP        
         if (g_ascii_strcasecmp (scheme, "ldap") == 0) 
-            ssrc = SEAHORSE_SERVER_SOURCE (seahorse_ldap_source_new (locsrc, host, pattern));
+            ssrc = SEAHORSE_SERVER_SOURCE (seahorse_ldap_source_new (server, host));
         else
 #endif /* WITH_LDAP */
         
@@ -624,7 +423,7 @@ seahorse_server_source_new (SeahorseKeySource *locsrc, const gchar *server,
         if (g_ascii_strcasecmp (scheme, "hkp") == 0 || 
             g_ascii_strcasecmp (scheme, "http") == 0 ||
             g_ascii_strcasecmp (scheme, "https") == 0)
-            ssrc = SEAHORSE_SERVER_SOURCE (seahorse_hkp_source_new (locsrc, host, pattern));
+            ssrc = SEAHORSE_SERVER_SOURCE (seahorse_hkp_source_new (server, host));
         else
 #endif /* WITH_HKP */
         

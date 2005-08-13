@@ -49,9 +49,8 @@ struct _SeahorseHKPSourceClass {
 
 GType                 seahorse_hkp_source_get_type (void);
 
-SeahorseHKPSource*    seahorse_hkp_source_new      (SeahorseKeySource *lsrc, 
-                                                    const gchar *server,
-                                                    const gchar *pattern);
+SeahorseHKPSource*    seahorse_hkp_source_new      (const gchar *uri, 
+                                                    const gchar *host);
 
 gboolean              seahorse_hkp_is_valid_uri    (const gchar *uri);
 

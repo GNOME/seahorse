@@ -27,40 +27,18 @@
 enum {
 	PROP_0,
     PROP_NONE_OPTION,
-    PROP_KEY_SOURCE
+    PROP_KEYSET
 };
 
-static void    seahorse_default_key_control_class_init      (SeahorseDefaultKeyControlClass    *klass);
-static void    seahorse_default_key_control_init            (SeahorseDefaultKeyControl *sdkc);
-static void    seahorse_default_key_control_finalize        (GObject                *gobject);
-static void    seahorse_default_key_control_set_property    (GObject                *object,
-                                                             guint                    prop_id,
-                                                             const GValue                *value,
-                                                             GParamSpec                *pspec);
-static void    seahorse_default_key_control_get_property    (GObject                *object,
-                                                             guint                    prop_id,
-                                                             GValue                    *value,
-                                                             GParamSpec                *pspec);
+G_DEFINE_TYPE (SeahorseDefaultKeyControl, seahorse_default_key_control, GTK_TYPE_OPTION_MENU);
+
+static void    seahorse_default_key_control_finalize        (GObject *gobject);
+static void    seahorse_default_key_control_set_property    (GObject *object, guint prop_id,
+                                                             const GValue *value, GParamSpec *pspec);
+static void    seahorse_default_key_control_get_property    (GObject *object, guint prop_id,
+                                                             GValue *value, GParamSpec *pspec);
 
 static GtkOptionMenuClass *parent_class = NULL;
-
-GType
-seahorse_default_key_control_get_type (void)
-{
-    static GType control_type = 0;
-    
-    if (!control_type) {
-        static const GTypeInfo control_info = {
-            sizeof (SeahorseDefaultKeyControlClass), NULL, NULL,
-            (GClassInitFunc) seahorse_default_key_control_class_init,
-            NULL, NULL, sizeof (SeahorseDefaultKeyControl), 0, (GInstanceInitFunc) seahorse_default_key_control_init
-        };
-        
-        control_type = g_type_register_static (GTK_TYPE_OPTION_MENU, "SeahorseDefaultKeyControl", &control_info, 0);
-    }
-    
-    return control_type;
-}
 
 static void
 seahorse_default_key_control_class_init (SeahorseDefaultKeyControlClass *klass)
@@ -74,9 +52,9 @@ seahorse_default_key_control_class_init (SeahorseDefaultKeyControlClass *klass)
     gobject_class->set_property = seahorse_default_key_control_set_property;
     gobject_class->get_property = seahorse_default_key_control_get_property;
         
-    g_object_class_install_property (gobject_class, PROP_KEY_SOURCE,
-            g_param_spec_object ("key-source", "Key Source", "Key Source to pull keys from",
-                                 SEAHORSE_TYPE_KEY_SOURCE, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+    g_object_class_install_property (gobject_class, PROP_KEYSET,
+            g_param_spec_object ("keyset", "Key Set", "Set of keys to pic from",
+                                 SEAHORSE_TYPE_KEYSET, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
     g_object_class_install_property (gobject_class, PROP_NONE_OPTION,
             g_param_spec_string ("none-option", "No key option", "Puts in an option for 'no key'",
@@ -84,27 +62,11 @@ seahorse_default_key_control_class_init (SeahorseDefaultKeyControlClass *klass)
 }
 
 static void
-key_destroyed (GtkObject *object, GtkWidget *widget)
-{
-    gtk_widget_destroy (GTK_WIDGET (widget));
-}
-
-static void 
-item_destroyed (GtkObject *object, gpointer data)
-{
-    g_signal_handlers_disconnect_by_func (SEAHORSE_KEY (data), 
-                key_destroyed, GTK_MENU_ITEM (object));
-}
-
-static void
-key_added (SeahorseKeySource *sksrc, SeahorseKey *skey, SeahorseDefaultKeyControl *sdkc)
+key_added (SeahorseKeyset *skset, SeahorseKey *skey, SeahorseDefaultKeyControl *sdkc)
 {
     GtkWidget *menu;
     GtkWidget *item;
     gchar *userid;
-    
-    if (!SEAHORSE_IS_KEY (skey) || !(seahorse_key_get_flags (skey) & SKEY_FLAG_CAN_SIGN))
-        return;
     
     menu = gtk_option_menu_get_menu (GTK_OPTION_MENU (sdkc));
     
@@ -112,38 +74,34 @@ key_added (SeahorseKeySource *sksrc, SeahorseKey *skey, SeahorseDefaultKeyContro
     item = gtk_menu_item_new_with_label (userid);
     g_free (userid);
 
-    g_object_set_data (G_OBJECT (item), "secret-key", skey);
+    g_object_set_data (G_OBJECT (item), "key", skey);
 
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
     gtk_widget_show (item);
     
-    g_signal_connect_after (GTK_OBJECT (skey), "destroy",
-        G_CALLBACK (key_destroyed), item);
-    g_signal_connect_after (GTK_MENU_ITEM (item), "destroy", 
-        G_CALLBACK (item_destroyed), skey); 
+    seahorse_keyset_set_closure (skset, skey, item);
 }
+
+static void
+key_removed (SeahorseKeyset *skset, SeahorseKey *skey, GtkWidget *item, 
+             SeahorseDefaultKeyControl *sdkc)
+{
+    gtk_widget_destroy (item);
+}
+
+/* TODO: We should be handling key changed and displaying the right display name */
 
 static void    
 seahorse_default_key_control_init (SeahorseDefaultKeyControl *sdkc)
 {
     GtkWidget *menu = gtk_menu_new ();
     gtk_option_menu_set_menu (GTK_OPTION_MENU (sdkc), menu);
-
-    sdkc->sksrc = NULL;
 }
 
 static void
 seahorse_default_key_control_finalize (GObject *gobject)
 {
-    SeahorseDefaultKeyControl *control;
-    
-    control = SEAHORSE_DEFAULT_KEY_CONTROL (gobject);
-
-    if (control->sksrc) {
-        g_object_unref (control->sksrc);
-        g_signal_handlers_disconnect_by_func (control->sksrc, key_added, GTK_WIDGET (gobject));
-    }
-    
+    g_signal_handlers_disconnect_by_func (SCTX_APP (), key_added, GTK_WIDGET (gobject));
     G_OBJECT_CLASS (parent_class)->finalize (gobject);
 }
 
@@ -159,21 +117,20 @@ seahorse_default_key_control_set_property (GObject *object, guint prop_id,
     control = SEAHORSE_DEFAULT_KEY_CONTROL (object);
     
     switch (prop_id) {
-    case PROP_KEY_SOURCE:
-        g_return_if_fail (control->sksrc == NULL);
-        control->sksrc = g_value_get_object (value);
-        g_object_ref (control->sksrc);
-    
-        keys = seahorse_key_source_get_keys (control->sksrc, TRUE);
-        
+    case PROP_KEYSET:
+        g_return_if_fail (control->skset == NULL);        
+        control->skset = g_value_get_object (value);
+
+        keys = seahorse_keyset_get_keys (control->skset);  
         for (l = keys; l != NULL; l = g_list_next (l)) {
             skey = SEAHORSE_KEY (l->data);
-            key_added (control->sksrc, skey, control);
+            key_added (control->skset, skey, control);
         }
      
         g_list_free (keys);
 
-        g_signal_connect_after (control->sksrc, "added", G_CALLBACK (key_added), control);
+        g_signal_connect_after (SCTX_APP (), "added", G_CALLBACK (key_added), GTK_WIDGET (control));
+        g_signal_connect_after (SCTX_APP (), "removed", G_CALLBACK (key_removed), GTK_WIDGET (control));
         break;
 
     case PROP_NONE_OPTION:
@@ -196,9 +153,6 @@ seahorse_default_key_control_set_property (GObject *object, guint prop_id,
             g_object_set_data (object, "none-option", GINT_TO_POINTER (1));
         }
         break;
-        
-    default:
-        break;
     }
 }
 
@@ -206,29 +160,23 @@ static void
 seahorse_default_key_control_get_property (GObject *object, guint prop_id,
                                            GValue *value, GParamSpec *pspec)
 {
-    SeahorseDefaultKeyControl *control;
-    
-    control = SEAHORSE_DEFAULT_KEY_CONTROL (object);
+    SeahorseDefaultKeyControl *control = SEAHORSE_DEFAULT_KEY_CONTROL (object);
     
     switch (prop_id) {
-        case PROP_KEY_SOURCE:
-            g_value_set_object (value, control->sksrc);
+        case PROP_KEYSET:
+            g_value_set_object (value, control->skset);
             break;
-
         case PROP_NONE_OPTION:
             g_value_set_boolean (value, g_object_get_data (object, "none-option") ?
                                                 TRUE : FALSE);
-            break;
-        
-        default:
             break;
     }
 }
 
 SeahorseDefaultKeyControl*  
-seahorse_default_key_control_new (SeahorseKeySource *sksrc, const gchar *none_option)
+seahorse_default_key_control_new (SeahorseKeyset *skset, const gchar *none_option)
 {
-    return g_object_new (SEAHORSE_TYPE_DEFAULT_KEY_CONTROL, "key-source", sksrc, 
+    return g_object_new (SEAHORSE_TYPE_DEFAULT_KEY_CONTROL, "keyset", skset, 
                          "none-option", none_option, NULL);
 }
 
@@ -262,7 +210,7 @@ seahorse_default_key_control_select_id (SeahorseDefaultKeyControl *sdkc,
     children = gtk_container_get_children (menu);
     
     for (i = 0, l = children; l != NULL; i++, l = g_list_next (l)) {
-        skey = SEAHORSE_KEY (g_object_get_data (l->data, "secret-key"));
+        skey = SEAHORSE_KEY (g_object_get_data (l->data, "key"));
         
         if (id == NULL) {
             if (skey == NULL) {
@@ -298,7 +246,7 @@ seahorse_default_key_control_active (SeahorseDefaultKeyControl *sdkc)
     
     for (i = 0, l = children; l != NULL; i++, l = g_list_next (l)) {
         if (i == gtk_option_menu_get_history (GTK_OPTION_MENU (sdkc))) {
-           secret = SEAHORSE_KEY (g_object_get_data (l->data, "secret-key"));
+           secret = SEAHORSE_KEY (g_object_get_data (l->data, "key"));
            break;
         }
     }

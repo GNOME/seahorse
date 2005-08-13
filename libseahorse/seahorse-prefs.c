@@ -29,9 +29,10 @@
 #include "seahorse-keyserver-control.h"
 #include "seahorse-server-source.h"
 #include "seahorse-gconf.h"
+#include "seahorse-pgp-key.h"
 
 /* From seahorse_preferences_cache.c */
-void seahorse_prefs_cache (SeahorseContext *ctx, SeahorseWidget *widget);
+void seahorse_prefs_cache (SeahorseWidget *widget);
 
 /* Key Server Prefs --------------------------------------------------------- */
 
@@ -335,7 +336,7 @@ keyserver_add_clicked (GtkButton *button, SeahorseWidget *sw)
     GtkTreeStore *store;
     GtkTreeIter iter;
     
-    swidget = seahorse_widget_new_allow_multiple ("add-keyserver", sw->sctx);
+    swidget = seahorse_widget_new_allow_multiple ("add-keyserver");
 	g_return_if_fail (swidget != NULL);
     
     widget = glade_xml_get_widget (swidget->xml, "keyserver-type");
@@ -382,7 +383,7 @@ keyserver_add_clicked (GtkButton *button, SeahorseWidget *sw)
 
 /* Perform keyserver page initialization */
 static void
-setup_keyservers (SeahorseContext *sctx, SeahorseWidget *swidget)
+setup_keyservers (SeahorseWidget *swidget)
 {
     GtkTreeView *treeview;
     SeahorseKeyserverControl *skc;
@@ -429,7 +430,7 @@ setup_keyservers (SeahorseContext *sctx, SeahorseWidget *swidget)
 /* Key Sharing Prefs -------------------------------------------------------- */
 
 static void
-setup_sharing (SeahorseContext *sctx, SeahorseWidget *swidget)
+setup_sharing (SeahorseWidget *swidget)
 {
     GtkWidget *widget;
     widget = glade_xml_get_widget (swidget->xml, "enable-sharing-placeholder");
@@ -464,21 +465,21 @@ remove_gconf_notification (GObject *obj, gpointer data)
 
 /**
  * seahorse_prefs_new
- * @sctx: The SeahorseContext to work with
  * 
  * Create a new preferences window.
  * 
  * Returns: The preferences window.
  **/
 SeahorseWidget *
-seahorse_prefs_new (SeahorseContext *sctx)
+seahorse_prefs_new ()
 {
+    SeahorseKeyset *skset;
     SeahorseWidget *swidget;
     GtkWidget *widget;
     SeahorseDefaultKeyControl *sdkc;
     guint gconf_id;
     
-    swidget = seahorse_widget_new ("prefs", sctx);
+    swidget = seahorse_widget_new ("prefs");
     
     widget = glade_xml_get_widget (swidget->xml, "modes");
     gtk_container_add (GTK_CONTAINER (widget),
@@ -489,8 +490,10 @@ seahorse_prefs_new (SeahorseContext *sctx)
 
     widget = glade_xml_get_widget (swidget->xml, "default_key");
 
-    sdkc = seahorse_default_key_control_new (seahorse_context_get_key_source (sctx), 
-                                             _("None. Prompt for a key."));
+    skset = seahorse_keyset_new (SKEY_PGP, SKEY_PRIVATE, SKEY_LOC_LOCAL, 0);
+    sdkc = seahorse_default_key_control_new (skset, _("None. Prompt for a key."));
+    g_object_unref (skset);
+    
     gtk_container_add (GTK_CONTAINER (widget), GTK_WIDGET (sdkc));
     gtk_widget_show_all (widget);
 
@@ -501,7 +504,7 @@ seahorse_prefs_new (SeahorseContext *sctx)
     g_signal_connect (sdkc, "destroy", G_CALLBACK (remove_gconf_notification), GINT_TO_POINTER (gconf_id));
     
 #ifdef WITH_AGENT   
-    seahorse_prefs_cache (sctx, swidget);
+    seahorse_prefs_cache (swidget);
 #else
     widget = glade_xml_get_widget (swidget->xml, "cache-tab");
     g_return_val_if_fail (GTK_IS_WIDGET (widget), swidget);
@@ -509,7 +512,7 @@ seahorse_prefs_new (SeahorseContext *sctx)
 #endif
 
 #ifdef WITH_KEYSERVER
-    setup_keyservers (sctx, swidget);
+    setup_keyservers (swidget);
 #else
     widget = glade_xml_get_widget (swidget->xml, "keyserver-tab");
     g_return_val_if_fail (GTK_IS_WIDGET (widget), swidget);
@@ -517,7 +520,7 @@ seahorse_prefs_new (SeahorseContext *sctx)
 #endif
 
 #ifdef WITH_SHARING
-    setup_sharing (sctx, swidget);
+    setup_sharing (swidget);
 #else
     widget = glade_xml_get_widget (swidget->xml, "sharing-tab");
     g_return_val_if_fail (GTK_IS_WIDGET (widget), swidget);

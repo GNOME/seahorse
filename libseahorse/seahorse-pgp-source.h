@@ -38,17 +38,24 @@ typedef struct _SeahorsePGPSourcePrivate SeahorsePGPSourcePrivate;
 struct _SeahorsePGPSource {
     SeahorseKeySource parent;
     
+    /*< public >*/
+    gpgme_ctx_t gctx;
+    
     /*< private >*/
-    SeahorsePGPSourcePrivate *priv;
+    SeahorsePGPSourcePrivate *pv;
 };
 
 struct _SeahorsePGPSourceClass {
     SeahorseKeySourceClass parent_class;
 };
 
-SeahorsePGPSource*   seahorse_pgp_source_new    ();
+GType                seahorse_pgp_source_get_type       (void);
 
-void                 seahorse_pgp_source_load   (SeahorsePGPSource *source,
-                                                 gboolean secret_only);
+SeahorsePGPSource*   seahorse_pgp_source_new            (void);
+
+gpgme_ctx_t          seahorse_pgp_source_new_context    (SeahorsePGPSource *source);
+
+void                 seahorse_pgp_source_loadkeys       (SeahorsePGPSource *source,
+                                                         gboolean secret_only);
 
 #endif /* __SEAHORSE_PGP_SOURCE_H__ */

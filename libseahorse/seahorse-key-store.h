@@ -25,6 +25,7 @@
 #include <gtk/gtk.h>
 
 #include "seahorse-context.h"
+#include "seahorse-keyset.h"
 
 #define SEAHORSE_TYPE_KEY_STORE			(seahorse_key_store_get_type ())
 #define SEAHORSE_KEY_STORE(obj)			(GTK_CHECK_CAST ((obj), SEAHORSE_TYPE_KEY_STORE, SeahorseKeyStore))
@@ -47,7 +48,7 @@ struct _SeahorseKeyStore {
 	GtkTreeStore		    parent;
  
     /*< public >*/
-	SeahorseKeySource	    *sksrc;
+    SeahorseKeyset          *skset;
     
     /*< private >*/
     SeahorseKeyStorePriv    *priv;
@@ -129,14 +130,14 @@ enum {
             G_TYPE_INT
             
 
-GType           seahorse_key_store_get_type ();
+GType               seahorse_key_store_get_type             ();
 
-void			seahorse_key_store_init			(SeahorseKeyStore	*skstore,
-								 GtkTreeView		*view);
+void                seahorse_key_store_init                 (SeahorseKeyStore   *skstore,
+								                             GtkTreeView        *view);
 
-void			seahorse_key_store_populate		(SeahorseKeyStore	*skstore);
+void                seahorse_key_store_populate             (SeahorseKeyStore   *skstore);
 
-SeahorseKey*		seahorse_key_store_get_key_from_path	(GtkTreeView		*view,
+SeahorseKey*	    seahorse_key_store_get_key_from_path	(GtkTreeView		*view,
                                                              GtkTreePath		*path,
                                                              guint              *uid);
 

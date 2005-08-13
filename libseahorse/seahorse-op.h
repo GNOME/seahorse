@@ -25,18 +25,18 @@
 #include <glib.h>
 #include <gpgme.h>
 
-#include "seahorse-key-source.h"
-#include "seahorse-key.h"
+#include "seahorse-pgp-source.h"
+#include "seahorse-pgp-key.h"
 
 typedef gchar*    (*SeahorseEncryptFunc)    (GList              *keys,
                                              const gchar        *data,
                                              gpgme_error_t      *err);
 
-gint        seahorse_op_import_file         (SeahorseKeySource  *sksrc,
+gint        seahorse_op_import_file         (SeahorsePGPSource  *psrc,
                                              const gchar        *path,
                                              GError             **err);
 
-gint        seahorse_op_import_text         (SeahorseKeySource  *sksrc,
+gint        seahorse_op_import_text         (SeahorsePGPSource  *psrc,
                                              const gchar        *text,
                                              GError             **err);
 
@@ -58,44 +58,44 @@ gchar*      seahorse_op_encrypt_text        (GList              *keys,
                                              const gchar        *text,
                                              gpgme_error_t      *err);
 
-void        seahorse_op_sign_file           (SeahorseKey        *signer,
+void        seahorse_op_sign_file           (SeahorsePGPKey     *signer,
                                              const gchar        *path,
                                              const gchar        *spath,
                                              gpgme_error_t      *err);
 
-gchar*      seahorse_op_sign_text           (SeahorseKey        *signer,
+gchar*      seahorse_op_sign_text           (SeahorsePGPKey     *signer,
                                              const gchar        *text,
                                              gpgme_error_t      *err);
 
 void        seahorse_op_encrypt_sign_file   (GList              *keys,
-                                             SeahorseKey        *signer,
+                                             SeahorsePGPKey     *signer,
                                              const gchar        *path,
                                              const gchar        *epath,
                                              gpgme_error_t      *err);
 
 gchar*      seahorse_op_encrypt_sign_text   (GList              *keys,
-                                             SeahorseKey        *signer,
+                                             SeahorsePGPKey     *signer,
                                              const gchar        *text,
                                              gpgme_error_t      *err);
 
-void        seahorse_op_verify_file         (SeahorseKeySource  *sksrc,
+void        seahorse_op_verify_file         (SeahorsePGPSource  *psrc,
                                              const gchar        *path,
                                              const gchar        *original,
                                              gpgme_verify_result_t *status,
                                              gpgme_error_t      *err);
 
-gchar*      seahorse_op_verify_text         (SeahorseKeySource  *sksrc,
+gchar*      seahorse_op_verify_text         (SeahorsePGPSource  *psrc,
                                              const gchar        *text,
                                              gpgme_verify_result_t *status,
                                              gpgme_error_t      *err);
 
-void        seahorse_op_decrypt_verify_file (SeahorseKeySource  *sksrc,
+void        seahorse_op_decrypt_verify_file (SeahorsePGPSource  *psrc,
                                              const gchar        *path,
                                              const gchar        *dpath,
                                              gpgme_verify_result_t *status,
                                              gpgme_error_t      *err);
 
-gchar*      seahorse_op_decrypt_verify_text (SeahorseKeySource  *sksrc,
+gchar*      seahorse_op_decrypt_verify_text (SeahorsePGPSource  *psrc,
                                              const gchar        *text,
                                              gpgme_verify_result_t *status,
                                              gpgme_error_t      *err);

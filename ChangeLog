@@ -1,3 +1,90 @@
+2005-08-13  Nate Nielsen  <nielsen@memberwebs.com>
+
+    * libseahorse/seahorse-operation.c:
+    * libseahorse/seahorse-operation.h: Rename seahorse_multi_operation_add
+    to seahorse_multi_operation_take to reflect op ownership.
+    * agent/seahorse-agent-status.c:
+    * libseahorse/Makefile.am:
+    * libseahorse/seahorse-context.c:
+    * libseahorse/seahorse-context.h:
+    * libseahorse/seahorse-default-key-control.c:
+    * libseahorse/seahorse-default-key-control.h:
+    * libseahorse/seahorse-hkp-source.c:
+    * libseahorse/seahorse-hkp-source.h:
+    * libseahorse/seahorse-key-source.c:
+    * libseahorse/seahorse-key-source.h:
+    * libseahorse/seahorse-key-store.c:
+    * libseahorse/seahorse-key-store.h:
+    * libseahorse/seahorse-key.c:
+    * libseahorse/seahorse-key.h:
+    * libseahorse/seahorse-keyset.c:
+    * libseahorse/seahorse-keyset.h:
+    * libseahorse/seahorse-ldap-source.c:
+    * libseahorse/seahorse-ldap-source.h:
+    * libseahorse/seahorse-libdialogs.h:
+    * libseahorse/seahorse-marshal.list:
+    * libseahorse/seahorse-op.c:
+    * libseahorse/seahorse-op.h:
+    * libseahorse/seahorse-passphrase.c:
+    * libseahorse/seahorse-pgp-key.c:
+    * libseahorse/seahorse-pgp-key.h:
+    * libseahorse/seahorse-pgp-source.c:
+    * libseahorse/seahorse-pgp-source.h:
+    * libseahorse/seahorse-prefs-cache.c:
+    * libseahorse/seahorse-prefs.c:
+    * libseahorse/seahorse-prefs.h:
+    * libseahorse/seahorse-progress.c:
+    * libseahorse/seahorse-progress.h:
+    * libseahorse/seahorse-recipients-store.c:
+    * libseahorse/seahorse-recipients-store.h:
+    * libseahorse/seahorse-recipients.h:
+    * libseahorse/seahorse-recipients.c:
+    * libseahorse/seahorse-server-source.c:
+    * libseahorse/seahorse-server-source.h:
+    * libseahorse/seahorse-signatures.c:
+    * libseahorse/seahorse-signer.c:
+    * libseahorse/seahorse-util.c:
+    * libseahorse/seahorse-util.h:
+    * libseahorse/seahorse-widget.c:
+    * libseahorse/seahorse-widget.h:
+    * plugins/gedit/seahorse-gedit.c:
+    * plugins/nautilus/seahorse-pgp-preferences.c:
+    * src/main.c:
+    * src/seahorse-add-subkey.c:
+    * src/seahorse-add-uid.c:
+    * src/seahorse-delete.c:
+    * src/seahorse-expires.c:
+    * src/seahorse-generate-adv.c:
+    * src/seahorse-generate-adv.h:
+    * src/seahorse-generate-druid.c:
+    * src/seahorse-generate-druid.h:
+    * src/seahorse-generate-select.c:
+    * src/seahorse-generate-select.h:
+    * src/seahorse-key-dialogs.h:
+    * src/seahorse-key-manager-store.c:
+    * src/seahorse-key-manager-store.h:
+    * src/seahorse-key-manager.c:
+    * src/seahorse-key-op.h:
+    * src/seahorse-key-op.h:
+    * src/seahorse-key-properties.c:
+    * src/seahorse-key-widget.c:
+    * src/seahorse-key-widget.h:
+    * src/seahorse-keyserver-results.c:
+    * src/seahorse-keyserver-results.ui:
+    * src/seahorse-keyserver-search.c:
+    * src/seahorse-keyserver-sync.c:
+    * src/seahorse-preferences.c:
+    * src/seahorse-preferences.h:
+    * src/seahorse-process-multiple.c:
+    * src/seahorse-revoke.c:
+    * src/seahorse-sign.c:
+    * src/seahorse-windows.h: Refactored much of the internals of seahorse.
+    SeahorseContext is now a global singleton. Keys are owned by the 
+    SeahorseContext. SeahorseKeyset provides a filtered view on the key 
+    list. SeahorseKeySource's add keys to the context. Operations only valid
+    on GPG/PGP keys now only accept those key types or key sources. More 
+    abstraction to allow different types of keys.
+    
 2005-08-07  Nate Nielsen  <nielsen@memberwebs.com>
 
     * autogen.sh: Require automake 1.7 

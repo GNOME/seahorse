@@ -2,6 +2,7 @@
  * Seahorse
  *
  * Copyright (C) 2003 Jacob Perkins
+ * Copyright (C) 2004 Nate Nielsen
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -133,7 +134,6 @@ seahorse_recipients_store_set (SeahorseKeyStore *skstore, SeahorseKey *skey,
 
 /**
  * seahorse_recipients_store_new:
- * @sctx: Current #SeahorseContext
  * @view: #GtkTreeView that will show the new #SeahorseRecipientsStore
  *
  * Creates a new #SeahorseRecipientsStore and embeds in @view.
@@ -143,12 +143,12 @@ seahorse_recipients_store_set (SeahorseKeyStore *skstore, SeahorseKey *skey,
  * Returns: The new #SeahorseKeyStore
  **/
 SeahorseKeyStore*
-seahorse_recipients_store_new (SeahorseKeySource *sksrc, GtkTreeView *view)
+seahorse_recipients_store_new (SeahorseKeyset *skset, GtkTreeView *view)
 {
 	SeahorseKeyStore *skstore;
 	GtkTreeViewColumn *column;
 	
-	skstore = g_object_new (SEAHORSE_TYPE_RECIPIENTS_STORE, "key-source", sksrc, NULL);
+	skstore = g_object_new (SEAHORSE_TYPE_RECIPIENTS_STORE, "keyset", skset, NULL);
 	seahorse_key_store_init (skstore, view);
 	
 	column = seahorse_key_store_append_column (view, _("Validity"), VALIDITY_STR);

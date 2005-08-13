@@ -24,7 +24,7 @@
 #define __SEAHORSE_DEFAULT_KEY_CONTROL_H__
 
 #include <gtk/gtk.h>
-#include "seahorse-key-source.h"
+#include "seahorse-keyset.h"
 
 #define SEAHORSE_TYPE_DEFAULT_KEY_CONTROL		(seahorse_default_key_control_get_type ())
 #define SEAHORSE_DEFAULT_KEY_CONTROL(obj)		(GTK_CHECK_CAST ((obj), SEAHORSE_TYPE_DEFAULT_KEY_CONTROL, SeahorseDefaultKeyControl))
@@ -38,16 +38,16 @@ typedef struct _SeahorseDefaultKeyControlClass SeahorseDefaultKeyControlClass;
 
 struct _SeahorseDefaultKeyControl {
     GtkOptionMenu   parent;
-
-    /* <private> */    
-    SeahorseKeySource *sksrc;
+    
+    /*<public>*/
+    SeahorseKeyset  *skset;
 };
 
 struct _SeahorseDefaultKeyControlClass {
 	GtkCheckButtonClass	parent_class;
 };
 
-SeahorseDefaultKeyControl*  seahorse_default_key_control_new       (SeahorseKeySource *sksrc,
+SeahorseDefaultKeyControl*  seahorse_default_key_control_new       (SeahorseKeyset    *skset,
                                                                     const gchar       *none_option);
 
 void                        seahorse_default_key_control_select_id (SeahorseDefaultKeyControl *sdkc,

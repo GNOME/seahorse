@@ -991,15 +991,14 @@ seahorse_util_check_suffix (const gchar *path, SeahorseSuffix suffix)
  * @prompt: Overwrite prompt text
  *
  * Constructs a new path for a file based on @path plus a suffix determined by
- * @suffix and the ASCII Armor setting of @ctx. If ASCII Armor is enabled, the
- * suffix will be '.asc'. Otherwise the suffix will be '.pgp' if @suffix is
- * %SEAHORSE_CRYPT_SUFFIX or '.sig' if @suffix is %SEAHORSE_SIG_SUFFIX.
+ * @suffix. If ASCII Armor is enabled, the suffix will be '.asc'. Otherwise the 
+ * suffix will be '.pgp' if @suffix is %SEAHORSE_CRYPT_SUFFIX or '.sig' if 
+ * @suffix is %SEAHORSE_SIG_SUFFIX.
  *
  * Returns: A new path with the suffix appended to @path. NULL if prompt cancelled
  **/
 gchar*
-seahorse_util_add_suffix (gpgme_ctx_t ctx, const gchar *path, 
-                          SeahorseSuffix suffix, const gchar *prompt)
+seahorse_util_add_suffix (const gchar *path, SeahorseSuffix suffix, const gchar *prompt)
 {
     GtkWidget *dialog;
     const gchar *ext;

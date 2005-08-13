@@ -31,32 +31,34 @@
 #include "seahorse-recipients-store.h"
 #include "seahorse-default-key-control.h"
 #include "seahorse-gconf.h"
+#include "seahorse-pgp-key.h"
 
-SeahorseKey*
-seahorse_signer_get (SeahorseContext *sctx)
+SeahorsePGPKey*
+seahorse_signer_get ()
 {
 	SeahorseWidget *swidget;
-    SeahorseKeySource *sksrc;
+    SeahorseKeyset *skset;
     SeahorseDefaultKeyControl *sdkc;
-    SeahorseKey *signer = NULL;
+    SeahorseKey *skey = NULL;
 	GtkWidget *widget;
 	gint response;
 	gboolean done = FALSE;
     gboolean ok = FALSE;
     gchar *id;
     
-    signer = seahorse_context_get_default_key (sctx);
-    if (signer != NULL)
-        return signer;
+    skey = seahorse_context_get_default_key (SCTX_APP ());
+    if (skey != NULL && SEAHORSE_IS_PGP_KEY (skey))
+        return SEAHORSE_PGP_KEY (skey);
 	
-	swidget = seahorse_widget_new ("signer", sctx);
+	swidget = seahorse_widget_new ("signer");
 	g_return_val_if_fail (swidget != NULL, NULL);
 	        
-    sksrc = seahorse_context_get_key_source (sctx);
-    g_return_val_if_fail (sksrc != NULL, NULL);
-
     widget = glade_xml_get_widget (swidget->xml, "sign_key_place");
-    sdkc = seahorse_default_key_control_new (sksrc, NULL);
+
+    skset = seahorse_keyset_new (SKEY_PGP, SKEY_PRIVATE, SKEY_LOC_LOCAL, SKEY_FLAG_CAN_SIGN);
+    sdkc = seahorse_default_key_control_new (skset, NULL);
+    g_object_unref (skset);
+    
     gtk_container_add (GTK_CONTAINER (widget), GTK_WIDGET (sdkc));
     gtk_widget_show_all (widget);    
 
@@ -82,13 +84,14 @@ seahorse_signer_get (SeahorseContext *sctx)
 	}
 
     if (ok) {
-        signer = seahorse_default_key_control_active (sdkc);
+        skey = seahorse_default_key_control_active (sdkc);
+        g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (skey), NULL);
 
         /* Save this as the last key signed with */
-        seahorse_gconf_set_string (LASTSIGNER_KEY, signer == NULL ? 
-                        "" : seahorse_key_get_keyid (signer));
+        seahorse_gconf_set_string (LASTSIGNER_KEY, skey == NULL ? 
+                        "" : seahorse_key_get_keyid (skey));
     }
     
 	seahorse_widget_destroy (swidget);
-	return signer;
+	return SEAHORSE_PGP_KEY (skey);
 }

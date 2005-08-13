@@ -28,7 +28,6 @@
 #include "seahorse-gpgmex.h"
 #include "seahorse-operation.h"
 #include "seahorse-ldap-source.h"
-#include "seahorse-multi-source.h"
 #include "seahorse-util.h"
 #include "seahorse-pgp-key.h"
 
@@ -270,7 +269,7 @@ escape_ldap_value (const gchar *v)
 typedef gboolean (*OpLDAPCallback)   (SeahorseOperation *op, LDAPMessage *result);
     
 DECLARE_OPERATION (LDAP, ldap)
-    SeahorseLDAPSource *lsrc;       /* The source to add keys to */
+    SeahorseLDAPSource *lsrc;       /* The source */
     LDAP *ldap;                     /* The LDAP connection */
     int ldap_op;                    /* The current LDAP async msg */
     guint stag;                     /* The tag for the idle event source */
@@ -1068,8 +1067,9 @@ start_send_operation (SeahorseLDAPSource *lsrc, gchar *key)
 static void seahorse_ldap_source_class_init (SeahorseLDAPSourceClass *klass);
 
 /* SeahorseKeySource methods */
-static SeahorseOperation*  seahorse_ldap_source_refresh   (SeahorseKeySource *src,
-                                                           const gchar *key);
+static SeahorseOperation*  seahorse_ldap_source_load      (SeahorseKeySource *src,
+                                                           SeahorseKeySourceLoad load,
+                                                           const gchar *match);
 static SeahorseOperation*  seahorse_ldap_source_import    (SeahorseKeySource *sksrc, 
                                                            gpgme_data_t data);
 static SeahorseOperation*  seahorse_ldap_source_export    (SeahorseKeySource *sksrc, 
@@ -1106,7 +1106,7 @@ seahorse_ldap_source_class_init (SeahorseLDAPSourceClass *klass)
     SeahorseKeySourceClass *key_class;
    
     key_class = SEAHORSE_KEY_SOURCE_CLASS (klass);
-    key_class->refresh = seahorse_ldap_source_refresh;
+    key_class->load = seahorse_ldap_source_load;
     key_class->import = seahorse_ldap_source_import;
     key_class->export = seahorse_ldap_source_export;
 
@@ -1114,49 +1114,36 @@ seahorse_ldap_source_class_init (SeahorseLDAPSourceClass *klass)
 }
 
 static SeahorseOperation*
-seahorse_ldap_source_refresh (SeahorseKeySource *src, const gchar *key)
+seahorse_ldap_source_load (SeahorseKeySource *src, SeahorseKeySourceLoad load,
+                           const gchar *match)
 {
     SeahorseOperation *op;
-    SeahorseLDAPOperation *lop;
-    gchar *pattern = NULL;
-    
+    SeahorseLDAPOperation *lop = NULL;
+
     g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (src), NULL);
     g_return_val_if_fail (SEAHORSE_IS_LDAP_SOURCE (src), NULL);
-    g_return_val_if_fail (key != NULL, NULL);
 
-    op = parent_class->refresh (src, key);
+    op = parent_class->load (src, load, match);
     if (op != NULL)
         return op;
     
-    /* No way to find new keys */
-    if (g_str_equal (key, SEAHORSE_KEY_SOURCE_NEW))
+    /* No way to find new or all keys */
+    if (load == SKSRC_LOAD_NEW || load == SKSRC_LOAD_ALL) 
         return seahorse_operation_new_complete (NULL);
-        
-    /* All keys, parent_class will have cleared */
-    else if(g_str_equal (key, SEAHORSE_KEY_SOURCE_ALL)) {
-        
-        g_object_get (src, "pattern", &pattern, NULL);
-        g_return_val_if_fail (pattern && pattern[0], NULL);
-    
-        lop = start_search_operation (SEAHORSE_LDAP_SOURCE (src), pattern);
-        g_return_val_if_fail (lop != NULL, NULL);
-    
-        g_free (pattern);
-    
-        seahorse_server_source_set_operation (SEAHORSE_SERVER_SOURCE (src), 
-                                              SEAHORSE_OPERATION (lop));
-        return SEAHORSE_OPERATION (lop);
+
+    /* Search for keys */
+    else if (load == SKSRC_LOAD_SEARCH)
+        lop = start_search_operation (SEAHORSE_LDAP_SOURCE (src), match);
         
     /* Load a specific key */
-    } else {
-        
-        lop = start_search_operation_fpr (SEAHORSE_LDAP_SOURCE (src), key);
-        g_return_val_if_fail (lop != NULL, NULL);
+    else if (load == SKSRC_LOAD_KEY)
+        lop = start_search_operation_fpr (SEAHORSE_LDAP_SOURCE (src), match);
     
-        seahorse_server_source_set_operation (SEAHORSE_SERVER_SOURCE (src),
-                                              SEAHORSE_OPERATION (lop));
-        return SEAHORSE_OPERATION (lop);
-    }
+    g_return_val_if_fail (lop != NULL, NULL);
+    seahorse_server_source_take_operation (SEAHORSE_SERVER_SOURCE (src),
+                                           SEAHORSE_OPERATION (lop));
+    g_object_ref (lop);
+    return SEAHORSE_OPERATION (lop);
 }
 
 static SeahorseOperation* 
@@ -1220,28 +1207,19 @@ seahorse_ldap_source_export (SeahorseKeySource *sksrc, GList *keys,
 
 /**
  * seahorse_ldap_source_new
- * @locsrc: Local source to base this key source off of
- * @server: The server to connect to 
- * @pattern: The pattern to search for
+ * @uri: The server to connect to 
  * 
  * Creates a new key source for an LDAP PGP server.
  * 
  * Returns: A new LDAP Key Source
  */
 SeahorseLDAPSource*   
-seahorse_ldap_source_new (SeahorseKeySource *locsrc, const gchar *server,
-                          const gchar *pattern)
+seahorse_ldap_source_new (const gchar* uri, const gchar *host)
 {
-    SeahorseLDAPSource *lsrc;
-    
-    g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (locsrc) && 
-                          !SEAHORSE_IS_SERVER_SOURCE (locsrc), NULL);
-    g_return_val_if_fail (server && server[0], NULL);
-    
-    lsrc = g_object_new (SEAHORSE_TYPE_LDAP_SOURCE, "local-source", locsrc,
-                         "key-server", server, "pattern", pattern, NULL);
-
-    return lsrc;  
+    g_return_val_if_fail (seahorse_ldap_is_valid_uri (uri), NULL);
+    g_return_val_if_fail (host && *host, NULL);
+    return g_object_new (SEAHORSE_TYPE_LDAP_SOURCE, "key-server", host, 
+                         "uri", uri, NULL);
 }
 
 /**
@@ -1255,6 +1233,8 @@ seahorse_ldap_is_valid_uri (const gchar *uri)
 {
     LDAPURLDesc *url;
     int r;
+    
+    g_return_val_if_fail (uri && *uri, FALSE);
     
     r = ldap_url_parse (uri, &url);
     if (r == LDAP_URL_SUCCESS) {

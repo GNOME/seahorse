@@ -138,7 +138,7 @@ GType                    seahorse_multi_operation_get_type  ();
 
 SeahorseMultiOperation*  seahorse_multi_operation_new       ();
 
-void                     seahorse_multi_operation_add       (SeahorseMultiOperation* mop,
+void                     seahorse_multi_operation_take      (SeahorseMultiOperation* mop,
                                                              SeahorseOperation *op);
 
 /* ----------------------------------------------------------------------------

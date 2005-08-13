@@ -127,8 +127,7 @@ gchar*      seahorse_util_chooser_save_prompt           (GtkWidget *dialog);
 gboolean	seahorse_util_check_suffix		(const gchar		*path,
                                              SeahorseSuffix     suffix);
 
-gchar*		seahorse_util_add_suffix		(gpgme_ctx_t		ctx,
-                                             const gchar        *path,
+gchar*		seahorse_util_add_suffix		(const gchar        *path,
                                              SeahorseSuffix     suffix,
                                              const gchar        *prompt);
 

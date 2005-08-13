@@ -39,39 +39,102 @@
 
 typedef struct _SeahorseContext SeahorseContext;
 typedef struct _SeahorseContextClass SeahorseContextClass;
-
 typedef struct _SeahorseContextPrivate SeahorseContextPrivate;
 	
-struct _SeahorseContext
-{
-	GtkObject		parent;
+struct _SeahorseContext {
+	GtkObject		        parent;
 	
 	/*< private >*/
-	SeahorseContextPrivate	*priv;
+	SeahorseContextPrivate	*pv;
 };
 
-struct _SeahorseContextClass
-{
+struct _SeahorseContextClass {
 	GtkObjectClass		parent_class;
+    
+    /* signals --------------------------------------------------------- */
+    
+    /* A key was added to this source */
+    void (*added) (SeahorseContext *sctx, SeahorseKey *key);
+
+    /* Removed a key from this source */
+    void (*removed) (SeahorseContext *sctx, SeahorseKey *key);
+    
+    /* This key has changed */
+    void (*changed) (SeahorseContext *sctx, SeahorseKey *skey, SeahorseKeyChange change);
 };
 
-GType                seahorse_context_get_type        (void);
+#define             SCTX_APP()                          (seahorse_context_app ())
 
-SeahorseContext*     seahorse_context_new             (void);
+GType               seahorse_context_get_type           (void);
 
-void                 seahorse_context_destroy         (SeahorseContext    *sctx);
+SeahorseContext*    seahorse_context_app                (void);
 
-void                 seahorse_context_load_keys       (SeahorseContext    *sctx, 
-                                                       gboolean secret_only);
+SeahorseContext*    seahorse_context_new                (gboolean           app_ctx);
 
-SeahorseKey*         seahorse_context_get_default_key (SeahorseContext    *sctx);
+void                seahorse_context_destroy            (SeahorseContext    *sctx);
 
-SeahorseKeySource*   seahorse_context_get_key_source  (SeahorseContext    *sctx);
+void                seahorse_context_add_key_source     (SeahorseContext    *sctx,
+                                                         SeahorseKeySource  *sksrc);
 
-void                 seahorse_context_own_source      (SeahorseContext    *sctx,
-                                                       SeahorseKeySource  *sksrc);
+void                seahorse_context_take_key_source    (SeahorseContext    *sctx,
+                                                         SeahorseKeySource  *sksrc);
+
+void                seahorse_context_remove_key_source  (SeahorseContext    *sctx,
+                                                         SeahorseKeySource  *sksrc);
+
+SeahorseKeySource*  seahorse_context_find_key_source    (SeahorseContext    *sctx,
+                                                         GQuark             ktype,
+                                                         SeahorseKeyLoc     location);
+
+GSList*             seahorse_context_find_key_sources   (SeahorseContext    *sctx,
+                                                         GQuark             ktype,
+                                                         SeahorseKeyLoc     location);
+                                                         
+
+SeahorseKeySource*  seahorse_context_remote_key_source  (SeahorseContext    *sctx,
+                                                         const gchar        *uri);
+
+void                seahorse_context_add_key            (SeahorseContext    *sctx,
+                                                         SeahorseKey        *skey);
+
+void                seahorse_context_take_key           (SeahorseContext    *sctx, 
+                                                         SeahorseKey        *skey);
+
+guint               seahorse_context_get_count          (SeahorseContext    *sctx);
+
+SeahorseKey*        seahorse_context_get_key            (SeahorseContext    *sctx,
+                                                         SeahorseKeySource  *sksrc,
+                                                         const gchar        *keyid);
+
+GList*              seahorse_context_get_keys           (SeahorseContext    *sctx, 
+                                                         SeahorseKeySource  *sksrc);
+
+SeahorseKey*        seahorse_context_find_key           (SeahorseContext    *sctx,
+                                                         GQuark             ktype,
+                                                         SeahorseKeyLoc     location,
+                                                         const gchar        *keyid);
+
+GList*              seahorse_context_find_keys          (SeahorseContext    *sctx,
+                                                         GQuark             ktype,
+                                                         SeahorseKeyEType   etype,
+                                                         SeahorseKeyLoc     location);
+
+GList*              seahorse_context_find_keys_full     (SeahorseContext    *sctx,
+                                                         SeahorseKeyPredicate *skpred);
+                                                         
+void                seahorse_context_remove_key         (SeahorseContext    *sctx,
+                                                         SeahorseKey        *skey);
 
 SeahorseServiceDiscovery*
-                     seahorse_context_get_discovery   (SeahorseContext    *sctx);
+                    seahorse_context_get_discovery      (SeahorseContext    *sctx);
+
+SeahorseKey*        seahorse_context_get_default_key    (SeahorseContext    *sctx);
+
+SeahorseOperation*  seahorse_context_load_local_keys    (SeahorseContext    *sctx);
+
+SeahorseOperation*  seahorse_context_load_remote_key    (SeahorseContext    *sctx);
+
+SeahorseOperation*  seahorse_context_load_remote_keys   (SeahorseContext    *sctx,
+                                                         const gchar        *search);
 
 #endif /* __SEAHORSE_CONTEXT_H__ */

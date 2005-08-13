@@ -29,6 +29,7 @@
 #include "seahorse-libdialogs.h"
 #include "seahorse-widget.h"
 #include "seahorse-validity.h"
+#include "seahorse-pgp-key.h"
 #include "seahorse-recipients-store.h"
 #include "seahorse-default-key-control.h"
 #include "seahorse-gconf.h"
@@ -134,10 +135,9 @@ update_filters (GObject* object, GParamSpec* arg, SeahorseWidget* swidget)
 }
 
 GList*
-seahorse_recipients_get (SeahorseContext *sctx, SeahorseKey **signer)
+seahorse_recipients_get (SeahorsePGPKey **signer)
 {
 	SeahorseWidget *swidget;
-    SeahorseOperation *operation;
     SeahorseDefaultKeyControl *sdkc;
 	GtkTreeSelection *selection;
 	GtkTreeView *view;
@@ -146,10 +146,11 @@ seahorse_recipients_get (SeahorseContext *sctx, SeahorseKey **signer)
 	gboolean done = FALSE;
     GList *keys = NULL;
     gchar *id;
-    SeahorseKeyStore* skstore;
-    SeahorseKeySource *sksrc;
+    SeahorseKey *skey;
+    SeahorseKeyStore *skstore;
+    SeahorseKeyset * skset;
 	
-	swidget = seahorse_widget_new ("recipients", sctx);
+	swidget = seahorse_widget_new ("recipients");
 	g_return_val_if_fail (swidget != NULL, NULL);
 	
 	view = GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, VIEW));
@@ -157,23 +158,23 @@ seahorse_recipients_get (SeahorseContext *sctx, SeahorseKey **signer)
 	gtk_tree_selection_set_mode (selection, GTK_SELECTION_SINGLE);
 	g_signal_connect (selection, "changed",
 		G_CALLBACK (selection_changed), swidget);
-        
-    sksrc = seahorse_context_get_key_source (sctx);
-    g_return_val_if_fail (sksrc != NULL, NULL);
-
-    /* Hook progress bar in */
-    operation = seahorse_key_source_get_operation (sksrc);
-    g_return_val_if_fail (operation != NULL, NULL);
 
     /* If always using the default key for signing, then hide this section */
-    if (!signer || (*signer = seahorse_context_get_default_key (sctx)) != NULL) {
+    if (!signer || 
+        ((skey = seahorse_context_get_default_key (SCTX_APP ())) != NULL &&
+         SEAHORSE_IS_PGP_KEY (skey))) {
+        *signer = SEAHORSE_PGP_KEY (skey);
         widget = glade_xml_get_widget (swidget->xml, "sign_box");
         gtk_widget_hide (widget);
 
     /* Signing section */
     } else {
         widget = glade_xml_get_widget (swidget->xml, "sign_key_place");
-        sdkc = seahorse_default_key_control_new (sksrc, _("None (Don't sign)"));
+
+        skset = seahorse_keyset_new (SKEY_PGP, SKEY_PRIVATE, SKEY_LOC_LOCAL, 0);    
+        sdkc = seahorse_default_key_control_new (skset, _("None (Don't sign)"));
+        g_object_unref (skset);
+        
         gtk_container_add (GTK_CONTAINER (widget), GTK_WIDGET (sdkc));
         gtk_widget_show_all (widget);    
 
@@ -182,11 +183,9 @@ seahorse_recipients_get (SeahorseContext *sctx, SeahorseKey **signer)
         seahorse_default_key_control_select_id (sdkc, id);
         g_free (id); 
     }
-    
-    widget = glade_xml_get_widget (swidget->xml, "status");
-    seahorse_progress_appbar_set_operation (widget, operation);
         
-	skstore = seahorse_recipients_store_new (sksrc, view);
+    skset = seahorse_keyset_new (SKEY_PGP, 0, 0, 0);
+	skstore = seahorse_recipients_store_new (skset, view);
    
     glade_xml_signal_connect_data (swidget->xml, "on_mode_changed", 
                               G_CALLBACK (mode_changed), skstore);
@@ -215,12 +214,15 @@ seahorse_recipients_get (SeahorseContext *sctx, SeahorseKey **signer)
 	}
 
     if (keys && signer) {
-        if (!*signer) 
-            *signer = seahorse_default_key_control_active (sdkc);
+        if (!*signer) {
+            *signer = SEAHORSE_PGP_KEY (seahorse_default_key_control_active (sdkc));
+            g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (*signer), keys);
+        }
+            
 
         /* Save this as the last key signed with */
         seahorse_gconf_set_string (LASTSIGNER_KEY, *signer == NULL ? 
-                        "" : seahorse_key_get_keyid (*signer));
+                        "" : seahorse_key_get_keyid (SEAHORSE_KEY (*signer)));
     }
     
 	seahorse_widget_destroy (swidget);

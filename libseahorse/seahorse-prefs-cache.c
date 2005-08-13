@@ -243,8 +243,7 @@ check_notify (GConfClient *client, guint id, GConfEntry *entry, gpointer data)
 
 /* Hook a button into gconf */
 static void
-setup_check_control (SeahorseContext *ctx, SeahorseWidget *sw,
-                     const gchar *name, const gchar * key)
+setup_check_control (SeahorseWidget *sw, const gchar *name, const gchar * key)
 {
     GtkWidget *ctl;
     CtlLinkups *lu;
@@ -291,8 +290,7 @@ spinner_notify (GConfClient *client, guint id, GConfEntry *entry, gpointer data)
 
 /* Hook a spinner into gconf */
 static void
-setup_spinner_control (SeahorseContext *ctx, SeahorseWidget *sw,
-                       const gchar *name, const gchar *key)
+setup_spinner_control (SeahorseWidget *sw, const gchar *name, const gchar *key)
 {
     GtkWidget *ctl;
     CtlLinkups *lu;
@@ -419,7 +417,7 @@ paint_button_label_as_link (GtkButton *button, GtkLabel *label)
 
 /* Initialize the cache tab */
 void
-seahorse_prefs_cache (SeahorseContext *ctx, SeahorseWidget *widget)
+seahorse_prefs_cache (SeahorseWidget *widget)
 {
     GtkWidget *w, *w2;
     
@@ -464,10 +462,10 @@ seahorse_prefs_cache (SeahorseContext *ctx, SeahorseWidget *widget)
                       , NULL);
     /* End -- Setup daemon button visuals */
     
-    setup_spinner_control (ctx, widget, "ttl", SETTING_TTL);
-    setup_check_control (ctx, widget, "use-cache", SETTING_CACHE);
-    setup_check_control (ctx, widget, "expire", SETTING_EXPIRE);
-    setup_check_control (ctx, widget, "authorize", SETTING_AUTH);
+    setup_spinner_control (widget, "ttl", SETTING_TTL);
+    setup_check_control (widget, "use-cache", SETTING_CACHE);
+    setup_check_control (widget, "expire", SETTING_EXPIRE);
+    setup_check_control (widget, "authorize", SETTING_AUTH);
 
     glade_xml_signal_connect_data (widget->xml, "on_session_link",
                                    G_CALLBACK (show_session_properties), NULL);

@@ -31,11 +31,11 @@
 
 enum {
 	PROP_0,
-	PROP_NAME,
-	PROP_CTX
+	PROP_NAME
 };
 
 static void     class_init          (SeahorseWidgetClass    *klass);
+static void     object_init         (SeahorseWidget         *swidget);
 
 static void     object_finalize     (GObject                *gobject);
 
@@ -77,7 +77,7 @@ seahorse_widget_get_type (void)
 		static const GTypeInfo widget_info = {
 			sizeof (SeahorseWidgetClass), NULL, NULL,
 			(GClassInitFunc) class_init,
-			NULL, NULL, sizeof (SeahorseWidget), 0, NULL
+			NULL, NULL, sizeof (SeahorseWidget), 0, (GInstanceInitFunc) object_init
 		};
 		
         widget_type = g_type_register_static (G_TYPE_OBJECT, "SeahorseWidget", 
@@ -102,9 +102,20 @@ class_init (SeahorseWidgetClass *klass)
     g_object_class_install_property (gobject_class, PROP_NAME,
         g_param_spec_string ("name", "Widget name", "Name of glade file and main widget",
                              NULL, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
-    g_object_class_install_property (gobject_class, PROP_CTX,
-        g_param_spec_object ("ctx", "Seahorse Context", "Current Seahorse Context to use",
-                             SEAHORSE_TYPE_CONTEXT, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+}
+
+/* Destroy widget when context is destroyed */
+static void
+context_destroyed (GtkObject *object, SeahorseWidget *swidget)
+{
+	seahorse_widget_destroy (swidget);
+}
+
+static void
+object_init (SeahorseWidget *swidget)
+{
+    g_signal_connect_after (SCTX_APP(), "destroy", 
+                G_CALLBACK (context_destroyed), swidget);
 }
 
 /* Disconnects callbacks, destroys main window widget,
@@ -125,13 +136,11 @@ object_finalize (GObject *gobject)
     	}
     }
     	
-	g_signal_handlers_disconnect_by_func (swidget->sctx, context_destroyed, swidget);
+	g_signal_handlers_disconnect_by_func (SCTX_APP (), context_destroyed, swidget);
 	gtk_widget_destroy (glade_xml_get_widget (swidget->xml, swidget->name));
 	
 	g_free (swidget->xml);
 	swidget->xml = NULL;
-	
-	g_object_unref (swidget->sctx);
 	
 	g_free (swidget->name);
 	
@@ -172,13 +181,6 @@ object_set_property (GObject *object, guint prop_id, const GValue *value, GParam
             gtk_window_set_icon (GTK_WINDOW (w), gdk_pixbuf_new_from_file (PIXMAPSDIR "seahorse.png", NULL));
 			break;
             
-		case PROP_CTX:
-            g_return_if_fail (swidget->sctx == NULL);
-			swidget->sctx = g_value_get_object (value);
-			g_object_ref (G_OBJECT (swidget->sctx));
-			g_signal_connect_after (swidget->sctx, "destroy",
-				G_CALLBACK (context_destroyed), swidget);
-			break;
 		default:
 			break;
 	}
@@ -193,9 +195,6 @@ object_get_property (GObject *object, guint prop_id, GValue *value, GParamSpec *
 	switch (prop_id) {
 		case PROP_NAME:
 			g_value_set_string (value, swidget->name);
-			break;
-		case PROP_CTX:
-			g_value_set_object (value, swidget->sctx);
 			break;
 		default:
 			break;
@@ -223,28 +222,18 @@ widget_delete_event (GtkWidget *widget, GdkEvent *event, SeahorseWidget *swidget
     return FALSE; /* propogate event */
 }
 
-/* Destroy widget when context is destroyed */
-static void
-context_destroyed (GtkObject *object, SeahorseWidget *swidget)
-{
-	seahorse_widget_destroy (swidget);
-}
-
 /**
  * seahorse_widget_new:
  * @name: Name of widget, filename part of glade file, and name of main window
- * @sctx: #SeahorseContext
  *
  * Creates a new #SeahorseWidget.
  *
  * Returns: The new #SeahorseWidget, or NULL if the widget already exists
  **/
 SeahorseWidget*
-seahorse_widget_new (gchar *name, SeahorseContext *sctx)
+seahorse_widget_new (gchar *name)
 {
 	SeahorseWidget *swidget;
-	
-	g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), NULL);
 	
 	/* Check if have widget hash */
 	if (widgets != NULL) {
@@ -261,7 +250,7 @@ seahorse_widget_new (gchar *name, SeahorseContext *sctx)
 		widgets = g_hash_table_new ((GHashFunc)g_str_hash, (GCompareFunc)g_str_equal);
 	
 	/* If widget doesn't already exist, create & insert into hash */
-	swidget = g_object_new (SEAHORSE_TYPE_WIDGET, "name", name, "ctx", sctx, NULL);
+	swidget = g_object_new (SEAHORSE_TYPE_WIDGET, "name", name, NULL);
 	g_hash_table_insert (widgets, g_strdup (name), swidget);
 	
 	return swidget;
@@ -270,16 +259,15 @@ seahorse_widget_new (gchar *name, SeahorseContext *sctx)
 /**
  * seahorse_widget_new:
  * @name: Name of widget, filename part of glade file, and name of main window
- * @sctx: #SeahorseContext
  *
  * Creates a new #SeahorseWidget without checking if it already exists.
  *
  * Returns: The new #SeahorseWidget
  **/
 SeahorseWidget*
-seahorse_widget_new_allow_multiple (gchar *name, SeahorseContext *sctx)
+seahorse_widget_new_allow_multiple (gchar *name)
 {
-	return g_object_new (SEAHORSE_TYPE_WIDGET, "name", name, "ctx", sctx, NULL);
+	return g_object_new (SEAHORSE_TYPE_WIDGET, "name", name,  NULL);
 }
 
 /**

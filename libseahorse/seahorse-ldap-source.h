@@ -49,9 +49,8 @@ struct _SeahorseLDAPSourceClass {
 
 GType                 seahorse_ldap_source_get_type (void);
 
-SeahorseLDAPSource*   seahorse_ldap_source_new     (SeahorseKeySource *lsrc, 
-                                                    const gchar *server,
-                                                    const gchar *pattern);
+SeahorseLDAPSource*   seahorse_ldap_source_new     (const gchar *uri, 
+                                                    const gchar *host);
 
 gboolean              seahorse_ldap_is_valid_uri   (const gchar *uri);
 

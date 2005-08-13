@@ -1,7 +1,7 @@
 /*
  * Seahorse
  *
- * Copyright (C) 2003 Jacob Perkins
+ * Copyright (C) 2005 Nate Nielsen
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -217,8 +217,14 @@ SeahorsePGPKey*
 seahorse_pgp_key_new (SeahorseKeySource *sksrc, gpgme_key_t pubkey, 
                       gpgme_key_t seckey)
 {
-    return g_object_new (SEAHORSE_TYPE_PGP_KEY, "key-source", sksrc,
+    SeahorsePGPKey *pkey;
+    pkey = g_object_new (SEAHORSE_TYPE_PGP_KEY, "key-source", sksrc,
                          "pubkey", pubkey, "seckey", seckey, NULL);
+    
+    /* We don't care about this floating business */
+    g_object_ref (GTK_OBJECT (pkey));
+    gtk_object_sink (GTK_OBJECT (pkey));
+    return pkey;
 }
 
 static gchar*
@@ -325,11 +331,13 @@ changed_key (SeahorsePGPKey *pkey)
 {
     SeahorseKey *skey = SEAHORSE_KEY (pkey);
     
+    skey->ktype = SKEY_PGP;
+    
     if (!pkey->pubkey) {
         
         skey->keyid = "UNKNOWN ";
         skey->location = SKEY_LOC_UNKNOWN;
-        skey->type = SKEY_INVALID;
+        skey->etype = SKEY_INVALID;
         skey->loaded = SKEY_INFO_NONE;
         skey->flags = 0;
         
@@ -349,8 +357,8 @@ changed_key (SeahorsePGPKey *pkey)
             skey->location = SKEY_LOC_LOCAL;
         
         /* The type */
-        skey->type = pkey->seckey ? SKEY_PRIVATE : SKEY_PUBLIC;
-        
+        skey->etype = pkey->seckey ? SKEY_PRIVATE : SKEY_PUBLIC;
+
         /* The info loaded */
         if (pkey->pubkey->keylist_mode & GPGME_KEYLIST_MODE_SIGS && 
             skey->loaded < SKEY_INFO_COMPLETE)

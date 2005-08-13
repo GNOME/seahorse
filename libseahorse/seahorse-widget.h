@@ -45,7 +45,6 @@ struct _SeahorseWidget
 	/*< public >*/
 	GladeXML	*xml;
 	gchar		*name;
-	SeahorseContext	*sctx;
     
     /*< private >*/
     GtkUIManager   *ui;
@@ -58,11 +57,9 @@ struct _SeahorseWidgetClass
 
 GType            seahorse_widget_get_type ();
 
-SeahorseWidget*  seahorse_widget_new                (gchar            *name,
-                                                     SeahorseContext  *sctx);
+SeahorseWidget*  seahorse_widget_new                (gchar            *name);
 
-SeahorseWidget*  seahorse_widget_new_allow_multiple (gchar            *name,
-                                                     SeahorseContext  *sctx);
+SeahorseWidget*  seahorse_widget_new_allow_multiple (gchar            *name);
 
 GtkWidget*       seahorse_widget_get_top            (SeahorseWidget   *swidget);
 

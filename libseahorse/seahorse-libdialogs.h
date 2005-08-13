@@ -28,27 +28,26 @@
 
 #include "seahorse-context.h"
 #include "seahorse-widget.h"
+#include "seahorse-pgp-key.h"
 
 #define SEAHORSE_PASS_BAD    0x00000001
 #define SEAHORSE_PASS_NEW    0x01000000
 
-gpgme_error_t
-seahorse_passphrase_get (SeahorseContext *sctx, const gchar *passphrase_hint, 
-                            const char* passphrase_info, int prev_bad, int fd);
+gpgme_error_t   seahorse_passphrase_get     (gconstpointer dummy,
+                                             const gchar *passphrase_hint, 
+                                             const char* passphrase_info, 
+                                             int prev_bad, int fd);
 
-GList*          seahorse_recipients_get (SeahorseContext    *sctx,
-                                         SeahorseKey        **signkey);
+GList*          seahorse_recipients_get     (SeahorsePGPKey **signkey);
 
-SeahorseKey*    seahorse_signer_get    (SeahorseContext *sctx);
+SeahorsePGPKey* seahorse_signer_get         (void);
 
-SeahorseWidget*	seahorse_signatures_new	(SeahorseContext	*sctx);
+SeahorseWidget*	seahorse_signatures_new	    (void);
 
-void            seahorse_signatures_add (SeahorseContext *sctx, 
-                                            SeahorseWidget *widget,
-                                            const gchar* data, 
-                                            gpgme_verify_result_t status);
+void            seahorse_signatures_add     (SeahorseWidget *widget,
+                                             const gchar* data, 
+                                             gpgme_verify_result_t status);
                             
-void            seahorse_signatures_run (SeahorseContext *sctx, 
-                                            SeahorseWidget *swidget);
+void            seahorse_signatures_run     (SeahorseWidget *swidget);
 
 #endif /* __SEAHORSE_LIBDIALOGS_H__ */

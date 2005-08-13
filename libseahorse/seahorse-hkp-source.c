@@ -28,7 +28,6 @@
 #include "seahorse-gpgmex.h"
 #include "seahorse-operation.h"
 #include "seahorse-hkp-source.h"
-#include "seahorse-multi-source.h"
 #include "seahorse-util.h"
 #include "seahorse-pgp-key.h"
 
@@ -113,7 +112,7 @@ dump_soup_response (SoupMessage *msg)
 typedef gboolean (*OpHKPCallback)   (SeahorseOperation *op, SoupMessage *message);
     
 DECLARE_OPERATION (HKP, hkp)
-    SeahorseHKPSource *hsrc;        /* The source to add keys to */
+    SeahorseHKPSource *hsrc;        /* The source  */
     SoupSession *session;           /* The HTTP session */
     guint total;                    /* Number of requests queued */
     guint requests;                 /* Number of requests remaining */
@@ -572,7 +571,8 @@ get_callback (SoupMessage *msg, SeahorseHKPOperation *hop)
 static void seahorse_hkp_source_class_init (SeahorseHKPSourceClass *klass);
 
 /* SeahorseKeySource methods */
-static SeahorseOperation*  seahorse_hkp_source_refresh    (SeahorseKeySource *src,
+static SeahorseOperation*  seahorse_hkp_source_load       (SeahorseKeySource *src,
+                                                           SeahorseKeySourceLoad load,
                                                            const gchar *key);
 static SeahorseOperation*  seahorse_hkp_source_import     (SeahorseKeySource *sksrc, 
                                                            gpgme_data_t data);
@@ -610,7 +610,7 @@ seahorse_hkp_source_class_init (SeahorseHKPSourceClass *klass)
     SeahorseKeySourceClass *key_class;
    
     key_class = SEAHORSE_KEY_SOURCE_CLASS (klass);
-    key_class->refresh = seahorse_hkp_source_refresh;
+    key_class->load = seahorse_hkp_source_load;
     key_class->import = seahorse_hkp_source_import;
     key_class->export = seahorse_hkp_source_export;
 
@@ -618,7 +618,8 @@ seahorse_hkp_source_class_init (SeahorseHKPSourceClass *klass)
 }
 
 static SeahorseOperation*
-seahorse_hkp_source_refresh (SeahorseKeySource *src, const gchar *key)
+seahorse_hkp_source_load (SeahorseKeySource *src, SeahorseKeySourceLoad load,
+                          const gchar *match)
 {
     SeahorseOperation *op;
     SeahorseHKPOperation *hop;
@@ -628,33 +629,25 @@ seahorse_hkp_source_refresh (SeahorseKeySource *src, const gchar *key)
     
     g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (src), NULL);
     g_return_val_if_fail (SEAHORSE_IS_HKP_SOURCE (src), NULL);
-    g_return_val_if_fail (key != NULL, NULL);
     
-    op = parent_class->refresh (src, key);
+    op = parent_class->load (src, load, match);
     if (op != NULL)
         return op;
 
-    /* No way to find new keys */
-    if (g_str_equal (key, SEAHORSE_KEY_SOURCE_NEW))
+    /* No way to find new all or new keys */
+    if (load == SKSRC_LOAD_NEW || load == SKSRC_LOAD_ALL)
         return seahorse_operation_new_complete (NULL);
         
-    /* All keys, parent_class will have cleared */
-    else if(g_str_equal (key, SEAHORSE_KEY_SOURCE_ALL)) {
-        
-        g_object_get (src, "pattern", &pattern, NULL);
-        g_return_val_if_fail (pattern && pattern[0], NULL);
-        
-        t = soup_uri_encode (pattern, "+=/\\()");
-        g_free (pattern);
-        pattern = t;
+    else if(load == SKSRC_LOAD_SEARCH)
+        pattern = soup_uri_encode (match, "+=/\\()");
         
     /* Load a specific key */
-    } else {
-
+    else if(load == SKSRC_LOAD_KEY) 
         /* TODO: Does this actually work? */
-        pattern = soup_uri_encode (key, NULL);    
-    } 
-        
+        pattern = soup_uri_encode (match, NULL);    
+
+    g_return_val_if_fail (pattern != NULL, NULL);
+    
     hop = setup_hkp_operation (SEAHORSE_HKP_SOURCE (src));
     
     g_object_get (src, "key-server", &server, NULL);
@@ -682,8 +675,9 @@ seahorse_hkp_source_refresh (SeahorseKeySource *src, const gchar *key)
 
     g_free (server);    
     
-    seahorse_server_source_set_operation (SEAHORSE_SERVER_SOURCE (src), 
-                                          SEAHORSE_OPERATION (hop));
+    seahorse_server_source_take_operation (SEAHORSE_SERVER_SOURCE (src), 
+                                           SEAHORSE_OPERATION (hop));
+    g_object_ref (hop);
     return SEAHORSE_OPERATION (hop);
 }
 
@@ -834,28 +828,19 @@ seahorse_hkp_source_export (SeahorseKeySource *sksrc, GList *keys,
 
 /**
  * seahorse_hkp_source_new
- * @locsrc: Local source to base this key source off of
- * @server: The server to connect to 
- * @pattern: The pattern to search for
+ * @uri: The server to connect to 
  * 
  * Creates a new key source for an HKP PGP server.
  * 
  * Returns: A new HKP Key Source
  */
 SeahorseHKPSource*   
-seahorse_hkp_source_new (SeahorseKeySource *locsrc, const gchar *server,
-                          const gchar *pattern)
+seahorse_hkp_source_new (const gchar *uri, const gchar *host)
 {
-    SeahorseHKPSource *hsrc;
-    
-    g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (locsrc) && 
-                          !SEAHORSE_IS_SERVER_SOURCE (locsrc), NULL);
-    g_return_val_if_fail (server && server[0], NULL);
-    
-    hsrc = g_object_new (SEAHORSE_TYPE_HKP_SOURCE, "local-source", locsrc,
-                         "key-server", server, "pattern", pattern, NULL);
-
-    return hsrc;  
+    g_return_val_if_fail (seahorse_hkp_is_valid_uri (uri), NULL);
+    g_return_val_if_fail (host && *host, NULL);
+    return g_object_new (SEAHORSE_TYPE_HKP_SOURCE, "uri", uri,
+                         "key-server", host, NULL);
 }
 
 /**
@@ -870,6 +855,8 @@ seahorse_hkp_is_valid_uri (const gchar *uri)
     SoupUri *soup;
     gboolean ret = FALSE;
     gchar *t;
+    
+    g_return_val_if_fail (uri && uri[0], FALSE);
     
     /* Replace 'hkp' with 'http' at the beginning of the URI */
     if (strncasecmp (uri, "hkp:", 4) == 0) {

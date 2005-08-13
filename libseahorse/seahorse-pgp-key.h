@@ -26,6 +26,9 @@
 #include <gpgme.h>
 
 #include "seahorse-key.h"
+#include "seahorse-pgp-source.h"
+
+#define SKEY_PGP                         (g_quark_from_static_string ("openpgp"))
 
 #define SEAHORSE_TYPE_PGP_KEY            (seahorse_pgp_key_get_type ())
 #define SEAHORSE_PGP_KEY(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_PGP_KEY, SeahorsePGPKey))
@@ -50,7 +53,7 @@ struct _SeahorsePGPKeyClass {
 	SeahorseKeyClass            parent_class;
 };
 
-SeahorsePGPKey* seahorse_pgp_key_new                  (struct _SeahorseKeySource *sksrc,
+SeahorsePGPKey* seahorse_pgp_key_new                  (SeahorseKeySource *sksrc,
                                                        gpgme_key_t        pubkey,
                                                        gpgme_key_t        seckey);
 

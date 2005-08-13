@@ -2,6 +2,7 @@
  * Seahorse
  *
  * Copyright (C) 2002 Jacob Perkins
+ * Copyright (C) 2004 Nate Nielsen
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,19 +25,16 @@
 #include "seahorse-libdialogs.h"
 #include "seahorse-widget.h"
 #include "seahorse-util.h"
+#include "seahorse-pgp-key.h"
 
 static gchar*
-userid_for_fingerprint (SeahorseContext *sctx, const gchar *fingerprint)
+userid_for_fingerprint (const gchar *fingerprint)
 {
-    SeahorseKeySource *sksrc;
     SeahorseKey *key;
     gchar *userid = NULL;
     
-    sksrc = seahorse_context_get_key_source (sctx);
-    g_return_val_if_fail (sksrc != NULL, g_strdup (""));
-    
     /* TODO: Eventually we need to extend this to lookup keys remotely */
-    key = seahorse_key_source_get_key (sksrc, fingerprint);
+    key = seahorse_context_find_key (SCTX_APP (), SKEY_PGP, SKEY_LOC_LOCAL, fingerprint);
 
     if (key != NULL) {
         userid = seahorse_key_get_display_name (key);
@@ -52,8 +50,7 @@ userid_for_fingerprint (SeahorseContext *sctx, const gchar *fingerprint)
 }
     
 static gchar* 
-generate_sig_text (SeahorseContext *sctx, const gchar* path, 
-                        gpgme_verify_result_t status)
+generate_sig_text (const gchar* path, gpgme_verify_result_t status)
 {
     gboolean good = FALSE;
     const gchar *t;
@@ -96,7 +93,7 @@ generate_sig_text (SeahorseContext *sctx, const gchar* path,
 
     if (good) {
         date = seahorse_util_get_date_string (status->signatures->timestamp);
-        userid = userid_for_fingerprint (sctx, status->signatures->fpr);
+        userid = userid_for_fingerprint (status->signatures->fpr);
         
         msg = g_strdup_printf (t, path, userid, date);
         
@@ -110,15 +107,15 @@ generate_sig_text (SeahorseContext *sctx, const gchar* path,
 }    
 
 void
-seahorse_signatures_add (SeahorseContext *sctx, SeahorseWidget *swidget,
-                            const gchar* data, gpgme_verify_result_t status)
+seahorse_signatures_add (SeahorseWidget *swidget, const gchar* data, 
+                         gpgme_verify_result_t status)
 {
     GtkWidget *label;
     gchar* msg;
     gchar* text;
     
     label = glade_xml_get_widget (swidget->xml, "status");
-    msg = generate_sig_text (sctx, data, status);
+    msg = generate_sig_text (data, status);
     
     text = g_strconcat (gtk_label_get_label (GTK_LABEL (label)), msg, "\n", NULL);
     gtk_label_set_markup (GTK_LABEL (label), text);
@@ -128,16 +125,13 @@ seahorse_signatures_add (SeahorseContext *sctx, SeahorseWidget *swidget,
 }
 
 SeahorseWidget* 
-seahorse_signatures_new (SeahorseContext *sctx)
+seahorse_signatures_new ()
 {
-	SeahorseWidget *swidget;
-    	
-	swidget = seahorse_widget_new_allow_multiple ("signatures", sctx);
-    return swidget;
+	return seahorse_widget_new_allow_multiple ("signatures");
 }
 
 void
-seahorse_signatures_run (SeahorseContext *sctx, SeahorseWidget *swidget)
+seahorse_signatures_run (SeahorseWidget *swidget)
 {
     GtkWidget *w; 
     w = glade_xml_get_widget (swidget->xml, "signatures");
