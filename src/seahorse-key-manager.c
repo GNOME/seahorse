@@ -40,6 +40,7 @@
 #include "seahorse-op.h"
 #include "seahorse-gpg-options.h"
 #include "seahorse-gconf.h"
+#include "seahorse-gtkstock.h"
 
 /* The various tabs */
 enum KeyManagerTabs {
@@ -432,6 +433,7 @@ about_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
 	static GtkWidget *about = NULL;
 	GdkPixbuf *pixbuf = NULL;
+    GtkWidget *tempwidget = gtk_image_new();
 
 	gchar *authors[] = {
 		"Jacob Perkins <jap1@users.sourceforge.net>",
@@ -458,7 +460,12 @@ about_activate (GtkWidget *widget, SeahorseWidget *swidget)
 		return;
 	}
 
-	pixbuf = gdk_pixbuf_new_from_file (PIXMAPSDIR "seahorse.png", NULL);
+    pixbuf = gtk_widget_render_icon (tempwidget, 
+                                     SEAHORSE_STOCK_SEAHORSE, 
+                                     (GtkIconSize)-1, 
+                                     NULL); 
+    gtk_widget_destroy(tempwidget);
+
 	if (pixbuf != NULL) {
 		GdkPixbuf *temp_pixbuf = NULL;
 		

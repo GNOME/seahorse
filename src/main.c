@@ -33,6 +33,7 @@
 #include "seahorse-libdialogs.h"
 #include "seahorse-pgp-source.h"
 #include "seahorse-pgp-key.h"
+#include "seahorse-gtkstock.h"
 
 typedef enum _CmdLineMode {
     MODE_NONE,
@@ -436,7 +437,10 @@ main (int argc, char **argv)
     g_log_set_always_fatal (G_LOG_LEVEL_WARNING | G_LOG_FLAG_FATAL | 
                             G_LOG_LEVEL_ERROR | G_LOG_LEVEL_CRITICAL);
 #endif
-                           
+    
+    /* Insert Icons into Stock */ 
+    seahorse_gtk_stock_init();
+    
     /* Make the default SeahorseContext */
     seahorse_context_new (TRUE);
     op = seahorse_context_load_local_keys (SCTX_APP());

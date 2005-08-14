@@ -70,6 +70,7 @@ libseahorse_internal_la_SOURCES = \
     seahorse-gconf.c seahorse-gconf.h \
     seahorse-dns-sd.c seahorse-dns-sd.h \
     eggtrayicon.c eggtrayicon.h \
+    seahorse-gtkstock.c seahorse-gtkstock.h \
 	$(BUILT_SOURCES) \
 	$(AGENT_SRCS) \
 	$(KEYSERVER_SRCS) \

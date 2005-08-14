@@ -21,6 +21,7 @@
  
 #include <gnome.h>
 #include <howl.h>
+#include "seahorse-gtkstock.h"
 
 /* Workaround broken howl installing config.h */
 #undef PACKAGE
@@ -219,7 +220,8 @@ show_tray ()
         tray_icon = egg_tray_icon_new ("seahorse-daemon-sharing");
         box = gtk_event_box_new ();
 
-        image = gtk_image_new_from_file (PIXMAPSDIR "seahorse-share-keys.png");
+        image = gtk_image_new_from_stock (SEAHORSE_STOCK_SHARE_KEYS, (GtkIconSize)-1);
+        //image = gtk_image_new_from_file (PIXMAPSDIR "seahorse-share-keys.png");
         gtk_container_add (GTK_CONTAINER (box), image);
         gtk_container_add (GTK_CONTAINER (tray_icon), box);
 

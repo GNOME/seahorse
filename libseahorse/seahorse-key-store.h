@@ -110,7 +110,7 @@ enum {
     KEY_STORE_DATA,
     KEY_STORE_CHECK,
     KEY_STORE_PAIR,
-    KEY_STORE_NOTPAIR,
+    KEY_STORE_STOCK_ID,
     KEY_STORE_NAME,
     KEY_STORE_KEYID,
     KEY_STORE_UID,
@@ -136,7 +136,7 @@ enum {
             G_TYPE_POINTER,  \
             G_TYPE_BOOLEAN,  \
             G_TYPE_BOOLEAN,  \
-            G_TYPE_BOOLEAN,  \
+            G_TYPE_STRING,  \
             G_TYPE_STRING,   \
             G_TYPE_STRING,   \
             G_TYPE_INT

@@ -26,6 +26,7 @@
 
 #include "seahorse-widget.h"
 #include "config.h"
+#include "seahorse-gtkstock.h"
 
 #define STATUS "status"
 
@@ -153,6 +154,7 @@ object_set_property (GObject *object, guint prop_id, const GValue *value, GParam
 {
 	SeahorseWidget *swidget;
     GtkWidget *w;
+    GdkPixbuf *pixbuf = NULL;
 	char *path;
 	
 	swidget = SEAHORSE_WIDGET (object);
@@ -178,8 +180,13 @@ object_set_property (GObject *object, guint prop_id, const GValue *value, GParam
             w = glade_xml_get_widget (swidget->xml, swidget->name);
             glade_xml_set_toplevel (swidget->xml, GTK_WINDOW (w));
             glade_xml_ensure_accel (swidget->xml);
-        
-            gtk_window_set_icon (GTK_WINDOW (w), gdk_pixbuf_new_from_file (PIXMAPSDIR "seahorse.png", NULL));
+            
+            pixbuf = gtk_widget_render_icon (w, 
+                                     SEAHORSE_STOCK_SEAHORSE, 
+                                     (GtkIconSize)-1, 
+                                     NULL); 
+            gtk_window_set_icon (GTK_WINDOW (w), gdk_pixbuf_copy(pixbuf));
+            g_object_unref(pixbuf);
 			break;
             
 		default:

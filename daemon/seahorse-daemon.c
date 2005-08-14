@@ -34,6 +34,7 @@
 
 #include "config.h"
 #include "seahorse-daemon.h"
+#include "seahorse-gtkstock.h"
 
 #ifdef WITH_AGENT
 #include "seahorse-agent.h"
@@ -230,6 +231,9 @@ int main(int argc, char* argv[])
     /* We log to the syslog */
     prepare_logging ();
 
+    /* Insert Icons into Stock */
+    seahorse_gtk_stock_init();
+    
     /* Initialize the various daemon components */
 #ifdef WITH_DBUS
     seahorse_dbus_server_init ();
