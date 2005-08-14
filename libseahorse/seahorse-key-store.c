@@ -756,8 +756,8 @@ seahorse_key_store_init (SeahorseKeyStore *skstore, GtkTreeView *view)
     
     /* When using key pair icons, we add an icon column */
     if (SEAHORSE_KEY_STORE_GET_CLASS (skstore)->use_icon) {
-    	GtkCellRenderer  *keyPixbufRenderer = NULL;
-    				 			 
+    	GtkCellRenderer  *keyPixbufRenderer = gtk_cell_renderer_pixbuf_new();
+    	
     	col = gtk_tree_view_column_new_with_attributes ("", keyPixbufRenderer, 
    												"stock-id", KEY_STORE_STOCK_ID,
    												NULL);
