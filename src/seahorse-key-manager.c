@@ -450,6 +450,7 @@ about_activate (GtkWidget *widget, SeahorseWidget *swidget)
 
 	gchar *documenters[] = {
 		"Jacob Perkins <jap1@users.sourceforge.net>",
+        "Adam Schreiber <sadam@clemson.edu>",
 		NULL
 	};
 
