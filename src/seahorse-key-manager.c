@@ -743,7 +743,7 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 
     /* To avoid flicker */
     seahorse_widget_show (swidget);
-	
+    gtk_widget_grab_focus (GTK_WIDGET (view));	
 
     /* Setup drops */
     gtk_drag_dest_set (GTK_WIDGET (win), GTK_DEST_DEFAULT_ALL, 

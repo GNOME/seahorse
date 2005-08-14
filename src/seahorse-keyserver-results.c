@@ -388,11 +388,11 @@ seahorse_keyserver_results_show (SeahorseContext *sctx, SeahorseKeySource *sksrc
 	gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
 	g_signal_connect (selection, "changed",
 		G_CALLBACK (selection_changed), swidget);
-    selection_changed (NULL, swidget);
+    selection_changed (selection, swidget);
 
     /* To avoid flicker */
     seahorse_widget_show (swidget);
-
+    gtk_widget_grab_focus (GTK_WIDGET (view));	
 
     /* Load the keys */
     seahorse_key_source_refresh_async (sksrc, SEAHORSE_KEY_SOURCE_ALL);
