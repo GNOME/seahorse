@@ -274,20 +274,57 @@ drag_begin (GtkWidget *widget, GdkDragContext *context, SeahorseKeyStore *skstor
 {
     GtkTreeView *view = GTK_TREE_VIEW (widget);
     SeahorseKeySource *sksrc;
+    SeahorseMultiOperation *mop = NULL;
     SeahorseOperation *op = NULL;
-   	GList *keys = NULL;
-
+   	GList *next, *keys, *sel_keys = NULL;
+    gpgme_data_t data = NULL;
+    SeahorseKey *skey;
+    
     DBG_PRINT (("drag_begin -->\n"));
     
-    g_object_get (G_OBJECT (skstore), "key-source", &sksrc, NULL);
-    g_return_if_fail (sksrc != NULL);
+  	sel_keys = seahorse_key_store_get_selected_keys (view);
+    if(sel_keys != NULL) {
+        
+        /* Sort by key source */
+        keys = g_list_copy (sel_keys);
+        keys = seahorse_util_keylist_sort (keys);
     
-  	keys = seahorse_key_store_get_selected_keys (view);
-    if(keys != NULL) {
-        op = seahorse_key_source_export (sksrc, keys, FALSE, NULL);
-        g_object_set_data_full (G_OBJECT (view), "drag-operation", op,
+        while (keys) {
+     
+            /* Break off one set (same keysource) */
+            next = seahorse_util_keylist_splice (keys);
+
+            g_return_if_fail (SEAHORSE_IS_KEY (keys->data));
+            skey = SEAHORSE_KEY (keys->data);
+
+            /* Export from this key source */        
+            sksrc = seahorse_key_get_source (skey);
+            g_return_if_fail (sksrc != NULL);
+            
+            if (!mop) 
+                mop = seahorse_multi_operation_new ();
+            
+            /* The data object where we export to */
+            if (!data) {
+                gpgme_data_new (&data);
+                g_return_if_fail (data != NULL);
+                g_object_set_data_full (G_OBJECT (mop), "result-data", data,
+                                        (GDestroyNotify)gpgme_data_release);
+            }
+        
+            /* We pass our own data object, to which data is appended */
+            op = seahorse_key_source_export (sksrc, keys, FALSE, data);
+            g_return_if_fail (op != NULL);
+
+            g_list_free (keys);
+            keys = next;
+
+            seahorse_multi_operation_take (mop, op);
+        }
+        
+        g_object_set_data_full (G_OBJECT (view), "drag-operation", mop,
                                 (GDestroyNotify)g_object_unref);
-        g_object_set_data_full (G_OBJECT (view), "drag-keys", keys,
+        g_object_set_data_full (G_OBJECT (view), "drag-keys", sel_keys,
                                 (GDestroyNotify)g_list_free);
         g_object_set_data (G_OBJECT (view), "drag-file", NULL);
     }
@@ -326,8 +363,8 @@ drag_data_get (GtkWidget *widget, GdkDragContext *context,
     gchar *t, *n;
     GList *keys;
     GError *err = NULL;
-    gpgme_data_t data;
     gpgme_error_t gerr;
+    gpgme_data_t data;
 
     DBG_PRINT (("drag_data_get %d -->\n", info)); 
     
@@ -346,8 +383,8 @@ drag_data_get (GtkWidget *widget, GdkDragContext *context,
         seahorse_util_handle_error (err, _("Couldn't retrieve key data"));
         return;
     }
-
-    data = (gpgme_data_t)seahorse_operation_get_result (op);
+    
+    data = (gpgme_data_t)g_object_get_data (G_OBJECT (op), "result-data");
     g_return_if_fail (data != NULL);
     
     if (info == TEXT_PLAIN) {
