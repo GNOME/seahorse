@@ -19,6 +19,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include "config.h"
 #include <sys/param.h>
 #include <sys/socket.h>
 #include <sys/types.h>
@@ -37,6 +38,23 @@
 #include <gnome.h>
 
 #include "seahorse-agent.h"
+
+/* Override the DEBUG_REFRESH_ENABLE switch here */
+/* #define DEBUG_AGENTIO_ENABLE 0 */
+
+#ifndef DEBUG_AGENTIO_ENABLE
+#if _DEBUG
+#define DEBUG_AGENTIO_ENABLE 1
+#else
+#define DEBUG_AGENTIO_ENABLE 0
+#endif
+#endif
+
+#if DEBUG_AGENTIO_ENABLE
+#define DEBUG_AGENTIO(x)    g_printerr x
+#else
+#define DEBUG_AGENTIO(x)
+#endif
 
 /*
  * Handles the server and open sockets. Parses received commands 
@@ -250,6 +268,8 @@ process_line (SeahorseAgentConn *cn, gchar *string)
 {
     gchar *args;
 
+    DEBUG_AGENTIO (("[agent-io] got line:\n%s", string));
+
     g_strstrip (string);
 
     if (strlen (string) == 0)
@@ -356,7 +376,7 @@ process_line (SeahorseAgentConn *cn, gchar *string)
     }
 
     else if (strcasecmp (string, ASS_BYE) == 0) {
-        seahorse_agent_io_reply (cn, TRUE, "closing connection");
+        /* seahorse_agent_io_reply (cn, TRUE, "closing connection"); */
         free_conn (cn);
     }
 
@@ -464,6 +484,8 @@ seahorse_agent_io_reply (SeahorseAgentConn *cn, gboolean ok, const gchar *respon
     /* The connection could have closed in the meantime */
     if (!is_valid_conn (cn))
         return;
+
+    DEBUG_AGENTIO (("[agent-io] send line:\n%s%s\n", ok ? ASS_OK : ASS_ERR, response ? response : ""));
 
     fd = g_io_channel_unix_get_fd (cn->iochannel);
 
