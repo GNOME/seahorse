@@ -424,9 +424,14 @@ seahorse_context_get_key (SeahorseContext *sctx, SeahorseKeySource  *sksrc,
                           const gchar *keyid)
 {
     gconstpointer k;
-
+    guint l;
+    
     g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), NULL);
     g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (sksrc), NULL);
+    
+    l = strlen (keyid);
+    if (l >= 16)
+        keyid += l - 16;
 
     k = hashtable_key (sksrc, keyid);
 
