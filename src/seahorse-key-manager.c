@@ -393,13 +393,14 @@ about_activate (GtkWidget *widget, SeahorseWidget *swidget)
         "Nate Nielsen <nielsen@memberwebs.com>",
         "",
         "Contributions:",
-        "Adam Schreiber <sadam@clemson.edu>",
         "Albrecht Dreß <albrecht.dress@arcor.de>",
+        "Jim Pharis <binbrain@gmail.com>",
 		NULL
 	};
 
 	gchar *documenters[] = {
 		"Jacob Perkins <jap1@users.sourceforge.net>",
+        "Adam Schreiber <sadam@clemson.edu>",
 		NULL
 	};
 
