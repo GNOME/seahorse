@@ -432,6 +432,11 @@ main (int argc, char **argv)
 	gpgme_set_locale(NULL, LC_MESSAGES, setlocale(LC_MESSAGES, NULL));
 #endif
 
+#ifdef _DEBUG 
+    g_log_set_always_fatal (G_LOG_LEVEL_WARNING | G_LOG_FLAG_FATAL | 
+                            G_LOG_LEVEL_ERROR | G_LOG_LEVEL_CRITICAL);
+#endif
+    
     program = gnome_program_init(PACKAGE, VERSION, LIBGNOMEUI_MODULE, argc, argv,
                     GNOME_PARAM_POPT_TABLE, options,
                     GNOME_PARAM_HUMAN_READABLE_NAME, _("Encryption Key Manager"),
