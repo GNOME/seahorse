@@ -89,9 +89,9 @@ void			seahorse_key_destroy		(SeahorseKey		*skey);
 void			seahorse_key_changed		(SeahorseKey		*skey,
 							 SeahorseKeyChange	change);
 
-const gint		seahorse_key_get_num_uids	(const SeahorseKey	*skey);
+gint			seahorse_key_get_num_uids	(const SeahorseKey	*skey);
 
-const gint		seahorse_key_get_num_subkeys	(const SeahorseKey	*skey);
+gint			seahorse_key_get_num_subkeys	(const SeahorseKey	*skey);
 
 gpgme_subkey_t		seahorse_key_get_nth_subkey	(const SeahorseKey	*skey,
 							 const guint		index);
@@ -122,9 +122,9 @@ gboolean		seahorse_key_is_valid		(const SeahorseKey	*skey);
 
 gboolean		seahorse_key_can_encrypt	(const SeahorseKey	*skey);
 
-const SeahorseValidity	seahorse_key_get_validity	(const SeahorseKey	*skey);
+SeahorseValidity	seahorse_key_get_validity	(const SeahorseKey	*skey);
 
-const SeahorseValidity	seahorse_key_get_trust		(const SeahorseKey	*skey);
+SeahorseValidity	seahorse_key_get_trust		(const SeahorseKey	*skey);
 
 struct _SeahorseKeySource*  seahorse_key_get_source    (const SeahorseKey *skey);
 

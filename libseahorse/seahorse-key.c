@@ -214,7 +214,7 @@ seahorse_key_changed (SeahorseKey *skey, SeahorseKeyChange change)
  *
  * Returns: The number of user IDs for @skey, or -1 if error.
  **/
-const gint
+gint
 seahorse_key_get_num_uids (const SeahorseKey *skey)
 {
 	gint index = 0;
@@ -240,7 +240,7 @@ seahorse_key_get_num_uids (const SeahorseKey *skey)
  *
  * Returns: The number of subkeys for @skey, or -1 if error.
  **/
-const gint
+gint
 seahorse_key_get_num_subkeys (const SeahorseKey *skey)
 {
 	gint index = 0;
@@ -466,7 +466,7 @@ seahorse_key_can_encrypt (const SeahorseKey *skey)
 	return (seahorse_key_is_valid (skey) &&	skey->key->can_encrypt);
 }
 
-const SeahorseValidity
+SeahorseValidity
 seahorse_key_get_validity (const SeahorseKey *skey)
 {
 	g_return_val_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey), SEAHORSE_VALIDITY_UNKNOWN);
@@ -481,7 +481,7 @@ seahorse_key_get_validity (const SeahorseKey *skey)
 	return skey->key->uids->validity;
 }
 
-const SeahorseValidity
+SeahorseValidity
 seahorse_key_get_trust (const SeahorseKey *skey)
 {
 	if (skey->key->owner_trust <= SEAHORSE_VALIDITY_UNKNOWN)
