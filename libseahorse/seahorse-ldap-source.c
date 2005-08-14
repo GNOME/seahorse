@@ -799,6 +799,9 @@ get_callback (SeahorseOperation *op, LDAPMessage *result)
         r = gpgme_data_write (data, key, strlen (key));
         g_return_val_if_fail (r != -1, FALSE);
 
+        r = gpgme_data_write (data, "\n", 1);
+        g_return_val_if_fail (r != -1, FALSE);
+
         g_free (key);
         return TRUE;
 

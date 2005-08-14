@@ -554,6 +554,9 @@ get_callback (SoupMessage *msg, SeahorseHKPOperation *hop)
             
             r = gpgme_data_write (data, start, end - start);
             g_return_if_fail (r != -1);
+
+            r = gpgme_data_write (data, "\n", 1);
+            g_return_if_fail (r != -1);
         }
 
     } while (type != SEAHORSE_TEXT_TYPE_NONE);        
