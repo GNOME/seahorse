@@ -321,7 +321,7 @@ void
 seahorse_agent_cache_set (const gchar *id, const gchar *pass,
                           gboolean encode, gboolean lock)
 {
-    int len;
+    int len, c;
     gboolean cache;
     sa_cache_t *it;
 
@@ -358,12 +358,14 @@ seahorse_agent_cache_set (const gchar *id, const gchar *pass,
     len = strlen (pass);
 
     if (encode) {
-        it->pass = (gchar *) secmem_malloc (sizeof (gchar *) * ((len * 2) + 1));
+        c = sizeof (gchar *) * ((len * 2) + 1);
+        it->pass = (gchar *) secmem_malloc (c);
         if (!it->pass) {
             g_critical ("out of secure memory");
             return;
         }
 
+        memset (it->pass, 0, c);
         encode_password (it->pass, pass);
     }
 
