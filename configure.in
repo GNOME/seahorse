@@ -421,7 +421,7 @@ AC_ARG_ENABLE(fatal-messages,
 	    AC_HELP_STRING([--fatal-messages],
 	    [Don't make compile and or runtime messages fatal in debug mode.]))
 
-if test "$enable_fatal_messages" != "no" && test "$enable_debug" = "yes"; then
+if test "$enable_fatal_messages" = "yes" && test "$enable_debug" = "yes"; then
     CFLAGS="$CFLAGS -Werror"
     AC_DEFINE_UNQUOTED(FATAL_MESSAGES, 1, [Fatal runtime messages])
     echo "enabling fatal runtime messages"
