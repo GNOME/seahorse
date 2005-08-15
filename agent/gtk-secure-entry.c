@@ -1883,6 +1883,7 @@ gtk_secure_entry_delete_from_cursor(GtkSecureEntry * entry,
     gtk_secure_entry_pend_cursor_blink(entry);
 }
 
+#if UNUSED
 static void
 gtk_secure_entry_delete_cb(GtkSecureEntry * entry)
 {
@@ -1893,7 +1894,7 @@ gtk_secure_entry_delete_cb(GtkSecureEntry * entry)
       gtk_editable_delete_text(editable, start, end);
 }
 
-#if UNUSED
+
 static void
 gtk_secure_entry_toggle_overwrite(GtkSecureEntry * entry)
 {
