@@ -23,7 +23,7 @@
 
 #include "seahorse-widget.h"
 #include "seahorse-util.h"
-#include "seahorse-key-op.h"
+#include "seahorse-pgp-key-op.h"
 #include "seahorse-generate-adv.h"
 #include "seahorse-generate-druid.h"
 

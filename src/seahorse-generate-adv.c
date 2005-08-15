@@ -24,7 +24,7 @@
 #include "seahorse-gpgmex.h"
 #include "seahorse-widget.h"
 #include "seahorse-util.h"
-#include "seahorse-key-op.h"
+#include "seahorse-pgp-key-op.h"
 
 #define LENGTH "length"
 #define EXPIRES "expires"

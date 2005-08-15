@@ -35,7 +35,7 @@
 #include "seahorse-validity.h"
 #include "seahorse-key-manager-store.h"
 #include "seahorse-key-dialogs.h"
-#include "seahorse-key-op.h"
+#include "seahorse-pgp-key-op.h"
 #include "seahorse-key-widget.h"
 #include "seahorse-op.h"
 #include "seahorse-gpg-options.h"

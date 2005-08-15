@@ -28,8 +28,8 @@
 #include "seahorse-key-widget.h"
 #include "seahorse-op.h"
 #include "seahorse-util.h"
-#include "seahorse-key-op.h"
 #include "seahorse-pgp-key.h"
+#include "seahorse-pgp-key-op.h"
 
 #define NOTEBOOK "notebook"
 #define SPACING 12

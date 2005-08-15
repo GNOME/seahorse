@@ -24,7 +24,7 @@
 #include "seahorse-gpgmex.h"
 #include "seahorse-key-dialogs.h"
 #include "seahorse-key-widget.h"
-#include "seahorse-key-op.h"
+#include "seahorse-pgp-key-op.h"
 #include "seahorse-util.h"
 
 #define NAME "name"

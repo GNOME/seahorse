@@ -25,7 +25,7 @@
 #include "seahorse-widget.h"
 #include "seahorse-util.h"
 #include "seahorse-key-source.h"
-#include "seahorse-key-op.h"
+#include "seahorse-pgp-key-op.h"
 
 #define EXPIRES "expiration_date"
 #define LOW_SECURITY 768

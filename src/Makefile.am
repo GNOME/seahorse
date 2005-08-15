@@ -23,7 +23,6 @@ bin_PROGRAMS = seahorse
 seahorse_SOURCES = main.c \
 	seahorse-key-widget.c seahorse-key-widget.h \
 	seahorse-key-manager-store.c seahorse-key-manager-store.h \
-	seahorse-key-op.c seahorse-key-op.h \
 	seahorse-preferences.c seahorse-preferences.h \
 	seahorse-key-manager.c eggtreemultidnd.c eggtreemultidnd.h \
 	seahorse-generate-select.c \

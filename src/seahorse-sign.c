@@ -24,7 +24,7 @@
 #include "seahorse-gpgmex.h"
 #include "seahorse-windows.h"
 #include "seahorse-key-widget.h"
-#include "seahorse-key-op.h"
+#include "seahorse-pgp-key-op.h"
 #include "seahorse-util.h"
 
 static gboolean

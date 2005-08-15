@@ -2,6 +2,7 @@
 gladedir = $(datadir)/seahorse/glade/
 localedir = $(datadir)/locale
 pixmapsdir = $(datadir)/pixmaps/
+seahorselibexecbindir = $(libexecdir)/seahorse/
 
 INCLUDES = -I$(top_builddir) \
 	-I$(top_srcdir) \
@@ -9,7 +10,8 @@ INCLUDES = -I$(top_builddir) \
 	-DDATA_DIR=\""$(datadir)"\" \
 	-DSEAHORSE_GLADEDIR=\""$(gladedir)"\" \
 	-DLOCALEDIR=\"$(localedir)\" \
-	-DPIXMAPSDIR=\""$(pixmapsdir)"\"
+	-DPIXMAPSDIR=\""$(pixmapsdir)"\" \
+	-DEXECDIR=\""$(seahorselibexecbindir)"\"
 
 lib_LTLIBRARIES = libseahorse-internal.la
 
@@ -44,6 +46,7 @@ endif
 libseahorse_internal_la_SOURCES = \
 	seahorse-key.c seahorse-key.h \
 	seahorse-pgp-key.c seahorse-pgp-key.h \
+    seahorse-pgp-key-op.c seahorse-pgp-key-op.h \
 	seahorse-context.c seahorse-context.h \
 	seahorse-widget.c seahorse-widget.h \
 	seahorse-op.c seahorse-op.h \
@@ -77,6 +80,9 @@ libseahorse_internal_la_SOURCES = \
     $(LDAP_SRCS) \
     $(HKP_SRCS)
     
+seahorselibexecbin_PROGRAMS = xloadimage
+
+xloadimage_SOURCES = ../src/seahorse-xloadimage.c 	
 
 seahorse-marshal.h: seahorse-marshal.list $(GLIB_GENMARSHAL)
 	$(GLIB_GENMARSHAL) $< --header --prefix=seahorse_marshal > $@
