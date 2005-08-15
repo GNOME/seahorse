@@ -95,7 +95,8 @@ static char *pgp_encrypted_types[] = {
 };
 
 static char *no_display_types[] = {
-    "application/x-desktop"  
+    "application/x-desktop",
+    NULL
 };
 
 static gboolean
