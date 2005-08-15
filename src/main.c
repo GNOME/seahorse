@@ -433,7 +433,7 @@ main (int argc, char **argv)
                     GNOME_PARAM_HUMAN_READABLE_NAME, _("Encryption Key Manager"),
                     GNOME_PARAM_APP_DATADIR, DATA_DIR, NULL);
 
-#ifdef _DEBUG 
+#ifdef FATAL_MESSAGES 
     g_log_set_always_fatal (G_LOG_LEVEL_WARNING | G_LOG_FLAG_FATAL | 
                             G_LOG_LEVEL_ERROR | G_LOG_LEVEL_CRITICAL);
 #endif
