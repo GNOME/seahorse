@@ -823,7 +823,7 @@ seahorse_key_manager_show (SeahorseOperation *op)
     initialize_tab (swidget, "sec-key-tab", TAB_PRIVATE, "sec-key-list", SKEY_PRIVATE);
     
     /* Set focus to the current key list */
-    w = get_current_view (swidget);
+    w = GTK_WIDGET (get_current_view (swidget));
     gtk_widget_grab_focus (w);
     
     /* To avoid flicker */

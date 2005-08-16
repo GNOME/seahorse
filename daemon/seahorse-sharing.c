@@ -137,7 +137,7 @@ start_publishing (int port)
     g_free (t);
     
     result = sw_discovery_publish (howl_session, 0, share_name, "_hkp._tcp",
-				                   NULL, NULL, port, /* text */"", 0,
+				                   NULL, NULL, port, (sw_octets)"", 0,
 				                   publish_reply, NULL, &published_id);
     g_free (share_name);
     

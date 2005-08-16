@@ -20,11 +20,14 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <gnome.h>
+#include "config.h"
+#include <sys/wait.h>
+#include <unistd.h>
 #include <time.h>
 #include <stdio.h>
-#include <sys/wait.h>
+#include <unistd.h>
 
+#include <gnome.h>
 #include <libgnomevfs/gnome-vfs.h>
 
 #include "seahorse-gpgmex.h"
@@ -229,11 +232,7 @@ seahorse_util_write_data_to_file (const gchar *path, gpgme_data_t data,
 	gchar *buffer;
 	gint nread;
    
-    /* 
-     * TODO: gpgme_data_seek doesn't work for us right now
-     * probably because of different off_t sizes 
-     */
-    gpgme_data_rewind (data);
+    gpgme_data_seek (data, 0, SEEK_SET);
 	
     file = seahorse_vfs_data_create (path, SEAHORSE_VFS_WRITE, &err);
     if (file != NULL) {
@@ -274,11 +273,7 @@ seahorse_util_write_data_to_text (gpgme_data_t data, gboolean release)
     guint nread = 0;
 	GString *string;
 
-    /* 
-     * TODO: gpgme_data_seek doesn't work for us right now
-     * probably because of different off_t sizes 
-     */
-    gpgme_data_rewind (data);
+    gpgme_data_seek (data, 0, SEEK_SET);
 
 	string = g_string_new ("");
 	buffer = g_new (gchar, size);

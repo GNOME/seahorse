@@ -933,16 +933,6 @@ start_get_operation_multiple (SeahorseLDAPSource *lsrc, GSList *fingerprints,
     return lop;
 }
 
-/* Starts a get operation for a single key */
-static SeahorseLDAPOperation *
-start_get_operation (SeahorseLDAPSource *lsrc, const gchar *fpr, 
-                     gpgme_data_t data)
-{
-    GSList *fingerprints = NULL;
-    fingerprints = g_slist_prepend (fingerprints, g_strdup (fpr));
-    return start_get_operation_multiple (lsrc, fingerprints, data);
-}
-
 /* -----------------------------------------------------------------------------
  *  SEND OPERATION 
  */
@@ -1066,15 +1056,6 @@ start_send_operation_multiple (SeahorseLDAPSource *lsrc, GSList *keys)
                             (GDestroyNotify)seahorse_util_string_slist_free);
 
     return lop;
-}
-
-/* Start a key send operation */
-static SeahorseLDAPOperation *
-start_send_operation (SeahorseLDAPSource *lsrc, gchar *key)
-{
-    GSList *keys = NULL;
-    keys = g_slist_prepend (keys, key);
-    return start_send_operation_multiple (lsrc, keys);
 }
 
 /* -----------------------------------------------------------------------------
