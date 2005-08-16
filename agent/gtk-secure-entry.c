@@ -686,13 +686,6 @@ gtk_secure_entry_class_init(GtkSecureEntryClass * class)
                GDK_CONTROL_MASK, "delete_from_cursor", 2,
                 G_TYPE_ENUM, GTK_DELETE_WORD_ENDS,
                 G_TYPE_INT, -1);
-
-    gtk_settings_install_property(g_param_spec_boolean
-                 ("gtk-entry-select-on-focus",
-                  _("Select on focus"),
-                 _
-                 ("Whether to select the contents of an entry when it is focused"),
-                TRUE, G_PARAM_READWRITE));
 }
 
 static void
