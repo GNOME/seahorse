@@ -326,7 +326,8 @@ delete_activate (GtkWidget *widget, SeahorseWidget *swidget)
         
         skey = seahorse_key_store_get_selected_key (view, &uid);
         if (uid > 0) 
-            seahorse_delete_userid_show (swidget->sctx, skey, uid);
+			/* User ids start from one in this case, strange */
+            seahorse_delete_userid_show (swidget->sctx, skey, uid + 1);
         else    
         	seahorse_delete_show (swidget->sctx, list);
 
