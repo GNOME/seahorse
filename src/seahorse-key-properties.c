@@ -751,7 +751,7 @@ seahorse_key_properties_new (SeahorsePGPKey *pkey)
 	GtkWidget *widget;
     gboolean remote;
     
-    remote = seahorse_key_get_loaded (skey) == SKEY_LOC_REMOTE;
+    remote = seahorse_key_get_location (skey) == SKEY_LOC_REMOTE;
     etype = seahorse_key_get_etype (skey);
     
     /* Reload the key to make sure to get all the props */
