@@ -329,7 +329,6 @@ drag_begin (GtkWidget *widget, GdkDragContext *context, SeahorseKeyStore *skstor
         g_object_set_data (G_OBJECT (view), "drag-file", NULL);
     }
     
-    g_object_unref (sksrc);
     DBG_PRINT (("drag_begin <--\n"));
 }
 
