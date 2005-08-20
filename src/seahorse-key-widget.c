@@ -231,8 +231,10 @@ seahorse_key_widget_create (gchar *name, SeahorseContext *sctx, SeahorseKey *ske
 		swidget = g_hash_table_lookup (widgets, name);
 	
 	/* if already have a widget of that type for the key, return null */
-	if (swidget != NULL)
+	if (swidget != NULL) {
+		gtk_window_present (GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)));
 		return NULL;
+	}
 	
 	/* otherwise create a new widget & insert into widgets hash for the key */
 	swidget = g_object_new (SEAHORSE_TYPE_KEY_WIDGET, "name", name,
