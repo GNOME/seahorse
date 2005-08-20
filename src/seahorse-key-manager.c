@@ -376,7 +376,8 @@ delete_activate (GtkWidget *widget, SeahorseWidget *swidget)
         
         skey = get_selected_key (swidget, &uid);
         if (uid > 0 && SEAHORSE_IS_PGP_KEY (skey)) 
-            seahorse_delete_userid_show (SEAHORSE_PGP_KEY (skey), uid);
+			/* User ids start from one in this case, strange */
+            seahorse_delete_userid_show (SEAHORSE_PGP_KEY (skey), uid + 1);
         else    
             seahorse_delete_show (keys);
 

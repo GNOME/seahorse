@@ -767,7 +767,10 @@ seahorse_key_properties_new (SeahorsePGPKey *pkey)
     }
 	
 	swidget = seahorse_key_widget_new ("key-properties", skey);
-	g_return_if_fail (swidget != NULL);
+	
+	/* This happens if the window is already open */
+	if (swidget == NULL)
+		return;
 	
 	widget = glade_xml_get_widget (swidget->xml, swidget->name);
 	g_signal_connect (GTK_OBJECT (widget), "destroy", G_CALLBACK (properties_destroyed), swidget);
