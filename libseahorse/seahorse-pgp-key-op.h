@@ -19,8 +19,8 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#ifndef __SEAHORSE_KEY_OP_H__
-#define __SEAHORSE_KEY_OP_H__
+#ifndef __SEAHORSE_PGP_KEY_OP_H__
+#define __SEAHORSE_PGP_KEY_OP_H__
 
 #include <glib.h>
 #include <gpgme.h>
@@ -101,7 +101,7 @@ typedef enum {
 	REVOKE_NOT_USED = 3
 } SeahorseRevokeReason;
 
-gpgme_error_t  seahorse_key_op_generate         (SeahorsePGPSource  *sksrc,
+gpgme_error_t  seahorse_pgp_key_op_generate         (SeahorsePGPSource  *sksrc,
                                                  const gchar *name,
                                                  const gchar *email,
                                                  const gchar *comment,
@@ -110,53 +110,53 @@ gpgme_error_t  seahorse_key_op_generate         (SeahorsePGPSource  *sksrc,
                                                  guint length,
                                                  time_t expires);
 
-gpgme_error_t  seahorse_key_op_delete           (SeahorsePGPKey *pkey);
+gpgme_error_t  seahorse_pgp_key_op_delete           (SeahorsePGPKey *pkey);
 
-gpgme_error_t  seahorse_key_pair_op_delete      (SeahorsePGPKey *pkey);
+gpgme_error_t  seahorse_pgp_key_pair_op_delete      (SeahorsePGPKey *pkey);
 
-gpgme_error_t  seahorse_key_op_sign             (SeahorsePGPKey *pkey,
+gpgme_error_t  seahorse_pgp_key_op_sign             (SeahorsePGPKey *pkey,
                                                  guint index,
                                                  SeahorseSignCheck check,
                                                  SeahorseSignOptions options);
 
-gpgme_error_t  seahorse_key_pair_op_change_pass (SeahorsePGPKey *pkey);
+gpgme_error_t  seahorse_pgp_key_pair_op_change_pass (SeahorsePGPKey *pkey);
 
-gpgme_error_t  seahorse_key_op_set_trust        (SeahorsePGPKey *pkey,
+gpgme_error_t  seahorse_pgp_key_op_set_trust        (SeahorsePGPKey *pkey,
                                                  SeahorseValidity validity);
 
-gpgme_error_t  seahorse_key_op_set_disabled     (SeahorsePGPKey *pkey,
+gpgme_error_t  seahorse_pgp_key_op_set_disabled     (SeahorsePGPKey *pkey,
                                                  gboolean disabled);
 
-gpgme_error_t  seahorse_key_pair_op_set_expires (SeahorsePGPKey *pkey,
+gpgme_error_t  seahorse_pgp_key_pair_op_set_expires (SeahorsePGPKey *pkey,
                                                  guint index,
                                                  time_t expires);
 
-gpgme_error_t  seahorse_key_pair_op_add_revoker (SeahorsePGPKey *pkey, 
+gpgme_error_t  seahorse_pgp_key_pair_op_add_revoker (SeahorsePGPKey *pkey, 
                                                  SeahorsePGPKey *revoker);
 
-gpgme_error_t  seahorse_key_pair_op_add_uid     (SeahorsePGPKey *pkey,
+gpgme_error_t  seahorse_pgp_key_pair_op_add_uid     (SeahorsePGPKey *pkey,
                                                  const gchar *name,
                                                  const gchar *email,
                                                  const gchar *comment);
 
-gpgme_error_t  seahorse_key_op_primary_uid      (SeahorsePGPKey *pkey,
+gpgme_error_t  seahorse_pgp_key_op_primary_uid      (SeahorsePGPKey *pkey,
                                                  guint index);
 
-gpgme_error_t  seahorse_key_op_del_uid          (SeahorsePGPKey *pkey,
+gpgme_error_t  seahorse_pgp_key_op_del_uid          (SeahorsePGPKey *pkey,
                                                  guint index);
                              
-gpgme_error_t  seahorse_key_pair_op_add_subkey  (SeahorsePGPKey *pkey,
+gpgme_error_t  seahorse_pgp_key_pair_op_add_subkey  (SeahorsePGPKey *pkey,
                                                  SeahorseKeyEncType type,
                                                  guint length,
                                                  time_t expires);
 
-gpgme_error_t  seahorse_key_op_del_subkey       (SeahorsePGPKey *pkey,
+gpgme_error_t  seahorse_pgp_key_op_del_subkey       (SeahorsePGPKey *pkey,
                                                  guint index);
 
-gpgme_error_t  seahorse_key_op_revoke_subkey    (SeahorsePGPKey *pkey,
+gpgme_error_t  seahorse_pgp_key_op_revoke_subkey    (SeahorsePGPKey *pkey,
                                                  guint index,
                                                  SeahorseRevokeReason reason,
                                                  const gchar *description);
 
                              							 
-#endif /* __SEAHORSE_KEY_OP_H__ */
+#endif /* __SEAHORSE_PGP_KEY_OP_H__ */

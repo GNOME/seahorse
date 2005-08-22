@@ -47,7 +47,7 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 		glade_xml_get_widget (swidget->xml, "description")));
 	
 	if (skwidget->index != 0) {
-		err = seahorse_key_op_revoke_subkey (SEAHORSE_PGP_KEY (skwidget->skey), 
+		err = seahorse_pgp_key_op_revoke_subkey (SEAHORSE_PGP_KEY (skwidget->skey), 
                                              skwidget->index, reason, description);
 		if (!GPG_IS_OK (err))
 			seahorse_util_handle_gpgme (err, _("Couldn't revoke subkey"));
@@ -116,7 +116,7 @@ seahorse_add_revoker_new (SeahorsePGPKey *pkey)
 	if (response != GTK_RESPONSE_YES)
 		return;
 	
-	err = seahorse_key_pair_op_add_revoker (pkey, revoker);
+	err = seahorse_pgp_key_pair_op_add_revoker (pkey, revoker);
 	if (!GPG_IS_OK (err))
 		seahorse_util_handle_gpgme (err, _("Couldn't add revoker"));
 }

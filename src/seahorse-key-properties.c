@@ -54,14 +54,14 @@ trust_changed (GtkOptionMenu *optionmenu, SeahorseWidget *swidget)
 	skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
 	
 	if (seahorse_key_get_trust (skey) != trust)
-		seahorse_key_op_set_trust (SEAHORSE_PGP_KEY (skey), trust);
+		seahorse_pgp_key_op_set_trust (SEAHORSE_PGP_KEY (skey), trust);
 }
 
 static void
 disabled_toggled (GtkToggleButton *togglebutton, SeahorseWidget *swidget)
 {
     SeahorseKey *skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
-	seahorse_key_op_set_disabled (SEAHORSE_PGP_KEY (skey),
+	seahorse_pgp_key_op_set_disabled (SEAHORSE_PGP_KEY (skey),
 		gtk_toggle_button_get_active (togglebutton));
 }
 
@@ -276,7 +276,7 @@ passphrase_clicked (GtkWidget *widget, SeahorseWidget *swidget)
     skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
     
     if (seahorse_key_get_etype (skey) == SKEY_PRIVATE)
-        seahorse_key_pair_op_change_pass (SEAHORSE_PGP_KEY (skey));
+        seahorse_pgp_key_pair_op_change_pass (SEAHORSE_PGP_KEY (skey));
 }
 
 static void
@@ -587,7 +587,7 @@ uid_primary_clicked (GtkWidget *widget, SeahorseWidget *swidget)
     
     index = get_selected_uid (swidget);
     if (index >= 1) {
-        err = seahorse_key_op_primary_uid (SEAHORSE_PGP_KEY (skey), index);
+        err = seahorse_pgp_key_op_primary_uid (SEAHORSE_PGP_KEY (skey), index);
         
         if (!GPG_IS_OK (err)) 
             seahorse_util_handle_gpgme (err, _("Couldn't change primary user ID"));

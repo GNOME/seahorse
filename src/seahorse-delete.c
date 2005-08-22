@@ -110,9 +110,9 @@ seahorse_delete_show (GList *keys)
             
             /* TODO: We need to be able to handle different key types here */
 			if (seahorse_key_get_etype (skey) == SKEY_PRIVATE)
-				err = seahorse_key_pair_op_delete (SEAHORSE_PGP_KEY (skey));
+				err = seahorse_pgp_key_pair_op_delete (SEAHORSE_PGP_KEY (skey));
 			else
-				err = seahorse_key_op_delete (SEAHORSE_PGP_KEY (skey));
+				err = seahorse_pgp_key_op_delete (SEAHORSE_PGP_KEY (skey));
 			
 			if (!GPG_IS_OK (err))
 				seahorse_util_handle_gpgme (err, _("Couldn't delete key"));
@@ -153,7 +153,7 @@ seahorse_delete_subkey_new (SeahorsePGPKey *pkey, guint index)
 	if (response != GTK_RESPONSE_ACCEPT)
 		return;
 	
-	err = seahorse_key_op_del_subkey (pkey, index);
+	err = seahorse_pgp_key_op_del_subkey (pkey, index);
 	if (!GPG_IS_OK (err))
 		seahorse_util_handle_gpgme (err, _("Couldn't delete subkey"));
 }
@@ -194,7 +194,7 @@ seahorse_delete_userid_show (SeahorsePGPKey *pkey, guint index)
     if (response != GTK_RESPONSE_ACCEPT)
        return;
     
-    err = seahorse_key_op_del_uid (pkey, index);
+    err = seahorse_pgp_key_op_del_uid (pkey, index);
     if (!GPG_IS_OK (err))
         seahorse_util_handle_gpgme (err, _("Couldn't delete user id"));
 }

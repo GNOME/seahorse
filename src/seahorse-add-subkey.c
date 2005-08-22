@@ -102,7 +102,7 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 	
 	widget = glade_xml_get_widget (swidget->xml, swidget->name);
 	gtk_widget_set_sensitive (widget, FALSE);
-	err = seahorse_key_pair_op_add_subkey (SEAHORSE_PGP_KEY (skwidget->skey), 
+	err = seahorse_pgp_key_pair_op_add_subkey (SEAHORSE_PGP_KEY (skwidget->skey), 
                                            real_type, length, expires);
 	gtk_widget_set_sensitive (widget, TRUE);
 	

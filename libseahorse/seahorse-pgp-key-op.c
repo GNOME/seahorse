@@ -35,7 +35,7 @@
 #define PRINTF(args) if(!seahorse_util_printf_fd args) return GPG_E (GPG_ERR_GENERAL)
 
 /**
- * seahorse_key_op_generate:
+ * seahorse_pgp_key_op_generate:
  * @sksrc: #SeahorseKeySource
  * @name: User ID name, must be at least 5 characters long
  * @email: Optional user ID email
@@ -53,7 +53,7 @@
  * Returns: gpgme_error_t
  **/
 gpgme_error_t
-seahorse_key_op_generate (SeahorsePGPSource *psrc, const gchar *name,
+seahorse_pgp_key_op_generate (SeahorsePGPSource *psrc, const gchar *name,
 			  const gchar *email, const gchar *comment,
 			  const gchar *passphrase, const SeahorseKeyEncType type,
 			  const guint length, const time_t expires)
@@ -142,7 +142,7 @@ op_delete (SeahorsePGPKey *pkey, gboolean secret)
 }
 
 /**
- * seahorse_key_op_delete:
+ * seahorse_pgp_key_op_delete:
  * @skey: #SeahorseKey to delete
  *
  * Tries to delete the key @skey.
@@ -150,13 +150,13 @@ op_delete (SeahorsePGPKey *pkey, gboolean secret)
  * Returns: gpgme_error_t
  **/
 gpgme_error_t
-seahorse_key_op_delete (SeahorsePGPKey *pkey)
+seahorse_pgp_key_op_delete (SeahorsePGPKey *pkey)
 {
 	return op_delete (pkey, FALSE);
 }
 
 /**
- * seahorse_key_pair_op_delete:
+ * seahorse_pgp_key_pair_op_delete:
  * @skpair: #SeahorsePGPKey to delete
  *
  * Tries to delete the key pair @pkey.
@@ -164,7 +164,7 @@ seahorse_key_op_delete (SeahorsePGPKey *pkey)
  * Returns: gpgme_error_t
  **/
 gpgme_error_t
-seahorse_key_pair_op_delete (SeahorsePGPKey *pkey)
+seahorse_pgp_key_pair_op_delete (SeahorsePGPKey *pkey)
 {
 	return op_delete (pkey, TRUE);
 }
@@ -212,7 +212,7 @@ seahorse_edit_parm_new (guint state, SeahorseEditAction action,
 
 /* Edit callback for gpgme */
 static gpgme_error_t
-seahorse_key_op_edit (gpointer data, gpgme_status_code_t status,
+seahorse_pgp_key_op_edit (gpointer data, gpgme_status_code_t status,
 		      const gchar *args, int fd)
 {
 	SeahorseEditParm *parms = (SeahorseEditParm*)data;
@@ -251,7 +251,7 @@ edit_key (SeahorsePGPKey *pkey, SeahorseEditParm *parms, SeahorseKeyChange chang
 	g_return_val_if_fail (GPG_IS_OK (err), err);
     
 	/* do edit callback, release data */
-	err = gpgme_op_edit (psrc->gctx, pkey->pubkey, seahorse_key_op_edit, parms, out);
+	err = gpgme_op_edit (psrc->gctx, pkey->pubkey, seahorse_pgp_key_op_edit, parms, out);
 	gpgme_data_release (out);
 	g_return_val_if_fail (GPG_IS_OK (err), err);
     
@@ -421,7 +421,7 @@ sign_transit (guint current_state, gpgme_status_code_t status,
 }
 
 /**
- * seahorse_key_op_sign:
+ * seahorse_pgp_key_op_sign:
  * @skey: #SeahorseKey to sign
  * @index: User ID to sign, 0 is all user IDs
  * @check: #SeahorseSignCheck
@@ -432,7 +432,7 @@ sign_transit (guint current_state, gpgme_status_code_t status,
  * Returns: Error value
  **/
 gpgme_error_t
-seahorse_key_op_sign (SeahorsePGPKey *pkey, const guint index,
+seahorse_pgp_key_op_sign (SeahorsePGPKey *pkey, const guint index,
 		              SeahorseSignCheck check, SeahorseSignOptions options)
 {
 	SignParm *sign_parm;
@@ -562,7 +562,7 @@ edit_pass_transit (guint current_state, gpgme_status_code_t status,
 }
 
 /**
- * seahorse_key_pair_op_change_pass:
+ * seahorse_pgp_key_pair_op_change_pass:
  * @skpair: #SeahorseKeyPair whose passphrase to change
  *
  * Tries to change the passphrase of @pkey. 
@@ -570,7 +570,7 @@ edit_pass_transit (guint current_state, gpgme_status_code_t status,
  * Returns: Error value
  **/
 gpgme_error_t
-seahorse_key_pair_op_change_pass (SeahorsePGPKey *pkey)
+seahorse_pgp_key_pair_op_change_pass (SeahorsePGPKey *pkey)
 {
 	SeahorseEditParm *parms;
 	gpgme_error_t err;
@@ -698,7 +698,7 @@ edit_trust_transit (guint current_state, gpgme_status_code_t status,
 }
 
 /**
- * seahorse_key_op_set_trust:
+ * seahorse_pgp_key_op_set_trust:
  * @skey: #SeahorseKey whose trust will be changed
  * @trust: New trust value that must be at least SEAHORSE_VALIDITY_UNKNOWN.
  * If @skey is a #SeahorseKeyPair, then @trust cannot be SEAHORSE_VALIDITY_UNKNOWN.
@@ -709,7 +709,7 @@ edit_trust_transit (guint current_state, gpgme_status_code_t status,
  * Returns: Error value
  **/
 gpgme_error_t
-seahorse_key_op_set_trust (SeahorsePGPKey *pkey, SeahorseValidity trust)
+seahorse_pgp_key_op_set_trust (SeahorsePGPKey *pkey, SeahorseValidity trust)
 {
 	SeahorseEditParm *parms;
 	
@@ -798,7 +798,7 @@ edit_disable_transit (guint current_state, gpgme_status_code_t status,
 }
 
 /**
- * seahorse_key_op_set_disabled:
+ * seahorse_pgp_key_op_set_disabled:
  * @skey: #SeahorseKey to change
  * @disabled: New disabled state
  *
@@ -807,7 +807,7 @@ edit_disable_transit (guint current_state, gpgme_status_code_t status,
  * Returns: Error value
  **/
 gpgme_error_t
-seahorse_key_op_set_disabled (SeahorsePGPKey *pkey, gboolean disabled)
+seahorse_pgp_key_op_set_disabled (SeahorsePGPKey *pkey, gboolean disabled)
 {
 	gchar *command;
 	SeahorseEditParm *parms;
@@ -947,7 +947,7 @@ edit_expire_transit (guint current_state, gpgme_status_code_t status,
 }
 
 /**
- * seahorse_key_pair_op_set_expires:
+ * seahorse_pgp_key_pair_op_set_expires:
  * @skpair: #SeahorseKeyPair whose expiration date to change
  * @index: Index of key to change, 0 being the primary key
  * @expires: New expiration date, 0 being never
@@ -957,7 +957,7 @@ edit_expire_transit (guint current_state, gpgme_status_code_t status,
  * Returns: Error value
  **/
 gpgme_error_t
-seahorse_key_pair_op_set_expires (SeahorsePGPKey *pkey,
+seahorse_pgp_key_pair_op_set_expires (SeahorsePGPKey *pkey,
 				  const guint index, const time_t expires)
 {
 	ExpireParm *exp_parm;
@@ -1088,7 +1088,7 @@ add_revoker_transit (guint current_state, gpgme_status_code_t status,
 }
 
 /**
- * seahorse_key_pair_op_add_revoker:
+ * seahorse_pgp_key_pair_op_add_revoker:
  * @skpair: #SeahorseKeyPair to add a revoker to
  *
  * Tries to add the default key as a revoker for @skpair.
@@ -1096,7 +1096,7 @@ add_revoker_transit (guint current_state, gpgme_status_code_t status,
  * Returns: Error value
  **/
 gpgme_error_t
-seahorse_key_pair_op_add_revoker (SeahorsePGPKey *pkey, SeahorsePGPKey *revoker)
+seahorse_pgp_key_pair_op_add_revoker (SeahorsePGPKey *pkey, SeahorsePGPKey *revoker)
 {
 	SeahorseEditParm *parms;
 	
@@ -1236,7 +1236,7 @@ add_uid_transit (guint current_state, gpgme_status_code_t status,
 }
 
 /**
- * seahorse_key_pair_op_add_uid:
+ * seahorse_pgp_key_pair_op_add_uid:
  * @skpair: #SeahorseKeyPair to add a user ID to
  * @name: New user ID name. Must be at least 5 characters long
  * @email: Optional email address
@@ -1247,7 +1247,7 @@ add_uid_transit (guint current_state, gpgme_status_code_t status,
  * Returns: Error value
  **/
 gpgme_error_t
-seahorse_key_pair_op_add_uid (SeahorsePGPKey *pkey, const gchar *name, 
+seahorse_pgp_key_pair_op_add_uid (SeahorsePGPKey *pkey, const gchar *name, 
                               const gchar *email, const gchar *comment)
 {
 	SeahorseEditParm *parms;
@@ -1393,7 +1393,7 @@ add_key_transit (guint current_state, gpgme_status_code_t status,
 }
 
 /**
- * seahorse_key_pair_op_add_subkey:
+ * seahorse_pgp_key_pair_op_add_subkey:
  * @skpair: #SeahorseKeyPair to add a subkey to
  * @type: #SeahorseKeyType of new subkey, must be DSA, ELGAMAL, or an RSA type
  * @length: Length of new subkey, must be within #SeahorseKeyLength ranges for @type
@@ -1404,7 +1404,7 @@ add_key_transit (guint current_state, gpgme_status_code_t status,
  * Returns: Error value
  **/
 gpgme_error_t
-seahorse_key_pair_op_add_subkey (SeahorsePGPKey *pkey, const SeahorseKeyEncType type, 
+seahorse_pgp_key_pair_op_add_subkey (SeahorsePGPKey *pkey, const SeahorseKeyEncType type, 
                                  const guint length, const time_t expires)
 {
 	SeahorseEditParm *parms;
@@ -1543,7 +1543,7 @@ del_key_transit (guint current_state, gpgme_status_code_t status,
 }
 
 /**
- * seahorse_key_op_del_subkey:
+ * seahorse_pgp_key_op_del_subkey:
  * @skey: #SeahorseKey whose subkey to delete
  * @index: Index of subkey to delete, must be at least 1
  *
@@ -1552,7 +1552,7 @@ del_key_transit (guint current_state, gpgme_status_code_t status,
  * Returns: Error value
  **/
 gpgme_error_t
-seahorse_key_op_del_subkey (SeahorsePGPKey *pkey, const guint index)
+seahorse_pgp_key_op_del_subkey (SeahorsePGPKey *pkey, const guint index)
 {
 	SeahorseEditParm *parms;
 	
@@ -1719,7 +1719,7 @@ rev_subkey_transit (guint current_state, gpgme_status_code_t status,
 }
 
 /**
- * seahorse_key_op_revoke_subkey:
+ * seahorse_pgp_key_op_revoke_subkey:
  * @skey: #SeahorseKey whose subkey to revoke
  * @index: Index of subkey to revoke, must be at least 1
  * @reason: #SeahorseRevokeReason for revoking the key
@@ -1730,7 +1730,7 @@ rev_subkey_transit (guint current_state, gpgme_status_code_t status,
  * Returns: Error value
  **/
 gpgme_error_t
-seahorse_key_op_revoke_subkey (SeahorsePGPKey *pkey, guint index,
+seahorse_pgp_key_op_revoke_subkey (SeahorsePGPKey *pkey, guint index,
 			                   SeahorseRevokeReason reason, const gchar *description)
 {
 	RevSubkeyParm *rev_parm;
@@ -1864,7 +1864,7 @@ primary_transit (guint current_state, gpgme_status_code_t status,
 }
                 
 gpgme_error_t   
-seahorse_key_op_primary_uid (SeahorsePGPKey *pkey, const guint index)
+seahorse_pgp_key_op_primary_uid (SeahorsePGPKey *pkey, const guint index)
 {
     PrimaryParm *pri_parm;
     SeahorseEditParm *parms;
@@ -2014,7 +2014,7 @@ del_uid_transit (guint current_state, gpgme_status_code_t status,
 }
                 
 gpgme_error_t   
-seahorse_key_op_del_uid (SeahorsePGPKey *pkey, const guint index)
+seahorse_pgp_key_op_del_uid (SeahorsePGPKey *pkey, const guint index)
 {
     DelUidParm *del_uid_parm;
     SeahorseEditParm *parms;

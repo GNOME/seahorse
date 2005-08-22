@@ -134,7 +134,7 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
     sksrc = seahorse_context_find_key_source (SCTX_APP (), SKEY_PGP, SKEY_LOC_LOCAL);
     g_return_if_fail (sksrc && SEAHORSE_IS_PGP_SOURCE (sksrc));
     	
-	err = seahorse_key_op_generate (SEAHORSE_PGP_SOURCE (sksrc), name, email, comment,
+	err = seahorse_pgp_key_op_generate (SEAHORSE_PGP_SOURCE (sksrc), name, email, comment,
 		                            pass, type, length, expires);
 	if (!GPG_IS_OK (err)) {
 		gtk_widget_show (widget);
