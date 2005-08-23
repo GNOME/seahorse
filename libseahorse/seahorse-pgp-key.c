@@ -534,6 +534,27 @@ seahorse_pgp_key_get_nth_userid (SeahorsePGPKey *pkey, guint index)
     return uid;
 }    
 
+const gchar*
+seahorse_pgp_key_get_algo (SeahorsePGPKey *pkey, guint index)
+{
+	const gchar* algo_type;
+	gpgme_subkey_t subkey;
+	
+	subkey = pkey->pubkey->subkeys;
+	while (0 < index) {
+		subkey = subkey->next;
+		index--;
+	}		
+	
+	algo_type = gpgme_pubkey_algo_name (subkey->pubkey_algo);
+
+	if (algo_type == NULL)
+		algo_type = _("Unknown");
+	else if (g_str_equal ("Elg", algo_type) || g_str_equal("ELG-E", algo_type))
+		algo_type = _("ElGamal");
+
+	return algo_type;	
+}
 
 const gchar*
 seahorse_pgp_key_get_id (gpgme_key_t key, guint index)

@@ -96,6 +96,9 @@ gchar*          seahorse_pgp_key_get_userid_email     (SeahorsePGPKey   *pkey,
 gchar*          seahorse_pgp_key_get_userid_comment   (SeahorsePGPKey   *pkey,
                                                        guint            index);
 
+const gchar*		seahorse_pgp_key_get_algo 	      (SeahorsePGPKey   *pkey,
+						       guint		index);
+
 const gchar*	seahorse_pgp_key_get_id               (gpgme_key_t      key,
                                                        guint            index);
 

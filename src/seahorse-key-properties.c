@@ -140,12 +140,7 @@ key_property_labels (SeahorseWidget *swidget)
     gtk_label_set_text (GTK_LABEL (w), label);
 
     w = glade_xml_get_widget (swidget->xml, "label_type");
-    label = gpgme_pubkey_algo_name(subkey->pubkey_algo);
-
-    if (label == NULL)
-        label = _("Unknown");
-    else if (g_str_equal ("ElG", label))
-        label = _("ElGamal");
+    label = seahorse_pgp_key_get_algo (pkey, 0);
     gtk_label_set_text (GTK_LABEL (w), label);
     
     w = glade_xml_get_widget (swidget->xml, "label_created");
@@ -225,11 +220,8 @@ do_stats (SeahorseWidget *swidget, GtkTable *table, guint top, guint index, gpgm
       tips, subkey->keyid);
     /* type */
     do_stat_label (_("Type:"), table, 2, top, FALSE, tips, _("Algorithm"));
-    str = gpgme_pubkey_algo_name(subkey->pubkey_algo);
-    if (str == NULL)
-        str = "Unknown";
-    else if (g_str_equal ("ElG", str))
-        str = "ElGamal";
+    str = seahorse_pgp_key_get_algo (pkey, index);
+    
     do_stat_label (str, table, 3, top, FALSE, NULL, NULL);
     /* created */
     do_stat_label (_("Created:"), table, 0, top+1, FALSE, tips, _("Key creation date"));
