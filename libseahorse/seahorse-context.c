@@ -330,7 +330,7 @@ seahorse_context_find_key_sources (SeahorseContext *sctx, GQuark ktype,
         sources = g_slist_append (sources, ks);
     }
     
-    return NULL;
+    return sources;
 }
 
 SeahorseKeySource*  
