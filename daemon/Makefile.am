@@ -30,8 +30,9 @@ SHARING_SRCS =
 endif
 
 if WITH_DBUS
-DBUS_SRCS = seahorse-dbus-server.c seahorse-service.c seahorse-service.h
-BUILT_SOURCES += seahorse-dbus-bindings.h
+DBUS_SRCS = seahorse-dbus-server.c seahorse-service.c seahorse-service.h 
+DBUS_SRCS += seahorse-service-keyset.c 
+BUILT_SOURCES += seahorse-service-bindings.h seahorse-service-keyset-bindings.h
 else
 DBUS_SRCS = 
 endif
@@ -55,9 +56,10 @@ EXTRA_DIST = \
 
 CLEANFILES = *.gladep* *.bak 
 
-# TODO: Look at evince to see what they did here. Something about --prefix
-seahorse-dbus-bindings.h: seahorse-dbus-bindings.xml
-	dbus-binding-tool --mode=glib-server --output=$@ $(srcdir)/$<
+seahorse-service-bindings.h: seahorse-service.xml
+	dbus-binding-tool --prefix=seahorse_service --mode=glib-server --output=$@ $(srcdir)/$<
+seahorse-service-keyset-bindings.h: seahorse-service-keyset.xml
+	dbus-binding-tool --prefix=seahorse_service_keyset --mode=glib-server --output=$@ $(srcdir)/$<
 
 install-exec-hook:
 	chmod u+s $(bindir)/seahorse-daemon

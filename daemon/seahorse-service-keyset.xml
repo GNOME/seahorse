@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<node name="/org/gnome/seahorse/keys/openpgp">
+
+    <interface name="org.gnome.seahorse.Keys">
+    
+        <method name="ListKeys">
+            <annotation name="org.freedesktop.DBus.GLib.CSymbol" 
+                value="seahorse_service_keyset_list_keys"/>
+            <arg type="as" name="keys" direction="out"/>            
+        </method>
+        
+        <signal name="KeyAdded">
+            <arg type="s" name="key" direction="out"/>
+        </signal>
+        
+        <signal name="KeyRemoved">
+            <arg type="s" name="key" direction="out"/>
+        </signal>
+        
+        <signal name="KeyChanged">
+            <arg type="s" name="key" direction="out"/>
+        </signal>
+        
+    </interface>
+    
+</node>

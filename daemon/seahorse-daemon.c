@@ -35,6 +35,7 @@
 #include "config.h"
 #include "seahorse-daemon.h"
 #include "seahorse-gtkstock.h"
+#include "seahorse-context.h"
 
 #ifdef WITH_AGENT
 #include "seahorse-agent.h"
@@ -188,6 +189,7 @@ prepare_logging ()
 
 int main(int argc, char* argv[])
 {
+    SeahorseOperation *op;
 	GnomeProgram *program = NULL;
 
 #ifdef WITH_AGENT	
@@ -234,6 +236,11 @@ int main(int argc, char* argv[])
     /* Insert Icons into Stock */
     seahorse_gtk_stock_init();
     
+    /* Make the default SeahorseContext */
+    seahorse_context_new (TRUE);
+    op = seahorse_context_load_local_keys (SCTX_APP ());
+    g_object_unref (op);
+    
     /* Initialize the various daemon components */
 #ifdef WITH_DBUS
     seahorse_dbus_server_init ();
@@ -257,6 +264,8 @@ int main(int argc, char* argv[])
 #ifdef WITH_DBUS
     seahorse_dbus_server_cleanup ();
 #endif
+
+    seahorse_context_destroy (SCTX_APP ());
 
     return 0;
 }

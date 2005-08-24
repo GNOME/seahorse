@@ -48,6 +48,7 @@ static void	get_property (GObject *object, guint prop_id,
 /* SeahorseKey methods */
 static guint key_get_num_names (SeahorseKey *skey);
 static gchar* key_get_name (SeahorseKey *skey, guint uid);
+static gchar* key_get_name_cn (SeahorseKey *skey, guint uid);
 
 /* Other forward declarations */
 static gchar* calc_fingerprint (SeahorsePGPKey *skey);
@@ -93,6 +94,7 @@ class_init (SeahorsePGPKeyClass *klass)
     
     key_class->get_num_names = key_get_num_names;
     key_class->get_name = key_get_name;
+    key_class->get_name_cn = key_get_name_cn;
     
 	g_object_class_install_property (gobject_class, PROP_PUBKEY,
 		g_param_spec_pointer ("pubkey", "Gpgme Public Key", "Gpgme Public Key that this object represents",
@@ -272,6 +274,19 @@ key_get_name (SeahorseKey *skey, guint index)
 
     uid = seahorse_pgp_key_get_nth_userid (pkey, index);
 	return uid ? convert_string (uid->uid) : NULL;
+}
+
+static gchar* 
+key_get_name_cn (SeahorseKey *skey, guint index)
+{
+    SeahorsePGPKey *pkey;
+    gpgme_user_id_t uid;
+    
+    g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (skey), NULL);
+    pkey = SEAHORSE_PGP_KEY (skey);
+
+    uid = seahorse_pgp_key_get_nth_userid (pkey, index);
+	return uid && uid->email ? g_strdup (uid->email) : NULL;
 }
 
 static gchar* 

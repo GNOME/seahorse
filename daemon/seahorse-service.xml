@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<node name="/org/gnome/seahorse/keys">
+
+    <interface name="org.gnome.seahorse.KeyService">
+        <annotation name="org.freedesktop.DBus.GLib.CSymbol" value="seahorse_service"/>
+    
+        <method name="GetKeyTypes">
+            <annotation name="org.freedesktop.DBus.GLib.CSymbol" 
+                value="seahorse_service_get_key_types"/>
+            <arg type="as" name="keytypes" direction="out"/>
+        </method>
+        
+        <method name="GetKeyset">
+            <annotation name="org.freedesktop.DBus.GLib.CSymbol" 
+                value="seahorse_service_get_keyset"/>
+            <arg type="s" name="ktype" direction="in"/>
+            <arg type="o" name="keyset" direction="out"/>
+        </method>
+        
+        <!-- A less than shiny hack around the fact that variants
+            don't support NULL! -->
+        <method name="HasKeyField">
+            <annotation name="org.freedesktop.DBus.GLib.CSymbol" 
+                value="seahorse_service_has_key_field"/>     
+            <arg type="s" name="key" direction="in"/>
+            <arg type="s" name="field" direction="in"/>
+            <arg type="b" name="has" direction="out"/>
+        </method>
+
+        <method name="GetKeyField">
+            <annotation name="org.freedesktop.DBus.GLib.CSymbol" 
+                value="seahorse_service_get_key_field"/>     
+            <arg type="s" name="key" direction="in"/>
+            <arg type="s" name="field" direction="in"/>
+            <arg type="v" name="info" direction="out"/>
+        </method>
+        
+        <method name="GetKeyFields">
+            <annotation name="org.freedesktop.DBus.GLib.CSymbol" 
+                value="seahorse_service_get_key_fields"/>     
+            <arg type="s" name="key" direction="in"/>
+            <arg type="as" name="fields" direction="in"/>
+            <!-- array {field, value} -->
+            <arg type="a{sv}" name="info" direction="out"/>            
+        </method>
+        
+        <method name="GetKeyNames">
+            <annotation name="org.freedesktop.DBus.GLib.CSymbol" 
+                value="seahorse_service_get_key_names"/>     
+            <arg type="s" name="key" direction="in"/>
+            <arg type="as" name="names" direction="out"/>            
+            <arg type="as" name="cns" direction="out"/>            
+        </method>
+        
+        <method name="ImportKeys">
+            <annotation name="org.freedesktop.DBus.Glib.CSymbol"
+                value="seahorse_service_import_keys"/>
+            <arg type="s" name="ktype" direction="in"/>
+            <arg type="s" name="data" direction="in"/>
+            <arg type="as" name="keys" direction="out"/>
+        </method>
+        
+        <method name="ExportKeys">
+            <annotation name="org.freedesktop.DBus.Glib.CSymbol"
+                value="seahorse_service_export_keys"/>
+            <arg type="s" name="ktype" direction="in"/>
+            <arg type="as" name="keys" direction="in"/>
+            <arg type="s" name="data" direction="out"/>
+        </method>
+                
+        <method name="MatchKeys">
+            <annotation name="org.freedesktop.DBus.GLib.CSymbol" 
+                value="seahorse_service_match_keys"/>
+            <arg type="s" name="keytype" direction="in"/>
+            <arg type="i" name="flags" direction="in"/>
+            <arg type="as" name="patterns" direction="in"/>
+            <arg type="as" name="keys" direction="out"/>
+            <arg type="as" name="unmatched" direction="out"/>
+        </method>
+        
+        <method name="MatchSave">
+            <annotation name="org.freedesktop.DBus.GLib.CSymbol"
+                value="seahorse_service_match_save"/>
+            <arg type="s" name="keytype" direction="in"/>
+            <arg type="i" name="flags" direction="in"/>
+            <arg type="as" name="patterns" direction="in"/>
+            <arg type="as" name="keys" direction="in"/>
+        </method>
+        
+        <method name="DiscoverKeys">
+            <annotation name="org.freedesktop.DBus.GLib.CSymbol"
+                value="seahorse_service_discover_keys"/>
+            <arg type="s" name="keytype" direction="in"/>
+            <arg type="i" name="flags" direction="in"/>
+            <arg type="as" name="patterns" direction="in"/>
+            <arg type="as" name="keys" direction="in"/>
+        </method>
+        
+    </interface>
+
+</node>

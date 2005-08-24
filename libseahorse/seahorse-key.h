@@ -142,6 +142,10 @@ struct _SeahorseKeyClass {
     /* Get the display name for the specified UID */
     gchar*            (*get_name)                 (SeahorseKey  *skey,
                                                    guint        uid);
+    
+    /* Get the CN for the specified UID */
+    gchar*            (*get_name_cn)              (SeahorseKey  *skey,
+                                                   guint        uid);
 };
 
 GType             seahorse_key_get_type (void);
@@ -169,7 +173,10 @@ guint             seahorse_key_get_flags          (SeahorseKey        *skey);
 guint             seahorse_key_get_num_names      (SeahorseKey        *skey);
 
 gchar*            seahorse_key_get_name           (SeahorseKey        *skey,
-                                                   guint              uid);
+                                                   guint              name);
+
+gchar*            seahorse_key_get_name_cn        (SeahorseKey        *skey,
+                                                   guint              name);
 
 gchar*            seahorse_key_get_display_name   (SeahorseKey        *skey);
 

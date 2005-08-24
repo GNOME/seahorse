@@ -11,7 +11,31 @@ print dbus_iface.ListNames()
 
 
 print "\n\nSEAHORSE DBUS CALL ------------------------------------"
-proxy_obj = bus.get_object('org.gnome.seahorse.CryptoService', '/org/gnome/seahorse/Crypto/Service')
-iface = dbus.Interface(proxy_obj, 'org.gnome.seahorse.CryptoService')
+proxy_obj = bus.get_object('org.gnome.seahorse.KeyService', '/org/gnome/seahorse/keys')
+service = dbus.Interface(proxy_obj, 'org.gnome.seahorse.KeyService')
 
-print iface.GetKeyTypes()
+types = service.GetKeyTypes()
+print "GetKeyTypes(): ", types
+
+if not len(types):
+    print "No key types found"
+    sys.exit(0)
+
+path = service.GetKeyset(types[0])
+print "GetKeySet(): ", path
+
+proxy_obj = bus.get_object('org.gnome.seahorse.KeyService', path)
+keyset = dbus.Interface(proxy_obj, "org.gnome.seahorse.Keys")
+
+keys = keyset.ListKeys()
+
+if not len(keys):
+    print "No keys found"
+    sys.exit(0)
+    
+print service.GetKeyField(keys[0], "display-name")
+print service.GetKeyFields(keys[0], [ "display-name", "simple-name", "fingerprint" ])
+
+print service.GetKeyNames(keys[0])
+
+print service.ExportKeys("openpgp", [ keys[0] ])
