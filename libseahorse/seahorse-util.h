@@ -40,13 +40,6 @@ typedef enum {
 	SEAHORSE_ASC_SUFFIX
 } SeahorseSuffix;
 
-typedef enum {
-    SEAHORSE_TEXT_TYPE_NONE,
-    SEAHORSE_TEXT_TYPE_KEY,
-    SEAHORSE_TEXT_TYPE_MESSAGE,
-    SEAHORSE_TEXT_TYPE_SIGNED
-} SeahorseTextType;
-
 #define SEAHORSE_EXT_ASC ".asc"
 #define SEAHORSE_EXT_SIG ".sig"
 #define SEAHORSE_EXT_PGP ".pgp"
@@ -87,11 +80,6 @@ gboolean    seahorse_util_print_fd          (int fd,
 
 gboolean    seahorse_util_printf_fd         (int fd, 
                                              const char* data, ...);
-
-SeahorseTextType  seahorse_util_detect_text (const gchar *text, 
-                                             gint len, 
-                                             const gchar **start, 
-                                             const gchar **end);
                              
 gchar*      seahorse_util_filename_for_keys (GList *keys);
                                              

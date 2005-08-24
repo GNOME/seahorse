@@ -56,6 +56,9 @@
 #define DEBUG_RESPONSE(a)
 #endif
 
+#define PGP_KEY_BEGIN   "-----BEGIN PGP PUBLIC KEY BLOCK-----"
+#define PGP_KEY_END     "-----END PGP PUBLIC KEY BLOCK-----"
+
 /* Amount of keys to load in a batch */
 #define DEFAULT_LOAD_BATCH 30
 
@@ -533,10 +536,32 @@ send_callback (SoupMessage *msg, SeahorseHKPOperation *hop)
                                           hop->requests, hop->total);
 }
 
+gboolean
+detect_key (const gchar *text, gint len, const gchar **start, const gchar **end)
+{
+    const gchar *t;
+
+    if (len == -1)
+        len = strlen (text);
+    
+    /* Find the first of the headers */
+    if((t = g_strstr_len (text, len, PGP_KEY_BEGIN)) == NULL)
+        return FALSE;
+    if (start)
+        *start = t;
+        
+    /* Find the end of that block */
+    if((t = g_strstr_len (t, len - (t - text), PGP_KEY_END)) == NULL)
+        return FALSE;
+    if (end)
+        *end = t;
+    
+    return TRUE; 
+}
+
 static void 
 get_callback (SoupMessage *msg, SeahorseHKPOperation *hop) 
 {
-    SeahorseTextType type;
     const gchar *start;
     const gchar *end;
     gpgme_data_t data;
@@ -555,26 +580,24 @@ get_callback (SoupMessage *msg, SeahorseHKPOperation *hop)
     end = text = msg->response.body;
     len = msg->response.length;
     
-    do {
+    for (;;) {
 
         len -= end - text;
         text = end;
         
-        type = seahorse_util_detect_text (text, len, &start, &end);
-
+        if(!detect_key (text, len, &start, &end))
+            break;
+        
         /* Any key blocks get written to our result data */
-        if (type == SEAHORSE_TEXT_TYPE_KEY) {
-            data = (gpgme_data_t)g_object_get_data (G_OBJECT (hop), "result");
-            g_return_if_fail (data != NULL);
+        data = (gpgme_data_t)g_object_get_data (G_OBJECT (hop), "result");
+        g_return_if_fail (data != NULL);
             
-            r = gpgme_data_write (data, start, end - start);
-            g_return_if_fail (r != -1);
+        r = gpgme_data_write (data, start, end - start);
+        g_return_if_fail (r != -1);
 
-            r = gpgme_data_write (data, "\n", 1);
-            g_return_if_fail (r != -1);
-        }
-
-    } while (type != SEAHORSE_TEXT_TYPE_NONE);        
+        r = gpgme_data_write (data, "\n", 1);
+        g_return_if_fail (r != -1);
+    }
         
     if (--hop->requests <= 0)
         seahorse_operation_mark_done (SEAHORSE_OPERATION (hop), FALSE, NULL);

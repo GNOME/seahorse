@@ -42,6 +42,42 @@
 #include "seahorse-op.h"
 #include "seahorse-widget.h"
 
+typedef enum {
+    SEAHORSE_TEXT_TYPE_NONE,
+    SEAHORSE_TEXT_TYPE_KEY,
+    SEAHORSE_TEXT_TYPE_MESSAGE,
+    SEAHORSE_TEXT_TYPE_SIGNED
+} SeahorseTextType;
+
+typedef struct _SeahorsePGPHeader {
+    const gchar *header;
+    const gchar *footer;
+    SeahorseTextType type;
+} SeahorsePGPHeader;    
+
+static const SeahorsePGPHeader seahorse_pgp_headers[] = {
+    { 
+        "-----BEGIN PGP MESSAGE-----", 
+        "-----END PGP MESSAGE-----", 
+        SEAHORSE_TEXT_TYPE_MESSAGE 
+    }, 
+    {
+        "-----BEGIN PGP SIGNED MESSAGE-----",
+        "-----END PGP SIGNATURE-----",
+        SEAHORSE_TEXT_TYPE_SIGNED
+    }, 
+    {
+        "-----BEGIN PGP PUBLIC KEY BLOCK-----",
+        "-----END PGP PUBLIC KEY BLOCK-----",
+        SEAHORSE_TEXT_TYPE_KEY
+    }, 
+    {
+        "-----BEGIN PGP PRIVATE KEY BLOCK-----",
+        "-----END PGP PRIVATE KEY BLOCK-----",
+        SEAHORSE_TEXT_TYPE_KEY
+    }
+};
+
 #define MENU_ENC_ITEM_LABEL      N_("_Encrypt...")
 #define MENU_ENC_ITEM_PATH       "/menu/Edit/EditOps_6/"
 #define MENU_ENC_ITEM_NAME       "Encrypt"
@@ -157,6 +193,46 @@ replace_selected_text (GeditDocument *doc, const gchar *replace)
                  replace, strlen (replace));
 
     gtk_text_buffer_end_user_action (GTK_TEXT_BUFFER (doc));
+}
+
+SeahorseTextType    
+detect_text_type (const gchar *text, gint len, const gchar **start, const gchar **end)
+{
+    const SeahorsePGPHeader *header;
+    const gchar *pos = NULL;
+    const gchar *t;
+    int i;
+    
+    if (len == -1)
+        len = strlen (text);
+    
+    /* Find the first of the headers */
+    for (i = 0; i < (sizeof (seahorse_pgp_headers) / sizeof (seahorse_pgp_headers[0])); i++) {
+        t = g_strstr_len (text, len, seahorse_pgp_headers[i].header);
+        if (t != NULL) {
+            if (pos == NULL || (t < pos)) {
+                header = &(seahorse_pgp_headers[i]);
+                pos = t;
+            }
+        }
+    }
+    
+    if (pos != NULL) {
+        
+        if (start)
+            *start = pos;
+        
+        /* Find the end of that block */
+        t = g_strstr_len (pos, len - (pos - text), header->footer);
+        if (t != NULL && end)
+            *end = t + strlen(header->footer);
+        else if (end)
+            *end = NULL;
+            
+        return header->type;
+    }
+    
+    return SEAHORSE_TEXT_TYPE_NONE;
 }
 
 /* -----------------------------------------------------------------------------
@@ -343,7 +419,7 @@ decrypt_cb (BonoboUIComponent * uic, gpointer user_data,
     for (;;) {
 
         /* Try to figure out what it contains */
-        type = seahorse_util_detect_text (last, -1, &start, &end);
+        type = detect_text_type (last, -1, &start, &end);
         gedit_debug (DEBUG_PLUGINS, "detected type: %d", type);
         
         if (type == SEAHORSE_TEXT_TYPE_NONE) {
