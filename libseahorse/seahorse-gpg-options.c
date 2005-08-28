@@ -75,7 +75,7 @@ find_config_file (gboolean read, GError **err)
     g_free (conf);
     	
     /* Check for and open ~/.gnupg/options */
-    conf = g_strconcat (gpg_homedir, "/options");
+    conf = g_strconcat (gpg_homedir, "/options", NULL);
     if (g_file_test (conf, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_EXISTS)) 
         return conf;
     g_free (conf);
