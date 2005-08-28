@@ -165,21 +165,29 @@ seahorse_agent_io_socket (const char **socketname)
     return 0;
 }
 
+/* Disconnect the connection */
+static void
+disconnect (SeahorseAgentConn *cn)
+{
+    /* The watch tag */
+    if (cn->stag) {
+        g_source_remove (cn->stag);
+        cn->stag = 0;
+
+        if (cn->iochannel)
+            g_io_channel_shutdown (cn->iochannel, TRUE, NULL);
+    }
+}        
+
 /* Free the given connection structure */
 static void
 free_conn (SeahorseAgentConn *cn)
 {
-    GError *err = NULL;
-
     if (cn->iochannel) {
-        if (cn->stag)
-            g_source_remove (cn->stag);
+        disconnect (cn);
 
-        g_io_channel_shutdown (cn->iochannel, TRUE, &err);
-        g_clear_error (&err);
-
-        cn->iochannel = 0;
-        cn->stag = 0;
+        g_io_channel_unref (cn->iochannel);
+        cn->iochannel = NULL;
     }
 
     g_connections = g_list_remove (g_connections, cn);
@@ -376,8 +384,8 @@ process_line (SeahorseAgentConn *cn, gchar *string)
     }
 
     else if (strcasecmp (string, ASS_BYE) == 0) {
-        /* seahorse_agent_io_reply (cn, TRUE, "closing connection"); */
-        free_conn (cn);
+        seahorse_agent_io_reply (cn, TRUE, "closing connection");
+        disconnect (cn);
     }
 
     else if (strcasecmp (string, ASS_RESET) == 0) {
@@ -413,6 +421,7 @@ io_handler (GIOChannel *source, GIOCondition condition, gpointer data)
             g_critical ("couldn't read from socket: %s", err->message);
             g_clear_error (&err);
             free_conn (cn);
+            cn = NULL;
             ret = FALSE;
         }
 
@@ -425,7 +434,7 @@ io_handler (GIOChannel *source, GIOCondition condition, gpointer data)
             g_free (string);
     }
 
-    if (condition & G_IO_HUP) {
+    if (cn && condition & G_IO_HUP) {
         free_conn (cn);
         ret = FALSE;            /* removes watch */
     }
@@ -437,7 +446,8 @@ io_handler (GIOChannel *source, GIOCondition condition, gpointer data)
 static gboolean
 is_valid_conn (SeahorseAgentConn *cn)
 {
-    return cn && g_list_index (g_connections, cn) != -1;
+    return cn && cn->iochannel && 
+           g_list_index (g_connections, cn) != -1;
 }
 
 /* Write all passed data to socket */
@@ -460,7 +470,8 @@ write_raw_data (int fd, const gchar *data, int len)
         r = write (fd, data, len);
         if (r == -1) {
             if (errno != EAGAIN && errno != EINTR) {
-                g_critical ("couldn't write data to socket: %s", strerror (errno));
+                if (errno != EPIPE)
+                    g_critical ("couldn't write data to socket: %s", strerror (errno));
                 return -1;
             }
         }
@@ -493,7 +504,7 @@ seahorse_agent_io_reply (SeahorseAgentConn *cn, gboolean ok, const gchar *respon
         == -1 || (response && write_raw_data (fd, response, -1)) == -1
         || write_raw_data (fd, NL, KL (NL)) == -1) {
         /* error message already printed */
-        free_conn (cn);
+        disconnect (cn);
     }
 
     /* After sending back a response we're ready for more */
@@ -518,8 +529,7 @@ connect_handler (GIOChannel *source, GIOCondition cond, gpointer data)
         return TRUE;            /* don't stop listening */
     }
 
-    cn = g_chunk_new (SeahorseAgentConn, g_memory);
-    memset (cn, 0, sizeof (*cn));
+    cn = g_chunk_new0 (SeahorseAgentConn, g_memory);
 
     g_connections = g_list_append (g_connections, cn);
 
@@ -559,7 +569,7 @@ seahorse_agent_io_init ()
     g_iochannel_tag = g_io_add_watch (g_iochannel, G_IO_IN, connect_handler, NULL);
 
     /* The main memory queue */
-    g_memory = g_mem_chunk_create (SeahorseAgentConn, 128, G_ALLOC_AND_FREE);
+    g_memory = g_mem_chunk_create (SeahorseAgentConn, 8, G_ALLOC_AND_FREE);
 
     return 0;
 }
