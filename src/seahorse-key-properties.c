@@ -30,6 +30,7 @@
 #include "seahorse-util.h"
 #include "seahorse-pgp-key.h"
 #include "seahorse-pgp-key-op.h"
+#include "seahorse-gtkstock.h"
 
 #define NOTEBOOK "notebook"
 #define SPACING 12
@@ -690,6 +691,202 @@ do_subkeys (SeahorseWidget *swidget)
 	}
 }
 
+/*
+ * Begin Photo ID Functions 
+ */
+static void
+photoid_add_clicked(GtkWidget *widget, SeahorseWidget *swidget)
+{
+	SeahorseKey *skey;
+    SeahorsePGPKey *pkey;
+	char* filename = NULL;
+    gpgme_error_t gerr;
+	GtkWidget *chooser;
+	
+    skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
+    pkey = SEAHORSE_PGP_KEY(skey);
+    
+    chooser = seahorse_util_chooser_open_new (_("Add Photo ID"), 
+                	GTK_WINDOW(glade_xml_get_widget (swidget->xml, "key-properties")));             	
+	gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (chooser), TRUE);		
+    seahorse_util_chooser_show_jpeg_files (chooser);
+	
+	if(gtk_dialog_run (GTK_DIALOG (chooser)) == GTK_RESPONSE_ACCEPT)
+        filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (chooser));
+        
+    gtk_widget_destroy (chooser);
+
+    g_return_if_fail(filename);
+
+    gerr = seahorse_pgp_key_op_photoid_add(pkey, filename);
+    if (!GPG_IS_OK (gerr)) {
+        
+        /* A special error value set by seahorse_key_op_photoid_add to 
+           denote an invalid format file */
+        if (gerr == GPG_E (GPG_ERR_USER_1)) 
+            /* TODO: We really shouldn't be getting here. We should rerender 
+               the photo into a format that will work (along with resizing). */
+            seahorse_util_show_error (NULL, _("Couldn't add photo"), 
+                                      _("The file could not be loaded. It may be in an invalid format"));
+        else        
+            seahorse_util_handle_gpgme (gerr, _("Couldn't add photo"));        
+    }
+    
+    g_free (filename);
+    g_object_set_data (G_OBJECT (swidget), "current-photoid", NULL);
+}
+ 
+static void
+photoid_delete_clicked (GtkWidget *widget, SeahorseWidget *swidget)
+{
+	SeahorseKey *skey;
+	SeahorsePGPKey *pkey;
+	gpgme_error_t gerr;
+	GtkWidget *question, *delete_button, *cancel_button;
+    gint response, uid; 
+    gpgmex_photo_id_t photoid = (gpgmex_photo_id_t)g_object_get_data (G_OBJECT (swidget),
+"current-photoid");
+    
+	g_return_if_fail(photoid != NULL);
+    
+    question = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
+                        GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE,
+                        _("Are you sure you want to permanently delete the current photo ID?"));
+    
+    delete_button = gtk_button_new_from_stock (GTK_STOCK_DELETE);
+    cancel_button = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
+
+    /* add widgets to action area */
+    gtk_dialog_add_action_widget (GTK_DIALOG (question), GTK_WIDGET (cancel_button), GTK_RESPONSE_REJECT);
+    gtk_dialog_add_action_widget (GTK_DIALOG (question), GTK_WIDGET (delete_button), GTK_RESPONSE_ACCEPT);
+   
+    /* show widgets */
+    gtk_widget_show (delete_button);
+    gtk_widget_show (cancel_button);
+       
+    response = gtk_dialog_run (GTK_DIALOG (question));
+    gtk_widget_destroy (question);
+    
+    skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
+    pkey = SEAHORSE_PGP_KEY(skey);
+    
+    uid = photoid->uid;
+    
+    g_return_if_fail(response == GTK_RESPONSE_ACCEPT);
+        
+    gerr = seahorse_pgp_key_op_photoid_delete (pkey, uid);
+    if (!GPG_IS_OK (gerr))
+        seahorse_util_handle_gpgme (gerr, _("Couldn't delete photo"));
+    
+    g_object_set_data (G_OBJECT (swidget), "current-photoid", NULL);
+}
+
+static void
+set_photoid_state(SeahorseWidget *swidget, SeahorsePGPKey *pkey)
+{
+    SeahorseKeyEType etype = seahorse_key_get_etype (SEAHORSE_KEY(pkey));
+    GtkWidget *next_button = glade_xml_get_widget(swidget->xml, "photoid-next");
+	GtkWidget *prev_button = glade_xml_get_widget(swidget->xml, "photoid-prev");
+	GtkWidget *del_button = glade_xml_get_widget(swidget->xml, "photoid-delete");
+	GtkWidget *add_button = glade_xml_get_widget(swidget->xml, "photoid-add");
+	GtkWidget *photo_image = glade_xml_get_widget (swidget->xml, "photoid");
+	
+	gpgmex_photo_id_t photoid = photoid = (gpgmex_photo_id_t)g_object_get_data (G_OBJECT (swidget),
+"current-photoid");
+	
+	if (etype == SKEY_PRIVATE) {
+	    gtk_widget_set_sensitive(add_button, TRUE);
+	    
+	    if (photoid != NULL)
+	       gtk_widget_set_sensitive(del_button, TRUE);
+	       
+	} else {
+	   gtk_widget_set_sensitive (add_button, FALSE);
+	   gtk_widget_set_sensitive (del_button, FALSE);
+	}
+
+    if (photoid != NULL) {	
+    	if (photoid == pkey->photoids)
+    	   gtk_widget_set_sensitive (prev_button, FALSE);
+    	else
+    	   gtk_widget_set_sensitive (prev_button, TRUE);
+    	   
+    	if ((photoid->next != NULL) && (photoid->next->photo != NULL))
+            gtk_widget_set_sensitive (next_button, TRUE);
+        else
+            gtk_widget_set_sensitive (next_button, FALSE);
+    } else {
+        gtk_widget_set_sensitive (del_button, FALSE);
+        gtk_widget_set_sensitive (prev_button, FALSE);
+        gtk_widget_set_sensitive (next_button, FALSE);
+    }
+        
+    if ((photoid == NULL) || (photoid->photo == NULL))
+        gtk_image_set_from_stock (GTK_IMAGE (photo_image), 
+                                  SEAHORSE_STOCK_PERSON, 
+                                  (GtkIconSize)-1);
+    else 
+        gtk_image_set_from_pixbuf (GTK_IMAGE (photo_image), photoid->photo);
+}
+
+static void
+photoid_next_clicked(GtkWidget *widget, SeahorseWidget *swidget)
+{
+	SeahorseKey *skey;
+	SeahorsePGPKey *pkey;
+	gpgmex_photo_id_t photoid;
+	
+	skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
+	pkey = SEAHORSE_PGP_KEY (skey);
+	
+	photoid = (gpgmex_photo_id_t)g_object_get_data (G_OBJECT (swidget),
+"current-photoid");
+	
+	if ((photoid != NULL) && (photoid->next != NULL))
+        g_object_set_data (G_OBJECT (swidget), "current-photoid", photoid->next);
+        
+    set_photoid_state (swidget, pkey);
+}
+
+static void
+photoid_prev_clicked(GtkWidget *widget, SeahorseWidget *swidget)
+{
+	SeahorseKey *skey;
+	SeahorsePGPKey *pkey;
+	gpgmex_photo_id_t itter, photoid;
+	
+	skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
+	pkey = SEAHORSE_PGP_KEY (skey);
+	
+	photoid = (gpgmex_photo_id_t)g_object_get_data (G_OBJECT (swidget),
+"current-photoid");
+	
+	if (photoid != pkey->photoids) {
+    	itter = pkey->photoids;
+    	
+    	while ((itter->next != photoid) && (itter->next != NULL))
+    	   itter = itter->next;
+    	
+    	g_object_set_data (G_OBJECT (swidget), "current-photoid", itter);
+	}
+	
+	set_photoid_state (swidget, pkey);
+}
+
+static void
+do_photo_ids (SeahorseWidget *swidget)
+{
+	SeahorseKey *skey;
+    SeahorsePGPKey *pkey;
+
+	skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
+    pkey = SEAHORSE_PGP_KEY (skey);
+
+    g_object_set_data (G_OBJECT (swidget), "current-photoid", pkey->photoids);
+    
+    set_photoid_state (swidget, pkey);
+}
+
 static void
 key_changed (SeahorseKey *skey, SeahorseKeyChange change, SeahorseWidget *swidget)
 {
@@ -700,6 +897,7 @@ key_changed (SeahorseKey *skey, SeahorseKeyChange change, SeahorseWidget *swidge
             do_signatures (swidget);
             do_signature_list (swidget);
             do_subkeys (swidget);
+            do_photo_ids(swidget);
             break;
 		case SKEY_CHANGE_UIDS:
 			do_uid_list (swidget);
@@ -713,6 +911,10 @@ key_changed (SeahorseKey *skey, SeahorseKeyChange change, SeahorseWidget *swidge
         case SKEY_CHANGE_EXPIRES:
 			do_subkeys (swidget);
 			break;
+		case SKEY_CHANGE_PHOTOS:
+            do_uid_list (swidget);
+            do_photo_ids (swidget);
+            break;
 		default:
 			break;
 	}
@@ -785,10 +987,20 @@ seahorse_key_properties_new (SeahorsePGPKey *pkey)
         gtk_widget_set_sensitive (widget, TRUE);
         glade_xml_signal_connect_data (swidget->xml, "export_clicked",
                     G_CALLBACK (export_clicked), swidget);
+    
+        widget = glade_xml_get_widget (swidget->xml, "photoid-add");
+        glade_xml_signal_connect_data (swidget->xml, "photoid_add_clicked",
+        	    G_CALLBACK (photoid_add_clicked), swidget);
+
+		widget = glade_xml_get_widget (swidget->xml, "photoid-delete");
+        glade_xml_signal_connect_data (swidget->xml, "photoid_delete_clicked",
+        	    G_CALLBACK (photoid_delete_clicked), swidget); 
+    
     }
 
 	do_subkeys (swidget);
     do_uid_list (swidget);
+    do_photo_ids (swidget);
 
     /* Disable stuff not appropriate for remote */
     if (remote) {
@@ -834,6 +1046,13 @@ seahorse_key_properties_new (SeahorsePGPKey *pkey)
                                        G_CALLBACK (trust_changed), swidget);
         glade_xml_signal_connect_data (swidget->xml, "disabled_toggled",
                                        G_CALLBACK (disabled_toggled), swidget);
+    
+        /* Photo ID controls */
+        glade_xml_signal_connect_data (swidget->xml, "photoid_next_clicked",
+        	    G_CALLBACK (photoid_next_clicked), swidget);
+        glade_xml_signal_connect_data (swidget->xml, "photoid_prev_clicked",
+        	    G_CALLBACK (photoid_prev_clicked), swidget);
+    
     }
 	
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (glade_xml_get_widget (swidget->xml, "disabled")),

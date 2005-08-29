@@ -141,6 +141,10 @@ object_finalize (GObject *gobject)
     if (skey->seckey)
         gpgmex_key_unref (skey->seckey);
     skey->pubkey = skey->seckey = NULL;
+
+    if (skey->photoids)
+            gpgmex_photo_id_free_all (skey->photoids);
+    skey->photoids = NULL;
 	
 	G_OBJECT_CLASS (parent_class)->finalize (gobject);
 }
@@ -582,4 +586,63 @@ seahorse_pgp_key_get_id (gpgme_key_t key, guint index)
     
     g_return_val_if_fail (subkey, "");
     return subkey->keyid;
+}
+
+guint           
+seahorse_pgp_key_get_num_photoids (SeahorsePGPKey *pkey)
+{
+	gint index = 0;
+	gpgmex_photo_id_t photoid;
+
+	g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (pkey), 0);    
+    g_return_val_if_fail (pkey->photoids != NULL, 0);
+		
+	photoid = pkey->photoids;
+	while (photoid) {
+		photoid = photoid->next;
+		index++;
+	}
+	
+	return index;        
+}
+
+/**
+ * seahorse_pgp_key_get_nth_photoid:
+ * @skey: #SeahorseKey
+ * @index: Which photo id
+ *
+ * Gets the the photo id at @index of @skey.
+ *
+ * Returns: subkey of @skey at @index, or NULL if @index is out of bounds
+ */
+gpgmex_photo_id_t  
+seahorse_pgp_key_get_nth_photoid (SeahorsePGPKey *pkey, guint index)
+{
+    gpgmex_photo_id_t photoid;
+    guint n;
+
+    g_return_val_if_fail (pkey != NULL && SEAHORSE_IS_PGP_KEY (pkey), NULL);
+    g_return_val_if_fail (pkey->photoids != NULL, NULL);
+    
+    photoid = pkey->photoids;
+    for (n = index; photoid && n; n--)
+        photoid = photoid->next;
+
+    return photoid;
+}    
+
+gpgmex_photo_id_t 
+seahorse_pgp_key_get_photoid_n      (SeahorsePGPKey   *pkey,
+                                     guint            uid)
+{
+    gpgmex_photo_id_t photoid;
+    
+    g_return_val_if_fail (pkey != NULL && SEAHORSE_IS_PGP_KEY (pkey), NULL);
+    g_return_val_if_fail (pkey->photoids != NULL, NULL);
+
+    photoid = pkey->photoids;
+    while((photoid->uid != uid) && (photoid != NULL))
+        photoid = photoid->next;
+        
+    return photoid;
 }

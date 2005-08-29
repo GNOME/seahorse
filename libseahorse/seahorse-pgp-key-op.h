@@ -28,6 +28,7 @@
 
 #include "seahorse-pgp-source.h"
 #include "seahorse-pgp-key.h"
+#include "seahorse-gpgmex.h"
 
 /* Key type options. */
 typedef enum {
@@ -158,5 +159,13 @@ gpgme_error_t  seahorse_pgp_key_op_revoke_subkey    (SeahorsePGPKey *pkey,
                                                  SeahorseRevokeReason reason,
                                                  const gchar *description);
 
+gpgme_error_t  seahorse_pgp_key_op_photoid_add      (SeahorsePGPKey *pkey,
+                                                     gchar *filename);
+ 
+gpgme_error_t  seahorse_pgp_key_op_photoid_delete   (SeahorsePGPKey *pkey,
+                                                     guint uid);
+ 
+gpgme_error_t  seahorse_pgp_key_op_photoid_load     (SeahorsePGPKey *pkey,
+                                                     gpgmex_photo_id_t *photoids);
                              							 
 #endif /* __SEAHORSE_PGP_KEY_OP_H__ */

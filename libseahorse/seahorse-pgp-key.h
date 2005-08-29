@@ -42,6 +42,7 @@
 
 #include "seahorse-key.h"
 #include "seahorse-pgp-source.h"
+#include "seahorse-gpgmex.h"
 
 #define SKEY_PGP                         (g_quark_from_static_string ("openpgp"))
 
@@ -60,8 +61,9 @@ struct _SeahorsePGPKey {
     SeahorseKey	                parent;
 	
     /*< public >*/
-    gpgme_key_t                 pubkey;
-    gpgme_key_t                 seckey;    
+    gpgme_key_t                 pubkey;         /* The public key */
+    gpgme_key_t                 seckey;         /* The secret key */
+    gpgmex_photo_id_t           photoids;       /* List of photos */
 };
 
 struct _SeahorsePGPKeyClass {
@@ -102,5 +104,12 @@ const gchar*		seahorse_pgp_key_get_algo 	      (SeahorsePGPKey   *pkey,
 const gchar*	seahorse_pgp_key_get_id               (gpgme_key_t      key,
                                                        guint            index);
 
+guint           seahorse_pgp_key_get_num_photoids     (SeahorsePGPKey   *pkey);
+ 
+gpgmex_photo_id_t seahorse_pgp_key_get_nth_photoid    (SeahorsePGPKey   *pkey,
+                                                       guint            index);                                                    
+
+gpgmex_photo_id_t seahorse_pgp_key_get_photoid_n      (SeahorsePGPKey   *pkey,
+                                                       guint            uid);
 
 #endif /* __SEAHORSE_KEY_H__ */

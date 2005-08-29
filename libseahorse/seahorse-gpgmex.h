@@ -26,7 +26,9 @@
 #ifndef __SEAHORSE_GPGMEX_H__
 #define __SEAHORSE_GPGMEX_H__
 
+#include "config.h"
 #include <gpgme.h>
+#include <gdk-pixbuf/gdk-pixbuf.h>
 
 /* -----------------------------------------------------------------------------
  * ERROR HANDLING 
@@ -55,6 +57,14 @@ enum {
     GPGMEX_KEY_DISABLED = 0x02
 };
 
+/* A photo id from a key */
+typedef struct _gpgmex_photo_id {
+    struct _gpgmex_photo_id *next;
+    
+    guint uid;            /* The actual uid used with gpgpme_op_edit */
+    GdkPixbuf *photo;     /* The photo itself */
+} *gpgmex_photo_id_t;
+    
 gpgme_key_t gpgmex_key_alloc         ();
 
 void        gpgmex_key_add_subkey    (gpgme_key_t key,
@@ -81,6 +91,14 @@ void        gpgmex_key_ref           (gpgme_key_t key);
 
 void        gpgmex_key_unref         (gpgme_key_t key);
 
+gpgmex_photo_id_t 
+            gpgmex_photo_id_alloc    (guint uid);
+            
+void        gpgmex_photo_id_free     (gpgmex_photo_id_t photoid);
+
+void        gpgmex_photo_id_free_all (gpgmex_photo_id_t photoid);
+
+
 /* -----------------------------------------------------------------------------
  * EXTRA FUNCTIONALITY
  */
@@ -89,4 +107,8 @@ gpgme_error_t gpgmex_op_export_secret  (gpgme_ctx_t ctx,
                                         const char *pattern,
                                         gpgme_data_t keydata);
 
+gpgme_error_t gpgmex_op_num_uids       (gpgme_ctx_t ctx, 
+                                        const char *pattern,
+                                        guint *number);
+ 
 #endif /* __SEAHORSE_GPGMEX_H__ */

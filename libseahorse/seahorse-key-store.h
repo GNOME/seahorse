@@ -136,7 +136,7 @@ enum {
             G_TYPE_POINTER,  \
             G_TYPE_BOOLEAN,  \
             G_TYPE_BOOLEAN,  \
-            G_TYPE_STRING,  \
+            G_TYPE_STRING,   \
             G_TYPE_STRING,   \
             G_TYPE_STRING,   \
             G_TYPE_INT

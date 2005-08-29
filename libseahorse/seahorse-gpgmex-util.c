@@ -319,6 +319,34 @@ gpgmex_key_is_gpgme (gpgme_key_t key)
     return !(key->keylist_mode & SEAHORSE_KEYLIST_MODE);
 }
 
+gpgmex_photo_id_t 
+gpgmex_photo_id_alloc (guint uid)
+{
+    gpgmex_photo_id_t photoid = g_new0 (struct _gpgmex_photo_id, 1);
+    photoid->uid = uid;
+    return photoid;
+}
+
+void        
+gpgmex_photo_id_free (gpgmex_photo_id_t photoid)
+{
+    if (photoid) {
+        if (photoid->photo)
+            g_object_unref (photoid->photo);
+        g_free (photoid);
+    }
+}
+
+void 
+gpgmex_photo_id_free_all (gpgmex_photo_id_t photoid)
+{
+    while (photoid) {
+        gpgmex_photo_id_t next = photoid->next;
+        gpgmex_photo_id_free (photoid);
+        photoid = next;
+    }
+}
+
 /* -----------------------------------------------------------------------------
  * OTHER MISC FUNCTIONS
  */

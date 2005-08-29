@@ -86,3 +86,33 @@ gpgmex_op_export_secret  (gpgme_ctx_t ctx,
     g_free (output);
     return GPG_OK;
 }
+
+gpgme_error_t 
+gpgmex_op_num_uids (gpgme_ctx_t ctx, const char *pattern, guint *number)
+{
+	 gchar *output = NULL;
+    gpgme_error_t err;
+    gchar *args;
+    gchar *found = NULL;
+    
+    g_return_val_if_fail (pattern != NULL, GPG_E (GPG_ERR_INV_VALUE));
+    args = g_strdup_printf ("--list-keys '%s'", pattern);
+    
+    err = execute_gpg_command (ctx, args, &output, NULL);
+    g_free (args);
+    
+    if (!GPG_IS_OK (err))
+        return err;
+    
+    found = output;
+	while ((found = strstr(found, "uid")) != NULL) {
+		*number = *number + 1;
+		found += 3;
+	}
+
+	if ((GPG_MAJOR == 1) && (GPG_MINOR == 2))
+		*number = *number + 1;
+     
+    g_free (output);
+    return GPG_OK;
+}

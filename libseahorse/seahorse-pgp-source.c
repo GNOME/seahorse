@@ -29,6 +29,7 @@
 #include "seahorse-operation.h"
 #include "seahorse-util.h"
 #include "seahorse-pgp-key.h"
+#include "seahorse-pgp-key-op.h"
 #include "seahorse-libdialogs.h"
 #include "seahorse-gpg-options.h"
 
@@ -104,6 +105,7 @@ DECLARE_OPERATION (Load, load)
     guint batch;                    /* Number to load in a batch, or 0 for synchronous */
     guint stag;                     /* The event source handler id (for stopping a load) */
     gboolean all;                   /* When refreshing this is the refresh all keys flag */
+    gboolean complete;              /* Load complete keys */
     GHashTable *checks;             /* When refreshing this is our set of missing keys */
 END_DECLARE_OPERATION        
 
@@ -348,7 +350,7 @@ have_key_in_context (SeahorsePGPSource *psrc, const gchar *id, gboolean secret)
 }
 
 /* Add a key to the context  */
-static void
+static SeahorsePGPKey*
 add_key_to_context (SeahorsePGPSource *psrc, gpgme_key_t key)
 {
     SeahorsePGPKey *pkey = NULL;
@@ -358,7 +360,7 @@ add_key_to_context (SeahorsePGPSource *psrc, gpgme_key_t key)
     
     id = seahorse_pgp_key_get_id (key, 0);
     
-    g_return_if_fail (SEAHORSE_IS_PGP_SOURCE (psrc));
+    g_return_val_if_fail (SEAHORSE_IS_PGP_SOURCE (psrc), NULL);
     prev = SEAHORSE_PGP_KEY (seahorse_context_get_key (SCTX_APP (), SEAHORSE_KEY_SOURCE (psrc), id));
     
     /* Check if we can just replace the key on the object */
@@ -367,7 +369,7 @@ add_key_to_context (SeahorsePGPSource *psrc, gpgme_key_t key)
             g_object_set (prev, "seckey", key, NULL);
         else
             g_object_set (prev, "pubkey", key, NULL);
-        return;
+        return prev;
     }
     
     /* Create a new key with secret */    
@@ -377,6 +379,9 @@ add_key_to_context (SeahorsePGPSource *psrc, gpgme_key_t key)
         /* Since we don't have a public key yet, save this away */
         psrc->pv->orphan_secret = g_list_append (psrc->pv->orphan_secret, pkey);
         
+        /* No key was loaded as far as everyone is concerned */
+        return NULL;        
+ 
     /* Just a new public key */
     } else {
         /* Check for orphans */
@@ -406,7 +411,8 @@ add_key_to_context (SeahorsePGPSource *psrc, gpgme_key_t key)
         /* Add to context */ 
         seahorse_context_add_key (SCTX_APP (), SEAHORSE_KEY (pkey));
     }
- 
+
+    return pkey; 
 }
 
 /* -----------------------------------------------------------------------------
@@ -537,6 +543,7 @@ seahorse_load_operation_cancel (SeahorseOperation *operation)
 static gboolean
 keyload_handler (SeahorseLoadOperation *lop)
 {
+    SeahorsePGPKey *pkey;
     gpgme_key_t key;
     guint batch;
     const gchar *id;
@@ -578,9 +585,19 @@ keyload_handler (SeahorseLoadOperation *lop)
             }
         }
         
-        add_key_to_context (lop->psrc, key);
+        pkey = add_key_to_context (lop->psrc, key);
         gpgmex_key_unref (key);
         lop->loaded++;
+        
+        /* Load additional info */
+        if (lop->complete && pkey != NULL) {
+            if (pkey->photoids) {
+                gpgmex_photo_id_free_all (pkey->photoids);
+                pkey->photoids = NULL;
+            }
+            
+            seahorse_pgp_key_op_photoid_load (pkey, &(pkey->photoids));
+        }
     }
     
     /* More to do, so queue for next round */        
@@ -620,6 +637,7 @@ seahorse_load_operation_start (SeahorsePGPSource *psrc, const gchar **pattern,
     
     /* When loading a specific key, we load extra info */
     if (pattern != NULL) {
+        lop->complete = TRUE;
         gpgme_set_keylist_mode (lop->ctx, GPGME_KEYLIST_MODE_SIGS | 
                 gpgme_get_keylist_mode (lop->ctx));
     }

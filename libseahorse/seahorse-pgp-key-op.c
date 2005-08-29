@@ -2,6 +2,8 @@
  * Seahorse
  *
  * Copyright (C) 2003 Jacob Perkins
+ * Copyright (C) 2004 Nate Nielsen
+ * Copyright (C) 2005 Adam Schreiber
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +21,9 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include "config.h"
 #include <gnome.h>
+#include <glib/gstdio.h>
 
 #include "seahorse-gpgmex.h"
 #include "seahorse-pgp-key-op.h"
@@ -30,9 +34,26 @@
 #define QUIT "quit"
 #define SAVE "keyedit.save.okay"
 #define YES "Y"
+#define NO "N"
 
 #define PRINT(args)  if(!seahorse_util_print_fd args) return GPG_E (GPG_ERR_GENERAL)
 #define PRINTF(args) if(!seahorse_util_printf_fd args) return GPG_E (GPG_ERR_GENERAL)
+
+ 
+#ifndef DEBUG_OPERATION_ENABLE
+#if _DEBUG
+#define DEBUG_OPERATION_ENABLE 1
+#else
+#define DEBUG_OPERATION_ENABLE 0
+#endif
+#endif
+
+#if DEBUG_OPERATION_ENABLE
+#define DEBUG_OPERATION(x) g_printerr x
+#else
+#define DEBUG_OPERATION(x) 
+#endif
+
 
 /**
  * seahorse_pgp_key_op_generate:
@@ -223,8 +244,11 @@ seahorse_pgp_key_op_edit (gpointer data, gpgme_status_code_t status,
 	    status == GPGME_STATUS_BAD_PASSPHRASE || status == GPGME_STATUS_USERID_HINT ||
 	    status == GPGME_STATUS_SIGEXPIRED || status == GPGME_STATUS_KEYEXPIRED ||
 	    status == GPGME_STATUS_PROGRESS || status == GPGME_STATUS_KEY_CREATED ||
-	    status == GPGME_STATUS_ALREADY_SIGNED)
-		return parms->err;
+	    status == GPGME_STATUS_ALREADY_SIGNED || status == GPGME_STATUS_MISSING_PASSPHRASE)		
+        return parms->err;
+    
+    DEBUG_OPERATION (("[edit key] state: %d / status: %d / args: %s\n", 
+                      parms->state, status, args));
 
 	/* Choose the next state based on the current one and the input */
 	parms->state = parms->transit (parms->state, status, args, parms->data, &parms->err);
@@ -256,7 +280,9 @@ edit_key (SeahorsePGPKey *pkey, SeahorseEditParm *parms, SeahorseKeyChange chang
 	g_return_val_if_fail (GPG_IS_OK (err), err);
     
 	/* signal key */
-	seahorse_key_changed (SEAHORSE_KEY (pkey), change);
+    if (change != 0)
+	    seahorse_key_changed (SEAHORSE_KEY (pkey), change);
+    
 	return err;
 }
 
@@ -2037,4 +2063,420 @@ seahorse_pgp_key_op_del_uid (SeahorsePGPKey *pkey, const guint index)
                 del_uid_transit, del_uid_parm);
  
     return edit_key (pkey, parms, SKEY_CHANGE_UIDS);    
+}
+
+typedef struct {
+	gchar *filename;
+} PhotoIdAddParm;
+
+typedef enum {
+    PHOTO_ID_ADD_START,
+    PHOTO_ID_ADD_COMMAND,
+    PHOTO_ID_ADD_URI,
+    PHOTO_ID_ADD_BIG,
+    PHOTO_ID_ADD_QUIT,
+    PHOTO_ID_ADD_SAVE,
+    PHOTO_ID_ADD_ERROR
+} PhotoIdAddState;
+
+/* action helper for adding a photoid to a #SeahorseKey */
+static gpgme_error_t
+photoid_add_action (guint state, gpointer data, int fd)
+{
+    PhotoIdAddParm *parm = (PhotoIdAddParm*)data;
+    GtkWidget *question, *delete_button, *cancel_button;
+    gint response;
+    
+    switch (state) {
+	    case PHOTO_ID_ADD_COMMAND:
+            PRINT ((fd, "addphoto"));
+	        break;
+	    case PHOTO_ID_ADD_URI:
+            PRINT ((fd, parm->filename));
+	    	break;
+	    case PHOTO_ID_ADD_BIG:
+	    	/* let the user know their file is big and ask them if they still want to use it */
+	    	question = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE,
+		                        _("This photo ID file is very large. Are you sure you want to add it to your key?"));
+		    
+		    delete_button = gtk_button_new_from_stock (GTK_STOCK_ADD);
+		    cancel_button = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
+
+		    /* add widgets to action area */
+		    gtk_dialog_add_action_widget (GTK_DIALOG(question), GTK_WIDGET (cancel_button), GTK_RESPONSE_REJECT);
+		    gtk_dialog_add_action_widget (GTK_DIALOG(question), GTK_WIDGET (delete_button), GTK_RESPONSE_ACCEPT);
+		   
+		    /* show widgets */
+		    gtk_widget_show (delete_button);
+		    gtk_widget_show (cancel_button);
+		       
+		    response = gtk_dialog_run (GTK_DIALOG (question));
+		    gtk_widget_destroy (question);
+		    
+	        PRINT ((fd, (response == GTK_RESPONSE_ACCEPT) ? YES : NO));
+	        break;
+	    case PHOTO_ID_ADD_QUIT:
+            PRINT ((fd, QUIT));
+	        break;
+	    case PHOTO_ID_ADD_SAVE:
+            PRINT ((fd, YES));
+	        break;
+	    default:
+	        g_return_val_if_reached (GPG_E (GPG_ERR_GENERAL));
+	        break;
+    }
+  
+    seahorse_util_print_fd (fd, "\n");
+    return GPG_OK;
+}
+
+static guint
+photoid_add_transit (guint current_state, gpgme_status_code_t status,
+                     const gchar *args, gpointer data, gpgme_error_t *err)
+{
+    guint next_state;
+	
+    switch (current_state) {
+    
+    case PHOTO_ID_ADD_START:
+        if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
+            next_state = PHOTO_ID_ADD_COMMAND;
+        else {
+            *err = GPG_E (GPG_ERR_GENERAL);
+            g_return_val_if_reached (PHOTO_ID_ADD_ERROR);
+        }
+        break;
+    case PHOTO_ID_ADD_COMMAND:
+		if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "photoid.jpeg.add")) {
+			next_state = PHOTO_ID_ADD_URI;
+		} else {
+			*err = GPG_E (GPG_ERR_GENERAL);
+			g_return_val_if_reached (PHOTO_ID_ADD_ERROR);
+        }
+        break;
+   case PHOTO_ID_ADD_URI:
+		if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT)) {
+			next_state = PHOTO_ID_ADD_QUIT;
+		} else if (status == GPGME_STATUS_GET_BOOL && g_str_equal (args, "photoid.jpeg.size")) {
+			next_state = PHOTO_ID_ADD_BIG;
+		} else {
+            *err = GPG_E (GPG_ERR_GENERAL);
+            g_return_val_if_reached (PHOTO_ID_ADD_ERROR);
+        }
+	    break;
+    case PHOTO_ID_ADD_BIG:
+		if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT)) {
+			next_state = PHOTO_ID_ADD_QUIT;
+        /* This happens when the file is invalid or can't be accessed */
+		} else if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "photoid.jpeg.add")) {
+            *err = GPG_E (GPG_ERR_USER_1);
+            return PHOTO_ID_ADD_ERROR;
+		} else {
+            *err = GPG_E (GPG_ERR_GENERAL);
+            g_return_val_if_reached (PHOTO_ID_ADD_ERROR);
+        }
+        break;
+    case PHOTO_ID_ADD_QUIT:
+    	if (status == GPGME_STATUS_GET_BOOL && g_str_equal (args, SAVE)) {
+			next_state = PHOTO_ID_ADD_SAVE;
+		} else {
+            *err = GPG_E (GPG_ERR_GENERAL);
+            g_return_val_if_reached (PHOTO_ID_ADD_ERROR);
+        }
+        break;
+    default:
+        *err = GPG_E (GPG_ERR_GENERAL);
+        g_return_val_if_reached (PHOTO_ID_ADD_ERROR);
+        break;
+    }
+    
+    return next_state;
+}
+
+/**
+ * seahorse_pgp_key_op_photoid_add:
+ * @skey: #SeahorseKey to add photoid to
+ * @uri: path to jpeg image to be added
+ *
+ * Tries to add @uri to @skey as a photoid.
+ *
+ * Returns: Error value
+ **/
+gpgme_error_t 
+seahorse_pgp_key_op_photoid_add	(SeahorsePGPKey *pkey, gchar *filename)
+{
+	SeahorseEditParm *parms;
+	PhotoIdAddParm *photoid_add_parm;
+	gpgme_error_t err;
+	
+	g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (pkey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
+    
+	photoid_add_parm = g_new0 (PhotoIdAddParm, 1);
+	photoid_add_parm->filename = filename;
+	
+	parms = seahorse_edit_parm_new (PHOTO_ID_ADD_START, photoid_add_action,
+                                    photoid_add_transit, photoid_add_parm);
+	
+	/* add photoid */
+	err = edit_key (pkey, parms, SKEY_CHANGE_PHOTOS);
+	
+    return err;
+}
+
+/**
+ * seahorse_pgp_key_op_photoid_delete:
+ * @skey: #SeahorseKey whose photoid to delete
+ * @uid: uid of photoid to delete
+ *
+ * Tries to delete photoid @uid from @skey. This uses the transit
+ * and action functions from seahorse_key_op_del_uid.
+ *
+ * Returns: Error value
+ **/
+gpgme_error_t 
+seahorse_pgp_key_op_photoid_delete	(SeahorsePGPKey *pkey, guint uid)
+{
+    DelUidParm *del_uid_parm;
+    SeahorseEditParm *parms;
+ 
+    g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (pkey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
+      
+    del_uid_parm = g_new0 (DelUidParm, 1);
+    del_uid_parm->index = uid;
+   
+    parms = seahorse_edit_parm_new (DEL_UID_START, del_uid_action,
+                                    del_uid_transit, del_uid_parm);
+ 
+    return edit_key (pkey, parms, SKEY_CHANGE_PHOTOS);    
+}
+
+typedef struct {
+	gpgmex_photo_id_t list;
+    gpgmex_photo_id_t first;
+	gint uid;
+	guint num_uids;
+	char *output_file;
+} PhotoIdLoadParm;
+
+typedef enum {
+    PHOTO_ID_LOAD_START,
+    PHOTO_ID_LOAD_SELECT,
+    PHOTO_ID_LOAD_OUTPUT_IMAGE,
+    PHOTO_ID_LOAD_QUIT,
+    PHOTO_ID_LOAD_ERROR
+} PhotoIdLoadState;
+
+/* action helper for getting a list of photoids attached to a #SeahorseKey */
+static gpgme_error_t
+photoid_load_action (guint state, gpointer data, int fd)
+{
+    PhotoIdLoadParm *parm = (PhotoIdLoadParm*)data;
+    
+    switch (state) {
+	    case PHOTO_ID_LOAD_SELECT:
+            PRINTF ((fd, "uid %d", parm->uid));            
+	        break;
+	    case PHOTO_ID_LOAD_OUTPUT_IMAGE:
+            PRINT ((fd, "showphoto"));
+	        break;
+	    case PHOTO_ID_LOAD_QUIT:
+            PRINT ((fd, QUIT));
+	        break;
+	    default:
+	        g_return_val_if_reached (GPG_E (GPG_ERR_GENERAL));
+	        break;
+    }
+  
+    seahorse_util_print_fd (fd, "\n");
+    return GPG_OK;
+}
+
+static guint
+photoid_load_transit (guint current_state, gpgme_status_code_t status,
+                      const gchar *args, gpointer data, gpgme_error_t *err)
+{
+    PhotoIdLoadParm *parm = (PhotoIdLoadParm*)data;
+    guint next_state;
+    struct stat buf;
+    GError *error = NULL;
+	
+    switch (current_state) {
+    
+    /* start, get photoid list */
+    case PHOTO_ID_LOAD_START:
+        if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
+            next_state = PHOTO_ID_LOAD_SELECT;
+        else {
+            *err = GPG_E (GPG_ERR_GENERAL);
+            g_return_val_if_reached (PHOTO_ID_LOAD_ERROR);
+        }
+        break;
+    case PHOTO_ID_LOAD_SELECT:
+		if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT)) {
+			next_state = PHOTO_ID_LOAD_OUTPUT_IMAGE;
+		} else {
+            *err = GPG_E (GPG_ERR_GENERAL);
+            g_return_val_if_reached (PHOTO_ID_LOAD_ERROR);
+        }
+		break;
+    case PHOTO_ID_LOAD_OUTPUT_IMAGE:
+
+        if (g_file_test (parm->output_file, G_FILE_TEST_EXISTS)) {
+
+            DEBUG_OPERATION (("PhotoIDLoad uid %i/%i from file %s\n", parm->uid, 
+                             parm->num_uids, parm->output_file));
+            DEBUG_OPERATION(("PhotoIDLoad first %s\n", parm->first ? "NOT_NULL" : "NULL"));
+            DEBUG_OPERATION(("PhotoIDLoad list %s\n", parm->list ? "NOT_NULL" : "NULL"));
+            
+            if ((parm->first == NULL) && (parm->list == NULL)) {
+                parm->first = gpgmex_photo_id_alloc (parm->uid);
+                parm->list = parm->first;
+                parm->list->next = NULL;                     
+            } else {
+                parm->list->next = gpgmex_photo_id_alloc (parm->uid);
+                parm->list = parm->list->next;
+                parm->list->next = NULL;     
+            }
+            
+            DEBUG_OPERATION (("PhotoIDLoad After List Setup\n"));
+            
+            if (g_stat (parm->output_file, &buf) == -1) {
+                g_warning ("couldn't stat output image file '%s': %s", parm->output_file,
+                           g_strerror (errno));
+            
+            } else if (buf.st_size > 0) {
+                DEBUG_OPERATION (("PhotoIDLoad Loading %s\n", parm->output_file));
+                parm->list->photo = gdk_pixbuf_new_from_file (parm->output_file, &error);
+    
+                if ((parm->list->photo == NULL) || (error != NULL)) {
+                    g_warning ("Loading image %s failed: %s", parm->output_file,
+                               error ? error->message : "unknown");
+                    g_error_free (error);
+                }
+            }
+            
+            g_unlink (parm->output_file);
+        
+            if (parm->list->photo == NULL) {
+                /* Load a 'missing' icon */
+                parm->list->photo = gtk_icon_theme_load_icon (gtk_icon_theme_get_default (), 
+                                                              "gnome-unknown", 48, 0, NULL);
+                if (parm->list->photo  == NULL) {
+                    g_critical ("couldn't load 'gnome-unknown' icon");
+                    *err = GPG_E (GPG_ERR_GENERAL);
+                    break;
+                }
+            }
+        }
+
+    	if (parm->uid < parm->num_uids) {
+    		parm->uid = parm->uid + 1;
+    		DEBUG_OPERATION (("PhotoIDLoad Next UID %i\n", parm->uid));
+            
+    		if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT)) {
+				next_state = PHOTO_ID_LOAD_SELECT;
+			} else {
+	            *err = GPG_E (GPG_ERR_GENERAL);
+	            g_return_val_if_reached (PHOTO_ID_LOAD_ERROR);
+	        }
+        } else {
+			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT)) {
+				next_state = PHOTO_ID_LOAD_QUIT;
+				DEBUG_OPERATION (("PhotoIDLoad Quiting Load\n"));
+			} else {
+	            *err = GPG_E (GPG_ERR_GENERAL);
+	            g_return_val_if_reached (PHOTO_ID_LOAD_ERROR);
+	        }
+        }
+        break;
+    case PHOTO_ID_LOAD_QUIT:
+        /* Shouldn't be reached */
+        *err = GPG_E (GPG_ERR_GENERAL);
+        DEBUG_OPERATION (("PhotoIDLoad Reached Quit\n"));
+        g_return_val_if_reached (PHOTO_ID_LOAD_ERROR);
+        break;
+    default:
+        *err = GPG_E (GPG_ERR_GENERAL);
+        g_return_val_if_reached (PHOTO_ID_LOAD_ERROR);
+        break;
+    }
+    
+    return next_state;
+}
+
+/**
+ * seahorse_pgp_key_op_photoid_load
+ * @skey: #SeahorseKey to get list of photoids for
+ * @photoids: The location to put the photoids
+ *
+ * Tries to create list of photoids for skey.
+ *
+ * Returns: Error value
+ **/
+gpgme_error_t 
+seahorse_pgp_key_op_photoid_load (SeahorsePGPKey *pkey, gpgmex_photo_id_t *photoids)
+{
+	SeahorseEditParm *parms;
+	PhotoIdLoadParm *photoid_load_parm;
+	gpgme_error_t err;
+    const gchar *oldpath;
+    gchar *path;
+	guint fd;
+
+    DEBUG_OPERATION (("PhotoIDLoad Start\n"));     
+
+    g_return_val_if_fail(*photoids == NULL, GPG_E (GPG_ERR_GENERAL));
+    
+    /* Make sure there's enough room for the .jpg extension */
+    gchar image_path[] = "/tmp/seahorse-photoid-XXXXXX\0\0\0\0";
+    
+    g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (pkey), GPG_E(GPG_ERR_WRONG_KEY_USAGE));
+    
+ 	fd = g_mkstemp (image_path);
+ 	
+ 	if(fd == -1)
+ 		err = GPG_E(GPG_ERR_GENERAL);
+    
+ 	else {
+
+		g_unlink(image_path);
+ 		close(fd);
+ 		strcat (image_path, ".jpg");
+	    
+		photoid_load_parm = g_new0 (PhotoIdLoadParm, 1);
+		photoid_load_parm->uid = 1;
+		photoid_load_parm->num_uids = 0;
+		photoid_load_parm->list = *photoids;
+		photoid_load_parm->first = NULL;
+		photoid_load_parm->output_file = image_path;
+		
+		DEBUG_OPERATION (("PhotoIdLoad KeyID %s\n", seahorse_key_get_keyid (SEAHORSE_KEY (pkey))));
+        err = gpgmex_op_num_uids (NULL, 
+                                  seahorse_key_get_keyid (SEAHORSE_KEY (pkey)), 
+							      &(photoid_load_parm->num_uids));
+        DEBUG_OPERATION (("PhotoIDLoad Number of UIDs %i\n", photoid_load_parm->num_uids));
+        
+		if (GPG_IS_OK(err)) {
+            
+			setenv("SEAHORSE_IMAGE_FILE", image_path, 1);
+			oldpath = getenv("PATH");
+            
+            path = g_strdup_printf ("%s:%s", EXECDIR, getenv("PATH"));
+			setenv("PATH", path, 1);
+            g_free (path);
+			
+			parms = seahorse_edit_parm_new (PHOTO_ID_LOAD_START, photoid_load_action,
+							                photoid_load_transit, photoid_load_parm);
+			
+			/* generate list */
+			err = edit_key (pkey, parms, 0);
+            setenv("PATH", oldpath, 1);
+            
+			*photoids = photoid_load_parm->first;  
+		}
+ 	}
+ 	
+ 	DEBUG_OPERATION (("PhotoIDLoad Done\n"));
+ 	
+    return err;
 }

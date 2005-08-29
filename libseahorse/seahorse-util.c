@@ -775,6 +775,25 @@ seahorse_util_chooser_show_key_files (GtkWidget *dialog)
 }
     
 void
+seahorse_util_chooser_show_jpeg_files (GtkWidget *dialog)
+{
+	GtkFileFilter* filter = gtk_file_filter_new ();
+     
+    /* Filter for JPEG files, this is meant to be 
+     * used when searching for images to add as a photoid*/
+     
+    gtk_file_filter_set_name (filter, _("All JPEG files"));
+    gtk_file_filter_add_mime_type (filter, "image/jpeg");
+    gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);    
+    gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dialog), filter);
+
+    filter = gtk_file_filter_new ();
+    gtk_file_filter_set_name (filter, _("All files"));
+    gtk_file_filter_add_pattern (filter, "*");    
+    gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
+}   
+
+void
 seahorse_util_chooser_show_archive_files (GtkWidget *dialog)
 {
     GtkFileFilter* filter;
