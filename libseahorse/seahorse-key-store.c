@@ -380,16 +380,12 @@ seahorse_key_store_set (SeahorseKeyStore *skstore, SeahorseKey *skey,
     gchar *userid = seahorse_key_get_name (skey, uid);
     gboolean sec = seahorse_key_get_etype (skey) == SKEY_PRIVATE;
     
-    const gchar *keyid = seahorse_key_get_keyid (skey);
-    if (strlen(keyid) > 8)
-        keyid = keyid + 8;
-        
 	gtk_tree_store_set (GTK_TREE_STORE (skstore), iter,
         KEY_STORE_CHECK, FALSE,
         KEY_STORE_PAIR, uid == 0 ? sec : FALSE,
         KEY_STORE_STOCK_ID, (uid == 0 && sec) ? SEAHORSE_STOCK_SECRET : SEAHORSE_STOCK_KEY,
 		KEY_STORE_NAME, userid,
-		KEY_STORE_KEYID, seahorse_key_get_keyid (skey),
+		KEY_STORE_KEYID, seahorse_key_get_short_keyid (skey),
         KEY_STORE_UID, uid, -1);
     g_free (userid);
 }
