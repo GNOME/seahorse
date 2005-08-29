@@ -405,7 +405,6 @@ seahorse_op_sign_file (SeahorsePGPKey *signer, const gchar *path,
                        const gchar *spath, gpgme_error_t *err)
 {
     SeahorsePGPSource *psrc;
-    SeahorsePGPKey *pkey;
 	gpgme_data_t plain, sig;
 	gpgme_error_t error;
 
@@ -428,7 +427,7 @@ seahorse_op_sign_file (SeahorsePGPKey *signer, const gchar *path,
         g_return_if_reached ();
     }
   
-    set_signer (psrc, pkey);
+    set_signer (psrc, signer);
     
 	/* get detached signature */
     gpgme_set_textmode (psrc->gctx, FALSE);
