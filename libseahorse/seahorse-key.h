@@ -95,7 +95,7 @@ typedef enum {
 
 /* Possible key changes */
 typedef enum {
-    SKEY_CHANGE_ALL,
+    SKEY_CHANGE_ALL = 1,
 	SKEY_CHANGE_SIGNERS,
 	SKEY_CHANGE_PASS,
 	SKEY_CHANGE_TRUST,
@@ -103,7 +103,8 @@ typedef enum {
 	SKEY_CHANGE_EXPIRES,
 	SKEY_CHANGE_REVOKERS,
 	SKEY_CHANGE_UIDS,
-	SKEY_CHANGE_SUBKEYS
+	SKEY_CHANGE_SUBKEYS,
+    SKEY_CHANGE_PHOTOS
 } SeahorseKeyChange;
 
 /* Forward declaration */
@@ -156,6 +157,8 @@ void              seahorse_key_changed            (SeahorseKey        *skey,
                                                    SeahorseKeyChange  change);
 
 const gchar*      seahorse_key_get_keyid          (SeahorseKey        *skey);
+
+const gchar*      seahorse_key_get_short_keyid    (SeahorseKey        *skey);
 
 struct _SeahorseKeySource*  
                   seahorse_key_get_source         (SeahorseKey        *skey);

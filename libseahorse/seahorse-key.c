@@ -228,6 +228,20 @@ seahorse_key_get_keyid (SeahorseKey *skey)
     return skey->keyid;
 }    
 
+const gchar*      
+seahorse_key_get_short_keyid (SeahorseKey *skey)
+{
+    guint l;
+    
+	g_return_val_if_fail (skey && SEAHORSE_IS_KEY (skey), NULL);
+    
+    l = strlen (skey->keyid);
+    if (l > 8)
+        return skey->keyid + l - 8;
+    return skey->keyid;
+}
+
+
 /**
  * seahorse_key_get_source
  * @skey: The #SeahorseKey object
