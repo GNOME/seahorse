@@ -271,21 +271,14 @@ encrypt_data_common (SeahorsePGPSource *psrc, GList *keys, gpgme_data_t plain,
 /* common file encryption helper to encrypt @path to @recips using @func.
  * @keys will be released.*/
 static void
-encrypt_file_common (GList *keys, const gchar *path, const gchar *epath,
-                     EncryptFunc func, gpgme_error_t *err)
+encrypt_file_common (SeahorsePGPSource *psrc, GList *keys, const gchar *path, 
+                     const gchar *epath, EncryptFunc func, gpgme_error_t *err)
 {
-    SeahorsePGPSource *psrc;
 	gpgme_data_t plain, cipher;
 	gpgme_error_t error;
 	
 	if (err == NULL)
 		err = &error;
-
-    /* TODO: When other key types are supported we need to make sure they're
-       all from the same PGP source */
-    g_return_if_fail (keys && SEAHORSE_IS_PGP_KEY (keys->data));
-    psrc = SEAHORSE_PGP_SOURCE (seahorse_key_get_source (SEAHORSE_KEY (keys->data)));
-    g_return_if_fail (psrc != NULL && SEAHORSE_IS_PGP_SOURCE (psrc));
 
     plain = seahorse_vfs_data_create (path, SEAHORSE_VFS_READ, err);
     g_return_if_fail (plain != NULL);
@@ -306,21 +299,14 @@ encrypt_file_common (GList *keys, const gchar *path, const gchar *epath,
 /* common text encryption helper to encrypt @text to @recips using @func.
  * returns the encrypted text. */
 static gchar*
-encrypt_text_common (GList *keys, const gchar *text, EncryptFunc func, 
-                     gpgme_error_t *err)
+encrypt_text_common (SeahorsePGPSource *psrc, GList *keys, const gchar *text, 
+                     EncryptFunc func, gpgme_error_t *err)
 {
-    SeahorsePGPSource *psrc;
 	gpgme_data_t plain, cipher;
 	gpgme_error_t error;
 	
 	if (err == NULL)
 		err = &error;
-    
-    /* TODO: When other key types are supported we need to make sure they're
-       all from the same PGP source */
-    g_return_val_if_fail (keys && SEAHORSE_IS_PGP_KEY (keys->data), NULL);
-    psrc = SEAHORSE_PGP_SOURCE (seahorse_key_get_source (SEAHORSE_KEY (keys->data)));
-    g_return_val_if_fail (psrc != NULL && SEAHORSE_IS_PGP_SOURCE (psrc), NULL);
     
 	/* new data form text */
 	*err = gpgme_data_new_from_mem (&plain, text, strlen (text), TRUE);
@@ -350,7 +336,15 @@ void
 seahorse_op_encrypt_file (GList *keys, const gchar *path, const gchar *epath,
                           gpgme_error_t *err)
 {
-	return encrypt_file_common (keys, path, epath, gpgme_op_encrypt, err);
+    SeahorsePGPSource *psrc;
+    
+    /* TODO: When other key types are supported we need to make sure they're
+       all from the same PGP source */
+    g_return_if_fail (keys && SEAHORSE_IS_PGP_KEY (keys->data));
+    psrc = SEAHORSE_PGP_SOURCE (seahorse_key_get_source (SEAHORSE_KEY (keys->data)));
+    g_return_if_fail (psrc != NULL && SEAHORSE_IS_PGP_SOURCE (psrc));
+
+	return encrypt_file_common (psrc, keys, path, epath, gpgme_op_encrypt, err);
 }
 
 /**
@@ -367,20 +361,24 @@ seahorse_op_encrypt_file (GList *keys, const gchar *path, const gchar *epath,
 gchar*
 seahorse_op_encrypt_text (GList *keys, const gchar *text, gpgme_error_t *err)
 {
-	return encrypt_text_common (keys, text, gpgme_op_encrypt, err);
+    SeahorsePGPSource *psrc;
+
+    /* TODO: When other key types are supported we need to make sure they're
+       all from the same PGP source */
+    g_return_val_if_fail (keys && SEAHORSE_IS_PGP_KEY (keys->data), NULL);
+    psrc = SEAHORSE_PGP_SOURCE (seahorse_key_get_source (SEAHORSE_KEY (keys->data)));
+    g_return_val_if_fail (psrc != NULL && SEAHORSE_IS_PGP_SOURCE (psrc), NULL);
+    
+	return encrypt_text_common (psrc, keys, text, gpgme_op_encrypt, err);
 }
 
 /* Helper function to set a key pair as the signer for its keysource */
 static void
-set_signer (SeahorsePGPKey *signer)
+set_signer (SeahorsePGPSource *psrc, SeahorsePGPKey *signer)
 {
-    SeahorsePGPSource *psrc;
-    
-    psrc = SEAHORSE_PGP_SOURCE (seahorse_key_get_source (SEAHORSE_KEY (signer)));
-    g_return_if_fail (psrc != NULL && SEAHORSE_IS_PGP_SOURCE (psrc));
-    
     gpgme_signers_clear (psrc->gctx);
-    gpgme_signers_add (psrc->gctx, signer->seckey);
+    if (signer)
+        gpgme_signers_add (psrc->gctx, signer->seckey);
 }
 
 /* helper function for signing @plain with @mode. @plain will be released. */
@@ -430,7 +428,7 @@ seahorse_op_sign_file (SeahorsePGPKey *signer, const gchar *path,
         g_return_if_reached ();
     }
   
-    set_signer (pkey);
+    set_signer (psrc, pkey);
     
 	/* get detached signature */
     gpgme_set_textmode (psrc->gctx, FALSE);
@@ -469,7 +467,7 @@ seahorse_op_sign_text (SeahorsePGPKey *signer, const gchar *text,
     psrc = SEAHORSE_PGP_SOURCE (seahorse_key_get_source (SEAHORSE_KEY (signer)));
     g_return_val_if_fail (psrc != NULL && SEAHORSE_IS_PGP_SOURCE (psrc), NULL);
     
-    set_signer (signer);
+    set_signer (psrc, signer);
             
 	/* new data from text */
 	*err = gpgme_data_new_from_mem (&plain, text, strlen (text), TRUE);
@@ -503,11 +501,19 @@ void
 seahorse_op_encrypt_sign_file (GList *keys, SeahorsePGPKey *signer, const gchar *path, 
                                const gchar *epath, gpgme_error_t *err)
 {
+    SeahorsePGPSource *psrc;
+    
     g_return_if_fail (signer && SEAHORSE_IS_PGP_KEY (signer));
     g_return_if_fail (seahorse_key_get_flags (SEAHORSE_KEY (signer)) & SKEY_FLAG_CAN_SIGN);
 
-    set_signer (signer);
-	encrypt_file_common (keys, path, epath, gpgme_op_encrypt_sign, err);
+    /* TODO: When other key types are supported we need to make sure they're
+       all from the same PGP source */
+    g_return_if_fail (keys && SEAHORSE_IS_PGP_KEY (keys->data));
+    psrc = SEAHORSE_PGP_SOURCE (seahorse_key_get_source (SEAHORSE_KEY (keys->data)));
+    g_return_if_fail (psrc != NULL && SEAHORSE_IS_PGP_SOURCE (psrc));
+
+    set_signer (psrc, signer);
+	encrypt_file_common (psrc, keys, path, epath, gpgme_op_encrypt_sign, err);
 }
 
 /**
@@ -527,11 +533,19 @@ gchar*
 seahorse_op_encrypt_sign_text (GList *keys, SeahorsePGPKey *signer, 
                                const gchar *text, gpgme_error_t *err)
 {
+    SeahorsePGPSource *psrc;
+    
     g_return_val_if_fail (signer && SEAHORSE_IS_PGP_KEY (signer), NULL);
     g_return_val_if_fail (seahorse_key_get_flags (SEAHORSE_KEY (signer)) & SKEY_FLAG_CAN_SIGN, NULL);
 
-    set_signer (signer);
-	return encrypt_text_common (keys, text, gpgme_op_encrypt_sign, err);
+    /* TODO: When other key types are supported we need to make sure they're
+       all from the same PGP source */
+    g_return_val_if_fail (keys && SEAHORSE_IS_PGP_KEY (keys->data), NULL);
+    psrc = SEAHORSE_PGP_SOURCE (seahorse_key_get_source (SEAHORSE_KEY (keys->data)));
+    g_return_val_if_fail (psrc != NULL && SEAHORSE_IS_PGP_SOURCE (psrc), NULL);
+
+    set_signer (psrc, signer);
+	return encrypt_text_common (psrc, keys, text, gpgme_op_encrypt_sign, err);
 }
 
 /**
