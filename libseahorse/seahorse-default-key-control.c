@@ -232,7 +232,7 @@ seahorse_default_key_control_select_id (SeahorseDefaultKeyControl *sdkc,
 SeahorseKey*
 seahorse_default_key_control_active (SeahorseDefaultKeyControl *sdkc)
 {
-    SeahorseKey *secret = NULL;
+    SeahorseKey *skey = NULL;
     GtkContainer *menu;
     GList *l, *children;
     guint i;
@@ -246,13 +246,13 @@ seahorse_default_key_control_active (SeahorseDefaultKeyControl *sdkc)
     
     for (i = 0, l = children; l != NULL; i++, l = g_list_next (l)) {
         if (i == gtk_option_menu_get_history (GTK_OPTION_MENU (sdkc))) {
-           secret = SEAHORSE_KEY (g_object_get_data (l->data, "key"));
+           skey = SEAHORSE_KEY (g_object_get_data (l->data, "key"));
            break;
         }
     }
 
     g_list_free (children);
-    return secret;
+    return skey;
 }
 
 const gchar*                
