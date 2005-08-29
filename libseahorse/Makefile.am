@@ -74,6 +74,7 @@ libseahorse_internal_la_SOURCES = \
     seahorse-dns-sd.c seahorse-dns-sd.h \
     eggtrayicon.c eggtrayicon.h \
     seahorse-gtkstock.c seahorse-gtkstock.h \
+    seahorse-notification.c \
 	$(BUILT_SOURCES) \
 	$(AGENT_SRCS) \
 	$(KEYSERVER_SRCS) \
@@ -95,7 +96,6 @@ glade_DATA = \
 	seahorse-passphrase.glade \
 	seahorse-recipients.glade \
     seahorse-signer.glade \
-	seahorse-signatures.glade \
 	seahorse-prefs.glade \
     seahorse-add-keyserver.glade \
 	seahorse-progress.glade

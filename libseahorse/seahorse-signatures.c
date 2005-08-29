@@ -20,6 +20,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include "config.h"
 #include <gnome.h>
 
 #include "seahorse-libdialogs.h"
@@ -27,114 +28,99 @@
 #include "seahorse-util.h"
 #include "seahorse-pgp-key.h"
 
-static gchar*
-userid_for_fingerprint (const gchar *fingerprint)
+/* Note that we can't use GTK stock here, as we hand these icons off 
+   to other processes in the case of notifications */
+#define ICON_PREFIX     DATA_DIR "/pixmaps/seahorse/"
+
+void
+seahorse_signatures_notify (const gchar* data, gpgme_verify_result_t status)
 {
     SeahorseKey *key;
-    gchar *userid = NULL;
+    gchar *t, *userid = NULL;
+    gboolean ok = FALSE;
+    const gchar *icon = NULL;
+    const gchar *fingerprint;
+    gchar *summary;
+    gchar *body;
+    guint l;    
+    
+    fingerprint = status->signatures->fpr;
+    l = strlen (fingerprint);
+    if (l >= 16)
+        fingerprint += l - 16;
     
     /* TODO: Eventually we need to extend this to lookup keys remotely */
     key = seahorse_context_find_key (SCTX_APP (), SKEY_PGP, SKEY_LOC_LOCAL, fingerprint);
 
     if (key != NULL) {
-        userid = seahorse_key_get_display_name (key);
-
-        /* Fix up the id, so it doesn't think it's markup */
-        g_strdelimit (userid, "<", '(');
-        g_strdelimit (userid, ">", ')');
-        
-    } else 
-        userid = g_strdup (_("[Unknown Key]"));
-            
-    return userid;
-}
-    
-static gchar* 
-generate_sig_text (const gchar* path, gpgme_verify_result_t status)
-{
-    gboolean good = FALSE;
-    const gchar *t;
-    gchar *msg;
-    gchar *date;
-    gchar *userid;
-     
-    switch (gpgme_err_code (status->signatures->status))  {
-    case GPG_ERR_KEY_EXPIRED:
-        t = _("%s: Good signature from (<b>expired</b>) '%s' on %s");
-        good = TRUE;
-        break;
-    case GPG_ERR_SIG_EXPIRED:
-        t = _("%s: <b>Expired</b> signature from '%s' on %s");
-        good = TRUE;
-        break;        
-    case GPG_ERR_CERT_REVOKED:
-        t = _("%s: Good signature from (<b>revoked</b>) '%s' on %s");
-        good = TRUE;
-        break;
-    case GPG_ERR_NO_ERROR:
-        t = _("%s: Good signature from '%s' on %s");
-        good = TRUE;
-        break;
-    case GPG_ERR_NO_PUBKEY:
-        t = _("%s: Signing key not in key ring");
-        break;
-    case GPG_ERR_BAD_SIGNATURE:
-        t = _("%s: <b>Bad</b> signature");
-        break;
-    case GPG_ERR_NO_DATA:
-        t = _("%s: Not a signature");
-        break;
-    default:
-        t = _("%s: Verification error");
-        break;
-    };
-
-    path = seahorse_util_uri_get_last (path);
-
-    if (good) {
-        date = seahorse_util_get_date_string (status->signatures->timestamp);
-        userid = userid_for_fingerprint (status->signatures->fpr);
-        
-        msg = g_strdup_printf (t, path, userid, date);
-        
-        g_free (date);
-        g_free (userid);
+        t = seahorse_key_get_simple_name (key);
+        userid = g_strdup_printf ("%s (id: %s)", t, seahorse_key_get_short_keyid (key));
+        g_free (t);
     } else {
-        msg = g_strdup_printf (t, path);
+        userid = g_strdup (fingerprint);
+        icon = ICON_PREFIX "seahorse-unknown.png";
     }
     
-    return msg;
+    switch (gpgme_err_code (status->signatures->status))  {
+    case GPG_ERR_KEY_EXPIRED:
+        body = _("Signed by <i>%s <b>Expired</b></i> on %s.");
+        summary = _("%s: Invalid Signature");
+        icon = ICON_PREFIX "seahorse-bad.png";
+        ok = TRUE;
+        break;
+    case GPG_ERR_SIG_EXPIRED:
+        body = _("Signed by <i>%s</i> on %s <b>Expired</b>.");
+        summary = _("%s: Expired Signature");
+        icon = ICON_PREFIX "seahorse-bad.png";
+        ok = TRUE;
+        break;        
+    case GPG_ERR_CERT_REVOKED:
+        body = _("Signed by <i>%s <b>Revoked</b></i> on %s.");
+        summary = _("%s: Invalid Signature");
+        icon = ICON_PREFIX "seahorse-bad.png";
+        ok = TRUE;
+        break;
+    case GPG_ERR_NO_ERROR:
+        body = _("Signed by <i>%s</i> on %s.");
+        summary = _("%s: Good Signature");
+        if (icon == NULL)
+            icon = ICON_PREFIX "seahorse-good.png";
+        ok = TRUE;
+        break;
+    case GPG_ERR_NO_PUBKEY:
+        body = _("Signing key not in keyring.");
+        summary = _("%s: Unknown Signature");
+        icon = ICON_PREFIX "seahorse-unknown.png";
+        break;
+    case GPG_ERR_BAD_SIGNATURE:
+        body = _("Bad or forged signature. The signed data was modified.");
+        summary = _("%s: Bad Signature");
+        icon = ICON_PREFIX "seahorse-bad.png";
+        break;
+    case GPG_ERR_NO_DATA:
+        return;
+    default:
+        if (!GPG_IS_OK (status->signatures->status)) 
+            seahorse_util_handle_gpgme (status->signatures->status, 
+                                        _("Couldn't verify signature."));
+        return;
+    };
+
+    data = seahorse_util_uri_get_last (data);
+
+    if (ok) {
+        gchar *date = seahorse_util_get_date_string (status->signatures->timestamp);
+        body = g_markup_printf_escaped (body, userid, date);
+        g_free (date);
+    } else {
+        body = g_strdup (body);
+    }
+    
+    summary = g_strdup_printf (summary, data); 
+    seahorse_notification_display (summary, body, !ok, icon);
+
+    g_free (summary);
+    g_free (body);
+    g_free (userid);
 }    
 
-void
-seahorse_signatures_add (SeahorseWidget *swidget, const gchar* data, 
-                         gpgme_verify_result_t status)
-{
-    GtkWidget *label;
-    gchar* msg;
-    gchar* text;
-    
-    label = glade_xml_get_widget (swidget->xml, "status");
-    msg = generate_sig_text (data, status);
-    
-    text = g_strconcat (gtk_label_get_label (GTK_LABEL (label)), msg, "\n", NULL);
-    gtk_label_set_markup (GTK_LABEL (label), text);
-    
-    g_free (text);
-    g_free (msg);
-}
-
-SeahorseWidget* 
-seahorse_signatures_new ()
-{
-	return seahorse_widget_new_allow_multiple ("signatures");
-}
-
-void
-seahorse_signatures_run (SeahorseWidget *swidget)
-{
-    GtkWidget *w; 
-    w = glade_xml_get_widget (swidget->xml, "signatures");
-    seahorse_widget_show (swidget);
-    gtk_dialog_run (GTK_DIALOG (w));
-}    

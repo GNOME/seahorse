@@ -488,11 +488,18 @@ seahorse_context_find_key (SeahorseContext *sctx, GQuark ktype,
     SeahorseKeyPredicate kp;
     SeahorseKey *skey = NULL;
     KeyMatcher km;
-
+    guint l;
+    
     g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), NULL);
 
     memset (&kp, 0, sizeof (kp));
     memset (&km, 0, sizeof (km));
+    
+    if (keyid) {
+        l = strlen (keyid);
+        if (l >= 16)
+            keyid += l - 16;
+    }
     
     km.kp = &kp;
     km.many = FALSE;

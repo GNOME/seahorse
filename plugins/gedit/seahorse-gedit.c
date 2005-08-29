@@ -395,7 +395,6 @@ decrypt_cb (BonoboUIComponent * uic, gpointer user_data,
     guint blocks = 0;           /* Number of blocks processed */
     guint keys = 0;             /* Number of keys imported */
 
-    SeahorseWidget *sigs = NULL;    /* Signature window */
     gpgme_verify_result_t status;   /* Signature status of last operation */
     
     gedit_debug (DEBUG_PLUGINS, "");
@@ -491,11 +490,7 @@ decrypt_cb (BonoboUIComponent * uic, gpointer user_data,
             if(status && status->signatures) {
                 gchar *t;
                 
-                if(!sigs) 
-                    sigs = seahorse_signatures_new ();
-                    
-                t = g_strdup_printf (_("Block %d"), blocks + 1);
-                seahorse_signatures_add (sigs, t, status);
+                seahorse_signatures_notify ("Text", status);
                 g_free (t);
             }
             
@@ -512,9 +507,6 @@ decrypt_cb (BonoboUIComponent * uic, gpointer user_data,
         gedit_utils_flash_va (ngettext("Imported %d key", "Imported %d keys", keys), keys);
 
     g_free (buffer);
-    
-    if (sigs)
-        seahorse_signatures_run (sigs);
 }
 
 /* Callback for the sign menu item */

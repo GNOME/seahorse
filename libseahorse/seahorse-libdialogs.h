@@ -21,7 +21,7 @@
  */
 
 /**
- * Constructors for various dialogs used in libseahorse.
+ * Various UI elements and dialogs used in libseahorse.
  */
  
 #ifndef __SEAHORSE_LIBDIALOGS_H__
@@ -46,12 +46,13 @@ GList*          seahorse_recipients_get     (SeahorsePGPKey **signkey);
 
 SeahorsePGPKey* seahorse_signer_get         (void);
 
-SeahorseWidget*	seahorse_signatures_new	    (void);
+void            seahorse_signatures_notify    (const gchar* data, 
+                                               gpgme_verify_result_t status);
 
-void            seahorse_signatures_add     (SeahorseWidget *widget,
-                                             const gchar* data, 
-                                             gpgme_verify_result_t status);
-                            
-void            seahorse_signatures_run     (SeahorseWidget *swidget);
 
+void            seahorse_notification_display (const gchar *summary, const gchar* body, 
+                                               gboolean urgent, const gchar *icon);
+  
+gboolean        seahorse_notification_have    ();
+                                               
 #endif /* __SEAHORSE_LIBDIALOGS_H__ */

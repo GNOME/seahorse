@@ -282,7 +282,6 @@ do_decrypt (const gchar **paths)
 {
     SeahorsePGPSource *psrc;
     gpgme_verify_result_t status = NULL;
-    SeahorseWidget *signatures = NULL;
     gpgme_error_t err;
     gchar **uris;
     gchar **u;
@@ -311,18 +310,13 @@ do_decrypt (const gchar **paths)
         }
     
         if(status && status->signatures) {
-            if(!signatures)
-                signatures = seahorse_signatures_new ();
-            seahorse_signatures_add (signatures, new_path, status);
+            seahorse_signatures_notify (new_path, status);
         }
 
         g_free (new_path);
     }
     
     g_strfreev (uris);    
-    
-    if (ret == 0 && signatures)
-        seahorse_signatures_run (signatures);
         
     return ret;
 }
@@ -333,7 +327,6 @@ do_verify (const gchar **paths)
 {
     SeahorsePGPSource *psrc;
     gpgme_verify_result_t status = NULL;
-    SeahorseWidget *signatures = NULL;
     gchar *original = NULL;
     gpgme_error_t err;
     gchar **uris;
@@ -381,6 +374,12 @@ do_verify (const gchar **paths)
         
         if (original) {
             seahorse_op_verify_file (psrc, *u, original, &status, &err);
+
+            if (GPG_IS_OK (err)) {
+                if (status && status->signatures)
+                    seahorse_signatures_notify (original, status);
+            }
+            
             g_free (original);
 
             if (!GPG_IS_OK (err)) {
@@ -390,20 +389,24 @@ do_verify (const gchar **paths)
                 break;
             }
             
-            if (status && status->signatures) {
-                if(!signatures)
-                    signatures = seahorse_signatures_new ();
-                seahorse_signatures_add (signatures, *u, status);
-            }
         }
     }
     
     g_strfreev (uris);    
     
-    if (ret == 0 && signatures)
-        seahorse_signatures_run (signatures);
-        
     return ret;
+}
+
+/* Checks to see if any dialogs are open when we're called  
+   as a command line app. Once all are gone, closes app */
+static gboolean
+check_dialogs (gpointer dummy)
+{
+    if(seahorse_notification_have ())
+        return TRUE;
+
+    gtk_main_quit ();
+    return FALSE;
 }
 
 /* Initializes context and preferences, then loads key manager */
@@ -481,6 +484,9 @@ main (int argc, char **argv)
                 
             g_strfreev (uris);
         }
+        
+        g_idle_add_full (G_PRIORITY_LOW, (GSourceFunc)check_dialogs, NULL, NULL);
+        gtk_main ();
 
     } else { 
         win = seahorse_key_manager_show (op);
