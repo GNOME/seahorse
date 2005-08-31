@@ -2262,6 +2262,7 @@ typedef enum {
     PHOTO_ID_LOAD_START,
     PHOTO_ID_LOAD_SELECT,
     PHOTO_ID_LOAD_OUTPUT_IMAGE,
+    PHOTO_ID_LOAD_DESELECT,
     PHOTO_ID_LOAD_QUIT,
     PHOTO_ID_LOAD_ERROR
 } PhotoIdLoadState;
@@ -2278,6 +2279,9 @@ photoid_load_action (guint state, gpointer data, int fd)
 	        break;
 	    case PHOTO_ID_LOAD_OUTPUT_IMAGE:
             PRINT ((fd, "showphoto"));
+	        break;
+	    case PHOTO_ID_LOAD_DESELECT:
+	        PRINTF ((fd, "uid %d", parm->uid));            
 	        break;
 	    case PHOTO_ID_LOAD_QUIT:
             PRINT ((fd, QUIT));
@@ -2355,7 +2359,7 @@ photoid_load_transit (guint current_state, gpgme_status_code_t status,
                 }
             }
             
-            g_unlink (parm->output_file);
+            DEBUG_OPERATION(("Unlink Image: %i\n", g_unlink (parm->output_file)));
         
             if (parm->list->photo == NULL) {
                 /* Load a 'missing' icon */
@@ -2368,7 +2372,16 @@ photoid_load_transit (guint current_state, gpgme_status_code_t status,
                 }
             }
         }
-
+    
+        if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT)) {
+			next_state = PHOTO_ID_LOAD_DESELECT;
+		} else {
+            *err = GPG_E (GPG_ERR_GENERAL);
+            g_return_val_if_reached (PHOTO_ID_LOAD_ERROR);
+        }
+        
+        break;
+    case PHOTO_ID_LOAD_DESELECT:
     	if (parm->uid < parm->num_uids) {
     		parm->uid = parm->uid + 1;
     		DEBUG_OPERATION (("PhotoIDLoad Next UID %i\n", parm->uid));
