@@ -2359,7 +2359,7 @@ photoid_load_transit (guint current_state, gpgme_status_code_t status,
                 }
             }
             
-            DEBUG_OPERATION(("Unlink Image: %i\n", g_unlink (parm->output_file)));
+            g_unlink (parm->output_file);
         
             if (parm->list->photo == NULL) {
                 /* Load a 'missing' icon */
