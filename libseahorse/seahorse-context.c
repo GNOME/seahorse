@@ -665,7 +665,7 @@ seahorse_context_load_remote_keys (SeahorseContext *sctx, const gchar *search)
             continue;
 
         if (servers) {
-            g_object_get (ks, "keyserver", &uri, NULL);
+            g_object_get (ks, "uri", &uri, NULL);
             if (!g_hash_table_lookup (servers, uri)) {
                 g_free (uri);
                 continue;
