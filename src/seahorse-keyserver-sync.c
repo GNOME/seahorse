@@ -43,8 +43,6 @@ sync_import_complete (SeahorseOperation *op, SeahorseKeySource *sksrc)
         seahorse_util_handle_error (err, _("Couldn't publish keys to server: %s"), 
                                     seahorse_gconf_get_string (PUBLISH_TO_KEY));
     }    
-    
-    g_object_unref (sksrc);
 }
 
 static void
@@ -60,7 +58,9 @@ sync_export_complete (SeahorseOperation *op, SeahorseKeySource *sksrc)
         g_return_if_fail (data != NULL);
 
         /* Now import it into the local key source */
-        g_object_get (sksrc, "local-source", &lsrc, NULL);
+        lsrc = seahorse_context_find_key_source (SCTX_APP (), SKEY_PGP, SKEY_LOC_LOCAL);
+        g_return_if_fail (lsrc);
+        
         if (!seahorse_key_source_import_sync (lsrc, data, &err))
             seahorse_util_handle_error (err, "Couldn't import keys");
         
@@ -75,8 +75,6 @@ sync_export_complete (SeahorseOperation *op, SeahorseKeySource *sksrc)
                                     keyserver);
         g_free (keyserver);
     }    
-    
-    g_object_unref (sksrc);
 }
 
 static void
@@ -93,11 +91,14 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
     GList *keys;
     
     keys = (GList*)g_object_get_data (G_OBJECT (swidget), "publish-keys");
+    keys = g_list_copy (keys);
     
     seahorse_widget_destroy (swidget);
     
     if (!keys)
         return;
+    
+    g_return_if_fail (SEAHORSE_IS_KEY (keys->data));
 
     /* This should be the default key source */
     lsksrc = seahorse_context_find_key_source (SCTX_APP(), SKEY_PGP, SKEY_LOC_LOCAL);
@@ -153,6 +154,7 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
         
     }
 
+    g_list_free (keys);
     g_free (keyserver);
     
     /* Show the progress window if necessary */
@@ -242,7 +244,10 @@ seahorse_keyserver_sync_show (GList *keys)
     g_signal_connect (win, "destroy", G_CALLBACK (unhook_notification), 
                       GINT_TO_POINTER (notify_id));
 
-    g_object_set_data (G_OBJECT (swidget), "publish-keys", keys);
+    keys = g_list_copy (keys);
+    g_return_val_if_fail (SEAHORSE_IS_KEY (keys->data), win);    
+    g_object_set_data_full (G_OBJECT (swidget), "publish-keys", keys, 
+                            (GDestroyNotify)g_list_free);
     
 	glade_xml_signal_connect_data (swidget->xml, "ok_clicked",
 		                           G_CALLBACK (ok_clicked), swidget);
