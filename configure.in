@@ -97,7 +97,7 @@ if test $GPGME_CONFIG != "failed" ; then
 		 sed 's/\([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\).*/\3/'`
 
 	if test "$major" -eq "$req_major"; then
-	   if test "$minor" -eq "$req_minor"; then
+	   if test "$minor" -ge "$req_minor"; then
 	     if test "$micro" -ge "$req_micro"; then
 	       ok="yes"
 	     fi
