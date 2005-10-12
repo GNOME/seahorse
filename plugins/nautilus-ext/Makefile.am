@@ -15,6 +15,5 @@ libnautilus_seahorse_la_SOURCES =     \
         seahorse-nautilus.h           \
         seahorse-nautilus-module.c
 
-libnautilus_seahorse_la_CDFLAGS = 
-libnautilus_seahorse_la_LDFLAGS = -module -avoid-version
+libnautilus_seahorse_la_LDFLAGS = -module -avoid-version -no-undefined
 libnautilus_seahorse_la_LIBADD  = $(NAUTILUS_LIBS)
