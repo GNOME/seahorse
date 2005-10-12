@@ -34,4 +34,4 @@ CLEANFILES = *.gladep* *.bak \
 	$(desktop_DATA)
 	
 install-exec-hook:
-	chmod u+s $(bindir)/seahorse-agent
+	chmod u+s $(DESTDIR)/$(bindir)/seahorse-agent
