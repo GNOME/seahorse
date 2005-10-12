@@ -137,6 +137,13 @@ void
 seahorse_util_handle_gpgme (gpgme_error_t err, const char* desc, ...)
 {
     gchar *t = NULL;
+	
+	switch (gpgme_err_code(err)) {
+	case GPG_ERR_CANCELED:
+	case GPG_ERR_NO_ERROR:
+	case GPG_ERR_ECANCELED:
+		return;
+	}
   
     va_list ap;
     va_start(ap, desc);
