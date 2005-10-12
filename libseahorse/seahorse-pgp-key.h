@@ -84,7 +84,7 @@ gpgme_subkey_t  seahorse_pgp_key_get_nth_subkey       (SeahorsePGPKey   *pkey,
 guint           seahorse_pgp_key_get_num_userids      (SeahorsePGPKey   *pkey);
 
 gpgme_user_id_t seahorse_pgp_key_get_nth_userid       (SeahorsePGPKey   *pkey,
-                                                       guint            index);                            
+                                                       guint            index);
 
 gchar*          seahorse_pgp_key_get_userid	          (SeahorsePGPKey   *pkey,
                                                        guint            index);
@@ -99,7 +99,7 @@ gchar*          seahorse_pgp_key_get_userid_comment   (SeahorsePGPKey   *pkey,
                                                        guint            index);
 
 const gchar*		seahorse_pgp_key_get_algo 	      (SeahorsePGPKey   *pkey,
-						       guint		index);
+						                               guint		    index);
 
 const gchar*	seahorse_pgp_key_get_id               (gpgme_key_t      key,
                                                        guint            index);
@@ -112,4 +112,12 @@ gpgmex_photo_id_t seahorse_pgp_key_get_nth_photoid    (SeahorsePGPKey   *pkey,
 gpgmex_photo_id_t seahorse_pgp_key_get_photoid_n      (SeahorsePGPKey   *pkey,
                                                        guint            uid);
 
+/* 
+ * This function is necessary because the uid stored in a gpgme_user_id_t
+ * struct is only usable with gpgme functions.  Problems will be caused if 
+ * that uid is used with functions found in seahorse-pgp-key-op.h.  This 
+ * function is only to be called with uids from gpgme_user_id_t structs.
+ */
+guint           seahorse_pgp_key_get_actual_uid       (SeahorsePGPKey   *pkey,
+                                                       guint            uid);
 #endif /* __SEAHORSE_KEY_H__ */

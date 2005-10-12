@@ -464,12 +464,13 @@ seahorse_pgp_key_op_sign (SeahorsePGPKey *pkey, const guint index,
 	SignParm *sign_parm;
 	SeahorseEditParm *parms;
     gpgme_error_t err;
+	guint real_index = seahorse_pgp_key_get_actual_uid(pkey, index);
 	
 	g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (pkey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
-	g_return_val_if_fail (index <= seahorse_pgp_key_get_num_userids (pkey), GPG_E (GPG_ERR_INV_VALUE));
+	g_return_val_if_fail (real_index <= (seahorse_pgp_key_get_num_userids (pkey) + seahorse_pgp_key_get_num_photoids (pkey)), GPG_E (GPG_ERR_INV_VALUE));
 	
 	sign_parm = g_new (SignParm, 1);
-	sign_parm->index = index;
+	sign_parm->index = real_index;
 	sign_parm->expire = ((options & SIGN_EXPIRES) != 0);
 	sign_parm->check = check;
 	sign_parm->command = "sign";
@@ -1895,11 +1896,12 @@ seahorse_pgp_key_op_primary_uid (SeahorsePGPKey *pkey, const guint index)
     PrimaryParm *pri_parm;
     SeahorseEditParm *parms;
     gpgme_user_id_t uid;
- 
+    guint real_index = seahorse_pgp_key_get_actual_uid(pkey, index);
+    
     g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (pkey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
     
     /* Check index range */
-    g_return_val_if_fail (index >= 1 && index <= seahorse_pgp_key_get_num_userids (pkey), GPG_E (GPG_ERR_INV_VALUE));
+    g_return_val_if_fail (real_index >= 1 && real_index <= (seahorse_pgp_key_get_num_userids (pkey) + seahorse_pgp_key_get_num_photoids(pkey)), GPG_E (GPG_ERR_INV_VALUE));
 
     /* Make sure not revoked */
     uid = seahorse_pgp_key_get_nth_userid (pkey, index - 1);
@@ -1907,7 +1909,7 @@ seahorse_pgp_key_op_primary_uid (SeahorsePGPKey *pkey, const guint index)
                             GPG_E (GPG_ERR_INV_VALUE));
   
     pri_parm = g_new0 (PrimaryParm, 1);
-    pri_parm->index = index;
+    pri_parm->index = real_index;
    
     parms = seahorse_edit_parm_new (PRIMARY_START, primary_action,
                 primary_transit, pri_parm);
@@ -2045,11 +2047,13 @@ seahorse_pgp_key_op_del_uid (SeahorsePGPKey *pkey, const guint index)
     DelUidParm *del_uid_parm;
     SeahorseEditParm *parms;
     gpgme_user_id_t uid;
+    guint real_index = seahorse_pgp_key_get_actual_uid(pkey, index);
  
     g_return_val_if_fail (SEAHORSE_IS_KEY (pkey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
     
     /* Check index range */
-    g_return_val_if_fail (index >= 1 && index <= seahorse_pgp_key_get_num_userids (pkey), GPG_E (GPG_ERR_INV_VALUE));
+    DEBUG_OPERATION(("Del UID: uid %i\n", index));
+    g_return_val_if_fail (real_index >= 1 && real_index <= (seahorse_pgp_key_get_num_userids (pkey) + seahorse_pgp_key_get_num_photoids(pkey)), GPG_E (GPG_ERR_INV_VALUE));
 
     /* Make sure not revoked */
     uid = seahorse_pgp_key_get_nth_userid (pkey, index - 1);
@@ -2057,7 +2061,7 @@ seahorse_pgp_key_op_del_uid (SeahorsePGPKey *pkey, const guint index)
                             GPG_E (GPG_ERR_INV_VALUE));
   
     del_uid_parm = g_new0 (DelUidParm, 1);
-    del_uid_parm->index = index;
+    del_uid_parm->index = real_index;
    
     parms = seahorse_edit_parm_new (DEL_UID_START, del_uid_action,
                 del_uid_transit, del_uid_parm);
@@ -2492,4 +2496,22 @@ seahorse_pgp_key_op_photoid_load (SeahorsePGPKey *pkey, gpgmex_photo_id_t *photo
  	DEBUG_OPERATION (("PhotoIDLoad Done\n"));
  	
     return err;
+}
+
+gpgme_error_t   
+seahorse_pgp_key_op_photoid_primary (SeahorsePGPKey *pkey, const guint index)
+{
+    PrimaryParm *pri_parm;
+    SeahorseEditParm *parms;
+    gpgme_user_id_t uid;
+ 
+    g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (pkey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
+  
+    pri_parm = g_new0 (PrimaryParm, 1);
+    pri_parm->index = index;
+   
+    parms = seahorse_edit_parm_new (PRIMARY_START, primary_action,
+                primary_transit, pri_parm);
+ 
+    return edit_key (pkey, parms, SKEY_CHANGE_PHOTOS);    
 }

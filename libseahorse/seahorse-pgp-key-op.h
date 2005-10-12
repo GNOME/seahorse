@@ -167,5 +167,8 @@ gpgme_error_t  seahorse_pgp_key_op_photoid_delete   (SeahorsePGPKey *pkey,
  
 gpgme_error_t  seahorse_pgp_key_op_photoid_load     (SeahorsePGPKey *pkey,
                                                      gpgmex_photo_id_t *photoids);
-                             							 
+
+gpgme_error_t  seahorse_pgp_key_op_photoid_primary (SeahorsePGPKey *pkey, 
+                                                    const guint index);
+
 #endif /* __SEAHORSE_PGP_KEY_OP_H__ */

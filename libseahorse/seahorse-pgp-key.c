@@ -646,3 +646,46 @@ seahorse_pgp_key_get_photoid_n      (SeahorsePGPKey   *pkey,
         
     return photoid;
 }
+
+/* 
+ * This function is necessary because the uid stored in a gpgme_user_id_t
+ * struct is only usable with gpgme functions.  Problems will be caused if 
+ * that uid is used with functions found in seahorse-pgp-key-op.h.  This 
+ * function is only to be called with uids from gpgme_user_id_t structs.
+ */
+guint 
+seahorse_pgp_key_get_actual_uid       (SeahorsePGPKey   *pkey,
+                                       guint            uid)
+{
+    guint num_uids, num_photoids, uids, uid_count, i;
+    gpgmex_photo_id_t photoid;
+    gchar *ids;
+    
+    g_return_val_if_fail (pkey != NULL && SEAHORSE_IS_PGP_KEY (pkey), 0);
+
+    num_uids = seahorse_pgp_key_get_num_userids(pkey);
+    num_photoids = seahorse_pgp_key_get_num_photoids(pkey);
+    uids = num_uids + num_photoids;
+
+    ids = g_malloc0(uids + 1);
+    
+    photoid = pkey->photoids;
+    while (photoid != NULL){
+        ids[photoid->uid - 1] = 'x';
+        photoid = photoid->next;
+    }
+    
+    uid_count = 0;
+    
+    for(i = 0; i < uids; i++){
+        if (ids[i] == '\0'){
+            uid_count++;
+           
+            if (uid == uid_count)
+                break;
+        }
+    }
+    
+    g_free(ids);
+    return i + 1;
+}
