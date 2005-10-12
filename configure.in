@@ -432,6 +432,13 @@ else
 
         SEAHORSE_CFLAGS="$SEAHORSE_CFLAGS $DBUS_CFLAGS"
         SEAHORSE_LIBS="$SEAHORSE_LIBS $DBUS_LIBS"
+        
+        PKG_CHECK_MODULES(LIBCRYPTUI, gtk+-2.0 >= 2.4.0)
+        LIBCRYPTUI_CFLAGS="$LIBCRYPTUI_CFLAGS $DBUS_CFLAGS"
+        LIBCRYPTUI_LIBS="$LIBCRYPTUI_LIBS $DBUS_LIBS" 
+        
+        AC_SUBST(LIBCRYPTUI_CFLAGS)
+        AC_SUBST(LIBCRYPTUI_LIBS)
     fi
 fi
 
@@ -525,6 +532,8 @@ dnl ******************************
 AC_OUTPUT([
 Makefile
 seahorse.spec
+libcryptui/Makefile
+libcryptui/tests/Makefile
 libseahorse/Makefile
 bonobo/Makefile
 po/Makefile.in
@@ -552,6 +561,7 @@ Keyserver Support:       $with_keyserver
   LDAP:                  $with_ldap
   HKP:                   $enable_hkp
 DBUS Support:            $enable_dbus
+  libcryptui:            $enable_dbus
 Plugins: 
   Seahorse Agent:        $enable_agent
   GEdit:                 $enable_gedit

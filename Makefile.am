@@ -12,6 +12,12 @@ else
 NAUTILUS_DIR = 
 endif
 
+if WITH_DBUS
+DBUS_DIR = libcryptui
+else
+DBUS_DIR = 
+endif
+
 SUBDIRS = libseahorse \
           src \
           po \
@@ -19,6 +25,7 @@ SUBDIRS = libseahorse \
           help \
           pixmaps \
           plugins \
+          $(DBUS_DIR) \
           $(NAUTILUS_DIR) \
           $(AGENT_DIR) \
           daemon 
