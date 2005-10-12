@@ -15,6 +15,9 @@ INCLUDES = -I$(top_builddir) \
 
 lib_LTLIBRARIES = libseahorse-internal.la
 
+libseahorse_internal_la_LDFLAGS = -no-undefined
+libseahorse_internal_la_LIBADD = $(SEAHORSE_LIBS)
+
 BUILT_SOURCES = \
 	seahorse-marshal.c seahorse-marshal.h
 

@@ -25,7 +25,35 @@ AC_CHECK_FUNCS(mlock)
 PKG_CHECK_MODULES(SEAHORSE, libgnomeui-2.0 libglade-2.0 gconf-2.0
 			      gtk+-2.0 >= 2.4.0 gnome-vfs-2.0)
 
-PLUGIN_LIBTOOL_FLAGS="-module -avoid-version"
+AC_MSG_CHECKING([for some Win32 platform])
+case "$host" in
+  *-*-cygwin*|*-*-mingw*)
+    platform_win32=yes
+    ;;
+  *)
+    platform_win32=no
+    ;;
+esac
+AC_MSG_RESULT([$platform_win32])
+AM_CONDITIONAL(PLATFORM_WIN32, test "$platform_win32" = "yes")
+
+AC_MSG_CHECKING([for native Win32])
+case "$host" in
+  *-*-mingw*)
+    os_win32=yes
+    ;;
+  *)
+    os_win32=no
+    ;;
+esac
+AC_MSG_RESULT([$os_win32])
+AM_CONDITIONAL(OS_WIN32, test "$os_win32" = "yes")
+
+if test "$platform_win32" = "yes" ; then
+	PLUGIN_LIBTOOL_FLAGS="-module -avoid-version -no-undefined"
+else
+	PLUGIN_LIBTOOL_FLAGS="-module -avoid-version"
+fi
 AC_SUBST(PLUGIN_LIBTOOL_FLAGS)
 
 dnl *********************
@@ -114,7 +142,7 @@ if test $GPGME_CONFIG != "failed" ; then
 		 sed 's/\([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\).*/\3/'`
 
 	if test "$major" -eq "$req_major"; then
-	   if test "$minor" -eq "$req_minor"; then
+	   if test "$minor" -ge "$req_minor"; then
 	     if test "$micro" -ge "$req_micro"; then
 	       ok="yes"
 	     fi
@@ -268,11 +296,13 @@ else
 	echo "enabling gedit plugin..."
 	echo "checking for supported versions of gedit..."
 	
-	PKG_CHECK_MODULES(GEDIT, gedit-2.10 >= 2.9.0, , 
-    	[PKG_CHECK_MODULES(GEDIT, gedit-2.8 >= 2.8.0, , 
-	    	[PKG_CHECK_MODULES(GEDIT, gedit-2.6 >= 2.6.0)])])
+	PKG_CHECK_MODULES(GEDIT, gedit-2.12 >= 2.12.0, ,
+		[PKG_CHECK_MODULES(GEDIT, gedit-2.10 >= 2.9.0, , 
+    		[PKG_CHECK_MODULES(GEDIT, gedit-2.8 >= 2.8.0, , 
+	    		[PKG_CHECK_MODULES(GEDIT, gedit-2.6 >= 2.6.0)])])])
 	
 	AC_SUBST(GEDIT_CFLAGS)
+	AC_SUBST(GEDIT_LIBS)
 fi
 
 
@@ -449,7 +479,7 @@ else
   echo "disabling debug compile mode"
 fi
 
-# Debug mode
+# Fatal Messages mode
 AC_ARG_ENABLE(fatal-messages, 
 	    AC_HELP_STRING([--enable-fatal-messages],
 	    [Don't make compile and or runtime messages fatal in debug mode.]))
@@ -459,6 +489,19 @@ if test "$enable_fatal_messages" = "yes" && test "$enable_debug" = "yes"; then
     AC_DEFINE_UNQUOTED(FATAL_MESSAGES, 1, [Fatal runtime messages])
     echo "enabling fatal runtime messages"
 fi
+
+# Build Tests
+AC_ARG_ENABLE(tests,
+        AC_HELP_STRING([--enable-tests],
+        [Compile Test Programs]))
+        
+if test "$enable_tests" != "yes"; then
+    enable_tests="no"
+fi
+
+AM_CONDITIONAL(WITH_TESTS, test "$enable_tests" == "yes")
+
+dnl *******************
 
 AC_SUBST(SEAHORSE_CFLAGS)
 AC_SUBST(SEAHORSE_LIBS)

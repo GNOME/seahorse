@@ -12,7 +12,7 @@ bonobo_LTLIBRARIES = libseahorse-pgp-file-listener.la
 libseahorse_pgp_file_listener_la_SOURCES = seahorse-pgp-file-listener.c
 
 libseahorse_pgp_file_listener_la_LIBADD = $(BONOBO_LIBS)
-libseahorse_pgp_file_listener_la_LDFLAGS = -module -avoid-version
+libseahorse_pgp_file_listener_la_LDFLAGS = -module -avoid-version -no-undefined
 
 @INTLTOOL_SERVER_RULE@
 

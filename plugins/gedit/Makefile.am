@@ -19,7 +19,8 @@ libseahorse_pgp_la_SOURCES = seahorse-gedit.c
 libseahorse_pgp_la_LDFLAGS = $(PLUGIN_LIBTOOL_FLAGS)
 libseahorse_pgp_la_LIBADD = \
 	$(top_builddir)/libseahorse/libseahorse-internal.la \
-	$(SEAHORSE_LIBS)
+	$(SEAHORSE_LIBS) \
+	$(GEDIT_LIBS)
 
 plugin_in_files = seahorse-pgp.gedit-plugin.desktop.in
 
