@@ -787,8 +787,6 @@ seahorse_key_store_populate (SeahorseKeyStore *skstore)
 {
 	GList *keys, *list = NULL;
 	SeahorseKey *skey;
-	guint count = 1;
-	gdouble length;
 	
     g_return_if_fail (SEAHORSE_IS_KEY_STORE (skstore));
     g_return_if_fail (SEAHORSE_IS_KEYSET (skstore->skset));
@@ -797,12 +795,10 @@ seahorse_key_store_populate (SeahorseKeyStore *skstore)
     if (seahorse_keyset_get_count (skstore->skset) > 0) {
 
     	keys = list = seahorse_keyset_get_keys (skstore->skset);
-    	length = g_list_length (list);
 	
     	while (list != NULL && (skey = list->data) != NULL) {
             seahorse_key_store_key_added (skstore->skset, skey, skstore);
     		list = g_list_next (list);
-    		count++;
     	}
      
         g_list_free (keys);

@@ -35,7 +35,6 @@ enum {
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
-static GObjectClass	*parent_class = NULL;
 
 struct _SeahorseKeysetPrivate {
     GHashTable *keys;
@@ -47,7 +46,7 @@ G_DEFINE_TYPE (SeahorseKeyset, seahorse_keyset, G_TYPE_OBJECT);
 static void key_destroyed (SeahorseKey *skey, SeahorseKeyset *skset);
 
 /* -----------------------------------------------------------------------------
- * HELPERS 
+ * INTERNAL 
  */
 
 static gboolean
@@ -151,7 +150,7 @@ keys_to_hash (SeahorseKey *skey, gpointer *c, GHashTable *ht)
 }
 
 /* -----------------------------------------------------------------------------
- * IMPLEMENTATION 
+ * OBJECT 
  */
 
 static void
@@ -167,7 +166,7 @@ seahorse_keyset_dispose (GObject *gobject)
     g_signal_handlers_disconnect_by_func (SCTX_APP (), key_removed, skset);    
     g_signal_handlers_disconnect_by_func (SCTX_APP (), key_changed, skset);    
     
-	G_OBJECT_CLASS (parent_class)->finalize (gobject);
+	G_OBJECT_CLASS (seahorse_keyset_parent_class)->dispose (gobject);
 }
 
 static void
@@ -179,7 +178,7 @@ seahorse_keyset_finalize (GObject *gobject)
     g_assert (skset->pv->pred == NULL);
     g_free (skset->pv);
     
-	G_OBJECT_CLASS (parent_class)->finalize (gobject);
+	G_OBJECT_CLASS (seahorse_keyset_parent_class)->finalize (gobject);
 }
 
 static void
@@ -227,7 +226,7 @@ seahorse_keyset_class_init (SeahorseKeysetClass *klass)
 {
 	GObjectClass *gobject_class;
 	
-	parent_class = g_type_class_peek_parent (klass);
+	seahorse_keyset_parent_class = g_type_class_peek_parent (klass);
 	gobject_class = G_OBJECT_CLASS (klass);
 	
 	gobject_class->dispose = seahorse_keyset_dispose;	
@@ -317,6 +316,8 @@ seahorse_keyset_refresh (SeahorseKeyset *skset)
         /* This will add to keyset */
         maybe_add_key (skset, skey);
     }
+    
+    g_list_free (keys);
     
     g_hash_table_foreach (check, (GHFunc)remove_key, skset);
     g_hash_table_destroy (check);
