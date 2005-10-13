@@ -28,9 +28,11 @@
 #include "seahorse-key-widget.h"
 #include "seahorse-op.h"
 #include "seahorse-util.h"
+#include "seahorse-key.h"
 #include "seahorse-pgp-key.h"
 #include "seahorse-pgp-key-op.h"
 #include "seahorse-gtkstock.h"
+#include "seahorse-windows.h"
 
 #define NOTEBOOK "notebook"
 #define SPACING 12
@@ -64,6 +66,33 @@ enum {
 	SIGN_COMMENT,
 	SIGN_N_COLUMNS
 };
+
+static void 
+show_glade_widget (SeahorseWidget *swidget, const gchar *name, gboolean show)
+{
+    GtkWidget *widget = glade_xml_get_widget (swidget->xml, name);
+    if (!widget)
+        return;
+    
+    if (show)
+        gtk_widget_show (widget);
+    else
+        gtk_widget_hide (widget);
+}
+
+static void
+set_glade_image (SeahorseWidget *swidget, const gchar *name, const gchar *file)
+{
+    GtkWidget *widget = glade_xml_get_widget (swidget->xml, name);
+    gchar *t;
+    
+    if (!widget)
+        return;
+    
+    t = g_strdup_printf (DATA_DIR "/pixmaps/seahorse/%s", file);
+    gtk_image_set_from_file (GTK_IMAGE (widget), t);
+    g_free (t);
+}
 
 static gint
 get_selected_uid (SeahorseWidget *swidget)
@@ -283,18 +312,12 @@ set_photoid_state(SeahorseWidget *swidget, SeahorsePGPKey *pkey)
 	photo_image = glade_xml_get_widget (swidget->xml, "photoid");
 	
 	photoid = (gpgmex_photo_id_t)g_object_get_data (G_OBJECT (swidget), "current-photoid");
-	
-	if (etype == SKEY_PRIVATE) {
-	    gtk_widget_set_sensitive(add_button, TRUE);
-	    
-	    if (photoid != NULL)
-	       gtk_widget_set_sensitive(del_button, TRUE);
-	       
-	} else {
-	   gtk_widget_set_sensitive (add_button, FALSE);
-	   gtk_widget_set_sensitive (del_button, FALSE);
-	}
 
+    if (add_button)
+        gtk_widget_set_sensitive (add_button, etype == SKEY_PRIVATE);
+    if (del_button)
+        gtk_widget_set_sensitive (del_button, etype == SKEY_PRIVATE && photoid);
+	
     if (photoid != NULL) {	
     	if (photoid == pkey->photoids)
     	   gtk_widget_set_sensitive (prev_button, FALSE);
@@ -306,7 +329,6 @@ set_photoid_state(SeahorseWidget *swidget, SeahorsePGPKey *pkey)
         else
             gtk_widget_set_sensitive (next_button, FALSE);
     } else {
-        gtk_widget_set_sensitive (del_button, FALSE);
         gtk_widget_set_sensitive (prev_button, FALSE);
         gtk_widget_set_sensitive (next_button, FALSE);
     }
@@ -411,18 +433,12 @@ do_owner_signals (SeahorseWidget *swidget)
 			G_CALLBACK (owner_photo_delete_button_clicked), swidget);
 	} else {
 		
-		gtk_widget_hide 
-			(glade_xml_get_widget (swidget->xml, "owner-add-button"));
-		gtk_widget_hide 
-			(glade_xml_get_widget (swidget->xml, "owner-delete-button"));
-		gtk_widget_hide 
-			(glade_xml_get_widget (swidget->xml, "owner-primary-button"));
-		gtk_widget_hide 
-			(glade_xml_get_widget (swidget->xml, "owner-photo-add-button"));
-		gtk_widget_hide 
-			(glade_xml_get_widget (swidget->xml, "owner-photo-delete-button"));
-		gtk_widget_hide 
-			(glade_xml_get_widget (swidget->xml, "owner-photo-primary-button"));
+        show_glade_widget (swidget, "owner-add-button", FALSE);
+        show_glade_widget (swidget, "owner-delete-button", FALSE);
+        show_glade_widget (swidget, "owner-primary-button", FALSE);
+        show_glade_widget (swidget, "owner-photo-add-button", FALSE);
+        show_glade_widget (swidget, "owner-photo-delete-button", FALSE);
+        show_glade_widget (swidget, "owner-photo-primary-button", FALSE);
 	}
 }
 
@@ -431,20 +447,54 @@ do_owner (SeahorseWidget *swidget)
 {
 	SeahorseKey *skey;
 	SeahorsePGPKey *pkey;
-	SeahorseValidity userid_validity;
 
 	gpgme_user_id_t uid;
 	
 	GtkWidget *widget;
 	GtkListStore *store;
 	GtkTreeIter iter;
-	gchar *text;
+	gchar *text, *t;
+	gulong expires_date;
+	guint flags;
 	const gchar *name, *email, *comment;
 	guint8 i;
 	
 	skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
 	pkey = SEAHORSE_PGP_KEY (skey);
 	
+    flags = seahorse_key_get_flags (skey);
+    
+    /* Display appropriate warnings */    
+    show_glade_widget (swidget, "expired-area", flags & SKEY_FLAG_EXPIRED);
+    show_glade_widget (swidget, "revoked-area", flags & SKEY_FLAG_REVOKED);
+    show_glade_widget (swidget, "disabled-area", flags & SKEY_FLAG_DISABLED);
+    
+    /* Update the expired message */
+    if (flags & SKEY_FLAG_EXPIRED) {
+        widget = glade_xml_get_widget (swidget->xml, "expired-message");
+        if (widget) {
+            
+            expires_date = seahorse_key_get_expires (skey);
+        	if (expires_date == 0) 
+        		t = g_strdup (_("(unknown)"));
+    		else
+    		    t = seahorse_util_get_date_string (expires_date);
+            text = g_strdup_printf (_("This key expired on: %s"), t);
+                
+            gtk_label_set_text (GTK_LABEL (widget), text);
+                
+            g_free (t);
+            g_free (text);
+        }
+    }
+        
+    /* Hide trust page when above */
+    show_glade_widget (swidget, "trust-page", !((flags & SKEY_FLAG_EXPIRED) ||
+                       (flags & SKEY_FLAG_REVOKED) || (flags & SKEY_FLAG_DISABLED)));
+
+    /* Hide or show the uids area */
+    show_glade_widget (swidget, "uids-area", seahorse_pgp_key_get_num_userids (pkey) > 1);
+
 	if ((text = seahorse_pgp_key_get_userid_name (pkey, 0)) != NULL) {
 		widget = glade_xml_get_widget (swidget->xml, "owner-name-label");
 		gtk_label_set_text (GTK_LABEL (widget), text);  
@@ -465,12 +515,18 @@ do_owner (SeahorseWidget *swidget)
 		gtk_label_set_text (GTK_LABEL (widget), text);  
 		g_free (text);
 	}
+    
+    widget = glade_xml_get_widget (swidget->xml, "owner-keyid-label");
+    if (widget)
+        gtk_label_set_text (GTK_LABEL (widget), seahorse_key_get_short_keyid (skey));
 	
-	/* temporarly disable these 2 buttons until the features get implemented */
-	gtk_widget_set_sensitive
-		(glade_xml_get_widget (swidget->xml, "owner-photo-first-button"), FALSE);
-	gtk_widget_set_sensitive
-		(glade_xml_get_widget (swidget->xml, "owner-photo-primary-button"), FALSE);
+    /* temporarly disable these 2 buttons until the features get implemented */
+    widget = glade_xml_get_widget (swidget->xml, "owner-photo-first-button");
+    if (widget)
+	    gtk_widget_set_sensitive (widget, FALSE);
+    widget = glade_xml_get_widget (swidget->xml, "owner-photo-primary-button");
+    if (widget)
+	    gtk_widget_set_sensitive (widget, FALSE);
 			
 	/* Clear/create table store */
 	widget = glade_xml_get_widget (swidget->xml, "owner-userid-tree");
@@ -698,13 +754,13 @@ do_details_signals (SeahorseWidget *swidget)
 	/* if not the key owner, disable most everything
 		if key owner, add the callbacks to the subkey buttons	*/
 	 if (etype == SKEY_PUBLIC ) {
-		gtk_widget_hide (glade_xml_get_widget (swidget->xml, "details-actions-label"));
-		gtk_widget_hide (glade_xml_get_widget (swidget->xml, "details-passphrase-button"));
-		gtk_widget_hide (glade_xml_get_widget (swidget->xml, "details-export-button"));
-		gtk_widget_hide (glade_xml_get_widget (swidget->xml, "details-add-button"));
-		gtk_widget_hide (glade_xml_get_widget (swidget->xml, "details-date-button"));
-		gtk_widget_hide (glade_xml_get_widget (swidget->xml, "details-revoke-button"));
-		gtk_widget_hide (glade_xml_get_widget (swidget->xml, "details-delete-button"));
+         show_glade_widget (swidget, "details-actions-label", FALSE);
+         show_glade_widget (swidget, "details-passphrase-button", FALSE);
+         show_glade_widget (swidget, "details-export-button", FALSE);
+         show_glade_widget (swidget, "details-add-button", FALSE);
+         show_glade_widget (swidget, "details-date-button", FALSE);
+         show_glade_widget (swidget, "details-revoke-button", FALSE);
+         show_glade_widget (swidget, "details-delete-button", FALSE);
 	} else {
 
 		glade_xml_signal_connect_data (swidget->xml, "on_details_passphrase_button_clicked",
@@ -745,47 +801,59 @@ do_details (SeahorseWidget *swidget)
 	skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
 	pkey = SEAHORSE_PGP_KEY (skey);
 	subkey = pkey->pubkey->subkeys;
+    
+    /* TODO: Rampant memory leaks and string buffer problems XXXXXXXXXXXX */
 	
-	widget = glade_xml_get_widget (swidget->xml, "details-id-label");
-	label = seahorse_key_get_keyid (skey); 
-	if (strlen (label) > 8)
-		label += 8;
-	gtk_label_set_text (GTK_LABEL (widget), label);
+    widget = glade_xml_get_widget (swidget->xml, "details-id-label");
+    if (widget) {
+        label = seahorse_key_get_short_keyid (skey); 
+        gtk_label_set_text (GTK_LABEL (widget), label);
+    }
 	
-	widget = glade_xml_get_widget (swidget->xml, "details-fingerprint-label");
-	fp_label = seahorse_key_get_fingerprint (skey);  
-	fp_label[24] = '\n';
-	gtk_label_set_text (GTK_LABEL (widget), fp_label);
+    widget = glade_xml_get_widget (swidget->xml, "details-fingerprint-label");
+    if (widget) {
+        fp_label = seahorse_key_get_fingerprint (skey);  
+        fp_label[24] = '\n';
+        gtk_label_set_text (GTK_LABEL (widget), fp_label);
+    }
 
-	widget = glade_xml_get_widget (swidget->xml, "details-algo-label");
-	label = seahorse_pgp_key_get_algo (pkey, 0);
-	gtk_label_set_text (GTK_LABEL (widget), label);
+    widget = glade_xml_get_widget (swidget->xml, "details-algo-label");
+    if (widget) {
+        label = seahorse_pgp_key_get_algo (pkey, 0);
+        gtk_label_set_text (GTK_LABEL (widget), label);
+    }
 	
-	widget = glade_xml_get_widget (swidget->xml, "details-created-label");
-	label = seahorse_util_get_date_string (subkey->timestamp); 
-	gtk_label_set_text (GTK_LABEL (widget), label);
+    widget = glade_xml_get_widget (swidget->xml, "details-created-label");
+    if (widget) {
+        label = seahorse_util_get_date_string (subkey->timestamp); 
+        gtk_label_set_text (GTK_LABEL (widget), label);
+    }
 
-	widget = glade_xml_get_widget (swidget->xml, "details-strength-label");
-	g_ascii_dtostr(dbuffer, G_ASCII_DTOSTR_BUF_SIZE, subkey->length);
-	gtk_label_set_text (GTK_LABEL (widget), dbuffer);
+    widget = glade_xml_get_widget (swidget->xml, "details-strength-label");
+    if (widget) {
+        g_ascii_dtostr(dbuffer, G_ASCII_DTOSTR_BUF_SIZE, subkey->length);
+        gtk_label_set_text (GTK_LABEL (widget), dbuffer);
+    }
 	
-	widget = glade_xml_get_widget (swidget->xml, "details-expires-label");
-	label = seahorse_util_get_date_string (subkey->expires);
-	if (g_str_equal("0", label))
-		label = _("Never");
-	gtk_label_set_text (GTK_LABEL (widget), label);
+    widget = glade_xml_get_widget (swidget->xml, "details-expires-label");
+    if (widget) {
+        label = seahorse_util_get_date_string (subkey->expires);
+        if (g_str_equal("0", label))
+            label = _("Never");
+        gtk_label_set_text (GTK_LABEL (widget), label);
+    }
 	
-	widget = glade_xml_get_widget (swidget->xml, "details-enable-toggle");	
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), !(pkey->pubkey->disabled));
+    widget = glade_xml_get_widget (swidget->xml, "details-enable-toggle");	
+    if (widget)
+         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), !(pkey->pubkey->disabled));
 	
-	widget = glade_xml_get_widget (swidget->xml, "details-trust-combobox");
-	gtk_widget_set_sensitive (widget, !(pkey->pubkey->disabled));
-		
-	trust = seahorse_key_get_trust (skey);
-
-	if ( 0 < trust ) {
-		gtk_combo_box_set_active (GTK_COMBO_BOX (widget),  trust-1);
-	}
+    widget = glade_xml_get_widget (swidget->xml, "details-trust-combobox");
+    if (widget) {
+        gtk_widget_set_sensitive (widget, !(pkey->pubkey->disabled));
+        trust = seahorse_key_get_trust (skey);
+        if (0 < trust)
+            gtk_combo_box_set_active (GTK_COMBO_BOX (widget),  trust - 1);
+    }
 	
 	/* Clear/create table store */
 	widget = glade_xml_get_widget (swidget->xml, "details-subkey-tree");
@@ -868,15 +936,13 @@ do_details (SeahorseWidget *swidget)
 							SUBKEY_LENGTH, length,
 							-1);
 
-		if (!key) {
+		if (!key) 
 			default_key = iter;
-		}
-		
 	} 
+    
 	gtk_tree_view_set_model (GTK_TREE_VIEW (widget), GTK_TREE_MODEL(store));
 	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (widget));
 	gtk_tree_selection_select_iter (selection, &default_key);
-	
 }
 
 static void
@@ -887,7 +953,9 @@ signatures_delete_button_clicked (GtkWidget *widget, SeahorseWidget *skey)
 
 static void
 signatures_revoke_button_clicked (GtkWidget *widget, SeahorseWidget *skey)
-{	}
+{	
+    
+}
 
 static void
 signatures_populate_model (SeahorseWidget *swidget, GtkListStore *store)
@@ -899,50 +967,63 @@ signatures_populate_model (SeahorseWidget *swidget, GtkListStore *store)
 	GtkWidget *widget;
 	GtkComboBox *combo;
 	GtkToggleButton *toggle;
-	gboolean keyring_only;
-	const gchar *name;
+	gboolean trusted_only = TRUE;
+	const gchar *name = NULL;
+	const gchar *keyid;
 	
 	gpgme_user_id_t uid;
 	gpgme_key_sig_t sig;
-	
-	keyring_only = TRUE;
 	
 	skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
 	pkey = SEAHORSE_PGP_KEY (skey);
 	
 	widget = glade_xml_get_widget (swidget->xml, "signatures-tree");
 	toggle = GTK_TOGGLE_BUTTON (glade_xml_get_widget (swidget->xml, "signatures-toggle"));
-	keyring_only = gtk_toggle_button_get_active (toggle);
+    	if (toggle)
+		trusted_only = gtk_toggle_button_get_active (toggle);
+    
+    /* TODO: Translation problems XXXXXXXXXXXXXXXXX */
 	
-	combo = GTK_COMBO_BOX (glade_xml_get_widget (swidget->xml, "signatures-filter-combobox"));
-	name = gtk_combo_box_get_active_text (combo);
-	
-	if (store) {
-		/* By rule of thumb, if the sig->name is null, the key isn't in the keyring */
-		for (uid = pkey->pubkey->uids; uid; uid = uid->next) {
-			for (sig = uid->signatures; sig; sig = sig->next)  {
-				if (keyring_only && g_str_equal (sig->name, "")) {
-					//don't push the sig, do nothing
-				} else {
-					if (g_str_equal (name, "All User IDs")) {		
-						gtk_list_store_append (store, &iter);					
-						gtk_list_store_set (store, &iter, 
-											SIGN_KEY_ID, sig->keyid,
-											SIGN_NAME, sig->name, 
-											SIGN_EMAIL, sig->email, 
-											SIGN_COMMENT, sig->comment, 
-											-1);
-					} else if (g_str_equal (name, sig->name)) {
-						gtk_list_store_append (store, &iter);
-						gtk_list_store_set (store, &iter, 
-											SIGN_KEY_ID, sig->keyid,
-											SIGN_NAME, sig->name, 
-											SIGN_EMAIL, sig->email, 
-											SIGN_COMMENT, sig->comment, 
-											-1);
-					}				
-				}	
-			}
+    combo = GTK_COMBO_BOX (glade_xml_get_widget (swidget->xml, "signatures-filter-combobox"));
+    if (combo) {
+        name = gtk_combo_box_get_active_text (combo);
+        if (g_str_equal (name, "All User IDs")) 
+            name = NULL;
+    }
+    
+    if (store) {
+     
+        keyid = seahorse_pgp_key_get_id (pkey->pubkey, 0);
+        
+            for (uid = pkey->pubkey->uids; uid; uid = uid->next) {
+			for (sig = uid->signatures; sig; sig = sig->next) {
+                
+                /* Never show self signatures, they're implied */
+                if (strcmp (sig->keyid, keyid) == 0)
+                    continue;
+                
+                /* Find any trusted signatures */
+                if (trusted_only && !(seahorse_pgp_key_get_sigtype (pkey, sig) & SKEY_PGPSIG_TRUSTED))
+                    continue;
+
+                gtk_list_store_append (store, &iter);					
+                
+                if (!name)
+                    gtk_list_store_set (store, &iter, 
+                                        SIGN_KEY_ID, sig->keyid,
+                                        SIGN_NAME, sig->name, 
+                                        SIGN_EMAIL, sig->email, 
+                                        SIGN_COMMENT, sig->comment, 
+                                        -1);
+                
+                else if (g_str_equal (name, sig->name))
+                    gtk_list_store_set (store, &iter, 
+                                        SIGN_KEY_ID, sig->keyid,
+                                        SIGN_NAME, sig->name, 
+                                        SIGN_EMAIL, sig->email, 
+                                        SIGN_COMMENT, sig->comment, 
+                                        -1);
+            }
 		}
 	}
 
@@ -960,33 +1041,34 @@ signatures_filter_changed (GtkComboBox *combo, SeahorseWidget *swidget)
 	widget = glade_xml_get_widget (swidget->xml, "signatures-tree");
 	store = GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (widget)));
 	
-	if (store) {
+	if (store)
 		gtk_list_store_clear (store);
-	}
 
 	signatures_populate_model (swidget, store);
-
 }
 	
-/* The signatures toggle filters the view for the user so that only signatures 
+/* 
+ * The signatures toggle filters the view for the user so that only signatures 
  * in the collected keys appear. This way the user won't have to filter 
  * through meaningless KeyIDs. Self signatures on personal keys should be 
  * assumed, don't display those by default either.
  */	
 static void
-signatures_toggled (GtkToggleButton *toggle, SeahorseWidget *swidget)
+trust_toggled (GtkToggleButton *toggle, SeahorseWidget *swidget)
 {
 	
-	GtkWidget *widget;
-	GtkListStore *store;
+    GtkWidget *widget;
+    GtkListStore *store;
 	
-	widget = glade_xml_get_widget (swidget->xml, "signatures-filter-combobox");
-	if (!gtk_toggle_button_get_active (toggle)) {
-		gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
-		gtk_widget_set_sensitive (widget, FALSE);
-	} else {
-		gtk_widget_set_sensitive (widget, TRUE);
-	}
+    widget = glade_xml_get_widget (swidget->xml, "signatures-filter-combobox");
+    if (widget) {
+    	if (!gtk_toggle_button_get_active (toggle)) {
+	    gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
+            gtk_widget_set_sensitive (widget, FALSE);
+        } else {
+            gtk_widget_set_sensitive (widget, TRUE);
+        }
+    }
 	
 	widget = glade_xml_get_widget (swidget->xml, "signatures-tree");
 	store = GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (widget)));
@@ -995,19 +1077,36 @@ signatures_toggled (GtkToggleButton *toggle, SeahorseWidget *swidget)
 	signatures_populate_model (swidget, store);	
 }
 
+static void 
+trust_sign_clicked (GtkWidget *widget, SeahorseWidget *swidget)
+{
+    GList *keys;
+	
+    keys = g_list_append (NULL, SEAHORSE_KEY_WIDGET (swidget)->skey);
+	seahorse_sign_show (keys);
+    g_list_free (keys);
+}
+
 static void
-do_signatures_signals (SeahorseWidget *swidget)
+do_trust_signals (SeahorseWidget *swidget)
 {
 	SeahorseKey *skey;
 	SeahorseKeyEType etype;
+	GtkWidget *widget;
 	
 	skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
 	etype = seahorse_key_get_etype (skey);
-	
+    
+    set_glade_image (swidget, "image-good1", "seahorse-good.png");
+    set_glade_image (swidget, "image-good2", "seahorse-good.png");
+    
+    glade_xml_signal_connect_data (swidget->xml, "trust_sign_clicked", 
+                                   G_CALLBACK (trust_sign_clicked), swidget);
+    
 	if (etype == SKEY_PUBLIC ) {
-		gtk_widget_hide (glade_xml_get_widget (swidget->xml, "signatures-revoke-button"));
-		gtk_widget_hide (glade_xml_get_widget (swidget->xml, "signatures-delete-button"));
-		gtk_widget_hide (glade_xml_get_widget (swidget->xml, "signatures-empty-label"));
+        show_glade_widget (swidget, "signatures-revoke-button", FALSE);
+        show_glade_widget (swidget, "signatures-delete-button", FALSE);
+        show_glade_widget (swidget, "signatures-empty-label", FALSE);
 	} else {
 		glade_xml_signal_connect_data (swidget->xml, "signatures_revoke_button_clicked",
 									   G_CALLBACK (signatures_revoke_button_clicked), swidget);
@@ -1016,16 +1115,17 @@ do_signatures_signals (SeahorseWidget *swidget)
 	}
 
 	glade_xml_signal_connect_data (swidget->xml, "on_signatures_toggle_toggled",
-								   G_CALLBACK (signatures_toggled), swidget);
+								   G_CALLBACK (trust_toggled), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "on_signatures_combobox_changed",
 								   G_CALLBACK (signatures_filter_changed), swidget);
-	
+
+	widget = glade_xml_get_widget (swidget->xml, "signatures-toggle");
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);	
 }	
 
 static void 
-do_signatures (SeahorseWidget *swidget)
+do_trust (SeahorseWidget *swidget)
 {
-	
 	SeahorseKey *skey;
 	SeahorsePGPKey *pkey;
 	
@@ -1034,39 +1134,58 @@ do_signatures (SeahorseWidget *swidget)
 	GArray *names;
 	gint names_size, i, j;
 	const gchar *name;
+	guint trust;
+	gboolean trusted;
+	gboolean sigpersonal;
 	
 	gpgme_user_id_t uid;
 	gpgme_key_sig_t sig;
 
 	skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
 	pkey = SEAHORSE_PGP_KEY (skey);
+    
+    trusted = seahorse_key_get_flags (skey) & SKEY_FLAG_TRUSTED;
+    sigpersonal = trusted ? seahorse_pgp_key_have_signatures (pkey, SKEY_PGPSIG_PERSONAL) : FALSE;
+    trust = seahorse_key_get_trust (skey);
+    
+    show_glade_widget (swidget, "untrusted-area", !trusted && trust != SEAHORSE_VALIDITY_NEVER);
+    show_glade_widget (swidget, "untrusted-overridden-area", !trusted && trust == SEAHORSE_VALIDITY_NEVER);
+    show_glade_widget (swidget, "trusted-signed-area", trusted && sigpersonal);
+    show_glade_widget (swidget, "trusted-area", trusted && !sigpersonal);
 
 	widget = glade_xml_get_widget (swidget->xml, "signatures-filter-combobox");
-	gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
+
+    /* Fill in the signatures filter combo box */
+    if (widget) {
+    	gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
 	
-	names = g_array_new (FALSE, FALSE, sizeof (gchar*));
-	names_size = 0;
-	for (uid = pkey->pubkey->uids; uid; uid = uid->next) {
-		for (sig = uid->signatures; sig; sig = sig->next)  {	
-			if (!g_str_equal (sig->name, "")) {
-				g_array_append_val (names, sig->name);
-				names_size++;
-			}
-		}
-	}
+	    names = g_array_new (FALSE, FALSE, sizeof (gchar*));
+	    names_size = 0;
+	    for (uid = pkey->pubkey->uids; uid; uid = uid->next) {
+		    for (sig = uid->signatures; sig; sig = sig->next)  {	
+    			if (!g_str_equal (sig->name, "")) {
+	    			g_array_append_val (names, sig->name);
+		    		names_size++;
+			    }
+		    }
+	    }
+    
+    	for (i = 0; i < names_size; i++) {
+	    	name = g_array_index (names, gchar*, i);
+		    for (j = i+1; j < names_size; j++) {
+			    if (g_str_equal (name, g_array_index (names, gchar*, j))) {
+				    g_array_remove_index (names, j);
+				    names_size--;
+				    j--;
+			    } 
+		    }
+		    gtk_combo_box_append_text (GTK_COMBO_BOX (widget), name);
+	    }
+        
+       	g_array_free (names, TRUE);
+    }
 	
-	for (i = 0; i < names_size; i++) {
-		name = g_array_index (names, gchar*, i);
-		for (j = i+1; j < names_size; j++) {
-			if (g_str_equal (name, g_array_index (names, gchar*, j))) {
-				g_array_remove_index (names, j);
-				names_size--;
-				j--;
-			} 
-		}
-		gtk_combo_box_append_text (GTK_COMBO_BOX (widget), name);
-	}
-	
+    /* The actual signatures listing */
 	widget = glade_xml_get_widget (swidget->xml, "signatures-tree");
 	store = GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (widget)));
 	
@@ -1104,8 +1223,8 @@ do_signatures (SeahorseWidget *swidget)
 	} else {
 		gtk_list_store_clear (store);
 	}
+
 	signatures_populate_model (swidget, store);
-	g_array_free (names, TRUE);
 }
 
 /**
@@ -1114,31 +1233,29 @@ do_signatures (SeahorseWidget *swidget)
 static void
 key_changed (SeahorseKey *skey, SeahorseKeyChange change, SeahorseWidget *swidget)
 {
-	switch (change) {
-		case SKEY_CHANGE_ALL:
-			break;
-		case SKEY_CHANGE_PHOTOS:
-		case SKEY_CHANGE_UIDS:
-			do_owner (swidget);
-			/* in some cases, when the uids change, the signature 
-			   page needs to be refreshed. For example, if a userid
-		       is changed to primary, the key is re-selfsigned w/ the
-			   new userid */
-		
-			//do_signatures (swidget);
-			break;
-		case SKEY_CHANGE_SIGNERS:
-			do_signatures (swidget);
-			break;
-		case SKEY_CHANGE_SUBKEYS: 
-			do_details (swidget);
-			break;
-		case SKEY_CHANGE_EXPIRES:
-			do_details (swidget);
-			break;
-		default:
-			break;
-	}
+    switch (change) {
+    case SKEY_CHANGE_PHOTOS:
+    case SKEY_CHANGE_UIDS:
+        do_owner (swidget);
+        do_trust (swidget);
+        break;
+    case SKEY_CHANGE_SIGNERS:
+        do_trust (swidget);
+        break;
+    case SKEY_CHANGE_SUBKEYS: 
+        do_details (swidget);
+        break;
+    case SKEY_CHANGE_EXPIRES:
+        do_details (swidget);
+        break;
+    case SKEY_CHANGE_TRUST:
+        do_trust (swidget);
+    default:
+        do_owner (swidget);
+        do_trust (swidget);
+        do_details (swidget);
+        break;
+    }
 }
 
 static void
@@ -1156,13 +1273,85 @@ properties_destroyed (GtkObject *object, SeahorseWidget *swidget)
 										  key_destroyed, swidget);
 }
 
+static SeahorseWidget*
+setup_public_properties (SeahorsePGPKey *pkey)
+{
+    SeahorseWidget *swidget;
+    GtkWidget *widget;
+
+    swidget = seahorse_key_widget_new ("pgp-public-key-properties", SEAHORSE_KEY (pkey));    
+    
+    /* This happens if the window is already open */
+    if (swidget == NULL)
+        return NULL;
+
+    widget = glade_xml_get_widget (swidget->xml, swidget->name);
+    g_signal_connect (GTK_OBJECT (widget), "destroy", G_CALLBACK (properties_destroyed), swidget);
+    g_signal_connect_after (pkey, "changed", G_CALLBACK (key_changed), swidget);
+    g_signal_connect_after (pkey, "destroy", G_CALLBACK (key_destroyed), swidget);
+
+    /* 
+     * The signals don't need to keep getting connected. Everytime a key changes the
+     * do_* functions get called. Therefore, seperate functions connect the signals
+     * have been created
+     */
+
+    do_owner (swidget);
+    do_owner_signals (swidget);
+	
+    do_details (swidget);
+    do_details_signals (swidget);
+
+    do_trust (swidget);
+    do_trust_signals (swidget);        
+
+    return swidget;
+}
+
+static SeahorseWidget*
+setup_private_properties (SeahorsePGPKey *pkey)
+{
+    SeahorseWidget *swidget;
+    GtkWidget *widget;
+
+    swidget = seahorse_key_widget_new ("key-properties", SEAHORSE_KEY (pkey));
+	
+    /* This happens if the window is already open */
+    if (swidget == NULL)
+        return NULL;
+
+    widget = glade_xml_get_widget (swidget->xml, swidget->name);
+    g_signal_connect (GTK_OBJECT (widget), "destroy", G_CALLBACK (properties_destroyed), swidget);
+    g_signal_connect_after (pkey, "changed", G_CALLBACK (key_changed), swidget);
+    g_signal_connect_after (pkey, "destroy", G_CALLBACK (key_destroyed), swidget);
+	
+    /* 
+     * The signals don't need to keep getting connected. Everytime a key changes the
+     * do_* functions get called. Therefore, seperate functions connect the signals
+     * have been created
+     */
+
+    do_owner (swidget);
+    do_owner_signals (swidget);
+
+    do_details (swidget);
+    do_details_signals (swidget);
+
+    do_trust (swidget);
+    do_trust_signals (swidget);
+
+    widget = glade_xml_get_widget (swidget->xml, NOTEBOOK);
+    gtk_widget_hide (gtk_notebook_get_nth_page (GTK_NOTEBOOK (widget), 3));
+
+    return swidget;
+}
+
 void
 seahorse_key_properties_new (SeahorsePGPKey *pkey)
 {
 	SeahorseKey *skey = SEAHORSE_KEY (pkey);
 	SeahorseKeySource *sksrc;
 	SeahorseWidget *swidget;
-	GtkWidget *widget;
 	gboolean remote;
 	
 	remote = seahorse_key_get_location (skey) == SKEY_LOC_REMOTE;
@@ -1178,39 +1367,12 @@ seahorse_key_properties_new (SeahorsePGPKey *pkey)
 		skey = seahorse_context_get_key (SCTX_APP(), sksrc, seahorse_key_get_keyid (skey));
 		g_return_if_fail (skey != NULL);                
 	}
-	
-	swidget = seahorse_key_widget_new ("key-properties", skey);
-	
-	/* This happens if the window is already open */
-	if (swidget == NULL)
-		return;
-	
-	widget = glade_xml_get_widget (swidget->xml, swidget->name);
-	g_signal_connect (GTK_OBJECT (widget), "destroy", G_CALLBACK (properties_destroyed), swidget);
-	g_signal_connect_after (skey, "changed", G_CALLBACK (key_changed), swidget);
-	g_signal_connect_after (skey, "destroy", G_CALLBACK (key_destroyed), swidget);
-	
-	widget = glade_xml_get_widget (swidget->xml, "signatures-toggle");
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
-	
-	
-	/* The signals don't need to keep getting connected. Everytime a key changes the
-	 * do_* functions get called. Therefore, seperate functions connect the signals
-	 * have been created
-	 */
-
-	do_owner (swidget);
-	do_owner_signals (swidget);
-	
-	do_details (swidget);
-	do_details_signals (swidget);
-
-	do_signatures (swidget);
-	do_signatures_signals (swidget);
-
-	
-	widget = glade_xml_get_widget (swidget->xml, "notebook1");
-	gtk_widget_hide (gtk_notebook_get_nth_page (GTK_NOTEBOOK (widget), 3));
-	
-	seahorse_widget_show (swidget);    
+    
+    if (seahorse_key_get_etype (skey) == SKEY_PUBLIC)
+        swidget = setup_public_properties (pkey);
+    else
+        swidget = setup_private_properties (pkey);       
+    
+    if (swidget)
+        seahorse_widget_show (swidget);
 }

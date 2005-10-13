@@ -90,7 +90,9 @@ typedef enum {
     SKEY_FLAG_CAN_ENCRYPT = 0x0002,
     SKEY_FLAG_CAN_SIGN = 0x0004,
     SKEY_FLAG_EXPIRED = 0x0010,
-    SKEY_FLAG_REVOKED = 0x0020
+    SKEY_FLAG_REVOKED = 0x0020,
+    SKEY_FLAG_DISABLED = 0x0040,
+    SKEY_FLAG_TRUSTED = 0x0100
 } SeahorseKeyFlags;
 
 /* Possible key changes */

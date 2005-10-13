@@ -48,6 +48,7 @@ glade_DATA = \
 	seahorse-key-manager.glade \
     seahorse-key-manager.ui \
 	seahorse-key-properties.glade \
+	seahorse-pgp-public-key-properties.glade \
 	seahorse-revoke.glade \
     seahorse-expires.glade \
 	seahorse-change-passphrase.glade \

@@ -46,6 +46,11 @@
 
 #define SKEY_PGP                         (g_quark_from_static_string ("openpgp"))
 
+enum {
+    SKEY_PGPSIG_TRUSTED = 0x0001,
+    SKEY_PGPSIG_PERSONAL = 0x0002
+};
+
 #define SEAHORSE_TYPE_PGP_KEY            (seahorse_pgp_key_get_type ())
 #define SEAHORSE_PGP_KEY(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_PGP_KEY, SeahorsePGPKey))
 #define SEAHORSE_PGP_KEY_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_PGP_KEY, SeahorsePGPKeyClass))
@@ -111,6 +116,12 @@ gpgmex_photo_id_t seahorse_pgp_key_get_nth_photoid    (SeahorsePGPKey   *pkey,
 
 gpgmex_photo_id_t seahorse_pgp_key_get_photoid_n      (SeahorsePGPKey   *pkey,
                                                        guint            uid);
+
+guint           seahorse_pgp_key_get_sigtype          (SeahorsePGPKey   *pkey, 
+                                                       gpgme_key_sig_t  signature);
+
+gboolean        seahorse_pgp_key_have_signatures      (SeahorsePGPKey   *pkey,
+                                                       guint            types);
 
 /* 
  * This function is necessary because the uid stored in a gpgme_user_id_t

@@ -22,6 +22,7 @@
 #include <gnome.h>
 
 #include "seahorse-gpgmex.h"
+#include "seahorse-context.h"
 #include "seahorse-key-source.h"
 #include "seahorse-pgp-key.h"
 
@@ -358,7 +359,7 @@ changed_key (SeahorsePGPKey *pkey)
         skey->location = SKEY_LOC_UNKNOWN;
         skey->etype = SKEY_INVALID;
         skey->loaded = SKEY_INFO_NONE;
-        skey->flags = 0;
+        skey->flags = SKEY_FLAG_DISABLED;
         
     } else {
     
@@ -403,6 +404,12 @@ changed_key (SeahorsePGPKey *pkey)
         
         if (pkey->pubkey->revoked)
             skey->flags |= SKEY_FLAG_REVOKED;
+        
+        if (pkey->pubkey->disabled)
+            skey->flags |= SKEY_FLAG_DISABLED;
+        
+        if (calc_trust (pkey) >= SEAHORSE_VALIDITY_MARGINAL)
+            skey->flags |= SKEY_FLAG_TRUSTED;
     }
     
     seahorse_key_changed (skey, SKEY_CHANGE_ALL);
@@ -688,4 +695,38 @@ seahorse_pgp_key_get_actual_uid       (SeahorsePGPKey   *pkey,
     
     g_free(ids);
     return i + 1;
+}
+
+guint         
+seahorse_pgp_key_get_sigtype (SeahorsePGPKey *pkey, gpgme_key_sig_t signature)
+{
+    SeahorseKey *skey;
+    
+    skey = seahorse_context_find_key (SCTX_APP (), SKEY_PGP, 
+                                      SKEY_LOC_LOCAL, signature->keyid);
+    
+    if (skey) {
+        if (seahorse_key_get_etype (skey) == SKEY_PRIVATE) 
+            return SKEY_PGPSIG_TRUSTED | SKEY_PGPSIG_PERSONAL;
+        if (seahorse_key_get_flags (skey) & SKEY_FLAG_TRUSTED)
+            return SKEY_PGPSIG_TRUSTED;
+    }
+
+    return 0;
+}
+
+gboolean        
+seahorse_pgp_key_have_signatures (SeahorsePGPKey *pkey, guint types)
+{
+    gpgme_user_id_t uid;
+    gpgme_key_sig_t sig;
+	
+    for (uid = pkey->pubkey->uids; uid; uid = uid->next) {
+		for (sig = uid->signatures; sig; sig = sig->next) {
+            if (seahorse_pgp_key_get_sigtype (pkey, sig) & types)
+                return TRUE;
+        }
+    }
+    
+    return FALSE;
 }
