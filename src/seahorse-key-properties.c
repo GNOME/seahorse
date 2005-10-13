@@ -528,7 +528,7 @@ do_owner (SeahorseWidget *swidget)
     } else {
 
         /* This is our first time so create a store */
-        store = gtk_list_store_new (UID_N_COLUMNS, uid_columns);
+        store = gtk_list_store_newv (UID_N_COLUMNS, (GType*)uid_columns);
 
         /* Make the columns for the view */
         gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (widget), 
@@ -811,7 +811,7 @@ do_details (SeahorseWidget *swidget)
     } else {
         
         /* This is our first time so create a store */
-        store = gtk_list_store_new (SUBKEY_N_COLUMNS, subkey_columns);
+        store = gtk_list_store_newv (SUBKEY_N_COLUMNS, (GType*)subkey_columns);
 
         /* Make the columns for the view */
         gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (widget), 
@@ -1113,7 +1113,7 @@ do_trust (SeahorseWidget *swidget)
     
     /* First time create the store */
     } else {
-        store = gtk_list_store_new (SIGN_N_COLUMNS, sign_columns);
+        store = gtk_list_store_newv (SIGN_N_COLUMNS, (GType*)sign_columns);
 
         gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (widget), 
                                                      -1, _("ID"), gtk_cell_renderer_text_new (), 

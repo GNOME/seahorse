@@ -425,6 +425,10 @@ setup_keyservers (SeahorseWidget *swidget)
     gtk_widget_show_all (w);
 }
 
+#endif /* WITH_KEYSERVER */
+
+#ifdef WITH_SHARING 
+
 /* Key Sharing Prefs -------------------------------------------------------- */
 
 static void
@@ -437,7 +441,7 @@ setup_sharing (SeahorseWidget *swidget)
     gtk_widget_show_all (widget);
 }
 
-#endif /* WITH_KEYSERVER */
+#endif /* WITH_SHARING */
 
 /* -------------------------------------------------------------------------- */
 
