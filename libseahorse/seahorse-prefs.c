@@ -425,8 +425,6 @@ setup_keyservers (SeahorseWidget *swidget)
     gtk_widget_show_all (w);
 }
 
-#endif /* WITH_KEYSERVER */
-
 /* Key Sharing Prefs -------------------------------------------------------- */
 
 static void
@@ -438,6 +436,8 @@ setup_sharing (SeahorseWidget *swidget)
         seahorse_check_button_control_new (_("_Share my keys with others on my network"), KEYSHARING_KEY));
     gtk_widget_show_all (widget);
 }
+
+#endif /* WITH_KEYSERVER */
 
 /* -------------------------------------------------------------------------- */
 

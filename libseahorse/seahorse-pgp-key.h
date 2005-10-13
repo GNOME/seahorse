@@ -61,10 +61,10 @@ enum {
 
 typedef struct _SeahorsePGPKey SeahorsePGPKey;
 typedef struct _SeahorsePGPKeyClass SeahorsePGPKeyClass;
-	
+
 struct _SeahorsePGPKey {
     SeahorseKey	                parent;
-	
+
     /*< public >*/
     gpgme_key_t                 pubkey;         /* The public key */
     gpgme_key_t                 seckey;         /* The secret key */
@@ -72,7 +72,7 @@ struct _SeahorsePGPKey {
 };
 
 struct _SeahorsePGPKeyClass {
-	SeahorseKeyClass            parent_class;
+    SeahorseKeyClass            parent_class;
 };
 
 SeahorsePGPKey* seahorse_pgp_key_new                  (SeahorseKeySource *sksrc,
@@ -103,10 +103,10 @@ gchar*          seahorse_pgp_key_get_userid_email     (SeahorsePGPKey   *pkey,
 gchar*          seahorse_pgp_key_get_userid_comment   (SeahorsePGPKey   *pkey,
                                                        guint            index);
 
-const gchar*		seahorse_pgp_key_get_algo 	      (SeahorsePGPKey   *pkey,
-						                               guint		    index);
+const gchar*    seahorse_pgp_key_get_algo             (SeahorsePGPKey   *pkey,
+                                                       guint            index);
 
-const gchar*	seahorse_pgp_key_get_id               (gpgme_key_t      key,
+const gchar*    seahorse_pgp_key_get_id               (gpgme_key_t      key,
                                                        guint            index);
 
 guint           seahorse_pgp_key_get_num_photoids     (SeahorsePGPKey   *pkey);

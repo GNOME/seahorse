@@ -2503,7 +2503,6 @@ seahorse_pgp_key_op_photoid_primary (SeahorsePGPKey *pkey, const guint index)
 {
     PrimaryParm *pri_parm;
     SeahorseEditParm *parms;
-    gpgme_user_id_t uid;
  
     g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (pkey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
   
