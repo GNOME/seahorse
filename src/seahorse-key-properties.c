@@ -326,13 +326,30 @@ set_photoid_state(SeahorseWidget *swidget, SeahorsePGPKey *pkey)
     etype = seahorse_key_get_etype (SEAHORSE_KEY(pkey));
     photoid = (gpgmex_photo_id_t)g_object_get_data (G_OBJECT (swidget), "current-photoid");
 
-    sensitive_glade_widget (swidget, "owner-photo-add-button", etype == SKEY_PRIVATE);
-    sensitive_glade_widget (swidget, "owner-photo-delete-button", etype == SKEY_PRIVATE && photoid);
+    /* Sensitive when adding a photo is possible */
+    sensitive_glade_widget (swidget, "owner-photo-add-button", 
+                            etype == SKEY_PRIVATE);
 
+    /* Sensitive when we have a photo id to delete */
+    sensitive_glade_widget (swidget, "owner-photo-delete-button", 
+                            etype == SKEY_PRIVATE && photoid);
+    
+    /* Sensitive when not the first photo id */
     sensitive_glade_widget (swidget, "owner-photo-previous-button", 
                             photoid && photoid != pkey->photoids);
+    
+    /* Sensitive when not the last photo id */
     sensitive_glade_widget (swidget, "owner-photo-next-button", 
                             photoid && photoid->next && photoid->next->photo);
+    
+    /* Display this when there are any photo ids */
+    show_glade_widget (swidget, "owner-photo-delete-button", photoid != NULL);
+    
+    /* Display these when there are more than one photo id */
+    show_glade_widget (swidget, "owner-photo-previous-button", 
+                       pkey->photoids && pkey->photoids->next);
+    show_glade_widget (swidget, "owner-photo-next-button", 
+                       pkey->photoids && pkey->photoids->next);
         
     photo_image = glade_xml_get_widget (swidget->xml, "photoid");
     if (photo_image) {
