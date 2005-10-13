@@ -205,12 +205,13 @@ typedef gboolean (*SeahorseKeyPredFunc) (SeahorseKey *key, gpointer data);
 typedef struct _SeahorseKeyPredicate {
     
     /* Criteria */
-    GQuark ktype;
-    const gchar *keyid;
-    SeahorseKeyLoc location;
-    SeahorseKeyEType etype;
-    guint flags;
-    struct _SeahorseKeySource *sksrc;
+    GQuark ktype;                       /* Keys of this type or 0*/
+    const gchar *keyid;                 /* A specific keyid or NULL */
+    SeahorseKeyLoc location;            /* Location of keys or SKEY_LOC_UNKNOWN */
+    SeahorseKeyEType etype;             /* Encryption type or SKEY_INVALID */
+    guint flags;                        /* Flags keys must have or 0 */
+    guint nflags;                       /* Flags keys must not have or 0 */
+    struct _SeahorseKeySource *sksrc;   /* key source keys must be from or NULL */
 
     /* Custom function */
     SeahorseKeyPredFunc custom;

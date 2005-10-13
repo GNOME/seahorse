@@ -39,6 +39,8 @@ seahorse_key_predicate_match (SeahorseKeyPredicate *kl, SeahorseKey *skey)
         return FALSE;
     if (kl->flags && !(kl->flags & skey->flags))
         return FALSE;
+    if (kl->nflags && (kl->nflags & skey->flags))
+        return FALSE;
     if (kl->sksrc && kl->sksrc != kl->sksrc)
         return FALSE;
     /* Any custom stuff last */

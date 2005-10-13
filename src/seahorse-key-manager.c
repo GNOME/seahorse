@@ -45,7 +45,38 @@
 /* The various tabs */
 enum KeyManagerTabs {
     TAB_PUBLIC = 1,
+    TAB_TRUSTED,
     TAB_PRIVATE
+};
+
+SeahorseKeyPredicate pred_public = {
+    0,                  /* ktype, set later */
+    NULL,               /* keyid */
+    SKEY_LOC_LOCAL,     /* location */
+    SKEY_PUBLIC,        /* etype */
+    0,                  /* flags */
+    SKEY_FLAG_TRUSTED,  /* nflags */
+    NULL,               /* sksrc */
+};
+
+SeahorseKeyPredicate pred_trusted = {
+    0,                  /* ktype, set later*/
+    NULL,               /* keyid */
+    SKEY_LOC_LOCAL,     /* location */
+    SKEY_PUBLIC,        /* etype */
+    SKEY_FLAG_TRUSTED,  /* flags */
+    0,                  /* nflags */
+    NULL,               /* sksrc */
+};
+
+SeahorseKeyPredicate pred_private = {
+    0,                  /* ktype, set later */
+    NULL,               /* keyid */
+    SKEY_LOC_LOCAL,     /* location */
+    SKEY_PRIVATE,       /* etype */
+    0,                  /* flags */
+    0,                  /* nflags */
+    NULL,               /* sksrc */
 };
 
 #define SEC_RING "/secring.gpg"
@@ -99,6 +130,9 @@ get_current_view (SeahorseWidget *swidget)
         break;
     case TAB_PRIVATE:
         name = "sec-key-list";
+        break;
+    case TAB_TRUSTED:
+        name = "trust-key-list";
         break;
     default:
         g_return_val_if_reached (NULL);
@@ -723,27 +757,28 @@ static GtkActionEntry remote_entries[] = {
 
 void
 initialize_tab (SeahorseWidget *swidget, const gchar *tabwidget, guint tabid, 
-                const gchar *viewwidget, guint etype)
+                const gchar *viewwidget, SeahorseKeyPredicate *pred)
 {
     SeahorseKeyset *skset;
     SeahorseKeyStore *skstore;
-	GtkTreeSelection *selection;
-	GtkTreeView *view;
+    GtkTreeSelection *selection;
+    GtkTreeView *view;
     GtkWidget *tab;
     
-    skset = seahorse_keyset_new (SKEY_PGP, etype, SKEY_LOC_LOCAL, 0);
+    pred->ktype = SKEY_PGP;
+    skset = seahorse_keyset_new_full (pred);
     
     tab = glade_xml_get_widget (swidget->xml, tabwidget);
     g_return_if_fail (tab != NULL);
     g_object_set_data (G_OBJECT (tab), "tab-id", GINT_TO_POINTER (tabid));
     
-	/* init key list & selection settings */
-	view = GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, viewwidget));
+    /* init key list & selection settings */
+    view = GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, viewwidget));
     g_return_if_fail (view != NULL);
     
-	selection = gtk_tree_view_get_selection (view);
-	gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
-	g_signal_connect (selection, "changed", G_CALLBACK (selection_changed), swidget);
+    selection = gtk_tree_view_get_selection (view);
+    gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
+    g_signal_connect (selection, "changed", G_CALLBACK (selection_changed), swidget);
     
     /* Add new key store and associate it */
     skstore = seahorse_key_manager_store_new (skset, view);
@@ -751,7 +786,7 @@ initialize_tab (SeahorseWidget *swidget, const gchar *tabwidget, guint tabid,
     
     /* For the filtering */
     glade_xml_signal_connect_data(swidget->xml, "on_filter_changed",
-                                  G_CALLBACK(filter_changed), skstore);    
+                                  G_CALLBACK(filter_changed), skstore);
 }
 
 GtkWindow* 
@@ -820,8 +855,9 @@ seahorse_key_manager_show (SeahorseOperation *op)
                                   G_CALLBACK(tab_changed), swidget);    
     
     /* Initialize the tabs, and associate them up */
-    initialize_tab (swidget, "pub-key-tab", TAB_PUBLIC, "pub-key-list", SKEY_PUBLIC);
-    initialize_tab (swidget, "sec-key-tab", TAB_PRIVATE, "sec-key-list", SKEY_PRIVATE);
+    initialize_tab (swidget, "pub-key-tab", TAB_PUBLIC, "pub-key-list", &pred_public);
+    initialize_tab (swidget, "trust-key-tab", TAB_TRUSTED, "trust-key-list", &pred_trusted);
+    initialize_tab (swidget, "sec-key-tab", TAB_PRIVATE, "sec-key-list", &pred_private);
     
     /* Set focus to the current key list */
     w = GTK_WIDGET (get_current_view (swidget));
