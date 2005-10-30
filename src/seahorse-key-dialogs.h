@@ -27,11 +27,15 @@
 
 #include "seahorse-context.h"
 #include "seahorse-pgp-key.h"
+#ifdef WITH_SSH
 #include "seahorse-ssh-key.h"
+#endif
 
 void        seahorse_key_properties_new (SeahorsePGPKey     *pkey);
 
+#ifdef WITH_SSH
 void        seahorse_ssh_key_properties_new (SeahorseSSHKey *skey);
+#endif
 
 void        seahorse_add_revoker_new    (SeahorsePGPKey     *pkey);
 

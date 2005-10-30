@@ -293,8 +293,10 @@ properties_activate (GtkWidget *widget, SeahorseWidget *swidget)
         return;
     if (SEAHORSE_IS_PGP_KEY (skey))
 		seahorse_key_properties_new (SEAHORSE_PGP_KEY (skey));
+#ifdef WITH_SSH    
     else if (SEAHORSE_IS_SSH_KEY (skey))
         seahorse_ssh_key_properties_new (SEAHORSE_SSH_KEY (skey));
+#endif 
 }
 
 /* Loads export dialog if a key is selected */
@@ -548,8 +550,15 @@ row_activated (GtkTreeView *treeview, GtkTreePath *path, GtkTreeViewColumn *arg2
     g_return_if_fail (view != NULL);
 	
 	skey = seahorse_key_store_get_key_from_path (view, path, NULL);
-	if (skey != NULL && SEAHORSE_IS_PGP_KEY (skey))
-		seahorse_key_properties_new (SEAHORSE_PGP_KEY (skey));
+	if (skey == NULL)
+        return;
+    
+    if (SEAHORSE_IS_PGP_KEY (skey))
+		seahorse_key_properties_new (SEAHORSE_PGP_KEY (skey));        
+#ifdef WITH_SSH    
+    else if (SEAHORSE_IS_SSH_KEY (skey))
+        seahorse_ssh_key_properties_new (SEAHORSE_SSH_KEY (skey));
+#endif 
 }
 
 static void
