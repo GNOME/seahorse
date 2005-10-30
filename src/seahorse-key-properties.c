@@ -211,14 +211,11 @@ owner_sign_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 static void 
 owner_delete_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 {
-	SeahorseKey *skey;
-	gint index;
-	
-	skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
-	index = get_selected_uid (swidget);
-
-	if (index >= 1) 
-		seahorse_delete_userid_show (SEAHORSE_PGP_KEY (skey), index);
+    SeahorseKey *skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
+    gint index = get_selected_uid (swidget);
+    
+    if (index >= 1) 
+        seahorse_delete_userid_show (skey, index);
 }
 
 static void

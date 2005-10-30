@@ -127,6 +127,20 @@ typedef struct _SeahorseKeySourceClass {
      */    
     SeahorseOperation* (*export) (SeahorseKeySource *sksrc, GList *keys, 
                                   gboolean complete, gpgme_data_t data);
+                                  
+    /**
+     * remove
+     * @sksrc: The #SeahorseKeySource to delete the key from.
+     * @key: A key to delete.
+     * @name: UID/name to delete, or 0 for main key.
+     * @error: Error code when not successful.
+     * 
+     * Delete the keys from the key source. 
+     *
+     * Returns: Whether successful or not.
+     */
+    gboolean (*remove) (SeahorseKeySource *sksrc, SeahorseKey *skey,  
+                        guint name, GError **error);
     
 } SeahorseKeySourceClass;
 
@@ -162,6 +176,11 @@ SeahorseOperation*  seahorse_key_source_export           (SeahorseKeySource *sks
                                                           gpgme_data_t data);                        
 
 void                seahorse_key_source_stop             (SeahorseKeySource *sksrc);
+
+gboolean            seahorse_key_source_remove           (SeahorseKeySource *sksrc,
+                                                          SeahorseKey *skey,
+                                                          guint name,
+                                                          GError **error);
 
 GQuark              seahorse_key_source_get_ktype        (SeahorseKeySource *sksrc);
 

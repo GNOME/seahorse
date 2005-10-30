@@ -145,6 +145,10 @@ static SeahorseOperation*  seahorse_pgp_source_export           (SeahorseKeySour
                                                                  GList *keys,
                                                                  gboolean complete, 
                                                                  gpgme_data_t data);
+static gboolean            seahorse_pgp_source_remove           (SeahorseKeySource *sksrc, 
+                                                                 SeahorseKey *skey,
+                                                                 guint name, 
+                                                                 GError **error);
 
 /* Other forward decls */
 static void                monitor_gpg_homedir                  (GnomeVFSMonitorHandle *handle, 
@@ -176,6 +180,7 @@ seahorse_pgp_source_class_init (SeahorsePGPSourceClass *klass)
     key_class->get_state = seahorse_pgp_source_get_state;
     key_class->import = seahorse_pgp_source_import;
     key_class->export = seahorse_pgp_source_export;
+    key_class->remove = seahorse_pgp_source_remove;
  
     g_object_class_install_property (gobject_class, PROP_KEY_TYPE,
         g_param_spec_uint ("key-type", "Key Type", "Key type that originates from this key source.", 
@@ -410,7 +415,7 @@ add_key_to_context (SeahorsePGPSource *psrc, gpgme_key_t key)
         g_signal_connect (pkey, "destroy", G_CALLBACK (key_destroyed), SEAHORSE_KEY_SOURCE (psrc));
 
         /* Add to context */ 
-        seahorse_context_add_key (SCTX_APP (), SEAHORSE_KEY (pkey));
+        seahorse_context_take_key (SCTX_APP (), SEAHORSE_KEY (pkey));
     }
 
     return pkey; 
@@ -898,6 +903,31 @@ seahorse_pgp_source_export (SeahorseKeySource *sksrc, GList *keys,
                                  
     seahorse_operation_mark_done (operation, FALSE, err);
     return operation;    
+}
+
+static gboolean            
+seahorse_pgp_source_remove (SeahorseKeySource *sksrc, SeahorseKey *skey,
+                            guint name, GError **error)
+{
+    gpgme_error_t gerr;
+    
+    g_assert (!error || !*error);
+    g_return_val_if_fail (seahorse_key_get_source (skey) == sksrc, FALSE);
+
+    if (name > 0)
+        gerr = seahorse_pgp_key_op_del_uid (SEAHORSE_PGP_KEY (skey), name);
+    else if (seahorse_key_get_etype (skey) == SKEY_PRIVATE) 
+        gerr = seahorse_pgp_key_pair_op_delete (SEAHORSE_PGP_KEY (skey));
+    else 
+        gerr = seahorse_pgp_key_op_delete (SEAHORSE_PGP_KEY (skey));
+    
+    if (!GPG_IS_OK (gerr)) {
+        seahorse_util_gpgme_to_error (gerr, error);
+        return FALSE;
+    }
+    
+    seahorse_key_source_load_async (sksrc, SKSRC_LOAD_NEW, NULL);    
+    return TRUE;
 }
 
 /* -------------------------------------------------------------------------- 

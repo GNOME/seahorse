@@ -350,6 +350,7 @@ static void
 changed_key (SeahorsePGPKey *pkey)
 {
     SeahorseKey *skey = SEAHORSE_KEY (pkey);
+    guint l;
     
     skey->ktype = SKEY_PGP;
     
@@ -411,6 +412,10 @@ changed_key (SeahorsePGPKey *pkey)
         if (calc_trust (pkey) >= SEAHORSE_VALIDITY_MARGINAL)
             skey->flags |= SKEY_FLAG_TRUSTED;
     }
+    
+    l = strlen (skey->keyid);
+    if (l >= 16)
+        skey->keyid += l - 16;
     
     seahorse_key_changed (skey, SKEY_CHANGE_ALL);
 }

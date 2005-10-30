@@ -24,6 +24,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <gnome.h>
+#include <glib/gstdio.h>
 #include <libgnomevfs/gnome-vfs.h>
 
 #include "seahorse-ssh-source.h"
@@ -49,7 +50,7 @@
 #endif
 
 enum {
-	PROP_0,
+    PROP_0,
     PROP_KEY_TYPE,
     PROP_LOCATION
 };
@@ -105,19 +106,6 @@ check_file_for_ssh_key (SeahorseSSHSource *ssrc, const gchar *filename)
     return FALSE;
 }
 
-static SeahorseSSHKey*
-load_ssh_key (SeahorseSSHSource *ssrc, const gchar *filename)
-{
-    SeahorseSSHKey *skey = seahorse_ssh_key_new (SEAHORSE_KEY_SOURCE (ssrc), 
-                                                 filename, NULL);
-    if (seahorse_key_get_etype (SEAHORSE_KEY (skey)) != SKEY_PRIVATE) {
-        g_object_unref (skey);
-        skey = NULL;
-    }
-    
-    return skey;
-}    
-
 static void
 key_changed (SeahorseKey *skey, SeahorseKeyChange change, SeahorseKeySource *sksrc)
 {
@@ -152,7 +140,8 @@ remove_key_from_context (const gchar *id, SeahorseKey *dummy, SeahorseSSHSource 
 {
     SeahorseKey *skey;
     
-    skey = seahorse_context_get_key (SCTX_APP (), SEAHORSE_KEY_SOURCE (ssrc), id);
+    skey = seahorse_context_get_key (SCTX_APP (), SEAHORSE_KEY_SOURCE (ssrc), id);    
+fprintf (stderr, "trying to remove key: %s %d\n", id, (guint)skey);            
     if (skey != NULL)
         seahorse_context_remove_key (SCTX_APP (), skey);
 }
@@ -210,11 +199,12 @@ seahorse_ssh_source_load (SeahorseKeySource *src, SeahorseKeySourceLoad load,
 {
     SeahorseSSHSource *ssrc;
     SeahorseSSHKey *skey;
+    SeahorseKey *key;
+    SeahorseSSHKeyData *keydata;
     GError *error = NULL;
     GHashTable *checks = NULL;
     GList *keys, *l;
     const gchar *filename;
-    const gchar *keyid;
     gchar *t;
     GDir *dir;
     
@@ -233,8 +223,10 @@ seahorse_ssh_source_load (SeahorseKeySource *src, SeahorseKeySourceLoad load,
         checks = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
         
         keys = seahorse_context_get_keys (SCTX_APP (), src);
-        for (l = keys; l; l = g_list_next (l))
+        for (l = keys; l; l = g_list_next (l)) {
+fprintf (stderr, "have key: %s\n", seahorse_key_get_keyid (SEAHORSE_KEY (l->data)));            
             g_hash_table_insert (checks, g_strdup (seahorse_key_get_keyid (l->data)), NULL);
+        }
         g_list_free (keys);
     }
 
@@ -256,42 +248,55 @@ seahorse_ssh_source_load (SeahorseKeySource *src, SeahorseKeySourceLoad load,
             g_free (t);
             continue;
         }
-
-        /* Try to load it */
-        skey = load_ssh_key (ssrc, t);
-        g_free (t);
         
-        if (!skey) {
-            g_warning ("couldn't load SSH key from file: %s", filename);
-            g_clear_error (&error);
-            continue;
-        } 
+        /* Try to load it */
+        keydata = seahorse_ssh_key_data_read (t);
+        g_free (t);
 
-        keyid = seahorse_key_get_keyid (SEAHORSE_KEY (skey));
+        if (!keydata->keyid) {
+            seahorse_ssh_key_data_free (keydata);
+            continue;
+        }
         
         switch(load) {
+            
         case SKSRC_LOAD_NEW:
-            g_hash_table_remove (checks, keyid);
-            if (seahorse_context_get_key (SCTX_APP (), src, keyid)) {
-                g_object_unref (skey);
-                skey = NULL;
+            /* If we already have this key then just transfer ownership of keydata */
+            key = seahorse_context_get_key (SCTX_APP (), src, keydata->keyid);
+            if (key) {
+                g_object_set (key, "key-data", keydata, NULL);
+                keydata = NULL;
             }
+            g_hash_table_remove (checks, keydata->keyid);
             break;
+            
         case SKSRC_LOAD_KEY:
-            if (!g_str_equal (match, keyid)) {
-                g_object_unref (skey);
-                skey = NULL;
+            if (!g_str_equal (match, keydata->keyid)) {
+                seahorse_ssh_key_data_free (keydata);
+                keydata = NULL;
             }
             break;
+            
+        case SKSRC_LOAD_ALL:
+            key = seahorse_context_get_key (SCTX_APP (), src, keydata->keyid);
+            if (key)
+                seahorse_context_remove_key (SCTX_APP (), key);
+            break;
+            
         default:
             break;
         }
 
-        /* We listen in to get notified of changes on this key */
-        g_signal_connect (skey, "changed", G_CALLBACK (key_changed), SEAHORSE_KEY_SOURCE (ssrc));
-        g_signal_connect (skey, "destroy", G_CALLBACK (key_destroyed), SEAHORSE_KEY_SOURCE (ssrc));
+        if (keydata) {
+            
+            skey = seahorse_ssh_key_new (src, keydata);
+            
+            /* We listen in to get notified of changes on this key */
+            g_signal_connect (skey, "changed", G_CALLBACK (key_changed), SEAHORSE_KEY_SOURCE (ssrc));
+            g_signal_connect (skey, "destroy", G_CALLBACK (key_destroyed), SEAHORSE_KEY_SOURCE (ssrc));
         
-        seahorse_context_add_key (SCTX_APP (), SEAHORSE_KEY (skey));
+            seahorse_context_take_key (SCTX_APP (), SEAHORSE_KEY (skey));
+        }
     }
 
     if (checks) 
@@ -327,7 +332,7 @@ seahorse_ssh_source_export (SeahorseKeySource *sksrc, GList *keys,
                             gboolean complete, gpgme_data_t data)
 {
     gchar *results, *cmd;
-    gchar *filename, *filepub;
+    const gchar *filename, *filepub;
     GError *error = NULL;
     SeahorseKey *skey;
     gint len, r;
@@ -338,8 +343,9 @@ seahorse_ssh_source_export (SeahorseKeySource *sksrc, GList *keys,
         
         g_return_val_if_fail (SEAHORSE_IS_SSH_KEY (skey), NULL);
         
-        g_object_get (skey, "filename", &filename, NULL);
-        g_object_get (skey, "filename-pub", &filepub, NULL);
+        filename = seahorse_ssh_key_get_filename (SEAHORSE_SSH_KEY (skey), TRUE);
+        filepub = seahorse_ssh_key_get_filename (SEAHORSE_SSH_KEY (skey), FALSE);
+
         g_return_val_if_fail (filename != NULL, NULL);
 
         /* Complete key means the private key */
@@ -359,9 +365,6 @@ seahorse_ssh_source_export (SeahorseKeySource *sksrc, GList *keys,
             g_free (cmd);
         }
         
-        g_free (filename);
-        g_free (filepub);
-
         if (!results)
             return seahorse_operation_new_complete (error);
         
@@ -377,6 +380,44 @@ seahorse_ssh_source_export (SeahorseKeySource *sksrc, GList *keys,
     }
     
     return seahorse_operation_new_complete (NULL);
+}
+
+static gboolean            
+seahorse_ssh_source_remove (SeahorseKeySource *sksrc, SeahorseKey *skey,
+                            guint name, GError **error)
+{
+    const gchar *filename, *filepub;
+    gboolean ret = TRUE;
+    
+    g_return_val_if_fail (name == 0, FALSE);
+    g_return_val_if_fail (seahorse_key_get_source (skey) == sksrc, FALSE);
+    g_assert (!error || !*error);
+    
+    filename = seahorse_ssh_key_get_filename (SEAHORSE_SSH_KEY (skey), TRUE);
+    filepub = seahorse_ssh_key_get_filename (SEAHORSE_SSH_KEY (skey), FALSE);
+
+    g_return_val_if_fail (filename != NULL, FALSE);
+    
+    if (filepub) {
+        if (g_unlink (filepub) == -1) {
+            g_set_error (error, G_FILE_ERROR, g_file_error_from_errno (errno), 
+                         "%s", g_strerror (errno));
+            ret = FALSE;
+        }
+    }
+
+    if (ret && filename) {
+        if (g_unlink (filename) == -1) {
+            g_set_error (error, G_FILE_ERROR, g_file_error_from_errno (errno), 
+                         "%s", g_strerror (errno));
+            ret = FALSE;
+        }
+    }
+    
+    if (ret)
+        seahorse_key_destroy (SEAHORSE_KEY (skey));
+
+    return ret;
 }
 
 static void 
@@ -477,6 +518,7 @@ seahorse_ssh_source_class_init (SeahorseSSHSourceClass *klass)
     parent_class->get_state = seahorse_ssh_source_get_state;
     parent_class->import = seahorse_ssh_source_import;
     parent_class->export = seahorse_ssh_source_export;
+    parent_class->remove = seahorse_ssh_source_remove;
  
     g_object_class_install_property (gobject_class, PROP_KEY_TYPE,
         g_param_spec_uint ("key-type", "Key Type", "Key type that originates from this key source.", 

@@ -117,7 +117,7 @@ do_details (SeahorseWidget *swidget)
 
     widget = glade_xml_get_widget (swidget->xml, "location-label");
     if (widget) {
-        label = seahorse_ssh_key_get_filename (skey);
+        label = seahorse_ssh_key_get_filename (skey, TRUE);
         gtk_label_set_text (GTK_LABEL (widget), label);  
     }
 

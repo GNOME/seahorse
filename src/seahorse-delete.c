@@ -36,7 +36,7 @@ ask_key_pair (SeahorseKey *skey)
     userid = seahorse_key_get_name (skey, 0);
 	warning = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
 		GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE,
-		_("%s is a key pair! Do you still want to delete it?"), userid);
+		_("%s is a private key. Make sure you have a backup. Do you still want to delete it?"), userid);
     g_free (userid);
     
 	delete_button = gtk_button_new_from_stock(GTK_STOCK_DELETE);
@@ -98,27 +98,25 @@ ask_key (SeahorseKey *skey)
 void
 seahorse_delete_show (GList *keys)
 {
-	SeahorseKey *skey;
-	gpgme_error_t err;
-	GList *list = NULL;
-	
-	g_return_if_fail (g_list_length (keys) > 0);
-	
-	for (list = keys; list != NULL; list = g_list_next (list)) {
-		skey = list->data;
-		if (ask_key (skey)) {
+    SeahorseKeySource *sksrc;
+    SeahorseKey *skey;
+    GError *error = NULL;
+    GList *list = NULL;
+
+    g_return_if_fail (g_list_length (keys) > 0);
+    
+    for (list = keys; list != NULL; list = g_list_next (list)) {
+        skey = SEAHORSE_KEY (list->data);
+        if (ask_key (skey)) {
+
+            sksrc = seahorse_key_get_source (skey);
+            g_return_if_fail (sksrc != NULL);
             
-            /* TODO: We need to be able to handle different key types here */
-			if (seahorse_key_get_etype (skey) == SKEY_PRIVATE)
-				err = seahorse_pgp_key_pair_op_delete (SEAHORSE_PGP_KEY (skey));
-			else
-				err = seahorse_pgp_key_op_delete (SEAHORSE_PGP_KEY (skey));
-			
-			if (!GPG_IS_OK (err))
-				seahorse_util_handle_gpgme (err, _("Couldn't delete key"));
-		} else
-			break;
-	}
+            if (!seahorse_key_source_remove (sksrc, skey, 0, &error))
+                seahorse_util_handle_error (error, _("Couldn't delete key"));
+        } else
+            break;
+    }
 }
 
 void
@@ -159,18 +157,19 @@ seahorse_delete_subkey_new (SeahorsePGPKey *pkey, guint index)
 }
 
 void
-seahorse_delete_userid_show (SeahorsePGPKey *pkey, guint index)
+seahorse_delete_userid_show (SeahorseKey *skey, guint index)
 {
     GtkWidget *question, *delete_button, *cancel_button;
+    SeahorseKeySource *sksrc;
     gint response;
-    gpgme_error_t err;
+    GError *error = NULL;
     gchar *userid;
   
     /* UIDs are one based ... */
     g_return_if_fail (index > 0);
    
     /* ... Except for when calling this, which is messed up */
-    userid = seahorse_key_get_name (SEAHORSE_KEY (pkey), index - 1);
+    userid = seahorse_key_get_name (skey, index - 1);
     question = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
                         GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE,
                         _("Are you sure you want to permanently delete the '%s' user ID?"),
@@ -194,7 +193,9 @@ seahorse_delete_userid_show (SeahorsePGPKey *pkey, guint index)
     if (response != GTK_RESPONSE_ACCEPT)
        return;
     
-    err = seahorse_pgp_key_op_del_uid (pkey, index);
-    if (!GPG_IS_OK (err))
-        seahorse_util_handle_gpgme (err, _("Couldn't delete user id"));
+    sksrc = seahorse_key_get_source (skey);
+    g_return_if_fail (sksrc != NULL);
+    
+    if (!seahorse_key_source_remove (sksrc, skey, index, &error)) 
+        seahorse_util_handle_error (error, _("Couldn't delete user id"));
 }

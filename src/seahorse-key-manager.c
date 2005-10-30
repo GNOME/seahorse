@@ -20,7 +20,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <config.h>
+#include "config.h"
 #include <gnome.h>
 #include <gconf/gconf-client.h>
 #include <libgnomevfs/gnome-vfs.h>
@@ -41,6 +41,10 @@
 #include "seahorse-gpg-options.h"
 #include "seahorse-gconf.h"
 #include "seahorse-gtkstock.h"
+
+#ifdef WITH_SSH
+#include "seahorse-ssh-key.h"
+#endif
 
 /* The various tabs */
 enum KeyManagerTabs {
@@ -170,6 +174,21 @@ set_numbered_status (SeahorseWidget *swidget, const gchar *t1, const gchar *t2, 
     g_free (msg);
 }
 
+/* Shows the properties for a given key */
+static void
+show_properties (SeahorseKey *skey)
+{
+    g_return_if_fail (skey != NULL);
+    
+    if (SEAHORSE_IS_PGP_KEY (skey))
+		seahorse_key_properties_new (SEAHORSE_PGP_KEY (skey));
+#ifdef WITH_SSH    
+    else if (SEAHORSE_IS_SSH_KEY (skey))
+        seahorse_ssh_key_properties_new (SEAHORSE_SSH_KEY (skey));
+#endif 
+    
+}
+
 /* Loads generate dialog */
 static void
 generate_activate (GtkWidget *widget, SeahorseWidget *swidget)
@@ -289,14 +308,8 @@ static void
 properties_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
 	SeahorseKey *skey = get_selected_key (swidget, NULL);
-	if (skey == NULL)
-        return;
-    if (SEAHORSE_IS_PGP_KEY (skey))
-		seahorse_key_properties_new (SEAHORSE_PGP_KEY (skey));
-#ifdef WITH_SSH    
-    else if (SEAHORSE_IS_SSH_KEY (skey))
-        seahorse_ssh_key_properties_new (SEAHORSE_SSH_KEY (skey));
-#endif 
+	if (skey != NULL)
+        show_properties (skey);
 }
 
 /* Loads export dialog if a key is selected */
@@ -396,6 +409,17 @@ static void
 sync_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
 	GList *keys = get_selected_keys (swidget);
+    GList *l;
+    
+    /* Only supported on PGP keys */
+    for (l = keys; l; l = g_list_next (l)) {
+        if (seahorse_key_get_ktype (SEAHORSE_KEY (l->data)) != SKEY_PGP) {
+            keys = l = g_list_delete_link (keys, l);
+            if (keys == NULL)
+                break;
+        }
+    }
+    
     if (keys == NULL)
         keys = seahorse_context_find_keys (SCTX_APP (), SKEY_PGP, SKEY_LOC_LOCAL, 0);
     seahorse_keyserver_sync_show (keys);
@@ -403,12 +427,20 @@ sync_activate (GtkWidget *widget, SeahorseWidget *swidget)
 }
 #endif
 
+#ifdef WITH_SSH
+static void
+setup_sshkey_activate (GtkWidget *widget, SeahorseWidget *swidget)
+{
+    /* TODO: */
+}
+#endif 
+
 /* Loads delete dialog if a key is selected */
 static void
 delete_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
-	GList *keys = get_selected_keys (swidget);
-	
+    GList *keys = get_selected_keys (swidget);
+    
     /* Special behavior for a single selection */
     if (g_list_length (keys) == 1) {
         SeahorseKey *skey;
@@ -416,33 +448,17 @@ delete_activate (GtkWidget *widget, SeahorseWidget *swidget)
         
         skey = get_selected_key (swidget, &uid);
         if (uid > 0 && SEAHORSE_IS_PGP_KEY (skey)) 
-			/* User ids start from one in this case, strange */
-            seahorse_delete_userid_show (SEAHORSE_PGP_KEY (skey), uid + 1);
+            /* User ids start from one in this case, strange */
+            seahorse_delete_userid_show (skey, uid + 1);
         else    
             seahorse_delete_show (keys);
 
     /* Multiple keys */
     } else {    
-	    seahorse_delete_show (keys);
+        seahorse_delete_show (keys);
     }
     
-  	g_list_free (keys);
-}
-
-static void
-add_uid_activate (GtkMenuItem *item, SeahorseWidget *swidget)
-{
-	SeahorseKey *skey = get_selected_key (swidget, NULL);
-	if (skey != NULL && SEAHORSE_IS_PGP_KEY (skey))
-		seahorse_add_uid_new (SEAHORSE_PGP_KEY (skey));
-}
-
-static void
-add_revoker_activate (GtkMenuItem *item, SeahorseWidget *swidget)
-{
-	SeahorseKey *skey = get_selected_key (swidget, NULL);
-	if (skey != NULL && SEAHORSE_IS_PGP_KEY (skey))
-		seahorse_add_revoker_new (SEAHORSE_PGP_KEY (skey));
+    g_list_free (keys);
 }
 
 /* Loads preferences dialog */
@@ -550,15 +566,8 @@ row_activated (GtkTreeView *treeview, GtkTreePath *path, GtkTreeViewColumn *arg2
     g_return_if_fail (view != NULL);
 	
 	skey = seahorse_key_store_get_key_from_path (view, path, NULL);
-	if (skey == NULL)
-        return;
-    
-    if (SEAHORSE_IS_PGP_KEY (skey))
-		seahorse_key_properties_new (SEAHORSE_PGP_KEY (skey));        
-#ifdef WITH_SSH    
-    else if (SEAHORSE_IS_SSH_KEY (skey))
-        seahorse_ssh_key_properties_new (SEAHORSE_SSH_KEY (skey));
-#endif 
+	if (skey != NULL)
+        show_properties (skey);
 }
 
 static void
@@ -566,7 +575,9 @@ selection_changed (GtkTreeSelection *notused, SeahorseWidget *swidget)
 {
     GtkTreeView *view;
     GtkActionGroup *actions;
+    GList *keys, *l;
 	SeahorseKey *skey = NULL;
+    gint ktype = 0;
     gboolean selected = FALSE;
     gboolean secret = FALSE;
 	gint rows = 0;
@@ -581,18 +592,37 @@ selection_changed (GtkTreeSelection *notused, SeahorseWidget *swidget)
 	if (selected) {
         set_numbered_status (swidget, _("Selected %d key"),
                                       _("Selected %d keys"), rows);
-	}
-	
-	if (rows == 1) {
-		skey = get_selected_key (swidget, NULL);
-		secret = (skey != NULL && seahorse_key_get_etype (skey) == SKEY_PRIVATE);
+        
+        keys = get_selected_keys (swidget);
+
+        if (keys) {
+            secret = TRUE;
+            ktype = -1;
+        }
+            
+        for (l = keys; l; l = g_list_next (l)) {
+            skey = SEAHORSE_KEY (l->data);
+            if (seahorse_key_get_etype (skey) != SKEY_PRIVATE)
+                secret = FALSE;
+            if (ktype == -1)
+                ktype = (gint)seahorse_key_get_ktype (skey);
+            else if (ktype != seahorse_key_get_ktype (skey))
+                ktype = 0;
+        }
+        
+        g_list_free (keys);
 	}
     
     actions = seahorse_widget_find_actions (swidget, "key");
     gtk_action_group_set_sensitive (actions, selected);
     
-    actions = seahorse_widget_find_actions (swidget, "keypair");
-    gtk_action_group_set_sensitive (actions, selected && secret);
+    actions = seahorse_widget_find_actions (swidget, "pgp");
+    gtk_action_group_set_visible (actions, ktype == SKEY_PGP);
+    
+#ifdef WITH_SSH    
+    actions = seahorse_widget_find_actions (swidget, "ssh");
+    gtk_action_group_set_sensitive (actions, ktype == SKEY_SSH);
+#endif    
 }
 
 static void
@@ -734,39 +764,44 @@ static GtkActionEntry ui_entries[] = {
             N_("Expand all listings"), G_CALLBACK (expand_all_activate) }, 
     { "view-collapse-all", GTK_STOCK_REMOVE, N_("_Collapse All"), NULL,
             N_("Collapse all listings"), G_CALLBACK (collapse_all_activate) }, 
+
+    { "remote-menu", NULL, N_("_Remote") },
             
     { "help-show", GTK_STOCK_HELP, N_("_Contents"), "F1",
             N_("Show Seahorse help"), G_CALLBACK (help_activate) }, 
 };
 
-static GtkActionEntry public_entries[] = {
+static GtkActionEntry key_entries[] = {
     { "key-properties", GTK_STOCK_PROPERTIES, N_("P_roperties"), NULL,
             N_("Show key properties"), G_CALLBACK (properties_activate) }, 
     { "key-export-file", GTK_STOCK_SAVE_AS, N_("E_xport..."), NULL,
             N_("Export public key"), G_CALLBACK (export_activate) }, 
     { "key-export-clipboard", GTK_STOCK_COPY, N_("_Copy Key"), "<control>C",
-            N_("Copy selected keys to the clipboard"), G_CALLBACK (copy_activate) }, 
-    { "key-sign", GTK_STOCK_INDEX, N_("_Sign..."), NULL,
-            N_("Sign public key"), G_CALLBACK (sign_activate) }, 
+            N_("Copy selected keys to the clipboard"), G_CALLBACK (copy_activate) },
     { "key-delete", GTK_STOCK_DELETE, N_("_Delete Key"), NULL,
             N_("Delete selected keys"), G_CALLBACK (delete_activate) }, 
 };
 
-static GtkActionEntry private_entries[] = {
-    { "key-add-userid", GTK_STOCK_ADD, N_("Add _User ID..."), NULL,
-            N_("Add a new user ID"), G_CALLBACK (add_uid_activate) }, 
-    { "key-add-revoker", GTK_STOCK_CANCEL, N_("Add _Revoker..."), NULL,
-            N_("Add the default key as a revoker"), G_CALLBACK (add_revoker_activate) }, 
+static GtkActionEntry pgp_entries[] = {
+    { "key-sign", GTK_STOCK_INDEX, N_("_Sign..."), NULL,
+            N_("Sign public key"), G_CALLBACK (sign_activate) }, 
 };
 
-static GtkActionEntry remote_entries[] = {
+#ifdef WITH_SSH
+static GtkActionEntry ssh_entries[] = {
+    { "remote-upload-ssh", NULL, N_("Setup Key for SSH..."), "",
+            N_("Send public SSH key to another machine, and enable logins using that key."), G_CALLBACK (setup_sshkey_activate) },
+};
+#endif 
 
-    { "remote-menu", NULL, N_("_Remote") },
+#ifdef WITH_KEYSERVER
+static GtkActionEntry keyserver_entries[] = {
     { "remote-find", GTK_STOCK_FIND, N_("_Find Remote Keys..."), "",
             N_("Search for keys on a key server"), G_CALLBACK (search_activate) }, 
     { "remote-sync", GTK_STOCK_REFRESH, N_("_Sync and Publish Keys..."), "",
             N_("Publish and/or sync your keys with those online."), G_CALLBACK (sync_activate) }, 
 };
+#endif 
 
 void
 initialize_tab (SeahorseWidget *swidget, const gchar *tabwidget, guint tabid, 
@@ -821,8 +856,8 @@ seahorse_key_manager_show (SeahorseOperation *op)
     
     /* Actions that are allowed on all keys */
     actions = gtk_action_group_new ("key");
-    gtk_action_group_add_actions (actions, public_entries, 
-                                  G_N_ELEMENTS (public_entries), swidget);
+    gtk_action_group_add_actions (actions, key_entries, 
+                                  G_N_ELEMENTS (key_entries), swidget);
     seahorse_widget_add_actions (swidget, actions);
 
     /* Mark the properties toolbar button as important */
@@ -830,17 +865,25 @@ seahorse_key_manager_show (SeahorseOperation *op)
     g_return_val_if_fail (action, win);
     g_object_set (action, "is-important", TRUE, NULL);
 
-    /* Actions for public keys */
-    actions = gtk_action_group_new ("keypair");
-    gtk_action_group_add_actions (actions, private_entries,
-                                  G_N_ELEMENTS (private_entries), swidget);
+    /* Actions for pgp keys */
+    actions = gtk_action_group_new ("pgp");
+    gtk_action_group_add_actions (actions, pgp_entries,
+                                  G_N_ELEMENTS (pgp_entries), swidget);
+    seahorse_widget_add_actions (swidget, actions);                              
+    
+    /* Actions for SSH keys */
+#ifdef WITH_SSH
+    actions = gtk_action_group_new ("ssh");
+    gtk_action_group_add_actions (actions, ssh_entries,
+                                  G_N_ELEMENTS (ssh_entries), swidget);
     seahorse_widget_add_actions (swidget, actions);
+#endif
 
     /* Actions for keyservers */
 #ifdef WITH_KEYSERVER      
-    actions = gtk_action_group_new ("remote");
-    gtk_action_group_add_actions (actions, remote_entries, 
-                                  G_N_ELEMENTS (remote_entries), swidget);
+    actions = gtk_action_group_new ("keyserver");
+    gtk_action_group_add_actions (actions, keyserver_entries, 
+                                  G_N_ELEMENTS (keyserver_entries), swidget);
     seahorse_widget_add_actions (swidget, actions);                                  
 #endif
  	

@@ -201,6 +201,22 @@ seahorse_key_source_export (SeahorseKeySource *sksrc, GList *keys,
     
     return (*klass->export) (sksrc, keys, complete, data);    
 }
+
+gboolean            
+seahorse_key_source_remove (SeahorseKeySource *sksrc, SeahorseKey *skey,
+                            guint name, GError **error)
+{
+    SeahorseKeySourceClass *klass;
+    
+    g_assert (!error || !*error);
+    g_return_val_if_fail (seahorse_key_get_source (skey) == sksrc, FALSE);
+    
+    g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (sksrc), FALSE);
+    klass = SEAHORSE_KEY_SOURCE_GET_CLASS (sksrc);
+    g_return_val_if_fail (klass->remove != NULL, FALSE);
+    
+    return (*klass->remove) (sksrc, skey, name, error);    
+}
                                                
 GQuark              
 seahorse_key_source_get_ktype (SeahorseKeySource *sksrc)

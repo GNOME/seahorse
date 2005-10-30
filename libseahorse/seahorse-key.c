@@ -29,19 +29,19 @@ gboolean
 seahorse_key_predicate_match (SeahorseKeyPredicate *kl, SeahorseKey *skey)
 {
     /* Now go for all the fields */
-    if (kl->ktype && kl->ktype != skey->ktype)
+    if (kl->ktype && (kl->ktype != skey->ktype))
         return FALSE;
     if (kl->keyid && (!skey->keyid || !g_str_equal (kl->keyid, skey->keyid)))
         return FALSE;
-    if (kl->location && kl->location != skey->location)
+    if (kl->location && (kl->location != skey->location))
         return FALSE;
-    if (kl->etype && kl->etype != skey->etype) 
+    if (kl->etype && (kl->etype != skey->etype)) 
         return FALSE;
     if (kl->flags && !(kl->flags & skey->flags))
         return FALSE;
     if (kl->nflags && (kl->nflags & skey->flags))
         return FALSE;
-    if (kl->sksrc && kl->sksrc != kl->sksrc)
+    if (kl->sksrc && (kl->sksrc != skey->sksrc))
         return FALSE;
     /* Any custom stuff last */
     if (kl->custom && !((kl->custom)(skey, kl->custom_data)))

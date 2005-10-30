@@ -27,6 +27,7 @@
 
 #include "seahorse-context.h"
 #include "seahorse-pgp-key.h"
+
 #ifdef WITH_SSH
 #include "seahorse-ssh-key.h"
 #endif
@@ -49,7 +50,7 @@ void        seahorse_add_uid_new        (SeahorsePGPKey     *pkey);
 void        seahorse_delete_subkey_new  (SeahorsePGPKey     *pkey,
                                          guint              index);
 
-void        seahorse_delete_userid_show (SeahorsePGPKey     *pkey, 
+void        seahorse_delete_userid_show (SeahorseKey        *skey, 
                                          guint              index);
 
 void        seahorse_revoke_new         (SeahorsePGPKey     *pkey,

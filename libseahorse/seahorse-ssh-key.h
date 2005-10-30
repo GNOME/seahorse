@@ -40,6 +40,14 @@
 
 #include "seahorse-key.h"
 
+/* The various algorithm types */
+enum {
+    SSH_ALGO_UNK,
+    SSH_ALGO_RSA1,
+    SSH_ALGO_RSA,
+    SSH_ALGO_DSA
+};
+
 #define SKEY_SSH                         (g_quark_from_static_string ("openssh"))
 
 #define SEAHORSE_TYPE_SSH_KEY            (seahorse_ssh_key_get_type ())
@@ -50,30 +58,50 @@
 #define SEAHORSE_SSH_KEY_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_SSH_KEY, SeahorseSSHKeyClass))
 
 typedef struct _SeahorseSSHKey SeahorseSSHKey;
+typedef struct _SeahorseSSHKeyData SeahorseSSHKeyData;
 typedef struct _SeahorseSSHKeyClass SeahorseSSHKeyClass;
 typedef struct _SeahorseSSHKeyPrivate SeahorseSSHKeyPrivate;
 
 struct _SeahorseSSHKey {
     SeahorseKey	parent;
 
+    /*< public >*/
+    struct _SeahorseSSHKeyData *keydata;
+        
     /*< private >*/
     struct _SeahorseSSHKeyPrivate *priv;
+};
+
+struct _SeahorseSSHKeyData {
+    gchar *filename;
+    gchar *filepub;
+    gchar *comment;
+    gchar *keyid;
+    gchar *fingerprint;
+    guint length;
+    guint algo;
 };
 
 struct _SeahorseSSHKeyClass {
     SeahorseKeyClass            parent_class;
 };
 
-SeahorseSSHKey* seahorse_ssh_key_new                  (SeahorseKeySource *sksrc,
-                                                       const gchar* filename,
-                                                       const gchar* filepub);
+SeahorseSSHKey*         seahorse_ssh_key_new                  (SeahorseKeySource *sksrc, 
+                                                               SeahorseSSHKeyData *data);
 
-GType           seahorse_ssh_key_get_type             (void);
+GType                   seahorse_ssh_key_get_type             (void);
 
-const gchar*    seahorse_ssh_key_get_algo             (SeahorseSSHKey *skey);
+const gchar*            seahorse_ssh_key_get_algo             (SeahorseSSHKey *skey);
 
-guint           seahorse_ssh_key_get_strength         (SeahorseSSHKey *skey);
+guint                   seahorse_ssh_key_get_strength         (SeahorseSSHKey *skey);
 
-const gchar*    seahorse_ssh_key_get_filename         (SeahorseSSHKey *skey);
+const gchar*            seahorse_ssh_key_get_filename         (SeahorseSSHKey *skey,
+                                                               gboolean private);
+
+SeahorseSSHKeyData*     seahorse_ssh_key_data_read            (const gchar *filename);
+
+gboolean                seahorse_ssh_key_data_is_valid        (SeahorseSSHKeyData *data);
+
+void                    seahorse_ssh_key_data_free            (SeahorseSSHKeyData *data);
 
 #endif /* __SEAHORSE_KEY_H__ */

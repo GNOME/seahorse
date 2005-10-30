@@ -23,12 +23,13 @@
 #include <gnome.h>
 
 #include "seahorse-key-store.h"
-#ifdef WITH_SSH
-#include "seahorse-ssh-key.h"
-#endif 
 #include "seahorse-pgp-key.h"
 #include "seahorse-gconf.h"
 #include "seahorse-gtkstock.h"
+
+#ifdef WITH_SSH
+#include "seahorse-ssh-key.h"
+#endif 
 
 enum {
 	PROP_0,

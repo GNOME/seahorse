@@ -29,18 +29,9 @@
 #include "seahorse-ssh-source.h"
 #include "seahorse-ssh-key.h"
 
-/* The various algorithm types */
-enum {
-    ALGO_UNK,
-    ALGO_RSA1,
-    ALGO_RSA,
-    ALGO_DSA
-};
-
 enum {
     PROP_0,
-    PROP_FILENAME,
-    PROP_FILENAME_PUB,
+    PROP_KEY_DATA,
     PROP_DISPLAY_NAME,
     PROP_SIMPLE_NAME,
     PROP_FINGERPRINT,
@@ -50,15 +41,8 @@ enum {
 };
 
 struct _SeahorseSSHKeyPrivate {
-    gchar *filename;
-    gchar *filepub;
-    gchar *comment;
-    gchar *keyid;
-    gchar *fingerprint;
     gchar *displayname;
     gchar *simplename;
-    guint length;
-    guint algo;
 };
 
 G_DEFINE_TYPE (SeahorseSSHKey, seahorse_ssh_key, SEAHORSE_TYPE_KEY);
@@ -88,131 +72,34 @@ parse_ssh_algo (gchar *type)
         *t = g_ascii_tolower (*t);
     
     if (strstr (type, "rsa1"))
-        return ALGO_RSA1;
+        return SSH_ALGO_RSA1;
     if (strstr (type, "rsa"))
-        return ALGO_RSA;
+        return SSH_ALGO_RSA;
     if (strstr (type, "dsa"))
-        return ALGO_DSA;
-    return ALGO_UNK;
-}
-
-static void 
-read_ssh_file (SeahorseSSHKey *skey)
-{
-    GError *error = NULL;
-    gchar **values;
-    gchar *t, *results;
-    
-    /* Lookup length, fingerprint and public key filename */
-    t = g_strdup_printf (SSH_KEYGEN_PATH " -l -f %s", skey->priv->filename);
-    results = seahorse_ssh_source_execute (t, NULL);
-    g_free (t);
-    
-    /* 
-     * Parse the length, fingerprint, and public key from a string like: 
-     * 1024 a0:f3:2a:b8:00:57:47:7e:03:f6:de:35:77:2d:a0:6a /home/nate/.ssh/id_rsa.pub
-     */
-    if (results) {
-        values = g_strsplit_set (results, " ", 3);
-        g_free (results);
-
-        /* Key length */
-        if (values[0]) {
-            if (values[0][0]) {
-                skey->priv->length = strtol (values[0], NULL, 10);
-                skey->priv->length = skey->priv->length < 0 ? 0 : skey->priv->length;
-            }
-            
-            /* Fingerprint */
-            if (values[1]) {
-                if (values[1][0]) {
-                    skey->priv->fingerprint = g_strdup (values[1]);
-                    g_strstrip (skey->priv->fingerprint);
-                }
-            
-                /* Public name */
-                if (values[2] && !skey->priv->filepub) {
-                    skey->priv->filepub = g_strdup (values[2]);
-                    g_strstrip (skey->priv->filepub);
-                }
-            }
-        }
-        
-        g_strfreev (values);
-    }
-    
-    /* Read in the public key */
-    results = NULL;
-    if (skey->priv->filepub) {
-        if(!g_file_get_contents (skey->priv->filepub, &results, NULL, &error)) {
-            g_warning ("couldn't read public SSH file: %s (%s)", skey->priv->filepub, error->message);
-            results = NULL;
-        }
-    } 
-    
-    /* 
-     * Parse the key type and comment from a string like: 
-     * ssh-rsa AAAAB3NzaC1yc2EAAAABIwAzE1/iHkfHMk= nielsen@memberwebs.com
-     */
-    if (results) {
-        values = g_strsplit_set (results, " ", 3);
-        g_free (results);
-        
-        /* Key type */
-        if (values[0]) {
-            if (values[0][0])
-                skey->priv->algo = parse_ssh_algo (values[0]);
-            
-            /* Key Comment */
-            if (values[1] && values[2] && values[2][0]) {
-                g_strstrip (values[2]);
-                
-            	/* If not utf8 valid, assume latin 1 */
-	            if (!g_utf8_validate (values[2], -1, NULL))
-		            skey->priv->comment = g_convert (values[2], -1, "UTF-8", "ISO-8859-1", NULL, NULL, NULL);
-                else
-                    skey->priv->comment = g_strdup (values[2]);
-            }
-        }
-        
-        g_strfreev (values);
-    }
+        return SSH_ALGO_DSA;
+    return SSH_ALGO_UNK;
 }
 
 static void
 changed_key (SeahorseSSHKey *skey)
 {
     SeahorseKey *key = SEAHORSE_KEY (skey);
-    
-    g_free (skey->priv->comment);
-    skey->priv->comment = NULL;
-    
-    g_free (skey->priv->fingerprint);
-    skey->priv->fingerprint = NULL;
-    
+
     g_free (skey->priv->displayname);
-    skey->priv->fingerprint = NULL;
+    skey->priv->displayname = NULL;
     
     g_free (skey->priv->simplename);
     skey->priv->simplename = NULL;
     
-    g_free (skey->priv->keyid);
-    skey->priv->keyid = NULL;
-    
-    skey->priv->length = 0;
-    skey->priv->algo = 0;
-    
-    if (skey->priv->filename) {
+    if (skey->keydata) {
 
-        read_ssh_file(skey);
-        
         /* Try to make display and simple names */
-        if (skey->priv->comment) {
-            skey->priv->displayname = g_strdup (skey->priv->comment);
-            skey->priv->simplename = parse_first_word (skey->priv->comment);
+        if (skey->keydata->comment) {
+            skey->priv->displayname = g_strdup (skey->keydata->comment);
+            skey->priv->simplename = parse_first_word (skey->keydata->comment);
             
         /* No names when not even the fingerpint loaded */
-        } else if (!skey->priv->fingerprint) {
+        } else if (!skey->keydata->fingerprint) {
             skey->priv->displayname = g_strdup (_("(Unreadable SSH Key)"));
     
         /* No comment, but loaded */        
@@ -223,16 +110,12 @@ changed_key (SeahorseSSHKey *skey)
         if (skey->priv->simplename == NULL)
             skey->priv->simplename = g_strdup (_("SSH Key"));
         
-        /* Make a key id */
-        if (skey->priv->fingerprint)
-            skey->priv->keyid = g_strndup (skey->priv->fingerprint, 11);
-        
     }
     
     /* Now start setting the main SeahorseKey fields */
     key->ktype = SKEY_SSH;
     
-    if (!skey->priv->fingerprint) {
+    if (!skey->keydata || !skey->keydata->keyid) {
         
         key->keyid = "UNKNOWN ";
         key->location = SKEY_LOC_UNKNOWN;
@@ -243,7 +126,7 @@ changed_key (SeahorseSSHKey *skey)
     } else {
     
         /* The key id */
-        key->keyid = skey->priv->keyid ? skey->priv->keyid : "UNKNOWN ";
+        key->keyid = skey->keydata->keyid ? skey->keydata->keyid : "UNKNOWN ";
         key->location = SKEY_LOC_LOCAL;
         key->etype = SKEY_PRIVATE;
         key->loaded = SKEY_INFO_COMPLETE;
@@ -288,14 +171,11 @@ static void
 seahorse_ssh_key_get_property (GObject *object, guint prop_id,
                                GValue *value, GParamSpec *pspec)
 {
-	SeahorseSSHKey *skey = SEAHORSE_SSH_KEY (object);
+    SeahorseSSHKey *skey = SEAHORSE_SSH_KEY (object);
     
     switch (prop_id) {
-    case PROP_FILENAME:
-        g_value_set_string (value, skey->priv->filename);
-        break;
-    case PROP_FILENAME_PUB:
-        g_value_set_string (value, skey->priv->filepub);
+    case PROP_KEY_DATA:
+        g_value_set_pointer (value, skey->keydata);
         break;
     case PROP_DISPLAY_NAME:
         g_value_take_string (value, skey->priv->displayname);
@@ -304,7 +184,7 @@ seahorse_ssh_key_get_property (GObject *object, guint prop_id,
         g_value_take_string (value, skey->priv->simplename);
         break;
     case PROP_FINGERPRINT:
-        g_value_set_string (value, skey->priv->fingerprint);
+        g_value_set_string (value, skey->keydata ? skey->keydata->fingerprint : NULL);
         break;
     case PROP_VALIDITY:
         g_value_set_uint (value, SEAHORSE_VALIDITY_ULTIMATE);
@@ -315,7 +195,7 @@ seahorse_ssh_key_get_property (GObject *object, guint prop_id,
     case PROP_EXPIRES:
         g_value_set_ulong (value, 0);
         break;
-	}
+    }
 }
 
 static void
@@ -325,14 +205,9 @@ seahorse_ssh_key_set_property (GObject *object, guint prop_id,
     SeahorseSSHKey *skey = SEAHORSE_SSH_KEY (object);
 
     switch (prop_id) {
-    case PROP_FILENAME:
-        g_free (skey->priv->filename);
-        skey->priv->filename = g_strdup (g_value_get_string (value));
-        changed_key (skey);
-        break;
-    case PROP_FILENAME_PUB:
-        g_free (skey->priv->filepub);
-        skey->priv->filepub = g_strdup (g_value_get_string (value));
+    case PROP_KEY_DATA:
+        seahorse_ssh_key_data_free (skey->keydata);
+        skey->keydata = (SeahorseSSHKeyData*)g_value_get_pointer (value);
         changed_key (skey);
         break;
     }
@@ -342,27 +217,23 @@ seahorse_ssh_key_set_property (GObject *object, guint prop_id,
 static void
 seahorse_ssh_key_finalize (GObject *gobject)
 {
-	SeahorseSSHKey *skey = SEAHORSE_SSH_KEY (gobject);
+    SeahorseSSHKey *skey = SEAHORSE_SSH_KEY (gobject);
     
-    g_free (skey->priv->filename);
-    g_free (skey->priv->filepub);
-    g_free (skey->priv->comment);
-    g_free (skey->priv->keyid);
     g_free (skey->priv->displayname);
     g_free (skey->priv->simplename);
-    g_free (skey->priv->fingerprint);
-    
     g_free (skey->priv);
     skey->priv = NULL;
-	
-	G_OBJECT_CLASS (seahorse_ssh_key_parent_class)->finalize (gobject);
+    
+    seahorse_ssh_key_data_free (skey->keydata);
+    
+    G_OBJECT_CLASS (seahorse_ssh_key_parent_class)->finalize (gobject);
 }
 
 static void
 seahorse_ssh_key_init (SeahorseSSHKey *skey)
 {
-	/* init private vars */
-	skey->priv = g_new0 (SeahorseSSHKeyPrivate, 1);
+    /* init private vars */
+    skey->priv = g_new0 (SeahorseSSHKeyPrivate, 1);
 }
 
 static void
@@ -376,19 +247,15 @@ seahorse_ssh_key_class_init (SeahorseSSHKeyClass *klass)
     gobject_class->finalize = seahorse_ssh_key_finalize;
     gobject_class->set_property = seahorse_ssh_key_set_property;
     gobject_class->get_property = seahorse_ssh_key_get_property;
-	
+
     key_class->get_num_names = seahorse_ssh_key_get_num_names;
     key_class->get_name = seahorse_ssh_key_get_name;
     key_class->get_name_cn = seahorse_ssh_key_get_name_cn;
     
-    g_object_class_install_property (gobject_class, PROP_FILENAME,
-        g_param_spec_string ("filename", "Private identity file", "SSH private identity file",
-                             NULL, G_PARAM_READWRITE));
+    g_object_class_install_property (gobject_class, PROP_KEY_DATA,
+        g_param_spec_pointer ("key-data", "SSH Key Data", "SSH key data pointer",
+                              G_PARAM_READWRITE));
 
-    g_object_class_install_property (gobject_class, PROP_FILENAME_PUB,
-        g_param_spec_string ("filename-pub", "Public identity file", "SSH public identity file",
-                             NULL, G_PARAM_READWRITE));
-                    
     g_object_class_install_property (gobject_class, PROP_DISPLAY_NAME,
         g_param_spec_string ("display-name", "Display Name", "User Displayable name for this key",
                              "", G_PARAM_READABLE));
@@ -419,12 +286,11 @@ seahorse_ssh_key_class_init (SeahorseSSHKeyClass *klass)
  */
 
 SeahorseSSHKey* 
-seahorse_ssh_key_new (SeahorseKeySource *sksrc, const gchar *filename,
-                      const gchar *filepub)
+seahorse_ssh_key_new (SeahorseKeySource *sksrc, SeahorseSSHKeyData *data)
 {
     SeahorseSSHKey *skey;
-    skey = g_object_new (SEAHORSE_TYPE_SSH_KEY, "key-source", sksrc,
-                         "filename-pub", filepub, "filename", filename, NULL);
+    skey = g_object_new (SEAHORSE_TYPE_SSH_KEY, "key-source", sksrc, 
+                         "key-data", data, NULL);
     
     /* We don't care about this floating business */
     g_object_ref (GTK_OBJECT (skey));
@@ -437,14 +303,14 @@ seahorse_ssh_key_get_algo (SeahorseSSHKey *skey)
 {
     g_return_val_if_fail (SEAHORSE_IS_SSH_KEY (skey), "");
     
-    switch(skey->priv->algo) {
-    case ALGO_UNK:
+    switch(skey->keydata->algo) {
+    case SSH_ALGO_UNK:
         return "";
-    case ALGO_RSA:
+    case SSH_ALGO_RSA:
         return "RSA";
-    case ALGO_DSA:
+    case SSH_ALGO_DSA:
         return "DSA";
-    case ALGO_RSA1:
+    case SSH_ALGO_RSA1:
         return "RSA1";
     default:
         g_assert_not_reached ();
@@ -456,12 +322,132 @@ guint
 seahorse_ssh_key_get_strength (SeahorseSSHKey *skey)
 {
     g_return_val_if_fail (SEAHORSE_IS_SSH_KEY (skey), 0);
-    return skey->priv->length;
+    return skey->keydata ? skey->keydata->length : 0;
 }
 
 const gchar*    
-seahorse_ssh_key_get_filename (SeahorseSSHKey *skey)
+seahorse_ssh_key_get_filename (SeahorseSSHKey *skey, gboolean private)
 {
     g_return_val_if_fail (SEAHORSE_IS_SSH_KEY (skey), NULL);
-    return skey->priv->filename;
+    if (!skey->keydata)
+        return NULL;
+    return private ? skey->keydata->filename : skey->keydata->filepub;
+}
+
+/* -----------------------------------------------------------------------------
+ * SSH KEY DATA 
+ */
+
+SeahorseSSHKeyData*
+seahorse_ssh_key_data_read (const gchar *filename)
+{
+    SeahorseSSHKeyData *data;
+    GError *error = NULL;
+    gchar **values;
+    gchar *t, *results;
+    
+    data = g_new0 (SeahorseSSHKeyData, 1);
+    data->filename = g_strdup (filename);
+    
+    /* Lookup length, fingerprint and public key filename */
+    t = g_strdup_printf (SSH_KEYGEN_PATH " -l -f %s", data->filename);
+    results = seahorse_ssh_source_execute (t, NULL);
+    g_free (t);
+    
+    /* 
+     * Parse the length, fingerprint, and public key from a string like: 
+     * 1024 a0:f3:2a:b8:00:57:47:7e:03:f6:de:35:77:2d:a0:6a /home/nate/.ssh/id_rsa.pub
+     */
+    if (results) {
+        values = g_strsplit_set (results, " ", 3);
+        g_free (results);
+
+        /* Key length */
+        if (values[0]) {
+            if (values[0][0]) {
+                data->length = strtol (values[0], NULL, 10);
+                data->length = data->length < 0 ? 0 : data->length;
+            }
+            
+            /* Fingerprint */
+            if (values[1]) {
+                if (values[1][0]) {
+                    data->fingerprint = g_strdup (values[1]);
+                    g_strstrip (data->fingerprint);
+                }
+            
+                /* Public name */
+                if (values[2] && !data->filepub) {
+                    data->filepub = g_strdup (values[2]);
+                    g_strstrip (data->filepub);
+                }
+            }
+        }
+        
+        g_strfreev (values);
+    }
+    
+    /* Read in the public key */
+    results = NULL;
+    if (data->filepub) {
+        if(!g_file_get_contents (data->filepub, &results, NULL, &error)) {
+            g_warning ("couldn't read public SSH file: %s (%s)", data->filepub, error->message);
+            results = NULL;
+        }
+    } 
+    
+    /* 
+     * Parse the key type and comment from a string like: 
+     * ssh-rsa AAAAB3NzaC1yc2EAAAABIwAzE1/iHkfHMk= nielsen@memberwebs.com
+     */
+    if (results) {
+        values = g_strsplit_set (results, " ", 3);
+        g_free (results);
+        
+        /* Key type */
+        if (values[0]) {
+            if (values[0][0])
+                data->algo = parse_ssh_algo (values[0]);
+            
+            /* Key Comment */
+            if (values[1] && values[2] && values[2][0]) {
+                g_strstrip (values[2]);
+                
+                /* If not utf8 valid, assume latin 1 */
+                if (!g_utf8_validate (values[2], -1, NULL))
+                    data->comment = g_convert (values[2], -1, "UTF-8", "ISO-8859-1", NULL, NULL, NULL);
+                else
+                    data->comment = g_strdup (values[2]);
+            }
+        }
+        
+        g_strfreev (values);
+    }
+
+    /* Make a key id */
+    if (data->fingerprint)
+        data->keyid = g_strndup (data->fingerprint, 11);
+    
+    return data;
+}
+
+gboolean
+seahorse_ssh_key_data_is_valid (SeahorseSSHKeyData *data)
+{
+    g_return_val_if_fail (data != NULL, FALSE);
+    return data->fingerprint != NULL;
+}
+
+void 
+seahorse_ssh_key_data_free (SeahorseSSHKeyData *data)
+{
+    if (!data)
+        return;
+    
+    g_free (data->filename);
+    g_free (data->filepub);
+    g_free (data->comment);
+    g_free (data->keyid);
+    g_free (data->fingerprint);
+    g_free (data);
 }
