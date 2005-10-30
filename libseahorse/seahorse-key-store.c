@@ -19,9 +19,14 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include "config.h"
 #include <gnome.h>
 
 #include "seahorse-key-store.h"
+#ifdef WITH_SSH
+#include "seahorse-ssh-key.h"
+#endif 
+#include "seahorse-pgp-key.h"
 #include "seahorse-gconf.h"
 #include "seahorse-gtkstock.h"
 
@@ -380,9 +385,16 @@ seahorse_key_store_set (SeahorseKeyStore *skstore, SeahorseKey *skey,
     gchar *userid = seahorse_key_get_name (skey, uid);
     gboolean sec = seahorse_key_get_etype (skey) == SKEY_PRIVATE;
     const gchar *stockid = NULL;
-    
-    if (uid == 0)
-        stockid = sec ? SEAHORSE_STOCK_SECRET : SEAHORSE_STOCK_KEY;
+
+#ifdef WITH_SSH    
+    if (seahorse_key_get_ktype (skey) == SKEY_SSH)
+        stockid = SEAHORSE_STOCK_KEY_SSH;
+    else
+#endif
+    if(seahorse_key_get_ktype (skey) == SKEY_PGP) {
+        if (uid == 0)
+            stockid = sec ? SEAHORSE_STOCK_SECRET : SEAHORSE_STOCK_KEY;
+    }
     
 	gtk_tree_store_set (GTK_TREE_STORE (skstore), iter,
         KEY_STORE_CHECK, FALSE,
@@ -756,9 +768,9 @@ seahorse_key_store_init (SeahorseKeyStore *skstore, GtkTreeView *view)
     
     /* When using key pair icons, we add an icon column */
     if (SEAHORSE_KEY_STORE_GET_CLASS (skstore)->use_icon) {
-    	GtkCellRenderer  *keyPixbufRenderer = gtk_cell_renderer_pixbuf_new();
-    	
-    	col = gtk_tree_view_column_new_with_attributes ("", keyPixbufRenderer, 
+    	GtkCellRenderer  *renderer = gtk_cell_renderer_pixbuf_new ();
+        g_object_set (renderer, "stock-size", GTK_ICON_SIZE_LARGE_TOOLBAR, NULL);
+    	col = gtk_tree_view_column_new_with_attributes ("", renderer, 
    												"stock-id", KEY_STORE_STOCK_ID,
    												NULL);
 										

@@ -18,6 +18,12 @@ else
 KEYSERVER_SRCS = 
 endif
 
+if WITH_SSH
+SSH_SRCS = seahorse-ssh-key-properties.c
+else
+SSH_SRCS = 
+endif
+
 bin_PROGRAMS = seahorse
 
 seahorse_SOURCES = main.c \
@@ -38,7 +44,8 @@ seahorse_SOURCES = main.c \
 	seahorse-add-subkey.c \
 	seahorse-key-dialogs.h \
 	seahorse-process-multiple.c \
-	$(KEYSERVER_SRCS) 	
+	$(KEYSERVER_SRCS) \
+    $(SSH_SRCS)
 
 seahorse_LDADD = \
 	$(top_builddir)/libseahorse/libseahorse-internal.la \
@@ -49,6 +56,7 @@ glade_DATA = \
     seahorse-key-manager.ui \
 	seahorse-key-properties.glade \
 	seahorse-pgp-public-key-properties.glade \
+    seahorse-ssh-key-properties.glade \
 	seahorse-revoke.glade \
     seahorse-expires.glade \
 	seahorse-change-passphrase.glade \

@@ -20,8 +20,8 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <gnome.h>
 #include "config.h"
+#include <gnome.h>
 
 #include "seahorse-key-manager-store.h"
 #include "seahorse-preferences.h"
@@ -31,6 +31,8 @@
 #include "seahorse-gconf.h"
 #include "seahorse-gpgmex.h"
 #include "eggtreemultidnd.h"
+#include "seahorse-pgp-key.h"
+#include "seahorse-ssh-key.h"
 
 #define KEY_MANAGER_SORT_KEY "/apps/seahorse/listing/sort_by"
 
@@ -189,16 +191,22 @@ store_set (SeahorseKeyStore *store, SeahorseKey *skey, guint uid, GtkTreeIter *i
     	}
         
         /* Only differentiate if the view shows more than one type of key */
-        g_object_get (store->skset, "predicate", &pred, NULL);
-        if (pred->etype == 0) {
-            /* TODO: With more than one ktype this becomes invalid */
-            if (seahorse_key_get_etype (skey) == SKEY_PRIVATE) 
-                type = _("Private PGP Key");
-            else 
-                type = _("Public PGP Key");
-        } else {
-            type = _("PGP Key");
+        if (seahorse_key_get_ktype (skey) == SKEY_PGP) {
+            g_object_get (store->skset, "predicate", &pred, NULL);
+            if (pred->etype == 0) {
+                /* TODO: With more than one ktype this becomes invalid */
+                if (seahorse_key_get_etype (skey) == SKEY_PRIVATE) 
+                    type = _("Private PGP Key");
+                else 
+                    type = _("Public PGP Key");
+            } else {
+                type = _("PGP Key");
+            }
         }
+#ifdef WITH_SSH
+        else if (seahorse_key_get_ktype (skey) == SKEY_SSH)
+            type = _("SSH Key");
+#endif
         
     	gtk_tree_store_set (GTK_TREE_STORE (store), iter,
     		VALIDITY_STR, validity == SEAHORSE_VALIDITY_UNKNOWN ? "" : seahorse_validity_get_string (validity),

@@ -129,6 +129,19 @@ seahorse_util_gpgme_error_domain ()
 }
 
 /**
+ * seahorse_util_error_domain
+ * Returns: The GError domain for generic seahorse errors
+ **/
+GQuark
+seahorse_util_error_domain ()
+{
+    static GQuark q = 0;
+    if(q == 0)
+        q = g_quark_from_static_string ("seahorse-error");
+    return q;
+}
+
+/**
  * seahorse_util_gpgme_to_error
  * @gerr GPGME error
  * @err  Resulting GError object

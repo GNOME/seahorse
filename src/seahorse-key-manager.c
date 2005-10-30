@@ -289,8 +289,12 @@ static void
 properties_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
 	SeahorseKey *skey = get_selected_key (swidget, NULL);
-	if (skey != NULL && SEAHORSE_IS_PGP_KEY (skey))
+	if (skey == NULL)
+        return;
+    if (SEAHORSE_IS_PGP_KEY (skey))
 		seahorse_key_properties_new (SEAHORSE_PGP_KEY (skey));
+    else if (SEAHORSE_IS_SSH_KEY (skey))
+        seahorse_ssh_key_properties_new (SEAHORSE_SSH_KEY (skey));
 }
 
 /* Loads export dialog if a key is selected */
@@ -765,7 +769,6 @@ initialize_tab (SeahorseWidget *swidget, const gchar *tabwidget, guint tabid,
     GtkTreeView *view;
     GtkWidget *tab;
     
-    pred->ktype = SKEY_PGP;
     skset = seahorse_keyset_new_full (pred);
     
     tab = glade_xml_get_widget (swidget->xml, tabwidget);

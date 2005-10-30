@@ -35,6 +35,7 @@
 #define SEAHORSE_STOCK_SEAHORSE     "seahorse"
 #define SEAHORSE_STOCK_SECRET       "seahorse-secret"
 #define SEAHORSE_STOCK_SHARE_KEYS   "seahorse-share-keys"
+#define SEAHORSE_STOCK_KEY_SSH      "seahorse-key-ssh"
 /*@}*/
 
 /**

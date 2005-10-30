@@ -41,6 +41,7 @@
 #include "seahorse-libdialogs.h"
 #include "seahorse-op.h"
 #include "seahorse-widget.h"
+#include "seahorse-pgp-key.h"
 
 typedef enum {
     SEAHORSE_TEXT_TYPE_NONE,
@@ -660,7 +661,7 @@ init (GeditPlugin * plugin)
     
     gedit_debug (DEBUG_PLUGINS, "inited");
 
-    sctx = seahorse_context_new (TRUE);
+    sctx = seahorse_context_new (TRUE, SKEY_PGP);
     op = seahorse_context_load_local_keys (sctx);
     plugin->private_data = sctx;
     

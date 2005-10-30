@@ -325,6 +325,7 @@ static void
 key_destroyed (SeahorseKey *skey, SeahorseKeySource *sksrc)
 {
     g_signal_handlers_disconnect_by_func (skey, key_changed, sksrc);
+    g_signal_handlers_disconnect_by_func (skey, key_destroyed, sksrc);
 }
 
 /* Remove the given key from the context */

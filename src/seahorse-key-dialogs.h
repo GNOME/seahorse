@@ -27,8 +27,11 @@
 
 #include "seahorse-context.h"
 #include "seahorse-pgp-key.h"
+#include "seahorse-ssh-key.h"
 
 void        seahorse_key_properties_new (SeahorsePGPKey     *pkey);
+
+void        seahorse_ssh_key_properties_new (SeahorseSSHKey *skey);
 
 void        seahorse_add_revoker_new    (SeahorsePGPKey     *pkey);
 

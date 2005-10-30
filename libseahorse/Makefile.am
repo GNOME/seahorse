@@ -46,10 +46,19 @@ else
 KEYSERVER_SRCS = 
 endif
 
+if WITH_SSH
+SSH_SRCS = seahorse-ssh-key.c seahorse-ssh-key.h 
+SSH_SRCS += seahorse-ssh-source.c seahorse-ssh-source.h
+else
+SSH_SRCS = 
+endif
+
 libseahorse_internal_la_SOURCES = \
 	seahorse-key.c seahorse-key.h \
+	seahorse-key-source.c seahorse-key-source.h \
 	seahorse-pgp-key.c seahorse-pgp-key.h \
     seahorse-pgp-key-op.c seahorse-pgp-key-op.h \
+	seahorse-pgp-source.c seahorse-pgp-source.h \
 	seahorse-context.c seahorse-context.h \
 	seahorse-widget.c seahorse-widget.h \
 	seahorse-op.c seahorse-op.h \
@@ -67,8 +76,6 @@ libseahorse_internal_la_SOURCES = \
 	seahorse-signatures.c \
 	seahorse-libdialogs.h \
 	seahorse-vfs-data.c seahorse-vfs-data.h \
-	seahorse-key-source.c seahorse-key-source.h \
-	seahorse-pgp-source.c seahorse-pgp-source.h \
 	seahorse-gpgmex.h seahorse-gpgmex-op.c seahorse-gpgmex-util.c \
 	seahorse-prefs.c seahorse-prefs.h \
 	seahorse-operation.c seahorse-operation.h \
@@ -82,7 +89,8 @@ libseahorse_internal_la_SOURCES = \
 	$(AGENT_SRCS) \
 	$(KEYSERVER_SRCS) \
     $(LDAP_SRCS) \
-    $(HKP_SRCS)
+    $(HKP_SRCS) \
+    $(SSH_SRCS)
     
 seahorselibexecbin_PROGRAMS = xloadimage
 

@@ -86,7 +86,8 @@ GType               seahorse_context_get_type           (void);
 
 SeahorseContext*    seahorse_context_app                (void);
 
-SeahorseContext*    seahorse_context_new                (gboolean           app_ctx);
+SeahorseContext*    seahorse_context_new                (gboolean           app_ctx,
+                                                         guint              ktype);
 
 void                seahorse_context_destroy            (SeahorseContext    *sctx);
 

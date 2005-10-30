@@ -470,7 +470,32 @@ else
     fi
 fi
 
-dnl *******************
+dnl ****************************************************************************
+dnl  SSH 
+dnl ****************************************************************************
+
+AC_ARG_ENABLE(ssh,
+        AC_HELP_STRING([--disable-ssh], 
+        [Support for managing SSH keys]))
+        
+if test "x$enable_ssh" = "xno"; then
+    echo "disabling ssh support"
+else
+
+    AC_PATH_PROG(SSH_KEYGEN_PATH, ssh-keygen, "failed")
+    
+    if test $SSH_KEYGEN_PATH != "failed"; then
+        enable_ssh="yes"
+        AC_DEFINE(WITH_SSH, 1, [With SSH Support])
+        AC_DEFINE_UNQUOTED(SSH_KEYGEN_PATH, "$SSH_KEYGEN_PATH", [Path to ssh-keygen])
+    fi
+    
+fi
+
+AM_CONDITIONAL(WITH_SSH, test "$enable_ssh" == "yes")
+
+
+dnl ****************************************************************************
 
 # Debug mode
 AC_ARG_ENABLE(debug, 
@@ -508,7 +533,7 @@ fi
 
 AM_CONDITIONAL(WITH_TESTS, test "$enable_tests" == "yes")
 
-dnl *******************
+dnl ****************************************************************************
 
 AC_SUBST(SEAHORSE_CFLAGS)
 AC_SUBST(SEAHORSE_LIBS)
@@ -527,7 +552,7 @@ AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE", [Name of the gettext dom
 
 AM_GLIB_GNU_GETTEXT
 
-dnl ******************************
+dnl ****************************************************************************
 
 AC_OUTPUT([
 Makefile
@@ -550,13 +575,14 @@ plugins/nautilus-ext/Makefile
 plugins/gedit/Makefile
 ])
 
-dnl ******************************
-dnl  Configuration Summary
-dnl ******************************
+dnl ****************************************************************************
+dnl  SUMMARY
+dnl ****************************************************************************
 
 echo "
 GnuPG Version:           $gnupg_version
 GPGME Version:           $gpgme_config_version
+SSH Support:             $enable_ssh
 Keyserver Support:       $with_keyserver
   LDAP:                  $with_ldap
   HKP:                   $enable_hkp

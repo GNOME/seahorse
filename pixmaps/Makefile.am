@@ -3,6 +3,7 @@ INCLUDES = -DDATA_DIR=\""$(datadir)"\"
 pixmap_DATA = seahorse.png
 appicon_DATA = seahorse-secret.png \
                seahorse-key.png \
+               seahorse-key-ssh.png \
                seahorse-share-keys.png \
                seahorse-person.png \
                seahorse-unknown.png \

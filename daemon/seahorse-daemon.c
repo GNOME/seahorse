@@ -237,7 +237,7 @@ int main(int argc, char* argv[])
     seahorse_gtk_stock_init();
     
     /* Make the default SeahorseContext */
-    seahorse_context_new (TRUE);
+    seahorse_context_new (TRUE, 0);
     op = seahorse_context_load_local_keys (SCTX_APP ());
     g_object_unref (op);
     

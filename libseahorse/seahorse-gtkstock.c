@@ -41,7 +41,8 @@ static struct StockIcon
     { SEAHORSE_STOCK_PERSON,      "seahorse",   "seahorse-person.png"      },
     { SEAHORSE_STOCK_SEAHORSE,    NULL,         "seahorse.png"             },
     { SEAHORSE_STOCK_SECRET,      "seahorse",   "seahorse-secret.png"      },
-    { SEAHORSE_STOCK_SHARE_KEYS,  "seahorse",   "seahorse-share-keys.png"  }
+    { SEAHORSE_STOCK_SHARE_KEYS,  "seahorse",   "seahorse-share-keys.png"  },
+    { SEAHORSE_STOCK_KEY_SSH,     "seahorse",   "seahorse-key-ssh.png"     }
 };
 
 static gchar *

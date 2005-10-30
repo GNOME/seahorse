@@ -20,13 +20,13 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include "config.h"
 #include <stdlib.h>
 #include <libintl.h>
 #include <gnome.h>
 
-#include "config.h"
-
 #include "seahorse-pgp-key.h"
+#include "seahorse-pgp-source.h"
 #include "seahorse-context.h"
 #include "seahorse-marshal.h"
 #include "seahorse-libdialogs.h"
@@ -35,6 +35,11 @@
 #include "seahorse-server-source.h"
 #include "seahorse-pgp-source.h"
 #include "seahorse-dns-sd.h"
+
+#ifdef WITH_SSH
+#include "seahorse-ssh-key.h"
+#include "seahorse-ssh-source.h"
+#endif
 
 /* The application main context */
 SeahorseContext* app_context = NULL;
@@ -181,16 +186,23 @@ seahorse_context_app (void)
 }
    
 SeahorseContext*
-seahorse_context_new (gboolean app_ctx)
+seahorse_context_new (gboolean app_ctx, guint ktype)
 {
 	SeahorseContext *sctx = g_object_new (SEAHORSE_TYPE_CONTEXT, NULL);
-    SeahorsePGPSource *pgpsrc;
     
     if (app_ctx) {
 
         /* Add the default key sources */
-        pgpsrc = seahorse_pgp_source_new ();
-        seahorse_context_take_key_source (sctx, SEAHORSE_KEY_SOURCE (pgpsrc));     
+        if (ktype == 0 || ktype == SKEY_PGP) {
+            SeahorsePGPSource *pgpsrc = seahorse_pgp_source_new ();
+            seahorse_context_take_key_source (sctx, SEAHORSE_KEY_SOURCE (pgpsrc));     
+        }
+#ifdef WITH_SSH        
+        if (ktype == 0 || ktype == SKEY_SSH) {
+            SeahorseSSHSource *sshsrc = seahorse_ssh_source_new ();
+            seahorse_context_take_key_source (sctx, SEAHORSE_KEY_SOURCE (sshsrc));     
+        }
+#endif
 
         /* DNS-SD discovery */    
         sctx->pv->discovery = seahorse_service_discovery_new ();

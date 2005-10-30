@@ -27,6 +27,7 @@
 #include <glade/glade-xml.h>
 
 #include "eggtrayicon.h"
+#include "seahorse-pgp-key.h"
 #include "seahorse-agent.h"
 #include "seahorse-context.h"
 #include "seahorse-widget.h"
@@ -151,7 +152,7 @@ window_show ()
     }
 
     if (!g_sctx)
-        g_sctx = seahorse_context_new (TRUE);
+        g_sctx = seahorse_context_new (TRUE, SKEY_PGP);
     
     g_window = seahorse_widget_new ("agent-cache");
 
