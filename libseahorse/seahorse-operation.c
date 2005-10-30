@@ -403,7 +403,6 @@ multi_operation_progress (SeahorseOperation *operation, const gchar *message,
     g_return_if_fail (SEAHORSE_IS_MULTI_OPERATION (mop));
     g_return_if_fail (SEAHORSE_IS_OPERATION (operation));  
 	
-    g_assert (mop->operations);
 	list = mop->operations;
     
     /* One or two operations, simple */
