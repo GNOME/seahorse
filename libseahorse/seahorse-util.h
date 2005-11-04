@@ -146,6 +146,8 @@ void         seahorse_util_free_keys          (gpgme_key_t* keys);
 
 gboolean    seahorse_util_string_equals       (const gchar *s1, const gchar *s2);
 
+void        seahorse_util_string_lower        (gchar *s);
+
 GSList*     seahorse_util_string_slist_free   (GSList *slist);
 
 GSList*     seahorse_util_string_slist_copy   (GSList *slist);

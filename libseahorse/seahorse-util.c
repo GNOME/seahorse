@@ -1186,6 +1186,13 @@ seahorse_util_string_equals (const gchar *s1, const gchar *s2)
     return g_str_equal (s1, s2);
 }
 
+void        
+seahorse_util_string_lower (gchar *s)
+{
+    for ( ; *s; s++)
+        *s = g_ascii_tolower (*s);
+}
+
 /* Free a GSList along with string values */
 GSList*
 seahorse_util_string_slist_free (GSList *list)

@@ -56,6 +56,24 @@ get_hkp_error_domain ()
 
 #ifdef _DEBUG
 
+static gchar*
+get_http_server_address (SeahorseKeySource *src)
+{
+    gchar *server, *t;
+
+    g_object_get (src, "key-server", &server, NULL);
+    g_return_val_if_fail (server != NULL, NULL);
+
+    /* If it already has a port then leave it at the default */
+    if (strchr (server, ':'))
+        return server;
+
+    /* Otherwise use default HKP port */
+    t = g_strdup_printf ("%s:11371", server);
+    g_free (server);
+    return t;
+}
+
 static void
 dump_soup_header (const gchar *name, const gchar *value, gpointer user_data)
 {
@@ -171,34 +189,6 @@ seahorse_hkp_operation_cancel (SeahorseOperation *operation)
     seahorse_operation_mark_done (operation, TRUE, NULL);
 }
 
-/* Cancels operation and marks the HKP operation as failed */
-static void
-fail_hkp_operation (SeahorseHKPOperation *hop, guint status, const gchar *msg)
-{
-    gchar *t;
-    
-    g_object_get (hop->hsrc, "key-server", &t, NULL);
-    seahorse_operation_mark_done (SEAHORSE_OPERATION (hop), FALSE, 
-            g_error_new (HKP_ERROR_DOMAIN, status, _("Couldn't communicate with '%s': %s"), 
-                         t, msg ? msg : soup_status_get_phrase (status)));
-    g_free (t);
-}
-
-static SeahorseHKPOperation*
-setup_hkp_operation (SeahorseHKPSource *hsrc)
-{
-    SeahorseHKPOperation *hop;
-
-    g_return_val_if_fail (SEAHORSE_IS_HKP_SOURCE (hsrc), NULL);
-    
-    hop = g_object_new (SEAHORSE_TYPE_HKP_OPERATION, NULL);
-    hop->hsrc = hsrc;
-    g_object_ref (hsrc);
-
-    seahorse_operation_mark_start (SEAHORSE_OPERATION (hop));
-    return hop;    
-}
-
 /* Thanks to GnuPG */
 static void
 dehtmlize(gchar *line)
@@ -264,6 +254,57 @@ dehtmlize(gchar *line)
 	        parsedindex--;
 	    }
     }
+}
+
+/* Cancels operation and marks the HKP operation as failed */
+static void
+fail_hkp_operation (SeahorseHKPOperation *hop, SoupMessage *msg, const gchar *text)
+{
+    gchar *t, *server;
+    GError *error = NULL;
+
+    g_object_get (hop->hsrc, "key-server", &server, NULL);
+
+    if (text) {
+        error = g_error_new (HKP_ERROR_DOMAIN, msg ? msg->status_code : 0, text);
+
+    } else if (msg) {
+        /* Make the body lower case, and no tags */
+        t = g_strndup (msg->response.body, msg->response.length);
+        dehtmlize (t);        
+        seahorse_util_string_lower (t);
+
+        if (strstr (t, "no keys"))
+            error = g_error_new (HKP_ERROR_DOMAIN, 0, _("No matching keys found on server '%s'."), server);
+        else if (strstr (t, "too many"))
+            error = g_error_new (HKP_ERROR_DOMAIN, 0, _("Search was not specific enough. Server '%s' found too many keys."), server);
+        else 
+            error = g_error_new (HKP_ERROR_DOMAIN, msg->status_code, _("Couldn't communicate with server '%s': %s"),
+                                 server, soup_status_get_phrase (msg->status_code));
+        g_free (t);
+    } else {
+
+        /* We should always have msg or text */
+        g_return_if_reached ();
+    }        
+
+    seahorse_operation_mark_done (SEAHORSE_OPERATION (hop), FALSE, error);
+    g_free (server);
+}
+
+static SeahorseHKPOperation*
+setup_hkp_operation (SeahorseHKPSource *hsrc)
+{
+    SeahorseHKPOperation *hop;
+
+    g_return_val_if_fail (SEAHORSE_IS_HKP_SOURCE (hsrc), NULL);
+    
+    hop = g_object_new (SEAHORSE_TYPE_HKP_OPERATION, NULL);
+    hop->hsrc = hsrc;
+    g_object_ref (hsrc);
+
+    seahorse_operation_mark_start (SEAHORSE_OPERATION (hop));
+    return hop;    
 }
 
 unsigned int
@@ -421,7 +462,7 @@ refresh_callback (SoupMessage *msg, SeahorseHKPOperation *hop)
 #endif      
     
     if (SOUP_MESSAGE_IS_ERROR (msg)) {
-        fail_hkp_operation (hop, msg->status_code, NULL);
+        fail_hkp_operation (hop, msg, NULL);
         return;
     }
     
@@ -495,13 +536,13 @@ send_callback (SoupMessage *msg, SeahorseHKPOperation *hop)
 #endif      
     
     if (SOUP_MESSAGE_IS_ERROR (msg)) {
-        fail_hkp_operation (hop, msg->status_code, NULL);
+        fail_hkp_operation (hop, msg, NULL);
         return;
     }
     
     errmsg = get_send_result (msg->response.body, msg->response.length);
     if (errmsg) {
-        fail_hkp_operation (hop, 0, errmsg);
+        fail_hkp_operation (hop, NULL, errmsg);
         g_free (errmsg);
         return;
     }
@@ -533,7 +574,7 @@ get_callback (SoupMessage *msg, SeahorseHKPOperation *hop)
 #endif      
     
     if (SOUP_MESSAGE_IS_ERROR (msg)) {
-        fail_hkp_operation (hop, msg->status_code, NULL);
+        fail_hkp_operation (hop, msg, NULL);
         return;
     }
     
@@ -564,7 +605,7 @@ get_callback (SoupMessage *msg, SeahorseHKPOperation *hop)
     if (--hop->requests <= 0)
         seahorse_operation_mark_done (SEAHORSE_OPERATION (hop), FALSE, NULL);
     else
-        seahorse_operation_mark_progress (SEAHORSE_OPERATION (hop), _("Uploading keys..."), 
+        seahorse_operation_mark_progress (SEAHORSE_OPERATION (hop), _("Retrieving keys..."), 
                                           hop->requests, hop->total);
 }
 
@@ -661,7 +702,7 @@ seahorse_hkp_source_refresh (SeahorseKeySource *src, const gchar *key)
         
     hop = setup_hkp_operation (SEAHORSE_HKP_SOURCE (src));
     
-    g_object_get (src, "key-server", &server, NULL);
+    server = get_http_server_address (src);
     g_return_val_if_fail (server && server[0], FALSE);
     
     uri = g_strdup_printf ("http://%s/pks/lookup?op=index&search=%s", 
@@ -724,7 +765,7 @@ seahorse_hkp_source_import (SeahorseKeySource *sksrc, gpgme_data_t data)
         return seahorse_operation_new_complete (NULL);
     
     /* Figure out the URI we're sending to */    
-    g_object_get (hsrc, "key-server", &server, NULL);
+    server = get_http_server_address (sksrc);
     g_return_val_if_fail (server && server[0], FALSE);
     uri = g_strdup_printf ("http://%s/pks/add", server);
 
@@ -783,7 +824,7 @@ seahorse_hkp_source_export (SeahorseKeySource *sksrc, GList *keys,
     if (g_list_length (keys) == 0)
         return seahorse_operation_new_complete (NULL);
 
-    g_object_get (hsrc, "key-server", &server, NULL);
+    server = get_http_server_address (sksrc);
     g_return_val_if_fail (server && server[0], FALSE);
 
     /* New operation started */    
@@ -850,16 +891,12 @@ SeahorseHKPSource*
 seahorse_hkp_source_new (SeahorseKeySource *locsrc, const gchar *server,
                           const gchar *pattern)
 {
-    SeahorseHKPSource *hsrc;
-    
     g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (locsrc) && 
                           !SEAHORSE_IS_SERVER_SOURCE (locsrc), NULL);
     g_return_val_if_fail (server && server[0], NULL);
-    
-    hsrc = g_object_new (SEAHORSE_TYPE_HKP_SOURCE, "local-source", locsrc,
-                         "key-server", server, "pattern", pattern, NULL);
 
-    return hsrc;  
+    return g_object_new (SEAHORSE_TYPE_HKP_SOURCE, "local-source", locsrc,
+                         "key-server", server, "pattern", pattern, NULL);
 }
 
 /**
