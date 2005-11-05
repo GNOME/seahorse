@@ -36,6 +36,8 @@ void        seahorse_key_properties_new (SeahorsePGPKey     *pkey);
 
 #ifdef WITH_SSH
 void        seahorse_ssh_key_properties_new (SeahorseSSHKey *skey);
+
+void        seahorse_ssh_upload_prompt  (GList *keys);
 #endif
 
 void        seahorse_add_revoker_new    (SeahorsePGPKey     *pkey);

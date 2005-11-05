@@ -94,9 +94,14 @@ libseahorse_internal_la_SOURCES = \
 	$(HKP_SRCS) \
 	$(SSH_SRCS)
 
-seahorselibexecbin_PROGRAMS = xloadimage
+seahorselibexecbin_PROGRAMS = xloadimage seahorse-ssh-askpass
 
-xloadimage_SOURCES = ../src/seahorse-xloadimage.c 	
+xloadimage_SOURCES = ../src/seahorse-xloadimage.c
+
+seahorse_ssh_askpass_SOURCES = seahorse-ssh-askpass.c
+seahorse_ssh_askpass_LDADD = \
+	$(top_builddir)/libseahorse/libseahorse-internal.la \
+	$(SEAHORSE_LIBS)
 
 seahorse-marshal.h: seahorse-marshal.list $(GLIB_GENMARSHAL)
 	$(GLIB_GENMARSHAL) $< --header --prefix=seahorse_marshal > $@

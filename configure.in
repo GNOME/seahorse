@@ -483,11 +483,13 @@ if test "x$enable_ssh" = "xno"; then
 else
 
     AC_PATH_PROG(SSH_KEYGEN_PATH, ssh-keygen, "failed")
+    AC_PATH_PROG(SSH_PATH, ssh, "failed")
     
-    if test $SSH_KEYGEN_PATH != "failed"; then
+    if test $SSH_KEYGEN_PATH != "failed" && test $SSH_PATH != "failed"; then
         enable_ssh="yes"
         AC_DEFINE(WITH_SSH, 1, [With SSH Support])
         AC_DEFINE_UNQUOTED(SSH_KEYGEN_PATH, "$SSH_KEYGEN_PATH", [Path to ssh-keygen])
+        AC_DEFINE_UNQUOTED(SSH_PATH, "$SSH_PATH", [Path to ssh])
     fi
     
 fi

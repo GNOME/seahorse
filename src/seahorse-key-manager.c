@@ -408,7 +408,7 @@ search_activate (GtkWidget *widget, SeahorseWidget *swidget)
 static void
 sync_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
-	GList *keys = get_selected_keys (swidget);
+    GList *keys = get_selected_keys (swidget);
     GList *l;
     
     /* Only supported on PGP keys */
@@ -431,7 +431,20 @@ sync_activate (GtkWidget *widget, SeahorseWidget *swidget)
 static void
 setup_sshkey_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
-    /* TODO: */
+    GList *keys = get_selected_keys (swidget);
+    GList *l;
+    
+    /* Only supported on SSH keys */
+    for (l = keys; l; l = g_list_next (l)) {
+        if (seahorse_key_get_ktype (SEAHORSE_KEY (l->data)) != SKEY_SSH) {
+            keys = l = g_list_delete_link (keys, l);
+            if (keys == NULL)
+                break;
+        }
+    }    
+    
+    if (keys != NULL)
+        seahorse_ssh_upload_prompt (keys);
 }
 #endif 
 
@@ -789,7 +802,7 @@ static GtkActionEntry pgp_entries[] = {
 
 #ifdef WITH_SSH
 static GtkActionEntry ssh_entries[] = {
-    { "remote-upload-ssh", NULL, N_("Setup Key for SSH..."), "",
+    { "remote-upload-ssh", NULL, N_("Configure SSH Key for Computer..."), "",
             N_("Send public SSH key to another machine, and enable logins using that key."), G_CALLBACK (setup_sshkey_activate) },
 };
 #endif 

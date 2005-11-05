@@ -19,7 +19,7 @@ KEYSERVER_SRCS =
 endif
 
 if WITH_SSH
-SSH_SRCS = seahorse-ssh-key-properties.c
+SSH_SRCS = seahorse-ssh-key-properties.c seahorse-ssh-upload.c
 else
 SSH_SRCS = 
 endif
@@ -53,12 +53,13 @@ seahorse_LDADD = \
 
 glade_DATA = \
 	seahorse-key-manager.glade \
-    seahorse-key-manager.ui \
+	seahorse-key-manager.ui \
 	seahorse-key-properties.glade \
 	seahorse-pgp-public-key-properties.glade \
-    seahorse-ssh-key-properties.glade \
+	seahorse-ssh-key-properties.glade \
+	seahorse-ssh-upload.glade \
 	seahorse-revoke.glade \
-    seahorse-expires.glade \
+	seahorse-expires.glade \
 	seahorse-change-passphrase.glade \
 	seahorse-sign.glade \
 	seahorse-generate-select.glade \
@@ -71,14 +72,14 @@ glade_DATA = \
 	seahorse-keyserver-search.glade \
 	seahorse-keyserver-results.glade \
 	seahorse-keyserver-results.ui \
-    seahorse-keyserver-sync.glade 
+	seahorse-keyserver-sync.glade 
 
 @INTLTOOL_DESKTOP_RULE@
 desktopdir = $(datadir)/applications
 desktop_in_files = seahorse.desktop.in \
 				   seahorse-pgp-encrypted.desktop.in \
 				   seahorse-pgp-signature.desktop.in \
-                   seahorse-pgp-keys.desktop.in 
+				   seahorse-pgp-keys.desktop.in 
 desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 
 EXTRA_DIST = \

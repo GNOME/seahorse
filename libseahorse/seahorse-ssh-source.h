@@ -65,7 +65,17 @@ GType                seahorse_ssh_source_get_type       (void);
 
 SeahorseSSHSource*   seahorse_ssh_source_new            (void);
 
+SeahorseOperation*   seahorse_ssh_source_upload         (SeahorseSSHSource *ssrc,
+                                                         GList *keys,
+                                                         const gchar *username,
+                                                         const gchar *hostname);
+
 gchar*               seahorse_ssh_source_execute        (const gchar *command, 
                                                          GError **error);
+
+SeahorseOperation*   seahorse_ssh_operation_new         (const gchar *command, 
+                                                         const gchar *input, 
+                                                         gint length,
+                                                         const gchar *progress_label);
 
 #endif /* __SEAHORSE_SSH_SOURCE_H__ */

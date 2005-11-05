@@ -35,7 +35,9 @@
 #define SEAHORSE_STOCK_SEAHORSE     "seahorse"
 #define SEAHORSE_STOCK_SECRET       "seahorse-secret"
 #define SEAHORSE_STOCK_SHARE_KEYS   "seahorse-share-keys"
+/* TODO: We should be using iconsets properly, for different sizes. */
 #define SEAHORSE_STOCK_KEY_SSH      "seahorse-key-ssh"
+#define SEAHORSE_STOCK_KEY_SSH_LRG  "seahorse-key-ssh-large"
 /*@}*/
 
 /**
