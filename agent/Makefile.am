@@ -17,8 +17,7 @@ noinst_LIBRARIES = libseahorseagent.a
 
 libseahorseagent_a_SOURCES = seahorse-agent.c seahorse-agent.h seahorse-agent-actions.c \
                              seahorse-agent-cache.c seahorse-agent-prompt.c seahorse-agent-io.c \
-                             gtk-secure-entry.c gtk-secure-entry.h seahorse-agent-secmem.h \
-                             seahorse-agent-secmem.c seahorse-agent-status.c
+                             seahorse-agent-status.c
 
 glade_DATA = \
 	seahorse-agent-cache.glade 

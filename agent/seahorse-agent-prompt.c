@@ -34,7 +34,7 @@
 
 #include "seahorse-agent.h"
 #include "seahorse-check-button-control.h"
-#include "gtk-secure-entry.h"
+#include "seahorse-secure-entry.h"
 
 #define HIG_SMALL      6        /* gnome hig small space in pixels */
 #define HIG_LARGE     12        /* gnome hig large space in pixels */
@@ -136,7 +136,7 @@ prompt_ok_button (GtkWidget *widget, gpointer data)
     const char *s;
 
     g_assert (g_current_entry != NULL);
-    s = gtk_secure_entry_get_text (GTK_SECURE_ENTRY (g_current_entry));
+    s = seahorse_secure_entry_get_text (SEAHORSE_SECURE_ENTRY (g_current_entry));
     seahorse_agent_cache_set (pr->id, s != NULL ? s : "", TRUE, TRUE);
 
     prompt_done_dialog (pr, TRUE);
@@ -266,7 +266,7 @@ create_prompt_window (SeahorseAgentPassReq *pr)
         gtk_box_pack_start (GTK_BOX (ebox), w, FALSE, FALSE, 0);
     }
 
-    g_current_entry = gtk_secure_entry_new ();
+    g_current_entry = seahorse_secure_entry_new ();
     gtk_widget_set_size_request (g_current_entry, 200, -1);
     g_signal_connect (G_OBJECT (g_current_entry), "activate",
                       G_CALLBACK (enter_callback), pr);

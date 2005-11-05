@@ -31,7 +31,7 @@
 #include "seahorse-agent.h"
 #include "seahorse-context.h"
 #include "seahorse-widget.h"
-#include "seahorse-agent-secmem.h"
+#include "seahorse-secure-memory.h"
 
 /* 
  * Implements tray icon, menu and status window. Tray icon ideas 
@@ -173,7 +173,7 @@ window_show ()
                                    G_CALLBACK (clear_clicked), g_window);
 
     /* The secure memory warning */
-    if (!secmem_have ()) {
+    if (!seahorse_secure_memory_have ()) {
         GdkColor color = { 0, 0xffff, 0, 0 };
         w = glade_xml_get_widget (g_window->xml, "insecure_label");
         gtk_widget_modify_fg (w, GTK_STATE_NORMAL, &color);

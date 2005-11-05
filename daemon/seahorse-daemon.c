@@ -39,7 +39,7 @@
 
 #ifdef WITH_AGENT
 #include "seahorse-agent.h"
-#include "seahorse-agent-secmem.h"
+#include "seahorse-secure-memory.h"
 #endif
 
 static gboolean g_daemonize = TRUE;
@@ -190,10 +190,10 @@ prepare_logging ()
 int main(int argc, char* argv[])
 {
     SeahorseOperation *op;
-	GnomeProgram *program = NULL;
+    GnomeProgram *program = NULL;
 
-#ifdef WITH_AGENT	
-    secmem_init (65536);
+#ifdef WITH_AGENT
+    seahorse_secure_memory_init (65536);
 #endif 
     
     /* We need to drop privileges completely for security */

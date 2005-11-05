@@ -29,7 +29,7 @@
 #include "seahorse-gconf.h"
 #include "seahorse-gpgmex.h"
 #include "seahorse-agent.h"
-#include "seahorse-agent-secmem.h"
+#include "seahorse-secure-memory.h"
 
 /*
  * Implementation of the password cache. Note that only passwords
@@ -127,7 +127,7 @@ destroy_cache_item (gpointer data)
             g_free (it->desc);
 
         if (it->pass)
-            secmem_free (it->pass);
+            seahorse_secure_memory_free (it->pass);
 
         g_chunk_free (it, g_memory);
     }
@@ -353,13 +353,13 @@ seahorse_agent_cache_set (const gchar *id, const gchar *pass,
     /* Work with the password */
 
     if (it->pass)
-        secmem_free (it->pass);
+        seahorse_secure_memory_free (it->pass);
 
     len = strlen (pass);
 
     if (encode) {
         c = sizeof (gchar *) * ((len * 2) + 1);
-        it->pass = (gchar *) secmem_malloc (c);
+        it->pass = (gchar *) seahorse_secure_memory_malloc (c);
         if (!it->pass) {
             g_critical ("out of secure memory");
             return;
@@ -370,7 +370,7 @@ seahorse_agent_cache_set (const gchar *id, const gchar *pass,
     }
 
     else {
-        it->pass = (gchar *) secmem_malloc (sizeof (gchar) * (len + 1));
+        it->pass = (gchar *) seahorse_secure_memory_malloc (sizeof (gchar) * (len + 1));
         if (!it->pass) {
             g_critical ("out of secure memory");
             return;

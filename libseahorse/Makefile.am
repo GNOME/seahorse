@@ -57,12 +57,12 @@ libseahorse_internal_la_SOURCES = \
 	seahorse-key.c seahorse-key.h \
 	seahorse-key-source.c seahorse-key-source.h \
 	seahorse-pgp-key.c seahorse-pgp-key.h \
-    seahorse-pgp-key-op.c seahorse-pgp-key-op.h \
+	seahorse-pgp-key-op.c seahorse-pgp-key-op.h \
 	seahorse-pgp-source.c seahorse-pgp-source.h \
 	seahorse-context.c seahorse-context.h \
 	seahorse-widget.c seahorse-widget.h \
 	seahorse-op.c seahorse-op.h \
-    seahorse-keyset.c seahorse-keyset.h \
+	seahorse-keyset.c seahorse-keyset.h \
 	seahorse-key-store.c seahorse-key-store.h \
 	seahorse-recipients-store.c seahorse-recipients-store.h \
 	seahorse-util.c seahorse-util.h \
@@ -72,7 +72,7 @@ libseahorse_internal_la_SOURCES = \
 	seahorse-gpg-options.c seahorse-gpg-options.h \
 	seahorse-passphrase.c \
 	seahorse-recipients.c \
-    seahorse-signer.c \
+	seahorse-signer.c \
 	seahorse-signatures.c \
 	seahorse-libdialogs.h \
 	seahorse-vfs-data.c seahorse-vfs-data.h \
@@ -80,18 +80,20 @@ libseahorse_internal_la_SOURCES = \
 	seahorse-prefs.c seahorse-prefs.h \
 	seahorse-operation.c seahorse-operation.h \
 	seahorse-progress.c seahorse-progress.h \
-    seahorse-gconf.c seahorse-gconf.h \
-    seahorse-dns-sd.c seahorse-dns-sd.h \
-    eggtrayicon.c eggtrayicon.h \
-    seahorse-gtkstock.c seahorse-gtkstock.h \
-    seahorse-notification.c \
+	seahorse-gconf.c seahorse-gconf.h \
+	seahorse-dns-sd.c seahorse-dns-sd.h \
+	eggtrayicon.c eggtrayicon.h \
+	seahorse-gtkstock.c seahorse-gtkstock.h \
+	seahorse-notification.c \
+	seahorse-secure-memory.c seahorse-secure-memory.h \
+	seahorse-secure-entry.c seahorse-secure-entry.h \
 	$(BUILT_SOURCES) \
 	$(AGENT_SRCS) \
 	$(KEYSERVER_SRCS) \
-    $(LDAP_SRCS) \
-    $(HKP_SRCS) \
-    $(SSH_SRCS)
-    
+	$(LDAP_SRCS) \
+	$(HKP_SRCS) \
+	$(SSH_SRCS)
+
 seahorselibexecbin_PROGRAMS = xloadimage
 
 xloadimage_SOURCES = ../src/seahorse-xloadimage.c 	

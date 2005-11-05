@@ -1,4 +1,5 @@
-/* Quintuple Agent secure memory allocation
+/* 
+ * Quintuple Agent secure memory allocation
  * Copyright (C) 1998,1999 Free Software Foundation, Inc.
  * Copyright (C) 1999,2000 Robert Bihlmeyer <robbe@orcus.priv.at>
  *
@@ -17,25 +18,25 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef _SEAHORSE_SECMEM_H
-#define _SEAHORSE_SECMEM_H
+#ifndef _SEAHORSE_SECURE_MEMORY_H_
+#define _SEAHORSE_SECURE_MEMORY_H_
 
 #include <sys/types.h>
 
-/* values for flags, hardcoded in secmem.c */
-#define SECMEM_WARN      0
-#define SECMEM_DONT_WARN  1
-#define SECMEM_SUSPEND_WARN   2
+void    seahorse_secure_memory_init         (size_t npool);
 
-void secmem_init( size_t npool );
-void secmem_term( void );
-int  secmem_have();
-void *secmem_malloc( size_t size );
-void *secmem_realloc( void *a, size_t newsize );
-void secmem_free( void *a );
-int  m_is_secure( const void *p );
-void secmem_dump_stats(void);
-void secmem_set_flags( unsigned flags );
-unsigned secmem_get_flags(void);
+void    seahorse_secure_memory_term         ();
 
-#endif /* _SEAHORSE_SECMEM_H */
+int     seahorse_secure_memory_have         ();
+
+void*   seahorse_secure_memory_malloc       (size_t size);
+
+void*   seahorse_secure_memory_realloc      (void *a, size_t newsize);
+
+void    seahorse_secure_memory_free         (void *a);
+
+int     seahorse_secure_memory_check        (const void *p);
+
+void    seahorse_secure_memory_dump_stats   (void);
+
+#endif /* _SEAHORSE_SECURE_MEMORY_H_ */
