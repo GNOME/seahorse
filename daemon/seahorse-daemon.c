@@ -192,9 +192,7 @@ int main(int argc, char* argv[])
     SeahorseOperation *op;
     GnomeProgram *program = NULL;
 
-#ifdef WITH_AGENT
     seahorse_secure_memory_init (65536);
-#endif 
     
     /* We need to drop privileges completely for security */
 #if defined(HAVE_SETRESUID) && defined(HAVE_SETRESGID)

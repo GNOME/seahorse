@@ -34,7 +34,7 @@
 
 #include "seahorse-agent.h"
 #include "seahorse-check-button-control.h"
-#include "seahorse-secure-entry.h"
+#include "seahorse-libdialogs.h"
 
 #define HIG_SMALL      6        /* gnome hig small space in pixels */
 #define HIG_LARGE     12        /* gnome hig large space in pixels */
@@ -120,7 +120,6 @@ prompt_done_dialog (SeahorseAgentPassReq *pr, gboolean ok)
     g_current_win = NULL;
 
     if (ok) {
-      
         pass = seahorse_agent_cache_get (pr->id);
         g_assert (pass);
     }
@@ -128,186 +127,34 @@ prompt_done_dialog (SeahorseAgentPassReq *pr, gboolean ok)
     seahorse_agent_actions_donepass (pr, pass);
 }
 
-/* Called when the ok button is clicked */
 static void
-prompt_ok_button (GtkWidget *widget, gpointer data)
+passphrase_response (GtkDialog *dialog, gint response, SeahorseAgentPassReq *pr)
 {
-    SeahorseAgentPassReq *pr = (SeahorseAgentPassReq *) data;
     const char *s;
 
-    g_assert (g_current_entry != NULL);
-    s = seahorse_secure_entry_get_text (SEAHORSE_SECURE_ENTRY (g_current_entry));
-    seahorse_agent_cache_set (pr->id, s != NULL ? s : "", TRUE, TRUE);
-
-    prompt_done_dialog (pr, TRUE);
+    switch (response) {
+    case GTK_RESPONSE_ACCEPT:
+        s = seahorse_passphrase_prompt_get (dialog);
+        seahorse_agent_cache_set (pr->id, s != NULL ? s : "", TRUE, TRUE);
+        prompt_done_dialog (pr, TRUE);
+        break;
+    default:
+        prompt_done_dialog (pr, FALSE);
+        break;
+    };
 }
 
-/* Called when canceled */
-static void
-prompt_cancel_button (GtkWidget *widget, gpointer data)
-{
-    SeahorseAgentPassReq *pr = (SeahorseAgentPassReq *) data;
-    prompt_done_dialog (pr, FALSE);
-}
-
-/* When enter is pressed in the entry, we simulate an ok */
-static void
-enter_callback (GtkWidget *widget, gpointer data)
-{
-    prompt_ok_button (widget, data);
-}
-
-/* grab_keyboard - grab the keyboard for maximum security */
-static void
-grab_keyboard (GtkWidget *win, GdkEvent * event, gpointer data)
-{
-    if (gdk_keyboard_grab (win->window, FALSE, gdk_event_get_time (event)))
-        g_critical ("could not grab keyboard");
-}
-
-/* ungrab_keyboard - remove grab */
-static void
-ungrab_keyboard (GtkWidget *win, GdkEvent *event, gpointer data)
-{
-    gdk_keyboard_ungrab (gdk_event_get_time (event));
-}
-
-/* When window close we simulate a cancel */
-static int
-prompt_delete_event (GtkWidget *widget, GdkEvent *event, gpointer data)
-{
-    prompt_cancel_button (widget, data);
-    return TRUE;
-}
-
-/* Initialize a password prompt */
-static GtkWidget *
-create_prompt_window (SeahorseAgentPassReq *pr)
-{
-    GtkWidget *w;
-    GtkWidget *win;
-    GtkWidget *box;
-    GtkWidget *ebox;
-    GtkWidget *wvbox;
-    GtkWidget *chbox;
-    GtkWidget *bbox;
-    GtkAccelGroup *acc;
-    gchar *msg;
-
-    gboolean grab = TRUE;
-
-    win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-
-    gtk_window_set_title (GTK_WINDOW (win), _("Passphrase"));
-    acc = gtk_accel_group_new ();
-
-    g_signal_connect (G_OBJECT (win), "delete_event",
-                      G_CALLBACK (prompt_delete_event), pr);
-
-    g_signal_connect (G_OBJECT (win), "size-request",
-                      G_CALLBACK (constrain_size), NULL);
-
-    g_signal_connect (G_OBJECT (win), grab ? "map-event" : "focus-in-event",
-                      G_CALLBACK (grab_keyboard), NULL);
-    g_signal_connect (G_OBJECT (win), grab ? "unmap-event" : "focus-out-event",
-                      G_CALLBACK (ungrab_keyboard), NULL);
-
-    gtk_window_add_accel_group (GTK_WINDOW (win), acc);
-
-    wvbox = gtk_vbox_new (FALSE, HIG_LARGE * 2);
-    gtk_container_add (GTK_CONTAINER (win), wvbox);
-    gtk_container_set_border_width (GTK_CONTAINER (wvbox), HIG_LARGE);
-
-    chbox = gtk_hbox_new (FALSE, HIG_LARGE);
-    gtk_box_pack_start (GTK_BOX (wvbox), chbox, FALSE, FALSE, 0);
-
-    /* The image */
-    w = gtk_image_new_from_stock (GTK_STOCK_DIALOG_AUTHENTICATION, GTK_ICON_SIZE_DIALOG);
-    gtk_misc_set_alignment (GTK_MISC (w), 0.0, 0.0);
-    gtk_box_pack_start (GTK_BOX (chbox), w, FALSE, FALSE, 0);
-
-    box = gtk_vbox_new (FALSE, HIG_SMALL);
-    gtk_box_pack_start (GTK_BOX (chbox), box, TRUE, TRUE, 0);
-
-    /* The description text */
-    if (pr->description) {
-        msg = utf8_validate (pr->description);
-        w = gtk_label_new (msg);
-        g_free (msg);
-
-        gtk_misc_set_alignment (GTK_MISC (w), 0.0, 0.5);
-        gtk_label_set_line_wrap (GTK_LABEL (w), TRUE);
-        gtk_box_pack_start (GTK_BOX (box), w, TRUE, FALSE, 0);
-    }
-
-    /* Any error messsages */
-    if (pr->errmsg) {
-        GdkColor color = { 0, 0xffff, 0, 0 };
-
-        msg = utf8_validate (pr->errmsg);
-        w = gtk_label_new (msg);
-        g_free (msg);
-
-        gtk_misc_set_alignment (GTK_MISC (w), 0.0, 0.5);
-        gtk_label_set_line_wrap (GTK_LABEL (w), TRUE);
-        gtk_box_pack_start (GTK_BOX (box), w, TRUE, FALSE, 0);
-        gtk_widget_modify_fg (w, GTK_STATE_NORMAL, &color);
-    }
-
-    ebox = gtk_hbox_new (FALSE, HIG_SMALL);
-    gtk_box_pack_start (GTK_BOX (box), ebox, FALSE, FALSE, 0);
-
-    /* Prompt goes before the entry */
-    if (pr->prompt) {
-        msg = utf8_validate (pr->prompt);
-        w = gtk_label_new (msg);
-        g_free (msg);
-
-        gtk_box_pack_start (GTK_BOX (ebox), w, FALSE, FALSE, 0);
-    }
-
-    g_current_entry = seahorse_secure_entry_new ();
-    gtk_widget_set_size_request (g_current_entry, 200, -1);
-    g_signal_connect (G_OBJECT (g_current_entry), "activate",
-                      G_CALLBACK (enter_callback), pr);
-
-    gtk_box_pack_start (GTK_BOX (ebox), g_current_entry, TRUE, TRUE, 0);
-    gtk_widget_grab_focus (g_current_entry);
-    gtk_widget_show (g_current_entry);
-
-    bbox = gtk_hbutton_box_new ();
-    gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox), GTK_BUTTONBOX_END);
-    gtk_box_set_spacing (GTK_BOX (bbox), 6);
-    gtk_box_pack_start (GTK_BOX (wvbox), bbox, TRUE, FALSE, 0);
-
-    w = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
-    gtk_container_add (GTK_CONTAINER (bbox), w);
-    g_signal_connect (G_OBJECT (w), "clicked", G_CALLBACK (prompt_cancel_button),
-                      pr);
-
-    GTK_WIDGET_SET_FLAGS (w, GTK_CAN_DEFAULT);
-
-    w = gtk_button_new_from_stock (GTK_STOCK_OK);
-    gtk_container_add (GTK_CONTAINER (bbox), w);
-
-    g_signal_connect (G_OBJECT (w), "clicked", G_CALLBACK (prompt_ok_button), pr);
-    GTK_WIDGET_SET_FLAGS (w, GTK_CAN_DEFAULT);
-    gtk_widget_grab_default (w);
-    g_signal_connect_object (G_OBJECT (g_current_entry), "focus_in_event",
-                             G_CALLBACK (gtk_widget_grab_default), G_OBJECT (w), 0);
-
-    gtk_window_set_position (GTK_WINDOW (win), GTK_WIN_POS_CENTER);
-    gtk_window_set_keep_above(GTK_WINDOW (win), TRUE);
-    gtk_widget_show_all (win);
-    return win;
-}
-
-/* Show prompt for a password using the given request */
 void
 seahorse_agent_prompt_pass (SeahorseAgentPassReq *pr)
 {
+    GtkDialog *dialog;
+
     g_assert (!seahorse_agent_prompt_have ());
-    g_current_win = create_prompt_window (pr);
+    
+    dialog = seahorse_passphrase_prompt_show (NULL, pr->description, 
+                                              pr->prompt, pr->errmsg);
+    g_signal_connect (dialog, "response", G_CALLBACK (passphrase_response), pr);
+    g_current_win = GTK_WIDGET (dialog);
 }
 
 
@@ -405,7 +252,7 @@ create_auth_window (SeahorseAgentPassReq *pr)
     gtk_box_pack_start (GTK_BOX (box), w, TRUE, FALSE, 0);
     
     w = seahorse_check_button_control_new(_("Always ask me before using a cached passphrase"),
-    									  SETTING_AUTH);
+                                          SETTING_AUTH);
     
     gtk_box_pack_start (GTK_BOX (box), w, TRUE, FALSE, 0);
                                   

@@ -37,22 +37,31 @@
 #define SEAHORSE_PASS_BAD    0x00000001
 #define SEAHORSE_PASS_NEW    0x01000000
 
-gpgme_error_t   seahorse_passphrase_get     (gconstpointer dummy,
-                                             const gchar *passphrase_hint, 
-                                             const char* passphrase_info, 
-                                             int prev_bad, int fd);
+GtkDialog*      seahorse_passphrase_prompt_show     (const gchar *title, 
+                                                     const gchar *description, 
+                                                     const gchar *prompt, 
+                                                     const gchar *errmsg);
+                                                     
+const gchar*    seahorse_passphrase_prompt_get      (GtkDialog *dialog);
 
-GList*          seahorse_recipients_get     (SeahorsePGPKey **signkey);
+gpgme_error_t   seahorse_passphrase_get             (gconstpointer dummy,
+                                                     const gchar *passphrase_hint, 
+                                                     const char* passphrase_info, 
+                                                     int prev_bad, int fd);
 
-SeahorsePGPKey* seahorse_signer_get         (void);
+GList*          seahorse_recipients_get             (SeahorsePGPKey **signkey);
 
-void            seahorse_signatures_notify    (const gchar* data, 
-                                               gpgme_verify_result_t status);
+SeahorsePGPKey* seahorse_signer_get                 (void);
+
+void            seahorse_signatures_notify          (const gchar* data, 
+                                                     gpgme_verify_result_t status);
 
 
-void            seahorse_notification_display (const gchar *summary, const gchar* body, 
-                                               gboolean urgent, const gchar *icon);
+void            seahorse_notification_display       (const gchar *summary, 
+                                                     const gchar* body, 
+                                                     gboolean urgent, 
+                                                     const gchar *icon);
   
-gboolean        seahorse_notification_have    ();
+gboolean        seahorse_notification_have          (void);
                                                
 #endif /* __SEAHORSE_LIBDIALOGS_H__ */

@@ -34,6 +34,7 @@
 #include "seahorse-pgp-source.h"
 #include "seahorse-pgp-key.h"
 #include "seahorse-gtkstock.h"
+#include "seahorse-secure-memory.h"
 
 typedef enum _CmdLineMode {
     MODE_NONE,
@@ -287,7 +288,7 @@ do_decrypt (const gchar **paths)
     gchar **u;
     gchar *new_path;
     guint ret = 0;
-	
+
     psrc = SEAHORSE_PGP_SOURCE (seahorse_context_find_key_source (SCTX_APP (), SKEY_PGP, SKEY_LOC_LOCAL));
     g_return_val_if_fail (psrc != NULL && SEAHORSE_IS_PGP_SOURCE (psrc), 1);
         
@@ -335,7 +336,7 @@ do_verify (const gchar **paths)
     
     uris = seahorse_util_uris_expand (paths);
     g_assert (uris != NULL);
-	
+
     psrc = SEAHORSE_PGP_SOURCE (seahorse_context_find_key_source (SCTX_APP (), SKEY_PGP, SKEY_LOC_LOCAL));
     g_return_val_if_fail (psrc != NULL && SEAHORSE_IS_PGP_SOURCE (psrc), 1);
          
@@ -418,17 +419,33 @@ main (int argc, char **argv)
     GtkWindow* win;
     int ret = 0;
 
-#ifdef ENABLE_NLS	
-	bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
-	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
-	textdomain (GETTEXT_PACKAGE);
+    seahorse_secure_memory_init (65536);
+    
+    /* We need to drop privileges completely for security */
+#if defined(HAVE_SETRESUID) && defined(HAVE_SETRESGID)
+
+    /* Not in header files for all OSs, even where present */
+    int setresuid(uid_t ruid, uid_t euid, uid_t suid);
+    int setresgid(gid_t rgid, gid_t egid, gid_t sgid);
+  
+    if (setresuid (getuid (), getuid (), getuid ()) == -1 ||
+        setresgid (getgid (), getgid (), getgid ()) == -1)
+#else
+    if (setuid (getuid ()) == -1 || setgid (getgid ()) == -1)
+#endif
+        g_error (_("couldn't drop privileges properly"));
+    
+#ifdef ENABLE_NLS
+    bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
+    bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+    textdomain (GETTEXT_PACKAGE);
 #endif
 
-	g_message("init gpgme version %s", gpgme_check_version(NULL));
+    g_message("init gpgme version %s", gpgme_check_version(NULL));
 
-#ifdef ENABLE_NLS	
-	gpgme_set_locale(NULL, LC_CTYPE, setlocale(LC_CTYPE, NULL));
-	gpgme_set_locale(NULL, LC_MESSAGES, setlocale(LC_MESSAGES, NULL));
+#ifdef ENABLE_NLS
+    gpgme_set_locale(NULL, LC_CTYPE, setlocale(LC_CTYPE, NULL));
+    gpgme_set_locale(NULL, LC_MESSAGES, setlocale(LC_MESSAGES, NULL));
 #endif
 
     program = gnome_program_init(PACKAGE, VERSION, LIBGNOMEUI_MODULE, argc, argv,
@@ -491,11 +508,11 @@ main (int argc, char **argv)
     } else { 
         win = seahorse_key_manager_show (op);
         g_signal_connect_after (G_OBJECT (win), "destroy", gtk_main_quit, NULL);
-	    gtk_main ();
-	}
+        gtk_main ();
+    }
     
     if (gnome_vfs_initialized ())
         gnome_vfs_shutdown ();
     
-	return ret;
+    return ret;
 }

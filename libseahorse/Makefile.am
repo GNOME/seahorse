@@ -106,11 +106,10 @@ seahorse-marshal.c: seahorse-marshal.list $(GLIB_GENMARSHAL)
 	$(GLIB_GENMARSHAL) $< --body --prefix=seahorse_marshal >> $@
 
 glade_DATA = \
-	seahorse-passphrase.glade \
 	seahorse-recipients.glade \
-    seahorse-signer.glade \
+	seahorse-signer.glade \
 	seahorse-prefs.glade \
-    seahorse-add-keyserver.glade \
+	seahorse-add-keyserver.glade \
 	seahorse-progress.glade
 
 EXTRA_DIST = $(glade_DATA) \
