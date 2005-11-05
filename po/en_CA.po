@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-01 13:09-0500\n"
+"POT-Creation-Date: 2005-11-05 13:06-0500\n"
 "PO-Revision-Date: 2005-08-16 22:06-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: Canadian English <adamw@gnome.org>\n"
@@ -16,85 +16,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-
-#: agent/gtk-secure-entry.c:457
-msgid "Cursor Position"
-msgstr "Cursor Position"
-
-#: agent/gtk-secure-entry.c:459
-msgid "The current position of the insertion cursor in chars"
-msgstr "The current position of the insertion cursor in chars"
-
-#: agent/gtk-secure-entry.c:466
-msgid "Selection Bound"
-msgstr "Selection Bound"
-
-#: agent/gtk-secure-entry.c:468
-msgid ""
-"The position of the opposite end of the selection from the cursor in chars"
-msgstr ""
-"The position of the opposite end of the selection from the cursor in chars"
-
-#: agent/gtk-secure-entry.c:475
-msgid "Maximum length"
-msgstr "Maximum length"
-
-#: agent/gtk-secure-entry.c:477
-msgid "Maximum number of characters for this entry. Zero if no maximum"
-msgstr "Maximum number of characters for this entry. Zero if no maximum"
-
-#: agent/gtk-secure-entry.c:485
-msgid "Has Frame"
-msgstr "Has Frame"
-
-#: agent/gtk-secure-entry.c:487
-msgid "FALSE removes outside bevel from entry"
-msgstr "FALSE removes outside bevel from entry"
-
-#: agent/gtk-secure-entry.c:496
-msgid "Invisible character"
-msgstr "Invisible character"
-
-#: agent/gtk-secure-entry.c:498
-msgid "The character to use when masking entry contents (in \"password mode\")"
-msgstr ""
-"The character to use when masking entry contents (in \"password mode\")"
-
-#: agent/gtk-secure-entry.c:507
-msgid "Activates default"
-msgstr "Activates default"
-
-#: agent/gtk-secure-entry.c:509
-msgid ""
-"Whether to activate the default widget (such as the default button in a "
-"dialog) when Enter is pressed"
-msgstr ""
-"Whether to activate the default widget (such as the default button in a "
-"dialogue) when Enter is pressed"
-
-#: agent/gtk-secure-entry.c:514
-msgid "Width in chars"
-msgstr "Width in chars"
-
-#: agent/gtk-secure-entry.c:516
-msgid "Number of characters to leave space for in the entry"
-msgstr "Number of characters to leave space for in the entry"
-
-#: agent/gtk-secure-entry.c:524
-msgid "Scroll offset"
-msgstr "Scroll offset"
-
-#: agent/gtk-secure-entry.c:526
-msgid "Number of pixels of the entry scrolled off the screen to the left"
-msgstr "Number of pixels of the entry scrolled off the screen to the left"
-
-#: agent/gtk-secure-entry.c:533
-msgid "Text"
-msgstr "Text"
-
-#: agent/gtk-secure-entry.c:535
-msgid "The contents of the entry"
-msgstr "The contents of the entry"
 
 #: agent/seahorse-agent-actions.c:94 src/seahorse-generate-druid.glade.h:27
 msgid "Passphrase:"
@@ -151,24 +72,19 @@ msgstr "_Clear Cache"
 msgid "_Show Window"
 msgstr "_Show Window"
 
-#: agent/seahorse-agent-prompt.c:201 src/seahorse-generate-druid.glade.h:25
-#: src/seahorse-key-properties.glade.h:39
-msgid "Passphrase"
-msgstr "Passphrase"
-
-#: agent/seahorse-agent-prompt.c:367
+#: agent/seahorse-agent-prompt.c:214
 msgid "Authorize Password Access"
 msgstr "Authorize Password Access"
 
-#: agent/seahorse-agent-prompt.c:402
+#: agent/seahorse-agent-prompt.c:249
 msgid "The passphrase is cached in memory."
 msgstr "The passphrase is cached in memory."
 
-#: agent/seahorse-agent-prompt.c:407
+#: agent/seahorse-agent-prompt.c:254
 msgid "Always ask me before using a cached passphrase"
 msgstr "Always ask me before using a cached passphrase"
 
-#: agent/seahorse-agent-prompt.c:424
+#: agent/seahorse-agent-prompt.c:271
 msgid "_Authorize"
 msgstr "_Authorize"
 
@@ -262,11 +178,11 @@ msgstr "could not fork process"
 msgid "couldn't create new process group"
 msgstr "could not create new process group"
 
-#: daemon/seahorse-daemon.c:211
+#: daemon/seahorse-daemon.c:209 src/main.c:436
 msgid "couldn't drop privileges properly"
 msgstr "could not drop privileges properly"
 
-#: daemon/seahorse-daemon.c:215
+#: daemon/seahorse-daemon.c:213
 msgid "Encryption Daemon (Seahorse)"
 msgstr "Encryption Daemon (Seahorse)"
 
@@ -528,7 +444,6 @@ msgid "The orientation of the tray."
 msgstr "The orientation of the tray."
 
 #: libseahorse/seahorse-add-keyserver.glade.h:1
-#: libseahorse/seahorse-passphrase.glade.h:1
 #: libseahorse/seahorse-recipients.glade.h:1 src/seahorse-add-uid.glade.h:1
 #: src/seahorse-change-passphrase.glade.h:1
 #: src/seahorse-generate-adv.glade.h:1 src/seahorse-generate-druid.glade.h:1
@@ -616,28 +531,29 @@ msgstr "Retrieving remote keys..."
 msgid "Sending keys to key server..."
 msgstr "Sending keys to key server..."
 
-#: libseahorse/seahorse-passphrase.c:62
-#, c-format
-msgid "Bad passphrase! Try again for '%s'"
-msgstr "Bad passphrase! Try again for '%s'"
+#: libseahorse/seahorse-passphrase.c:112
+#: src/seahorse-generate-druid.glade.h:25
+#: src/seahorse-key-properties.glade.h:39
+msgid "Passphrase"
+msgstr "Passphrase"
 
-#: libseahorse/seahorse-passphrase.c:64
+#: libseahorse/seahorse-passphrase.c:115
+msgid "Password:"
+msgstr "Password:"
+
+#: libseahorse/seahorse-passphrase.c:230
+msgid "Wrong passphrase."
+msgstr "Wrong passphrase."
+
+#: libseahorse/seahorse-passphrase.c:233
 #, c-format
 msgid "Enter new passphrase for '%s'"
 msgstr "Enter new passphrase for '%s'"
 
-#: libseahorse/seahorse-passphrase.c:66
+#: libseahorse/seahorse-passphrase.c:235
 #, c-format
 msgid "Enter passphrase for '%s'"
 msgstr "Enter passphrase for '%s'"
-
-#: libseahorse/seahorse-passphrase.glade.h:2
-msgid "Enter Passphrase"
-msgstr "Enter Passphrase"
-
-#: libseahorse/seahorse-passphrase.glade.h:3
-msgid "Passphrase for key"
-msgstr "Passphrase for key"
 
 #: libseahorse/seahorse-pgp-key-op.c:2104
 msgid ""
@@ -905,6 +821,85 @@ msgstr "Search _for: "
 #: libseahorse/seahorse-signer.glade.h:2
 msgid "_Sign message with key:"
 msgstr "_Sign message with key:"
+
+#: libseahorse/seahorse-secure-entry.c:361
+msgid "Cursor Position"
+msgstr "Cursor Position"
+
+#: libseahorse/seahorse-secure-entry.c:361
+msgid "The current position of the insertion cursor in chars"
+msgstr "The current position of the insertion cursor in chars"
+
+#: libseahorse/seahorse-secure-entry.c:365
+msgid "Selection Bound"
+msgstr "Selection Bound"
+
+#: libseahorse/seahorse-secure-entry.c:365
+msgid ""
+"The position of the opposite end of the selection from the cursor in chars"
+msgstr ""
+"The position of the opposite end of the selection from the cursor in chars"
+
+#: libseahorse/seahorse-secure-entry.c:369
+msgid "Maximum length"
+msgstr "Maximum length"
+
+#: libseahorse/seahorse-secure-entry.c:369
+msgid "Maximum number of characters for this entry. Zero if no maximum"
+msgstr "Maximum number of characters for this entry. Zero if no maximum"
+
+#: libseahorse/seahorse-secure-entry.c:373
+msgid "Has Frame"
+msgstr "Has Frame"
+
+#: libseahorse/seahorse-secure-entry.c:373
+msgid "FALSE removes outside bevel from entry"
+msgstr "FALSE removes outside bevel from entry"
+
+#: libseahorse/seahorse-secure-entry.c:377
+msgid "Invisible character"
+msgstr "Invisible character"
+
+#: libseahorse/seahorse-secure-entry.c:377
+msgid "The character to use when masking entry contents (in \"password mode\")"
+msgstr ""
+"The character to use when masking entry contents (in \"password mode\")"
+
+#: libseahorse/seahorse-secure-entry.c:381
+msgid "Activates default"
+msgstr "Activates default"
+
+#: libseahorse/seahorse-secure-entry.c:381
+msgid ""
+"Whether to activate the default widget (such as the default button in a "
+"dialog) when Enter is pressed"
+msgstr ""
+"Whether to activate the default widget (such as the default button in a "
+"dialogue) when Enter is pressed"
+
+#: libseahorse/seahorse-secure-entry.c:385
+msgid "Width in chars"
+msgstr "Width in chars"
+
+#: libseahorse/seahorse-secure-entry.c:385
+msgid "Number of characters to leave space for in the entry"
+msgstr "Number of characters to leave space for in the entry"
+
+#: libseahorse/seahorse-secure-entry.c:389
+msgid "Scroll offset"
+msgstr "Scroll offset"
+
+#: libseahorse/seahorse-secure-entry.c:389
+msgid "Number of pixels of the entry scrolled off the screen to the left"
+msgstr "Number of pixels of the entry scrolled off the screen to the left"
+
+#: libseahorse/seahorse-secure-entry.c:393
+msgid "Text"
+msgstr "Text"
+
+#: libseahorse/seahorse-secure-entry.c:393
+msgid "The contents of the entry"
+msgstr "The contents of the entry"
 
 #: libseahorse/seahorse-server-source.c:455
 msgid "LDAP Key Server"
@@ -1190,90 +1185,90 @@ msgstr "For internal use"
 msgid "Configure key servers and other encryption settings"
 msgstr "Configure key servers and other encryption settings"
 
-#: src/main.c:53
+#: src/main.c:54
 msgid "Import keys from the file"
 msgstr "Import keys from the file"
 
-#: src/main.c:56
+#: src/main.c:57
 msgid "Encrypt file"
 msgstr "Encrypt file"
 
-#: src/main.c:59
+#: src/main.c:60
 msgid "Sign file with default key"
 msgstr "Sign file with default key"
 
-#: src/main.c:62
+#: src/main.c:63
 msgid "Encrypt and sign file with default key"
 msgstr "Encrypt and sign file with default key"
 
-#: src/main.c:65
+#: src/main.c:66
 msgid "Decrypt encrypted file"
 msgstr "Decrypt encrypted file"
 
-#: src/main.c:68
+#: src/main.c:69
 msgid "Verify signature file"
 msgstr "Verify signature file"
 
-#: src/main.c:71
+#: src/main.c:72
 msgid "Read list of URIs on standard in"
 msgstr "Read list of URIs on standard input"
 
-#: src/main.c:153 src/seahorse-key-manager.c:230
+#: src/main.c:154 src/seahorse-key-manager.c:230
 #, c-format
 msgid "Couldn't import keys from \"%s\""
 msgstr "Could not import keys from \"%s\""
 
-#: src/main.c:161
+#: src/main.c:162
 msgid "Imported key"
 msgstr "Imported key"
 
-#: src/main.c:162 src/seahorse-key-manager.c:234
+#: src/main.c:163 src/seahorse-key-manager.c:234
 #: src/seahorse-key-manager.c:257 src/seahorse-key-manager.c:706
 #, c-format
 msgid "Imported %d keys"
 msgstr "Imported %d keys"
 
-#: src/main.c:198
+#: src/main.c:199
 #, c-format
 msgid "Choose Encrypted File Name for '%s'"
 msgstr "Choose Encrypted File Name for '%s'"
 
-#: src/main.c:210
+#: src/main.c:211
 #, c-format
 msgid "Couldn't encrypt \"%s\""
 msgstr "Could not encrypt \"%s\""
 
-#: src/main.c:260
+#: src/main.c:261
 #, c-format
 msgid "Choose Signature File Name for '%s'"
 msgstr "Choose Signature File Name for '%s'"
 
-#: src/main.c:268
+#: src/main.c:269
 #, c-format
 msgid "Couldn't sign \"%s\""
 msgstr "Could not sign \"%s\""
 
-#: src/main.c:299
+#: src/main.c:300
 #, c-format
 msgid "Choose Decrypted File Name for '%s'"
 msgstr "Choose Decrypted File Name for '%s'"
 
-#: src/main.c:306
+#: src/main.c:307
 #, c-format
 msgid "Couldn't decrypt \"%s\""
 msgstr "Could not decrypt \"%s\""
 
-#: src/main.c:352
+#: src/main.c:353
 #, c-format
 msgid "Choose Original File for '%s'"
 msgstr "Choose Original File for '%s'"
 
-#: src/main.c:386
+#: src/main.c:387
 #, c-format
 msgid "Couldn't verify \"%s\""
 msgstr "Could not verify \"%s\""
 
-#: src/main.c:436 src/seahorse-key-manager.glade.h:2
+#: src/main.c:453 src/seahorse-key-manager.glade.h:2
 #: src/seahorse.desktop.in.h:1
 msgid "Encryption Key Manager"
 msgstr "Encryption Key Manager"
