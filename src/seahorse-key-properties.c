@@ -309,7 +309,23 @@ owner_photo_delete_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 static void
 owner_photo_primary_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 {
-    /* TODO: */
+    SeahorseKey *skey;
+    SeahorsePGPKey *pkey;
+    gpgme_error_t gerr;
+    gint uid;
+    gpgmex_photo_id_t photoid;
+
+    photoid	= (gpgmex_photo_id_t)g_object_get_data (G_OBJECT (swidget), "current-photoid");
+    g_return_if_fail (photoid != NULL);
+        
+    skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
+    pkey = SEAHORSE_PGP_KEY (skey);
+    
+    uid = photoid->uid;
+    
+    gerr = seahorse_pgp_key_op_photoid_primary (pkey, uid);
+    if (!GPG_IS_OK (gerr))
+        seahorse_util_handle_gpgme (gerr, _("Couldn't change primary photo ID"));
 }
 
 static void
@@ -317,6 +333,7 @@ set_photoid_state(SeahorseWidget *swidget, SeahorsePGPKey *pkey)
 {
     SeahorseKeyEType etype; 
     GtkWidget *photo_image;
+    guint num_photoids;
 
     gpgmex_photo_id_t photoid;
 
@@ -327,6 +344,10 @@ set_photoid_state(SeahorseWidget *swidget, SeahorsePGPKey *pkey)
     sensitive_glade_widget (swidget, "owner-photo-add-button", 
                             etype == SKEY_PRIVATE);
 
+    /* Sensitive when we have a photo to set as primary */
+    sensitive_glade_widget (swidget, "owner-photo-primary-button", 
+                            etype == SKEY_PRIVATE && photoid);
+
     /* Sensitive when we have a photo id to delete */
     sensitive_glade_widget (swidget, "owner-photo-delete-button", 
                             etype == SKEY_PRIVATE && photoid);
@@ -335,10 +356,16 @@ set_photoid_state(SeahorseWidget *swidget, SeahorsePGPKey *pkey)
     sensitive_glade_widget (swidget, "owner-photo-previous-button", 
                             photoid && photoid != pkey->photoids);
     
+    sensitive_glade_widget (swidget, "owner-photo-first-button", 
+                            photoid && photoid != pkey->photoids);
+    
     /* Sensitive when not the last photo id */
     sensitive_glade_widget (swidget, "owner-photo-next-button", 
                             photoid && photoid->next && photoid->next->photo);
-    
+                            
+    sensitive_glade_widget (swidget, "owner-photo-last-button",
+                            photoid && photoid->next && photoid->next->photo);
+                            
     /* Display this when there are any photo ids */
     show_glade_widget (swidget, "owner-photo-delete-button", photoid != NULL);
     
@@ -347,6 +374,14 @@ set_photoid_state(SeahorseWidget *swidget, SeahorsePGPKey *pkey)
                        pkey->photoids && pkey->photoids->next);
     show_glade_widget (swidget, "owner-photo-next-button", 
                        pkey->photoids && pkey->photoids->next);
+                       
+    /* Display these when there are more than 2 photo ids */
+    num_photoids = seahorse_pgp_key_get_num_photoids(pkey);
+    
+    show_glade_widget (swidget, "owner-photo-first-button",
+                       (num_photoids > 2));
+    show_glade_widget (swidget, "owner-photo-last-button",
+                       (num_photoids > 2));
         
     photo_image = glade_xml_get_widget (swidget->xml, "photoid");
     if (photo_image) {
@@ -414,6 +449,42 @@ photoid_prev_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 }
 
 static void
+photoid_first_clicked (GtkWidget *widget, SeahorseWidget *swidget)
+{
+    SeahorseKey *skey;
+    SeahorsePGPKey *pkey;
+    gpgmex_photo_id_t photoid;
+
+    skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
+    pkey = SEAHORSE_PGP_KEY (skey);
+
+    photoid = pkey->photoids;
+    
+    g_object_set_data (G_OBJECT (swidget), "current-photoid", photoid);
+    set_photoid_state (swidget, pkey);
+}
+
+static void
+photoid_last_clicked (GtkWidget *widget, SeahorseWidget *swidget)
+{
+    SeahorseKey *skey;
+    SeahorsePGPKey *pkey;
+    gpgmex_photo_id_t photoid;
+
+    skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
+    pkey = SEAHORSE_PGP_KEY (skey);
+
+    photoid = pkey->photoids;
+    
+    while(photoid->next != NULL)
+        photoid = photoid->next;
+    
+    g_object_set_data (G_OBJECT (swidget), "current-photoid", photoid);
+    set_photoid_state (swidget, pkey);
+}
+
+
+static void
 do_owner_signals (SeahorseWidget *swidget)
 { 
 	SeahorseKey *skey;
@@ -428,6 +499,10 @@ do_owner_signals (SeahorseWidget *swidget)
 								G_CALLBACK (photoid_next_clicked), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "on_owner_photo_previous_clicked",
 								G_CALLBACK (photoid_prev_clicked), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "on_owner_photo_first_button_clicked",
+	                            G_CALLBACK (photoid_first_clicked), swidget);
+	glade_xml_signal_connect_data (swidget->xml, "on_owner_photo_last_button_clicked",
+	                            G_CALLBACK (photoid_last_clicked), swidget);
 	
 	if (etype == SKEY_PRIVATE ) {
 		glade_xml_signal_connect_data (swidget->xml, "on_owner_add_button_clicked",
@@ -526,12 +601,8 @@ do_owner (SeahorseWidget *swidget)
     
     widget = glade_xml_get_widget (swidget->xml, "owner-keyid-label");
     if (widget)
-        gtk_label_set_text (GTK_LABEL (widget), seahorse_key_get_short_keyid (skey));
-
-    /* temporarly disable these 2 buttons until the features get implemented */
-    sensitive_glade_widget (swidget, "owner-photo-first-button", FALSE);
-    sensitive_glade_widget (swidget, "owner-photo-primary-button", FALSE);
-
+        gtk_label_set_text (GTK_LABEL (widget), seahorse_key_get_short_keyid (skey)); 
+    
     /* Clear/create table store */
     widget = glade_xml_get_widget (swidget->xml, "owner-userid-tree");
     store = GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (widget)));	
