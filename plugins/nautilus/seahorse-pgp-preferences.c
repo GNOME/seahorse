@@ -26,6 +26,7 @@
 #include "config.h"
 #include "seahorse-context.h"
 #include "seahorse-prefs.h"
+#include "seahorse-gtkstock.h"
 
 #ifdef WITH_AGENT
 static gboolean show_cache = FALSE;
@@ -64,6 +65,9 @@ main (int argc, char **argv)
                 GNOME_PARAM_POPT_TABLE, options,
                 GNOME_PARAM_HUMAN_READABLE_NAME, _("Encryption Preferences"),
                 GNOME_PARAM_APP_DATADIR, DATA_DIR, NULL);
+
+    /* Insert Icons into Stock */ 
+    seahorse_gtk_stock_init();
 	
     /* The default SeahorseContext */
 	seahorse_context_new (TRUE, 0);
@@ -88,7 +92,7 @@ main (int argc, char **argv)
         seahorse_prefs_select_tab (swidget, tab);
     }
 #endif
-    
+        
 	gtk_main();
 	return 0;
 }
