@@ -55,7 +55,11 @@ seahorse_signer_get ()
 	        
     widget = glade_xml_get_widget (swidget->xml, "sign_key_place");
 
-    skset = seahorse_keyset_new (SKEY_PGP, SKEY_PRIVATE, SKEY_LOC_LOCAL, SKEY_FLAG_CAN_SIGN);
+    skset = seahorse_keyset_new (SKEY_PGP, 
+                                 SKEY_PRIVATE, 
+                                 SKEY_LOC_LOCAL, 
+                                 SKEY_FLAG_CAN_SIGN, 
+                                 SKEY_FLAG_EXPIRED | SKEY_FLAG_REVOKED | SKEY_FLAG_DISABLED);
     sdkc = seahorse_default_key_control_new (skset, NULL);
     g_object_unref (skset);
     

@@ -87,7 +87,8 @@ GType               seahorse_keyset_get_type           (void);
 SeahorseKeyset*     seahorse_keyset_new                (GQuark             ktype,
                                                         SeahorseKeyEType   etype,
                                                         SeahorseKeyLoc     location,
-                                                        guint              flags);
+                                                        guint              flags,
+                                                        guint              nflags);
 
 SeahorseKeyset*     seahorse_keyset_new_full           (SeahorseKeyPredicate *pred);
 

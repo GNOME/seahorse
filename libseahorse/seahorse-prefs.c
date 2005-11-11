@@ -494,7 +494,11 @@ seahorse_prefs_new ()
 
     widget = glade_xml_get_widget (swidget->xml, "default_key");
 
-    skset = seahorse_keyset_new (SKEY_PGP, SKEY_PRIVATE, SKEY_LOC_LOCAL, 0);
+    skset = seahorse_keyset_new (SKEY_PGP, 
+                                 SKEY_PRIVATE, 
+                                 SKEY_LOC_LOCAL, 
+                                 0, 
+                                 SKEY_FLAG_EXPIRED | SKEY_FLAG_REVOKED | SKEY_FLAG_DISABLED);
     sdkc = seahorse_default_key_control_new (skset, _("None. Prompt for a key."));
     g_object_unref (skset);
     

@@ -171,7 +171,11 @@ seahorse_recipients_get (SeahorsePGPKey **signer)
     } else {
         widget = glade_xml_get_widget (swidget->xml, "sign_key_place");
 
-        skset = seahorse_keyset_new (SKEY_PGP, SKEY_PRIVATE, SKEY_LOC_LOCAL, 0);    
+        skset = seahorse_keyset_new (SKEY_PGP, 
+                                     SKEY_PRIVATE, 
+                                     SKEY_LOC_LOCAL, 
+                                     0, 
+                                     SKEY_FLAG_EXPIRED | SKEY_FLAG_REVOKED | SKEY_FLAG_DISABLED);
         sdkc = seahorse_default_key_control_new (skset, _("None (Don't sign)"));
         g_object_unref (skset);
         
@@ -184,7 +188,7 @@ seahorse_recipients_get (SeahorsePGPKey **signer)
         g_free (id); 
     }
         
-    skset = seahorse_keyset_new (SKEY_PGP, 0, 0, 0);
+    skset = seahorse_keyset_new (SKEY_PGP, 0, 0, 0, 0);
 	skstore = seahorse_recipients_store_new (skset, view);
    
     glade_xml_signal_connect_data (swidget->xml, "on_mode_changed", 

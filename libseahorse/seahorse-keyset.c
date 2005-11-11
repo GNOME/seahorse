@@ -257,7 +257,7 @@ seahorse_keyset_class_init (SeahorseKeysetClass *klass)
 
 SeahorseKeyset*
 seahorse_keyset_new (GQuark ktype, SeahorseKeyEType etype, SeahorseKeyLoc location,
-                     guint flags)
+                     guint flags, guint nflags)
 {
     SeahorseKeyset *skset;
     SeahorseKeyPredicate *pred = g_new0(SeahorseKeyPredicate, 1);
@@ -266,6 +266,7 @@ seahorse_keyset_new (GQuark ktype, SeahorseKeyEType etype, SeahorseKeyLoc locati
     pred->ktype = ktype;
     pred->etype = etype;
     pred->flags = flags;
+    pred->nflags = nflags;
     
     skset = seahorse_keyset_new_full (pred);
     g_object_set_data_full (G_OBJECT (skset), "quick-predicate", pred, g_free);
