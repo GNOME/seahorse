@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-06 19:23+0200\n"
-"PO-Revision-Date: 2005-07-06 19:34+0200\n"
+"POT-Creation-Date: 2005-11-11 18:38+0100\n"
+"PO-Revision-Date: 2005-11-11 18:40+0100\n"
 "Last-Translator: \n"
 "Language-Team:  <en@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -108,15 +108,6 @@ msgstr "Texto"
 #: ../agent/gtk-secure-entry.c:535
 msgid "The contents of the entry"
 msgstr "El contenido de la entrada"
-
-#: ../agent/gtk-secure-entry.c:692
-msgid "Select on focus"
-msgstr "Seleccionar en el foco"
-
-#: ../agent/gtk-secure-entry.c:694
-msgid "Whether to select the contents of an entry when it is focused"
-msgstr ""
-"Indica si debe seleccionar el contenido de una entrada que tiene el foco"
 
 #: ../agent/seahorse-agent-actions.c:94
 #: ../src/seahorse-generate-druid.glade.h:27
@@ -251,7 +242,7 @@ msgid "Encrypt and sign operations on files"
 msgstr "Operaciones de encriptado y firma de un archivo"
 
 #: ../bonobo/Seahorse_PGP_File_Listener.server.in.in.h:4
-#: ../plugins/nautilus-ext/seahorse-nautilus.c:148
+#: ../plugins/nautilus-ext/seahorse-nautilus.c:149
 msgid "Encrypt..."
 msgstr "Encriptar..."
 
@@ -280,7 +271,7 @@ msgid "Seahorse PGP verify operation"
 msgstr "Operación de verificación PGP de Seahorse"
 
 #: ../bonobo/Seahorse_PGP_File_Listener.server.in.in.h:11
-#: ../plugins/nautilus-ext/seahorse-nautilus.c:155
+#: ../plugins/nautilus-ext/seahorse-nautilus.c:156
 msgid "Sign"
 msgstr "Firmar"
 
@@ -296,7 +287,10 @@ msgstr "Operación de verificación en archivos firmados por PGP"
 msgid ""
 "A list of key server URIs to search for remote PGP keys. In later versions a "
 "display name can be included, by appending a space and then the name."
-msgstr "Una lista de URI de servidores donde buscar claves PGP remotas. En versiones posteriores se puede incluir un nombre para mostrar, anexando un espacio y después el nombre."
+msgstr ""
+"Una lista de URI de servidores donde buscar claves PGP remotas. En versiones "
+"posteriores se puede incluir un nombre para mostrar, anexando un espacio y "
+"después el nombre."
 
 #: ../data/seahorse.schemas.in.h:2
 msgid "Controls the visibility of the expires column for the key manager."
@@ -520,44 +514,61 @@ msgstr "El puerto por el que acceder al servidor."
 msgid "initial temp item"
 msgstr "elemento temp inicial"
 
-#: ../libseahorse/seahorse-hkp-source.c:182
-#: ../libseahorse/seahorse-ldap-source.c:376
+#: ../libseahorse/seahorse-hkp-source.c:278
 #, c-format
-msgid "Couldn't communicate with '%s': %s"
-msgstr "No se pudo comunicar con «%s»: %s"
+msgid "No matching keys found on server '%s'."
+msgstr "No se han encontrado clave coincidentes en el servidor «%s»."
 
-#: ../libseahorse/seahorse-hkp-source.c:443
+#: ../libseahorse/seahorse-hkp-source.c:280
+#, c-format
+msgid "Search was not specific enough. Server '%s' found too many keys."
+msgstr "La búsqueda no fue suficientemente específica. El servidor «%s» encontró demasiadas claves."
+
+#: ../libseahorse/seahorse-hkp-source.c:282
+#, c-format
+msgid "Couldn't communicate with server '%s': %s"
+msgstr "No se pudo comunicar con «el servidor %s»: %s"
+
+#: ../libseahorse/seahorse-hkp-source.c:484
 msgid "Searching for keys..."
 msgstr "Buscando claves..."
 
-#: ../libseahorse/seahorse-hkp-source.c:515
-#: ../libseahorse/seahorse-hkp-source.c:564
+#: ../libseahorse/seahorse-hkp-source.c:556
 msgid "Uploading keys..."
 msgstr "Subiendo claves..."
 
-#: ../libseahorse/seahorse-hkp-source.c:680
+#: ../libseahorse/seahorse-hkp-source.c:608
+msgid "Retrieving keys..."
+msgstr "Obteniendo claves..."
+
+#: ../libseahorse/seahorse-hkp-source.c:724
 #, c-format
 msgid "Searching for keys on: %s"
 msgstr "Buscando claves en: «%s»"
 
-#: ../libseahorse/seahorse-hkp-source.c:754
-#: ../libseahorse/seahorse-hkp-source.c:828
+#: ../libseahorse/seahorse-hkp-source.c:798
+#: ../libseahorse/seahorse-hkp-source.c:872
 #: ../libseahorse/seahorse-ldap-source.c:553
 #, c-format
 msgid "Connecting to: %s"
 msgstr "Conectando con: %s"
 
 #. Make the column
-#: ../libseahorse/seahorse-key-store.c:780
+#: ../libseahorse/seahorse-key-store.c:781
 #: ../src/seahorse-key-properties.c:401 ../src/seahorse-key-properties.c:495
 msgid "Name"
 msgstr "Nombre"
 
 #. Make the column
-#: ../libseahorse/seahorse-key-store.c:783
+#: ../libseahorse/seahorse-key-store.c:784
 #: ../src/seahorse-key-properties.c:398
 msgid "Key ID"
 msgstr "Identificador"
+
+#: ../libseahorse/seahorse-ldap-source.c:376
+#, c-format
+msgid "Couldn't communicate with '%s': %s"
+msgstr "No se pudo comunicar con «%s»: %s"
 
 #: ../libseahorse/seahorse-ldap-source.c:726
 #, c-format
@@ -569,11 +580,11 @@ msgstr "Buscando claves que contengan «%s»..."
 msgid "Searching for key id '%s'..."
 msgstr "Buscando la clave con id «%s»..."
 
-#: ../libseahorse/seahorse-ldap-source.c:847
+#: ../libseahorse/seahorse-ldap-source.c:850
 msgid "Retrieving remote keys..."
 msgstr "Obteniendo claves remotas..."
 
-#: ../libseahorse/seahorse-ldap-source.c:991
+#: ../libseahorse/seahorse-ldap-source.c:994
 msgid "Sending keys to key server..."
 msgstr "Enviando claves al servidor de claves..."
 
@@ -749,7 +760,7 @@ msgid_plural "Loaded %d keys"
 msgstr[0] "%d clave cargada"
 msgstr[1] "%d claves cargadas"
 
-#: ../libseahorse/seahorse-pgp-source.c:697
+#: ../libseahorse/seahorse-pgp-source.c:700
 msgid "Loading Keys..."
 msgstr "Cargando claves..."
 
@@ -827,11 +838,11 @@ msgstr "_Buscar: "
 msgid "_Sign message with key:"
 msgstr "_Firmar mensaje con la clave:"
 
-#: ../libseahorse/seahorse-server-source.c:656
+#: ../libseahorse/seahorse-server-source.c:677
 msgid "LDAP Key Server"
 msgstr "Servidor de claves LDAP"
 
-#: ../libseahorse/seahorse-server-source.c:659
+#: ../libseahorse/seahorse-server-source.c:680
 msgid "HTTP Key Server"
 msgstr "Servidor de claves HTTP"
 
@@ -895,37 +906,37 @@ msgstr "Elegir clave de firma"
 msgid "%Y-%m-%d"
 msgstr "%d-%m-%Y"
 
-#: ../libseahorse/seahorse-util.c:478
+#: ../libseahorse/seahorse-util.c:485
 msgid "Multiple Keys"
 msgstr "Claves múltiples"
 
-#: ../libseahorse/seahorse-util.c:789
+#: ../libseahorse/seahorse-util.c:796
 msgid "Couldn't run file-roller"
 msgstr "No se pudo ejecutar file-roller"
 
-#: ../libseahorse/seahorse-util.c:794
+#: ../libseahorse/seahorse-util.c:801
 msgid "The file-roller process did not complete successfully"
 msgstr "El proceso de file-roller no terminó completamente"
 
-#: ../libseahorse/seahorse-util.c:804
+#: ../libseahorse/seahorse-util.c:811
 msgid "Couldn't set permissions on backup file."
 msgstr "No se pudo establecer los permisos en el archivo de respaldo."
 
 #. Filter for PGP keys. We also include *.asc, as in many
 #. cases that extension is associated with text/plain
-#: ../libseahorse/seahorse-util.c:849
+#: ../libseahorse/seahorse-util.c:856
 msgid "All key files"
 msgstr "Todos los ficheros de claves"
 
-#: ../libseahorse/seahorse-util.c:856 ../libseahorse/seahorse-util.c:896
+#: ../libseahorse/seahorse-util.c:863 ../libseahorse/seahorse-util.c:903
 msgid "All files"
 msgstr "Todos los ficheros"
 
-#: ../libseahorse/seahorse-util.c:889
+#: ../libseahorse/seahorse-util.c:896
 msgid "Archive files"
 msgstr "Archivar ficheros"
 
-#: ../libseahorse/seahorse-util.c:930
+#: ../libseahorse/seahorse-util.c:937
 msgid ""
 "<b>A file already exists with this name.</b>\n"
 "\n"
@@ -935,7 +946,7 @@ msgstr ""
 "\n"
 "¿Quiere reemplazarlo por uno nuevo?"
 
-#: ../libseahorse/seahorse-util.c:933
+#: ../libseahorse/seahorse-util.c:940
 msgid "_Replace"
 msgstr "_Reemplazar"
 
@@ -973,7 +984,7 @@ msgstr "Deshabilitada"
 msgid "Revoked"
 msgstr "Revocada"
 
-#: ../libseahorse/seahorse-widget.c:306
+#: ../libseahorse/seahorse-widget.c:307
 #, c-format
 msgid "Could not display help: %s"
 msgstr "No se pudo mostrar la ayuda: %s"
@@ -1040,7 +1051,7 @@ msgid "Block %d"
 msgstr "Bloque %d"
 
 #: ../plugins/gedit/seahorse-gedit.c:441 ../src/seahorse-key-manager.c:116
-#: ../src/seahorse-key-manager.c:139 ../src/seahorse-key-manager.c:575
+#: ../src/seahorse-key-manager.c:139 ../src/seahorse-key-manager.c:579
 #, c-format
 msgid "Imported %d key"
 msgid_plural "Imported %d keys"
@@ -1079,13 +1090,13 @@ msgstr "Para uso interno"
 msgid "Configure key servers and other encryption settings"
 msgstr "Configurar los servidores de claves y otras opciones de encriptado"
 
-#: ../plugins/nautilus-ext/seahorse-nautilus.c:149
+#: ../plugins/nautilus-ext/seahorse-nautilus.c:150
 msgid "Encrypt (and optionally sign) the selected file"
 msgid_plural "Encrypt the selected files"
 msgstr[0] "Encriptar (y opcionalmente firmar) el archivo seleccionado"
 msgstr[1] "Encriptar (y opcionalmente firmar) los archivos seleccionados"
 
-#: ../plugins/nautilus-ext/seahorse-nautilus.c:156
+#: ../plugins/nautilus-ext/seahorse-nautilus.c:157
 msgid "Sign the selected file"
 msgid_plural "Sign the selected files"
 msgstr[0] "Firmar el archivo seleccionado"
@@ -1129,7 +1140,7 @@ msgid "Imported key"
 msgstr "Clave importada"
 
 #: ../src/main.c:158 ../src/seahorse-key-manager.c:117
-#: ../src/seahorse-key-manager.c:140 ../src/seahorse-key-manager.c:576
+#: ../src/seahorse-key-manager.c:140 ../src/seahorse-key-manager.c:580
 #, c-format
 msgid "Imported %d keys"
 msgstr "%d claves importadas"
@@ -1174,7 +1185,7 @@ msgstr "Elija el archivo original para «%s»"
 msgid "Couldn't verify \"%s\""
 msgstr "No se pudo verificar «%s»"
 
-#: ../src/main.c:437 ../src/seahorse-key-manager.glade.h:3
+#: ../src/main.c:442 ../src/seahorse-key-manager.glade.h:3
 #: ../src/seahorse.desktop.in.h:1
 msgid "Encryption Key Manager"
 msgstr "Administrador de claves de encriptación"
@@ -1672,203 +1683,203 @@ msgstr "No se pudo exportar la clave a «%s»"
 msgid "Backup Keyrings to Archive"
 msgstr "Respaldar anillos de claves en un archivo"
 
-#: ../src/seahorse-key-manager.c:404
+#: ../src/seahorse-key-manager.c:408
 msgid "translator_credits"
 msgstr ""
 "Francisco F. Serrador <serrador@cvs.gnome.org>\n"
 "José Carlos García Sogo <jsogo@debian.org>\n"
 "Germán Poo-Caamaño <gpoo@ubiobio.cl>"
 
-#: ../src/seahorse-key-manager.c:424
+#: ../src/seahorse-key-manager.c:428
 msgid "seahorse"
 msgstr "seahorse"
 
-#: ../src/seahorse-key-manager.c:467 ../src/seahorse-keyserver-results.c:219
+#: ../src/seahorse-key-manager.c:471 ../src/seahorse-keyserver-results.c:219
 #, c-format
 msgid "Selected %d key"
 msgstr "%d clave seleccionada"
 
-#: ../src/seahorse-key-manager.c:468 ../src/seahorse-keyserver-results.c:220
+#: ../src/seahorse-key-manager.c:472 ../src/seahorse-keyserver-results.c:220
 #, c-format
 msgid "Selected %d keys"
 msgstr "%d claves seleccionadas"
 
-#: ../src/seahorse-key-manager.c:572
+#: ../src/seahorse-key-manager.c:576
 #, c-format
 msgid "Couldn't import key from \"%s\""
 msgstr "No se puede importar la clave desde «%s»"
 
 #. Top menu items
-#: ../src/seahorse-key-manager.c:600 ../src/seahorse-keyserver-results.c:280
+#: ../src/seahorse-key-manager.c:604 ../src/seahorse-keyserver-results.c:280
 msgid "_Key"
 msgstr "_Clave"
 
-#: ../src/seahorse-key-manager.c:601 ../src/seahorse-keyserver-results.c:281
+#: ../src/seahorse-key-manager.c:605 ../src/seahorse-keyserver-results.c:281
 msgid "_Edit"
 msgstr "_Editar"
 
-#: ../src/seahorse-key-manager.c:602
+#: ../src/seahorse-key-manager.c:606
 msgid "_View"
 msgstr "_Ver"
 
-#: ../src/seahorse-key-manager.c:603 ../src/seahorse-keyserver-results.c:282
+#: ../src/seahorse-key-manager.c:607 ../src/seahorse-keyserver-results.c:282
 msgid "_Help"
 msgstr "A_yuda"
 
 #. Key Actions
-#: ../src/seahorse-key-manager.c:606
+#: ../src/seahorse-key-manager.c:610
 msgid "_Create Key Pair..."
 msgstr "_Crear un par de claves..."
 
-#: ../src/seahorse-key-manager.c:607
+#: ../src/seahorse-key-manager.c:611
 msgid "Create a new key pair"
 msgstr "Crea un par de claves nuevo"
 
-#: ../src/seahorse-key-manager.c:608
+#: ../src/seahorse-key-manager.c:612
 msgid "_Import..."
 msgstr "_Importar..."
 
-#: ../src/seahorse-key-manager.c:609
+#: ../src/seahorse-key-manager.c:613
 msgid "Import keys into your keyring from a file"
 msgstr "Importar claves en el anillo desde un archivo"
 
-#: ../src/seahorse-key-manager.c:610
+#: ../src/seahorse-key-manager.c:614
 msgid "_Backup Keyrings..."
 msgstr "_Copia de respaldo de los anillos de claves..."
 
-#: ../src/seahorse-key-manager.c:611
+#: ../src/seahorse-key-manager.c:615
 msgid "Backup all keys"
 msgstr "Respaldar todas las claves"
 
-#: ../src/seahorse-key-manager.c:612
+#: ../src/seahorse-key-manager.c:616
 msgid "Paste _Keys"
 msgstr "Pegar _claves"
 
-#: ../src/seahorse-key-manager.c:613
+#: ../src/seahorse-key-manager.c:617
 msgid "Import keys from the clipboard"
 msgstr "Importar claves desde el portapapeles"
 
-#: ../src/seahorse-key-manager.c:615
+#: ../src/seahorse-key-manager.c:619
 msgid "_Quit"
 msgstr "_Salir"
 
-#: ../src/seahorse-key-manager.c:616
+#: ../src/seahorse-key-manager.c:620
 msgid "Close this program"
 msgstr "Cierra este programa"
 
-#: ../src/seahorse-key-manager.c:617
+#: ../src/seahorse-key-manager.c:621
 msgid "Prefere_nces"
 msgstr "_Preferencias"
 
-#: ../src/seahorse-key-manager.c:618
+#: ../src/seahorse-key-manager.c:622
 msgid "Change preferences for this program"
 msgstr "Cambia las preferencias de este programa"
 
-#: ../src/seahorse-key-manager.c:619
+#: ../src/seahorse-key-manager.c:623
 msgid "_About"
 msgstr "A_cerca de"
 
-#: ../src/seahorse-key-manager.c:620
+#: ../src/seahorse-key-manager.c:624
 msgid "About this program"
 msgstr "Acerca de este programa"
 
-#: ../src/seahorse-key-manager.c:622 ../src/seahorse-keyserver-results.c:289
+#: ../src/seahorse-key-manager.c:626 ../src/seahorse-keyserver-results.c:289
 msgid "_Expand All"
 msgstr "_Expandir todo"
 
-#: ../src/seahorse-key-manager.c:623 ../src/seahorse-keyserver-results.c:290
+#: ../src/seahorse-key-manager.c:627 ../src/seahorse-keyserver-results.c:290
 msgid "Expand all listings"
 msgstr "Expandir todos los listados"
 
-#: ../src/seahorse-key-manager.c:624 ../src/seahorse-keyserver-results.c:291
+#: ../src/seahorse-key-manager.c:628 ../src/seahorse-keyserver-results.c:291
 msgid "_Collapse All"
 msgstr "_Contraer todo"
 
-#: ../src/seahorse-key-manager.c:625 ../src/seahorse-keyserver-results.c:292
+#: ../src/seahorse-key-manager.c:629 ../src/seahorse-keyserver-results.c:292
 msgid "Collapse all listings"
 msgstr "Contraer todos los listados"
 
-#: ../src/seahorse-key-manager.c:627 ../src/seahorse-keyserver-results.c:286
+#: ../src/seahorse-key-manager.c:631 ../src/seahorse-keyserver-results.c:286
 msgid "_Contents"
 msgstr "_Contenido"
 
-#: ../src/seahorse-key-manager.c:628 ../src/seahorse-keyserver-results.c:287
+#: ../src/seahorse-key-manager.c:632 ../src/seahorse-keyserver-results.c:287
 msgid "Show Seahorse help"
 msgstr "Mostrar ayuda"
 
-#: ../src/seahorse-key-manager.c:632 ../src/seahorse-keyserver-results.c:298
+#: ../src/seahorse-key-manager.c:636 ../src/seahorse-keyserver-results.c:298
 msgid "P_roperties"
 msgstr "_Propiedades"
 
-#: ../src/seahorse-key-manager.c:633 ../src/seahorse-keyserver-results.c:299
+#: ../src/seahorse-key-manager.c:637 ../src/seahorse-keyserver-results.c:299
 msgid "Show key properties"
 msgstr "Mostrar propiedades de la clave"
 
-#: ../src/seahorse-key-manager.c:634
+#: ../src/seahorse-key-manager.c:638
 msgid "E_xport..."
 msgstr "E_xportar..."
 
-#: ../src/seahorse-key-manager.c:635
+#: ../src/seahorse-key-manager.c:639
 msgid "Export public key"
 msgstr "Exportar clave pública"
 
-#: ../src/seahorse-key-manager.c:636 ../src/seahorse-keyserver-results.c:302
+#: ../src/seahorse-key-manager.c:640 ../src/seahorse-keyserver-results.c:302
 msgid "_Copy Key"
 msgstr "_Copiar clave"
 
-#: ../src/seahorse-key-manager.c:637 ../src/seahorse-keyserver-results.c:303
+#: ../src/seahorse-key-manager.c:641 ../src/seahorse-keyserver-results.c:303
 msgid "Copy selected keys to the clipboard"
 msgstr "Copia las claves seleccionadas al portapapeles"
 
-#: ../src/seahorse-key-manager.c:638
+#: ../src/seahorse-key-manager.c:642
 msgid "_Sign..."
 msgstr "_Firmar..."
 
-#: ../src/seahorse-key-manager.c:639
+#: ../src/seahorse-key-manager.c:643
 msgid "Sign public key"
 msgstr "Firmar clave pública"
 
-#: ../src/seahorse-key-manager.c:640
+#: ../src/seahorse-key-manager.c:644
 msgid "_Delete Key"
 msgstr "_Borrar clave"
 
-#: ../src/seahorse-key-manager.c:641
+#: ../src/seahorse-key-manager.c:645
 msgid "Delete selected keys"
 msgstr "Borra las claves seleccionadas"
 
-#: ../src/seahorse-key-manager.c:645
+#: ../src/seahorse-key-manager.c:649
 msgid "Add _User ID..."
 msgstr "Añadir identificador de _usuario..."
 
-#: ../src/seahorse-key-manager.c:646
+#: ../src/seahorse-key-manager.c:650
 msgid "Add a new user ID"
 msgstr "Añadir un nuevo identificador de usuario"
 
-#: ../src/seahorse-key-manager.c:647
+#: ../src/seahorse-key-manager.c:651
 msgid "Add _Revoker..."
 msgstr "Añadir _revocador..."
 
-#: ../src/seahorse-key-manager.c:648
+#: ../src/seahorse-key-manager.c:652
 msgid "Add the default key as a revoker"
 msgstr "Añadir la clave predeterminada como un revocador"
 
-#: ../src/seahorse-key-manager.c:653
+#: ../src/seahorse-key-manager.c:656
 msgid "_Remote"
 msgstr "_Remota"
 
-#: ../src/seahorse-key-manager.c:654 ../src/seahorse-keyserver-results.c:307
+#: ../src/seahorse-key-manager.c:657 ../src/seahorse-keyserver-results.c:307
 msgid "_Find Remote Keys..."
 msgstr "_Buscar claves remotas..."
 
-#: ../src/seahorse-key-manager.c:655 ../src/seahorse-keyserver-results.c:308
+#: ../src/seahorse-key-manager.c:658 ../src/seahorse-keyserver-results.c:308
 msgid "Search for keys on a key server"
 msgstr "Buscar claves en un servidor de claves"
 
-#: ../src/seahorse-key-manager.c:656
+#: ../src/seahorse-key-manager.c:659
 msgid "_Sync and Publish Keys..."
 msgstr "_Sincronizar y publicar claves..."
 
-#: ../src/seahorse-key-manager.c:657
+#: ../src/seahorse-key-manager.c:660
 msgid "Publish and/or sync your keys with those online."
 msgstr "Publicar y/o sincronizar sus claves con las que estén en línea."
 
@@ -2510,6 +2521,13 @@ msgstr "_Revocable"
 #: ../src/seahorse.desktop.in.h:2
 msgid "Manage your encryption keys"
 msgstr "Administre sus claves de encriptación"
+
+#~ msgid "Select on focus"
+#~ msgstr "Seleccionar en el foco"
+
+#~ msgid "Whether to select the contents of an entry when it is focused"
+#~ msgstr ""
+#~ "Indica si debe seleccionar el contenido de una entrada que tiene el foco"
 
 #~ msgid "usage: seahorse-agent [-cdv]\n"
 #~ msgstr "uso: seahorse-agent [-cdv]\n"
