@@ -97,6 +97,8 @@ guint                   seahorse_ssh_key_get_strength         (SeahorseSSHKey *s
 
 const gchar*            seahorse_ssh_key_get_filename         (SeahorseSSHKey *skey,
                                                                gboolean private);
+                                                                   
+SeahorseOperation*      seahorse_ssh_key_op_change_passphrase (SeahorseSSHKey *skey);
 
 SeahorseSSHKeyData*     seahorse_ssh_key_data_read            (const gchar *filename);
 

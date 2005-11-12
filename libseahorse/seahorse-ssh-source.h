@@ -70,7 +70,7 @@ SeahorseOperation*   seahorse_ssh_source_upload         (SeahorseSSHSource *ssrc
                                                          const gchar *username,
                                                          const gchar *hostname);
 
-gchar*               seahorse_ssh_source_execute        (const gchar *command, 
+gchar*               seahorse_ssh_execute_sync          (const gchar *command, 
                                                          GError **error);
 
 SeahorseOperation*   seahorse_ssh_operation_new         (const gchar *command, 

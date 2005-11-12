@@ -215,6 +215,14 @@ ssh_child_setup (gpointer user_data)
     setsid ();
 }
 
+static void
+ssh_sync_child_setup (gpointer user_data)
+{
+    /* No terminal for this process */
+    setsid ();
+}
+
+
 /* -----------------------------------------------------------------------------
  * OBJECT
  */
@@ -386,7 +394,7 @@ seahorse_ssh_source_export (SeahorseKeySource *sksrc, GList *keys,
         /* Public key without identity.pub. Export it. */
         } else {
             cmd = g_strdup_printf (SSH_KEYGEN_PATH " -y %s", filename);
-            results = seahorse_ssh_source_execute (cmd, &error);
+            results = seahorse_ssh_execute_sync (cmd, &error);
             g_free (cmd);
         }
         
@@ -565,7 +573,7 @@ seahorse_ssh_source_new (void)
 }   
 
 gchar*
-seahorse_ssh_source_execute (const gchar *command, GError **error)
+seahorse_ssh_execute_sync (const gchar *command, GError **error)
 {
     GError *err = NULL;
     gchar *sout, *serr;
@@ -585,7 +593,8 @@ seahorse_ssh_source_execute (const gchar *command, GError **error)
         g_error ("couldn't parse ssh command line: %s", command);
     }
     
-    r = g_spawn_sync (NULL, argv, NULL, 0, ssh_child_setup, NULL, &sout, &serr, &status, error);
+    r = g_spawn_sync (NULL, argv, NULL, 0, ssh_sync_child_setup, NULL, 
+                      &sout, &serr, &status, error);
     g_strfreev (argv);
     
     if (!r) {

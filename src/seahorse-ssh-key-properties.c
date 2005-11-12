@@ -29,7 +29,7 @@
 
 #define NOTEBOOK "notebook"
 
-static void	
+static void
 do_main (SeahorseWidget *swidget)
 {
     SeahorseKey *key;
@@ -56,39 +56,71 @@ do_main (SeahorseWidget *swidget)
 }
 
 static void
+passphrase_done (SeahorseOperation *op, SeahorseWidget *swidget)
+{
+    GError *err = NULL;
+    GtkWidget *w;
+
+    if (!seahorse_operation_is_successful (op)) {
+        seahorse_operation_steal_error (op, &err);
+        seahorse_util_handle_error (err, _("Couldn't change passhrase for SSH key."));
+    }
+    
+    w = glade_xml_get_widget (swidget->xml, "passphrase-button");
+    gtk_widget_set_sensitive (w, TRUE);
+}
+
+static void
 passphrase_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 {
-    /* TODO: */
+    SeahorseOperation *op;
+    SeahorseKey *skey;
+    GtkWidget *w;
+    
+    skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
+    g_return_if_fail (SEAHORSE_IS_SSH_KEY (skey));
+
+    w = glade_xml_get_widget (swidget->xml, "passphrase-button");
+    gtk_widget_set_sensitive (w, FALSE);
+    
+    op = seahorse_ssh_key_op_change_passphrase (SEAHORSE_SSH_KEY (skey));
+    if (seahorse_operation_is_done (op))
+        passphrase_done (op, swidget);
+    else 
+        g_signal_connect (op, "done", G_CALLBACK (passphrase_done), swidget);
+
+    /* Running operations ref themselves */
+    g_object_unref (op);
 }
 
 static void
 export_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 {
-	SeahorseKey *skey;
-	GtkWidget *dialog;
-	gchar* uri = NULL;
-	GError *err = NULL;
-	GList *keys = NULL;
-	
-	skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
-	keys = g_list_prepend (keys, skey);
-	
-	dialog = seahorse_util_chooser_save_new (_("Export Complete Key"), 
-	                                         GTK_WINDOW (seahorse_widget_get_top (swidget)));
-	seahorse_util_chooser_show_key_files (dialog);
-	seahorse_util_chooser_set_filename (dialog, keys);
-	
-	uri = seahorse_util_chooser_save_prompt (dialog);
-	if(uri) {
-		seahorse_op_export_file (keys, TRUE, uri, &err);
+    SeahorseKey *skey;
+    GtkWidget *dialog;
+    gchar* uri = NULL;
+    GError *err = NULL;
+    GList *keys = NULL;
 
-		if (err != NULL) {
-			seahorse_util_handle_error (err, _("Couldn't export key to \"%s\""),
-										seahorse_util_uri_get_last (uri));
-		}
-		g_free (uri);
-	}
-	g_list_free (keys);
+    skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
+    keys = g_list_prepend (keys, skey);
+
+    dialog = seahorse_util_chooser_save_new (_("Export Complete Key"), 
+                                             GTK_WINDOW (seahorse_widget_get_top (swidget)));
+    seahorse_util_chooser_show_key_files (dialog);
+    seahorse_util_chooser_set_filename (dialog, keys);
+
+    uri = seahorse_util_chooser_save_prompt (dialog);
+    if(uri) {
+        seahorse_op_export_file (keys, TRUE, uri, &err);
+
+        if (err != NULL) {
+            seahorse_util_handle_error (err, _("Couldn't export key to \"%s\""),
+                                        seahorse_util_uri_get_last (uri));
+        }
+        g_free (uri);
+    }
+    g_list_free (keys);
 }
 
 static void 
@@ -140,7 +172,7 @@ key_changed (SeahorseKey *skey, SeahorseKeyChange change, SeahorseWidget *swidge
 static void
 key_destroyed (GtkObject *object, SeahorseWidget *swidget)
 {
-	seahorse_widget_destroy (swidget);
+    seahorse_widget_destroy (swidget);
 }
 
 static void
@@ -179,12 +211,10 @@ seahorse_ssh_key_properties_new (SeahorseSSHKey *skey)
     do_main (swidget);
     do_details (swidget);
 
-	glade_xml_signal_connect_data (swidget->xml, "export_button_clicked",
-								G_CALLBACK (export_button_clicked), swidget);        
-	glade_xml_signal_connect_data (swidget->xml, "passphrase_button_clicked",
-								G_CALLBACK (passphrase_button_clicked), swidget);        
-    
-    /* TODO: add signal for passphrase stuff here */
+    glade_xml_signal_connect_data (swidget->xml, "export_button_clicked",
+                                   G_CALLBACK (export_button_clicked), swidget);        
+    glade_xml_signal_connect_data (swidget->xml, "passphrase_button_clicked",
+                                   G_CALLBACK (passphrase_button_clicked), swidget);        
 
     if (swidget)
         seahorse_widget_show (swidget);
