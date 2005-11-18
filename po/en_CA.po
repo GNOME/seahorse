@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-06 14:21-0500\n"
+"POT-Creation-Date: 2005-11-17 21:44-0500\n"
 "PO-Revision-Date: 2005-08-16 22:06-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: Canadian English <adamw@gnome.org>\n"
@@ -508,8 +508,8 @@ msgstr "Searching for keys on: %s"
 msgid "Connecting to: %s"
 msgstr "Connecting to: %s"
 
-#: libseahorse/seahorse-key-store.c:784 src/seahorse-key-properties.c:549
-#: src/seahorse-key-properties.c:1136
+#: libseahorse/seahorse-key-store.c:784 src/seahorse-key-properties.c:620
+#: src/seahorse-key-properties.c:1207
 msgid "Name"
 msgstr "Name"
 
@@ -641,7 +641,7 @@ msgstr "_Encrypt to Self"
 msgid "_Armor Encode Files"
 msgstr "_Armour Encode Files"
 
-#: libseahorse/seahorse-prefs.c:498
+#: libseahorse/seahorse-prefs.c:502
 msgid "None. Prompt for a key."
 msgstr "None. Prompt for a key."
 
@@ -670,7 +670,7 @@ msgid "Cache encryption _passphrases in memory"
 msgstr "Cache encryption _passphrases in memory"
 
 #: libseahorse/seahorse-prefs.glade.h:5
-#: plugins/nautilus/seahorse-pgp-preferences.c:65
+#: plugins/nautilus/seahorse-pgp-preferences.c:66
 #: plugins/nautilus/seahorse-pgp-preferences.desktop.in.h:2
 msgid "Encryption Preferences"
 msgstr "Encryption Preferences"
@@ -799,7 +799,7 @@ msgstr[1] "(%d not fully valid)"
 msgid "%s%s"
 msgstr "%s%s"
 
-#: libseahorse/seahorse-recipients.c:175
+#: libseahorse/seahorse-recipients.c:179
 msgid "None (Don't sign)"
 msgstr "None (Do not sign)"
 
@@ -987,15 +987,15 @@ msgstr "(Unreadable SSH Key)"
 msgid "SSH Key"
 msgstr "SSH Key"
 
-#: libseahorse/seahorse-ssh-source.c:598 libseahorse/seahorse-ssh-source.c:770
+#: libseahorse/seahorse-ssh-source.c:607 libseahorse/seahorse-ssh-source.c:779
 msgid "The SSH command was terminated unexpectedly."
 msgstr "The SSH command was terminated unexpectedly."
 
-#: libseahorse/seahorse-ssh-source.c:605 libseahorse/seahorse-ssh-source.c:778
+#: libseahorse/seahorse-ssh-source.c:614 libseahorse/seahorse-ssh-source.c:787
 msgid "The SSH command failed."
 msgstr "The SSH command failed."
 
-#: libseahorse/seahorse-ssh-source.c:666
+#: libseahorse/seahorse-ssh-source.c:675
 msgid "Sending SSH public key..."
 msgstr "Sending SSH public key..."
 
@@ -1058,8 +1058,8 @@ msgstr ""
 msgid "_Replace"
 msgstr "_Replace"
 
-#: libseahorse/seahorse-validity.c:33 src/seahorse-key-properties.c:799
-#: src/seahorse-key-properties.c:860
+#: libseahorse/seahorse-validity.c:33 src/seahorse-key-properties.c:870
+#: src/seahorse-key-properties.c:931
 msgid "Never"
 msgstr "Never"
 
@@ -1079,7 +1079,7 @@ msgstr "Ultimate"
 msgid "Disabled"
 msgstr "Disabled"
 
-#: libseahorse/seahorse-validity.c:43 src/seahorse-key-properties.c:856
+#: libseahorse/seahorse-validity.c:43 src/seahorse-key-properties.c:927
 msgid "Revoked"
 msgstr "Revoked"
 
@@ -1188,8 +1188,8 @@ msgid_plural "Sign the selected files"
 msgstr[0] "Sign the selected file"
 msgstr[1] "Sign the selected files"
 
-#: plugins/nautilus/seahorse-pgp-preferences.c:40
-#: plugins/nautilus/seahorse-pgp-preferences.c:44
+#: plugins/nautilus/seahorse-pgp-preferences.c:41
+#: plugins/nautilus/seahorse-pgp-preferences.c:45
 msgid "For internal use"
 msgstr "For internal use"
 
@@ -1704,7 +1704,7 @@ msgstr "Select a method to generate your new key:"
 msgid "radio_druid"
 msgstr "radio_druid"
 
-#: src/seahorse-key-manager-store.c:180 src/seahorse-key-properties.c:857
+#: src/seahorse-key-manager-store.c:180 src/seahorse-key-properties.c:928
 msgid "Expired"
 msgstr "Expired"
 
@@ -1733,7 +1733,7 @@ msgstr "Could not retrieve key data"
 msgid "Trust"
 msgstr "Trust"
 
-#: src/seahorse-key-manager-store.c:466 src/seahorse-key-properties.c:835
+#: src/seahorse-key-manager-store.c:466 src/seahorse-key-properties.c:906
 msgid "Type"
 msgstr "Type"
 
@@ -1763,8 +1763,8 @@ msgstr "Copied %d keys"
 msgid "Export Key"
 msgstr "Export Key"
 
-#: src/seahorse-key-manager.c:339 src/seahorse-key-properties.c:694
-#: src/seahorse-keyserver-results.c:149 src/seahorse-ssh-key-properties.c:86
+#: src/seahorse-key-manager.c:339 src/seahorse-key-properties.c:765
+#: src/seahorse-keyserver-results.c:149 src/seahorse-ssh-key-properties.c:118
 #, c-format
 msgid "Couldn't export key to \"%s\""
 msgstr "Could not export key to \"%s\""
@@ -2030,52 +2030,56 @@ msgstr "Are you sure you want to permanently delete the current photo ID?"
 msgid "Couldn't delete photo"
 msgstr "Could not delete photo"
 
-#: src/seahorse-key-properties.c:487
+#: src/seahorse-key-properties.c:328
+msgid "Couldn't change primary photo ID"
+msgstr "Could not change primary photo ID"
+
+#: src/seahorse-key-properties.c:562
 msgid "(unknown)"
 msgstr "(unknown)"
 
-#: src/seahorse-key-properties.c:490
+#: src/seahorse-key-properties.c:565
 #, c-format
 msgid "This key expired on: %s"
 msgstr "This key expired on: %s"
 
-#: src/seahorse-key-properties.c:553 src/seahorse-key-properties.c:1139
+#: src/seahorse-key-properties.c:624 src/seahorse-key-properties.c:1210
 msgid "Email"
 msgstr "Email"
 
-#: src/seahorse-key-properties.c:557 src/seahorse-key-properties.c:1142
+#: src/seahorse-key-properties.c:628 src/seahorse-key-properties.c:1213
 msgid "Comment"
 msgstr "Comment"
 
-#: src/seahorse-key-properties.c:632
+#: src/seahorse-key-properties.c:703
 msgid "Unable to change trust"
 msgstr "Unable to change trust"
 
-#: src/seahorse-key-properties.c:684 src/seahorse-ssh-key-properties.c:76
+#: src/seahorse-key-properties.c:755 src/seahorse-ssh-key-properties.c:108
 msgid "Export Complete Key"
 msgstr "Export Complete Key"
 
-#: src/seahorse-key-properties.c:832 src/seahorse-key-properties.c:1133
+#: src/seahorse-key-properties.c:903 src/seahorse-key-properties.c:1204
 msgid "ID"
 msgstr "ID"
 
-#: src/seahorse-key-properties.c:838
+#: src/seahorse-key-properties.c:909
 msgid "Created"
 msgstr "Created"
 
-#: src/seahorse-key-properties.c:841
+#: src/seahorse-key-properties.c:912
 msgid "Expires"
 msgstr "Expires"
 
-#: src/seahorse-key-properties.c:844
+#: src/seahorse-key-properties.c:915
 msgid "Status"
 msgstr "Status"
 
-#: src/seahorse-key-properties.c:847
+#: src/seahorse-key-properties.c:918
 msgid "Strength"
 msgstr "Strength"
 
-#: src/seahorse-key-properties.c:856 src/seahorse-key-properties.c:857
+#: src/seahorse-key-properties.c:927 src/seahorse-key-properties.c:928
 msgid "Good"
 msgstr "Good"
 
@@ -2856,6 +2860,10 @@ msgstr "_Revocable"
 msgid "_Sign"
 msgstr "_Sign"
 
+#: src/seahorse-ssh-key-properties.c:66
+msgid "Couldn't change passhrase for SSH key."
+msgstr "Could not change passhrase for SSH key."
+
 #: src/seahorse-ssh-key-properties.glade.h:2
 msgid "/home/nate/.ssh/blah_rsa"
 msgstr "/home/nate/.ssh/blah_rsa"
@@ -2920,8 +2928,8 @@ msgid ""
 "The computer in question must be running SSH, and you must already have an "
 "login account on it. "
 msgstr ""
-"This will configure another computer to allow use of your SSH key when you log "
-"into it.\n"
+"This will configure another computer to allow use of your SSH key when you "
+"log into it.\n"
 "\n"
 "The computer in question must be running SSH, and you must already have an "
 "login account on it. "
