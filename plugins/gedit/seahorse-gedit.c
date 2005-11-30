@@ -487,12 +487,8 @@ decrypt_cb (BonoboUIComponent * uic, gpointer user_data,
             gedit_debug (DEBUG_PLUGINS, "raw (pos: %d, len %d)", block_pos, raw_len);
             g_free (rawtext);
             rawtext = NULL;
-            
-            if(status && status->signatures) {
-                gchar *t;
-                
+            if(status && status->signatures) {              
                 seahorse_signatures_notify ("Text", status);
-                g_free (t);
             }
             
         /* No replacement text, skip ahead */
