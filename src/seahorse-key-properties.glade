@@ -94,14 +94,23 @@
 					      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 					      <child>
-						<widget class="GtkImage" id="photoid">
-						  <property name="width_request">185</property>
-						  <property name="height_request">160</property>
+						<widget class="GtkEventBox" id="image_eventbox">
 						  <property name="visible">True</property>
-						  <property name="xalign">0</property>
-						  <property name="yalign">0.10000000149</property>
-						  <property name="xpad">6</property>
-						  <property name="ypad">3</property>
+						  <property name="visible_window">True</property>
+						  <property name="above_child">False</property>
+						  <signal name="scroll_event" handler="on_image_eventbox_scroll_event" last_modification_time="Sun, 04 Dec 2005 00:48:29 GMT"/>
+
+						  <child>
+						    <widget class="GtkImage" id="photoid">
+						      <property name="width_request">185</property>
+						      <property name="height_request">160</property>
+						      <property name="visible">True</property>
+						      <property name="xalign">0</property>
+						      <property name="yalign">0.10000000149</property>
+						      <property name="xpad">6</property>
+						      <property name="ypad">3</property>
+						    </widget>
+						  </child>
 						</widget>
 					      </child>
 

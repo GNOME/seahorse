@@ -483,6 +483,21 @@ photoid_last_clicked (GtkWidget *widget, SeahorseWidget *swidget)
     set_photoid_state (swidget, pkey);
 }
 
+static void
+photoid_button_pressed(GtkWidget *widget, GdkEvent *event, SeahorseWidget *swidget)
+{
+    GdkEventScroll *event_scroll;
+    
+    if(event->type == GDK_SCROLL){
+        event_scroll = (GdkEventScroll *) event;
+        
+        if(event_scroll->direction == GDK_SCROLL_UP)
+            photoid_prev_clicked (widget, swidget);
+        else if(event_scroll->direction == GDK_SCROLL_DOWN)
+            photoid_next_clicked(widget, swidget);
+    }
+}
+
 
 static void
 do_owner_signals (SeahorseWidget *swidget)
@@ -503,6 +518,8 @@ do_owner_signals (SeahorseWidget *swidget)
 	                            G_CALLBACK (photoid_first_clicked), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "on_owner_photo_last_button_clicked",
 	                            G_CALLBACK (photoid_last_clicked), swidget);
+    glade_xml_signal_connect_data(swidget->xml, "on_image_eventbox_scroll_event", 
+                                G_CALLBACK(photoid_button_pressed), swidget);
 	
 	if (etype == SKEY_PRIVATE ) {
 		glade_xml_signal_connect_data (swidget->xml, "on_owner_add_button_clicked",
