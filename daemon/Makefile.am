@@ -62,4 +62,4 @@ seahorse-service-keyset-bindings.h: seahorse-service-keyset.xml
 	dbus-binding-tool --prefix=seahorse_service_keyset --mode=glib-server --output=$@ $(srcdir)/$<
 
 install-exec-hook:
-	chmod u+s $(bindir)/seahorse-daemon
+	chmod u+s $(DESTDIR)$(bindir)/seahorse-daemon
