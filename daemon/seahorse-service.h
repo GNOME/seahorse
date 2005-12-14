@@ -97,9 +97,9 @@ gboolean        seahorse_service_discover_keys      (SeahorseService *svc, gchar
                                                      gint flags, gchar **patterns, gchar **keys, 
                                                      GError **error);
 
-SeahorseKey*    seahorse_service_key_from_dbus      (const gchar *key);
+SeahorseKey*    seahorse_service_key_from_dbus      (const gchar *key, guint *uid);
 
-gchar*          seahorse_service_key_to_dbus        (SeahorseKey *skey);
+gchar*          seahorse_service_key_to_dbus        (SeahorseKey *skey, guint uid);
 
 typedef struct _SeahorseServiceKeyset SeahorseServiceKeyset;
 typedef struct _SeahorseServiceKeysetClass SeahorseServiceKeysetClass;
@@ -116,7 +116,7 @@ struct _SeahorseServiceKeyset {
 };
 
 struct _SeahorseServiceKeysetClass {
-	SeahorseKeysetClass base;
+    SeahorseKeysetClass base;
     
     /* signals --------------------------------------------------------- */
     
@@ -126,8 +126,8 @@ struct _SeahorseServiceKeysetClass {
     /* Removed a key from this view */
     void (*key_removed) (SeahorseServiceKeyset *skset, const gchar *key);
     
-	/* One of the key's attributes has changed */
-	void (*key_changed) (SeahorseServiceKeyset *skset, const gchar *key);   
+    /* One of the key's attributes has changed */
+    void (*key_changed) (SeahorseServiceKeyset *skset, const gchar *key);   
 };
 
 GType           seahorse_service_keyset_get_type       (void);

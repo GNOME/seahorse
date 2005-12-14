@@ -63,13 +63,20 @@ seahorse_service_keyset_list_keys (SeahorseServiceKeyset *keyset, gchar ***keys,
     GList *k, *l;
     GArray *a;
     gchar *id;
+    guint nuids, i;
     
     k = seahorse_keyset_get_keys (SEAHORSE_KEYSET (keyset));
     a = g_array_new (TRUE, TRUE, sizeof (gchar*));
     
     for (l = k; l; l = g_list_next (l)) {
-        id = seahorse_service_key_to_dbus (SEAHORSE_KEY (l->data));
+        id = seahorse_service_key_to_dbus (SEAHORSE_KEY (l->data), 0);
         g_array_append_val (a, id);
+        
+        nuids = seahorse_key_get_num_names (SEAHORSE_KEY (l->data));
+        for (i = 1; i < nuids; i++) {
+            id = seahorse_service_key_to_dbus (SEAHORSE_KEY (l->data), i);
+            g_array_append_val (a, id);
+        }
     }
     
     *keys = (gchar**)g_array_free (a, FALSE);
@@ -83,27 +90,61 @@ seahorse_service_keyset_list_keys (SeahorseServiceKeyset *keyset, gchar ***keys,
 static void
 seahorse_service_keyset_added (SeahorseKeyset *skset, SeahorseKey *skey)
 {
-    gchar *id = seahorse_service_key_to_dbus (skey);
-    g_signal_emit (SEAHORSE_SERVICE_KEYSET (skset), signals[KEY_ADDED], 0, id);
-    g_free (id);        
+    gchar *id;
+    guint uids, i;
+    
+    uids = seahorse_key_get_num_names (skey);
+    uids = (uids == 0) ? 1 : uids;
+
+    for (i = 0; i < uids; i++) {    
+        id = seahorse_service_key_to_dbus (skey, i);
+        g_signal_emit (SEAHORSE_SERVICE_KEYSET (skset), signals[KEY_ADDED], 0, id);
+        g_free (id);        
+    }
+    
+    seahorse_keyset_set_closure (skset, skey, GUINT_TO_POINTER (uids));
 }
 
 static void
 seahorse_service_keyset_removed (SeahorseKeyset *skset, SeahorseKey *skey, 
-                              gpointer closure)
+                                 gpointer closure)
 {
-    gchar *id = seahorse_service_key_to_dbus (skey);
-    g_signal_emit (SEAHORSE_SERVICE_KEYSET (skset), signals[KEY_REMOVED], 0, id);
-    g_free (id);
+    gchar *id;
+    guint uids, i;
+    
+    uids = GPOINTER_TO_UINT (closure);
+    uids = (uids == 0) ? 1 : uids;
+    
+    for (i = 0; i < uids; i++) {
+        id = seahorse_service_key_to_dbus (skey, i);
+        g_signal_emit (SEAHORSE_SERVICE_KEYSET (skset), signals[KEY_REMOVED], 0, id);
+        g_free (id);
+    }
 }
 
 static void
 seahorse_service_keyset_changed (SeahorseKeyset *skset, SeahorseKey *skey, 
-                              SeahorseKeyChange change, gpointer closure)
+                                 SeahorseKeyChange change, gpointer closure)
 {
-    gchar *id = seahorse_service_key_to_dbus (skey);
-    g_signal_emit (SEAHORSE_SERVICE_KEYSET (skset), signals[KEY_CHANGED], 0, id);
-    g_free (id);
+    gchar *id;
+    guint uids, euids, i;
+    
+    /* Adding or removing uids means we do a add/remove */
+    uids = seahorse_key_get_num_names (skey);
+    uids = (uids == 0) ? 1 : uids;
+    
+    euids = GPOINTER_TO_UINT (closure);
+    if (euids > 0 && euids != uids) {
+        seahorse_service_keyset_removed (skset, skey, closure);
+        seahorse_service_keyset_added (skset, skey);
+        return;
+    }
+
+    for (i = 0; i < uids; i++) {
+        id = seahorse_service_key_to_dbus (skey, i);
+        g_signal_emit (SEAHORSE_SERVICE_KEYSET (skset), signals[KEY_CHANGED], 0, id);
+        g_free (id);
+    }
 }
 
 /* -----------------------------------------------------------------------------
@@ -111,16 +152,22 @@ seahorse_service_keyset_changed (SeahorseKeyset *skset, SeahorseKey *skey,
  */
 
 static void
+seahorse_service_keyset_init (SeahorseServiceKeyset *keyset)
+{
+
+}
+
+static void
 seahorse_service_keyset_class_init (SeahorseServiceKeysetClass *klass)
 {
-    GObjectClass *gobject_class;
+    GObjectClass *gclass;
    
     parent_class = g_type_class_peek_parent (klass);
     parent_class->added = seahorse_service_keyset_added;
     parent_class->removed = seahorse_service_keyset_removed;
     parent_class->changed = seahorse_service_keyset_changed;
     
-    gobject_class = G_OBJECT_CLASS (klass);
+    gclass = G_OBJECT_CLASS (klass);
     
     signals[KEY_ADDED] = g_signal_new ("key_added", SEAHORSE_TYPE_SERVICE_KEYSET, 
                 G_SIGNAL_RUN_FIRST, G_STRUCT_OFFSET (SeahorseServiceKeysetClass, key_added),
@@ -135,8 +182,3 @@ seahorse_service_keyset_class_init (SeahorseServiceKeysetClass *klass)
                 NULL, NULL, g_cclosure_marshal_VOID__STRING, G_TYPE_NONE, 1, G_TYPE_STRING);
 }
 
-static void
-seahorse_service_keyset_init (SeahorseServiceKeyset *keyset)
-{
-
-}

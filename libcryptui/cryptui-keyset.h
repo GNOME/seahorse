@@ -36,16 +36,16 @@
 typedef struct _CryptUIKeyset CryptUIKeyset;
 typedef struct _CryptUIKeysetClass CryptUIKeysetClass;
 typedef struct _CryptUIKeysetPrivate CryptUIKeysetPrivate;
-    
+
 struct _CryptUIKeyset {
-	GtkObject parent;
-	
-	/*<private>*/
+    GtkObject parent;
+
+    /*<private>*/
     CryptUIKeysetPrivate *priv;
 };
 
 struct _CryptUIKeysetClass {
-	GtkObjectClass		parent_class;
+    GtkObjectClass      parent_class;
     
     /* signals --------------------------------------------------------- */
     
@@ -55,8 +55,8 @@ struct _CryptUIKeysetClass {
     /* Removed a key from this view */
     void (*removed) (CryptUIKeyset *keyset, const gchar *key, gpointer closure);
     
-	/* One of the key's attributes has changed */
-	void (*changed) (CryptUIKeyset *keyset, const gchar *key, gpointer closure);    
+    /* One of the key's attributes has changed */
+    void (*changed) (CryptUIKeyset *keyset, const gchar *key, gpointer closure);    
 };
 
 GType               cryptui_keyset_get_type           (void);

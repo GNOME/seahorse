@@ -31,8 +31,16 @@
 
 #define KEYSET_PATH "/org/gnome/seahorse/keys/%s"
 
+/* Special fields */
+enum {
+    FIELD_DISLAY_NAME,
+    FIELD_CN,
+    FIELD_SPECIAL_MAX
+};
+
+GQuark key_fields[FIELD_SPECIAL_MAX] = { 0 };
+
 G_DEFINE_TYPE (SeahorseService, seahorse_service, G_TYPE_OBJECT);
-GObjectClass *parent_class = NULL;
 
 static void
 copy_to_array (const gchar *type, gpointer dummy, GArray *a)
@@ -48,33 +56,85 @@ value_free (gpointer value)
     g_free (value);
 }
 
+static gboolean
+lookup_key_field (SeahorseKey *skey, guint uid, const gchar *field, GValue *value)
+{
+    GParamSpec *spec;
+    GQuark qfield;
+    gchar *name;
+    
+    /* Special UID fields */
+    if (uid > 0) {
+
+        qfield = g_quark_from_string (field);
+        if (qfield == key_fields[FIELD_DISLAY_NAME]) {
+            name = seahorse_key_get_name (skey, uid);
+            g_value_init (value, G_TYPE_STRING);
+            g_value_take_string (value, name ? name : g_strdup (""));
+            return TRUE;
+
+        } else if (qfield == key_fields[FIELD_CN]) {
+            name = seahorse_key_get_name_cn (skey, uid);
+            g_value_init (value, G_TYPE_STRING);
+            g_value_take_string (value, name ? name : g_strdup (""));
+            return TRUE;
+        }
+    }
+
+    spec = g_object_class_find_property (G_OBJECT_GET_CLASS (skey), field);
+    if (!spec) 
+        return FALSE;
+
+    g_value_init (value, spec->value_type);
+    g_object_get_property (G_OBJECT (skey), field, value);
+    return TRUE; 
+}
+
 /* -----------------------------------------------------------------------------
  * PUBLIC METHODS 
  */ 
 
 SeahorseKey*
-seahorse_service_key_from_dbus (const gchar *key)
+seahorse_service_key_from_dbus (const gchar *key, guint *uid)
 {
-    gchar *ktype = NULL;
-    const gchar *k;
+    SeahorseKey *skey;
+    gchar **vec;
+    char *t = NULL;
     
-    k = strchr(key, ':');
-    if (!k)
+    vec = g_strsplit (key, ":", 3);
+    if (!vec[0] || !vec[1])
         return NULL;
     
-    /* The two parts */
-    ktype = g_strndup (key, k - key);
-    key = k + 1;
+    skey = seahorse_context_find_key (SCTX_APP (), g_quark_from_string (vec[0]), 
+                                      SKEY_LOC_UNKNOWN, vec[1]);
     
-    return seahorse_context_find_key (SCTX_APP (), g_quark_from_string (ktype), 
-                                      SKEY_LOC_UNKNOWN, key);
+    if (uid)
+        *uid = 0;
+        
+    /* Parse out the uid */
+    if (skey && vec[2]) {
+        glong l = strtol (vec[2], &t, 10);
+            
+        /* Make sure it's valid */
+        if (*t || l < 0 || l >= seahorse_key_get_num_names (skey))
+            skey = NULL;
+        else if (uid)
+            *uid = (guint)l;
+    }
+    
+    g_strfreev (vec);
+    return skey;
 }
 
 gchar*
-seahorse_service_key_to_dbus (SeahorseKey *skey)
+seahorse_service_key_to_dbus (SeahorseKey *skey, guint uid)
 {
-    return g_strdup_printf ("%s:%s", g_quark_to_string (seahorse_key_get_ktype (skey)),
-                            seahorse_key_get_keyid (skey));    
+    if (uid == 0)
+        return g_strdup_printf ("%s:%s", g_quark_to_string (seahorse_key_get_ktype (skey)),
+                                seahorse_key_get_keyid (skey));
+    else
+        return g_strdup_printf ("%s:%s:%d", g_quark_to_string (seahorse_key_get_ktype (skey)),
+                                seahorse_key_get_keyid (skey), uid);
 }
 
 /* -----------------------------------------------------------------------------
@@ -105,7 +165,7 @@ seahorse_service_get_keyset (SeahorseService *svc, gchar *ktype,
                              gchar **path, GError **error)
 {
     if (!g_hash_table_lookup (svc->keysets, ktype)) {
-		g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID, 
+        g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID, 
                      _("Invalid or unrecognized key type: %s"), ktype);
         return FALSE;
     }
@@ -120,12 +180,22 @@ seahorse_service_has_key_field (SeahorseService *svc, gchar *key, gchar *field,
 {
     SeahorseKey *skey;
     GParamSpec *spec;
+    GQuark qfield;
+    guint uid;
     
-    skey = seahorse_service_key_from_dbus (key);
+    skey = seahorse_service_key_from_dbus (key, &uid);
     if (!skey) {
-		g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID, 
-					 _("Invalid or unrecognized key: %s"), key);
+        g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID, 
+                     _("Invalid or unrecognized key: %s"), key);
         return FALSE;
+    }
+    
+    if (uid > 0) {
+        /* UIDs always have certain fields */
+        qfield = g_quark_from_string (field);
+        if (qfield == key_fields[FIELD_DISLAY_NAME] ||
+            qfield == key_fields[FIELD_CN])
+            return TRUE;
     }
     
     spec = g_object_class_find_property (G_OBJECT_GET_CLASS (skey), field);
@@ -138,24 +208,21 @@ seahorse_service_get_key_field (SeahorseService *svc, gchar *key, gchar *field,
                                 GValue *value, GError **error)
 {
     SeahorseKey *skey;
-    GParamSpec *spec;
+    guint uid;
 
-    skey = seahorse_service_key_from_dbus (key);
+    skey = seahorse_service_key_from_dbus (key, &uid);
     if (!skey) {
-		g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID, 
-					 _("Invalid or unrecognized key: %s"), key);
+        g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID, 
+                     _("Invalid or unrecognized key: %s"), key);
         return FALSE;
     }
-    
-    spec = g_object_class_find_property (G_OBJECT_GET_CLASS (skey), field);
-    if (!spec) {
-		g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID, 
-					 _("Invalid field: %s"), field);
+ 
+    if (!lookup_key_field (skey, uid, field, value)) {
+        g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID, 
+                     _("Invalid field: %s"), field);  
         return FALSE;
-    }    
+    }        
 
-    g_value_init (value, spec->value_type);
-    g_object_get_property (G_OBJECT (skey), field, value);
     return TRUE; 
 }
 
@@ -164,68 +231,28 @@ seahorse_service_get_key_fields (SeahorseService *svc, gchar *key, gchar **field
                                  GHashTable **values, GError **error)
 {
     SeahorseKey *skey;
-    GParamSpec *spec;
     GValue *value;
+    guint uid;
     
-    skey = seahorse_service_key_from_dbus (key);
+    skey = seahorse_service_key_from_dbus (key, &uid);
     if (!skey) {
-		g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID, 
-					 _("Invalid or unrecognized key: %s"), key);
+        g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID, 
+                     _("Invalid or unrecognized key: %s"), key);
         return FALSE;
     }
 
-    /* TODO: Free the value properly */    
     *values = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, value_free);
     
     while (*fields) {
-
-        spec = g_object_class_find_property (G_OBJECT_GET_CLASS (skey), *fields);
-        if (spec) {
-            value = g_new0 (GValue, 1);
-            g_value_init (value, spec->value_type);
-            g_object_get_property (G_OBJECT (skey), *fields, value);
+        value = g_new0 (GValue, 1);
+        if (lookup_key_field (skey, uid, *fields, value))
             g_hash_table_insert (*values, g_strdup (*fields), value);
-            value = NULL;
-        }
-        
+        else
+            g_free (value);
         fields++;
     }
     
     return TRUE; 
-}
-
-gboolean
-seahorse_service_get_key_names (SeahorseService *svc, gchar *key, gchar ***names,
-                                gchar ***cns, GError **error)
-{
-    SeahorseKey *skey;
-    GArray *anames;
-    GArray *acns;
-    guint i, n;
-    gchar *t;
-    
-    skey = seahorse_service_key_from_dbus (key);
-    if (!skey) {
-		g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID, 
-					 _("Invalid or unrecognized key: %s"), key);
-        return FALSE;
-    }
-    
-    anames = g_array_new (TRUE, TRUE, sizeof (gchar*));
-    acns = g_array_new (TRUE, TRUE, sizeof (gchar*));
-
-    for (i = 0, n = seahorse_key_get_num_names (skey); i < n; i++) {
-        if(!(t = seahorse_key_get_name (skey, i)))
-            t = g_strdup ("");
-        g_array_append_val (anames, t);
-        if(!(t = seahorse_key_get_name_cn (skey, i)))
-            t = g_strdup ("");
-        g_array_append_val (acns, t);
-    }
-    
-    *names = (gchar**)g_array_free (anames, FALSE);
-    *cns = (gchar**)g_array_free (acns, FALSE);
-    return TRUE;
 }
 
 gboolean
@@ -243,8 +270,8 @@ seahorse_service_import_keys (SeahorseService *svc, gchar *ktype,
     sksrc = seahorse_context_find_key_source (SCTX_APP (), g_quark_from_string (ktype), 
                                               SKEY_LOC_LOCAL);
     if (!sksrc) {
-		g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID, 
-					 _("Invalid or unrecognized key type: %s"), ktype);
+        g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID, 
+                     _("Invalid or unrecognized key type: %s"), ktype);
         return FALSE;
     }
     
@@ -260,7 +287,7 @@ seahorse_service_import_keys (SeahorseService *svc, gchar *ktype,
     
     a = g_array_new (TRUE, TRUE, sizeof (gchar*));
     for (l = (GList*)seahorse_operation_get_result (op); l; l = g_list_next (l)) {
-        t = seahorse_service_key_to_dbus (SEAHORSE_KEY (l->data));
+        t = seahorse_service_key_to_dbus (SEAHORSE_KEY (l->data), 0);
         g_array_append_val (a, t);
     }
     
@@ -292,12 +319,12 @@ seahorse_service_export_keys (SeahorseService *svc, gchar *ktype,
     }    
     
     while (*keys) {
-        skey = seahorse_service_key_from_dbus (*keys);
+        skey = seahorse_service_key_from_dbus (*keys, 0);
         
         if (!skey || seahorse_key_get_ktype (skey) != type) {
             gpgme_data_release (gdata);
-		    g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID, 
-			    		 _("Invalid or unrecognized key: %s"), *keys);
+            g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID, 
+                         _("Invalid or unrecognized key: %s"), *keys);
             return FALSE;
         }
         
@@ -426,7 +453,7 @@ seahorse_service_dispose (GObject *gobject)
     g_signal_handlers_disconnect_by_func (SCTX_APP (), seahorse_service_added, svc);
     g_signal_handlers_disconnect_by_func (SCTX_APP (), seahorse_service_changed, svc);
     
-    G_OBJECT_CLASS (parent_class)->dispose (gobject);
+    G_OBJECT_CLASS (seahorse_service_parent_class)->dispose (gobject);
 }
     
 static void
@@ -434,10 +461,14 @@ seahorse_service_class_init (SeahorseServiceClass *klass)
 {
     GObjectClass *gobject_class;
    
-    parent_class = g_type_class_peek_parent (klass);
+    seahorse_service_parent_class = g_type_class_peek_parent (klass);
     gobject_class = G_OBJECT_CLASS (klass);
     
     gobject_class->dispose = seahorse_service_dispose;
+    
+    /* Some special fields */
+    key_fields[FIELD_DISLAY_NAME] = g_quark_from_static_string ("display-name");
+    key_fields[FIELD_CN] = g_quark_from_static_string ("cn");
 }
 
 static void

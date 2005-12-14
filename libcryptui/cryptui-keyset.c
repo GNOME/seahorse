@@ -25,9 +25,10 @@
 #include <dbus/dbus-glib-bindings.h>
 
 enum {
-	PROP_0,
+    PROP_0,
     PROP_KEYTYPE,
-    PROP_ENCTYPE
+    PROP_ENCTYPE,
+    PROP_EXPAND_KEYS
 };
 
 enum {
@@ -44,6 +45,7 @@ struct _CryptUIKeysetPrivate {
     gchar *keytype;
     CryptUIEncType enctype;
     DBusGProxy *remote_keyset;
+    gboolean expand_keys;
 };
 
 G_DEFINE_TYPE (CryptUIKeyset, cryptui_keyset, G_TYPE_OBJECT);
@@ -80,26 +82,48 @@ remove_key  (const gchar *key, gpointer closure, CryptUIKeyset *keyset)
 static void
 key_added (DBusGProxy *proxy, const char *key, CryptUIKeyset *keyset)
 {
+    gchar *k = NULL;
+    
+    if (!keyset->priv->expand_keys)
+        key = k = cryptui_key_get_base (key);
+        
     if (!g_hash_table_lookup (keyset->priv->keys, key)) {
         g_hash_table_replace (keyset->priv->keys, g_strdup (key), GINT_TO_POINTER (TRUE));
         g_signal_emit (keyset, signals[ADDED], 0, key);
     }
+    
+    g_free (k);
 }
 
 static void 
 key_removed (DBusGProxy *proxy, const char *key, CryptUIKeyset *keyset)
 {
+    gchar *k = NULL;
+    
+    if (!keyset->priv->expand_keys)
+        key = k = cryptui_key_get_base (key);
+
     if (g_hash_table_lookup (keyset->priv->keys, key))
         remove_key (key, NULL, keyset);
+    
+    g_free (k);
 }
 
 static void
 key_changed (DBusGProxy *proxy, const char *key, CryptUIKeyset *keyset)
 {
-    gpointer closure = g_hash_table_lookup (keyset->priv->keys, key);
+    gpointer closure;
+    gchar *k = NULL;
+    
+    if (!keyset->priv->expand_keys)
+        key = k = cryptui_key_get_base (key);
+
+    closure = g_hash_table_lookup (keyset->priv->keys, key);
     if (closure == GINT_TO_POINTER (TRUE))
         closure = NULL;
     g_signal_emit (keyset, signals[CHANGED], 0, key, closure);
+    
+    g_free (k);
 }
 
 static void
@@ -121,8 +145,8 @@ keys_to_hash (const gchar *key, gpointer *c, GHashTable *ht)
 static void
 cryptui_keyset_init (CryptUIKeyset *keyset)
 {
-	/* init private vars */
-	keyset->priv = g_new0 (CryptUIKeysetPrivate, 1);
+    /* init private vars */
+    keyset->priv = g_new0 (CryptUIKeysetPrivate, 1);
     keyset->priv->keys = g_hash_table_new_full (g_str_hash, g_str_equal,
                                                 g_free, NULL);
 
@@ -189,8 +213,8 @@ static void
 cryptui_keyset_set_property (GObject *object, guint prop_id, const GValue *value, 
                               GParamSpec *pspec)
 {
-	CryptUIKeyset *keyset = CRYPTUI_KEYSET (object);
-	
+    CryptUIKeyset *keyset = CRYPTUI_KEYSET (object);
+
     switch (prop_id) {
     case PROP_KEYTYPE:
         g_return_if_fail (keyset->priv->keytype == NULL);
@@ -200,6 +224,9 @@ cryptui_keyset_set_property (GObject *object, guint prop_id, const GValue *value
         keyset->priv->enctype = g_value_get_uint (value);
         cryptui_keyset_refresh (keyset);
         break;
+    case PROP_EXPAND_KEYS:
+        keyset->priv->expand_keys = g_value_get_boolean (value);
+        cryptui_keyset_refresh (keyset);
     };
 }
 
@@ -208,13 +235,16 @@ cryptui_keyset_get_property (GObject *object, guint prop_id, GValue *value,
                               GParamSpec *pspec)
 {
     CryptUIKeyset *keyset = CRYPTUI_KEYSET (object);
-	
+
     switch (prop_id) {
     case PROP_KEYTYPE:
         g_value_set_string (value, keyset->priv->keytype);
         break;
     case PROP_ENCTYPE:
         g_value_set_uint (value, keyset->priv->enctype);
+        break;
+    case PROP_EXPAND_KEYS:
+        g_value_set_boolean (value, keyset->priv->expand_keys);
         break;
     }
 }
@@ -238,7 +268,7 @@ cryptui_keyset_dispose (GObject *gobject)
         keyset->priv->remote_keyset = NULL;
     }
     
-	G_OBJECT_CLASS (cryptui_keyset_parent_class)->dispose (gobject);
+    G_OBJECT_CLASS (cryptui_keyset_parent_class)->dispose (gobject);
 }
 
 static void
@@ -250,20 +280,20 @@ cryptui_keyset_finalize (GObject *gobject)
     g_assert (keyset->priv->remote_keyset == NULL);
     g_free (keyset->priv);
     
-	G_OBJECT_CLASS (cryptui_keyset_parent_class)->finalize (gobject);
+    G_OBJECT_CLASS (cryptui_keyset_parent_class)->finalize (gobject);
 }
 
 static void
 cryptui_keyset_class_init (CryptUIKeysetClass *klass)
 {
-	GObjectClass *gclass;
-	
-	cryptui_keyset_parent_class = g_type_class_peek_parent (klass);
-	gclass = G_OBJECT_CLASS (klass);
-	
+    GObjectClass *gclass;
+
+    cryptui_keyset_parent_class = g_type_class_peek_parent (klass);
+    gclass = G_OBJECT_CLASS (klass);
+
     gclass->constructor = cryptui_keyset_constructor;
-	gclass->dispose = cryptui_keyset_dispose;	
-	gclass->finalize = cryptui_keyset_finalize;	
+    gclass->dispose = cryptui_keyset_dispose;
+    gclass->finalize = cryptui_keyset_finalize;
     gclass->set_property = cryptui_keyset_set_property;
     gclass->get_property = cryptui_keyset_get_property;
     
@@ -273,6 +303,9 @@ cryptui_keyset_class_init (CryptUIKeysetClass *klass)
     g_object_class_install_property (gclass, PROP_ENCTYPE,
         g_param_spec_uint ("enctype", "Encryption Type", "Type of encryption provided by keys",
                            0, _CRYPTUI_ENCTYPE_MAXVALUE, 0, G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE));
+    g_object_class_install_property (gclass, PROP_EXPAND_KEYS, 
+        g_param_spec_boolean ("expand-keys", "Expand Keys", "Expand all names in keys", 
+                              TRUE, G_PARAM_READWRITE));
     
     signals[ADDED] = g_signal_new ("added", CRYPTUI_TYPE_KEYSET, 
                 G_SIGNAL_RUN_FIRST, G_STRUCT_OFFSET (CryptUIKeysetClass, added),
