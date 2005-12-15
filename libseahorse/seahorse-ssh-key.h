@@ -26,6 +26,7 @@
  * 
  * Properties:
  *   display-name: (gchar*) The display name for the key.
+ *   display-id: (gchar*) The display id for the key.
  *   simple-name: (gchar*) Shortened display name for the key (for use in files etc...).
  *   fingerprint: (gchar*) Displayable fingerprint for the key.
  *   validity: (SeahorseValidity) The key validity.

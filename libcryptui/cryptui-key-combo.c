@@ -1,7 +1,6 @@
 /*
  * Seahorse
  *
- * Copyright (C) 2003 Jacob Perkins
  * Copyright (C) 2004-2005 Nate Nielsen
  *
  * This program is free software; you can redistribute it and/or modify
@@ -25,44 +24,34 @@
 
 #include "cryptui-key-combo.h"
 
-G_DEFINE_TYPE (CryptUIKeyCombo, cryptui_key_combo, GTK_TYPE_COMBO_BOX);
-
 /* -----------------------------------------------------------------------------
- * OBJECT 
+ * PUBLIC
  */
 
-
-static void
-cryptui_key_combo_init (CryptUIKeyCombo *combo)
-{
-    
-}
-
-static void
-cryptui_key_combo_class_init (CryptUIKeyComboClass *klass)
-{
-    cryptui_key_combo_parent_class = g_type_class_peek_parent (klass);
-}
-
-CryptUIKeyCombo*  
+GtkComboBox*  
 cryptui_key_combo_new (CryptUIKeyStore *ckstore)
 {
-    GtkCellRenderer *cell;
-    CryptUIKeyCombo *combo;
+    GtkComboBox *combo = g_object_new (GTK_TYPE_COMBO_BOX, "model", ckstore, NULL);
+    cryptui_key_combo_setup (combo, ckstore);
+    return combo;
+}
 
-    combo = g_object_new (CRYPTUI_TYPE_KEY_COMBO, "model", ckstore, NULL);
+void              
+cryptui_key_combo_setup (GtkComboBox *combo, CryptUIKeyStore *ckstore)
+{
+    GtkCellRenderer *cell;
+
+    gtk_combo_box_set_model (combo, GTK_TREE_MODEL (ckstore));
     
     cell = gtk_cell_renderer_text_new ();
     gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo), cell, TRUE);
     gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo), cell, "text", 0, NULL);
-    
-    return combo;
 }
 
 void
-cryptui_key_combo_set_key (CryptUIKeyCombo *combo, const gchar *key)
+cryptui_key_combo_set_key (GtkComboBox *combo, const gchar *key)
 {
-    GtkTreeModel *model = gtk_combo_box_get_model (GTK_COMBO_BOX (combo));
+    GtkTreeModel *model = gtk_combo_box_get_model (combo);
     CryptUIKeyStore *ckstore;
     GtkTreeIter iter;
     
@@ -70,20 +59,20 @@ cryptui_key_combo_set_key (CryptUIKeyCombo *combo, const gchar *key)
     ckstore = CRYPTUI_KEY_STORE (model);
     
     if (cryptui_key_store_get_iter_from_key (ckstore, key, &iter))
-        gtk_combo_box_set_active_iter (GTK_COMBO_BOX (combo), &iter);
+        gtk_combo_box_set_active_iter (combo, &iter);
 }
 
 const gchar*
-cryptui_key_combo_get_key (CryptUIKeyCombo *combo)
+cryptui_key_combo_get_key (GtkComboBox *combo)
 {
-    GtkTreeModel *model = gtk_combo_box_get_model (GTK_COMBO_BOX (combo));
+    GtkTreeModel *model = gtk_combo_box_get_model (combo);
     CryptUIKeyStore *ckstore;
     GtkTreeIter iter;
     
     g_return_val_if_fail (CRYPTUI_IS_KEY_STORE (model), NULL);
     ckstore = CRYPTUI_KEY_STORE (model);
     
-    if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (combo), &iter))
+    if (gtk_combo_box_get_active_iter (combo, &iter))
         return cryptui_key_store_get_key_from_iter (ckstore, &iter);
     
     return NULL;

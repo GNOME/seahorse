@@ -24,10 +24,12 @@
 
 #include <dbus/dbus-glib-bindings.h>
 
+#define TYPE_G_STRING_VALUE_HASHTABLE \
+    (dbus_g_type_get_map ("GHashTable", G_TYPE_STRING, G_TYPE_VALUE))
+
 enum {
     PROP_0,
     PROP_KEYTYPE,
-    PROP_ENCTYPE,
     PROP_EXPAND_KEYS
 };
 
@@ -38,13 +40,22 @@ enum {
     LAST_SIGNAL
 };
 
+/* TODO: Make these cached key properties be customizeable */
+static const gchar* cached_key_props[] = {
+    "display-name",
+    "display-id",
+    "enc-type", 
+    NULL
+};
+
 static guint signals[LAST_SIGNAL] = { 0 };
 
 struct _CryptUIKeysetPrivate {
     GHashTable *keys;
+    GHashTable *key_props;
     gchar *keytype;
-    CryptUIEncType enctype;
     DBusGProxy *remote_keyset;
+    DBusGProxy *remote_service;
     gboolean expand_keys;
 };
 
@@ -103,8 +114,13 @@ key_removed (DBusGProxy *proxy, const char *key, CryptUIKeyset *keyset)
     if (!keyset->priv->expand_keys)
         key = k = cryptui_key_get_base (key);
 
-    if (g_hash_table_lookup (keyset->priv->keys, key))
+    if (g_hash_table_lookup (keyset->priv->keys, key)) {
+        
+        /* Remove all cached properties for this key */
+        g_hash_table_remove (keyset->priv->key_props, key);
+        
         remove_key (key, NULL, keyset);
+    }
     
     g_free (k);
 }
@@ -117,6 +133,9 @@ key_changed (DBusGProxy *proxy, const char *key, CryptUIKeyset *keyset)
     
     if (!keyset->priv->expand_keys)
         key = k = cryptui_key_get_base (key);
+    
+    /* Remove all cached properties for this key */
+    g_hash_table_remove (keyset->priv->key_props, key);
 
     closure = g_hash_table_lookup (keyset->priv->keys, key);
     if (closure == GINT_TO_POINTER (TRUE))
@@ -138,6 +157,37 @@ keys_to_hash (const gchar *key, gpointer *c, GHashTable *ht)
     g_hash_table_replace (ht, (gpointer)key, NULL);
 }
 
+static GValue*
+lookup_key_property (CryptUIKeyset *keyset, const gchar *key, const gchar *prop,
+                     gboolean *allocated)
+{
+    GHashTable *cached_props;
+    GError *error = NULL;
+    GValue *value;
+    
+    *allocated = FALSE;
+    
+    cached_props = g_hash_table_lookup (keyset->priv->key_props, key);
+    if (cached_props) {
+        value = g_hash_table_lookup (cached_props, prop);
+        if (value)
+            return value;
+    }
+    
+    value = g_new0 (GValue, 1);
+    if (!dbus_g_proxy_call (keyset->priv->remote_service, "GetKeyField", &error,
+                            G_TYPE_STRING, key, G_TYPE_STRING, prop, G_TYPE_INVALID, 
+                            G_TYPE_VALUE, value, G_TYPE_INVALID)) {
+        g_warning ("dbus call to get '%s' failed: %s", prop, error ? error->message : "");
+        g_clear_error (&error);
+        g_free (value);
+        return NULL;
+    }
+
+    *allocated = TRUE;
+    return value;
+}
+
 /* -----------------------------------------------------------------------------
  * OBJECT 
  */
@@ -147,10 +197,16 @@ cryptui_keyset_init (CryptUIKeyset *keyset)
 {
     /* init private vars */
     keyset->priv = g_new0 (CryptUIKeysetPrivate, 1);
+    
+    /* Map of keyid to closure */
     keyset->priv->keys = g_hash_table_new_full (g_str_hash, g_str_equal,
                                                 g_free, NULL);
+    
+    /* Map of keyid to cached key properties */
+    keyset->priv->key_props = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                                g_free, (GDestroyNotify)g_hash_table_destroy);
 
-    /* The DBUS connection gets initialized in the constructor */    
+    /* The DBUS connection gets initialized in the constructor */
 }
 
 static GObject*  
@@ -181,10 +237,12 @@ cryptui_keyset_constructor (GType type, guint n_props, GObjectConstructParam* pr
 
     keyset->priv->remote_keyset = dbus_g_proxy_new_for_name (bus,
                     "org.gnome.seahorse.KeyService", path, "org.gnome.seahorse.Keys");
+    keyset->priv->remote_service = dbus_g_proxy_new_for_name (bus,
+                    "org.gnome.seahorse.KeyService", "/org/gnome/seahorse/keys", "org.gnome.seahorse.KeyService");
     
     g_free (path);
             
-    if (!keyset->priv->remote_keyset) {
+    if (!keyset->priv->remote_keyset || !keyset->priv->remote_service) {
         g_critical ("couldn't connect to the dbus service");
         goto finally;
     }
@@ -220,10 +278,6 @@ cryptui_keyset_set_property (GObject *object, guint prop_id, const GValue *value
         g_return_if_fail (keyset->priv->keytype == NULL);
         keyset->priv->keytype = g_strdup (g_value_get_string (value));
         break;
-    case PROP_ENCTYPE:
-        keyset->priv->enctype = g_value_get_uint (value);
-        cryptui_keyset_refresh (keyset);
-        break;
     case PROP_EXPAND_KEYS:
         keyset->priv->expand_keys = g_value_get_boolean (value);
         cryptui_keyset_refresh (keyset);
@@ -239,9 +293,6 @@ cryptui_keyset_get_property (GObject *object, guint prop_id, GValue *value,
     switch (prop_id) {
     case PROP_KEYTYPE:
         g_value_set_string (value, keyset->priv->keytype);
-        break;
-    case PROP_ENCTYPE:
-        g_value_set_uint (value, keyset->priv->enctype);
         break;
     case PROP_EXPAND_KEYS:
         g_value_set_boolean (value, keyset->priv->expand_keys);
@@ -266,6 +317,8 @@ cryptui_keyset_dispose (GObject *gobject)
         
         g_object_unref (keyset->priv->remote_keyset);
         keyset->priv->remote_keyset = NULL;
+        g_object_unref (keyset->priv->remote_service);
+        keyset->priv->remote_service = NULL;
     }
     
     G_OBJECT_CLASS (cryptui_keyset_parent_class)->dispose (gobject);
@@ -300,9 +353,6 @@ cryptui_keyset_class_init (CryptUIKeysetClass *klass)
     g_object_class_install_property (gclass, PROP_KEYTYPE,
         g_param_spec_string ("keytype", "Key Type", "Type of keys to be listed", 
                              NULL, G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE));
-    g_object_class_install_property (gclass, PROP_ENCTYPE,
-        g_param_spec_uint ("enctype", "Encryption Type", "Type of encryption provided by keys",
-                           0, _CRYPTUI_ENCTYPE_MAXVALUE, 0, G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE));
     g_object_class_install_property (gclass, PROP_EXPAND_KEYS, 
         g_param_spec_boolean ("expand-keys", "Expand Keys", "Expand all names in keys", 
                               TRUE, G_PARAM_READWRITE));
@@ -325,10 +375,9 @@ cryptui_keyset_class_init (CryptUIKeysetClass *klass)
  */
 
 CryptUIKeyset*
-cryptui_keyset_new (const gchar *keytype, CryptUIEncType enctype)
+cryptui_keyset_new (const gchar *keytype)
 {
-    return g_object_new (CRYPTUI_TYPE_KEYSET, "keytype", keytype, 
-                         "enctype", enctype, NULL);
+    return g_object_new (CRYPTUI_TYPE_KEYSET, "keytype", keytype, NULL);
 }
 
 GList*             
@@ -407,4 +456,64 @@ cryptui_keyset_set_closure (CryptUIKeyset *keyset, const gchar *key,
         closure = GINT_TO_POINTER (TRUE);
 
     g_hash_table_insert (keyset->priv->keys, g_strdup (key), closure);    
+}
+
+void
+cryptui_keyset_cache_key (CryptUIKeyset *keyset, const gchar *key)
+{
+    GError *error = NULL;
+    GHashTable *props;
+    
+    /* We don't recache a key until it's been changed */
+    props = (GHashTable*)g_hash_table_lookup (keyset->priv->key_props, key);
+    if (props)
+        return;
+
+    if (!dbus_g_proxy_call (keyset->priv->remote_service, "GetKeyFields", &error,
+                            G_TYPE_STRING, key, G_TYPE_STRV, cached_key_props, G_TYPE_INVALID, 
+                            TYPE_G_STRING_VALUE_HASHTABLE, &props, G_TYPE_INVALID)) {
+        g_warning ("dbus call to cache key failed: %s", error ? error->message : "");
+        g_clear_error (&error);
+        return;
+    }
+    
+    if (props) 
+        g_hash_table_insert (keyset->priv->key_props, g_strdup (key), props);
+    else
+        g_hash_table_remove (keyset->priv->key_props, key);
+}
+
+gchar*
+cryptui_keyset_key_get_string (CryptUIKeyset *keyset, const gchar *key, 
+                               const gchar *prop)
+{
+    GValue *value;
+    gboolean allocated;
+    gchar *str;
+    
+    value = lookup_key_property (keyset, key, prop, &allocated);
+    if (!value)
+        return NULL;
+        
+    g_return_val_if_fail (G_VALUE_TYPE (value) == G_TYPE_STRING, NULL);
+    str = g_value_dup_string (value);
+    
+    if (allocated) {
+        g_value_unset (value);
+        g_free (value);
+    }
+    
+    return str;
+}
+
+gchar*
+cryptui_keyset_key_display_name (CryptUIKeyset *keyset, const gchar *key)
+{
+    return cryptui_keyset_key_get_string (keyset, key, "display-name");
+}
+
+gchar*
+cryptui_keyset_key_display_id (CryptUIKeyset *keyset, const gchar *key)
+{
+    return cryptui_keyset_key_get_string (keyset, key, "display-id");
 }

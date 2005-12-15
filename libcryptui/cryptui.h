@@ -34,12 +34,20 @@ typedef enum _CryptUIEncType {
     _CRYPTUI_ENCTYPE_MAXVALUE
 } CryptUIEncType;
 
+/* 
+ * Key Properties:
+ * 
+ * display-name: G_TYPE_STRING
+ * display-id:   G_TYPE_STRING 
+ * enc-type:     G_TYPE_UINT (CryptUIEncType)
+ * 
+ * TODO: Flesh this list out 
+ */
+
 gchar*              cryptui_key_get_base (const gchar *key);
 
-gchar*              cryptui_key_get_display_name (const gchar *key);
-
-gchar*              cryptui_key_get_display_id (const gchar *key);
-
 CryptUIEncType      cryptui_key_get_enctype (const gchar *key);
+
+
 
 #endif /* __CRYPT_UI_H__ */

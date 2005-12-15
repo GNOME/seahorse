@@ -26,23 +26,38 @@
 #include "cryptui-keyset.h"
 #include "cryptui-key-store.h"
 #include "cryptui-key-combo.h"
+#include "cryptui-key-list.h"
 
 static void
 show_ui_dialog (CryptUIKeyset *keyset)
 {
     GtkWidget *dialog;
-    CryptUIKeyCombo *combo;
-    CryptUIKeyStore *ckstore;
+    GtkComboBox *combo;
+    GtkTreeView *list;
+    GtkContainer *box;
+    CryptUIKeyStore *combo_store;
+    CryptUIKeyStore *list_store;
     
     dialog = gtk_dialog_new_with_buttons ("CryptUI Test", NULL, GTK_DIALOG_MODAL, 
                                           GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
     
-    ckstore = cryptui_key_store_new (keyset, FALSE);
-    combo = cryptui_key_combo_new (ckstore);
-    gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox), GTK_WIDGET (combo));
-    gtk_widget_show_all (dialog);
+    box = GTK_CONTAINER (gtk_vbox_new (FALSE, 6));
+    gtk_container_set_border_width (box, 6);
+    gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox), GTK_WIDGET (box));
+
+    list_store = cryptui_key_store_new (keyset, TRUE);
+    list = cryptui_key_list_new (list_store, CRYPTUI_KEY_LIST_CHECKS);
+    gtk_container_add (box, GTK_WIDGET (list));
     
+    combo_store = cryptui_key_store_new (keyset, FALSE);
+    combo = cryptui_key_combo_new (combo_store);
+    gtk_container_add (box, GTK_WIDGET (combo));
+    
+    gtk_widget_show_all (dialog);    
     gtk_dialog_run (GTK_DIALOG (dialog));
+    
+    g_object_unref (combo_store);
+    g_object_unref (list_store);
 }
 
 int
@@ -53,7 +68,7 @@ main (int argc, char **argv)
     
     gtk_init(&argc, &argv);
     
-    keyset = cryptui_keyset_new ("openpgp", CRYPTUI_ENCTYPE_NONE);
+    keyset = cryptui_keyset_new ("openpgp");
     keys = cryptui_keyset_get_keys (keyset);
     
     for(l = keys; l; l = g_list_next (l)) 
@@ -64,5 +79,3 @@ main (int argc, char **argv)
     
     return 0;
 }
-
-

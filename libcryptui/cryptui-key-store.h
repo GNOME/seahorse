@@ -77,7 +77,7 @@ CryptUIKeyStore*    cryptui_key_store_new                   (CryptUIKeyset *keys
 
 void                cryptui_key_store_check_toggled         (CryptUIKeyStore *ckstore, 
                                                              GtkTreeView *view, 
-                                                             gchar *path);
+                                                             GtkTreeIter *iter);
 
 gboolean            cryptui_key_store_get_iter_from_key     (CryptUIKeyStore *ckstore,
                                                              const gchar *key,

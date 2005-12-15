@@ -29,11 +29,12 @@ main (int argc, char **argv)
 {
     CryptUIKeyset *keyset;
     GList *keys, *l;
+    gboolean cache = FALSE;
     gchar *name;
     
     gtk_init(&argc, &argv);
 
-    keyset = cryptui_keyset_new ("openpgp", CRYPTUI_ENCTYPE_NONE);
+    keyset = cryptui_keyset_new ("openpgp");
     g_object_set (keyset, "expand-keys", TRUE, NULL);
     
     keys = cryptui_keyset_get_keys (keyset);
@@ -41,11 +42,16 @@ main (int argc, char **argv)
     for(l = keys; l; l = g_list_next (l)) {
         g_print ("key: %s\n", (gchar*)l->data);
         
-        name = cryptui_key_get_display_name ((gchar*)l->data);
+        /* Test half of them cached, half not */
+        if (cache)
+            cryptui_keyset_cache_key (keyset, (gchar*)l->data);
+        cache = !cache;
+        
+        name = cryptui_keyset_key_display_name (keyset, (gchar*)l->data);
         g_print ("     name: %s\n", name);
         g_free (name);
         
-        name = cryptui_key_get_display_id ((gchar*)l->data);
+        name = cryptui_keyset_key_display_id (keyset, (gchar*)l->data);
         g_print ("     id: %s\n", name);
         g_free (name);
     }

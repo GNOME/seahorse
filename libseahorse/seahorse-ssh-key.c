@@ -33,6 +33,7 @@ enum {
     PROP_0,
     PROP_KEY_DATA,
     PROP_DISPLAY_NAME,
+    PROP_DISPLAY_ID,
     PROP_SIMPLE_NAME,
     PROP_FINGERPRINT,
     PROP_VALIDITY,
@@ -178,10 +179,13 @@ seahorse_ssh_key_get_property (GObject *object, guint prop_id,
         g_value_set_pointer (value, skey->keydata);
         break;
     case PROP_DISPLAY_NAME:
-        g_value_take_string (value, skey->priv->displayname);
+        g_value_set_string (value, skey->priv->displayname);
+        break;
+    case PROP_DISPLAY_ID:
+        g_value_set_string (value, seahorse_key_get_short_keyid (SEAHORSE_KEY (skey))); 
         break;
     case PROP_SIMPLE_NAME:        
-        g_value_take_string (value, skey->priv->simplename);
+        g_value_set_string (value, skey->priv->simplename);
         break;
     case PROP_FINGERPRINT:
         g_value_set_string (value, skey->keydata ? skey->keydata->fingerprint : NULL);
@@ -258,6 +262,10 @@ seahorse_ssh_key_class_init (SeahorseSSHKeyClass *klass)
 
     g_object_class_install_property (gobject_class, PROP_DISPLAY_NAME,
         g_param_spec_string ("display-name", "Display Name", "User Displayable name for this key",
+                             "", G_PARAM_READABLE));
+
+    g_object_class_install_property (gobject_class, PROP_DISPLAY_ID,
+        g_param_spec_string ("display-id", "Display ID", "User Displayable id for this key",
                              "", G_PARAM_READABLE));
                       
     g_object_class_install_property (gobject_class, PROP_SIMPLE_NAME,

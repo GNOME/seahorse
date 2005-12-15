@@ -44,7 +44,9 @@ static const GType col_types[] = {
     G_TYPE_POINTER
 };
 
-struct _CryptUIKeyStorePriv {    
+struct _CryptUIKeyStorePriv {
+    GHashTable              *rows;
+    
     GtkTreeModelFilter      *filter;
     GtkTreeStore            *store;
     
@@ -87,7 +89,7 @@ key_store_row_add (CryptUIKeyStore *ckstore, const gchar *key, GtkTreeIter *iter
     GtkTreeRowReference *ref;
     
     /* Do we already have a row for this key? */
-    ref = (GtkTreeRowReference*)cryptui_keyset_get_closure (ckstore->ckset, key);
+    ref = (GtkTreeRowReference*)g_hash_table_lookup (ckstore->priv->rows, key);
     g_return_if_fail (ref == NULL);
 
     gtk_tree_store_append (GTK_TREE_STORE (ckstore->priv->store), iter, NULL);
@@ -95,7 +97,7 @@ key_store_row_add (CryptUIKeyStore *ckstore, const gchar *key, GtkTreeIter *iter
     ref = gtk_tree_row_reference_new (GTK_TREE_MODEL (ckstore->priv->store), path);
     gtk_tree_path_free (path);
     
-    cryptui_keyset_set_closure (ckstore->ckset, key, ref);
+    g_hash_table_replace (ckstore->priv->rows, (gchar*)key, ref);
     gtk_tree_store_set (GTK_TREE_STORE (ckstore->priv->store), iter, CRYPTUI_KEY_STORE_KEY, key, -1);
 }
 
@@ -103,9 +105,14 @@ key_store_row_add (CryptUIKeyStore *ckstore, const gchar *key, GtkTreeIter *iter
 static void
 key_store_set (CryptUIKeyStore *ckstore, const gchar *key, GtkTreeIter *iter)
 {
-    gchar *userid = cryptui_key_get_display_name (key);
-    gchar *keyid = cryptui_key_get_display_id (key);
-    gboolean sec = cryptui_key_get_enctype (key) == CRYPTUI_ENCTYPE_PRIVATE;
+    gchar *userid, *keyid;
+    gboolean sec;
+    
+    cryptui_keyset_cache_key (ckstore->ckset, key);
+    
+    userid = cryptui_keyset_key_display_name (ckstore->ckset, key);
+    keyid = cryptui_keyset_key_display_id (ckstore->ckset, key);
+    sec = cryptui_key_get_enctype (key) == CRYPTUI_ENCTYPE_PRIVATE;
     
     gtk_tree_store_set (GTK_TREE_STORE (ckstore->priv->store), iter,
                         CRYPTUI_KEY_STORE_CHECK, FALSE,
@@ -162,8 +169,8 @@ key_store_key_removed (CryptUIKeyset *ckset, const gchar *key,
         gtk_tree_path_free (path);
     }
     
-    /* Key is no more, free the closure */
-    gtk_tree_row_reference_free (ref);
+    /* Key is no more, free the reference */
+    g_hash_table_remove (ckstore->priv->rows, key);
 }
 
 static void
@@ -303,6 +310,12 @@ refilter_later (CryptUIKeyStore* ckstore)
     ckstore->priv->filter_stag = g_timeout_add (200, (GSourceFunc)refilter_now, ckstore);
 }
 
+gboolean    
+hashtable_remove_all (gpointer key, gpointer value, gpointer user_data)
+{
+    return TRUE;
+}
+
 /* -----------------------------------------------------------------------------
  * OBJECT 
  */
@@ -312,6 +325,10 @@ cryptui_key_store_init (CryptUIKeyStore *ckstore)
 {
     /* init private vars */
     ckstore->priv = g_new0 (CryptUIKeyStorePriv, 1);
+    
+    /* Our key -> row ref mapping */
+    ckstore->priv->rows = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, 
+                                                 (GDestroyNotify)gtk_tree_row_reference_free);
 
     /* The base store */
     ckstore->priv->store = gtk_tree_store_newv (CRYPTUI_KEY_STORE_NCOLS, (GType*)col_types);
@@ -357,6 +374,8 @@ cryptui_key_store_dispose (GObject *gobject)
         ckstore->ckset = NULL;
     }
     
+    g_hash_table_foreach_remove (ckstore->priv->rows, hashtable_remove_all, NULL);
+    
     G_OBJECT_CLASS (cryptui_key_store_parent_class)->dispose (gobject);
 }
 
@@ -370,9 +389,12 @@ cryptui_key_store_finalize (GObject *gobject)
     /* These were allocated in the constructor */
     g_object_unref (ckstore->priv->store);
     g_object_unref (ckstore->priv->filter);
+    g_hash_table_destroy (ckstore->priv->rows);
      
     /* Allocated in property setter */
     g_free (ckstore->priv->filter_text); 
+    
+    g_free (ckstore->priv);
     
     G_OBJECT_CLASS (cryptui_key_store_parent_class)->finalize (gobject);
 }
@@ -515,28 +537,25 @@ cryptui_key_store_new (CryptUIKeyset *keyset, gboolean use_check)
 }
 
 void
-cryptui_key_store_check_toggled (CryptUIKeyStore *ckstore, GtkTreeView *view, gchar *path)
+cryptui_key_store_check_toggled (CryptUIKeyStore *ckstore, GtkTreeView *view, GtkTreeIter *iter)
 {
-    GtkTreeModel* fmodel = GTK_TREE_MODEL (ckstore);
     GtkTreeSelection *selection;
     gboolean prev = FALSE;
-    GtkTreeIter iter;
     GtkTreeIter base;
     GValue v;
 
     memset (&v, 0, sizeof(v));
-    g_return_if_fail (path != NULL);
-    g_return_if_fail (gtk_tree_model_get_iter_from_string (fmodel, &iter, path));
+    g_return_if_fail (iter != NULL);
     
     /* We get notified in filtered coordinates, we have to convert those to base */
-    key_store_get_base_iter (ckstore, &iter, &base);
+    key_store_get_base_iter (ckstore, iter, &base);
  
-    gtk_tree_model_get_value (GTK_TREE_MODEL (ckstore), &base, CRYPTUI_KEY_STORE_CHECK, &v);
+    gtk_tree_model_get_value (GTK_TREE_MODEL (ckstore->priv->store), &base, CRYPTUI_KEY_STORE_CHECK, &v);
     if(G_VALUE_TYPE (&v) == G_TYPE_BOOLEAN)
         prev = g_value_get_boolean (&v);
     g_value_unset (&v);    
     
-    gtk_tree_store_set (GTK_TREE_STORE (ckstore), &base, CRYPTUI_KEY_STORE_CHECK, prev ? FALSE : TRUE, -1);
+    gtk_tree_store_set (GTK_TREE_STORE (ckstore->priv->store), &base, CRYPTUI_KEY_STORE_CHECK, prev ? FALSE : TRUE, -1);
 
     selection = gtk_tree_view_get_selection (view);
     g_signal_emit_by_name (selection, "changed");
@@ -555,7 +574,7 @@ cryptui_key_store_get_iter_from_key (CryptUIKeyStore *ckstore, const gchar *key,
     
     /* TODO: When key is NULL return none_option if it exists */
     
-    ref = (GtkTreeRowReference*)cryptui_keyset_get_closure (ckstore->ckset, key);
+    ref = (GtkTreeRowReference*)g_hash_table_lookup (ckstore->priv->rows, key);
     path = gtk_tree_row_reference_get_path (ref);
     if (path) {
         if (gtk_tree_model_get_iter (GTK_TREE_MODEL (ckstore->priv->store), iter, path))

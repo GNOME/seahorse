@@ -61,8 +61,7 @@ struct _CryptUIKeysetClass {
 
 GType               cryptui_keyset_get_type           (void);
 
-CryptUIKeyset*      cryptui_keyset_new                (const gchar *keytype,
-                                                       CryptUIEncType enctype);
+CryptUIKeyset*      cryptui_keyset_new                (const gchar *keytype);
 
 gboolean            cryptui_keyset_has_key            (CryptUIKeyset *keyset,
                                                        const gchar *key);
@@ -79,5 +78,20 @@ gpointer            cryptui_keyset_get_closure        (CryptUIKeyset *keyset,
 void                cryptui_keyset_set_closure        (CryptUIKeyset *keyset,
                                                        const gchar *key,
                                                        gpointer closure);
+                                                       
+void                cryptui_keyset_cache_key          (CryptUIKeyset *keyset,
+                                                       const gchar *key);
+
+gchar*              cryptui_keyset_key_get_string     (CryptUIKeyset *keyset, 
+                                                       const gchar *key, 
+                                                       const gchar *prop);
+
+gchar*              cryptui_keyset_key_display_name   (CryptUIKeyset *keyset, 
+                                                       const gchar *key);
+
+gchar*              cryptui_keyset_key_display_id     (CryptUIKeyset *keyset, 
+                                                       const gchar *key);
+
+/* TODO: A way to change the key properties cached */
 
 #endif /* __CRYPTUI_KEYSET_H__ */

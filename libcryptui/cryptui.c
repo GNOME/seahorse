@@ -22,6 +22,7 @@
 #include "config.h"
 #include <gtk/gtk.h>
 #include <string.h>
+
 #include <dbus/dbus-glib-bindings.h>
 
 #include "cryptui.h"
@@ -34,7 +35,7 @@ init_remote_service ()
     DBusGConnection *bus;
     GError *error = NULL;
     
-    if (remote_service)
+    if (remote_service) 
         return TRUE;
 
     bus = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
@@ -51,7 +52,7 @@ init_remote_service ()
         g_critical ("couldn't connect to the dbus service");
         return FALSE;
     }
-
+    
     return TRUE;
 }
 
@@ -76,61 +77,11 @@ cryptui_key_get_base (const gchar *key)
     return g_strdup (key);
 }
 
-gchar*
-cryptui_key_get_display_name (const gchar *key)
-{
-    GError *error = NULL;
-    GValue value;
-    gchar *name;
-    
-    if (!init_remote_service ())
-        return NULL;
-    
-    memset (&value, 0, sizeof (value));
-    
-    if (!dbus_g_proxy_call (remote_service, "GetKeyField", &error,
-                            G_TYPE_STRING, key, G_TYPE_STRING, "display-name", G_TYPE_INVALID, 
-                            G_TYPE_VALUE, &value, G_TYPE_INVALID)) {
-        g_warning ("dbus call to get display name failed: %s", error ? error->message : "");
-        g_clear_error (&error);
-        return NULL;
-    }
-
-    g_return_val_if_fail (G_VALUE_TYPE (&value) == G_TYPE_STRING, NULL);
-    name = g_value_dup_string (&value);
-    g_value_unset (&value);
-    return name;
-}
-
-gchar*
-cryptui_key_get_display_id (const gchar *key)
-{
-    GError *error = NULL;
-    GValue value;
-    gchar *name;
-    
-    if (!init_remote_service ())
-        return NULL;
-    
-    memset (&value, 0, sizeof (value));
-    
-    if (!dbus_g_proxy_call (remote_service, "GetKeyField", &error,
-                            G_TYPE_STRING, key, G_TYPE_STRING, "key-id", G_TYPE_INVALID, 
-                            G_TYPE_VALUE, &value, G_TYPE_INVALID)) {
-        g_warning ("dbus call to get display name failed: %s", error ? error->message : "");
-        g_clear_error (&error);
-        return NULL;
-    }
-
-    g_return_val_if_fail (G_VALUE_TYPE (&value) == G_TYPE_STRING, NULL);
-    name = g_value_dup_string (&value);
-    g_value_unset (&value);
-    return name;
-}
-
 CryptUIEncType
 cryptui_key_get_enctype (const gchar *key)
 {
+    init_remote_service ();
+    
     /* TODO: Implement this properly */
     return CRYPTUI_ENCTYPE_PUBLIC;
 }

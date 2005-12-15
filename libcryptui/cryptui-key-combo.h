@@ -26,29 +26,21 @@
 
 #include "cryptui-key-store.h"
 
-#define CRYPTUI_TYPE_KEY_COMBO               (cryptui_key_combo_get_type ())
-#define CRYPTUI_KEY_COMBO(obj)               (GTK_CHECK_CAST ((obj), CRYPTUI_TYPE_KEY_COMBO, CryptUIKeyCombo))
-#define CRYPTUI_KEY_COMBO_CLASS(klass)       (GTK_CHECK_CLASS_CAST ((klass), CRYPTUI_TYPE_KEY_COMBO, CryptUIKeyComboClass))
-#define CRYPTUI_IS_KEY_COMBO(obj)            (GTK_CHECK_TYPE ((obj), CRYPTUI_TYPE_KEY_COMBO))
-#define CRYPTUI_IS_KEY_COMBO_CLASS(klass)    (GTK_CHECK_CLASS_TYPE ((klass), CRYPTUI_TYPE_KEY_COMBO))
-#define CRYPTUI_KEY_COMBO_GET_CLASS(obj)     (GTK_CHECK_GET_CLASS ((obj), CRYPTUI_TYPE_KEY_COMBO, CryptUIKeyComboClass))
+#define CRYPTUI_TYPE_KEY_COMBO               GTK_TYPE_COMBO_BOX
+#define CRYPTUI_KEY_COMBO(obj)               GTK_COMBO_BOX(obj)
+#define CRYPTUI_KEY_COMBO_CLASS(klass)       GTK_COMBO_BOX_CLASS(klass)
+#define CRYPTUI_IS_KEY_COMBO(obj)            GTK_IS_COMBO_BOX(obj)
+#define CRYPTUI_IS_KEY_COMBO_CLASS(klass)    GTK_IS_COMBO_BOX_CLASS(klass)
+#define CRYPTUI_KEY_COMBO_GET_CLASS(obj)     GTK_COMBO_BOX_GET_CLASS(obj)
 
-typedef struct _CryptUIKeyCombo CryptUIKeyCombo;
-typedef struct _CryptUIKeyComboClass CryptUIKeyComboClass;
+GtkComboBox*      cryptui_key_combo_new             (CryptUIKeyStore *ckstore);
 
-struct _CryptUIKeyCombo {
-    GtkComboBox parent;
-};
+void              cryptui_key_combo_setup           (GtkComboBox *combo,
+                                                     CryptUIKeyStore *ckstore);
 
-struct _CryptUIKeyComboClass {
-    GtkComboBoxClass parent_class;
-};
-
-CryptUIKeyCombo*  cryptui_key_combo_new             (CryptUIKeyStore *ckstore);
-
-void              cryptui_key_combo_set_key         (CryptUIKeyCombo *ckcombo,
+void              cryptui_key_combo_set_key         (GtkComboBox *combo,
                                                      const gchar *key);
 
-const gchar*      cryptui_key_combo_get_key         (CryptUIKeyCombo *ckcombo);
+const gchar*      cryptui_key_combo_get_key         (GtkComboBox *ckcombo);
 
 #endif /* __CRYPTUI_KEY_COMBO_H__ */

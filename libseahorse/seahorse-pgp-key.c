@@ -27,10 +27,11 @@
 #include "seahorse-pgp-key.h"
 
 enum {
-	PROP_0,
-	PROP_PUBKEY,
-	PROP_SECKEY,
+    PROP_0,
+    PROP_PUBKEY,
+    PROP_SECKEY,
     PROP_DISPLAY_NAME,
+    PROP_DISPLAY_ID,
     PROP_SIMPLE_NAME,
     PROP_FINGERPRINT,
     PROP_VALIDITY,
@@ -81,32 +82,36 @@ seahorse_pgp_key_get_type (void)
 static void
 class_init (SeahorsePGPKeyClass *klass)
 {
-	GObjectClass *gobject_class;
-	SeahorseKeyClass *key_class;
+    GObjectClass *gobject_class;
+    SeahorseKeyClass *key_class;
     
-	parent_class = g_type_class_peek_parent (klass);
-	gobject_class = G_OBJECT_CLASS (klass);
-	
-	gobject_class->finalize = object_finalize;
-	gobject_class->set_property = set_property;
-	gobject_class->get_property = get_property;
-	
+    parent_class = g_type_class_peek_parent (klass);
+    gobject_class = G_OBJECT_CLASS (klass);
+    
+    gobject_class->finalize = object_finalize;
+    gobject_class->set_property = set_property;
+    gobject_class->get_property = get_property;
+    
     key_class = SEAHORSE_KEY_CLASS (klass);
     
     key_class->get_num_names = key_get_num_names;
     key_class->get_name = key_get_name;
     key_class->get_name_cn = key_get_name_cn;
     
-	g_object_class_install_property (gobject_class, PROP_PUBKEY,
-		g_param_spec_pointer ("pubkey", "Gpgme Public Key", "Gpgme Public Key that this object represents",
-				              G_PARAM_READWRITE));
+    g_object_class_install_property (gobject_class, PROP_PUBKEY,
+        g_param_spec_pointer ("pubkey", "Gpgme Public Key", "Gpgme Public Key that this object represents",
+                              G_PARAM_READWRITE));
 
-	g_object_class_install_property (gobject_class, PROP_SECKEY,
-		g_param_spec_pointer ("seckey", "Gpgme Secret Key", "Gpgme Secret Key that this object represents",
-				              G_PARAM_READWRITE));
+    g_object_class_install_property (gobject_class, PROP_SECKEY,
+        g_param_spec_pointer ("seckey", "Gpgme Secret Key", "Gpgme Secret Key that this object represents",
+                              G_PARAM_READWRITE));
                       
     g_object_class_install_property (gobject_class, PROP_DISPLAY_NAME,
         g_param_spec_string ("display-name", "Display Name", "User Displayable name for this key",
+                             "", G_PARAM_READABLE));
+                      
+    g_object_class_install_property (gobject_class, PROP_DISPLAY_ID,
+        g_param_spec_string ("display-id", "Display ID", "User Displayable id for this key",
                              "", G_PARAM_READABLE));
                       
     g_object_class_install_property (gobject_class, PROP_SIMPLE_NAME,
@@ -180,7 +185,7 @@ static void
 get_property (GObject *object, guint prop_id,
               GValue *value, GParamSpec *pspec)
 {
-	SeahorsePGPKey *pkey = SEAHORSE_PGP_KEY (object);
+    SeahorsePGPKey *pkey = SEAHORSE_PGP_KEY (object);
     
     switch (prop_id) {
     case PROP_PUBKEY:
@@ -190,7 +195,10 @@ get_property (GObject *object, guint prop_id,
         g_value_set_pointer (value, pkey->seckey);
         break;
     case PROP_DISPLAY_NAME:
-        g_value_take_string (value, key_get_name(SEAHORSE_KEY (pkey), 0));
+        g_value_take_string (value, key_get_name (SEAHORSE_KEY (pkey), 0));
+        break;
+    case PROP_DISPLAY_ID:
+        g_value_set_string (value, seahorse_key_get_short_keyid (SEAHORSE_KEY (pkey)));
         break;
     case PROP_SIMPLE_NAME:        
         g_value_take_string (value, seahorse_pgp_key_get_userid_name (pkey, 0));
@@ -208,7 +216,7 @@ get_property (GObject *object, guint prop_id,
         if (pkey->pubkey)
             g_value_set_ulong (value, pkey->pubkey->subkeys->expires);
         break;
-	}
+    }
 }
 
 /**
