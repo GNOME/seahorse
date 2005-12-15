@@ -27,8 +27,8 @@
 #include "cryptui-key-store.h"
 
 enum {
-    CRYPTUI_KEY_LIST_CHECKS,
-    CRYPTUI_KEY_LIST_ICONS
+    CRYPTUI_KEY_LIST_CHECKS = 0x01,
+    CRYPTUI_KEY_LIST_ICONS = 0x02
 };
 
 #define CRYPTUI_TYPE_KEY_LIST               GTK_TYPE_TREE_VIEW

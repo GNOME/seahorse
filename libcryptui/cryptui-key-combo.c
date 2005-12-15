@@ -25,6 +25,18 @@
 #include "cryptui-key-combo.h"
 
 /* -----------------------------------------------------------------------------
+ * INTERNAL
+ */
+ 
+static gboolean    
+is_row_separator (GtkTreeModel *model, GtkTreeIter *iter, gpointer data)
+{
+    gboolean ret;
+    gtk_tree_model_get (model, iter, CRYPTUI_KEY_STORE_SEPARATOR, &ret, -1);
+    return ret;
+}
+
+/* -----------------------------------------------------------------------------
  * PUBLIC
  */
 
@@ -36,7 +48,7 @@ cryptui_key_combo_new (CryptUIKeyStore *ckstore)
     return combo;
 }
 
-void              
+void
 cryptui_key_combo_setup (GtkComboBox *combo, CryptUIKeyStore *ckstore)
 {
     GtkCellRenderer *cell;
@@ -46,6 +58,9 @@ cryptui_key_combo_setup (GtkComboBox *combo, CryptUIKeyStore *ckstore)
     cell = gtk_cell_renderer_text_new ();
     gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo), cell, TRUE);
     gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo), cell, "text", 0, NULL);
+    
+    gtk_combo_box_set_row_separator_func (combo, is_row_separator, NULL, NULL);
+    cryptui_key_combo_set_key (combo, NULL);
 }
 
 void

@@ -60,12 +60,17 @@ struct _CryptUIKeyStoreClass {
 
 /* This should always match the list in cryptui-keystore.c */
 enum {
-    CRYPTUI_KEY_STORE_NAME,         /* string */
-    CRYPTUI_KEY_STORE_KEYID,        /* keyid */
-    CRYPTUI_KEY_STORE_CHECK,        /* boolean */
-    CRYPTUI_KEY_STORE_PAIR,         /* boolean */
-    CRYPTUI_KEY_STORE_STOCK_ID,     /* string */
-    CRYPTUI_KEY_STORE_KEY,          /* pointer */
+    /* Displayable columns */
+    CRYPTUI_KEY_STORE_NAME,         /* (string) Text to display as the key name */
+    CRYPTUI_KEY_STORE_KEYID,        /* (string) Text to display as the key id */
+    CRYPTUI_KEY_STORE_CHECK,        /* (boolean) Is this key selected or not */
+    
+    /* Metadata formatting */
+    CRYPTUI_KEY_STORE_PAIR,         /* (boolean) A key pair or not */
+    CRYPTUI_KEY_STORE_STOCK_ID,     /* (string) Image to display next to key */
+    CRYPTUI_KEY_STORE_SEPARATOR,    /* (boolean) Row is a separator */
+    CRYPTUI_KEY_STORE_KEY,          /* (pointer) Pointer to key handle */
+    
     CRYPTUI_KEY_STORE_NCOLS
 };
 
@@ -73,7 +78,8 @@ enum {
 GType               cryptui_key_store_get_type              ();
 
 CryptUIKeyStore*    cryptui_key_store_new                   (CryptUIKeyset *keyset, 
-                                                             gboolean use_check);
+                                                             gboolean use_checks,
+                                                             const gchar *none_option);
 
 void                cryptui_key_store_check_toggled         (CryptUIKeyStore *ckstore, 
                                                              GtkTreeView *view, 

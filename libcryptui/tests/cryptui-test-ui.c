@@ -45,11 +45,11 @@ show_ui_dialog (CryptUIKeyset *keyset)
     gtk_container_set_border_width (box, 6);
     gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox), GTK_WIDGET (box));
 
-    list_store = cryptui_key_store_new (keyset, TRUE);
+    list_store = cryptui_key_store_new (keyset, TRUE, NULL);
     list = cryptui_key_list_new (list_store, CRYPTUI_KEY_LIST_CHECKS);
     gtk_container_add (box, GTK_WIDGET (list));
     
-    combo_store = cryptui_key_store_new (keyset, FALSE);
+    combo_store = cryptui_key_store_new (keyset, FALSE, "No Key Selected");
     combo = cryptui_key_combo_new (combo_store);
     gtk_container_add (box, GTK_WIDGET (combo));
     
@@ -64,17 +64,12 @@ int
 main (int argc, char **argv)
 {
     CryptUIKeyset *keyset;
-    GList *keys, *l;
     
     gtk_init(&argc, &argv);
     
     keyset = cryptui_keyset_new ("openpgp");
-    keys = cryptui_keyset_get_keys (keyset);
-    
-    for(l = keys; l; l = g_list_next (l)) 
-        g_print ("key: %s\n", (gchar*)l->data);
-    
     show_ui_dialog (keyset);
+    
     /* gtk_main(); */
     
     return 0;

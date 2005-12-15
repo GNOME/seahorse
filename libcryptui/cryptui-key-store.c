@@ -2,7 +2,6 @@
  * Seahorse
  *
  * Copyright (C) 2005 Nate Nielsen
- * Copyright (C) 2003 Jacob Perkins
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,7 +30,8 @@ enum {
     PROP_KEYSET,
     PROP_MODE,
     PROP_FILTER,
-    PROP_USE_CHECK,
+    PROP_USE_CHECKS,
+    PROP_NONE_OPTION
 };
 
 /* This should always match the list in cryptui-keystore.h */
@@ -41,10 +41,12 @@ static const GType col_types[] = {
     G_TYPE_BOOLEAN,
     G_TYPE_BOOLEAN,
     G_TYPE_STRING,
+    G_TYPE_BOOLEAN,
     G_TYPE_POINTER
 };
 
 struct _CryptUIKeyStorePriv {
+    gboolean                initialized;
     GHashTable              *rows;
     
     GtkTreeModelFilter      *filter;
@@ -54,7 +56,8 @@ struct _CryptUIKeyStorePriv {
     gchar                   *filter_text;
     guint                   filter_stag;
     
-    gboolean                use_check;
+    gboolean                use_checks;
+    gchar                   *none_option;
 };
 
 G_DEFINE_TYPE (CryptUIKeyStore, cryptui_key_store, GTK_TYPE_TREE_MODEL_SORT);
@@ -69,6 +72,12 @@ compare_pointers (gconstpointer a, gconstpointer b)
     if (a == b)
         return 0;
     return a > b ? 1 : -1;
+}
+
+gboolean    
+hashtable_remove_all (gpointer key, gpointer value, gpointer user_data)
+{
+    return TRUE;
 }
 
 /* Try to find our key store given a tree model */
@@ -114,7 +123,7 @@ key_store_set (CryptUIKeyStore *ckstore, const gchar *key, GtkTreeIter *iter)
     keyid = cryptui_keyset_key_display_id (ckstore->ckset, key);
     sec = cryptui_key_get_enctype (key) == CRYPTUI_ENCTYPE_PRIVATE;
     
-    gtk_tree_store_set (GTK_TREE_STORE (ckstore->priv->store), iter,
+    gtk_tree_store_set (ckstore->priv->store, iter,
                         CRYPTUI_KEY_STORE_CHECK, FALSE,
                         CRYPTUI_KEY_STORE_PAIR, sec,
                         CRYPTUI_KEY_STORE_STOCK_ID, NULL,
@@ -178,9 +187,32 @@ key_store_populate (CryptUIKeyStore *ckstore)
 {
     GList *keys, *l = NULL;
     
+    if (!ckstore->priv->initialized)
+        return;
+    
     /* Clear the store and then add all the keys */
     gtk_tree_store_clear (ckstore->priv->store);
+    g_hash_table_foreach_remove (ckstore->priv->rows, hashtable_remove_all, NULL);
     
+    /* Add the none option */
+    if (ckstore->priv->none_option) {
+        GtkTreeIter iter;
+        
+        /* Second row is a separator */
+        gtk_tree_store_prepend (ckstore->priv->store, &iter, NULL);
+        gtk_tree_store_set (ckstore->priv->store, &iter, 
+                        CRYPTUI_KEY_STORE_NAME, NULL,
+                        CRYPTUI_KEY_STORE_SEPARATOR, TRUE,
+                        -1);
+        
+        /* The first row is the none option */
+        gtk_tree_store_prepend (ckstore->priv->store, &iter, NULL);
+        gtk_tree_store_set (ckstore->priv->store, &iter,
+                        CRYPTUI_KEY_STORE_NAME, ckstore->priv->none_option,
+                        CRYPTUI_KEY_STORE_KEY, NULL, 
+                        -1);
+    }
+
     g_return_if_fail (CRYPTUI_IS_KEYSET (ckstore->ckset));
     keys = cryptui_keyset_get_keys (ckstore->ckset);
     
@@ -194,16 +226,22 @@ key_store_populate (CryptUIKeyStore *ckstore)
 
 /* Given a treeview iter, get the base store iterator */
 static void 
-key_store_get_base_iter (CryptUIKeyStore* ckstore, const GtkTreeIter* iter, 
-                         GtkTreeIter* base_iter)
+key_store_get_base_iter (CryptUIKeyStore *ckstore, const GtkTreeIter *iter, 
+                         GtkTreeIter *base_iter)
 {
     GtkTreeIter i;
-    
-    g_return_if_fail (CRYPTUI_IS_KEY_STORE (ckstore));
-    g_assert (ckstore->priv->store && ckstore->priv->filter);
-    
     gtk_tree_model_sort_convert_iter_to_child_iter (GTK_TREE_MODEL_SORT (ckstore), &i, (GtkTreeIter*)iter);
     gtk_tree_model_filter_convert_iter_to_child_iter (ckstore->priv->filter, base_iter, &i);
+}
+
+/* Given a base iter get the treeview iter */
+static void
+key_store_get_view_iter (CryptUIKeyStore *ckstore, const GtkTreeIter *base,
+                         GtkTreeIter *iter)
+{
+    GtkTreeIter i;
+    gtk_tree_model_filter_convert_child_iter_to_iter (ckstore->priv->filter, &i, (GtkTreeIter*)base);
+    gtk_tree_model_sort_convert_child_iter_to_iter (GTK_TREE_MODEL_SORT (ckstore), iter, &i);
 }
 
 /* Given an iterator find the associated key */
@@ -274,7 +312,7 @@ filter_callback (GtkTreeModel *model, GtkTreeIter *iter, CryptUIKeyStore *ckstor
         break;
         
     case CRYPTUI_KEY_STORE_MODE_SELECTED:
-        if (ckstore->priv->use_check)
+        if (ckstore->priv->use_checks)
             gtk_tree_model_get (model, iter, CRYPTUI_KEY_STORE_CHECK, &ret, -1); 
         break;
         
@@ -310,10 +348,40 @@ refilter_later (CryptUIKeyStore* ckstore)
     ckstore->priv->filter_stag = g_timeout_add (200, (GSourceFunc)refilter_now, ckstore);
 }
 
-gboolean    
-hashtable_remove_all (gpointer key, gpointer value, gpointer user_data)
+gint        
+sort_default_comparator (GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b,
+                         gpointer user_data)
 {
-    return TRUE;
+    const gchar *keya, *keyb;
+    gchar *namea, *nameb;
+    
+    /* By default we sort by:
+     *  - Presence of key pointer (to keep none-option at top)
+     *  - Name 
+     */
+    
+    gtk_tree_model_get (model, a, CRYPTUI_KEY_STORE_KEY, &keya, 
+                        CRYPTUI_KEY_STORE_NAME, &namea, -1);
+    gtk_tree_model_get (model, b, CRYPTUI_KEY_STORE_KEY, &keyb, 
+                        CRYPTUI_KEY_STORE_NAME, &nameb, -1);
+    
+    /* This somewhat strage set of checks keep the none-option,
+       separator, and keys in proper order */
+    if (!keya && keyb)
+        return -1;
+    else if (!keyb && keya)
+        return 1;
+    else if (!namea && nameb)
+        return 1;
+    else if (!nameb && namea)
+        return -1;
+    else if (!keya && !keyb)
+        return 0;
+    else if (!namea && !nameb)
+        return 0;
+
+    return g_utf8_collate (namea, nameb);
+    
 }
 
 /* -----------------------------------------------------------------------------
@@ -347,6 +415,10 @@ cryptui_key_store_constructor (GType type, guint n_props, GObjectConstructParam*
     /* Hookup to the current object */
     g_object_set (ckstore, "model", ckstore->priv->filter, NULL);
 
+    /* Default sort function */
+    gtk_tree_sortable_set_default_sort_func (GTK_TREE_SORTABLE (ckstore), sort_default_comparator, NULL, NULL);
+    
+    ckstore->priv->initialized = TRUE;
     key_store_populate (ckstore);
 
     return obj;
@@ -393,6 +465,7 @@ cryptui_key_store_finalize (GObject *gobject)
      
     /* Allocated in property setter */
     g_free (ckstore->priv->filter_text); 
+    g_free (ckstore->priv->none_option);
     
     g_free (ckstore->priv);
     
@@ -449,8 +522,14 @@ cryptui_key_store_set_property (GObject *gobject, guint prop_id,
         }
         break;
         
-    case PROP_USE_CHECK:
-        ckstore->priv->use_check = g_value_get_boolean (value);
+    case PROP_USE_CHECKS:
+        ckstore->priv->use_checks = g_value_get_boolean (value);
+        break;
+    
+    case PROP_NONE_OPTION:
+        g_free (ckstore->priv->none_option);
+        ckstore->priv->none_option = g_strdup (g_value_get_string (value));
+        key_store_populate (ckstore);
         break;
     
     default:
@@ -483,10 +562,14 @@ cryptui_key_store_get_property (GObject *gobject, guint prop_id,
             ckstore->priv->filter_mode == CRYPTUI_KEY_STORE_MODE_FILTERED ? ckstore->priv->filter_text : "");
         break;
     
-    case PROP_USE_CHECK:
-        g_value_set_boolean (value, ckstore->priv->use_check);
+    case PROP_USE_CHECKS:
+        g_value_set_boolean (value, ckstore->priv->use_checks);
         break;
-        
+    
+    case PROP_NONE_OPTION:
+        g_value_set_string (value, ckstore->priv->none_option);
+        break;
+    
     default:
         break;
     }
@@ -518,21 +601,25 @@ cryptui_key_store_class_init (CryptUIKeyStoreClass *klass)
         g_param_spec_string ("filter", "Key Store Filter", "Key store filter for when in filtered mode",
                              "", G_PARAM_READWRITE));
                              
-    g_object_class_install_property (gobject_class, PROP_USE_CHECK,
-        g_param_spec_boolean ("use-check", "Use check boxes", "Use check box column to denote selection",
+    g_object_class_install_property (gobject_class, PROP_USE_CHECKS,
+        g_param_spec_boolean ("use-checks", "Use check boxes", "Use check box column to denote selection",
                               FALSE, G_PARAM_READWRITE));
-                              
-}
 
+    g_object_class_install_property (gobject_class, PROP_NONE_OPTION,
+        g_param_spec_string ("none-option", "Option for 'No Selection'", "Text for row that denotes 'No Selection'",
+                              "", G_PARAM_READWRITE));
+}
 
 /* -----------------------------------------------------------------------------
  * PUBLIC 
  */
 
 CryptUIKeyStore*
-cryptui_key_store_new (CryptUIKeyset *keyset, gboolean use_check)
+cryptui_key_store_new (CryptUIKeyset *keyset, gboolean use_checks, 
+                       const gchar *none_option)
 {
-    GObject *obj = g_object_new (CRYPTUI_TYPE_KEY_STORE, "keyset", keyset, "use-check", use_check, NULL);
+    GObject *obj = g_object_new (CRYPTUI_TYPE_KEY_STORE, "keyset", keyset, 
+                                 "use-checks", use_checks, "none-option", none_option, NULL);
     return (CryptUIKeyStore*)obj;
 }
 
@@ -567,18 +654,31 @@ cryptui_key_store_get_iter_from_key (CryptUIKeyStore *ckstore, const gchar *key,
 {
     GtkTreeRowReference *ref;
     GtkTreePath *path;
+    GtkTreeIter base;
     gboolean ret = FALSE;
     
     g_return_val_if_fail (CRYPTUI_IS_KEY_STORE (ckstore), FALSE);
     g_return_val_if_fail (iter != NULL, FALSE);
     
-    /* TODO: When key is NULL return none_option if it exists */
+    if (key == NULL) {
+        /* The none option for NULL */
+        if (ckstore->priv->none_option) {
+            if (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (ckstore->priv->store), &base)) {
+                key_store_get_view_iter (ckstore, &base, iter);
+                return TRUE;
+            }
+        }
+        
+        return FALSE;
+    }
     
     ref = (GtkTreeRowReference*)g_hash_table_lookup (ckstore->priv->rows, key);
     path = gtk_tree_row_reference_get_path (ref);
     if (path) {
-        if (gtk_tree_model_get_iter (GTK_TREE_MODEL (ckstore->priv->store), iter, path))
+        if (gtk_tree_model_get_iter (GTK_TREE_MODEL (ckstore->priv->store), &base, path)) {
+            key_store_get_view_iter (ckstore, &base, iter);
             ret = TRUE;
+        }
         gtk_tree_path_free (path);
     }
     
@@ -588,14 +688,11 @@ cryptui_key_store_get_iter_from_key (CryptUIKeyStore *ckstore, const gchar *key,
 const gchar*
 cryptui_key_store_get_key_from_iter (CryptUIKeyStore *ckstore, GtkTreeIter *iter)
 {
-    const gchar *key;
-
     g_return_val_if_fail (CRYPTUI_IS_KEY_STORE (ckstore), FALSE);
     g_return_val_if_fail (iter != NULL, FALSE);
     
-    gtk_tree_model_get (GTK_TREE_MODEL (ckstore->priv->store), iter, 
-                        CRYPTUI_KEY_STORE_KEY, &key, -1);
-    return key;
+    /* The none option will automatically have NULL as it's key pointer */
+    return key_from_iterator (GTK_TREE_MODEL (ckstore), iter);
 }
 
 const gchar*
@@ -626,7 +723,7 @@ cryptui_key_store_get_selected_keys (CryptUIKeyStore *ckstore, GtkTreeView *view
     g_return_val_if_fail (CRYPTUI_IS_KEY_STORE (ckstore), NULL);
     g_return_val_if_fail (GTK_IS_TREE_VIEW (view), NULL);
     
-    if (ckstore->priv->use_check) {
+    if (ckstore->priv->use_checks) {
         GtkTreeModel* model = GTK_TREE_MODEL (ckstore);
         GtkTreeIter iter;
         gboolean check;
@@ -676,7 +773,7 @@ cryptui_key_store_get_selected_key (CryptUIKeyStore *ckstore, GtkTreeView *view)
     g_return_val_if_fail (CRYPTUI_IS_KEY_STORE (ckstore), NULL);
     g_return_val_if_fail (GTK_IS_TREE_VIEW (view), NULL);
     
-    if (ckstore->priv->use_check) {
+    if (ckstore->priv->use_checks) {
         GtkTreeModel* model = GTK_TREE_MODEL (ckstore->priv->store);
         GtkTreeIter iter;
         gboolean check;

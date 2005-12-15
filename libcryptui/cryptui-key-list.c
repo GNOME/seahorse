@@ -103,7 +103,7 @@ cryptui_key_list_setup (GtkTreeView *view, CryptUIKeyStore *ckstore,
         gtk_tree_view_column_set_resizable (col, FALSE);
         gtk_tree_view_append_column (view, col);
         
-        g_signal_connect (view, "row_activated", G_CALLBACK (row_activated), view);
+        g_signal_connect (view, "row_activated", G_CALLBACK (row_activated), ckstore);
         
         gtk_tree_selection_set_mode (sel, GTK_SELECTION_BROWSE);
         
