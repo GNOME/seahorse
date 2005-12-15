@@ -90,6 +90,26 @@ lookup_key_field (SeahorseKey *skey, guint uid, const gchar *field, GValue *valu
     return TRUE; 
 }
 
+void 
+add_key_source (SeahorseService *svc, GQuark ktype)
+{
+    const gchar *keytype = g_quark_to_string (ktype);
+    gchar *dbus_id;
+    
+    /* Check if we have a keyset for this key type, and add if not */
+    if (svc->keysets && !g_hash_table_lookup (svc->keysets, keytype)) {
+        SeahorseKeyset *keyset = seahorse_service_keyset_new (ktype);
+
+        /* Register it with DBUS */
+        dbus_id = g_strdup_printf (KEYSET_PATH, keytype);
+        dbus_g_connection_register_g_object (seahorse_dbus_server_get_connection (),
+                                             dbus_id, G_OBJECT (keyset));    
+        g_free (dbus_id);
+        
+        g_hash_table_replace (svc->keysets, g_strdup (keytype), keyset);
+    }
+}
+
 /* -----------------------------------------------------------------------------
  * PUBLIC METHODS 
  */ 
@@ -412,21 +432,7 @@ static void
 seahorse_service_added (SeahorseContext *sctx, SeahorseKey *skey, SeahorseService *svc)
 {
     GQuark ktype = seahorse_key_get_ktype (skey);
-    const gchar *keytype = g_quark_to_string (ktype);
-    gchar *dbus_id;
-    
-    /* Check if we have a keyset for this key type, and add if not */
-    if (svc->keysets && !g_hash_table_lookup (svc->keysets, keytype)) {
-        SeahorseKeyset *keyset = seahorse_service_keyset_new (ktype);
-                
-        /* Register it with DBUS */
-        dbus_id = g_strdup_printf (KEYSET_PATH, keytype);
-        dbus_g_connection_register_g_object (seahorse_dbus_server_get_connection (),
-                                             dbus_id, G_OBJECT (keyset));    
-        g_free (dbus_id);
-        
-        g_hash_table_replace (svc->keysets, g_strdup (keytype), keyset);
-    }
+    add_key_source (svc, ktype);
 }
 
 static void
@@ -434,7 +440,8 @@ seahorse_service_changed (SeahorseContext *sctx, SeahorseKey *skey,
                           SeahorseKeyChange change, SeahorseService *svc)
 {
     /* Do the same thing as when a key is added */
-    seahorse_service_added (sctx, skey, svc);
+    GQuark ktype = seahorse_key_get_ktype (skey);
+    add_key_source (svc, ktype);
 }
 
 /* -----------------------------------------------------------------------------
@@ -455,7 +462,7 @@ seahorse_service_dispose (GObject *gobject)
     
     G_OBJECT_CLASS (seahorse_service_parent_class)->dispose (gobject);
 }
-    
+
 static void
 seahorse_service_class_init (SeahorseServiceClass *klass)
 {
@@ -474,17 +481,17 @@ seahorse_service_class_init (SeahorseServiceClass *klass)
 static void
 seahorse_service_init (SeahorseService *svc)
 {
-    GList *keys, *l;
+    GSList *srcs, *l;
     
     /* We keep around a keyset for each keytype */
     svc->keysets = g_hash_table_new_full (g_str_hash, g_str_equal, 
                                           g_free, g_object_unref);
     
     /* Fill in keysets for any keys already in the context */
-    keys = seahorse_context_get_keys (SCTX_APP (), NULL);
-    for (l = keys; l; l = g_list_next (l)) 
-        seahorse_service_added (SCTX_APP (), SEAHORSE_KEY (l->data), svc);
-    g_list_free (keys);
+    srcs = seahorse_context_find_key_sources (SCTX_APP (), SKEY_UNKNOWN, SKEY_LOC_LOCAL);
+    for (l = srcs; l; l = g_slist_next (l)) 
+        add_key_source (svc, seahorse_key_source_get_ktype (SEAHORSE_KEY_SOURCE (l->data)));
+    g_slist_free (srcs);
     
     /* And now listen for new key types */
     g_signal_connect (SCTX_APP (), "added", G_CALLBACK (seahorse_service_added), svc);
