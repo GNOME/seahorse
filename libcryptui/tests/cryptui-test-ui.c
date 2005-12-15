@@ -27,6 +27,7 @@
 #include "cryptui-key-store.h"
 #include "cryptui-key-combo.h"
 #include "cryptui-key-list.h"
+#include "cryptui-key-chooser.h"
 
 static void
 show_ui_dialog (CryptUIKeyset *keyset)
@@ -60,6 +61,22 @@ show_ui_dialog (CryptUIKeyset *keyset)
     g_object_unref (list_store);
 }
 
+static void
+show_chooser_dialog (CryptUIKeyset *keyset)
+{
+    CryptUIKeyChooser *chooser;
+    GtkWidget *dialog;
+    
+    dialog = gtk_dialog_new_with_buttons ("CryptUI Test", NULL, GTK_DIALOG_MODAL, 
+                                          GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
+    
+    chooser = cryptui_key_chooser_new (keyset);
+    gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox), GTK_WIDGET (chooser));
+    
+    gtk_widget_show_all (dialog);
+    gtk_dialog_run (GTK_DIALOG (dialog));
+}
+
 int
 main (int argc, char **argv)
 {
@@ -68,9 +85,15 @@ main (int argc, char **argv)
     gtk_init(&argc, &argv);
     
     keyset = cryptui_keyset_new ("openpgp");
-    show_ui_dialog (keyset);
     
-    /* gtk_main(); */
-    
+    if (argc > 1) {
+        if (g_ascii_strcasecmp (argv[1], "plain")) {
+            show_ui_dialog (keyset);
+            return 0;
+        } 
+    }
+
+    /* The default */
+    show_chooser_dialog (keyset);
     return 0;
 }

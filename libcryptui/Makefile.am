@@ -22,6 +22,7 @@ libcryptui_la_SOURCES = \
 	cryptui-key-store.h cryptui-key-store.c \
 	cryptui-key-combo.h cryptui-key-combo.c \
 	cryptui-key-list.h cryptui-key-list.c \
+	cryptui-key-chooser.h cryptui-key-chooser.c \
 	$(BUILT_SOURCES)
 
 cryptui-marshal.h: cryptui-marshal.list $(GLIB_GENMARSHAL)
