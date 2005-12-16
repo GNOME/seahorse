@@ -5,6 +5,7 @@ pixmapsdir = $(datadir)/pixmaps/
 
 INCLUDES = -I$(top_builddir) \
 	-I$(top_srcdir) \
+	-I$(top_srcdir)/libcryptui \
 	-I$(top_srcdir)/libseahorse \
 	-I$(top_srcdir)/daemon \
 	$(SEAHORSE_CFLAGS) \

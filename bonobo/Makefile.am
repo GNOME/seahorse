@@ -2,6 +2,7 @@
 INCLUDES = \
 	-I$(top_builddir) \
 	-I$(top_srcdir) \
+	-I$(top_srcdir)/libcryptui \
 	-I$(top_srcdir)/libseahorse \
 	$(BONOBO_CFLAGS) \
 	-DDATA_DIR=\""$(datadir)"\"

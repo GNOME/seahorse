@@ -6,6 +6,7 @@ seahorselibexecbindir = $(libexecdir)/seahorse/
 
 INCLUDES = -I$(top_builddir) \
 	-I$(top_srcdir) \
+	-I$(top_srcdir)/libcryptui \
 	$(SEAHORSE_CFLAGS) \
 	-DDATA_DIR=\""$(datadir)"\" \
 	-DSEAHORSE_GLADEDIR=\""$(gladedir)"\" \

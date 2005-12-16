@@ -7,6 +7,7 @@ plugindir = $(libdir)/gedit-2/plugins
 
 INCLUDES = \
 	-I$(top_srcdir) \
+	-I$(top_srcdir)/libcryptui \
 	-I$(top_srcdir)/libseahorse \
 	$(SEAHORSE_CFLAGS) \
 	$(GEDIT_CFLAGS) 								\

@@ -56,6 +56,7 @@
 
 #include <gtk/gtk.h>
 
+#include "cryptui.h"
 #include "seahorse-validity.h"
 
 #define SKEY_UNKNOWN                    0
@@ -80,20 +81,20 @@ typedef enum {
 } SeahorseKeyInfo;
 
 typedef enum {
-    SKEY_INVALID,       /* An invalid key */
-    SKEY_SYMMETRIC,     /* A symmetric key */
-    SKEY_PUBLIC,        /* A public key */
-    SKEY_PRIVATE        /* A private key (assumes public/keypair)*/
+    SKEY_INVALID =          CRYPTUI_ENCTYPE_NONE,       /* An invalid key */
+    SKEY_SYMMETRIC =        CRYPTUI_ENCTYPE_SYMMETRIC,  /* A symmetric key */
+    SKEY_PUBLIC =           CRYPTUI_ENCTYPE_PUBLIC,     /* A public key */
+    SKEY_PRIVATE =          CRYPTUI_ENCTYPE_PRIVATE     /* A private key (assumes public/keypair)*/
 } SeahorseKeyEType;
 
 typedef enum {
-    SKEY_FLAG_IS_VALID = 0x0001,
-    SKEY_FLAG_CAN_ENCRYPT = 0x0002,
-    SKEY_FLAG_CAN_SIGN = 0x0004,
-    SKEY_FLAG_EXPIRED = 0x0010,
-    SKEY_FLAG_REVOKED = 0x0020,
-    SKEY_FLAG_DISABLED = 0x0040,
-    SKEY_FLAG_TRUSTED = 0x0100
+    SKEY_FLAG_IS_VALID =    CRYPTUI_FLAG_IS_VALID,
+    SKEY_FLAG_CAN_ENCRYPT = CRYPTUI_FLAG_CAN_ENCRYPT,
+    SKEY_FLAG_CAN_SIGN =    CRYPTUI_FLAG_CAN_SIGN,
+    SKEY_FLAG_EXPIRED =     CRYPTUI_FLAG_EXPIRED,
+    SKEY_FLAG_REVOKED =     CRYPTUI_FLAG_REVOKED,
+    SKEY_FLAG_DISABLED =    CRYPTUI_FLAG_DISABLED,
+    SKEY_FLAG_TRUSTED =     CRYPTUI_FLAG_TRUSTED
 } SeahorseKeyFlags;
 
 /* Possible key changes */

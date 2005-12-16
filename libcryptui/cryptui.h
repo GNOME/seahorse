@@ -24,7 +24,7 @@
 
 #include <glib.h>
 
-typedef enum _CryptUIEncType {
+typedef enum {
     CRYPTUI_ENCTYPE_NONE,
     CRYPTUI_ENCTYPE_SYMMETRIC,
     CRYPTUI_ENCTYPE_PUBLIC,
@@ -34,12 +34,23 @@ typedef enum _CryptUIEncType {
     _CRYPTUI_ENCTYPE_MAXVALUE
 } CryptUIEncType;
 
+typedef enum {
+    CRYPTUI_FLAG_IS_VALID = 0x0001,
+    CRYPTUI_FLAG_CAN_ENCRYPT = 0x0002,
+    CRYPTUI_FLAG_CAN_SIGN = 0x0004,
+    CRYPTUI_FLAG_EXPIRED = 0x0010,
+    CRYPTUI_FLAG_REVOKED = 0x0020,
+    CRYPTUI_FLAG_DISABLED = 0x0040,
+    CRYPTUI_FLAG_TRUSTED = 0x0100
+} CryptUIKeyFlags;
+
 /* 
  * Key Properties:
  * 
  * display-name: G_TYPE_STRING
  * display-id:   G_TYPE_STRING 
  * enc-type:     G_TYPE_UINT (CryptUIEncType)
+ * 
  * 
  * TODO: Flesh this list out 
  */

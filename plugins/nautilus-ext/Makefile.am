@@ -1,6 +1,7 @@
 
 INCLUDES = -I$(top_builddir) 	\
 	-I$(top_srcdir) 			\
+	-I$(top_srcdir)/libcryptui  \
 	-I$(top_srcdir)/libseahorse \
 	$(NAUTILUS_CFLAGS) 			\
 	-DGNOMELOCALEDIR=\""$(datadir)/locale"\"
