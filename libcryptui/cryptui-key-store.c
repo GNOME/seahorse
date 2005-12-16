@@ -29,7 +29,7 @@ enum {
     PROP_0,
     PROP_KEYSET,
     PROP_MODE,
-    PROP_FILTER,
+    PROP_SEARCH,
     PROP_USE_CHECKS,
     PROP_NONE_OPTION
 };
@@ -46,18 +46,23 @@ static const GType col_types[] = {
 };
 
 struct _CryptUIKeyStorePriv {
-    gboolean                initialized;
-    GHashTable              *rows;
+    gboolean                    initialized;
     
-    GtkTreeModelFilter      *filter;
-    GtkTreeStore            *store;
+    GHashTable                  *rows;
+    GtkTreeModelFilter          *filter;
+    GtkTreeStore                *store;
     
-    CryptUIKeyStoreMode     filter_mode;
-    gchar                   *filter_text;
-    guint                   filter_stag;
+    /* For text searches */
+    CryptUIKeyStoreMode         filter_mode;
+    gchar                       *search_text;
+    guint                       filter_stag;
     
-    gboolean                use_checks;
-    gchar                   *none_option;
+    /* Custom filtering */
+    CryptUIKeyStoreFilterFunc   filter_func;
+    gpointer                    filter_data;
+    
+    gboolean                    use_checks;
+    gchar                       *none_option;
 };
 
 G_DEFINE_TYPE (CryptUIKeyStore, cryptui_key_store, GTK_TYPE_TREE_MODEL_SORT);
@@ -303,30 +308,41 @@ row_contains_filtered_text (GtkTreeModel* model, GtkTreeIter* iter, const gchar*
 static gboolean 
 filter_callback (GtkTreeModel *model, GtkTreeIter *iter, CryptUIKeyStore *ckstore)
 {
+    const gchar *key = NULL;
     gboolean ret = FALSE;
     
-    /* Check the row requested */
+    /* Special rows (such as the none-option, separators) are always visible */
+    gtk_tree_model_get (model, iter, CRYPTUI_KEY_STORE_KEY, &key, -1);
+    if (!key)
+        return TRUE;
+    
+    /* First the custom filter */
+    if (ckstore->priv->filter_func)
+        if (!(ckstore->priv->filter_func) (ckstore->ckset, key, ckstore->priv->filter_data))
+            return FALSE;
+    
     switch (ckstore->priv->filter_mode) {
-    case CRYPTUI_KEY_STORE_MODE_FILTERED:
-        ret = row_contains_filtered_text (model, iter, ckstore->priv->filter_text);
-        break;
         
+    /* Search for specified text */
+    case CRYPTUI_KEY_STORE_MODE_RESULTS:
+        return row_contains_filtered_text (model, iter, ckstore->priv->search_text);
+        
+    /* Anything checked off */
     case CRYPTUI_KEY_STORE_MODE_SELECTED:
         if (ckstore->priv->use_checks)
             gtk_tree_model_get (model, iter, CRYPTUI_KEY_STORE_CHECK, &ret, -1); 
-        break;
+        else
+            ret = TRUE;
+        return ret;
         
+    /* And all the keys */
     case CRYPTUI_KEY_STORE_MODE_ALL:
-        ret = TRUE;
-        break;
+        return TRUE;
         
     default:
         g_assert_not_reached ();
-        break;
+        return FALSE;
     };
-
-    /* Note that we never have children, no need to filter them */
-    return ret;        
 }
 
 /* Refilter the tree */
@@ -464,7 +480,7 @@ cryptui_key_store_finalize (GObject *gobject)
     g_hash_table_destroy (ckstore->priv->rows);
      
     /* Allocated in property setter */
-    g_free (ckstore->priv->filter_text); 
+    g_free (ckstore->priv->search_text); 
     g_free (ckstore->priv->none_option);
     
     g_free (ckstore->priv);
@@ -476,10 +492,7 @@ static void
 cryptui_key_store_set_property (GObject *gobject, guint prop_id,
                                 const GValue *value, GParamSpec *pspec)
 {
-    CryptUIKeyStore *ckstore;
-    const gchar* t;
-
-    ckstore = CRYPTUI_KEY_STORE (gobject);
+    CryptUIKeyStore *ckstore = CRYPTUI_KEY_STORE (gobject);
     
     switch (prop_id) {
     case PROP_KEYSET:
@@ -496,32 +509,14 @@ cryptui_key_store_set_property (GObject *gobject, guint prop_id,
         
     /* The filtering mode */
     case PROP_MODE:
-        if (ckstore->priv->filter_mode != g_value_get_uint (value)) {
-            ckstore->priv->filter_mode = g_value_get_uint (value);
-            refilter_later (ckstore);
-        }
+        cryptui_key_store_set_search_mode (ckstore, g_value_get_uint (value));
         break;
         
-    /* The filter text */
-    case PROP_FILTER:
-        t = g_value_get_string (value);
-        
-        /* 
-         * If we're not in filtered mode and there is text OR
-         * we're in filtered mode (regardless of text or not)
-         * then update the filter
-         */
-        if ((ckstore->priv->filter_mode != CRYPTUI_KEY_STORE_MODE_FILTERED && t && t[0]) ||
-            (ckstore->priv->filter_mode == CRYPTUI_KEY_STORE_MODE_FILTERED)) {
-            ckstore->priv->filter_mode = CRYPTUI_KEY_STORE_MODE_FILTERED;
-            g_free (ckstore->priv->filter_text);
-                
-            /* We always use lower case text (see filter_callback) */
-            ckstore->priv->filter_text = g_utf8_strdown (t, -1);
-            refilter_later (ckstore);
-        }
-        break;
-        
+    /* The search text */
+    case PROP_SEARCH:
+        cryptui_key_store_set_search_text (ckstore, g_value_get_string (value));
+        break; 
+    
     case PROP_USE_CHECKS:
         ckstore->priv->use_checks = g_value_get_boolean (value);
         break;
@@ -555,11 +550,11 @@ cryptui_key_store_get_property (GObject *gobject, guint prop_id,
         g_value_set_uint (value, ckstore->priv->filter_mode);
         break;
     
-    /* The filter text. Note that we act as if we don't have any 
+    /* The search text. Note that we act as if we don't have any 
      * filter text when not in filtering mode */
-    case PROP_FILTER:
+    case PROP_SEARCH:
         g_value_set_string (value, 
-            ckstore->priv->filter_mode == CRYPTUI_KEY_STORE_MODE_FILTERED ? ckstore->priv->filter_text : "");
+            ckstore->priv->filter_mode == CRYPTUI_KEY_STORE_MODE_RESULTS ? ckstore->priv->search_text : "");
         break;
     
     case PROP_USE_CHECKS:
@@ -595,10 +590,10 @@ cryptui_key_store_class_init (CryptUIKeyStoreClass *klass)
                     
     g_object_class_install_property (gobject_class, PROP_MODE,
         g_param_spec_uint ("mode", "Key Store Mode", "Key store mode controls which keys to display",
-                           0, CRYPTUI_KEY_STORE_MODE_FILTERED, CRYPTUI_KEY_STORE_MODE_ALL, G_PARAM_READWRITE));
+                           0, CRYPTUI_KEY_STORE_MODE_RESULTS, CRYPTUI_KEY_STORE_MODE_ALL, G_PARAM_READWRITE));
 
-    g_object_class_install_property (gobject_class, PROP_FILTER,
-        g_param_spec_string ("filter", "Key Store Filter", "Key store filter for when in filtered mode",
+    g_object_class_install_property (gobject_class, PROP_SEARCH,
+        g_param_spec_string ("search", "Search text", "Key store search text for when in results mode",
                              "", G_PARAM_READWRITE));
                              
     g_object_class_install_property (gobject_class, PROP_USE_CHECKS,
@@ -765,6 +760,51 @@ cryptui_key_store_get_selected_keys (CryptUIKeyStore *ckstore, GtkTreeView *view
     return keys;
 }
 
+void
+cryptui_key_store_set_selected_keys (CryptUIKeyStore *ckstore, GtkTreeView *view,
+                                    GList *keys)
+{
+    GtkTreeModel* model = GTK_TREE_MODEL (ckstore->priv->store);
+    GtkTreeSelection *sel;
+    GHashTable *keyset;
+    GtkTreeIter iter;
+    const gchar *key;
+    gboolean have;
+    
+    g_return_if_fail (CRYPTUI_IS_KEY_STORE (ckstore));
+    g_return_if_fail (GTK_IS_TREE_VIEW (view));
+    
+    sel = gtk_tree_view_get_selection (view);
+    
+    /* A quick lookup table for the keys */
+    keyset = g_hash_table_new (g_str_hash, g_str_equal);
+    for (; keys; keys = g_list_next (keys)) 
+        g_hash_table_insert (keyset, keys->data, GINT_TO_POINTER (TRUE));
+
+    /* Go through all rows and select deselect as necessary */
+    if (gtk_tree_model_get_iter_first (model, &iter)) {
+        do {
+            
+            /* Is this row in our selection? */
+            gtk_tree_model_get (model, &iter, CRYPTUI_KEY_STORE_KEY, &key, -1);
+            have = (key && g_hash_table_lookup (keyset, key) != NULL) ? TRUE : FALSE;
+            
+            /* Using checks so change data store */
+            if (ckstore->priv->use_checks)
+                gtk_tree_store_set (ckstore->priv->store, &iter, CRYPTUI_KEY_STORE_CHECK, have, -1);
+                
+            /* Using normal selection */
+            else if (have)
+                gtk_tree_selection_select_iter (sel, &iter);
+            else
+                gtk_tree_selection_unselect_iter (sel, &iter);
+            
+        } while (gtk_tree_model_iter_next (model, &iter));
+    }
+    
+    g_hash_table_destroy (keyset);
+}
+
 const gchar*
 cryptui_key_store_get_selected_key (CryptUIKeyStore *ckstore, GtkTreeView *view)
 {
@@ -808,4 +848,79 @@ cryptui_key_store_get_selected_key (CryptUIKeyStore *ckstore, GtkTreeView *view)
     }
     
     return key;
+}
+
+void
+cryptui_key_store_set_selected_key (CryptUIKeyStore *ckstore, GtkTreeView *view,
+                                    const gchar *selkey)
+{
+    GtkTreeModel* model = GTK_TREE_MODEL (ckstore->priv->store);
+    GtkTreeSelection *sel;
+    GtkTreeIter iter;
+    const gchar *key;
+    gboolean have;
+    
+    g_return_if_fail (CRYPTUI_IS_KEY_STORE (ckstore));
+    g_return_if_fail (GTK_IS_TREE_VIEW (view));
+    
+    sel = gtk_tree_view_get_selection (view);
+    
+    /* Go through all rows and select deselect as necessary */
+    if (gtk_tree_model_get_iter_first (model, &iter)) {
+        do {
+            
+            /* Is this row in our selection? */
+            gtk_tree_model_get (model, &iter, CRYPTUI_KEY_STORE_KEY, &key, -1);
+            have = (key && strcmp (selkey, key) == 0) ? TRUE : FALSE;
+            
+            /* Using checks so change data store */
+            if (ckstore->priv->use_checks)
+                gtk_tree_store_set (ckstore->priv->store, &iter, CRYPTUI_KEY_STORE_CHECK, have, -1);
+                
+            /* Using normal selection */
+            else if (have)
+                gtk_tree_selection_select_iter (sel, &iter);
+            else
+                gtk_tree_selection_unselect_iter (sel, &iter);
+            
+        } while (gtk_tree_model_iter_next (model, &iter));
+    }
+}
+
+void
+cryptui_key_store_set_search_mode (CryptUIKeyStore *ckstore, CryptUIKeyStoreMode mode)
+{
+    if (ckstore->priv->filter_mode != mode) {
+        ckstore->priv->filter_mode = mode;
+        refilter_later (ckstore);
+    }
+}
+
+void
+cryptui_key_store_set_search_text (CryptUIKeyStore *ckstore, const gchar *search_text)
+{
+    /* 
+     * If we're not in filtered mode and there is text OR
+     * we're in results mode (regardless of text or not)
+     * then update the results
+     */
+    if ((ckstore->priv->filter_mode != CRYPTUI_KEY_STORE_MODE_RESULTS && 
+         search_text && search_text[0]) ||
+        (ckstore->priv->filter_mode == CRYPTUI_KEY_STORE_MODE_RESULTS)) {
+        ckstore->priv->filter_mode = CRYPTUI_KEY_STORE_MODE_RESULTS;
+        g_free (ckstore->priv->search_text);
+            
+        /* We always use lower case text (see filter_callback) */
+        ckstore->priv->search_text = g_utf8_strdown (search_text, -1);
+        refilter_later (ckstore);
+    }
+}
+
+void
+cryptui_key_store_set_filter (CryptUIKeyStore *ckstore, CryptUIKeyStoreFilterFunc func,
+                              gpointer user_data)
+{
+    ckstore->priv->filter_func = func;
+    ckstore->priv->filter_data = user_data;
+    refilter_later (ckstore);
 }

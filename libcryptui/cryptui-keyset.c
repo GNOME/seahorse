@@ -45,6 +45,7 @@ static const gchar* cached_key_props[] = {
     "display-name",
     "display-id",
     "enc-type", 
+    "flags",
     NULL
 };
 
@@ -506,6 +507,30 @@ cryptui_keyset_key_get_string (CryptUIKeyset *keyset, const gchar *key,
     return str;
 }
 
+guint
+cryptui_keyset_key_get_uint (CryptUIKeyset *keyset, const gchar *key,
+                             const gchar *prop)
+{
+    GValue *value;
+    gboolean allocated;
+    guint val;
+    
+    value = lookup_key_property (keyset, key, prop, &allocated);
+    if (!value)
+        return 0;
+        
+    g_return_val_if_fail (G_VALUE_TYPE (value) == G_TYPE_UINT, 0);
+    val = g_value_get_uint (value);
+    
+    if (allocated) {
+        g_value_unset (value);
+        g_free (value);
+    }
+    
+    return val;
+}
+
+
 gchar*
 cryptui_keyset_key_display_name (CryptUIKeyset *keyset, const gchar *key)
 {
@@ -516,4 +541,10 @@ gchar*
 cryptui_keyset_key_display_id (CryptUIKeyset *keyset, const gchar *key)
 {
     return cryptui_keyset_key_get_string (keyset, key, "display-id");
+}
+
+guint
+cryptui_keyset_key_flags (CryptUIKeyset *keyset, const gchar *key)
+{
+    return cryptui_keyset_key_get_uint (keyset, key, "flags");
 }

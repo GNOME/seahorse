@@ -31,6 +31,7 @@ main (int argc, char **argv)
     GList *keys, *l;
     gboolean cache = FALSE;
     gchar *name;
+    guint flags;
     
     gtk_init(&argc, &argv);
 
@@ -54,6 +55,9 @@ main (int argc, char **argv)
         name = cryptui_keyset_key_display_id (keyset, (gchar*)l->data);
         g_print ("     id: %s\n", name);
         g_free (name);
+        
+        flags = cryptui_keyset_key_flags (keyset, (gchar*)l->data);
+        g_print ("     flags: %d\n", flags);
     }
 
     /* gtk_main(); */

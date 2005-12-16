@@ -86,12 +86,19 @@ gchar*              cryptui_keyset_key_get_string     (CryptUIKeyset *keyset,
                                                        const gchar *key, 
                                                        const gchar *prop);
 
+guint               cryptui_keyset_key_get_uint       (CryptUIKeyset *keyset, 
+                                                       const gchar *key,
+                                                       const gchar *prop);
+
+guint               cryptui_keyset_key_flags          (CryptUIKeyset *keyset, 
+                                                       const gchar *key);
+
 gchar*              cryptui_keyset_key_display_name   (CryptUIKeyset *keyset, 
                                                        const gchar *key);
 
 gchar*              cryptui_keyset_key_display_id     (CryptUIKeyset *keyset, 
                                                        const gchar *key);
 
-/* TODO: A way to change the key properties cached */
+/* TODO: A way to change the key properties ve cache */
 
 #endif /* __CRYPTUI_KEYSET_H__ */

@@ -37,12 +37,6 @@ typedef struct _CryptUIKeyStore CryptUIKeyStore;
 typedef struct _CryptUIKeyStorePriv CryptUIKeyStorePriv;
 typedef struct _CryptUIKeyStoreClass CryptUIKeyStoreClass;
 
-typedef enum _CryptUIKeyStoreMode {
-    CRYPTUI_KEY_STORE_MODE_ALL,
-    CRYPTUI_KEY_STORE_MODE_SELECTED,
-    CRYPTUI_KEY_STORE_MODE_FILTERED
-} CryptUIKeyStoreMode;
-
 struct _CryptUIKeyStore {
     GtkTreeModelSort       parent;
  
@@ -56,6 +50,16 @@ struct _CryptUIKeyStore {
 struct _CryptUIKeyStoreClass {
     GtkTreeModelSortClass       parent_class;
 };
+
+typedef enum _CryptUIKeyStoreMode {
+    CRYPTUI_KEY_STORE_MODE_ALL,
+    CRYPTUI_KEY_STORE_MODE_SELECTED,
+    CRYPTUI_KEY_STORE_MODE_RESULTS
+} CryptUIKeyStoreMode;
+
+/* For custom filters */
+typedef gboolean (*CryptUIKeyStoreFilterFunc) (CryptUIKeyset *ckset, const gchar *key, 
+                                               gpointer user_data);
 
 /* This should always match the list in cryptui-keystore.c */
 enum {
@@ -99,7 +103,25 @@ GList*              cryptui_key_store_get_all_keys          (CryptUIKeyStore *ck
 GList*              cryptui_key_store_get_selected_keys     (CryptUIKeyStore *ckstore, 
                                                              GtkTreeView *view);
 
+void                cryptui_key_store_set_selected_keys     (CryptUIKeyStore *ckstore, 
+                                                             GtkTreeView *view,
+                                                             GList *keys);
+
 const gchar*        cryptui_key_store_get_selected_key      (CryptUIKeyStore *ckstore, 
                                                              GtkTreeView *view);
+
+void                cryptui_key_store_set_selected_key      (CryptUIKeyStore *ckstore, 
+                                                             GtkTreeView *view,
+                                                             const gchar *key);
+                                                             
+void                cryptui_key_store_set_search_mode       (CryptUIKeyStore *ckstore,
+                                                             CryptUIKeyStoreMode mode);
+
+void                cryptui_key_store_set_search_text       (CryptUIKeyStore *ckstore,
+                                                             const gchar *search_text);
+                                                             
+void                cryptui_key_store_set_filter            (CryptUIKeyStore *ckstore,
+                                                             CryptUIKeyStoreFilterFunc func,
+                                                             gpointer user_data);
 
 #endif /* __CRYPTUI_KEY_STORE_H__ */

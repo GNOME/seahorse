@@ -131,6 +131,17 @@ cryptui_key_list_get_selected_keys (GtkTreeView *view)
     return cryptui_key_store_get_selected_keys (CRYPTUI_KEY_STORE (model), view);
 }
 
+void
+cryptui_key_list_set_selected_keys (GtkTreeView *view, GList *keys)
+{
+    GtkTreeModel *model;
+    
+    model = gtk_tree_view_get_model (view);
+    g_return_if_fail (CRYPTUI_IS_KEY_STORE (model));
+    
+    cryptui_key_store_set_selected_keys (CRYPTUI_KEY_STORE (model), view, keys);
+}
+
 const gchar*
 cryptui_key_list_get_selected_key (GtkTreeView *view)
 {
@@ -140,4 +151,15 @@ cryptui_key_list_get_selected_key (GtkTreeView *view)
     g_return_val_if_fail (CRYPTUI_IS_KEY_STORE (model), NULL);
     
     return cryptui_key_store_get_selected_key (CRYPTUI_KEY_STORE (model), view);
+}
+
+void
+cryptui_key_list_set_selected_key (GtkTreeView *view, const gchar *key)
+{
+    GtkTreeModel *model;
+    
+    model = gtk_tree_view_get_model (view);
+    g_return_if_fail (CRYPTUI_IS_KEY_STORE (model));
+    
+    cryptui_key_store_set_selected_key (CRYPTUI_KEY_STORE (model), view, key);
 }

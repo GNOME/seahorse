@@ -44,23 +44,41 @@ G_DEFINE_TYPE (CryptUIKeyChooser, cryptui_key_chooser, GTK_TYPE_VBOX);
  * INTERNAL
  */
 
+static gboolean 
+recipients_filter (CryptUIKeyset *ckset, const gchar *key, gpointer user_data)
+{
+    guint flags = cryptui_keyset_key_flags (ckset, key);
+    return flags & CRYPTUI_FLAG_CAN_ENCRYPT;
+}
+
+static gboolean 
+signer_filter (CryptUIKeyset *ckset, const gchar *key, gpointer user_data)
+{
+    guint flags = cryptui_keyset_key_flags (ckset, key);
+    return flags & CRYPTUI_FLAG_CAN_SIGN;
+}
+
 static void
-construct_recipients (CryptUIKeyChooser *chooser, GtkContainer *box)
+construct_recipients (CryptUIKeyChooser *chooser, GtkBox *box)
 {
     CryptUIKeyStore *ckstore;
     
-    /* TODO: The key filter widgets need to be implemented */
+    /* TODO: The key search widgets need to be implemented */
     /* TODO: Labels need to be added where appropriate */
     /* TODO: HIG and beautification */
     
     ckstore = cryptui_key_store_new (chooser->priv->ckset, TRUE, NULL);
+    cryptui_key_store_set_filter (ckstore, recipients_filter, NULL);
     chooser->priv->keylist = cryptui_key_list_new (ckstore, CRYPTUI_KEY_LIST_CHECKS);
     g_object_unref (ckstore);
-    gtk_container_add (box, GTK_WIDGET (chooser->priv->keylist));
+    
+    gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (chooser->priv->keylist));
+    gtk_box_set_child_packing (box, GTK_WIDGET (chooser->priv->keylist), TRUE, 
+                               TRUE, 0, GTK_PACK_START);
 }
 
 static void
-construct_signer (CryptUIKeyChooser *chooser, GtkContainer *box)
+construct_signer (CryptUIKeyChooser *chooser, GtkBox *box)
 {
     CryptUIKeyStore *ckstore;
     
@@ -72,9 +90,13 @@ construct_signer (CryptUIKeyChooser *chooser, GtkContainer *box)
 
     /* TODO: i18n */
     ckstore = cryptui_key_store_new (chooser->priv->ckset, TRUE, "None (Don't Sign)");
+    cryptui_key_store_set_filter (ckstore, signer_filter, NULL);
     chooser->priv->keycombo = cryptui_key_combo_new (ckstore);
     g_object_unref (ckstore);
-    gtk_container_add (box, GTK_WIDGET (chooser->priv->keycombo));
+    
+    gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (chooser->priv->keycombo));
+    gtk_box_set_child_packing (box, GTK_WIDGET (chooser->priv->keycombo), FALSE, 
+                               TRUE, 0, GTK_PACK_START);
 }
 
 /* -----------------------------------------------------------------------------
@@ -99,8 +121,8 @@ cryptui_key_chooser_constructor (GType type, guint n_props, GObjectConstructPara
     gtk_container_set_border_width (GTK_CONTAINER (obj), 6);
     
     /* Add the various objects now */
-    construct_recipients (chooser, GTK_CONTAINER (obj));
-    construct_signer (chooser, GTK_CONTAINER (obj));
+    construct_recipients (chooser, GTK_BOX (obj));
+    construct_signer (chooser, GTK_BOX (obj));
     
     /* TODO: Fill in the default selection */
 
@@ -198,3 +220,26 @@ cryptui_key_chooser_new (CryptUIKeyset *ckset)
     return CRYPTUI_KEY_CHOOSER (obj);
 }
 
+GList*
+cryptui_key_chooser_get_recipients (CryptUIKeyChooser *chooser)
+{
+    return cryptui_key_list_get_selected_keys (chooser->priv->keylist);
+}
+
+void                
+cryptui_key_chooser_set_recipients (CryptUIKeyChooser *chooser, GList *keys)
+{
+    return cryptui_key_list_set_selected_keys (chooser->priv->keylist, keys);
+}
+
+const gchar*        
+cryptui_key_chooser_get_signer (CryptUIKeyChooser *chooser)
+{
+    return cryptui_key_combo_get_key (chooser->priv->keycombo);
+}
+
+void                
+cryptui_key_chooser_set_signer (CryptUIKeyChooser *chooser, const gchar *key)
+{
+    return cryptui_key_combo_set_key (chooser->priv->keycombo, key);
+}

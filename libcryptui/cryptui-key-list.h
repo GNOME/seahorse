@@ -47,8 +47,12 @@ void              cryptui_key_list_setup                (GtkTreeView *view,
 
 GList*            cryptui_key_list_get_selected_keys    (GtkTreeView *view);
 
+void              cryptui_key_list_set_selected_keys    (GtkTreeView *view, 
+                                                         GList *keys);
+
 const gchar*      cryptui_key_list_get_selected_key     (GtkTreeView *view);
 
-/* TODO: Methods for changing the selection */
+void              cryptui_key_list_set_selected_key     (GtkTreeView *view, 
+                                                         const gchar *key);
 
 #endif /* __CRYPTUI_KEY_LIST_H__ */
