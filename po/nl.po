@@ -22,8 +22,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Seahorse Gnome2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-03 20:12+0000\n"
-"PO-Revision-Date: 2005-07-04 03:59+0200\n"
+"POT-Creation-Date: 2005-12-19 20:22+0100\n"
+"PO-Revision-Date: 2005-12-19 20:50+0100\n"
 "Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
@@ -119,15 +119,6 @@ msgstr "Tekst"
 #: ../agent/gtk-secure-entry.c:535
 msgid "The contents of the entry"
 msgstr "De inhoud van het veld"
-
-#: ../agent/gtk-secure-entry.c:692
-msgid "Select on focus"
-msgstr "Selecteren bij aandacht"
-
-#: ../agent/gtk-secure-entry.c:694
-msgid "Whether to select the contents of an entry when it is focused"
-msgstr ""
-"Of de inhoud van een veld moet worden geselecteerd als het aandacht krijgt"
 
 #: ../agent/seahorse-agent-actions.c:94
 #: ../src/seahorse-generate-druid.glade.h:27
@@ -267,7 +258,7 @@ msgid "Encrypt and sign operations on files"
 msgstr "Bestanden versleutelen & signeren"
 
 #: ../bonobo/Seahorse_PGP_File_Listener.server.in.in.h:4
-#: ../plugins/nautilus-ext/seahorse-nautilus.c:148
+#: ../plugins/nautilus-ext/seahorse-nautilus.c:149
 msgid "Encrypt..."
 msgstr "Versleutelen..."
 
@@ -296,7 +287,7 @@ msgid "Seahorse PGP verify operation"
 msgstr "Seahorse PGP verifiëringsbewerking"
 
 #: ../bonobo/Seahorse_PGP_File_Listener.server.in.in.h:11
-#: ../plugins/nautilus-ext/seahorse-nautilus.c:155
+#: ../plugins/nautilus-ext/seahorse-nautilus.c:156
 msgid "Sign"
 msgstr "Ondertekenen"
 
@@ -538,44 +529,61 @@ msgstr "De poort waardoor de server kan worden bereikt."
 msgid "initial temp item"
 msgstr "aanvankelijke tijdelijke item"
 
-#: ../libseahorse/seahorse-hkp-source.c:182
-#: ../libseahorse/seahorse-ldap-source.c:376
+#: ../libseahorse/seahorse-hkp-source.c:278
 #, c-format
-msgid "Couldn't communicate with '%s': %s"
-msgstr "Kon niet communiceren met '%s': %s"
+msgid "No matching keys found on server '%s'."
+msgstr "Geen passende sleutels gevonden op server '%s'."
 
-#: ../libseahorse/seahorse-hkp-source.c:443
+#: ../libseahorse/seahorse-hkp-source.c:280
+#, c-format
+msgid "Search was not specific enough. Server '%s' found too many keys."
+msgstr "Zoekopdracht was niet specifiek genoeg. Server '%s' heeft teveel sleutels gevonden."
+
+#: ../libseahorse/seahorse-hkp-source.c:282
+#, c-format
+msgid "Couldn't communicate with server '%s': %s"
+msgstr "Kon niet communiceren met server '%s': %s"
+
+#: ../libseahorse/seahorse-hkp-source.c:484
 msgid "Searching for keys..."
 msgstr "Zoeken naar sleutels..."
 
-#: ../libseahorse/seahorse-hkp-source.c:515
-#: ../libseahorse/seahorse-hkp-source.c:564
+#: ../libseahorse/seahorse-hkp-source.c:556
 msgid "Uploading keys..."
 msgstr "Sleutels uploaden..."
 
-#: ../libseahorse/seahorse-hkp-source.c:680
+#: ../libseahorse/seahorse-hkp-source.c:608
+msgid "Retrieving keys..."
+msgstr "Ophalen van sleutels..."
+
+#: ../libseahorse/seahorse-hkp-source.c:724
 #, c-format
 msgid "Searching for keys on: %s"
 msgstr "Zoeken naar sleutels op: \"%s\""
 
-#: ../libseahorse/seahorse-hkp-source.c:754
-#: ../libseahorse/seahorse-hkp-source.c:828
+#: ../libseahorse/seahorse-hkp-source.c:798
+#: ../libseahorse/seahorse-hkp-source.c:872
 #: ../libseahorse/seahorse-ldap-source.c:553
 #, c-format
 msgid "Connecting to: %s"
 msgstr "Verbinden met: %s"
 
 #. Make the column
-#: ../libseahorse/seahorse-key-store.c:780
+#: ../libseahorse/seahorse-key-store.c:781
 #: ../src/seahorse-key-properties.c:401 ../src/seahorse-key-properties.c:495
 msgid "Name"
 msgstr "Naam"
 
 #. Make the column
-#: ../libseahorse/seahorse-key-store.c:783
+#: ../libseahorse/seahorse-key-store.c:784
 #: ../src/seahorse-key-properties.c:398
 msgid "Key ID"
 msgstr "Sleutel-ID"
+
+#: ../libseahorse/seahorse-ldap-source.c:376
+#, c-format
+msgid "Couldn't communicate with '%s': %s"
+msgstr "Kon niet communiceren met '%s': %s"
 
 #: ../libseahorse/seahorse-ldap-source.c:726
 #, c-format
@@ -587,11 +595,11 @@ msgstr "Zoeken naar sleutels die '%s' bevatten..."
 msgid "Searching for key id '%s'..."
 msgstr "Zoeken naar sleutel-id '%s'..."
 
-#: ../libseahorse/seahorse-ldap-source.c:847
+#: ../libseahorse/seahorse-ldap-source.c:850
 msgid "Retrieving remote keys..."
 msgstr "Ophalen van sleutels op afstand..."
 
-#: ../libseahorse/seahorse-ldap-source.c:991
+#: ../libseahorse/seahorse-ldap-source.c:994
 msgid "Sending keys to key server..."
 msgstr "Sleutels verzenden naar sleutelserver..."
 
@@ -771,7 +779,7 @@ msgid_plural "Loaded %d keys"
 msgstr[0] "%d sleutel geladen"
 msgstr[1] "%d sleutels geladen"
 
-#: ../libseahorse/seahorse-pgp-source.c:697
+#: ../libseahorse/seahorse-pgp-source.c:700
 msgid "Loading Keys..."
 msgstr "Sleutels laden..."
 
@@ -850,11 +858,11 @@ msgstr "_Zoeken naar: "
 msgid "_Sign message with key:"
 msgstr "Bestand _ondertekenen met sleutel:"
 
-#: ../libseahorse/seahorse-server-source.c:656
+#: ../libseahorse/seahorse-server-source.c:677
 msgid "LDAP Key Server"
 msgstr "LDAP sleutelserver"
 
-#: ../libseahorse/seahorse-server-source.c:659
+#: ../libseahorse/seahorse-server-source.c:680
 msgid "HTTP Key Server"
 msgstr "HTTP sleutelserver"
 
@@ -918,37 +926,37 @@ msgstr "Ondertekeningssleutel kiezen"
 msgid "%Y-%m-%d"
 msgstr "%Y-%m-%d"
 
-#: ../libseahorse/seahorse-util.c:478
+#: ../libseahorse/seahorse-util.c:485
 msgid "Multiple Keys"
 msgstr "Meerdere sleutels"
 
-#: ../libseahorse/seahorse-util.c:789
+#: ../libseahorse/seahorse-util.c:796
 msgid "Couldn't run file-roller"
 msgstr "Kon file-roller niet uitvoeren"
 
-#: ../libseahorse/seahorse-util.c:794
+#: ../libseahorse/seahorse-util.c:801
 msgid "The file-roller process did not complete successfully"
 msgstr "Het file-roller proces is niet juist voltooid"
 
-#: ../libseahorse/seahorse-util.c:804
+#: ../libseahorse/seahorse-util.c:811
 msgid "Couldn't set permissions on backup file."
 msgstr "Kon de rechten op het backup-bestand niet instellen."
 
 #. Filter for PGP keys. We also include *.asc, as in many
 #. cases that extension is associated with text/plain
-#: ../libseahorse/seahorse-util.c:849
+#: ../libseahorse/seahorse-util.c:856
 msgid "All key files"
 msgstr "Alle sleutelbestanden"
 
-#: ../libseahorse/seahorse-util.c:856 ../libseahorse/seahorse-util.c:896
+#: ../libseahorse/seahorse-util.c:863 ../libseahorse/seahorse-util.c:903
 msgid "All files"
 msgstr "Alle bestanden"
 
-#: ../libseahorse/seahorse-util.c:889
+#: ../libseahorse/seahorse-util.c:896
 msgid "Archive files"
 msgstr "Archiefbestanden"
 
-#: ../libseahorse/seahorse-util.c:930
+#: ../libseahorse/seahorse-util.c:937
 msgid ""
 "<b>A file already exists with this name.</b>\n"
 "\n"
@@ -958,7 +966,7 @@ msgstr ""
 "\n"
 "Wilt u het vervangen door een nieuw bestand?"
 
-#: ../libseahorse/seahorse-util.c:933
+#: ../libseahorse/seahorse-util.c:940
 msgid "_Replace"
 msgstr "_Vervangen"
 
@@ -996,7 +1004,7 @@ msgstr "Uitgeschakeld"
 msgid "Revoked"
 msgstr "Herroepen"
 
-#: ../libseahorse/seahorse-widget.c:306
+#: ../libseahorse/seahorse-widget.c:307
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Kon de hulp niet weergeven: %s"
@@ -1064,7 +1072,7 @@ msgid "Block %d"
 msgstr "%d blokkeren"
 
 #: ../plugins/gedit/seahorse-gedit.c:441 ../src/seahorse-key-manager.c:116
-#: ../src/seahorse-key-manager.c:139 ../src/seahorse-key-manager.c:575
+#: ../src/seahorse-key-manager.c:139 ../src/seahorse-key-manager.c:579
 #, c-format
 msgid "Imported %d key"
 msgid_plural "Imported %d keys"
@@ -1106,13 +1114,13 @@ msgstr "Voor intern gebruik"
 msgid "Configure key servers and other encryption settings"
 msgstr "Sleutelservers en overige versleutelingsinstellingen configureren"
 
-#: ../plugins/nautilus-ext/seahorse-nautilus.c:149
+#: ../plugins/nautilus-ext/seahorse-nautilus.c:150
 msgid "Encrypt (and optionally sign) the selected file"
 msgid_plural "Encrypt the selected files"
 msgstr[0] "Het geselecteerde bestand verleutelen (en eventueel ondertekenen)"
 msgstr[1] "De geselecteerde bestanden verleutelen"
 
-#: ../plugins/nautilus-ext/seahorse-nautilus.c:156
+#: ../plugins/nautilus-ext/seahorse-nautilus.c:157
 msgid "Sign the selected file"
 msgid_plural "Sign the selected files"
 msgstr[0] "Het geselecteerde bestand ondertekenen"
@@ -1157,7 +1165,7 @@ msgid "Imported key"
 msgstr "Geïmporteerde sleutel"
 
 #: ../src/main.c:158 ../src/seahorse-key-manager.c:117
-#: ../src/seahorse-key-manager.c:140 ../src/seahorse-key-manager.c:576
+#: ../src/seahorse-key-manager.c:140 ../src/seahorse-key-manager.c:580
 #, c-format
 msgid "Imported %d keys"
 msgstr "%d sleutels geïmporteerd"
@@ -1202,7 +1210,7 @@ msgstr "Oorspronkelijk bestand kiezen voor '%s'"
 msgid "Couldn't verify \"%s\""
 msgstr "Kon \"%s\" niet verifiëren"
 
-#: ../src/main.c:437 ../src/seahorse-key-manager.glade.h:3
+#: ../src/main.c:442 ../src/seahorse-key-manager.glade.h:3
 #: ../src/seahorse.desktop.in.h:1
 msgid "Encryption Key Manager"
 msgstr "Beheer van cryptografische sleutels"
@@ -1717,7 +1725,7 @@ msgstr "Kon sleutel niet exporteren naar \"%s\""
 msgid "Backup Keyrings to Archive"
 msgstr "Backup maken van sleutelbossen in archief"
 
-#: ../src/seahorse-key-manager.c:404
+#: ../src/seahorse-key-manager.c:408
 msgid "translator_credits"
 msgstr ""
 "Tino Meinen\n"
@@ -1725,196 +1733,196 @@ msgstr ""
 "\n"
 "Kijk voor meer info op http://nl.gnome.org/"
 
-#: ../src/seahorse-key-manager.c:424
+#: ../src/seahorse-key-manager.c:428
 msgid "seahorse"
 msgstr "seahorse"
 
-#: ../src/seahorse-key-manager.c:467 ../src/seahorse-keyserver-results.c:219
+#: ../src/seahorse-key-manager.c:471 ../src/seahorse-keyserver-results.c:219
 #, c-format
 msgid "Selected %d key"
 msgstr "%d sleutel geselecteerd"
 
-#: ../src/seahorse-key-manager.c:468 ../src/seahorse-keyserver-results.c:220
+#: ../src/seahorse-key-manager.c:472 ../src/seahorse-keyserver-results.c:220
 #, c-format
 msgid "Selected %d keys"
 msgstr "%d sleutels geselecteerd"
 
-#: ../src/seahorse-key-manager.c:572
+#: ../src/seahorse-key-manager.c:576
 #, c-format
 msgid "Couldn't import key from \"%s\""
 msgstr "Kon sleutel niet importeren van \"%s\""
 
 #. Top menu items
-#: ../src/seahorse-key-manager.c:600 ../src/seahorse-keyserver-results.c:280
+#: ../src/seahorse-key-manager.c:604 ../src/seahorse-keyserver-results.c:280
 msgid "_Key"
 msgstr "_Sleutel"
 
-#: ../src/seahorse-key-manager.c:601 ../src/seahorse-keyserver-results.c:281
+#: ../src/seahorse-key-manager.c:605 ../src/seahorse-keyserver-results.c:281
 msgid "_Edit"
 msgstr "Be_werken"
 
-#: ../src/seahorse-key-manager.c:602
+#: ../src/seahorse-key-manager.c:606
 msgid "_View"
 msgstr "Beel_d"
 
-#: ../src/seahorse-key-manager.c:603 ../src/seahorse-keyserver-results.c:282
+#: ../src/seahorse-key-manager.c:607 ../src/seahorse-keyserver-results.c:282
 msgid "_Help"
 msgstr "_Hulp"
 
 #. Key Actions
-#: ../src/seahorse-key-manager.c:606
+#: ../src/seahorse-key-manager.c:610
 msgid "_Create Key Pair..."
 msgstr "Sleutelpaar _aanmaken..."
 
-#: ../src/seahorse-key-manager.c:607
+#: ../src/seahorse-key-manager.c:611
 msgid "Create a new key pair"
 msgstr "Een nieuw sleutelpaar aanmaken"
 
-#: ../src/seahorse-key-manager.c:608
+#: ../src/seahorse-key-manager.c:612
 msgid "_Import..."
 msgstr "_Importeren..."
 
-#: ../src/seahorse-key-manager.c:609
+#: ../src/seahorse-key-manager.c:613
 msgid "Import keys into your keyring from a file"
 msgstr "Sleutels in uw sleutelbos importeren uit een bestand"
 
-#: ../src/seahorse-key-manager.c:610
+#: ../src/seahorse-key-manager.c:614
 msgid "_Backup Keyrings..."
 msgstr "_Backup maken van sleutelbossen..."
 
-#: ../src/seahorse-key-manager.c:611
+#: ../src/seahorse-key-manager.c:615
 msgid "Backup all keys"
 msgstr "Backup maken van alle sleutels"
 
-#: ../src/seahorse-key-manager.c:612
+#: ../src/seahorse-key-manager.c:616
 msgid "Paste _Keys"
 msgstr "Sleutels _plakken"
 
-#: ../src/seahorse-key-manager.c:613
+#: ../src/seahorse-key-manager.c:617
 msgid "Import keys from the clipboard"
 msgstr "Sleutels importeren van het klembord"
 
-#: ../src/seahorse-key-manager.c:615
+#: ../src/seahorse-key-manager.c:619
 msgid "_Quit"
 msgstr "A_fsluiten"
 
-#: ../src/seahorse-key-manager.c:616
+#: ../src/seahorse-key-manager.c:620
 msgid "Close this program"
 msgstr "De programma sluiten"
 
-#: ../src/seahorse-key-manager.c:617
+#: ../src/seahorse-key-manager.c:621
 msgid "Prefere_nces"
 msgstr "_Voorkeuren"
 
-#: ../src/seahorse-key-manager.c:618
+#: ../src/seahorse-key-manager.c:622
 msgid "Change preferences for this program"
 msgstr "Voorkeuren voor dit programma wijzigen"
 
-#: ../src/seahorse-key-manager.c:619
+#: ../src/seahorse-key-manager.c:623
 msgid "_About"
 msgstr "In_fo"
 
-#: ../src/seahorse-key-manager.c:620
+#: ../src/seahorse-key-manager.c:624
 msgid "About this program"
 msgstr "Over dit programma"
 
-#: ../src/seahorse-key-manager.c:622 ../src/seahorse-keyserver-results.c:289
+#: ../src/seahorse-key-manager.c:626 ../src/seahorse-keyserver-results.c:289
 msgid "_Expand All"
 msgstr "_Alles uitklappen"
 
-#: ../src/seahorse-key-manager.c:623 ../src/seahorse-keyserver-results.c:290
+#: ../src/seahorse-key-manager.c:627 ../src/seahorse-keyserver-results.c:290
 msgid "Expand all listings"
 msgstr "Alle opsommingen uitklappen"
 
-#: ../src/seahorse-key-manager.c:624 ../src/seahorse-keyserver-results.c:291
+#: ../src/seahorse-key-manager.c:628 ../src/seahorse-keyserver-results.c:291
 msgid "_Collapse All"
 msgstr "Alles in_klappen"
 
-#: ../src/seahorse-key-manager.c:625 ../src/seahorse-keyserver-results.c:292
+#: ../src/seahorse-key-manager.c:629 ../src/seahorse-keyserver-results.c:292
 msgid "Collapse all listings"
 msgstr "Alle opsommingen inklappen"
 
-#: ../src/seahorse-key-manager.c:627 ../src/seahorse-keyserver-results.c:286
+#: ../src/seahorse-key-manager.c:631 ../src/seahorse-keyserver-results.c:286
 msgid "_Contents"
 msgstr "_Inhoud"
 
-#: ../src/seahorse-key-manager.c:628 ../src/seahorse-keyserver-results.c:287
+#: ../src/seahorse-key-manager.c:632 ../src/seahorse-keyserver-results.c:287
 msgid "Show Seahorse help"
 msgstr "Seahorse hulp tonen"
 
-#: ../src/seahorse-key-manager.c:632 ../src/seahorse-keyserver-results.c:298
+#: ../src/seahorse-key-manager.c:636 ../src/seahorse-keyserver-results.c:298
 msgid "P_roperties"
 msgstr "_Eigenschappen"
 
-#: ../src/seahorse-key-manager.c:633 ../src/seahorse-keyserver-results.c:299
+#: ../src/seahorse-key-manager.c:637 ../src/seahorse-keyserver-results.c:299
 msgid "Show key properties"
 msgstr "Sleuteleigenschappen tonen"
 
-#: ../src/seahorse-key-manager.c:634
+#: ../src/seahorse-key-manager.c:638
 msgid "E_xport..."
 msgstr "E_xporteren..."
 
-#: ../src/seahorse-key-manager.c:635
+#: ../src/seahorse-key-manager.c:639
 msgid "Export public key"
 msgstr "Publieke sleutel exporteren"
 
-#: ../src/seahorse-key-manager.c:636 ../src/seahorse-keyserver-results.c:302
+#: ../src/seahorse-key-manager.c:640 ../src/seahorse-keyserver-results.c:302
 msgid "_Copy Key"
 msgstr "Sleutel _kopiëren"
 
-#: ../src/seahorse-key-manager.c:637 ../src/seahorse-keyserver-results.c:303
+#: ../src/seahorse-key-manager.c:641 ../src/seahorse-keyserver-results.c:303
 msgid "Copy selected keys to the clipboard"
 msgstr "De geselecteerde sleutels naar het klembord kopiëren"
 
-#: ../src/seahorse-key-manager.c:638
+#: ../src/seahorse-key-manager.c:642
 msgid "_Sign..."
 msgstr "_Ondertekenen..."
 
-#: ../src/seahorse-key-manager.c:639
+#: ../src/seahorse-key-manager.c:643
 msgid "Sign public key"
 msgstr "Publieke sleutel ondertekenen"
 
-#: ../src/seahorse-key-manager.c:640
+#: ../src/seahorse-key-manager.c:644
 msgid "_Delete Key"
 msgstr "Sleutel _verwijderen"
 
-#: ../src/seahorse-key-manager.c:641
+#: ../src/seahorse-key-manager.c:645
 msgid "Delete selected keys"
 msgstr "Geselecteerde sleutels verwijderen"
 
-#: ../src/seahorse-key-manager.c:645
+#: ../src/seahorse-key-manager.c:649
 msgid "Add _User ID..."
 msgstr "_Gebruikers-ID toevoegen..."
 
-#: ../src/seahorse-key-manager.c:646
+#: ../src/seahorse-key-manager.c:650
 msgid "Add a new user ID"
 msgstr "Een nieuwe gebruikers-ID toevoegen"
 
-#: ../src/seahorse-key-manager.c:647
+#: ../src/seahorse-key-manager.c:651
 msgid "Add _Revoker..."
 msgstr "_Herroeper toevoegen..."
 
-#: ../src/seahorse-key-manager.c:648
+#: ../src/seahorse-key-manager.c:652
 msgid "Add the default key as a revoker"
 msgstr "De standaard sleutel als herroeper toevoegen"
 
-#: ../src/seahorse-key-manager.c:653
+#: ../src/seahorse-key-manager.c:656
 msgid "_Remote"
 msgstr "E_xtern"
 
-#: ../src/seahorse-key-manager.c:654 ../src/seahorse-keyserver-results.c:307
+#: ../src/seahorse-key-manager.c:657 ../src/seahorse-keyserver-results.c:307
 msgid "_Find Remote Keys..."
 msgstr "Sleutels op afstand _zoeken..."
 
-#: ../src/seahorse-key-manager.c:655 ../src/seahorse-keyserver-results.c:308
+#: ../src/seahorse-key-manager.c:658 ../src/seahorse-keyserver-results.c:308
 msgid "Search for keys on a key server"
 msgstr "Zoeken naar sleutels op een sleutelserver"
 
-#: ../src/seahorse-key-manager.c:656
+#: ../src/seahorse-key-manager.c:659
 msgid "_Sync and Publish Keys..."
 msgstr "_Synchroniseren en sleutels publiceren..."
 
-#: ../src/seahorse-key-manager.c:657
+#: ../src/seahorse-key-manager.c:660
 msgid "Publish and/or sync your keys with those online."
 msgstr "Uw sleutels publiceren en/of synchroniseren met 'online' sleutels."
 
@@ -2572,6 +2580,13 @@ msgstr "Her_roepbaar"
 #: ../src/seahorse.desktop.in.h:2
 msgid "Manage your encryption keys"
 msgstr "Uw cryptografische sleutels beheren"
+
+#~ msgid "Select on focus"
+#~ msgstr "Selecteren bij aandacht"
+
+#~ msgid "Whether to select the contents of an entry when it is focused"
+#~ msgstr ""
+#~ "Of de inhoud van een veld moet worden geselecteerd als het aandacht krijgt"
 
 #~ msgid "usage: seahorse-agent [-cdv]\n"
 #~ msgstr "gebruik: seahorse-agent[-cdv]\n"
