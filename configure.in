@@ -276,6 +276,32 @@ else
 	echo "disabling key server support"
 fi
 
+dnl ***************
+dnl APPLET
+dnl ***************
+
+# Allow gedit plugin to be disabled
+AC_ARG_ENABLE(applet, 
+	    AC_HELP_STRING([--disable-applet],
+	    [Don't compile panel applet]))
+
+AM_CONDITIONAL(WITH_APPLET, test "$enable_applet" = "yes")
+
+# Applet tests 
+if test "$enable_applet" = "no"; then
+    with_applet=no
+	echo "disabling panel applet"
+else
+    enable_applet=yes
+	echo "enabling panel applet..."
+	echo "checking for supported versions of libpanel..."
+
+    PKG_CHECK_MODULES(GNOME_APPLETS, libpanelapplet-2.0 >= 2.9.4)
+    AC_SUBST(GNOME_APPLETS_CFLAGS)
+    AC_SUBST(GNOME_APPLETS_LIBS)
+    AC_DEFINE(WITH_APPLET, 1, [Panel applet code])
+fi
+
 
 dnl ***************
 dnl GEDIT
@@ -572,6 +598,9 @@ src/Makefile
 agent/Makefile
 daemon/Makefile
 plugins/Makefile
+plugins/applet/Makefile
+plugins/applet/docs/Makefile
+plugins/applet/docs/C/Makefile
 plugins/nautilus/Makefile
 plugins/nautilus-ext/Makefile
 plugins/gedit/Makefile
@@ -593,6 +622,7 @@ DBUS Support:            $enable_dbus
 Plugins: 
   Seahorse Agent:        $enable_agent
   GEdit:                 $enable_gedit
+  Panel Applet:          $enable_applet
   Nautilus (v < 2.8):    $with_nautilus
   Nautilus (v > 2.10):   $with_nautilus_ext
 Key Sharing:             $enable_sharing

@@ -74,6 +74,7 @@ libseahorse_internal_la_SOURCES = \
 	seahorse-passphrase.c \
 	seahorse-recipients.c \
 	seahorse-signer.c \
+    seahorse-import.c \
 	seahorse-signatures.c \
 	seahorse-libdialogs.h \
 	seahorse-vfs-data.c seahorse-vfs-data.h \

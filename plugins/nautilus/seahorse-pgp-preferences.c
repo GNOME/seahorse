@@ -34,6 +34,9 @@ static gboolean show_cache = FALSE;
 #ifdef WITH_SHARING
 static gboolean show_sharing = FALSE;
 #endif
+#ifdef WITH_APPLET
+static gboolean show_applet = FALSE;
+#endif
 
 static const struct poptOption options[] = {
 #ifdef WITH_AGENT    
@@ -42,6 +45,10 @@ static const struct poptOption options[] = {
 #endif 
 #ifdef WITH_SHARING   
 	{ "sharing", 's', POPT_ARG_NONE | POPT_ARG_VAL, &show_sharing, TRUE,
+	    N_("For internal use"), NULL },
+#endif 
+#ifdef WITH_APPLET   
+	{ "applet", 's', POPT_ARG_NONE | POPT_ARG_VAL, &show_applet, TRUE,
 	    N_("For internal use"), NULL },
 #endif 
         
@@ -92,7 +99,12 @@ main (int argc, char **argv)
         seahorse_prefs_select_tab (swidget, tab);
     }
 #endif
-        
+#ifdef WITH_APPLET	
+    if (show_applet) {
+        GtkWidget *tab = glade_xml_get_widget (swidget->xml, "applet-tab");
+        seahorse_prefs_select_tab (swidget, tab);
+    }
+#endif       
 	gtk_main();
 	return 0;
 }

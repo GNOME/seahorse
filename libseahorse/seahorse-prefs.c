@@ -445,6 +445,115 @@ setup_sharing (SeahorseWidget *swidget)
 
 /* -------------------------------------------------------------------------- */
 
+#ifdef WITH_APPLET
+
+/* Applet Prefs ------------------------------------------------------------- */
+
+/* Callback for changes on keyserver key */
+static void
+gconf_applet_notify (GConfClient *client, guint id, GConfEntry *entry, SeahorseWidget *swidget)
+{
+        if (g_str_equal (HOTKEYS_ENABLED, gconf_entry_get_key (entry))) {
+            if (seahorse_gconf_get_boolean(HOTKEYS_ENABLED)){
+                gtk_widget_set_sensitive(glade_xml_get_widget(swidget->xml, "encrypt-entry"), TRUE);
+                gtk_widget_set_sensitive(glade_xml_get_widget(swidget->xml, "sign-entry"), TRUE);
+                gtk_widget_set_sensitive(glade_xml_get_widget(swidget->xml, "decrypt-entry"), TRUE);      
+            } else {
+                gtk_widget_set_sensitive(glade_xml_get_widget(swidget->xml, "encrypt-entry"), FALSE);
+                gtk_widget_set_sensitive(glade_xml_get_widget(swidget->xml, "sign-entry"), FALSE);
+                gtk_widget_set_sensitive(glade_xml_get_widget(swidget->xml, "decrypt-entry"), FALSE);
+            }
+        } else if (g_str_equal (ENCRYPT_HOTKEY, gconf_entry_get_key (entry))) {
+            gtk_entry_set_text(GTK_ENTRY (glade_xml_get_widget(swidget->xml, "encrypt-entry")),
+                               seahorse_gconf_get_string(ENCRYPT_HOTKEY));
+        } else if (g_str_equal (SIGN_HOTKEY, gconf_entry_get_key (entry))) {
+            gtk_entry_set_text(GTK_ENTRY (glade_xml_get_widget(swidget->xml, "sign-entry")),
+                               seahorse_gconf_get_string(SIGN_HOTKEY));
+        } else if (g_str_equal (DECRYPT_HOTKEY, gconf_entry_get_key (entry))) {
+            gtk_entry_set_text(GTK_ENTRY (glade_xml_get_widget(swidget->xml, "decrypt-entry")),
+                               seahorse_gconf_get_string(DECRYPT_HOTKEY));
+        }
+}
+
+static void
+encrypt_entry_changed(GtkEntry *entry, SeahorseWidget *widget)
+{
+    seahorse_gconf_set_string(ENCRYPT_HOTKEY, gtk_entry_get_text (entry));
+}
+
+static void
+sign_entry_changed(GtkEntry *entry, SeahorseWidget *widget)
+{
+    seahorse_gconf_set_string(SIGN_HOTKEY, gtk_entry_get_text (entry));
+}
+
+static void
+decrypt_entry_changed(GtkEntry *entry, SeahorseWidget *widget)
+{
+    seahorse_gconf_set_string(DECRYPT_HOTKEY, gtk_entry_get_text (entry));
+}
+
+static void
+setup_applet(SeahorseWidget *swidget)
+{
+    GtkWidget *widget;
+    
+    widget = glade_xml_get_widget (swidget->xml, "enable-display-place-holder");
+    gtk_container_add(GTK_CONTAINER (widget),
+        seahorse_check_button_control_new (_("Display _decrypted text"), DISPLAY_DECRYPT_ENABLED));
+    gtk_container_add(GTK_CONTAINER (widget),
+        seahorse_check_button_control_new (_("Display _signed text"), DISPLAY_SIGN_ENABLED));
+    gtk_container_add(GTK_CONTAINER (widget),
+        seahorse_check_button_control_new (_("Display _encrypted text"), DISPLAY_ENCRYPT_ENABLED));
+    gtk_widget_show_all (widget);
+   
+    /*
+    widget = glade_xml_get_widget (swidget->xml, "hotkeys-place-holder");
+    gtk_container_add(GTK_CONTAINER (widget),
+        seahorse_check_button_control_new (_("_Listen for Hotkeys"), HOTKEYS_ENABLED));
+    gtk_widget_show_all (widget);
+    */
+    
+    gtk_entry_set_text(GTK_ENTRY (glade_xml_get_widget(swidget->xml, "encrypt-entry")),
+                               seahorse_gconf_get_string(ENCRYPT_HOTKEY));
+    glade_xml_signal_connect_data (swidget->xml, "on_encrypt_entry_changed",
+                G_CALLBACK(encrypt_entry_changed), swidget);
+                
+    gtk_entry_set_text(GTK_ENTRY (glade_xml_get_widget(swidget->xml, "sign-entry")),
+                               seahorse_gconf_get_string(SIGN_HOTKEY));            
+    glade_xml_signal_connect_data (swidget->xml, "on_sign_entry_changed",
+                G_CALLBACK(sign_entry_changed), swidget);
+                
+    gtk_entry_set_text(GTK_ENTRY (glade_xml_get_widget(swidget->xml, "decrypt-entry")),
+                               seahorse_gconf_get_string(DECRYPT_HOTKEY));
+    glade_xml_signal_connect_data (swidget->xml, "on_decrypt_entry_changed",
+                G_CALLBACK(decrypt_entry_changed), swidget);
+    
+    if (seahorse_gconf_get_boolean(HOTKEYS_ENABLED)){
+        gtk_widget_set_sensitive(glade_xml_get_widget(swidget->xml, "encrypt-entry"), TRUE);
+        gtk_widget_set_sensitive(glade_xml_get_widget(swidget->xml, "sign-entry"), TRUE);
+        gtk_widget_set_sensitive(glade_xml_get_widget(swidget->xml, "decrypt-entry"), TRUE);      
+    } else {
+        gtk_widget_set_sensitive(glade_xml_get_widget(swidget->xml, "encrypt-entry"), FALSE);
+        gtk_widget_set_sensitive(glade_xml_get_widget(swidget->xml, "sign-entry"), FALSE);
+        gtk_widget_set_sensitive(glade_xml_get_widget(swidget->xml, "decrypt-entry"), FALSE);
+    }
+                
+    seahorse_gconf_notify_lazy(HOTKEYS_ENABLED, (GConfClientNotifyFunc)gconf_applet_notify, 
+                                       swidget, seahorse_widget_get_top (swidget));
+    seahorse_gconf_notify_lazy(ENCRYPT_HOTKEY, (GConfClientNotifyFunc)gconf_applet_notify, 
+                                       swidget, seahorse_widget_get_top (swidget));
+    seahorse_gconf_notify_lazy(SIGN_HOTKEY, (GConfClientNotifyFunc)gconf_applet_notify, 
+                                       swidget, seahorse_widget_get_top (swidget));
+    seahorse_gconf_notify_lazy(DECRYPT_HOTKEY, (GConfClientNotifyFunc)gconf_applet_notify, 
+                                       swidget, seahorse_widget_get_top (swidget));
+    
+}
+
+#endif /* WITH_APPLET */
+
+/* -------------------------------------------------------------------------- */
+
 static void
 default_key_changed (SeahorseDefaultKeyControl *sdkc, gpointer *data)
 {
@@ -533,7 +642,16 @@ seahorse_prefs_new ()
     widget = glade_xml_get_widget (swidget->xml, "sharing-tab");
     g_return_val_if_fail (GTK_IS_WIDGET (widget), swidget);
     seahorse_prefs_remove_tab (swidget, widget);
-#endif    
+#endif
+
+#ifdef WITH_APPLET
+    setup_applet(swidget);
+#else
+    widget = glade_xml_get_widget (swidget->xml, "applet-tab");
+    g_return_val_if_fail (GTK_IS_WIDGET (widget), swidget);
+    seahorse_prefs_remove_tab (swidget, widget);
+#endif
+    
 
     seahorse_widget_show (swidget);
     return swidget;

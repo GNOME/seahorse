@@ -14,6 +14,9 @@ appicon_DATA = seahorse-secret.png \
 pixmapdir = $(datadir)/pixmaps/
 appicondir = $(datadir)/pixmaps/seahorse
 
+desktop_iconsdir   = $(datadir)/icons/hicolor/48x48/apps
+desktop_icons_DATA = seahorse.png
+
 EXTRA_DIST = $(pixmap_DATA) \
              $(appicon_DATA) \
              seahorse-shared-keys.xcf

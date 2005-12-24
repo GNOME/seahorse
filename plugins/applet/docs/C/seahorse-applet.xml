@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
+"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+	<!ENTITY legal SYSTEM "legal.xml">
+	<!ENTITY appversion "0.9.0">
+	<!ENTITY manrevision "1.0">
+	<!ENTITY date "December 2005">
+	<!ENTITY applet "Encryption Applet">
+	<!ENTITY project "Seahorse Project">
+]>
+
+<article id="index" Lang="en">
+	<articleinfo>
+		<title>&applet; Manual V&manrevision;</title>
+		<copyright>
+			<year>2005</year>
+			<holder>Adam Schreiber</holder>
+		</copyright>
+		<publisher>
+			<publishername>Seahorse Project</publishername>
+		</publisher>
+		&legal;
+		<authorgroup>
+			<author>
+				<firstname>Adam</firstname>
+				<surname>Schreiber</surname>
+				<affiliation>
+					<orgname>Seahorse Project</orgname>
+					<address>
+						<email>sadam@clemson.edu</email>
+					</address>
+				</affiliation>
+			</author>
+		</authorgroup>
+		<revhistory>
+			<revision>
+				<revnumber>&applet; Manual V0.9.0</revnumber>
+				<date>July 2005</date>
+				<revdescription>
+					<para role="author">Adam Schreiber
+						<email>sadam@clemson.edu</email>
+					</para>
+					<para role="publisher">Seahorse Project</para>
+				</revdescription>
+			</revision>
+		</revhistory>
+		<releaseinfo>This manual describes version &appversion; of &applet;</releaseinfo>
+		<legalnotice>
+			<title>Feedback</title>
+			<para>To report a bug or make a suggestion regarding
+				&applet; application or this manual, follow the directions in the
+				<ulink url="ghelp:gnome-feedback" type="help">Gnome Feedback Page</ulink>.
+			</para>
+		</legalnotice>
+	</articleinfo>
+	<indexterm zone="index">
+		<primary>&applet;</primary>
+	</indexterm>
+	<sect1 id="introduction">
+		<title>Introduction</title>
+		<para>
+			The <application>&applet;</application>, part of the &project;, encrypts, signs, decrypts, verifies and imports the contents of the clipboard.
+		</para> 
+		<sect2 id="seahorse-applet-introduction-add">
+          <title>To Add &applet; to a Panel</title>
+              <para>To add <application>&applet;</application> to a panel,
+              right-click on the panel, then choose <guimenuitem>Add to
+              Panel</guimenuitem>.  Select <application>&applet;</application>
+              in the <application>Add to the panel</application> dialog, then
+              click <guibutton>OK</guibutton>.</para>
+              <para>
+                The layout of the <application>&applet;</application> applet varies depending on the size and type of panel in which the applet resides.
+              </para>
+        </sect2>
+		<sect2 id="seahorse-encryption">
+		  <title>Encryption Information</title>
+		  <para><application>&applet;</application> performs the various encryption operations using standard OpenPGP methods. You will need to have already created an OpenPGP key with <application>Encryption Key Manager</application> and imported the public keys of those you want to encrypt to or verify signatures of.
+		  </para>
+		</sect2>
+	</sect1>
+	<sect1 id="about">
+		<title>About &applet;</title>
+		<para> 
+			&project; was written by Jacob Perkins.  The current maintainer is Nate 
+			Nielsen.  This manual is by Adam Schreiber.  The project's web site was designed 
+			by Jim Pharis.	To find more information about Seahorse, please visit the 
+			<ulink url="http://seahorse.sourceforge.net" type="http">&project; web page</ulink>.
+		</para>
+		<para>
+			To report a bug or make a suggestion regarding this application or this manual,
+			follow the directions in this
+			<ulink url="ghelp:gnome-feedback" type="help">document</ulink>.
+		</para>
+		<para> 
+			This program is distributed under the terms of the GNU
+			General Public license as published by the Free Software
+			Foundation; either version 2 of the License, or (at your option)
+			any later version. A copy of this license can be found at this
+			<ulink url="ghelp:gpl" type="help">link</ulink>, or in the file
+			COPYING included with the source code of this program.
+		</para>
+	</sect1>
+</article>

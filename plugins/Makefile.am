@@ -11,4 +11,10 @@ else
 NAUTILUS_EXT_DIR = 
 endif
 
-SUBDIRS = nautilus $(GEDIT_DIR) $(NAUTILUS_EXT_DIR)
+if WITH_APPLET
+APPLET_DIR = applet
+else
+APPLET_DIR =
+endif
+
+SUBDIRS = nautilus $(APPLET_DIR) $(GEDIT_DIR) $(NAUTILUS_EXT_DIR)

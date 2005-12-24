@@ -56,6 +56,7 @@ SeahorsePGPKey* seahorse_signer_get                 (void);
 void            seahorse_signatures_notify          (const gchar* data, 
                                                      gpgme_verify_result_t status);
 
+void            seahorse_import_notify              (guint keys);
 
 void            seahorse_notification_display       (const gchar *summary, 
                                                      const gchar* body, 
