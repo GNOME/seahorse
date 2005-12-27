@@ -84,24 +84,24 @@ struct _SeahorseAppletPrivate
     GtkWidget *menu;
 };
 
-static void seahorse_applet_class_init (SeahorseAppletClass *class);
-static void seahorse_applet_init       (SeahorseApplet      *applet);
+G_DEFINE_TYPE (SeahorseApplet, seahorse_applet, PANEL_TYPE_APPLET);
+
 static void seahorse_applet_finalize   (GObject          *object);
 
 static void seahorse_applet_change_size (PanelApplet *applet, guint size);
 
 static void seahorse_applet_change_background (PanelApplet *app,
-					    PanelAppletBackgroundType type,
-					    GdkColor  *colour,
-					    GdkPixmap *pixmap);
+                                                PanelAppletBackgroundType type,
+                                                GdkColor  *colour,
+                                                GdkPixmap *pixmap);
 
 static void set_atk_name_description (GtkWidget *widget, 
                                        const gchar *name, 
                                        const gchar *description);
 
 static void handle_clipboard_owner_change(GtkClipboard *clipboard,
-                                            GdkEvent *event,
-                                            SeahorseAppletPrivate *priv);
+                                           GdkEvent *event,
+                                           SeahorseAppletPrivate *priv);
                                             
 static gboolean handle_button_press (GtkWidget *widget, 
                                       GdkEventButton *event);
@@ -115,39 +115,11 @@ static void sign_cb(GtkMenuItem *menuitem,
 static void dvi_cb(GtkMenuItem *menuitem,
                     SeahorseApplet *applet);
                     
+/*
 static void enable_disable_keybindings(gboolean enable);
 
 static void applet_gconf_callback(GConfClient *client, guint id, GConfEntry *entry, SeahorseApplet *applet);
-
-
-static gpointer parent_class;
-
-GType
-seahorse_applet_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-    {
-      static const GTypeInfo info =
-        {
-	  sizeof (SeahorseAppletClass),
-	  NULL,		/* base_init */
-	  NULL,		/* base_finalize */
-	  (GClassInitFunc) seahorse_applet_class_init,
-	  NULL,		/* class_finalize */
-	  NULL,		/* class_data */
-	  sizeof (SeahorseApplet),
-	  0,		/* n_preallocs */
-	  (GInstanceInitFunc) seahorse_applet_init,
-	};
-
-      type = g_type_register_static (PANEL_TYPE_APPLET, "SeahorseApplet",
-				     &info, 0);
-    }
-
-  return type;
-}
+*/
 
 SeahorseApplet*
 seahorse_applet_new (void)
@@ -198,22 +170,20 @@ detect_text_type (const gchar *text, gint len, const gchar **start, const gchar 
 static void
 seahorse_applet_class_init (SeahorseAppletClass *klass)
 {
-  GObjectClass     *object_class;
-  PanelAppletClass *applet_class;
-  GtkWidgetClass *widget_class;
+    GObjectClass     *object_class;
+    PanelAppletClass *applet_class;
+    GtkWidgetClass *widget_class;
 
-  object_class = G_OBJECT_CLASS (klass);
-  applet_class = PANEL_APPLET_CLASS (klass);
-  widget_class = GTK_WIDGET_CLASS(klass);
-  
-  parent_class = g_type_class_peek_parent (klass);
+    object_class = G_OBJECT_CLASS (klass);
+    applet_class = PANEL_APPLET_CLASS (klass);
+    widget_class = GTK_WIDGET_CLASS(klass);
 
-  object_class->finalize = seahorse_applet_finalize;
-  applet_class->change_size = seahorse_applet_change_size;
-  applet_class->change_background = seahorse_applet_change_background;
-  widget_class->button_press_event = handle_button_press;
+    object_class->finalize = seahorse_applet_finalize;
+    applet_class->change_size = seahorse_applet_change_size;
+    applet_class->change_background = seahorse_applet_change_background;
+    widget_class->button_press_event = handle_button_press;
 
-  g_type_class_add_private (object_class, sizeof (SeahorseAppletPrivate));
+    g_type_class_add_private (object_class, sizeof (SeahorseAppletPrivate));
 }
 
 static void
@@ -288,8 +258,8 @@ seahorse_applet_finalize (GObject *object)
         }
     }
 
-    if (G_OBJECT_CLASS (parent_class)->finalize)
-        (* G_OBJECT_CLASS (parent_class)->finalize) (object);
+    if (G_OBJECT_CLASS (seahorse_applet_parent_class)->finalize)
+        (* G_OBJECT_CLASS (seahorse_applet_parent_class)->finalize) (object);
 }
 
 static void
@@ -309,12 +279,12 @@ seahorse_applet_change_size (PanelApplet *applet,
 }
 
 static void
-seahorse_applet_change_background (PanelApplet *app,
+seahorse_applet_change_background (PanelApplet *applet,
 				PanelAppletBackgroundType type,
 				GdkColor  *colour,
 				GdkPixmap *pixmap)
 {
-  SeahorseApplet *applet = SEAHORSE_APPLET (app);
+  //SeahorseApplet *applet = SEAHORSE_APPLET (app);
   GtkRcStyle *rc_style;
   GtkStyle *style;
 
@@ -429,8 +399,8 @@ handle_button_press (GtkWidget *widget,
         gtk_menu_popup (GTK_MENU(priv->menu), NULL, NULL, seahorse_popup_position_menu, (gpointer) applet, 
         	  event->button, event->time);
         return TRUE;
-	} else if (GTK_WIDGET_CLASS (parent_class)->button_press_event)
-        return (* GTK_WIDGET_CLASS (parent_class)->button_press_event) (widget, event);
+	} else if (GTK_WIDGET_CLASS (seahorse_applet_parent_class)->button_press_event)
+        return (* GTK_WIDGET_CLASS (seahorse_applet_parent_class)->button_press_event) (widget, event);
     else
         return FALSE;
 }
@@ -755,9 +725,7 @@ help_cb (BonoboUIComponent *uic,
 	GError *error = NULL;
 	GtkWidget *dialog;
 	
-    fprintf(stderr, "Before Help Display PACKAGE=%s\n", PACKAGE);
 	gnome_help_display ("seahorse-applet", NULL, &error);
-    fprintf(stderr, "After Help Display error %s\n", error?error->message:"NULL");
     
 	if (error) {
 		dialog = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, 

@@ -285,7 +285,7 @@ AC_ARG_ENABLE(applet,
 	    AC_HELP_STRING([--disable-applet],
 	    [Don't compile panel applet]))
 
-AM_CONDITIONAL(WITH_APPLET, test "$enable_applet" = "yes")
+AM_CONDITIONAL(WITH_APPLET, test "$enable_applet" != "no")
 
 # Applet tests 
 if test "$enable_applet" = "no"; then
