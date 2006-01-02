@@ -630,7 +630,7 @@ selection_changed (GtkTreeSelection *notused, SeahorseWidget *swidget)
     gtk_action_group_set_sensitive (actions, selected);
     
     actions = seahorse_widget_find_actions (swidget, "pgp");
-    gtk_action_group_set_visible (actions, ktype == SKEY_PGP);
+    gtk_action_group_set_sensitive (actions, ((ktype == SKEY_PGP) && (seahorse_key_get_etype (skey) != SKEY_PRIVATE)));
     
 #ifdef WITH_SSH    
     actions = seahorse_widget_find_actions (swidget, "ssh");
@@ -734,9 +734,18 @@ static void
 tab_changed (GtkWidget *widget, GtkNotebookPage *page, guint page_num, 
              SeahorseWidget *swidget)
 {
+    GtkTreeView *view;
+    GtkTreeSelection *selection;
     GtkWidget *entry = glade_xml_get_widget (swidget->xml, "filter");
     g_return_if_fail (entry != NULL);
     gtk_entry_set_text (GTK_ENTRY (entry), "");
+    
+    view = get_current_view (swidget);
+    if (view != NULL){
+        selection = gtk_tree_view_get_selection (view);
+        gtk_tree_selection_unselect_all (selection);
+    }
+    
     selection_changed (NULL, swidget);
 }
 
