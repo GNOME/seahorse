@@ -59,24 +59,54 @@
 	<sect1 id="introduction">
 		<title>Introduction</title>
 		<para>
-			The <application>&applet;</application>, part of the &project;, encrypts, signs, decrypts, verifies and imports the contents of the clipboard.
+			<application>&applet;</application> performs the various encryption operations 
+			using standard OpenPGP methods. You will need to have already created an OpenPGP 
+			key with <application>Encryption Key Manager</application> and imported the public 
+			keys of those you want to encrypt to or verify signatures of.
 		</para> 
 		<sect2 id="seahorse-applet-introduction-add">
-          <title>To Add &applet; to a Panel</title>
-              <para>To add <application>&applet;</application> to a panel,
-              right-click on the panel, then choose <guimenuitem>Add to
-              Panel</guimenuitem>.  Select <application>&applet;</application>
-              in the <application>Add to the panel</application> dialog, then
-              click <guibutton>OK</guibutton>.</para>
-              <para>
-                The layout of the <application>&applet;</application> applet varies depending on the size and type of panel in which the applet resides.
-              </para>
+            <title>To Add <application>&applet;</application> to a Panel</title>
+            <para>
+                To add <application>&applet;</application> to a panel,
+                right-click on the panel, then choose <guimenuitem>Add to
+                Panel</guimenuitem>.  Select <application>&applet;</application>
+                in the <application>Add to the panel</application> dialog, then
+                click <guibutton>OK</guibutton>.
+            </para>
+            <para>
+                The layout of the <application>&applet;</application> varies depending 
+                on the size and type of panel in which the applet resides.
+            </para>
         </sect2>
-		<sect2 id="seahorse-encryption">
-		  <title>Encryption Information</title>
-		  <para><application>&applet;</application> performs the various encryption operations using standard OpenPGP methods. You will need to have already created an OpenPGP key with <application>Encryption Key Manager</application> and imported the public keys of those you want to encrypt to or verify signatures of.
-		  </para>
-		</sect2>
+	</sect1>
+    <sect1 id="usage">
+        <title>Usage</title>
+        <para>
+            The &applet; operates on both the Ctrl-C/V and the select/middle click clipboards.  
+            Simply copy the desired text using the method of your choice, select the encryption 
+            operation from the left click menu, follow the prompts and paste the new contents of 
+            the clipboard into your application or view them in a display window after enabling 
+            the appropriate option in the <xref linkend="prefs"/>    
+        </para>
+    </sect1>
+	<sect1 id="prefs">
+	   <title>&applet; Preferences</title>
+	   <para>
+	       The preferences for the <application>&applet;</application> are part of your <application>Encryption 
+	       Preferences</application> and can be edited by selecting <menuchoice><guimenu>Desktop</guimenu>
+	       <guimenuitem>Preferences</guimenuitem><guimenuitem>Encryption Preferences</guimenuitem></menuchoice>, 
+	       or by right clicking on the <application>&applet;</application> and selecting 
+	       <guimenuitem>Preferences</guimenuitem>.
+	   </para> 
+	   <sect2 id="display">
+	       <title>Display options</title>
+	       <para>
+	           These options affect whether or not a window displaying the resultant text is presented following 
+	           performing an encryption operation.  Enabling these options may be of use when reading web based 
+	           email or handling other encryption tasks where a entry field may not be readily available or immediate 
+	           display is required.
+	       </para>
+	   </sect2>
 	</sect1>
 	<sect1 id="about">
 		<title>About &applet;</title>

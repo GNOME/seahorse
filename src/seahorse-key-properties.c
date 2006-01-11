@@ -170,6 +170,12 @@ get_selected_subkey (SeahorseWidget *swidget)
 }
 
 static void
+help_button_clicked(GtkWidget *widget, SeahorseWidget *swidget)
+{
+    seahorse_widget_show_help(swidget);
+}
+
+static void
 owner_add_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 {
 	SeahorseKey *skey;
@@ -1312,6 +1318,9 @@ setup_public_properties (SeahorsePGPKey *pkey)
     do_trust (swidget);
     do_trust_signals (swidget);        
 
+    glade_xml_signal_connect_data ((swidget->xml), "on_pgp_public_key_properties_help_button_clicked",
+								G_CALLBACK (help_button_clicked), swidget);
+
     return swidget;
 }
 
@@ -1346,6 +1355,9 @@ setup_private_properties (SeahorsePGPKey *pkey)
 
     do_trust (swidget);
     do_trust_signals (swidget);
+
+    glade_xml_signal_connect_data ((swidget->xml), "on_key_properties_help_button_clicked",
+								G_CALLBACK (help_button_clicked), swidget);
 
     widget = glade_xml_get_widget (swidget->xml, NOTEBOOK);
     gtk_widget_hide (gtk_notebook_get_nth_page (GTK_NOTEBOOK (widget), 3));

@@ -5,7 +5,7 @@
 	<!ENTITY appversion "0.9.0">
 	<!ENTITY manrevision "3.0">
 	<!ENTITY date "July 2005">
-	<!ENTITY app "<application>seahorse</application>">
+	<!ENTITY app "<guimenuitem>Encryption Key Manager</guimenuitem>">
 	<!ENTITY daemon "<application>seahorse-daemon</application>">
 	<!ENTITY project "Seahorse">
 	<!ENTITY key "<glossterm>key</glossterm>">
@@ -88,14 +88,15 @@
 			&project; is a GNOME2 project that provides integration of 
 			<ulink url="http://www.gnupg.org" type="http">Gnu Privacy Guard (GPG)</ulink>
 			with the <ulink url="http://www.gnome.org">GNOME</ulink> desktop.
-			&project; includes &app;, a GPG key management front end, 
+			&project; includes the &app;, a GPG key management front end, 
 			&daemon;, a drop in replacement for <command>gpg-agent</command> as well as a 
 			DNS-SD HKP &key; server, and plug-ins for <guimenuitem>Text Editor
 			</guimenuitem> and <application>nautilus</application>.
 		</para> 
 		<para>
-			In <xref linkend="keymanager"/> learn how to perform the following tasks in 
-			the Encryption Key Manager:
+            The &app; provides a front end to many of the 
+			features of 
+			<ulink url="http://www.gnupg.org" type="http">Gnu Privacy Guard (GPG)</ulink>.  The contents of this guide concerning the &app; are linked below:
 		</para>
 		<itemizedlist>
 			<listitem><para><xref linkend="generate"/></para></listitem>
@@ -103,7 +104,8 @@
 			<listitem><para><xref linkend="export"/></para></listitem>
 			<listitem><para><xref linkend="backup"/></para></listitem>
 			<listitem><para><xref linkend="key-properties"/></para></listitem>
-			<listitem><para><xref linkend="key-server"/></para></listitem>
+			<listitem><para><xref linkend="ssh-key-properties"/></para></listitem>
+			<!--listitem><para><xref linkend="key-server"/></para></listitem-->
 		</itemizedlist>
 		<para>
 			In <xref linkend="file-manager"/> learn how to perform the following tasks 
@@ -167,239 +169,328 @@
 		</sect2>
 	</sect1 -->
 	<!-- sections organized so coincide with menus -->
-	<sect1 id="keymanager">
-		<title>Encryption Key Manager</title>
+	<sect1 id="generate">
+		<title>Creating Encryption Keys</title>
 		<para>
-			The Encryption Key Manager (&app;) provides a front end to many of the 
-			features of 
-			<ulink url="http://www.gnupg.org" type="http">Gnu Privacy Guard (GPG)</ulink>.
-			Several of the tasks able to be performed are explained below:
+			There are two methods of creating OpenPGP keys in &app;:the key
+			 generation assistant and the advanced generation dialog.  
 		</para>
-		<sect2 id="generate">
-			<title>Generate a Key Pair</title>
+		<para>
+			 Access the assistant by choosing
+			<menuchoice>
+				<guimenu>Key</guimenu>
+				<guimenuitem>Create Key Pair</guimenuitem>
+			</menuchoice>
+			.  Select <guilabel>Assistant</guilabel> and press the enter key or
+			 press <guibutton>Continue</guibutton>.
+		</para>
+		<para>
+			Access the advanced generation dialog by choosing 
+			<menuchoice>
+				<guimenu>Key</guimenu>
+				<guimenuitem>Create Key Pair</guimenuitem>
+			</menuchoice>
+			.  Select <guilabel>Advanced</guilabel> and press the enter key or 
+			press <guibutton>Continue</guibutton>.
+		</para>
+		<sect2 id="generate-assistant">
+			<title>Key Generation Assistant</title>
 			<para>
-				There are two methods of generating key pairs in &app;:the key
-				 generation assistant and the advanced generation dialog.  
-			</para>
-			<para>
-				 Access the assistant by choosing
-				<menuchoice>
-					<guimenu>Key</guimenu>
-					<guimenuitem>Create Key Pair</guimenuitem>
-				</menuchoice>
-				.  Select <guilabel>Assistant</guilabel> and press the enter key or
-				 press <guibutton>Continue</guibutton>.
-			</para>
-			<para>
-				Access the advanced generation dialog by choosing 
-				<menuchoice>
-					<guimenu>Key</guimenu>
-					<guimenuitem>Create Key Pair</guimenuitem>
-				</menuchoice>
-				.  Select <guilabel>Advanced</guilabel> and press the enter key or 
-				press <guibutton>Continue</guibutton>.
-			</para>
-			<sect3 id="generate-assistant">
-				<title>Key Generation Assistant</title>
-				<para>
-					After following the instructions above, the assistant will 
-					walk you through the process of generating a key pair.
-				</para>
-			</sect3>
-			<sect3 id="generate-adv">
-				<title>Advanced Key Generation</title>
-				<para>
-					After following the instructions above, you will be 
-					presented with a dialog to fill in.  The fields are detailed 
-					below.
-				</para>
-				<variablelist>
-					<varlistentry>
-						<term><guilabel>Full Name</guilabel></term>
-						<listitem>
-							<para>
-								Enter your full name in the form
-								<programlisting>&lt;first&gt; &lt;last&gt;</programlisting>
-								A middle name or initial is optional.
-								<note>You must enter at least 5 
-								characters in this field.</note> 
-							</para>
-						</listitem>
-					</varlistentry>
-					<varlistentry>
-						<term><guilabel>Email Address</guilabel></term>
-						<listitem>
-							<para>
-								Your email address is how most
-								people will locate your key on a
-								key server or other key provider.
-								Make sure it is correct before
-								continuing. 
-								<note>It should be of the form 
-								<programlisting>&lt;user name&gt;@&lt;domain name&gt;</programlisting></note>
-							</para>
-						</listitem>
-					</varlistentry>
-					<varlistentry>
-						<term><guilabel>Key Comment</guilabel></term>
-						<listitem>
-							<para>
-								The comment field can be used to 
-								place any additional information 
-								into the displayed name of your new 
-								key pair.  This information can be 
-								searched for on key servers.
-							</para>
-						</listitem>
-					</varlistentry>
-					<varlistentry>
-						<term><guilabel>Key Type</guilabel></term>
-						<listitem>
-							<para>
-								This field specifies the encryption 
-								algorithms used to generate your keys.
-							</para>
-							<variablelist>
-								<varlistentry>
-									<term>DSA &amp; ElGamal</term>
-									<listitem>
-										<para>
-										This is the suggested 
-										choice as it will allow 
-										you to encrypt/decrypt/
-										sign/verify as needed
-										</para>
-									</listitem>
-								</varlistentry>
-								<varlistentry>
-									<term>DSA</term>
-									<listitem>
-										<para>
-										Will allow signing only.
-										</para>
-									</listitem>
-								</varlistentry>
-								<varlistentry>
-									<term>RSA</term>
-									<listitem>
-										<para>
-										Will allow signing only.
-										</para>
-									</listitem>
-								</varlistentry>
-							</variablelist>
-						</listitem>
-					</varlistentry>
-					<varlistentry>
-						<term><guilabel>Key Length</guilabel></term>
-						<listitem>
-							<para>
-								This is the length of the key in bits.  
-								The longer the key, the more secure it 
-								will be, provided a strong passphrase is
-								used.  Conversely, performing any
-								operation with a longer key will require 
-								more time than it would with a shorter 
-								key.  Acceptable values are between 1024 
-								and 4096 bits.  At least 2048 bits is 
-								recommended.
-							</para>
-						</listitem>
-					</varlistentry>
-					<varlistentry>
-						<term><guilabel>Expiration Date</guilabel></term>
-						<listitem>
-							<para>
-								This is the date at which the key will 
-								cease to be usable for performing 
-								encryption or signing operations.  A 
-								reasonable time to set it to is 6 
-								months.  You will have to generate a new 
-								key after this amount of time passes.  
-								<note>Sign your new key with your old one 
-								before it expires to preserve your trust 
-								status.</note>
-							</para>
-						</listitem>
-					</varlistentry>
-					<varlistentry>
-						<term><guilabel>Passphrase</guilabel></term>
-						<listitem>
-							<para>
-								Use similar practices to generating a 
-								strong password when choosing a 
-								passphrase.  The difference between a 
-								password and a pass phrase is that in a 
-								passphrase spaces are valid characters.
-							</para>
-						</listitem>
-					</varlistentry>
-				</variablelist>
-			</sect3>
-		</sect2>
-		<sect2 id="import">
-			<title>Import Keys</title>
-			<para>
-				Importing keys can be performed by choosing
-				<menuchoice>
-					<guimenu>Key</guimenu>
-					<guimenuitem>Import</guimenuitem>
-				</menuchoice>
-				and selecting a file containing at least one ASCII armored public key in 
-				the file chooser.  You can also paste keys by selecting an ASCII armored 
-				public block of text, copying it to the clipboard and choosing
-				<menuchoice>
-					<guimenu>Edit</guimenu>
-					<guimenuitem>Paste Keys</guimenuitem>
-				</menuchoice>
-				.
+				After following the instructions above, the assistant will 
+				walk you through the process of generating a key pair.
 			</para>
 		</sect2>
-		<sect2 id="export">
-			<title>Export Keys</title>
+		<sect2 id="generate-adv">
+			<title>Advanced Key Generation</title>
 			<para>
-				Exporting keys can be performed by selecting the keys in the main window 
-				and choosing
-				<menuchoice>
-					<guimenu>Key</guimenu>
-					<guimenuitem>Export</guimenuitem>
-				</menuchoice>
-				and selecting a file containing at least one ASCII armored public key in 
-				the file chooser.  You can also export keys to the clipboard, in an 
-				ASCII armored block of text, by selecting the keys in the main window 
-				and choosing
-				<menuchoice>
-					<guimenu>Edit</guimenu>
-					<guimenuitem>Copy Keys</guimenuitem>
-				</menuchoice>
-				.
+				After following the instructions above, you will be 
+				presented with a dialog to fill in.  The fields are detailed 
+				below.
 			</para>
-		</sect2>
-		<sect2 id="backup">
-			<title>Backup Keyrings</title>
-			<para>
-				You can back up your public and private keyrings to an archived file by 
-				choosing
-				<menuchoice>
-					<guimenu>Key</guimenu>
-					<guimenuitem>Backup Keyrings</guimenuitem>
-				</menuchoice>
-				.  Enter a file name with a valid archive extenision and specify the 
-				location to save the archive.  
-				<note>You can choose any of the archive types 
-				<application>file-roller</application> supports.</note>
-			</para>
-		</sect2>
-		<!--sect2 id="key-properties">
-			<title>Edit Key Properties</title>
-			<para>Write me: key-properties</para>
 			<variablelist>
 				<varlistentry>
-					<term>Fingerprint</term>
+					<term><guilabel>Full Name</guilabel></term>
 					<listitem>
-						<para>Write me</para>
+						<para>
+							Enter your full name in the form
+							<programlisting>&lt;first&gt; &lt;last&gt;</programlisting>
+							A middle name or initial is optional.
+							<note>You must enter at least 5 
+							characters in this field.</note> 
+						</para>
 					</listitem>
 				</varlistentry>
+				<varlistentry>
+					<term><guilabel>Email Address</guilabel></term>
+					<listitem>
+						<para>
+							Your email address is how most
+							people will locate your key on a
+							key server or other key provider.
+							Make sure it is correct before
+							continuing. 
+							<note>It should be of the form 
+							<programlisting>&lt;user name&gt;@&lt;domain name&gt;</programlisting></note>
+						</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term><guilabel>Key Comment</guilabel></term>
+					<listitem>
+						<para>
+							The comment field can be used to 
+							place any additional information 
+							into the displayed name of your new 
+							key pair.  This information can be 
+							searched for on key servers.
+						</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term><guilabel>Key Type</guilabel></term>
+					<listitem>
+						<para>
+							This field specifies the encryption 
+							algorithms used to generate your keys.
+						</para>
+						<variablelist>
+							<varlistentry>
+								<term>DSA &amp; ElGamal</term>
+								<listitem>
+									<para>
+									This is the suggested 
+									choice as it will allow 
+									you to encrypt/decrypt/
+									sign/verify as needed
+									</para>
+								</listitem>
+							</varlistentry>
+							<varlistentry>
+								<term>DSA</term>
+								<listitem>
+									<para>
+									Will allow signing only.
+									</para>
+								</listitem>
+							</varlistentry>
+							<varlistentry>
+								<term>RSA</term>
+								<listitem>
+									<para>
+									Will allow signing only.
+									</para>
+								</listitem>
+							</varlistentry>
+						</variablelist>
+					</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term><guilabel>Key Length</guilabel></term>
+					<listitem>
+						<para>
+							This is the length of the key in bits.  
+							The longer the key, the more secure it 
+							will be, provided a strong passphrase is
+							used.  Conversely, performing any
+							operation with a longer key will require 
+							more time than it would with a shorter 
+							key.  Acceptable values are between 1024 
+							and 4096 bits.  At least 2048 bits is 
+							recommended.
+						</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term><guilabel>Expiration Date</guilabel></term>
+					<listitem>
+						<para>
+							This is the date at which the key will 
+							cease to be usable for performing 
+							encryption or signing operations.  A 
+							reasonable time to set it to is 6 
+							months.  You will have to either change the 
+							expiration date or generate a new 
+							key or subkey after this amount of time passes.  
+							<note>Sign your new key with your old one 
+							before it expires to preserve your trust 
+							status.</note>
+						</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term><guilabel>Passphrase</guilabel></term>
+					<listitem>
+						<para>
+							Use similar practices to generating a 
+							strong password when choosing a 
+							passphrase.  The difference between a 
+							password and a pass phrase is that in a 
+							passphrase spaces are valid characters.
+						</para>
+					</listitem>
+				</varlistentry>
+			</variablelist>
+		</sect2>
+	</sect1>
+	<sect1 id="import">
+		<title>Importing Keys</title>
+		<para>
+			Importing keys can be performed by choosing
+			<menuchoice>
+				<guimenu>Key</guimenu>
+				<guimenuitem>Import</guimenuitem>
+			</menuchoice>
+			and selecting a file containing at least one ASCII armored public key in 
+			the file chooser.  You can also paste keys by selecting an ASCII armored 
+			public block of text, copying it to the clipboard and choosing
+			<menuchoice>
+				<guimenu>Edit</guimenu>
+				<guimenuitem>Paste Keys</guimenuitem>
+			</menuchoice>
+			.
+		</para>
+	</sect1>
+	<sect1 id="export">
+		<title>Exporting Keys</title>
+		<para>
+			Exporting keys can be performed by selecting the keys in the main window 
+			and choosing
+			<menuchoice>
+				<guimenu>Key</guimenu>
+				<guimenuitem>Export</guimenuitem>
+			</menuchoice>.  You can also export keys to the clipboard, in an 
+			ASCII armored block of text, by selecting the keys in the main window 
+			and choosing
+			<menuchoice>
+				<guimenu>Edit</guimenu>
+				<guimenuitem>Copy Keys</guimenuitem>
+			</menuchoice>
+			.
+		</para>
+	</sect1>
+	<sect1 id="backup">
+		<title>Backing up Keyrings</title>
+		<para>
+			You can back up your public and private keyrings to an archived file by 
+			choosing
+			<menuchoice>
+				<guimenu>Key</guimenu>
+				<guimenuitem>Backup Keyrings</guimenuitem>
+			</menuchoice>
+			.  Enter a file name with a valid archive extenision and specify the 
+			location to save the archive.  
+			<note>You can choose any of the archive types 
+			<application>file-roller</application> supports.</note>
+		</para>
+	</sect1>
+	<sect1 id="key-properties">
+		<title id="pgp-public-key-properties">OpenPGP Key Properties</title>
+		<para>The descriptions in this section apply to all OpenPGP keys</para>
+		<variablelist>
+			<varlistentry>
+				<term>Fingerprint</term>
+				<listitem>
+					<para>The fingerprint is a unique string of characters that exactly identifies a key</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>KeyID</term>
+				<listitem>
+					<para>
+					   The KeyID is similar to the Fingerprint.  However the KeyID only contains the last 8
+					   characters of the fingerprint.  Most of the time it is possible to identify a key with 
+					   only the KeyID, but occasionally two keys may have the same ID.
+				    </para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Type</term>
+				<listitem>
+    			   <para>
+					   Specifies the encryption algorithm used to generate a key.  DSA keys can only sign. 
+					   ElGamel keys are used to encrypt. 
+    			   </para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Created</term>
+				<listitem>
+					<para>Indicates the date the key was created.</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Length</term>
+				<listitem>
+					<para>
+					Indicates the length in bits of a key.  In general the longer the key, the more security it 
+					provides.<note>A long key is not enough to make up for the use of a weak passphrase.</note>  
+					</para>
+				</listitem>
+			</varlistentry>
+		</variablelist>
+		<sect2 id="change-owner-trust">
+			<title>Trust</title>
+			<para>
+    			Trust is an indication of how sure you are of a person's ability to correctly extend 
+    			the web of trust.  When you are faced with a key you have not signed, the validity of 
+    			that person's key will be determined based on the signatures they have collected and 
+    			how well or not you trust the people who have made those signatures.  By default, an 
+    			unknown key will require 3 signatures with marginal trust value or 1 fully trusted signature.
+			</para>
+			<itemizedlist>
+				<listitem><para>
+				    <guilabel>Unknown</guilabel> You are not familiar with the person's ability to sign keys correctly.
+				</para></listitem>
+				<listitem><para>
+				    <guilabel>Never</guilabel> This person cannot correctly sign keys.
+				</para></listitem>
+				<listitem><para>
+				    <guilabel>Marginal</guilabel> This person checks for photo ID before signing a key, but 
+				    does not necessarily scrutinize the IDs.
+				</para></listitem>
+				<listitem><para>
+				    <guilabel>Full</guilabel> This person scrutinizes each and every person's photo IDs before
+				    signing them (e.g. they only sign keys that truely belong to the person asking for the signature). 
+			    </para></listitem>
+				<listitem><para>
+				    <guilabel>Ultimate</guilabel> This level of trust should only be assigned to your own keys.
+				</para></listitem>
+			</itemizedlist>
+		</sect2>
+		<sect2 id="disable-key">
+    		<title>Enabling and Disabling Keys</title>
+    		<para>
+    		  When a key is enabled, it can be used to perform encryption operations.  When a key is disabled, 
+    		  it cannot be used to encrypt to or verify signatures made by it.
+    		</para>
+		</sect2>
+		<sect2 id="change-expires">
+			<title>Expiration Date</title>
+			<para>
+			 A key can no longer be used to perform key operations after it has expired.  Changing a 
+			 key's expiration date to a point in the future re-enables it.  A good general practice 
+			 would be to have a master key that never expires and multiple subkeys that do and are 
+			 signed by the master key.
+			</para>
+		</sect2>
+		<sect2 id="userid-properties">
+			<title>User IDs</title>
+			<para>
+			 User IDs allow multiple identities and email addresses to be used with the same key.  
+			 They usually take the form of: Name (comment) &lt;email address&gt;. 
+			</para>
+		</sect2>
+		<sect2 id="photoid-properties">
+		  <title>Photo IDs</title>
+		  <para>Photo IDs allow a key owner to embed one or more pictures of themselves in a key.
+		    These identities can be signed just like normal user IDs.  A photo ID must be in JPEG 
+		    format and is recommended to be no larger than 240x288 pixels.
+          </para>
+		</sect2>
+		<!--sect2 id="subkey-properties">
+			<title>Subkeys</title>
+			<para>Write me: subkeys</para>
+			<variablelist>
 				<varlistentry>
 					<term>KeyID</term>
 					<listitem>
@@ -424,80 +515,34 @@
 						<para>Write me</para>
 					</listitem>
 				</varlistentry>
+				<varlistentry>
+					<term>Status</term>
+					<listitem>
+						<para>Write me</para>
+					</listitem>
+				</varlistentry>
 			</variablelist>
-			<sect3 id="change-owner-trust">
-				<title>Changing Owner Trust</title>
-				<para>Write me: owner-trust</para>
-				<itemizedlist>
-					<listitem><para><guilabel>Unknown</guilabel></para></listitem>
-					<listitem><para><guilabel>Never</guilabel></para></listitem>
-					<listitem><para><guilabel>Marginal</guilabel></para></listitem>
-					<listitem><para><guilabel>Full</guilabel></para></listitem>
-					<listitem><para><guilabel>Ultimate</guilabel></para></listitem>
-				</itemizedlist>
+			<sect3 id="change-subkey-expires">
+				<title>Changing a Subkey Expiration Date</title>
+				<para>Write me: subkey-expires</para>
 			</sect3>
-			<sect3 id="disable-key">
-				<title>Disabling a Key</title>
-				<para>Write me: disable</para>
+			<sect3 id="revoke-subkey">
+				<title>Revoking a Subkey</title>
+				<para>Write me: subkey-revoke</para>
 			</sect3>
-			<sect3 id="change-expires">
-				<title>Changing Expiration Date</title>
-				<para>Write me: expires</para>
+			<sect3 id="delete-subkey">
+				<title>Deleting a Subkey</title>
+				<para>Write me: subkey-delete</para>
 			</sect3>
-			<sect3 id="userid-properties">
-				<title>User IDs</title>
-				<para>Write me: userids</para>
-			</sect3>
-			<sect3 id="subkey-properties">
-				<title>Subkeys</title>
-				<para>Write me: subkeys</para>
-				<variablelist>
-					<varlistentry>
-						<term>KeyID</term>
-						<listitem>
-							<para>Write me</para>
-						</listitem>
-					</varlistentry>
-					<varlistentry>
-						<term>Type</term>
-						<listitem>
-							<para>Write me</para>
-						</listitem>
-					</varlistentry>
-					<varlistentry>
-						<term>Created</term>
-						<listitem>
-							<para>Write me</para>
-						</listitem>
-					</varlistentry>
-					<varlistentry>
-						<term>Length</term>
-						<listitem>
-							<para>Write me</para>
-						</listitem>
-					</varlistentry>
-					<varlistentry>
-						<term>Status</term>
-						<listitem>
-							<para>Write me</para>
-						</listitem>
-					</varlistentry>
-				</variablelist>
-				<sect4 id="change-subkey-expires">
-					<title>Changing a Subkey Expiration Date</title>
-					<para>Write me: subkey-expires</para>
-				</sect4>
-				<sect4 id="revoke-subkey">
-					<title>Revoking a Subkey</title>
-					<para>Write me: subkey-revoke</para>
-				</sect4>
-				<sect4 id="delete-subkey">
-					<title>Deleting a Subkey</title>
-					<para>Write me: subkey-delete</para>
-				</sect4>
-			</sect3>
-		</sect2>
-		<sect2 id="sign">
+		</sect2-->
+	</sect1>
+    <sect1 id="ssh-key-properties">
+	   <title>SSH Key Properties</title>
+	   <para>
+	       Write me: ssh key properties
+	   </para>
+    </sect1>
+		<!--sect2 id="sign">
 			<title>Signing a Key</title>
 			<para>Write me: sign</para>
 			<variablelist>
@@ -652,8 +697,8 @@
 					</listitem>
 				</varlistentry>
 			</variablelist>
-		</sect2-->
-	</sect1>
+		</sect2>
+	</sect1-->
 	<sect1 id="file-manager">
 		<title>File Manager</title>
 		<para>
