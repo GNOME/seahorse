@@ -129,7 +129,7 @@ object_finalize (GObject *gobject)
     if (glade_xml_get_widget (swidget->xml, swidget->name))
     	gtk_widget_destroy (glade_xml_get_widget (swidget->xml, swidget->name));
 	
-	g_free (swidget->xml);
+	g_object_unref (swidget->xml);
 	swidget->xml = NULL;
 	
 	g_object_unref (swidget->sctx);
