@@ -194,8 +194,6 @@ create_prompt_window (SeahorseAgentPassReq *pr)
     GtkAccelGroup *acc;
     gchar *msg;
 
-    gboolean grab = TRUE;
-
     win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
     gtk_window_set_title (GTK_WINDOW (win), _("Passphrase"));
@@ -206,11 +204,6 @@ create_prompt_window (SeahorseAgentPassReq *pr)
 
     g_signal_connect (G_OBJECT (win), "size-request",
                       G_CALLBACK (constrain_size), NULL);
-
-    g_signal_connect (G_OBJECT (win), grab ? "map-event" : "focus-in-event",
-                      G_CALLBACK (grab_keyboard), NULL);
-    g_signal_connect (G_OBJECT (win), grab ? "unmap-event" : "focus-out-event",
-                      G_CALLBACK (ungrab_keyboard), NULL);
 
     gtk_window_add_accel_group (GTK_WINDOW (win), acc);
 
@@ -299,6 +292,7 @@ create_prompt_window (SeahorseAgentPassReq *pr)
     gtk_window_set_position (GTK_WINDOW (win), GTK_WIN_POS_CENTER);
     gtk_window_set_keep_above(GTK_WINDOW (win), TRUE);
     gtk_widget_show_all (win);
+    gtk_window_present (GTK_WINDOW (win));
     return win;
 }
 
@@ -432,6 +426,7 @@ create_auth_window (SeahorseAgentPassReq *pr)
     gtk_window_set_position (GTK_WINDOW (win), GTK_WIN_POS_CENTER);
     gtk_window_set_keep_above(GTK_WINDOW (win), TRUE);
     gtk_widget_show_all (win);
+    gtk_window_present (GTK_WINDOW (win));
     return win;
 }
 
