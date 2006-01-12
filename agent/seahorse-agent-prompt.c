@@ -205,6 +205,11 @@ create_prompt_window (SeahorseAgentPassReq *pr)
     g_signal_connect (G_OBJECT (win), "size-request",
                       G_CALLBACK (constrain_size), NULL);
 
+    g_signal_connect (G_OBJECT (win), "map-event", 
+                      G_CALLBACK (grab_keyboard), NULL);
+    g_signal_connect (G_OBJECT (win), "unmap-event", 
+                      G_CALLBACK (ungrab_keyboard), NULL);
+
     gtk_window_add_accel_group (GTK_WINDOW (win), acc);
 
     wvbox = gtk_vbox_new (FALSE, HIG_LARGE * 2);
