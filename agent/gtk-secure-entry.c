@@ -1364,16 +1364,19 @@ static void
 gtk_secure_entry_grab_focus(GtkWidget * widget)
 {
     GtkSecureEntry *entry = GTK_SECURE_ENTRY(widget);
-    gboolean select_on_focus;
+    GtkSettings *settings = gtk_widget_get_settings (widget);
+    gboolean select_on_focus = FALSE;
 
-    GTK_WIDGET_SET_FLAGS(widget, GTK_CAN_DEFAULT);
-    GTK_WIDGET_CLASS(parent_class)->grab_focus(widget);
+    GTK_WIDGET_SET_FLAGS (widget, GTK_CAN_DEFAULT);
+    GTK_WIDGET_CLASS (parent_class)->grab_focus(widget);
 
-    g_object_get(gtk_widget_get_settings(widget),
-      "gtk-entry-select-on-focus", &select_on_focus, NULL);
+    /* Some versions of GTK don't have this property */
+    if (g_object_class_find_property (G_OBJECT_CLASS (GTK_SETTINGS_GET_CLASS (settings)), 
+                                      "gtk-entry-select-on-focus"))
+        g_object_get (settings, "gtk-entry-select-on-focus", &select_on_focus, NULL);
 
     if (select_on_focus && !entry->in_click)
-    gtk_editable_select_region(GTK_EDITABLE(widget), 0, -1);
+        gtk_editable_select_region (GTK_EDITABLE (widget), 0, -1);
 }
 
 static void
