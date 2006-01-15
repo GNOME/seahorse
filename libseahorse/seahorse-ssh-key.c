@@ -417,6 +417,7 @@ seahorse_ssh_key_data_read (const gchar *filename)
         if(!g_file_get_contents (data->filepub, &results, NULL, &error)) {
             g_warning ("couldn't read public SSH file: %s (%s)", data->filepub, error->message);
             results = NULL;
+            g_error_free(error);
         }
     } 
     

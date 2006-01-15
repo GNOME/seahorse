@@ -719,28 +719,16 @@ properties_cb (BonoboUIComponent *uic,
 
 static void
 help_cb (BonoboUIComponent *uic,
-	     SeahorseApplet        *seahorse_applet,
-	     const char        *verbname)
+	     SeahorseApplet    *seahorse_applet,
+	     const char       *verbname)
 {
-	GError *error = NULL;
+	GError *err = NULL;
 	GtkWidget *dialog;
 	
-	gnome_help_display ("seahorse-applet", NULL, &error);
+	gnome_help_display ("seahorse-applet", NULL, &err);
     
-	if (error) {
-		dialog = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, 
-							    _("There was an error displaying help: %s"), error->message);
-		fprintf(stderr, "After create dialog\n");
-		g_signal_connect (G_OBJECT (dialog), "response", G_CALLBACK (gtk_widget_destroy), dialog);
-		fprintf(stderr, "After signal connect\n");
-		gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
-		fprintf(stderr, "After set resizable\n");
-		gtk_window_set_screen (GTK_WINDOW (dialog), gtk_widget_get_screen (GTK_WIDGET (seahorse_applet)));
-		fprintf(stderr, "Before Show\n");
-		gtk_widget_show (dialog);
-		fprintf(stderr, "After Show\n");
-		g_error_free (error);
-		error = NULL;
+	if (err) {
+	   seahorse_util_handle_error(err, _("Could not display the help file"));
 	}
 }
 
