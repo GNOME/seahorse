@@ -34,6 +34,11 @@
 #include "config.h"
 #include "seahorse-context.h"
 
+#ifdef WITH_SHARING
+#include <avahi-client/client.h>
+const AvahiPoll* seahorse_util_dns_sd_get_poll ();
+#endif
+
 typedef enum {
 	SEAHORSE_CRYPT_SUFFIX,
 	SEAHORSE_SIG_SUFFIX,

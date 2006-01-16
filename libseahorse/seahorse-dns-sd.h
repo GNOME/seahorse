@@ -43,20 +43,20 @@
 typedef struct _SeahorseServiceDiscovery SeahorseServiceDiscovery;
 typedef struct _SeahorseServiceDiscoveryClass SeahorseServiceDiscoveryClass;
 typedef struct _SeahorseServiceDiscoveryPriv SeahorseServiceDiscoveryPriv;
-	
+
 struct _SeahorseServiceDiscovery {
-	GObject		parent;
-	
-	/*< public >*/
-    GHashTable *services;
+    GObject parent;
+
+    /*< public >*/
+    GHashTable  *services;
     
     /*< private >*/
     SeahorseServiceDiscoveryPriv *priv;
 };
 
 struct _SeahorseServiceDiscoveryClass {
-	GObjectClass		parent_class;
-	
+    GObjectClass parent_class;
+
     /* A relevant service appeared on the network */
     void (*added) (SeahorseServiceDiscovery *ssd, const gchar* service);
 

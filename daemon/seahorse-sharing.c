@@ -18,18 +18,15 @@
  * 59 Temple Place, Suite 330,
  * Boston, MA 02111-1307, USA.
  */
- 
-#include <gnome.h>
-#include <howl.h>
-#include "seahorse-gtkstock.h"
 
-/* Workaround broken howl installing config.h */
-#undef PACKAGE
-#undef VERSION
-#undef PACKAGE_STRING
-#undef PACKAGE_NAME
-#undef PACKAGE_VERSION
-#undef PACKAGE_TARNAME
+#include <config.h>
+#include <gnome.h>
+
+#include <avahi-client/client.h>
+#include <avahi-client/publish.h>
+#include <avahi-common/error.h>
+
+#include "seahorse-gtkstock.h"
 
 #include "config.h"
 #include "eggtrayicon.h"
@@ -37,7 +34,9 @@
 #include "seahorse-gconf.h"
 #include "seahorse-util.h"
 
-/* TODO: Need to be able to advertize in real domains */
+#define HKP_SERVICE_TYPE "_hkp._tcp."
+
+/* TODO: Need to be able to advertize in real DNS domains */
 
 static void start_sharing ();
 static void stop_sharing ();
@@ -48,106 +47,158 @@ static guint gconf_notify_id = 0;
 
 /* DNS-SD publishing -------------------------------------------------------- */
 
-static sw_discovery_publish_id published_id = 0;
-static sw_discovery howl_session = NULL;
-static guint channel_notify_id = 0;
+static AvahiEntryGroup *avahi_group = NULL;
+static AvahiClient *avahi_client = NULL;
 
-static sw_result
-publish_reply (sw_discovery discovery, sw_discovery_publish_status status,
-               sw_discovery_oid id, sw_opaque extra)
+/* Name and 'alternate' integer (for collisions). */
+static gchar *share_name = NULL;
+static int share_alternate = 0;
+
+static void
+stop_publishing (gboolean errmsg)
 {
-	return SW_OKAY;
+    if (share_name)
+        g_free (share_name);
+    share_name = NULL;
+    
+    if (avahi_client)
+        avahi_client_free (avahi_client);
+    avahi_client = NULL;
+
+    if (errmsg) {
+        seahorse_util_show_error (NULL, _("Couldn't share keys"), 
+                                  _("Can't publish discovery information on the network."));
+    }
 }
 
 static void
-stop_publishing (void)
+calc_share_name ()
 {
-    if (published_id != 0)
-		sw_discovery_cancel (howl_session, published_id);
-    published_id = 0;
-    
-    if (channel_notify_id != 0)
-        g_source_remove (channel_notify_id);
-    
-    if (howl_session)
-        sw_discovery_fina (howl_session);
-    howl_session = NULL;
-}
-
-static gboolean
-howl_input (GIOChannel *io_channel, GIOCondition cond, gpointer callback_data)
-{
-	sw_discovery session = callback_data;
-    sw_result result;
-	sw_salt salt;
-
-    result = sw_discovery_salt (session, &salt);
-    if (result != SW_OKAY) {
-        g_warning ("problem accessing discovery session");
-        stop_sharing ();
-        return FALSE;
-    }
-        
-    sw_salt_lock (salt);
-    result = sw_discovery_read_socket (session);
-    sw_salt_unlock (salt);
-    
-    if (result != SW_OKAY) {
-        g_warning ("problem reading from discovery socket");
-        stop_sharing ();
-        return FALSE;
-    }
-    
-	return TRUE;
-}
-
-static gboolean
-start_publishing (int port)
-{
-	GIOChannel *channel;
-    sw_result result;
     const gchar *user_name;
     gchar *t = NULL;
-    gchar *share_name;
-    int fd;
 
-    if (sw_discovery_init (&howl_session) != SW_OKAY)
-        return FALSE;
-    
-	fd = sw_discovery_socket (howl_session);
-	channel = g_io_channel_unix_new (fd);
-	channel_notify_id = g_io_add_watch (channel, G_IO_IN | G_IO_HUP | G_IO_NVAL, 
-                                        howl_input, howl_session);
-	g_io_channel_unref (channel);
     
     user_name = g_get_real_name ();
     if (!user_name || g_str_equal (user_name, "Unknown"))
         user_name = t = seahorse_util_string_up_first (g_get_user_name ());
 
-	/* Translators: The %s will get filled in with the user name
-	   of the user, to form a genitive. If this is difficult to
-	   translate correctly so that it will work correctly in your
-	   language, you may use something equivalent to
-	   "Shared keys of %s", or leave out the %s altogether.
-	   In the latter case, please put "%.0s" somewhere in the string,
-	   which will match the user name string passed by the C code,
-	   but not put the user name in the final string. This is to
-	   avoid the warning that msgfmt might otherwise generate. */
+    /* Translators: The %s will get filled in with the user name
+        of the user, to form a genitive. If this is difficult to
+        translate correctly so that it will work correctly in your
+        language, you may use something equivalent to
+        "Shared keys of %s". */
     share_name = g_strdup_printf (_("%s's encryption keys"), user_name);
     g_free (t);
     
-    result = sw_discovery_publish (howl_session, 0, share_name, "_hkp._tcp",
-				                   NULL, NULL, port, (sw_octets)"", 0,
-				                   publish_reply, NULL, &published_id);
-    g_free (share_name);
-    
-    if (result != SW_OKAY) {
-        stop_publishing ();
-        return FALSE;
+    if (share_alternate) {
+        t = g_strdup_printf ("%s #%d", share_name, share_alternate); 
+        g_free (share_name);
+        share_name = t;
     }
+}
+
+static void
+add_service ()
+{
+    int r;
+
+    r = avahi_entry_group_add_service (avahi_group, AVAHI_IF_UNSPEC, AVAHI_PROTO_UNSPEC, 
+                                           0, share_name, HKP_SERVICE_TYPE, NULL, NULL, 
+                                           seahorse_hkp_server_get_port (), NULL);
+    if (r >= 0)
+        r = avahi_entry_group_commit (avahi_group);
+
+    if (r < 0) {
+        g_warning ("failed to register _hkp._tcp service: %s", avahi_strerror (r));
+        stop_publishing (TRUE);
+        return;
+    }
+}
+
+
+static void 
+services_callback(AvahiEntryGroup *group, AvahiEntryGroupState state, 
+                  AVAHI_GCC_UNUSED void *userdata) 
+{
+    
+    g_assert (!avahi_group || group == avahi_group);
+    
+    switch (state) {
+    case AVAHI_ENTRY_GROUP_COLLISION:
+        /* Someone else has our registered name */
+        share_alternate++;
+        calc_share_name ();
+        g_warning ("naming collision trying new name: %s", share_name);
+        add_service ();
+        break;
+    
+    case AVAHI_ENTRY_GROUP_FAILURE:
+        g_warning ("avahi entry group failure: %s", 
+                   avahi_strerror (avahi_client_errno (avahi_client)));
+        stop_publishing (TRUE);
+        break;
+    
+    default:
+        break;
+    };
+}
+
+static void 
+client_callback (AvahiClient *client, AvahiClientState state, 
+                 AVAHI_GCC_UNUSED void * userdata) 
+{
+    g_assert (!avahi_client || client == avahi_client);
+    
+    switch (state) {
+    case AVAHI_CLIENT_S_RUNNING:
+        /* Create a new entry group if necessary */
+        if (!avahi_group) {
+            avahi_group = avahi_entry_group_new (client, services_callback, NULL);
+            if (!avahi_group) {
+                g_warning ("couldn't create avahi services group: %s", 
+                           avahi_strerror (avahi_client_errno (client)));
+                stop_publishing (TRUE);
+                return;
+            }
+        }
+
+        /* Add add the good stuff */
+        add_service ();
+        break;
+    
+    case AVAHI_CLIENT_S_COLLISION:
+        /* Drop our published services */
+        if (avahi_group)
+            avahi_entry_group_reset (avahi_group);
+        break;
+    
+    case AVAHI_CLIENT_FAILURE:
+        g_warning ("failure talking with avahi: %s", 
+                   avahi_strerror (avahi_client_errno (client)));
+        stop_publishing (TRUE);
+        break;
+    
+    default:
+        break;
+    };
+}
+
+static gboolean
+start_publishing ()
+{
+    int aerr;
+
+    /* The share name is important */
+    share_alternate = 0;
+    calc_share_name ();
+    
+    avahi_client = avahi_client_new (seahorse_util_dns_sd_get_poll (),
+                                     0, client_callback, NULL, &aerr);
+    if (!avahi_client)
+        return FALSE;
     
     return TRUE;
-}   
+}
 
 /* Tray Icon ---------------------------------------------------------------- */
 
@@ -266,11 +317,10 @@ start_sharing ()
             return;
         }
 
-        if (!start_publishing (seahorse_hkp_server_get_port ())) {
+        if (!start_publishing ()) {
             seahorse_hkp_server_stop ();
 
-            seahorse_util_show_error (NULL, _("Couldn't share keys"), 
-                                      _("Can't publish discovery information on the network."));
+            stop_publishing (TRUE);
             return;
         }
     }
@@ -281,7 +331,7 @@ start_sharing ()
 static void
 stop_sharing ()
 {
-    stop_publishing ();
+    stop_publishing (FALSE);
     
     if (seahorse_hkp_server_is_running ())
         seahorse_hkp_server_stop ();
@@ -292,12 +342,12 @@ stop_sharing ()
 static void
 gconf_notify (GConfClient *client, guint id, GConfEntry *entry, gpointer data)
 {
-	if (g_str_equal (KEYSHARING_KEY, gconf_entry_get_key (entry))) {
+    if (g_str_equal (KEYSHARING_KEY, gconf_entry_get_key (entry))) {
         if (gconf_value_get_bool (gconf_entry_get_value (entry)))
             start_sharing ();
         else
             stop_sharing ();
-	}
+    }
 }
 
 void 

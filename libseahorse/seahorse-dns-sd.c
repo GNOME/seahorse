@@ -24,16 +24,12 @@
 #include <gnome.h>
 
 #ifdef WITH_SHARING 
-/* Workaround broken howl installing config.h */
-#undef PACKAGE
-#undef VERSION
-#undef PACKAGE_STRING
-#undef PACKAGE_NAME
-#undef PACKAGE_VERSION
-#undef PACKAGE_TARNAME
-#include <howl.h>
+#include <avahi-client/client.h>
+#include <avahi-client/lookup.h>
+#include <avahi-common/error.h>
 #endif /* WITH_SHARING */
 
+#include "seahorse-util.h"
 #include "seahorse-dns-sd.h"
 #include "seahorse-context.h"
 #include "seahorse-server-source.h"
@@ -65,10 +61,9 @@
 
 struct _SeahorseServiceDiscoveryPriv {
 #ifdef WITH_SHARING
-    sw_discovery session;
-    sw_discovery_oid  oid;
+    AvahiClient *client;
+    AvahiServiceBrowser *browser;
 #endif
-    guint timer;
 };
 
 enum {
@@ -78,43 +73,239 @@ enum {
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
-static GObjectClass *parent_class = NULL;
 
-/* GObject handlers */
-static void class_init        (SeahorseServiceDiscoveryClass *ssd);
-static void object_init       (SeahorseServiceDiscovery *ssd);
-static void object_dispose    (GObject *gobject);
-static void object_finalize   (GObject *gobject);
+G_DEFINE_TYPE (SeahorseServiceDiscovery, seahorse_service_discovery, G_TYPE_OBJECT);
 
-GType
-seahorse_service_discovery_get_type (void) {
-    static GType gtype = 0;
- 
-    if (!gtype) {
+/* -----------------------------------------------------------------------------
+ * INTERNAL 
+ */
+
+#ifdef WITH_SHARING
+
+static void
+disconnect (SeahorseServiceDiscovery *ssd)
+{
+    if (ssd->priv->browser && ssd->priv->client)
+        avahi_service_browser_free (ssd->priv->browser);
+    ssd->priv->browser = NULL;
+    
+    if (ssd->priv->client)
+        avahi_client_free (ssd->priv->client);
+    ssd->priv->client = NULL;
+}
+
+static void 
+resolve_callback (AvahiServiceResolver *resolver, AvahiIfIndex iface, AvahiProtocol proto, 
+                  AvahiResolverEvent event, const char *name, const char *type, const char *domain,
+                  const char *host_name, const AvahiAddress *address, uint16_t port, 
+                  AvahiStringList *txt, AvahiLookupResultFlags flags, void *data)
+{
+    SeahorseServiceDiscovery *ssd = SEAHORSE_SERVICE_DISCOVERY (data);
+    gchar *service_name;
+    gchar *service_uri;
+    gchar *ipname;
+    
+    g_assert (SEAHORSE_IS_SERVICE_DISCOVERY (ssd));
+
+
+    switch(event) {
+    case AVAHI_RESOLVER_FAILURE:
+        g_warning ("couldn't resolve service '%s': %s", name, 
+                   avahi_strerror (avahi_client_errno (ssd->priv->client)));
+        break;
+    
+    
+    case AVAHI_RESOLVER_FOUND:
         
-        static const GTypeInfo gtinfo = {
-            sizeof (SeahorseServiceDiscoveryClass), NULL, NULL,
-            (GClassInitFunc) class_init, NULL, NULL,
-            sizeof (SeahorseServiceDiscovery), 0, (GInstanceInitFunc) object_init
-        };
+        /* Make sure it's our type ... */
+        if (g_strcasecmp (HKP_SERVICE_TYPE, type) != 0)
+            break;
         
-        gtype = g_type_register_static (G_TYPE_OBJECT, "SeahorseServiceDiscovery", 
-                                        &gtinfo, 0);
+#ifndef DISCOVER_THIS_HOST
+        /* And that it's local */
+        if (flags & AVAHI_LOOKUP_RESULT_LOCAL)
+            break;
+#endif
+        
+        ipname = g_new0(gchar, AVAHI_ADDRESS_STR_MAX);
+        avahi_address_snprint (ipname, AVAHI_ADDRESS_STR_MAX, address);
+        
+        service_uri = g_strdup_printf ("hkp://%s:%d", ipname, (int)port);
+        service_name = g_strdup (name);
+        
+        g_hash_table_replace (ssd->services, service_name, service_uri);
+        g_signal_emit (ssd, signals[ADDED], 0, service_name);
+    
+        /* Add it to the context */
+        if (!seahorse_context_remote_key_source (SCTX_APP (), service_uri)) {
+            SeahorseServerSource *ssrc = seahorse_server_source_new (service_uri);
+            g_return_if_fail (ssrc != NULL);
+            seahorse_context_add_key_source (SCTX_APP (), SEAHORSE_KEY_SOURCE (ssrc));
+        }
+    
+        DEBUG_DNSSD (("DNS-SD added: %s %s\n", service_name, service_uri));
+        break;
+        
+    default:
+        break;
+    };
+
+    /* One result is enough for us */
+    avahi_service_resolver_free (resolver);
+}
+
+static void 
+browse_callback(AvahiServiceBrowser *browser, AvahiIfIndex iface, AvahiProtocol proto,
+                AvahiBrowserEvent event, const char *name, const char *type, 
+                const char *domain, AvahiLookupResultFlags flags, void* data) 
+{
+    SeahorseServiceDiscovery *ssd = SEAHORSE_SERVICE_DISCOVERY (data);
+    const gchar *uri;
+    
+    g_return_if_fail (SEAHORSE_IS_SERVICE_DISCOVERY (ssd));
+    g_assert (browser == ssd->priv->browser);
+    
+    if (g_strcasecmp (HKP_SERVICE_TYPE, type) != 0)
+        return;
+
+    switch (event) {
+    case AVAHI_BROWSER_FAILURE:
+        g_warning ("failure browsing for services: %s", 
+                   avahi_strerror (avahi_client_errno (ssd->priv->client)));
+        disconnect (ssd);
+        break;
+    
+    
+    case AVAHI_BROWSER_NEW:
+        if (!avahi_service_resolver_new (ssd->priv->client, iface, proto, name, type, 
+                                         domain, AVAHI_PROTO_UNSPEC, 0, resolve_callback, ssd))
+            g_warning ("couldn't start resolver for service '%s': %s\n", name, 
+                       avahi_strerror (avahi_client_errno (ssd->priv->client)));
+        break;
+        
+        
+    case AVAHI_BROWSER_REMOVE:
+        uri = g_hash_table_lookup (ssd->services, name);
+        if (uri != NULL) {
+            /* Remove it from the main context */
+            SeahorseKeySource *sksrc = seahorse_context_remote_key_source (SCTX_APP(), uri);
+            seahorse_context_remove_key_source (SCTX_APP(), sksrc);
+        }
+        
+        /* And remove it from our tables */
+        g_hash_table_remove (ssd->services, name);
+        g_signal_emit (ssd, signals[REMOVED], 0, name);
+        DEBUG_DNSSD (("DNS-SD removed: %s\n", name));
+        break;
+        
+    
+    default:
+        break;
     }
-  
-    return gtype;
+}
+
+static void 
+client_callback (AvahiClient *client, AvahiClientState state, void *data) 
+{
+    SeahorseServiceDiscovery *ssd = SEAHORSE_SERVICE_DISCOVERY (data);
+    
+    g_return_if_fail (SEAHORSE_IS_SERVICE_DISCOVERY (ssd));
+    
+    /* Disconnect when failed */
+    if (state == AVAHI_CLIENT_FAILURE) {
+        g_return_if_fail (client == ssd->priv->client);
+        g_warning ("failure communicating with to avahi: %s", 
+                   avahi_strerror (avahi_client_errno (client)));
+        disconnect (ssd);
+    }
+}
+
+#endif /* WITH_SHARING */
+
+static void
+service_key_list (const gchar* key, const gchar* value, GSList **arg)
+{
+    *arg = g_slist_prepend (*arg, g_strdup (key));
+}
+
+
+/* -----------------------------------------------------------------------------
+ * OBJECT 
+ */
+
+
+static void
+seahorse_service_discovery_init (SeahorseServiceDiscovery *ssd)
+{
+    int aerr;
+    
+    ssd->priv = g_new0 (SeahorseServiceDiscoveryPriv, 1);
+    ssd->services = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
+    
+#ifdef WITH_SHARING
+    ssd->priv->client = avahi_client_new (seahorse_util_dns_sd_get_poll (), 
+                                          0, client_callback, ssd, &aerr);
+fprintf(stderr, "returned from client_new...\n");    
+    if (!ssd->priv->client) {
+        g_warning ("DNS-SD initialization failed: %s", avahi_strerror (aerr));
+        return;
+    }
+    
+    ssd->priv->browser = avahi_service_browser_new (ssd->priv->client, AVAHI_IF_UNSPEC, 
+                                AVAHI_PROTO_UNSPEC, HKP_SERVICE_TYPE, NULL, 0, 
+                                browse_callback, ssd);
+    if (!ssd->priv->browser) {
+        g_warning ("Browsing for DNS-SD services failed: %s", 
+                   avahi_strerror (avahi_client_errno (ssd->priv->client)));
+        return;
+    }
+    
+#endif /* WITH_SHARING */
 }
 
 static void
-class_init (SeahorseServiceDiscoveryClass *klass)
+seahorse_service_discovery_dispose (GObject *gobject)
 {
-    GObjectClass *gobject_class;
-   
-    parent_class = g_type_class_peek_parent (klass);
-    gobject_class = G_OBJECT_CLASS (klass);
+    SeahorseServiceDiscovery *ssd = SEAHORSE_SERVICE_DISCOVERY (gobject);
     
-    gobject_class->dispose = object_dispose;
-    gobject_class->finalize = object_finalize;
+#ifdef WITH_SHARING
+    disconnect (ssd);
+#endif 
+    
+    G_OBJECT_CLASS (seahorse_service_discovery_parent_class)->dispose (gobject);
+}
+
+/* free private vars */
+static void
+seahorse_service_discovery_finalize (GObject *gobject)
+{
+    SeahorseServiceDiscovery *ssd = SEAHORSE_SERVICE_DISCOVERY (gobject);
+  
+#ifdef WITH_SHARING    
+    g_assert (ssd->priv->browser == NULL);
+    g_assert (ssd->priv->client == NULL);
+#endif /* WITH_SHARING */    
+
+    if (ssd->services)    
+        g_hash_table_destroy (ssd->services);
+    ssd->services = NULL;
+    
+    g_free (ssd->priv);
+    ssd->priv = NULL;
+    
+    G_OBJECT_CLASS (seahorse_service_discovery_parent_class)->finalize (gobject);
+}
+
+static void
+seahorse_service_discovery_class_init (SeahorseServiceDiscoveryClass *klass)
+{
+    GObjectClass *gclass;
+   
+    seahorse_service_discovery_parent_class = g_type_class_peek_parent (klass);
+    gclass = G_OBJECT_CLASS (klass);
+    
+    gclass->dispose = seahorse_service_discovery_dispose;
+    gclass->finalize = seahorse_service_discovery_finalize;
 
     signals[ADDED] = g_signal_new ("added", SEAHORSE_TYPE_SERVICE_DISCOVERY, 
                 G_SIGNAL_RUN_FIRST, G_STRUCT_OFFSET (SeahorseServiceDiscoveryClass, added),
@@ -124,197 +315,14 @@ class_init (SeahorseServiceDiscoveryClass *klass)
                 NULL, NULL, g_cclosure_marshal_VOID__STRING, G_TYPE_NONE, 1, G_TYPE_STRING);
 }
 
-#ifdef WITH_SHARING
-
-static gboolean     
-salt_timer (SeahorseServiceDiscovery *ssd)
-{
-    sw_salt salt;
-    sw_ulong timeout = 0;
-    
-    g_return_val_if_fail (SEAHORSE_IS_SERVICE_DISCOVERY (ssd), FALSE);
-    g_return_val_if_fail (ssd->priv->session != NULL, FALSE);
-    sw_discovery_salt (ssd->priv->session, &salt);
-    sw_salt_step (salt, &timeout);
-    
-    return TRUE;
-}
-
-static sw_result
-resolve_callback (sw_discovery discovery, sw_discovery_oid oid, sw_uint32 interface_index,
-                  sw_const_string name, sw_const_string type, sw_const_string domain,
-                  sw_ipv4_address address, sw_port port, sw_octets text_record, 
-                  sw_ulong text_record_len, SeahorseServiceDiscovery *ssd)
-{
-    sw_ipv4_address local;
-    gchar *service_name;
-    gchar *service_uri;
-    gchar *ipname;
-    
-    /* One address is enough */
-    sw_discovery_cancel (discovery, oid);   
-    
-    g_return_val_if_fail (SEAHORSE_IS_SERVICE_DISCOVERY (ssd), SW_DISCOVERY_E_BAD_PARAM);
-
-    if (g_strcasecmp (HKP_SERVICE_TYPE, type) != 0)
-        return SW_OKAY;
-    
-    /* To prevent warnings */
-    memset (&local, 0, sizeof (local));
-
-#ifndef DISCOVER_THIS_HOST
-
-    /* 
-     * TODO: In the future there needs to be a better way of determining 
-     * which services we see that are from the local host. This can fail
-     * on multihomed hosts.
-     */
-    sw_ipv4_address_init_from_this_host (&local);
-    if (sw_ipv4_address_equals (local, address))
-        return SW_OKAY;
-    
-#endif /* DISCOVER_THIS_HOST */
-    
-    ipname = g_new0(gchar, 16);
-    sw_ipv4_address_name (address, ipname, 16);
-    service_uri = g_strdup_printf ("hkp://%s:%d", ipname, port);
-    service_name = g_strdup (name);
-    
-    g_hash_table_replace (ssd->services, service_name, service_uri);
-    g_signal_emit (ssd, signals[ADDED], 0, service_name);
-    
-    /* Add it to the context */
-    if (!seahorse_context_remote_key_source (SCTX_APP (), service_uri)) {
-        SeahorseServerSource *ssrc = seahorse_server_source_new (service_uri);
-        g_return_val_if_fail (ssrc != NULL, SW_OKAY);
-        seahorse_context_add_key_source (SCTX_APP (), SEAHORSE_KEY_SOURCE (ssrc));
-    }
-    
-    DEBUG_DNSSD (("DNS-SD added: %s %s\n", service_name, service_uri));
-    
-    return SW_OKAY;    
-}
-
-static sw_result
-browse_callback (sw_discovery discovery, sw_discovery_oid id,
-                 sw_discovery_browse_status status, sw_uint32 interface_index,
-                 sw_const_string name, sw_const_string type, sw_const_string domain,
-                 SeahorseServiceDiscovery *ssd)
-{
-    sw_discovery_oid oid;
-    const gchar *uri;
-
-    g_return_val_if_fail (SEAHORSE_IS_SERVICE_DISCOVERY (ssd), SW_DISCOVERY_E_BAD_PARAM);
-    
-    if (g_strcasecmp (HKP_SERVICE_TYPE, type) != 0)
-        return SW_OKAY;
-
-    if (status == SW_DISCOVERY_BROWSE_ADD_SERVICE) {
-        
-        if (sw_discovery_resolve (ssd->priv->session, 0, name, type, domain, 
-                                  (sw_discovery_resolve_reply)resolve_callback, 
-                                   ssd, &oid) != SW_OKAY) 
-            g_warning ("error resolving DNS-SD name: %s", name);
-        
-    } else if (status == SW_DISCOVERY_BROWSE_REMOVE_SERVICE) {
-        
-        /* Remove it from the context */
-        uri = g_hash_table_lookup (ssd->services, name);
-        if (uri != NULL) {
-            SeahorseKeySource *sksrc = seahorse_context_remote_key_source (SCTX_APP(), uri);
-            seahorse_context_remove_key_source (SCTX_APP(), sksrc);
-        }
-
-        g_hash_table_remove (ssd->services, name);
-        g_signal_emit (ssd, signals[REMOVED], 0, name);
-        DEBUG_DNSSD (("DNS-SD removed: %s\n", name));
-        
-    }
-    
-    return SW_OKAY;
-}
-
-#endif /* WITH_SHARING */
-
-static void
-object_init (SeahorseServiceDiscovery *ssd)
-{
-	ssd->priv = g_new0 (SeahorseServiceDiscoveryPriv, 1);
-    ssd->services = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
-    
-#ifdef WITH_SHARING     
-    if (sw_discovery_init (&(ssd->priv->session)) != SW_OKAY) {
-        g_warning ("DNS-SD initialization failed");
-        ssd->priv->session = NULL;
-        return;
-    }
-        
-    if (sw_discovery_browse (ssd->priv->session, 0, HKP_SERVICE_TYPE, NULL,
-					         (sw_discovery_browse_reply)browse_callback, ssd, 
-                             &(ssd->priv->oid)) != SW_OKAY) {
-        g_warning ("Browsing for DNS-SD services failed");
-        ssd->priv->oid = 0;
-    }
-    
-    ssd->priv->timer = g_timeout_add (100, (GSourceFunc)salt_timer, ssd);
-#endif /* WITH_SHARING */
-}
-
-static void
-object_dispose (GObject *gobject)
-{
-    SeahorseServiceDiscovery *ssd;
-    ssd = SEAHORSE_SERVICE_DISCOVERY (gobject);
-    
-#ifdef WITH_SHARING     
-    if (ssd->priv->oid != 0 && ssd->priv->session != NULL)
-        sw_discovery_cancel (ssd->priv->session, ssd->priv->oid);
-    ssd->priv->oid = 0;
-    
-    if (ssd->priv->session != NULL)
-        sw_discovery_fina (ssd->priv->session);
-    ssd->priv->session = NULL;
-    
-    if (ssd->priv->timer != 0)
-        g_source_remove (ssd->priv->timer);
-    ssd->priv->timer = 0;
-#endif /* WITH_SHARING */
-    
-    G_OBJECT_CLASS (parent_class)->dispose (gobject);
-}
-
-/* free private vars */
-static void
-object_finalize (GObject *gobject)
-{
-    SeahorseServiceDiscovery *ssd = SEAHORSE_SERVICE_DISCOVERY (gobject);
-  
-#ifdef WITH_SHARING    
-    g_assert (ssd->priv->session == NULL);
-    g_assert (ssd->priv->oid == 0);
-    g_assert (ssd->priv->timer == 0);
-#endif /* WITH_SHARING */    
-    
-    g_hash_table_destroy (ssd->services);
-    ssd->services = NULL;
-    
-    g_free (ssd->priv);
-    ssd->priv = NULL;
-    
-    G_OBJECT_CLASS (parent_class)->finalize (gobject);
-}
-
+/* -----------------------------------------------------------------------------
+ * PUBLIC 
+ */
 
 SeahorseServiceDiscovery*   
 seahorse_service_discovery_new ()
 {
     return g_object_new (SEAHORSE_TYPE_SERVICE_DISCOVERY, NULL);
-}
-
-static void
-service_key_list (const gchar* key, const gchar* value, GSList **arg)
-{
-    *arg = g_slist_prepend (*arg, g_strdup (key));
 }
 
 GSList*                     
