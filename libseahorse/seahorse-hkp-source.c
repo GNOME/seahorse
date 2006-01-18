@@ -54,8 +54,6 @@ get_hkp_error_domain ()
     return q;
 }
 
-#ifdef _DEBUG
-
 static gchar*
 get_http_server_address (SeahorseKeySource *src)
 {
@@ -73,6 +71,8 @@ get_http_server_address (SeahorseKeySource *src)
     g_free (server);
     return t;
 }
+
+#ifdef _DEBUG
 
 static void
 dump_soup_header (const gchar *name, const gchar *value, gpointer user_data)
