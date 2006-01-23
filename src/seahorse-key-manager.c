@@ -127,8 +127,10 @@ static GtkTreeView*
 get_current_view (SeahorseWidget *swidget)
 {
     const gchar *name;
-    
+
     switch (get_current_tab (swidget)) {
+	case 0: /* Early on in initialization no tab is selected */
+		return NULL;
     case TAB_PUBLIC:
         name = "pub-key-list";
         break;
@@ -398,16 +400,18 @@ sign_activate (GtkWidget *widget, SeahorseWidget *swidget)
     g_list_free (keys);
 }
 
-#ifdef WITH_KEYSERVER
 static void
 search_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
+#ifdef WITH_KEYSERVER
     seahorse_keyserver_search_show ();
+#endif
 }
 
 static void
 sync_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
+#ifdef WITH_KEYSERVER
     GList *keys = get_selected_keys (swidget);
     GList *l;
     
@@ -424,13 +428,13 @@ sync_activate (GtkWidget *widget, SeahorseWidget *swidget)
         keys = seahorse_context_find_keys (SCTX_APP (), SKEY_PGP, SKEY_LOC_LOCAL, 0);
     seahorse_keyserver_sync_show (keys);
     g_list_free (keys);
-}
 #endif
+}
 
-#ifdef WITH_SSH
 static void
 setup_sshkey_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
+#ifdef WITH_SSH
     GList *keys = get_selected_keys (swidget);
     GList *l;
     
@@ -445,8 +449,8 @@ setup_sshkey_activate (GtkWidget *widget, SeahorseWidget *swidget)
     
     if (keys != NULL)
         seahorse_ssh_upload_prompt (keys);
-}
 #endif 
+}
 
 /* Loads delete dialog if a key is selected */
 static void
@@ -809,21 +813,17 @@ static GtkActionEntry pgp_entries[] = {
             N_("Sign public key"), G_CALLBACK (sign_activate) }, 
 };
 
-#ifdef WITH_SSH
 static GtkActionEntry ssh_entries[] = {
     { "remote-upload-ssh", NULL, N_("Configure SSH Key for Computer..."), "",
             N_("Send public SSH key to another machine, and enable logins using that key."), G_CALLBACK (setup_sshkey_activate) },
 };
-#endif 
 
-#ifdef WITH_KEYSERVER
 static GtkActionEntry keyserver_entries[] = {
     { "remote-find", GTK_STOCK_FIND, N_("_Find Remote Keys..."), "",
             N_("Search for keys on a key server"), G_CALLBACK (search_activate) }, 
     { "remote-sync", GTK_STOCK_REFRESH, N_("_Sync and Publish Keys..."), "",
             N_("Publish and/or sync your keys with those online."), G_CALLBACK (sync_activate) }, 
 };
-#endif 
 
 void
 initialize_tab (SeahorseWidget *swidget, const gchar *tabwidget, guint tabid, 
@@ -894,19 +894,23 @@ seahorse_key_manager_show (SeahorseOperation *op)
     seahorse_widget_add_actions (swidget, actions);                              
     
     /* Actions for SSH keys */
-#ifdef WITH_SSH
     actions = gtk_action_group_new ("ssh");
     gtk_action_group_add_actions (actions, ssh_entries,
                                   G_N_ELEMENTS (ssh_entries), swidget);
     seahorse_widget_add_actions (swidget, actions);
+	
+#ifndef WITH_SSH
+    gtk_action_group_set_visible (actions, FALSE);
 #endif
 
     /* Actions for keyservers */
-#ifdef WITH_KEYSERVER      
     actions = gtk_action_group_new ("keyserver");
     gtk_action_group_add_actions (actions, keyserver_entries, 
                                   G_N_ELEMENTS (keyserver_entries), swidget);
     seahorse_widget_add_actions (swidget, actions);                                  
+	
+#ifndef WITH_KEYSERVER
+	gtk_action_group_set_visible (actions, FALSE);
 #endif
  	
 	/* close event */
