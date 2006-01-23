@@ -285,22 +285,25 @@ AC_ARG_ENABLE(applet,
 	    AC_HELP_STRING([--disable-applet],
 	    [Don't compile panel applet]))
 
-AM_CONDITIONAL(WITH_APPLET, test "$enable_applet" != "no")
-
 # Applet tests 
 if test "$enable_applet" = "no"; then
-    with_applet=no
 	echo "disabling panel applet"
 else
-    enable_applet=yes
-	echo "enabling panel applet..."
-	echo "checking for supported versions of libpanel..."
+	echo "checking for supported versions of libpanelapplet..."
+	
+    PKG_CHECK_MODULES(GNOME_APPLETS, libpanelapplet-2.0 >= 2.9.4,
+		[enable_applet=yes],
+		[enable_applet=no])
 
-    PKG_CHECK_MODULES(GNOME_APPLETS, libpanelapplet-2.0 >= 2.9.4)
-    AC_SUBST(GNOME_APPLETS_CFLAGS)
-    AC_SUBST(GNOME_APPLETS_LIBS)
-    AC_DEFINE(WITH_APPLET, 1, [Panel applet code])
+	if test "$enable_applet" = "yes"; then
+		echo "enabling panel applet..."
+    	AC_SUBST(GNOME_APPLETS_CFLAGS)
+    	AC_SUBST(GNOME_APPLETS_LIBS)
+    	AC_DEFINE(WITH_APPLET, 1, [Panel applet code])
+	fi
 fi
+
+AM_CONDITIONAL(WITH_APPLET, test "$enable_applet" = "yes")
 
 
 dnl ***************
@@ -312,8 +315,6 @@ AC_ARG_ENABLE(gedit,
 	    AC_HELP_STRING([--disable-gedit],
 	    [Don't compile gedit plugin]))
 
-AM_CONDITIONAL(WITH_GEDIT, test "$enable_gedit" != "no")
-
 # Gedit tests 
 if test "$enable_gedit" = "no"; then
 	echo "disabling gedit plugin"
@@ -322,14 +323,20 @@ else
 	echo "enabling gedit plugin..."
 	echo "checking for supported versions of gedit..."
 	
-	PKG_CHECK_MODULES(GEDIT, gedit-2.12 >= 2.12.0, ,
-		[PKG_CHECK_MODULES(GEDIT, gedit-2.10 >= 2.9.0, , 
-    		[PKG_CHECK_MODULES(GEDIT, gedit-2.8 >= 2.8.0, , 
-	    		[PKG_CHECK_MODULES(GEDIT, gedit-2.6 >= 2.6.0)])])])
+	PKG_CHECK_MODULES(GEDIT, gedit-2.12 >= 2.12.0, [enable_gedit=yes],
+		[PKG_CHECK_MODULES(GEDIT, gedit-2.10 >= 2.9.0, [enable_gedit=yes], 
+    		[PKG_CHECK_MODULES(GEDIT, gedit-2.8 >= 2.8.0, [enable_gedit=yes], 
+	    		[PKG_CHECK_MODULES(GEDIT, gedit-2.6 >= 2.6.0, [enable_gedit=yes],
+					[enable_gedit=no])])])])
 	
-	AC_SUBST(GEDIT_CFLAGS)
-	AC_SUBST(GEDIT_LIBS)
+	if test "$enable_gedit" = "yes"; then
+		echo "enabling gedit plugin..."
+		AC_SUBST(GEDIT_CFLAGS)
+		AC_SUBST(GEDIT_LIBS)
+	fi
 fi
+
+AM_CONDITIONAL(WITH_GEDIT, test "$enable_gedit" = "yes")
 
 
 dnl ***************
