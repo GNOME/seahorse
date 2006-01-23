@@ -1169,6 +1169,13 @@ seahorse_util_string_up_first (const gchar *orig)
     return ret;
 }
     
+void        
+seahorse_util_string_lower (gchar *s)
+{
+    for ( ; *s; s++)
+        *s = g_ascii_tolower (*s);
+}
+
 /* Free a GSList along with string values */
 GSList*
 seahorse_util_string_slist_free (GSList *list)

@@ -24,13 +24,19 @@ mimeinfo_DATA = seahorse.mime seahorse.keys
 mimedir = $(datadir)/mime/packages
 mime_DATA = seahorse.xml
 
+if UPDATE_MIME_DATABASE
 install-data-local:
-	mkdir -p $(datadir)/mime/packages/
+	mkdir -p $(mimedir)
 	update-mime-database $(datadir)/mime/
-    
+
 uninstall-local:
 	update-mime-database $(datadir)/mime/
-	
+else
+install-data-local:
+
+uninstall-local:
+endif
+
 @INTLTOOL_DESKTOP_RULE@
 olddesktopdir = $(datadir)/control-center-2.0/capplets
 olddesktop_in_files = seahorse-pgp-preferences.desktop.in

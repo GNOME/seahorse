@@ -152,6 +152,8 @@ gboolean    seahorse_util_string_equals       (const gchar *s1, const gchar *s2)
 
 gchar*      seahorse_util_string_up_first     (const gchar *orig);
 
+void        seahorse_util_string_lower        (gchar *s);
+
 GSList*     seahorse_util_string_slist_free   (GSList *slist);
 
 GSList*     seahorse_util_string_slist_copy   (GSList *slist);

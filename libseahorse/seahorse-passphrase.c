@@ -196,6 +196,7 @@ seahorse_passphrase_prompt_show (const gchar *title, const gchar *description,
 
     gtk_window_set_position (GTK_WINDOW (dialog), GTK_WIN_POS_CENTER);
     gtk_window_set_keep_above(GTK_WINDOW (dialog), TRUE);
+    gtk_window_present (GTK_WINDOW (win));
     gtk_widget_show_all (GTK_WIDGET (dialog));
 
     return dialog;

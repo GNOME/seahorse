@@ -575,6 +575,11 @@ AC_SUBST(SEAHORSE_LIBS)
 
 AC_PATH_PROG(GLIB_GENMARSHAL, glib-genmarshal)
 
+AC_ARG_ENABLE(update-mime-database,
+	AC_HELP_STRING([--disable-update-mime-database],
+	[do not run the update-mime-database utility (mostly useful for package maintainers) ]))
+AM_CONDITIONAL(UPDATE_MIME_DATABASE, test "$enable_update_mime_database" != "no")
+
 dnl *******************
 dnl ***** gettext *****
 dnl *******************

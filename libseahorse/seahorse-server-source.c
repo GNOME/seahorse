@@ -402,7 +402,7 @@ seahorse_server_source_new (const gchar *server)
     SeahorseServerSource *ssrc = NULL;
     const gchar *scheme;
     const gchar *host;
-    gchar *uri;
+    gchar *uri, *t;
     
     g_return_val_if_fail (server && server[0], NULL);
     
@@ -410,21 +410,40 @@ seahorse_server_source_new (const gchar *server)
         
     if (!parse_keyserver_uri (uri, &scheme, &host)) {
         g_warning ("invalid uri passed: %s", server);
+
         
     } else {
         
-#ifdef WITH_LDAP        
+#ifdef WITH_LDAP       
+        /* LDAP Uris */ 
         if (g_ascii_strcasecmp (scheme, "ldap") == 0) 
             ssrc = SEAHORSE_SERVER_SOURCE (seahorse_ldap_source_new (server, host));
         else
 #endif /* WITH_LDAP */
         
 #ifdef WITH_HKP
-        if (g_ascii_strcasecmp (scheme, "hkp") == 0 || 
-            g_ascii_strcasecmp (scheme, "http") == 0 ||
-            g_ascii_strcasecmp (scheme, "https") == 0)
+        /* HKP Uris */
+        if (g_ascii_strcasecmp (scheme, "hkp") == 0) {
+            
             ssrc = SEAHORSE_SERVER_SOURCE (seahorse_hkp_source_new (server, host));
-        else
+
+        /* HTTP Uris */
+        } else if (g_ascii_strcasecmp (scheme, "http") == 0 ||
+                   g_ascii_strcasecmp (scheme, "https") == 0) {
+
+            /* If already have a port */
+            if (strchr (host, ':')) 
+	            ssrc = SEAHORSE_SERVER_SOURCE (seahorse_hkp_source_new (server, host));
+
+            /* No port make sure to use defaults */
+            else {
+                t = g_strdup_printf ("%s:%d", host, 
+                                     (g_ascii_strcasecmp (scheme, "http") == 0) ? 80 : 443);
+                ssrc = SEAHORSE_SERVER_SOURCE (seahorse_hkp_source_new (server, t));
+                g_free (t);
+            }
+
+        } else
 #endif /* WITH_HKP */
         
             g_warning ("unsupported keyserver uri scheme: %s", scheme);
