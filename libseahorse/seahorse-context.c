@@ -210,7 +210,7 @@ seahorse_context_new (gboolean app_ctx, guint ktype)
         /* Automatically added remote key sources */
         sctx->pv->auto_sources = g_hash_table_new_full (g_str_hash, g_str_equal,
                                                         g_free, NULL);
-        
+
         /* Listen for new gconf remote key sources automatically */
         sctx->pv->notify_id = seahorse_gconf_notify (KEYSERVER_KEY, 
                                     (GConfClientNotifyFunc)refresh_keyservers, sctx);
@@ -371,6 +371,7 @@ seahorse_context_remote_key_source (SeahorseContext *sctx, const gchar *uri)
             return ks;
     }
     
+#ifdef WITH_KEYSERVER	
     /* Auto generate one if possible */
     if (sctx->pv->auto_sources) {
         ks = SEAHORSE_KEY_SOURCE (seahorse_server_source_new (uri));
@@ -379,6 +380,7 @@ seahorse_context_remote_key_source (SeahorseContext *sctx, const gchar *uri)
             g_hash_table_replace (sctx->pv->auto_sources, g_strdup (uri), ks);
         }
     }
+#endif /* WITH_KEYSERVER */	
     
     return ks;
 }
@@ -714,6 +716,7 @@ static void
 refresh_keyservers (GConfClient *client, guint id, GConfEntry *entry, 
                     SeahorseContext *sctx)
 {
+#ifdef WITH_KEYSERVER
     SeahorseServerSource *ssrc;
     GSList *keyservers, *l;
     GHashTable *check;
@@ -728,6 +731,7 @@ refresh_keyservers (GConfClient *client, guint id, GConfEntry *entry,
     /* Make a light copy of the auto_source table */    
     check = g_hash_table_new (g_str_hash, g_str_equal);
     g_hash_table_foreach (sctx->pv->auto_sources, (GHFunc)auto_source_to_hash, check);
+
     
     /* Load and strip names from keyserver list */
     keyservers = seahorse_gconf_get_string_list (KEYSERVER_KEY);
@@ -748,10 +752,11 @@ refresh_keyservers (GConfClient *client, guint id, GConfEntry *entry,
         /* Mark this one as present */
         g_hash_table_remove (check, uri);
     }
-    
+	    
     /* Now remove any extras */
     g_hash_table_foreach (check, (GHFunc)auto_source_remove, sctx);
     
     g_hash_table_destroy (check);
     seahorse_util_string_slist_free (keyservers);    
+#endif /* WITH_KEYSERVER */
 }
