@@ -221,7 +221,7 @@ seahorse_pgp_source_init (SeahorsePGPSource *psrc)
     g_free (uri);
     
     if (res != GNOME_VFS_OK) {
-        psrc->priv->monitor_handle = NULL;
+        psrc->pv->monitor_handle = NULL;
         g_warning ("couldn't monitor the GPG home directory: %s", gpg_homedir);
     }
 }
