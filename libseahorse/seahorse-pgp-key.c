@@ -615,12 +615,13 @@ seahorse_pgp_key_get_num_photoids (SeahorsePGPKey *pkey)
 	gpgmex_photo_id_t photoid;
 
 	g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (pkey), 0);    
-    g_return_val_if_fail (pkey->photoids != NULL, 0);
-		
-	photoid = pkey->photoids;
-	while (photoid) {
-		photoid = photoid->next;
-		index++;
+    
+    if (pkey->photoids != NULL) {	
+    	photoid = pkey->photoids;
+    	while (photoid) {
+    		photoid = photoid->next;
+    		index++;
+    	}
 	}
 	
 	return index;        
