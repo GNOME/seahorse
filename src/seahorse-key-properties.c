@@ -826,6 +826,8 @@ do_details_signals (SeahorseWidget *swidget)
 										G_CALLBACK (details_revoke_subkey_button_clicked), swidget);
 		glade_xml_signal_connect_data (swidget->xml, "on_details_delete_button_clicked",
 										G_CALLBACK (details_del_subkey_button_clicked), swidget);
+		glade_xml_signal_connect_data (swidget->xml, "on_details_export_button_clicked",
+										G_CALLBACK (details_export_button_clicked), swidget);
 	}
 	glade_xml_signal_connect_data (swidget->xml, "on_details_enable_toggle",
 									G_CALLBACK (trust_enable_toggled), swidget);
