@@ -277,11 +277,9 @@ edit_key (SeahorsePGPKey *pkey, SeahorseEditParm *parms, SeahorseKeyChange chang
 	/* do edit callback, release data */
 	err = gpgme_op_edit (psrc->gctx, pkey->pubkey, seahorse_pgp_key_op_edit, parms, out);
 	gpgme_data_release (out);
-	g_return_val_if_fail (GPG_IS_OK (err), err);
-    
-	/* signal key */
-    if (change != 0)
-	    seahorse_key_changed (SEAHORSE_KEY (pkey), change);
+	
+	if (GPG_IS_OK (err) && (change != 0))
+    	seahorse_key_changed (SEAHORSE_KEY (pkey), change);
     
 	return err;
 }
