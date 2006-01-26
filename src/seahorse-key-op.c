@@ -253,9 +253,10 @@ edit_key (SeahorseKey *skey, SeahorseEditParm *parms, SeahorseKeyChange change)
 	/* do edit callback, release data */
 	err = gpgme_op_edit (sksrc->ctx, skey->key, seahorse_key_op_edit, parms, out);
 	gpgme_data_release (out);
-	g_return_val_if_fail (GPG_IS_OK (err), err);
+
 	/* signal key */
-	seahorse_key_changed (skey, change);
+	if(GPG_IS_OK (err))
+		seahorse_key_changed (skey, change);
 	return err;
 }
 
