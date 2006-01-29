@@ -32,6 +32,10 @@
 #include <gedit/gedit-plugin.h>
 #include <gedit/gedit-debug.h>
 #include <gedit/gedit-utils.h>
+#include <gedit/gedit-menus.h>
+
+#include "seahorse-context.h"
+#include "seahorse-gedit.h"
 
 #define MENU_ENC_ITEM_LABEL      N_("_Encrypt...")
 #define MENU_ENC_ITEM_PATH       "/menu/Edit/EditOps_6/"
@@ -59,21 +63,21 @@ static SeahorseContext *sctx = NULL;
 static void
 encrypt_cb (BonoboUIComponent *uic, gpointer user_data, const gchar *verbname)
 {
-	seahorse_gedit_encrypt (sctx);
+    seahorse_gedit_encrypt (sctx, gedit_get_active_document ());
 }
 
 /* Called for the decrypt menu item */
 static void
 decrypt_cb (BonoboUIComponent *uic, gpointer user_data, const gchar *verbname)
 {
-	seahorse_gedit_decrypt (sctx);
+    seahorse_gedit_decrypt (sctx, gedit_get_active_document ());
 }
 
 /* Callback for the sign menu item */
 static void
 sign_cb (BonoboUIComponent *uic, gpointer user_data, const gchar *verbname)
 {
-	seahorse_gedit_sign (sctx);
+    seahorse_gedit_sign (sctx, gedit_get_active_document ());
 }
 
 /* -----------------------------------------------------------------------------
@@ -183,4 +187,29 @@ init (GeditPlugin *plugin)
     plugin->private_data = sctx;
 
     return PLUGIN_OK;
+}
+
+/* -----------------------------------------------------------------------------
+ * HELPERS
+ */
+
+void        
+seahorse_gedit_flash (const gchar *format, ...)
+{
+    va_list va;
+    gchar *msg; 
+
+    va_start(va, format);
+    
+    msg = g_strdup_vprintf(format, va);
+    gedit_utils_flash (msg);
+    g_free(msg);
+    
+    va_end(va);
+}
+
+GtkWindow*    
+seahorse_gedit_active_window (void)
+{
+    return GTK_WINDOW (gedit_get_active_window ());
 }

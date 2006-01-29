@@ -25,14 +25,14 @@
 #include "config.h"
 #include "seahorse-context.h"
 
-void 		    seahorse_gedit_encrypt 		    (SeahorseContext *sctx,
-									             GeditDocument *doc);
-void 		    seahorse_gedit_sign			    (SeahorseContext *sctx,
+void            seahorse_gedit_encrypt          (SeahorseContext *sctx,
                                                  GeditDocument *doc);
-void 		    seahorse_gedit_decrypt		    (SeahorseContext *sctx,
+void            seahorse_gedit_sign             (SeahorseContext *sctx,
+                                                 GeditDocument *doc);
+void            seahorse_gedit_decrypt          (SeahorseContext *sctx,
                                                  GeditDocument *doc);
 
-GeditWindow*    seahorse_gedit_active_window    (void);
+GtkWindow*      seahorse_gedit_active_window    (void);
 void            seahorse_gedit_flash            (const gchar *format, ...);
 
 #ifdef WITH_GEDIT_BONOBO

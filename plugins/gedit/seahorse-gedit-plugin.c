@@ -33,25 +33,25 @@
  * OBJECT DECLARATIONS
  */
 
-#define SEAHORSE_TYPE_GEDIT_PLUGIN			(seahorse_gedit_plugin_get_type ())
-#define SEAHORSE_GEDIT_PLUGIN(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), SEAHORSE_TYPE_GEDIT_PLUGIN, SeahorseGeditPlugin))
-#define SEAHORSE_GEDIT_PLUGIN_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST((k), SEAHORSE_TYPE_GEDIT_PLUGIN, SeahorseGeditPluginClass))
-#define SEAHORSE_IS_GEDIT_PLUGIN(o)			(G_TYPE_CHECK_INSTANCE_TYPE ((o), SEAHORSE_TYPE_GEDIT_PLUGIN))
-#define SEAHORSE_IS_GEDIT_PLUGIN_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), SEAHORSE_TYPE_GEDIT_PLUGIN))
-#define SEAHORSE_GEDIT_PLUGIN_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), SEAHORSE_TYPE_GEDIT_PLUGIN, SeahorseGeditPluginClass))
+#define SEAHORSE_TYPE_GEDIT_PLUGIN          (seahorse_gedit_plugin_get_type ())
+#define SEAHORSE_GEDIT_PLUGIN(o)            (G_TYPE_CHECK_INSTANCE_CAST ((o), SEAHORSE_TYPE_GEDIT_PLUGIN, SeahorseGeditPlugin))
+#define SEAHORSE_GEDIT_PLUGIN_CLASS(k)      (G_TYPE_CHECK_CLASS_CAST((k), SEAHORSE_TYPE_GEDIT_PLUGIN, SeahorseGeditPluginClass))
+#define SEAHORSE_IS_GEDIT_PLUGIN(o)         (G_TYPE_CHECK_INSTANCE_TYPE ((o), SEAHORSE_TYPE_GEDIT_PLUGIN))
+#define SEAHORSE_IS_GEDIT_PLUGIN_CLASS(k)   (G_TYPE_CHECK_CLASS_TYPE ((k), SEAHORSE_TYPE_GEDIT_PLUGIN))
+#define SEAHORSE_GEDIT_PLUGIN_GET_CLASS(o)  (G_TYPE_INSTANCE_GET_CLASS ((o), SEAHORSE_TYPE_GEDIT_PLUGIN, SeahorseGeditPluginClass))
 
-typedef struct _SeahorseGeditPlugin			SeahorseGeditPlugin;
-typedef struct _SeahorseGeditPluginClass	SeahorseGeditPluginClass;
+typedef struct _SeahorseGeditPlugin         SeahorseGeditPlugin;
+typedef struct _SeahorseGeditPluginClass    SeahorseGeditPluginClass;
 
 struct _SeahorseGeditPlugin {
-	GeditPlugin parent;
-	
-	/* <public> */
-	SeahorseContext *sctx;
+    GeditPlugin parent;
+    
+    /* <public> */
+    SeahorseContext *sctx;
 };
 
 struct _SeahorseGeditPluginClass {
-	GeditPluginClass parent_class;
+    GeditPluginClass parent_class;
 };
 
 /* -----------------------------------------------------------------------------
@@ -66,8 +66,8 @@ struct _SeahorseGeditPluginClass {
 #define MENU_ITEM_ENCRYPT "Encrypt"
 
 typedef struct {
-	GtkActionGroup *action_group;
-	guint ui_id;
+    GtkActionGroup *action_group;
+    guint ui_id;
 } WindowData;
 
 /* All the plugins must implement this function */
@@ -82,42 +82,42 @@ static void
 encrypt_cb (GtkAction *action, SeahorseContext *sctx)
 {
     GeditWindow *win;
-	GeditDocument *doc;
+    GeditDocument *doc;
 
     win = seahorse_gedit_active_window ();
     g_return_if_fail (win);
 
     doc = gedit_window_get_active_document(win);
-	if(doc)
-		seahorse_gedit_encrypt (sctx, doc);
+    if (doc)
+        seahorse_gedit_encrypt (sctx, doc);
 }
 
 static void
 decrypt_cb (GtkAction *action, SeahorseContext *sctx)
 {
     GeditWindow *win;
-	GeditDocument *doc;
+    GeditDocument *doc;
 
     win = seahorse_gedit_active_window ();
     g_return_if_fail (win);
 
     doc = gedit_window_get_active_document(win);
-	if(doc)
-		seahorse_gedit_decrypt (sctx, doc);
+    if(doc)
+        seahorse_gedit_decrypt (sctx, doc);
 }
 
 static void
 sign_cb (GtkAction *action, SeahorseContext *sctx)
 {
     GeditWindow *win;
-	GeditDocument *doc;
+    GeditDocument *doc;
 
     win = seahorse_gedit_active_window ();
     g_return_if_fail (win);
 
     doc = gedit_window_get_active_document(win);
-	if(doc)
-		seahorse_gedit_sign (sctx, doc);
+    if (doc)
+        seahorse_gedit_sign (sctx, doc);
 }
 
 static void
@@ -132,12 +132,12 @@ free_window_data (WindowData *data)
 
 static const GtkActionEntry action_entries[] =
 {
-	{ MENU_ITEM_ENCRYPT, NULL, N_("_Encrypt..."), NULL,
-	  	N_("Encrypt the selected text"), G_CALLBACK (encrypt_cb) },
-	{ MENU_ITEM_DECRYPT, NULL, N_("Decr_ypt/Verify"), NULL,
-		N_("Decrypt and/or Verify text"), G_CALLBACK (decrypt_cb) },
-	{ MENU_ITEM_SIGN, NULL, N_("Sig_n..."), NULL,
-		N_("Sign the selected text"), G_CALLBACK (sign_cb) },
+    { MENU_ITEM_ENCRYPT, NULL, N_("_Encrypt..."), NULL,
+        N_("Encrypt the selected text"), G_CALLBACK (encrypt_cb) },
+    { MENU_ITEM_DECRYPT, NULL, N_("Decr_ypt/Verify"), NULL,
+        N_("Decrypt and/or Verify text"), G_CALLBACK (decrypt_cb) },
+    { MENU_ITEM_SIGN, NULL, N_("Sig_n..."), NULL,
+        N_("Sign the selected text"), G_CALLBACK (sign_cb) },
 };
 
 /* -----------------------------------------------------------------------------
@@ -147,109 +147,108 @@ static const GtkActionEntry action_entries[] =
 static void
 seahorse_gedit_plugin_init (SeahorseGeditPlugin *splugin)
 {
-	splugin->sctx = seahorse_context_new ();
+    splugin->sctx = seahorse_context_new ();
     seahorse_context_load_keys (splugin->sctx, FALSE);
-	SEAHORSE_GEDIT_DEBUG (DEBUG_PLUGINS, "seahorse gedit plugin inited");	
+    SEAHORSE_GEDIT_DEBUG (DEBUG_PLUGINS, "seahorse gedit plugin inited");	
 }
 
 static void
 seahorse_gedit_plugin_update_ui (GeditPlugin *plugin, GeditWindow *window)
 {
-	WindowData *data;
+    WindowData *data;
     GeditDocument *doc;
     gboolean sensitive;
 
-	data = (WindowData*)g_object_get_data (G_OBJECT (window), WINDOW_DATA_KEY);
-	g_return_if_fail (data != NULL);
+    data = (WindowData*)g_object_get_data (G_OBJECT (window), WINDOW_DATA_KEY);
+    g_return_if_fail (data != NULL);
 
     doc = gedit_window_get_active_document(window);
-	
+    
     sensitive = (doc && gtk_text_buffer_get_char_count (GTK_TEXT_BUFFER (doc)) > 0);
-	gtk_action_group_set_sensitive (data->action_group, sensitive);	
+    gtk_action_group_set_sensitive (data->action_group, sensitive);	
 }
 
 static void
 seahorse_gedit_plugin_activate (GeditPlugin *plugin, GeditWindow *window)
 {
-	SeahorseGeditPlugin *splugin = SEAHORSE_GEDIT_PLUGIN (plugin);
-	GtkUIManager *manager;
+    SeahorseGeditPlugin *splugin = SEAHORSE_GEDIT_PLUGIN (plugin);
+    GtkUIManager *manager;
     WindowData *data;
-	
-	manager = gedit_window_get_ui_manager (window);
-	g_return_if_fail (manager != NULL);
-	
-	data = g_new0 (WindowData, 1);
-	
-	data->action_group = gtk_action_group_new ("SeahorseGeditPluginActions");
-	gtk_action_group_set_translation_domain (data->action_group, GETTEXT_PACKAGE);
-	gtk_action_group_add_actions (data->action_group, action_entries,
-				      		      G_N_ELEMENTS (action_entries), splugin->sctx);
-	gtk_ui_manager_insert_action_group (manager, data->action_group, -1);
+    
+    manager = gedit_window_get_ui_manager (window);
+    g_return_if_fail (manager != NULL);
+    
+    data = g_new0 (WindowData, 1);
+    
+    data->action_group = gtk_action_group_new ("SeahorseGeditPluginActions");
+    gtk_action_group_set_translation_domain (data->action_group, GETTEXT_PACKAGE);
+    gtk_action_group_add_actions (data->action_group, action_entries,
+                                  G_N_ELEMENTS (action_entries), splugin->sctx);
+    gtk_ui_manager_insert_action_group (manager, data->action_group, -1);
 
-	data->ui_id = gtk_ui_manager_new_merge_id (manager);
+    data->ui_id = gtk_ui_manager_new_merge_id (manager);
 
-	g_object_set_data_full (G_OBJECT (window), WINDOW_DATA_KEY,  data, 
-							(GDestroyNotify)free_window_data);
+    g_object_set_data_full (G_OBJECT (window), WINDOW_DATA_KEY,  data, 
+                            (GDestroyNotify)free_window_data);
 
-	gtk_ui_manager_add_ui (manager, data->ui_id, MENU_PATH, MENU_ITEM_SIGN, 
-			       		   MENU_ITEM_SIGN, GTK_UI_MANAGER_MENUITEM,  FALSE);
-	gtk_ui_manager_add_ui (manager, data->ui_id, MENU_PATH, MENU_ITEM_DECRYPT, 
-			       		   MENU_ITEM_DECRYPT, GTK_UI_MANAGER_MENUITEM,  FALSE);
-	gtk_ui_manager_add_ui (manager, data->ui_id, MENU_PATH, MENU_ITEM_ENCRYPT, 
-			       		   MENU_ITEM_ENCRYPT, GTK_UI_MANAGER_MENUITEM,  FALSE);
+    gtk_ui_manager_add_ui (manager, data->ui_id, MENU_PATH, MENU_ITEM_SIGN, 
+                           MENU_ITEM_SIGN, GTK_UI_MANAGER_MENUITEM,  FALSE);
+    gtk_ui_manager_add_ui (manager, data->ui_id, MENU_PATH, MENU_ITEM_DECRYPT, 
+                           MENU_ITEM_DECRYPT, GTK_UI_MANAGER_MENUITEM,  FALSE);
+    gtk_ui_manager_add_ui (manager, data->ui_id, MENU_PATH, MENU_ITEM_ENCRYPT, 
+                           MENU_ITEM_ENCRYPT, GTK_UI_MANAGER_MENUITEM,  FALSE);
 
-	seahorse_gedit_plugin_update_ui (plugin, window);
+    seahorse_gedit_plugin_update_ui (plugin, window);
 }
 
 static void
 seahorse_gedit_plugin_deactivate (GeditPlugin *plugin, GeditWindow *window)
 {
-	GtkUIManager *manager;
-	WindowData *data;
+    GtkUIManager *manager;
+    WindowData *data;
 
-	manager = gedit_window_get_ui_manager (window);
-	g_return_if_fail (manager != NULL);
+    manager = gedit_window_get_ui_manager (window);
+    g_return_if_fail (manager != NULL);
 
-	data = (WindowData*)g_object_get_data (G_OBJECT (window), WINDOW_DATA_KEY);
-	g_return_if_fail (data != NULL);
+    data = (WindowData*)g_object_get_data (G_OBJECT (window), WINDOW_DATA_KEY);
+    g_return_if_fail (data != NULL);
 
-	gtk_ui_manager_remove_ui (manager, data->ui_id);
-	gtk_ui_manager_remove_action_group (manager, data->action_group);
+    gtk_ui_manager_remove_ui (manager, data->ui_id);
+    gtk_ui_manager_remove_action_group (manager, data->action_group);
 
-	g_object_set_data (G_OBJECT (window), WINDOW_DATA_KEY, NULL);
+    g_object_set_data (G_OBJECT (window), WINDOW_DATA_KEY, NULL);
 }
 
 static void
 seahorse_gedit_plugin_finalize (GObject *object)
 {
-	SeahorseGeditPlugin *splugin = SEAHORSE_GEDIT_PLUGIN (object);
-	
-	if (splugin->sctx)
-		seahorse_context_destroy (splugin->sctx);
-	splugin->sctx = NULL;
-	
-	G_OBJECT_CLASS (seahorse_gedit_plugin_parent_class)->finalize (object);
+    SeahorseGeditPlugin *splugin = SEAHORSE_GEDIT_PLUGIN (object);
 
-	SEAHORSE_GEDIT_DEBUG (DEBUG_PLUGINS, "seahorse gedit plugin destroyed");	
+    if (splugin->sctx)
+        seahorse_context_destroy (splugin->sctx);
+    splugin->sctx = NULL;
+
+    G_OBJECT_CLASS (seahorse_gedit_plugin_parent_class)->finalize (object);
+
+    SEAHORSE_GEDIT_DEBUG (DEBUG_PLUGINS, "seahorse gedit plugin destroyed");	
 }
 
 static void
 seahorse_gedit_plugin_class_init (SeahorseGeditPluginClass *klass)
 {
-	GObjectClass *gclass = G_OBJECT_CLASS (klass);
-	GeditPluginClass *plugin_class = GEDIT_PLUGIN_CLASS (klass);
-	seahorse_gedit_plugin_parent_class = g_type_class_peek_parent (klass);
-	
-	gclass->dispose = seahorse_gedit_plugin_finalize;
-	
-	plugin_class->activate = seahorse_gedit_plugin_activate;
-	plugin_class->deactivate = seahorse_gedit_plugin_deactivate;
-	plugin_class->update_ui = seahorse_gedit_plugin_update_ui;
-	
+    GObjectClass *gclass = G_OBJECT_CLASS (klass);
+    GeditPluginClass *plugin_class = GEDIT_PLUGIN_CLASS (klass);
+    seahorse_gedit_plugin_parent_class = g_type_class_peek_parent (klass);
+
+    gclass->dispose = seahorse_gedit_plugin_finalize;
+    
+    plugin_class->activate = seahorse_gedit_plugin_activate;
+    plugin_class->deactivate = seahorse_gedit_plugin_deactivate;
+    plugin_class->update_ui = seahorse_gedit_plugin_update_ui;
 }
 
 /* -----------------------------------------------------------------------------
- * UTILITIES
+ * HELPERS
  */
 
 void        
@@ -275,7 +274,7 @@ seahorse_gedit_flash (const gchar *format, ...)
     va_end(va);
 }
 
-GeditWindow*    
+GtkWindow*    
 seahorse_gedit_active_window (void)
 {
     GeditApp *app;
@@ -283,5 +282,5 @@ seahorse_gedit_active_window (void)
     app = gedit_app_get_default ();
     g_return_val_if_fail (app, NULL);
     
-    return gedit_app_get_active_window (app);
+    return GTK_WINDOW (gedit_app_get_active_window (app));
 }

@@ -125,7 +125,7 @@ replace_selected_text (GeditDocument *doc, const gchar *replace)
 
     if (!gtk_text_buffer_get_selection_bounds (GTK_TEXT_BUFFER (doc),           
                                                   &iter, &sel_bound)) {
-        gedit_debug_message (DEBUG_PLUGINS, "There is no selected text");
+        SEAHORSE_GEDIT_DEBUG (DEBUG_PLUGINS, "There is no selected text");
         return;
     }
 
