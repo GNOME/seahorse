@@ -143,6 +143,8 @@ seahorse_util_handle_gpgme (gpgme_error_t err, const char* desc, ...)
 	case GPG_ERR_NO_ERROR:
 	case GPG_ERR_ECANCELED:
 		return;
+	default:
+		break;
 	}
   
     va_list ap;
