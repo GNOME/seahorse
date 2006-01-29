@@ -15,7 +15,13 @@ INCLUDES = \
 
 plugin_LTLIBRARIES = libseahorse-pgp.la
 
-libseahorse_pgp_la_SOURCES = seahorse-gedit.c
+if WITH_GEDIT_BONOBO
+PLUGIN_SRCS = seahorse-gedit-bonobo.c
+else
+PLUGIN_SRCS = seahorse-gedit-plugin.c
+endif
+
+libseahorse_pgp_la_SOURCES = seahorse-gedit.c seahorse-gedit.h $(PLUGIN_SRCS)
 libseahorse_pgp_la_LDFLAGS = $(PLUGIN_LIBTOOL_FLAGS)
 libseahorse_pgp_la_LIBADD = \
 	$(top_builddir)/libseahorse/libseahorse-internal.la \
@@ -49,4 +55,3 @@ endif
 
 EXTRA_DIST = $(plugin_in_files) $(schemas_in_files)
 CLEANFILES = $(schemas_DATA) $(plugin_DATA)
-	
