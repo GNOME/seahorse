@@ -1177,8 +1177,8 @@ do_trust (SeahorseWidget *swidget)
     sigpersonal = trusted ? seahorse_pgp_key_have_signatures (pkey, SKEY_PGPSIG_PERSONAL) : FALSE;
     trust = seahorse_key_get_trust (skey);
     
-    show_glade_widget (swidget, "untrusted-area", !trusted && trust != SEAHORSE_VALIDITY_NEVER);
-    show_glade_widget (swidget, "untrusted-overridden-area", !trusted && trust == SEAHORSE_VALIDITY_NEVER);
+    show_glade_widget (swidget, "untrusted-area", !trusted);
+    show_glade_widget (swidget, "untrusted-overridden-area", ((trust != SEAHORSE_VALIDITY_NEVER)||(trust != SEAHORSE_VALIDITY_UNKNOWN)));
     show_glade_widget (swidget, "trusted-signed-area", trusted && sigpersonal);
     show_glade_widget (swidget, "trusted-area", trusted && !sigpersonal);
 
