@@ -2,7 +2,6 @@
 <!DOCTYPE glade-interface SYSTEM "http://glade.gnome.org/glade-2.0.dtd">
 
 <glade-interface>
-<requires lib="gnome"/>
 
 <widget class="GtkDialog" id="expires">
   <property name="visible">True</property>
@@ -17,6 +16,8 @@
   <property name="skip_pager_hint">False</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
+  <property name="focus_on_map">True</property>
+  <property name="urgency_hint">False</property>
   <property name="has_separator">False</property>
   <signal name="delete_event" handler="delete_event" last_modification_time="Fri, 31 Jan 2003 22:20:04 GMT"/>
 
@@ -29,10 +30,11 @@
       <child internal-child="action_area">
 	<widget class="GtkHButtonBox" id="dialog-action_area1">
 	  <property name="visible">True</property>
-	  <property name="layout_style">GTK_BUTTONBOX_END</property>
+	  <property name="layout_style">GTK_BUTTONBOX_SPREAD</property>
 
 	  <child>
 	    <widget class="GtkButton" id="cancelbutton1">
+	      <property name="border_width">6</property>
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
@@ -47,6 +49,7 @@
 
 	  <child>
 	    <widget class="GtkButton" id="okbutton1">
+	      <property name="border_width">6</property>
 	      <property name="visible">True</property>
 	      <property name="tooltip" translatable="yes">Revoke key</property>
 	      <property name="can_default">True</property>
@@ -55,7 +58,7 @@
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
 	      <property name="response_id">-5</property>
-	      <signal name="clicked" handler="ok_clicked" last_modification_time="Fri, 31 Jan 2003 22:19:51 GMT"/>
+	      <signal name="clicked" handler="on_calendar_change_button_clicked" last_modification_time="Fri, 30 Dec 2005 15:22:20 GMT"/>
 
 	      <child>
 		<widget class="GtkAlignment" id="alignment1">
@@ -105,6 +108,10 @@
 			  <property name="yalign">0.5</property>
 			  <property name="xpad">0</property>
 			  <property name="ypad">0</property>
+			  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+			  <property name="width_chars">-1</property>
+			  <property name="single_line_mode">False</property>
+			  <property name="angle">0</property>
 			</widget>
 			<packing>
 			  <property name="padding">0</property>
@@ -122,7 +129,7 @@
 	<packing>
 	  <property name="padding">0</property>
 	  <property name="expand">False</property>
-	  <property name="fill">True</property>
+	  <property name="fill">False</property>
 	  <property name="pack_type">GTK_PACK_END</property>
 	</packing>
       </child>
@@ -138,13 +145,14 @@
 	    <widget class="GtkCheckButton" id="expire">
 	      <property name="visible">True</property>
 	      <property name="can_focus">True</property>
-	      <property name="label" translatable="yes">This key should e_xpire on:</property>
+	      <property name="label" translatable="yes">Never Expires</property>
 	      <property name="use_underline">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
 	      <property name="active">False</property>
 	      <property name="inconsistent">False</property>
 	      <property name="draw_indicator">True</property>
+	      <signal name="toggled" handler="on_expire_toggled" last_modification_time="Tue, 03 Jan 2006 05:00:34 GMT"/>
 	    </widget>
 	    <packing>
 	      <property name="padding">0</property>
@@ -157,12 +165,12 @@
 	    <widget class="GtkCalendar" id="calendar">
 	      <property name="visible">True</property>
 	      <property name="can_focus">True</property>
-	      <property name="display_options">GTK_CALENDAR_SHOW_HEADING|GTK_CALENDAR_SHOW_DAY_NAMES</property>
+	      <property name="display_options">GTK_CALENDAR_SHOW_HEADING|GTK_CALENDAR_SHOW_DAY_NAMES|GTK_CALENDAR_SHOW_WEEK_NUMBERS</property>
 	    </widget>
 	    <packing>
 	      <property name="padding">0</property>
-	      <property name="expand">True</property>
-	      <property name="fill">True</property>
+	      <property name="expand">False</property>
+	      <property name="fill">False</property>
 	    </packing>
 	  </child>
 	</widget>

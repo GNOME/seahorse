@@ -33,9 +33,9 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 {
 	SeahorseKeyWidget *skwidget;
     SeahorsePGPKey *pkey;
-    gpgme_subkey_t subkey;
+	GtkWidget *w; 
+	gpgme_subkey_t subkey;
 	gpgme_error_t err;
-    GtkWidget *w;
 	guint index;
     time_t expiry = 0;
 	
@@ -43,18 +43,19 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
     pkey = SEAHORSE_PGP_KEY (skwidget->skey);
 	index = skwidget->index;	
 
-    w = glade_xml_get_widget (swidget->xml, "expire");    
-    if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w))) {
-        struct tm t;
+	struct tm t;
 
-        memset (&t, 0, sizeof(t));            
-        w = glade_xml_get_widget (swidget->xml, "calendar");
-        gtk_calendar_get_date (GTK_CALENDAR (w), (guint*)&(t.tm_year), 
-                               (guint*)&(t.tm_mon), (guint*)&(t.tm_mday));
-        t.tm_year -= 1900;
-        expiry = mktime (&t);
-    }
- 
+	w = glade_xml_get_widget (swidget->xml, "expire");
+	if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w))) {
+		
+		memset (&t, 0, sizeof(t));            
+		w = glade_xml_get_widget (swidget->xml, "calendar");
+		gtk_calendar_get_date (GTK_CALENDAR (w), (guint*)&(t.tm_year), 
+							   (guint*)&(t.tm_mon), (guint*)&(t.tm_mday));
+		t.tm_year -= 1900;
+		expiry = mktime (&t);
+	}
+	
     subkey = seahorse_pgp_key_get_nth_subkey (pkey, index);    
     g_return_if_fail (subkey != NULL);
     
@@ -68,10 +69,17 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 	seahorse_widget_destroy (swidget);
 }
 
-static void
-set_date_edit_sensitive (GtkToggleButton *togglebutton, GtkWidget *widget)
+void
+expires_toggled (GtkWidget *widget, SeahorseWidget *swidget)
 {
-    gtk_widget_set_sensitive (widget, !gtk_toggle_button_get_active (togglebutton));
+	GtkWidget *expire;
+	GtkWidget *cal;
+	gboolean toggled;
+	
+	expire = glade_xml_get_widget (swidget->xml, "expire");
+	cal = glade_xml_get_widget (swidget->xml, "calendar");
+
+	gtk_widget_set_sensitive (cal, !gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (expire)));
 }
 
 void
@@ -79,7 +87,7 @@ seahorse_expires_new (SeahorsePGPKey *pkey, guint index)
 {
 	SeahorseWidget *swidget;
     gpgme_subkey_t subkey;
-    GtkWidget *tog, *date;
+    GtkWidget *date, *expire;
 	gchar *title;
     gchar *userid;
 	
@@ -89,20 +97,26 @@ seahorse_expires_new (SeahorsePGPKey *pkey, guint index)
 	swidget = seahorse_key_widget_new_with_index ("expires", SEAHORSE_KEY (pkey), index);
 	g_return_if_fail (swidget != NULL);
 	
-	glade_xml_signal_connect_data (swidget->xml, "ok_clicked",
+	glade_xml_signal_connect_data (swidget->xml, "on_calendar_change_button_clicked",
 		G_CALLBACK (ok_clicked), swidget);
     
-    tog = glade_xml_get_widget (swidget->xml, "expire");    
-    g_return_if_fail (tog != NULL);
     date = glade_xml_get_widget (swidget->xml, "calendar");    
     g_return_if_fail (date != NULL);
     
     subkey = seahorse_pgp_key_get_nth_subkey (pkey, index);
     g_return_if_fail (subkey != NULL);
 
-    gtk_widget_set_sensitive (date, subkey->expires);
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (tog), !subkey->expires);
-    g_signal_connect_after (tog, "toggled", G_CALLBACK (set_date_edit_sensitive), date);    
+	expire = glade_xml_get_widget (swidget->xml, "expire");
+	glade_xml_signal_connect_data (swidget->xml, "on_expire_toggled",
+		G_CALLBACK (expires_toggled), swidget);
+	if (!seahorse_key_get_expires (SEAHORSE_KEY (pkey))) {
+		gtk_toggle_button_set_active  (GTK_TOGGLE_BUTTON (expire), TRUE);
+    	gtk_widget_set_sensitive (date, FALSE);
+	} else {
+		gtk_toggle_button_set_active  (GTK_TOGGLE_BUTTON (expire), FALSE);
+    	gtk_widget_set_sensitive (date, TRUE);
+	}
+    
     if (subkey->expires) {
         struct tm t;
         time_t time = (time_t)subkey->expires;

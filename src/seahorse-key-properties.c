@@ -794,6 +794,23 @@ details_export_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 }
 
 static void
+details_calendar_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
+{
+	SeahorseKey *skey;
+	gint index;
+	
+	g_return_if_fail (SEAHORSE_IS_KEY_WIDGET (swidget));
+	skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
+
+	index = get_selected_subkey (swidget);
+	
+	if (-1 == index) {
+		index = 0;
+	}
+	seahorse_expires_new (SEAHORSE_PGP_KEY (skey), index);	
+}
+
+static void
 do_details_signals (SeahorseWidget *swidget) 
 { 
 	SeahorseKey *skey;
@@ -814,6 +831,7 @@ do_details_signals (SeahorseWidget *swidget)
          show_glade_widget (swidget, "details-date-button", FALSE);
          show_glade_widget (swidget, "details-revoke-button", FALSE);
          show_glade_widget (swidget, "details-delete-button", FALSE);
+		 show_glade_widget (swidget, "details-calendar-button", FALSE);
 	} else {
 
 		glade_xml_signal_connect_data (swidget->xml, "on_details_passphrase_button_clicked",
@@ -826,6 +844,8 @@ do_details_signals (SeahorseWidget *swidget)
 										G_CALLBACK (details_revoke_subkey_button_clicked), swidget);
 		glade_xml_signal_connect_data (swidget->xml, "on_details_delete_button_clicked",
 										G_CALLBACK (details_del_subkey_button_clicked), swidget);
+		glade_xml_signal_connect_data (swidget->xml, "on_details_calendar_button_clicked",
+									   G_CALLBACK (details_calendar_button_clicked), swidget);
 		glade_xml_signal_connect_data (swidget->xml, "on_details_export_button_clicked",
 										G_CALLBACK (details_export_button_clicked), swidget);
 	}
@@ -854,7 +874,7 @@ do_details (SeahorseWidget *swidget)
     skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
     pkey = SEAHORSE_PGP_KEY (skey);
     subkey = pkey->pubkey->subkeys;
-    
+			
     widget = glade_xml_get_widget (swidget->xml, "details-id-label");
     if (widget) {
         label = seahorse_key_get_short_keyid (skey); 
