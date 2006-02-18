@@ -30,18 +30,16 @@
 #include <string.h>
 
 #include <gedit/gedit-plugin.h>
-#include <gedit/gedit-file.h>
 #include <gedit/gedit-debug.h>
-#include <gedit/gedit-menus.h>
 #include <gedit/gedit-utils.h>
 
+#include "seahorse-gedit.h"
 #include "seahorse-gpgmex.h"
 #include "seahorse-util.h"
 #include "seahorse-context.h"
 #include "seahorse-libdialogs.h"
 #include "seahorse-op.h"
 #include "seahorse-widget.h"
-#include "seahorse-pgp-key.h"
 
 typedef enum {
     SEAHORSE_TEXT_TYPE_NONE,
@@ -78,21 +76,6 @@ static const SeahorsePGPHeader seahorse_pgp_headers[] = {
         SEAHORSE_TEXT_TYPE_KEY
     }
 };
-
-#define MENU_ENC_ITEM_LABEL      N_("_Encrypt...")
-#define MENU_ENC_ITEM_PATH       "/menu/Edit/EditOps_6/"
-#define MENU_ENC_ITEM_NAME       "Encrypt"
-#define MENU_ENC_ITEM_TIP        N_("Encrypt the selected text")
-
-#define MENU_DEC_ITEM_LABEL      N_("Decr_ypt/Verify")
-#define MENU_DEC_ITEM_PATH       "/menu/Edit/EditOps_6/"
-#define MENU_DEC_ITEM_NAME       "Decrypt"
-#define MENU_DEC_ITEM_TIP        N_("Decrypt and/or Verify text")
-
-#define MENU_SIGN_ITEM_LABEL      N_("Sig_n...")
-#define MENU_SIGN_ITEM_PATH       "/menu/Edit/EditOps_6/"
-#define MENU_SIGN_ITEM_NAME       "Sign"
-#define MENU_SIGN_ITEM_TIP        N_("Sign the selected text")
 
 /* -----------------------------------------------------------------------------
  * HELPER FUNCTIONS 
@@ -178,7 +161,7 @@ replace_selected_text (GeditDocument *doc, const gchar *replace)
 
     if (!gtk_text_buffer_get_selection_bounds (GTK_TEXT_BUFFER (doc),           
                                                   &iter, &sel_bound)) {
-        gedit_debug (DEBUG_PLUGINS, "There is no selected text");
+        SEAHORSE_GEDIT_DEBUG (DEBUG_PLUGINS, "There is no selected text");
         return;
     }
 
@@ -188,6 +171,8 @@ replace_selected_text (GeditDocument *doc, const gchar *replace)
 
     gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (doc),            
                    &iter, gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (doc)));
+
+    g_printerr ("%s\n", replace);
 
     if (*replace != '\0')
         gtk_text_buffer_insert (GTK_TEXT_BUFFER (doc), &iter,
@@ -241,13 +226,10 @@ detect_text_type (const gchar *text, gint len, const gchar **start, const gchar 
  */
 
 /* Callback for encrypt menu item */
-static void
-encrypt_cb (BonoboUIComponent * uic, gpointer user_data,
-            const gchar * verbname)
+void
+seahorse_gedit_encrypt (SeahorseContext *sctx, GeditDocument *doc)
 {
-    GeditView *view = GEDIT_VIEW (gedit_get_active_view ());
     SeahorsePGPKey *signer = NULL;
-    GeditDocument *doc;
     gpgme_error_t err = GPG_OK;
     gchar *enctext = NULL;
     gchar *buffer;
@@ -255,10 +237,7 @@ encrypt_cb (BonoboUIComponent * uic, gpointer user_data,
     gint start;
     gint end;
 
-    gedit_debug (DEBUG_PLUGINS, "");
-
-    g_return_if_fail (view != NULL);
-    doc = gedit_view_get_document (view);
+    g_return_if_fail (doc != NULL);
 
     /* 
      * We get the selection bounds before getting recipients.
@@ -271,7 +250,7 @@ encrypt_cb (BonoboUIComponent * uic, gpointer user_data,
     }
     
     /* Get the recipient list */
-    gedit_debug (DEBUG_PLUGINS, "getting recipients");
+    SEAHORSE_GEDIT_DEBUG (DEBUG_PLUGINS, "getting recipients");
     keys = seahorse_recipients_get (&signer);
 
     /* User may have cancelled */
@@ -282,7 +261,7 @@ encrypt_cb (BonoboUIComponent * uic, gpointer user_data,
     buffer = get_document_chars (doc, start, end);    
 
     /* Encrypt it */
-    gedit_debug (DEBUG_PLUGINS, "encrypting text");
+    SEAHORSE_GEDIT_DEBUG (DEBUG_PLUGINS, "encrypting text");
     if (signer == NULL)
         enctext = seahorse_op_encrypt_text (keys, buffer, &err);
     else
@@ -300,7 +279,7 @@ encrypt_cb (BonoboUIComponent * uic, gpointer user_data,
     /* And finish up */
     set_document_selection (doc, start, end);
     replace_selected_text (doc, enctext);
-    gedit_utils_flash (_("Encrypted text"));
+    seahorse_gedit_flash (_("Encrypted text"));
     g_free (enctext);
 }
 
@@ -321,7 +300,7 @@ import_keys (const gchar * text)
         seahorse_util_handle_error (err, _("Couldn't import keys"));
         return 0;
     } else if (keys == 0) {    
-        gedit_utils_flash (_("Keys found but not imported"));
+        seahorse_gedit_flash (_("Keys found but not imported"));
         return 0;
     } else {
         return keys;
@@ -372,13 +351,9 @@ verify_text (const gchar * text, gpgme_verify_result_t *status)
 }
 
 /* Called for the decrypt menu item */
-static void
-decrypt_cb (BonoboUIComponent * uic, gpointer user_data,
-            const gchar * verbname)
+void
+seahorse_gedit_decrypt (SeahorseContext *sctx, GeditDocument *doc)
 {
-    GeditView *view = GEDIT_VIEW (gedit_get_active_view ());
-    GeditDocument *doc;
-    
     gchar *buffer;              /* The text selected */
     gint sel_start;             /* The end of the whole deal */
     gint sel_end;               /* The beginning of the whole deal */
@@ -398,12 +373,8 @@ decrypt_cb (BonoboUIComponent * uic, gpointer user_data,
 
     gpgme_verify_result_t status;   /* Signature status of last operation */
     
-    gedit_debug (DEBUG_PLUGINS, "");
-
-    g_return_if_fail (view);
-
-    /* Get the document text */
-    doc = gedit_view_get_document (view);
+    g_assert (SEAHORSE_IS_CONTEXT (sctx));
+    g_return_if_fail (doc != NULL);
 
     if (!get_document_selection (doc, &sel_start, &sel_end)) {
         sel_start = 0;
@@ -420,11 +391,11 @@ decrypt_cb (BonoboUIComponent * uic, gpointer user_data,
 
         /* Try to figure out what it contains */
         type = detect_text_type (last, -1, &start, &end);
-        gedit_debug (DEBUG_PLUGINS, "detected type: %d", type);
+        SEAHORSE_GEDIT_DEBUG (DEBUG_PLUGINS, "detected type: %d", type);
         
         if (type == SEAHORSE_TEXT_TYPE_NONE) {
             if (blocks == 0) 
-                gedit_warning (GTK_WINDOW (gedit_get_active_window ()),
+                gedit_warning (GTK_WINDOW (seahorse_gedit_active_window ()),
                            _("No encrypted or signed text is selected."));
             break;
         }
@@ -441,29 +412,29 @@ decrypt_cb (BonoboUIComponent * uic, gpointer user_data,
         block_pos += start - last;
         block_len = end - start;
         
-        gedit_debug (DEBUG_PLUGINS, "block (pos: %d, len %d)", block_pos, block_len);
+        SEAHORSE_GEDIT_DEBUG (DEBUG_PLUGINS, "block (pos: %d, len %d)", block_pos, block_len);
         status = NULL;
         
         switch (type) {
 
         /* A key, import it */
         case SEAHORSE_TEXT_TYPE_KEY:
-            gedit_debug (DEBUG_PLUGINS, "importing key");
+            SEAHORSE_GEDIT_DEBUG (DEBUG_PLUGINS, "importing key");
             keys += import_keys (start);
             break;
 
         /* A message decrypt it */
         case SEAHORSE_TEXT_TYPE_MESSAGE:
-            gedit_debug (DEBUG_PLUGINS, "decrypting message");
+            SEAHORSE_GEDIT_DEBUG (DEBUG_PLUGINS, "decrypting message");
             rawtext = decrypt_text (start, &status);
-            gedit_utils_flash (_("Decrypted text"));
+            seahorse_gedit_flash (_("Decrypted text"));
             break;
 
         /* A message verify it */
         case SEAHORSE_TEXT_TYPE_SIGNED:
-            gedit_debug (DEBUG_PLUGINS, "verifying message");
+            SEAHORSE_GEDIT_DEBUG (DEBUG_PLUGINS, "verifying message");
             rawtext = verify_text (start, &status);
-            gedit_utils_flash (_("Verified text"));
+            seahorse_gedit_flash (_("Verified text"));
             break;
 
         default:
@@ -484,9 +455,10 @@ decrypt_cb (BonoboUIComponent * uic, gpointer user_data,
             raw_len = strlen (rawtext);
             block_pos += raw_len + 1;
 
-            gedit_debug (DEBUG_PLUGINS, "raw (pos: %d, len %d)", block_pos, raw_len);
+            SEAHORSE_GEDIT_DEBUG (DEBUG_PLUGINS, "raw (pos: %d, len %d)", block_pos, raw_len);
             g_free (rawtext);
             rawtext = NULL;
+            
             if(status && status->signatures) {              
                 seahorse_signatures_notify ("Text", status);
             }
@@ -501,18 +473,15 @@ decrypt_cb (BonoboUIComponent * uic, gpointer user_data,
     }
     
     if (keys > 0)
-        gedit_utils_flash_va (ngettext("Imported %d key", "Imported %d keys", keys), keys);
+        seahorse_gedit_flash (ngettext ("Imported %d key", "Imported %d keys", keys), keys);
 
     g_free (buffer);
 }
 
 /* Callback for the sign menu item */
-static void
-sign_cb (BonoboUIComponent * uic, gpointer user_data,
-         const gchar * verbname)
+void
+seahorse_gedit_sign (SeahorseContext *sctx, GeditDocument *doc)
 {
-    GeditView *view = GEDIT_VIEW (gedit_get_active_view ());
-    GeditDocument *doc;
     gpgme_error_t err = GPG_OK;
     SeahorsePGPKey *signer;
     gchar *enctext = NULL;
@@ -520,10 +489,7 @@ sign_cb (BonoboUIComponent * uic, gpointer user_data,
     gint start;
     gint end;
 
-    gedit_debug (DEBUG_PLUGINS, "");
-
-    g_return_if_fail (view);
-    doc = gedit_view_get_document (view);
+    g_return_if_fail (doc != NULL);
 
     if (!get_document_selection (doc, &start, &end)) {
         start = 0;
@@ -538,7 +504,7 @@ sign_cb (BonoboUIComponent * uic, gpointer user_data,
         return;
 
     /* Perform the signing */
-    gedit_debug (DEBUG_PLUGINS, "signing text");
+    SEAHORSE_GEDIT_DEBUG (DEBUG_PLUGINS, "signing text");
     enctext = seahorse_op_sign_text (signer, buffer, &err);
     g_free (buffer);
 
@@ -551,119 +517,6 @@ sign_cb (BonoboUIComponent * uic, gpointer user_data,
     /* Finish up */
     set_document_selection (doc, start, end);
     replace_selected_text (doc, enctext);
-    gedit_utils_flash (_("Signed text"));
+    seahorse_gedit_flash (_("Signed text"));
     g_free (enctext);
-}
-
-/* -----------------------------------------------------------------------------
- * UI STUFF
- */
-
-/* Called by gedit when time to update the UI */
-G_MODULE_EXPORT GeditPluginState
-update_ui (GeditPlugin * plugin, BonoboWindow * window)
-{
-    BonoboUIComponent *uic;
-    GeditDocument *doc;
-    gboolean sensitive;
-
-    g_return_val_if_fail (window != NULL, PLUGIN_ERROR);
-
-    uic = gedit_get_ui_component_from_window (window);
-    doc = gedit_get_active_document ();
-
-    sensitive = (doc && gtk_text_buffer_get_char_count (GTK_TEXT_BUFFER (doc)) > 0);
-
-    gedit_debug (DEBUG_PLUGINS, "updating UI");
-    gedit_menus_set_verb_sensitive (uic, "/commands/" MENU_DEC_ITEM_NAME,
-                                    sensitive);
-    gedit_menus_set_verb_sensitive (uic, "/commands/" MENU_SIGN_ITEM_NAME,
-                                    sensitive);
-    gedit_menus_set_verb_sensitive (uic, "/commands/" MENU_ENC_ITEM_NAME,
-                                    sensitive);
-    return PLUGIN_OK;
-}
-
-/* Called once by gedit when the plugin is activated */
-G_MODULE_EXPORT GeditPluginState
-activate (GeditPlugin * pd)
-{
-    GList *top_windows;
-    gedit_debug (DEBUG_PLUGINS, "adding menu items");
-
-    top_windows = gedit_get_top_windows ();
-    g_return_val_if_fail (top_windows != NULL, PLUGIN_ERROR);
-
-    while (top_windows) {
-        gedit_menus_add_menu_item (BONOBO_WINDOW (top_windows->data),
-                                   MENU_ENC_ITEM_PATH, MENU_ENC_ITEM_NAME,
-                                   MENU_ENC_ITEM_LABEL, MENU_ENC_ITEM_TIP,
-                                   NULL, encrypt_cb);
-
-        gedit_menus_add_menu_item (BONOBO_WINDOW (top_windows->data),
-                                   MENU_SIGN_ITEM_PATH,
-                                   MENU_SIGN_ITEM_NAME,
-                                   MENU_SIGN_ITEM_LABEL,
-                                   MENU_SIGN_ITEM_TIP, NULL, sign_cb);
-
-        gedit_menus_add_menu_item (BONOBO_WINDOW (top_windows->data),
-                                   MENU_DEC_ITEM_PATH, MENU_DEC_ITEM_NAME,
-                                   MENU_DEC_ITEM_LABEL, MENU_DEC_ITEM_TIP,
-                                   NULL, decrypt_cb);
-
-        pd->update_ui (pd, BONOBO_WINDOW (top_windows->data));
-
-        top_windows = g_list_next (top_windows);
-    }
-
-    return PLUGIN_OK;
-}
-
-/* Called once by gedit when the plugin goes away */
-G_MODULE_EXPORT GeditPluginState
-deactivate (GeditPlugin * plugin)
-{
-    gedit_debug (DEBUG_PLUGINS, "removing menu items");
-    gedit_menus_remove_menu_item_all (MENU_ENC_ITEM_PATH,
-                                      MENU_ENC_ITEM_NAME);
-    gedit_menus_remove_menu_item_all (MENU_SIGN_ITEM_PATH,
-                                      MENU_SIGN_ITEM_NAME);
-    gedit_menus_remove_menu_item_all (MENU_DEC_ITEM_PATH,
-                                      MENU_DEC_ITEM_NAME);
-    return PLUGIN_OK;
-}
-
-/* -----------------------------------------------------------------------------
- * PLUGIN BASICS
- */
-
-/* Called once by gedit when the plugin is destroyed */
-G_MODULE_EXPORT GeditPluginState
-destroy (GeditPlugin * plugin)
-{
-    gedit_debug (DEBUG_PLUGINS, "destroy");
-
-    seahorse_context_destroy (SCTX_APP ());
-    plugin->private_data = NULL;
-    return PLUGIN_OK;
-}
-
-/* Called first by gedit at program startup */
-G_MODULE_EXPORT GeditPluginState
-init (GeditPlugin * plugin)
-{
-    SeahorseContext *sctx;
-    SeahorseOperation *op;
-    
-    gedit_debug (DEBUG_PLUGINS, "inited");
-
-    sctx = seahorse_context_new (TRUE, SKEY_PGP);
-    op = seahorse_context_load_local_keys (sctx);
-    plugin->private_data = sctx;
-    
-    /* Let operation take care of itself */
-    g_object_unref (op);
-
-
-    return PLUGIN_OK;
 }
