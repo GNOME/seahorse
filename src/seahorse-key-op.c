@@ -345,6 +345,8 @@ sign_transit (guint current_state, gpgme_status_code_t status,
 			/* if doing all uids, confirm */
 			if (status == GPGME_STATUS_GET_BOOL && g_str_equal (args, "keyedit.sign_all.okay"))
 				next_state = SIGN_CONFIRM;
+			else if (status == GPGME_STATUS_GET_BOOL && g_str_equal (args, "sign_uid.okay"))
+			    next_state = SIGN_CONFIRM;
 			/* need to do expires */
 			else if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "sign_uid.expire"))
 				next_state = SIGN_EXPIRE;
@@ -374,6 +376,8 @@ sign_transit (guint current_state, gpgme_status_code_t status,
 			/* need to do check */
 			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "sign_uid.class"))
 				next_state = SIGN_CHECK;
+			else if (status == GPGME_STATUS_GET_BOOL && g_str_equal (args, "sign_uid.okay"))
+			    next_state = SIGN_CONFIRM;
 			/* need to do expire */
 			else if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "sign_uid.expire"))
 				next_state = SIGN_EXPIRE;
