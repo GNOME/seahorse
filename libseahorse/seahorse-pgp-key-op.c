@@ -369,6 +369,8 @@ sign_transit (guint current_state, gpgme_status_code_t status,
 			/* if doing all uids, confirm */
 			if (status == GPGME_STATUS_GET_BOOL && g_str_equal (args, "keyedit.sign_all.okay"))
 				next_state = SIGN_CONFIRM;
+		    else if (status == GPGME_STATUS_GET_BOOL && g_str_equal (args, "sign_uid.okay"))
+				next_state = SIGN_CONFIRM;
 			/* need to do expires */
 			else if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "sign_uid.expire"))
 				next_state = SIGN_EXPIRE;
@@ -398,6 +400,8 @@ sign_transit (guint current_state, gpgme_status_code_t status,
 			/* need to do check */
 			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "sign_uid.class"))
 				next_state = SIGN_CHECK;
+			else if (status == GPGME_STATUS_GET_BOOL && g_str_equal (args, "sign_uid.okay"))
+				next_state = SIGN_CONFIRM;
 			/* need to do expire */
 			else if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "sign_uid.expire"))
 				next_state = SIGN_EXPIRE;
@@ -463,9 +467,12 @@ seahorse_pgp_key_op_sign (SeahorsePGPKey *pkey, const guint index,
 	SeahorseEditParm *parms;
     gpgme_error_t err;
 	guint real_index = seahorse_pgp_key_get_actual_uid(pkey, index);
+	guint num_userids = seahorse_pgp_key_get_num_userids (pkey);
+	guint num_photoids = seahorse_pgp_key_get_num_photoids (pkey);
 	
 	g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (pkey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
-	g_return_val_if_fail (real_index <= (seahorse_pgp_key_get_num_userids (pkey) + seahorse_pgp_key_get_num_photoids (pkey)), GPG_E (GPG_ERR_INV_VALUE));
+	DEBUG_OPERATION(("SignKey: index = %i,real_index = %i, num_userids = %i, num_photoids = %i\n", index, real_index, num_userids, num_photoids));
+	g_return_val_if_fail (real_index <= (num_userids + num_photoids), GPG_E (GPG_ERR_INV_VALUE));
 	
 	sign_parm = g_new (SignParm, 1);
 	sign_parm->index = real_index;
