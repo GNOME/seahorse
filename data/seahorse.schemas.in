@@ -51,108 +51,29 @@
 	</schemalist>
     <schemalist>
         <schema>
-            <key>/schemas/apps/seahorse/applet/display_encrypt_enabled</key>
-            <applyto>/apps/seahorse/applet/display_encrypt_enabled</applyto>
+            <key>/schemas/apps/seahorse/applet/display_encrypted_clipboard</key>
+            <applyto>/apps/seahorse/applet/display_encrypted_clipboard</applyto>
             <owner>seahorse</owner>
             <type>bool</type>
             <default>FALSE</default>
             <locale name="C">
-                <short>Enables display of encrypted text</short>
-                <long>Enables displaying of encrypted text in a separate window after selecting the decrypt option.
-                </long>
+                <short>Display clipboard after encrypting</short>
+                <long>After performing an encrypt or signing operation from the applet,
+                display the resulting text in a window.</long>
             </locale>
         </schema>
         <schema>
-            <key>/schemas/apps/seahorse/applet/display_sign_enabled</key>
-            <applyto>/apps/seahorse/applet/display_sign_enabled</applyto>
+            <key>/schemas/apps/seahorse/applet/display_decrypted_clipboard</key>
+            <applyto>/apps/seahorse/applet/display_decrypted_clipboard</applyto>
             <owner>seahorse</owner>
             <type>bool</type>
             <default>FALSE</default>
             <locale name="C">
-                <short>Enables display of signed text</short>
-                <long>Enables displaying of signed text in a separate window after selecting the decrypt option.
-                </long>
+                <short>Display clipboard after decrypting</short>
+                <long>After performing an decrypt or verify operation from the applet,
+                display the resulting text in a window.</long>
             </locale>
         </schema>
-        <schema>
-            <key>/schemas/apps/seahorse/applet/display_decrypt_enabled</key>
-            <applyto>/apps/seahorse/applet/display_decrypt_enabled</applyto>
-            <owner>seahorse</owner>
-            <type>bool</type>
-            <default>FALSE</default>
-            <locale name="C">
-                <short>Enables display of decrypted text</short>
-                <long>Enables displaying of decrypted text in a separate window after selecting the decrypt option.
-                </long>
-            </locale>
-        </schema>
-        <schema>
-            <key>/schemas/apps/seahorse/applet/hotkeys_enabled</key>
-            <applyto>/apps/seahorse/applet/hotkeys_enabled</applyto>
-            <owner>seahorse</owner>
-            <type>bool</type>
-            <default>TRUE</default>
-            <locale name="C">
-                <short>Enables hotkeys</short>
-                <long>Enables listening globally for keypresses to activate applet functions.
-                </long>
-            </locale>
-        </schema>
-        <schema>
-            <key>/schemas/apps/seahorse/applet/encrypt_hotkey</key>
-            <applyto>/apps/seahorse/applet/encrypt_hotkey</applyto>
-            <owner>seahorse</owner>
-            <type>string</type>
-            <default>&lt;Alt&gt;F8</default>
-            <locale name="C">
-                <short>Encrypt Clipboard</short>
-                <long>The global keybinding for encrypting the clipboard.
-
-	   The format looks like "&lt;Control&gt;a" or
-          "&lt;Shift&gt;&lt;Alt&gt;F1".  The parser is fairly liberal and allows
-          lower or upper case, and also abbreviations such as "&lt;Ctl&gt;" and
-          "&lt;Ctrl&gt;". If you set the option to the special string
-          "disabled", then there will be no keybinding for this action.
-                </long>
-            </locale>
-        </schema>
-        <schema>
-            <key>/schemas/apps/seahorse/applet/sign_hotkey</key>
-            <applyto>/apps/seahorse/applet/sign_hotkey</applyto>
-            <owner>seahorse</owner>
-            <type>string</type>
-            <default>&lt;Alt&gt;F9</default>
-            <locale name="C">
-                <short>Sign Clipboard</short>
-                <long>The global keybinding for signing the clipboard.
-
-	   The format looks like "&lt;Control&gt;a" or
-          "&lt;Shift&gt;&lt;Alt&gt;F1".  The parser is fairly liberal and allows
-          lower or upper case, and also abbreviations such as "&lt;Ctl&gt;" and
-          "&lt;Ctrl&gt;". If you set the option to the special string
-          "disabled", then there will be no keybinding for this action.
-                </long>
-            </locale>
-        </schema>
-        <schema>
-            <key>/schemas/apps/seahorse/applet/dvi_hotkey</key>
-            <applyto>/apps/seahorse/applet/dvi_hotkey</applyto>
-            <owner>seahorse</owner>
-            <type>string</type>
-            <default>&lt;Alt&gt;F10</default>
-            <locale name="C">
-                <short>Decrypt/Verify/Import Clipboard</short>
-                <long>The global keybinding for Decrypting/Verifying/Importing the clipboard.
-
-	   The format looks like "&lt;Control&gt;a" or
-          "&lt;Shift&gt;&lt;Alt&gt;F1".  The parser is fairly liberal and allows
-          lower or upper case, and also abbreviations such as "&lt;Ctl&gt;" and
-          "&lt;Ctrl&gt;". If you set the option to the special string
-          "disabled", then there will be no keybinding for this action.
-                </long>
-            </locale>
-        </schema>
-    </schemalist>
     <schemalist>
         <schema>
 			<key>/schemas/apps/seahorse/sharing/sharing_enabled</key>

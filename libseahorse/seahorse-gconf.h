@@ -45,15 +45,6 @@
 
 #define KEYSHARING_KEY              SEAHORSE_SCHEMAS "/sharing/sharing_enabled"
 
-#define DISPLAY_ENCRYPT_ENABLED     SEAHORSE_SCHEMAS "/applet/display_encrypt_enabled"
-#define DISPLAY_SIGN_ENABLED        SEAHORSE_SCHEMAS "/applet/display_sign_enabled"
-#define DISPLAY_DECRYPT_ENABLED     SEAHORSE_SCHEMAS "/applet/display_decrypt_enabled"
-
-#define HOTKEYS_ENABLED             SEAHORSE_SCHEMAS "/applet/hotkeys_enabled"
-#define ENCRYPT_HOTKEY              SEAHORSE_SCHEMAS "/applet/encrypt_hotkey"
-#define SIGN_HOTKEY                 SEAHORSE_SCHEMAS "/applet/sign_hotkey"
-#define DECRYPT_HOTKEY              SEAHORSE_SCHEMAS "/applet/dvi_hotkey"
-
 void            seahorse_gconf_set_boolean       (const char         *key, 
                                                   gboolean           boolean_value);
 
