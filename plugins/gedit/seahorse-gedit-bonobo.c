@@ -36,6 +36,7 @@
 
 #include "seahorse-context.h"
 #include "seahorse-gedit.h"
+#include "seahorse-pgp-key.h"
 
 #define MENU_ENC_ITEM_LABEL      N_("_Encrypt...")
 #define MENU_ENC_ITEM_PATH       "/menu/Edit/EditOps_6/"
