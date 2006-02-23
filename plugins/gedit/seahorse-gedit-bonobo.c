@@ -59,10 +59,25 @@ static SeahorseContext *sctx = NULL;
  * CRYPT CALLBACKS
  */
 
+static void
+init_context ()
+{
+    SeahorseOperation *op;
+    
+    if (!sctx) {
+        sctx = seahorse_context_new (TRUE, SKEY_PGP);
+        op = seahorse_context_load_local_keys (sctx);
+        
+        /* The op frees itself */
+        g_object_unref (op);
+    }
+}
+
 /* Callback for encrypt menu item */
 static void
 encrypt_cb (BonoboUIComponent *uic, gpointer user_data, const gchar *verbname)
 {
+    init_context ();
     seahorse_gedit_encrypt (sctx, gedit_get_active_document ());
 }
 
@@ -70,6 +85,7 @@ encrypt_cb (BonoboUIComponent *uic, gpointer user_data, const gchar *verbname)
 static void
 decrypt_cb (BonoboUIComponent *uic, gpointer user_data, const gchar *verbname)
 {
+    init_context ();
     seahorse_gedit_decrypt (sctx, gedit_get_active_document ());
 }
 
@@ -77,6 +93,7 @@ decrypt_cb (BonoboUIComponent *uic, gpointer user_data, const gchar *verbname)
 static void
 sign_cb (BonoboUIComponent *uic, gpointer user_data, const gchar *verbname)
 {
+    init_context ();
     seahorse_gedit_sign (sctx, gedit_get_active_document ());
 }
 
@@ -182,10 +199,7 @@ init (GeditPlugin *plugin)
 {
     gedit_debug (DEBUG_PLUGINS, "seahorse plugin inited");
 
-    sctx = seahorse_context_new ();
-    seahorse_context_load_keys (sctx, FALSE);
-    plugin->private_data = sctx;
-
+    sctx = NULL;
     return PLUGIN_OK;
 }
 

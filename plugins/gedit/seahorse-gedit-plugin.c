@@ -80,45 +80,65 @@ GEDIT_PLUGIN_REGISTER_TYPE (SeahorseGeditPlugin, seahorse_gedit_plugin);
  */
 
 static void
-encrypt_cb (GtkAction *action, SeahorseContext *sctx)
+init_context (SeahorseGeditPlugin *splugin)
+{
+    SeahorseOperation *op;
+    
+    if (!splugin->sctx) {
+        splugin->sctx = seahorse_context_new (TRUE, SKEY_PGP);
+        op = seahorse_context_load_local_keys (splugin->sctx);
+        
+        /* The op frees itself */
+        g_object_unref (op);
+    }
+}
+
+static void
+encrypt_cb (GtkAction *action, SeahorseGeditPlugin *splugin)
 {
     GeditWindow *win;
     GeditDocument *doc;
+    
+    init_context (splugin);
 
     win = GEDIT_WINDOW (seahorse_gedit_active_window ());
     g_return_if_fail (win);
 
     doc = gedit_window_get_active_document(win);
     if (doc)
-        seahorse_gedit_encrypt (sctx, doc);
+        seahorse_gedit_encrypt (splugin->sctx, doc);
 }
 
 static void
-decrypt_cb (GtkAction *action, SeahorseContext *sctx)
+decrypt_cb (GtkAction *action, SeahorseGeditPlugin *splugin)
 {
     GeditWindow *win;
     GeditDocument *doc;
+
+    init_context (splugin);
 
     win = GEDIT_WINDOW (seahorse_gedit_active_window ());
     g_return_if_fail (win);
 
     doc = gedit_window_get_active_document(win);
     if(doc)
-        seahorse_gedit_decrypt (sctx, doc);
+        seahorse_gedit_decrypt (splugin->sctx, doc);
 }
 
 static void
-sign_cb (GtkAction *action, SeahorseContext *sctx)
+sign_cb (GtkAction *action, SeahorseGeditPlugin *splugin)
 {
     GeditWindow *win;
     GeditDocument *doc;
+
+    init_context (splugin);
 
     win = GEDIT_WINDOW (seahorse_gedit_active_window ());
     g_return_if_fail (win);
 
     doc = gedit_window_get_active_document(win);
     if (doc)
-        seahorse_gedit_sign (sctx, doc);
+        seahorse_gedit_sign (splugin->sctx, doc);
 }
 
 static void
@@ -148,9 +168,7 @@ static const GtkActionEntry action_entries[] =
 static void
 seahorse_gedit_plugin_init (SeahorseGeditPlugin *splugin)
 {
-    splugin->sctx = seahorse_context_new (TRUE, SKEY_PGP);
-    seahorse_context_load_local_keys (splugin->sctx);
-    SEAHORSE_GEDIT_DEBUG (DEBUG_PLUGINS, "seahorse gedit plugin inited");	
+    SEAHORSE_GEDIT_DEBUG (DEBUG_PLUGINS, "seahorse gedit plugin inited");
 }
 
 static void
@@ -184,7 +202,7 @@ seahorse_gedit_plugin_activate (GeditPlugin *plugin, GeditWindow *window)
     data->action_group = gtk_action_group_new ("SeahorseGeditPluginActions");
     gtk_action_group_set_translation_domain (data->action_group, GETTEXT_PACKAGE);
     gtk_action_group_add_actions (data->action_group, action_entries,
-                                  G_N_ELEMENTS (action_entries), splugin->sctx);
+                                  G_N_ELEMENTS (action_entries), splugin);
     gtk_ui_manager_insert_action_group (manager, data->action_group, -1);
 
     data->ui_id = gtk_ui_manager_new_merge_id (manager);
@@ -231,7 +249,7 @@ seahorse_gedit_plugin_finalize (GObject *object)
 
     G_OBJECT_CLASS (seahorse_gedit_plugin_parent_class)->finalize (object);
 
-    SEAHORSE_GEDIT_DEBUG (DEBUG_PLUGINS, "seahorse gedit plugin destroyed");	
+    SEAHORSE_GEDIT_DEBUG (DEBUG_PLUGINS, "seahorse gedit plugin destroyed");
 }
 
 static void
