@@ -23,26 +23,26 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-#ifndef _SEAHORSE_STOCK_H_
-#define _SEAHORSE_STOCK_H_
+#ifndef _SEAHORSE_GTKSTOCK_H_
+#define _SEAHORSE_GTKSTOCK_H_
 
-/**************************************************************************/
-/** @name Stock images                                                    */
-/**************************************************************************/
-/*@{*/
+/* The default stock icons */
 #define SEAHORSE_STOCK_KEY          "seahorse-key"
 #define SEAHORSE_STOCK_PERSON       "seahorse-person"
 #define SEAHORSE_STOCK_SEAHORSE     "seahorse"
 #define SEAHORSE_STOCK_SECRET       "seahorse-secret"
 #define SEAHORSE_STOCK_SHARE_KEYS   "seahorse-share-keys"
-/* TODO: We should be using iconsets properly, for different sizes. */
 #define SEAHORSE_STOCK_KEY_SSH      "seahorse-key-ssh"
 #define SEAHORSE_STOCK_KEY_SSH_LRG  "seahorse-key-ssh-large"
-/*@}*/
 
-/**
- * Sets up the gaim stock repository.
- */
-void seahorse_gtk_stock_init(void);
+typedef struct _SeahorseStockIcon {
+    const char *id;
+    const char *dir;
+    const char *filename;
+} SeahorseStockIcon;
 
-#endif /* _SEAHORSE_STOCK_H_ */
+void    seahorse_gtkstock_init          (void);
+
+void    seahorse_gtkstock_add_icons     (const SeahorseStockIcon *icons);
+
+#endif /* _SEAHORSE_GTKSTOCK_H_ */

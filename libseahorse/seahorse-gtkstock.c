@@ -29,98 +29,91 @@
  
 #include "seahorse-gtkstock.h"
 
-static struct StockIcon
-{
-	const char *name;
-	const char *dir;
-	const char *filename;
-
-} const stock_icons[] =
-{
+static const SeahorseStockIcon seahorse_icons[] = {
     { SEAHORSE_STOCK_KEY,         "seahorse",   "seahorse-key.png"         },
     { SEAHORSE_STOCK_PERSON,      "seahorse",   "seahorse-person.png"      },
     { SEAHORSE_STOCK_SEAHORSE,    NULL,         "seahorse.png"             },
     { SEAHORSE_STOCK_SECRET,      "seahorse",   "seahorse-secret.png"      },
     { SEAHORSE_STOCK_SHARE_KEYS,  "seahorse",   "seahorse-share-keys.png"  },
     { SEAHORSE_STOCK_KEY_SSH,     "seahorse",   "seahorse-key-ssh.png"     },
-    { SEAHORSE_STOCK_KEY_SSH_LRG, "seahorse",   "seahorse-key-ssh-large.png" }
+    { SEAHORSE_STOCK_KEY_SSH_LRG, "seahorse",   "seahorse-key-ssh-large.png" },
+    { NULL }
 };
 
 static gchar *
 find_file(const char *dir, const char *base)
 {
-	char *filename;
+    char *filename;
 
-	if (base == NULL)
-		return NULL;
+    if (base == NULL)
+        return NULL;
 
-	if (dir == NULL)
-		filename = g_build_filename(DATA_DIR, "pixmaps", base, NULL);
-	else
-	{
-		filename = g_build_filename(DATA_DIR, "pixmaps", dir,
-									base, NULL);
-	}
+    if (dir == NULL)
+        filename = g_build_filename (DATA_DIR, "pixmaps", base, NULL);
+    else 
+        filename = g_build_filename (DATA_DIR, "pixmaps", dir, base, NULL);
 
-	if (!g_file_test(filename, G_FILE_TEST_EXISTS))
-	{
-		g_critical("Unable to load stock pixmap %s\n", base);
+    if (!g_file_test (filename, G_FILE_TEST_EXISTS)) {
+        g_critical ("Unable to load stock pixmap %s\n", base);
+        g_free (filename);
+        return NULL;
+    }
 
-		g_free(filename);
-
-		return NULL;
-	}
-
-	return filename;
+    return filename;
 }
 
 void
-seahorse_gtk_stock_init(void)
+seahorse_gtkstock_init(void)
 {
-	static gboolean stock_initted = FALSE;
-	GtkIconFactory *icon_factory;
-	int i;
-	GtkWidget *win;
+    static gboolean stock_initted = FALSE;
 
-	if (stock_initted)
-		return;
+    if (stock_initted)
+        return;
 
-	stock_initted = TRUE;
+    stock_initted = TRUE;
+    seahorse_gtkstock_add_icons (seahorse_icons);
+}
 
-	/* Setup the icon factory. */
-	icon_factory = gtk_icon_factory_new();
+void
+seahorse_gtkstock_add_icons (const SeahorseStockIcon *icons)
+{
+    GtkIconFactory *factory;
+    GtkIconSource *source;
+    GtkIconSet *iconset;
+    GtkWidget *win;
+    gchar *filename;
 
-	gtk_icon_factory_add_default(icon_factory);
+    /* Setup the icon factory. */
+    factory = gtk_icon_factory_new ();
+    gtk_icon_factory_add_default (factory);
+    
+    /* Er, yeah, a hack, but it works. :) */
+    win = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    gtk_widget_realize(win);
+    
+    /* TODO: Implement differently sized icons here */
 
-	/* Er, yeah, a hack, but it works. :) */
-	win = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	gtk_widget_realize(win);
-
-	for (i = 0; i < G_N_ELEMENTS(stock_icons); i++)
-	{
-		GdkPixbuf *pixbuf;
-		GtkIconSet *iconset;
-		gchar *filename;
-
-		filename = find_file(stock_icons[i].dir, stock_icons[i].filename);
-
-		if (filename == NULL)
-			continue;
-
-		pixbuf = gdk_pixbuf_new_from_file(filename, NULL);
-
-		g_free(filename);
-
-		iconset = gtk_icon_set_new_from_pixbuf(pixbuf);
-
-		g_object_unref(G_OBJECT(pixbuf));
-
-		gtk_icon_factory_add(icon_factory, stock_icons[i].name, iconset);
-
-		gtk_icon_set_unref(iconset);
-	}
-
-	gtk_widget_destroy(win);
-
-	g_object_unref(G_OBJECT(icon_factory));
+    for ( ; icons->id; icons++) {
+    
+        filename = find_file(icons->dir, icons->filename);
+        if (filename == NULL)
+            continue;
+        
+        source = gtk_icon_source_new ();
+        gtk_icon_source_set_filename (source, filename);
+        gtk_icon_source_set_direction_wildcarded (source, TRUE);
+        gtk_icon_source_set_size_wildcarded (source, TRUE);
+            
+        g_free(filename);
+        
+        iconset = gtk_icon_set_new ();
+        gtk_icon_set_add_source (iconset, source);
+        gtk_icon_source_free (source);
+        
+        gtk_icon_factory_add (factory, icons->id, iconset);
+        gtk_icon_set_unref (iconset);
+    }
+    
+    gtk_widget_destroy (win);
+    g_object_unref (factory);
 }

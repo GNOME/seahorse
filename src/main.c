@@ -459,7 +459,7 @@ main (int argc, char **argv)
 #endif
     
     /* Insert Icons into Stock */ 
-    seahorse_gtk_stock_init();
+    seahorse_gtkstock_init();
     
     /* Make the default SeahorseContext */
     seahorse_context_new (TRUE, 0);

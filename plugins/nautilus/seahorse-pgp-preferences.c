@@ -74,10 +74,10 @@ main (int argc, char **argv)
                 GNOME_PARAM_APP_DATADIR, DATA_DIR, NULL);
 
     /* Insert Icons into Stock */ 
-    seahorse_gtk_stock_init();
-	
+    seahorse_gtkstock_init();
+    
     /* The default SeahorseContext */
-	seahorse_context_new (TRUE, 0);
+    seahorse_context_new (TRUE, 0);
     op = seahorse_context_load_local_keys (SCTX_APP ());
     
     /* Let operation take care of itself */

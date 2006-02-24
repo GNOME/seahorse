@@ -764,7 +764,7 @@ seahorse_applet_fill (PanelApplet *applet)
     BonoboUIComponent *pcomp;
 
     /* Insert Icons into Stock */ 
-    seahorse_gtk_stock_init();
+    seahorse_gtkstock_init();
 
     g_return_val_if_fail (PANEL_IS_APPLET (applet), FALSE);
     gtk_widget_show_all (GTK_WIDGET (applet));
