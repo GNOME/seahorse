@@ -1,6 +1,8 @@
 INCLUDES = -DDATA_DIR=\""$(datadir)"\"
 
-pixmap_DATA = seahorse.png
+pixmap_DATA = seahorse.png \
+               seahorse-applet.png
+
 appicon_DATA = seahorse-secret.png \
                seahorse-key.png \
                seahorse-key-ssh.png \
@@ -12,8 +14,8 @@ appicon_DATA = seahorse-secret.png \
                seahorse-bad.png \
                seahorse-applet-encrypted.png \
                seahorse-applet-key.png \
-               seahorse-applet-signed.png \ 
-               seahorse-applet-text.png \ 
+               seahorse-applet-signed.png \
+               seahorse-applet-text.png \
                seahorse-applet-unknown.png
 
 pixmapdir = $(datadir)/pixmaps/
