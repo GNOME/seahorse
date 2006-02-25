@@ -38,10 +38,29 @@
 #define DISPLAY_CLIPBOARD_ENC_KEY     APPLET_SCHEMAS "/display_encrypted_clipboard"
 #define DISPLAY_CLIPBOARD_DEC_KEY     APPLET_SCHEMAS "/display_decrypted_clipboard"
 
-#define SEAHORSE_APPLET_GET_PRIVATE(obj)  (G_TYPE_INSTANCE_GET_PRIVATE ((obj), SEAHORSE_TYPE_APPLET, SeahorseAppletPrivate))
+/* -----------------------------------------------------------------------------
+ * ICONS AND STATE 
+ */
+
+#define ICON_CLIPBOARD_UNKNOWN      "seahorse-applet-unknown"
+#define ICON_CLIPBOARD_TEXT         "seahorse-applet-text"
+#define ICON_CLIPBOARD_ENCRYPTED    "seahorse-applet-encrypted"
+#define ICON_CLIPBOARD_SIGNED       "seahorse-applet-signed"
+#define ICON_CLIPBOARD_KEY          "seahorse-applet-key"
+#define ICON_CLIPBOARD_DEFAULT      ICON_CLIPBOARD_ENCRYPTED
+
+static const SeahorseStockIcon clipboard_icons[] = {
+    { ICON_CLIPBOARD_UNKNOWN,     "seahorse",   ICON_CLIPBOARD_UNKNOWN ".png" },
+    { ICON_CLIPBOARD_TEXT,        "seahorse",   ICON_CLIPBOARD_TEXT ".png" },
+    { ICON_CLIPBOARD_ENCRYPTED,   "seahorse",   ICON_CLIPBOARD_ENCRYPTED ".png" },
+    { ICON_CLIPBOARD_SIGNED,      "seahorse",   ICON_CLIPBOARD_SIGNED ".png" },
+    { ICON_CLIPBOARD_KEY,         "seahorse",   ICON_CLIPBOARD_KEY ".png" },
+    { NULL }
+};
 
 typedef enum {
     SEAHORSE_TEXT_TYPE_NONE,
+    SEAHORSE_TEXT_TYPE_PLAIN,
     SEAHORSE_TEXT_TYPE_KEY,
     SEAHORSE_TEXT_TYPE_MESSAGE,
     SEAHORSE_TEXT_TYPE_SIGNED
@@ -76,15 +95,20 @@ static const SeahorsePGPHeader seahorse_pgp_headers[] = {
     }
 };
 
+/* -----------------------------------------------------------------------------
+ * OBJECT DECLARATION
+ */
+
 typedef struct _SeahorseAppletPrivate {
-    GtkIconTheme        *icon_theme;
-    GdkPixbuf           *icon;
     GtkWidget           *image;
     GtkTooltips         *tooltips;
     SeahorseContext     *context;
     GtkClipboard        *board;
     GtkWidget           *menu;
+    SeahorseTextType    clipboard_contents;
 } SeahorseAppletPrivate;
+
+#define SEAHORSE_APPLET_GET_PRIVATE(obj)  (G_TYPE_INSTANCE_GET_PRIVATE ((obj), SEAHORSE_TYPE_APPLET, SeahorseAppletPrivate))
 
 G_DEFINE_TYPE (SeahorseApplet, seahorse_applet, PANEL_TYPE_APPLET);
 
@@ -146,11 +170,11 @@ detect_text_type (const gchar *text, gint len, const gchar **start, const gchar 
         return header->type;
     }
     
-    return SEAHORSE_TEXT_TYPE_NONE;
+    return SEAHORSE_TEXT_TYPE_PLAIN;
 }
 
 static void
-update_applet (SeahorseApplet *sapplet)
+update_menus (SeahorseApplet *sapplet)
 {
     BonoboUIComponent *pcomp;
     gboolean display;
@@ -167,11 +191,56 @@ update_applet (SeahorseApplet *sapplet)
 }
 
 static void 
+update_icon (SeahorseApplet *sapplet)
+{
+    SeahorseAppletPrivate *priv = SEAHORSE_APPLET_GET_PRIVATE (sapplet);
+    const char *stock;
+    
+    switch (priv->clipboard_contents) {
+    case SEAHORSE_TEXT_TYPE_NONE:
+        stock = ICON_CLIPBOARD_UNKNOWN;
+        break;
+    case SEAHORSE_TEXT_TYPE_PLAIN:
+        stock = ICON_CLIPBOARD_TEXT;
+        break;
+    case SEAHORSE_TEXT_TYPE_KEY:
+        stock = ICON_CLIPBOARD_KEY;
+        break;
+    case SEAHORSE_TEXT_TYPE_MESSAGE:
+        stock = ICON_CLIPBOARD_ENCRYPTED;
+        break;
+    case SEAHORSE_TEXT_TYPE_SIGNED:
+        stock = ICON_CLIPBOARD_SIGNED;
+        break;
+    default:
+        g_assert_not_reached ();
+        return;
+    };
+    
+    gtk_image_set_from_stock (GTK_IMAGE (priv->image), stock, GTK_ICON_SIZE_LARGE_TOOLBAR);
+}
+
+static void
+detect_received(GtkClipboard *board, const gchar *text, SeahorseApplet *sapplet)
+{
+    SeahorseAppletPrivate *priv = SEAHORSE_APPLET_GET_PRIVATE (sapplet);
+    
+    if (!text || !*text)
+        priv->clipboard_contents = SEAHORSE_TEXT_TYPE_NONE;
+    else
+        priv->clipboard_contents = detect_text_type (text, -1, NULL, NULL);
+    
+    update_icon (sapplet);
+}
+
+static void 
 handle_clipboard_owner_change(GtkClipboard *clipboard, GdkEvent *event, 
                               SeahorseApplet *sapplet)
 {
     SeahorseAppletPrivate *priv = SEAHORSE_APPLET_GET_PRIVATE (sapplet);
     priv->board = clipboard; 
+    gtk_clipboard_request_text (clipboard,
+         (GtkClipboardTextReceivedFunc)detect_received, sapplet);
 }
 
 static void
@@ -235,7 +304,7 @@ display_text (gchar *title, gchar *text, gboolean editable)
 }
 
 static void
-encrypt_received(GtkClipboard *board, const gchar *text, gpointer data)
+encrypt_received (GtkClipboard *board, const gchar *text, SeahorseApplet *sapplet)
 {
     SeahorsePGPKey *signer = NULL;
     gpgme_error_t err = GPG_OK;
@@ -263,6 +332,7 @@ encrypt_received(GtkClipboard *board, const gchar *text, gpointer data)
 
     /* And finish up */
     gtk_clipboard_set_text (board, enctext, strlen (enctext));
+    detect_received (board, enctext, sapplet);
     
     if (seahorse_gconf_get_boolean (DISPLAY_CLIPBOARD_ENC_KEY) == TRUE)
         display_text (_("Encrypted Text"), enctext, FALSE);
@@ -278,11 +348,11 @@ encrypt_cb (GtkMenuItem *menuitem, SeahorseApplet *sapplet)
     init_context (sapplet);
 
     gtk_clipboard_request_text (priv->board,
-         (GtkClipboardTextReceivedFunc)encrypt_received, NULL);    
+            (GtkClipboardTextReceivedFunc)encrypt_received, sapplet);
 }
 
 static void
-sign_received (GtkClipboard *board, const gchar *text, gpointer data)
+sign_received (GtkClipboard *board, const gchar *text, SeahorseApplet *sapplet)
 {
     SeahorsePGPKey *signer = NULL;
     gpgme_error_t err = GPG_OK;
@@ -303,6 +373,7 @@ sign_received (GtkClipboard *board, const gchar *text, gpointer data)
 
     /* And finish up */
     gtk_clipboard_set_text (board, enctext, strlen (enctext));
+    detect_received (board, enctext, sapplet);
 
     if (seahorse_gconf_get_boolean (DISPLAY_CLIPBOARD_ENC_KEY) == TRUE)
         display_text (_("Signed Text"), enctext, FALSE);
@@ -318,7 +389,7 @@ sign_cb (GtkMenuItem *menuitem, SeahorseApplet *sapplet)
     init_context (sapplet);
 
     gtk_clipboard_request_text (priv->board,
-         (GtkClipboardTextReceivedFunc)sign_received, NULL);    
+            (GtkClipboardTextReceivedFunc)sign_received, sapplet);
 }
 
 /* When we try to 'decrypt' a key, this gets called */
@@ -388,7 +459,7 @@ verify_text (const gchar *text, gpgme_verify_result_t *status)
 }
 
 static void
-dvi_received(GtkClipboard *board, const gchar *text, gpointer data)
+dvi_received (GtkClipboard *board, const gchar *text, SeahorseApplet *sapplet)
 {
     SeahorseTextType type;      /* Type of the current block */
     gchar *rawtext = NULL;      /* Replacement text */
@@ -435,6 +506,7 @@ dvi_received(GtkClipboard *board, const gchar *text, gpointer data)
     if (rawtext) {
 
         gtk_clipboard_set_text (board, rawtext, strlen (rawtext));
+        detect_received (board, rawtext, sapplet);
         
         if (seahorse_gconf_get_boolean (DISPLAY_CLIPBOARD_DEC_KEY) == TRUE)
             display_text (_("Decrypted Text"), rawtext, TRUE);
@@ -458,7 +530,7 @@ dvi_cb (GtkMenuItem *menuitem, SeahorseApplet *sapplet)
     init_context (sapplet);
 
     gtk_clipboard_request_text (priv->board,
-         (GtkClipboardTextReceivedFunc)dvi_received, NULL);    
+            (GtkClipboardTextReceivedFunc)dvi_received, sapplet);
 }
 
 static void
@@ -470,7 +542,6 @@ help_cb (BonoboUIComponent *uic, SeahorseApplet *sapplet, const char *verbname)
     if (err)
         seahorse_util_handle_error(err, _("Could not display the help file"));
 }
-
 
 static void
 seahorse_popup_position_menu (GtkMenu *menu, int *x, int *y, gboolean *push_in, 
@@ -530,17 +601,32 @@ handle_button_press (GtkWidget *widget, GdkEventButton *event)
         /* Build Menu */
         priv->menu = gtk_menu_new ();
         
-        item = gtk_image_menu_item_new_with_mnemonic (_("_Encrypt Clipboard"));
-        g_signal_connect (item, "activate", G_CALLBACK (encrypt_cb), applet);
-        gtk_menu_shell_append ((GtkMenuShell *)(priv->menu), (item));
+        if (priv->clipboard_contents == SEAHORSE_TEXT_TYPE_PLAIN ||
+            priv->clipboard_contents == SEAHORSE_TEXT_TYPE_NONE) {
+            item = gtk_image_menu_item_new_with_mnemonic (_("_Encrypt Clipboard"));
+            g_signal_connect (item, "activate", G_CALLBACK (encrypt_cb), applet);
+            gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), item);
+        }
         
-        item = gtk_image_menu_item_new_with_mnemonic (_("_Sign Clipboard"));
-        g_signal_connect (item, "activate", G_CALLBACK (sign_cb), applet);
-        gtk_menu_shell_append ((GtkMenuShell *)(priv->menu),(item));
+        if (priv->clipboard_contents == SEAHORSE_TEXT_TYPE_PLAIN ||
+            priv->clipboard_contents == SEAHORSE_TEXT_TYPE_NONE) {
+            item = gtk_image_menu_item_new_with_mnemonic (_("_Sign Clipboard"));
+            g_signal_connect (item, "activate", G_CALLBACK (sign_cb), applet);
+            gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), item);
+        }
         
-        item = gtk_image_menu_item_new_with_mnemonic (_("_Decrypt/Verify/Import Clipboard"));
-        g_signal_connect(item, "activate", G_CALLBACK (dvi_cb), applet);
-        gtk_menu_shell_append ((GtkMenuShell *)(priv->menu),(item));
+        if (priv->clipboard_contents == SEAHORSE_TEXT_TYPE_MESSAGE ||
+            priv->clipboard_contents == SEAHORSE_TEXT_TYPE_SIGNED) {
+            item = gtk_image_menu_item_new_with_mnemonic (_("_Decrypt/Verify Clipboard"));
+            g_signal_connect (item, "activate", G_CALLBACK (dvi_cb), applet);
+            gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), item);
+        }
+        
+        if (priv->clipboard_contents == SEAHORSE_TEXT_TYPE_KEY) {
+            item = gtk_image_menu_item_new_with_mnemonic (_("_Import Keys from Clipboard"));
+            g_signal_connect (item, "activate", G_CALLBACK (dvi_cb), applet);
+            gtk_menu_shell_append (GTK_MENU_SHELL (priv->menu), item);
+        }
         
         gtk_widget_show_all (priv->menu);
         
@@ -571,7 +657,7 @@ set_atk_name_description (GtkWidget *widget, const gchar *name, const gchar *des
 static void
 gconf_notify (GConfClient *client, guint id, GConfEntry *entry, gpointer *data)
 {
-    update_applet (SEAHORSE_APPLET (data));
+    update_menus (SEAHORSE_APPLET (data));
 }
 
 static void
@@ -620,8 +706,8 @@ seahorse_applet_init (SeahorseApplet *applet)
      * login.
      */
     
-    priv->icon = NULL;
-    priv->icon_theme = gtk_icon_theme_get_default ();
+    priv->clipboard_contents = SEAHORSE_TEXT_TYPE_NONE;
+    
     priv->image = gtk_image_new ();
     priv->tooltips = gtk_tooltips_new ();
 
@@ -646,20 +732,6 @@ seahorse_applet_init (SeahorseApplet *applet)
     g_signal_connect (board, "owner-change",
                       G_CALLBACK (handle_clipboard_owner_change), applet);
                       
-}
-
-static void
-seahorse_applet_change_size (PanelApplet *applet, guint size)
-{
-    SeahorseAppletPrivate *priv = SEAHORSE_APPLET_GET_PRIVATE (applet);
-
-    if (priv->icon)
-        g_object_unref (priv->icon);
-
-    /* this might be too much overload, maybe should we get just one icon size and scale? */
-    priv->icon = gtk_icon_theme_load_icon (priv->icon_theme, "seahorse", size, 0, NULL);
-
-    gtk_image_set_from_pixbuf (GTK_IMAGE (priv->image), priv->icon);
 }
 
 static void
@@ -701,8 +773,6 @@ seahorse_applet_finalize (GObject *object)
     BonoboUIComponent *pcomp;
 
     if (priv) {
-        g_object_unref (priv->icon);
-
         seahorse_context_destroy (SCTX_APP ());
         priv->context = NULL;
         
@@ -711,10 +781,6 @@ seahorse_applet_finalize (GObject *object)
         priv->menu = NULL;
         
         if (priv->tooltips)
-            g_object_unref (G_OBJECT (priv->tooltips));
-        priv->tooltips = NULL;
-        
-        if (priv->icon)
             g_object_unref (G_OBJECT (priv->tooltips));
         priv->tooltips = NULL;
     }
@@ -739,7 +805,6 @@ seahorse_applet_class_init (SeahorseAppletClass *klass)
     widget_class = GTK_WIDGET_CLASS(klass);
 
     object_class->finalize = seahorse_applet_finalize;
-    applet_class->change_size = seahorse_applet_change_size;
     applet_class->change_background = seahorse_applet_change_background;
     widget_class->button_press_event = handle_button_press;
 
@@ -764,8 +829,8 @@ seahorse_applet_fill (PanelApplet *applet)
     BonoboUIComponent *pcomp;
 
     /* Insert Icons into Stock */ 
-    seahorse_gtkstock_init();
-
+    seahorse_gtkstock_init ();
+    seahorse_gtkstock_add_icons (clipboard_icons);
     g_return_val_if_fail (PANEL_IS_APPLET (applet), FALSE);
     gtk_widget_show_all (GTK_WIDGET (applet));
 
@@ -782,7 +847,7 @@ seahorse_applet_fill (PanelApplet *applet)
                                       "hidden", "1", NULL);
     }
 
-    update_applet (sapplet);
+    update_menus (sapplet);
     seahorse_gconf_notify_lazy (APPLET_SCHEMAS, (GConfClientNotifyFunc)gconf_notify, 
                                 sapplet, GTK_WIDGET (applet));
     

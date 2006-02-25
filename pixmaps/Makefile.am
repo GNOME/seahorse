@@ -9,7 +9,12 @@ appicon_DATA = seahorse-secret.png \
                seahorse-person.png \
                seahorse-unknown.png \
                seahorse-good.png \
-               seahorse-bad.png
+               seahorse-bad.png \
+               seahorse-applet-encrypted.png \
+               seahorse-applet-key.png \
+               seahorse-applet-signed.png \ 
+               seahorse-applet-text.png \ 
+               seahorse-applet-unknown.png
 
 pixmapdir = $(datadir)/pixmaps/
 appicondir = $(datadir)/pixmaps/seahorse
