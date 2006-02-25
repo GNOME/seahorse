@@ -1,7 +1,7 @@
 /*
  * Seahorse
  *
- * Copyright (C) 2003 Jacob Perkins
+ * Copyright (C) 2006 Nate Nielsen
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,30 +34,32 @@
 
 #include <gtk/gtk.h>
 
-#define SEAHORSE_TYPE_CHECK_BUTTON_CONTROL		(seahorse_check_button_control_get_type ())
-#define SEAHORSE_CHECK_BUTTON_CONTROL(obj)		(GTK_CHECK_CAST ((obj), SEAHORSE_TYPE_CHECK_BUTTON_CONTROL, SeahorseCheckButtonControl))
-#define SEAHORSE_CHECK_BUTTON_CONTROL_CLASS(klass)	(GTK_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_CHECK_BUTTON_CONTROL, SeahorseCheckButtonControlClass))
-#define SEAHORSE_IS_CHECK_BUTTON_CONTROL(obj)		(GTK_CHECK_TYPE ((obj), SEAHORSE_TYPE_CHECK_BUTTON_CONTROL))
-#define SEAHORSE_IS_CHECK_BUTTON_CONTROL_CLASS(klass)	(GTK_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_CHECK_BUTTON_CONTROL))
-#define SEAHORSE_CHECK_BUTTON_CONTROL_GET_CLASS(obj)	(GTK_CHECK_GET_CLASS ((obj), SEAHORSE_TYPE_CHECK_BUTTON_CONTROL, SeahorseCheckButtonControlClass))
+#define SEAHORSE_TYPE_CHECK_BUTTON_CONTROL              (seahorse_check_button_control_get_type ())
+#define SEAHORSE_CHECK_BUTTON_CONTROL(obj)              (GTK_CHECK_CAST ((obj), SEAHORSE_TYPE_CHECK_BUTTON_CONTROL, SeahorseCheckButtonControl))
+#define SEAHORSE_CHECK_BUTTON_CONTROL_CLASS(klass)      (GTK_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_CHECK_BUTTON_CONTROL, SeahorseCheckButtonControlClass))
+#define SEAHORSE_IS_CHECK_BUTTON_CONTROL(obj)           (GTK_CHECK_TYPE ((obj), SEAHORSE_TYPE_CHECK_BUTTON_CONTROL))
+#define SEAHORSE_IS_CHECK_BUTTON_CONTROL_CLASS(klass)   (GTK_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_CHECK_BUTTON_CONTROL))
+#define SEAHORSE_CHECK_BUTTON_CONTROL_GET_CLASS(obj)    (GTK_CHECK_GET_CLASS ((obj), SEAHORSE_TYPE_CHECK_BUTTON_CONTROL, SeahorseCheckButtonControlClass))
 
 typedef struct _SeahorseCheckButtonControl SeahorseCheckButtonControl;
 typedef struct _SeahorseCheckButtonControlClass SeahorseCheckButtonControlClass;
 
-struct _SeahorseCheckButtonControl
-{
-	GtkCheckButton		parent;
-	
-	gchar			*gconf_key;
-	guint			notify_id;
+struct _SeahorseCheckButtonControl {
+    GtkCheckButton parent;
 };
 
-struct _SeahorseCheckButtonControlClass
-{
-	GtkCheckButtonClass	parent_class;
+struct _SeahorseCheckButtonControlClass {
+    GtkCheckButtonClass parent_class;
 };
 
-GtkWidget*	seahorse_check_button_control_new	(const gchar	*label,
-							 const gchar	*gconf_key);
+GtkWidget*  seahorse_check_button_control_new       (const gchar *label,
+                                                     const gchar *gconf_key);
+
+/* A new API for dealing with elsewhere created widgets */
+
+void        seahorse_check_button_gconf_attach      (GtkCheckButton *button,
+                                                     const char *gconf_key);
+
+void        seahorse_check_button_gconf_detach      (GtkCheckButton *button);
 
 #endif /* __SEAHORSE_CHECK_BUTTON_CONTROL_H__ */
