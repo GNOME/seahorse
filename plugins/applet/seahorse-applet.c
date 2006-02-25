@@ -310,6 +310,10 @@ encrypt_received (GtkClipboard *board, const gchar *text, SeahorseApplet *sapple
     gpgme_error_t err = GPG_OK;
     gchar *enctext = NULL;
     GList *keys;
+    
+    /* No text on clipboard */
+    if (!text)
+        return;
  
     keys = seahorse_recipients_get (&signer);
     
@@ -357,6 +361,10 @@ sign_received (GtkClipboard *board, const gchar *text, SeahorseApplet *sapplet)
     SeahorsePGPKey *signer = NULL;
     gpgme_error_t err = GPG_OK;
     gchar *enctext = NULL;
+    
+    /* No text on clipboard */
+    if (!text)
+        return;
 
     signer = seahorse_signer_get ();
     if (signer == NULL)
