@@ -437,31 +437,28 @@ sign_transit (guint current_state, gpgme_status_code_t status,
  **/
 gpgme_error_t
 seahorse_key_op_sign (SeahorseKey *skey, const guint index,
-		              SeahorseSignCheck check, SeahorseSignOptions options)
+                      SeahorseSignCheck check, SeahorseSignOptions options)
 {
-	SignParm *sign_parm;
-	SeahorseEditParm *parms;
+    SignParm *sign_parm;
+    SeahorseEditParm *parms;
     gpgme_error_t err;
-	
-	g_return_val_if_fail (SEAHORSE_IS_KEY (skey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
-	g_return_val_if_fail (index <= seahorse_key_get_num_uids (skey), GPG_E (GPG_ERR_INV_VALUE));
-	
-	sign_parm = g_new (SignParm, 1);
-	sign_parm->index = index;
-	sign_parm->expire = ((options & SIGN_EXPIRES) != 0);
-	sign_parm->check = check;
-	sign_parm->command = "sign";
-	
-	/* if sign is local */
-	if ((options & SIGN_LOCAL) != 0)
-		sign_parm->command = g_strdup_printf ("l%s", sign_parm->command);
-	/* if sign is non-revocable */
-	if ((options & SIGN_NO_REVOKE) != 0)
-		sign_parm->command = g_strdup_printf ("nr%s", sign_parm->command);
-	
-	parms = seahorse_edit_parm_new (SIGN_START, sign_action, sign_transit, sign_parm);
-	
-	err =  edit_key (skey, parms, SKEY_CHANGE_SIGNERS);
+
+    g_return_val_if_fail (SEAHORSE_IS_KEY (skey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
+    g_return_val_if_fail (index <= seahorse_key_get_num_uids (skey), GPG_E (GPG_ERR_INV_VALUE));
+
+    sign_parm = g_new (SignParm, 1);
+    sign_parm->index = index;
+    sign_parm->expire = ((options & SIGN_EXPIRES) != 0);
+    sign_parm->check = check;
+    
+    sign_parm->command = g_strdup_printf ("%s%ssign", 
+                                (options & SIGN_NO_REVOKE) ? "nr" : "",
+                                (options & SIGN_LOCAL) ? "l" : "");
+    
+    parms = seahorse_edit_parm_new (SIGN_START, sign_action, sign_transit, sign_parm);
+
+    err =  edit_key (skey, parms, SKEY_CHANGE_SIGNERS);
+    g_free (sign_parm->command);
  
     /* If it was already signed then it's not an error */
     if (!GPG_IS_OK (err) && gpgme_err_code (err) == GPG_ERR_EALREADY)
