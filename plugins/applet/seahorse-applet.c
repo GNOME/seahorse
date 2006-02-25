@@ -33,8 +33,10 @@
 #include "seahorse-util.h"
 #include "seahorse-gconf.h"
 #include "seahorse-secure-memory.h"
+#include "seahorse-check-button-control.h"
 
 #define APPLET_SCHEMAS                SEAHORSE_SCHEMAS "/applet"
+#define SHOW_CLIPBOARD_STATE_KEY      APPLET_SCHEMAS "/show_clipboard_state"
 #define DISPLAY_CLIPBOARD_ENC_KEY     APPLET_SCHEMAS "/display_encrypted_clipboard"
 #define DISPLAY_CLIPBOARD_DEC_KEY     APPLET_SCHEMAS "/display_decrypted_clipboard"
 
@@ -173,49 +175,37 @@ detect_text_type (const gchar *text, gint len, const gchar **start, const gchar 
     return SEAHORSE_TEXT_TYPE_PLAIN;
 }
 
-static void
-update_menus (SeahorseApplet *sapplet)
-{
-    BonoboUIComponent *pcomp;
-    gboolean display;
-
-    pcomp = panel_applet_get_popup_component (PANEL_APPLET (sapplet));
-
-    display = seahorse_gconf_get_boolean (DISPLAY_CLIPBOARD_ENC_KEY);
-    bonobo_ui_component_set_prop (pcomp, "/commands/DisplayEncrypted", "state", 
-                                  display ? "1" : "0", NULL);
-
-    display = seahorse_gconf_get_boolean (DISPLAY_CLIPBOARD_DEC_KEY);
-    bonobo_ui_component_set_prop (pcomp, "/commands/DisplayDecrypted", "state", 
-                                  display ? "1" : "0", NULL);
-}
-
 static void 
 update_icon (SeahorseApplet *sapplet)
 {
     SeahorseAppletPrivate *priv = SEAHORSE_APPLET_GET_PRIVATE (sapplet);
-    const char *stock;
+    const char *stock = NULL;
     
-    switch (priv->clipboard_contents) {
-    case SEAHORSE_TEXT_TYPE_NONE:
-        stock = ICON_CLIPBOARD_UNKNOWN;
-        break;
-    case SEAHORSE_TEXT_TYPE_PLAIN:
-        stock = ICON_CLIPBOARD_TEXT;
-        break;
-    case SEAHORSE_TEXT_TYPE_KEY:
-        stock = ICON_CLIPBOARD_KEY;
-        break;
-    case SEAHORSE_TEXT_TYPE_MESSAGE:
-        stock = ICON_CLIPBOARD_ENCRYPTED;
-        break;
-    case SEAHORSE_TEXT_TYPE_SIGNED:
-        stock = ICON_CLIPBOARD_SIGNED;
-        break;
-    default:
-        g_assert_not_reached ();
-        return;
-    };
+    if (seahorse_gconf_get_boolean (SHOW_CLIPBOARD_STATE_KEY)) {
+        switch (priv->clipboard_contents) {
+        case SEAHORSE_TEXT_TYPE_NONE:
+            stock = ICON_CLIPBOARD_UNKNOWN;
+            break;
+        case SEAHORSE_TEXT_TYPE_PLAIN:
+            stock = ICON_CLIPBOARD_TEXT;
+            break;
+        case SEAHORSE_TEXT_TYPE_KEY:
+            stock = ICON_CLIPBOARD_KEY;
+            break;
+        case SEAHORSE_TEXT_TYPE_MESSAGE:
+            stock = ICON_CLIPBOARD_ENCRYPTED;
+            break;
+        case SEAHORSE_TEXT_TYPE_SIGNED:
+            stock = ICON_CLIPBOARD_SIGNED;
+            break;
+        default:
+            g_assert_not_reached ();
+            return;
+        };
+        
+    } else {
+        stock = ICON_CLIPBOARD_DEFAULT;
+    }
     
     gtk_image_set_from_stock (GTK_IMAGE (priv->image), stock, GTK_ICON_SIZE_LARGE_TOOLBAR);
 }
@@ -239,8 +229,12 @@ handle_clipboard_owner_change(GtkClipboard *clipboard, GdkEvent *event,
 {
     SeahorseAppletPrivate *priv = SEAHORSE_APPLET_GET_PRIVATE (sapplet);
     priv->board = clipboard; 
-    gtk_clipboard_request_text (clipboard,
-         (GtkClipboardTextReceivedFunc)detect_received, sapplet);
+    
+    if (seahorse_gconf_get_boolean (SHOW_CLIPBOARD_STATE_KEY)) 
+        gtk_clipboard_request_text (clipboard,
+             (GtkClipboardTextReceivedFunc)detect_received, sapplet);
+    else
+        update_icon (sapplet);
 }
 
 static void
@@ -541,6 +535,32 @@ dvi_cb (GtkMenuItem *menuitem, SeahorseApplet *sapplet)
             (GtkClipboardTextReceivedFunc)dvi_received, sapplet);
 }
 
+void
+properties_cb (BonoboUIComponent *uic, SeahorseApplet *sapplet, const char *verbname)
+{
+    SeahorseWidget *swidget;
+    GtkWidget *widget;
+    
+    /* SeahorseWidget needs a SeahorseContext initialized */
+    init_context (sapplet);
+    
+    swidget = seahorse_widget_new ("applet-preferences");
+    
+    widget = glade_xml_get_widget (swidget->xml, "show-clipboard-state");
+    if (widget && GTK_IS_CHECK_BUTTON (widget))
+        seahorse_check_button_gconf_attach (GTK_CHECK_BUTTON (widget), SHOW_CLIPBOARD_STATE_KEY);
+    
+    widget = glade_xml_get_widget (swidget->xml, "display-encrypted-clipboard");
+    if (widget && GTK_IS_CHECK_BUTTON (widget))
+        seahorse_check_button_gconf_attach (GTK_CHECK_BUTTON (widget), DISPLAY_CLIPBOARD_ENC_KEY);
+    
+    widget = glade_xml_get_widget (swidget->xml, "display-decrypted-clipboard");
+    if (widget && GTK_IS_CHECK_BUTTON (widget))
+        seahorse_check_button_gconf_attach (GTK_CHECK_BUTTON (widget), DISPLAY_CLIPBOARD_DEC_KEY);
+    
+    seahorse_widget_show (swidget);
+}
+
 static void
 help_cb (BonoboUIComponent *uic, SeahorseApplet *sapplet, const char *verbname)
 {
@@ -665,34 +685,7 @@ set_atk_name_description (GtkWidget *widget, const gchar *name, const gchar *des
 static void
 gconf_notify (GConfClient *client, guint id, GConfEntry *entry, gpointer *data)
 {
-    update_menus (SEAHORSE_APPLET (data));
-}
-
-static void
-toggle_display (BonoboUIComponent *pcomp, gchar *arg1, gint arg2, gchar *arg3, 
-                SeahorseApplet *sapplet)
-{
-    gchar* val;
-    gboolean display = FALSE;
-    
-    if (strcmp (arg1, "DisplayEncrypted") == 0) {
-        
-        val = bonobo_ui_component_get_prop (pcomp, "/commands/DisplayEncrypted", "state", NULL);
-        if (strcmp (val, "1") == 0)
-            display = TRUE;
-        g_free (val);
-    
-        seahorse_gconf_set_boolean (DISPLAY_CLIPBOARD_ENC_KEY, display);
-        
-    } else if (strcmp (arg1, "DisplayDecrypted") == 0) {
-        
-        val = bonobo_ui_component_get_prop (pcomp, "/commands/DisplayDecrypted", "state", NULL);
-        if (strcmp (val, "1") == 0)
-            display = TRUE;
-        g_free (val);
-    
-        seahorse_gconf_set_boolean (DISPLAY_CLIPBOARD_DEC_KEY, display);
-    }
+    update_icon (SEAHORSE_APPLET (data));
 }
 
 /* -----------------------------------------------------------------------------
@@ -778,7 +771,6 @@ static void
 seahorse_applet_finalize (GObject *object)
 {
     SeahorseAppletPrivate *priv = SEAHORSE_APPLET_GET_PRIVATE (object);
-    BonoboUIComponent *pcomp;
 
     if (priv) {
         if (priv->context)
@@ -794,10 +786,6 @@ seahorse_applet_finalize (GObject *object)
         priv->tooltips = NULL;
     }
     
-    pcomp = panel_applet_get_popup_component (PANEL_APPLET (object));
-    if (BONOBO_IS_UI_COMPONENT (pcomp))
-        g_signal_handlers_disconnect_by_func (pcomp, toggle_display, SEAHORSE_APPLET (object));
-
     if (G_OBJECT_CLASS (seahorse_applet_parent_class)->finalize)
         (* G_OBJECT_CLASS (seahorse_applet_parent_class)->finalize) (object);
 }
@@ -826,6 +814,7 @@ seahorse_applet_class_init (SeahorseAppletClass *klass)
  */
 
 static const BonoboUIVerb seahorse_applet_menu_verbs [] = {
+    BONOBO_UI_UNSAFE_VERB ("Props", properties_cb),
     BONOBO_UI_UNSAFE_VERB ("Help", help_cb),
     BONOBO_UI_UNSAFE_VERB ("About", about_cb),
     BONOBO_UI_VERB_END
@@ -847,16 +836,11 @@ seahorse_applet_fill (PanelApplet *applet)
                                        NULL, seahorse_applet_menu_verbs, sapplet);
         
     pcomp = panel_applet_get_popup_component (applet);
-    g_signal_connect (pcomp, "ui-event", G_CALLBACK (toggle_display), sapplet);
 
-    if (panel_applet_get_locked_down (applet)) {
-        bonobo_ui_component_set_prop (pcomp, "/commands/DisplayEncrypted",
-                                      "hidden", "1", NULL);
-        bonobo_ui_component_set_prop (pcomp, "/commands/DisplayDecrypted",
-                                      "hidden", "1", NULL);
-    }
+    if (panel_applet_get_locked_down (applet))
+        bonobo_ui_component_set_prop (pcomp, "/commands/Props", "hidden", "1", NULL);    
 
-    update_menus (sapplet);
+    update_icon (sapplet);
     seahorse_gconf_notify_lazy (APPLET_SCHEMAS, (GConfClientNotifyFunc)gconf_notify, 
                                 sapplet, GTK_WIDGET (applet));
     

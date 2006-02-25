@@ -51,11 +51,23 @@
 	</schemalist>
     <schemalist>
         <schema>
+            <key>/schemas/apps/seahorse/applet/show_clipboard_state</key>
+            <applyto>/apps/seahorse/applet/show_clipboard_state</applyto>
+            <owner>seahorse</owner>
+            <type>bool</type>
+            <default>FALSE</default>
+            <locale name="C">
+                <short>Show clipboard state in panel</short>
+                <long>Reflect the contents of the clipboard (whether encrypted, 
+                signed, etc...) in the panel applet icon.</long>
+            </locale>
+        </schema>
+        <schema>
             <key>/schemas/apps/seahorse/applet/display_encrypted_clipboard</key>
             <applyto>/apps/seahorse/applet/display_encrypted_clipboard</applyto>
             <owner>seahorse</owner>
             <type>bool</type>
-            <default>FALSE</default>
+            <default>TRUE</default>
             <locale name="C">
                 <short>Display clipboard after encrypting</short>
                 <long>After performing an encrypt or signing operation from the applet,
@@ -74,6 +86,7 @@
                 display the resulting text in a window.</long>
             </locale>
         </schema>
+    </schemalist>
     <schemalist>
         <schema>
 			<key>/schemas/apps/seahorse/sharing/sharing_enabled</key>
