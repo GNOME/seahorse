@@ -773,7 +773,8 @@ seahorse_applet_finalize (GObject *object)
     BonoboUIComponent *pcomp;
 
     if (priv) {
-        seahorse_context_destroy (SCTX_APP ());
+        if (priv->context)
+            seahorse_context_destroy (priv->context);
         priv->context = NULL;
         
         if (priv->menu)
