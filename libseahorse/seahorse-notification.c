@@ -1,7 +1,28 @@
-
+/*
+ * Seahorse
+ *
+ * Copyright (C) 2006 Nate Nielsen
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the
+ * Free Software Foundation, Inc.,
+ * 59 Temple Place, Suite 330,
+ * Boston, MA 02111-1307, USA.
+ */
+ 
 #include "config.h"
 
 #include <gtk/gtk.h>
+
 #include "seahorse-libdialogs.h"
 
 #ifdef HAVE_LIBNOTIFY
@@ -85,20 +106,30 @@ void
 seahorse_notification_display (const gchar *summary, const gchar *body,
                                gboolean urgent, const gchar *icon)
 {
+    gboolean res = FALSE;
 #ifdef HAVE_LIBNOTIFY
-    NotifyHandle *handle;
-    NotifyIcon *nicon;
+    NotifyNotification *notif;
+    GError *err = NULL;
     
     if (!notify_is_initted ())
-        notify_glib_init ("seahorse", NULL);
+        notify_init ("seahorse");
+
+    notif = notify_notification_new (summary, body, icon, NULL);
+    g_return_if_fail (notif != NULL);
+        
+    notify_notification_set_urgency (notif,  urgent ?
+                                            NOTIFY_URGENCY_CRITICAL : 
+                                            NOTIFY_URGENCY_NORMAL);
     
-    nicon = notify_icon_new_from_uri (icon);
-    handle = notify_send_notification (NULL, NULL, urgent ? NOTIFY_URGENCY_CRITICAL : NOTIFY_URGENCY_NORMAL,
-                                       summary, body, nicon, TRUE, urgent ? 8640000 : 10, NULL, NULL, 0);
-    notify_icon_destroy (nicon);
+    res = notify_notification_show (notif, &err);
+    if (!res) {
+        g_warning ("couldn't show notification through libnotify: %s", err->message);
+        g_clear_error (&err);
+    }
     
-    /* If we failed to display the notification, then display the dialog */
-    if (handle == NULL)
-#endif
+#endif /* HAVE_LIBNOTIFY */ 
+    
+    /* If no display via libnotify, then display the dialog */
+    if (!res)
         notification_display_fallback (summary, body, urgent, icon);
 }
