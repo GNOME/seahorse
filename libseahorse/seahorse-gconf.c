@@ -212,6 +212,22 @@ seahorse_gconf_get_string_list (const char *key)
     return handle_error (&error) ? NULL : slist;
 }
 
+GConfEntry*
+seahorse_gconf_get_entry (const char *key)
+{
+    GConfEntry *entry;
+    GConfClient *client;
+    GError *error = NULL;
+    
+    g_return_val_if_fail (key != NULL, NULL);
+    
+    client = get_global_client ();
+    g_return_val_if_fail (client != NULL, NULL);
+
+    entry = gconf_client_get_entry (client, key, NULL, TRUE, &error);
+    return handle_error (&error) ? NULL : entry;
+}
+
 guint
 seahorse_gconf_notify (const char *key, GConfClientNotifyFunc notification_callback,
 				       gpointer callback_data)
