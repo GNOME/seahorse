@@ -377,7 +377,7 @@ seahorse_multi_operation_cancel (SeahorseOperation *operation)
 {
     SeahorseMultiOperation *mop;
     
-    g_return_if_fail (SEAHORSE_IS_MULTI_OPERATION (operation));
+    g_assert (SEAHORSE_IS_MULTI_OPERATION (operation));
     mop = SEAHORSE_MULTI_OPERATION (operation);
 
     seahorse_operation_list_cancel (mop->operations);
@@ -398,12 +398,12 @@ static void
 multi_operation_progress (SeahorseOperation *operation, const gchar *message, 
                           gdouble fract, SeahorseMultiOperation *mop)
 {
-	GSList *list;
+    GSList *list;
     
-    g_return_if_fail (SEAHORSE_IS_MULTI_OPERATION (mop));
-    g_return_if_fail (SEAHORSE_IS_OPERATION (operation));  
+    g_assert (SEAHORSE_IS_MULTI_OPERATION (mop));
+    g_assert (SEAHORSE_IS_OPERATION (operation));  
 	
-	list = mop->operations;
+    list = mop->operations;
     
     /* One or two operations, simple */
     if (g_slist_length (list) <= 1) {
@@ -461,8 +461,8 @@ multi_operation_done (SeahorseOperation *op, SeahorseMultiOperation *mop)
     GSList *l;
     gboolean done = TRUE;
     
-    g_return_if_fail (SEAHORSE_IS_MULTI_OPERATION (mop));
-    g_return_if_fail (SEAHORSE_IS_OPERATION (op));  
+    g_assert (SEAHORSE_IS_MULTI_OPERATION (mop));
+    g_assert (SEAHORSE_IS_OPERATION (op));  
   
     g_signal_handlers_disconnect_by_func (op, multi_operation_done, mop);
     g_signal_handlers_disconnect_by_func (op, multi_operation_progress, mop);

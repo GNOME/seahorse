@@ -180,7 +180,7 @@ set_numbered_status (SeahorseWidget *swidget, const gchar *t1, const gchar *t2, 
 static void
 show_properties (SeahorseKey *skey)
 {
-    g_return_if_fail (skey != NULL);
+    g_assert (skey);
     
     if (SEAHORSE_IS_PGP_KEY (skey))
 		seahorse_key_properties_new (SEAHORSE_PGP_KEY (skey));

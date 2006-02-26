@@ -30,7 +30,7 @@
 static gboolean
 pulse_timer (GtkProgressBar *progress)
 {
-    g_return_val_if_fail (GTK_IS_PROGRESS_BAR (progress), FALSE);
+    g_assert (GTK_IS_PROGRESS_BAR (progress));
     
     if (gtk_progress_bar_get_pulse_step (progress) != 0) {
         gtk_progress_bar_pulse (progress);
@@ -75,7 +75,7 @@ operation_progress (SeahorseOperation *operation, const gchar *message,
 {
     GtkProgressBar *progress;
   
-    g_return_if_fail (GNOME_IS_APPBAR (appbar));
+    g_assert (GNOME_IS_APPBAR (appbar));
     
     if (message != NULL) {
         if (message[0])
@@ -210,7 +210,7 @@ progress_show (SeahorseOperation *operation)
         return FALSE;
     }
         
-  	swidget = seahorse_widget_new ("progress");
+    swidget = seahorse_widget_new ("progress");
     g_return_val_if_fail (swidget != NULL, FALSE);
 
     /* Release our reference on the operation when this window is destroyed */    

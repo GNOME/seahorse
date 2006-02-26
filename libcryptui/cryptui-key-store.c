@@ -157,7 +157,7 @@ key_store_key_changed (CryptUIKeyset *ckset, const gchar *key,
     GtkTreeIter iter;
     GtkTreePath *path;
 
-    g_return_if_fail (ref != NULL);
+    g_assert (ref != NULL);
     
     path = gtk_tree_row_reference_get_path (ref);
     if (path) {
@@ -174,7 +174,7 @@ key_store_key_removed (CryptUIKeyset *ckset, const gchar *key,
     GtkTreeIter iter;
     GtkTreePath *path;
     
-    g_return_if_fail (ref != NULL);
+    g_assert (ref != NULL);
     
     path = gtk_tree_row_reference_get_path (ref);
     if (path) {
@@ -218,11 +218,11 @@ key_store_populate (CryptUIKeyStore *ckstore)
                         -1);
     }
 
-    g_return_if_fail (CRYPTUI_IS_KEYSET (ckstore->ckset));
+    g_assert (CRYPTUI_IS_KEYSET (ckstore->ckset));
     keys = cryptui_keyset_get_keys (ckstore->ckset);
     
     for (l = keys; l; l = g_list_next (l)) {
-        g_return_if_fail (l->data != NULL);
+        g_assert (l->data != NULL);
         key_store_key_added (ckstore->ckset, l->data, ckstore);
     }
      
@@ -496,7 +496,7 @@ cryptui_key_store_set_property (GObject *gobject, guint prop_id,
     
     switch (prop_id) {
     case PROP_KEYSET:
-        g_return_if_fail (ckstore->ckset == NULL);
+        g_assert (ckstore->ckset == NULL);
         ckstore->ckset = g_value_get_object (value);
         g_object_ref (ckstore->ckset);
         g_signal_connect_after (ckstore->ckset, "added",

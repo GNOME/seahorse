@@ -98,7 +98,7 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
     if (!keys)
         return;
     
-    g_return_if_fail (SEAHORSE_IS_KEY (keys->data));
+    g_assert (SEAHORSE_IS_KEY (keys->data));
 
     /* This should be the default key source */
     lsksrc = seahorse_context_find_key_source (SCTX_APP(), SKEY_PGP, SKEY_LOC_LOCAL);

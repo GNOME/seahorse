@@ -118,7 +118,7 @@ seahorse_default_key_control_set_property (GObject *object, guint prop_id,
     
     switch (prop_id) {
     case PROP_KEYSET:
-        g_return_if_fail (control->skset == NULL);        
+        g_assert (control->skset == NULL);        
         control->skset = g_value_get_object (value);
 
         keys = seahorse_keyset_get_keys (control->skset);  

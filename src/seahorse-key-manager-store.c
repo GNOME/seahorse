@@ -257,8 +257,8 @@ gconf_notification (GConfClient *gclient, guint id, GConfEntry *entry, GtkTreeVi
 
     key = gconf_entry_get_key (entry);
 
-    g_return_if_fail (key != NULL);
-    g_return_if_fail (GTK_IS_TREE_VIEW (view));
+    g_assert (key != NULL);
+    g_assert (GTK_IS_TREE_VIEW (view));
     
     columns = gtk_tree_view_get_columns (view);
     for (l = columns; l; l = g_list_next (l)) {
@@ -284,13 +284,13 @@ drag_begin (GtkWidget *widget, GdkDragContext *context, SeahorseKeyStore *skstor
     SeahorseKeySource *sksrc;
     SeahorseMultiOperation *mop = NULL;
     SeahorseOperation *op = NULL;
-   	GList *next, *keys, *sel_keys = NULL;
+    GList *next, *keys, *sel_keys = NULL;
     gpgme_data_t data = NULL;
     SeahorseKey *skey;
     
     DBG_PRINT (("drag_begin -->\n"));
     
-  	sel_keys = seahorse_key_store_get_selected_keys (view);
+    sel_keys = seahorse_key_store_get_selected_keys (view);
     if(sel_keys != NULL) {
         
         /* Sort by key source */
@@ -302,7 +302,7 @@ drag_begin (GtkWidget *widget, GdkDragContext *context, SeahorseKeyStore *skstor
             /* Break off one set (same keysource) */
             next = seahorse_util_keylist_splice (keys);
 
-            g_return_if_fail (SEAHORSE_IS_KEY (keys->data));
+            g_assert (SEAHORSE_IS_KEY (keys->data));
             skey = SEAHORSE_KEY (keys->data);
 
             /* Export from this key source */        
@@ -343,7 +343,7 @@ drag_begin (GtkWidget *widget, GdkDragContext *context, SeahorseKeyStore *skstor
 static void
 cleanup_file (gchar *file)
 {
-    g_return_if_fail (file != NULL);
+    g_assert (file != NULL);
     DBG_PRINT (("deleting temp file: %s\n", file));
     unlink (file);
     g_free (file);

@@ -53,6 +53,7 @@ keyserver_cell_edited (GtkCellRendererText *cell, gchar *path, gchar *text,
                        GtkTreeModel *model)
 {
     GtkTreeIter iter;
+    gboolean ret;
     
     if (!seahorse_server_source_valid_uri (text)) {
         seahorse_util_show_error (NULL, _("Not a valid Key Server address."), 
@@ -60,7 +61,8 @@ keyserver_cell_edited (GtkCellRendererText *cell, gchar *path, gchar *text,
         return;
     }
     
-    g_return_if_fail (gtk_tree_model_get_iter_from_string (model, &iter, path));
+    ret = gtk_tree_model_get_iter_from_string (model, &iter, path);
+    g_assert (ret);
     gtk_tree_store_set (GTK_TREE_STORE (model), &iter, KEYSERVER_COLUMN, text, -1);
 }
 
@@ -337,7 +339,7 @@ keyserver_add_clicked (GtkButton *button, SeahorseWidget *sw)
     GtkTreeIter iter;
     
     swidget = seahorse_widget_new_allow_multiple ("add-keyserver");
-	g_return_if_fail (swidget != NULL);
+    g_return_if_fail (swidget != NULL);
     
     widget = glade_xml_get_widget (swidget->xml, "keyserver-type");
     g_return_if_fail (widget != NULL);

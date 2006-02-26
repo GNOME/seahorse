@@ -276,7 +276,7 @@ cryptui_keyset_set_property (GObject *object, guint prop_id, const GValue *value
 
     switch (prop_id) {
     case PROP_KEYTYPE:
-        g_return_if_fail (keyset->priv->keytype == NULL);
+        g_assert (keyset->priv->keytype == NULL);
         keyset->priv->keytype = g_strdup (g_value_get_string (value));
         break;
     case PROP_EXPAND_KEYS:

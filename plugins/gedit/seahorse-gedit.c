@@ -91,9 +91,9 @@ get_document_chars (GeditDocument *doc, gint start, gint end)
     GtkTextIter start_iter;
     GtkTextIter end_iter;
 
-    g_return_val_if_fail (GEDIT_IS_DOCUMENT (doc), NULL);
-    g_return_val_if_fail (start >= 0, NULL);
-    g_return_val_if_fail ((end > start) || (end < 0), NULL);
+    g_assert (GEDIT_IS_DOCUMENT (doc));
+    g_assert (start >= 0);
+    g_assert ((end > start) || (end < 0));
 
     gtk_text_buffer_get_iter_at_offset (GTK_TEXT_BUFFER (doc), &start_iter, start);
 
@@ -112,7 +112,7 @@ get_document_selection (GeditDocument *doc, gint *start, gint *end)
     GtkTextIter iter;
     GtkTextIter sel_bound;
 
-    g_return_val_if_fail (GEDIT_IS_DOCUMENT (doc), FALSE);
+    g_assert (GEDIT_IS_DOCUMENT (doc));
 
     ret = gtk_text_buffer_get_selection_bounds (GTK_TEXT_BUFFER (doc),          
                                                 &iter, &sel_bound);
@@ -134,9 +134,9 @@ set_document_selection (GeditDocument *doc, gint start, gint end)
     GtkTextIter start_iter;
     GtkTextIter end_iter;
 
-    g_return_if_fail (GEDIT_IS_DOCUMENT (doc));
-    g_return_if_fail (start >= 0);
-    g_return_if_fail ((end > start) || (end < 0));
+    g_assert (GEDIT_IS_DOCUMENT (doc));
+    g_assert (start >= 0);
+    g_assert ((end > start) || (end < 0));
 
     gtk_text_buffer_get_iter_at_offset (GTK_TEXT_BUFFER (doc), &start_iter, start);
 
@@ -156,8 +156,8 @@ replace_selected_text (GeditDocument *doc, const gchar *replace)
     GtkTextIter iter;
     GtkTextIter sel_bound;
 
-    g_return_if_fail (GEDIT_IS_DOCUMENT (doc));
-    g_return_if_fail (replace != NULL);
+    g_assert (GEDIT_IS_DOCUMENT (doc));
+    g_assert (replace != NULL);
 
     if (!gtk_text_buffer_get_selection_bounds (GTK_TEXT_BUFFER (doc),           
                                                   &iter, &sel_bound)) {

@@ -246,7 +246,8 @@ owner_photo_add_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
         
     gtk_widget_destroy (chooser);
 
-    g_return_if_fail (filename);
+    if (!filename)
+        return;
 
     gerr = seahorse_pgp_key_op_photoid_add (pkey, filename);
     if (!GPG_IS_OK (gerr)) {
@@ -276,8 +277,8 @@ owner_photo_delete_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
     gint response, uid; 
     gpgmex_photo_id_t photoid;
 
-    photoid	= (gpgmex_photo_id_t)g_object_get_data (G_OBJECT (swidget), "current-photoid");
-    g_return_if_fail (photoid != NULL);
+    photoid = (gpgmex_photo_id_t)g_object_get_data (G_OBJECT (swidget), "current-photoid");
+    g_assert (photoid != NULL);
     
     question = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
                         GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE,
@@ -321,8 +322,8 @@ owner_photo_primary_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
     gint uid;
     gpgmex_photo_id_t photoid;
 
-    photoid	= (gpgmex_photo_id_t)g_object_get_data (G_OBJECT (swidget), "current-photoid");
-    g_return_if_fail (photoid != NULL);
+    photoid = (gpgmex_photo_id_t)g_object_get_data (G_OBJECT (swidget), "current-photoid");
+    g_assert (photoid != NULL);
         
     skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
     pkey = SEAHORSE_PGP_KEY (skey);

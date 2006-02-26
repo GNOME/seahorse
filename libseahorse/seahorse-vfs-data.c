@@ -194,9 +194,9 @@ vfs_data_open_done(GnomeVFSAsyncHandle *handle, GnomeVFSResult result,
 static void
 vfs_data_open_helper (VfsAsyncHandle *ah, gboolean write)
 {
-    g_return_if_fail (ah->handle == NULL);
-    g_return_if_fail (ah->uri != NULL);
-    g_return_if_fail (ah->state == VFS_ASYNC_READY);
+    g_assert (ah->handle == NULL);
+    g_assert (ah->uri != NULL);
+    g_assert (ah->state == VFS_ASYNC_READY);
     
     if (write) {
         /* Note that we always overwrite the file */
@@ -218,7 +218,7 @@ vfs_data_open(const gchar* uri, gboolean write, gboolean delayed)
     VfsAsyncHandle* ah;
 
     /* We only support delayed opening of write files */
-    g_return_val_if_fail (write || !delayed, NULL);
+    g_assert (write || !delayed);
     
     ah = g_new0(VfsAsyncHandle, 1);
     ah->state = VFS_ASYNC_READY;
@@ -258,7 +258,7 @@ vfs_data_read(void *handle, void *buffer, size_t size)
     VfsAsyncHandle* ah = (VfsAsyncHandle*)handle;
     ssize_t sz = 0;
     
-    g_return_val_if_fail (ah->handle != NULL, -1);
+    g_assert (ah->handle != NULL);
 
     /* Just in case we have an operation, like open */
     if(!vfs_data_wait_results(ah, TRUE))

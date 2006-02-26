@@ -78,7 +78,7 @@ passphrase_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
     GtkWidget *w;
     
     skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
-    g_return_if_fail (SEAHORSE_IS_SSH_KEY (skey));
+    g_assert (SEAHORSE_IS_SSH_KEY (skey));
 
     w = glade_xml_get_widget (swidget->xml, "passphrase-button");
     gtk_widget_set_sensitive (w, FALSE);

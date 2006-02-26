@@ -242,7 +242,7 @@ seahorse_ssh_source_load (SeahorseKeySource *src, SeahorseKeySourceLoad load,
     gchar *t;
     GDir *dir;
     
-    g_return_val_if_fail (SEAHORSE_IS_SSH_SOURCE (src), NULL);
+    g_assert (SEAHORSE_IS_SSH_SOURCE (src));
     ssrc = SEAHORSE_SSH_SOURCE (src);
  
     /* Schedule a dummy refresh. This blocks all monitoring for a while */
@@ -374,7 +374,7 @@ seahorse_ssh_source_export (SeahorseKeySource *sksrc, GList *keys,
     for (l = keys; l; l = g_list_next (l)) {
         skey = SEAHORSE_KEY (l->data);
         
-        g_return_val_if_fail (SEAHORSE_IS_SSH_KEY (skey), NULL);
+        g_assert (SEAHORSE_IS_SSH_KEY (skey));
         
         filename = seahorse_ssh_key_get_filename (SEAHORSE_SSH_KEY (skey), TRUE);
         filepub = seahorse_ssh_key_get_filename (SEAHORSE_SSH_KEY (skey), FALSE);
@@ -422,8 +422,8 @@ seahorse_ssh_source_remove (SeahorseKeySource *sksrc, SeahorseKey *skey,
     const gchar *filename, *filepub;
     gboolean ret = TRUE;
     
-    g_return_val_if_fail (name == 0, FALSE);
-    g_return_val_if_fail (seahorse_key_get_source (skey) == sksrc, FALSE);
+    g_assert (name == 0);
+    g_assert (seahorse_key_get_source (skey) == sksrc);
     g_assert (!error || !*error);
     
     filename = seahorse_ssh_key_get_filename (SEAHORSE_SSH_KEY (skey), TRUE);

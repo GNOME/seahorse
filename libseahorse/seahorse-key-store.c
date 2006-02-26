@@ -295,8 +295,8 @@ seahorse_key_store_set_property (GObject *gobject, guint prop_id,
 	skstore = SEAHORSE_KEY_STORE (gobject);
 	
 	switch (prop_id) {
-		case PROP_KEYSET:
-            g_return_if_fail (skstore->skset == NULL);
+        case PROP_KEYSET:
+            g_assert (skstore->skset == NULL);
             skstore->skset = g_value_get_object (value);
             g_object_ref (skstore->skset);
             g_signal_connect_after (skstore->skset, "added",
@@ -459,7 +459,7 @@ seahorse_key_store_key_changed (SeahorseKeyset *skset, SeahorseKey *skey,
     num_uids = seahorse_key_get_num_names (skey);
     
     for (i = 0; i < skrow->refs->len; i++) {
-        g_return_if_fail (g_ptr_array_index (skrow->refs, i) != NULL);
+        g_assert (g_ptr_array_index (skrow->refs, i) != NULL);
         path = gtk_tree_row_reference_get_path ((GtkTreeRowReference*)g_ptr_array_index (skrow->refs, i));
         g_return_if_fail (gtk_tree_model_get_iter (GTK_TREE_MODEL (skrow->skstore), &iter, path));
         gtk_tree_path_free (path);        
@@ -591,7 +591,7 @@ check_toggled(GtkCellRendererToggle *cellrenderertoggle, gchar *path, gpointer u
     GValue v;
 
     memset (&v, 0, sizeof(v));
-    g_return_if_fail (path != NULL);
+    g_assert (path != NULL);
     g_return_if_fail (gtk_tree_model_get_iter_from_string (fmodel, &iter, path));
     
     /* We get notified in filtered coordinates, we have to convert those to base */
@@ -620,7 +620,7 @@ row_activated (GtkTreeView *treeview, GtkTreePath *path, GtkTreeViewColumn *arg2
     GValue v;
 
     memset (&v, 0, sizeof(v));
-    g_return_if_fail (path != NULL);
+    g_assert (path != NULL);
     g_return_if_fail (gtk_tree_model_get_iter (fmodel, &iter, path));
     
     /* We get notified in filtered coordinates, we have to convert those to base */
@@ -677,7 +677,7 @@ seahorse_key_row_free (SeahorseKeyRow *skrow)
     g_object_unref (skrow->skey);
   
     for (i = 0; i < skrow->refs->len; i++) {
-        g_return_if_fail (g_ptr_array_index (skrow->refs, i) != NULL);
+        g_assert (g_ptr_array_index (skrow->refs, i) != NULL);
         gtk_tree_row_reference_free ((GtkTreeRowReference*)g_ptr_array_index (skrow->refs, i));
     }
     g_ptr_array_free (skrow->refs, TRUE);
@@ -696,7 +696,7 @@ seahorse_key_row_remove_all (SeahorseKeyRow *skrow)
     guint i;
     
     for (i = 0; i < skrow->refs->len; i++) {
-        g_return_if_fail (g_ptr_array_index (skrow->refs, i) != NULL);
+        g_assert (g_ptr_array_index (skrow->refs, i) != NULL);
         path = gtk_tree_row_reference_get_path ((GtkTreeRowReference*)g_ptr_array_index (skrow->refs, i));
         
         /* Note that removing a parent row could remove it's sub rows, so ... */
@@ -720,7 +720,7 @@ seahorse_key_row_remove (SeahorseKeyRow *skrow, GtkTreeIter *iter)
     p1 = gtk_tree_model_get_path (GTK_TREE_MODEL (skrow->skstore), iter);
     
     for (i = 0; i < skrow->refs->len; i++) {
-        g_return_if_fail (g_ptr_array_index (skrow->refs, i) != NULL);
+        g_assert (g_ptr_array_index (skrow->refs, i) != NULL);
         p2 = gtk_tree_row_reference_get_path ((GtkTreeRowReference*)g_ptr_array_index (skrow->refs, i));
         r = gtk_tree_path_compare (p1, p2);
         gtk_tree_path_free (p2);

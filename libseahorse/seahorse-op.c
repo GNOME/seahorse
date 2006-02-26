@@ -137,7 +137,7 @@ export_data (GList *keys, gboolean complete, gboolean force_armor,
         /* Break off one set (same keysource) */
         next = seahorse_util_keylist_splice (keys);
 
-        g_return_val_if_fail (SEAHORSE_IS_KEY (keys->data), FALSE);
+        g_assert (SEAHORSE_IS_KEY (keys->data));
         skey = SEAHORSE_KEY (keys->data);
 
         /* Export from this key source */        

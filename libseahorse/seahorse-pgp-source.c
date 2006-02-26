@@ -350,7 +350,7 @@ static gboolean
 have_key_in_context (SeahorsePGPSource *psrc, const gchar *id, gboolean secret)
 {
     SeahorseKey *skey;
-    g_return_val_if_fail (SEAHORSE_IS_PGP_SOURCE (psrc), FALSE);
+    g_assert (SEAHORSE_IS_PGP_SOURCE (psrc));
     skey = seahorse_context_get_key (SCTX_APP (), SEAHORSE_KEY_SOURCE (psrc), id);
     return skey && (!secret || seahorse_key_get_etype (skey) == SKEY_PRIVATE);
 }
@@ -366,7 +366,7 @@ add_key_to_context (SeahorsePGPSource *psrc, gpgme_key_t key)
     
     id = seahorse_pgp_key_get_id (key, 0);
     
-    g_return_val_if_fail (SEAHORSE_IS_PGP_SOURCE (psrc), NULL);
+    g_assert (SEAHORSE_IS_PGP_SOURCE (psrc));
     prev = SEAHORSE_PGP_KEY (seahorse_context_get_key (SCTX_APP (), SEAHORSE_KEY_SOURCE (psrc), id));
     
     /* Check if we can just replace the key on the object */
@@ -555,7 +555,7 @@ keyload_handler (SeahorseLoadOperation *lop)
     const gchar *id;
     gchar *t;
     
-    g_return_val_if_fail (SEAHORSE_IS_LOAD_OPERATION (lop), FALSE);
+    g_assert (SEAHORSE_IS_LOAD_OPERATION (lop));
     
     /* We load until done if batch is zero */
     batch = lop->batch == 0 ? ~0 : lop->batch;
@@ -633,7 +633,7 @@ seahorse_load_operation_start (SeahorsePGPSource *psrc, const gchar **pattern,
     GList *keys, *l;
     SeahorseKey *skey;
     
-    g_return_val_if_fail (SEAHORSE_IS_PGP_SOURCE (psrc), NULL);
+    g_assert (SEAHORSE_IS_PGP_SOURCE (psrc));
     priv = psrc->pv;
 
     lop = g_object_new (SEAHORSE_TYPE_LOAD_OPERATION, NULL);    
@@ -698,7 +698,7 @@ seahorse_pgp_source_load (SeahorseKeySource *src, SeahorseKeySourceLoad load,
     gboolean all, ref;
     const gchar *patterns[2];
     
-    g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (src), NULL);
+    g_assert (SEAHORSE_IS_KEY_SOURCE (src));
     psrc = SEAHORSE_PGP_SOURCE (src);
     
     /* Schedule a dummy refresh. This blocks all monitoring for a while */
@@ -736,7 +736,7 @@ seahorse_pgp_source_stop (SeahorseKeySource *src)
 {
     SeahorsePGPSource *psrc;
     
-    g_return_if_fail (SEAHORSE_IS_KEY_SOURCE (src));
+    g_assert (SEAHORSE_IS_KEY_SOURCE (src));
     psrc = SEAHORSE_PGP_SOURCE (src);
     
     if(!seahorse_operation_is_done (SEAHORSE_OPERATION (psrc->pv->operations)))
@@ -748,7 +748,7 @@ seahorse_pgp_source_get_state (SeahorseKeySource *src)
 {
     SeahorsePGPSource *psrc;
     
-    g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (src), 0);
+    g_assert (SEAHORSE_IS_KEY_SOURCE (src));
     psrc = SEAHORSE_PGP_SOURCE (src);
     
     return seahorse_operation_is_done (SEAHORSE_OPERATION (psrc->pv->operations)) ? 
@@ -912,7 +912,7 @@ seahorse_pgp_source_remove (SeahorseKeySource *sksrc, SeahorseKey *skey,
     gpgme_error_t gerr;
     
     g_assert (!error || !*error);
-    g_return_val_if_fail (seahorse_key_get_source (skey) == sksrc, FALSE);
+    g_assert (seahorse_key_get_source (skey) == sksrc);
 
     if (name > 0)
         gerr = seahorse_pgp_key_op_del_uid (SEAHORSE_PGP_KEY (skey), name);

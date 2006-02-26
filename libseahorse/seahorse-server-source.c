@@ -173,12 +173,12 @@ seahorse_server_set_property (GObject *object, guint prop_id,
  
     switch (prop_id) {
     case PROP_KEY_SERVER:
-        g_return_if_fail (ssrc->priv->server == NULL);
+        g_assert (ssrc->priv->server == NULL);
         ssrc->priv->server = g_strdup (g_value_get_string (value));
         g_return_if_fail (ssrc->priv->server && ssrc->priv->server[0]);
         break;
     case PROP_URI:
-        g_return_if_fail (ssrc->priv->uri == NULL);
+        g_assert (ssrc->priv->uri == NULL);
         ssrc->priv->uri = g_strdup (g_value_get_string (value));
         g_return_if_fail (ssrc->priv->uri && ssrc->priv->uri[0]);
         break;
@@ -224,8 +224,8 @@ combine_keys (SeahorseServerSource *ssrc, gpgme_key_t k, gpgme_key_t key)
     gpgme_subkey_t s;
     gboolean found;
     
-    g_return_if_fail (k != NULL);
-    g_return_if_fail (key != NULL);
+    g_assert (k != NULL);
+    g_assert (key != NULL);
     
     /* Go through user ids */
     for (uid = key->uids; uid != NULL; uid = uid->next) {
@@ -311,7 +311,7 @@ seahorse_server_source_load (SeahorseKeySource *src, SeahorseKeySourceLoad load,
     SeahorseServerSource *ssrc;
     GList *keys, *l;
     
-    g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (src), NULL);
+    g_assert (SEAHORSE_IS_KEY_SOURCE (src));
     ssrc = SEAHORSE_SERVER_SOURCE (src);
 
     if (load == SKSRC_LOAD_ALL) {
@@ -334,7 +334,7 @@ seahorse_server_source_stop (SeahorseKeySource *src)
 {
     SeahorseServerSource *ssrc;
     
-    g_return_if_fail (SEAHORSE_IS_KEY_SOURCE (src));
+    g_assert (SEAHORSE_IS_KEY_SOURCE (src));
     ssrc = SEAHORSE_SERVER_SOURCE (src);
 
     if(!seahorse_operation_is_done(SEAHORSE_OPERATION (ssrc->priv->mop)))
@@ -346,7 +346,7 @@ seahorse_server_source_get_state (SeahorseKeySource *src)
 {
     SeahorseServerSource *ssrc;
     
-    g_return_val_if_fail (SEAHORSE_IS_SERVER_SOURCE (src), 0);
+    g_assert (SEAHORSE_IS_SERVER_SOURCE (src));
     ssrc = SEAHORSE_SERVER_SOURCE (src);
     
     guint state = SKSRC_REMOTE;
@@ -361,8 +361,8 @@ parse_keyserver_uri (char *uri, const char **scheme, const char **host)
 {
     int assume_ldap = 0;
 
-    g_return_val_if_fail (uri != NULL, FALSE);
-    g_return_val_if_fail (scheme != NULL && host != NULL, FALSE);
+    g_assert (uri != NULL);
+    g_assert (scheme != NULL && host != NULL);
 
     *scheme = NULL;
     *host = NULL;

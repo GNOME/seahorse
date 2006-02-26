@@ -153,10 +153,10 @@ seahorse_ssh_key_get_name (SeahorseKey *key, guint index)
 {
     SeahorseSSHKey *skey;
     
-    g_return_val_if_fail (SEAHORSE_IS_SSH_KEY (key), NULL);
+    g_assert (SEAHORSE_IS_SSH_KEY (key));
     skey = SEAHORSE_SSH_KEY (key);
     
-    g_return_val_if_fail (index == 0, NULL);
+    g_assert (index == 0);
 
     return g_strdup (skey->priv->displayname);
 }
@@ -164,7 +164,7 @@ seahorse_ssh_key_get_name (SeahorseKey *key, guint index)
 static gchar* 
 seahorse_ssh_key_get_name_cn (SeahorseKey *skey, guint index)
 {
-    g_return_val_if_fail (index != 0, NULL);
+    g_assert (index != 0);
     return NULL;
 }
 

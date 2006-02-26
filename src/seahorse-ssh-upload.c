@@ -76,7 +76,7 @@ upload_via_source (const gchar *user, const gchar *host, GList *keys)
         /* Break off one set (same keysource) */
         next = seahorse_util_keylist_splice (keys);
         
-        g_return_val_if_fail (SEAHORSE_IS_KEY (keys->data), NULL);
+        g_assert (SEAHORSE_IS_KEY (keys->data));
         skey = SEAHORSE_KEY (keys->data);
 
         /* Upload via this key source */        

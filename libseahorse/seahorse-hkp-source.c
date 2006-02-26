@@ -204,7 +204,7 @@ seahorse_hkp_operation_cancel (SeahorseOperation *operation)
 {
     SeahorseHKPOperation *hop;
     
-    g_return_if_fail (SEAHORSE_IS_HKP_OPERATION (operation));
+    g_assert (SEAHORSE_IS_HKP_OPERATION (operation));
     hop = SEAHORSE_HKP_OPERATION (operation);
     
     if (hop->session != NULL) 
@@ -309,7 +309,7 @@ fail_hkp_operation (SeahorseHKPOperation *hop, SoupMessage *msg, const gchar *te
     } else {
 
         /* We should always have msg or text */
-        g_return_if_reached ();
+        g_assert (FALSE);
     }        
 
     seahorse_operation_mark_done (SEAHORSE_OPERATION (hop), FALSE, error);
@@ -711,8 +711,8 @@ seahorse_hkp_source_load (SeahorseKeySource *src, SeahorseKeySourceLoad load,
     gchar *pattern = NULL;
     gchar *t, *uri, *server;
     
-    g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (src), NULL);
-    g_return_val_if_fail (SEAHORSE_IS_HKP_SOURCE (src), NULL);
+    g_assert (SEAHORSE_IS_KEY_SOURCE (src));
+    g_assert (SEAHORSE_IS_HKP_SOURCE (src));
     
     op = parent_class->load (src, load, match);
     if (op != NULL)
@@ -775,7 +775,7 @@ seahorse_hkp_source_import (SeahorseKeySource *sksrc, gpgme_data_t data)
     GSList *l;
     guint len;
     
-    g_return_val_if_fail (SEAHORSE_IS_HKP_SOURCE (sksrc), NULL);
+    g_assert (SEAHORSE_IS_HKP_SOURCE (sksrc));
     hsrc = SEAHORSE_HKP_SOURCE (sksrc);
     
     for (;;) {
@@ -805,7 +805,7 @@ seahorse_hkp_source_import (SeahorseKeySource *sksrc, gpgme_data_t data)
     hop = setup_hkp_operation (hsrc);
     
     for (l = keydata; l; l = g_slist_next (l)) {
-        g_return_val_if_fail (l->data != NULL, FALSE);
+        g_assert (l->data != NULL);
         t = soup_uri_encode((gchar*)(l->data), "+=/\\()");
 
         key = g_strdup_printf ("keytext=%s", t);
@@ -871,7 +871,7 @@ seahorse_hkp_source_export (SeahorseKeySource *sksrc, GList *keys,
     }
     
     for ( ; keys; keys = g_list_next (keys)) {
-        g_return_val_if_fail (SEAHORSE_IS_KEY (keys->data), NULL);
+        g_assert (SEAHORSE_IS_KEY (keys->data));
 
         /* Get the key id and limit it to 8 characters */
         fpr = seahorse_key_get_keyid (SEAHORSE_KEY (keys->data));

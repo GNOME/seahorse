@@ -51,7 +51,7 @@ check_toggled (GtkCellRendererToggle *cellrenderertoggle, gchar *path, GtkTreeVi
     model = gtk_tree_view_get_model (view);
     g_return_if_fail (CRYPTUI_IS_KEY_STORE (model));
     
-    g_return_if_fail (path != NULL);
+    g_assert (path != NULL);
     
     if (gtk_tree_model_get_iter_from_string (model, &iter, path))
         cryptui_key_store_check_toggled (CRYPTUI_KEY_STORE (model), view, &iter);
@@ -63,7 +63,7 @@ row_activated (GtkTreeView *treeview, GtkTreePath *path, GtkTreeViewColumn *arg2
 {
     GtkTreeIter iter;
 
-    g_return_if_fail (path != NULL);
+    g_assert (path != NULL);
     
     if (gtk_tree_model_get_iter (GTK_TREE_MODEL (ckstore), &iter, path))
         cryptui_key_store_check_toggled (ckstore, treeview, &iter);

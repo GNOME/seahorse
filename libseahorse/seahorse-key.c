@@ -158,7 +158,7 @@ set_property (GObject *object, guint prop_id, const GValue *value,
 	
     switch (prop_id) {
     case PROP_KEY_SOURCE:
-        g_return_if_fail (!skey->sksrc);
+        g_assert (!skey->sksrc);
         skey->sksrc = g_value_get_object (value);
         g_return_if_fail (SEAHORSE_IS_KEY_SOURCE (skey->sksrc));
         g_object_add_weak_pointer (G_OBJECT (skey->sksrc), (gpointer*)&(skey->sksrc));

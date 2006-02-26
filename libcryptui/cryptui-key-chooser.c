@@ -163,7 +163,7 @@ cryptui_key_chooser_set_property (GObject *gobject, guint prop_id,
     
     switch (prop_id) {
     case PROP_KEYSET:
-        g_return_if_fail (chooser->priv->ckset == NULL);
+        g_assert (chooser->priv->ckset == NULL);
         chooser->priv->ckset = g_value_get_object (value);
         g_object_ref (chooser->priv->ckset);
         break;

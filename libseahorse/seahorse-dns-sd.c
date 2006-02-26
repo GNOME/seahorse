@@ -162,7 +162,7 @@ browse_callback(AvahiServiceBrowser *browser, AvahiIfIndex iface, AvahiProtocol 
     SeahorseServiceDiscovery *ssd = SEAHORSE_SERVICE_DISCOVERY (data);
     const gchar *uri;
     
-    g_return_if_fail (SEAHORSE_IS_SERVICE_DISCOVERY (ssd));
+    g_assert (SEAHORSE_IS_SERVICE_DISCOVERY (ssd));
     g_assert (browser == ssd->priv->browser);
     
     if (g_strcasecmp (HKP_SERVICE_TYPE, type) != 0)
@@ -209,7 +209,7 @@ client_callback (AvahiClient *client, AvahiClientState state, void *data)
 {
     SeahorseServiceDiscovery *ssd = SEAHORSE_SERVICE_DISCOVERY (data);
     
-    g_return_if_fail (SEAHORSE_IS_SERVICE_DISCOVERY (ssd));
+    g_assert (SEAHORSE_IS_SERVICE_DISCOVERY (ssd));
     
     /* Disconnect when failed */
     if (state == AVAHI_CLIENT_FAILURE) {

@@ -42,7 +42,7 @@ crypt_callback (NautilusMenuItem *item, gpointer user_data)
     GString *cmd;
 
     files = g_object_get_data (G_OBJECT (item), "files");
-    g_return_if_fail (files != NULL);
+    g_assert (files != NULL);
     
     cmd = g_string_new ("seahorse");
     g_string_append_printf (cmd, " --encrypt");
@@ -72,6 +72,7 @@ sign_callback (NautilusMenuItem *item, gpointer user_data)
     cmd = g_string_new ("seahorse");
     g_string_append_printf (cmd, " --sign");
     files = g_object_get_data (G_OBJECT (item), "files");
+    g_assert (files != NULL);
 
     for (scan = files; scan; scan = scan->next) {
         uri = nautilus_file_info_get_uri ((NautilusFileInfo*)scan->data);
@@ -148,16 +149,16 @@ seahorse_nautilus_get_file_items (NautilusMenuProvider *provider,
      
     item = nautilus_menu_item_new ("NautilusSh::crypt", _("Encrypt..."),
         ngettext ("Encrypt (and optionally sign) the selected file", "Encrypt the selected files", num), NULL);
-    g_signal_connect (item, "activate", G_CALLBACK (crypt_callback), provider);
     g_object_set_data_full (G_OBJECT (item), "files", nautilus_file_info_list_copy (files),
                                  (GDestroyNotify) nautilus_file_info_list_free);
+    g_signal_connect (item, "activate", G_CALLBACK (crypt_callback), provider);
     items = g_list_append (items, item);
 
     item = nautilus_menu_item_new ("NautilusSh::sign", _("Sign"),
         ngettext ("Sign the selected file", "Sign the selected files", num), NULL);
-    g_signal_connect (item, "activate", G_CALLBACK (sign_callback), provider);
     g_object_set_data_full (G_OBJECT (item), "files", nautilus_file_info_list_copy (files),
                                 (GDestroyNotify) nautilus_file_info_list_free);
+    g_signal_connect (item, "activate", G_CALLBACK (sign_callback), provider);
 
     items = g_list_append (items, item);
     return items;

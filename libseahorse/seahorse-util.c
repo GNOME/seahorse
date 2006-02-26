@@ -1082,8 +1082,8 @@ sort_keys_by_source (SeahorseKey *k1, SeahorseKey *k2)
 {
     SeahorseKeySource *sk1, *sk2;
     
-    g_return_val_if_fail (SEAHORSE_IS_KEY (k1), 0);
-    g_return_val_if_fail (SEAHORSE_IS_KEY (k2), 0);
+    g_assert (SEAHORSE_IS_KEY (k1));
+    g_assert (SEAHORSE_IS_KEY (k2));
     
     sk1 = seahorse_key_get_source (k1);
     sk2 = seahorse_key_get_source (k2);

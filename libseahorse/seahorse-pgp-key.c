@@ -259,21 +259,21 @@ static guint
 key_get_num_names (SeahorseKey *skey)
 {
     SeahorsePGPKey *pkey;
-	gint index = 0;
-	gpgme_user_id_t uid;
+    gint index = 0;
+    gpgme_user_id_t uid;
 
-	g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (skey), 0);
+    g_assert (SEAHORSE_IS_PGP_KEY (skey));
     
     pkey = SEAHORSE_PGP_KEY (skey);
-	g_return_val_if_fail (pkey->pubkey != NULL, 0);
+    g_assert (pkey->pubkey != NULL);
 		
-	uid = pkey->pubkey->uids;
-	while (uid) {
-		uid = uid->next;
-		index++;
-	}
-	
-	return index;        
+    uid = pkey->pubkey->uids;
+    while (uid) {
+       uid = uid->next;
+       index++;
+    }
+
+    return index;        
 }
 
 static gchar* 
@@ -282,7 +282,7 @@ key_get_name (SeahorseKey *skey, guint index)
     SeahorsePGPKey *pkey;
     gpgme_user_id_t uid;
     
-    g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (skey), NULL);
+    g_assert (SEAHORSE_IS_PGP_KEY (skey));
     pkey = SEAHORSE_PGP_KEY (skey);
 
     uid = seahorse_pgp_key_get_nth_userid (pkey, index);
@@ -295,7 +295,7 @@ key_get_name_cn (SeahorseKey *skey, guint index)
     SeahorsePGPKey *pkey;
     gpgme_user_id_t uid;
     
-    g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (skey), NULL);
+    g_assert (SEAHORSE_IS_PGP_KEY (skey));
     pkey = SEAHORSE_PGP_KEY (skey);
 
     uid = seahorse_pgp_key_get_nth_userid (pkey, index);
@@ -310,7 +310,7 @@ calc_fingerprint (SeahorsePGPKey *pkey)
 	guint index, len;
 	gchar *fpr;
 	
-	g_return_val_if_fail (pkey->pubkey && pkey->pubkey->subkeys, NULL);
+	g_assert (pkey->pubkey && pkey->pubkey->subkeys);
 
 	raw = pkey->pubkey->subkeys->fpr;
 	g_return_val_if_fail (raw != NULL, NULL);

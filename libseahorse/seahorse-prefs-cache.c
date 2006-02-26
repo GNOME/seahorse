@@ -248,7 +248,7 @@ setup_check_control (SeahorseWidget *sw, const gchar *name, const gchar * key)
     GtkWidget *ctl;
     CtlLinkups *lu;
 
-    g_return_if_fail (sw != NULL);    
+    g_assert (sw != NULL);    
 
     ctl = glade_xml_get_widget (sw->xml, name);
     g_return_if_fail (ctl != NULL);
@@ -295,7 +295,7 @@ setup_spinner_control (SeahorseWidget *sw, const gchar *name, const gchar *key)
     GtkWidget *ctl;
     CtlLinkups *lu;
     
-    g_return_if_fail (sw != NULL);    
+    g_assert (sw != NULL);    
 
     ctl = glade_xml_get_widget (sw->xml, name);
     g_return_if_fail (ctl != NULL);
