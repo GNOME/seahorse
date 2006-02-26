@@ -546,6 +546,10 @@ properties_cb (BonoboUIComponent *uic, SeahorseApplet *sapplet, const char *verb
     
     swidget = seahorse_widget_new ("applet-preferences");
     
+    /* Preferences window is already open */
+    if (!swidget)
+        return;
+    
     widget = glade_xml_get_widget (swidget->xml, "show-clipboard-state");
     if (widget && GTK_IS_CHECK_BUTTON (widget))
         seahorse_check_button_gconf_attach (GTK_CHECK_BUTTON (widget), SHOW_CLIPBOARD_STATE_KEY);
