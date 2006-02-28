@@ -4,6 +4,7 @@
 <glade-interface>
 
 <widget class="GtkDialog" id="expires">
+  <property name="border_width">5</property>
   <property name="visible">True</property>
   <property name="title" translatable="yes"></property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
@@ -25,16 +26,15 @@
     <widget class="GtkVBox" id="dialog-vbox1">
       <property name="visible">True</property>
       <property name="homogeneous">False</property>
-      <property name="spacing">0</property>
+      <property name="spacing">2</property>
 
       <child internal-child="action_area">
 	<widget class="GtkHButtonBox" id="dialog-action_area1">
 	  <property name="visible">True</property>
-	  <property name="layout_style">GTK_BUTTONBOX_SPREAD</property>
+	  <property name="layout_style">GTK_BUTTONBOX_END</property>
 
 	  <child>
 	    <widget class="GtkButton" id="cancelbutton1">
-	      <property name="border_width">6</property>
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
@@ -49,7 +49,6 @@
 
 	  <child>
 	    <widget class="GtkButton" id="okbutton1">
-	      <property name="border_width">6</property>
 	      <property name="visible">True</property>
 	      <property name="tooltip" translatable="yes">Revoke key</property>
 	      <property name="can_default">True</property>
@@ -136,10 +135,10 @@
 
       <child>
 	<widget class="GtkVBox" id="vbox1">
-	  <property name="border_width">6</property>
+	  <property name="border_width">5</property>
 	  <property name="visible">True</property>
 	  <property name="homogeneous">False</property>
-	  <property name="spacing">12</property>
+	  <property name="spacing">6</property>
 
 	  <child>
 	    <widget class="GtkCheckButton" id="expire">
@@ -176,7 +175,7 @@
 	</widget>
 	<packing>
 	  <property name="padding">0</property>
-	  <property name="expand">True</property>
+	  <property name="expand">False</property>
 	  <property name="fill">True</property>
 	</packing>
       </child>

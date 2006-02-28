@@ -5,6 +5,7 @@
 <requires lib="gnome"/>
 
 <widget class="GtkDialog" id="revoke">
+  <property name="border_width">5</property>
   <property name="visible">True</property>
   <property name="title" translatable="yes"></property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
@@ -12,6 +13,13 @@
   <property name="modal">False</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
+  <property name="decorated">True</property>
+  <property name="skip_taskbar_hint">False</property>
+  <property name="skip_pager_hint">False</property>
+  <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
+  <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
+  <property name="focus_on_map">True</property>
+  <property name="urgency_hint">False</property>
   <property name="has_separator">False</property>
   <signal name="delete_event" handler="delete_event" last_modification_time="Fri, 31 Jan 2003 22:20:04 GMT"/>
 
@@ -19,7 +27,7 @@
     <widget class="GtkVBox" id="dialog-vbox1">
       <property name="visible">True</property>
       <property name="homogeneous">False</property>
-      <property name="spacing">0</property>
+      <property name="spacing">2</property>
 
       <child internal-child="action_area">
 	<widget class="GtkHButtonBox" id="dialog-action_area1">
@@ -34,6 +42,7 @@
 	      <property name="label">gtk-help</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
 	      <property name="response_id">-11</property>
 	      <signal name="clicked" handler="help" last_modification_time="Fri, 31 Jan 2003 22:18:57 GMT"/>
 	    </widget>
@@ -47,6 +56,7 @@
 	      <property name="label">gtk-cancel</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
 	      <property name="response_id">-6</property>
 	      <signal name="clicked" handler="closed" last_modification_time="Fri, 31 Jan 2003 22:18:50 GMT"/>
 	    </widget>
@@ -60,6 +70,7 @@
 	      <property name="has_default">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
 	      <property name="response_id">-5</property>
 	      <signal name="clicked" handler="ok_clicked" last_modification_time="Fri, 31 Jan 2003 22:19:51 GMT"/>
 
@@ -70,6 +81,10 @@
 		  <property name="yalign">0.5</property>
 		  <property name="xscale">0</property>
 		  <property name="yscale">0</property>
+		  <property name="top_padding">0</property>
+		  <property name="bottom_padding">0</property>
+		  <property name="left_padding">0</property>
+		  <property name="right_padding">0</property>
 
 		  <child>
 		    <widget class="GtkHBox" id="hbox1">
@@ -107,6 +122,10 @@
 			  <property name="yalign">0.5</property>
 			  <property name="xpad">0</property>
 			  <property name="ypad">0</property>
+			  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+			  <property name="width_chars">-1</property>
+			  <property name="single_line_mode">False</property>
+			  <property name="angle">0</property>
 			</widget>
 			<packing>
 			  <property name="padding">0</property>
@@ -131,12 +150,12 @@
 
       <child>
 	<widget class="GtkTable" id="table1">
-	  <property name="border_width">12</property>
+	  <property name="border_width">5</property>
 	  <property name="visible">True</property>
 	  <property name="n_rows">2</property>
 	  <property name="n_columns">2</property>
 	  <property name="homogeneous">False</property>
-	  <property name="row_spacing">12</property>
+	  <property name="row_spacing">6</property>
 	  <property name="column_spacing">12</property>
 
 	  <child>
@@ -206,7 +225,7 @@
 	      <property name="max_length">0</property>
 	      <property name="text" translatable="yes"></property>
 	      <property name="has_frame">True</property>
-	      <property name="invisible_char" translatable="yes">*</property>
+	      <property name="invisible_char">*</property>
 	      <property name="activates_default">True</property>
 	    </widget>
 	    <packing>
@@ -232,6 +251,10 @@
 	      <property name="xpad">0</property>
 	      <property name="ypad">0</property>
 	      <property name="mnemonic_widget">description</property>
+	      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+	      <property name="width_chars">-1</property>
+	      <property name="single_line_mode">False</property>
+	      <property name="angle">0</property>
 	    </widget>
 	    <packing>
 	      <property name="left_attach">0</property>
@@ -247,6 +270,8 @@
 	    <widget class="GtkEventBox" id="eventbox1">
 	      <property name="visible">True</property>
 	      <property name="tooltip" translatable="yes">Reason for revoking the key</property>
+	      <property name="visible_window">True</property>
+	      <property name="above_child">False</property>
 
 	      <child>
 		<widget class="GtkLabel" id="label1">
@@ -262,6 +287,10 @@
 		  <property name="xpad">0</property>
 		  <property name="ypad">0</property>
 		  <property name="mnemonic_widget">reason</property>
+		  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+		  <property name="width_chars">-1</property>
+		  <property name="single_line_mode">False</property>
+		  <property name="angle">0</property>
 		</widget>
 	      </child>
 	    </widget>
