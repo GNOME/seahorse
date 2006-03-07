@@ -26,4 +26,5 @@ desktop_icons_DATA = seahorse.png
 
 EXTRA_DIST = $(pixmap_DATA) \
              $(appicon_DATA) \
-             seahorse-shared-keys.xcf
+             seahorse-share-keys.xcf \
+             seahorse-applet.xcf

@@ -25,6 +25,9 @@ libcryptui_la_SOURCES = \
 	cryptui-key-chooser.h cryptui-key-chooser.c \
 	$(BUILT_SOURCES)
 
+EXTRA_DIST = \
+	cryptui-marshal.list
+
 cryptui-marshal.h: cryptui-marshal.list $(GLIB_GENMARSHAL)
 	$(GLIB_GENMARSHAL) $< --header --prefix=cryptui_marshal > $@
 

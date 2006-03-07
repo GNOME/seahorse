@@ -53,7 +53,10 @@ glade_DATA =
 
 EXTRA_DIST = \
 	$(glade_DATA) \
-    seahorse-dbus-bindings.h
+	seahorse-service.xml \
+	seahorse-service-keyset.xml \
+	seahorse-service-bindings.h \
+	seahorse-service-keyset-bindings.h
 
 CLEANFILES = *.gladep* *.bak 
 
