@@ -240,6 +240,13 @@ handle_clipboard_owner_change(GtkClipboard *clipboard, GdkEvent *event,
 static void
 about_cb (BonoboUIComponent *uic, SeahorseApplet *sapplet, const gchar *verbname)
 {
+    GdkPixbuf *pixbuf;
+    
+    pixbuf = gtk_widget_render_icon (GTK_WIDGET(sapplet), 
+                                     ICON_CLIPBOARD_DEFAULT, 
+                                     (GtkIconSize)-1, 
+                                     NULL);
+                                     
     static const gchar *authors [] = {
         "Adam Schreiber <sadam@clemson.edu>",
         "Nate Nielsen <nielsen@memberwebs.com>",
@@ -259,8 +266,10 @@ about_cb (BonoboUIComponent *uic, SeahorseApplet *sapplet, const gchar *verbname
                 "authors", authors,
                 "documenters", documenters,
                 "translator-credits", _("translator-credits"),
-                "logo-icon-name", "seahorse",
+                "logo", pixbuf,
                 NULL);
+    
+    g_object_unref(pixbuf);
 }
 
 static void
