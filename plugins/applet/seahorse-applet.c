@@ -293,6 +293,15 @@ display_text (gchar *title, gchar *text, gboolean editable)
     
     buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (text_view));
     gtk_text_buffer_set_text (buffer, text, strlen (text));
+
+    pixbuf = gtk_widget_render_icon (dialog, 
+                                     ICON_CLIPBOARD_DEFAULT, 
+                                     (GtkIconSize)-1, 
+                                     NULL);
+                                     
+    gtk_window_set_icon (GTK_WINDOW (dialog), pixbuf);
+    
+    g_object_unref(pixbuf);
     
     gtk_widget_show_all (dialog);
 }
@@ -540,11 +549,23 @@ properties_cb (BonoboUIComponent *uic, SeahorseApplet *sapplet, const char *verb
 {
     SeahorseWidget *swidget;
     GtkWidget *widget;
+    GdkPixbuf *pixbuf;
     
     /* SeahorseWidget needs a SeahorseContext initialized */
     init_context (sapplet);
     
     swidget = seahorse_widget_new ("applet-preferences");
+    
+    widget = glade_xml_get_widget (swidget->xml, swidget->name);
+
+    pixbuf = gtk_widget_render_icon (widget, 
+                                     ICON_CLIPBOARD_DEFAULT, 
+                                     (GtkIconSize)-1, 
+                                     NULL);
+                                     
+    gtk_window_set_icon (GTK_WINDOW (widget), pixbuf);
+    
+    g_object_unref(pixbuf);
     
     /* Preferences window is already open */
     if (!swidget)

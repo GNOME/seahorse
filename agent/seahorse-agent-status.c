@@ -144,6 +144,7 @@ static void
 window_show ()
 {
     GtkWidget *w;
+    GtkImage *img;
     
     if (g_window) {
         w = glade_xml_get_widget (g_window->xml, g_window->name);
@@ -158,12 +159,10 @@ window_show ()
 
     w = glade_xml_get_widget (g_window->xml, g_window->name);
 
-#if 0
-    /* TODO: We need to get this working somehow */
+
     img = GTK_IMAGE (gtk_image_new_from_stock (GTK_STOCK_DIALOG_AUTHENTICATION, 
                                                 GTK_ICON_SIZE_DIALOG));
     gtk_window_set_icon (GTK_WINDOW (w), gtk_image_get_pixbuf (img));
-#endif
 
     g_signal_connect (G_OBJECT (w), "delete_event", G_CALLBACK (delete_event), NULL);
 
