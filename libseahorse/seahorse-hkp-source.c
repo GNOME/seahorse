@@ -30,6 +30,7 @@
 #include "seahorse-hkp-source.h"
 #include "seahorse-util.h"
 #include "seahorse-pgp-key.h"
+#include "seahorse-gconf.h"
 
 #ifdef WITH_HKP
 
@@ -68,6 +69,13 @@
      SOUP_STATUS_IS_SERVER_ERROR((msg)->status_code))
     
 #define HKP_ERROR_DOMAIN (get_hkp_error_domain())
+
+#define GCONF_USE_HTTP_PROXY    "/system/http_proxy/use_http_proxy"
+#define GCONF_HTTP_PROXY_HOST   "/system/http_proxy/host"
+#define GCONF_PROXY_PORT        "/system/http_proxy/port"
+#define GCONF_USE_AUTH          "/system/http_proxy/use_authentication"
+#define GCONF_AUTH_USER         "/system/http_proxy/authentication_user"
+#define GCONF_AUTH_PASS         "/system/http_proxy/authentication_password"
 
 static GQuark
 get_hkp_error_domain ()
@@ -167,7 +175,21 @@ IMPLEMENT_OPERATION (HKP, hkp)
 static void 
 seahorse_hkp_operation_init (SeahorseHKPOperation *hop)
 {
-    hop->session = soup_session_async_new ();
+    SoupUri *uri;
+    
+    if (seahorse_gconf_get_boolean(GCONF_USE_HTTP_PROXY)) {
+        uri = soup_uri_new (seahorse_gconf_get_string(GCONF_HTTP_PROXY_HOST));
+        
+        uri->port = seahorse_gconf_get_integer(GCONF_PROXY_PORT);
+        
+        if (seahorse_gconf_get_boolean(GCONF_USE_AUTH)) {
+            uri->user = seahorse_gconf_get_string(GCONF_AUTH_USER);
+            uri->passwd = seahorse_gconf_get_string(GCONF_AUTH_PASS);
+        }
+        
+        hop->session = soup_session_async_new_with_options(SOUP_SESSION_PROXY_URI, uri, NULL);
+    } else
+        hop->session = soup_session_async_new ();
 }
 
 static void 
