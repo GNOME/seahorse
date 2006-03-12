@@ -217,24 +217,32 @@ seahorse_passphrase_get (gconstpointer dummy, const gchar *passphrase_hint,
 {
     GtkDialog *dialog;
     gpgme_error_t err;
-    gchar **split_uid;
+    gchar **split_uid = NULL;
     gchar *label = NULL;
     gchar *errmsg = NULL;
     const gchar *pass;
     
     if (passphrase_info && strlen(passphrase_info) < 16)
-        flags |= SEAHORSE_PASS_NEW;        
-
-    split_uid = g_strsplit (passphrase_hint, " ", 2);
+        flags |= SEAHORSE_PASS_NEW;
+    
+    if (passphrase_hint)
+        split_uid = g_strsplit (passphrase_hint, " ", 2);
 
     if (flags & SEAHORSE_PASS_BAD) 
         errmsg = g_strdup_printf (_("Wrong passphrase."));
     
-    if (flags & SEAHORSE_PASS_NEW) 
-        label = g_strdup_printf (_("Enter new passphrase for '%s'"), split_uid[1]);
-    else 
-        label = g_strdup_printf (_("Enter passphrase for '%s'"), split_uid[1]);
-        
+    if (split_uid && split_uid[0] && split_uid[1]) {
+        if (flags & SEAHORSE_PASS_NEW) 
+            label = g_strdup_printf (_("Enter new passphrase for '%s'"), split_uid[1]);
+        else 
+            label = g_strdup_printf (_("Enter passphrase for '%s'"), split_uid[1]);
+    } else {
+        if (flags & SEAHORSE_PASS_NEW) 
+            label = g_strdup (_("Enter new passphrase"));
+        else 
+            label = g_strdup (_("Enter passphrase"));
+    }
+
     g_strfreev (split_uid);
 
     dialog = seahorse_passphrase_prompt_show (NULL, label, NULL, errmsg);
