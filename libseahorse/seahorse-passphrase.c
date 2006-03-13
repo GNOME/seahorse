@@ -38,39 +38,46 @@ gpgme_error_t
 seahorse_passphrase_get (SeahorseContext *sctx, const gchar *passphrase_hint, 
                             const char* passphrase_info, int flags, int fd)
 {
-	SeahorseWidget *swidget;
+    SeahorseWidget *swidget;
     GtkWidget *widget;
-	gint response;
+    gint response;
     gpgme_error_t err;
-	gchar *pass, **split_uid, *label;
-	
-	swidget = seahorse_widget_new_allow_multiple ("passphrase", sctx);
-	g_return_val_if_fail (swidget != NULL, GPG_E (GPG_ERR_GENERAL));
+    gchar **split_uid = NULL;
+    gchar *pass, *label;
+    const gchar *name;
+    
+    swidget = seahorse_widget_new_allow_multiple ("passphrase", sctx);
+    g_return_val_if_fail (swidget != NULL, GPG_E (GPG_ERR_GENERAL));
   
-	glade_xml_signal_connect_data (swidget->xml, "pass_changed",
-		G_CALLBACK (pass_changed), swidget);
+    glade_xml_signal_connect_data (swidget->xml, "pass_changed",
+            G_CALLBACK (pass_changed), swidget);
      
     if (passphrase_info && strlen(passphrase_info) < 16)
         flags |= SEAHORSE_PASS_NEW;        
 
-	split_uid = g_strsplit (passphrase_hint, " ", 2);
+    if (passphrase_hint)
+        split_uid = g_strsplit (passphrase_hint, " ", 2);
+    if (split_uid && split_uid[0] && split_uid[1])
+        name = split_uid[1];
+    else
+        name = "";
 
     if (flags & SEAHORSE_PASS_BAD) {
         widget = glade_xml_get_widget (swidget->xml, "image");
-		gtk_image_set_from_stock (GTK_IMAGE (widget), GTK_STOCK_DIALOG_ERROR, GTK_ICON_SIZE_DIALOG);
-		label = g_strdup_printf (_("Bad passphrase! Try again for '%s'"), split_uid[1]);
+        gtk_image_set_from_stock (GTK_IMAGE (widget), GTK_STOCK_DIALOG_ERROR, GTK_ICON_SIZE_DIALOG);
+        label = g_strdup_printf (_("Bad passphrase! Try again for '%s'"), name);
     } else if (flags & SEAHORSE_PASS_NEW) {
-        label = g_strdup_printf (_("Enter new passphrase for '%s'"), split_uid[1]);
+        label = g_strdup_printf (_("Enter new passphrase for '%s'"), name);
     } else {
-        label = g_strdup_printf (_("Enter passphrase for '%s'"), split_uid[1]);
+        label = g_strdup_printf (_("Enter passphrase for '%s'"), name);
     }   
-		
+
     widget = glade_xml_get_widget (swidget->xml, "description");
-	gtk_label_set_text (GTK_LABEL (widget), label);
+    gtk_label_set_text (GTK_LABEL (widget), label);
     g_free (label);     
-		
+    
     widget = glade_xml_get_widget (swidget->xml, swidget->name);
-	response = gtk_dialog_run (GTK_DIALOG (widget));
+    response = gtk_dialog_run (GTK_DIALOG (widget));
 
     widget = glade_xml_get_widget (swidget->xml, "pass");
     pass = g_strdup (gtk_entry_get_text (GTK_ENTRY (widget)));
