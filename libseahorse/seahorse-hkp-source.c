@@ -176,19 +176,40 @@ static void
 seahorse_hkp_operation_init (SeahorseHKPOperation *hop)
 {
     SoupUri *uri;
+    gchar *host;
+    gchar *suri;
     
-    if (seahorse_gconf_get_boolean(GCONF_USE_HTTP_PROXY)) {
-        uri = soup_uri_new (seahorse_gconf_get_string(GCONF_HTTP_PROXY_HOST));
+    if (seahorse_gconf_get_boolean (GCONF_USE_HTTP_PROXY)) {
         
-        uri->port = seahorse_gconf_get_integer(GCONF_PROXY_PORT);
-        
-        if (seahorse_gconf_get_boolean(GCONF_USE_AUTH)) {
-            uri->user = seahorse_gconf_get_string(GCONF_AUTH_USER);
-            uri->passwd = seahorse_gconf_get_string(GCONF_AUTH_PASS);
+        host = seahorse_gconf_get_string (GCONF_HTTP_PROXY_HOST);
+        if (host) {
+            
+            suri = g_strdup_printf ("http://%s/", host);
+            g_free (host);
+            
+            uri = soup_uri_new (suri);
+            
+            if (!uri) {
+                g_warning ("creation of SoupUri from '%s' failed", suri);
+                
+            } else {
+                
+                uri->port = seahorse_gconf_get_integer (GCONF_PROXY_PORT);
+                
+                if (seahorse_gconf_get_boolean (GCONF_USE_AUTH)) {
+                    uri->user = seahorse_gconf_get_string (GCONF_AUTH_USER);
+                    uri->passwd = seahorse_gconf_get_string (GCONF_AUTH_PASS);
+                }
+                
+                hop->session = soup_session_async_new_with_options (SOUP_SESSION_PROXY_URI, uri, NULL);
+            }
+
+            g_free (suri);
         }
-        
-        hop->session = soup_session_async_new_with_options(SOUP_SESSION_PROXY_URI, uri, NULL);
-    } else
+    }
+    
+    /* Without a proxy */
+    if (!hop->session)
         hop->session = soup_session_async_new ();
 }
 
