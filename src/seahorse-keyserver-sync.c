@@ -110,11 +110,16 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 
     /* And now syncing keys from the servers */
     ks = seahorse_gconf_get_string_list (KEYSERVER_KEY);
-	ks = seahorse_server_source_purge_keyservers (ks);
-	
+    ks = seahorse_server_source_purge_keyservers (ks);
+    
     for (l = ks; l; l = g_slist_next (l)) {
 
         sksrc = SEAHORSE_KEY_SOURCE (seahorse_server_source_new (lsksrc, (const gchar*)(l->data), NULL));
+        
+        /* When the scheme is not supported */
+        if (!sksrc)
+            continue;
+        
         op = seahorse_key_source_export (sksrc, keys, FALSE, NULL);
         g_return_if_fail (op != NULL);
 
