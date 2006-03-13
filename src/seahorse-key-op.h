@@ -116,6 +116,7 @@ gpgme_error_t  seahorse_key_op_delete           (SeahorseKey *skey);
 gpgme_error_t  seahorse_key_pair_op_delete      (SeahorseKeyPair *skpair);
 
 gpgme_error_t  seahorse_key_op_sign             (SeahorseKey *skey,
+                                                 SeahorseKeyPair *signer,
                                                  const guint index,
                                                  SeahorseSignCheck check,
                                                  SeahorseSignOptions options);

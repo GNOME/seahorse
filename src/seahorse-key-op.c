@@ -427,6 +427,7 @@ sign_transit (guint current_state, gpgme_status_code_t status,
 /**
  * seahorse_key_op_sign:
  * @skey: #SeahorseKey to sign
+ * @signer: #SeahorseKeyPair to sign with
  * @index: User ID to sign, 0 is all user IDs
  * @check: #SeahorseSignCheck
  * @options: #SeahorseSignOptions
@@ -436,11 +437,12 @@ sign_transit (guint current_state, gpgme_status_code_t status,
  * Returns: Error value
  **/
 gpgme_error_t
-seahorse_key_op_sign (SeahorseKey *skey, const guint index,
+seahorse_key_op_sign (SeahorseKey *skey, SeahorseKeyPair *skpair, const guint index,
                       SeahorseSignCheck check, SeahorseSignOptions options)
 {
     SignParm *sign_parm;
     SeahorseEditParm *parms;
+    SeahorseKeySource *sksrc;
     gpgme_error_t err;
 
     g_return_val_if_fail (SEAHORSE_IS_KEY (skey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
@@ -455,8 +457,18 @@ seahorse_key_op_sign (SeahorseKey *skey, const guint index,
                                 (options & SIGN_NO_REVOKE) ? "nr" : "",
                                 (options & SIGN_LOCAL) ? "l" : "");
     
+    sksrc = seahorse_key_get_source (skey);
+    g_return_val_if_fail (sksrc != NULL, GPG_E (GPG_ERR_INV_VALUE));
+    
+    gpgme_signers_clear (sksrc->ctx);
+    if (skpair) {
+        err = gpgme_signers_add (sksrc->ctx, skpair->secret);
+        if (!GPG_IS_OK (err))
+            return err;
+    }
+    
     parms = seahorse_edit_parm_new (SIGN_START, sign_action, sign_transit, sign_parm);
-
+    
     err =  edit_key (skey, parms, SKEY_CHANGE_SIGNERS);
     g_free (sign_parm->command);
  

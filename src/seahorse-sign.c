@@ -26,11 +26,13 @@
 #include "seahorse-key-widget.h"
 #include "seahorse-key-op.h"
 #include "seahorse-util.h"
+#include "seahorse-libdialogs.h"
 
 static gboolean
 ok_clicked (SeahorseWidget *swidget)
 {
 	SeahorseKeyWidget *skwidget;
+	SeahorseKeyPair *signer;
 	SeahorseSignCheck check;
 	SeahorseSignOptions options = 0;
 	gpgme_error_t err;
@@ -52,7 +54,11 @@ ok_clicked (SeahorseWidget *swidget)
 	glade_xml_get_widget (swidget->xml, "expires"))))
 		options = options | SIGN_EXPIRES;
 	
-	err = seahorse_key_op_sign (skwidget->skey, skwidget->index, check, options);
+	signer = seahorse_signer_get (swidget->sctx);
+	if (!signer) 
+		return FALSE;
+	
+	err = seahorse_key_op_sign (skwidget->skey, signer, skwidget->index, check, options);
 	if (!GPG_IS_OK (err)) {
 		seahorse_util_handle_gpgme (err, _("Couldn't sign key"));
 		return FALSE;
