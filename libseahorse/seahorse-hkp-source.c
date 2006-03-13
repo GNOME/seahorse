@@ -95,7 +95,7 @@ dump_soup_request (SoupMessage *msg)
     
     if (msg->request.body) {
         t = g_strndup (msg->request.body, msg->request.length);
-        g_printerr ("request: %s\n", t);
+        g_printerr ("request: %s\n", t ? t : "");
         g_free (t);
     }    
 }
@@ -111,7 +111,7 @@ dump_soup_response (SoupMessage *msg)
     
     if (msg->response.body) {
         t = g_strndup (msg->response.body, msg->response.length);
-        g_printerr ("response: %s\n", t);
+        g_printerr ("response: %s\n", t ? t : "");
         g_free (t);
     }    
 }
@@ -271,17 +271,21 @@ fail_hkp_operation (SeahorseHKPOperation *hop, SoupMessage *msg, const gchar *te
     } else if (msg) {
         /* Make the body lower case, and no tags */
         t = g_strndup (msg->response.body, msg->response.length);
-        dehtmlize (t);        
-        seahorse_util_string_lower (t);
+        if (t) {
+            dehtmlize (t);        
+            seahorse_util_string_lower (t);
 
-        if (strstr (t, "no keys"))
-            error = g_error_new (HKP_ERROR_DOMAIN, 0, _("No matching keys found on server '%s'."), server);
-        else if (strstr (t, "too many"))
-            error = g_error_new (HKP_ERROR_DOMAIN, 0, _("Search was not specific enough. Server '%s' found too many keys."), server);
-        else 
+            if (strstr (t, "no keys"))
+                error = g_error_new (HKP_ERROR_DOMAIN, 0, _("No matching keys found on server '%s'."), server);
+            else if (strstr (t, "too many"))
+                error = g_error_new (HKP_ERROR_DOMAIN, 0, _("Search was not specific enough. Server '%s' found too many keys."), server);
+            
+            g_free (t);
+        } 
+
+        if (!error)
             error = g_error_new (HKP_ERROR_DOMAIN, msg->status_code, _("Couldn't communicate with server '%s': %s"),
                                  server, soup_status_get_phrase (msg->status_code));
-        g_free (t);
     } else {
 
         /* We should always have msg or text */
@@ -494,7 +498,10 @@ get_send_result (const gchar *response, unsigned int length)
     gboolean is_error = FALSE;
     
     text = g_strndup (response, length);
-    lines = g_strsplit (text, "\n", 0);    
+    if (!text)
+        return g_strdup ("");
+    
+    lines = g_strsplit (text, "\n", 0); 
 
     for (l = lines; *l; l++) {
 
