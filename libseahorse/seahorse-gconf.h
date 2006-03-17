@@ -74,6 +74,6 @@ guint           seahorse_gconf_notify            (const char         *key,
 void            seahorse_gconf_notify_lazy       (const char         *key,
                                                   GConfClientNotifyFunc notification_callback,
                                                   gpointer           callback_data,
-                                                  GtkWidget          *lifetime);
+                                                  gpointer           lifetime);
 
 void            seahorse_gconf_unnotify          (guint              notification_id);

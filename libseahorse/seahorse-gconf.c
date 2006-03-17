@@ -256,20 +256,25 @@ seahorse_gconf_notify (const char *key, GConfClientNotifyFunc notification_callb
 }
 
 static void
-internal_gconf_unnotify (GtkWidget *widget, gpointer data)
+internal_gconf_unnotify (gpointer data)
 {
     guint notify_id = GPOINTER_TO_INT (data);
     seahorse_gconf_unnotify (notify_id);
 }
 
-void            
-seahorse_gconf_notify_lazy  (const char *key, GConfClientNotifyFunc notification_callback,
-				             gpointer callback_data, GtkWidget *lifetime)
+void
+seahorse_gconf_notify_lazy (const char *key, GConfClientNotifyFunc notification_callback,
+                            gpointer callback_data, gpointer lifetime)
 {
-    guint notification_id = seahorse_gconf_notify (key, notification_callback, callback_data);
-    if (notification_id != 0)
-        g_signal_connect (lifetime, "destroy", G_CALLBACK (internal_gconf_unnotify), 
-                          GINT_TO_POINTER (notification_id));
+    guint notification_id;
+    gchar *t;
+    
+    notification_id = seahorse_gconf_notify (key, notification_callback, callback_data);
+    if (notification_id != 0) {
+        t = g_strdup_printf ("_gconf-notify-lazy-%d", notification_id);
+        g_object_set_data_full (G_OBJECT (lifetime), t, 
+                GINT_TO_POINTER (notification_id), internal_gconf_unnotify);
+    }
 }
 
 void
