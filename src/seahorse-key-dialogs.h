@@ -58,7 +58,7 @@ void        seahorse_delete_userid_show (SeahorseKey        *skey,
 void        seahorse_revoke_new         (SeahorsePGPKey     *pkey,
                                          guint              index);
 
-void        seahorse_sign_uid_show      (SeahorsePGPKey     *pkey, 
+void        seahorse_sign_show          (SeahorsePGPKey     *pkey, 
                                          guint              uid);
 
 #endif /* __SEAHORSE_KEY_DIALOGS__ */

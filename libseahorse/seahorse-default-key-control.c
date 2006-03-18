@@ -36,6 +36,9 @@ key_added (SeahorseKeyset *skset, SeahorseKey *skey, GtkOptionMenu *combo)
     GtkWidget *item;
     gchar *userid;
     
+    g_return_if_fail (skey != NULL);
+    g_return_if_fail (combo != NULL);
+    
     menu = gtk_option_menu_get_menu (combo);
     
     userid = seahorse_key_get_display_name (skey);
@@ -56,6 +59,9 @@ key_changed (SeahorseKeyset *skset, SeahorseKey *skey, SeahorseKeyChange change,
 {
     GList *children;
     gchar *userid;
+    
+    g_return_if_fail (skey != NULL);
+    g_return_if_fail (item != NULL);
 
     children = gtk_container_get_children (GTK_CONTAINER (item));
     
@@ -71,6 +77,9 @@ static void
 key_removed (SeahorseKeyset *skset, SeahorseKey *skey, GtkWidget *item, 
              GtkOptionMenu *combo)
 {
+    g_return_if_fail (skey != NULL);
+    g_return_if_fail (item != NULL);
+
     gtk_widget_destroy (item);
 }
 

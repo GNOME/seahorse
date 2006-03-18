@@ -55,7 +55,7 @@ seahorse_signer_get ()
         /* TODO: We should be giving an error message that allows them to 
            generate or import a key */
         seahorse_util_show_error (NULL, _("No keys usable for signing"), 
-                _("You have no private keys that can be used to sign a document or message."));
+                _("You have no personal PGP keys that can be used to sign a document or message."));
         return NULL;
     }
     

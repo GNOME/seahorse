@@ -32,6 +32,7 @@
 static const SeahorseStockIcon seahorse_icons[] = {
     { SEAHORSE_STOCK_KEY,         "seahorse",   "seahorse-key.png"         },
     { SEAHORSE_STOCK_PERSON,      "seahorse",   "seahorse-person.png"      },
+    { SEAHORSE_STOCK_SIGN,        "seahorse",   "seahorse-sign.svg"        },
     { SEAHORSE_STOCK_SEAHORSE,    NULL,         "seahorse.png"             },
     { SEAHORSE_STOCK_SECRET,      "seahorse",   "seahorse-secret.png"      },
     { SEAHORSE_STOCK_SHARE_KEYS,  "seahorse",   "seahorse-share-keys.png"  },
@@ -103,6 +104,7 @@ seahorse_gtkstock_add_icons (const SeahorseStockIcon *icons)
         gtk_icon_source_set_filename (source, filename);
         gtk_icon_source_set_direction_wildcarded (source, TRUE);
         gtk_icon_source_set_size_wildcarded (source, TRUE);
+        gtk_icon_source_set_state_wildcarded (source, TRUE);
             
         g_free(filename);
         

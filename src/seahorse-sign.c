@@ -2,6 +2,7 @@
  * Seahorse
  *
  * Copyright (C) 2003 Jacob Perkins
+ * Copyright (C) 2006 Nate Nielsen
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,122 +27,183 @@
 #include "seahorse-key-widget.h"
 #include "seahorse-pgp-key-op.h"
 #include "seahorse-util.h"
+#include "seahorse-keyset.h"
+#include "seahorse-gtkstock.h"
+#include "seahorse-default-key-control.h"
 
 static gboolean
 ok_clicked (SeahorseWidget *swidget)
 {
-	SeahorseKeyWidget *skwidget;
-	SeahorseSignCheck check;
-	SeahorseSignOptions options = 0;
-	gpgme_error_t err;
-	
-	skwidget = SEAHORSE_KEY_WIDGET (swidget);
-	
-	check = gtk_option_menu_get_history (GTK_OPTION_MENU (
-		glade_xml_get_widget (swidget->xml, "checked")));
-	/* get local option */
-	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (
-	glade_xml_get_widget (swidget->xml, "local"))))
-		options = options | SIGN_LOCAL;
-	/* get revoke option */
-	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (
-	glade_xml_get_widget (swidget->xml, "revocable"))))
-		options = options | SIGN_NO_REVOKE;
-	/* get expires option */
-	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (
-	glade_xml_get_widget (swidget->xml, "expires"))))
-		options = options | SIGN_EXPIRES;
-	
-	err = seahorse_pgp_key_op_sign (SEAHORSE_PGP_KEY (skwidget->skey), 
-                                skwidget->index, check, options);
-	if (!GPG_IS_OK (err)) {
-		seahorse_util_handle_gpgme (err, _("Couldn't sign key"));
-		return FALSE;
-	}
-	else {
-		seahorse_widget_destroy (swidget);
-		return TRUE;
-	}
+    SeahorseKeyWidget *skwidget;
+    SeahorseSignCheck check;
+    SeahorseSignOptions options = 0;
+    SeahorseKey *signer;
+    GtkWidget *w;
+    gpgme_error_t err;
+    
+    skwidget = SEAHORSE_KEY_WIDGET (swidget);
+    
+    /* Figure out choice */
+    check = SIGN_CHECK_NO_ANSWER;
+    w = glade_xml_get_widget (swidget->xml, "sign-choice-not");
+    g_return_if_fail (w != NULL);
+    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w)))
+        check = SIGN_CHECK_NONE;
+    else {
+        w = glade_xml_get_widget (swidget->xml, "sign-choice-casual");
+        g_return_if_fail (w != NULL);
+        if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w)))
+            check = SIGN_CHECK_CASUAL;
+        else {
+            w = glade_xml_get_widget (swidget->xml, "sign-choice-careful");
+            g_return_if_fail (w != NULL);
+            if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w)))
+                check = SIGN_CHECK_CAREFUL;
+        }
+    }
+    
+    /* Local signature */
+    w = glade_xml_get_widget (swidget->xml, "sign-option-local");
+    g_return_if_fail (w != NULL);
+    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w)))
+        options |= SIGN_LOCAL;
+    
+    /* Revocable signature */
+    w = glade_xml_get_widget (swidget->xml, "sign-option-revocable");
+    g_return_if_fail (w != NULL);
+    if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w))) 
+        options |= SIGN_NO_REVOKE;
+    
+    /* Signer */
+    w = glade_xml_get_widget (swidget->xml, "signer-select");
+    g_return_if_fail (w != NULL);
+    signer = seahorse_combo_keys_get_active (GTK_OPTION_MENU (w));
+    
+    g_assert (!signer || (SEAHORSE_IS_PGP_KEY (signer) && 
+                          seahorse_key_get_etype (signer) == SKEY_PRIVATE));
+    
+    err = seahorse_pgp_key_op_sign (SEAHORSE_PGP_KEY (skwidget->skey), 
+                                    SEAHORSE_PGP_KEY (signer), 
+                                    skwidget->index + 1, check, options);
+    if (!GPG_IS_OK (err))
+        seahorse_util_handle_gpgme (err, _("Couldn't sign key"));
+    
+    seahorse_widget_destroy (swidget);
+    return TRUE;
+}
+
+static void
+keyset_changed (SeahorseKeyset *skset, GtkWidget *widget)
+{
+    if (seahorse_keyset_get_count (skset) <= 1)
+        gtk_widget_hide (widget);
+    else
+        gtk_widget_show (widget);
+}
+
+static void
+choice_toggled (GtkToggleButton *toggle, SeahorseWidget *swidget)
+{
+    GtkWidget *w;
+    
+    /* Figure out choice */
+    w = glade_xml_get_widget (swidget->xml, "sign-choice-not");
+    g_return_if_fail (w != NULL);
+    seahorse_widget_set_visible (swidget, "sign-display-not", 
+                             gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w)));
+    w = glade_xml_get_widget (swidget->xml, "sign-choice-casual");
+    g_return_if_fail (w != NULL);
+    seahorse_widget_set_visible (swidget, "sign-display-casual", 
+                             gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w)));
+    w = glade_xml_get_widget (swidget->xml, "sign-choice-careful");
+    g_return_if_fail (w != NULL);
+    seahorse_widget_set_visible (swidget, "sign-display-careful", 
+                             gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w)));
 }
 
 void
-seahorse_sign_show (GList *keys)
+seahorse_sign_show (SeahorsePGPKey *pkey, guint uid)
 {
-	GtkWidget *question;
-	gint response;
-	GList *list = NULL;
-	SeahorsePGPKey *pkey;
-	SeahorseWidget *swidget;
-	gboolean do_sign = TRUE;
-	
-	for (list = keys; list != NULL; list = g_list_next (list)) {
-        g_return_if_fail (SEAHORSE_IS_PGP_KEY (list->data));
-		pkey = SEAHORSE_PGP_KEY (list->data);
-		
-		question = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
-			GTK_MESSAGE_QUESTION, GTK_BUTTONS_YES_NO,
-			_("Are you sure you want to sign all user IDs for %s?"),
-			seahorse_key_get_keyid (SEAHORSE_KEY (pkey)));
-		response = gtk_dialog_run (GTK_DIALOG (question));
-		gtk_widget_destroy (question);
-		
-		if (response != GTK_RESPONSE_YES)
-			break;
-		
-		swidget = seahorse_key_widget_new_with_index ("sign", SEAHORSE_KEY (pkey), 0);
-		g_return_if_fail (swidget != NULL);
-		
-		while (do_sign) {
-			response = gtk_dialog_run (GTK_DIALOG (
-				glade_xml_get_widget (swidget->xml, swidget->name)));\
-			switch (response) {
-				case GTK_RESPONSE_HELP:
-					break;
-				case GTK_RESPONSE_OK:
-					do_sign = !ok_clicked (swidget);
-					break;
-				default:
-					do_sign = FALSE;
-					seahorse_widget_destroy (swidget);
-					break;
-			}
-		}
-		do_sign = TRUE;
-	}
-}
-
-void
-seahorse_sign_uid_show (SeahorsePGPKey *pkey, guint uid)
-{
-    GtkWidget *question;
+    SeahorseKeyset *skset;
+    GtkWidget *w;
     gint response;
     SeahorseWidget *swidget;
     gboolean do_sign = TRUE;
+    gchar *t;
     gchar *userid;
-    
-    /* UIDs are one based ... */
-    g_return_if_fail (uid > 0);
-   
-    /* ... Except for when calling this, which is messed up */
-    userid = seahorse_key_get_name (SEAHORSE_KEY (pkey), uid - 1);     
-    question = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
-                        GTK_MESSAGE_QUESTION, GTK_BUTTONS_YES_NO,
-                        _("Are you sure you want to sign the '%s' user ID?"),
-                        userid);
-    g_free (userid);
 
-    response = gtk_dialog_run (GTK_DIALOG (question));
-    gtk_widget_destroy (question);
-     
-    if (response != GTK_RESPONSE_YES)
+    /* Some initial checks */
+    skset = seahorse_keyset_pgp_signers_new ();
+    
+    /* If no signing keys then we can't sign */
+    if (seahorse_keyset_get_count (skset) == 0) {
+        /* TODO: We should be giving an error message that allows them to 
+           generate or import a key */
+        seahorse_util_show_error (NULL, _("No keys usable for signing"), 
+                _("You have no personal PGP keys that can be used to indicate your trust of this key."));
         return;
-     
+    }
+
     swidget = seahorse_key_widget_new_with_index ("sign", SEAHORSE_KEY (pkey), uid);
     g_return_if_fail (swidget != NULL);
-        
+
+    /* ... Except for when calling this, which is messed up */
+    w = glade_xml_get_widget (swidget->xml, "sign-uid-text");
+    g_return_if_fail (w != NULL);
+    t = seahorse_key_get_name (SEAHORSE_KEY (pkey), uid);
+    userid = g_markup_escape_text (t, -1);
+    g_free (t);
+    t = g_strdup_printf ("<i>%s</i>", userid);
+    g_free (userid);
+    gtk_label_set_markup (GTK_LABEL (w), t);
+    g_free (t);
+    
+    /* Uncheck all selections */
+    w = glade_xml_get_widget (swidget->xml, "sign-choice-not");
+    g_return_if_fail (w != NULL);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), FALSE);
+    g_signal_connect (w, "toggled", G_CALLBACK (choice_toggled), swidget);
+    w = glade_xml_get_widget (swidget->xml, "sign-choice-casual");
+    g_return_if_fail (w != NULL);
+    g_signal_connect (w, "toggled", G_CALLBACK (choice_toggled), swidget);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), FALSE);
+    w = glade_xml_get_widget (swidget->xml, "sign-choice-careful");
+    g_return_if_fail (w != NULL);
+    g_signal_connect (w, "toggled", G_CALLBACK (choice_toggled), swidget);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), FALSE);
+    
+    /* Initial choice */
+    choice_toggled(NULL, swidget);
+    
+    /* Other question's default state */
+    w = glade_xml_get_widget (swidget->xml, "sign-option-local");
+    g_return_if_fail (w != NULL);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), FALSE);
+    w = glade_xml_get_widget (swidget->xml, "sign-option-revocable");
+    g_return_if_fail (w != NULL);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), TRUE);
+    
+    /* Signature area */
+    w = glade_xml_get_widget (swidget->xml, "signer-frame");
+    g_return_if_fail (w != NULL);
+    g_signal_connect (skset, "set-changed", G_CALLBACK (keyset_changed), w);
+    keyset_changed (skset, w);
+
+    /* Signer box */
+    w = glade_xml_get_widget (swidget->xml, "signer-select");
+    g_return_if_fail (w != NULL);
+    seahorse_combo_keys_attach (GTK_OPTION_MENU (w), skset, NULL);
+
+    /* Image */
+    w = glade_xml_get_widget (swidget->xml, "sign-image");
+    g_return_if_fail (w != NULL);
+    gtk_image_set_from_stock (GTK_IMAGE (w), SEAHORSE_STOCK_SIGN, GTK_ICON_SIZE_DIALOG);
+    
+    g_object_unref (skset);
+    seahorse_widget_show (swidget);
+    
     while (do_sign) {
-        response = gtk_dialog_run (GTK_DIALOG (
-                glade_xml_get_widget (swidget->xml, swidget->name)));
+        response = gtk_dialog_run (GTK_DIALOG (seahorse_widget_get_top (swidget)));
         switch (response) {
         case GTK_RESPONSE_HELP:
             break;

@@ -79,6 +79,10 @@ void             seahorse_widget_show               (SeahorseWidget   *swidget);
 
 void             seahorse_widget_show_help          (SeahorseWidget   *swidget);
 
+void             seahorse_widget_set_visible        (SeahorseWidget   *swidget,
+                                                     const char       *identifier,
+                                                     gboolean         visible);
+
 void             seahorse_widget_destroy            (SeahorseWidget   *swidget);
 
 GtkWidget*       seahorse_widget_get_ui_widget      (SeahorseWidget *swidget, 

@@ -29,6 +29,7 @@
 /* The default stock icons */
 #define SEAHORSE_STOCK_KEY          "seahorse-key"
 #define SEAHORSE_STOCK_PERSON       "seahorse-person"
+#define SEAHORSE_STOCK_SIGN         "seahorse-sign"
 #define SEAHORSE_STOCK_SEAHORSE     "seahorse"
 #define SEAHORSE_STOCK_SECRET       "seahorse-secret"
 #define SEAHORSE_STOCK_SHARE_KEYS   "seahorse-share-keys"

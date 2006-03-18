@@ -116,9 +116,10 @@ gpgme_error_t  seahorse_pgp_key_op_delete           (SeahorsePGPKey *pkey);
 gpgme_error_t  seahorse_pgp_key_pair_op_delete      (SeahorsePGPKey *pkey);
 
 gpgme_error_t  seahorse_pgp_key_op_sign             (SeahorsePGPKey *pkey,
-                                                 guint index,
-                                                 SeahorseSignCheck check,
-                                                 SeahorseSignOptions options);
+                                                     SeahorsePGPKey *signer,
+                                                     guint index,
+                                                     SeahorseSignCheck check,
+                                                     SeahorseSignOptions options);
 
 gpgme_error_t  seahorse_pgp_key_pair_op_change_pass (SeahorsePGPKey *pkey);
 

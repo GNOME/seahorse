@@ -460,36 +460,50 @@ sign_transit (guint current_state, gpgme_status_code_t status,
  * Returns: Error value
  **/
 gpgme_error_t
-seahorse_pgp_key_op_sign (SeahorsePGPKey *pkey, const guint index,
-		              SeahorseSignCheck check, SeahorseSignOptions options)
+seahorse_pgp_key_op_sign (SeahorsePGPKey *pkey, SeahorsePGPKey *signer, 
+                          const guint index, SeahorseSignCheck check, 
+                          SeahorseSignOptions options)
 {
-	SignParm *sign_parm;
-	SeahorseEditParm *parms;
+    SeahorseKeySource *sksrc;
+    SignParm *sign_parm;
+    SeahorseEditParm *parms;
     gpgme_error_t err;
-	guint real_index = seahorse_pgp_key_get_actual_uid(pkey, index);
-	guint num_userids = seahorse_pgp_key_get_num_userids (pkey);
-	guint num_photoids = seahorse_pgp_key_get_num_photoids (pkey);
-	
-	g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (pkey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
-	DEBUG_OPERATION(("SignKey: index = %i,real_index = %i, num_userids = %i, num_photoids = %i\n", index, real_index, num_userids, num_photoids));
-	g_return_val_if_fail (real_index <= (num_userids + num_photoids), GPG_E (GPG_ERR_INV_VALUE));
-	
-	sign_parm = g_new (SignParm, 1);
-	sign_parm->index = real_index;
-	sign_parm->expire = ((options & SIGN_EXPIRES) != 0);
-	sign_parm->check = check;
-	sign_parm->command = "sign";
-	
-	/* if sign is local */
-	if ((options & SIGN_LOCAL) != 0)
-		sign_parm->command = g_strdup_printf ("l%s", sign_parm->command);
-	/* if sign is non-revocable */
-	if ((options & SIGN_NO_REVOKE) != 0)
-		sign_parm->command = g_strdup_printf ("nr%s", sign_parm->command);
-	
-	parms = seahorse_edit_parm_new (SIGN_START, sign_action, sign_transit, sign_parm);
-	
-	err =  edit_key (pkey, parms, SKEY_CHANGE_SIGNERS);
+    guint real_index = seahorse_pgp_key_get_actual_uid(pkey, index);
+    guint num_userids = seahorse_pgp_key_get_num_userids (pkey);
+    guint num_photoids = seahorse_pgp_key_get_num_photoids (pkey);
+    
+    g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (pkey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
+    DEBUG_OPERATION(("SignKey: index = %i,real_index = %i, num_userids = %i, num_photoids = %i\n", index, real_index, num_userids, num_photoids));
+    g_return_val_if_fail (real_index <= (num_userids + num_photoids), GPG_E (GPG_ERR_INV_VALUE));
+    
+    sign_parm = g_new (SignParm, 1);
+    sign_parm->index = real_index;
+    sign_parm->expire = ((options & SIGN_EXPIRES) != 0);
+    sign_parm->check = check;
+
+    sign_parm->command = g_strdup_printf ("%s%ssign", 
+                                (options & SIGN_NO_REVOKE) ? "nr" : "",
+                                (options & SIGN_LOCAL) ? "l" : "");
+    
+    if (signer) {
+        sksrc = seahorse_key_get_source (SEAHORSE_KEY (pkey));
+        
+        g_assert (SEAHORSE_IS_PGP_SOURCE (sksrc));
+        g_assert (SEAHORSE_PGP_SOURCE (sksrc)->gctx);
+        
+        gpgme_signers_clear (SEAHORSE_PGP_SOURCE (sksrc)->gctx);
+
+        g_return_val_if_fail (signer->seckey != NULL, GPG_E (GPG_ERR_INV_VALUE));
+        err = gpgme_signers_add (SEAHORSE_PGP_SOURCE (sksrc)->gctx, signer->seckey);
+        if (!GPG_IS_OK (err))
+            return err;
+    }
+
+    
+    parms = seahorse_edit_parm_new (SIGN_START, sign_action, sign_transit, sign_parm);
+    
+    err =  edit_key (pkey, parms, SKEY_CHANGE_SIGNERS);
+    g_free (sign_parm->command);
  
     /* If it was already signed then it's not an error */
     if (!GPG_IS_OK (err) && gpgme_err_code (err) == GPG_ERR_EALREADY)

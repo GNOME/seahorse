@@ -204,14 +204,14 @@ owner_primary_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 static void 
 owner_sign_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 {
-	SeahorseKey *skey;
-	gint index;
-	
-	skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
-	index = get_selected_uid (swidget);
+    SeahorseKey *skey;
+    gint index;
 
-	if (index >= 1) 
-		seahorse_sign_uid_show (SEAHORSE_PGP_KEY (skey), index);
+    skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
+    index = get_selected_uid (swidget);
+
+    if (index >= 1) 
+        seahorse_sign_show (SEAHORSE_PGP_KEY (skey), index - 1);
 }
 
 static void 
@@ -1132,11 +1132,8 @@ trust_toggled (GtkToggleButton *toggle, SeahorseWidget *swidget)
 static void 
 trust_sign_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 {
-    GList *keys;
-
-    keys = g_list_append (NULL, SEAHORSE_KEY_WIDGET (swidget)->skey);
-    seahorse_sign_show (keys);
-    g_list_free (keys);
+    g_return_if_fail (SEAHORSE_IS_PGP_KEY (SEAHORSE_KEY_WIDGET (swidget)->skey));
+    seahorse_sign_show (SEAHORSE_PGP_KEY (SEAHORSE_KEY_WIDGET (swidget)->skey), 0);
 }
 
 static void

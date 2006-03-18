@@ -12,6 +12,7 @@ appicon_DATA = seahorse-secret.png \
                seahorse-unknown.png \
                seahorse-good.png \
                seahorse-bad.png \
+               seahorse-sign.svg \
                seahorse-applet-encrypted.png \
                seahorse-applet-key.png \
                seahorse-applet-signed.png \

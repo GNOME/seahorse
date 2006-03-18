@@ -352,6 +352,19 @@ seahorse_widget_show (SeahorseWidget *swidget)
     gtk_widget_show (widget);
 }
  
+void             
+seahorse_widget_set_visible (SeahorseWidget *swidget, const char *identifier,
+                             gboolean visible)
+{
+    GtkWidget *widget = glade_xml_get_widget (swidget->xml, identifier);
+    g_return_if_fail (widget != NULL);
+    
+    if (visible)
+        gtk_widget_show (widget);
+    else
+        gtk_widget_hide (widget);
+}
+
 /**
  * seahorse_widget_destroy:
  * @swidget: #SeahorseWidget to destroy

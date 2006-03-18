@@ -266,13 +266,29 @@ seahorse_key_widget_create (gchar *name, SeahorseKey *skey, guint index)
 SeahorseWidget*
 seahorse_key_widget_new (gchar *name, SeahorseKey *skey)
 {
-	return seahorse_key_widget_create (name, skey, 0);
+    SeahorseWidget *swidget;
+    
+    swidget = seahorse_key_widget_create (name, skey, 0);
+    
+    /* We don't care about this floating business */
+    g_object_ref (GTK_OBJECT (swidget));
+    gtk_object_sink (GTK_OBJECT (swidget));
+
+    return swidget;
 }
 
 SeahorseWidget*
 seahorse_key_widget_new_with_index (gchar *name, SeahorseKey *skey, guint index)
 {
-	return seahorse_key_widget_create (name, skey, index);
+    SeahorseWidget *swidget;
+    
+    swidget = seahorse_key_widget_create (name, skey, index);
+    
+    /* We don't care about this floating business */
+    g_object_ref (GTK_OBJECT (swidget));
+    gtk_object_sink (GTK_OBJECT (swidget));
+
+    return swidget;
 }
 
 gboolean

@@ -395,9 +395,12 @@ backup_activate (GtkWidget *widget, SeahorseWidget *swidget)
 static void
 sign_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
-    GList *keys = get_selected_keys (swidget);
-	seahorse_sign_show (keys);
-    g_list_free (keys);
+    SeahorseKey *skey;
+    guint uid;
+
+    skey = get_selected_key (swidget, &uid);
+    if (SEAHORSE_IS_PGP_KEY (skey))
+        seahorse_sign_show (SEAHORSE_PGP_KEY (skey), uid);
 }
 
 static void
