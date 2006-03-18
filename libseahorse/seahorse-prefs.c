@@ -499,7 +499,7 @@ seahorse_prefs_new ()
     skset = seahorse_keyset_new (SKEY_PGP, 
                                  SKEY_PRIVATE, 
                                  SKEY_LOC_LOCAL, 
-                                 0, 
+                                 SKEY_FLAG_CAN_SIGN, 
                                  SKEY_FLAG_EXPIRED | SKEY_FLAG_REVOKED | SKEY_FLAG_DISABLED);
     seahorse_combo_keys_attach (GTK_OPTION_MENU (widget), skset, _("None. Prompt for a key."));
     g_object_unref (skset);
