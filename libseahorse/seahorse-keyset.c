@@ -21,9 +21,11 @@
 
 #include "seahorse-keyset.h"
 #include "seahorse-marshal.h"
+#include "seahorse-gconf.h"
+#include "seahorse-pgp-key.h"
 
 enum {
-	PROP_0,
+    PROP_0,
     PROP_PREDICATE
 };
 
@@ -31,6 +33,7 @@ enum {
     ADDED,
     REMOVED,
     CHANGED,
+    SET_CHANGED,
     LAST_SIGNAL
 };
 
@@ -55,7 +58,8 @@ remove_update (SeahorseKey *skey, gpointer closure, SeahorseKeyset *skset)
     if (closure == GINT_TO_POINTER (TRUE))
         closure = NULL;
     
-    g_signal_emit (skset, signals[REMOVED], 0, skey, closure);     
+    g_signal_emit (skset, signals[REMOVED], 0, skey, closure);
+    g_signal_emit (skset, signals[SET_CHANGED], 0);
     g_signal_handlers_disconnect_by_func (skey, key_destroyed, skset);    
     return TRUE;
 }
@@ -88,6 +92,7 @@ maybe_add_key (SeahorseKeyset *skset, SeahorseKey *skey)
     g_hash_table_replace (skset->pv->keys, skey, GINT_TO_POINTER (TRUE));
     g_signal_connect (skey, "destroy", G_CALLBACK (key_destroyed), skset);
     g_signal_emit (skset, signals[ADDED], 0, skey);
+    g_signal_emit (skset, signals[SET_CHANGED], 0);
     return TRUE;
 }
 
@@ -224,13 +229,13 @@ seahorse_keyset_init (SeahorseKeyset *skset)
 static void
 seahorse_keyset_class_init (SeahorseKeysetClass *klass)
 {
-	GObjectClass *gobject_class;
-	
-	seahorse_keyset_parent_class = g_type_class_peek_parent (klass);
-	gobject_class = G_OBJECT_CLASS (klass);
-	
-	gobject_class->dispose = seahorse_keyset_dispose;	
-	gobject_class->finalize = seahorse_keyset_finalize;	
+    GObjectClass *gobject_class;
+    
+    seahorse_keyset_parent_class = g_type_class_peek_parent (klass);
+    gobject_class = G_OBJECT_CLASS (klass);
+    
+    gobject_class->dispose = seahorse_keyset_dispose;
+    gobject_class->finalize = seahorse_keyset_finalize;
     gobject_class->set_property = seahorse_keyset_set_property;
     gobject_class->get_property = seahorse_keyset_get_property;
     
@@ -249,6 +254,10 @@ seahorse_keyset_class_init (SeahorseKeysetClass *klass)
     signals[CHANGED] = g_signal_new ("changed", SEAHORSE_TYPE_KEYSET, 
                 G_SIGNAL_RUN_FIRST, G_STRUCT_OFFSET (SeahorseKeysetClass, changed),
                 NULL, NULL, seahorse_marshal_VOID__OBJECT_UINT_POINTER, G_TYPE_NONE, 3, SEAHORSE_TYPE_KEY, G_TYPE_UINT, G_TYPE_POINTER);
+                
+    signals[SET_CHANGED] = g_signal_new ("set-changed", SEAHORSE_TYPE_KEYSET,
+                G_SIGNAL_RUN_FIRST, G_STRUCT_OFFSET (SeahorseKeysetClass, set_changed),
+                NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
 }
 
 /* -----------------------------------------------------------------------------
@@ -293,7 +302,6 @@ seahorse_keyset_get_count (SeahorseKeyset *skset)
 {
     return g_hash_table_size (skset->pv->keys);
 }
-
 
 void
 seahorse_keyset_refresh (SeahorseKeyset *skset)
@@ -349,4 +357,50 @@ seahorse_keyset_set_closure (SeahorseKeyset *skset, SeahorseKey *skey,
         closure = GINT_TO_POINTER (TRUE);
 
     g_hash_table_insert (skset->pv->keys, skey, closure);    
+}
+
+/* -----------------------------------------------------------------------------
+ * COMMON KEYSETS 
+ */
+
+static void
+pgp_signers_gconf_notify (GConfClient *client, guint id, GConfEntry *entry, 
+                          SeahorseKeyset *skset)
+{
+    /* Default key changed, refresh */
+    seahorse_keyset_refresh (skset);
+}
+
+static gboolean 
+pgp_signers_match (SeahorseKey *key, gpointer data)
+{
+    SeahorseKey *defkey = seahorse_context_get_default_key (SCTX_APP ());
+    
+    /* Default key overrides all, and becomes the only signer available*/
+    if (defkey && strcmp (seahorse_key_get_keyid (key), seahorse_key_get_keyid (defkey)) != 0)
+        return FALSE;
+    
+    return TRUE;
+}
+
+SeahorseKeyset*     
+seahorse_keyset_pgp_signers_new ()
+{
+    SeahorseKeyPredicate *pred = g_new0(SeahorseKeyPredicate, 1);
+    SeahorseKeyset *skset;
+    guint notify_id;
+    
+    pred->location = SKEY_LOC_LOCAL;
+    pred->ktype = SKEY_PGP;
+    pred->etype = SKEY_PRIVATE;
+    pred->flags = SKEY_FLAG_CAN_SIGN;
+    pred->nflags = SKEY_FLAG_EXPIRED | SKEY_FLAG_REVOKED | SKEY_FLAG_DISABLED;
+    pred->custom = pgp_signers_match;
+    
+    skset = seahorse_keyset_new_full (pred);
+    g_object_set_data_full (G_OBJECT (skset), "pgp-signers-predicate", pred, g_free);
+    
+    seahorse_gconf_notify_lazy (DEFAULT_KEY, (GConfClientNotifyFunc)pgp_signers_gconf_notify, 
+                                skset, skset);
+    return skset;
 }

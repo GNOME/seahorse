@@ -45,15 +45,22 @@ seahorse_signer_get ()
     gboolean done = FALSE;
     gboolean ok = FALSE;
     gchar *id;
+    guint nkeys;
 
-    skset = seahorse_keyset_new (SKEY_PGP, 
-                                 SKEY_PRIVATE, 
-                                 SKEY_LOC_LOCAL, 
-                                 SKEY_FLAG_CAN_SIGN, 
-                                 SKEY_FLAG_EXPIRED | SKEY_FLAG_REVOKED | SKEY_FLAG_DISABLED);
-
+    skset = seahorse_keyset_pgp_signers_new ();
+    nkeys = seahorse_keyset_get_count (skset);
+    
+    /* If no signing keys then we can't sign */
+    if (nkeys == 0) {
+        /* TODO: We should be giving an error message that allows them to 
+           generate or import a key */
+        seahorse_util_show_error (NULL, _("No keys usable for signing"), 
+                _("You have no private keys that can be used to sign a document or message."));
+        return NULL;
+    }
+    
     /* If only one key (probably default) then return it immediately */
-    if (seahorse_keyset_get_count (skset) == 1) {
+    if (nkeys == 1) {
         GList *keys = seahorse_keyset_get_keys (skset);
         skey = SEAHORSE_KEY (keys->data);
         

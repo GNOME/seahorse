@@ -1,7 +1,7 @@
 /*
  * Seahorse
  *
- * Copyright (C) 2005 Nate Nielsen
+ * Copyright (C) 2005-2006 Nate Nielsen
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,8 +36,10 @@
  *   added: A key was added to this keyset.
  *   removed: A key disappeared from this keyset.
  *   changed: A key in the keyset changed.
+ *   set-changed: The number of keys in the keyset changed
  * 
  * Properties:
+ *   count: The number of keys 
  *   predicate: (SeahorseKeyPredicate) The predicate used for matching.
  */
  
@@ -60,14 +62,14 @@ typedef struct _SeahorseKeysetClass SeahorseKeysetClass;
 typedef struct _SeahorseKeysetPrivate SeahorseKeysetPrivate;
     
 struct _SeahorseKeyset {
-	GtkObject		        parent;
-	
-	/*<private>*/
+    GtkObject parent;
+    
+    /*<private>*/
     SeahorseKeysetPrivate   *pv;
 };
 
 struct _SeahorseKeysetClass {
-	GtkObjectClass		parent_class;
+    GtkObjectClass parent_class;
     
     /* signals --------------------------------------------------------- */
     
@@ -77,9 +79,12 @@ struct _SeahorseKeysetClass {
     /* Removed a key from this view */
     void (*removed) (SeahorseKeyset *skset, SeahorseKey *key, gpointer closure);
     
-	/* One of the key's attributes has changed */
-	void (*changed) (SeahorseKeyset *skset, SeahorseKey *skey, 
-                     SeahorseKeyChange change, gpointer closure);    
+    /* One of the key's attributes has changed */
+    void (*changed) (SeahorseKeyset *skset, SeahorseKey *skey, 
+                     SeahorseKeyChange change, gpointer closure);
+    
+    /* The set of keys changed */
+    void (*set_changed) (SeahorseKeyset *skset);
 };
 
 GType               seahorse_keyset_get_type           (void);
@@ -107,5 +112,12 @@ gpointer            seahorse_keyset_get_closure        (SeahorseKeyset *skset,
 void                seahorse_keyset_set_closure        (SeahorseKeyset *skset,
                                                         SeahorseKey *skey,
                                                         gpointer closure);
+
+/* -----------------------------------------------------------------------------
+ * SOME COMMON KEYSETS 
+ */
+ 
+SeahorseKeyset*     seahorse_keyset_pgp_signers_new     ();
+
 
 #endif /* __SEAHORSE_KEY_SET_H__ */
