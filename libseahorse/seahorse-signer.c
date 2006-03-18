@@ -1,7 +1,7 @@
 /*
  * Seahorse
  *
- * Copyright (C) 2004-2005 Nate Nielsen
+ * Copyright (C) 2004-2006 Nate Nielsen
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,59 +36,65 @@
 SeahorsePGPKey*
 seahorse_signer_get ()
 {
-	SeahorseWidget *swidget;
+    SeahorseWidget *swidget;
     SeahorseKeyset *skset;
-    SeahorseDefaultKeyControl *sdkc;
     SeahorseKey *skey = NULL;
-	GtkWidget *widget;
-	gint response;
-	gboolean done = FALSE;
+    GtkWidget *combo;
+    GtkWidget *widget;
+    gint response;
+    gboolean done = FALSE;
     gboolean ok = FALSE;
     gchar *id;
-    
-    skey = seahorse_context_get_default_key (SCTX_APP ());
-    if (skey != NULL && SEAHORSE_IS_PGP_KEY (skey))
-        return SEAHORSE_PGP_KEY (skey);
-	
-	swidget = seahorse_widget_new ("signer");
-	g_return_val_if_fail (swidget != NULL, NULL);
-	        
-    widget = glade_xml_get_widget (swidget->xml, "sign_key_place");
 
     skset = seahorse_keyset_new (SKEY_PGP, 
                                  SKEY_PRIVATE, 
                                  SKEY_LOC_LOCAL, 
                                  SKEY_FLAG_CAN_SIGN, 
                                  SKEY_FLAG_EXPIRED | SKEY_FLAG_REVOKED | SKEY_FLAG_DISABLED);
-    sdkc = seahorse_default_key_control_new (skset, NULL);
+
+    /* If only one key (probably default) then return it immediately */
+    if (seahorse_keyset_get_count (skset) == 1) {
+        GList *keys = seahorse_keyset_get_keys (skset);
+        skey = SEAHORSE_KEY (keys->data);
+        
+        g_list_free (keys);
+        g_object_unref (skset);
+
+        g_assert (SEAHORSE_IS_PGP_KEY (skey));
+        return SEAHORSE_PGP_KEY (skey);
+    }
+    
+    swidget = seahorse_widget_new ("signer");
+    g_return_val_if_fail (swidget != NULL, NULL);
+            
+    combo = glade_xml_get_widget (swidget->xml, "signer-select");
+    g_return_val_if_fail (combo != NULL, NULL);
+    seahorse_combo_keys_attach (GTK_OPTION_MENU (combo), skset, NULL);
     g_object_unref (skset);
     
-    gtk_container_add (GTK_CONTAINER (widget), GTK_WIDGET (sdkc));
-    gtk_widget_show_all (widget);    
-
     /* Select the last key used */
     id = seahorse_gconf_get_string (LASTSIGNER_KEY);
-    seahorse_default_key_control_select_id (sdkc, id);
+    seahorse_combo_keys_set_active_id (GTK_OPTION_MENU (combo), id);
     g_free (id); 
     
-	widget = seahorse_widget_get_top (swidget);
+    widget = seahorse_widget_get_top (swidget);
     seahorse_widget_show (swidget);
     
-	while (!done) {
-		response = gtk_dialog_run (GTK_DIALOG (widget));
-		switch (response) {
-			case GTK_RESPONSE_HELP:
-				break;
-			case GTK_RESPONSE_OK:
-				ok = TRUE;
-			default:
-				done = TRUE;
-				break;
-		}
-	}
+    while (!done) {
+        response = gtk_dialog_run (GTK_DIALOG (widget));
+        switch (response) {
+            case GTK_RESPONSE_HELP:
+                break;
+            case GTK_RESPONSE_OK:
+                ok = TRUE;
+            default:
+                done = TRUE;
+                break;
+        }
+    }
 
     if (ok) {
-        skey = seahorse_default_key_control_active (sdkc);
+        skey = seahorse_combo_keys_get_active (GTK_OPTION_MENU (combo));
         g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (skey), NULL);
 
         /* Save this as the last key signed with */
@@ -96,6 +102,6 @@ seahorse_signer_get ()
                         "" : seahorse_key_get_keyid (skey));
     }
     
-	seahorse_widget_destroy (swidget);
-	return SEAHORSE_PGP_KEY (skey);
+    seahorse_widget_destroy (swidget);
+    return SEAHORSE_PGP_KEY (skey);
 }

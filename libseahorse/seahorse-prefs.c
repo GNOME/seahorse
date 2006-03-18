@@ -448,18 +448,18 @@ setup_sharing (SeahorseWidget *swidget)
 /* -------------------------------------------------------------------------- */
 
 static void
-default_key_changed (SeahorseDefaultKeyControl *sdkc, gpointer *data)
+default_key_changed (GtkOptionMenu *combo, gpointer *data)
 {
-    const gchar *id = seahorse_default_key_control_active_id (sdkc);
+    const gchar *id = seahorse_combo_keys_get_active_id (combo);
     seahorse_gconf_set_string (DEFAULT_KEY, id == NULL ? "" : id);    
 }
 
 static void
 gconf_notification (GConfClient *gclient, guint id, GConfEntry *entry, 
-                    SeahorseDefaultKeyControl *sdkc)
+                    GtkOptionMenu *combo)
 {
     const gchar *key_id = gconf_value_get_string (gconf_entry_get_value (entry));
-    seahorse_default_key_control_select_id (sdkc, key_id);
+    seahorse_combo_keys_set_active_id (combo, key_id);
 }
 
 static void
@@ -482,7 +482,6 @@ seahorse_prefs_new ()
     SeahorseKeyset *skset;
     SeahorseWidget *swidget;
     GtkWidget *widget;
-    SeahorseDefaultKeyControl *sdkc;
     guint gconf_id;
     
     swidget = seahorse_widget_new ("prefs");
@@ -494,24 +493,22 @@ seahorse_prefs_new ()
         seahorse_check_button_control_new (_("_Armor Encode Files"), ARMOR_KEY));
     gtk_widget_show_all (widget);
 
-    widget = glade_xml_get_widget (swidget->xml, "default_key");
+    widget = glade_xml_get_widget (swidget->xml, "signer-select");
+    g_return_val_if_fail (widget != NULL, NULL);
 
     skset = seahorse_keyset_new (SKEY_PGP, 
                                  SKEY_PRIVATE, 
                                  SKEY_LOC_LOCAL, 
                                  0, 
                                  SKEY_FLAG_EXPIRED | SKEY_FLAG_REVOKED | SKEY_FLAG_DISABLED);
-    sdkc = seahorse_default_key_control_new (skset, _("None. Prompt for a key."));
+    seahorse_combo_keys_attach (GTK_OPTION_MENU (widget), skset, _("None. Prompt for a key."));
     g_object_unref (skset);
     
-    gtk_container_add (GTK_CONTAINER (widget), GTK_WIDGET (sdkc));
-    gtk_widget_show_all (widget);
+    seahorse_combo_keys_set_active_id (GTK_OPTION_MENU (widget), seahorse_gconf_get_string (DEFAULT_KEY));    
+    g_signal_connect (widget, "changed", G_CALLBACK (default_key_changed), NULL);
 
-    seahorse_default_key_control_select_id (sdkc, seahorse_gconf_get_string (DEFAULT_KEY));    
-    g_signal_connect (sdkc, "changed", G_CALLBACK (default_key_changed), NULL);
-
-    gconf_id = seahorse_gconf_notify (DEFAULT_KEY, (GConfClientNotifyFunc)gconf_notification, sdkc);
-    g_signal_connect (sdkc, "destroy", G_CALLBACK (remove_gconf_notification), GINT_TO_POINTER (gconf_id));
+    gconf_id = seahorse_gconf_notify (DEFAULT_KEY, (GConfClientNotifyFunc)gconf_notification, GTK_OPTION_MENU (widget));
+    g_signal_connect (widget, "destroy", G_CALLBACK (remove_gconf_notification), GINT_TO_POINTER (gconf_id));
     
 #ifdef WITH_AGENT   
     seahorse_prefs_cache (swidget);

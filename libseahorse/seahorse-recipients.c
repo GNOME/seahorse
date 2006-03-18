@@ -137,27 +137,27 @@ update_filters (GObject* object, GParamSpec* arg, SeahorseWidget* swidget)
 GList*
 seahorse_recipients_get (SeahorsePGPKey **signer)
 {
-	SeahorseWidget *swidget;
-    SeahorseDefaultKeyControl *sdkc;
-	GtkTreeSelection *selection;
-	GtkTreeView *view;
-	GtkWidget *widget;
-	gint response;
-	gboolean done = FALSE;
+    SeahorseWidget *swidget;
+    GtkTreeSelection *selection;
+    GtkTreeView *view;
+    GtkWidget *widget;
+    GtkWidget *combo;
+    gint response;
+    gboolean done = FALSE;
     GList *keys = NULL;
     gchar *id;
     SeahorseKey *skey;
     SeahorseKeyStore *skstore;
     SeahorseKeyset * skset;
-	
-	swidget = seahorse_widget_new ("recipients");
-	g_return_val_if_fail (swidget != NULL, NULL);
-	
-	view = GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, VIEW));
-	selection = gtk_tree_view_get_selection (view);
-	gtk_tree_selection_set_mode (selection, GTK_SELECTION_SINGLE);
-	g_signal_connect (selection, "changed",
-		G_CALLBACK (selection_changed), swidget);
+    
+    swidget = seahorse_widget_new ("recipients");
+    g_return_val_if_fail (swidget != NULL, NULL);
+    
+    view = GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, VIEW));
+    selection = gtk_tree_view_get_selection (view);
+    gtk_tree_selection_set_mode (selection, GTK_SELECTION_SINGLE);
+    g_signal_connect (selection, "changed",
+                G_CALLBACK (selection_changed), swidget);
 
     /* If always using the default key for signing, then hide this section */
     if (!signer || 
@@ -169,27 +169,24 @@ seahorse_recipients_get (SeahorsePGPKey **signer)
 
     /* Signing section */
     } else {
-        widget = glade_xml_get_widget (swidget->xml, "sign_key_place");
-
+        combo = glade_xml_get_widget (swidget->xml, "signer-select");
+        g_return_val_if_fail (combo != NULL, NULL);
         skset = seahorse_keyset_new (SKEY_PGP, 
                                      SKEY_PRIVATE, 
                                      SKEY_LOC_LOCAL, 
                                      0, 
                                      SKEY_FLAG_EXPIRED | SKEY_FLAG_REVOKED | SKEY_FLAG_DISABLED);
-        sdkc = seahorse_default_key_control_new (skset, _("None (Don't sign)"));
+        seahorse_combo_keys_attach (GTK_OPTION_MENU (combo), skset, _("None (Don't sign)"));
         g_object_unref (skset);
         
-        gtk_container_add (GTK_CONTAINER (widget), GTK_WIDGET (sdkc));
-        gtk_widget_show_all (widget);    
-
         /* Select the last key used */
         id = seahorse_gconf_get_string (LASTSIGNER_KEY);
-        seahorse_default_key_control_select_id (sdkc, id);
+        seahorse_combo_keys_set_active_id (GTK_OPTION_MENU (combo), id);
         g_free (id); 
     }
         
     skset = seahorse_keyset_new (SKEY_PGP, 0, 0, 0, 0);
-	skstore = seahorse_recipients_store_new (skset, view);
+    skstore = seahorse_recipients_store_new (skset, view);
    
     glade_xml_signal_connect_data (swidget->xml, "on_mode_changed", 
                               G_CALLBACK (mode_changed), skstore);
@@ -201,25 +198,25 @@ seahorse_recipients_get (SeahorsePGPKey **signer)
     g_signal_connect (skstore, "notify", G_CALLBACK (update_filters), swidget);
     update_filters (G_OBJECT (skstore), NULL, swidget);
 
-	widget = seahorse_widget_get_top (swidget);
+    widget = seahorse_widget_get_top (swidget);
     seahorse_widget_show (swidget);
     
-	while (!done) {
-		response = gtk_dialog_run (GTK_DIALOG (widget));
-		switch (response) {
-			case GTK_RESPONSE_HELP:
-				break;
-			case GTK_RESPONSE_OK:
-				keys = seahorse_key_store_get_selected_keys (view);
-			default:
-				done = TRUE;
-				break;
-		}
-	}
+    while (!done) {
+        response = gtk_dialog_run (GTK_DIALOG (widget));
+        switch (response) {
+        case GTK_RESPONSE_HELP:
+            break;
+        case GTK_RESPONSE_OK:
+            keys = seahorse_key_store_get_selected_keys (view);
+        default:
+            done = TRUE;
+            break;
+        }
+    }
 
     if (keys && signer) {
         if (!*signer) {
-            *signer = SEAHORSE_PGP_KEY (seahorse_default_key_control_active (sdkc));
+            *signer = SEAHORSE_PGP_KEY (seahorse_combo_keys_get_active (GTK_OPTION_MENU (combo)));
             g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (*signer), keys);
         }
             
@@ -229,6 +226,6 @@ seahorse_recipients_get (SeahorsePGPKey **signer)
                         "" : seahorse_key_get_keyid (SEAHORSE_KEY (*signer)));
     }
     
-	seahorse_widget_destroy (swidget);
-	return keys;
+    seahorse_widget_destroy (swidget);
+    return keys;
 }

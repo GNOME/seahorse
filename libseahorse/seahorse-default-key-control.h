@@ -1,8 +1,7 @@
 /*
  * Seahorse
  *
- * Copyright (C) 2003 Jacob Perkins
- * Copyright (C) 2004-2005 Nate Nielsen
+ * Copyright (C) 2004-2006 Nate Nielsen
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,55 +20,32 @@
  */
 
 /** 
- * SeahorseDefaultKeyControl: (misnamed) Shows a list of keys in a dropdown for 
- * selection.
+ * seahorse_combo_keys_*: Shows a list of keys in a dropdown for selection.
  * 
- * - Derived from GtkOptionMenu
+ * - Attaches to a GtkOptionMenu
  * - Gets its list of keys from a SeahorseKeyset.
- * 
- * Properties:
- *   keyset: (SeahorseKeyset) The keyset being used for listing keys.
- *   none-option: (gchar*) The option text used for selection 'no key'
  */
  
-#ifndef __SEAHORSE_DEFAULT_KEY_CONTROL_H__
-#define __SEAHORSE_DEFAULT_KEY_CONTROL_H__
+/* TODO: This file should be renamed to seahorse-combo-keys.h once we're using SVN */
+ 
+#ifndef __SEAHORSE_COMBO_KEYS_H__
+#define __SEAHORSE_COMBO_KEYS_H__
 
 #include <gtk/gtk.h>
 #include "seahorse-keyset.h"
 
-#define SEAHORSE_TYPE_DEFAULT_KEY_CONTROL		(seahorse_default_key_control_get_type ())
-#define SEAHORSE_DEFAULT_KEY_CONTROL(obj)		(GTK_CHECK_CAST ((obj), SEAHORSE_TYPE_DEFAULT_KEY_CONTROL, SeahorseDefaultKeyControl))
-#define SEAHORSE_DEFAULT_KEY_CONTROL_CLASS(klass)	(GTK_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_DEFAULT_KEY_CONTROL, SeahorseDefaultKeyControlClass))
-#define SEAHORSE_IS_DEFAULT_KEY_CONTROL(obj)		(GTK_CHECK_TYPE ((obj), SEAHORSE_TYPE_DEFAULT_KEY_CONTROL))
-#define SEAHORSE_IS_DEFAULT_KEY_CONTROL_CLASS(klass)	(GTK_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_DEFAULT_KEY_CONTROL))
-#define SEAHORSE_DEFAULT_KEY_CONTROL_GET_CLASS(obj)	(GTK_CHECK_GET_CLASS ((obj), SEAHORSE_TYPE_DEFAULT_KEY_CONTROL, SeahorseDefaultKeyControlClass))
+void                        seahorse_combo_keys_attach              (GtkOptionMenu *combo,
+                                                                     SeahorseKeyset *skset,
+                                                                     const gchar *none_option);
 
-typedef struct _SeahorseDefaultKeyControl SeahorseDefaultKeyControl;
-typedef struct _SeahorseDefaultKeyControlClass SeahorseDefaultKeyControlClass;
+void                        seahorse_combo_keys_set_active_id       (GtkOptionMenu *combo,
+                                                                     const gchar *id);
 
-struct _SeahorseDefaultKeyControl {
-    GtkOptionMenu   parent;
-    
-    /*<public>*/
-    SeahorseKeyset  *skset;
-};
+void                        seahorse_combo_keys_set_active          (GtkOptionMenu *combo,
+                                                                     SeahorseKey *skey);
 
-struct _SeahorseDefaultKeyControlClass {
-	GtkCheckButtonClass	parent_class;
-};
+SeahorseKey*                seahorse_combo_keys_get_active          (GtkOptionMenu *combo);
 
-SeahorseDefaultKeyControl*  seahorse_default_key_control_new       (SeahorseKeyset    *skset,
-                                                                    const gchar       *none_option);
+const gchar*                seahorse_combo_keys_get_active_id       (GtkOptionMenu *combo);
 
-void                        seahorse_default_key_control_select_id (SeahorseDefaultKeyControl *sdkc,
-                                                                    const gchar *id);
-
-void                        seahorse_default_key_control_select    (SeahorseDefaultKeyControl *sdkc,
-                                                                    SeahorseKey *skey);
-
-SeahorseKey*                seahorse_default_key_control_active    (SeahorseDefaultKeyControl *sdkc);
-
-const gchar*                seahorse_default_key_control_active_id (SeahorseDefaultKeyControl *sdkc);
-
-#endif /* __SEAHORSE_DEFAULT_KEY_CONTROL_H__ */
+#endif /* __SEAHORSE_COMBO_KEYS_H__ */
