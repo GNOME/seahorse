@@ -64,7 +64,7 @@ static gboolean widget_delete_event  (GtkWidget             *widget,
 static void     context_destroyed    (GtkObject             *object,
                                       SeahorseWidget        *swidget);
 
-static GObjectClass *parent_class = NULL;
+static GtkObjectClass *parent_class = NULL;
 
 /* Hash of widgets with name as key */
 static GHashTable *widgets = NULL;
@@ -81,7 +81,7 @@ seahorse_widget_get_type (void)
 			NULL, NULL, sizeof (SeahorseWidget), 0, (GInstanceInitFunc) object_init
 		};
 		
-        widget_type = g_type_register_static (G_TYPE_OBJECT, "SeahorseWidget", 
+        widget_type = g_type_register_static (GTK_TYPE_OBJECT, "SeahorseWidget", 
                                               &widget_info, 0);
 	}
 	
@@ -260,8 +260,12 @@ seahorse_widget_new (gchar *name)
 	/* If widget doesn't already exist, create & insert into hash */
 	swidget = g_object_new (SEAHORSE_TYPE_WIDGET, "name", name, NULL);
 	g_hash_table_insert (widgets, g_strdup (name), swidget);
-	
-	return swidget;
+
+    /* We don't care about this floating business */
+    g_object_ref (GTK_OBJECT (swidget));
+    gtk_object_sink (GTK_OBJECT (swidget));
+
+    return swidget;
 }
 
 /**
@@ -275,7 +279,13 @@ seahorse_widget_new (gchar *name)
 SeahorseWidget*
 seahorse_widget_new_allow_multiple (gchar *name)
 {
-	return g_object_new (SEAHORSE_TYPE_WIDGET, "name", name,  NULL);
+    SeahorseWidget *swidget = g_object_new (SEAHORSE_TYPE_WIDGET, "name", name,  NULL);
+    
+    /* We don't care about this floating business */
+    g_object_ref (GTK_OBJECT (swidget));
+    gtk_object_sink (GTK_OBJECT (swidget));
+
+    return swidget;
 }
 
 /**

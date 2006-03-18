@@ -42,31 +42,29 @@
 
 #include "seahorse-context.h"
 
-#define SEAHORSE_TYPE_WIDGET		(seahorse_widget_get_type ())
-#define SEAHORSE_WIDGET(obj)		(GTK_CHECK_CAST ((obj), SEAHORSE_TYPE_WIDGET, SeahorseWidget))
-#define SEAHORSE_WIDGET_CLASS(klass)	(GTK_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_WIDGET, SeahorseWidgetClass))
-#define SEAHORSE_IS_WIDGET(obj)		(GTK_CHECK_TYPE ((obj), SEAHORSE_TYPE_WIDGET))
-#define SEAHORSE_IS_WIDGET_CLASS(klass)	(GTK_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_WIDGET))
-#define SEAHORSE_WIDGET_GET_CLASS(obj)	(GTK_CHECK_GET_CLASS ((obj), SEAHORSE_TYPE_WIDGET, SeahorseWidgetClass))
+#define SEAHORSE_TYPE_WIDGET            (seahorse_widget_get_type ())
+#define SEAHORSE_WIDGET(obj)            (GTK_CHECK_CAST ((obj), SEAHORSE_TYPE_WIDGET, SeahorseWidget))
+#define SEAHORSE_WIDGET_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_WIDGET, SeahorseWidgetClass))
+#define SEAHORSE_IS_WIDGET(obj)         (GTK_CHECK_TYPE ((obj), SEAHORSE_TYPE_WIDGET))
+#define SEAHORSE_IS_WIDGET_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_WIDGET))
+#define SEAHORSE_WIDGET_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), SEAHORSE_TYPE_WIDGET, SeahorseWidgetClass))
 
 typedef struct _SeahorseWidget SeahorseWidget;
 typedef struct _SeahorseWidgetClass SeahorseWidgetClass;
 
-struct _SeahorseWidget
-{
-	GObject		parent;
-	
-	/*< public >*/
-	GladeXML	*xml;
-	gchar		*name;
+struct _SeahorseWidget {
+    GtkObject parent;
+
+    /*< public >*/
+    GladeXML *xml;
+    gchar *name;
     
     /*< private >*/
     GtkUIManager   *ui;
 };
 
-struct _SeahorseWidgetClass
-{
-	GObjectClass	parent_class;
+struct _SeahorseWidgetClass {
+    GtkObjectClass parent_class;
 };
 
 GType            seahorse_widget_get_type ();
