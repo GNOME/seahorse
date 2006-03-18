@@ -438,7 +438,7 @@ if test "$enable_sharing" = "no"; then
     echo "disabling DNS-SD key sharing"
 else
 
-    PKG_CHECK_MODULES(SHARING, avahi-glib >= $AVAHI_GLIB_REQUIRED, 
+    PKG_CHECK_MODULES(SHARING, avahi-client avahi-glib >= $AVAHI_GLIB_REQUIRED, 
         [enable_sharing=yes],  
         [enable_sharing=no])
 		
