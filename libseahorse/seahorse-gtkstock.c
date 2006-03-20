@@ -29,39 +29,14 @@
  
 #include "seahorse-gtkstock.h"
 
-static const SeahorseStockIcon seahorse_icons[] = {
-    { SEAHORSE_STOCK_KEY,         "seahorse",   "seahorse-key.png"         },
-    { SEAHORSE_STOCK_PERSON,      "seahorse",   "seahorse-person.png"      },
-    { SEAHORSE_STOCK_SIGN,        "seahorse",   "seahorse-sign.svg"        },
-    { SEAHORSE_STOCK_SEAHORSE,    NULL,         "seahorse.png"             },
-    { SEAHORSE_STOCK_SECRET,      "seahorse",   "seahorse-secret.png"      },
-    { SEAHORSE_STOCK_SHARE_KEYS,  "seahorse",   "seahorse-share-keys.png"  },
-    { SEAHORSE_STOCK_KEY_SSH,     "seahorse",   "seahorse-key-ssh.png"     },
-    { SEAHORSE_STOCK_KEY_SSH_LRG, "seahorse",   "seahorse-key-ssh-large.png" },
-    { NULL }
+static const gchar *seahorse_icons[] = {
+    SEAHORSE_STOCK_KEY,
+    SEAHORSE_STOCK_SECRET,
+    SEAHORSE_STOCK_KEY_SSH,
+    SEAHORSE_STOCK_PERSON,
+    SEAHORSE_STOCK_SIGN,
+    NULL
 };
-
-static gchar *
-find_file(const char *dir, const char *base)
-{
-    char *filename;
-
-    if (base == NULL)
-        return NULL;
-
-    if (dir == NULL)
-        filename = g_build_filename (DATA_DIR, "pixmaps", base, NULL);
-    else 
-        filename = g_build_filename (DATA_DIR, "pixmaps", dir, base, NULL);
-
-    if (!g_file_test (filename, G_FILE_TEST_EXISTS)) {
-        g_critical ("Unable to load stock pixmap %s\n", base);
-        g_free (filename);
-        return NULL;
-    }
-
-    return filename;
-}
 
 void
 seahorse_gtkstock_init(void)
@@ -75,14 +50,39 @@ seahorse_gtkstock_init(void)
     seahorse_gtkstock_add_icons (seahorse_icons);
 }
 
+static GtkIconSource*
+make_icon_source (const gchar *icon, const gchar *base, const gchar *ext, 
+                  GtkIconSize size)
+{
+    GtkIconSource *source;
+    gchar *filename;
+    
+    filename = g_strdup_printf ("%s/%s/%s.%s", PIXMAPSDIR, base, icon, ext);
+    
+    source = gtk_icon_source_new ();
+    gtk_icon_source_set_filename (source, filename);
+    gtk_icon_source_set_direction_wildcarded (source, TRUE);
+    gtk_icon_source_set_state_wildcarded (source, TRUE);
+    
+    if (size == -1) {
+        gtk_icon_source_set_size_wildcarded (source, TRUE);
+    } else {
+        gtk_icon_source_set_size_wildcarded (source, FALSE);
+        gtk_icon_source_set_size (source, size);
+    }
+    
+    g_free(filename);
+    
+    return source;
+}
+
 void
-seahorse_gtkstock_add_icons (const SeahorseStockIcon *icons)
+seahorse_gtkstock_add_icons (const gchar **icons)
 {
     GtkIconFactory *factory;
     GtkIconSource *source;
     GtkIconSet *iconset;
     GtkWidget *win;
-    gchar *filename;
 
     /* Setup the icon factory. */
     factory = gtk_icon_factory_new ();
@@ -94,25 +94,30 @@ seahorse_gtkstock_add_icons (const SeahorseStockIcon *icons)
     
     /* TODO: Implement differently sized icons here */
 
-    for ( ; icons->id; icons++) {
-    
-        filename = find_file(icons->dir, icons->filename);
-        if (filename == NULL)
-            continue;
-        
-        source = gtk_icon_source_new ();
-        gtk_icon_source_set_filename (source, filename);
-        gtk_icon_source_set_direction_wildcarded (source, TRUE);
-        gtk_icon_source_set_size_wildcarded (source, TRUE);
-        gtk_icon_source_set_state_wildcarded (source, TRUE);
-            
-        g_free(filename);
-        
+    for ( ; *icons; icons++) {
+
         iconset = gtk_icon_set_new ();
+        
+        source = make_icon_source (*icons, "22x22", "png", GTK_ICON_SIZE_BUTTON);
+        gtk_icon_set_add_source (iconset, source);
+        gtk_icon_source_free (source);
+        source = make_icon_source (*icons, "22x22", "png", GTK_ICON_SIZE_MENU);
+        gtk_icon_set_add_source (iconset, source);
+        gtk_icon_source_free (source);
+        source = make_icon_source (*icons, "22x22", "png", GTK_ICON_SIZE_LARGE_TOOLBAR);
+        gtk_icon_set_add_source (iconset, source);
+        gtk_icon_source_free (source);
+        source = make_icon_source (*icons, "22x22", "png", GTK_ICON_SIZE_SMALL_TOOLBAR);
+        gtk_icon_set_add_source (iconset, source);
+        gtk_icon_source_free (source);
+        source = make_icon_source (*icons, "48x48", "png", GTK_ICON_SIZE_DIALOG);
+        gtk_icon_set_add_source (iconset, source);
+        gtk_icon_source_free (source);
+        source = make_icon_source (*icons, "scaleable", "svg", -1);
         gtk_icon_set_add_source (iconset, source);
         gtk_icon_source_free (source);
         
-        gtk_icon_factory_add (factory, icons->id, iconset);
+        gtk_icon_factory_add (factory, *icons, iconset);
         gtk_icon_set_unref (iconset);
     }
     

@@ -45,6 +45,12 @@
 static gboolean g_daemonize = TRUE;
 static gboolean g_quit = FALSE;
 
+static const gchar *daemon_icons[] = {
+    SEAHORSE_ICON_SHARING,
+    NULL
+};
+
+
 static const struct poptOption options[] = {
 	{ "no-daemonize", 'd', POPT_ARG_NONE | POPT_ARG_VAL, &g_daemonize, FALSE,
 	  N_("Do not daemonize seahorse-agent"), NULL },
@@ -208,7 +214,7 @@ int main(int argc, char* argv[])
 #endif
         err (1, _("couldn't drop privileges properly"));
     
-	program = gnome_program_init(PACKAGE, VERSION, LIBGNOMEUI_MODULE, argc, argv,
+    program = gnome_program_init(PACKAGE, VERSION, LIBGNOMEUI_MODULE, argc, argv,
                     GNOME_PARAM_POPT_TABLE, options,
                     GNOME_PARAM_HUMAN_READABLE_NAME, _("Encryption Daemon (Seahorse)"),
                     GNOME_PARAM_APP_DATADIR, DATA_DIR, NULL);
@@ -232,7 +238,8 @@ int main(int argc, char* argv[])
     prepare_logging ();
 
     /* Insert Icons into Stock */
-    seahorse_gtkstock_init();
+    seahorse_gtkstock_init ();
+    seahorse_gtkstock_add_icons (daemon_icons);
     
     /* Make the default SeahorseContext */
     seahorse_context_new (TRUE, 0);

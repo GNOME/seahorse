@@ -24,6 +24,8 @@
 
 #include "config.h"
 
+#define SEAHORSE_ICON_SHARING   "seahorse-share-keys"
+
 /* seahorse-sharing.c ------------------------------------------------------- */
 
 #ifdef WITH_SHARING

@@ -51,13 +51,13 @@
 #define ICON_CLIPBOARD_KEY          "seahorse-applet-key"
 #define ICON_CLIPBOARD_DEFAULT      ICON_CLIPBOARD_ENCRYPTED
 
-static const SeahorseStockIcon clipboard_icons[] = {
-    { ICON_CLIPBOARD_UNKNOWN,     "seahorse",   ICON_CLIPBOARD_UNKNOWN ".png" },
-    { ICON_CLIPBOARD_TEXT,        "seahorse",   ICON_CLIPBOARD_TEXT ".png" },
-    { ICON_CLIPBOARD_ENCRYPTED,   "seahorse",   ICON_CLIPBOARD_ENCRYPTED ".png" },
-    { ICON_CLIPBOARD_SIGNED,      "seahorse",   ICON_CLIPBOARD_SIGNED ".png" },
-    { ICON_CLIPBOARD_KEY,         "seahorse",   ICON_CLIPBOARD_KEY ".png" },
-    { NULL }
+static const gchar *clipboard_icons[] = {
+    ICON_CLIPBOARD_UNKNOWN,
+    ICON_CLIPBOARD_TEXT,
+    ICON_CLIPBOARD_ENCRYPTED,
+    ICON_CLIPBOARD_SIGNED,
+    ICON_CLIPBOARD_KEY,
+    NULL
 };
 
 typedef enum {

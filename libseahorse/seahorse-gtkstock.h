@@ -30,20 +30,14 @@
 #define SEAHORSE_STOCK_KEY          "seahorse-key"
 #define SEAHORSE_STOCK_PERSON       "seahorse-person"
 #define SEAHORSE_STOCK_SIGN         "seahorse-sign"
-#define SEAHORSE_STOCK_SEAHORSE     "seahorse"
-#define SEAHORSE_STOCK_SECRET       "seahorse-secret"
-#define SEAHORSE_STOCK_SHARE_KEYS   "seahorse-share-keys"
+#define SEAHORSE_STOCK_SECRET       "seahorse-key-personal"
 #define SEAHORSE_STOCK_KEY_SSH      "seahorse-key-ssh"
-#define SEAHORSE_STOCK_KEY_SSH_LRG  "seahorse-key-ssh-large"
 
-typedef struct _SeahorseStockIcon {
-    const char *id;
-    const char *dir;
-    const char *filename;
-} SeahorseStockIcon;
+/* TODO: For now this is the default icon */
+#define SEAHORSE_STOCK_SEAHORSE     SEAHORSE_STOCK_SECRET
 
 void    seahorse_gtkstock_init          (void);
 
-void    seahorse_gtkstock_add_icons     (const SeahorseStockIcon *icons);
+void    seahorse_gtkstock_add_icons     (const gchar **icons);
 
 #endif /* _SEAHORSE_GTKSTOCK_H_ */
