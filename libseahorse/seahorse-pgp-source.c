@@ -679,9 +679,10 @@ seahorse_load_operation_start (SeahorsePGPSource *psrc, const gchar **pattern,
     seahorse_operation_mark_start (SEAHORSE_OPERATION (lop));
     seahorse_operation_mark_progress (SEAHORSE_OPERATION (lop), _("Loading Keys..."), 0, 0);
     
-    /* Run one iteration of the handler */
-    keyload_handler (lop);
-
+    /* Load keys at idle time */
+    lop->stag = g_idle_add_full (G_PRIORITY_LOW, (GSourceFunc)keyload_handler, 
+                                 lop, NULL);
+ 
     return lop;
 }    
 
