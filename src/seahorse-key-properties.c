@@ -97,27 +97,19 @@ static void
 show_glade_widget (SeahorseWidget *swidget, const gchar *name, gboolean show)
 {
     GtkWidget *widget = glade_xml_get_widget (swidget->xml, name);
-    if (!widget)
-        return;
-    
-    if (show)
-        gtk_widget_show (widget);
-    else
-        gtk_widget_hide (widget);
+    if (widget != NULL)
+        seahorse_widget_set_visible (swidget, name, show);
 }
 
 static void
-set_glade_image (SeahorseWidget *swidget, const gchar *name, const gchar *file)
+set_glade_image (SeahorseWidget *swidget, const gchar *name, const gchar *stock)
 {
     GtkWidget *widget = glade_xml_get_widget (swidget->xml, name);
-    gchar *t;
     
     if (!widget)
         return;
     
-    t = g_strdup_printf (DATA_DIR "/pixmaps/seahorse/%s", file);
-    gtk_image_set_from_file (GTK_IMAGE (widget), t);
-    g_free (t);
+    gtk_image_set_from_stock (GTK_IMAGE (widget), stock, GTK_ICON_SIZE_DIALOG);
 }
 
 static void
@@ -1029,6 +1021,7 @@ signatures_populate_model (SeahorseWidget *swidget, GtkListStore *store)
     const gchar *keyid;
     gpgme_user_id_t uid;
     gpgme_key_sig_t sig;
+    gboolean have_sigs = FALSE;
 
     skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
     pkey = SEAHORSE_PGP_KEY (skey);
@@ -1056,6 +1049,8 @@ signatures_populate_model (SeahorseWidget *swidget, GtkListStore *store)
                 if (strcmp (sig->keyid, keyid) == 0)
                     continue;
                 
+                have_sigs = TRUE;
+                
                 /* Find any trusted signatures */
                 if (trusted_only && !(seahorse_pgp_key_get_sigtype (pkey, sig) & SKEY_PGPSIG_TRUSTED))
                     continue;
@@ -1082,6 +1077,9 @@ signatures_populate_model (SeahorseWidget *swidget, GtkListStore *store)
     }
 
     gtk_tree_view_set_model (GTK_TREE_VIEW (widget), GTK_TREE_MODEL(store));
+    
+    /* Only show signatures area when there are signatures */
+    seahorse_widget_set_visible (swidget, "signatures-area", have_sigs);
 }
 
 static void
@@ -1146,8 +1144,8 @@ do_trust_signals (SeahorseWidget *swidget)
     skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
     etype = seahorse_key_get_etype (skey);
     
-    set_glade_image (swidget, "image-good1", "seahorse-good.png");
-    set_glade_image (swidget, "image-good2", "seahorse-good.png");
+    set_glade_image (swidget, "image-good1", "seahorse-sign-ok");
+    set_glade_image (swidget, "image-good2", "seahorse-sign-ok");
     
     glade_xml_signal_connect_data (swidget->xml, "trust_sign_clicked", 
                                    G_CALLBACK (trust_sign_clicked), swidget);
@@ -1192,12 +1190,21 @@ do_trust (SeahorseWidget *swidget)
     pkey = SEAHORSE_PGP_KEY (skey);
     
     trusted = seahorse_key_get_flags (skey) & SKEY_FLAG_TRUSTED;
-    sigpersonal = seahorse_pgp_key_have_signatures (pkey, SKEY_PGPSIG_PERSONAL);
+    sigpersonal = trusted ? seahorse_pgp_key_have_signatures (pkey, SKEY_PGPSIG_PERSONAL) : FALSE;
     trust = seahorse_key_get_trust (skey);
     
-    show_glade_widget (swidget, "untrusted-area", !sigpersonal);
-    show_glade_widget (swidget, "untrusted-overridden-area", ((trust != SEAHORSE_VALIDITY_NEVER)||(trust != SEAHORSE_VALIDITY_UNKNOWN)));
+    /* This is for untrusted keys, that aren't overriden by user */
+    show_glade_widget (swidget, "untrusted-area", 
+                       !trusted && trust != SEAHORSE_VALIDITY_NEVER);
+                       
+    /* For untrusted keys that *are* overriden by user */
+    show_glade_widget (swidget, "untrusted-overridden-area", 
+                       !trusted && trust == SEAHORSE_VALIDITY_NEVER);
+                       
+    /* Signed by user */
     show_glade_widget (swidget, "trusted-signed-area", trusted && sigpersonal);
+    
+    /* Trusted but not signed by user */
     show_glade_widget (swidget, "trusted-area", trusted && !sigpersonal);
 
     widget = glade_xml_get_widget (swidget->xml, "signatures-filter-combobox");

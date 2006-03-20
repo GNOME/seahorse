@@ -35,6 +35,8 @@ static const gchar *seahorse_icons[] = {
     SEAHORSE_STOCK_KEY_SSH,
     SEAHORSE_STOCK_PERSON,
     SEAHORSE_STOCK_SIGN,
+    SEAHORSE_STOCK_SIGN_OK,
+    SEAHORSE_STOCK_SIGN_BAD,
     NULL
 };
 
