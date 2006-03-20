@@ -46,17 +46,17 @@ ok_clicked (SeahorseWidget *swidget)
     /* Figure out choice */
     check = SIGN_CHECK_NO_ANSWER;
     w = glade_xml_get_widget (swidget->xml, "sign-choice-not");
-    g_return_if_fail (w != NULL);
+    g_return_val_if_fail (w != NULL, FALSE);
     if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w)))
         check = SIGN_CHECK_NONE;
     else {
         w = glade_xml_get_widget (swidget->xml, "sign-choice-casual");
-        g_return_if_fail (w != NULL);
+        g_return_val_if_fail (w != NULL, FALSE);
         if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w)))
             check = SIGN_CHECK_CASUAL;
         else {
             w = glade_xml_get_widget (swidget->xml, "sign-choice-careful");
-            g_return_if_fail (w != NULL);
+            g_return_val_if_fail (w != NULL, FALSE);
             if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w)))
                 check = SIGN_CHECK_CAREFUL;
         }
@@ -64,19 +64,19 @@ ok_clicked (SeahorseWidget *swidget)
     
     /* Local signature */
     w = glade_xml_get_widget (swidget->xml, "sign-option-local");
-    g_return_if_fail (w != NULL);
+    g_return_val_if_fail (w != NULL, FALSE);
     if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w)))
         options |= SIGN_LOCAL;
     
     /* Revocable signature */
     w = glade_xml_get_widget (swidget->xml, "sign-option-revocable");
-    g_return_if_fail (w != NULL);
+    g_return_val_if_fail (w != NULL, FALSE);
     if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w))) 
         options |= SIGN_NO_REVOKE;
     
     /* Signer */
     w = glade_xml_get_widget (swidget->xml, "signer-select");
-    g_return_if_fail (w != NULL);
+    g_return_val_if_fail (w != NULL, FALSE);
     signer = seahorse_combo_keys_get_active (GTK_OPTION_MENU (w));
     
     g_assert (!signer || (SEAHORSE_IS_PGP_KEY (signer) && 
