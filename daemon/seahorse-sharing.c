@@ -271,7 +271,7 @@ show_tray ()
         tray_icon = egg_tray_icon_new ("seahorse-daemon-sharing");
         box = gtk_event_box_new ();
 
-        image = gtk_image_new_from_stock (SEAHORSE_STOCK_SHARE_KEYS, (GtkIconSize)-1);
+        image = gtk_image_new_from_stock (SEAHORSE_ICON_SHARING, GTK_ICON_SIZE_SMALL_TOOLBAR);
 
         gtk_container_add (GTK_CONTAINER (box), image);
         gtk_container_add (GTK_CONTAINER (tray_icon), box);
