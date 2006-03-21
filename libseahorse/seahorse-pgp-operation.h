@@ -25,16 +25,28 @@
  * - Derived from SeahorseOperation
  * - Uses the arcane gpgme_io_cbs API.
  * - Creates a new context so this doesn't block other operations.
- * 
+ *
  * Properties:
  *  gctx:  (pointer) GPGME context.
+ * 
+ * HOW TO USE: 
+ * 1. Create a SeahorsePGPOperation with seahorse_pgp_operation_new. 
+ * 2. You'll be using the gpgme_ctx_t out of the gctx data member.
+ * 3. Use one of the gpgme_op_*_start functions to start an operation with gctx.
+ * 4. Hand off the operation to seahorse_progress_* functions (which claim 
+ *    ownership of the operation) to see a progress dialog or status bar.
+ * 
+ * NOTES:
+ * - Never use with gpgme_op_keylist_start and gpgme_op_trustlist_start. 
  */
  
 #ifndef __SEAHORSE_PGP_OPERATION_H__
 #define __SEAHORSE_PGP_OPERATION_H__
 
-// TODO: Eventually most of the stuff from seahorse-pgp-key-op and 
-// seahorse-op should get merged into here.
+/*
+ * TODO: Eventually most of the stuff from seahorse-pgp-key-op and 
+ * seahorse-op should get merged into here.
+ */
 
 #include "seahorse-operation.h"
 
