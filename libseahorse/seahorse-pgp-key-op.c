@@ -128,7 +128,7 @@ seahorse_pgp_key_op_generate (SeahorsePGPSource *psrc, const gchar *name,
 	else
 		parms = g_strdup_printf ("%s%d\n%s", start, length, common);
 
-    new_ctx = seahorse_pgp_source_new_context (psrc);
+    new_ctx = seahorse_pgp_source_new_context ();
     g_return_val_if_fail (new_ctx != NULL, GPG_E (GPG_ERR_GENERAL));
     
 	err = gpgme_op_genkey (new_ctx, parms, NULL, NULL);

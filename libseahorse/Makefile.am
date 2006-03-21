@@ -60,6 +60,7 @@ libseahorse_internal_la_SOURCES = \
 	seahorse-pgp-key.c seahorse-pgp-key.h \
 	seahorse-pgp-key-op.c seahorse-pgp-key-op.h \
 	seahorse-pgp-source.c seahorse-pgp-source.h \
+	seahorse-pgp-operation.c seahorse-pgp-operation.h \
 	seahorse-context.c seahorse-context.h \
 	seahorse-widget.c seahorse-widget.h \
 	seahorse-op.c seahorse-op.h \

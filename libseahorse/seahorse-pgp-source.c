@@ -778,7 +778,7 @@ seahorse_pgp_source_import (SeahorseKeySource *sksrc, gpgme_data_t data)
     /* Eventually this should probably be asynchronous, but for now
      * we leave it as a sync operation for simplicity. */
     
-    new_ctx = seahorse_pgp_source_new_context (psrc);
+    new_ctx = seahorse_pgp_source_new_context ();
     g_return_val_if_fail (new_ctx != NULL, NULL);
     
     operation = g_object_new (SEAHORSE_TYPE_OPERATION, NULL);
@@ -870,7 +870,7 @@ seahorse_pgp_source_export (SeahorseKeySource *sksrc, GList *keys,
         g_object_set_data (G_OBJECT (operation), "result", data);
     }
      
-    new_ctx = seahorse_pgp_source_new_context (psrc);
+    new_ctx = seahorse_pgp_source_new_context ();
     g_return_val_if_fail (new_ctx != NULL, NULL);
 
     gpgme_set_armor (new_ctx, TRUE);
@@ -949,7 +949,7 @@ seahorse_pgp_source_new (void)
 }   
 
 gpgme_ctx_t          
-seahorse_pgp_source_new_context (SeahorsePGPSource *source)
+seahorse_pgp_source_new_context ()
 {
     gpgme_ctx_t ctx = NULL;
     g_return_val_if_fail (GPG_IS_OK (init_gpgme (&ctx)), NULL);

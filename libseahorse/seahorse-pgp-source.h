@@ -71,7 +71,7 @@ GType                seahorse_pgp_source_get_type       (void);
 
 SeahorsePGPSource*   seahorse_pgp_source_new            (void);
 
-gpgme_ctx_t          seahorse_pgp_source_new_context    (SeahorsePGPSource *source);
+gpgme_ctx_t          seahorse_pgp_source_new_context    ();
 
 void                 seahorse_pgp_source_loadkeys       (SeahorsePGPSource *source,
                                                          gboolean secret_only);
