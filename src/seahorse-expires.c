@@ -74,7 +74,6 @@ expires_toggled (GtkWidget *widget, SeahorseWidget *swidget)
 {
 	GtkWidget *expire;
 	GtkWidget *cal;
-	gboolean toggled;
 	
 	expire = glade_xml_get_widget (swidget->xml, "expire");
 	cal = glade_xml_get_widget (swidget->xml, "calendar");

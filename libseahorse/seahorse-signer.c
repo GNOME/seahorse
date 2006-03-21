@@ -32,6 +32,7 @@
 #include "seahorse-default-key-control.h"
 #include "seahorse-gconf.h"
 #include "seahorse-pgp-key.h"
+#include "seahorse-util.h"
 
 SeahorsePGPKey*
 seahorse_signer_get ()

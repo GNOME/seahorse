@@ -51,13 +51,15 @@ on_method_ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 
 void
 seahorse_generate_select_show ()
-{	
-	SeahorseWidget *swidget;
-	
-	swidget = seahorse_widget_new ("generate-select");
-	g_return_if_fail (swidget != NULL);
-	
-              
-	glade_xml_signal_connect_data(swidget->xml, "on_method_ok_clicked",
-		G_CALLBACK (on_method_ok_clicked), swidget);
+{
+    SeahorseWidget *swidget;
+    
+    swidget = seahorse_widget_new ("generate-select");
+    
+    /* Widget already exists */
+    if (swidget == NULL)
+        return;
+    
+    glade_xml_signal_connect_data(swidget->xml, "on_method_ok_clicked",
+                                  G_CALLBACK (on_method_ok_clicked), swidget);
 }

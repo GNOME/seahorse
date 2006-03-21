@@ -388,7 +388,6 @@ seahorse_keyset_pgp_signers_new ()
 {
     SeahorseKeyPredicate *pred = g_new0(SeahorseKeyPredicate, 1);
     SeahorseKeyset *skset;
-    guint notify_id;
     
     pred->location = SKEY_LOC_LOCAL;
     pred->ktype = SKEY_PGP;

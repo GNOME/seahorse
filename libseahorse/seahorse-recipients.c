@@ -164,7 +164,6 @@ seahorse_recipients_get (SeahorsePGPKey **signer)
     gboolean done = FALSE;
     GList *keys = NULL;
     gchar *id;
-    SeahorseKey *skey;
     SeahorseKeyStore *skstore;
     SeahorseKeyset * skset;
     

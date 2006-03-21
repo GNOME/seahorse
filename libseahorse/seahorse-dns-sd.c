@@ -245,7 +245,6 @@ seahorse_service_discovery_init (SeahorseServiceDiscovery *ssd)
 #ifdef WITH_SHARING
     ssd->priv->client = avahi_client_new (seahorse_util_dns_sd_get_poll (), 
                                           0, client_callback, ssd, &aerr);
-fprintf(stderr, "returned from client_new...\n");    
     if (!ssd->priv->client) {
         g_warning ("DNS-SD initialization failed: %s", avahi_strerror (aerr));
         return;
@@ -266,9 +265,8 @@ fprintf(stderr, "returned from client_new...\n");
 static void
 seahorse_service_discovery_dispose (GObject *gobject)
 {
-    SeahorseServiceDiscovery *ssd = SEAHORSE_SERVICE_DISCOVERY (gobject);
-    
 #ifdef WITH_SHARING
+    SeahorseServiceDiscovery *ssd = SEAHORSE_SERVICE_DISCOVERY (gobject);
     disconnect (ssd);
 #endif 
     
