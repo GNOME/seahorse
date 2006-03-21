@@ -185,9 +185,14 @@ properties_destroyed (GtkObject *object, SeahorseWidget *swidget)
 }
 
 static void
-help_button_clicked(GtkWidget *widget, SeahorseWidget *swidget)
+properties_response (GtkDialog *dialog, int response, SeahorseWidget *swidget)
 {
-    seahorse_widget_show_help(swidget);
+    if (response == GTK_RESPONSE_HELP) {
+        seahorse_widget_show_help(swidget);
+        return;
+    }
+   
+    seahorse_widget_destroy (swidget);
 }
 
 void
@@ -204,6 +209,7 @@ seahorse_ssh_key_properties_new (SeahorseSSHKey *skey)
         return;
 
     widget = glade_xml_get_widget (swidget->xml, swidget->name);
+    g_signal_connect (widget, "response", G_CALLBACK (properties_response), swidget);
     g_signal_connect (GTK_OBJECT (widget), "destroy", G_CALLBACK (properties_destroyed), swidget);
     g_signal_connect_after (skey, "changed", G_CALLBACK (key_changed), swidget);
     g_signal_connect_after (skey, "destroy", G_CALLBACK (key_destroyed), swidget);
@@ -221,8 +227,6 @@ seahorse_ssh_key_properties_new (SeahorseSSHKey *skey)
                                    G_CALLBACK (export_button_clicked), swidget);        
     glade_xml_signal_connect_data (swidget->xml, "passphrase_button_clicked",
                                    G_CALLBACK (passphrase_button_clicked), swidget);        
-    glade_xml_signal_connect_data (swidget->xml, "help_button_clicked",
-                                   G_CALLBACK (help_button_clicked), swidget);
 
     if (swidget)
         seahorse_widget_show (swidget);

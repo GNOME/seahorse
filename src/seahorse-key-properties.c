@@ -1305,6 +1305,17 @@ key_destroyed (GtkObject *object, SeahorseWidget *swidget)
 }
 
 static void
+properties_response (GtkDialog *dialog, int response, SeahorseWidget *swidget)
+{
+	if (response == GTK_RESPONSE_HELP) {
+		seahorse_widget_show_help(swidget);
+		return;
+	}
+
+	seahorse_widget_destroy (swidget);
+}
+
+static void
 properties_destroyed (GtkObject *object, SeahorseWidget *swidget)
 {
     g_signal_handlers_disconnect_by_func (SEAHORSE_KEY_WIDGET (swidget)->skey,
@@ -1326,6 +1337,7 @@ setup_public_properties (SeahorsePGPKey *pkey)
         return NULL;
 
     widget = glade_xml_get_widget (swidget->xml, swidget->name);
+    g_signal_connect (widget, "response", G_CALLBACK (properties_response), swidget);
     g_signal_connect (GTK_OBJECT (widget), "destroy", G_CALLBACK (properties_destroyed), swidget);
     g_signal_connect_after (pkey, "changed", G_CALLBACK (key_changed), swidget);
     g_signal_connect_after (pkey, "destroy", G_CALLBACK (key_destroyed), swidget);
@@ -1345,9 +1357,6 @@ setup_public_properties (SeahorsePGPKey *pkey)
     do_trust (swidget);
     do_trust_signals (swidget);        
 
-    glade_xml_signal_connect_data ((swidget->xml), "on_pgp_public_key_properties_help_button_clicked",
-								G_CALLBACK (help_button_clicked), swidget);
-
     return swidget;
 }
 
@@ -1364,6 +1373,7 @@ setup_private_properties (SeahorsePGPKey *pkey)
         return NULL;
 
     widget = glade_xml_get_widget (swidget->xml, swidget->name);
+    g_signal_connect (widget, "response", G_CALLBACK (properties_response), swidget);
     g_signal_connect (GTK_OBJECT (widget), "destroy", G_CALLBACK (properties_destroyed), swidget);
     g_signal_connect_after (pkey, "changed", G_CALLBACK (key_changed), swidget);
     g_signal_connect_after (pkey, "destroy", G_CALLBACK (key_destroyed), swidget);
@@ -1382,9 +1392,6 @@ setup_private_properties (SeahorsePGPKey *pkey)
 
     do_trust (swidget);
     do_trust_signals (swidget);
-
-    glade_xml_signal_connect_data ((swidget->xml), "on_key_properties_help_button_clicked",
-								G_CALLBACK (help_button_clicked), swidget);
 
     widget = glade_xml_get_widget (swidget->xml, NOTEBOOK);
     gtk_widget_hide (gtk_notebook_get_nth_page (GTK_NOTEBOOK (widget), 3));
