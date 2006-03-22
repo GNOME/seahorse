@@ -127,7 +127,7 @@ seahorse_progress_appbar_set_operation (GtkWidget* appbar, SeahorseOperation *op
     g_object_set_data_full (G_OBJECT (appbar), "operations", operation, 
                                 (GDestroyNotify)g_object_unref);
 
-    operation_progress (operation, seahorse_operation_get_details (operation),
+    operation_progress (operation, seahorse_operation_get_message (operation),
                         seahorse_operation_get_progress (operation), appbar);
 }
 
@@ -146,7 +146,7 @@ progress_operation_update (SeahorseOperation *operation, const gchar *message,
     w = glade_xml_get_widget (swidget->xml, "operation-details");
     g_return_if_fail (w != NULL);
     
-    t = seahorse_operation_get_details (operation);
+    t = seahorse_operation_get_message (operation);
     gtk_label_set_text (GTK_LABEL (w), t ? t : "");
     
     progress = GTK_PROGRESS_BAR (glade_xml_get_widget (swidget->xml, "operation-bar"));

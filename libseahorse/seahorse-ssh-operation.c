@@ -124,7 +124,7 @@ watch_ssh_process (GPid pid, gint status, SeahorseSSHOperation *sop)
             if (pv->result_cb)
                 (pv->result_cb) (sop);
             else
-                g_object_set_data (G_OBJECT (sop), "result", pv->sout->str);
+                seahorse_operation_mark_result (SEAHORSE_OPERATION (sop), pv->sout->str, NULL);
             
             seahorse_operation_mark_done (SEAHORSE_OPERATION (sop), FALSE, NULL);
         }
@@ -345,8 +345,7 @@ generate_result_cb (SeahorseSSHOperation *sop)
     skey = seahorse_ssh_source_key_for_filename (sop->sksrc, filename);
     g_return_if_fail (SEAHORSE_IS_SSH_KEY (skey));
     
-g_printerr ("loaded key from filename: %s\n", filename);
-    g_object_set_data (G_OBJECT (sop), "result", skey);
+    seahorse_operation_mark_result (SEAHORSE_OPERATION (sop), skey, NULL);
 }
 
 /* -----------------------------------------------------------------------------

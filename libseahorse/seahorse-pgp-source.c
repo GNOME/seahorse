@@ -821,7 +821,7 @@ seahorse_pgp_source_import (SeahorseKeySource *sksrc, gpgme_data_t data)
             }
         }        
         
-        g_object_set_data_full (G_OBJECT (operation), "result", keys, (GDestroyNotify)g_list_free);        
+        seahorse_operation_mark_result (operation, keys, (GDestroyNotify)g_list_free);
         seahorse_operation_mark_done (operation, FALSE, NULL);
         
     } else {
@@ -862,12 +862,12 @@ seahorse_pgp_source_export (SeahorseKeySource *sksrc, GList *keys,
         /* Tie to operation when we create our own (auto-free) */
         gerr = gpgme_data_new (&data);
         g_return_val_if_fail (GPG_IS_OK (gerr), NULL);
-        g_object_set_data_full (G_OBJECT (operation), "result", data, 
-                               (GDestroyNotify)gpgme_data_release);        
+        seahorse_operation_mark_result (operation, data, 
+                                        (GDestroyNotify)gpgme_data_release);
     } else {
        
         /* Don't free when people pass us their own data */
-        g_object_set_data (G_OBJECT (operation), "result", data);
+        seahorse_operation_mark_result (operation, data, NULL);
     }
      
     new_ctx = seahorse_pgp_source_new_context ();

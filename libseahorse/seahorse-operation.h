@@ -22,17 +22,26 @@
 /**
  * SeahorseOperation: An operation taking place over time. 
  * 
+ * - Generally this class is derived and a base class actually hooks in and 
+ *   performs the operation, keeps the properties updated etc...
  * - Used all over to represent things like key loading operations, search 
- *   etc...
  * - SeahorseMultiOperation allows you to combine multiple operations into
  *   a single one. Used when searching multiple key servers for example.
- * - No idea why it's so complex, but it seems it needs to be that way.
  * - Can be tied to a progress bar (see seahorse-progress.h)
  * - Holds a reference to itself while the operation is in progress.
+ * - The seahorse_operation_mark_* are used by derived classes to update 
+ *   properties of the operation as things progress.
  *
  * Signals:
  *   done: The operation is complete.
  *   progress: The operation has progressed, or changed state somehow.
+ * 
+ * Properties:
+ *   result: The 'result' of the operation (if applicable). 
+ *           This depends on the derived operation class.
+ *   progress: A fraction between 0.0 and 1.0 inclusive representing how far 
+ *           along this operation is. 0.0 = indeterminate, and 1.0 is done.
+ *   message: A progress message to display to the user.
  */
  
 #ifndef __SEAHORSE_OPERATION_H__
@@ -57,11 +66,15 @@ typedef struct _SeahorseOperation {
     GObject parent;
     
     /*< public >*/
-    gchar *details;                /* Progress status details ie: "foobar.jpg" */
+    gchar *message;                /* Progress status details ie: "foobar.jpg" */
     gint current;                  /* The current progress position, or -1 for not started */
     gint total;                    /* The total range of progress, or -1 for complete */
     gboolean cancelled;
     GError *error;
+    
+    /*< private> */
+    gpointer result;
+    GDestroyNotify result_destroy;
 
 } SeahorseOperation;
 
@@ -110,9 +123,9 @@ void                seahorse_operation_copy_error  (SeahorseOperation *operation
 void                seahorse_operation_wait        (SeahorseOperation *operation);
 
 gdouble             seahorse_operation_get_progress(SeahorseOperation *operation);
-                                                                                                      
-#define             seahorse_operation_get_details(operation) \
-                                                   ((const gchar*)((operation)->details))
+
+#define             seahorse_operation_get_message(operation) \
+                                                   ((const gchar*)((operation)->message))
 
 gpointer            seahorse_operation_get_result  (SeahorseOperation *operation);
                                                       
@@ -275,13 +288,16 @@ seahorse_xx_operation_cancel (SeahorseOperation *operation)
 
 /* Helpers for Derived ----------------------------------------------- */
 
-void                seahorse_operation_mark_start (SeahorseOperation *operation);
+void                seahorse_operation_mark_start    (SeahorseOperation *operation);
 
-void                seahorse_operation_mark_done  (SeahorseOperation *operation,
-                                                   gboolean cancelled, GError *error);
+void                seahorse_operation_mark_done     (SeahorseOperation *operation,
+                                                      gboolean cancelled, GError *error);
 
 void                seahorse_operation_mark_progress (SeahorseOperation *operation,
-                                                      const gchar *details,
+                                                      const gchar *message,
                                                       gint current, gint total);
-                                                      
+
+void                seahorse_operation_mark_result   (SeahorseOperation *operation,
+                                                      gpointer result, GDestroyNotify notify_func);
+
 #endif /* __SEAHORSE_OPERATION_H__ */

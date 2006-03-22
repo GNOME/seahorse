@@ -673,7 +673,7 @@ get_callback (SoupMessage *msg, SeahorseHKPOperation *hop)
             break;
         
         /* Any key blocks get written to our result data */
-        data = (gpgme_data_t)g_object_get_data (G_OBJECT (hop), "result");
+        data = (gpgme_data_t)seahorse_operation_get_result (SEAHORSE_OPERATION (hop));
         g_return_if_fail (data != NULL);
             
         r = gpgme_data_write (data, start, end - start);
@@ -904,13 +904,13 @@ seahorse_hkp_source_export (SeahorseKeySource *sksrc, GList *keys,
 
     if (data) {
         /* Note that we don't auto-free this */
-        g_object_set_data (G_OBJECT (hop), "result", data);
+        seahorse_operation_mark_result (SEAHORSE_OPERATION (hop), data, NULL);
     } else {
         /* But when we auto create a data object then we free it */
         gpgme_data_new (&data);
         g_return_val_if_fail (data != NULL, NULL);
-        g_object_set_data_full (G_OBJECT (hop), "result", data, 
-                                (GDestroyNotify)gpgme_data_release);
+        seahorse_operation_mark_result (SEAHORSE_OPERATION (hop), data, 
+                                        (GDestroyNotify)gpgme_data_release);
     }
     
     for ( ; keys; keys = g_list_next (keys)) {

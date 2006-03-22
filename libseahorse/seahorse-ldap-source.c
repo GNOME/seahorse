@@ -809,7 +809,7 @@ get_callback (SeahorseOperation *op, LDAPMessage *result)
             fail_ldap_operation (lop, LDAP_NO_SUCH_OBJECT); 
         }
         
-        data = (gpgme_data_t)g_object_get_data (G_OBJECT (lop), "result");
+        data = (gpgme_data_t)seahorse_operation_get_result (SEAHORSE_OPERATION (lop));
         g_return_val_if_fail (data != NULL, FALSE);
         
         r = gpgme_data_write (data, key, strlen (key));
@@ -920,13 +920,13 @@ start_get_operation_multiple (SeahorseLDAPSource *lsrc, GSList *fingerprints,
         
     if (data) {
         /* Note that we don't auto-free this */
-        g_object_set_data (G_OBJECT (lop), "result", data);
+        seahorse_operation_mark_result (SEAHORSE_OPERATION (lop), data, NULL);
     } else {
         /* But when we auto create a data object then we free it */
         gerr = gpgme_data_new (&data);
         g_return_val_if_fail (data != NULL, NULL);
-        g_object_set_data_full (G_OBJECT (lop), "result", data, 
-                                (GDestroyNotify)gpgme_data_release);
+        seahorse_operation_mark_result (SEAHORSE_OPERATION (lop), data, 
+                                        (GDestroyNotify)gpgme_data_release);
     }
     
     g_object_set_data (G_OBJECT (lop), "fingerprints", fingerprints);
