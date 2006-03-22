@@ -756,6 +756,26 @@ tab_changed (GtkWidget *widget, GtkNotebookPage *page, guint page_num,
     selection_changed (NULL, swidget);
 }
 
+static gboolean
+first_timer (SeahorseWidget *swidget)
+{
+    GtkWidget *w;
+    
+    /* A slight chance we may already be closed */
+    if (!SEAHORSE_IS_WIDGET (swidget))
+        return FALSE;
+    
+    /* Although not all the keys have completed we'll know whether we have 
+     * any or not at this point */
+    if (seahorse_context_get_count (SCTX_APP()) == 0) {
+        w = seahorse_widget_get_widget (swidget, "first-time-box");
+        gtk_widget_show (w);
+    }
+    
+    /* Remove this timer */
+    return FALSE;
+}
+
 static void
 help_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
@@ -949,7 +969,7 @@ seahorse_key_manager_show (SeahorseOperation *op)
     
     /* To avoid flicker */
     seahorse_widget_show (swidget);
-	
+    
     /* Setup drops */
     gtk_drag_dest_set (GTK_WIDGET (win), GTK_DEST_DEFAULT_ALL, 
                 seahorse_target_entries, seahorse_n_targets, GDK_ACTION_COPY);
@@ -960,14 +980,10 @@ seahorse_key_manager_show (SeahorseOperation *op)
     w = glade_xml_get_widget (swidget->xml, "status");
     seahorse_progress_appbar_set_operation (w, op);
 
-    /* Although not all the keys have completed we'll know whether we have 
-     * any or not at this point */
-	if (seahorse_context_get_count (SCTX_APP()) == 0) {
-		w = glade_xml_get_widget (swidget->xml, "first-time-box");
-		gtk_widget_show (w);
-	}
+    /* To show first time dialog */
+    g_timeout_add (1000, (GSourceFunc)first_timer, swidget);
     
-	selection_changed (NULL, swidget);
+    selection_changed (NULL, swidget);
     
     return win;
 }
