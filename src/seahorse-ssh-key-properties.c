@@ -26,6 +26,7 @@
 #include "seahorse-key.h"
 #include "seahorse-op.h"
 #include "seahorse-ssh-key.h"
+#include "seahorse-ssh-operation.h"
 
 #define NOTEBOOK "notebook"
 
@@ -83,7 +84,7 @@ passphrase_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
     w = glade_xml_get_widget (swidget->xml, "passphrase-button");
     gtk_widget_set_sensitive (w, FALSE);
     
-    op = seahorse_ssh_key_op_change_passphrase (SEAHORSE_SSH_KEY (skey));
+    op = seahorse_ssh_operation_change_passphrase (SEAHORSE_SSH_KEY (skey));
     if (seahorse_operation_is_done (op))
         passphrase_done (op, swidget);
     else 
@@ -231,4 +232,3 @@ seahorse_ssh_key_properties_new (SeahorseSSHKey *skey)
     if (swidget)
         seahorse_widget_show (swidget);
 }
-

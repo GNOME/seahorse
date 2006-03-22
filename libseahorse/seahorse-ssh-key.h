@@ -40,6 +40,7 @@
 #include <gtk/gtk.h>
 
 #include "seahorse-key.h"
+#include "seahorse-ssh-source.h"
 
 /* The various algorithm types */
 enum {
@@ -101,7 +102,8 @@ const gchar*            seahorse_ssh_key_get_filename         (SeahorseSSHKey *s
                                                                    
 SeahorseOperation*      seahorse_ssh_key_op_change_passphrase (SeahorseSSHKey *skey);
 
-SeahorseSSHKeyData*     seahorse_ssh_key_data_read            (const gchar *filename);
+SeahorseSSHKeyData*     seahorse_ssh_key_data_read            (SeahorseSSHSource *ssrc,
+                                                               const gchar *filename);
 
 gboolean                seahorse_ssh_key_data_is_valid        (SeahorseSSHKeyData *data);
 

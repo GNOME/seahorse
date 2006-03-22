@@ -30,6 +30,7 @@
 #include "seahorse-gtkstock.h"
 #include "seahorse-ssh-source.h"
 #include "seahorse-ssh-key.h"
+#include "seahorse-ssh-operation.h"
 
 static void 
 upload_complete (SeahorseOperation *op, gpointer dummy)
@@ -93,7 +94,7 @@ upload_via_source (const gchar *user, const gchar *host, GList *keys)
         }
 
         /* Start an upload process */
-        op = seahorse_ssh_source_upload (SEAHORSE_SSH_SOURCE (sksrc), keys, user, host);
+        op = seahorse_ssh_operation_upload (SEAHORSE_SSH_SOURCE (sksrc), keys, user, host);
         g_return_val_if_fail (op != NULL, NULL);
 
         /* And combine if necessary */

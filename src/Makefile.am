@@ -20,7 +20,7 @@ KEYSERVER_SRCS =
 endif
 
 if WITH_SSH
-SSH_SRCS = seahorse-ssh-key-properties.c seahorse-ssh-upload.c
+SSH_SRCS = seahorse-ssh-key-properties.c seahorse-ssh-upload.c seahorse-ssh-generate.c
 else
 SSH_SRCS = 
 endif
@@ -59,6 +59,7 @@ glade_DATA = \
 	seahorse-pgp-private-key-properties.glade \
 	seahorse-ssh-key-properties.glade \
 	seahorse-ssh-upload.glade \
+	seahorse-ssh-generate.glade \
 	seahorse-revoke.glade \
 	seahorse-expires.glade \
 	seahorse-change-passphrase.glade \

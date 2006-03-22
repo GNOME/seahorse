@@ -210,7 +210,7 @@ progress_show (SeahorseOperation *operation)
         return FALSE;
     }
         
-    swidget = seahorse_widget_new ("progress");
+    swidget = seahorse_widget_new_allow_multiple ("progress");
     g_return_val_if_fail (swidget != NULL, FALSE);
 
     /* Release our reference on the operation when this window is destroyed */    
@@ -242,9 +242,9 @@ progress_show (SeahorseOperation *operation)
 
     /* Cancel events */
     glade_xml_signal_connect_data (swidget->xml, "cancel_clicked",
-	                               G_CALLBACK (progress_operation_cancel), operation);
+                                   G_CALLBACK (progress_operation_cancel), operation);
     glade_xml_signal_connect_data (swidget->xml, "delete_event",
-	                               G_CALLBACK (progress_delete_event), operation);
+                                   G_CALLBACK (progress_delete_event), operation);
     
     /* Done and cleanup */
     w = glade_xml_get_widget (swidget->xml, swidget->name);

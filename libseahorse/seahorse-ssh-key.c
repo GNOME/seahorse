@@ -28,6 +28,7 @@
 #include "seahorse-key-source.h"
 #include "seahorse-ssh-source.h"
 #include "seahorse-ssh-key.h"
+#include "seahorse-ssh-operation.h"
 
 enum {
     PROP_0,
@@ -342,28 +343,12 @@ seahorse_ssh_key_get_filename (SeahorseSSHKey *skey, gboolean private)
     return private ? skey->keydata->filename : skey->keydata->filepub;
 }
 
-SeahorseOperation*      
-seahorse_ssh_key_op_change_passphrase (SeahorseSSHKey *skey)
-{
-    SeahorseOperation *op;
-    gchar *cmd;
-    
-    g_return_val_if_fail (SEAHORSE_IS_SSH_KEY (skey), NULL);
-    g_return_val_if_fail (skey->keydata && skey->keydata->filename, NULL);
-    
-    cmd = g_strdup_printf (SSH_KEYGEN_PATH " -p -f %s", skey->keydata->filename);
-    op = seahorse_ssh_operation_new (cmd, NULL, -1, NULL);
-    g_free (cmd);
-    
-    return op;
-}
-
 /* -----------------------------------------------------------------------------
  * SSH KEY DATA 
  */
 
 SeahorseSSHKeyData*
-seahorse_ssh_key_data_read (const gchar *filename)
+seahorse_ssh_key_data_read (SeahorseSSHSource *ssrc, const gchar *filename)
 {
     SeahorseSSHKeyData *data;
     GError *error = NULL;
@@ -375,7 +360,7 @@ seahorse_ssh_key_data_read (const gchar *filename)
     
     /* Lookup length, fingerprint and public key filename */
     t = g_strdup_printf (SSH_KEYGEN_PATH " -l -f %s", data->filename);
-    results = seahorse_ssh_execute_sync (t, NULL);
+    results = seahorse_ssh_operation_sync (ssrc, t, NULL);
     g_free (t);
     
     /* 

@@ -46,6 +46,7 @@
 #define SEAHORSE_IS_SSH_SOURCE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_SSH_SOURCE))
 #define SEAHORSE_SSH_SOURCE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_SSH_SOURCE, SeahorseSSHSourceClass))
 
+struct _SeahorseSSHKey;
 typedef struct _SeahorseSSHSource SeahorseSSHSource;
 typedef struct _SeahorseSSHSourceClass SeahorseSSHSourceClass;
 typedef struct _SeahorseSSHSourcePrivate SeahorseSSHSourcePrivate;
@@ -61,21 +62,12 @@ struct _SeahorseSSHSourceClass {
     SeahorseKeySourceClass parent_class;
 };
 
-GType                seahorse_ssh_source_get_type       (void);
+GType                seahorse_ssh_source_get_type           (void);
 
-SeahorseSSHSource*   seahorse_ssh_source_new            (void);
+SeahorseSSHSource*   seahorse_ssh_source_new                (void);
 
-SeahorseOperation*   seahorse_ssh_source_upload         (SeahorseSSHSource *ssrc,
-                                                         GList *keys,
-                                                         const gchar *username,
-                                                         const gchar *hostname);
-
-gchar*               seahorse_ssh_execute_sync          (const gchar *command, 
-                                                         GError **error);
-
-SeahorseOperation*   seahorse_ssh_operation_new         (const gchar *command, 
-                                                         const gchar *input, 
-                                                         gint length,
-                                                         const gchar *progress_label);
+struct _SeahorseSSHKey*      
+                     seahorse_ssh_source_key_for_filename   (SeahorseSSHSource *ssrc, 
+                                                             const gchar *privfile);
 
 #endif /* __SEAHORSE_SSH_SOURCE_H__ */

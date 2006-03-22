@@ -1,7 +1,7 @@
 /*
  * Seahorse
  *
- * Copyright (C) 2003 Jacob Perkins, Adam Schreiber
+ * Copyright (C) 2006 Nate Nielsen
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,40 +19,113 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include "config.h"
 #include <gnome.h>
 
 #include "seahorse-widget.h"
 #include "seahorse-util.h"
-#include "seahorse-pgp-key-op.h"
+#include "seahorse-pgp-key.h"
+#include "seahorse-ssh-key.h"
 #include "seahorse-generate-adv.h"
 #include "seahorse-generate-druid.h"
+#include "seahorse-key-dialogs.h"
+#include "seahorse-gtkstock.h"
 
-#define DRUID "radio_druid"
-#define ADV "radio_adv"
+enum {
+    KEY_TYPE,
+    KEY_ICON,
+    KEY_TEXT,
+    KEY_N_COLUMNS
+};
+
+const GType key_columns[] = {
+    G_TYPE_UINT,    /* type */
+    G_TYPE_STRING,  /* icon */
+    G_TYPE_STRING,  /* text */
+};
+
+
 void
-on_method_ok_clicked (GtkButton *button, SeahorseWidget *swidget)
+on_response (GtkDialog *dialog, guint response, SeahorseWidget *swidget)
 {
-	GtkToggleButton *druid, *adv;
-	GtkWidget *widget;
-	
-	druid = GTK_TOGGLE_BUTTON(glade_xml_get_widget (swidget->xml, DRUID));
-	adv = GTK_TOGGLE_BUTTON(glade_xml_get_widget (swidget->xml, ADV));
-	
-	widget = glade_xml_get_widget (swidget->xml, swidget->name);
-	gtk_widget_hide (widget);
-	
-	if(druid->active){
-		seahorse_generate_druid_show ();
-	}else if(adv->active){
-		seahorse_generate_adv_show ();
-	}
+    GtkWidget *widget;
+    GtkTreeModel *model;
+    GtkTreeSelection *selection;
+    SeahorseKeySource *sksrc;
+    GtkTreeIter iter;
+    gboolean advanced;
+    GQuark ktype;
+    
+    if (response != GTK_RESPONSE_OK) {
+        seahorse_widget_destroy (swidget);
+        return;
+    }
+    
+    /* Advanced or not? */
+    widget = seahorse_widget_get_widget (swidget, "advanced-option");
+    g_return_if_fail (widget != NULL);
+    advanced = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
+    
+    /* Figure out the key type selected */
+    widget = seahorse_widget_get_widget (swidget, "keytype-tree");
+    g_return_if_fail (widget != NULL);
+    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (widget));
+    if (!gtk_tree_selection_get_selected (selection, &model, &iter))
+        g_return_if_reached ();
+    gtk_tree_model_get (model, &iter, KEY_TYPE, &ktype, -1);
+    
+    /* Get an appropriate key source */
+    sksrc = seahorse_context_find_key_source (SCTX_APP (), ktype, SKEY_LOC_LOCAL);
+    g_return_if_fail (sksrc != NULL);
+    
+    seahorse_widget_destroy (swidget);
+    
+    if (ktype == SKEY_PGP) {
+        if (advanced)
+            seahorse_generate_adv_show ();
+        else
+            seahorse_generate_druid_show ();
+        
+    } 
+#ifdef WITH_SSH 
+    else if (ktype == SKEY_SSH)
+        seahorse_ssh_generate_show (SEAHORSE_SSH_SOURCE (sksrc));
+#endif 
+    
+    else
+        g_return_if_reached ();
 }
 
+static void
+add_key_type (GtkListStore *store, GQuark type, const char *stock_icon, 
+              const char *text, const char *desc)
+{
+    GtkTreeIter iter;
+    gchar *t;
+    
+    t = g_strdup_printf("<span size=\"larger\" weight=\"bold\">%s</span>\n%s", 
+                        text, desc);
+    
+    /* PGP Key */
+    gtk_list_store_append (store, &iter);
+    gtk_list_store_set (store, &iter, 
+                        KEY_TYPE, type,
+                        KEY_ICON, stock_icon,
+                        KEY_TEXT, t,
+                        -1);
+    
+    g_free (t);
+}
 
 void
 seahorse_generate_select_show ()
 {
     SeahorseWidget *swidget;
+    GtkListStore *store;
+    GtkCellRenderer *renderer;
+    GtkTreeSelection *selection;
+    GtkTreeIter iter;
+    GtkWidget *widget;
     
     swidget = seahorse_widget_new ("generate-select");
     
@@ -60,6 +133,39 @@ seahorse_generate_select_show ()
     if (swidget == NULL)
         return;
     
-    glade_xml_signal_connect_data(swidget->xml, "on_method_ok_clicked",
-                                  G_CALLBACK (on_method_ok_clicked), swidget);
+    /* TODO: Once we're rid of the "Advanced" option, we can skip this
+       whole dialog and cut straight to the chase if only one key type */
+    
+    /* Build our tree store */
+    store = gtk_list_store_newv (KEY_N_COLUMNS, (GType*)key_columns);
+    add_key_type (store, SKEY_PGP, SEAHORSE_STOCK_SECRET, _("PGP Key"), 
+                  _("Used to encrypt email and files"));
+#ifdef WITH_SSH
+    add_key_type (store, SKEY_SSH, SEAHORSE_STOCK_KEY_SSH, _("SSH Key"),
+                  _("Used to access other computers (eg: via a terminal)"));
+#endif /* WITH_SSH */
+    
+    /* Hook it into the view */
+    widget = seahorse_widget_get_widget (swidget, "keytype-tree");
+    g_return_if_fail (widget != NULL);
+    
+    /* Make the columns for the view */
+    renderer = gtk_cell_renderer_pixbuf_new ();
+    g_object_set (renderer, "stock-size", GTK_ICON_SIZE_DIALOG, NULL);
+    gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (widget),
+                                                 -1, "", renderer,
+                                                 "stock-id", KEY_ICON, NULL);
+    gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (widget), 
+                                                 -1, "", gtk_cell_renderer_text_new (), 
+                                                 "markup", KEY_TEXT, NULL);
+    gtk_tree_view_set_model (GTK_TREE_VIEW (widget), GTK_TREE_MODEL (store));
+    
+    /* Setup selection, select first item */
+    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (widget));
+    gtk_tree_selection_set_mode (selection, GTK_SELECTION_BROWSE);
+    gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter);
+    gtk_tree_selection_select_iter (selection, &iter);
+    
+    g_signal_connect (seahorse_widget_get_top (swidget), "response", 
+                      G_CALLBACK (on_response), swidget);
 }

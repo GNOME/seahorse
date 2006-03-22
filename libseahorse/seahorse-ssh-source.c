@@ -1,7 +1,7 @@
 /*
  * Seahorse
  *
- * Copyright (C) 2004 Nate Nielsen
+ * Copyright (C) 2004-2006 Nate Nielsen
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,11 +20,10 @@
  */
 
 #include "config.h"
-#include <sys/wait.h>
 #include <stdlib.h>
-#include <fcntl.h>
 #include <unistd.h>
 #include <gnome.h>
+#include <fcntl.h>
 #include <glib/gstdio.h>
 #include <libgnomevfs/gnome-vfs.h>
 
@@ -33,6 +32,7 @@
 #include "seahorse-operation.h"
 #include "seahorse-util.h"
 #include "seahorse-ssh-key.h"
+#include "seahorse-ssh-operation.h"
 
 /* Override DEBUG switches here */
 #define DEBUG_REFRESH_ENABLE 0
@@ -52,24 +52,11 @@
 #define DEBUG_REFRESH(x)
 #endif
 
-#ifndef DEBUG_OPERATION_ENABLE
-#if _DEBUG
-#define DEBUG_OPERATION_ENABLE 1
-#else
-#define DEBUG_OPERATION_ENABLE 0
-#endif
-#endif
-
-#if DEBUG_OPERATION_ENABLE
-#define DEBUG_OPERATION(x)  g_printerr x
-#else
-#define DEBUG_OPERATION(x)
-#endif
-
 enum {
     PROP_0,
     PROP_KEY_TYPE,
-    PROP_LOCATION
+    PROP_LOCATION,
+    PROP_BASE_DIRECTORY
 };
 
 struct _SeahorseSSHSourcePrivate {
@@ -205,23 +192,55 @@ monitor_ssh_homedir (GnomeVFSMonitorHandle *handle, const gchar *monitor_uri,
     ssrc->priv->scheduled_refresh = g_timeout_add (500, (GSourceFunc)scheduled_refresh, ssrc);
 }
 
-static void
-ssh_child_setup (gpointer user_data)
-{
-    /* Install our askpass program if none present */
-    g_setenv ("SSH_ASKPASS", EXECDIR "seahorse-ssh-askpass", 0);
+
+static SeahorseSSHKey*
+ssh_key_from_data (SeahorseSSHSource *ssrc, SeahorseSSHKeyData *keydata, 
+                   const gchar *match, SeahorseKeySourceLoad load)
+{   
+    SeahorseKeySource *sksrc = SEAHORSE_KEY_SOURCE (ssrc);
+    SeahorseSSHKey *skey;
+    SeahorseKey *key;
     
-    /* No terminal for this process */
-    setsid ();
-}
+    if (!seahorse_ssh_key_data_is_valid (keydata))
+        return NULL;
+    
+    switch(load) {
+            
+    case SKSRC_LOAD_NEW:
+        /* If we already have this key then just transfer ownership of keydata */
+        key = seahorse_context_get_key (SCTX_APP (), sksrc, keydata->keyid);
+        if (key) {
+            g_object_set (key, "key-data", keydata, NULL);
+            return SEAHORSE_SSH_KEY (key);
+        }
+        break;
+        
+    case SKSRC_LOAD_KEY:
+        if (!match || !g_str_equal (match, keydata->keyid))
+            return NULL;
+        break;
+            
+    case SKSRC_LOAD_ALL:
+        key = seahorse_context_get_key (SCTX_APP (), sksrc, keydata->keyid);
+        if (key)
+            seahorse_context_remove_key (SCTX_APP (), key);
+        break;
+        
+    default:
+        break;
+    }
+    
+    g_assert (keydata);
 
-static void
-ssh_sync_child_setup (gpointer user_data)
-{
-    /* No terminal for this process */
-    setsid ();
+    skey = seahorse_ssh_key_new (sksrc, keydata);
+            
+    /* We listen in to get notified of changes on this key */
+    g_signal_connect (skey, "changed", G_CALLBACK (key_changed), sksrc);
+    g_signal_connect (skey, "destroy", G_CALLBACK (key_destroyed), sksrc);
+        
+    seahorse_context_take_key (SCTX_APP (), SEAHORSE_KEY (skey));
+    return skey;
 }
-
 
 /* -----------------------------------------------------------------------------
  * OBJECT
@@ -231,9 +250,8 @@ static SeahorseOperation*
 seahorse_ssh_source_load (SeahorseKeySource *src, SeahorseKeySourceLoad load,
                           const gchar *match)
 {
-    SeahorseSSHSource *ssrc;
     SeahorseSSHKey *skey;
-    SeahorseKey *key;
+    SeahorseSSHSource *ssrc;
     SeahorseSSHKeyData *keydata;
     GError *error = NULL;
     GHashTable *checks = NULL;
@@ -282,54 +300,24 @@ seahorse_ssh_source_load (SeahorseKeySource *src, SeahorseKeySourceLoad load,
             continue;
         }
         
+        skey = NULL;
+        
         /* Try to load it */
-        keydata = seahorse_ssh_key_data_read (t);
+        keydata = seahorse_ssh_key_data_read (ssrc, t);
         g_free (t);
+        
+        /* Make sure it's valid */
+        if (keydata->keyid) {
+        
+            if (checks)
+                g_hash_table_remove (checks, keydata->keyid);
 
-        if (!keydata->keyid) {
+            skey = ssh_key_from_data (ssrc, keydata, match, load);
+        }
+        
+        /* If no key was created, free */
+        if (!skey)
             seahorse_ssh_key_data_free (keydata);
-            continue;
-        }
-        
-        switch(load) {
-            
-        case SKSRC_LOAD_NEW:
-            /* If we already have this key then just transfer ownership of keydata */
-            key = seahorse_context_get_key (SCTX_APP (), src, keydata->keyid);
-            if (key) {
-                g_object_set (key, "key-data", keydata, NULL);
-                keydata = NULL;
-            }
-            g_hash_table_remove (checks, keydata->keyid);
-            break;
-            
-        case SKSRC_LOAD_KEY:
-            if (!g_str_equal (match, keydata->keyid)) {
-                seahorse_ssh_key_data_free (keydata);
-                keydata = NULL;
-            }
-            break;
-            
-        case SKSRC_LOAD_ALL:
-            key = seahorse_context_get_key (SCTX_APP (), src, keydata->keyid);
-            if (key)
-                seahorse_context_remove_key (SCTX_APP (), key);
-            break;
-            
-        default:
-            break;
-        }
-
-        if (keydata) {
-            
-            skey = seahorse_ssh_key_new (src, keydata);
-            
-            /* We listen in to get notified of changes on this key */
-            g_signal_connect (skey, "changed", G_CALLBACK (key_changed), SEAHORSE_KEY_SOURCE (ssrc));
-            g_signal_connect (skey, "destroy", G_CALLBACK (key_destroyed), SEAHORSE_KEY_SOURCE (ssrc));
-        
-            seahorse_context_take_key (SCTX_APP (), SEAHORSE_KEY (skey));
-        }
     }
 
     if (checks) 
@@ -371,6 +359,8 @@ seahorse_ssh_source_export (SeahorseKeySource *sksrc, GList *keys,
     gint len, r;
     GList *l;
     
+    g_return_val_if_fail (SEAHORSE_IS_SSH_SOURCE (sksrc), NULL);
+    
     for (l = keys; l; l = g_list_next (l)) {
         skey = SEAHORSE_KEY (l->data);
         
@@ -394,7 +384,8 @@ seahorse_ssh_source_export (SeahorseKeySource *sksrc, GList *keys,
         /* Public key without identity.pub. Export it. */
         } else {
             cmd = g_strdup_printf (SSH_KEYGEN_PATH " -y %s", filename);
-            results = seahorse_ssh_execute_sync (cmd, &error);
+            results = seahorse_ssh_operation_sync (SEAHORSE_SSH_SOURCE (sksrc), 
+                                                   cmd, &error);
             g_free (cmd);
         }
         
@@ -464,12 +455,17 @@ static void
 seahorse_ssh_source_get_property (GObject *object, guint prop_id, GValue *value, 
                                   GParamSpec *pspec)
 {
+    SeahorseSSHSource *ssrc = SEAHORSE_SSH_SOURCE (object);
+    
     switch (prop_id) {
     case PROP_KEY_TYPE:
         g_value_set_uint (value, SKEY_SSH);
         break;
     case PROP_LOCATION:
         g_value_set_uint (value, SKEY_LOC_LOCAL);
+        break;
+    case PROP_BASE_DIRECTORY:
+        g_value_set_string (value, ssrc->priv->ssh_homedir);
         break;
     }
 }
@@ -560,6 +556,10 @@ seahorse_ssh_source_class_init (SeahorseSSHSourceClass *klass)
     g_object_class_install_property (gobject_class, PROP_LOCATION,
         g_param_spec_uint ("location", "Key Location", "Where the key is stored. See SeahorseKeyLoc", 
                            0, G_MAXUINT, SKEY_LOC_UNKNOWN, G_PARAM_READABLE));    
+                           
+    g_object_class_install_property (gobject_class, PROP_BASE_DIRECTORY,
+        g_param_spec_string ("base-directory", "Key directory", "Directory where the keys are stored",
+                             NULL, G_PARAM_READABLE));
 }
 
 /* -----------------------------------------------------------------------------
@@ -570,379 +570,38 @@ SeahorseSSHSource*
 seahorse_ssh_source_new (void)
 {
    return g_object_new (SEAHORSE_TYPE_SSH_SOURCE, NULL);
-}   
-
-gchar*
-seahorse_ssh_execute_sync (const gchar *command, GError **error)
-{
-    GError *err = NULL;
-    gchar *sout, *serr;
-    gint status;
-    gint argc;
-    gchar **argv;
-    gboolean r;
-    
-    g_assert (!error || !*error);
-    
-    /* We use this internally, so guarantee it exists */
-    if (!error)
-        error = &err;
-    
-    if (!g_shell_parse_argv (command, &argc, &argv, NULL)) {
-        /* Internal error, aborts */
-        g_error ("couldn't parse ssh command line: %s", command);
-    }
-    
-    r = g_spawn_sync (NULL, argv, NULL, 0, ssh_sync_child_setup, NULL, 
-                      &sout, &serr, &status, error);
-    g_strfreev (argv);
-    
-    if (!r) {
-        g_critical ("couldn't execute SSH command: %s (%s)", command, *error ? (*error)->message : "");
-        return NULL;
-    }
-    
-    if (!WIFEXITED (status)) {
-        g_critical ("SSH command didn't exit properly: %s", command);
-        g_set_error (error, SEAHORSE_ERROR, 0, "%s", _("The SSH command was terminated unexpectedly."));
-        g_free (sout);
-        g_free (serr);
-        return NULL;
-    }
-    
-    if (WEXITSTATUS (status) != 0) {
-        g_set_error (error, SEAHORSE_ERROR, 0, "%s", _("The SSH command failed."));
-        g_warning ("SSH command failed: %s (%d)", command, WEXITSTATUS (status));
-        if (serr && serr[0])
-            g_warning ("SSH error output: %s", serr);
-        g_free (serr);
-        g_free (sout);
-        return NULL;
-    }
-    
-    g_free (serr);
-    return sout;
 }
 
-SeahorseOperation*  
-seahorse_ssh_source_upload (SeahorseSSHSource *ssrc, GList *keys, 
-                            const gchar *username, const gchar *hostname)
+SeahorseSSHKey*
+seahorse_ssh_source_key_for_filename (SeahorseSSHSource *ssrc, const gchar *privfile)
 {
-    SeahorseOperation *op;
-    gpgme_data_t data;
-    gpgme_error_t gerr;
-    gchar *input;
-    guint length;
-    gchar *cmd;
+    SeahorseSSHKeyData *data;
+    SeahorseSSHKey *skey;
+    GList *keys, *l;
     
-    g_return_val_if_fail (keys != NULL, NULL);
-    g_return_val_if_fail (username && username[0], NULL);
-    g_return_val_if_fail (hostname && hostname[0], NULL);
+    g_return_val_if_fail (SEAHORSE_IS_SSH_SOURCE (ssrc), NULL);
     
-    gerr = gpgme_data_new (&data);
-    g_return_val_if_fail (GPG_IS_OK (gerr), NULL);
-    
-    /* Buffer for what we send to the server */
-    op = seahorse_ssh_source_export (SEAHORSE_KEY_SOURCE (ssrc), keys, FALSE, data);
-    g_return_val_if_fail (op != NULL, NULL);
-    
-    /* 
-     * We happen to know that seahorse_ssh_source_export always returns
-     * completed operations, so we don't need to factor that in. If this
-     * ever changes, then we need to recode this bit 
-     */
-    g_return_val_if_fail (seahorse_operation_is_done (op), NULL);
-    
-    /* Return any errors */
-    if (!seahorse_operation_is_successful (op)) {
-        gpgme_data_release (data);
-        return op;
-    }
-    
-    /* Free the export operation */
-    g_object_unref (op);
-
-    /* 
-     * This command creates the .ssh directory if necessary (with appropriate permissions) 
-     * and then appends all input data onto the end of .ssh/authorized_keys
-     */
-    /* TODO: Important, we should handle the host checking properly */
-    cmd = g_strdup_printf (SSH_PATH " %s@%s -o StrictHostKeyChecking=no "
-                                    "\"umask 077; test -d .ssh || mkdir .ssh ; cat >> .ssh/authorized_keys\"", 
-                           username, hostname);
-    input = gpgme_data_release_and_get_mem (data, &length);
-    
-    op = seahorse_ssh_operation_new (cmd, input, length, _("Sending SSH public key..."));
-    
-    g_free (cmd);
-    free (input);
-
-    return op;
-}
-
-/* -----------------------------------------------------------------------------
- * SSH OPERATION 
- */
-
-#define SEAHORSE_TYPE_SSH_OPERATION            (seahorse_ssh_operation_get_type ())
-#define SEAHORSE_SSH_OPERATION(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_SSH_OPERATION, SeahorseSSHOperation))
-#define SEAHORSE_SSH_OPERATION_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_SSH_OPERATION, SeahorseSSHOperationClass))
-#define SEAHORSE_IS_SSH_OPERATION(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_SSH_OPERATION))
-#define SEAHORSE_IS_SSH_OPERATION_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_SSH_OPERATION))
-#define SEAHORSE_SSH_OPERATION_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_SSH_OPERATION, SeahorseSSHOperationClass))
-
-DECLARE_OPERATION (SSH, ssh)
-    /*< private >*/
-    SeahorseSSHSource *ssrc;
-    GString *sin;
-    guint win;
-    GIOChannel *iin;
-    GString *sout;
-    guint wout;
-    GIOChannel *iout;
-    GString *serr;
-    guint werr;
-    GIOChannel *ierr;
-    GPid pid;
-    guint wpid;
-END_DECLARE_OPERATION        
-
-IMPLEMENT_OPERATION (SSH, ssh)
-
-static void 
-seahorse_ssh_operation_init (SeahorseSSHOperation *sop)
-{
-    sop->sout = g_string_new (NULL);
-    sop->serr = g_string_new (NULL);
-}
-
-static void 
-seahorse_ssh_operation_dispose (GObject *gobject)
-{
-    SeahorseOperation *op = SEAHORSE_OPERATION (gobject);
-    if (!seahorse_operation_is_done (op))
-        seahorse_ssh_operation_cancel (op);
-    G_OBJECT_CLASS (operation_parent_class)->dispose (gobject);  
-}
-
-static void 
-seahorse_ssh_operation_finalize (GObject *gobject)
-{
-    SeahorseSSHOperation *sop = SEAHORSE_SSH_OPERATION (gobject);
-    
-    if (sop->win)
-        g_source_remove (sop->win);
-    if (sop->wout)
-        g_source_remove (sop->wout);
-    if (sop->werr)
-        g_source_remove (sop->werr);
-
-    if (sop->iin)
-        g_io_channel_unref (sop->iin);
-    if (sop->iout)
-        g_io_channel_unref (sop->iout);
-    if (sop->ierr)
-        g_io_channel_unref (sop->ierr);
+    /* Try to find it first */
+    keys = seahorse_context_get_keys (SCTX_APP (), SEAHORSE_KEY_SOURCE (ssrc));
+    for (l = keys; l; l = g_list_next (l)) {
         
-    if (sop->sin)
-        g_string_free (sop->sin, TRUE);
-    g_string_free (sop->sout, TRUE);
-    g_string_free (sop->serr, TRUE);
-    
-    /* watch_ssh_process always needs to have been called */
-    g_assert (sop->pid == 0 && sop->wpid == 0);
+        /* If it's already loaded then just leave it at that */
+        if (strcmp (privfile, 
+                    seahorse_ssh_key_get_filename (SEAHORSE_SSH_KEY (l->data), TRUE)) == 0)
+            return SEAHORSE_SSH_KEY (l->data);
         
-    G_OBJECT_CLASS (operation_parent_class)->finalize (gobject);  
+    }
+    
+    /* Read in the key */
+    data = seahorse_ssh_key_data_read (ssrc, privfile);
+    g_return_val_if_fail (data != NULL, NULL);
+    
+    /* And try and load it (this also puts it into the context) */
+    skey = ssh_key_from_data (ssrc, data, NULL, SKSRC_LOAD_NEW);
+    
+    /* No memory leaks on failure */
+    if (!skey)
+        seahorse_ssh_key_data_free (data);
+    
+    return skey;
 }
-
-static void 
-seahorse_ssh_operation_cancel (SeahorseOperation *operation)
-{
-    SeahorseSSHOperation *sop = SEAHORSE_SSH_OPERATION (operation);    
-
-    seahorse_operation_mark_done (operation, TRUE, NULL);
-
-    if (sop->pid != 0)
-        kill (sop->pid, SIGTERM);
-}
-
-static void 
-watch_ssh_process (GPid pid, gint status, SeahorseSSHOperation *sop)
-{
-    DEBUG_OPERATION (("SSH process done\n"));
-    
-    if (!seahorse_operation_is_done (SEAHORSE_OPERATION (sop))) {
-
-        /* Was killed */
-        if (!WIFEXITED (status)) {
-            seahorse_operation_mark_done (SEAHORSE_OPERATION (sop), FALSE, 
-                g_error_new (SEAHORSE_ERROR, 0, _("The SSH command was terminated unexpectedly.")));
-            
-        /* Command failed */
-        } else if (WEXITSTATUS (status) != 0) {
-            g_warning ("SSH command failed: (%d)", WEXITSTATUS (status));
-            if (sop->serr->len)
-                g_warning ("SSH error output: %s", sop->serr->str);
-            seahorse_operation_mark_done (SEAHORSE_OPERATION (sop), FALSE, 
-                g_error_new_literal (SEAHORSE_ERROR, 0, sop->serr->len ? sop->serr->str : _("The SSH command failed.")));
-
-        /* Successful completion */
-        } else {
-            g_object_set_data (G_OBJECT (sop), "result", sop->sout->str);
-            seahorse_operation_mark_done (SEAHORSE_OPERATION (sop), FALSE, NULL);
-        }
-    }
-
-    g_spawn_close_pid (pid);
-    sop->pid = 0;
-    sop->wpid = 0;
-    
-    /* This watch holds a ref on the operation, release */
-    g_object_unref (sop);
-}
-
-static gboolean    
-io_ssh_write (GIOChannel *source, GIOCondition condition, SeahorseSSHOperation *sop)
-{
-    GError *error = NULL;
-    GIOStatus status;
-    gsize written = 0;
-
-    if (!seahorse_operation_is_done (SEAHORSE_OPERATION (sop)) && sop->sin) {
-        DEBUG_OPERATION (("SSH ready for input\n"));
-        
-        status = g_io_channel_write_chars (sop->iin, sop->sin->str, sop->sin->len,
-                                           &written, &error);
-        switch (status) {
-        case G_IO_STATUS_ERROR:
-            seahorse_operation_mark_done (SEAHORSE_OPERATION (sop), FALSE, error);
-            break;
-        case G_IO_STATUS_AGAIN:
-            break;
-        default:
-            DEBUG_OPERATION (("Wrote %d bytes to SSH\n", written));
-            g_string_erase (sop->sin, 0, written);
-            break;
-        }
-    }
-    
-    if (sop->sin && !sop->sin->len) {
-        DEBUG_OPERATION (("Finished writing SSH input\n"));
-        g_string_free (sop->sin, TRUE);
-        sop->sin = NULL;
-    }
-    
-    if (seahorse_operation_is_done (SEAHORSE_OPERATION (sop)) || !sop->sin) {
-        DEBUG_OPERATION (("Closing SSH input channel\n"));
-        g_io_channel_unref (sop->iin);
-        sop->iin = NULL;
-        g_source_remove (sop->win);
-        sop->win = 0;
-        return FALSE;
-    }
-    
-    return TRUE;
-}
-
-static gboolean    
-io_ssh_read (GIOChannel *source, GIOCondition condition, SeahorseSSHOperation *sop)
-{
-    GError *error = NULL;
-    gchar buf[128];
-    GIOStatus status;
-    gsize read = 0;
-    GString *str;
-    
-    if (seahorse_operation_is_done (SEAHORSE_OPERATION (sop)))
-        return TRUE;
-    
-    /* Figure out which buffer we're writing into */
-    if (source == sop->iout) {
-        str = sop->sout;
-        DEBUG_OPERATION (("SSH output: "));    
-    } else if(source == sop->ierr) {
-        str = sop->serr;
-        DEBUG_OPERATION (("SSH errout: "));
-    } else
-        g_assert_not_reached ();
-
-    do {
-        status = g_io_channel_read_chars (source, buf, sizeof (buf), &read, &error);
-        switch (status) {
-        case G_IO_STATUS_ERROR:
-            seahorse_operation_mark_done (SEAHORSE_OPERATION (sop), FALSE, error);
-            break;
-        case G_IO_STATUS_AGAIN:
-            continue;
-        case G_IO_STATUS_EOF:
-            break;
-        default:
-            g_string_append_len (str, buf, read);
-            DEBUG_OPERATION (("%s\n", str->str + (str->len - read)));
-            break;
-        }
-    } while (read == sizeof (buf));
-    
-    return TRUE;
-}
-
-SeahorseOperation*
-seahorse_ssh_operation_new (const gchar *command, const gchar *input, 
-                            gint length, const gchar *progress)
-{
-    SeahorseSSHOperation *sop;
-    GError *error = NULL;
-    int argc, r;
-    int fin, fout, ferr;
-    char **argv;
-    
-    if (!g_shell_parse_argv (command, &argc, &argv, NULL)) {
-        /* Internal error, aborts */
-        g_error ("couldn't parse ssh command line: %s\n", command);
-    }
-    
-    sop = g_object_new (SEAHORSE_TYPE_SSH_OPERATION, NULL);
-
-    DEBUG_OPERATION (("Executing SSH command: %s\n", command));
-    r = g_spawn_async_with_pipes (NULL, argv, NULL, G_SPAWN_DO_NOT_REAP_CHILD, 
-                                  ssh_child_setup, NULL, &sop->pid, 
-                                  input ? &fin : NULL, &fout, &ferr, &error);
-    g_strfreev (argv);  
-
-    if (!r)
-        return seahorse_operation_new_complete (error);
-    
-    /* Copy the input for later writing */
-    if (input) {
-        sop->sin = g_string_new_len (input, length == -1 ? strlen (input) : length);
-        DEBUG_OPERATION (("Will send SSH input: %s", sop->sin->str));    
-        
-        fcntl (fin, F_SETFL, O_NONBLOCK | fcntl (fin, F_GETFL));
-        sop->iin = g_io_channel_unix_new (fin);
-        g_io_channel_set_encoding (sop->iin, NULL, NULL);
-        g_io_channel_set_close_on_unref (sop->iin, TRUE);
-        sop->win = g_io_add_watch (sop->iin, G_IO_OUT, (GIOFunc)io_ssh_write, sop);
-    }
-    
-    /* Make all the proper IO Channels for the output/error */
-    fcntl (fout, F_SETFL, O_NONBLOCK | fcntl (fout, F_GETFL));
-    sop->iout = g_io_channel_unix_new (fout);
-    g_io_channel_set_encoding (sop->iout, NULL, NULL);
-    g_io_channel_set_close_on_unref (sop->iout, TRUE);
-    sop->wout = g_io_add_watch (sop->iout, G_IO_IN, (GIOFunc)io_ssh_read, sop);
-    
-    fcntl (ferr, F_SETFL, O_NONBLOCK | fcntl (ferr, F_GETFL));
-    sop->ierr = g_io_channel_unix_new (ferr);
-    g_io_channel_set_encoding (sop->ierr, NULL, NULL);
-    g_io_channel_set_close_on_unref (sop->ierr, TRUE);
-    sop->werr = g_io_add_watch (sop->ierr, G_IO_IN, (GIOFunc)io_ssh_read, sop);
-    
-    /* Process watch */
-    g_object_ref (sop); /* When the process ends, reference is released */
-    sop->wpid = g_child_watch_add (sop->pid, (GChildWatchFunc)watch_ssh_process, sop);
-
-    seahorse_operation_mark_start (SEAHORSE_OPERATION (sop));
-    seahorse_operation_mark_progress (SEAHORSE_OPERATION (sop), progress, 0, 1);
-    
-    return SEAHORSE_OPERATION (sop);
-}    

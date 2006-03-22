@@ -793,8 +793,8 @@ static GtkActionEntry ui_entries[] = {
     { "help-menu", NULL, N_("_Help") },
     
     /* Key Actions */
-    { "key-generate", GTK_STOCK_NEW, N_("_Create Key Pair..."), "<control>N", 
-            N_("Create a new key pair"), G_CALLBACK (generate_activate) },
+    { "key-generate", GTK_STOCK_NEW, N_("_Create New Key..."), "<control>N", 
+            N_("Create a new personal key"), G_CALLBACK (generate_activate) },
     { "key-import-file", GTK_STOCK_OPEN, N_("_Import..."), "<control>I",
             N_("Import keys into your keyring from a file"), G_CALLBACK (import_activate) },
     { "key-backup", GTK_STOCK_SAVE, N_("_Backup Keyrings..."), "",
