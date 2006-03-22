@@ -334,6 +334,14 @@ seahorse_widget_get_top     (SeahorseWidget     *swidget)
     return widget;
 }
 
+GtkWidget*
+seahorse_widget_get_widget (SeahorseWidget *swidget, const char *identifier)
+{
+    GtkWidget *widget = glade_xml_get_widget (swidget->xml, identifier);
+    g_return_val_if_fail (widget != NULL, NULL);
+    return widget;
+}
+
 /**
  * seahorse_widget_show:
  * @swidget: #SeahorseWidget to show

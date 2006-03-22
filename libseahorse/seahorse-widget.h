@@ -75,6 +75,9 @@ SeahorseWidget*  seahorse_widget_new_allow_multiple (gchar            *name);
 
 GtkWidget*       seahorse_widget_get_top            (SeahorseWidget   *swidget);
 
+GtkWidget*       seahorse_widget_get_widget         (SeahorseWidget   *swidget,
+                                                     const char       *identifier);
+
 void             seahorse_widget_show               (SeahorseWidget   *swidget);
 
 void             seahorse_widget_show_help          (SeahorseWidget   *swidget);

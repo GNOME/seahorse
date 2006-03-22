@@ -55,8 +55,8 @@ seahorse_LDADD = \
 glade_DATA = \
 	seahorse-key-manager.glade \
 	seahorse-key-manager.ui \
-	seahorse-key-properties.glade \
 	seahorse-pgp-public-key-properties.glade \
+	seahorse-pgp-private-key-properties.glade \
 	seahorse-ssh-key-properties.glade \
 	seahorse-ssh-upload.glade \
 	seahorse-revoke.glade \

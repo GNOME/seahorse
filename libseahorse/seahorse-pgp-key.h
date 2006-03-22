@@ -103,7 +103,7 @@ gchar*          seahorse_pgp_key_get_userid_email     (SeahorsePGPKey   *pkey,
 
 gchar*          seahorse_pgp_key_get_userid_comment   (SeahorsePGPKey   *pkey,
                                                        guint            index);
-
+                                                       
 const gchar*    seahorse_pgp_key_get_algo             (SeahorsePGPKey   *pkey,
                                                        guint            index);
 
@@ -117,6 +117,12 @@ gpgmex_photo_id_t seahorse_pgp_key_get_nth_photoid    (SeahorsePGPKey   *pkey,
 
 gpgmex_photo_id_t seahorse_pgp_key_get_photoid_n      (SeahorsePGPKey   *pkey,
                                                        guint            uid);
+
+void            seahorse_pgp_key_get_signature_text   (SeahorsePGPKey   *pkey,
+                                                       gpgme_key_sig_t  signature,
+                                                       gchar            **name,
+                                                       gchar            **email,
+                                                       gchar            **comment);
 
 guint           seahorse_pgp_key_get_sigtype          (SeahorsePGPKey   *pkey, 
                                                        gpgme_key_sig_t  signature);

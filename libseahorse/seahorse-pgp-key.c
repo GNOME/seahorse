@@ -711,6 +711,20 @@ seahorse_pgp_key_get_actual_uid       (SeahorsePGPKey   *pkey,
     return i + 1;
 }
 
+void
+seahorse_pgp_key_get_signature_text (SeahorsePGPKey *pkey, gpgme_key_sig_t signature,
+                                     gchar **name, gchar **email, gchar **comment)
+{
+    g_return_if_fail (signature != NULL);
+    
+    if (name)
+        *name = signature->name ? convert_string (signature->name) : NULL;
+    if (email)
+        *email = signature->email ? convert_string (signature->email) : NULL;
+    if (comment)
+        *comment = signature->comment ? convert_string (signature->comment) : NULL;
+}
+
 guint         
 seahorse_pgp_key_get_sigtype (SeahorsePGPKey *pkey, gpgme_key_sig_t signature)
 {
