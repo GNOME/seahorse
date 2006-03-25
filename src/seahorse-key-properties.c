@@ -275,7 +275,7 @@ do_names (SeahorseWidget *swidget)
                                 UIDSIG_ICON, SEAHORSE_STOCK_SIGN,
                                 UIDSIG_NAME, name ? name : _("[Unknown]"),
                                 UIDSIG_EMAIL, email,
-                                UIDSIG_COMMENT, sig->keyid);
+                                UIDSIG_COMMENT, sig->keyid, -1);
             
             g_free (name);
             g_free (email);
