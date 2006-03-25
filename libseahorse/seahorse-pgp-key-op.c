@@ -2107,46 +2107,26 @@ static gpgme_error_t
 photoid_add_action (guint state, gpointer data, int fd)
 {
     PhotoIdAddParm *parm = (PhotoIdAddParm*)data;
-    GtkWidget *question, *delete_button, *cancel_button;
-    gint response;
     
     switch (state) {
-	    case PHOTO_ID_ADD_COMMAND:
-            PRINT ((fd, "addphoto"));
-	        break;
-	    case PHOTO_ID_ADD_URI:
-            PRINT ((fd, parm->filename));
-	    	break;
-	    case PHOTO_ID_ADD_BIG:
-	    	/* let the user know their file is big and ask them if they still want to use it */
-	    	question = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE,
-		                        _("This photo ID file is very large. Are you sure you want to add it to your key?"));
-		    
-		    delete_button = gtk_button_new_from_stock (GTK_STOCK_ADD);
-		    cancel_button = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
-
-		    /* add widgets to action area */
-		    gtk_dialog_add_action_widget (GTK_DIALOG(question), GTK_WIDGET (cancel_button), GTK_RESPONSE_REJECT);
-		    gtk_dialog_add_action_widget (GTK_DIALOG(question), GTK_WIDGET (delete_button), GTK_RESPONSE_ACCEPT);
-		   
-		    /* show widgets */
-		    gtk_widget_show (delete_button);
-		    gtk_widget_show (cancel_button);
-		       
-		    response = gtk_dialog_run (GTK_DIALOG (question));
-		    gtk_widget_destroy (question);
-		    
-	        PRINT ((fd, (response == GTK_RESPONSE_ACCEPT) ? YES : NO));
-	        break;
-	    case PHOTO_ID_ADD_QUIT:
-            PRINT ((fd, QUIT));
-	        break;
-	    case PHOTO_ID_ADD_SAVE:
-            PRINT ((fd, YES));
-	        break;
-	    default:
-	        g_return_val_if_reached (GPG_E (GPG_ERR_GENERAL));
-	        break;
+    case PHOTO_ID_ADD_COMMAND:
+        PRINT ((fd, "addphoto"));
+        break;
+    case PHOTO_ID_ADD_URI:
+        PRINT ((fd, parm->filename));
+        break;
+    case PHOTO_ID_ADD_BIG:
+        PRINT ((fd, YES));
+        break;
+    case PHOTO_ID_ADD_QUIT:
+        PRINT ((fd, QUIT));
+        break;
+    case PHOTO_ID_ADD_SAVE:
+        PRINT ((fd, YES));
+        break;
+    default:
+        g_return_val_if_reached (GPG_E (GPG_ERR_GENERAL));
+        break;
     }
   
     seahorse_util_print_fd (fd, "\n");

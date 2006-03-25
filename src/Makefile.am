@@ -37,8 +37,9 @@ seahorse_SOURCES = main.c \
 	seahorse-generate-adv.c seahorse-generate-adv.h \
 	seahorse-windows.h \
 	seahorse-key-properties.c \
+	seahorse-photos.c \
 	seahorse-revoke.c \
-    seahorse-expires.c \
+	seahorse-expires.c \
 	seahorse-sign.c \
 	seahorse-delete.c \
 	seahorse-add-uid.c \

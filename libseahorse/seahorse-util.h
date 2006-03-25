@@ -117,8 +117,6 @@ GtkWidget*  seahorse_util_chooser_save_new              (const gchar *title,
 
 void        seahorse_util_chooser_show_key_files        (GtkWidget *dialog);
 
-void        seahorse_util_chooser_show_jpeg_files       (GtkWidget *dialog);
-
 void        seahorse_util_chooser_show_archive_files    (GtkWidget *dialog);
 
 void        seahorse_util_chooser_set_filename          (GtkWidget *dialog, 

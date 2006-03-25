@@ -321,90 +321,31 @@ do_names_signals (SeahorseWidget *swidget)
 static void
 owner_photo_add_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 {
-    SeahorseKey *skey;
     SeahorsePGPKey *pkey;
-    gchar* filename = NULL;
-    gpgme_error_t gerr;
-    GtkWidget *chooser;
 
-    skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
-    pkey = SEAHORSE_PGP_KEY (skey);
+    pkey = SEAHORSE_PGP_KEY (SEAHORSE_KEY_WIDGET (swidget)->skey);
+    g_assert (SEAHORSE_IS_PGP_KEY (pkey));
     
-    chooser = seahorse_util_chooser_open_new (_("Add Photo ID"), 
-                                              GTK_WINDOW (seahorse_widget_get_top (swidget)));
-    gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (chooser), TRUE);		
-    seahorse_util_chooser_show_jpeg_files (chooser);
-
-    if(gtk_dialog_run (GTK_DIALOG (chooser)) == GTK_RESPONSE_ACCEPT)
-        filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (chooser));
-        
-    gtk_widget_destroy (chooser);
-
-    if (!filename)
-        return;
-
-    gerr = seahorse_pgp_key_op_photoid_add (pkey, filename);
-    if (!GPG_IS_OK (gerr)) {
-        
-        /* A special error value set by seahorse_key_op_photoid_add to 
-           denote an invalid format file */
-        if (gerr == GPG_E (GPG_ERR_USER_1)) 
-            /* TODO: We really shouldn't be getting here. We should rerender 
-               the photo into a format that will work (along with resizing). */
-            seahorse_util_show_error (NULL, _("Couldn't add photo"), 
-                                      _("The file could not be loaded. It may be in an invalid format"));
-        else        
-            seahorse_util_handle_gpgme (gerr, _("Couldn't add photo"));        
-    }
-    
-    g_free (filename);
-    g_object_set_data (G_OBJECT (swidget), "current-photoid", NULL);
+    if (seahorse_photo_add (pkey, GTK_WINDOW (seahorse_widget_get_top (swidget))))
+        g_object_set_data (G_OBJECT (swidget), "current-photoid", NULL);
 }
  
 static void
 owner_photo_delete_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 {
-    SeahorseKey *skey;
     SeahorsePGPKey *pkey;
-    gpgme_error_t gerr;
-    GtkWidget *question, *delete_button, *cancel_button;
-    gint response, uid; 
     gpgmex_photo_id_t photoid;
 
-    photoid = (gpgmex_photo_id_t)g_object_get_data (G_OBJECT (swidget), "current-photoid");
+    photoid = (gpgmex_photo_id_t)g_object_get_data (G_OBJECT (swidget), 
+                                                    "current-photoid");
     g_assert (photoid != NULL);
-    
-    question = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
-                        GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE,
-                        _("Are you sure you want to permanently delete the current photo ID?"));
-    
-    delete_button = gtk_button_new_from_stock (GTK_STOCK_DELETE);
-    cancel_button = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
 
-    /* add widgets to action area */
-    gtk_dialog_add_action_widget (GTK_DIALOG (question), GTK_WIDGET (cancel_button), GTK_RESPONSE_REJECT);
-    gtk_dialog_add_action_widget (GTK_DIALOG (question), GTK_WIDGET (delete_button), GTK_RESPONSE_ACCEPT);
-   
-    /* show widgets */
-    gtk_widget_show (delete_button);
-    gtk_widget_show (cancel_button);
-       
-    response = gtk_dialog_run (GTK_DIALOG (question));
-    gtk_widget_destroy (question);
+    pkey = SEAHORSE_PGP_KEY (SEAHORSE_KEY_WIDGET (swidget)->skey);
+    g_assert (SEAHORSE_IS_PGP_KEY (pkey));
     
-    if (response != GTK_RESPONSE_ACCEPT)
-        return;
-    
-    skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
-    pkey = SEAHORSE_PGP_KEY (skey);
-    
-    uid = photoid->uid;
-    
-    gerr = seahorse_pgp_key_op_photoid_delete (pkey, uid);
-    if (!GPG_IS_OK (gerr))
-        seahorse_util_handle_gpgme (gerr, _("Couldn't delete photo"));
-    
-    g_object_set_data (G_OBJECT (swidget), "current-photoid", NULL);
+    if (seahorse_photo_delete (pkey, photoid, 
+                GTK_WINDOW (seahorse_widget_get_top (swidget))))
+        g_object_set_data (G_OBJECT (swidget), "current-photoid", NULL);
 }
 
 static void
@@ -416,7 +357,8 @@ owner_photo_primary_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
     gint uid;
     gpgmex_photo_id_t photoid;
 
-    photoid = (gpgmex_photo_id_t)g_object_get_data (G_OBJECT (swidget), "current-photoid");
+    photoid = (gpgmex_photo_id_t)g_object_get_data (G_OBJECT (swidget), 
+                                                    "current-photoid");
     g_assert (photoid != NULL);
         
     skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
@@ -426,7 +368,7 @@ owner_photo_primary_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
     
     gerr = seahorse_pgp_key_op_photoid_primary (pkey, uid);
     if (!GPG_IS_OK (gerr))
-        seahorse_util_handle_gpgme (gerr, _("Couldn't change primary photo ID"));
+        seahorse_util_handle_gpgme (gerr, _("Couldn't change primary photo"));
 }
 
 static void
@@ -438,7 +380,8 @@ set_photoid_state(SeahorseWidget *swidget, SeahorsePGPKey *pkey)
     gpgmex_photo_id_t photoid;
 
     etype = seahorse_key_get_etype (SEAHORSE_KEY(pkey));
-    photoid = (gpgmex_photo_id_t)g_object_get_data (G_OBJECT (swidget), "current-photoid");
+    photoid = (gpgmex_photo_id_t)g_object_get_data (G_OBJECT (swidget), 
+                                                    "current-photoid");
 
     /* Show when adding a photo is possible */
     show_glade_widget (swidget, "owner-photo-add-button", 
@@ -470,7 +413,8 @@ set_photoid_state(SeahorseWidget *swidget, SeahorsePGPKey *pkey)
     photo_image = glade_xml_get_widget (swidget->xml, "photoid");
     if (photo_image) {
         if (!photoid || !photoid->photo)
-            gtk_image_set_from_stock (GTK_IMAGE (photo_image), SEAHORSE_STOCK_PERSON, (GtkIconSize)-1);
+            gtk_image_set_from_stock (GTK_IMAGE (photo_image), 
+                                      SEAHORSE_STOCK_PERSON, (GtkIconSize)-1);
         else 
             gtk_image_set_from_pixbuf (GTK_IMAGE (photo_image), photoid->photo);
     }

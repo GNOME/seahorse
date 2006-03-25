@@ -64,5 +64,12 @@ void        seahorse_revoke_new         (SeahorsePGPKey     *pkey,
 
 void        seahorse_sign_show          (SeahorsePGPKey     *pkey, 
                                          guint              uid);
+                                         
+gboolean    seahorse_photo_add          (SeahorsePGPKey *pkey, 
+                                         GtkWindow *parent);
+                                         
+gboolean    seahorse_photo_delete       (SeahorsePGPKey *pkey, 
+                                         gpgmex_photo_id_t photo, 
+                                         GtkWindow *parent);
 
 #endif /* __SEAHORSE_KEY_DIALOGS__ */
