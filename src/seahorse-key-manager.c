@@ -508,11 +508,10 @@ collapse_all_activate (GtkMenuItem *item, SeahorseWidget *swidget)
 static void
 about_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
-	static GtkWidget *about = NULL;
 	GdkPixbuf *pixbuf = NULL;
     GtkWidget *tempwidget = gtk_image_new();
 
-	gchar *authors[] = {
+	static const gchar *authors[] = {
 		"Jacob Perkins <jap1@users.sourceforge.net>",
 		"Jose Carlos Garcia Sogo <jsogo@users.sourceforge.net>",
 		"Jean Schurger <yshark@schurger.org>",
@@ -525,18 +524,17 @@ about_activate (GtkWidget *widget, SeahorseWidget *swidget)
 		NULL
 	};
 
-	gchar *documenters[] = {
+	static const gchar *documenters[] = {
 		"Jacob Perkins <jap1@users.sourceforge.net>",
         "Adam Schreiber <sadam@clemson.edu>",
 		NULL
 	};
 
-	gchar *translator_credits = _("translator_credits");
-
-	if (about != NULL) {
-		gtk_window_present (GTK_WINDOW (about));
-		return;
-	}
+    static const gchar *artists[] = {
+        "Jacob Perkins <jap1@users.sourceforge.net>",
+        "Nate Nielsen <nielsen@memberwebs.com>",
+        NULL
+    };
 
     pixbuf = gtk_widget_render_icon (tempwidget, 
                                      SEAHORSE_STOCK_SEAHORSE, 
@@ -544,35 +542,22 @@ about_activate (GtkWidget *widget, SeahorseWidget *swidget)
                                      NULL); 
     gtk_widget_destroy(tempwidget);
 
-	if (pixbuf != NULL) {
-		GdkPixbuf *temp_pixbuf = NULL;
-		
-		temp_pixbuf = gdk_pixbuf_scale_simple (pixbuf,
-			gdk_pixbuf_get_width (pixbuf),
-			gdk_pixbuf_get_height (pixbuf),
-			GDK_INTERP_HYPER);
+	gtk_show_about_dialog (NULL, 
+                "name", _("seahorse"),
+                "version", VERSION,
+                "comments", _("Encryption Key Manager"),
+                "copyright", "Copyright \xc2\xa9 2002, 2003, 2004, 2005, 2006 Seahorse Project",
+                "authors", authors,
+                "documenters", documenters,
+                "artists", artists,
+                "translator-credits", _("translator-credits"),
+                "logo", pixbuf,
+                "website", "http://seahorse.sf.net",
+                "website-label", _("Seahorse Project Homepage"),
+                NULL);
+    
+    if (pixbuf != NULL)
 		g_object_unref (pixbuf);
-
-		pixbuf = temp_pixbuf;
-	}
-
-	about = gnome_about_new (_("seahorse"), VERSION,
-		"Copyright \xc2\xa9 2002, 2003, 2004 Seahorse Project",
-		"http://seahorse.sourceforge.net/",
-		(const char **)authors, (const char **)documenters,
-		strcmp (translator_credits, "translator_credits") != 0 ?
-			translator_credits : NULL,
-		pixbuf);
-	gtk_window_set_transient_for (GTK_WINDOW (about), GTK_WINDOW (
-		glade_xml_get_widget (swidget->xml, swidget->name)));
-	gtk_window_set_destroy_with_parent (GTK_WINDOW (about), TRUE);
-
-	if (pixbuf != NULL)
-		g_object_unref (pixbuf);
-
-	g_signal_connect (GTK_OBJECT (about), "destroy",
-		G_CALLBACK (gtk_widget_destroyed), &about);
-	gtk_widget_show (about);
 }
 
 /* Loads key properties of activated key */

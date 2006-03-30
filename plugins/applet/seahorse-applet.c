@@ -253,20 +253,28 @@ about_cb (BonoboUIComponent *uic, SeahorseApplet *sapplet, const gchar *verbname
         NULL    
     };
 
-    const gchar *documenters[] = {
+    static const gchar *documenters[] = {
         "Adam Schreiber <sadam@clemson.edu>",
         NULL
+    };
+    
+    static const gchar *artists[] = {
+        "Nate Nielsen <nielsen@memberwebs.com>",
+        NULL    
     };
 
     gtk_show_about_dialog (NULL, 
                 "name", _("seahorse-applet"),
                 "version", VERSION,
                 "comments", _("Use PGP/GPG to encrypt/decrypt/sign/verify/import the clipboard."),
-                "copyright", "\xC2\xA9 2005 Adam Schreiber",
+                "copyright", "\xC2\xA9 2005, 2006 Adam Schreiber",
                 "authors", authors,
                 "documenters", documenters,
+                "artists", artists,
                 "translator-credits", _("translator-credits"),
                 "logo", pixbuf,
+                "website", "http://seahorse.sf.net",
+                "website-label", _("Seahorse Project Homepage"),
                 NULL);
     
     g_object_unref(pixbuf);
