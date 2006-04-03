@@ -1,7 +1,7 @@
 /*
  * Seahorse
  *
- * Copyright (C) 2004 Nate Nielsen
+ * Copyright (C) 2004-2006 Nate Nielsen
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,7 +56,12 @@
 #define DEFAULT_LOAD_BATCH 200
 
 enum {
-	PROP_0,
+    LOAD_FULL = 0x01,
+    LOAD_PHOTOS = 0x02
+};
+
+enum {
+    PROP_0,
     PROP_KEY_TYPE,
     PROP_LOCATION
 };
@@ -105,12 +110,20 @@ DECLARE_OPERATION (Load, load)
     guint batch;                    /* Number to load in a batch, or 0 for synchronous */
     guint stag;                     /* The event source handler id (for stopping a load) */
     gboolean all;                   /* When refreshing this is the refresh all keys flag */
-    gboolean complete;              /* Load complete keys */
+    guint parts;                    /* Parts to load*/
     GHashTable *checks;             /* When refreshing this is our set of missing keys */
 END_DECLARE_OPERATION        
 
 IMPLEMENT_OPERATION (Load, load)
 
+static SeahorseLoadOperation*   seahorse_load_operation_start   (SeahorsePGPSource *psrc, 
+                                                                 const gchar **pattern, 
+                                                                 guint parts,
+                                                                 gboolean secret, 
+                                                                 gboolean refresh, 
+                                                                 gboolean all);
+
+static gboolean                 scheduled_dummy                 (gpointer data);
 
 /* -----------------------------------------------------------------------------
  * PGP Source
@@ -317,13 +330,46 @@ seahorse_pgp_source_get_property (GObject *object, guint prop_id, GValue *value,
 static void
 key_changed (SeahorseKey *skey, SeahorseKeyChange change, SeahorseKeySource *sksrc)
 {
+    SeahorsePGPSource *psrc;
+    SeahorseKeyEType etype;
+    SeahorseLoadOperation *lop;
+    const gchar *patterns[2];
+    guint parts;
+    
     /* TODO: We need to fix these key change flags. Currently the only thing
      * that sets 'ALL' is when we replace a key in an skey. We don't 
      * need to reload in that case */
     
-    if (change != SKEY_CHANGE_ALL)
-        seahorse_key_source_load_async (sksrc, SKSRC_LOAD_KEY, 
-                                        seahorse_key_get_keyid (skey));
+    if (change == SKEY_CHANGE_ALL)
+        return;
+    
+    etype = seahorse_key_get_etype (skey);
+    
+    psrc = SEAHORSE_PGP_SOURCE (seahorse_key_get_source (skey));
+    g_assert (SEAHORSE_IS_PGP_SOURCE (psrc));
+    
+    patterns[0] = seahorse_key_get_keyid (skey);
+    patterns[1] = NULL;
+    
+    parts = 0;
+    if (seahorse_key_get_loaded (skey) == SKEY_INFO_COMPLETE) {
+        parts |= LOAD_FULL;
+        if (change == SKEY_CHANGE_PHOTOS || change == SKEY_CHANGE_UIDS)
+            parts |= LOAD_PHOTOS;
+    }
+    
+    /* Schedule a dummy refresh. This blocks all monitoring for a while */
+    cancel_scheduled_refresh (psrc);
+    psrc->pv->scheduled_refresh = g_timeout_add (500, scheduled_dummy, psrc);
+    DEBUG_REFRESH ("scheduled a dummy refresh\n");
+    
+    lop = seahorse_load_operation_start (psrc, patterns, parts, FALSE, FALSE, FALSE);
+    seahorse_multi_operation_take (psrc->pv->operations, SEAHORSE_OPERATION (lop));
+
+    if (etype == SKEY_PRIVATE) {
+        lop = seahorse_load_operation_start (psrc, patterns, parts, TRUE, FALSE, FALSE);
+        seahorse_multi_operation_take (psrc->pv->operations, SEAHORSE_OPERATION (lop));
+    }
 }
 
 static void
@@ -357,7 +403,7 @@ have_key_in_context (SeahorsePGPSource *psrc, const gchar *id, gboolean secret)
 
 /* Add a key to the context  */
 static SeahorsePGPKey*
-add_key_to_context (SeahorsePGPSource *psrc, gpgme_key_t key)
+add_key_to_context (SeahorsePGPSource *psrc, gpgme_key_t key, gpgmex_photo_id_t photos)
 {
     SeahorsePGPKey *pkey = NULL;
     SeahorsePGPKey *prev;
@@ -375,6 +421,11 @@ add_key_to_context (SeahorsePGPSource *psrc, gpgme_key_t key)
             g_object_set (prev, "seckey", key, NULL);
         else
             g_object_set (prev, "pubkey", key, NULL);
+        
+        if (prev->photoids)
+            gpgmex_photo_id_free_all (prev->photoids);
+        prev->photoids = photos;
+        
         return prev;
     }
     
@@ -385,39 +436,46 @@ add_key_to_context (SeahorsePGPSource *psrc, gpgme_key_t key)
         /* Since we don't have a public key yet, save this away */
         psrc->pv->orphan_secret = g_list_append (psrc->pv->orphan_secret, pkey);
         
+        if (photos)
+            gpgmex_photo_id_free_all (photos);
+        
         /* No key was loaded as far as everyone is concerned */
-        return NULL;        
+        return NULL;
+    }
  
     /* Just a new public key */
-    } else {
-        /* Check for orphans */
-        for (l = psrc->pv->orphan_secret; l; l = g_list_next (l)) {
-            
-            /* Look for a matching key */
-            if (g_str_equal (id, seahorse_pgp_key_get_id (SEAHORSE_PGP_KEY(l->data)->seckey, 0))) {
-                
-                /* Set it up properly */
-                pkey = SEAHORSE_PGP_KEY (l->data);
-                g_object_set (pkey, "pubkey", key, NULL);
-                
-                /* Remove item from orphan list cleanly */
-                psrc->pv->orphan_secret = g_list_remove_link (psrc->pv->orphan_secret, l);
-                g_list_free (l);
-                break;
-            }
-        }
-                                
-        if (pkey == NULL)
-            pkey = seahorse_pgp_key_new (SEAHORSE_KEY_SOURCE (psrc), key, NULL);
-        
-        /* We listen in to get notified of changes on this key */
-        g_signal_connect (pkey, "changed", G_CALLBACK (key_changed), SEAHORSE_KEY_SOURCE (psrc));
-        g_signal_connect (pkey, "destroy", G_CALLBACK (key_destroyed), SEAHORSE_KEY_SOURCE (psrc));
 
-        /* Add to context */ 
-        seahorse_context_take_key (SCTX_APP (), SEAHORSE_KEY (pkey));
+    /* Check for orphans */
+    for (l = psrc->pv->orphan_secret; l; l = g_list_next (l)) {
+        
+        /* Look for a matching key */
+        if (g_str_equal (id, seahorse_pgp_key_get_id (SEAHORSE_PGP_KEY(l->data)->seckey, 0))) {
+            
+            /* Set it up properly */
+            pkey = SEAHORSE_PGP_KEY (l->data);
+            g_object_set (pkey, "pubkey", key, NULL);
+            
+            /* Remove item from orphan list cleanly */
+            psrc->pv->orphan_secret = g_list_remove_link (psrc->pv->orphan_secret, l);
+            g_list_free (l);
+            break;
+        }
     }
 
+    if (pkey == NULL)
+        pkey = seahorse_pgp_key_new (SEAHORSE_KEY_SOURCE (psrc), key, NULL);
+    
+    /* We listen in to get notified of changes on this key */
+    g_signal_connect (pkey, "changed", G_CALLBACK (key_changed), SEAHORSE_KEY_SOURCE (psrc));
+    g_signal_connect (pkey, "destroy", G_CALLBACK (key_destroyed), SEAHORSE_KEY_SOURCE (psrc));
+
+    /* Add to context */ 
+    seahorse_context_take_key (SCTX_APP (), SEAHORSE_KEY (pkey));
+
+    if (pkey->photoids)
+        gpgmex_photo_id_free_all (pkey->photoids);
+    pkey->photoids = photos;
+    
     return pkey; 
 }
 
@@ -550,6 +608,7 @@ static gboolean
 keyload_handler (SeahorseLoadOperation *lop)
 {
     SeahorsePGPKey *pkey;
+    gpgmex_photo_id_t photos;
     gpgme_key_t key;
     guint batch;
     const gchar *id;
@@ -591,19 +650,15 @@ keyload_handler (SeahorseLoadOperation *lop)
             }
         }
         
-        pkey = add_key_to_context (lop->psrc, key);
+        /* Load additional info */
+        photos = NULL;
+        if (lop->parts & LOAD_PHOTOS)
+            seahorse_pgp_key_op_photoid_load (lop->psrc, key, &photos);
+
+        pkey = add_key_to_context (lop->psrc, key, photos);
+        
         gpgmex_key_unref (key);
         lop->loaded++;
-        
-        /* Load additional info */
-        if (lop->complete && pkey != NULL) {
-            if (pkey->photoids) {
-                gpgmex_photo_id_free_all (pkey->photoids);
-                pkey->photoids = NULL;
-            }
-            
-            seahorse_pgp_key_op_photoid_load (pkey, &(pkey->photoids));
-        }
     }
     
     /* More to do, so queue for next round */        
@@ -624,7 +679,7 @@ keyload_handler (SeahorseLoadOperation *lop)
 }
 
 static SeahorseLoadOperation*
-seahorse_load_operation_start (SeahorsePGPSource *psrc, const gchar **pattern,
+seahorse_load_operation_start (SeahorsePGPSource *psrc, const gchar **pattern, guint parts,
                                gboolean secret, gboolean refresh, gboolean all)
 {
     SeahorsePGPSourcePrivate *priv;
@@ -641,12 +696,11 @@ seahorse_load_operation_start (SeahorsePGPSource *psrc, const gchar **pattern,
     lop->secret = secret;
     g_object_ref (psrc);
     
-    /* When loading a specific key, we load extra info */
-    if (pattern != NULL) {
-        lop->complete = TRUE;
+    /* See which extra parts we should load */
+    lop->parts = parts;
+    if (parts & LOAD_FULL) 
         gpgme_set_keylist_mode (lop->ctx, GPGME_KEYLIST_MODE_SIGS | 
                 gpgme_get_keylist_mode (lop->ctx));
-    }
     
     /* Start the key listing */
     if (pattern)
@@ -679,9 +733,15 @@ seahorse_load_operation_start (SeahorsePGPSource *psrc, const gchar **pattern,
     seahorse_operation_mark_start (SEAHORSE_OPERATION (lop));
     seahorse_operation_mark_progress (SEAHORSE_OPERATION (lop), _("Loading Keys..."), 0, 0);
     
-    /* Load keys at idle time */
-    lop->stag = g_idle_add_full (G_PRIORITY_LOW, (GSourceFunc)keyload_handler, 
-                                 lop, NULL);
+    if (all && !refresh) {
+        /* Load keys at idle time */
+        lop->stag = g_idle_add_full (G_PRIORITY_LOW, (GSourceFunc)keyload_handler, 
+                                     lop, NULL);
+        
+    } else {
+        /* Run one iteration of the handler */
+        keyload_handler (lop);
+    }
  
     return lop;
 }    
@@ -721,11 +781,17 @@ seahorse_pgp_source_load (SeahorseKeySource *src, SeahorseKeySourceLoad load,
     DEBUG_REFRESH ("refreshing keys...\n");
 
     /* Secret keys */
-    lop = seahorse_load_operation_start (psrc, match ? patterns : NULL, FALSE, ref, all);
+    lop = seahorse_load_operation_start (psrc, 
+                                         match ? patterns : NULL, 
+                                         match ? LOAD_FULL | LOAD_PHOTOS : 0,
+                                         FALSE, ref, all);
     seahorse_multi_operation_take (psrc->pv->operations, SEAHORSE_OPERATION (lop));
 
     /* Public keys */
-    lop = seahorse_load_operation_start (psrc, match ? patterns : NULL, TRUE, ref, all);
+    lop = seahorse_load_operation_start (psrc, 
+                                         match ? patterns : NULL, 
+                                         match ? LOAD_FULL | LOAD_PHOTOS : 0,
+                                         TRUE, ref, all);
     seahorse_multi_operation_take (psrc->pv->operations, SEAHORSE_OPERATION (lop));
 
     g_object_ref (psrc->pv->operations);
@@ -801,11 +867,13 @@ seahorse_pgp_source_import (SeahorseKeySource *sksrc, gpgme_data_t data)
             }
 
             /* Reload public keys */
-            lop = seahorse_load_operation_start (psrc, patterns, FALSE, FALSE, TRUE);
+            lop = seahorse_load_operation_start (psrc, patterns, LOAD_FULL, 
+                                                 FALSE, FALSE, TRUE);
             g_object_unref (lop);
 
             /* Reload secret keys */
-            lop = seahorse_load_operation_start (psrc, patterns, TRUE, FALSE, TRUE);
+            lop = seahorse_load_operation_start (psrc, patterns, LOAD_FULL,
+                                                 TRUE, FALSE, TRUE);
             g_object_unref (lop);
             
             g_free (patterns);
@@ -971,11 +1039,11 @@ seahorse_pgp_source_loadkeys (SeahorsePGPSource *psrc, gboolean secret_only)
 
     if (!secret_only) {
         /* Public keys */
-        lop = seahorse_load_operation_start (psrc, NULL, FALSE, FALSE, FALSE);
+        lop = seahorse_load_operation_start (psrc, NULL, 0, FALSE, FALSE, FALSE);
         seahorse_multi_operation_take (psrc->pv->operations, SEAHORSE_OPERATION (lop));
     }
     
     /* Secret keys */
-    lop = seahorse_load_operation_start (psrc, NULL, TRUE, FALSE, FALSE);
+    lop = seahorse_load_operation_start (psrc, NULL, 0, TRUE, FALSE, FALSE);
     seahorse_multi_operation_take (psrc->pv->operations, SEAHORSE_OPERATION (lop));
 }

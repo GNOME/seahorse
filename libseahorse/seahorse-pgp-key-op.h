@@ -165,8 +165,9 @@ gpgme_error_t  seahorse_pgp_key_op_photoid_add      (SeahorsePGPKey *pkey,
  
 gpgme_error_t  seahorse_pgp_key_op_photoid_delete   (SeahorsePGPKey *pkey,
                                                      guint uid);
- 
-gpgme_error_t  seahorse_pgp_key_op_photoid_load     (SeahorsePGPKey *pkey,
+                                                     
+gpgme_error_t  seahorse_pgp_key_op_photoid_load     (SeahorsePGPSource *psrc, 
+                                                     gpgme_key_t key, 
                                                      gpgmex_photo_id_t *photoids);
 
 gpgme_error_t  seahorse_pgp_key_op_photoid_primary (SeahorsePGPKey *pkey, 

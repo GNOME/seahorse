@@ -205,6 +205,9 @@ do_names (SeahorseWidget *swidget)
     
     skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
     pkey = SEAHORSE_PGP_KEY (skey);
+    
+    if (seahorse_key_get_etype (skey) != SKEY_PRIVATE)
+        return;
 
     /* Clear/create table store */
     widget = seahorse_widget_get_widget (swidget, "names-tree");
@@ -297,6 +300,9 @@ do_names_signals (SeahorseWidget *swidget)
     
     skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
     
+    if (seahorse_key_get_etype (skey) != SKEY_PRIVATE)
+        return;
+
     glade_xml_signal_connect_data (swidget->xml, "on_names_add",
             G_CALLBACK (names_add_clicked), swidget);
     glade_xml_signal_connect_data (swidget->xml, "on_names_primary",
@@ -1035,7 +1041,7 @@ do_details (SeahorseWidget *swidget)
 }
 
 /* -----------------------------------------------------------------------------
- * TRUST PAGE
+ * TRUST PAGE (PUBLIC KEYS)
  */
 
 enum {
@@ -1066,6 +1072,44 @@ signatures_revoke_button_clicked (GtkWidget *widget, SeahorseWidget *skey)
 }
 
 static void
+trust_marginal_toggled (GtkToggleButton *toggle, SeahorseWidget *swidget)
+{
+    SeahorseKey *skey;
+    guint trust;
+    gpgme_error_t err;
+    
+    skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
+    
+    trust = gtk_toggle_button_get_active (toggle) ?
+            SEAHORSE_VALIDITY_MARGINAL : SEAHORSE_VALIDITY_UNKNOWN;
+    
+    if (seahorse_key_get_trust (skey) != trust) {
+        err = seahorse_pgp_key_op_set_trust (SEAHORSE_PGP_KEY (skey), trust);
+        if (err)
+            seahorse_util_handle_gpgme (err, _("Unable to change trust"));
+    }
+}
+
+static void
+trust_complete_toggled (GtkToggleButton *toggle, SeahorseWidget *swidget)
+{
+    SeahorseKey *skey;
+    guint trust;
+    gpgme_error_t err;
+    
+    skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
+    
+    trust = gtk_toggle_button_get_active (toggle) ?
+            SEAHORSE_VALIDITY_FULL : SEAHORSE_VALIDITY_MARGINAL;
+    
+    if (seahorse_key_get_trust (skey) != trust) {
+        err = seahorse_pgp_key_op_set_trust (SEAHORSE_PGP_KEY (skey), trust);
+        if (err)
+            seahorse_util_handle_gpgme (err, _("Unable to change trust"));
+    }
+}
+
+static void
 signatures_populate_model (SeahorseWidget *swidget, GtkListStore *store)
 {
     SeahorseKey *skey;
@@ -1073,6 +1117,7 @@ signatures_populate_model (SeahorseWidget *swidget, GtkListStore *store)
     GtkTreeIter iter;
     GtkWidget *widget;
     gboolean trusted_only = TRUE;
+    guint sigtype;
     const gchar *name = NULL;
     const gchar *keyid;
     gpgme_user_id_t uid;
@@ -1101,7 +1146,8 @@ signatures_populate_model (SeahorseWidget *swidget, GtkListStore *store)
                 have_sigs = TRUE;
                 
                 /* Find any trusted signatures */
-                if (trusted_only && !(seahorse_pgp_key_get_sigtype (pkey, sig) & SKEY_PGPSIG_TRUSTED))
+                sigtype = seahorse_pgp_key_get_sigtype (pkey, sig);
+                if (trusted_only && !(sigtype & SKEY_PGPSIG_TRUSTED || sigtype & SKEY_PGPSIG_PERSONAL))
                     continue;
 
                 gtk_list_store_append (store, &iter);
@@ -1138,7 +1184,7 @@ signatures_populate_model (SeahorseWidget *swidget, GtkListStore *store)
  * assumed, don't display those by default either.
  */
 static void
-trust_toggled (GtkToggleButton *toggle, SeahorseWidget *swidget)
+trusted_toggled (GtkToggleButton *toggle, SeahorseWidget *swidget)
 {
     GtkWidget *widget;
     GtkListStore *store;
@@ -1167,11 +1213,15 @@ do_trust_signals (SeahorseWidget *swidget)
     skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
     etype = seahorse_key_get_etype (skey);
     
+    if (etype != SKEY_PUBLIC)
+        return;
+    
     set_glade_image (swidget, "image-good1", "seahorse-sign-ok");
     set_glade_image (swidget, "image-good2", "seahorse-sign-ok");
     
     glade_xml_signal_connect_data (swidget->xml, "trust_sign_clicked", 
                                    G_CALLBACK (trust_sign_clicked), swidget);
+    /* TODO: Hookup revoke handler */
     
     if (etype == SKEY_PUBLIC ) {
         show_glade_widget (swidget, "signatures-revoke-button", FALSE);
@@ -1185,10 +1235,15 @@ do_trust_signals (SeahorseWidget *swidget)
     }
 
     glade_xml_signal_connect_data (swidget->xml, "on_signatures_toggle_toggled",
-                                   G_CALLBACK (trust_toggled), swidget);
-
+                                   G_CALLBACK (trusted_toggled), swidget);
     widget = glade_xml_get_widget (swidget->xml, "signatures-toggle");
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
+    
+    glade_xml_signal_connect_data (swidget->xml, "trust_marginal_toggled",
+                                   G_CALLBACK (trust_marginal_toggled), swidget);
+    glade_xml_signal_connect_data (swidget->xml, "trust_complete_toggled",
+                                   G_CALLBACK (trust_complete_toggled), swidget);
+    
 }
 
 static void 
@@ -1198,68 +1253,95 @@ do_trust (SeahorseWidget *swidget)
     SeahorsePGPKey *pkey;
     GtkWidget *widget;
     GtkListStore *store;
-    GArray *names;
-    gint names_size, i, j;
-    const gchar *name;
     guint trust;
     gboolean trusted;
+    gboolean managed;
+    const gchar *icon = NULL;
     gboolean sigpersonal;
-    gpgme_user_id_t uid;
-    gpgme_key_sig_t sig;
 
     skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
     pkey = SEAHORSE_PGP_KEY (skey);
     
-    trusted = seahorse_key_get_flags (skey) & SKEY_FLAG_TRUSTED;
-    sigpersonal = trusted ? seahorse_pgp_key_have_signatures (pkey, SKEY_PGPSIG_PERSONAL) : FALSE;
+    if (seahorse_key_get_etype (skey) != SKEY_PUBLIC)
+        return;
+    
     trust = seahorse_key_get_trust (skey);
     
-    /* This is for untrusted keys, that aren't overriden by user */
-    show_glade_widget (swidget, "untrusted-area", 
-                       !trusted && trust != SEAHORSE_VALIDITY_NEVER);
-                       
-    /* For untrusted keys that *are* overriden by user */
-    show_glade_widget (swidget, "untrusted-overridden-area", 
-                       !trusted && trust == SEAHORSE_VALIDITY_NEVER);
-                       
-    /* Signed by user */
-    show_glade_widget (swidget, "trusted-signed-area", trusted && sigpersonal);
+    trusted = FALSE;
+    managed = FALSE;
     
-    /* Trusted but not signed by user */
-    show_glade_widget (swidget, "trusted-area", trusted && !sigpersonal);
+    switch (trust) {
 
-    widget = glade_xml_get_widget (swidget->xml, "signatures-filter-combobox");
-
-    /* Fill in the signatures filter combo box */
-    if (widget) {
-        gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
-
-        names = g_array_new (FALSE, FALSE, sizeof (gchar*));
-        names_size = 0;
-        for (uid = pkey->pubkey->uids; uid; uid = uid->next) {
-            for (sig = uid->signatures; sig; sig = sig->next)  {	
-                if (!g_str_equal (sig->name, "")) {
-                    g_array_append_val (names, sig->name);
-                    names_size++;
-                }
-            }
-        }
+    /* We shouldn't be seeing this page with these trusts */
+    case SEAHORSE_VALIDITY_REVOKED:
+    case SEAHORSE_VALIDITY_DISABLED:
+        return;
     
-        for (i = 0; i < names_size; i++) {
-            name = g_array_index (names, gchar*, i);
-            for (j = i+1; j < names_size; j++) {
-                if (g_str_equal (name, g_array_index (names, gchar*, j))) {
-                    g_array_remove_index (names, j);
-                    names_size--;
-                    j--;
-                } 
-            }
-            gtk_combo_box_append_text (GTK_COMBO_BOX (widget), name);
-        }
+    /* Trust is specified manually */
+    case SEAHORSE_VALIDITY_ULTIMATE:
+        trusted = TRUE;
+        managed = FALSE;
+        icon = SEAHORSE_STOCK_SIGN_OK;
+        break;
+    
+    /* Trust is specified manually */
+    case SEAHORSE_VALIDITY_NEVER:
+        trusted = FALSE;
+        managed = FALSE;
+        icon = SEAHORSE_STOCK_SIGN_BAD;
+        break;
+    
+    /* We manage the trust through this page */
+    case SEAHORSE_VALIDITY_FULL:
+    case SEAHORSE_VALIDITY_MARGINAL:
+        trusted = TRUE;
+        managed = TRUE;
+        icon = SEAHORSE_STOCK_SIGN_OK;
+        break;
+    
+    /* We manage the trust through this page */
+    case SEAHORSE_VALIDITY_UNKNOWN:
+        trusted = FALSE;
+        managed = TRUE;
+        icon = SEAHORSE_STOCK_SIGN;
+        break;
+    
+    default:
+        g_assert_not_reached ();
+        return;
+    }
+    
+    /* Managed and unmanaged areas */
+    show_glade_widget (swidget, "manual-trust-area", !managed);
+    show_glade_widget (swidget, "manage-trust-area", managed);
+
+    /* Managed check boxes */
+    if (managed) {
+        widget = seahorse_widget_get_widget (swidget, "trust-marginal-check");
+        g_return_if_fail (widget != NULL);
         
-        g_array_free (names, TRUE);
+        g_signal_handlers_block_by_func (widget, trust_marginal_toggled, swidget);
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), trust != SEAHORSE_VALIDITY_UNKNOWN);
+        g_signal_handlers_unblock_by_func (widget, trust_marginal_toggled, swidget);
+    
+        widget = seahorse_widget_get_widget (swidget, "trust-complete-check");
+        g_return_if_fail (widget != NULL);
+        
+        g_signal_handlers_block_by_func (widget, trust_complete_toggled, swidget);
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), trust == SEAHORSE_VALIDITY_FULL);
+        gtk_widget_set_sensitive (widget, trust != SEAHORSE_VALIDITY_UNKNOWN);
+        g_signal_handlers_unblock_by_func (widget, trust_complete_toggled, swidget);
     }
 
+    /* Signing and revoking */
+    sigpersonal = seahorse_pgp_key_have_signatures (pkey, SKEY_PGPSIG_PERSONAL);
+    show_glade_widget (swidget, "sign-area", !sigpersonal && trusted);
+    show_glade_widget (swidget, "revoke-area", sigpersonal);
+    
+    /* The image */
+    set_glade_image (swidget, "sign-image", icon);
+
+    
     /* The actual signatures listing */
     widget = glade_xml_get_widget (swidget->xml, "signatures-tree");
     store = GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (widget)));
@@ -1295,8 +1377,6 @@ do_trust (SeahorseWidget *swidget)
 static void
 key_changed (SeahorseKey *skey, SeahorseKeyChange change, SeahorseWidget *swidget)
 {
-    SeahorseKeyEType etype = seahorse_key_get_etype (skey);
-    
     switch (change) {
     case SKEY_CHANGE_PHOTOS:
         do_owner (swidget);
@@ -1305,10 +1385,8 @@ key_changed (SeahorseKey *skey, SeahorseKeyChange change, SeahorseWidget *swidge
     case SKEY_CHANGE_UIDS:
     case SKEY_CHANGE_SIGNERS:
         do_owner (swidget);
-        if (etype == SKEY_PRIVATE)
-            do_names (swidget);
-        else
-            do_trust (swidget);
+        do_names (swidget);
+        do_trust (swidget);
         break;
         
     case SKEY_CHANGE_SUBKEYS: 
@@ -1320,16 +1398,14 @@ key_changed (SeahorseKey *skey, SeahorseKeyChange change, SeahorseWidget *swidge
         break;
     
     case SKEY_CHANGE_TRUST:
-        if (etype != SKEY_PRIVATE)
-            do_trust (swidget);
+        do_trust (swidget);
         do_details (swidget);
+        break;
     
     default:
         do_owner (swidget);
-        if (etype == SKEY_PRIVATE)
-            do_names (swidget);
-        else
-            do_trust (swidget);
+        do_names (swidget);
+        do_trust (swidget);
         do_details (swidget);
         break;
     }

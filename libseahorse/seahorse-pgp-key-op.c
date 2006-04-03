@@ -262,26 +262,38 @@ seahorse_pgp_key_op_edit (gpointer data, gpgme_status_code_t status,
 
 /* Common edit operation */
 static gpgme_error_t
+edit_gpgme_key (SeahorsePGPSource *psrc, gpgme_key_t key, SeahorseEditParm *parms)
+{
+    gpgme_data_t out;
+    gpgme_error_t err;
+    
+    g_assert (psrc && SEAHORSE_IS_PGP_SOURCE (psrc));
+    
+    err = gpgme_data_new (&out);
+    g_return_val_if_fail (GPG_IS_OK (err), err);
+    
+    /* do edit callback, release data */
+    err = gpgme_op_edit (psrc->gctx, key, seahorse_pgp_key_op_edit, parms, out);
+    gpgme_data_release (out);
+    
+    return err;
+}
+
+static gpgme_error_t
 edit_key (SeahorsePGPKey *pkey, SeahorseEditParm *parms, SeahorseKeyChange change)
 {
     SeahorsePGPSource *psrc;
-	gpgme_data_t out;
-	gpgme_error_t err;
-	
+    gpgme_error_t err;
+    
     psrc = SEAHORSE_PGP_SOURCE (seahorse_key_get_source (SEAHORSE_KEY (pkey)));
     g_return_val_if_fail (psrc && SEAHORSE_IS_PGP_SOURCE (psrc), GPG_E (GPG_ERR_INV_KEYRING));
   
-	err = gpgme_data_new (&out);
-	g_return_val_if_fail (GPG_IS_OK (err), err);
+    err = edit_gpgme_key (psrc, pkey->pubkey, parms);
+
+    if (GPG_IS_OK (err) && (change != 0))
+        seahorse_key_changed (SEAHORSE_KEY (pkey), change);
     
-	/* do edit callback, release data */
-	err = gpgme_op_edit (psrc->gctx, pkey->pubkey, seahorse_pgp_key_op_edit, parms, out);
-	gpgme_data_release (out);
-	
-	if (GPG_IS_OK (err) && (change != 0))
-    	seahorse_key_changed (SEAHORSE_KEY (pkey), change);
-    
-	return err;
+    return err;
 }
 
 typedef struct
@@ -2430,70 +2442,71 @@ photoid_load_transit (guint current_state, gpgme_status_code_t status,
  * Returns: Error value
  **/
 gpgme_error_t 
-seahorse_pgp_key_op_photoid_load (SeahorsePGPKey *pkey, gpgmex_photo_id_t *photoids)
+seahorse_pgp_key_op_photoid_load (SeahorsePGPSource *psrc, gpgme_key_t key, 
+                                  gpgmex_photo_id_t *photoids)
 {
-	SeahorseEditParm *parms;
-	PhotoIdLoadParm *photoid_load_parm;
-	gpgme_error_t err;
+    /* Make sure there's enough room for the .jpg extension */
+    gchar image_path[]    = "/tmp/seahorse-photoid-XXXXXX\0\0\0\0";
+    
+    SeahorseEditParm *parms;
+    PhotoIdLoadParm *photoid_load_parm;
+    gpgme_error_t err;
     const gchar *oldpath;
     gchar *path;
-	guint fd;
-
-    DEBUG_OPERATION (("PhotoIDLoad Start\n"));     
+    guint fd;
 
     g_return_val_if_fail(*photoids == NULL, GPG_E (GPG_ERR_GENERAL));
-    
-    /* Make sure there's enough room for the .jpg extension */
-    gchar image_path[] = "/tmp/seahorse-photoid-XXXXXX\0\0\0\0";
-    
-    g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (pkey), GPG_E(GPG_ERR_WRONG_KEY_USAGE));
-    
- 	fd = g_mkstemp (image_path);
- 	
- 	if(fd == -1)
- 		err = GPG_E(GPG_ERR_GENERAL);
-    
- 	else {
+    g_return_val_if_fail (SEAHORSE_IS_PGP_SOURCE (psrc), 
+                          GPG_E (GPG_ERR_GENERAL));
+    g_return_val_if_fail (key && seahorse_pgp_key_get_id (key, 0), 
+                          GPG_E (GPG_ERR_WRONG_KEY_USAGE));
 
-		g_unlink(image_path);
- 		close(fd);
- 		strcat (image_path, ".jpg");
-	    
-		photoid_load_parm = g_new0 (PhotoIdLoadParm, 1);
-		photoid_load_parm->uid = 1;
-		photoid_load_parm->num_uids = 0;
-		photoid_load_parm->list = *photoids;
-		photoid_load_parm->first = NULL;
-		photoid_load_parm->output_file = image_path;
-		
-		DEBUG_OPERATION (("PhotoIdLoad KeyID %s\n", seahorse_key_get_keyid (SEAHORSE_KEY (pkey))));
-        err = gpgmex_op_num_uids (NULL, 
-                                  seahorse_key_get_keyid (SEAHORSE_KEY (pkey)), 
-							      &(photoid_load_parm->num_uids));
+    DEBUG_OPERATION (("PhotoIDLoad Start\n"));
+    
+    fd = g_mkstemp (image_path);
+    if(fd == -1) 
+        err = GPG_E(GPG_ERR_GENERAL);
+    
+    else {
+
+        g_unlink(image_path);
+        close(fd);
+        strcat (image_path, ".jpg");
+        
+        photoid_load_parm = g_new0 (PhotoIdLoadParm, 1);
+        photoid_load_parm->uid = 1;
+        photoid_load_parm->num_uids = 0;
+        photoid_load_parm->list = *photoids;
+        photoid_load_parm->first = NULL;
+        photoid_load_parm->output_file = image_path;
+        
+        DEBUG_OPERATION (("PhotoIdLoad KeyID %s\n", seahorse_pgp_key_get_id (key, 0)));
+        err = gpgmex_op_num_uids (NULL, seahorse_pgp_key_get_id (key, 0),
+                                  &(photoid_load_parm->num_uids));
         DEBUG_OPERATION (("PhotoIDLoad Number of UIDs %i\n", photoid_load_parm->num_uids));
         
-		if (GPG_IS_OK(err)) {
+        if (GPG_IS_OK(err)) {
             
-			setenv("SEAHORSE_IMAGE_FILE", image_path, 1);
-			oldpath = getenv("PATH");
+            setenv("SEAHORSE_IMAGE_FILE", image_path, 1);
+            oldpath = getenv("PATH");
             
             path = g_strdup_printf ("%s:%s", EXECDIR, getenv("PATH"));
-			setenv("PATH", path, 1);
+            setenv("PATH", path, 1);
             g_free (path);
-			
-			parms = seahorse_edit_parm_new (PHOTO_ID_LOAD_START, photoid_load_action,
-							                photoid_load_transit, photoid_load_parm);
-			
-			/* generate list */
-			err = edit_key (pkey, parms, 0);
+            
+            parms = seahorse_edit_parm_new (PHOTO_ID_LOAD_START, photoid_load_action,
+                                            photoid_load_transit, photoid_load_parm);
+            
+            /* generate list */
+            err = edit_gpgme_key (psrc, key, parms);
             setenv("PATH", oldpath, 1);
             
-			*photoids = photoid_load_parm->first;  
-		}
- 	}
- 	
- 	DEBUG_OPERATION (("PhotoIDLoad Done\n"));
- 	
+            *photoids = photoid_load_parm->first;  
+        }
+    }
+    
+    DEBUG_OPERATION (("PhotoIDLoad Done\n"));
+    
     return err;
 }
 

@@ -50,7 +50,8 @@ execute_gpg_command (gpgme_ctx_t ctx, const gchar *args, gchar **std_out,
     if (!g_spawn_command_line_sync (cmd, std_out, std_err, &status, &err) || 
         status != 0) {
         gerr = GPG_E (GPG_ERR_GENERAL);
-        g_error_free (err);
+        if(err != NULL)
+            g_error_free (err);
     }
 
     g_free (cmd);    
