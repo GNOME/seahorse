@@ -27,16 +27,14 @@
 #define _SEAHORSE_GTKSTOCK_H_
 
 /* The default stock icons */
+#define SEAHORSE_STOCK_SEAHORSE     "seahorse"
 #define SEAHORSE_STOCK_KEY          "seahorse-key"
 #define SEAHORSE_STOCK_SECRET       "seahorse-key-personal"
 #define SEAHORSE_STOCK_KEY_SSH      "seahorse-key-ssh"
 #define SEAHORSE_STOCK_PERSON       "seahorse-person"
 #define SEAHORSE_STOCK_SIGN         "seahorse-sign"
 #define SEAHORSE_STOCK_SIGN_OK      "seahorse-sign-ok"
-#define SEAHORSE_STOCK_SIGN_BAD      "seahorse-sign-bad"
-
-/* TODO: For now this is the default icon */
-#define SEAHORSE_STOCK_SEAHORSE     SEAHORSE_STOCK_SECRET
+#define SEAHORSE_STOCK_SIGN_BAD     "seahorse-sign-bad"
 
 void    seahorse_gtkstock_init          (void);
 

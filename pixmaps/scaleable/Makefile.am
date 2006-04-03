@@ -3,7 +3,9 @@ pixmapdir = $(datadir)/pixmaps/
 pixmap_DATA = seahorse-applet.svg
 
 iconsvgdir = $(datadir)/pixmaps/seahorse/scaleable/
-iconsvg_DATA = seahorse-applet.svg \
+iconsvg_DATA = seahorse.svg \
+                seahorse-preferences.svg \
+                seahorse-applet.svg \
                 seahorse-applet-encrypted.svg \
                 seahorse-applet-key.svg \
                 seahorse-applet-signed.svg \
@@ -18,5 +20,11 @@ iconsvg_DATA = seahorse-applet.svg \
                 seahorse-sign-bad.svg \
                 seahorse-sign-ok.svg \
                 seahorse-sign-unknown.svg
+
+desktop_iconsdir = $(datadir)/icons/hicolor/scalable/apps
+desktop_icons_DATA = seahorse.svg \
+                        seahorse-preferences.svg \
+                        seahorse-applet.svg
+
 
 EXTRA_DIST = $(iconsvg_DATA)
