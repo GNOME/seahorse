@@ -239,14 +239,7 @@ handle_clipboard_owner_change(GtkClipboard *clipboard, GdkEvent *event,
 
 static void
 about_cb (BonoboUIComponent *uic, SeahorseApplet *sapplet, const gchar *verbname)
-{
-    GdkPixbuf *pixbuf;
-    
-    pixbuf = gtk_widget_render_icon (GTK_WIDGET(sapplet), 
-                                     ICON_CLIPBOARD_DEFAULT, 
-                                     (GtkIconSize)-1, 
-                                     NULL);
-                                     
+{                   
     static const gchar *authors [] = {
         "Adam Schreiber <sadam@clemson.edu>",
         "Nate Nielsen <nielsen@memberwebs.com>",
@@ -272,12 +265,10 @@ about_cb (BonoboUIComponent *uic, SeahorseApplet *sapplet, const gchar *verbname
                 "documenters", documenters,
                 "artists", artists,
                 "translator-credits", _("translator-credits"),
-                "logo", pixbuf,
+                "logo-icon-name", "seahorse-applet",
                 "website", "http://seahorse.sf.net",
                 "website-label", _("Seahorse Project Homepage"),
                 NULL);
-    
-    g_object_unref(pixbuf);
 }
 
 static void
@@ -288,13 +279,8 @@ display_text (gchar *title, gchar *text, gboolean editable)
     GdkPixbuf *pixbuf;
 
     dialog = gtk_dialog_new_with_buttons (title, NULL, 0,
-                                          GTK_STOCK_OK, GTK_RESPONSE_NONE, NULL);
+                                          GTK_STOCK_CLOSE, GTK_RESPONSE_NONE, NULL);
 
-    pixbuf = gtk_widget_render_icon (dialog,  SEAHORSE_STOCK_SEAHORSE, 
-                                     (GtkIconSize)-1,  NULL); 
-    gtk_window_set_icon (GTK_WINDOW (dialog), gdk_pixbuf_copy(pixbuf));
-    g_object_unref (pixbuf);
-    
     gtk_window_set_default_size (GTK_WINDOW (dialog), 600, 450);
     g_signal_connect_swapped (dialog, "response", 
                               G_CALLBACK (gtk_widget_destroy), dialog);

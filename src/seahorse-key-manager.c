@@ -508,9 +508,6 @@ collapse_all_activate (GtkMenuItem *item, SeahorseWidget *swidget)
 static void
 about_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
-	GdkPixbuf *pixbuf = NULL;
-    GtkWidget *tempwidget = gtk_image_new();
-
 	static const gchar *authors[] = {
 		"Jacob Perkins <jap1@users.sourceforge.net>",
 		"Jose Carlos Garcia Sogo <jsogo@users.sourceforge.net>",
@@ -536,12 +533,6 @@ about_activate (GtkWidget *widget, SeahorseWidget *swidget)
         NULL
     };
 
-    pixbuf = gtk_widget_render_icon (tempwidget, 
-                                     SEAHORSE_STOCK_SEAHORSE, 
-                                     (GtkIconSize)-1, 
-                                     NULL); 
-    gtk_widget_destroy(tempwidget);
-
 	gtk_show_about_dialog (NULL, 
                 "name", _("seahorse"),
                 "version", VERSION,
@@ -551,13 +542,10 @@ about_activate (GtkWidget *widget, SeahorseWidget *swidget)
                 "documenters", documenters,
                 "artists", artists,
                 "translator-credits", _("translator-credits"),
-                "logo", pixbuf,
+                "logo-icon-name", "seahorse",
                 "website", "http://seahorse.sf.net",
                 "website-label", _("Seahorse Project Homepage"),
                 NULL);
-    
-    if (pixbuf != NULL)
-		g_object_unref (pixbuf);
 }
 
 /* Loads key properties of activated key */
