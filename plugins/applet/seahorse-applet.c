@@ -916,7 +916,8 @@ main (int argc, char *argv [])
 
     
     gnome_program_init ("seahorse-applet", VERSION, LIBGNOMEUI_MODULE, argc, argv,
-                        GNOME_CLIENT_PARAM_SM_CONNECT, FALSE, GNOME_PARAM_NONE);
+                        GNOME_CLIENT_PARAM_SM_CONNECT, FALSE,
+                        GNOME_PROGRAM_STANDARD_PROPERTIES, GNOME_PARAM_NONE);
     
     return panel_applet_factory_main ("OAFIID:GNOME_SeahorseApplet_Factory", 
                                       SEAHORSE_TYPE_APPLET, seahorse_applet_factory, NULL);
