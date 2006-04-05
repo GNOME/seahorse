@@ -335,14 +335,23 @@
 				  <property name="spacing">6</property>
 
 				  <child>
-				    <widget class="GtkImage" id="photoid">
-				      <property name="width_request">200</property>
-				      <property name="height_request">160</property>
+				    <widget class="GtkEventBox" id="image_eventbox">
 				      <property name="visible">True</property>
-				      <property name="xalign">0.5</property>
-				      <property name="yalign">0.5</property>
-				      <property name="xpad">0</property>
-				      <property name="ypad">0</property>
+				      <property name="visible_window">True</property>
+				      <property name="above_child">False</property>
+				      <signal name="scroll_event" handler="on_image_eventbox_scroll_event" last_modification_time="Wed, 05 Apr 2006 20:48:46 GMT"/>
+
+				      <child>
+					<widget class="GtkImage" id="photoid">
+					  <property name="width_request">200</property>
+					  <property name="height_request">160</property>
+					  <property name="visible">True</property>
+					  <property name="xalign">0.5</property>
+					  <property name="yalign">0.5</property>
+					  <property name="xpad">0</property>
+					  <property name="ypad">0</property>
+					</widget>
+				      </child>
 				    </widget>
 				    <packing>
 				      <property name="padding">0</property>
