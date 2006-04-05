@@ -30,7 +30,7 @@
 
 /* Note that we can't use GTK stock here, as we hand these icons off 
    to other processes in the case of notifications */
-#define ICON_PREFIX     DATA_DIR "/pixmaps/seahorse/"
+#define ICON_PREFIX     DATA_DIR "/pixmaps/seahorse/48x48/"
 
 void
 seahorse_signatures_notify (const gchar* data, gpgme_verify_result_t status)
@@ -65,37 +65,37 @@ seahorse_signatures_notify (const gchar* data, gpgme_verify_result_t status)
     case GPG_ERR_KEY_EXPIRED:
         body = _("Signed by <i>%s <b>Expired</b></i> on %s.");
         summary = _("%s: Invalid Signature");
-        icon = ICON_PREFIX "seahorse-bad.png";
+        icon = ICON_PREFIX "seahorse-sign-bad.png";
         ok = TRUE;
         break;
     case GPG_ERR_SIG_EXPIRED:
         body = _("Signed by <i>%s</i> on %s <b>Expired</b>.");
         summary = _("%s: Expired Signature");
-        icon = ICON_PREFIX "seahorse-bad.png";
+        icon = ICON_PREFIX "seahorse-sign-bad.png";
         ok = TRUE;
         break;        
     case GPG_ERR_CERT_REVOKED:
         body = _("Signed by <i>%s <b>Revoked</b></i> on %s.");
         summary = _("%s: Invalid Signature");
-        icon = ICON_PREFIX "seahorse-bad.png";
+        icon = ICON_PREFIX "seahorse-sign-bad.png";
         ok = TRUE;
         break;
     case GPG_ERR_NO_ERROR:
         body = _("Signed by <i>%s</i> on %s.");
         summary = _("%s: Good Signature");
         if (icon == NULL)
-            icon = ICON_PREFIX "seahorse-good.png";
+            icon = ICON_PREFIX "seahorse-sign-ok.png";
         ok = TRUE;
         break;
     case GPG_ERR_NO_PUBKEY:
         body = _("Signing key not in keyring.");
         summary = _("%s: Unknown Signature");
-        icon = ICON_PREFIX "seahorse-unknown.png";
+        icon = ICON_PREFIX "seahorse-sign-unknown.png";
         break;
     case GPG_ERR_BAD_SIGNATURE:
         body = _("Bad or forged signature. The signed data was modified.");
         summary = _("%s: Bad Signature");
-        icon = ICON_PREFIX "seahorse-bad.png";
+        icon = ICON_PREFIX "seahorse-sign-bad.png";
         break;
     case GPG_ERR_NO_DATA:
         return;

@@ -31,7 +31,7 @@
 
 /* Note that we can't use GTK stock here, as we hand these icons off 
    to other processes in the case of notifications */
-#define ICON_PREFIX     DATA_DIR "/pixmaps/seahorse/"
+#define ICON_PREFIX     DATA_DIR "/pixmaps/seahorse/48x48/"
 
 void
 seahorse_import_notify (guint keys)
