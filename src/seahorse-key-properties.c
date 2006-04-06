@@ -780,16 +780,6 @@ details_revoke_subkey_button_clicked (GtkButton *button, SeahorseWidget *swidget
 }
 
 static void
-details_date_subkey_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
-{
-	SeahorseKey *skey;
-	skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
-	
-	if (seahorse_key_get_etype (skey) == SKEY_PRIVATE)
-		seahorse_expires_new (SEAHORSE_PGP_KEY (skey), get_selected_subkey (swidget));
-}
-
-static void
 trust_changed (GtkComboBox *selection, SeahorseWidget *swidget)
 {
 	SeahorseKey *skey;
@@ -838,6 +828,11 @@ details_export_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 	g_list_free (keys);
 }
 
+/*
+ * This function is called by 2 different buttons. There may not
+ * be a selected subkey which will cause an index of -1
+ */
+
 static void
 details_calendar_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 {
@@ -880,14 +875,14 @@ do_details_signals (SeahorseWidget *swidget)
 
         glade_xml_signal_connect_data (swidget->xml, "on_details_add_button_clicked", 
                                         G_CALLBACK (details_add_subkey_button_clicked), swidget);
-        glade_xml_signal_connect_data (swidget->xml, "on_details_date_button_clicked",
-                                        G_CALLBACK (details_date_subkey_button_clicked), swidget);
+        glade_xml_signal_connect_data (swidget->xml, "on_details_calendar1_button_clicked",
+                                        G_CALLBACK (details_calendar_button_clicked), swidget);
+        glade_xml_signal_connect_data (swidget->xml, "on_details_calendar2_button_clicked",
+                                        G_CALLBACK (details_calendar_button_clicked), swidget);
         glade_xml_signal_connect_data (swidget->xml, "on_details_revoke_button_clicked",
                                         G_CALLBACK (details_revoke_subkey_button_clicked), swidget);
         glade_xml_signal_connect_data (swidget->xml, "on_details_delete_button_clicked",
                                         G_CALLBACK (details_del_subkey_button_clicked), swidget);
-        glade_xml_signal_connect_data (swidget->xml, "on_details_calendar_button_clicked",
-                                        G_CALLBACK (details_calendar_button_clicked), swidget);
         glade_xml_signal_connect_data (swidget->xml, "on_details_export_button_clicked",
                                         G_CALLBACK (details_export_button_clicked), swidget);
     }
