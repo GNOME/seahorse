@@ -29,6 +29,7 @@
 #include "seahorse-pgp-key-op.h"
 #include "seahorse-util.h"
 #include "seahorse-libdialogs.h"
+#include "seahorse-pgp-operation.h"
 
 #define PROMPT "keyedit.prompt"
 #define QUIT "quit"
@@ -65,84 +66,84 @@
  * @type: Key type. Supported types are #DSA_ELGAMAL, #DSA, and #RSA_SIGN
  * @length: Length of key, must be within the range of @type specified by #SeahorseKeyLength
  * @expires: Expiration date of key
- *
+ * @err: Catches errors in the params
+ * 
  * Tries to generate a new key based on given parameters.
- * The generation operation is done with a new GPGME context
- * If the generation is successful, seahorse_key_source_refresh() will be
- * called with @sksrc.
  *
- * Returns: gpgme_error_t
+ * Returns: SeahorseOperation*
  **/
-gpgme_error_t
+SeahorseOperation*
 seahorse_pgp_key_op_generate (SeahorsePGPSource *psrc, const gchar *name,
-			  const gchar *email, const gchar *comment,
-			  const gchar *passphrase, const SeahorseKeyEncType type,
-			  const guint length, const time_t expires)
+                              const gchar *email, const gchar *comment,
+                              const gchar *passphrase, const SeahorseKeyEncType type,
+                              const guint length, const time_t expires, gpgme_error_t *err)
 {
-	gchar *common, *key_type, *start, *parms, *expires_date;
-    gpgme_error_t err;
-	gpgme_ctx_t new_ctx;
-	
-	g_return_val_if_fail (strlen (name) >= 5, GPG_E (GPG_ERR_INV_VALUE));
-	
-	/* Check lengths for each type */
-	switch (type) {
-		case DSA_ELGAMAL:
-			g_return_val_if_fail (length >= ELGAMAL_MIN && length <= LENGTH_MAX, GPG_E (GPG_ERR_INV_VALUE));
-			break;
-		case DSA:
-			g_return_val_if_fail (length >= DSA_MIN && length <= DSA_MAX, GPG_E (GPG_ERR_INV_VALUE));
-			break;
-		case RSA_SIGN:
-			g_return_val_if_fail (length >= RSA_MIN && length <= LENGTH_MAX, GPG_E (GPG_ERR_INV_VALUE));
-			break;
-		default:
-			g_return_val_if_reached (GPG_E (GPG_ERR_INV_VALUE));
-			break;
-	}
-	
-	if (expires != 0)
-		expires_date = seahorse_util_get_date_string (expires);
-	else
-		expires_date = "0";
-	
-	/* Common xml */
-	common = g_strdup_printf ("Name-Real: %s\nExpire-Date: %s\nPassphrase: %s\n"
-		"</GnupgKeyParms>", name, expires_date, passphrase);
-	if (email != NULL && strlen (email) > 0)
-		common = g_strdup_printf ("Name-Email: %s\n%s", email, common);
-	if (comment != NULL && strlen (comment) > 0)
-		common = g_strdup_printf ("Name-Comment: %s\n%s", comment, common);
-	
-	if (type == RSA_SIGN)
-		key_type = "Key-Type: RSA";
-	else
-		key_type = "Key-Type: DSA";
-	
-	start = g_strdup_printf ("<GnupgKeyParms format=\"internal\">\n%s\nKey-Length: ", key_type);
-	
-	/* Subkey xml */
-	if (type == DSA_ELGAMAL)
-		parms = g_strdup_printf ("%s%d\nSubkey-Type: ELG-E\nSubkey-Length: %d\n%s",
-					 start, DSA_MAX, length, common);
-	else
-		parms = g_strdup_printf ("%s%d\n%s", start, length, common);
-
-    new_ctx = seahorse_pgp_source_new_context ();
-    g_return_val_if_fail (new_ctx != NULL, GPG_E (GPG_ERR_GENERAL));
+    SeahorsePGPOperation *pop = NULL;
+    gchar *common, *key_type, *start, *expires_date;
+    const gchar *parms;
     
-	err = gpgme_op_genkey (new_ctx, parms, NULL, NULL);
-    gpgme_release (new_ctx);
-	
-	if (GPG_IS_OK (err))
-        seahorse_key_source_load_async (SEAHORSE_KEY_SOURCE (psrc), SKSRC_LOAD_NEW, NULL);
-	
-	/* Free xmls */
-	g_free (parms);
-	g_free (start);
-	g_free (common);
-	
-	return err;
+    *err = GPG_OK;
+
+    if (strlen (name) < 5)
+        *err = GPG_E (GPG_ERR_INV_VALUE);
+
+    /* Check lengths for each type */
+    switch (type) {
+    case DSA_ELGAMAL:
+        if (length < ELGAMAL_MIN || length > LENGTH_MAX)
+            *err = GPG_E (GPG_ERR_INV_VALUE);
+        break;
+    case DSA:
+        if (length < DSA_MIN || length > DSA_MAX)
+            *err = GPG_E (GPG_ERR_INV_VALUE);
+        break;
+    case RSA_SIGN:
+        if (length < RSA_MIN || length > LENGTH_MAX)
+            *err = GPG_E (GPG_ERR_INV_VALUE);
+        break;
+    default:
+        *err = GPG_E (GPG_ERR_INV_VALUE);
+        break;
+    }
+
+    if (0 != expires)
+        expires_date = seahorse_util_get_date_string (expires);
+    else
+        expires_date = g_strdup ("0");
+
+    /* Common xml */
+    common = g_strdup_printf ("Name-Real: %s\nExpire-Date: %s\nPassphrase: %s\n"
+                              "</GnupgKeyParms>", name, expires_date, passphrase);
+    if (email != NULL && strlen (email) > 0)
+        common = g_strdup_printf ("Name-Email: %s\n%s", email, common);
+    if (comment != NULL && strlen (comment) > 0)
+        common = g_strdup_printf ("Name-Comment: %s\n%s", comment, common);
+
+    if (type == RSA_SIGN)
+        key_type = "Key-Type: RSA";
+    else
+        key_type = "Key-Type: DSA";
+
+    start = g_strdup_printf ("<GnupgKeyParms format=\"internal\">\n%s\nKey-Length: ", key_type);
+
+    /* Subkey xml */
+    if (type == DSA_ELGAMAL)
+        parms = g_strdup_printf ("%s%d\nSubkey-Type: ELG-E\nSubkey-Length: %d\n%s",
+                                 start, DSA_MAX, length, common);
+    else
+        parms = g_strdup_printf ("%s%d\n%s", start, length, common);
+
+    if (GPG_IS_OK (*err)) {
+        pop = seahorse_pgp_operation_new (NULL);
+        *err = gpgme_op_genkey_start (pop->gctx, parms, NULL, NULL);
+     }
+
+    /* Free xmls */
+    g_free (start);
+    g_free (common);
+    g_free (expires_date);
+
+    return pop ? SEAHORSE_OPERATION (pop) : NULL;
 }
 
 /* helper function for deleting @skey */

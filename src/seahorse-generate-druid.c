@@ -26,6 +26,8 @@
 #include "seahorse-util.h"
 #include "seahorse-key-source.h"
 #include "seahorse-pgp-key-op.h"
+#include "seahorse-progress.h"
+#include "seahorse-operation.h"
 
 #define EXPIRES "expiration_date"
 #define LOW_SECURITY 768
@@ -121,20 +123,21 @@ on_druidpagepassphrase_next (GnomeDruidPage *gnomedruidpage, GtkWidget *widget, 
 void
 on_druid_finish (GnomeDruidPage *gnomedruidpage, GtkWidget *widget, SeahorseWidget *swidget)
 {
-    SeahorseKeySource *sksrc;
+	SeahorseKeySource *sksrc;
+	SeahorseOperation *op;
 	const gchar *name, *email, *comment, *pass;
 	gint length;
 	SeahorseKeyEncType type;
 	time_t expires;
 	GtkWidget *widget2;
 	gpgme_error_t err;
+
+	err = GPG_OK;
 	
 	name = gtk_entry_get_text (GTK_ENTRY (glade_xml_get_widget (swidget->xml, NAME)));
 	email = gtk_entry_get_text (GTK_ENTRY (glade_xml_get_widget (swidget->xml, EMAIL)));
 	comment = gtk_entry_get_text (GTK_ENTRY (glade_xml_get_widget (swidget->xml, COMMENT)));
 	pass = gtk_entry_get_text (GTK_ENTRY (glade_xml_get_widget (swidget->xml, PASS)));
-
-	
 
 	if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON (glade_xml_get_widget (swidget->xml, RM_SECURITY)))){
 		length = MED_SECURITY;
@@ -156,19 +159,18 @@ on_druid_finish (GnomeDruidPage *gnomedruidpage, GtkWidget *widget, SeahorseWidg
 	widget2 = glade_xml_get_widget (swidget->xml, swidget->name);
 	gtk_widget_hide (widget2);
     
-    /* When we update to support S/MIME this will need to change */
-    sksrc = seahorse_context_find_key_source (SCTX_APP(), SKEY_PGP, SKEY_LOC_LOCAL);
-    g_return_if_fail (sksrc && SEAHORSE_IS_PGP_SOURCE (sksrc));
+	/* When we update to support S/MIME this will need to change */
+	sksrc = seahorse_context_find_key_source (SCTX_APP(), SKEY_PGP, SKEY_LOC_LOCAL);
+	g_return_if_fail (sksrc && SEAHORSE_IS_PGP_SOURCE (sksrc));
 	
-	err = seahorse_pgp_key_op_generate (SEAHORSE_PGP_SOURCE (sksrc), name, email, comment,
-		                            pass, type, length, expires);
-	if (!GPG_IS_OK (err)) {
-		gtk_widget_show (widget2);
-		seahorse_util_handle_gpgme (err, _("Couldn't generate key"));
-	}
+	op = seahorse_pgp_key_op_generate (SEAHORSE_PGP_SOURCE (sksrc), name, email, comment,
+		                            pass, type, length, expires, &err);
+
+	if (GPG_IS_OK (err))
+		seahorse_progress_show (op, _("Generating Key"), TRUE);
 	else
-		gtk_widget_destroy (widget2);
-	
+		seahorse_util_handle_gpgme (err, _("Couldn't generate key"));
+	gtk_widget_destroy (widget2);
 }
 
 gboolean

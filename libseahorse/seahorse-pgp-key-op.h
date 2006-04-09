@@ -29,6 +29,7 @@
 #include "seahorse-pgp-source.h"
 #include "seahorse-pgp-key.h"
 #include "seahorse-gpgmex.h"
+#include "seahorse-operation.h"
 
 /* Key type options. */
 typedef enum {
@@ -102,14 +103,15 @@ typedef enum {
 	REVOKE_NOT_USED = 3
 } SeahorseRevokeReason;
 
-gpgme_error_t  seahorse_pgp_key_op_generate         (SeahorsePGPSource  *sksrc,
-                                                 const gchar *name,
-                                                 const gchar *email,
-                                                 const gchar *comment,
-                                                 const gchar *passphrase,
-                                                 SeahorseKeyEncType type,
-                                                 guint length,
-                                                 time_t expires);
+SeahorseOperation*  seahorse_pgp_key_op_generate (SeahorsePGPSource  *sksrc,
+                                                  const gchar *name,
+                                                  const gchar *email,
+                                                  const gchar *comment,
+                                                  const gchar *passphrase,
+                                                  SeahorseKeyEncType type,
+                                                  guint length,
+                                                  time_t expires,
+                                                  gpgme_error_t *err);
 
 gpgme_error_t  seahorse_pgp_key_op_delete           (SeahorsePGPKey *pkey);
 

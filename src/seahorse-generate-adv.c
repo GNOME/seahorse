@@ -25,6 +25,8 @@
 #include "seahorse-widget.h"
 #include "seahorse-util.h"
 #include "seahorse-pgp-key-op.h"
+#include "seahorse-progress.h"
+#include "seahorse-operation.h"
 
 #define LENGTH "length"
 #define EXPIRES "expires"
@@ -90,13 +92,16 @@ never_expires_toggled (GtkToggleButton *togglebutton, SeahorseWidget *swidget)
 static void
 ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 {
-    SeahorseKeySource *sksrc;
+	SeahorseKeySource *sksrc;
+	SeahorseOperation *op;
 	const gchar *name, *email, *comment, *pass;
 	gint history, length;
 	SeahorseKeyEncType type;
 	time_t expires;
 	GtkWidget *widget;
 	gpgme_error_t err;
+	
+	err = GPG_OK;
 	
 	name = gtk_entry_get_text (GTK_ENTRY (glade_xml_get_widget (swidget->xml, NAME)));
 	email = gtk_entry_get_text (GTK_ENTRY (glade_xml_get_widget (swidget->xml, "email")));
@@ -130,18 +135,20 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 	widget = glade_xml_get_widget (swidget->xml, swidget->name);
 	gtk_widget_hide (widget);
 	
-    /* When we update to support S/MIME this will need to change */
-    sksrc = seahorse_context_find_key_source (SCTX_APP (), SKEY_PGP, SKEY_LOC_LOCAL);
-    g_return_if_fail (sksrc && SEAHORSE_IS_PGP_SOURCE (sksrc));
+	/* When we update to support S/MIME this will need to change */
+	sksrc = seahorse_context_find_key_source (SCTX_APP (), SKEY_PGP, SKEY_LOC_LOCAL);
+	g_return_if_fail (sksrc && SEAHORSE_IS_PGP_SOURCE (sksrc));
     	
-	err = seahorse_pgp_key_op_generate (SEAHORSE_PGP_SOURCE (sksrc), name, email, comment,
-		                            pass, type, length, expires);
-	if (!GPG_IS_OK (err)) {
-		gtk_widget_show (widget);
+	op = seahorse_pgp_key_op_generate (SEAHORSE_PGP_SOURCE (sksrc), name, email, comment,
+		                            pass, type, length, expires, &err);
+	
+	if (GPG_IS_OK (err)) 
+		seahorse_progress_show (op, _("Generating key"), TRUE);
+	else 
 		seahorse_util_handle_gpgme (err, _("Couldn't generate key"));
-	}
-	else
-		seahorse_widget_destroy (swidget);
+
+	gtk_widget_destroy (widget);
+	seahorse_widget_destroy (swidget);
 }
 
 void
