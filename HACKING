@@ -91,5 +91,40 @@ debugging helpers etc...
 --enable-fatal-messages
     When used with --enable-debug turns on fatal compile and runtime warnings.
 
+INDENTATION STYLE
 
+  * No gratituous reformatting of code. If you're rewriting much of a function 
+    or file it's okay to reformat it, but reformatting for the sake of it isn't 
+    a good idea.
+
+    static int 
+    function (int x, const char *y) 
+    {
+        if (func (arg, arg2 + 1)) {
+            switch (val) {
+            case XXX:
+                break;
+            case YYY:
+                break;
+            default:
+                break;
+            }
+        } else {
+            y = y * x + 1;
+        }
+        
+        return y;
+    }
+
+  * For consistency we expand tabs into spaces. This means no tabs in files
+    unless there's a specific reason for it.
+  * Spaces between functions and arguments, or macros and arguments.
+  * Spaces before and after most operators. 
+  * Brace on same line as statement. 
+  * Return value on line before function definition.
+  * Brace on line after function definition.
+  * Break long lines where possible.
+  * '*' goes with variable not type, when declaring a pointer.
+ 
+ 
 last updated 2006-01-24
