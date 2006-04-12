@@ -241,6 +241,12 @@ seahorse_operation_copy_error  (SeahorseOperation *operation, GError **err)
         *err = operation->error ? g_error_copy (operation->error) : NULL;
 }
 
+const GError*       
+seahorse_operation_get_error (SeahorseOperation *operation)
+{
+    return operation->error;
+}
+
 gpointer
 seahorse_operation_get_result (SeahorseOperation *operation)
 {

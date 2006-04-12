@@ -120,6 +120,8 @@ void                seahorse_operation_steal_error (SeahorseOperation *operation
 void                seahorse_operation_copy_error  (SeahorseOperation *operation,
                                                     GError **err);
 
+const GError*       seahorse_operation_get_error   (SeahorseOperation *operation);
+
 void                seahorse_operation_wait        (SeahorseOperation *operation);
 
 gdouble             seahorse_operation_get_progress(SeahorseOperation *operation);
