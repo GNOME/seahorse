@@ -1,22 +1,22 @@
-/*
+/* 
  * Seahorse
- *
- * Copyright (C) 2005 Nate Nielsen
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the
- * Free Software Foundation, Inc.,
- * 59 Temple Place, Suite 330,
- * Boston, MA 02111-1307, USA.
+ * 
+ * Copyright (C) 2005 Nate Nielsen 
+ * 
+ * This program is free software; you can redistribute it and/or modify 
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *  
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *  
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+ * 02111-1307, USA.  
  */
 
 #include "config.h"
@@ -64,29 +64,18 @@ show_ui_dialog (CryptUIKeyset *keyset)
 static void
 show_chooser_dialog (CryptUIKeyset *keyset)
 {
-    CryptUIKeyChooser *chooser;
-    GtkWidget *dialog;
-    GList *recipients, *l;
-    const gchar *signer;
+    gchar **recipients, **k;
+    gchar *signer;
     
-    dialog = gtk_dialog_new_with_buttons ("CryptUI Test", NULL, GTK_DIALOG_MODAL, 
-                                          GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
+    recipients = cryptui_prompt_recipients (keyset, "Choose Recipients", &signer);
     
-    chooser = cryptui_key_chooser_new (keyset);
-    gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox), GTK_WIDGET (chooser));
-    
-    gtk_widget_show_all (dialog);
-    gtk_dialog_run (GTK_DIALOG (dialog));
-    
-    recipients = cryptui_key_chooser_get_recipients (chooser);
-    for (l = recipients; l; l = g_list_next (l))
-        g_print ("RECIPIENT: %s\n", (char*)(l->data));
-    g_list_free (recipients);
-    
-    signer = cryptui_key_chooser_get_signer (chooser);
-    g_print ("SIGNER: %s\n", signer);
-    
-    gtk_widget_destroy (dialog);
+    if (recipients) {
+        for (k = recipients; *k; k++)
+            g_print ("RECIPIENT: %s\n", *k);
+        g_strfreev (recipients);
+        g_print ("SIGNER: %s\n", signer);
+        g_free (signer);
+    }
 }
 
 int

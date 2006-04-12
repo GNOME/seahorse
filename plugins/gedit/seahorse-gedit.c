@@ -33,14 +33,15 @@
 #include <gedit/gedit-debug.h>
 #include <gedit/gedit-utils.h>
 
-#include "seahorse-gedit.h"
-#include "seahorse-gpgmex.h"
-#include "seahorse-util.h"
-#include "seahorse-context.h"
-#include "seahorse-libdialogs.h"
-#include "seahorse-op.h"
-#include "seahorse-widget.h"
+#include <dbus/dbus-glib-bindings.h>
 
+#include <cryptui.h>
+#include "seahorse-gedit.h"
+
+/* -----------------------------------------------------------------------------
+ * DECLARATIONS
+ */
+ 
 typedef enum {
     SEAHORSE_TEXT_TYPE_NONE,
     SEAHORSE_TEXT_TYPE_KEY,
@@ -54,28 +55,11 @@ typedef struct _SeahorsePGPHeader {
     SeahorseTextType type;
 } SeahorsePGPHeader;    
 
-static const SeahorsePGPHeader seahorse_pgp_headers[] = {
-    { 
-        "-----BEGIN PGP MESSAGE-----", 
-        "-----END PGP MESSAGE-----", 
-        SEAHORSE_TEXT_TYPE_MESSAGE 
-    }, 
-    {
-        "-----BEGIN PGP SIGNED MESSAGE-----",
-        "-----END PGP SIGNATURE-----",
-        SEAHORSE_TEXT_TYPE_SIGNED
-    }, 
-    {
-        "-----BEGIN PGP PUBLIC KEY BLOCK-----",
-        "-----END PGP PUBLIC KEY BLOCK-----",
-        SEAHORSE_TEXT_TYPE_KEY
-    }, 
-    {
-        "-----BEGIN PGP PRIVATE KEY BLOCK-----",
-        "-----END PGP PRIVATE KEY BLOCK-----",
-        SEAHORSE_TEXT_TYPE_KEY
-    }
-};
+/* Setup in init_crypt */
+DBusGConnection *dbus_connection = NULL;
+DBusGProxy      *dbus_key_proxy = NULL;
+DBusGProxy      *dbus_crypto_proxy = NULL;
+CryptUIKeyset   *dbus_keyset = NULL;
 
 /* -----------------------------------------------------------------------------
  * HELPER FUNCTIONS 
@@ -189,6 +173,29 @@ detect_text_type (const gchar *text, gint len, const gchar **start, const gchar 
     const gchar *t;
     int i;
     
+    static const SeahorsePGPHeader seahorse_pgp_headers[] = {
+        { 
+            "-----BEGIN PGP MESSAGE-----", 
+            "-----END PGP MESSAGE-----", 
+            SEAHORSE_TEXT_TYPE_MESSAGE 
+        }, 
+        {
+            "-----BEGIN PGP SIGNED MESSAGE-----",
+            "-----END PGP SIGNATURE-----",
+            SEAHORSE_TEXT_TYPE_SIGNED
+        }, 
+        {
+            "-----BEGIN PGP PUBLIC KEY BLOCK-----",
+            "-----END PGP PUBLIC KEY BLOCK-----",
+            SEAHORSE_TEXT_TYPE_KEY
+        }, 
+        {
+            "-----BEGIN PGP PRIVATE KEY BLOCK-----",
+            "-----END PGP PRIVATE KEY BLOCK-----",
+            SEAHORSE_TEXT_TYPE_KEY
+        }
+    };
+    
     if (len == -1)
         len = strlen (text);
     
@@ -221,21 +228,92 @@ detect_text_type (const gchar *text, gint len, const gchar **start, const gchar 
     return SEAHORSE_TEXT_TYPE_NONE;
 }
 
+void
+seahorse_gedit_show_error (const gchar *heading, GError *error)
+{
+    GtkWidget *dlg;
+    gchar *t;
+    
+    g_assert (heading);
+    g_assert (error);
+    
+    t = g_strconcat("<big><b>", heading, "</b></big>\n\n", 
+                    error->message ? error->message : "", NULL);
+    
+    dlg = gtk_message_dialog_new_with_markup (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR,
+                                              GTK_BUTTONS_CLOSE, t);
+    g_free (t);
+    
+    gtk_dialog_run (GTK_DIALOG (dlg));
+    gtk_widget_destroy (dlg);
+    
+    g_clear_error (&error);
+}
+
+/* -----------------------------------------------------------------------------
+ * INITIALIZATION / CLEANUP 
+ */
+
+static gboolean
+init_crypt ()
+{
+    GError *error = NULL;
+    
+    if (!dbus_connection) {
+        dbus_connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
+        if (!dbus_connection) {
+            seahorse_gedit_show_error (_("Couldn't connect to seahorse-daemon"), error);
+            return FALSE;
+        }
+
+        dbus_key_proxy = dbus_g_proxy_new_for_name (dbus_connection, "org.gnome.seahorse",
+                                               "/org/gnome/seahorse/keys",
+                                               "org.gnome.seahorse.KeyService");
+        
+        dbus_crypto_proxy = dbus_g_proxy_new_for_name (dbus_connection, "org.gnome.seahorse",
+                                               "/org/gnome/seahorse/crypto",
+                                               "org.gnome.seahorse.CryptoService");
+        
+        dbus_keyset = cryptui_keyset_new ("openpgp");
+    }
+    
+    return TRUE;
+}
+
+void
+seahorse_gedit_cleanup ()
+{
+    if (dbus_key_proxy)
+        g_object_unref (dbus_key_proxy);
+    dbus_key_proxy = NULL;
+    
+    if (dbus_crypto_proxy)
+        g_object_unref (dbus_crypto_proxy);
+    dbus_crypto_proxy = NULL;
+    
+    if (dbus_connection)
+        dbus_g_connection_unref (dbus_connection);
+    dbus_connection = NULL;
+}
+
 /* -----------------------------------------------------------------------------
  * CRYPT CALLBACKS
  */
 
 /* Callback for encrypt menu item */
 void
-seahorse_gedit_encrypt (SeahorseContext *sctx, GeditDocument *doc)
+seahorse_gedit_encrypt (GeditDocument *doc)
 {
-    SeahorsePGPKey *signer = NULL;
-    gpgme_error_t err = GPG_OK;
+    GError *error = NULL;
     gchar *enctext = NULL;
     gchar *buffer;
-    GList *keys;
-    gint start;
-    gint end;
+    gchar **keys;
+    gchar *signer;
+    gint start, end;
+    gboolean ret;
+    
+    if (!init_crypt ())
+        return;
 
     g_return_if_fail (doc != NULL);
 
@@ -251,108 +329,142 @@ seahorse_gedit_encrypt (SeahorseContext *sctx, GeditDocument *doc)
     
     /* Get the recipient list */
     SEAHORSE_GEDIT_DEBUG (DEBUG_PLUGINS, "getting recipients");
-    keys = seahorse_recipients_get (&signer);
+    keys = cryptui_prompt_recipients (dbus_keyset, _("Choose Recipient Keys"), &signer);
 
     /* User may have cancelled */
-    if (g_list_length(keys) == 0)
-        return;
+    if (keys && *keys) {
 
-    /* Get the document text */
-    buffer = get_document_chars (doc, start, end);    
-
-    /* Encrypt it */
-    SEAHORSE_GEDIT_DEBUG (DEBUG_PLUGINS, "encrypting text");
-    if (signer == NULL)
-        enctext = seahorse_op_encrypt_text (keys, buffer, &err);
-    else
-        enctext = seahorse_op_encrypt_sign_text (keys, signer, buffer, &err);
-
-    g_list_free (keys);
-    g_free (buffer);
-
-    if (!GPG_IS_OK (err)) {
-        g_assert (!enctext);
-        seahorse_util_handle_gpgme (err, _("Couldn't encrypt text"));
-        return;
+        /* Get the document text */
+        buffer = get_document_chars (doc, start, end);
+        /* Encrypt it */
+        SEAHORSE_GEDIT_DEBUG (DEBUG_PLUGINS, "encrypting text");
+        
+        ret = dbus_g_proxy_call (dbus_crypto_proxy, "EncryptText", &error, 
+                                G_TYPE_STRV, keys, 
+                                G_TYPE_STRING, signer, 
+                                G_TYPE_INT, 0,
+                                G_TYPE_STRING, buffer,
+                                G_TYPE_INVALID,
+                                G_TYPE_STRING, &enctext,
+                                G_TYPE_INVALID);
+        
+        if (ret) {
+            set_document_selection (doc, start, end);
+            replace_selected_text (doc, enctext);
+            seahorse_gedit_flash (_("Encrypted text"));
+            g_free (enctext);
+        } else {
+            seahorse_gedit_show_error (_("Couldn't encrypt text"), error);
+        }
+        
+        /* And finish up */
+        g_strfreev (keys);
+        g_free (signer);
+        g_free (buffer);
     }
-
-    /* And finish up */
-    set_document_selection (doc, start, end);
-    replace_selected_text (doc, enctext);
-    seahorse_gedit_flash (_("Encrypted text"));
-    g_free (enctext);
 }
 
 /* When we try to 'decrypt' a key, this gets called */
 static guint
-import_keys (const gchar * text)
+import_keys (const gchar *text)
 {
-    SeahorseKeySource *sksrc;
-    GError *err = NULL;
-    gint keys;
-
-    sksrc = seahorse_context_find_key_source (SCTX_APP (), SKEY_PGP, SKEY_LOC_LOCAL);
-    g_return_val_if_fail (sksrc && SEAHORSE_IS_PGP_SOURCE (sksrc), 0);
+    GError *error = NULL;
+    gchar **keys, **k;
+    int nkeys = 0;
+    gboolean ret;
     
-    keys = seahorse_op_import_text (SEAHORSE_PGP_SOURCE (sksrc), text, &err);
-
-    if (keys < 0) {
-        seahorse_util_handle_error (err, _("Couldn't import keys"));
+    if (!init_crypt ())
         return 0;
-    } else if (keys == 0) {    
-        seahorse_gedit_flash (_("Keys found but not imported"));
+    
+    ret = dbus_g_proxy_call (dbus_key_proxy, "ImportKeys", &error,
+                             G_TYPE_STRING, "openpgp",
+                             G_TYPE_STRING, text,
+                             G_TYPE_INVALID,
+                             G_TYPE_STRV, &keys,
+                             G_TYPE_INVALID);
+    
+    if (!ret) {
+        seahorse_gedit_show_error (_("Couldn't import keys"), error);
         return 0;
-    } else {
-        return keys;
     }
+    
+    for (k = keys, nkeys = 0; *k; k++)
+        nkeys++;
+    g_strfreev (keys);
+    
+    if (!nkeys) 
+        seahorse_gedit_flash (_("Keys found but not imported"));
+    
+    return nkeys;
 }
 
 /* Decrypt an encrypted message */
 static gchar*
-decrypt_text (const gchar * text, gpgme_verify_result_t *status)
+decrypt_text (const gchar *text)
 {
-    SeahorseKeySource *sksrc;
-    gpgme_error_t err;
+    GError *error = NULL;
     gchar *rawtext = NULL;
+    gchar *signer;
+    gboolean ret;
     
-    sksrc = seahorse_context_find_key_source (SCTX_APP (), SKEY_PGP, SKEY_LOC_LOCAL);
-    g_return_val_if_fail (sksrc && SEAHORSE_IS_PGP_SOURCE (sksrc), 0);
-
-    rawtext = seahorse_op_decrypt_verify_text (SEAHORSE_PGP_SOURCE (sksrc), 
-                                               text, status, &err);
-
-    if (!GPG_IS_OK (err)) {
-        seahorse_util_handle_gpgme (err, _("Couldn't decrypt text"));
+    if (!init_crypt ())
+        return NULL;
+    
+    ret = dbus_g_proxy_call (dbus_crypto_proxy, "DecryptText", &error,
+                             G_TYPE_STRING, "openpgp",
+                             G_TYPE_INT, 0,
+                             G_TYPE_STRING, text,
+                             G_TYPE_INVALID, 
+                             G_TYPE_STRING, &rawtext,
+                             G_TYPE_STRING, &signer,
+                             G_TYPE_INVALID);
+    
+    /* Not interested in the signer */
+    g_free (signer);
+    
+    if (!ret) {
+        seahorse_gedit_show_error (_("Couldn't decrypt text"), error);
         return NULL;
     }
-
+    
     return rawtext;
 }
 
 /* Verify a signed message */
 static gchar*
-verify_text (const gchar * text, gpgme_verify_result_t *status)
+verify_text (const gchar * text)
 {
-    SeahorseKeySource *sksrc;
-    gpgme_error_t err;
+    GError *error = NULL;
     gchar *rawtext = NULL;
+    gchar *signer;
+    gboolean ret;
+    
+    if (!init_crypt ())
+        return NULL;
 
-    sksrc = seahorse_context_find_key_source (SCTX_APP (), SKEY_PGP, SKEY_LOC_LOCAL);
-    g_return_val_if_fail (sksrc && SEAHORSE_IS_PGP_SOURCE (sksrc), 0);    
-
-    rawtext = seahorse_op_verify_text (SEAHORSE_PGP_SOURCE (sksrc), text, status, &err);
-
-    if (!GPG_IS_OK (err)) {
-        seahorse_util_handle_gpgme (err, _("Couldn't decrypt text"));
+    ret = dbus_g_proxy_call (dbus_crypto_proxy, "VerifyText", &error,
+                             G_TYPE_STRING, "openpgp",
+                             G_TYPE_INT, 0,
+                             G_TYPE_STRING, text,
+                             G_TYPE_INVALID, 
+                             G_TYPE_STRING, &rawtext,
+                             G_TYPE_STRING, &signer,
+                             G_TYPE_INVALID);
+    
+    /* Not interested in the signer, daemon displays this for us */
+    g_free (signer);
+    
+    if (!ret) {
+        seahorse_gedit_show_error (_("Couldn't verify text"), error);
         return NULL;
     }
-
+    
     return rawtext;
 }
 
 /* Called for the decrypt menu item */
 void
-seahorse_gedit_decrypt (SeahorseContext *sctx, GeditDocument *doc)
+seahorse_gedit_decrypt (GeditDocument *doc)
 {
     gchar *buffer;              /* The text selected */
     gint sel_start;             /* The end of the whole deal */
@@ -371,9 +483,6 @@ seahorse_gedit_decrypt (SeahorseContext *sctx, GeditDocument *doc)
     guint blocks = 0;           /* Number of blocks processed */
     guint keys = 0;             /* Number of keys imported */
 
-    gpgme_verify_result_t status;   /* Signature status of last operation */
-    
-    g_assert (SEAHORSE_IS_CONTEXT (sctx));
     g_return_if_fail (doc != NULL);
 
     if (!get_document_selection (doc, &sel_start, &sel_end)) {
@@ -396,7 +505,7 @@ seahorse_gedit_decrypt (SeahorseContext *sctx, GeditDocument *doc)
         if (type == SEAHORSE_TEXT_TYPE_NONE) {
             if (blocks == 0) 
                 gedit_warning (GTK_WINDOW (seahorse_gedit_active_window ()),
-                           _("No encrypted or signed text is selected."));
+                               _("No encrypted or signed text is selected."));
             break;
         }
         
@@ -413,7 +522,6 @@ seahorse_gedit_decrypt (SeahorseContext *sctx, GeditDocument *doc)
         block_len = end - start;
         
         SEAHORSE_GEDIT_DEBUG (DEBUG_PLUGINS, "block (pos: %d, len %d)", block_pos, block_len);
-        status = NULL;
         
         switch (type) {
 
@@ -426,14 +534,14 @@ seahorse_gedit_decrypt (SeahorseContext *sctx, GeditDocument *doc)
         /* A message decrypt it */
         case SEAHORSE_TEXT_TYPE_MESSAGE:
             SEAHORSE_GEDIT_DEBUG (DEBUG_PLUGINS, "decrypting message");
-            rawtext = decrypt_text (start, &status);
+            rawtext = decrypt_text (start);
             seahorse_gedit_flash (_("Decrypted text"));
             break;
 
         /* A message verify it */
         case SEAHORSE_TEXT_TYPE_SIGNED:
             SEAHORSE_GEDIT_DEBUG (DEBUG_PLUGINS, "verifying message");
-            rawtext = verify_text (start, &status);
+            rawtext = verify_text (start);
             seahorse_gedit_flash (_("Verified text"));
             break;
 
@@ -459,10 +567,6 @@ seahorse_gedit_decrypt (SeahorseContext *sctx, GeditDocument *doc)
             g_free (rawtext);
             rawtext = NULL;
             
-            if(status && status->signatures) {              
-                seahorse_signatures_notify ("Text", status);
-            }
-            
         /* No replacement text, skip ahead */
         } else {
             block_pos += block_len + 1;
@@ -480,14 +584,17 @@ seahorse_gedit_decrypt (SeahorseContext *sctx, GeditDocument *doc)
 
 /* Callback for the sign menu item */
 void
-seahorse_gedit_sign (SeahorseContext *sctx, GeditDocument *doc)
+seahorse_gedit_sign (GeditDocument *doc)
 {
-    gpgme_error_t err = GPG_OK;
-    SeahorsePGPKey *signer;
+    GError *error = NULL;
     gchar *enctext = NULL;
     gchar *buffer;
-    gint start;
-    gint end;
+    gchar *signer;
+    gint start, end;
+    gboolean ret;
+
+    if (!init_crypt ())
+        return;
 
     g_return_if_fail (doc != NULL);
 
@@ -499,24 +606,37 @@ seahorse_gedit_sign (SeahorseContext *sctx, GeditDocument *doc)
     /* Get the document text */
     buffer = get_document_chars (doc, start, end);
 
-    signer = seahorse_signer_get ();
-    if (signer == NULL)
-        return;
+    signer = cryptui_prompt_signer (dbus_keyset, _("Choose Key to Sign with"));
+    
+    /* User may have cancelled */
+    if (signer != NULL) {
 
-    /* Perform the signing */
-    SEAHORSE_GEDIT_DEBUG (DEBUG_PLUGINS, "signing text");
-    enctext = seahorse_op_sign_text (signer, buffer, &err);
-    g_free (buffer);
+        /* Get the document text */
+        buffer = get_document_chars (doc, start, end);
 
-    if (!GPG_IS_OK (err)) {
-        g_assert (!enctext);
-        seahorse_util_handle_gpgme (err, _("Couldn't sign text"));
-        return;
+        /* Sign it */
+        SEAHORSE_GEDIT_DEBUG (DEBUG_PLUGINS, "signing text");
+        
+        ret = dbus_g_proxy_call (dbus_crypto_proxy, "SignText", &error, 
+                                G_TYPE_STRING, signer, 
+                                G_TYPE_INT, 0,
+                                G_TYPE_STRING, buffer,
+                                G_TYPE_INVALID,
+                                G_TYPE_STRING, &enctext,
+                                G_TYPE_INVALID);
+        
+        if (ret) {
+            set_document_selection (doc, start, end);
+            replace_selected_text (doc, enctext);
+            seahorse_gedit_flash (_("Signed text"));
+            g_free (enctext);
+        } else {
+            seahorse_gedit_show_error (_("Couldn't sign text"), error);
+        }
+        
+        /* And finish up */
+        g_free (signer);
+        g_free (buffer);
     }
-
-    /* Finish up */
-    set_document_selection (doc, start, end);
-    replace_selected_text (doc, enctext);
-    seahorse_gedit_flash (_("Signed text"));
-    g_free (enctext);
 }
+

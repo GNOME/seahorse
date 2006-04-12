@@ -6,13 +6,10 @@
 plugindir = $(libdir)/gedit-2/plugins
 
 INCLUDES = \
-	-I$(top_srcdir) \
-	-I$(top_srcdir)/libcryptui \
-	-I$(top_srcdir)/libseahorse \
-	$(SEAHORSE_CFLAGS) \
-	$(GEDIT_CFLAGS) 								\
-	-DGNOME_ICONDIR=\""$(datadir)/pixmaps"\" 		\
-	-DGEDIT_GLADEDIR=\""$(datadir)/gedit-2/glade/"\" 
+    -I$(top_srcdir) \
+    -I$(top_srcdir)/libcryptui \
+    $(GEDIT_CFLAGS) \
+    $(LIBCRYPTUI_CFLAGS)
 
 plugin_LTLIBRARIES = libseahorse-pgp.la
 
@@ -24,10 +21,8 @@ endif
 
 libseahorse_pgp_la_SOURCES = seahorse-gedit.c seahorse-gedit.h $(PLUGIN_SRCS)
 libseahorse_pgp_la_LDFLAGS = $(PLUGIN_LIBTOOL_FLAGS)
-libseahorse_pgp_la_LIBADD = \
-	$(top_builddir)/libseahorse/libseahorse-internal.la \
-	$(SEAHORSE_LIBS) \
-	$(GEDIT_LIBS)
+libseahorse_pgp_la_LIBADD = $(GEDIT_LIBS) $(LIBCRYPTUI_LIBS) \
+    $(top_builddir)/libcryptui/libcryptui.la
 
 plugin_in_files = seahorse-pgp.gedit-plugin.desktop.in
 

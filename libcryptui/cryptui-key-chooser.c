@@ -1,22 +1,22 @@
-/*
+/* 
  * Seahorse
- *
- * Copyright (C) 2005 Nate Nielsen
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the
- * Free Software Foundation, Inc.,
- * 59 Temple Place, Suite 330,
- * Boston, MA 02111-1307, USA.
+ * 
+ * Copyright (C) 2005 Nate Nielsen 
+ * 
+ * This program is free software; you can redistribute it and/or modify 
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *  
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *  
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+ * 02111-1307, USA.  
  */
 
 #include "config.h"
@@ -29,11 +29,20 @@
 
 enum {
     PROP_0,
-    PROP_KEYSET
+    PROP_KEYSET,
+    PROP_MODE,
 };
 
+enum {
+    CHANGED,
+    LAST_SIGNAL
+};
+
+
 struct _CryptUIKeyChooserPriv {
+    guint                   mode;
     gboolean                initialized;
+    
     CryptUIKeyset           *ckset;
     CryptUIKeyStore         *ckstore;
     GtkTreeView             *keylist;
@@ -44,6 +53,7 @@ struct _CryptUIKeyChooserPriv {
 };
 
 G_DEFINE_TYPE (CryptUIKeyChooser, cryptui_key_chooser, GTK_TYPE_VBOX);
+static guint signals[LAST_SIGNAL] = { 0 };
 
 /* -----------------------------------------------------------------------------
  * INTERNAL
@@ -84,10 +94,16 @@ filtermode_changed (GtkWidget *widget, CryptUIKeyChooser *chooser)
         g_object_set (chooser->priv->ckstore, "mode", active, NULL);    
 }
 
+static void
+selection_changed (GtkWidget *widget, CryptUIKeyChooser *chooser)
+{
+    g_signal_emit (chooser, signals[CHANGED], 0);
+}
 
 static void
 construct_recipients (CryptUIKeyChooser *chooser, GtkBox *box)
 {
+    GtkTreeSelection *selection;
     GtkWidget *scroll;
     GtkWidget *label;
     GtkWidget *hbox;
@@ -147,6 +163,8 @@ construct_recipients (CryptUIKeyChooser *chooser, GtkBox *box)
     gtk_container_add (GTK_CONTAINER (scroll), GTK_WIDGET (chooser->priv->keylist));
     gtk_container_add (GTK_CONTAINER (box), scroll);
     gtk_box_set_child_packing (box, scroll, TRUE, TRUE, 0, GTK_PACK_START);
+    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (chooser->priv->keylist));
+    g_signal_connect (selection, "changed", G_CALLBACK (selection_changed), chooser);
 }
 
 static void
@@ -155,6 +173,7 @@ construct_signer (CryptUIKeyChooser *chooser, GtkBox *box)
     CryptUIKeyStore *ckstore;
     GtkWidget *hbox;
     GtkWidget *label;
+    const gchar *none_option;
 
     /* Top filter box */
     hbox = gtk_hbox_new (FALSE, 12);
@@ -170,12 +189,16 @@ construct_signer (CryptUIKeyChooser *chooser, GtkBox *box)
     
     /* TODO: When only one key is present this should be a checkbox
        ie: 'Sign this Message (as 'key name') */
+    
+    if (!(chooser->priv->mode & CRYPTUI_KEY_CHOOSER_MUSTSIGN))
+        none_option = _("None (Don't Sign)");
 
     /* The Sign combo */
-    ckstore = cryptui_key_store_new (chooser->priv->ckset, TRUE, _("None (Don't Sign)"));
+    ckstore = cryptui_key_store_new (chooser->priv->ckset, TRUE, none_option);
     cryptui_key_store_set_filter (ckstore, signer_filter, NULL);
     chooser->priv->keycombo = cryptui_key_combo_new (ckstore);
     g_object_unref (ckstore);
+    g_signal_connect (chooser->priv->keycombo, "changed", G_CALLBACK (selection_changed), chooser);
     gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (chooser->priv->keycombo));
     gtk_box_set_child_packing (GTK_BOX (hbox), GTK_WIDGET (chooser->priv->keycombo), 
                                TRUE, TRUE, 0, GTK_PACK_START);
@@ -207,8 +230,10 @@ cryptui_key_chooser_constructor (GType type, guint n_props, GObjectConstructPara
     gtk_container_set_border_width (GTK_CONTAINER (obj), 6);
     
     /* Add the various objects now */
-    construct_recipients (chooser, GTK_BOX (obj));
-    construct_signer (chooser, GTK_BOX (obj));
+    if (chooser->priv->mode & CRYPTUI_KEY_CHOOSER_RECIPIENTS)
+        construct_recipients (chooser, GTK_BOX (obj));
+    if (chooser->priv->mode & CRYPTUI_KEY_CHOOSER_SIGNER)
+        construct_signer (chooser, GTK_BOX (obj));
     
     /* TODO: Fill in the default selection */
 
@@ -256,6 +281,10 @@ cryptui_key_chooser_set_property (GObject *gobject, guint prop_id,
         chooser->priv->ckset = g_value_get_object (value);
         g_object_ref (chooser->priv->ckset);
         break;
+    
+    case PROP_MODE:
+        chooser->priv->mode = g_value_get_uint (value);
+        break;
         
     default:
         break;
@@ -271,6 +300,10 @@ cryptui_key_chooser_get_property (GObject *gobject, guint prop_id,
     switch (prop_id) {
     case PROP_KEYSET:
         g_value_set_object (value, chooser->priv->ckset);
+        break;
+    
+    case PROP_MODE:
+        g_value_set_uint (value, chooser->priv->mode);
         break;
     
     default:
@@ -295,40 +328,65 @@ cryptui_key_chooser_class_init (CryptUIKeyChooserClass *klass)
     g_object_class_install_property (gclass, PROP_KEYSET,
         g_param_spec_object ("keyset", "CryptUI Keyset", "Current CryptUI Key Source to use",
                              CRYPTUI_TYPE_KEYSET, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+    
+    g_object_class_install_property (gclass, PROP_MODE,
+        g_param_spec_uint ("mode", "Display Mode", "Display mode for chooser",
+                           0, 0x0FFFFFFF, 0, G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE));
+    
+    signals[CHANGED] = g_signal_new ("changed", CRYPTUI_TYPE_KEY_CHOOSER, 
+                G_SIGNAL_RUN_FIRST, G_STRUCT_OFFSET (CryptUIKeyChooserClass, changed),
+                NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
 }
-
 
 /* -----------------------------------------------------------------------------
  * PUBLIC 
  */
 
 CryptUIKeyChooser*
-cryptui_key_chooser_new (CryptUIKeyset *ckset)
+cryptui_key_chooser_new (CryptUIKeyset *ckset, CryptUIKeyChooserMode mode)
 {
-    GObject *obj = g_object_new (CRYPTUI_TYPE_KEY_CHOOSER, "keyset", ckset, NULL);
+    GObject *obj = g_object_new (CRYPTUI_TYPE_KEY_CHOOSER, "keyset", ckset, 
+                                                           "mode", mode, NULL);
     return CRYPTUI_KEY_CHOOSER (obj);
+}
+
+gboolean
+cryptui_key_chooser_have_recipients (CryptUIKeyChooser *chooser)
+{
+    g_return_val_if_fail (chooser->priv->keylist != NULL, FALSE);
+    return cryptui_key_list_have_selected_keys (chooser->priv->keylist);
 }
 
 GList*
 cryptui_key_chooser_get_recipients (CryptUIKeyChooser *chooser)
 {
+    g_return_val_if_fail (chooser->priv->keylist != NULL, NULL);
     return cryptui_key_list_get_selected_keys (chooser->priv->keylist);
 }
 
 void                
 cryptui_key_chooser_set_recipients (CryptUIKeyChooser *chooser, GList *keys)
 {
+    g_return_if_fail (chooser->priv->keylist != NULL);
     return cryptui_key_list_set_selected_keys (chooser->priv->keylist, keys);
 }
 
 const gchar*        
 cryptui_key_chooser_get_signer (CryptUIKeyChooser *chooser)
 {
+    g_return_val_if_fail (chooser->priv->keycombo != NULL, NULL);
     return cryptui_key_combo_get_key (chooser->priv->keycombo);
 }
 
 void                
 cryptui_key_chooser_set_signer (CryptUIKeyChooser *chooser, const gchar *key)
 {
+    g_return_if_fail (chooser->priv->keycombo != NULL);
     return cryptui_key_combo_set_key (chooser->priv->keycombo, key);
+}
+
+CryptUIKeyChooserMode
+cryptui_key_chooser_get_mode (CryptUIKeyChooser *chooser)
+{
+    return chooser->priv->mode;
 }

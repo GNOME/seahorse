@@ -40,6 +40,7 @@ seahorse_signatures_notify (const gchar* data, gpgme_verify_result_t status)
     gboolean ok = FALSE;
     const gchar *icon = NULL;
     const gchar *fingerprint;
+    gchar *title;
     gchar *summary;
     gchar *body;
     guint l;    
@@ -64,13 +65,13 @@ seahorse_signatures_notify (const gchar* data, gpgme_verify_result_t status)
     switch (gpgme_err_code (status->signatures->status))  {
     case GPG_ERR_KEY_EXPIRED:
         body = _("Signed by <i>%s <b>Expired</b></i> on %s.");
-        summary = _("%s: Invalid Signature");
+        title = _("Invalid Signature");
         icon = ICON_PREFIX "seahorse-sign-bad.png";
         ok = TRUE;
         break;
     case GPG_ERR_SIG_EXPIRED:
         body = _("Signed by <i>%s</i> on %s <b>Expired</b>.");
-        summary = _("%s: Expired Signature");
+        title = _("Expired Signature");
         icon = ICON_PREFIX "seahorse-sign-bad.png";
         ok = TRUE;
         break;        
@@ -82,19 +83,19 @@ seahorse_signatures_notify (const gchar* data, gpgme_verify_result_t status)
         break;
     case GPG_ERR_NO_ERROR:
         body = _("Signed by <i>%s</i> on %s.");
-        summary = _("%s: Good Signature");
+        title = _("Good Signature");
         if (icon == NULL)
             icon = ICON_PREFIX "seahorse-sign-ok.png";
         ok = TRUE;
         break;
     case GPG_ERR_NO_PUBKEY:
         body = _("Signing key not in keyring.");
-        summary = _("%s: Unknown Signature");
+        title = _("Unknown Signature");
         icon = ICON_PREFIX "seahorse-sign-unknown.png";
         break;
     case GPG_ERR_BAD_SIGNATURE:
         body = _("Bad or forged signature. The signed data was modified.");
-        summary = _("%s: Bad Signature");
+        title = _("Bad Signature");
         icon = ICON_PREFIX "seahorse-sign-bad.png";
         break;
     case GPG_ERR_NO_DATA:
@@ -106,8 +107,6 @@ seahorse_signatures_notify (const gchar* data, gpgme_verify_result_t status)
         return;
     };
 
-    data = seahorse_util_uri_get_last (data);
-
     if (ok) {
         gchar *date = seahorse_util_get_date_string (status->signatures->timestamp);
         body = g_markup_printf_escaped (body, userid, date);
@@ -116,7 +115,13 @@ seahorse_signatures_notify (const gchar* data, gpgme_verify_result_t status)
         body = g_strdup (body);
     }
     
-    summary = g_strdup_printf (summary, data); 
+    if (data) {
+        data = seahorse_util_uri_get_last (data);
+        summary = g_strdup_printf ("%s: %s", data, title); 
+    } else {
+        summary = g_strdup (title);
+    }
+    
     seahorse_notification_display (summary, body, !ok, icon);
 
     g_free (summary);

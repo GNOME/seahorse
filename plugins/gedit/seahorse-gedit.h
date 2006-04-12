@@ -23,17 +23,15 @@
 #define __SEAHORSE_GEDIT_H__
 
 #include "config.h"
-#include "seahorse-context.h"
 
-void            seahorse_gedit_encrypt          (SeahorseContext *sctx,
-                                                 GeditDocument *doc);
-void            seahorse_gedit_sign             (SeahorseContext *sctx,
-                                                 GeditDocument *doc);
-void            seahorse_gedit_decrypt          (SeahorseContext *sctx,
-                                                 GeditDocument *doc);
+void            seahorse_gedit_encrypt          (GeditDocument *doc);
+void            seahorse_gedit_sign             (GeditDocument *doc);
+void            seahorse_gedit_decrypt          (GeditDocument *doc);
+void            seahorse_gedit_cleanup          ();
 
 GtkWindow*      seahorse_gedit_active_window    (void);
 void            seahorse_gedit_flash            (const gchar *format, ...);
+void            seahorse_gedit_show_error       (const gchar *heading, GError *error);
 
 #ifdef WITH_GEDIT_BONOBO
 #define SEAHORSE_GEDIT_DEBUG     gedit_debug 

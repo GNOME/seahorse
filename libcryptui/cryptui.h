@@ -24,6 +24,8 @@
 
 #include <glib.h>
 
+#include "cryptui-keyset.h"
+
 typedef enum {
     CRYPTUI_ENCTYPE_NONE,
     CRYPTUI_ENCTYPE_SYMMETRIC,
@@ -59,6 +61,9 @@ gchar*              cryptui_key_get_base (const gchar *key);
 
 CryptUIEncType      cryptui_key_get_enctype (const gchar *key);
 
+gchar**             cryptui_prompt_recipients (CryptUIKeyset *keyset, 
+                                               const gchar *title, gchar **signer);
 
+gchar*              cryptui_prompt_signer (CryptUIKeyset *keyset, const gchar *title);
 
 #endif /* __CRYPT_UI_H__ */

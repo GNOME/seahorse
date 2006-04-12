@@ -2,6 +2,13 @@
 
 <node name="/org/gnome/seahorse/crypto">
 
+    <!-- 
+     *
+     * FLAGS for use in |flags| fields 
+     *   FLAG_QUIET  =  0x01   (Don't display unnecessary UI)
+     *
+    -->
+
     <interface name="org.gnome.seahorse.CryptoService">
         <annotation name="org.freedesktop.DBus.GLib.CSymbol" value="seahorse_service_crypto"/>
     
@@ -27,6 +34,7 @@
         <method name="DecryptText">
             <annotation name="org.freedesktop.DBus.GLib.CSymbol" 
                 value="seahorse_service_crypto_decrypt_text"/>
+            <arg type="s" name="ktype" direction="in"/>
             <arg type="i" name="flags" direction="in"/>
             <arg type="s" name="crypttext" direction="in"/>
             <arg type="s" name="cleartext" direction="out"/>
@@ -36,6 +44,7 @@
         <method name="VerifyText">
             <annotation name="org.freedesktop.DBus.GLib.CSymbol" 
                 value="seahorse_service_crypto_verify_text"/>
+            <arg type="s" name="ktype" direction="in"/>
             <arg type="i" name="flags" direction="in"/>
             <arg type="s" name="crypttext" direction="in"/>
             <arg type="s" name="cleartext" direction="out"/>

@@ -34,9 +34,7 @@
 #include <gedit/gedit-utils.h>
 #include <gedit/gedit-menus.h>
 
-#include "seahorse-context.h"
 #include "seahorse-gedit.h"
-#include "seahorse-pgp-key.h"
 
 #define MENU_ENC_ITEM_LABEL      N_("_Encrypt...")
 #define MENU_ENC_ITEM_PATH       "/menu/Edit/EditOps_6/"
@@ -53,49 +51,29 @@
 #define MENU_SIGN_ITEM_NAME       "Sign"
 #define MENU_SIGN_ITEM_TIP        N_("Sign the selected text")
 
-/* The global plugin context */
-static SeahorseContext *sctx = NULL;
-
 /* -----------------------------------------------------------------------------
  * CRYPT CALLBACKS
  */
-
-static void
-init_context ()
-{
-    SeahorseOperation *op;
-    
-    if (!sctx) {
-        sctx = seahorse_context_new (TRUE, SKEY_PGP);
-        op = seahorse_context_load_local_keys (sctx);
-        
-        /* The op frees itself */
-        g_object_unref (op);
-    }
-}
 
 /* Callback for encrypt menu item */
 static void
 encrypt_cb (BonoboUIComponent *uic, gpointer user_data, const gchar *verbname)
 {
-    init_context ();
-    seahorse_gedit_encrypt (sctx, gedit_get_active_document ());
+    seahorse_gedit_encrypt (gedit_get_active_document ());
 }
 
 /* Called for the decrypt menu item */
 static void
 decrypt_cb (BonoboUIComponent *uic, gpointer user_data, const gchar *verbname)
 {
-    init_context ();
-    seahorse_gedit_decrypt (sctx, gedit_get_active_document ());
+    seahorse_gedit_decrypt (gedit_get_active_document ());
 }
 
 /* Callback for the sign menu item */
 static void
 sign_cb (BonoboUIComponent *uic, gpointer user_data, const gchar *verbname)
 {
-    init_context ();
-    seahorse_gedit_sign (sctx, gedit_get_active_document ());
+    seahorse_gedit_sign (gedit_get_active_document ());
 }
 
 /* -----------------------------------------------------------------------------
@@ -185,12 +163,10 @@ G_MODULE_EXPORT GeditPluginState
 destroy (GeditPlugin *plugin)
 {
     gedit_debug (DEBUG_PLUGINS, "seahorse plugin destroyed");
-
-    if (sctx && SEAHORSE_IS_CONTEXT (sctx))
-        seahorse_context_destroy (sctx);
-
-    sctx = NULL;
+    
+    seahorse_gedit_cleanup ();
     plugin->private_data = NULL;
+    
     return PLUGIN_OK;
 }
 
@@ -199,8 +175,6 @@ G_MODULE_EXPORT GeditPluginState
 init (GeditPlugin *plugin)
 {
     gedit_debug (DEBUG_PLUGINS, "seahorse plugin inited");
-
-    sctx = NULL;
     return PLUGIN_OK;
 }
 

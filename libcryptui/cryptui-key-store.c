@@ -1,22 +1,22 @@
-/*
+/* 
  * Seahorse
- *
- * Copyright (C) 2005 Nate Nielsen
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the
- * Free Software Foundation, Inc.,
- * 59 Temple Place, Suite 330,
- * Boston, MA 02111-1307, USA.
+ * 
+ * Copyright (C) 2005 Nate Nielsen 
+ * 
+ * This program is free software; you can redistribute it and/or modify 
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *  
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *  
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+ * 02111-1307, USA.  
  */
 
 #include "config.h"
@@ -708,6 +708,37 @@ cryptui_key_store_get_all_keys (CryptUIKeyStore *ckstore)
 {
     g_return_val_if_fail (CRYPTUI_KEY_STORE (ckstore), NULL);
     return cryptui_keyset_get_keys (ckstore->ckset);
+}
+
+gboolean            
+cryptui_key_store_have_selected_keys (CryptUIKeyStore *ckstore, GtkTreeView *view)
+{
+    GtkTreeSelection *selection;
+
+    g_return_val_if_fail (CRYPTUI_IS_KEY_STORE (ckstore), FALSE);
+    g_return_val_if_fail (GTK_IS_TREE_VIEW (view), FALSE);
+    
+    if (ckstore->priv->use_checks) {
+        GtkTreeModel* model = GTK_TREE_MODEL (ckstore);
+        GtkTreeIter iter;
+        gboolean check;
+            
+        if (gtk_tree_model_get_iter_first (model, &iter)) {
+            do {
+                check = FALSE;
+                gtk_tree_model_get (model, &iter, CRYPTUI_KEY_STORE_CHECK, &check, -1); 
+                if (check)
+                    return TRUE;
+            } while (gtk_tree_model_iter_next (model, &iter));
+        }
+    }
+    
+    /* Fall back if none checked, or not using checks */
+    selection = gtk_tree_view_get_selection (view);
+    if (gtk_tree_selection_count_selected_rows (selection))
+        return TRUE;
+    
+    return FALSE;
 }
 
 GList*

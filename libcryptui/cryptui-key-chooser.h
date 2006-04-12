@@ -1,22 +1,22 @@
-/*
+/* 
  * Seahorse
- *
- * Copyright (C) 2005 Nate Nielsen
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the
- * Free Software Foundation, Inc.,
- * 59 Temple Place, Suite 330,
- * Boston, MA 02111-1307, USA.
+ * 
+ * Copyright (C) 2005 Nate Nielsen 
+ * 
+ * This program is free software; you can redistribute it and/or modify 
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *  
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *  
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+ * 02111-1307, USA.  
  */
 
 #ifndef __CRYPTUI_KEY_CHOOSER_H__
@@ -25,6 +25,13 @@
 #include <gtk/gtk.h>
 
 #include "cryptui-keyset.h"
+
+typedef enum _CryptUIKeyChooserMode {
+    CRYPTUI_KEY_CHOOSER_RECIPIENTS =    0x01,
+    CRYPTUI_KEY_CHOOSER_SIGNER =        0x02,
+    
+    CRYPTUI_KEY_CHOOSER_MUSTSIGN =      0x10
+} CryptUIKeyChooserMode;
 
 #define CRYPTUI_TYPE_KEY_CHOOSER             (cryptui_key_chooser_get_type ())
 #define CRYPTUI_KEY_CHOOSER(obj)             (GTK_CHECK_CAST ((obj), CRYPTUI_TYPE_KEY_CHOOSER, CryptUIKeyChooser))
@@ -46,12 +53,20 @@ struct _CryptUIKeyChooser {
 
 struct _CryptUIKeyChooserClass {
     GtkVBoxClass       parent_class;
+    
+    /* signals --------------------------------------------------------- */
+    
+    /* The key selection changed  */
+    void (*changed)   (CryptUIKeyChooser *chooser);
 };
 
 
 GType               cryptui_key_chooser_get_type            ();
 
-CryptUIKeyChooser*  cryptui_key_chooser_new                 (CryptUIKeyset *ckset);
+CryptUIKeyChooser*  cryptui_key_chooser_new                 (CryptUIKeyset *ckset, 
+                                                             CryptUIKeyChooserMode mode);
+
+gboolean            cryptui_key_chooser_have_recipients     (CryptUIKeyChooser *chooser);
 
 GList*              cryptui_key_chooser_get_recipients      (CryptUIKeyChooser *chooser);
 

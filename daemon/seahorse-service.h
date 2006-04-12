@@ -171,24 +171,26 @@ GType                   seahorse_service_crypto_get_type       (void);
 SeahorseServiceCrypto*  seahorse_service_crypto_new            ();
 
 gboolean                seahorse_service_crypto_encrypt_text    (SeahorseServiceCrypto *crypto, 
-                                                                 const char **recipients, 
-                                                                 const char *signer, int flags, 
-                                                                 const char *cleartext, 
-                                                                 char **crypttext, GError **error);
+                                                                 const gchar **recipients, 
+                                                                 const gchar *signer, int flags, 
+                                                                 const gchar *cleartext, 
+                                                                 gchar **crypttext, GError **error);
 
 gboolean                seahorse_service_crypto_sign_text       (SeahorseServiceCrypto *crypto, 
-                                                                 const char *signer, int flags, 
-                                                                 const char *cleartext, 
-                                                                 char **crypttext, GError **error);
+                                                                 const gchar *signer, int flags, 
+                                                                 const gchar *cleartext, 
+                                                                 gchar **crypttext, GError **error);
 
 gboolean                seahorse_service_crypto_decrypt_text    (SeahorseServiceCrypto *crypto, 
-                                                                 int flags, const char *crypttext, 
-                                                                 char **cleartext, char **signer,
+                                                                 const gchar *ktype, int flags, 
+                                                                 const gchar *crypttext, 
+                                                                 gchar **cleartext, gchar **signer,
                                                                  GError **error);
 
 gboolean                seahorse_service_crypto_verify_text     (SeahorseServiceCrypto *crypto, 
-                                                                 int flags, const char *crypttext, 
-                                                                 char **cleartext, char **signer,
+                                                                 const gchar *ktype, int flags, 
+                                                                 const gchar *crypttext, 
+                                                                 gchar **cleartext, gchar **signer,
                                                                  GError **error);
 
 G_END_DECLS

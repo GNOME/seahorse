@@ -26,8 +26,6 @@
 #include <gedit/gedit-debug.h>
 #include <gedit/gedit-statusbar.h>
 
-#include "seahorse-context.h"
-#include "seahorse-pgp-key.h"
 #include "seahorse-gedit.h"
 
 /* -----------------------------------------------------------------------------
@@ -46,9 +44,6 @@ typedef struct _SeahorseGeditPluginClass    SeahorseGeditPluginClass;
 
 struct _SeahorseGeditPlugin {
     GeditPlugin parent;
-    
-    /* <public> */
-    SeahorseContext *sctx;
 };
 
 struct _SeahorseGeditPluginClass {
@@ -80,33 +75,17 @@ GEDIT_PLUGIN_REGISTER_TYPE (SeahorseGeditPlugin, seahorse_gedit_plugin);
  */
 
 static void
-init_context (SeahorseGeditPlugin *splugin)
-{
-    SeahorseOperation *op;
-    
-    if (!splugin->sctx) {
-        splugin->sctx = seahorse_context_new (TRUE, SKEY_PGP);
-        op = seahorse_context_load_local_keys (splugin->sctx);
-        
-        /* The op frees itself */
-        g_object_unref (op);
-    }
-}
-
-static void
 encrypt_cb (GtkAction *action, SeahorseGeditPlugin *splugin)
 {
     GeditWindow *win;
     GeditDocument *doc;
     
-    init_context (splugin);
-
     win = GEDIT_WINDOW (seahorse_gedit_active_window ());
     g_return_if_fail (win);
 
     doc = gedit_window_get_active_document(win);
     if (doc)
-        seahorse_gedit_encrypt (splugin->sctx, doc);
+        seahorse_gedit_encrypt (doc);
 }
 
 static void
@@ -115,14 +94,12 @@ decrypt_cb (GtkAction *action, SeahorseGeditPlugin *splugin)
     GeditWindow *win;
     GeditDocument *doc;
 
-    init_context (splugin);
-
     win = GEDIT_WINDOW (seahorse_gedit_active_window ());
     g_return_if_fail (win);
 
     doc = gedit_window_get_active_document(win);
     if(doc)
-        seahorse_gedit_decrypt (splugin->sctx, doc);
+        seahorse_gedit_decrypt (doc);
 }
 
 static void
@@ -131,14 +108,12 @@ sign_cb (GtkAction *action, SeahorseGeditPlugin *splugin)
     GeditWindow *win;
     GeditDocument *doc;
 
-    init_context (splugin);
-
     win = GEDIT_WINDOW (seahorse_gedit_active_window ());
     g_return_if_fail (win);
 
     doc = gedit_window_get_active_document(win);
     if (doc)
-        seahorse_gedit_sign (splugin->sctx, doc);
+        seahorse_gedit_sign (doc);
 }
 
 static void
@@ -243,9 +218,8 @@ seahorse_gedit_plugin_finalize (GObject *object)
 {
     SeahorseGeditPlugin *splugin = SEAHORSE_GEDIT_PLUGIN (object);
 
-    if (splugin->sctx)
-        seahorse_context_destroy (splugin->sctx);
-    splugin->sctx = NULL;
+    /* This can be called multiple times */
+    seahorse_gedit_cleanup ();
 
     G_OBJECT_CLASS (seahorse_gedit_plugin_parent_class)->finalize (object);
 

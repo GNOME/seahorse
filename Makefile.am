@@ -19,13 +19,13 @@ DBUS_DIR =
 endif
 
 SUBDIRS = libseahorse \
+          $(DBUS_DIR) \
           src \
           po \
           data \
           help \
           pixmaps \
           plugins \
-          $(DBUS_DIR) \
           $(NAUTILUS_DIR) \
           $(AGENT_DIR) \
           daemon 
