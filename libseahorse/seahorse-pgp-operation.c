@@ -132,6 +132,9 @@ progress_cb (void *data, const char *what, int type,
     
     DEBUG_OPERATION (("PGPOP: got progress: %s %d/%d\n", what, current, total));
     
+    if (current > total)
+        current = total;
+    
     if (!seahorse_operation_is_done (SEAHORSE_OPERATION (pop)))
         seahorse_operation_mark_progress (SEAHORSE_OPERATION (pop), 
                         pv->message ? pv->message : what, current, total);
