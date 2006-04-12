@@ -20,6 +20,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include "config.h"
 #include <gnome.h>
 #include <glade/glade-xml.h>
 
@@ -58,15 +59,19 @@ utf8_validate (const gchar *text)
 static void
 grab_keyboard (GtkWidget *win, GdkEvent * event, gpointer data)
 {
+#ifndef _DEBUG
     if (gdk_keyboard_grab (win->window, FALSE, gdk_event_get_time (event)))
         g_critical ("could not grab keyboard");
+#endif
 }
 
 /* ungrab_keyboard - remove grab */
 static void
 ungrab_keyboard (GtkWidget *win, GdkEvent *event, gpointer data)
 {
+#ifndef _DEBUG
     gdk_keyboard_ungrab (gdk_event_get_time (event));
+#endif
 }
 
 /* When enter is pressed in the entry, we simulate an ok */
