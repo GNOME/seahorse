@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<node name="/org/gnome/seahorse/crypto">
+
+    <interface name="org.gnome.seahorse.CryptoService">
+        <annotation name="org.freedesktop.DBus.GLib.CSymbol" value="seahorse_service_crypto"/>
+    
+        <method name="EncryptText">
+            <annotation name="org.freedesktop.DBus.GLib.CSymbol" 
+                value="seahorse_service_crypto_encrypt_text"/>
+            <arg type="as" name="recipients" direction="in"/>
+            <arg type="s" name="signer" direction="in"/>
+            <arg type="i" name="flags" direction="in"/>
+            <arg type="s" name="cleartext" direction="in"/>
+            <arg type="s" name="crypttext" direction="out"/>
+        </method>
+        
+        <method name="SignText">
+            <annotation name="org.freedesktop.DBus.GLib.CSymbol" 
+                value="seahorse_service_crypto_sign_text"/>
+            <arg type="s" name="signer" direction="in"/>
+            <arg type="i" name="flags" direction="in"/>
+            <arg type="s" name="cleartext" direction="in"/>
+            <arg type="s" name="crypttext" direction="out"/>
+        </method>
+        
+        <method name="DecryptText">
+            <annotation name="org.freedesktop.DBus.GLib.CSymbol" 
+                value="seahorse_service_crypto_decrypt_text"/>
+            <arg type="i" name="flags" direction="in"/>
+            <arg type="s" name="crypttext" direction="in"/>
+            <arg type="s" name="cleartext" direction="out"/>
+            <arg type="s" name="signer" direction="out"/>
+        </method>
+        
+        <method name="VerifyText">
+            <annotation name="org.freedesktop.DBus.GLib.CSymbol" 
+                value="seahorse_service_crypto_verify_text"/>
+            <arg type="i" name="flags" direction="in"/>
+            <arg type="s" name="crypttext" direction="in"/>
+            <arg type="s" name="cleartext" direction="out"/>
+            <arg type="s" name="signer" direction="out"/>
+        </method>
+
+    </interface>
+
+</node>

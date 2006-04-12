@@ -24,13 +24,18 @@
 
 #include "seahorse-service-bindings.h"
 #include "seahorse-service-keyset-bindings.h"
+#include "seahorse-service-crypto-bindings.h"
 
+#define DBUS_API_SUBJECT_TO_CHANGE
+#include <dbus/dbus.h>
 #include <dbus/dbus-glib-bindings.h>
+#include <dbus/dbus-glib-lowlevel.h>
 
-#define APPLICATION_SERVICE_NAME "org.gnome.seahorse.KeyService"
+#define APPLICATION_SERVICE_NAME "org.gnome.seahorse"
 
-/* The main service object */
+/* The main service objects */
 SeahorseService *the_service = NULL;
+SeahorseServiceCrypto *the_crypto = NULL;
 DBusGConnection *connection = NULL;
 
 void 
@@ -47,22 +52,24 @@ seahorse_dbus_server_init ()
     if (connection == NULL) {
         g_warning ("DBUS Service registration failed: %s", err ? err->message : "");
         g_error_free (err);
-		return;
-	}
+        return;
+    }
+    
+    dbus_connection_set_exit_on_disconnect (dbus_g_connection_get_connection (connection), FALSE);
 
     driver_proxy = dbus_g_proxy_new_for_name (connection, DBUS_SERVICE_DBUS,
                                               DBUS_PATH_DBUS, DBUS_INTERFACE_DBUS);
 
-	if (!org_freedesktop_DBus_request_name (driver_proxy, APPLICATION_SERVICE_NAME,
-						0, &request_name_result, &err)) {
-		g_warning ("DBUS Service name request failed.");
-		g_clear_error (&err);
-	}
+    if (!org_freedesktop_DBus_request_name (driver_proxy, APPLICATION_SERVICE_NAME,
+                                            0, &request_name_result, &err)) {
+        g_warning ("DBUS Service name request failed.");
+        g_clear_error (&err);
+    }
 
     if (request_name_result == DBUS_REQUEST_NAME_REPLY_EXISTS) {
         g_warning ("DBUS Service already started elsewhere");
-		return;
-	}
+        return;
+    }
 
        
     dbus_g_object_type_install_info (SEAHORSE_TYPE_SERVICE, 
@@ -71,9 +78,16 @@ seahorse_dbus_server_init ()
     dbus_g_object_type_install_info (SEAHORSE_TYPE_SERVICE_KEYSET, 
                                      &dbus_glib_seahorse_service_keyset_object_info);
     
+    dbus_g_object_type_install_info (SEAHORSE_TYPE_SERVICE_CRYPTO,
+                                     &dbus_glib_seahorse_service_crypto_object_info);
+    
     the_service = g_object_new (SEAHORSE_TYPE_SERVICE, NULL);
     dbus_g_connection_register_g_object (connection, "/org/gnome/seahorse/keys",
                                          G_OBJECT (the_service));
+    
+    the_crypto = g_object_new (SEAHORSE_TYPE_SERVICE_CRYPTO, NULL);
+    dbus_g_connection_register_g_object (connection, "/org/gnome/seahorse/crypto",
+                                         G_OBJECT (the_crypto));
 }
 
 DBusGConnection*    
@@ -90,6 +104,10 @@ seahorse_dbus_server_cleanup ()
     if (the_service)
         g_object_unref (the_service);
     the_service = NULL;
+    
+    if (the_crypto)
+        g_object_unref (the_crypto);
+    the_crypto = NULL;
     
     if (connection)
         dbus_g_connection_unref (connection);

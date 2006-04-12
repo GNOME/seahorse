@@ -32,6 +32,7 @@ G_BEGIN_DECLS
 /* TODO: This needs to be refined */
 enum {
     SEAHORSE_DBUS_ERROR_INVALID = 1,
+    SEAHORSE_DBUS_ERROR_CRYPTO = 2,
     SEAHORSE_DBUS_ERROR_NOTIMPLEMENTED = 100
 };
 
@@ -101,6 +102,12 @@ SeahorseKey*    seahorse_service_key_from_dbus      (const gchar *key, guint *ui
 
 gchar*          seahorse_service_key_to_dbus        (SeahorseKey *skey, guint uid);
 
+gchar*          seahorse_service_keyid_to_dbus      (GQuark ktype, const gchar *keyid, guint uid);
+
+/* -----------------------------------------------------------------------------
+ * KEYSET SERVICE
+ */
+ 
 typedef struct _SeahorseServiceKeyset SeahorseServiceKeyset;
 typedef struct _SeahorseServiceKeysetClass SeahorseServiceKeysetClass;
     
@@ -136,6 +143,53 @@ SeahorseKeyset* seahorse_service_keyset_new            (GQuark keytype);
 
 gboolean        seahorse_service_keyset_list_keys      (SeahorseServiceKeyset *keyset,
                                                         gchar ***keys, GError **error);
+
+/* -----------------------------------------------------------------------------
+ * CRYPTO SERVICE
+ */
+
+typedef struct _SeahorseServiceCrypto SeahorseServiceCrypto;
+typedef struct _SeahorseServiceCryptoClass SeahorseServiceCryptoClass;
+    
+#define SEAHORSE_TYPE_SERVICE_CRYPTO               (seahorse_service_crypto_get_type ())
+#define SEAHORSE_SERVICE_CRYPTO(object)            (G_TYPE_CHECK_INSTANCE_CAST((object), SEAHORSE_TYPE_SERVICE_CRYPTO, SeahorseServiceCrypto))
+#define SEAHORSE_SERVICE_CRYPTO_CLASS(klass)       (G_TYPE_CHACK_CLASS_CAST((klass), SEAHORSE_TYPE_SERVICE_CRYPTO, SeahorseServiceCryptoClass))
+#define SEAHORSE_IS_SERVICE_CRYPTO(object)         (G_TYPE_CHECK_INSTANCE_TYPE((object), SEAHORSE_TYPE_SERVICE_CRYPTO))
+#define SEAHORSE_IS_SERVICE_CRYPTO_CLASS(klass)    (G_TYPE_CHECK_CLASS_TYPE((klass), SEAHORSE_TYPE_SERVICE_CRYPTO))
+#define SEAHORSE_SERVICE_CRYPTO_GET_CLASS(object)  (G_TYPE_INSTANCE_GET_CLASS((object), SEAHORSE_TYPE_SERVICE_CRYPTO, SeahorseServiceCryptoClass))
+
+struct _SeahorseServiceCrypto {
+    GObject base;
+};
+
+struct _SeahorseServiceCryptoClass {
+    GObjectClass base;
+};
+
+GType                   seahorse_service_crypto_get_type       (void);
+
+SeahorseServiceCrypto*  seahorse_service_crypto_new            ();
+
+gboolean                seahorse_service_crypto_encrypt_text    (SeahorseServiceCrypto *crypto, 
+                                                                 const char **recipients, 
+                                                                 const char *signer, int flags, 
+                                                                 const char *cleartext, 
+                                                                 char **crypttext, GError **error);
+
+gboolean                seahorse_service_crypto_sign_text       (SeahorseServiceCrypto *crypto, 
+                                                                 const char *signer, int flags, 
+                                                                 const char *cleartext, 
+                                                                 char **crypttext, GError **error);
+
+gboolean                seahorse_service_crypto_decrypt_text    (SeahorseServiceCrypto *crypto, 
+                                                                 int flags, const char *crypttext, 
+                                                                 char **cleartext, char **signer,
+                                                                 GError **error);
+
+gboolean                seahorse_service_crypto_verify_text     (SeahorseServiceCrypto *crypto, 
+                                                                 int flags, const char *crypttext, 
+                                                                 char **cleartext, char **signer,
+                                                                 GError **error);
 
 G_END_DECLS
 

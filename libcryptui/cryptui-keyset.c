@@ -237,9 +237,9 @@ cryptui_keyset_constructor (GType type, guint n_props, GObjectConstructParam* pr
     path = g_strdup_printf("/org/gnome/seahorse/keys/%s", keyset->priv->keytype);
 
     keyset->priv->remote_keyset = dbus_g_proxy_new_for_name (bus,
-                    "org.gnome.seahorse.KeyService", path, "org.gnome.seahorse.Keys");
+                    "org.gnome.seahorse", path, "org.gnome.seahorse.Keys");
     keyset->priv->remote_service = dbus_g_proxy_new_for_name (bus,
-                    "org.gnome.seahorse.KeyService", "/org/gnome/seahorse/keys", "org.gnome.seahorse.KeyService");
+                    "org.gnome.seahorse", "/org/gnome/seahorse/keys", "org.gnome.seahorse.KeyService");
     
     g_free (path);
             

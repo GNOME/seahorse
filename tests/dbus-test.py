@@ -11,7 +11,7 @@ print dbus_iface.ListNames()
 
 
 print "\n\nSEAHORSE DBUS CALL ------------------------------------"
-proxy_obj = bus.get_object('org.gnome.seahorse.KeyService', '/org/gnome/seahorse/keys')
+proxy_obj = bus.get_object('org.gnome.seahorse', '/org/gnome/seahorse/keys')
 service = dbus.Interface(proxy_obj, 'org.gnome.seahorse.KeyService')
 
 types = service.GetKeyTypes()
@@ -24,7 +24,7 @@ if not len(types):
 path = service.GetKeyset(types[0])
 print "GetKeySet(): ", path
 
-proxy_obj = bus.get_object('org.gnome.seahorse.KeyService', path)
+proxy_obj = bus.get_object('org.gnome.seahorse', path)
 keyset = dbus.Interface(proxy_obj, "org.gnome.seahorse.Keys")
 
 keys = keyset.ListKeys()

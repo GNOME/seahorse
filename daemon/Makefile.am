@@ -32,8 +32,9 @@ endif
 
 if WITH_DBUS
 DBUS_SRCS = seahorse-dbus-server.c seahorse-service.c seahorse-service.h 
-DBUS_SRCS += seahorse-service-keyset.c 
+DBUS_SRCS += seahorse-service-keyset.c seahorse-service-crypto.c
 BUILT_SOURCES += seahorse-service-bindings.h seahorse-service-keyset-bindings.h
+BUILT_SOURCES += seahorse-service-crypto-bindings.h
 else
 DBUS_SRCS = 
 endif
@@ -64,6 +65,8 @@ seahorse-service-bindings.h: seahorse-service.xml
 	dbus-binding-tool --prefix=seahorse_service --mode=glib-server --output=$@ $(srcdir)/$<
 seahorse-service-keyset-bindings.h: seahorse-service-keyset.xml
 	dbus-binding-tool --prefix=seahorse_service_keyset --mode=glib-server --output=$@ $(srcdir)/$<
+seahorse-service-crypto-bindings.h: seahorse-service-crypto.xml
+	dbus-binding-tool --prefix=seahorse_service_crypto --mode=glib-server --output=$@ $(srcdir)/$<
 
 install-exec-hook:
 	chmod u+s $(DESTDIR)$(bindir)/seahorse-daemon

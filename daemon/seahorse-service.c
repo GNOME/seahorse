@@ -149,12 +149,18 @@ seahorse_service_key_from_dbus (const gchar *key, guint *uid)
 gchar*
 seahorse_service_key_to_dbus (SeahorseKey *skey, guint uid)
 {
-    if (uid == 0)
-        return g_strdup_printf ("%s:%s", g_quark_to_string (seahorse_key_get_ktype (skey)),
-                                seahorse_key_get_keyid (skey));
+    return seahorse_service_keyid_to_dbus (seahorse_key_get_ktype (skey), 
+                                           seahorse_key_get_keyid (skey), uid);
+}
+
+gchar*
+seahorse_service_keyid_to_dbus (GQuark ktype, const gchar *keyid, guint uid)
+{
+        if (uid == 0)
+        return g_strdup_printf ("%s:%s", g_quark_to_string (ktype), keyid);
     else
-        return g_strdup_printf ("%s:%s:%d", g_quark_to_string (seahorse_key_get_ktype (skey)),
-                                seahorse_key_get_keyid (skey), uid);
+        return g_strdup_printf ("%s:%s:%d", g_quark_to_string (ktype), keyid, uid);
+    
 }
 
 /* -----------------------------------------------------------------------------
