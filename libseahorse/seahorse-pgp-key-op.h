@@ -163,7 +163,7 @@ gpgme_error_t  seahorse_pgp_key_op_revoke_subkey    (SeahorsePGPKey *pkey,
                                                  const gchar *description);
 
 gpgme_error_t  seahorse_pgp_key_op_photoid_add      (SeahorsePGPKey *pkey,
-                                                     gchar *filename);
+                                                     const gchar *filename);
  
 gpgme_error_t  seahorse_pgp_key_op_photoid_delete   (SeahorsePGPKey *pkey,
                                                      guint uid);

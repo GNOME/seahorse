@@ -2102,7 +2102,7 @@ seahorse_pgp_key_op_del_uid (SeahorsePGPKey *pkey, const guint index)
 }
 
 typedef struct {
-	gchar *filename;
+    const gchar *filename;
 } PhotoIdAddParm;
 
 typedef enum {
@@ -2219,7 +2219,7 @@ photoid_add_transit (guint current_state, gpgme_status_code_t status,
  * Returns: Error value
  **/
 gpgme_error_t 
-seahorse_pgp_key_op_photoid_add	(SeahorsePGPKey *pkey, gchar *filename)
+seahorse_pgp_key_op_photoid_add	(SeahorsePGPKey *pkey, const gchar *filename)
 {
 	SeahorseEditParm *parms;
 	PhotoIdAddParm *photoid_add_parm;
