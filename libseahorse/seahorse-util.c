@@ -284,6 +284,7 @@ seahorse_util_write_data_to_text (gpgme_data_t data, gboolean release)
     
 	text = string->str;
 	g_string_free (string, FALSE);
+    g_free (buffer);
 	
 	return text;
 }
