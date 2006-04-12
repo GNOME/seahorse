@@ -66,6 +66,8 @@ show_chooser_dialog (CryptUIKeyset *keyset)
 {
     CryptUIKeyChooser *chooser;
     GtkWidget *dialog;
+    GList *recipients, *l;
+    const gchar *signer;
     
     dialog = gtk_dialog_new_with_buttons ("CryptUI Test", NULL, GTK_DIALOG_MODAL, 
                                           GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
@@ -75,6 +77,16 @@ show_chooser_dialog (CryptUIKeyset *keyset)
     
     gtk_widget_show_all (dialog);
     gtk_dialog_run (GTK_DIALOG (dialog));
+    
+    recipients = cryptui_key_chooser_get_recipients (chooser);
+    for (l = recipients; l; l = g_list_next (l))
+        g_print ("RECIPIENT: %s\n", (char*)(l->data));
+    g_list_free (recipients);
+    
+    signer = cryptui_key_chooser_get_signer (chooser);
+    g_print ("SIGNER: %s\n", signer);
+    
+    gtk_widget_destroy (dialog);
 }
 
 int

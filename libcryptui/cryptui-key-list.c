@@ -118,6 +118,9 @@ cryptui_key_list_setup (GtkTreeView *view, CryptUIKeyStore *ckstore,
     col = append_text_column (view, "Name", CRYPTUI_KEY_STORE_NAME);
     append_text_column (view, "Key ID", CRYPTUI_KEY_STORE_KEYID);
     gtk_tree_view_column_set_sort_column_id (col, CRYPTUI_KEY_STORE_NAME);
+    
+    gtk_tree_view_set_rules_hint (view, TRUE);
+    gtk_widget_set_size_request (GTK_WIDGET (view), 500, 250);
 }
 
 GList*
