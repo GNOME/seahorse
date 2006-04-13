@@ -61,6 +61,7 @@ EXTRA_DIST = \
 
 CLEANFILES = *.gladep* *.bak 
 
+# DBUS binding files
 seahorse-service-bindings.h: seahorse-service.xml
 	dbus-binding-tool --prefix=seahorse_service --mode=glib-server --output=$@ $(srcdir)/$<
 seahorse-service-keyset-bindings.h: seahorse-service-keyset.xml
@@ -68,5 +69,15 @@ seahorse-service-keyset-bindings.h: seahorse-service-keyset.xml
 seahorse-service-crypto-bindings.h: seahorse-service-crypto.xml
 	dbus-binding-tool --prefix=seahorse_service_crypto --mode=glib-server --output=$@ $(srcdir)/$<
 
+# Dbus service file
+servicedir = $(DBUS_SERVICES_DIR)
+service_in_files = org.gnome.seahorse.service.in
+service_DATA = $(service_in_files:.service.in=.service)
+
+# Rule to make the service file with bindir expanded
+$(service_DATA): $(service_in_files) Makefile
+	@sed -e "s|\@bindir\@|$(bindir)|" $< > $@
+
+# Make the daemon setuid
 install-exec-hook:
 	chmod u+s $(DESTDIR)$(bindir)/seahorse-daemon
