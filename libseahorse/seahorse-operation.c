@@ -469,7 +469,7 @@ multi_operation_done (SeahorseOperation *op, SeahorseMultiOperation *mop)
     /* Remove all the listeners */
     for (l = mop->operations; l; l = g_slist_next (l)) {
         g_signal_handlers_disconnect_by_func (l->data, multi_operation_done, mop);
-        g_signal_handlers_disconnect_by_func (l->data, multi_operation_done, mop);
+        g_signal_handlers_disconnect_by_func (l->data, multi_operation_progress, mop);
     }
 
     mop->operations = seahorse_operation_list_purge (mop->operations);
@@ -491,7 +491,15 @@ static void
 seahorse_multi_operation_dispose (GObject *gobject)
 {
     SeahorseMultiOperation *mop;
+    GSList *l;
+    
     mop = SEAHORSE_MULTI_OPERATION (gobject);
+    
+    /* Remove all the listeners */
+    for (l = mop->operations; l; l = g_slist_next (l)) {
+        g_signal_handlers_disconnect_by_func (l->data, multi_operation_done, mop);
+        g_signal_handlers_disconnect_by_func (l->data, multi_operation_progress, mop);
+    }
     
     /* Anything remaining, gets released  */
     mop->operations = seahorse_operation_list_free (mop->operations);
@@ -554,6 +562,9 @@ seahorse_multi_operation_take (SeahorseMultiOperation* mop, SeahorseOperation *o
 {
     g_return_if_fail (SEAHORSE_IS_MULTI_OPERATION (mop));
     g_return_if_fail (SEAHORSE_IS_OPERATION (op));
+    
+    /* We should never add an operation to itself */
+    g_return_if_fail (SEAHORSE_OPERATION (op) != SEAHORSE_OPERATION (mop));
     
     if(mop->operations == NULL) {
         DEBUG_OPERATION (("[multi-operation 0x%08X] start\n", (guint)mop));

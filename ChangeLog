@@ -1,5 +1,11 @@
 2006-04-12  Nate Nielsen  <nielsen@memberwebs.com>
 
+    * libseahorse/seahorse-operation.c: Fix problem where multi
+    operations aren't cleaned up properly, leading to random 
+    crashes, when a signal fires on a dangling pointer.
+    
+2006-04-12  Nate Nielsen  <nielsen@memberwebs.com>
+
     * libseahorse/seahorse-hkp-source.c: Fix crasher when 
     server returns error but no text. Fixes bug #336191
     
