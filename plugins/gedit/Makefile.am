@@ -8,6 +8,7 @@ plugindir = $(libdir)/gedit-2/plugins
 INCLUDES = \
     -I$(top_srcdir) \
     -I$(top_srcdir)/libcryptui \
+    -DGEDIT_LOCALEDIR=\"$(localedir)\" \
     $(GEDIT_CFLAGS) \
     $(LIBCRYPTUI_CFLAGS)
 

@@ -18,9 +18,11 @@
  * 59 Temple Place, Suite 330,
  * Boston, MA 02111-1307, USA.
  */
- 
+
+#include "config.h"
 #include <glib.h>
 #include <glib-object.h>
+#include <glib/gi18n-lib.h>
 #include <gedit/gedit-app.h>
 #include <gedit/gedit-plugin.h>
 #include <gedit/gedit-debug.h>
@@ -216,8 +218,6 @@ seahorse_gedit_plugin_deactivate (GeditPlugin *plugin, GeditWindow *window)
 static void
 seahorse_gedit_plugin_finalize (GObject *object)
 {
-    SeahorseGeditPlugin *splugin = SEAHORSE_GEDIT_PLUGIN (object);
-
     /* This can be called multiple times */
     seahorse_gedit_cleanup ();
 
