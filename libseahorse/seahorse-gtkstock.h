@@ -35,6 +35,7 @@
 #define SEAHORSE_STOCK_SIGN         "seahorse-sign"
 #define SEAHORSE_STOCK_SIGN_OK      "seahorse-sign-ok"
 #define SEAHORSE_STOCK_SIGN_BAD     "seahorse-sign-bad"
+#define SEAHORSE_STOCK_SIGN_UNKNOWN "seahorse-sign-unknown"
 
 void    seahorse_gtkstock_init          (void);
 

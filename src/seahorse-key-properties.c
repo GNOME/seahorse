@@ -905,11 +905,13 @@ do_details (SeahorseWidget *swidget)
     gchar *fp_label, *expiration_date, *created_date;
     const gchar *label, *status, *length;
     gint subkey_number, key, trust;
+    guint keyloc;
 
     skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
     pkey = SEAHORSE_PGP_KEY (skey);
     subkey = pkey->pubkey->subkeys;
-			
+    keyloc = seahorse_key_get_location (skey);
+
     widget = glade_xml_get_widget (swidget->xml, "details-id-label");
     if (widget) {
         label = seahorse_key_get_short_keyid (skey); 
@@ -954,6 +956,7 @@ do_details (SeahorseWidget *swidget)
         g_free (fp_label);
     }
 
+    show_glade_widget (swidget, "details-trust-combobox", keyloc == SKEY_LOC_LOCAL);
     widget = glade_xml_get_widget (swidget->xml, "details-trust-combobox");
     if (widget) {
         gtk_widget_set_sensitive (widget, !(pkey->pubkey->disabled));
@@ -1248,94 +1251,111 @@ do_trust (SeahorseWidget *swidget)
     SeahorsePGPKey *pkey;
     GtkWidget *widget;
     GtkListStore *store;
-    guint trust;
-    gboolean trusted;
-    gboolean managed;
-    const gchar *icon = NULL;
     gboolean sigpersonal;
-
+    guint keyloc;
+    
     skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
     pkey = SEAHORSE_PGP_KEY (skey);
+    keyloc = seahorse_key_get_location (skey);
     
     if (seahorse_key_get_etype (skey) != SKEY_PUBLIC)
         return;
     
-    trust = seahorse_key_get_trust (skey);
+    /* Remote keys */
+    if (keyloc != SKEY_LOC_LOCAL) {
+        
+        show_glade_widget (swidget, "manual-trust-area", FALSE);
+        show_glade_widget (swidget, "manage-trust-area", TRUE);
+        show_glade_widget (swidget, "sign-area", FALSE);
+        show_glade_widget (swidget, "revoke-area", FALSE);
+        sensitive_glade_widget (swidget, "trust-marginal-check", FALSE);
+        sensitive_glade_widget (swidget, "trust-complete-check", FALSE);
+        set_glade_image (swidget, "sign-image", SEAHORSE_STOCK_SIGN_UNKNOWN);
+        
+    /* Local keys */
+    } else {
+        guint trust;
+        gboolean trusted, managed;
+        const gchar *icon = NULL;
+        
+        trust = seahorse_key_get_trust (skey);
     
-    trusted = FALSE;
-    managed = FALSE;
-    
-    switch (trust) {
-
-    /* We shouldn't be seeing this page with these trusts */
-    case SEAHORSE_VALIDITY_REVOKED:
-    case SEAHORSE_VALIDITY_DISABLED:
-        return;
-    
-    /* Trust is specified manually */
-    case SEAHORSE_VALIDITY_ULTIMATE:
-        trusted = TRUE;
-        managed = FALSE;
-        icon = SEAHORSE_STOCK_SIGN_OK;
-        break;
-    
-    /* Trust is specified manually */
-    case SEAHORSE_VALIDITY_NEVER:
         trusted = FALSE;
         managed = FALSE;
-        icon = SEAHORSE_STOCK_SIGN_BAD;
-        break;
-    
-    /* We manage the trust through this page */
-    case SEAHORSE_VALIDITY_FULL:
-    case SEAHORSE_VALIDITY_MARGINAL:
-        trusted = TRUE;
-        managed = TRUE;
-        icon = SEAHORSE_STOCK_SIGN_OK;
-        break;
-    
-    /* We manage the trust through this page */
-    case SEAHORSE_VALIDITY_UNKNOWN:
-        trusted = FALSE;
-        managed = TRUE;
-        icon = SEAHORSE_STOCK_SIGN;
-        break;
-    
-    default:
-        g_assert_not_reached ();
-        return;
-    }
-    
-    /* Managed and unmanaged areas */
-    show_glade_widget (swidget, "manual-trust-area", !managed);
-    show_glade_widget (swidget, "manage-trust-area", managed);
-
-    /* Managed check boxes */
-    if (managed) {
-        widget = seahorse_widget_get_widget (swidget, "trust-marginal-check");
-        g_return_if_fail (widget != NULL);
         
-        g_signal_handlers_block_by_func (widget, trust_marginal_toggled, swidget);
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), trust != SEAHORSE_VALIDITY_UNKNOWN);
-        g_signal_handlers_unblock_by_func (widget, trust_marginal_toggled, swidget);
+        switch (trust) {
     
-        widget = seahorse_widget_get_widget (swidget, "trust-complete-check");
-        g_return_if_fail (widget != NULL);
+        /* We shouldn't be seeing this page with these trusts */
+        case SEAHORSE_VALIDITY_REVOKED:
+        case SEAHORSE_VALIDITY_DISABLED:
+            return;
         
-        g_signal_handlers_block_by_func (widget, trust_complete_toggled, swidget);
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), trust == SEAHORSE_VALIDITY_FULL);
-        gtk_widget_set_sensitive (widget, trust != SEAHORSE_VALIDITY_UNKNOWN);
-        g_signal_handlers_unblock_by_func (widget, trust_complete_toggled, swidget);
-    }
-
-    /* Signing and revoking */
-    sigpersonal = seahorse_pgp_key_have_signatures (pkey, SKEY_PGPSIG_PERSONAL);
-    show_glade_widget (swidget, "sign-area", !sigpersonal && trusted);
-    show_glade_widget (swidget, "revoke-area", sigpersonal);
+        /* Trust is specified manually */
+        case SEAHORSE_VALIDITY_ULTIMATE:
+            trusted = TRUE;
+            managed = FALSE;
+            icon = SEAHORSE_STOCK_SIGN_OK;
+            break;
+        
+        /* Trust is specified manually */
+        case SEAHORSE_VALIDITY_NEVER:
+            trusted = FALSE;
+            managed = FALSE;
+            icon = SEAHORSE_STOCK_SIGN_BAD;
+            break;
+        
+        /* We manage the trust through this page */
+        case SEAHORSE_VALIDITY_FULL:
+        case SEAHORSE_VALIDITY_MARGINAL:
+            trusted = TRUE;
+            managed = TRUE;
+            icon = SEAHORSE_STOCK_SIGN_OK;
+            break;
+        
+        /* We manage the trust through this page */
+        case SEAHORSE_VALIDITY_UNKNOWN:
+            trusted = FALSE;
+            managed = TRUE;
+            icon = SEAHORSE_STOCK_SIGN;
+            break;
+        
+        default:
+            g_assert_not_reached ();
+            return;
+        }
+        
+        
+        /* Managed and unmanaged areas */
+        show_glade_widget (swidget, "manual-trust-area", !managed);
+        show_glade_widget (swidget, "manage-trust-area", managed);
     
-    /* The image */
-    set_glade_image (swidget, "sign-image", icon);
-
+        /* Managed check boxes */
+        if (managed) {
+            widget = seahorse_widget_get_widget (swidget, "trust-marginal-check");
+            g_return_if_fail (widget != NULL);
+            gtk_widget_set_sensitive (widget, TRUE);
+            
+            g_signal_handlers_block_by_func (widget, trust_marginal_toggled, swidget);
+            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), trust != SEAHORSE_VALIDITY_UNKNOWN);
+            g_signal_handlers_unblock_by_func (widget, trust_marginal_toggled, swidget);
+        
+            widget = seahorse_widget_get_widget (swidget, "trust-complete-check");
+            g_return_if_fail (widget != NULL);
+            
+            g_signal_handlers_block_by_func (widget, trust_complete_toggled, swidget);
+            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), trust == SEAHORSE_VALIDITY_FULL);
+            gtk_widget_set_sensitive (widget, trust != SEAHORSE_VALIDITY_UNKNOWN);
+            g_signal_handlers_unblock_by_func (widget, trust_complete_toggled, swidget);
+        }
+    
+        /* Signing and revoking */
+        sigpersonal = seahorse_pgp_key_have_signatures (pkey, SKEY_PGPSIG_PERSONAL);
+        show_glade_widget (swidget, "sign-area", !sigpersonal && trusted);
+        show_glade_widget (swidget, "revoke-area", sigpersonal);
+        
+        /* The image */
+        set_glade_image (swidget, "sign-image", icon);
+    }
     
     /* The actual signatures listing */
     widget = glade_xml_get_widget (swidget->xml, "signatures-tree");
