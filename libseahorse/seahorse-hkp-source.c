@@ -267,6 +267,8 @@ dehtmlize(gchar *line)
      */
     int parsedindex = 0;
     gchar *parsed = line;
+    
+    g_return_if_fail (line);
 
     while (*line != '\0') {
         switch(*line) {
@@ -338,12 +340,14 @@ fail_hkp_operation (SeahorseHKPOperation *hop, SoupMessage *msg, const gchar *te
     } else if (msg) {
         /* Make the body lower case, and no tags */
         t = g_strndup (msg->response.body, msg->response.length);
-        dehtmlize (t);        
-        seahorse_util_string_lower (t);
+        if (t != NULL) {
+            dehtmlize (t);        
+            seahorse_util_string_lower (t);
+        }
 
-        if (strstr (t, "no keys"))
+        if (t && strstr (t, "no keys"))
             error = g_error_new (HKP_ERROR_DOMAIN, 0, _("No matching keys found on server '%s'."), server);
-        else if (strstr (t, "too many"))
+        else if (t && strstr (t, "too many"))
             error = g_error_new (HKP_ERROR_DOMAIN, 0, _("Search was not specific enough. Server '%s' found too many keys."), server);
         else 
             error = g_error_new (HKP_ERROR_DOMAIN, msg->status_code, _("Couldn't communicate with server '%s': %s"),
