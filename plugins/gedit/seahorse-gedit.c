@@ -410,6 +410,8 @@ decrypt_text (const gchar *text)
     if (!init_crypt ())
         return NULL;
     
+g_printerr ("%s\n", text);    
+    
     ret = dbus_g_proxy_call (dbus_crypto_proxy, "DecryptText", &error,
                              G_TYPE_STRING, "openpgp",
                              G_TYPE_INT, 0,
@@ -419,15 +421,15 @@ decrypt_text (const gchar *text)
                              G_TYPE_STRING, &signer,
                              G_TYPE_INVALID);
     
-    /* Not interested in the signer */
-    g_free (signer);
-    
-    if (!ret) {
+    if (ret) {
+        /* Not interested in the signer */
+        g_free (signer);
+        return rawtext;
+        
+    } else {
         seahorse_gedit_show_error (_("Couldn't decrypt text"), error);
         return NULL;
     }
-    
-    return rawtext;
 }
 
 /* Verify a signed message */
@@ -451,15 +453,15 @@ verify_text (const gchar * text)
                              G_TYPE_STRING, &signer,
                              G_TYPE_INVALID);
     
-    /* Not interested in the signer, daemon displays this for us */
-    g_free (signer);
-    
-    if (!ret) {
+    if (ret) {
+        /* Not interested in the signer */
+        g_free (signer);
+        return rawtext;
+        
+    } else {
         seahorse_gedit_show_error (_("Couldn't verify text"), error);
         return NULL;
     }
-    
-    return rawtext;
 }
 
 /* Called for the decrypt menu item */
