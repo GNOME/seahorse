@@ -40,24 +40,27 @@ DBUS_SRCS =
 endif
 
 seahorse_daemon_SOURCES = \
-		seahorse-daemon.c \
-		seahorse-daemon.h \
-		$(DBUS_SRCS) \
-		$(SHARING_SRCS)
+    seahorse-daemon.c \
+    seahorse-daemon.h \
+    $(DBUS_SRCS) \
+    $(SHARING_SRCS)
 
 seahorse_daemon_LDADD = \
     $(AGENT_LIB) \
-	$(top_builddir)/libseahorse/libseahorse-internal.la \
-	$(SEAHORSE_LIBS)
+    $(top_builddir)/libseahorse/libseahorse-internal.la \
+    $(SEAHORSE_LIBS)
 
 glade_DATA = 
 
 EXTRA_DIST = \
-	$(glade_DATA) \
-	seahorse-service.xml \
-	seahorse-service-keyset.xml \
-	seahorse-service-bindings.h \
-	seahorse-service-keyset-bindings.h
+    $(glade_DATA) \
+    seahorse-service.xml \
+    seahorse-service-keyset.xml \
+    seahorse-service-crypto.xml \
+    seahorse-service-bindings.h \
+    seahorse-service-keyset-bindings.h \
+    seahorse-service-crypto-bindings.h \
+    org.gnome.seahorse.service.in
 
 CLEANFILES = *.gladep* *.bak 
 
