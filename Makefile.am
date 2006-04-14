@@ -53,7 +53,14 @@ EXTRA_DIST = \
     m4
 
 DISTCLEANFILES = \
-    gnome-doc-utils.make
+    gnome-doc-utils.make \
+    intltool-extract \
+    intltool-merge \
+    intltool-update
     
 DISTCHECK_CONFIGURE_FLAGS = \
-    --disable-scrollkeeper
+    --disable-scrollkeeper \
+    --disable-update-mime-database
+
+distuninstallcheck:
+	@:

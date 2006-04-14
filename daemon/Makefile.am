@@ -62,7 +62,8 @@ EXTRA_DIST = \
     seahorse-service-crypto-bindings.h \
     org.gnome.seahorse.service.in
 
-CLEANFILES = *.gladep* *.bak 
+CLEANFILES = *.gladep* *.bak \
+    org.gnome.seahorse.service
 
 # DBUS binding files
 seahorse-service-bindings.h: seahorse-service.xml
