@@ -11,7 +11,7 @@
 	<!ENTITY key "<glossterm>key</glossterm>">
 ]>
 
-<article id="index" Lang="en">
+<article id="index">
 	<articleinfo>
 		<title>&project; Manual V&manrevision;</title>
 		<copyright>
@@ -124,7 +124,7 @@
 		<itemizedlist>
 			<listitem><para><xref linkend="encrypt-te"/></para></listitem>
 			<listitem><para><xref linkend="sign-te"/></para></listitem>
-			<listitem><para><xref linkend="decrypt/verify-te"/></para></listitem>
+			<listitem><para><xref linkend="decryptverify-te"/></para></listitem>
 		</itemizedlist>
 		<!-- note>Most &key; management features can be found in the <xref linkend="key-properties"/>.</note -->
 	</sect1>
@@ -215,8 +215,8 @@
 							Enter your full name in the form
 							<programlisting>&lt;first&gt; &lt;last&gt;</programlisting>
 							A middle name or initial is optional.
-							<note>You must enter at least 5 
-							characters in this field.</note> 
+							<note><para>You must enter at least 5 
+							characters in this field.</para></note> 
 						</para>
 					</listitem>
 				</varlistentry>
@@ -229,8 +229,8 @@
 							key server or other key provider.
 							Make sure it is correct before
 							continuing. 
-							<note>It should be of the form 
-							<programlisting>&lt;user name&gt;@&lt;domain name&gt;</programlisting></note>
+							<note><para>It should be of the form 
+							<programlisting>&lt;user name&gt;@&lt;domain name&gt;</programlisting></para></note>
 						</para>
 					</listitem>
 				</varlistentry>
@@ -311,9 +311,9 @@
 							months.  You will have to either change the 
 							expiration date or generate a new 
 							key or subkey after this amount of time passes.  
-							<note>Sign your new key with your old one 
+							<note><para>Sign your new key with your old one 
 							before it expires to preserve your trust 
-							status.</note>
+							status.</para></note>
 						</para>
 					</listitem>
 				</varlistentry>
@@ -379,8 +379,8 @@
 			</menuchoice>
 			.  Enter a file name with a valid archive extenision and specify the 
 			location to save the archive.  
-			<note>You can choose any of the archive types 
-			<application>file-roller</application> supports.</note>
+			<note><para>You can choose any of the archive types 
+			<application>file-roller</application> supports.</para></note>
 		</para>
 	</sect1>
 	<sect1 id="key-properties">
@@ -423,7 +423,7 @@
 				<listitem>
 					<para>
 					Indicates the length in bits of a key.  In general the longer the key, the more security it 
-					provides.<note>A long key is not enough to make up for the use of a weak passphrase.</note>  
+					provides.<note><para>A long key is not enough to make up for the use of a weak passphrase.</para></note>  
 					</para>
 				</listitem>
 			</varlistentry>
@@ -735,9 +735,8 @@
 			<para>
 				To verify files, double click on the the detached signature file.
 			</para>
-			<note>Detached signature file names often take the form
-				<codelisting> &lt;file name to be verified&gt;.sig</codelisting>
-			</note>
+			<note><para>Detached signature file names often take the form
+				&lt;file name to be verified&gt;.sig</para></note>
 		</sect2>
 	</sect1>
 	<sect1 id="text-editor">
@@ -780,7 +779,7 @@
 				signed text.
 			</para>
 		</sect2>
-		<sect2 id="decrypt/verify-te">
+		<sect2 id="decryptverify-te">
 			<title>Decrypt/Verify Text</title>
 			<para>
 				To Decrypt and or Verify a selection of text, select the text you want 
@@ -842,9 +841,9 @@
 				<para>
 					Whether the key is an OpenPGP key or a S/MIME certificate.  
 				</para>
-				<note>
+				<note><para>
 					Certificates are not yet supported.
-				</note>
+				</para></note>
 			</sect3>
 		</sect2>
 		<sect2 id="encryption-settings">
@@ -859,10 +858,10 @@
 					Sets whether or not you will be added to the recipients list for 
 					all files encrypted by &app;. 
 				</para>
-				<note>
+				<note><para>
 					If you don't select this and you don't select yourself as a 
 					recipient you will be unable to decrypt any files you encrypt.
-				</note>
+				</para></note>
 			</sect3>
 			<sect3>
 				<title>Armor Encode Files</title>
@@ -933,10 +932,10 @@
 				to the remote search dialog.  Using these local "key servers" will most 
 				likely be faster than accessing remote servers.
 			</para>
-			<note>
+			<note><para>
 				To enable key sharing, you must have started <command>mDNSResponder
 				</command> before <command>seahorse-daemon</command>.
-			</note>
+			</para></note>
 		</sect2>
 	</sect1>
 	<sect1 id="about">
