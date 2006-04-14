@@ -2,7 +2,24 @@ dnl Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.52)
 
+dnl ****************************************************************************
+dnl MAIN SEAHORSE VERSION (update after release)
+
 AC_INIT(seahorse, 0.9.1)
+
+dnl ****************************************************************************
+dnl LIBCRYPTUI libtool versioning
+dnl CURRENT : REVISION : AGE
+dnl   +1    :     0    : +1   == new interface that does not break old one.
+dnl   +1    :     0    :  0   == removed an interface. Breaks old apps.
+dnl    ?    :    +1    :  ?   == internal changes that doesn't break anything.
+
+LIBCRYPTUI_CURRENT=0
+LIBCRYPTUI_REVISION=0
+LIBCRYPTUI_AGE=0
+
+dnl ****************************************************************************
+
 AC_CONFIG_SRCDIR(src/main.c)
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 AM_CONFIG_HEADER(config.h)
@@ -438,13 +455,6 @@ else
         SEAHORSE_CFLAGS="$SEAHORSE_CFLAGS $DBUS_CFLAGS"
         SEAHORSE_LIBS="$SEAHORSE_LIBS $DBUS_LIBS"
         
-        PKG_CHECK_MODULES(LIBCRYPTUI, gtk+-2.0 >= 2.4.0)
-        LIBCRYPTUI_CFLAGS="$LIBCRYPTUI_CFLAGS $DBUS_CFLAGS"
-        LIBCRYPTUI_LIBS="$LIBCRYPTUI_LIBS $DBUS_LIBS" 
-        
-        AC_SUBST(LIBCRYPTUI_CFLAGS)
-        AC_SUBST(LIBCRYPTUI_LIBS)
-        
         AS_AC_EXPAND(DATADIR, $datadir)
 
         DBUS_SERVICES_DIR="$DATADIR/dbus-1/services"
@@ -454,8 +464,28 @@ else
 fi
 
 AM_CONDITIONAL(WITH_DBUS, test "$enable_dbus" != "no")
+
+
+dnl ****************************************************************************
+dnl LIBCRYPTUI
+dnl ****************************************************************************
    
-   
+if test "$enable_dbus" != "yes"; then
+    echo "disabling libcryptui: no dbus support"
+else
+    
+    LIBCRYPTUI_LT_RELEASE=$LIBCRYPTUI_CURRENT:$LIBCRYPTUI_REVISION:$LIBCRYPTUI_REVISION
+    AC_SUBST(LIBCRYPTUI_LT_RELEASE)
+
+    PKG_CHECK_MODULES(LIBCRYPTUI, gtk+-2.0 >= 2.4.0)
+    LIBCRYPTUI_CFLAGS="$LIBCRYPTUI_CFLAGS $DBUS_CFLAGS"
+    LIBCRYPTUI_LIBS="$LIBCRYPTUI_LIBS $DBUS_LIBS" 
+        
+    AC_SUBST(LIBCRYPTUI_CFLAGS)
+    AC_SUBST(LIBCRYPTUI_LIBS)
+fi
+
+
 dnl ****************************************************************************
 dnl GEDIT
 dnl ****************************************************************************
