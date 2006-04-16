@@ -577,7 +577,7 @@ seahorse_ssh_operation_upload (SeahorseSSHSource *ssrc, GList *keys,
     gpgme_data_t data;
     gpgme_error_t gerr;
     gchar *input;
-    guint length;
+    size_t length;
     gchar *cmd;
     
     g_return_val_if_fail (keys != NULL, NULL);
