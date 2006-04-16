@@ -237,9 +237,19 @@ handle_clipboard_owner_change(GtkClipboard *clipboard, GdkEvent *event,
         update_icon (sapplet);
 }
 
+/* Makes URL in About Dialog Clickable */
+static void about_dialog_activate_link_cb (GtkAboutDialog *about,
+                                           const gchar *url,
+                                           gpointer data)
+{
+	gnome_url_show (url, NULL);
+}
+
 static void
 about_cb (BonoboUIComponent *uic, SeahorseApplet *sapplet, const gchar *verbname)
 {                   
+    static gboolean been_here = FALSE;
+    
     static const gchar *authors [] = {
         "Adam Schreiber <sadam@clemson.edu>",
         "Nate Nielsen <nielsen@memberwebs.com>",
@@ -255,7 +265,13 @@ about_cb (BonoboUIComponent *uic, SeahorseApplet *sapplet, const gchar *verbname
         "Nate Nielsen <nielsen@memberwebs.com>",
         NULL    
     };
-
+    
+	if (!been_here)
+	{
+		been_here = TRUE;
+		gtk_about_dialog_set_url_hook (about_dialog_activate_link_cb, NULL, NULL);
+	}
+	
     gtk_show_about_dialog (NULL, 
                 "name", _("seahorse-applet"),
                 "version", VERSION,

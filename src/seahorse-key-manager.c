@@ -504,10 +504,20 @@ collapse_all_activate (GtkMenuItem *item, SeahorseWidget *swidget)
 	    gtk_tree_view_collapse_all (view);
 }
 
+/* Makes URL in About Dialog Clickable */
+static void about_dialog_activate_link_cb (GtkAboutDialog *about,
+                                           const gchar *url,
+                                           gpointer data)
+{
+	gnome_url_show (url, NULL);
+}
+
 /* Shows about dialog */
 static void
 about_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
+    static gboolean been_here = FALSE;
+    
 	static const gchar *authors[] = {
 		"Jacob Perkins <jap1@users.sourceforge.net>",
 		"Jose Carlos Garcia Sogo <jsogo@users.sourceforge.net>",
@@ -533,6 +543,12 @@ about_activate (GtkWidget *widget, SeahorseWidget *swidget)
         NULL
     };
 
+    if (!been_here)
+	{
+		been_here = TRUE;
+		gtk_about_dialog_set_url_hook (about_dialog_activate_link_cb, NULL, NULL);
+	}
+	
 	gtk_show_about_dialog (NULL, 
                 "name", _("seahorse"),
                 "version", VERSION,
