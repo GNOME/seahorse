@@ -981,7 +981,7 @@ seahorse_key_store_get_selected_keys (GtkTreeView *view)
     /* Remove duplicates */
     keys = g_list_sort (keys, compare_pointers);
     for (l = keys; l; l = g_list_next (l)) {
-        while (l->next && l->data == l->next->data)
+        while (!l->data || (l->next && l->data == l->next->data))
             keys = g_list_delete_link (keys, l->next);
     }    
 	 
