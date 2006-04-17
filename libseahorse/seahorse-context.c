@@ -271,8 +271,7 @@ seahorse_context_add_key_source (SeahorseContext *sctx, SeahorseKeySource *sksrc
 void
 seahorse_context_remove_key_source (SeahorseContext *sctx, SeahorseKeySource *sksrc)
 {
-    SeahorseKeySource *ks;
-    GSList *l;
+    GList *l, *keys;
     
     g_return_if_fail (SEAHORSE_IS_CONTEXT (sctx));
     g_return_if_fail (SEAHORSE_IS_KEY_SOURCE (sksrc));
@@ -281,11 +280,9 @@ seahorse_context_remove_key_source (SeahorseContext *sctx, SeahorseKeySource *sk
         return;
 
     /* Remove all keys from this source */    
-    for (l = sctx->pv->sources; l; l = g_slist_next (l)) {
-        ks = seahorse_key_get_source (SEAHORSE_KEY (l->data));
-        if (ks == sksrc)
-            seahorse_context_remove_key (sctx, SEAHORSE_KEY (l->data));
-    }
+    keys = seahorse_context_get_keys (sctx, sksrc);
+    for (l = keys; l; l = g_list_next (l)) 
+        seahorse_context_remove_key (sctx, SEAHORSE_KEY (l->data));
     
     /* Remove the source itself */
     sctx->pv->sources = g_slist_remove (sctx->pv->sources, sksrc);
