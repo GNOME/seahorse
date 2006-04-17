@@ -940,7 +940,8 @@ seahorse_key_store_get_all_keys (GtkTreeView *view)
 GList*
 seahorse_key_store_get_selected_keys (GtkTreeView *view)
 {
-	GList *l, *keys = NULL;
+    SeahorseKey *skey;
+    GList *l, *keys = NULL;
     SeahorseKeyStore* skstore;
     
     g_return_val_if_fail (GTK_IS_TREE_VIEW (view), NULL);
@@ -955,23 +956,29 @@ seahorse_key_store_get_selected_keys (GtkTreeView *view)
             do {
                 check = FALSE;
                 gtk_tree_model_get (model, &iter, KEY_STORE_CHECK, &check, -1); 
-                if (check)
-                    keys = g_list_append (keys, key_from_iterator (model, &iter, NULL));
+                if (check) {
+                    skey = key_from_iterator (model, &iter, NULL);
+                    if (skey != NULL)
+                        keys = g_list_append (keys, skey);
+                }
             } while (gtk_tree_model_iter_next (model, &iter));
         }
     }
     
     /* Fall back if none checked, or not using checks */
     if (keys == NULL) {
-    	GList *list, *paths = NULL;
-        GtkTreeSelection *selection;	
+        GList *list, *paths = NULL;
+        GtkTreeSelection *selection;    
         
-    	selection = gtk_tree_view_get_selection (view);
-    	paths = gtk_tree_selection_get_selected_rows (selection, NULL);
-	
-    	/* make key list */
-	    for (list = paths; list != NULL; list = g_list_next (list))
-		    keys = g_list_append (keys, seahorse_key_store_get_key_from_path (view, list->data, NULL));
+        selection = gtk_tree_view_get_selection (view);
+        paths = gtk_tree_selection_get_selected_rows (selection, NULL);
+    
+        /* make key list */
+        for (list = paths; list != NULL; list = g_list_next (list)) {
+            skey = seahorse_key_store_get_key_from_path (view, list->data, NULL);
+            if (skey != NULL)
+                keys = g_list_append (keys, skey);
+        }
             
         /* free selected paths */
         g_list_foreach (paths, (GFunc)gtk_tree_path_free, NULL);
@@ -981,10 +988,10 @@ seahorse_key_store_get_selected_keys (GtkTreeView *view)
     /* Remove duplicates */
     keys = g_list_sort (keys, compare_pointers);
     for (l = keys; l; l = g_list_next (l)) {
-        while (!l->data || (l->next && l->data == l->next->data))
+        while (l->next && l->data == l->next->data)
             keys = g_list_delete_link (keys, l->next);
     }    
-	 
+    
     return keys;
 }
 
