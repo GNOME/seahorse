@@ -23,6 +23,15 @@
 
 #include "seahorse-service.h"
 
+/* Special fields */
+enum {
+    FIELD_DISLAY_NAME,
+    FIELD_CN,
+    FIELD_SPECIAL_MAX
+};
+
+GQuark key_fields[FIELD_SPECIAL_MAX] = { 0 };
+
 enum {
     KEY_ADDED,
     KEY_REMOVED,
@@ -32,6 +41,51 @@ enum {
 
 G_DEFINE_TYPE (SeahorseServiceKeyset, seahorse_service_keyset, SEAHORSE_TYPE_KEYSET);
 static guint signals[LAST_SIGNAL] = { 0 };
+
+/* -----------------------------------------------------------------------------
+ * HELPERS 
+ */
+
+static void
+value_free (gpointer value)
+{
+    g_value_unset ((GValue*)value);
+    g_free (value);
+}
+
+static gboolean
+lookup_key_field (SeahorseKey *skey, guint uid, const gchar *field, GValue *value)
+{
+    GParamSpec *spec;
+    GQuark qfield;
+    gchar *name;
+    
+    /* Special UID fields */
+    if (uid > 0) {
+
+        qfield = g_quark_from_string (field);
+        if (qfield == key_fields[FIELD_DISLAY_NAME]) {
+            name = seahorse_key_get_name (skey, uid);
+            g_value_init (value, G_TYPE_STRING);
+            g_value_take_string (value, name ? name : g_strdup (""));
+            return TRUE;
+
+        } else if (qfield == key_fields[FIELD_CN]) {
+            name = seahorse_key_get_name_cn (skey, uid);
+            g_value_init (value, G_TYPE_STRING);
+            g_value_take_string (value, name ? name : g_strdup (""));
+            return TRUE;
+        }
+    }
+
+    spec = g_object_class_find_property (G_OBJECT_GET_CLASS (skey), field);
+    if (!spec) 
+        return FALSE;
+
+    g_value_init (value, spec->value_type);
+    g_object_get_property (G_OBJECT (skey), field, value);
+    return TRUE; 
+}
 
 /* -----------------------------------------------------------------------------
  * DBUS METHODS 
@@ -62,6 +116,63 @@ seahorse_service_keyset_list_keys (SeahorseServiceKeyset *keyset, gchar ***keys,
     
     *keys = (gchar**)g_array_free (a, FALSE);
     return TRUE;
+}
+
+gboolean
+seahorse_service_keyset_get_key_field (SeahorseService *svc, gchar *key, gchar *field,
+                                       gboolean *has, GValue *value, GError **error)
+{
+    SeahorseKey *skey;
+    guint uid;
+
+    skey = seahorse_service_key_from_dbus (key, &uid);
+    if (!skey) {
+        g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID, 
+                     _("Invalid or unrecognized key: %s"), key);
+        return FALSE;
+    }
+ 
+    if (lookup_key_field (skey, uid, field, value)) {
+        *has = TRUE;
+        
+    } else {
+        *has = FALSE;
+        
+        /* As close as we can get to 'null' */
+        g_value_init (value, G_TYPE_INT);
+        g_value_set_int (value, 0);
+    }
+
+    return TRUE;
+}
+
+gboolean
+seahorse_service_keyset_get_key_fields (SeahorseService *svc, gchar *key, gchar **fields,
+                                        GHashTable **values, GError **error)
+{
+    SeahorseKey *skey;
+    GValue *value;
+    guint uid;
+    
+    skey = seahorse_service_key_from_dbus (key, &uid);
+    if (!skey) {
+        g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID, 
+                     _("Invalid or unrecognized key: %s"), key);
+        return FALSE;
+    }
+
+    *values = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, value_free);
+    
+    while (*fields) {
+        value = g_new0 (GValue, 1);
+        if (lookup_key_field (skey, uid, *fields, value))
+            g_hash_table_insert (*values, g_strdup (*fields), value);
+        else
+            g_free (value);
+        fields++;
+    }
+    
+    return TRUE; 
 }
 
 gboolean        
@@ -228,10 +339,22 @@ seahorse_service_keyset_changed (SeahorseKeyset *skset, SeahorseKey *skey,
     uids = (uids == 0) ? 1 : uids;
     
     euids = GPOINTER_TO_UINT (closure);
-    if (euids > 0 && euids != uids) {
-        seahorse_service_keyset_removed (skset, skey, closure, NULL);
-        seahorse_service_keyset_added (skset, skey, NULL);
-        return;
+    if (euids != uids)
+        seahorse_keyset_set_closure (skset, skey, GUINT_TO_POINTER (uids));
+
+g_printerr ("old: %d / current: %d\n", euids, uids);
+    if (euids < uids) {
+        for (i = euids; i < uids; i++) {
+            id = seahorse_service_key_to_dbus (skey, i);
+            g_signal_emit (SEAHORSE_SERVICE_KEYSET (skset), signals[KEY_ADDED], 0, id);
+            g_free (id);
+        }
+    } else if (euids > uids) {
+        for (i = uids; i < euids; i++) {
+            id = seahorse_service_key_to_dbus (skey, i);
+            g_signal_emit (SEAHORSE_SERVICE_KEYSET (skset), signals[KEY_REMOVED], 0, id);
+            g_free (id);
+        }
     }
 
     for (i = 0; i < uids; i++) {
@@ -239,6 +362,7 @@ seahorse_service_keyset_changed (SeahorseKeyset *skset, SeahorseKey *skey,
         g_signal_emit (SEAHORSE_SERVICE_KEYSET (skset), signals[KEY_CHANGED], 0, id);
         g_free (id);
     }
+    
 }
 
 /* -----------------------------------------------------------------------------
@@ -250,7 +374,7 @@ seahorse_service_keyset_init (SeahorseServiceKeyset *keyset)
 {
     g_signal_connect_after (keyset, "added", G_CALLBACK (seahorse_service_keyset_added), NULL);
     g_signal_connect_after (keyset, "removed", G_CALLBACK (seahorse_service_keyset_removed), NULL);
-    g_signal_connect_after (keyset, "added", G_CALLBACK (seahorse_service_keyset_changed), NULL);
+    g_signal_connect_after (keyset, "changed", G_CALLBACK (seahorse_service_keyset_changed), NULL);
 }
 
 static void
@@ -271,6 +395,11 @@ seahorse_service_keyset_class_init (SeahorseServiceKeysetClass *klass)
     signals[KEY_CHANGED] = g_signal_new ("key_changed", SEAHORSE_TYPE_SERVICE_KEYSET, 
                 G_SIGNAL_RUN_LAST | G_SIGNAL_DETAILED, G_STRUCT_OFFSET (SeahorseServiceKeysetClass, key_changed),
                 NULL, NULL, g_cclosure_marshal_VOID__STRING, G_TYPE_NONE, 1, G_TYPE_STRING);
+    
+    
+    /* Some special fields */
+    key_fields[FIELD_DISLAY_NAME] = g_quark_from_static_string ("display-name");
+    key_fields[FIELD_CN] = g_quark_from_static_string ("cn");
 }
 
 /* -----------------------------------------------------------------------------

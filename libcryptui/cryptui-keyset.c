@@ -176,16 +176,15 @@ lookup_key_property (CryptUIKeyset *keyset, const gchar *key, const gchar *prop,
     }
     
     value = g_new0 (GValue, 1);
-    if (!dbus_g_proxy_call (keyset->priv->remote_service, "GetKeyField", &error,
+    if (!dbus_g_proxy_call (keyset->priv->remote_keyset, "GetKeyField", &error,
                             G_TYPE_STRING, key, G_TYPE_STRING, prop, G_TYPE_INVALID, 
-                            G_TYPE_VALUE, value, G_TYPE_INVALID)) {
+                            G_TYPE_BOOLEAN, allocated, G_TYPE_VALUE, value, G_TYPE_INVALID)) {
         g_warning ("dbus call to get '%s' failed: %s", prop, error ? error->message : "");
         g_clear_error (&error);
         g_free (value);
         return NULL;
     }
 
-    *allocated = TRUE;
     return value;
 }
 
@@ -470,7 +469,7 @@ cryptui_keyset_cache_key (CryptUIKeyset *keyset, const gchar *key)
     if (props)
         return;
 
-    if (!dbus_g_proxy_call (keyset->priv->remote_service, "GetKeyFields", &error,
+    if (!dbus_g_proxy_call (keyset->priv->remote_keyset, "GetKeyFields", &error,
                             G_TYPE_STRING, key, G_TYPE_STRV, cached_key_props, G_TYPE_INVALID, 
                             TYPE_G_STRING_VALUE_HASHTABLE, &props, G_TYPE_INVALID)) {
         g_warning ("dbus call to cache key failed: %s", error ? error->message : "");

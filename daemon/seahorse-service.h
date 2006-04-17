@@ -68,24 +68,13 @@ gboolean       seahorse_service_get_key_types       (SeahorseService *svc, gchar
 gboolean        seahorse_service_get_keyset         (SeahorseService *svc, gchar *ktype, 
                                                      gchar **path, GError **error);
 
-gboolean        seahorse_service_has_key_field      (SeahorseService *svc, gchar *key, 
-                                                     gchar *field, gboolean *has, GError **error);
-
-gboolean        seahorse_service_get_key_field      (SeahorseService *svc, gchar *key, 
-                                                     gchar *field, GValue *value, GError **error);
-
-gboolean        seahorse_service_get_key_fields     (SeahorseService *svc, gchar *key, 
-                                                     gchar **fields, GHashTable **values, GError **error);
-
-gboolean        seahorse_service_get_key_names      (SeahorseService *svc, gchar *key, 
-                                                     gchar ***names, gchar ***cns, GError **error);
-
 gboolean        seahorse_service_import_keys        (SeahorseService *svc, gchar *ktype, 
                                                      gchar *data, gchar ***keys, GError **error);
                               
 gboolean        seahorse_service_export_keys        (SeahorseService *svc, gchar *ktype,
                                                      gchar **keys, gchar **data, GError **error);
 
+#if 0
 gboolean        seahorse_service_match_keys         (SeahorseService *svc, gchar *ktype, 
                                                      gint flags, gchar **patterns, gchar ***keys, 
                                                      gchar***unmatched, GError **error);
@@ -93,6 +82,7 @@ gboolean        seahorse_service_match_keys         (SeahorseService *svc, gchar
 gboolean        seahorse_service_match_save         (SeahorseService *svc, gchar *ktype, 
                                                      gint flags, gchar **patterns, 
                                                      gchar **keys, GError **error);
+#endif
 
 SeahorseKey*    seahorse_service_key_from_dbus      (const gchar *key, guint *uid);
 
@@ -143,6 +133,14 @@ SeahorseKeyset* seahorse_service_keyset_new            (GQuark keytype,
 
 gboolean        seahorse_service_keyset_list_keys      (SeahorseServiceKeyset *keyset,
                                                         gchar ***keys, GError **error);
+
+gboolean        seahorse_service_keyset_get_key_field  (SeahorseService *svc, gchar *key, 
+                                                        gchar *field, gboolean *has, 
+                                                        GValue *value, GError **error);
+
+gboolean        seahorse_service_keyset_get_key_fields (SeahorseService *svc, gchar *key, 
+                                                        gchar **fields, GHashTable **values, 
+                                                        GError **error);
 
 gboolean        seahorse_service_keyset_discover_keys  (SeahorseServiceKeyset *keyset, 
                                                         const gchar **keyids, gint flags,

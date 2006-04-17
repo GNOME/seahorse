@@ -10,6 +10,26 @@
             <arg type="as" name="keys" direction="out"/>            
         </method>
         
+        <method name="GetKeyField">
+            <annotation name="org.freedesktop.DBus.GLib.CSymbol" 
+                value="seahorse_service_keyset_get_key_field"/>     
+            <arg type="s" name="key" direction="in"/>
+            <arg type="s" name="field" direction="in"/>
+            <!-- A less than shiny hack around the fact that variants
+                don't support NULL! -->
+            <arg type="b" name="has" direction="out"/>
+            <arg type="v" name="info" direction="out"/>
+        </method>
+        
+        <method name="GetKeyFields">
+            <annotation name="org.freedesktop.DBus.GLib.CSymbol" 
+                value="seahorse_service_keyset_get_key_fields"/>     
+            <arg type="s" name="key" direction="in"/>
+            <arg type="as" name="fields" direction="in"/>
+            <!-- array {field, value} -->
+            <arg type="a{sv}" name="info" direction="out"/>            
+        </method>
+        
         <method name="DiscoverKeys">
             <annotation name="org.freedesktop.DBus.GLib.CSymbol"
                 value="seahorse_service_keyset_discover_keys"/>

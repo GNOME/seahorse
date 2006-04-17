@@ -33,6 +33,6 @@ if not len(keys):
     print "No keys found"
     sys.exit(0)
     
-print service.GetKeyField(keys[0], "display-name")
-print service.GetKeyFields(keys[0], [ "display-name", "simple-name", "fingerprint" ])
+print keyset.GetKeyField(keys[0], "display-name")
+print keyset.GetKeyFields(keys[0], [ "display-name", "simple-name", "fingerprint" ])
 print service.ExportKeys("openpgp", [ keys[0] ])

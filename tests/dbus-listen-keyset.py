@@ -1,11 +1,14 @@
 #!/usr/bin/python
 
+import gobject 
 import dbus
-import gtk
+if getattr(dbus, 'version', (0,0,0)) >= (0,41,0):
+    import dbus.glib
 
 bus = dbus.SessionBus()
 proxy_obj = bus.get_object('org.gnome.seahorse', '/org/gnome/seahorse/keys/openpgp')
 service = dbus.Interface(proxy_obj, 'org.gnome.seahorse.Keys')
+
 
 def signal_callback(interface, signal_name, service, path, message):
     print "Received signal %s from %s" % (signal_name, interface)
@@ -36,4 +39,6 @@ service.connect_to_signal ('KeyRemoved', key_removed)
 #bus.add_signal_receiver (signal_callback, 'KeyRemoved', 'org.gnome.seahorse.Keys', 
 #                         'org.gnome.seahorse', '/org/gnome/seahorse/keys/openpgp')
 
-gtk.main()
+
+mainloop = gobject.MainLoop()
+mainloop.run()
