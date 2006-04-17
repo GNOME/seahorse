@@ -707,9 +707,8 @@ static SeahorseOperation*  seahorse_hkp_source_load       (SeahorseKeySource *sr
                                                            const gchar *key);
 static SeahorseOperation*  seahorse_hkp_source_import     (SeahorseKeySource *sksrc, 
                                                            gpgme_data_t data);
-static SeahorseOperation*  seahorse_hkp_source_export     (SeahorseKeySource *sksrc, 
-                                                           GList *keys,     
-                                                           gboolean complete,
+static SeahorseOperation*  seahorse_hkp_source_export_raw (SeahorseKeySource *sksrc, 
+                                                           GSList *keys,     
                                                            gpgme_data_t data);
 
 static SeahorseKeySourceClass *parent_class = NULL;
@@ -743,7 +742,7 @@ seahorse_hkp_source_class_init (SeahorseHKPSourceClass *klass)
     key_class = SEAHORSE_KEY_SOURCE_CLASS (klass);
     key_class->load = seahorse_hkp_source_load;
     key_class->import = seahorse_hkp_source_import;
-    key_class->export = seahorse_hkp_source_export;
+    key_class->export_raw = seahorse_hkp_source_export_raw;
 
     parent_class = g_type_class_peek_parent (klass);
 }
@@ -883,21 +882,22 @@ seahorse_hkp_source_import (SeahorseKeySource *sksrc, gpgme_data_t data)
     return SEAHORSE_OPERATION (hop);
 }
 
-static SeahorseOperation* 
-seahorse_hkp_source_export (SeahorseKeySource *sksrc, GList *keys, 
-                            gboolean complete, gpgme_data_t data)
+static SeahorseOperation*  
+seahorse_hkp_source_export_raw (SeahorseKeySource *sksrc, GSList *keyids,
+                                gpgme_data_t data)
 {
     SeahorseHKPOperation *hop;
     SeahorseHKPSource *hsrc;
     SoupMessage *message;
     gchar *t, *server, *uri;
     const gchar *fpr;
-    guint l;
+    guint len;
+    GSList *l;
     
     g_return_val_if_fail (SEAHORSE_IS_HKP_SOURCE (sksrc), NULL);
     hsrc = SEAHORSE_HKP_SOURCE (sksrc);
     
-    if (g_list_length (keys) == 0)
+    if (g_slist_length (keyids) == 0)
         return seahorse_operation_new_complete (NULL);
 
     server = get_http_server_address (sksrc);
@@ -917,14 +917,13 @@ seahorse_hkp_source_export (SeahorseKeySource *sksrc, GList *keys,
                                         (GDestroyNotify)gpgme_data_release);
     }
     
-    for ( ; keys; keys = g_list_next (keys)) {
-        g_assert (SEAHORSE_IS_KEY (keys->data));
+    for (l = keyids; l; l = g_slist_next (l)) {
 
         /* Get the key id and limit it to 8 characters */
-        fpr = seahorse_key_get_keyid (SEAHORSE_KEY (keys->data));
-        l = strlen (fpr);
-        if (l > 8)
-            fpr += (l - 8);
+        fpr = (const char*)(l->data);
+        len = strlen (fpr);
+        if (len > 8)
+            fpr += (len - 8);
 
         /* The get key URI */
         uri = g_strdup_printf ("http://%s/pks/lookup?op=get&search=0x%s", 

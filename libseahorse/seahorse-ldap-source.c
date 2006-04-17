@@ -1069,15 +1069,14 @@ start_send_operation_multiple (SeahorseLDAPSource *lsrc, GSList *keys)
 static void seahorse_ldap_source_class_init (SeahorseLDAPSourceClass *klass);
 
 /* SeahorseKeySource methods */
-static SeahorseOperation*  seahorse_ldap_source_load      (SeahorseKeySource *src,
-                                                           SeahorseKeySourceLoad load,
-                                                           const gchar *match);
-static SeahorseOperation*  seahorse_ldap_source_import    (SeahorseKeySource *sksrc, 
-                                                           gpgme_data_t data);
-static SeahorseOperation*  seahorse_ldap_source_export    (SeahorseKeySource *sksrc, 
-                                                           GList *keys,     
-                                                           gboolean complete,
-                                                           gpgme_data_t data);
+static SeahorseOperation*  seahorse_ldap_source_load       (SeahorseKeySource *src,
+                                                            SeahorseKeySourceLoad load,
+                                                            const gchar *match);
+static SeahorseOperation*  seahorse_ldap_source_import     (SeahorseKeySource *sksrc, 
+                                                            gpgme_data_t data);
+static SeahorseOperation*  seahorse_ldap_source_export_raw (SeahorseKeySource *sksrc, 
+                                                            GSList *keyids,
+                                                            gpgme_data_t data);
                                                            
 static SeahorseKeySourceClass *parent_class = NULL;
 
@@ -1110,7 +1109,7 @@ seahorse_ldap_source_class_init (SeahorseLDAPSourceClass *klass)
     key_class = SEAHORSE_KEY_SOURCE_CLASS (klass);
     key_class->load = seahorse_ldap_source_load;
     key_class->import = seahorse_ldap_source_import;
-    key_class->export = seahorse_ldap_source_export;
+    key_class->export_raw = seahorse_ldap_source_export_raw;
 
     parent_class = g_type_class_peek_parent (klass);
 }
@@ -1183,22 +1182,18 @@ seahorse_ldap_source_import (SeahorseKeySource *sksrc, gpgme_data_t data)
 }
 
 static SeahorseOperation* 
-seahorse_ldap_source_export (SeahorseKeySource *sksrc, GList *keys, 
-                             gboolean complete, gpgme_data_t data)
+seahorse_ldap_source_export_raw (SeahorseKeySource *sksrc, GSList *keyids, 
+                                 gpgme_data_t data)
 {
     SeahorseLDAPOperation *lop;
     SeahorseLDAPSource *lsrc;
-    GSList *fingerprints = NULL;
+    GSList *l, *fingerprints = NULL;
     
     g_assert (SEAHORSE_IS_LDAP_SOURCE (sksrc));
     lsrc = SEAHORSE_LDAP_SOURCE (sksrc);
     
-    for ( ; keys; keys = g_list_next (keys)) {
-        g_assert (SEAHORSE_IS_KEY (keys->data));
-        fingerprints = g_slist_prepend (fingerprints,
-                g_strdup (seahorse_key_get_keyid (SEAHORSE_KEY (keys->data))));
-    }
-    
+    for (l = keyids; l; l = g_slist_next (l)) 
+        fingerprints = g_slist_prepend (fingerprints, g_strdup (l->data));
     fingerprints = g_slist_reverse (fingerprints);
 
     lop = start_get_operation_multiple (lsrc, fingerprints, data);

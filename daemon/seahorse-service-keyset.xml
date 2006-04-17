@@ -10,6 +10,14 @@
             <arg type="as" name="keys" direction="out"/>            
         </method>
         
+        <method name="DiscoverKeys">
+            <annotation name="org.freedesktop.DBus.GLib.CSymbol"
+                value="seahorse_service_keyset_discover_keys"/>
+            <arg type="as" name="keyids" direction="in"/>
+            <arg type="i" name="flags" direction="in"/>
+            <arg type="as" name="keys" direction="out"/>
+        </method>
+        
         <signal name="KeyAdded">
             <arg type="s" name="key" direction="out"/>
         </signal>

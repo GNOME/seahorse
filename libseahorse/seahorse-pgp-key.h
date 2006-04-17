@@ -138,4 +138,7 @@ gboolean        seahorse_pgp_key_have_signatures      (SeahorsePGPKey   *pkey,
  */
 guint           seahorse_pgp_key_get_actual_uid       (SeahorsePGPKey   *pkey,
                                                        guint            uid);
+                                                       
+gchar*          seahorse_pgp_key_get_cannonical_id     (const gchar *id);
+
 #endif /* __SEAHORSE_KEY_H__ */

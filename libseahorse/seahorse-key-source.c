@@ -19,10 +19,17 @@
  * Boston, MA 02111-1307, USA.
  */
  
+#include "config.h"
 #include <gnome.h>
 
 #include "seahorse-key-source.h"
 #include "seahorse-marshal.h"
+#include "seahorse-context.h"
+#include "seahorse-pgp-key.h"
+
+#ifdef WITH_SSH
+#include "seahorse-ssh-key.h"
+#endif
 
 G_DEFINE_TYPE (SeahorseKeySource, seahorse_key_source, G_TYPE_OBJECT);
 
@@ -194,12 +201,59 @@ seahorse_key_source_export (SeahorseKeySource *sksrc, GList *keys,
                             gboolean complete, gpgme_data_t data)
 {
     SeahorseKeySourceClass *klass;
+    SeahorseOperation *op;
+    GSList *keyids = NULL;
+    GList *l;
     
     g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (sksrc), NULL);
     klass = SEAHORSE_KEY_SOURCE_GET_CLASS (sksrc);   
-    g_return_val_if_fail (klass->export != NULL, NULL);
+    if (klass->export) 
+        return (*klass->export) (sksrc, keys, complete, data);    
+
+    /* Either export or export_raw must be implemented */
+    g_return_val_if_fail (klass->export_raw != NULL, NULL);
     
-    return (*klass->export) (sksrc, keys, complete, data);    
+    for (l = keys; l; l = g_list_next (l)) 
+        keyids = g_slist_prepend (keyids, (gpointer)seahorse_key_get_keyid (l->data));
+    
+    keyids = g_slist_reverse (keyids);
+    op = (*klass->export_raw) (sksrc, keyids, data);
+    g_slist_free (keyids);
+    return op;
+
+}
+
+SeahorseOperation* 
+seahorse_key_source_export_raw (SeahorseKeySource *sksrc, GSList *keyids, 
+                                gpgme_data_t data)
+{
+    SeahorseKeySourceClass *klass;
+    SeahorseOperation *op;
+    SeahorseKey *skey;
+    GList *keys = NULL;
+    GSList *l;
+    
+    g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (sksrc), NULL);
+    klass = SEAHORSE_KEY_SOURCE_GET_CLASS (sksrc);   
+    
+    /* Either export or export_raw must be implemented */
+    if (klass->export_raw)
+        return (*klass->export_raw)(sksrc, keyids, data);
+    
+    g_return_val_if_fail (klass->export != NULL, NULL);
+        
+    for (l = keyids; l; l = g_slist_next (l)) {
+        skey = seahorse_context_get_key (SCTX_APP (), sksrc, l->data);
+        
+        /* TODO: A proper error message here 'not found' */
+        if (skey)
+            keys = g_list_prepend (keys, skey);
+    }
+    
+    keys = g_list_reverse (keys);
+    op = (*klass->export) (sksrc, keys, FALSE, data);
+    g_list_free (keys);
+    return op;
 }
 
 gboolean            
@@ -234,3 +288,25 @@ seahorse_key_source_get_location (SeahorseKeySource *sksrc)
     return loc;
 }
 
+/* -----------------------------------------------------------------------------
+ * CANONICAL KEYIDS 
+ */
+
+gchar*
+seahorse_key_source_cannonical_keyid (GQuark ktype, const gchar *keyid)
+{
+    g_return_val_if_fail (keyid != NULL, NULL);
+    
+    if (ktype == SKEY_PGP)
+        return seahorse_pgp_key_get_cannonical_id (keyid);
+    
+#ifdef WITH_SSH
+    else if(ktype == SKEY_SSH)
+        return seahorse_ssh_key_get_cannonical_id (keyid);
+#endif
+        
+    else 
+        g_return_val_if_reached (NULL);
+    
+    return NULL;
+}

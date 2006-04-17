@@ -40,6 +40,8 @@
  *   flags: (guint) Flags on the capabilities of the key (ie: SeahorseKeyFlags)
  *   location: (SeahorseKeyLoc) The location this key is stored. (ie: SKEY_LOC_REMOTE)
  *   loaded: (SeahorseKeyInfo) How much of the key is loaded (ie: SKEY_INFO_COMPLETE)
+ *   preferred: (SeahorseKey) Another representation of this key, that is better suited
+ *      for use. (eg: for a remote key could point to it's local counterpart)
  *   
  * Properties derived classes must implement:
  *   display-name: (gchar*) The display name for the key.
@@ -49,6 +51,7 @@
  *   validity: (SeahorseValidity) The key validity.
  *   trust: (SeahorseValidity) Trust for the key.
  *   expires: (gulong) Date this key expires or 0.
+ *   
  */
  
 #ifndef __SEAHORSE_KEY_H__
@@ -68,10 +71,16 @@
 #define SEAHORSE_IS_KEY_CLASS(klass)    (GTK_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_KEY))
 #define SEAHORSE_KEY_GET_CLASS(obj)     (GTK_CHECK_GET_CLASS ((obj), SEAHORSE_TYPE_KEY, SeahorseKeyClass))
 
+/* 
+ * These types should never change. These values are exported via DBUS. In the 
+ * case of a key being in multiple locations, the highest location always 'wins'.
+ */
 typedef enum {
-    SKEY_LOC_UNKNOWN,   /* A key we don't know anything about */
-    SKEY_LOC_LOCAL,     /* A key on the local machine */
-    SKEY_LOC_REMOTE     /* A key that we know is present remotely */
+    SKEY_LOC_INVALID =        0,    /* An invalid key */
+    SKEY_LOC_UNKNOWN =       10,    /* A key we don't know anything about */
+    SKEY_LOC_SEARCHING =     20,    /* A key we're searching for but haven't found yet */
+    SKEY_LOC_REMOTE =        50,    /* A key that we've found is present remotely */
+    SKEY_LOC_LOCAL =        100,    /* A key on the local machine */
 } SeahorseKeyLoc;
 
 typedef enum {
@@ -100,15 +109,16 @@ typedef enum {
 /* Possible key changes */
 typedef enum {
     SKEY_CHANGE_ALL = 1,
-	SKEY_CHANGE_SIGNERS,
-	SKEY_CHANGE_PASS,
-	SKEY_CHANGE_TRUST,
-	SKEY_CHANGE_DISABLED,
-	SKEY_CHANGE_EXPIRES,
-	SKEY_CHANGE_REVOKERS,
-	SKEY_CHANGE_UIDS,
-	SKEY_CHANGE_SUBKEYS,
-    SKEY_CHANGE_PHOTOS
+    SKEY_CHANGE_SIGNERS,
+    SKEY_CHANGE_PASS,
+    SKEY_CHANGE_TRUST,
+    SKEY_CHANGE_DISABLED,
+    SKEY_CHANGE_EXPIRES,
+    SKEY_CHANGE_REVOKERS,
+    SKEY_CHANGE_UIDS,
+    SKEY_CHANGE_SUBKEYS,
+    SKEY_CHANGE_PHOTOS,
+    SKEY_CHANGE_PREFERRED
 } SeahorseKeyChange;
 
 /* Forward declaration */
@@ -128,6 +138,7 @@ struct _SeahorseKey {
     SeahorseKeyEType            etype;
     guint                       flags;
     struct _SeahorseKeySource*  sksrc;
+    struct _SeahorseKey*        preferred;
 };
 
 struct _SeahorseKeyClass {
@@ -196,6 +207,9 @@ SeahorseValidity  seahorse_key_get_validity       (SeahorseKey        *skey);
 SeahorseValidity  seahorse_key_get_trust          (SeahorseKey        *skey);
 
 gulong            seahorse_key_get_expires        (SeahorseKey        *skey);
+
+void              seahorse_key_set_preferred      (SeahorseKey        *skey,
+                                                   SeahorseKey        *preferred);
 
 /* -----------------------------------------------------------------------------
  * KEY PREDICATES

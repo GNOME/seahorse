@@ -96,7 +96,7 @@ seahorse_server_source_class_init (SeahorseServerSourceClass *klass)
 
     g_object_class_install_property (gobject_class, PROP_LOCATION,
         g_param_spec_uint ("location", "Key Location", "Where the key is stored. See SeahorseKeyLoc", 
-                           0, G_MAXUINT, SKEY_LOC_UNKNOWN, G_PARAM_READABLE));    
+                           0, G_MAXUINT, SKEY_LOC_INVALID, G_PARAM_READABLE));    
                            
     g_object_class_install_property (gobject_class, PROP_KEY_SERVER,
             g_param_spec_string ("key-server", "Key Server",

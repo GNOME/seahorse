@@ -127,7 +127,21 @@ typedef struct _SeahorseKeySourceClass {
      */    
     SeahorseOperation* (*export) (SeahorseKeySource *sksrc, GList *keys, 
                                   gboolean complete, gpgme_data_t data);
-                                  
+
+    /**
+     * export_raw
+     * @sksrc: The #SeahorseKeySource to export from.
+     * @keys: A list of key ids to export.
+     * @data: Optional data object to export to (not freed).
+     *
+     * Import keys into the key source. When operation is 'done' the result
+     * of the operation will be a gpgme_data_t 
+     * 
+     * Returns: The export operation
+     */    
+    SeahorseOperation* (*export_raw) (SeahorseKeySource *sksrc, GSList *keyids, 
+                                      gpgme_data_t data);
+
     /**
      * remove
      * @sksrc: The #SeahorseKeySource to delete the key from.
@@ -175,6 +189,10 @@ SeahorseOperation*  seahorse_key_source_export           (SeahorseKeySource *sks
                                                           gboolean complete,
                                                           gpgme_data_t data);                        
 
+SeahorseOperation*  seahorse_key_source_export_raw       (SeahorseKeySource *sksrc, 
+                                                          GSList *keyids, 
+                                                          gpgme_data_t data);
+
 void                seahorse_key_source_stop             (SeahorseKeySource *sksrc);
 
 gboolean            seahorse_key_source_remove           (SeahorseKeySource *sksrc,
@@ -185,5 +203,8 @@ gboolean            seahorse_key_source_remove           (SeahorseKeySource *sks
 GQuark              seahorse_key_source_get_ktype        (SeahorseKeySource *sksrc);
 
 SeahorseKeyLoc      seahorse_key_source_get_location     (SeahorseKeySource *sksrc);
+
+gchar*              seahorse_key_source_cannonical_keyid (GQuark ktype, 
+                                                          const gchar *keyid);
 
 #endif /* __SEAHORSE_KEY_SOURCE_H__ */

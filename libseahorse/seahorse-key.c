@@ -132,7 +132,7 @@ class_init (SeahorseKeyClass *klass)
 
     g_object_class_install_property (gobject_class, PROP_LOCATION,
         g_param_spec_uint ("location", "Key Location", "Where the key is stored. See SeahorseKeyLoc", 
-                           0, G_MAXUINT, SKEY_LOC_UNKNOWN, G_PARAM_READABLE));
+                           0, G_MAXUINT, SKEY_LOC_INVALID, G_PARAM_READABLE));
 
     g_object_class_install_property (gobject_class, PROP_LOADED,
         g_param_spec_uint ("loaded", "Loaded Information", "Which parts of the key are loaded. See SeahorseKeyLoaded", 
@@ -291,7 +291,7 @@ seahorse_key_get_loaded (SeahorseKey *skey)
 SeahorseKeyLoc 
 seahorse_key_get_location (SeahorseKey *skey)
 {
-    g_return_val_if_fail (SEAHORSE_IS_KEY (skey), SKEY_LOC_UNKNOWN);
+    g_return_val_if_fail (SEAHORSE_IS_KEY (skey), SKEY_LOC_INVALID);
     return skey->location;
 }
 
@@ -384,4 +384,18 @@ seahorse_key_get_expires (SeahorseKey *skey)
     gulong expires;
     g_object_get (skey, "expires", &expires, NULL);
     return expires;
+}
+
+void
+seahorse_key_set_preferred (SeahorseKey *skey, SeahorseKey *preferred)
+{
+    /* 
+     * We don't ref, because the SeahorseContext takes care of 
+     * keeping things sane. 
+     */
+    
+    if (preferred != skey->preferred) {
+        skey->preferred = preferred;
+        seahorse_key_changed (skey, SKEY_CHANGE_PREFERRED);
+    }
 }

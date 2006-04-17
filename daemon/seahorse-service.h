@@ -94,10 +94,6 @@ gboolean        seahorse_service_match_save         (SeahorseService *svc, gchar
                                                      gint flags, gchar **patterns, 
                                                      gchar **keys, GError **error);
 
-gboolean        seahorse_service_discover_keys      (SeahorseService *svc, gchar *ktype, 
-                                                     gint flags, gchar **patterns, gchar **keys, 
-                                                     GError **error);
-
 SeahorseKey*    seahorse_service_key_from_dbus      (const gchar *key, guint *uid);
 
 gchar*          seahorse_service_key_to_dbus        (SeahorseKey *skey, guint uid);
@@ -120,6 +116,9 @@ typedef struct _SeahorseServiceKeysetClass SeahorseServiceKeysetClass;
 
 struct _SeahorseServiceKeyset {
     SeahorseKeyset base;
+    
+    /* <public> */
+    GQuark ktype;
 };
 
 struct _SeahorseServiceKeysetClass {
@@ -139,9 +138,14 @@ struct _SeahorseServiceKeysetClass {
 
 GType           seahorse_service_keyset_get_type       (void);
 
-SeahorseKeyset* seahorse_service_keyset_new            (GQuark keytype);
+SeahorseKeyset* seahorse_service_keyset_new            (GQuark keytype, 
+                                                        SeahorseKeyLoc location);
 
 gboolean        seahorse_service_keyset_list_keys      (SeahorseServiceKeyset *keyset,
+                                                        gchar ***keys, GError **error);
+
+gboolean        seahorse_service_keyset_discover_keys  (SeahorseServiceKeyset *keyset, 
+                                                        const gchar **keyids, gint flags,
                                                         gchar ***keys, GError **error);
 
 /* -----------------------------------------------------------------------------

@@ -201,7 +201,7 @@ seahorse_pgp_source_class_init (SeahorsePGPSourceClass *klass)
 
     g_object_class_install_property (gobject_class, PROP_LOCATION,
         g_param_spec_uint ("location", "Key Location", "Where the key is stored. See SeahorseKeyLoc", 
-                           0, G_MAXUINT, SKEY_LOC_UNKNOWN, G_PARAM_READABLE));    
+                           0, G_MAXUINT, SKEY_LOC_INVALID, G_PARAM_READABLE));    
 }
 
 /* init context, private vars, set prefs, connect signals */
@@ -850,6 +850,7 @@ seahorse_pgp_source_import (SeahorseKeySource *sksrc, gpgme_data_t data)
     operation = g_object_new (SEAHORSE_TYPE_OPERATION, NULL);
     seahorse_operation_mark_start (operation);
     
+    gpgme_data_seek (data, 0, SEEK_SET);
     gerr = gpgme_op_import (new_ctx, data);
     if (GPG_IS_OK (gerr)) {
 

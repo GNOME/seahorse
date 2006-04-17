@@ -30,6 +30,7 @@
 #include "seahorse-util.h"
 
 #define KEYSET_PATH "/org/gnome/seahorse/keys/%s"
+#define KEYSET_PATH_LOCAL "/org/gnome/seahorse/keys/%s/local"
 
 /* Special fields */
 enum {
@@ -94,14 +95,22 @@ void
 add_key_source (SeahorseService *svc, GQuark ktype)
 {
     const gchar *keytype = g_quark_to_string (ktype);
+    SeahorseKeyset *keyset;
     gchar *dbus_id;
     
     /* Check if we have a keyset for this key type, and add if not */
     if (svc->keysets && !g_hash_table_lookup (svc->keysets, keytype)) {
-        SeahorseKeyset *keyset = seahorse_service_keyset_new (ktype);
 
-        /* Register it with DBUS */
+        /* Keyset for all keys */
+        keyset = seahorse_service_keyset_new (ktype, SKEY_LOC_INVALID);
         dbus_id = g_strdup_printf (KEYSET_PATH, keytype);
+        dbus_g_connection_register_g_object (seahorse_dbus_server_get_connection (),
+                                             dbus_id, G_OBJECT (keyset));    
+        g_free (dbus_id);
+        
+        /* Keyset for local keys */
+        keyset = seahorse_service_keyset_new (ktype, SKEY_LOC_LOCAL);
+        dbus_id = g_strdup_printf (KEYSET_PATH_LOCAL, keytype);
         dbus_g_connection_register_g_object (seahorse_dbus_server_get_connection (),
                                              dbus_id, G_OBJECT (keyset));    
         g_free (dbus_id);
@@ -125,8 +134,9 @@ seahorse_service_key_from_dbus (const gchar *key, guint *uid)
     if (!vec[0] || !vec[1])
         return NULL;
     
+    /* This will always get the most preferred key */
     skey = seahorse_context_find_key (SCTX_APP (), g_quark_from_string (vec[0]), 
-                                      SKEY_LOC_UNKNOWN, vec[1]);
+                                      SKEY_LOC_INVALID, vec[1]);
     
     if (uid)
         *uid = 0;
@@ -417,15 +427,6 @@ seahorse_service_match_save (SeahorseService *svc, gchar *ktype, gint flags,
                              gchar **patterns, gchar **keys, GError **error)
 {
     /* TODO: Implement match keys */
-    g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_NOTIMPLEMENTED, "TODO");
-    return FALSE;    
-}
-
-gboolean
-seahorse_service_discover_keys (SeahorseService *svc, gchar *ktype, gint flags, 
-                                gchar **patterns, gchar **keys, GError **error)
-{
-    /* TODO: Implement discover keys */
     g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_NOTIMPLEMENTED, "TODO");
     return FALSE;    
 }

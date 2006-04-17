@@ -109,4 +109,6 @@ gboolean                seahorse_ssh_key_data_is_valid        (SeahorseSSHKeyDat
 
 void                    seahorse_ssh_key_data_free            (SeahorseSSHKeyData *data);
 
+gchar*                  seahorse_ssh_key_get_cannonical_id    (const gchar *id);
+
 #endif /* __SEAHORSE_KEY_H__ */

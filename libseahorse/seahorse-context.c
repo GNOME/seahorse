@@ -35,6 +35,9 @@
 #include "seahorse-server-source.h"
 #include "seahorse-pgp-source.h"
 #include "seahorse-dns-sd.h"
+#include "seahorse-transfer-operation.h"
+#include "seahorse-unknown-source.h"
+#include "seahorse-unknown-key.h"
 
 #ifdef WITH_SSH
 #include "seahorse-ssh-key.h"
@@ -55,33 +58,43 @@ static guint signals[LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE (SeahorseContext, seahorse_context, GTK_TYPE_OBJECT);
 
+/* 
+ * Two hashtables are used to keep track of the keys:
+ *
+ *  keys_by_source: This contains a reference to the key and allows us to 
+ *    lookup keys by their source. Each key/source combination should be 
+ *    unique. Hashkeys are made with hashkey_by_source()
+ *  keys_by_type: Each value contains a GList of keys with the same ktype/keyid
+ *    combination (ie: same key from different key sources). The keys are 
+ *    orderred in by preferred usage. Hashkeys are made with hashkey_by_type().
+ */
+
 struct _SeahorseContextPrivate {
-    GSList *sources;						/* Key sources which add keys to this context */
-    GHashTable *keys;                       /* A list of all keys in the context */
+    GSList *sources;                        /* Key sources which add keys to this context */
     GHashTable *auto_sources;               /* Automatically added key sources (keyservers) */
+    GHashTable *keys_by_source;             /* See explanation above */
+    GHashTable *keys_by_type;               /* See explanation above */
     guint notify_id;                        /* Notify for GConf watch */
     SeahorseServiceDiscovery *discovery;    /* Adds key sources from DNS-SD */
 };
 
-static void	seahorse_context_dispose	(GObject *gobject);
+static void seahorse_context_dispose    (GObject *gobject);
 static void seahorse_context_finalize   (GObject *gobject);
 
 /* Forward declarations */
 static void refresh_keyservers          (GConfClient *client, guint id, 
                                          GConfEntry *entry, SeahorseContext *sctx);
 
-static GtkObjectClass	*parent_class			= NULL;
-
 static void
 seahorse_context_class_init (SeahorseContextClass *klass)
 {
-	GObjectClass *gobject_class;
-	
-	parent_class = g_type_class_peek_parent (klass);
-	gobject_class = G_OBJECT_CLASS (klass);
-	
+    GObjectClass *gobject_class;
+    
+    seahorse_context_parent_class = g_type_class_peek_parent (klass);
+    gobject_class = G_OBJECT_CLASS (klass);
+    
     gobject_class->dispose = seahorse_context_dispose;
-	gobject_class->finalize = seahorse_context_finalize;	
+    gobject_class->finalize = seahorse_context_finalize;	
     
     signals[ADDED] = g_signal_new ("added", SEAHORSE_TYPE_CONTEXT, 
                 G_SIGNAL_RUN_FIRST, G_STRUCT_OFFSET (SeahorseContextClass, added),
@@ -98,15 +111,18 @@ seahorse_context_class_init (SeahorseContextClass *klass)
 static void
 seahorse_context_init (SeahorseContext *sctx)
 {
-	/* init private vars */
-	sctx->pv = g_new0 (SeahorseContextPrivate, 1);
+    /* init private vars */
+    sctx->pv = g_new0 (SeahorseContextPrivate, 1);
 
     /* A list of sources */
     sctx->pv->sources = NULL;
     
     /* A table of keys */
-    sctx->pv->keys = g_hash_table_new_full (g_direct_hash, g_direct_equal, 
-                                            NULL, g_object_unref);
+    sctx->pv->keys_by_source = g_hash_table_new_full (g_direct_hash, g_direct_equal, 
+                                                      NULL, g_object_unref);
+    
+    sctx->pv->keys_by_type = g_hash_table_new_full (g_direct_hash, g_direct_equal, 
+                                                    NULL, NULL);
     
     /* The context is explicitly destroyed */
     g_object_ref (sctx);
@@ -129,7 +145,8 @@ seahorse_context_dispose (GObject *gobject)
     sctx = SEAHORSE_CONTEXT (gobject);
     
     /* All the keys */
-    g_hash_table_foreach_remove (sctx->pv->keys, remove_each, NULL);
+    g_hash_table_foreach_remove (sctx->pv->keys_by_source, remove_each, NULL);
+    g_hash_table_foreach_remove (sctx->pv->keys_by_type, remove_each, NULL);
 
     /* Gconf notification */
     if (sctx->pv->notify_id)
@@ -154,28 +171,28 @@ seahorse_context_dispose (GObject *gobject)
     g_slist_free (sctx->pv->sources);
     sctx->pv->sources = NULL;
     
-    G_OBJECT_CLASS (parent_class)->dispose (gobject);
+    G_OBJECT_CLASS (seahorse_context_parent_class)->dispose (gobject);
 }
 
 /* destroy all keys, free private vars */
 static void
 seahorse_context_finalize (GObject *gobject)
 {
-	SeahorseContext *sctx;
-	
-	sctx = SEAHORSE_CONTEXT (gobject);
+    SeahorseContext *sctx = SEAHORSE_CONTEXT (gobject);
     
     /* Destroy the hash table */        
-    if (sctx->pv->keys)
-        g_hash_table_destroy (sctx->pv->keys);
+    if (sctx->pv->keys_by_source)
+        g_hash_table_destroy (sctx->pv->keys_by_source);
+    if (sctx->pv->keys_by_type)
+        g_hash_table_destroy (sctx->pv->keys_by_type);
     
     /* Other stuff already done in dispose */
     g_assert (sctx->pv->sources == NULL);
     g_assert (sctx->pv->auto_sources == NULL);
     g_assert (sctx->pv->discovery == NULL);
-	g_free (sctx->pv);
-   	
-	G_OBJECT_CLASS (parent_class)->finalize (gobject);
+    g_free (sctx->pv);
+    
+    G_OBJECT_CLASS (seahorse_context_parent_class)->finalize (gobject);
 }
 
 SeahorseContext*
@@ -305,10 +322,17 @@ seahorse_context_find_key_source (SeahorseContext *sctx, GQuark ktype,
             seahorse_key_source_get_ktype (ks) != ktype)
             continue;
         
-        if (location != SKEY_LOC_UNKNOWN && 
+        if (location != SKEY_LOC_INVALID && 
             seahorse_key_source_get_location (ks) != location)
             continue;
         
+        return ks;
+    }
+    
+    /* If we don't have an unknown source for this type, create it */
+    if (location == SKEY_LOC_UNKNOWN && location != SKEY_UNKNOWN) {
+        ks = SEAHORSE_KEY_SOURCE (seahorse_unknown_source_new (ktype));
+        seahorse_context_add_key_source (sctx, ks);
         return ks;
     }
     
@@ -332,7 +356,7 @@ seahorse_context_find_key_sources (SeahorseContext *sctx, GQuark ktype,
             seahorse_key_source_get_ktype (ks) != ktype)
             continue;
         
-        if (location != SKEY_LOC_UNKNOWN && 
+        if (location != SKEY_LOC_INVALID && 
             seahorse_key_source_get_location (ks) != location)
             continue;
         
@@ -368,7 +392,7 @@ seahorse_context_remote_key_source (SeahorseContext *sctx, const gchar *uri)
             return ks;
     }
     
-#ifdef WITH_KEYSERVER	
+#ifdef WITH_KEYSERVER
     /* Auto generate one if possible */
     if (sctx->pv->auto_sources) {
         ks = SEAHORSE_KEY_SOURCE (seahorse_server_source_new (uri));
@@ -389,14 +413,92 @@ key_changed (SeahorseKey *skey, SeahorseKeyChange change, SeahorseContext *sctx)
     g_signal_emit (sctx, signals[CHANGED], 0, skey, change);
 }
 
+static void
+key_destroyed (SeahorseKey *skey, SeahorseContext *sctx)
+{
+    /* When keys are destroyed elsewhere */
+    seahorse_context_remove_key (sctx, skey);
+}
+
 static gpointer                 
-hashtable_key (SeahorseKeySource *sksrc, const gchar *keyid)
+hashkey_by_source (SeahorseKeySource *sksrc, const gchar *keyid)
 {
     return GINT_TO_POINTER (g_direct_hash (sksrc) ^ 
                             g_str_hash (keyid));
-}                                                         
+}
 
-void                
+static gpointer
+hashkey_by_type (GQuark ktype, const gchar *keyid)
+{
+    return GINT_TO_POINTER (g_str_hash (g_quark_to_string (ktype)) ^
+                            g_str_hash (keyid));
+}
+
+static gint
+sort_by_location (gconstpointer a, gconstpointer b)
+{
+    guint aloc, bloc;
+    
+    g_assert (SEAHORSE_IS_KEY (a));
+    g_assert (SEAHORSE_IS_KEY (b));
+    
+    aloc = seahorse_key_get_location (SEAHORSE_KEY (a));
+    bloc = seahorse_key_get_location (SEAHORSE_KEY (b));
+    
+    if (aloc == bloc)
+        return 0;
+    return aloc > bloc ? -1 : 1;
+}
+
+static void
+setup_keys_by_type (SeahorseContext *sctx, SeahorseKey *skey, gboolean add)
+{
+    GList *l, *keys = NULL;
+    SeahorseKey *akey, *next;
+    gpointer kt;
+    gboolean first;
+    
+    kt = hashkey_by_type (seahorse_key_get_ktype (skey), 
+                          seahorse_key_get_keyid (skey));
+    
+    /* Get current set of keys in this ktype/keyid */
+    if (add)
+        keys = g_list_prepend (keys, skey);
+    
+    for (akey = g_hash_table_lookup (sctx->pv->keys_by_type, kt); akey; 
+         akey = akey->preferred)
+    {
+        if(akey != skey)
+            keys = g_list_prepend (keys, akey);
+    }
+    
+    /* No keys just remove */
+    if (!keys) {
+        g_hash_table_remove (sctx->pv->keys_by_type, kt);
+        return;
+    }
+
+    /* Sort and add back */
+    keys = g_list_sort (keys, sort_by_location);
+    for (l = keys, first = TRUE; l; l = g_list_next (l), first = FALSE) {
+        
+        akey = SEAHORSE_KEY (l->data);
+        
+        /* Set first as start of list */
+        if (first)
+            g_hash_table_replace (sctx->pv->keys_by_type, kt, akey);
+            
+        /* Set next one as preferred */
+        else {
+            next = g_list_next (l) ? SEAHORSE_KEY (g_list_next (l)->data) : NULL;
+            seahorse_key_set_preferred (akey, next);
+        }
+    }
+    
+    g_list_free (keys);
+}
+
+void
 seahorse_context_add_key (SeahorseContext *sctx, SeahorseKey *skey)
 {
     g_object_ref (skey);
@@ -406,32 +508,34 @@ seahorse_context_add_key (SeahorseContext *sctx, SeahorseKey *skey)
 void
 seahorse_context_take_key (SeahorseContext *sctx, SeahorseKey *skey)
 {
-    gpointer k;
+    gpointer ks;
     
     g_return_if_fail (SEAHORSE_IS_CONTEXT (sctx));
     g_return_if_fail (SEAHORSE_IS_KEY (skey));
     
-    k = hashtable_key (seahorse_key_get_source (skey), 
-                       seahorse_key_get_keyid (skey));
+    ks = hashkey_by_source (seahorse_key_get_source (skey), 
+                            seahorse_key_get_keyid (skey));
     
-    g_return_if_fail (!g_hash_table_lookup (sctx->pv->keys, k));
+    g_return_if_fail (!g_hash_table_lookup (sctx->pv->keys_by_source, ks));
 
     g_object_ref (skey);
-    g_hash_table_replace (sctx->pv->keys, k, skey);
+    g_hash_table_replace (sctx->pv->keys_by_source, ks, skey);
+    setup_keys_by_type (sctx, skey, TRUE);
     g_signal_emit (sctx, signals[ADDED], 0, skey);
     g_object_unref (skey);
     
     g_signal_connect (skey, "changed", G_CALLBACK (key_changed), sctx);
+    g_signal_connect (skey, "destroy", G_CALLBACK (key_destroyed), sctx);
 }
 
 guint
 seahorse_context_get_count (SeahorseContext *sctx)
 {
-    return g_hash_table_size (sctx->pv->keys);
+    return g_hash_table_size (sctx->pv->keys_by_source);
 }
 
 SeahorseKey*        
-seahorse_context_get_key (SeahorseContext *sctx, SeahorseKeySource  *sksrc,
+seahorse_context_get_key (SeahorseContext *sctx, SeahorseKeySource *sksrc,
                           const gchar *keyid)
 {
     gconstpointer k;
@@ -446,9 +550,9 @@ seahorse_context_get_key (SeahorseContext *sctx, SeahorseKeySource  *sksrc,
             keyid += l - 16;
     }
     
-    k = hashtable_key (sksrc, keyid);
+    k = hashkey_by_source (sksrc, keyid);
 
-    return SEAHORSE_KEY (g_hash_table_lookup (sctx->pv->keys, k));
+    return SEAHORSE_KEY (g_hash_table_lookup (sctx->pv->keys_by_source, k));
 }
 
 typedef struct _KeyMatcher {
@@ -489,7 +593,7 @@ seahorse_context_get_keys (SeahorseContext *sctx, SeahorseKeySource *sksrc)
     km.many = TRUE;
     kp.sksrc = sksrc;
     
-    g_hash_table_find (sctx->pv->keys, (GHRFunc)find_matching_keys, &km);
+    g_hash_table_find (sctx->pv->keys_by_source, (GHRFunc)find_matching_keys, &km);
     return km.keys;
 }
 
@@ -497,30 +601,26 @@ SeahorseKey*
 seahorse_context_find_key (SeahorseContext *sctx, GQuark ktype,
                            SeahorseKeyLoc location, const gchar *keyid)
 {
-    SeahorseKeyPredicate kp;
-    SeahorseKey *skey = NULL;
-    KeyMatcher km;
+    SeahorseKey *skey; 
+    gpointer kt;
     
-    g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), NULL);
-
-    memset (&kp, 0, sizeof (kp));
-    memset (&km, 0, sizeof (km));
+    kt = hashkey_by_type (ktype, keyid);
     
-    
-    km.kp = &kp;
-    km.many = FALSE;
-    kp.ktype = ktype;
-    kp.location = location;
-    kp.keyid = keyid;
-    
-    g_hash_table_find (sctx->pv->keys, (GHRFunc)find_matching_keys, &km);
-    
-    if (km.keys) {
-        skey = km.keys->data;
-        g_list_free (km.keys);
+    skey = (SeahorseKey*)g_hash_table_lookup (sctx->pv->keys_by_type, kt);
+    while (skey) {
+        
+        /* If at the end and no more keys in list, return */
+        if (location == SKEY_LOC_INVALID && !skey->preferred)
+            return skey;
+        
+        if (location == seahorse_key_get_location (skey))
+            return skey;
+        
+        /* Look down the list for this location */
+        skey = skey->preferred;
     }
     
-    return skey;
+    return NULL;
 }
 
 GList*
@@ -549,7 +649,7 @@ seahorse_context_find_keys_full (SeahorseContext *sctx, SeahorseKeyPredicate *sk
     km.kp = skpred;
     km.many = TRUE;
     
-    g_hash_table_find (sctx->pv->keys, (GHRFunc)find_matching_keys, &km);
+    g_hash_table_find (sctx->pv->keys_by_source, (GHRFunc)find_matching_keys, &km);
     return km.keys; 
 }
 
@@ -561,16 +661,17 @@ seahorse_context_remove_key (SeahorseContext *sctx, SeahorseKey *skey)
     g_return_if_fail (SEAHORSE_IS_CONTEXT (sctx));
     g_return_if_fail (SEAHORSE_IS_KEY (skey));
     
-    k = hashtable_key (seahorse_key_get_source (skey), 
-                       seahorse_key_get_keyid (skey));
+    k = hashkey_by_source (seahorse_key_get_source (skey), 
+                           seahorse_key_get_keyid (skey));
     
-    g_return_if_fail (g_hash_table_lookup (sctx->pv->keys, k));
-
-    g_object_ref (skey);
-    g_signal_handlers_disconnect_by_func (skey, key_changed, sctx);
-    g_hash_table_remove (sctx->pv->keys, k);
-    g_signal_emit (sctx, signals[REMOVED], 0, skey);    
-    g_object_unref (skey);
+    if (g_hash_table_lookup (sctx->pv->keys_by_source, k)) {
+        g_object_ref (skey);
+        g_signal_handlers_disconnect_by_func (skey, key_changed, sctx);
+        g_hash_table_remove (sctx->pv->keys_by_source, k);
+        setup_keys_by_type (sctx, skey, FALSE);
+        g_signal_emit (sctx, signals[REMOVED], 0, skey);    
+        g_object_unref (skey);
+    }
 }
 
 
@@ -722,7 +823,7 @@ refresh_keyservers (GConfClient *client, guint id, GConfEntry *entry,
     if (!sctx->pv->auto_sources)
         return;
     
-	if (entry && !g_str_equal (KEYSERVER_KEY, gconf_entry_get_key (entry)))
+    if (entry && !g_str_equal (KEYSERVER_KEY, gconf_entry_get_key (entry)))
         return;
 
     /* Make a light copy of the auto_source table */    
@@ -749,11 +850,145 @@ refresh_keyservers (GConfClient *client, guint id, GConfEntry *entry,
         /* Mark this one as present */
         g_hash_table_remove (check, uri);
     }
-	    
+    
     /* Now remove any extras */
     g_hash_table_foreach (check, (GHFunc)auto_source_remove, sctx);
     
     g_hash_table_destroy (check);
     seahorse_util_string_slist_free (keyservers);    
 #endif /* WITH_KEYSERVER */
+}
+
+SeahorseOperation*
+seahorse_context_transfer_keys (SeahorseContext *sctx, GList *keys, 
+                                SeahorseKeySource *to)
+{
+    SeahorseKeySource *from;
+    SeahorseOperation *op = NULL;
+    SeahorseMultiOperation *mop = NULL;
+    SeahorseKey *skey;
+    GSList *keyids = NULL;
+    GList *next, *l;
+    GQuark ktype;
+
+    keys = g_list_copy (keys);
+    
+    /* Sort by key source */
+    keys = seahorse_util_keylist_sort (keys);
+    
+    while (keys) {
+     
+        /* Break off one set (same keysource) */
+        next = seahorse_util_keylist_splice (keys);
+
+        g_assert (SEAHORSE_IS_KEY (keys->data));
+        skey = SEAHORSE_KEY (keys->data);
+
+        /* Export from this key source */
+        from = seahorse_key_get_source (skey);
+        g_return_val_if_fail (from != NULL, FALSE);
+        ktype = seahorse_key_source_get_ktype (from);
+        
+        /* Find a local keysource to import to */
+        if (!to) {
+            to = seahorse_context_find_key_source (sctx, ktype, SKEY_LOC_LOCAL);
+            if (!to) {
+                /* TODO: How can we warn caller about this. Do we need to? */
+                g_warning ("couldn't find a local key source for: %s", 
+                           g_quark_to_string (ktype));
+            }
+        }
+        
+        /* Make sure it's the same type */
+        if (ktype != seahorse_key_source_get_ktype (to)) {
+            /* TODO: How can we warn caller about this. Do we need to? */
+            g_warning ("destination key source is not of type: %s", 
+                       g_quark_to_string (ktype));
+        }
+        
+        if (to != NULL && from != to) {
+            
+            if (op != NULL) {
+                if (mop == NULL)
+                    mop = seahorse_multi_operation_new ();
+                seahorse_multi_operation_take (mop, op);
+            }
+            
+            /* Build keyid list */
+            for (l = keys; l; l = g_list_next (l)) 
+                keyids = g_slist_prepend (keyids, (gpointer)seahorse_key_get_keyid (l->data));
+            keyids = g_slist_reverse (keyids);
+        
+            /* Start a new transfer operation between the two key sources */
+            op = seahorse_transfer_operation_new (NULL, from, to, keyids);
+            g_return_val_if_fail (op != NULL, FALSE);
+            
+            g_slist_free (keyids);
+            keyids = NULL;
+        }
+
+        g_list_free (keys);
+        keys = next;
+    } 
+    
+    /* No keys done, just return success */
+    if (!mop && !op) {
+        g_warning ("no valid keys to transfer found");
+        return seahorse_operation_new_complete (NULL);
+    }
+    
+    return mop ? SEAHORSE_OPERATION (mop) : op;
+}
+
+SeahorseOperation*
+seahorse_context_retrieve_keys (SeahorseContext *sctx, GQuark ktype, 
+                                GSList *keyids, SeahorseKeySource *to)
+{
+    SeahorseMultiOperation *mop = NULL;
+    SeahorseOperation *op = NULL;
+    SeahorseKeySource *sksrc;
+    GSList *sources, *l;
+    
+    if (!to) {
+        to = seahorse_context_find_key_source (sctx, ktype, SKEY_LOC_LOCAL);
+        if (!to) {
+            /* TODO: How can we warn caller about this. Do we need to? */
+            g_warning ("couldn't find a local key source for: %s", 
+                       g_quark_to_string (ktype));
+            return seahorse_operation_new_complete (NULL);
+        }
+    }
+    
+    sources = seahorse_context_find_key_sources (sctx, ktype, SKEY_LOC_REMOTE);
+    if (!sources) {
+        g_warning ("no key sources found for type: %s", g_quark_to_string (ktype));
+        return seahorse_operation_new_complete (NULL);
+    }
+
+    for (l = sources; l; l = g_slist_next (l)) {
+        
+        sksrc = SEAHORSE_KEY_SOURCE (l->data);
+        g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (sksrc), NULL);
+        
+        if (op != NULL) {
+            if (mop == NULL)
+                mop = seahorse_multi_operation_new ();
+            seahorse_multi_operation_take (mop, op);
+        }
+        
+        /* Start a new transfer operation between the two key sources */
+        op = seahorse_transfer_operation_new (NULL, sksrc, to, keyids);
+        g_return_val_if_fail (op != NULL, FALSE);
+    }
+    
+    /* Add unknown keys for all these */
+    sksrc = seahorse_context_find_key_source (sctx, ktype, SKEY_LOC_UNKNOWN);
+    if (sksrc) {
+        for (l = keyids; l; l = g_slist_next (l)) {
+            seahorse_unknown_source_add_key (SEAHORSE_UNKNOWN_SOURCE (sksrc), 
+                                             l->data, mop ? SEAHORSE_OPERATION (mop) : op);
+        }
+    }
+    
+    return mop ? SEAHORSE_OPERATION (mop) : op;
 }

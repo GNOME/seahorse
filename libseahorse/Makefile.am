@@ -62,6 +62,8 @@ libseahorse_internal_la_SOURCES = \
 	seahorse-pgp-key-op.c seahorse-pgp-key-op.h \
 	seahorse-pgp-source.c seahorse-pgp-source.h \
 	seahorse-pgp-operation.c seahorse-pgp-operation.h \
+    seahorse-unknown-key.c seahorse-unknown-key.h \
+    seahorse-unknown-source.c seahorse-unknown-source.h \
 	seahorse-context.c seahorse-context.h \
 	seahorse-widget.c seahorse-widget.h \
 	seahorse-op.c seahorse-op.h \
@@ -83,6 +85,7 @@ libseahorse_internal_la_SOURCES = \
 	seahorse-gpgmex.h seahorse-gpgmex-op.c seahorse-gpgmex-util.c \
 	seahorse-prefs.c seahorse-prefs.h \
 	seahorse-operation.c seahorse-operation.h \
+    seahorse-transfer-operation.c seahorse-transfer-operation.h \
 	seahorse-progress.c seahorse-progress.h \
 	seahorse-gconf.c seahorse-gconf.h \
 	seahorse-dns-sd.c seahorse-dns-sd.h \
@@ -122,4 +125,4 @@ glade_DATA = \
 	seahorse-progress.glade
 
 EXTRA_DIST = $(glade_DATA) \
-	seahorse-marshal.list 
+	seahorse-marshal.list

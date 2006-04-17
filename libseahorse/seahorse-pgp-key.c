@@ -365,7 +365,7 @@ changed_key (SeahorsePGPKey *pkey)
     if (!pkey->pubkey) {
         
         skey->keyid = "UNKNOWN ";
-        skey->location = SKEY_LOC_UNKNOWN;
+        skey->location = SKEY_LOC_INVALID;
         skey->etype = SKEY_INVALID;
         skey->loaded = SKEY_INFO_NONE;
         skey->flags = SKEY_FLAG_DISABLED;
@@ -757,4 +757,18 @@ seahorse_pgp_key_have_signatures (SeahorsePGPKey *pkey, guint types)
     }
     
     return FALSE;
+}
+
+gchar*
+seahorse_pgp_key_get_cannonical_id (const gchar *id)
+{
+    guint len = strlen (id);
+    if (len < 16) {
+        g_warning ("invalid keyid (less than 16 chars): %s", id);
+        return NULL;
+    }
+    
+    if (len > 16)
+        id += len - 16;
+    return g_strdup (id);
 }

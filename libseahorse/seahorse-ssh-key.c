@@ -120,7 +120,7 @@ changed_key (SeahorseSSHKey *skey)
     if (!skey->keydata || !skey->keydata->keyid) {
         
         key->keyid = "UNKNOWN ";
-        key->location = SKEY_LOC_UNKNOWN;
+        key->location = SKEY_LOC_INVALID;
         key->etype = SKEY_INVALID;
         key->loaded = SKEY_INFO_NONE;
         key->flags = SKEY_FLAG_DISABLED;
@@ -341,6 +341,13 @@ seahorse_ssh_key_get_filename (SeahorseSSHKey *skey, gboolean private)
     if (!skey->keydata)
         return NULL;
     return private ? skey->keydata->filename : skey->keydata->filepub;
+}
+
+gchar*
+seahorse_ssh_key_get_cannonical_id (const gchar *id)
+{
+    /* TODO: Implement this properly */
+    return g_strdup (id);
 }
 
 /* -----------------------------------------------------------------------------
