@@ -58,18 +58,17 @@
 
 struct _SeahorseOperation;
 
-typedef void (*SeahorseOperationDone) (struct _SeahorseOperation *operation, 
-                                       gboolean cancelled, 
-                                       gpointer userdata);
-
 typedef struct _SeahorseOperation {
     GObject parent;
     
     /*< public >*/
     gchar *message;                /* Progress status details ie: "foobar.jpg" */
-    gint current;                  /* The current progress position, or -1 for not started */
-    gint total;                    /* The total range of progress, or -1 for complete */
-    gboolean cancelled;
+    gdouble progress;              /* The current progress position, -1 for indeterminate */
+    
+    guint is_running : 1;          /* If the operation is running or not */
+    guint is_done : 1;             /* Operation is done or not */
+    guint is_cancelled : 1;        /* Operation is cancelled or not */;
+
     GError *error;
     
     /*< private> */
@@ -105,11 +104,11 @@ SeahorseOperation*  seahorse_operation_new_complete (GError *err);
 
 void                seahorse_operation_cancel      (SeahorseOperation *operation);
 
-#define             seahorse_operation_is_done(operation) \
-                                                   ((operation)->cancelled || ((operation)->total != 0 && ((operation)->total == (operation)->current))) 
+#define             seahorse_operation_is_running(operation) \
+                                                   ((operation)->is_running) 
                                                   
 #define             seahorse_operation_is_cancelled(operation) \
-                                                   ((operation)->cancelled)
+                                                   ((operation)->is_cancelled)
                                                   
 #define             seahorse_operation_is_successful(operation) \
                                                    ((operation)->error == NULL)                                                                 
@@ -124,7 +123,8 @@ const GError*       seahorse_operation_get_error   (SeahorseOperation *operation
 
 void                seahorse_operation_wait        (SeahorseOperation *operation);
 
-gdouble             seahorse_operation_get_progress(SeahorseOperation *operation);
+#define             seahorse_operation_get_progress(op) \
+                                                   ((op)->progress)
 
 #define             seahorse_operation_get_message(operation) \
                                                    ((const gchar*)((operation)->message))
@@ -290,16 +290,22 @@ seahorse_xx_operation_cancel (SeahorseOperation *operation)
 
 /* Helpers for Derived ----------------------------------------------- */
 
-void                seahorse_operation_mark_start    (SeahorseOperation *operation);
+#define SEAHORSE_CALC_PROGRESS(cur, tot)
+    
+void              seahorse_operation_mark_start         (SeahorseOperation *operation);
 
-void                seahorse_operation_mark_done     (SeahorseOperation *operation,
-                                                      gboolean cancelled, GError *error);
+void              seahorse_operation_mark_done          (SeahorseOperation *operation,
+                                                         gboolean cancelled, GError *error);
 
-void                seahorse_operation_mark_progress (SeahorseOperation *operation,
-                                                      const gchar *message,
-                                                      gint current, gint total);
+void              seahorse_operation_mark_progress      (SeahorseOperation *operation,
+                                                         const gchar *message,
+                                                         gdouble progress);
 
-void                seahorse_operation_mark_result   (SeahorseOperation *operation,
-                                                      gpointer result, GDestroyNotify notify_func);
+void              seahorse_operation_mark_progress_full (SeahorseOperation *operation,
+                                                         const gchar *message,
+                                                         gdouble current, gdouble total);
+
+void              seahorse_operation_mark_result        (SeahorseOperation *operation,
+                                                         gpointer result, GDestroyNotify notify_func);
 
 #endif /* __SEAHORSE_OPERATION_H__ */

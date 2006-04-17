@@ -272,7 +272,7 @@ window_destroyed (GtkWindow *window, SeahorseWidget *swidget)
     SeahorseOperation *op = 
         SEAHORSE_OPERATION (g_object_get_data (G_OBJECT (swidget), "operation"));
     
-    if (op && !seahorse_operation_is_done (op))
+    if (op && seahorse_operation_is_running (op))
         seahorse_operation_cancel (op);
 }
 

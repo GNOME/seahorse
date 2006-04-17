@@ -152,12 +152,10 @@ progress_cb (void *data, const char *what, int type,
     
     DEBUG_OPERATION (("PGPOP: got progress: %s %d/%d\n", what, current, total));
     
-    if (current > total)
-        current = total;
-    
-    if (!seahorse_operation_is_done (SEAHORSE_OPERATION (pop)))
-        seahorse_operation_mark_progress (SEAHORSE_OPERATION (pop), 
-                        pv->message ? pv->message : what, current, total);
+    if (seahorse_operation_is_running (SEAHORSE_OPERATION (pop)))
+        seahorse_operation_mark_progress_full (SEAHORSE_OPERATION (pop), 
+                                               pv->message ? pv->message : what, 
+                                               current, total);
 }
 
 /* Register a callback. */
@@ -252,7 +250,7 @@ event_cb (void *data, gpgme_event_io_t type, void *type_data)
         gpgme_set_progress_cb (pop->gctx, NULL, NULL);
         
         /* And try to figure out a good response */
-        if (!seahorse_operation_is_done (SEAHORSE_OPERATION (pop))) {
+        if (seahorse_operation_is_running (SEAHORSE_OPERATION (pop))) {
             
             /* Cancelled */
             if (gpgme_err_code (*gerr) == GPG_ERR_CANCELED) {
@@ -377,7 +375,7 @@ seahorse_pgp_operation_cancel (SeahorseOperation *operation)
     SeahorsePGPOperation *pop = SEAHORSE_PGP_OPERATION (operation);
     SeahorsePGPOperationPrivate *pv = SEAHORSE_PGP_OPERATION_GET_PRIVATE (pop);
     
-    g_return_if_fail (!seahorse_operation_is_done (operation));
+    g_return_if_fail (seahorse_operation_is_running (operation));
     g_return_if_fail (pop->gctx != NULL);
     
     /* This should call in through event_cb and cancel us */

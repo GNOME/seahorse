@@ -138,17 +138,17 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 	/* When we update to support S/MIME this will need to change */
 	sksrc = seahorse_context_find_key_source (SCTX_APP (), SKEY_PGP, SKEY_LOC_LOCAL);
 	g_return_if_fail (sksrc && SEAHORSE_IS_PGP_SOURCE (sksrc));
-    	
-	op = seahorse_pgp_key_op_generate (SEAHORSE_PGP_SOURCE (sksrc), name, email, comment,
-		                            pass, type, length, expires, &err);
-	
-	if (GPG_IS_OK (err)) 
-		seahorse_progress_show (op, _("Generating key"), TRUE);
-	else 
-		seahorse_util_handle_gpgme (err, _("Couldn't generate key"));
+    
+    op = seahorse_pgp_key_op_generate (SEAHORSE_PGP_SOURCE (sksrc), name, email, comment,
+                                       pass, type, length, expires, &err);
+    
+    seahorse_widget_destroy (swidget);
 
-	gtk_widget_destroy (widget);
-	seahorse_widget_destroy (swidget);
+    if (GPG_IS_OK (err)) {
+        seahorse_progress_show (op, _("Generating key"), TRUE);
+        g_object_unref (op);
+    } else 
+        seahorse_util_handle_gpgme (err, _("Couldn't generate key"));
 }
 
 void

@@ -259,7 +259,7 @@ seahorse_pgp_source_dispose (GObject *gobject)
     
     /* Clear out all operations */
     if (psrc->pv->operations) {
-        if(!seahorse_operation_is_done (SEAHORSE_OPERATION (psrc->pv->operations)))
+        if(seahorse_operation_is_running (SEAHORSE_OPERATION (psrc->pv->operations)))
             seahorse_operation_cancel (SEAHORSE_OPERATION (psrc->pv->operations));
         g_object_unref (psrc->pv->operations);
         psrc->pv->operations = NULL;
@@ -672,7 +672,7 @@ keyload_handler (SeahorseLoadOperation *lop)
     
     /* TODO: We can use the GPGME progress to make this more accurate */
     t = g_strdup_printf (ngettext("Loaded %d key", "Loaded %d keys", lop->loaded), lop->loaded);
-    seahorse_operation_mark_progress (SEAHORSE_OPERATION (lop), t, 0, 0);
+    seahorse_operation_mark_progress (SEAHORSE_OPERATION (lop), t, 0.0);
     g_free (t);
     
     return TRUE; 
@@ -731,7 +731,7 @@ seahorse_load_operation_start (SeahorsePGPSource *psrc, const gchar **pattern, g
     }
     
     seahorse_operation_mark_start (SEAHORSE_OPERATION (lop));
-    seahorse_operation_mark_progress (SEAHORSE_OPERATION (lop), _("Loading Keys..."), 0, 0);
+    seahorse_operation_mark_progress (SEAHORSE_OPERATION (lop), _("Loading Keys..."), 0.0);
     
     if (all && !refresh) {
         /* Load keys at idle time */
@@ -806,7 +806,7 @@ seahorse_pgp_source_stop (SeahorseKeySource *src)
     g_assert (SEAHORSE_IS_KEY_SOURCE (src));
     psrc = SEAHORSE_PGP_SOURCE (src);
     
-    if(!seahorse_operation_is_done (SEAHORSE_OPERATION (psrc->pv->operations)))
+    if(seahorse_operation_is_running (SEAHORSE_OPERATION (psrc->pv->operations)))
         seahorse_operation_cancel (SEAHORSE_OPERATION (psrc->pv->operations));
 }
 
@@ -818,8 +818,8 @@ seahorse_pgp_source_get_state (SeahorseKeySource *src)
     g_assert (SEAHORSE_IS_KEY_SOURCE (src));
     psrc = SEAHORSE_PGP_SOURCE (src);
     
-    return seahorse_operation_is_done (SEAHORSE_OPERATION (psrc->pv->operations)) ? 
-                                       SKSRC_LOADING : 0;
+    return seahorse_operation_is_running (SEAHORSE_OPERATION (psrc->pv->operations)) ? 
+                                          SKSRC_LOADING : 0;
 }
 
 static SeahorseOperation* 

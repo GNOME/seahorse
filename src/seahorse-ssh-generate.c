@@ -126,6 +126,7 @@ on_response (GtkDialog *dialog, guint response, SeahorseWidget *swidget)
         g_signal_connect (op, "done", G_CALLBACK (upload_handler), NULL);
     
     seahorse_progress_show (op, _("Creating SSH Key"), TRUE);
+    g_object_unref (op);
 }
 
 void

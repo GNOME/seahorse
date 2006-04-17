@@ -85,10 +85,10 @@ passphrase_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
     gtk_widget_set_sensitive (w, FALSE);
     
     op = seahorse_ssh_operation_change_passphrase (SEAHORSE_SSH_KEY (skey));
-    if (seahorse_operation_is_done (op))
-        passphrase_done (op, swidget);
-    else 
+    if (seahorse_operation_is_running (op))
         g_signal_connect (op, "done", G_CALLBACK (passphrase_done), swidget);
+    else 
+        passphrase_done (op, swidget);
 
     /* Running operations ref themselves */
     g_object_unref (op);

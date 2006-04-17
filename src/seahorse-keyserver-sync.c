@@ -108,8 +108,8 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 
     /* And now syncing keys from the servers */
     ks = seahorse_gconf_get_string_list (KEYSERVER_KEY);
-	ks = seahorse_server_source_purge_keyservers (ks);
-	
+    ks = seahorse_server_source_purge_keyservers (ks);
+    
     for (l = ks; l; l = g_slist_next (l)) {
         
         sksrc = seahorse_context_remote_key_source (SCTX_APP(), (const gchar*)(l->data));
@@ -158,8 +158,8 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
     g_free (keyserver);
     
     /* Show the progress window if necessary */
-    if (!seahorse_operation_is_done (SEAHORSE_OPERATION (mop))) 
-        seahorse_progress_show (SEAHORSE_OPERATION (mop), _("Syncing keys..."), FALSE);
+    seahorse_progress_show (SEAHORSE_OPERATION (mop), _("Syncing keys..."), FALSE);
+    g_object_unref (mop);
 }
 
 static void

@@ -117,7 +117,7 @@ seahorse_progress_appbar_set_operation (GtkWidget* appbar, SeahorseOperation *op
     g_return_if_fail (GNOME_IS_APPBAR (appbar));
     g_return_if_fail (SEAHORSE_IS_OPERATION (operation));
     
-    if (seahorse_operation_is_done (operation)) {
+    if (!seahorse_operation_is_running (operation)) {
         operation_done (operation, appbar);
         return;
     }
@@ -163,7 +163,7 @@ progress_operation_update (SeahorseOperation *operation, const gchar *message,
 static void
 progress_operation_cancel (GtkButton *button, SeahorseOperation *operation)
 {
-    if (!seahorse_operation_is_done (operation))
+    if (seahorse_operation_is_running (operation))
         seahorse_operation_cancel (operation);
 }
 
@@ -204,7 +204,7 @@ progress_show (SeahorseOperation *operation)
     const gchar *title;
     gchar *t;
 
-    if (seahorse_operation_is_done (operation)) {
+    if (!seahorse_operation_is_running (operation)) {
         /* Matches the ref in seahorse_progress_show */
         g_object_unref (operation);
         return FALSE;

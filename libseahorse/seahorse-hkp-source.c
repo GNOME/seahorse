@@ -550,8 +550,8 @@ refresh_callback (SoupMessage *msg, SeahorseHKPOperation *hop)
     if (--hop->requests <= 0)
         seahorse_operation_mark_done (SEAHORSE_OPERATION (hop), FALSE, NULL);
     else
-        seahorse_operation_mark_progress (SEAHORSE_OPERATION (hop), _("Searching for keys..."), 
-                                          hop->requests, hop->total);
+        seahorse_operation_mark_progress_full (SEAHORSE_OPERATION (hop), _("Searching for keys..."), 
+                                               hop->requests, hop->total);
 }
 
 static gchar*
@@ -620,8 +620,8 @@ send_callback (SoupMessage *msg, SeahorseHKPOperation *hop)
     if (--hop->requests <= 0)
         seahorse_operation_mark_done (SEAHORSE_OPERATION (hop), FALSE, NULL);
     else
-        seahorse_operation_mark_progress (SEAHORSE_OPERATION (hop), _("Uploading keys..."), 
-                                          hop->requests, hop->total);
+        seahorse_operation_mark_progress_full (SEAHORSE_OPERATION (hop), _("Uploading keys..."), 
+                                               hop->requests, hop->total);
 }
 
 gboolean
@@ -690,8 +690,8 @@ get_callback (SoupMessage *msg, SeahorseHKPOperation *hop)
     if (--hop->requests <= 0)
         seahorse_operation_mark_done (SEAHORSE_OPERATION (hop), FALSE, NULL);
     else
-        seahorse_operation_mark_progress (SEAHORSE_OPERATION (hop), _("Retrieving keys..."), 
-                                          hop->requests, hop->total);
+        seahorse_operation_mark_progress_full (SEAHORSE_OPERATION (hop), _("Retrieving keys..."), 
+                                               hop->requests, hop->total);
 }
 
 /* -----------------------------------------------------------------------------
@@ -799,7 +799,7 @@ seahorse_hkp_source_load (SeahorseKeySource *src, SeahorseKeySourceLoad load,
     
     hop->total = hop->requests = 1;
     t = g_strdup_printf (_("Searching for keys on: %s"), server);
-    seahorse_operation_mark_progress (SEAHORSE_OPERATION (hop), t, 0, hop->total);
+    seahorse_operation_mark_progress (SEAHORSE_OPERATION (hop), t, 0.0);
     g_free (t);
 
     g_free (server);    
@@ -872,7 +872,7 @@ seahorse_hkp_source_import (SeahorseKeySource *sksrc, gpgme_data_t data)
 
     hop->total = hop->requests;
     t = g_strdup_printf (_("Connecting to: %s"), server);
-    seahorse_operation_mark_progress (SEAHORSE_OPERATION (hop), t, 0, hop->total);
+    seahorse_operation_mark_progress (SEAHORSE_OPERATION (hop), t, 0.0);
     g_free (t);
 
     g_free (server);
@@ -944,7 +944,7 @@ seahorse_hkp_source_export (SeahorseKeySource *sksrc, GList *keys,
     
     hop->total = hop->requests;
     t = g_strdup_printf (_("Connecting to: %s"), server);
-    seahorse_operation_mark_progress (SEAHORSE_OPERATION (hop), t, 0, hop->total);
+    seahorse_operation_mark_progress (SEAHORSE_OPERATION (hop), t, 0.0);
     g_free (t);
 
     g_free (server);

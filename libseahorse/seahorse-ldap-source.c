@@ -437,7 +437,7 @@ result_callback (SeahorseLDAPOperation *lop)
         g_assert (lop->ldap_cb);
 
         /* Should not be marked as done. */
-        g_assert (!seahorse_operation_is_done (SEAHORSE_OPERATION (lop)));
+        g_assert (seahorse_operation_is_running (SEAHORSE_OPERATION (lop)));
     }    
         
     return ret;
@@ -568,7 +568,7 @@ seahorse_ldap_operation_start (SeahorseLDAPSource *lsrc, OpLDAPCallback cb,
     seahorse_operation_mark_start (SEAHORSE_OPERATION (lop));
     
     t = g_strdup_printf (_("Connecting to: %s"), server);
-    seahorse_operation_mark_progress (SEAHORSE_OPERATION (lop), t, 0, total);
+    seahorse_operation_mark_progress (SEAHORSE_OPERATION (lop), t, 0.0);
     g_free (t);
 
     g_free (server);
@@ -707,7 +707,7 @@ start_search (SeahorseOperation *op, LDAPMessage *result)
     g_return_val_if_fail (filter != NULL, FALSE);
 
     t = (gchar*)g_object_get_data (G_OBJECT (lop), "details");
-    seahorse_operation_mark_progress (SEAHORSE_OPERATION (lop), t, 0, 0);
+    seahorse_operation_mark_progress (SEAHORSE_OPERATION (lop), t, 0.0);
     
     sinfo = get_ldap_server_info (lop->lsrc, TRUE);
     lop->ldap_op = ldap_search (lop->ldap, sinfo->base_dn, LDAP_SCOPE_SUBTREE,
@@ -862,9 +862,9 @@ get_key_from_ldap (SeahorseOperation *op, LDAPMessage *result)
     fprfull = (GSList*)g_object_get_data (G_OBJECT (lop), "fingerprints-full");
 
     l = g_slist_length (fprfull);
-    seahorse_operation_mark_progress (SEAHORSE_OPERATION (lop), 
-                                      _("Retrieving remote keys..."), 
-                                      l - g_slist_length (fingerprints), l);
+    seahorse_operation_mark_progress_full (SEAHORSE_OPERATION (lop), 
+                                           _("Retrieving remote keys..."), 
+                                           l - g_slist_length (fingerprints), l);
     
     if (fingerprints) {
      
@@ -996,9 +996,9 @@ send_key_to_ldap (SeahorseOperation *op, LDAPMessage *result)
     keysfull = (GSList*)g_object_get_data (G_OBJECT (lop), "key-data-full");
     
     l = g_slist_length (keysfull);
-    seahorse_operation_mark_progress (SEAHORSE_OPERATION (lop), 
-                                      _("Sending keys to key server..."), 
-                                      l - g_slist_length (keys), l);
+    seahorse_operation_mark_progress_full (SEAHORSE_OPERATION (lop), 
+                                           _("Sending keys to key server..."), 
+                                           l - g_slist_length (keys), l);
     
     if (keys) {
      

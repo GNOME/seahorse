@@ -139,7 +139,7 @@ seahorse_server_source_dispose (GObject *gobject)
     
     /* Clear out all the operations */
     if (ssrc->priv->mop) {
-        if(!seahorse_operation_is_done (SEAHORSE_OPERATION (ssrc->priv->mop)))
+        if(seahorse_operation_is_running (SEAHORSE_OPERATION (ssrc->priv->mop)))
             seahorse_operation_cancel (SEAHORSE_OPERATION (ssrc->priv->mop));
         g_object_unref (ssrc->priv->mop);
         ssrc->priv->mop = NULL;
@@ -337,7 +337,7 @@ seahorse_server_source_stop (SeahorseKeySource *src)
     g_assert (SEAHORSE_IS_KEY_SOURCE (src));
     ssrc = SEAHORSE_SERVER_SOURCE (src);
 
-    if(!seahorse_operation_is_done(SEAHORSE_OPERATION (ssrc->priv->mop)))
+    if(seahorse_operation_is_running (SEAHORSE_OPERATION (ssrc->priv->mop)))
         seahorse_operation_cancel (SEAHORSE_OPERATION (ssrc->priv->mop));
 }
 
@@ -350,7 +350,7 @@ seahorse_server_source_get_state (SeahorseKeySource *src)
     ssrc = SEAHORSE_SERVER_SOURCE (src);
     
     guint state = SKSRC_REMOTE;
-    if (!seahorse_operation_is_done (SEAHORSE_OPERATION (ssrc->priv->mop)))
+    if (seahorse_operation_is_running (SEAHORSE_OPERATION (ssrc->priv->mop)))
         state |= SKSRC_LOADING;
     return state;
 }

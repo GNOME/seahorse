@@ -99,7 +99,7 @@ watch_ssh_process (GPid pid, gint status, SeahorseSSHOperation *sop)
     
     DEBUG_OPERATION (("SSHOP: SSH process done\n"));
     
-    if (!seahorse_operation_is_done (SEAHORSE_OPERATION (sop))) {
+    if (seahorse_operation_is_running (SEAHORSE_OPERATION (sop))) {
 
         /* Was killed */
         if (!WIFEXITED (status)) {
@@ -146,7 +146,7 @@ io_ssh_write (GIOChannel *source, GIOCondition condition, SeahorseSSHOperation *
     GIOStatus status;
     gsize written = 0;
 
-    if (!seahorse_operation_is_done (SEAHORSE_OPERATION (sop)) && pv->sin) {
+    if (seahorse_operation_is_running (SEAHORSE_OPERATION (sop)) && pv->sin) {
         DEBUG_OPERATION (("SSHOP: SSH ready for input\n"));
         
         status = g_io_channel_write_chars (pv->iin, pv->sin->str, pv->sin->len,
@@ -170,7 +170,7 @@ io_ssh_write (GIOChannel *source, GIOCondition condition, SeahorseSSHOperation *
         pv->sin = NULL;
     }
     
-    if (seahorse_operation_is_done (SEAHORSE_OPERATION (sop)) || !pv->sin) {
+    if (!seahorse_operation_is_running (SEAHORSE_OPERATION (sop)) || !pv->sin) {
         DEBUG_OPERATION (("SSHOP: Closing SSH input channel\n"));
         g_io_channel_unref (pv->iin);
         pv->iin = NULL;
@@ -192,7 +192,7 @@ io_ssh_read (GIOChannel *source, GIOCondition condition, SeahorseSSHOperation *s
     gsize read = 0;
     GString *str;
     
-    if (seahorse_operation_is_done (SEAHORSE_OPERATION (sop)))
+    if (!seahorse_operation_is_running (SEAHORSE_OPERATION (sop)))
         return TRUE;
     
     /* Figure out which buffer we're writing into */
@@ -388,7 +388,7 @@ static void
 seahorse_ssh_operation_dispose (GObject *gobject)
 {
     SeahorseOperation *op = SEAHORSE_OPERATION (gobject);
-    if (!seahorse_operation_is_done (op))
+    if (seahorse_operation_is_running (op))
         seahorse_ssh_operation_cancel (op);
     G_OBJECT_CLASS (operation_parent_class)->dispose (gobject);  
 }
@@ -509,7 +509,7 @@ seahorse_ssh_operation_new (SeahorseSSHSource *ssrc, const gchar *command,
     pv->message = g_strdup (progress);
 
     seahorse_operation_mark_start (SEAHORSE_OPERATION (sop));
-    seahorse_operation_mark_progress (SEAHORSE_OPERATION (sop), progress, 0, 0);
+    seahorse_operation_mark_progress (SEAHORSE_OPERATION (sop), progress, 0.0);
     
     return SEAHORSE_OPERATION (sop);
 }
@@ -596,7 +596,7 @@ seahorse_ssh_operation_upload (SeahorseSSHSource *ssrc, GList *keys,
      * completed operations, so we don't need to factor that in. If this
      * ever changes, then we need to recode this bit 
      */
-    g_return_val_if_fail (seahorse_operation_is_done (op), NULL);
+    g_return_val_if_fail (!seahorse_operation_is_running (op), NULL);
     
     /* Return any errors */
     if (!seahorse_operation_is_successful (op)) {

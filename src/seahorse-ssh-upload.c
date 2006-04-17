@@ -145,9 +145,7 @@ upload_keys (SeahorseWidget *swidget)
     g_signal_connect (op, "done", G_CALLBACK (upload_complete), NULL);
     
     /* Show the progress window if necessary */
-    if (!seahorse_operation_is_done (op)) 
-        seahorse_progress_show (op, _("Configuring SSH Keys..."), FALSE);
-
+    seahorse_progress_show (op, _("Configuring SSH Keys..."), FALSE);
     g_object_unref (op);
 }
 
