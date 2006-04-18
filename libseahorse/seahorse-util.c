@@ -211,50 +211,6 @@ seahorse_util_set_text_view_string (GtkTextView *view, GString *string)
 }
 
 /**
- * seahorse_util_write_data_to_file:
- * @path: Path of file to write to
- * @data: Data to write
- * @release: Whether to release @data or not
- *
- * Tries to write @data to the file @path. 
- *
- * Returns: GPG_ERR_NO_ERROR if write is successful,
- * GPGME_File_Error if the file could not be opened
- **/
-gpgme_error_t
-seahorse_util_write_data_to_file (const gchar *path, gpgme_data_t data, 
-                                  gboolean release)
-{
-    gpgme_error_t err = GPG_OK;
-	gpgme_data_t file;
-	gchar *buffer;
-	gint nread;
-   
-    gpgme_data_seek (data, 0, SEEK_SET);
-	
-    file = seahorse_vfs_data_create (path, SEAHORSE_VFS_WRITE, &err);
-    if (file != NULL) {
-    	buffer = g_new0 (gchar, 128);
-    	
-    	while ((nread = gpgme_data_read (data, buffer, 128)) > 0) {
-            if(gpgme_data_write (file, buffer, nread) < 0) {
-                gpg_err_code_t e = gpg_err_code_from_errno (errno);
-                err = GPG_E (e);                
-                break;
-            }
-        }
-
-        g_free (buffer);
-    }
-
-    if (release)
-        gpgmex_data_release (data);
-    
-    gpgmex_data_release (file);
-    return err;
-}
-
-/**
  * seahorse_util_write_data_to_text:
  * @data: Data to write
  * @release: Whether to release @data or not

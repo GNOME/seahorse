@@ -468,11 +468,24 @@ static struct gpgme_data_cbs vfs_data_cbs =
 
 /* -----------------------------------------------------------------------------
  */
+
+gpgme_data_t 
+seahorse_vfs_data_create (const gchar *uri, guint mode, GError **err)
+{
+    gpgme_data_t data;
+    gpgme_error_t gerr;
+    
+    g_return_val_if_fail (!err || !*err, NULL);
+    data = seahorse_vfs_data_create_gerr (uri, mode, &gerr);
+    if (!data)
+        seahorse_util_gpgme_to_error (gerr, err);
+    return data;
+}
  
 /* Create a data on the given uri, remote uris get gnome-vfs backends,
  * local uris get normal file access. */
 gpgme_data_t
-seahorse_vfs_data_create(const gchar *uri, guint mode, gpg_error_t* err) 
+seahorse_vfs_data_create_gerr (const gchar *uri, guint mode, gpg_error_t* err) 
 {
     gpgme_error_t gerr;
     gpgme_data_t ret = NULL;
@@ -499,3 +512,45 @@ seahorse_vfs_data_create(const gchar *uri, guint mode, gpg_error_t* err)
     return ret;
 }
 
+gboolean
+seahorse_vfs_set_file_contents (const gchar *uri, const gchar *text, guint len, 
+                                GError **err)
+{
+    gpgme_data_t data;
+    gboolean ret;
+    
+    if (len < 0)
+        len = strlen (text);
+    
+    data = seahorse_vfs_data_create (uri, SEAHORSE_VFS_WRITE, err);
+    if (!data)
+        return FALSE;
+    
+    ret = seahorse_vfs_data_write_all (data, (void*)text, len, err);
+    
+    gpgme_data_release (data);
+    return ret;
+}
+
+gboolean 
+seahorse_vfs_data_write_all (gpgme_data_t data, const void* buffer, size_t len, GError **err)
+{
+    guchar *text = (guchar*)buffer;
+    gint written;
+    
+    while (len > 0) {
+        written = gpgme_data_write (data, (void*)text, len);
+        if (written < 0) {
+            if (errno == EAGAIN || errno == EINTR)
+                continue;
+            g_set_error (err, G_FILE_ERROR, g_file_error_from_errno (errno), 
+                         "%s", strerror (errno));
+            return FALSE;
+        }
+        
+        len -= written;
+        text += written;
+    }
+    
+    return TRUE;
+}

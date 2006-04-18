@@ -30,6 +30,7 @@
 #include "seahorse-ldap-source.h"
 #include "seahorse-util.h"
 #include "seahorse-pgp-key.h"
+#include "seahorse-vfs-data.h"
 
 #ifdef WITH_LDAP
 
@@ -787,6 +788,8 @@ get_callback (SeahorseOperation *op, LDAPMessage *result)
     LDAPServerInfo *sinfo;
     gpgme_data_t data;
     char *message;
+    GError *err = NULL;
+    gboolean ret;
     gchar *key;
     int code;
     int r;
@@ -812,13 +815,16 @@ get_callback (SeahorseOperation *op, LDAPMessage *result)
         data = (gpgme_data_t)seahorse_operation_get_result (SEAHORSE_OPERATION (lop));
         g_return_val_if_fail (data != NULL, FALSE);
         
-        r = gpgme_data_write (data, key, strlen (key));
-        g_return_val_if_fail (r != -1, FALSE);
-
-        r = gpgme_data_write (data, "\n", 1);
-        g_return_val_if_fail (r != -1, FALSE);
-
+        ret = seahorse_vfs_data_write_all (data, key, -1, &err) &&
+              seahorse_vfs_data_write_all (data, "\n", -1, &err);
+        
         g_free (key);
+        
+        if (!ret) {
+            seahorse_operation_mark_done (SEAHORSE_OPERATION (lop), FALSE, err);
+            return FALSE;
+        }
+        
         return TRUE;
 
     /* No more entries, result */

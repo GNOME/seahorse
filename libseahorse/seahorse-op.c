@@ -75,17 +75,14 @@ import_data (SeahorsePGPSource *psrc, gpgme_data_t data,
 gint
 seahorse_op_import_file (SeahorsePGPSource *psrc, const gchar *path, GError **err)
 {
-	gpgme_data_t data;
-	gpgme_error_t gerr;
+    gpgme_data_t data;
   
-	/* new data from file */
-    data = seahorse_vfs_data_create (path, SEAHORSE_VFS_READ, &gerr);
-    if (!GPG_IS_OK (gerr)) {
-        seahorse_util_gpgme_to_error (gerr, err);
+    /* new data from file */
+    data = seahorse_vfs_data_create (path, SEAHORSE_VFS_READ, err);
+    if (!data) 
         return -1;
-    }
     
-	return import_data (psrc, data, err);
+    return import_data (psrc, data, err);
 }
 
 /**
@@ -108,116 +105,6 @@ seahorse_op_import_text (SeahorsePGPSource *psrc, const gchar *text, GError **er
     /* new data from text */
     data = gpgmex_data_new_from_mem (text, strlen (text), TRUE);
     return import_data (psrc, data, err);
-}
-
-/* helper function for exporting @keys. */
-static gboolean
-export_data (GList *keys, gboolean complete, gboolean force_armor, 
-             gpgme_data_t data, GError **err)
-{
-    SeahorseKeySource *sksrc;
-    SeahorseOperation *operation;
-    gboolean ret = TRUE;
-    SeahorseKey *skey;
-    GList *next;
-    
-    keys = g_list_copy (keys);
-
-    /* Sort by key source */
-    keys = seahorse_util_keylist_sort (keys);
-    
-    while (keys) {
-     
-        /* Break off one set (same keysource) */
-        next = seahorse_util_keylist_splice (keys);
-
-        g_assert (SEAHORSE_IS_KEY (keys->data));
-        skey = SEAHORSE_KEY (keys->data);
-
-        /* Export from this key source */        
-        sksrc = seahorse_key_get_source (skey);
-        g_return_val_if_fail (sksrc != NULL, FALSE);
-        
-        /* We pass our own data object, to which data is appended */
-        operation = seahorse_key_source_export (sksrc, keys, complete, data);
-        g_return_val_if_fail (operation != NULL, FALSE);
-
-        g_list_free (keys);
-        keys = next;
-        
-        seahorse_operation_wait (operation);
-    
-        if (!seahorse_operation_is_successful (operation)) {
-            seahorse_operation_steal_error (operation, err);
-
-            /* Ignore the rest, break loop */
-            g_list_free (keys);
-            keys = NULL;
-            ret = FALSE;
-        }        
-        
-        g_object_unref (operation);
-    } 
-    
-    return ret;
-}
-
-/**
- * seahorse_op_export_file:
- * @keys: List of #SeahorseKey objects to export
- * @complete: Whether to export the private key or not.
- * @path: Path of a new file to export to
- * @err: Optional error value
- *
- * Tries to export @recips to the new file @path, saving an errors in @err.
- * @recips will be released upon completion.
- **/
-gboolean
-seahorse_op_export_file (GList *keys, gboolean complete, const gchar *path, 
-                         GError **err)
-{
-	gpgme_data_t data;
-	gpgme_error_t gerr;
-    gboolean ret;
-	
-    /* Open the appropriate file */
-    data = seahorse_vfs_data_create (path, SEAHORSE_VFS_WRITE, &gerr);
-    if (!GPG_IS_OK (gerr)) {
-        seahorse_util_gpgme_to_error (gerr, err);
-        return FALSE;
-    }
-    
-	/* export data */
-	ret = export_data (keys, complete, FALSE, data, err);
-    gpgmex_data_release (data);
-    return ret;
-}
-
-/**
- * seahorse_op_export_text:
- * @keys: List of #SeahorseKey objects to export
- * @complete: Whether to export the private key or not.
- * @err: Optional error value
- *
- * Tries to export @recips to text using seahorse_util_write_data_to_text(),
- * saving any errors in @err. @recips will be released upon completion.
- *
- * Returns: The exported text or NULL if the operation fails
- **/
-gchar*
-seahorse_op_export_text (GList *keys, gboolean complete, GError **err)
-{
-    gpgme_data_t data;
-        
-    data = gpgmex_data_new ();
-    
-    /* export data with armor */
-    if (export_data (keys, complete, TRUE, data, err)) {
-        return seahorse_util_write_data_to_text (data, TRUE);
-    } else {
-        gpgmex_data_release (data);
-        return NULL;
-    }
 }
 
 /* common encryption function definition. */
@@ -270,10 +157,10 @@ encrypt_file_common (SeahorsePGPSource *psrc, GList *keys, const gchar *path,
     if (err == NULL)
         err = &error;
 
-    plain = seahorse_vfs_data_create (path, SEAHORSE_VFS_READ, err);
+    plain = seahorse_vfs_data_create_gerr (path, SEAHORSE_VFS_READ, err);
     g_return_if_fail (plain != NULL);
     
-    cipher = seahorse_vfs_data_create (epath, SEAHORSE_VFS_WRITE | SEAHORSE_VFS_DELAY, err);
+    cipher = seahorse_vfs_data_create_gerr (epath, SEAHORSE_VFS_WRITE | SEAHORSE_VFS_DELAY, err);
     if (!cipher) {
         gpgmex_data_release (plain);
         return;
@@ -404,10 +291,10 @@ seahorse_op_sign_file (SeahorsePGPKey *signer, const gchar *path,
     g_return_if_fail (psrc != NULL && SEAHORSE_IS_PGP_SOURCE (psrc));
     
     /* new data from file */
-    plain = seahorse_vfs_data_create (path, SEAHORSE_VFS_READ, err);
+    plain = seahorse_vfs_data_create_gerr (path, SEAHORSE_VFS_READ, err);
     g_return_if_fail (plain != NULL);
     
-    sig = seahorse_vfs_data_create (spath, SEAHORSE_VFS_WRITE | SEAHORSE_VFS_DELAY, err);
+    sig = seahorse_vfs_data_create_gerr (spath, SEAHORSE_VFS_WRITE | SEAHORSE_VFS_DELAY, err);
     if (!sig) {
         gpgmex_data_release (plain);
         return;
@@ -549,10 +436,10 @@ seahorse_op_verify_file (SeahorsePGPSource *psrc, const gchar *path, const gchar
     if (err == NULL)
         err = &error;
     /* new data from sig file */
-    sig = seahorse_vfs_data_create (path, SEAHORSE_VFS_READ, err);
+    sig = seahorse_vfs_data_create_gerr (path, SEAHORSE_VFS_READ, err);
     g_return_if_fail (plain != NULL);
 
-    plain = seahorse_vfs_data_create (original, SEAHORSE_VFS_READ, err);
+    plain = seahorse_vfs_data_create_gerr (original, SEAHORSE_VFS_READ, err);
     if (!plain) {
         gpgmex_data_release (sig);
         return;
@@ -638,10 +525,10 @@ seahorse_op_decrypt_verify_file (SeahorsePGPSource *psrc, const gchar *path,
     if (err == NULL)
         err = &error;
     /* new data from file */
-    cipher = seahorse_vfs_data_create (path, SEAHORSE_VFS_READ, err);
+    cipher = seahorse_vfs_data_create_gerr (path, SEAHORSE_VFS_READ, err);
     g_return_if_fail (cipher != NULL);
     
-    plain = seahorse_vfs_data_create (dpath, SEAHORSE_VFS_WRITE | SEAHORSE_VFS_DELAY, err);
+    plain = seahorse_vfs_data_create_gerr (dpath, SEAHORSE_VFS_WRITE | SEAHORSE_VFS_DELAY, err);
     if (!plain) {
         gpgmex_data_release (cipher);
         return;

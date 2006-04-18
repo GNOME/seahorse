@@ -31,6 +31,7 @@
 #include "seahorse-util.h"
 #include "seahorse-pgp-key.h"
 #include "seahorse-gconf.h"
+#include "seahorse-vfs-data.h"
 
 #ifdef WITH_HKP
 
@@ -650,12 +651,13 @@ detect_key (const gchar *text, gint len, const gchar **start, const gchar **end)
 static void 
 get_callback (SoupMessage *msg, SeahorseHKPOperation *hop) 
 {
+    GError *err = NULL;
     const gchar *start;
     const gchar *end;
     gpgme_data_t data;
     const gchar *text;
+    gboolean ret;
     guint len;
-    int r;
     
     DEBUG_HKP (("[hkp] Get Result:\n"));
     DEBUG_RESPONSE (msg);
@@ -680,11 +682,13 @@ get_callback (SoupMessage *msg, SeahorseHKPOperation *hop)
         data = (gpgme_data_t)seahorse_operation_get_result (SEAHORSE_OPERATION (hop));
         g_return_if_fail (data != NULL);
             
-        r = gpgme_data_write (data, start, end - start);
-        g_return_if_fail (r != -1);
-
-        r = gpgme_data_write (data, "\n", 1);
-        g_return_if_fail (r != -1);
+        ret = seahorse_vfs_data_write_all (data, start, end - start, &err) &&
+              seahorse_vfs_data_write_all (data, "\n", -1, &err);
+        
+        if (!ret) {
+            seahorse_operation_mark_done (SEAHORSE_OPERATION (hop), FALSE, err);
+            return;
+        }
     }
         
     if (--hop->requests <= 0)

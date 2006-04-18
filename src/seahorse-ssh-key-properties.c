@@ -27,6 +27,7 @@
 #include "seahorse-op.h"
 #include "seahorse-ssh-key.h"
 #include "seahorse-ssh-operation.h"
+#include "seahorse-vfs-data.h"
 
 #define NOTEBOOK "notebook"
 
@@ -97,7 +98,10 @@ passphrase_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 static void
 export_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 {
+    SeahorseKeySource *sksrc;
+    SeahorseOperation *op;
     SeahorseKey *skey;
+    gpgme_data_t data;
     GtkWidget *dialog;
     gchar* uri = NULL;
     GError *err = NULL;
@@ -112,15 +116,29 @@ export_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
     seahorse_util_chooser_set_filename (dialog, keys);
 
     uri = seahorse_util_chooser_save_prompt (dialog);
-    if(uri) {
-        seahorse_op_export_file (keys, TRUE, uri, &err);
-
-        if (err != NULL) {
-            seahorse_util_handle_error (err, _("Couldn't export key to \"%s\""),
-                                        seahorse_util_uri_get_last (uri));
-        }
-        g_free (uri);
+    if(!uri) 
+        return;
+    
+    sksrc = seahorse_key_get_source (skey);
+    g_assert (SEAHORSE_IS_KEY_SOURCE (sksrc));
+    
+    data = seahorse_vfs_data_create (uri, SEAHORSE_VFS_WRITE, &err);
+    
+    if (data) {
+        op = seahorse_key_source_export (sksrc, keys, TRUE, data);
+    
+        seahorse_operation_wait (op);
+        gpgmex_data_release (data);
+        
+        if (!seahorse_operation_is_successful (op))
+            seahorse_operation_steal_error (op, &err);
     }
+    
+    if (err)
+        seahorse_util_handle_error (err, _("Couldn't export key to \"%s\""),
+                                    seahorse_util_uri_get_last (uri));
+    
+    g_free (uri);
     g_list_free (keys);
 }
 

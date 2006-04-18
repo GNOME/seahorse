@@ -32,6 +32,7 @@
 #include "seahorse-preferences.h"
 #include "seahorse-server-source.h"
 #include "seahorse-gconf.h"
+#include "seahorse-transfer-operation.h"
 
 static void 
 sync_import_complete (SeahorseOperation *op, SeahorseKeySource *sksrc)
@@ -80,14 +81,13 @@ sync_export_complete (SeahorseOperation *op, SeahorseKeySource *sksrc)
 static void
 ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 {
-    SeahorseKeySource *lsksrc;
     SeahorseKeySource *sksrc;
     SeahorseMultiOperation *mop;
     SeahorseOperation *op;
-    GError *err = NULL;
     gchar *keyserver;
     GSList *ks, *l;
-    GList *keys;
+    GList *keys, *k;
+    GSList *keyids = NULL;
     
     keys = (GList*)g_object_get_data (G_OBJECT (swidget), "publish-keys");
     keys = g_list_copy (keys);
@@ -98,10 +98,11 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
         return;
     
     g_assert (SEAHORSE_IS_KEY (keys->data));
-
-    /* This should be the default key source */
-    lsksrc = seahorse_context_find_key_source (SCTX_APP(), SKEY_PGP, SKEY_LOC_LOCAL);
-    g_return_if_fail (lsksrc != NULL);
+    
+    /* Build a keyid list */
+    for (k = keys; k; k = g_list_next (k)) 
+        keyids = g_slist_prepend (keyids, 
+                    (gchar*)seahorse_key_get_keyid (SEAHORSE_KEY (k->data)));
 
     mop = seahorse_multi_operation_new ();
 
@@ -114,7 +115,7 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
         sksrc = seahorse_context_remote_key_source (SCTX_APP(), (const gchar*)(l->data));
         g_return_if_fail (sksrc != NULL);
         
-        op = seahorse_key_source_export (sksrc, keys, FALSE, NULL);
+        op = seahorse_transfer_operation_new (_("Syncing keys"), sksrc, NULL, keyids);
         g_return_if_fail (op != NULL);
 
         g_signal_connect (op, "done", G_CALLBACK (sync_export_complete), sksrc);
@@ -126,33 +127,18 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
     keyserver = seahorse_gconf_get_string (PUBLISH_TO_KEY);
     if (keyserver && keyserver[0]) {
         
-        gchar *exported;
-        gpgme_data_t data;
-
-        /* Export all the necessary keys from our local keyring */
-        exported = seahorse_op_export_text (keys, FALSE, &err);
-        if (!exported) {
-            seahorse_util_handle_error (err, _("Couldn't export keys"));
-        } else {
-            /* New GPGME data which copies original text */
-            data = gpgmex_data_new_from_mem (exported, strlen (exported), 0);
-
-            sksrc = seahorse_context_remote_key_source (SCTX_APP (), keyserver);
-            g_return_if_fail (sksrc != NULL);
-            
-            op = seahorse_key_source_import (sksrc, data);
-            g_return_if_fail (op != NULL);
-            
-            gpgmex_data_release (data);
-            g_free (exported);
-            
-            g_signal_connect (op, "done", G_CALLBACK (sync_import_complete), sksrc);
-            seahorse_multi_operation_take (mop, op);
-        }
+        sksrc = seahorse_context_remote_key_source (SCTX_APP (), keyserver);
+        g_return_if_fail (sksrc != NULL);
         
+        op = seahorse_context_transfer_keys (SCTX_APP (), keys, sksrc);
+        g_return_if_fail (sksrc != NULL);
+
+        g_signal_connect (op, "done", G_CALLBACK (sync_import_complete), sksrc);
+        seahorse_multi_operation_take (mop, op);
     }
 
     g_list_free (keys);
+    g_slist_free (keyids);
     g_free (keyserver);
     
     /* Show the progress window if necessary */

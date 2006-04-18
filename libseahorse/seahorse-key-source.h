@@ -60,7 +60,7 @@ typedef struct _SeahorseKeySource {
 
 /* Flags for the get_state method below */
 typedef enum {
-    SKSRC_REMOTE = 0x00000001,
+    SKSRC_REMOTE  = 0x00000001,
     SKSRC_LOADING = 0x00000010
 } SeahorseKeySourceFlags;
 
@@ -184,10 +184,13 @@ gboolean            seahorse_key_source_import_sync      (SeahorseKeySource *sks
                                                           gpgme_data_t data,
                                                           GError **err);
 
+SeahorseOperation*  seahorse_key_source_export_keys      (GList *keys, 
+                                                          gpgme_data_t data);
+
 SeahorseOperation*  seahorse_key_source_export           (SeahorseKeySource *sksrc,
                                                           GList *keys,
                                                           gboolean complete,
-                                                          gpgme_data_t data);                        
+                                                          gpgme_data_t data);
 
 SeahorseOperation*  seahorse_key_source_export_raw       (SeahorseKeySource *sksrc, 
                                                           GSList *keyids, 

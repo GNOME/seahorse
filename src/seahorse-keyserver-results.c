@@ -36,6 +36,7 @@
 #include "seahorse-key-manager-store.h"
 #include "seahorse-key-widget.h"
 #include "seahorse-key-dialogs.h"
+#include "seahorse-vfs-data.h"
 
 #define KEY_LIST "key_list"
 
@@ -80,14 +81,26 @@ set_numbered_status (SeahorseWidget *swidget, const gchar *t1, const gchar *t2, 
 }
 
 static void
+import_done (SeahorseOperation *op, SeahorseWidget *swidget)
+{
+    GError *err = NULL;
+    
+    /* 
+     * TODO: We should display the number of keys actually 
+     * imported, but that's hard to do 
+     */
+    
+    if (!seahorse_operation_is_successful (op)) {
+        seahorse_operation_steal_error (op, &err);
+        seahorse_util_handle_error (err, _("Couldn't import keys into keyring"));
+    }
+}
+
+static void
 import_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
-    SeahorseKeySource *sksrc;
-    gpgme_data_t data;
-    GError *err = NULL;
-    gchar *text;
+    SeahorseOperation *op;
     GList *keys;
-    guint n;
     
     keys = seahorse_key_store_get_selected_keys (GTK_TREE_VIEW (
                 glade_xml_get_widget (swidget->xml, KEY_LIST)));
@@ -95,37 +108,44 @@ import_activate (GtkWidget *widget, SeahorseWidget *swidget)
     /* No keys, nothing to do */
     if (keys == NULL)
         return;
-
-    text = seahorse_op_export_text (keys, FALSE, &err);
-    g_list_free (keys);
-    if (text == NULL) {
-        seahorse_util_handle_error (err, _("Couldn't retrieve key data from key server"));
-        return;
-    } 
     
-    data = gpgmex_data_new_from_mem (text, strlen (text), 0);
-
-    /* The default key source */
-    sksrc = seahorse_context_find_key_source (SCTX_APP(), SKEY_PGP, SKEY_LOC_LOCAL);
-    g_return_if_fail (sksrc && SEAHORSE_IS_PGP_SOURCE (sksrc));
+    op = seahorse_context_transfer_keys (SCTX_APP (), keys, NULL);
+    g_return_if_fail (op != NULL);
     
-    n = seahorse_op_import_text (SEAHORSE_PGP_SOURCE (sksrc), text, &err);
-    if (n == -1) 
-        seahorse_util_handle_error (err, _("Couldn't import keys into keyring"));
-    else
-        set_numbered_status (swidget, _("Imported %d key into keyring"), 
-                                      _("Imported %d keys into keyring"), n);
-
-    gpgmex_data_release (data);
-    g_free (text);
+    if (seahorse_operation_is_running (op)) {
+        seahorse_progress_show (op, _("Importing keys from key servers"), TRUE);
+        g_signal_connect (op, "done", G_CALLBACK (import_done), swidget);
+    }
+    
+    /* Running operation refs itself */
+    g_object_unref (op);
 } 
+
+static void
+export_done (SeahorseOperation *op, SeahorseWidget *swidget)
+{
+    GError *err = NULL;
+    gchar *uri;
+
+    uri = g_object_get_data (G_OBJECT (op), "export-uri");
+    g_return_if_fail (uri != NULL);
+    
+    if (!seahorse_operation_is_successful (op)) {
+        seahorse_operation_steal_error (op, &err);
+        seahorse_util_handle_error (err, _("Couldn't write keys to file: %s"), 
+                                           seahorse_util_uri_get_last (uri));
+    }
+    
+}
 
 static void
 export_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
+    SeahorseOperation *op;
     GtkWidget *dialog;
     gchar* uri = NULL;
     GError *err = NULL;
+    gpgme_data_t data;
     GList *keys;
      
     keys = seahorse_key_store_get_selected_keys (GTK_TREE_VIEW (
@@ -143,23 +163,76 @@ export_activate (GtkWidget *widget, SeahorseWidget *swidget)
     uri = seahorse_util_chooser_save_prompt (dialog);
 
     if(uri) {
-        if (!seahorse_op_export_file (keys, FALSE, uri, &err))
-            seahorse_util_handle_error (err, _("Couldn't export key to \"%s\""),
+        
+        data = seahorse_vfs_data_create (uri, SEAHORSE_VFS_WRITE, &err);
+        if (!data) {
+            seahorse_util_handle_error (err, _("Couldn't write keys to file: %s"), 
                                         seahorse_util_uri_get_last (uri));
-    }      
-
-    g_free (uri);
+            g_free (uri);
+            
+        } else { 
+            
+            op = seahorse_key_source_export_keys (keys, data);
+            g_return_if_fail (op != NULL);
+        
+            g_object_set_data_full (G_OBJECT (op), "export-uri", uri, g_free);
+            g_object_set_data_full (G_OBJECT (op), "export-data", data, 
+                                    (GDestroyNotify)gpgmex_data_release);
+    
+            if (seahorse_operation_is_running (op)) {
+                seahorse_progress_show (op, _("Retrieving keys"), TRUE);
+                g_signal_connect (op, "done", G_CALLBACK (export_done), swidget);
+            } else {
+                export_done (op, swidget);
+            }
+        
+            /* Running operation refs itself */
+            g_object_unref (op);
+        }
+    }
+    
+    /* uri is freed with op */
     g_list_free (keys);
+}
+
+static void
+copy_done (SeahorseOperation *op, SeahorseWidget *swidget)
+{
+    GdkAtom atom;
+    GtkClipboard *board;
+    gchar *text;
+    GError *err = NULL;
+    gpgme_data_t data;
+    guint num;
+    
+    if (!seahorse_operation_is_successful (op)) {
+        seahorse_operation_steal_error (op, &err);
+        seahorse_util_handle_error (err, _("Couldn't retrieve data from key server"));
+    }
+    
+    data = (gpgme_data_t)seahorse_operation_get_result (op);
+    g_return_if_fail (data != NULL);
+    
+    text = seahorse_util_write_data_to_text (data, FALSE);
+    g_return_if_fail (text != NULL);
+    
+    atom = gdk_atom_intern ("CLIPBOARD", FALSE);
+    board = gtk_clipboard_get (atom);
+    gtk_clipboard_set_text (board, text, strlen (text));
+    g_free (text);
+
+    num = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (op), "num-keys"));
+    if (num > 0) {
+        set_numbered_status (swidget, _("Copied %d key"), 
+                                      _("Copied %d keys"), num);
+    }
 }
 
 /* Copies key to clipboard */
 static void
 copy_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
-    GdkAtom atom;
-    GtkClipboard *board;
-    gchar *text;
-    GError *err = NULL;
+    SeahorseOperation *op;
     GList *keys;
     guint num;
   
@@ -169,21 +242,22 @@ copy_activate (GtkWidget *widget, SeahorseWidget *swidget)
     num = g_list_length (keys);
     if (num == 0)
         return;
-               
-    text = seahorse_op_export_text (keys, FALSE, &err);
-    g_list_free (keys);
     
-    if (text == NULL)
-        seahorse_util_handle_error (err, _("Couldn't retrieve key data from key server"));
-    else {
-        atom = gdk_atom_intern ("CLIPBOARD", FALSE);
-        board = gtk_clipboard_get (atom);
-        gtk_clipboard_set_text (board, text, strlen (text));
-        g_free (text);
-
-        set_numbered_status (swidget, _("Copied %d key"), 
-                                      _("Copied %d keys"), num);
+    op = seahorse_key_source_export_keys (keys, NULL);
+    g_return_if_fail (op != NULL);
+    
+    g_object_set_data (G_OBJECT (op), "num-keys", GINT_TO_POINTER (num));
+        
+    if (seahorse_operation_is_running (op)) {
+        seahorse_progress_show (op, _("Retrieving keys"), TRUE);
+        g_signal_connect (op, "done", G_CALLBACK (copy_done), swidget);
+    } else {
+        copy_done (op, swidget);
     }
+        
+    /* Running operation refs itself */
+    g_object_unref (op);
+    g_list_free (keys);
 }
 
 static void
@@ -437,7 +511,7 @@ seahorse_keyserver_results_show (SeahorseOperation *op, const gchar *search)
 
     /* Free these when the keyset goes away */
     g_object_set_data_full (G_OBJECT (skset), "search-text", t, g_free);
-    g_object_set_data_full (G_OBJECT (skset), "predicate", t, g_free);
+    g_object_set_data_full (G_OBJECT (skset), "predicate", pred, g_free);
     
     /* A new key store only showing public keys */
     skstore = seahorse_key_manager_store_new (skset, view);

@@ -31,7 +31,17 @@
 #define SEAHORSE_VFS_WRITE  0x00000001
 #define SEAHORSE_VFS_DELAY  0x00000010
 
-gpgme_data_t seahorse_vfs_data_create (const gchar *uri, guint mode, 
-                                       gpg_error_t* err);
+gpgme_data_t        seahorse_vfs_data_create        (const gchar *uri, guint mode, 
+                                                     GError **err);
+                                       
+/* Deprecated compat API, eventually to be removed */
+gpgme_data_t        seahorse_vfs_data_create_gerr   (const gchar *uri, guint mode, 
+                                                     gpgme_error_t *err);
+
+gboolean            seahorse_vfs_data_write_all     (gpgme_data_t data, const void* buffer, 
+                                                     size_t len, GError **err);
+
+gboolean            seahorse_vfs_set_file_contents  (const gchar *uri, const gchar *text, 
+                                                     guint len, GError **err);
 
 #endif /* __SEAHORSE_VFS_DATA__ */

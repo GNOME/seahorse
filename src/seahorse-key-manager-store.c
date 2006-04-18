@@ -33,6 +33,7 @@
 #include "eggtreemultidnd.h"
 #include "seahorse-pgp-key.h"
 #include "seahorse-ssh-key.h"
+#include "seahorse-vfs-data.h"
 
 #define KEY_MANAGER_SORT_KEY "/apps/seahorse/listing/sort_by"
 
@@ -369,14 +370,14 @@ drag_data_get (GtkWidget *widget, GdkDragContext *context,
     gchar *t, *n;
     GList *keys;
     GError *err = NULL;
-    gpgme_error_t gerr;
     gpgme_data_t data;
+    gchar *text;
 
     DBG_PRINT (("drag_data_get %d -->\n", info)); 
     
     op = (SeahorseOperation*)g_object_get_data (G_OBJECT (widget), "drag-operation");
     if (op == NULL) {
-		DBG_PRINT (("No operation in drag"));
+        DBG_PRINT (("No operation in drag"));
         return;
     }
 
@@ -393,8 +394,12 @@ drag_data_get (GtkWidget *widget, GdkDragContext *context,
     data = (gpgme_data_t)g_object_get_data (G_OBJECT (op), "result-data");
     g_return_if_fail (data != NULL);
     
+    text = seahorse_util_write_data_to_text (data, FALSE);
+    g_return_if_fail (text != NULL);
+    
     if (info == TEXT_PLAIN) {
-        t = seahorse_util_write_data_to_text (data, FALSE);
+        DBG_PRINT (("returning key text\n"));
+        t = text;
 
     } else {
         t = (gchar*)g_object_get_data (G_OBJECT (widget), "drag-file");
@@ -407,26 +412,29 @@ drag_data_get (GtkWidget *widget, GdkDragContext *context,
             g_return_if_fail (n != NULL);
             t = g_build_filename(g_get_tmp_dir (), n, NULL);
             g_free (n);
-            
-            gerr = seahorse_util_write_data_to_file (t, data, FALSE);
-            g_return_if_fail (GPG_IS_OK (gerr));
 
             g_object_set_data_full (G_OBJECT (widget), "drag-file", t,
                                     (GDestroyNotify)cleanup_file);
-        } 
-        
-        t = g_strdup (t);
+            
+            DBG_PRINT (("writing to temp file: %s\n", t));
+            
+            if (!seahorse_vfs_set_file_contents (t, text, strlen (text), &err)) {
+                seahorse_util_handle_error (err, _("Couldn't write key to file"));
+                g_object_set_data (G_OBJECT (widget), "drag-file", NULL);
+                t = NULL;
+            }
+        }
     }
     
-    if (t != NULL) {            
+    if (t != NULL) {
         DBG_PRINT (("%s\n", t));
-    	gtk_selection_data_set (selection_data,  selection_data->target, 8, 
+        gtk_selection_data_set (selection_data,  selection_data->target, 8, 
                                 (const guchar*)t, strlen (t));
     }
 
     DBG_PRINT(("drag_data_get <--\n"));
 
-    g_free(t);
+    g_free(text);
 }
 
 /**

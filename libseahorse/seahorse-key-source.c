@@ -26,6 +26,7 @@
 #include "seahorse-marshal.h"
 #include "seahorse-context.h"
 #include "seahorse-pgp-key.h"
+#include "seahorse-util.h"
 
 #ifdef WITH_SSH
 #include "seahorse-ssh-key.h"
@@ -194,6 +195,68 @@ seahorse_key_source_import_sync (SeahorseKeySource *sksrc, gpgme_data_t data,
     
     g_object_unref (op);
     return ret;    
+}
+
+SeahorseOperation*
+seahorse_key_source_export_keys (GList *keys, gpgme_data_t data)
+{
+    SeahorseOperation *op = NULL;
+    SeahorseMultiOperation *mop = NULL;
+    SeahorseKeySource *sksrc;
+    SeahorseKey *skey;
+    gboolean allocated = FALSE;
+    GList *next;
+    
+    if (!data) {
+        data = gpgmex_data_new ();
+        allocated = TRUE;
+    }
+    
+    /* Sort by key source */
+    keys = g_list_copy (keys);
+    keys = seahorse_util_keylist_sort (keys);
+    
+    while (keys) {
+     
+        /* Break off one set (same keysource) */
+        next = seahorse_util_keylist_splice (keys);
+
+        g_assert (SEAHORSE_IS_KEY (keys->data));
+        skey = SEAHORSE_KEY (keys->data);
+
+        /* Export from this key source */        
+        sksrc = seahorse_key_get_source (skey);
+        g_return_val_if_fail (sksrc != NULL, FALSE);
+        
+        if (op != NULL) {
+            if (mop == NULL)
+                mop = seahorse_multi_operation_new ();
+            seahorse_multi_operation_take (mop, op);
+        }
+        
+        /* We pass our own data object, to which data is appended */
+        op = seahorse_key_source_export (sksrc, keys, FALSE, data);
+        g_return_val_if_fail (op != NULL, FALSE);
+
+        g_list_free (keys);
+        keys = next;
+    }
+    
+    if (mop) {
+        op = SEAHORSE_OPERATION (mop);
+        
+        /* 
+         * Setup the result data properly, as we would if it was a 
+         * single export operation.
+         */
+        seahorse_operation_mark_result (op, data, 
+                             allocated ? (GDestroyNotify)gpgmex_data_release : NULL);
+    }
+    
+    if (!op) 
+        op = seahorse_operation_new_complete (NULL);
+    
+    return op;
 }
 
 SeahorseOperation* 

@@ -41,6 +41,8 @@
 #include "seahorse-gpg-options.h"
 #include "seahorse-gconf.h"
 #include "seahorse-gtkstock.h"
+#include "seahorse-key-source.h"
+#include "seahorse-vfs-data.h"
 
 #ifdef WITH_SSH
 #include "seahorse-ssh-key.h"
@@ -272,14 +274,44 @@ paste_activate (GtkWidget *widget, SeahorseWidget *swidget)
          (GtkClipboardTextReceivedFunc)clipboard_received, swidget);
 }
 
-/* Copies key to clipboard */
 static void
-copy_activate (GtkWidget *widget, SeahorseWidget *swidget)
+copy_done (SeahorseOperation *op, SeahorseWidget *swidget)
 {
     GdkAtom atom;
     GtkClipboard *board;
     gchar *text;
     GError *err = NULL;
+    gpgme_data_t data;
+    guint num;
+    
+    if (!seahorse_operation_is_successful (op)) {
+        seahorse_operation_steal_error (op, &err);
+        seahorse_util_handle_error (err, _("Couldn't retrieve data from key server"));
+    }
+    
+    data = (gpgme_data_t)seahorse_operation_get_result (op);
+    g_return_if_fail (data != NULL);
+    
+    text = seahorse_util_write_data_to_text (data, FALSE);
+    g_return_if_fail (text != NULL);
+    
+    atom = gdk_atom_intern ("CLIPBOARD", FALSE);
+    board = gtk_clipboard_get (atom);
+    gtk_clipboard_set_text (board, text, strlen (text));
+    g_free (text);
+
+    num = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (op), "num-keys"));
+    if (num > 0) {
+        set_numbered_status (swidget, _("Copied %d key"), 
+                                      _("Copied %d keys"), num);
+    }
+}
+
+/* Copies key to clipboard */
+static void
+copy_activate (GtkWidget *widget, SeahorseWidget *swidget)
+{
+    SeahorseOperation *op;
     GList *keys;
     guint num;
   
@@ -288,21 +320,22 @@ copy_activate (GtkWidget *widget, SeahorseWidget *swidget)
     
     if (num == 0)
         return;
-               
-    text = seahorse_op_export_text (keys, FALSE, &err);
-    g_list_free (keys);
     
-    if (text == NULL)
-        seahorse_util_handle_error (err, _("Couldn't export key to clipboard"));
-    else {
-        atom = gdk_atom_intern ("CLIPBOARD", FALSE);
-        board = gtk_clipboard_get (atom);
-        gtk_clipboard_set_text (board, text, strlen (text));
-        g_free (text);
-
-        set_numbered_status (swidget, _("Copied %d key"), 
-                                      _("Copied %d keys"), num);
+    op = seahorse_key_source_export_keys (keys, NULL);
+    g_return_if_fail (op != NULL);
+    
+    g_object_set_data (G_OBJECT (op), "num-keys", GINT_TO_POINTER (num));
+        
+    if (seahorse_operation_is_running (op)) {
+        seahorse_progress_show (op, _("Retrieving keys"), TRUE);
+        g_signal_connect (op, "done", G_CALLBACK (copy_done), swidget);
+    } else {
+        copy_done (op, swidget);
     }
+        
+    /* Running operation refs itself */
+    g_object_unref (op);
+    g_list_free (keys);
 }
 
 /* Loads key properties if a key is selected */
@@ -318,9 +351,11 @@ properties_activate (GtkWidget *widget, SeahorseWidget *swidget)
 static void
 export_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
+    SeahorseOperation *op;
     GtkWidget *dialog;
     gchar* uri = NULL;
     GError *err = NULL;
+    gpgme_data_t data;
     GList *keys;
 
     keys = get_selected_keys (swidget);
@@ -334,16 +369,25 @@ export_activate (GtkWidget *widget, SeahorseWidget *swidget)
      
     uri = seahorse_util_chooser_save_prompt (dialog);
     if(uri) {
-
-        seahorse_op_export_file (keys, FALSE, uri, &err); 
-		        
-        if (err != NULL)
+        data = seahorse_vfs_data_create (uri, SEAHORSE_VFS_WRITE, &err);
+        if (data) {
+    
+            op = seahorse_key_source_export_keys (keys, data);
+            g_return_if_fail (op != NULL);
+        
+            seahorse_operation_wait (op);
+            gpgmex_data_release (data);
+    
+            if (!seahorse_operation_is_successful (op)) 
+                seahorse_operation_steal_error (op, &err);
+        }
+        
+        if (err) 
             seahorse_util_handle_error (err, _("Couldn't export key to \"%s\""),
-                    seahorse_util_uri_get_last (uri));
-                    
-        g_free (uri);
+                                        seahorse_util_uri_get_last (uri));
     }
     
+    g_free (uri);
     g_list_free (keys);
 }
 
