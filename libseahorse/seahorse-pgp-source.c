@@ -929,10 +929,9 @@ seahorse_pgp_source_export (SeahorseKeySource *sksrc, GList *keys,
     if (data == NULL) {
         
         /* Tie to operation when we create our own (auto-free) */
-        gerr = gpgme_data_new (&data);
-        g_return_val_if_fail (GPG_IS_OK (gerr), NULL);
+        data = gpgmex_data_new ();
         seahorse_operation_mark_result (operation, data, 
-                                        (GDestroyNotify)gpgme_data_release);
+                                        (GDestroyNotify)gpgmex_data_release);
     } else {
        
         /* Don't free when people pass us their own data */

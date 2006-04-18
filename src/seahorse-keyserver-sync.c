@@ -85,7 +85,6 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
     SeahorseMultiOperation *mop;
     SeahorseOperation *op;
     GError *err = NULL;
-    gpgme_error_t gerr;
     gchar *keyserver;
     GSList *ks, *l;
     GList *keys;
@@ -136,8 +135,7 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
             seahorse_util_handle_error (err, _("Couldn't export keys"));
         } else {
             /* New GPGME data which copies original text */
-            gerr = gpgme_data_new_from_mem (&data, exported, strlen (exported), 0);
-            g_return_if_fail (GPG_IS_OK (gerr));
+            data = gpgmex_data_new_from_mem (exported, strlen (exported), 0);
 
             sksrc = seahorse_context_remote_key_source (SCTX_APP (), keyserver);
             g_return_if_fail (sksrc != NULL);
@@ -145,7 +143,7 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
             op = seahorse_key_source_import (sksrc, data);
             g_return_if_fail (op != NULL);
             
-            gpgme_data_release (data);
+            gpgmex_data_release (data);
             g_free (exported);
             
             g_signal_connect (op, "done", G_CALLBACK (sync_import_complete), sksrc);

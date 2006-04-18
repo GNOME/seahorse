@@ -911,10 +911,9 @@ seahorse_hkp_source_export_raw (SeahorseKeySource *sksrc, GSList *keyids,
         seahorse_operation_mark_result (SEAHORSE_OPERATION (hop), data, NULL);
     } else {
         /* But when we auto create a data object then we free it */
-        gpgme_data_new (&data);
-        g_return_val_if_fail (data != NULL, NULL);
+        data = gpgmex_data_new ();
         seahorse_operation_mark_result (SEAHORSE_OPERATION (hop), data, 
-                                        (GDestroyNotify)gpgme_data_release);
+                                        (GDestroyNotify)gpgmex_data_release);
     }
     
     for (l = keyids; l; l = g_slist_next (l)) {

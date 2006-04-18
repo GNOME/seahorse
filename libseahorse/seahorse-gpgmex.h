@@ -39,6 +39,22 @@
 #define GPG_E(e)            (gpgme_error (e))
 
 /* -----------------------------------------------------------------------------
+ * DATA ALLOCATION
+ */
+ 
+/* 
+ * GTK/Glib use a model where if allocation fails, the program exits. These 
+ * helper functions extend certain GPGME calls to provide the same behavior.
+ */
+ 
+gpgme_data_t        gpgmex_data_new          ();
+
+void                gpgmex_data_release      (gpgme_data_t data);
+
+gpgme_data_t        gpgmex_data_new_from_mem (const char *buffer, size_t size,
+                                              gboolean copy);
+
+/* -----------------------------------------------------------------------------
  * KEY ALLOCATION
  */
  

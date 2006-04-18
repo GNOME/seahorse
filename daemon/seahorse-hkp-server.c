@@ -379,8 +379,7 @@ lookup_handle_get (SoupMessage *msg, GHashTable *args)
         return lookup_handle_error (msg, "pks request did not include a <b>search</b> property", GPG_OK);
     
     /* Retrieve the key */
-    gerr = gpgme_data_new (&data);
-    g_return_val_if_fail (GPG_IS_OK (gerr), SOUP_STATUS_INTERNAL_SERVER_ERROR);
+    data = gpgmex_data_new ();
     
     gpgme_set_armor (gpgme_ctx, 1);
     gerr = gpgme_op_export (gpgme_ctx, search, 0, data);

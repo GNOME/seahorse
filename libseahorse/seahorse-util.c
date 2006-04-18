@@ -248,10 +248,10 @@ seahorse_util_write_data_to_file (const gchar *path, gpgme_data_t data,
     }
 
     if (release)
-        gpgme_data_release (data);
+        gpgmex_data_release (data);
     
-    gpgme_data_release (file);	
-	return err;
+    gpgmex_data_release (file);
+    return err;
 }
 
 /**
@@ -280,7 +280,7 @@ seahorse_util_write_data_to_text (gpgme_data_t data, gboolean release)
 		string = g_string_append_len (string, buffer, nread);
 
     if (release)
-        gpgme_data_release (data);
+        gpgmex_data_release (data);
     
 	text = string->str;
 	g_string_free (string, FALSE);

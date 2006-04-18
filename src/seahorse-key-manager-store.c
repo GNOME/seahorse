@@ -314,10 +314,9 @@ drag_begin (GtkWidget *widget, GdkDragContext *context, SeahorseKeyStore *skstor
             
             /* The data object where we export to */
             if (!data) {
-                gpgme_data_new (&data);
-                g_return_if_fail (data != NULL);
+                data = gpgmex_data_new ();
                 g_object_set_data_full (G_OBJECT (mop), "result-data", data,
-                                        (GDestroyNotify)gpgme_data_release);
+                                        (GDestroyNotify)gpgmex_data_release);
             }
         
             /* We pass our own data object, to which data is appended */

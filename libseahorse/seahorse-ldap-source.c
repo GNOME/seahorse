@@ -910,7 +910,6 @@ start_get_operation_multiple (SeahorseLDAPSource *lsrc, GSList *fingerprints,
                               gpgme_data_t data)
 {
     SeahorseLDAPOperation *lop;
-    gpgme_error_t gerr;
     
     g_assert (g_slist_length (fingerprints) > 0);
     
@@ -923,10 +922,9 @@ start_get_operation_multiple (SeahorseLDAPSource *lsrc, GSList *fingerprints,
         seahorse_operation_mark_result (SEAHORSE_OPERATION (lop), data, NULL);
     } else {
         /* But when we auto create a data object then we free it */
-        gerr = gpgme_data_new (&data);
-        g_return_val_if_fail (data != NULL, NULL);
+        data = gpgmex_data_new ();
         seahorse_operation_mark_result (SEAHORSE_OPERATION (lop), data, 
-                                        (GDestroyNotify)gpgme_data_release);
+                                        (GDestroyNotify)gpgmex_data_release);
     }
     
     g_object_set_data (G_OBJECT (lop), "fingerprints", fingerprints);

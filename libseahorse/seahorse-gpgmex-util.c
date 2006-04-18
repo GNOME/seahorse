@@ -22,11 +22,77 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <errno.h>
 
 #include "config.h"
 #include "seahorse-gpgmex.h"
 #include <glib.h>
 
+/* -----------------------------------------------------------------------------
+ * DATA
+ */
+
+gpgme_data_t 
+gpgmex_data_new ()
+{
+    gpgme_error_t gerr;
+    gpgme_data_t data;
+    
+    gerr = gpgme_data_new (&data);
+    if (!GPG_IS_OK (gerr)) {
+        if (gpgme_err_code_to_errno (gerr) == ENOMEM || 
+            gpgme_err_code (gerr) == GPG_ERR_ENOMEM) {
+                
+            g_error ("%s: failed to allocate gpgme_data_t", G_STRLOC);
+                
+        } else {
+            /* The only reason this should fail is above */
+            g_assert_not_reached ();
+            
+            /* Just in case */
+            abort ();
+        }
+    }
+    
+    return data;
+}
+
+gpgme_data_t
+gpgmex_data_new_from_mem (const char *buffer, size_t size, gboolean copy)
+{
+    gpgme_data_t data;
+    gpgme_error_t gerr;
+    
+    gerr = gpgme_data_new_from_mem (&data, buffer, size, copy ? 0 : 1);
+    if (!GPG_IS_OK (gerr)) {
+        if (gpgme_err_code_to_errno (gerr) == ENOMEM || 
+            gpgme_err_code (gerr) == GPG_ERR_ENOMEM) {
+                
+            g_error ("%s: failed to allocate gpgme_data_t", G_STRLOC);
+                
+        } else {
+            /* The only reason this should fail is above */
+            g_assert_not_reached ();
+            
+            /* Just in case */
+            abort ();
+        }
+    }
+    
+    return data;
+}
+
+void
+gpgmex_data_release (gpgme_data_t data)
+{
+    if (data)
+        gpgme_data_release (data);
+}
+
+/* -----------------------------------------------------------------------------
+ * KEYS
+ */
+ 
 /* Our special keylist mode flag */
 #define SEAHORSE_KEYLIST_MODE    0x04000000
 

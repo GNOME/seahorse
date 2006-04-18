@@ -270,12 +270,11 @@ edit_gpgme_key (SeahorsePGPSource *psrc, gpgme_key_t key, SeahorseEditParm *parm
     
     g_assert (psrc && SEAHORSE_IS_PGP_SOURCE (psrc));
     
-    err = gpgme_data_new (&out);
-    g_return_val_if_fail (GPG_IS_OK (err), err);
+    out = gpgmex_data_new ();
     
     /* do edit callback, release data */
     err = gpgme_op_edit (psrc->gctx, key, seahorse_pgp_key_op_edit, parms, out);
-    gpgme_data_release (out);
+    gpgmex_data_release (out);
     
     return err;
 }

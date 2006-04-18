@@ -83,7 +83,6 @@ static void
 import_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
     SeahorseKeySource *sksrc;
-    gpgme_error_t gerr;
     gpgme_data_t data;
     GError *err = NULL;
     gchar *text;
@@ -104,8 +103,7 @@ import_activate (GtkWidget *widget, SeahorseWidget *swidget)
         return;
     } 
     
-    gerr = gpgme_data_new_from_mem (&data, text, strlen (text), 0);
-    g_return_if_fail (GPG_IS_OK (gerr));
+    data = gpgmex_data_new_from_mem (text, strlen (text), 0);
 
     /* The default key source */
     sksrc = seahorse_context_find_key_source (SCTX_APP(), SKEY_PGP, SKEY_LOC_LOCAL);
@@ -118,7 +116,7 @@ import_activate (GtkWidget *widget, SeahorseWidget *swidget)
         set_numbered_status (swidget, _("Imported %d key into keyring"), 
                                       _("Imported %d keys into keyring"), n);
 
-    gpgme_data_release (data);
+    gpgmex_data_release (data);
     g_free (text);
 } 
 
