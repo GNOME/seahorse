@@ -169,6 +169,7 @@ DECLARE_OPERATION (HKP, hkp)
     SoupSession *session;           /* The HTTP session */
     guint total;                    /* Number of requests queued */
     guint requests;                 /* Number of requests remaining */
+    gboolean cancelling;            /* Cancelling the request, don't process */
 END_DECLARE_OPERATION
 
 IMPLEMENT_OPERATION (HKP, hkp)
@@ -251,9 +252,12 @@ seahorse_hkp_operation_cancel (SeahorseOperation *operation)
     g_assert (SEAHORSE_IS_HKP_OPERATION (operation));
     hop = SEAHORSE_HKP_OPERATION (operation);
     
+    g_return_if_fail (seahorse_operation_is_running (operation));
+    hop->cancelling = TRUE;
+    
     if (hop->session != NULL) 
         soup_session_abort (hop->session);
-
+    
     seahorse_operation_mark_done (operation, TRUE, NULL);
 }
 
@@ -332,6 +336,9 @@ fail_hkp_operation (SeahorseHKPOperation *hop, SoupMessage *msg, const gchar *te
 {
     gchar *t, *server;
     GError *error = NULL;
+    
+    if (hop->cancelling)
+        return;
 
     g_object_get (hop->hsrc, "key-server", &server, NULL);
 
@@ -528,6 +535,9 @@ refresh_callback (SoupMessage *msg, SeahorseHKPOperation *hop)
     GList *keys, *k;
     gchar *t;
     
+    if (hop->cancelling)
+        return;
+    
     DEBUG_HKP (("[hkp] Search Result:\n"));
     DEBUG_RESPONSE (msg);
     
@@ -600,6 +610,9 @@ send_callback (SoupMessage *msg, SeahorseHKPOperation *hop)
 {
     gchar *errmsg;
 
+    if (hop->cancelling)
+        return;
+
     DEBUG_HKP (("[hkp] Send Result:\n"));
     DEBUG_RESPONSE (msg);
     
@@ -658,6 +671,9 @@ get_callback (SoupMessage *msg, SeahorseHKPOperation *hop)
     const gchar *text;
     gboolean ret;
     guint len;
+    
+    if (hop->cancelling)
+        return;
     
     DEBUG_HKP (("[hkp] Get Result:\n"));
     DEBUG_RESPONSE (msg);

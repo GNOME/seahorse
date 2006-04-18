@@ -458,8 +458,9 @@ multi_operation_done (SeahorseOperation *op, SeahorseMultiOperation *mop)
 
     mop->operations = seahorse_operation_list_purge (mop->operations);
     
-    seahorse_operation_mark_done (SEAHORSE_OPERATION (mop), FALSE, 
-                                  SEAHORSE_OPERATION (mop)->error);        
+    if (!seahorse_operation_is_cancelled (SEAHORSE_OPERATION (mop))) 
+        seahorse_operation_mark_done (SEAHORSE_OPERATION (mop), FALSE, 
+                                      SEAHORSE_OPERATION (mop)->error);
 }
 
 /* OBJECT ------------------------------------------------------------------- */
@@ -512,7 +513,7 @@ seahorse_multi_operation_cancel (SeahorseOperation *operation)
     mop = SEAHORSE_MULTI_OPERATION (operation);
 
     seahorse_operation_list_cancel (mop->operations);
-    seahorse_operation_list_purge (mop->operations);    
+    mop->operations = seahorse_operation_list_purge (mop->operations);    
     
     seahorse_operation_mark_done (operation, TRUE, 
                                   SEAHORSE_OPERATION (mop)->error);

@@ -111,6 +111,13 @@ operation_done (SeahorseOperation *operation, GtkWidget *appbar)
     operation_progress (operation, "", 0.0, appbar);    
 }
 
+static void
+disconnect_progress (GtkWidget *widget, SeahorseOperation *op)
+{
+    g_signal_handlers_disconnect_by_func (op, operation_progress, widget);
+    g_signal_handlers_disconnect_by_func (op, operation_done, widget);
+}
+
 void 
 seahorse_progress_appbar_set_operation (GtkWidget* appbar, SeahorseOperation *operation)
 {
@@ -126,6 +133,7 @@ seahorse_progress_appbar_set_operation (GtkWidget* appbar, SeahorseOperation *op
     g_signal_connect (operation, "progress", G_CALLBACK (operation_progress), appbar);
     g_object_set_data_full (G_OBJECT (appbar), "operations", operation, 
                                 (GDestroyNotify)g_object_unref);
+    g_signal_connect (appbar, "destroy", G_CALLBACK (disconnect_progress), operation);
 
     operation_progress (operation, seahorse_operation_get_message (operation),
                         seahorse_operation_get_progress (operation), appbar);
