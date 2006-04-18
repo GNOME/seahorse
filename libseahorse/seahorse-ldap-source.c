@@ -326,6 +326,12 @@ seahorse_ldap_operation_dispose (GObject *gobject)
         g_object_unref (lop->lsrc);
         lop->lsrc = NULL;
     }
+    
+    if (lop->ldap_op != -1) {
+        if (lop->ldap)
+            ldap_abandon (lop->ldap, lop->ldap_op);
+        lop->ldap_op = -1;
+    }
 
     if (lop->ldap) {
         ldap_unbind (lop->ldap);

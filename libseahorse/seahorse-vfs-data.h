@@ -39,9 +39,9 @@ gpgme_data_t        seahorse_vfs_data_create_gerr   (const gchar *uri, guint mod
                                                      gpgme_error_t *err);
 
 gboolean            seahorse_vfs_data_write_all     (gpgme_data_t data, const void* buffer, 
-                                                     size_t len, GError **err);
+                                                     gint len, GError **err);
 
 gboolean            seahorse_vfs_set_file_contents  (const gchar *uri, const gchar *text, 
-                                                     guint len, GError **err);
+                                                     gint len, GError **err);
 
 #endif /* __SEAHORSE_VFS_DATA__ */

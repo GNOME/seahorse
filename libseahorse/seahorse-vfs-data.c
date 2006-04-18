@@ -513,14 +513,11 @@ seahorse_vfs_data_create_gerr (const gchar *uri, guint mode, gpg_error_t* err)
 }
 
 gboolean
-seahorse_vfs_set_file_contents (const gchar *uri, const gchar *text, guint len, 
+seahorse_vfs_set_file_contents (const gchar *uri, const gchar *text, gint len, 
                                 GError **err)
 {
     gpgme_data_t data;
     gboolean ret;
-    
-    if (len < 0)
-        len = strlen (text);
     
     data = seahorse_vfs_data_create (uri, SEAHORSE_VFS_WRITE, err);
     if (!data)
@@ -533,10 +530,13 @@ seahorse_vfs_set_file_contents (const gchar *uri, const gchar *text, guint len,
 }
 
 gboolean 
-seahorse_vfs_data_write_all (gpgme_data_t data, const void* buffer, size_t len, GError **err)
+seahorse_vfs_data_write_all (gpgme_data_t data, const void* buffer, gint len, GError **err)
 {
     guchar *text = (guchar*)buffer;
     gint written;
+    
+    if (len < 0)
+        len = strlen ((gchar*)text);
     
     while (len > 0) {
         written = gpgme_data_write (data, (void*)text, len);

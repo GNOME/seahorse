@@ -472,7 +472,7 @@ sync_activate (GtkWidget *widget, SeahorseWidget *swidget)
     }
     
     if (keys == NULL)
-        keys = seahorse_context_find_keys (SCTX_APP (), SKEY_PGP, SKEY_LOC_LOCAL, 0);
+        keys = seahorse_context_find_keys (SCTX_APP (), SKEY_PGP, 0, SKEY_LOC_LOCAL);
     seahorse_keyserver_sync_show (keys);
     g_list_free (keys);
 #endif

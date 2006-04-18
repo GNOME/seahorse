@@ -113,18 +113,21 @@ import_done (SeahorseOperation *op, SeahorseTransferOperation *top)
     /* A release guard */
     g_object_ref (top);
     
-    if (seahorse_operation_is_cancelled (op)) {
-        seahorse_operation_mark_done (SEAHORSE_OPERATION (top), TRUE, NULL);
+    if (seahorse_operation_is_running (SEAHORSE_OPERATION (top))) {
+        if (seahorse_operation_is_cancelled (op)) {
+            seahorse_operation_mark_done (SEAHORSE_OPERATION (top), TRUE, NULL);
         
-    } else if (!seahorse_operation_is_successful (op)) {
-        seahorse_operation_steal_error (op, &err);
-        seahorse_operation_mark_done (SEAHORSE_OPERATION (top), FALSE, err);
+        } else if (!seahorse_operation_is_successful (op)) {
+            seahorse_operation_steal_error (op, &err);
+            seahorse_operation_mark_done (SEAHORSE_OPERATION (top), FALSE, err);
+        }
     }
     
     g_object_unref (pv->operation);
     pv->operation = NULL;
 
-    seahorse_operation_mark_done (SEAHORSE_OPERATION (top), FALSE, NULL);
+    if (seahorse_operation_is_running (SEAHORSE_OPERATION (top)))
+        seahorse_operation_mark_done (SEAHORSE_OPERATION (top), FALSE, NULL);
 
     /* End release guard */
     g_object_unref (top);
@@ -228,10 +231,7 @@ static void
 seahorse_transfer_operation_init (SeahorseTransferOperation *top)
 {
     SeahorseTransferOperationPrivate *pv = SEAHORSE_TRANSFER_OPERATION_GET_PRIVATE (top);
-    gpgme_error_t gerr;
-    
-    gerr = gpgme_data_new (&(pv->data));
-    g_return_if_fail (GPG_IS_OK (gerr));
+    pv->data = gpgmex_data_new ();
 }
 
 static void 
@@ -286,9 +286,10 @@ seahorse_transfer_operation_dispose (GObject *gobject)
     SeahorseTransferOperationPrivate *pv = SEAHORSE_TRANSFER_OPERATION_GET_PRIVATE (top);
 
     /* Cancel any events in progress */
-    if (pv->operation)
+    if (pv->operation) {
         seahorse_operation_cancel (pv->operation);
-    g_object_unref (pv->operation);
+        g_object_unref (pv->operation);
+    }
     pv->operation = NULL;
     
     G_OBJECT_CLASS (operation_parent_class)->dispose (gobject);
@@ -335,8 +336,8 @@ seahorse_transfer_operation_cancel (SeahorseOperation *operation)
     g_object_unref (pv->operation);
     pv->operation = NULL;
     
-    g_assert (seahorse_operation_is_cancelled (operation));
-    g_assert (!seahorse_operation_is_running (operation));
+    if (seahorse_operation_is_running (operation))
+        seahorse_operation_mark_done (operation, TRUE, NULL);
 }
 
 /* -----------------------------------------------------------------------------

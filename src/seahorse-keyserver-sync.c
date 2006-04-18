@@ -50,25 +50,9 @@ static void
 sync_export_complete (SeahorseOperation *op, SeahorseKeySource *sksrc)
 {
     GError *err = NULL;
+    gchar *keyserver;
 
-    if (seahorse_operation_is_successful (op)) {
-        SeahorseKeySource *lsrc;
-        gpgme_data_t data;
-        
-        data = seahorse_operation_get_result (op);
-        g_return_if_fail (data != NULL);
-
-        /* Now import it into the local key source */
-        lsrc = seahorse_context_find_key_source (SCTX_APP (), SKEY_PGP, SKEY_LOC_LOCAL);
-        g_return_if_fail (lsrc);
-        
-        if (!seahorse_key_source_import_sync (lsrc, data, &err))
-            seahorse_util_handle_error (err, "Couldn't import keys");
-        
-        /* |data| is owned by the operation, no need to free */
-        
-    } else {
-        gchar *keyserver;
+    if (!seahorse_operation_is_successful (op)) {
         g_object_get (sksrc, "key-server", &keyserver, NULL);
 
         seahorse_operation_steal_error (op, &err);
@@ -82,6 +66,7 @@ static void
 ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 {
     SeahorseKeySource *sksrc;
+    SeahorseKeySource *lsksrc;
     SeahorseMultiOperation *mop;
     SeahorseOperation *op;
     gchar *keyserver;
@@ -112,15 +97,21 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
     
     for (l = ks; l; l = g_slist_next (l)) {
         
-        sksrc = seahorse_context_remote_key_source (SCTX_APP(), (const gchar*)(l->data));
+        sksrc = seahorse_context_remote_key_source (SCTX_APP (), (const gchar*)(l->data));
         g_return_if_fail (sksrc != NULL);
         
-        op = seahorse_transfer_operation_new (_("Syncing keys"), sksrc, NULL, keyids);
-        g_return_if_fail (op != NULL);
+        lsksrc = seahorse_context_find_key_source (SCTX_APP (), 
+                        seahorse_key_source_get_ktype (sksrc), SKEY_LOC_LOCAL);
+        
+        if (lsksrc) {
+            op = seahorse_transfer_operation_new (_("Syncing keys"), sksrc, lsksrc, keyids);
+            g_return_if_fail (op != NULL);
 
-        g_signal_connect (op, "done", G_CALLBACK (sync_export_complete), sksrc);
-        seahorse_multi_operation_take (mop, op);
+            g_signal_connect (op, "done", G_CALLBACK (sync_export_complete), sksrc);
+            seahorse_multi_operation_take (mop, op);
+        }
     }
+    
     seahorse_util_string_slist_free (ks);
     
     /* Publishing keys online */    
@@ -229,7 +220,7 @@ seahorse_keyserver_sync_show (GList *keys)
                       GINT_TO_POINTER (notify_id));
 
     keys = g_list_copy (keys);
-    g_return_val_if_fail (SEAHORSE_IS_KEY (keys->data), win);    
+    g_return_val_if_fail (keys && SEAHORSE_IS_KEY (keys->data), win);    
     g_object_set_data_full (G_OBJECT (swidget), "publish-keys", keys, 
                             (GDestroyNotify)g_list_free);
     
