@@ -1280,7 +1280,7 @@ do_trust (SeahorseWidget *swidget)
         return;
     
     /* Remote keys */
-    if (keyloc != SKEY_LOC_LOCAL) {
+    if (keyloc < SKEY_LOC_LOCAL) {
         
         show_glade_widget (swidget, "manual-trust-area", FALSE);
         show_glade_widget (swidget, "manage-trust-area", TRUE);

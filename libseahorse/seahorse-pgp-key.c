@@ -380,9 +380,10 @@ changed_key (SeahorsePGPKey *pkey)
         
         /* The location */
         if (pkey->pubkey->keylist_mode & GPGME_KEYLIST_MODE_EXTERN && 
-            skey->location < SKEY_LOC_REMOTE)
+            skey->location <= SKEY_LOC_REMOTE)
             skey->location = SKEY_LOC_REMOTE;
-        else if (skey->location < SKEY_LOC_LOCAL)
+        
+        else if (skey->location <= SKEY_LOC_LOCAL)
             skey->location = SKEY_LOC_LOCAL;
         
         /* The type */
