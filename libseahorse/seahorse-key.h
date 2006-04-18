@@ -76,11 +76,11 @@
  * case of a key being in multiple locations, the highest location always 'wins'.
  */
 typedef enum {
-    SKEY_LOC_INVALID =        0,    /* An invalid key */
-    SKEY_LOC_UNKNOWN =       10,    /* A key we don't know anything about */
-    SKEY_LOC_SEARCHING =     20,    /* A key we're searching for but haven't found yet */
-    SKEY_LOC_REMOTE =        50,    /* A key that we've found is present remotely */
-    SKEY_LOC_LOCAL =        100,    /* A key on the local machine */
+    SKEY_LOC_INVALID =    CRYPTUI_LOC_INVALID,    /* An invalid key */
+    SKEY_LOC_UNKNOWN =    CRYPTUI_LOC_MISSING,    /* A key we don't know anything about */
+    SKEY_LOC_SEARCHING =  CRYPTUI_LOC_SEARCHING,  /* A key we're searching for but haven't found yet */
+    SKEY_LOC_REMOTE =     CRYPTUI_LOC_REMOTE,     /* A key that we've found is present remotely */
+    SKEY_LOC_LOCAL =      CRYPTUI_LOC_LOCAL,      /* A key on the local machine */
 } SeahorseKeyLoc;
 
 typedef enum {
