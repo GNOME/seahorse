@@ -38,6 +38,7 @@
 
 #include "seahorse-context.h"
 #include "seahorse-keyset.h"
+#include "seahorse-key-model.h"
 
 #define SEAHORSE_TYPE_KEY_STORE			(seahorse_key_store_get_type ())
 #define SEAHORSE_KEY_STORE(obj)			(GTK_CHECK_CAST ((obj), SEAHORSE_TYPE_KEY_STORE, SeahorseKeyStore))
@@ -57,7 +58,7 @@ typedef enum _SeahorseKeyStoreMode {
 } SeahorseKeyStoreMode;
 
 struct _SeahorseKeyStore {
-	GtkTreeStore		    parent;
+    SeahorseKeyModel        parent;
  
     /*< public >*/
     SeahorseKeyset          *skset;
@@ -68,7 +69,7 @@ struct _SeahorseKeyStore {
 
 struct _SeahorseKeyStoreClass
 {
-	GtkTreeStoreClass	parent_class;
+    SeahorseKeyModelClass    parent_class;
     
    /* Virtual method for appending a key/uid. When subclass method finishes,
     * iter should be set to the parent of the new row.
@@ -107,7 +108,6 @@ struct _SeahorseKeyStoreClass
 
 
 enum {
-    KEY_STORE_DATA,
     KEY_STORE_CHECK,
     KEY_STORE_PAIR,
     KEY_STORE_STOCK_ID,
@@ -124,7 +124,6 @@ enum {
 /* For use as first item in base class' column id list */
 #define KEY_STORE_BASE_IDS   \
             NULL,            \
-            NULL,            \
             "pair",          \
             NULL,            \
             "name",          \
@@ -133,7 +132,6 @@ enum {
             
 /* For use in base class' type list */            
 #define KEY_STORE_BASE_TYPES \
-            G_TYPE_POINTER,  \
             G_TYPE_BOOLEAN,  \
             G_TYPE_BOOLEAN,  \
             G_TYPE_STRING,   \
@@ -144,8 +142,8 @@ enum {
 
 GType               seahorse_key_store_get_type             ();
 
-void                seahorse_key_store_init                 (SeahorseKeyStore   *skstore,
-								                             GtkTreeView        *view);
+void                seahorse_key_store_initialize           (SeahorseKeyStore   *skstore,
+                                                             GtkTreeView        *view);
 
 void                seahorse_key_store_populate             (SeahorseKeyStore   *skstore);
 

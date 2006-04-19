@@ -149,7 +149,7 @@ seahorse_recipients_store_new (SeahorseKeyset *skset, GtkTreeView *view)
 	GtkTreeViewColumn *column;
 	
 	skstore = g_object_new (SEAHORSE_TYPE_RECIPIENTS_STORE, "keyset", skset, NULL);
-	seahorse_key_store_init (skstore, view);
+	seahorse_key_store_initialize (skstore, view);
 	
 	column = seahorse_key_store_append_column (view, _("Validity"), VALIDITY_STR);
 	gtk_tree_view_column_set_sort_column_id (column, VALIDITY);

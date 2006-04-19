@@ -454,7 +454,7 @@ seahorse_key_manager_store_new (SeahorseKeyset *skset, GtkTreeView *view)
     SeahorseKeyPredicate *pred;
 
 	skstore = g_object_new (SEAHORSE_TYPE_KEY_MANAGER_STORE, "keyset", skset, NULL);
-    seahorse_key_store_init (skstore, view);
+    seahorse_key_store_initialize (skstore, view);
     
     g_object_get (skset, "predicate", &pred, NULL);
 	

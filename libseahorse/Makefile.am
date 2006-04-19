@@ -68,6 +68,7 @@ libseahorse_internal_la_SOURCES = \
 	seahorse-widget.c seahorse-widget.h \
 	seahorse-op.c seahorse-op.h \
 	seahorse-keyset.c seahorse-keyset.h \
+    seahorse-key-model.c seahorse-key-model.h \
 	seahorse-key-store.c seahorse-key-store.h \
 	seahorse-recipients-store.c seahorse-recipients-store.h \
 	seahorse-util.c seahorse-util.h \
