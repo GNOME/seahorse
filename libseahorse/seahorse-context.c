@@ -2,7 +2,7 @@
  * Seahorse
  *
  * Copyright (C) 2003 Jacob Perkins
- * Copyright (C) 2005 Nate Nielsen
+ * Copyright (C) 2005, 2006 Nate Nielsen
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -981,14 +981,99 @@ seahorse_context_retrieve_keys (SeahorseContext *sctx, GQuark ktype,
         g_return_val_if_fail (op != NULL, FALSE);
     }
     
-    /* Add unknown keys for all these */
-    sksrc = seahorse_context_find_key_source (sctx, ktype, SKEY_LOC_UNKNOWN);
-    if (sksrc) {
-        for (l = keyids; l; l = g_slist_next (l)) {
-            seahorse_unknown_source_add_key (SEAHORSE_UNKNOWN_SOURCE (sksrc), 
-                                             l->data, mop ? SEAHORSE_OPERATION (mop) : op);
+    return mop ? SEAHORSE_OPERATION (mop) : op;
+}
+
+
+GList*
+seahorse_context_discover_keys (SeahorseContext *sctx, GQuark ktype, 
+                                GSList *keyids)
+{
+    GList *rkeys = NULL;
+    gchar *keyid = NULL;
+    GSList *todiscover = NULL;
+    GList *toimport = NULL;
+    SeahorseKeySource *sksrc;
+    SeahorseKey* skey;
+    SeahorseKeyLoc loc;
+    SeahorseOperation *op;
+    GSList *l;
+
+    /* Check all the keyids */
+    for (l = keyids; l; l = g_slist_next (l)) {
+        
+        g_free (keyid);
+        
+        keyid = seahorse_key_source_cannonical_keyid (ktype, (gchar*)l->data);
+        if (!keyid) {
+            g_warning ("invalid keyid: %s", (gchar*)(l->data));
+            continue;
         }
+        
+        /* Do we know about this key? */
+        skey = seahorse_context_find_key (sctx, ktype, SKEY_LOC_INVALID, keyid);
+
+        /* No such key anywhere, discover it */
+        if (!skey) {
+            todiscover = g_slist_prepend (todiscover, keyid);
+            keyid = NULL;
+            continue;
+        }
+        
+        /* Our return value */
+        rkeys = g_list_prepend (rkeys, skey);
+        
+        /* We know about this key, check where it is */
+        loc = seahorse_key_get_location (skey);
+        g_assert (loc != SKEY_LOC_INVALID);
+        
+        /* Do nothing for local keys */
+        if (loc >= SKEY_LOC_LOCAL)
+            continue;
+        
+        /* Remote keys get imported */
+        else if (loc >= SKEY_LOC_REMOTE)
+            toimport = g_list_prepend (toimport, skey);
+        
+        /* Searching keys are ignored */
+        else if (loc >= SKEY_LOC_SEARCHING)
+            continue;
+        
+        /* TODO: Should we try SKEY_LOC_UNKNOWN keys again? */
     }
     
-    return mop ? SEAHORSE_OPERATION (mop) : op;
+    g_free (keyid);
+    
+    /* Start an import process on all toimport */
+    if (toimport) {
+        op = seahorse_context_transfer_keys (sctx, toimport, NULL);
+        
+        g_list_free (toimport);
+        
+        /* Running operations ref themselves */
+        g_object_unref (op);
+    }
+    
+    /* Start a discover process on all todiscover */
+    if (todiscover) {
+        op = seahorse_context_retrieve_keys (sctx, ktype, todiscover, NULL);
+
+        /* Add unknown keys for all these */
+        sksrc = seahorse_context_find_key_source (sctx, ktype, SKEY_LOC_UNKNOWN);
+        for (l = todiscover; l; l = g_slist_next (l)) {
+            if (sksrc) {
+                skey = seahorse_unknown_source_add_key (SEAHORSE_UNKNOWN_SOURCE (sksrc), 
+                                                        l->data, op);
+                rkeys = g_list_prepend (rkeys, skey);
+            }
+            g_free (l->data);
+        }
+        
+        g_slist_free (todiscover);
+        
+        /* Running operations ref themselves */
+        g_object_unref (op);
+    }
+    
+    return rkeys;
 }

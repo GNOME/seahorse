@@ -63,7 +63,7 @@ GType                    seahorse_unknown_source_get_type      (void);
 
 SeahorseUnknownSource*   seahorse_unknown_source_new           (GQuark ktype);
 
-void                     seahorse_unknown_source_add_key       (SeahorseUnknownSource *usrc,
+SeahorseKey*             seahorse_unknown_source_add_key       (SeahorseUnknownSource *usrc,
                                                                 const gchar *keyid,
                                                                 SeahorseOperation *search);
 

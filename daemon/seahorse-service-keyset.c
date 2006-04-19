@@ -1,7 +1,7 @@
 /*
  * Seahorse
  *
- * Copyright (C) 2005 Nate Nielsen
+ * Copyright (C) 2005, 2006 Nate Nielsen
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,9 +19,11 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include "config.h"
 #include <glib.h>
 
 #include "seahorse-service.h"
+#include "seahorse-util.h"
 
 /* Special fields */
 enum {
@@ -180,110 +182,36 @@ seahorse_service_keyset_discover_keys (SeahorseServiceKeyset *keyset, const gcha
                                        gint flags, gchar ***keys, GError **error)
 {
     GArray *akeys = NULL;
-    gchar *keyid = NULL;
-    GSList *todiscover = NULL;
-    GList *toimport = NULL;
-    SeahorseKey* skey;
-    SeahorseKeyLoc loc;
-    SeahorseOperation *op;
+    GList *lkeys, *l;
+    GSList *lkeyids = NULL;
     const gchar **k;
-    gchar *t;
-    GSList *l;
-    gboolean ret = FALSE;
+    gchar *keyid;
     
-    akeys = g_array_new (TRUE, TRUE, sizeof (gchar*));
-    
-    /* Check all the keyids */
+    /* Check to make sure the key ids are valid */
     for (k = keyids; *k; k++) {
-        
-        g_free (keyid);
-        
         keyid = seahorse_key_source_cannonical_keyid (keyset->ktype, *k);
         if (!keyid) {
             g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID, 
                          _("Invalid key id: %s"), *k);
-            goto finally;
+            return FALSE;
         }
-        
-        /* Do we know about this key? */
-        skey = seahorse_context_find_key (SCTX_APP (), keyset->ktype, 
-                                          SKEY_LOC_INVALID, keyid);
-
-        /* Add to the return value */
-        t = seahorse_service_keyid_to_dbus (keyset->ktype, keyid, 0);
-        g_array_append_val (akeys, t);
-        
-        /* No such key anywhere, discover it */
-        if (!skey) {
-            todiscover = g_slist_prepend (todiscover, keyid);
-            keyid = NULL;
-            continue;
-        }
-        
-        g_free (keyid);
-        keyid = NULL;
-        
-        /* We know about this key, check where it is */
-        loc = seahorse_key_get_location (skey);
-        g_assert (loc != SKEY_LOC_INVALID);
-        
-        /* Do nothing for local keys */
-        if (loc >= SKEY_LOC_LOCAL)
-            continue;
-        
-        /* Remote keys get imported */
-        else if (loc >= SKEY_LOC_REMOTE)
-            toimport = g_list_prepend (toimport, skey);
-        
-        /* Searching keys are ignored */
-        else if (loc >= SKEY_LOC_SEARCHING)
-            continue;
-        
-        /* Not found keys are tried again */
-        else if (loc >= SKEY_LOC_UNKNOWN) {
-            todiscover = g_slist_prepend (todiscover, keyid);
-            keyid = NULL;
-        }
+        lkeyids = g_slist_prepend (lkeyids, keyid);
     }
     
-    /* Start an import process on all toimport */
-    if (toimport) {
-        op = seahorse_context_transfer_keys (SCTX_APP (), toimport, NULL);
-        /* Running operations ref themselves */
-        g_object_unref (op);
+    /* Pass it on to do the work */
+    lkeys = seahorse_context_discover_keys (SCTX_APP (), keyset->ktype, lkeyids);
+    seahorse_util_string_slist_free (lkeyids);
+    
+    /* Prepare return value */
+    akeys = g_array_new (TRUE, TRUE, sizeof (gchar*));
+    for (l = lkeys; l; l = g_list_next (l)) {
+        keyid = seahorse_service_key_to_dbus (SEAHORSE_KEY (l->data), 0);
+        akeys = g_array_append_val (akeys, keyid);
     }
+    *keys = (gchar**)g_array_free (akeys, FALSE);
+    g_list_free (lkeys);
     
-    /* Start a discover process on all todiscover */
-    if (todiscover) {
-        op = seahorse_context_retrieve_keys (SCTX_APP (), keyset->ktype, 
-                                             todiscover, NULL);
-        /* Running operations ref themselves */
-        g_object_unref (op);
-    }
-
-    ret = TRUE;
-    
-finally:
-    if (todiscover) {
-        for (l = todiscover; l; l = g_slist_next (l)) 
-            g_free (l->data);
-        g_slist_free (todiscover);
-    }
-    
-    if (toimport)
-        g_list_free (toimport);
-        
-    if (keyid)
-        g_free (keyid);
-    
-    if (ret) {
-        g_assert (akeys);
-        *keys = (gchar**)g_array_free (akeys, FALSE);
-    } else if (akeys) {
-        g_strfreev ((gchar**)g_array_free (akeys, FALSE));
-    }
-    
-    return ret;
+    return TRUE;
 }
 
 /* -----------------------------------------------------------------------------
@@ -342,7 +270,6 @@ seahorse_service_keyset_changed (SeahorseKeyset *skset, SeahorseKey *skey,
     if (euids != uids)
         seahorse_keyset_set_closure (skset, skey, GUINT_TO_POINTER (uids));
 
-g_printerr ("old: %d / current: %d\n", euids, uids);
     if (euids < uids) {
         for (i = euids; i < uids; i++) {
             id = seahorse_service_key_to_dbus (skey, i);

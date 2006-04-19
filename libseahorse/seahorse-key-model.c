@@ -246,7 +246,7 @@ seahorse_key_model_class_init (SeahorseKeyModelClass *klass)
         g_param_spec_uint ("data-column", "Column data is stored", "Column where internal data is stored",
                            0, ~0, 0, G_PARAM_READWRITE | G_PARAM_READWRITE));
 
-    signals[UPDATE_ROW] = g_signal_new ("added", SEAHORSE_TYPE_KEY_MODEL, 
+    signals[UPDATE_ROW] = g_signal_new ("update-row", SEAHORSE_TYPE_KEY_MODEL, 
                 G_SIGNAL_RUN_FIRST, G_STRUCT_OFFSET (SeahorseKeyModelClass, update_row),
                 NULL, NULL, seahorse_marshal_VOID__OBJECT_POINTER, G_TYPE_NONE, 2, SEAHORSE_TYPE_KEY, G_TYPE_POINTER);
     

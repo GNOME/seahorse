@@ -37,6 +37,7 @@
 #include "seahorse-gtkstock.h"
 #include "seahorse-windows.h"
 #include "seahorse-vfs-data.h"
+#include "seahorse-key-model.h"
 
 #define NOTEBOOK "notebook"
 
@@ -104,8 +105,7 @@ enum {
     UIDSIG_INDEX,
     UIDSIG_ICON,
     UIDSIG_NAME,
-    UIDSIG_EMAIL,
-    UIDSIG_COMMENT,
+    UIDSIG_KEYID,
     UIDSIG_N_COLUMNS
 };
 
@@ -113,8 +113,7 @@ const GType uidsig_columns[] = {
     G_TYPE_INT,     /* index */
     G_TYPE_STRING,  /* icon */
     G_TYPE_STRING,  /* name */
-    G_TYPE_STRING,  /* email */
-    G_TYPE_STRING   /* comment */
+    G_TYPE_STRING   /* keyid */
 };
 
 static gint
@@ -189,20 +188,89 @@ update_names (GtkTreeSelection *selection, SeahorseWidget *swidget)
     show_glade_widget (swidget, "names-revoke-button", FALSE);
 }
 
+/* Is called whenever a signature key changes, to update row */
+static void
+names_update_row (SeahorseKeyModel *skmodel, SeahorseKey *skey, 
+                  GtkTreeIter *iter, SeahorseWidget *swidget)
+{
+    const gchar *icon;
+    gchar *name;
+
+    icon = seahorse_key_get_location (skey) < SKEY_LOC_LOCAL ? 
+                GTK_STOCK_DIALOG_QUESTION : SEAHORSE_STOCK_SIGN;
+    name = seahorse_key_get_display_name (skey);
+    
+    gtk_tree_store_set (GTK_TREE_STORE (skmodel), iter,
+                        UIDSIG_INDEX, -1,
+                        UIDSIG_ICON, icon,
+                        UIDSIG_NAME, name ? name : _("[Unknown]"),
+                        UIDSIG_KEYID, seahorse_key_get_keyid (skey), -1);
+            
+    g_free (name);
+}
+
+static void
+names_populate (SeahorseWidget *swidget, GtkTreeStore *store, SeahorsePGPKey *pkey)
+{
+    SeahorseKey *skey;
+    gpgme_user_id_t uid;
+    gpgme_key_sig_t sig;
+    GtkTreeIter uiditer, sigiter;
+    gchar *name;
+    const gchar *keyid;
+    GSList *keyids = NULL;
+    int i, j;
+    GList *keys, *l;
+
+    keyid = seahorse_pgp_key_get_id (pkey->pubkey, 0);
+    
+    /* Insert all the fun-ness */
+    for (i = 1, uid = pkey->pubkey->uids; uid; uid = uid->next, i++) {
+
+        name = seahorse_pgp_key_get_userid (pkey, i - 1);
+
+        gtk_tree_store_append (store, &uiditer, NULL);
+        gtk_tree_store_set (store, &uiditer,  
+                            UIDSIG_INDEX, i,
+                            UIDSIG_ICON, SEAHORSE_STOCK_PERSON,
+                            UIDSIG_NAME, name,
+                            -1);
+        
+        g_free (name);
+        
+        
+        /* Build a list of all the keyids */
+        for (j = 1, sig = uid->signatures; sig; sig = sig->next, j++) {
+            /* Never show self signatures, they're implied */
+            if (strcmp (sig->keyid, keyid) == 0)
+                continue;
+            keyids = g_slist_prepend (keyids, sig->keyid);
+        }
+        
+        /* Pass it to 'DiscoverKeys' for resolution/download */
+        keys = seahorse_context_discover_keys (SCTX_APP (), SKEY_PGP, keyids);
+        g_slist_free (keyids);
+        keyids = NULL;
+        
+        /* Add the keys to the store */
+        for (l = keys; l; l = g_list_next (l)) {
+            skey = SEAHORSE_KEY (l->data);
+            gtk_tree_store_append (store, &sigiter, &uiditer);
+            
+            /* This calls the 'update-row' callback, to set the values for the key */
+            seahorse_key_model_set_row_key (SEAHORSE_KEY_MODEL (store), &sigiter, skey);
+        }
+    } 
+}
+
 static void
 do_names (SeahorseWidget *swidget)
 {
     SeahorseKey *skey;
     SeahorsePGPKey *pkey;
-    gpgme_user_id_t uid;
-    gpgme_key_sig_t sig;
     GtkWidget *widget;
     GtkTreeStore *store;
     GtkCellRenderer *renderer;
-    GtkTreeIter uiditer, sigiter;
-    gchar *name, *email, *comment;
-    const gchar *keyid;
-    int i, j;
     
     skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
     pkey = SEAHORSE_PGP_KEY (skey);
@@ -221,7 +289,8 @@ do_names (SeahorseWidget *swidget)
     } else {
         
         /* This is our first time so create a store */
-        store = gtk_tree_store_newv (UIDSIG_N_COLUMNS, (GType*)uidsig_columns);
+        store = GTK_TREE_STORE (seahorse_key_model_new (UIDSIG_N_COLUMNS, (GType*)uidsig_columns));
+        g_signal_connect (store, "update-row", G_CALLBACK (names_update_row), swidget);
 
         /* Make the columns for the view */
         renderer = gtk_cell_renderer_pixbuf_new ();
@@ -231,60 +300,15 @@ do_names (SeahorseWidget *swidget)
                                                      "stock-id", UIDSIG_ICON, NULL);
 
         gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (widget), 
-                                                     -1, _("Name"), gtk_cell_renderer_text_new (), 
+                                                     -1, _("Name/Email"), gtk_cell_renderer_text_new (), 
                                                      "text", UIDSIG_NAME, NULL);
 
-        gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (widget),
-                                                     -1, _("Email"), gtk_cell_renderer_text_new (), 
-                                                     "text", UIDSIG_EMAIL, NULL);
-
-        gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (widget),
-                                                     -1, _("Comment"), gtk_cell_renderer_text_new (), 
-                                                     "text", UIDSIG_COMMENT, NULL);
+        gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (widget), 
+                                                     -1, _("Signature ID"), gtk_cell_renderer_text_new (), 
+                                                     "text", UIDSIG_KEYID, NULL);
     }
 
-    keyid = seahorse_pgp_key_get_id (pkey->pubkey, 0);
-    
-    /* Insert all the fun-ness */
-    for (i = 1, uid = pkey->pubkey->uids; uid; uid = uid->next, i++) {
-
-        name = seahorse_pgp_key_get_userid_name (pkey, i - 1);
-        email = seahorse_pgp_key_get_userid_email (pkey, i - 1);
-        comment = seahorse_pgp_key_get_userid_comment (pkey, i - 1);
-
-        gtk_tree_store_append (store, &uiditer, NULL);
-        gtk_tree_store_set (store, &uiditer,  
-                            UIDSIG_INDEX, i,
-                            UIDSIG_ICON, SEAHORSE_STOCK_PERSON,
-                            UIDSIG_NAME, name,
-                            UIDSIG_EMAIL, email,
-                            UIDSIG_COMMENT, comment,
-                            -1);
-        
-        g_free (name);
-        g_free (email);
-        g_free (comment);
-        
-        for (j = 1, sig = uid->signatures; sig; sig = sig->next, j++) {
-            
-            /* Never show self signatures, they're implied */
-            if (strcmp (sig->keyid, keyid) == 0)
-                continue;
-            
-            seahorse_pgp_key_get_signature_text (pkey, sig, &name, &email, NULL);
-            
-            gtk_tree_store_append (store, &sigiter, &uiditer);
-            gtk_tree_store_set (store, &sigiter,
-                                UIDSIG_INDEX, -1,
-                                UIDSIG_ICON, SEAHORSE_STOCK_SIGN,
-                                UIDSIG_NAME, name ? name : _("[Unknown]"),
-                                UIDSIG_EMAIL, email,
-                                UIDSIG_COMMENT, sig->keyid, -1);
-            
-            g_free (name);
-            g_free (email);
-        }
-    } 
+    names_populate (swidget, store, pkey);
     
     gtk_tree_view_set_model (GTK_TREE_VIEW (widget), GTK_TREE_MODEL(store));
     gtk_tree_view_expand_all (GTK_TREE_VIEW (widget));

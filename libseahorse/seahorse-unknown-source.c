@@ -39,9 +39,9 @@ G_DEFINE_TYPE (SeahorseUnknownSource, seahorse_unknown_source, SEAHORSE_TYPE_KEY
  */
 
 static void
-search_done (SeahorseOperation *op, SeahorseUnknownKey *ukey)
+search_done (SeahorseOperation *op, SeahorseKey *skey)
 {
-    SEAHORSE_KEY (ukey)->location = SKEY_LOC_UNKNOWN;
+    skey->location = SKEY_LOC_UNKNOWN;
 }
 
 /* -----------------------------------------------------------------------------
@@ -171,18 +171,25 @@ seahorse_unknown_source_new (GQuark ktype)
    return g_object_new (SEAHORSE_TYPE_UNKNOWN_SOURCE, "key-type", ktype, NULL);
 }
 
-void                     
+SeahorseKey*                     
 seahorse_unknown_source_add_key (SeahorseUnknownSource *usrc, const gchar *keyid,
                                  SeahorseOperation *search)
 {
-    SeahorseUnknownKey *ukey = seahorse_unknown_key_new (usrc, keyid);
-    seahorse_context_add_key (SCTX_APP (), SEAHORSE_KEY (ukey));
+    SeahorseKey *skey;
+
+    skey = seahorse_context_get_key (SCTX_APP (), SEAHORSE_KEY_SOURCE (usrc), keyid);
+    if (!skey) {
+        skey = SEAHORSE_KEY (seahorse_unknown_key_new (usrc, keyid));
+        seahorse_context_add_key (SCTX_APP (), skey);
+    }
     
     if (search) {
-        SEAHORSE_KEY (ukey)->location = SKEY_LOC_SEARCHING;
+        skey->location = SKEY_LOC_SEARCHING;
         if (seahorse_operation_is_running (search)) 
-            g_signal_connect (search, "done", G_CALLBACK (search_done), ukey);
+            g_signal_connect (search, "done", G_CALLBACK (search_done), skey);
         else
-            search_done (search, ukey);
+            search_done (search, skey);
     }
+    
+    return skey;
 }

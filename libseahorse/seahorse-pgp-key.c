@@ -481,6 +481,23 @@ seahorse_pgp_key_get_nth_subkey (SeahorsePGPKey *pkey, guint index)
 }
 
 /**
+ * seahorse_key_get_userid:
+ * @skey: #SeahorseKey
+ * @index: Which user ID
+ *
+ * Gets the formatted user ID of @skey at @index.
+ *
+ * Returns: UTF8 valid name of @skey at @index,
+ * or NULL if @index is out of bounds.
+ **/
+gchar*
+seahorse_pgp_key_get_userid (SeahorsePGPKey *pkey, guint index)
+{
+    gpgme_user_id_t uid = seahorse_pgp_key_get_nth_userid (pkey, index);
+    return uid ? convert_string (uid->uid) : NULL;
+}
+
+/**
  * seahorse_key_get_userid_name:
  * @skey: #SeahorseKey
  * @index: Which user ID

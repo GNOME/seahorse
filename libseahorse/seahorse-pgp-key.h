@@ -92,7 +92,7 @@ guint           seahorse_pgp_key_get_num_userids      (SeahorsePGPKey   *pkey);
 gpgme_user_id_t seahorse_pgp_key_get_nth_userid       (SeahorsePGPKey   *pkey,
                                                        guint            index);
 
-gchar*          seahorse_pgp_key_get_userid	          (SeahorsePGPKey   *pkey,
+gchar*          seahorse_pgp_key_get_userid           (SeahorsePGPKey   *pkey,
                                                        guint            index);
 
 gchar*          seahorse_pgp_key_get_userid_name      (SeahorsePGPKey   *pkey,

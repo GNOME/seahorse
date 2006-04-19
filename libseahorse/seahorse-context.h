@@ -163,5 +163,9 @@ SeahorseOperation*  seahorse_context_retrieve_keys      (SeahorseContext    *sct
                                                          GQuark             ktype, 
                                                          GSList             *keyids, 
                                                          SeahorseKeySource  *to);
-                                                         
+
+GList*              seahorse_context_discover_keys      (SeahorseContext    *sctx, 
+                                                         GQuark             ktype, 
+                                                         GSList             *keyids);
+
 #endif /* __SEAHORSE_CONTEXT_H__ */

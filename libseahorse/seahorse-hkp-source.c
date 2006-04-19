@@ -337,7 +337,7 @@ fail_hkp_operation (SeahorseHKPOperation *hop, SoupMessage *msg, const gchar *te
     gchar *t, *server;
     GError *error = NULL;
     
-    if (hop->cancelling)
+    if (!seahorse_operation_is_running (SEAHORSE_OPERATION (hop)))
         return;
 
     g_object_get (hop->hsrc, "key-server", &server, NULL);
