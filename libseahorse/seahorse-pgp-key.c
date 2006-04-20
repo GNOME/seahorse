@@ -347,11 +347,22 @@ calc_validity (SeahorsePGPKey *pkey)
 static SeahorseValidity 
 calc_trust (SeahorsePGPKey *pkey)
 {
-	g_return_val_if_fail (pkey->pubkey, SEAHORSE_VALIDITY_UNKNOWN);
+    g_return_val_if_fail (pkey->pubkey, SEAHORSE_VALIDITY_UNKNOWN);
 
-   	if (pkey->pubkey->owner_trust <= SEAHORSE_VALIDITY_UNKNOWN)
-		return SEAHORSE_VALIDITY_UNKNOWN;
-	return pkey->pubkey->owner_trust;
+    switch (pkey->pubkey->owner_trust) {
+    case GPGME_VALIDITY_NEVER:
+        return SEAHORSE_VALIDITY_NEVER;
+    case GPGME_VALIDITY_MARGINAL:
+        return SEAHORSE_VALIDITY_MARGINAL;
+    case GPGME_VALIDITY_FULL:
+        return SEAHORSE_VALIDITY_FULL;
+    case GPGME_VALIDITY_ULTIMATE:
+        return SEAHORSE_VALIDITY_ULTIMATE;
+    case GPGME_VALIDITY_UNDEFINED:
+    case GPGME_VALIDITY_UNKNOWN:
+    default:
+        return SEAHORSE_VALIDITY_UNKNOWN;
+    }
 }
 
 static void
