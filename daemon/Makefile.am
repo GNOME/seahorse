@@ -74,7 +74,7 @@ seahorse-service-crypto-bindings.h: seahorse-service-crypto.xml
 	dbus-binding-tool --prefix=seahorse_service_crypto --mode=glib-server --output=$@ $(srcdir)/$<
 
 # Dbus service file
-servicedir = $(DBUS_SERVICES_DIR)
+servicedir = $(datadir)/dbus-1/services/
 service_in_files = org.gnome.seahorse.service.in
 service_DATA = $(service_in_files:.service.in=.service)
 
