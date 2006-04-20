@@ -97,6 +97,21 @@ get_selected_row (SeahorseWidget *swidget, const gchar *gladeid, guint column)
     return index;
 }
 
+static GSList*
+unique_slist_strings (GSList *keyids)
+{
+    GSList *l;
+    
+    keyids = g_slist_sort (keyids, (GCompareFunc)g_ascii_strcasecmp);
+    for (l = keyids; l; l = g_slist_next (l)) {
+        while (l->next && l->data && l->next->data && 
+               g_ascii_strcasecmp (l->data, l->next->data) == 0)
+            keyids = g_slist_delete_link (keyids, l->next);
+    }    
+    
+    return keyids;
+}
+
 /* -----------------------------------------------------------------------------
  * NAMES PAGE (PRIVATE KEYS)
  */
@@ -195,6 +210,13 @@ names_update_row (SeahorseKeyModel *skmodel, SeahorseKey *skey,
 {
     const gchar *icon;
     gchar *name;
+    
+    /* Always use the most preferred key for this keyid */
+    if (skey->preferred) {
+        while (skey->preferred)
+            skey = skey->preferred;
+        seahorse_key_model_set_row_key (skmodel, iter, skey);
+    }
 
     icon = seahorse_key_get_location (skey) < SKEY_LOC_LOCAL ? 
                 GTK_STOCK_DIALOG_QUESTION : SEAHORSE_STOCK_SIGN;
@@ -1085,10 +1107,10 @@ do_details (SeahorseWidget *swidget)
  */
 
 enum {
-    SIGN_KEY_ID,
+    SIGN_ICON,
     SIGN_NAME,
-    SIGN_EMAIL,
-    SIGN_COMMENT,
+    SIGN_KEYID,
+    SIGN_TRUSTED,
     SIGN_N_COLUMNS
 };
 
@@ -1096,7 +1118,7 @@ const GType sign_columns[] = {
     G_TYPE_STRING,
     G_TYPE_STRING,
     G_TYPE_STRING,
-    G_TYPE_STRING
+    G_TYPE_BOOLEAN
 };
 
 static void
@@ -1149,93 +1171,107 @@ trust_complete_toggled (GtkToggleButton *toggle, SeahorseWidget *swidget)
     }
 }
 
+/* Is called whenever a signature key changes */
 static void
-signatures_populate_model (SeahorseWidget *swidget, GtkListStore *store)
+trust_update_row (SeahorseKeyModel *skmodel, SeahorseKey *skey, 
+                  GtkTreeIter *iter, SeahorseWidget *swidget)
+{
+    gboolean trusted = FALSE;
+    const gchar *icon;
+    gchar *name;    
+    
+    /* Always use the most preferred key for this keyid */
+    if (skey->preferred) {
+        while (skey->preferred)
+            skey = skey->preferred;
+        seahorse_key_model_set_row_key (skmodel, iter, skey);
+    }
+
+    if (seahorse_key_get_etype (skey) == SKEY_PRIVATE) 
+        trusted = TRUE;
+    else if (seahorse_key_get_flags (skey) & SKEY_FLAG_TRUSTED)
+        trusted = TRUE;
+    
+    icon = seahorse_key_get_location (skey) < SKEY_LOC_LOCAL ? 
+                GTK_STOCK_DIALOG_QUESTION : SEAHORSE_STOCK_SIGN;
+    name = seahorse_key_get_display_name (skey);
+    
+    gtk_tree_store_set (GTK_TREE_STORE (skmodel), iter,
+                        SIGN_ICON, icon,
+                        SIGN_NAME, name ? name : _("[Unknown]"),
+                        SIGN_KEYID, seahorse_key_get_keyid (skey),
+                        SIGN_TRUSTED, trusted,
+                        -1);
+            
+    g_free (name);
+}
+
+static void
+signatures_populate_model (SeahorseWidget *swidget, SeahorseKeyModel *skmodel)
 {
     SeahorseKey *skey;
     SeahorsePGPKey *pkey;
     GtkTreeIter iter;
     GtkWidget *widget;
-    gboolean trusted_only = TRUE;
-    guint sigtype;
-    const gchar *name = NULL;
     const gchar *keyid;
     gpgme_user_id_t uid;
     gpgme_key_sig_t sig;
     gboolean have_sigs = FALSE;
+    GSList *keyids = NULL;
+    GList *keys, *l;
 
-    skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
-    pkey = SEAHORSE_PGP_KEY (skey);
-
-    widget = glade_xml_get_widget (swidget->xml, "signatures-toggle");
-    if (widget)
-        trusted_only = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
-    
+    pkey = SEAHORSE_PGP_KEY (SEAHORSE_KEY_WIDGET (swidget)->skey);
     widget = glade_xml_get_widget (swidget->xml, "signatures-tree");
     
-    if (store) {
-        keyid = seahorse_pgp_key_get_id (pkey->pubkey, 0);
+    keyid = seahorse_pgp_key_get_id (pkey->pubkey, 0);
 
-        for (uid = pkey->pubkey->uids; uid; uid = uid->next) {
-            for (sig = uid->signatures; sig; sig = sig->next) {
-                
-                /* Never show self signatures, they're implied */
-                if (strcmp (sig->keyid, keyid) == 0)
-                    continue;
-                
-                have_sigs = TRUE;
-                
-                /* Find any trusted signatures */
-                sigtype = seahorse_pgp_key_get_sigtype (pkey, sig);
-                if (trusted_only && !(sigtype & SKEY_PGPSIG_TRUSTED || sigtype & SKEY_PGPSIG_PERSONAL))
-                    continue;
-
-                gtk_list_store_append (store, &iter);
-                
-                if (!name)
-                    gtk_list_store_set (store, &iter, 
-                                        SIGN_KEY_ID, sig->keyid,
-                                        SIGN_NAME, sig->name, 
-                                        SIGN_EMAIL, sig->email, 
-                                        SIGN_COMMENT, sig->comment, 
-                                        -1);
-                
-                else if (g_str_equal (name, sig->name))
-                    gtk_list_store_set (store, &iter, 
-                                        SIGN_KEY_ID, sig->keyid,
-                                        SIGN_NAME, sig->name, 
-                                        SIGN_EMAIL, sig->email, 
-                                        SIGN_COMMENT, sig->comment, 
-                                        -1);
-            }
+    /* Build a list of all the keyids */        
+    for (uid = pkey->pubkey->uids; uid; uid = uid->next) {
+        for (sig = uid->signatures; sig; sig = sig->next) {
+            /* Never show self signatures, they're implied */
+            if (strcmp (sig->keyid, keyid) == 0)
+                continue;
+            have_sigs = TRUE;
+            keyids = g_slist_prepend (keyids, sig->keyid);
         }
     }
-
-    gtk_tree_view_set_model (GTK_TREE_VIEW (widget), GTK_TREE_MODEL(store));
     
     /* Only show signatures area when there are signatures */
     seahorse_widget_set_visible (swidget, "signatures-area", have_sigs);
+
+    if (skmodel) {
+    
+        /* String out duplicates */
+        keyids = unique_slist_strings (keyids);
+        
+        /* Pass it to 'DiscoverKeys' for resolution/download */
+        keys = seahorse_context_discover_keys (SCTX_APP (), SKEY_PGP, keyids);
+        g_slist_free (keyids);
+        keyids = NULL;
+        
+        /* Add the keys to the store */
+        for (l = keys; l; l = g_list_next (l)) {
+            skey = SEAHORSE_KEY (l->data);
+            gtk_tree_store_append (GTK_TREE_STORE (skmodel), &iter, NULL);
+            
+            /* This calls the 'update-row' callback, to set the values for the key */
+            seahorse_key_model_set_row_key (SEAHORSE_KEY_MODEL (skmodel), &iter, skey);
+        }
+    }
 }
 
-/* 
- * The signatures toggle filters the view for the user so that only signatures 
- * in the collected keys appear. This way the user won't have to filter 
- * through meaningless KeyIDs. Self signatures on personal keys should be 
- * assumed, don't display those by default either.
- */
+/* Refilter when the user toggles the 'only show trusted' checkbox */
 static void
-trusted_toggled (GtkToggleButton *toggle, SeahorseWidget *swidget)
+trusted_toggled (GtkToggleButton *toggle, GtkTreeModelFilter *filter)
 {
-    GtkWidget *widget;
-    GtkListStore *store;
-
-    widget = glade_xml_get_widget (swidget->xml, "signatures-tree");
-    store = GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (widget)));
-
-    gtk_list_store_clear (store);
-    signatures_populate_model (swidget, store);	
+    /* Set flag on the store */
+    GtkTreeModel *model = gtk_tree_model_filter_get_model (filter);
+    g_object_set_data (G_OBJECT (model), "only-trusted", 
+                GINT_TO_POINTER (gtk_toggle_button_get_active (toggle)));
+    gtk_tree_model_filter_refilter (filter);
 }
 
+/* Add a signature */
 static void 
 trust_sign_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 {
@@ -1248,7 +1284,6 @@ do_trust_signals (SeahorseWidget *swidget)
 {
     SeahorseKey *skey;
     SeahorseKeyEType etype;
-    GtkWidget *widget;
 
     skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
     etype = seahorse_key_get_etype (skey);
@@ -1274,16 +1309,20 @@ do_trust_signals (SeahorseWidget *swidget)
                                        G_CALLBACK (signatures_delete_button_clicked), swidget);
     }
 
-    glade_xml_signal_connect_data (swidget->xml, "on_signatures_toggle_toggled",
-                                   G_CALLBACK (trusted_toggled), swidget);
-    widget = glade_xml_get_widget (swidget->xml, "signatures-toggle");
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
-    
     glade_xml_signal_connect_data (swidget->xml, "trust_marginal_toggled",
                                    G_CALLBACK (trust_marginal_toggled), swidget);
     glade_xml_signal_connect_data (swidget->xml, "trust_complete_toggled",
                                    G_CALLBACK (trust_complete_toggled), swidget);
-    
+}
+
+/* When the 'only display trusted' check is checked, hide untrusted rows */
+static gboolean
+trust_filter (GtkTreeModel *model, GtkTreeIter *iter, gpointer userdata)
+{
+    /* Read flag on the store */
+    gboolean trusted = FALSE;
+    gtk_tree_model_get (model, iter, SIGN_TRUSTED, &trusted, -1);
+    return !g_object_get_data (G_OBJECT (model), "only-trusted") || trusted;
 }
 
 static void 
@@ -1292,8 +1331,10 @@ do_trust (SeahorseWidget *swidget)
     SeahorseKey *skey;
     SeahorsePGPKey *pkey;
     GtkWidget *widget;
-    GtkListStore *store;
+    GtkTreeStore *store;
+    GtkTreeModelFilter *filter;
     gboolean sigpersonal;
+    GtkCellRenderer *renderer;
     guint keyloc;
     
     skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
@@ -1362,6 +1403,7 @@ do_trust (SeahorseWidget *swidget)
             break;
         
         default:
+            g_warning ("unknown trust value: %d", trust);
             g_assert_not_reached ();
             return;
         }
@@ -1401,30 +1443,47 @@ do_trust (SeahorseWidget *swidget)
     
     /* The actual signatures listing */
     widget = glade_xml_get_widget (swidget->xml, "signatures-tree");
-    store = GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (widget)));
+    filter = GTK_TREE_MODEL_FILTER (gtk_tree_view_get_model (GTK_TREE_VIEW (widget)));
     
-    if (store) {
-        gtk_list_store_clear (store);
+    if (filter) {
+        store = GTK_TREE_STORE (gtk_tree_model_filter_get_model (filter));
+        gtk_tree_store_clear (store);
     
     /* First time create the store */
     } else {
-        store = gtk_list_store_newv (SIGN_N_COLUMNS, (GType*)sign_columns);
-
+        
+        /* Create a new SeahorseKeyModel store.... */
+        store = GTK_TREE_STORE (seahorse_key_model_new (SIGN_N_COLUMNS, (GType*)sign_columns));
+        g_signal_connect (store, "update-row", G_CALLBACK (trust_update_row), swidget);
+        
+        /* .... and a filter to go ontop of it */
+        filter = GTK_TREE_MODEL_FILTER (gtk_tree_model_filter_new (GTK_TREE_MODEL (store), NULL));
+        gtk_tree_model_filter_set_visible_func (filter, 
+                                (GtkTreeModelFilterVisibleFunc)trust_filter, NULL, NULL);
+        
+        /* Make the colunms for the view */
+        renderer = gtk_cell_renderer_pixbuf_new ();
+        g_object_set (renderer, "stock-size", GTK_ICON_SIZE_LARGE_TOOLBAR, NULL);
+        gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (widget),
+                                                     -1, "", renderer,
+                                                     "stock-id", SIGN_ICON, NULL);
         gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (widget), 
-                                                     -1, _("ID"), gtk_cell_renderer_text_new (), 
-                                                     "text", SIGN_KEY_ID, NULL);
-        gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (widget), 
-                                                     -1, _("Name"), gtk_cell_renderer_text_new (), 
+                                                     -1, _("Name/Email"), gtk_cell_renderer_text_new (), 
                                                      "text", SIGN_NAME, NULL);
         gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (widget), 
-                                                     -1, _("Email"), gtk_cell_renderer_text_new (), 
-                                                     "text", SIGN_EMAIL, NULL);
-        gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (widget), 
-                                                     -1, _("Comment"), gtk_cell_renderer_text_new (), 
-                                                     "text", SIGN_COMMENT, NULL);
+                                                     -1, _("Key ID"), gtk_cell_renderer_text_new (), 
+                                                     "text", SIGN_KEYID, NULL);
+        
+        gtk_tree_view_set_model (GTK_TREE_VIEW (widget), GTK_TREE_MODEL(filter));
+        
+        glade_xml_signal_connect_data (swidget->xml, "on_signatures_toggle_toggled",
+                                       G_CALLBACK (trusted_toggled), filter);
+        widget = glade_xml_get_widget (swidget->xml, "signatures-toggle");
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
+        trusted_toggled (GTK_TOGGLE_BUTTON (widget), filter);
     } 
 
-    signatures_populate_model (swidget, store);
+    signatures_populate_model (swidget, SEAHORSE_KEY_MODEL (store));
 }
 
 /* -----------------------------------------------------------------------------
