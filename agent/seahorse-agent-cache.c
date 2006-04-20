@@ -19,6 +19,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include "config.h"
 #include <sys/types.h>
 #include <stdlib.h>
 #include <string.h>
@@ -26,10 +27,18 @@
 
 #include <gnome.h>
 
+#ifdef WITH_GNOME_KEYRING
+#include <gnome-keyring.h>
+#endif
+
 #include "seahorse-gconf.h"
 #include "seahorse-gpgmex.h"
 #include "seahorse-agent.h"
 #include "seahorse-secure-memory.h"
+
+/* -----------------------------------------------------------------------------
+ * INTERNAL PASSWORD CACHE
+ */
 
 /*
  * Implementation of the password cache. Note that only passwords
@@ -54,7 +63,7 @@ typedef struct sa_cache_t {
 static GHashTable *g_cache = NULL;      /* Hash of ids to sa_cache_t */
 static GMemChunk *g_memory = NULL;      /* Memory for sa_cache_t's */
 static gpgme_ctx_t g_ctx = NULL;        /* Context for looking up ids */
-static guint g_notify_id = 0;			/* gconf notify id */
+static guint g_notify_id = 0;           /* gconf notify id */
 
 /* -----------------------------------------------------------------------------
  */
@@ -206,7 +215,7 @@ seahorse_agent_cache_uninit ()
 
 /* Retrieve a password from the cache */
 const gchar *
-seahorse_agent_cache_get (const gchar *id)
+seahorse_agent_internal_get (const gchar *id)
 {
     sa_cache_t *it;
 
@@ -235,7 +244,7 @@ seahorse_agent_cache_get (const gchar *id)
 
 /* Check if a given id is in the cache, and lock if requested */
 gboolean
-seahorse_agent_cache_has (const gchar *id, gboolean lock)
+seahorse_agent_internal_has (const gchar *id, gboolean lock)
 {
     sa_cache_t *it;
 
@@ -259,7 +268,7 @@ seahorse_agent_cache_has (const gchar *id, gboolean lock)
 
 /* Remove given id from the cache */
 void
-seahorse_agent_cache_clear (const gchar *id)
+seahorse_agent_internal_clear (const gchar *id)
 {
     if (id == NULL)
         id = TRANSIENT_ID;
@@ -283,7 +292,7 @@ remove_cache_item (gpointer key, gpointer value, gpointer user_data)
      * This is a simple callback for removing all 
      * items from a GHashTable. returning TRUE removes. 
      */
-	return !it->locked;
+    return !it->locked;
 }
 
 /* Clear all items in the cache */
@@ -296,32 +305,11 @@ seahorse_agent_cache_clearall ()
         seahorse_agent_status_update ();
 }
 
-/* Encode a password in hex */
-static void
-encode_password (gchar *dest, const gchar *src)
-{
-    static const char HEXC[] = "0123456789abcdef";
-    int j;
-
-    g_assert (dest && src);
-
-    /* Simple hex encoding */
-
-    while (*src) {
-        j = *(src) >> 4 & 0xf;
-        *(dest++) = HEXC[j];
-
-        j = *(src++) & 0xf;
-        *(dest++) = HEXC[j];
-    }
-}
 
 /* Set a password in the cache. encode and lock if requested */
 void
-seahorse_agent_cache_set (const gchar *id, const gchar *pass,
-                          gboolean encode, gboolean lock)
+seahorse_agent_internal_set (const gchar *id, const gchar *pass, gboolean lock)
 {
-    int len, c;
     gboolean cache;
     sa_cache_t *it;
 
@@ -351,33 +339,10 @@ seahorse_agent_cache_set (const gchar *id, const gchar *pass,
     g_assert (it->id != NULL);
 
     /* Work with the password */
-
     if (it->pass)
         seahorse_secure_memory_free (it->pass);
-
-    len = strlen (pass);
-
-    if (encode) {
-        c = sizeof (gchar *) * ((len * 2) + 1);
-        it->pass = (gchar *) seahorse_secure_memory_malloc (c);
-        if (!it->pass) {
-            g_critical ("out of secure memory");
-            return;
-        }
-
-        memset (it->pass, 0, c);
-        encode_password (it->pass, pass);
-    }
-
-    else {
-        it->pass = (gchar *) seahorse_secure_memory_malloc (sizeof (gchar) * (len + 1));
-        if (!it->pass) {
-            g_critical ("out of secure memory");
-            return;
-        }
-
-        strcpy (it->pass, pass);
-    }
+    it->pass = seahorse_secure_memory_malloc (strlen (pass) + 1);
+    strcpy (it->pass, pass);
 
     /* If not caching set to the epoch which should always expire */
     it->stamp = cache ? time (NULL) : 0;
@@ -436,4 +401,190 @@ seahorse_agent_cache_getname (const gchar *id)
 
     gpgme_key_unref (key);
     return userid;
+}
+
+/* -----------------------------------------------------------------------------
+ * GENERIC CACHE FUNCTIONS
+ */
+
+
+#define KEYRING_ATTR_TYPE "seahorse-key-type"
+#define KEYRING_ATTR_KEYID "seahorse-keyid"
+#define KEYRING_VAL_GPG "gpg"
+
+static gboolean 
+only_internal_cache ()
+{
+    gboolean internal = TRUE;
+    
+    /* No cache, internal must still work though */
+    if (!seahorse_gconf_get_boolean (SETTING_CACHE))
+        internal = TRUE;
+    
+#ifdef WITH_GNOME_KEYRING
+    
+    else {
+        gchar *method = seahorse_gconf_get_string (SETTING_METHOD);
+        if (method && strcmp (method, METHOD_GNOME) == 0)
+            internal = FALSE;
+        g_free (method);
+    }
+    
+#endif /* WITH_GNOME_KEYRING */
+    
+    return internal;
+}
+
+void
+seahorse_agent_cache_set (const gchar *id, const gchar *pass, gboolean lock)
+{
+    /* Store in our internal cache */
+    seahorse_agent_internal_set (id, pass, lock);
+
+#ifdef WITH_GNOME_KEYRING
+    
+    /* Store in gnome-keyring */
+    if (id && !only_internal_cache ()) {
+        
+        GnomeKeyringResult res;
+        GnomeKeyringAttributeList *attributes = NULL;
+        guint item_id;
+        gchar *desc, *key;
+        key = seahorse_agent_cache_getname (id);
+        desc = g_strdup_printf (_("PGP Key: %s"), key);
+        g_free (key);
+        
+        attributes = gnome_keyring_attribute_list_new ();
+        gnome_keyring_attribute_list_append_string (attributes, KEYRING_ATTR_TYPE, 
+                                                    KEYRING_VAL_GPG);
+        gnome_keyring_attribute_list_append_string (attributes, KEYRING_ATTR_KEYID, id);
+        res = gnome_keyring_item_create_sync (NULL, GNOME_KEYRING_ITEM_GENERIC_SECRET, 
+                                              desc, attributes, pass, TRUE, &item_id);
+        gnome_keyring_attribute_list_free (attributes);
+        g_free (desc);
+        
+        if (res != GNOME_KEYRING_RESULT_OK)
+            g_warning ("Couldn't store password in keyring: (code %d)", res);
+    }
+    
+#endif /* WITH_GNOME_KEYRING */
+    
+}
+
+void
+seahorse_agent_cache_clear (const gchar *id)
+{
+    /* Clear from our internal cache */
+    seahorse_agent_internal_clear (id);
+    
+#ifdef WITH_GNOME_KEYRING 
+    
+    /* Clear from gnome-keyring */
+    if (id && !only_internal_cache ()) {
+        
+        GnomeKeyringResult res;
+        GnomeKeyringAttributeList *attributes = NULL;
+        GList *found_items, *l;
+        
+        attributes = gnome_keyring_attribute_list_new ();
+        gnome_keyring_attribute_list_append_string (attributes, KEYRING_ATTR_KEYID, id);
+        res = gnome_keyring_find_items_sync (GNOME_KEYRING_ITEM_GENERIC_SECRET,
+                                             attributes, &found_items);
+        gnome_keyring_attribute_list_free (attributes);
+        
+        if (res != GNOME_KEYRING_RESULT_OK) {
+            g_warning ("couldn't search keyring: (code %d)", res);
+            
+        } else {
+            for (l = found_items; l; l = g_list_next (l)) {
+                /* TODO: Can we use async here? */
+                res = gnome_keyring_item_delete_sync (NULL, 
+                                    ((GnomeKeyringFound*)(l->data))->item_id);
+                if (res != GNOME_KEYRING_RESULT_OK)
+                    g_warning ("Couldn't clear password from keyring: (code %d)", res);
+            }
+            
+            gnome_keyring_found_list_free (found_items);
+        }
+        
+    }
+    
+#endif /* WITH_GNOME_KEYRING */
+
+}
+
+const gchar* 
+seahorse_agent_cache_get (const gchar *id)
+{
+    const gchar *ret = NULL;
+    
+    /* Always look in our own keyring first */
+    ret = seahorse_agent_internal_get (id);
+        
+#ifdef WITH_GNOME_KEYRING 
+    
+    /* Clear from gnome-keyring */
+    if (!ret && id && !only_internal_cache ()) {
+        
+        GnomeKeyringResult res;
+        GnomeKeyringAttributeList *attributes = NULL;
+        GList *found_items;
+        GnomeKeyringFound *found;
+        
+        attributes = gnome_keyring_attribute_list_new ();
+        gnome_keyring_attribute_list_append_string (attributes, KEYRING_ATTR_KEYID, id);
+        res = gnome_keyring_find_items_sync (GNOME_KEYRING_ITEM_GENERIC_SECRET,
+                                             attributes, &found_items);
+        gnome_keyring_attribute_list_free (attributes);
+        
+        if (res != GNOME_KEYRING_RESULT_OK) {
+            g_warning ("couldn't search keyring: (code %d)", res);
+            
+        } else {
+            
+            if (found_items && found_items->data) {
+                found = (GnomeKeyringFound*)found_items->data;
+                if (found->secret) {
+                    
+                    /* Store it temporarily in our loving hands */
+                    seahorse_agent_internal_set (NULL, found->secret, TRUE);
+                    ret = seahorse_agent_internal_get (NULL);
+                
+                }
+            }
+            
+            gnome_keyring_found_list_free (found_items);
+        }
+        
+    }
+    
+#endif /* WITH_GNOME_KEYRING */
+    
+    return ret;
+}
+
+/* Check if a given id is in the cache, and lock if requested */
+gboolean
+seahorse_agent_cache_has (const gchar *id, gboolean lock)
+{
+    if (seahorse_agent_internal_has (id, lock))
+        return TRUE;
+    
+#ifdef WITH_GNOME_KEYRING 
+
+    /* Retrieve from keyring and lock in local */
+    if (id && !only_internal_cache ()) {
+        
+        const gchar *pass = seahorse_agent_cache_get (id);
+        if (!pass)
+            return FALSE;
+        
+        /* Store it in our loving hands */
+        seahorse_agent_internal_set (id, pass, TRUE);
+        return TRUE;
+    }
+
+#endif /* WITH_GNOME_KEYRING */
+    
+    return FALSE;
 }

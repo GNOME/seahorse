@@ -19,7 +19,7 @@ bin_PROGRAMS = seahorse-daemon
 BUILT_SOURCES = 
 
 if WITH_AGENT
-AGENT_LIB = $(top_builddir)/agent/libseahorseagent.a
+AGENT_LIB = $(top_builddir)/agent/libseahorseagent.a $(AGENT_LIBS)
 else
 AGENT_LIB = 
 endif

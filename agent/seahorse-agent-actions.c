@@ -27,6 +27,7 @@
 
 #include "seahorse-gconf.h"
 #include "seahorse-agent.h"
+#include "seahorse-secure-memory.h"
 
 /*
  * Implements a queue of SeahorseAgentPassReq items. We can only show one dialog
@@ -40,6 +41,36 @@ static GMemChunk *g_memory = NULL;      /* Allocator for SeahorseAgentPassReq it
 /* -----------------------------------------------------------------------------
  * IMPLEMENTATION
  */
+
+/* Encode a password in hex */
+static gchar*
+encode_password (const gchar *pass)
+{
+    static const char HEXC[] = "0123456789abcdef";
+    int j, c;
+    gchar *enc, *k;
+
+    /* Encode the password */
+    c = sizeof (gchar *) * ((strlen (pass) * 2) + 1);
+    k = enc = (gchar *) seahorse_secure_memory_malloc (c);
+    if (!enc) {
+        g_critical ("out of secure memory");
+        return NULL;
+    }
+    memset (enc, 0, c);
+
+    /* Simple hex encoding */
+    while (*pass) {
+        j = *(pass) >> 4 & 0xf;
+        *(k++) = HEXC[j];
+
+        j = *(pass++) & 0xf;
+        *(k++) = HEXC[j];
+    }
+    
+    return enc;
+}
+
 
 void
 seahorse_agent_actions_init ()
@@ -72,6 +103,7 @@ seahorse_agent_actions_getpass (SeahorseAgentConn * rq, gchar * id,
 {
     SeahorseAgentPassReq *pr;
     const gchar *pass;
+    gchar *enc;
 
     g_assert (rq != NULL);
 
@@ -81,7 +113,9 @@ seahorse_agent_actions_getpass (SeahorseAgentConn * rq, gchar * id,
          * just reply now, without going to the queue.
          */
         if ((pass = seahorse_agent_cache_get (id)) != NULL) {
-            seahorse_agent_io_reply (rq, TRUE, pass);
+            enc = encode_password (pass);
+            seahorse_agent_io_reply (rq, TRUE, enc);
+            seahorse_secure_memory_free (enc);
             return;
         }
     }
@@ -144,10 +178,15 @@ seahorse_agent_actions_doneauth (SeahorseAgentPassReq * pr, gboolean authorized)
 void
 seahorse_agent_actions_donepass (SeahorseAgentPassReq * pr, const gchar * pass)
 {
+    gchar *enc;
+    
     if (pass == NULL)
         seahorse_agent_io_reply (pr->request, FALSE, "111 cancelled");
-    else
-        seahorse_agent_io_reply (pr->request, TRUE, pass);
+    else {
+        enc = encode_password (pass);
+        seahorse_agent_io_reply (pr->request, TRUE, enc);
+        seahorse_secure_memory_free (enc);
+    }
 
     free_passreq (pr);
     seahorse_agent_actions_nextgui ();

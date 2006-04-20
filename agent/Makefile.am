@@ -9,6 +9,7 @@ INCLUDES = -I$(top_builddir) \
 	-I$(top_srcdir)/libseahorse \
 	-I$(top_srcdir)/daemon \
 	$(SEAHORSE_CFLAGS) \
+	$(AGENT_CFLAGS) \
 	-DDATA_DIR=\""$(datadir)"\" \
 	-DSEAHORSE_GLADEDIR=\""$(gladedir)"\" \
 	-DLOCALEDIR=\""$(localedir)"\" \

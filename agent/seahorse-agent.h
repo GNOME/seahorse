@@ -34,10 +34,12 @@
  * seahorse-agent gconf keys
  */
 
-#define SETTING_AUTH 		"/apps/seahorse/agent/cache_authorize"
+#define SETTING_AUTH        "/apps/seahorse/agent/cache_authorize"
 #define SETTING_CACHE       "/apps/seahorse/agent/cache_enabled"
+#define SETTING_METHOD      "/apps/seahorse/agent/cache_method"
 #define SETTING_EXPIRE      "/apps/seahorse/agent/cache_expire"
 #define SETTING_TTL         "/apps/seahorse/agent/cache_ttl"
+#define METHOD_GNOME        "gnome"
 
 /* -----------------------------------------------------------------------------
  * seahorse-agent.c
@@ -97,8 +99,7 @@ void seahorse_agent_actions_nextgui ();
 void seahorse_agent_cache_init ();
 void seahorse_agent_cache_uninit ();
 const gchar *seahorse_agent_cache_get (const gchar *id);
-void seahorse_agent_cache_set (const gchar *id, const gchar *pass,
-                               gboolean encode, gboolean lock);
+void seahorse_agent_cache_set (const gchar *id, const gchar *pass, gboolean lock);
 gboolean seahorse_agent_cache_has (const gchar *id, gboolean lock);
 void seahorse_agent_cache_clear (const gchar *id);
 void seahorse_agent_cache_clearall ();

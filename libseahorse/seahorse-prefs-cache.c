@@ -19,6 +19,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include "config.h"
 #include <sys/types.h>
 #include <sys/param.h>
 #include <sys/socket.h>
@@ -33,11 +34,18 @@
 #include "seahorse-widget.h"
 #include "seahorse-gpg-options.h"
 #include "seahorse-gconf.h"
+#include "seahorse-util.h"
+#include "seahorse-check-button-control.h"
 
-#define SETTING_CACHE       "/apps/seahorse/agent/cache_enabled"
-#define SETTING_TTL         "/apps/seahorse/agent/cache_ttl"
-#define SETTING_EXPIRE      "/apps/seahorse/agent/cache_expire"
-#define SETTING_AUTH        "/apps/seahorse/agent/cache_authorize"
+#define AGENT_SETTINGS      "/apps/seahorse/agent"
+#define SETTING_CACHE       AGENT_SETTINGS "/cache_enabled"
+#define SETTING_METHOD      AGENT_SETTINGS "/cache_method"
+#define SETTING_TTL         AGENT_SETTINGS "/cache_ttl"
+#define SETTING_EXPIRE      AGENT_SETTINGS "/cache_expire"
+#define SETTING_AUTH        AGENT_SETTINGS "/cache_authorize"
+
+#define METHOD_INTERNAL     "internal"
+#define METHOD_GNOME        "gnome"
 
 typedef enum {
     AGENT_NONE,
@@ -194,148 +202,120 @@ which_agent_running ()
  *  CONTROLS
  */
 
-/* For the control callbacks */
-typedef struct _CtlLinkups {
-    gint notify_id;
-    gchar *gconf_key;
-} CtlLinkups;
-
-/* Disconnect control from gconf */
 static void
-control_destroy (GtkWidget *widget, gpointer data)
+update_cache_choices (const char *gconf_key, SeahorseWidget *swidget)
 {
-    CtlLinkups *lu = (CtlLinkups *) data;
-    g_assert (lu->gconf_key);
-    g_assert (lu->notify_id);
-    seahorse_gconf_unnotify (lu->notify_id);
-
-    g_free (lu->gconf_key);
-    g_free (lu);
-}
-
-/* Disable a control based on this button */
-static void
-control_disable (GtkWidget *widget, gpointer data)
-{
-    gtk_widget_set_sensitive (GTK_WIDGET (data),
-                              gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON
-                                                            (widget)));
-}
-
-/* Change gconf setting based on this button */
-static void
-check_toggled (GtkWidget *widget, gpointer data)
-{
-    CtlLinkups *lu = (CtlLinkups *) data;
-    seahorse_gconf_set_boolean (lu->gconf_key,
-                                gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON
-                                                              (widget)));
-}
-
-/* Change button based on gconf */
-static void
-check_notify (GConfClient *client, guint id, GConfEntry *entry, gpointer data)
-{
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (data),
-                                  gconf_value_get_bool (gconf_entry_get_value
-                                                        (entry)));
-}
-
-/* Hook a button into gconf */
-static void
-setup_check_control (SeahorseWidget *sw, const gchar *name, const gchar * key)
-{
-    GtkWidget *ctl;
-    CtlLinkups *lu;
-
-    g_assert (sw != NULL);    
-
-    ctl = glade_xml_get_widget (sw->xml, name);
-    g_return_if_fail (ctl != NULL);
-
-    /* Hookup load events */
-    lu = g_new0 (CtlLinkups, 1);
-    lu->gconf_key = g_strdup (key);
-    lu->notify_id = seahorse_gconf_notify (key, check_notify, ctl);
-
-    /* Hookup save events */
-    g_signal_connect (ctl, "toggled", G_CALLBACK (check_toggled), lu);
-
-    /* Cleanup */
-    g_signal_connect (ctl, "destroy", G_CALLBACK (control_destroy), lu);
-
-    /* Set initial value, and listen on events */
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ctl),
-                                  seahorse_gconf_get_boolean (key));
-}
-
-/* Change gconf based on spinner */
-static void
-spinner_changed (GtkWidget *widget, gpointer data)
-{
-    CtlLinkups *lu = (CtlLinkups *) data;
-    seahorse_gconf_set_integer (lu->gconf_key,
-                                gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON
-                                                                  (widget)));
-}
-
-/* Change spinner based on gconf */
-static void
-spinner_notify (GConfClient *client, guint id, GConfEntry *entry, gpointer data)
-{
-    gtk_spin_button_set_value (GTK_SPIN_BUTTON (data),
-                               (double)
-                               gconf_value_get_int (gconf_entry_get_value (entry)));
-}
-
-/* Hook a spinner into gconf */
-static void
-setup_spinner_control (SeahorseWidget *sw, const gchar *name, const gchar *key)
-{
-    GtkWidget *ctl;
-    CtlLinkups *lu;
+    GtkWidget *widget;
+    gchar *str;
+    gint ttl;
+    gboolean set;
     
-    g_assert (sw != NULL);    
+    if (strcmp (gconf_key, SETTING_CACHE) == 0) {
+        
+        set = seahorse_gconf_get_boolean (SETTING_CACHE);
+        if (!set) {
+            widget = seahorse_widget_get_widget (swidget, "no-cache");
+            g_return_if_fail (widget != NULL);
+            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
+        }
+        
+        return;
+    }
+    
+    if (strcmp (gconf_key, SETTING_METHOD) == 0) {
+        
+        str = seahorse_gconf_get_string (SETTING_METHOD);
+        if (!str || strcmp (str, METHOD_GNOME) != 0)
+            widget = seahorse_widget_get_widget (swidget, "session-cache");
+        else
+            widget = seahorse_widget_get_widget (swidget, "keyring-cache");
+        g_free (str);
 
-    ctl = glade_xml_get_widget (sw->xml, name);
-    g_return_if_fail (ctl != NULL);
-
-    /* Hookup load events */
-    lu = g_new0 (CtlLinkups, 1);
-    lu->gconf_key = g_strdup (key);
-    lu->notify_id = seahorse_gconf_notify (key, spinner_notify, ctl);
-
-    /* Hookup save events */
-    g_signal_connect (ctl, "changed", G_CALLBACK (spinner_changed), lu);
-
-    /* Cleanup */
-    g_signal_connect (ctl, "destroy", G_CALLBACK (control_destroy), lu);
-
-    /* Set initial value, and listen on events */
-    gtk_spin_button_set_value (GTK_SPIN_BUTTON (ctl), seahorse_gconf_get_integer (key));
+        g_return_if_fail (widget != NULL);
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
+        
+        return;
+    }
+    
+    if (strcmp (gconf_key, SETTING_TTL) == 0) {
+        
+        ttl = seahorse_gconf_get_integer (SETTING_TTL);
+        if (ttl < 0)
+            ttl = 0;
+        widget = seahorse_widget_get_widget (swidget, "ttl");
+        g_return_if_fail (widget != NULL);
+        gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), ttl);
+        
+        return;
+    }
 }
 
-/* Basic GError handler */
 static void
-handle_error (GError *err, const gchar *desc)
+cache_gconf_notify (GConfClient *client, guint id, 
+              GConfEntry *entry, SeahorseWidget *swidget)
 {
-    GtkWidget *dialog;
-    gchar *msg;
+    update_cache_choices (gconf_entry_get_key (entry), swidget);
+}
 
-    if (desc && err)
-        msg = g_strdup_printf ("%s\n\n%s", desc, err->message);
-    else if (desc)
-        msg = g_strdup (desc);
-    else
-        msg = g_strdup (err->message);
 
-    g_clear_error (&err);
+static void
+save_cache_choices (GtkWidget *unused, SeahorseWidget *swidget)
+{
+    GtkWidget *widget, *widget_ttl;
+    int ttl;
+    
+    widget_ttl = seahorse_widget_get_widget (swidget, "ttl");
+    g_return_if_fail (widget_ttl != NULL);
+    
+    widget = seahorse_widget_get_widget (swidget, "no-cache");
+    g_return_if_fail (widget != NULL);
+    
+    /* No cache */
+    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
+        seahorse_gconf_set_boolean (SETTING_CACHE, FALSE);
+        gtk_widget_set_sensitive (widget_ttl, FALSE);
+        
+        return;
+    }
+    
+    widget = seahorse_widget_get_widget (swidget, "session-cache");
+    g_return_if_fail (widget != NULL);
+    
+    /* Session cache */
+    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
+        seahorse_gconf_set_boolean (SETTING_CACHE, TRUE);
+        seahorse_gconf_set_string (SETTING_METHOD, METHOD_INTERNAL);
+        gtk_widget_set_sensitive (widget_ttl, TRUE);
+        ttl = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (widget_ttl));
+        seahorse_gconf_set_boolean (SETTING_EXPIRE, ttl > 0 ? TRUE : FALSE);
+        seahorse_gconf_set_integer (SETTING_TTL, ttl);
+        return;
+    }
+    
+#ifdef WITH_GNOME_KEYRING
+    
+    widget = seahorse_widget_get_widget (swidget, "keyring-cache");
+    g_return_if_fail (widget != NULL);
+    
+    /* gnome-keyring cache */
+    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
+        seahorse_gconf_set_boolean (SETTING_CACHE, TRUE);
+        seahorse_gconf_set_string (SETTING_METHOD, METHOD_GNOME);
+        gtk_widget_set_sensitive (widget_ttl, FALSE);
+        seahorse_gconf_set_boolean (SETTING_EXPIRE, FALSE);
+    }
 
-    dialog = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR,
-                                     GTK_BUTTONS_CLOSE, msg);
-    gtk_dialog_run (GTK_DIALOG (dialog));
-    gtk_widget_destroy (dialog);
-    g_free (msg);
+#endif /* WITH_GNOME_KEYRING */
+    
+}
+
+static void
+save_ttl (GtkSpinButton *spinner, SeahorseWidget *swidget)
+{
+    int ttl = gtk_spin_button_get_value_as_int (spinner);
+    if (ttl < 0)
+        ttl = 0;
+    seahorse_gconf_set_integer (SETTING_TTL, ttl);
 }
 
 /* Start up the gnome-session-properties */
@@ -347,7 +327,7 @@ show_session_properties (GtkWidget *widget, gpointer data)
     g_spawn_command_line_async ("gnome-session-properties", &err);
 
     if (err)
-        handle_error (err, _("Couldn't open the Session Properties"));
+        seahorse_util_handle_error (err, _("Couldn't open the Session Properties"));
 }
 
 /* Startup our agent (seahorse-daemon) */
@@ -360,9 +340,9 @@ start_agent (GtkWidget *widget, gpointer data)
     g_spawn_command_line_sync ("seahorse-daemon", NULL, NULL, &status, &err);
 
     if (err)
-        handle_error (err, _("Couldn't start the 'seahorse-daemon' program"));
+        seahorse_util_handle_error (err, _("Couldn't start the 'seahorse-daemon' program"));
     else if (!(WIFEXITED (status) && WEXITSTATUS (status) == 0))
-        handle_error (NULL, _("The 'seahorse-daemon' program exited unsucessfully."));
+        seahorse_util_handle_error (NULL, _("The 'seahorse-daemon' program exited unsucessfully."));
     else {
         /* Show the next message about starting up automatically */
         gtk_widget_hide (gtk_widget_get_parent (gtk_widget_get_parent (widget)));
@@ -422,19 +402,38 @@ seahorse_prefs_cache (SeahorseWidget *widget)
     GtkWidget *w, *w2;
     
     g_return_if_fail (widget != NULL);
-	
-	w2 = glade_xml_get_widget (widget->xml, "cache-options");
-    g_return_if_fail (w2 != NULL);
-
-    w = glade_xml_get_widget (widget->xml, "use-cache");
+    
+    w = seahorse_widget_get_widget (widget, "no-cache");
     g_return_if_fail (w != NULL);
-    g_signal_connect_after (w , "toggled", G_CALLBACK (control_disable), w2);
-	control_disable (w, w2);
-	
-    w = glade_xml_get_widget (widget->xml, "expire");        
+    g_signal_connect_after (w, "toggled", G_CALLBACK (save_cache_choices), widget);
+    
+    w = seahorse_widget_get_widget (widget, "session-cache");
     g_return_if_fail (w != NULL);
-    g_signal_connect_after (w , "toggled", G_CALLBACK (control_disable),
-                            glade_xml_get_widget (widget->xml, "ttl"));
+    g_signal_connect_after (w, "toggled", G_CALLBACK (save_cache_choices), widget);
+    
+    w = seahorse_widget_get_widget (widget, "keyring-cache");
+    g_return_if_fail (w != NULL);
+#ifdef WITH_GNOME_KEYRING    
+    g_signal_connect_after (w, "toggled", G_CALLBACK (save_cache_choices), widget);
+#else
+    gtk_widget_hide (w);
+#endif 
+    
+    w = seahorse_widget_get_widget (widget, "ttl");
+    g_return_if_fail (w != NULL);
+    g_signal_connect_after (w, "value-changed", G_CALLBACK (save_ttl), widget);
+    
+    /* Initial values, then listen */
+    update_cache_choices (SETTING_CACHE, widget);
+    update_cache_choices (SETTING_METHOD, widget);
+    update_cache_choices (SETTING_TTL, widget);
+    seahorse_gconf_notify_lazy (AGENT_SETTINGS, (GConfClientNotifyFunc)cache_gconf_notify, 
+                                widget, widget);
+                                
+    /* Authorize check button */
+    w = seahorse_widget_get_widget (widget, "authorize");
+    g_return_if_fail (w != NULL);
+    seahorse_check_button_gconf_attach (GTK_CHECK_BUTTON (w), SETTING_AUTH);
 
     /* Setup daemon button visuals */
     w = glade_xml_get_widget (widget->xml, "session-link");
@@ -444,10 +443,7 @@ seahorse_prefs_cache (SeahorseWidget *widget)
     g_return_if_fail (w2 != NULL);
     
     paint_button_label_as_link (GTK_BUTTON (w), GTK_LABEL(w2));
-    g_signal_connect (GTK_WIDGET (w)
-                      , "realize"
-                      , G_CALLBACK (set_hand_cursor_on_realize)
-                      , NULL);
+    g_signal_connect (GTK_WIDGET (w), "realize", G_CALLBACK (set_hand_cursor_on_realize), NULL);
 
     w = glade_xml_get_widget (widget->xml, "start-link");
     g_return_if_fail (w != NULL);
@@ -456,17 +452,9 @@ seahorse_prefs_cache (SeahorseWidget *widget)
     g_return_if_fail (w2 != NULL);
     
     paint_button_label_as_link (GTK_BUTTON (w), GTK_LABEL(w2));
-    g_signal_connect (GTK_WIDGET (w)
-                      , "realize"
-                      , G_CALLBACK (set_hand_cursor_on_realize)
-                      , NULL);
+    g_signal_connect (GTK_WIDGET (w), "realize", G_CALLBACK (set_hand_cursor_on_realize), NULL);
     /* End -- Setup daemon button visuals */
     
-    setup_spinner_control (widget, "ttl", SETTING_TTL);
-    setup_check_control (widget, "use-cache", SETTING_CACHE);
-    setup_check_control (widget, "expire", SETTING_EXPIRE);
-    setup_check_control (widget, "authorize", SETTING_AUTH);
-
     glade_xml_signal_connect_data (widget->xml, "on_session_link",
                                    G_CALLBACK (show_session_properties), NULL);
 
