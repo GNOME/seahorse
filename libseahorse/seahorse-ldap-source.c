@@ -1,7 +1,7 @@
 /*
  * Seahorse
  *
- * Copyright (C) 2004 Nate Nielsen
+ * Copyright (C) 2004 - 2006 Nate Nielsen
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,11 +18,16 @@
  * 59 Temple Place, Suite 330,
  * Boston, MA 02111-1307, USA.
  */
- 
+
+#include "config.h"
 #include <stdlib.h>
 #include <libintl.h>
 #include <gnome.h>
 #include <ldap.h>
+
+#ifdef WITH_SOUP
+#include <libsoup/soup-address.h>
+#endif
 
 #include "config.h"
 #include "seahorse-gpgmex.h"
@@ -289,6 +294,9 @@ escape_ldap_value (const gchar *v)
 typedef gboolean (*OpLDAPCallback)   (SeahorseOperation *op, LDAPMessage *result);
     
 DECLARE_OPERATION (LDAP, ldap)
+#ifdef WITH_SOUP
+    SoupAddress *addr;              /* For async DNS lookup */
+#endif
     SeahorseLDAPSource *lsrc;       /* The source */
     LDAP *ldap;                     /* The LDAP connection */
     int ldap_op;                    /* The current LDAP async msg */
@@ -321,7 +329,13 @@ static void
 seahorse_ldap_operation_dispose (GObject *gobject)
 {
     SeahorseLDAPOperation *lop = SEAHORSE_LDAP_OPERATION (gobject);
-    
+
+#ifdef WITH_SOUP
+    if (lop->addr)
+        g_object_unref (lop->addr);
+    lop->addr = NULL;
+#endif 
+        
     if (lop->lsrc) {
         g_object_unref (lop->lsrc);
         lop->lsrc = NULL;
@@ -366,6 +380,13 @@ seahorse_ldap_operation_cancel (SeahorseOperation *operation)
     
     g_assert (SEAHORSE_IS_LDAP_OPERATION (operation));
     lop = SEAHORSE_LDAP_OPERATION (operation);
+    
+#ifdef WITH_SOUP
+    /* This cancels lookup */
+    if (lop->addr)
+        g_object_unref (lop->addr);
+    lop->addr = NULL;
+#endif
     
     if (lop->ldap_op != -1) {
         if (lop->ldap)
@@ -548,31 +569,58 @@ done_bind_start_info (SeahorseOperation *op, LDAPMessage *result)
     return TRUE;
 }
 
-/* Start an LDAP (bind, server info) request */
-static SeahorseLDAPOperation*
-seahorse_ldap_operation_start (SeahorseLDAPSource *lsrc, OpLDAPCallback cb,
-                               guint total)
+/* Once the DNS name is resolved, we end up here */
+static void
+resolved_callback (gpointer unused, guint status, SeahorseLDAPOperation *lop)
 {
-    SeahorseLDAPOperation *lop;
+    guint port = LDAP_PORT;
     gchar *server = NULL;
     gchar *t;
-
-    g_assert (SEAHORSE_IS_LDAP_SOURCE (lsrc));
     
-    lop = g_object_new (SEAHORSE_TYPE_LDAP_OPERATION, NULL);
-    lop->lsrc = lsrc;
-    g_object_ref (lsrc);
+    g_object_get (lop->lsrc, "key-server", &server, NULL);
+    g_return_if_fail (server && server[0]);
     
-    g_object_get (lsrc, "key-server", &server, NULL);
-    g_return_val_if_fail (server && server[0], NULL);
+    if ((t = strchr (server, ':')) != NULL) {
+        *t = 0;
+        t++;
+        port = atoi (t);
+        if (port <= 0 || port >= G_MAXUINT16) {
+            g_warning ("invalid port number: %s (using default)", t);
+            port = LDAP_PORT;
+        }
+    }
+
+#ifdef WITH_SOUP
     
-    lop->ldap = ldap_init (server, LDAP_PORT);
-    g_return_val_if_fail (lop->ldap != NULL, NULL);
-
-    lop->ldap_cb = done_bind_start_info;
-    lop->chain_cb = cb;
-
-    seahorse_operation_mark_start (SEAHORSE_OPERATION (lop));
+    /* DNS failed */
+    if (!SOUP_STATUS_IS_SUCCESSFUL (status)) {
+        seahorse_operation_mark_done (SEAHORSE_OPERATION (lop), FALSE, 
+            g_error_new (SEAHORSE_ERROR, -1, _("Couldn't resolve address: %s"), server));
+        g_free (server);
+        return;
+    } 
+    
+    g_assert (lop->addr);
+    
+    {
+        /* Now that we've resolved our address, connect via IP */
+        const char *ip;
+        ip = soup_address_get_physical (lop->addr);
+        g_return_if_fail (ip != NULL);
+        
+        lop->ldap = ldap_init (ip, port);
+        g_return_if_fail (lop->ldap != NULL);
+    }
+    
+#else /* WITH_SOUP */
+    
+    /* No async DNS resolve, let libldap handle resolving synchronously */
+    lop->ldap = ldap_init (server, port);
+    g_return_if_fail (lop->ldap != NULL);    
+    
+#endif /* WITH_SOUP */
+    
+    /* The ldap_cb and chain_cb were set in seahorse_ldap_operation_start */
     
     t = g_strdup_printf (_("Connecting to: %s"), server);
     seahorse_operation_mark_progress (SEAHORSE_OPERATION (lop), t, 0.0);
@@ -588,7 +636,55 @@ seahorse_ldap_operation_start (SeahorseLDAPSource *lsrc, OpLDAPCallback cb,
     else   /* This starts looking for results */
         lop->stag = g_idle_add_full (G_PRIORITY_DEFAULT_IDLE, 
                         (GSourceFunc)result_callback, lop, NULL);
-        
+}
+
+/* Start an LDAP (bind, server info) request */
+static SeahorseLDAPOperation*
+seahorse_ldap_operation_start (SeahorseLDAPSource *lsrc, OpLDAPCallback cb,
+                               guint total)
+{
+    SeahorseLDAPOperation *lop;
+#ifdef WITH_SOUP
+    gchar *server = NULL;
+    gchar *t;
+#endif
+
+    g_assert (SEAHORSE_IS_LDAP_SOURCE (lsrc));
+    
+    lop = g_object_new (SEAHORSE_TYPE_LDAP_OPERATION, NULL);
+    lop->lsrc = lsrc;
+    g_object_ref (lsrc);
+
+    /* Not used until step after resolve */
+    lop->ldap_cb = done_bind_start_info;
+    lop->chain_cb = cb;
+    
+    seahorse_operation_mark_start (SEAHORSE_OPERATION (lop));
+    
+#ifdef WITH_SOUP
+    
+    /* Try and resolve asynchronously */
+    g_object_get (lsrc, "key-server", &server, NULL);
+    g_return_val_if_fail (server && server[0], NULL);
+
+    if ((t = strchr (server, ':')) != NULL)
+        *t = 0;
+    lop->addr = soup_address_new (server, LDAP_PORT);
+    
+    t = g_strdup_printf (_("Resolving server address: %s"), server);
+    seahorse_operation_mark_progress (SEAHORSE_OPERATION (lop), t, 0.0);
+    g_free (t);
+
+    g_free (server);
+    
+    soup_address_resolve_async (lop->addr, (SoupAddressCallback)resolved_callback, lop);
+    
+#else /* no WITH_SOUP */
+    
+    resolved_callback (NULL, 0, lop);
+    
+#endif
+    
     return lop;
 }
 
