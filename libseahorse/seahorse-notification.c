@@ -104,7 +104,7 @@ notification_display_fallback (const gchar *summary, const gchar* body,
 
 void 
 seahorse_notification_display (const gchar *summary, const gchar *body,
-                               gboolean urgent, const gchar *icon)
+                               gboolean urgent, const gchar *icon, GtkWidget *attachto)
 {
     gboolean res = FALSE;
 #ifdef HAVE_LIBNOTIFY
@@ -114,7 +114,7 @@ seahorse_notification_display (const gchar *summary, const gchar *body,
     if (!notify_is_initted ())
         notify_init ("seahorse");
 
-    notif = notify_notification_new (summary, body, icon, NULL);
+    notif = notify_notification_new (summary, body, icon, attachto);
     g_return_if_fail (notif != NULL);
         
     notify_notification_set_urgency (notif,  urgent ?

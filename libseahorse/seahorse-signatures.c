@@ -33,7 +33,7 @@
 #define ICON_PREFIX     DATA_DIR "/pixmaps/seahorse/48x48/"
 
 void
-seahorse_signatures_notify (const gchar* data, gpgme_verify_result_t status)
+seahorse_signatures_notify (const gchar* data, gpgme_verify_result_t status, GtkWidget *attachto)
 {
     SeahorseKey *key;
     gchar *t, *userid = NULL;
@@ -122,7 +122,7 @@ seahorse_signatures_notify (const gchar* data, gpgme_verify_result_t status)
         summary = g_strdup (title);
     }
     
-    seahorse_notification_display (summary, body, !ok, icon);
+    seahorse_notification_display (summary, body, !ok, icon, attachto);
 
     g_free (summary);
     g_free (body);

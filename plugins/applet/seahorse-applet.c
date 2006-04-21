@@ -545,11 +545,11 @@ dvi_received (GtkClipboard *board, const gchar *text, SeahorseApplet *sapplet)
         rawtext = NULL;
 
         if(status && status->signatures)
-            seahorse_signatures_notify ("Text", status);
+            seahorse_signatures_notify ("Text", status, GTK_WIDGET(sapplet));
     }
     
     if (keys > 0)
-        seahorse_import_notify (keys);
+        seahorse_import_notify (keys, GTK_WIDGET(sapplet));
 }
 
 static void

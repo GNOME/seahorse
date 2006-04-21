@@ -54,14 +54,17 @@ GList*          seahorse_recipients_get             (SeahorsePGPKey **signkey);
 SeahorsePGPKey* seahorse_signer_get                 (void);
 
 void            seahorse_signatures_notify          (const gchar* data, 
-                                                     gpgme_verify_result_t status);
+                                                     gpgme_verify_result_t status,
+                                                     GtkWidget *attachto);
 
-void            seahorse_import_notify              (guint keys);
+void            seahorse_import_notify              (guint keys,
+                                                     GtkWidget *attachto);
 
 void            seahorse_notification_display       (const gchar *summary, 
                                                      const gchar* body, 
                                                      gboolean urgent, 
-                                                     const gchar *icon);
+                                                     const gchar *icon,
+                                                     GtkWidget *attachto);
   
 gboolean        seahorse_notification_have          (void);
                                                

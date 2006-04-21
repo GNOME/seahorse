@@ -34,7 +34,7 @@
 #define ICON_PREFIX     DATA_DIR "/pixmaps/seahorse/48x48/"
 
 void
-seahorse_import_notify (guint keys)
+seahorse_import_notify (guint keys, GtkWidget *attachto)
 {
     const gchar *icon = NULL;
     const gchar *summary;
@@ -46,7 +46,7 @@ seahorse_import_notify (guint keys)
     body = g_strdup_printf(body, keys);
     icon = ICON_PREFIX "seahorse-key.png";
 
-    seahorse_notification_display (summary, body, !ok, icon);
+    seahorse_notification_display (summary, body, !ok, icon, attachto);
     
     g_free (body);
 }

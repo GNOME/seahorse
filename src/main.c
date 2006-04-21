@@ -311,7 +311,7 @@ do_decrypt (const gchar **paths)
         }
     
         if(status && status->signatures) {
-            seahorse_signatures_notify (new_path, status);
+            seahorse_signatures_notify (new_path, status, NULL);
         }
 
         g_free (new_path);
@@ -378,7 +378,7 @@ do_verify (const gchar **paths)
 
             if (GPG_IS_OK (err)) {
                 if (status && status->signatures)
-                    seahorse_signatures_notify (original, status);
+                    seahorse_signatures_notify (original, status, NULL);
             }
             
             g_free (original);
