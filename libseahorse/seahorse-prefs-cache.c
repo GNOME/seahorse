@@ -342,7 +342,7 @@ start_agent (GtkWidget *widget, gpointer data)
     if (err)
         seahorse_util_handle_error (err, _("Couldn't start the 'seahorse-daemon' program"));
     else if (!(WIFEXITED (status) && WEXITSTATUS (status) == 0))
-        seahorse_util_handle_error (NULL, _("The 'seahorse-daemon' program exited unsucessfully."));
+        seahorse_util_handle_error (NULL, _("The 'seahorse-daemon' program exited unsuccessfully."));
     else {
         /* Show the next message about starting up automatically */
         gtk_widget_hide (gtk_widget_get_parent (gtk_widget_get_parent (widget)));
