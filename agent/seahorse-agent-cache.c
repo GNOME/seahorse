@@ -412,6 +412,8 @@ seahorse_agent_cache_getname (const gchar *id)
 #define KEYRING_ATTR_KEYID "seahorse-keyid"
 #define KEYRING_VAL_GPG "gpg"
 
+#ifdef WITH_GNOME_KEYRING
+
 static gboolean 
 only_internal_cache ()
 {
@@ -421,8 +423,6 @@ only_internal_cache ()
     if (!seahorse_gconf_get_boolean (SETTING_CACHE))
         internal = TRUE;
     
-#ifdef WITH_GNOME_KEYRING
-    
     else {
         gchar *method = seahorse_gconf_get_string (SETTING_METHOD);
         if (method && strcmp (method, METHOD_GNOME) == 0)
@@ -430,11 +430,11 @@ only_internal_cache ()
         g_free (method);
     }
     
-#endif /* WITH_GNOME_KEYRING */
-    
     return internal;
 }
 
+#endif /* WITH_GNOME_KEYRING */
+    
 void
 seahorse_agent_cache_set (const gchar *id, const gchar *pass, gboolean lock)
 {

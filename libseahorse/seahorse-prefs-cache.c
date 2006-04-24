@@ -481,7 +481,6 @@ seahorse_prefs_cache (SeahorseWidget *widget)
    
     /* Seahorse agent running, behave normally */
     case AGENT_SEAHORSE:
-        gtk_widget_show (GTK_WIDGET (glade_xml_get_widget (widget->xml, "agent-started")));
         break;
         
     default:
