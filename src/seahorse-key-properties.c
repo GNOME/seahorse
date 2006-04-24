@@ -371,6 +371,60 @@ do_names_signals (SeahorseWidget *swidget)
  * PHOTO ID AREA
  */
 
+/* drag-n-drop uri data */
+enum {
+    TARGET_URI, 
+};
+
+static GtkTargetEntry target_list[] = {
+    { "text/uri-list", 0, TARGET_URI } };
+
+static guint n_targets = G_N_ELEMENTS (target_list);
+
+static void
+owner_photo_drag_received (GtkWidget *widget, GdkDragContext *context, gint x, gint y,
+                           GtkSelectionData *sel_data, guint target_type, guint time,
+                           SeahorseWidget *swidget)
+{       
+    gboolean dnd_success = FALSE;
+    SeahorsePGPKey *pkey;
+    gchar **uri_list;
+    gint len = 0;
+    gchar *uri;
+    
+    pkey = SEAHORSE_PGP_KEY (SEAHORSE_KEY_WIDGET (swidget)->skey);
+    g_assert (SEAHORSE_IS_PGP_KEY (pkey)); 
+    
+    /* 
+     * This needs to be improved, support should be added for remote images 
+     * and there has to be a better way to get rid of the trailing \r\n appended
+     * to the end of the path after the call to g_filename_from_uri
+     */
+    if((sel_data != NULL) && (sel_data->length >= 0)) {
+        g_return_if_fail (target_type == TARGET_URI);
+        
+        uri_list = gtk_selection_data_get_uris (sel_data);
+        while (uri_list && uri_list[len]) {
+                
+            uri = g_filename_from_uri (uri_list[len], NULL, NULL);
+            if (!uri)
+                continue;
+                
+            dnd_success = seahorse_photo_add (pkey, GTK_WINDOW (seahorse_widget_get_top (swidget)),
+                                              uri);
+            g_free (uri);
+            
+            if (!dnd_success)
+                break;
+            len++;
+        }
+        
+        g_strfreev (uri_list);
+    }
+    
+    gtk_drag_finish (context, dnd_success, FALSE, time);
+}
+
 static void
 owner_photo_add_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 {
@@ -379,7 +433,7 @@ owner_photo_add_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
     pkey = SEAHORSE_PGP_KEY (SEAHORSE_KEY_WIDGET (swidget)->skey);
     g_assert (SEAHORSE_IS_PGP_KEY (pkey));
     
-    if (seahorse_photo_add (pkey, GTK_WINDOW (seahorse_widget_get_top (swidget))))
+    if (seahorse_photo_add (pkey, GTK_WINDOW (seahorse_widget_get_top (swidget)), NULL))
         g_object_set_data (G_OBJECT (swidget), "current-photoid", NULL);
 }
  
@@ -600,6 +654,7 @@ do_owner_signals (SeahorseWidget *swidget)
 { 
     SeahorseKey *skey;
     SeahorseKeyEType etype;
+    GtkWidget *frame;
     
     skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
     etype = seahorse_key_get_etype (skey);
@@ -622,6 +677,11 @@ do_owner_signals (SeahorseWidget *swidget)
                 G_CALLBACK (owner_photo_delete_button_clicked), swidget);
         glade_xml_signal_connect_data (swidget->xml, "on_passphrase_button",
                 G_CALLBACK (owner_passphrase_button_clicked), swidget);
+        glade_xml_signal_connect_data (swidget->xml, "on_owner_photo_drag_received",
+                G_CALLBACK (owner_photo_drag_received), swidget);
+        frame = glade_xml_get_widget (swidget->xml, "owner-photo-frame");
+        gtk_drag_dest_set (frame, GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_HIGHLIGHT |
+                           GTK_DEST_DEFAULT_DROP, target_list, n_targets, GDK_ACTION_COPY);
     } else {
         show_glade_widget (swidget, "owner-photo-add-button", FALSE);
         show_glade_widget (swidget, "owner-photo-delete-button", FALSE);

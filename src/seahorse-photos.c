@@ -243,7 +243,7 @@ add_image_files (GtkWidget *dialog)
 
 
 gboolean
-seahorse_photo_add (SeahorsePGPKey *pkey, GtkWindow *parent)
+seahorse_photo_add (SeahorsePGPKey *pkey, GtkWindow *parent, const gchar *path)
 {
     gchar *filename = NULL;
     gchar *tempfile = NULL;
@@ -254,17 +254,21 @@ seahorse_photo_add (SeahorsePGPKey *pkey, GtkWindow *parent)
     
     g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (pkey), FALSE);
 
-    chooser = seahorse_util_chooser_open_new (_("Choose Photo to Add to Key"), parent);
-    gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (chooser), TRUE);
-    add_image_files (chooser);
+    if (NULL == path) {
+        chooser = seahorse_util_chooser_open_new (_("Choose Photo to Add to Key"), parent);
+        gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (chooser), TRUE);
+        add_image_files (chooser);
 
-    if (gtk_dialog_run (GTK_DIALOG (chooser)) == GTK_RESPONSE_ACCEPT)
-        filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (chooser));
-        
-    gtk_widget_destroy (chooser);
+        if (gtk_dialog_run (GTK_DIALOG (chooser)) == GTK_RESPONSE_ACCEPT)
+            filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (chooser));
+	
+        gtk_widget_destroy (chooser);
 
-    if (!filename)
-        return FALSE;
+        if (!filename)
+            return FALSE;
+    } else {
+	filename = g_strdup (path);
+    }
     
     if (!prepare_photo_id (parent, filename, &tempfile, &error)) {
         if (error)

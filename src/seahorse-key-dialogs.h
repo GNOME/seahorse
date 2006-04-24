@@ -66,7 +66,8 @@ void        seahorse_sign_show          (SeahorsePGPKey     *pkey,
                                          guint              uid);
                                          
 gboolean    seahorse_photo_add          (SeahorsePGPKey *pkey, 
-                                         GtkWindow *parent);
+                                         GtkWindow *parent,
+                                         const gchar *path);
                                          
 gboolean    seahorse_photo_delete       (SeahorsePGPKey *pkey, 
                                          gpgmex_photo_id_t photo, 
