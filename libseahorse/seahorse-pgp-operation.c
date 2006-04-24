@@ -65,12 +65,14 @@ typedef struct _SeahorsePGPOperationPrivate {
     struct gpgme_io_cbs io_cbs;     /* The GPGME IO callback vtable */
     GList *watches;                 /* Watches GPGME asked us to track */
     gboolean busy;                  /* If the context is currently executing something */
+    guint def_total;                /* Default total */
 } SeahorsePGPOperationPrivate;
 
 enum {
     PROP_0,
     PROP_GCTX,
-    PROP_MESSAGE
+    PROP_MESSAGE,
+    PROP_DEF_TOTAL
 };
 
 #define SEAHORSE_PGP_OPERATION_GET_PRIVATE(obj)  \
@@ -86,6 +88,10 @@ IMPLEMENT_OPERATION_PROPS(PGP, pgp)
     g_object_class_install_property (gobject_class, PROP_MESSAGE,
         g_param_spec_string ("message", "Progress Message", "Progress message that overrides whatever GPGME gives us", 
                              NULL, G_PARAM_READABLE | G_PARAM_WRITABLE));   
+
+    g_object_class_install_property (gobject_class, PROP_DEF_TOTAL,
+        g_param_spec_uint ("default-total", "Default Total", "Default total to use instead of GPGME's progress total.",
+                           0, G_MAXUINT, 0, G_PARAM_READABLE | G_PARAM_WRITABLE));
 
     g_type_class_add_private (gobject_class, sizeof (SeahorsePGPOperationPrivate));
 
@@ -151,6 +157,9 @@ progress_cb (void *data, const char *what, int type,
     SeahorsePGPOperationPrivate *pv = SEAHORSE_PGP_OPERATION_GET_PRIVATE (pop);
     
     DEBUG_OPERATION (("PGPOP: got progress: %s %d/%d\n", what, current, total));
+    
+    if (total <= 0)
+        total = pv->def_total;
     
     if (seahorse_operation_is_running (SEAHORSE_OPERATION (pop)))
         seahorse_operation_mark_progress_full (SEAHORSE_OPERATION (pop), 
@@ -310,6 +319,9 @@ seahorse_pgp_operation_set_property (GObject *gobject, guint prop_id,
         g_free (pv->message);
         pv->message = g_strdup (g_value_get_string (value));
         break;
+    case PROP_DEF_TOTAL:
+        pv->def_total = g_value_get_uint (value);
+        break;
     }
 }
 
@@ -327,6 +339,8 @@ seahorse_pgp_operation_get_property (GObject *gobject, guint prop_id,
     case PROP_MESSAGE:
         g_value_set_string (value, pv->message);
         break;
+    case PROP_DEF_TOTAL:
+        g_value_set_uint (value, pv->def_total);
     }
 }
 

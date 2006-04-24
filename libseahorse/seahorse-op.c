@@ -145,32 +145,6 @@ encrypt_data_common (SeahorsePGPSource *psrc, GList *keys, gpgme_data_t plain,
     gpgmex_data_release (plain);
 }
 
-/* common file encryption helper to encrypt @path to @recips using @func.
- * @keys will be released.*/
-static void
-encrypt_file_common (SeahorsePGPSource *psrc, GList *keys, const gchar *path, 
-                     const gchar *epath, EncryptFunc func, gpgme_error_t *err)
-{
-    gpgme_data_t plain, cipher;
-    gpgme_error_t error;
-    
-    if (err == NULL)
-        err = &error;
-
-    plain = seahorse_vfs_data_create_gerr (path, SEAHORSE_VFS_READ, err);
-    g_return_if_fail (plain != NULL);
-    
-    cipher = seahorse_vfs_data_create_gerr (epath, SEAHORSE_VFS_WRITE | SEAHORSE_VFS_DELAY, err);
-    if (!cipher) {
-        gpgmex_data_release (plain);
-        return;
-    }
- 
-    gpgme_set_textmode (psrc->gctx, FALSE);
-    encrypt_data_common (psrc, keys, plain, cipher, func, FALSE, err);
-    gpgmex_data_release (cipher);
-}
-
 /* common text encryption helper to encrypt @text to @recips using @func.
  * returns the encrypted text. */
 static gchar*
@@ -194,30 +168,6 @@ encrypt_text_common (SeahorsePGPSource *psrc, GList *keys, const gchar *text,
         return NULL;
     
     return seahorse_util_write_data_to_text (cipher, TRUE);
-}
-
-/**
- * seahorse_op_encrypt_file:
- * @keys: List of #SeahorseKey objects to encrypt to
- * @path: Path of file to encrypt
- * @epath: Path of file to write encrypted data
- * @err: Optional error value
- *
- * Tries to encrypt the file @path to @recips, saving any errors in @err.
- **/
-void
-seahorse_op_encrypt_file (GList *keys, const gchar *path, const gchar *epath,
-                          gpgme_error_t *err)
-{
-    SeahorsePGPSource *psrc;
-    
-    /* TODO: When other key types are supported we need to make sure they're
-       all from the same PGP source */
-    g_return_if_fail (keys && SEAHORSE_IS_PGP_KEY (keys->data));
-    psrc = SEAHORSE_PGP_SOURCE (seahorse_key_get_source (SEAHORSE_KEY (keys->data)));
-    g_return_if_fail (psrc != NULL && SEAHORSE_IS_PGP_SOURCE (psrc));
-
-	return encrypt_file_common (psrc, keys, path, epath, gpgme_op_encrypt, err);
 }
 
 /**
@@ -264,52 +214,6 @@ sign_data (SeahorsePGPSource *psrc, gpgme_data_t plain, gpgme_data_t sig,
 }
 
 /**
- * seahorse_op_sign_file:
- * @signer: Key pair to sign with 
- * @path: Path of file to sign
- * @spath: Where to write the signature
- * @err: Optional error value
- *
- * Tries to create a detached signature file for the file @path, saving any errors
- * in @err. 
- **/
-void
-seahorse_op_sign_file (SeahorsePGPKey *signer, const gchar *path, 
-                       const gchar *spath, gpgme_error_t *err)
-{
-    SeahorsePGPSource *psrc;
-    gpgme_data_t plain, sig;
-    gpgme_error_t error;
-
-    g_return_if_fail (signer && SEAHORSE_IS_PGP_KEY (signer));
-    g_return_if_fail (seahorse_key_get_flags (SEAHORSE_KEY (signer)) & SKEY_FLAG_CAN_SIGN);
-    
-    if (err == NULL)
-        err = &error;
-
-    psrc = SEAHORSE_PGP_SOURCE (seahorse_key_get_source (SEAHORSE_KEY (signer)));
-    g_return_if_fail (psrc != NULL && SEAHORSE_IS_PGP_SOURCE (psrc));
-    
-    /* new data from file */
-    plain = seahorse_vfs_data_create_gerr (path, SEAHORSE_VFS_READ, err);
-    g_return_if_fail (plain != NULL);
-    
-    sig = seahorse_vfs_data_create_gerr (spath, SEAHORSE_VFS_WRITE | SEAHORSE_VFS_DELAY, err);
-    if (!sig) {
-        gpgmex_data_release (plain);
-        return;
-    }
-  
-    set_signer (psrc, signer);
-    
-    /* get detached signature */
-    gpgme_set_textmode (psrc->gctx, FALSE);
-    gpgme_set_armor (psrc->gctx, seahorse_gconf_get_boolean (ARMOR_KEY));    
-    sign_data (psrc, plain, sig, GPGME_SIG_MODE_DETACH, err);
-    gpgmex_data_release (sig);
-}
-
-/**
  * seahorse_op_sign_text:
  * @sksrc: SeahorseKeyStore to sign with 
  * @text: Text to sign
@@ -353,37 +257,6 @@ seahorse_op_sign_text (SeahorsePGPKey *signer, const gchar *text,
 }
 
 /**
- * seahorse_op_encrypt_sign_file:
- * @keys: List of #SeahorseKey objects to encrypt to
- * @path: Path of file to encrypt and sign
- * @epath: Where to write encrypted data
- * @recips: Keys to encrypt with
- * @err: Optional error value
- *
- * Tries to encrypt and sign the file @path to @recips, saving any errors in @err.
- * Signing will be done with the default key. @recips will be released
- * upon completion.
- **/
-void
-seahorse_op_encrypt_sign_file (GList *keys, SeahorsePGPKey *signer, const gchar *path, 
-                               const gchar *epath, gpgme_error_t *err)
-{
-    SeahorsePGPSource *psrc;
-    
-    g_return_if_fail (signer && SEAHORSE_IS_PGP_KEY (signer));
-    g_return_if_fail (seahorse_key_get_flags (SEAHORSE_KEY (signer)) & SKEY_FLAG_CAN_SIGN);
-
-    /* TODO: When other key types are supported we need to make sure they're
-       all from the same PGP source */
-    g_return_if_fail (keys && SEAHORSE_IS_PGP_KEY (keys->data));
-    psrc = SEAHORSE_PGP_SOURCE (seahorse_key_get_source (SEAHORSE_KEY (keys->data)));
-    g_return_if_fail (psrc != NULL && SEAHORSE_IS_PGP_SOURCE (psrc));
-
-    set_signer (psrc, signer);
-	encrypt_file_common (psrc, keys, path, epath, gpgme_op_encrypt_sign, err);
-}
-
-/**
  * seahorse_op_encrypt_sign_text:
  * @keys: List of #SeahorseKey objects to encrypt to
  * @text: Text to encrypt and sign
@@ -413,43 +286,6 @@ seahorse_op_encrypt_sign_text (GList *keys, SeahorsePGPKey *signer,
 
     set_signer (psrc, signer);
 	return encrypt_text_common (psrc, keys, text, gpgme_op_encrypt_sign, err);
-}
-
-/**
- * seahorse_op_verify_file:
- * @sksrc: #SeahorseKeySource to verify against
- * @path: Path of detached signature file
- * @status: Will contain the status of any verified signatures
- * @err: Optional error value
- *
- * Tries to verify the signature file @path, saving any errors in @err. The
- * signed file to check against is assumed to be @path without the suffix.
- * The status of any verified signatures will be saved in @status.
- **/
-void
-seahorse_op_verify_file (SeahorsePGPSource *psrc, const gchar *path, const gchar *original,
-                         gpgme_verify_result_t *status, gpgme_error_t *err)
-{
-    gpgme_data_t sig, plain;
-    gpgme_error_t error;
-    
-    if (err == NULL)
-        err = &error;
-    /* new data from sig file */
-    sig = seahorse_vfs_data_create_gerr (path, SEAHORSE_VFS_READ, err);
-    g_return_if_fail (plain != NULL);
-
-    plain = seahorse_vfs_data_create_gerr (original, SEAHORSE_VFS_READ, err);
-    if (!plain) {
-        gpgmex_data_release (sig);
-        return;
-    }
- 
-    /* verify sig file, release plain data */
-    *err = gpgme_op_verify (psrc->gctx, sig, plain, NULL);
-    *status = gpgme_op_verify_result (psrc->gctx);
-    gpgmex_data_release (sig); 
-    gpgmex_data_release (plain);
 }
 
 /**
@@ -501,42 +337,6 @@ decrypt_verify_data (SeahorsePGPSource *psrc, gpgme_data_t cipher,
         *status = gpgme_op_verify_result (psrc->gctx);
      
     gpgmex_data_release (cipher);
-}
-
-/**
- * seahorse_op_decrypt_verify_file:
- * @sksrc: #SeahorseKeySource to verify against
- * @path: Path of file to decrypt and verify
- * @path: Where to write the decrypted data
- * @status: Will contain the status of any verified signatures
- * @err: Optional error value
- *
- * Tries to decrypt and verify the file @path, saving any errors in @err. The
- * status of any verified signatures will be saved in @status. 
- **/
-void
-seahorse_op_decrypt_verify_file (SeahorsePGPSource *psrc, const gchar *path, 
-                                 const gchar *dpath, gpgme_verify_result_t *status, 
-                                 gpgme_error_t *err)
-{
-    gpgme_data_t cipher, plain;
-    gpgme_error_t error;
-    
-    if (err == NULL)
-        err = &error;
-    /* new data from file */
-    cipher = seahorse_vfs_data_create_gerr (path, SEAHORSE_VFS_READ, err);
-    g_return_if_fail (cipher != NULL);
-    
-    plain = seahorse_vfs_data_create_gerr (dpath, SEAHORSE_VFS_WRITE | SEAHORSE_VFS_DELAY, err);
-    if (!plain) {
-        gpgmex_data_release (cipher);
-        return;
-    }
-
-    /* verify data */
-    decrypt_verify_data (psrc, cipher, plain, status, err);
-    gpgmex_data_release (plain);
 }
 
 /**

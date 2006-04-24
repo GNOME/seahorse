@@ -27,12 +27,25 @@
 #ifndef __SEAHORSE_VFS_DATA__
 #define __SEAHORSE_VFS_DATA__
 
+/* 
+ * HACKY: GPGME progress sucks, and doesn't update properly. So we 
+ * have a progress callback that can be hooked into the reading or 
+ * writing of a file.
+ */
+
+typedef void (*SeahorseVfsProgressCb) (gpgme_data_t data, GnomeVFSFileSize pos, 
+                                       gpointer userdata);
+
 #define SEAHORSE_VFS_READ   0x00000000
 #define SEAHORSE_VFS_WRITE  0x00000001
 #define SEAHORSE_VFS_DELAY  0x00000010
 
 gpgme_data_t        seahorse_vfs_data_create        (const gchar *uri, guint mode, 
                                                      GError **err);
+                                                     
+gpgme_data_t        seahorse_vfs_data_create_full   (const gchar *uri, guint mode, 
+                                                     SeahorseVfsProgressCb progcb, 
+                                                     gpointer userdata, GError **err);
                                        
 /* Deprecated compat API, eventually to be removed */
 gpgme_data_t        seahorse_vfs_data_create_gerr   (const gchar *uri, guint mode, 

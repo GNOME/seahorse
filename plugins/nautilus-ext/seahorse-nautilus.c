@@ -44,16 +44,16 @@ crypt_callback (NautilusMenuItem *item, gpointer user_data)
     files = g_object_get_data (G_OBJECT (item), "files");
     g_assert (files != NULL);
     
-    cmd = g_string_new ("seahorse");
+    cmd = g_string_new ("seahorse-tool");
     g_string_append_printf (cmd, " --encrypt");
     
     for (scan = files; scan; scan = scan->next) {
         uri = nautilus_file_info_get_uri ((NautilusFileInfo*)scan->data);
-		t = g_shell_quote (uri);
+        t = g_shell_quote (uri);
         g_free (uri);
 
-		g_string_append_printf (cmd, " %s", t);
-		g_free (t);        
+        g_string_append_printf (cmd, " %s", t);
+        g_free (t);        
     }
 
     g_print ("EXEC: %s\n", cmd->str);

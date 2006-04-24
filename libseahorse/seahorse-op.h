@@ -45,28 +45,12 @@ gint        seahorse_op_import_text         (SeahorsePGPSource  *psrc,
                                              const gchar        *text,
                                              GError             **err);
 
-void        seahorse_op_encrypt_file        (GList              *keys,
-                                             const gchar        *path,
-                                             const gchar        *epath,
-                                             gpgme_error_t      *err);
-
 gchar*      seahorse_op_encrypt_text        (GList              *keys,
                                              const gchar        *text,
                                              gpgme_error_t      *err);
 
-void        seahorse_op_sign_file           (SeahorsePGPKey     *signer,
-                                             const gchar        *path,
-                                             const gchar        *spath,
-                                             gpgme_error_t      *err);
-
 gchar*      seahorse_op_sign_text           (SeahorsePGPKey     *signer,
                                              const gchar        *text,
-                                             gpgme_error_t      *err);
-
-void        seahorse_op_encrypt_sign_file   (GList              *keys,
-                                             SeahorsePGPKey     *signer,
-                                             const gchar        *path,
-                                             const gchar        *epath,
                                              gpgme_error_t      *err);
 
 gchar*      seahorse_op_encrypt_sign_text   (GList              *keys,
@@ -74,20 +58,8 @@ gchar*      seahorse_op_encrypt_sign_text   (GList              *keys,
                                              const gchar        *text,
                                              gpgme_error_t      *err);
 
-void        seahorse_op_verify_file         (SeahorsePGPSource  *psrc,
-                                             const gchar        *path,
-                                             const gchar        *original,
-                                             gpgme_verify_result_t *status,
-                                             gpgme_error_t      *err);
-
 gchar*      seahorse_op_verify_text         (SeahorsePGPSource  *psrc,
                                              const gchar        *text,
-                                             gpgme_verify_result_t *status,
-                                             gpgme_error_t      *err);
-
-void        seahorse_op_decrypt_verify_file (SeahorsePGPSource  *psrc,
-                                             const gchar        *path,
-                                             const gchar        *dpath,
                                              gpgme_verify_result_t *status,
                                              gpgme_error_t      *err);
 

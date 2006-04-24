@@ -44,7 +44,4 @@ void        seahorse_generate_druid_show        (void);
 
 void        seahorse_delete_show                (GList *keys);
 
-gchar**     seahorse_process_multiple           (const gchar **uris, 
-                                                 const gchar *glade);
-
 #endif /* __SEAHORSE_WINDOWS_H__ */

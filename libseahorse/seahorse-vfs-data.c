@@ -31,6 +31,8 @@
 #include "seahorse-vfs-data.h"
 #include "seahorse-util.h"
 
+#define PROGRESS_BLOCK  16 * 1024
+
 /* The current/last VFS operation */
 typedef enum _VfsAsyncOp
 {
@@ -53,6 +55,9 @@ VfsAsyncState;
 
 /* A handle for VFS work */
 typedef struct _VfsAsyncHandle {
+    
+    gpgme_data_t gdata;             /* A pointer to the outside gpgme_data_t handle */
+    
     gchar *uri;                     /* The URI we're operating on */
     GnomeVFSAsyncHandle* handle;    /* Handle for operations */
     GtkWidget* widget;              /* Widget for progress and cancel */
@@ -63,6 +68,12 @@ typedef struct _VfsAsyncHandle {
     GnomeVFSResult result;          /* Result of the current operation */
     gpointer buffer;                /* Current operation's buffer */
     GnomeVFSFileSize processed;     /* Number of bytes processed in current op */
+    
+    GnomeVFSFileSize last;          /* Last update sent about number of bytes */
+    GnomeVFSFileSize total;         /* Total number of bytes read or written */
+    
+    SeahorseVfsProgressCb progcb;   /* Progress callback */
+    gpointer userdata;              /* User data for progress callback */
 } VfsAsyncHandle;
 
 static void vfs_data_cancel(VfsAsyncHandle *ah);
@@ -187,6 +198,8 @@ vfs_data_open_done(GnomeVFSAsyncHandle *handle, GnomeVFSResult result,
     
         ah->result = result;
         ah->state = VFS_ASYNC_READY;
+        ah->total = 0;
+        ah->last = 0;
     }
 }
 
@@ -208,7 +221,7 @@ vfs_data_open_helper (VfsAsyncHandle *ah, gboolean write)
     }
 
     ah->state = VFS_ASYNC_PROCESSING;
-    ah->operation = VFS_OP_OPENING;        
+    ah->operation = VFS_OP_OPENING;
 }
 
 /* Open the given URI */
@@ -248,6 +261,11 @@ vfs_data_read_done(GnomeVFSAsyncHandle *handle, GnomeVFSResult result, gpointer 
         ah->result = result;
         ah->processed = bytes_read;
         ah->state = VFS_ASYNC_READY;
+        ah->total += bytes_read;
+        
+        /* Call progress callback if setup */
+        if (ah->progcb && ah->total >= ah->last + PROGRESS_BLOCK)
+            (ah->progcb) (ah->gdata, ah->total, ah->userdata);
     }
 }    
     
@@ -302,6 +320,11 @@ vfs_data_write_done(GnomeVFSAsyncHandle *handle, GnomeVFSResult result, gconstpo
         ah->result = result;
         ah->processed = bytes_written;
         ah->state = VFS_ASYNC_READY;
+        ah->total += bytes_written;
+        
+        /* Call progress callback if setup */
+        if (ah->progcb && ah->total >= ah->last + PROGRESS_BLOCK)
+            (ah->progcb) (ah->gdata, ah->total, ah->userdata);
     }
 }    
 
@@ -469,27 +492,15 @@ static struct gpgme_data_cbs vfs_data_cbs =
 /* -----------------------------------------------------------------------------
  */
 
-gpgme_data_t 
-seahorse_vfs_data_create (const gchar *uri, guint mode, GError **err)
-{
-    gpgme_data_t data;
-    gpgme_error_t gerr;
-    
-    g_return_val_if_fail (!err || !*err, NULL);
-    data = seahorse_vfs_data_create_gerr (uri, mode, &gerr);
-    if (!data)
-        seahorse_util_gpgme_to_error (gerr, err);
-    return data;
-}
- 
 /* Create a data on the given uri, remote uris get gnome-vfs backends,
  * local uris get normal file access. */
-gpgme_data_t
-seahorse_vfs_data_create_gerr (const gchar *uri, guint mode, gpg_error_t* err) 
+static gpgme_data_t
+create_vfs_data (const gchar *uri, guint mode, SeahorseVfsProgressCb progcb,
+                 gpointer userdata, gpg_error_t* err) 
 {
     gpgme_error_t gerr;
     gpgme_data_t ret = NULL;
-    void* handle = NULL;
+    VfsAsyncHandle* handle = NULL;
     char* ruri;
     
     if (!err)
@@ -500,16 +511,50 @@ seahorse_vfs_data_create_gerr (const gchar *uri, guint mode, gpg_error_t* err)
     handle = vfs_data_open (ruri, mode & SEAHORSE_VFS_WRITE, 
                                   mode & SEAHORSE_VFS_DELAY);
     if (handle) {
+        
         *err = gpgme_data_new_from_cbs (&ret, &vfs_data_cbs, handle);
         if (!GPG_IS_OK (*err)) {
             vfs_data_cbs.release (handle);
             ret = NULL;
         }
+        
+        handle->progcb = progcb;
+        handle->userdata = userdata;
+        handle->gdata = ret;
     }
     
     g_free (ruri);
 
     return ret;
+}
+
+
+gpgme_data_t 
+seahorse_vfs_data_create (const gchar *uri, guint mode, GError **err)
+{
+    return seahorse_vfs_data_create_full (uri, mode, NULL, NULL, err);
+}
+
+gpgme_data_t 
+seahorse_vfs_data_create_full (const gchar *uri, guint mode, SeahorseVfsProgressCb progcb,
+                               gpointer userdata, GError **err)
+{
+    gpgme_data_t data;
+    gpgme_error_t gerr;
+    
+    g_return_val_if_fail (!err || !*err, NULL);
+    data = create_vfs_data (uri, mode, progcb, userdata, &gerr);
+    if (!data)
+        seahorse_util_gpgme_to_error (gerr, err);
+    return data;
+    
+    
+}
+
+gpgme_data_t
+seahorse_vfs_data_create_gerr (const gchar *uri, guint mode, gpg_error_t* err) 
+{
+    return create_vfs_data (uri, mode, NULL, NULL, err);
 }
 
 gboolean

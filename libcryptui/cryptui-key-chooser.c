@@ -170,10 +170,10 @@ construct_recipients (CryptUIKeyChooser *chooser, GtkBox *box)
 static void
 construct_signer (CryptUIKeyChooser *chooser, GtkBox *box)
 {
+    const gchar *none_option = NULL;
     CryptUIKeyStore *ckstore;
     GtkWidget *hbox;
     GtkWidget *label;
-    const gchar *none_option;
 
     /* Top filter box */
     hbox = gtk_hbox_new (FALSE, 12);

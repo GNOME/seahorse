@@ -1,20 +1,32 @@
 gladedir = $(datadir)/seahorse/glade/
 
 INCLUDES = -I$(top_builddir) \
-	-I$(top_srcdir) \
-	-I$(top_srcdir)/libcryptui \
-	-I$(top_srcdir)/libseahorse \
-	$(SEAHORSE_CFLAGS) \
-	-DDATA_DIR=\""$(datadir)"\" \
-	-DSEAHORSE_GLADEDIR=\""$(gladedir)"\"
+    -I$(top_srcdir) \
+    -I$(top_srcdir)/libcryptui \
+    -I$(top_srcdir)/libseahorse \
+    $(SEAHORSE_CFLAGS) \
+    -DLOCALEDIR=\"$(localedir)\" \
+    -DDATA_DIR=\""$(datadir)"\" \
+    -DSEAHORSE_GLADEDIR=\""$(gladedir)"\"
 
-bin_PROGRAMS = seahorse-preferences
+bin_PROGRAMS = seahorse-preferences seahorse-tool
 
 seahorse_preferences_SOURCES = seahorse-pgp-preferences.c 
-	
+
 seahorse_preferences_LDADD = \
-	$(top_builddir)/libseahorse/libseahorse-internal.la \
-	$(SEAHORSE_LIBS)
+    $(top_builddir)/libseahorse/libseahorse-internal.la \
+    $(SEAHORSE_LIBS)
+    
+seahorse_tool_SOURCES = \
+    seahorse-tool.c \
+    seahorse-tool.h \
+    seahorse-tool-files.c \
+    seahorse-tool-progress.c
+
+seahorse_tool_LDADD = \
+    $(SEAHORSE_LIBS) $(LIBCRYPTUI_LIBS) \
+    $(top_builddir)/libseahorse/libseahorse-internal.la \
+    $(top_builddir)/libcryptui/libcryptui.la
 
 # The old mime structure 
 mimeinfodir = $(datadir)/mime-info

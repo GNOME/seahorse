@@ -209,17 +209,19 @@ seahorse_context_new (gboolean app_ctx, guint ktype)
     
     if (app_ctx) {
 
-        /* Add the default key sources */
-        if (ktype == 0 || ktype == SKEY_PGP) {
-            SeahorsePGPSource *pgpsrc = seahorse_pgp_source_new ();
-            seahorse_context_take_key_source (sctx, SEAHORSE_KEY_SOURCE (pgpsrc));     
-        }
+        if (ktype >= 0) {
+            /* Add the default key sources */
+            if (ktype == 0 || ktype == SKEY_PGP) {
+                SeahorsePGPSource *pgpsrc = seahorse_pgp_source_new ();
+                seahorse_context_take_key_source (sctx, SEAHORSE_KEY_SOURCE (pgpsrc));     
+            }
 #ifdef WITH_SSH        
-        if (ktype == 0 || ktype == SKEY_SSH) {
-            SeahorseSSHSource *sshsrc = seahorse_ssh_source_new ();
-            seahorse_context_take_key_source (sctx, SEAHORSE_KEY_SOURCE (sshsrc));     
-        }
+            if (ktype == 0 || ktype == SKEY_SSH) {
+                SeahorseSSHSource *sshsrc = seahorse_ssh_source_new ();
+                seahorse_context_take_key_source (sctx, SEAHORSE_KEY_SOURCE (sshsrc));     
+            }
 #endif
+        }
 
         /* DNS-SD discovery */    
         sctx->pv->discovery = seahorse_service_discovery_new ();

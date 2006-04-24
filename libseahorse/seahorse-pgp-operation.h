@@ -28,6 +28,8 @@
  *
  * Properties:
  *  gctx:  (pointer) GPGME context.
+ *  message: (string) message to display instead of from GPGME.
+ *  default-total: (guint) When GPGME reports 0 as progress total, use this instead.
  * 
  * HOW TO USE: 
  * 1. Create a SeahorsePGPOperation with seahorse_pgp_operation_new. 

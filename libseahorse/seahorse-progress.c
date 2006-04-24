@@ -226,7 +226,7 @@ progress_show (SeahorseOperation *operation)
                             (GDestroyNotify)g_object_unref);    
         
     /* Setup the title */
-    title = (const gchar*)g_object_get_data (G_OBJECT (operation), "title");
+    title = (const gchar*)g_object_get_data (G_OBJECT (operation), "progress-title");
     if (title) {
             
         /* The window title */
@@ -251,8 +251,8 @@ progress_show (SeahorseOperation *operation)
     /* Cancel events */
     glade_xml_signal_connect_data (swidget->xml, "cancel_clicked",
                                    G_CALLBACK (progress_operation_cancel), operation);
-    glade_xml_signal_connect_data (swidget->xml, "delete_event",
-                                   G_CALLBACK (progress_delete_event), operation);
+    g_signal_connect (seahorse_widget_get_top (swidget), "delete_event",
+                      G_CALLBACK (progress_delete_event), operation);
     
     /* Done and cleanup */
     w = glade_xml_get_widget (swidget->xml, swidget->name);
@@ -268,7 +268,7 @@ seahorse_progress_show (SeahorseOperation *operation, const gchar *title,
 {    
     /* Unref in the timeout callback */
     g_object_ref (operation);
-    g_object_set_data_full (G_OBJECT (operation), "title", 
+    g_object_set_data_full (G_OBJECT (operation), "progress-title", 
                 title ? g_strdup (title) : NULL, (GDestroyNotify)g_free);
     
     /* Show the progress, after one second */

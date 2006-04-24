@@ -101,6 +101,12 @@ gchar*              cryptui_keyset_key_display_name   (CryptUIKeyset *keyset,
 gchar*              cryptui_keyset_key_display_id     (CryptUIKeyset *keyset, 
                                                        const gchar *key);
 
+gchar*              cryptui_keyset_key_raw_keyid      (CryptUIKeyset *keyset,
+                                                       const gchar *key);
+                                                       
+gchar**             cryptui_keyset_keys_raw_keyids    (CryptUIKeyset *keyset,
+                                                       const gchar **keys);
+
 /* TODO: A way to change the key properties ve cache */
 
 #endif /* __CRYPTUI_KEYSET_H__ */

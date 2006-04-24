@@ -214,9 +214,14 @@ seahorse_operation_cancel (SeahorseOperation *op)
     g_object_ref (op);
  
     klass = SEAHORSE_OPERATION_GET_CLASS (op);
-    g_return_if_fail (klass->cancel != NULL);
     
-    (*klass->cancel) (op); 
+    /* A derived operation exists */
+    if (klass->cancel)
+        (*klass->cancel) (op); 
+    
+    /* No derived operation exists */
+    else
+        seahorse_operation_mark_done (op, TRUE, NULL);
     
     g_object_unref (op);
 }

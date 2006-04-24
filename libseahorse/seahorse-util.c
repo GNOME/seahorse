@@ -318,6 +318,8 @@ seahorse_util_print_fd (int fd, const char* s)
         r = write (fd, s, l);
         
         if (r == -1) {
+            if (errno == EPIPE)
+                return FALSE;
             if (errno != EAGAIN && errno != EINTR) {
                 g_critical ("couldn't write data to socket: %s", strerror (errno));
                 return FALSE;

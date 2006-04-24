@@ -45,7 +45,6 @@ seahorse_SOURCES = main.c \
 	seahorse-add-uid.c \
 	seahorse-add-subkey.c \
 	seahorse-key-dialogs.h \
-	seahorse-process-multiple.c \
 	$(KEYSERVER_SRCS) \
     $(SSH_SRCS)
 

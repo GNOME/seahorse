@@ -26,7 +26,7 @@ listener_callback (BonoboListener *listener, const gchar *event_name,
 	g_return_if_fail (list != NULL);
 
 	/* start cmd string */
-	str = g_string_new ("seahorse");
+	str = g_string_new ("seahorse-tool");
 
 	/* get command line options */
 	if (g_str_equal (event_name, "Import")) 
