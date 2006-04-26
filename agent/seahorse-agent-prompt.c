@@ -135,6 +135,7 @@ passphrase_response (GtkDialog *dialog, gint response, SeahorseAgentPassReq *pr)
     switch (response) {
     case GTK_RESPONSE_ACCEPT:
         s = seahorse_passphrase_prompt_get (dialog);
+        gtk_widget_hide (GTK_WIDGET (dialog));
         seahorse_agent_cache_set (pr->id, s != NULL ? s : "", TRUE);
         prompt_done_dialog (pr, TRUE);
         break;

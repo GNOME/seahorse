@@ -407,10 +407,9 @@ seahorse_agent_cache_getname (const gchar *id)
  * GENERIC CACHE FUNCTIONS
  */
 
-
 #define KEYRING_ATTR_TYPE "seahorse-key-type"
-#define KEYRING_ATTR_KEYID "seahorse-keyid"
-#define KEYRING_VAL_GPG "gpg"
+#define KEYRING_ATTR_KEYID "openpgp-keyid"
+#define KEYRING_VAL_GPG "openpgp"
 
 #ifdef WITH_GNOME_KEYRING
 
@@ -431,6 +430,13 @@ only_internal_cache ()
     }
     
     return internal;
+}
+
+static const gchar*
+gkeyring_keyid (const gchar *fullid)
+{
+    size_t len = strlen(fullid);
+    return fullid + (len > 16 ? len - 16 : 0);
 }
 
 #endif /* WITH_GNOME_KEYRING */
@@ -457,7 +463,8 @@ seahorse_agent_cache_set (const gchar *id, const gchar *pass, gboolean lock)
         attributes = gnome_keyring_attribute_list_new ();
         gnome_keyring_attribute_list_append_string (attributes, KEYRING_ATTR_TYPE, 
                                                     KEYRING_VAL_GPG);
-        gnome_keyring_attribute_list_append_string (attributes, KEYRING_ATTR_KEYID, id);
+        gnome_keyring_attribute_list_append_string (attributes, KEYRING_ATTR_KEYID, 
+                                                    gkeyring_keyid (id));
         res = gnome_keyring_item_create_sync (NULL, GNOME_KEYRING_ITEM_GENERIC_SECRET, 
                                               desc, attributes, pass, TRUE, &item_id);
         gnome_keyring_attribute_list_free (attributes);
@@ -487,7 +494,8 @@ seahorse_agent_cache_clear (const gchar *id)
         GList *found_items, *l;
         
         attributes = gnome_keyring_attribute_list_new ();
-        gnome_keyring_attribute_list_append_string (attributes, KEYRING_ATTR_KEYID, id);
+        gnome_keyring_attribute_list_append_string (attributes, KEYRING_ATTR_KEYID, 
+                                                    gkeyring_keyid (id));
         res = gnome_keyring_find_items_sync (GNOME_KEYRING_ITEM_GENERIC_SECRET,
                                              attributes, &found_items);
         gnome_keyring_attribute_list_free (attributes);
@@ -532,13 +540,15 @@ seahorse_agent_cache_get (const gchar *id)
         GnomeKeyringFound *found;
         
         attributes = gnome_keyring_attribute_list_new ();
-        gnome_keyring_attribute_list_append_string (attributes, KEYRING_ATTR_KEYID, id);
+        gnome_keyring_attribute_list_append_string (attributes, KEYRING_ATTR_KEYID, 
+                                                    gkeyring_keyid (id));
         res = gnome_keyring_find_items_sync (GNOME_KEYRING_ITEM_GENERIC_SECRET,
                                              attributes, &found_items);
         gnome_keyring_attribute_list_free (attributes);
         
         if (res != GNOME_KEYRING_RESULT_OK) {
-            g_warning ("couldn't search keyring: (code %d)", res);
+            if (res != GNOME_KEYRING_RESULT_DENIED)
+                g_warning ("couldn't search keyring: (code %d)", res);
             
         } else {
             
