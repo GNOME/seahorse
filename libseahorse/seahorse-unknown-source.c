@@ -154,7 +154,7 @@ seahorse_unknown_source_class_init (SeahorseUnknownSourceClass *klass)
  
     g_object_class_install_property (gobject_class, PROP_KEY_TYPE,
         g_param_spec_uint ("key-type", "Key Type", "Key type that originates from this key source.", 
-                           0, G_MAXUINT, SKEY_INVALID, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+                           0, G_MAXUINT, SKEY_UNKNOWN, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
     g_object_class_install_property (gobject_class, PROP_LOCATION,
         g_param_spec_uint ("location", "Key Location", "Where the key is stored. See SeahorseKeyLoc", 

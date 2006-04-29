@@ -121,7 +121,7 @@ changed_key (SeahorseSSHKey *skey)
         
         key->keyid = "UNKNOWN ";
         key->location = SKEY_LOC_INVALID;
-        key->etype = SKEY_INVALID;
+        key->etype = SKEY_ETYPE_NONE;
         key->loaded = SKEY_INFO_NONE;
         key->flags = SKEY_FLAG_DISABLED;
         

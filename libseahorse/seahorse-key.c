@@ -120,11 +120,11 @@ class_init (SeahorseKeyClass *klass)
     
     g_object_class_install_property (gobject_class, PROP_KTYPE,
         g_param_spec_uint ("ktype", "Key Type", "Key type", 
-                           0, G_MAXUINT, SKEY_INVALID, G_PARAM_READABLE));
+                           0, G_MAXUINT, SKEY_UNKNOWN, G_PARAM_READABLE));
 
     g_object_class_install_property (gobject_class, PROP_ETYPE,
         g_param_spec_uint ("etype", "Encrpyption Type", "Key encryption type", 
-                           0, G_MAXUINT, SKEY_INVALID, G_PARAM_READABLE));
+                           0, G_MAXUINT, SKEY_ETYPE_NONE, G_PARAM_READABLE));
 
     g_object_class_install_property (gobject_class, PROP_FLAGS,
         g_param_spec_uint ("flags", "Key Flags", "Flags on capabilities of key. See SeahorseKeyFlags", 
@@ -270,7 +270,7 @@ seahorse_key_get_ktype (SeahorseKey *skey)
 SeahorseKeyEType
 seahorse_key_get_etype (SeahorseKey *skey)
 {
-    g_return_val_if_fail (SEAHORSE_IS_KEY (skey), SKEY_INVALID);
+    g_return_val_if_fail (SEAHORSE_IS_KEY (skey), SKEY_ETYPE_NONE);
     return skey->etype;
 }
 /**

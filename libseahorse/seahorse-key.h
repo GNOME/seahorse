@@ -90,7 +90,7 @@ typedef enum {
 } SeahorseKeyInfo;
 
 typedef enum {
-    SKEY_INVALID =          CRYPTUI_ENCTYPE_NONE,       /* An invalid key */
+    SKEY_ETYPE_NONE =       CRYPTUI_ENCTYPE_NONE,       /* Any encryption type */
     SKEY_SYMMETRIC =        CRYPTUI_ENCTYPE_SYMMETRIC,  /* A symmetric key */
     SKEY_PUBLIC =           CRYPTUI_ENCTYPE_PUBLIC,     /* A public key */
     SKEY_PRIVATE =          CRYPTUI_ENCTYPE_PRIVATE     /* A private key (assumes public/keypair)*/

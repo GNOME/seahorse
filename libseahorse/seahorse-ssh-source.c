@@ -551,7 +551,7 @@ seahorse_ssh_source_class_init (SeahorseSSHSourceClass *klass)
  
     g_object_class_install_property (gobject_class, PROP_KEY_TYPE,
         g_param_spec_uint ("key-type", "Key Type", "Key type that originates from this key source.", 
-                           0, G_MAXUINT, SKEY_INVALID, G_PARAM_READABLE));
+                           0, G_MAXUINT, SKEY_UNKNOWN, G_PARAM_READABLE));
 
     g_object_class_install_property (gobject_class, PROP_LOCATION,
         g_param_spec_uint ("location", "Key Location", "Where the key is stored. See SeahorseKeyLoc", 

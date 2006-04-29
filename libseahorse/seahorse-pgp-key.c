@@ -377,7 +377,7 @@ changed_key (SeahorsePGPKey *pkey)
         
         skey->keyid = "UNKNOWN ";
         skey->location = SKEY_LOC_INVALID;
-        skey->etype = SKEY_INVALID;
+        skey->etype = SKEY_ETYPE_NONE;
         skey->loaded = SKEY_INFO_NONE;
         skey->flags = SKEY_FLAG_DISABLED;
         

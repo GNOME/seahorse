@@ -62,7 +62,7 @@ seahorse_unknown_key_constructor (GType type, guint n_props, GObjectConstructPar
         skey->ktype = seahorse_key_source_get_ktype (skey->sksrc);
     skey->location = SKEY_LOC_UNKNOWN;
     skey->loaded = SKEY_INFO_NONE;
-    skey->etype = SKEY_INVALID;
+    skey->etype = SKEY_ETYPE_NONE;
     return obj;
 }
 
