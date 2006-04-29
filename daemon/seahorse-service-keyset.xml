@@ -38,6 +38,19 @@
             <arg type="as" name="keys" direction="out"/>
         </method>
         
+        <!-- flags for MatchKeys
+          * LocalOnly           0x00000010
+        -->
+        
+        <method name="MatchKeys">
+            <annotation name="org.freedesktop.DBus.GLib.CSymbol" 
+                value="seahorse_service_keyset_match_keys"/>
+            <arg type="as" name="patterns" direction="in"/>
+            <arg type="i" name="flags" direction="in"/>
+            <arg type="as" name="keys" direction="out"/>
+            <arg type="as" name="unmatched" direction="out"/>
+        </method>
+        
         <signal name="KeyAdded">
             <arg type="s" name="key" direction="out"/>
         </signal>

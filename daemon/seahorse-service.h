@@ -49,14 +49,14 @@ typedef struct _SeahorseServiceClass SeahorseServiceClass;
 #define SEAHORSE_SERVICE_GET_CLASS(object)  (G_TYPE_INSTANCE_GET_CLASS((object), SEAHORSE_TYPE_SERVICE, SeahorseServiceClass))
 
 struct _SeahorseService {
-	GObject base;
+    GObject base;
     
     /* <public> */
     GHashTable *keysets;
 };
 
 struct _SeahorseServiceClass {
-	GObjectClass base;
+    GObjectClass base;
 };
 
 GType          seahorse_service_get_type            (void);
@@ -75,10 +75,6 @@ gboolean        seahorse_service_export_keys        (SeahorseService *svc, gchar
                                                      gchar **keys, gchar **data, GError **error);
 
 #if 0
-gboolean        seahorse_service_match_keys         (SeahorseService *svc, gchar *ktype, 
-                                                     gint flags, gchar **patterns, gchar ***keys, 
-                                                     gchar***unmatched, GError **error);
-
 gboolean        seahorse_service_match_save         (SeahorseService *svc, gchar *ktype, 
                                                      gint flags, gchar **patterns, 
                                                      gchar **keys, GError **error);
@@ -145,6 +141,12 @@ gboolean        seahorse_service_keyset_get_key_fields (SeahorseService *svc, gc
 gboolean        seahorse_service_keyset_discover_keys  (SeahorseServiceKeyset *keyset, 
                                                         const gchar **keyids, gint flags,
                                                         gchar ***keys, GError **error);
+
+
+gboolean        seahorse_service_keyset_match_keys     (SeahorseServiceKeyset *keyset, 
+                                                        gchar **patterns, gint flags, 
+                                                        gchar ***keys, gchar***unmatched, 
+                                                        GError **error);
 
 /* -----------------------------------------------------------------------------
  * CRYPTO SERVICE

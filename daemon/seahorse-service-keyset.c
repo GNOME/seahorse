@@ -25,6 +25,9 @@
 #include "seahorse-service.h"
 #include "seahorse-util.h"
 
+/* Flags for seahorse_service_keyset_match_keys */
+#define MATCH_KEYS_LOCAL_ONLY       0x00000010
+
 /* Special fields */
 enum {
     FIELD_DISLAY_NAME,
@@ -87,6 +90,36 @@ lookup_key_field (SeahorseKey *skey, guint uid, const gchar *field, GValue *valu
     g_value_init (value, spec->value_type);
     g_object_get_property (G_OBJECT (skey), field, value);
     return TRUE; 
+}
+
+static gboolean
+match_remove_patterns (GArray *patterns, gchar *value)
+{
+    gboolean matched = FALSE;
+    gchar *lower;
+    int i;
+    
+    if(value) {
+        lower = g_utf8_casefold (value, -1);
+        g_free (value);
+        
+        /* 
+         * Search for each pattern on this key. We try to match
+         * as many as possible.
+         */
+        for (i = 0; i < patterns->len; i++) {
+            if (strstr (lower, g_array_index (patterns, gchar*, i)) ? TRUE : FALSE) {
+                matched = TRUE;
+                g_free (g_array_index (patterns, gchar*, i));
+                g_array_remove_index_fast (patterns, i);
+                i--;
+            }
+        }
+        
+        g_free (lower);
+    }
+    
+    return matched;
 }
 
 /* -----------------------------------------------------------------------------
@@ -211,6 +244,95 @@ seahorse_service_keyset_discover_keys (SeahorseServiceKeyset *keyset, const gcha
     *keys = (gchar**)g_array_free (akeys, FALSE);
     g_list_free (lkeys);
     
+    return TRUE;
+}
+
+gboolean
+seahorse_service_keyset_match_keys (SeahorseServiceKeyset *keyset, gchar **patterns, 
+                                    gint flags, gchar ***keys, gchar***unmatched, 
+                                    GError **error)
+{
+    GArray *results = NULL;
+    GArray *remaining = NULL;
+    GList *lkeys, *l;
+    SeahorseKey *skey;
+    gchar *value, *keyid;
+    gchar **k;
+    int i, nnames;
+
+    /* Copy the keys so we can see what's left. */
+    remaining = g_array_new (TRUE, TRUE, sizeof (gchar*));
+    for(k = patterns; *k; k++) {
+        value = g_utf8_casefold (*k, -1);
+        g_array_append_val (remaining, value);
+    }
+    
+    results = g_array_new (TRUE, TRUE, sizeof (gchar*));
+    
+
+    lkeys = seahorse_context_find_keys (SCTX_APP (), keyset->ktype, SKEY_ETYPE_NONE, 
+                                        (flags & MATCH_KEYS_LOCAL_ONLY) ? SKEY_LOC_LOCAL : SKEY_LOC_INVALID);
+    for (l = lkeys; l; l = g_list_next(l)) {
+        
+        if (remaining->len <= 0)
+            break;
+
+        skey = SEAHORSE_KEY (l->data);
+        
+        /* Note that match_remove_patterns frees value */
+        
+        /* Main name */        
+        value = seahorse_key_get_display_name (skey);
+        if (match_remove_patterns (remaining, value)) {
+            keyid = seahorse_service_key_to_dbus (skey, 0);
+            g_array_append_val (results, keyid);
+        }
+        
+        /* Key ID */
+        value = g_strdup (seahorse_key_get_keyid (skey));
+        if (match_remove_patterns (remaining, value)) {
+            keyid = seahorse_service_key_to_dbus (skey, 0);
+            g_array_append_val (results, keyid);
+        }
+        
+        /* Each UID */
+        nnames = seahorse_key_get_num_names (skey);
+        for (i = 0; i < nnames; i++) {
+            
+            /* UID name */
+            value = seahorse_key_get_name (skey, i);
+            if (match_remove_patterns (remaining, value)) {
+                keyid = seahorse_service_key_to_dbus (skey, i);
+                g_array_append_val (results, keyid);
+                break;
+            }
+            
+            /* UID email */
+            value = seahorse_key_get_name_cn (skey, i);
+            if (match_remove_patterns (remaining, value)) {
+                keyid = seahorse_service_key_to_dbus (skey, i);
+                g_array_append_val (results, keyid);
+                break;
+            }
+        }
+    }
+    
+    /* Sort results and remove duplicates */
+    g_array_sort (results, (GCompareFunc)g_utf8_collate);
+    for (i = 0; i < results->len; i++) {
+        if (i > 0 && i < results->len) {
+            if (strcmp (g_array_index (results, gchar*, i), 
+                        g_array_index (results, gchar*, i - 1)) == 0) {
+                g_free (g_array_index (results, gchar*, i));
+                g_array_remove_index (results, i);
+                i--;
+            }
+        }
+    }
+    
+    *keys = (gchar**)g_array_free (results, FALSE);
+    *unmatched = (gchar**)g_array_free (remaining, FALSE);
+
     return TRUE;
 }
 

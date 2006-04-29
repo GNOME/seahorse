@@ -283,17 +283,6 @@ seahorse_service_export_keys (SeahorseService *svc, gchar *ktype,
 #if 0
 
 gboolean
-seahorse_service_match_keys (SeahorseService *svc, gchar *ktype, gint flags, 
-                             gchar **patterns, gchar ***keys, gchar***unmatched,
-                             GError **error)
-{
-    /* TODO: Implement match keys */
-    g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_NOTIMPLEMENTED, "TODO");
-    return FALSE;    
-    
-}
-
-gboolean
 seahorse_service_match_save (SeahorseService *svc, gchar *ktype, gint flags, 
                              gchar **patterns, gchar **keys, GError **error)
 {
