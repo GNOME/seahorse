@@ -18,8 +18,8 @@ else
 DBUS_DIR = 
 endif
 
-SUBDIRS = libseahorse \
-          $(DBUS_DIR) \
+SUBDIRS = $(DBUS_DIR) \
+          libseahorse \
           src \
           po \
           data \

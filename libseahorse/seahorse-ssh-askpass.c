@@ -25,6 +25,7 @@
 
 #include "seahorse-libdialogs.h"
 #include "seahorse-secure-memory.h"
+#include "seahorse-passphrase.h"
 
 int main (int argc, char* argv[])
 {

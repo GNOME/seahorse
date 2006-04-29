@@ -22,11 +22,8 @@
 #include "config.h"
 #include <sys/types.h>
 #include <sys/param.h>
-#include <sys/socket.h>
-#include <sys/un.h>
 #include <sys/wait.h>
 
-#include <signal.h>
 #include <stdlib.h>
 #include <gnome.h>
 
@@ -36,167 +33,10 @@
 #include "seahorse-gconf.h"
 #include "seahorse-util.h"
 #include "seahorse-check-button-control.h"
-
-#define AGENT_SETTINGS      "/apps/seahorse/agent"
-#define SETTING_CACHE       AGENT_SETTINGS "/cache_enabled"
-#define SETTING_METHOD      AGENT_SETTINGS "/cache_method"
-#define SETTING_TTL         AGENT_SETTINGS "/cache_ttl"
-#define SETTING_EXPIRE      AGENT_SETTINGS "/cache_expire"
-#define SETTING_AUTH        AGENT_SETTINGS "/cache_authorize"
+#include "agent/seahorse-agent.h"
+#include "seahorse-passphrase.h"
 
 #define METHOD_INTERNAL     "internal"
-#define METHOD_GNOME        "gnome"
-
-typedef enum {
-    AGENT_NONE,
-    AGENT_OTHER,
-    AGENT_SEAHORSE
-} AgentType;
-
-/* -----------------------------------------------------------------------------
- *  SEAHORSE-AGENT CHECKS
- */
-
-/* Check if given process is running */
-static gboolean
-is_pid_running (pid_t pid)
-{
-    /* 
-     * We try to send it a harmless signal. Note that this won't
-     * work when sending to another users process. But other users
-     * shouldn't be running agent for this user anyway.
-     */
-    return (kill (pid, SIGWINCH) != -1);
-}
-
-/* Check if the server at the other end of the socket is our agent */
-static AgentType
-check_agent_id (int fd)
-{
-    AgentType ret = AGENT_NONE;
-    GIOChannel *io;
-    gchar *t;
-
-    io = g_io_channel_unix_new (fd);
-
-    /* Server always sends a response first */
-    if (g_io_channel_read_line (io, &t, NULL, NULL, NULL) == G_IO_STATUS_NORMAL && t) {
-        g_strstrip (t);
-        if (g_str_has_prefix (t, "OK"))
-            ret = AGENT_OTHER;
-        g_free (t);
-
-        /* Send back request for info */
-        if (ret != AGENT_NONE &&
-            g_io_channel_write_chars (io, "AGENT_ID\n", -1, NULL,
-                                      NULL) == G_IO_STATUS_NORMAL
-            && g_io_channel_flush (io, NULL) == G_IO_STATUS_NORMAL
-            && g_io_channel_read_line (io, &t, NULL, NULL,
-                                       NULL) == G_IO_STATUS_NORMAL && t) {
-            g_strstrip (t);
-            if (g_str_has_prefix (t, "OK seahorse-agent"))
-                ret = AGENT_SEAHORSE;
-            g_free (t);
-        }
-    }
-
-    g_io_channel_shutdown (io, FALSE, NULL);
-    g_io_channel_unref (io);
-    return ret;
-}
-
-/* Open a connection to our agent */
-static AgentType
-get_listening_agent_type (const gchar *sockname)
-{
-    struct sockaddr_un addr;
-    AgentType ret = AGENT_NONE;
-    int len;
-    int fd;
-
-    /* Agent is always a unix socket */
-    fd = socket (AF_UNIX, SOCK_STREAM, 0);
-    if (fd != -1) {
-        memset (&addr, 0, sizeof (addr));
-        addr.sun_family = AF_UNIX;
-        g_strlcpy (addr.sun_path, sockname, sizeof (addr.sun_path));
-        len = offsetof (struct sockaddr_un, sun_path) + strlen (addr.sun_path) + 1;
-
-        if (connect (fd, (const struct sockaddr *) &addr, len) == 0)
-            ret = check_agent_id (fd);
-    }
-
-    shutdown (fd, SHUT_RDWR);
-    close (fd);
-    return ret;
-}
-
-/* Given an agent info string make sure it's running and is our agent */
-static AgentType
-check_agent_info (const gchar *agent_info)
-{
-    AgentType ret = AGENT_NONE;
-    gchar **info;
-    gchar **t;
-    int i;
-
-    gchar *socket;
-    pid_t pid;
-    gint version;
-
-    info = g_strsplit (agent_info, ":", 3);
-
-    for (i = 0, t = info; *t && i < 3; t++, i++) {
-        switch (i) {
-            /* The socket name first */
-        case 0:
-            socket = *t;
-            break;
-
-            /* Then the process id */
-        case 1:
-            pid = (pid_t) atoi (*t);
-            break;
-
-            /* Then the protocol version */
-        case 2:
-            version = (gint) atoi (*t);
-            break;
-
-        default:
-            g_assert_not_reached ();
-        };
-    }
-
-    if (version == 1 && pid != 0 && is_pid_running (pid))
-        ret = get_listening_agent_type (socket);
-        
-    g_strfreev (info);
-    return ret;
-}
-
-/* Check if the agent is running */
-static AgentType
-which_agent_running ()
-{
-    gchar *value = NULL;
-    AgentType ret;
-
-    /* Seahorse edits gpg.conf by default */
-    seahorse_gpg_options_find ("gpg-agent-info", &value, NULL);
-    if (value != NULL) {
-        ret = check_agent_info (value);
-        g_free (value);
-        return ret;
-    }
-
-    /* The user probably set this up on their own */
-    value = (gchar *) g_getenv ("GPG_AGENT_INFO");
-    if (value != NULL)
-        return check_agent_info (value);
-
-    return AGENT_NONE;
-}
 
 /* -----------------------------------------------------------------------------
  *  CONTROLS
@@ -458,7 +298,7 @@ seahorse_prefs_cache (SeahorseWidget *widget)
     glade_xml_signal_connect_data (widget->xml, "on_session_link",
                                    G_CALLBACK (show_session_properties), NULL);
 
-    switch (which_agent_running ()) {
+    switch (seahorse_passphrase_detect_agent ()) {
       
     /* No agent running offer to start */
     case AGENT_NONE:

@@ -34,11 +34,12 @@
  * seahorse-agent gconf keys
  */
 
-#define SETTING_AUTH        "/apps/seahorse/agent/cache_authorize"
-#define SETTING_CACHE       "/apps/seahorse/agent/cache_enabled"
-#define SETTING_METHOD      "/apps/seahorse/agent/cache_method"
-#define SETTING_EXPIRE      "/apps/seahorse/agent/cache_expire"
-#define SETTING_TTL         "/apps/seahorse/agent/cache_ttl"
+#define AGENT_SETTINGS      "/apps/seahorse/agent"
+#define SETTING_CACHE       AGENT_SETTINGS "/cache_enabled"
+#define SETTING_METHOD      AGENT_SETTINGS "/cache_method"
+#define SETTING_TTL         AGENT_SETTINGS "/cache_ttl"
+#define SETTING_EXPIRE      AGENT_SETTINGS "/cache_expire"
+#define SETTING_AUTH        AGENT_SETTINGS "/cache_authorize"
 #define METHOD_GNOME        "gnome"
 
 /* -----------------------------------------------------------------------------

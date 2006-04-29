@@ -19,7 +19,9 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include "config.h"
 #include <sys/types.h>
+#include <sys/param.h>
 #include <sys/signal.h>
 
 #include <stddef.h>
@@ -35,7 +37,9 @@
 #include "config.h"
 #include "seahorse-agent.h"
 #include "seahorse-gpg-options.h"
+#include "seahorse-passphrase.h"
 
+gboolean seahorse_agent_enabled = FALSE;
 gboolean seahorse_agent_displayvars = FALSE;
 gboolean seahorse_agent_cshell = FALSE;
 
@@ -121,6 +125,13 @@ unprocess_gpg_conf ()
 void
 seahorse_agent_prefork ()
 {
+    /* Detect and see if there's an agent */
+    if (seahorse_passphrase_detect_agent () != AGENT_NONE) {
+        g_message ("Another GPG agent already running\n");
+        return;
+    }
+    
+    seahorse_agent_enabled = TRUE;
     if (seahorse_agent_io_socket () == -1)
         _exit (1); /* Message already printed */
 }
@@ -128,7 +139,12 @@ seahorse_agent_prefork ()
 void
 seahorse_agent_postfork (pid_t child)
 {
-    const gchar *socket = seahorse_agent_io_get_socket ();
+    const gchar *socket;
+
+    if(!seahorse_agent_enabled)
+        return;
+    
+    socket = seahorse_agent_io_get_socket ();
     g_return_if_fail (socket != NULL);
     
     /* If any of these fail, they simply exit */
@@ -141,6 +157,9 @@ seahorse_agent_postfork (pid_t child)
 int
 seahorse_agent_init ()
 {
+    if(!seahorse_agent_enabled)
+        return 0;
+    
     if (seahorse_agent_io_init () == -1)
         return -1;               /* message already printed */
     
@@ -154,6 +173,9 @@ seahorse_agent_init ()
 void
 seahorse_agent_uninit ()
 {
+    if(!seahorse_agent_enabled)
+        return;
+
     if (!seahorse_agent_displayvars)
         unprocess_gpg_conf ();
         
@@ -166,3 +188,4 @@ seahorse_agent_uninit ()
     seahorse_agent_actions_uninit ();
     seahorse_agent_io_uninit ();
 }
+

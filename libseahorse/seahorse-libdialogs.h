@@ -28,26 +28,10 @@
 #define __SEAHORSE_LIBDIALOGS_H__
 
 #include <glib.h>
-#include <gpgme.h>
 
 #include "seahorse-context.h"
 #include "seahorse-widget.h"
 #include "seahorse-pgp-key.h"
-
-#define SEAHORSE_PASS_BAD    0x00000001
-#define SEAHORSE_PASS_NEW    0x01000000
-
-GtkDialog*      seahorse_passphrase_prompt_show     (const gchar *title, 
-                                                     const gchar *description, 
-                                                     const gchar *prompt, 
-                                                     const gchar *errmsg);
-                                                     
-const gchar*    seahorse_passphrase_prompt_get      (GtkDialog *dialog);
-
-gpgme_error_t   seahorse_passphrase_get             (gconstpointer dummy,
-                                                     const gchar *passphrase_hint, 
-                                                     const char* passphrase_info, 
-                                                     int prev_bad, int fd);
 
 GList*          seahorse_recipients_get             (SeahorsePGPKey **signkey);
 

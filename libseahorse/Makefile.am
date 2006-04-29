@@ -16,9 +16,6 @@ INCLUDES = -I$(top_builddir) \
 
 lib_LTLIBRARIES = libseahorse-internal.la
 
-libseahorse_internal_la_LDFLAGS = -no-undefined
-libseahorse_internal_la_LIBADD = $(SEAHORSE_LIBS)
-
 BUILT_SOURCES = \
 	seahorse-marshal.c seahorse-marshal.h
 
@@ -76,7 +73,7 @@ libseahorse_internal_la_SOURCES = \
 	seahorse-check-button-control.c seahorse-check-button-control.h \
 	seahorse-default-key-control.c seahorse-default-key-control.h \
 	seahorse-gpg-options.c seahorse-gpg-options.h \
-	seahorse-passphrase.c \
+	seahorse-passphrase.c seahorse-passphrase.h \
 	seahorse-recipients.c \
 	seahorse-signer.c \
     seahorse-import.c \
@@ -101,6 +98,9 @@ libseahorse_internal_la_SOURCES = \
 	$(LDAP_SRCS) \
 	$(HKP_SRCS) \
 	$(SSH_SRCS)
+
+libseahorse_internal_la_LDFLAGS = -no-undefined
+libseahorse_internal_la_LIBADD = $(SEAHORSE_LIBS)
 
 seahorselibexecbin_PROGRAMS = xloadimage seahorse-ssh-askpass
 

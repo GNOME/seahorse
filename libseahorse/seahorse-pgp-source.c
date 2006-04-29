@@ -32,6 +32,7 @@
 #include "seahorse-pgp-key-op.h"
 #include "seahorse-libdialogs.h"
 #include "seahorse-gpg-options.h"
+#include "seahorse-passphrase.h"
 
 /* TODO: Verify properly that all keys we deal with are PGP keys */
 
