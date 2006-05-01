@@ -817,7 +817,7 @@ help_activate (GtkWidget *widget, SeahorseWidget *swidget)
 
 /* BUILDING THE MAIN WINDOW ------------------------------------------------- */
 
-static GtkActionEntry ui_entries[] = {
+static const GtkActionEntry ui_entries[] = {
     
     /* Top menu items */
     { "key-menu", NULL, N_("_Key") },
@@ -853,7 +853,7 @@ static GtkActionEntry ui_entries[] = {
             N_("Show Seahorse help"), G_CALLBACK (help_activate) }, 
 };
 
-static GtkActionEntry key_entries[] = {
+static const GtkActionEntry key_entries[] = {
     { "key-properties", GTK_STOCK_PROPERTIES, N_("P_roperties"), NULL,
             N_("Show key properties"), G_CALLBACK (properties_activate) }, 
     { "key-export-file", GTK_STOCK_SAVE_AS, N_("E_xport..."), NULL,
@@ -864,17 +864,17 @@ static GtkActionEntry key_entries[] = {
             N_("Delete selected keys"), G_CALLBACK (delete_activate) }, 
 };
 
-static GtkActionEntry pgp_entries[] = {
+static const GtkActionEntry pgp_entries[] = {
     { "key-sign", GTK_STOCK_INDEX, N_("_Sign..."), NULL,
             N_("Sign public key"), G_CALLBACK (sign_activate) }, 
 };
 
-static GtkActionEntry ssh_entries[] = {
+static const GtkActionEntry ssh_entries[] = {
     { "remote-upload-ssh", NULL, N_("Configure SSH Key for Computer..."), "",
             N_("Send public SSH key to another machine, and enable logins using that key."), G_CALLBACK (setup_sshkey_activate) },
 };
 
-static GtkActionEntry keyserver_entries[] = {
+static const GtkActionEntry keyserver_entries[] = {
     { "remote-find", GTK_STOCK_FIND, N_("_Find Remote Keys..."), "",
             N_("Search for keys on a key server"), G_CALLBACK (search_activate) }, 
     { "remote-sync", GTK_STOCK_REFRESH, N_("_Sync and Publish Keys..."), "",
@@ -918,22 +918,24 @@ GtkWindow*
 seahorse_key_manager_show (SeahorseOperation *op)
 {
     GtkWindow *win;
-	SeahorseWidget *swidget;
+    SeahorseWidget *swidget;
     GtkWidget *w;
     GtkActionGroup *actions;
     GtkAction *action;
-	
-	swidget = seahorse_widget_new ("key-manager");
+    
+    swidget = seahorse_widget_new ("key-manager");
     win = GTK_WINDOW (glade_xml_get_widget (swidget->xml, "key-manager"));
     
     /* General normal actions */
     actions = gtk_action_group_new ("main");
+    gtk_action_group_set_translation_domain (actions, NULL);
     gtk_action_group_add_actions (actions, ui_entries, 
                                   G_N_ELEMENTS (ui_entries), swidget);
     seahorse_widget_add_actions (swidget, actions);
     
     /* Actions that are allowed on all keys */
     actions = gtk_action_group_new ("key");
+    gtk_action_group_set_translation_domain (actions, NULL);
     gtk_action_group_add_actions (actions, key_entries, 
                                   G_N_ELEMENTS (key_entries), swidget);
     seahorse_widget_add_actions (swidget, actions);
@@ -945,30 +947,33 @@ seahorse_key_manager_show (SeahorseOperation *op)
 
     /* Actions for pgp keys */
     actions = gtk_action_group_new ("pgp");
+    gtk_action_group_set_translation_domain (actions, NULL);
     gtk_action_group_add_actions (actions, pgp_entries,
                                   G_N_ELEMENTS (pgp_entries), swidget);
     seahorse_widget_add_actions (swidget, actions);                              
     
     /* Actions for SSH keys */
     actions = gtk_action_group_new ("ssh");
+    gtk_action_group_set_translation_domain (actions, NULL);
     gtk_action_group_add_actions (actions, ssh_entries,
                                   G_N_ELEMENTS (ssh_entries), swidget);
     seahorse_widget_add_actions (swidget, actions);
-	
+    
 #ifndef WITH_SSH
     gtk_action_group_set_visible (actions, FALSE);
 #endif
 
     /* Actions for keyservers */
     actions = gtk_action_group_new ("keyserver");
+    gtk_action_group_set_translation_domain (actions, NULL);
     gtk_action_group_add_actions (actions, keyserver_entries, 
                                   G_N_ELEMENTS (keyserver_entries), swidget);
     seahorse_widget_add_actions (swidget, actions);                                  
-	
+    
 #ifndef WITH_KEYSERVER
-	gtk_action_group_set_visible (actions, FALSE);
+    gtk_action_group_set_visible (actions, FALSE);
 #endif
- 	
+    
 	/* close event */
 	glade_xml_signal_connect_data (swidget->xml, "quit_event",
 		G_CALLBACK (delete_event), swidget);
