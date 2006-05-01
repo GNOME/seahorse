@@ -274,7 +274,7 @@ help_activate (GtkWidget *widget, SeahorseWidget *swidget)
 
 /* BUILDING THE MAIN WINDOW ------------------------------------------------- */
 
-static GtkActionEntry ui_entries[] = {
+static const GtkActionEntry ui_entries[] = {
     
     /* Top menu items */
     { "key-menu", NULL, N_("_Key") },
@@ -292,7 +292,7 @@ static GtkActionEntry ui_entries[] = {
             N_("Collapse all listings"), G_CALLBACK (collapse_all_activate) }, 
 };
 
-static GtkActionEntry public_entries[] = {
+static const GtkActionEntry public_entries[] = {
     { "key-import-keyring", GTK_STOCK_ADD, N_("_Import"), "",
             N_("Import selected keys to local keyring"), G_CALLBACK (import_activate) },
     { "key-properties", GTK_STOCK_PROPERTIES, N_("P_roperties"), NULL,
@@ -303,7 +303,7 @@ static GtkActionEntry public_entries[] = {
             N_("Copy selected keys to the clipboard"), G_CALLBACK (copy_activate) }, 
 };
 
-static GtkActionEntry remote_entries[] = {
+static const GtkActionEntry remote_entries[] = {
     { "remote-find", GTK_STOCK_FIND, N_("_Find Remote Keys..."), "",
             N_("Search for keys on a key server"), G_CALLBACK (search_activate) }, 
 };
@@ -349,12 +349,14 @@ seahorse_keyserver_results_show (SeahorseContext *sctx, SeahorseKeySource *sksrc
     
     /* General normal actions */
     actions = gtk_action_group_new ("main");
+    gtk_action_group_set_translation_domain (actions, NULL);
     gtk_action_group_add_actions (actions, ui_entries, 
                                   G_N_ELEMENTS (ui_entries), swidget);
     seahorse_widget_add_actions (swidget, actions);
 
     /* Actions that are allowed on all keys */
     actions = gtk_action_group_new ("key");
+    gtk_action_group_set_translation_domain (actions, NULL);
     gtk_action_group_add_actions (actions, public_entries, 
                                   G_N_ELEMENTS (public_entries), swidget);
     seahorse_widget_add_actions (swidget, actions);
@@ -370,6 +372,7 @@ seahorse_keyserver_results_show (SeahorseContext *sctx, SeahorseKeySource *sksrc
     g_object_set (action, "is-important", TRUE, NULL);
     
     actions = gtk_action_group_new ("remote");
+    gtk_action_group_set_translation_domain (actions, NULL);
     gtk_action_group_add_actions (actions, remote_entries, 
                                   G_N_ELEMENTS (remote_entries), swidget);
     seahorse_widget_add_actions (swidget, actions);    

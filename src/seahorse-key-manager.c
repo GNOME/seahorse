@@ -598,7 +598,7 @@ help_activate (GtkWidget *widget, SeahorseWidget *swidget)
 
 /* BUILDING THE MAIN WINDOW ------------------------------------------------- */
 
-static GtkActionEntry ui_entries[] = {
+static const GtkActionEntry ui_entries[] = {
     
     /* Top menu items */
     { "key-menu", NULL, N_("_Key") },
@@ -632,7 +632,7 @@ static GtkActionEntry ui_entries[] = {
             N_("Show Seahorse help"), G_CALLBACK (help_activate) }, 
 };
 
-static GtkActionEntry public_entries[] = {
+static const GtkActionEntry public_entries[] = {
     { "key-properties", GTK_STOCK_PROPERTIES, N_("P_roperties"), NULL,
             N_("Show key properties"), G_CALLBACK (properties_activate) }, 
     { "key-export-file", GTK_STOCK_SAVE_AS, N_("E_xport..."), NULL,
@@ -645,14 +645,14 @@ static GtkActionEntry public_entries[] = {
             N_("Delete selected keys"), G_CALLBACK (delete_activate) }, 
 };
 
-static GtkActionEntry private_entries[] = {
+static const GtkActionEntry private_entries[] = {
     { "key-add-userid", GTK_STOCK_ADD, N_("Add _User ID..."), NULL,
             N_("Add a new user ID"), G_CALLBACK (add_uid_activate) }, 
     { "key-add-revoker", GTK_STOCK_CANCEL, N_("Add _Revoker..."), NULL,
             N_("Add the default key as a revoker"), G_CALLBACK (add_revoker_activate) }, 
 };
 
-static GtkActionEntry remote_entries[] = {
+static const GtkActionEntry remote_entries[] = {
     { "remote-menu", NULL, N_("_Remote") },
     { "remote-find", GTK_STOCK_FIND, N_("_Find Remote Keys..."), "",
             N_("Search for keys on a key server"), G_CALLBACK (search_activate) }, 
@@ -680,12 +680,14 @@ seahorse_key_manager_show (SeahorseContext *sctx)
     
     /* General normal actions */
     actions = gtk_action_group_new ("main");
+    gtk_action_group_set_translation_domain (actions, NULL);
     gtk_action_group_add_actions (actions, ui_entries, 
                                   G_N_ELEMENTS (ui_entries), swidget);
     seahorse_widget_add_actions (swidget, actions);
     
     /* Actions that are allowed on all keys */
     actions = gtk_action_group_new ("key");
+    gtk_action_group_set_translation_domain (actions, NULL);
     gtk_action_group_add_actions (actions, public_entries, 
                                   G_N_ELEMENTS (public_entries), swidget);
     seahorse_widget_add_actions (swidget, actions);
@@ -697,6 +699,7 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 
     /* Actions for public keys */
     actions = gtk_action_group_new ("keypair");
+    gtk_action_group_set_translation_domain (actions, NULL);
     gtk_action_group_add_actions (actions, private_entries,
                                   G_N_ELEMENTS (private_entries), swidget);
     seahorse_widget_add_actions (swidget, actions);
@@ -704,6 +707,7 @@ seahorse_key_manager_show (SeahorseContext *sctx)
     /* Actions for keyservers */
 #ifdef WITH_KEYSERVER      
     actions = gtk_action_group_new ("remote");
+    gtk_action_group_set_translation_domain (actions, NULL);
     gtk_action_group_add_actions (actions, remote_entries, 
                                   G_N_ELEMENTS (remote_entries), swidget);
     seahorse_widget_add_actions (swidget, actions);                                  
@@ -711,7 +715,7 @@ seahorse_key_manager_show (SeahorseContext *sctx)
 
     sksrc = seahorse_context_get_key_source (sctx);
     g_return_val_if_fail (sksrc != NULL, win);
-    	
+    
 	/* close event */
 	glade_xml_signal_connect_data (swidget->xml, "quit_event",
 		G_CALLBACK (delete_event), swidget);
