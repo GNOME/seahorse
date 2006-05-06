@@ -23,6 +23,10 @@
 #include <gnome.h>
 #include <panel-applet.h>
 
+#include <dbus/dbus-glib-bindings.h>
+
+#include <cryptui.h>
+
 #include "seahorse-applet.h"
 #include "seahorse-gtkstock.h"
 #include "seahorse-context.h"
@@ -40,6 +44,41 @@
 #define DISPLAY_CLIPBOARD_ENC_KEY     APPLET_SCHEMAS "/display_encrypted_clipboard"
 #define DISPLAY_CLIPBOARD_DEC_KEY     APPLET_SCHEMAS "/display_decrypted_clipboard"
 
+/* -----------------------------------------------------------------------------
+ * Initialize Crypto 
+ */
+ 
+ /* Setup in init_crypt */
+DBusGConnection *dbus_connection = NULL;
+DBusGProxy      *dbus_key_proxy = NULL;
+DBusGProxy      *dbus_crypto_proxy = NULL;
+CryptUIKeyset   *dbus_keyset = NULL;
+
+static gboolean
+init_crypt ()
+{
+    GError *error = NULL;
+    
+    if (!dbus_connection) {
+        dbus_connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
+        if (!dbus_connection) {
+            
+            return FALSE;
+        }
+
+        dbus_key_proxy = dbus_g_proxy_new_for_name (dbus_connection, "org.gnome.seahorse",
+                                               "/org/gnome/seahorse/keys",
+                                               "org.gnome.seahorse.KeyService");
+        
+        dbus_crypto_proxy = dbus_g_proxy_new_for_name (dbus_connection, "org.gnome.seahorse",
+                                               "/org/gnome/seahorse/crypto",
+                                               "org.gnome.seahorse.CryptoService");
+        
+        dbus_keyset = cryptui_keyset_new ("openpgp");
+    }
+    
+    return TRUE;
+}
 /* -----------------------------------------------------------------------------
  * ICONS AND STATE 
  */
@@ -328,42 +367,47 @@ display_text (gchar *title, gchar *text, gboolean editable)
 static void
 encrypt_received (GtkClipboard *board, const gchar *text, SeahorseApplet *sapplet)
 {
-    SeahorsePGPKey *signer = NULL;
-    gpgme_error_t err = GPG_OK;
+    gchar *signer = NULL;
     gchar *enctext = NULL;
-    GList *keys;
-    
+    gchar **keys;
+    gboolean ret;
+
     /* No text on clipboard */
     if (!text)
         return;
  
-    keys = seahorse_recipients_get (&signer);
-    
+    /* Get the recipient list */
+    keys = cryptui_prompt_recipients (dbus_keyset, _("Choose Recipient Keys"), &signer);
+
     /* User may have cancelled */
-    if (g_list_length (keys) == 0)
-        return;
+    if (keys && *keys) {
+        ret = dbus_g_proxy_call (dbus_crypto_proxy, "EncryptText", NULL, 
+                                G_TYPE_STRV, keys, 
+                                G_TYPE_STRING, signer, 
+                                G_TYPE_INT, 0,
+                                G_TYPE_STRING, text,
+                                G_TYPE_INVALID,
+                                G_TYPE_STRING, &enctext,
+                                G_TYPE_INVALID);
     
-    if (signer == NULL)
-        enctext = seahorse_op_encrypt_text (keys, text, &err);
-    else
-        enctext = seahorse_op_encrypt_sign_text (keys, signer, text, &err);
-
-    g_list_free (keys);
-
-    if (!GPG_IS_OK (err)) {
-        g_assert (!enctext);
-        seahorse_util_handle_gpgme (err, _("Couldn't encrypt text"));
-        return;
+        if (ret) {
+            /* And finish up */
+            gtk_clipboard_set_text (board, enctext, strlen (enctext));
+            detect_received (board, enctext, sapplet);
+            
+            if (seahorse_gconf_get_boolean (DISPLAY_CLIPBOARD_ENC_KEY) == TRUE)
+                display_text (_("Encrypted Text"), enctext, FALSE);
+        } else {
+            seahorse_notification_display(_("Encryption Failed"),
+                                          _("The clipboard could not be encrypted."),
+                                          FALSE,
+                                          NULL,
+                                          GTK_WIDGET(sapplet));
+        }
+        g_strfreev(keys);
+        g_free (signer);
+        g_free (enctext);
     }
-
-    /* And finish up */
-    gtk_clipboard_set_text (board, enctext, strlen (enctext));
-    detect_received (board, enctext, sapplet);
-    
-    if (seahorse_gconf_get_boolean (DISPLAY_CLIPBOARD_ENC_KEY) == TRUE)
-        display_text (_("Encrypted Text"), enctext, FALSE);
-    
-    g_free (enctext);
 }
 
 static void
@@ -371,7 +415,8 @@ encrypt_cb (GtkMenuItem *menuitem, SeahorseApplet *sapplet)
 {
     SeahorseAppletPrivate *priv = SEAHORSE_APPLET_GET_PRIVATE (sapplet);
     
-    init_context (sapplet);
+    if(!init_crypt ())
+        return;
 
     gtk_clipboard_request_text (priv->board,
             (GtkClipboardTextReceivedFunc)encrypt_received, sapplet);
@@ -380,34 +425,43 @@ encrypt_cb (GtkMenuItem *menuitem, SeahorseApplet *sapplet)
 static void
 sign_received (GtkClipboard *board, const gchar *text, SeahorseApplet *sapplet)
 {
-    SeahorsePGPKey *signer = NULL;
-    gpgme_error_t err = GPG_OK;
+    gchar *signer = NULL;
     gchar *enctext = NULL;
+    gboolean ret;
     
     /* No text on clipboard */
     if (!text)
         return;
 
-    signer = seahorse_signer_get ();
+    signer = cryptui_prompt_signer (dbus_keyset, _("Choose Key to Sign with"));
     if (signer == NULL)
         return;
 
     /* Perform the signing */
-    enctext = seahorse_op_sign_text (signer, text, &err);
+    ret = dbus_g_proxy_call (dbus_crypto_proxy, "SignText", NULL, 
+                                G_TYPE_STRING, signer, 
+                                G_TYPE_INT, 0,
+                                G_TYPE_STRING, text,
+                                G_TYPE_INVALID,
+                                G_TYPE_STRING, &enctext,
+                                G_TYPE_INVALID);
+     
+     if (ret) {                          
+        /* And finish up */
+        gtk_clipboard_set_text (board, enctext, strlen (enctext));
+        detect_received (board, enctext, sapplet);
 
-    if (!GPG_IS_OK (err)) {
-        g_assert (!enctext);
-        seahorse_util_handle_gpgme (err, _("Couldn't sign text"));
-        return;
+        if (seahorse_gconf_get_boolean (DISPLAY_CLIPBOARD_ENC_KEY) == TRUE)
+            display_text (_("Signed Text"), enctext, FALSE);
+    } else {
+        seahorse_notification_display(_("Signing Failed"),
+                                      _("The clipboard could not be Signed."),
+                                      FALSE,
+                                      NULL,
+                                      GTK_WIDGET(sapplet));
     }
-
-    /* And finish up */
-    gtk_clipboard_set_text (board, enctext, strlen (enctext));
-    detect_received (board, enctext, sapplet);
-
-    if (seahorse_gconf_get_boolean (DISPLAY_CLIPBOARD_ENC_KEY) == TRUE)
-        display_text (_("Signed Text"), enctext, FALSE);
-
+    
+    g_free (signer);
     g_free (enctext);
 }
 
@@ -416,7 +470,8 @@ sign_cb (GtkMenuItem *menuitem, SeahorseApplet *sapplet)
 {
     SeahorseAppletPrivate *priv = SEAHORSE_APPLET_GET_PRIVATE (sapplet);
 
-    init_context (sapplet);
+    if(!init_crypt ())
+        return;
 
     gtk_clipboard_request_text (priv->board,
             (GtkClipboardTextReceivedFunc)sign_received, sapplet);
@@ -424,68 +479,91 @@ sign_cb (GtkMenuItem *menuitem, SeahorseApplet *sapplet)
 
 /* When we try to 'decrypt' a key, this gets called */
 static guint
-import_keys (const gchar *text)
+import_keys (const gchar *text, SeahorseApplet *sapplet)
 {
-    SeahorseKeySource *sksrc;
-    GError *err = NULL;
-    gint keys;
+    gchar **keys, **k;
+    gint nkeys = 0;
+    gboolean ret;
 
-    sksrc = seahorse_context_find_key_source (SCTX_APP (), SKEY_PGP, SKEY_LOC_LOCAL);
-    g_assert (sksrc && SEAHORSE_IS_PGP_SOURCE (sksrc));
-    
-    keys = seahorse_op_import_text (SEAHORSE_PGP_SOURCE (sksrc), text, &err);
-    
-    if (keys < 0) {
-        seahorse_util_handle_error (err, _("Couldn't import keys"));
-        return 0;
-    } else if (keys == 0) {    
-        return 0;
-    } else {
-        return keys;
+    ret = dbus_g_proxy_call (dbus_key_proxy, "ImportKeys", NULL,
+                             G_TYPE_STRING, "openpgp",
+                             G_TYPE_STRING, text,
+                             G_TYPE_INVALID,
+                             G_TYPE_STRV, &keys,
+                             G_TYPE_INVALID);
+                             
+    if (ret) {
+        for (k = keys, nkeys = 0; *k; k++)
+            nkeys++;
+        g_strfreev (keys);
+        
+        if (!nkeys)
+            seahorse_notification_display(_("Import Failed"),
+                                      _("Keys were found but not imported."),
+                                      FALSE,
+                                      NULL,
+                                      GTK_WIDGET(sapplet));
     }
+    
+    return nkeys;
 }
 
 /* Decrypt an encrypted message */
 static gchar*
-decrypt_text (const gchar *text, gpgme_verify_result_t *status)
+decrypt_text (const gchar *text, SeahorseApplet *sapplet)
 {
-    SeahorseKeySource *sksrc;
-    gpgme_error_t err;
     gchar *rawtext = NULL;
+    gchar *signer = NULL;
+    gboolean ret;
     
-    sksrc = seahorse_context_find_key_source (SCTX_APP (), SKEY_PGP, SKEY_LOC_LOCAL);
-    g_return_val_if_fail (sksrc && SEAHORSE_IS_PGP_SOURCE (sksrc), 0);
+    ret = dbus_g_proxy_call (dbus_crypto_proxy, "DecryptText", NULL,
+                             G_TYPE_STRING, "openpgp",
+                             G_TYPE_INT, 0,
+                             G_TYPE_STRING, text,
+                             G_TYPE_INVALID, 
+                             G_TYPE_STRING, &rawtext,
+                             G_TYPE_STRING, &signer,
+                             G_TYPE_INVALID);
 
-    rawtext = seahorse_op_decrypt_verify_text (SEAHORSE_PGP_SOURCE (sksrc), 
-                                               text, status, &err);
-
-    if (!GPG_IS_OK (err)) {
-        seahorse_util_handle_gpgme (err, _("Couldn't decrypt text"));
+    if (ret) {
+        g_free (signer);
+        
+        return rawtext;
+    } else {
+        seahorse_notification_display(_("Import Failed"),
+                                      _("Keys were found but not imported."),
+                                      FALSE,
+                                      NULL,
+                                      GTK_WIDGET(sapplet));
         return NULL;
     }
-
-    return rawtext;
 }
 
 /* Verify a signed message */
 static gchar*
-verify_text (const gchar *text, gpgme_verify_result_t *status)
+verify_text (const gchar *text, SeahorseApplet *sapplet)
 {
-    SeahorseKeySource *sksrc;
-    gpgme_error_t err;
     gchar *rawtext = NULL;
+    gchar *signer;
+    gboolean ret;
 
-    sksrc = seahorse_context_find_key_source (SCTX_APP (), SKEY_PGP, SKEY_LOC_LOCAL);
-    g_return_val_if_fail (sksrc && SEAHORSE_IS_PGP_SOURCE (sksrc), 0);    
-
-    rawtext = seahorse_op_verify_text (SEAHORSE_PGP_SOURCE (sksrc), text, status, &err);
-
-    if (!GPG_IS_OK (err)) {
-        seahorse_util_handle_gpgme (err, _("Couldn't decrypt text"));
+    ret = dbus_g_proxy_call (dbus_crypto_proxy, "VerifyText", NULL,
+                             G_TYPE_STRING, "openpgp",
+                             G_TYPE_INT, 0,
+                             G_TYPE_STRING, text,
+                             G_TYPE_INVALID, 
+                             G_TYPE_STRING, &rawtext,
+                             G_TYPE_STRING, &signer,
+                             G_TYPE_INVALID);
+    
+    if (ret) {
+        /* Not interested in the signer */
+        g_free (signer);
+        return rawtext;
+        
+    } else {
         return NULL;
     }
-
-    return rawtext;
 }
 
 static void
@@ -494,7 +572,6 @@ dvi_received (GtkClipboard *board, const gchar *text, SeahorseApplet *sapplet)
     SeahorseTextType type;      /* Type of the current block */
     gchar *rawtext = NULL;      /* Replacement text */
     guint keys = 0;             /* Number of keys imported */
-    gpgme_verify_result_t status;   /* Signature status of last operation */
     const gchar *start;         /* Pointer to start of the block */
     const gchar *end;           /* Pointer to end of the block */
     
@@ -508,23 +585,21 @@ dvi_received (GtkClipboard *board, const gchar *text, SeahorseApplet *sapplet)
     if (type == SEAHORSE_TEXT_TYPE_NONE)
         return;
     
-    status = NULL;
-    
     switch (type) {
 
     /* A key, import it */
     case SEAHORSE_TEXT_TYPE_KEY:
-        keys = import_keys (text);
+        keys = import_keys (text, sapplet);
         break;
 
     /* A message decrypt it */
     case SEAHORSE_TEXT_TYPE_MESSAGE:
-        rawtext = decrypt_text (text, &status);
+        rawtext = decrypt_text (text, sapplet);
         break;
 
     /* A message verify it */
     case SEAHORSE_TEXT_TYPE_SIGNED:
-        rawtext = verify_text (text, &status);
+        rawtext = verify_text (text, sapplet);
         break;
 
     default:
@@ -543,13 +618,7 @@ dvi_received (GtkClipboard *board, const gchar *text, SeahorseApplet *sapplet)
         
         g_free (rawtext);
         rawtext = NULL;
-
-        if(status && status->signatures)
-            seahorse_signatures_notify ("Text", status, GTK_WIDGET(sapplet));
     }
-    
-    if (keys > 0)
-        seahorse_import_notify (keys, GTK_WIDGET(sapplet));
 }
 
 static void
@@ -557,8 +626,9 @@ dvi_cb (GtkMenuItem *menuitem, SeahorseApplet *sapplet)
 {
     SeahorseAppletPrivate *priv = SEAHORSE_APPLET_GET_PRIVATE (sapplet);
 
-    init_context (sapplet);
-
+    if (!init_crypt ())
+        return;
+        
     gtk_clipboard_request_text (priv->board,
             (GtkClipboardTextReceivedFunc)dvi_received, sapplet);
 }
@@ -832,6 +902,18 @@ seahorse_applet_finalize (GObject *object)
     
     if (G_OBJECT_CLASS (seahorse_applet_parent_class)->finalize)
         (* G_OBJECT_CLASS (seahorse_applet_parent_class)->finalize) (object);
+        
+    if (dbus_key_proxy)
+        g_object_unref (dbus_key_proxy);
+    dbus_key_proxy = NULL;
+    
+    if (dbus_crypto_proxy)
+        g_object_unref (dbus_crypto_proxy);
+    dbus_crypto_proxy = NULL;
+    
+    if (dbus_connection)
+        dbus_g_connection_unref (dbus_connection);
+    dbus_connection = NULL;
 }
 
 static void
@@ -850,6 +932,7 @@ seahorse_applet_class_init (SeahorseAppletClass *klass)
     widget_class->button_press_event = handle_button_press;
 
     g_type_class_add_private (object_class, sizeof (SeahorseAppletPrivate));
+    
 }
 
 
