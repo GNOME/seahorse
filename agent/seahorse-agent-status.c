@@ -32,7 +32,8 @@
 #include "seahorse-context.h"
 #include "seahorse-widget.h"
 #include "seahorse-secure-memory.h"
-
+#include "seahorse-util.h"
+ 
 /* 
  * Implements tray icon, menu and status window. Tray icon ideas 
  * came from gaim
@@ -242,7 +243,9 @@ tray_clicked (GtkWidget *button, GdkEventButton *event, void *data)
         glade_xml_signal_connect_data (xml, "on_settings_activate",
                                        G_CALLBACK (on_settings_activate), NULL);
 
-        gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL,
+        gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
+                        seahorse_util_determine_popup_menu_position,
+                        (gpointer) button,
                         event->button, gtk_get_current_event_time ());
         gtk_widget_show (menu);
         g_object_unref (xml);

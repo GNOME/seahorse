@@ -154,6 +154,12 @@ GSList*     seahorse_util_string_slist_copy   (GSList *slist);
 
 gboolean    seahorse_util_string_slist_equal  (GSList *sl1, GSList *sl2);
 
+void        seahorse_util_determine_popup_menu_position  (GtkMenu *menu,
+                                                           int *x,
+                                                           int *y,
+                                                           gboolean *push_in,
+                                                           gpointer gdata);
+
 #define     seahorse_util_wait_until(expr)          \
     while (!(expr)) {                               \
         g_thread_yield ();                          \

@@ -1151,6 +1151,36 @@ seahorse_util_string_slist_equal (GSList *l1, GSList *l2)
     return !l1 && !l2;   
 }
 
+/* Callback to determine where a popup menu should be placed */
+void
+seahorse_util_determine_popup_menu_position (GtkMenu *menu, int *x, int *y,
+                                             gboolean *push_in, gpointer  gdata)
+{
+        GtkWidget      *widget;
+        GtkRequisition  requisition;
+        gint            menu_xpos;
+        gint            menu_ypos;
+
+        widget = GTK_WIDGET (gdata);
+
+        gtk_widget_size_request (GTK_WIDGET (menu), &requisition);
+
+        gdk_window_get_origin (widget->window, &menu_xpos, &menu_ypos);
+
+        menu_xpos += widget->allocation.x;
+        menu_ypos += widget->allocation.y;
+
+
+        if (menu_ypos > gdk_screen_get_height (gtk_widget_get_screen (widget)) / 2)
+                menu_ypos -= requisition.height;
+        else
+                menu_ypos += widget->allocation.height;
+           
+        *x = menu_xpos;
+        *y = menu_ypos;
+        *push_in = TRUE;
+}            
+
 /* -----------------------------------------------------------------------------
  * DNS-SD Stuff 
  */
