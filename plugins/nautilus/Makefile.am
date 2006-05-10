@@ -59,11 +59,13 @@ desktopdir = $(datadir)/applications
 desktop_in_files = seahorse-pgp-preferences.desktop.in
 desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 
+man_MANS = seahorse-tool.1
 
 EXTRA_DIST = \
-	$(mime_DATA) \
-	$(mimeinfo_DATA) \
-	$(desktop_in_files) 
+    $(man_MANS) \
+    $(mime_DATA) \
+    $(mimeinfo_DATA) \
+    $(desktop_in_files) 
 
 CLEANFILES = *.bak \
 	$(desktop_DATA)

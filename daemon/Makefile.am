@@ -50,9 +50,12 @@ seahorse_daemon_LDADD = \
     $(top_builddir)/libseahorse/libseahorse-internal.la \
     $(SEAHORSE_LIBS)
 
+man_MANS = seahorse-daemon.1
+
 glade_DATA = 
 
 EXTRA_DIST = \
+    $(man_MANS) \
     $(glade_DATA) \
     seahorse-service.xml \
     seahorse-service-keyset.xml \
