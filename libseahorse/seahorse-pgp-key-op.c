@@ -2083,7 +2083,7 @@ seahorse_pgp_key_op_del_uid (SeahorsePGPKey *pkey, const guint index)
     g_return_val_if_fail (SEAHORSE_IS_KEY (pkey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
     
     /* Check index range */
-    DEBUG_OPERATION(("Del UID: uid %i\n", index));
+    DEBUG_OPERATION(("Del UID: uid %u\n", index));
     g_return_val_if_fail (real_index >= 1 && real_index <= (seahorse_pgp_key_get_num_userids (pkey) + seahorse_pgp_key_get_num_photoids(pkey)), GPG_E (GPG_ERR_INV_VALUE));
 
     /* Make sure not revoked */

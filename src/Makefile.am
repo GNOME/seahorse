@@ -14,7 +14,7 @@ INCLUDES = -I$(top_builddir) \
 	-DPIXMAPSDIR=\""$(pixmapsdir)"\"
 
 if WITH_KEYSERVER
-KEYSERVER_SRCS = seahorse-keyserver-search.c seahorse-keyserver-results.c seahorse-keyserver-sync.c
+KEYSERVER_SRCS = seahorse-keyserver-search.c seahorse-keyserver-results.c seahorse-keyserver-sync.c seahorse-keyserver-sync.h
 else
 KEYSERVER_SRCS = 
 endif

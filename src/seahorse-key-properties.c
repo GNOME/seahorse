@@ -38,6 +38,12 @@
 #include "seahorse-windows.h"
 #include "seahorse-vfs-data.h"
 #include "seahorse-key-model.h"
+#include "seahorse-gconf.h"
+
+
+#ifdef WITH_KEYSERVER
+#include "seahorse-keyserver-sync.h"
+#endif
 
 #define NOTEBOOK "notebook"
 
@@ -178,18 +184,46 @@ names_sign_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 {
     SeahorseKey *skey;
     gint index;
+    GList *keys = NULL;
 
     skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
     index = names_get_selected_uid (swidget);
 
-    if (index >= 1) 
+    if (index >= 1) {
         seahorse_sign_show (SEAHORSE_PGP_KEY (skey), index - 1);
+
+#ifdef WITH_KEYSERVER
+        if (seahorse_gconf_get_boolean(AUTOSYNC_KEY) == TRUE) {
+            keys = g_list_append (keys, skey);
+            seahorse_keyserver_sync (keys);
+            g_list_free(keys);
+        }
+#endif
+    }
 }
 
 static void 
 names_revoke_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 {
     /* TODO: */
+/*    SeahorseKey *skey;
+    gint index;
+    Glist *keys = NULL;
+
+    skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
+    index = names_get_selected_uid (swidget);
+
+    if (index >= 1) {
+        seahorse_revoke_show (SEAHORSE_PGP_KEY (skey), index - 1);
+
+#ifdef WITH_KEYSERVER
+        if (seahorse_gconf_get_boolean(AUTOSYNC_KEY) == TRUE) {
+            keys = g_list_append (keys, skey);
+            seahorse_keyserver_sync (keys);
+            g_list_free(keys);
+        }
+#endif
+    }*/
 }
 
 static void

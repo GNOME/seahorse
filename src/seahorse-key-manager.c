@@ -44,6 +44,10 @@
 #include "seahorse-key-source.h"
 #include "seahorse-vfs-data.h"
 
+#ifdef WITH_KEYSERVER
+#include "seahorse-keyserver-sync.h"
+#endif
+
 #ifdef WITH_SSH
 #include "seahorse-ssh-key.h"
 #endif
@@ -441,10 +445,20 @@ sign_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
     SeahorseKey *skey;
     guint uid;
+    GList *keys = NULL;
 
     skey = get_selected_key (swidget, &uid);
-    if (SEAHORSE_IS_PGP_KEY (skey))
+    if (SEAHORSE_IS_PGP_KEY (skey)) {
         seahorse_sign_show (SEAHORSE_PGP_KEY (skey), uid);
+        
+#ifdef WITH_KEYSERVER
+        if (seahorse_gconf_get_boolean(AUTOSYNC_KEY) == TRUE) {
+            keys = g_list_append (keys, skey);
+            seahorse_keyserver_sync (keys);
+            g_list_free(keys);
+        }
+#endif
+    }
 }
 
 static void

@@ -37,6 +37,7 @@
 #define MULTI_EXTENSION_KEY PGP_SCHEMAS "/package_extension"
 #define MULTI_SEPERATE_KEY PGP_SCHEMAS "/multi_seperate"
 #define KEYSERVER_KEY PGP_SCHEMAS "/keyservers/all_keyservers"
+#define AUTOSYNC_KEY PGP_SCHEMAS "/keyservers/auto_sync"
 #define LASTSEARCH_KEY PGP_SCHEMAS "/keyservers/search_text"
 #define LASTSERVERS_KEY PGP_SCHEMAS "/keyservers/search_keyservers"
 #define PUBLISH_TO_KEY PGP_SCHEMAS "/keyservers/publish_to"

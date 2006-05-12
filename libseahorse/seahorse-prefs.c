@@ -425,6 +425,11 @@ setup_keyservers (SeahorseWidget *swidget)
     skc = seahorse_keyserver_control_new (PUBLISH_TO_KEY, _("None: Don't publish keys"));
     gtk_container_add (GTK_CONTAINER (w), GTK_WIDGET (skc));
     gtk_widget_show_all (w);
+    
+    w = glade_xml_get_widget(swidget->xml, "auto_sync");
+    g_return_if_fail (w != NULL);
+    
+    seahorse_check_button_gconf_attach(GTK_CHECK_BUTTON(w), AUTOSYNC_KEY);
 }
 
 #endif /* WITH_KEYSERVER */
