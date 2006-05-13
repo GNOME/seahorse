@@ -68,14 +68,20 @@ free_file_info (FileInfo *file, gpointer unused)
 gboolean
 step_check_uris (FilesCtx *ctx, const gchar **uris, GError **err)
 {
-    GnomeVFSFileInfo* info = NULL;
+    GnomeVFSFileInfo *info = NULL;
     GnomeVFSResult res;
-    gchar *uri = NULL;
+    GnomeVFSURI *guri, *base;
+    gchar *t, *uri = NULL;
     gboolean ret = TRUE;
     FileInfo *file;
     const gchar **k;
 
     g_assert (err && !*err);
+    
+    t = g_get_current_dir ();
+    uri = g_strdup_printf ("file://%s/", t);
+    g_free (t);
+    base = gnome_vfs_uri_new (uri);
 
     info = gnome_vfs_file_info_new ();
 
@@ -88,7 +94,10 @@ step_check_uris (FilesCtx *ctx, const gchar **uris, GError **err)
 
         if (uri)
             g_free (uri);
-        uri = gnome_vfs_make_uri_canonical (*k);
+        guri = gnome_vfs_uri_resolve_relative (base, *k);
+        g_return_val_if_fail (guri != NULL, FALSE);
+        uri = gnome_vfs_uri_to_string (guri, GNOME_VFS_URI_HIDE_NONE);
+        gnome_vfs_uri_unref (guri);
 
         gnome_vfs_file_info_clear (info);
     
@@ -118,6 +127,7 @@ step_check_uris (FilesCtx *ctx, const gchar **uris, GError **err)
         ctx->files = g_list_prepend (ctx->files, file);
     }
     
+    gnome_vfs_uri_unref (base);
     g_free (uri);
     gnome_vfs_file_info_unref (info);
     
