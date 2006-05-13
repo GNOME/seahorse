@@ -20,8 +20,7 @@
  */
 
 /**
- * A bunch of (mostly) PGP specific operations to be done on files
- * text etc...
+ * Soon to be removed. 
  */
  
 #ifndef __SEAHORSE_OP_H__
@@ -31,11 +30,6 @@
 #include <gpgme.h>
 
 #include "seahorse-pgp-source.h"
-#include "seahorse-pgp-key.h"
-
-typedef gchar*    (*SeahorseEncryptFunc)    (GList              *keys,
-                                             const gchar        *data,
-                                             gpgme_error_t      *err);
 
 gint        seahorse_op_import_file         (SeahorsePGPSource  *psrc,
                                              const gchar        *path,
@@ -44,28 +38,5 @@ gint        seahorse_op_import_file         (SeahorsePGPSource  *psrc,
 gint        seahorse_op_import_text         (SeahorsePGPSource  *psrc,
                                              const gchar        *text,
                                              GError             **err);
-
-gchar*      seahorse_op_encrypt_text        (GList              *keys,
-                                             const gchar        *text,
-                                             gpgme_error_t      *err);
-
-gchar*      seahorse_op_sign_text           (SeahorsePGPKey     *signer,
-                                             const gchar        *text,
-                                             gpgme_error_t      *err);
-
-gchar*      seahorse_op_encrypt_sign_text   (GList              *keys,
-                                             SeahorsePGPKey     *signer,
-                                             const gchar        *text,
-                                             gpgme_error_t      *err);
-
-gchar*      seahorse_op_verify_text         (SeahorsePGPSource  *psrc,
-                                             const gchar        *text,
-                                             gpgme_verify_result_t *status,
-                                             gpgme_error_t      *err);
-
-gchar*      seahorse_op_decrypt_verify_text (SeahorsePGPSource  *psrc,
-                                             const gchar        *text,
-                                             gpgme_verify_result_t *status,
-                                             gpgme_error_t      *err);
 
 #endif /* __SEAHORSE_OP_H__ */
