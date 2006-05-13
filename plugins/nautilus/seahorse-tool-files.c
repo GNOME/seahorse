@@ -567,6 +567,12 @@ step_operation (FilesCtx *ctx, SeahorseToolMode *mode, GError **err)
         /* Run until the operation completes */
         seahorse_util_wait_until ((!seahorse_operation_is_running (op) || 
                                    !seahorse_tool_progress_check ()));
+
+        /* If cancel then reflect that */
+        if (seahorse_operation_is_running (op)) {
+            seahorse_operation_cancel (op);
+            goto finally;
+        }
         
         if (!seahorse_operation_is_successful (op)) {
             seahorse_operation_steal_error (op, err);
