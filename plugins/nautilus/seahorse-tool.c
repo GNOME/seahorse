@@ -627,7 +627,6 @@ main (int argc, char **argv)
             mode.title = _("Signing");
             mode.errmsg = _("Couldn't sign file: %s");
             mode.startcb = sign_start;
-            mode.package = TRUE;
         }
         break;
     case MODE_IMPORT:
