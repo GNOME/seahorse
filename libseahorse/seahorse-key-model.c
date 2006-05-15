@@ -159,7 +159,8 @@ row_inserted (SeahorseKeyModel *skmodel, GtkTreePath *path, GtkTreeIter *iter,
 {
     SeahorseKeyModelPrivate *pv = SEAHORSE_KEY_MODEL_GET_PRIVATE (skmodel);
     g_return_if_fail (pv->data_column != -1);
-    gtk_tree_store_set (GTK_TREE_STORE (skmodel), iter, pv->data_column, NULL, -1);
+    /* XXX: The following line causes problems with GtkTreeModelFilter */
+    /* gtk_tree_store_set (GTK_TREE_STORE (skmodel), iter, pv->data_column, NULL, -1); */
 }
 
 /* -----------------------------------------------------------------------------

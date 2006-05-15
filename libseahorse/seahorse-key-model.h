@@ -48,7 +48,7 @@ struct _SeahorseKeyModel {
 };
 
 struct _SeahorseKeyModelClass {
-    GtkObjectClass parent_class;
+    GtkTreeStoreClass parent_class;
     
     /* signals --------------------------------------------------------- */
     

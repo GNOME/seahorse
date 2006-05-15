@@ -375,7 +375,7 @@ seahorse_key_store_changed (SeahorseKeyStore *skstore, SeahorseKey *skey, guint 
 static void
 seahorse_key_store_key_added (SeahorseKeyset *skset, SeahorseKey *skey, SeahorseKeyStore *skstore)
 {
-	GtkTreeIter iter;
+	GtkTreeIter iter = { 0, };
 	guint i, uids = seahorse_key_get_num_names (skey);
  
     for (i = 0; i < uids; i++) {
@@ -511,12 +511,11 @@ sort_changed(GtkTreeSortable *sort, gpointer user_data)
 static SeahorseKeyStore* 
 key_store_from_model (GtkTreeModel *model)
 {
-	/* Sort models are what's set on the tree */
-    if (GTK_IS_TREE_MODEL_SORT (model)) {
+    /* Sort models are what's set on the tree */
+    if (GTK_IS_TREE_MODEL_SORT (model))
         model = gtk_tree_model_sort_get_model (GTK_TREE_MODEL_SORT (model));
+    if (GTK_IS_TREE_MODEL_FILTER (model)) 
         model = gtk_tree_model_filter_get_model (GTK_TREE_MODEL_FILTER (model));
-    }
-    
     if (SEAHORSE_IS_KEY_STORE (model))
         return SEAHORSE_KEY_STORE (model);
     
@@ -533,7 +532,7 @@ check_toggled(GtkCellRendererToggle *cellrenderertoggle, gchar *path, gpointer u
     GtkTreeModel* fmodel = GTK_TREE_MODEL (skstore->priv->sort);
     GtkTreeSelection *selection;
     gboolean prev = FALSE;
-    GtkTreeIter iter;
+    GtkTreeIter iter = { 0, };
     GtkTreeIter child;
     GValue v;
 
@@ -562,7 +561,7 @@ row_activated (GtkTreeView *treeview, GtkTreePath *path, GtkTreeViewColumn *arg2
     GtkTreeModel* fmodel = GTK_TREE_MODEL (skstore->priv->sort);
     GtkTreeSelection *selection;
     gboolean prev = FALSE;
-    GtkTreeIter iter;
+    GtkTreeIter iter = { 0, };
     GtkTreeIter child;
     GValue v;
 
@@ -602,8 +601,8 @@ seahorse_key_store_initialize (SeahorseKeyStore *skstore, GtkTreeView *view)
     /* The sorted model is the top level model */   
     g_assert (GTK_IS_TREE_MODEL (skstore->priv->sort));
     gtk_tree_view_set_model (view, GTK_TREE_MODEL (skstore->priv->sort));
- 
- 	/* When using checks we add a check column */
+
+    /* When using checks we add a check column */
     if (SEAHORSE_KEY_STORE_GET_CLASS (skstore)->use_check) {
         GtkCellRenderer *renderer;
         renderer = gtk_cell_renderer_toggle_new ();
