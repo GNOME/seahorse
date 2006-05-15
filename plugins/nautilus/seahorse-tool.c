@@ -279,7 +279,7 @@ sign_start (SeahorseToolMode *mode, const gchar *uri, gpgme_data_t uridata,
     g_assert (mode->signer);
     
     /* File to encrypt to */
-    touri = seahorse_util_add_suffix (uri, SEAHORSE_CRYPT_SUFFIX, 
+    touri = seahorse_util_add_suffix (uri, SEAHORSE_SIG_SUFFIX, 
                                       _("Choose Signature File Name for '%s'"));
     if (!touri) 
         return FALSE;

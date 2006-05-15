@@ -877,7 +877,8 @@ gboolean
 seahorse_util_check_suffix (const gchar *path, SeahorseSuffix suffix)
 {
 	if (suffix == SEAHORSE_SIG_SUFFIX)
-        return g_str_has_suffix (path, SEAHORSE_EXT_SIG);
+        return g_str_has_suffix (path, SEAHORSE_EXT_SIG) || 
+               g_str_has_suffix (path, SEAHORSE_EXT_ASC);
 	else
         return g_str_has_suffix (path, SEAHORSE_EXT_PGP) ||
                g_str_has_suffix (path, SEAHORSE_EXT_GPG) ||
@@ -905,15 +906,13 @@ seahorse_util_add_suffix (const gchar *path, SeahorseSuffix suffix, const gchar 
     const gchar *ext;
     gchar *uri;
     gchar *t;
-	
-	if (suffix == SEAHORSE_CRYPT_SUFFIX)
-        ext = seahorse_gconf_get_boolean (ARMOR_KEY) ? SEAHORSE_EXT_ASC : SEAHORSE_EXT_PGP;
-	else if (suffix == SEAHORSE_ASC_SUFFIX)
-		ext = SEAHORSE_EXT_ASC;
-	else
-		ext = SEAHORSE_EXT_SIG;
-	
-	uri = g_strdup_printf ("%s%s", path, ext);
+    
+    if (suffix == SEAHORSE_CRYPT_SUFFIX)
+        ext = SEAHORSE_EXT_PGP;
+    else
+        ext = SEAHORSE_EXT_SIG;
+    
+    uri = g_strdup_printf ("%s%s", path, ext);
     
     if (prompt && uri && seahorse_util_uri_exists (uri)) {
             
@@ -922,7 +921,7 @@ seahorse_util_add_suffix (const gchar *path, SeahorseSuffix suffix, const gchar 
         g_free (t);
 
         seahorse_util_chooser_show_key_files (dialog);
-		gtk_file_chooser_select_uri (GTK_FILE_CHOOSER (dialog), uri);
+        gtk_file_chooser_select_uri (GTK_FILE_CHOOSER (dialog), uri);
 
         g_free (uri);                
         uri = NULL;

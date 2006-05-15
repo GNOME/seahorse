@@ -40,9 +40,8 @@ const AvahiPoll* seahorse_util_dns_sd_get_poll ();
 #endif
 
 typedef enum {
-	SEAHORSE_CRYPT_SUFFIX,
-	SEAHORSE_SIG_SUFFIX,
-	SEAHORSE_ASC_SUFFIX
+    SEAHORSE_CRYPT_SUFFIX,
+    SEAHORSE_SIG_SUFFIX,
 } SeahorseSuffix;
 
 #define SEAHORSE_EXT_ASC ".asc"
