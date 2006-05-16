@@ -35,6 +35,7 @@
 #include "seahorse-agent.h"
 #include "seahorse-check-button-control.h"
 #include "seahorse-libdialogs.h"
+#include "seahorse-passphrase.h"
 
 #define HIG_SMALL      6        /* gnome hig small space in pixels */
 #define HIG_LARGE     12        /* gnome hig large space in pixels */

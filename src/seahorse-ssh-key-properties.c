@@ -28,6 +28,7 @@
 #include "seahorse-ssh-key.h"
 #include "seahorse-ssh-operation.h"
 #include "seahorse-vfs-data.h"
+#include "seahorse-gpgmex.h"
 
 #define NOTEBOOK "notebook"
 
