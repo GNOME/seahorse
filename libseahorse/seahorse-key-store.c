@@ -776,12 +776,13 @@ seahorse_key_store_init (SeahorseKeyStore *skstore, GtkTreeView *view)
         gtk_tree_view_append_column (view, col);
         
         gtk_tree_view_column_set_sort_column_id (col, KEY_STORE_PAIR);
-      }
-      
-	col = seahorse_key_store_append_column (view, _("Name"), KEY_STORE_NAME);
-	gtk_tree_view_column_set_sort_column_id (col, KEY_STORE_NAME);
-	
-	seahorse_key_store_append_column (view, _("Key ID"), KEY_STORE_KEYID);
+    }
+    
+    col = seahorse_key_store_append_column (view, _("Name"), KEY_STORE_NAME);
+    gtk_tree_view_column_set_sort_column_id (col, KEY_STORE_NAME);
+    
+    col = seahorse_key_store_append_column (view, _("Key ID"), KEY_STORE_KEYID);
+    gtk_tree_view_column_set_sort_column_id (col, KEY_STORE_KEYID);
 
     if (SEAHORSE_KEY_STORE_GET_CLASS (skstore)->gconf_sort_key) {
         /* Also watch for sort-changed on the store */
