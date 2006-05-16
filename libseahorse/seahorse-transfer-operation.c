@@ -199,12 +199,13 @@ export_done (SeahorseOperation *op, SeahorseTransferOperation *top)
     gerr = gpgme_data_new_from_mem (&data, raw, len, 0);
     g_return_if_fail (GPG_IS_OK (gerr));
 
+    /* This frees data */
     pv->operation = seahorse_key_source_import (top->to, data);
-    
-    gpgme_data_release (data);
-    free (raw);
-    
     g_return_if_fail (pv->operation != NULL);
+    
+    /* Free this data with the operation */
+    g_object_set_data_full (G_OBJECT (pv->operation), "raw-data", 
+                            raw, (GDestroyNotify)raw);
 
     /* And mark us as started */
     seahorse_operation_mark_start (SEAHORSE_OPERATION (top));

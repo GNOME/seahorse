@@ -1284,6 +1284,7 @@ seahorse_ldap_source_import (SeahorseKeySource *sksrc, gpgme_data_t data)
     lop = start_send_operation_multiple (lsrc, keydata);
     g_return_val_if_fail (lop != NULL, NULL);
     
+    gpgmex_data_release (data);
     return SEAHORSE_OPERATION (lop);
 }
 

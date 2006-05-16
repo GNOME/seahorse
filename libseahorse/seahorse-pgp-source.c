@@ -895,6 +895,8 @@ seahorse_pgp_source_import (SeahorseKeySource *sksrc, gpgme_data_t data)
     gerr = gpgme_op_import_start (pop->gctx, data);
     
     g_signal_connect (pop, "results", G_CALLBACK (prepare_import_results), psrc);
+    g_object_set_data_full (G_OBJECT (pop), "source-data", data, 
+                            (GDestroyNotify)gpgmex_data_release);
     
     /* Couldn't start import */
     if (!GPG_IS_OK (gerr))

@@ -898,6 +898,7 @@ seahorse_hkp_source_import (SeahorseKeySource *sksrc, gpgme_data_t data)
     g_free (uri);
     
     seahorse_util_string_slist_free (keydata);
+    gpgmex_data_release (data);
     
     return SEAHORSE_OPERATION (hop);
 }

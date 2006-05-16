@@ -43,6 +43,7 @@ import_data (SeahorsePGPSource *psrc, gpgme_data_t data,
     
     g_return_val_if_fail (!err || !err[0], -1);
 
+    /* This frees |data| */
     operation = seahorse_key_source_import (SEAHORSE_KEY_SOURCE (psrc), data);
     g_return_val_if_fail (operation != NULL, -1);
     
@@ -57,7 +58,6 @@ import_data (SeahorsePGPSource *psrc, gpgme_data_t data,
     }
     
     g_object_unref (operation);
-    gpgmex_data_release (data);
 
     return keys;    
 }

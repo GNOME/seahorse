@@ -104,7 +104,7 @@ typedef struct _SeahorseKeySourceClass {
     /**
      * import
      * @sksrc: The #SeahorseKeySource to import into.
-     * @data: The data to import (not freed).
+     * @data: The data to import (takes ownership).
      *
      * Import keys into the key source. When operation is 'done' a GList of 
      * updated keys may be found as the operation result. 
@@ -177,9 +177,11 @@ void                seahorse_key_source_load_async       (SeahorseKeySource *sks
                                                           SeahorseKeySourceLoad load,
                                                           const gchar *key);                                                          
 
+/* Takes ownership of |data| */
 SeahorseOperation*  seahorse_key_source_import           (SeahorseKeySource *sksrc,
                                                           gpgme_data_t data);
-                                                          
+
+/* Takes ownership of |data| */
 gboolean            seahorse_key_source_import_sync      (SeahorseKeySource *sksrc,
                                                           gpgme_data_t data,
                                                           GError **err);
