@@ -686,7 +686,7 @@ key_from_iterator (GtkTreeModel* model, GtkTreeIter* iter, guint *uid)
     
     skey = seahorse_key_model_get_row_key (SEAHORSE_KEY_MODEL (model), iter);
     if (skey && uid)
-        gtk_tree_model_get (model, iter, KEY_STORE_UID, &uid, -1);
+        gtk_tree_model_get (model, iter, KEY_STORE_UID, uid, -1);
     return skey;
 }
 

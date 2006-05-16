@@ -522,7 +522,7 @@ delete_activate (GtkWidget *widget, SeahorseWidget *swidget)
     /* Special behavior for a single selection */
     if (g_list_length (keys) == 1) {
         SeahorseKey *skey;
-        guint uid;
+        guint uid = 0;
         
         skey = get_selected_key (swidget, &uid);
         if (uid > 0 && SEAHORSE_IS_PGP_KEY (skey)) 
