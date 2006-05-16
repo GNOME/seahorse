@@ -65,10 +65,11 @@ key_changed (SeahorseKeyset *skset, SeahorseKey *skey, SeahorseKeyChange change,
 
     children = gtk_container_get_children (GTK_CONTAINER (item));
     
-    userid = seahorse_key_get_display_name (skey);
-    if (GTK_IS_LABEL (children->data))
+    if (children && GTK_IS_LABEL (children->data)) {
+        userid = seahorse_key_get_display_name (skey);
         gtk_label_set_text (GTK_LABEL (children->data), userid);
-    g_free (userid);
+        g_free (userid);
+    }
     
     g_list_free (children);
 }
