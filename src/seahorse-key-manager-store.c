@@ -27,7 +27,6 @@
 #include "seahorse-preferences.h"
 #include "seahorse-validity.h"
 #include "seahorse-util.h"
-#include "seahorse-op.h"
 #include "seahorse-gconf.h"
 #include "seahorse-gpgmex.h"
 #include "eggtreemultidnd.h"

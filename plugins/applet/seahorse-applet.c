@@ -31,7 +31,6 @@
 #include "seahorse-gtkstock.h"
 #include "seahorse-context.h"
 #include "seahorse-pgp-key.h"
-#include "seahorse-op.h"
 #include "seahorse-libdialogs.h"
 #include "seahorse-widget.h"
 #include "seahorse-util.h"

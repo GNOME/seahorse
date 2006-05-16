@@ -24,7 +24,6 @@
 
 #include "seahorse-widget.h"
 #include "seahorse-util.h"
-#include "seahorse-op.h"
 #include "seahorse-gpgmex.h"
 #include "seahorse-context.h"
 #include "seahorse-windows.h"

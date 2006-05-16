@@ -63,7 +63,6 @@ libseahorse_internal_la_SOURCES = \
     seahorse-unknown-source.c seahorse-unknown-source.h \
 	seahorse-context.c seahorse-context.h \
 	seahorse-widget.c seahorse-widget.h \
-	seahorse-op.c seahorse-op.h \
 	seahorse-keyset.c seahorse-keyset.h \
     seahorse-key-model.c seahorse-key-model.h \
 	seahorse-key-store.c seahorse-key-store.h \

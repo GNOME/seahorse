@@ -30,7 +30,6 @@
 #include "seahorse-operation.h"
 #include "seahorse-key.h"
 #include "seahorse-pgp-key.h"
-#include "seahorse-op.h"
 #include "seahorse-operation.h"
 #include "seahorse-progress.h"
 #include "seahorse-key-manager-store.h"

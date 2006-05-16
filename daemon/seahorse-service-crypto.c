@@ -24,7 +24,6 @@
 #include "seahorse-service.h"
 #include "seahorse-key.h"
 #include "seahorse-pgp-key.h"
-#include "seahorse-op.h"
 #include "seahorse-pgp-operation.h"
 #include "seahorse-gconf.h"
 #include "seahorse-util.h"

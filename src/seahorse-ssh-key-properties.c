@@ -24,7 +24,6 @@
 #include "seahorse-key-widget.h"
 #include "seahorse-util.h"
 #include "seahorse-key.h"
-#include "seahorse-op.h"
 #include "seahorse-ssh-key.h"
 #include "seahorse-ssh-operation.h"
 #include "seahorse-vfs-data.h"

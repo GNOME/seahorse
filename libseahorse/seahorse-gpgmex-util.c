@@ -63,7 +63,7 @@ gpgmex_data_new_from_mem (const char *buffer, size_t size, gboolean copy)
     gpgme_data_t data;
     gpgme_error_t gerr;
     
-    gerr = gpgme_data_new_from_mem (&data, buffer, size, copy ? 0 : 1);
+    gerr = gpgme_data_new_from_mem (&data, buffer, size, copy ? 1 : 0);
     if (!GPG_IS_OK (gerr)) {
         if (gpgme_err_code_to_errno (gerr) == ENOMEM || 
             gpgme_err_code (gerr) == GPG_ERR_ENOMEM) {

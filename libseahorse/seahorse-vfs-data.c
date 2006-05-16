@@ -547,8 +547,6 @@ seahorse_vfs_data_create_full (const gchar *uri, guint mode, SeahorseVfsProgress
     if (!data)
         seahorse_util_gpgme_to_error (gerr, err);
     return data;
-    
-    
 }
 
 gpgme_data_t
@@ -598,4 +596,124 @@ seahorse_vfs_data_write_all (gpgme_data_t data, const void* buffer, gint len, GE
     }
     
     return TRUE;
+}
+
+/* -----------------------------------------------------------------------------
+ * MULTIPLE CONCATED FILES 
+ */
+
+/* Called by gpgme to read data */
+static ssize_t
+multi_data_read (void *handle, void *buffer, size_t size)
+{
+    gpgme_data_t data = NULL;
+    ssize_t sz = 0;
+    GList *datas, *l;
+    guchar *buf;
+
+    datas = (GList*)handle;
+    buf = (guchar*)buffer;
+    
+    /* Find first non-null data thingy */
+    for (l = datas; l; l = g_list_next (l)) {
+        data = (gpgme_data_t)l->data;
+        if (data)
+            break;
+    }
+    
+    while (size > 0 && data) {
+        sz = gpgme_data_read (data, buf, size);
+        
+        /* An error */
+        if (sz < 0)
+            return sz;
+        
+        if (sz > size)
+            sz = size;
+        
+        /* Free current data, get next one */
+        if (sz < size) {
+            l->data = NULL;
+            gpgmex_data_release (data);
+            l = g_list_next (l);
+            data = (gpgme_data_t)(l ? l->data : NULL);
+        }
+        
+        /* Read later in buffer */
+        size -= sz;
+        buf += sz;
+    }
+    
+    return sz;
+}
+
+/* Called by gpgme to write data */
+static ssize_t
+multi_data_write (void *handle, const void *buffer, size_t size)
+{
+    /* No writing */
+    errno = EBADF;
+    return -1;
+}
+
+/* Called from gpgme to seek a file */
+static off_t
+multi_data_seek(void *handle, off_t offset, int whence)
+{
+    /* No real seeking */
+    return offset;
+}
+
+/* Called by gpgme to close a file */
+static void
+multi_data_release(void *handle)
+{
+    GList *datas = (GList*)handle;
+    GList *l;
+
+    for (l = datas; l; l = g_list_next (l))
+        gpgmex_data_release ((gpgme_data_t)l->data);
+    g_list_free (datas);
+}
+
+static struct gpgme_data_cbs multi_data_cbs = 
+{
+    multi_data_read,
+    multi_data_write,
+    multi_data_seek,
+    multi_data_release
+};
+
+gpgme_data_t
+seahorse_vfs_data_read_multi (const gchar **uris, GError **err)
+{
+    gpgme_error_t gerr;
+    gpgme_data_t data;
+    GList *datas = NULL;
+    const gchar **u;
+    
+    for (u = uris; *u; u++) {
+        if(!(*u)[0])
+            continue;
+        data = seahorse_vfs_data_create (*u, SEAHORSE_VFS_READ, err);
+        if (!data)
+            break;
+        datas = g_list_prepend (datas, data);
+    }
+    
+    /* Failed somewhere */
+    if (!data) {
+        multi_data_release (datas);
+        return NULL;
+    }
+    
+    datas = g_list_reverse (datas);
+    gerr = gpgme_data_new_from_cbs (&data, &multi_data_cbs, datas);
+    if (!GPG_IS_OK (gerr)) {
+        seahorse_util_gpgme_to_error (gerr, err);
+        multi_data_release (datas);
+        return NULL;
+    }
+
+    return data;
 }

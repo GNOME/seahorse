@@ -37,7 +37,6 @@
 #include "seahorse-key-dialogs.h"
 #include "seahorse-pgp-key-op.h"
 #include "seahorse-key-widget.h"
-#include "seahorse-op.h"
 #include "seahorse-gpg-options.h"
 #include "seahorse-gconf.h"
 #include "seahorse-gtkstock.h"
@@ -211,19 +210,86 @@ new_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 	seahorse_generate_druid_show ();
 }
 
+static void
+imported_keys (SeahorseOperation *op, SeahorseWidget *swidget)
+{
+    GError *err = NULL;
+    GList *keys;
+    guint nkeys;
+    
+    /* This key list is freed with the operation */
+    keys = (GList*)seahorse_operation_get_result (op);
+    nkeys = g_list_length (keys);
+    
+    if (seahorse_operation_is_successful (op)) {
+        set_numbered_status (swidget, _("Imported %d key"), 
+                                      _("Imported %d keys"), nkeys);
+    } else  {
+        seahorse_operation_steal_error (op, &err);
+        seahorse_util_handle_error (err, _("Couldn't import keys"));
+    }
+}
+
+static void
+import_files (SeahorseWidget *swidget, const gchar **uris)
+{
+    SeahorseKeySource *sksrc;
+    SeahorseOperation *op;
+    gpgme_data_t data;
+    GError *err = NULL;
+    
+    data = seahorse_vfs_data_read_multi (uris, &err);
+    if (!data) {
+        seahorse_util_handle_error (err, _("Couldn't import keys"));
+        return;
+    }
+
+    /* TODO: This needs work once we get more key types */
+    sksrc = seahorse_context_find_key_source (SCTX_APP (), SKEY_PGP, SKEY_LOC_LOCAL);
+    g_return_if_fail (sksrc && SEAHORSE_IS_PGP_SOURCE (sksrc));
+        
+    /* data is freed here */
+    op = seahorse_key_source_import (sksrc, data);
+    g_return_if_fail (op != NULL);
+
+    g_signal_connect (op, "done", G_CALLBACK (imported_keys), swidget);
+    seahorse_progress_show (op, _("Importing Keys"), TRUE);
+    
+    /* A running operation refs itself */
+    g_object_unref (op);
+}
+
+static void
+import_text (SeahorseWidget *swidget, const gchar *text)
+{
+    SeahorseKeySource *sksrc;
+    SeahorseOperation *op;
+    gpgme_data_t data;
+    
+    data = gpgmex_data_new_from_mem (text, strlen (text), TRUE);
+    g_return_if_fail (data != NULL);
+
+    /* TODO: This needs work once we get more key types */
+    sksrc = seahorse_context_find_key_source (SCTX_APP (), SKEY_PGP, SKEY_LOC_LOCAL);
+    g_return_if_fail (sksrc && SEAHORSE_IS_PGP_SOURCE (sksrc));
+    
+    /* data is freed here */
+    op = seahorse_key_source_import (sksrc, data);
+    g_return_if_fail (op != NULL);
+    
+    g_signal_connect (op, "done", G_CALLBACK (imported_keys), swidget);
+    seahorse_progress_show (op, _("Importing Keys"), TRUE);
+    
+    /* A running operation refs itself */
+    g_object_unref (op);
+}
+
 /* Loads import dialog */
 static void
 import_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
-    SeahorseKeySource *sksrc;
     GtkWidget *dialog;
     char* uri = NULL;
-    GError *err = NULL;
-    gint keys;
-    
-    /* TODO: This needs work once we get more key types */
-    sksrc = seahorse_context_find_key_source (SCTX_APP (), SKEY_PGP, SKEY_LOC_LOCAL);
-    g_return_if_fail (sksrc && SEAHORSE_IS_PGP_SOURCE (sksrc));
     
     dialog = seahorse_util_chooser_open_new (_("Import Key"), 
                 GTK_WINDOW(glade_xml_get_widget (swidget->xml, "key-manager")));
@@ -231,38 +297,17 @@ import_activate (GtkWidget *widget, SeahorseWidget *swidget)
 
     uri = seahorse_util_chooser_open_prompt (dialog);
     if(uri) {
-        
-        keys = seahorse_op_import_file (SEAHORSE_PGP_SOURCE (sksrc), uri, &err);
-        
-        if (err != NULL)
-            seahorse_util_handle_error (err, _("Couldn't import keys from \"%s\""), 
-                seahorse_util_uri_get_last (uri));
-        else 
-            set_numbered_status (swidget, _("Imported %d key"), 
-                                          _("Imported %d keys"), keys);
-
-        g_free (uri);
+        const gchar *uris[] = { uri, NULL };
+        import_files (swidget, uris);
     }
+    g_free (uri);
 }
 
 /* Callback for pasting from clipboard */
 static void
 clipboard_received (GtkClipboard *board, const gchar *text, SeahorseWidget *swidget)
 {
-    SeahorseKeySource *sksrc;
-    GError *err = NULL;
-    gint keys;
-    
-    sksrc = seahorse_context_find_key_source (SCTX_APP (), SKEY_PGP, SKEY_LOC_LOCAL);
-    g_return_if_fail (sksrc && SEAHORSE_IS_PGP_SOURCE (sksrc));
- 
-    keys = seahorse_op_import_text (SEAHORSE_PGP_SOURCE (sksrc), text, &err);
- 
-    if (err != NULL)
-        seahorse_util_handle_error (err, _("Couldn't import keys from clipboard"));
-    else
-        set_numbered_status (swidget, _("Imported %d key"), 
-                                      _("Imported %d keys"), keys);
+    import_text (swidget, text);
 }
 
 /* Pastes key from keyboard */
@@ -729,34 +774,22 @@ static void
 target_drag_data_received (GtkWidget *widget, GdkDragContext *context, gint x, gint y,
                            GtkSelectionData *data, guint info, guint time, SeahorseWidget *swidget)
 {
-    SeahorseKeySource *sksrc;
-    gint keys = 0;
-    GError *err = NULL;
     gchar** uris;
     gchar** u;
     
     DBG_PRINT(("DragDataReceived -->\n"));
     g_return_if_fail (data != NULL);
     
-    sksrc = seahorse_context_find_key_source (SCTX_APP (), SKEY_PGP, SKEY_LOC_LOCAL);
-    g_return_if_fail (sksrc && SEAHORSE_IS_PGP_SOURCE (sksrc));
-    
     switch(info) {
     case TEXT_PLAIN:
-        keys = seahorse_op_import_text (SEAHORSE_PGP_SOURCE (sksrc), 
-                                        (const gchar*)(data->data), &err);
+        import_text (swidget, (const gchar*)(data->data));
         break;
         
     case TEXT_URIS:
         uris = g_strsplit ((const gchar*)data->data, "\n", 0);
-        for(u = uris; *u; u++) {
+        for(u = uris; *u; u++)
             g_strstrip (*u);
-            if ((*u)[0]) { /* Make sure it's not an empty line */
-                keys += seahorse_op_import_file (SEAHORSE_PGP_SOURCE (sksrc), *u, &err);  
-                if (err != NULL)
-                    break;
-            }
-        }
+        import_files (swidget, (const gchar**)uris);
         g_strfreev (uris);
         break;
         
@@ -765,13 +798,6 @@ target_drag_data_received (GtkWidget *widget, GdkDragContext *context, gint x, g
         break;
     } 
 
-    if (err != NULL)
-        seahorse_util_handle_error (err, _("Couldn't import key from \"%s\""),
-                                    seahorse_util_uri_get_last (*u));
-    else
-        set_numbered_status (swidget, _("Imported %d key"), 
-                                      _("Imported %d keys"), keys);
-    
     DBG_PRINT(("DragDataReceived <--\n"));
 }
 

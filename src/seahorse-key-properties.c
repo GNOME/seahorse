@@ -29,7 +29,6 @@
 #include "seahorse-gpgmex.h"
 #include "seahorse-key-dialogs.h"
 #include "seahorse-key-widget.h"
-#include "seahorse-op.h"
 #include "seahorse-util.h"
 #include "seahorse-key.h"
 #include "seahorse-pgp-key.h"

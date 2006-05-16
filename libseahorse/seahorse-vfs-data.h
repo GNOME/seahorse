@@ -46,7 +46,9 @@ gpgme_data_t        seahorse_vfs_data_create        (const gchar *uri, guint mod
 gpgme_data_t        seahorse_vfs_data_create_full   (const gchar *uri, guint mode, 
                                                      SeahorseVfsProgressCb progcb, 
                                                      gpointer userdata, GError **err);
-                                       
+                                                     
+gpgme_data_t        seahorse_vfs_data_read_multi    (const gchar **uris, GError **err);
+
 /* Deprecated compat API, eventually to be removed */
 gpgme_data_t        seahorse_vfs_data_create_gerr   (const gchar *uri, guint mode, 
                                                      gpgme_error_t *err);

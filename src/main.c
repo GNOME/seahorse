@@ -27,7 +27,6 @@
 
 #include "seahorse-context.h"
 #include "seahorse-windows.h"
-#include "seahorse-op.h"
 #include "seahorse-util.h"
 #include "seahorse-libdialogs.h"
 #include "seahorse-pgp-source.h"
