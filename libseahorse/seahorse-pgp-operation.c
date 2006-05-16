@@ -24,6 +24,8 @@
 #include "seahorse-gpgmex.h"
 #include "seahorse-util.h"
 
+#define DEBUG_OPERATION_ENABLE 0
+
 #ifndef DEBUG_OPERATION_ENABLE
 #if _DEBUG
 #define DEBUG_OPERATION_ENABLE 1
@@ -75,6 +77,13 @@ enum {
     PROP_DEF_TOTAL
 };
 
+enum {
+    RESULTS,
+    LAST_SIGNAL
+};
+
+static guint signals[LAST_SIGNAL] = { 0 };
+
 #define SEAHORSE_PGP_OPERATION_GET_PRIVATE(obj)  \
     (G_TYPE_INSTANCE_GET_PRIVATE ((obj), SEAHORSE_TYPE_PGP_OPERATION, SeahorsePGPOperationPrivate))
 
@@ -92,6 +101,10 @@ IMPLEMENT_OPERATION_PROPS(PGP, pgp)
     g_object_class_install_property (gobject_class, PROP_DEF_TOTAL,
         g_param_spec_uint ("default-total", "Default Total", "Default total to use instead of GPGME's progress total.",
                            0, G_MAXUINT, 0, G_PARAM_READABLE | G_PARAM_WRITABLE));
+
+    signals[RESULTS] = g_signal_new ("results", SEAHORSE_TYPE_PGP_OPERATION, 
+                G_SIGNAL_RUN_LAST, G_STRUCT_OFFSET (SeahorsePGPOperationClass, results),
+                NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
 
     g_type_class_add_private (gobject_class, sizeof (SeahorsePGPOperationPrivate));
 
@@ -269,7 +282,12 @@ event_cb (void *data, gpgme_event_io_t type, void *type_data)
                 /* Other Errors */
                 if (*gerr)
                     seahorse_util_gpgme_to_error (*gerr, &error);
+                
+                /* No error, results available */
+                else
+                    g_signal_emit (pop, signals[RESULTS], 0);
     
+                /* Ready and done */
                 seahorse_operation_mark_done (SEAHORSE_OPERATION (pop), FALSE, error);
             }
         }
@@ -405,4 +423,17 @@ SeahorsePGPOperation*
 seahorse_pgp_operation_new (const gchar *message)
 {
     return g_object_new (SEAHORSE_TYPE_PGP_OPERATION, "message", message, NULL);
+}
+
+void
+seahorse_pgp_operation_mark_failed (SeahorsePGPOperation *pop, gpgme_error_t gerr)
+{
+    SeahorseOperation *op = SEAHORSE_OPERATION (pop);
+    GError *err = NULL;
+    
+    if (!seahorse_operation_is_running (op))
+        seahorse_operation_mark_start (op);
+    
+    seahorse_util_gpgme_to_error (gerr, &err);
+    seahorse_operation_mark_done (op, FALSE, err);
 }

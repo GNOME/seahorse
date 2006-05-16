@@ -33,6 +33,7 @@
 #include "seahorse-libdialogs.h"
 #include "seahorse-gpg-options.h"
 #include "seahorse-passphrase.h"
+#include "seahorse-pgp-operation.h"
 
 /* TODO: Verify properly that all keys we deal with are PGP keys */
 
@@ -747,6 +748,60 @@ seahorse_load_operation_start (SeahorsePGPSource *psrc, const gchar **pattern, g
     return lop;
 }    
 
+static void
+prepare_import_results (SeahorsePGPOperation *pop, SeahorsePGPSource *psrc)
+{
+    SeahorseKey *skey;
+    SeahorseLoadOperation *lop;
+    gpgme_import_result_t results;
+    gpgme_import_status_t import;
+    SeahorseKeySource *sksrc;
+    GList *keys = NULL;
+    const gchar **patterns = NULL;
+    guint i;
+    
+    sksrc = SEAHORSE_KEY_SOURCE (psrc);
+
+    /* Figure out which keys were imported */
+    results = gpgme_op_import_result (pop->gctx);
+    if (results) {
+            
+        /* Dig out all the fingerprints for use as load patterns */
+        patterns = (const gchar**)g_new0(gchar*, results->considered + 1);
+        for (i = 0, import = results->imports; 
+             i < results->considered && import; 
+             import = import->next) {
+            if (GPG_IS_OK (import->result))
+                patterns[i++] = import->fpr;
+        }
+
+        /* Reload public keys */
+        lop = seahorse_load_operation_start (psrc, patterns, LOAD_FULL, 
+                                             FALSE, FALSE, TRUE);
+        g_object_unref (lop);
+
+        /* Reload secret keys */
+        lop = seahorse_load_operation_start (psrc, patterns, LOAD_FULL,
+                                             TRUE, FALSE, TRUE);
+        g_object_unref (lop);
+            
+        g_free (patterns);
+            
+        /* Now get a list of the new keys */
+        for (import = results->imports; import; import = import->next) {
+            if (!GPG_IS_OK (import->result))
+                continue;
+                
+            skey = seahorse_context_get_key (SCTX_APP (), sksrc, import->fpr);
+            if (skey != NULL)
+                keys = g_list_prepend (keys, skey);
+        }
+    }
+    
+    seahorse_operation_mark_result (SEAHORSE_OPERATION (pop), keys, 
+                                    (GDestroyNotify)g_list_free);
+}
+
 /* --------------------------------------------------------------------------
  * METHODS
  */
@@ -826,153 +881,99 @@ seahorse_pgp_source_get_state (SeahorseKeySource *src)
 static SeahorseOperation* 
 seahorse_pgp_source_import (SeahorseKeySource *sksrc, gpgme_data_t data)
 {
-    SeahorseLoadOperation *lop;
-    SeahorseOperation *operation;
+    SeahorsePGPOperation *pop;
     SeahorsePGPSource *psrc;
-    gpgme_import_result_t results;
-    gpgme_import_status_t import;
-    SeahorseKey *skey;
     gpgme_error_t gerr;
-    gpgme_ctx_t new_ctx;
-    GList *keys = NULL;
-    GError *err = NULL;
-    const gchar **patterns = NULL;
-	guint i;
     
     g_return_val_if_fail (SEAHORSE_IS_PGP_SOURCE (sksrc), NULL);
     psrc = SEAHORSE_PGP_SOURCE (sksrc);
     
-    /* Eventually this should probably be asynchronous, but for now
-     * we leave it as a sync operation for simplicity. */
-    
-    new_ctx = seahorse_pgp_source_new_context ();
-    g_return_val_if_fail (new_ctx != NULL, NULL);
-    
-    operation = g_object_new (SEAHORSE_TYPE_OPERATION, NULL);
-    seahorse_operation_mark_start (operation);
+    pop = seahorse_pgp_operation_new (_("Importing Keys"));
+    g_return_val_if_fail (pop != NULL, NULL);
     
     gpgme_data_seek (data, 0, SEEK_SET);
-    gerr = gpgme_op_import (new_ctx, data);
-    if (GPG_IS_OK (gerr)) {
-
-        /* Figure out which keys were imported */
-        results = gpgme_op_import_result (new_ctx);
-        if (results) {
-            
-            /* Dig out all the fingerprints for use as load patterns */
-            patterns = (const gchar**)g_new0(gchar*, results->considered + 1);
-            for (i = 0, import = results->imports; 
-				 i < results->considered && import; 
-				 import = import->next) {
-                if (GPG_IS_OK (import->result))
-                    patterns[i++] = import->fpr;
-            }
-
-            /* Reload public keys */
-            lop = seahorse_load_operation_start (psrc, patterns, LOAD_FULL, 
-                                                 FALSE, FALSE, TRUE);
-            g_object_unref (lop);
-
-            /* Reload secret keys */
-            lop = seahorse_load_operation_start (psrc, patterns, LOAD_FULL,
-                                                 TRUE, FALSE, TRUE);
-            g_object_unref (lop);
-            
-            g_free (patterns);
-            
-            /* Now get a list of the new keys */
-            for (import = results->imports; import; import = import->next) {
-                if (!GPG_IS_OK (import->result))
-                    continue;
-                    
-                skey = seahorse_context_get_key (SCTX_APP (), sksrc, import->fpr);
-                if (skey != NULL)
-                    keys = g_list_prepend (keys, skey);
-            }
-        }        
-        
-        seahorse_operation_mark_result (operation, keys, (GDestroyNotify)g_list_free);
-        seahorse_operation_mark_done (operation, FALSE, NULL);
-        
-    } else {
-       
-        /* Marks the operation as failed */
-        seahorse_util_gpgme_to_error (gerr, &err);
-        seahorse_operation_mark_done (operation, FALSE, err);
-    }
-
-    gpgme_release (new_ctx);
-    return operation;                    
+    gerr = gpgme_op_import_start (pop->gctx, data);
+    
+    g_signal_connect (pop, "results", G_CALLBACK (prepare_import_results), psrc);
+    
+    /* Couldn't start import */
+    if (!GPG_IS_OK (gerr))
+        seahorse_pgp_operation_mark_failed (pop, gerr);
+    
+    return SEAHORSE_OPERATION (pop);
 }
 
 static SeahorseOperation* 
 seahorse_pgp_source_export (SeahorseKeySource *sksrc, GList *keys, 
                             gboolean complete, gpgme_data_t data)
 {
-    SeahorseOperation *operation;
+    SeahorsePGPOperation *pop;
     SeahorsePGPSource *psrc;
     SeahorsePGPKey *pkey;
     SeahorseKey *skey;
-    gpgme_error_t gerr;
-    gpgme_ctx_t new_ctx;
-    GError *err = NULL;
+    gpgme_error_t gerr = GPG_OK;
+    GArray *akeyids; 
+    gchar **keyids;
+    const gchar *keyid;
     GList *l;
     
     g_return_val_if_fail (SEAHORSE_IS_PGP_SOURCE (sksrc), NULL);
     psrc = SEAHORSE_PGP_SOURCE (sksrc);
-    
-    /* Eventually this should probably be asynchronous, but for now
-     * we leave it as a sync operation for simplicity. */
 
-    operation = g_object_new (SEAHORSE_TYPE_OPERATION, NULL);
-    seahorse_operation_mark_start (operation);
-     
+    pop = seahorse_pgp_operation_new (_("Exporting Keys"));
+    g_return_val_if_fail (pop != NULL, NULL);
+
     if (data == NULL) {
         
         /* Tie to operation when we create our own (auto-free) */
         data = gpgmex_data_new ();
-        seahorse_operation_mark_result (operation, data, 
+        seahorse_operation_mark_result (SEAHORSE_OPERATION (pop), data, 
                                         (GDestroyNotify)gpgmex_data_release);
     } else {
        
         /* Don't free when people pass us their own data */
-        seahorse_operation_mark_result (operation, data, NULL);
+        seahorse_operation_mark_result (SEAHORSE_OPERATION (pop), data, NULL);
     }
-     
-    new_ctx = seahorse_pgp_source_new_context ();
-    g_return_val_if_fail (new_ctx != NULL, NULL);
+    
+    gpgme_set_armor (pop->gctx, TRUE);
+    gpgme_set_textmode (pop->gctx, TRUE);
 
-    gpgme_set_armor (new_ctx, TRUE);
-    gpgme_set_textmode (new_ctx, TRUE);
-
+    /* Build list of keyids for export */
+    akeyids = g_array_new (TRUE, TRUE, sizeof (gchar*));
+    
     for (l = keys; l != NULL; l = g_list_next (l)) {
-       
+        
         g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (l->data), NULL);
         pkey = SEAHORSE_PGP_KEY (l->data);
         
         skey = SEAHORSE_KEY (l->data);       
         g_return_val_if_fail (skey->sksrc == sksrc, NULL);
         
-        gerr = gpgme_op_export (new_ctx, skey->keyid, 0, data);
-
-        if (!GPG_IS_OK (gerr))
-            break;
+        /* Building list */
+        keyid = seahorse_key_get_keyid (skey);
+        g_array_append_val (akeyids, keyid);
         
+        /* TODO: Exporting of secret keys is synchronous */
         if (complete && skey->etype == SKEY_PRIVATE) {
             
-            gerr = gpgmex_op_export_secret (new_ctx, 
+            gerr = gpgmex_op_export_secret (pop->gctx, 
                         seahorse_pgp_key_get_id (pkey->seckey, 0), data);
             
             if (!GPG_IS_OK (gerr))
                 break;
         }
     }
-
-    if (!GPG_IS_OK (gerr)) 
-        seahorse_util_gpgme_to_error (gerr, &err);
-                                 
-    seahorse_operation_mark_done (operation, FALSE, err);
-    return operation;    
+    
+    keyids = (gchar**)g_array_free (akeyids, FALSE);
+    
+    if (GPG_IS_OK (gerr))
+        gerr = gpgme_op_export_ext_start (pop->gctx, (const char**)keyids, 0, data);
+    
+    if (!GPG_IS_OK (gerr))
+        seahorse_pgp_operation_mark_failed (pop, gerr);
+    
+    g_free (keyids);
+    return SEAHORSE_OPERATION (pop);
 }
 
 static gboolean            

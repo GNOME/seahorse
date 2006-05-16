@@ -26,6 +26,10 @@
  * - Uses the arcane gpgme_io_cbs API.
  * - Creates a new context so this doesn't block other operations.
  *
+ * Signals:
+ *   results: The GPGME results are ready. This is called before 
+ *            the 'done' signal of SeahorseOperation.
+ *
  * Properties:
  *  gctx:  (pointer) GPGME context.
  *  message: (string) message to display instead of from GPGME.
@@ -60,11 +64,30 @@
 #define SEAHORSE_IS_PGP_OPERATION_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_PGP_OPERATION))
 #define SEAHORSE_PGP_OPERATION_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_PGP_OPERATION, SeahorsePGPOperationClass))
 
-DECLARE_OPERATION (PGP, pgp)
+typedef struct _SeahorsePGPOperation SeahorsePGPOperation;
+typedef struct _SeahorsePGPOperationClass SeahorsePGPOperationClass;
+
+struct _SeahorsePGPOperation {
+    SeahorseOperation parent;
+    
     /*< public >*/
     gpgme_ctx_t gctx;
-END_DECLARE_OPERATION
+};
 
-SeahorsePGPOperation*   seahorse_pgp_operation_new       (const gchar *message);
+struct _SeahorsePGPOperationClass {
+    SeahorseOperationClass parent_class;
+
+    /* Signal that occurs when the results of the GPGME operation are ready */
+    void (*results) (SeahorsePGPOperation *pop);
+};
+
+
+GType                   seahorse_pgp_operation_get_type     (void);
+
+SeahorsePGPOperation*   seahorse_pgp_operation_new          (const gchar *message);
+
+/* Call when calling of gpgme_op_*_start failed */
+void                    seahorse_pgp_operation_mark_failed  (SeahorsePGPOperation *pop, 
+                                                             gpgme_error_t gerr);
 
 #endif /* __SEAHORSE_PGP_OPERATION_H__ */

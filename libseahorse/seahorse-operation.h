@@ -294,6 +294,7 @@ seahorse_xx_operation_cancel (SeahorseOperation *operation)
     
 void              seahorse_operation_mark_start         (SeahorseOperation *operation);
 
+/* Takes ownership of |error| */
 void              seahorse_operation_mark_done          (SeahorseOperation *operation,
                                                          gboolean cancelled, GError *error);
 
