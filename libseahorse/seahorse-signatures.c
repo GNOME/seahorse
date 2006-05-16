@@ -98,7 +98,7 @@ generate_sig_text (SeahorseContext *sctx, const gchar* path,
         date = seahorse_util_get_date_string (status->signatures->timestamp);
         userid = userid_for_fingerprint (sctx, status->signatures->fpr);
         
-        msg = g_strdup_printf (t, path, userid, date);
+        msg = g_strdup_printf (t, path, userid, date ? date : "");
         
         g_free (date);
         g_free (userid);

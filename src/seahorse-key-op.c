@@ -59,70 +59,71 @@ seahorse_key_op_generate (SeahorseKeySource *sksrc, const gchar *name,
 			  const gchar *passphrase, const SeahorseKeyType type,
 			  const guint length, const time_t expires)
 {
-	gchar *common, *key_type, *start, *parms, *expires_date;
+    gchar *common, *key_type, *start, *parms, *expires_date = NULL;
     gpgme_error_t err;
-	gpgme_ctx_t new_ctx;
-	
-	g_return_val_if_fail (strlen (name) >= 5, GPG_E (GPG_ERR_INV_VALUE));
-	
-	/* Check lengths for each type */
-	switch (type) {
-		case DSA_ELGAMAL:
-			g_return_val_if_fail (length >= ELGAMAL_MIN && length <= LENGTH_MAX, GPG_E (GPG_ERR_INV_VALUE));
-			break;
-		case DSA:
-			g_return_val_if_fail (length >= DSA_MIN && length <= DSA_MAX, GPG_E (GPG_ERR_INV_VALUE));
-			break;
-		case RSA_SIGN:
-			g_return_val_if_fail (length >= RSA_MIN && length <= LENGTH_MAX, GPG_E (GPG_ERR_INV_VALUE));
-			break;
-		default:
-			g_return_val_if_reached (GPG_E (GPG_ERR_INV_VALUE));
-			break;
-	}
-	
-	if (expires != 0)
-		expires_date = seahorse_util_get_date_string (expires);
-	else
-		expires_date = "0";
-	
-	/* Common xml */
-	common = g_strdup_printf ("Name-Real: %s\nExpire-Date: %s\nPassphrase: %s\n"
-		"</GnupgKeyParms>", name, expires_date, passphrase);
-	if (email != NULL && strlen (email) > 0)
-		common = g_strdup_printf ("Name-Email: %s\n%s", email, common);
-	if (comment != NULL && strlen (comment) > 0)
-		common = g_strdup_printf ("Name-Comment: %s\n%s", comment, common);
-	
-	if (type == RSA_SIGN)
-		key_type = "Key-Type: RSA";
-	else
-		key_type = "Key-Type: DSA";
-	
-	start = g_strdup_printf ("<GnupgKeyParms format=\"internal\">\n%s\nKey-Length: ", key_type);
-	
-	/* Subkey xml */
-	if (type == DSA_ELGAMAL)
-		parms = g_strdup_printf ("%s%d\nSubkey-Type: ELG-E\nSubkey-Length: %d\n%s",
-					 start, DSA_MAX, length, common);
-	else
-		parms = g_strdup_printf ("%s%d\n%s", start, length, common);
+    gpgme_ctx_t new_ctx;
+    
+    g_return_val_if_fail (strlen (name) >= 5, GPG_E (GPG_ERR_INV_VALUE));
+    
+    /* Check lengths for each type */
+    switch (type) {
+    case DSA_ELGAMAL:
+        g_return_val_if_fail (length >= ELGAMAL_MIN && length <= LENGTH_MAX, GPG_E (GPG_ERR_INV_VALUE));
+        break;
+    case DSA:
+        g_return_val_if_fail (length >= DSA_MIN && length <= DSA_MAX, GPG_E (GPG_ERR_INV_VALUE));
+        break;
+    case RSA_SIGN:
+        g_return_val_if_fail (length >= RSA_MIN && length <= LENGTH_MAX, GPG_E (GPG_ERR_INV_VALUE));
+        break;
+    default:
+        g_return_val_if_reached (GPG_E (GPG_ERR_INV_VALUE));
+        break;
+    }
+    
+    if (expires != 0)
+        expires_date = seahorse_util_get_date_string (expires);
+    if (!expires_date)
+        expires_date = g_strdup ("0");
+    
+    /* Common xml */
+    common = g_strdup_printf ("Name-Real: %s\nExpire-Date: %s\nPassphrase: %s\n"
+                              "</GnupgKeyParms>", name, expires_date, passphrase);
+    if (email != NULL && strlen (email) > 0)
+        common = g_strdup_printf ("Name-Email: %s\n%s", email, common);
+    if (comment != NULL && strlen (comment) > 0)
+        common = g_strdup_printf ("Name-Comment: %s\n%s", comment, common);
+    
+    if (type == RSA_SIGN)
+        key_type = "Key-Type: RSA";
+    else
+        key_type = "Key-Type: DSA";
+    
+    start = g_strdup_printf ("<GnupgKeyParms format=\"internal\">\n%s\nKey-Length: ", key_type);
+    
+    /* Subkey xml */
+    if (type == DSA_ELGAMAL)
+        parms = g_strdup_printf ("%s%d\nSubkey-Type: ELG-E\nSubkey-Length: %d\n%s",
+                                 start, DSA_MAX, length, common);
+    else
+        parms = g_strdup_printf ("%s%d\n%s", start, length, common);
 
     new_ctx = seahorse_key_source_new_context (sksrc);	
     g_return_val_if_fail (new_ctx != NULL, GPG_E (GPG_ERR_GENERAL));
     
-	err = gpgme_op_genkey (new_ctx, parms, NULL, NULL);
+    err = gpgme_op_genkey (new_ctx, parms, NULL, NULL);
     gpgme_release (new_ctx);
-	
-	if (GPG_IS_OK (err))
+    
+    if (GPG_IS_OK (err))
         seahorse_key_source_refresh_async (sksrc, SEAHORSE_KEY_SOURCE_NEW);
-	
-	/* Free xmls */
-	g_free (parms);
-	g_free (start);
-	g_free (common);
-	
-	return err;
+    
+    /* Free xmls */
+    g_free (parms);
+    g_free (start);
+    g_free (common);
+    g_free (expires_date);
+    
+    return err;
 }
 
 /* helper function for deleting @skey */
@@ -860,7 +861,8 @@ static gpgme_error_t
 edit_expire_action (guint state, gpointer data, int fd)
 {
 	ExpireParm *parm = (ExpireParm*)data;
-  
+    gchar *exp;
+    
 	switch (state) {
 		/* selected key */
 		case EXPIRE_SELECT:
@@ -871,8 +873,9 @@ edit_expire_action (guint state, gpointer data, int fd)
 			break;
 		/* set date */
 		case EXPIRE_DATE:
-            PRINT ((fd, (parm->expires) ?
-				seahorse_util_get_date_string (parm->expires) : "0"));
+            exp = seahorse_util_get_date_string (parm->expires);
+            PRINT ((fd, exp ? exp : "0"));
+            g_free (exp);
 			break;
 		case EXPIRE_QUIT:
             PRINT ((fd, QUIT));
@@ -1299,7 +1302,8 @@ static gpgme_error_t
 add_key_action (guint state, gpointer data, int fd)
 {
 	SubkeyParm *parm = (SubkeyParm*)data;
-	
+	gchar *exp;
+    
 	switch (state) {
 		case ADD_KEY_COMMAND:
             PRINT ((fd, "addkey"));
@@ -1312,9 +1316,10 @@ add_key_action (guint state, gpointer data, int fd)
 			break;
 		/* Get exact date or 0 */
 		case ADD_KEY_EXPIRES:
-            PRINT ((fd, (parm->expires) ?
-				seahorse_util_get_date_string (parm->expires) : "0"));
-			break;
+            exp = seahorse_util_get_date_string (parm->expires);
+            PRINT ((fd, exp ? exp : "0"));
+            g_free (exp);
+            break;
 		case ADD_KEY_QUIT:
             PRINT ((fd, QUIT));
 			break;

@@ -114,17 +114,17 @@ seahorse_util_set_text_view_string (GtkTextView *view, GString *string)
 gchar*
 seahorse_util_get_date_string (const time_t time)
 {
-	GDate *created_date;
-	gchar *created_string;
-	
-	if (time == 0)
-		return "0";
-	
-	created_date = g_date_new ();
-	g_date_set_time (created_date, time);
-	created_string = g_new (gchar, 11);
-	g_date_strftime (created_string, 11, _("%Y-%m-%d"), created_date);
-	return created_string;
+    GDate *created_date;
+    gchar *created_string;
+    
+    if (time == 0)
+        return NULL;
+    
+    created_date = g_date_new ();
+    g_date_set_time (created_date, time);
+    created_string = g_new (gchar, 11);
+    g_date_strftime (created_string, 11, _("%Y-%m-%d"), created_date);
+    return created_string;
 }
 
 /**

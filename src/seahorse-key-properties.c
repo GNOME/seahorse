@@ -118,14 +118,14 @@ key_property_labels (SeahorseWidget *swidget)
     gpgme_subkey_t subkey;
     SeahorseKey *skey;
     GtkWidget *w;
-    const gchar *label;
+    gchar *label;
     gchar *t, *x;
 
     skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
     subkey = skey->key->subkeys;
     
     w = glade_xml_get_widget (swidget->xml, "keyid");
-    label = seahorse_key_get_keyid (skey, 0); 
+    label = (gchar*)seahorse_key_get_keyid (skey, 0); 
     gtk_label_set_text (GTK_LABEL (w), label);
     
     w = glade_xml_get_widget (swidget->xml, "fingerprint");
@@ -133,7 +133,7 @@ key_property_labels (SeahorseWidget *swidget)
     gtk_label_set_text (GTK_LABEL (w), label);
 
     w = glade_xml_get_widget (swidget->xml, "label_type");
-    label = gpgme_pubkey_algo_name(subkey->pubkey_algo);
+    label = (gchar*)gpgme_pubkey_algo_name(subkey->pubkey_algo);
 
     if (label == NULL)
         label = _("Unknown");
@@ -143,7 +143,8 @@ key_property_labels (SeahorseWidget *swidget)
     
     w = glade_xml_get_widget (swidget->xml, "label_created");
     label = seahorse_util_get_date_string (subkey->timestamp); 
-    gtk_label_set_text (GTK_LABEL (w), label);
+    gtk_label_set_text (GTK_LABEL (w), label ? label : "");
+    g_free (label);
 
     w = glade_xml_get_widget (swidget->xml, "label_strength");
     g_ascii_dtostr(dbuffer, G_ASCII_DTOSTR_BUF_SIZE, subkey->length);
@@ -151,13 +152,16 @@ key_property_labels (SeahorseWidget *swidget)
     
     w = glade_xml_get_widget (swidget->xml, "label_expires");
     label = seahorse_util_get_date_string (subkey->expires);
-    if (g_str_equal("0", label))
-	    label = _("Never");
-    gtk_label_set_text (GTK_LABEL (w), label);
+    if (!label && seahorse_key_get_loaded_info (skey) != SKEY_INFO_REMOTE)
+        label = g_strdup (_("Never"));
+    if (label)
+        gtk_label_set_text (GTK_LABEL (w), label);
+    g_free (label);
     
     w = glade_xml_get_widget (swidget->xml, "label_created");
     label = seahorse_util_get_date_string (subkey->timestamp); 
-    gtk_label_set_text (GTK_LABEL (w), label);
+    gtk_label_set_text (GTK_LABEL (w), label ? label : "");
+    g_free (label);
     
     if ((t = seahorse_key_get_userid_name (skey, 0)) != NULL) {
         w = glade_xml_get_widget (swidget->xml, "label_name");
@@ -203,7 +207,7 @@ do_stats (SeahorseWidget *swidget, GtkTable *table, guint top, guint index, gpgm
     GtkWidget *widget;
     GtkTooltips *tips;
     const gchar *str;
-    gchar * buf;
+    gchar *buf, *t;
    
     skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
     tips = gtk_tooltips_new ();
@@ -213,6 +217,7 @@ do_stats (SeahorseWidget *swidget, GtkTable *table, guint top, guint index, gpgm
  
     do_stat_label (seahorse_key_get_keyid (skey, index), table, 1, top, TRUE,
       tips, subkey->keyid);
+    
     /* type */
     do_stat_label (_("Type:"), table, 2, top, FALSE, tips, _("Algorithm"));
     str = gpgme_pubkey_algo_name(subkey->pubkey_algo);
@@ -221,15 +226,19 @@ do_stats (SeahorseWidget *swidget, GtkTable *table, guint top, guint index, gpgm
     else if (g_str_equal ("ElG", str))
         str = "ElGamal";
     do_stat_label (str, table, 3, top, FALSE, NULL, NULL);
+    
     /* created */
     do_stat_label (_("Created:"), table, 0, top+1, FALSE, tips, _("Key creation date"));
-    do_stat_label (seahorse_util_get_date_string (subkey->timestamp),
-        table, 1, top+1, FALSE, NULL, NULL);
+    t = seahorse_util_get_date_string (subkey->timestamp);
+    do_stat_label (t ? t : "", table, 1, top+1, FALSE, NULL, NULL);
+    g_free (t);
+    
     /* length */
     do_stat_label (_("Length:"), table, 2, top+1, FALSE, NULL, NULL);
     buf = g_strdup_printf ("%d", subkey->length);
     do_stat_label (buf, table, 3, top+1, FALSE, NULL, NULL);
     g_free(buf);
+    
     /* status */
     do_stat_label (_("Status:"), table, 0, top+3, FALSE, NULL, NULL);
     str = _("Good");
@@ -238,14 +247,17 @@ do_stats (SeahorseWidget *swidget, GtkTable *table, guint top, guint index, gpgm
     else if (subkey->expired)
         str = _("Expired");
     do_stat_label (str, table, 1, top+3, FALSE, NULL, NULL);
+    
     /* expires */
     do_stat_label (_("Expires:"), table, 0, top+2, FALSE, NULL, NULL);
  
-    if (subkey->expires)
-        do_stat_label (seahorse_util_get_date_string (subkey->expires),
-                       table, 1, top+2, FALSE, NULL, NULL);
-    else
+    if (subkey->expires) {
+        t = seahorse_util_get_date_string (subkey->expires);
+        do_stat_label (t ? t : "", table, 1, top+2, FALSE, NULL, NULL);
+        g_free (t);
+    } else {
         do_stat_label (_("Never"), table, 1, top+2, FALSE, NULL, NULL);
+    }
     
     if (SEAHORSE_IS_KEY_PAIR (skey)) {
         widget = gtk_button_new_with_mnemonic(_("Change Expiry Date"));
