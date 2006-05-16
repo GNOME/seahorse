@@ -38,6 +38,7 @@
 void          seahorse_progress_appbar_set_operation  (GtkWidget* appbar,
                                                        SeahorseOperation *operation);
 
+/* Keeps operation refed until progress dialog goes away */
 void          seahorse_progress_show                  (SeahorseOperation *operation,
                                                        const gchar *title,
                                                        gboolean delayed);

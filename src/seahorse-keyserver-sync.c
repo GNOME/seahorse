@@ -33,6 +33,7 @@
 #include "seahorse-server-source.h"
 #include "seahorse-gconf.h"
 #include "seahorse-transfer-operation.h"
+#include "seahorse-keyserver-sync.h"
 
 static void 
 sync_import_complete (SeahorseOperation *op, SeahorseKeySource *sksrc)
@@ -65,76 +66,15 @@ sync_export_complete (SeahorseOperation *op, SeahorseKeySource *sksrc)
 static void
 ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 {
-    SeahorseKeySource *sksrc;
-    SeahorseKeySource *lsksrc;
-    SeahorseMultiOperation *mop;
-    SeahorseOperation *op;
-    gchar *keyserver;
-    GSList *ks, *l;
-    GList *keys, *k;
-    GSList *keyids = NULL;
+    GList *keys;
     
     keys = (GList*)g_object_get_data (G_OBJECT (swidget), "publish-keys");
     keys = g_list_copy (keys);
     
     seahorse_widget_destroy (swidget);
-    
-    if (!keys)
-        return;
-    
-    g_assert (SEAHORSE_IS_KEY (keys->data));
-    
-    /* Build a keyid list */
-    for (k = keys; k; k = g_list_next (k)) 
-        keyids = g_slist_prepend (keyids, 
-                    (gchar*)seahorse_key_get_keyid (SEAHORSE_KEY (k->data)));
-
-    mop = seahorse_multi_operation_new ();
-
-    /* And now syncing keys from the servers */
-    ks = seahorse_gconf_get_string_list (KEYSERVER_KEY);
-    ks = seahorse_server_source_purge_keyservers (ks);
-    
-    for (l = ks; l; l = g_slist_next (l)) {
-        
-        sksrc = seahorse_context_remote_key_source (SCTX_APP (), (const gchar*)(l->data));
-        g_return_if_fail (sksrc != NULL);
-        
-        lsksrc = seahorse_context_find_key_source (SCTX_APP (), 
-                        seahorse_key_source_get_ktype (sksrc), SKEY_LOC_LOCAL);
-        
-        if (lsksrc) {
-            op = seahorse_transfer_operation_new (_("Syncing keys"), sksrc, lsksrc, keyids);
-            g_return_if_fail (op != NULL);
-
-            g_signal_connect (op, "done", G_CALLBACK (sync_export_complete), sksrc);
-            seahorse_multi_operation_take (mop, op);
-        }
-    }
-    
-    seahorse_util_string_slist_free (ks);
-    
-    /* Publishing keys online */    
-    keyserver = seahorse_gconf_get_string (PUBLISH_TO_KEY);
-    if (keyserver && keyserver[0]) {
-        
-        sksrc = seahorse_context_remote_key_source (SCTX_APP (), keyserver);
-        g_return_if_fail (sksrc != NULL);
-        
-        op = seahorse_context_transfer_keys (SCTX_APP (), keys, sksrc);
-        g_return_if_fail (sksrc != NULL);
-
-        g_signal_connect (op, "done", G_CALLBACK (sync_import_complete), sksrc);
-        seahorse_multi_operation_take (mop, op);
-    }
-
+   
+    seahorse_keyserver_sync (keys);
     g_list_free (keys);
-    g_slist_free (keyids);
-    g_free (keyserver);
-    
-    /* Show the progress window if necessary */
-    seahorse_progress_show (SEAHORSE_OPERATION (mop), _("Syncing keys..."), FALSE);
-    g_object_unref (mop);
 }
 
 static void
@@ -236,13 +176,13 @@ void
 seahorse_keyserver_sync (GList *keys)
 {
     SeahorseKeySource *sksrc;
-    SeahorseKeySource       *lsksrc;
-    SeahorseMultiOperation  *mop;
-    SeahorseOperation       *op;
-    gchar                   *keyserver;
-    GSList                  *ks, *l;
-    GList                   *k;
-    GSList                  *keyids = NULL;
+    SeahorseKeySource *lsksrc;
+    SeahorseMultiOperation *mop;
+    SeahorseOperation *op;
+    gchar *keyserver;
+    GSList *ks, *l;
+    GList *k;
+    GSList *keyids = NULL;
     
     if (!keys)
         return;
