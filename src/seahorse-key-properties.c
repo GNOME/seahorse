@@ -38,6 +38,7 @@
 #include "seahorse-vfs-data.h"
 #include "seahorse-key-model.h"
 #include "seahorse-gconf.h"
+#include "seahorse-key-model.h"
 
 
 #ifdef WITH_KEYSERVER
@@ -100,6 +101,29 @@ get_selected_row (SeahorseWidget *swidget, const gchar *gladeid, guint column)
     g_list_free (rows);
 
     return index;
+}
+
+static void
+signature_row_activated(GtkTreeView *treeview, GtkTreePath *path, GtkTreeViewColumn *arg2, 
+                        SeahorseWidget *swidget)
+{
+    SeahorseKey *skey = NULL;
+    GtkTreeModel *model;
+    GtkTreeIter iter;
+    
+    model = gtk_tree_view_get_model (treeview);
+    
+    if (GTK_IS_TREE_MODEL_FILTER (model)) 
+        model = gtk_tree_model_filter_get_model (GTK_TREE_MODEL_FILTER (model));
+        
+    g_return_if_fail (gtk_tree_model_get_iter (model, &iter, path));
+    
+    skey = seahorse_key_model_get_row_key (SEAHORSE_KEY_MODEL (model), &iter);
+    
+	if (skey != NULL) {
+	   if (SEAHORSE_IS_PGP_KEY (skey))
+	       seahorse_key_properties_new (SEAHORSE_PGP_KEY (skey));
+    }
 }
 
 static GSList*
@@ -393,6 +417,8 @@ do_names_signals (SeahorseWidget *swidget)
             G_CALLBACK (names_delete_clicked), swidget);
     glade_xml_signal_connect_data (swidget->xml, "on_names_revoke",
             G_CALLBACK (names_revoke_clicked), swidget);
+    glade_xml_signal_connect_data (swidget->xml, "on_names_tree_row_activated",
+                                   G_CALLBACK (signature_row_activated), swidget);
     
     widget = seahorse_widget_get_widget (swidget, "names-tree");
     g_return_if_fail (widget != NULL);
@@ -1406,6 +1432,9 @@ do_trust_signals (SeahorseWidget *swidget)
                                    G_CALLBACK (trust_marginal_toggled), swidget);
     glade_xml_signal_connect_data (swidget->xml, "trust_complete_toggled",
                                    G_CALLBACK (trust_complete_toggled), swidget);
+                                   
+    glade_xml_signal_connect_data (swidget->xml, "on_signatures_tree_row_activated",
+                                   G_CALLBACK (signature_row_activated), swidget);
 }
 
 /* When the 'only display trusted' check is checked, hide untrusted rows */
