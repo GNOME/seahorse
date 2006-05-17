@@ -38,8 +38,6 @@
 #include "seahorse-vfs-data.h"
 #include "seahorse-key-model.h"
 #include "seahorse-gconf.h"
-#include "seahorse-key-model.h"
-
 
 #ifdef WITH_KEYSERVER
 #include "seahorse-keyserver-sync.h"
