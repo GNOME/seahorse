@@ -27,8 +27,10 @@ gconf_notify (GConfClient *client, guint id, GConfEntry *entry, GtkCheckButton *
 {
     const char *gconf_key = g_object_get_data (G_OBJECT (check), "gconf-key");
     if (g_str_equal (gconf_key, gconf_entry_get_key (entry))) {
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check),
-                        gconf_value_get_bool (gconf_entry_get_value (entry)));
+        GConfValue *value = gconf_entry_get_value (entry);
+        if (value)
+            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check),
+                                          gconf_value_get_bool (value));
     }
 }
 
