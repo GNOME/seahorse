@@ -45,8 +45,8 @@ const GType key_columns[] = {
 };
 
 
-void
-on_response (GtkDialog *dialog, guint response, SeahorseWidget *swidget)
+static void
+choose_keytype(SeahorseWidget *swidget)
 {
     GtkWidget *widget;
     GtkTreeModel *model;
@@ -55,12 +55,7 @@ on_response (GtkDialog *dialog, guint response, SeahorseWidget *swidget)
     GtkTreeIter iter;
     gboolean advanced;
     GQuark ktype;
-    
-    if (response != GTK_RESPONSE_OK) {
-        seahorse_widget_destroy (swidget);
-        return;
-    }
-    
+
     /* Advanced or not? */
     widget = seahorse_widget_get_widget (swidget, "advanced-option");
     g_return_if_fail (widget != NULL);
@@ -94,6 +89,24 @@ on_response (GtkDialog *dialog, guint response, SeahorseWidget *swidget)
     
     else
         g_return_if_reached ();
+}
+
+static void
+row_activated(GtkTreeView *treeview, GtkTreePath *path, GtkTreeViewColumn *arg2, 
+              SeahorseWidget *swidget)
+{
+    choose_keytype(swidget);     
+}
+
+void
+on_response (GtkDialog *dialog, guint response, SeahorseWidget *swidget)
+{
+    if (response != GTK_RESPONSE_OK) {
+        seahorse_widget_destroy (swidget);
+        return;
+    }
+    
+    choose_keytype(swidget);
 }
 
 static void
@@ -168,4 +181,6 @@ seahorse_generate_select_show ()
     
     g_signal_connect (seahorse_widget_get_top (swidget), "response", 
                       G_CALLBACK (on_response), swidget);
+    g_signal_connect (widget, "row_activated", 
+                      G_CALLBACK(row_activated), swidget);                  
 }
