@@ -253,8 +253,8 @@ create_auth_window (SeahorseAgentPassReq *pr)
     gtk_label_set_line_wrap (GTK_LABEL (w), TRUE);
     gtk_box_pack_start (GTK_BOX (box), w, TRUE, FALSE, 0);
     
-    w = seahorse_check_button_control_new(_("Always ask me before using a cached passphrase"),
-                                          SETTING_AUTH);
+    w = gtk_check_button_new_with_mnemonic (_("Always ask me before using a cached passphrase"));
+    seahorse_check_button_gconf_attach (GTK_CHECK_BUTTON (w), SETTING_AUTH);
     
     gtk_box_pack_start (GTK_BOX (box), w, TRUE, FALSE, 0);
                                   

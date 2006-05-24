@@ -429,7 +429,7 @@ setup_keyservers (SeahorseWidget *swidget)
     w = glade_xml_get_widget(swidget->xml, "auto_sync");
     g_return_if_fail (w != NULL);
     
-    seahorse_check_button_gconf_attach(GTK_CHECK_BUTTON(w), AUTOSYNC_KEY);
+    seahorse_check_button_gconf_attach (GTK_CHECK_BUTTON(w), AUTOSYNC_KEY);
 }
 
 #endif /* WITH_KEYSERVER */
@@ -442,10 +442,8 @@ static void
 setup_sharing (SeahorseWidget *swidget)
 {
     GtkWidget *widget;
-    widget = glade_xml_get_widget (swidget->xml, "enable-sharing-placeholder");
-    gtk_container_add (GTK_CONTAINER (widget),
-        seahorse_check_button_control_new (_("_Share my keys with others on my network"), KEYSHARING_KEY));
-    gtk_widget_show_all (widget);
+    widget = glade_xml_get_widget (swidget->xml, "enable-sharing");
+    seahorse_check_button_gconf_attach (GTK_CHECK_BUTTON (widget), KEYSHARING_KEY);
 }
 
 #endif /* WITH_SHARING */
@@ -491,12 +489,11 @@ seahorse_prefs_new ()
     
     swidget = seahorse_widget_new ("prefs");
     
-    widget = glade_xml_get_widget (swidget->xml, "modes");
-    gtk_container_add (GTK_CONTAINER (widget),
-        seahorse_check_button_control_new (_("_Encrypt to Self"), ENCRYPTSELF_KEY));
-    gtk_container_add (GTK_CONTAINER (widget),
-        seahorse_check_button_control_new (_("_Armor Encode Files"), ARMOR_KEY));
-    gtk_widget_show_all (widget);
+    widget = glade_xml_get_widget (swidget->xml, "encrypt-self");
+    seahorse_check_button_gconf_attach (GTK_CHECK_BUTTON (widget), ENCRYPTSELF_KEY);
+    
+    widget = glade_xml_get_widget (swidget->xml, "armor-encode");
+    seahorse_check_button_gconf_attach (GTK_CHECK_BUTTON (widget), ARMOR_KEY);
 
     widget = glade_xml_get_widget (swidget->xml, "signer-select");
     g_return_val_if_fail (widget != NULL, NULL);

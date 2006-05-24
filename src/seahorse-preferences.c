@@ -68,16 +68,24 @@ seahorse_preferences_show (const gchar *tabid)
     gtk_container_add (GTK_CONTAINER (tab), align);    
     gtk_box_set_child_packing (GTK_BOX (tab), align, FALSE, FALSE, 0, GTK_PACK_START);
     
-	gtk_container_add (GTK_CONTAINER (box), 
-            seahorse_check_button_control_new (_("_Validity"), SHOW_VALIDITY_KEY));
-	gtk_container_add (GTK_CONTAINER (box), 
-            seahorse_check_button_control_new (_("_Expires"), SHOW_EXPIRES_KEY));
-	gtk_container_add (GTK_CONTAINER (box), 
-            seahorse_check_button_control_new (_("_Trust"), SHOW_TRUST_KEY));
-	gtk_container_add (GTK_CONTAINER (box), 
-            seahorse_check_button_control_new (_("T_ype"), SHOW_TYPE_KEY));
 	
-	gtk_widget_show_all (tab);
+    widget = gtk_check_button_new_with_mnemonic (_("_Validity"));
+    seahorse_check_button_gconf_attach (GTK_CHECK_BUTTON (widget), SHOW_VALIDITY_KEY);
+    gtk_container_add (GTK_CONTAINER (box), widget);
+
+    widget = gtk_check_button_new_with_mnemonic (_("_Expires"));
+    seahorse_check_button_gconf_attach (GTK_CHECK_BUTTON (widget), SHOW_EXPIRES_KEY);
+    gtk_container_add (GTK_CONTAINER (box), widget);
+
+    widget = gtk_check_button_new_with_mnemonic (_("_Trust"));
+    seahorse_check_button_gconf_attach (GTK_CHECK_BUTTON (widget), SHOW_TRUST_KEY);
+    gtk_container_add (GTK_CONTAINER (box), widget);
+	
+    widget = gtk_check_button_new_with_mnemonic (_("T_ype"));
+    seahorse_check_button_gconf_attach (GTK_CHECK_BUTTON (widget), SHOW_TYPE_KEY);
+    gtk_container_add (GTK_CONTAINER (box), widget);
+	
+    gtk_widget_show_all (tab);
     seahorse_prefs_add_tab (swidget, label, tab);
     
     if (tabid)

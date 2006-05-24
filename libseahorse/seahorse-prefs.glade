@@ -101,15 +101,41 @@
 		      <property name="spacing">12</property>
 
 		      <child>
-			<placeholder/>
+			<widget class="GtkCheckButton" id="encrypt-self">
+			  <property name="visible">True</property>
+			  <property name="can_focus">True</property>
+			  <property name="label" translatable="yes">_Encrypt to Self</property>
+			  <property name="use_underline">True</property>
+			  <property name="relief">GTK_RELIEF_NORMAL</property>
+			  <property name="focus_on_click">True</property>
+			  <property name="active">False</property>
+			  <property name="inconsistent">False</property>
+			  <property name="draw_indicator">True</property>
+			</widget>
+			<packing>
+			  <property name="padding">0</property>
+			  <property name="expand">False</property>
+			  <property name="fill">False</property>
+			</packing>
 		      </child>
 
 		      <child>
-			<placeholder/>
-		      </child>
-
-		      <child>
-			<placeholder/>
+			<widget class="GtkCheckButton" id="armor-encode">
+			  <property name="visible">True</property>
+			  <property name="can_focus">True</property>
+			  <property name="label" translatable="yes">_Armor Encode Files</property>
+			  <property name="use_underline">True</property>
+			  <property name="relief">GTK_RELIEF_NORMAL</property>
+			  <property name="focus_on_click">True</property>
+			  <property name="active">False</property>
+			  <property name="inconsistent">False</property>
+			  <property name="draw_indicator">True</property>
+			</widget>
+			<packing>
+			  <property name="padding">0</property>
+			  <property name="expand">True</property>
+			  <property name="fill">False</property>
+			</packing>
 		      </child>
 		    </widget>
 		    <packing>
@@ -1016,14 +1042,16 @@ it to the Session manager. </property>
 	      <property name="spacing">12</property>
 
 	      <child>
-		<widget class="GtkVBox" id="enable-sharing-placeholder">
+		<widget class="GtkCheckButton" id="enable-sharing">
 		  <property name="visible">True</property>
-		  <property name="homogeneous">False</property>
-		  <property name="spacing">0</property>
-
-		  <child>
-		    <placeholder/>
-		  </child>
+		  <property name="can_focus">True</property>
+		  <property name="label" translatable="yes">_Share my keys with others on my network</property>
+		  <property name="use_underline">True</property>
+		  <property name="relief">GTK_RELIEF_NORMAL</property>
+		  <property name="focus_on_click">True</property>
+		  <property name="active">False</property>
+		  <property name="inconsistent">False</property>
+		  <property name="draw_indicator">True</property>
 		</widget>
 		<packing>
 		  <property name="padding">0</property>
