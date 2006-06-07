@@ -10,7 +10,9 @@ icon22_DATA = seahorse.png \
                 seahorse-key.png \
                 seahorse-key-personal.png \
                 seahorse-key-ssh.png \
-                seahorse-share-keys.png 
+                seahorse-share-keys.png \
+                seahorse-sign-ok.png \
+                seahorse-sign-bad.png
 
 iconsrc = seahorse.svg \
                 seahorse-preferences.svg \
@@ -22,7 +24,9 @@ iconsrc = seahorse.svg \
                 seahorse-key.svg \
                 seahorse-key-personal.svg \
                 seahorse-key-ssh.svg \
-                seahorse-share-keys.svg 
+                seahorse-share-keys.svg \
+                seahorse-sign-ok.svg \
+                seahorse-sign-bad.svg
 
 desktop_iconsdir   = $(datadir)/icons/hicolor/22x22/apps
 desktop_icons_DATA = seahorse.svg \
