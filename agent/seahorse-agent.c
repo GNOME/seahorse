@@ -154,20 +154,20 @@ seahorse_agent_postfork (pid_t child)
         process_gpg_conf (socket, child);    
 }
 
-int
+gboolean
 seahorse_agent_init ()
 {
     if(!seahorse_agent_enabled)
-        return 0;
+        return TRUE;
     
     if (seahorse_agent_io_init () == -1)
-        return -1;               /* message already printed */
+        return FALSE;           /* message already printed */
     
     /* Initialize our sub systems */
     seahorse_agent_actions_init ();
     seahorse_agent_cache_init ();
     
-    return 0;
+    return TRUE;
 }
 
 void

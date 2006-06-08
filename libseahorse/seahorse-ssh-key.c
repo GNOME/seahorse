@@ -77,7 +77,7 @@ parse_ssh_algo (gchar *type)
         return SSH_ALGO_RSA1;
     if (strstr (type, "rsa"))
         return SSH_ALGO_RSA;
-    if (strstr (type, "dsa"))
+    if (strstr (type, "dsa") || strstr (type, "dss"))
         return SSH_ALGO_DSA;
     return SSH_ALGO_UNK;
 }
@@ -307,8 +307,15 @@ seahorse_ssh_key_new (SeahorseKeySource *sksrc, SeahorseSSHKeyData *data)
     return skey;
 }
 
-const gchar*
+guint 
 seahorse_ssh_key_get_algo (SeahorseSSHKey *skey)
+{
+    g_return_val_if_fail (SEAHORSE_IS_SSH_KEY (skey), SSH_ALGO_UNK);
+    return skey->keydata->algo;
+}
+
+const gchar*
+seahorse_ssh_key_get_algo_str (SeahorseSSHKey *skey)
 {
     g_return_val_if_fail (SEAHORSE_IS_SSH_KEY (skey), "");
     

@@ -51,7 +51,7 @@ void seahorse_agent_prefork ();
 void seahorse_agent_postfork (pid_t child);
 
 /* Called in the new child process */
-int seahorse_agent_init ();
+gboolean seahorse_agent_init ();
 void seahorse_agent_uninit ();
 
 /* Global options to set from the command line */
@@ -74,7 +74,6 @@ void seahorse_agent_io_reply (SeahorseAgentConn *rq, gboolean ok, const gchar *r
 /* -----------------------------------------------------------------------------
  * seahorse-agent-actions.c
  */
-
 
 typedef struct _SeahorseAgentPassReq {
     const gchar *id;
@@ -124,4 +123,11 @@ void seahorse_agent_prompt_cleanup ();
 void seahorse_agent_status_cleanup ();
 void seahorse_agent_status_update ();
 
-#endif                          /* __SEAHORSE_AGENT_H__ */
+/* -----------------------------------------------------------------------------
+ * seahorse-agent-ssh.c
+ */
+
+gboolean seahorse_agent_ssh_init ();
+void seahorse_agent_ssh_uninit ();
+
+#endif /* __SEAHORSE_AGENT_H__ */

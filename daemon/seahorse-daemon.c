@@ -250,22 +250,35 @@ int main(int argc, char* argv[])
 #ifdef WITH_DBUS
     seahorse_dbus_server_init ();
 #endif
+
 #ifdef WITH_AGENT
-    seahorse_agent_init ();
-#endif    
+    if (!seahorse_agent_init ())
+        seahorse_agent_uninit ();
+#ifdef WITH_SSH
+    if (!seahorse_agent_ssh_init ())
+        seahorse_agent_ssh_uninit ();
+#endif
+#endif
+    
 #ifdef WITH_SHARING
     seahorse_sharing_init ();
 #endif
 
     gtk_main ();
+g_printerr ("left gtk_main\n");
 
     /* And now clean them all up */
 #ifdef WITH_SHARING
     seahorse_sharing_cleanup ();
 #endif
+    
 #ifdef WITH_AGENT
     seahorse_agent_uninit ();
-#endif    
+#ifdef WITH_SSH
+    seahorse_agent_ssh_uninit ();
+#endif
+#endif
+    
 #ifdef WITH_DBUS
     seahorse_dbus_server_cleanup ();
 #endif

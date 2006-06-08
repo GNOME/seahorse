@@ -93,7 +93,9 @@ SeahorseSSHKey*         seahorse_ssh_key_new                  (SeahorseKeySource
 
 GType                   seahorse_ssh_key_get_type             (void);
 
-const gchar*            seahorse_ssh_key_get_algo             (SeahorseSSHKey *skey);
+guint                   seahorse_ssh_key_get_algo             (SeahorseSSHKey *skey);
+
+const gchar*            seahorse_ssh_key_get_algo_str         (SeahorseSSHKey *skey);
 
 guint                   seahorse_ssh_key_get_strength         (SeahorseSSHKey *skey);
 

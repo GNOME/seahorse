@@ -17,9 +17,15 @@ INCLUDES = -I$(top_builddir) \
 
 noinst_LIBRARIES = libseahorseagent.a
 
+if WITH_SSH
+SSH_SOURCES = seahorse-agent-ssh.c
+else
+SSH_SOURCES = 
+endif
+
 libseahorseagent_a_SOURCES = seahorse-agent.c seahorse-agent.h seahorse-agent-actions.c \
                              seahorse-agent-cache.c seahorse-agent-prompt.c seahorse-agent-io.c \
-                             seahorse-agent-status.c
+                             seahorse-agent-status.c $(SSH_SOURCES)
 
 glade_DATA = \
 	seahorse-agent-cache.glade 

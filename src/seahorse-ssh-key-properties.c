@@ -162,7 +162,7 @@ do_details (SeahorseWidget *swidget)
 
     widget = glade_xml_get_widget (swidget->xml, "algo-label");
     if (widget) {
-        label = seahorse_ssh_key_get_algo (skey);
+        label = seahorse_ssh_key_get_algo_str (skey);
         gtk_label_set_text (GTK_LABEL (widget), label);
     }
 
