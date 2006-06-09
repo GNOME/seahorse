@@ -298,38 +298,6 @@ else
 fi
 
 dnl ***************
-dnl APPLET
-dnl ***************
-
-PANEL_APPLET_REQUIRED=2.9.4
-
-# Allow applet to be disabled
-AC_ARG_ENABLE(applet, 
-        AC_HELP_STRING([--disable-applet],
-        [Don't compile clipboard encryption panel applet]))
-
-# Applet tests 
-if test "$enable_applet" = "no"; then
-    echo "disabling panel applet"
-else
-    echo "checking for supported versions of libpanelapplet..."
-    
-    PKG_CHECK_MODULES(GNOME_APPLETS, libpanelapplet-2.0 >= $PANEL_APPLET_REQUIRED,
-            [enable_applet=yes],
-            [enable_applet=no])
-
-    if test "$enable_applet" = "yes"; then
-        echo "enabling panel applet..."
-        AC_SUBST(GNOME_APPLETS_CFLAGS)
-        AC_SUBST(GNOME_APPLETS_LIBS)
-        AC_DEFINE(WITH_APPLET, 1, [Build the clipboard encryption panel applet])
-    fi
-fi
-
-AM_CONDITIONAL(WITH_APPLET, test "$enable_applet" = "yes")
-
-
-dnl ***************
 dnl NAUTILUS
 dnl ***************
 
@@ -566,6 +534,46 @@ fi
 AM_CONDITIONAL(WITH_GEDIT, test "$enable_gedit" = "yes")
 AM_CONDITIONAL(WITH_GEDIT_BONOBO, test "$with_gedit_bonobo" = "yes")
 
+dnl ***************
+dnl APPLET
+dnl ***************
+
+PANEL_APPLET_REQUIRED=2.9.4
+
+enable_applet=""
+with_panel_applet="no"
+
+if test "$enable_dbus" != "yes"; then
+    echo "disabling panel applet: no dbus support"
+    
+else
+
+    # Allow applet to be disabled
+    AC_ARG_ENABLE(applet, 
+            AC_HELP_STRING([--disable-applet],
+            [Don't compile clipboard encryption panel applet]))
+
+    # Applet tests 
+    if test "$enable_applet" = "no"; then
+        echo "disabling panel applet"
+    else
+        echo "checking for supported versions of libpanelapplet..."
+        
+        PKG_CHECK_MODULES(GNOME_APPLETS, libpanelapplet-2.0 >= $PANEL_APPLET_REQUIRED,
+                [enable_applet=yes],
+                [enable_applet=no])
+
+        if test "$enable_applet" = "yes"; then
+            echo "enabling panel applet..."
+            AC_SUBST(GNOME_APPLETS_CFLAGS)
+            AC_SUBST(GNOME_APPLETS_LIBS)
+            AC_DEFINE(WITH_APPLET, 1, [Build the clipboard encryption panel applet])
+            with_panel_applet=yes
+        fi
+    fi
+fi
+
+AM_CONDITIONAL(WITH_APPLET, test "$enable_applet" = "yes")
    
 dnl *******************
 dnl LIBNOTIFY
@@ -730,8 +738,8 @@ Plugins/DBUS Support:    $enable_dbus
   libcryptui:            $enable_dbus
   GEdit (v <= 2.12):     $with_gedit_bonobo
   GEdit (v >= 2.14):     $with_gedit_plugin
+  Panel Applet:          $with_panel_applet
 Plugins: 
-  Panel Applet:          $enable_applet
   Nautilus (v < 2.8):    $with_nautilus
   Nautilus (v > 2.10):   $with_nautilus_ext
 Key Sharing:             $enable_sharing
