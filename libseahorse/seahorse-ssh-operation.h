@@ -31,6 +31,11 @@
 #ifndef __SEAHORSE_SSH_OPERATION_H__
 #define __SEAHORSE_SSH_OPERATION_H__
 
+/* Used by both seahorse-ssh-operation.c and seahorse-ssh-askpass.c */
+#define SEAHORSE_SSH_ENV_PROMPT_TITLE   "SEAHORSE_SSH_PROMPT_TITLE"
+#define SEAHORSE_SSH_ENV_ID             "SEAHORSE_SSH_KEYID"
+#define SEAHORSE_SSH_ENV_DESC           "SEAHORSE_SSH_KEYDESC"
+
 #include "seahorse-operation.h"
 #include "seahorse-ssh-source.h"
 #include "seahorse-ssh-key.h"
@@ -51,7 +56,8 @@ SeahorseOperation*   seahorse_ssh_operation_new          (SeahorseSSHSource *ssr
                                                           const gchar *command, 
                                                           const gchar *input, 
                                                           gint length,
-                                                          const gchar *message);
+                                                          const gchar *prompt,
+                                                          SeahorseSSHKey *promptkey);
 
 gchar*               seahorse_ssh_operation_sync         (SeahorseSSHSource *ssrc,
                                                           const gchar *command, 

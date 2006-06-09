@@ -170,7 +170,6 @@ read_ssh_message (GIOChannel* source, gchar *buf, gsize bufsize)
     }
     
     length = GET_32BIT (buf);
-    DEBUG_MSG (("reading message of length: %u\n", length));
     
     /* To prevent buffer overflow discard anything over bufsize */
     for (read = 0; read < length; read += bufsize) {
@@ -191,7 +190,7 @@ read_ssh_message (GIOChannel* source, gchar *buf, gsize bufsize)
         length -= r;
     }
 
-    DEBUG_MSG (("received message: %d (len: %d)\n", (int)buf[0], bytes));    
+    DEBUG_MSG (("received message: %d (len: %d)\n", (int)(guchar)buf[0], bytes));    
     return bytes;
 }
 
@@ -221,7 +220,7 @@ write_ssh_message (GIOChannel* source, gchar *buf, gsize bufsize)
         return FALSE;
     }
 
-    DEBUG_MSG (("sent message: %d (len: %d)\n", (int)buf[0], bufsize));
+    DEBUG_MSG (("sent message: %d (len: %d)\n", (int)(guchar)buf[0], bufsize));
     return TRUE;
 }
 
@@ -297,7 +296,7 @@ load_ssh_key (SeahorseSSHKey *skey)
     
     cmd = g_strdup_printf (SSH_ADD_PATH " '%s'", seahorse_ssh_key_get_filename (skey, TRUE));
     ssrc = SEAHORSE_SSH_SOURCE (seahorse_key_get_source (SEAHORSE_KEY (skey)));
-    op = seahorse_ssh_operation_new (ssrc, cmd, NULL, 0, _("Loading SSH Key"));
+    op = seahorse_ssh_operation_new (ssrc, cmd, NULL, 0, _("SSH Passphrase"), skey);
     
     g_free (cmd);
     
@@ -373,12 +372,12 @@ io_handler (GIOChannel *source, GIOCondition condition, SSHProxyConn *cn)
         if (source == cn->inchan) {
             out = cn->outchan;
             from_client = TRUE;
-            DEBUG_MSG (("data from client"));
+            DEBUG_MSG (("data from client\n"));
         }
         else if (source == cn->outchan) {
             out = cn->inchan;
             from_client = FALSE;
-            DEBUG_MSG (("data from agent"));
+            DEBUG_MSG (("data from agent\n"));
         }
         else
             g_return_val_if_reached (FALSE);
@@ -580,7 +579,7 @@ seahorse_agent_ssh_init ()
     g_io_channel_set_close_on_unref (ssh_agent_iochan, TRUE);
     ssh_agent_iochan_tag = g_io_add_watch (ssh_agent_iochan, G_IO_IN, connect_handler, NULL);
     
-    DEBUG_MSG (("proxying SSH from %s -> %s", ssh_agent_sockname, ssh_client_sockname));
+    DEBUG_MSG (("proxying SSH from %s -> %s\n", ssh_agent_sockname, ssh_client_sockname));
 
     /* All nicely done */
     ssh_agent_initialized = TRUE;
