@@ -293,6 +293,11 @@ seahorse_prefs_cache (SeahorseWidget *widget)
     
     paint_button_label_as_link (GTK_BUTTON (w), GTK_LABEL(w2));
     g_signal_connect (GTK_WIDGET (w), "realize", G_CALLBACK (set_hand_cursor_on_realize), NULL);
+
+    w = glade_xml_get_widget (widget->xml, "auto-load-ssh");
+    g_return_if_fail (w != NULL);
+    seahorse_check_button_gconf_attach (GTK_CHECK_BUTTON (w), SETTING_AGENT_SSH);
+    
     /* End -- Setup daemon button visuals */
     
     glade_xml_signal_connect_data (widget->xml, "on_session_link",

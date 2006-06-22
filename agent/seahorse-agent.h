@@ -40,6 +40,7 @@
 #define SETTING_TTL         AGENT_SETTINGS "/cache_ttl"
 #define SETTING_EXPIRE      AGENT_SETTINGS "/cache_expire"
 #define SETTING_AUTH        AGENT_SETTINGS "/cache_authorize"
+#define SETTING_AGENT_SSH   AGENT_SETTINGS "/load_ssh"
 #define METHOD_GNOME        "gnome"
 
 /* -----------------------------------------------------------------------------

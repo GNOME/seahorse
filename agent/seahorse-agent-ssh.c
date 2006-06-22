@@ -39,6 +39,7 @@
 #include <glib.h>
 #include <glib/gstdio.h>
 
+#include "seahorse-gconf.h"
 #include "seahorse-agent.h"
 #include "seahorse-context.h"
 #include "seahorse-key.h"
@@ -338,9 +339,12 @@ process_message (SSHProxyConn *cn, gboolean from_client, gchar *msg, gsize len)
         return TRUE;
     };
     
-    count = get_num_identities (cn, version1);
-    
+    /* Check if we're supposed to load */
+    if(!seahorse_gconf_get_boolean(SETTING_AGENT_SSH)) 
+        return TRUE;
+
     /* If keys are already loaded then return */
+    count = get_num_identities (cn, version1);
     if (count != 0)
         return TRUE;
     
