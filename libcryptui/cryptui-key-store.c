@@ -731,12 +731,12 @@ cryptui_key_store_have_selected_keys (CryptUIKeyStore *ckstore, GtkTreeView *vie
                     return TRUE;
             } while (gtk_tree_model_iter_next (model, &iter));
         }
+    } else {
+        /* Fall back if none checked, or not using checks */
+        selection = gtk_tree_view_get_selection (view);
+        if (gtk_tree_selection_count_selected_rows (selection))
+            return TRUE;
     }
-    
-    /* Fall back if none checked, or not using checks */
-    selection = gtk_tree_view_get_selection (view);
-    if (gtk_tree_selection_count_selected_rows (selection))
-        return TRUE;
     
     return FALSE;
 }
