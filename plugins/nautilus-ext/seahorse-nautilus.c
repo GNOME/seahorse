@@ -69,7 +69,7 @@ sign_callback (NautilusMenuItem *item, gpointer user_data)
     char *uri, *t;
     GString *cmd;
 
-    cmd = g_string_new ("seahorse");
+    cmd = g_string_new ("seahorse-tool");
     g_string_append_printf (cmd, " --sign");
     files = g_object_get_data (G_OBJECT (item), "files");
     g_assert (files != NULL);
