@@ -66,14 +66,12 @@ libseahorse_internal_la_SOURCES = \
 	seahorse-keyset.c seahorse-keyset.h \
     seahorse-key-model.c seahorse-key-model.h \
 	seahorse-key-store.c seahorse-key-store.h \
-	seahorse-recipients-store.c seahorse-recipients-store.h \
 	seahorse-util.c seahorse-util.h \
 	seahorse-validity.c seahorse-validity.h \
 	seahorse-check-button-control.c seahorse-check-button-control.h \
 	seahorse-default-key-control.c seahorse-default-key-control.h \
 	seahorse-gpg-options.c seahorse-gpg-options.h \
 	seahorse-passphrase.c seahorse-passphrase.h \
-	seahorse-recipients.c \
 	seahorse-signer.c \
     seahorse-import.c \
 	seahorse-signatures.c \
@@ -118,7 +116,6 @@ seahorse-marshal.c: seahorse-marshal.list $(GLIB_GENMARSHAL)
 	$(GLIB_GENMARSHAL) $< --body --prefix=seahorse_marshal >> $@
 
 glade_DATA = \
-	seahorse-recipients.glade \
 	seahorse-signer.glade \
 	seahorse-prefs.glade \
 	seahorse-add-keyserver.glade \

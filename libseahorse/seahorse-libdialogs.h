@@ -33,8 +33,6 @@
 #include "seahorse-widget.h"
 #include "seahorse-pgp-key.h"
 
-GList*          seahorse_recipients_get             (SeahorsePGPKey **signkey);
-
 SeahorsePGPKey* seahorse_signer_get                 (void);
 
 void            seahorse_signatures_notify          (const gchar* data, 
