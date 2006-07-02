@@ -575,7 +575,7 @@ main (int argc, char **argv)
     seahorse_tool_progress_init (argc, argv);
     
     /* Main operation process */
-    program = gnome_program_init(PACKAGE, VERSION, LIBGNOMEUI_MODULE, argc, argv,
+    program = gnome_program_init("seahorse-tool", VERSION, LIBGNOMEUI_MODULE, argc, argv,
                                  GNOME_PARAM_POPT_TABLE, options,
                                  GNOME_PARAM_HUMAN_READABLE_NAME, _("File Encryption Tool"),
                                  GNOME_PARAM_APP_DATADIR, DATA_DIR, NULL);
