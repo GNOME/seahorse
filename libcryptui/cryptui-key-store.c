@@ -157,7 +157,7 @@ key_store_key_changed (CryptUIKeyset *ckset, const gchar *key,
     GtkTreeIter iter;
     GtkTreePath *path;
 
-    g_assert (ref != NULL);
+    g_return_if_fail (ref != NULL);
     
     path = gtk_tree_row_reference_get_path (ref);
     if (path) {
@@ -174,7 +174,7 @@ key_store_key_removed (CryptUIKeyset *ckset, const gchar *key,
     GtkTreeIter iter;
     GtkTreePath *path;
     
-    g_assert (ref != NULL);
+    g_return_if_fail (ref != NULL);
     
     path = gtk_tree_row_reference_get_path (ref);
     if (path) {
