@@ -53,10 +53,11 @@ seahorse_check_button_gconf_attach  (GtkCheckButton *check, const char *gconf_ke
     g_object_set_data_full (G_OBJECT (check), "gconf-key", g_strdup (gconf_key), g_free);
     seahorse_gconf_notify_lazy (gconf_key, (GConfClientNotifyFunc)gconf_notify, 
                                 check, GTK_WIDGET (check));
-    g_signal_connect (check, "toggled", G_CALLBACK (check_toggled), NULL); 
     
     /* Load initial value */
     entry = seahorse_gconf_get_entry (gconf_key);
     g_return_if_fail (entry != NULL);
     gconf_notify (NULL, 0, entry, check);
+    
+    g_signal_connect (check, "toggled", G_CALLBACK (check_toggled), NULL); 
 }
