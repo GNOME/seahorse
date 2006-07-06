@@ -23,6 +23,7 @@
 #define _SEAHORSE_DAEMON_H_
 
 #include "config.h"
+#include <dbus/dbus-glib-bindings.h>
 
 #define SEAHORSE_ICON_SHARING   "seahorse-share-keys"
 
@@ -55,15 +56,11 @@ GQuark              seahorse_hkp_server_error_domain ();
 
 /* seahorse-dbus-server.c --------------------------------------------------- */
 
-#ifdef WITH_DBUS
-#include <dbus/dbus-glib-bindings.h>
 
 gboolean            seahorse_dbus_server_init ();
 
 gboolean            seahorse_dbus_server_cleanup ();
 
 DBusGConnection*    seahorse_dbus_server_get_connection ();
-
-#endif 
 
 #endif /* _SEAHORSE_DAEMON_H_ */

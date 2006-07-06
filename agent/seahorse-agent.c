@@ -38,6 +38,7 @@
 #include "seahorse-agent.h"
 #include "seahorse-gpg-options.h"
 #include "seahorse-passphrase.h"
+#include "seahorse-pgp-key.h"
 
 gboolean seahorse_agent_enabled = FALSE;
 gboolean seahorse_agent_displayvars = FALSE;
@@ -126,7 +127,10 @@ void
 seahorse_agent_prefork ()
 {
     /* Detect and see if there's an agent */
-    if (seahorse_passphrase_detect_agent () != AGENT_NONE) {
+    switch (seahorse_passphrase_detect_agent (SKEY_PGP)) {
+    case SEAHORSE_AGENT_NONE:
+        break;
+    default:
         g_message ("Another GPG agent already running\n");
         return;
     }

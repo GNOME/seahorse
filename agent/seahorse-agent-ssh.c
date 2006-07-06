@@ -45,6 +45,7 @@
 #include "seahorse-key.h"
 #include "seahorse-ssh-key.h"
 #include "seahorse-ssh-operation.h"
+#include "seahorse-passphrase.h"
 
 #ifndef DEBUG_SSHAGENT_ENABLE
 #if _DEBUG
@@ -92,9 +93,6 @@ typedef struct _SSHProxyConn {
 #define SSH_AGENT_RSA_IDENTITIES_ANSWER     2
 #define SSH2_AGENTC_REQUEST_IDENTITIES      11
 #define SSH2_AGENT_IDENTITIES_ANSWER        12
-    
-/* Our custom message */
-#define SSH_SEAHORSE_PING                   252
     
 struct _SSHMsgHeader {
     guchar msgid;
@@ -324,7 +322,7 @@ process_message (SSHProxyConn *cn, gboolean from_client, gchar *msg, gsize len)
     switch (smsg->msgid) {
         
     /* For pings we just write the same thing back */
-    case SSH_SEAHORSE_PING:
+    case SEAHORSE_SSH_PING_MSG:
         write_ssh_message (cn->inchan, msg, len);
         return FALSE;
     
@@ -466,58 +464,6 @@ connect_handler (GIOChannel *source, GIOCondition cond, gpointer data)
     return TRUE;
 }
 
-static gboolean
-test_agent_socket (const gchar *socketpath)
-{
-    struct sockaddr_un sunaddr;
-    gchar buf[1024];
-    SSHMsgHeader *msg;
-    GIOChannel *io;
-    int agentfd;
-    gboolean ret;
-    
-    /* Default to not loading up agent stuff */
-    ret = FALSE;
-
-    /* Try to connect to the real agent */
-    agentfd = socket (AF_UNIX, SOCK_STREAM, 0);
-    if (agentfd == -1) {
-        g_warning ("couldn't create socket: %s", g_strerror (errno));
-        return ret;
-    }
-    
-    memset (&sunaddr, 0, sizeof (sunaddr));
-    sunaddr.sun_family = AF_UNIX;
-    g_strlcpy (sunaddr.sun_path, socketpath, sizeof (sunaddr.sun_path));
-    if (connect (agentfd, (struct sockaddr*) &sunaddr, sizeof sunaddr) < 0) {
-        g_warning ("couldn't connect to SSH agent at: %s: %s", socketpath, 
-                   g_strerror (errno));
-        close (agentfd);
-        return ret;
-    }
-    
-    io = g_io_channel_unix_new (agentfd);
-    g_io_channel_set_close_on_unref (io, TRUE);
-    g_io_channel_set_encoding (io, NULL, NULL);
-    g_io_channel_set_buffered (io, FALSE);
-
-    /* Send our fun test message */
-    msg = (SSHMsgHeader*)buf;
-    msg->msgid = SSH_SEAHORSE_PING;
-    
-    if (write_ssh_message (io, buf, sizeof (*msg)) && 
-        read_ssh_message (io, buf, sizeof (buf)) > 0) {
-            
-        if (msg->msgid == SSH_SEAHORSE_PING)
-            g_warning ("a seahorse SSH agent proxy is already running at: %s", socketpath);
-        else
-            ret = TRUE;
-    }
-    
-    g_io_channel_unref (io);
-    return ret;
-}
-
 /* -----------------------------------------------------------------------------
  * PUBLIC 
  */
@@ -538,8 +484,17 @@ seahorse_agent_ssh_init ()
         return FALSE;
     }
     
-    if (!test_agent_socket (sockname))
+    switch (seahorse_passphrase_detect_agent (SKEY_SSH)) {
+    case SEAHORSE_AGENT_SEAHORSE:
+        g_warning ("This SSH agent is already being proxied: %s", sockname);
         return FALSE;
+    case SEAHORSE_AGENT_UNKNOWN:
+    case SEAHORSE_AGENT_NONE:
+        g_warning ("couldn't contact SSH agent. Cannot proxy SSH key requests.");
+        return FALSE;
+    default:
+        break;
+    };
     
     /* New sock names */
     t = g_strdup_printf ("%s.proxied-by-seahorse", sockname);

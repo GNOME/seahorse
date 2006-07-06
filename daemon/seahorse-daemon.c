@@ -247,9 +247,7 @@ int main(int argc, char* argv[])
     g_object_unref (op);
     
     /* Initialize the various daemon components */
-#ifdef WITH_DBUS
     seahorse_dbus_server_init ();
-#endif
 
 #ifdef WITH_AGENT
     if (!seahorse_agent_init ())
@@ -279,9 +277,7 @@ g_printerr ("left gtk_main\n");
 #endif
 #endif
     
-#ifdef WITH_DBUS
     seahorse_dbus_server_cleanup ();
-#endif
 
     seahorse_context_destroy (SCTX_APP ());
 

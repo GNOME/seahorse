@@ -12,13 +12,7 @@ else
 NAUTILUS_DIR = 
 endif
 
-if WITH_DBUS
-DBUS_DIR = libcryptui
-else
-DBUS_DIR = 
-endif
-
-SUBDIRS = $(DBUS_DIR) \
+SUBDIRS = libcryptui \
           libseahorse \
           src \
           po \

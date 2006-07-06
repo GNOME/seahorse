@@ -47,6 +47,10 @@
 #include "seahorse-passphrase.h"
 #include "seahorse-secure-entry.h"
 #include "seahorse-gpg-options.h"
+#include "agent/seahorse-agent.h"
+
+#include "seahorse-ssh-key.h"
+#include "seahorse-pgp-key.h"
 
 #define HIG_SMALL      6        /* gnome hig small space in pixels */
 #define HIG_LARGE     12        /* gnome hig large space in pixels */
@@ -288,7 +292,7 @@ seahorse_passphrase_get (gconstpointer dummy, const gchar *passphrase_hint,
 }
 
 /* -----------------------------------------------------------------------------
- * CHECK IF AN AGENT IS RUNNING 
+ * GPG AGENT 
  */
 
 /* Check if given process is running */
@@ -307,9 +311,10 @@ is_pid_running (pid_t pid)
 static SeahorseAgentType
 check_agent_id (int fd)
 {
-    SeahorseAgentType ret = AGENT_NONE;
+    SeahorseAgentType ret = SEAHORSE_AGENT_NONE;
     GIOChannel *io;
     gchar *t;
+    GError *err = NULL;
 
     io = g_io_channel_unix_new (fd);
 
@@ -317,25 +322,32 @@ check_agent_id (int fd)
     if (g_io_channel_read_line (io, &t, NULL, NULL, NULL) == G_IO_STATUS_NORMAL && t) {
         g_strstrip (t);
         if (g_str_has_prefix (t, "OK"))
-            ret = AGENT_OTHER;
+            ret = SEAHORSE_AGENT_OTHER;
         g_free (t);
 
         /* Send back request for info */
-        if (ret != AGENT_NONE &&
+        if (ret != SEAHORSE_AGENT_NONE &&
             g_io_channel_write_chars (io, "AGENT_ID\n", -1, NULL,
-                                      NULL) == G_IO_STATUS_NORMAL
-            && g_io_channel_flush (io, NULL) == G_IO_STATUS_NORMAL
+                                      &err) == G_IO_STATUS_NORMAL
+            && g_io_channel_flush (io, &err) == G_IO_STATUS_NORMAL
             && g_io_channel_read_line (io, &t, NULL, NULL,
-                                       NULL) == G_IO_STATUS_NORMAL && t) {
+                                       &err) == G_IO_STATUS_NORMAL && t) {
             g_strstrip (t);
             if (g_str_has_prefix (t, "OK seahorse-agent"))
-                ret = AGENT_SEAHORSE;
+                ret = SEAHORSE_AGENT_SEAHORSE;
             g_free (t);
         }
     }
 
     g_io_channel_shutdown (io, FALSE, NULL);
     g_io_channel_unref (io);
+    
+    if (err) {
+        g_warning ("couldn't check GPG agent: %s", err->message);
+        g_error_free (err);
+        ret = SEAHORSE_AGENT_UNKNOWN;
+    }
+    
     return ret;
 }
 
@@ -344,21 +356,24 @@ static SeahorseAgentType
 get_listening_agent_type (const gchar *sockname)
 {
     struct sockaddr_un addr;
-    SeahorseAgentType ret = AGENT_NONE;
+    SeahorseAgentType ret;
     int len;
     int fd;
 
     /* Agent is always a unix socket */
     fd = socket (AF_UNIX, SOCK_STREAM, 0);
-    if (fd != -1) {
-        memset (&addr, 0, sizeof (addr));
-        addr.sun_family = AF_UNIX;
-        g_strlcpy (addr.sun_path, sockname, sizeof (addr.sun_path));
-        len = offsetof (struct sockaddr_un, sun_path) + strlen (addr.sun_path) + 1;
+    if (fd == -1)
+        return SEAHORSE_AGENT_UNKNOWN;
+    
+    memset (&addr, 0, sizeof (addr));
+    addr.sun_family = AF_UNIX;
+    g_strlcpy (addr.sun_path, sockname, sizeof (addr.sun_path));
+    len = offsetof (struct sockaddr_un, sun_path) + strlen (addr.sun_path) + 1;
 
-        if (connect (fd, (const struct sockaddr *) &addr, len) == 0)
-            ret = check_agent_id (fd);
-    }
+    if (connect (fd, (const struct sockaddr *) &addr, len) == 0)
+        ret = check_agent_id (fd);
+    else
+        ret = SEAHORSE_AGENT_UNKNOWN;
 
     shutdown (fd, SHUT_RDWR);
     close (fd);
@@ -369,7 +384,7 @@ get_listening_agent_type (const gchar *sockname)
 static SeahorseAgentType
 check_agent_info (const gchar *agent_info)
 {
-    SeahorseAgentType ret = AGENT_NONE;
+    SeahorseAgentType ret = SEAHORSE_AGENT_NONE;
     gchar **info;
     gchar **t;
     int i;
@@ -409,27 +424,105 @@ check_agent_info (const gchar *agent_info)
     return ret;
 }
 
-/* Check if the agent is running */
-SeahorseAgentType
-seahorse_passphrase_detect_agent ()
+static SeahorseAgentType
+gpg_detect_agent ()
 {
     gchar *value = NULL;
-    SeahorseAgentType ret;
 
     /* Seahorse edits gpg.conf by default */
     seahorse_gpg_options_find ("gpg-agent-info", &value, NULL);
     if (value != NULL) {
-        ret = check_agent_info (value);
+        SeahorseAgentType ret = check_agent_info (value);
         g_free (value);
         return ret;
     }
 
     /* The user probably set this up on their own */
-    value = (gchar *) g_getenv ("GPG_AGENT_INFO");
+    value = (gchar*)g_getenv ("GPG_AGENT_INFO");
     if (value != NULL)
         return check_agent_info (value);
 
-    return AGENT_NONE;
+    return SEAHORSE_AGENT_NONE;
 }
 
+/* -----------------------------------------------------------------------------
+ * SSH AGENT 
+ */
 
+const gchar REQ_MESSAGE[] = { 0x01, 0x00, 0x00, 0x00, SEAHORSE_SSH_PING_MSG };
+const guint RESP_INDEX = 4;
+const guint RESP_VALUE = SEAHORSE_SSH_PING_MSG;
+
+static SeahorseAgentType
+ssh_detect_agent ()
+{
+    SeahorseAgentType ret;
+    const gchar *socketpath;
+    struct sockaddr_un sunaddr;
+    gchar buf[16];
+    GIOChannel *io;
+    int agentfd;
+    gsize bytes_read = 0;
+    GError *err = NULL;
+    
+    /* Guarantee we have enough space */
+    g_assert (sizeof (buf) > RESP_INDEX);
+    
+    socketpath = g_getenv ("SSH_AUTH_SOCK");
+    if (!socketpath)
+        return SEAHORSE_AGENT_NONE;
+    
+    /* Try to connect to the real agent */
+    agentfd = socket (AF_UNIX, SOCK_STREAM, 0);
+    if (agentfd == -1) {
+        g_warning ("couldn't create socket: %s", g_strerror (errno));
+        return SEAHORSE_AGENT_UNKNOWN;
+    }
+    
+    memset (&sunaddr, 0, sizeof (sunaddr));
+    sunaddr.sun_family = AF_UNIX;
+    g_strlcpy (sunaddr.sun_path, socketpath, sizeof (sunaddr.sun_path));
+    if (connect (agentfd, (struct sockaddr*) &sunaddr, sizeof sunaddr) < 0) {
+        g_warning ("couldn't connect to SSH agent at: %s: %s", socketpath, 
+                   g_strerror (errno));
+        close (agentfd);
+        return SEAHORSE_AGENT_UNKNOWN;
+    }
+    
+    io = g_io_channel_unix_new (agentfd);
+    g_io_channel_set_close_on_unref (io, TRUE);
+    g_io_channel_set_encoding (io, NULL, NULL);
+    g_io_channel_set_buffered (io, FALSE);
+
+    /* Send and receive our message */
+    if (g_io_channel_write_chars (io, REQ_MESSAGE, sizeof (REQ_MESSAGE), NULL, 
+                                  &err) == G_IO_STATUS_NORMAL) {
+        g_io_channel_read_chars (io, buf, sizeof (buf), &bytes_read, &err);
+    }
+    
+    if (!err) {
+        if (bytes_read > RESP_INDEX && buf[RESP_INDEX] == RESP_VALUE)
+            ret = SEAHORSE_AGENT_SEAHORSE;
+        else
+            ret = SEAHORSE_AGENT_OTHER;
+    } else {
+        g_warning ("couldn't check for SSH agent: %s", err ? err->message : "");
+        ret = SEAHORSE_AGENT_UNKNOWN;
+    }
+    
+    g_io_channel_unref (io);
+    return ret;
+}
+
+/* -------------------------------------------------------------------------- */
+
+/* Check if the agent is running */
+SeahorseAgentType
+seahorse_passphrase_detect_agent (GQuark ktype)
+{
+    if (ktype == SKEY_PGP)
+        return gpg_detect_agent ();
+    if (ktype == SKEY_SSH)
+        return ssh_detect_agent ();
+    g_return_val_if_reached (SEAHORSE_AGENT_UNKNOWN);
+}

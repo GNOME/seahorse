@@ -127,6 +127,8 @@ void seahorse_agent_status_update ();
 /* -----------------------------------------------------------------------------
  * seahorse-agent-ssh.c
  */
+ 
+#define SEAHORSE_SSH_PING_MSG             252
 
 gboolean seahorse_agent_ssh_init ();
 void seahorse_agent_ssh_uninit ();

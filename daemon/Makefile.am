@@ -16,7 +16,10 @@ INCLUDES = -I$(top_builddir) \
 
 bin_PROGRAMS = seahorse-daemon
 
-BUILT_SOURCES = 
+BUILT_SOURCES = \
+	seahorse-service-bindings.h \
+	seahorse-service-keyset-bindings.h \
+	seahorse-service-crypto-bindings.h 
 
 if WITH_AGENT
 AGENT_LIB = $(top_builddir)/agent/libseahorseagent.a $(AGENT_LIBS)
@@ -30,19 +33,10 @@ else
 SHARING_SRCS = 
 endif
 
-if WITH_DBUS
-DBUS_SRCS = seahorse-dbus-server.c seahorse-service.c seahorse-service.h 
-DBUS_SRCS += seahorse-service-keyset.c seahorse-service-crypto.c
-BUILT_SOURCES += seahorse-service-bindings.h seahorse-service-keyset-bindings.h
-BUILT_SOURCES += seahorse-service-crypto-bindings.h
-else
-DBUS_SRCS = 
-endif
-
 seahorse_daemon_SOURCES = \
-    seahorse-daemon.c \
-    seahorse-daemon.h \
-    $(DBUS_SRCS) \
+    seahorse-daemon.c seahorse-daemon.h \
+    seahorse-dbus-server.c seahorse-service.c seahorse-service.h \
+    seahorse-service-keyset.c seahorse-service-crypto.c \
     $(SHARING_SRCS)
 
 seahorse_daemon_LDADD = \
