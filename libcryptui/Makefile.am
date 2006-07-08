@@ -1,4 +1,3 @@
-
 if WITH_TESTS
 TESTS_DIR = tests
 else
@@ -38,12 +37,17 @@ libcryptui_la_SOURCES = \
 libcryptui_la_LDFLAGS = \
     -version-info $(LIBCRYPTUI_LT_RELEASE)
 
+pkgconfigdir = $(libdir)/pkgconfig
+pkgconfig_DATA = cryptui-$(LIBCRYPTUI_MAJOR).pc
+
 EXTRA_DIST = \
-    cryptui-marshal.list
+    cryptui-marshal.list \
+    cryptui.pc.in
     
 CLEANFILES = \
     cryptui-marshal.h \
-    cryptui-marshal.c
+    cryptui-marshal.c \
+    $(pkgconfig_DATA)
 
 cryptui-marshal.h: cryptui-marshal.list $(GLIB_GENMARSHAL)
 	$(GLIB_GENMARSHAL) $< --header --prefix=cryptui_marshal > $@
@@ -51,3 +55,6 @@ cryptui-marshal.h: cryptui-marshal.list $(GLIB_GENMARSHAL)
 cryptui-marshal.c: cryptui-marshal.list $(GLIB_GENMARSHAL)
 	echo "#include \"cryptui-marshal.h\"" > $@ && \
 	$(GLIB_GENMARSHAL) $< --body --prefix=cryptui_marshal >> $@
+
+cryptui-$(LIBCRYPTUI_MAJOR).pc: cryptui.pc
+	cp cryptui.pc cryptui-$(LIBCRYPTUI_MAJOR).pc
