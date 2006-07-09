@@ -3,9 +3,10 @@ exec_prefix=@exec_prefix@
 libdir=@libdir@
 includedir=@includedir@
 datadir=@datadir@
+sysconfdir=@sysconfdir@
 
 Name: cryptui
 Description: UI library for DBUS functions exported by Seahorse
 Version: @LIBCRYPTUI_MAJOR@
-Libs: -L${libdir}
+Libs: -L${libdir} -lcryptui
 Cflags: -I${includedir}/libcryptui
