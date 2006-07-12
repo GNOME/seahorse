@@ -136,7 +136,7 @@ class_init (SeahorsePGPKeyClass *klass)
                            0, G_MAXULONG, 0, G_PARAM_READABLE));
 
     g_object_class_install_property (gobject_class, PROP_LENGTH,
-        g_param_spec_ulong ("length", "Length", "The length of this key.",
+        g_param_spec_uint ("length", "Length", "The length of this key.",
                            0, G_MAXUINT, 0, G_PARAM_READABLE));    
 }
 
