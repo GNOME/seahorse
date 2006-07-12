@@ -386,6 +386,14 @@ seahorse_key_get_expires (SeahorseKey *skey)
     return expires;
 }
 
+guint
+seahorse_key_get_length (SeahorseKey *skey)
+{
+    guint length;
+    g_object_get (skey, "length", &length, NULL);
+    return length;
+}
+
 void
 seahorse_key_set_preferred (SeahorseKey *skey, SeahorseKey *preferred)
 {

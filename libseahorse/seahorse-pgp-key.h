@@ -33,6 +33,7 @@
  *   validity: (SeahorseValidity) The key validity.
  *   trust: (SeahorseValidity) Trust for the key.
  *   expires: (gulong) Date this key expires or 0.
+ *   length: (gint) The length of the key in bits.
  */
  
 #ifndef __SEAHORSE_PGP_KEY_H__

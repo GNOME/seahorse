@@ -32,6 +32,7 @@
  *   validity: (SeahorseValidity) The key validity.
  *   trust: (SeahorseValidity) Trust for the key.
  *   expires: (gulong) Date this key expires or 0.
+ *   length: (guint) The length of the key in bits.
  */
  
 #ifndef __SEAHORSE_SSH_KEY_H__

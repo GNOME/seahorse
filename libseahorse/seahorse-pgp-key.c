@@ -36,7 +36,8 @@ enum {
     PROP_FINGERPRINT,
     PROP_VALIDITY,
     PROP_TRUST,
-    PROP_EXPIRES
+    PROP_EXPIRES,
+    PROP_LENGTH
 };
 
 static void class_init (SeahorsePGPKeyClass *klass);
@@ -134,6 +135,9 @@ class_init (SeahorsePGPKeyClass *klass)
         g_param_spec_ulong ("expires", "Expires On", "Date this key expires on",
                            0, G_MAXULONG, 0, G_PARAM_READABLE));
 
+    g_object_class_install_property (gobject_class, PROP_LENGTH,
+        g_param_spec_ulong ("length", "Length", "The length of this key.",
+                           0, G_MAXUINT, 0, G_PARAM_READABLE));    
 }
 
 /* Unrefs gpgme key and frees data */
@@ -216,6 +220,10 @@ get_property (GObject *object, guint prop_id,
         if (pkey->pubkey)
             g_value_set_ulong (value, pkey->pubkey->subkeys->expires);
         break;
+    case PROP_LENGTH:
+        if (pkey->pubkey)
+            g_value_set_uint (value, pkey->pubkey->subkeys->length);
+        break;        
     }
 }
 

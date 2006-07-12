@@ -51,7 +51,7 @@
  *   validity: (SeahorseValidity) The key validity.
  *   trust: (SeahorseValidity) Trust for the key.
  *   expires: (gulong) Date this key expires or 0.
- *   
+ *   length: (guint) The length of the key in bits.
  */
  
 #ifndef __SEAHORSE_KEY_H__
@@ -207,6 +207,8 @@ SeahorseValidity  seahorse_key_get_validity       (SeahorseKey        *skey);
 SeahorseValidity  seahorse_key_get_trust          (SeahorseKey        *skey);
 
 gulong            seahorse_key_get_expires        (SeahorseKey        *skey);
+
+guint              seahorse_key_get_length         (SeahorseKey        *skey);
 
 void              seahorse_key_set_preferred      (SeahorseKey        *skey,
                                                    SeahorseKey        *preferred);

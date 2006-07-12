@@ -39,7 +39,8 @@ enum {
     PROP_FINGERPRINT,
     PROP_VALIDITY,
     PROP_TRUST,
-    PROP_EXPIRES
+    PROP_EXPIRES,
+    PROP_LENGTH
 };
 
 struct _SeahorseSSHKeyPrivate {
@@ -200,6 +201,9 @@ seahorse_ssh_key_get_property (GObject *object, guint prop_id,
     case PROP_EXPIRES:
         g_value_set_ulong (value, 0);
         break;
+    case PROP_LENGTH:
+        g_value_set_uint (value, skey->keydata ? skey->keydata->length : 0);
+        break;
     }
 }
 
@@ -288,6 +292,10 @@ seahorse_ssh_key_class_init (SeahorseSSHKeyClass *klass)
     g_object_class_install_property (gobject_class, PROP_EXPIRES,
         g_param_spec_ulong ("expires", "Expires On", "Date this key expires on",
                            0, G_MAXULONG, 0, G_PARAM_READABLE));
+
+    g_object_class_install_property (gobject_class, PROP_LENGTH,
+        g_param_spec_uint ("length", "Length of", "The length of this key",
+                           0, G_MAXUINT, 0, G_PARAM_READABLE));
 }
 
 /* -----------------------------------------------------------------------------
