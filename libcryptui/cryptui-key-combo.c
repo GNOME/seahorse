@@ -63,6 +63,21 @@ cryptui_key_combo_setup (GtkComboBox *combo, CryptUIKeyStore *ckstore)
     cryptui_key_combo_set_key (combo, NULL);
 }
 
+CryptUIKeyStore*
+cryptui_key_combo_get_key_store (GtkComboBox *combo)
+{
+    GtkTreeModel *model = gtk_combo_box_get_model (combo);
+    g_return_val_if_fail (CRYPTUI_KEY_STORE (model), NULL);
+    return CRYPTUI_KEY_STORE (model);
+}
+
+CryptUIKeyset* 
+cryptui_key_combo_get_keyset (GtkComboBox *combo)
+{
+    CryptUIKeyStore *ckstore = cryptui_key_combo_get_key_store (combo);
+    return ckstore ? cryptui_key_store_get_keyset (ckstore) : NULL;
+}
+
 void
 cryptui_key_combo_set_key (GtkComboBox *combo, const gchar *key)
 {

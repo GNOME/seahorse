@@ -695,7 +695,7 @@ seahorse_context_get_default_key (SeahorseContext *sctx)
     
     /* TODO: All of this needs to take multiple key types into account */
     
-    id = seahorse_gconf_get_string (DEFAULT_KEY);
+    id = seahorse_gconf_get_string (SEAHORSE_DEFAULT_KEY);
     if (id != NULL && id[0]) 
         skey = seahorse_context_find_key (sctx, SKEY_PGP, SKEY_LOC_LOCAL, id);
     g_free (id);

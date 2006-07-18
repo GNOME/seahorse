@@ -68,6 +68,8 @@ CryptUIKeyset*      cryptui_keyset_new                (const gchar *keytype);
 gboolean            cryptui_keyset_has_key            (CryptUIKeyset *keyset,
                                                        const gchar *key);
 
+const gchar*        cryptui_keyset_get_keytype        (CryptUIKeyset *keyset);
+
 GList*              cryptui_keyset_get_keys           (CryptUIKeyset *keyset);
 
 guint               cryptui_keyset_get_count          (CryptUIKeyset *keyset);

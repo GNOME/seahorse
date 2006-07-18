@@ -45,6 +45,10 @@ void              cryptui_key_list_setup                (GtkTreeView *view,
                                                          CryptUIKeyStore *ckstore,
                                                          guint flags);
 
+CryptUIKeyStore*  cryptui_key_list_get_key_store        (GtkTreeView *combo);
+
+CryptUIKeyset*    cryptui_key_list_get_keyset           (GtkTreeView *combo);
+
 gboolean          cryptui_key_list_have_selected_keys   (GtkTreeView *view);
 
 GList*            cryptui_key_list_get_selected_keys    (GtkTreeView *view);

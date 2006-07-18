@@ -28,63 +28,63 @@ static GConfClient *global_gconf_client = NULL;
 static void
 global_client_free (void)
 {
-	if (global_gconf_client == NULL)
-		return;
-	
-	gconf_client_remove_dir (global_gconf_client, PGP_SCHEMAS, NULL);
-	gconf_client_remove_dir (global_gconf_client, SEAHORSE_SCHEMAS, NULL);
+    if (global_gconf_client == NULL)
+        return;
     
-	g_object_unref (global_gconf_client);
-	global_gconf_client = NULL;
+    gconf_client_remove_dir (global_gconf_client, SEAHORSE_DESKTOP_KEYS, NULL);
+    gconf_client_remove_dir (global_gconf_client, SEAHORSE_SCHEMAS, NULL);
+    
+    g_object_unref (global_gconf_client);
+    global_gconf_client = NULL;
 }
 
 static gboolean
 handle_error (GError **error)
 {
-	g_return_val_if_fail (error != NULL, FALSE);
+    g_return_val_if_fail (error != NULL, FALSE);
 
-	if (*error != NULL) {
-		g_warning ("GConf error:\n  %s", (*error)->message);
-		g_error_free (*error);
-		*error = NULL;
+    if (*error != NULL) {
+        g_warning ("GConf error:\n  %s", (*error)->message);
+        g_error_free (*error);
+        *error = NULL;
 
-		return TRUE;
-	}
+        return TRUE;
+    }
 
-	return FALSE;
+    return FALSE;
 }
  
 static GConfClient*
 get_global_client (void)
 {
-	GError *error = NULL;
+    GError *error = NULL;
     
-	/* Initialize gconf if needed */
-	if (!gconf_is_initialized ()) {
-		char *argv[] = { "seahorse-preferences", NULL };
-		
-		if (!gconf_init (1, argv, &error)) {
-			if (handle_error (&error))
-				return NULL;
-		}
-	}
-	
-	if (global_gconf_client == NULL) {
-		global_gconf_client = gconf_client_get_default ();
+    /* Initialize gconf if needed */
+    if (!gconf_is_initialized ()) {
+        char *argv[] = { "seahorse-preferences", NULL };
+        
+        if (!gconf_init (1, argv, &error)) {
+            if (handle_error (&error))
+                return NULL;
+        }
+    }
+    
+    if (global_gconf_client == NULL) {
+        global_gconf_client = gconf_client_get_default ();
 
         if (global_gconf_client) {
-      	    gconf_client_add_dir (global_gconf_client, PGP_SCHEMAS, 
+            gconf_client_add_dir (global_gconf_client, SEAHORSE_DESKTOP_KEYS, 
                                   GCONF_CLIENT_PRELOAD_NONE, &error);
             handle_error (&error);
-      	    gconf_client_add_dir (global_gconf_client, SEAHORSE_SCHEMAS, 
+            gconf_client_add_dir (global_gconf_client, SEAHORSE_SCHEMAS, 
                                   GCONF_CLIENT_PRELOAD_NONE, &error);
             handle_error (&error);
         }
 
         atexit (global_client_free);
-	}
-	
-	return global_gconf_client;
+    }
+    
+    return global_gconf_client;
 }
 
 void

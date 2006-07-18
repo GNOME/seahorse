@@ -165,7 +165,8 @@
 		</schema>
         <schema>
             <key>/schemas/desktop/pgp/last_signer</key>
-            <applyto>/desktop/pgp/last_signer</applyto>
+            <applyto>/desktop/pgp/last_signer_openpgp</applyto>
+            <applyto>/desktop/pgp/last_signer_openssh</applyto>
             <owner>seahorse</owner>
             <type>string</type>
             <default></default>
@@ -232,19 +233,19 @@
                 sort in descending order.</long>
 			</locale>
 		</schema>
-		<schema>
-			<key>/schemas/desktop/pgp/recipients/sort_by</key>
-			<applyto>/desktop/pgp/recipients/sort_by</applyto>
-			<owner>seahorse</owner>
-			<type>string</type>
-			<default>name</default>
-			<locale name="C">
-				<short>The column to sort the recipients by</short>
-				<long>Specify the column to sort the recipients window by. 
-				Columns are: 'name', 'id' and 'validity', Put a '-' in front of the 
-				column name to sort in descending order.</long>
-			</locale>
-		</schema>
+        <schema>
+            <key>/schemas/desktop/pgp/recipients/sort_by</key>
+            <applyto>/desktop/pgp/recipients/sort_by</applyto>
+            <owner>seahorse</owner>
+            <type>string</type>
+            <default>name</default>
+            <locale name="C">
+                <short>The column to sort the recipients by</short>
+                <long>Specify the column to sort the recipients window by. 
+                Columns are: 'name' and 'id'. Put a '-' in front of the 
+                column name to sort in descending order.</long>
+            </locale>
+        </schema>
 		<schema>
 			<key>/schemas/desktop/pgp/keyservers/all_keyservers</key>
 			<applyto>/desktop/pgp/keyservers/all_keyservers</applyto>

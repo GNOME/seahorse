@@ -80,7 +80,7 @@ seahorse_signer_get ()
     g_object_unref (skset);
     
     /* Select the last key used */
-    id = seahorse_gconf_get_string (LASTSIGNER_KEY);
+    id = seahorse_gconf_get_string (SEAHORSE_LASTSIGNER_KEY);
     seahorse_combo_keys_set_active_id (GTK_OPTION_MENU (combo), id);
     g_free (id); 
     
@@ -105,7 +105,7 @@ seahorse_signer_get ()
         g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (skey), NULL);
 
         /* Save this as the last key signed with */
-        seahorse_gconf_set_string (LASTSIGNER_KEY, skey == NULL ? 
+        seahorse_gconf_set_string (SEAHORSE_LASTSIGNER_KEY, skey == NULL ? 
                         "" : seahorse_key_get_keyid (skey));
     }
     

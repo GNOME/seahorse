@@ -454,7 +454,7 @@ static void
 default_key_changed (GtkOptionMenu *combo, gpointer *data)
 {
     const gchar *id = seahorse_combo_keys_get_active_id (combo);
-    seahorse_gconf_set_string (DEFAULT_KEY, id == NULL ? "" : id);    
+    seahorse_gconf_set_string (SEAHORSE_DEFAULT_KEY, id == NULL ? "" : id);    
 }
 
 static void
@@ -506,10 +506,12 @@ seahorse_prefs_new ()
     seahorse_combo_keys_attach (GTK_OPTION_MENU (widget), skset, _("None. Prompt for a key."));
     g_object_unref (skset);
     
-    seahorse_combo_keys_set_active_id (GTK_OPTION_MENU (widget), seahorse_gconf_get_string (DEFAULT_KEY));    
+    seahorse_combo_keys_set_active_id (GTK_OPTION_MENU (widget), 
+                                       seahorse_gconf_get_string (SEAHORSE_DEFAULT_KEY));
     g_signal_connect (widget, "changed", G_CALLBACK (default_key_changed), NULL);
 
-    gconf_id = seahorse_gconf_notify (DEFAULT_KEY, (GConfClientNotifyFunc)gconf_notification, GTK_OPTION_MENU (widget));
+    gconf_id = seahorse_gconf_notify (SEAHORSE_DEFAULT_KEY, 
+                                      (GConfClientNotifyFunc)gconf_notification, GTK_OPTION_MENU (widget));
     g_signal_connect (widget, "destroy", G_CALLBACK (remove_gconf_notification), GINT_TO_POINTER (gconf_id));
     
 #ifdef WITH_AGENT   

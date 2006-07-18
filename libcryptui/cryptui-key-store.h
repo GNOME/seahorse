@@ -77,12 +77,18 @@ enum {
     CRYPTUI_KEY_STORE_NCOLS
 };
 
-
 GType               cryptui_key_store_get_type              ();
 
 CryptUIKeyStore*    cryptui_key_store_new                   (CryptUIKeyset *keyset, 
                                                              gboolean use_checks,
                                                              const gchar *none_option);
+
+CryptUIKeyset*      cryptui_key_store_get_keyset            (CryptUIKeyStore *ckstore);
+
+void                cryptui_key_store_set_sortable          (CryptUIKeyStore *ckstore,
+                                                             gboolean sortable);
+
+gboolean            cryptui_key_store_get_sortable          (CryptUIKeyStore *ckstore);
 
 void                cryptui_key_store_check_toggled         (CryptUIKeyStore *ckstore, 
                                                              GtkTreeView *view, 

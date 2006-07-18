@@ -24,6 +24,7 @@
 #include <string.h>
 
 #include "cryptui-key-store.h"
+#include "cryptui-priv.h"
 
 enum {
     PROP_0,
@@ -31,6 +32,7 @@ enum {
     PROP_MODE,
     PROP_SEARCH,
     PROP_USE_CHECKS,
+    PROP_SORTABLE,
     PROP_NONE_OPTION
 };
 
@@ -62,6 +64,7 @@ struct _CryptUIKeyStorePriv {
     gpointer                    filter_data;
     
     gboolean                    use_checks;
+    gboolean                    sortable;
     gchar                       *none_option;
 };
 
@@ -400,6 +403,66 @@ sort_default_comparator (GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b,
     
 }
 
+static void 
+load_sort_order (CryptUIKeyStore *ckstore)
+{
+    GtkSortType ord = GTK_SORT_ASCENDING;
+    gchar *sort = NULL;
+    const gchar *name;
+
+    if (ckstore->priv->sortable)
+        sort = _cryptui_gconf_get_string (SEAHORSE_RECIPIENTS_SORT_KEY);
+    
+    name = sort ? sort : "";
+    
+    /* Prefix with a minus means descending */
+    if (name[0] == '-') {
+        ord = GTK_SORT_DESCENDING;
+        name++;
+    }
+    
+    /* Prefix with a plus meaning ascending */
+    else if (name[0] == '+') {
+        ord = GTK_SORT_ASCENDING;
+        name++;
+    }
+    
+    if (g_ascii_strcasecmp ("name", name) == 0)
+        gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (ckstore), 
+                                              CRYPTUI_KEY_STORE_NAME, ord);
+    else if (g_ascii_strcasecmp ("id", name) == 0)
+        gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (ckstore), 
+                                              CRYPTUI_KEY_STORE_KEYID, ord);
+    else 
+        gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (ckstore), 
+                                              GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID, ord);
+    
+    g_free (sort);
+}
+
+static void
+sort_changed (GtkTreeSortable *sort, CryptUIKeyStore *ckstore)
+{
+    gint id;
+    GtkSortType ord;
+    const gchar *name = NULL;
+    gchar *x;
+    
+    if (!ckstore->priv->sortable)
+        return;
+
+    if (gtk_tree_sortable_get_sort_column_id (sort, &id, &ord)) {
+        if (id == CRYPTUI_KEY_STORE_NAME)
+            name = "name";
+        else if (id == CRYPTUI_KEY_STORE_KEYID)
+            name = "id";
+    }
+    
+    x = g_strconcat (ord == GTK_SORT_DESCENDING ? "-" : "", name ? name : "", NULL);
+    _cryptui_gconf_set_string (SEAHORSE_RECIPIENTS_SORT_KEY, x);
+    g_free (x);
+}
+
 /* -----------------------------------------------------------------------------
  * OBJECT 
  */
@@ -425,7 +488,9 @@ cryptui_key_store_init (CryptUIKeyStore *ckstore)
 static GObject*  
 cryptui_key_store_constructor (GType type, guint n_props, GObjectConstructParam* props)
 {
-    GObject *obj = G_OBJECT_CLASS (cryptui_key_store_parent_class)->constructor (type, n_props, props);
+    GObject *obj;
+    
+    obj = G_OBJECT_CLASS (cryptui_key_store_parent_class)->constructor (type, n_props, props);
     CryptUIKeyStore *ckstore = CRYPTUI_KEY_STORE (obj);
 
     /* Hookup to the current object */
@@ -433,6 +498,7 @@ cryptui_key_store_constructor (GType type, guint n_props, GObjectConstructParam*
 
     /* Default sort function */
     gtk_tree_sortable_set_default_sort_func (GTK_TREE_SORTABLE (ckstore), sort_default_comparator, NULL, NULL);
+    g_signal_connect (ckstore, "sort-column-changed", G_CALLBACK (sort_changed), ckstore);
     
     ckstore->priv->initialized = TRUE;
     key_store_populate (ckstore);
@@ -515,8 +581,14 @@ cryptui_key_store_set_property (GObject *gobject, guint prop_id,
     /* The search text */
     case PROP_SEARCH:
         cryptui_key_store_set_search_text (ckstore, g_value_get_string (value));
-        break; 
+        break;
+
+    /* Sortable columns */
+    case PROP_SORTABLE:
+        ckstore->priv->sortable = g_value_get_boolean (value);
+        break;
     
+    /* Display and use the check boxes */
     case PROP_USE_CHECKS:
         ckstore->priv->use_checks = g_value_get_boolean (value);
         break;
@@ -555,6 +627,11 @@ cryptui_key_store_get_property (GObject *gobject, guint prop_id,
     case PROP_SEARCH:
         g_value_set_string (value, 
             ckstore->priv->filter_mode == CRYPTUI_KEY_STORE_MODE_RESULTS ? ckstore->priv->search_text : "");
+        break;
+    
+    case PROP_SORTABLE:
+        g_value_set_boolean (value, ckstore->priv->sortable);
+        load_sort_order (ckstore);
         break;
     
     case PROP_USE_CHECKS:
@@ -596,6 +673,10 @@ cryptui_key_store_class_init (CryptUIKeyStoreClass *klass)
         g_param_spec_string ("search", "Search text", "Key store search text for when in results mode",
                              "", G_PARAM_READWRITE));
                              
+    g_object_class_install_property (gobject_class, PROP_SORTABLE,
+        g_param_spec_boolean ("sortable", "User sortable columns", "Allow user to sort columns",
+                              FALSE, G_PARAM_READWRITE));
+
     g_object_class_install_property (gobject_class, PROP_USE_CHECKS,
         g_param_spec_boolean ("use-checks", "Use check boxes", "Use check box column to denote selection",
                               FALSE, G_PARAM_READWRITE));
@@ -616,6 +697,26 @@ cryptui_key_store_new (CryptUIKeyset *keyset, gboolean use_checks,
     GObject *obj = g_object_new (CRYPTUI_TYPE_KEY_STORE, "keyset", keyset, 
                                  "use-checks", use_checks, "none-option", none_option, NULL);
     return (CryptUIKeyStore*)obj;
+}
+
+CryptUIKeyset*
+cryptui_key_store_get_keyset (CryptUIKeyStore *ckstore)
+{
+    return ckstore->ckset;
+}
+
+void
+cryptui_key_store_set_sortable (CryptUIKeyStore *ckstore, gboolean sortable)
+{
+    g_object_set (ckstore, "sortable", sortable, NULL);
+}
+
+gboolean 
+cryptui_key_store_get_sortable (CryptUIKeyStore *ckstore)
+{
+    gboolean sortable;
+    g_object_get (ckstore, "sortable", &sortable, NULL);
+    return sortable;
 }
 
 void

@@ -18,7 +18,8 @@ inc_HEADERS = \
 
 INCLUDES = -I$(top_builddir) \
     -I$(top_srcdir) \
-    $(LIBCRYPTUI_CFLAGS)
+    $(LIBCRYPTUI_CFLAGS) \
+    -DLIBCRYPTUI_BUILD=1
 
 lib_LTLIBRARIES = libcryptui.la
 
@@ -26,7 +27,7 @@ BUILT_SOURCES = \
     cryptui-marshal.c cryptui-marshal.h
 
 libcryptui_la_SOURCES = \
-    cryptui.h cryptui.c \
+    cryptui.h cryptui.c cryptui-defines.h cryptui-priv.h \
     cryptui-keyset.h cryptui-keyset.c \
     cryptui-key-store.h cryptui-key-store.c \
     cryptui-key-combo.h cryptui-key-combo.c \

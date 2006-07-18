@@ -28,19 +28,17 @@
 #include <gconf/gconf-client.h>
 
 #include <gtk/gtk.h>
+#include "cryptui-defines.h"
 
-#define PGP_SCHEMAS "/desktop/pgp"
-#define ARMOR_KEY PGP_SCHEMAS "/ascii_armor"
-#define DEFAULT_KEY PGP_SCHEMAS "/default_key"
-#define ENCRYPTSELF_KEY PGP_SCHEMAS "/encrypt_to_self"
-#define LASTSIGNER_KEY PGP_SCHEMAS "/last_signer"
-#define MULTI_EXTENSION_KEY PGP_SCHEMAS "/package_extension"
-#define MULTI_SEPERATE_KEY PGP_SCHEMAS "/multi_seperate"
-#define KEYSERVER_KEY PGP_SCHEMAS "/keyservers/all_keyservers"
-#define AUTOSYNC_KEY PGP_SCHEMAS "/keyservers/auto_sync"
-#define LASTSEARCH_KEY PGP_SCHEMAS "/keyservers/search_text"
-#define LASTSERVERS_KEY PGP_SCHEMAS "/keyservers/search_keyservers"
-#define PUBLISH_TO_KEY PGP_SCHEMAS "/keyservers/publish_to"
+#define ARMOR_KEY SEAHORSE_DESKTOP_KEYS "/ascii_armor"
+#define ENCRYPTSELF_KEY SEAHORSE_DESKTOP_KEYS "/encrypt_to_self"
+#define MULTI_EXTENSION_KEY SEAHORSE_DESKTOP_KEYS "/package_extension"
+#define MULTI_SEPERATE_KEY SEAHORSE_DESKTOP_KEYS "/multi_seperate"
+#define KEYSERVER_KEY SEAHORSE_DESKTOP_KEYS "/keyservers/all_keyservers"
+#define AUTOSYNC_KEY SEAHORSE_DESKTOP_KEYS "/keyservers/auto_sync"
+#define LASTSEARCH_KEY SEAHORSE_DESKTOP_KEYS "/keyservers/search_text"
+#define LASTSERVERS_KEY SEAHORSE_DESKTOP_KEYS "/keyservers/search_keyservers"
+#define PUBLISH_TO_KEY SEAHORSE_DESKTOP_KEYS "/keyservers/publish_to"
 
 #define SEAHORSE_SCHEMAS            "/apps/seahorse"
 

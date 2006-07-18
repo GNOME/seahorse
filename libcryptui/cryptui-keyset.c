@@ -380,6 +380,12 @@ cryptui_keyset_new (const gchar *keytype)
     return g_object_new (CRYPTUI_TYPE_KEYSET, "keytype", keytype, NULL);
 }
 
+const gchar*
+cryptui_keyset_get_keytype (CryptUIKeyset *keyset)
+{
+    return keyset->priv->keytype;
+}
+
 GList*             
 cryptui_keyset_get_keys (CryptUIKeyset *keyset)
 {
@@ -571,4 +577,17 @@ cryptui_keyset_keys_raw_keyids (CryptUIKeyset *keyset, const gchar **keys)
         ids[i] = cryptui_keyset_key_get_string (keyset, *k, "key-id");
     
     return ids;
+}
+
+/* -----------------------------------------------------------------------------
+ * INTERNAL
+ */
+
+const gchar*
+_cryptui_keyset_get_internal_keyid (CryptUIKeyset *keyset, const gchar *keyid)
+{
+    gpointer orig_key, value;
+    if (!g_hash_table_lookup_extended (keyset->priv->keys, keyid, &orig_key, &value))
+        return NULL;
+    return (const gchar*)orig_key;
 }

@@ -69,7 +69,6 @@ row_activated (GtkTreeView *treeview, GtkTreePath *path, GtkTreeViewColumn *arg2
         cryptui_key_store_check_toggled (ckstore, treeview, &iter);
 }
 
-
 /* -----------------------------------------------------------------------------
  * PUBLIC
  */
@@ -116,11 +115,28 @@ cryptui_key_list_setup (GtkTreeView *view, CryptUIKeyStore *ckstore,
  
     /* TODO: Translatable */
     col = append_text_column (view, "Name", CRYPTUI_KEY_STORE_NAME);
-    append_text_column (view, "Key ID", CRYPTUI_KEY_STORE_KEYID);
     gtk_tree_view_column_set_sort_column_id (col, CRYPTUI_KEY_STORE_NAME);
+
+    col = append_text_column (view, "Key ID", CRYPTUI_KEY_STORE_KEYID);
+    gtk_tree_view_column_set_sort_column_id (col, CRYPTUI_KEY_STORE_KEYID);
     
     gtk_tree_view_set_rules_hint (view, TRUE);
     gtk_widget_set_size_request (GTK_WIDGET (view), 500, 250);
+}
+
+CryptUIKeyStore*
+cryptui_key_list_get_key_store (GtkTreeView *list)
+{
+    GtkTreeModel *model = gtk_tree_view_get_model (list);
+    g_return_val_if_fail (CRYPTUI_KEY_STORE (model), NULL);
+    return CRYPTUI_KEY_STORE (model);
+}
+
+CryptUIKeyset* 
+cryptui_key_list_get_keyset (GtkTreeView *list)
+{
+    CryptUIKeyStore *ckstore = cryptui_key_list_get_key_store (list);
+    return ckstore ? cryptui_key_store_get_keyset (ckstore) : NULL;
 }
 
 gboolean          

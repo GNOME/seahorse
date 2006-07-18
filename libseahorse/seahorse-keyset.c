@@ -399,7 +399,8 @@ seahorse_keyset_pgp_signers_new ()
     skset = seahorse_keyset_new_full (pred);
     g_object_set_data_full (G_OBJECT (skset), "pgp-signers-predicate", pred, g_free);
     
-    seahorse_gconf_notify_lazy (DEFAULT_KEY, (GConfClientNotifyFunc)pgp_signers_gconf_notify, 
+    seahorse_gconf_notify_lazy (SEAHORSE_DEFAULT_KEY, 
+                                (GConfClientNotifyFunc)pgp_signers_gconf_notify, 
                                 skset, skset);
     return skset;
 }

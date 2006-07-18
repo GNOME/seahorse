@@ -22,10 +22,13 @@
 #include "config.h"
 #include <gtk/gtk.h>
 #include <string.h>
+#include <stdlib.h>
 
+#include <gconf/gconf-client.h>
 #include <dbus/dbus-glib-bindings.h>
 
 #include "cryptui.h"
+#include "cryptui-priv.h"
 #include "cryptui-key-chooser.h"
 #include "cryptui-keyset.h"
 
@@ -174,4 +177,149 @@ cryptui_prompt_signer (CryptUIKeyset *keyset, const gchar *title)
     
     gtk_widget_destroy (dialog);
     return signer;
+}
+
+/* -----------------------------------------------------------------------------
+ * GCONF HELPERS 
+ */
+
+static GConfClient *global_gconf_client = NULL;
+
+static void
+global_client_free (void)
+{
+    if (global_gconf_client == NULL)
+        return;
+    
+    gconf_client_remove_dir (global_gconf_client, SEAHORSE_DESKTOP_KEYS, NULL);
+    g_object_unref (global_gconf_client);
+    global_gconf_client = NULL;
+}
+
+static gboolean
+handle_error (GError **error)
+{
+    g_return_val_if_fail (error != NULL, FALSE);
+
+    if (*error != NULL) {
+        g_warning ("GConf error:\n  %s", (*error)->message);
+        g_error_free (*error);
+        *error = NULL;
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+static GConfClient*
+get_global_client (void)
+{
+    GError *error = NULL;
+    
+    if (global_gconf_client != NULL)
+        return global_gconf_client;
+    
+    global_gconf_client = gconf_client_get_default ();
+    if (global_gconf_client) {
+        gconf_client_add_dir (global_gconf_client, SEAHORSE_DESKTOP_KEYS, 
+                                  GCONF_CLIENT_PRELOAD_NONE, &error);
+        handle_error (&error);
+    }
+
+    atexit (global_client_free);
+    return global_gconf_client;
+}
+
+gboolean
+_cryptui_gconf_get_boolean (const char *key)
+{
+    GConfClient *client = get_global_client ();
+    gboolean result;
+    GError *error = NULL;
+    
+    g_return_val_if_fail (key != NULL, FALSE);
+    g_return_val_if_fail (client != NULL, FALSE);
+    
+    result = gconf_client_get_bool (client, key, &error);
+    return handle_error (&error) ? FALSE : result;
+}
+
+char *
+_cryptui_gconf_get_string (const char *key)
+{
+    char *result;
+    GConfClient *client;
+    GError *error = NULL;
+    
+    g_return_val_if_fail (key != NULL, NULL);
+    
+    client = get_global_client ();
+    g_return_val_if_fail (client != NULL, NULL);
+    
+    result = gconf_client_get_string (client, key, &error);
+    return handle_error (&error) ? g_strdup ("") : result;
+}
+
+void
+_cryptui_gconf_set_string (const char *key, const char *string_value)
+{
+    GConfClient *client = get_global_client ();
+    GError *error = NULL;
+
+    g_return_if_fail (key != NULL);
+    g_return_if_fail (client != NULL);
+    
+    gconf_client_set_string (client, key, string_value, &error);
+    handle_error (&error);
+}
+
+guint
+_cryptui_gconf_notify (const char *key, GConfClientNotifyFunc notification_callback,
+                       gpointer callback_data)
+{
+    GConfClient *client = get_global_client ();
+    guint notification_id;
+    GError *error = NULL;
+    
+    g_return_val_if_fail (key != NULL, 0);
+    g_return_val_if_fail (notification_callback != NULL, 0);
+    g_return_val_if_fail (client != NULL, 0);
+    
+    notification_id = gconf_client_notify_add (client, key, notification_callback,
+                                               callback_data, NULL, &error);
+    return handle_error (&error) ? notification_id : 0;
+}
+
+static void
+internal_gconf_unnotify (gpointer data)
+{
+    guint notify_id = GPOINTER_TO_INT (data);
+    _cryptui_gconf_unnotify (notify_id);
+}
+
+void
+_cryptui_gconf_notify_lazy (const char *key, GConfClientNotifyFunc notification_callback,
+                            gpointer callback_data, gpointer lifetime)
+{
+    guint notification_id;
+    gchar *t;
+    
+    notification_id = _cryptui_gconf_notify (key, notification_callback, callback_data);
+    if (notification_id != 0) {
+        t = g_strdup_printf ("_cryutui-gconf-notify-lazy-%d", notification_id);
+        g_object_set_data_full (G_OBJECT (lifetime), t, 
+                GINT_TO_POINTER (notification_id), internal_gconf_unnotify);
+    }
+}
+
+void
+_cryptui_gconf_unnotify (guint notification_id)
+{
+    GConfClient *client = get_global_client ();
+    g_return_if_fail (client != NULL);
+
+    if (notification_id == 0)
+        return;
+
+    gconf_client_notify_remove (client, notification_id);
 }
