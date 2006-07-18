@@ -30,7 +30,7 @@
  */
 
 #ifndef LIBCRYPTUI_BUILD
-#error This header shouldn't be included outside of the libcryptui build
+#error "This header shouldn't be included outside of the libcryptui build."
 #endif
 
 #include <gconf/gconf.h>
