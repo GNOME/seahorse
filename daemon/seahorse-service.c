@@ -19,6 +19,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include "config.h"
 #include <glib.h>
 #include <dbus/dbus-glib-bindings.h>
 
@@ -28,6 +29,7 @@
 #include "seahorse-key-source.h"
 #include "seahorse-gpgmex.h"
 #include "seahorse-util.h"
+#include "seahorse-libdialogs.h"
 
 #define KEYSET_PATH "/org/gnome/seahorse/keys/%s"
 #define KEYSET_PATH_LOCAL "/org/gnome/seahorse/keys/%s/local"
@@ -41,7 +43,7 @@ copy_to_array (const gchar *type, gpointer dummy, GArray *a)
     g_array_append_val (a, v);
 }
 
-void 
+static void 
 add_key_source (SeahorseService *svc, GQuark ktype)
 {
     const gchar *keytype = g_quark_to_string (ktype);
@@ -67,60 +69,6 @@ add_key_source (SeahorseService *svc, GQuark ktype)
         
         g_hash_table_replace (svc->keysets, g_strdup (keytype), keyset);
     }
-}
-
-/* -----------------------------------------------------------------------------
- * PUBLIC METHODS 
- */ 
-
-SeahorseKey*
-seahorse_service_key_from_dbus (const gchar *key, guint *uid)
-{
-    SeahorseKey *skey;
-    gchar **vec;
-    char *t = NULL;
-    
-    vec = g_strsplit (key, ":", 3);
-    if (!vec[0] || !vec[1])
-        return NULL;
-    
-    /* This will always get the most preferred key */
-    skey = seahorse_context_find_key (SCTX_APP (), g_quark_from_string (vec[0]), 
-                                      SKEY_LOC_INVALID, vec[1]);
-    
-    if (uid)
-        *uid = 0;
-        
-    /* Parse out the uid */
-    if (skey && vec[2]) {
-        glong l = strtol (vec[2], &t, 10);
-            
-        /* Make sure it's valid */
-        if (*t || l < 0 || l >= seahorse_key_get_num_names (skey))
-            skey = NULL;
-        else if (uid)
-            *uid = (guint)l;
-    }
-    
-    g_strfreev (vec);
-    return skey;
-}
-
-gchar*
-seahorse_service_key_to_dbus (SeahorseKey *skey, guint uid)
-{
-    return seahorse_service_keyid_to_dbus (seahorse_key_get_ktype (skey), 
-                                           seahorse_key_get_keyid (skey), uid);
-}
-
-gchar*
-seahorse_service_keyid_to_dbus (GQuark ktype, const gchar *keyid, guint uid)
-{
-        if (uid == 0)
-        return g_strdup_printf ("%s:%s", g_quark_to_string (ktype), keyid);
-    else
-        return g_strdup_printf ("%s:%s:%d", g_quark_to_string (ktype), keyid, uid);
-    
 }
 
 /* -----------------------------------------------------------------------------
@@ -192,7 +140,7 @@ seahorse_service_import_keys (SeahorseService *svc, gchar *ktype,
     
     a = g_array_new (TRUE, TRUE, sizeof (gchar*));
     for (l = (GList*)seahorse_operation_get_result (op); l; l = g_list_next (l)) {
-        t = seahorse_service_key_to_dbus (SEAHORSE_KEY (l->data), 0);
+        t = seahorse_context_key_to_dbus (SEAHORSE_KEY (l->data), 0);
         g_array_append_val (a, t);
     }
     
@@ -224,7 +172,7 @@ seahorse_service_export_keys (SeahorseService *svc, gchar *ktype,
     }    
     
     while (*keys) {
-        skey = seahorse_service_key_from_dbus (*keys, 0);
+        skey = seahorse_context_key_from_dbus (SCTX_APP (), *keys, 0);
         
         if (!skey || seahorse_key_get_ktype (skey) != type) {
             gpgme_data_release (gdata);
@@ -277,6 +225,18 @@ seahorse_service_export_keys (SeahorseService *svc, gchar *ktype,
     
     /* TODO: We should be base64 encoding this */
     *data = seahorse_util_write_data_to_text (gdata, TRUE);
+    return TRUE;
+}
+
+gboolean
+seahorse_service_display_notification (SeahorseService *svc, gchar *heading,
+                                       gchar *text, gchar *icon, gboolean urgent, 
+                                       GError **error)
+{
+    if (!icon || !icon[0])
+        icon = NULL;
+    
+    seahorse_notification_display (heading, text, urgent, icon, NULL);
     return TRUE;
 }
 

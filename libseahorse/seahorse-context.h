@@ -168,4 +168,15 @@ GList*              seahorse_context_discover_keys      (SeahorseContext    *sct
                                                          GQuark             ktype, 
                                                          GSList             *keyids);
 
+SeahorseKey*        seahorse_context_key_from_dbus      (SeahorseContext    *sctx, 
+                                                         const gchar        *key, 
+                                                         guint              *uid);
+
+gchar*              seahorse_context_key_to_dbus        (SeahorseKey        *skey, 
+                                                         guint              uid);
+
+gchar*              seahorse_context_keyid_to_dbus      (GQuark             ktype, 
+                                                         const gchar        *keyid, 
+                                                         guint              uid);
+
 #endif /* __SEAHORSE_CONTEXT_H__ */

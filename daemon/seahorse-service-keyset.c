@@ -28,15 +28,6 @@
 /* Flags for seahorse_service_keyset_match_keys */
 #define MATCH_KEYS_LOCAL_ONLY       0x00000010
 
-/* Special fields */
-enum {
-    FIELD_DISLAY_NAME,
-    FIELD_CN,
-    FIELD_SPECIAL_MAX
-};
-
-GQuark key_fields[FIELD_SPECIAL_MAX] = { 0 };
-
 enum {
     KEY_ADDED,
     KEY_REMOVED,
@@ -56,40 +47,6 @@ value_free (gpointer value)
 {
     g_value_unset ((GValue*)value);
     g_free (value);
-}
-
-static gboolean
-lookup_key_field (SeahorseKey *skey, guint uid, const gchar *field, GValue *value)
-{
-    GParamSpec *spec;
-    GQuark qfield;
-    gchar *name;
-    
-    /* Special UID fields */
-    if (uid > 0) {
-
-        qfield = g_quark_from_string (field);
-        if (qfield == key_fields[FIELD_DISLAY_NAME]) {
-            name = seahorse_key_get_name (skey, uid);
-            g_value_init (value, G_TYPE_STRING);
-            g_value_take_string (value, name ? name : g_strdup (""));
-            return TRUE;
-
-        } else if (qfield == key_fields[FIELD_CN]) {
-            name = seahorse_key_get_name_cn (skey, uid);
-            g_value_init (value, G_TYPE_STRING);
-            g_value_take_string (value, name ? name : g_strdup (""));
-            return TRUE;
-        }
-    }
-
-    spec = g_object_class_find_property (G_OBJECT_GET_CLASS (skey), field);
-    if (!spec) 
-        return FALSE;
-
-    g_value_init (value, spec->value_type);
-    g_object_get_property (G_OBJECT (skey), field, value);
-    return TRUE; 
 }
 
 static gboolean
@@ -139,12 +96,12 @@ seahorse_service_keyset_list_keys (SeahorseServiceKeyset *keyset, gchar ***keys,
     a = g_array_new (TRUE, TRUE, sizeof (gchar*));
     
     for (l = k; l; l = g_list_next (l)) {
-        id = seahorse_service_key_to_dbus (SEAHORSE_KEY (l->data), 0);
+        id = seahorse_context_key_to_dbus (SEAHORSE_KEY (l->data), 0);
         g_array_append_val (a, id);
         
         nuids = seahorse_key_get_num_names (SEAHORSE_KEY (l->data));
         for (i = 1; i < nuids; i++) {
-            id = seahorse_service_key_to_dbus (SEAHORSE_KEY (l->data), i);
+            id = seahorse_context_key_to_dbus (SEAHORSE_KEY (l->data), i);
             g_array_append_val (a, id);
         }
     }
@@ -160,14 +117,14 @@ seahorse_service_keyset_get_key_field (SeahorseService *svc, gchar *key, gchar *
     SeahorseKey *skey;
     guint uid;
 
-    skey = seahorse_service_key_from_dbus (key, &uid);
+    skey = seahorse_context_key_from_dbus (SCTX_APP(), key, &uid);
     if (!skey) {
         g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID, 
                      _("Invalid or unrecognized key: %s"), key);
         return FALSE;
     }
  
-    if (lookup_key_field (skey, uid, field, value)) {
+    if (seahorse_key_get_property (skey, uid, field, value)) {
         *has = TRUE;
         
     } else {
@@ -189,7 +146,7 @@ seahorse_service_keyset_get_key_fields (SeahorseService *svc, gchar *key, gchar 
     GValue *value;
     guint uid;
     
-    skey = seahorse_service_key_from_dbus (key, &uid);
+    skey = seahorse_context_key_from_dbus (SCTX_APP(), key, &uid);
     if (!skey) {
         g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID, 
                      _("Invalid or unrecognized key: %s"), key);
@@ -200,7 +157,7 @@ seahorse_service_keyset_get_key_fields (SeahorseService *svc, gchar *key, gchar 
     
     while (*fields) {
         value = g_new0 (GValue, 1);
-        if (lookup_key_field (skey, uid, *fields, value))
+        if (seahorse_key_get_property (skey, uid, *fields, value))
             g_hash_table_insert (*values, g_strdup (*fields), value);
         else
             g_free (value);
@@ -238,7 +195,7 @@ seahorse_service_keyset_discover_keys (SeahorseServiceKeyset *keyset, const gcha
     /* Prepare return value */
     akeys = g_array_new (TRUE, TRUE, sizeof (gchar*));
     for (l = lkeys; l; l = g_list_next (l)) {
-        keyid = seahorse_service_key_to_dbus (SEAHORSE_KEY (l->data), 0);
+        keyid = seahorse_context_key_to_dbus (SEAHORSE_KEY (l->data), 0);
         akeys = g_array_append_val (akeys, keyid);
     }
     *keys = (gchar**)g_array_free (akeys, FALSE);
@@ -284,14 +241,14 @@ seahorse_service_keyset_match_keys (SeahorseServiceKeyset *keyset, gchar **patte
         /* Main name */        
         value = seahorse_key_get_display_name (skey);
         if (match_remove_patterns (remaining, value)) {
-            keyid = seahorse_service_key_to_dbus (skey, 0);
+            keyid = seahorse_context_key_to_dbus (skey, 0);
             g_array_append_val (results, keyid);
         }
         
         /* Key ID */
         value = g_strdup (seahorse_key_get_keyid (skey));
         if (match_remove_patterns (remaining, value)) {
-            keyid = seahorse_service_key_to_dbus (skey, 0);
+            keyid = seahorse_context_key_to_dbus (skey, 0);
             g_array_append_val (results, keyid);
         }
         
@@ -302,7 +259,7 @@ seahorse_service_keyset_match_keys (SeahorseServiceKeyset *keyset, gchar **patte
             /* UID name */
             value = seahorse_key_get_name (skey, i);
             if (match_remove_patterns (remaining, value)) {
-                keyid = seahorse_service_key_to_dbus (skey, i);
+                keyid = seahorse_context_key_to_dbus (skey, i);
                 g_array_append_val (results, keyid);
                 break;
             }
@@ -310,7 +267,7 @@ seahorse_service_keyset_match_keys (SeahorseServiceKeyset *keyset, gchar **patte
             /* UID email */
             value = seahorse_key_get_name_cn (skey, i);
             if (match_remove_patterns (remaining, value)) {
-                keyid = seahorse_service_key_to_dbus (skey, i);
+                keyid = seahorse_context_key_to_dbus (skey, i);
                 g_array_append_val (results, keyid);
                 break;
             }
@@ -351,7 +308,7 @@ seahorse_service_keyset_added (SeahorseKeyset *skset, SeahorseKey *skey,
     uids = (uids == 0) ? 1 : uids;
 
     for (i = 0; i < uids; i++) {    
-        id = seahorse_service_key_to_dbus (skey, i);
+        id = seahorse_context_key_to_dbus (skey, i);
         g_signal_emit (SEAHORSE_SERVICE_KEYSET (skset), signals[KEY_ADDED], 0, id);
         g_free (id);        
     }
@@ -370,7 +327,7 @@ seahorse_service_keyset_removed (SeahorseKeyset *skset, SeahorseKey *skey,
     uids = (uids == 0) ? 1 : uids;
     
     for (i = 0; i < uids; i++) {
-        id = seahorse_service_key_to_dbus (skey, i);
+        id = seahorse_context_key_to_dbus (skey, i);
         g_signal_emit (SEAHORSE_SERVICE_KEYSET (skset), signals[KEY_REMOVED], 0, id);
         g_free (id);
     }
@@ -394,20 +351,20 @@ seahorse_service_keyset_changed (SeahorseKeyset *skset, SeahorseKey *skey,
 
     if (euids < uids) {
         for (i = euids; i < uids; i++) {
-            id = seahorse_service_key_to_dbus (skey, i);
+            id = seahorse_context_key_to_dbus (skey, i);
             g_signal_emit (SEAHORSE_SERVICE_KEYSET (skset), signals[KEY_ADDED], 0, id);
             g_free (id);
         }
     } else if (euids > uids) {
         for (i = uids; i < euids; i++) {
-            id = seahorse_service_key_to_dbus (skey, i);
+            id = seahorse_context_key_to_dbus (skey, i);
             g_signal_emit (SEAHORSE_SERVICE_KEYSET (skset), signals[KEY_REMOVED], 0, id);
             g_free (id);
         }
     }
 
     for (i = 0; i < uids; i++) {
-        id = seahorse_service_key_to_dbus (skey, i);
+        id = seahorse_context_key_to_dbus (skey, i);
         g_signal_emit (SEAHORSE_SERVICE_KEYSET (skset), signals[KEY_CHANGED], 0, id);
         g_free (id);
     }
@@ -444,11 +401,6 @@ seahorse_service_keyset_class_init (SeahorseServiceKeysetClass *klass)
     signals[KEY_CHANGED] = g_signal_new ("key_changed", SEAHORSE_TYPE_SERVICE_KEYSET, 
                 G_SIGNAL_RUN_LAST | G_SIGNAL_DETAILED, G_STRUCT_OFFSET (SeahorseServiceKeysetClass, key_changed),
                 NULL, NULL, g_cclosure_marshal_VOID__STRING, G_TYPE_NONE, 1, G_TYPE_STRING);
-    
-    
-    /* Some special fields */
-    key_fields[FIELD_DISLAY_NAME] = g_quark_from_static_string ("display-name");
-    key_fields[FIELD_CN] = g_quark_from_static_string ("cn");
 }
 
 /* -----------------------------------------------------------------------------

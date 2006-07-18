@@ -69,9 +69,11 @@ struct _SeahorseWidgetClass {
 
 GType            seahorse_widget_get_type ();
 
-SeahorseWidget*  seahorse_widget_new                (gchar            *name);
+SeahorseWidget*  seahorse_widget_new                (const gchar      *name);
 
-SeahorseWidget*  seahorse_widget_new_allow_multiple (gchar            *name);
+SeahorseWidget*  seahorse_widget_new_allow_multiple (const gchar      *name);
+
+SeahorseWidget*  seahorse_widget_find               (const gchar      *name);
 
 GtkWidget*       seahorse_widget_get_top            (SeahorseWidget   *swidget);
 

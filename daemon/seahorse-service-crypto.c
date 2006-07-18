@@ -114,7 +114,7 @@ seahorse_service_crypto_encrypt_text (SeahorseServiceCrypto *crypto,
     
     /* The signer */
     if (signer && signer[0]) {
-        signkey = seahorse_service_key_from_dbus (signer, NULL);
+        signkey = seahorse_context_key_from_dbus (SCTX_APP (), signer, NULL);
         if (!signkey) {
             g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID, 
                          _("Invalid or unrecognized signer: %s"), signer);
@@ -132,7 +132,7 @@ seahorse_service_crypto_encrypt_text (SeahorseServiceCrypto *crypto,
     /* The recipients */
     for( ; recipients[0]; recipients++)
     {
-        skey = seahorse_service_key_from_dbus (recipients[0], NULL);
+        skey = seahorse_context_key_from_dbus (SCTX_APP (), recipients[0], NULL);
         if (!skey) {
             g_list_free (recipkeys);
             g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID, 
@@ -221,7 +221,7 @@ seahorse_service_crypto_sign_text (SeahorseServiceCrypto *crypto, const char *si
         g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID,
                      _("No signer specified"));
     
-    signkey = seahorse_service_key_from_dbus (signer, NULL);
+    signkey = seahorse_context_key_from_dbus (SCTX_APP (), signer, NULL);
     if (!signkey) {
         g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID, 
                      _("Invalid or unrecognized signer: %s"), signer);
@@ -309,7 +309,7 @@ seahorse_service_crypto_decrypt_text (SeahorseServiceCrypto *crypto,
                 seahorse_signatures_notify (NULL, status, NULL);
             if (status->signatures->summary & GPGME_SIGSUM_GREEN ||
                 status->signatures->summary & GPGME_SIGSUM_VALID) 
-                    *signer = seahorse_service_keyid_to_dbus (SKEY_PGP, 
+                    *signer = seahorse_context_keyid_to_dbus (SKEY_PGP, 
                                                 status->signatures->fpr, 0);
         }
     }
@@ -369,7 +369,7 @@ seahorse_service_crypto_verify_text (SeahorseServiceCrypto *crypto,
                 seahorse_signatures_notify (NULL, status, NULL);
             if (status->signatures->summary & GPGME_SIGSUM_GREEN ||
                 status->signatures->summary & GPGME_SIGSUM_VALID) 
-                    *signer = seahorse_service_keyid_to_dbus (SKEY_PGP, 
+                    *signer = seahorse_context_keyid_to_dbus (SKEY_PGP, 
                                                 status->signatures->fpr, 0);
         }
     }

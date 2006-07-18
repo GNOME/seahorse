@@ -208,10 +208,16 @@ SeahorseValidity  seahorse_key_get_trust          (SeahorseKey        *skey);
 
 gulong            seahorse_key_get_expires        (SeahorseKey        *skey);
 
-guint              seahorse_key_get_length         (SeahorseKey        *skey);
+guint             seahorse_key_get_length         (SeahorseKey        *skey);
 
 void              seahorse_key_set_preferred      (SeahorseKey        *skey,
                                                    SeahorseKey        *preferred);
+
+gboolean          seahorse_key_get_property       (SeahorseKey        *skey, 
+                                                   guint              uid, 
+                                                   const gchar        *field, 
+                                                   GValue             *value);
+
 
 /* -----------------------------------------------------------------------------
  * KEY PREDICATES

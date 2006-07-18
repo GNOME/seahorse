@@ -1079,3 +1079,52 @@ seahorse_context_discover_keys (SeahorseContext *sctx, GQuark ktype,
     
     return rkeys;
 }
+
+SeahorseKey*
+seahorse_context_key_from_dbus (SeahorseContext *sctx, const gchar *key, guint *uid)
+{
+    SeahorseKey *skey;
+    gchar **vec;
+    char *t = NULL;
+    
+    vec = g_strsplit (key, ":", 3);
+    if (!vec[0] || !vec[1])
+        return NULL;
+    
+    /* This will always get the most preferred key */
+    skey = seahorse_context_find_key (sctx, g_quark_from_string (vec[0]), 
+                                      SKEY_LOC_INVALID, vec[1]);
+    
+    if (uid)
+        *uid = 0;
+        
+    /* Parse out the uid */
+    if (skey && vec[2]) {
+        glong l = strtol (vec[2], &t, 10);
+            
+        /* Make sure it's valid */
+        if (*t || l < 0 || l >= seahorse_key_get_num_names (skey))
+            skey = NULL;
+        else if (uid)
+            *uid = (guint)l;
+    }
+    
+    g_strfreev (vec);
+    return skey;
+}
+
+gchar*
+seahorse_context_key_to_dbus (SeahorseKey *skey, guint uid)
+{
+    return seahorse_context_keyid_to_dbus (seahorse_key_get_ktype (skey), 
+                                           seahorse_key_get_keyid (skey), uid);
+}
+
+gchar*
+seahorse_context_keyid_to_dbus (GQuark ktype, const gchar *keyid, guint uid)
+{
+    if (uid == 0)
+        return g_strdup_printf ("%s:%s", g_quark_to_string (ktype), keyid);
+    else
+        return g_strdup_printf ("%s:%s:%d", g_quark_to_string (ktype), keyid, uid);
+}

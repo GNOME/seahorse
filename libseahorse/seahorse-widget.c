@@ -239,27 +239,22 @@ widget_delete_event (GtkWidget *widget, GdkEvent *event, SeahorseWidget *swidget
  * Returns: The new #SeahorseWidget, or NULL if the widget already exists
  **/
 SeahorseWidget*
-seahorse_widget_new (gchar *name)
+seahorse_widget_new (const gchar *name)
 {
-	SeahorseWidget *swidget;
-	
-	/* Check if have widget hash */
-	if (widgets != NULL) {
-		swidget = g_hash_table_lookup (widgets, name);
-		
-		/* If widget already exists, present */
-		if (swidget != NULL) {
-			gtk_window_present (GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)));
-			return NULL;
-		}
-	}
-	/* Else create new widget hash */
-	else
-		widgets = g_hash_table_new ((GHashFunc)g_str_hash, (GCompareFunc)g_str_equal);
-	
-	/* If widget doesn't already exist, create & insert into hash */
-	swidget = g_object_new (SEAHORSE_TYPE_WIDGET, "name", name, NULL);
-	g_hash_table_insert (widgets, g_strdup (name), swidget);
+    /* Check if have widget hash */
+    SeahorseWidget *swidget = seahorse_widget_find (name);
+    
+    /* If widget already exists, present */
+    if (swidget != NULL) {
+        gtk_window_present (GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)));
+        return NULL;
+    }
+
+    /* If widget doesn't already exist, create & insert into hash */
+    swidget = g_object_new (SEAHORSE_TYPE_WIDGET, "name", name, NULL);
+    if(!widgets)
+        widgets = g_hash_table_new ((GHashFunc)g_str_hash, (GCompareFunc)g_str_equal);
+    g_hash_table_insert (widgets, g_strdup (name), swidget);
 
     /* We don't care about this floating business */
     g_object_ref (GTK_OBJECT (swidget));
@@ -277,7 +272,7 @@ seahorse_widget_new (gchar *name)
  * Returns: The new #SeahorseWidget
  **/
 SeahorseWidget*
-seahorse_widget_new_allow_multiple (gchar *name)
+seahorse_widget_new_allow_multiple (const gchar *name)
 {
     SeahorseWidget *swidget = g_object_new (SEAHORSE_TYPE_WIDGET, "name", name,  NULL);
     
@@ -286,6 +281,15 @@ seahorse_widget_new_allow_multiple (gchar *name)
     gtk_object_sink (GTK_OBJECT (swidget));
 
     return swidget;
+}
+
+SeahorseWidget*
+seahorse_widget_find (const gchar *name)
+{
+    /* Check if have widget hash */
+    if (widgets != NULL)
+        return SEAHORSE_WIDGET (g_hash_table_lookup (widgets, name));
+    return NULL;
 }
 
 /**

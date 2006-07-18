@@ -34,6 +34,15 @@
             <arg type="s" name="data" direction="out"/>
         </method>
         
+        <method name="DisplayNotification">
+            <annotation name="org.freedesktop.DBus.Glib.CSymbol"
+                value="seahorse_service_display_notification"/>
+            <arg type="s" name="heading" direction="in"/>
+            <arg type="s" name="text" direction="in"/>
+            <arg type="s" name="icon" direction="in"/>
+            <arg type="b" name="urgent" direction="in"/>
+        </method>
+
 <!--
         <method name="MatchSave">
             <annotation name="org.freedesktop.DBus.GLib.CSymbol"

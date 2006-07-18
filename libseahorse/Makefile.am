@@ -119,7 +119,8 @@ glade_DATA = \
 	seahorse-signer.glade \
 	seahorse-prefs.glade \
 	seahorse-add-keyserver.glade \
-	seahorse-progress.glade
+	seahorse-progress.glade \
+	seahorse-notify.glade
 
 EXTRA_DIST = $(glade_DATA) \
 	seahorse-marshal.list

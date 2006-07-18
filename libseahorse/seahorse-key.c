@@ -60,6 +60,15 @@ enum {
     PROP_LOADED
 };
 
+/* Special fields */
+enum {
+    PROP_SPECIAL_DISPLAY_NAME,
+    PROP_SPECIAL_CN,
+    PROP_SPECIAL_MAX
+};
+
+GQuark special_properties[PROP_SPECIAL_MAX] = { 0 };
+
 enum {
 	CHANGED,
 	LAST_SIGNAL
@@ -138,9 +147,13 @@ class_init (SeahorseKeyClass *klass)
         g_param_spec_uint ("loaded", "Loaded Information", "Which parts of the key are loaded. See SeahorseKeyLoaded", 
                            0, G_MAXUINT, SKEY_INFO_NONE, G_PARAM_READABLE));
 
-	signals[CHANGED] = g_signal_new ("changed", G_OBJECT_CLASS_TYPE (gobject_class),
-		G_SIGNAL_RUN_LAST,  G_STRUCT_OFFSET (SeahorseKeyClass, changed),
-		NULL, NULL, g_cclosure_marshal_VOID__INT, G_TYPE_NONE, 1, G_TYPE_INT);
+    signals[CHANGED] = g_signal_new ("changed", G_OBJECT_CLASS_TYPE (gobject_class),
+        G_SIGNAL_RUN_LAST,  G_STRUCT_OFFSET (SeahorseKeyClass, changed),
+        NULL, NULL, g_cclosure_marshal_VOID__INT, G_TYPE_NONE, 1, G_TYPE_INT);
+        
+    /* Some special fields */
+    special_properties[PROP_SPECIAL_DISPLAY_NAME] = g_quark_from_static_string ("display-name");
+    special_properties[PROP_SPECIAL_CN] = g_quark_from_static_string ("cn");
 }
 
 /* Unrefs gpgme key and frees data */
@@ -406,4 +419,39 @@ seahorse_key_set_preferred (SeahorseKey *skey, SeahorseKey *preferred)
         skey->preferred = preferred;
         seahorse_key_changed (skey, SKEY_CHANGE_PREFERRED);
     }
+}
+
+
+gboolean
+seahorse_key_get_property (SeahorseKey *skey, guint uid, const gchar *field, GValue *value)
+{
+    GParamSpec *spec;
+    GQuark qfield;
+    gchar *name;
+    
+    /* Special UID fields */
+    if (uid > 0) {
+
+        qfield = g_quark_from_string (field);
+        if (qfield == special_properties[PROP_SPECIAL_DISPLAY_NAME]) {
+            name = seahorse_key_get_name (skey, uid);
+            g_value_init (value, G_TYPE_STRING);
+            g_value_take_string (value, name ? name : g_strdup (""));
+            return TRUE;
+
+        } else if (qfield == special_properties[PROP_SPECIAL_CN]) {
+            name = seahorse_key_get_name_cn (skey, uid);
+            g_value_init (value, G_TYPE_STRING);
+            g_value_take_string (value, name ? name : g_strdup (""));
+            return TRUE;
+        }
+    }
+
+    spec = g_object_class_find_property (G_OBJECT_GET_CLASS (skey), field);
+    if (!spec) 
+        return FALSE;
+
+    g_value_init (value, spec->value_type);
+    g_object_get_property (G_OBJECT (skey), field, value);
+    return TRUE; 
 }
