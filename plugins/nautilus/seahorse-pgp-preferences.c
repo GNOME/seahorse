@@ -77,7 +77,7 @@ main (int argc, char **argv)
     seahorse_gtkstock_init();
     
     /* The default SeahorseContext */
-    seahorse_context_new (TRUE, 0);
+    seahorse_context_new (SEAHORSE_CONTEXT_APP, 0);
     op = seahorse_context_load_local_keys (SCTX_APP ());
     
     /* Let operation take care of itself */

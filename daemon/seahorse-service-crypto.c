@@ -306,7 +306,7 @@ seahorse_service_crypto_decrypt_text (SeahorseServiceCrypto *crypto,
     
         if (status->signatures) {
             if (!(flags & FLAG_QUIET))
-                seahorse_signatures_notify (NULL, status, NULL);
+                seahorse_notify_signatures (NULL, status);
             if (status->signatures->summary & GPGME_SIGSUM_GREEN ||
                 status->signatures->summary & GPGME_SIGSUM_VALID) 
                     *signer = seahorse_context_keyid_to_dbus (SKEY_PGP, 
@@ -366,7 +366,7 @@ seahorse_service_crypto_verify_text (SeahorseServiceCrypto *crypto,
     
         if (status->signatures) {
             if (!(flags & FLAG_QUIET))
-                seahorse_signatures_notify (NULL, status, NULL);
+                seahorse_notify_signatures (NULL, status);
             if (status->signatures->summary & GPGME_SIGSUM_GREEN ||
                 status->signatures->summary & GPGME_SIGSUM_VALID) 
                     *signer = seahorse_context_keyid_to_dbus (SKEY_PGP, 

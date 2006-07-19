@@ -164,7 +164,7 @@ progress_main (int argc, char* argv[])
     seahorse_gtkstock_init();
     
     /* New app context, without loading any keys */
-    sctx = seahorse_context_new (TRUE, -1);
+    sctx = seahorse_context_new (SEAHORSE_CONTEXT_APP, -1);
 
     op = g_object_new (SEAHORSE_TYPE_OPERATION, NULL);
     seahorse_operation_mark_start (op);

@@ -154,7 +154,7 @@ window_show ()
     }
 
     if (!g_sctx)
-        g_sctx = seahorse_context_new (TRUE, SKEY_PGP);
+        g_sctx = seahorse_context_new (SEAHORSE_CONTEXT_APP, SKEY_PGP);
     
     g_window = seahorse_widget_new ("agent-cache");
 

@@ -242,7 +242,7 @@ int main(int argc, char* argv[])
     seahorse_gtkstock_add_icons (daemon_icons);
     
     /* Make the default SeahorseContext */
-    seahorse_context_new (TRUE, 0);
+    seahorse_context_new (SEAHORSE_CONTEXT_APP | SEAHORSE_CONTEXT_DAEMON, 0);
     op = seahorse_context_load_local_keys (SCTX_APP ());
     g_object_unref (op);
     

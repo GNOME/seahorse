@@ -412,7 +412,7 @@ decrypt_done (SeahorseToolMode *mode, const gchar *uri, gpgme_data_t uridata,
     
     status = gpgme_op_verify_result (pop->gctx);
     if (status && status->signatures)
-        seahorse_signatures_notify (uri, status, NULL);
+        seahorse_notify_signatures (uri, status);
     
     return TRUE;
 }
@@ -500,7 +500,7 @@ verify_done (SeahorseToolMode *mode, const gchar *uri, gpgme_data_t uridata,
         orig = g_object_get_data (G_OBJECT (pop), "original-file");
         if (!orig)
             orig = uri;
-        seahorse_signatures_notify (orig, status, NULL);
+        seahorse_notify_signatures (orig, status);
         
     } else {
         
@@ -605,7 +605,7 @@ main (int argc, char **argv)
     seahorse_gtkstock_init();
     
     /* Make the default SeahorseContext */
-    sctx = seahorse_context_new (TRUE, 0);
+    sctx = seahorse_context_new (SEAHORSE_CONTEXT_APP, 0);
     
     /* The basic settings for the operation */
     memset (&mode, 0, sizeof (mode));

@@ -203,11 +203,14 @@ seahorse_context_app (void)
 }
    
 SeahorseContext*
-seahorse_context_new (gboolean app_ctx, guint ktype)
+seahorse_context_new (guint flags, guint ktype)
 {
-	SeahorseContext *sctx = g_object_new (SEAHORSE_TYPE_CONTEXT, NULL);
+    SeahorseContext *sctx = g_object_new (SEAHORSE_TYPE_CONTEXT, NULL);
     
-    if (app_ctx) {
+    if (flags & SEAHORSE_CONTEXT_DAEMON)
+        sctx->is_daemon = TRUE;
+    
+    if (flags & SEAHORSE_CONTEXT_APP) {
 
         if (ktype >= 0) {
             /* Add the default key sources */

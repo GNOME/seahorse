@@ -79,6 +79,9 @@ gchar*              cryptui_key_get_base (const gchar *key);
 
 CryptUIEncType      cryptui_key_get_enctype (const gchar *key);
 
+void                cryptui_display_notification (const gchar *title, const gchar *body,
+                                                  const gchar *icon, gboolean urgent);
+
 gchar**             cryptui_prompt_recipients (CryptUIKeyset *keyset, 
                                                const gchar *title, gchar **signer);
 

@@ -35,11 +35,16 @@
 
 SeahorsePGPKey* seahorse_signer_get                 (void);
 
-void            seahorse_signatures_notify          (const gchar* data, 
+void            seahorse_notify_signatures          (const gchar* data, 
+                                                     gpgme_verify_result_t status);
+
+void            seahorse_notify_signatures_local    (const gchar* data, 
                                                      gpgme_verify_result_t status,
                                                      GtkWidget *attachto);
 
-void            seahorse_import_notify              (guint keys,
+void            seahorse_notify_import              (guint keys);
+                                                     
+void            seahorse_notify_import_local        (guint keys,
                                                      GtkWidget *attachto);
 
 void            seahorse_notification_display       (const gchar *summary, 
@@ -49,5 +54,5 @@ void            seahorse_notification_display       (const gchar *summary,
                                                      GtkWidget *attachto);
   
 gboolean        seahorse_notification_have          (void);
-                                               
+
 #endif /* __SEAHORSE_LIBDIALOGS_H__ */

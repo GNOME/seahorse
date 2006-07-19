@@ -57,16 +57,19 @@
 typedef struct _SeahorseContext SeahorseContext;
 typedef struct _SeahorseContextClass SeahorseContextClass;
 typedef struct _SeahorseContextPrivate SeahorseContextPrivate;
-	
+
 struct _SeahorseContext {
-	GtkObject		        parent;
-	
-	/*< private >*/
-	SeahorseContextPrivate	*pv;
+    GtkObject               parent;
+    
+    /*< public >*/
+    gboolean                is_daemon;
+    
+    /*< private >*/
+    SeahorseContextPrivate  *pv;
 };
 
 struct _SeahorseContextClass {
-	GtkObjectClass		parent_class;
+    GtkObjectClass parent_class;
     
     /* signals --------------------------------------------------------- */
     
@@ -80,16 +83,23 @@ struct _SeahorseContextClass {
     void (*changed) (SeahorseContext *sctx, SeahorseKey *skey, SeahorseKeyChange change);
 };
 
+enum SeahorseContextType {
+    SEAHORSE_CONTEXT_APP = 1,
+    SEAHORSE_CONTEXT_DAEMON = 2,
+};
+
 #define             SCTX_APP()                          (seahorse_context_app ())
 
 GType               seahorse_context_get_type           (void);
 
 SeahorseContext*    seahorse_context_app                (void);
 
-SeahorseContext*    seahorse_context_new                (gboolean           app_ctx,
+SeahorseContext*    seahorse_context_new                (guint              flags,
                                                          guint              ktype);
 
 void                seahorse_context_destroy            (SeahorseContext    *sctx);
+
+#define             seahorse_context_is_daemon(ctx)     ((ctx)->is_daemon)
 
 void                seahorse_context_add_key_source     (SeahorseContext    *sctx,
                                                          SeahorseKeySource  *sksrc);

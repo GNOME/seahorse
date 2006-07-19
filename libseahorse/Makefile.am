@@ -73,8 +73,6 @@ libseahorse_internal_la_SOURCES = \
 	seahorse-gpg-options.c seahorse-gpg-options.h \
 	seahorse-passphrase.c seahorse-passphrase.h \
 	seahorse-signer.c \
-    seahorse-import.c \
-	seahorse-signatures.c \
 	seahorse-libdialogs.h \
 	seahorse-vfs-data.c seahorse-vfs-data.h \
 	seahorse-gpgmex.h seahorse-gpgmex-op.c seahorse-gpgmex-util.c \
@@ -97,7 +95,9 @@ libseahorse_internal_la_SOURCES = \
 	$(SSH_SRCS)
 
 libseahorse_internal_la_LDFLAGS = -no-undefined
-libseahorse_internal_la_LIBADD = $(SEAHORSE_LIBS)
+libseahorse_internal_la_LIBADD = \
+    $(SEAHORSE_LIBS) \
+    $(top_builddir)/libcryptui/libcryptui.la
 
 seahorselibexecbin_PROGRAMS = xloadimage seahorse-ssh-askpass
 

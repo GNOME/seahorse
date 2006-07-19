@@ -50,7 +50,7 @@ init_remote_service ()
         return FALSE;
     }
     
-    remote_service = dbus_g_proxy_new_for_name (bus, "org.gnome.seahorse.KeyService", 
+    remote_service = dbus_g_proxy_new_for_name (bus, "org.gnome.seahorse", 
                               "/org/gnome/seahorse/keys", "org.gnome.seahorse.KeyService");
             
     if (!remote_service) {
@@ -89,6 +89,27 @@ cryptui_key_get_enctype (const gchar *key)
     
     /* TODO: Implement this properly */
     return CRYPTUI_ENCTYPE_PUBLIC;
+}
+
+void
+cryptui_display_notification (const gchar *title, const gchar *body, const gchar *icon, 
+                              gboolean urgent)
+{
+    GError *error = NULL;
+    
+    if (!init_remote_service ())
+        g_return_if_reached ();
+    
+    if (!dbus_g_proxy_call (remote_service, "DisplayNotification", &error,
+                            G_TYPE_STRING, title, 
+                            G_TYPE_STRING, body, 
+                            G_TYPE_STRING, icon,
+                            G_TYPE_BOOLEAN, urgent,
+                            G_TYPE_INVALID,
+                            G_TYPE_INVALID)) {
+        g_warning ("dbus call DisplayNotification failed: %s", error ? error->message : "");
+        g_clear_error (&error);
+    }
 }
 
 /* -----------------------------------------------------------------------------

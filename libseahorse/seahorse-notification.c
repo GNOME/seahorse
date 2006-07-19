@@ -25,6 +25,7 @@
 #include <glib.h>
 
 #include "seahorse-libdialogs.h"
+#include "seahorse-util.h"
 
 #ifdef HAVE_LIBNOTIFY
 #include <libnotify/notify.h>
@@ -133,10 +134,10 @@ format_start_element (GMarkupParseContext *ctx, const gchar *element_name,
     }
 
     /* Just pass through any other elements */
-    g_string_printf (res, "<%s", element_name);
+    g_string_append_printf (res, "<%s", element_name);
     for (; *attribute_names && *attribute_values; attribute_names++, attribute_values++) {
         t = g_markup_printf_escaped ("%s", *attribute_values);
-        g_string_printf (res, " %s=\"%s\"", *attribute_names, t);
+        g_string_append_printf (res, " %s=\"%s\"", *attribute_names, t);
         g_free (t);
     }
     g_string_append (res, ">");
@@ -153,7 +154,7 @@ format_end_element (GMarkupParseContext *ctx, const gchar *element_name,
         return;
     
     /* Just pass through any other elements */;
-    g_string_printf (res, "</%s>", element_name);
+    g_string_append_printf (res, "</%s>", element_name);
 }
 
 static void 
@@ -346,7 +347,8 @@ setup_fallback_notification (SeahorseNotification *snotif, gboolean urgent,
     vbox = gtk_vbox_new (FALSE, 6);
     gtk_box_pack_start (GTK_BOX (hbox), image, FALSE, FALSE, 0);
     gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE, TRUE, 0);
-    gtk_box_pack_end (GTK_BOX (messages), hbox, FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX (messages), hbox, FALSE, FALSE, 0);
+    gtk_box_reorder_child (GTK_BOX (messages), hbox, 0);
     
     snotif->widget = G_OBJECT (vbox);
     g_signal_connect (vbox, "destroy", G_CALLBACK (fallback_closed), snotif);
@@ -540,3 +542,127 @@ seahorse_notification_display (const gchar *summary, const gchar *body,
     if (snotif)
         g_object_unref (snotif);
 }
+
+/* -----------------------------------------------------------------------------
+ * SPECIFIC NOTIFICATIONS
+ */
+
+/* Note that we can't use GTK stock here, as we hand these icons off 
+   to other processes in the case of notifications */
+#define ICON_PREFIX     DATA_DIR "/pixmaps/seahorse/48x48/"
+
+void
+seahorse_notify_import (guint keys)
+{
+    gchar *body = g_strdup_printf(ngettext("Imported %i key", "Imported %i keys", keys), keys);
+    const gchar *title = ngettext("Key Imported", "Keys Imported", keys);
+    const gchar *icon = ICON_PREFIX "seahorse-key.png";
+    
+    /* Always try and display in the daemon */
+    if (seahorse_context_is_daemon (SCTX_APP ()))
+        seahorse_notification_display (title, body, FALSE, icon, NULL);
+    else
+        cryptui_display_notification (title, body, icon, FALSE);
+
+    g_free (body);
+}
+
+void
+seahorse_notify_import_local (guint keys, GtkWidget *attachto)
+{
+    gchar *body = g_strdup_printf(ngettext("Imported %i key", "Imported %i keys", keys), keys);
+    seahorse_notification_display (ngettext("Key Imported", "Keys Imported", keys), body, 
+                                   FALSE, ICON_PREFIX "seahorse-key.png", attachto);
+    g_free (body);
+}
+
+void
+seahorse_notify_signatures (const gchar* data, gpgme_verify_result_t status)
+{
+    const gchar *icon = NULL;
+    gchar *title, *body;
+    gboolean sig = FALSE;
+    GSList *keyids;
+    GList *keys;
+    SeahorseKey *skey;
+    
+    /* Discover the key in question */
+    keyids = g_slist_append(NULL, status->signatures->fpr);
+    keys = seahorse_context_discover_keys (SCTX_APP (), SKEY_PGP, keyids);
+    g_slist_free (keyids);
+    
+    g_return_if_fail (keys != NULL);
+    skey = SEAHORSE_KEY (keys->data);
+    g_list_free (keys);
+
+    /* Figure out what to display */
+    switch (gpgme_err_code (status->signatures->status))  {
+    case GPG_ERR_KEY_EXPIRED:
+        body = _("Signed by <i><key id='%s'/> <b>expired</b></i> on %s.");
+        title = _("Invalid Signature");
+        icon = ICON_PREFIX "seahorse-sign-bad.png";
+        sig = TRUE;
+        break;
+    case GPG_ERR_SIG_EXPIRED:
+        body = _("Signed by <i><key id='%s'/></i> on %s <b>Expired</b>.");
+        title = _("Expired Signature");
+        icon = ICON_PREFIX "seahorse-sign-bad.png";
+        sig = TRUE;
+        break;
+    case GPG_ERR_CERT_REVOKED:
+        body = _("Signed by <i><key id='%s'/> <b>Revoked</b></i> on %s.");
+        title = _("Revoked Signature");
+        icon = ICON_PREFIX "seahorse-sign-bad.png";
+        sig = TRUE;
+        break;
+    case GPG_ERR_NO_ERROR:
+        body = _("Signed by <i><key id='%s'/></i> on %s.");
+        title = _("Good Signature");
+        icon = ICON_PREFIX "seahorse-sign-ok.png";
+        sig = TRUE;
+        break;
+    case GPG_ERR_NO_PUBKEY:
+        body = _("Signing key not in keyring.");
+        title = _("Unknown Signature");
+        icon = ICON_PREFIX "seahorse-sign-unknown.png";
+        break;
+    case GPG_ERR_BAD_SIGNATURE:
+        body = _("Bad or forged signature. The signed data was modified.");
+        title = _("Bad Signature");
+        icon = ICON_PREFIX "seahorse-sign-bad.png";
+        break;
+    case GPG_ERR_NO_DATA:
+        return;
+    default:
+        if (!GPG_IS_OK (status->signatures->status)) 
+            seahorse_util_handle_gpgme (status->signatures->status, 
+                                        _("Couldn't verify signature."));
+        return;
+    };
+
+    if (sig) {
+        gchar *date = seahorse_util_get_date_string (status->signatures->timestamp);
+        gchar *id = seahorse_context_key_to_dbus (skey, 0);
+        body = g_markup_printf_escaped (body, id, date);
+        g_free (date);
+        g_free (id);
+    } else {
+        body = g_strdup (body);
+    }
+    
+    if (data) {
+        data = seahorse_util_uri_get_last (data);
+        title = g_strdup_printf ("%s: %s", data, title); 
+    } else {
+        title = g_strdup (title);
+    }
+
+    /* Always try and display in the daemon */
+    if (seahorse_context_is_daemon (SCTX_APP ()))
+        seahorse_notification_display (title, body, !sig, icon, NULL);
+    else
+        cryptui_display_notification (title, body, icon, !sig);
+
+    g_free (title);
+    g_free (body);
+}    
