@@ -358,7 +358,7 @@ seahorse_prefs_cache (SeahorseWidget *swidget)
         g_warning ("Another GPG agent may be running. Disabling cache preferences.");
         w = seahorse_widget_get_widget (swidget, "pgp-area");
         if (w != NULL)
-            gtk_widget_hide (w);
+            gtk_widget_set_sensitive (w, FALSE);
         break;
     default:
         break;
@@ -371,7 +371,7 @@ seahorse_prefs_cache (SeahorseWidget *swidget)
         g_warning ("No SSH agent is running. Disabling cache preferences.");
         w = seahorse_widget_get_widget (swidget, "ssh-area");
         if (w != NULL)
-            gtk_widget_hide (w);
+            gtk_widget_set_sensitive (w, FALSE);
         break;
     default:
         break;

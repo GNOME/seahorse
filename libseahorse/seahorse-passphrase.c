@@ -469,7 +469,7 @@ ssh_detect_agent ()
     g_assert (sizeof (buf) > RESP_INDEX);
     
     socketpath = g_getenv ("SSH_AUTH_SOCK");
-    if (!socketpath)
+    if (!socketpath || !socketpath[0])
         return SEAHORSE_AGENT_NONE;
     
     /* Try to connect to the real agent */
