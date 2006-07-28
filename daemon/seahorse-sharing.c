@@ -61,6 +61,10 @@ stop_publishing (gboolean errmsg)
         g_free (share_name);
     share_name = NULL;
     
+    if (avahi_group)
+        avahi_entry_group_free (avahi_group);
+    avahi_group = NULL;
+    
     if (avahi_client)
         avahi_client_free (avahi_client);
     avahi_client = NULL;
