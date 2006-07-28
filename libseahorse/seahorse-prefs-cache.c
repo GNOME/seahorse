@@ -281,7 +281,7 @@ focus_cache_tab (GtkNotebook *notebook, GtkNotebookPage *p,
     g_return_if_fail (page != NULL);
     
     name = glade_get_widget_name (page);
-    if (strcmp (name, "cache-tab") == 0) {
+    if (name && strcmp (name, "cache-tab") == 0) {
         start_seahorse_daemon (swidget);
         g_object_set_data (G_OBJECT (swidget), "seahorse-daemon-inited", swidget);
     }
