@@ -30,6 +30,7 @@
 #include "seahorse-server-source.h"
 #include "seahorse-gconf.h"
 #include "seahorse-pgp-key.h"
+#include "seahorse-gtkstock.h"
 
 /* From seahorse_preferences_cache.c */
 void seahorse_prefs_cache (SeahorseWidget *widget);
@@ -441,9 +442,13 @@ setup_keyservers (SeahorseWidget *swidget)
 static void
 setup_sharing (SeahorseWidget *swidget)
 {
-    GtkWidget *widget;
-    widget = glade_xml_get_widget (swidget->xml, "enable-sharing");
+    GtkWidget *widget = seahorse_widget_get_widget (swidget, "enable-sharing");
+    g_return_if_fail (widget != NULL);
     seahorse_check_button_gconf_attach (GTK_CHECK_BUTTON (widget), KEYSHARING_KEY);
+    
+    widget = seahorse_widget_get_widget (swidget, "key-sharing-image");
+    g_return_if_fail (widget != NULL);
+    gtk_image_set_from_stock (GTK_IMAGE (widget), SEAHORSE_STOCK_SHARING, GTK_ICON_SIZE_DIALOG);
 }
 
 #endif /* WITH_SHARING */

@@ -39,6 +39,7 @@ static const gchar *seahorse_icons[] = {
     SEAHORSE_STOCK_SIGN_OK,
     SEAHORSE_STOCK_SIGN_BAD,
     SEAHORSE_STOCK_SIGN_UNKNOWN,
+    SEAHORSE_STOCK_SHARING,
     NULL
 };
 

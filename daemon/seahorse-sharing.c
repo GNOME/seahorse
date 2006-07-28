@@ -29,7 +29,6 @@
 #include "seahorse-gtkstock.h"
 
 #include "config.h"
-#include "eggtrayicon.h"
 #include "seahorse-daemon.h"
 #include "seahorse-gconf.h"
 #include "seahorse-util.h"
@@ -42,7 +41,6 @@ static void start_sharing ();
 static void stop_sharing ();
 
 /* For the docklet icon */
-static EggTrayIcon *tray_icon = NULL;
 static guint gconf_notify_id = 0;
 
 /* DNS-SD publishing -------------------------------------------------------- */
@@ -204,111 +202,6 @@ start_publishing ()
     return TRUE;
 }
 
-/* Tray Icon ---------------------------------------------------------------- */
-
-static void
-stop_activate (GtkWidget *item, gpointer data)
-{
-    seahorse_gconf_set_boolean (KEYSHARING_KEY, FALSE);
-}
-
-static void
-prefs_activate (GtkWidget *item, gpointer data)
-{
-    GError *err = NULL;
-    g_spawn_command_line_async ("seahorse-preferences --sharing", &err);
-    
-    if (err != NULL) {
-        g_warning ("couldn't execute seahorse-preferences: %s", err->message);
-        g_error_free (err);
-    }
-}
-
-/* Called when icon destroyed */
-static void
-tray_destroyed (GtkWidget *widget, void *data)
-{
-    g_object_unref (G_OBJECT (tray_icon));
-    tray_icon = NULL;
-}
-
-/* Called when icon clicked */
-static void
-tray_clicked (GtkWidget *button, GdkEventButton *event, void *data)
-{
-    GtkWidget *image, *menu;
-    GtkWidget *item;
-    
-    if (event->type != GDK_BUTTON_PRESS)
-        return;
-
-    /* Right click, show menu */
-    if (event->button == 3) {
-
-        menu = gtk_menu_new ();
-        
-        /* Stop Sharing menu item */
-        item = gtk_image_menu_item_new_with_mnemonic (_("_Stop Sharing My Keys"));
-        image = gtk_image_new_from_stock (GTK_STOCK_STOP, GTK_ICON_SIZE_MENU);
-        gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
-        g_signal_connect (item, "activate", G_CALLBACK (stop_activate), NULL);
-        gtk_menu_append (menu, item);
-        
-        /* Sharing Preferences menu item */
-        item = gtk_image_menu_item_new_from_stock (GTK_STOCK_PREFERENCES, NULL);
-        g_signal_connect (item, "activate", G_CALLBACK (prefs_activate), NULL);
-        gtk_menu_append (menu, item);
-
-        gtk_menu_popup (GTK_MENU (menu), NULL, NULL,        
-                        seahorse_util_determine_popup_menu_position,
-                        (gpointer) button,
-                        event->button, gtk_get_current_event_time ());
-        gtk_widget_show_all (menu);
-    }
-}
-
-static void
-show_tray ()
-{
-    GtkWidget *box;
-    GtkWidget *image;
-
-    if (!tray_icon) {
-        tray_icon = egg_tray_icon_new ("seahorse-daemon-sharing");
-        box = gtk_event_box_new ();
-
-        image = gtk_image_new_from_stock (SEAHORSE_ICON_SHARING, GTK_ICON_SIZE_SMALL_TOOLBAR);
-
-        gtk_container_add (GTK_CONTAINER (box), image);
-        gtk_container_add (GTK_CONTAINER (tray_icon), box);
-
-        g_signal_connect (G_OBJECT (tray_icon), "destroy", 
-                          G_CALLBACK (tray_destroyed), NULL);
-        g_signal_connect (G_OBJECT (box), "button-press-event",
-                          G_CALLBACK (tray_clicked), NULL);
-
-
-        if (!gtk_check_version (2, 4, 0))
-            g_object_set (G_OBJECT (box), "visible-window", FALSE, NULL);
-
-        gtk_widget_show_all (GTK_WIDGET (tray_icon));
-        g_object_ref (G_OBJECT (tray_icon));        
-    }    
-}
-
-static void
-hide_tray ()
-{
-    if (tray_icon) {
-        g_signal_handlers_disconnect_by_func (G_OBJECT (tray_icon), 
-                                              G_CALLBACK (tray_destroyed), NULL);
-        gtk_widget_destroy (GTK_WIDGET (tray_icon));
-        
-        g_object_unref (G_OBJECT (tray_icon));
-        tray_icon = NULL;    
-    }
-}
-
 /* -------------------------------------------------------------------------- */
 
 static void
@@ -330,8 +223,6 @@ start_sharing ()
             return;
         }
     }
-
-    show_tray ();
 }
 
 static void
@@ -341,8 +232,6 @@ stop_sharing ()
     
     if (seahorse_hkp_server_is_running ())
         seahorse_hkp_server_stop ();
-    
-    hide_tray ();
 }
 
 static void
