@@ -143,17 +143,12 @@ seahorse_combo_keys_attach (GtkOptionMenu *combo, SeahorseKeyset *skset,
 }
 
 void
-seahorse_combo_keys_set_active_id (GtkOptionMenu *combo, const gchar *id)
+seahorse_combo_keys_set_active_id (GtkOptionMenu *combo, GQuark keyid)
 {
     SeahorseKey *skey;
     GtkContainer *menu;
     GList *l, *children;
-    const gchar *x;
     guint i;
-    
-    /* Zero length string is null */
-    if (id && !id[0])
-        id = NULL;
     
     g_return_if_fail (GTK_IS_OPTION_MENU (combo));
 
@@ -165,14 +160,13 @@ seahorse_combo_keys_set_active_id (GtkOptionMenu *combo, const gchar *id)
     for (i = 0, l = children; l != NULL; i++, l = g_list_next (l)) {
         skey = SEAHORSE_KEY (g_object_get_data (l->data, "key"));
         
-        if (id == NULL) {
-            if (skey == NULL) {
+        if (!keyid) {
+            if (!skey) {
                 gtk_option_menu_set_history (combo, i);
                 break;
             }
         } else if (skey != NULL) {
-            x = seahorse_key_get_keyid (skey);
-            if (x != NULL && g_str_equal (x, id)) {
+            if (keyid == seahorse_key_get_keyid (skey)) {
                 gtk_option_menu_set_history (combo, i);
                 break;
             }
@@ -186,7 +180,7 @@ void
 seahorse_combo_keys_set_active (GtkOptionMenu *combo, SeahorseKey *skey)
 {
     seahorse_combo_keys_set_active_id (combo, 
-                skey == NULL ? NULL : seahorse_key_get_keyid (skey));
+                skey == NULL ? 0 : seahorse_key_get_keyid (skey));
 }
 
 SeahorseKey* 
@@ -215,9 +209,9 @@ seahorse_combo_keys_get_active (GtkOptionMenu *combo)
     return skey;
 }
 
-const gchar* 
+GQuark 
 seahorse_combo_keys_get_active_id (GtkOptionMenu *combo)
 {
     SeahorseKey *skey = seahorse_combo_keys_get_active (combo);
-    return skey == NULL ? NULL : seahorse_key_get_keyid (skey);
+    return skey == NULL ? 0 : seahorse_key_get_keyid (skey);
 }

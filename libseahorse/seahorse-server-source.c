@@ -65,6 +65,7 @@ static void         seahorse_server_source_stop        (SeahorseKeySource *src);
 static guint        seahorse_server_source_get_state   (SeahorseKeySource *src);
 static SeahorseOperation*  seahorse_server_source_load (SeahorseKeySource *src,
                                                         SeahorseKeySourceLoad load,
+                                                        GQuark keyid,
                                                         const gchar *match);
 
 static GObjectClass *parent_class = NULL;
@@ -269,12 +270,12 @@ seahorse_server_source_add_key (SeahorseServerSource *ssrc, gpgme_key_t key)
 {
     SeahorseKey *prev;
     SeahorsePGPKey *pkey;
-    const gchar *id;
+    GQuark keyid;
        
     g_return_if_fail (SEAHORSE_IS_SERVER_SOURCE (ssrc));
 
-    id = seahorse_pgp_key_get_id (key, 0);
-    prev = seahorse_context_get_key (SCTX_APP (), SEAHORSE_KEY_SOURCE (ssrc), id);
+    keyid = seahorse_pgp_key_get_cannonical_id (seahorse_pgp_key_get_id (key, 0));
+    prev = seahorse_context_get_key (SCTX_APP (), SEAHORSE_KEY_SOURCE (ssrc), keyid);
     
     /* TODO: This function needs reworking after we get more key types */
     if (prev != NULL) {
@@ -306,7 +307,7 @@ seahorse_server_source_take_operation (SeahorseServerSource *ssrc, SeahorseOpera
 
 static SeahorseOperation*
 seahorse_server_source_load (SeahorseKeySource *src, SeahorseKeySourceLoad load,
-                             const gchar *match)
+                             GQuark keyid, const gchar *match)
 {
     SeahorseServerSource *ssrc;
     GList *keys, *l;

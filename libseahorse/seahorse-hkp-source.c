@@ -724,6 +724,7 @@ static void seahorse_hkp_source_class_init (SeahorseHKPSourceClass *klass);
 /* SeahorseKeySource methods */
 static SeahorseOperation*  seahorse_hkp_source_load       (SeahorseKeySource *src,
                                                            SeahorseKeySourceLoad load,
+                                                           GQuark keyid,
                                                            const gchar *key);
 static SeahorseOperation*  seahorse_hkp_source_import     (SeahorseKeySource *sksrc, 
                                                            gpgme_data_t data);
@@ -769,7 +770,7 @@ seahorse_hkp_source_class_init (SeahorseHKPSourceClass *klass)
 
 static SeahorseOperation*
 seahorse_hkp_source_load (SeahorseKeySource *src, SeahorseKeySourceLoad load,
-                          const gchar *match)
+                          GQuark keyid, const gchar *match)
 {
     SeahorseOperation *op;
     SeahorseHKPOperation *hop;
@@ -780,7 +781,7 @@ seahorse_hkp_source_load (SeahorseKeySource *src, SeahorseKeySourceLoad load,
     g_assert (SEAHORSE_IS_KEY_SOURCE (src));
     g_assert (SEAHORSE_IS_HKP_SOURCE (src));
     
-    op = parent_class->load (src, load, match);
+    op = parent_class->load (src, load, keyid, match);
     if (op != NULL)
         return op;
 
@@ -794,7 +795,7 @@ seahorse_hkp_source_load (SeahorseKeySource *src, SeahorseKeySourceLoad load,
     /* Load a specific key */
     else if(load == SKSRC_LOAD_KEY) 
         /* TODO: Does this actually work? */
-        pattern = soup_uri_encode (match, NULL);    
+        pattern = soup_uri_encode (seahorse_key_get_rawid (keyid), NULL);    
 
     g_return_val_if_fail (pattern != NULL, NULL);
     
@@ -940,7 +941,7 @@ seahorse_hkp_source_export_raw (SeahorseKeySource *sksrc, GSList *keyids,
     for (l = keyids; l; l = g_slist_next (l)) {
 
         /* Get the key id and limit it to 8 characters */
-        fpr = (const char*)(l->data);
+        fpr = (const char*)seahorse_key_get_rawid (GPOINTER_TO_UINT (l->data));
         len = strlen (fpr);
         if (len > 8)
             fpr += (len - 8);

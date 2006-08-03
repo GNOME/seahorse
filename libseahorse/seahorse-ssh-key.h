@@ -51,7 +51,8 @@ enum {
     SSH_ALGO_DSA
 };
 
-#define SKEY_SSH                         (g_quark_from_static_string ("openssh"))
+#define SKEY_SSH_STR                     "openssh"
+#define SKEY_SSH                         (g_quark_from_static_string (SKEY_SSH_STR))
 
 #define SEAHORSE_TYPE_SSH_KEY            (seahorse_ssh_key_get_type ())
 #define SEAHORSE_SSH_KEY(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_SSH_KEY, SeahorseSSHKey))
@@ -112,6 +113,6 @@ gboolean                seahorse_ssh_key_data_is_valid        (SeahorseSSHKeyDat
 
 void                    seahorse_ssh_key_data_free            (SeahorseSSHKeyData *data);
 
-gchar*                  seahorse_ssh_key_get_cannonical_id    (const gchar *id);
+GQuark                  seahorse_ssh_key_get_cannonical_id    (const gchar *id);
 
 #endif /* __SEAHORSE_KEY_H__ */

@@ -34,7 +34,8 @@
  * 
  * Properties:
  *   key-source: (SeahorseKeySource) The key source this key came from.
- *   key-id: (gchar*) The key identifier (ie: might be a fingerprint).
+ *   key-id: (GQuark) The key identifier in the format ktype:fingerprint 
+ *      (ie: the DBUS format)
  *   ktype: (GQuark) The type of key (ie: SKEY_PGP). 
  *   etype: (SeahorseKeyEType) The encryption type (ie: SKEY_PUBLIC)
  *   flags: (guint) Flags on the capabilities of the key (ie: SeahorseKeyFlags)
@@ -126,13 +127,13 @@ struct _SeahorseKeySource;
 
 typedef struct _SeahorseKey SeahorseKey;
 typedef struct _SeahorseKeyClass SeahorseKeyClass;
-	
+
 struct _SeahorseKey {
-    GtkObject		            parent;
-	
+    GtkObject                   parent;
+
     /*< public >*/
     GQuark                      ktype;
-    const gchar*                keyid;
+    GQuark                      keyid;
     SeahorseKeyLoc              location;
     SeahorseKeyInfo             loaded;
     SeahorseKeyEType            etype;
@@ -142,12 +143,12 @@ struct _SeahorseKey {
 };
 
 struct _SeahorseKeyClass {
-	GtkObjectClass              parent_class;
+    GtkObjectClass              parent_class;
 
     /* signals --------------------------------------------------------- */
-    	
-	/* One of the key's attributes has changed */
-	void 			(* changed)		              (SeahorseKey        *skey,
+    
+    /* One of the key's attributes has changed */
+    void              (* changed)                 (SeahorseKey        *skey,
                                                    SeahorseKeyChange  change);
     
     /* virtual methods ------------------------------------------------- */
@@ -171,7 +172,9 @@ void              seahorse_key_destroy            (SeahorseKey        *skey);
 void              seahorse_key_changed            (SeahorseKey        *skey,
                                                    SeahorseKeyChange  change);
 
-const gchar*      seahorse_key_get_keyid          (SeahorseKey        *skey);
+GQuark            seahorse_key_get_keyid          (SeahorseKey        *skey);
+
+const gchar*      seahorse_key_get_rawid          (GQuark             keyid);
 
 const gchar*      seahorse_key_get_short_keyid    (SeahorseKey        *skey);
 
@@ -213,7 +216,7 @@ guint             seahorse_key_get_length         (SeahorseKey        *skey);
 void              seahorse_key_set_preferred      (SeahorseKey        *skey,
                                                    SeahorseKey        *preferred);
 
-gboolean          seahorse_key_get_property       (SeahorseKey        *skey, 
+gboolean          seahorse_key_lookup_property    (SeahorseKey        *skey, 
                                                    guint              uid, 
                                                    const gchar        *field, 
                                                    GValue             *value);
@@ -230,7 +233,7 @@ typedef struct _SeahorseKeyPredicate {
     
     /* Criteria */
     GQuark ktype;                       /* Keys of this type or 0*/
-    const gchar *keyid;                 /* A specific keyid or NULL */
+    GQuark keyid;                       /* A specific keyid or 0 */
     SeahorseKeyLoc location;            /* Location of keys or SKEY_LOC_UNKNOWN */
     SeahorseKeyEType etype;             /* Encryption type or SKEY_INVALID */
     guint flags;                        /* Flags keys must have or 0 */

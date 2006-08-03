@@ -281,7 +281,7 @@ names_update_row (SeahorseKeyModel *skmodel, SeahorseKey *skey,
                         UIDSIG_INDEX, -1,
                         UIDSIG_ICON, icon,
                         UIDSIG_NAME, name ? name : _("[Unknown]"),
-                        UIDSIG_KEYID, seahorse_key_get_keyid (skey), -1);
+                        UIDSIG_KEYID, seahorse_key_get_short_keyid (skey), -1);
             
     g_free (name);
 }
@@ -295,7 +295,7 @@ names_populate (SeahorseWidget *swidget, GtkTreeStore *store, SeahorsePGPKey *pk
     GtkTreeIter uiditer, sigiter;
     gchar *name;
     const gchar *keyid;
-    GSList *keyids = NULL;
+    GSList *rawids = NULL;
     int i, j;
     GList *keys, *l;
 
@@ -321,13 +321,13 @@ names_populate (SeahorseWidget *swidget, GtkTreeStore *store, SeahorsePGPKey *pk
             /* Never show self signatures, they're implied */
             if (strcmp (sig->keyid, keyid) == 0)
                 continue;
-            keyids = g_slist_prepend (keyids, sig->keyid);
+            rawids = g_slist_prepend (rawids, sig->keyid);
         }
         
         /* Pass it to 'DiscoverKeys' for resolution/download */
-        keys = seahorse_context_discover_keys (SCTX_APP (), SKEY_PGP, keyids);
-        g_slist_free (keyids);
-        keyids = NULL;
+        keys = seahorse_context_discover_keys (SCTX_APP (), SKEY_PGP, rawids);
+        g_slist_free (rawids);
+        rawids = NULL;
         
         /* Add the keys to the store */
         for (l = keys; l; l = g_list_next (l)) {
@@ -1316,7 +1316,7 @@ trust_update_row (SeahorseKeyModel *skmodel, SeahorseKey *skey,
     gtk_tree_store_set (GTK_TREE_STORE (skmodel), iter,
                         SIGN_ICON, icon,
                         SIGN_NAME, name ? name : _("[Unknown]"),
-                        SIGN_KEYID, seahorse_key_get_keyid (skey),
+                        SIGN_KEYID, seahorse_key_get_short_keyid (skey),
                         SIGN_TRUSTED, trusted,
                         -1);
             
@@ -1334,7 +1334,7 @@ signatures_populate_model (SeahorseWidget *swidget, SeahorseKeyModel *skmodel)
     gpgme_user_id_t uid;
     gpgme_key_sig_t sig;
     gboolean have_sigs = FALSE;
-    GSList *keyids = NULL;
+    GSList *rawids = NULL;
     GList *keys, *l;
 
     pkey = SEAHORSE_PGP_KEY (SEAHORSE_KEY_WIDGET (swidget)->skey);
@@ -1349,7 +1349,7 @@ signatures_populate_model (SeahorseWidget *swidget, SeahorseKeyModel *skmodel)
             if (strcmp (sig->keyid, keyid) == 0)
                 continue;
             have_sigs = TRUE;
-            keyids = g_slist_prepend (keyids, sig->keyid);
+            rawids = g_slist_prepend (rawids, sig->keyid);
         }
     }
     
@@ -1359,12 +1359,12 @@ signatures_populate_model (SeahorseWidget *swidget, SeahorseKeyModel *skmodel)
     if (skmodel) {
     
         /* String out duplicates */
-        keyids = unique_slist_strings (keyids);
+        rawids = unique_slist_strings (rawids);
         
         /* Pass it to 'DiscoverKeys' for resolution/download */
-        keys = seahorse_context_discover_keys (SCTX_APP (), SKEY_PGP, keyids);
-        g_slist_free (keyids);
-        keyids = NULL;
+        keys = seahorse_context_discover_keys (SCTX_APP (), SKEY_PGP, rawids);
+        g_slist_free (rawids);
+        rawids = NULL;
         
         /* Add the keys to the store */
         for (l = keys; l; l = g_list_next (l)) {
@@ -1762,7 +1762,7 @@ seahorse_key_properties_new (SeahorsePGPKey *pkey)
     /* Don't trigger the import of remote keys if possible */
     if (!remote) {
         /* This causes the key source to get any specific info about the key */
-        seahorse_key_source_load_sync (sksrc, SKSRC_LOAD_KEY, seahorse_key_get_keyid (skey));
+        seahorse_key_source_load_sync (sksrc, SKSRC_LOAD_KEY, seahorse_key_get_keyid (skey), NULL);
         skey = seahorse_context_get_key (SCTX_APP(), sksrc, seahorse_key_get_keyid (skey));
         g_return_if_fail (skey != NULL);
     }

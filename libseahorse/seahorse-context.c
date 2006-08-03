@@ -64,9 +64,9 @@ G_DEFINE_TYPE (SeahorseContext, seahorse_context, GTK_TYPE_OBJECT);
  *  keys_by_source: This contains a reference to the key and allows us to 
  *    lookup keys by their source. Each key/source combination should be 
  *    unique. Hashkeys are made with hashkey_by_source()
- *  keys_by_type: Each value contains a GList of keys with the same ktype/keyid
- *    combination (ie: same key from different key sources). The keys are 
- *    orderred in by preferred usage. Hashkeys are made with hashkey_by_type().
+ *  keys_by_type: Each value contains a GList of keys with the same keyid
+ *    (ie: same key from different key sources). The keys are 
+ *    orderred in by preferred usage. 
  */
 
 struct _SeahorseContextPrivate {
@@ -426,17 +426,10 @@ key_destroyed (SeahorseKey *skey, SeahorseContext *sctx)
 }
 
 static gpointer                 
-hashkey_by_source (SeahorseKeySource *sksrc, const gchar *keyid)
+hashkey_by_source (SeahorseKeySource *sksrc, GQuark keyid)
 {
     return GINT_TO_POINTER (g_direct_hash (sksrc) ^ 
-                            g_str_hash (keyid));
-}
-
-static gpointer
-hashkey_by_type (GQuark ktype, const gchar *keyid)
-{
-    return GINT_TO_POINTER (g_str_hash (g_quark_to_string (ktype)) ^
-                            g_str_hash (keyid));
+                            g_str_hash (g_quark_to_string (keyid)));
 }
 
 static gint
@@ -460,18 +453,15 @@ setup_keys_by_type (SeahorseContext *sctx, SeahorseKey *skey, gboolean add)
 {
     GList *l, *keys = NULL;
     SeahorseKey *akey, *next;
-    gpointer kt;
+    gpointer kt = (gpointer)seahorse_key_get_keyid (skey);
     gboolean first;
-    
-    kt = hashkey_by_type (seahorse_key_get_ktype (skey), 
-                          seahorse_key_get_keyid (skey));
     
     /* Get current set of keys in this ktype/keyid */
     if (add)
         keys = g_list_prepend (keys, skey);
     
-    for (akey = g_hash_table_lookup (sctx->pv->keys_by_type, kt); akey; 
-         akey = akey->preferred)
+    for (akey = g_hash_table_lookup (sctx->pv->keys_by_type, kt); 
+         akey; akey = akey->preferred)
     {
         if(akey != skey)
             keys = g_list_prepend (keys, akey);
@@ -541,22 +531,14 @@ seahorse_context_get_count (SeahorseContext *sctx)
 
 SeahorseKey*        
 seahorse_context_get_key (SeahorseContext *sctx, SeahorseKeySource *sksrc,
-                          const gchar *keyid)
+                          GQuark keyid)
 {
     gconstpointer k;
-    guint l;
     
     g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), NULL);
     g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (sksrc), NULL);
     
-    if(SEAHORSE_IS_PGP_SOURCE(sksrc)){
-        l = strlen (keyid); 	 
-        if (l >= 16) 	 
-            keyid += l - 16;
-    }
-    
     k = hashkey_by_source (sksrc, keyid);
-
     return SEAHORSE_KEY (g_hash_table_lookup (sctx->pv->keys_by_source, k));
 }
 
@@ -603,15 +585,11 @@ seahorse_context_get_keys (SeahorseContext *sctx, SeahorseKeySource *sksrc)
 }
 
 SeahorseKey*        
-seahorse_context_find_key (SeahorseContext *sctx, GQuark ktype,
-                           SeahorseKeyLoc location, const gchar *keyid)
+seahorse_context_find_key (SeahorseContext *sctx, GQuark keyid, SeahorseKeyLoc location)
 {
     SeahorseKey *skey; 
-    gpointer kt;
     
-    kt = hashkey_by_type (ktype, keyid);
-    
-    skey = (SeahorseKey*)g_hash_table_lookup (sctx->pv->keys_by_type, kt);
+    skey = (SeahorseKey*)g_hash_table_lookup (sctx->pv->keys_by_type, GUINT_TO_POINTER (keyid));
     while (skey) {
         
         /* If at the end and no more keys in list, return */
@@ -699,10 +677,12 @@ seahorse_context_get_default_key (SeahorseContext *sctx)
     /* TODO: All of this needs to take multiple key types into account */
     
     id = seahorse_gconf_get_string (SEAHORSE_DEFAULT_KEY);
-    if (id != NULL && id[0]) 
-        skey = seahorse_context_find_key (sctx, SKEY_PGP, SKEY_LOC_LOCAL, id);
+    if (id != NULL && id[0]) {
+        GQuark keyid = g_quark_from_string (id);
+        skey = seahorse_context_find_key (sctx, keyid, SKEY_LOC_LOCAL);
+    }
+    
     g_free (id);
-
     return skey;
 }
 
@@ -740,7 +720,7 @@ seahorse_context_load_local_keys (SeahorseContext *sctx)
                 seahorse_multi_operation_take (mop, op);
             }
             
-            op = seahorse_key_source_load (ks, SKSRC_LOAD_ALL, NULL);
+            op = seahorse_key_source_load (ks, SKSRC_LOAD_ALL, 0, NULL);
             
             if (mop != NULL)
                 seahorse_multi_operation_take (mop, op);
@@ -791,7 +771,7 @@ seahorse_context_load_remote_keys (SeahorseContext *sctx, const gchar *search)
             seahorse_multi_operation_take (mop, op);
         }
             
-        op = seahorse_key_source_load (ks, SKSRC_LOAD_SEARCH, search);
+        op = seahorse_key_source_load (ks, SKSRC_LOAD_SEARCH, 0, search);
             
         if (mop != NULL)
             seahorse_multi_operation_take (mop, op);
@@ -921,7 +901,7 @@ seahorse_context_transfer_keys (SeahorseContext *sctx, GList *keys,
             
             /* Build keyid list */
             for (l = keys; l; l = g_list_next (l)) 
-                keyids = g_slist_prepend (keyids, (gpointer)seahorse_key_get_keyid (l->data));
+                keyids = g_slist_prepend (keyids, GUINT_TO_POINTER (seahorse_key_get_keyid (l->data)));
             keyids = g_slist_reverse (keyids);
         
             /* Start a new transfer operation between the two key sources */
@@ -992,10 +972,10 @@ seahorse_context_retrieve_keys (SeahorseContext *sctx, GQuark ktype,
 
 GList*
 seahorse_context_discover_keys (SeahorseContext *sctx, GQuark ktype, 
-                                GSList *keyids)
+                                GSList *rawids)
 {
     GList *rkeys = NULL;
-    gchar *keyid = NULL;
+    GQuark keyid = 0;
     GSList *todiscover = NULL;
     GList *toimport = NULL;
     SeahorseKeySource *sksrc;
@@ -1005,23 +985,22 @@ seahorse_context_discover_keys (SeahorseContext *sctx, GQuark ktype,
     GSList *l;
 
     /* Check all the keyids */
-    for (l = keyids; l; l = g_slist_next (l)) {
-        
-        g_free (keyid);
+    for (l = rawids; l; l = g_slist_next (l)) {
         
         keyid = seahorse_key_source_cannonical_keyid (ktype, (gchar*)l->data);
         if (!keyid) {
-            g_warning ("invalid keyid: %s", (gchar*)(l->data));
+            /* TODO: Try and match this partial keyid */
+            g_warning ("invalid keyid: %s", (gchar*)l->data);
             continue;
         }
         
         /* Do we know about this key? */
-        skey = seahorse_context_find_key (sctx, ktype, SKEY_LOC_INVALID, keyid);
+        skey = seahorse_context_find_key (sctx, keyid, SKEY_LOC_INVALID);
 
         /* No such key anywhere, discover it */
         if (!skey) {
-            todiscover = g_slist_prepend (todiscover, keyid);
-            keyid = NULL;
+            todiscover = g_slist_prepend (todiscover, GUINT_TO_POINTER (keyid));
+            keyid = 0;
             continue;
         }
         
@@ -1047,8 +1026,6 @@ seahorse_context_discover_keys (SeahorseContext *sctx, GQuark ktype,
         /* TODO: Should we try SKEY_LOC_UNKNOWN keys again? */
     }
     
-    g_free (keyid);
-    
     /* Start an import process on all toimport */
     if (toimport) {
         op = seahorse_context_transfer_keys (sctx, toimport, NULL);
@@ -1068,10 +1045,9 @@ seahorse_context_discover_keys (SeahorseContext *sctx, GQuark ktype,
         for (l = todiscover; l; l = g_slist_next (l)) {
             if (sksrc) {
                 skey = seahorse_unknown_source_add_key (SEAHORSE_UNKNOWN_SOURCE (sksrc), 
-                                                        l->data, op);
+                                                        GPOINTER_TO_UINT (l->data), op);
                 rkeys = g_list_prepend (rkeys, skey);
             }
-            g_free (l->data);
         }
         
         g_slist_free (todiscover);
@@ -1087,47 +1063,51 @@ SeahorseKey*
 seahorse_context_key_from_dbus (SeahorseContext *sctx, const gchar *key, guint *uid)
 {
     SeahorseKey *skey;
-    gchar **vec;
-    char *t = NULL;
+    const gchar *t = NULL;
+    gchar *x, *alloc = NULL;
     
-    vec = g_strsplit (key, ":", 3);
-    if (!vec[0] || !vec[1])
-        return NULL;
+    /* Find the second colon, if any */
+    t = strchr (key, ':');
+    if (t != NULL) {
+        t = strchr (t + 1, ':');
+        if(t != NULL) {
+            key = alloc = g_strndup (key, t - key);
+            ++t;
+        }
+    }
     
     /* This will always get the most preferred key */
-    skey = seahorse_context_find_key (sctx, g_quark_from_string (vec[0]), 
-                                      SKEY_LOC_INVALID, vec[1]);
+    skey = seahorse_context_find_key (sctx, g_quark_from_string (key), 
+                                      SKEY_LOC_INVALID);
     
     if (uid)
         *uid = 0;
         
     /* Parse out the uid */
-    if (skey && vec[2]) {
-        glong l = strtol (vec[2], &t, 10);
+    if (skey && t) {
+        glong l = strtol (t, &x, 10);
             
         /* Make sure it's valid */
-        if (*t || l < 0 || l >= seahorse_key_get_num_names (skey))
+        if (*x || l < 0 || l >= seahorse_key_get_num_names (skey))
             skey = NULL;
         else if (uid)
             *uid = (guint)l;
     }
     
-    g_strfreev (vec);
     return skey;
 }
 
 gchar*
-seahorse_context_key_to_dbus (SeahorseKey *skey, guint uid)
+seahorse_context_key_to_dbus (SeahorseContext *sctx, SeahorseKey *skey, guint uid)
 {
-    return seahorse_context_keyid_to_dbus (seahorse_key_get_ktype (skey), 
-                                           seahorse_key_get_keyid (skey), uid);
+    return seahorse_context_keyid_to_dbus (sctx, seahorse_key_get_keyid (skey), uid);
 }
 
 gchar*
-seahorse_context_keyid_to_dbus (GQuark ktype, const gchar *keyid, guint uid)
+seahorse_context_keyid_to_dbus (SeahorseContext* sctx, GQuark keyid, guint uid)
 {
     if (uid == 0)
-        return g_strdup_printf ("%s:%s", g_quark_to_string (ktype), keyid);
+        return g_strdup (g_quark_to_string (keyid));
     else
-        return g_strdup_printf ("%s:%s:%d", g_quark_to_string (ktype), keyid, uid);
+        return g_strdup_printf ("%s:%d", g_quark_to_string (keyid), uid);
 }

@@ -377,7 +377,7 @@ pgp_signers_match (SeahorseKey *key, gpointer data)
     SeahorseKey *defkey = seahorse_context_get_default_key (SCTX_APP ());
     
     /* Default key overrides all, and becomes the only signer available*/
-    if (defkey && strcmp (seahorse_key_get_keyid (key), seahorse_key_get_keyid (defkey)) != 0)
+    if (defkey && seahorse_key_get_keyid (key) != seahorse_key_get_keyid (defkey))
         return FALSE;
     
     return TRUE;

@@ -119,7 +119,7 @@ key_changed (SeahorseKey *skey, SeahorseKeyChange change, SeahorseKeySource *sks
     
     if (change != SKEY_CHANGE_ALL)
         seahorse_key_source_load_async (sksrc, SKSRC_LOAD_KEY, 
-                                        seahorse_key_get_keyid (skey));
+                                        seahorse_key_get_keyid (skey), NULL);
 }
 
 static void
@@ -140,11 +140,11 @@ cancel_scheduled_refresh (SeahorseSSHSource *ssrc)
 }
 
 static void
-remove_key_from_context (const gchar *id, SeahorseKey *dummy, SeahorseSSHSource *ssrc)
+remove_key_from_context (GQuark keyid, SeahorseKey *dummy, SeahorseSSHSource *ssrc)
 {
     SeahorseKey *skey;
     
-    skey = seahorse_context_get_key (SCTX_APP (), SEAHORSE_KEY_SOURCE (ssrc), id);    
+    skey = seahorse_context_get_key (SCTX_APP (), SEAHORSE_KEY_SOURCE (ssrc), keyid);
     if (skey != NULL)
         seahorse_context_remove_key (SCTX_APP (), skey);
 }
@@ -155,7 +155,7 @@ scheduled_refresh (SeahorseSSHSource *ssrc)
 {
     DEBUG_REFRESH ("scheduled refresh event ocurring now\n");
     cancel_scheduled_refresh (ssrc);
-    seahorse_key_source_load_async (SEAHORSE_KEY_SOURCE (ssrc), SKSRC_LOAD_ALL, NULL);    
+    seahorse_key_source_load_async (SEAHORSE_KEY_SOURCE (ssrc), SKSRC_LOAD_ALL, 0, NULL);
     return FALSE; /* don't run again */    
 }
 
@@ -195,20 +195,24 @@ monitor_ssh_homedir (GnomeVFSMonitorHandle *handle, const gchar *monitor_uri,
 
 static SeahorseSSHKey*
 ssh_key_from_data (SeahorseSSHSource *ssrc, SeahorseSSHKeyData *keydata, 
-                   const gchar *match, SeahorseKeySourceLoad load)
+                   GQuark match, SeahorseKeySourceLoad load)
 {   
     SeahorseKeySource *sksrc = SEAHORSE_KEY_SOURCE (ssrc);
     SeahorseSSHKey *skey;
     SeahorseKey *key;
+    GQuark keyid;
     
     if (!seahorse_ssh_key_data_is_valid (keydata))
         return NULL;
+    
+    keyid = seahorse_ssh_key_get_cannonical_id (keydata->keyid);
+    g_return_val_if_fail (keyid, NULL);
     
     switch(load) {
             
     case SKSRC_LOAD_NEW:
         /* If we already have this key then just transfer ownership of keydata */
-        key = seahorse_context_get_key (SCTX_APP (), sksrc, keydata->keyid);
+        key = seahorse_context_get_key (SCTX_APP (), sksrc, keyid);
         if (key) {
             g_object_set (key, "key-data", keydata, NULL);
             return SEAHORSE_SSH_KEY (key);
@@ -216,12 +220,12 @@ ssh_key_from_data (SeahorseSSHSource *ssrc, SeahorseSSHKeyData *keydata,
         break;
         
     case SKSRC_LOAD_KEY:
-        if (!match || !g_str_equal (match, keydata->keyid))
+        if (match != keyid)
             return NULL;
         break;
             
     case SKSRC_LOAD_ALL:
-        key = seahorse_context_get_key (SCTX_APP (), sksrc, keydata->keyid);
+        key = seahorse_context_get_key (SCTX_APP (), sksrc, keyid);
         if (key)
             seahorse_context_remove_key (SCTX_APP (), key);
         break;
@@ -248,7 +252,7 @@ ssh_key_from_data (SeahorseSSHSource *ssrc, SeahorseSSHKeyData *keydata,
 
 static SeahorseOperation*
 seahorse_ssh_source_load (SeahorseKeySource *src, SeahorseKeySourceLoad load,
-                          const gchar *match)
+                          GQuark keyid, const gchar *match)
 {
     SeahorseSSHKey *skey;
     SeahorseSSHSource *ssrc;
@@ -276,7 +280,7 @@ seahorse_ssh_source_load (SeahorseKeySource *src, SeahorseKeySourceLoad load,
         
         keys = seahorse_context_get_keys (SCTX_APP (), src);
         for (l = keys; l; l = g_list_next (l)) {
-            g_hash_table_insert (checks, g_strdup (seahorse_key_get_keyid (l->data)), NULL);
+            g_hash_table_insert (checks, GUINT_TO_POINTER (seahorse_key_get_keyid (l->data)), NULL);
         }
         g_list_free (keys);
     }
@@ -312,7 +316,7 @@ seahorse_ssh_source_load (SeahorseKeySource *src, SeahorseKeySourceLoad load,
             if (checks)
                 g_hash_table_remove (checks, keydata->keyid);
 
-            skey = ssh_key_from_data (ssrc, keydata, match, load);
+            skey = ssh_key_from_data (ssrc, keydata, keyid, load);
         }
         
         /* If no key was created, free */
@@ -597,7 +601,7 @@ seahorse_ssh_source_key_for_filename (SeahorseSSHSource *ssrc, const gchar *priv
     g_return_val_if_fail (data != NULL, NULL);
     
     /* And try and load it (this also puts it into the context) */
-    skey = ssh_key_from_data (ssrc, data, NULL, SKSRC_LOAD_NEW);
+    skey = ssh_key_from_data (ssrc, data, 0, SKSRC_LOAD_NEW);
     
     /* No memory leaks on failure */
     if (!skey)

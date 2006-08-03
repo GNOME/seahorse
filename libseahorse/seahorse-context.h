@@ -132,15 +132,14 @@ guint               seahorse_context_get_count          (SeahorseContext    *sct
 
 SeahorseKey*        seahorse_context_get_key            (SeahorseContext    *sctx,
                                                          SeahorseKeySource  *sksrc,
-                                                         const gchar        *keyid);
+                                                         GQuark             keyid);
 
 GList*              seahorse_context_get_keys           (SeahorseContext    *sctx, 
                                                          SeahorseKeySource  *sksrc);
 
 SeahorseKey*        seahorse_context_find_key           (SeahorseContext    *sctx,
-                                                         GQuark             ktype,
-                                                         SeahorseKeyLoc     location,
-                                                         const gchar        *keyid);
+                                                         GQuark             keyid,
+                                                         SeahorseKeyLoc     location);
 
 GList*              seahorse_context_find_keys          (SeahorseContext    *sctx,
                                                          GQuark             ktype,
@@ -178,15 +177,16 @@ GList*              seahorse_context_discover_keys      (SeahorseContext    *sct
                                                          GQuark             ktype, 
                                                          GSList             *keyids);
 
-SeahorseKey*        seahorse_context_key_from_dbus      (SeahorseContext    *sctx, 
-                                                         const gchar        *key, 
+SeahorseKey*        seahorse_context_key_from_dbus      (SeahorseContext    *sctx,
+                                                         const gchar        *dbusid,
                                                          guint              *uid);
 
-gchar*              seahorse_context_key_to_dbus        (SeahorseKey        *skey, 
+gchar*              seahorse_context_key_to_dbus        (SeahorseContext    *sctx,
+                                                         SeahorseKey        *skey,
                                                          guint              uid);
 
-gchar*              seahorse_context_keyid_to_dbus      (GQuark             ktype, 
-                                                         const gchar        *keyid, 
+gchar*              seahorse_context_keyid_to_dbus      (SeahorseContext    *sctx,
+                                                         GQuark             keyid, 
                                                          guint              uid);
 
 #endif /* __SEAHORSE_CONTEXT_H__ */

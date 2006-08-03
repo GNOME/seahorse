@@ -191,7 +191,7 @@ seahorse_keyserver_sync (GList *keys)
     /* Build a keyid list */
     for (k = keys; k; k = g_list_next (k)) 
         keyids = g_slist_prepend (keyids, 
-                    (gchar*)seahorse_key_get_keyid (SEAHORSE_KEY (k->data)));
+                    GUINT_TO_POINTER (seahorse_key_get_keyid (SEAHORSE_KEY (k->data))));
 
     mop = seahorse_multi_operation_new ();
 

@@ -84,7 +84,7 @@ seahorse_key_source_finalize (GObject *gobject)
  **/   
 SeahorseOperation*
 seahorse_key_source_load (SeahorseKeySource *sksrc, SeahorseKeySourceLoad load,
-                          const gchar *match)
+                          GQuark keyid, const gchar *match)
 {
     SeahorseKeySourceClass *klass;
     
@@ -92,7 +92,7 @@ seahorse_key_source_load (SeahorseKeySource *sksrc, SeahorseKeySourceLoad load,
     klass = SEAHORSE_KEY_SOURCE_GET_CLASS (sksrc);
     g_return_val_if_fail (klass->load != NULL, NULL);
     
-    return (*klass->load) (sksrc, load, match);    
+    return (*klass->load) (sksrc, load, keyid, match);
 }
 
 /**
@@ -104,9 +104,9 @@ seahorse_key_source_load (SeahorseKeySource *sksrc, SeahorseKeySourceLoad load,
  **/   
 void
 seahorse_key_source_load_sync (SeahorseKeySource *sksrc, SeahorseKeySourceLoad load,
-                               const gchar *match)
+                               GQuark keyid, const gchar *match)
 {
-    SeahorseOperation *op = seahorse_key_source_load (sksrc, load, match);
+    SeahorseOperation *op = seahorse_key_source_load (sksrc, load, keyid, match);
     g_return_if_fail (op != NULL);
     seahorse_operation_wait (op);
     g_object_unref (op);
@@ -121,9 +121,9 @@ seahorse_key_source_load_sync (SeahorseKeySource *sksrc, SeahorseKeySourceLoad l
  **/   
 void
 seahorse_key_source_load_async (SeahorseKeySource *sksrc, SeahorseKeySourceLoad load,
-                                const gchar *match)
+                                GQuark keyid, const gchar *match)
 {
-    SeahorseOperation *op = seahorse_key_source_load (sksrc, load, match);
+    SeahorseOperation *op = seahorse_key_source_load (sksrc, load, keyid, match);
     g_return_if_fail (op != NULL);
     g_object_unref (op);
 }
@@ -277,7 +277,7 @@ seahorse_key_source_export (SeahorseKeySource *sksrc, GList *keys,
     g_return_val_if_fail (klass->export_raw != NULL, NULL);
     
     for (l = keys; l; l = g_list_next (l)) 
-        keyids = g_slist_prepend (keyids, (gpointer)seahorse_key_get_keyid (l->data));
+        keyids = g_slist_prepend (keyids, GUINT_TO_POINTER (seahorse_key_get_keyid (l->data)));
     
     keyids = g_slist_reverse (keyids);
     op = (*klass->export_raw) (sksrc, keyids, data);
@@ -306,7 +306,7 @@ seahorse_key_source_export_raw (SeahorseKeySource *sksrc, GSList *keyids,
     g_return_val_if_fail (klass->export != NULL, NULL);
         
     for (l = keyids; l; l = g_slist_next (l)) {
-        skey = seahorse_context_get_key (SCTX_APP (), sksrc, l->data);
+        skey = seahorse_context_get_key (SCTX_APP (), sksrc, GPOINTER_TO_UINT (l->data));
         
         /* TODO: A proper error message here 'not found' */
         if (skey)
@@ -355,10 +355,10 @@ seahorse_key_source_get_location (SeahorseKeySource *sksrc)
  * CANONICAL KEYIDS 
  */
 
-gchar*
+GQuark
 seahorse_key_source_cannonical_keyid (GQuark ktype, const gchar *keyid)
 {
-    g_return_val_if_fail (keyid != NULL, NULL);
+    g_return_val_if_fail (keyid != NULL, 0);
     
     if (ktype == SKEY_PGP)
         return seahorse_pgp_key_get_cannonical_id (keyid);
@@ -369,7 +369,7 @@ seahorse_key_source_cannonical_keyid (GQuark ktype, const gchar *keyid)
 #endif
         
     else 
-        g_return_val_if_reached (NULL);
+        g_return_val_if_reached (0);
     
-    return NULL;
+    return 0;
 }

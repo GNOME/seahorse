@@ -458,16 +458,16 @@ setup_sharing (SeahorseWidget *swidget)
 static void
 default_key_changed (GtkOptionMenu *combo, gpointer *data)
 {
-    const gchar *id = seahorse_combo_keys_get_active_id (combo);
-    seahorse_gconf_set_string (SEAHORSE_DEFAULT_KEY, id == NULL ? "" : id);    
+    GQuark keyid = seahorse_combo_keys_get_active_id (combo);
+    seahorse_gconf_set_string (SEAHORSE_DEFAULT_KEY, keyid == 0 ? "" : g_quark_to_string (keyid));
 }
 
 static void
 gconf_notification (GConfClient *gclient, guint id, GConfEntry *entry, 
                     GtkOptionMenu *combo)
 {
-    const gchar *key_id = gconf_value_get_string (gconf_entry_get_value (entry));
-    seahorse_combo_keys_set_active_id (combo, key_id);
+    GQuark keyid = g_quark_from_string (gconf_value_get_string (gconf_entry_get_value (entry)));
+    seahorse_combo_keys_set_active_id (combo, keyid);
 }
 
 static void
@@ -512,7 +512,7 @@ seahorse_prefs_new ()
     g_object_unref (skset);
     
     seahorse_combo_keys_set_active_id (GTK_OPTION_MENU (widget), 
-                                       seahorse_gconf_get_string (SEAHORSE_DEFAULT_KEY));
+                                       g_quark_from_string (seahorse_gconf_get_string (SEAHORSE_DEFAULT_KEY)));
     g_signal_connect (widget, "changed", G_CALLBACK (default_key_changed), NULL);
 
     gconf_id = seahorse_gconf_notify (SEAHORSE_DEFAULT_KEY, 

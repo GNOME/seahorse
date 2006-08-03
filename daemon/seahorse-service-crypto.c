@@ -270,6 +270,7 @@ seahorse_service_crypto_decrypt_text (SeahorseServiceCrypto *crypto,
     SeahorsePGPOperation *pop; 
     gpgme_data_t plain, cipher;
     gboolean ret = TRUE;
+    GQuark keyid;
     
     if (!g_str_equal (ktype, g_quark_to_string (SKEY_PGP))) {
         g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID,
@@ -308,9 +309,10 @@ seahorse_service_crypto_decrypt_text (SeahorseServiceCrypto *crypto,
             if (!(flags & FLAG_QUIET))
                 seahorse_notify_signatures (NULL, status);
             if (status->signatures->summary & GPGME_SIGSUM_GREEN ||
-                status->signatures->summary & GPGME_SIGSUM_VALID) 
-                    *signer = seahorse_context_keyid_to_dbus (SKEY_PGP, 
-                                                status->signatures->fpr, 0);
+                status->signatures->summary & GPGME_SIGSUM_VALID) {
+                keyid = seahorse_pgp_key_get_cannonical_id (status->signatures->fpr);
+                *signer = seahorse_context_keyid_to_dbus (SCTX_APP (), keyid, 0);
+            }
         }
     }
 
@@ -330,6 +332,7 @@ seahorse_service_crypto_verify_text (SeahorseServiceCrypto *crypto,
     SeahorsePGPOperation *pop; 
     gpgme_data_t plain, cipher;
     gboolean ret = TRUE;
+    GQuark keyid;
     
     if (!g_str_equal (ktype, g_quark_to_string (SKEY_PGP))) {
         g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID,
@@ -368,9 +371,10 @@ seahorse_service_crypto_verify_text (SeahorseServiceCrypto *crypto,
             if (!(flags & FLAG_QUIET))
                 seahorse_notify_signatures (NULL, status);
             if (status->signatures->summary & GPGME_SIGSUM_GREEN ||
-                status->signatures->summary & GPGME_SIGSUM_VALID) 
-                    *signer = seahorse_context_keyid_to_dbus (SKEY_PGP, 
-                                                status->signatures->fpr, 0);
+                status->signatures->summary & GPGME_SIGSUM_VALID) {
+                keyid = seahorse_pgp_key_get_cannonical_id (status->signatures->fpr);
+                *signer = seahorse_context_keyid_to_dbus (SCTX_APP (), keyid, 0);
+            }
         }
     }
     

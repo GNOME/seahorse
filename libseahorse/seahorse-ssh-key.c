@@ -117,10 +117,10 @@ changed_key (SeahorseSSHKey *skey)
     
     /* Now start setting the main SeahorseKey fields */
     key->ktype = SKEY_SSH;
+    key->keyid = 0;
     
     if (!skey->keydata || !skey->keydata->keyid) {
         
-        key->keyid = "UNKNOWN ";
         key->location = SKEY_LOC_INVALID;
         key->etype = SKEY_ETYPE_NONE;
         key->loaded = SKEY_INFO_NONE;
@@ -129,12 +129,15 @@ changed_key (SeahorseSSHKey *skey)
     } else {
     
         /* The key id */
-        key->keyid = skey->keydata->keyid ? skey->keydata->keyid : "UNKNOWN ";
+        key->keyid = seahorse_ssh_key_get_cannonical_id (skey->keydata->keyid);
         key->location = SKEY_LOC_LOCAL;
         key->etype = SKEY_PRIVATE;
         key->loaded = SKEY_INFO_COMPLETE;
         key->flags = SKEY_FLAG_TRUSTED;
     }
+    
+    if (!key->keyid)
+        key->keyid = g_quark_from_string (SKEY_SSH_STR ":UNKNOWN ");
     
     seahorse_key_changed (key, SKEY_CHANGE_ALL);
 }
@@ -358,11 +361,34 @@ seahorse_ssh_key_get_filename (SeahorseSSHKey *skey, gboolean private)
     return private ? skey->keydata->filename : skey->keydata->filepub;
 }
 
-gchar*
+GQuark
 seahorse_ssh_key_get_cannonical_id (const gchar *id)
 {
-    /* TODO: Implement this properly */
-    return g_strdup (id);
+    static guint x = strlen (SKEY_SSH_STR);
+    gchar *p, *hex;
+    guint l, off = 0;
+    GQuark ret;
+
+    hex = g_strdup_printf ("%s:%s", SKEY_SSH_STR, id);
+    
+    /* Strip out all non alpha numeric chars */
+    for(p = hex + x + 1; *p; p++) {
+        if (g_ascii_isalnum(*p))
+            p[0 - off] = p[0];
+        else
+            off++;
+    }
+    p[0 - off] = 0;
+    
+    /* Shorten where necessary */
+    l = strlen (hex);
+    if (l > (8 + x + 1))
+        hex[8 + x + 1] = 0;
+    
+    ret = g_quark_from_string (hex);
+    g_free (hex);
+    
+    return ret;
 }
 
 /* -----------------------------------------------------------------------------

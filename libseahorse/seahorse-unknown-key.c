@@ -82,7 +82,7 @@ seahorse_unknown_key_get_name (SeahorseKey *key, guint index)
     
     g_return_val_if_fail (index == 0, NULL);
 
-    return g_strdup_printf (_("Unknown Key: %s"), ukey->keyid);
+    return g_strdup_printf (_("Unknown Key: %s"), seahorse_key_get_rawid (ukey->keyid));
 }
 
 static gchar* 
@@ -104,7 +104,7 @@ seahorse_unknown_key_get_property (GObject *object, guint prop_id,
                 seahorse_unknown_key_get_name (SEAHORSE_KEY (ukey), 0));
         break;
     case PROP_DISPLAY_ID:
-        g_value_set_string (value, ukey->keyid); 
+        g_value_set_string (value, seahorse_key_get_rawid (ukey->keyid)); 
         break;
     case PROP_SIMPLE_NAME:
         g_value_set_string (value, _("Unknown Key"));
@@ -132,8 +132,7 @@ seahorse_unknown_key_set_property (GObject *object, guint prop_id,
 
     switch (prop_id) {
     case PROP_KEYID:
-        g_free (ukey->keyid);
-        ukey->keyid = g_strdup (g_value_get_string (value));
+        ukey->keyid = g_value_get_uint (value);
         SEAHORSE_KEY (ukey)->keyid = ukey->keyid;
         break;
     }
@@ -142,11 +141,6 @@ seahorse_unknown_key_set_property (GObject *object, guint prop_id,
 static void
 seahorse_unknown_key_finalize (GObject *gobject)
 {
-    SeahorseUnknownKey *ukey = SEAHORSE_UNKNOWN_KEY (gobject);
-    
-    g_free (ukey->keyid);
-    ukey->keyid = NULL;
-    
     G_OBJECT_CLASS (seahorse_unknown_key_parent_class)->finalize (gobject);
 }
 
@@ -168,8 +162,8 @@ seahorse_unknown_key_class_init (SeahorseUnknownKeyClass *klass)
     key_class->get_name_cn = seahorse_unknown_key_get_name_cn;
     
     g_object_class_install_property (gobject_class, PROP_KEYID,
-        g_param_spec_string ("key-id", "The Key ID", "Key identifier",
-                             "", G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+        g_param_spec_uint ("key-id", "The Key ID", "Key identifier",
+                           0, G_MAXUINT, 0, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
     g_object_class_install_property (gobject_class, PROP_DISPLAY_NAME,
         g_param_spec_string ("display-name", "Display Name", "User Displayable name for this key",
@@ -205,7 +199,7 @@ seahorse_unknown_key_class_init (SeahorseUnknownKeyClass *klass)
  */
 
 SeahorseUnknownKey* 
-seahorse_unknown_key_new (SeahorseUnknownSource *sksrc, const gchar *keyid)
+seahorse_unknown_key_new (SeahorseUnknownSource *sksrc, GQuark keyid)
 {
     SeahorseUnknownKey *ukey;
     

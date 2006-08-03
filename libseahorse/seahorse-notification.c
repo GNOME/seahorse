@@ -89,7 +89,7 @@ insert_key_field (GString *res, const gchar *key, const gchar *field)
     memset (&value, 0, sizeof (value));
     memset (&svalue, 0, sizeof (value));
     
-    if (seahorse_key_get_property (skey, uid, field, &value)) {
+    if (seahorse_key_lookup_property (skey, uid, field, &value)) {
         g_value_init (&svalue, G_TYPE_STRING);
         if (g_value_transform (&value, &svalue)) {
             str = g_markup_escape_text (g_value_get_string (&svalue), -1);
@@ -582,14 +582,14 @@ seahorse_notify_signatures (const gchar* data, gpgme_verify_result_t status)
     const gchar *icon = NULL;
     gchar *title, *body;
     gboolean sig = FALSE;
-    GSList *keyids;
+    GSList *rawids;
     GList *keys;
     SeahorseKey *skey;
     
     /* Discover the key in question */
-    keyids = g_slist_append(NULL, status->signatures->fpr);
-    keys = seahorse_context_discover_keys (SCTX_APP (), SKEY_PGP, keyids);
-    g_slist_free (keyids);
+    rawids = g_slist_append (NULL, status->signatures->fpr);
+    keys = seahorse_context_discover_keys (SCTX_APP (), SKEY_PGP, rawids);
+    g_slist_free (rawids);
     
     g_return_if_fail (keys != NULL);
     skey = SEAHORSE_KEY (keys->data);
@@ -642,7 +642,7 @@ seahorse_notify_signatures (const gchar* data, gpgme_verify_result_t status)
 
     if (sig) {
         gchar *date = seahorse_util_get_date_string (status->signatures->timestamp);
-        gchar *id = seahorse_context_key_to_dbus (skey, 0);
+        gchar *id = seahorse_context_keyid_to_dbus (SCTX_APP (), seahorse_key_get_keyid (skey), 0);
         body = g_markup_printf_escaped (body, id, date);
         g_free (date);
         g_free (id);

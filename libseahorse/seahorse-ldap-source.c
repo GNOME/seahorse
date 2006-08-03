@@ -1177,6 +1177,7 @@ static void seahorse_ldap_source_class_init (SeahorseLDAPSourceClass *klass);
 /* SeahorseKeySource methods */
 static SeahorseOperation*  seahorse_ldap_source_load       (SeahorseKeySource *src,
                                                             SeahorseKeySourceLoad load,
+                                                            GQuark keyid,
                                                             const gchar *match);
 static SeahorseOperation*  seahorse_ldap_source_import     (SeahorseKeySource *sksrc, 
                                                             gpgme_data_t data);
@@ -1222,7 +1223,7 @@ seahorse_ldap_source_class_init (SeahorseLDAPSourceClass *klass)
 
 static SeahorseOperation*
 seahorse_ldap_source_load (SeahorseKeySource *src, SeahorseKeySourceLoad load,
-                           const gchar *match)
+                           GQuark keyid, const gchar *match)
 {
     SeahorseOperation *op;
     SeahorseLDAPOperation *lop = NULL;
@@ -1230,7 +1231,7 @@ seahorse_ldap_source_load (SeahorseKeySource *src, SeahorseKeySourceLoad load,
     g_assert (SEAHORSE_IS_KEY_SOURCE (src));
     g_assert (SEAHORSE_IS_LDAP_SOURCE (src));
 
-    op = parent_class->load (src, load, match);
+    op = parent_class->load (src, load, keyid, match);
     if (op != NULL)
         return op;
     
@@ -1244,7 +1245,8 @@ seahorse_ldap_source_load (SeahorseKeySource *src, SeahorseKeySourceLoad load,
         
     /* Load a specific key */
     else if (load == SKSRC_LOAD_KEY)
-        lop = start_search_operation_fpr (SEAHORSE_LDAP_SOURCE (src), match);
+        lop = start_search_operation_fpr (SEAHORSE_LDAP_SOURCE (src), 
+                                          seahorse_key_get_rawid (keyid));
     
     g_return_val_if_fail (lop != NULL, NULL);
     seahorse_server_source_take_operation (SEAHORSE_SERVER_SOURCE (src),
@@ -1300,7 +1302,8 @@ seahorse_ldap_source_export_raw (SeahorseKeySource *sksrc, GSList *keyids,
     lsrc = SEAHORSE_LDAP_SOURCE (sksrc);
     
     for (l = keyids; l; l = g_slist_next (l)) 
-        fingerprints = g_slist_prepend (fingerprints, g_strdup (l->data));
+        fingerprints = g_slist_prepend (fingerprints, 
+            g_strdup (seahorse_key_get_rawid (GPOINTER_TO_UINT (l->data))));
     fingerprints = g_slist_reverse (fingerprints);
 
     lop = start_get_operation_multiple (lsrc, fingerprints, data);

@@ -60,7 +60,7 @@ enum KeyManagerTabs {
 
 SeahorseKeyPredicate pred_public = {
     0,                  /* ktype, set later */
-    NULL,               /* keyid */
+    0,                  /* keyid */
     SKEY_LOC_LOCAL,     /* location */
     SKEY_PUBLIC,        /* etype */
     0,                  /* flags */
@@ -70,7 +70,7 @@ SeahorseKeyPredicate pred_public = {
 
 SeahorseKeyPredicate pred_trusted = {
     0,                  /* ktype, set later*/
-    NULL,               /* keyid */
+    0,                  /* keyid */
     SKEY_LOC_LOCAL,     /* location */
     SKEY_PUBLIC,        /* etype */
     SKEY_FLAG_TRUSTED,  /* flags */
@@ -80,7 +80,7 @@ SeahorseKeyPredicate pred_trusted = {
 
 SeahorseKeyPredicate pred_private = {
     0,                  /* ktype, set later */
-    NULL,               /* keyid */
+    0,                  /* keyid */
     SKEY_LOC_LOCAL,     /* location */
     SKEY_PRIVATE,       /* etype */
     0,                  /* flags */

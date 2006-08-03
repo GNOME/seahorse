@@ -31,7 +31,7 @@ seahorse_key_predicate_match (SeahorseKeyPredicate *kl, SeahorseKey *skey)
     /* Now go for all the fields */
     if (kl->ktype && (kl->ktype != skey->ktype))
         return FALSE;
-    if (kl->keyid && (!skey->keyid || !g_str_equal (kl->keyid, skey->keyid)))
+    if (kl->keyid && (kl->keyid != skey->keyid))
         return FALSE;
     if (kl->location && (kl->location != skey->location))
         return FALSE;
@@ -50,7 +50,7 @@ seahorse_key_predicate_match (SeahorseKeyPredicate *kl, SeahorseKey *skey)
 }
 
 enum {
-	PROP_0,
+    PROP_0,
     PROP_KEY_SOURCE,
     PROP_KEY_ID,
     PROP_KTYPE,
@@ -70,62 +70,97 @@ enum {
 GQuark special_properties[PROP_SPECIAL_MAX] = { 0 };
 
 enum {
-	CHANGED,
-	LAST_SIGNAL
+    CHANGED,
+    LAST_SIGNAL
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
-static GObjectClass *parent_class = NULL;
 
-/* GObject handlers */
-static void class_init        (SeahorseKeyClass *klass);
-static void object_finalize   (GObject *gobject);
+G_DEFINE_TYPE (SeahorseKey, seahorse_key, GTK_TYPE_OBJECT);
 
-static void set_property      (GObject *object, guint prop_id, 
-                               const GValue *value, GParamSpec *pspec);
-static void get_property      (GObject *object, guint prop_id,
-                               GValue *value, GParamSpec *pspec);
+/* -----------------------------------------------------------------------------
+ * OBJECT 
+ */
 
-GType
-seahorse_key_get_type (void)
+static void
+seahorse_key_init (SeahorseKey *skey)
 {
-	static GType gtype = 0;
-	
-	if (!gtype) {
-		static const GTypeInfo gtinfo = {
-			sizeof (SeahorseKeyClass), NULL, NULL,
-			(GClassInitFunc) class_init, NULL, NULL,
-			sizeof (SeahorseKey), 0, NULL
-		};
-		
-		gtype = g_type_register_static (GTK_TYPE_OBJECT, "SeahorseKey", 
-                                        &gtinfo, 0);
-	}
-	
-	return gtype;
+    
 }
 
 static void
-class_init (SeahorseKeyClass *klass)
+seahorse_key_set_property (GObject *object, guint prop_id, const GValue *value, 
+                           GParamSpec *pspec)
+{
+    SeahorseKey *skey = SEAHORSE_KEY (object);
+    
+    switch (prop_id) {
+    case PROP_KEY_SOURCE:
+        g_assert (!skey->sksrc);
+        skey->sksrc = g_value_get_object (value);
+        g_return_if_fail (SEAHORSE_IS_KEY_SOURCE (skey->sksrc));
+        g_object_add_weak_pointer (G_OBJECT (skey->sksrc), (gpointer*)&(skey->sksrc));
+        break;
+    }
+}
+
+static void
+seahorse_key_get_property (GObject *object, guint prop_id, GValue *value, 
+                           GParamSpec *pspec)
+{
+    SeahorseKey *skey = SEAHORSE_KEY (object);
+    
+    switch (prop_id) {
+    case PROP_KEY_SOURCE:
+        g_value_set_object (value, skey->sksrc);
+        break;
+    case PROP_KEY_ID:
+        g_value_set_uint (value, skey->keyid);
+        break;
+    case PROP_KTYPE:
+        g_value_set_uint (value, skey->ktype);
+        break;
+    case PROP_ETYPE:
+        g_value_set_uint (value, skey->etype);
+    case PROP_FLAGS:
+        g_value_set_uint (value, skey->flags);
+        break;
+    case PROP_LOCATION:
+        g_value_set_uint (value, skey->location);
+        break;
+    case PROP_LOADED:
+        g_value_set_uint (value, skey->loaded);
+        break;
+    }
+}
+
+static void
+seahorse_key_object_finalize (GObject *gobject)
+{
+    G_OBJECT_CLASS (seahorse_key_parent_class)->finalize (gobject);
+}
+
+static void
+seahorse_key_class_init (SeahorseKeyClass *klass)
 {
     GObjectClass *gobject_class;
-	
-    parent_class = g_type_class_peek_parent (klass);
+    
+    seahorse_key_parent_class = g_type_class_peek_parent (klass);
     gobject_class = G_OBJECT_CLASS (klass);
-	
-    gobject_class->finalize = object_finalize;
-    gobject_class->set_property = set_property;
-    gobject_class->get_property = get_property;
-	
-	klass->changed = NULL;
-	
+    
+    gobject_class->finalize = seahorse_key_object_finalize;
+    gobject_class->set_property = seahorse_key_set_property;
+    gobject_class->get_property = seahorse_key_get_property;
+    
+    klass->changed = NULL;
+    
     g_object_class_install_property (gobject_class, PROP_KEY_SOURCE,
         g_param_spec_object ("key-source", "Key Source", "Key Source that this key belongs to", 
                              SEAHORSE_TYPE_KEY_SOURCE, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
     g_object_class_install_property (gobject_class, PROP_KEY_ID,
-        g_param_spec_string ("key-id", "Key ID", "Key identifier", 
-                             "UNKNOWN ", G_PARAM_READABLE));
+        g_param_spec_uint ("key-id", "Key ID", "Key identifier", 
+                           0, G_MAXUINT, SKEY_UNKNOWN, G_PARAM_READABLE));
     
     g_object_class_install_property (gobject_class, PROP_KTYPE,
         g_param_spec_uint ("ktype", "Key Type", "Key type", 
@@ -156,58 +191,9 @@ class_init (SeahorseKeyClass *klass)
     special_properties[PROP_SPECIAL_CN] = g_quark_from_static_string ("cn");
 }
 
-/* Unrefs gpgme key and frees data */
-static void
-object_finalize (GObject *gobject)
-{
-	G_OBJECT_CLASS (parent_class)->finalize (gobject);
-}
-
-static void
-set_property (GObject *object, guint prop_id, const GValue *value, 
-              GParamSpec *pspec)
-{
-	SeahorseKey *skey = SEAHORSE_KEY (object);
-	
-    switch (prop_id) {
-    case PROP_KEY_SOURCE:
-        g_assert (!skey->sksrc);
-        skey->sksrc = g_value_get_object (value);
-        g_return_if_fail (SEAHORSE_IS_KEY_SOURCE (skey->sksrc));
-        g_object_add_weak_pointer (G_OBJECT (skey->sksrc), (gpointer*)&(skey->sksrc));
-        break;
-    }
-}
-
-static void
-get_property (GObject *object, guint prop_id, GValue *value, 
-              GParamSpec *pspec)
-{
-    SeahorseKey *skey = SEAHORSE_KEY (object);
-	
-    switch (prop_id) {
-    case PROP_KEY_SOURCE:
-        g_value_set_object (value, skey->sksrc);
-        break;
-    case PROP_KEY_ID:
-        g_value_set_string (value, skey->keyid);
-        break;
-    case PROP_KTYPE:
-        g_value_set_uint (value, skey->ktype);
-        break;
-    case PROP_ETYPE:
-        g_value_set_uint (value, skey->etype);
-    case PROP_FLAGS:
-        g_value_set_uint (value, skey->flags);
-        break;
-    case PROP_LOCATION:
-        g_value_set_uint (value, skey->location);
-        break;
-    case PROP_LOADED:
-        g_value_set_uint (value, skey->loaded);
-        break;
-    }
-}
+/* -----------------------------------------------------------------------------
+ * PUBLIC 
+ */
 
 /**
  * seahorse_key_destroy:
@@ -232,28 +218,30 @@ seahorse_key_destroy (SeahorseKey *skey)
 void
 seahorse_key_changed (SeahorseKey *skey, SeahorseKeyChange change)
 {
-	g_return_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey));
-	g_signal_emit (G_OBJECT (skey), signals[CHANGED], 0, change);
+    g_return_if_fail (skey != NULL && SEAHORSE_IS_KEY (skey));
+    g_signal_emit (G_OBJECT (skey), signals[CHANGED], 0, change);
 }
 
-const gchar*      
+GQuark
 seahorse_key_get_keyid (SeahorseKey *skey)
 {
-	g_return_val_if_fail (skey && SEAHORSE_IS_KEY (skey), NULL);
+    g_return_val_if_fail (skey && SEAHORSE_IS_KEY (skey), 0);
     return skey->keyid;
 }    
 
 const gchar*      
 seahorse_key_get_short_keyid (SeahorseKey *skey)
 {
+    const gchar *id;
     guint l;
     
-	g_return_val_if_fail (skey && SEAHORSE_IS_KEY (skey), NULL);
+    g_return_val_if_fail (skey && SEAHORSE_IS_KEY (skey), NULL);
+    id = g_quark_to_string (skey->keyid);
     
-    l = strlen (skey->keyid);
+    l = strlen (id);
     if (l > 8)
-        return skey->keyid + l - 8;
-    return skey->keyid;
+        return id + l - 8;
+    return id;
 }
 
 
@@ -423,7 +411,7 @@ seahorse_key_set_preferred (SeahorseKey *skey, SeahorseKey *preferred)
 
 
 gboolean
-seahorse_key_get_property (SeahorseKey *skey, guint uid, const gchar *field, GValue *value)
+seahorse_key_lookup_property (SeahorseKey *skey, guint uid, const gchar *field, GValue *value)
 {
     GParamSpec *spec;
     GQuark qfield;
@@ -454,4 +442,12 @@ seahorse_key_get_property (SeahorseKey *skey, guint uid, const gchar *field, GVa
     g_value_init (value, spec->value_type);
     g_object_get_property (G_OBJECT (skey), field, value);
     return TRUE; 
+}
+
+const gchar* 
+seahorse_key_get_rawid (GQuark keyid)
+{
+    const gchar* id = g_quark_to_string (keyid);
+    const gchar* t = strchr (id, ':');
+    return t ? t + 1 : id;
 }

@@ -46,7 +46,8 @@
 #include "seahorse-pgp-source.h"
 #include "seahorse-gpgmex.h"
 
-#define SKEY_PGP                         (g_quark_from_static_string ("openpgp"))
+#define SKEY_PGP_STR                     "openpgp"
+#define SKEY_PGP                         (g_quark_from_static_string (SKEY_PGP_STR))
 
 enum {
     SKEY_PGPSIG_TRUSTED = 0x0001,
@@ -140,6 +141,6 @@ gboolean        seahorse_pgp_key_have_signatures      (SeahorsePGPKey   *pkey,
 guint           seahorse_pgp_key_get_actual_uid       (SeahorsePGPKey   *pkey,
                                                        guint            uid);
                                                        
-gchar*          seahorse_pgp_key_get_cannonical_id     (const gchar *id);
+GQuark          seahorse_pgp_key_get_cannonical_id     (const gchar *id);
 
 #endif /* __SEAHORSE_KEY_H__ */

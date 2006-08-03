@@ -473,8 +473,8 @@ seahorse_ssh_operation_new (SeahorseSSHSource *ssrc, const gchar *command,
         g_unsetenv (SEAHORSE_SSH_ENV_ID);
         g_unsetenv (SEAHORSE_SSH_ENV_DESC);
     } else {
-        g_setenv (SEAHORSE_SSH_ENV_ID, 
-                  seahorse_key_get_keyid (SEAHORSE_KEY (promptkey)), TRUE);
+        g_setenv (SEAHORSE_SSH_ENV_ID,
+                  seahorse_key_get_rawid (seahorse_key_get_keyid (SEAHORSE_KEY (promptkey))), TRUE);
         t = seahorse_key_get_display_name (SEAHORSE_KEY (promptkey));
         g_setenv (SEAHORSE_SSH_ENV_DESC, t, TRUE);
         g_free (t);

@@ -80,7 +80,7 @@ typedef struct _SeahorseKeySourceClass {
     /**
      * load
      * @sksrc: The #SeahorseKeySource.
-     * @op: The type of load todo. See SeahorseKeySourceLoad.
+     * @op: The type of load to do. See SeahorseKeySourceLoad.
      * @match: Match text (valid for SKSRC_LOAD_KEY and SKSRC_LOAD_SEARCH ops).
      * 
      * Loads the requested keys, and add the keys to SeahorseContext. 
@@ -88,7 +88,7 @@ typedef struct _SeahorseKeySourceClass {
      * Returns: The load operation.
      */
     SeahorseOperation* (*load) (SeahorseKeySource *sksrc, SeahorseKeySourceLoad op,
-                                const gchar *match);
+                                GQuark keyid, const gchar *match);
     
     /**
      * stop
@@ -167,15 +167,18 @@ guint               seahorse_key_source_get_state        (SeahorseKeySource *sks
 
 SeahorseOperation*  seahorse_key_source_load             (SeahorseKeySource *sksrc,
                                                           SeahorseKeySourceLoad load,
+                                                          GQuark keyid,
                                                           const gchar *match);
                                                           
 void                seahorse_key_source_load_sync        (SeahorseKeySource *sksrc,
                                                           SeahorseKeySourceLoad load,
-                                                          const gchar *match);                                                          
+                                                          GQuark keyid,
+                                                          const gchar *match);
 
 void                seahorse_key_source_load_async       (SeahorseKeySource *sksrc,
                                                           SeahorseKeySourceLoad load,
-                                                          const gchar *key);                                                          
+                                                          GQuark keyid,
+                                                          const gchar *match);
 
 /* Takes ownership of |data| */
 SeahorseOperation*  seahorse_key_source_import           (SeahorseKeySource *sksrc,
@@ -209,7 +212,7 @@ GQuark              seahorse_key_source_get_ktype        (SeahorseKeySource *sks
 
 SeahorseKeyLoc      seahorse_key_source_get_location     (SeahorseKeySource *sksrc);
 
-gchar*              seahorse_key_source_cannonical_keyid (GQuark ktype, 
+GQuark              seahorse_key_source_cannonical_keyid (GQuark ktype, 
                                                           const gchar *keyid);
 
 #endif /* __SEAHORSE_KEY_SOURCE_H__ */

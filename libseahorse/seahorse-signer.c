@@ -81,7 +81,7 @@ seahorse_signer_get ()
     
     /* Select the last key used */
     id = seahorse_gconf_get_string (SEAHORSE_LASTSIGNER_KEY);
-    seahorse_combo_keys_set_active_id (GTK_OPTION_MENU (combo), id);
+    seahorse_combo_keys_set_active_id (GTK_OPTION_MENU (combo), g_quark_from_string (id));
     g_free (id); 
     
     widget = seahorse_widget_get_top (swidget);
@@ -106,7 +106,7 @@ seahorse_signer_get ()
 
         /* Save this as the last key signed with */
         seahorse_gconf_set_string (SEAHORSE_LASTSIGNER_KEY, skey == NULL ? 
-                        "" : seahorse_key_get_keyid (skey));
+                        "" : g_quark_to_string (seahorse_key_get_keyid (skey)));
     }
     
     seahorse_widget_destroy (swidget);

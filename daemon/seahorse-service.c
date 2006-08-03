@@ -140,7 +140,8 @@ seahorse_service_import_keys (SeahorseService *svc, gchar *ktype,
     
     a = g_array_new (TRUE, TRUE, sizeof (gchar*));
     for (l = (GList*)seahorse_operation_get_result (op); l; l = g_list_next (l)) {
-        t = seahorse_context_key_to_dbus (SEAHORSE_KEY (l->data), 0);
+        t = seahorse_context_keyid_to_dbus (SCTX_APP (), 
+                                seahorse_key_get_keyid (SEAHORSE_KEY (l->data)), 0);
         g_array_append_val (a, t);
     }
     

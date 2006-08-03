@@ -370,11 +370,8 @@ seahorse_util_filename_for_keys (GList *keys)
         g_return_val_if_fail (SEAHORSE_IS_KEY (keys->data), NULL);
         skey = SEAHORSE_KEY (keys->data);
         t = seahorse_key_get_simple_name (skey);
-        if (t == NULL) {
-            t = g_strdup (seahorse_key_get_keyid (skey));
-            if (strlen (t) > 8)
-                t[8] = 0;
-        }
+        if (t == NULL)
+            t = g_strdup (_("Key Data"));
     } else {
         t = g_strdup (_("Multiple Keys"));
     }

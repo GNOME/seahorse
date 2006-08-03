@@ -39,13 +39,13 @@ void                        seahorse_combo_keys_attach              (GtkOptionMe
                                                                      const gchar *none_option);
 
 void                        seahorse_combo_keys_set_active_id       (GtkOptionMenu *combo,
-                                                                     const gchar *id);
+                                                                     GQuark keyid);
 
 void                        seahorse_combo_keys_set_active          (GtkOptionMenu *combo,
                                                                      SeahorseKey *skey);
 
 SeahorseKey*                seahorse_combo_keys_get_active          (GtkOptionMenu *combo);
 
-const gchar*                seahorse_combo_keys_get_active_id       (GtkOptionMenu *combo);
+GQuark                      seahorse_combo_keys_get_active_id       (GtkOptionMenu *combo);
 
 #endif /* __SEAHORSE_COMBO_KEYS_H__ */

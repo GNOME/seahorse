@@ -56,7 +56,7 @@ struct _SeahorseUnknownKey {
     SeahorseKey parent;
 
     /*< public >*/
-    gchar *keyid;
+    GQuark keyid;
 };
 
 struct _SeahorseUnknownKeyClass {
@@ -66,6 +66,6 @@ struct _SeahorseUnknownKeyClass {
 GType                   seahorse_unknown_key_get_type         (void);
 
 SeahorseUnknownKey*     seahorse_unknown_key_new              (SeahorseUnknownSource *usrc, 
-                                                               const gchar *keyid);
+                                                               GQuark keyid);
 
 #endif /* __SEAHORSE_UNKNOWN_KEY_H__ */

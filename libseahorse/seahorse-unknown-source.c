@@ -50,15 +50,17 @@ search_done (SeahorseOperation *op, SeahorseKey *skey)
 
 static SeahorseOperation*
 seahorse_unknown_source_load (SeahorseKeySource *src, SeahorseKeySourceLoad load,
-                              const gchar *match)
+                              GQuark keyid, const gchar *match)
 {
     SeahorseUnknownSource *usrc;
     
     g_assert (SEAHORSE_IS_UNKNOWN_SOURCE (src));
     usrc = SEAHORSE_UNKNOWN_SOURCE (src);
     
-    if (load != SKSRC_LOAD_KEY)
-        seahorse_unknown_source_add_key (usrc, match, NULL);
+    if (load != SKSRC_LOAD_KEY) {
+        g_return_val_if_fail (keyid, NULL);
+        seahorse_unknown_source_add_key (usrc, keyid, NULL);
+    }
     
     return seahorse_operation_new_complete (NULL);
 }
@@ -172,7 +174,7 @@ seahorse_unknown_source_new (GQuark ktype)
 }
 
 SeahorseKey*                     
-seahorse_unknown_source_add_key (SeahorseUnknownSource *usrc, const gchar *keyid,
+seahorse_unknown_source_add_key (SeahorseUnknownSource *usrc, GQuark keyid,
                                  SeahorseOperation *search)
 {
     SeahorseKey *skey;
