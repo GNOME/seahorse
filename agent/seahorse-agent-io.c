@@ -272,6 +272,37 @@ split_arguments (gchar *line, ...)
     va_end (ap);
 }
 
+static guint
+x11_display_dot_offset (const gchar *d) 
+{
+    const gchar *p;
+    guint l = strlen (d);
+    
+    for (p = d + l; *p != '.'; --p) {
+        if (p <= d)
+            break;
+        if (*p == ':')
+            break;
+    }
+    if (*p == '.')
+        l = p - d;
+
+    return l;
+}
+
+/*
+ * Displays are of the form: hostname:displaynumber.screennumber, where
+ * hostname can be empty (to indicate a local connection).
+ * Two displays are equivalent if their hostnames and displaynumbers match.
+ */
+static gboolean
+x11_displays_eq (const gchar *d1, const gchar *d2) 
+{
+    guint l1 = x11_display_dot_offset (d1);
+    guint l2 = x11_display_dot_offset (d2);
+    return (g_ascii_strncasecmp (d1, d2, l1 > l2 ? l1 : l2) == 0);
+}
+
 /* Process a request line from client */
 static void
 process_line (SeahorseAgentConn *cn, gchar *string)
@@ -315,7 +346,8 @@ process_line (SeahorseAgentConn *cn, gchar *string)
          */
         if (g_ascii_strncasecmp (option, ASS_OPT_DISPLAY, KL (ASS_OPT_DISPLAY)) == 0) {
             option += KL (ASS_OPT_DISPLAY);
-            if (g_ascii_strcasecmp (option, g_getenv("DISPLAY")) == 0) {
+
+            if (x11_displays_eq (option, g_getenv ("DISPLAY"))) {
                 cn->terminal_ok = TRUE;
             } else {
                 g_warning ("received request different display: %s", option);
