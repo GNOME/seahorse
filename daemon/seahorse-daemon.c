@@ -193,10 +193,17 @@ prepare_logging ()
     g_log_set_handler ("Gnome", flags, log_handler, NULL);
 }
 
+static void
+client_die ()
+{
+    gtk_main_quit ();
+}
+
 int main(int argc, char* argv[])
 {
     SeahorseOperation *op;
     GnomeProgram *program = NULL;
+    GnomeClient *client = NULL;
 
     seahorse_secure_memory_init (65536);
     
@@ -233,6 +240,9 @@ int main(int argc, char* argv[])
     signal (SIGINT, on_quit);
     signal (SIGTERM, on_quit);
     g_timeout_add (100, check_quit, NULL);
+    
+    client = gnome_master_client();
+    g_signal_connect(client, "die", G_CALLBACK(client_die), NULL);
     
     /* We log to the syslog */
     prepare_logging ();

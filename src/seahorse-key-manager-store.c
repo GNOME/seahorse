@@ -214,7 +214,7 @@ store_set (SeahorseKeyStore *store, SeahorseKey *skey, guint uid, GtkTreeIter *i
     		TRUST_STR, trust == SEAHORSE_VALIDITY_UNKNOWN ? "" : seahorse_validity_get_string (trust),
     		TRUST, trust,
     		TYPE, type,
-    		EXPIRES_STR, expires,
+    		EXPIRES_STR, expires ? expires : "",
     		EXPIRES, expires_date,
     		-1);
          

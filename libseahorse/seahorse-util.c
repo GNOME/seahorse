@@ -944,8 +944,9 @@ seahorse_util_remove_suffix (const gchar *path, const gchar *prompt)
     GtkWidget *dialog;
     gchar *uri;
     gchar *t;
-
-	uri =  g_strndup (path, strlen (path) - 4);
+    
+    g_return_val_if_fail (path != NULL, NULL);
+    uri =  g_strndup (path, strlen (path) - 4);
    
     if (prompt && uri && seahorse_util_uri_exists (uri)) {
             

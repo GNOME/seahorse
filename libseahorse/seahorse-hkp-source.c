@@ -128,7 +128,7 @@ dump_soup_request (SoupMessage *msg)
     
     if (msg->request.body) {
         t = g_strndup (msg->request.body, msg->request.length);
-        g_printerr ("request: %s\n", t);
+        g_printerr ("request: %s\n", t ? t : "");
         g_free (t);
     }    
 }
@@ -144,7 +144,7 @@ dump_soup_response (SoupMessage *msg)
     
     if (msg->response.body) {
         t = g_strndup (msg->response.body, msg->response.length);
-        g_printerr ("response: %s\n", t);
+        g_printerr ("response: %s\n", t ? t : "");
         g_free (t);
     }    
 }
@@ -574,7 +574,10 @@ get_send_result (const gchar *response, unsigned int length)
     gboolean is_error = FALSE;
     
     text = g_strndup (response, length);
-    lines = g_strsplit (text, "\n", 0);    
+    if (!text)
+        return g_strdup ("");
+    
+    lines = g_strsplit (text, "\n", 0); 
 
     for (l = lines; *l; l++) {
 
