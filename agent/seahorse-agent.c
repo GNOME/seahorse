@@ -267,12 +267,19 @@ prepare_logging ()
     g_log_set_handler ("Gnome", flags, log_handler, NULL);
 }
 
+static void
+client_die ()
+{
+    gtk_main_quit ();
+}
+
 int
 main (int argc, char **argv)
 {
     const char *sockname;
-	GnomeProgram *program = NULL;
-	
+    GnomeProgram *program = NULL;
+    GnomeClient *client = NULL;
+    
     secmem_init (65536);
 
     /* We need to drop privileges completely for security */
@@ -311,7 +318,10 @@ main (int argc, char **argv)
     /* Handle some signals */
     signal (SIGINT, on_quit);
     signal (SIGTERM, on_quit);
-    g_timeout_add (100, check_quit, NULL);
+    g_timeout_add (50, check_quit, NULL);
+    
+    client = gnome_master_client();
+    g_signal_connect(client, "die", G_CALLBACK(client_die), NULL);
     
     /* We log to the syslog */
     prepare_logging ();
