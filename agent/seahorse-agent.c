@@ -296,7 +296,7 @@ main (int argc, char **argv)
 #endif
         err (1, _("couldn't drop privileges properly"));
 
-    program = gnome_program_init(PACKAGE, VERSION, LIBGNOMEUI_MODULE, argc, argv,
+    program = gnome_program_init("seahorse-agent", VERSION, LIBGNOMEUI_MODULE, argc, argv,
                                  GNOME_PARAM_POPT_TABLE, options,
                                  GNOME_PARAM_HUMAN_READABLE_NAME, _("Encryption Passphrase Agent"),
                                  GNOME_PARAM_APP_DATADIR, DATA_DIR, NULL);
