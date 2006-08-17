@@ -21,6 +21,7 @@
  
 #include "config.h"
 #include <gtk/gtk.h>
+#include <glib/gi18n-lib.h>
 
 #include "cryptui-key-list.h"
 
@@ -113,11 +114,10 @@ cryptui_key_list_setup (GtkTreeView *view, CryptUIKeyStore *ckstore,
     
     /* TODO: Icons */
  
-    /* TODO: Translatable */
-    col = append_text_column (view, "Name", CRYPTUI_KEY_STORE_NAME);
+    col = append_text_column (view, _("Name"), CRYPTUI_KEY_STORE_NAME);
     gtk_tree_view_column_set_sort_column_id (col, CRYPTUI_KEY_STORE_NAME);
 
-    col = append_text_column (view, "Key ID", CRYPTUI_KEY_STORE_KEYID);
+    col = append_text_column (view, _("Key ID"), CRYPTUI_KEY_STORE_KEYID);
     gtk_tree_view_column_set_sort_column_id (col, CRYPTUI_KEY_STORE_KEYID);
     
     gtk_tree_view_set_rules_hint (view, TRUE);
