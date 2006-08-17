@@ -797,11 +797,13 @@ prepare_import_results (SeahorsePGPOperation *pop, SeahorsePGPSource *psrc)
         /* Reload public keys */
         lop = seahorse_load_operation_start (psrc, patterns, LOAD_FULL, 
                                              FALSE, FALSE, TRUE);
+        seahorse_operation_wait (SEAHORSE_OPERATION (lop));
         g_object_unref (lop);
 
         /* Reload secret keys */
         lop = seahorse_load_operation_start (psrc, patterns, LOAD_FULL,
                                              TRUE, FALSE, TRUE);
+        seahorse_operation_wait (SEAHORSE_OPERATION (lop));
         g_object_unref (lop);
             
         g_free (patterns);
@@ -812,11 +814,19 @@ prepare_import_results (SeahorsePGPOperation *pop, SeahorsePGPSource *psrc)
                 continue;
             
             keyid = seahorse_pgp_key_get_cannonical_id (import->fpr);
-            if (keyid) {
-                skey = seahorse_context_get_key (SCTX_APP (), sksrc, keyid);
-                if (skey != NULL)
-                    keys = g_list_prepend (keys, skey);
+            if (!keyid) {
+                g_warning ("imported non key with strange keyid: %s", import->fpr);
+                continue;
             }
+            
+            skey = seahorse_context_get_key (SCTX_APP (), sksrc, keyid);
+            if (skey == NULL) {
+                g_warning ("imported key but then couldn't find it in keyring: %s", 
+                           import->fpr);
+                continue;
+            }
+            
+            keys = g_list_prepend (keys, skey);
         }
     }
     
