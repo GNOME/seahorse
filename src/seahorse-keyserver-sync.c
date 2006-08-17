@@ -130,15 +130,15 @@ unhook_notification (GtkWidget *widget, gpointer data)
  **/
 GtkWindow*
 seahorse_keyserver_sync_show (GList *keys)
-{	
-	SeahorseWidget *swidget;
+{
+    SeahorseWidget *swidget;
     GtkWindow *win;
     GtkWidget *w;
     guint n, notify_id;
     gchar *t;
     
-	swidget = seahorse_widget_new ("keyserver-sync");
-	g_return_val_if_fail (swidget != NULL, NULL);
+    swidget = seahorse_widget_new ("keyserver-sync");
+    g_return_val_if_fail (swidget != NULL, NULL);
     
     win = GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name));
     
@@ -159,14 +159,14 @@ seahorse_keyserver_sync_show (GList *keys)
                       GINT_TO_POINTER (notify_id));
 
     keys = g_list_copy (keys);
-    g_return_val_if_fail (keys && SEAHORSE_IS_KEY (keys->data), win);    
+    g_return_val_if_fail (!keys || SEAHORSE_IS_KEY (keys->data), win);
     g_object_set_data_full (G_OBJECT (swidget), "publish-keys", keys, 
                             (GDestroyNotify)g_list_free);
     
-	glade_xml_signal_connect_data (swidget->xml, "ok_clicked",
-		                           G_CALLBACK (ok_clicked), swidget);
-	glade_xml_signal_connect_data (swidget->xml, "configure_clicked",
-		                           G_CALLBACK (configure_clicked), swidget);
+    glade_xml_signal_connect_data (swidget->xml, "ok_clicked",
+                                   G_CALLBACK (ok_clicked), swidget);
+    glade_xml_signal_connect_data (swidget->xml, "configure_clicked",
+                                   G_CALLBACK (configure_clicked), swidget);
 
     return win;
 }
