@@ -588,23 +588,7 @@ delete_activate (GtkWidget *widget, SeahorseWidget *swidget)
 static void
 preferences_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
-	seahorse_preferences_show (NULL);
-}
-
-static void
-expand_all_activate (GtkMenuItem *item, SeahorseWidget *swidget)
-{
-    GtkTreeView *view = get_current_view (swidget);
-    if (view != NULL)
-	    gtk_tree_view_expand_all (view);
-}
-
-static void
-collapse_all_activate (GtkMenuItem *item, SeahorseWidget *swidget)
-{
-    GtkTreeView *view = get_current_view (swidget);
-    if (view != NULL)
-	    gtk_tree_view_collapse_all (view);
+    seahorse_preferences_show (NULL);
 }
 
 /* Makes URL in About Dialog Clickable */
@@ -612,7 +596,7 @@ static void about_dialog_activate_link_cb (GtkAboutDialog *about,
                                            const gchar *url,
                                            gpointer data)
 {
-	gnome_url_show (url, NULL);
+    gnome_url_show (url, NULL);
 }
 
 /* Shows about dialog */
@@ -882,11 +866,6 @@ static const GtkActionEntry ui_entries[] = {
     { "app-about", "gnome-stock-about", N_("_About"), NULL, 
             N_("About this program"), G_CALLBACK (about_activate) }, 
             
-    { "view-expand-all", GTK_STOCK_ADD, N_("_Expand All"), NULL,
-            N_("Expand all listings"), G_CALLBACK (expand_all_activate) }, 
-    { "view-collapse-all", GTK_STOCK_REMOVE, N_("_Collapse All"), NULL,
-            N_("Collapse all listings"), G_CALLBACK (collapse_all_activate) }, 
-
     { "remote-menu", NULL, N_("_Remote") },
             
     { "help-show", GTK_STOCK_HELP, N_("_Contents"), "F1",
