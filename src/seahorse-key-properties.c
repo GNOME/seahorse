@@ -948,14 +948,35 @@ trust_changed (GtkComboBox *selection, SeahorseWidget *swidget)
 {
 	SeahorseKey *skey;
 	gint trust;
+	SeahorseValidity trust_enum;
 	gpgme_error_t err;
 	
-	trust = gtk_combo_box_get_active (selection) + 1;
+	trust = gtk_combo_box_get_active (selection);
+	
+	switch (trust) {
+	    case 0:
+	        trust_enum = SEAHORSE_VALIDITY_UNKNOWN;
+	        break;
+        case 1:
+            trust_enum = SEAHORSE_VALIDITY_NEVER;
+            break;
+        case 2:
+            trust_enum = SEAHORSE_VALIDITY_MARGINAL;
+            break;
+        case 3:
+            trust_enum = SEAHORSE_VALIDITY_FULL;
+            break;
+        case 4:
+            trust_enum = SEAHORSE_VALIDITY_ULTIMATE;
+            break;
+        default:
+            trust_enum = SEAHORSE_VALIDITY_UNKNOWN;
+    }
 	
 	skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
 	
-	if (seahorse_key_get_trust (skey) != trust) {
-		err = seahorse_pgp_key_op_set_trust (SEAHORSE_PGP_KEY (skey), trust);
+	if (seahorse_key_get_trust (skey) != trust_enum) {
+		err = seahorse_pgp_key_op_set_trust (SEAHORSE_PGP_KEY (skey), trust_enum);
 		if (err) {
 			seahorse_util_handle_gpgme (err, _("Unable to change trust"));
 		}
@@ -1086,6 +1107,7 @@ do_details (SeahorseWidget *swidget)
     gchar *fp_label, *expiration_date, *created_date;
     const gchar *label, *status, *length;
     gint subkey_number, key, trust;
+    SeahorseValidity trust_enum;
     guint keyloc;
 
     skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
@@ -1141,9 +1163,30 @@ do_details (SeahorseWidget *swidget)
     widget = glade_xml_get_widget (swidget->xml, "details-trust-combobox");
     if (widget) {
         gtk_widget_set_sensitive (widget, !(pkey->pubkey->disabled));
-        trust = seahorse_key_get_trust (skey);
+        trust_enum = seahorse_key_get_trust (skey);
+        
+        switch (trust_enum) {
+            case SEAHORSE_VALIDITY_UNKNOWN:
+                trust = 0;
+                break;
+            case SEAHORSE_VALIDITY_NEVER:
+                trust = 1;
+                break;
+            case SEAHORSE_VALIDITY_MARGINAL:
+                trust = 2;
+                break;
+            case SEAHORSE_VALIDITY_FULL:
+                trust = 3;
+                break;
+            case SEAHORSE_VALIDITY_ULTIMATE:
+                trust = 4;
+                break;
+            default:
+                trust = 0;
+        }
+        
         if (0 < trust)
-            gtk_combo_box_set_active (GTK_COMBO_BOX (widget),  trust - 1);
+            gtk_combo_box_set_active (GTK_COMBO_BOX (widget),  trust);
     }
 
     /* Clear/create table store */

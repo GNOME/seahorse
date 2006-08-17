@@ -657,7 +657,7 @@ typedef enum
 static gpgme_error_t
 edit_trust_action (guint state, gpointer data, int fd)
 {
-	SeahorseValidity trust = (SeahorseValidity)data;
+	gint trust = (gint)data;
 	
 	switch (state) {
 		/* enter command */
@@ -770,6 +770,9 @@ gpgme_error_t
 seahorse_pgp_key_op_set_trust (SeahorsePGPKey *pkey, SeahorseValidity trust)
 {
 	SeahorseEditParm *parms;
+	gint menu_choice;
+	
+	DEBUG_OPERATION(("[PGP_KEY_OP] set_trust: trust = %i",trust));
 	
 	g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (pkey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
 	g_return_val_if_fail (trust >= GPGME_VALIDITY_UNKNOWN, GPG_E (GPG_ERR_INV_VALUE));
@@ -780,8 +783,28 @@ seahorse_pgp_key_op_set_trust (SeahorsePGPKey *pkey, SeahorseValidity trust)
 	else
 		g_return_val_if_fail (trust != SEAHORSE_VALIDITY_ULTIMATE, GPG_E (GPG_ERR_INV_VALUE));
 	
+	switch (trust) {
+        case SEAHORSE_VALIDITY_UNKNOWN:
+            menu_choice = 1;
+            break;
+        case SEAHORSE_VALIDITY_NEVER:
+            menu_choice = 2;
+            break;
+        case SEAHORSE_VALIDITY_MARGINAL:
+            menu_choice = 3;
+            break;
+        case SEAHORSE_VALIDITY_FULL:
+            menu_choice = 4;
+            break;
+        case SEAHORSE_VALIDITY_ULTIMATE:
+            menu_choice = 5;
+            break;
+        default:
+            menu_choice = 1;
+    }
+	
 	parms = seahorse_edit_parm_new (TRUST_START, edit_trust_action,
-		edit_trust_transit, (gpointer)trust);
+		edit_trust_transit, (gpointer)menu_choice);
 	
 	return edit_key (pkey, parms, SKEY_CHANGE_TRUST);
 }
