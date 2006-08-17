@@ -122,7 +122,6 @@ seahorse_key_store_class_init (SeahorseKeyStoreClass *klass)
     klass->changed = seahorse_key_store_changed;
   
     /* Class defaults. Derived classes should override */
-    klass->use_check = FALSE;
     klass->use_icon = FALSE;
     klass->n_columns = KEY_STORE_NCOLS;
     klass->col_types = col_types;
@@ -346,12 +345,11 @@ seahorse_key_store_set (SeahorseKeyStore *skstore, SeahorseKey *skey,
             stockid = sec ? SEAHORSE_STOCK_SECRET : SEAHORSE_STOCK_KEY;
     }
     
-	gtk_tree_store_set (GTK_TREE_STORE (skstore), iter,
-        KEY_STORE_CHECK, FALSE,
+    gtk_tree_store_set (GTK_TREE_STORE (skstore), iter,
         KEY_STORE_PAIR, uid == 0 ? sec : FALSE,
         KEY_STORE_STOCK_ID, stockid,
-		KEY_STORE_NAME, userid,
-		KEY_STORE_KEYID, seahorse_key_get_short_keyid (skey),
+        KEY_STORE_NAME, userid,
+        KEY_STORE_KEYID, seahorse_key_get_short_keyid (skey),
         KEY_STORE_UID, uid, -1);
     g_free (userid);
 }
@@ -523,66 +521,6 @@ key_store_from_model (GtkTreeModel *model)
     return NULL;
 }
 
-/* Called when a checkbox is toggled, toggle the value */
-static void
-check_toggled(GtkCellRendererToggle *cellrenderertoggle, gchar *path, gpointer user_data)
-{
-    GtkTreeView *view = GTK_TREE_VIEW (user_data);
-    SeahorseKeyStore *skstore = key_store_from_model (gtk_tree_view_get_model (view));
-    GtkTreeModel* fmodel = GTK_TREE_MODEL (skstore->priv->sort);
-    GtkTreeSelection *selection;
-    gboolean prev = FALSE;
-    GtkTreeIter iter = { 0, };
-    GtkTreeIter child;
-    GValue v;
-
-    memset (&v, 0, sizeof(v));
-    g_assert (path != NULL);
-    g_return_if_fail (gtk_tree_model_get_iter_from_string (fmodel, &iter, path));
-    
-    /* We get notified in filtered coordinates, we have to convert those to base */
-    seahorse_key_store_get_base_iter (skstore, &child, &iter);
- 
-    gtk_tree_model_get_value (GTK_TREE_MODEL (skstore), &child, KEY_STORE_CHECK, &v);
-    if(G_VALUE_TYPE (&v) == G_TYPE_BOOLEAN)
-        prev = g_value_get_boolean (&v);
-    g_value_unset (&v);    
-    
-    gtk_tree_store_set (GTK_TREE_STORE (skstore), &child, KEY_STORE_CHECK, prev ? FALSE : TRUE, -1);
-
-    selection = gtk_tree_view_get_selection (view);
-    g_signal_emit_by_name (selection, "changed");    
-}
-
-static void
-row_activated (GtkTreeView *treeview, GtkTreePath *path, GtkTreeViewColumn *arg2, 
-               SeahorseKeyStore *skstore)
-{
-    GtkTreeModel* fmodel = GTK_TREE_MODEL (skstore->priv->sort);
-    GtkTreeSelection *selection;
-    gboolean prev = FALSE;
-    GtkTreeIter iter = { 0, };
-    GtkTreeIter child;
-    GValue v;
-
-    memset (&v, 0, sizeof(v));
-    g_assert (path != NULL);
-    g_return_if_fail (gtk_tree_model_get_iter (fmodel, &iter, path));
-    
-    /* We get notified in filtered coordinates, we have to convert those to base */
-    seahorse_key_store_get_base_iter (skstore, &child, &iter);
- 
-    gtk_tree_model_get_value (GTK_TREE_MODEL (skstore), &child, KEY_STORE_CHECK, &v);
-    if(G_VALUE_TYPE (&v) == G_TYPE_BOOLEAN)
-        prev = g_value_get_boolean (&v);
-    g_value_unset (&v);    
-    
-    gtk_tree_store_set (GTK_TREE_STORE (skstore), &child, KEY_STORE_CHECK, prev ? FALSE : TRUE, -1);
-
-    selection = gtk_tree_view_get_selection (treeview);
-    g_signal_emit_by_name (selection, "changed");    
-}
-
 /**
  * seahorse_key_store_init:
  * @skstore: #SeahorseKeyStore to initialize
@@ -602,17 +540,6 @@ seahorse_key_store_initialize (SeahorseKeyStore *skstore, GtkTreeView *view)
     g_assert (GTK_IS_TREE_MODEL (skstore->priv->sort));
     gtk_tree_view_set_model (view, GTK_TREE_MODEL (skstore->priv->sort));
 
-    /* When using checks we add a check column */
-    if (SEAHORSE_KEY_STORE_GET_CLASS (skstore)->use_check) {
-        GtkCellRenderer *renderer;
-        renderer = gtk_cell_renderer_toggle_new ();
-        g_signal_connect (renderer, "toggled", G_CALLBACK (check_toggled), view);
-        col = gtk_tree_view_column_new_with_attributes ("", renderer, "active", KEY_STORE_CHECK, NULL);
-        gtk_tree_view_column_set_resizable (col, FALSE);
-        gtk_tree_view_append_column (view, col);
-        g_signal_connect (view, "row_activated", G_CALLBACK (row_activated), skstore);
-    }
-    
     /* When using key pair icons, we add an icon column */
     if (SEAHORSE_KEY_STORE_GET_CLASS (skstore)->use_icon) {
     	GtkCellRenderer  *renderer = gtk_cell_renderer_pixbuf_new ();
@@ -788,47 +715,25 @@ seahorse_key_store_get_selected_keys (GtkTreeView *view)
     SeahorseKey *skey;
     GList *l, *keys = NULL;
     SeahorseKeyStore* skstore;
+    GList *list, *paths = NULL;
+    GtkTreeSelection *selection;    
     
     g_return_val_if_fail (GTK_IS_TREE_VIEW (view), NULL);
     skstore = key_store_from_model (gtk_tree_view_get_model (view));
     
-    if (SEAHORSE_KEY_STORE_GET_CLASS (skstore)->use_check) {
-        GtkTreeModel* model = GTK_TREE_MODEL (skstore);
-        GtkTreeIter iter;
-        gboolean check;
-            
-        if (gtk_tree_model_get_iter_first (model, &iter)) {
-            do {
-                check = FALSE;
-                gtk_tree_model_get (model, &iter, KEY_STORE_CHECK, &check, -1); 
-                if (check) {
-                    skey = key_from_iterator (model, &iter, NULL);
-                    if (skey != NULL)
-                        keys = g_list_append (keys, skey);
-                }
-            } while (gtk_tree_model_iter_next (model, &iter));
-        }
+    selection = gtk_tree_view_get_selection (view);
+    paths = gtk_tree_selection_get_selected_rows (selection, NULL);
+
+    /* make key list */
+    for (list = paths; list != NULL; list = g_list_next (list)) {
+        skey = seahorse_key_store_get_key_from_path (view, list->data, NULL);
+        if (skey != NULL)
+            keys = g_list_append (keys, skey);
     }
-    
-    /* Fall back if none checked, or not using checks */
-    if (keys == NULL) {
-        GList *list, *paths = NULL;
-        GtkTreeSelection *selection;    
         
-        selection = gtk_tree_view_get_selection (view);
-        paths = gtk_tree_selection_get_selected_rows (selection, NULL);
-    
-        /* make key list */
-        for (list = paths; list != NULL; list = g_list_next (list)) {
-            skey = seahorse_key_store_get_key_from_path (view, list->data, NULL);
-            if (skey != NULL)
-                keys = g_list_append (keys, skey);
-        }
-            
-        /* free selected paths */
-        g_list_foreach (paths, (GFunc)gtk_tree_path_free, NULL);
-        g_list_free (paths);
-    }
+    /* free selected paths */
+    g_list_foreach (paths, (GFunc)gtk_tree_path_free, NULL);
+    g_list_free (paths);
     
     /* Remove duplicates */
     keys = g_list_sort (keys, compare_pointers);
@@ -838,6 +743,38 @@ seahorse_key_store_get_selected_keys (GtkTreeView *view)
     }    
     
     return keys;
+}
+
+void
+seahorse_key_store_set_selected_keys (GtkTreeView *view, GList* keys)
+{
+    SeahorseKeyStore* skstore;
+    GtkTreeSelection* selection;
+    GList *l;
+    GSList *rows, *rl;
+    GtkTreeIter it;
+    
+    g_return_if_fail (GTK_IS_TREE_VIEW (view));
+    selection = gtk_tree_view_get_selection (view);
+    gtk_tree_selection_unselect_all (selection);
+    
+    skstore = key_store_from_model (gtk_tree_view_get_model (view));
+    g_return_if_fail (SEAHORSE_IS_KEY_STORE (skstore));
+    
+    for(l = keys; l; l = g_list_next (l)) {
+        
+        /* Get all the rows for that key .... */
+        rows = seahorse_key_model_get_rows_for_key (SEAHORSE_KEY_MODEL (skstore), 
+                                                    SEAHORSE_KEY (l->data));
+        for(rl = rows; rl; rl = g_slist_next (rl)) {
+
+            /* And select them ... */
+            if(seahorse_key_store_get_upper_iter(skstore, &it, (GtkTreeIter*)rl->data))
+                gtk_tree_selection_select_iter (selection, &it);
+        }
+        
+        seahorse_key_model_free_rows (rows);
+    }
 }
 
 /**
@@ -854,46 +791,26 @@ SeahorseKey*
 seahorse_key_store_get_selected_key (GtkTreeView *view, guint *uid)
 {
     SeahorseKeyStore* skstore;
-	SeahorseKey *skey = NULL;
-	
+    SeahorseKey *skey = NULL;
+    GList *paths = NULL;
+    GtkTreeSelection *selection;
+    
     g_return_val_if_fail (GTK_IS_TREE_VIEW (view), NULL);
     skstore = key_store_from_model (gtk_tree_view_get_model (view));
     
-    if (SEAHORSE_KEY_STORE_GET_CLASS (skstore)->use_check) {
-        GtkTreeModel* model = GTK_TREE_MODEL (skstore);
-        GtkTreeIter iter;
-        gboolean check;
-            
-        if (gtk_tree_model_get_iter_first (model, &iter)) {
-            do {
-                check = FALSE;
-                gtk_tree_model_get (model, &iter, KEY_STORE_CHECK, &check, -1); 
-                if (check) {
-					skey = key_from_iterator (model, &iter, uid);
-					break;
-				}
-            } while (gtk_tree_model_iter_next (model, &iter));
-        }
-    }
-
-    /* Fall back if none checked, or not using checks */
-    if (skey == NULL) {
-    	GList *paths = NULL;
-        GtkTreeSelection *selection;	
-        
-    	selection = gtk_tree_view_get_selection (view);
-    	paths = gtk_tree_selection_get_selected_rows (selection, NULL);
-	
-    	/* make key list */
-		if (paths != NULL)
-		    skey = seahorse_key_store_get_key_from_path (view, paths->data, uid);
+    selection = gtk_tree_view_get_selection (view);
+    paths = gtk_tree_selection_get_selected_rows (selection, NULL);
+    
+    /* make key list */
+    if (paths != NULL) {
+        skey = seahorse_key_store_get_key_from_path (view, paths->data, uid);
             
         /* free selected paths */
         g_list_foreach (paths, (GFunc)gtk_tree_path_free, NULL);
         g_list_free (paths);
     }
-		
-	return skey;
+    
+    return skey;
 }
 
 /* Search through row for text */
@@ -946,14 +863,6 @@ filter_callback (GtkTreeModel *model, GtkTreeIter *iter, gpointer data)
         ret = row_contains_filtered_text (model, iter, skstore->priv->filter_text);
         break;
         
-    case KEY_STORE_MODE_SELECTED:
-        if (SEAHORSE_KEY_STORE_GET_CLASS (skstore)->use_check) {
-            gboolean check = FALSE;
-            gtk_tree_model_get (model, iter, KEY_STORE_CHECK, &check, -1); 
-            ret = check;
-        }
-        break;
-        
     case KEY_STORE_MODE_ALL:
         ret = TRUE;
         break;
@@ -975,8 +884,8 @@ filter_callback (GtkTreeModel *model, GtkTreeIter *iter, gpointer data)
 
 /* Given a treeview iter, get the base store iterator */
 void 
-seahorse_key_store_get_base_iter(SeahorseKeyStore* skstore, GtkTreeIter* base_iter, 
-                                        const GtkTreeIter* iter)
+seahorse_key_store_get_base_iter(SeahorseKeyStore *skstore, GtkTreeIter *base_iter, 
+                                 const GtkTreeIter *iter)
 {
     GtkTreeIter i;
     
@@ -985,4 +894,35 @@ seahorse_key_store_get_base_iter(SeahorseKeyStore* skstore, GtkTreeIter* base_it
     
     gtk_tree_model_sort_convert_iter_to_child_iter (skstore->priv->sort, &i, (GtkTreeIter*)iter);
     gtk_tree_model_filter_convert_iter_to_child_iter (skstore->priv->filter, base_iter, &i);
+}
+
+/* Given a base store iter, get the treeview iter */
+gboolean 
+seahorse_key_store_get_upper_iter(SeahorseKeyStore *skstore, GtkTreeIter *upper_iter, 
+                                  const GtkTreeIter *iter)
+{
+    GtkTreeIter i;
+    GtkTreePath *child_path, *path;
+    gboolean ret;
+    
+    g_return_val_if_fail (SEAHORSE_IS_KEY_STORE (skstore), FALSE);
+    g_assert (skstore->priv->sort && skstore->priv->filter);
+    
+    child_path = gtk_tree_model_get_path (gtk_tree_model_filter_get_model (skstore->priv->filter), 
+                                          (GtkTreeIter*)iter);
+    g_return_val_if_fail (child_path != NULL, FALSE);
+    path = gtk_tree_model_filter_convert_child_path_to_path (skstore->priv->filter, child_path);
+    gtk_tree_path_free (child_path);
+
+    if (!path)
+        return FALSE;
+
+    ret = gtk_tree_model_get_iter (GTK_TREE_MODEL (skstore->priv->filter), &i, path);
+    gtk_tree_path_free (path);
+    
+    if (!ret)
+        return FALSE;
+  
+    gtk_tree_model_sort_convert_child_iter_to_iter (skstore->priv->sort, upper_iter, &i);
+    return TRUE;
 }

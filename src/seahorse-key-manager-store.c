@@ -134,7 +134,6 @@ class_init (SeahorseKeyManagerStoreClass *klass)
     skstore_class->changed = store_changed;
   
     /* Base class behavior and columns */
-    skstore_class->use_check = FALSE;
     skstore_class->use_icon = TRUE;
     skstore_class->n_columns = COLS;
     skstore_class->col_ids = col_ids;

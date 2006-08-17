@@ -51,11 +51,13 @@
 #include "seahorse-ssh-key.h"
 #endif
 
-/* The various tabs */
+/* The various tabs. If adding a tab be sure to fix 
+   logic throughout this file. */
 enum KeyManagerTabs {
     TAB_PUBLIC = 1,
     TAB_TRUSTED,
-    TAB_PRIVATE
+    TAB_PRIVATE,
+    HIGHEST_TAB
 };
 
 SeahorseKeyPredicate pred_public = {
@@ -108,8 +110,38 @@ delete_event (GtkWidget *widget, GdkEvent *event, SeahorseWidget *swidget)
 	return TRUE;
 }
 
-/* Get the currently selected key store */
+static GtkWidget*
+get_tab_for_key (SeahorseWidget* swidget, SeahorseKey *skey)
+{
+    SeahorseKeyset *skset;
+    GtkNotebook *notebook;
+    GtkWidget *widget;
+    gint pages, i;
+    
+    notebook = GTK_NOTEBOOK (glade_xml_get_widget (swidget->xml, "notebook"));
+    g_return_val_if_fail (GTK_IS_NOTEBOOK (notebook), NULL);
+
+    pages = gtk_notebook_get_n_pages(notebook);
+    for(i = 0; i < pages; i++)
+    {
+        widget = gtk_notebook_get_nth_page (notebook, i);
+        skset = g_object_get_data (G_OBJECT (widget), "keyset");
+        
+        if (seahorse_keyset_has_key (skset, skey))
+            return widget;
+    }
+
+    return NULL;
+}
+
 static guint
+get_tab_id (GtkWidget *tab)
+{
+    return GPOINTER_TO_INT (g_object_get_data (G_OBJECT (tab), "tab-id"));
+}
+
+/* Get the currently selected key store */
+static GtkWidget* 
 get_current_tab (SeahorseWidget *swidget)
 {
     GtkNotebook *notebook;
@@ -125,17 +157,39 @@ get_current_tab (SeahorseWidget *swidget)
     widget = gtk_notebook_get_nth_page (notebook, page);
     g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
     
-    return GPOINTER_TO_INT (g_object_get_data (G_OBJECT (widget), "tab-id"));
+    return widget;
 }
 
-static GtkTreeView*
-get_current_view (SeahorseWidget *swidget)
+static void
+set_current_tab (SeahorseWidget *swidget, guint tabid)
+{
+    GtkNotebook *notebook;
+    guint pages, i;
+    
+    notebook = GTK_NOTEBOOK (glade_xml_get_widget (swidget->xml, "notebook"));
+    g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
+    
+    pages = gtk_notebook_get_n_pages(notebook);
+    for(i = 0; i < pages; i++)
+    {
+        if (get_tab_id (gtk_notebook_get_nth_page (notebook, i)) == tabid)
+        {
+            gtk_notebook_set_current_page (notebook, i);
+            return;
+        }
+    }
+    
+    g_return_if_reached ();
+}
+
+static GtkTreeView* 
+get_tab_view (SeahorseWidget *swidget, guint tabid)
 {
     const gchar *name;
-
-    switch (get_current_tab (swidget)) {
-	case 0: /* Early on in initialization no tab is selected */
-		return NULL;
+    
+    switch (tabid) {
+    case 0: /* This happens before initialization */
+        return NULL; 
     case TAB_PUBLIC:
         name = "pub-key-list";
         break;
@@ -153,6 +207,18 @@ get_current_view (SeahorseWidget *swidget)
     return GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, name));
 }
 
+static GtkTreeView*
+get_current_view (SeahorseWidget *swidget)
+{
+    GtkWidget *tab;
+
+    tab = get_current_tab (swidget);
+    if(tab == NULL)
+        return NULL;
+    
+    return get_tab_view (swidget, get_tab_id (tab));
+}
+
 static GList*
 get_selected_keys (SeahorseWidget *swidget)
 {
@@ -167,7 +233,48 @@ get_selected_key (SeahorseWidget *swidget, guint *uid)
     GtkTreeView *view = get_current_view (swidget);
     g_return_val_if_fail (view != NULL, NULL);
     return seahorse_key_store_get_selected_key (view, uid);
-}    
+}
+
+static void
+set_selected_keys (SeahorseWidget *swidget, GList* keys)
+{
+    GList* tab_lists[HIGHEST_TAB];
+    GtkTreeView *view;
+    GtkWidget *tab;
+    GList* l;
+    guint tabid;
+    guint i, last = 0;
+    
+    memset(tab_lists, 0, sizeof(tab_lists));
+    
+    for(l = keys; l; l = g_list_next (l)) {
+        tab = get_tab_for_key (swidget, SEAHORSE_KEY (l->data));
+        if (tab == NULL)
+            continue;
+        
+        tabid = get_tab_id (tab);
+        if(!tabid)
+            continue;
+        
+        g_assert(tabid < HIGHEST_TAB);
+        tab_lists[tabid] = g_list_prepend (tab_lists[tabid], l->data);
+    }
+    
+    for(i = 1; i < HIGHEST_TAB; i++) {
+        
+        view = get_tab_view (swidget, i);
+        g_assert(view);
+        
+        if(tab_lists[i])
+            last = i;
+
+        seahorse_key_store_set_selected_keys (view, tab_lists[i]);
+        g_list_free (tab_lists[i]);
+    }
+    
+    if (last != 0)
+        set_current_tab (swidget, last);
+}
 
 static void
 set_numbered_status (SeahorseWidget *swidget, const gchar *t1, const gchar *t2, guint num)
@@ -216,18 +323,20 @@ imported_keys (SeahorseOperation *op, SeahorseWidget *swidget)
     GError *err = NULL;
     GList *keys;
     guint nkeys;
+
+    if (!seahorse_operation_is_successful (op)) {
+        seahorse_operation_steal_error (op, &err);
+        seahorse_util_handle_error (err, _("Couldn't import keys"));
+        return;
+    }
     
     /* This key list is freed with the operation */
     keys = (GList*)seahorse_operation_get_result (op);
-    nkeys = g_list_length (keys);
+    set_selected_keys (swidget, keys);
     
-    if (seahorse_operation_is_successful (op)) {
-        set_numbered_status (swidget, _("Imported %d key"), 
-                                      _("Imported %d keys"), nkeys);
-    } else  {
-        seahorse_operation_steal_error (op, &err);
-        seahorse_util_handle_error (err, _("Couldn't import keys"));
-    }
+    nkeys = g_list_length (keys);
+    set_numbered_status (swidget, _("Imported %d key"), 
+                                  _("Imported %d keys"), nkeys);
 }
 
 static void
@@ -798,17 +907,9 @@ static void
 tab_changed (GtkWidget *widget, GtkNotebookPage *page, guint page_num, 
              SeahorseWidget *swidget)
 {
-    GtkTreeView *view;
-    GtkTreeSelection *selection;
     GtkWidget *entry = glade_xml_get_widget (swidget->xml, "filter");
     g_return_if_fail (entry != NULL);
     gtk_entry_set_text (GTK_ENTRY (entry), "");
-    
-    view = get_current_view (swidget);
-    if (view != NULL){
-        selection = gtk_tree_view_get_selection (view);
-        gtk_tree_selection_unselect_all (selection);
-    }
     
     selection_changed (NULL, swidget);
 }
@@ -909,12 +1010,13 @@ initialize_tab (SeahorseWidget *swidget, const gchar *tabwidget, guint tabid,
     GtkTreeSelection *selection;
     GtkTreeView *view;
     GtkWidget *tab;
-    
-    skset = seahorse_keyset_new_full (pred);
-    
+
     tab = glade_xml_get_widget (swidget->xml, tabwidget);
     g_return_if_fail (tab != NULL);
     g_object_set_data (G_OBJECT (tab), "tab-id", GINT_TO_POINTER (tabid));
+    
+    skset = seahorse_keyset_new_full (pred);
+    g_object_set_data_full (G_OBJECT (tab), "keyset", skset, g_object_unref);
     
     /* init key list & selection settings */
     view = GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, viewwidget));

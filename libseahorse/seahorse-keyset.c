@@ -289,6 +289,13 @@ seahorse_keyset_new_full (SeahorseKeyPredicate *pred)
     return g_object_new (SEAHORSE_TYPE_KEYSET, "predicate", pred, NULL);
 }
 
+gboolean
+seahorse_keyset_has_key (SeahorseKeyset *skset, SeahorseKey *skey)
+{
+    return g_hash_table_lookup (skset->pv->keys, skey) ? 
+                TRUE : FALSE;
+}
+
 GList*             
 seahorse_keyset_get_keys (SeahorseKeyset *skset)
 {
