@@ -756,7 +756,7 @@ cryptui_key_store_get_iter_from_key (CryptUIKeyStore *ckstore, const gchar *key,
     g_return_val_if_fail (CRYPTUI_IS_KEY_STORE (ckstore), FALSE);
     g_return_val_if_fail (iter != NULL, FALSE);
     
-    if (key == NULL) {
+    if (key == NULL || !key[0]) {
         /* The none option for NULL */
         if (ckstore->priv->none_option) {
             if (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (ckstore->priv->store), &base)) {
