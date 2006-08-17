@@ -909,6 +909,18 @@ const GType subkey_columns[] = {
     G_TYPE_STRING   /* length*/
 };
 
+/* trust combo box list */
+enum {
+    TRUST_LABEL,
+    TRUST_VALIDITY,
+    TRUST_N_COLUMNS
+};
+
+const GType trust_columns[] = {
+    G_TYPE_STRING,  /* label */
+    G_TYPE_INT      /* validity */
+};
+
 static gint 
 get_selected_subkey (SeahorseWidget *swidget)
 {
@@ -948,39 +960,29 @@ trust_changed (GtkComboBox *selection, SeahorseWidget *swidget)
 {
 	SeahorseKey *skey;
 	gint trust;
-	SeahorseValidity trust_enum;
+	GtkTreeModel *model;
+	GtkTreeIter iter;
 	gpgme_error_t err;
+	gboolean set;
 	
-	trust = gtk_combo_box_get_active (selection);
+	set = gtk_combo_box_get_active_iter (selection, &iter);
+	g_assert (set);
 	
-	switch (trust) {
-	    case 0:
-	        trust_enum = SEAHORSE_VALIDITY_UNKNOWN;
-	        break;
-        case 1:
-            trust_enum = SEAHORSE_VALIDITY_NEVER;
-            break;
-        case 2:
-            trust_enum = SEAHORSE_VALIDITY_MARGINAL;
-            break;
-        case 3:
-            trust_enum = SEAHORSE_VALIDITY_FULL;
-            break;
-        case 4:
-            trust_enum = SEAHORSE_VALIDITY_ULTIMATE;
-            break;
-        default:
-            trust_enum = SEAHORSE_VALIDITY_UNKNOWN;
+	if (set) {
+    	skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
+    	
+    	model = gtk_combo_box_get_model (selection);
+    	gtk_tree_model_get (model, &iter,
+                            TRUST_VALIDITY, &trust,
+                            -1);
+                                  
+    	if (seahorse_key_get_trust (skey) != trust) {
+    		err = seahorse_pgp_key_op_set_trust (SEAHORSE_PGP_KEY (skey), trust);
+    		if (err) {
+    			seahorse_util_handle_gpgme (err, _("Unable to change trust"));
+    		}
+    	}
     }
-	
-	skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
-	
-	if (seahorse_key_get_trust (skey) != trust_enum) {
-		err = seahorse_pgp_key_op_set_trust (SEAHORSE_PGP_KEY (skey), trust_enum);
-		if (err) {
-			seahorse_util_handle_gpgme (err, _("Unable to change trust"));
-		}
-	}
 }
 
 static void
@@ -1053,6 +1055,71 @@ details_calendar_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 }
 
 static void
+setup_details_trust (SeahorseWidget *swidget)
+{
+    SeahorseKey *skey;
+    SeahorseKeyEType etype;
+    GtkWidget *widget;
+    GtkListStore *model;
+    GtkTreeIter iter;
+    GtkCellRenderer *text_cell = gtk_cell_renderer_text_new ();
+
+    DBG_PRINT(("KeyProperties: Setting up Trust Combo Box Store\n"));
+    
+    skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
+    etype = seahorse_key_get_etype (skey);
+    
+    widget = glade_xml_get_widget (swidget->xml, "details-trust-combobox");
+    
+    gtk_cell_layout_clear(GTK_CELL_LAYOUT (widget));
+    
+    gtk_cell_layout_pack_start(GTK_CELL_LAYOUT (widget), text_cell, FALSE);
+    gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT (widget), text_cell,
+                                   "text", TRUST_LABEL,
+                                   NULL);
+    
+    /* Initialize the store */
+    model = gtk_list_store_newv (TRUST_N_COLUMNS, (GType*)trust_columns);
+    
+    if (etype != SKEY_PRIVATE) {
+        gtk_list_store_append (model, &iter);
+        gtk_list_store_set (model, &iter,
+                            TRUST_LABEL, _("Unknown"),
+                            TRUST_VALIDITY,  SEAHORSE_VALIDITY_UNKNOWN,
+                            -1);                               
+       
+        gtk_list_store_append (model, &iter);
+        gtk_list_store_set (model, &iter,
+                            TRUST_LABEL, _("Never"),
+                            TRUST_VALIDITY,  SEAHORSE_VALIDITY_NEVER,
+                            -1);
+    }
+    
+    gtk_list_store_append (model, &iter);
+    gtk_list_store_set (model, &iter,
+                        TRUST_LABEL, _("Marginal"),
+                        TRUST_VALIDITY,  SEAHORSE_VALIDITY_MARGINAL,
+                        -1);
+    
+    gtk_list_store_append (model, &iter);
+    gtk_list_store_set (model, &iter,
+                        TRUST_LABEL, _("Full"),
+                        TRUST_VALIDITY,  SEAHORSE_VALIDITY_FULL,
+                        -1);
+    if (etype == SKEY_PRIVATE) {
+        gtk_list_store_append (model, &iter);
+        gtk_list_store_set (model, &iter,
+                            TRUST_LABEL, _("Ultimate"),
+                            TRUST_VALIDITY,  SEAHORSE_VALIDITY_ULTIMATE,
+                            -1);
+    }
+    
+    gtk_combo_box_set_model (GTK_COMBO_BOX (widget), GTK_TREE_MODEL (model));                                        
+
+    DBG_PRINT(("KeyProperties: Finished Setting up Trust Combo Box Store\n"));
+}
+
+static void
 do_details_signals (SeahorseWidget *swidget) 
 { 
     SeahorseKey *skey;
@@ -1100,6 +1167,7 @@ do_details (SeahorseWidget *swidget)
     gpgme_subkey_t subkey;
     GtkWidget *widget;
     GtkListStore *store;
+    GtkTreeModel *model;
     GtkTreeIter iter;
     GtkTreeIter default_key;
     GtkTreeSelection *selection;
@@ -1107,8 +1175,8 @@ do_details (SeahorseWidget *swidget)
     gchar *fp_label, *expiration_date, *created_date;
     const gchar *label, *status, *length;
     gint subkey_number, key, trust;
-    SeahorseValidity trust_enum;
     guint keyloc;
+    gboolean valid;
 
     skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
     pkey = SEAHORSE_PGP_KEY (skey);
@@ -1161,32 +1229,25 @@ do_details (SeahorseWidget *swidget)
 
     show_glade_widget (swidget, "details-trust-combobox", keyloc == SKEY_LOC_LOCAL);
     widget = glade_xml_get_widget (swidget->xml, "details-trust-combobox");
+    
     if (widget) {
         gtk_widget_set_sensitive (widget, !(pkey->pubkey->disabled));
-        trust_enum = seahorse_key_get_trust (skey);
+        model = gtk_combo_box_get_model (GTK_COMBO_BOX (widget));
         
-        switch (trust_enum) {
-            case SEAHORSE_VALIDITY_UNKNOWN:
-                trust = 0;
+        valid = gtk_tree_model_get_iter_first (model, &iter);
+       
+        while (valid) {
+            gtk_tree_model_get (model, &iter,
+                                TRUST_VALIDITY, &trust,
+                                -1);
+            
+            if (trust == seahorse_key_get_trust (skey)) {
+                gtk_combo_box_set_active_iter (GTK_COMBO_BOX (widget),  &iter);
                 break;
-            case SEAHORSE_VALIDITY_NEVER:
-                trust = 1;
-                break;
-            case SEAHORSE_VALIDITY_MARGINAL:
-                trust = 2;
-                break;
-            case SEAHORSE_VALIDITY_FULL:
-                trust = 3;
-                break;
-            case SEAHORSE_VALIDITY_ULTIMATE:
-                trust = 4;
-                break;
-            default:
-                trust = 0;
+            }
+            
+            valid = gtk_tree_model_iter_next (model, &iter);             
         }
-        
-        if (0 < trust)
-            gtk_combo_box_set_active (GTK_COMBO_BOX (widget),  trust);
     }
 
     /* Clear/create table store */
@@ -1743,6 +1804,7 @@ setup_public_properties (SeahorsePGPKey *pkey)
     do_owner (swidget);
     do_owner_signals (swidget);
 
+    setup_details_trust (swidget);
     do_details (swidget);
     do_details_signals (swidget);
 
@@ -1782,6 +1844,7 @@ setup_private_properties (SeahorsePGPKey *pkey)
     do_names (swidget);
     do_names_signals (swidget);
 
+    setup_details_trust (swidget);
     do_details (swidget);
     do_details_signals (swidget);
 

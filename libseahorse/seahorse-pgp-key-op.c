@@ -55,6 +55,11 @@
 #define DEBUG_OPERATION(x) 
 #endif
 
+#define GPG_UNKNOWN     1
+#define GPG_NEVER       2
+#define GPG_MARGINAL    3
+#define GPG_FULL        4
+#define GPG_ULTIMATE    5
 
 /**
  * seahorse_pgp_key_op_generate:
@@ -785,19 +790,19 @@ seahorse_pgp_key_op_set_trust (SeahorsePGPKey *pkey, SeahorseValidity trust)
 	
 	switch (trust) {
         case SEAHORSE_VALIDITY_UNKNOWN:
-            menu_choice = 1;
+            menu_choice = GPG_UNKNOWN;
             break;
         case SEAHORSE_VALIDITY_NEVER:
-            menu_choice = 2;
+            menu_choice = GPG_NEVER;
             break;
         case SEAHORSE_VALIDITY_MARGINAL:
-            menu_choice = 3;
+            menu_choice = GPG_MARGINAL;
             break;
         case SEAHORSE_VALIDITY_FULL:
-            menu_choice = 4;
+            menu_choice = GPG_FULL;
             break;
         case SEAHORSE_VALIDITY_ULTIMATE:
-            menu_choice = 5;
+            menu_choice = GPG_ULTIMATE;
             break;
         default:
             menu_choice = 1;
