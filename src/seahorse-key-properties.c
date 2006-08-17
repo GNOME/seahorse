@@ -819,12 +819,12 @@ seahorse_key_properties_new (SeahorseContext *sctx, SeahorseKey *skey)
         glade_xml_signal_connect_data (swidget->xml, "sigs_changed",
                                        G_CALLBACK (signature_sel_changed), swidget);        
 
-        /* disable trust options */
+        /* disable irrelevant trust options */
         if (SEAHORSE_IS_KEY_PAIR (skey))
             widget = glade_xml_get_widget (swidget->xml, "unknown");
         else
             widget = glade_xml_get_widget (swidget->xml, "ultimate");
-        gtk_widget_set_sensitive (widget, FALSE);
+        gtk_widget_hide (widget);
         
     	gtk_option_menu_set_history (GTK_OPTION_MENU (glade_xml_get_widget (swidget->xml, "trust")),
 	                                 seahorse_key_get_trust (skey) - 1);
