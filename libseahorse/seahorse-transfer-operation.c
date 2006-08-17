@@ -205,7 +205,7 @@ export_done (SeahorseOperation *op, SeahorseTransferOperation *top)
     
     /* Free this data with the operation */
     g_object_set_data_full (G_OBJECT (pv->operation), "raw-data", 
-                            raw, (GDestroyNotify)gpgmex_data_release);
+                            raw, (GDestroyNotify)free);
 
     /* And mark us as started */
     seahorse_operation_mark_start (SEAHORSE_OPERATION (top));
