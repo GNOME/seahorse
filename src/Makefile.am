@@ -47,7 +47,8 @@ seahorse_SOURCES = main.c \
     $(SSH_SRCS)
 
 seahorse_LDADD = \
-	$(top_builddir)/libseahorse/libseahorse-internal.la \
+	$(top_builddir)/libcryptui/libcryptui.la \
+	$(top_builddir)/libseahorse/libseahorse.a \
 	$(SEAHORSE_LIBS)
 
 glade_DATA = \

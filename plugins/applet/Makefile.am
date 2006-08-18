@@ -30,10 +30,10 @@ seahorse_applet_SOURCES = \
 
 seahorse_applet_LDADD = \
 	$(GNOME_APPLETS_LIBS) \
-	$(top_builddir)/libseahorse/libseahorse-internal.la \
+	$(top_builddir)/libcryptui/libcryptui.la \
+	$(top_builddir)/libseahorse/libseahorse.a \
 	$(SEAHORSE_LIBS) \
-	$(LIBCRYPTUI_LIBS)\
-    $(top_builddir)/libcryptui/libcryptui.la
+	$(LIBCRYPTUI_LIBS)
 
 serverdir = $(libdir)/bonobo/servers
 server_in_files = GNOME_SeahorseApplet.server.in

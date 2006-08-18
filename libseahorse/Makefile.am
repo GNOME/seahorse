@@ -14,7 +14,7 @@ INCLUDES = -I$(top_builddir) \
 	-DPIXMAPSDIR=\""$(pixmapsdir)"\" \
 	-DEXECDIR=\""$(seahorselibexecbindir)"\"
 
-lib_LTLIBRARIES = libseahorse-internal.la
+noinst_LIBRARIES = libseahorse.a
 
 BUILT_SOURCES = \
 	seahorse-marshal.c seahorse-marshal.h
@@ -52,7 +52,7 @@ else
 SSH_SRCS = 
 endif
 
-libseahorse_internal_la_SOURCES = \
+libseahorse_a_SOURCES = \
 	seahorse-key.c seahorse-key.h \
 	seahorse-key-source.c seahorse-key-source.h \
 	seahorse-pgp-key.c seahorse-pgp-key.h \
@@ -94,18 +94,14 @@ libseahorse_internal_la_SOURCES = \
 	$(HKP_SRCS) \
 	$(SSH_SRCS)
 
-libseahorse_internal_la_LDFLAGS = -no-undefined
-libseahorse_internal_la_LIBADD = \
-    $(SEAHORSE_LIBS) \
-    $(top_builddir)/libcryptui/libcryptui.la
-
 seahorselibexecbin_PROGRAMS = xloadimage seahorse-ssh-askpass
 
 xloadimage_SOURCES = ../src/seahorse-xloadimage.c
 
 seahorse_ssh_askpass_SOURCES = seahorse-ssh-askpass.c
 seahorse_ssh_askpass_LDADD = \
-	$(top_builddir)/libseahorse/libseahorse-internal.la \
+	$(top_builddir)/libseahorse/libseahorse.a \
+	$(top_builddir)/libcryptui/libcryptui.la \
 	$(SEAHORSE_LIBS)
 
 seahorse-marshal.h: seahorse-marshal.list $(GLIB_GENMARSHAL)
