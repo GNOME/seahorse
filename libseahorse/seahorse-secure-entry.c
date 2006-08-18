@@ -572,7 +572,14 @@ seahorse_secure_entry_get_property (GObject *object, guint prop_id,
 static void
 seahorse_secure_entry_init (SeahorseSecureEntry *entry)
 {
+    GtkStyle *style;
+    
     GTK_WIDGET_SET_FLAGS (entry, GTK_CAN_FOCUS);
+
+    /* Get the RC style for a normal GtkEntry */
+    style = gtk_rc_get_style_by_paths (gtk_widget_get_settings (GTK_WIDGET (entry)), 
+                                       NULL, NULL, GTK_TYPE_ENTRY);
+    gtk_widget_set_style (GTK_WIDGET (entry), style); 
 
     entry->text_size = MIN_SIZE;
     WITH_SECURE_MEM (entry->text = g_malloc(entry->text_size));
