@@ -483,6 +483,9 @@ seahorse_server_source_get_descriptions()
 gboolean
 seahorse_server_source_valid_uri (const gchar *uri)
 {
+    if (!uri || !*uri)
+        return FALSE;
+    
 #ifdef WITH_LDAP
     if (seahorse_ldap_is_valid_uri (uri))
         return TRUE;
