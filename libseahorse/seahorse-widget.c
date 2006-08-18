@@ -152,46 +152,41 @@ object_finalize (GObject *gobject)
 static void
 object_set_property (GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec)
 {
-	SeahorseWidget *swidget;
+    SeahorseWidget *swidget;
     GtkWidget *w;
     GdkPixbuf *pixbuf = NULL;
-	char *path;
-	
-	swidget = SEAHORSE_WIDGET (object);
-	
-	switch (prop_id) {
-		/* Loads xml definition from name, connects common callbacks */
-		case PROP_NAME:
-            g_return_if_fail (swidget->name == NULL);
-			swidget->name = g_value_dup_string (value);
-			path = g_strdup_printf ("%sseahorse-%s.glade",
-			                        SEAHORSE_GLADEDIR, swidget->name);
-			swidget->xml = glade_xml_new (path, swidget->name, NULL);
-			g_free (path);
-			g_assert (swidget->xml != NULL);
-			
-			glade_xml_signal_connect_data (swidget->xml, "closed",
-				G_CALLBACK (widget_closed), swidget);
-			glade_xml_signal_connect_data (swidget->xml, "delete_event",
-				G_CALLBACK (widget_delete_event), swidget);
-			glade_xml_signal_connect_data (swidget->xml, "help",
-				G_CALLBACK (widget_help), swidget);
+    char *path;
+    
+    swidget = SEAHORSE_WIDGET (object);
+    
+    switch (prop_id) {
+    /* Loads xml definition from name, connects common callbacks */
+    case PROP_NAME:
+        g_return_if_fail (swidget->name == NULL);
+        swidget->name = g_value_dup_string (value);
+        path = g_strdup_printf ("%sseahorse-%s.glade",
+                                SEAHORSE_GLADEDIR, swidget->name);
+        swidget->xml = glade_xml_new (path, swidget->name, NULL);
+        g_free (path);
+        g_return_if_fail (swidget->xml != NULL);
         
-            w = glade_xml_get_widget (swidget->xml, swidget->name);
-            glade_xml_set_toplevel (swidget->xml, GTK_WINDOW (w));
-            glade_xml_ensure_accel (swidget->xml);
-            
-            pixbuf = gtk_widget_render_icon (w, 
-                                     SEAHORSE_STOCK_SEAHORSE, 
-                                     (GtkIconSize)-1, 
-                                     NULL); 
-            gtk_window_set_icon (GTK_WINDOW (w), gdk_pixbuf_copy(pixbuf));
-            g_object_unref(pixbuf);
-			break;
-            
-		default:
-			break;
-	}
+        glade_xml_signal_connect_data (swidget->xml, "closed",
+                                       G_CALLBACK (widget_closed), swidget);
+        glade_xml_signal_connect_data (swidget->xml, "delete_event",
+                                       G_CALLBACK (widget_delete_event), swidget);
+        glade_xml_signal_connect_data (swidget->xml, "help",
+                                       G_CALLBACK (widget_help), swidget);
+        
+        w = glade_xml_get_widget (swidget->xml, swidget->name);
+        glade_xml_set_toplevel (swidget->xml, GTK_WINDOW (w));
+        glade_xml_ensure_accel (swidget->xml);
+        
+        pixbuf = gtk_widget_render_icon (w, SEAHORSE_STOCK_SEAHORSE, 
+                                         (GtkIconSize)-1, NULL); 
+        gtk_window_set_icon (GTK_WINDOW (w), gdk_pixbuf_copy(pixbuf));
+        g_object_unref(pixbuf);
+        break;
+    }
 }
 
 static void
@@ -361,6 +356,7 @@ seahorse_widget_show (SeahorseWidget *swidget)
         gtk_ui_manager_ensure_update (swidget->ui);
 
     widget = glade_xml_get_widget (swidget->xml, swidget->name);
+    g_return_if_fail (widget != NULL);
     gtk_widget_show (widget);
 }
  
