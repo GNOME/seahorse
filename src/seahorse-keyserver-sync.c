@@ -225,7 +225,7 @@ seahorse_keyserver_sync (GList *keys)
         sksrc = seahorse_context_remote_key_source (SCTX_APP (), keyserver);
         g_return_if_fail (sksrc != NULL);
         
-        op = seahorse_context_transfer_keys (SCTX_APP (), keys, sksrc);
+        op = seahorse_context_transfer_keys (SCTX_APP (), keys, sksrc, TRUE);
         g_return_if_fail (sksrc != NULL);
 
         g_signal_connect (op, "done", G_CALLBACK (sync_import_complete), sksrc);

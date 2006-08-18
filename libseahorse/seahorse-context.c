@@ -846,7 +846,7 @@ refresh_keyservers (GConfClient *client, guint id, GConfEntry *entry,
 
 SeahorseOperation*
 seahorse_context_transfer_keys (SeahorseContext *sctx, GList *keys, 
-                                SeahorseKeySource *to)
+                                SeahorseKeySource *to, gboolean individually)
 {
     SeahorseKeySource *from;
     SeahorseOperation *op = NULL;
@@ -862,9 +862,14 @@ seahorse_context_transfer_keys (SeahorseContext *sctx, GList *keys,
     keys = seahorse_util_keylist_sort (keys);
     
     while (keys) {
+        
+        /* When individual, break off each one */
+        if (individually)
+            next = g_list_remove_link (keys, keys);
      
-        /* Break off one set (same keysource) */
-        next = seahorse_util_keylist_splice (keys);
+        /* Otherwise break off one set (same keysource) */
+        else 
+            next = seahorse_util_keylist_splice (keys);
 
         g_assert (SEAHORSE_IS_KEY (keys->data));
         skey = SEAHORSE_KEY (keys->data);
@@ -1028,7 +1033,7 @@ seahorse_context_discover_keys (SeahorseContext *sctx, GQuark ktype,
     
     /* Start an import process on all toimport */
     if (toimport) {
-        op = seahorse_context_transfer_keys (sctx, toimport, NULL);
+        op = seahorse_context_transfer_keys (sctx, toimport, NULL, FALSE);
         
         g_list_free (toimport);
         

@@ -108,7 +108,7 @@ import_activate (GtkWidget *widget, SeahorseWidget *swidget)
     if (keys == NULL)
         return;
     
-    op = seahorse_context_transfer_keys (SCTX_APP (), keys, NULL);
+    op = seahorse_context_transfer_keys (SCTX_APP (), keys, NULL, FALSE);
     g_return_if_fail (op != NULL);
     
     if (seahorse_operation_is_running (op)) {
