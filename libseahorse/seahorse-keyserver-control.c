@@ -222,9 +222,9 @@ populate_combo (SeahorseKeyserverControl *skc, gboolean gconf, gboolean force)
     
     /* Retreieve the key server list and make sure it's changed */
     ks = seahorse_gconf_get_string_list (KEYSERVER_KEY);
-	ks = seahorse_server_source_purge_keyservers (ks);
+    ks = seahorse_server_source_purge_keyservers (ks);
     ks = g_slist_sort (ks, (GCompareFunc)g_utf8_collate);
-	
+    
     if (force || !seahorse_util_string_slist_equal (ks, skc->keyservers)) {
         
         /* Remove saved data */
@@ -247,17 +247,19 @@ populate_combo (SeahorseKeyserverControl *skc, gboolean gconf, gboolean force)
     if (chosen) {
 
         n = (skc->none_option ? 0 : -1);
-        
         for (i = 0, l = skc->keyservers; l != NULL; l = g_slist_next (l), i++) {
             if (g_utf8_collate ((gchar*)l->data, chosen) == 0)
                 n = i + (skc->none_option ? 1 : 0);
         }
         
-        g_free (chosen);
         if (gtk_combo_box_get_active (skc->combo) != n)
             gtk_combo_box_set_active (skc->combo, n);
+        
+    } else if (skc->none_option) {
+        gtk_combo_box_set_active (skc->combo, 0);
     }
     
+    g_free (chosen);
     seahorse_util_string_slist_free (ks);
     
     /* Done updating */
