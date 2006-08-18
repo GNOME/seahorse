@@ -44,6 +44,8 @@ void        seahorse_ssh_generate_show  (SeahorseSSHSource  *sksrc);
 
 #endif
 
+void        seahorse_pgp_generate_show  (SeahorsePGPSource  *sksrc);
+
 void        seahorse_add_revoker_new    (SeahorsePGPKey     *pkey);
 
 void        seahorse_expires_new        (SeahorsePGPKey     *pkey, 

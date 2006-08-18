@@ -96,6 +96,15 @@ ungrab_keyboard (GtkWidget *win, GdkEvent *event, gpointer data)
 #endif
 }
 
+/* When enter is pressed in the confirm entry, move */
+static void
+confirm_callback (GtkWidget *widget, GtkDialog *dialog)
+{
+    GtkWidget *entry = GTK_WIDGET (g_object_get_data (G_OBJECT (dialog), "secure-entry"));
+    g_assert (SEAHORSE_IS_SECURE_ENTRY (entry));
+    gtk_widget_grab_focus (entry);
+}
+
 /* When enter is pressed in the entry, we simulate an ok */
 static void
 enter_callback (GtkWidget *widget, GtkDialog *dialog)
@@ -103,6 +112,18 @@ enter_callback (GtkWidget *widget, GtkDialog *dialog)
     gtk_dialog_response (dialog, GTK_RESPONSE_ACCEPT);
 }
 
+static void
+entry_changed (GtkEditable *editable, GtkDialog *dialog)
+{
+    SeahorseSecureEntry *entry, *confirm;
+    
+    entry = SEAHORSE_SECURE_ENTRY (g_object_get_data (G_OBJECT (dialog), "secure-entry"));
+    confirm = SEAHORSE_SECURE_ENTRY (g_object_get_data (G_OBJECT (dialog), "confirm-entry"));
+    
+    gtk_dialog_set_response_sensitive (dialog, GTK_RESPONSE_ACCEPT, 
+                                       strcmp (seahorse_secure_entry_get_text (entry), 
+                                               seahorse_secure_entry_get_text (confirm)) == 0);
+}
 
 static void
 constrain_size (GtkWidget *win, GtkRequisition *req, gpointer data)
@@ -124,13 +145,15 @@ constrain_size (GtkWidget *win, GtkRequisition *req, gpointer data)
 
 GtkDialog*
 seahorse_passphrase_prompt_show (const gchar *title, const gchar *description, 
-                                 const gchar *prompt, const gchar *errmsg)
+                                 const gchar *prompt, const gchar *errmsg,
+                                 gboolean confirm)
 {
     SeahorseSecureEntry *entry;
     GtkDialog *dialog;
     GtkWidget *w;
     GtkWidget *box;
     GtkWidget *ebox;
+    GtkTable *table;
     GtkWidget *wvbox;
     GtkWidget *chbox;
     gchar *msg;
@@ -190,26 +213,47 @@ seahorse_passphrase_prompt_show (const gchar *title, const gchar *description,
         gtk_widget_modify_fg (w, GTK_STATE_NORMAL, &color);
     }
 
-    ebox = gtk_hbox_new (FALSE, HIG_SMALL);
-    gtk_box_pack_start (GTK_BOX (box), ebox, FALSE, FALSE, 0);
+    /* Two entries (usually on is hidden)  in a vbox */
+    table = GTK_TABLE (gtk_table_new (2, 2, FALSE));
+    gtk_table_set_row_spacings (table, HIG_SMALL);
+    gtk_table_set_col_spacings (table, HIG_LARGE);
+    gtk_box_pack_start (GTK_BOX (box), GTK_WIDGET (table), FALSE, FALSE, 0);
 
-    /* Prompt goes before the entry */
-    msg = utf8_validate (prompt);
+    /* The first entry if we have one */
+    if (confirm) {
+        ebox = gtk_hbox_new (FALSE, HIG_LARGE);
+        msg = utf8_validate (prompt);
+        w = gtk_label_new (msg);
+        g_free (msg);
+        gtk_table_attach (table, w, 0, 1, 0, 1, GTK_FILL, 0, 0, 0);
+
+        entry = SEAHORSE_SECURE_ENTRY (seahorse_secure_entry_new ());
+        gtk_widget_set_size_request (GTK_WIDGET (entry), 200, -1);
+        g_object_set_data (G_OBJECT (dialog), "confirm-entry", entry);
+        g_signal_connect (G_OBJECT (entry), "activate", G_CALLBACK (confirm_callback), dialog);
+        g_signal_connect (G_OBJECT (entry), "changed", G_CALLBACK (entry_changed), dialog);
+        gtk_table_attach_defaults (table, GTK_WIDGET (entry), 1, 2, 0, 1);
+        gtk_widget_grab_focus (GTK_WIDGET (entry));
+    }
+
+    /* The second and main entry */
+    ebox = gtk_hbox_new (FALSE, HIG_LARGE);
+    msg = utf8_validate (confirm ? _("Confirm:") : prompt);
     w = gtk_label_new (msg);
     g_free (msg);
-
-    gtk_box_pack_start (GTK_BOX (ebox), w, FALSE, FALSE, 0);
-
+    gtk_table_attach (table, w, 0, 1, 1, 2, GTK_FILL, 0, 0, 0);
+    
     entry = SEAHORSE_SECURE_ENTRY (seahorse_secure_entry_new ());
     gtk_widget_set_size_request (GTK_WIDGET (entry), 200, -1);
-    g_signal_connect (G_OBJECT (entry), "activate", G_CALLBACK (enter_callback), dialog);
-
-    gtk_box_pack_start (GTK_BOX (ebox), GTK_WIDGET (entry), TRUE, TRUE, 0);
-    gtk_widget_grab_focus (GTK_WIDGET (entry));
-    gtk_widget_show (GTK_WIDGET (entry));
-
     g_object_set_data (G_OBJECT (dialog), "secure-entry", entry);
-
+    g_signal_connect (G_OBJECT (entry), "activate", G_CALLBACK (enter_callback), dialog);
+    gtk_table_attach_defaults (table, GTK_WIDGET (entry), 1, 2, 1, 2);
+    if (!confirm)
+        gtk_widget_grab_focus (GTK_WIDGET (entry));
+    else
+        g_signal_connect (G_OBJECT (entry), "changed", G_CALLBACK (entry_changed), dialog);
+    gtk_widget_show_all (GTK_WIDGET (table));
+    
     w = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
     gtk_dialog_add_action_widget (dialog, w, GTK_RESPONSE_REJECT);
     GTK_WIDGET_SET_FLAGS (w, GTK_CAN_DEFAULT);
@@ -226,6 +270,9 @@ seahorse_passphrase_prompt_show (const gchar *title, const gchar *description,
     gtk_window_present (GTK_WINDOW (dialog));
     gtk_widget_show_all (GTK_WIDGET (dialog));
 
+    if (confirm)
+        entry_changed (NULL, dialog);
+    
     return dialog;
 }
 
@@ -272,7 +319,7 @@ seahorse_passphrase_get (gconstpointer dummy, const gchar *passphrase_hint,
 
     g_strfreev (split_uid);
 
-    dialog = seahorse_passphrase_prompt_show (NULL, label, NULL, errmsg);
+    dialog = seahorse_passphrase_prompt_show (NULL, label, NULL, errmsg, FALSE);
     g_free (label);
     g_free (errmsg);
     

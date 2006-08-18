@@ -26,8 +26,6 @@
 #include "seahorse-util.h"
 #include "seahorse-pgp-key.h"
 #include "seahorse-ssh-key.h"
-#include "seahorse-generate-adv.h"
-#include "seahorse-generate-druid.h"
 #include "seahorse-key-dialogs.h"
 #include "seahorse-gtkstock.h"
 
@@ -53,14 +51,8 @@ choose_keytype(SeahorseWidget *swidget)
     GtkTreeSelection *selection;
     SeahorseKeySource *sksrc;
     GtkTreeIter iter;
-    gboolean advanced;
     GQuark ktype;
 
-    /* Advanced or not? */
-    widget = seahorse_widget_get_widget (swidget, "advanced-option");
-    g_return_if_fail (widget != NULL);
-    advanced = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
-    
     /* Figure out the key type selected */
     widget = seahorse_widget_get_widget (swidget, "keytype-tree");
     g_return_if_fail (widget != NULL);
@@ -75,13 +67,9 @@ choose_keytype(SeahorseWidget *swidget)
     
     seahorse_widget_destroy (swidget);
     
-    if (ktype == SKEY_PGP) {
-        if (advanced)
-            seahorse_generate_adv_show ();
-        else
-            seahorse_generate_druid_show ();
+    if (ktype == SKEY_PGP)
+        seahorse_pgp_generate_show (SEAHORSE_PGP_SOURCE (sksrc));
         
-    } 
 #ifdef WITH_SSH 
     else if (ktype == SKEY_SSH)
         seahorse_ssh_generate_show (SEAHORSE_SSH_SOURCE (sksrc));

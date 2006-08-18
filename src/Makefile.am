@@ -32,9 +32,7 @@ seahorse_SOURCES = main.c \
 	seahorse-key-manager-store.c seahorse-key-manager-store.h \
 	seahorse-preferences.c seahorse-preferences.h \
 	seahorse-key-manager.c eggtreemultidnd.c eggtreemultidnd.h \
-	seahorse-generate-select.c \
-	seahorse-generate-druid.c seahorse-generate-druid.h \
-	seahorse-generate-adv.c seahorse-generate-adv.h \
+	seahorse-generate-select.c seahorse-pgp-generate.c \
 	seahorse-windows.h \
 	seahorse-key-properties.c \
 	seahorse-photos.c \
@@ -57,6 +55,7 @@ glade_DATA = \
 	seahorse-key-manager.ui \
 	seahorse-pgp-public-key-properties.glade \
 	seahorse-pgp-private-key-properties.glade \
+	seahorse-pgp-generate.glade \
 	seahorse-ssh-key-properties.glade \
 	seahorse-ssh-upload.glade \
 	seahorse-ssh-generate.glade \
@@ -65,8 +64,6 @@ glade_DATA = \
 	seahorse-change-passphrase.glade \
 	seahorse-sign.glade \
 	seahorse-generate-select.glade \
-	seahorse-generate-druid.glade \
-	seahorse-generate-adv.glade \
 	seahorse-preferences.glade \
 	seahorse-add-uid.glade \
 	seahorse-add-subkey.glade \

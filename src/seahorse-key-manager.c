@@ -307,14 +307,14 @@ show_properties (SeahorseKey *skey)
 static void
 generate_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
-	seahorse_generate_select_show ();
+    seahorse_generate_select_show ();
 }
 
 /* Loads Key generation assistant for first time users */
 static void
 new_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 {
-	seahorse_generate_druid_show ();
+    seahorse_generate_select_show ();
 }
 
 static void
