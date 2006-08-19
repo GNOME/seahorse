@@ -382,9 +382,11 @@ seahorse_widget_set_visible (SeahorseWidget *swidget, const char *identifier,
 void
 seahorse_widget_destroy (SeahorseWidget *swidget)
 {
-	g_return_if_fail (swidget != NULL && SEAHORSE_IS_WIDGET (swidget));
-	
-	g_object_unref (swidget);
+    g_return_if_fail (swidget != NULL && SEAHORSE_IS_WIDGET (swidget));
+    if (!swidget->destroying) {
+        swidget->destroying = TRUE;
+        g_object_unref (swidget);
+    }
 }
 
 /* UI MANAGER CODE ---------------------------------------------------------- */

@@ -199,7 +199,7 @@ ssh_key_from_data (SeahorseSSHSource *ssrc, SeahorseSSHKeyData *keydata,
 {   
     SeahorseKeySource *sksrc = SEAHORSE_KEY_SOURCE (ssrc);
     SeahorseSSHKey *skey;
-    SeahorseKey *key;
+    SeahorseKey *prev;
     GQuark keyid;
     
     if (!seahorse_ssh_key_data_is_valid (keydata))
@@ -207,27 +207,27 @@ ssh_key_from_data (SeahorseSSHSource *ssrc, SeahorseSSHKeyData *keydata,
     
     keyid = seahorse_ssh_key_get_cannonical_id (keydata->keyid);
     g_return_val_if_fail (keyid, NULL);
+
+    prev = seahorse_context_get_key (SCTX_APP (), sksrc, keyid);
     
     switch(load) {
-            
-    case SKSRC_LOAD_NEW:
-        /* If we already have this key then just transfer ownership of keydata */
-        key = seahorse_context_get_key (SCTX_APP (), sksrc, keyid);
-        if (key) {
-            g_object_set (key, "key-data", keydata, NULL);
-            return SEAHORSE_SSH_KEY (key);
-        }
-        break;
-        
+
     case SKSRC_LOAD_KEY:
         if (match != keyid)
             return NULL;
+        /* Fall through */
+        
+    case SKSRC_LOAD_NEW:
+        /* If we already have this key then just transfer ownership of keydata */
+        if (prev) {
+            g_object_set (prev, "key-data", keydata, NULL);
+            return SEAHORSE_SSH_KEY (prev);
+        }
         break;
-            
+        
     case SKSRC_LOAD_ALL:
-        key = seahorse_context_get_key (SCTX_APP (), sksrc, keyid);
-        if (key)
-            seahorse_context_remove_key (SCTX_APP (), key);
+        if (prev) 
+            seahorse_context_remove_key (SCTX_APP (), prev);
         break;
         
     default:

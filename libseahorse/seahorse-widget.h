@@ -61,6 +61,7 @@ struct _SeahorseWidget {
     
     /*< private >*/
     GtkUIManager   *ui;
+    gboolean destroying;
 };
 
 struct _SeahorseWidgetClass {

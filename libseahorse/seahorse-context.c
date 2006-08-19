@@ -463,7 +463,7 @@ setup_keys_by_type (SeahorseContext *sctx, SeahorseKey *skey, gboolean add)
     for (akey = g_hash_table_lookup (sctx->pv->keys_by_type, kt); 
          akey; akey = akey->preferred)
     {
-        if(akey != skey)
+        if (akey != skey)
             keys = g_list_prepend (keys, akey);
     }
     
@@ -650,6 +650,7 @@ seahorse_context_remove_key (SeahorseContext *sctx, SeahorseKey *skey)
     if (g_hash_table_lookup (sctx->pv->keys_by_source, k)) {
         g_object_ref (skey);
         g_signal_handlers_disconnect_by_func (skey, key_changed, sctx);
+        g_signal_handlers_disconnect_by_func (skey, key_destroyed, sctx);
         g_hash_table_remove (sctx->pv->keys_by_source, k);
         setup_keys_by_type (sctx, skey, FALSE);
         g_signal_emit (sctx, signals[REMOVED], 0, skey);    
