@@ -104,6 +104,13 @@ gchar**     seahorse_util_uris_expand       (const gchar **uris);
 gboolean    seahorse_util_uris_package      (const gchar* package, 
                                              const gchar** uris);
 
+GQuark      seahorse_util_detect_mime_type   (const gchar *mime);
+
+GQuark      seahorse_util_detect_data_type   (const gchar *data,
+                                              guint length);
+
+GQuark      seahorse_util_detect_file_type   (const gchar *uri);
+
 GtkWidget*  seahorse_util_chooser_open_new              (const gchar *title,
                                                          GtkWindow *parent);
 

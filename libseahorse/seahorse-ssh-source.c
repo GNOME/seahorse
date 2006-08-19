@@ -349,7 +349,8 @@ seahorse_ssh_source_import (SeahorseKeySource *sksrc, gpgme_data_t data)
 {
     // TODO: Implement this
     g_warning ("no import support yet for SSH");
-    return seahorse_operation_new_complete (NULL);              
+    seahorse_util_show_error (NULL, "No import support for SSH keys", "TODO: Needs implementing");
+    return seahorse_operation_new_complete (NULL);
 }
 
 static SeahorseOperation* 

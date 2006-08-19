@@ -42,6 +42,10 @@
 #include "seahorse-gconf.h"
 #include "seahorse-vfs-data.h"
 
+#ifdef WITH_SSH
+#include "seahorse-ssh-key.h"
+#endif
+
 static const gchar *bad_filename_chars = "/\\<>|";
 
 void
@@ -705,6 +709,54 @@ seahorse_util_uris_package (const gchar* package, const char** uris)
     }
 
     return TRUE;
+}
+
+GQuark
+seahorse_util_detect_mime_type (const gchar *mime)
+{
+    if (!mime || g_ascii_strcasecmp (mime, GNOME_VFS_MIME_TYPE_UNKNOWN) == 0) {
+        g_warning ("couldn't get mime type for data");
+        return 0;
+    }
+
+    if (g_ascii_strcasecmp (mime, "application/pgp-keys") == 0)
+        return SKEY_PGP;
+    
+#ifdef WITH_SSH 
+    else if (g_ascii_strcasecmp (mime, "application/ssh-key") == 0)
+        return SKEY_SSH;
+#endif 
+    
+    g_warning ("unsupported type of key data: %s", mime);
+    return 0;
+}
+
+GQuark
+seahorse_util_detect_data_type (const gchar *data, guint length)
+{
+    const gchar* mime = gnome_vfs_get_mime_type_for_data (data, length);
+    return seahorse_util_detect_mime_type (mime);
+}
+
+GQuark
+seahorse_util_detect_file_type (const gchar *uri)
+{
+    GnomeVFSResult res;
+    GnomeVFSFileInfo *info;
+    GQuark ret = 0;
+    
+    info = gnome_vfs_file_info_new ();
+    res = gnome_vfs_get_file_info (uri, info, 
+            GNOME_VFS_FILE_INFO_GET_MIME_TYPE | GNOME_VFS_FILE_INFO_FORCE_SLOW_MIME_TYPE);
+    
+    if (res == GNOME_VFS_OK)
+        ret = seahorse_util_detect_mime_type (info->mime_type);
+    else
+        g_warning ("couldn't get mime type for: %s: %s", uri, 
+                   gnome_vfs_result_to_string (res));
+
+    gnome_vfs_file_info_unref (info);
+    return ret;
 }
 
 GtkWidget*

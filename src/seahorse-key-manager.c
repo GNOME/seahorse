@@ -343,29 +343,61 @@ static void
 import_files (SeahorseWidget *swidget, const gchar **uris)
 {
     SeahorseKeySource *sksrc;
+    SeahorseMultiOperation *mop;
     SeahorseOperation *op;
     gpgme_data_t data;
+    GString *errmsg = NULL;
     GError *err = NULL;
+    const gchar **u;
+    GQuark ktype;
     
-    data = seahorse_vfs_data_read_multi (uris, &err);
-    if (!data) {
-        seahorse_util_handle_error (err, _("Couldn't import keys"));
-        return;
+    mop = seahorse_multi_operation_new ();
+    errmsg = g_string_new ("");
+    
+    for (u = uris; *u; u++) {
+        
+        if(!(*u)[0])
+            continue;
+        
+        /* Figure out where to import to */
+        ktype = seahorse_util_detect_file_type (*u);
+        if (!ktype) {
+            g_string_append_printf (errmsg, "%s: Invalid file format\n", *u);
+            continue;
+        }
+
+        /* All our supported key types have local */
+        sksrc = seahorse_context_find_key_source (SCTX_APP (), ktype, SKEY_LOC_LOCAL);
+        g_return_if_fail (sksrc);
+        
+        /* Load up the file */
+        data = seahorse_vfs_data_create (*u, SEAHORSE_VFS_READ, &err);
+        if (!data) {
+            g_string_append_printf (errmsg, "%s: %s", *u, 
+                        err && err->message ? err->message : _("Couldn't read file"));
+            continue;
+        }
+        
+        /* data is freed here */
+        op = seahorse_key_source_import (sksrc, data);
+        g_return_if_fail (op != NULL);
+        seahorse_multi_operation_take (mop, op);
     }
 
-    /* TODO: This needs work once we get more key types */
-    sksrc = seahorse_context_find_key_source (SCTX_APP (), SKEY_PGP, SKEY_LOC_LOCAL);
-    g_return_if_fail (sksrc && SEAHORSE_IS_PGP_SOURCE (sksrc));
-        
-    /* data is freed here */
-    op = seahorse_key_source_import (sksrc, data);
-    g_return_if_fail (op != NULL);
-
-    g_signal_connect (op, "done", G_CALLBACK (imported_keys), swidget);
-    seahorse_progress_show (op, _("Importing Keys"), TRUE);
+    if (seahorse_operation_is_running (SEAHORSE_OPERATION (mop))) {
+        g_signal_connect (mop, "done", G_CALLBACK (imported_keys), swidget);
+        seahorse_progress_show (SEAHORSE_OPERATION (mop), _("Importing Keys"), TRUE);
+    }
     
     /* A running operation refs itself */
-    g_object_unref (op);
+    g_object_unref (mop);
+        
+    if (errmsg->len) {
+        seahorse_util_show_error (GTK_WINDOW (seahorse_widget_get_top (swidget)),
+                                  _("Couldn't import keys"), errmsg->str);
+    }
+    
+    g_string_free (errmsg, TRUE);
 }
 
 static void
@@ -374,14 +406,26 @@ import_text (SeahorseWidget *swidget, const gchar *text)
     SeahorseKeySource *sksrc;
     SeahorseOperation *op;
     gpgme_data_t data;
+    GQuark ktype;
+    guint len;
     
+    len = strlen (text);
+    
+    /* Figure out what key format we're dealing with here */
+    ktype = seahorse_util_detect_data_type (text, len);
+    if (!ktype) {
+        seahorse_util_show_error (GTK_WINDOW (seahorse_widget_get_top (swidget)),
+                _("Couldn't import keys"), _("Unrecognized key type, or invalid data format"));
+        return;
+    }
+    
+    /* All our supported key types have local */
+    sksrc = seahorse_context_find_key_source (SCTX_APP (), ktype, SKEY_LOC_LOCAL);
+    g_return_if_fail (sksrc && SEAHORSE_IS_PGP_SOURCE (sksrc));
+
     data = gpgmex_data_new_from_mem (text, strlen (text), TRUE);
     g_return_if_fail (data != NULL);
 
-    /* TODO: This needs work once we get more key types */
-    sksrc = seahorse_context_find_key_source (SCTX_APP (), SKEY_PGP, SKEY_LOC_LOCAL);
-    g_return_if_fail (sksrc && SEAHORSE_IS_PGP_SOURCE (sksrc));
-    
     /* data is freed here */
     op = seahorse_key_source_import (sksrc, data);
     g_return_if_fail (op != NULL);
