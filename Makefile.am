@@ -6,12 +6,6 @@ else
 AGENT_DIR = 
 endif
 
-if WITH_NAUTILUS
-NAUTILUS_DIR = bonobo
-else
-NAUTILUS_DIR = 
-endif
-
 SUBDIRS = libcryptui \
           libseahorse \
           src \
@@ -20,7 +14,6 @@ SUBDIRS = libcryptui \
           help \
           pixmaps \
           plugins \
-          $(NAUTILUS_DIR) \
           $(AGENT_DIR) \
           daemon 
 

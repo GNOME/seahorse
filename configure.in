@@ -307,36 +307,26 @@ AC_ARG_ENABLE(nautilus,
 	    [Don't compile nautilus plugin]))
 
 with_nautilus_ext=no
-with_nautilus=no
 
 # Nautilus tests 
 if test "$enable_nautilus" = "no"; then
-	echo "disabling nautilus plugin"
+    echo "disabling nautilus plugin"
 else
     enable_nautilus=yes
-	echo "enabling nautilus plugin..."
-	echo "checking for supported versions of nautilus..."
+    echo "enabling nautilus plugin..."
+    echo "checking for supported versions of nautilus..."
 
-	PKG_CHECK_MODULES(NAUTILUS, libnautilus-extension >= 2.9.0 glib-2.0 >= 2.6.0, , 
-        [PKG_CHECK_MODULES(BONOBO, libbonobo-2.0 libbonoboui-2.0 bonobo-activation-2.0 )])
+    PKG_CHECK_MODULES(NAUTILUS, libnautilus-extension >= 2.9.0 glib-2.0 >= 2.6.0)
 
     # The new Nautilus extension
     if test -n "$NAUTILUS_CFLAGS"; then
         with_nautilus_ext=yes
-    	AC_SUBST(NAUTILUS_CFLAGS)
-	    AC_SUBST(NAUTILUS_LIBS)
-        
-    # The old Bonobo Nautilus extension
-    elif test -n "$BONOBO_CFLAGS"; then
-        with_nautilus=yes
-    	AC_SUBST(BONOBO_CFLAGS)
-	    AC_SUBST(BONOBO_LIBS)
+        AC_SUBST(NAUTILUS_CFLAGS)
+        AC_SUBST(NAUTILUS_LIBS)
     fi
-
 fi
 
 AM_CONDITIONAL(WITH_NAUTILUS_EXT, test "$with_nautilus_ext" = "yes")
-AM_CONDITIONAL(WITH_NAUTILUS, test "$with_nautilus" = "yes")
 
 
 dnl ****************************************************************************
@@ -692,7 +682,6 @@ libcryptui/cryptui.pc
 libcryptui/Makefile
 libcryptui/tests/Makefile
 libseahorse/Makefile
-bonobo/Makefile
 po/Makefile.in
 help/Makefile
 data/Makefile
@@ -728,8 +717,7 @@ Plugins:
   Panel Applet:          $with_panel_applet
   Seahorse Agent:        $enable_agent
     gnome-keyring:       $enable_gnome_keyring
-  Nautilus (v < 2.8):    $with_nautilus
-  Nautilus (v > 2.10):   $with_nautilus_ext
+  Nautilus:              $with_nautilus_ext
   Key Sharing:           $enable_sharing
 Notification Support:    $enable_libnotify
 "
