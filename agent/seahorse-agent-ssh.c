@@ -289,16 +289,11 @@ load_ssh_key (SeahorseSSHKey *skey)
 {
     SeahorseOperation *op;
     SeahorseSSHSource *ssrc;
-    gchar *cmd;
     
     DEBUG_MSG (("Loading SSH key: %s\n", seahorse_ssh_key_get_filename (skey, TRUE)));
-    
-    cmd = g_strdup_printf (SSH_ADD_PATH " '%s'", seahorse_ssh_key_get_filename (skey, TRUE));
     ssrc = SEAHORSE_SSH_SOURCE (seahorse_key_get_source (SEAHORSE_KEY (skey)));
-    op = seahorse_ssh_operation_new (ssrc, cmd, NULL, 0, _("SSH Passphrase"), skey);
     
-    g_free (cmd);
-    
+    op = seahorse_ssh_operation_agent_load (ssrc, skey);
     seahorse_operation_wait (op);
     
     if (!seahorse_operation_is_successful (op))

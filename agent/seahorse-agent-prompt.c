@@ -153,8 +153,8 @@ seahorse_agent_prompt_pass (SeahorseAgentPassReq *pr)
 
     g_assert (!seahorse_agent_prompt_have ());
     
-    dialog = seahorse_passphrase_prompt_show (NULL, pr->description, 
-                                              pr->prompt, pr->errmsg, FALSE);
+    dialog = seahorse_passphrase_prompt_show (NULL, pr->errmsg ? pr->errmsg : pr->description, 
+                                              pr->prompt, NULL, FALSE);
     g_signal_connect (dialog, "response", G_CALLBACK (passphrase_response), pr);
     g_current_win = GTK_WIDGET (dialog);
 }

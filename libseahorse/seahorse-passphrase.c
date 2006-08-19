@@ -145,7 +145,7 @@ constrain_size (GtkWidget *win, GtkRequisition *req, gpointer data)
 
 GtkDialog*
 seahorse_passphrase_prompt_show (const gchar *title, const gchar *description, 
-                                 const gchar *prompt, const gchar *errmsg,
+                                 const gchar *prompt, const gchar *check,
                                  gboolean confirm)
 {
     SeahorseSecureEntry *entry;
@@ -199,22 +199,8 @@ seahorse_passphrase_prompt_show (const gchar *title, const gchar *description,
         gtk_box_pack_start (GTK_BOX (box), w, TRUE, FALSE, 0);
     }
 
-    /* Any error messsages */
-    if (errmsg) {
-        GdkColor color = { 0, 0xffff, 0, 0 };
-
-        msg = utf8_validate (errmsg);
-        w = gtk_label_new (msg);
-        g_free (msg);
-
-        gtk_misc_set_alignment (GTK_MISC (w), 0.0, 0.5);
-        gtk_label_set_line_wrap (GTK_LABEL (w), TRUE);
-        gtk_box_pack_start (GTK_BOX (box), w, TRUE, FALSE, 0);
-        gtk_widget_modify_fg (w, GTK_STATE_NORMAL, &color);
-    }
-
     /* Two entries (usually on is hidden)  in a vbox */
-    table = GTK_TABLE (gtk_table_new (2, 2, FALSE));
+    table = GTK_TABLE (gtk_table_new (3, 2, FALSE));
     gtk_table_set_row_spacings (table, HIG_SMALL);
     gtk_table_set_col_spacings (table, HIG_LARGE);
     gtk_box_pack_start (GTK_BOX (box), GTK_WIDGET (table), FALSE, FALSE, 0);
@@ -252,6 +238,14 @@ seahorse_passphrase_prompt_show (const gchar *title, const gchar *description,
         gtk_widget_grab_focus (GTK_WIDGET (entry));
     else
         g_signal_connect (G_OBJECT (entry), "changed", G_CALLBACK (entry_changed), dialog);
+
+    /* The checkbox */
+    if (check) {
+        w = gtk_check_button_new_with_mnemonic (check);
+        gtk_table_attach_defaults (table, w, 1, 2, 2, 3);
+        g_object_set_data (G_OBJECT (dialog), "check-option", w);
+    }
+
     gtk_widget_show_all (GTK_WIDGET (table));
     
     w = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
@@ -284,6 +278,14 @@ seahorse_passphrase_prompt_get (GtkDialog *dialog)
     entry = SEAHORSE_SECURE_ENTRY (g_object_get_data (G_OBJECT (dialog), "secure-entry"));
     return seahorse_secure_entry_get_text (entry);
 }
+
+gboolean
+seahorse_passphrase_prompt_checked (GtkDialog *dialog)
+{
+    GtkToggleButton *button = GTK_TOGGLE_BUTTON (g_object_get_data (G_OBJECT (dialog), "check-option"));
+    return GTK_IS_TOGGLE_BUTTON (button) ? gtk_toggle_button_get_active (button) : FALSE;
+}
+
 
 gpgme_error_t
 seahorse_passphrase_get (gconstpointer dummy, const gchar *passphrase_hint, 
@@ -319,7 +321,8 @@ seahorse_passphrase_get (gconstpointer dummy, const gchar *passphrase_hint,
 
     g_strfreev (split_uid);
 
-    dialog = seahorse_passphrase_prompt_show (NULL, label, NULL, errmsg, FALSE);
+    dialog = seahorse_passphrase_prompt_show (NULL, errmsg ? errmsg : label, 
+                                              NULL, NULL, FALSE);
     g_free (label);
     g_free (errmsg);
     

@@ -95,7 +95,7 @@ on_response (GtkDialog *dialog, guint response, SeahorseWidget *swidget)
     widget = seahorse_widget_get_widget (swidget, "algorithm-choice");
     g_return_if_fail (widget != NULL);
     t = gtk_combo_box_get_active_text (GTK_COMBO_BOX (widget));
-    if (t && strcasecmp (t, "DSA"))
+    if (t && strstr (t, "DSA"))
         type = SSH_ALGO_DSA;
     else
         type = SSH_ALGO_RSA;

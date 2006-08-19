@@ -21,12 +21,18 @@
 
 #include "config.h"
 #include <sys/wait.h>
+#include <sys/socket.h>
 #include <gnome.h>
 #include <fcntl.h>
 
 #include "seahorse-ssh-operation.h"
 #include "seahorse-util.h"
 #include "seahorse-gpgmex.h"
+#include "seahorse-passphrase.h"
+
+#ifdef WITH_GNOME_KEYRING
+#include <gnome-keyring.h>
+#endif
 
 #ifndef DEBUG_OPERATION_ENABLE
 #if _DEBUG
@@ -47,21 +53,49 @@
  */
  
 typedef void (*ResultCallback) (SeahorseSSHOperation *sop);
+typedef const gchar* (*PasswordCallback) (SeahorseSSHOperation *sop, const gchar* msg);
 
 typedef struct _SeahorseSSHOperationPrivate {
+    
+    /* Data written to SSH */
     GString *sin;
     guint win;
     GIOChannel *iin;
+    
+    /* Data being read from SSH */
     GString *sout;
     guint wout;
     GIOChannel *iout;
+    
+    /* Data from SSH error */
     GString *serr;
     guint werr;
     GIOChannel *ierr;
+    
+    /* Process Information */
     GPid pid;
     guint wpid;
+    
+    /* Callback when ready to parse result */
     ResultCallback result_cb;
+    
+    /* Callback for password prompting */
+    PasswordCallback password_cb;
+    
+    /* Prompt information */
+    SeahorseKey *prompt_skey;
+    GtkDialog *prompt_dialog;
+    guint prompt_requests;
+    
+    /* seahorse-ssh-askpass communication */
+    GIOChannel *io_askpass;
+    guint stag_askpass;
+    int fds_askpass[2];
+
 } SeahorseSSHOperationPrivate;
+
+#define COMMAND_PASSWORD "PASSWORD "
+#define COMMAND_PASSWORD_LEN   9
 
 enum {
     PROP_0,
@@ -127,6 +161,15 @@ watch_ssh_process (GPid pid, gint status, SeahorseSSHOperation *sop)
     g_spawn_close_pid (pid);
     pv->pid = 0;
     pv->wpid = 0;
+    
+    /* Close off the askpass io channel etc... */
+    if(pv->stag_askpass)
+        g_source_remove (pv->stag_askpass);
+    pv->stag_askpass = 0;
+    
+    if(pv->io_askpass)
+        g_io_channel_unref (pv->io_askpass);
+    pv->io_askpass = NULL;
     
     /* This watch holds a ref on the operation, release */
     g_object_unref (sop);
@@ -219,18 +262,97 @@ io_ssh_read (GIOChannel *source, GIOCondition condition, SeahorseSSHOperation *s
     return TRUE;
 }
 
+/* Communication with seahorse-ssh-askpass */
+static gboolean
+askpass_handler (GIOChannel *source, GIOCondition condition, SeahorseSSHOperation *sop)
+{
+    SeahorseSSHOperationPrivate *pv = SEAHORSE_SSH_OPERATION_GET_PRIVATE (sop);
+    gchar *string = NULL;
+    gsize length;
+    GError *err = NULL;
+    gboolean ret = TRUE;
+    const gchar *line;
+    const gchar *result = NULL;
+
+    if (condition & G_IO_IN) {
+        
+        /* Read 1 line from the io channel, including newline character */
+        g_io_channel_read_line (source, &string, &length, NULL, &err);
+
+        if (err != NULL) {
+            g_critical ("couldn't read from seahorse-ssh-askpass: %s", err->message);
+            g_clear_error (&err);
+            ret = FALSE;
+        }
+        
+        /* Process the line */
+        if (string && ret) {
+            
+            string[length] = 0;
+            DEBUG_OPERATION (("SSHOP: seahorse-ssh-askpass request: %s\n", string));
+            
+            if (g_ascii_strncasecmp (COMMAND_PASSWORD, string, COMMAND_PASSWORD_LEN) == 0) {
+                line = g_strstrip (string + COMMAND_PASSWORD_LEN);
+                if (pv->password_cb)
+                    result = (pv->password_cb) (sop, line);
+                pv->prompt_requests++;
+            }
+            
+            /* And write the result back out to seahorse-ssh-askpass */
+            DEBUG_OPERATION (("SSHOP: seahorse-ssh-askpass response: %s\n", result ? result : ""));
+            if (result)
+                g_io_channel_write_chars (pv->io_askpass, result, strlen (result), &length, &err);
+            if (err == NULL)
+                g_io_channel_write_chars (pv->io_askpass, "\n", 1, &length, &err);
+            if (err == NULL)
+                g_io_channel_flush (pv->io_askpass, &err);
+            if (err != NULL) {
+                g_critical ("couldn't read from seahorse-ssh-askpass: %s", err->message);
+                g_clear_error (&err);
+                ret = FALSE;
+            }
+        }
+    }
+
+    if (condition & G_IO_HUP)
+        ret = FALSE;
+        
+    if (!ret) {
+        if (pv->io_askpass)
+            g_io_channel_unref (pv->io_askpass);
+        pv->io_askpass = NULL;
+        pv->stag_askpass = 0;
+    }
+
+    g_free (string);
+    return ret;
+}
+
 static void
 ssh_child_setup (gpointer user_data)
 {
-    /* Install our askpass program if none present */
-    g_setenv ("SSH_ASKPASS", EXECDIR "seahorse-ssh-askpass", FALSE);
+    SeahorseSSHOperationPrivate *pv = (SeahorseSSHOperationPrivate*)user_data;
+    gchar buf[15];
+
+    /* No terminal for this process */
+    setsid ();
     
+    g_setenv ("SSH_ASKPASS", EXECDIR "seahorse-ssh-askpass", FALSE);
+
+    /* We do screen scraping so we need locale C */
     if (g_getenv ("LC_ALL"))
         g_setenv ("LC_ALL", "C", TRUE);
     g_setenv ("LANG", "C", TRUE);
     
-    /* No terminal for this process */
-    setsid ();
+    /* Let child know which fd it is */
+    if (pv->fds_askpass[1] != -1) {
+        snprintf (buf, sizeof (buf), "%d", pv->fds_askpass[1]);
+        g_setenv ("SEAHORSE_SSH_ASKPASS_FD", buf, TRUE);
+    }
+    
+    /* Child doesn't need this stuff */
+    if (pv->fds_askpass[0] != -1)
+        close(pv->fds_askpass[0]);
 }
 
 static void
@@ -254,48 +376,6 @@ get_algorithm_text (guint algo)
         g_return_val_if_reached (NULL);
         break;
     }
-}
-
-static gchar*
-find_nonexistant_ssh_filename (SeahorseSSHSource *src, guint type)
-{
-    const gchar *algo;
-    gchar *filename;
-    gchar *dir;
-    guint i = 0;
-    
-    g_object_get (src, "base-directory", &dir, NULL);
-    g_return_val_if_fail (dir, NULL);
-    
-    switch (type) {
-    case SSH_ALGO_DSA:
-        algo = "id_dsa";
-        break;
-    case SSH_ALGO_RSA:
-        algo = "id_rsa";
-        break;
-    case SSH_ALGO_RSA1:
-        algo = "identity";
-        break;
-    default:
-        g_return_val_if_reached (NULL);
-        break;
-    }
-    
-    for (i = 0; i < ~0; i++) {
-        if (i == 0)
-            filename = g_strdup_printf ("%s/%s", dir, algo);
-        else
-            filename = g_strdup_printf ("%s/%s.%d", dir, algo, i);
-        
-        if (!g_file_test (filename, G_FILE_TEST_EXISTS))
-            break;
-        
-        g_free (filename);
-        filename = NULL;
-    }
-        
-    return filename;
 }
 
 static gchar*
@@ -330,20 +410,37 @@ escape_shell_arg (const gchar *arg)
     return escaped;
 }
 
-static void
-generate_result_cb (SeahorseSSHOperation *sop)
+static const gchar* 
+prompt_passphrase (SeahorseSSHOperation *sop, const gchar* title, const gchar* message,
+                   const gchar* check, gboolean confirm)
 {
-    SeahorseSSHKey *skey;
-    const char *filename;
+    SeahorseSSHOperationPrivate *pv = SEAHORSE_SSH_OPERATION_GET_PRIVATE (sop);
+    gchar *display;
+    gchar *msg;
     
-    filename = g_object_get_data (G_OBJECT (sop), "filename");
-    g_return_if_fail (filename != NULL);
+    if (pv->prompt_dialog)
+        gtk_widget_destroy (GTK_WIDGET (pv->prompt_dialog));
     
-    /* The result of the operation is the key we generated */
-    skey = seahorse_ssh_source_key_for_filename (sop->sksrc, filename);
-    g_return_if_fail (SEAHORSE_IS_SSH_KEY (skey));
+    if (pv->prompt_skey)
+        display = seahorse_key_get_display_name (pv->prompt_skey);
+    else 
+        display = g_strdup (_("SSH key"));
+    msg = g_strdup_printf (message, display);
+    g_free (display);
+
+    pv->prompt_dialog = seahorse_passphrase_prompt_show (title, msg, _("Passphrase:"), 
+                                                         check, confirm);
+    g_free (msg);
     
-    seahorse_operation_mark_result (SEAHORSE_OPERATION (sop), skey, NULL);
+    /* Run and check if cancelled? */
+    if (gtk_dialog_run (pv->prompt_dialog) != GTK_RESPONSE_ACCEPT) {
+        gtk_widget_destroy (GTK_WIDGET (pv->prompt_dialog));
+        pv->prompt_dialog = NULL;
+        return NULL;
+    }
+    
+    gtk_widget_hide (GTK_WIDGET (pv->prompt_dialog));
+    return seahorse_passphrase_prompt_get (pv->prompt_dialog);
 }
 
 /* -----------------------------------------------------------------------------
@@ -354,8 +451,17 @@ static void
 seahorse_ssh_operation_init (SeahorseSSHOperation *sop)
 {
     SeahorseSSHOperationPrivate *pv = SEAHORSE_SSH_OPERATION_GET_PRIVATE (sop);
+    
     pv->sout = g_string_new (NULL);
     pv->serr = g_string_new (NULL);
+
+    /* The seahorse-ssh-askpass pipes */
+    if (socketpair (AF_UNIX, SOCK_STREAM, 0, pv->fds_askpass) == -1) {
+        g_warning ("couldn't create pipes to communicate with seahorse-ssh-askpass: %s",
+                   strerror(errno));
+        pv->fds_askpass[0] = -1;
+        pv->fds_askpass[1] = -1;
+    }
 }
 
 static void 
@@ -382,8 +488,15 @@ static void
 seahorse_ssh_operation_dispose (GObject *gobject)
 {
     SeahorseOperation *op = SEAHORSE_OPERATION (gobject);
+    SeahorseSSHOperationPrivate *pv = SEAHORSE_SSH_OPERATION_GET_PRIVATE (op);
+
     if (seahorse_operation_is_running (op))
         seahorse_ssh_operation_cancel (op);
+    
+    if (pv->prompt_dialog)
+        gtk_widget_destroy (GTK_WIDGET (pv->prompt_dialog));
+    pv->prompt_dialog = NULL;
+    
     G_OBJECT_CLASS (operation_parent_class)->dispose (gobject);  
 }
 
@@ -412,8 +525,20 @@ seahorse_ssh_operation_finalize (GObject *gobject)
     g_string_free (pv->sout, TRUE);
     g_string_free (pv->serr, TRUE);
     
+    /* Close the sockets */
+    if (pv->fds_askpass[0] != -1) 
+        close (pv->fds_askpass[0]);
+    pv->fds_askpass[0] = -1;
+
+    if (pv->fds_askpass[1] != -1) 
+        close (pv->fds_askpass[1]);
+    pv->fds_askpass[1] = -1;
+    
+    g_assert (pv->prompt_dialog == NULL);
+
     /* watch_ssh_process always needs to have been called */
     g_assert (pv->pid == 0 && pv->wpid == 0);
+    g_assert (pv->io_askpass == NULL && pv->stag_askpass == 0);
     
     G_OBJECT_CLASS (operation_parent_class)->finalize (gobject);  
 }
@@ -436,8 +561,7 @@ seahorse_ssh_operation_cancel (SeahorseOperation *operation)
 
 SeahorseOperation*
 seahorse_ssh_operation_new (SeahorseSSHSource *ssrc, const gchar *command, 
-                            const gchar *input, gint length, const gchar *prompt, 
-                            SeahorseSSHKey *promptkey)
+                            const gchar *input, gint length, SeahorseSSHKey *skey)
 {
     SeahorseSSHOperationPrivate *pv;
     SeahorseSSHOperation *sop;
@@ -445,7 +569,6 @@ seahorse_ssh_operation_new (SeahorseSSHSource *ssrc, const gchar *command,
     int argc, r;
     int fin, fout, ferr;
     char **argv;
-    gchar *t;
     
     g_return_val_if_fail (SEAHORSE_IS_SSH_SOURCE (ssrc), NULL);
     g_return_val_if_fail (command && command[0], NULL);
@@ -459,38 +582,17 @@ seahorse_ssh_operation_new (SeahorseSSHSource *ssrc, const gchar *command,
     pv = SEAHORSE_SSH_OPERATION_GET_PRIVATE (sop);
 
     sop->sksrc = ssrc;
+    pv->prompt_skey = SEAHORSE_KEY (skey);
     
     DEBUG_OPERATION (("SSHOP: Executing SSH command: %s\n", command));
     
-    /* A title for the passphrase prompter */
-    if (prompt == NULL)
-        g_unsetenv (SEAHORSE_SSH_ENV_PROMPT_TITLE);
-    else
-        g_setenv (SEAHORSE_SSH_ENV_PROMPT_TITLE, prompt, TRUE);
-    
-    /* Set our passphrase prompter know which key we're dealing with */
-    if (promptkey == NULL) {
-        g_unsetenv (SEAHORSE_SSH_ENV_ID);
-        g_unsetenv (SEAHORSE_SSH_ENV_DESC);
-    } else {
-        g_setenv (SEAHORSE_SSH_ENV_ID,
-                  seahorse_key_get_rawid (seahorse_key_get_keyid (SEAHORSE_KEY (promptkey))), TRUE);
-        t = seahorse_key_get_display_name (SEAHORSE_KEY (promptkey));
-        g_setenv (SEAHORSE_SSH_ENV_DESC, t, TRUE);
-        g_free (t);
-    }
-    
     /* And off we go to run the program */
-    r = g_spawn_async_with_pipes (NULL, argv, NULL, G_SPAWN_DO_NOT_REAP_CHILD, 
-                                  ssh_child_setup, NULL, &pv->pid, 
+    r = g_spawn_async_with_pipes (NULL, argv, NULL, 
+                                  G_SPAWN_DO_NOT_REAP_CHILD | G_SPAWN_LEAVE_DESCRIPTORS_OPEN 	, 
+                                  ssh_child_setup, pv, &pv->pid, 
                                   input ? &fin : NULL, &fout, &ferr, &error);
     g_strfreev (argv);  
     
-    /* No funny env variables floating around  */
-    g_unsetenv (SEAHORSE_SSH_ENV_PROMPT_TITLE);
-    g_unsetenv (SEAHORSE_SSH_ENV_ID);
-    g_unsetenv (SEAHORSE_SSH_ENV_DESC);
-
     if (!r)
         return seahorse_operation_new_complete (error);
     
@@ -522,6 +624,21 @@ seahorse_ssh_operation_new (SeahorseSSHSource *ssrc, const gchar *command,
     /* Process watch */
     g_object_ref (sop); /* When the process ends, reference is released */
     pv->wpid = g_child_watch_add (pv->pid, (GChildWatchFunc)watch_ssh_process, sop);
+    
+    /* Setup askpass communication */
+    if (pv->fds_askpass[0] != -1) {
+        pv->io_askpass = g_io_channel_unix_new (pv->fds_askpass[0]);
+        g_io_channel_set_close_on_unref (pv->io_askpass, TRUE);
+        g_io_channel_set_encoding (pv->io_askpass, NULL, NULL);
+        pv->stag_askpass = g_io_add_watch (pv->io_askpass, G_IO_IN | G_IO_HUP, 
+                                           (GIOFunc)askpass_handler, sop);
+        pv->fds_askpass[0] = -1; /* closed by io channel */
+    }
+    
+    /* The other end of the pipe, close it */
+    if (pv->fds_askpass[1] != -1) 
+        close (pv->fds_askpass[1]);
+    pv->fds_askpass[1] = -1;
     
     seahorse_operation_mark_start (SEAHORSE_OPERATION (sop));
     
@@ -583,10 +700,24 @@ seahorse_ssh_operation_sync (SeahorseSSHSource *ssrc, const gchar *command,
     return sout;
 }
 
+/* -----------------------------------------------------------------------------
+ * UPLOAD KEY 
+ */
+
+static const gchar*
+upload_password_cb (SeahorseSSHOperation *sop, const gchar* msg)
+{
+    DEBUG_OPERATION (("in upload_password_cb\n"));
+
+    /* Just prompt over and over again */
+    return prompt_passphrase (sop, _("SSH Passphrase"), msg, NULL, FALSE);
+}
+
 SeahorseOperation*  
 seahorse_ssh_operation_upload (SeahorseSSHSource *ssrc, GList *keys, 
                                const gchar *username, const gchar *hostname)
 {
+    SeahorseSSHOperationPrivate *pv;
     SeahorseOperation *op;
     gpgme_data_t data;
     gpgme_error_t gerr;
@@ -631,17 +762,68 @@ seahorse_ssh_operation_upload (SeahorseSSHSource *ssrc, GList *keys,
                            username, hostname);
     input = gpgme_data_release_and_get_mem (data, &length);
     
-    op = seahorse_ssh_operation_new (ssrc, cmd, input, length, NULL, NULL);
+    op = seahorse_ssh_operation_new (ssrc, cmd, input, length, NULL);
     
     g_free (cmd);
     free (input);
 
+    pv = SEAHORSE_SSH_OPERATION_GET_PRIVATE (op);
+    pv->password_cb = upload_password_cb;
+
     return op;
+}
+
+/* -----------------------------------------------------------------------------
+ * CHANGE PASSPHRASE 
+ */
+
+static const gchar*
+change_password_cb (SeahorseSSHOperation *sop, const gchar* msg)
+{
+    SeahorseSSHOperationPrivate *pv = SEAHORSE_SSH_OPERATION_GET_PRIVATE (sop);
+    const gchar *ret = NULL;
+    gchar *lcase;
+
+    lcase = g_strdup (msg ? msg : "");
+    seahorse_util_string_lower (lcase);
+    
+    DEBUG_OPERATION (("in change_password_cb\n"));
+    
+    /* Need the old passphrase */
+    if (strstr (lcase, "old pass"))
+        ret = prompt_passphrase (sop, _("Old Key Passphrase"), 
+                _("Enter the old passphrase for: %s"), NULL, FALSE);
+        
+    /* Look for the new passphrase thingy */
+    else if (strstr (lcase, "new pass"))
+        ret = prompt_passphrase (sop, _("New Key Passphrase"), 
+                _("Enter the new passphrase for: %s"), NULL, TRUE);
+        
+    /* Confirm the new passphrase, just send it again */
+    else if (strstr (lcase, "again") && pv->prompt_dialog)
+        ret = seahorse_passphrase_prompt_get (pv->prompt_dialog);
+        
+    /* Something we don't understand */
+    else
+        ret = prompt_passphrase (sop, _("Enter Key Passphrase"), msg, NULL, FALSE);
+    
+    g_free (lcase);
+    return ret;
+}
+
+static void
+change_result_cb (SeahorseSSHOperation *sop)
+{
+    SeahorseSSHOperationPrivate *pv = SEAHORSE_SSH_OPERATION_GET_PRIVATE (sop);
+    if (pv->prompt_skey)
+        seahorse_key_source_load_async (SEAHORSE_KEY_SOURCE (sop->sksrc), SKSRC_LOAD_KEY, 
+                                        seahorse_key_get_keyid (pv->prompt_skey), NULL);
 }
 
 SeahorseOperation*
 seahorse_ssh_operation_change_passphrase (SeahorseSSHKey *skey)
 {
+    SeahorseSSHOperationPrivate *pv;
     SeahorseKeySource *ssrc;
     SeahorseOperation *op;
     gchar *cmd;
@@ -653,14 +835,95 @@ seahorse_ssh_operation_change_passphrase (SeahorseSSHKey *skey)
     g_return_val_if_fail (SEAHORSE_IS_SSH_SOURCE (ssrc), NULL);
     
     cmd = g_strdup_printf (SSH_KEYGEN_PATH " -p -f %s", skey->keydata->filename);
-    op = seahorse_ssh_operation_new (SEAHORSE_SSH_SOURCE (ssrc), cmd, NULL, -1, 
-                                     _("Change SSH Passphrase"), skey);
+    op = seahorse_ssh_operation_new (SEAHORSE_SSH_SOURCE (ssrc), cmd, NULL, -1, skey);
     g_free (cmd);
+    
+    pv = SEAHORSE_SSH_OPERATION_GET_PRIVATE (op);
+    pv->password_cb = change_password_cb;
+    pv->result_cb = change_result_cb;
     
     return op;
 }
 
-SeahorseOperation*   
+/* -----------------------------------------------------------------------------
+ * KEY GENERATE OPERATION
+ */ 
+
+static gchar*
+find_nonexistant_ssh_filename (SeahorseSSHSource *src, guint type)
+{
+    const gchar *algo;
+    gchar *filename;
+    gchar *dir;
+    guint i = 0;
+    
+    g_object_get (src, "base-directory", &dir, NULL);
+    g_return_val_if_fail (dir, NULL);
+    
+    switch (type) {
+    case SSH_ALGO_DSA:
+        algo = "id_dsa";
+        break;
+    case SSH_ALGO_RSA:
+        algo = "id_rsa";
+        break;
+    case SSH_ALGO_RSA1:
+        algo = "identity";
+        break;
+    default:
+        g_return_val_if_reached (NULL);
+        break;
+    }
+    
+    for (i = 0; i < ~0; i++) {
+        if (i == 0)
+            filename = g_strdup_printf ("%s/%s", dir, algo);
+        else
+            filename = g_strdup_printf ("%s/%s.%d", dir, algo, i);
+        
+        if (!g_file_test (filename, G_FILE_TEST_EXISTS))
+            break;
+        
+        g_free (filename);
+        filename = NULL;
+    }
+        
+    return filename;
+}
+
+static void
+generate_result_cb (SeahorseSSHOperation *sop)
+{
+    SeahorseSSHKey *skey;
+    const char *filename;
+    
+    filename = g_object_get_data (G_OBJECT (sop), "filename");
+    g_return_if_fail (filename != NULL);
+    
+    /* The result of the operation is the key we generated */
+    skey = seahorse_ssh_source_key_for_filename (sop->sksrc, filename);
+    g_return_if_fail (SEAHORSE_IS_SSH_KEY (skey));
+    
+    seahorse_operation_mark_result (SEAHORSE_OPERATION (sop), skey, NULL);
+}
+
+static const gchar*
+generate_password_cb (SeahorseSSHOperation *sop, const gchar* msg)
+{
+    SeahorseSSHOperationPrivate *pv = SEAHORSE_SSH_OPERATION_GET_PRIVATE (sop);
+    DEBUG_OPERATION (("in generate_password_cb\n"));
+
+    /* If the first time then prompt */
+    if (!pv->prompt_dialog) {
+        return prompt_passphrase (sop, _("New SSH Passphrase"), 
+                _("Enter a passphrase for your new SSH key."), NULL, TRUE);
+    }
+    
+    /* Otherwise return the entered passphrase */
+    return seahorse_passphrase_prompt_get (pv->prompt_dialog);
+}
+
+SeahorseOperation*
 seahorse_ssh_operation_generate (SeahorseSSHSource *src, const gchar *email, 
                                  guint type, guint bits)
 {
@@ -686,13 +949,143 @@ seahorse_ssh_operation_generate (SeahorseSSHSource *src, const gchar *email,
                            bits, algo, comment, filename);
     g_free (comment);
     
-    op = seahorse_ssh_operation_new (SEAHORSE_SSH_SOURCE (src), cmd, NULL, -1, 
-                                     _("New SSH Passphrase"), NULL);
+    op = seahorse_ssh_operation_new (SEAHORSE_SSH_SOURCE (src), cmd, NULL, -1, NULL);
     g_free (cmd);
-
+    
     pv = SEAHORSE_SSH_OPERATION_GET_PRIVATE (op);
     pv->result_cb = generate_result_cb;
+    pv->password_cb = generate_password_cb;
     g_object_set_data_full (G_OBJECT (op), "filename", filename, g_free);
+    
+    return op;
+}
+
+/* -----------------------------------------------------------------------------
+ * LOAD KEY INTO AGENT
+ */ 
+
+#ifdef WITH_GNOME_KEYRING
+
+#define KEYRING_ATTR_TYPE "seahorse-key-type"
+#define KEYRING_ATTR_KEYID "openssh-keyid"
+#define KEYRING_VAL_SSH "openssh"
+
+static gchar*
+get_keyring_passphrase (SeahorseKey *skey)
+{
+    GnomeKeyringAttributeList *attributes = NULL;
+    GnomeKeyringResult res;
+    GList *found_items;
+    GnomeKeyringFound *found;
+    gchar *ret = NULL;
+    const gchar *id;
+    
+    g_assert (skey != NULL);
+    id = seahorse_key_get_rawid (seahorse_key_get_keyid (skey));
+    
+    attributes = gnome_keyring_attribute_list_new ();
+    gnome_keyring_attribute_list_append_string (attributes, KEYRING_ATTR_KEYID, id);
+    res = gnome_keyring_find_items_sync (GNOME_KEYRING_ITEM_GENERIC_SECRET, attributes, 
+                                         &found_items);
+    gnome_keyring_attribute_list_free (attributes);
+        
+    if (res != GNOME_KEYRING_RESULT_OK) {
+        if (res != GNOME_KEYRING_RESULT_DENIED)
+            g_warning ("couldn't search keyring: (code %d)", res);
+            
+    } else {
+        
+        if (found_items && found_items->data) {
+            found = (GnomeKeyringFound*)found_items->data;
+            if (found->secret)
+                ret = g_strdup (found->secret);
+        }
+            
+        gnome_keyring_found_list_free (found_items);
+    }
+    
+    return ret;
+}
+
+static void 
+set_keyring_passphrase (SeahorseKey *skey, const gchar *pass)
+{
+    const gchar *keyring = NULL;
+    GnomeKeyringResult res;
+    GnomeKeyringAttributeList *attributes = NULL;
+    guint item_id;
+    const gchar *id;
+    gchar *display;
+    
+    g_assert (id != NULL);
+    id = seahorse_key_get_rawid (seahorse_key_get_keyid (skey));
+    display = seahorse_key_get_display_name (skey);
+    
+    attributes = gnome_keyring_attribute_list_new ();
+    gnome_keyring_attribute_list_append_string (attributes, KEYRING_ATTR_TYPE, 
+                                                KEYRING_VAL_SSH);
+    gnome_keyring_attribute_list_append_string (attributes, KEYRING_ATTR_KEYID, id);
+    res = gnome_keyring_item_create_sync (keyring, GNOME_KEYRING_ITEM_GENERIC_SECRET, 
+                                          display, attributes, pass, TRUE, &item_id);
+    gnome_keyring_attribute_list_free (attributes);
+        
+    if (res != GNOME_KEYRING_RESULT_OK)
+        g_warning ("Couldn't store password in keyring: (code %d)", res);
+}
+
+#endif /* WITH_GNOME_KEYRING */
+
+static const gchar*
+load_password_cb (SeahorseSSHOperation *sop, const gchar* msg)
+{
+#ifdef WITH_GNOME_KEYRING
+    SeahorseSSHOperationPrivate *pv = SEAHORSE_SSH_OPERATION_GET_PRIVATE (sop);
+    gchar* pass;
+
+    DEBUG_OPERATION (("in load_password_cb\n"));
+    
+    if (pv->prompt_requests <= 0) {
+        pass = get_keyring_passphrase (pv->prompt_skey);
+        if (pass != NULL) {
+            g_object_set_data_full (G_OBJECT (sop), "load-keyring-passphrase", pass, g_free);
+            return pass;
+        }
+        pv->prompt_requests++;
+    }
+#endif /* WITH_GNOME_KEYRING */
+    
+    return prompt_passphrase (sop, _("SSH Key Passphrase"), _("Enter the SSH passphrase for: %s"), 
+                              _("Save this passphrase in my keyring"), FALSE);
+}
+
+static void
+load_result_cb (SeahorseSSHOperation *sop)
+{
+#ifdef WITH_GNOME_KEYRING
+    SeahorseSSHOperationPrivate *pv = SEAHORSE_SSH_OPERATION_GET_PRIVATE (sop);
+    const gchar* pass;
+    
+    if (pv->prompt_dialog && seahorse_passphrase_prompt_checked (pv->prompt_dialog)) {
+        pass = seahorse_passphrase_prompt_get (pv->prompt_dialog);
+        set_keyring_passphrase (pv->prompt_skey, pass);
+    }
+#endif /* WITH_GNOME_KEYRING */
+}
+
+SeahorseOperation*
+seahorse_ssh_operation_agent_load (SeahorseSSHSource *src, SeahorseSSHKey *skey)
+{
+    SeahorseSSHOperationPrivate *pv;
+    SeahorseOperation *op;
+    gchar *cmd;
+    
+    cmd = g_strdup_printf (SSH_ADD_PATH " '%s'", seahorse_ssh_key_get_filename (skey, TRUE));
+    op = seahorse_ssh_operation_new (src, cmd, NULL, 0, skey);
+    g_free (cmd);
+    
+    pv = SEAHORSE_SSH_OPERATION_GET_PRIVATE (op);
+    pv->result_cb = load_result_cb;
+    pv->password_cb = load_password_cb;
     
     return op;
 }

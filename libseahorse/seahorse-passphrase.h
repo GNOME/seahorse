@@ -27,19 +27,21 @@
 #define SEAHORSE_PASS_BAD    0x00000001
 #define SEAHORSE_PASS_NEW    0x01000000
 
-GtkDialog*      seahorse_passphrase_prompt_show     (const gchar *title, 
-                                                     const gchar *description, 
-                                                     const gchar *prompt, 
-                                                     const gchar *errmsg,
+GtkDialog*      seahorse_passphrase_prompt_show     (const gchar *title,
+                                                     const gchar *description,
+                                                     const gchar *prompt,
+                                                     const gchar *check,
                                                      gboolean confirm);
                                                      
 const gchar*    seahorse_passphrase_prompt_get      (GtkDialog *dialog);
+
+gboolean        seahorse_passphrase_prompt_checked  (GtkDialog *dialog);
 
 gpgme_error_t   seahorse_passphrase_get             (gconstpointer dummy,
                                                      const gchar *passphrase_hint, 
                                                      const char* passphrase_info, 
                                                      int prev_bad, int fd);
- 
+
 typedef enum {
     SEAHORSE_AGENT_UNKNOWN,
     SEAHORSE_AGENT_NONE,

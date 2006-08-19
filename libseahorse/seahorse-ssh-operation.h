@@ -31,11 +31,6 @@
 #ifndef __SEAHORSE_SSH_OPERATION_H__
 #define __SEAHORSE_SSH_OPERATION_H__
 
-/* Used by both seahorse-ssh-operation.c and seahorse-ssh-askpass.c */
-#define SEAHORSE_SSH_ENV_PROMPT_TITLE   "SEAHORSE_SSH_PROMPT_TITLE"
-#define SEAHORSE_SSH_ENV_ID             "SEAHORSE_SSH_KEYID"
-#define SEAHORSE_SSH_ENV_DESC           "SEAHORSE_SSH_KEYDESC"
-
 #include "seahorse-operation.h"
 #include "seahorse-ssh-source.h"
 #include "seahorse-ssh-key.h"
@@ -48,16 +43,17 @@
 #define SEAHORSE_SSH_OPERATION_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_SSH_OPERATION, SeahorseSSHOperationClass))
 
 DECLARE_OPERATION (SSH, ssh)
+
     /*< public >*/
     SeahorseSSHSource *sksrc;
+    
 END_DECLARE_OPERATION
 
 SeahorseOperation*   seahorse_ssh_operation_new          (SeahorseSSHSource *ssrc,
                                                           const gchar *command, 
                                                           const gchar *input, 
                                                           gint length,
-                                                          const gchar *prompt,
-                                                          SeahorseSSHKey *promptkey);
+                                                          SeahorseSSHKey *key);
 
 gchar*               seahorse_ssh_operation_sync         (SeahorseSSHSource *ssrc,
                                                           const gchar *command, 
@@ -74,5 +70,8 @@ SeahorseOperation*   seahorse_ssh_operation_generate     (SeahorseSSHSource *src
                                                           guint bits);
 
 SeahorseOperation*   seahorse_ssh_operation_change_passphrase (SeahorseSSHKey *skey);
+
+SeahorseOperation*   seahorse_ssh_operation_agent_load    (SeahorseSSHSource *src, 
+                                                           SeahorseSSHKey *skey);
 
 #endif /* __SEAHORSE_SSH_OPERATION_H__ */
