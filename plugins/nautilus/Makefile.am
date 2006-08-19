@@ -29,10 +29,6 @@ seahorse_tool_LDADD = \
     $(top_builddir)/libcryptui/libcryptui.la \
     $(top_builddir)/libseahorse/libseahorse.a
 
-# The old mime structure 
-mimeinfodir = $(datadir)/mime-info
-mimeinfo_DATA = seahorse.mime seahorse.keys
-
 # The new mime system
 mimedir = $(datadir)/mime/packages
 mime_DATA = seahorse.xml
