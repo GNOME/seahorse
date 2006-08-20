@@ -370,8 +370,6 @@ get_algorithm_text (guint algo)
         return "dsa";
     case SSH_ALGO_RSA:
         return "rsa";
-    case SSH_ALGO_RSA1:
-        return "rsa1";
     default:
         g_return_val_if_reached (NULL);
         break;
@@ -866,9 +864,6 @@ find_nonexistant_ssh_filename (SeahorseSSHSource *src, guint type)
         break;
     case SSH_ALGO_RSA:
         algo = "id_rsa";
-        break;
-    case SSH_ALGO_RSA1:
-        algo = "identity";
         break;
     default:
         g_return_val_if_reached (NULL);

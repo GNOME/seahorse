@@ -45,7 +45,8 @@ KEYSERVER_SRCS =
 endif
 
 if WITH_SSH
-SSH_SRCS = seahorse-ssh-key.c seahorse-ssh-key.h 
+SSH_SRCS = seahorse-ssh-key-data.c seahorse-ssh-key.h
+SSH_SRCS += seahorse-ssh-key.c seahorse-ssh-key.h 
 SSH_SRCS += seahorse-ssh-source.c seahorse-ssh-source.h
 SSH_SRCS += seahorse-ssh-operation.c seahorse-ssh-operation.h
 else
@@ -87,6 +88,7 @@ libseahorse_a_SOURCES = \
 	seahorse-notification.c \
 	seahorse-secure-memory.c seahorse-secure-memory.h \
 	seahorse-secure-entry.c seahorse-secure-entry.h \
+	seahorse-algo.c seahorse-algo.h \
 	$(BUILT_SOURCES) \
 	$(AGENT_SRCS) \
 	$(KEYSERVER_SRCS) \

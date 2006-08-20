@@ -42,14 +42,7 @@
 
 #include "seahorse-key.h"
 #include "seahorse-ssh-source.h"
-
-/* The various algorithm types */
-enum {
-    SSH_ALGO_UNK,
-    SSH_ALGO_RSA1,
-    SSH_ALGO_RSA,
-    SSH_ALGO_DSA
-};
+#include "seahorse-ssh-key-data.h"
 
 #define SKEY_SSH_STR                     "openssh"
 #define SKEY_SSH                         (g_quark_from_static_string (SKEY_SSH_STR))
@@ -62,7 +55,6 @@ enum {
 #define SEAHORSE_SSH_KEY_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_SSH_KEY, SeahorseSSHKeyClass))
 
 typedef struct _SeahorseSSHKey SeahorseSSHKey;
-typedef struct _SeahorseSSHKeyData SeahorseSSHKeyData;
 typedef struct _SeahorseSSHKeyClass SeahorseSSHKeyClass;
 typedef struct _SeahorseSSHKeyPrivate SeahorseSSHKeyPrivate;
 
@@ -76,15 +68,6 @@ struct _SeahorseSSHKey {
     struct _SeahorseSSHKeyPrivate *priv;
 };
 
-struct _SeahorseSSHKeyData {
-    gchar *filename;
-    gchar *filepub;
-    gchar *comment;
-    gchar *keyid;
-    gchar *fingerprint;
-    guint length;
-    guint algo;
-};
 
 struct _SeahorseSSHKeyClass {
     SeahorseKeyClass            parent_class;
@@ -106,13 +89,7 @@ const gchar*            seahorse_ssh_key_get_filename         (SeahorseSSHKey *s
                                                                    
 SeahorseOperation*      seahorse_ssh_key_op_change_passphrase (SeahorseSSHKey *skey);
 
-SeahorseSSHKeyData*     seahorse_ssh_key_data_read            (SeahorseSSHSource *ssrc,
-                                                               const gchar *filename);
-
-gboolean                seahorse_ssh_key_data_is_valid        (SeahorseSSHKeyData *data);
-
-void                    seahorse_ssh_key_data_free            (SeahorseSSHKeyData *data);
-
 GQuark                  seahorse_ssh_key_get_cannonical_id    (const gchar *id);
+
 
 #endif /* __SEAHORSE_KEY_H__ */

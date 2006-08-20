@@ -307,7 +307,7 @@ seahorse_ssh_source_load (SeahorseKeySource *src, SeahorseKeySourceLoad load,
         skey = NULL;
         
         /* Try to load it */
-        keydata = seahorse_ssh_key_data_read (ssrc, t);
+        keydata = seahorse_ssh_key_data_read (t, FALSE);
         g_free (t);
         
         /* Make sure it's valid */
@@ -598,7 +598,7 @@ seahorse_ssh_source_key_for_filename (SeahorseSSHSource *ssrc, const gchar *priv
     }
     
     /* Read in the key */
-    data = seahorse_ssh_key_data_read (ssrc, privfile);
+    data = seahorse_ssh_key_data_read (privfile, FALSE);
     g_return_val_if_fail (data != NULL, NULL);
     
     /* And try and load it (this also puts it into the context) */

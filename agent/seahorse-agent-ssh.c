@@ -89,8 +89,6 @@ typedef struct _SSHProxyConn {
     do { (cp)[0] = (value) >> 8; (cp)[1] = (value); } while (0)
 
 /* The various messages we're interested in */
-#define SSH_AGENTC_REQUEST_RSA_IDENTITIES   1
-#define SSH_AGENT_RSA_IDENTITIES_ANSWER     2
 #define SSH2_AGENTC_REQUEST_IDENTITIES      11
 #define SSH2_AGENT_IDENTITIES_ANSWER        12
     
@@ -224,7 +222,7 @@ write_ssh_message (GIOChannel* source, gchar *buf, gsize bufsize)
 }
 
 static guint
-get_num_identities (SSHProxyConn *cn, gboolean version1)
+get_num_identities (SSHProxyConn *cn)
 {
     gchar buf[1024];
     SSHMsgHeader *req;
@@ -234,8 +232,7 @@ get_num_identities (SSHProxyConn *cn, gboolean version1)
     memset (buf, 0, sizeof (buf));
     
     req = (SSHMsgHeader*)buf;
-    req->msgid = version1 ? SSH_AGENTC_REQUEST_RSA_IDENTITIES : 
-                            SSH2_AGENTC_REQUEST_IDENTITIES;
+    req->msgid = SSH2_AGENTC_REQUEST_IDENTITIES;
     
     if (!write_ssh_message (cn->outchan, buf, sizeof (*req)))
         return -1;
@@ -244,22 +241,12 @@ get_num_identities (SSHProxyConn *cn, gboolean version1)
     
     resp = (SSHMsgNumIdentities*)buf;
     if (length >= sizeof (*resp)) {
-        
-        if ((version1 && resp->head.msgid == SSH_AGENT_RSA_IDENTITIES_ANSWER) || 
-            (!version1 && resp->head.msgid == SSH2_AGENT_IDENTITIES_ANSWER)) {
+        if (resp->head.msgid == SSH2_AGENT_IDENTITIES_ANSWER) 
             return resp->num_identities;
-        }
     }
     
     g_warning ("can't understand SSH agent protocol");
     return -1;
-}
-
-static gboolean 
-filter_version_one (SeahorseKey *key, gpointer data)
-{
-    g_return_val_if_fail (SEAHORSE_IS_SSH_KEY (key), FALSE);
-    return seahorse_ssh_key_get_algo (SEAHORSE_SSH_KEY (key)) == SSH_ALGO_RSA1;
 }
 
 static gboolean 
@@ -272,14 +259,14 @@ filter_version_two (SeahorseKey *key, gpointer data)
 }
 
 static GList*
-find_ssh_keys (gboolean version1)
+find_ssh_keys ()
 {
     SeahorseKeyPredicate skp;
     
     memset (&skp, 0, sizeof (skp));
     skp.ktype = SKEY_SSH;
     skp.location = SKEY_LOC_LOCAL;
-    skp.custom = version1 ? filter_version_one : filter_version_two;
+    skp.custom = filter_version_two;
     
     return seahorse_context_find_keys_full (SCTX_APP (), &skp);
 }
@@ -307,7 +294,6 @@ static gboolean
 process_message (SSHProxyConn *cn, gboolean from_client, gchar *msg, gsize len)
 {
     SSHMsgHeader *smsg = (SSHMsgHeader*)msg;
-    gboolean version1 = FALSE;
     GList *keys, *l;
     guint count;
     
@@ -321,9 +307,6 @@ process_message (SSHProxyConn *cn, gboolean from_client, gchar *msg, gsize len)
         write_ssh_message (cn->inchan, msg, len);
         return FALSE;
     
-    case SSH_AGENTC_REQUEST_RSA_IDENTITIES:
-        version1 = TRUE;
-        /* Fall through */;
     case SSH2_AGENTC_REQUEST_IDENTITIES:
         break;
     
@@ -337,11 +320,11 @@ process_message (SSHProxyConn *cn, gboolean from_client, gchar *msg, gsize len)
         return TRUE;
 
     /* If keys are already loaded then return */
-    count = get_num_identities (cn, version1);
+    count = get_num_identities (cn);
     if (count != 0)
         return TRUE;
     
-    keys = find_ssh_keys (version1);
+    keys = find_ssh_keys ();
     
     for (l = keys; l; l = g_list_next (l))
         load_ssh_key (SEAHORSE_SSH_KEY (l->data));

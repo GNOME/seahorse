@@ -65,24 +65,6 @@ parse_first_word (const gchar *line)
     return pos == 0 ? NULL : g_strndup (line, pos);
 }
 
-static guint 
-parse_ssh_algo (gchar *type)
-{
-    gchar *t;
-
-    /* Lower case */
-    for (t = type; *t; t++)
-        *t = g_ascii_tolower (*t);
-    
-    if (strstr (type, "rsa1"))
-        return SSH_ALGO_RSA1;
-    if (strstr (type, "rsa"))
-        return SSH_ALGO_RSA;
-    if (strstr (type, "dsa") || strstr (type, "dss"))
-        return SSH_ALGO_DSA;
-    return SSH_ALGO_UNK;
-}
-
 static void
 changed_key (SeahorseSSHKey *skey)
 {
@@ -337,8 +319,6 @@ seahorse_ssh_key_get_algo_str (SeahorseSSHKey *skey)
         return "RSA";
     case SSH_ALGO_DSA:
         return "DSA";
-    case SSH_ALGO_RSA1:
-        return "RSA1";
     default:
         g_assert_not_reached ();
         return NULL;
@@ -391,121 +371,3 @@ seahorse_ssh_key_get_cannonical_id (const gchar *id)
     return ret;
 }
 
-/* -----------------------------------------------------------------------------
- * SSH KEY DATA 
- */
-
-SeahorseSSHKeyData*
-seahorse_ssh_key_data_read (SeahorseSSHSource *ssrc, const gchar *filename)
-{
-    SeahorseSSHKeyData *data;
-    GError *error = NULL;
-    gchar **values;
-    gchar *t, *results;
-    
-    data = g_new0 (SeahorseSSHKeyData, 1);
-    data->filename = g_strdup (filename);
-    
-    /* Lookup length, fingerprint and public key filename */
-    t = g_strdup_printf (SSH_KEYGEN_PATH " -l -f %s", data->filename);
-    results = seahorse_ssh_operation_sync (ssrc, t, NULL);
-    g_free (t);
-    
-    /* 
-     * Parse the length, fingerprint, and public key from a string like: 
-     * 1024 a0:f3:2a:b8:00:57:47:7e:03:f6:de:35:77:2d:a0:6a /home/nate/.ssh/id_rsa.pub
-     */
-    if (results) {
-        values = g_strsplit_set (results, " ", 3);
-        g_free (results);
-
-        /* Key length */
-        if (values[0]) {
-            if (values[0][0]) {
-                data->length = strtol (values[0], NULL, 10);
-                data->length = data->length < 0 ? 0 : data->length;
-            }
-            
-            /* Fingerprint */
-            if (values[1]) {
-                if (values[1][0]) {
-                    data->fingerprint = g_strdup (values[1]);
-                    g_strstrip (data->fingerprint);
-                }
-            
-                /* Public name */
-                if (values[2] && !data->filepub) {
-                    data->filepub = g_strdup (values[2]);
-                    g_strstrip (data->filepub);
-                }
-            }
-        }
-        
-        g_strfreev (values);
-    }
-    
-    /* Read in the public key */
-    results = NULL;
-    if (data->filepub) {
-        if(!g_file_get_contents (data->filepub, &results, NULL, &error)) {
-            g_warning ("couldn't read public SSH file: %s (%s)", data->filepub, error->message);
-            results = NULL;
-            g_error_free(error);
-        }
-    } 
-    
-    /* 
-     * Parse the key type and comment from a string like: 
-     * ssh-rsa AAAAB3NzaC1yc2EAAAABIwAzE1/iHkfHMk= nielsen@memberwebs.com
-     */
-    if (results) {
-        values = g_strsplit_set (results, " ", 3);
-        g_free (results);
-        
-        /* Key type */
-        if (values[0]) {
-            if (values[0][0])
-                data->algo = parse_ssh_algo (values[0]);
-            
-            /* Key Comment */
-            if (values[1] && values[2] && values[2][0]) {
-                g_strstrip (values[2]);
-                
-                /* If not utf8 valid, assume latin 1 */
-                if (!g_utf8_validate (values[2], -1, NULL))
-                    data->comment = g_convert (values[2], -1, "UTF-8", "ISO-8859-1", NULL, NULL, NULL);
-                else
-                    data->comment = g_strdup (values[2]);
-            }
-        }
-        
-        g_strfreev (values);
-    }
-
-    /* Make a key id */
-    if (data->fingerprint)
-        data->keyid = g_strndup (data->fingerprint, 11);
-    
-    return data;
-}
-
-gboolean
-seahorse_ssh_key_data_is_valid (SeahorseSSHKeyData *data)
-{
-    g_return_val_if_fail (data != NULL, FALSE);
-    return data->fingerprint != NULL;
-}
-
-void 
-seahorse_ssh_key_data_free (SeahorseSSHKeyData *data)
-{
-    if (!data)
-        return;
-    
-    g_free (data->filename);
-    g_free (data->filepub);
-    g_free (data->comment);
-    g_free (data->keyid);
-    g_free (data->fingerprint);
-    g_free (data);
-}
