@@ -25,6 +25,7 @@
 #include "seahorse-ssh-key-data.h"
 #include "seahorse-ssh-source.h"
 #include "seahorse-algo.h"
+#include "seahorse-util.h"
 
 /* -----------------------------------------------------------------------------
  * HELPERS
@@ -110,6 +111,7 @@ parse_key_data (gchar *line, SeahorseSSHKeyData *data)
         return FALSE;
     *space = '\0';
     data->algo = parse_algo (line);
+    *space = ' ';
     if (data->algo == SSH_ALGO_UNK)
         return FALSE;
     
@@ -137,6 +139,7 @@ parse_key_data (gchar *line, SeahorseSSHKeyData *data)
     
     /* And the rest is the comment */
     if (space) {
+        *space = ' ';
         ++space;
         
         /* If not utf8 valid, assume latin 1 */
@@ -152,31 +155,157 @@ parse_key_data (gchar *line, SeahorseSSHKeyData *data)
     
     return TRUE;
 }
-    
-static gchar**
-get_file_lines (const gchar* filename, GError **err)
+
+gchar*
+parse_lines_block (gchar ***lx, const gchar *start, const gchar* end)
 {
-    gchar **ret;
-    gchar *results;
+    GString *result;
+    gchar **lines;
     
-    /* TODO: What about insanely large files? */
-    if(!g_file_get_contents (filename, &results, NULL, err))
-        return NULL;
+    result = g_string_new ("");
+    lines = *lx;
+     
+    /* Look for the beginning */
+    for ( ; *lines; lines++) {
+        if (strstr (*lines, start)) {
+            g_string_append (result, *lines);
+            g_string_append_c (result, '\n');
+            lines++;
+            break;
+        }
+    }
     
-    ret = g_strsplit (results, "\n", -1);
-    g_free (results);
-    return ret;
+    /* Look for the end */
+    for ( ; *lines; *lines++) {
+        g_string_append (result, *lines);
+        g_string_append_c (result, '\n');
+        if (strstr (*lines, end)) 
+            break;
+    }
+    
+    *lx = lines;
+    return g_string_free (result, result->len == 0);
+}
+
+static SeahorseSSHSecData*
+parse_private_data (gchar ***lx)
+{
+    SeahorseSSHSecData *secdata = NULL;
+    gchar *rawdata;
+    gchar *comment;
+    
+    comment = strstr (**lx, SSH_KEY_SECRET_SIG);
+    if (comment) 
+        comment += strlen (SSH_KEY_SECRET_SIG);
+    
+    rawdata = parse_lines_block (lx, "-----BEGIN ", "-----END ");
+    if (rawdata) {
+        secdata = g_new0 (SeahorseSSHSecData, 1);
+        if (comment)
+        secdata->comment = g_strdup (g_strstrip (comment));
+        secdata->rawdata = rawdata;
+        
+        /* Guess at the algorithm type */
+        if (strstr (secdata->rawdata, " RSA "))
+            secdata->algo = SSH_ALGO_RSA;
+        else if (strstr (secdata->rawdata, " DSA "))
+            secdata->algo = SSH_ALGO_DSA;
+        else
+            secdata->algo = SSH_ALGO_UNK;
+    } 
+    
+    /* caller knows how many lines were consumed */
+    return secdata;
 }
 
 /* -----------------------------------------------------------------------------
  * PUBLIC 
  */
 
-gboolean
-seahorse_ssh_key_data_parse (const gchar *line, gint length, SeahorseSSHKeyData* data)
+guint
+seahorse_ssh_key_data_parse (const gchar *data, SeahorseSSHPublicKeyParsed public_cb,
+                             SeahorseSSHSecretKeyParsed secret_cb, gpointer arg)
 {
-    gboolean ret;
+    SeahorseSSHKeyData *keydata;
+    SeahorseSSHSecData *secdata;
+    guint nkeys = 0;
+    gchar **lines, **l;
+    gchar *line;
+    
+    lines = g_strsplit (data, "\n", -1);
+    for (l = lines; *l; l++) {
+        
+        line = *l;
+
+        /* Skip leading whitespace. */
+        for (; *line && g_ascii_isspace (*line); line++)
+            ;
+
+        /* See if we have a private key coming up */
+        if (strstr (line, SSH_KEY_SECRET_SIG)) {
+            
+            secdata = parse_private_data (&l);
+            if (secdata) {
+            
+                /* Let it fall on the floor :( */
+                if (!secret_cb) {
+                    seahorse_ssh_sec_data_free (secdata);
+                    continue;
+                }
+                
+                if (!(secret_cb) (secdata, arg))
+                    break;
+            }
+        }
+        
+        /* Comments and empty lines, not a parse error, but no data */
+        if (!*line || *line == '#')
+            continue;
+        
+        /* See if we have a public key */
+        keydata = seahorse_ssh_key_data_parse_line (line, -1);
+        if (keydata) {
+            nkeys++;
+            
+            /* Let it fall on the floor :( */
+            if (!public_cb) {
+                seahorse_ssh_key_data_free (keydata);
+                continue;
+            }
+            
+            if (!(public_cb) (keydata, arg))
+                break;
+        }
+    }
+    
+    g_strfreev (lines);
+    return nkeys;
+}
+
+guint
+seahorse_ssh_key_data_parse_file (const gchar *filename,  SeahorseSSHPublicKeyParsed public_cb,
+                                  SeahorseSSHSecretKeyParsed secret_cb, gpointer arg,
+                                  GError **err)
+{
+    gchar *contents;
+    guint nkeys;
+    
+    if (!g_file_get_contents (filename, &contents, NULL, err))
+        return 0;
+    
+    nkeys = seahorse_ssh_key_data_parse (contents, public_cb, secret_cb, arg);
+    g_free (contents);
+    return nkeys;
+}
+
+SeahorseSSHKeyData*
+seahorse_ssh_key_data_parse_line (const gchar *line, guint length)
+{
+    SeahorseSSHKeyData *keydata = NULL;
     gchar *x;
+    
+    if (length == -1)
+        length = strlen (line);
     
     /* Skip leading whitespace. */
     for (; *line && g_ascii_isspace (*line); line++)
@@ -184,48 +313,84 @@ seahorse_ssh_key_data_parse (const gchar *line, gint length, SeahorseSSHKeyData*
     
     /* Comments and empty lines, not a parse error, but no data */
     if (!*line || *line == '#')
-        return TRUE;
+        return NULL;
     
     x = g_strndup (line, length == -1 ? strlen (line) : length);
-    ret = parse_key_data (x, data);
-    g_free (x);
     
+    keydata = g_new0 (SeahorseSSHKeyData, 1);
+    if (!parse_key_data (x, keydata)) {
+        g_free (keydata);
+        keydata = NULL;
+    }
+    
+    if (keydata)
+        keydata->rawdata = x;
+    else 
+        g_free (x);
+    
+    return keydata;
+}
+
+gboolean
+seahorse_ssh_key_data_match (const gchar *line, gint length, SeahorseSSHKeyData *match)
+{
+    SeahorseSSHKeyData *keydata;
+    gboolean ret = FALSE;
+    
+    g_return_val_if_fail (match->fingerprint, FALSE);
+    
+    keydata = seahorse_ssh_key_data_parse_line (line, -1);
+    if (keydata && keydata->fingerprint && 
+        strcmp (match->fingerprint, keydata->fingerprint) == 0)
+        ret = TRUE;
+    
+    seahorse_ssh_key_data_free (keydata);
     return ret;
 }
 
-SeahorseSSHKeyData*
-seahorse_ssh_key_data_read (const gchar *filename, gboolean pub)
+gboolean
+seahorse_ssh_key_data_filter_file (const gchar *filename, SeahorseSSHKeyData *add, 
+                                   SeahorseSSHKeyData *remove, GError **err)
 {
-    SeahorseSSHKeyData *data;
-    GError *error = NULL;
+    GString *results;
+    gchar *contents = NULL;
     gchar **lines, **l;
+    gboolean ret;
+    
+    /* By default filter out teh one we're adding */
+    if (!remove)
+        remove = add;
+    
+    if (g_file_test (filename, G_FILE_TEST_EXISTS)) {
+        if (!g_file_get_contents (filename, &contents, NULL, err))
+            return FALSE;
+    }
 
-    data = g_new0 (SeahorseSSHKeyData, 1);
-    if (pub) {
-        data->filename = NULL;
-        data->filepub = g_strdup (filename);
-    } else {
-        data->filename = g_strdup (filename);
-        data->filepub = g_strdup_printf ("%s.pub", filename);
-    }
+    lines = g_strsplit (contents ? contents : "", "\n", -1);
+    g_free (contents);
     
-    lines = get_file_lines (data->filepub, &error);
-    if (!lines) {
-        g_warning ("couldn't read public SSH file: %s (%s)", data->filepub, error->message);
-        g_error_free(error);
-        return data;
-    }
+    results = g_string_new ("");
     
+    /* Load each line */
     for (l = lines; *l; l++) {
-        if (seahorse_ssh_key_data_parse (*l, -1, data) && 
-            seahorse_ssh_key_data_is_valid (data))
-            break;
+        if (seahorse_ssh_key_data_match (*l, -1, remove))
+            continue;
+        g_string_append (results, *l);
+        g_string_append_c (results, '\n');
+    }
+    
+    /* Add any that need adding */
+    if (add) {
+        g_string_append (results, add->rawdata);
+        g_string_append_c (results, '\n');
     }
     
     g_strfreev (lines);
-    return data;
     
-    return data;
+    ret = seahorse_util_write_file_private (filename, results->str, err);
+    g_string_free (results, TRUE);
+    
+    return ret;
 }
 
 gboolean
@@ -235,16 +400,28 @@ seahorse_ssh_key_data_is_valid (SeahorseSSHKeyData *data)
     return data->fingerprint != NULL;
 }
 
-void 
+void
 seahorse_ssh_key_data_free (SeahorseSSHKeyData *data)
 {
     if (!data)
         return;
     
-    g_free (data->filename);
-    g_free (data->filepub);
+    g_free (data->privfile);
+    g_free (data->pubfile);
+    g_free (data->rawdata);
     g_free (data->comment);
     g_free (data->keyid);
     g_free (data->fingerprint);
     g_free (data);
 }
+
+void
+seahorse_ssh_sec_data_free (SeahorseSSHSecData *data)
+{
+    if (!data)
+        return;
+    
+    g_free (data->rawdata);
+    g_free (data->comment);
+}
+

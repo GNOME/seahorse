@@ -565,10 +565,15 @@ seahorse_multi_operation_take (SeahorseMultiOperation* mop, SeahorseOperation *o
     
     mop->operations = seahorse_operation_list_add (mop->operations, op);
     
-    g_signal_connect (op, "done", G_CALLBACK (multi_operation_done), mop);
-    g_signal_connect (op, "progress", G_CALLBACK (multi_operation_progress), mop);
-    
-    multi_operation_progress (op, NULL, -1, mop);
+    if (seahorse_operation_is_running (op)) {
+        g_signal_connect (op, "done", G_CALLBACK (multi_operation_done), mop);
+        g_signal_connect (op, "progress", G_CALLBACK (multi_operation_progress), mop);
+        multi_operation_progress (op, NULL, -1, mop);
+        
+    /* Already done, so handle immediately */
+    } else {
+        multi_operation_done (op, mop);
+    }
 }
 
 /* -----------------------------------------------------------------------------

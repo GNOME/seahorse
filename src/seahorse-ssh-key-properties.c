@@ -38,6 +38,7 @@ do_main (SeahorseWidget *swidget)
     SeahorseSSHKey *skey;
     GtkWidget *widget;
     gchar *text;
+    const gchar *template;
 
     key = SEAHORSE_KEY_WIDGET (swidget)->skey;
     skey = SEAHORSE_SSH_KEY (key);
@@ -55,6 +56,52 @@ do_main (SeahorseWidget *swidget)
         gtk_label_set_text (GTK_LABEL (widget), text);
         g_free (text);
     }
+    
+    /* Put in message */
+    widget = seahorse_widget_get_widget (swidget, "trust-message");
+    g_return_if_fail (widget != NULL);
+    template = gtk_label_get_label (GTK_LABEL (widget));
+    text = g_strdup_printf (template, g_get_user_name ());
+    gtk_label_set_markup (GTK_LABEL (widget), text);
+    g_free (text);
+    
+    /* Setup the check */
+    widget = seahorse_widget_get_widget (swidget, "trust-check");
+    g_return_if_fail (widget != NULL);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), 
+                                  seahorse_key_get_trust (key) >= SEAHORSE_VALIDITY_FULL);
+}
+
+static void 
+trust_toggled (GtkToggleButton *button, SeahorseWidget *swidget)
+{
+    SeahorseKeySource *sksrc;
+    SeahorseOperation *op;
+    SeahorseKey *key;
+    SeahorseSSHKey *skey;
+    gboolean authorize;
+    GError *err = NULL;
+
+    key = SEAHORSE_KEY_WIDGET (swidget)->skey;
+    skey = SEAHORSE_SSH_KEY (key);
+    sksrc = seahorse_key_get_source (key);
+    g_return_if_fail (SEAHORSE_IS_SSH_SOURCE (sksrc));
+    
+    authorize = gtk_toggle_button_get_active (button);
+    gtk_widget_set_sensitive (GTK_WIDGET (button), FALSE);
+    
+    op = seahorse_ssh_operation_authorize (SEAHORSE_SSH_SOURCE (sksrc), skey, authorize);
+    g_return_if_fail (op);
+    
+    /* A very fast op, so just wait */
+    seahorse_operation_wait (op);
+    
+    if (!seahorse_operation_is_successful (op)) {
+        seahorse_operation_steal_error (op, &err);
+        seahorse_util_handle_error (err, _("Couldn't change authorization for key."));
+    }
+    
+    gtk_widget_set_sensitive (GTK_WIDGET (button), TRUE);
 }
 
 static void
@@ -69,6 +116,7 @@ passphrase_done (SeahorseOperation *op, SeahorseWidget *swidget)
     }
     
     w = glade_xml_get_widget (swidget->xml, "passphrase-button");
+    g_return_if_fail (w != NULL);
     gtk_widget_set_sensitive (w, TRUE);
 }
 
@@ -83,6 +131,7 @@ passphrase_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
     g_assert (SEAHORSE_IS_SSH_KEY (skey));
 
     w = glade_xml_get_widget (swidget->xml, "passphrase-button");
+    g_return_if_fail (w != NULL);
     gtk_widget_set_sensitive (w, FALSE);
     
     op = seahorse_ssh_operation_change_passphrase (SEAHORSE_SSH_KEY (skey));
@@ -168,7 +217,7 @@ do_details (SeahorseWidget *swidget)
 
     widget = glade_xml_get_widget (swidget->xml, "location-label");
     if (widget) {
-        label = seahorse_ssh_key_get_filename (skey, TRUE);
+        label = seahorse_ssh_key_get_location (skey);
         gtk_label_set_text (GTK_LABEL (widget), label);  
     }
 
@@ -241,11 +290,21 @@ seahorse_ssh_key_properties_new (SeahorseSSHKey *skey)
 
     do_main (swidget);
     do_details (swidget);
+    
+    glade_xml_signal_connect_data (swidget->xml, "trust_toggled", 
+                                   G_CALLBACK (trust_toggled), swidget);
 
-    glade_xml_signal_connect_data (swidget->xml, "export_button_clicked",
-                                   G_CALLBACK (export_button_clicked), swidget);        
-    glade_xml_signal_connect_data (swidget->xml, "passphrase_button_clicked",
-                                   G_CALLBACK (passphrase_button_clicked), swidget);        
+    if (seahorse_key_get_etype (key) == SKEY_PRIVATE) {
+        glade_xml_signal_connect_data (swidget->xml, "export_button_clicked",
+                                       G_CALLBACK (export_button_clicked), swidget);
+        glade_xml_signal_connect_data (swidget->xml, "passphrase_button_clicked",
+                                       G_CALLBACK (passphrase_button_clicked), swidget);
+        
+    /* A public key only */
+    } else {
+        seahorse_widget_set_visible (swidget, "passphrase-button", FALSE);
+        seahorse_widget_set_visible (swidget, "export-button", FALSE);
+    }
 
     if (swidget)
         seahorse_widget_show (swidget);

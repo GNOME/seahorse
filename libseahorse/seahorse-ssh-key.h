@@ -84,8 +84,7 @@ const gchar*            seahorse_ssh_key_get_algo_str         (SeahorseSSHKey *s
 
 guint                   seahorse_ssh_key_get_strength         (SeahorseSSHKey *skey);
 
-const gchar*            seahorse_ssh_key_get_filename         (SeahorseSSHKey *skey,
-                                                               gboolean private);
+const gchar*            seahorse_ssh_key_get_location         (SeahorseSSHKey *skey);
                                                                    
 SeahorseOperation*      seahorse_ssh_key_op_change_passphrase (SeahorseSSHKey *skey);
 

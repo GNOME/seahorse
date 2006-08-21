@@ -22,6 +22,7 @@
 
 #include "config.h"
 #include <sys/wait.h>
+#include <sys/stat.h>
 #include <unistd.h>
 #include <time.h>
 #include <stdio.h>
@@ -756,6 +757,15 @@ seahorse_util_detect_file_type (const gchar *uri)
                    gnome_vfs_result_to_string (res));
 
     gnome_vfs_file_info_unref (info);
+    return ret;
+}
+
+gboolean
+seahorse_util_write_file_private (const gchar* filename, const gchar* contents, GError **err)
+{
+    mode_t mask = umask (0077);
+    gboolean ret = g_file_set_contents (filename, contents, -1, err);
+    umask (mask);
     return ret;
 }
 

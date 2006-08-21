@@ -111,6 +111,10 @@ GQuark      seahorse_util_detect_data_type   (const gchar *data,
 
 GQuark      seahorse_util_detect_file_type   (const gchar *uri);
 
+gboolean    seahorse_util_write_file_private            (const gchar* filename,
+                                                         const gchar* contents,
+                                                         GError **err);
+
 GtkWidget*  seahorse_util_chooser_open_new              (const gchar *title,
                                                          GtkWindow *parent);
 

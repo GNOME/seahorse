@@ -250,12 +250,13 @@ get_num_identities (SSHProxyConn *cn)
 }
 
 static gboolean 
-filter_version_two (SeahorseKey *key, gpointer data)
+filter_keys (SeahorseKey *key, gpointer data)
 {
     guint algo;
     g_return_val_if_fail (SEAHORSE_IS_SSH_KEY (key), FALSE);
     algo = seahorse_ssh_key_get_algo (SEAHORSE_SSH_KEY (key));
-    return algo == SSH_ALGO_RSA || algo == SSH_ALGO_DSA;
+    return (algo == SSH_ALGO_RSA || algo == SSH_ALGO_DSA) && 
+            seahorse_key_get_etype (key) == SKEY_PRIVATE;
 }
 
 static GList*
@@ -266,7 +267,7 @@ find_ssh_keys ()
     memset (&skp, 0, sizeof (skp));
     skp.ktype = SKEY_SSH;
     skp.location = SKEY_LOC_LOCAL;
-    skp.custom = filter_version_two;
+    skp.custom = filter_keys;
     
     return seahorse_context_find_keys_full (SCTX_APP (), &skp);
 }
@@ -277,7 +278,7 @@ load_ssh_key (SeahorseSSHKey *skey)
     SeahorseOperation *op;
     SeahorseSSHSource *ssrc;
     
-    DEBUG_MSG (("Loading SSH key: %s\n", seahorse_ssh_key_get_filename (skey, TRUE)));
+    DEBUG_MSG (("Loading SSH key: %s\n", seahorse_ssh_key_get_location (skey)));
     ssrc = SEAHORSE_SSH_SOURCE (seahorse_key_get_source (SEAHORSE_KEY (skey)));
     
     op = seahorse_ssh_operation_agent_load (ssrc, skey);

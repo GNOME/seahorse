@@ -153,8 +153,10 @@ watch_ssh_process (GPid pid, gint status, SeahorseSSHOperation *sop)
                 (pv->result_cb) (sop);
             else
                 seahorse_operation_mark_result (SEAHORSE_OPERATION (sop), pv->sout->str, NULL);
-            
-            seahorse_operation_mark_done (SEAHORSE_OPERATION (sop), FALSE, NULL);
+    
+            /* The result callback may have completed operation */
+            if (seahorse_operation_is_running (SEAHORSE_OPERATION (sop)))
+                seahorse_operation_mark_done (SEAHORSE_OPERATION (sop), FALSE, NULL);
         }
     }
 
@@ -827,12 +829,12 @@ seahorse_ssh_operation_change_passphrase (SeahorseSSHKey *skey)
     gchar *cmd;
     
     g_return_val_if_fail (SEAHORSE_IS_SSH_KEY (skey), NULL);
-    g_return_val_if_fail (skey->keydata && skey->keydata->filename, NULL);
+    g_return_val_if_fail (skey->keydata && skey->keydata->privfile, NULL);
     
     ssrc = seahorse_key_get_source (SEAHORSE_KEY (skey));
     g_return_val_if_fail (SEAHORSE_IS_SSH_SOURCE (ssrc), NULL);
     
-    cmd = g_strdup_printf (SSH_KEYGEN_PATH " -p -f %s", skey->keydata->filename);
+    cmd = g_strdup_printf (SSH_KEYGEN_PATH " -p -f %s", skey->keydata->privfile);
     op = seahorse_ssh_operation_new (SEAHORSE_SSH_SOURCE (ssrc), cmd, NULL, -1, skey);
     g_free (cmd);
     
@@ -846,45 +848,6 @@ seahorse_ssh_operation_change_passphrase (SeahorseSSHKey *skey)
 /* -----------------------------------------------------------------------------
  * KEY GENERATE OPERATION
  */ 
-
-static gchar*
-find_nonexistant_ssh_filename (SeahorseSSHSource *src, guint type)
-{
-    const gchar *algo;
-    gchar *filename;
-    gchar *dir;
-    guint i = 0;
-    
-    g_object_get (src, "base-directory", &dir, NULL);
-    g_return_val_if_fail (dir, NULL);
-    
-    switch (type) {
-    case SSH_ALGO_DSA:
-        algo = "id_dsa";
-        break;
-    case SSH_ALGO_RSA:
-        algo = "id_rsa";
-        break;
-    default:
-        g_return_val_if_reached (NULL);
-        break;
-    }
-    
-    for (i = 0; i < ~0; i++) {
-        if (i == 0)
-            filename = g_strdup_printf ("%s/%s", dir, algo);
-        else
-            filename = g_strdup_printf ("%s/%s.%d", dir, algo, i);
-        
-        if (!g_file_test (filename, G_FILE_TEST_EXISTS))
-            break;
-        
-        g_free (filename);
-        filename = NULL;
-    }
-        
-    return filename;
-}
 
 static void
 generate_result_cb (SeahorseSSHOperation *sop)
@@ -928,8 +891,8 @@ seahorse_ssh_operation_generate (SeahorseSSHSource *src, const gchar *email,
     const gchar *algo;
     gchar *cmd;
     
-    filename = find_nonexistant_ssh_filename (src, type);
-    g_assert (filename);
+    filename = seahorse_ssh_source_file_for_algorithm (src, type);
+    g_return_val_if_fail (filename, NULL);
     
     comment = escape_shell_arg (email);
     
@@ -1074,7 +1037,9 @@ seahorse_ssh_operation_agent_load (SeahorseSSHSource *src, SeahorseSSHKey *skey)
     SeahorseOperation *op;
     gchar *cmd;
     
-    cmd = g_strdup_printf (SSH_ADD_PATH " '%s'", seahorse_ssh_key_get_filename (skey, TRUE));
+    g_return_val_if_fail (skey->keydata->privfile, NULL);
+    
+    cmd = g_strdup_printf (SSH_ADD_PATH " '%s'", skey->keydata->privfile);
     op = seahorse_ssh_operation_new (src, cmd, NULL, 0, skey);
     g_free (cmd);
     
@@ -1083,4 +1048,176 @@ seahorse_ssh_operation_agent_load (SeahorseSSHSource *src, SeahorseSSHKey *skey)
     pv->password_cb = load_password_cb;
     
     return op;
+}
+
+/* -----------------------------------------------------------------------------
+ * IMPORT A PUBLIC KEY 
+ */
+
+SeahorseOperation*
+seahorse_ssh_operation_import_public (SeahorseSSHSource *ssrc, SeahorseSSHKeyData *data,
+                                      const gchar* filename)
+{
+    SeahorseOperation *op;
+    GError *err = NULL;
+    
+    g_return_val_if_fail (seahorse_ssh_key_data_is_valid (data), NULL);
+    g_return_val_if_fail (data->rawdata, NULL);
+    g_return_val_if_fail (SEAHORSE_IS_SSH_SOURCE (ssrc), NULL);
+
+    seahorse_ssh_key_data_filter_file (filename, data, NULL, &err);
+    
+    op = seahorse_operation_new_complete (err);
+    seahorse_operation_mark_result (op, g_strdup (data->fingerprint), g_free);
+    return op;
+}
+
+
+/* -----------------------------------------------------------------------------
+ * IMPORT A PRIVATE KEY 
+ */ 
+
+static const gchar*
+import_password_cb (SeahorseSSHOperation *sop, const gchar* msg)
+{
+    const gchar *comment;
+    const gchar *ret;
+    gchar* message;
+    
+    /* Add the comment to the output */
+    comment = (const gchar*)g_object_get_data (G_OBJECT (sop), "import-comment");
+    if (comment)
+        message = g_strdup_printf (_("Importing key: %s"), comment);
+    else
+        message = g_strdup (_("Importing key. Enter passphrase"));
+    
+    ret = prompt_passphrase (sop, _("Import Key"), message, NULL, FALSE);
+    g_free (message);
+    
+    return ret;
+}
+
+static void
+import_result_cb (SeahorseSSHOperation *sop)
+{
+    SeahorseSSHOperationPrivate *pv = SEAHORSE_SSH_OPERATION_GET_PRIVATE (sop);
+    SeahorseSSHKeyData *keydata;
+    const gchar *pubfile;
+    const gchar *comment;
+    GError *err = NULL;
+    gsize pos;
+    
+    g_assert (seahorse_operation_is_running (SEAHORSE_OPERATION (sop)));
+    
+    /* Only use the first line of the output */
+    pos = strcspn (pv->sout->str, "\n\r");
+    if (pos < pv->sout->len)
+        g_string_erase (pv->sout, pos, -1);
+    
+    /* Parse the data so we can get the fingerprint */
+    keydata = seahorse_ssh_key_data_parse_line (pv->sout->str, -1);
+    if (seahorse_ssh_key_data_is_valid (keydata))
+        seahorse_operation_mark_result (SEAHORSE_OPERATION (sop),
+                                        g_strdup (keydata->fingerprint), g_free);
+    else
+        g_warning ("couldn't parse imported private key fingerprint");
+    seahorse_ssh_key_data_free (keydata);
+    
+    /* Add the comment to the output */
+    comment = (const gchar*)g_object_get_data (G_OBJECT (sop), "import-comment");
+    if (comment) {
+        g_string_append_c (pv->sout, ' ');
+        g_string_append (pv->sout, comment);
+    }
+    
+    /* The file to write to */
+    pubfile = (const gchar*)g_object_get_data (G_OBJECT (sop), "import-file");
+    g_assert (pubfile);
+    
+    if (!seahorse_util_write_file_private (pubfile, pv->sout->str, &err))
+        seahorse_operation_mark_done (SEAHORSE_OPERATION (sop), FALSE, err);
+}
+
+SeahorseOperation*
+seahorse_ssh_operation_import_private (SeahorseSSHSource *ssrc, SeahorseSSHSecData *data,
+                                       const gchar *filename)
+{
+    SeahorseSSHOperationPrivate *pv;
+    SeahorseOperation *op;
+    gchar *cmd, *privfile = NULL;
+    GError *err = NULL;
+    
+    g_return_val_if_fail (data && data->rawdata, NULL);
+    g_return_val_if_fail (SEAHORSE_IS_SSH_SOURCE (ssrc), NULL);
+    
+    /* No filename specified, make one up */
+    if (!filename) {
+        filename = privfile = seahorse_ssh_source_file_for_algorithm (ssrc, data->algo);
+        g_return_val_if_fail (privfile, NULL);
+    }
+    
+    /* Write the private key into the file */
+    if (!seahorse_util_write_file_private (filename, data->rawdata, &err)) {
+        g_free (privfile);
+        return seahorse_operation_new_complete (err);
+    }
+    
+    /* Start command to generate public key */
+    cmd = g_strdup_printf (SSH_KEYGEN_PATH " -y -f '%s'", privfile);
+    op = seahorse_ssh_operation_new (ssrc, cmd, NULL, 0, NULL);
+    g_free (cmd);
+    
+    g_object_set_data_full (G_OBJECT (op), "import-file", 
+                g_strdup_printf ("%s.pub", filename), g_free);
+    g_object_set_data_full (G_OBJECT (op), "import-comment",
+                g_strdup (data->comment), g_free);
+    
+    g_free (privfile);
+    
+    pv = SEAHORSE_SSH_OPERATION_GET_PRIVATE (op);
+    pv->result_cb = import_result_cb;
+    pv->password_cb = import_password_cb;
+    
+    return op;
+}
+
+/* -----------------------------------------------------------------------------
+ * AUTHORIZE A PUBLIC KEY 
+ */ 
+
+SeahorseOperation*
+seahorse_ssh_operation_authorize (SeahorseSSHSource *ssrc, SeahorseSSHKey *skey,
+                                  gboolean authorize)
+{
+    SeahorseSSHKeyData *keydata = NULL;
+    GError *err = NULL;
+    gchar* from = NULL;
+    gchar* to = NULL;
+    
+    g_return_val_if_fail (SEAHORSE_IS_SSH_SOURCE (ssrc), NULL);
+    g_return_val_if_fail (SEAHORSE_IS_SSH_KEY (skey), NULL);
+    
+    g_object_get (skey, "key-data", &keydata, NULL);
+    g_return_val_if_fail (keydata, NULL);
+    
+    if (authorize) {
+        to = seahorse_ssh_source_file_for_public (ssrc, TRUE);
+    } else {
+        from = seahorse_ssh_source_file_for_public (ssrc, TRUE);
+        to = seahorse_ssh_source_file_for_public (ssrc, FALSE);
+    }
+    
+    /* Take it out of the from file, and put into the to file */
+    if (!from || seahorse_ssh_key_data_filter_file (from, NULL, keydata, &err))
+        seahorse_ssh_key_data_filter_file (to, keydata, NULL, &err);
+    
+    g_free (from);
+    g_free (to);
+    
+    /* Just reload that one key */
+    if (!err)
+        seahorse_key_source_load (SEAHORSE_KEY_SOURCE (ssrc), SKSRC_LOAD_KEY, 
+                                  seahorse_key_get_keyid (SEAHORSE_KEY (skey)), NULL);
+    
+    return seahorse_operation_new_complete (err);
 }

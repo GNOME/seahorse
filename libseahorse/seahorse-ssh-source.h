@@ -24,6 +24,7 @@
  * 
  * - Derived from SeahorseKeySource
  * - Lists all the keys in ~/.ssh/ by searching through every file.
+ * - Loads public keys from ~/.ssh/authorized_keys and ~/.ssh/other_keys.seahorse
  * - Adds the keys it loads to the SeahorseContext.
  * - Monitors ~/.ssh for changes and reloads the keyring as necessary.
  * 
@@ -69,5 +70,11 @@ SeahorseSSHSource*   seahorse_ssh_source_new                (void);
 struct _SeahorseSSHKey*      
                      seahorse_ssh_source_key_for_filename   (SeahorseSSHSource *ssrc, 
                                                              const gchar *privfile);
+
+gchar*               seahorse_ssh_source_file_for_public    (SeahorseSSHSource *ssrc,
+                                                             gboolean authorized);
+
+gchar*               seahorse_ssh_source_file_for_algorithm (SeahorseSSHSource *ssrc,
+                                                             guint algo);
 
 #endif /* __SEAHORSE_SSH_SOURCE_H__ */

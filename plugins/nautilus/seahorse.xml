@@ -35,8 +35,8 @@
     <magic priority="90">
       <match type="string" value="ssh-dss " offset="0"/>
       <match type="string" value="ssh-rsa " offset="0"/>
-      <match type="string" value="-----BEGIN RSA PRIVATE KEY-----" offset="0"/>
-      <match type="string" value="-----BEGIN DSA PRIVATE KEY-----" offset="0"/>
+      <!-- A seahorse specific prefix for SSH private keys -->
+      <match type="string" value="# SSH PRIVATE KEY:" offset="0"/>
     </magic>
   </mime-type>
   

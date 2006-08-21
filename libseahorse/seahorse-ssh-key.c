@@ -113,9 +113,9 @@ changed_key (SeahorseSSHKey *skey)
         /* The key id */
         key->keyid = seahorse_ssh_key_get_cannonical_id (skey->keydata->keyid);
         key->location = SKEY_LOC_LOCAL;
-        key->etype = SKEY_PRIVATE;
+        key->etype = skey->keydata->privfile ? SKEY_PRIVATE : SKEY_PUBLIC;
         key->loaded = SKEY_INFO_COMPLETE;
-        key->flags = SKEY_FLAG_TRUSTED;
+        key->flags = skey->keydata->authorized ? SKEY_FLAG_TRUSTED : 0;
     }
     
     if (!key->keyid)
@@ -124,6 +124,21 @@ changed_key (SeahorseSSHKey *skey)
     seahorse_key_changed (key, SKEY_CHANGE_ALL);
 }
 
+static guint 
+calc_validity (SeahorseSSHKey *skey)
+{
+    if (skey->keydata->privfile)
+        return SEAHORSE_VALIDITY_ULTIMATE;
+    return 0;
+}
+
+static guint
+calc_trust (SeahorseSSHKey *skey)
+{
+    if (skey->keydata->authorized)
+        return SEAHORSE_VALIDITY_FULL;
+    return 0;
+}
 
 /* -----------------------------------------------------------------------------
  * OBJECT 
@@ -178,10 +193,10 @@ seahorse_ssh_key_get_property (GObject *object, guint prop_id,
         g_value_set_string (value, skey->keydata ? skey->keydata->fingerprint : NULL);
         break;
     case PROP_VALIDITY:
-        g_value_set_uint (value, SEAHORSE_VALIDITY_ULTIMATE);
+        g_value_set_uint (value, calc_validity (skey));
         break;
     case PROP_TRUST:
-        g_value_set_uint (value, SEAHORSE_VALIDITY_ULTIMATE);
+        g_value_set_uint (value, calc_trust (skey));
         break;
     case PROP_EXPIRES:
         g_value_set_ulong (value, 0);
@@ -197,11 +212,15 @@ seahorse_ssh_key_set_property (GObject *object, guint prop_id,
                                const GValue *value, GParamSpec *pspec)
 {
     SeahorseSSHKey *skey = SEAHORSE_SSH_KEY (object);
-
+    SeahorseSSHKeyData *keydata;
+    
     switch (prop_id) {
     case PROP_KEY_DATA:
-        seahorse_ssh_key_data_free (skey->keydata);
-        skey->keydata = (SeahorseSSHKeyData*)g_value_get_pointer (value);
+        keydata = (SeahorseSSHKeyData*)g_value_get_pointer (value);
+        if (skey->keydata != keydata) {
+            seahorse_ssh_key_data_free (skey->keydata);
+            skey->keydata = keydata;
+        }
         changed_key (skey);
         break;
     }
@@ -236,7 +255,7 @@ seahorse_ssh_key_class_init (SeahorseSSHKeyClass *klass)
     GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
     SeahorseKeyClass *key_class = SEAHORSE_KEY_CLASS (klass);
     
-    seahorse_ssh_key_parent_class = g_type_class_peek_parent (klass);	
+    seahorse_ssh_key_parent_class = g_type_class_peek_parent (klass);
     
     gobject_class->finalize = seahorse_ssh_key_finalize;
     gobject_class->set_property = seahorse_ssh_key_set_property;
@@ -333,12 +352,13 @@ seahorse_ssh_key_get_strength (SeahorseSSHKey *skey)
 }
 
 const gchar*    
-seahorse_ssh_key_get_filename (SeahorseSSHKey *skey, gboolean private)
+seahorse_ssh_key_get_location (SeahorseSSHKey *skey)
 {
     g_return_val_if_fail (SEAHORSE_IS_SSH_KEY (skey), NULL);
     if (!skey->keydata)
         return NULL;
-    return private ? skey->keydata->filename : skey->keydata->filepub;
+    return skey->keydata->privfile ? 
+                    skey->keydata->privfile : skey->keydata->pubfile;
 }
 
 GQuark

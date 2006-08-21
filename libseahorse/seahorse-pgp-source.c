@@ -393,7 +393,6 @@ remove_key_from_context (gpointer kt, SeahorseKey *dummy, SeahorsePGPSource *psr
 {
     /* This function gets called as a GHRFunc on the lctx->checks hashtable. */
     GQuark keyid = GPOINTER_TO_UINT (kt);
-    
     SeahorseKey *skey;
     
     skey = seahorse_context_get_key (SCTX_APP (), SEAHORSE_KEY_SOURCE (psrc), keyid);
@@ -743,7 +742,8 @@ seahorse_load_operation_start (SeahorsePGPSource *psrc, const gchar **pattern, g
             skey = SEAHORSE_KEY (l->data);
             if (secret && seahorse_key_get_etype (skey) != SKEY_PRIVATE) 
                 continue;
-            g_hash_table_insert (lop->checks, GUINT_TO_POINTER (seahorse_key_get_keyid (l->data)), NULL);
+            g_hash_table_insert (lop->checks, GUINT_TO_POINTER (seahorse_key_get_keyid (l->data)), 
+                                              GUINT_TO_POINTER (TRUE));
         }
         
         g_list_free (keys);

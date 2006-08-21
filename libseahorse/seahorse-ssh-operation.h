@@ -59,19 +59,38 @@ gchar*               seahorse_ssh_operation_sync         (SeahorseSSHSource *ssr
                                                           const gchar *command, 
                                                           GError **error);
 
+/* result: nothing */
 SeahorseOperation*   seahorse_ssh_operation_upload       (SeahorseSSHSource *ssrc,
                                                           GList *keys,
                                                           const gchar *username,
                                                           const gchar *hostname);
 
+/* result: the generated SeahorseKey */
 SeahorseOperation*   seahorse_ssh_operation_generate     (SeahorseSSHSource *src, 
                                                           const gchar *email, 
                                                           guint type, 
                                                           guint bits);
 
+/* result: nothing */
 SeahorseOperation*   seahorse_ssh_operation_change_passphrase (SeahorseSSHKey *skey);
 
-SeahorseOperation*   seahorse_ssh_operation_agent_load    (SeahorseSSHSource *src, 
-                                                           SeahorseSSHKey *skey);
+/* result: nothing */
+SeahorseOperation*   seahorse_ssh_operation_agent_load     (SeahorseSSHSource *src, 
+                                                            SeahorseSSHKey *skey);
 
+/* result: fingerprint of imported key */
+SeahorseOperation*   seahorse_ssh_operation_import_public  (SeahorseSSHSource *ssrc,
+                                                            SeahorseSSHKeyData *data,
+                                                            const gchar* filename);
+
+/* result: fingerprint of imported key */
+SeahorseOperation*   seahorse_ssh_operation_import_private (SeahorseSSHSource *ssrc, 
+                                                            SeahorseSSHSecData *data,
+                                                            const gchar* filename);
+
+/* result: nothing */
+SeahorseOperation*  seahorse_ssh_operation_authorize       (SeahorseSSHSource *ssrc,
+                                                            SeahorseSSHKey *skey,
+                                                            gboolean authorize);
+                                                            
 #endif /* __SEAHORSE_SSH_OPERATION_H__ */
