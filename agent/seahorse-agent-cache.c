@@ -410,6 +410,7 @@ seahorse_agent_cache_enum (GHFunc func, gpointer user_data)
 gchar *
 seahorse_agent_cache_getname (const gchar *id)
 {
+    gpgme_error_t gerr;
     gpgme_key_t key;
     gchar *userid;
     
@@ -419,10 +420,10 @@ seahorse_agent_cache_getname (const gchar *id)
     g_return_val_if_fail (g_ctx != NULL, g_strdup (UNKNOWN_KEY));
     g_return_val_if_fail (id != NULL, g_strdup (UNKNOWN_KEY));
         
-    gpgme_get_key (g_ctx, id, &key, 1);
-    if (key == NULL) {
-        gpgme_get_key (g_ctx, id, &key, 0);
-        if (key == NULL) 
+    gerr = gpgme_get_key (g_ctx, id, &key, 1);
+    if (!GPG_IS_OK (gerr) || key == NULL) {
+        gerr = gpgme_get_key (g_ctx, id, &key, 0);
+        if (!GPG_IS_OK (gerr) || key == NULL) 
             return g_strdup (UNKNOWN_KEY);
     }
 
