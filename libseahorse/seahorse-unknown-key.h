@@ -32,6 +32,7 @@
  *   validity: (SeahorseValidity) The key validity.
  *   trust: (SeahorseValidity) Trust for the key.
  *   expires: (gulong) Date this key expires or 0.
+ *   stock-id: (gpointer/string) The stock icon id.
  */
  
 #ifndef __SEAHORSE_UNKNOWN_KEY_H__

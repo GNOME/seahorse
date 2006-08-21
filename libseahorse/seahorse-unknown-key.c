@@ -34,7 +34,8 @@ enum {
     PROP_FINGERPRINT,
     PROP_VALIDITY,
     PROP_TRUST,
-    PROP_EXPIRES
+    PROP_EXPIRES,
+    PROP_STOCK_ID
 };
 
 G_DEFINE_TYPE (SeahorseUnknownKey, seahorse_unknown_key, SEAHORSE_TYPE_KEY);
@@ -135,6 +136,10 @@ seahorse_unknown_key_set_property (GObject *object, guint prop_id,
         ukey->keyid = g_value_get_uint (value);
         SEAHORSE_KEY (ukey)->keyid = ukey->keyid;
         break;
+    case PROP_STOCK_ID:
+        /* We use a pointer so we don't copy the string every time */
+        g_value_set_pointer (value, NULL);
+        break;
     }
 }
 
@@ -192,6 +197,11 @@ seahorse_unknown_key_class_init (SeahorseUnknownKeyClass *klass)
     g_object_class_install_property (gobject_class, PROP_EXPIRES,
         g_param_spec_ulong ("expires", "Expires On", "Date this key expires on",
                            0, G_MAXULONG, 0, G_PARAM_READABLE));
+                           
+    g_object_class_install_property (gobject_class, PROP_STOCK_ID,
+        g_param_spec_pointer ("stock-id", "The stock icon", "The stock icon id",
+                              G_PARAM_READABLE));
+
 }
 
 /* -----------------------------------------------------------------------------

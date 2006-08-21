@@ -29,6 +29,7 @@
 #include "seahorse-ssh-source.h"
 #include "seahorse-ssh-key.h"
 #include "seahorse-ssh-operation.h"
+#include "seahorse-gtkstock.h"
 
 enum {
     PROP_0,
@@ -40,7 +41,8 @@ enum {
     PROP_VALIDITY,
     PROP_TRUST,
     PROP_EXPIRES,
-    PROP_LENGTH
+    PROP_LENGTH,
+    PROP_STOCK_ID
 };
 
 struct _SeahorseSSHKeyPrivate {
@@ -204,6 +206,10 @@ seahorse_ssh_key_get_property (GObject *object, guint prop_id,
     case PROP_LENGTH:
         g_value_set_uint (value, skey->keydata ? skey->keydata->length : 0);
         break;
+    case PROP_STOCK_ID:
+        /* We use a pointer so we don't copy the string every time */
+        g_value_set_pointer (value, SEAHORSE_STOCK_KEY_SSH);
+        break;
     }
 }
 
@@ -300,6 +306,10 @@ seahorse_ssh_key_class_init (SeahorseSSHKeyClass *klass)
     g_object_class_install_property (gobject_class, PROP_LENGTH,
         g_param_spec_uint ("length", "Length of", "The length of this key",
                            0, G_MAXUINT, 0, G_PARAM_READABLE));
+                           
+    g_object_class_install_property (gobject_class, PROP_STOCK_ID,
+        g_param_spec_pointer ("stock-id", "The stock icon", "The stock icon id",
+                              G_PARAM_READABLE));
 }
 
 /* -----------------------------------------------------------------------------

@@ -25,6 +25,7 @@
 #include "seahorse-context.h"
 #include "seahorse-key-source.h"
 #include "seahorse-pgp-key.h"
+#include "seahorse-gtkstock.h"
 
 enum {
     PROP_0,
@@ -37,7 +38,8 @@ enum {
     PROP_VALIDITY,
     PROP_TRUST,
     PROP_EXPIRES,
-    PROP_LENGTH
+    PROP_LENGTH,
+    PROP_STOCK_ID
 };
 
 G_DEFINE_TYPE (SeahorsePGPKey, seahorse_pgp_key, SEAHORSE_TYPE_KEY);
@@ -256,6 +258,7 @@ seahorse_pgp_key_get_property (GObject *object, guint prop_id,
                                GValue *value, GParamSpec *pspec)
 {
     SeahorsePGPKey *pkey = SEAHORSE_PGP_KEY (object);
+    SeahorseKey *skey = SEAHORSE_KEY (object);
     
     switch (prop_id) {
     case PROP_PUBKEY:
@@ -289,7 +292,12 @@ seahorse_pgp_key_get_property (GObject *object, guint prop_id,
     case PROP_LENGTH:
         if (pkey->pubkey)
             g_value_set_uint (value, pkey->pubkey->subkeys->length);
-        break;        
+        break;
+    case PROP_STOCK_ID:
+        /* We use a pointer so we don't copy the string every time */
+        g_value_set_pointer (value, 
+            skey->etype == SKEY_PRIVATE ? SEAHORSE_STOCK_SECRET : SEAHORSE_STOCK_KEY);
+        break;
     }
 }
 
@@ -394,7 +402,12 @@ seahorse_pgp_key_class_init (SeahorsePGPKeyClass *klass)
 
     g_object_class_install_property (gobject_class, PROP_LENGTH,
         g_param_spec_uint ("length", "Length", "The length of this key.",
-                           0, G_MAXUINT, 0, G_PARAM_READABLE));    
+                           0, G_MAXUINT, 0, G_PARAM_READABLE));
+                           
+    g_object_class_install_property (gobject_class, PROP_STOCK_ID,
+        g_param_spec_pointer ("stock-id", "The stock icon", "The stock icon id",
+                              G_PARAM_READABLE));
+
 }
 
 

@@ -395,6 +395,14 @@ seahorse_key_get_length (SeahorseKey *skey)
     return length;
 }
 
+const gchar*
+seahorse_key_get_stock_id (SeahorseKey *skey)
+{
+    const gchar* stock_id;
+    g_object_get (skey, "stock-id", &stock_id, NULL);
+    return stock_id;
+}
+
 void
 seahorse_key_set_preferred (SeahorseKey *skey, SeahorseKey *preferred)
 {

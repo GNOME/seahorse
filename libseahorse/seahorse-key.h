@@ -53,6 +53,7 @@
  *   trust: (SeahorseValidity) Trust for the key.
  *   expires: (gulong) Date this key expires or 0.
  *   length: (guint) The length of the key in bits.
+ *   stock-id: (gpointer/string) The icon stock id
  */
  
 #ifndef __SEAHORSE_KEY_H__
@@ -212,6 +213,8 @@ SeahorseValidity  seahorse_key_get_trust          (SeahorseKey        *skey);
 gulong            seahorse_key_get_expires        (SeahorseKey        *skey);
 
 guint             seahorse_key_get_length         (SeahorseKey        *skey);
+
+const gchar*      seahorse_key_get_stock_id       (SeahorseKey        *skey);
 
 void              seahorse_key_set_preferred      (SeahorseKey        *skey,
                                                    SeahorseKey        *preferred);
