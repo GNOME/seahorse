@@ -200,50 +200,54 @@ free_connections (gpointer data, gpointer user_data)
     free_connection ((SSHProxyConn*)data);
 }
 
-static gint
-read_ssh_message (GIOChannel* source, gchar *buf, gsize bufsize)
+static gchar*
+read_ssh_message (GIOChannel* source, gsize* length)
 {
     GError *err = NULL;
+    gchar buf[256];
     gsize bytes;
-    guint length, read, r;
+    GString *msg = NULL;
+    guint r;
     
-    g_assert (bufsize >= 4);
+    *length = 0;
     
-    /* First read the length of the response packet. */
-    g_io_channel_read_chars (source, buf, 4, &bytes, &err);
+    /* First read the length of the response packet */
+    g_io_channel_read_chars (source, (gchar*)buf, 4, &bytes, &err);
     
     if (err != NULL || bytes != 4) {
         if(bytes == 0)
-            return -1;
+            return NULL;
         g_critical ("couldn't read length from socket: %s", 
                     err && err->message ? err->message : "");
         g_clear_error (&err);
-        return -1;
+        return NULL;
     }
     
-    length = GET_32BIT (buf);
+    *length = GET_32BIT (buf);
+    msg = g_string_sized_new (1024);
     
-    /* To prevent buffer overflow discard anything over bufsize */
-    for (read = 0; read < length; read += bufsize) {
+    while (msg->len < *length) {
         
-        r = length > bufsize ? bufsize : length;
+        r = (*length - msg->len) > sizeof (buf) ? sizeof (buf) : (*length - msg->len);
         
         /* Now read the actual msg */
-        g_io_channel_read_chars (source, buf, r, &bytes, &err);
+        g_io_channel_read_chars (source, (gchar*)buf, r, &bytes, &err);
         
         if (err != NULL || bytes != r) {
-            g_critical ("couldn't read from socket: %s", 
-                         err && err->message ? err->message : "");
+            g_critical ("couldn't read from socket: %s (%d/%d/%d)", 
+                         err && err->message ? err->message : "", r, bytes, *length);
             g_clear_error (&err);
-            return -1;
+            g_string_free (msg, TRUE);
+            return NULL;
         }
         
-        read += r;
-        length -= r;
+        g_string_append_len (msg, buf, r);
     }
+    
+    g_assert (*length == msg->len);
 
-    DEBUG_MSG (("received message: %d (len: %d)\n", (int)(guchar)buf[0], bytes));    
-    return bytes;
+    DEBUG_MSG (("received message: %d (len: %d)\n", (int)(gchar)msg->str[0], *length));
+    return (gchar*)g_string_free (msg, FALSE);
 }
 
 static gboolean
@@ -263,7 +267,7 @@ write_ssh_message (GIOChannel* source, gchar *buf, gsize bufsize)
         return FALSE;
     }
     
-    g_io_channel_write_chars (source, buf, bufsize, &written, &err);
+    g_io_channel_write_chars (source, (gchar*)buf, bufsize, &written, &err);
     
     if (err != NULL || written != bufsize) {
         g_critical ("couldn't write to socket: %s", 
@@ -272,36 +276,39 @@ write_ssh_message (GIOChannel* source, gchar *buf, gsize bufsize)
         return FALSE;
     }
 
-    DEBUG_MSG (("sent message: %d (len: %d)\n", (int)(guchar)buf[0], bufsize));
+    DEBUG_MSG (("sent message: %d (len: %d)\n", (int)(gchar)buf[0], bufsize));
     return TRUE;
 }
 
-static guint
+static gint
 get_num_identities (SSHProxyConn *cn)
 {
-    gchar buf[1024];
-    SSHMsgHeader *req;
+    gchar *msg;
+    SSHMsgHeader req;
     SSHMsgNumIdentities *resp;
     guint length;
+    guint ret = -1;
     
-    memset (buf, 0, sizeof (buf));
+    memset (&req, 0, sizeof (req));
+    req.msgid = SSH2_AGENTC_REQUEST_IDENTITIES;
     
-    req = (SSHMsgHeader*)buf;
-    req->msgid = SSH2_AGENTC_REQUEST_IDENTITIES;
-    
-    if (!write_ssh_message (cn->outchan, buf, sizeof (*req)))
+    if (!write_ssh_message (cn->outchan, (gchar*)(&req), sizeof (req)))
         return -1;
     
-    length = read_ssh_message (cn->outchan, buf, sizeof (buf));
+    msg = read_ssh_message (cn->outchan, &length);
+    if (!msg)
+        return -1;
     
-    resp = (SSHMsgNumIdentities*)buf;
+    resp = (SSHMsgNumIdentities*)msg;
     if (length >= sizeof (*resp)) {
         if (resp->head.msgid == SSH2_AGENT_IDENTITIES_ANSWER) 
-            return resp->num_identities;
+            ret = resp->num_identities;
+    } else {
+        g_warning ("can't understand SSH agent protocol");
     }
     
-    g_warning ("can't understand SSH agent protocol");
-    return -1;
+    g_free (msg);
+    return ret;
 }
 
 static gboolean 
@@ -370,7 +377,7 @@ process_message (SSHProxyConn *cn, gboolean from_client, gchar *msg, gsize len)
         
     /* For pings we just write the same thing back */
     case SEAHORSE_SSH_PING_MSG:
-        write_ssh_message (cn->inchan, msg, len);
+        write_ssh_message (cn->inchan, (gchar*)msg, len);
         return FALSE;
     
     case SSH2_AGENTC_REQUEST_IDENTITIES:
@@ -414,9 +421,9 @@ static gboolean
 io_handler (GIOChannel *source, GIOCondition condition, SSHProxyConn *cn)
 {
     GIOChannel *out;
-    gchar msg[1024];
+    gchar *msg;
     gboolean ret = FALSE;
-    gint length;
+    gsize length;
     gboolean from_client = FALSE;
     
     memset (msg, 0, sizeof (msg));
@@ -436,9 +443,9 @@ io_handler (GIOChannel *source, GIOCondition condition, SSHProxyConn *cn)
         else
             g_return_val_if_reached (FALSE);
         
-        length = read_ssh_message (source, msg, sizeof (msg));
+        msg = read_ssh_message (source, &length);
         
-        if (length <= 0) {
+        if (!msg) {
             free_connection (cn);
             cn = NULL;
             goto finally;
@@ -448,6 +455,7 @@ io_handler (GIOChannel *source, GIOCondition condition, SSHProxyConn *cn)
         if (process_message (cn, from_client, msg, length))
             write_ssh_message (out, msg, length);
 
+        g_free (msg);
         ret = TRUE;
     }
 
