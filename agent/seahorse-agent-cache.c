@@ -35,6 +35,10 @@
 #include "seahorse-gpgmex.h"
 #include "seahorse-agent.h"
 #include "seahorse-secure-memory.h"
+#include "seahorse-key-source.h"
+#include "seahorse-pgp-key.h"
+#include "seahorse-context.h"
+#include "seahorse-unknown-source.h"
 
 /* -----------------------------------------------------------------------------
  * INTERNAL PASSWORD CACHE
@@ -62,7 +66,6 @@ typedef struct sa_cache_t {
 
 static GHashTable *g_cache = NULL;      /* Hash of ids to sa_cache_t */
 static GMemChunk *g_memory = NULL;      /* Memory for sa_cache_t's */
-static gpgme_ctx_t g_ctx = NULL;        /* Context for looking up ids */
 static guint g_notify_id = 0;           /* gconf notify id */
 
 /* -----------------------------------------------------------------------------
@@ -174,16 +177,8 @@ seahorse_agent_cache_init ()
     err = gpgme_engine_check_version (proto);
     g_return_if_fail (GPG_IS_OK (err));
    
-    err = gpgme_new (&g_ctx);
-    g_return_if_fail (GPG_IS_OK (err));
-   
-    err = gpgme_set_protocol (g_ctx, proto);
-    g_return_if_fail (GPG_IS_OK (err));
-   
-    gpgme_set_keylist_mode (g_ctx, GPGME_KEYLIST_MODE_LOCAL);
-	
-	/* Listen for changes on the AUTH key */
-	g_notify_id = seahorse_gconf_notify (SETTING_AUTH, gconf_notify, NULL);
+    /* Listen for changes on the AUTH key */
+    g_notify_id = seahorse_gconf_notify (SETTING_AUTH, gconf_notify, NULL);
 }
 
 /* Uninitialize and free up cache memory */
@@ -202,15 +197,10 @@ seahorse_agent_cache_uninit ()
         g_memory = NULL;
     }
     
-    if (g_ctx) {
-        gpgme_release (g_ctx);
-        g_ctx = NULL;
+    if (g_notify_id) {
+        seahorse_gconf_unnotify (g_notify_id);
+        g_notify_id = 0;
     }
-	
-	if (g_notify_id) {
-		seahorse_gconf_unnotify (g_notify_id);
-		g_notify_id = 0;
-	}
 }
 
 /* Retrieve a password from the cache */
@@ -362,46 +352,37 @@ seahorse_agent_cache_count ()
     return g_hash_table_size (g_cache);
 }
 
-/* For enumerating through all ids in the cache */
-void
-seahorse_agent_cache_enum (GHFunc func, gpointer user_data)
+static void 
+build_key_list (gpointer key, gpointer value, GList **keys)
 {
-    g_assert (g_cache != NULL);
-    g_assert (func != NULL);
-    g_hash_table_foreach (g_cache, func, user_data);
-}
-
-/* Get the displayable name of a given cache item */
-gchar *
-seahorse_agent_cache_getname (const gchar *id)
-{
-    gpgme_key_t key;
-    gchar *userid;
+    sa_cache_t *it = (sa_cache_t*)value;
+    SeahorseKeySource *sksrc;
+    SeahorseKey *skey;
+    GQuark keyid;
     
-    if (!g_ctx)
-        return g_strdup (UNKNOWN_KEY);
+    keyid = seahorse_pgp_key_get_cannonical_id (it->id);
 
-    g_return_val_if_fail (g_ctx != NULL, g_strdup (UNKNOWN_KEY));
-    g_return_val_if_fail (id != NULL, g_strdup (UNKNOWN_KEY));
-        
-    gpgme_get_key (g_ctx, id, &key, 1);
-    if (key == NULL) {
-        gpgme_get_key (g_ctx, id, &key, 0);
-        if (key == NULL) 
-            return g_strdup (UNKNOWN_KEY);
+    skey = seahorse_context_find_key (SCTX_APP (), keyid, SKEY_LOC_LOCAL);
+    if (!skey) {
+        sksrc = seahorse_context_find_key_source (SCTX_APP (), SKEY_PGP, SKEY_LOC_UNKNOWN);
+        g_return_if_fail (sksrc != NULL);
+        skey = seahorse_unknown_source_add_key (SEAHORSE_UNKNOWN_SOURCE (sksrc), keyid, NULL);
     }
-
-    userid = (key->uids && key->uids->uid) ? key->uids->uid : UNKNOWN_KEY;
     
-    /* If not utf8 valid, assume latin 1 */
-    if (!g_utf8_validate (userid, -1, NULL))
-        userid = g_convert (userid, -1, "UTF-8", "ISO-8859-1", NULL, NULL, NULL);
-    else
-        userid = g_strdup (userid);
-
-    gpgme_key_unref (key);
-    return userid;
+    if (skey) 
+        *keys = g_list_prepend (*keys, skey);
 }
+
+/* Get list of all SeahorseKey's cached */
+GList* 
+seahorse_agent_cache_get_keys ()
+{
+    GList *keys = NULL;
+    g_assert (g_cache != NULL);
+    g_hash_table_foreach (g_cache, (GHFunc)build_key_list, &keys);
+    return keys;
+}
+
 
 /* -----------------------------------------------------------------------------
  * GENERIC CACHE FUNCTIONS
@@ -455,10 +436,18 @@ seahorse_agent_cache_set (const gchar *id, const gchar *pass, gboolean lock)
         GnomeKeyringResult res;
         GnomeKeyringAttributeList *attributes = NULL;
         guint item_id;
-        gchar *desc, *key;
-        key = seahorse_agent_cache_getname (id);
-        desc = g_strdup_printf (_("PGP Key: %s"), key);
-        g_free (key);
+        gchar *desc = NULL, *name;
+        SeahorseKey *skey;
+        GQuark keyid;
+        
+        keyid = seahorse_pgp_key_get_cannonical_id (id);
+        skey = seahorse_context_find_key (SCTX_APP (), keyid, SKEY_LOC_LOCAL);
+        
+        if (skey) {
+            name = seahorse_key_get_display_name (skey);
+            desc = g_strdup_printf (_("PGP Key: %s"), name);
+            g_free (name);
+        }
         
         attributes = gnome_keyring_attribute_list_new ();
         gnome_keyring_attribute_list_append_string (attributes, KEYRING_ATTR_TYPE, 

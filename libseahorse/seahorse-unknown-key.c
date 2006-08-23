@@ -122,6 +122,10 @@ seahorse_unknown_key_get_property (GObject *object, guint prop_id,
     case PROP_EXPIRES:
         g_value_set_ulong (value, 0);
         break;
+    case PROP_STOCK_ID:
+        /* We use a pointer so we don't copy the string every time */
+        g_value_set_pointer (value, "");
+        break;
     }
 }
 
@@ -135,10 +139,6 @@ seahorse_unknown_key_set_property (GObject *object, guint prop_id,
     case PROP_KEYID:
         ukey->keyid = g_value_get_uint (value);
         SEAHORSE_KEY (ukey)->keyid = ukey->keyid;
-        break;
-    case PROP_STOCK_ID:
-        /* We use a pointer so we don't copy the string every time */
-        g_value_set_pointer (value, NULL);
         break;
     }
 }

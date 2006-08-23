@@ -105,8 +105,7 @@ gboolean seahorse_agent_cache_has (const gchar *id, gboolean lock);
 void seahorse_agent_cache_clear (const gchar *id);
 void seahorse_agent_cache_clearall ();
 guint seahorse_agent_cache_count ();
-void seahorse_agent_cache_enum (GHFunc func, gpointer user_data);
-gchar *seahorse_agent_cache_getname (const gchar *id);
+GList* seahorse_agent_cache_get_keys ();
 
 /* -----------------------------------------------------------------------------
  * seahorse-agent-prompt.c
@@ -131,6 +130,9 @@ void seahorse_agent_status_update ();
 #define SEAHORSE_SSH_PING_MSG             252
 
 gboolean seahorse_agent_ssh_init ();
-void seahorse_agent_ssh_uninit ();
+GList*   seahorse_agent_ssh_cached_keys ();
+guint    seahorse_agent_ssh_count_keys ();
+void     seahorse_agent_ssh_clearall ();
+void     seahorse_agent_ssh_uninit ();
 
 #endif /* __SEAHORSE_AGENT_H__ */

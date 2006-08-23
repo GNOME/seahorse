@@ -19,6 +19,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include "config.h"
 #include <sys/types.h>
 #include <stdlib.h>
 
@@ -45,14 +46,14 @@ static GtkWidget *g_image = NULL;
 
 /* For the popup window */
 static SeahorseWidget *g_window = NULL;
-static SeahorseContext *g_sctx = NULL;
 
 /* -----------------------------------------------------------------------------
  *  Popup Window
  */
 
 enum {
-    KEY_COLUMN,
+    ICON_COLUMN,
+    UID_COLUMN,
     N_COLUMNS
 };
 
@@ -86,24 +87,35 @@ static void
 clear_clicked (GtkButton *button, SeahorseWidget *swidget)
 {
     seahorse_agent_cache_clearall ();
+#ifdef WITH_SSH
+    seahorse_agent_ssh_clearall ();
+#endif
     window_destroy ();
 }
 
 /* Add a row to the tree for a given password */
 static void
-add_row_for_key (gpointer id, gpointer reserved, gpointer user_data)
+add_keys_to_store (GtkTreeStore *store, GList *keys)
 {
-    GtkTreeStore *store = GTK_TREE_STORE (user_data);
+    GList *k;
     GtkTreeIter iter;
     gchar *userid;
-
-    /* Add a new row to the model */
-    gtk_tree_store_append (store, &iter, NULL);
     
-    userid = seahorse_agent_cache_getname ((const gchar *) id);
-    gtk_tree_store_set (store, &iter, KEY_COLUMN,
-                        userid, -1);
-    g_free (userid);
+    for (k = keys; k; k = g_list_next (k)) {
+        
+        /* Add a new row to the model */
+        gtk_tree_store_append (store, &iter, NULL);
+        
+        userid = seahorse_key_get_display_name (SEAHORSE_KEY (k->data));
+        gtk_tree_store_set (store, &iter, 
+                    UID_COLUMN, userid,
+                    ICON_COLUMN, seahorse_key_get_stock_id (SEAHORSE_KEY (k->data)),
+                    -1);
+        
+        g_free (userid);
+    }
+    
+    g_list_free (keys);
 }
 
 /* Called when the cache changes and window is open */
@@ -111,9 +123,10 @@ static void
 window_update_keys ()
 {
     GtkTreeViewColumn *column;
+    GtkCellRenderer  *renderer;
     GtkTreeStore *store;
     GtkTreeView *tree;
-
+    
     g_assert (g_window != NULL);
     tree = GTK_TREE_VIEW (glade_xml_get_widget (g_window->xml, "key_list"));
     g_assert (tree != NULL);
@@ -121,23 +134,34 @@ window_update_keys ()
     store = GTK_TREE_STORE (gtk_tree_view_get_model (tree));
     if (!store) {
         /* This is our first time so create a store */
-        store = gtk_tree_store_new (N_COLUMNS, G_TYPE_STRING);
+        store = gtk_tree_store_new (N_COLUMNS, G_TYPE_STRING, G_TYPE_STRING);
         gtk_tree_view_set_model (tree, GTK_TREE_MODEL (store));
+        
+        /* Make the icon column */
+        renderer = gtk_cell_renderer_pixbuf_new ();
+        g_object_set (renderer, "stock-size", GTK_ICON_SIZE_LARGE_TOOLBAR, NULL);
+        column = gtk_tree_view_column_new_with_attributes ("", renderer, 
+                                                           "stock-id", ICON_COLUMN, NULL);
+        gtk_tree_view_column_set_resizable (column, FALSE);
+        gtk_tree_view_append_column (tree, column);
 
-        /* Make the column */
-        column = gtk_tree_view_column_new_with_attributes (_("Cached Encryption Keys"),
-                                                           gtk_cell_renderer_text_new
-                                                           (), "text", KEY_COLUMN,
-                                                           NULL);
+        /* Make the uid column */
+        column = gtk_tree_view_column_new_with_attributes (_("Key Name"),
+                                                           gtk_cell_renderer_text_new (), 
+                                                           "text", UID_COLUMN, NULL);
         gtk_tree_view_append_column (tree, column);
     } else {
         /* Clear the store we refill below */
         gtk_tree_store_clear (store);
     }
-
-    /* Add all the keys */
-    seahorse_agent_cache_enum (add_row_for_key, store);
-    g_object_unref (G_OBJECT (store));
+    
+    /* The keys from the PGP cache */
+    add_keys_to_store (store, seahorse_agent_cache_get_keys ());
+    
+#ifdef WITH_SSH
+    /* And  the ones from the SSH agent */
+    add_keys_to_store (store, seahorse_agent_ssh_cached_keys ());
+#endif
 }
 
 /* Display the status window */
@@ -145,7 +169,6 @@ static void
 window_show ()
 {
     GtkWidget *w;
-    GtkImage *img;
     
     if (g_window) {
         w = glade_xml_get_widget (g_window->xml, g_window->name);
@@ -153,17 +176,8 @@ window_show ()
         return;
     }
 
-    if (!g_sctx)
-        g_sctx = seahorse_context_new (SEAHORSE_CONTEXT_APP, SKEY_PGP);
-    
     g_window = seahorse_widget_new ("agent-cache");
-
     w = glade_xml_get_widget (g_window->xml, g_window->name);
-
-
-    img = GTK_IMAGE (gtk_image_new_from_stock (GTK_STOCK_DIALOG_AUTHENTICATION, 
-                                                GTK_ICON_SIZE_DIALOG));
-    gtk_window_set_icon (GTK_WINDOW (w), gtk_image_get_pixbuf (img));
 
     g_signal_connect (G_OBJECT (w), "delete_event", G_CALLBACK (delete_event), NULL);
 
@@ -184,14 +198,14 @@ window_show ()
 }
 
 /* -----------------------------------------------------------------------------
- *  Tray Icon Code
+ *  TRAY ICON
  */
 
 /* Menu item for clearing cache */
 static void
 on_clear_cache_activate (GtkWidget *item, gpointer data)
 {
-    seahorse_agent_cache_clearall ();
+    clear_clicked (NULL, NULL);
 }
 
 /* Menu item for showing status */
@@ -317,6 +331,10 @@ docklet_create ()
     g_object_ref (G_OBJECT (g_docklet));
 }
 
+/* -----------------------------------------------------------------------------
+ * PUBLIC
+ */
+
 /* Called when quiting */
 void
 seahorse_agent_status_cleanup ()
@@ -332,7 +350,12 @@ void
 seahorse_agent_status_update ()
 {
     gboolean have = (seahorse_agent_cache_count () > 0);
-
+    
+#ifdef WITH_SSH
+    if (!have) 
+        have = (seahorse_agent_ssh_count_keys () > 0);
+#endif 
+    
     if (have && !g_docklet)
         docklet_create ();
 

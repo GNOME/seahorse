@@ -46,6 +46,8 @@
 #include "seahorse-ssh-key.h"
 #include "seahorse-ssh-operation.h"
 #include "seahorse-passphrase.h"
+#include "seahorse-util.h"
+#include "seahorse-unknown-source.h"
 
 #ifndef DEBUG_SSHAGENT_ENABLE
 #if _DEBUG
@@ -60,6 +62,9 @@
 #else
 #define DEBUG_MSG(x)
 #endif
+
+static GSList *ssh_agent_cached_fingerprints = NULL;
+static gboolean ssh_agent_fingerprints_loaded = FALSE;
 
 static gboolean ssh_agent_initialized = FALSE;
 static GList *ssh_agent_connections = NULL;
@@ -91,6 +96,9 @@ typedef struct _SSHProxyConn {
 /* The various messages we're interested in */
 #define SSH2_AGENTC_REQUEST_IDENTITIES      11
 #define SSH2_AGENT_IDENTITIES_ANSWER        12
+#define SSH2_AGENTC_ADD_IDENTITY            17
+#define SSH2_AGENTC_REMOVE_IDENTITY         18
+#define SSH2_AGENTC_REMOVE_ALL_IDENTITIES   19
     
 struct _SSHMsgHeader {
     guchar msgid;
@@ -107,6 +115,53 @@ typedef struct _SSHMsgNumIdentities SSHMsgNumIdentities;
 /* -----------------------------------------------------------------------------
  * IMPLEMENTATION
  */
+
+static void
+clear_cached_fingerprints()
+{
+    DEBUG_MSG (("Clearing our internal cache of loaded SSH fingerprints\n"));
+    seahorse_util_string_slist_free (ssh_agent_cached_fingerprints);
+    ssh_agent_cached_fingerprints = NULL;
+    ssh_agent_fingerprints_loaded = FALSE;
+}
+
+static gboolean
+parse_cached_fingerprint (SeahorseSSHKeyData *keydata, gpointer arg)
+{
+    ssh_agent_cached_fingerprints = 
+        g_slist_prepend (ssh_agent_cached_fingerprints, g_strdup (keydata->fingerprint));
+    seahorse_ssh_key_data_free (keydata);
+    return TRUE;
+}
+
+static void
+load_cached_fingerprints ()
+{
+    SeahorseKeySource *sksrc;
+    gchar *output;
+    GError *err = NULL;
+    
+    if (ssh_agent_fingerprints_loaded)
+        return;
+    
+    clear_cached_fingerprints ();
+    
+    DEBUG_MSG (("Loading internal cache of fingerprints\n"));
+    ssh_agent_fingerprints_loaded = TRUE;
+    
+    sksrc = seahorse_context_find_key_source (SCTX_APP (), SKEY_SSH, SKEY_LOC_LOCAL);
+    g_return_if_fail (SEAHORSE_IS_SSH_SOURCE (sksrc));
+    
+    /* TODO: This could possibly done more efficiently by talking with the agent ourselves */
+    output = seahorse_ssh_operation_sync (SEAHORSE_SSH_SOURCE (sksrc), "/bin/sh -c \"" SSH_ADD_PATH " -L; true\"", &err);
+    if (!output) {
+        g_warning ("couldn't list keys in SSH agent: %s", err && err->message ? err->message : "");
+        return;
+    }
+    
+    seahorse_ssh_key_data_parse (output, parse_cached_fingerprint, NULL, NULL);
+    g_free (output);
+}
 
 /* Free the given connection structure */
 static void
@@ -272,6 +327,13 @@ find_ssh_keys ()
     return seahorse_context_find_keys_full (SCTX_APP (), &skp);
 }
 
+static gboolean
+update_status (gpointer dummy)
+{
+    seahorse_agent_status_update ();
+    return FALSE;
+}
+
 static void
 load_ssh_key (SeahorseSSHKey *skey)
 {
@@ -288,6 +350,9 @@ load_ssh_key (SeahorseSSHKey *skey)
         g_warning ("couldn't run ssh-add to add a key identity: %s", 
                    seahorse_operation_get_error (op)->message);
     
+    clear_cached_fingerprints ();
+    g_timeout_add (500, update_status, NULL);
+
     g_object_unref (op);
 }
 
@@ -310,6 +375,14 @@ process_message (SSHProxyConn *cn, gboolean from_client, gchar *msg, gsize len)
     
     case SSH2_AGENTC_REQUEST_IDENTITIES:
         break;
+    
+    /* Keep our internal representation of what's cached consistent */
+    case SSH2_AGENTC_ADD_IDENTITY:
+    case SSH2_AGENTC_REMOVE_IDENTITY:
+    case SSH2_AGENTC_REMOVE_ALL_IDENTITIES:
+        clear_cached_fingerprints ();
+        g_timeout_add (500, update_status, NULL);
+        return TRUE;
     
     /* Ignore all other messages */
     default:
@@ -521,6 +594,9 @@ seahorse_agent_ssh_init ()
 
     /* All nicely done */
     ssh_agent_initialized = TRUE;
+    
+    /* We want any of our accesses to the agent to go directly: */
+    g_setenv ("SSH_AUTH_SOCK", ssh_client_sockname, TRUE);
     return TRUE;
 }
 
@@ -553,5 +629,68 @@ seahorse_agent_ssh_uninit ()
     if (ssh_agent_sockname[0] && ssh_client_sockname[0])
         g_rename (ssh_client_sockname, ssh_agent_sockname);
     
+    /* Free the cached data */
+    clear_cached_fingerprints ();
+    
     ssh_agent_initialized = FALSE;
+}
+
+GList*   
+seahorse_agent_ssh_cached_keys ()
+{
+    GList *keys = NULL;
+    SeahorseKey *skey;
+    SeahorseKeySource *sksrc;
+    GSList *l;
+    GQuark keyid;
+    
+    load_cached_fingerprints ();
+    
+    for (l = ssh_agent_cached_fingerprints; l; l = g_slist_next (l)) {
+        
+        keyid = seahorse_ssh_key_get_cannonical_id ((const gchar*)l->data);
+        g_return_val_if_fail (keyid, NULL);
+        
+        skey = seahorse_context_find_key (SCTX_APP (), keyid, SKEY_LOC_LOCAL);
+        if (!skey) {
+            sksrc = seahorse_context_find_key_source (SCTX_APP (), SKEY_SSH, SKEY_LOC_UNKNOWN);
+            g_return_val_if_fail (sksrc != NULL, NULL);
+            skey = seahorse_unknown_source_add_key (SEAHORSE_UNKNOWN_SOURCE (sksrc), keyid, NULL);
+        }
+        
+        if (skey)
+            keys = g_list_prepend (keys, skey);
+    }
+    
+    return keys;
+}
+
+guint    
+seahorse_agent_ssh_count_keys ()
+{
+    load_cached_fingerprints ();
+    return g_slist_length (ssh_agent_cached_fingerprints);
+}
+
+void
+seahorse_agent_ssh_clearall ()
+{
+    SeahorseKeySource *sksrc;
+    GError *err = NULL;
+    gchar *output;
+
+    sksrc = seahorse_context_find_key_source (SCTX_APP (), SKEY_SSH, SKEY_LOC_LOCAL);
+    g_return_if_fail (SEAHORSE_IS_SSH_SOURCE (sksrc));
+    
+    /* TODO: This could possibly done more efficiently by talking with the agent ourselves */
+    output = seahorse_ssh_operation_sync (SEAHORSE_SSH_SOURCE (sksrc), SSH_ADD_PATH " -D", &err);
+    if (!output) {
+        g_warning ("couldn't clear keys in SSH agent: %s", err && err->message ? err->message : "");
+        return;
+    }
+
+    clear_cached_fingerprints ();
+    update_status (NULL);
+    
+    g_free (output);
 }

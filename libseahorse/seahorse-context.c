@@ -453,7 +453,7 @@ setup_keys_by_type (SeahorseContext *sctx, SeahorseKey *skey, gboolean add)
 {
     GList *l, *keys = NULL;
     SeahorseKey *akey, *next;
-    gpointer kt = (gpointer)seahorse_key_get_keyid (skey);
+    gpointer kt = GUINT_TO_POINTER (seahorse_key_get_keyid (skey));
     gboolean first;
     
     /* Get current set of keys in this ktype/keyid */
@@ -596,7 +596,7 @@ seahorse_context_find_key (SeahorseContext *sctx, GQuark keyid, SeahorseKeyLoc l
         if (location == SKEY_LOC_INVALID && !skey->preferred)
             return skey;
         
-        if (location == seahorse_key_get_location (skey))
+        if (location >= seahorse_key_get_location (skey))
             return skey;
         
         /* Look down the list for this location */
