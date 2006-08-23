@@ -46,16 +46,16 @@ create_file (const gchar *file, mode_t mode, GError **err)
     if ((fd = open (file, O_CREAT | O_TRUNC | O_WRONLY, mode)) == -1) {
         g_set_error (err, G_IO_CHANNEL_ERROR, g_io_channel_error_from_errno (errno),
                      strerror (errno));     
-		return FALSE;
+        return FALSE;
     }
 
-	/* Write the header when we make a new file */
-	if (write (fd, GPG_CONF_HEADER, strlen (GPG_CONF_HEADER)) == -1) {
+    /* Write the header when we make a new file */
+    if (write (fd, GPG_CONF_HEADER, strlen (GPG_CONF_HEADER)) == -1) {
         g_set_error (err, G_IO_CHANNEL_ERROR, g_io_channel_error_from_errno (errno),
                      strerror (errno));     
-	}
-	
-	close (fd);
+    }
+    
+    close (fd);
     return *err ? FALSE : TRUE;
 }
 
@@ -73,7 +73,7 @@ find_config_file (gboolean read, GError **err)
     if (g_file_test (conf, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_EXISTS)) 
         return conf;
     g_free (conf);
-    	
+    
     /* Check for and open ~/.gnupg/options */
     conf = g_strconcat (gpg_homedir, "/options", NULL);
     if (g_file_test (conf, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_EXISTS)) 
@@ -91,7 +91,7 @@ find_config_file (gboolean read, GError **err)
     }
 
     /* For writers just return the file name */
-    conf = g_strconcat (gpg_homedir, "/gpg.conf", NULL);	
+    conf = g_strconcat (gpg_homedir, "/gpg.conf", NULL);
     if (!read)
         return conf;
 
@@ -99,18 +99,18 @@ find_config_file (gboolean read, GError **err)
     if (create_file (conf, 0600, err))
         return conf;
     g_free (conf);
-	
+
     return NULL;
-}	
+}
 
 static GArray*
 read_config_file (GError **err)
 {
-    GIOChannel *io;
     GError *e = NULL;
-    GArray *ret;
-    gchar *conf;
-    gchar *line;
+    gboolean ret;
+    GArray *array;
+    gchar *conf, *contents;
+    gchar **lines, **l;
 
     g_assert (!err || !*err);
     if (!err)
@@ -119,36 +119,30 @@ read_config_file (GError **err)
     conf = find_config_file (TRUE, err);
     if (conf == NULL)
         return NULL;
-
-    io = g_io_channel_new_file (conf, "r", err);
-    g_free (conf);
-
-    if (io == NULL)
-        return NULL;        
-
-    g_io_channel_set_encoding (io, NULL, NULL);    
-    ret = g_array_new (FALSE, TRUE, sizeof (char*));
-
-    while (g_io_channel_read_line (io, &line, NULL, NULL, err) == G_IO_STATUS_NORMAL)
-        g_array_append_val (ret, line);
-
-    g_io_channel_unref (io);
-
-    if (*err != NULL) {
-        g_array_free (ret, TRUE);
-        return NULL;
-    }
     
-    return ret;
+    ret = g_file_get_contents (conf, &contents, NULL, err);
+    g_free (conf);
+    
+    if (!ret)
+        return FALSE;
+        
+    lines = g_strsplit (contents, "\n", -1);
+    g_free (contents);
+    
+    array = g_array_new (TRUE, TRUE, sizeof (gchar**));
+    for (l = lines; *l; l++)
+        g_array_append_val (array, *l);
+    
+    /* We took ownership of the individual lines */
+    g_free (lines);
+    return array;
 }    
 
 static gboolean
-write_config_file (GArray *lines, GError **err)
+write_config_file (GArray *array, GError **err)
 {
     GError *e = NULL;
-    gchar *conf;
-    guint i;
-    int fd;
+    gchar *conf, *contents;
 
     g_assert (!err || !*err);
     if (!err)
@@ -158,38 +152,18 @@ write_config_file (GArray *lines, GError **err)
     if (conf == NULL)
         return FALSE;
 
-    fd = open (conf, O_CREAT | O_TRUNC | O_WRONLY, 0700);
-    g_free (conf);
+    contents = g_strjoinv ("\n", (gchar**)(array->data));
+    seahorse_util_write_file_private (conf, contents, err);
+    g_free (contents);
 
-    if (fd == -1) {
-        g_set_error (err, G_IO_CHANNEL_ERROR, g_io_channel_error_from_errno (errno),
-                     strerror (errno));     
-		return FALSE;
-    }
-
-    for (i = 0; i < lines->len; i++) {
-        const gchar *line = g_array_index (lines, const gchar*, i);
-        g_assert (line != NULL);        
-
-        if (write (fd, line, strlen (line)) == -1) {
-            g_set_error (err, G_IO_CHANNEL_ERROR, g_io_channel_error_from_errno (errno),
-                         strerror (errno));     
-            break;
-        }
-    }
-
-    close (fd);    
-    
     return *err ? FALSE : TRUE;
 }
 
 static void
-free_string_array (GArray *lines)
+free_string_array (GArray *array)
 {
-    guint i;
-    for (i = 0; i < lines->len; i++)
-        g_free (g_array_index (lines, gchar*, i));
-    g_array_free (lines, TRUE);
+    gchar** lines = (gchar**)g_array_free (array, FALSE);
+    g_strfreev (lines);
 }
 
 #define HOME_PREFIX "\nHome: "
@@ -410,7 +384,6 @@ process_conf_edits (GArray *lines, const gchar *options[], gchar *values[])
     gchar *n;
     gchar *line;
     gsize length;
-    gboolean ending = TRUE;
     guint i, j;
 
     for (j = 0; j < lines->len; j++) {
@@ -422,7 +395,6 @@ process_conf_edits (GArray *lines, const gchar *options[], gchar *values[])
          * Does this line have an ending? 
          * We use this below when appending lines.
          */
-        ending = (line[length - 1] == '\n');
         n = line;
 
         /* Don't use g_strstrip as we don't want to modify the line */
@@ -458,11 +430,11 @@ process_conf_edits (GArray *lines, const gchar *options[], gchar *values[])
 
                     /* A line with a value */
                     if (values[i][0])
-                        n = g_strconcat (n, " ", values[i], "\n", NULL);
+                        n = g_strconcat (n, " ", values[i], NULL);
 
                     /* A setting without a value */
                     else
-                        n = g_strconcat (n, "\n", NULL);
+                        n = g_strdup (n);
 
                     /* 
                      * We're done with this option, all other instances
@@ -493,20 +465,14 @@ process_conf_edits (GArray *lines, const gchar *options[], gchar *values[])
     for (i = 0, opt = options; *opt != NULL; *opt++, i++) {
         /* Are we setting this value? */
         if (values[i]) {
-            /* If the last line didn't have an ending, then add one */
-            if (!ending) {
-                n = g_strdup ("\n");
-                g_array_append_val (lines, n);
-                ending = TRUE;
-            }
 
             /* A line with a value */
             if (values[i][0])
-                n = g_strconcat (*opt, " ", values[i], "\n", NULL);
+                n = g_strconcat (*opt, " ", values[i], NULL);
 
             /* A setting without a value */
             else
-                n = g_strconcat (*opt, "\n", NULL);
+                n = g_strdup (*opt);
 
             g_array_append_val (lines, n);
         }
