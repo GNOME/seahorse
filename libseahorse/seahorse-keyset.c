@@ -292,8 +292,17 @@ seahorse_keyset_new_full (SeahorseKeyPredicate *pred)
 gboolean
 seahorse_keyset_has_key (SeahorseKeyset *skset, SeahorseKey *skey)
 {
-    return g_hash_table_lookup (skset->pv->keys, skey) ? 
-                TRUE : FALSE;
+    if (g_hash_table_lookup (skset->pv->keys, skey))
+        return TRUE;
+    
+    /* 
+     * This happens when the key has changed state, but we have 
+     * not yet received the signal. 
+     */
+    if (maybe_add_key (skset, skey))
+        return TRUE;
+    
+    return FALSE;
 }
 
 GList*             

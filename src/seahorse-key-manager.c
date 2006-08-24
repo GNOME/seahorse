@@ -93,6 +93,8 @@ SeahorseKeyPredicate pred_private = {
 #define SEC_RING "/secring.gpg"
 #define PUB_RING "/pubring.gpg"
 
+static void selection_changed (GtkTreeSelection *notused, SeahorseWidget *swidget);
+
 /* SIGNAL CALLBACKS --------------------------------------------------------- */
 
 /* Quits seahorse */
@@ -121,7 +123,7 @@ get_tab_for_key (SeahorseWidget* swidget, SeahorseKey *skey)
     notebook = GTK_NOTEBOOK (glade_xml_get_widget (swidget->xml, "notebook"));
     g_return_val_if_fail (GTK_IS_NOTEBOOK (notebook), NULL);
 
-    pages = gtk_notebook_get_n_pages(notebook);
+    pages = gtk_notebook_get_n_pages (notebook);
     for(i = 0; i < pages; i++)
     {
         widget = gtk_notebook_get_nth_page (notebook, i);
@@ -175,6 +177,7 @@ set_current_tab (SeahorseWidget *swidget, guint tabid)
         if (get_tab_id (gtk_notebook_get_nth_page (notebook, i)) == tabid)
         {
             gtk_notebook_set_current_page (notebook, i);
+            selection_changed (NULL, swidget);
             return;
         }
     }
@@ -274,6 +277,14 @@ set_selected_keys (SeahorseWidget *swidget, GList* keys)
     
     if (last != 0)
         set_current_tab (swidget, last);
+}
+
+static void
+set_selected_key (SeahorseWidget *swidget, SeahorseKey *skey)
+{
+    GList *keys = g_list_prepend (NULL, skey);
+    set_selected_keys (swidget, keys);
+    g_list_free (keys);
 }
 
 static void
@@ -823,22 +834,46 @@ static void
 selection_changed (GtkTreeSelection *notused, SeahorseWidget *swidget)
 {
     GtkTreeView *view;
+    GtkWidget *tab;
     GtkActionGroup *actions;
     GList *keys, *l;
-	SeahorseKey *skey = NULL;
+    SeahorseKey *skey = NULL;
     gint ktype = 0;
     gboolean selected = FALSE;
     gboolean secret = FALSE;
-	gint rows = 0;
+    gint rows = 0;
+    GQuark keyid;
     
     view = get_current_view (swidget);
     if (view != NULL) {
         GtkTreeSelection *selection = gtk_tree_view_get_selection (view);
-    	rows = gtk_tree_selection_count_selected_rows (selection);
-	    selected = rows > 0;
+        rows = gtk_tree_selection_count_selected_rows (selection);
+        selected = rows > 0;
     }
-	
-	if (selected) {
+
+    /* Retrieve currently tracked, and reset tracking */
+    keyid = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (swidget), "track-selected-keyid"));
+    g_object_set_data (G_OBJECT (swidget), "track-selected-keyid", NULL);
+    
+    /* no selection, see if selected key moved to another tab */
+    if (rows == 0 && keyid) {
+        
+        /* Find it */
+        skey = seahorse_context_find_key (SCTX_APP (), keyid, SKEY_LOC_LOCAL);
+        if (skey) {
+            
+            /* If it's still around, then select it */
+            tab = get_tab_for_key (swidget, skey);
+            if (tab && tab != get_current_tab (swidget)) {
+
+                /* Make sure we don't end up in a loop  */
+                g_assert (!g_object_get_data (G_OBJECT (swidget), "track-selected-keyid"));
+                set_selected_key (swidget, skey);
+            }
+        }
+    }
+    
+    if (selected) {
         set_numbered_status (swidget, _("Selected %d key"),
                                       _("Selected %d keys"), rows);
         
@@ -859,8 +894,15 @@ selection_changed (GtkTreeSelection *notused, SeahorseWidget *swidget)
                 ktype = 0;
         }
         
+        /* If one key is selected then mark it down for following across tabs */
+        if (g_list_length (keys) == 1) {
+            skey = SEAHORSE_KEY (keys->data);
+            g_object_set_data (G_OBJECT (swidget), "track-selected-keyid", 
+                                GUINT_TO_POINTER (seahorse_key_get_keyid (skey)));
+        }
+        
         g_list_free (keys);
-	}
+    }
     
     actions = seahorse_widget_find_actions (swidget, "key");
     gtk_action_group_set_sensitive (actions, selected);

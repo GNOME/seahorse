@@ -740,6 +740,8 @@ seahorse_key_store_set_selected_keys (GtkTreeView *view, GList* keys)
 {
     SeahorseKeyStore* skstore;
     GtkTreeSelection* selection;
+    gboolean first = TRUE;
+    GtkTreePath *path;
     GList *l;
     GSList *rows, *rl;
     GtkTreeIter it;
@@ -759,8 +761,17 @@ seahorse_key_store_set_selected_keys (GtkTreeView *view, GList* keys)
         for(rl = rows; rl; rl = g_slist_next (rl)) {
 
             /* And select them ... */
-            if(seahorse_key_store_get_upper_iter(skstore, &it, (GtkTreeIter*)rl->data))
+            if(seahorse_key_store_get_upper_iter(skstore, &it, (GtkTreeIter*)rl->data)) {
                 gtk_tree_selection_select_iter (selection, &it);
+                
+                /* Scroll the first row selected into view */
+                if (first) {
+                    path = gtk_tree_model_get_path (gtk_tree_view_get_model (view), &it);
+                    gtk_tree_view_scroll_to_cell (view, path, NULL, FALSE, 0.0, 0.0);
+                    gtk_tree_path_free (path);
+                    first = FALSE;
+                }
+            }
         }
         
         seahorse_key_model_free_rows (rows);
