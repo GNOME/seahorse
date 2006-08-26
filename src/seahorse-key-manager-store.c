@@ -162,32 +162,32 @@ store_append (SeahorseKeyStore *skstore, SeahorseKey *skey, guint uid, GtkTreeIt
 static void
 store_set (SeahorseKeyStore *store, SeahorseKey *skey, guint uid, GtkTreeIter *iter)
 {
-	SeahorseValidity validity, trust;
+    SeahorseValidity validity, trust;
     SeahorseKeyPredicate *pred;
-	gulong expires_date;
-	gchar *expires;
+    gulong expires_date;
+    gchar *expires;
     gchar *type;
-	
-	parent_class->set (store, skey, uid, iter);
+    
+    parent_class->set (store, skey, uid, iter);
+    validity = seahorse_key_get_name_validity (skey, uid);
     
     if (uid == 0) {
-    	
-    	validity = seahorse_key_get_validity (skey);
-    	trust = seahorse_key_get_trust (skey);
-    	
+        
+        trust = seahorse_key_get_trust (skey);
+        
         if (seahorse_key_get_flags (skey) & SKEY_FLAG_EXPIRED) {
-    		expires = g_strdup (_("Expired"));
-    		expires_date = -1;
-    	} else {
-    		expires_date = seahorse_key_get_expires (skey);
-    		
-    		if (expires_date == 0) {
-    			expires = g_strdup ("");
-    			expires_date = G_MAXLONG;
-    		}
-    		else
-    			expires = seahorse_util_get_date_string (expires_date);
-    	}
+            expires = g_strdup (_("Expired"));
+            expires_date = -1;
+        } else {
+            expires_date = seahorse_key_get_expires (skey);
+            
+            if (expires_date == 0) {
+                expires = g_strdup ("");
+                expires_date = G_MAXLONG;
+            }
+            else
+                expires = seahorse_util_get_date_string (expires_date);
+        }
         
         /* Only differentiate if the view shows more than one type of key */
         if (seahorse_key_get_ktype (skey) == SKEY_PGP) {
@@ -207,24 +207,27 @@ store_set (SeahorseKeyStore *store, SeahorseKey *skey, guint uid, GtkTreeIter *i
             type = _("SSH Key");
 #endif
         
-    	gtk_tree_store_set (GTK_TREE_STORE (store), iter,
-    		VALIDITY_STR, validity == SEAHORSE_VALIDITY_UNKNOWN ? "" : seahorse_validity_get_string (validity),
-    		VALIDITY, validity,
-    		TRUST_STR, trust == SEAHORSE_VALIDITY_UNKNOWN ? "" : seahorse_validity_get_string (trust),
-    		TRUST, trust,
-    		TYPE, type,
-    		EXPIRES_STR, expires ? expires : "",
-    		EXPIRES, expires_date,
-    		-1);
+        gtk_tree_store_set (GTK_TREE_STORE (store), iter,
+            VALIDITY_STR, validity == SEAHORSE_VALIDITY_UNKNOWN ? "" : seahorse_validity_get_string (validity),
+            VALIDITY, validity,
+            TRUST_STR, trust == SEAHORSE_VALIDITY_UNKNOWN ? "" : seahorse_validity_get_string (trust),
+            TRUST, trust,
+            TYPE, type,
+            EXPIRES_STR, expires ? expires : "",
+            EXPIRES, expires_date,
+            -1);
          
         g_free (expires);
        
     } else {
 
-		gtk_tree_store_set (GTK_TREE_STORE (store), iter,
-			TYPE, _("User ID"), KEY_STORE_KEYID, "", -1);
-
-	}
+        gtk_tree_store_set (GTK_TREE_STORE (store), iter,
+            KEY_STORE_KEYID, "", 
+            VALIDITY_STR, validity == SEAHORSE_VALIDITY_UNKNOWN ? "" : seahorse_validity_get_string (validity),
+            VALIDITY, validity,
+            TYPE, _("User ID"), 
+            -1);
+    }
 }
 
 /* Refreshed @skey if trust has changed */

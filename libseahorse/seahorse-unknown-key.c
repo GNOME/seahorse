@@ -93,6 +93,13 @@ seahorse_unknown_key_get_name_cn (SeahorseKey *skey, guint index)
     return NULL;
 }
 
+static SeahorseValidity
+seahorse_unknown_key_get_name_validity (SeahorseKey *skey, guint index)
+{
+    g_return_val_if_fail (index == 0, SEAHORSE_VALIDITY_UNKNOWN);
+    return SEAHORSE_VALIDITY_UNKNOWN;
+}
+
 static void
 seahorse_unknown_key_get_property (GObject *object, guint prop_id,
                                    GValue *value, GParamSpec *pspec)
@@ -165,6 +172,7 @@ seahorse_unknown_key_class_init (SeahorseUnknownKeyClass *klass)
     key_class->get_num_names = seahorse_unknown_key_get_num_names;
     key_class->get_name = seahorse_unknown_key_get_name;
     key_class->get_name_cn = seahorse_unknown_key_get_name_cn;
+    key_class->get_name_validity = seahorse_unknown_key_get_name_validity;
     
     g_object_class_install_property (gobject_class, PROP_KEYID,
         g_param_spec_uint ("key-id", "The Key ID", "Key identifier",

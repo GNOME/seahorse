@@ -339,6 +339,18 @@ seahorse_key_get_name_cn (SeahorseKey *skey, guint uid)
     return (*klass->get_name_cn) (skey, uid);
 }
 
+SeahorseValidity  
+seahorse_key_get_name_validity  (SeahorseKey *skey, guint uid)
+{
+    SeahorseKeyClass *klass;
+    
+    g_return_val_if_fail (SEAHORSE_IS_KEY (skey), SEAHORSE_VALIDITY_UNKNOWN);
+    klass = SEAHORSE_KEY_GET_CLASS (skey);
+    g_return_val_if_fail (klass->get_name_validity, SEAHORSE_VALIDITY_UNKNOWN);
+    
+    return (*klass->get_name_validity) (skey, uid);
+}
+
 gchar*
 seahorse_key_get_display_name (SeahorseKey *skey)
 {

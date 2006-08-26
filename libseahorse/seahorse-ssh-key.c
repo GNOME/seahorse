@@ -172,6 +172,13 @@ seahorse_ssh_key_get_name_cn (SeahorseKey *skey, guint index)
     return NULL;
 }
 
+static SeahorseValidity  
+seahorse_ssh_key_get_name_validity  (SeahorseKey *skey, guint index)
+{
+    g_return_val_if_fail (index == 0, SEAHORSE_VALIDITY_UNKNOWN);
+    return calc_validity (SEAHORSE_SSH_KEY (skey));
+}
+
 static void
 seahorse_ssh_key_get_property (GObject *object, guint prop_id,
                                GValue *value, GParamSpec *pspec)
@@ -270,6 +277,7 @@ seahorse_ssh_key_class_init (SeahorseSSHKeyClass *klass)
     key_class->get_num_names = seahorse_ssh_key_get_num_names;
     key_class->get_name = seahorse_ssh_key_get_name;
     key_class->get_name_cn = seahorse_ssh_key_get_name_cn;
+    key_class->get_name_validity = seahorse_ssh_key_get_name_validity;
     
     g_object_class_install_property (gobject_class, PROP_KEY_DATA,
         g_param_spec_pointer ("key-data", "SSH Key Data", "SSH key data pointer",

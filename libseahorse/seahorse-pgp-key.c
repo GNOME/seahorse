@@ -237,6 +237,25 @@ seahorse_pgp_key_get_name_cn (SeahorseKey *skey, guint index)
     return uid && uid->email ? g_strdup (uid->email) : NULL;
 }
 
+static SeahorseValidity  
+seahorse_pgp_key_get_name_validity  (SeahorseKey *skey, guint index)
+{
+    SeahorsePGPKey *pkey;
+    gpgme_user_id_t uid;
+
+    g_assert (SEAHORSE_IS_PGP_KEY (skey));
+    pkey = SEAHORSE_PGP_KEY (skey);
+    g_return_val_if_fail (pkey->pubkey, SEAHORSE_VALIDITY_UNKNOWN);
+
+    if (pkey->pubkey->revoked)
+        return SEAHORSE_VALIDITY_REVOKED;
+    if (pkey->pubkey->disabled)
+        return SEAHORSE_VALIDITY_DISABLED;
+    
+    uid = seahorse_pgp_key_get_nth_userid (pkey, index);
+    return uid ? seahorse_validity_from_gpgme (uid->validity) : SEAHORSE_VALIDITY_UNKNOWN;
+}
+
 static void
 seahorse_pgp_key_get_property (GObject *object, guint prop_id,
                                GValue *value, GParamSpec *pspec)
@@ -347,6 +366,7 @@ seahorse_pgp_key_class_init (SeahorsePGPKeyClass *klass)
     key_class->get_num_names = seahorse_pgp_key_get_num_names;
     key_class->get_name = seahorse_pgp_key_get_name;
     key_class->get_name_cn = seahorse_pgp_key_get_name_cn;
+    key_class->get_name_validity = seahorse_pgp_key_get_name_validity;
     
     g_object_class_install_property (gobject_class, PROP_PUBKEY,
         g_param_spec_pointer ("pubkey", "Gpgme Public Key", "Gpgme Public Key that this object represents",
