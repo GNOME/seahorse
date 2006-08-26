@@ -98,30 +98,14 @@ calc_validity (SeahorsePGPKey *pkey)
         return SEAHORSE_VALIDITY_REVOKED;
     if (pkey->pubkey->disabled)
         return SEAHORSE_VALIDITY_DISABLED;
-    if (pkey->pubkey->uids->validity <= SEAHORSE_VALIDITY_UNKNOWN)
-        return SEAHORSE_VALIDITY_UNKNOWN;
-    return pkey->pubkey->uids->validity;    
+    return seahorse_validity_from_gpgme (pkey->pubkey->uids->validity);
 }
 
 static SeahorseValidity 
 calc_trust (SeahorsePGPKey *pkey)
 {
     g_return_val_if_fail (pkey->pubkey, SEAHORSE_VALIDITY_UNKNOWN);
-
-    switch (pkey->pubkey->owner_trust) {
-    case GPGME_VALIDITY_NEVER:
-        return SEAHORSE_VALIDITY_NEVER;
-    case GPGME_VALIDITY_MARGINAL:
-        return SEAHORSE_VALIDITY_MARGINAL;
-    case GPGME_VALIDITY_FULL:
-        return SEAHORSE_VALIDITY_FULL;
-    case GPGME_VALIDITY_ULTIMATE:
-        return SEAHORSE_VALIDITY_ULTIMATE;
-    case GPGME_VALIDITY_UNDEFINED:
-    case GPGME_VALIDITY_UNKNOWN:
-    default:
-        return SEAHORSE_VALIDITY_UNKNOWN;
-    }
+    return seahorse_validity_from_gpgme (pkey->pubkey->owner_trust);
 }
 
 static void

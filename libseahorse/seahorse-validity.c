@@ -45,3 +45,23 @@ seahorse_validity_get_string (SeahorseValidity validity)
 			return NULL;
 	}
 }
+
+SeahorseValidity    
+seahorse_validity_from_gpgme (gpgme_validity_t validity)
+{
+    switch (validity) {
+    case GPGME_VALIDITY_NEVER:
+        return SEAHORSE_VALIDITY_NEVER;
+    case GPGME_VALIDITY_MARGINAL:
+        return SEAHORSE_VALIDITY_MARGINAL;
+    case GPGME_VALIDITY_FULL:
+        return SEAHORSE_VALIDITY_FULL;
+    case GPGME_VALIDITY_ULTIMATE:
+        return SEAHORSE_VALIDITY_ULTIMATE;
+    case GPGME_VALIDITY_UNDEFINED:
+    case GPGME_VALIDITY_UNKNOWN:
+    default:
+        return SEAHORSE_VALIDITY_UNKNOWN;
+    }
+}
+
