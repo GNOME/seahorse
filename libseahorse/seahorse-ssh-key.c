@@ -382,7 +382,7 @@ seahorse_ssh_key_get_location (SeahorseSSHKey *skey)
 GQuark
 seahorse_ssh_key_get_cannonical_id (const gchar *id)
 {
-    static guint x = strlen (SKEY_SSH_STR);
+    guint x = strlen (SKEY_SSH_STR);
     gchar *p, *hex;
     guint l, off = 0;
     GQuark ret;

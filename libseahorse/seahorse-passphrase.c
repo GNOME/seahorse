@@ -499,7 +499,7 @@ gpg_detect_agent ()
  * SSH AGENT 
  */
 
-const gchar REQ_MESSAGE[] = { 0x01, 0x00, 0x00, 0x00, SEAHORSE_SSH_PING_MSG };
+const guchar REQ_MESSAGE[] = { 0x01, 0x00, 0x00, 0x00, SEAHORSE_SSH_PING_MSG };
 const guint RESP_INDEX = 4;
 const guint RESP_VALUE = SEAHORSE_SSH_PING_MSG;
 
@@ -509,7 +509,7 @@ ssh_detect_agent ()
     SeahorseAgentType ret;
     const gchar *socketpath;
     struct sockaddr_un sunaddr;
-    gchar buf[16];
+    guchar buf[16];
     GIOChannel *io;
     int agentfd;
     gsize bytes_read = 0;
@@ -545,9 +545,9 @@ ssh_detect_agent ()
     g_io_channel_set_buffered (io, FALSE);
 
     /* Send and receive our message */
-    if (g_io_channel_write_chars (io, REQ_MESSAGE, sizeof (REQ_MESSAGE), NULL, 
+    if (g_io_channel_write_chars (io, (const gchar*)REQ_MESSAGE, sizeof (REQ_MESSAGE), NULL, 
                                   &err) == G_IO_STATUS_NORMAL) {
-        g_io_channel_read_chars (io, buf, sizeof (buf), &bytes_read, &err);
+        g_io_channel_read_chars (io, (gchar*)buf, sizeof (buf), &bytes_read, &err);
     }
     
     if (!err) {
