@@ -400,6 +400,23 @@ seahorse_ssh_key_data_is_valid (SeahorseSSHKeyData *data)
     return data->fingerprint != NULL;
 }
 
+SeahorseSSHKeyData*
+seahorse_ssh_key_data_dup (SeahorseSSHKeyData *data)
+{
+    SeahorseSSHKeyData *n = g_new0 (SeahorseSSHKeyData, 1);
+    n->privfile = g_strdup (data->privfile);
+    n->pubfile = g_strdup (data->pubfile);
+    n->rawdata = g_strdup (data->rawdata);
+    n->comment = g_strdup (data->comment);
+    n->keyid = g_strdup (data->keyid);
+    n->fingerprint = g_strdup (data->fingerprint);
+    n->authorized = data->authorized;
+    n->partial = data->partial;
+    n->algo = data->algo;
+    n->length = data->length;
+    return n;
+}
+
 void
 seahorse_ssh_key_data_free (SeahorseSSHKeyData *data)
 {

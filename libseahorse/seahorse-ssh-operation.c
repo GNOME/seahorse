@@ -1221,3 +1221,67 @@ seahorse_ssh_operation_authorize (SeahorseSSHSource *ssrc, SeahorseSSHKey *skey,
     
     return seahorse_operation_new_complete (err);
 }
+
+/* -----------------------------------------------------------------------------
+ * RENAME COMMENT ON A KEY 
+ */
+
+static gboolean
+change_raw_comment (SeahorseSSHKeyData *keydata, const gchar *newcomment)
+{
+    const gchar *x = keydata->rawdata;
+    gchar *result;
+    gchar **parts;
+    
+    g_assert (x);
+    while (*x && g_ascii_isspace (*x))
+        ++x;
+    
+    parts = g_strsplit_set (x, " ", 3);
+    if (!parts[0] || !parts[1])
+        return FALSE;
+    
+    result = g_strconcat (parts[0], " ", parts[1], " ", newcomment, NULL);
+    g_strfreev(parts);
+    
+    g_free (keydata->rawdata);
+    keydata->rawdata = result;
+    return TRUE;
+}
+
+SeahorseOperation*
+seahorse_ssh_operation_rename (SeahorseSSHSource *ssrc, SeahorseSSHKey *skey,
+                               const gchar *newcomment)
+{
+    SeahorseSSHKeyData *keydata;
+    GError *err = NULL;
+    
+    g_return_val_if_fail (SEAHORSE_IS_SSH_SOURCE (ssrc), NULL);
+    g_return_val_if_fail (SEAHORSE_IS_SSH_KEY (skey), NULL);
+    g_assert (seahorse_ssh_key_data_is_valid (skey->keydata));
+    g_assert (skey->keydata->rawdata);
+    
+    keydata = seahorse_ssh_key_data_dup (skey->keydata);
+    
+    if (!newcomment)
+        newcomment = "";
+    
+    if (!change_raw_comment (keydata, newcomment ? newcomment : ""))
+        g_return_if_reached ();
+    
+    DEBUG_OPERATION (("renaming key to: %s", newcomment));
+    
+    /* Just part of a file for this key */
+    if (keydata->partial) {
+        g_assert (keydata->pubfile);
+        seahorse_ssh_key_data_filter_file (keydata->pubfile, keydata, keydata, &err);
+        
+    /* A full file for this key */
+    } else {
+        g_assert (keydata->pubfile);
+        seahorse_util_write_file_private (keydata->pubfile, keydata->rawdata, &err);
+    }
+    
+    seahorse_ssh_key_data_free (keydata);
+    return seahorse_operation_new_complete (err);
+}

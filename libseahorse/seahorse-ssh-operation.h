@@ -92,5 +92,10 @@ SeahorseOperation*   seahorse_ssh_operation_import_private (SeahorseSSHSource *s
 SeahorseOperation*  seahorse_ssh_operation_authorize       (SeahorseSSHSource *ssrc,
                                                             SeahorseSSHKey *skey,
                                                             gboolean authorize);
-                                                            
+
+/* result: nothing */
+SeahorseOperation*  seahorse_ssh_operation_rename          (SeahorseSSHSource *ssrc,
+                                                            SeahorseSSHKey *skey,
+                                                            const gchar *newcomment);
+
 #endif /* __SEAHORSE_SSH_OPERATION_H__ */

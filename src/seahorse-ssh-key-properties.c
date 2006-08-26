@@ -43,10 +43,10 @@ do_main (SeahorseWidget *swidget)
     key = SEAHORSE_KEY_WIDGET (swidget)->skey;
     skey = SEAHORSE_SSH_KEY (key);
 
-    widget = glade_xml_get_widget (swidget->xml, "comment-label");
+    widget = glade_xml_get_widget (swidget->xml, "comment-entry");
     if (widget) {
         text = seahorse_key_get_display_name (key);
-        gtk_label_set_text (GTK_LABEL (widget), text);  
+        gtk_entry_set_text (GTK_ENTRY (widget), text);
         g_free (text);
     }
 
@@ -70,6 +70,53 @@ do_main (SeahorseWidget *swidget)
     g_return_if_fail (widget != NULL);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), 
                                   seahorse_key_get_trust (key) >= SEAHORSE_VALIDITY_FULL);
+}
+
+static void
+comment_activate (GtkWidget *entry, SeahorseWidget *swidget)
+{
+    SeahorseKey *key;
+    SeahorseSSHKey *skey;
+    SeahorseKeySource *sksrc;
+    SeahorseOperation *op;
+    const gchar *text;
+    gchar *comment;
+    GError *err = NULL;
+    
+    key = SEAHORSE_KEY_WIDGET (swidget)->skey;
+    skey = SEAHORSE_SSH_KEY (key);
+    sksrc = seahorse_key_get_source (key);
+    g_return_if_fail (SEAHORSE_IS_SSH_SOURCE (sksrc));
+    
+    text = gtk_entry_get_text (GTK_ENTRY (entry));
+    
+    /* Make sure not the same */
+    if (skey->keydata->comment && g_utf8_collate (text, skey->keydata->comment) == 0)
+        return;
+
+    gtk_widget_set_sensitive (entry, FALSE);
+    
+    comment = g_strdup (text);
+    op = seahorse_ssh_operation_rename (SEAHORSE_SSH_SOURCE (sksrc), skey, comment);
+    g_free (comment);
+    
+    /* This is usually a quick operation */
+    seahorse_operation_wait (op);
+    
+    if (!seahorse_operation_is_successful (op)) {
+        seahorse_operation_steal_error (op, &err);
+        seahorse_util_handle_error (err, _("Couldn't rename key."));
+        gtk_entry_set_text (GTK_ENTRY (entry), skey->keydata->comment ? skey->keydata->comment : "");
+    }
+    
+    gtk_widget_set_sensitive (entry, TRUE);
+}
+
+static gboolean
+comment_focus_out (GtkWidget* widget, GdkEventFocus *event, SeahorseWidget *swidget)
+{
+    comment_activate (widget, swidget);
+    return FALSE;
 }
 
 static void 
@@ -293,6 +340,11 @@ seahorse_ssh_key_properties_new (SeahorseSSHKey *skey)
     
     glade_xml_signal_connect_data (swidget->xml, "trust_toggled", 
                                    G_CALLBACK (trust_toggled), swidget);
+    
+    widget = seahorse_widget_get_widget (swidget, "comment-entry");
+    g_return_if_fail (widget != NULL);
+    g_signal_connect (widget, "activate", G_CALLBACK (comment_activate), swidget);
+    g_signal_connect (widget, "focus-out-event", G_CALLBACK (comment_focus_out), swidget);
 
     if (seahorse_key_get_etype (key) == SKEY_PRIVATE) {
         glade_xml_signal_connect_data (swidget->xml, "export_button_clicked",

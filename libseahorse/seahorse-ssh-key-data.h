@@ -96,6 +96,8 @@ gboolean                seahorse_ssh_key_data_filter_file     (const gchar *file
 
 gboolean                seahorse_ssh_key_data_is_valid        (SeahorseSSHKeyData *data);
 
+SeahorseSSHKeyData*     seahorse_ssh_key_data_dup             (SeahorseSSHKeyData *data);
+
 void                    seahorse_ssh_key_data_free            (SeahorseSSHKeyData *data);
 
 void                    seahorse_ssh_sec_data_free            (SeahorseSSHSecData *data);
