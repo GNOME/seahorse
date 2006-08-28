@@ -295,23 +295,37 @@ askpass_handler (GIOChannel *source, GIOCondition condition, SeahorseSSHOperatio
             
             if (g_ascii_strncasecmp (COMMAND_PASSWORD, string, COMMAND_PASSWORD_LEN) == 0) {
                 line = g_strstrip (string + COMMAND_PASSWORD_LEN);
-                if (pv->password_cb)
+                
+                /* Prompt for a password */
+                if (pv->password_cb) {
                     result = (pv->password_cb) (sop, line);
+                    
+                    /* Cancelled prompt, cancel operation */
+                    if (!result) {
+                        if (seahorse_operation_is_running (SEAHORSE_OPERATION (sop)))
+                            seahorse_operation_cancel (SEAHORSE_OPERATION (sop));
+                        DEBUG_OPERATION (("SSHOP: password prompt cancelled\n"));
+                        ret = FALSE;
+                    }
+                }
+                
                 pv->prompt_requests++;
             }
             
-            /* And write the result back out to seahorse-ssh-askpass */
-            DEBUG_OPERATION (("SSHOP: seahorse-ssh-askpass response: %s\n", result ? result : ""));
-            if (result)
-                g_io_channel_write_chars (pv->io_askpass, result, strlen (result), &length, &err);
-            if (err == NULL)
-                g_io_channel_write_chars (pv->io_askpass, "\n", 1, &length, &err);
-            if (err == NULL)
-                g_io_channel_flush (pv->io_askpass, &err);
-            if (err != NULL) {
-                g_critical ("couldn't read from seahorse-ssh-askpass: %s", err->message);
-                g_clear_error (&err);
-                ret = FALSE;
+            if (ret) {
+                /* And write the result back out to seahorse-ssh-askpass */
+                DEBUG_OPERATION (("SSHOP: seahorse-ssh-askpass response: %s\n", result ? result : ""));
+                if (result)
+                    g_io_channel_write_chars (pv->io_askpass, result, strlen (result), &length, &err);
+                if (err == NULL)
+                    g_io_channel_write_chars (pv->io_askpass, "\n", 1, &length, &err);
+                if (err == NULL)
+                    g_io_channel_flush (pv->io_askpass, &err);
+                if (err != NULL) {
+                    g_critical ("couldn't read from seahorse-ssh-askpass: %s", err->message);
+                    g_clear_error (&err);
+                    ret = FALSE;
+                }
             }
         }
     }
