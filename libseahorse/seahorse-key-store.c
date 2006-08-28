@@ -195,9 +195,9 @@ seahorse_key_store_constructor (GType type, guint n_props, GObjectConstructParam
                                        NULL, (GDestroyNotify)seahorse_key_row_free);
  
     /* Setup the store */
-    guint cols = SEAHORSE_KEY_STORE_GET_CLASS (skstore)->n_columns;
-    GType* types = (GType*)SEAHORSE_KEY_STORE_GET_CLASS (skstore)->col_types;
-    gtk_tree_store_set_column_types (GTK_TREE_STORE (obj), cols, types);
+    gtk_tree_store_set_column_types (GTK_TREE_STORE (obj), 
+            SEAHORSE_KEY_STORE_GET_CLASS (skstore)->n_columns, 
+            (GType*)SEAHORSE_KEY_STORE_GET_CLASS (skstore)->col_types);
     
     /* Setup the sort and filter */
     skstore->priv->filter = GTK_TREE_MODEL_FILTER (gtk_tree_model_filter_new (GTK_TREE_MODEL (obj), NULL));

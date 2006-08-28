@@ -174,7 +174,6 @@ on_druid_finish (GnomeDruidPage *gnomedruidpage, GtkWidget *widget, SeahorseWidg
 gboolean
 on_druidpagestandard4_next (GnomeDruidPage *gnomedruidpage, GtkWidget *widget, SeahorseWidget *swidget)
 {
-	g_print("go to finish\n");
 	GtkWidget *druidpage = glade_xml_get_widget (swidget->xml, "druidpagefinish1");
 		
 	gnome_druid_page_prepare (GNOME_DRUID_PAGE(druidpage));

@@ -280,8 +280,6 @@ main (int argc, char **argv)
     GnomeProgram *program = NULL;
     GnomeClient *client = NULL;
     
-    secmem_init (65536);
-
     /* We need to drop privileges completely for security */
 #if defined(HAVE_SETRESUID) && defined(HAVE_SETRESGID)
 
@@ -289,9 +287,13 @@ main (int argc, char **argv)
     int setresuid(uid_t ruid, uid_t euid, uid_t suid);
     int setresgid(gid_t rgid, gid_t egid, gid_t sgid);
   
+    secmem_init (65536);
+    
     if (setresuid (getuid (), getuid (), getuid ()) == -1 ||
         setresgid (getgid (), getgid (), getgid ()) == -1)
 #else
+    secmem_init (65536);
+    
     if (setuid (getuid ()) == -1 || setgid (getgid ()) == -1)
 #endif
         err (1, _("couldn't drop privileges properly"));
