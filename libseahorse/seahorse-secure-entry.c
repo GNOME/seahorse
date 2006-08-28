@@ -585,7 +585,7 @@ seahorse_secure_entry_init (SeahorseSecureEntry *entry)
     WITH_SECURE_MEM (entry->text = g_malloc(entry->text_size));
     entry->text[0] = '\0';
 
-    entry->invisible_char = '*';
+    entry->invisible_char = 0x25cf;
     entry->width_chars = -1;
     entry->is_cell_renderer = FALSE;
     entry->editing_canceled = FALSE;
