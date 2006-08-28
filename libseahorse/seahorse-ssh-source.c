@@ -500,7 +500,7 @@ seahorse_ssh_source_load (SeahorseKeySource *sksrc, SeahorseKeySourceLoad mode,
         if (filename == NULL)
             break;
 
-        ctx.privfile = g_strconcat (ssrc->priv->ssh_homedir, filename, NULL);
+        ctx.privfile = g_build_filename (ssrc->priv->ssh_homedir, filename, NULL);
         ctx.pubfile = g_strconcat (ctx.privfile, ".pub", NULL);
         
         /* possibly an SSH key? */
@@ -868,7 +868,6 @@ SeahorseSSHKey*
 seahorse_ssh_source_key_for_filename (SeahorseSSHSource *ssrc, const gchar *privfile)
 {
     SeahorseSSHKeyData *data;
-    SeahorseSSHKey *skey;
     GList *keys, *l;
     int i;
     
@@ -880,8 +879,8 @@ seahorse_ssh_source_key_for_filename (SeahorseSSHSource *ssrc, const gchar *priv
         /* Try to find it first */
         keys = seahorse_context_get_keys (SCTX_APP (), SEAHORSE_KEY_SOURCE (ssrc));
         for (l = keys; l; l = g_list_next (l)) {
-        
-            g_object_get (skey, "key-data", &data, NULL);
+            
+            g_object_get (l->data, "key-data", &data, NULL);
             g_return_val_if_fail (data, NULL);
         
             /* If it's already loaded then just leave it at that */
@@ -903,7 +902,7 @@ gchar*
 seahorse_ssh_source_file_for_algorithm (SeahorseSSHSource *ssrc, guint algo)
 {
     const gchar *pref;
-    gchar *filename;
+    gchar *filename, *t;
     guint i = 0;
     
     switch (algo) {
@@ -922,10 +921,9 @@ seahorse_ssh_source_file_for_algorithm (SeahorseSSHSource *ssrc, guint algo)
     }
     
     for (i = 0; i < ~0; i++) {
-        if (i == 0)
-            filename = g_strdup_printf ("%s/%s", ssrc->priv->ssh_homedir, pref);
-        else
-            filename = g_strdup_printf ("%s/%s.%d", ssrc->priv->ssh_homedir, pref, i);
+        t = (i == 0) ? g_strdup (pref) : g_strdup_printf ("%s.%d", pref, i);
+        filename = g_build_filename (ssrc->priv->ssh_homedir, t, NULL);
+        g_free (t);
         
         if (!g_file_test (filename, G_FILE_TEST_EXISTS))
             break;
@@ -940,6 +938,6 @@ seahorse_ssh_source_file_for_algorithm (SeahorseSSHSource *ssrc, guint algo)
 gchar*
 seahorse_ssh_source_file_for_public (SeahorseSSHSource *ssrc, gboolean authorized)
 {
-    return g_strconcat (ssrc->priv->ssh_homedir, 
+    return g_build_filename (ssrc->priv->ssh_homedir, 
             authorized ? AUTHORIZED_KEYS_FILE : OTHER_KEYS_FILE, NULL);
 }
