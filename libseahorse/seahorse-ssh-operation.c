@@ -1267,7 +1267,7 @@ seahorse_ssh_operation_rename (SeahorseSSHSource *ssrc, SeahorseSSHKey *skey,
         newcomment = "";
     
     if (!change_raw_comment (keydata, newcomment ? newcomment : ""))
-        g_return_if_reached ();
+        g_return_val_if_reached (NULL);
     
     DEBUG_OPERATION (("renaming key to: %s", newcomment));
     

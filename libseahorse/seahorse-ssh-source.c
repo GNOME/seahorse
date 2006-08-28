@@ -262,7 +262,7 @@ ssh_key_from_data (SeahorseSSHSource *ssrc, LoadContext *ctx,
     }
 
     /* Make sure it's valid */
-    keyid = seahorse_ssh_key_get_cannonical_id (keydata->keyid);
+    keyid = seahorse_ssh_key_get_cannonical_id (keydata->fingerprint);
     g_return_val_if_fail (keyid, NULL);
 
     /* Does this key exist in the context? */

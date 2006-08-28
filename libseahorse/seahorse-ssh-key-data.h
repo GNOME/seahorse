@@ -52,7 +52,6 @@ struct _SeahorseSSHKeyData {
     /* Filled in by parser */
     gchar *rawdata;         /* The raw data of the public key */
     gchar *comment;         /* The comment for the public key */
-    gchar *keyid;           /* A simple keyid */
     gchar *fingerprint;     /* The full fingerprint hash */
     guint length;           /* Number of bits */
     guint algo;             /* Key algorithm */

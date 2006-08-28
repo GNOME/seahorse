@@ -1,3 +1,15 @@
+2006-08-28  Nate Nielsen  <nielsen@memberwebs.com>
+
+    * libseahorse/seahorse-ssh-key.c: Fix crasher on amd64 with negative
+    array indexes. Patch by Sebastian Dröge. Fixes #352808
+    * libseahorse/seahorse-ssh-key.c:
+    * libseahorse/seahorse-ssh-key-data.c: 
+    * libseahorse/seahorse-ssh-key-data.h:
+    * libseahorse/seahorse-ssh-operation.c:
+    * libseahorse/seahorse-ssh-source.c: 
+    Also standardize internal SSH key ids on last 16 upper case 
+    hex chars of fingerprint similar to PGP key ids.
+    
 2006-08-27  Nate Nielsen  <nielsen@memberwebs.com>
 
     * src/seahorse-pgp-encrypted.desktop.in: Add application/pgp to the 

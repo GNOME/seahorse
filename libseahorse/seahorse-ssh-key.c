@@ -103,7 +103,7 @@ changed_key (SeahorseSSHKey *skey)
     key->ktype = SKEY_SSH;
     key->keyid = 0;
     
-    if (!skey->keydata || !skey->keydata->keyid) {
+    if (!skey->keydata || !skey->keydata->fingerprint) {
         
         key->location = SKEY_LOC_INVALID;
         key->etype = SKEY_ETYPE_NONE;
@@ -113,7 +113,7 @@ changed_key (SeahorseSSHKey *skey)
     } else {
     
         /* The key id */
-        key->keyid = seahorse_ssh_key_get_cannonical_id (skey->keydata->keyid);
+        key->keyid = seahorse_ssh_key_get_cannonical_id (skey->keydata->fingerprint);
         key->location = SKEY_LOC_LOCAL;
         key->etype = skey->keydata->privfile ? SKEY_PRIVATE : SKEY_PUBLIC;
         key->loaded = SKEY_INFO_COMPLETE;
@@ -382,28 +382,24 @@ seahorse_ssh_key_get_location (SeahorseSSHKey *skey)
 GQuark
 seahorse_ssh_key_get_cannonical_id (const gchar *id)
 {
-    guint x = strlen (SKEY_SSH_STR);
-    gchar *p, *hex;
-    guint l, off = 0;
+    #define SSH_ID_SIZE 16
+    gchar *hex, *canonical_id = g_malloc0 (SSH_ID_SIZE + 1);
+    gint i, off, len = strlen (id);
     GQuark ret;
 
-    hex = g_strdup_printf ("%s:%s", SKEY_SSH_STR, id);
-    
-    /* Strip out all non alpha numeric chars */
-    for(p = hex + x + 1; *p; p++) {
-        if (g_ascii_isalnum(*p))
-            p[0 - off] = p[0];
-        else
-            off++;
+    /* Strip out all non alpha numeric chars and limit length to SSH_ID_SIZE */
+    for (i = len, off = SSH_ID_SIZE; i >= 0 && off > 0; --i) {
+         if (g_ascii_isalnum (id[i]))
+             canonical_id[--off] = g_ascii_toupper (id[i]);
     }
-    p[0 - off] = 0;
     
-    /* Shorten where necessary */
-    l = strlen (hex);
-    if (l > (8 + x + 1))
-        hex[8 + x + 1] = 0;
-    
+    /* Not enough characters */
+    g_return_val_if_fail (off == 0, 0);
+
+    hex = g_strdup_printf ("%s:%s", SKEY_SSH_STR, canonical_id);
     ret = g_quark_from_string (hex);
+    
+    g_free (canonical_id);
     g_free (hex);
     
     return ret;

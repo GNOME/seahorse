@@ -149,10 +149,6 @@ parse_key_data (gchar *line, SeahorseSSHKeyData *data)
             data->comment = g_strdup (space);
     }
     
-    /* Make a key id */
-    if (data->fingerprint)
-        data->keyid = g_strndup (data->fingerprint, 11);
-    
     return TRUE;
 }
 
@@ -408,7 +404,6 @@ seahorse_ssh_key_data_dup (SeahorseSSHKeyData *data)
     n->pubfile = g_strdup (data->pubfile);
     n->rawdata = g_strdup (data->rawdata);
     n->comment = g_strdup (data->comment);
-    n->keyid = g_strdup (data->keyid);
     n->fingerprint = g_strdup (data->fingerprint);
     n->authorized = data->authorized;
     n->partial = data->partial;
@@ -427,7 +422,6 @@ seahorse_ssh_key_data_free (SeahorseSSHKeyData *data)
     g_free (data->pubfile);
     g_free (data->rawdata);
     g_free (data->comment);
-    g_free (data->keyid);
     g_free (data->fingerprint);
     g_free (data);
 }
