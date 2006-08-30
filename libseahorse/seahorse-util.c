@@ -724,7 +724,7 @@ seahorse_util_detect_mime_type (const gchar *mime)
         return SKEY_PGP;
     
 #ifdef WITH_SSH 
-    else if (g_ascii_strcasecmp (mime, "application/ssh-key") == 0)
+    else if (g_ascii_strcasecmp (mime, "application/x-ssh-key") == 0)
         return SKEY_SSH;
 #endif 
     
