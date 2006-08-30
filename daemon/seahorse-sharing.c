@@ -33,7 +33,7 @@
 #include "seahorse-gconf.h"
 #include "seahorse-util.h"
 
-#define HKP_SERVICE_TYPE "_hkp._tcp."
+#define HKP_SERVICE_TYPE "_pgpkey-hkp._tcp."
 
 /* TODO: Need to be able to advertize in real DNS domains */
 
@@ -111,7 +111,7 @@ add_service ()
         r = avahi_entry_group_commit (avahi_group);
 
     if (r < 0) {
-        g_warning ("failed to register _hkp._tcp service: %s", avahi_strerror (r));
+        g_warning ("failed to register _pgpkey-hkp._tcp service: %s", avahi_strerror (r));
         stop_publishing (TRUE);
         return;
     }

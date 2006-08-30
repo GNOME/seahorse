@@ -51,7 +51,7 @@
 #define DEBUG_DNSSD(x) 
 #endif
 
-#define HKP_SERVICE_TYPE "_hkp._tcp."
+#define HKP_SERVICE_TYPE "_pgpkey-hkp._tcp."
 
 /* 
  * DEBUG: Define if we want to show discoveries from this
