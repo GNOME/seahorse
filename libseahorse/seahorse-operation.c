@@ -69,6 +69,7 @@ G_DEFINE_TYPE (SeahorseOperation, seahorse_operation, G_TYPE_OBJECT);
 static gboolean
 delayed_mark_done (SeahorseOperation *operation)
 {
+    g_assert (SEAHORSE_IS_OPERATION (operation));
     g_signal_emit (operation, signals[DONE], 0);
 
     /* A running operation always refs itself */

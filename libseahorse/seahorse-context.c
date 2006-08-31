@@ -716,7 +716,7 @@ seahorse_context_load_local_keys (SeahorseContext *sctx)
         ks = SEAHORSE_KEY_SOURCE (l->data);
         
         if (seahorse_key_source_get_location (ks) == SKEY_LOC_LOCAL) {
-            if (op != NULL) {
+            if (mop == NULL && op != NULL) {
                 mop = seahorse_multi_operation_new ();
                 seahorse_multi_operation_take (mop, op);
             }
