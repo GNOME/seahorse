@@ -30,6 +30,11 @@
 #include "seahorse-keyset.h"
 #include "seahorse-gtkstock.h"
 #include "seahorse-default-key-control.h"
+#include "seahorse-gconf.h"
+
+#ifdef WITH_KEYSERVER
+#include "seahorse-keyserver-sync.h"
+#endif
 
 static gboolean
 ok_clicked (SeahorseWidget *swidget)
@@ -40,8 +45,11 @@ ok_clicked (SeahorseWidget *swidget)
     SeahorseKey *signer;
     GtkWidget *w;
     gpgme_error_t err;
+    SeahorseKey *skey;
+    GList *keys;
     
     skwidget = SEAHORSE_KEY_WIDGET (swidget);
+    skey = skwidget->skey;
     
     /* Figure out choice */
     check = SIGN_CHECK_NO_ANSWER;
@@ -82,13 +90,22 @@ ok_clicked (SeahorseWidget *swidget)
     g_assert (!signer || (SEAHORSE_IS_PGP_KEY (signer) && 
                           seahorse_key_get_etype (signer) == SKEY_PRIVATE));
     
-    err = seahorse_pgp_key_op_sign (SEAHORSE_PGP_KEY (skwidget->skey), 
+    err = seahorse_pgp_key_op_sign (SEAHORSE_PGP_KEY (skey), 
                                     SEAHORSE_PGP_KEY (signer), 
                                     skwidget->index + 1, check, options);
     if (!GPG_IS_OK (err))
         seahorse_util_handle_gpgme (err, _("Couldn't sign key"));
     
     seahorse_widget_destroy (swidget);
+    
+#ifdef WITH_KEYSERVER
+    if (GPG_IS_OK (err) && seahorse_gconf_get_boolean (AUTOSYNC_KEY)) {
+        keys = g_list_append (NULL, skey);
+        seahorse_keyserver_sync (keys);
+        g_list_free (keys);
+    }
+#endif
+    
     return TRUE;
 }
 
