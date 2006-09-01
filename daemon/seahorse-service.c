@@ -225,7 +225,8 @@ seahorse_service_export_keys (SeahorseService *svc, gchar *ktype,
     } 
     
     /* TODO: We should be base64 encoding this */
-    *data = seahorse_util_write_data_to_text (gdata, TRUE);
+    *data = seahorse_util_write_data_to_text (gdata, NULL);
+    gpgmex_data_release (gdata);
     return TRUE;
 }
 

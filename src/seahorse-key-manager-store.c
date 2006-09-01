@@ -31,8 +31,11 @@
 #include "seahorse-gpgmex.h"
 #include "eggtreemultidnd.h"
 #include "seahorse-pgp-key.h"
-#include "seahorse-ssh-key.h"
 #include "seahorse-vfs-data.h"
+
+#ifdef WITH_SSH
+#include "seahorse-ssh-key.h"
+#endif 
 
 #define KEY_MANAGER_SORT_KEY "/apps/seahorse/listing/sort_by"
 
@@ -395,7 +398,7 @@ drag_data_get (GtkWidget *widget, GdkDragContext *context,
     data = (gpgme_data_t)g_object_get_data (G_OBJECT (op), "result-data");
     g_return_if_fail (data != NULL);
     
-    text = seahorse_util_write_data_to_text (data, FALSE);
+    text = seahorse_util_write_data_to_text (data, NULL);
     g_return_if_fail (text != NULL);
     
     if (info == TEXT_PLAIN) {

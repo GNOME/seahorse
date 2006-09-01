@@ -73,7 +73,7 @@ void        seahorse_util_handle_error          (GError*            err,
                                                  const char*        desc, ...);
 
 gchar*      seahorse_util_write_data_to_text    (gpgme_data_t       data,
-                                                 gboolean           release);
+                                                 guint              *len);
 
 guint       seahorse_util_read_data_block       (GString            *buf, 
                                                  gpgme_data_t       data, 

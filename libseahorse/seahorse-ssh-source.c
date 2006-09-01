@@ -591,7 +591,7 @@ seahorse_ssh_source_import (SeahorseKeySource *sksrc, gpgme_data_t data)
     ImportContext ctx;
     gchar *contents;
 
-    contents = seahorse_util_write_data_to_text (data, FALSE);
+    contents = seahorse_util_write_data_to_text (data, NULL);
     
     memset (&ctx, 0, sizeof (ctx));
     ctx.ssrc = ssrc;

@@ -204,6 +204,17 @@ seahorse_operation_new_complete (GError *err)
     return operation;
 }
 
+SeahorseOperation*
+seahorse_operation_new_cancelled ()
+{
+    SeahorseOperation *operation;
+    
+    operation = g_object_new (SEAHORSE_TYPE_OPERATION, NULL);
+    seahorse_operation_mark_start (operation);
+    seahorse_operation_mark_done (operation, TRUE, NULL);
+    return operation;
+}
+
 void
 seahorse_operation_cancel (SeahorseOperation *op)
 {

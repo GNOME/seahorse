@@ -505,7 +505,7 @@ copy_done (SeahorseOperation *op, SeahorseWidget *swidget)
     data = (gpgme_data_t)seahorse_operation_get_result (op);
     g_return_if_fail (data != NULL);
     
-    text = seahorse_util_write_data_to_text (data, FALSE);
+    text = seahorse_util_write_data_to_text (data, NULL);
     g_return_if_fail (text != NULL);
     
     atom = gdk_atom_intern ("CLIPBOARD", FALSE);
@@ -654,7 +654,6 @@ sign_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
     SeahorseKey *skey;
     guint uid;
-    GList *keys = NULL;
 
     skey = get_selected_key (swidget, &uid);
     if (SEAHORSE_IS_PGP_KEY (skey))

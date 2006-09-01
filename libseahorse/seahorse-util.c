@@ -218,36 +218,36 @@ seahorse_util_set_text_view_string (GtkTextView *view, GString *string)
 /**
  * seahorse_util_write_data_to_text:
  * @data: Data to write
- * @release: Whether to release @data or not
+ * @len: Length of the data
  *
  * Converts @data to a string. 
  *
  * Returns: The string read from data
  **/
 gchar*
-seahorse_util_write_data_to_text (gpgme_data_t data, gboolean release)
+seahorse_util_write_data_to_text (gpgme_data_t data, guint *len)
 {
-	gint size = 128;
+    gint size = 128;
     gchar *buffer, *text;
     guint nread = 0;
-	GString *string;
+    GString *string;
 
     gpgme_data_seek (data, 0, SEEK_SET);
 
-	string = g_string_new ("");
-	buffer = g_new (gchar, size);
-	
-	while ((nread = gpgme_data_read (data, buffer, size)) > 0)
-		string = g_string_append_len (string, buffer, nread);
-
-    if (release)
-        gpgmex_data_release (data);
+    string = g_string_new ("");
+    buffer = g_new (gchar, size);
     
-	text = string->str;
-	g_string_free (string, FALSE);
+    while ((nread = gpgme_data_read (data, buffer, size)) > 0)
+        string = g_string_append_len (string, buffer, nread);
+
+    if (len)
+        *len = string->len;
+    
+    text = string->str;
+    g_string_free (string, FALSE);
     g_free (buffer);
-	
-	return text;
+    
+    return text;
 }
 
 /** 

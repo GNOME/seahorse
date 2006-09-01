@@ -364,7 +364,7 @@ seahorse_key_source_cannonical_keyid (GQuark ktype, const gchar *keyid)
         return seahorse_pgp_key_get_cannonical_id (keyid);
     
 #ifdef WITH_SSH
-    else if(ktype == SKEY_SSH)
+    else if (ktype == SKEY_SSH)
         return seahorse_ssh_key_get_cannonical_id (keyid);
 #endif
         

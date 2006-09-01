@@ -27,10 +27,6 @@
 #include "seahorse-gconf.h"
 #include "seahorse-gtkstock.h"
 
-#ifdef WITH_SSH
-#include "seahorse-ssh-key.h"
-#endif 
-
 enum {
 	PROP_0,
 	PROP_KEYSET,

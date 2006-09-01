@@ -42,7 +42,8 @@ void        seahorse_ssh_upload_prompt  (GList *keys);
 
 void        seahorse_ssh_generate_show  (SeahorseSSHSource  *sksrc);
 
-#endif
+#endif /* WITH_SSH */
+
 
 void        seahorse_pgp_generate_show  (SeahorsePGPSource  *sksrc);
 

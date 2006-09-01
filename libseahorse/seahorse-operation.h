@@ -102,6 +102,8 @@ GType       seahorse_operation_get_type      (void);
 /* Assumes ownership of |err| */
 SeahorseOperation*  seahorse_operation_new_complete (GError *err);
 
+SeahorseOperation*  seahorse_operation_new_cancelled ();
+
 void                seahorse_operation_cancel      (SeahorseOperation *operation);
 
 #define             seahorse_operation_is_running(operation) \
