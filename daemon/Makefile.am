@@ -41,8 +41,8 @@ seahorse_daemon_SOURCES = \
 
 seahorse_daemon_LDADD = \
     $(AGENT_LIB) \
-    $(top_builddir)/libcryptui/libcryptui.la \
     $(top_builddir)/libseahorse/libseahorse.a \
+    $(top_builddir)/libcryptui/libcryptui.la \
     $(SEAHORSE_LIBS)
 
 man_MANS = seahorse-daemon.1

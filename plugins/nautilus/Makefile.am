@@ -14,8 +14,8 @@ bin_PROGRAMS = seahorse-preferences seahorse-tool
 seahorse_preferences_SOURCES = seahorse-pgp-preferences.c 
 
 seahorse_preferences_LDADD = \
-    $(top_builddir)/libcryptui/libcryptui.la \
     $(top_builddir)/libseahorse/libseahorse.a \
+    $(top_builddir)/libcryptui/libcryptui.la \
     $(SEAHORSE_LIBS)
     
 seahorse_tool_SOURCES = \

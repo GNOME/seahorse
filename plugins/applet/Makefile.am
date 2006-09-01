@@ -30,8 +30,8 @@ seahorse_applet_SOURCES = \
 
 seahorse_applet_LDADD = \
 	$(GNOME_APPLETS_LIBS) \
-	$(top_builddir)/libcryptui/libcryptui.la \
 	$(top_builddir)/libseahorse/libseahorse.a \
+	$(top_builddir)/libcryptui/libcryptui.la \
 	$(SEAHORSE_LIBS) \
 	$(LIBCRYPTUI_LIBS)
 
