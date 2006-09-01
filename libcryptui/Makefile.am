@@ -37,6 +37,8 @@ libcryptui_la_SOURCES = \
     
 libcryptui_la_LDFLAGS = \
     -version-info $(LIBCRYPTUI_LT_RELEASE)
+    
+libcryptui_la_LIBADD = $(LIBCRYPTUI_LIBS) 
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = cryptui-$(LIBCRYPTUI_MAJOR).pc
