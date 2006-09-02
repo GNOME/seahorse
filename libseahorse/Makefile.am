@@ -65,8 +65,7 @@ libseahorse_a_SOURCES = \
 	seahorse-context.c seahorse-context.h \
 	seahorse-widget.c seahorse-widget.h \
 	seahorse-keyset.c seahorse-keyset.h \
-    seahorse-key-model.c seahorse-key-model.h \
-	seahorse-key-store.c seahorse-key-store.h \
+	seahorse-key-model.c seahorse-key-model.h \
 	seahorse-util.c seahorse-util.h \
 	seahorse-validity.c seahorse-validity.h \
 	seahorse-check-button-control.c seahorse-check-button-control.h \

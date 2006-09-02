@@ -227,7 +227,7 @@ get_selected_keys (SeahorseWidget *swidget)
 {
     GtkTreeView *view = get_current_view (swidget);
     g_return_val_if_fail (view != NULL, NULL);
-    return seahorse_key_store_get_selected_keys (view);
+    return seahorse_key_manager_store_get_selected_keys (view);
 }
 
 static SeahorseKey*
@@ -235,7 +235,7 @@ get_selected_key (SeahorseWidget *swidget, guint *uid)
 {
     GtkTreeView *view = get_current_view (swidget);
     g_return_val_if_fail (view != NULL, NULL);
-    return seahorse_key_store_get_selected_key (view, uid);
+    return seahorse_key_manager_store_get_selected_key (view, uid);
 }
 
 static void
@@ -271,7 +271,7 @@ set_selected_keys (SeahorseWidget *swidget, GList* keys)
         if(tab_lists[i])
             last = i;
 
-        seahorse_key_store_set_selected_keys (view, tab_lists[i]);
+        seahorse_key_manager_store_set_selected_keys (view, tab_lists[i]);
         g_list_free (tab_lists[i]);
     }
     
@@ -811,12 +811,12 @@ row_activated (GtkTreeView *treeview, GtkTreePath *path, GtkTreeViewColumn *arg2
                SeahorseWidget *swidget)
 {
     GtkTreeView *view = get_current_view (swidget);
-	SeahorseKey *skey;
+    SeahorseKey *skey;
     
     g_return_if_fail (view != NULL);
-	
-	skey = seahorse_key_store_get_key_from_path (view, path, NULL);
-	if (skey != NULL)
+
+    skey = seahorse_key_manager_store_get_key_from_path (view, path, NULL);
+    if (skey != NULL)
         show_properties (skey);
 }
 
@@ -972,7 +972,7 @@ target_drag_data_received (GtkWidget *widget, GdkDragContext *context, gint x, g
 
 /* Refilter the keys when the filter text changes */
 static void
-filter_changed (GtkWidget *widget, SeahorseKeyStore* skstore)
+filter_changed (GtkWidget *widget, SeahorseKeyManagerStore* skstore)
 {
     const gchar* text = gtk_entry_get_text (GTK_ENTRY (widget));
     g_object_set (skstore, "filter", text, NULL);
@@ -1082,7 +1082,7 @@ initialize_tab (SeahorseWidget *swidget, const gchar *tabwidget, guint tabid,
                 const gchar *viewwidget, SeahorseKeyPredicate *pred)
 {
     SeahorseKeyset *skset;
-    SeahorseKeyStore *skstore;
+    SeahorseKeyManagerStore *skstore;
     GtkTreeSelection *selection;
     GtkTreeView *view;
     GtkWidget *tab;
