@@ -339,6 +339,26 @@ seahorse_key_get_name_cn (SeahorseKey *skey, guint uid)
     return (*klass->get_name_cn) (skey, uid);
 }
 
+gchar*
+seahorse_key_get_name_markup (SeahorseKey *skey, guint uid)
+{
+    SeahorseKeyClass *klass;
+    gchar *name, *markup;
+    
+    g_return_val_if_fail (SEAHORSE_IS_KEY (skey), NULL);
+    klass = SEAHORSE_KEY_GET_CLASS (skey);
+    
+    /* If not implemented, then just return the normal name */
+    if (!klass->get_name_markup) {
+        name = seahorse_key_get_name (skey, uid);
+        markup = g_markup_escape_text (name, -1);
+        g_free (name);
+        return markup;
+    }
+    
+    return (*klass->get_name_markup) (skey, uid);
+}
+
 SeahorseValidity  
 seahorse_key_get_name_validity  (SeahorseKey *skey, guint uid)
 {

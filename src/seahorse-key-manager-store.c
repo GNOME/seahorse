@@ -213,12 +213,12 @@ update_key_row (SeahorseKeyManagerStore *skstore, SeahorseKey *skey, guint uid,
     SeahorseKeyPredicate *pred;
     const gchar *stockid;
     gulong expires_date;
-    gchar *userid;
+    gchar *markup;
     gboolean sec;
     gchar *expires;
     gchar *type;
 
-    userid = seahorse_key_get_name (skey, uid);
+    markup = seahorse_key_get_name_markup (skey, uid);
     sec = seahorse_key_get_etype (skey) == SKEY_PRIVATE;
     stockid = seahorse_key_get_stock_id (skey);
     validity = seahorse_key_get_name_validity (skey, uid);
@@ -261,7 +261,7 @@ update_key_row (SeahorseKeyManagerStore *skstore, SeahorseKey *skey, guint uid,
         gtk_tree_store_set (GTK_TREE_STORE (skstore), iter,
             COL_PAIR, uid == 0 ? sec : FALSE,
             COL_STOCK_ID, uid == 0 ? stockid : NULL,
-            COL_NAME, userid,
+            COL_NAME, markup,
             COL_KEYID, seahorse_key_get_short_keyid (skey),
             COL_UID, uid,
             COL_VALIDITY_STR, validity == SEAHORSE_VALIDITY_UNKNOWN ? "" : seahorse_validity_get_string (validity),
@@ -279,14 +279,14 @@ update_key_row (SeahorseKeyManagerStore *skstore, SeahorseKey *skey, guint uid,
 
         gtk_tree_store_set (GTK_TREE_STORE (skstore), iter,
             COL_KEYID, "", 
-            COL_NAME, userid,
+            COL_NAME, markup,
             COL_VALIDITY_STR, validity == SEAHORSE_VALIDITY_UNKNOWN ? "" : seahorse_validity_get_string (validity),
             COL_VALIDITY, validity,
             COL_TYPE, _("User ID"), 
             -1);
     }
     
-    g_free (userid);
+    g_free (markup);
 }
 
 static gboolean
@@ -482,23 +482,17 @@ gconf_notification (GConfClient *gclient, guint id, GConfEntry *entry, GtkTreeVi
 }
 
 static GtkTreeViewColumn*
-append_column (SeahorseKeyManagerStore *skstore, GtkTreeView *view, 
+append_text_column (SeahorseKeyManagerStore *skstore, GtkTreeView *view, 
                const gchar *label, const gint index)
 {
     GtkTreeViewColumn *column;
     GtkCellRenderer *renderer;
-    gchar *sort;
     
     renderer = gtk_cell_renderer_text_new ();
+    g_object_set (renderer, "xpad", 3, NULL);
     column = gtk_tree_view_column_new_with_attributes (label, renderer, "text", index, NULL);
     gtk_tree_view_column_set_resizable (column, TRUE);
     gtk_tree_view_append_column (view, column);
-    
-    /* Update sort order in case the sorted column was added */
-    if ((sort = seahorse_gconf_get_string (KEY_MANAGER_SORT_KEY)) != NULL) {
-        set_sort_to (skstore, sort);
-        g_free (sort);
-    }  
     
     return column;
 }
@@ -922,6 +916,7 @@ seahorse_key_manager_store_new (SeahorseKeyset *skset, GtkTreeView *view)
     GtkTreeViewColumn *col;
     SeahorseKeyPredicate *pred;
     GtkCellRenderer *renderer;
+    gchar *sort;
     
     skstore = g_object_new (SEAHORSE_TYPE_KEY_MANAGER_STORE, "keyset", skset, NULL);
 
@@ -934,17 +929,23 @@ seahorse_key_manager_store_new (SeahorseKeyset *skset, GtkTreeView *view)
     /* add the icon column */
     renderer = gtk_cell_renderer_pixbuf_new ();
     g_object_set (renderer, "stock-size", GTK_ICON_SIZE_LARGE_TOOLBAR, NULL);
+    g_object_set (renderer, "xpad", 6, NULL);
     col = gtk_tree_view_column_new_with_attributes ("", renderer, "stock-id", COL_STOCK_ID, NULL);
     gtk_tree_view_column_set_resizable (col, FALSE);
     gtk_tree_view_append_column (view, col);
     gtk_tree_view_column_set_sort_column_id (col, COL_PAIR);
     
     /* Name column */
-    col = append_column (skstore, view, _("Name"), COL_NAME);
+    renderer = gtk_cell_renderer_text_new ();
+    col = gtk_tree_view_column_new_with_attributes (_("Name"), renderer, "markup", COL_NAME, NULL);
+    gtk_tree_view_column_set_resizable (col, TRUE);
+    gtk_tree_view_column_set_expand (col, TRUE);
+    gtk_tree_view_append_column (view, col);
+    gtk_tree_view_set_expander_column (view, col);
     gtk_tree_view_column_set_sort_column_id (col, COL_NAME);
     
     /* Key ID column */
-    col = append_column (skstore, view, _("Key ID"), COL_KEYID);
+    col = append_text_column (skstore, view, _("Key ID"), COL_KEYID);
     gtk_tree_view_column_set_sort_column_id (col, COL_KEYID);
 
     /* Use predicate to figure out which columns to add */
@@ -952,26 +953,26 @@ seahorse_key_manager_store_new (SeahorseKeyset *skset, GtkTreeView *view)
     
     /* Public keys show validity */
     if (pred->etype == SKEY_PUBLIC) {
-        col = append_column (skstore, view, _("Validity"), COL_VALIDITY_STR);
+        col = append_text_column (skstore, view, _("Validity"), COL_VALIDITY_STR);
         g_object_set_data (G_OBJECT (col), "gconf-key", SHOW_VALIDITY_KEY);
         gtk_tree_view_column_set_visible (col, seahorse_gconf_get_boolean (SHOW_VALIDITY_KEY));
         gtk_tree_view_column_set_sort_column_id (col, COL_VALIDITY);
     }
 
     /* Trust column */
-    col = append_column (skstore, view, _("Trust"), COL_TRUST_STR);
+    col = append_text_column (skstore, view, _("Trust"), COL_TRUST_STR);
     g_object_set_data (G_OBJECT (col), "gconf-key", SHOW_TRUST_KEY);
     gtk_tree_view_column_set_visible (col, seahorse_gconf_get_boolean (SHOW_TRUST_KEY));
     gtk_tree_view_column_set_sort_column_id (col, COL_TRUST);
     
     /* The key type column */
-    col = append_column (skstore, view, _("Type"), COL_TYPE);
+    col = append_text_column (skstore, view, _("Type"), COL_TYPE);
     g_object_set_data (G_OBJECT (col), "gconf-key", SHOW_TYPE_KEY);
     gtk_tree_view_column_set_visible (col, seahorse_gconf_get_boolean (SHOW_TYPE_KEY));
     gtk_tree_view_column_set_sort_column_id (col, COL_TYPE);
 
     /* Expiry date column */
-    col = append_column (skstore, view, _("Expiration Date"), COL_EXPIRES_STR);
+    col = append_text_column (skstore, view, _("Expiration Date"), COL_EXPIRES_STR);
     g_object_set_data (G_OBJECT (col), "gconf-key", SHOW_EXPIRES_KEY);
     gtk_tree_view_column_set_visible (col, seahorse_gconf_get_boolean (SHOW_EXPIRES_KEY));
     gtk_tree_view_column_set_sort_column_id (col, COL_EXPIRES);
@@ -979,6 +980,12 @@ seahorse_key_manager_store_new (SeahorseKeyset *skset, GtkTreeView *view)
     /* Also watch for sort-changed on the store */
     g_signal_connect (skstore->priv->sort, "sort-column-changed", G_CALLBACK (sort_changed), skstore);
 
+    /* Update sort order in case the sorted column was added */
+    if ((sort = seahorse_gconf_get_string (KEY_MANAGER_SORT_KEY)) != NULL) {
+        set_sort_to (skstore, sort);
+        g_free (sort);
+    }  
+    
     seahorse_gconf_notify_lazy (LISTING_SCHEMAS, (GConfClientNotifyFunc)gconf_notification, 
                                 view, GTK_WIDGET (view));
 

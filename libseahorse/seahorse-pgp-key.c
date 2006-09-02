@@ -49,16 +49,30 @@ G_DEFINE_TYPE (SeahorsePGPKey, seahorse_pgp_key, SEAHORSE_TYPE_KEY);
  */
 
 static gchar*
-convert_string (const gchar *str)
+convert_string (const gchar *str, gboolean escape)
 {
+    gchar *t, *ret;
+    
     if (!str)
         return NULL;
     
     /* If not utf8 valid, assume latin 1 */
     if (!g_utf8_validate (str, -1, NULL))
-        return g_convert (str, -1, "UTF-8", "ISO-8859-1", NULL, NULL, NULL);
+    {
+        ret = g_convert (str, -1, "UTF-8", "ISO-8859-1", NULL, NULL, NULL);
+        if (escape) {
+            t = ret;
+            ret = g_markup_escape_text (t, -1);
+            g_free (t);
+        }
+        
+        return ret;
+    }
+
+    if (escape)
+        return g_markup_escape_text (str, -1);
     else
-        return g_strdup (str);    
+        return g_strdup (str);
 }
 
 static gchar* 
@@ -221,7 +235,7 @@ seahorse_pgp_key_get_name (SeahorseKey *skey, guint index)
     pkey = SEAHORSE_PGP_KEY (skey);
 
     uid = seahorse_pgp_key_get_nth_userid (pkey, index);
-    return uid ? convert_string (uid->uid) : NULL;
+    return uid ? convert_string (uid->uid, FALSE) : NULL;
 }
 
 static gchar* 
@@ -235,6 +249,37 @@ seahorse_pgp_key_get_name_cn (SeahorseKey *skey, guint index)
 
     uid = seahorse_pgp_key_get_nth_userid (pkey, index);
     return uid && uid->email ? g_strdup (uid->email) : NULL;
+}
+
+static gchar*
+seahorse_pgp_key_get_name_markup (SeahorseKey *skey, guint index)
+{
+    SeahorsePGPKey *pkey;
+    gpgme_user_id_t uid;
+    gchar *email, *name, *comment, *ret;
+    
+    g_assert (SEAHORSE_IS_PGP_KEY (skey));
+    pkey = SEAHORSE_PGP_KEY (skey);
+
+    uid = seahorse_pgp_key_get_nth_userid (pkey, index);
+    
+    name = convert_string (uid->name, TRUE);
+    email = convert_string (uid->email, TRUE);
+    comment = convert_string (uid->comment, TRUE);
+    
+    ret = g_strconcat (name, 
+            "<span foreground='#555555' size='small' rise='0'>",
+            email && email[0] ? "  " : "",
+            email && email[0] ? email : "",
+            comment && comment[0] ? "  " : "",
+            comment && comment[0] ? comment : "",
+            "</span>", NULL);
+    
+    g_free (name);
+    g_free (comment);
+    g_free (email);
+    
+    return ret;
 }
 
 static SeahorseValidity  
@@ -366,6 +411,7 @@ seahorse_pgp_key_class_init (SeahorsePGPKeyClass *klass)
     key_class->get_num_names = seahorse_pgp_key_get_num_names;
     key_class->get_name = seahorse_pgp_key_get_name;
     key_class->get_name_cn = seahorse_pgp_key_get_name_cn;
+    key_class->get_name_markup = seahorse_pgp_key_get_name_markup;
     key_class->get_name_validity = seahorse_pgp_key_get_name_validity;
     
     g_object_class_install_property (gobject_class, PROP_PUBKEY,
@@ -507,7 +553,7 @@ gchar*
 seahorse_pgp_key_get_userid (SeahorsePGPKey *pkey, guint index)
 {
     gpgme_user_id_t uid = seahorse_pgp_key_get_nth_userid (pkey, index);
-    return uid ? convert_string (uid->uid) : NULL;
+    return uid ? convert_string (uid->uid, FALSE) : NULL;
 }
 
 /**
@@ -524,7 +570,7 @@ gchar*
 seahorse_pgp_key_get_userid_name (SeahorsePGPKey *pkey, guint index)
 {
     gpgme_user_id_t uid = seahorse_pgp_key_get_nth_userid (pkey, index);
-    return uid ? convert_string (uid->name) : NULL;
+    return uid ? convert_string (uid->name, FALSE) : NULL;
 }
 
 /**
@@ -541,7 +587,7 @@ gchar*
 seahorse_pgp_key_get_userid_email (SeahorsePGPKey *pkey, guint index)
 {
     gpgme_user_id_t uid = seahorse_pgp_key_get_nth_userid (pkey, index);
-    return uid ? convert_string (uid->email) : NULL;
+    return uid ? convert_string (uid->email, FALSE) : NULL;
 }
 
 /**
@@ -558,7 +604,7 @@ gchar*
 seahorse_pgp_key_get_userid_comment (SeahorsePGPKey *pkey, guint index)
 {
     gpgme_user_id_t uid = seahorse_pgp_key_get_nth_userid (pkey, index);
-    return uid ? convert_string (uid->comment) : NULL;
+    return uid ? convert_string (uid->comment, FALSE) : NULL;
 }
 
 guint           
@@ -749,11 +795,11 @@ seahorse_pgp_key_get_signature_text (SeahorsePGPKey *pkey, gpgme_key_sig_t signa
     g_return_if_fail (signature != NULL);
     
     if (name)
-        *name = signature->name ? convert_string (signature->name) : NULL;
+        *name = signature->name ? convert_string (signature->name, FALSE) : NULL;
     if (email)
-        *email = signature->email ? convert_string (signature->email) : NULL;
+        *email = signature->email ? convert_string (signature->email, FALSE) : NULL;
     if (comment)
-        *comment = signature->comment ? convert_string (signature->comment) : NULL;
+        *comment = signature->comment ? convert_string (signature->comment, FALSE) : NULL;
 }
 
 guint         
