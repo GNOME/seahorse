@@ -31,6 +31,7 @@
  * Properties base classes must implement:
  *  ktype: (GQuark) The ktype (ie: SKEY_PGP) of keys originating from this 
  *         key source.
+ *  key-desc: (gchar*) Description for the type of keys originating here.
  *  location: (SeahorseKeyLoc) The location of keys that come from this 
  *         source. (ie: SKEY_LOC_LOCAL, SKEY_LOC_REMOTE)
  *  uri: (gchar*) Only for remote key sources. The full URI of the keyserver 

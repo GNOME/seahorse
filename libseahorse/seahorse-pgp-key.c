@@ -136,6 +136,7 @@ changed_key (SeahorsePGPKey *pkey)
         skey->etype = SKEY_ETYPE_NONE;
         skey->loaded = SKEY_INFO_NONE;
         skey->flags = SKEY_FLAG_DISABLED;
+        skey->keydesc = _("Invalid");
         
     } else {
     
@@ -152,7 +153,13 @@ changed_key (SeahorsePGPKey *pkey)
             skey->location = SKEY_LOC_LOCAL;
         
         /* The type */
-        skey->etype = pkey->seckey ? SKEY_PRIVATE : SKEY_PUBLIC;
+        if (pkey->seckey) {
+            skey->etype = SKEY_PRIVATE;
+            skey->keydesc = _("Public PGP Key");
+        } else {
+            skey->etype = SKEY_PUBLIC;
+            skey->keydesc = _("Private PGP Key");
+        }
 
         /* The info loaded */
         if (pkey->pubkey->keylist_mode & GPGME_KEYLIST_MODE_SIGS && 
@@ -271,8 +278,9 @@ seahorse_pgp_key_get_name_markup (SeahorseKey *skey, guint index)
             "<span foreground='#555555' size='small' rise='0'>",
             email && email[0] ? "  " : "",
             email && email[0] ? email : "",
-            comment && comment[0] ? "  " : "",
+            comment && comment[0] ? "  '" : "",
             comment && comment[0] ? comment : "",
+            comment && comment[0] ? "'" : "",
             "</span>", NULL);
     
     g_free (name);

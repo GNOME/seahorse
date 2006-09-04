@@ -65,6 +65,7 @@ enum {
 enum {
     PROP_0,
     PROP_KEY_TYPE,
+    PROP_KEY_DESC,
     PROP_LOCATION
 };
 
@@ -201,6 +202,10 @@ seahorse_pgp_source_class_init (SeahorsePGPSourceClass *klass)
     g_object_class_install_property (gobject_class, PROP_KEY_TYPE,
         g_param_spec_uint ("key-type", "Key Type", "Key type that originates from this key source.", 
                            0, G_MAXUINT, SKEY_UNKNOWN, G_PARAM_READABLE));
+                           
+    g_object_class_install_property (gobject_class, PROP_KEY_DESC,
+        g_param_spec_string ("key-desc", "Key Desc", "Description for keys that originate here.",
+                             NULL, G_PARAM_READABLE));
 
     g_object_class_install_property (gobject_class, PROP_LOCATION,
         g_param_spec_uint ("location", "Key Location", "Where the key is stored. See SeahorseKeyLoc", 
@@ -318,6 +323,9 @@ seahorse_pgp_source_get_property (GObject *object, guint prop_id, GValue *value,
     switch (prop_id) {
     case PROP_KEY_TYPE:
         g_value_set_uint (value, SKEY_PGP);
+        break;
+    case PROP_KEY_DESC:
+        g_value_set_string (value, _("PGP Key"));
         break;
     case PROP_LOCATION:
         g_value_set_uint (value, SKEY_LOC_LOCAL);

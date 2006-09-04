@@ -211,6 +211,7 @@ update_key_row (SeahorseKeyManagerStore *skstore, SeahorseKey *skey, guint uid,
 {
     SeahorseValidity validity, trust;
     SeahorseKeyPredicate *pred;
+    SeahorseKeySource *sksrc;
     const gchar *stockid;
     gulong expires_date;
     gchar *markup;
@@ -242,22 +243,19 @@ update_key_row (SeahorseKeyManagerStore *skstore, SeahorseKey *skey, guint uid,
         }
         
         /* Only differentiate if the view shows more than one type of key */
-        if (seahorse_key_get_ktype (skey) == SKEY_PGP) {
-            g_object_get (skstore->skset, "predicate", &pred, NULL);
-            if (pred->etype == 0) {
-                if (seahorse_key_get_etype (skey) == SKEY_PRIVATE) 
-                    type = _("Private PGP Key");
-                else 
-                    type = _("Public PGP Key");
-            } else {
-                type = _("PGP Key");
-            }
-        }
-#ifdef WITH_SSH
-        else if (seahorse_key_get_ktype (skey) == SKEY_SSH)
-            type = _("SSH Key");
-#endif
+        g_object_get (skstore->skset, "predicate", &pred, NULL);
         
+        /* If mixed etypes, then get specific description */
+        if (pred->etype == 0) {
+            type = g_strdup (seahorse_key_get_desc (skey));
+            
+        /* Otherwise general description */
+        } else {
+            sksrc = seahorse_key_get_source (skey);
+            g_return_if_fail (sksrc);
+            g_object_get (sksrc, "key-desc", &type, NULL);
+        }
+
         gtk_tree_store_set (GTK_TREE_STORE (skstore), iter,
             COL_PAIR, uid == 0 ? sec : FALSE,
             COL_STOCK_ID, uid == 0 ? stockid : NULL,
@@ -273,6 +271,7 @@ update_key_row (SeahorseKeyManagerStore *skstore, SeahorseKey *skey, guint uid,
             COL_EXPIRES, expires_date,
             -1);
          
+        g_free (type);
         g_free (expires);
        
     } else {

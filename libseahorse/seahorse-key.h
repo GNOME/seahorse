@@ -36,6 +36,7 @@
  *   key-source: (SeahorseKeySource) The key source this key came from.
  *   key-id: (GQuark) The key identifier in the format ktype:fingerprint 
  *      (ie: the DBUS format)
+ *   key-desc: (gchar*) A description of the key type.
  *   ktype: (GQuark) The type of key (ie: SKEY_PGP). 
  *   etype: (SeahorseKeyEType) The encryption type (ie: SKEY_PUBLIC)
  *   flags: (guint) Flags on the capabilities of the key (ie: SeahorseKeyFlags)
@@ -135,6 +136,7 @@ struct _SeahorseKey {
     /*< public >*/
     GQuark                      ktype;
     GQuark                      keyid;
+    const gchar*                keydesc;
     SeahorseKeyLoc              location;
     SeahorseKeyInfo             loaded;
     SeahorseKeyEType            etype;
@@ -193,6 +195,8 @@ struct _SeahorseKeySource*
 SeahorseKeyEType  seahorse_key_get_etype          (SeahorseKey        *skey);
 
 GQuark            seahorse_key_get_ktype          (SeahorseKey        *skey);
+
+const gchar*      seahorse_key_get_desc           (SeahorseKey        *skey);
 
 SeahorseKeyInfo   seahorse_key_get_loaded         (SeahorseKey        *skey);
 

@@ -53,6 +53,7 @@ enum {
     PROP_0,
     PROP_KEY_SOURCE,
     PROP_KEY_ID,
+    PROP_KEY_DESC,
     PROP_KTYPE,
     PROP_ETYPE,
     PROP_FLAGS,
@@ -117,6 +118,9 @@ seahorse_key_get_property (GObject *object, guint prop_id, GValue *value,
     case PROP_KEY_ID:
         g_value_set_uint (value, skey->keyid);
         break;
+    case PROP_KEY_DESC:
+        g_value_set_string (value, skey->keydesc);
+        break;
     case PROP_KTYPE:
         g_value_set_uint (value, skey->ktype);
         break;
@@ -161,6 +165,10 @@ seahorse_key_class_init (SeahorseKeyClass *klass)
     g_object_class_install_property (gobject_class, PROP_KEY_ID,
         g_param_spec_uint ("key-id", "Key ID", "Key identifier", 
                            0, G_MAXUINT, SKEY_UNKNOWN, G_PARAM_READABLE));
+    
+    g_object_class_install_property (gobject_class, PROP_KEY_ID,
+        g_param_spec_string ("key-desc", "Key Desc", "Key Description",
+                             NULL, G_PARAM_READABLE));
     
     g_object_class_install_property (gobject_class, PROP_KTYPE,
         g_param_spec_uint ("ktype", "Key Type", "Key type", 
@@ -259,6 +267,12 @@ seahorse_key_get_source  (SeahorseKey *skey)
     g_return_val_if_fail (SEAHORSE_IS_KEY (skey), NULL);
     g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (skey->sksrc), NULL);
     return skey->sksrc;
+}
+
+const gchar*
+seahorse_key_get_desc (SeahorseKey *skey)
+{
+    return skey->keydesc;
 }
 
 GQuark

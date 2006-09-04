@@ -115,9 +115,16 @@ changed_key (SeahorseSSHKey *skey)
         /* The key id */
         key->keyid = seahorse_ssh_key_get_cannonical_id (skey->keydata->fingerprint);
         key->location = SKEY_LOC_LOCAL;
-        key->etype = skey->keydata->privfile ? SKEY_PRIVATE : SKEY_PUBLIC;
         key->loaded = SKEY_INFO_COMPLETE;
         key->flags = skey->keydata->authorized ? SKEY_FLAG_TRUSTED : 0;
+        
+        if (skey->keydata->privfile) {
+            key->etype = SKEY_PRIVATE;
+            key->keydesc = _("Private SSH Key");
+        } else {
+            key->etype = SKEY_PUBLIC;
+            key->keydesc = _("Public SSH Key");
+        }
     }
     
     if (!key->keyid)

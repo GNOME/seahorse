@@ -55,6 +55,7 @@
 enum {
     PROP_0,
     PROP_KEY_TYPE,
+    PROP_KEY_DESC,
     PROP_LOCATION,
     PROP_BASE_DIRECTORY
 };
@@ -753,6 +754,9 @@ seahorse_ssh_source_get_property (GObject *object, guint prop_id, GValue *value,
     case PROP_KEY_TYPE:
         g_value_set_uint (value, SKEY_SSH);
         break;
+    case PROP_KEY_DESC:
+        g_value_set_string (value, _("SSH Key"));
+        break;
     case PROP_LOCATION:
         g_value_set_uint (value, SKEY_LOC_LOCAL);
         break;
@@ -844,6 +848,10 @@ seahorse_ssh_source_class_init (SeahorseSSHSourceClass *klass)
     g_object_class_install_property (gobject_class, PROP_KEY_TYPE,
         g_param_spec_uint ("key-type", "Key Type", "Key type that originates from this key source.", 
                            0, G_MAXUINT, SKEY_UNKNOWN, G_PARAM_READABLE));
+
+    g_object_class_install_property (gobject_class, PROP_KEY_DESC,
+        g_param_spec_string ("key-desc", "Key Desc", "Description for keys that originate here.",
+                             NULL, G_PARAM_READABLE));
 
     g_object_class_install_property (gobject_class, PROP_LOCATION,
         g_param_spec_uint ("location", "Key Location", "Where the key is stored. See SeahorseKeyLoc", 
