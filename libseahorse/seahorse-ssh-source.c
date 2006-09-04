@@ -811,16 +811,23 @@ seahorse_ssh_source_init (SeahorseSSHSource *ssrc)
     ssrc->priv->monitor_handle = NULL;
 
     ssrc->priv->ssh_homedir = g_strdup_printf ("%s/.ssh/", g_get_home_dir ());
+    
+    /* Make the .ssh directory if it doesn't exist */
+    if (!g_file_test (ssrc->priv->ssh_homedir, G_FILE_TEST_EXISTS)) {
+        if (g_mkdir (ssrc->priv->ssh_homedir, 0700) == -1)
+            g_warning ("couldn't create .ssh directory: %s", ssrc->priv->ssh_homedir);
+            return;
+    }
+    
     uri = gnome_vfs_make_uri_canonical (ssrc->priv->ssh_homedir);
     g_return_if_fail (uri != NULL);
-    
     res = gnome_vfs_monitor_add (&(ssrc->priv->monitor_handle), uri, 
                                  GNOME_VFS_MONITOR_DIRECTORY, 
                                  (GnomeVFSMonitorCallback)monitor_ssh_homedir, ssrc);
     g_free (uri);
     
     if (res != GNOME_VFS_OK) {
-        ssrc->priv->monitor_handle = NULL;        
+        ssrc->priv->monitor_handle = NULL;
         g_return_if_reached ();
     }
 }
