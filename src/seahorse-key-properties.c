@@ -275,7 +275,7 @@ names_update_row (SeahorseKeyModel *skmodel, SeahorseKey *skey,
 
     icon = seahorse_key_get_location (skey) < SKEY_LOC_LOCAL ? 
                 GTK_STOCK_DIALOG_QUESTION : SEAHORSE_STOCK_SIGN;
-    name = seahorse_key_get_display_name (skey);
+    name = seahorse_key_get_name_markup (skey, 0);
     
     gtk_tree_store_set (GTK_TREE_STORE (skmodel), iter,
                         UIDSIG_INDEX, -1,
@@ -304,7 +304,7 @@ names_populate (SeahorseWidget *swidget, GtkTreeStore *store, SeahorsePGPKey *pk
     /* Insert all the fun-ness */
     for (i = 1, uid = pkey->pubkey->uids; uid; uid = uid->next, i++) {
 
-        name = seahorse_pgp_key_get_userid (pkey, i - 1);
+        name = seahorse_key_get_name_markup (SEAHORSE_KEY (pkey), i - 1);
 
         gtk_tree_store_append (store, &uiditer, NULL);
         gtk_tree_store_set (store, &uiditer,  
@@ -368,18 +368,20 @@ do_names (SeahorseWidget *swidget)
         /* This is our first time so create a store */
         store = GTK_TREE_STORE (seahorse_key_model_new (UIDSIG_N_COLUMNS, (GType*)uidsig_columns));
         g_signal_connect (store, "update-row", G_CALLBACK (names_update_row), swidget);
-
-        /* Make the columns for the view */
+        
+        /* Icon column */
         renderer = gtk_cell_renderer_pixbuf_new ();
         g_object_set (renderer, "stock-size", GTK_ICON_SIZE_LARGE_TOOLBAR, NULL);
         gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (widget),
                                                      -1, "", renderer,
                                                      "stock-id", UIDSIG_ICON, NULL);
 
+        /* The name column */
         gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (widget), 
                                                      -1, _("Name/Email"), gtk_cell_renderer_text_new (), 
-                                                     "text", UIDSIG_NAME, NULL);
+                                                     "markup", UIDSIG_NAME, NULL);
 
+        /* The signature ID column */
         gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (widget), 
                                                      -1, _("Signature ID"), gtk_cell_renderer_text_new (), 
                                                      "text", UIDSIG_KEYID, NULL);
@@ -578,7 +580,7 @@ set_photoid_state(SeahorseWidget *swidget, SeahorsePGPKey *pkey)
     if (photo_image) {
         if (!photoid || !photoid->photo)
             gtk_image_set_from_stock (GTK_IMAGE (photo_image), 
-                                      SEAHORSE_STOCK_PERSON, (GtkIconSize)-1);
+                etype == SKEY_PRIVATE ? SEAHORSE_STOCK_SECRET : SEAHORSE_STOCK_KEY, (GtkIconSize)-1);
         else 
             gtk_image_set_from_pixbuf (GTK_IMAGE (photo_image), photoid->photo);
     }
@@ -663,9 +665,7 @@ photoid_button_pressed(GtkWidget *widget, GdkEvent *event, SeahorseWidget *swidg
 enum {
     UID_INDEX,
     UID_ICON,
-    UID_NAME,
-    UID_EMAIL,
-    UID_COMMENT,
+    UID_MARKUP,
     UID_N_COLUMNS
 };
 
@@ -760,7 +760,7 @@ do_owner (SeahorseWidget *swidget)
     gchar *text, *t;
     gulong expires_date;
     guint flags;
-    gchar *name, *email, *comment;
+    gchar *markup;
     int i;
 
     skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
@@ -846,35 +846,20 @@ do_owner (SeahorseWidget *swidget)
 
             gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (widget), 
                                                          -1, _("Name"), gtk_cell_renderer_text_new (), 
-                                                         "text", UID_NAME, NULL);
-    
-            gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (widget),
-                                                         -1, _("Email"), gtk_cell_renderer_text_new (), 
-                                                         "text", UID_EMAIL, NULL);
-    
-            gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (widget),
-                                                         -1, _("Comment"), gtk_cell_renderer_text_new (), 
-                                                         "text", UID_COMMENT, NULL);
+                                                         "markup", UID_MARKUP, NULL);
         }
     
         for (i = 1, uid = pkey->pubkey->uids; uid; uid = uid->next, i++) {
     
-            name = seahorse_pgp_key_get_userid_name (pkey, i - 1);
-            email = seahorse_pgp_key_get_userid_email (pkey, i - 1);
-            comment = seahorse_pgp_key_get_userid_comment (pkey, i - 1);
+            markup = seahorse_key_get_name_markup (SEAHORSE_KEY (pkey), i - 1);
     
             gtk_list_store_append (store, &iter);
             gtk_list_store_set (store, &iter,  
                                 UID_INDEX, i,
                                 UID_ICON, SEAHORSE_STOCK_PERSON,
-                                UID_NAME, name,
-                                UID_EMAIL, email,
-                                UID_COMMENT, comment,
-                                -1);
+                                UID_MARKUP, markup, -1);
             
-            g_free (name);
-            g_free (email);
-            g_free (comment);
+            g_free (markup);
         } 
         
         gtk_tree_view_set_model (GTK_TREE_VIEW (widget), GTK_TREE_MODEL(store));

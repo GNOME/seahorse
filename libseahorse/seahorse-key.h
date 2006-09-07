@@ -220,6 +220,8 @@ SeahorseValidity  seahorse_key_get_name_validity  (SeahorseKey        *skey,
 
 gchar*            seahorse_key_get_display_name   (SeahorseKey        *skey);
 
+gchar*            seahorse_key_get_display_id     (SeahorseKey        *skey);
+
 gchar*            seahorse_key_get_simple_name    (SeahorseKey        *skey);
 
 gchar*            seahorse_key_get_fingerprint    (SeahorseKey        *skey);

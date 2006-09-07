@@ -28,6 +28,7 @@
 #include "seahorse-ssh-operation.h"
 #include "seahorse-vfs-data.h"
 #include "seahorse-gpgmex.h"
+#include "seahorse-gtkstock.h"
 
 #define NOTEBOOK "notebook"
 
@@ -43,16 +44,24 @@ do_main (SeahorseWidget *swidget)
     key = SEAHORSE_KEY_WIDGET (swidget)->skey;
     skey = SEAHORSE_SSH_KEY (key);
 
-    widget = glade_xml_get_widget (swidget->xml, "comment-entry");
-    if (widget) {
-        text = seahorse_key_get_display_name (key);
-        gtk_entry_set_text (GTK_ENTRY (widget), text);
-        g_free (text);
-    }
+    /* Image */
+    widget = seahorse_widget_get_widget (swidget, "key-image");
+    if (widget)
+        gtk_image_set_from_stock (GTK_IMAGE (widget), SEAHORSE_STOCK_KEY_SSH, GTK_ICON_SIZE_DIALOG);
 
-    widget = glade_xml_get_widget (swidget->xml, "fingerprint-label");
+    /* Name and title */
+    text = seahorse_key_get_display_name (key);
+    widget = seahorse_widget_get_widget (swidget, "comment-entry");
+    if (widget)
+        gtk_entry_set_text (GTK_ENTRY (widget), text);
+    widget = seahorse_widget_get_top (swidget);
+    gtk_window_set_title (GTK_WINDOW (widget), text);
+    g_free (text);
+
+    /* Key id */
+    widget = glade_xml_get_widget (swidget->xml, "id-label");
     if (widget) {
-        text = seahorse_key_get_fingerprint (key);  
+        text = seahorse_key_get_display_id (key);
         gtk_label_set_text (GTK_LABEL (widget), text);
         g_free (text);
     }
@@ -250,10 +259,11 @@ do_details (SeahorseWidget *swidget)
     key = SEAHORSE_KEY_WIDGET (swidget)->skey;
     skey = SEAHORSE_SSH_KEY (key);
 
-    widget = glade_xml_get_widget (swidget->xml, "id-label");
+    widget = glade_xml_get_widget (swidget->xml, "fingerprint-label");
     if (widget) {
-        label = seahorse_key_get_short_keyid (key); 
-        gtk_label_set_text (GTK_LABEL (widget), label);
+        text = seahorse_key_get_fingerprint (key); 
+        gtk_label_set_text (GTK_LABEL (widget), text);
+        g_free (text);
     }
 
     widget = glade_xml_get_widget (swidget->xml, "algo-label");

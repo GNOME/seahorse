@@ -394,6 +394,15 @@ seahorse_key_get_display_name (SeahorseKey *skey)
 }
 
 gchar*
+seahorse_key_get_display_id (SeahorseKey *skey)
+{
+    gchar *id;
+    g_object_get (skey, "display-id", &id, NULL);
+    return id;
+}
+
+
+gchar*
 seahorse_key_get_simple_name (SeahorseKey *skey)
 {
     gchar *name;
