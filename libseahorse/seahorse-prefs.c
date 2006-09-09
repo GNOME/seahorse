@@ -497,9 +497,6 @@ seahorse_prefs_new ()
     widget = glade_xml_get_widget (swidget->xml, "encrypt-self");
     seahorse_check_button_gconf_attach (GTK_CHECK_BUTTON (widget), ENCRYPTSELF_KEY);
     
-    widget = glade_xml_get_widget (swidget->xml, "armor-encode");
-    seahorse_check_button_gconf_attach (GTK_CHECK_BUTTON (widget), ARMOR_KEY);
-
     widget = glade_xml_get_widget (swidget->xml, "signer-select");
     g_return_val_if_fail (widget != NULL, NULL);
 
