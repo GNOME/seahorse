@@ -19,7 +19,8 @@ inc_HEADERS = \
 INCLUDES = -I$(top_builddir) \
     -I$(top_srcdir) \
     $(LIBCRYPTUI_CFLAGS) \
-    -DLIBCRYPTUI_BUILD=1
+    -DLIBCRYPTUI_BUILD=1 \
+    -DLIBCRYPTUI_API_SUBJECT_TO_CHANGE 
 
 lib_LTLIBRARIES = libcryptui.la
 

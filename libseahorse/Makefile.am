@@ -12,7 +12,8 @@ INCLUDES = -I$(top_builddir) \
 	-DSEAHORSE_GLADEDIR=\""$(gladedir)"\" \
 	-DLOCALEDIR=\"$(localedir)\" \
 	-DPIXMAPSDIR=\""$(pixmapsdir)"\" \
-	-DEXECDIR=\""$(seahorselibexecbindir)"\"
+	-DEXECDIR=\""$(seahorselibexecbindir)"\" \
+	-DLIBCRYPTUI_API_SUBJECT_TO_CHANGE 
 
 noinst_LIBRARIES = libseahorse.a
 

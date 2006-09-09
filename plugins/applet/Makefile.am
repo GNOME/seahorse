@@ -20,7 +20,8 @@ INCLUDES = \
 	-DDATADIR=\""$(datadir)"\" \
 	-DLIBDIR=\""$(libdir)"\" \
 	-DSYSCONFDIR=\""$(sysconfdir)"\" \
-	-DPREFIX=\""$(prefix)"\"
+	-DPREFIX=\""$(prefix)"\" \
+	-DLIBCRYPTUI_API_SUBJECT_TO_CHANGE
 
 libexec_PROGRAMS = seahorse-applet
 

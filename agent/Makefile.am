@@ -13,7 +13,8 @@ INCLUDES = -I$(top_builddir) \
 	-DDATA_DIR=\""$(datadir)"\" \
 	-DSEAHORSE_GLADEDIR=\""$(gladedir)"\" \
 	-DLOCALEDIR=\""$(localedir)"\" \
-	-DPIXMAPSDIR=\""$(pixmapsdir)"\"
+	-DPIXMAPSDIR=\""$(pixmapsdir)"\" \
+	-DLIBCRYPTUI_API_SUBJECT_TO_CHANGE
 
 noinst_LIBRARIES = libseahorseagent.a
 

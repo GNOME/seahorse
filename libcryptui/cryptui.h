@@ -24,6 +24,10 @@
 
 #include <glib.h>
 
+#ifndef LIBCRYPTUI_API_SUBJECT_TO_CHANGE
+#error "Please define LIBCRYPTUI_API_SUBJECT_TO_CHANGE to acknowledge your understanding that this API is not yet stable."
+#endif
+
 #include "cryptui-keyset.h"
 
 typedef enum {

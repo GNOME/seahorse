@@ -7,7 +7,8 @@ INCLUDES = -I$(top_builddir) \
     $(SEAHORSE_CFLAGS) \
     -DLOCALEDIR=\"$(localedir)\" \
     -DDATA_DIR=\""$(datadir)"\" \
-    -DSEAHORSE_GLADEDIR=\""$(gladedir)"\"
+    -DSEAHORSE_GLADEDIR=\""$(gladedir)"\" \
+    -DLIBCRYPTUI_API_SUBJECT_TO_CHANGE
 
 bin_PROGRAMS = seahorse-preferences seahorse-tool
 
