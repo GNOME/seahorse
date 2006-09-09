@@ -22,8 +22,6 @@
 #ifndef __SEAHORSE_PREFERENCES_H__
 #define __SEAHORSE_PREFERENCES_H__
 
-#include "seahorse-context.h"
-
 #define LISTING_SCHEMAS SEAHORSE_SCHEMAS "/listing"
 #define SHOW_VALIDITY_KEY LISTING_SCHEMAS "/show_validity"
 #define SHOW_EXPIRES_KEY LISTING_SCHEMAS "/show_expires"
@@ -31,8 +29,6 @@
 #define SHOW_LENGTH_KEY LISTING_SCHEMAS "/show_length"
 #define SHOW_TYPE_KEY LISTING_SCHEMAS "/show_type"
 
-#define UI_SCHEMAS SEAHORSE_SCHEMAS "/ui"
-
-void		seahorse_preferences_show		(const gchar        *tabid);
+void seahorse_preferences_show  (const gchar *tabid);
 
 #endif /* __SEAHORSE_PREFERENCES_H__ */

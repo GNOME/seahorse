@@ -65,7 +65,6 @@ glade_DATA = \
 	seahorse-change-passphrase.glade \
 	seahorse-sign.glade \
 	seahorse-generate-select.glade \
-	seahorse-preferences.glade \
 	seahorse-add-uid.glade \
 	seahorse-add-subkey.glade \
 	seahorse-multi-encrypt.glade \

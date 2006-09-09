@@ -1016,6 +1016,62 @@ help_activate (GtkWidget *widget, SeahorseWidget *swidget)
     seahorse_widget_show_help (swidget);
 }
 
+static void
+view_type_column (GtkToggleAction *action, SeahorseWidget *swidget)
+{
+    seahorse_gconf_set_boolean (SHOW_TYPE_KEY,
+                gtk_toggle_action_get_active (action));
+}
+
+static void
+view_expiry_column (GtkToggleAction *action, SeahorseWidget *swidget)
+{
+    seahorse_gconf_set_boolean (SHOW_EXPIRES_KEY,
+                gtk_toggle_action_get_active (action));
+}
+
+static void
+view_validity_column (GtkToggleAction *action, SeahorseWidget *swidget)
+{
+    seahorse_gconf_set_boolean (SHOW_VALIDITY_KEY,
+                gtk_toggle_action_get_active (action));
+}
+
+static void
+view_trust_column (GtkToggleAction *action, SeahorseWidget *swidget)
+{
+    seahorse_gconf_set_boolean (SHOW_TRUST_KEY,
+                gtk_toggle_action_get_active (action));
+}
+
+static void
+gconf_notify (GConfClient *client, guint id, GConfEntry *entry, 
+              SeahorseWidget *swidget)
+{
+    GtkActionGroup *actions;
+    GtkAction *action;
+    const gchar *key;
+    
+    actions = seahorse_widget_find_actions (swidget, "main");
+    g_return_if_fail (actions);
+    key = gconf_entry_get_key (entry);
+
+    if (g_str_equal (SHOW_TRUST_KEY, key))
+        action = gtk_action_group_get_action (actions, "view-trust");
+    else if (g_str_equal (SHOW_TYPE_KEY, key))
+        action = gtk_action_group_get_action (actions, "view-type");
+    else if (g_str_equal (SHOW_EXPIRES_KEY, key))
+        action = gtk_action_group_get_action (actions, "view-expires");
+    else if (g_str_equal (SHOW_VALIDITY_KEY, key))
+        action = gtk_action_group_get_action (actions, "view-validity");
+    else
+        return;
+    
+    g_return_if_fail (action);
+    gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), 
+                        gconf_value_get_bool (gconf_entry_get_value (entry)));
+}
+
 /* BUILDING THE MAIN WINDOW ------------------------------------------------- */
 
 static const GtkActionEntry ui_entries[] = {
@@ -1047,6 +1103,17 @@ static const GtkActionEntry ui_entries[] = {
             
     { "help-show", GTK_STOCK_HELP, N_("_Contents"), "F1",
             N_("Show Seahorse help"), G_CALLBACK (help_activate) }, 
+};
+
+static const GtkToggleActionEntry view_entries[] = {
+    { "view-type", NULL, N_("Key T_ypes"), NULL,
+             N_("Show key type column"), G_CALLBACK (view_type_column), FALSE },
+    { "view-expires", NULL, N_("Key _Expiry"), NULL,
+             N_("Show key expiry column"), G_CALLBACK (view_expiry_column), FALSE },
+    { "view-trust", NULL, N_("Key _Trust"), NULL,
+             N_("Show owner trust column"), G_CALLBACK (view_trust_column), FALSE },
+    { "view-validity", NULL, N_("Key _Validity"), NULL,
+             N_("Show key validity column"), G_CALLBACK (view_validity_column), FALSE },
 };
 
 static const GtkActionEntry key_entries[] = {
@@ -1128,7 +1195,20 @@ seahorse_key_manager_show (SeahorseOperation *op)
     gtk_action_group_set_translation_domain (actions, NULL);
     gtk_action_group_add_actions (actions, ui_entries, 
                                   G_N_ELEMENTS (ui_entries), swidget);
+    gtk_action_group_add_toggle_actions (actions, view_entries,
+                                  G_N_ELEMENTS (view_entries), swidget);
     seahorse_widget_add_actions (swidget, actions);
+    
+    /* Setup the initial values for the view toggles */
+    action = gtk_action_group_get_action (actions, "view-type");
+    gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), seahorse_gconf_get_boolean (SHOW_TYPE_KEY));
+    action = gtk_action_group_get_action (actions, "view-trust");
+    gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), seahorse_gconf_get_boolean (SHOW_TRUST_KEY));
+    action = gtk_action_group_get_action (actions, "view-expires");
+    gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), seahorse_gconf_get_boolean (SHOW_EXPIRES_KEY));
+    action = gtk_action_group_get_action (actions, "view-validity");
+    gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), seahorse_gconf_get_boolean (SHOW_VALIDITY_KEY));
+    seahorse_gconf_notify_lazy (LISTING_SCHEMAS, (GConfClientNotifyFunc)gconf_notify, swidget, swidget);
     
     /* Actions that are allowed on all keys */
     actions = gtk_action_group_new ("key");
