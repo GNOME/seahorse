@@ -137,12 +137,15 @@ changed_key (SeahorsePGPKey *pkey)
         skey->loaded = SKEY_INFO_NONE;
         skey->flags = SKEY_FLAG_DISABLED;
         skey->keydesc = _("Invalid");
+        skey->rawid = NULL;
         
     } else {
     
         /* The key id */
-        if (pkey->pubkey->subkeys)
+        if (pkey->pubkey->subkeys) {
             skey->keyid = seahorse_pgp_key_get_cannonical_id (pkey->pubkey->subkeys->keyid);
+            skey->rawid = pkey->pubkey->subkeys->keyid;
+        }
         
         /* The location */
         if (pkey->pubkey->keylist_mode & GPGME_KEYLIST_MODE_EXTERN && 

@@ -23,6 +23,7 @@
 #include <gnome.h>
 
 #include "seahorse-key.h"
+#include "seahorse-context.h"
 #include "seahorse-key-source.h"
 
 gboolean 
@@ -53,6 +54,7 @@ enum {
     PROP_0,
     PROP_KEY_SOURCE,
     PROP_KEY_ID,
+    PROP_RAW_ID,
     PROP_KEY_DESC,
     PROP_KTYPE,
     PROP_ETYPE,
@@ -63,6 +65,7 @@ enum {
 
 /* Special fields */
 enum {
+    PROP_SPECIAL_KEY_ID,
     PROP_SPECIAL_DISPLAY_NAME,
     PROP_SPECIAL_CN,
     PROP_SPECIAL_MAX
@@ -118,6 +121,9 @@ seahorse_key_get_property (GObject *object, guint prop_id, GValue *value,
     case PROP_KEY_ID:
         g_value_set_uint (value, skey->keyid);
         break;
+    case PROP_RAW_ID:
+        g_value_set_string (value, skey->rawid);
+        break;
     case PROP_KEY_DESC:
         g_value_set_string (value, skey->keydesc);
         break;
@@ -166,6 +172,10 @@ seahorse_key_class_init (SeahorseKeyClass *klass)
         g_param_spec_uint ("key-id", "Key ID", "Key identifier", 
                            0, G_MAXUINT, SKEY_UNKNOWN, G_PARAM_READABLE));
     
+    g_object_class_install_property (gobject_class, PROP_RAW_ID,
+        g_param_spec_string ("raw-id", "Raw ID", "Backend specific key identifier",
+                             NULL, G_PARAM_READABLE));
+                             
     g_object_class_install_property (gobject_class, PROP_KEY_ID,
         g_param_spec_string ("key-desc", "Key Desc", "Key Description",
                              NULL, G_PARAM_READABLE));
@@ -195,6 +205,7 @@ seahorse_key_class_init (SeahorseKeyClass *klass)
         NULL, NULL, g_cclosure_marshal_VOID__INT, G_TYPE_NONE, 1, G_TYPE_INT);
         
     /* Some special fields */
+    special_properties[PROP_SPECIAL_KEY_ID] = g_quark_from_static_string ("key-id");
     special_properties[PROP_SPECIAL_DISPLAY_NAME] = g_quark_from_static_string ("display-name");
     special_properties[PROP_SPECIAL_CN] = g_quark_from_static_string ("cn");
 }
@@ -401,7 +412,6 @@ seahorse_key_get_display_id (SeahorseKey *skey)
     return id;
 }
 
-
 gchar*
 seahorse_key_get_simple_name (SeahorseKey *skey)
 {
@@ -478,22 +488,31 @@ seahorse_key_lookup_property (SeahorseKey *skey, guint uid, const gchar *field, 
 {
     GParamSpec *spec;
     GQuark qfield;
-    gchar *name;
+    gchar *text;
+
+    qfield = g_quark_from_string (field);
+    
+    /* The key-id for these guys contains the uid */
+    if (qfield == special_properties[PROP_SPECIAL_KEY_ID]) {
+        text = seahorse_context_key_to_dbus (SCTX_APP (), skey, uid);
+        g_value_init (value, G_TYPE_STRING);
+        g_value_take_string (value, text);
+        return TRUE;
+    }
     
     /* Special UID fields */
     if (uid > 0) {
 
-        qfield = g_quark_from_string (field);
         if (qfield == special_properties[PROP_SPECIAL_DISPLAY_NAME]) {
-            name = seahorse_key_get_name (skey, uid);
+            text = seahorse_key_get_name (skey, uid);
             g_value_init (value, G_TYPE_STRING);
-            g_value_take_string (value, name ? name : g_strdup (""));
+            g_value_take_string (value, text ? text : g_strdup (""));
             return TRUE;
 
         } else if (qfield == special_properties[PROP_SPECIAL_CN]) {
-            name = seahorse_key_get_name_cn (skey, uid);
+            text = seahorse_key_get_name_cn (skey, uid);
             g_value_init (value, G_TYPE_STRING);
-            g_value_take_string (value, name ? name : g_strdup (""));
+            g_value_take_string (value, text ? text : g_strdup (""));
             return TRUE;
         }
     }
@@ -504,6 +523,7 @@ seahorse_key_lookup_property (SeahorseKey *skey, guint uid, const gchar *field, 
 
     g_value_init (value, spec->value_type);
     g_object_get_property (G_OBJECT (skey), field, value);
+    
     return TRUE; 
 }
 

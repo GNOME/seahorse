@@ -32,6 +32,7 @@
 #include "seahorse-libdialogs.h"
 #include "seahorse-gtkstock.h"
 #include "seahorse-gconf.h"
+#include "seahorse-util.h"
 
 /* -----------------------------------------------------------------------------
  * ARGUMENT PARSING 
@@ -141,11 +142,12 @@ prompt_recipients (gpgme_key_t *signkey)
         
         if (GPG_IS_OK (gerr)) {
             gchar **ids;
+            guint num;
             
             /* Load up the GPGME keys */
             ids = cryptui_keyset_keys_raw_keyids (keyset, (const gchar**)recips);
+            num = seahorse_util_strvec_length ((const gchar**)ids);
             keys = g_array_new (TRUE, TRUE, sizeof (gpgme_key_t));
-            
             gerr = gpgme_op_keylist_ext_start (ctx, (const gchar**)ids, 0, 0);
             g_free (ids);
             
@@ -158,6 +160,9 @@ prompt_recipients (gpgme_key_t *signkey)
             /* Ignore EOF error */
             if (GPG_ERR_EOF == gpgme_err_code (gerr))
                 gerr = GPG_OK;
+            
+            if (GPG_IS_OK (gerr) && num != keys->len)
+                g_warning ("couldn't load all the keys (%d/%d) from GPGME", keys->len, num);
         }
         
         gpgme_release (ctx);
@@ -171,7 +176,7 @@ prompt_recipients (gpgme_key_t *signkey)
     g_strfreev (recips);
     g_free (signer);
     
-    if (GPG_IS_OK (gerr))
+    if (GPG_IS_OK (gerr) && keys->len)
         return (gpgme_key_t*)g_array_free (keys, FALSE);
     
     /* When failure, free all our return values */

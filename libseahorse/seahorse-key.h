@@ -36,6 +36,7 @@
  *   key-source: (SeahorseKeySource) The key source this key came from.
  *   key-id: (GQuark) The key identifier in the format ktype:fingerprint 
  *      (ie: the DBUS format)
+ *   raw-id: (gchar*) The raw backend specific key identifier
  *   key-desc: (gchar*) A description of the key type.
  *   ktype: (GQuark) The type of key (ie: SKEY_PGP). 
  *   etype: (SeahorseKeyEType) The encryption type (ie: SKEY_PUBLIC)
@@ -137,6 +138,7 @@ struct _SeahorseKey {
     GQuark                      ktype;
     GQuark                      keyid;
     const gchar*                keydesc;
+    const gchar*                rawid;
     SeahorseKeyLoc              location;
     SeahorseKeyInfo             loaded;
     SeahorseKeyEType            etype;

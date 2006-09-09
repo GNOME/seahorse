@@ -109,11 +109,14 @@ changed_key (SeahorseSSHKey *skey)
         key->etype = SKEY_ETYPE_NONE;
         key->loaded = SKEY_INFO_NONE;
         key->flags = SKEY_FLAG_DISABLED;
+        key->keydesc = _("Invalid");
+        key->rawid = NULL;
         
     } else {
     
         /* The key id */
         key->keyid = seahorse_ssh_key_get_cannonical_id (skey->keydata->fingerprint);
+        key->rawid = skey->keydata->fingerprint;
         key->location = SKEY_LOC_LOCAL;
         key->loaded = SKEY_INFO_COMPLETE;
         key->flags = skey->keydata->authorized ? SKEY_FLAG_TRUSTED : 0;

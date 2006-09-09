@@ -35,5 +35,5 @@ if not len(keys):
     
 print keys[0]
 print keyset.GetKeyField(keys[0], "display-name")
-print keyset.GetKeyFields(keys[0], [ "display-name", "simple-name", "fingerprint" ])
+print keyset.GetKeyFields(keys[0], [ "display-name", "raw-id", "fingerprint" ])
 print service.ExportKeys("openssh", [ keys[0] ])

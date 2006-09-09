@@ -1048,6 +1048,15 @@ seahorse_util_strvec_dup (const gchar** vec)
     return ret;
 }
 
+guint 
+seahorse_util_strvec_length (const gchar **vec)
+{
+    guint len = 0;
+    while (*(vec++))
+        len++;
+    return len;
+}
+
 /* TODO: This function no longer makes sense once we 
    have multiple key and encryption types */
 gpgme_key_t* 

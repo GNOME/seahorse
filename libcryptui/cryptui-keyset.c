@@ -574,7 +574,7 @@ cryptui_keyset_keys_raw_keyids (CryptUIKeyset *keyset, const gchar **keys)
         nkeys++;
     ids = g_new0 (gchar*, nkeys + 1);
     for (k = keys, i = 0; *k; k++, i++)
-        ids[i] = cryptui_keyset_key_get_string (keyset, *k, "key-id");
+        ids[i] = cryptui_keyset_key_get_string (keyset, *k, "raw-id");
     
     return ids;
 }
