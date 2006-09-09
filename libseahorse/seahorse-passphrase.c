@@ -78,8 +78,21 @@ utf8_validate (const gchar *text)
     return result;
 }
 
+static gboolean
+key_press (GtkWidget *widget, GdkEventKey *event, gpointer data)
+{
+    /* Close the dialog when hitting "Esc". */
+    if (event->keyval == GDK_Escape)
+    {
+        gtk_dialog_response(GTK_DIALOG (widget), GTK_RESPONSE_REJECT);
+        return TRUE;
+    }
+    
+    return FALSE;
+}
+
 static void
-grab_keyboard (GtkWidget *win, GdkEvent * event, gpointer data)
+grab_keyboard (GtkWidget *win, GdkEvent *event, gpointer data)
 {
 #ifndef _DEBUG
     if (gdk_keyboard_grab (win->window, FALSE, gdk_event_get_time (event)))
@@ -258,6 +271,8 @@ seahorse_passphrase_prompt_show (const gchar *title, const gchar *description,
     g_signal_connect_object (G_OBJECT (entry), "focus_in_event",
                              G_CALLBACK (gtk_widget_grab_default), G_OBJECT (w), 0);
     gtk_widget_grab_default (w);
+    
+    g_signal_connect (dialog, "key_press_event", G_CALLBACK (key_press), NULL);
 
     gtk_window_set_position (GTK_WINDOW (dialog), GTK_WIN_POS_CENTER);
     gtk_window_set_keep_above(GTK_WINDOW (dialog), TRUE);
