@@ -193,7 +193,9 @@ changed_key (SeahorsePGPKey *pkey)
         if (pkey->pubkey->disabled)
             skey->flags |= SKEY_FLAG_DISABLED;
         
-        if (calc_trust (pkey) >= SEAHORSE_VALIDITY_MARGINAL)
+        if (calc_trust (pkey) >= SEAHORSE_VALIDITY_MARGINAL && 
+            !pkey->pubkey->revoked && !pkey->pubkey->disabled && 
+            !pkey->pubkey->expired)
             skey->flags |= SKEY_FLAG_TRUSTED;
     }
     
