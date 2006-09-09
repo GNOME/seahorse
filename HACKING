@@ -16,19 +16,17 @@ Here is a description of the modules:
    are here because there will be multiple schemas files to separate the app and 
    pgp settings.
 
- o libseahorse: Common library code for seahorse. This should not depend on other 
-   code modules (read: not data), and other code modules should only depend on this 
-   (or bonobo servers). Any code that is depended on by multiple modules, such as 
-   src/ and plugins/nautilus, is placed here. Currently this includes 
-   SeahorseContext & keys, operations, and common dialogs.
+ o libseahorse: Common static library of code for seahorse. Any code that is depended 
+   on by multiple modules, such as src/ and plugins/nautilus, is placed here. 
+   Currently this includes SeahorseContext & keys, operations, and common dialogs.
 
  o plugins: Contains subdirs for any possible apps in which seahorse can provide 
    a plugin. Currently this includes nautilus and gedit. Future possibilities are 
    AbiWord and Gaim.
 
- o plugins/nautilus: This doesn't really contain nautilus targetted code, but 
-   nautilus/file-manager oriented code that doesn't go anywhere else. Currently 
-   this is just a control center capplet and mime data. 
+ o plugins/nautilus: Contains the seahorse-tool for nautilus encryption. Also has 
+   the seahorse-prefercences capplet (which should be moved once we get into SVN).
+   The MIME data is also located here.
 
  o plugins/nautilus-ext: An extension for Nautilus 2.10 and later.
 
@@ -36,8 +34,7 @@ Here is a description of the modules:
  
  o plugins/applet: Clipboard encryption panel applet
 
- o src: The main app code. This currently includes the main window & dialogs,
-   along with code that hasn't been deemed necessary to include in libseahorse.
+ o src: The key manager program. This currently includes the main window & dialogs.
 
 
 USING THE GPG EXECUTABLE DIRECTLY
@@ -69,7 +66,7 @@ below, and must be discussed before hand on the seahorse-devel mailing list.
    - gpgme_op_edit state machine in libseahorse/seahorse-pgp-key-op.c 
    
  o Export Secret Key Support 
-   - (not yet implemented)
+   - libseahorse/seahorse-gpgmex.c
 
 
 DEBUGGING SEAHORSE
@@ -129,4 +126,4 @@ INDENTATION STYLE
   * Function arguments follow the function call on the same line, and if 
     lengthy are (where possible) wrapped to the column of the first brace.
  
-last updated 2006-01-24
+last updated 2006-09-09
