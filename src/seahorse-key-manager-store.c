@@ -77,6 +77,7 @@ static const gchar* col_ids[] = {
     NULL,
     "name",
     "id",
+    NULL,
     "validity",
     "trust",
     "type",
@@ -115,6 +116,84 @@ G_DEFINE_TYPE (SeahorseKeyManagerStore, seahorse_key_manager_store, SEAHORSE_TYP
 /* -----------------------------------------------------------------------------
  * INTERNAL 
  */
+
+/* Given a treeview iter, get the base store iterator */
+static void 
+get_base_iter (SeahorseKeyManagerStore *skstore, GtkTreeIter *base_iter, 
+               const GtkTreeIter *iter)
+{
+    GtkTreeIter i;
+    
+    g_assert (skstore->priv->sort && skstore->priv->filter);
+    gtk_tree_model_sort_convert_iter_to_child_iter (skstore->priv->sort, &i, (GtkTreeIter*)iter);
+    gtk_tree_model_filter_convert_iter_to_child_iter (skstore->priv->filter, base_iter, &i);
+}
+
+/* Given a base store iter, get the treeview iter */
+static gboolean 
+get_upper_iter (SeahorseKeyManagerStore *skstore, GtkTreeIter *upper_iter, 
+                const GtkTreeIter *iter)
+{
+    GtkTreeIter i;
+    GtkTreePath *child_path, *path;
+    gboolean ret;
+    
+    child_path = gtk_tree_model_get_path (gtk_tree_model_filter_get_model (skstore->priv->filter), 
+                                          (GtkTreeIter*)iter);
+    g_return_val_if_fail (child_path != NULL, FALSE);
+    path = gtk_tree_model_filter_convert_child_path_to_path (skstore->priv->filter, child_path);
+    gtk_tree_path_free (child_path);
+
+    if (!path)
+        return FALSE;
+
+    ret = gtk_tree_model_get_iter (GTK_TREE_MODEL (skstore->priv->filter), &i, path);
+    gtk_tree_path_free (path);
+    
+    if (!ret)
+        return FALSE;
+  
+    gtk_tree_model_sort_convert_child_iter_to_iter (skstore->priv->sort, upper_iter, &i);
+    return TRUE;
+}
+
+/* Try to find our key store given a tree model */
+static SeahorseKeyManagerStore* 
+key_store_from_model (GtkTreeModel *model)
+{
+    /* Sort models are what's set on the tree */
+    if (GTK_IS_TREE_MODEL_SORT (model))
+        model = gtk_tree_model_sort_get_model (GTK_TREE_MODEL_SORT (model));
+    if (GTK_IS_TREE_MODEL_FILTER (model)) 
+        model = gtk_tree_model_filter_get_model (GTK_TREE_MODEL_FILTER (model));
+    if (SEAHORSE_IS_KEY_MANAGER_STORE (model))
+        return SEAHORSE_KEY_MANAGER_STORE (model);
+    
+    g_assert_not_reached ();
+    return NULL;
+}
+
+/* Given an iterator find the associated key */
+static SeahorseKey*
+key_from_iterator (GtkTreeModel* model, GtkTreeIter* iter, guint *uid)
+{
+    GtkTreeIter i;
+    SeahorseKey *skey = NULL;
+    
+    /* Convert to base iter if necessary */
+    if (!SEAHORSE_IS_KEY_MANAGER_STORE (model)) {
+        SeahorseKeyManagerStore* skstore = key_store_from_model (model);
+        get_base_iter (skstore, &i, iter);
+        
+        iter = &i;
+        model = GTK_TREE_MODEL (skstore);
+    }
+    
+    skey = seahorse_key_model_get_row_key (SEAHORSE_KEY_MODEL (model), iter);
+    if (skey && uid)
+        gtk_tree_model_get (model, iter, COL_UID, uid, -1);
+    return skey;
+}
 
 /* Search through row for text */
 static gboolean
@@ -392,6 +471,8 @@ set_sort_to (SeahorseKeyManagerStore *skstore, const gchar *name)
     GtkSortType ord = GTK_SORT_ASCENDING;
     const gchar* n;
     
+    g_return_if_fail (name != NULL);
+    
     /* Prefix with a minus means descending */
     if (name[0] == '-') {
         ord = GTK_SORT_DESCENDING;
@@ -452,6 +533,7 @@ sort_changed (GtkTreeSortable *sort, gpointer user_data)
 static void
 gconf_notification (GConfClient *gclient, guint id, GConfEntry *entry, GtkTreeView *view)
 {
+    SeahorseKeyManagerStore *skstore;
     GtkTreeViewColumn *col = NULL;
     GList *columns, *l;
     GConfValue *value;
@@ -462,6 +544,12 @@ gconf_notification (GConfClient *gclient, guint id, GConfEntry *entry, GtkTreeVi
 
     g_assert (key != NULL);
     g_assert (GTK_IS_TREE_VIEW (view));
+    
+    if (g_str_equal (key, KEY_MANAGER_SORT_KEY)) {
+        skstore = key_store_from_model (gtk_tree_view_get_model(view));
+        g_return_if_fail (skstore != NULL);
+        set_sort_to (skstore, gconf_value_get_string (gconf_entry_get_value (entry)));
+    }
     
     columns = gtk_tree_view_get_columns (view);
     for (l = columns; l; l = g_list_next (l)) {
@@ -655,84 +743,6 @@ drag_data_get (GtkWidget *widget, GdkDragContext *context,
     g_free(text);
 }
 
-/* Given a treeview iter, get the base store iterator */
-static void 
-get_base_iter (SeahorseKeyManagerStore *skstore, GtkTreeIter *base_iter, 
-               const GtkTreeIter *iter)
-{
-    GtkTreeIter i;
-    
-    g_assert (skstore->priv->sort && skstore->priv->filter);
-    gtk_tree_model_sort_convert_iter_to_child_iter (skstore->priv->sort, &i, (GtkTreeIter*)iter);
-    gtk_tree_model_filter_convert_iter_to_child_iter (skstore->priv->filter, base_iter, &i);
-}
-
-/* Given a base store iter, get the treeview iter */
-static gboolean 
-get_upper_iter (SeahorseKeyManagerStore *skstore, GtkTreeIter *upper_iter, 
-                const GtkTreeIter *iter)
-{
-    GtkTreeIter i;
-    GtkTreePath *child_path, *path;
-    gboolean ret;
-    
-    child_path = gtk_tree_model_get_path (gtk_tree_model_filter_get_model (skstore->priv->filter), 
-                                          (GtkTreeIter*)iter);
-    g_return_val_if_fail (child_path != NULL, FALSE);
-    path = gtk_tree_model_filter_convert_child_path_to_path (skstore->priv->filter, child_path);
-    gtk_tree_path_free (child_path);
-
-    if (!path)
-        return FALSE;
-
-    ret = gtk_tree_model_get_iter (GTK_TREE_MODEL (skstore->priv->filter), &i, path);
-    gtk_tree_path_free (path);
-    
-    if (!ret)
-        return FALSE;
-  
-    gtk_tree_model_sort_convert_child_iter_to_iter (skstore->priv->sort, upper_iter, &i);
-    return TRUE;
-}
-
-/* Try to find our key store given a tree model */
-static SeahorseKeyManagerStore* 
-key_store_from_model (GtkTreeModel *model)
-{
-    /* Sort models are what's set on the tree */
-    if (GTK_IS_TREE_MODEL_SORT (model))
-        model = gtk_tree_model_sort_get_model (GTK_TREE_MODEL_SORT (model));
-    if (GTK_IS_TREE_MODEL_FILTER (model)) 
-        model = gtk_tree_model_filter_get_model (GTK_TREE_MODEL_FILTER (model));
-    if (SEAHORSE_IS_KEY_MANAGER_STORE (model))
-        return SEAHORSE_KEY_MANAGER_STORE (model);
-    
-    g_assert_not_reached ();
-    return NULL;
-}
-
-/* Given an iterator find the associated key */
-static SeahorseKey*
-key_from_iterator (GtkTreeModel* model, GtkTreeIter* iter, guint *uid)
-{
-    GtkTreeIter i;
-    SeahorseKey *skey = NULL;
-    
-    /* Convert to base iter if necessary */
-    if (!SEAHORSE_IS_KEY_MANAGER_STORE (model)) {
-        SeahorseKeyManagerStore* skstore = key_store_from_model (model);
-        get_base_iter (skstore, &i, iter);
-        
-        iter = &i;
-        model = GTK_TREE_MODEL (skstore);
-    }
-    
-    skey = seahorse_key_model_get_row_key (SEAHORSE_KEY_MODEL (model), iter);
-    if (skey && uid)
-        gtk_tree_model_get (model, iter, COL_UID, uid, -1);
-    return skey;
-}
-
 static gint 
 compare_pointers (gconstpointer a, gconstpointer b)
 {
@@ -885,6 +895,10 @@ seahorse_key_manager_store_class_init (SeahorseKeyManagerStoreClass *klass)
 {
     GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
     seahorse_key_manager_store_parent_class = g_type_class_peek_parent (klass);
+    
+    /* Some simple checks to make sure all column info is on the same page */
+    g_assert (N_COLS == G_N_ELEMENTS (col_ids));
+    g_assert (N_COLS == G_N_ELEMENTS (col_types));
 
     gobject_class->finalize = seahorse_key_manager_store_finalize;
     gobject_class->dispose = seahorse_key_manager_store_dispose;
