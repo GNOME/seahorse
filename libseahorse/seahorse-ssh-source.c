@@ -612,7 +612,7 @@ seahorse_ssh_source_export (SeahorseKeySource *sksrc, GList *keys,
 {
     SeahorseSSHKeyData *keydata;
     gchar *results = NULL;
-    gchar *prefix = NULL;
+    gchar *raw = NULL;
     GError *error = NULL;
     SeahorseKey *skey;
     GList *l;
@@ -625,7 +625,7 @@ seahorse_ssh_source_export (SeahorseKeySource *sksrc, GList *keys,
         g_assert (SEAHORSE_IS_SSH_KEY (skey));
         
         results = NULL;
-        prefix = NULL;
+        raw = NULL;
         
         keydata = NULL;
         g_object_get (skey, "key-data", &keydata, NULL);
@@ -634,17 +634,20 @@ seahorse_ssh_source_export (SeahorseKeySource *sksrc, GList *keys,
         /* Complete key means the private key */
         if (complete && keydata->privfile) {
             
-            /* Add the seahorse specific prefix */
-            prefix = g_strdup_printf ("%s %s\n", SSH_KEY_SECRET_SIG, keydata->comment ? keydata->comment : "");
-            
             /* And then the data itself */
-            if (!g_file_get_contents (keydata->privfile, &results, NULL, &error))
-                results = NULL;
+            if (!g_file_get_contents (keydata->privfile, &raw, NULL, &error)) {
+                raw = results = NULL;
+            } else {
+                /* Add the seahorse specific prefix */
+                results = g_strdup_printf ("%s %s\n%s\n", SSH_KEY_SECRET_SIG, 
+                                           keydata->comment ? keydata->comment : "",
+                                           raw);
+            }
            
         /* Public key. We should already have the data loaded */
         } else if (keydata->pubfile) { 
             g_assert (keydata->rawdata);
-            results = g_strdup (keydata->rawdata);
+            results = g_strdup_printf ("%s\n", keydata->rawdata);
             
         /* Public key without identity.pub. Export it. */
         } else if (!keydata->pubfile) {
@@ -659,15 +662,15 @@ seahorse_ssh_source_export (SeahorseKeySource *sksrc, GList *keys,
         if (results) {
             
             /* Write the data out */
-            if ((prefix && !write_gpgme_data (data, prefix)) || 
-                !write_gpgme_data (data, results)) {
+            if (write_gpgme_data (data, results)) {
                 g_set_error (&error, G_FILE_ERROR, g_file_error_from_errno (errno),
                              strerror (errno));
             }
             
             g_free (results);
-            g_free (prefix);
         }
+
+        g_free (raw);
         
         if (error != NULL)
             break;
