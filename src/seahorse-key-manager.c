@@ -336,7 +336,7 @@ imported_keys (SeahorseOperation *op, SeahorseWidget *swidget)
     guint nkeys;
 
     if (!seahorse_operation_is_successful (op)) {
-        seahorse_operation_steal_error (op, &err);
+        seahorse_operation_copy_error (op, &err);
         seahorse_util_handle_error (err, _("Couldn't import keys"));
         return;
     }
@@ -396,8 +396,8 @@ import_files (SeahorseWidget *swidget, const gchar **uris)
     }
 
     if (seahorse_operation_is_running (SEAHORSE_OPERATION (mop))) {
-        g_signal_connect (mop, "done", G_CALLBACK (imported_keys), swidget);
         seahorse_progress_show (SEAHORSE_OPERATION (mop), _("Importing Keys"), TRUE);
+        seahorse_operation_watch (SEAHORSE_OPERATION (mop), G_CALLBACK (imported_keys), NULL, swidget);
     }
     
     /* A running operation refs itself */
@@ -441,7 +441,7 @@ import_text (SeahorseWidget *swidget, const gchar *text)
     op = seahorse_key_source_import (sksrc, data);
     g_return_if_fail (op != NULL);
     
-    g_signal_connect (op, "done", G_CALLBACK (imported_keys), swidget);
+    seahorse_operation_watch (op, G_CALLBACK (imported_keys), NULL, swidget);
     seahorse_progress_show (op, _("Importing Keys"), TRUE);
     
     /* A running operation refs itself */
@@ -498,7 +498,7 @@ copy_done (SeahorseOperation *op, SeahorseWidget *swidget)
     guint num;
     
     if (!seahorse_operation_is_successful (op)) {
-        seahorse_operation_steal_error (op, &err);
+        seahorse_operation_copy_error (op, &err);
         seahorse_util_handle_error (err, _("Couldn't retrieve data from key server"));
     }
     
@@ -539,12 +539,8 @@ copy_activate (GtkWidget *widget, SeahorseWidget *swidget)
     
     g_object_set_data (G_OBJECT (op), "num-keys", GINT_TO_POINTER (num));
         
-    if (seahorse_operation_is_running (op)) {
-        seahorse_progress_show (op, _("Retrieving keys"), TRUE);
-        g_signal_connect (op, "done", G_CALLBACK (copy_done), swidget);
-    } else {
-        copy_done (op, swidget);
-    }
+    seahorse_progress_show (op, _("Retrieving keys"), TRUE);
+    seahorse_operation_watch (op, G_CALLBACK (copy_done), NULL, swidget);
         
     /* Running operation refs itself */
     g_object_unref (op);
@@ -558,6 +554,20 @@ properties_activate (GtkWidget *widget, SeahorseWidget *swidget)
 	SeahorseKey *skey = get_selected_key (swidget, NULL);
 	if (skey != NULL)
         show_properties (skey);
+}
+
+static void
+export_done (SeahorseOperation *op, SeahorseWidget *swidget)
+{
+    gchar *uri;
+    GError *err = NULL;
+    
+    if (!seahorse_operation_is_successful (op)) {
+        seahorse_operation_copy_error (op, &err);
+        uri = (gchar*)g_object_get_data (G_OBJECT (op), "exported-file-uri");
+        seahorse_util_handle_error (err, _("Couldn't export key"),
+                                    seahorse_util_uri_get_last (uri));
+    }
 }
 
 /* Loads export dialog if a key is selected */
@@ -582,25 +592,27 @@ export_activate (GtkWidget *widget, SeahorseWidget *swidget)
      
     uri = seahorse_util_chooser_save_prompt (dialog);
     if(uri) {
+        
         data = seahorse_vfs_data_create (uri, SEAHORSE_VFS_WRITE, &err);
-        if (data) {
-    
-            op = seahorse_key_source_export_keys (keys, data);
-            g_return_if_fail (op != NULL);
-        
-            seahorse_operation_wait (op);
-            gpgmex_data_release (data);
-    
-            if (!seahorse_operation_is_successful (op)) 
-                seahorse_operation_steal_error (op, &err);
-        }
-        
-        if (err) 
+        if (!data) {
             seahorse_util_handle_error (err, _("Couldn't export key to \"%s\""),
                                         seahorse_util_uri_get_last (uri));
+            return;
+        }
+        
+        op = seahorse_key_source_export_keys (keys, data);
+        g_return_if_fail (op != NULL);
+        
+        g_object_set_data_full (G_OBJECT (op), "exported-file-uri", uri, g_free);
+        g_object_set_data_full (G_OBJECT (op), "exported-file-data", data, 
+                                (GDestroyNotify)gpgmex_data_release);
+        
+        seahorse_progress_show (op, _("Exporting keys"), TRUE);
+        seahorse_operation_watch (op, G_CALLBACK (export_done), NULL, swidget);
+        
+        g_object_unref (op);
     }
     
-    g_free (uri);
     g_list_free (keys);
 }
 

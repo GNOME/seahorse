@@ -1006,7 +1006,7 @@ details_export_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
         gpgmex_data_release (data);
         
         if (!seahorse_operation_is_successful (op))
-            seahorse_operation_steal_error (op, &err);
+            seahorse_operation_copy_error (op, &err);
     }
     
     if (err)

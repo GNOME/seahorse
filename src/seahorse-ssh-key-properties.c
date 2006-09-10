@@ -113,7 +113,7 @@ comment_activate (GtkWidget *entry, SeahorseWidget *swidget)
     seahorse_operation_wait (op);
     
     if (!seahorse_operation_is_successful (op)) {
-        seahorse_operation_steal_error (op, &err);
+        seahorse_operation_copy_error (op, &err);
         seahorse_util_handle_error (err, _("Couldn't rename key."));
         gtk_entry_set_text (GTK_ENTRY (entry), skey->keydata->comment ? skey->keydata->comment : "");
     }
@@ -153,7 +153,7 @@ trust_toggled (GtkToggleButton *button, SeahorseWidget *swidget)
     seahorse_operation_wait (op);
     
     if (!seahorse_operation_is_successful (op)) {
-        seahorse_operation_steal_error (op, &err);
+        seahorse_operation_copy_error (op, &err);
         seahorse_util_handle_error (err, _("Couldn't change authorization for key."));
     }
     
@@ -167,7 +167,7 @@ passphrase_done (SeahorseOperation *op, SeahorseWidget *swidget)
     GtkWidget *w;
 
     if (!seahorse_operation_is_successful (op)) {
-        seahorse_operation_steal_error (op, &err);
+        seahorse_operation_copy_error (op, &err);
         seahorse_util_handle_error (err, _("Couldn't change passhrase for SSH key."));
     }
     
@@ -191,10 +191,7 @@ passphrase_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
     gtk_widget_set_sensitive (w, FALSE);
     
     op = seahorse_ssh_operation_change_passphrase (SEAHORSE_SSH_KEY (skey));
-    if (seahorse_operation_is_running (op))
-        g_signal_connect (op, "done", G_CALLBACK (passphrase_done), swidget);
-    else 
-        passphrase_done (op, swidget);
+    seahorse_operation_watch (op, G_CALLBACK (passphrase_done), NULL, swidget);
 
     /* Running operations ref themselves */
     g_object_unref (op);
@@ -236,7 +233,7 @@ export_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
         gpgmex_data_release (data);
         
         if (!seahorse_operation_is_successful (op))
-            seahorse_operation_steal_error (op, &err);
+            seahorse_operation_copy_error (op, &err);
     }
     
     if (err)

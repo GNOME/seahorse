@@ -150,7 +150,7 @@ on_response (GtkDialog *dialog, guint response, SeahorseWidget *swidget)
             seahorse_util_handle_gpgme (gerr, _("Couldn't generate key"));
         } else {
             seahorse_progress_show (op, _("Generating key"), TRUE);
-            g_signal_connect (op, "done", G_CALLBACK (completion_handler), NULL);
+            seahorse_operation_watch (op, G_CALLBACK (completion_handler), NULL, NULL);
             g_object_unref (op);
         }
     }

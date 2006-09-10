@@ -90,7 +90,7 @@ import_done (SeahorseOperation *op, SeahorseWidget *swidget)
      */
     
     if (!seahorse_operation_is_successful (op)) {
-        seahorse_operation_steal_error (op, &err);
+        seahorse_operation_copy_error (op, &err);
         seahorse_util_handle_error (err, _("Couldn't import keys into keyring"));
     }
 }
@@ -108,12 +108,12 @@ import_activate (GtkWidget *widget, SeahorseWidget *swidget)
     if (keys == NULL)
         return;
     
-    op = seahorse_context_transfer_keys (SCTX_APP (), keys, NULL, FALSE);
+    op = seahorse_context_transfer_keys (SCTX_APP (), keys, NULL);
     g_return_if_fail (op != NULL);
     
     if (seahorse_operation_is_running (op)) {
         seahorse_progress_show (op, _("Importing keys from key servers"), TRUE);
-        g_signal_connect (op, "done", G_CALLBACK (import_done), swidget);
+        seahorse_operation_watch (op, G_CALLBACK (import_done), NULL, swidget);
     }
     
     /* Running operation refs itself */
@@ -130,7 +130,7 @@ export_done (SeahorseOperation *op, SeahorseWidget *swidget)
     g_return_if_fail (uri != NULL);
     
     if (!seahorse_operation_is_successful (op)) {
-        seahorse_operation_steal_error (op, &err);
+        seahorse_operation_copy_error (op, &err);
         seahorse_util_handle_error (err, _("Couldn't write keys to file: %s"), 
                                            seahorse_util_uri_get_last (uri));
     }
@@ -178,12 +178,8 @@ export_activate (GtkWidget *widget, SeahorseWidget *swidget)
             g_object_set_data_full (G_OBJECT (op), "export-data", data, 
                                     (GDestroyNotify)gpgmex_data_release);
     
-            if (seahorse_operation_is_running (op)) {
-                seahorse_progress_show (op, _("Retrieving keys"), TRUE);
-                g_signal_connect (op, "done", G_CALLBACK (export_done), swidget);
-            } else {
-                export_done (op, swidget);
-            }
+            seahorse_progress_show (op, _("Retrieving keys"), TRUE);
+            seahorse_operation_watch (op, G_CALLBACK (export_done), NULL, swidget);
         
             /* Running operation refs itself */
             g_object_unref (op);
@@ -205,7 +201,7 @@ copy_done (SeahorseOperation *op, SeahorseWidget *swidget)
     guint num;
     
     if (!seahorse_operation_is_successful (op)) {
-        seahorse_operation_steal_error (op, &err);
+        seahorse_operation_copy_error (op, &err);
         seahorse_util_handle_error (err, _("Couldn't retrieve data from key server"));
     }
     
@@ -246,13 +242,9 @@ copy_activate (GtkWidget *widget, SeahorseWidget *swidget)
     g_return_if_fail (op != NULL);
     
     g_object_set_data (G_OBJECT (op), "num-keys", GINT_TO_POINTER (num));
-        
-    if (seahorse_operation_is_running (op)) {
-        seahorse_progress_show (op, _("Retrieving keys"), TRUE);
-        g_signal_connect (op, "done", G_CALLBACK (copy_done), swidget);
-    } else {
-        copy_done (op, swidget);
-    }
+    
+    seahorse_progress_show (op, _("Retrieving keys"), TRUE);
+    seahorse_operation_watch (op, G_CALLBACK (copy_done), NULL, swidget);
         
     /* Running operation refs itself */
     g_object_unref (op);
@@ -434,9 +426,9 @@ seahorse_keyserver_results_show (SeahorseOperation *op, const gchar *search)
     win = GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name));
     g_return_val_if_fail (win != NULL, NULL);
     
-    g_object_set_data (G_OBJECT (swidget), "operation", op);    
-    g_signal_connect (op, "done", G_CALLBACK (operation_done), swidget);
-    g_signal_connect (win, "destroy", G_CALLBACK (window_destroyed), swidget);    
+    g_object_set_data (G_OBJECT (swidget), "operation", op);
+    seahorse_operation_watch (op, G_CALLBACK (operation_done), NULL, swidget);
+    g_signal_connect (win, "destroy", G_CALLBACK (window_destroyed), swidget);
 
     if (!search)
         title = g_strdup (_("Remote Keys"));

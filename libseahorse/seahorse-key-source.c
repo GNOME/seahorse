@@ -191,7 +191,7 @@ seahorse_key_source_import_sync (SeahorseKeySource *sksrc, gpgme_data_t data,
     seahorse_operation_wait (op);
     ret = seahorse_operation_is_successful (op);
     if (!ret)
-        seahorse_operation_steal_error (op, err);
+        seahorse_operation_copy_error (op, err);
     
     g_object_unref (op);
     return ret;    

@@ -214,7 +214,7 @@ seahorse_service_export_keys (SeahorseService *svc, gchar *ktype,
             /* Ignore the rest, break loop */
             g_list_free (l);
             
-            seahorse_operation_steal_error (op, error);
+            seahorse_operation_copy_error (op, error);
             g_object_unref (op);
             
             gpgme_data_release (gdata);

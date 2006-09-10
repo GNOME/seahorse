@@ -38,7 +38,7 @@ upload_complete (SeahorseOperation *op, gpointer dummy)
     GError *err = NULL;
     
     if (!seahorse_operation_is_successful (op)) {
-        seahorse_operation_steal_error (op, &err);
+        seahorse_operation_copy_error (op, &err);
         seahorse_util_handle_error (err, _("Couldn't configure SSH keys on remote computer."));
     }    
 }
@@ -142,7 +142,7 @@ upload_keys (SeahorseWidget *swidget)
     op = upload_via_source (user, host, keys);
     g_return_if_fail (op != NULL);
     
-    g_signal_connect (op, "done", G_CALLBACK (upload_complete), NULL);
+    seahorse_operation_watch (op, G_CALLBACK (upload_complete), NULL, NULL);
     
     /* Show the progress window if necessary */
     seahorse_progress_show (op, _("Configuring SSH Keys..."), FALSE);

@@ -115,15 +115,18 @@ void                seahorse_operation_cancel      (SeahorseOperation *operation
 #define             seahorse_operation_is_successful(operation) \
                                                    ((operation)->error == NULL)                                                                 
 
-void                seahorse_operation_steal_error (SeahorseOperation *operation,
-                                                    GError **err);
-
 void                seahorse_operation_copy_error  (SeahorseOperation *operation,
                                                     GError **err);
 
 const GError*       seahorse_operation_get_error   (SeahorseOperation *operation);
 
 void                seahorse_operation_wait        (SeahorseOperation *operation);
+
+/* When called on an already complete operation, the callbacks are called immediately */
+void                seahorse_operation_watch       (SeahorseOperation *operation,
+                                                    GCallback done_callback,
+                                                    GCallback progress_callback,
+                                                    gpointer userdata);
 
 #define             seahorse_operation_get_progress(op) \
                                                    ((op)->progress)

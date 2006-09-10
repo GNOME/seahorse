@@ -100,7 +100,7 @@ operation_done (SeahorseOperation *operation, GtkWidget *appbar)
     GError *err = NULL;
     
     if (!seahorse_operation_is_successful (operation)) {
-        seahorse_operation_steal_error (operation, &err);
+        seahorse_operation_copy_error (operation, &err);
         if (err) {
             operation_progress (operation, err->message, 0.0, appbar);
             g_error_free (err);
@@ -123,20 +123,13 @@ seahorse_progress_appbar_set_operation (GtkWidget* appbar, SeahorseOperation *op
 {
     g_return_if_fail (GNOME_IS_APPBAR (appbar));
     g_return_if_fail (SEAHORSE_IS_OPERATION (operation));
-    
-    if (!seahorse_operation_is_running (operation)) {
-        operation_done (operation, appbar);
-        return;
-    }
 
-    g_signal_connect (operation, "done", G_CALLBACK (operation_done), appbar);
-    g_signal_connect (operation, "progress", G_CALLBACK (operation_progress), appbar);
     g_object_set_data_full (G_OBJECT (appbar), "operations", operation, 
                                 (GDestroyNotify)g_object_unref);
     g_signal_connect (appbar, "destroy", G_CALLBACK (disconnect_progress), operation);
-
-    operation_progress (operation, seahorse_operation_get_message (operation),
-                        seahorse_operation_get_progress (operation), appbar);
+    
+    seahorse_operation_watch (operation, G_CALLBACK (operation_done), 
+                                G_CALLBACK (operation_progress), appbar);
 }
 
 /* -----------------------------------------------------------------------------

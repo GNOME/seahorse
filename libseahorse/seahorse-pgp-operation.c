@@ -19,6 +19,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include "config.h"
 #include "seahorse-pgp-operation.h"
 #include "seahorse-pgp-source.h"
 #include "seahorse-gpgmex.h"
@@ -251,7 +252,8 @@ event_cb (void *data, gpgme_event_io_t type, void *type_data)
             register_watch ((WatchData*)(list->data));
     
         /* And tell everyone we've begun */
-        seahorse_operation_mark_start (SEAHORSE_OPERATION (pop));
+        if (!seahorse_operation_is_running (SEAHORSE_OPERATION (pop)))
+            seahorse_operation_mark_start (SEAHORSE_OPERATION (pop));
         
         /* Listens for progress updates from GPG */
         gpgme_set_progress_cb (pop->gctx, progress_cb, pop);
@@ -286,9 +288,10 @@ event_cb (void *data, gpgme_event_io_t type, void *type_data)
                 /* No error, results available */
                 else
                     g_signal_emit (pop, signals[RESULTS], 0);
-    
-                /* Ready and done */
-                seahorse_operation_mark_done (SEAHORSE_OPERATION (pop), FALSE, error);
+                
+                /* The above event may have started the action again so double check */
+                if (!pv->busy && seahorse_operation_is_running (SEAHORSE_OPERATION (pop)))
+                    seahorse_operation_mark_done (SEAHORSE_OPERATION (pop), FALSE, error);
             }
         }
         break;

@@ -432,21 +432,23 @@ result_callback (SeahorseLDAPOperation *lop)
     gboolean ret;
     int r, i;
     
-    g_assert (SEAHORSE_IS_LDAP_OPERATION (lop));
-    g_assert (lop->ldap != NULL);
-    g_assert (lop->ldap_op != -1);
-    
     for (i = 0; i < DEFAULT_LOAD_BATCH; i++) {
-     
+
+        g_assert (SEAHORSE_IS_LDAP_OPERATION (lop));
+        g_assert (lop->ldap != NULL);
+        g_assert (lop->ldap_op != -1);
+        
         /* This effects a poll */
         timeout.tv_sec = 0;
         timeout.tv_usec = 0;
-    
+
         r = ldap_result (lop->ldap, lop->ldap_op, 0, &timeout, &result);
         switch (r) {   
-        case -1: /* Scary error */
-            g_return_val_if_reached (FALSE);
-            break;
+        case -1: /* Strange system error */
+            seahorse_operation_mark_done (SEAHORSE_OPERATION (lop), FALSE, 
+                g_error_new (LDAP_ERROR_DOMAIN, errno, strerror(errno)));
+            return FALSE;
+        
         case 0: /* Timeout exceeded */
             return TRUE;
         };

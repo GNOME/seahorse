@@ -575,7 +575,7 @@ step_operation (FilesCtx *ctx, SeahorseToolMode *mode, GError **err)
         }
         
         if (!seahorse_operation_is_successful (op)) {
-            seahorse_operation_steal_error (op, err);
+            seahorse_operation_copy_error (op, err);
             goto finally;
         }
         

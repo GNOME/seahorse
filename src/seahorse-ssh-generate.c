@@ -119,11 +119,11 @@ on_response (GtkDialog *dialog, guint response, SeahorseWidget *swidget)
     seahorse_widget_destroy (swidget);
     
     /* Watch for errors so we can display */
-    g_signal_connect (op, "done", G_CALLBACK (completion_handler), NULL);
+    seahorse_operation_watch (op, G_CALLBACK (completion_handler), NULL, NULL);
     
     /* When completed upload */
     if (upload)
-        g_signal_connect (op, "done", G_CALLBACK (upload_handler), NULL);
+        seahorse_operation_watch (op, G_CALLBACK (upload_handler), NULL, NULL);
     
     seahorse_progress_show (op, _("Creating SSH Key"), TRUE);
     g_object_unref (op);

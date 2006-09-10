@@ -166,8 +166,7 @@ SeahorseOperation*  seahorse_context_load_remote_keys   (SeahorseContext    *sct
 
 SeahorseOperation*  seahorse_context_transfer_keys      (SeahorseContext    *sctx, 
                                                          GList              *keys, 
-                                                         SeahorseKeySource  *to,
-                                                         gboolean           individually);
+                                                         SeahorseKeySource  *to);
 
 SeahorseOperation*  seahorse_context_retrieve_keys      (SeahorseContext    *sctx, 
                                                          GQuark             ktype, 

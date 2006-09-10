@@ -49,6 +49,7 @@ typedef struct _SeahorseTransferOperationPrivate {
     SeahorseOperation *operation;   /* The current operation in progress */
     gchar *message;                 /* A progress message to display */
     gpgme_data_t data;              /* Hold onto the data */
+    gboolean individually;          /* Individually export keys, not as one block */
 } SeahorseTransferOperationPrivate;
 
 enum {
@@ -95,10 +96,12 @@ import_progress (SeahorseOperation *op, const gchar *message,
     
     DEBUG_OPERATION (("[transfer] import progress: %lf\n", fract));
     
-    if (seahorse_operation_is_running (SEAHORSE_OPERATION (top)))
+    if (seahorse_operation_is_running (SEAHORSE_OPERATION (top))) {
+        message = pv->message ? pv->message : message;
+        fract = fract <= 0 ? 0.5 : (0.5 + (fract / 2.0));
         seahorse_operation_mark_progress (SEAHORSE_OPERATION (top), 
-                                          pv->message ? pv->message : message, 
-                                          0.5 + (fract / 2));
+                                          message, fract);
+    }
 }
 
 static void
@@ -118,7 +121,7 @@ import_done (SeahorseOperation *op, SeahorseTransferOperation *top)
             seahorse_operation_mark_done (SEAHORSE_OPERATION (top), TRUE, NULL);
         
         } else if (!seahorse_operation_is_successful (op)) {
-            seahorse_operation_steal_error (op, &err);
+            seahorse_operation_copy_error (op, &err);
             seahorse_operation_mark_done (SEAHORSE_OPERATION (top), FALSE, err);
         }
     }
@@ -170,7 +173,7 @@ export_done (SeahorseOperation *op, SeahorseTransferOperation *top)
         done = TRUE;
         
     } else if (!seahorse_operation_is_successful (op)) {
-        seahorse_operation_steal_error (op, &err);
+        seahorse_operation_copy_error (op, &err);
         seahorse_operation_mark_done (SEAHORSE_OPERATION (top), FALSE, err);
         done = TRUE;
     }
@@ -212,17 +215,32 @@ export_done (SeahorseOperation *op, SeahorseTransferOperation *top)
     seahorse_operation_mark_progress (SEAHORSE_OPERATION (top), pv->message ? pv->message : 
                                       seahorse_operation_get_message (pv->operation), 0.5);
     
-    /* If it's already done, move to next stage */
-    if (!seahorse_operation_is_running (pv->operation)) {
-        import_done (pv->operation, top);
-        
-    /* Not done, add watches to this operation */
-    } else {
-        g_signal_connect (pv->operation, "progress", G_CALLBACK (import_progress), top);
-        g_signal_connect (pv->operation, "done", G_CALLBACK (import_done), top);
-    }
+    seahorse_operation_watch (pv->operation, G_CALLBACK (import_done), 
+                              G_CALLBACK (import_progress), top);
 }
 
+
+static gboolean 
+start_transfer (SeahorseTransferOperation *top)
+{
+    SeahorseTransferOperationPrivate *pv = SEAHORSE_TRANSFER_OPERATION_GET_PRIVATE (top);
+    SeahorseKeySource *from;
+    GSList *keyids;
+    
+    g_assert (pv->operation == NULL);
+
+    keyids = (GSList*)g_object_get_data (G_OBJECT (top), "transfer-key-ids");
+    g_object_get (top, "from-key-source", &from, NULL);
+    g_assert (keyids && from);
+    
+    pv = SEAHORSE_TRANSFER_OPERATION_GET_PRIVATE (top);
+    pv->operation = seahorse_key_source_export_raw (from, keyids, pv->data);
+    g_return_val_if_fail (pv->operation != NULL, FALSE);
+    
+    seahorse_operation_watch (pv->operation, G_CALLBACK (export_done), 
+                              G_CALLBACK (export_progress), top);
+    return FALSE;
+};
 
 /* -----------------------------------------------------------------------------
  * OBJECT 
@@ -334,8 +352,7 @@ seahorse_transfer_operation_cancel (SeahorseOperation *operation)
     /* This should call through to our event handler, and cancel us */
     if (pv->operation)
         seahorse_operation_cancel (pv->operation);
-    g_object_unref (pv->operation);
-    pv->operation = NULL;
+    g_assert (pv->operation == NULL);
     
     if (seahorse_operation_is_running (operation))
         seahorse_operation_mark_done (operation, TRUE, NULL);
@@ -350,30 +367,28 @@ seahorse_transfer_operation_new (const gchar *message, SeahorseKeySource *from,
                                  SeahorseKeySource *to, GSList *keyids)
 {
     SeahorseTransferOperation *top;
-    SeahorseTransferOperationPrivate *pv;
+    
+    g_return_val_if_fail (from != NULL, NULL);
+    g_return_val_if_fail (to != NULL, NULL);
+    
+    if (!keyids)
+        return seahorse_operation_new_complete (NULL);
     
     top = g_object_new (SEAHORSE_TYPE_TRANSFER_OPERATION, "message", message, 
                         "from-key-source", from, "to-key-source", to, NULL);
     
     DEBUG_OPERATION (("[transfer] starting export\n"));
 
-    pv = SEAHORSE_TRANSFER_OPERATION_GET_PRIVATE (top);
-    pv->operation = seahorse_key_source_export_raw (from, keyids, pv->data);
-    g_return_val_if_fail (pv->operation != NULL, NULL);
-
+    /* A list of quarks, so a deep copy is not necessary */
+    g_object_set_data_full (G_OBJECT (top), "transfer-key-ids", g_slist_copy (keyids), 
+                            (GDestroyNotify)g_slist_free);
+    
     /* And mark us as started */
     seahorse_operation_mark_start (SEAHORSE_OPERATION (top));
     seahorse_operation_mark_progress (SEAHORSE_OPERATION (top), message, 0.0);
     
-    /* If it's already done, move to next stage */
-    if (!seahorse_operation_is_running (pv->operation)) {
-        export_done (pv->operation, top);
-        
-    /* Not done, add watches to this operation */
-    } else {
-        g_signal_connect (pv->operation, "progress", G_CALLBACK (export_progress), top);
-        g_signal_connect (pv->operation, "done", G_CALLBACK (export_done), top);
-    }
+    /* We delay and continue from a callback */
+    g_timeout_add (0, (GSourceFunc)start_transfer, top);
     
     return SEAHORSE_OPERATION (top);
 }

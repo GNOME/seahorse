@@ -40,7 +40,7 @@ sync_import_complete (SeahorseOperation *op, SeahorseKeySource *sksrc)
     GError *err = NULL;
     
     if (!seahorse_operation_is_successful (op)) {
-        seahorse_operation_steal_error (op, &err);
+        seahorse_operation_copy_error (op, &err);
         seahorse_util_handle_error (err, _("Couldn't publish keys to server: %s"), 
                                     seahorse_gconf_get_string (PUBLISH_TO_KEY));
     }    
@@ -55,7 +55,7 @@ sync_export_complete (SeahorseOperation *op, SeahorseKeySource *sksrc)
     if (!seahorse_operation_is_successful (op)) {
         g_object_get (sksrc, "key-server", &keyserver, NULL);
 
-        seahorse_operation_steal_error (op, &err);
+        seahorse_operation_copy_error (op, &err);
         seahorse_util_handle_error (err, _("Couldn't retrieve keys from server: %s"), 
                                     keyserver);
         g_free (keyserver);
@@ -211,8 +211,8 @@ seahorse_keyserver_sync (GList *keys)
             op = seahorse_transfer_operation_new (_("Syncing keys"), sksrc, lsksrc, keyids);
             g_return_if_fail (op != NULL);
 
-            g_signal_connect (op, "done", G_CALLBACK (sync_export_complete), sksrc);
             seahorse_multi_operation_take (mop, op);
+            seahorse_operation_watch (op, G_CALLBACK (sync_export_complete), NULL, sksrc);
         }
     }
     
@@ -225,11 +225,11 @@ seahorse_keyserver_sync (GList *keys)
         sksrc = seahorse_context_remote_key_source (SCTX_APP (), keyserver);
         g_return_if_fail (sksrc != NULL);
         
-        op = seahorse_context_transfer_keys (SCTX_APP (), keys, sksrc, TRUE);
+        op = seahorse_context_transfer_keys (SCTX_APP (), keys, sksrc);
         g_return_if_fail (sksrc != NULL);
 
-        g_signal_connect (op, "done", G_CALLBACK (sync_import_complete), sksrc);
         seahorse_multi_operation_take (mop, op);
+        seahorse_operation_watch (op, G_CALLBACK (sync_import_complete), NULL, sksrc);
     }
 
     g_slist_free (keyids);

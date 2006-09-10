@@ -64,19 +64,6 @@ static guint signals[LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE (SeahorseOperation, seahorse_operation, G_TYPE_OBJECT);
 
-/* HELPERS ------------------------------------------------------------------ */
-
-static gboolean
-delayed_mark_done (SeahorseOperation *operation)
-{
-    g_assert (SEAHORSE_IS_OPERATION (operation));
-    g_signal_emit (operation, signals[DONE], 0);
-
-    /* A running operation always refs itself */
-    g_object_unref (operation);   
-    return FALSE;
-}
-
 /* OBJECT ------------------------------------------------------------------- */
 
 static void
@@ -238,17 +225,7 @@ seahorse_operation_cancel (SeahorseOperation *op)
     g_object_unref (op);
 }
 
-void                
-seahorse_operation_steal_error (SeahorseOperation *op, GError **err)
-{
-    g_return_if_fail (err == NULL || *err == NULL);
-    if (err) {
-        *err = op->error;
-        op->error = NULL;
-    }
-}
-
-void                
+void
 seahorse_operation_copy_error  (SeahorseOperation *op, GError **err)
 {
     g_return_if_fail (err == NULL || *err == NULL);
@@ -272,6 +249,30 @@ void
 seahorse_operation_wait (SeahorseOperation *op)
 {
     seahorse_util_wait_until (!seahorse_operation_is_running (op));
+}
+
+void
+seahorse_operation_watch (SeahorseOperation *operation, GCallback done_callback,
+                          GCallback progress_callback, gpointer userdata)
+{
+    typedef void (*DoneCb) (SeahorseOperation*, gpointer);
+    typedef void (*ProgressCb) (SeahorseOperation*, const gchar*, gdouble, gpointer);
+
+    if (!seahorse_operation_is_running (operation)) {
+        if (done_callback)
+            ((DoneCb)done_callback) (operation, userdata);
+        return;
+    }
+    
+    if (done_callback)
+        g_signal_connect (operation, "done", done_callback, userdata);
+    
+    if (progress_callback) {
+        ((ProgressCb)progress_callback) (operation, 
+                seahorse_operation_get_message (operation),
+                seahorse_operation_get_progress (operation), userdata);
+        g_signal_connect (operation, "progress", progress_callback, userdata);
+    }
 }
 
 /* METHODS FOR DERIVED CLASSES ---------------------------------------------- */
@@ -344,10 +345,10 @@ seahorse_operation_mark_done (SeahorseOperation *op, gboolean cancelled,
     op->error = error;
 
     g_signal_emit (op, signals[PROGRESS], 0, NULL, op->progress);
+    g_signal_emit (op, signals[DONE], 0);
 
-    /* Since we're asynchronous we guarantee this by going to back out
-       to the loop before marking an operation as done */
-    g_timeout_add (0, (GSourceFunc)delayed_mark_done, op);
+    /* A running operation always refs itself */
+    g_object_unref (op);
 }
 
 void
@@ -382,7 +383,10 @@ multi_operation_progress (SeahorseOperation *operation, const gchar *message,
     GSList *list;
     
     g_assert (SEAHORSE_IS_MULTI_OPERATION (mop));
-    g_assert (SEAHORSE_IS_OPERATION (operation));  
+    g_assert (SEAHORSE_IS_OPERATION (operation));
+    
+    if (seahorse_operation_is_cancelled (SEAHORSE_OPERATION (mop)))
+        return;
     
     list = mop->operations;
     
@@ -424,10 +428,12 @@ multi_operation_progress (SeahorseOperation *operation, const gchar *message,
                     current += (seahorse_operation_is_running (op) ? 0 : 1);
                 else
                     current += op->progress;
+                DEBUG_OPERATION (("    progres is: %lf\n", op->progress));
             }
         } 
         
         progress = total ? current / total : -1;
+
         DEBUG_OPERATION (("[multi-operation 0x%08X] multi progress: %s %lf\n", (guint)mop, 
                           message, progress));
         
@@ -529,11 +535,10 @@ seahorse_multi_operation_cancel (SeahorseOperation *operation)
     g_assert (SEAHORSE_IS_MULTI_OPERATION (operation));
     mop = SEAHORSE_MULTI_OPERATION (operation);
 
+    seahorse_operation_mark_done (operation, TRUE, NULL);
+
     seahorse_operation_list_cancel (mop->operations);
-    mop->operations = seahorse_operation_list_purge (mop->operations);    
-    
-    seahorse_operation_mark_done (operation, TRUE, 
-                                  SEAHORSE_OPERATION (mop)->error);
+    mop->operations = seahorse_operation_list_purge (mop->operations);
 }
 
 static void
@@ -576,16 +581,8 @@ seahorse_multi_operation_take (SeahorseMultiOperation* mop, SeahorseOperation *o
     DEBUG_OPERATION (("[multi-operation 0x%08X] adding part: 0x%08X\n", (guint)mop, (guint)op));
     
     mop->operations = seahorse_operation_list_add (mop->operations, op);
-    
-    if (seahorse_operation_is_running (op)) {
-        g_signal_connect (op, "done", G_CALLBACK (multi_operation_done), mop);
-        g_signal_connect (op, "progress", G_CALLBACK (multi_operation_progress), mop);
-        multi_operation_progress (op, NULL, -1, mop);
-        
-    /* Already done, so handle immediately */
-    } else {
-        multi_operation_done (op, mop);
-    }
+    seahorse_operation_watch (op, G_CALLBACK (multi_operation_done), 
+                              G_CALLBACK (multi_operation_progress), mop);
 }
 
 /* -----------------------------------------------------------------------------

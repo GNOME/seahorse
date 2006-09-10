@@ -1,3 +1,33 @@
+2006-09-10  Nate Nielsen  <nielsen@memberwebs.com>
+
+    * daemon/seahorse-service.c:
+    * libseahorse/seahorse-context.c:
+    * libseahorse/seahorse-context.h:
+    * libseahorse/seahorse-key-source.c:
+    * libseahorse/seahorse-ldap-source.c:
+    * libseahorse/seahorse-operation.c:
+    * libseahorse/seahorse-operation.h:
+    * libseahorse/seahorse-pgp-operation.c:
+    * libseahorse/seahorse-pgp-source.c:
+    * libseahorse/seahorse-progress.c:
+    * libseahorse/seahorse-transfer-operation.c:
+    * libseahorse/seahorse-unknown-source.c:
+    * libseahorse/seahorse-util.c:
+    * libseahorse/seahorse-util.h
+    * plugins/nautilus/seahorse-tool-files.c:
+    * src/seahorse-key-manager.c:
+    * src/seahorse-key-properties.c:
+    * src/seahorse-keyserver-results.c:
+    * src/seahorse-keyserver-sync.c:
+    * src/seahorse-pgp-generate.c:
+    * src/seahorse-ssh-generate.c:
+    * src/seahorse-ssh-key-properties.c:
+    * src/seahorse-ssh-upload.c: Fix operation / export / syncing problems.
+    Removed some of the more dubious logic (such as async 'done' callbacks).
+    Made the seahorse_util_wait_until more robust. Don't open an insane
+    amount of parallel connections to remote servers. Proper calculations 
+    of progress in SeahorseTransferOperation.
+    
 2006-09-10  Adam Schreiber  <sadam@clemson.edu>
 
     * plugins/gedit/Makefile.am: Require define to acknowledge instability

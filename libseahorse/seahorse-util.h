@@ -172,10 +172,11 @@ void        seahorse_util_determine_popup_menu_position  (GtkMenu *menu,
                                                            gboolean *push_in,
                                                            gpointer gdata);
 
-#define     seahorse_util_wait_until(expr)          \
-    while (!(expr)) {                               \
-        g_thread_yield ();                          \
-        g_main_context_iteration (NULL, FALSE);     \
+#define     seahorse_util_wait_until(expr)                \
+    while (!(expr)) {                                     \
+        while (g_main_context_pending(NULL) && !(expr))   \
+            g_main_context_iteration (NULL, FALSE);       \
+        g_thread_yield ();                                \
     }
 
 #ifdef _DEBUG

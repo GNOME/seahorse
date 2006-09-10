@@ -129,6 +129,49 @@ static SeahorseLoadOperation*   seahorse_load_operation_start   (SeahorsePGPSour
 static gboolean                 scheduled_dummy                 (gpointer data);
 
 /* -----------------------------------------------------------------------------
+ * EXPORT 
+ */
+ 
+typedef struct _ExportContext {
+    GArray *keyids;
+    guint at;
+    gpgme_data_t data;
+} ExportContext;
+
+static void
+free_export_context (gpointer p)
+{
+    ExportContext *ctx = (ExportContext*)p;
+    if (!ctx)
+        return;
+    g_array_free (ctx->keyids, TRUE);
+    g_free (ctx);
+}
+
+static void
+export_key_callback (SeahorsePGPOperation *pop, ExportContext *ctx)
+{
+    gpgme_error_t gerr;
+    
+    if (seahorse_operation_is_running (SEAHORSE_OPERATION (pop)))
+        seahorse_operation_mark_progress_full (SEAHORSE_OPERATION (pop), NULL, 
+                                               ctx->at, ctx->keyids->len);
+    
+    /* Done, no need to do anything further */
+    if (ctx->at >= ctx->keyids->len)
+        return;
+    
+    /* Do the next key in the list */
+    gerr = gpgme_op_export_start (pop->gctx, g_array_index (ctx->keyids, const char*, ctx->at), 
+                                  0, ctx->data);
+    ctx->at++;
+    
+    if (!GPG_IS_OK (gerr))
+        seahorse_pgp_operation_mark_failed (pop, gerr);
+}
+
+
+/* -----------------------------------------------------------------------------
  * PGP Source
  */
     
@@ -956,9 +999,8 @@ seahorse_pgp_source_export (SeahorseKeySource *sksrc, GList *keys,
     SeahorsePGPSource *psrc;
     SeahorsePGPKey *pkey;
     SeahorseKey *skey;
+    ExportContext *ctx;
     gpgme_error_t gerr = GPG_OK;
-    GArray *akeyids; 
-    gchar **keyids;
     const gchar *keyid;
     GList *l;
     
@@ -983,8 +1025,12 @@ seahorse_pgp_source_export (SeahorseKeySource *sksrc, GList *keys,
     gpgme_set_armor (pop->gctx, TRUE);
     gpgme_set_textmode (pop->gctx, TRUE);
 
-    /* Build list of keyids for export */
-    akeyids = g_array_new (TRUE, TRUE, sizeof (gchar*));
+    /* Export context for asynchronous export */
+    ctx = g_new0(ExportContext, 1);
+    ctx->keyids = g_array_new (TRUE, TRUE, sizeof (gchar*));
+    ctx->at = 0;
+    ctx->data = data;
+    g_object_set_data_full (G_OBJECT (pop), "export-context", ctx, free_export_context);
     
     for (l = keys; l != NULL; l = g_list_next (l)) {
         
@@ -996,9 +1042,9 @@ seahorse_pgp_source_export (SeahorseKeySource *sksrc, GList *keys,
         
         /* Building list */
         keyid = seahorse_pgp_key_get_id (pkey->pubkey, 0);
-        g_array_append_val (akeyids, keyid);
+        g_array_append_val (ctx->keyids, keyid);
         
-        /* TODO: Exporting of secret keys is synchronous */
+        /* Exporting of secret keys is synchronous */
         if (complete && skey->etype == SKEY_PRIVATE) {
             
             gerr = gpgmex_op_export_secret (pop->gctx, 
@@ -1008,16 +1054,15 @@ seahorse_pgp_source_export (SeahorseKeySource *sksrc, GList *keys,
                 break;
         }
     }
-    
-    keyids = (gchar**)g_array_free (akeyids, FALSE);
-    
-    if (GPG_IS_OK (gerr))
-        gerr = gpgme_op_export_ext_start (pop->gctx, (const char**)keyids, 0, data);
-    
+
     if (!GPG_IS_OK (gerr))
         seahorse_pgp_operation_mark_failed (pop, gerr);
+    else
+    {
+        g_signal_connect (pop, "results", G_CALLBACK (export_key_callback), ctx);
+        export_key_callback (pop, ctx);
+    }
     
-    g_free (keyids);
     return SEAHORSE_OPERATION (pop);
 }
 

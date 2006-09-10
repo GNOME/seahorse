@@ -403,6 +403,8 @@ seahorse_util_uri_get_last (const gchar* uri)
 {
     const gchar* t;
     
+    g_return_val_if_fail (uri, NULL);
+    
     t = uri + strlen (uri);
     
     if (*(t - 1) == '/' && t != uri)

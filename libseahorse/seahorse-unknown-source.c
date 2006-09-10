@@ -195,10 +195,7 @@ seahorse_unknown_source_add_key (SeahorseUnknownSource *usrc, GQuark keyid,
     
     if (search) {
         skey->location = SKEY_LOC_SEARCHING;
-        if (seahorse_operation_is_running (search)) 
-            g_signal_connect (search, "done", G_CALLBACK (search_done), skey);
-        else
-            search_done (search, skey);
+        seahorse_operation_watch (search, G_CALLBACK (search_done), NULL, skey);
     }
     
     return skey;
