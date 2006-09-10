@@ -2,6 +2,7 @@
 INCLUDES = -I$(top_builddir) \
 	-I$(top_srcdir) \
 	-I$(top_srcdir)/libcryptui \
+	-DLIBCRYPTUI_API_SUBJECT_TO_CHANGE \
 	$(LIBCRYPTUI_CFLAGS) 
 
 bin_PROGRAMS = cryptui-test-keyset cryptui-test-ui
