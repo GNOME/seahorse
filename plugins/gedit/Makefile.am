@@ -9,7 +9,8 @@ INCLUDES = \
     -I$(top_srcdir) \
     -I$(top_srcdir)/libcryptui \
     -DGEDIT_LOCALEDIR=\"$(localedir)\" \
-    $(GEDIT_CFLAGS) \
+	-DLIBCRYPTUI_API_SUBJECT_TO_CHANGE \
+	$(GEDIT_CFLAGS) \
     $(LIBCRYPTUI_CFLAGS)
 
 plugin_LTLIBRARIES = libseahorse-pgp.la
