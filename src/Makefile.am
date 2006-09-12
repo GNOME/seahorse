@@ -74,23 +74,13 @@ glade_DATA = \
 	seahorse-keyserver-results.ui \
 	seahorse-keyserver-sync.glade 
 
-@INTLTOOL_DESKTOP_RULE@
-
-seahorse.desktop.in:
-	sed -e "s|\@VERSION\@|$(VERSION)|g" < seahorse.desktop.in.in > seahorse.desktop.in
-seahorse-pgp-encrypted.desktop.in:
-	sed -e "s|\@VERSION\@|$(VERSION)|g" < seahorse-pgp-encrypted.desktop.in.in > seahorse-pgp-encrypted.desktop.in
-seahorse-pgp-keys.desktop.in:
-	sed -e "s|\@VERSION\@|$(VERSION)|g" < seahorse-pgp-keys.desktop.in.in > seahorse-pgp-keys.desktop.in
-seahorse-pgp-signature.desktop.in:
-	sed -e "s|\@VERSION\@|$(VERSION)|g" < seahorse-pgp-signature.desktop.in.in > seahorse-pgp-signature.desktop.in
-
 desktopdir = $(datadir)/applications
 desktop_in_files = seahorse.desktop.in \
 				   seahorse-pgp-encrypted.desktop.in \
 				   seahorse-pgp-signature.desktop.in \
 				   seahorse-pgp-keys.desktop.in 
 desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
+@INTLTOOL_DESKTOP_RULE@
 
 EXTRA_DIST = \
     $(glade_DATA) \
