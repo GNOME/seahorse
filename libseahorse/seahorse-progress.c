@@ -26,6 +26,8 @@
  *  GENERIC PROGRESS BAR HANDLING 
  */
  
+static void     disconnect_progress     (SeahorseWidget *widget, SeahorseOperation *op);
+ 
 /* Called to keep the progress bar cycle when we're in pulse mode */
 static gboolean
 pulse_timer (GtkProgressBar *progress)
@@ -71,65 +73,84 @@ stop_pulse (GtkProgressBar *progress)
  * display the latest operation in our special list  */
 static void
 operation_progress (SeahorseOperation *operation, const gchar *message, 
-                    gdouble fract, GtkWidget *appbar)
+                    gdouble fract, SeahorseWidget *swidget)
 {
     GtkProgressBar *progress;
-  
-    g_assert (GNOME_IS_APPBAR (appbar));
+    GtkStatusbar *status;
+    guint id; 
     
-    if (message != NULL) {
+    progress = GTK_PROGRESS_BAR (seahorse_widget_get_widget (swidget, "progress"));
+    status = GTK_STATUSBAR (seahorse_widget_get_widget (swidget, "status"));
+    
+    if (message != NULL && status) {
+        g_return_if_fail (GTK_IS_STATUSBAR (status));
+        id = gtk_statusbar_get_context_id (status, "operation-progress");
+        gtk_statusbar_pop (status, id);
         if (message[0])
-            gnome_appbar_set_status (GNOME_APPBAR (appbar), message);
-        else
-            gnome_appbar_clear_stack (GNOME_APPBAR (appbar));
+            gtk_statusbar_push (status, id, message);
     }
 
-    progress = gnome_appbar_get_progress (GNOME_APPBAR (appbar));
-        
-    if (fract >= 0.0) {
-        stop_pulse (progress);
-        gtk_progress_bar_set_fraction (progress, fract);        
-    } else { 
-        start_pulse (progress);
+    if(progress) {
+        g_return_if_fail (GTK_IS_PROGRESS_BAR (progress));
+        if (fract >= 0.0) {
+            stop_pulse (progress);
+            gtk_progress_bar_set_fraction (progress, fract);        
+        } else { 
+            start_pulse (progress);
+        }
     }
 }
 
 static void
-operation_done (SeahorseOperation *operation, GtkWidget *appbar)
+operation_done (SeahorseOperation *operation, SeahorseWidget *swidget)
 {
     GError *err = NULL;
+
+    disconnect_progress (swidget, operation);
     
     if (!seahorse_operation_is_successful (operation)) {
         seahorse_operation_copy_error (operation, &err);
         if (err) {
-            operation_progress (operation, err->message, 0.0, appbar);
+            operation_progress (operation, err->message, 0.0, swidget);
             g_error_free (err);
             return;
         }
     }
     
-    operation_progress (operation, "", 0.0, appbar);    
+    operation_progress (operation, "", 0.0, swidget);
 }
 
 static void
-disconnect_progress (GtkWidget *widget, SeahorseOperation *op)
+disconnect_progress (SeahorseWidget *widget, SeahorseOperation *op)
 {
     g_signal_handlers_disconnect_by_func (op, operation_progress, widget);
     g_signal_handlers_disconnect_by_func (op, operation_done, widget);
+    g_signal_handlers_disconnect_by_func (widget, disconnect_progress, op);
 }
 
 void 
-seahorse_progress_appbar_set_operation (GtkWidget* appbar, SeahorseOperation *operation)
+seahorse_progress_status_set_operation (SeahorseWidget *swidget, 
+                                        SeahorseOperation *operation)
 {
-    g_return_if_fail (GNOME_IS_APPBAR (appbar));
+    SeahorseOperation *prev;
+    
+    if (!seahorse_operation_is_running (operation))
+        return;
+    
+    g_return_if_fail (SEAHORSE_IS_WIDGET (swidget));
     g_return_if_fail (SEAHORSE_IS_OPERATION (operation));
-
-    g_object_set_data_full (G_OBJECT (appbar), "operations", operation, 
-                                (GDestroyNotify)g_object_unref);
-    g_signal_connect (appbar, "destroy", G_CALLBACK (disconnect_progress), operation);
+    
+    prev = SEAHORSE_OPERATION (g_object_get_data (G_OBJECT (swidget), "operation"));
+    if (prev)
+        disconnect_progress (swidget, prev);
+        
+    g_object_set_data_full (G_OBJECT (swidget), "operation", operation, 
+                            (GDestroyNotify)g_object_unref);
+    g_signal_connect (swidget, "destroy", 
+                      G_CALLBACK (disconnect_progress), operation);
     
     seahorse_operation_watch (operation, G_CALLBACK (operation_done), 
-                                G_CALLBACK (operation_progress), appbar);
+                                G_CALLBACK (operation_progress), swidget);
 }
 
 /* -----------------------------------------------------------------------------

@@ -290,12 +290,18 @@ set_selected_key (SeahorseWidget *swidget, SeahorseKey *skey)
 static void
 set_numbered_status (SeahorseWidget *swidget, const gchar *t1, const gchar *t2, guint num)
 {
-    GnomeAppBar *status;
+    GtkStatusbar *status;
+    guint id;
     gchar *msg;
     
+    status = GTK_STATUSBAR (seahorse_widget_get_widget (swidget, "status"));
+    g_return_if_fail (status != NULL);
+    
+    id = gtk_statusbar_get_context_id (status, "key-manager");
+    gtk_statusbar_pop (status, id);
+    
     msg = g_strdup_printf (ngettext (t1, t2, num), num);
-    status = GNOME_APPBAR (glade_xml_get_widget (swidget->xml, "status"));
-	gnome_appbar_set_default (status, msg);
+    gtk_statusbar_push (status, id, msg);
     g_free (msg);
 }
 
@@ -1304,8 +1310,7 @@ seahorse_key_manager_show (SeahorseOperation *op)
                 GTK_SIGNAL_FUNC (target_drag_data_received), swidget);
                         
     /* Hook progress bar in */
-    w = glade_xml_get_widget (swidget->xml, "status");
-    seahorse_progress_appbar_set_operation (w, op);
+    seahorse_progress_status_set_operation (swidget, op);
 
     /* To show first time dialog */
     g_timeout_add (1000, (GSourceFunc)first_timer, swidget);

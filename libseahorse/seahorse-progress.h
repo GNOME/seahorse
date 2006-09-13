@@ -26,16 +26,16 @@
 #ifndef __SEAHORSE_PROGRESS_H__
 #define __SEAHORSE_PROGRESS_H__
 
-#include <gtk/gtk.h>
-
 #include "seahorse-operation.h"
+#include "seahorse-widget.h"
 #include "seahorse-context.h"
 
 /* -----------------------------------------------------------------------------
  * SEAHORSE APPBAR HOOKS
  */
 
-void          seahorse_progress_appbar_set_operation  (GtkWidget* appbar,
+/* Updates two glade widgets 'status' and 'progress' in the SeahorseWidget */
+void          seahorse_progress_status_set_operation  (SeahorseWidget *swidget,
                                                        SeahorseOperation *operation);
 
 /* Keeps operation refed until progress dialog goes away */
