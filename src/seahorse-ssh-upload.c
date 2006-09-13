@@ -39,7 +39,7 @@ upload_complete (SeahorseOperation *op, gpointer dummy)
     
     if (!seahorse_operation_is_successful (op)) {
         seahorse_operation_copy_error (op, &err);
-        seahorse_util_handle_error (err, _("Couldn't configure SSH keys on remote computer."));
+        seahorse_util_handle_error (err, _("Couldn't configure Secure Shell keys on remote computer."));
     }    
 }
 
@@ -145,7 +145,7 @@ upload_keys (SeahorseWidget *swidget)
     seahorse_operation_watch (op, G_CALLBACK (upload_complete), NULL, NULL);
     
     /* Show the progress window if necessary */
-    seahorse_progress_show (op, _("Configuring SSH Keys..."), FALSE);
+    seahorse_progress_show (op, _("Configuring Secure Shell Keys..."), FALSE);
     g_object_unref (op);
 }
 

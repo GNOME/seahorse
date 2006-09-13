@@ -758,7 +758,7 @@ seahorse_ssh_source_get_property (GObject *object, guint prop_id, GValue *value,
         g_value_set_uint (value, SKEY_SSH);
         break;
     case PROP_KEY_DESC:
-        g_value_set_string (value, _("SSH Key"));
+        g_value_set_string (value, _("Secure Shell Key"));
         break;
     case PROP_LOCATION:
         g_value_set_uint (value, SKEY_LOC_LOCAL);

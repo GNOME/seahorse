@@ -87,15 +87,15 @@ changed_key (SeahorseSSHKey *skey)
             
         /* No names when not even the fingerpint loaded */
         } else if (!skey->keydata->fingerprint) {
-            skey->priv->displayname = g_strdup (_("(Unreadable SSH Key)"));
+            skey->priv->displayname = g_strdup (_("(Unreadable Secure Shell Key)"));
     
         /* No comment, but loaded */        
         } else {
-            skey->priv->displayname = g_strdup (_("SSH Key"));
+            skey->priv->displayname = g_strdup (_("Secure Shell Key"));
         }
     
         if (skey->priv->simplename == NULL)
-            skey->priv->simplename = g_strdup (_("SSH Key"));
+            skey->priv->simplename = g_strdup (_("Secure Shell Key"));
         
     }
     
@@ -123,10 +123,10 @@ changed_key (SeahorseSSHKey *skey)
         
         if (skey->keydata->privfile) {
             key->etype = SKEY_PRIVATE;
-            key->keydesc = _("Private SSH Key");
+            key->keydesc = _("Private Secure Shell Key");
         } else {
             key->etype = SKEY_PUBLIC;
-            key->keydesc = _("Public SSH Key");
+            key->keydesc = _("Public Secure Shell Key");
         }
     }
     

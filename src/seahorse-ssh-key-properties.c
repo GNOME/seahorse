@@ -168,7 +168,7 @@ passphrase_done (SeahorseOperation *op, SeahorseWidget *swidget)
 
     if (!seahorse_operation_is_successful (op)) {
         seahorse_operation_copy_error (op, &err);
-        seahorse_util_handle_error (err, _("Couldn't change passhrase for SSH key."));
+        seahorse_util_handle_error (err, _("Couldn't change passhrase for key."));
     }
     
     w = glade_xml_get_widget (swidget->xml, "passphrase-button");

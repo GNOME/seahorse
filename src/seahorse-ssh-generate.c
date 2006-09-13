@@ -37,7 +37,7 @@ completion_handler (SeahorseOperation *op, gpointer data)
     GError *error = NULL;
     if (!seahorse_operation_is_successful (op)) {
         seahorse_operation_copy_error (op, &error);
-        seahorse_util_handle_error (error, _("Couldn't generate SSH key"));
+        seahorse_util_handle_error (error, _("Couldn't generate Secure Shell key"));
     }
 }
 
@@ -125,7 +125,7 @@ on_response (GtkDialog *dialog, guint response, SeahorseWidget *swidget)
     if (upload)
         seahorse_operation_watch (op, G_CALLBACK (upload_handler), NULL, NULL);
     
-    seahorse_progress_show (op, _("Creating SSH Key"), TRUE);
+    seahorse_progress_show (op, _("Creating Secure Shell Key"), TRUE);
     g_object_unref (op);
 }
 

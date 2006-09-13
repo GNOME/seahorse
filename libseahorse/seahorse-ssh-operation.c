@@ -132,7 +132,7 @@ watch_ssh_process (GPid pid, gint status, SeahorseSSHOperation *sop)
         /* Was killed */
         if (!WIFEXITED (status)) {
             seahorse_operation_mark_done (SEAHORSE_OPERATION (sop), FALSE, 
-                g_error_new (SEAHORSE_ERROR, 0, _("The SSH command was terminated unexpectedly.")));
+                g_error_new (SEAHORSE_ERROR, 0, _("The ssh command was terminated unexpectedly.")));
             
         /* Command failed */
         } else if (WEXITSTATUS (status) != 0) {
@@ -438,7 +438,7 @@ prompt_passphrase (SeahorseSSHOperation *sop, const gchar* title, const gchar* m
     if (pv->prompt_skey)
         display = seahorse_key_get_display_name (pv->prompt_skey);
     else 
-        display = g_strdup (_("SSH key"));
+        display = g_strdup (_("Secure Shell key"));
     msg = g_strdup_printf (message, display);
     g_free (display);
 
@@ -694,14 +694,14 @@ seahorse_ssh_operation_sync (SeahorseSSHSource *ssrc, const gchar *command,
     
     if (!WIFEXITED (status)) {
         g_critical ("SSH command didn't exit properly: %s", command);
-        g_set_error (error, SEAHORSE_ERROR, 0, "%s", _("The SSH command was terminated unexpectedly."));
+        g_set_error (error, SEAHORSE_ERROR, 0, "%s", _("The ssh command was terminated unexpectedly."));
         g_free (sout);
         g_free (serr);
         return NULL;
     }
     
     if (WEXITSTATUS (status) != 0) {
-        g_set_error (error, SEAHORSE_ERROR, 0, "%s", _("The SSH command failed."));
+        g_set_error (error, SEAHORSE_ERROR, 0, "%s", _("The ssh command failed."));
         g_warning ("SSH command failed: %s (%d)", command, WEXITSTATUS (status));
         if (serr && serr[0])
             g_warning ("SSH error output: %s", serr);
@@ -724,7 +724,7 @@ upload_password_cb (SeahorseSSHOperation *sop, const gchar* msg)
     DEBUG_OPERATION (("in upload_password_cb\n"));
 
     /* Just prompt over and over again */
-    return prompt_passphrase (sop, _("SSH Passphrase"), msg, NULL, FALSE);
+    return prompt_passphrase (sop, _("Secure Shell Passphrase"), msg, NULL, FALSE);
 }
 
 SeahorseOperation*  
@@ -887,7 +887,7 @@ generate_password_cb (SeahorseSSHOperation *sop, const gchar* msg)
 
     /* If the first time then prompt */
     if (!pv->prompt_dialog) {
-        return prompt_passphrase (sop, _("New SSH Passphrase"), 
+        return prompt_passphrase (sop, _("New Secure Shell Key Passphrase"), 
                 _("Enter a passphrase for your new SSH key."), NULL, TRUE);
     }
     
@@ -1026,7 +1026,7 @@ load_password_cb (SeahorseSSHOperation *sop, const gchar* msg)
     }
 #endif /* WITH_GNOME_KEYRING */
     
-    return prompt_passphrase (sop, _("SSH Key Passphrase"), _("Enter the SSH passphrase for: %s"), 
+    return prompt_passphrase (sop, _("Secure Shell Key Passphrase"), _("Enter the passphrase for: %s"), 
                               _("Save this passphrase in my keyring"), FALSE);
 }
 

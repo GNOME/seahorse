@@ -87,7 +87,7 @@ int main (int argc, char* argv[])
     if (argc > 1)
         message = g_strjoinv (" ", argv + 1);
     else 
-        message = g_strdup ("Enter your SSH passphrase:");
+        message = g_strdup ("Enter your Secure Shell passphrase:");
 
     /* Check if we're being handed a password from seahorse */
     pass = askpass_command ("PASSWORD", message);

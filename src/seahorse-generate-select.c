@@ -142,7 +142,7 @@ seahorse_generate_select_show ()
     add_key_type (store, SKEY_PGP, SEAHORSE_STOCK_SECRET, _("PGP Key"), 
                   _("Used to encrypt email and files"));
 #ifdef WITH_SSH
-    add_key_type (store, SKEY_SSH, SEAHORSE_STOCK_KEY_SSH, _("SSH Key"),
+    add_key_type (store, SKEY_SSH, SEAHORSE_STOCK_KEY_SSH, _("Secure Shell Key"),
                   _("Used to access other computers (eg: via a terminal)"));
 #endif /* WITH_SSH */
     

@@ -1151,8 +1151,8 @@ static const GtkActionEntry pgp_entries[] = {
 };
 
 static const GtkActionEntry ssh_entries[] = {
-    { "remote-upload-ssh", NULL, N_("Configure SSH Key for Computer..."), "",
-            N_("Send public SSH key to another machine, and enable logins using that key."), G_CALLBACK (setup_sshkey_activate) },
+    { "remote-upload-ssh", NULL, N_("Configure Key for Secure Shell..."), "",
+            N_("Send public Secure Shell key to another machine, and enable logins using that key."), G_CALLBACK (setup_sshkey_activate) },
 };
 
 static const GtkActionEntry keyserver_entries[] = {
