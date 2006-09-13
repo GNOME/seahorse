@@ -295,6 +295,13 @@ seahorse_prefs_cache (SeahorseWidget *swidget)
     GtkWidget *w, *w2;
     
     g_return_if_fail (swidget != NULL);
+
+    /* Initial values, then listen */
+    update_cache_choices (SETTING_CACHE, swidget);
+    update_cache_choices (SETTING_METHOD, swidget);
+    update_cache_choices (SETTING_TTL, swidget);
+    seahorse_gconf_notify_lazy (AGENT_SETTINGS, (GConfClientNotifyFunc)cache_gconf_notify, 
+                                swidget, swidget);
     
     w = seahorse_widget_get_widget (swidget, "no-cache");
     g_return_if_fail (w != NULL);
@@ -316,13 +323,6 @@ seahorse_prefs_cache (SeahorseWidget *swidget)
     g_return_if_fail (w != NULL);
     g_signal_connect_after (w, "value-changed", G_CALLBACK (save_ttl), swidget);
     
-    /* Initial values, then listen */
-    update_cache_choices (SETTING_CACHE, swidget);
-    update_cache_choices (SETTING_METHOD, swidget);
-    update_cache_choices (SETTING_TTL, swidget);
-    seahorse_gconf_notify_lazy (AGENT_SETTINGS, (GConfClientNotifyFunc)cache_gconf_notify, 
-                                swidget, swidget);
-                                
     /* Authorize check button */
     w = seahorse_widget_get_widget (swidget, "authorize");
     g_return_if_fail (w != NULL);
