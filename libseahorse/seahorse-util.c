@@ -1082,6 +1082,8 @@ void
 seahorse_util_free_keys (gpgme_key_t* keys)
 {
     gpgme_key_t* k = keys;
+    if (!keys)
+        return;
     while (*k)
         gpgmex_key_unref (*(k++));
     g_free (keys);

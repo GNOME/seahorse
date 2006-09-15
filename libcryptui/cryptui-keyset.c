@@ -557,7 +557,7 @@ cryptui_keyset_key_flags (CryptUIKeyset *keyset, const gchar *key)
 gchar*
 cryptui_keyset_key_raw_keyid (CryptUIKeyset *keyset, const gchar *key)
 {
-    return cryptui_keyset_key_get_string (keyset, key, "key-id");
+    return cryptui_keyset_key_get_string (keyset, key, "raw-id");
 }
 
 gchar**

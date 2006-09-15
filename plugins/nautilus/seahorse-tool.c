@@ -138,6 +138,10 @@ prompt_recipients (gpgme_key_t *signkey)
             gchar *id = cryptui_keyset_key_raw_keyid (keyset, signer);
             gerr = gpgme_get_key (ctx, id, signkey, 1);
             g_free (id);
+            
+            /* A more descriptive error message */
+            if (GPG_ERR_EOF == gpgme_err_code (gerr))
+                gerr = GPG_E (GPG_ERR_NOT_FOUND);
         }
         
         if (GPG_IS_OK (gerr)) {
