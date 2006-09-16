@@ -32,6 +32,10 @@
 #include "seahorse-ssh-key.h"
 #endif
 
+#ifdef WITH_GNOME_KEYRING
+#include "seahorse-gkeyring-item.h"
+#endif
+
 void        seahorse_key_properties_new (SeahorsePGPKey     *pkey);
 
 #ifdef WITH_SSH
@@ -43,6 +47,12 @@ void        seahorse_ssh_upload_prompt  (GList *keys);
 void        seahorse_ssh_generate_show  (SeahorseSSHSource  *sksrc);
 
 #endif /* WITH_SSH */
+
+#ifdef WITH_GNOME_KEYRING
+
+void        seahorse_gkeyring_item_properties_new (SeahorseGKeyringItem *git);
+
+#endif /* WITH_GNOME_KEYRING */
 
 
 void        seahorse_pgp_generate_show  (SeahorsePGPSource  *sksrc);

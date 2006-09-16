@@ -20,7 +20,7 @@
 
 /* 
  * Originally from pinentry in gnupg.
- * Modifications and cleanup by Nate Nielsen 
+ * Modifications cleanup and integration with glib by Nate Nielsen 
  */
 
 #include "config.h"
@@ -29,6 +29,7 @@
 #include <errno.h>
 #include <unistd.h>
 #include <string.h> 
+#include <stdlib.h>
 
 #if defined(HAVE_MLOCK) || defined(HAVE_MMAP)
 #include <sys/mman.h>
@@ -40,6 +41,99 @@
 #endif
 
 #include "seahorse-secure-memory.h"
+
+/* extern declared in seahorse-secure-memory.h */
+gboolean seahorse_use_secure_mem = FALSE;
+
+#ifndef DEBUG_SECMEM_ENABLE
+#if _DEBUG
+#define DEBUG_SECMEM_ENABLE 1
+#else
+#define DEBUG_SECMEM_ENABLE 0
+#endif
+#endif
+
+#if DEBUG_SECMEM_ENABLE
+#define DEBUG_SECMEM(x) g_printerr x
+#else
+#define DEBUG_SECMEM(x) 
+#endif
+
+gpointer
+g_malloc (gulong size)
+{
+    gpointer p;
+
+    if (size == 0)
+        return NULL;
+    if (seahorse_use_secure_mem)
+        p = (gpointer) seahorse_secure_memory_malloc (size);
+    else
+        p = (gpointer) malloc (size);
+    if (!p)
+        g_error ("could not allocate %ld bytes", size);
+    return p;
+}
+
+gpointer
+g_malloc0 (gulong size)
+{
+    gpointer p;
+
+    if (size == 0)
+        return NULL;
+    if (seahorse_use_secure_mem) {
+        p = (gpointer) seahorse_secure_memory_malloc (size);
+        if (p)
+            memset (p, 0, size);
+    } else
+        p = (gpointer) calloc (size, 1);
+    if (!p)
+        g_error("could not allocate %ld bytes", size);
+    return p;
+}
+
+gpointer
+g_realloc (gpointer mem, gulong size)
+{
+    gpointer p;
+
+    if (size == 0) {
+        g_free (mem);
+        return NULL;
+    }
+
+    if (!mem) {
+        if (seahorse_use_secure_mem)
+            p = (gpointer) seahorse_secure_memory_malloc (size);
+        else
+            p = (gpointer) malloc (size);
+    } else {
+        if (seahorse_use_secure_mem) {
+            g_assert (seahorse_secure_memory_check (mem));
+            p = (gpointer) seahorse_secure_memory_realloc (mem, size);
+    } else
+        p = (gpointer) realloc(mem, size);
+    }
+
+    if (!p)
+        g_error("could not reallocate %lu bytes", (gulong) size);
+
+    return p;
+}
+
+void
+g_free(gpointer mem)
+{
+    if (mem) {
+        if (seahorse_secure_memory_check (mem))
+            seahorse_secure_memory_free (mem);
+        else
+            free (mem);
+    }
+}
+
+/* -------------------------------------------------------------------------- */
 
 /* 
  * To avoid that a compiler optimizes certain memset calls away, these
@@ -198,7 +292,7 @@ init_pool( size_t n)
 #endif /* HAVE_MMAP */
     
     if( !pool_okay ) {
-        pool = g_malloc (poolsize);
+        pool = malloc (poolsize);
         g_assert (pool);
         pool_okay = 1;
     }
@@ -259,6 +353,8 @@ seahorse_secure_memory_malloc (size_t size)
     size += sizeof (MEMBLOCK);
     size = ((size + 31) / 32) * 32;
 
+    DEBUG_SECMEM(("SECMEM: allocating %0x bytes\n", size));
+
 retry:
     /* try to get it from the used blocks */
     for (mb = unused_blocks, mb2 = NULL; mb; mb2 = mb, mb = mb->u.next) {
@@ -303,8 +399,11 @@ seahorse_secure_memory_realloc (void *p, size_t newsize)
 
     mb = (MEMBLOCK*)((char*)p - ((size_t) &((MEMBLOCK*)0)->u.aligned.c));
     size = mb->size;
+    
     if( newsize < size )
         return p; /* it is easier not to shrink the memory */
+    
+    DEBUG_SECMEM(("SECMEM: reallocating %x bytes to %x\n", size, newsize));
     
     a = seahorse_secure_memory_malloc (newsize);
     memcpy (a, p, size);
@@ -324,6 +423,8 @@ seahorse_secure_memory_free (void *a)
 
     mb = (MEMBLOCK*)((char*)a - ((size_t) &((MEMBLOCK*)0)->u.aligned.c));
     size = mb->size;
+    
+    DEBUG_SECMEM(("SECMEM: freeing %x bytes\n", size));
     
     /* This does not make much sense: probably this memory is held in the
      * cache. We do it anyway: */

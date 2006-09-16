@@ -112,12 +112,18 @@ maybe_remove_key (SeahorseKeyset *skset, SeahorseKey *skey)
 static void
 key_added (SeahorseContext *sctx, SeahorseKey *skey, SeahorseKeyset *skset)
 {
+    g_assert (SEAHORSE_IS_KEY (skey));
+    g_assert (SEAHORSE_IS_KEYSET (skset));
+
     maybe_add_key (skset, skey);
 }
 
 static void 
 key_removed (SeahorseContext *sctx, SeahorseKey *skey, SeahorseKeyset *skset)
 {
+    g_assert (SEAHORSE_IS_KEY (skey));
+    g_assert (SEAHORSE_IS_KEYSET (skset));
+
     maybe_remove_key (skset, skey);
 }
 
@@ -126,6 +132,10 @@ key_changed (SeahorseContext *sctx, SeahorseKey *skey, SeahorseKeyChange change,
              SeahorseKeyset *skset)
 {
     gpointer closure = g_hash_table_lookup (skset->pv->keys, skey);
+
+    g_assert (SEAHORSE_IS_KEY (skey));
+    g_assert (SEAHORSE_IS_KEYSET (skset));
+
     if (closure) {
         
         /* See if needs to be removed, otherwise emit signal */

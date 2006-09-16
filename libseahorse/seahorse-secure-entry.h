@@ -113,6 +113,11 @@ struct _SeahorseSecureEntry {
 
     gunichar invisible_char;
     gint width_chars;
+    
+    gboolean visibility;
+    
+    /* Keeps track of whether changed between resets */
+    gboolean changed;
 };
 
 struct _SeahorseSecureEntryClass {
@@ -135,6 +140,14 @@ struct _SeahorseSecureEntryClass {
 GType               seahorse_secure_entry_get_type              (void) G_GNUC_CONST;
 
 GtkWidget*          seahorse_secure_entry_new                   (void);
+
+void                seahorse_secure_entry_reset_changed         (SeahorseSecureEntry *entry);
+
+gboolean            seahorse_secure_entry_get_changed           (SeahorseSecureEntry *entry);
+
+void                seahorse_secure_entry_set_visibility        (SeahorseSecureEntry *entry, gboolean setting);
+
+gboolean            seahorse_secure_entry_get_visibility        (SeahorseSecureEntry *entry);
 
 void                seahorse_secure_entry_set_invisible_char    (SeahorseSecureEntry *entry, gunichar ch);
 

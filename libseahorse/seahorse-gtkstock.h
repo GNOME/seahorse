@@ -38,6 +38,8 @@
 #define SEAHORSE_STOCK_SIGN_UNKNOWN "seahorse-sign-unknown"
 #define SEAHORSE_STOCK_SHARING      "seahorse-share-keys"
 
+#define SEAHORSE_THEMED_WEBBROWSER  "web-browser"
+
 void    seahorse_gtkstock_init          (void);
 
 void    seahorse_gtkstock_add_icons     (const gchar **icons);

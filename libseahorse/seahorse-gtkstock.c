@@ -43,16 +43,29 @@ static const gchar *seahorse_icons[] = {
     NULL
 };
 
-void
-seahorse_gtkstock_init(void)
+static const gchar *themed_icons[] = {
+    SEAHORSE_THEMED_WEBBROWSER,
+    NULL
+};
+
+static GtkIconSource*
+make_theme_source (const gchar *icon, GtkIconSize size)
 {
-    static gboolean stock_initted = FALSE;
+    GtkIconSource *source;
 
-    if (stock_initted)
-        return;
-
-    stock_initted = TRUE;
-    seahorse_gtkstock_add_icons (seahorse_icons);
+    source = gtk_icon_source_new ();
+    gtk_icon_source_set_icon_name (source, icon);
+    gtk_icon_source_set_direction_wildcarded (source, TRUE);
+    gtk_icon_source_set_state_wildcarded (source, TRUE);
+    
+    if (size == -1) {
+        gtk_icon_source_set_size_wildcarded (source, TRUE);
+    } else {
+        gtk_icon_source_set_size_wildcarded (source, FALSE);
+        gtk_icon_source_set_size (source, size);
+    }
+    
+    return source;
 }
 
 static GtkIconSource*
@@ -81,8 +94,8 @@ make_icon_source (const gchar *icon, const gchar *base, const gchar *ext,
     return source;
 }
 
-void
-seahorse_gtkstock_add_icons (const gchar **icons)
+static void
+add_icons (const gchar **icons, const gchar **themed)
 {
     GtkIconFactory *factory;
     GtkIconSource *source;
@@ -97,8 +110,6 @@ seahorse_gtkstock_add_icons (const gchar **icons)
     win = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_widget_realize(win);
     
-    /* TODO: Implement differently sized icons here */
-
     for ( ; *icons; icons++) {
 
         iconset = gtk_icon_set_new ();
@@ -126,6 +137,51 @@ seahorse_gtkstock_add_icons (const gchar **icons)
         gtk_icon_set_unref (iconset);
     }
     
+    for ( ; themed && *themed; themed++) {
+
+        iconset = gtk_icon_set_new ();
+        
+        source = make_theme_source (*themed, GTK_ICON_SIZE_BUTTON);
+        gtk_icon_set_add_source (iconset, source);
+        gtk_icon_source_free (source);
+        source = make_theme_source (*themed, GTK_ICON_SIZE_MENU);
+        gtk_icon_set_add_source (iconset, source);
+        gtk_icon_source_free (source);
+        source = make_theme_source (*themed, GTK_ICON_SIZE_LARGE_TOOLBAR);
+        gtk_icon_set_add_source (iconset, source);
+        gtk_icon_source_free (source);
+        source = make_theme_source (*themed, GTK_ICON_SIZE_SMALL_TOOLBAR);
+        gtk_icon_set_add_source (iconset, source);
+        gtk_icon_source_free (source);
+        source = make_theme_source (*themed, GTK_ICON_SIZE_DIALOG);
+        gtk_icon_set_add_source (iconset, source);
+        gtk_icon_source_free (source);
+        source = make_theme_source (*themed, -1);
+        gtk_icon_set_add_source (iconset, source);
+        gtk_icon_source_free (source);
+        
+        gtk_icon_factory_add (factory, *themed, iconset);
+        gtk_icon_set_unref (iconset);
+    }
+    
     gtk_widget_destroy (win);
     g_object_unref (factory);
+}
+
+void
+seahorse_gtkstock_init(void)
+{
+    static gboolean stock_initted = FALSE;
+
+    if (stock_initted)
+        return;
+
+    stock_initted = TRUE;
+    add_icons (seahorse_icons, themed_icons);
+}
+
+void
+seahorse_gtkstock_add_icons (const gchar **icons)
+{
+    add_icons (icons, NULL);
 }

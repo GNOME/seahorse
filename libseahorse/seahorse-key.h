@@ -97,7 +97,8 @@ typedef enum {
     SKEY_ETYPE_NONE =       CRYPTUI_ENCTYPE_NONE,       /* Any encryption type */
     SKEY_SYMMETRIC =        CRYPTUI_ENCTYPE_SYMMETRIC,  /* A symmetric key */
     SKEY_PUBLIC =           CRYPTUI_ENCTYPE_PUBLIC,     /* A public key */
-    SKEY_PRIVATE =          CRYPTUI_ENCTYPE_PRIVATE     /* A private key (assumes public/keypair)*/
+    SKEY_PRIVATE =          CRYPTUI_ENCTYPE_PRIVATE,    /* A private key (assumes public/keypair) */
+    SKEY_CREDENTIALS                                    /* Credentials (ie: from gnome-keyring) */
 } SeahorseKeyEType;
 
 typedef enum {

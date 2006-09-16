@@ -783,9 +783,6 @@ seahorse_load_operation_start (SeahorsePGPSource *psrc, const gchar **pattern, g
      
         lop->all = all;
         
-        /* This hashtable contains only allocated strings with no 
-         * values. We allocate the strings in case a key goes away
-         * while we're holding the ids in this table */
         lop->checks = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, NULL);
         
         keys = seahorse_context_get_keys (SCTX_APP (), SEAHORSE_KEY_SOURCE (psrc));

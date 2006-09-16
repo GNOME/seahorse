@@ -26,6 +26,15 @@ else
 SSH_SRCS = 
 endif
 
+if WITH_GNOME_KEYRING
+GNOME_KEYRING_SRCS = seahorse-gkeyring-item.c seahorse-gkeyring-item.h 
+GNOME_KEYRING_SRCS += seahorse-gkeyring-source.c seahorse-gkeyring-source.h
+GNOME_KEYRING_SRCS += seahorse-gkeyring-operation.c seahorse-gkeyring-operation.h
+GNOME_KEYRING_SRCS += seahorse-gkeyring-item-properties.c
+else
+GNOME_KEYRING_SRCS = 
+endif
+
 bin_PROGRAMS = seahorse
 
 seahorse_SOURCES = main.c \
@@ -45,6 +54,7 @@ seahorse_SOURCES = main.c \
 	seahorse-add-subkey.c \
 	seahorse-key-dialogs.h \
 	$(KEYSERVER_SRCS) \
+    $(GNOME_KEYRING_SRCS) \
     $(SSH_SRCS)
 
 seahorse_LDADD = \
@@ -61,6 +71,7 @@ glade_DATA = \
 	seahorse-ssh-key-properties.glade \
 	seahorse-ssh-upload.glade \
 	seahorse-ssh-generate.glade \
+	seahorse-gkeyring-item-properties.glade \
 	seahorse-revoke.glade \
 	seahorse-expires.glade \
 	seahorse-change-passphrase.glade \

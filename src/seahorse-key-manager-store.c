@@ -123,8 +123,8 @@ get_base_iter (SeahorseKeyManagerStore *skstore, GtkTreeIter *base_iter,
                const GtkTreeIter *iter)
 {
     GtkTreeIter i;
-    
     g_assert (skstore->priv->sort && skstore->priv->filter);
+    
     gtk_tree_model_sort_convert_iter_to_child_iter (skstore->priv->sort, &i, (GtkTreeIter*)iter);
     gtk_tree_model_filter_convert_iter_to_child_iter (skstore->priv->filter, base_iter, &i);
 }
@@ -325,7 +325,7 @@ update_key_row (SeahorseKeyManagerStore *skstore, SeahorseKey *skey, guint uid,
         g_object_get (skstore->skset, "predicate", &pred, NULL);
         
         /* If mixed etypes, then get specific description */
-        if (pred->etype == 0) {
+        if (pred->etype == 0 || pred->etype == SKEY_CREDENTIALS) {
             type = g_strdup (seahorse_key_get_desc (skey));
             
         /* Otherwise general description */
@@ -956,14 +956,16 @@ seahorse_key_manager_store_new (SeahorseKeyset *skset, GtkTreeView *view)
     gtk_tree_view_append_column (view, col);
     gtk_tree_view_set_expander_column (view, col);
     gtk_tree_view_column_set_sort_column_id (col, COL_NAME);
-    
-    /* Key ID column */
-    col = append_text_column (skstore, view, _("Key ID"), COL_KEYID);
-    gtk_tree_view_column_set_sort_column_id (col, COL_KEYID);
 
     /* Use predicate to figure out which columns to add */
     g_object_get (skset, "predicate", &pred, NULL);
     
+    /* Key ID column, don't show for passwords */
+    if (pred->etype != SKEY_CREDENTIALS) {
+        col = append_text_column (skstore, view, _("Key ID"), COL_KEYID);
+        gtk_tree_view_column_set_sort_column_id (col, COL_KEYID);
+    }
+
     /* Public keys show validity */
     if (pred->etype == SKEY_PUBLIC) {
         col = append_text_column (skstore, view, _("Validity"), COL_VALIDITY_STR);

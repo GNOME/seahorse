@@ -32,7 +32,7 @@
  * (C) by Albrecht Dreß 2004 unter the terms of the GNU Lesser General
  * Public License.
  *
- * The entry is now always invisible, uses secure memory methods to
+ * The entry is invisible by default, uses secure memory methods to
  * allocate the text memory, and all potentially dangerous methods
  * (copy & paste, popup, etc.) have been removed.
  */
@@ -82,7 +82,8 @@ enum {
     PROP_ACTIVATES_DEFAULT,
     PROP_WIDTH_CHARS,
     PROP_SCROLL_OFFSET,
-    PROP_TEXT
+    PROP_TEXT,
+    PROP_VISIBILITY
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -179,93 +180,6 @@ static void _gtk_marshal_VOID__ENUM_INT (GClosure *closure, GValue *return_value
                                          const GValue *param_values, gpointer invocation_hint, gpointer marshal_data);
 
 static GtkWidgetClass *parent_class = NULL;
-gboolean use_secure_mem = FALSE;
-
-#define g_sec_new(type, count)    \
-      ((type *) g_sec_malloc ((unsigned) sizeof (type) * (count)))
-
-#define WITH_SECURE_MEM(EXP) \
-    do { \
-        gboolean tmp = use_secure_mem; \
-        use_secure_mem = TRUE; \
-        EXP; \
-        use_secure_mem = tmp; \
-    } while (0)
-
-
-gpointer
-g_malloc (gulong size)
-{
-    gpointer p;
-
-    if (size == 0)
-        return NULL;
-    if (use_secure_mem)
-        p = (gpointer) seahorse_secure_memory_malloc (size);
-    else
-        p = (gpointer) malloc (size);
-    if (!p)
-        g_error ("could not allocate %ld bytes", size);
-    return p;
-}
-
-gpointer
-g_malloc0 (gulong size)
-{
-    gpointer p;
-
-    if (size == 0)
-        return NULL;
-    if (use_secure_mem) {
-        p = (gpointer) seahorse_secure_memory_malloc (size);
-        if (p)
-            memset (p, 0, size);
-    } else
-        p = (gpointer) calloc (size, 1);
-    if (!p)
-        g_error("could not allocate %ld bytes", size);
-    return p;
-}
-
-gpointer
-g_realloc (gpointer mem, gulong size)
-{
-    gpointer p;
-
-    if (size == 0) {
-        g_free (mem);
-        return NULL;
-    }
-
-    if (!mem) {
-        if (use_secure_mem)
-            p = (gpointer) seahorse_secure_memory_malloc (size);
-        else
-            p = (gpointer) malloc (size);
-    } else {
-        if (use_secure_mem) {
-            g_assert (seahorse_secure_memory_check (mem));
-            p = (gpointer) seahorse_secure_memory_realloc (mem, size);
-    } else
-        p = (gpointer) realloc(mem, size);
-    }
-
-    if (!p)
-        g_error("could not reallocate %lu bytes", (gulong) size);
-
-    return p;
-}
-
-void
-g_free(gpointer mem)
-{
-    if (mem) {
-        if (seahorse_secure_memory_check (mem))
-            seahorse_secure_memory_free (mem);
-        else
-            free (mem);
-    }
-}
 
 GType
 seahorse_secure_entry_get_type(void)
@@ -392,6 +306,10 @@ seahorse_secure_entry_class_init(SeahorseSecureEntryClass *class)
     g_object_class_install_property (gobject_class, PROP_TEXT,
         g_param_spec_string("text", _("Text"), _("The contents of the entry"),
                             "", G_PARAM_READABLE | G_PARAM_WRITABLE));
+                            
+    g_object_class_install_property (gobject_class, PROP_VISIBILITY,
+        g_param_spec_boolean ("visibility", _("Visibility"), _("Whether contents are drawn using invisible character"),
+                              FALSE, G_PARAM_READWRITE));
 
     /* Action signals */
 
@@ -519,6 +437,10 @@ seahorse_secure_entry_set_property (GObject *object, guint prop_id,
     case PROP_TEXT:
         seahorse_secure_entry_set_text(entry, g_value_get_string(value));
         break;
+    
+    case PROP_VISIBILITY:
+        seahorse_secure_entry_set_visibility (entry, g_value_get_boolean (value));
+        break;
 
     case PROP_SCROLL_OFFSET:
     case PROP_CURSOR_POSITION:
@@ -562,7 +484,10 @@ seahorse_secure_entry_get_property (GObject *object, guint prop_id,
     case PROP_TEXT:
         g_value_set_string(value, seahorse_secure_entry_get_text(entry));
         break;
-
+    case PROP_VISIBILITY:
+        g_value_set_boolean (value, seahorse_secure_entry_get_visibility (entry));
+        break;
+    
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
         break;
@@ -585,6 +510,7 @@ seahorse_secure_entry_init (SeahorseSecureEntry *entry)
     WITH_SECURE_MEM (entry->text = g_malloc(entry->text_size));
     entry->text[0] = '\0';
 
+    entry->visibility = FALSE;
     entry->invisible_char = 0x25cf;
     entry->width_chars = -1;
     entry->is_cell_renderer = FALSE;
@@ -1377,6 +1303,7 @@ seahorse_secure_entry_real_insert_text (GtkEditable *editable, const gchar *new_
 
     seahorse_secure_entry_recompute (entry);
 
+    entry->changed = TRUE;
     g_signal_emit_by_name (editable, "changed");
     g_object_notify (G_OBJECT (editable), "text");
 }
@@ -1415,6 +1342,7 @@ seahorse_secure_entry_real_delete_text (GtkEditable *editable, gint start_pos,
 
         seahorse_secure_entry_recompute (entry);
 
+        entry->changed = TRUE;
         g_signal_emit_by_name (editable, "changed");
         g_object_notify (G_OBJECT (editable), "text");
     }
@@ -1782,19 +1710,31 @@ seahorse_secure_entry_recompute (SeahorseSecureEntry *entry)
     }
 }
 
-static void
-append_char (GString * str, gunichar ch, gint count)
+static gunichar
+build_string (SeahorseSecureEntry *entry, GString *str, gint extra)
 {
-    gint i;
-    gint char_len;
+    gint i, count, char_len;
+    gunichar invisible_char;
     gchar buf[7];
-
-    char_len = g_unichar_to_utf8 (ch, buf);
-
-    i = 0;
-    while (i < count) {
-        g_string_append_len(str, buf, char_len);
-        ++i;
+    
+    if (entry->visibility) {
+        g_string_append_len (str, entry->text, entry->n_bytes);
+        return 0;
+        
+    } else {
+        
+        if (entry->invisible_char != 0)
+            invisible_char = entry->invisible_char;
+        else
+            invisible_char = ' '; /* just pick a char */
+        
+        count = g_utf8_strlen (entry->text, entry->n_bytes) + extra;
+        
+        char_len = g_unichar_to_utf8 (entry->invisible_char, buf);
+        for (i = 0; i < count; i++)
+            g_string_append_len(str, buf, char_len);
+        
+        return invisible_char;
     }
 }
 
@@ -1823,30 +1763,20 @@ seahorse_secure_entry_create_layout (SeahorseSecureEntry * entry, gboolean inclu
         gint cursor_index = g_utf8_offset_to_pointer (entry->text, entry->current_pos) -
         entry->text;
 
-        gint ch_len;
         gint preedit_len_chars;
         gunichar invisible_char;
 
-        ch_len = g_utf8_strlen (entry->text, entry->n_bytes);
         preedit_len_chars = g_utf8_strlen (preedit_string, -1);
-        ch_len += preedit_len_chars;
-
-        if (entry->invisible_char != 0)
-            invisible_char = entry->invisible_char;
-        else
-            invisible_char = ' '; /* just pick a char */
-    
-        append_char (tmp_string, invisible_char, ch_len);
+        invisible_char = build_string (entry, tmp_string, preedit_len_chars);
     
         /* 
          * Fix cursor index to point to invisible char corresponding
          * to the preedit, fix preedit_length to be the length of
          * the invisible chars representing the preedit
          */
-        cursor_index = g_utf8_offset_to_pointer (tmp_string->str, entry->current_pos) -
-        tmp_string->str;
-        preedit_length =
-        preedit_len_chars * g_unichar_to_utf8 (invisible_char, NULL);
+        cursor_index = 
+            g_utf8_offset_to_pointer (tmp_string->str, entry->current_pos) - tmp_string->str;
+        preedit_length = preedit_len_chars * g_unichar_to_utf8 (invisible_char, NULL);
     
         pango_layout_set_text (layout, tmp_string->str, tmp_string->len);
     
@@ -1878,14 +1808,7 @@ seahorse_secure_entry_create_layout (SeahorseSecureEntry * entry, gboolean inclu
 
         {
             GString *str = g_string_new (NULL);
-            gunichar invisible_char;
-
-            if (entry->invisible_char != 0)
-                invisible_char = entry->invisible_char;
-            else
-                invisible_char = ' ';   /* just pick a char */
-
-            append_char (str, invisible_char, entry->text_length);
+            build_string (entry, str, 0);
             pango_layout_set_text (layout, str->str, str->len);
             g_string_free (str, TRUE);
         }
@@ -2403,13 +2326,48 @@ seahorse_secure_entry_set_position(SeahorseSecureEntry *entry, gint position)
     gtk_editable_set_position (GTK_EDITABLE (entry), position);
 }
 
+void 
+seahorse_secure_entry_reset_changed (SeahorseSecureEntry *entry)
+{
+    g_return_if_fail (SEAHORSE_IS_SECURE_ENTRY (entry));
+    entry->changed = FALSE;
+}
+
+gboolean
+seahorse_secure_entry_get_changed (SeahorseSecureEntry *entry)
+{
+    g_return_val_if_fail (SEAHORSE_IS_SECURE_ENTRY (entry), FALSE);
+    return entry->changed;
+}
+
+void
+seahorse_secure_entry_set_visibility (SeahorseSecureEntry *entry, gboolean setting)
+{
+    g_return_if_fail (SEAHORSE_IS_SECURE_ENTRY (entry));
+
+    if (setting == entry->visibility)
+        return;
+
+    entry->visibility = setting;
+    g_object_notify (G_OBJECT (entry), "visibility");
+    seahorse_secure_entry_recompute (entry);
+}
+
+gboolean
+seahorse_secure_entry_get_visibility (SeahorseSecureEntry *entry)
+{
+    g_return_val_if_fail (SEAHORSE_IS_SECURE_ENTRY (entry), FALSE);
+    return entry->visibility;
+}
+
+
 /**
  * seahorse_secure_entry_set_invisible_char:
  * @entry: a #SeahorseSecureEntry
  * @ch: a Unicode character
  * 
  * Sets the character to use in place of the actual text when
- * seahorse_secure_entry_set_visibility() has been called to set text visibility
+ * seahorse_secure_entry_set_visibility() has been called to set text 
  * to %FALSE. i.e. this is the character used in "password mode" to
  * show the user how many characters have been typed. The default
  * invisible char is an asterisk ('*').  If you set the invisible char

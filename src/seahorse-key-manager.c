@@ -51,12 +51,21 @@
 #include "seahorse-ssh-key.h"
 #endif
 
+#ifdef WITH_GNOME_KEYRING
+#include "seahorse-gkeyring-item.h"
+#include "seahorse-gkeyring-source.h"
+#endif
+
+#define TRACK_SELECTED_KEY    "track-selected-keyid"
+#define TRACK_SELECTED_TAB    "track-selected-tabid"
+
 /* The various tabs. If adding a tab be sure to fix 
    logic throughout this file. */
 enum KeyManagerTabs {
     TAB_PUBLIC = 1,
     TAB_TRUSTED,
     TAB_PRIVATE,
+    TAB_PASSWORD,
     HIGHEST_TAB
 };
 
@@ -90,12 +99,46 @@ SeahorseKeyPredicate pred_private = {
     NULL,               /* sksrc */
 };
 
+SeahorseKeyPredicate pred_password = {
+    0,                  /* ktype, set later */
+    0,                  /* keyid */
+    SKEY_LOC_LOCAL,     /* location */
+    SKEY_CREDENTIALS,   /* etype */
+    0,                  /* flags */
+    0,                  /* nflags */
+    NULL,               /* sksrc */
+};
+
 #define SEC_RING "/secring.gpg"
 #define PUB_RING "/pubring.gpg"
 
 static void selection_changed (GtkTreeSelection *notused, SeahorseWidget *swidget);
 
 /* SIGNAL CALLBACKS --------------------------------------------------------- */
+
+#ifdef WITH_GNOME_KEYRING
+
+/* Loads gnome-keyring keys when first accessed */
+static void
+load_gkeyring_items (SeahorseWidget *swidget, SeahorseContext *sctx)
+{
+    SeahorseGKeyringSource *gsrc;
+    SeahorseOperation *op;
+    
+    if (g_object_get_data (G_OBJECT (sctx), "loaded-gnome-keyring-items"))
+        return;
+    
+    g_object_set_data (G_OBJECT (sctx), "loaded-gnome-keyring-items", GUINT_TO_POINTER (TRUE));
+    
+    gsrc = seahorse_gkeyring_source_new (NULL);
+    seahorse_context_take_key_source (sctx, SEAHORSE_KEY_SOURCE (gsrc));
+    op = seahorse_key_source_load (SEAHORSE_KEY_SOURCE (gsrc), SKSRC_LOAD_ALL, 0, NULL);
+    
+    /* Monitor loading progress */
+    seahorse_progress_status_set_operation (swidget, op);
+}
+
+#endif /* WITH_GNOME_KEYRING */
 
 /* Quits seahorse */
 static void
@@ -201,6 +244,9 @@ get_tab_view (SeahorseWidget *swidget, guint tabid)
         break;
     case TAB_TRUSTED:
         name = "trust-key-list";
+        break;
+    case TAB_PASSWORD:
+        name = "password-list";
         break;
     default:
         g_return_val_if_reached (NULL);
@@ -312,12 +358,15 @@ show_properties (SeahorseKey *skey)
     g_assert (skey);
     
     if (SEAHORSE_IS_PGP_KEY (skey))
-		seahorse_key_properties_new (SEAHORSE_PGP_KEY (skey));
+        seahorse_key_properties_new (SEAHORSE_PGP_KEY (skey));
 #ifdef WITH_SSH    
     else if (SEAHORSE_IS_SSH_KEY (skey))
         seahorse_ssh_key_properties_new (SEAHORSE_SSH_KEY (skey));
 #endif 
-    
+#ifdef WITH_GNOME_KEYRING
+    else if (SEAHORSE_IS_GKEYRING_ITEM (skey))
+        seahorse_gkeyring_item_properties_new (SEAHORSE_GKEYRING_ITEM (skey));
+#endif
 }
 
 /* Loads generate dialog */
@@ -847,10 +896,12 @@ selection_changed (GtkTreeSelection *notused, SeahorseWidget *swidget)
     GList *keys, *l;
     SeahorseKey *skey = NULL;
     gint ktype = 0;
+    gboolean dotracking = TRUE;
     gboolean selected = FALSE;
     gboolean secret = FALSE;
     gint rows = 0;
     GQuark keyid;
+    guint tabid;
     
     view = get_current_view (swidget);
     if (view != NULL) {
@@ -858,10 +909,18 @@ selection_changed (GtkTreeSelection *notused, SeahorseWidget *swidget)
         rows = gtk_tree_selection_count_selected_rows (selection);
         selected = rows > 0;
     }
+    
+    /* See which tab we're on, if different from previous, no tracking */
+    tabid = get_tab_id (get_current_tab (swidget));
+    if (tabid != GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (swidget), TRACK_SELECTED_TAB))) {
+        dotracking = FALSE;
+        g_object_set_data (G_OBJECT (swidget), TRACK_SELECTED_TAB, GUINT_TO_POINTER (tabid));
+    }
+    
 
     /* Retrieve currently tracked, and reset tracking */
-    keyid = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (swidget), "track-selected-keyid"));
-    g_object_set_data (G_OBJECT (swidget), "track-selected-keyid", NULL);
+    keyid = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (swidget), TRACK_SELECTED_KEY));
+    g_object_set_data (G_OBJECT (swidget), TRACK_SELECTED_KEY, NULL);
     
     /* no selection, see if selected key moved to another tab */
     if (rows == 0 && keyid) {
@@ -875,7 +934,7 @@ selection_changed (GtkTreeSelection *notused, SeahorseWidget *swidget)
             if (tab && tab != get_current_tab (swidget)) {
 
                 /* Make sure we don't end up in a loop  */
-                g_assert (!g_object_get_data (G_OBJECT (swidget), "track-selected-keyid"));
+                g_assert (!g_object_get_data (G_OBJECT (swidget), TRACK_SELECTED_KEY));
                 set_selected_key (swidget, skey);
             }
         }
@@ -905,8 +964,8 @@ selection_changed (GtkTreeSelection *notused, SeahorseWidget *swidget)
         /* If one key is selected then mark it down for following across tabs */
         if (g_list_length (keys) == 1) {
             skey = SEAHORSE_KEY (keys->data);
-            g_object_set_data (G_OBJECT (swidget), "track-selected-keyid", 
-                                GUINT_TO_POINTER (seahorse_key_get_keyid (skey)));
+            g_object_set_data (G_OBJECT (swidget), TRACK_SELECTED_KEY, 
+                               GUINT_TO_POINTER (seahorse_key_get_keyid (skey)));
         }
         
         g_list_free (keys);
@@ -1005,7 +1064,20 @@ tab_changed (GtkWidget *widget, GtkNotebookPage *page, guint page_num,
     g_return_if_fail (entry != NULL);
     gtk_entry_set_text (GTK_ENTRY (entry), "");
     
+    /* Don't track the selected key when tab is changed on purpose */
+    g_object_set_data (G_OBJECT (swidget), TRACK_SELECTED_KEY, NULL);
+    
     selection_changed (NULL, swidget);
+    
+    /* 
+     * Because gnome-keyring can throw prompts etc... we delay loading 
+     * of the gnome keyring items until we first access them. 
+     */
+    
+#ifdef WITH_GNOME_KEYRING
+    if (get_tab_id (get_current_tab (swidget)) == TAB_PASSWORD)
+        load_gkeyring_items (swidget, SCTX_APP ());
+#endif
 }
 
 static gboolean
@@ -1199,14 +1271,18 @@ initialize_tab (SeahorseWidget *swidget, const gchar *tabwidget, guint tabid,
 GtkWindow* 
 seahorse_key_manager_show (SeahorseOperation *op)
 {
-    GtkWindow *win;
     SeahorseWidget *swidget;
+    GtkNotebook *notebook;
     GtkWidget *w;
+    GtkWindow *win;
     GtkActionGroup *actions;
     GtkAction *action;
     
     swidget = seahorse_widget_new ("key-manager");
-    win = GTK_WINDOW (glade_xml_get_widget (swidget->xml, "key-manager"));
+    win = GTK_WINDOW (seahorse_widget_get_top (swidget));
+    
+    notebook = GTK_NOTEBOOK (seahorse_widget_get_widget (swidget, "notebook"));
+    g_return_val_if_fail (notebook != NULL, win);
     
     /* General normal actions */
     actions = gtk_action_group_new ("main");
@@ -1288,13 +1364,25 @@ seahorse_key_manager_show (SeahorseOperation *op)
 		G_CALLBACK (new_button_clicked), swidget);
 
     /* The notebook */
-    glade_xml_signal_connect_data (swidget->xml, "on_tab_changed", 
-                                  G_CALLBACK(tab_changed), swidget);    
+    g_signal_connect_after (notebook, "switch-page", G_CALLBACK(tab_changed), swidget);
     
     /* Initialize the tabs, and associate them up */
     initialize_tab (swidget, "pub-key-tab", TAB_PUBLIC, "pub-key-list", &pred_public);
     initialize_tab (swidget, "trust-key-tab", TAB_TRUSTED, "trust-key-list", &pred_trusted);
     initialize_tab (swidget, "sec-key-tab", TAB_PRIVATE, "sec-key-list", &pred_private);
+
+#ifdef WITH_GNOME_KEYRING
+    initialize_tab (swidget, "password-tab", TAB_PASSWORD, "password-list", &pred_password);
+#else
+    {
+        guint page;
+        w = seahorse_widget_get_widget (swidget, "password-tab");
+        g_return_val_if_fail (w, win);
+        page = gtk_notebook_page_num (notebook, w);
+        g_return_val_if_fail (page != -1, win);
+        gtk_notebook_remove_page (notebook, page);
+    }
+#endif
     
     /* Set focus to the current key list */
     w = GTK_WIDGET (get_current_view (swidget));

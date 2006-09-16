@@ -23,6 +23,16 @@
 
 #include <sys/types.h>
 
+extern gboolean seahorse_use_secure_mem;
+
+#define WITH_SECURE_MEM(EXP) \
+    do { \
+        gboolean tmp = seahorse_use_secure_mem; \
+        seahorse_use_secure_mem = TRUE; \
+        EXP; \
+        seahorse_use_secure_mem = tmp; \
+    } while (0)
+
 void    seahorse_secure_memory_init         (size_t npool);
 
 void    seahorse_secure_memory_term         ();

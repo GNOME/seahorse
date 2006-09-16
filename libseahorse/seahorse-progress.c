@@ -82,6 +82,9 @@ operation_progress (SeahorseOperation *operation, const gchar *message,
     progress = GTK_PROGRESS_BAR (seahorse_widget_get_widget (swidget, "progress"));
     status = GTK_STATUSBAR (seahorse_widget_get_widget (swidget, "status"));
     
+    if (!seahorse_operation_is_running (operation))
+        fract = 0.0;
+    
     if (message != NULL && status) {
         g_return_if_fail (GTK_IS_STATUSBAR (status));
         id = gtk_statusbar_get_context_id (status, "operation-progress");
@@ -106,8 +109,6 @@ operation_done (SeahorseOperation *operation, SeahorseWidget *swidget)
 {
     GError *err = NULL;
 
-    disconnect_progress (swidget, operation);
-    
     if (!seahorse_operation_is_successful (operation)) {
         seahorse_operation_copy_error (operation, &err);
         if (err) {
@@ -134,23 +135,46 @@ seahorse_progress_status_set_operation (SeahorseWidget *swidget,
 {
     SeahorseOperation *prev;
     
-    if (!seahorse_operation_is_running (operation))
-        return;
+    /* 
+     * Note that this is not one off, the operation is monitored until it is 
+     * replaced, so if the operation starts up again the progress will be 
+     * displayed 
+     */
     
     g_return_if_fail (SEAHORSE_IS_WIDGET (swidget));
     g_return_if_fail (SEAHORSE_IS_OPERATION (operation));
     
     prev = SEAHORSE_OPERATION (g_object_get_data (G_OBJECT (swidget), "operation"));
-    if (prev)
+    if (prev) {
+        
+        /* If the previous one was a multi operation, just piggy back this one in */
+        if (SEAHORSE_IS_MULTI_OPERATION (prev)) {
+            seahorse_multi_operation_take (SEAHORSE_MULTI_OPERATION (prev), operation);
+            return;
+        }
+
+        /* Otherwise disconnect old progress, replace with new */
         disconnect_progress (swidget, prev);
+    }
         
     g_object_set_data_full (G_OBJECT (swidget), "operation", operation, 
                             (GDestroyNotify)g_object_unref);
     g_signal_connect (swidget, "destroy", 
                       G_CALLBACK (disconnect_progress), operation);
     
-    seahorse_operation_watch (operation, G_CALLBACK (operation_done), 
-                                G_CALLBACK (operation_progress), swidget);
+    if (!seahorse_operation_is_running (operation)) {
+        operation_progress (operation, seahorse_operation_get_message (operation),
+                            seahorse_operation_get_progress (operation), swidget);
+    }
+    
+    g_signal_connect (operation, "done", G_CALLBACK (operation_done), swidget);
+    g_signal_connect (operation, "progress", G_CALLBACK (operation_progress), swidget);
+}
+
+SeahorseOperation*
+seahorse_progress_status_get_operation (SeahorseWidget *swidget)
+{
+    return SEAHORSE_OPERATION (g_object_get_data (G_OBJECT (swidget), "operation"));
 }
 
 /* -----------------------------------------------------------------------------

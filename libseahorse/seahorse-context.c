@@ -507,6 +507,7 @@ seahorse_context_take_key (SeahorseContext *sctx, SeahorseKey *skey)
     
     g_return_if_fail (SEAHORSE_IS_CONTEXT (sctx));
     g_return_if_fail (SEAHORSE_IS_KEY (skey));
+    g_return_if_fail (skey->keyid != 0);
     
     ks = hashkey_by_source (seahorse_key_get_source (skey), 
                             seahorse_key_get_keyid (skey));
