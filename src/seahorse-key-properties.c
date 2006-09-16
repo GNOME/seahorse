@@ -70,7 +70,24 @@ sensitive_glade_widget (SeahorseWidget *swidget, const gchar *name, gboolean sen
     GtkWidget *widget = glade_xml_get_widget (swidget->xml, name);
     if (widget)
         gtk_widget_set_sensitive (widget, sens);
-}    
+}
+
+static void
+printf_glade_widget (SeahorseWidget *swidget, const gchar *name, const gchar *str)
+{
+    GtkWidget *widget;
+    const gchar *label;
+    gchar *text;
+    
+    widget = glade_xml_get_widget (swidget->xml, name);
+    if (!widget)
+        return; 
+    
+    label = gtk_button_get_label (GTK_BUTTON (widget));
+    text = g_strdup_printf (label, str);
+    gtk_button_set_label (GTK_BUTTON (widget), text);
+    g_free (text);
+}
 
 static gint
 get_selected_row (SeahorseWidget *swidget, const gchar *gladeid, guint column)
@@ -1490,7 +1507,8 @@ do_trust_signals (SeahorseWidget *swidget)
 {
     SeahorseKey *skey;
     SeahorseKeyEType etype;
-
+    gchar *user;
+    
     skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
     etype = seahorse_key_get_etype (skey);
     
@@ -1505,14 +1523,24 @@ do_trust_signals (SeahorseWidget *swidget)
     /* TODO: Hookup revoke handler */
     
     if (etype == SKEY_PUBLIC ) {
+        
         show_glade_widget (swidget, "signatures-revoke-button", FALSE);
         show_glade_widget (swidget, "signatures-delete-button", FALSE);
         show_glade_widget (swidget, "signatures-empty-label", FALSE);
+        
+        /* Fill in trust labels with name .This only happens once, so it sits here. */
+        user = seahorse_pgp_key_get_userid_name (SEAHORSE_PGP_KEY (skey), 0);
+        printf_glade_widget (swidget, "trust-marginal-check", user);
+        printf_glade_widget (swidget, "trust-complete-check", user);
+        g_free (user);
+        
     } else {
+        
         glade_xml_signal_connect_data (swidget->xml, "signatures_revoke_button_clicked",
                                        G_CALLBACK (signatures_revoke_button_clicked), swidget);
         glade_xml_signal_connect_data (swidget->xml, "signatures_delete_button_clicked",
                                        G_CALLBACK (signatures_delete_button_clicked), swidget);
+        
     }
 
     glade_xml_signal_connect_data (swidget->xml, "trust_marginal_toggled",
