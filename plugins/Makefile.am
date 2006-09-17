@@ -1,3 +1,8 @@
+if WITH_EPIPHANY
+EPIPHANY_DIR = epiphany
+else
+EPIPHANY_DIR = 
+endif
 
 if WITH_GEDIT
 GEDIT_DIR = gedit
@@ -17,4 +22,4 @@ else
 APPLET_DIR =
 endif
 
-SUBDIRS = nautilus $(APPLET_DIR) $(GEDIT_DIR) $(NAUTILUS_EXT_DIR)
+SUBDIRS = nautilus $(APPLET_DIR) $(EPIPHANY_DIR) $(GEDIT_DIR) $(NAUTILUS_EXT_DIR)

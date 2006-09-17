@@ -24,6 +24,8 @@
 
 #include <glib.h>
 
+G_BEGIN_DECLS
+
 #ifndef LIBCRYPTUI_API_SUBJECT_TO_CHANGE
 #error "Please define LIBCRYPTUI_API_SUBJECT_TO_CHANGE to acknowledge your understanding that this API is not yet stable."
 #endif
@@ -90,5 +92,7 @@ gchar**             cryptui_prompt_recipients (CryptUIKeyset *keyset,
                                                const gchar *title, gchar **signer);
 
 gchar*              cryptui_prompt_signer (CryptUIKeyset *keyset, const gchar *title);
+
+G_END_DECLS
 
 #endif /* __CRYPT_UI_H__ */
