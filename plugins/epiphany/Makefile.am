@@ -29,7 +29,6 @@ libseahorseextension_la_LIBADD =	\
 
 libseahorseextension_la_LDFLAGS = \
 	-module -avoid-version \
-#	-export-symbols $(top_srcdir)/ephy-extension.symbols \
 	$(AM_LDFLAGS)
 
 extensioninidir = $(extensiondir)
