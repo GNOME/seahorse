@@ -426,8 +426,6 @@ io_handler (GIOChannel *source, GIOCondition condition, SSHProxyConn *cn)
     gsize length;
     gboolean from_client = FALSE;
     
-    memset (msg, 0, sizeof (msg));
-    
     if (condition & G_IO_IN) {
 
         if (source == cn->inchan) {
