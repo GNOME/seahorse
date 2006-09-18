@@ -449,6 +449,7 @@ static gboolean
 init_keyring_name (SeahorseGKeyringSource *gsrc, GError **err)
 {
     GnomeKeyringResult res;
+    gboolean ret;
     
     if (gsrc->pv->keyring_name)
         return TRUE;
@@ -457,7 +458,14 @@ init_keyring_name (SeahorseGKeyringSource *gsrc, GError **err)
     res = gnome_keyring_get_default_keyring_sync (&(gsrc->pv->keyring_name));
     if (res != GNOME_KEYRING_RESULT_OK)
         g_warning ("couldn't get default keyring: (code %d)", res);
-    return seahorse_gkeyring_operation_parse_error (res, err);
+    
+    ret = seahorse_gkeyring_operation_parse_error (res, err);
+    if(!ret)
+        return FALSE;
+    
+    /* Hmmm, this happens sometimes, need to figure out why */
+    g_return_val_if_fail (gsrc->pv->keyring_name != NULL, FALSE);
+    return TRUE;
 }
 
 /* -----------------------------------------------------------------------------
