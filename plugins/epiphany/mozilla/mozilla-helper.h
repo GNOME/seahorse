@@ -27,9 +27,10 @@
 
 G_BEGIN_DECLS
 
-gboolean	mozilla_is_input (EphyEmbed *embed);
-void		mozilla_encrypt (EphyEmbed *embed);
-
+gboolean	    mozilla_is_input            (EphyEmbed *embed);
+const char*     mozilla_get_text            (EphyEmbed *embed);
+void            mozilla_set_text            (EphyEmbed *embed,
+                                             char *new_text);
 G_END_DECLS
 
 #endif

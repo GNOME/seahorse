@@ -39,15 +39,134 @@
 
 #include <string.h>
 
+//#include <glib.h>
+//#include <glib/gi18n.h>
+#include <cryptui.h>
+#include <dbus/dbus-glib.h>
+
 #define SEAHORSE_EXTENSION_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), TYPE_SEAHORSE_EXTENSION, SeahorseExtensionPrivate))
 
-#define LOOKUP_ACTION		"SeahorseExtLookup"
+#define ENCRYPT_ACTION		"SeahorseExtEncrypt"
+#define SIGN_ACTION         "SeahorseExtSign"
 #define WINDOW_DATA_KEY		"SeahorseWindowData"
+
+typedef enum {
+    SEAHORSE_TEXT_TYPE_NONE,
+    SEAHORSE_TEXT_TYPE_PLAIN,
+    SEAHORSE_TEXT_TYPE_KEY,
+    SEAHORSE_TEXT_TYPE_MESSAGE,
+    SEAHORSE_TEXT_TYPE_SIGNED
+} SeahorseTextType;
+
+typedef struct _SeahorsePGPHeader {
+    const gchar *header;
+    const gchar *footer;
+    SeahorseTextType type;
+} SeahorsePGPHeader;    
+
+static const SeahorsePGPHeader seahorse_pgp_headers[] = {
+    { 
+        "-----BEGIN PGP MESSAGE-----", 
+        "-----END PGP MESSAGE-----", 
+        SEAHORSE_TEXT_TYPE_MESSAGE 
+    }, 
+    {
+        "-----BEGIN PGP SIGNED MESSAGE-----",
+        "-----END PGP SIGNATURE-----",
+        SEAHORSE_TEXT_TYPE_SIGNED
+    }, 
+    {
+        "-----BEGIN PGP PUBLIC KEY BLOCK-----",
+        "-----END PGP PUBLIC KEY BLOCK-----",
+        SEAHORSE_TEXT_TYPE_KEY
+    }, 
+    {
+        "-----BEGIN PGP PRIVATE KEY BLOCK-----",
+        "-----END PGP PRIVATE KEY BLOCK-----",
+        SEAHORSE_TEXT_TYPE_KEY
+    }
+};
 
 struct SeahorseExtensionPrivate
 {
 	int dummy;
 };
+
+/* -----------------------------------------------------------------------------
+ * Initialize Crypto 
+ */
+ 
+ /* Setup in init_crypt */
+DBusGConnection *dbus_connection = NULL;
+DBusGProxy      *dbus_key_proxy = NULL;
+DBusGProxy      *dbus_crypto_proxy = NULL;
+CryptUIKeyset   *dbus_keyset = NULL;
+
+static gboolean
+init_crypt ()
+{
+    GError *error = NULL;
+    
+    if (!dbus_connection) {
+        dbus_connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
+        if (!dbus_connection) {
+            
+            return FALSE;
+        }
+
+        dbus_key_proxy = dbus_g_proxy_new_for_name (dbus_connection, "org.gnome.seahorse",
+                                               "/org/gnome/seahorse/keys",
+                                               "org.gnome.seahorse.KeyService");
+        
+        dbus_crypto_proxy = dbus_g_proxy_new_for_name (dbus_connection, "org.gnome.seahorse",
+                                               "/org/gnome/seahorse/crypto",
+                                               "org.gnome.seahorse.CryptoService");
+        
+        dbus_keyset = cryptui_keyset_new ("openpgp");
+    }
+    
+    return TRUE;
+}
+
+SeahorseTextType    
+detect_text_type (const gchar *text, gint len, const gchar **start, const gchar **end)
+{
+    const SeahorsePGPHeader *header;
+    const gchar *pos = NULL;
+    const gchar *t;
+    int i;
+    
+    if (len == -1)
+        len = strlen (text);
+    
+    /* Find the first of the headers */
+    for (i = 0; i < (sizeof (seahorse_pgp_headers) / sizeof (seahorse_pgp_headers[0])); i++) {
+        t = g_strstr_len (text, len, seahorse_pgp_headers[i].header);
+        if (t != NULL) {
+            if (pos == NULL || (t < pos)) {
+                header = &(seahorse_pgp_headers[i]);
+                pos = t;
+            }
+        }
+    }
+    
+    if (pos != NULL) {
+        
+        if (start)
+            *start = pos;
+        
+        /* Find the end of that block */
+        t = g_strstr_len (pos, len - (pos - text), header->footer);
+        if (t != NULL && end)
+            *end = t + strlen(header->footer);
+        else if (end)
+            *end = NULL;
+            
+        return header->type;
+    }
+    
+    return SEAHORSE_TEXT_TYPE_PLAIN;
+}
 
 typedef struct
 {
@@ -107,16 +226,91 @@ seahorse_extension_register_type (GTypeModule *module)
 }
 
 static void 
-search_seahorse_cb (GtkAction *action,
-		    EphyWindow *window)
+encrypt_seahorse_cb (GtkAction *action, EphyWindow *window)
 {
 	EphyEmbed *embed;
-
+	const char *text;
+    gchar **keys;
+    gchar *signer = NULL;
+    gchar *enctext = NULL;
+    gboolean ret;
+    
+    init_crypt();
+    
 	embed = ephy_window_get_active_embed (window);
 	g_return_if_fail (EPHY_IS_EMBED (embed));
 
-	/* ask gecko to encrypt the input if possible */
-	mozilla_encrypt (embed);
+	/* ask gecko for the input */
+	text = mozilla_get_text (embed);
+	
+	g_return_if_fail ((text != NULL) || (text[0] != '\0'));
+    
+    /* Get the recipient list */
+    keys = cryptui_prompt_recipients (dbus_keyset, _("Choose Recipient Keys"), &signer);
+
+    /* User may have cancelled */
+    if (keys && *keys) {
+        ret = dbus_g_proxy_call (dbus_crypto_proxy, "EncryptText", NULL, 
+                                 G_TYPE_STRV, keys, 
+                                 G_TYPE_STRING, signer, 
+                                 G_TYPE_INT, 0,
+                                 G_TYPE_STRING, text,
+                                 G_TYPE_INVALID,
+                                 G_TYPE_STRING, &enctext,
+                                 G_TYPE_INVALID);
+                                
+    }
+    
+    g_strfreev(keys);
+    g_free (signer);
+    
+    if (ret != TRUE) {
+        g_free (enctext);
+        return;
+    }
+	
+	mozilla_set_text (embed, enctext);
+}
+
+static void 
+sign_seahorse_cb (GtkAction *action, EphyWindow *window)
+{
+    EphyEmbed *embed;
+	const char *text;
+    gchar *signer = NULL;
+    gchar *enctext = NULL;
+    gboolean ret;
+    
+    init_crypt();
+    
+	embed = ephy_window_get_active_embed (window);
+	g_return_if_fail (EPHY_IS_EMBED (embed));
+
+	/* ask gecko for the input */
+	text = mozilla_get_text (embed);
+	
+	g_return_if_fail ((text != NULL) || (text[0] != '\0'));
+    
+    signer = cryptui_prompt_signer (dbus_keyset, _("Choose Key to Sign with"));
+    if (signer == NULL)
+        return;
+
+    /* Perform the signing */
+    ret = dbus_g_proxy_call (dbus_crypto_proxy, "SignText", NULL, 
+                                G_TYPE_STRING, signer, 
+                                G_TYPE_INT, 0,
+                                G_TYPE_STRING, text,
+                                G_TYPE_INVALID,
+                                G_TYPE_STRING, &enctext,
+                                G_TYPE_INVALID);
+    g_free (signer);
+    
+    if (ret != TRUE) {
+        g_free (enctext);
+        return;
+    }
+	
+	mozilla_set_text (embed, enctext);
 }
 
 static gboolean
@@ -127,18 +321,31 @@ context_menu_cb (EphyEmbed *embed,
 	gboolean is_input;
 	GtkAction  *action;
 	WindowData *data;
-
+    const char *text;
+    SeahorseTextType texttype;
+    
 	data = (WindowData *) g_object_get_data (G_OBJECT (window), WINDOW_DATA_KEY);
 	g_return_val_if_fail (data != NULL, FALSE);
 
-	action = gtk_action_group_get_action (data->action_group, LOOKUP_ACTION);
-	g_return_val_if_fail (action != NULL, FALSE);
+	text = mozilla_get_text (embed);
+	g_return_val_if_fail (text != NULL, FALSE);
+	
+    texttype = detect_text_type (text, -1, NULL, NULL);
 
-	is_input = mozilla_is_input (embed);
+    is_input = mozilla_is_input (embed);
 
-	gtk_action_set_sensitive (action, is_input);
-	gtk_action_set_visible (action, is_input);
+	action = gtk_action_group_get_action (data->action_group, ENCRYPT_ACTION);
+	g_return_val_if_fail (action != NULL, FALSE);	
 
+	gtk_action_set_sensitive (action, (is_input && (texttype == SEAHORSE_TEXT_TYPE_PLAIN)));
+	gtk_action_set_visible (action, (is_input && (texttype == SEAHORSE_TEXT_TYPE_PLAIN)));
+
+    action = gtk_action_group_get_action (data->action_group, SIGN_ACTION);
+	g_return_val_if_fail (action != NULL, FALSE);	
+
+	gtk_action_set_sensitive (action, (is_input && (texttype == SEAHORSE_TEXT_TYPE_PLAIN)));
+	gtk_action_set_visible (action, (is_input && (texttype == SEAHORSE_TEXT_TYPE_PLAIN)));
+	
 	return FALSE;
 }
 
@@ -164,7 +371,10 @@ build_ui (WindowData *data)
 			       "SeahorseExtSep0", NULL,
 			       GTK_UI_MANAGER_SEPARATOR, FALSE);
 	gtk_ui_manager_add_ui (manager, ui_id, "/EphyDocumentPopup",
-			       LOOKUP_ACTION, LOOKUP_ACTION,
+			       ENCRYPT_ACTION, ENCRYPT_ACTION,
+			       GTK_UI_MANAGER_MENUITEM, FALSE);
+    gtk_ui_manager_add_ui (manager, ui_id, "/EphyDocumentPopup",
+			       SIGN_ACTION, SIGN_ACTION,
 			       GTK_UI_MANAGER_MENUITEM, FALSE);
 
 	/* Add bookmarks to input popup context */
@@ -172,9 +382,12 @@ build_ui (WindowData *data)
 			       "SeahorseExtSep0", NULL,
 			       GTK_UI_MANAGER_SEPARATOR, FALSE);
 	gtk_ui_manager_add_ui (manager, ui_id, "/EphyInputPopup",
-			       LOOKUP_ACTION, LOOKUP_ACTION,
+			       ENCRYPT_ACTION, ENCRYPT_ACTION,
 			       GTK_UI_MANAGER_MENUITEM, FALSE);
-
+    gtk_ui_manager_add_ui (manager, ui_id, "/EphyInputPopup",
+			       SIGN_ACTION, SIGN_ACTION,
+			       GTK_UI_MANAGER_MENUITEM, FALSE);
+			       
 	gtk_ui_manager_ensure_update (manager);
 }
 
@@ -208,12 +421,19 @@ impl_detach_tab (EphyExtension *extension,
 
 static const GtkActionEntry action_entries [] =
 {
-	{ LOOKUP_ACTION,
+	{ ENCRYPT_ACTION,
 	  NULL,
 	  N_("_Encrypt"),
 	  NULL,
 	  NULL,
-	  G_CALLBACK (search_seahorse_cb)
+	  G_CALLBACK (encrypt_seahorse_cb)
+	},
+	{ SIGN_ACTION,
+	  NULL,
+	  N_("_Sign"),
+	  NULL,
+	  NULL,
+	  G_CALLBACK (sign_seahorse_cb)
 	},
 };
 

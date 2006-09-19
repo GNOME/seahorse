@@ -43,47 +43,6 @@
 
 #include "mozilla-helper.h"
 
-#include <glib.h>
-#include <glib/gi18n.h>
-#include <cryptui.h>
-#include <dbus/dbus-glib.h>
-
-/* -----------------------------------------------------------------------------
- * Initialize Crypto 
- */
- 
- /* Setup in init_crypt */
-DBusGConnection *dbus_connection = NULL;
-DBusGProxy      *dbus_key_proxy = NULL;
-DBusGProxy      *dbus_crypto_proxy = NULL;
-CryptUIKeyset   *dbus_keyset = NULL;
-
-static gboolean
-init_crypt ()
-{
-    GError *error = NULL;
-    
-    if (!dbus_connection) {
-        dbus_connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
-        if (!dbus_connection) {
-            
-            return FALSE;
-        }
-
-        dbus_key_proxy = dbus_g_proxy_new_for_name (dbus_connection, "org.gnome.seahorse",
-                                               "/org/gnome/seahorse/keys",
-                                               "org.gnome.seahorse.KeyService");
-        
-        dbus_crypto_proxy = dbus_g_proxy_new_for_name (dbus_connection, "org.gnome.seahorse",
-                                               "/org/gnome/seahorse/crypto",
-                                               "org.gnome.seahorse.CryptoService");
-        
-        dbus_keyset = cryptui_keyset_new ("openpgp");
-    }
-    
-    return TRUE;
-}
-
 template <class T>
 void set_value (nsIDOMElement *aElement, const char *value)
 {
@@ -115,96 +74,6 @@ char * get_value (nsIDOMElement *aElement)
 	return g_strdup(cText.get());
 }
 
-extern "C" char*
-seahorse_encrypt (char *text)
-{
-    gchar **keys;
-    gchar *signer = NULL;
-    gchar *enctext = NULL;
-    gboolean ret;
-    
-    init_crypt();
-    
-    g_return_val_if_fail ((text != NULL) || (text[0] != '\0'), NULL);
-    
-    /* Get the recipient list */
-    keys = cryptui_prompt_recipients (dbus_keyset, _("Choose Recipient Keys"), &signer);
-
-    /* User may have cancelled */
-    if (keys && *keys) {
-        ret = dbus_g_proxy_call (dbus_crypto_proxy, "EncryptText", NULL, 
-                                G_TYPE_STRV, keys, 
-                                G_TYPE_STRING, signer, 
-                                G_TYPE_INT, 0,
-                                G_TYPE_STRING, text,
-                                G_TYPE_INVALID,
-                                G_TYPE_STRING, &enctext,
-                                G_TYPE_INVALID);
-                                
-        g_strfreev(keys);
-        g_free (signer);
-    }
-    
-    if (ret != TRUE) {
-        g_free (enctext);
-        return NULL;
-    }
-    
-    return enctext;       
-}
-
-extern "C" void
-mozilla_encrypt (EphyEmbed *embed)
-{
-	nsCOMPtr<nsIWebBrowser> browser;
-	gtk_moz_embed_get_nsIWebBrowser (GTK_MOZ_EMBED (embed),
-			getter_AddRefs (browser));
-	nsCOMPtr<nsIWebBrowserFocus> focus (do_QueryInterface(browser));
-	if (!focus) return;
-
-	nsCOMPtr<nsIDOMElement> domElement;
-	focus->GetFocusedElement (getter_AddRefs(domElement));
-	if (!domElement) return;
-
-	char *value;
-	// Try with a textarea
-	value = get_value <nsIDOMHTMLTextAreaElement> (domElement);
-	if (value)
-	{
-		char *encrypted_value;
-	
-		encrypted_value = seahorse_encrypt (value);
-
-		set_value <nsIDOMHTMLTextAreaElement> (domElement, encrypted_value);
-
-        g_free (encrypted_value);
-        
-		return;
-	}
-
-	// Then with any input
-	// Take care of password fields
-	nsString text;
-	nsCOMPtr<nsIDOMHTMLInputElement> input (do_QueryInterface(domElement));
-	input->GetType (text);
-	const PRUnichar *str = text.get ();
-	if (!(str[0] == 't' && str[1] == 'e' && str[2] == 'x' && str[3] == 't' && str[4] == '\0')) return;
-
-	value = get_value <nsIDOMHTMLInputElement> (domElement);
-	if (value)
-	{
-		char *encrypted_value;
-	
-		encrypted_value = seahorse_encrypt (value);
-
-		set_value <nsIDOMHTMLInputElement> (domElement, encrypted_value);
-		
-        g_free (encrypted_value);
-
-		return;
-	}
-}
-
 extern "C" gboolean
 mozilla_is_input (EphyEmbed *embed)
 {
@@ -225,4 +94,84 @@ mozilla_is_input (EphyEmbed *embed)
 	if (nodeAsInput) return TRUE;
 
 	return FALSE;
+}
+
+extern "C" const char*
+mozilla_get_text (EphyEmbed *embed)
+{
+    nsCOMPtr<nsIWebBrowser> browser;
+	gtk_moz_embed_get_nsIWebBrowser (GTK_MOZ_EMBED (embed),
+			getter_AddRefs (browser));
+	nsCOMPtr<nsIWebBrowserFocus> focus (do_QueryInterface(browser));
+	if (!focus) 
+	    return NULL;
+
+	nsCOMPtr<nsIDOMElement> domElement;
+	focus->GetFocusedElement (getter_AddRefs(domElement));
+	if (!domElement) 
+	    return NULL;
+
+	char *value;
+	// Try with a textarea
+	value = get_value <nsIDOMHTMLTextAreaElement> (domElement);
+	if (value)   
+		return value;
+
+	// Then with any input
+	// Take care of password fields
+	nsString text;
+	nsCOMPtr<nsIDOMHTMLInputElement> input (do_QueryInterface(domElement));
+	input->GetType (text);
+	const PRUnichar *str = text.get ();
+	if (!(str[0] == 't' && str[1] == 'e' && str[2] == 'x' && str[3] == 't' && str[4] == '\0')) 
+	    return NULL;
+
+	value = get_value <nsIDOMHTMLInputElement> (domElement);
+	if (value)
+        return value;
+}
+
+extern "C" void
+mozilla_set_text (EphyEmbed *embed, char *new_text)
+{
+    nsCOMPtr<nsIWebBrowser> browser;
+	gtk_moz_embed_get_nsIWebBrowser (GTK_MOZ_EMBED (embed),
+			getter_AddRefs (browser));
+	nsCOMPtr<nsIWebBrowserFocus> focus (do_QueryInterface(browser));
+	if (!focus) return;
+
+	nsCOMPtr<nsIDOMElement> domElement;
+	focus->GetFocusedElement (getter_AddRefs(domElement));
+	if (!domElement) return;
+
+	char *value;
+	// Try with a textarea
+	value = get_value <nsIDOMHTMLTextAreaElement> (domElement);
+	if (value)
+	{
+		set_value <nsIDOMHTMLTextAreaElement> (domElement, new_text);
+
+        g_free (new_text);
+        
+		return;
+	}
+
+	// Then with any input
+	// Take care of password fields
+	nsString text;
+	nsCOMPtr<nsIDOMHTMLInputElement> input (do_QueryInterface(domElement));
+	input->GetType (text);
+	const PRUnichar *str = text.get ();
+	if (!(str[0] == 't' && str[1] == 'e' && str[2] == 'x' && str[3] == 't' && str[4] == '\0'))  
+	    return;
+
+	value = get_value <nsIDOMHTMLInputElement> (domElement);
+	if (value)
+	{
+		set_value <nsIDOMHTMLInputElement> (domElement, new_text);
+		
+        g_free (new_text);
+
+		return;
+	}
 }

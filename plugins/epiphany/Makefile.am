@@ -16,10 +16,12 @@ libseahorseextension_la_CPPFLAGS = \
 	-DSHARE_DIR=\"$(pkgdatadir)\"				\
     -DEPHY_EXTENSIONS_LOCALEDIR=\"$(datadir)/locale\"	\
 	$(AM_CPPFLAGS) \
+	-I$(top_srcdir)/libcryptui \
 	-DLIBCRYPTUI_API_SUBJECT_TO_CHANGE
 
 libseahorseextension_la_CFLAGS = \
 	$(EPIPHANY_DEPENDENCY_CFLAGS)	\
+	$(LIBCRYPTUI_CFLAGS) \
 	$(AM_CFLAGS)
 
 libseahorseextension_la_LIBADD =	\

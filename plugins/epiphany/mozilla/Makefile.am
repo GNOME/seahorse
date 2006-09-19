@@ -17,15 +17,13 @@ mozilla_include_subdirs = \
 libsbmozilla_la_CPPFLAGS = \
 	-I..			\
 	-I$(top_srcdir)/include	\
-	-I$(top_srcdir)/libcryptui \
 	$(addprefix -I$(MOZILLA_INCLUDE_ROOT)/,$(mozilla_include_subdirs))	\
 	-DALLOW_PRIVATE_API		\
 	-DSHARE_DIR=\"$(pkgdatadir)\"   \
-	$(AM_CPPFLAGS) \
-	-DLIBCRYPTUI_API_SUBJECT_TO_CHANGE
+	$(AM_CPPFLAGS)
+
 	
 libsbmozilla_la_CXXFLAGS = \
 	$(MOZILLA_COMPONENT_CFLAGS)	\
 	$(EPIPHANY_DEPENDENCY_CFLAGS) 	\
-	$(LIBCRYPTUI_CFLAGS) \
 	$(AM_CXXFLAGS)
