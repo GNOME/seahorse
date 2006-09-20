@@ -473,12 +473,16 @@ context_menu_cb (EphyEmbed *embed,
 	data = (WindowData *) g_object_get_data (G_OBJECT (window), WINDOW_DATA_KEY);
 	g_return_val_if_fail (data != NULL, FALSE);
 
-	text = mozilla_get_text (embed);
-	g_return_val_if_fail (text != NULL, FALSE);
-	
-    texttype = detect_text_type (text, -1, NULL, NULL);
-
     is_input = mozilla_is_input (embed);
+
+    if (is_input == FALSE)
+        return FALSE;
+        
+	text = mozilla_get_text (embed);
+	if (text == NULL)
+	    return FALSE;
+	
+    texttype = detect_text_type (text, -1, NULL, NULL);   
 
 	action = gtk_action_group_get_action (data->action_group, ENCRYPT_ACTION);
 	g_return_val_if_fail (action != NULL, FALSE);	
