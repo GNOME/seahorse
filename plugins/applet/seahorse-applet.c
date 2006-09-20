@@ -320,7 +320,7 @@ about_cb (BonoboUIComponent *uic, SeahorseApplet *sapplet, const gchar *verbname
                 "artists", artists,
                 "translator-credits", _("translator-credits"),
                 "logo-icon-name", "seahorse-applet",
-                "website", "http://seahorse.sf.net",
+                "website", "http://www.gnome.org/projects/seahorse",
                 "website-label", _("Seahorse Project Homepage"),
                 NULL);
 }
@@ -529,8 +529,8 @@ decrypt_text (const gchar *text, SeahorseApplet *sapplet)
         
         return rawtext;
     } else {
-        seahorse_notification_display(_("Import Failed"),
-                                      _("Keys were found but not imported."),
+        seahorse_notification_display(_("Decrypting Failed"),
+                                      _("Text may be malformed."),
                                       FALSE,
                                       NULL,
                                       GTK_WIDGET(sapplet));

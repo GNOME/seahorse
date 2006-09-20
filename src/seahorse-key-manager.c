@@ -867,7 +867,7 @@ about_activate (GtkWidget *widget, SeahorseWidget *swidget)
                 "artists", artists,
                 "translator-credits", _("translator-credits"),
                 "logo-icon-name", "seahorse",
-                "website", "http://seahorse.sf.net",
+                "website", "http://www.gnome.org/projects/seahorse",
                 "website-label", _("Seahorse Project Homepage"),
                 NULL);
 }
