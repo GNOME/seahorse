@@ -452,6 +452,7 @@ write_gpgme_data (gpgme_data_t data, const gchar *str)
 {
     int len = strlen (str);
     int r = gpgme_data_write (data, str, len);
+
     return len == r;
 }
 
@@ -662,7 +663,7 @@ seahorse_ssh_source_export (SeahorseKeySource *sksrc, GList *keys,
         if (results) {
             
             /* Write the data out */
-            if (write_gpgme_data (data, results)) {
+            if (write_gpgme_data (data, results) == FALSE) {
                 g_set_error (&error, G_FILE_ERROR, g_file_error_from_errno (errno),
                              strerror (errno));
             }
