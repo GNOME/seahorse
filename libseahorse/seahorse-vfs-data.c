@@ -214,7 +214,7 @@ vfs_data_open_helper (VfsAsyncHandle *ah, gboolean write)
     if (write) {
         /* Note that we always overwrite the file */
         gnome_vfs_async_create (&(ah->handle), ah->uri, GNOME_VFS_OPEN_WRITE | GNOME_VFS_OPEN_RANDOM,
-                    FALSE, 0644, GNOME_VFS_PRIORITY_DEFAULT, vfs_data_open_done, ah);        
+                    FALSE, 0600, GNOME_VFS_PRIORITY_DEFAULT, vfs_data_open_done, ah);        
     } else {
         gnome_vfs_async_open (&(ah->handle), ah->uri, GNOME_VFS_OPEN_READ | GNOME_VFS_OPEN_RANDOM,
                     GNOME_VFS_PRIORITY_DEFAULT, vfs_data_open_done, ah);
