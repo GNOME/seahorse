@@ -1223,7 +1223,7 @@ static const GtkActionEntry pgp_entries[] = {
 };
 
 static const GtkActionEntry ssh_entries[] = {
-    { "remote-upload-ssh", NULL, N_("Configure Key for Secure Shell..."), "",
+    { "remote-upload-ssh", NULL, N_("Set Up Computer for _Secure Shell..."), "",
             N_("Send public Secure Shell key to another machine, and enable logins using that key."), G_CALLBACK (setup_sshkey_activate) },
 };
 

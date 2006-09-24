@@ -115,7 +115,7 @@ upload_keys (SeahorseWidget *swidget)
 {
     SeahorseOperation *op;
     GtkWidget *widget;
-    const gchar *user, *host, *port;
+    const gchar *user, *host;
     GList *keys;
     gchar *t;
 
@@ -127,16 +127,8 @@ upload_keys (SeahorseWidget *swidget)
     host = gtk_entry_get_text (GTK_ENTRY (widget));
     g_return_if_fail (host && host[0]);
 
-    widget = glade_xml_get_widget (swidget->xml, "port-label");
-    port = gtk_entry_get_text (GTK_ENTRY (widget));
-
     keys = (GList*)g_object_steal_data (G_OBJECT (swidget), "upload-keys");
     g_return_if_fail (keys != NULL);
-    
-    if (port && port[0])
-        t = g_strdup_printf ("%s:%s", host, port);
-    else
-        t = g_strdup (host);
     
     /* This frees |keys| */
     op = upload_via_source (user, host, keys);

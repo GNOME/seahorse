@@ -76,7 +76,11 @@ on_response (GtkDialog *dialog, guint response, SeahorseWidget *swidget)
         return;
     }
     
-    if (response != GTK_RESPONSE_OK) {
+    if (response == GTK_RESPONSE_OK) 
+        upload = TRUE;
+    else if (response == GTK_RESPONSE_CLOSE)
+        upload = FALSE;
+    else {
         seahorse_widget_destroy (swidget);
         return;
     }
@@ -86,11 +90,6 @@ on_response (GtkDialog *dialog, guint response, SeahorseWidget *swidget)
     g_return_if_fail (widget != NULL);
     email = gtk_entry_get_text (GTK_ENTRY (widget));
     
-    /* The 'configure' option */
-    widget = seahorse_widget_get_widget (swidget, "configure-option");
-    g_return_if_fail (widget != NULL);
-    upload = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
-
     /* The algorithm */
     widget = seahorse_widget_get_widget (swidget, "algorithm-choice");
     g_return_if_fail (widget != NULL);
