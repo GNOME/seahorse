@@ -274,6 +274,7 @@ seahorse_pgp_key_get_name_markup (SeahorseKey *skey, guint index)
     pkey = SEAHORSE_PGP_KEY (skey);
 
     uid = seahorse_pgp_key_get_nth_userid (pkey, index);
+    g_return_val_if_fail (uid != NULL, NULL);
     
     name = convert_string (uid->name, TRUE);
     email = convert_string (uid->email, TRUE);
