@@ -530,98 +530,108 @@ seahorse_pgp_key_op_sign (SeahorsePGPKey *pkey, SeahorsePGPKey *signer,
 }
 
 typedef enum {
-	PASS_START,
-	PASS_COMMAND,
+    PASS_START,
+    PASS_COMMAND,
     PASS_PASSPHRASE,
-	PASS_QUIT,
-	PASS_SAVE,
-	PASS_ERROR
+    PASS_QUIT,
+    PASS_SAVE,
+    PASS_ERROR
 } PassState;
 
 /* action helper for changing passphrase */
 static gpgme_error_t
 edit_pass_action (guint state, gpointer data, int fd)
 {
-	switch (state) {
-		case PASS_COMMAND:
-            PRINT ((fd, "passwd"));
-			break;
-        case PASS_PASSPHRASE:
-            /* Do nothing */
-            return GPG_OK;
-		case PASS_QUIT:
-            PRINT ((fd, QUIT));
-			break;
-		case PASS_SAVE:
-            PRINT ((fd, YES));
-			break;
-		default:
-			return GPG_E (GPG_ERR_GENERAL);
-	}
-	
+    switch (state) {
+    case PASS_COMMAND:
+        PRINT ((fd, "passwd"));
+        break;
+    case PASS_PASSPHRASE:
+        /* Do nothing */
+        return GPG_OK;
+    case PASS_QUIT:
+        PRINT ((fd, QUIT));
+        break;
+    case PASS_SAVE:
+        PRINT ((fd, YES));
+        break;
+    default:
+        return GPG_E (GPG_ERR_GENERAL);
+    }
+    
     PRINT ((fd, "\n"));
-	return GPG_OK;
+    return GPG_OK;
 }
 
 /* transition helper for changing passphrase */
 static guint
 edit_pass_transit (guint current_state, gpgme_status_code_t status,
-		   const gchar *args, gpointer data, gpgme_error_t *err)
+                   const gchar *args, gpointer data, gpgme_error_t *err)
 {
-	guint next_state;
-	
-	switch (current_state) {
-		/* start state, go to command */
-		case PASS_START:
-			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
-				next_state = PASS_COMMAND;
-			else {
-                *err = GPG_E (GPG_ERR_GENERAL);
-                g_return_val_if_reached (PASS_ERROR);
-			}
-			break;
-		/* did command, go to should be the passphrase now */
-		case PASS_COMMAND:
-            if (status == GPGME_STATUS_NEED_PASSPHRASE_SYM)
-    			next_state = PASS_PASSPHRASE;
-            else {
-                *err = GPG_E (GPG_ERR_GENERAL);
-                g_return_val_if_reached (PASS_ERROR);
-          }
-          break;
-        /* got passphrase now quit */
-        case PASS_PASSPHRASE:
-            if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
-             next_state = PASS_QUIT;
-         else {
-                *err = GPG_E (GPG_ERR_GENERAL);
-                g_return_val_if_reached (PASS_ERROR);
-           }
-          break;
-        
-		/* quit, go to save */
-		case PASS_QUIT:
-			if (status == GPGME_STATUS_GET_BOOL && g_str_equal (args, SAVE))
-				next_state = PASS_SAVE;
-			else {
-                *err = GPG_E (GPG_ERR_GENERAL);
-                g_return_val_if_reached (PASS_ERROR);
-			}
-			break;
-		/* error, go to quit */
-		case PASS_ERROR:
-			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
-				next_state = PASS_QUIT;
-			else
-				next_state = PASS_ERROR;
-			break;
-		default:
+    guint next_state;
+    
+    switch (current_state) {
+    /* start state, go to command */
+    case PASS_START:
+        if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
+            next_state = PASS_COMMAND;
+        else {
             *err = GPG_E (GPG_ERR_GENERAL);
             g_return_val_if_reached (PASS_ERROR);
-			break;
-	}
-	
-	return next_state;
+        }
+        break;
+
+    case PASS_COMMAND:
+        /* did command, go to should be the passphrase now */
+        if (status == GPGME_STATUS_NEED_PASSPHRASE_SYM)
+            next_state = PASS_PASSPHRASE;
+        
+        /* If all tries for passphrase were wrong, we get here */
+        else if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT)) {
+            *err = GPG_E (GPG_ERR_CANCELED);
+            next_state = PASS_ERROR;
+        
+        /* No idea how we got here ... */
+        } else {
+            *err = GPG_E (GPG_ERR_GENERAL);
+            g_return_val_if_reached (PASS_ERROR);
+        }
+        break;
+    /* got passphrase now quit */
+    case PASS_PASSPHRASE:
+        if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
+            next_state = PASS_QUIT;
+        else {
+            *err = GPG_E (GPG_ERR_GENERAL);
+            g_return_val_if_reached (PASS_ERROR);
+        }
+        break;
+        
+    /* quit, go to save */
+    case PASS_QUIT:
+        if (status == GPGME_STATUS_GET_BOOL && g_str_equal (args, SAVE))
+            next_state = PASS_SAVE;
+        else {
+            *err = GPG_E (GPG_ERR_GENERAL);
+            g_return_val_if_reached (PASS_ERROR);
+        }
+        break;
+    
+    /* error, go to quit */
+    case PASS_ERROR:    
+        if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
+            next_state = PASS_QUIT;
+        else
+            next_state = PASS_ERROR;
+        break;
+    
+    default:
+        *err = GPG_E (GPG_ERR_GENERAL);
+        g_return_val_if_reached (PASS_ERROR);
+        break;
+    }
+    
+    return next_state;
 }
 
 /**
