@@ -107,7 +107,15 @@ key_store_row_add (CryptUIKeyStore *ckstore, const gchar *key, GtkTreeIter *iter
     
     /* Do we already have a row for this key? */
     ref = (GtkTreeRowReference*)g_hash_table_lookup (ckstore->priv->rows, key);
-    g_return_if_fail (ref == NULL);
+    if (ref != NULL) {
+        
+        /* If so return the previous reference */
+        path = gtk_tree_row_reference_get_path (ref);
+        if (path != NULL) {
+            gtk_tree_model_get_iter (GTK_TREE_MODEL (ckstore->priv->store), iter, path);
+            return;
+        }
+    }
 
     gtk_tree_store_append (GTK_TREE_STORE (ckstore->priv->store), iter, NULL);
     path = gtk_tree_model_get_path (GTK_TREE_MODEL (ckstore->priv->store), iter);
@@ -160,13 +168,20 @@ key_store_key_changed (CryptUIKeyset *ckset, const gchar *key,
     GtkTreeIter iter;
     GtkTreePath *path;
 
-    g_return_if_fail (ref != NULL);
-    
-    path = gtk_tree_row_reference_get_path (ref);
-    if (path) {
-        if (gtk_tree_model_get_iter (GTK_TREE_MODEL (ckstore->priv->store), &iter, path))
-            key_store_set (ckstore, key, &iter);
-        gtk_tree_path_free (path);
+    /* If never seen before treat as added */
+    if (ref == NULL) {
+        g_return_if_fail (!g_hash_table_lookup (ckstore->priv->rows, key));
+        key_store_row_add (ckstore, key, &iter);
+        key_store_set (ckstore, key, &iter);
+        
+    /* Otherwise just update */
+    } else {
+        path = gtk_tree_row_reference_get_path (ref);
+        if (path) {
+            if (gtk_tree_model_get_iter (GTK_TREE_MODEL (ckstore->priv->store), &iter, path))
+                key_store_set (ckstore, key, &iter);
+            gtk_tree_path_free (path);
+        }
     }
 }
 
