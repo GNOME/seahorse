@@ -44,6 +44,7 @@
 
 /* extern declared in seahorse-secure-memory.h */
 gboolean seahorse_use_secure_mem = FALSE;
+static int have_secure = 0;
 
 #ifndef DEBUG_SECMEM_ENABLE
 #if _DEBUG
@@ -66,7 +67,7 @@ g_malloc (gulong size)
 
     if (size == 0)
         return NULL;
-    if (seahorse_use_secure_mem)
+    if (seahorse_use_secure_mem && have_secure)
         p = (gpointer) seahorse_secure_memory_malloc (size);
     else
         p = (gpointer) malloc (size);
@@ -82,7 +83,7 @@ g_malloc0 (gulong size)
 
     if (size == 0)
         return NULL;
-    if (seahorse_use_secure_mem) {
+    if (seahorse_use_secure_mem && have_secure) {
         p = (gpointer) seahorse_secure_memory_malloc (size);
         if (p)
             memset (p, 0, size);
@@ -104,7 +105,7 @@ g_realloc (gpointer mem, gulong size)
     }
 
     if (!mem) {
-        if (seahorse_use_secure_mem)
+        if (seahorse_use_secure_mem && have_secure)
             p = (gpointer) seahorse_secure_memory_malloc (size);
         else
             p = (gpointer) malloc (size);
@@ -185,8 +186,6 @@ static unsigned max_alloced;
 static unsigned cur_alloced;
 static unsigned max_blocks;
 static unsigned cur_blocks;
-static int disable_secmem;
-static int have_secure = 0;
 
 static void
 lock_pool(void *p, size_t n)
@@ -226,11 +225,6 @@ lock_pool(void *p, size_t n)
         err = errno;
 #endif /* HAVE_BROKEN_MLOCK */
 
-    if (uid && !geteuid()) {
-        if (setuid (uid) || getuid () != geteuid ())
-            g_assert_not_reached ();
-    }
-
     if( err ) {
         if(errno != EPERM && errno != EAGAIN)
             g_warning ("can't lock memory: %s", g_strerror (err));
@@ -249,8 +243,6 @@ static void
 init_pool( size_t n)
 {
     size_t pgsize;
-
-    g_assert (!disable_secmem);
 
     poolsize = n;
 
@@ -321,17 +313,8 @@ seahorse_secure_memory_init (size_t n)
 #ifdef USE_CAPABILITIES
         /* drop all capabilities */
         cap_set_proc( cap_from_text("all-eip") );
-
 #elif !defined(HAVE_DOSISH_SYSTEM)
-        uid_t uid;
-
-        disable_secmem = 1;
-        uid = getuid();
-        
-        if (uid && !geteuid()) {
-            if (setuid (uid) || getuid () != geteuid ())
-                g_assert_not_reached ();
-        }
+        have_secure = 0;
 #endif
     } else {
         if (n < DEFAULT_POOLSIZE)
@@ -339,6 +322,9 @@ seahorse_secure_memory_init (size_t n)
         g_assert (!pool_okay);
         init_pool (n);
     }
+    
+    if (!have_secure)
+        g_printerr ("WARNING: not using secure memory for passwords\n");
 }
 
 void*
@@ -470,7 +456,7 @@ seahorse_secure_memory_term ()
 void
 seahorse_secure_memory_dump ()
 {
-    if (disable_secmem)
+    if (!have_secure)
         return;
     
     g_printerr ("secmem usage: %u/%u bytes in %u/%u blocks of pool %lu/%lu\n",
