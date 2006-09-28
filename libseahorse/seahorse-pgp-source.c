@@ -824,6 +824,8 @@ prepare_import_results (SeahorsePGPOperation *pop, SeahorsePGPSource *psrc)
     SeahorseKeySource *sksrc;
     GList *keys = NULL;
     const gchar **patterns = NULL;
+    GError *err = NULL;
+    gchar *msg;
     GQuark keyid;
     guint i;
     
@@ -840,6 +842,18 @@ prepare_import_results (SeahorsePGPOperation *pop, SeahorsePGPSource *psrc)
              import = import->next) {
             if (GPG_IS_OK (import->result))
                 patterns[i++] = import->fpr;
+        }
+        
+        /* See if we've managed to import any ... */
+        if (!patterns[0] && results->considered > 0) {
+            
+            /* ... try and find out why */
+            if (results->no_user_id) {
+                msg = _("Invalid key data (missing UIDs). This may be due to a computer with a date set in the future or a missing self-signature.");
+                g_set_error (&err, SEAHORSE_ERROR, -1, "%s", msg);
+                seahorse_operation_mark_done (SEAHORSE_OPERATION (pop), FALSE, err);
+                return;
+            }
         }
 
         /* Reload public keys */

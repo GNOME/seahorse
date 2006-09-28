@@ -281,6 +281,10 @@ event_cb (void *data, gpgme_event_io_t type, void *type_data)
                 seahorse_operation_mark_done (SEAHORSE_OPERATION (pop), TRUE, NULL);
                 
             } else {
+                
+                /* Reference guard (marking an op as complete unrefs it) */
+                g_object_ref (pop);
+                
                 /* Other Errors */
                 if (*gerr)
                     seahorse_util_gpgme_to_error (*gerr, &error);
@@ -292,6 +296,9 @@ event_cb (void *data, gpgme_event_io_t type, void *type_data)
                 /* The above event may have started the action again so double check */
                 if (!pv->busy && seahorse_operation_is_running (SEAHORSE_OPERATION (pop)))
                     seahorse_operation_mark_done (SEAHORSE_OPERATION (pop), FALSE, error);
+                
+                /* End reference guard */
+                g_object_unref (pop);
             }
         }
         break;
