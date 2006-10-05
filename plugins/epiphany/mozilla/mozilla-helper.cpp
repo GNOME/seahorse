@@ -121,14 +121,18 @@ mozilla_get_text (EphyEmbed *embed)
 	// Take care of password fields
 	nsString text;
 	nsCOMPtr<nsIDOMHTMLInputElement> input (do_QueryInterface(domElement));
-	input->GetType (text);
-	const PRUnichar *str = text.get ();
-	if (!(str[0] == 't' && str[1] == 'e' && str[2] == 'x' && str[3] == 't' && str[4] == '\0')) 
-	    return NULL;
+	if (text.Length () > 0) {
+    	input->GetType (text);
+    	const PRUnichar *str = text.get ();
+    	if (!(str[0] == 't' && str[1] == 'e' && str[2] == 'x' && str[3] == 't' && str[4] == '\0')) 
+    	    return NULL;
 
-	value = get_value <nsIDOMHTMLInputElement> (domElement);
-	if (value)
-        return value;
+    	value = get_value <nsIDOMHTMLInputElement> (domElement);
+    	if (value)
+            return value;
+    }
+    
+    return NULL;
 }
 
 extern "C" void

@@ -468,7 +468,7 @@ context_menu_cb (EphyEmbed *embed,
 	GtkAction  *action;
 	WindowData *data;
     const char *text;
-    SeahorseTextType texttype;
+    SeahorseTextType texttype = SEAHORSE_TEXT_TYPE_NONE;
     
 	data = (WindowData *) g_object_get_data (G_OBJECT (window), WINDOW_DATA_KEY);
 	g_return_val_if_fail (data != NULL, FALSE);
@@ -479,10 +479,9 @@ context_menu_cb (EphyEmbed *embed,
         return FALSE;
         
 	text = mozilla_get_text (embed);
-	if (text == NULL)
-	    return FALSE;
 	
-    texttype = detect_text_type (text, -1, NULL, NULL);   
+	if (text != NULL)
+        texttype = detect_text_type (text, -1, NULL, NULL);   
 
 	action = gtk_action_group_get_action (data->action_group, ENCRYPT_ACTION);
 	g_return_val_if_fail (action != NULL, FALSE);	
