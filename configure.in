@@ -317,10 +317,11 @@ else
     echo "enabling nautilus plugin..."
     echo "checking for supported versions of nautilus..."
 
-    PKG_CHECK_MODULES(NAUTILUS, libnautilus-extension >= 2.9.0 glib-2.0 >= 2.6.0)
+    PKG_CHECK_MODULES(NAUTILUS, [libnautilus-extension >= 2.9.0 glib-2.0 >= 2.6.0],
+                      [enable_nautilus=yes],[enable_nautilus=no])
 
     # The new Nautilus extension
-    if test -n "$NAUTILUS_CFLAGS"; then
+    if test "$enable_nautilus" = "yes"; then
         with_nautilus_ext=yes
         AC_SUBST(NAUTILUS_CFLAGS)
         AC_SUBST(NAUTILUS_LIBS)
