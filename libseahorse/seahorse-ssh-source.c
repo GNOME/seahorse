@@ -519,7 +519,8 @@ seahorse_ssh_source_load (SeahorseKeySource *sksrc, SeahorseKeySourceLoad mode,
         
         g_free (ctx.privfile);
         g_free (ctx.pubfile);
-            
+        ctx.privfile = ctx.pubfile = NULL;
+
         if (ctx.matched)
             break;
     }
@@ -541,6 +542,7 @@ seahorse_ssh_source_load (SeahorseKeySource *sksrc, SeahorseKeySourceLoad mode,
         }
         
         g_free (ctx.pubfile);
+		ctx.pubfile = NULL;
     }
     
     /* Load the other keys file */
@@ -557,6 +559,7 @@ seahorse_ssh_source_load (SeahorseKeySource *sksrc, SeahorseKeySourceLoad mode,
         }
         
         g_free (ctx.pubfile);
+		ctx.pubfile = NULL;
     }
 
     /* Clean up and done */
