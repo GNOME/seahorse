@@ -561,9 +561,7 @@ else
             echo "enabling epiphany plugin"
             
             EPIPHANY_EXTENSION_INIT([$E_API_VERSION], [$EPIPHANY_REQUIRED])
-            
-            EXTENSIONS_DIR=$EPIPHANY_EXTENSIONS_DIR
-            AC_SUBST([EXTENSIONS_DIR])
+            AC_SUBST([E_API_VERSION])
             
             AC_SUBST([EPIPHANY_DEPENDENCY_CFLAGS])
             AC_SUBST([EPIPHANY_DEPENDENCY_LIBS])
