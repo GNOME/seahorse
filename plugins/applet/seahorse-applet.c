@@ -574,15 +574,17 @@ dvi_received (GtkClipboard *board, const gchar *text, SeahorseApplet *sapplet)
     const gchar *start;         /* Pointer to start of the block */
     const gchar *end;           /* Pointer to end of the block */
     
-    /* No text on clipboard */
+    /* Try to figure out what clipboard contains */
     if (text == NULL)
-        return;
+		type = SEAHORSE_TEXT_TYPE_NONE;
+	else 
+	    type = detect_text_type (text, -1, &start, &end);
     
-    /* Try to figure out what it contains */
-    type = detect_text_type (text, -1, &start, &end);
-    
-    if (type == SEAHORSE_TEXT_TYPE_NONE)
-        return;
+    if (type == SEAHORSE_TEXT_TYPE_NONE || type == SEAHORSE_TEXT_TYPE_PLAIN) {
+        seahorse_notification_display(_("No PGP key or message was found on clipboard"),
+                                      _("No PGP data found."), FALSE, NULL, GTK_WIDGET(sapplet));
+		return;
+	}
     
     switch (type) {
 
