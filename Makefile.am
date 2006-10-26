@@ -1,5 +1,7 @@
 ## Process this file with automake to produce Makefile.in
 
+ACLOCAL_AMFLAGS = -I m4
+
 if WITH_AGENT
 AGENT_DIR = agent
 else
@@ -36,8 +38,7 @@ EXTRA_DIST = \
     intltool-merge.in \
     intltool-update.in \
     gnome-doc-utils.make \
-    omf.make \
-    m4
+    omf.make 
 
 DISTCLEANFILES = \
     gnome-doc-utils.make \
