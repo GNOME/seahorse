@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-09-15 13:10+0300\n"
-"PO-Revision-Date: 2006-09-15 13:59+0300\n"
+"POT-Creation-Date: 2006-10-26 18:36+0300\n"
+"PO-Revision-Date: 2006-10-26 18:55+0300\n"
 "Last-Translator: Ilkka Tuohela <hile@iki.fi>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -131,8 +131,8 @@ msgstr "prosessin fork() epäonnistui"
 msgid "couldn't create new process group"
 msgstr "uutta prosessiryhmää ei voi luoda"
 
-#: ../daemon/seahorse-daemon.c:222 ../plugins/applet/seahorse-applet.c:1013
-#: ../plugins/nautilus/seahorse-tool.c:567 ../src/main.c:59
+#: ../daemon/seahorse-daemon.c:222 ../plugins/applet/seahorse-applet.c:1015
+#: ../plugins/nautilus/seahorse-tool.c:571 ../src/main.c:59
 msgid "couldn't drop privileges properly"
 msgstr "Oikeuksia ei voitu tiputtaa kunnolla"
 
@@ -491,7 +491,6 @@ msgid "The orientation of the tray."
 msgstr "Ilmoitusalueen suunta"
 
 #: ../libseahorse/seahorse-add-keyserver.glade.h:1
-#: ../src/seahorse-ssh-upload.glade.h:1
 msgid ":"
 msgstr ":"
 
@@ -508,12 +507,11 @@ msgid "Key Server Type:"
 msgstr "Avainpalvelimen tyyppi:"
 
 #: ../libseahorse/seahorse-add-keyserver.glade.h:5
-#: ../src/seahorse-ssh-upload.glade.h:5
+#: ../src/seahorse-ssh-upload.glade.h:3
 msgid "The host name or address of the server."
 msgstr "Palvelimen verkkonimi tai osoite."
 
 #: ../libseahorse/seahorse-add-keyserver.glade.h:6
-#: ../src/seahorse-ssh-upload.glade.h:6
 msgid "The port to access the server on."
 msgstr "Portti, jossa palvelin on."
 
@@ -529,8 +527,8 @@ msgstr "Palvelimelta \"%s\" ei löytynyt vastaavia avaimia."
 #: ../libseahorse/seahorse-hkp-source.c:359
 #, c-format
 msgid "Search was not specific enough. Server '%s' found too many keys."
-msgstr "Haku ei ollut tarpeeksi tarkka. Palvelin \"%s\" löysi liian "
-"monta avainta."
+msgstr ""
+"Haku ei ollut tarpeeksi tarkka. Palvelin \"%s\" löysi liian monta avainta."
 
 #: ../libseahorse/seahorse-hkp-source.c:361
 #, c-format
@@ -631,11 +629,12 @@ msgid "Enter passphrase"
 msgstr "Anna tunnuslause"
 
 #: ../libseahorse/seahorse-pgp-key.c:139 ../libseahorse/seahorse-ssh-key.c:112
+#: ../src/seahorse-gkeyring-item.c:229
 msgid "Invalid"
 msgstr "Virheellinen"
 
 #: ../libseahorse/seahorse-pgp-key.c:161
-#: ../src/seahorse-pgp-public-key-properties.glade.h:28
+#: ../src/seahorse-pgp-public-key-properties.glade.h:30
 msgid "Public PGP Key"
 msgstr "Julkinen PGP-avain"
 
@@ -644,12 +643,12 @@ msgstr "Julkinen PGP-avain"
 msgid "Private PGP Key"
 msgstr "Yksityinen PGP-avain"
 
-#: ../libseahorse/seahorse-pgp-key.c:681 ../libseahorse/seahorse-validity.c:31
-#: ../src/seahorse-key-properties.c:1072
+#: ../libseahorse/seahorse-pgp-key.c:682 ../libseahorse/seahorse-validity.c:31
+#: ../src/seahorse-key-properties.c:1089
 msgid "Unknown"
 msgstr "Tuntematon"
 
-#: ../libseahorse/seahorse-pgp-key.c:683
+#: ../libseahorse/seahorse-pgp-key.c:684
 msgid "ElGamal"
 msgstr "ElGamal"
 
@@ -667,16 +666,22 @@ msgid_plural "Loaded %d keys"
 msgstr[0] "Ladattiin %d avain"
 msgstr[1] "Ladattiin %d avainta"
 
-#: ../libseahorse/seahorse-pgp-source.c:805
+#: ../libseahorse/seahorse-pgp-source.c:802
 msgid "Loading Keys..."
 msgstr "Ladataan avaimia..."
 
-#: ../libseahorse/seahorse-pgp-source.c:977 ../src/seahorse-key-manager.c:399
-#: ../src/seahorse-key-manager.c:445
+#: ../libseahorse/seahorse-pgp-source.c:852
+msgid ""
+"Invalid key data (missing UIDs). This may be due to a computer with a date "
+"set in the future or a missing self-signature."
+msgstr ""
+
+#: ../libseahorse/seahorse-pgp-source.c:988 ../src/seahorse-key-manager.c:454
+#: ../src/seahorse-key-manager.c:500
 msgid "Importing Keys"
 msgstr "Tuodaan avaimia"
 
-#: ../libseahorse/seahorse-pgp-source.c:1010
+#: ../libseahorse/seahorse-pgp-source.c:1021
 msgid "Exporting Keys"
 msgstr "Viedään avaimia"
 
@@ -717,8 +722,7 @@ msgstr "Palvelua seahorse-daemon ei voitu käynnistää"
 #: ../libseahorse/seahorse-prefs-cache.c:259
 msgid ""
 "The program 'seahorse-daemon' is necessary for the caching of passphrases"
-msgstr ""
-"Ohjelma \"seahorse-daemon\" vaaditaan avainten välimuistin käyttöön"
+msgstr "Ohjelma \"seahorse-daemon\" vaaditaan avainten välimuistin käyttöön"
 
 #: ../libseahorse/seahorse-prefs.glade.h:1
 msgid "<b>Defaults</b>"
@@ -735,7 +739,7 @@ msgid "<b>Remember PGP Passphrases</b>"
 msgstr "<b>Muista PGP-tunnuslauseet</b>"
 
 #: ../libseahorse/seahorse-prefs.glade.h:4
-msgid "<b>SSH Keys</b>"
+msgid "<b>Secure Shell Keys</b>"
 msgstr "<b>SSH-avaimet</b>"
 
 #: ../libseahorse/seahorse-prefs.glade.h:5
@@ -743,8 +747,8 @@ msgid "<i>A non-supported PGP passphrase caching agent is running.</i>"
 msgstr "<b>Käytössä oleva PGP-salasanojen välimuisti ei ole tuettu.</i>"
 
 #: ../libseahorse/seahorse-prefs.glade.h:6
-msgid ""
-"<i>No SSH caching agent is running. Cannot automatically load SSH keys.</i>"
+#, fuzzy
+msgid "<i>No SSH caching agent is running. Cannot load Secure Shell keys.</i>"
 msgstr ""
 "<i>SSH-avainten välimuistia ei ole käytössä. SSH-avaimia ei voi avata "
 "automaattisesti</i>"
@@ -754,7 +758,8 @@ msgid "<i>This key is used to sign messages when no other key is chosen</i>"
 msgstr ""
 
 #: ../libseahorse/seahorse-prefs.glade.h:8
-msgid "Automatically load _SSH keys"
+#, fuzzy
+msgid "Automatically load _Secure Shell keys"
 msgstr "Lataa _SSH-avaimet automaattisesti"
 
 #: ../libseahorse/seahorse-prefs.glade.h:9
@@ -854,79 +859,87 @@ msgstr ""
 msgid "Progress Title"
 msgstr ""
 
-#: ../libseahorse/seahorse-secure-entry.c:361
+#: ../libseahorse/seahorse-secure-entry.c:275
 msgid "Cursor Position"
 msgstr ""
 
-#: ../libseahorse/seahorse-secure-entry.c:361
+#: ../libseahorse/seahorse-secure-entry.c:275
 msgid "The current position of the insertion cursor in chars"
 msgstr ""
 
-#: ../libseahorse/seahorse-secure-entry.c:365
+#: ../libseahorse/seahorse-secure-entry.c:279
 msgid "Selection Bound"
 msgstr ""
 
-#: ../libseahorse/seahorse-secure-entry.c:365
+#: ../libseahorse/seahorse-secure-entry.c:279
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr ""
 
-#: ../libseahorse/seahorse-secure-entry.c:369
+#: ../libseahorse/seahorse-secure-entry.c:283
 msgid "Maximum length"
 msgstr ""
 
-#: ../libseahorse/seahorse-secure-entry.c:369
+#: ../libseahorse/seahorse-secure-entry.c:283
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr ""
 
-#: ../libseahorse/seahorse-secure-entry.c:373
+#: ../libseahorse/seahorse-secure-entry.c:287
 msgid "Has Frame"
 msgstr ""
 
-#: ../libseahorse/seahorse-secure-entry.c:373
+#: ../libseahorse/seahorse-secure-entry.c:287
 msgid "FALSE removes outside bevel from entry"
 msgstr ""
 
-#: ../libseahorse/seahorse-secure-entry.c:377
+#: ../libseahorse/seahorse-secure-entry.c:291
 msgid "Invisible character"
 msgstr ""
 
-#: ../libseahorse/seahorse-secure-entry.c:377
+#: ../libseahorse/seahorse-secure-entry.c:291
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
 
-#: ../libseahorse/seahorse-secure-entry.c:381
+#: ../libseahorse/seahorse-secure-entry.c:295
 msgid "Activates default"
 msgstr ""
 
-#: ../libseahorse/seahorse-secure-entry.c:381
+#: ../libseahorse/seahorse-secure-entry.c:295
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
 msgstr ""
 
-#: ../libseahorse/seahorse-secure-entry.c:385
+#: ../libseahorse/seahorse-secure-entry.c:299
 msgid "Width in chars"
 msgstr "Leveys merkkeinä"
 
-#: ../libseahorse/seahorse-secure-entry.c:385
+#: ../libseahorse/seahorse-secure-entry.c:299
 msgid "Number of characters to leave space for in the entry"
 msgstr ""
 
-#: ../libseahorse/seahorse-secure-entry.c:389
+#: ../libseahorse/seahorse-secure-entry.c:303
 msgid "Scroll offset"
 msgstr ""
 
-#: ../libseahorse/seahorse-secure-entry.c:389
+#: ../libseahorse/seahorse-secure-entry.c:303
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr ""
 
-#: ../libseahorse/seahorse-secure-entry.c:393
+#: ../libseahorse/seahorse-secure-entry.c:307
 msgid "Text"
 msgstr "Teksti"
 
-#: ../libseahorse/seahorse-secure-entry.c:393
+#: ../libseahorse/seahorse-secure-entry.c:307
 msgid "The contents of the entry"
+msgstr ""
+
+#: ../libseahorse/seahorse-secure-entry.c:311
+msgid "Visibility"
+msgstr ""
+
+#: ../libseahorse/seahorse-secure-entry.c:311
+msgid "Whether contents are drawn using invisible character"
 msgstr ""
 
 #: ../libseahorse/seahorse-server-source.c:483
@@ -957,40 +970,44 @@ msgid "_Sign message with key:"
 msgstr "_Allekirjoita viesti avaimella:"
 
 #: ../libseahorse/seahorse-ssh-key.c:90
-msgid "(Unreadable SSH Key)"
-msgstr "(SSH-avain ei ole luettavissa)"
+msgid "(Unreadable Secure Shell Key)"
+msgstr "(Lukukelvoton SSH-avain)"
 
 #: ../libseahorse/seahorse-ssh-key.c:94 ../libseahorse/seahorse-ssh-key.c:98
-#: ../libseahorse/seahorse-ssh-source.c:761
+#: ../libseahorse/seahorse-ssh-source.c:765
 #: ../src/seahorse-generate-select.c:145
-msgid "SSH Key"
+#: ../src/seahorse-ssh-key-properties.glade.h:20
+msgid "Secure Shell Key"
 msgstr "SSH-avain"
 
 #: ../libseahorse/seahorse-ssh-key.c:126
-msgid "Private SSH Key"
+msgid "Private Secure Shell Key"
 msgstr "Yksityinen SSH-avain"
 
 #: ../libseahorse/seahorse-ssh-key.c:129
-msgid "Public SSH Key"
+msgid "Public Secure Shell Key"
 msgstr "Julkinen SSH-avain"
 
 #: ../libseahorse/seahorse-ssh-operation.c:135
 #: ../libseahorse/seahorse-ssh-operation.c:697
-msgid "The SSH command was terminated unexpectedly."
+msgid "The ssh command was terminated unexpectedly."
 msgstr "SSH-komento keskeytettiin odottamatta."
 
 #: ../libseahorse/seahorse-ssh-operation.c:143
-#: ../libseahorse/seahorse-ssh-operation.c:704
 msgid "The SSH command failed."
 msgstr "SSH-komento epäonnistui."
 
 #: ../libseahorse/seahorse-ssh-operation.c:441
-msgid "SSH key"
+msgid "Secure Shell key"
 msgstr "SSH-avain"
+
+#: ../libseahorse/seahorse-ssh-operation.c:704
+msgid "The ssh command failed."
+msgstr "SSH-komento epäonnistui."
 
 #. Just prompt over and over again
 #: ../libseahorse/seahorse-ssh-operation.c:727
-msgid "SSH Passphrase"
+msgid "Secure Shell Passphrase"
 msgstr "SSH-tunnuslause"
 
 #: ../libseahorse/seahorse-ssh-operation.c:808
@@ -1016,21 +1033,21 @@ msgid "Enter Key Passphrase"
 msgstr "Anna uusi tunnuslause"
 
 #: ../libseahorse/seahorse-ssh-operation.c:890
-msgid "New SSH Passphrase"
-msgstr "Uusi SSH-tunnuslause"
+msgid "New Secure Shell Key Passphrase"
+msgstr "SSH-avaimen uusi tunnuslause"
 
 #: ../libseahorse/seahorse-ssh-operation.c:891
 msgid "Enter a passphrase for your new SSH key."
 msgstr "Anna tunnuslause uudelle SSH-avaimellesi."
 
 #: ../libseahorse/seahorse-ssh-operation.c:1029
-msgid "SSH Key Passphrase"
+msgid "Secure Shell Key Passphrase"
 msgstr "SSH-avaimen tunnuslause"
 
 #: ../libseahorse/seahorse-ssh-operation.c:1029
 #, c-format
-msgid "Enter the SSH passphrase for: %s"
-msgstr "Anna tunnuslause SSH-avaimelle: %s"
+msgid "Enter the passphrase for: %s"
+msgstr "Anna avaimen tunnuslause: %s"
 
 #: ../libseahorse/seahorse-ssh-operation.c:1030
 msgid "Save this passphrase in my keyring"
@@ -1046,7 +1063,7 @@ msgid "Importing key. Enter passphrase"
 msgstr "Tuodaan avainta. Anna tunnuslause"
 
 #: ../libseahorse/seahorse-ssh-operation.c:1108
-#: ../src/seahorse-key-manager.c:458
+#: ../src/seahorse-key-manager.c:513
 #: ../src/seahorse-pgp-keys.desktop.in.in.h:1
 msgid "Import Key"
 msgstr "Tuo avain"
@@ -1119,20 +1136,20 @@ msgstr ""
 msgid "_Replace"
 msgstr "Ko_rvaa"
 
-#: ../libseahorse/seahorse-validity.c:33 ../src/seahorse-key-properties.c:1078
-#: ../src/seahorse-key-properties.c:1208 ../src/seahorse-key-properties.c:1280
+#: ../libseahorse/seahorse-validity.c:33 ../src/seahorse-key-properties.c:1095
+#: ../src/seahorse-key-properties.c:1225 ../src/seahorse-key-properties.c:1297
 msgid "Never"
 msgstr "Ei koskaan"
 
-#: ../libseahorse/seahorse-validity.c:35 ../src/seahorse-key-properties.c:1085
+#: ../libseahorse/seahorse-validity.c:35 ../src/seahorse-key-properties.c:1102
 msgid "Marginal"
 msgstr "Jonkin verran"
 
-#: ../libseahorse/seahorse-validity.c:37 ../src/seahorse-key-properties.c:1091
+#: ../libseahorse/seahorse-validity.c:37 ../src/seahorse-key-properties.c:1108
 msgid "Full"
 msgstr "Kokonaan"
 
-#: ../libseahorse/seahorse-validity.c:39 ../src/seahorse-key-properties.c:1097
+#: ../libseahorse/seahorse-validity.c:39 ../src/seahorse-key-properties.c:1114
 msgid "Ultimate"
 msgstr "Ehdottomasti"
 
@@ -1140,7 +1157,7 @@ msgstr "Ehdottomasti"
 msgid "Disabled"
 msgstr "Ei käytössä"
 
-#: ../libseahorse/seahorse-validity.c:43 ../src/seahorse-key-properties.c:1276
+#: ../libseahorse/seahorse-validity.c:43 ../src/seahorse-key-properties.c:1293
 msgid "Revoked"
 msgstr "Peruutettu"
 
@@ -1162,12 +1179,12 @@ msgid "Seahorse Applet Factory"
 msgstr ""
 
 #: ../plugins/applet/GNOME_SeahorseApplet.xml.h:1
-#: ../src/seahorse-key-manager.c:1111
+#: ../src/seahorse-key-manager.c:1189
 msgid "_About"
 msgstr "_Tietoja"
 
 #: ../plugins/applet/GNOME_SeahorseApplet.xml.h:2
-#: ../src/seahorse-key-manager.c:1095 ../src/seahorse-keyserver-results.c:355
+#: ../src/seahorse-key-manager.c:1173 ../src/seahorse-keyserver-results.c:361
 msgid "_Help"
 msgstr "O_hje"
 
@@ -1180,11 +1197,11 @@ msgid "seahorse-applet"
 msgstr "seahorse-applet"
 
 #: ../plugins/applet/seahorse-applet.c:316
-#: ../plugins/applet/seahorse-applet.c:835
+#: ../plugins/applet/seahorse-applet.c:837
 msgid "Use PGP/GPG to encrypt/decrypt/sign/verify/import the clipboard."
 msgstr ""
 
-#: ../plugins/applet/seahorse-applet.c:321 ../src/seahorse-key-manager.c:813
+#: ../plugins/applet/seahorse-applet.c:321 ../src/seahorse-key-manager.c:868
 msgid "translator-credits"
 msgstr ""
 "Jarmo Kielosto, 2000\n"
@@ -1192,14 +1209,13 @@ msgstr ""
 "\n"
 "http://gnome.fi/"
 
-#: ../plugins/applet/seahorse-applet.c:324 ../src/seahorse-key-manager.c:816
+#: ../plugins/applet/seahorse-applet.c:324 ../src/seahorse-key-manager.c:871
 msgid "Seahorse Project Homepage"
 msgstr "Seahorse-projektin kotisivu"
 
 #. Get the recipient list
 #: ../plugins/applet/seahorse-applet.c:379
 #: ../plugins/gedit/seahorse-gedit.c:332
-#, fuzzy
 msgid "Choose Recipient Keys"
 msgstr "Valitse vastaanottajien avaimet"
 
@@ -1233,42 +1249,55 @@ msgid "The clipboard could not be Signed."
 msgstr "Leikepöytää ei voitu allekirjoittaa."
 
 #: ../plugins/applet/seahorse-applet.c:500
-#: ../plugins/applet/seahorse-applet.c:532
 msgid "Import Failed"
 msgstr "Tuonti epäonnistui"
 
 #: ../plugins/applet/seahorse-applet.c:501
-#: ../plugins/applet/seahorse-applet.c:533
 msgid "Keys were found but not imported."
 msgstr "Avaimia löytyi mutta niitä ei tuotu."
 
-#: ../plugins/applet/seahorse-applet.c:616
+#: ../plugins/applet/seahorse-applet.c:532
+msgid "Decrypting Failed"
+msgstr "Salauksen purku epäonnistui"
+
+#: ../plugins/applet/seahorse-applet.c:533
+msgid "Text may be malformed."
+msgstr ""
+
+#: ../plugins/applet/seahorse-applet.c:584
+msgid "No PGP key or message was found on clipboard"
+msgstr ""
+
+#: ../plugins/applet/seahorse-applet.c:585
+msgid "No PGP data found."
+msgstr ""
+
+#: ../plugins/applet/seahorse-applet.c:618
 msgid "Decrypted Text"
 msgstr "Salauksesta purettu teksti"
 
-#: ../plugins/applet/seahorse-applet.c:684
+#: ../plugins/applet/seahorse-applet.c:686
 msgid "Could not display the help file"
 msgstr "Ohjetiedostoa ei voitu näyttää"
 
-#: ../plugins/applet/seahorse-applet.c:747
+#: ../plugins/applet/seahorse-applet.c:749
 msgid "_Encrypt Clipboard"
 msgstr "_Salattu leikepöytä"
 
-#: ../plugins/applet/seahorse-applet.c:754
+#: ../plugins/applet/seahorse-applet.c:756
 msgid "_Sign Clipboard"
 msgstr "_Allekirjoita leikepöytä"
 
-#: ../plugins/applet/seahorse-applet.c:761
+#: ../plugins/applet/seahorse-applet.c:763
 msgid "_Decrypt/Verify Clipboard"
 msgstr "_Pura tai varmista leikepöytä"
 
-#: ../plugins/applet/seahorse-applet.c:767
-#, fuzzy
+#: ../plugins/applet/seahorse-applet.c:769
 msgid "_Import Keys from Clipboard"
-msgstr "Tuo avaimia tiedostosta"
+msgstr "_Tuo avaimia leikepöydältä"
 
-#: ../plugins/applet/seahorse-applet.c:832
 #: ../plugins/applet/seahorse-applet.c:834
+#: ../plugins/applet/seahorse-applet.c:836
 msgid "Encryption Applet"
 msgstr "Salaussovelma"
 
@@ -1304,8 +1333,8 @@ msgstr "Salattu teksti"
 msgid "Couldn't encrypt text"
 msgstr "Tekstiä ei voitu salata"
 
-#: ../plugins/gedit/seahorse-gedit.c:387 ../src/seahorse-key-manager.c:340
-#: ../src/seahorse-key-manager.c:408 ../src/seahorse-key-manager.c:429
+#: ../plugins/gedit/seahorse-gedit.c:387 ../src/seahorse-key-manager.c:395
+#: ../src/seahorse-key-manager.c:463 ../src/seahorse-key-manager.c:484
 msgid "Couldn't import keys"
 msgstr "Avaimia ei voitu tuoda"
 
@@ -1333,7 +1362,7 @@ msgstr "Purettu salateksti"
 msgid "Verified text"
 msgstr "Varmistettu salateksti"
 
-#: ../plugins/gedit/seahorse-gedit.c:582 ../src/seahorse-key-manager.c:349
+#: ../plugins/gedit/seahorse-gedit.c:582 ../src/seahorse-key-manager.c:404
 #, c-format
 msgid "Imported %d key"
 msgid_plural "Imported %d keys"
@@ -1451,41 +1480,41 @@ msgstr "Luo lista URI-osoitteista oletussyötteestä"
 msgid "Choose Recipients"
 msgstr "Valitse vastaanottajat"
 
-#: ../plugins/nautilus/seahorse-tool.c:187
-#: ../plugins/nautilus/seahorse-tool.c:269
+#: ../plugins/nautilus/seahorse-tool.c:191
+#: ../plugins/nautilus/seahorse-tool.c:273
 msgid "Couldn't load keys"
 msgstr "Avaimia ei voitu ladata"
 
-#: ../plugins/nautilus/seahorse-tool.c:203
+#: ../plugins/nautilus/seahorse-tool.c:207
 #, c-format
 msgid "Choose Encrypted File Name for '%s'"
 msgstr ""
 
-#: ../plugins/nautilus/seahorse-tool.c:253
+#: ../plugins/nautilus/seahorse-tool.c:257
 msgid "Choose Signer"
 msgstr "Valitse allekirjoittaja"
 
-#: ../plugins/nautilus/seahorse-tool.c:288
+#: ../plugins/nautilus/seahorse-tool.c:292
 #, c-format
 msgid "Choose Signature File Name for '%s'"
 msgstr "Valitse allekirjoitustiedoston nimi kohteelle \"%s\""
 
-#: ../plugins/nautilus/seahorse-tool.c:368
+#: ../plugins/nautilus/seahorse-tool.c:372
 msgid "Imported key"
 msgstr "Tuotiin avain"
 
-#: ../plugins/nautilus/seahorse-tool.c:369 ../src/seahorse-key-manager.c:350
+#: ../plugins/nautilus/seahorse-tool.c:373 ../src/seahorse-key-manager.c:405
 #, c-format
 msgid "Imported %d keys"
 msgstr "Tuotiin %d avainta"
 
 #. File to decrypt to
-#: ../plugins/nautilus/seahorse-tool.c:390
+#: ../plugins/nautilus/seahorse-tool.c:394
 #, c-format
 msgid "Choose Decrypted File Name for '%s'"
 msgstr ""
 
-#: ../plugins/nautilus/seahorse-tool.c:446
+#: ../plugins/nautilus/seahorse-tool.c:450
 #, c-format
 msgid "Choose Original File for '%s'"
 msgstr ""
@@ -1495,61 +1524,58 @@ msgstr ""
 #. * The last thing we want to do is cascade a big pile of error
 #. * dialogs at the user.
 #.
-#: ../plugins/nautilus/seahorse-tool.c:518
+#: ../plugins/nautilus/seahorse-tool.c:522
 msgid "No valid signatures found"
 msgstr "Kelvollisia allekirjoituksia ei löydy"
 
-#: ../plugins/nautilus/seahorse-tool.c:585
+#: ../plugins/nautilus/seahorse-tool.c:589
 msgid "File Encryption Tool"
 msgstr "Tiedostojen salaustyökalu"
 
-#: ../plugins/nautilus/seahorse-tool.c:623
+#: ../plugins/nautilus/seahorse-tool.c:627
 msgid "Encrypting"
-msgstr "Salataan"
+msgstr "Salaus"
 
-#: ../plugins/nautilus/seahorse-tool.c:624
+#: ../plugins/nautilus/seahorse-tool.c:628
 #, c-format
 msgid "Couldn't encrypt file: %s"
 msgstr "Tiedostoa ei voitu salata: %s"
 
-#: ../plugins/nautilus/seahorse-tool.c:632
+#: ../plugins/nautilus/seahorse-tool.c:636
 msgid "Signing"
-msgstr "Allekirjoitetaan"
+msgstr "Allekirjoitus"
 
-#: ../plugins/nautilus/seahorse-tool.c:633
+#: ../plugins/nautilus/seahorse-tool.c:637
 #, c-format
 msgid "Couldn't sign file: %s"
 msgstr "Tiedostoa ei voitu allekirjoittaa: %s"
 
-#: ../plugins/nautilus/seahorse-tool.c:638
-#, fuzzy
+#: ../plugins/nautilus/seahorse-tool.c:642
 msgid "Importing"
-msgstr "Tuo"
+msgstr "Tuonti"
 
-#: ../plugins/nautilus/seahorse-tool.c:639
-#, fuzzy, c-format
+#: ../plugins/nautilus/seahorse-tool.c:643
+#, c-format
 msgid "Couldn't import keys from file: %s"
-msgstr "Tuo avain tiedostosta"
+msgstr "Avaimia ei voitu tuoda tiedostosta: %s"
 
-#: ../plugins/nautilus/seahorse-tool.c:645
-#, fuzzy
+#: ../plugins/nautilus/seahorse-tool.c:649
 msgid "Decrypting"
-msgstr "Pura salaus..."
+msgstr "Salauksen purku"
 
-#: ../plugins/nautilus/seahorse-tool.c:646
-#, fuzzy, c-format
+#: ../plugins/nautilus/seahorse-tool.c:650
+#, c-format
 msgid "Couldn't decrypt file: %s"
-msgstr "Tuo avaimia"
+msgstr "Tiedoston salausta ei voitu purkaa: %s"
 
-#: ../plugins/nautilus/seahorse-tool.c:651
-#, fuzzy
+#: ../plugins/nautilus/seahorse-tool.c:655
 msgid "Verifying"
 msgstr "Varmista"
 
-#: ../plugins/nautilus/seahorse-tool.c:652
-#, fuzzy, c-format
+#: ../plugins/nautilus/seahorse-tool.c:656
+#, c-format
 msgid "Couldn't verify file: %s"
-msgstr "Varmista allekirjoitustiedosto"
+msgstr "Tiedostoa ei voitu varmistaa: %s"
 
 #. TRANSLATOR: This string will become
 #. * "You have selected %d files and %d folders"
@@ -1598,8 +1624,7 @@ msgstr "Valmistellaan..."
 msgid "Couldn't list files"
 msgstr "Tiedostoja ei voitu listata"
 
-#: ../src/main.c:75 ../src/seahorse-key-manager.c:808
-#: ../src/seahorse-key-manager.glade.h:2
+#: ../src/main.c:75 ../src/seahorse-key-manager.c:863
 msgid "Encryption Key Manager"
 msgstr "Salausavainten hallinta"
 
@@ -1698,7 +1723,6 @@ msgid "Optional email address"
 msgstr "Valinnainen sähköpostiosoite"
 
 #: ../src/seahorse-add-uid.glade.h:8 ../src/seahorse-pgp-generate.glade.h:13
-#: ../src/seahorse-ssh-generate.glade.h:13
 msgid "_Email Address:"
 msgstr "_Sähköpostiosoite:"
 
@@ -1719,11 +1743,12 @@ msgid "New _Passphrase:"
 msgstr "Uusi _tunnuslause:"
 
 #: ../src/seahorse-delete.c:39
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s is a private key. Make sure you have a backup. Do you still want to "
 "delete it?"
-msgstr "%s on avainpari! Haluatko vielä poistaa sen?"
+msgstr "%s on salainen avain. Varmista että sinulla on varmuuskopio. "
+"Haluatko varmasti poistaa avaimen?"
 
 #: ../src/seahorse-delete.c:70
 #, c-format
@@ -1731,9 +1756,8 @@ msgid "Are you sure you want to permanently delete %s?"
 msgstr "Haluatko varmasti poistaa avaimen %s?"
 
 #: ../src/seahorse-delete.c:116
-#, fuzzy
 msgid "Couldn't delete key"
-msgstr "Poista avain"
+msgstr "Avainta ei voitu poistaa"
 
 #: ../src/seahorse-delete.c:133
 #, c-format
@@ -1754,21 +1778,21 @@ msgid "Couldn't delete user id"
 msgstr "Käyttäjän tunnistetta ei voitu poistaa"
 
 #: ../src/seahorse.desktop.in.in.h:1
-msgid "Encryption Keys"
-msgstr "Salausavaimet"
+msgid "Manage your passwords and encryption keys"
+msgstr "Hallitse salasanoja ja salausavaimia"
 
-#: ../src/seahorse.desktop.in.in.h:2
-msgid "Manage your encryption keys"
-msgstr "Hallitse salausavaimiasi"
+#: ../src/seahorse.desktop.in.in.h:2 ../src/seahorse-key-manager.glade.h:7
+msgid "Passwords and Encryption Keys"
+msgstr "Salasanat ja salausavaimet"
 
 #: ../src/seahorse-expires.c:66
 msgid "Couldn't change expiry date"
 msgstr "Vanhenemispäivää ei voitu muuttaa"
 
 #: ../src/seahorse-expires.c:130
-#, fuzzy, c-format
+#, c-format
 msgid "Expiry for Subkey %d of %s"
-msgstr "Aliavaimen vanheneminen avaimelle %d/%s"
+msgstr "Aliavaimen %d vanheneminen avaimessa %s"
 
 #: ../src/seahorse-expires.c:132
 #, c-format
@@ -1788,9 +1812,8 @@ msgid "Revoke key"
 msgstr "Peru avain"
 
 #: ../src/seahorse-generate-select.c:143
-#, fuzzy
 msgid "Used to encrypt email and files"
-msgstr "Pura tiedoston salaus"
+msgstr "Käytetään sähköpostin ja tiedostojen salaukseen"
 
 #: ../src/seahorse-generate-select.c:146
 msgid "Used to access other computers (eg: via a terminal)"
@@ -1801,252 +1824,415 @@ msgid "<b>_Select the kind of key you wish to create:</b>"
 msgstr ""
 
 #: ../src/seahorse-generate-select.glade.h:2
+msgid "C_ontinue"
+msgstr "J_atka"
+
+#: ../src/seahorse-generate-select.glade.h:3
 msgid "Create a New Key"
 msgstr "Luo uusi avain"
 
-#: ../src/seahorse-generate-select.glade.h:3
-msgid "_Continue"
-msgstr "J_atka"
+#: ../src/seahorse-gkeyring-item-properties.c:90
+msgid "Access a network share or resource"
+msgstr ""
 
-#: ../src/seahorse-key-manager.c:388
+#: ../src/seahorse-gkeyring-item-properties.c:94
+msgid "Access a website"
+msgstr ""
+
+#: ../src/seahorse-gkeyring-item-properties.c:98
+msgid "Unlocks a PGP key"
+msgstr ""
+
+#: ../src/seahorse-gkeyring-item-properties.c:101
+msgid "Unlocks a Secure Shell key"
+msgstr ""
+
+#: ../src/seahorse-gkeyring-item-properties.c:104
+msgid "Saved password or login"
+msgstr ""
+
+#: ../src/seahorse-gkeyring-item-properties.c:116
+msgid "Network Credentials"
+msgstr ""
+
+#: ../src/seahorse-gkeyring-item-properties.c:116
+#: ../src/seahorse-gkeyring-item.c:247 ../src/seahorse-gkeyring-source.c:506
+msgid "Password"
+msgstr "Salasana"
+
+#: ../src/seahorse-gkeyring-item-properties.c:177
+msgid "Couldn't change password."
+msgstr "Salasanaa ei voitu vaihtaa."
+
+#: ../src/seahorse-gkeyring-item-properties.c:284
+msgid "Couldn't set description."
+msgstr "Kuvausta ei voitu asettaa."
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:1
+msgid "<b>Description:</b>"
+msgstr "<b>Kuvaus:</b>"
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:2
+msgid "<b>Login:</b>"
+msgstr "<b>Käyttäjätunnus:</b>"
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:3
+msgid "<b>Password:</b>"
+msgstr "<b>Salasana:</b>"
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:4
+msgid "<b>Server:</b>"
+msgstr "<b>Palvelin:</b>"
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:5
+#: ../src/seahorse-pgp-public-key-properties.glade.h:9
+#: ../src/seahorse-ssh-key-properties.glade.h:9
+msgid "<b>Technical Details:</b>"
+msgstr "<b>Tekniset yksityiskohdat:</b>"
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:6
+#: ../src/seahorse-pgp-private-key-properties.glade.h:13
+#: ../src/seahorse-pgp-public-key-properties.glade.h:12
+#: ../src/seahorse-ssh-key-properties.glade.h:11
+msgid "<b>Type:</b>"
+msgstr "<b>Tyyppi:</b>"
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:7
+#: ../src/seahorse-pgp-private-key-properties.glade.h:14
+#: ../src/seahorse-pgp-public-key-properties.glade.h:13
+#: ../src/seahorse-ssh-key-properties.glade.h:12
+msgid "<b>Use:</b>"
+msgstr "<b>Käyttö:</b>"
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:8
+#: ../src/seahorse-pgp-private-key-properties.glade.h:22
+#: ../src/seahorse-pgp-public-key-properties.glade.h:19
+#: ../src/seahorse-ssh-key-properties.glade.h:16
+msgid "Details"
+msgstr "Yksityiskohdat"
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:9
+#: ../src/seahorse-ssh-key-properties.glade.h:18
+msgid "Key"
+msgstr "Avain"
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:10
+#: ../src/seahorse-pgp-private-key-properties.glade.h:29
+#: ../src/seahorse-pgp-public-key-properties.glade.h:28
+#: ../src/seahorse-ssh-key-properties.glade.h:19
+msgid "Key Properties"
+msgstr "Avaimen ominaisuudet"
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:11
+msgid "Show pass_word"
+msgstr "Näytä salasana"
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:12
+msgid "[Type here]"
+msgstr ""
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:13
+msgid "[Use here]"
+msgstr ""
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:14
+msgid "[details]\n"
+msgstr "[yksityiskohdat]\n"
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:16
+msgid "[login]"
+msgstr "[käyttäjätunnus]"
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:17
+msgid "[server]"
+msgstr "[palvelin]"
+
+#: ../src/seahorse-gkeyring-item.c:243
+msgid "Web Password"
+msgstr "WWW-salasana"
+
+#: ../src/seahorse-gkeyring-item.c:245
+msgid "Network Password"
+msgstr "Verkkosalasana"
+
+#: ../src/seahorse-gkeyring-operation.c:206
+msgid "Access to the keyring was denied"
+msgstr "Pääsy avainrenkaaseen estettiin"
+
+#: ../src/seahorse-gkeyring-operation.c:209
+msgid "The GNOME keyring daemon is not running"
+msgstr "Gnomen avainrengaspalveu ei ole käytössä"
+
+#: ../src/seahorse-gkeyring-operation.c:212
+msgid "The keyring has already been unlocked"
+msgstr ""
+
+#: ../src/seahorse-gkeyring-operation.c:215
+msgid "No such keyring exists"
+msgstr "Avainrengasta ei ole olemassa"
+
+#: ../src/seahorse-gkeyring-operation.c:218
+msgid "Couldn't communicate with keyring daemon"
+msgstr "Ei voitu kommunikoida avainrengaspalvelimen kanssa"
+
+#: ../src/seahorse-gkeyring-operation.c:221
+msgid "The item already exists"
+msgstr "Kohta on jo olemassa"
+
+#: ../src/seahorse-gkeyring-operation.c:227
+msgid "Internal error accessing GNOME keyring"
+msgstr "Sisäinen virhe käsiteltäessä Gnomen avainrengasta"
+
+#: ../src/seahorse-gkeyring-operation.c:285
+msgid "Saving item..."
+msgstr "Tallennetaan kohtaa..."
+
+#: ../src/seahorse-gkeyring-source.c:335
+msgid "Retrieving key"
+msgstr "Haetaan avainta"
+
+#. Start listing of ids
+#: ../src/seahorse-gkeyring-source.c:354
+msgid "Listing passwords"
+msgstr "Listataan salasanoja"
+
+#: ../src/seahorse-key-manager.c:443
 msgid "Couldn't read file"
 msgstr "Tiedostoa ei voitu lukea"
 
-#: ../src/seahorse-key-manager.c:429
+#: ../src/seahorse-key-manager.c:484
 msgid "Unrecognized key type, or invalid data format"
 msgstr ""
 
-#: ../src/seahorse-key-manager.c:502 ../src/seahorse-keyserver-results.c:205
+#: ../src/seahorse-key-manager.c:557 ../src/seahorse-keyserver-results.c:211
 #, fuzzy
 msgid "Couldn't retrieve data from key server"
 msgstr "Tuo avain avainpalvelimelta"
 
-#: ../src/seahorse-key-manager.c:518 ../src/seahorse-keyserver-results.c:221
+#: ../src/seahorse-key-manager.c:573 ../src/seahorse-keyserver-results.c:227
 #, c-format
 msgid "Copied %d key"
 msgstr "Kopioitiin %d avain"
 
-#: ../src/seahorse-key-manager.c:519 ../src/seahorse-keyserver-results.c:222
+#: ../src/seahorse-key-manager.c:574 ../src/seahorse-keyserver-results.c:228
 #, c-format
 msgid "Copied %d keys"
 msgstr "Kopioitiin %d avainta"
 
-#: ../src/seahorse-key-manager.c:542 ../src/seahorse-keyserver-results.c:181
-#: ../src/seahorse-keyserver-results.c:246
+#: ../src/seahorse-key-manager.c:597 ../src/seahorse-keyserver-results.c:187
+#: ../src/seahorse-keyserver-results.c:252
 msgid "Retrieving keys"
 msgstr "Nouda avaimia"
 
-#: ../src/seahorse-key-manager.c:568
+#: ../src/seahorse-key-manager.c:623
 msgid "Couldn't export key"
 msgstr "Avaimia ei voitu viedä"
 
-#: ../src/seahorse-key-manager.c:588
+#: ../src/seahorse-key-manager.c:643
 msgid "Export Key"
 msgstr "Vie avain"
 
-#: ../src/seahorse-key-manager.c:598 ../src/seahorse-key-properties.c:1013
+#: ../src/seahorse-key-manager.c:653 ../src/seahorse-key-properties.c:1030
 #: ../src/seahorse-ssh-key-properties.c:240
 #, c-format
 msgid "Couldn't export key to \"%s\""
 msgstr "Avaimia ei voitu viedä palvelimelle \"%s\""
 
-#: ../src/seahorse-key-manager.c:610
+#: ../src/seahorse-key-manager.c:665
 msgid "Exporting keys"
 msgstr "Viedään avaimia"
 
-#: ../src/seahorse-key-manager.c:629
+#: ../src/seahorse-key-manager.c:684
 msgid "Backup Keyrings to Archive"
 msgstr ""
 
-#: ../src/seahorse-key-manager.c:806
+#: ../src/seahorse-key-manager.c:861
 msgid "seahorse"
 msgstr "seahorse"
 
-#: ../src/seahorse-key-manager.c:879 ../src/seahorse-keyserver-results.c:286
+#: ../src/seahorse-key-manager.c:944 ../src/seahorse-keyserver-results.c:292
 #, c-format
 msgid "Selected %d key"
 msgstr "Valittiin  %d avain"
 
-#: ../src/seahorse-key-manager.c:880 ../src/seahorse-keyserver-results.c:287
+#: ../src/seahorse-key-manager.c:945 ../src/seahorse-keyserver-results.c:293
 #, c-format
 msgid "Selected %d keys"
 msgstr "Valittiin %d avainta"
 
 #. Top menu items
-#: ../src/seahorse-key-manager.c:1092 ../src/seahorse-keyserver-results.c:353
+#: ../src/seahorse-key-manager.c:1170 ../src/seahorse-keyserver-results.c:359
 msgid "_Key"
 msgstr "_Avain"
 
-#: ../src/seahorse-key-manager.c:1093 ../src/seahorse-keyserver-results.c:354
+#: ../src/seahorse-key-manager.c:1171 ../src/seahorse-keyserver-results.c:360
 msgid "_Edit"
 msgstr "_Muokkaa"
 
-#: ../src/seahorse-key-manager.c:1094
+#: ../src/seahorse-key-manager.c:1172
 msgid "_View"
 msgstr "_Näytä"
 
 #. Key Actions
-#: ../src/seahorse-key-manager.c:1098
+#: ../src/seahorse-key-manager.c:1176
 msgid "_Create New Key..."
 msgstr "Luo _uusi avain..."
 
-#: ../src/seahorse-key-manager.c:1099
+#: ../src/seahorse-key-manager.c:1177
 msgid "Create a new personal key"
 msgstr "Luo uusi henkilökohtainen avain"
 
-#: ../src/seahorse-key-manager.c:1100
+#: ../src/seahorse-key-manager.c:1178
 msgid "_Import..."
 msgstr "_Tuo..."
 
-#: ../src/seahorse-key-manager.c:1101
+#: ../src/seahorse-key-manager.c:1179
 msgid "Import keys into your keyring from a file"
 msgstr "Tuo avaimia avainrenkaaseen tiedostosta"
 
-#: ../src/seahorse-key-manager.c:1102
+#: ../src/seahorse-key-manager.c:1180
 msgid "_Backup Keyrings..."
 msgstr "_Varmuuskopioi avainrenkaita..."
 
-#: ../src/seahorse-key-manager.c:1103
+#: ../src/seahorse-key-manager.c:1181
 msgid "Backup all keys"
 msgstr "Varmuuskopioi kaikki avaimet"
 
-#: ../src/seahorse-key-manager.c:1104
+#: ../src/seahorse-key-manager.c:1182
 msgid "Paste _Keys"
 msgstr "Liitä _avaimia"
 
-#: ../src/seahorse-key-manager.c:1105
+#: ../src/seahorse-key-manager.c:1183
 msgid "Import keys from the clipboard"
 msgstr "Tuo avaimia leikepöydältä"
 
-#: ../src/seahorse-key-manager.c:1107
+#: ../src/seahorse-key-manager.c:1185
 msgid "_Quit"
 msgstr "_Lopeta"
 
-#: ../src/seahorse-key-manager.c:1108
+#: ../src/seahorse-key-manager.c:1186
 msgid "Close this program"
 msgstr "Sulje ohjelma"
 
-#: ../src/seahorse-key-manager.c:1109
+#: ../src/seahorse-key-manager.c:1187
 msgid "Prefere_nces"
 msgstr "_Asetukset"
 
-#: ../src/seahorse-key-manager.c:1110
+#: ../src/seahorse-key-manager.c:1188
 msgid "Change preferences for this program"
 msgstr ""
 
-#: ../src/seahorse-key-manager.c:1112
+#: ../src/seahorse-key-manager.c:1190
 msgid "About this program"
 msgstr "Tietoja ohjelmasta"
 
-#: ../src/seahorse-key-manager.c:1114
+#: ../src/seahorse-key-manager.c:1192
 msgid "_Remote"
 msgstr ""
 
-#: ../src/seahorse-key-manager.c:1116 ../src/seahorse-keyserver-results.c:359
+#: ../src/seahorse-key-manager.c:1194 ../src/seahorse-keyserver-results.c:365
 msgid "_Contents"
 msgstr "_Sisältö"
 
-#: ../src/seahorse-key-manager.c:1117 ../src/seahorse-keyserver-results.c:360
+#: ../src/seahorse-key-manager.c:1195 ../src/seahorse-keyserver-results.c:366
 msgid "Show Seahorse help"
 msgstr "Näytä Seahorsen ohje"
 
-#: ../src/seahorse-key-manager.c:1121
+#: ../src/seahorse-key-manager.c:1199
 msgid "Key T_ypes"
 msgstr "Avain_tyypit"
 
-#: ../src/seahorse-key-manager.c:1122
+#: ../src/seahorse-key-manager.c:1200
 msgid "Show key type column"
 msgstr "Näytä avaintyypin sarake"
 
-#: ../src/seahorse-key-manager.c:1123
-#, fuzzy
+#: ../src/seahorse-key-manager.c:1201
 msgid "Key _Expiry"
 msgstr "Avaimen _vanheneminen"
 
-#: ../src/seahorse-key-manager.c:1124
+#: ../src/seahorse-key-manager.c:1202
 msgid "Show key expiry column"
 msgstr "Näytä vanhenemispäivän sarake"
 
-#: ../src/seahorse-key-manager.c:1125
+#: ../src/seahorse-key-manager.c:1203
 msgid "Key _Trust"
 msgstr "Avaimen _luotettavuus"
 
-#: ../src/seahorse-key-manager.c:1126
+#: ../src/seahorse-key-manager.c:1204
 msgid "Show owner trust column"
 msgstr "Näytä avaimen luotettavuus -sarake"
 
-#: ../src/seahorse-key-manager.c:1127
+#: ../src/seahorse-key-manager.c:1205
 msgid "Key _Validity"
 msgstr "AVaimen _kelvollisuus"
 
-#: ../src/seahorse-key-manager.c:1128
+#: ../src/seahorse-key-manager.c:1206
 msgid "Show key validity column"
 msgstr "Näytä avaimen kelvollisuus-sarake"
 
-#: ../src/seahorse-key-manager.c:1132 ../src/seahorse-keyserver-results.c:371
+#: ../src/seahorse-key-manager.c:1210 ../src/seahorse-keyserver-results.c:377
 msgid "P_roperties"
 msgstr "_Ominaisuudet"
 
-#: ../src/seahorse-key-manager.c:1133 ../src/seahorse-keyserver-results.c:372
+#: ../src/seahorse-key-manager.c:1211 ../src/seahorse-keyserver-results.c:378
 msgid "Show key properties"
 msgstr "Näytä avaimen ominaisuudet"
 
-#: ../src/seahorse-key-manager.c:1134
+#: ../src/seahorse-key-manager.c:1212
 msgid "E_xport..."
 msgstr "Vie..."
 
-#: ../src/seahorse-key-manager.c:1135
+#: ../src/seahorse-key-manager.c:1213
 msgid "Export public key"
 msgstr "Vie julkinen avain"
 
-#: ../src/seahorse-key-manager.c:1136 ../src/seahorse-keyserver-results.c:375
-#, fuzzy
+#: ../src/seahorse-key-manager.c:1214 ../src/seahorse-keyserver-results.c:381
 msgid "_Copy Key"
-msgstr "_Avain"
+msgstr "_Kopioi avain"
 
-#: ../src/seahorse-key-manager.c:1137 ../src/seahorse-keyserver-results.c:376
-#, fuzzy
+#: ../src/seahorse-key-manager.c:1215 ../src/seahorse-keyserver-results.c:382
 msgid "Copy selected keys to the clipboard"
-msgstr "Vie avain leikepöydälle"
+msgstr "Kopioi valitut avaimet leikepöydälle"
 
-#: ../src/seahorse-key-manager.c:1138
+#: ../src/seahorse-key-manager.c:1216
 msgid "_Delete Key"
 msgstr "P_oista avain"
 
-#: ../src/seahorse-key-manager.c:1139
+#: ../src/seahorse-key-manager.c:1217
 msgid "Delete selected keys"
 msgstr "Poista valitut avaimet"
 
-#: ../src/seahorse-key-manager.c:1143
+#: ../src/seahorse-key-manager.c:1221
 msgid "_Sign..."
 msgstr "_Allekirjoita..."
 
-#: ../src/seahorse-key-manager.c:1144
+#: ../src/seahorse-key-manager.c:1222
 msgid "Sign public key"
 msgstr "Allekirjoita julkinen avain"
 
-#: ../src/seahorse-key-manager.c:1148
-msgid "Configure SSH Key for Computer..."
-msgstr "Määrittele SSH-avain tietokoneelle..."
-
-#: ../src/seahorse-key-manager.c:1149
-msgid ""
-"Send public SSH key to another machine, and enable logins using that key."
+#: ../src/seahorse-key-manager.c:1226
+msgid "Set Up Computer for _Secure Shell..."
 msgstr ""
 
-#: ../src/seahorse-key-manager.c:1153 ../src/seahorse-keyserver-results.c:380
+#: ../src/seahorse-key-manager.c:1227
+msgid ""
+"Send public Secure Shell key to another machine, and enable logins using "
+"that key."
+msgstr ""
+
+#: ../src/seahorse-key-manager.c:1231 ../src/seahorse-keyserver-results.c:386
 msgid "_Find Remote Keys..."
 msgstr ""
 
-#: ../src/seahorse-key-manager.c:1154 ../src/seahorse-keyserver-results.c:381
+#: ../src/seahorse-key-manager.c:1232 ../src/seahorse-keyserver-results.c:387
 msgid "Search for keys on a key server"
 msgstr "Etsi avaimia avainpalvelimelta"
 
-#: ../src/seahorse-key-manager.c:1155
+#: ../src/seahorse-key-manager.c:1233
 msgid "_Sync and Publish Keys..."
 msgstr ""
 
-#: ../src/seahorse-key-manager.c:1156
+#: ../src/seahorse-key-manager.c:1234
 msgid "Publish and/or sync your keys with those online."
 msgstr ""
 
@@ -2054,215 +2240,219 @@ msgstr ""
 msgid "<big><b>First time options:</b></big>"
 msgstr ""
 
-#: ../src/seahorse-key-manager.glade.h:3
+#: ../src/seahorse-key-manager.glade.h:2
 msgid "Filter:"
 msgstr ""
 
-#: ../src/seahorse-key-manager.glade.h:4
+#: ../src/seahorse-key-manager.glade.h:3
 #, fuzzy
 msgid "Generate a new key of your own: "
 msgstr "Luo uusi avain"
 
-#: ../src/seahorse-key-manager.glade.h:5
+#: ../src/seahorse-key-manager.glade.h:4
 #, fuzzy
 msgid "Import existing keys from a file:"
 msgstr "Tuo avaimia tiedostosta"
 
-#: ../src/seahorse-key-manager.glade.h:6
-msgid "Keys I _Trust"
-msgstr "Avaimet joihin _luotan"
-
-#: ../src/seahorse-key-manager.glade.h:7
-msgid "Keys I've _Collected "
-msgstr "_Keräämäni avaimet"
-
-#: ../src/seahorse-key-manager.glade.h:8
+#: ../src/seahorse-key-manager.glade.h:5
 msgid "My _Personal Keys"
 msgstr "Henkilökohtaiset _avaimet"
 
-#: ../src/seahorse-key-manager.glade.h:9
-msgid "To get started with encryption you'll need keys."
+#: ../src/seahorse-key-manager.glade.h:6
+#, fuzzy
+msgid "Other _Collected Keys"
+msgstr "Poista valitut avaimet"
+
+#: ../src/seahorse-key-manager.glade.h:8
+msgid "To get started with encryption you will need keys."
 msgstr ""
 
-#: ../src/seahorse-key-manager.glade.h:10
-#: ../src/seahorse-keyserver-results.c:369
+#: ../src/seahorse-key-manager.glade.h:9
+#: ../src/seahorse-keyserver-results.c:375
 msgid "_Import"
 msgstr "_Tuo"
 
+#: ../src/seahorse-key-manager.glade.h:10
+msgid "_Passwords"
+msgstr "_Salasanat"
+
+#: ../src/seahorse-key-manager.glade.h:11
+msgid "_Trusted Keys"
+msgstr "_Luotetut avaimet"
+
 #: ../src/seahorse-key-manager-store.c:311
-#: ../src/seahorse-key-properties.c:1277
+#: ../src/seahorse-key-properties.c:1294
 msgid "Expired"
 msgstr "Vanhentunut"
 
-#: ../src/seahorse-key-manager-store.c:363
+#: ../src/seahorse-key-manager-store.c:364
 msgid "User ID"
 msgstr "Käyttäjätunniste"
 
-#: ../src/seahorse-key-manager-store.c:696
+#: ../src/seahorse-key-manager-store.c:697
 #, fuzzy
 msgid "Couldn't retrieve key data"
 msgstr "Tuo avain avainpalvelimelta"
 
-#: ../src/seahorse-key-manager-store.c:728
+#: ../src/seahorse-key-manager-store.c:729
 #, fuzzy
 msgid "Couldn't write key to file"
 msgstr "Tuo avain avainpalvelimelta"
 
-#: ../src/seahorse-key-manager-store.c:953
-#: ../src/seahorse-key-properties.c:848
+#: ../src/seahorse-key-manager-store.c:954
+#: ../src/seahorse-key-properties.c:865
 msgid "Name"
 msgstr "Nimi"
 
-#. Key ID column
-#: ../src/seahorse-key-manager-store.c:961
-#: ../src/seahorse-key-properties.c:1683
+#: ../src/seahorse-key-manager-store.c:966
+#: ../src/seahorse-key-properties.c:1711
 msgid "Key ID"
 msgstr "Avaimen tunniste"
 
-#: ../src/seahorse-key-manager-store.c:969
+#: ../src/seahorse-key-manager-store.c:972
 msgid "Validity"
 msgstr "Kelvollisuus"
 
 #. Trust column
-#: ../src/seahorse-key-manager-store.c:976
-#: ../src/seahorse-pgp-public-key-properties.glade.h:33
+#: ../src/seahorse-key-manager-store.c:979
+#: ../src/seahorse-pgp-public-key-properties.glade.h:35
 msgid "Trust"
 msgstr "Luottamus"
 
 #. The key type column
-#: ../src/seahorse-key-manager-store.c:982
-#: ../src/seahorse-key-properties.c:1255
+#: ../src/seahorse-key-manager-store.c:985
+#: ../src/seahorse-key-properties.c:1272
 msgid "Type"
 msgstr "Tyyppi"
 
 #. Expiry date column
-#: ../src/seahorse-key-manager-store.c:988
+#: ../src/seahorse-key-manager-store.c:991
 msgid "Expiration Date"
 msgstr "Vanhenemispäivä"
 
-#: ../src/seahorse-key-properties.c:189
+#: ../src/seahorse-key-properties.c:206
 msgid "Couldn't change primary user ID"
 msgstr "Ensisijaista käyttäjätunnistetta ei voitu vaihtaa"
 
-#: ../src/seahorse-key-properties.c:283 ../src/seahorse-key-properties.c:1407
+#: ../src/seahorse-key-properties.c:300 ../src/seahorse-key-properties.c:1424
 msgid "[Unknown]"
 msgstr "[Tuntematon]"
 
-#: ../src/seahorse-key-properties.c:381 ../src/seahorse-key-properties.c:1680
+#: ../src/seahorse-key-properties.c:398 ../src/seahorse-key-properties.c:1708
 msgid "Name/Email"
 msgstr "Nimi/Sähköposti"
 
-#: ../src/seahorse-key-properties.c:386
+#: ../src/seahorse-key-properties.c:403
 #, fuzzy
 msgid "Signature ID"
 msgstr "Allekirjoitukset:"
 
-#: ../src/seahorse-key-properties.c:537
+#: ../src/seahorse-key-properties.c:554
 msgid "Couldn't change primary photo"
 msgstr "Ensisijaista valokuvaa ei voitu vaihtaa"
 
-#: ../src/seahorse-key-properties.c:783
+#: ../src/seahorse-key-properties.c:800
 msgid "(unknown)"
 msgstr "(tuntematon)"
 
-#: ../src/seahorse-key-properties.c:786
+#: ../src/seahorse-key-properties.c:803
 #, c-format
 msgid "This key expired on: %s"
 msgstr ""
 
-#: ../src/seahorse-key-properties.c:967 ../src/seahorse-key-properties.c:1357
-#: ../src/seahorse-key-properties.c:1376
+#: ../src/seahorse-key-properties.c:984 ../src/seahorse-key-properties.c:1374
+#: ../src/seahorse-key-properties.c:1393
 msgid "Unable to change trust"
 msgstr "Luotettavuutta ei voitu muuttaa"
 
-#: ../src/seahorse-key-properties.c:988
+#: ../src/seahorse-key-properties.c:1005
 #: ../src/seahorse-ssh-key-properties.c:215
 msgid "Export Complete Key"
 msgstr "Vie koko avain"
 
-#: ../src/seahorse-key-properties.c:1252
+#: ../src/seahorse-key-properties.c:1269
 msgid "ID"
 msgstr "Tunniste"
 
-#: ../src/seahorse-key-properties.c:1258
+#: ../src/seahorse-key-properties.c:1275
 msgid "Created"
 msgstr "Luotu"
 
-#: ../src/seahorse-key-properties.c:1261
+#: ../src/seahorse-key-properties.c:1278
 msgid "Expires"
 msgstr "Vanhenee"
 
-#: ../src/seahorse-key-properties.c:1264
+#: ../src/seahorse-key-properties.c:1281
 msgid "Status"
 msgstr "Tila"
 
-#: ../src/seahorse-key-properties.c:1267
+#: ../src/seahorse-key-properties.c:1284
 msgid "Strength"
 msgstr "Vahvuus"
 
-#: ../src/seahorse-key-properties.c:1276 ../src/seahorse-key-properties.c:1277
+#: ../src/seahorse-key-properties.c:1293 ../src/seahorse-key-properties.c:1294
 msgid "Good"
 msgstr "Hyvä"
 
-#: ../src/seahorse-keyserver-results.c:94
+#: ../src/seahorse-keyserver-results.c:100
 msgid "Couldn't import keys into keyring"
 msgstr "Avaimia ei voitu tuoda avainrenkaaseen"
 
-#: ../src/seahorse-keyserver-results.c:115
+#: ../src/seahorse-keyserver-results.c:121
 msgid "Importing keys from key servers"
 msgstr "Tuodaan avaimia avainpalvelimilta"
 
-#: ../src/seahorse-keyserver-results.c:134
-#: ../src/seahorse-keyserver-results.c:168
+#: ../src/seahorse-keyserver-results.c:140
+#: ../src/seahorse-keyserver-results.c:174
 #, c-format
 msgid "Couldn't write keys to file: %s"
 msgstr "Avaimia ei voitu kirjoittaa tiedostoon: %s"
 
-#: ../src/seahorse-keyserver-results.c:157
+#: ../src/seahorse-keyserver-results.c:163
 msgid "Save Remote Keys"
 msgstr "Tallenna etäavaimet"
 
-#: ../src/seahorse-keyserver-results.c:357
+#: ../src/seahorse-keyserver-results.c:363
 msgid "_Close"
 msgstr "_Sulje"
 
-#: ../src/seahorse-keyserver-results.c:358
+#: ../src/seahorse-keyserver-results.c:364
 msgid "Close this window"
 msgstr "Sulje tämä ikkuna"
 
-#: ../src/seahorse-keyserver-results.c:362
+#: ../src/seahorse-keyserver-results.c:368
 msgid "_Expand All"
 msgstr "_Laajenna kaikki"
 
-#: ../src/seahorse-keyserver-results.c:363
+#: ../src/seahorse-keyserver-results.c:369
 msgid "Expand all listings"
 msgstr "Laajenna kaikki listaukset"
 
-#: ../src/seahorse-keyserver-results.c:364
+#: ../src/seahorse-keyserver-results.c:370
 msgid "_Collapse All"
 msgstr "_"
 
-#: ../src/seahorse-keyserver-results.c:365
+#: ../src/seahorse-keyserver-results.c:371
 msgid "Collapse all listings"
 msgstr "Pienennä kaikki listaukset"
 
-#: ../src/seahorse-keyserver-results.c:370
+#: ../src/seahorse-keyserver-results.c:376
 msgid "Import selected keys to local keyring"
 msgstr ""
 
-#: ../src/seahorse-keyserver-results.c:373
+#: ../src/seahorse-keyserver-results.c:379
 msgid "Save As..."
 msgstr "Tallenna nimellä..."
 
-#: ../src/seahorse-keyserver-results.c:374
+#: ../src/seahorse-keyserver-results.c:380
 msgid "Save selected keys as a file"
 msgstr "Tallenna valitut avaimet tiedostoon"
 
-#: ../src/seahorse-keyserver-results.c:434
+#: ../src/seahorse-keyserver-results.c:439
 msgid "Remote Keys"
 msgstr "Etäavain"
 
-#: ../src/seahorse-keyserver-results.c:436
+#: ../src/seahorse-keyserver-results.c:441
 #, c-format
 msgid "Remote Keys Containing '%s'"
 msgstr "Etäavain, joka sisältää tunnisteen \"%s\""
@@ -2406,9 +2596,8 @@ msgid "Passphrase for New Key"
 msgstr "Tunnuslause uudelle avaimelle"
 
 #: ../src/seahorse-pgp-generate.c:141
-#, fuzzy
 msgid "Enter the passphrase for your new key twice"
-msgstr "Anna tunnuslause avaimelle %s"
+msgstr "Anna uuden avaimesi tunnuslause kahdesti"
 
 #: ../src/seahorse-pgp-generate.c:150
 msgid "Couldn't generate key"
@@ -2419,7 +2608,6 @@ msgid "Generating key"
 msgstr "Luodaan avainta"
 
 #: ../src/seahorse-pgp-generate.glade.h:1
-#: ../src/seahorse-ssh-generate.glade.h:2
 msgid "<b>_Advanced Options</b>"
 msgstr "<b>_Lisäasetukset</b>"
 
@@ -2432,7 +2620,6 @@ msgid "Algoritms here"
 msgstr "Algoritmit"
 
 #: ../src/seahorse-pgp-generate.glade.h:4
-#: ../src/seahorse-ssh-generate.glade.h:5
 msgid "C_reate"
 msgstr "_Luo"
 
@@ -2445,12 +2632,11 @@ msgid "E_xpiration Date:"
 msgstr "Vanh_enemispäivä:"
 
 #: ../src/seahorse-pgp-generate.glade.h:7
-#: ../src/seahorse-ssh-generate.glade.h:8
+#: ../src/seahorse-ssh-generate.glade.h:7
 msgid "Encryption _Type:"
 msgstr "Salaus_tyyppi:"
 
 #: ../src/seahorse-pgp-generate.glade.h:9
-#: ../src/seahorse-ssh-generate.glade.h:9
 msgid "Generate a new key"
 msgstr "Luo uusi avain"
 
@@ -2523,18 +2709,6 @@ msgstr ""
 msgid "<b>This key has expired</b>"
 msgstr ""
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:13
-#: ../src/seahorse-pgp-public-key-properties.glade.h:12
-#: ../src/seahorse-ssh-key-properties.glade.h:11
-msgid "<b>Type:</b>"
-msgstr "<b>Tyyppi:</b>"
-
-#: ../src/seahorse-pgp-private-key-properties.glade.h:14
-#: ../src/seahorse-pgp-public-key-properties.glade.h:13
-#: ../src/seahorse-ssh-key-properties.glade.h:12
-msgid "<b>Use:</b>"
-msgstr "<b>Käyttö:</b>"
-
 #: ../src/seahorse-pgp-private-key-properties.glade.h:15
 #: ../src/seahorse-pgp-public-key-properties.glade.h:17
 msgid "<b>_Subkeys</b>"
@@ -2566,56 +2740,39 @@ msgstr ""
 msgid "Delete"
 msgstr "Poista"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:22
-#: ../src/seahorse-pgp-public-key-properties.glade.h:19
-#: ../src/seahorse-ssh-key-properties.glade.h:16
-msgid "Details"
-msgstr "Yksityiskohdat"
-
 #: ../src/seahorse-pgp-private-key-properties.glade.h:23
-#, fuzzy
 msgid "Expire"
-msgstr "Vanhentunut"
+msgstr "Vanhenna"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:24
 #: ../src/seahorse-pgp-public-key-properties.glade.h:21
-#, fuzzy
 msgid "Expires:"
-msgstr "_Vanhenee"
+msgstr "Vanhenee:"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:25
-#, fuzzy
 msgid "Export"
-msgstr "_Vie"
+msgstr "Vie"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:26
 msgid "Go to next photo"
-msgstr ""
+msgstr "Siirry seuraavaan valokuvaan"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:27
 msgid "Go to previous photo"
-msgstr ""
+msgstr "Sirry edelliseen valokuvaan"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:28
-#: ../src/seahorse-pgp-public-key-properties.glade.h:25
+#: ../src/seahorse-pgp-public-key-properties.glade.h:27
 msgid "Key ID:"
 msgstr "Avaimen tunniste:"
-
-#: ../src/seahorse-pgp-private-key-properties.glade.h:29
-#: ../src/seahorse-pgp-public-key-properties.glade.h:26
-#: ../src/seahorse-ssh-key-properties.glade.h:19
-#, fuzzy
-msgid "Key Properties"
-msgstr "%s ominaisuudet"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:30
 msgid "Make this photo the primary photo"
 msgstr ""
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:31
-#, fuzzy
-msgid "Names/Signatures"
-msgstr "Allekirjoitukset:"
+msgid "Names and Signatures"
+msgstr "Nimet ja allekirjoitukset"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:32
 #, fuzzy
@@ -2623,37 +2780,35 @@ msgid "Override Owner _Trust:"
 msgstr "Omistajan _luottamus:"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:33
-#: ../src/seahorse-pgp-public-key-properties.glade.h:27
+#: ../src/seahorse-pgp-public-key-properties.glade.h:29
 msgid "Owner"
-msgstr ""
+msgstr "Omistaja"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:35
 msgid "Remove this photo from this key"
-msgstr ""
+msgstr "Poista tämä valokuva tästä avaimesta"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:36
-#, fuzzy
 msgid "Revoke"
-msgstr "Peruutettu"
+msgstr "Mitätöi"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:38
-#: ../src/seahorse-pgp-public-key-properties.glade.h:29
-#, fuzzy
+#: ../src/seahorse-pgp-public-key-properties.glade.h:31
 msgid "Strength:"
-msgstr "Pituus:"
+msgstr "Vahvuus:"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:39
-#: ../src/seahorse-pgp-public-key-properties.glade.h:30
+#: ../src/seahorse-pgp-public-key-properties.glade.h:32
 msgid "The owner of the key revoked the key. It can no longer be used."
 msgstr ""
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:40
-#: ../src/seahorse-pgp-public-key-properties.glade.h:31
+#: ../src/seahorse-pgp-public-key-properties.glade.h:33
 msgid "This key expired on: (placeholder)"
 msgstr ""
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:41
-#: ../src/seahorse-pgp-public-key-properties.glade.h:34
+#: ../src/seahorse-pgp-public-key-properties.glade.h:36
 msgid "Type:"
 msgstr "Tyyppi:"
 
@@ -2667,27 +2822,20 @@ msgid ""
 msgstr ""
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:47
-#, fuzzy
 msgid "_Export Complete Key:"
-msgstr "Vie avain"
+msgstr "Vi_e koko avain"
 
 #: ../src/seahorse-pgp-public-key-properties.glade.h:2
 msgid "<b>Dates:</b>"
-msgstr ""
+msgstr "<b>Päiväykset:</b>"
 
 #: ../src/seahorse-pgp-public-key-properties.glade.h:4
 #: ../src/seahorse-ssh-key-properties.glade.h:4
-#, fuzzy
 msgid "<b>Fingerprint:</b>"
-msgstr "Sormenjälki:"
+msgstr "<b>Sormenjälki:</b>"
 
 #: ../src/seahorse-pgp-public-key-properties.glade.h:5
 msgid "<b>Indicate Trust:</b>"
-msgstr ""
-
-#: ../src/seahorse-pgp-public-key-properties.glade.h:9
-#: ../src/seahorse-ssh-key-properties.glade.h:9
-msgid "<b>Technical Details:</b>"
 msgstr ""
 
 #: ../src/seahorse-pgp-public-key-properties.glade.h:14
@@ -2695,9 +2843,8 @@ msgid "<b>Your trust of this key</b>"
 msgstr ""
 
 #: ../src/seahorse-pgp-public-key-properties.glade.h:15
-#, fuzzy
 msgid "<b>_Other Names:</b>"
-msgstr "Avain ei vanhene koskaan"
+msgstr "<b>_Muut nimet:</b>"
 
 #: ../src/seahorse-pgp-public-key-properties.glade.h:16
 msgid "<b>_People who have signed this key:</b>"
@@ -2707,25 +2854,26 @@ msgstr ""
 msgid "Encrypt files and email to the key's owner "
 msgstr ""
 
-#: ../src/seahorse-pgp-public-key-properties.glade.h:22
-#, fuzzy
-msgid "I _trust signatures on other keys that are signed with this key."
-msgstr "Onko allekirjoitus paikallinen eikä sitä viedä avaimen mukana"
-
 #: ../src/seahorse-pgp-public-key-properties.glade.h:23
-msgid "I have _verified that this key belongs to who it says it does."
+#, no-c-format
+msgid "I have checked that this key belongs to '%s'"
 msgstr ""
 
-#: ../src/seahorse-pgp-public-key-properties.glade.h:24
+#: ../src/seahorse-pgp-public-key-properties.glade.h:25
+#, fuzzy, no-c-format
+msgid "I trust signatures from '%s' on other keys "
+msgstr "Onko allekirjoitus paikallinen eikä sitä viedä avaimen mukana"
+
+#: ../src/seahorse-pgp-public-key-properties.glade.h:26
 msgid ""
 "If you no longer trust this person's identity, <i>revoke</i> your signature:"
 msgstr ""
 
-#: ../src/seahorse-pgp-public-key-properties.glade.h:32
+#: ../src/seahorse-pgp-public-key-properties.glade.h:34
 msgid "To indicate your trust of this key to others, <i>sign</i> this key:"
 msgstr ""
 
-#: ../src/seahorse-pgp-public-key-properties.glade.h:35
+#: ../src/seahorse-pgp-public-key-properties.glade.h:37
 msgid ""
 "Unknown\n"
 "Never\n"
@@ -2734,32 +2882,29 @@ msgid ""
 "Ultimately"
 msgstr ""
 
-#: ../src/seahorse-pgp-public-key-properties.glade.h:40
+#: ../src/seahorse-pgp-public-key-properties.glade.h:42
 msgid "You _Trust the Owner:"
 msgstr ""
 
-#: ../src/seahorse-pgp-public-key-properties.glade.h:41
+#: ../src/seahorse-pgp-public-key-properties.glade.h:43
 msgid "Your trust is manually specified on the <i>Details</i> tab."
 msgstr ""
 
-#: ../src/seahorse-pgp-public-key-properties.glade.h:42
+#: ../src/seahorse-pgp-public-key-properties.glade.h:44
 msgid "_Only display the signatures of people I trust"
 msgstr ""
 
-#: ../src/seahorse-pgp-public-key-properties.glade.h:43
-#, fuzzy
+#: ../src/seahorse-pgp-public-key-properties.glade.h:45
 msgid "_Revoke Signature"
-msgstr "Allekirjoitukset:"
+msgstr "_Mitätöi allekirjoitus"
 
-#: ../src/seahorse-pgp-public-key-properties.glade.h:44
-#, fuzzy
+#: ../src/seahorse-pgp-public-key-properties.glade.h:46
 msgid "_Sign this Key"
-msgstr "Allekirjoita avain"
+msgstr "_Allekirjoita tämä avain"
 
 #: ../src/seahorse-pgp-signature.desktop.in.in.h:1
-#, fuzzy
 msgid "Verify Signature"
-msgstr "Varmista allekirjoitustiedosto"
+msgstr "Varmista allekirjoitus"
 
 #: ../src/seahorse-photos.c:70
 #, c-format
@@ -2770,11 +2915,11 @@ msgstr ""
 
 #: ../src/seahorse-photos.c:75
 msgid "_Don't Resize"
-msgstr ""
+msgstr "Ä_lä muuta kokoa"
 
 #: ../src/seahorse-photos.c:76
 msgid "_Resize"
-msgstr ""
+msgstr "_Muuta kokoa"
 
 #: ../src/seahorse-photos.c:125
 msgid ""
@@ -2784,20 +2929,19 @@ msgstr ""
 
 #: ../src/seahorse-photos.c:221
 msgid "All image files"
-msgstr ""
+msgstr "Kaikki kuvatiedostot"
 
 #: ../src/seahorse-photos.c:234
 msgid "All JPEG files"
-msgstr ""
+msgstr "Kaikki JPEG-tiedostot"
 
 #: ../src/seahorse-photos.c:258
 msgid "Choose Photo to Add to Key"
-msgstr ""
+msgstr "Valitse avaimeen lisättävä kuva"
 
 #: ../src/seahorse-photos.c:285 ../src/seahorse-photos.c:289
-#, fuzzy
 msgid "Couldn't add photo"
-msgstr "Tuo avaimia"
+msgstr "Valokuvaa ei voitu lisätä"
 
 #: ../src/seahorse-photos.c:286
 msgid "The file could not be loaded. It may be in an invalid format"
@@ -2809,14 +2953,12 @@ msgid "Are you sure you want to remove the current photo from your key?"
 msgstr "Haluatko varmasti poistaa avaimen %s?"
 
 #: ../src/seahorse-photos.c:330
-#, fuzzy
 msgid "Couldn't delete photo"
-msgstr "Poista avain"
+msgstr "Valokuvaa ei voitu poistaa"
 
 #: ../src/seahorse-revoke.c:53
-#, fuzzy
 msgid "Couldn't revoke subkey"
-msgstr "Peruuta aliavain %d"
+msgstr "Aliavainta ei voitu perua"
 
 #: ../src/seahorse-revoke.c:76
 #, c-format
@@ -2895,7 +3037,7 @@ msgstr "_Syy:"
 
 #: ../src/seahorse-sign.c:97
 msgid "Couldn't sign key"
-msgstr ""
+msgstr "Avainta ei voitu allekirjoittaa"
 
 #: ../src/seahorse-sign.c:160
 msgid ""
@@ -2904,18 +3046,16 @@ msgid ""
 msgstr ""
 
 #: ../src/seahorse-sign.glade.h:1
-#, fuzzy
 msgid "<b>How carefully have you checked this key?</b>"
-msgstr "_Kuinka tarkasti olet tarkistanut tämän avaimen?"
+msgstr "<b>Kuinka tarkasti olet tarkistanut tämän avaimen?</b>"
 
 #: ../src/seahorse-sign.glade.h:2
 msgid "<b>How others will see this signature:</b>"
 msgstr ""
 
 #: ../src/seahorse-sign.glade.h:3
-#, fuzzy
 msgid "<b>Sign key as:</b>"
-msgstr "Avaimen tunniste:"
+msgstr ""
 
 #: ../src/seahorse-sign.glade.h:4
 msgid ""
@@ -2925,9 +3065,8 @@ msgid ""
 msgstr ""
 
 #: ../src/seahorse-sign.glade.h:7
-#, fuzzy
 msgid "<i>Key Name</i>"
-msgstr "Avaimen tunniste:"
+msgstr "<i>Avaimen nimi</i>"
 
 #: ../src/seahorse-sign.glade.h:8
 msgid ""
@@ -2972,113 +3111,111 @@ msgid ""
 msgstr ""
 
 #: ../src/seahorse-sign.glade.h:21
-#, fuzzy
 msgid "_Casually"
-msgstr "Pintapuolisesti"
+msgstr "_Pintapuolisesti"
 
 #: ../src/seahorse-sign.glade.h:22
-#, fuzzy
 msgid "_Not at all"
-msgstr "Ei lainkaan"
+msgstr "_Ei lainkaan"
 
 #: ../src/seahorse-sign.glade.h:23
 msgid "_Others may not see this signature"
-msgstr ""
+msgstr "_Muut eivät nää tätä allekirjoitusta"
 
 #: ../src/seahorse-sign.glade.h:24
 msgid "_Sign"
 msgstr "_Allekirjoita"
 
 #: ../src/seahorse-sign.glade.h:25
-#, fuzzy
 msgid "_Signer:"
-msgstr "Allekirjoittaja:"
+msgstr "_Allekirjoittaja:"
 
 #: ../src/seahorse-sign.glade.h:26
-#, fuzzy
 msgid "_Very Carefully"
-msgstr "Erittäin tarkasti"
+msgstr "E_rittäin tarkasti"
 
 #: ../src/seahorse-ssh-generate.c:40
-#, fuzzy
-msgid "Couldn't generate SSH key"
-msgstr "Poista avain"
+msgid "Couldn't generate Secure Shell key"
+msgstr "SSH-avainta ei voitu luoda"
 
-#: ../src/seahorse-ssh-generate.c:128
-#, fuzzy
-msgid "Creating SSH Key"
-msgstr "Ladataan avainta %d"
+#: ../src/seahorse-ssh-generate.c:127
+msgid "Creating Secure Shell Key"
+msgstr "Luodaan SSH-avainta"
 
 #: ../src/seahorse-ssh-generate.glade.h:1
-msgid "<b>Configure SSH Key for Login</b>"
-msgstr ""
+msgid "<b>_Advanced key options</b>"
+msgstr "<b>Avaimen lisäasetukset</b>"
 
-#: ../src/seahorse-ssh-generate.glade.h:3
+#: ../src/seahorse-ssh-generate.glade.h:2
 msgid ""
-"An SSH Key allows you to access other computers via a terminal \n"
-"or file manager. An email address helps identify your key."
+"<i>Use your email address, and any other reminder\n"
+" you need about what this key is for.</i>"
 msgstr ""
 
-#: ../src/seahorse-ssh-generate.glade.h:6
-msgid "Configure my new _key on another computer"
+#: ../src/seahorse-ssh-generate.glade.h:4
+msgid ""
+"A Secure Shell (SSH) key lets you connect securely to trusted\n"
+"computers using SSH, without entering a different password \n"
+"for each of them."
 msgstr ""
 
-#: ../src/seahorse-ssh-generate.glade.h:7
-#, fuzzy
-msgid "Create an SSH Key"
-msgstr "Luo avain"
+#: ../src/seahorse-ssh-generate.glade.h:8
+msgid ""
+"If there is already a computer you want to use this key with, you \n"
+"can set up that computer to recognize your key now. "
+msgstr ""
 
 #: ../src/seahorse-ssh-generate.glade.h:11
-msgid ""
-"To use your new key to access another computer you must first\n"
-"it must first be configured for login on that computer."
-msgstr ""
+msgid "New Secure Shell Key"
+msgstr "Uusi SSH-avain"
+
+#: ../src/seahorse-ssh-generate.glade.h:12
+msgid "_Create and Set Up"
+msgstr "_Luo ja ota käyttöön"
+
+#: ../src/seahorse-ssh-generate.glade.h:13
+msgid "_Key Description:"
+msgstr "_Avaimen kuvaus:"
 
 #: ../src/seahorse-ssh-key-properties.c:117
-#, fuzzy
 msgid "Couldn't rename key."
-msgstr "Poista avain"
+msgstr "Avainta ei voitu nimetä uudestaan."
 
 #: ../src/seahorse-ssh-key-properties.c:157
-#, fuzzy
 msgid "Couldn't change authorization for key."
-msgstr "Vaihda salaisen avaimen tunnuslause"
+msgstr ""
 
 #: ../src/seahorse-ssh-key-properties.c:171
-#, fuzzy
-msgid "Couldn't change passhrase for SSH key."
-msgstr "Vaihda salaisen avaimen tunnuslause"
+msgid "Couldn't change passhrase for key."
+msgstr "Avaimen tunnuslausetta ei voitu vaihtaa."
 
 #: ../src/seahorse-ssh-key-properties.glade.h:1
 msgid "/home/nate/.ssh/blah_rsa"
-msgstr ""
+msgstr "/home/nate/.ssh/blah_rsa"
 
 #: ../src/seahorse-ssh-key-properties.glade.h:2
 msgid "00:00:00:00:00"
-msgstr ""
+msgstr "00:00:00:00:00"
 
 #: ../src/seahorse-ssh-key-properties.glade.h:3
-#, fuzzy
 msgid "<b>Algorithm:</b>"
-msgstr "Algoritmi"
+msgstr "<b>Algoritmi:</b>"
 
 #: ../src/seahorse-ssh-key-properties.glade.h:5
-#, fuzzy
 msgid "<b>Identifier:</b>"
-msgstr "Kommentti:"
+msgstr "<b>Tunniste:</b>"
 
 #: ../src/seahorse-ssh-key-properties.glade.h:6
 msgid "<b>Location:</b>"
-msgstr ""
+msgstr "<b>Sijainti:</b>"
 
 #: ../src/seahorse-ssh-key-properties.glade.h:8
-#, fuzzy
 msgid "<b>Strength:</b>"
-msgstr "Pituus:"
+msgstr "<b>Vahvuus:</b>"
 
 #: ../src/seahorse-ssh-key-properties.glade.h:10
 msgid "<b>Trust</b>"
-msgstr ""
+msgstr "<b>Luottamus</b>"
 
 #: ../src/seahorse-ssh-key-properties.glade.h:14
 #, no-c-format
@@ -3086,18 +3223,8 @@ msgid "<i>This only applies to the '%s'</i> account."
 msgstr ""
 
 #: ../src/seahorse-ssh-key-properties.glade.h:17
-#, fuzzy
 msgid "E_xport Complete Key"
-msgstr "Vie avain"
-
-#: ../src/seahorse-ssh-key-properties.glade.h:18
-#, fuzzy
-msgid "Key"
-msgstr "_Avain"
-
-#: ../src/seahorse-ssh-key-properties.glade.h:20
-msgid "Secure Shell Key"
-msgstr ""
+msgstr "Vi_e koko avain"
 
 #: ../src/seahorse-ssh-key-properties.glade.h:21
 msgid "The owner of this key is _authorized to connect to this computer"
@@ -3105,38 +3232,60 @@ msgstr ""
 
 #: ../src/seahorse-ssh-key-properties.glade.h:22
 msgid "Used to connect to other computers."
-msgstr ""
+msgstr "Käytetään otettaessa yhteyttä muihin tietokoneisiin."
 
 #: ../src/seahorse-ssh-upload.c:42
-msgid "Couldn't configure SSH keys on remote computer."
-msgstr ""
+msgid "Couldn't configure Secure Shell keys on remote computer."
+msgstr "SSH-avainta ei voitu määritellä etätietokoneelle."
 
 #. Show the progress window if necessary
-#: ../src/seahorse-ssh-upload.c:148
-#, fuzzy
-msgid "Configuring SSH Keys..."
-msgstr "Ladataan avainta %d"
+#: ../src/seahorse-ssh-upload.c:140
+msgid "Configuring Secure Shell Keys..."
+msgstr "Määritellään SSH-avaimia..."
 
-#: ../src/seahorse-ssh-upload.glade.h:2
-msgid "Computer:"
+#: ../src/seahorse-ssh-upload.glade.h:1
+msgid "<i>eg: fileserver.example.com</i>"
 msgstr ""
 
-#: ../src/seahorse-ssh-upload.glade.h:3
-msgid "Configure SSH Key for Login"
+#: ../src/seahorse-ssh-upload.glade.h:2
+msgid "Set Up Computer for SSH Connection"
 msgstr ""
 
 #: ../src/seahorse-ssh-upload.glade.h:4
-msgid "Login Name:"
+msgid ""
+"To use your Secure Shell key with another computer that\n"
+"uses SSH, you must already have a login account on that \n"
+"computer."
 msgstr ""
 
 #: ../src/seahorse-ssh-upload.glade.h:7
-msgid ""
-"This will configure another computer to allow use your SSH key when you log "
-"into it.\n"
-"\n"
-"The computer in question must be running SSH, and you must already have an "
-"login account on it. "
-msgstr ""
+msgid "_Computer Name:"
+msgstr "_Tietokoneen nimi:"
+
+#: ../src/seahorse-ssh-upload.glade.h:8
+msgid "_Login Name:"
+msgstr "_Käyttäjätunnus:"
+
+#~ msgid "SSH Key"
+#~ msgstr "SSH-avain"
+
+#~ msgid "SSH key"
+#~ msgstr "SSH-avain"
+
+#~ msgid "New SSH Passphrase"
+#~ msgstr "Uusi SSH-tunnuslause"
+
+#~ msgid "Enter the SSH passphrase for: %s"
+#~ msgstr "Anna tunnuslause SSH-avaimelle: %s"
+
+#~ msgid "Encryption Keys"
+#~ msgstr "Salausavaimet"
+
+#~ msgid "Keys I _Trust"
+#~ msgstr "Avaimet joihin _luotan"
+
+#~ msgid "Keys I've _Collected "
+#~ msgstr "_Keräämäni avaimet"
 
 #, fuzzy
 #~ msgid "Cached Encryption Passphrases"
