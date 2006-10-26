@@ -129,8 +129,10 @@ seahorse_nautilus_get_file_items (NautilusMenuProvider *provider,
                                   GtkWidget *window, GList *files)
 {
     NautilusMenuItem *item;
-    GList *items = NULL;
+    GList *scan, *items = NULL;
+    gboolean xnaut;
     guint num;
+    gchar *uri;
     
     num = g_list_length (files);
     
@@ -138,6 +140,15 @@ seahorse_nautilus_get_file_items (NautilusMenuProvider *provider,
     if (num == 0)
         return NULL;
     
+    /* Check if it's a desktop file. Copied from nautilus-send extension */
+    for (scan = files; scan; scan = scan->next) {
+        uri = nautilus_file_info_get_uri ((NautilusFileInfo*)(scan->data));
+        xnaut = (uri != NULL && g_ascii_strncasecmp (uri, "x-nautilus-desktop", 18) == 0);
+        g_free (uri);
+        if (xnaut)
+            return NULL;
+    }
+
     /* A single encrypted file, no menu items */
     if (num == 1 && 
         is_mime_types ((NautilusFileInfo*)files->data, pgp_encrypted_types))
