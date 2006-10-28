@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-10-27 08:52+0300\n"
-"PO-Revision-Date: 2006-10-27 11:03+0300\n"
+"PO-Revision-Date: 2006-10-28 07:18+0300\n"
 "Last-Translator: Ilkka Tuohela <hile@iki.fi>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -741,7 +741,7 @@ msgstr "URL"
 
 #: ../libseahorse/seahorse-prefs.c:356
 msgid "Custom"
-msgstr "Itse määritelty"
+msgstr "Oma määrittely"
 
 #: ../libseahorse/seahorse-prefs.c:426
 msgid "None: Don't publish keys"
@@ -766,7 +766,7 @@ msgstr "Ohjelma \"seahorse-daemon\" vaaditaan avainten välimuistin käyttöön"
 
 #: ../libseahorse/seahorse-prefs.glade.h:1
 msgid "<b>Defaults</b>"
-msgstr "<b>Oletukset</b>"
+msgstr "<b>Oletusasetukset</b>"
 
 #: ../libseahorse/seahorse-prefs.glade.h:2
 msgid ""
@@ -791,13 +791,13 @@ msgstr "<i>Käytössä oleva PGP-salasanojen välimuisti ei ole tuettu.</i>"
 #: ../libseahorse/seahorse-prefs.glade.h:6
 msgid "<i>No SSH caching agent is running. Cannot load Secure Shell keys.</i>"
 msgstr ""
-"<i>SSH-avainten välimuistia ei ole käytössä. SSH-avaimia ei voi avata.</i>"
+"<i>SSH-avainten välimuisti ei ole käytössä, SSH-avaimia ei voi avata.</i>"
 
 #: ../libseahorse/seahorse-prefs.glade.h:7
 msgid "<i>This key is used to sign messages when no other key is chosen</i>"
 msgstr ""
-"<i>Tätä avainta käytetään viestien allekirjoitukseen kun muita ei ole "
-"valittu</i>"
+"<i>Tätä avainta käytetään viestien allekirjoitukseen,\n"
+"kun muita avaimia ei ole valittu</i>"
 
 #: ../libseahorse/seahorse-prefs.glade.h:8
 msgid "Automatically load _Secure Shell keys"
@@ -805,17 +805,17 @@ msgstr "Lataa _SSH-avaimet automaattisesti"
 
 #: ../libseahorse/seahorse-prefs.glade.h:9
 msgid "Automatically synchronize modified keys with keyservers. "
-msgstr "Automaattisesti synkronoi muokatut avaimet avainpalvelimille."
+msgstr "Synkronoi muokatut avaimet automaattisesti palvelimille."
 
 #: ../libseahorse/seahorse-prefs.glade.h:10
 #: ../plugins/nautilus/seahorse-pgp-preferences.c:73
 #: ../plugins/nautilus/seahorse-pgp-preferences.desktop.in.h:2
 msgid "Encryption Preferences"
-msgstr "Salausasetukset"
+msgstr "Salausavainten asetukset"
 
 #: ../libseahorse/seahorse-prefs.glade.h:11
 msgid "Encryption Settings"
-msgstr "Salausasetukset"
+msgstr "Salauksen asetukset"
 
 #: ../libseahorse/seahorse-prefs.glade.h:12
 msgid "Key Servers"
@@ -827,7 +827,7 @@ msgstr "Avainten jako"
 
 #: ../libseahorse/seahorse-prefs.glade.h:14
 msgid "Passphrase Cache"
-msgstr "Tunnuslauseiden välimuisti"
+msgstr "Välimuisti"
 
 #: ../libseahorse/seahorse-prefs.glade.h:15
 msgid "Session Properties"
@@ -841,10 +841,10 @@ msgid ""
 "\n"
 "<b>Note:</b> Your personal keys will not be compromised."
 msgstr ""
-"Avaimien jako sallii muiden käyttää keräämiäsi avaimia. Tämä tarkoittaa "
-"että muut verkossa olijat voivat automaattisesti salata viestejä sinulle "
-"ja muille, joiden avaimet sinulla on, ilman että sinun täytyy lähettää "
-"heille avaimia.\n"
+"Avainten jako lähiverkossa sallii muiden käyttää keräämiäsi avaimia. "
+"Tämä tarkoittaa, että muut samassa verkossa olijat voivat automaattisesti "
+"salata viestejä sinulle ja niille joiden avaimet sinulla on, ilman "
+"että sinun täytyy lähettää heille avaimia erikseen.\n"
 "\n"
 "<b>Huomautus:</b> Salaisia avaimiasi ei jaeta."
 
@@ -858,11 +858,11 @@ msgstr ""
 
 #: ../libseahorse/seahorse-prefs.glade.h:21
 msgid "When _encrypting, always include myself as a recipient"
-msgstr "Lisää aina _salattaessa itsesi vastaanottajiin"
+msgstr "Lisää _oma tunnus aina vastaanottajiin salattaessa"
 
 #: ../libseahorse/seahorse-prefs.glade.h:22
 msgid "_Always remember passphrases whenever logged in"
-msgstr "_Muista aina tunnuslauseet sisäänkirjatuneena"
+msgstr "_Muista tunnuslauseet aina sisäänkirjatuneena"
 
 #: ../libseahorse/seahorse-prefs.glade.h:23
 msgid "_Ask me before using a cached passphrase"
@@ -874,7 +874,7 @@ msgstr "_Oletusavain:"
 
 #: ../libseahorse/seahorse-prefs.glade.h:25
 msgid "_Find Keys Using:"
-msgstr "_Etsi avaimet käyttäen:"
+msgstr "_Määritellyt lähteet:"
 
 #: ../libseahorse/seahorse-prefs.glade.h:26
 msgid "_Never remember passphrases"
@@ -882,7 +882,7 @@ msgstr "Älä _koskaan muista tunnuslauseita"
 
 #: ../libseahorse/seahorse-prefs.glade.h:27
 msgid "_Publish Keys To:"
-msgstr "_Julkaise avaimet palvelimelle:"
+msgstr "_Julkaise kohteeseen:"
 
 #: ../libseahorse/seahorse-prefs.glade.h:28
 msgid "_Remember passphrases for"
@@ -890,7 +890,7 @@ msgstr "_Muista salasanat "
 
 #: ../libseahorse/seahorse-prefs.glade.h:29
 msgid "_Share my keys with others on my network"
-msgstr "_Jaa avaimeni muiden verkon jäsenten kanssa"
+msgstr "_Jaa julkiset avaimet lähiverkossa"
 
 #: ../libseahorse/seahorse-prefs.glade.h:30
 msgid "minutes"
@@ -2103,7 +2103,7 @@ msgstr "Viedään avaimia"
 
 #: ../src/seahorse-key-manager.c:684
 msgid "Backup Keyrings to Archive"
-msgstr "VArmuuskopioi avainrenkaat arkistoon"
+msgstr "Varmuuskopioi avainrenkaat arkistoon"
 
 #: ../src/seahorse-key-manager.c:861
 msgid "seahorse"
@@ -2112,12 +2112,12 @@ msgstr "seahorse"
 #: ../src/seahorse-key-manager.c:944 ../src/seahorse-keyserver-results.c:292
 #, c-format
 msgid "Selected %d key"
-msgstr "Valittiin  %d avain"
+msgstr "Valittu  %d avain"
 
 #: ../src/seahorse-key-manager.c:945 ../src/seahorse-keyserver-results.c:293
 #, c-format
 msgid "Selected %d keys"
-msgstr "Valittiin %d avainta"
+msgstr "Valittu %d avainta"
 
 #. Top menu items
 #: ../src/seahorse-key-manager.c:1170 ../src/seahorse-keyserver-results.c:359
@@ -2151,7 +2151,7 @@ msgstr "Tuo avaimia avainrenkaaseen tiedostosta"
 
 #: ../src/seahorse-key-manager.c:1180
 msgid "_Backup Keyrings..."
-msgstr "_Varmuuskopioi avainrenkaita..."
+msgstr "_Varmuuskopioi avainrenkaat..."
 
 #: ../src/seahorse-key-manager.c:1181
 msgid "Backup all keys"
