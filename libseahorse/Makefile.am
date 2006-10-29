@@ -2,7 +2,7 @@
 gladedir = $(datadir)/seahorse/glade/
 localedir = $(datadir)/locale
 pixmapsdir = $(datadir)/pixmaps/seahorse/
-seahorselibexecbindir = $(libexecdir)/seahorse/
+seahorselibexecbindir = $(libdir)/seahorse/
 
 INCLUDES = -I$(top_builddir) \
 	-I$(top_srcdir) \

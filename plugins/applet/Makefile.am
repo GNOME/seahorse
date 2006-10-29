@@ -23,7 +23,8 @@ INCLUDES = \
 	-DPREFIX=\""$(prefix)"\" \
 	-DLIBCRYPTUI_API_SUBJECT_TO_CHANGE
 
-libexec_PROGRAMS = seahorse-applet
+seahorse_appletdir = $(libdir)/seahorse
+seahorse_applet_PROGRAMS = seahorse-applet
 
 seahorse_applet_SOURCES = \
 	seahorse-applet.c \
@@ -41,7 +42,7 @@ server_in_files = GNOME_SeahorseApplet.server.in
 server_DATA = $(server_in_files:.server.in=.server)
 
 $(server_in_files): $(server_in_files:.server.in=.server.in.in)
-	sed -e "s|\@LIBEXECDIR\@|$(libexecdir)|" $< > $@
+	sed -e "s|\@LIBDIR\@|$(libdir)|" $< > $@
 
 CLEANFILES = $(server_in_files) $(server_DATA) $(schemas_DATA) *.gladep* *.bak
 
