@@ -93,6 +93,7 @@ DECLARE_OPERATION (List, list)
     guint total;
     
     guint32 current_id;
+    guint32 info_flags;
     GnomeKeyringItemInfo *current_info;
     GnomeKeyringAttributeList *current_attrs;
     
@@ -287,8 +288,19 @@ process_next_item (SeahorseListOperation *lop)
     lop->remaining = g_list_delete_link (lop->remaining, lop->remaining);
     
     g_assert (!lop->request);
+
+	/* 
+	 * Check for the new gnome_keyring_item_get_info_full() function. 
+ 	 * TODO: Once this is in a stable release of gnome-keyring, remove defs.
+ 	 */
+#ifdef GNOME_KEYRING_ITEM_INFO_ALL
+    lop->request = gnome_keyring_item_get_info_full (lop->gsrc->pv->keyring_name, 
+                                lop->current_id, lop->info_flags, 
+                                (GnomeKeyringOperationGetItemInfoCallback)item_info_ready, lop, NULL);
+#else
     lop->request = gnome_keyring_item_get_info (lop->gsrc->pv->keyring_name, 
                 lop->current_id, (GnomeKeyringOperationGetItemInfoCallback)item_info_ready, lop, NULL);
+#endif
 }
 
 static void 
@@ -331,6 +343,11 @@ start_list_operation (SeahorseGKeyringSource *gsrc, SeahorseKeySourceLoad mode,
         
         lop->remaining = g_list_prepend (lop->remaining, GUINT_TO_POINTER (id));
         lop->total = 1;
+
+#ifdef GNOME_KEYRING_ITEM_INFO_ALL
+        /* TODO: Once this is in a stable release of gnome-keyring, remove defs. */
+        lop->info_flags = GNOME_KEYRING_ITEM_INFO_ALL;
+#endif
         
         seahorse_operation_mark_progress (SEAHORSE_OPERATION (lop), _("Retrieving key"), -1);
         process_next_item (lop);

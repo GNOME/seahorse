@@ -27,6 +27,7 @@
 #include "seahorse-gkeyring-item.h"
 #include "seahorse-gtkstock.h"
 #include "seahorse-util.h"
+#include "seahorse-secure-memory.h"
 
 /* For gnome-keyring secret type ids */
 #include "seahorse-pgp-key.h"
@@ -219,7 +220,8 @@ static void
 changed_key (SeahorseGKeyringItem *git)
 {
     SeahorseKey *skey = SEAHORSE_KEY (git);
-    
+    gchar *secret;
+
     if (!git->info) {
         
         skey->location = SKEY_LOC_INVALID;
@@ -231,11 +233,14 @@ changed_key (SeahorseGKeyringItem *git)
         skey->keyid = 0;
         return;
     } 
-    
+
+    WITH_SECURE_MEM ((secret = gnome_keyring_item_info_get_secret (git->info)));
+    skey->loaded = (secret == NULL) ? SKEY_INFO_BASIC : SKEY_INFO_COMPLETE;
+    g_free (secret);
+
     skey->ktype = SKEY_GKEYRING;
     skey->location = SKEY_LOC_LOCAL;
     skey->etype = SKEY_CREDENTIALS;
-    skey->loaded = SKEY_INFO_BASIC;
     skey->flags = SKEY_FLAG_IS_VALID;
     skey->keyid = seahorse_gkeyring_item_get_cannonical (git->item_id);
 

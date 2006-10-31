@@ -44,7 +44,7 @@ load_password (SeahorseWidget *swidget, SeahorseGKeyringItem *git)
         
         /* Retrieve initial password. Try to keep it safe */
         WITH_SECURE_MEM ((secret = gnome_keyring_item_info_get_secret (git->info)));
-        seahorse_secure_entry_set_text (entry, secret);
+        seahorse_secure_entry_set_text (entry, secret ? secret : "");
         g_free (secret);
     
         seahorse_secure_entry_reset_changed (entry);
@@ -376,6 +376,7 @@ void
 seahorse_gkeyring_item_properties_new (SeahorseGKeyringItem *git)
 {
     SeahorseKey *key = SEAHORSE_KEY (git);
+    SeahorseKeySource *sksrc;
     SeahorseWidget *swidget = NULL;
     GtkWidget *widget;
 
@@ -384,6 +385,12 @@ seahorse_gkeyring_item_properties_new (SeahorseGKeyringItem *git)
     /* This happens if the window is already open */
     if (swidget == NULL)
         return;
+
+    /* This causes the key source to get any specific info about the key */
+    if (seahorse_key_get_loaded (key) < SKEY_INFO_COMPLETE) {
+        sksrc = seahorse_key_get_source (key);
+        seahorse_key_source_load_async (sksrc, SKSRC_LOAD_KEY, seahorse_key_get_keyid (key), NULL);
+    }
 
     widget = glade_xml_get_widget (swidget->xml, swidget->name);
     g_signal_connect (widget, "response", G_CALLBACK (properties_response), swidget);
