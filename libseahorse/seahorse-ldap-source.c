@@ -115,14 +115,36 @@ get_ldap_server_info (SeahorseLDAPSource *lsrc, gboolean force)
  
 #define LDAP_ERROR_DOMAIN (get_ldap_error_domain())
 
+static gchar**
+get_ldap_values (LDAP *ld, LDAPMessage *entry, const char *attribute)
+{
+    GArray *array;
+    struct berval **bv;
+    gchar *value;
+    int num, i;
+
+    bv = ldap_get_values_len (ld, entry, attribute);
+    if (!bv)
+        return NULL;
+
+    array = g_array_new (TRUE, TRUE, sizeof (gchar*));
+    num = ldap_count_values_len (bv);
+    for(i = 0; i < num; i++) {
+        value = g_strndup (bv[i]->bv_val, bv[i]->bv_len);
+        g_array_append_val(array, value);
+    }
+
+    return (gchar**)g_array_free (array, FALSE);
+}
+
 #if DEBUG_LDAP_ENABLE
 
 static void
 dump_ldap_entry (LDAP *ld, LDAPMessage *res)
 {
     BerElement *pos;
-    char **values;
-    char **v;
+    gchar **values;
+    gchar **v;
     char *t;
     
     t = ldap_get_dn (ld, res);
@@ -132,11 +154,11 @@ dump_ldap_entry (LDAP *ld, LDAPMessage *res)
     for (t = ldap_first_attribute (ld, res, &pos); t; 
          t = ldap_next_attribute (ld, res, pos)) {
              
-        values = ldap_get_values (ld, res, t);
+        values = get_ldap_values (ld, res, t);
         for (v = values; *v; v++) 
             g_printerr ("%s: %s\n", t, *v);
              
-        ldap_value_free (values);
+        g_strfreev (values);
         ldap_memfree (t);
     }
     
@@ -155,44 +177,44 @@ get_ldap_error_domain ()
 }
 
 static gchar*
-get_string_attribute (LDAP* ld, LDAPMessage *res, const char *attribute)
+get_string_attribute (LDAP *ld, LDAPMessage *res, const char *attribute)
 {
-    char **vals;
+    gchar **vals;
     gchar *v;
     
-    vals = ldap_get_values (ld, res, attribute);
+    vals = get_ldap_values (ld, res, attribute);
     if (!vals)
         return NULL; 
     v = vals[0] ? g_strdup (vals[0]) : NULL;
-    ldap_value_free (vals);
+    g_strfreev (vals);
     return v;
 }
 
 static gboolean
 get_boolean_attribute (LDAP* ld, LDAPMessage *res, const char *attribute)
 {
-    char **vals;
+    gchar **vals;
     gboolean b;
     
-    vals = ldap_get_values (ld, res, attribute);
+    vals = get_ldap_values (ld, res, attribute);
     if (!vals)
         return FALSE;
     b = vals[0] && atoi (vals[0]) == 1;
-    ldap_value_free (vals);
+    g_strfreev (vals);
     return b;
 }
 
 static long int
 get_int_attribute (LDAP* ld, LDAPMessage *res, const char *attribute)
 {
-    char **vals;
+    gchar **vals;
     long int d;
     
-    vals = ldap_get_values (ld, res, attribute);
+    vals = get_ldap_values (ld, res, attribute);
     if (!vals)
         return 0;
     d = vals[0] ? atoi (vals[0]) : 0;
-    ldap_value_free (vals);
+    g_strfreev (vals);
     return d;         
 }
 
@@ -200,10 +222,10 @@ static long int
 get_date_attribute (LDAP* ld, LDAPMessage *res, const char *attribute)
 {
     struct tm t;
-    char **vals;
+    gchar **vals;
     long int d;
     
-    vals = ldap_get_values (ld, res, attribute);
+    vals = get_ldap_values (ld, res, attribute);
     if (!vals)
         return 0;
         
@@ -222,7 +244,7 @@ get_date_attribute (LDAP* ld, LDAPMessage *res, const char *attribute)
         d = mktime (&t);
     }        
 
-    ldap_value_free (vals);
+    g_strfreev (vals);
     return d;         
 }
 
@@ -230,9 +252,9 @@ static gpgme_pubkey_algo_t
 get_algo_attribute (LDAP* ld, LDAPMessage *res, const char *attribute)
 {
     gpgme_pubkey_algo_t a = 0;
-    char **vals;
+    gchar **vals;
     
-    vals = ldap_get_values (ld, res, attribute);
+    vals = get_ldap_values (ld, res, attribute);
     if (!vals)
         return 0;
     
@@ -247,7 +269,7 @@ get_algo_attribute (LDAP* ld, LDAPMessage *res, const char *attribute)
             a = GPGME_PK_DSA;     
     }
     
-    ldap_value_free (vals);
+    g_strfreev (vals);
     return a;
 }
 
@@ -343,12 +365,12 @@ seahorse_ldap_operation_dispose (GObject *gobject)
     
     if (lop->ldap_op != -1) {
         if (lop->ldap)
-            ldap_abandon (lop->ldap, lop->ldap_op);
+            ldap_abandon_ext (lop->ldap, lop->ldap_op, NULL, NULL);
         lop->ldap_op = -1;
     }
 
     if (lop->ldap) {
-        ldap_unbind (lop->ldap);
+        ldap_unbind_ext (lop->ldap, NULL, NULL);
         lop->ldap = NULL;
     }
     
@@ -390,12 +412,12 @@ seahorse_ldap_operation_cancel (SeahorseOperation *operation)
     
     if (lop->ldap_op != -1) {
         if (lop->ldap)
-            ldap_abandon (lop->ldap, lop->ldap_op);
+            ldap_abandon_ext (lop->ldap, lop->ldap_op, NULL, NULL);
         lop->ldap_op = -1;
     }
 
     if (lop->ldap) {
-        ldap_unbind (lop->ldap);
+        ldap_unbind_ext (lop->ldap, NULL, NULL);
         lop->ldap = NULL;
     }
 
@@ -505,7 +527,7 @@ done_info_start_op (SeahorseOperation *op, LDAPMessage *result)
             sinfo->key_attr = g_strdup (sinfo->version > 1 ? "pgpkeyv2" : "pgpkey");
             set_ldap_server_info (lop->lsrc, sinfo);
             
-            ldap_abandon (lop->ldap, lop->ldap_op);
+            ldap_abandon_ext (lop->ldap, lop->ldap_op, NULL, NULL);
             lop->ldap_op = -1;
             
         } else {
@@ -560,10 +582,11 @@ done_bind_start_info (SeahorseOperation *op, LDAPMessage *result)
         return done_info_start_op (op, NULL);
         
     /* Retrieve the server info */
-    lop->ldap_op = ldap_search (lop->ldap, "cn=PGPServerInfo", LDAP_SCOPE_BASE,
-                                "(objectclass=*)", (char**)kServerAttributes, 0);    
-    if (lop->ldap_op == -1) {
-        fail_ldap_operation (lop, 0);
+    r = ldap_search_ext (lop->ldap, "cn=PGPServerInfo", LDAP_SCOPE_BASE,
+                         "(objectclass=*)", (char**)kServerAttributes, 0,
+                         NULL, NULL, NULL, 0, &(lop->ldap_op));    
+    if (r != LDAP_SUCCESS) {
+        fail_ldap_operation (lop, r);
         return FALSE;
     }
 
@@ -804,6 +827,7 @@ start_search (SeahorseOperation *op, LDAPMessage *result)
     SeahorseLDAPOperation *lop = SEAHORSE_LDAP_OPERATION (op);  
     LDAPServerInfo *sinfo;
     gchar *filter, *t;
+    int r;
     
     g_return_val_if_fail (lop->ldap != NULL, FALSE);
     g_assert (lop->ldap_op == -1);
@@ -815,10 +839,11 @@ start_search (SeahorseOperation *op, LDAPMessage *result)
     seahorse_operation_mark_progress (SEAHORSE_OPERATION (lop), t, 0.0);
     
     sinfo = get_ldap_server_info (lop->lsrc, TRUE);
-    lop->ldap_op = ldap_search (lop->ldap, sinfo->base_dn, LDAP_SCOPE_SUBTREE,
-                                filter, (char**)kPGPAttributes, 0);
-    if (lop->ldap_op == -1) {
-        fail_ldap_operation (lop, 0);
+    r = ldap_search_ext (lop->ldap, sinfo->base_dn, LDAP_SCOPE_SUBTREE,
+                         filter, (char**)kPGPAttributes, 0,
+                         NULL, NULL, NULL, 0, &(lop->ldap_op));    
+    if (r != LDAP_SUCCESS) {
+        fail_ldap_operation (lop, r);
         return FALSE;
     }                                    
     
@@ -963,7 +988,7 @@ get_key_from_ldap (SeahorseOperation *op, LDAPMessage *result)
     gchar *filter;
     char *attrs[2];
     const gchar *fpr;
-    int l;
+    int l, r;
     
     g_assert (lop->ldap != NULL);
     g_assert (lop->ldap_op == -1);
@@ -995,13 +1020,13 @@ get_key_from_ldap (SeahorseOperation *op, LDAPMessage *result)
         attrs[0] = sinfo->key_attr;
         attrs[1] = NULL;
         
-        lop->ldap_op = ldap_search (lop->ldap, sinfo->base_dn, LDAP_SCOPE_SUBTREE,
-                                    filter, attrs, 0);
-
+        r = ldap_search_ext (lop->ldap, sinfo->base_dn, LDAP_SCOPE_SUBTREE,
+                             filter, attrs, 0,
+                             NULL, NULL, NULL, 0, &(lop->ldap_op));
         g_free (filter);
 
-        if (lop->ldap_op == -1) {
-            fail_ldap_operation (lop, 0);
+        if (r != LDAP_SUCCESS) {
+            fail_ldap_operation (lop, r);
             return FALSE;
         }                                    
                 
@@ -1096,6 +1121,7 @@ send_key_to_ldap (SeahorseOperation *op, LDAPMessage *result)
     LDAPMod *attrs[2];
     char *values[2];
     guint l;
+    int r;
 
     g_assert (lop->ldap != NULL);
     g_assert (lop->ldap_op == -1);
@@ -1132,12 +1158,12 @@ send_key_to_ldap (SeahorseOperation *op, LDAPMessage *result)
         
         base = g_strdup_printf ("pgpCertid=virtual,%s", sinfo->base_dn);
         
-        lop->ldap_op = ldap_add (lop->ldap, base, attrs);
+        r = ldap_add_ext (lop->ldap, base, attrs, NULL, NULL, &(lop->ldap_op));
 
         g_free (base);
-                
-        if (lop->ldap_op == -1) {
-            fail_ldap_operation (lop, 0);
+        
+        if (r != LDAP_SUCCESS) {
+            fail_ldap_operation (lop, r);
             return FALSE;
         }                                    
                 
