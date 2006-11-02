@@ -164,12 +164,8 @@ init_context (SeahorseApplet *sapplet)
     
     priv = SEAHORSE_APPLET_GET_PRIVATE (sapplet);
     if (!priv->context) {
-        
         priv->context = seahorse_context_new (SEAHORSE_CONTEXT_APP, SKEY_PGP);
-        op = seahorse_context_load_local_keys (priv->context);
-    
-        /* Let operation take care of itself */
-        g_object_unref (op);
+        seahorse_context_load_local_keys_async (priv->context);
     }
 }
 

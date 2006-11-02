@@ -1881,7 +1881,7 @@ seahorse_key_properties_new (SeahorsePGPKey *pkey)
     /* Don't trigger the import of remote keys if possible */
     if (!remote) {
         /* This causes the key source to get any specific info about the key */
-        seahorse_key_source_load_sync (sksrc, SKSRC_LOAD_KEY, seahorse_key_get_keyid (skey), NULL);
+        seahorse_key_source_load_sync (sksrc, seahorse_key_get_keyid (skey));
         skey = seahorse_context_get_key (SCTX_APP(), sksrc, seahorse_key_get_keyid (skey));
         g_return_if_fail (skey != NULL);
     }

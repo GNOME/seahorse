@@ -73,7 +73,4 @@ SeahorsePGPSource*   seahorse_pgp_source_new            (void);
 
 gpgme_ctx_t          seahorse_pgp_source_new_context    ();
 
-void                 seahorse_pgp_source_loadkeys       (SeahorsePGPSource *source,
-                                                         gboolean secret_only);
-
 #endif /* __SEAHORSE_PGP_SOURCE_H__ */

@@ -132,7 +132,7 @@ load_gkeyring_items (SeahorseWidget *swidget, SeahorseContext *sctx)
     
     gsrc = seahorse_gkeyring_source_new (NULL);
     seahorse_context_take_key_source (sctx, SEAHORSE_KEY_SOURCE (gsrc));
-    op = seahorse_key_source_load (SEAHORSE_KEY_SOURCE (gsrc), SKSRC_LOAD_ALL, 0, NULL);
+    op = seahorse_key_source_load (SEAHORSE_KEY_SOURCE (gsrc), 0);
     
     /* Monitor loading progress */
     seahorse_progress_status_set_operation (swidget, op);

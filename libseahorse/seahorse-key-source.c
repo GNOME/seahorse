@@ -76,15 +76,14 @@ seahorse_key_source_finalize (GObject *gobject)
 /**
  * seahorse_key_source_load
  * @sksrc: A #SeahorseKeySource object
- * @key: The key to refresh or SEAHORSE_KEY_SOURCE_ALL, SEAHORSE_KEY_SOURCE_NEW 
+ * @keyid: The key to refresh or 0 for all.
  * 
  * Refreshes the #SeahorseKeySource's internal key listing. 
  * 
  * Returns the asynchronous key refresh operation. 
  **/   
 SeahorseOperation*
-seahorse_key_source_load (SeahorseKeySource *sksrc, SeahorseKeySourceLoad load,
-                          GQuark keyid, const gchar *match)
+seahorse_key_source_load (SeahorseKeySource *sksrc, GQuark keyid)
 {
     SeahorseKeySourceClass *klass;
     
@@ -92,21 +91,20 @@ seahorse_key_source_load (SeahorseKeySource *sksrc, SeahorseKeySourceLoad load,
     klass = SEAHORSE_KEY_SOURCE_GET_CLASS (sksrc);
     g_return_val_if_fail (klass->load != NULL, NULL);
     
-    return (*klass->load) (sksrc, load, keyid, match);
+    return (*klass->load) (sksrc, keyid);
 }
 
 /**
  * seahorse_key_source_load_sync
  * @sksrc: A #SeahorseKeySource object
- * @key: The key to refresh or SEAHORSE_KEY_SOURCE_ALL, SEAHORSE_KEY_SOURCE_NEW 
+ * @keyid: The key to refresh or 0 for all.
  * 
  * Refreshes the #SeahorseKeySource's internal key listing, and waits for it to complete.
  **/   
 void
-seahorse_key_source_load_sync (SeahorseKeySource *sksrc, SeahorseKeySourceLoad load,
-                               GQuark keyid, const gchar *match)
+seahorse_key_source_load_sync (SeahorseKeySource *sksrc, GQuark keyid)
 {
-    SeahorseOperation *op = seahorse_key_source_load (sksrc, load, keyid, match);
+    SeahorseOperation *op = seahorse_key_source_load (sksrc, keyid);
     g_return_if_fail (op != NULL);
     seahorse_operation_wait (op);
     g_object_unref (op);
@@ -115,17 +113,37 @@ seahorse_key_source_load_sync (SeahorseKeySource *sksrc, SeahorseKeySourceLoad l
 /**
  * seahorse_key_source_load_sync
  * @sksrc: A #SeahorseKeySource object
- * @key: The key to refresh or SEAHORSE_KEY_SOURCE_ALL, SEAHORSE_KEY_SOURCE_NEW 
+ * @keyid: The key to refresh or 0 for all.
  * 
  * Refreshes the #SeahorseKeySource's internal key listing. Completes in the background.
  **/   
 void
-seahorse_key_source_load_async (SeahorseKeySource *sksrc, SeahorseKeySourceLoad load,
-                                GQuark keyid, const gchar *match)
+seahorse_key_source_load_async (SeahorseKeySource *sksrc, GQuark keyid)
 {
-    SeahorseOperation *op = seahorse_key_source_load (sksrc, load, keyid, match);
+    SeahorseOperation *op = seahorse_key_source_load (sksrc, keyid);
     g_return_if_fail (op != NULL);
     g_object_unref (op);
+}
+
+/**
+ * seahorse_key_source_search
+ * @sksrc: A #SeahorseKeySource object
+ * @match: Text to search for
+ * 
+ * Refreshes the #SeahorseKeySource's internal key listing. 
+ * 
+ * Returns the asynchronous key refresh operation. 
+ **/   
+SeahorseOperation*
+seahorse_key_source_search (SeahorseKeySource *sksrc, const gchar *match)
+{
+    SeahorseKeySourceClass *klass;
+    
+    g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (sksrc), NULL);
+    klass = SEAHORSE_KEY_SOURCE_GET_CLASS (sksrc);
+    g_return_val_if_fail (klass->search != NULL, NULL);
+    
+    return (*klass->search) (sksrc, match);
 }
 
 /**

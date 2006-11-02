@@ -159,7 +159,7 @@ SeahorseKey*        seahorse_context_get_default_key    (SeahorseContext    *sct
 
 SeahorseOperation*  seahorse_context_load_local_keys    (SeahorseContext    *sctx);
 
-SeahorseOperation*  seahorse_context_load_remote_key    (SeahorseContext    *sctx);
+void                seahorse_context_load_local_keys_async (SeahorseContext *sctx);
 
 SeahorseOperation*  seahorse_context_load_remote_keys   (SeahorseContext    *sctx,
                                                          const gchar        *search);

@@ -720,62 +720,18 @@ get_callback (SoupMessage *msg, SeahorseHKPOperation *hop)
 /* -----------------------------------------------------------------------------
  *  SEAHORSE HKP SOURCE
  */
- 
-/* GObject handlers */
-static void seahorse_hkp_source_class_init (SeahorseHKPSourceClass *klass);
 
-/* SeahorseKeySource methods */
-static SeahorseOperation*  seahorse_hkp_source_load       (SeahorseKeySource *src,
-                                                           SeahorseKeySourceLoad load,
-                                                           GQuark keyid,
-                                                           const gchar *key);
-static SeahorseOperation*  seahorse_hkp_source_import     (SeahorseKeySource *sksrc, 
-                                                           gpgme_data_t data);
-static SeahorseOperation*  seahorse_hkp_source_export_raw (SeahorseKeySource *sksrc, 
-                                                           GSList *keys,     
-                                                           gpgme_data_t data);
+G_DEFINE_TYPE (SeahorseHKPSource, seahorse_hkp_source, SEAHORSE_TYPE_SERVER_SOURCE);
 
-static SeahorseKeySourceClass *parent_class = NULL;
-
-GType
-seahorse_hkp_source_get_type (void)
+static void 
+seahorse_hkp_source_init (SeahorseHKPSource *hsrc)
 {
-    static GType type = 0;
+
+}
  
-    if (!type) {
-        
-        static const GTypeInfo tinfo = {
-            sizeof (SeahorseHKPSourceClass), NULL, NULL,
-            (GClassInitFunc) seahorse_hkp_source_class_init, NULL, NULL,
-            sizeof (SeahorseHKPSource), 0, NULL
-        };
-        
-        type = g_type_register_static (SEAHORSE_TYPE_SERVER_SOURCE, 
-                                       "SeahorseHKPSource", &tinfo, 0);
-    }
-  
-    return type;
-}
-
-/* Initialize the basic class stuff */
-static void
-seahorse_hkp_source_class_init (SeahorseHKPSourceClass *klass)
-{
-    SeahorseKeySourceClass *key_class;
-   
-    key_class = SEAHORSE_KEY_SOURCE_CLASS (klass);
-    key_class->load = seahorse_hkp_source_load;
-    key_class->import = seahorse_hkp_source_import;
-    key_class->export_raw = seahorse_hkp_source_export_raw;
-
-    parent_class = g_type_class_peek_parent (klass);
-}
-
 static SeahorseOperation*
-seahorse_hkp_source_load (SeahorseKeySource *src, SeahorseKeySourceLoad load,
-                          GQuark keyid, const gchar *match)
+seahorse_hkp_source_search (SeahorseKeySource *src, const gchar *match)
 {
-    SeahorseOperation *op;
     SeahorseHKPOperation *hop;
     SoupMessage *message;
     gchar *pattern = NULL;
@@ -783,23 +739,8 @@ seahorse_hkp_source_load (SeahorseKeySource *src, SeahorseKeySourceLoad load,
     
     g_assert (SEAHORSE_IS_KEY_SOURCE (src));
     g_assert (SEAHORSE_IS_HKP_SOURCE (src));
-    
-    op = parent_class->load (src, load, keyid, match);
-    if (op != NULL)
-        return op;
 
-    /* No way to find new all or new keys */
-    if (load == SKSRC_LOAD_NEW || load == SKSRC_LOAD_ALL)
-        return seahorse_operation_new_complete (NULL);
-        
-    else if(load == SKSRC_LOAD_SEARCH)
-        pattern = soup_uri_encode (match, "+=/\\()");
-        
-    /* Load a specific key */
-    else if(load == SKSRC_LOAD_KEY) 
-        /* TODO: Does this actually work? */
-        pattern = soup_uri_encode (seahorse_key_get_rawid (keyid), NULL);    
-
+    pattern = soup_uri_encode (match, "+=/\\()");
     g_return_val_if_fail (pattern != NULL, NULL);
     
     hop = setup_hkp_operation (SEAHORSE_HKP_SOURCE (src));
@@ -831,6 +772,26 @@ seahorse_hkp_source_load (SeahorseKeySource *src, SeahorseKeySourceLoad load,
                                            SEAHORSE_OPERATION (hop));
     g_object_ref (hop);
     return SEAHORSE_OPERATION (hop);
+}
+
+static SeahorseOperation*
+seahorse_hkp_source_load (SeahorseKeySource *src, GQuark keyid)
+{
+    SeahorseOperation *op;
+    
+    g_assert (SEAHORSE_IS_KEY_SOURCE (src));
+    g_assert (SEAHORSE_IS_HKP_SOURCE (src));
+    
+    op = SEAHORSE_KEY_SOURCE_CLASS (seahorse_hkp_source_parent_class)->load (src, keyid);
+    if (op != NULL)
+        return op;
+
+    /* No way to find new all or new keys */
+    if (!keyid)
+        return seahorse_operation_new_complete (NULL);
+
+    /* TODO: Does this actually work? */
+    return seahorse_hkp_source_search (src, seahorse_key_get_rawid (keyid));        
 }
 
 static SeahorseOperation* 
@@ -973,6 +934,22 @@ seahorse_hkp_source_export_raw (SeahorseKeySource *sksrc, GSList *keyids,
     g_free (server);
     return SEAHORSE_OPERATION (hop);    
 }
+
+/* Initialize the basic class stuff */
+static void
+seahorse_hkp_source_class_init (SeahorseHKPSourceClass *klass)
+{
+    SeahorseKeySourceClass *key_class;
+   
+    key_class = SEAHORSE_KEY_SOURCE_CLASS (klass);
+    key_class->load = seahorse_hkp_source_load;
+    key_class->search = seahorse_hkp_source_search;
+    key_class->import = seahorse_hkp_source_import;
+    key_class->export_raw = seahorse_hkp_source_export_raw;
+
+    seahorse_hkp_source_parent_class = g_type_class_peek_parent (klass);
+}
+
 
 /**
  * seahorse_hkp_source_new

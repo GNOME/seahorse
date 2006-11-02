@@ -50,15 +50,14 @@ search_done (SeahorseOperation *op, SeahorseKey *skey)
  */
 
 static SeahorseOperation*
-seahorse_unknown_source_load (SeahorseKeySource *src, SeahorseKeySourceLoad load,
-                              GQuark keyid, const gchar *match)
+seahorse_unknown_source_load (SeahorseKeySource *src, GQuark keyid)
 {
     SeahorseUnknownSource *usrc;
     
     g_assert (SEAHORSE_IS_UNKNOWN_SOURCE (src));
     usrc = SEAHORSE_UNKNOWN_SOURCE (src);
     
-    if (load != SKSRC_LOAD_KEY) {
+    if (keyid) {
         g_return_val_if_fail (keyid, NULL);
         seahorse_unknown_source_add_key (usrc, keyid, NULL);
     }

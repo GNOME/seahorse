@@ -99,7 +99,6 @@ DECLARE_OPERATION (List, list)
     
     gpointer request;
     
-    SeahorseKeySourceLoad mode;
     GHashTable *checks;
 
 END_DECLARE_OPERATION
@@ -324,10 +323,10 @@ keyring_ids_ready (GnomeKeyringResult result, GList *list, SeahorseListOperation
 }
 
 static SeahorseListOperation*
-start_list_operation (SeahorseGKeyringSource *gsrc, SeahorseKeySourceLoad mode, 
-                      GQuark keyid)
+start_list_operation (SeahorseGKeyringSource *gsrc, GQuark keyid)
 {
     SeahorseListOperation *lop;
+    GList *keys, *l;
 
     lop = g_object_new (SEAHORSE_TYPE_LIST_OPERATION, NULL);
     lop->gsrc = gsrc;
@@ -335,7 +334,7 @@ start_list_operation (SeahorseGKeyringSource *gsrc, SeahorseKeySourceLoad mode,
     seahorse_operation_mark_start (SEAHORSE_OPERATION (lop));
     
     /* When we know which key to load go directly to step two */
-    if (mode == SKSRC_LOAD_KEY) {
+    if (keyid) {
         guint32 id;
         
         id = parse_keyid (keyid);
@@ -355,17 +354,12 @@ start_list_operation (SeahorseGKeyringSource *gsrc, SeahorseKeySourceLoad mode,
     }
     
     /* When loading new keys prepare a list of current */
-    if (mode == SKSRC_LOAD_NEW) {
-        GList *keys, *l;
-
-        lop->checks = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, NULL);
-        keys = seahorse_context_get_keys (SCTX_APP (), SEAHORSE_KEY_SOURCE (gsrc));
-        for (l = keys; l; l = g_list_next (l))
-            g_hash_table_insert (lop->checks, GUINT_TO_POINTER (seahorse_key_get_keyid (l->data)), 
-                                         GUINT_TO_POINTER (TRUE));
-        g_list_free (keys);
-    }
-    
+    lop->checks = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, NULL);
+    keys = seahorse_context_get_keys (SCTX_APP (), SEAHORSE_KEY_SOURCE (gsrc));
+    for (l = keys; l; l = g_list_next (l))
+        g_hash_table_insert (lop->checks, GUINT_TO_POINTER (seahorse_key_get_keyid (l->data)), 
+                             GUINT_TO_POINTER (TRUE));
+    g_list_free (keys);
     
     /* Start listing of ids */
     seahorse_operation_mark_progress (SEAHORSE_OPERATION (lop), _("Listing passwords"), -1);
@@ -451,8 +445,7 @@ key_changed (SeahorseKey *skey, SeahorseKeyChange change, SeahorseKeySource *sks
     if (change == SKEY_CHANGE_ALL)
         return;
 
-    seahorse_key_source_load_async (sksrc, SKSRC_LOAD_KEY, 
-                                    seahorse_key_get_keyid (skey), NULL);
+    seahorse_key_source_load_async (sksrc, seahorse_key_get_keyid (skey));
 }
 
 static void
@@ -545,8 +538,7 @@ seahorse_gkeyring_source_set_property (GObject *object, guint prop_id, const GVa
 }
 
 static SeahorseOperation*
-seahorse_gkeyring_source_load (SeahorseKeySource *src, SeahorseKeySourceLoad mode,
-                               GQuark keyid, const gchar *match)
+seahorse_gkeyring_source_load (SeahorseKeySource *src, GQuark keyid)
 {
     SeahorseGKeyringSource *gsrc;
     SeahorseListOperation *lop;
@@ -555,16 +547,12 @@ seahorse_gkeyring_source_load (SeahorseKeySource *src, SeahorseKeySourceLoad mod
     g_assert (SEAHORSE_IS_KEY_SOURCE (src));
     gsrc = SEAHORSE_GKEYRING_SOURCE (src);
     
-    /* Don't support searching */
-    if (mode == SKSRC_LOAD_SEARCH)
-        return seahorse_operation_new_complete (NULL);
-
     if (!init_keyring_name (gsrc, &err))
         return seahorse_operation_new_complete (err);
 
     g_assert (gsrc->pv->keyring_name);
 
-    lop = start_list_operation (gsrc, mode, keyid);
+    lop = start_list_operation (gsrc, keyid);
     seahorse_multi_operation_take (gsrc->pv->operations, SEAHORSE_OPERATION (lop));
     
     g_object_ref (lop);
@@ -645,7 +633,7 @@ seahorse_gkeyring_source_remove (SeahorseKeySource *sksrc, SeahorseKey *skey,
     
     if (ret) {
         seahorse_context_remove_key (SCTX_APP (), skey);
-        seahorse_key_source_load_async (sksrc, SKSRC_LOAD_NEW, 0, NULL);
+        seahorse_key_source_load_async (sksrc, 0);
     }
     
     return ret;

@@ -70,7 +70,6 @@ typedef struct _LoadContext {
     SeahorseSSHSource *ssrc;
     GHashTable *loaded;
     GHashTable *checks;
-    guint mode;
     GQuark match;
     gboolean matched;
     gchar *pubfile;
@@ -143,8 +142,7 @@ key_changed (SeahorseKey *skey, SeahorseKeyChange change, SeahorseKeySource *sks
      * need to reload in that case */
     
     if (change != SKEY_CHANGE_ALL)
-        seahorse_key_source_load_async (sksrc, SKSRC_LOAD_KEY, 
-                                        seahorse_key_get_keyid (skey), NULL);
+        seahorse_key_source_load_async (sksrc, seahorse_key_get_keyid (skey));
 }
 
 static void
@@ -181,7 +179,7 @@ scheduled_refresh (SeahorseSSHSource *ssrc)
 {
     DEBUG_REFRESH ("scheduled refresh event ocurring now\n");
     cancel_scheduled_refresh (ssrc);
-    seahorse_key_source_load_async (SEAHORSE_KEY_SOURCE (ssrc), SKSRC_LOAD_ALL, 0, NULL);
+    seahorse_key_source_load_async (SEAHORSE_KEY_SOURCE (ssrc), 0);
     return FALSE; /* don't run again */    
 }
 
@@ -294,38 +292,23 @@ ssh_key_from_data (SeahorseSSHSource *ssrc, LoadContext *ctx,
                                           GUINT_TO_POINTER (TRUE));
     }
 
-    switch(ctx->mode) {
-
-    /* Lookin for a specific key */
-    case SKSRC_LOAD_KEY:
-        if (ctx->match != keyid) {
+    /* Looking for a specific key */
+    if (ctx->match) {
+        if(ctx->match != keyid) {
             seahorse_ssh_key_data_free (keydata);
             return NULL;
         }
         ctx->matched = TRUE;
-        /* Fall through */
-        
-    /* Refresh any keys, add any new ones */
-    case SKSRC_LOAD_NEW:
-        /* If we already have this key then just transfer ownership of keydata */
-        if (prev) {
-            g_object_set (prev, "key-data", keydata, NULL);
-            return SEAHORSE_SSH_KEY (prev);
-        }
-        break;
-        
-    /* Full reload */
-    case SKSRC_LOAD_ALL:
-        if (prev) 
-            seahorse_context_remove_key (SCTX_APP (), prev);
-        break;
-        
-    default:
-        break;
     }
-    
-    g_assert (keydata);
+        
+    /* If we already have this key then just transfer ownership of keydata */
+    if (prev) {
+        g_object_set (prev, "key-data", keydata, NULL);
+        return SEAHORSE_SSH_KEY (prev);
+    }
 
+    /* Create a new key */        
+    g_assert (keydata);
     skey = seahorse_ssh_key_new (sksrc, keydata);
             
     /* We listen in to get notified of changes on this key */
@@ -461,8 +444,7 @@ write_gpgme_data (gpgme_data_t data, const gchar *str)
  */
 
 static SeahorseOperation*
-seahorse_ssh_source_load (SeahorseKeySource *sksrc, SeahorseKeySourceLoad mode,
-                          GQuark keymatch, const gchar *match)
+seahorse_ssh_source_load (SeahorseKeySource *sksrc, GQuark keymatch)
 {
     SeahorseSSHSource *ssrc;
     GError *err = NULL;
@@ -486,14 +468,13 @@ seahorse_ssh_source_load (SeahorseKeySource *sksrc, SeahorseKeySourceLoad mode,
     memset (&ctx, 0, sizeof (ctx));
     ctx.match = keymatch;
     ctx.matched = FALSE;
-    ctx.mode = mode;
     ctx.ssrc = ssrc;
     
     /* Since we can find duplicate keys, limit them with this hash */
     ctx.loaded = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, NULL);
     
     /* Keys that currently exist, so we can remove any that disappeared */
-    if (mode == SKSRC_LOAD_NEW)
+    if (!keymatch)
         ctx.checks = load_present_keys (sksrc);
 
     /* For each private key file */
@@ -912,8 +893,7 @@ seahorse_ssh_source_key_for_filename (SeahorseSSHSource *ssrc, const gchar *priv
         
         /* Force loading of all new keys */
         if (!i) {
-            seahorse_key_source_load_sync (SEAHORSE_KEY_SOURCE (ssrc), 
-                                           SKSRC_LOAD_NEW, 0, NULL);
+            seahorse_key_source_load_sync (SEAHORSE_KEY_SOURCE (ssrc), 0);
         }
     }
     

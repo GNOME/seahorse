@@ -389,7 +389,7 @@ seahorse_gkeyring_item_properties_new (SeahorseGKeyringItem *git)
     /* This causes the key source to get any specific info about the key */
     if (seahorse_key_get_loaded (key) < SKEY_INFO_COMPLETE) {
         sksrc = seahorse_key_get_source (key);
-        seahorse_key_source_load_async (sksrc, SKSRC_LOAD_KEY, seahorse_key_get_keyid (key), NULL);
+        seahorse_key_source_load_async (sksrc, seahorse_key_get_keyid (key));
     }
 
     widget = glade_xml_get_widget (swidget->xml, swidget->name);

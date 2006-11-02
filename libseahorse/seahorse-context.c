@@ -722,7 +722,7 @@ seahorse_context_load_local_keys (SeahorseContext *sctx)
                 seahorse_multi_operation_take (mop, op);
             }
             
-            op = seahorse_key_source_load (ks, SKSRC_LOAD_ALL, 0, NULL);
+            op = seahorse_key_source_load (ks, 0);
             
             if (mop != NULL)
                 seahorse_multi_operation_take (mop, op);
@@ -731,6 +731,21 @@ seahorse_context_load_local_keys (SeahorseContext *sctx)
 
     return mop ? SEAHORSE_OPERATION (mop) : op;  
 }
+
+static void 
+load_local_keys (SeahorseContext *sctx)
+{
+    SeahorseOperation *op = seahorse_context_load_local_keys (sctx);
+    g_return_if_fail (op != NULL);
+    g_object_unref (op);
+}
+
+void
+seahorse_context_load_local_keys_async (SeahorseContext *sctx)
+{
+    g_idle_add_full (G_PRIORITY_LOW, (GSourceFunc)load_local_keys, NULL, sctx);
+}
+
 
 SeahorseOperation*  
 seahorse_context_load_remote_keys (SeahorseContext *sctx, const gchar *search)
@@ -773,7 +788,7 @@ seahorse_context_load_remote_keys (SeahorseContext *sctx, const gchar *search)
             seahorse_multi_operation_take (mop, op);
         }
             
-        op = seahorse_key_source_load (ks, SKSRC_LOAD_SEARCH, 0, search);
+        op = seahorse_key_source_search (ks, search);
             
         if (mop != NULL)
             seahorse_multi_operation_take (mop, op);

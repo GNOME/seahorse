@@ -64,10 +64,7 @@ static void seahorse_server_set_property      (GObject *object, guint prop_id,
 /* SeahorseKeySource methods */
 static void         seahorse_server_source_stop        (SeahorseKeySource *src);
 static guint        seahorse_server_source_get_state   (SeahorseKeySource *src);
-static SeahorseOperation*  seahorse_server_source_load (SeahorseKeySource *src,
-                                                        SeahorseKeySourceLoad load,
-                                                        GQuark keyid,
-                                                        const gchar *match);
+static SeahorseOperation*  seahorse_server_source_load (SeahorseKeySource *src, GQuark keyid);
 
 static GObjectClass *parent_class = NULL;
 
@@ -314,8 +311,7 @@ seahorse_server_source_take_operation (SeahorseServerSource *ssrc, SeahorseOpera
  */
 
 static SeahorseOperation*
-seahorse_server_source_load (SeahorseKeySource *src, SeahorseKeySourceLoad load,
-                             GQuark keyid, const gchar *match)
+seahorse_server_source_load (SeahorseKeySource *src, GQuark keyid)
 {
     SeahorseServerSource *ssrc;
     GList *keys, *l;
@@ -323,17 +319,6 @@ seahorse_server_source_load (SeahorseKeySource *src, SeahorseKeySourceLoad load,
     g_assert (SEAHORSE_IS_KEY_SOURCE (src));
     ssrc = SEAHORSE_SERVER_SOURCE (src);
 
-    if (load == SKSRC_LOAD_ALL) {
-        /* Stop all operations */
-        seahorse_server_source_stop (src);
-
-        /* Remove all keys */
-        keys = seahorse_context_get_keys (SCTX_APP (), src);
-        for (l = keys; l; l = g_list_next (l))
-            seahorse_context_remove_key (SCTX_APP(), SEAHORSE_KEY (l->data));
-        g_list_free (keys);
-    }
-    
     /* We should never be called directly */
     return NULL;
 }

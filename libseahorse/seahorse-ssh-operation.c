@@ -830,8 +830,8 @@ change_result_cb (SeahorseSSHOperation *sop)
 {
     SeahorseSSHOperationPrivate *pv = SEAHORSE_SSH_OPERATION_GET_PRIVATE (sop);
     if (pv->prompt_skey)
-        seahorse_key_source_load_async (SEAHORSE_KEY_SOURCE (sop->sksrc), SKSRC_LOAD_KEY, 
-                                        seahorse_key_get_keyid (pv->prompt_skey), NULL);
+        seahorse_key_source_load_async (SEAHORSE_KEY_SOURCE (sop->sksrc), 
+                                        seahorse_key_get_keyid (pv->prompt_skey));
 }
 
 SeahorseOperation*
@@ -1230,8 +1230,8 @@ seahorse_ssh_operation_authorize (SeahorseSSHSource *ssrc, SeahorseSSHKey *skey,
     
     /* Just reload that one key */
     if (!err)
-        seahorse_key_source_load (SEAHORSE_KEY_SOURCE (ssrc), SKSRC_LOAD_KEY, 
-                                  seahorse_key_get_keyid (SEAHORSE_KEY (skey)), NULL);
+        seahorse_key_source_load (SEAHORSE_KEY_SOURCE (ssrc), 
+                                  seahorse_key_get_keyid (SEAHORSE_KEY (skey)));
     
     return seahorse_operation_new_complete (err);
 }

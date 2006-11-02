@@ -251,8 +251,7 @@ basic_operation_done (GnomeKeyringResult result, SeahorseGKeyringOperation *gop)
 
     /* When operation is successful reload the key */
     g_return_if_fail (pv->keyid != 0);
-    seahorse_key_source_load_async (SEAHORSE_KEY_SOURCE (gop->gsrc), SKSRC_LOAD_KEY, 
-                                    pv->keyid, NULL);
+    seahorse_key_source_load_async (SEAHORSE_KEY_SOURCE (gop->gsrc), pv->keyid);
 }
 
 SeahorseOperation*

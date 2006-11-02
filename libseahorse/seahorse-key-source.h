@@ -65,14 +65,6 @@ typedef enum {
     SKSRC_LOADING = 0x00000010
 } SeahorseKeySourceFlags;
 
-/* Operation for the load method below */
-typedef enum {
-    SKSRC_LOAD_NEW,
-    SKSRC_LOAD_ALL,
-    SKSRC_LOAD_KEY,
-    SKSRC_LOAD_SEARCH
-} SeahorseKeySourceLoad;
-
 typedef struct _SeahorseKeySourceClass {
     GtkObjectClass parent_class;
 
@@ -81,15 +73,25 @@ typedef struct _SeahorseKeySourceClass {
     /**
      * load
      * @sksrc: The #SeahorseKeySource.
-     * @op: The type of load to do. See SeahorseKeySourceLoad.
-     * @match: Match text (valid for SKSRC_LOAD_KEY and SKSRC_LOAD_SEARCH ops).
+     * @keyid: The key to load or 0 for all the keys.
      * 
      * Loads the requested keys, and add the keys to SeahorseContext. 
      * 
      * Returns: The load operation.
      */
-    SeahorseOperation* (*load) (SeahorseKeySource *sksrc, SeahorseKeySourceLoad op,
-                                GQuark keyid, const gchar *match);
+    SeahorseOperation* (*load) (SeahorseKeySource *sksrc, GQuark keyid);
+
+    /**
+     * search
+     * @sksrc: The #SeahorseKeySource 
+     * @match: Match text
+     *
+     * Searches for keys in the key source.
+     *
+     * Returns: The search operation.
+     */
+    SeahorseOperation* (*search) (SeahorseKeySource *sksrc, const gchar *match);
+
     
     /**
      * stop
@@ -167,18 +169,15 @@ GType       seahorse_key_source_get_type      (void);
 guint               seahorse_key_source_get_state        (SeahorseKeySource *sksrc);
 
 SeahorseOperation*  seahorse_key_source_load             (SeahorseKeySource *sksrc,
-                                                          SeahorseKeySourceLoad load,
-                                                          GQuark keyid,
-                                                          const gchar *match);
+                                                          GQuark keyid);
                                                           
 void                seahorse_key_source_load_sync        (SeahorseKeySource *sksrc,
-                                                          SeahorseKeySourceLoad load,
-                                                          GQuark keyid,
-                                                          const gchar *match);
+                                                          GQuark keyid);
 
 void                seahorse_key_source_load_async       (SeahorseKeySource *sksrc,
-                                                          SeahorseKeySourceLoad load,
-                                                          GQuark keyid,
+                                                          GQuark keyid);
+
+SeahorseOperation*  seahorse_key_source_search           (SeahorseKeySource *sksrc,
                                                           const gchar *match);
 
 /* Takes ownership of |data| */

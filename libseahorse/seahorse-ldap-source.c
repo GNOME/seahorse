@@ -1199,59 +1199,17 @@ start_send_operation_multiple (SeahorseLDAPSource *lsrc, GSList *keys)
  *  SEAHORSE LDAP SOURCE
  */
  
-/* GObject handlers */
-static void seahorse_ldap_source_class_init (SeahorseLDAPSourceClass *klass);
+G_DEFINE_TYPE (SeahorseLDAPSource, seahorse_ldap_source, SEAHORSE_TYPE_SERVER_SOURCE);
 
-/* SeahorseKeySource methods */
-static SeahorseOperation*  seahorse_ldap_source_load       (SeahorseKeySource *src,
-                                                            SeahorseKeySourceLoad load,
-                                                            GQuark keyid,
-                                                            const gchar *match);
-static SeahorseOperation*  seahorse_ldap_source_import     (SeahorseKeySource *sksrc, 
-                                                            gpgme_data_t data);
-static SeahorseOperation*  seahorse_ldap_source_export_raw (SeahorseKeySource *sksrc, 
-                                                            GSList *keyids,
-                                                            gpgme_data_t data);
-                                                           
-static SeahorseKeySourceClass *parent_class = NULL;
 
-GType
-seahorse_ldap_source_get_type (void)
+static void 
+seahorse_ldap_source_init (SeahorseLDAPSource *lsrc)
 {
-    static GType type = 0;
- 
-    if (!type) {
-        
-        static const GTypeInfo tinfo = {
-            sizeof (SeahorseLDAPSourceClass), NULL, NULL,
-            (GClassInitFunc) seahorse_ldap_source_class_init, NULL, NULL,
-            sizeof (SeahorseLDAPSource), 0, NULL
-        };
-        
-        type = g_type_register_static (SEAHORSE_TYPE_SERVER_SOURCE, 
-                                       "SeahorseLDAPSource", &tinfo, 0);
-    }
-  
-    return type;
-}
 
-/* Initialize the basic class stuff */
-static void
-seahorse_ldap_source_class_init (SeahorseLDAPSourceClass *klass)
-{
-    SeahorseKeySourceClass *key_class;
-   
-    key_class = SEAHORSE_KEY_SOURCE_CLASS (klass);
-    key_class->load = seahorse_ldap_source_load;
-    key_class->import = seahorse_ldap_source_import;
-    key_class->export_raw = seahorse_ldap_source_export_raw;
-
-    parent_class = g_type_class_peek_parent (klass);
 }
 
 static SeahorseOperation*
-seahorse_ldap_source_load (SeahorseKeySource *src, SeahorseKeySourceLoad load,
-                           GQuark keyid, const gchar *match)
+seahorse_ldap_source_load (SeahorseKeySource *src, GQuark keyid)
 {
     SeahorseOperation *op;
     SeahorseLDAPOperation *lop = NULL;
@@ -1259,23 +1217,35 @@ seahorse_ldap_source_load (SeahorseKeySource *src, SeahorseKeySourceLoad load,
     g_assert (SEAHORSE_IS_KEY_SOURCE (src));
     g_assert (SEAHORSE_IS_LDAP_SOURCE (src));
 
-    op = parent_class->load (src, load, keyid, match);
+    op = SEAHORSE_KEY_SOURCE_CLASS (seahorse_ldap_source_parent_class)->load (src, keyid);
     if (op != NULL)
         return op;
     
     /* No way to find new or all keys */
-    if (load == SKSRC_LOAD_NEW || load == SKSRC_LOAD_ALL) 
+    if (!keyid) 
         return seahorse_operation_new_complete (NULL);
 
+    lop = start_search_operation_fpr (SEAHORSE_LDAP_SOURCE (src), 
+                                      seahorse_key_get_rawid (keyid));
+    g_return_val_if_fail (lop != NULL, NULL);
+
+    seahorse_server_source_take_operation (SEAHORSE_SERVER_SOURCE (src),
+                                           SEAHORSE_OPERATION (lop));
+    g_object_ref (lop);
+    return SEAHORSE_OPERATION (lop);
+}
+
+static SeahorseOperation*
+seahorse_ldap_source_search (SeahorseKeySource *src, const gchar *match)
+{
+    SeahorseLDAPOperation *lop = NULL;
+
+    g_assert (SEAHORSE_IS_KEY_SOURCE (src));
+    g_assert (SEAHORSE_IS_LDAP_SOURCE (src));
+
     /* Search for keys */
-    else if (load == SKSRC_LOAD_SEARCH)
-        lop = start_search_operation (SEAHORSE_LDAP_SOURCE (src), match);
-        
-    /* Load a specific key */
-    else if (load == SKSRC_LOAD_KEY)
-        lop = start_search_operation_fpr (SEAHORSE_LDAP_SOURCE (src), 
-                                          seahorse_key_get_rawid (keyid));
-    
+    lop = start_search_operation (SEAHORSE_LDAP_SOURCE (src), match);
+     
     g_return_val_if_fail (lop != NULL, NULL);
     seahorse_server_source_take_operation (SEAHORSE_SERVER_SOURCE (src),
                                            SEAHORSE_OPERATION (lop));
@@ -1339,6 +1309,22 @@ seahorse_ldap_source_export_raw (SeahorseKeySource *sksrc, GSList *keyids,
     
     return SEAHORSE_OPERATION (lop);    
 }
+
+/* Initialize the basic class stuff */
+static void
+seahorse_ldap_source_class_init (SeahorseLDAPSourceClass *klass)
+{
+    SeahorseKeySourceClass *key_class;
+   
+    key_class = SEAHORSE_KEY_SOURCE_CLASS (klass);
+    key_class->load = seahorse_ldap_source_load;
+    key_class->search = seahorse_ldap_source_search;
+    key_class->import = seahorse_ldap_source_import;
+    key_class->export_raw = seahorse_ldap_source_export_raw;
+
+    seahorse_ldap_source_parent_class = g_type_class_peek_parent (klass);
+}
+
 
 /**
  * seahorse_ldap_source_new
