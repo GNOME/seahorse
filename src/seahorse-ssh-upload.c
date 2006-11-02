@@ -161,11 +161,6 @@ seahorse_ssh_upload_prompt (GList *keys)
     
     win = GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name));
 
-    /* Set the image properly */
-    w = glade_xml_get_widget (swidget->xml, "icon-image");
-    gtk_image_set_from_stock (GTK_IMAGE (w), SEAHORSE_STOCK_KEY_SSH, 
-                              GTK_ICON_SIZE_DIALOG);
-
     /* Default to the users current name */
     w = glade_xml_get_widget (swidget->xml, "user-label");
     gtk_entry_set_text (GTK_ENTRY (w), g_get_user_name ());
