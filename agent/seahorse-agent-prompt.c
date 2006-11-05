@@ -213,7 +213,7 @@ create_auth_window (SeahorseAgentPassReq *pr)
     gchar *msg;
 
     win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    gtk_window_set_title (GTK_WINDOW (win), _("Authorize Password Access"));
+    gtk_window_set_title (GTK_WINDOW (win), _("Authorize Passphrase Access"));
     acc = gtk_accel_group_new ();
 
     g_signal_connect (G_OBJECT (win), "delete_event",
