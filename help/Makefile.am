@@ -17,4 +17,4 @@ DOC_FIGURES = \
 	figures/preferences.png \
 	figures/text-editor.png
 
-DOC_LINGUAS =
+DOC_LINGUAS = sv
