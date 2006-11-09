@@ -274,7 +274,7 @@ init_crypt ()
                                                "/org/gnome/seahorse/crypto",
                                                "org.gnome.seahorse.CryptoService");
         
-        dbus_keyset = cryptui_keyset_new ("openpgp");
+        dbus_keyset = cryptui_keyset_new ("openpgp", TRUE);
     }
     
     return TRUE;

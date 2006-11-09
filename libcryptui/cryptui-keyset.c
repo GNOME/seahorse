@@ -375,9 +375,10 @@ cryptui_keyset_class_init (CryptUIKeysetClass *klass)
  */
 
 CryptUIKeyset*
-cryptui_keyset_new (const gchar *keytype)
+cryptui_keyset_new (const gchar *keytype, gboolean expand_keys)
 {
-    return g_object_new (CRYPTUI_TYPE_KEYSET, "keytype", keytype, NULL);
+    return g_object_new (CRYPTUI_TYPE_KEYSET, "keytype", keytype, 
+                         "expand-keys", expand_keys, NULL);
 }
 
 const gchar*
@@ -462,6 +463,20 @@ cryptui_keyset_set_closure (CryptUIKeyset *keyset, const gchar *key,
         closure = GINT_TO_POINTER (TRUE);
 
     g_hash_table_insert (keyset->priv->keys, g_strdup (key), closure);    
+}
+
+gboolean
+cryptui_keyset_get_expand_keys (CryptUIKeyset *keyset)
+{
+    gboolean expand;
+    g_object_get(keyset, "expand-keys", &expand, NULL);
+    return expand;
+}
+
+void
+cryptui_keyset_set_expand_keys (CryptUIKeyset *keyset, gboolean expand_keys)
+{
+    g_object_set(keyset, "expand-keys", expand_keys, NULL);
 }
 
 void

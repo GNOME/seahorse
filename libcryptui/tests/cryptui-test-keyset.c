@@ -35,9 +35,7 @@ main (int argc, char **argv)
     
     gtk_init(&argc, &argv);
 
-    keyset = cryptui_keyset_new ("openpgp");
-    g_object_set (keyset, "expand-keys", TRUE, NULL);
-    
+    keyset = cryptui_keyset_new ("openpgp", TRUE);    
     keys = cryptui_keyset_get_keys (keyset);
     
     for(l = keys; l; l = g_list_next (l)) {

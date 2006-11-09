@@ -85,8 +85,7 @@ main (int argc, char **argv)
     
     gtk_init(&argc, &argv);
     
-    keyset = cryptui_keyset_new ("openpgp");
-    
+    keyset = cryptui_keyset_new ("openpgp", TRUE);
     if (argc > 1) {
         if (g_ascii_strcasecmp (argv[1], "plain")) {
             show_ui_dialog (keyset);

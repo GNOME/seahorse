@@ -63,7 +63,8 @@ struct _CryptUIKeysetClass {
 
 GType               cryptui_keyset_get_type           (void);
 
-CryptUIKeyset*      cryptui_keyset_new                (const gchar *keytype);
+CryptUIKeyset*      cryptui_keyset_new                (const gchar *keytype, 
+                                                       gboolean expand_keys);
 
 gboolean            cryptui_keyset_has_key            (CryptUIKeyset *keyset,
                                                        const gchar *key);
@@ -82,6 +83,11 @@ gpointer            cryptui_keyset_get_closure        (CryptUIKeyset *keyset,
 void                cryptui_keyset_set_closure        (CryptUIKeyset *keyset,
                                                        const gchar *key,
                                                        gpointer closure);
+
+gboolean            cryptui_keyset_get_expand_keys    (CryptUIKeyset *keyset);
+
+void                cryptui_keyset_set_expand_keys    (CryptUIKeyset *keyset,
+                                                       gboolean expand_keys);
                                                        
 void                cryptui_keyset_cache_key          (CryptUIKeyset *keyset,
                                                        const gchar *key);

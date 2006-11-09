@@ -125,7 +125,7 @@ prompt_recipients (gpgme_key_t *signkey)
     
     *signkey = NULL;
     
-    keyset = cryptui_keyset_new ("openpgp");
+    keyset = cryptui_keyset_new ("openpgp", TRUE);
     recips = cryptui_prompt_recipients (keyset, _("Choose Recipients"), &signer);
     
     if (recips) {
@@ -253,7 +253,7 @@ prompt_signer ()
     gchar *signer;
     gchar *id;
     
-    keyset = cryptui_keyset_new ("openpgp");
+    keyset = cryptui_keyset_new ("openpgp", TRUE);
     signer = cryptui_prompt_signer (keyset, _("Choose Signer"));
     if (signer) {
         
