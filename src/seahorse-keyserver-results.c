@@ -67,21 +67,27 @@ properties_activate (GtkWidget *widget, SeahorseWidget *swidget)
         seahorse_key_properties_new (SEAHORSE_PGP_KEY (skey));
 }
 
-static void
-set_numbered_status (SeahorseWidget *swidget, const gchar *t1, const gchar *t2, guint num)
+static void 
+set_status_text (SeahorseWidget *swidget, const gchar *msg)
 {
     GtkStatusbar *status;
     guint id;
-    gchar *msg;
-    
+
     status = GTK_STATUSBAR (seahorse_widget_get_widget (swidget, "status"));
     g_return_if_fail (status != NULL);
-    
+
     id = gtk_statusbar_get_context_id (status, "key-manager");
     gtk_statusbar_pop (status, id);
+    gtk_statusbar_push (status, id, msg);
+}
+
+static void
+set_numbered_status (SeahorseWidget *swidget, const gchar *t1, const gchar *t2, guint num)
+{
+    gchar *msg;
     
     msg = g_strdup_printf (ngettext (t1, t2, num), num);
-    gtk_statusbar_push (status, id, msg);
+    set_status_text (swidget, msg);
     g_free (msg);
 }
 
@@ -332,6 +338,18 @@ key_list_popup_menu (GtkWidget *widget, SeahorseWidget *swidget)
 static void
 operation_done (SeahorseOperation *op, SeahorseWidget *swidget)
 {
+    GtkTreeView* view;
+    GtkTreeModel* model;
+
+    view = GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, KEY_LIST));
+    g_return_if_fail (view);
+
+    model = gtk_tree_view_get_model (view);
+    g_return_if_fail (model);
+
+    if (gtk_tree_model_iter_n_children (model, NULL) <= 0)
+        set_status_text (swidget, _("No matching keys found"));
+
     g_object_set_data (G_OBJECT (swidget), "operation", NULL);
 }
 

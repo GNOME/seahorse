@@ -354,7 +354,7 @@ fail_hkp_operation (SeahorseHKPOperation *hop, SoupMessage *msg, const gchar *te
         }
 
         if (t && strstr (t, "no keys"))
-            error = g_error_new (HKP_ERROR_DOMAIN, 0, _("No matching keys found on server '%s'."), server);
+            error = NULL; /* not found is not an error */
         else if (t && strstr (t, "too many"))
             error = g_error_new (HKP_ERROR_DOMAIN, 0, _("Search was not specific enough. Server '%s' found too many keys."), server);
         else 
@@ -763,7 +763,7 @@ seahorse_hkp_source_search (SeahorseKeySource *src, const gchar *match)
     
     hop->total = hop->requests = 1;
     t = g_strdup_printf (_("Searching for keys on: %s"), server);
-    seahorse_operation_mark_progress (SEAHORSE_OPERATION (hop), t, 0.0);
+    seahorse_operation_mark_progress (SEAHORSE_OPERATION (hop), t, -1);
     g_free (t);
 
     g_free (server);    
@@ -856,7 +856,7 @@ seahorse_hkp_source_import (SeahorseKeySource *sksrc, gpgme_data_t data)
 
     hop->total = hop->requests;
     t = g_strdup_printf (_("Connecting to: %s"), server);
-    seahorse_operation_mark_progress (SEAHORSE_OPERATION (hop), t, 0.0);
+    seahorse_operation_mark_progress (SEAHORSE_OPERATION (hop), t, -1);
     g_free (t);
 
     g_free (server);
@@ -928,7 +928,7 @@ seahorse_hkp_source_export_raw (SeahorseKeySource *sksrc, GSList *keyids,
     
     hop->total = hop->requests;
     t = g_strdup_printf (_("Connecting to: %s"), server);
-    seahorse_operation_mark_progress (SEAHORSE_OPERATION (hop), t, 0.0);
+    seahorse_operation_mark_progress (SEAHORSE_OPERATION (hop), t, -1);
     g_free (t);
 
     g_free (server);

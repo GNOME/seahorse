@@ -162,10 +162,11 @@ seahorse_progress_status_set_operation (SeahorseWidget *swidget,
     g_signal_connect (swidget, "destroy", 
                       G_CALLBACK (disconnect_progress), operation);
     
-    if (!seahorse_operation_is_running (operation)) {
-        operation_progress (operation, seahorse_operation_get_message (operation),
-                            seahorse_operation_get_progress (operation), swidget);
-    }
+    if (!seahorse_operation_is_running (operation))
+        operation_done (operation, swidget);
+
+    operation_progress (operation, seahorse_operation_get_message (operation),
+                        seahorse_operation_get_progress (operation), swidget);
     
     g_signal_connect (operation, "done", G_CALLBACK (operation_done), swidget);
     g_signal_connect (operation, "progress", G_CALLBACK (operation_progress), swidget);
