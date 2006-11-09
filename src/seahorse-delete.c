@@ -57,42 +57,42 @@ ask_key_pair (SeahorseKey *skey)
 }
 
 static gboolean
-ask_key (SeahorseKey *skey)
+ask_keys (GList* keys)
 {
-	GtkWidget *question, *delete_button, *cancel_button;
-	gint response;
+    GtkWidget *question, *delete_button, *cancel_button;
+    gint response = GTK_RESPONSE_ACCEPT;
     gchar *userid;
+    guint nkeys;
 
-	//create widgets	
-    userid = seahorse_key_get_name (skey, 0);
-	question = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
-		GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE,
-		_("Are you sure you want to permanently delete %s?"), userid);
-    g_free(userid);
-	delete_button = gtk_button_new_from_stock(GTK_STOCK_DELETE);
-	cancel_button = gtk_button_new_from_stock(GTK_STOCK_CANCEL);
-	
-	
-	//add widgets to action area
-	gtk_dialog_add_action_widget(GTK_DIALOG(question), GTK_WIDGET (cancel_button), GTK_RESPONSE_REJECT);
-	gtk_dialog_add_action_widget(GTK_DIALOG(question), GTK_WIDGET (delete_button), GTK_RESPONSE_ACCEPT);
-	
-	//show widgets
-	gtk_widget_show (delete_button);
-	gtk_widget_show (cancel_button);
+    // create widgets	
+    nkeys = g_list_length (keys);
+    if (nkeys == 1) {
+        userid = seahorse_key_get_name (SEAHORSE_KEY (keys->data), 0);
+        question = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
+    	                                   GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE,
+                                           _("Are you sure you want to permanently delete %s?"), 
+                                           userid);
+        g_free(userid);
+    } else {
+        question = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
+    	                                   GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE,
+                                           _("Are you sure you want to permanently delete %d keys?"), 
+                                           nkeys);
+    }
 
-	//run dialog
-	response = gtk_dialog_run (GTK_DIALOG (question));
-	gtk_widget_destroy (question);
+    // add widgets to action area
+    delete_button = gtk_button_new_from_stock (GTK_STOCK_DELETE);
+    cancel_button = gtk_button_new_from_stock (GTK_STOCK_CANCEL);	
+    gtk_dialog_add_action_widget (GTK_DIALOG (question), GTK_WIDGET (cancel_button), GTK_RESPONSE_REJECT);
+    gtk_dialog_add_action_widget (GTK_DIALOG (question), GTK_WIDGET (delete_button), GTK_RESPONSE_ACCEPT);
+    gtk_widget_show (delete_button); 
+    gtk_widget_show (cancel_button);
 
-	if (response == GTK_RESPONSE_ACCEPT) {
-		if (seahorse_key_get_etype (skey) == SKEY_PRIVATE)
-			return ask_key_pair (skey);
-		else
-			return TRUE;
-	}
-	else
-		return FALSE;
+    // run dialog
+    response = gtk_dialog_run (GTK_DIALOG (question));
+    gtk_widget_destroy (question);
+
+    return (response == GTK_RESPONSE_ACCEPT);
 }
 
 void
@@ -104,18 +104,22 @@ seahorse_delete_show (GList *keys)
     GList *list = NULL;
 
     g_return_if_fail (g_list_length (keys) > 0);
+
+    if (!ask_keys (keys))
+        return;
     
     for (list = keys; list != NULL; list = g_list_next (list)) {
         skey = SEAHORSE_KEY (list->data);
-        if (ask_key (skey)) {
 
-            sksrc = seahorse_key_get_source (skey);
-            g_return_if_fail (sksrc != NULL);
-            
-            if (!seahorse_key_source_remove (sksrc, skey, 0, &error))
-                seahorse_util_handle_error (error, _("Couldn't delete key"));
-        } else
+        if (seahorse_key_get_etype (skey) == SKEY_PRIVATE && 
+            !ask_key_pair (skey))
             break;
+
+        sksrc = seahorse_key_get_source (skey);
+        g_return_if_fail (sksrc != NULL);
+            
+        if (!seahorse_key_source_remove (sksrc, skey, 0, &error))
+            seahorse_util_handle_error (error, _("Couldn't delete key"));
     }
 }
 
