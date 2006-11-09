@@ -105,17 +105,18 @@ g_realloc (gpointer mem, gulong size)
     }
 
     if (!mem) {
+
         if (seahorse_use_secure_mem && have_secure)
             p = (gpointer) seahorse_secure_memory_malloc (size);
         else
             p = (gpointer) malloc (size);
-    } else {
-        if (seahorse_use_secure_mem) {
-            g_assert (seahorse_secure_memory_check (mem));
-            p = (gpointer) seahorse_secure_memory_realloc (mem, size);
-    } else
+
+    } else if (seahorse_secure_memory_check (mem))
+        p = (gpointer) seahorse_secure_memory_realloc (mem, size);
+
+    else
         p = (gpointer) realloc(mem, size);
-    }
+    
 
     if (!p)
         g_error("could not reallocate %lu bytes", (gulong) size);
@@ -386,7 +387,7 @@ seahorse_secure_memory_realloc (void *p, size_t newsize)
     mb = (MEMBLOCK*)((char*)p - ((size_t) &((MEMBLOCK*)0)->u.aligned.c));
     size = mb->size;
     
-    if( newsize < size )
+    if( newsize <= size )
         return p; /* it is easier not to shrink the memory */
     
     DEBUG_SECMEM(("SECMEM: reallocating %x bytes to %x\n", size, newsize));
