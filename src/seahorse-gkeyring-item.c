@@ -241,7 +241,7 @@ changed_key (SeahorseGKeyringItem *git)
     skey->ktype = SKEY_GKEYRING;
     skey->location = SKEY_LOC_LOCAL;
     skey->etype = SKEY_CREDENTIALS;
-    skey->flags = SKEY_FLAG_IS_VALID;
+    skey->flags = 0;
     skey->keyid = seahorse_gkeyring_item_get_cannonical (git->item_id);
 
     if (is_network_item (git, "http")) 

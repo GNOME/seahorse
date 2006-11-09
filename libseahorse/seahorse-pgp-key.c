@@ -107,6 +107,7 @@ static SeahorseValidity
 calc_validity (SeahorsePGPKey *pkey)
 {
     g_return_val_if_fail (pkey->pubkey, SEAHORSE_VALIDITY_UNKNOWN);
+    g_return_val_if_fail (pkey->pubkey->uids, SEAHORSE_VALIDITY_UNKNOWN);
 
     if (pkey->pubkey->revoked)
         return SEAHORSE_VALIDITY_REVOKED;
@@ -177,7 +178,8 @@ changed_key (SeahorsePGPKey *pkey)
         if (!pkey->pubkey->disabled && !pkey->pubkey->expired && 
             !pkey->pubkey->revoked && !pkey->pubkey->invalid)
         {
-            skey->flags |= SKEY_FLAG_IS_VALID;
+            if (calc_validity (pkey) >= SEAHORSE_VALIDITY_MARGINAL)
+                skey->flags |= SKEY_FLAG_IS_VALID;
             if (pkey->pubkey->can_encrypt)
                 skey->flags |= SKEY_FLAG_CAN_ENCRYPT;
             if (pkey->seckey && pkey->pubkey->can_sign)
