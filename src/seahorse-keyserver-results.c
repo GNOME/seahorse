@@ -376,7 +376,7 @@ static const GtkActionEntry public_entries[] = {
             N_("Import selected keys to local keyring"), G_CALLBACK (import_activate) },
     { "key-properties", GTK_STOCK_PROPERTIES, N_("P_roperties"), NULL,
             N_("Show key properties"), G_CALLBACK (properties_activate) }, 
-    { "key-export-file", GTK_STOCK_SAVE_AS, N_("Save As..."), "<control><shift>S",
+    { "key-export-file", GTK_STOCK_SAVE_AS, N_("Save Key As..."), "<control><shift>S",
             N_("Save selected keys as a file"), G_CALLBACK (export_activate) }, 
     { "key-export-clipboard", GTK_STOCK_COPY, N_("_Copy Key"), "<control>C",
             N_("Copy selected keys to the clipboard"), G_CALLBACK (copy_activate) }, 

@@ -640,7 +640,7 @@ export_activate (GtkWidget *widget, SeahorseWidget *swidget)
     if (keys == NULL)
         return;
     
-    dialog = seahorse_util_chooser_save_new (_("Export Key"), 
+    dialog = seahorse_util_chooser_save_new (_("Export public key"), 
                 GTK_WINDOW(glade_xml_get_widget (swidget->xml, "key-manager")));
     seahorse_util_chooser_show_key_files (dialog);
     seahorse_util_chooser_set_filename (dialog, keys);
@@ -1209,10 +1209,10 @@ static const GtkToggleActionEntry view_entries[] = {
 static const GtkActionEntry key_entries[] = {
     { "key-properties", GTK_STOCK_PROPERTIES, N_("P_roperties"), NULL,
             N_("Show key properties"), G_CALLBACK (properties_activate) }, 
-    { "key-export-file", GTK_STOCK_SAVE_AS, N_("E_xport..."), NULL,
-            N_("Export public key"), G_CALLBACK (export_activate) }, 
-    { "key-export-clipboard", GTK_STOCK_COPY, N_("_Copy Key"), "<control>C",
-            N_("Copy selected keys to the clipboard"), G_CALLBACK (copy_activate) },
+    { "key-export-file", GTK_STOCK_SAVE_AS, N_("E_xport Public Key..."), NULL,
+            N_("Export public part of key to a file"), G_CALLBACK (export_activate) }, 
+    { "key-export-clipboard", GTK_STOCK_COPY, N_("_Copy Public Key"), "<control>C",
+            N_("Copy public part of selected keys to the clipboard"), G_CALLBACK (copy_activate) },
     { "key-delete", GTK_STOCK_DELETE, N_("_Delete Key"), NULL,
             N_("Delete selected keys"), G_CALLBACK (delete_activate) }, 
 };
