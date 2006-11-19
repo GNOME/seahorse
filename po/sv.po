@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-11-14 13:49+0100\n"
-"PO-Revision-Date: 2006-11-14 06:44+0100\n"
+"PO-Revision-Date: 2006-11-19 22:44+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -1178,6 +1178,7 @@ msgstr "Seahorse-projektets webbplats"
 #. Get the recipient list
 #: ../plugins/applet/seahorse-applet.c:375
 #: ../plugins/gedit/seahorse-gedit.c:332
+#: ../plugins/epiphany/seahorse-extension.c:251
 msgid "Choose Recipient Keys"
 msgstr "Välj mottagarnycklar"
 
@@ -1195,6 +1196,7 @@ msgstr "Urklippet kunde inte krypteras."
 
 #: ../plugins/applet/seahorse-applet.c:431
 #: ../plugins/gedit/seahorse-gedit.c:611
+#: ../plugins/epiphany/seahorse-extension.c:296
 msgid "Choose Key to Sign with"
 msgstr "Välj nyckel att signera med"
 
@@ -1211,18 +1213,22 @@ msgid "The clipboard could not be Signed."
 msgstr "Urklippet kunde inte signeras."
 
 #: ../plugins/applet/seahorse-applet.c:496
+#: ../plugins/epiphany/seahorse-extension.c:340
 msgid "Import Failed"
 msgstr "Importering misslyckades"
 
 #: ../plugins/applet/seahorse-applet.c:497
+#: ../plugins/epiphany/seahorse-extension.c:341
 msgid "Keys were found but not imported."
 msgstr "Nycklar hittades men importerades inte."
 
 #: ../plugins/applet/seahorse-applet.c:528
+#: ../plugins/epiphany/seahorse-extension.c:374
 msgid "Decrypting Failed"
 msgstr "Dekryptering misslyckades"
 
 #: ../plugins/applet/seahorse-applet.c:529
+#: ../plugins/epiphany/seahorse-extension.c:375
 msgid "Text may be malformed."
 msgstr "Texten kan vara felformulerad."
 
@@ -2283,13 +2289,16 @@ msgstr "Kunde inte hämta nyckeldata"
 msgid "Couldn't write key to file"
 msgstr "Kunde inte skriva nyckel till fil"
 
+#. TODO: Icons
 #: ../src/seahorse-key-manager-store.c:954
 #: ../src/seahorse-key-properties.c:865
+#: ../libcryptui/cryptui-key-list.c:117
 msgid "Name"
 msgstr "Namn"
 
 #: ../src/seahorse-key-manager-store.c:966
 #: ../src/seahorse-key-properties.c:1711
+#: ../libcryptui/cryptui-key-list.c:120
 msgid "Key ID"
 msgstr "Nyckel-id"
 
@@ -3123,6 +3132,7 @@ msgid "_Others may not see this signature"
 msgstr "_Andra får inte se den här signaturen"
 
 #: ../src/seahorse-sign.glade.h:24
+#: ../plugins/epiphany/seahorse-extension.c:608
 msgid "_Sign"
 msgstr "_Signera"
 
@@ -3275,4 +3285,95 @@ msgstr "_Datornamn:"
 #: ../src/seahorse-ssh-upload.glade.h:8
 msgid "_Login Name:"
 msgstr "_Inloggningsnamn:"
+
+#: ../libseahorse/seahorse-notification.c:557
+#: ../libseahorse/seahorse-notification.c:573
+#, c-format
+msgid "Imported %i key"
+msgid_plural "Imported %i keys"
+msgstr[0] "Importerade %d nyckel"
+msgstr[1] "Importerade %d nycklar"
+
+#: ../libseahorse/seahorse-notification.c:558
+#: ../libseahorse/seahorse-notification.c:574
+msgid "Key Imported"
+msgid_plural "Keys Imported"
+msgstr[0] "Nyckel importerad"
+msgstr[1] "\"Nycklar importerade"
+
+#: ../libseahorse/seahorse-notification.c:601
+#, c-format
+msgid "Signed by <i><key id='%s'/> <b>expired</b></i> on %s."
+msgstr "Signerad av <i><key id='%s'/> <b>utgånget</b></i> den %s."
+
+#: ../libseahorse/seahorse-notification.c:602
+msgid "Invalid Signature"
+msgstr "Ogiltig signatur"
+
+#: ../libseahorse/seahorse-notification.c:607
+#, c-format
+msgid "Signed by <i><key id='%s'/></i> on %s <b>Expired</b>."
+msgstr "Signerad av <i><key id='%s'/></i> den %s <b>Utgånget</b>."
+
+#: ../libseahorse/seahorse-notification.c:608
+msgid "Expired Signature"
+msgstr "Utgången signatur"
+
+#: ../libseahorse/seahorse-notification.c:613
+#, c-format
+msgid "Signed by <i><key id='%s'/> <b>Revoked</b></i> on %s."
+msgstr "Signerad av <i><key id='%s'/> <b>Återkallat</b></i> den %s."
+
+#: ../libseahorse/seahorse-notification.c:614
+msgid "Revoked Signature"
+msgstr "Återkallad signatur"
+
+#: ../libseahorse/seahorse-notification.c:619
+#, c-format
+msgid "Signed by <i><key id='%s'/></i> on %s."
+msgstr "Signerad av <i><key id='%s'/></i> den %s."
+
+#: ../libseahorse/seahorse-notification.c:620
+msgid "Good Signature"
+msgstr "Korrekt signatur"
+
+#: ../libseahorse/seahorse-notification.c:625
+msgid "Signing key not in keyring."
+msgstr "Signeringsnyckel inte i nyckelring."
+
+#: ../libseahorse/seahorse-notification.c:626
+msgid "Unknown Signature"
+msgstr "Okänd signatur"
+
+#: ../libseahorse/seahorse-notification.c:630
+msgid "Bad or forged signature. The signed data was modified."
+msgstr "Felaktig eller förfalskad signatur. Signerat data har ändrats."
+
+#: ../libseahorse/seahorse-notification.c:631
+msgid "Bad Signature"
+msgstr "Felaktig signatur"
+
+#: ../libseahorse/seahorse-notification.c:639
+msgid "Couldn't verify signature."
+msgstr "Kunde inte validera signatur."
+
+#: ../libseahorse/seahorse-notify.glade.h:1
+msgid "Notification Messages"
+msgstr "Notifieringsmeddelanden"
+
+#: ../libseahorse/seahorse-unknown-source.c:128
+msgid "Unavailable Key"
+msgstr "Otillgänglig nyckel"
+
+#: ../plugins/epiphany/seahorse-extension.c:601
+msgid "_Encrypt"
+msgstr "_Kryptera"
+
+#: ../plugins/epiphany/seahorse-extension.c:615
+msgid "_Decrypt/Verify"
+msgstr "_Dekryptera/Validera"
+
+#: ../plugins/epiphany/seahorse-extension.c:622
+msgid "_Import Key"
+msgstr "_Importera nyckel"
 
