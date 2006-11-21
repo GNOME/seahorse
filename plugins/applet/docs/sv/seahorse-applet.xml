@@ -1,0 +1,158 @@
+<?xml version="1.0"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
+"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+	<!ENTITY legal SYSTEM "legal.xml">
+	<!ENTITY appversion "0.9.0">
+	<!ENTITY manrevision "1.0">
+	<!ENTITY date "December 2005">
+	<!ENTITY applet "Encryption Applet">
+	<!ENTITY project "Seahorse Project">
+]>
+
+<article id="index">
+	<articleinfo>
+		<title
+>&applet; Manual V&manrevision;</title>
+		<copyright>
+			<year
+>2005</year>
+			<holder
+>Adam Schreiber</holder>
+		</copyright>
+		<publisher>
+			<publishername
+>Seahorse Project</publishername>
+		</publisher>
+		&legal;
+		<authorgroup>
+			<author
+><firstname
+>Adam</firstname
+> <surname
+>Schreiber</surname
+> <affiliation
+><orgname
+>Seahorse Project</orgname
+> <address
+> <email
+>sadam@clemson.edu</email
+> </address
+> </affiliation>
+			</author>
+		</authorgroup>
+		<revhistory>
+			<revision>
+				<revnumber
+>&applet; Manual V0.9.0</revnumber>
+				<date
+>July 2005</date>
+				<revdescription>
+					<para role="author"
+>Adam Schreiber <email
+>sadam@clemson.edu</email
+> </para>
+					<para role="publisher"
+>Seahorse-projektet</para>
+				</revdescription>
+			</revision>
+		</revhistory>
+		<releaseinfo
+>This manual describes version &appversion; of &applet;</releaseinfo>
+		<legalnotice>
+			<title
+>Återkoppling</title>
+			<para
+>To report a bug or make a suggestion regarding &applet; application or this manual, follow the directions in the <ulink url="ghelp:gnome-feedback" type="help"
+>Gnome Feedback Page</ulink
+>. </para>
+		</legalnotice>
+	</articleinfo>
+	<indexterm zone="index">
+		<primary
+>&applet;</primary>
+	</indexterm>
+	<sect1 id="introduction">
+		<title
+>Introduktion</title>
+		<para
+><application
+>&applet;</application
+> performs the various encryption operations using standard OpenPGP methods. You will need to have already created an OpenPGP key with <application
+>Encryption Key Manager</application
+> and imported the public keys of those you want to encrypt to or verify signatures of. </para
+> 
+		<sect2 id="seahorse-applet-introduction-add">
+            <title
+>To Add <application
+>&applet;</application
+> to a Panel</title>
+            <para
+>To add <application
+>&applet;</application
+> to a panel, right-click on the panel, then choose <guimenuitem
+>Add to Panel</guimenuitem
+>. Select <application
+>&applet;</application
+> in the <application
+>Add to the panel</application
+> dialog, then click <guibutton
+>OK</guibutton
+>. </para>
+            <para
+>The layout of the <application
+>&applet;</application
+> varies depending on the size and type of panel in which the applet resides. </para>
+        </sect2>
+	</sect1>
+    <sect1 id="usage">
+        <title
+>Användning</title>
+        <para
+>The &applet; operates on both the Ctrl-C/V and the select/middle click clipboards. Simply copy the desired text using the method of your choice, select the encryption operation from the left click menu, follow the prompts and paste the new contents of the clipboard into your application or view them in a display window after enabling the appropriate option in the <xref linkend="prefs"/> </para>
+    </sect1>
+	<sect1 id="prefs">
+	   <title
+>&applet; Preferences</title>
+	   <para
+>The preferences for the <application
+>&applet;</application
+> are part of your <application
+>Encryption Preferences</application
+> and can be edited by selecting <menuchoice
+><guimenu
+>Desktop</guimenu
+> <guimenuitem
+>Preferences</guimenuitem
+><guimenuitem
+>Encryption Preferences</guimenuitem
+></menuchoice
+>, or by right clicking on the <application
+>&applet;</application
+> and selecting <guimenuitem
+>Preferences</guimenuitem
+>. </para
+> 
+	   <sect2 id="display">
+	       <title
+>Visningsalternativ</title>
+	       <para
+>Dessa alternativ påverkar huruvida ett fönster visar den resulterande texten som skapas när en krypteringsåtgärd genomförs. Aktivera dessa alternativ kan vara användbart när man läser webbaserad e-post eller hanterar andra krypteringsfunktioner där ett fält inte kanske är direkt tillgängligt eller att omedelbar visning krävs. </para>
+	   </sect2>
+	</sect1>
+	<sect1 id="about">
+		<title
+>About &applet;</title>
+		<para
+>&project; was written by Jacob Perkins. The current maintainer is Nate Nielsen. This manual is by Adam Schreiber. The project's web site was designed by Jim Pharis. To find more information about Seahorse, please visit the <ulink url="http://seahorse.sourceforge.net" type="http"
+>&project; web page</ulink
+>. </para>
+		<para
+>För att rapportera ett fel eller föreslå någonting angående det här programmet eller den här handboken, följ anvisningarna i det här <ulink url="ghelp:gnome-feedback" type="help"
+>dokumentet</ulink
+>. </para>
+		<para
+>Det här programmet distribueras under villkoren för GNU General Public License som publicerats av Free Software Foundation; antingen version 2 av licensen, eller (enligt dig själv) någon senare version. En kopia av den här licensen kan hittas på den här <ulink url="ghelp:gpl" type="help"
+>länken</ulink
+>, eller i filen COPYING som inkluderats i källkoden för det här programmet. </para>
+	</sect1>
+</article>
