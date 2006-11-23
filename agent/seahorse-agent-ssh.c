@@ -66,7 +66,10 @@
 static GSList *ssh_agent_cached_fingerprints = NULL;
 static gboolean ssh_agent_fingerprints_loaded = FALSE;
 
+static gboolean ssh_agent_enabled = FALSE;
 static gboolean ssh_agent_initialized = FALSE;
+static gboolean ssh_agent_swapped = FALSE;
+
 static GList *ssh_agent_connections = NULL;
 
 static gint ssh_agent_socket = -1;                      /* Socket we're listening on */
@@ -498,7 +501,7 @@ connect_handler (GIOChannel *source, GIOCondition cond, gpointer data)
     sunaddr.sun_family = AF_UNIX;
     g_strlcpy (sunaddr.sun_path, ssh_client_sockname, sizeof (sunaddr.sun_path));
     if (connect (agentfd, (struct sockaddr*) &sunaddr, sizeof sunaddr) < 0) {
-        g_warning ("couldn't connect to SSH agent at: %s: %s", ssh_agent_sockname, 
+        g_warning ("couldn't connect to SSH agent at: %s: %s", ssh_client_sockname, 
                    g_strerror (errno));
         close (agentfd);
         return TRUE;
@@ -522,50 +525,40 @@ connect_handler (GIOChannel *source, GIOCondition cond, gpointer data)
     return TRUE;
 }
 
-/* -----------------------------------------------------------------------------
- * PUBLIC 
- */
+/* Print out the socket name info: <name>:<pid>:<protocol_version> */
+static void
+process_display (pid_t pid)
+{
+    if (seahorse_agent_cshell) {
+        fprintf (stdout, "setenv SSH_AGENT_PID %lu\n", (long unsigned int)pid);
+        fprintf (stdout, "setenv SSH_AUTH_SOCK %s\n", ssh_agent_sockname);
+    } else {
+        fprintf (stdout, "SSH_AGENT_PID=%lu; export SSH_AGENT_PID\n", (long unsigned int)pid);
+        fprintf (stdout, "SSH_AUTH_SOCK=%s; export SSH_AUTH_SOCK\n", ssh_agent_sockname);
+    }
 
-gboolean
-seahorse_agent_ssh_init ()
+    fflush (stdout);
+}
+
+static gboolean
+create_ssh_socket (const gchar *sockname)
 {
     struct sockaddr_un sunaddr;
-    const gchar *sockname;
     mode_t prev_mask;
     gchar *t;
     
-    g_assert (!ssh_agent_initialized);
-    
-    sockname = g_getenv ("SSH_AUTH_SOCK");
-    if (!sockname) {
-        g_warning ("no SSH agent running on the system. Cannot proxy SSH key requests.");
-        return FALSE;
-    }
-    
-    switch (seahorse_passphrase_detect_agent (SKEY_SSH)) {
-    case SEAHORSE_AGENT_SEAHORSE:
-        g_warning ("This SSH agent is already being proxied: %s", sockname);
-        return FALSE;
-    case SEAHORSE_AGENT_UNKNOWN:
-    case SEAHORSE_AGENT_NONE:
-        g_warning ("couldn't contact SSH agent. Cannot proxy SSH key requests.");
-        return FALSE;
-    default:
-        break;
-    };
-    
-    /* New sock names */
-    t = g_strdup_printf ("%s.proxied-by-seahorse", sockname);
-    g_strlcpy (ssh_client_sockname, t, sizeof (ssh_client_sockname));
-    g_strlcpy (ssh_agent_sockname, sockname, sizeof (ssh_agent_sockname));
+    /* New socket names */
+    t = g_strdup_printf ("%s.seahorse", sockname);
+    g_strlcpy (ssh_agent_sockname, t, sizeof (ssh_agent_sockname));
+    g_strlcpy (ssh_client_sockname, sockname, sizeof (ssh_client_sockname));
     g_free (t);
     
-    /* Rename */
-    g_unlink (ssh_client_sockname);
-    if (g_rename (sockname, ssh_client_sockname) == -1) {
-        g_warning ("couldn't replace SSH agent socket with seahorse proxy socket");
-        ssh_client_sockname[0] = 0; /* No renaming back */
-        return FALSE;
+    /* Remove any old stuff */
+    if (g_unlink (ssh_agent_sockname) == -1) {
+        if (errno != ENOENT) {
+            g_warning ("socket in the way of SSH proxy socket: %s", ssh_agent_sockname);
+            return FALSE;
+        }
     }
     
     /* Start building our own socket */
@@ -577,17 +570,103 @@ seahorse_agent_ssh_init ()
     
     memset (&sunaddr, 0, sizeof(sunaddr));
     sunaddr.sun_family = AF_UNIX;
-    g_strlcpy (sunaddr.sun_path, sockname, sizeof (sunaddr.sun_path));
+    g_strlcpy (sunaddr.sun_path, ssh_agent_sockname, sizeof (sunaddr.sun_path));
     prev_mask = umask (0177);
     if (bind (ssh_agent_socket, (struct sockaddr *) & sunaddr, sizeof(sunaddr)) < 0) {
-        g_warning ("couldn't bind to SSH proxy socket: %s: %s", sockname, g_strerror (errno));
+        g_warning ("couldn't bind to SSH proxy socket: %s: %s", ssh_agent_sockname, g_strerror (errno));
         umask (prev_mask);
         return FALSE;
     }
     umask (prev_mask);
     
+    return TRUE;
+}
+
+static void 
+swap_sockets ()
+{
+    gchar *orig;
+    gchar *newname;
+
+    g_assert (!ssh_agent_swapped);
+
+    /* Rename real socket into other */
+    orig = g_strdup (ssh_client_sockname);
+    newname = g_strdup_printf ("%s.proxied-by-seahorse", orig);
+
+    if (g_rename (orig, newname) == 0) {
+        g_strlcpy (ssh_client_sockname, newname, sizeof (ssh_client_sockname));
+
+        if (g_rename (ssh_agent_sockname, orig) == 0) {
+            g_strlcpy (ssh_agent_sockname, orig, sizeof (ssh_agent_sockname));
+            ssh_agent_swapped = TRUE;
+        }
+    }
+
+    g_free (newname);
+    g_free (orig);
+
+    if (!ssh_agent_swapped)
+        g_warning ("couldn't rename SSH proxy socket: %s", g_strerror (errno));
+}
+
+/* -----------------------------------------------------------------------------
+ * PUBLIC 
+ */
+
+void
+seahorse_agent_ssh_prefork ()
+{
+    const gchar *sockname;
+
+    sockname = g_getenv ("SSH_AUTH_SOCK");
+    if (!sockname) {
+        g_warning ("no SSH agent running on the system. Cannot proxy SSH key requests.");
+        return;
+    }
+    
+    switch (seahorse_passphrase_detect_agent (SKEY_SSH)) {
+    case SEAHORSE_AGENT_SEAHORSE:
+        g_warning ("This SSH agent is already being proxied: %s", sockname);
+        return;
+    case SEAHORSE_AGENT_UNKNOWN:
+    case SEAHORSE_AGENT_NONE:
+        g_warning ("couldn't contact SSH agent. Cannot proxy SSH key requests.");
+        return;
+    default:
+        break;
+    };
+
+    if (seahorse_agent_displayvars) {
+        if (create_ssh_socket (sockname) == -1)
+            _exit (1);
+    } else {
+        create_ssh_socket (sockname);
+    }
+
+    ssh_agent_enabled = TRUE;
+}
+
+void
+seahorse_agent_ssh_postfork (pid_t child)
+{
+    if (!ssh_agent_enabled)
+        return;
+
+    /* If any of these fail, they simply exit */
+    if (seahorse_agent_displayvars)
+        process_display (child);
+    else 
+        swap_sockets ();
+}
+
+gboolean
+seahorse_agent_ssh_init ()
+{
+    g_assert (!ssh_agent_initialized);
+    
     if (listen (ssh_agent_socket, 5) < 0) {
-        g_warning ("couldn't listen on SSH proxy socket: %s: %s", sockname, g_strerror (errno));
+        g_warning ("couldn't listen on SSH proxy socket: %s: %s", ssh_agent_sockname, g_strerror (errno));
         return FALSE;
     }
     
@@ -632,7 +711,7 @@ seahorse_agent_ssh_uninit ()
     /* Rename things back */
     if (ssh_agent_sockname[0])
         g_unlink (ssh_agent_sockname);
-    if (ssh_agent_sockname[0] && ssh_client_sockname[0])
+    if (ssh_agent_swapped)
         g_rename (ssh_client_sockname, ssh_agent_sockname);
     
     /* Free the cached data */

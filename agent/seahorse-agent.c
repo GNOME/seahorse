@@ -62,10 +62,10 @@ static void
 process_display (const gchar *socket, pid_t pid)
 {
     if (seahorse_agent_cshell) {
-        fprintf (stdout, "setenv GPG_AGENT_INFO %s:%lu:1",
+        fprintf (stdout, "setenv GPG_AGENT_INFO %s:%lu:1\n",
                  socket, (long unsigned int) pid);
     } else {
-        fprintf (stdout, "GPG_AGENT_INFO=%s:%lu:1; export GPG_AGENT_INFO",
+        fprintf (stdout, "GPG_AGENT_INFO=%s:%lu:1; export GPG_AGENT_INFO\n",
                  socket, (long unsigned int) pid);
     }
 

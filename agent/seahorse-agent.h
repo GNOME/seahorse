@@ -129,6 +129,10 @@ void seahorse_agent_status_update ();
  
 #define SEAHORSE_SSH_PING_MSG             252
 
+/* Called from the original process before and after fork */
+void     seahorse_agent_ssh_prefork ();
+void     seahorse_agent_ssh_postfork (pid_t child);
+
 gboolean seahorse_agent_ssh_init ();
 GList*   seahorse_agent_ssh_cached_keys ();
 guint    seahorse_agent_ssh_count_keys ();

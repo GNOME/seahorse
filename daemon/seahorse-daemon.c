@@ -56,11 +56,11 @@ static const struct poptOption options[] = {
 	  N_("Do not daemonize seahorse-agent"), NULL },
 
 #ifdef WITH_AGENT
-    { "cshell", 'c', POPT_ARG_NONE | POPT_ARG_VAL, &seahorse_agent_cshell, TRUE,
+	{ "cshell", 'c', POPT_ARG_NONE | POPT_ARG_VAL, &seahorse_agent_cshell, TRUE,
 	  N_("Print variables in for a C type shell"), NULL },
 
 	{ "variables", 'v', POPT_ARG_NONE | POPT_ARG_VAL, &seahorse_agent_displayvars, TRUE,
-	  N_("Display variables instead of editing gpg.conf"), NULL },
+	  N_("Display variables instead of editing conf files (gpg.conf, ssh agent socket)"), NULL },
 #endif
       
 	POPT_AUTOHELP
@@ -112,6 +112,7 @@ daemonize ()
 #ifdef WITH_AGENT
     /* Let the agent do it's thing */
     seahorse_agent_postfork (pid);
+    seahorse_agent_ssh_postfork (pid);
 #endif
     
     /* The parent, or not daemonized */
@@ -228,6 +229,7 @@ int main(int argc, char* argv[])
 
 #ifdef WITH_AGENT    
     seahorse_agent_prefork ();
+    seahorse_agent_ssh_prefork ();
 #endif
     
     /* 
