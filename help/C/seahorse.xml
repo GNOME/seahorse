@@ -1,17 +1,17 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
 "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
 	<!ENTITY legal SYSTEM "legal.xml">
-	<!ENTITY appversion "0.9.0">
-	<!ENTITY manrevision "3.0">
+	<!ENTITY appversion "0.9.7">
+	<!ENTITY manrevision "3.1">
 	<!ENTITY date "July 2005">
-	<!ENTITY app "<guimenuitem>Encryption Key Manager</guimenuitem>">
+	<!ENTITY app "Passwords and Encryption Keys">
 	<!ENTITY daemon "<application>seahorse-daemon</application>">
 	<!ENTITY project "Seahorse">
 	<!ENTITY key "<glossterm>key</glossterm>">
+	<!ENTITY website "http://www.gnome.org/projects/seahorse/">
 ]>
-
-<article id="index">
+<article id="index" lang="en">
 	<articleinfo>
 		<title>&project; Manual V&manrevision;</title>
 		<copyright>
@@ -21,6 +21,7 @@
 		<publisher>
 			<publishername>Seahorse Project</publishername>
 		</publisher>
+		<!-- link to document containig the legal notice of GNU FDL  -->
 		&legal;
 		<authorgroup>
 			<author>
@@ -48,6 +49,16 @@
 		</authorgroup>
 		<revhistory>
 			<revision>
+				<revnumber>&project; Manual V0.9.7</revnumber>
+				<date>November 2006</date>
+				<revdescription>
+					<para role="author">
+						Milo Casagrande
+						<email>milo_casagrande@yahoo.it</email>
+					</para>
+				</revdescription>	
+			</revision>
+			<revision>
 				<revnumber>&project; Manual V0.9.0</revnumber>
 				<date>July 2005</date>
 				<revdescription>
@@ -59,7 +70,7 @@
 			</revision>
 			<revision>
 				<revnumber>&project; Manual V0.7.0</revnumber>
-				<date>February 2003;</date>
+				<date>February 2003</date>
 				<revdescription>
 					<para role="author">Jacob Perkins
 					<!--
@@ -74,43 +85,98 @@
 		<legalnotice>
 			<title>Feedback</title>
 			<para>To report a bug or make a suggestion regarding the
-				&app; application or this manual, follow the directions in the
+				<application>&app;</application> application or this manual, follow the directions in the
 				<ulink url="ghelp:gnome-feedback" type="help">Gnome Feedback Page</ulink>.
 			</para>
 		</legalnotice>
+
+		<abstract role="description">
+			<para>
+				<application>&app;</application> is the application for managing encryption keys for the GNOME Desktop
+			</para>
+		</abstract> 		
+
 	</articleinfo>
+
 	<indexterm zone="index">
-		<primary>&app;</primary>
+		<primary>Seahorse</primary>
 	</indexterm>
+
+	<indexterm zone="index">
+		<primary>seahorse</primary>	
+	</indexterm>
+
+	<indexterm zone="index">
+		<primary>Encryption Keys</primary>
+	</indexterm>
+
 	<sect1 id="introduction">
 		<title>Introduction</title>
-		<para>
-			&project; is a GNOME2 project that provides integration of 
-			<ulink url="http://www.gnupg.org" type="http">Gnu Privacy Guard (GPG)</ulink>
-			with the <ulink url="http://www.gnome.org">GNOME</ulink> desktop.
-			&project; includes the &app;, a GPG key management front end, 
-			&daemon;, a drop in replacement for <command>gpg-agent</command> as well as a 
-			DNS-SD HKP &key; server, and plug-ins for <guimenuitem>Text Editor
-			</guimenuitem> and <application>nautilus</application>.
-		</para> 
-		<para>
-            The &app; provides a front end to many of the 
-			features of 
-			<ulink url="http://www.gnupg.org" type="http">Gnu Privacy Guard (GPG)</ulink>.  The contents of this guide concerning the &app; are linked below:
-		</para>
-		<itemizedlist>
-			<listitem><para><xref linkend="generate"/></para></listitem>
-			<listitem><para><xref linkend="import"/></para></listitem>
-			<listitem><para><xref linkend="export"/></para></listitem>
-			<listitem><para><xref linkend="backup"/></para></listitem>
-			<listitem><para><xref linkend="key-properties"/></para></listitem>
-			<listitem><para><xref linkend="ssh-key-properties"/></para></listitem>
-			<!--listitem><para><xref linkend="key-server"/></para></listitem-->
-		</itemizedlist>
-		<para>
-			In <xref linkend="file-manager"/> learn how to perform the following tasks 
-			in the File Manager:
-		</para>		
+			<para>
+				&project; is a GNOME project that provides integration of 
+				<ulink url="http://www.gnupg.org" type="http">Gnu Privacy Guard (GPG)</ulink>
+				with the <ulink url="http://www.gnome.org">GNOME</ulink> desktop.
+				&project; includes the <application>&app;</application>, a GPG key management front end, 
+				&daemon;, a drop in replacement for <command>gpg-agent</command> as well as a 
+				DNS-SD HKP &key; server, plug-ins for <application>Gedit</application>, 
+				<application>nautilus</application> and <application>Epiphany</application> and 
+				a panel applet for clipboard's encryption.
+			</para> 
+
+			<para>
+				<application>&app;</application> provides a front end to many of the features of 
+				<ulink url="http://www.gnupg.org" type="http">Gnu Privacy Guard (GPG)</ulink>.  
+			</para>
+
+			<para>
+				With &project; you can:
+				<itemizedlist>
+				
+				<listitem>
+					<para>Create and manage PGP and SSH keys,</para>
+				</listitem>
+				<listitem>
+					<para>Export and import PGP and SSH keys,</para>
+				</listitem>
+				<listitem>
+					<para>Share with others your keys,</para>
+				</listitem>
+				<listitem>
+					<para>Backup your keys and keyring,</para>
+				</listitem>
+				<listitem>
+					<para>Cache your passphrase so you don't have to keep typing it,</para>
+				</listitem>
+				<listitem>
+					<para>Encrypt and decrypt your clipboard.</para>
+				</listitem>
+				</itemizedlist>
+			
+			</para>
+
+		<sect2 id="seahorse-contents">
+		
+		<title>Contents of this guide</title>
+			<para>
+				The contents of this guide concerning the <application>&app;</application> are linked below:
+			</para>
+
+			<itemizedlist>
+				<listitem><para><xref linkend="pgp-generate"/></para></listitem>
+				<listitem><para><xref linkend="ssh-generate"/></para></listitem>
+				<listitem><para><xref linkend="import"/></para></listitem>
+				<listitem><para><xref linkend="export"/></para></listitem>
+				<listitem><para><xref linkend="backup"/></para></listitem>
+				<listitem><para><xref linkend="key-properties"/></para></listitem>
+				<listitem><para><xref linkend="ssh-key-properties"/></para></listitem>
+				<!--listitem><para><xref linkend="key-server"/></para></listitem-->
+			</itemizedlist>
+			
+			<para>
+				In <xref linkend="file-manager"/> learn how to perform the following tasks 
+				in the File Manager:
+			</para>
+		
 		<itemizedlist>
 			<listitem><para><xref linkend="encrypt-fm"/></para></listitem>
 			<listitem><para><xref linkend="sign-fm"/></para></listitem>
@@ -127,12 +193,17 @@
 			<listitem><para><xref linkend="decryptverify-te"/></para></listitem>
 		</itemizedlist>
 		<!-- note>Most &key; management features can be found in the <xref linkend="key-properties"/>.</note -->
+		</sect2>
 	</sect1>
-	<!--sect1 id="getting-started">
+
+	<sect1 id="seahorse-getting-started">
 		<title>Getting Started</title>
-		<sect2 id="start">
-			<title>To Start &app;</title>
-			<para>You can start &app; in the following ways:</para>
+			
+		<sect2 id="seahorse-start">
+			<title>To Start <application>&app;</application></title>
+			<para>
+				You can start <application>&app;</application> 
+				in the following ways:</para>
 			<variablelist>
 				<varlistentry>
 					<term><guimenu>Applications</guimenu> menu</term>
@@ -140,225 +211,412 @@
 						<para>Choose
 						<menuchoice>
 							<guimenu>Other</guimenu>
-							<guimenuitem>GPG Keys Manager</guimenuitem>
+							<guimenuitem>Password and Encryption Keys</guimenuitem>
 						</menuchoice>.</para>
 					</listitem>
 				</varlistentry>
 				<varlistentry>
 					<term>Command Line</term>
 					<listitem>
-						<para>Type <command>seahorse</command>.</para>
+						<para>
+							Type <command>seahorse</command> then press <keycap>Return</keycap>.
+						</para>
 					</listitem>
 				</varlistentry>
 			</variablelist>
 		</sect2>
-		<sect2 id="when-start">
-			<title>When You Start &app;</title>
-			<para>When you start &app;, the <guilabel>Seahorse Key Manager</guilabel>
-			window is displayed.
+
+	<!-- commented out: need a little work
+		<sect2 id="seahorse-when-start">
+			<title>When You Start <application>&app;</application></title>
+			<para>
+				When you start <application>&app;</application>, the <guilabel>Password and Encryption Keys</guilabel>
+				window is displayed.
 			
-			The window contains the following elements:</para>
+				The window contains the following elements:
+			</para>
 			<variablelist>
 				<varlistentry>
 					<term>Menubar</term>
 					<listitem>
-						<para>The menus allow you to access</para>
+						<para>The menubar allows you to access</para>
 					</listitem>
 				</varlistentry>
 			</variablelist>
 		</sect2>
-	</sect1 -->
+	-->
+	</sect1>
+
 	<!-- sections organized so coincide with menus -->
-	<sect1 id="generate">
+	<sect1 id="pgp-generate">
 		<title>Creating Encryption Keys</title>
 		<para>
-			There are two methods of creating OpenPGP keys in &app;:the key
-			 generation assistant and the advanced generation dialog.  
+			To create OpenPGP keys in <application>&app;</application>, 
+			open the <guilabel>Create a New Key</guilabel> dialog by:
 		</para>
+		<itemizedlist>
+			<listitem>
+				<para>
+					Choosing <menuchoice><guimenu>Key</guimenu><guimenuitem>Create Key Pair</guimenuitem></menuchoice> from the menubar  or,
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					Using the shortcut 
+					<keycombo><keycap>Ctrl</keycap><keycap>N</keycap></keycombo>
+				</para>	
+			</listitem>
+		</itemizedlist>
+		
 		<para>
-			 Access the assistant by choosing
-			<menuchoice>
-				<guimenu>Key</guimenu>
-				<guimenuitem>Create Key Pair</guimenuitem>
-			</menuchoice>
-			.  Select <guilabel>Assistant</guilabel> and press the enter key or
-			 press <guibutton>Continue</guibutton>.
+			You will be prompt to select the kind of key you wish to create. 
+			Choose <guilabel>PGP Key</guilabel>.
 		</para>
+		
 		<para>
-			Access the advanced generation dialog by choosing 
-			<menuchoice>
-				<guimenu>Key</guimenu>
-				<guimenuitem>Create Key Pair</guimenuitem>
-			</menuchoice>
-			.  Select <guilabel>Advanced</guilabel> and press the enter key or 
-			press <guibutton>Continue</guibutton>.
+			After following the instructions above, you will be 
+			presented with a dialog to fill in. The fields are detailed 
+			below.
 		</para>
-		<sect2 id="generate-assistant">
-			<title>Key Generation Assistant</title>
+		<variablelist>
+		<varlistentry>
+			<term><guilabel>Full Name</guilabel></term>
+			<listitem>
+				<para>
+					Enter your full name in the form
+					<programlisting>&lt;first&gt; &lt;last&gt;</programlisting>
+					A middle name or initial is optional.
+					<note>
+						<para>You must enter at least 5 characters in this field.
+						</para>
+					</note> 
+				</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term><guilabel>Email Address</guilabel></term>
+			<listitem>
+				<para>
+					Your email address is how most
+					people will locate your key on a
+					key server or other key provider.
+					Make sure it is correct before
+					continuing. 
+					<note>
+						<para>It should be of the form 
+						<programlisting><replaceable>&lt;username&gt;</replaceable>@<replaceable>&lt;domainname&gt;</replaceable></programlisting>
+						</para>
+					</note>
+						
+				</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term><guilabel>Comment</guilabel></term>
+			<listitem>
+				<para>
+					The comment field can be used to 
+					place any additional information 
+					into the displayed name of your new 
+					key pair.  This information can be 
+					searched for on key servers.
+				</para>
+			</listitem>
+		</varlistentry>
+		</variablelist>
+
+		<sect2 id="seahorse-pgp-advanced-mode">
+		<title>Using advanced options</title>
 			<para>
-				After following the instructions above, the assistant will 
-				walk you through the process of generating a key pair.
+				To use advanced options for creating a new key, 
+				use the <guibutton>Advanced Options</guibutton> 
+				expander.
 			</para>
+			<para>
+				The advanced options fields are detailed below.
+			</para>
+		<!-- add description about the advanced selection  -->
+		<variablelist>
+		<varlistentry>
+			<term><guilabel>Encryption Type</guilabel></term>
+			<listitem>
+				<para>
+					This field specifies the encryption 
+					algorithms used to generate your keys.
+				</para>
+				<variablelist>
+					<varlistentry>
+						<term>DSA ElGamal</term>
+						<listitem>
+							<para>
+								This is the suggested 
+								choice as it will allow 
+								you to encrypt/decrypt/
+								sign/verify as needed
+							</para>
+						</listitem>
+					</varlistentry>
+					<varlistentry>
+						<term>DSA</term>
+						<listitem>
+							<para>
+								Will allow signing only.
+							</para>
+						</listitem>
+					</varlistentry>
+					<varlistentry>
+						<term>RSA</term>
+						<listitem>
+							<para>
+								Will allow signing only.
+							</para>
+						</listitem>
+					</varlistentry>
+				</variablelist>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term><guilabel>Key Strength (bits)</guilabel></term>
+			<listitem>
+				<para>
+					This is the length of the key in bits.  
+					The longer the key, the more secure it 
+					will be, provided a strong passphrase is
+					used.  Conversely, performing any
+					operation with a longer key will require 
+					more time than it would with a shorter 
+					key.  Acceptable values are between 1024 
+					and 4096 bits.  At least 2048 bits is recommended.
+				</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term><guilabel>Expiration Date</guilabel></term>
+			<listitem>
+				<para>
+					This is the date at which the key will 
+					cease to be usable for performing 
+					encryption or signing operations.  A 
+					reasonable time to set it to is 6 
+					months.  You will have to either change the 
+					expiration date or generate a new 
+					key or subkey after this amount of time passes.  
+					<note>
+						<para>
+							Sign your new key with your old one 
+							before it expires to preserve your trust status.
+						</para>
+					</note>
+				</para>
+			</listitem>
+		</varlistentry>
+		</variablelist>
 		</sect2>
-		<sect2 id="generate-adv">
-			<title>Advanced Key Generation</title>
+		
+		<sect2 id="seahorse-pgp-create">
+			<title>Creating the keys</title>
+				<para>
+					Once you have completed all the fields, 
+					press <guibutton>Create</guibutton> to 
+					create a new key pair.
+				</para>
+				<para>
+					The <guilabel>Passphrase for New Key</guilabel> 
+					dialog will be shown.
+				</para>
+				<para>
+					Enter the passphrase twice for your new key.
+				</para>
+				<tip>
+					<para>
+						Use similar practices to generating a 
+						strong password when choosing a 
+						passphrase. The difference between a 
+						password and a passphrase is that, in a 
+						passphrase, spaces are valid characters.
+					</para>				
+				</tip>
+		</sect2>
+
+	</sect1>
+	
+	<sect1 id="ssh-generate">
+	<title>Creating Secure Shell Keys</title>
+	<para>
+		To create Secure Shell keys in <application>&app;</application>, 
+		open the <guilabel>Create a New Key</guilabel> dialog by:
+	</para>
+	<itemizedlist>
+		<listitem>
 			<para>
-				After following the instructions above, you will be 
-				presented with a dialog to fill in.  The fields are detailed 
-				below.
+				Choosing <menuchoice><guimenu>Key</guimenu><guimenuitem>Create Key Pair</guimenuitem></menuchoice> 
+				from the menubar  or,
 			</para>
+		</listitem>
+		<listitem>
+			<para>
+				Using the shortcut 
+				<keycombo><keycap>Ctrl</keycap><keycap>N</keycap></keycombo>
+			</para>	
+		</listitem>
+		</itemizedlist>
+		
+		<para>
+			You will be prompt to select the kind of key you wish to create. 
+			Choose <guilabel>Secure Shell Key</guilabel>.
+		</para>
+		
+		<para>
+			After following the instructions above, you will be 
+			presented with a dialog to fill in. The fields are detailed 
+			below.
+		</para>
+
+		<variablelist>
+			<varlistentry>
+				<term><guilabel>Key Description</guilabel></term>
+				<listitem>
+					<para>
+					This is a description of what the key is meant for. 
+					You con use your e-mail address or any other remainder.
+					</para>
+				</listitem>
+		
+			</varlistentry>
+		</variablelist>
+		
+		<sect2 id="seahorse-ssh-advanced-options">
+		<title>Using advanced options</title>
+			<para>
+				To use advanced options for creating a new key, 
+				use the <guibutton>Advanced Options</guibutton> 
+				expander.
+			</para>
+			<para>
+				The advanced options fields are detailed below.
+			</para>	
+			
 			<variablelist>
-				<varlistentry>
-					<term><guilabel>Full Name</guilabel></term>
-					<listitem>
-						<para>
-							Enter your full name in the form
-							<programlisting>&lt;first&gt; &lt;last&gt;</programlisting>
-							A middle name or initial is optional.
-							<note><para>You must enter at least 5 
-							characters in this field.</para></note> 
-						</para>
-					</listitem>
-				</varlistentry>
-				<varlistentry>
-					<term><guilabel>Email Address</guilabel></term>
-					<listitem>
-						<para>
-							Your email address is how most
-							people will locate your key on a
-							key server or other key provider.
-							Make sure it is correct before
-							continuing. 
-							<note><para>It should be of the form 
-							<programlisting>&lt;user name&gt;@&lt;domain name&gt;</programlisting></para></note>
-						</para>
-					</listitem>
-				</varlistentry>
-				<varlistentry>
-					<term><guilabel>Key Comment</guilabel></term>
-					<listitem>
-						<para>
-							The comment field can be used to 
-							place any additional information 
-							into the displayed name of your new 
-							key pair.  This information can be 
-							searched for on key servers.
-						</para>
-					</listitem>
-				</varlistentry>
-				<varlistentry>
-					<term><guilabel>Key Type</guilabel></term>
-					<listitem>
-						<para>
-							This field specifies the encryption 
-							algorithms used to generate your keys.
-						</para>
-						<variablelist>
-							<varlistentry>
-								<term>DSA &amp; ElGamal</term>
-								<listitem>
-									<para>
-									This is the suggested 
-									choice as it will allow 
-									you to encrypt/decrypt/
-									sign/verify as needed
-									</para>
-								</listitem>
-							</varlistentry>
-							<varlistentry>
-								<term>DSA</term>
-								<listitem>
-									<para>
-									Will allow signing only.
-									</para>
-								</listitem>
-							</varlistentry>
-							<varlistentry>
-								<term>RSA</term>
-								<listitem>
-									<para>
-									Will allow signing only.
-									</para>
-								</listitem>
-							</varlistentry>
-						</variablelist>
-					</listitem>
-				</varlistentry>
-				<varlistentry>
-					<term><guilabel>Key Length</guilabel></term>
-					<listitem>
-						<para>
-							This is the length of the key in bits.  
-							The longer the key, the more secure it 
-							will be, provided a strong passphrase is
-							used.  Conversely, performing any
-							operation with a longer key will require 
-							more time than it would with a shorter 
-							key.  Acceptable values are between 1024 
-							and 4096 bits.  At least 2048 bits is 
-							recommended.
-						</para>
-					</listitem>
-				</varlistentry>
-				<varlistentry>
-					<term><guilabel>Expiration Date</guilabel></term>
-					<listitem>
-						<para>
-							This is the date at which the key will 
-							cease to be usable for performing 
-							encryption or signing operations.  A 
-							reasonable time to set it to is 6 
-							months.  You will have to either change the 
-							expiration date or generate a new 
-							key or subkey after this amount of time passes.  
-							<note><para>Sign your new key with your old one 
-							before it expires to preserve your trust 
-							status.</para></note>
-						</para>
-					</listitem>
-				</varlistentry>
-				<varlistentry>
-					<term><guilabel>Passphrase</guilabel></term>
-					<listitem>
-						<para>
-							Use similar practices to generating a 
-							strong password when choosing a 
-							passphrase.  The difference between a 
-							password and a pass phrase is that in a 
-							passphrase spaces are valid characters.
-						</para>
-					</listitem>
-				</varlistentry>
+			<varlistentry>
+				<term><guilabel>Encryption Type</guilabel></term>
+				<listitem>
+				<para>
+					This field specifies the encryption 
+					algorithms used to generate your key.
+				</para>
+				<variablelist>
+					<varlistentry>
+						<term>RSA</term>
+						<listitem>
+							<para> 
+								Use the <emphasis>Rivest-ShamirAdleman</emphasis> 
+								(RSA) algorithm to create the SSH key. This is the preferred 
+								and more secure choice.
+							</para>
+						</listitem>
+					</varlistentry>
+					<varlistentry>
+						<term>DSA</term>
+						<listitem>
+							<para>
+								Use the <emphasis>Digital Signature Algorithm</emphasis> 
+								(DSA) to create	the SSH key.
+							</para>
+						</listitem>
+					</varlistentry>
+				</variablelist>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term><guilabel>Key Strength (bits)</guilabel></term>
+				<listitem>
+				<para>
+					This is the length of the key in bits.  
+					The longer the key, the more secure it 
+					will be, provided a strong passphrase is
+					used.  Conversely, performing any
+					operation with a longer key will require 
+					more time than it would with a shorter 
+					key.  Acceptable values are between 1024 
+					and 4096 bits.  At least 2048 bits is recommended.
+				</para>
+				</listitem>
+			</varlistentry>
 			</variablelist>
 		</sect2>
+		<sect2 id="seahorse-ssh-generate">
+			<title>Creating the key</title>
+			<para> <!-- fix me: different buttons for diffenret task "Create" and "Create and setup" -->
+				Once you have completed all the fields, 
+				press <guibutton>Create</guibutton> to 
+				create a new SSH key.
+			</para>
+			<para> <!-- fix me: the dialog's title is not Passphrase for New Key -->
+					The <guilabel>Passphrase for New Key</guilabel> 
+					dialog will be shown.
+				</para>
+				<para>
+					Enter the passphrase twice for your new key.
+				</para>
+				<tip>
+					<para>
+						Use similar practices to generating a 
+						strong password when choosing a 
+						passphrase. The difference between a 
+						password and a passphrase is that, in a 
+						passphrase, spaces are valid characters.
+					</para>				
+				</tip>
+		</sect2>
+			
 	</sect1>
+	
 	<sect1 id="import">
 		<title>Importing Keys</title>
 		<para>
-			Importing keys can be performed by choosing
+			To import keys choose
 			<menuchoice>
 				<guimenu>Key</guimenu>
 				<guimenuitem>Import</guimenuitem>
 			</menuchoice>
-			and selecting a file containing at least one ASCII armored public key in 
-			the file chooser.  You can also paste keys by selecting an ASCII armored 
-			public block of text, copying it to the clipboard and choosing
-			<menuchoice>
-				<guimenu>Edit</guimenu>
-				<guimenuitem>Paste Keys</guimenuitem>
-			</menuchoice>
-			.
+			from the menubar and select from the file chooser a file containing at least one ASCII armored public key. 
+		</para>
+		<para>
+			Importing can also be performed by pasting the keys inside <application>&app;</application>:
+		<itemizedlist>
+		<listitem>
+			<para>
+				Select an ASCII armored public block of text,
+			</para>
+		</listitem>
+		<listitem>
+			<para>
+			Copy it to the clipboard,			
+			</para>
+		</listitem>
+		<listitem>
+			<para>
+				Choose 
+				<menuchoice>
+					<guimenu>Edit</guimenu>
+					<guimenuitem>Paste Keys</guimenuitem>
+				</menuchoice> 
+				from the menubar.
+			</para>
+		</listitem>
+		</itemizedlist>
 		</para>
 	</sect1>
+
 	<sect1 id="export">
 		<title>Exporting Keys</title>
 		<para>
-			Exporting keys can be performed by selecting the keys in the main window 
-			and choosing
+			To export keys, select the keys in the main window 
+			and choose
 			<menuchoice>
 				<guimenu>Key</guimenu>
 				<guimenuitem>Export</guimenuitem>
-			</menuchoice>.  You can also export keys to the clipboard, in an 
+			</menuchoice> from the menubar. You can also export keys to the clipboard, in an 
 			ASCII armored block of text, by selecting the keys in the main window 
 			and choosing
 			<menuchoice>
@@ -377,7 +635,7 @@
 				<guimenu>Key</guimenu>
 				<guimenuitem>Back up Keyrings</guimenuitem>
 			</menuchoice>
-			.  Enter a file name with a valid archive extenision and specify the 
+			. Enter a file name with a valid archive extenision and specify the 
 			location to save the archive.  
 			<note><para>You can choose any of the archive types 
 			<application>file-roller</application> supports.</para></note>

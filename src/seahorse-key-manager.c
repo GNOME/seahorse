@@ -842,6 +842,7 @@ about_activate (GtkWidget *widget, SeahorseWidget *swidget)
 	static const gchar *documenters[] = {
 		"Jacob Perkins <jap1@users.sourceforge.net>",
         "Adam Schreiber <sadam@clemson.edu>",
+        "Milo Casagrande <milo_casagrande@yahoo.it>",
 		NULL
 	};
 
