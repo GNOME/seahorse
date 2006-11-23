@@ -637,12 +637,8 @@ seahorse_agent_ssh_prefork ()
         break;
     };
 
-    if (seahorse_agent_displayvars) {
-        if (create_ssh_socket (sockname) == -1)
-            _exit (1);
-    } else {
-        create_ssh_socket (sockname);
-    }
+    if (!create_ssh_socket (sockname))
+        return;
 
     ssh_agent_enabled = TRUE;
 }
@@ -663,6 +659,9 @@ seahorse_agent_ssh_postfork (pid_t child)
 gboolean
 seahorse_agent_ssh_init ()
 {
+    if (!ssh_agent_enabled)
+        return FALSE;
+
     g_assert (!ssh_agent_initialized);
     
     if (listen (ssh_agent_socket, 5) < 0) {
