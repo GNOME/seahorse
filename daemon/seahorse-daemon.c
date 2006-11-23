@@ -241,7 +241,6 @@ int main(int argc, char* argv[])
     /* Handle some signals */
     signal (SIGINT, on_quit);
     signal (SIGTERM, on_quit);
-    g_timeout_add (100, check_quit, NULL);
     
     client = gnome_master_client();
     g_signal_connect(client, "die", G_CALLBACK(client_die), NULL);
@@ -274,8 +273,12 @@ int main(int argc, char* argv[])
     seahorse_sharing_init ();
 #endif
 
-    gtk_main ();
-g_printerr ("left gtk_main\n");
+    /* Sometimes we've already gotten a quit signal */
+    if(!g_quit) {
+        g_timeout_add (100, check_quit, NULL);
+        gtk_main ();
+        g_message ("left gtk_main\n");
+    }
 
     /* And now clean them all up */
 #ifdef WITH_SHARING
