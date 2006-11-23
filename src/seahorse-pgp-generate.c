@@ -136,9 +136,8 @@ on_response (GtkDialog *dialog, guint response, SeahorseWidget *swidget)
     /* Less confusing with less on the screen */
     gtk_widget_hide (seahorse_widget_get_top (swidget));
     
-    /* TODO: This needs to be a double prompt */
-    dialog = seahorse_passphrase_prompt_show (_("Passphrase for New Key"), 
-                                              _("Enter the passphrase for your new key twice"), 
+    dialog = seahorse_passphrase_prompt_show (_("Passphrase for New PGP Key"), 
+                                              _("Enter the passphrase for your new key twice."), 
                                               NULL, NULL, TRUE);
     if (gtk_dialog_run (dialog) == GTK_RESPONSE_ACCEPT)
     {

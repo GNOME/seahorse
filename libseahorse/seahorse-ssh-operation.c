@@ -887,8 +887,8 @@ generate_password_cb (SeahorseSSHOperation *sop, const gchar* msg)
 
     /* If the first time then prompt */
     if (!pv->prompt_dialog) {
-        return prompt_passphrase (sop, _("New Secure Shell Key Passphrase"), 
-                _("Enter a passphrase for your new SSH key."), NULL, TRUE);
+        return prompt_passphrase (sop, _("Passphrase for New Secure Shell Key"), 
+                _("Enter a passphrase for your new Secure Shell key."), NULL, TRUE);
     }
     
     /* Otherwise return the entered passphrase */
