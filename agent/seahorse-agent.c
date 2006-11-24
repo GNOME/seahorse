@@ -40,9 +40,11 @@
 #include "seahorse-passphrase.h"
 #include "seahorse-pgp-key.h"
 
-gboolean seahorse_agent_enabled = FALSE;
 gboolean seahorse_agent_displayvars = FALSE;
 gboolean seahorse_agent_cshell = FALSE;
+gboolean seahorse_agent_execvars = FALSE;
+
+static gboolean seahorse_agent_enabled = FALSE;
 
 /* PUBLISHING AGENT INFO ---------------------------------------------------- */
 
@@ -70,6 +72,16 @@ process_display (const gchar *socket, pid_t pid)
     }
 
     fflush (stdout);
+}
+
+static void 
+process_setenv (const gchar *socket, pid_t pid)
+{
+    gchar *var;
+
+    /* Memory doesn't need to be freed */
+    var = g_strdup_printf ("%s:%lu:1", socket, (long unsigned int) pid);
+    g_setenv ("GPG_AGENT_INFO", var, TRUE);
 }
 
 /* Add our agent info to gpg.conf */
@@ -154,6 +166,8 @@ seahorse_agent_postfork (pid_t child)
     /* If any of these fail, they simply exit */
     if (seahorse_agent_displayvars)
         process_display (socket, child);
+    else if(seahorse_agent_execvars)
+        process_setenv (socket, child);
     else
         process_gpg_conf (socket, child);    
 }

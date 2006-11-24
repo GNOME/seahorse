@@ -540,6 +540,18 @@ process_display (pid_t pid)
     fflush (stdout);
 }
 
+/* Setup the current process environment for using this SSH agent */
+static void 
+process_setenv (pid_t pid)
+{
+    gchar *var;
+
+    /* Memory doesn't need to be freed */
+    var = g_strdup_printf ("%lu", (long unsigned int) pid);
+    g_setenv ("SSH_AGENT_PID", var, TRUE);
+    g_setenv ("SSH_AUTH_SOCK", ssh_agent_sockname, TRUE);
+}
+
 static gboolean
 create_ssh_socket (const gchar *sockname)
 {
@@ -652,6 +664,8 @@ seahorse_agent_ssh_postfork (pid_t child)
     /* If any of these fail, they simply exit */
     if (seahorse_agent_displayvars)
         process_display (child);
+    else if (seahorse_agent_execvars)
+        process_setenv (child);
     else 
         swap_sockets ();
 }

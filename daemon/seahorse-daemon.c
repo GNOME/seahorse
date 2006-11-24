@@ -61,6 +61,9 @@ static const struct poptOption options[] = {
 
 	{ "variables", 'v', POPT_ARG_NONE | POPT_ARG_VAL, &seahorse_agent_displayvars, TRUE,
 	  N_("Display variables instead of editing conf files (gpg.conf, ssh agent socket)"), NULL },
+
+	{ "execute", 'x', POPT_ARG_NONE | POPT_ARG_VAL, &seahorse_agent_execvars, TRUE,
+	  N_("Execute other arguments on the command line"), NULL },
 #endif
       
 	POPT_AUTOHELP
@@ -69,7 +72,7 @@ static const struct poptOption options[] = {
 };
 
 static void
-daemonize ()
+daemonize (const gchar **exec)
 {
     /* 
      * We can't use the normal daemon call, because we have
@@ -85,7 +88,7 @@ daemonize ()
             err (1, _("couldn't fork process"));
             break;
 
-            /* The child */
+        /* The child */
         case 0:
             if (setsid () == -1)
                 err (1, _("couldn't create new process group"));
@@ -100,7 +103,7 @@ daemonize ()
             open ("/dev/null", O_WRONLY, 0666);
 
             chdir ("/tmp");
-            return;
+            return; /* Child process returns */
         };
     }
 
@@ -109,15 +112,31 @@ daemonize ()
         pid = getpid ();
     }
 
+    /* The parent process or not daemonizing ... */
+
 #ifdef WITH_AGENT
     /* Let the agent do it's thing */
     seahorse_agent_postfork (pid);
     seahorse_agent_ssh_postfork (pid);
 #endif
     
-    /* The parent, or not daemonized */
-    if (g_daemonize)
-        exit (0);
+    if (g_daemonize) {
+
+        /* If we were asked to exec another program, do that here */
+        if (!exec || !exec[0])
+            exit (0);
+
+        execvp (exec[0], (char**)exec);
+	    g_critical ("couldn't exec %s: %s\n", exec[0], strerror (errno));
+	    exit (1);
+
+    } else {
+
+        /* We can't overlay our process with the exec one if not daemonizing */
+        if (exec && exec[0])
+            g_warning ("cannot execute process when not daemonizing: %s", exec[0]);    
+
+    }
 }
 
 static void
@@ -205,6 +224,9 @@ int main(int argc, char* argv[])
     SeahorseOperation *op;
     GnomeProgram *program = NULL;
     GnomeClient *client = NULL;
+    const char **args = NULL;
+    poptContext pctx;
+    GValue value = { 0, };
 
     seahorse_secure_memory_init (65536);
     
@@ -230,13 +252,24 @@ int main(int argc, char* argv[])
 #ifdef WITH_AGENT    
     seahorse_agent_prefork ();
     seahorse_agent_ssh_prefork ();
-#endif
     
+    /* If we need to run another program, then prepare that */
+    if (seahorse_agent_execvars) {
+        g_value_init (&value, G_TYPE_POINTER);
+        g_object_get_property (G_OBJECT (program), GNOME_PARAM_POPT_CONTEXT, &value);
+    
+        pctx = g_value_get_pointer (&value);
+        g_value_unset (&value);
+
+        args = poptGetArgs(pctx);
+    }
+#endif
+
     /* 
      * All functions after this point have to print messages 
      * nicely and not just called exit() 
      */
-    daemonize ();
+    daemonize (args);
 
     /* Handle some signals */
     signal (SIGINT, on_quit);
