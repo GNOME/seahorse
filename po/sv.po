@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-11-14 13:49+0100\n"
-"PO-Revision-Date: 2006-11-19 22:44+0100\n"
+"POT-Creation-Date: 2006-11-24 07:24+0100\n"
+"PO-Revision-Date: 2006-11-24 12:27+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -28,11 +28,11 @@ msgid "Please enter a passphrase to use."
 msgstr "Ange en lösenfras att använda."
 
 #. Warn and put in defaults
-#: ../agent/seahorse-agent.c:91
+#: ../agent/seahorse-agent.c:103
 msgid "couldn't read gpg configuration, will try to create"
 msgstr "kunde inte läsa gpg-konfiguration, kommer att försöka skapa"
 
-#: ../agent/seahorse-agent.c:113
+#: ../agent/seahorse-agent.c:125
 #, c-format
 msgid "couldn't modify gpg configuration: %s"
 msgstr "kunde inte ändra gpg-konfiguration: %s"
@@ -118,25 +118,29 @@ msgid "Print variables in for a C type shell"
 msgstr "Skriv ut variabler för ett C-liknande skal"
 
 #: ../daemon/seahorse-daemon.c:63
-msgid "Display variables instead of editing gpg.conf"
-msgstr "Visa variabler istället för att redigera gpg.conf"
+msgid "Display variables instead of editing conf files (gpg.conf, ssh agent socket)"
+msgstr "Visa variabler istället för att redigera konfigurationsfiler (gpg.conf, ssh agent-uttag)"
 
-#: ../daemon/seahorse-daemon.c:85
+#: ../daemon/seahorse-daemon.c:66
+msgid "Execute other arguments on the command line"
+msgstr "Kör andra argument på kommandoraden"
+
+#: ../daemon/seahorse-daemon.c:88
 msgid "couldn't fork process"
 msgstr "kunde inte grena process"
 
-#: ../daemon/seahorse-daemon.c:91
+#: ../daemon/seahorse-daemon.c:94
 msgid "couldn't create new process group"
 msgstr "kunde inte skapa ny processgrupp"
 
-#: ../daemon/seahorse-daemon.c:222
+#: ../daemon/seahorse-daemon.c:245
 #: ../plugins/applet/seahorse-applet.c:1011
 #: ../plugins/nautilus/seahorse-tool.c:571
 #: ../src/main.c:59
 msgid "couldn't drop privileges properly"
 msgstr "kunde inte korrekt släppa privilegier"
 
-#: ../daemon/seahorse-daemon.c:226
+#: ../daemon/seahorse-daemon.c:249
 msgid "Encryption Daemon (Seahorse)"
 msgstr "Krypteringsdemon (Seahorse)"
 
@@ -443,6 +447,19 @@ msgstr "_Signera meddelande som:"
 msgid "None (Don't Sign)"
 msgstr "Ingen (Signera inte)"
 
+#. TODO: Icons
+#: ../libcryptui/cryptui-key-list.c:117
+#: ../src/seahorse-key-manager-store.c:954
+#: ../src/seahorse-key-properties.c:865
+msgid "Name"
+msgstr "Namn"
+
+#: ../libcryptui/cryptui-key-list.c:120
+#: ../src/seahorse-key-manager-store.c:966
+#: ../src/seahorse-key-properties.c:1711
+msgid "Key ID"
+msgstr "Nyckel-id"
+
 #: ../libseahorse/eggtrayicon.c:127
 msgid "Orientation"
 msgstr "Orientering"
@@ -547,6 +564,81 @@ msgstr "Hämtar fjärrnycklar..."
 #: ../libseahorse/seahorse-ldap-source.c:1134
 msgid "Sending keys to key server..."
 msgstr "Skickar nycklar till nyckelserver..."
+
+#: ../libseahorse/seahorse-notification.c:557
+#: ../libseahorse/seahorse-notification.c:573
+#, c-format
+msgid "Imported %i key"
+msgid_plural "Imported %i keys"
+msgstr[0] "Importerade %d nyckel"
+msgstr[1] "Importerade %d nycklar"
+
+#: ../libseahorse/seahorse-notification.c:558
+#: ../libseahorse/seahorse-notification.c:574
+msgid "Key Imported"
+msgid_plural "Keys Imported"
+msgstr[0] "Nyckel importerad"
+msgstr[1] "\"Nycklar importerade"
+
+#: ../libseahorse/seahorse-notification.c:601
+#, c-format
+msgid "Signed by <i><key id='%s'/> <b>expired</b></i> on %s."
+msgstr "Signerad av <i><key id='%s'/> <b>utgånget</b></i> den %s."
+
+#: ../libseahorse/seahorse-notification.c:602
+msgid "Invalid Signature"
+msgstr "Ogiltig signatur"
+
+#: ../libseahorse/seahorse-notification.c:607
+#, c-format
+msgid "Signed by <i><key id='%s'/></i> on %s <b>Expired</b>."
+msgstr "Signerad av <i><key id='%s'/></i> den %s <b>Utgånget</b>."
+
+#: ../libseahorse/seahorse-notification.c:608
+msgid "Expired Signature"
+msgstr "Utgången signatur"
+
+#: ../libseahorse/seahorse-notification.c:613
+#, c-format
+msgid "Signed by <i><key id='%s'/> <b>Revoked</b></i> on %s."
+msgstr "Signerad av <i><key id='%s'/> <b>Spärrad</b></i> den %s."
+
+#: ../libseahorse/seahorse-notification.c:614
+msgid "Revoked Signature"
+msgstr "Spärrad signatur"
+
+#: ../libseahorse/seahorse-notification.c:619
+#, c-format
+msgid "Signed by <i><key id='%s'/></i> on %s."
+msgstr "Signerad av <i><key id='%s'/></i> den %s."
+
+#: ../libseahorse/seahorse-notification.c:620
+msgid "Good Signature"
+msgstr "Korrekt signatur"
+
+#: ../libseahorse/seahorse-notification.c:625
+msgid "Signing key not in keyring."
+msgstr "Signeringsnyckel inte i nyckelring."
+
+#: ../libseahorse/seahorse-notification.c:626
+msgid "Unknown Signature"
+msgstr "Okänd signatur"
+
+#: ../libseahorse/seahorse-notification.c:630
+msgid "Bad or forged signature. The signed data was modified."
+msgstr "Felaktig eller förfalskad signatur. Signerat data har ändrats."
+
+#: ../libseahorse/seahorse-notification.c:631
+msgid "Bad Signature"
+msgstr "Felaktig signatur"
+
+#: ../libseahorse/seahorse-notification.c:639
+msgid "Couldn't verify signature."
+msgstr "Kunde inte validera signatur."
+
+#: ../libseahorse/seahorse-notify.glade.h:1
+msgid "Notification Messages"
+msgstr "Notifieringsmeddelanden"
 
 #: ../libseahorse/seahorse-passphrase.c:175
 msgid "Passphrase"
@@ -981,12 +1073,12 @@ msgid "Enter Key Passphrase"
 msgstr "Ange lösenfras för nyckel"
 
 #: ../libseahorse/seahorse-ssh-operation.c:890
-msgid "New Secure Shell Key Passphrase"
-msgstr "Ny lösenfras för Secure Shell-nyckel"
+msgid "Passphrase for New Secure Shell Key"
+msgstr "Lösenfras för ny Secure Shell-nyckel"
 
 #: ../libseahorse/seahorse-ssh-operation.c:891
-msgid "Enter a passphrase for your new SSH key."
-msgstr "Ange en lösenfras för din nya SSH-nyckel."
+msgid "Enter a passphrase for your new Secure Shell key."
+msgstr "Ange en lösenfras för din nya Secure Shell-nyckel."
 
 #: ../libseahorse/seahorse-ssh-operation.c:1029
 msgid "Secure Shell Key Passphrase"
@@ -1028,6 +1120,10 @@ msgstr "Okänd nyckel: %s"
 #: ../libseahorse/seahorse-unknown-key.c:119
 msgid "Unknown Key"
 msgstr "Okänd nyckel"
+
+#: ../libseahorse/seahorse-unknown-source.c:128
+msgid "Unavailable Key"
+msgstr "Otillgänglig nyckel"
 
 #: ../libseahorse/seahorse-util.c:188
 msgid "%Y-%m-%d"
@@ -1108,7 +1204,7 @@ msgstr "Fullständig"
 #: ../libseahorse/seahorse-validity.c:39
 #: ../src/seahorse-key-properties.c:1114
 msgid "Ultimate"
-msgstr "Ultimat"
+msgstr "Förbehållslös"
 
 #: ../libseahorse/seahorse-validity.c:41
 msgid "Disabled"
@@ -1117,7 +1213,7 @@ msgstr "Inaktiverat"
 #: ../libseahorse/seahorse-validity.c:43
 #: ../src/seahorse-key-properties.c:1293
 msgid "Revoked"
-msgstr "Återkallad"
+msgstr "Spärrad"
 
 #: ../libseahorse/seahorse-widget.c:311
 #, c-format
@@ -1137,12 +1233,12 @@ msgid "Seahorse Applet Factory"
 msgstr "Panelprogramsfabrik för Seahorse"
 
 #: ../plugins/applet/GNOME_SeahorseApplet.xml.h:1
-#: ../src/seahorse-key-manager.c:1189
+#: ../src/seahorse-key-manager.c:1190
 msgid "_About"
 msgstr "_Om"
 
 #: ../plugins/applet/GNOME_SeahorseApplet.xml.h:2
-#: ../src/seahorse-key-manager.c:1173
+#: ../src/seahorse-key-manager.c:1174
 #: ../src/seahorse-keyserver-results.c:379
 msgid "_Help"
 msgstr "_Hjälp"
@@ -1161,7 +1257,7 @@ msgid "Use PGP/GPG to encrypt/decrypt/sign/verify/import the clipboard."
 msgstr "Använd PGP/GPG för att kryptera/dekryptera/signera/validera/importera urklippet."
 
 #: ../plugins/applet/seahorse-applet.c:317
-#: ../src/seahorse-key-manager.c:868
+#: ../src/seahorse-key-manager.c:869
 msgid "translator-credits"
 msgstr ""
 "Daniel Nylander\n"
@@ -1171,14 +1267,14 @@ msgstr ""
 "tp-sv@listor.tp-sv.se"
 
 #: ../plugins/applet/seahorse-applet.c:320
-#: ../src/seahorse-key-manager.c:871
+#: ../src/seahorse-key-manager.c:872
 msgid "Seahorse Project Homepage"
 msgstr "Seahorse-projektets webbplats"
 
 #. Get the recipient list
 #: ../plugins/applet/seahorse-applet.c:375
-#: ../plugins/gedit/seahorse-gedit.c:332
 #: ../plugins/epiphany/seahorse-extension.c:251
+#: ../plugins/gedit/seahorse-gedit.c:332
 msgid "Choose Recipient Keys"
 msgstr "Välj mottagarnycklar"
 
@@ -1195,8 +1291,8 @@ msgid "The clipboard could not be encrypted."
 msgstr "Urklippet kunde inte krypteras."
 
 #: ../plugins/applet/seahorse-applet.c:431
-#: ../plugins/gedit/seahorse-gedit.c:611
 #: ../plugins/epiphany/seahorse-extension.c:296
+#: ../plugins/gedit/seahorse-gedit.c:611
 msgid "Choose Key to Sign with"
 msgstr "Välj nyckel att signera med"
 
@@ -1288,6 +1384,23 @@ msgstr "_Kryptera eller signera urklipp"
 #: ../plugins/applet/seahorse-applet-preferences.glade.h:5
 msgid "_Show clipboard state in panel"
 msgstr "_Visa tillståndet för urklipp i panelen"
+
+#: ../plugins/epiphany/seahorse-extension.c:601
+msgid "_Encrypt"
+msgstr "_Kryptera"
+
+#: ../plugins/epiphany/seahorse-extension.c:608
+#: ../src/seahorse-sign.glade.h:24
+msgid "_Sign"
+msgstr "_Signera"
+
+#: ../plugins/epiphany/seahorse-extension.c:615
+msgid "_Decrypt/Verify"
+msgstr "_Dekryptera/Validera"
+
+#: ../plugins/epiphany/seahorse-extension.c:622
+msgid "_Import Key"
+msgstr "_Importera nyckel"
 
 #: ../plugins/gedit/seahorse-gedit.c:265
 msgid "Couldn't connect to seahorse-daemon"
@@ -1597,7 +1710,7 @@ msgid "Couldn't list files"
 msgstr "Kunde inte lista filer"
 
 #: ../src/main.c:75
-#: ../src/seahorse-key-manager.c:863
+#: ../src/seahorse-key-manager.c:864
 msgid "Encryption Key Manager"
 msgstr "Hanterare för krypteringsnycklar"
 
@@ -1699,7 +1812,7 @@ msgid "Optional email address"
 msgstr "Valfri e-postadress"
 
 #: ../src/seahorse-add-uid.glade.h:8
-#: ../src/seahorse-pgp-generate.glade.h:13
+#: ../src/seahorse-pgp-generate.glade.h:14
 msgid "_Email Address:"
 msgstr "_E-postadress:"
 
@@ -1790,7 +1903,7 @@ msgstr "Går aldrig ut"
 #: ../src/seahorse-expires.glade.h:3
 #: ../src/seahorse-revoke.glade.h:11
 msgid "Revoke key"
-msgstr "Återkalla nyckel"
+msgstr "Spärra nyckel"
 
 #: ../src/seahorse-generate-select.c:143
 msgid "Used to encrypt email and files"
@@ -1811,6 +1924,20 @@ msgstr "F_ortsätt"
 #: ../src/seahorse-generate-select.glade.h:3
 msgid "Create a New Key"
 msgstr "Skapa en ny nyckel"
+
+#: ../src/seahorse-gkeyring-item.c:248
+msgid "Web Password"
+msgstr "Webblösenord"
+
+#: ../src/seahorse-gkeyring-item.c:250
+msgid "Network Password"
+msgstr "Nätverkslösenord"
+
+#: ../src/seahorse-gkeyring-item.c:252
+#: ../src/seahorse-gkeyring-item-properties.c:116
+#: ../src/seahorse-gkeyring-source.c:516
+msgid "Password"
+msgstr "Lösenord"
 
 #: ../src/seahorse-gkeyring-item-properties.c:90
 msgid "Access a network share or resource"
@@ -1835,12 +1962,6 @@ msgstr "Sparade lösenord eller inloggning"
 #: ../src/seahorse-gkeyring-item-properties.c:116
 msgid "Network Credentials"
 msgstr "Nätverksinloggning"
-
-#: ../src/seahorse-gkeyring-item-properties.c:116
-#: ../src/seahorse-gkeyring-item.c:252
-#: ../src/seahorse-gkeyring-source.c:516
-msgid "Password"
-msgstr "Lösenord"
 
 #: ../src/seahorse-gkeyring-item-properties.c:177
 msgid "Couldn't change password."
@@ -1929,14 +2050,6 @@ msgstr "[inloggningsnamn]"
 #: ../src/seahorse-gkeyring-item-properties.glade.h:17
 msgid "[server]"
 msgstr "[server]"
-
-#: ../src/seahorse-gkeyring-item.c:248
-msgid "Web Password"
-msgstr "Webblösenord"
-
-#: ../src/seahorse-gkeyring-item.c:250
-msgid "Network Password"
-msgstr "Nätverkslösenord"
 
 #: ../src/seahorse-gkeyring-operation.c:206
 msgid "Access to the keyring was denied"
@@ -2033,201 +2146,201 @@ msgstr "Exporterar nycklar"
 msgid "Back up Keyrings to Archive"
 msgstr "Säkerhetskopiera nyckelringar till arkiv"
 
-#: ../src/seahorse-key-manager.c:861
+#: ../src/seahorse-key-manager.c:862
 msgid "seahorse"
 msgstr "seahorse"
 
-#: ../src/seahorse-key-manager.c:944
+#: ../src/seahorse-key-manager.c:945
 #: ../src/seahorse-keyserver-results.c:298
 #, c-format
 msgid "Selected %d key"
 msgstr "Markerade %d nyckel"
 
-#: ../src/seahorse-key-manager.c:945
+#: ../src/seahorse-key-manager.c:946
 #: ../src/seahorse-keyserver-results.c:299
 #, c-format
 msgid "Selected %d keys"
 msgstr "Markerade %d nycklar"
 
 #. Top menu items
-#: ../src/seahorse-key-manager.c:1170
+#: ../src/seahorse-key-manager.c:1171
 #: ../src/seahorse-keyserver-results.c:377
 msgid "_Key"
 msgstr "_Nyckel"
 
-#: ../src/seahorse-key-manager.c:1171
+#: ../src/seahorse-key-manager.c:1172
 #: ../src/seahorse-keyserver-results.c:378
 msgid "_Edit"
 msgstr "_Redigera"
 
-#: ../src/seahorse-key-manager.c:1172
+#: ../src/seahorse-key-manager.c:1173
 msgid "_View"
 msgstr "_Visa"
 
 #. Key Actions
-#: ../src/seahorse-key-manager.c:1176
+#: ../src/seahorse-key-manager.c:1177
 msgid "_Create New Key..."
 msgstr "_Skapa ny nyckel..."
 
-#: ../src/seahorse-key-manager.c:1177
+#: ../src/seahorse-key-manager.c:1178
 msgid "Create a new personal key"
 msgstr "Skapa en ny personlig nyckel"
 
-#: ../src/seahorse-key-manager.c:1178
+#: ../src/seahorse-key-manager.c:1179
 msgid "_Import..."
 msgstr "_Importera..."
 
-#: ../src/seahorse-key-manager.c:1179
+#: ../src/seahorse-key-manager.c:1180
 msgid "Import keys into your keyring from a file"
 msgstr "Importera nycklar till din nyckelring från en fil"
 
-#: ../src/seahorse-key-manager.c:1180
+#: ../src/seahorse-key-manager.c:1181
 msgid "_Back up Keyrings..."
 msgstr "_Säkerhetskopiera nyckelringar..."
 
-#: ../src/seahorse-key-manager.c:1181
+#: ../src/seahorse-key-manager.c:1182
 msgid "Back up all keys"
 msgstr "Säkerhetskopiera alla nycklar"
 
-#: ../src/seahorse-key-manager.c:1182
+#: ../src/seahorse-key-manager.c:1183
 msgid "Paste _Keys"
 msgstr "Klistra _in nycklar"
 
-#: ../src/seahorse-key-manager.c:1183
+#: ../src/seahorse-key-manager.c:1184
 msgid "Import keys from the clipboard"
 msgstr "Importera nycklar från urklipp"
 
-#: ../src/seahorse-key-manager.c:1185
+#: ../src/seahorse-key-manager.c:1186
 msgid "_Quit"
 msgstr "_Avsluta"
 
-#: ../src/seahorse-key-manager.c:1186
+#: ../src/seahorse-key-manager.c:1187
 msgid "Close this program"
 msgstr "Stäng detta program"
 
-#: ../src/seahorse-key-manager.c:1187
+#: ../src/seahorse-key-manager.c:1188
 msgid "Prefere_nces"
 msgstr "Inställni_ngar"
 
-#: ../src/seahorse-key-manager.c:1188
+#: ../src/seahorse-key-manager.c:1189
 msgid "Change preferences for this program"
 msgstr "Ändra inställningar för detta program"
 
-#: ../src/seahorse-key-manager.c:1190
+#: ../src/seahorse-key-manager.c:1191
 msgid "About this program"
 msgstr "Om detta program"
 
-#: ../src/seahorse-key-manager.c:1192
+#: ../src/seahorse-key-manager.c:1193
 msgid "_Remote"
 msgstr "_Fjärr"
 
-#: ../src/seahorse-key-manager.c:1194
+#: ../src/seahorse-key-manager.c:1195
 #: ../src/seahorse-keyserver-results.c:383
 msgid "_Contents"
 msgstr "_Innehåll"
 
-#: ../src/seahorse-key-manager.c:1195
+#: ../src/seahorse-key-manager.c:1196
 #: ../src/seahorse-keyserver-results.c:384
 msgid "Show Seahorse help"
 msgstr "Visa hjälp för Seahorse"
 
-#: ../src/seahorse-key-manager.c:1199
+#: ../src/seahorse-key-manager.c:1200
 msgid "Key T_ypes"
 msgstr "Nyckelt_yper"
 
-#: ../src/seahorse-key-manager.c:1200
+#: ../src/seahorse-key-manager.c:1201
 msgid "Show key type column"
 msgstr "Visa nyckeltypkolumnen"
 
-#: ../src/seahorse-key-manager.c:1201
+#: ../src/seahorse-key-manager.c:1202
 msgid "Key _Expiry"
 msgstr "Utgån_gsdatum"
 
-#: ../src/seahorse-key-manager.c:1202
+#: ../src/seahorse-key-manager.c:1203
 msgid "Show key expiry column"
 msgstr "Visa utgångskolumnen"
 
-#: ../src/seahorse-key-manager.c:1203
+#: ../src/seahorse-key-manager.c:1204
 msgid "Key _Trust"
 msgstr "_Tillit för nyckel"
 
-#: ../src/seahorse-key-manager.c:1204
+#: ../src/seahorse-key-manager.c:1205
 msgid "Show owner trust column"
 msgstr "Visa ägartillitskolumnen"
 
-#: ../src/seahorse-key-manager.c:1205
+#: ../src/seahorse-key-manager.c:1206
 msgid "Key _Validity"
 msgstr "_Giltighet för nyckel"
 
-#: ../src/seahorse-key-manager.c:1206
+#: ../src/seahorse-key-manager.c:1207
 msgid "Show key validity column"
 msgstr "Visa nyckelgiltighetskolumnen"
 
-#: ../src/seahorse-key-manager.c:1210
+#: ../src/seahorse-key-manager.c:1211
 #: ../src/seahorse-keyserver-results.c:395
 msgid "P_roperties"
 msgstr "E_genskaper"
 
-#: ../src/seahorse-key-manager.c:1211
+#: ../src/seahorse-key-manager.c:1212
 #: ../src/seahorse-keyserver-results.c:396
 msgid "Show key properties"
 msgstr "Visa nyckelegenskaper"
 
-#: ../src/seahorse-key-manager.c:1212
+#: ../src/seahorse-key-manager.c:1213
 msgid "E_xport Public Key..."
 msgstr "E_xportera publik nyckel..."
 
-#: ../src/seahorse-key-manager.c:1213
+#: ../src/seahorse-key-manager.c:1214
 msgid "Export public part of key to a file"
 msgstr "Exportera den publika delen av nyckeln till en fil"
 
-#: ../src/seahorse-key-manager.c:1214
+#: ../src/seahorse-key-manager.c:1215
 msgid "_Copy Public Key"
 msgstr "_Kopiera publik nyckel"
 
-#: ../src/seahorse-key-manager.c:1215
+#: ../src/seahorse-key-manager.c:1216
 msgid "Copy public part of selected keys to the clipboard"
 msgstr "Kopiera den publika delen av markerade nycklar till urklipp"
 
-#: ../src/seahorse-key-manager.c:1216
+#: ../src/seahorse-key-manager.c:1217
 msgid "_Delete Key"
 msgstr "_Ta bort nyckel"
 
-#: ../src/seahorse-key-manager.c:1217
+#: ../src/seahorse-key-manager.c:1218
 msgid "Delete selected keys"
 msgstr "Ta bort markerade nycklar"
 
-#: ../src/seahorse-key-manager.c:1221
+#: ../src/seahorse-key-manager.c:1222
 msgid "_Sign..."
 msgstr "_Signera..."
 
-#: ../src/seahorse-key-manager.c:1222
+#: ../src/seahorse-key-manager.c:1223
 msgid "Sign public key"
 msgstr "Signera publik nyckel"
 
-#: ../src/seahorse-key-manager.c:1226
+#: ../src/seahorse-key-manager.c:1227
 msgid "Set Up Computer for _Secure Shell..."
 msgstr "Konfigurera dator för _Secure Shell..."
 
-#: ../src/seahorse-key-manager.c:1227
+#: ../src/seahorse-key-manager.c:1228
 msgid "Send public Secure Shell key to another machine, and enable logins using that key."
 msgstr "Skicka publik Secure Shell-nyckel till en annan dator, och aktivera inloggningar med den nyckeln."
 
-#: ../src/seahorse-key-manager.c:1231
+#: ../src/seahorse-key-manager.c:1232
 #: ../src/seahorse-keyserver-results.c:404
 msgid "_Find Remote Keys..."
 msgstr "_Sök fjärrnycklar..."
 
-#: ../src/seahorse-key-manager.c:1232
+#: ../src/seahorse-key-manager.c:1233
 #: ../src/seahorse-keyserver-results.c:405
 msgid "Search for keys on a key server"
 msgstr "Sök efter nycklar på en nyckelserver"
 
-#: ../src/seahorse-key-manager.c:1233
+#: ../src/seahorse-key-manager.c:1234
 msgid "_Sync and Publish Keys..."
 msgstr "Synkronisera och _publicera nycklar..."
 
-#: ../src/seahorse-key-manager.c:1234
+#: ../src/seahorse-key-manager.c:1235
 msgid "Publish and/or sync your keys with those online."
 msgstr "Publicera och/eller synkronisera dina nycklar med de online."
 
@@ -2288,19 +2401,6 @@ msgstr "Kunde inte hämta nyckeldata"
 #: ../src/seahorse-key-manager-store.c:729
 msgid "Couldn't write key to file"
 msgstr "Kunde inte skriva nyckel till fil"
-
-#. TODO: Icons
-#: ../src/seahorse-key-manager-store.c:954
-#: ../src/seahorse-key-properties.c:865
-#: ../libcryptui/cryptui-key-list.c:117
-msgid "Name"
-msgstr "Namn"
-
-#: ../src/seahorse-key-manager-store.c:966
-#: ../src/seahorse-key-properties.c:1711
-#: ../libcryptui/cryptui-key-list.c:120
-msgid "Key ID"
-msgstr "Nyckel-id"
 
 #: ../src/seahorse-key-manager-store.c:972
 msgid "Validity"
@@ -2587,26 +2687,26 @@ msgstr "DSA Elgamal"
 msgid "Couldn't generate PGP key"
 msgstr "Kunde inte generera PGP-nyckel"
 
-#. TODO: This needs to be a double prompt
+#: ../src/seahorse-pgp-generate.c:139
+msgid "Passphrase for New PGP Key"
+msgstr "Lösenfras för ny PGP-nyckel"
+
 #: ../src/seahorse-pgp-generate.c:140
-msgid "Passphrase for New Key"
-msgstr "Lösenfras för ny nyckel"
+msgid "Enter the passphrase for your new key twice."
+msgstr "Ange lösenfrasen för din nya nyckel två gånger."
 
-#: ../src/seahorse-pgp-generate.c:141
-msgid "Enter the passphrase for your new key twice"
-msgstr "Ange lösenfrasen för din nya nyckel två gånger"
-
-#: ../src/seahorse-pgp-generate.c:150
+#: ../src/seahorse-pgp-generate.c:149
 msgid "Couldn't generate key"
 msgstr "Kunde inte generera nyckel"
 
-#: ../src/seahorse-pgp-generate.c:152
+#: ../src/seahorse-pgp-generate.c:151
 msgid "Generating key"
 msgstr "Genererar nyckel"
 
 #: ../src/seahorse-pgp-generate.glade.h:1
-msgid "<b>_Advanced Options</b>"
-msgstr "<b>_Avancerade alternativ</b>"
+#: ../src/seahorse-ssh-generate.glade.h:1
+msgid "<b>_Advanced key options</b>"
+msgstr "<b>_Avancerade nyckelalternativ</b>"
 
 #: ../src/seahorse-pgp-generate.glade.h:2
 msgid "A PGP key allows you to encrypt email or files to other people."
@@ -2647,6 +2747,10 @@ msgid "Ne_ver Expires"
 msgstr "_Går aldrig ut"
 
 #: ../src/seahorse-pgp-generate.glade.h:12
+msgid "New PGP Key"
+msgstr "Ny PGP-nyckel"
+
+#: ../src/seahorse-pgp-generate.glade.h:13
 msgid "_Comment:"
 msgstr "_Kommentar:"
 
@@ -2699,7 +2803,7 @@ msgstr "<b>Tekniska detaljer</b>"
 #: ../src/seahorse-pgp-private-key-properties.glade.h:11
 #: ../src/seahorse-pgp-public-key-properties.glade.h:10
 msgid "<b>This key has been revoked</b>"
-msgstr "<b>Den här nyckeln har återkallats</b>"
+msgstr "<b>Den här nyckeln har spärrats</b>"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:12
 #: ../src/seahorse-pgp-public-key-properties.glade.h:11
@@ -2786,7 +2890,7 @@ msgstr "Ta bort det här fotot från nyckeln"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:36
 msgid "Revoke"
-msgstr "Återkalla"
+msgstr "Spärra"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:38
 #: ../src/seahorse-pgp-public-key-properties.glade.h:31
@@ -2796,7 +2900,7 @@ msgstr "Styrka:"
 #: ../src/seahorse-pgp-private-key-properties.glade.h:39
 #: ../src/seahorse-pgp-public-key-properties.glade.h:32
 msgid "The owner of the key revoked the key. It can no longer be used."
-msgstr "Ägaren av nyckeln har återkallat nyckeln. Den kan inte längre användas."
+msgstr "Ägaren av nyckeln har spärrat nyckeln. Den kan inte användas längre."
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:40
 #: ../src/seahorse-pgp-public-key-properties.glade.h:33
@@ -2867,7 +2971,7 @@ msgstr "Jag litar på signaturer från \"%s\" på andra nycklar "
 
 #: ../src/seahorse-pgp-public-key-properties.glade.h:26
 msgid "If you no longer trust this person's identity, <i>revoke</i> your signature:"
-msgstr "Om du inte längre litar på den här personens identitet, kan du <i>återkalla</i> din signatur:"
+msgstr "Om du inte längre litar på den här personens identitet, kan du <i>spärra</i> din signatur:"
 
 #: ../src/seahorse-pgp-public-key-properties.glade.h:34
 msgid "To indicate your trust of this key to others, <i>sign</i> this key:"
@@ -2901,7 +3005,7 @@ msgstr "_Visa endast signaturer på personer jag litar på"
 
 #: ../src/seahorse-pgp-public-key-properties.glade.h:45
 msgid "_Revoke Signature"
-msgstr "_Återkalla signatur"
+msgstr "_Spärra signatur"
 
 #: ../src/seahorse-pgp-public-key-properties.glade.h:46
 msgid "_Sign this Key"
@@ -2963,26 +3067,26 @@ msgstr "Kunde inte ta bort foto"
 
 #: ../src/seahorse-revoke.c:53
 msgid "Couldn't revoke subkey"
-msgstr "Kunde inte återkalla undernyckel"
+msgstr "Kunde inte spärra undernyckel"
 
 #: ../src/seahorse-revoke.c:76
 #, c-format
 msgid "Revoke Subkey %d of %s"
-msgstr "Återkalla undernyckel %d av %s"
+msgstr "Spärra undernyckeln %d av %s"
 
 #: ../src/seahorse-revoke.c:78
 #, c-format
 msgid "Revoke %s"
-msgstr "Återkalla %s"
+msgstr "Spärra %s"
 
 #: ../src/seahorse-revoke.c:106
 #, c-format
 msgid "You are about to add %s as a revoker for %s. This operation cannot be undone! Are you sure you want to continue?"
-msgstr "Du håller på att lägga till %s som återkallare för %s. Denna åtgärd kan inte göras ogjord! Är du säker på att du vill fortsätta?"
+msgstr "Du håller på att lägga till %s som spärr för %s. Denna åtgärd kan inte göras ogjord! Är du säker på att du vill fortsätta?"
 
 #: ../src/seahorse-revoke.c:121
 msgid "Couldn't add revoker"
-msgstr "Kunde inte lägga till återkallare"
+msgstr "Kunde inte lägga till spärr"
 
 #: ../src/seahorse-revoke.glade.h:1
 msgid "Compromised"
@@ -3006,7 +3110,7 @@ msgstr "Ingen orsak"
 
 #: ../src/seahorse-revoke.glade.h:6
 msgid "No reason for revoking key"
-msgstr "Ingen orsak för återkallandet av nyckeln"
+msgstr "Ingen anledning för spärr av nyckeln"
 
 #: ../src/seahorse-revoke.glade.h:7
 msgid "Not Used"
@@ -3018,11 +3122,11 @@ msgstr "Valfri beskrivning av återkallelse"
 
 #: ../src/seahorse-revoke.glade.h:9
 msgid "Re_voke"
-msgstr "_Återkalla"
+msgstr "Spä_rra"
 
 #: ../src/seahorse-revoke.glade.h:10
 msgid "Reason for revoking the key"
-msgstr "Orsak för återkallandet av nyckeln"
+msgstr "Anledning för spärr av nyckeln"
 
 #: ../src/seahorse-revoke.glade.h:12
 msgid "Superseded"
@@ -3093,11 +3197,11 @@ msgstr "Genom att signera visar du din tillit till att den här nyckeln tillhör
 
 #: ../src/seahorse-sign.glade.h:13
 msgid "I can _revoke this signature at a later date."
-msgstr "Jag kan _återkalla den här signaturen senare."
+msgstr "Jag kan _spärra den här signaturen senare."
 
 #: ../src/seahorse-sign.glade.h:14
 msgid "If signature can be revoked"
-msgstr "Om signaturen kan återkallas"
+msgstr "Om signaturen kan spärras"
 
 #: ../src/seahorse-sign.glade.h:15
 msgid "If signature is local to the key ring and won't be exported with the key"
@@ -3131,11 +3235,6 @@ msgstr "_Inte alls"
 msgid "_Others may not see this signature"
 msgstr "_Andra får inte se den här signaturen"
 
-#: ../src/seahorse-sign.glade.h:24
-#: ../plugins/epiphany/seahorse-extension.c:608
-msgid "_Sign"
-msgstr "_Signera"
-
 #: ../src/seahorse-sign.glade.h:25
 msgid "_Signer:"
 msgstr "_Signerare:"
@@ -3151,10 +3250,6 @@ msgstr "Kunde inte generera Secure Shell-nyckel"
 #: ../src/seahorse-ssh-generate.c:127
 msgid "Creating Secure Shell Key"
 msgstr "Skapar Secure Shell-nyckel"
-
-#: ../src/seahorse-ssh-generate.glade.h:1
-msgid "<b>_Advanced key options</b>"
-msgstr "<b>_Avancerade nyckelalternativ</b>"
 
 #: ../src/seahorse-ssh-generate.glade.h:2
 msgid ""
@@ -3286,94 +3381,8 @@ msgstr "_Datornamn:"
 msgid "_Login Name:"
 msgstr "_Inloggningsnamn:"
 
-#: ../libseahorse/seahorse-notification.c:557
-#: ../libseahorse/seahorse-notification.c:573
-#, c-format
-msgid "Imported %i key"
-msgid_plural "Imported %i keys"
-msgstr[0] "Importerade %d nyckel"
-msgstr[1] "Importerade %d nycklar"
-
-#: ../libseahorse/seahorse-notification.c:558
-#: ../libseahorse/seahorse-notification.c:574
-msgid "Key Imported"
-msgid_plural "Keys Imported"
-msgstr[0] "Nyckel importerad"
-msgstr[1] "\"Nycklar importerade"
-
-#: ../libseahorse/seahorse-notification.c:601
-#, c-format
-msgid "Signed by <i><key id='%s'/> <b>expired</b></i> on %s."
-msgstr "Signerad av <i><key id='%s'/> <b>utgånget</b></i> den %s."
-
-#: ../libseahorse/seahorse-notification.c:602
-msgid "Invalid Signature"
-msgstr "Ogiltig signatur"
-
-#: ../libseahorse/seahorse-notification.c:607
-#, c-format
-msgid "Signed by <i><key id='%s'/></i> on %s <b>Expired</b>."
-msgstr "Signerad av <i><key id='%s'/></i> den %s <b>Utgånget</b>."
-
-#: ../libseahorse/seahorse-notification.c:608
-msgid "Expired Signature"
-msgstr "Utgången signatur"
-
-#: ../libseahorse/seahorse-notification.c:613
-#, c-format
-msgid "Signed by <i><key id='%s'/> <b>Revoked</b></i> on %s."
-msgstr "Signerad av <i><key id='%s'/> <b>Återkallat</b></i> den %s."
-
-#: ../libseahorse/seahorse-notification.c:614
-msgid "Revoked Signature"
-msgstr "Återkallad signatur"
-
-#: ../libseahorse/seahorse-notification.c:619
-#, c-format
-msgid "Signed by <i><key id='%s'/></i> on %s."
-msgstr "Signerad av <i><key id='%s'/></i> den %s."
-
-#: ../libseahorse/seahorse-notification.c:620
-msgid "Good Signature"
-msgstr "Korrekt signatur"
-
-#: ../libseahorse/seahorse-notification.c:625
-msgid "Signing key not in keyring."
-msgstr "Signeringsnyckel inte i nyckelring."
-
-#: ../libseahorse/seahorse-notification.c:626
-msgid "Unknown Signature"
-msgstr "Okänd signatur"
-
-#: ../libseahorse/seahorse-notification.c:630
-msgid "Bad or forged signature. The signed data was modified."
-msgstr "Felaktig eller förfalskad signatur. Signerat data har ändrats."
-
-#: ../libseahorse/seahorse-notification.c:631
-msgid "Bad Signature"
-msgstr "Felaktig signatur"
-
-#: ../libseahorse/seahorse-notification.c:639
-msgid "Couldn't verify signature."
-msgstr "Kunde inte validera signatur."
-
-#: ../libseahorse/seahorse-notify.glade.h:1
-msgid "Notification Messages"
-msgstr "Notifieringsmeddelanden"
-
-#: ../libseahorse/seahorse-unknown-source.c:128
-msgid "Unavailable Key"
-msgstr "Otillgänglig nyckel"
-
-#: ../plugins/epiphany/seahorse-extension.c:601
-msgid "_Encrypt"
-msgstr "_Kryptera"
-
-#: ../plugins/epiphany/seahorse-extension.c:615
-msgid "_Decrypt/Verify"
-msgstr "_Dekryptera/Validera"
-
-#: ../plugins/epiphany/seahorse-extension.c:622
-msgid "_Import Key"
-msgstr "_Importera nyckel"
+#~ msgid "New Secure Shell Key Passphrase"
+#~ msgstr "Ny lösenfras för Secure Shell-nyckel"
+#~ msgid "<b>_Advanced Options</b>"
+#~ msgstr "<b>_Avancerade alternativ</b>"
 
