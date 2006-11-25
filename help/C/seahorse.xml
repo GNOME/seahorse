@@ -13,7 +13,7 @@
 ]>
 <article id="index" lang="en">
 	<articleinfo>
-		<title>&project; Manual V&manrevision;</title>
+		<title>&project; Manual</title>
 		<copyright>
 			<year>2005, 2006</year>
 			<holder>Jacob Perkins and Adam Schreiber</holder>
@@ -49,7 +49,7 @@
 		</authorgroup>
 		<revhistory>
 			<revision>
-				<revnumber>&project; Manual V0.9.7</revnumber>
+				<revnumber>&project; Manual V0.9.1</revnumber>
 				<date>November 2006</date>
 				<revdescription>
 					<para role="author">
@@ -113,23 +113,40 @@
 	<sect1 id="introduction">
 		<title>Introduction</title>
 			<para>
-				&project; is a GNOME project that provides integration of 
-				<ulink url="http://www.gnupg.org" type="http">Gnu Privacy Guard (GPG)</ulink>
+				<application>&app;</application> is a GNOME project that provides integration and 
+				a front end to many of the features of <ulink url="http://www.gnupg.org" type="http">Gnu Privacy Guard (GPG)</ulink>
 				with the <ulink url="http://www.gnome.org">GNOME</ulink> desktop.
-				&project; includes the <application>&app;</application>, a GPG key management front end, 
-				&daemon;, a drop in replacement for <command>gpg-agent</command> as well as a 
-				DNS-SD HKP &key; server, plug-ins for <application>Gedit</application>, 
-				<application>nautilus</application> and <application>Epiphany</application> and 
-				a panel applet for clipboard's encryption.
 			</para> 
 
 			<para>
-				<application>&app;</application> provides a front end to many of the features of 
-				<ulink url="http://www.gnupg.org" type="http">Gnu Privacy Guard (GPG)</ulink>.  
+				Current features of <application>&app;</application> include:
+			<itemizedlist>
+				<listitem>
+					<para>
+						A drop-in replacement for <application>gpg-agent</application>
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						A DNS-SD HKP &key; server
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						Plugins for <application><ulink url="ghelp:gedit" type="help">Gedit</ulink></application>, <application><ulink url="ghelp:user-guide?nautilus">nautilus</ulink></application> 
+						and <application><ulink url="ghelp:epiphany">Epiphany</ulink></application>
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						A panel applet for clipboard's encryption
+					</para>
+				</listitem>
+			</itemizedlist>
 			</para>
 
 			<para>
-				With &project; you can:
+				With <application>&app;</application> you can:
 				<itemizedlist>
 				
 				<listitem>
@@ -153,54 +170,13 @@
 				</itemizedlist>
 			
 			</para>
-
-		<sect2 id="seahorse-contents">
-		
-		<title>Contents of this guide</title>
-			<para>
-				The contents of this guide concerning the <application>&app;</application> are linked below:
-			</para>
-
-			<itemizedlist>
-				<listitem><para><xref linkend="pgp-generate"/></para></listitem>
-				<listitem><para><xref linkend="ssh-generate"/></para></listitem>
-				<listitem><para><xref linkend="import"/></para></listitem>
-				<listitem><para><xref linkend="export"/></para></listitem>
-				<listitem><para><xref linkend="backup"/></para></listitem>
-				<listitem><para><xref linkend="key-properties"/></para></listitem>
-				<listitem><para><xref linkend="ssh-key-properties"/></para></listitem>
-				<!--listitem><para><xref linkend="key-server"/></para></listitem-->
-			</itemizedlist>
-			
-			<para>
-				In <xref linkend="file-manager"/> learn how to perform the following tasks 
-				in the File Manager:
-			</para>
-		
-		<itemizedlist>
-			<listitem><para><xref linkend="encrypt-fm"/></para></listitem>
-			<listitem><para><xref linkend="sign-fm"/></para></listitem>
-			<listitem><para><xref linkend="decrypt-fm"/></para></listitem>
-			<listitem><para><xref linkend="verify-fm"/></para></listitem>
-		</itemizedlist>
-		<para>
-			In <xref linkend="text-editor"/> learn how to perform the following tasks in 
-			<guimenuitem>Text Editor</guimenuitem>:
-		</para>
-		<itemizedlist>
-			<listitem><para><xref linkend="encrypt-te"/></para></listitem>
-			<listitem><para><xref linkend="sign-te"/></para></listitem>
-			<listitem><para><xref linkend="decryptverify-te"/></para></listitem>
-		</itemizedlist>
-		<!-- note>Most &key; management features can be found in the <xref linkend="key-properties"/>.</note -->
-		</sect2>
 	</sect1>
 
 	<sect1 id="seahorse-getting-started">
 		<title>Getting Started</title>
 			
 		<sect2 id="seahorse-start">
-			<title>To Start <application>&app;</application></title>
+			<title>Starting <application>&app;</application></title>
 			<para>
 				You can start <application>&app;</application> 
 				in the following ways:</para>
@@ -251,6 +227,16 @@
 	<sect1 id="pgp-generate">
 		<title>Creating Encryption Keys</title>
 		<para>
+			OpenPGP is an <ulink url="http://www.ietf.org/rfc/rfc2440.txt" type="http">RFC</ulink> 
+			(Request for Comments) for public keys cryptography.
+		</para>
+		<para>
+			Public keys cryptography is a concept which involve the use of two keys:
+			a <emphasis>public key</emphasis>, that you can give to anyone with whom
+			you would like to communicate, and a <emphasis>private key</emphasis> which is
+			private and must be kept secret.
+		</para>
+		<para>
 			To create OpenPGP keys in <application>&app;</application>, 
 			open the <guilabel>Create a New Key</guilabel> dialog by:
 		</para>
@@ -269,7 +255,7 @@
 		</itemizedlist>
 		
 		<para>
-			You will be prompt to select the kind of key you wish to create. 
+			You will be prompt to choose the kind of key you wish to create. 
 			Choose <guilabel>PGP Key</guilabel>.
 		</para>
 		
@@ -286,6 +272,8 @@
 					Enter your full name in the form
 					<programlisting>&lt;first&gt; &lt;last&gt;</programlisting>
 					A middle name or initial is optional.
+				</para>
+				<para>
 					<note>
 						<para>You must enter at least 5 characters in this field.
 						</para>
@@ -301,7 +289,9 @@
 					people will locate your key on a
 					key server or other key provider.
 					Make sure it is correct before
-					continuing. 
+					continuing.
+				</para>
+				<para>
 					<note>
 						<para>It should be of the form 
 						<programlisting><replaceable>&lt;username&gt;</replaceable>@<replaceable>&lt;domainname&gt;</replaceable></programlisting>
@@ -329,13 +319,13 @@
 		<title>Using advanced options</title>
 			<para>
 				To use advanced options for creating a new key, 
-				use the <guibutton>Advanced Options</guibutton> 
+				use the <guibutton>Advanced key options</guibutton> 
 				expander.
 			</para>
 			<para>
 				The advanced options fields are detailed below.
 			</para>
-		<!-- add description about the advanced selection  -->
+
 		<variablelist>
 		<varlistentry>
 			<term><guilabel>Encryption Type</guilabel></term>
@@ -351,8 +341,8 @@
 							<para>
 								This is the suggested 
 								choice as it will allow 
-								you to encrypt/decrypt/
-								sign/verify as needed
+								you to encrypt, decrypt,
+								sign and verify as needed.
 							</para>
 						</listitem>
 					</varlistentry>
@@ -421,7 +411,7 @@
 					create a new key pair.
 				</para>
 				<para>
-					The <guilabel>Passphrase for New Key</guilabel> 
+					The <guilabel>Passphrase for New PGP Key</guilabel> 
 					dialog will be shown.
 				</para>
 				<para>
@@ -443,6 +433,16 @@
 	<sect1 id="ssh-generate">
 	<title>Creating Secure Shell Keys</title>
 	<para>
+		SSH is a program for logging into a remote computer for executing commands on that machine. 
+		SSH keys are used in key-based authentication system, an alternative to the default password 
+		authentication system.
+		With key-based authentication there is no need to manually type a password to authenticate. 
+	</para>
+	<para>
+		Secure Shell keys are made of two keys: a <emphasis>private key</emphasis>, that must be kept secret, 
+		and a <emphasis>public key</emphasis> which can be uploaded to any computer you need to access.
+	</para>
+	<para>
 		To create Secure Shell keys in <application>&app;</application>, 
 		open the <guilabel>Create a New Key</guilabel> dialog by:
 	</para>
@@ -450,7 +450,7 @@
 		<listitem>
 			<para>
 				Choosing <menuchoice><guimenu>Key</guimenu><guimenuitem>Create Key Pair</guimenuitem></menuchoice> 
-				from the menubar  or,
+				from the menubar or,
 			</para>
 		</listitem>
 		<listitem>
@@ -462,7 +462,7 @@
 		</itemizedlist>
 		
 		<para>
-			You will be prompt to select the kind of key you wish to create. 
+			You will be prompt to choose the kind of key you wish to create. 
 			Choose <guilabel>Secure Shell Key</guilabel>.
 		</para>
 		
@@ -489,7 +489,7 @@
 		<title>Using advanced options</title>
 			<para>
 				To use advanced options for creating a new key, 
-				use the <guibutton>Advanced Options</guibutton> 
+				use the <guibutton>Advanced key options</guibutton> 
 				expander.
 			</para>
 			<para>
@@ -544,31 +544,32 @@
 			</varlistentry>
 			</variablelist>
 		</sect2>
+
 		<sect2 id="seahorse-ssh-generate">
 			<title>Creating the key</title>
-			<para> <!-- fix me: different buttons for diffenret task "Create" and "Create and setup" -->
+			<para> 
 				Once you have completed all the fields, 
 				press <guibutton>Create</guibutton> to 
-				create a new SSH key.
+				create a new SSH key or <guibutton>Create and Set Up</guibutton> 
+				to create the key and set up another computer to use it for authentication.
 			</para>
-			<para> <!-- fix me: the dialog's title is not Passphrase for New Key -->
-					The <guilabel>Passphrase for New Key</guilabel> 
-					dialog will be shown.
-				</para>
+			<para>
+				 <guilabel>Passphrase for New Secure Shell Key</guilabel> 
+				 dialog will be shown.
+			</para>
+			<para>
+				Enter the passphrase twice for your new key.
+			</para>
+			<tip>
 				<para>
-					Enter the passphrase twice for your new key.
-				</para>
-				<tip>
-					<para>
-						Use similar practices to generating a 
-						strong password when choosing a 
-						passphrase. The difference between a 
-						password and a passphrase is that, in a 
-						passphrase, spaces are valid characters.
-					</para>				
-				</tip>
+					Use similar practices to generating a 
+					strong password when choosing a 
+					passphrase. The difference between a 
+					password and a passphrase is that, in a 
+					passphrase, spaces are valid characters.
+				</para>				
+			</tip>
 		</sect2>
-			
 	</sect1>
 	
 	<sect1 id="import">
@@ -579,7 +580,7 @@
 				<guimenu>Key</guimenu>
 				<guimenuitem>Import</guimenuitem>
 			</menuchoice>
-			from the menubar and select from the file chooser a file containing at least one ASCII armored public key. 
+			from the menubar and select, from the file chooser, a file containing at least one ASCII armored public key. 
 		</para>
 		<para>
 			Importing can also be performed by pasting the keys inside <application>&app;</application>:
@@ -591,7 +592,7 @@
 		</listitem>
 		<listitem>
 			<para>
-			Copy it to the clipboard,			
+				Copy it to the clipboard,			
 			</para>
 		</listitem>
 		<listitem>
@@ -616,112 +617,191 @@
 			<menuchoice>
 				<guimenu>Key</guimenu>
 				<guimenuitem>Export</guimenuitem>
-			</menuchoice> from the menubar. You can also export keys to the clipboard, in an 
-			ASCII armored block of text, by selecting the keys in the main window 
-			and choosing
-			<menuchoice>
-				<guimenu>Edit</guimenu>
-				<guimenuitem>Copy Keys</guimenuitem>
-			</menuchoice>
-			.
+			</menuchoice> from the menubar. 
+		</para>
+		<para>
+			You can also export keys to the clipboard in an 
+			ASCII armored block of text:
+		<itemizedlist>
+			<listitem>
+				<para>
+					Select the keys in the main window,
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					Choose 
+						<menuchoice>
+							<guimenu>Edit</guimenu>
+							<guimenuitem>Copy Keys</guimenuitem>
+						</menuchoice>.
+				</para>
+			</listitem>
+		</itemizedlist>
 		</para>
 	</sect1>
+
 	<sect1 id="backup">
 		<title>Backing up Keyrings</title>
 		<para>
-			You can back up your public and private keyrings to an archived file by 
-			choosing
-			<menuchoice>
-				<guimenu>Key</guimenu>
-				<guimenuitem>Back up Keyrings</guimenuitem>
-			</menuchoice>
-			. Enter a file name with a valid archive extenision and specify the 
-			location to save the archive.  
-			<note><para>You can choose any of the archive types 
-			<application>file-roller</application> supports.</para></note>
+			You can back up your public and private keyrings to an archived file by:
+		<itemizedlist>
+			<listitem>
+				<para> 
+					Choosing
+					<menuchoice>
+						<guimenu>Key</guimenu>
+						<guimenuitem>Back up Keyrings</guimenuitem>
+					</menuchoice> from the menubar,
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					Enter a file name with a valid archive extension and specify the 
+					location to save the archive.
+				</para>
+			</listitem>
+		</itemizedlist>
+			<note>
+				<para>
+					You can choose any of the archive types 
+					<application>file-roller</application> 
+					supports.
+				</para>
+			</note>
 		</para>
 	</sect1>
+
 	<sect1 id="key-properties">
 		<title id="pgp-public-key-properties">OpenPGP Key Properties</title>
-		<para>The descriptions in this section apply to all OpenPGP keys</para>
+		<para>
+			The descriptions in this section apply to all OpenPGP keys.
+		</para>
+		
+		<para>
+			To view properties of a PGP key:
+		<itemizedlist>
+			<listitem>
+				<para>
+					Select the PGP key 
+					from the main window,
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					Double click on it or choose <guilabel>Properties</guilabel> 
+					from the toolbar,
+				</para> 
+			</listitem>
+			<listitem>
+				<para>
+					Select the <guilabel>Details</guilabel> tab.
+				</para>
+			</listitem>
+		</itemizedlist>
+		</para>
+
+	<sect2 id="pgp-properties">
+		<title>Properties</title>
+		<para>
 		<variablelist>
 			<varlistentry>
-				<term>Fingerprint</term>
+				<term><guilabel>Fingerprint</guilabel></term>
 				<listitem>
-					<para>The fingerprint is a unique string of characters that exactly identifies a key</para>
+					<para>The fingerprint is a unique string of characters that exactly identifies a key.</para>
 				</listitem>
 			</varlistentry>
 			<varlistentry>
-				<term>KeyID</term>
+				<term><guilabel>KeyID</guilabel></term>
 				<listitem>
 					<para>
-					   The KeyID is similar to the Fingerprint.  However the KeyID only contains the last 8
-					   characters of the fingerprint.  Most of the time it is possible to identify a key with 
-					   only the KeyID, but occasionally two keys may have the same ID.
-				    </para>
+						The KeyID is similar to the Fingerprint. However the KeyID only contains the last 8
+						characters of the fingerprint. Most of the time it is possible to identify a key with 
+						only the KeyID, but occasionally two keys may have the same ID.
+					 </para>
 				</listitem>
 			</varlistentry>
 			<varlistentry>
-				<term>Type</term>
-				<listitem>
-    			   <para>
-					   Specifies the encryption algorithm used to generate a key.  DSA keys can only sign. 
-					   ElGamel keys are used to encrypt. 
-    			   </para>
-				</listitem>
-			</varlistentry>
-			<varlistentry>
-				<term>Created</term>
-				<listitem>
-					<para>Indicates the date the key was created.</para>
-				</listitem>
-			</varlistentry>
-			<varlistentry>
-				<term>Length</term>
+				<term><guilabel>Type</guilabel></term>
 				<listitem>
 					<para>
-					Indicates the length in bits of a key.  In general the longer the key, the more security it 
-					provides.<note><para>A long key is not enough to make up for the use of a weak passphrase.</para></note>  
+						Specifies the encryption algorithm used to generate a key. DSA keys can only sign. 
+						ElGamal keys are used to encrypt. 
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term><guilabel>Created</guilabel></term>
+				<listitem>
+					<para>
+						Indicates the date the key was created.
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term><guilabel>Expires</guilabel></term>
+				<listitem>
+				<para>
+					Indicates the date the key can no longer be used.
+				</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term><guilabel>Strength</guilabel></term>
+				<listitem>
+					<para>
+						Indicates the length in bits of a key.  In general the longer the key, the more security it 
+						provides.
+						<note>
+							<para>
+								A long key is not enough to make up for the use of a weak passphrase.
+							</para>
+						</note>  
 					</para>
 				</listitem>
 			</varlistentry>
 		</variablelist>
+		</para>
+	</sect2>
+
 		<sect2 id="change-owner-trust">
 			<title>Trust</title>
 			<para>
-    			Trust is an indication of how sure you are of a person's ability to correctly extend 
-    			the web of trust.  When you are faced with a key you have not signed, the validity of 
-    			that person's key will be determined based on the signatures they have collected and 
-    			how well or not you trust the people who have made those signatures.  By default, an 
-    			unknown key will require 3 signatures with marginal trust value or 1 fully trusted signature.
+	  			Trust is an indication of how sure you are of a person's ability to correctly extend 
+				the web of trust.  When you are faced with a key you have not signed, the validity of 
+	    			that person's key will be determined based on the signatures they have collected and 
+				how well or not you trust the people who have made those signatures.  By default, an 
+				unknown key will require 3 signatures with marginal trust value or 1 fully trusted signature.
 			</para>
 			<itemizedlist>
 				<listitem><para>
-				    <guilabel>Unknown</guilabel> You are not familiar with the person's ability to sign keys correctly.
+				    <guilabel>Unknown</guilabel>: You are not familiar with the person's ability to sign keys correctly.
 				</para></listitem>
 				<listitem><para>
-				    <guilabel>Never</guilabel> This person cannot correctly sign keys.
+				    <guilabel>Never</guilabel>: This person cannot correctly sign keys.
 				</para></listitem>
 				<listitem><para>
-				    <guilabel>Marginal</guilabel> This person checks for photo ID before signing a key, but 
+				    <guilabel>Marginal</guilabel>: This person checks for photo ID before signing a key, but 
 				    does not necessarily scrutinize the IDs.
 				</para></listitem>
 				<listitem><para>
-				    <guilabel>Full</guilabel> This person scrutinizes each and every person's photo IDs before
+				    <guilabel>Full</guilabel>: This person scrutinizes each and every person's photo IDs before
 				    signing them (e.g. they only sign keys that truely belong to the person asking for the signature). 
 			    </para></listitem>
 				<listitem><para>
-				    <guilabel>Ultimate</guilabel> This level of trust should only be assigned to your own keys.
+				    <guilabel>Ultimate</guilabel>: This level of trust should only be assigned to your own keys.
 				</para></listitem>
 			</itemizedlist>
 		</sect2>
+
 		<sect2 id="disable-key">
-    		<title>Enabling and Disabling Keys</title>
-    		<para>
-    		  When a key is enabled, it can be used to perform encryption operations.  When a key is disabled, 
-    		  it cannot be used to encrypt to or verify signatures made by it.
-    		</para>
+			<title>Enabling and Disabling Keys</title>
+			<para>
+				When a key is enabled, it can be used to perform encryption operations. 
+				When a key is disabled, it cannot be used to encrypt to or verify signatures made by it.
+			</para>
 		</sect2>
+
 		<sect2 id="change-expires">
 			<title>Expiration Date</title>
 			<para>
@@ -731,76 +811,246 @@
 			 signed by the master key.
 			</para>
 		</sect2>
+
 		<sect2 id="userid-properties">
 			<title>User IDs</title>
 			<para>
-			 User IDs allow multiple identities and email addresses to be used with the same key.  
-			 They usually take the form of: Name (comment) &lt;email address&gt;. 
+				User IDs allow multiple identities and email addresses to 
+				be used with the same key.
+			</para>
+			<para>
+				They usually take the form of: 
+				<programlisting>Name (comment) &lt;email address&gt;</programlisting>
 			</para>
 		</sect2>
+
 		<sect2 id="photoid-properties">
-		  <title>Photo IDs</title>
-		  <para>Photo IDs allow a key owner to embed one or more pictures of themselves in a key.
-		    These identities can be signed just like normal user IDs.  A photo ID must be in JPEG 
-		    format and is recommended to be no larger than 240x288 pixels.
-          </para>
+			<title>Photo IDs</title>
+				<para>
+					Photo IDs allow a key owner to embed one or more pictures of themselves in a key.
+					These identities can be signed just like normal user IDs.  A photo ID must be in JPEG 
+					format and is recommended to be no larger than 240x288 pixels.
+				</para>
 		</sect2>
-		<!--sect2 id="subkey-properties">
+
+		<sect2 id="subkey-properties">
 			<title>Subkeys</title>
-			<para>Write me: subkeys</para>
+			<para>
+				Each OpenPGP key has a single master key used 
+				to sign only. Subkeys are used to encrypt and 
+				to sign also. In this way, if your sub key is 
+				compromised, you don't need to revoke your master key.
+			</para>
 			<variablelist>
 				<varlistentry>
-					<term>KeyID</term>
+					<term><guilabel>ID</guilabel></term>
 					<listitem>
-						<para>Write me</para>
+						<para>
+							This is the identifier of the subkey.
+						</para>
 					</listitem>
 				</varlistentry>
 				<varlistentry>
-					<term>Type</term>
+					<term><guilabel>Type</guilabel></term>
 					<listitem>
-						<para>Write me</para>
+						<para>
+							Specifies the encryption algorithm used to generate a subkey. 
+							DSA keys can only sign,	ElGamal keys are used to encrypt while 
+							RSA keys are used to sign or to encrypt.
+						</para>
 					</listitem>
 				</varlistentry>
 				<varlistentry>
-					<term>Created</term>
+					<term><guilabel>Created</guilabel></term>
 					<listitem>
-						<para>Write me</para>
+						<para>
+							Indicates the date the key was created.
+						</para>
 					</listitem>
 				</varlistentry>
 				<varlistentry>
-					<term>Length</term>
+					<term><guilabel>Expires</guilabel></term>
 					<listitem>
-						<para>Write me</para>
+						<para>
+							Indicates the date the key can no longer be used.
+						</para>
 					</listitem>
 				</varlistentry>
 				<varlistentry>
-					<term>Status</term>
+					<term><guilabel>Status</guilabel></term>
 					<listitem>
-						<para>Write me</para>
+						<para>
+							Indicates the status of the key.
+						</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term><guilabel>Strength</guilabel></term>
+					<listitem>
+						<para>
+							Indicates the length in bits of the key. In general the longer the key, the more security it 
+							provides.
+							<note>
+								<para>
+									A long key is not enough to make up for the use of a weak passphrase.
+								</para>
+							</note>
+						</para>
 					</listitem>
 				</varlistentry>
 			</variablelist>
+
 			<sect3 id="change-subkey-expires">
 				<title>Changing a Subkey Expiration Date</title>
-				<para>Write me: subkey-expires</para>
+				<para>
+					To change a subkey expiration date, choose 
+					the subkey from the <guilabel>Subkeys</guilabel> 
+					section, then:
+					<itemizedlist>
+					<listitem>
+						<para>
+							Click on the <guibutton>Expire</guibutton> button on the left,
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							From the date dialog choose the new expiration date or select
+							<guilabel>Never expires</guilabel> for no expiration date.
+						</para>
+					</listitem>
+					</itemizedlist>
+					
+				</para>
 			</sect3>
+
 			<sect3 id="revoke-subkey">
+			<!-- fix me: try to revoke a key with seahorse but didn't work -->
 				<title>Revoking a Subkey</title>
-				<para>Write me: subkey-revoke</para>
+				<para>
+					To revoke a subkey, choose the subkey from the <guilabel>Subkeys</guilabel>
+					section, then:
+					<itemizedlist>
+					<listitem>
+						<para>
+							Click on the <guibutton>Revoke</guibutton> button on the left,
+						</para>
+					</listitem>
+					<listitem>
+						<para>	
+							Choose a reason why to revoke the subkey,
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Enter a description of the revoke.
+						</para>
+					</listitem>
+					</itemizedlist>
+				</para>
+				<para>
+				The effect of revoking a subkey is immediate.
+				</para>
 			</sect3>
+
 			<sect3 id="delete-subkey">
 				<title>Deleting a Subkey</title>
-				<para>Write me: subkey-delete</para>
+				<para>
+					To delete a subkey, choose the subkey from the <guilabel>Subkeys</guilabel> 
+					section, then:
+					<itemizedlist>
+					<listitem>
+						<para>
+							Click on the <guibutton>Delete</guibutton> button on the left.
+						</para>
+					</listitem>
+					</itemizedlist>
+				</para>
 			</sect3>
-		</sect2-->
+		</sect2>
 	</sect1>
+
     <sect1 id="ssh-key-properties">
-	   <title>SSH Key Properties</title>
-	   <para>
-	       Write me: ssh key properties
-	   </para>
+    <title>SSH Key Properties</title>
+        <para>
+            The descriptions in this section apply to all SSH keys.
+	</para>
+	<para>
+		To view properties of a SSH key:
+		<itemizedlist>
+			<listitem>
+				<para>
+					Select the Secure Shell key 
+					from the main window,
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					Double click on it or choose <guilabel>Properties</guilabel> 
+					from the toolbar,
+				</para> 
+			</listitem>
+			<listitem>
+				<para>
+					Select the <guilabel>Details</guilabel> tab.
+				</para>
+			</listitem>
+		</itemizedlist>
+	</para>
+
+	<sect2 id="properties">
+		<title>Properties</title>
+		<para>
+		<variablelist>
+		<varlistentry>
+			<term><guilabel>Fingerprint</guilabel></term>
+			<listitem>
+				<para>
+					The fingerprint is a unique string of 
+					characters that exactly identifies a key.
+				</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term><guilabel>Algorithm</guilabel></term>
+			<listitem>
+				<para>
+					Specifies the encryption algorithm used to 
+					generate a key.
+				</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term><guilabel>Location</guilabel></term>
+			<listitem>
+				<para>
+					This is the location where the 
+					<emphasis>private key</emphasis> 
+					has been stored.
+				</para>
+		</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term><guilabel>Strength</guilabel></term>
+			<listitem>
+				<para>
+					Indicates the length in bits of a key. 
+					In general the longer the key, the more 
+					security it provides.
+				<note>
+					<para>
+						A long key is not enough to make up 
+						for the use of a weak passphrase.
+					</para>
+				</note>
+				</para>
+			</listitem>
+		</varlistentry>
+		</variablelist>
+		</para>
+	</sect2>
+	
     </sect1>
-		<!--sect2 id="sign">
+		<!--sect1 id="sign">
 			<title>Signing a Key</title>
 			<para>Write me: sign</para>
 			<variablelist>
@@ -868,6 +1118,7 @@
 				</varlistentry>
 			</variablelist>
 		</sect2>
+
 		<sect2 id="add-subkey">
 			<title>Adding a Subkey</title>
 			<para>Write me: add subkey</para>
@@ -957,6 +1208,7 @@
 			</variablelist>
 		</sect2>
 	</sect1-->
+
 	<sect1 id="file-manager">
 		<title>File Manager</title>
 		<para>
@@ -1213,8 +1465,8 @@
 		<para> 
 			&project; was written by Jacob Perkins.  The current maintainer is Nate 
 			Nielsen.  This manual is by Adam Schreiber.  The project's web site was designed 
-			by Jim Pharis.	To find more information about Seahorse, please visit the 
-			<ulink url="http://seahorse.sourceforge.net" type="http">&project; web page</ulink>.
+			by Jim Pharis. To find more information about &project;, please visit the 
+			<ulink url="http://www.gnome.org/projects/seahorse/" type="http">&project; web page</ulink>.
 		</para>
 		<para>
 			To report a bug or make a suggestion regarding this application or this manual,
