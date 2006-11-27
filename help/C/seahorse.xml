@@ -227,7 +227,7 @@
 	<sect1 id="pgp-generate">
 		<title>Creating Encryption Keys</title>
 		<para>
-			OpenPGP is an <ulink url="http://www.ietf.org/rfc/rfc2440.txt" type="http">RFC</ulink> 
+			OpenPGP is an <acronym><ulink url="http://www.ietf.org/rfc/rfc2440.txt" type="http">RFC</ulink></acronym> 
 			(Request for Comments) for public keys cryptography.
 		</para>
 		<para>
@@ -672,8 +672,8 @@
 		</para>
 	</sect1>
 
-	<sect1 id="key-properties">
-		<title id="pgp-public-key-properties">OpenPGP Key Properties</title>
+	<sect1 id="seahorse-key-properties">
+		<title>OpenPGP Key Properties</title>
 		<para>
 			The descriptions in this section apply to all OpenPGP keys.
 		</para>
@@ -701,8 +701,8 @@
 		</itemizedlist>
 		</para>
 
-	<sect2 id="pgp-properties">
-		<title>Properties</title>
+	<sect2 id="pgp-public-key-properties">
+		<title id="pgp-private-key-properties">Properties</title>
 		<para>
 		<variablelist>
 			<varlistentry>
@@ -1050,164 +1050,214 @@
 	</sect2>
 	
     </sect1>
-		<!--sect1 id="sign">
-			<title>Signing a Key</title>
-			<para>Write me: sign</para>
-			<variablelist>
-				<varlistentry>
-					<term>Checking the Key</term>
-					<listitem>
-						<para>Write me</para>
-						<itemizedlist>
-							<listitem><para><guilabel>No Answer</guilabel></para></listitem>
-							<listitem><para><guilabel>Not at all</guilabel></para></listitem>
-							<listitem><para><guilabel>Casually</guilabel></para></listitem>
-							<listitem><para><guilabel>Very carefully</guilabel></para></listitem>
-						</itemizedlist>
-					</listitem>
-				</varlistentry>
-				<varlistentry>
-					<term>Signature Expiration</term>
-					<listitem>
-						<para>Write me</para>
-					</listitem>
-				</varlistentry>
-				<varlistentry>
-					<term>Local Signature</term>
-					<listitem>
-						<para>Write me</para>
-					</listitem>
-				</varlistentry>
-				<varlistentry>
-					<term>Revocable Signature</term>
-					<listitem>
-						<para>Write me</para>
-					</listitem>
-				</varlistentry>
-			</variablelist>
-		</sect2>
-		<sect2 id="delete">
-			<title>Deleting a Key</title>
-			<para>Write me: delete</para>
-		</sect2>
-		<sect2 id="change-passphrase">
-			<title>Changing a Passphrase</title>
-			<para>Write me: change passphrase</para>
-		</sect2>
-		<sect2 id="add-uid">
-			<title>Adding a User ID</title>
-			<para>Write me: add uid</para>
-			<variablelist>
-				<varlistentry>
-					<term>Full Name</term>
-					<listitem>
-						<para>Write me</para>
-					</listitem>
-				</varlistentry>
-				<varlistentry>
-					<term>Email Address</term>
-					<listitem>
-						<para>Write me</para>
-					</listitem>
-				</varlistentry>
-				<varlistentry>
-					<term>Key Comment</term>
-					<listitem>
-						<para>Write me</para>
-					</listitem>
-				</varlistentry>
-			</variablelist>
-		</sect2>
 
-		<sect2 id="add-subkey">
-			<title>Adding a Subkey</title>
-			<para>Write me: add subkey</para>
-			<variablelist>
-				<varlistentry>
-					<term>Key Type</term>
-					<listitem>
-						<para>Write me</para>
-						<variablelist>
-							<varlistentry>
-								<term>DSA</term>
-								<listitem>
-									<para>Write me</para>
-								</listitem>
-							</varlistentry>
-							<varlistentry>
-								<term>ElGamal</term>
-								<listitem>
-									<para>Write me</para>
-								</listitem>
-							</varlistentry>
-							<varlistentry>
-								<term>RSA</term>
-								<listitem>
-									<para>Write me</para>
-								</listitem>
-							</varlistentry>
-						</variablelist>
-					</listitem>
-				</varlistentry>
-				<varlistentry>
-					<term>Key Length</term>
-					<listitem>
-						<para>Write me</para>
-					</listitem>
-				</varlistentry>
-				<varlistentry>
-					<term>Expiration Date</term>
-					<listitem>
-						<para>Write me</para>
-					</listitem>
-				</varlistentry>
-			</variablelist>
-		</sect2>
-		<sect2 id="revoke">
-			<title>Revoking a Key</title>
-			<para>Write me</para>
-			<variablelist>
-				<varlistentry>
-					<term>Reason</term>
-					<listitem>
-						<para>Write me</para>
-						<variablelist>
-							<varlistentry>
-								<term>No Reason</term>
-								<listitem>
-									<para>Write me</para>
-								</listitem>
-							</varlistentry>
-							<varlistentry>
-								<term>Compromised</term>
-								<listitem>
-									<para>Write me</para>
-								</listitem>
-							</varlistentry>
-							<varlistentry>
-								<term>Superseded</term>
-								<listitem>
-									<para>Write me</para>
-								</listitem>
-							</varlistentry>
-							<varlistentry>
-								<term>Not Used</term>
-								<listitem>
-									<para>Write me</para>
-								</listitem>
-							</varlistentry>
-						</variablelist>
-					</listitem>
-				</varlistentry>
-				<varlistentry>
-					<term>Description</term>
-					<listitem>
-						<para>Write me</para>
-					</listitem>
-				</varlistentry>
-			</variablelist>
-		</sect2>
-	</sect1-->
+    <!--
+    <sect1 id="sign">
+	<title>Signing a Key</title>
+		<para>Write me: sign</para>
+		<variablelist>
+			<varlistentry>
+				<term>Checking the Key</term>
+				<listitem>
+					<para>Write me</para>
+					<itemizedlist>
+						<listitem><para><guilabel>No Answer</guilabel></para></listitem>
+						<listitem><para><guilabel>Not at all</guilabel></para></listitem>
+						<listitem><para><guilabel>Casually</guilabel></para></listitem>
+						<listitem><para><guilabel>Very carefully</guilabel></para></listitem>
+					</itemizedlist>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Signature Expiration</term>
+				<listitem>
+					<para>Write me</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Local Signature</term>
+				<listitem>
+					<para>Write me</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Revocable Signature</term>
+				<listitem>
+					<para>Write me</para>
+				</listitem>
+			</varlistentry>
+		</variablelist>
+	
+	<sect2 id="delete">
+		<title>Deleting a Key</title>
+		<para>
+			To delete a key from your keyring:
+			<itemizedlist>
+				<listitem>
+					<para>
+						Select the key from the mainwindow,
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						Right click on and choose <guilabel>Delete Key</guilabel> 
+						or choose 
+						<menuchoice>
+							<guimenu>Edit</guimenu>
+							<guimenuitem>Delete Key</guimenuitem>
+						</menuchoice> 
+						from the menubar.
+					</para>
+				</listitem>
+			</itemizedlist>
+			<note>
+				<para>
+					You can delete your keys, trusted keys and collected keys.
+				</para>		
+			</note> 
+		</para>
+	</sect2>
+
+	<sect2 id="change-passphrase">
+		<title>Changing a Passphrase</title>
+		<para>
+			To change the passphrase assigned to a key:
+			<itemizedlist>
+				<listitem>
+					<para>
+						Select the key from the main window,
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						Double click on it or choose <guilabel>Properties</guilabel> from the toolbar,
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						Click on <guibutton>Change Passphrase</guibutton>.
+					</para>
+				</listitem>
+			</itemizedlist>
+		</para>
+		<para>
+		fix me add the section concerning the dialog 
+		</para>
+	</sect2>
+	<sect2 id="add-uid">
+		<title>Adding a User ID</title>
+		<para>Write me: add uid</para>
+		<variablelist>
+			<varlistentry>
+				<term>Full Name</term>
+				<listitem>
+					<para>Write me</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Email Address</term>
+				<listitem>
+					<para>Write me</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Key Comment</term>
+				<listitem>
+					<para>Write me</para>
+				</listitem>
+			</varlistentry>
+		</variablelist>
+	</sect2>
+	<sect2 id="add-subkey">
+		<title>Adding a Subkey</title>
+		<para>Write me: add subkey</para>
+		<variablelist>
+			<varlistentry>
+				<term>Key Type</term>
+				<listitem>
+					<para>Write me</para>
+					<variablelist>
+						<varlistentry>
+							<term>DSA</term>
+							<listitem>
+								<para>Write me</para>
+							</listitem>
+						</varlistentry>
+						<varlistentry>
+							<term>ElGamal</term>
+							<listitem>
+								<para>Write me</para>
+							</listitem>
+						</varlistentry>
+						<varlistentry>
+							<term>RSA</term>
+							<listitem>
+								<para>Write me</para>
+							</listitem>
+						</varlistentry>
+					</variablelist>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Key Length</term>
+				<listitem>
+					<para>Write me</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Expiration Date</term>
+				<listitem>
+					<para>Write me</para>
+				</listitem>
+			</varlistentry>
+		</variablelist>
+	</sect2>
+	<sect2 id="revoke">
+		<title>Revoking a Key</title>
+		<para>Write me</para>
+		<variablelist>
+			<varlistentry>
+				<term>Reason</term>
+				<listitem>
+					<para>Write me</para>
+					<variablelist>
+						<varlistentry>
+							<term>No Reason</term>
+							<listitem>
+								<para>Write me</para>
+							</listitem>
+						</varlistentry>
+						<varlistentry>
+							<term>Compromised</term>
+							<listitem>
+								<para>Write me</para>
+							</listitem>
+						</varlistentry>
+						<varlistentry>
+							<term>Superseded</term>
+							<listitem>
+								<para>Write me</para>
+							</listitem>
+						</varlistentry>
+						<varlistentry>
+							<term>Not Used</term>
+							<listitem>
+								<para>Write me</para>
+							</listitem>
+						</varlistentry>
+					</variablelist>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Description</term>
+				<listitem>
+					<para>Write me</para>
+				</listitem>
+			</varlistentry>
+		</variablelist>
+	</sect2>
+	</sect1>
+	-->
 
 	<sect1 id="file-manager">
 		<title>File Manager</title>
