@@ -202,7 +202,10 @@ seahorse_keyserver_sync (GList *keys)
     for (l = ks; l; l = g_slist_next (l)) {
         
         sksrc = seahorse_context_remote_key_source (SCTX_APP (), (const gchar*)(l->data));
-        g_return_if_fail (sksrc != NULL);
+
+        /* This can happen if the URI scheme is not supported */
+        if (sksrc == NULL)
+            continue;
         
         lsksrc = seahorse_context_find_key_source (SCTX_APP (), 
                         seahorse_key_source_get_ktype (sksrc), SKEY_LOC_LOCAL);
@@ -223,13 +226,17 @@ seahorse_keyserver_sync (GList *keys)
     if (keyserver && keyserver[0]) {
         
         sksrc = seahorse_context_remote_key_source (SCTX_APP (), keyserver);
-        g_return_if_fail (sksrc != NULL);
-        
-        op = seahorse_context_transfer_keys (SCTX_APP (), keys, sksrc);
-        g_return_if_fail (sksrc != NULL);
 
-        seahorse_multi_operation_take (mop, op);
-        seahorse_operation_watch (op, G_CALLBACK (sync_import_complete), NULL, sksrc);
+        /* This can happen if the URI scheme is not supported */
+        if (sksrc != NULL) {
+
+            op = seahorse_context_transfer_keys (SCTX_APP (), keys, sksrc);
+            g_return_if_fail (sksrc != NULL);
+
+            seahorse_multi_operation_take (mop, op);
+            seahorse_operation_watch (op, G_CALLBACK (sync_import_complete), NULL, sksrc);
+
+        }
     }
 
     g_slist_free (keyids);
