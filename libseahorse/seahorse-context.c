@@ -743,7 +743,7 @@ load_local_keys (SeahorseContext *sctx)
 void
 seahorse_context_load_local_keys_async (SeahorseContext *sctx)
 {
-    g_idle_add_full (G_PRIORITY_LOW, (GSourceFunc)load_local_keys, NULL, sctx);
+    g_idle_add_full (G_PRIORITY_LOW, (GSourceFunc)load_local_keys, sctx, NULL);
 }
 
 
