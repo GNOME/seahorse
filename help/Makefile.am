@@ -15,6 +15,7 @@ DOC_FIGURES = \
 	figures/file-manager.png \
 	figures/key-manager.png \
 	figures/preferences.png \
-	figures/text-editor.png
+	figures/text-editor.png \
+	figures/seahorse-window.png
 
 DOC_LINGUAS = it sv
