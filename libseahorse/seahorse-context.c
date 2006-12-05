@@ -508,6 +508,7 @@ seahorse_context_take_key (SeahorseContext *sctx, SeahorseKey *skey)
     g_return_if_fail (SEAHORSE_IS_CONTEXT (sctx));
     g_return_if_fail (SEAHORSE_IS_KEY (skey));
     g_return_if_fail (skey->keyid != 0);
+    g_return_if_fail (!skey->attached_to);
     
     ks = hashkey_by_source (seahorse_key_get_source (skey), 
                             seahorse_key_get_keyid (skey));
@@ -515,6 +516,8 @@ seahorse_context_take_key (SeahorseContext *sctx, SeahorseKey *skey)
     g_return_if_fail (!g_hash_table_lookup (sctx->pv->keys_by_source, ks));
 
     g_object_ref (skey);
+
+    skey->attached_to = sctx;
     g_hash_table_replace (sctx->pv->keys_by_source, ks, skey);
     setup_keys_by_type (sctx, skey, TRUE);
     g_signal_emit (sctx, signals[ADDED], 0, skey);
@@ -637,6 +640,12 @@ seahorse_context_find_keys_full (SeahorseContext *sctx, SeahorseKeyPredicate *sk
     return km.keys; 
 }
 
+gboolean
+seahorse_context_owns_key (SeahorseContext *sctx, SeahorseKey *skey)
+{
+    return skey->attached_to == sctx;
+}
+
 void 
 seahorse_context_remove_key (SeahorseContext *sctx, SeahorseKey *skey)
 {
@@ -649,9 +658,12 @@ seahorse_context_remove_key (SeahorseContext *sctx, SeahorseKey *skey)
                            seahorse_key_get_keyid (skey));
     
     if (g_hash_table_lookup (sctx->pv->keys_by_source, k)) {
+        g_return_if_fail (skey->attached_to == sctx);
+
         g_object_ref (skey);
         g_signal_handlers_disconnect_by_func (skey, key_changed, sctx);
         g_signal_handlers_disconnect_by_func (skey, key_destroyed, sctx);
+        skey->attached_to = NULL;
         g_hash_table_remove (sctx->pv->keys_by_source, k);
         setup_keys_by_type (sctx, skey, FALSE);
         g_signal_emit (sctx, signals[REMOVED], 0, skey);    

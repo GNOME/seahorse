@@ -152,6 +152,9 @@ GList*              seahorse_context_find_keys_full     (SeahorseContext    *sct
 void                seahorse_context_remove_key         (SeahorseContext    *sctx,
                                                          SeahorseKey        *skey);
 
+gboolean            seahorse_context_owns_key           (SeahorseContext    *sctx,
+                                                         SeahorseKey        *skey);
+
 SeahorseServiceDiscovery*
                     seahorse_context_get_discovery      (SeahorseContext    *sctx);
 

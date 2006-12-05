@@ -46,8 +46,6 @@ struct _SeahorseKeysetPrivate {
 
 G_DEFINE_TYPE (SeahorseKeyset, seahorse_keyset, G_TYPE_OBJECT);
 
-static void key_destroyed (SeahorseKey *skey, SeahorseKeyset *skset);
-
 /* -----------------------------------------------------------------------------
  * INTERNAL 
  */
@@ -60,7 +58,6 @@ remove_update (SeahorseKey *skey, gpointer closure, SeahorseKeyset *skset)
     
     g_signal_emit (skset, signals[REMOVED], 0, skey, closure);
     g_signal_emit (skset, signals[SET_CHANGED], 0);
-    g_signal_handlers_disconnect_by_func (skey, key_destroyed, skset);    
     return TRUE;
 }
 
@@ -74,15 +71,12 @@ remove_key  (SeahorseKey *skey, gpointer closure, SeahorseKeyset *skset)
     remove_update (skey, closure, skset);
 }
 
-static void
-key_destroyed (SeahorseKey *skey, SeahorseKeyset *skset)
-{
-    remove_key (skey, NULL, skset);
-}
-
 static gboolean
 maybe_add_key (SeahorseKeyset *skset, SeahorseKey *skey)
 {
+    if (!seahorse_context_owns_key (SCTX_APP (), skey))
+        return FALSE;
+
     if (g_hash_table_lookup (skset->pv->keys, skey))
         return FALSE;
     
@@ -90,7 +84,6 @@ maybe_add_key (SeahorseKeyset *skset, SeahorseKey *skey)
         return FALSE;
     
     g_hash_table_replace (skset->pv->keys, skey, GINT_TO_POINTER (TRUE));
-    g_signal_connect (skey, "destroy", G_CALLBACK (key_destroyed), skset);
     g_signal_emit (skset, signals[ADDED], 0, skey);
     g_signal_emit (skset, signals[SET_CHANGED], 0);
     return TRUE;

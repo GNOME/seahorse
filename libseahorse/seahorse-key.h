@@ -128,6 +128,7 @@ typedef enum {
 
 /* Forward declaration */
 struct _SeahorseKeySource;
+struct _SeahorseContext;
 
 typedef struct _SeahorseKey SeahorseKey;
 typedef struct _SeahorseKeyClass SeahorseKeyClass;
@@ -145,6 +146,9 @@ struct _SeahorseKey {
     SeahorseKeyEType            etype;
     guint                       flags;
     struct _SeahorseKeySource*  sksrc;
+
+    /*< private >*/
+    struct _SeahorseContext*    attached_to;
     struct _SeahorseKey*        preferred;
 };
 
