@@ -108,8 +108,8 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 	
 	if (!GPG_IS_OK (err))
 		seahorse_util_handle_gpgme (err, _("Couldn't add subkey"));
-	else
-		seahorse_widget_destroy (swidget);
+
+	seahorse_widget_destroy (swidget);
 }
 
 void

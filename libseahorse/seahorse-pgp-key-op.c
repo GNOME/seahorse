@@ -1434,34 +1434,21 @@ add_key_transit (guint current_state, gpgme_status_code_t status,
 			break;
 		/* did command, do type */
 		case ADD_KEY_COMMAND:
+		case ADD_KEY_TYPE:
+		case ADD_KEY_LENGTH:
+		case ADD_KEY_EXPIRES:
 			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "keygen.algo"))
 				next_state = ADD_KEY_TYPE;
-			else {
-                *err = GPG_E (GPG_ERR_GENERAL);
-                g_return_val_if_reached (ADD_KEY_ERROR);
-			}
-			break;
-		/* did type, do length */
-		case ADD_KEY_TYPE:
-			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "keygen.size"))
+			else if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "keygen.size"))
 				next_state = ADD_KEY_LENGTH;
-			else {
-                *err = GPG_E (GPG_ERR_GENERAL);
-                g_return_val_if_reached (ADD_KEY_ERROR);
-			}
-			break;
-		/* did length, do expires */
-		case ADD_KEY_LENGTH:
-			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "keygen.valid"))
+			else if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "keygen.valid"))
 				next_state = ADD_KEY_EXPIRES;
+			else if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
+				next_state = ADD_KEY_QUIT;
 			else {
                 *err = GPG_E (GPG_ERR_GENERAL);
-                g_return_val_if_reached (ADD_KEY_ERROR);
+                return ADD_KEY_ERROR; /* Legitimate errors error here */
 			}
-			break;
-		/* did expires, quit */
-		case ADD_KEY_EXPIRES:
-			next_state = ADD_KEY_QUIT;
 			break;
 		/* quit, save */
 		case ADD_KEY_QUIT:
