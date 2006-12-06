@@ -118,7 +118,7 @@
 				with the <ulink url="http://www.gnome.org">GNOME</ulink> desktop.
 			</para> 
 			<para>
-				Current features of <application>&app;</application> include:
+				Features of <application>&app;</application> include:
 			<itemizedlist>
 				<listitem>
 					<para>
@@ -132,13 +132,13 @@
 				</listitem>
 				<listitem>
 					<para>
-						Plugins for <application><ulink url="ghelp:gedit" type="help">Gedit</ulink></application>, <application><ulink url="ghelp:user-guide?nautilus">nautilus</ulink></application> 
+						Plugins for <application><ulink url="ghelp:gedit" type="help">Gedit</ulink></application>, <application><ulink url="ghelp:user-guide?nautilus">Nautilus</ulink></application> 
 						and <application><ulink url="ghelp:epiphany">Epiphany</ulink></application>
 					</para>
 				</listitem>
 				<listitem>
 					<para>
-						A panel applet for clipboard's encryption
+						A panel applet for encrypting text on the clipboard
 					</para>
 				</listitem>
 			</itemizedlist>
@@ -154,7 +154,7 @@
 					<para>Export and import PGP and SSH keys,</para>
 				</listitem>
 				<listitem>
-					<para>Share with others your keys,</para>
+					<para>Share your keys with others,</para>
 				</listitem>
 				<listitem>
 					<para>Backup your keys and keyring,</para>
@@ -163,7 +163,7 @@
 					<para>Cache your passphrase so you don't have to keep typing it,</para>
 				</listitem>
 				<listitem>
-					<para>Encrypt and decrypt your clipboard.</para>
+					<para>Encrypt and decrypt the clipboard.</para>
 				</listitem>
 				</itemizedlist>
 			</para>
@@ -226,36 +226,44 @@
 				The <application>&app;</application> window contains the following elements:
 			</para>
 			
-      <variablelist>
-      	<varlistentry><term>Menubar</term>
-       	  <listitem>
-      	    <para>The menus on the menubar contain all of the commands that you need to perform tasks in <application>&app;</application>.</para>
-      	  </listitem>
-       	</varlistentry>
-      	<varlistentry><term>Toolbar</term>
-      	  <listitem>
-      	    <para>Use the toolbar to quickly access commonly-used commands.</para>
-      	  </listitem>	
-    	  </varlistentry> 		
-  		  <varlistentry><term>Keys and Passwords Tabs</term>
+	    <variablelist>
+		<varlistentry><term>Menubar</term>
+		    <listitem>
+			<para>The menus on the menubar contain all of the commands that you need to perform tasks in <application>&app;</application>.</para>
+		    </listitem>
+		</varlistentry>
+		<varlistentry><term>Toolbar</term>
+		    <listitem>
+			<para>Use the toolbar to quickly access commonly-used commands.</para>
+		    </listitem>	
+		</varlistentry> 		
+		<varlistentry><term>Keys and Passwords Tabs</term>
   		    <listitem>
-  		      <para>Provides access to the keys and passwords in the keyring.</para>
+			<para>Provides access to the keys and passwords in the keyring.</para>
   		    </listitem>
-  		  </varlistentry>
-  		  <!--
-  		  <varlistentry><term>First time options</term>
+		</varlistentry>
+		<varlistentry><term>First time options</term>
   		    <listitem>
-  		      <para>write me</para>
-  		    </listitem>
-  		  </varlistentry>
-  		  -->
-			</variablelist>
-			
-		</sect2>
-	</sect1>
+			<para>Provides fast access to useful actions for first time users. From here you can:</para>
+			<itemizedlist>
+			    <listitem>
+				<para>Browse the help system,</para>
+			    </listitem>
+			    <listitem>
+				<para>Import keys in the keyring,</para>
+			    </listitem>
+			    <listitem>
+				<para>Create new keys.</para>
+			    </listitem>
+			</itemizedlist>
+		    </listitem>
+		</varlistentry>
+	    </variablelist>
+	</sect2>
+    </sect1>
 
 	<sect1 id="pgp-generate">
-		<title>Creating Encryption Keys</title>
+		<title>Creating OpenPGP Keys</title>
 		<para>
 			OpenPGP is a non proprietary protocol for encrypting e-mail with the use of public key
 			cryptography based on <acronym>PGP</acronym>. It defines standard formats for encrypted messages, signatures, private keys 
@@ -268,25 +276,11 @@
 			private and must be kept secret.
 		</para>
 		<para>
-			To create OpenPGP keys in <application>&app;</application>, 
-			open the <guilabel>Create a New Key</guilabel> dialog by:
-		</para>
-		<itemizedlist>
-			<listitem>
-				<para>
-					Choosing <menuchoice><guimenu>Key</guimenu><guimenuitem>Create Key Pair</guimenuitem></menuchoice> from the menubar  or,
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-					Using the shortcut 
-					<keycombo><keycap>Ctrl</keycap><keycap>N</keycap></keycombo>
-				</para>	
-			</listitem>
-		</itemizedlist>
+			To create OpenPGP keys in <application>&app;</application>, choose
+			<menuchoice><guimenu>Key</guimenu><guimenuitem>Create Key Pair</guimenuitem></menuchoice>. The <guilabel>Create a New Key</guilabel> dialog opens.</para>
 		
 		<para>
-			You will be prompt to choose the kind of key you wish to create. 
+			You will be prompted to choose the kind of key you wish to create. 
 			Choose <guilabel>PGP Key</guilabel>.
 		</para>
 		
@@ -476,25 +470,10 @@
 	</para>
 	<para>
 		To create Secure Shell keys in <application>&app;</application>, 
-		open the <guilabel>Create a New Key</guilabel> dialog by:
-	</para>
-	<itemizedlist>
-		<listitem>
-			<para>
-				Choosing <menuchoice><guimenu>Key</guimenu><guimenuitem>Create Key Pair</guimenuitem></menuchoice> 
-				from the menubar or,
-			</para>
-		</listitem>
-		<listitem>
-			<para>
-				Using the shortcut 
-				<keycombo><keycap>Ctrl</keycap><keycap>N</keycap></keycombo>
-			</para>	
-		</listitem>
-		</itemizedlist>
-		
+    choose <menuchoice><guimenu>Key</guimenu><guimenuitem>Create Key Pair</guimenuitem></menuchoice>. The <guilabel>Create a New Key</guilabel> dialog opens.</para>		
+			
 		<para>
-			You will be prompt to choose the kind of key you wish to create. 
+			You will be prompted to choose the kind of key you wish to create. 
 			Choose <guilabel>Secure Shell Key</guilabel>.
 		</para>
 		
@@ -846,14 +825,17 @@
 			</sect3>
 		</sect2>
 
-		<sect2 id="photoid-properties">
-			<title>Photo IDs</title>
-			<para>
-				Photo IDs allow a key owner to embed one or more pictures of themselves in a key.
-				These identities can be signed just like normal user IDs.  A photo ID must be in JPEG 
-				format and is recommended to be no larger than 240x288 pixels.
-			</para>
-		</sect2>
+    <sect2 id="photoid-properties">
+      <title>Photo IDs</title>
+      <para>
+            Photo IDs allow a key owner to embed one or more pictures of themselves in a key.
+            These identities can be signed just like normal user IDs. A photo ID must be in JPEG 
+            format and is recommended to be no larger than 240x288 pixels.</para>
+      <para>
+	<application>&app;</application> supports resizing of images and can also convert on the fly from 
+	  any image format supported by <acronym>GDK</acronym> library.
+      </para>
+    </sect2>
 		
 		<sect2 id="change-passphrase">
 			<title>Changing the Passphrase</title>
@@ -996,7 +978,7 @@
 				<term>Key Type</term>
 				<listitem>
 					<para>
-						Specifies the encryptionalgorithm used to generate a subkey. 
+						Specifies the encryption algorithm used to generate a subkey. 
 					</para>
 				<variablelist>
 				<varlistentry>
@@ -1414,7 +1396,7 @@
 	<sect1 id="file-manager">
 		<title>File Manager</title>
 		<para>
-			<application>&app;</application> offers integration with the GNOME file manager <command>nautilus</command>.  Because of this integration, you will be able to encrypt, decrypt, sign and verify files as well as import public keys from the file manager window without launching <application>&app;</application>.
+			<application>&app;</application> integrates with <application><ulink url="ghelp:user-guide?nautilus">Nautilus</ulink></application> file manager.  You can encrypt, decrypt, sign and verify files as well as import public keys from the file manager window without launching <application>&app;</application>.
 		</para>
 		<sect2 id="encrypt-fm">
 			<title>Encrypt Files</title>
@@ -1455,13 +1437,12 @@
 	<sect1 id="text-editor">
 		<title>Text Editor</title>
 		<para>
-			To enable the <application>&app;</application> plugin in <command>gedit</command> choose
+			To enable the <application>&app;</application> plugin in  <application><ulink url="ghelp:gedit" type="help">Gedit</ulink></application> text editor, choose
 			<menuchoice>
 				<guimenu>Edit</guimenu>
 				<guimenuitem>Preferences</guimenuitem>
-			</menuchoice>
-			. Then select the tab <guilabel>Plugin</guilabel> and check <guilabel>Text 
-			Encryption</guilabel>.
+			</menuchoice>.
+			In the <guilabel>Plugin</guilabel> tab, select the <guilabel>Text Encryption</guilabel> plugin.
 		</para>
 		<sect2 id="encrypt-te">
 			<title>Encrypt Text</title>
@@ -1471,8 +1452,8 @@
 				<menuchoice>
 					<guimenu>Edit</guimenu>
 					<guimenuitem>Encrypt</guimenuitem>
-				</menuchoice>
-				. You will then be presented with a dialog containing a list of 
+				</menuchoice>. 
+				You will then be presented with a dialog containing a list of 
 				recipients. Check the boxes next to the people you want to encrypt text 
 				to and press <guilabel>Ok</guilabel>. You can now copy or save the 
 				encrypted text.
@@ -1486,8 +1467,8 @@
 				<menuchoice>
 					<guimenu>Edit</guimenu>
 					<guimenuitem>Sign</guimenuitem>
-				</menuchoice>
-				. You will then be prompted for the passphrase to your secret key. 	
+				</menuchoice>. 
+				You will then be prompted for the passphrase to your secret key. 	
 				After entering your passphrase you will be able copy or save the 
 				signed text.
 			</para>
@@ -1500,8 +1481,8 @@
 				<menuchoice>
 					<guimenu>Edit</guimenu>
 					<guimenuitem>Decrypt/Verify</guimenuitem>
-				</menuchoice>
-				. If you are decrypting text, you will then be prompted for the 
+				</menuchoice>. 
+				If you are decrypting text, you will then be prompted for the 
 				passphrase to your secret key. After entering your passphrase you
 				 will be able copy or save the decrypted text.
 			</para>
@@ -1616,14 +1597,13 @@
 			<sect3>
 				<title>Server Types</title>
 				<para>
-					<application>&app;</application> currently provides support for HKP and LDAP keyservers.
+					<application>&app;</application> provides support for HKP and LDAP keyservers.
 				</para>
 			<sect4>
 				<title>HKP Servers</title>
-				<para>
+		                <para>
 					HKP keyservers are ordinary web based keyservers such as the 
-					popular <ulink url="hkp://pgp.mit.edu:11371" type="hkp">hkp://
-					pgp.mit.edu:11371</ulink>; Also accessable at <ulink url="http://
+					popular <ulink url="hkp://pgp.mit.edu:11371" type="hkp">hkp://pgp.mit.edu:11371</ulink>, also accessible at <ulink url="http://
 					pgp.mit.edu" type="http">http://pgp.mit.edu</ulink>.
 				</para>
 			</sect4>
