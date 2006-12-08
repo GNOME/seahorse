@@ -110,14 +110,17 @@
 		<primary>Encryption Keys</primary>
 	</indexterm>
 
-	<sect1 id="introduction">
-		<title>Introduction</title>
-			<para>
-				<application>&app;</application> is a GNOME project that provides integration and 
-				a front end to many of the features of <ulink url="http://www.gnupg.org" type="http">Gnu Privacy Guard (GPG)</ulink>
-				with the <ulink url="http://www.gnome.org">GNOME</ulink> desktop.
-			</para> 
-			<para>
+  <sect1 id="introduction">
+    <title>Introduction</title>
+    <para>
+      You can use <application>&app;</application> to create and  manage <acronym>PGP</acronym> and <acronym>SSH</acronym> keys.
+    </para>
+    <para>
+      <application>&app;</application> provides integration and 
+      a front end to many of the features of <ulink url="http://www.gnupg.org" type="http">Gnu Privacy Guard (GPG)</ulink>
+      with the <ulink url="http://www.gnome.org">GNOME</ulink> desktop. 
+    </para>
+ 			<para>
 				Features of <application>&app;</application> include:
 			<itemizedlist>
 				<listitem>
@@ -275,20 +278,21 @@
 			you would like to communicate, and a <emphasis>private key</emphasis> which is
 			private and must be kept secret.
 		</para>
-		<para>
-			To create OpenPGP keys in <application>&app;</application>, choose
-			<menuchoice><guimenu>Key</guimenu><guimenuitem>Create Key Pair</guimenuitem></menuchoice>. The <guilabel>Create a New Key</guilabel> dialog opens.</para>
-		
-		<para>
-			You will be prompted to choose the kind of key you wish to create. 
-			Choose <guilabel>PGP Key</guilabel>.
-		</para>
-		
-		<para>
+    <para>
+      To create OpenPGP keys in <application>&app;</application>, choose
+      <menuchoice><guimenu>Key</guimenu><guimenuitem>Create Key Pair</guimenuitem></menuchoice> from the menubar, then 
+      choose <guilabel>PGP Key</guilabel> and click on <guibutton>Continue</guibutton>.
+    </para>
+		<!--para>
 			After following the instructions above, you will be 
 			presented with a dialog to fill in. The fields are detailed 
 			below.
-		</para>
+		</para-->
+    <sect2 id="pgp-fields-description">
+      <title>Fields description</title>
+      <para>
+	Fields to fill for creating a new <acronym>PGP</acronym> key:
+      </para>
 		<variablelist>
 		<varlistentry>
 			<term><guilabel>Full Name</guilabel></term>
@@ -340,6 +344,7 @@
 			</listitem>
 		</varlistentry>
 		</variablelist>
+    </sect2>
 
 		<sect2 id="seahorse-pgp-advanced-mode">
 		<title>Using advanced options</title>
@@ -468,21 +473,22 @@
 		Secure Shell keys are made of two keys: a <emphasis>private key</emphasis>, that must be kept secret, 
 		and a <emphasis>public key</emphasis> which can be uploaded to any computer you need to access.
 	</para>
-	<para>
-		To create Secure Shell keys in <application>&app;</application>, 
-    choose <menuchoice><guimenu>Key</guimenu><guimenuitem>Create Key Pair</guimenuitem></menuchoice>. The <guilabel>Create a New Key</guilabel> dialog opens.</para>		
-			
-		<para>
-			You will be prompted to choose the kind of key you wish to create. 
-			Choose <guilabel>Secure Shell Key</guilabel>.
-		</para>
-		
-		<para>
+    <para>
+      To create Secure Shell keys in <application>&app;</application>, 
+      choose <menuchoice><guimenu>Key</guimenu><guimenuitem>Create Key Pair</guimenuitem></menuchoice> from the menubar, 
+      then choose <guilabel>Secure Shell Key</guilabel> and click on <guibutton>Continue</guibutton>.
+    </para>		
+		<!-- para>
 			After following the instructions above, you will be 
 			presented with a dialog to fill in. The fields are detailed 
 			below.
-		</para>
-
+		</para-->
+    
+    <sect2 id="ssh-fields-description">
+      <title>Fields description</title>
+      <para>
+	Fields to fill for creating a new <acronym>SSH</acronym> key:
+      </para>
 		<variablelist>
 			<varlistentry>
 				<term><guilabel>Key Description</guilabel></term>
@@ -495,6 +501,7 @@
 		
 			</varlistentry>
 		</variablelist>
+    </sect2>
 		
 		<sect2 id="seahorse-ssh-advanced-options">
 		<title>Using advanced options</title>
