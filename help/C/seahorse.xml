@@ -461,11 +461,12 @@
 
 	</sect1>
 	
+	
 	<sect1 id="ssh-generate">
 	<title>Creating Secure Shell Keys</title>
 	<para>
-		SSH is a program for logging into a remote computer for executing commands on that machine. 
-		SSH keys are used in key-based authentication system, an alternative to the default password 
+		Secure Shell (<acronym>SSH</acronym>) is a way of logging into a remote computer to execute command on that machine. 
+		SSH keys are used in key-based authentication system, as an alternative to the default password 
 		authentication system.
 		With key-based authentication there is no need to manually type a password to authenticate. 
 	</para>
@@ -474,46 +475,48 @@
 		and a <emphasis>public key</emphasis> which can be uploaded to any computer you need to access.
 	</para>
     <para>
-      To create Secure Shell keys in <application>&app;</application>, 
-      choose <menuchoice><guimenu>Key</guimenu><guimenuitem>Create Key Pair</guimenuitem></menuchoice> from the menubar, 
-      then choose <guilabel>Secure Shell Key</guilabel> and click on <guibutton>Continue</guibutton>.
-    </para>		
-		<!-- para>
-			After following the instructions above, you will be 
-			presented with a dialog to fill in. The fields are detailed 
-			below.
-		</para-->
+      To create a Secure Shell key:
+    </para>
+    <orderedlist>
+      <listitem>
+        <para>Choose <menuchoice><guimenu>Key</guimenu><guimenuitem>Create Key Pair</guimenuitem></menuchoice></para>
+      </listitem>
+      <listitem>
+        <para>Choose <guilabel>Secure Shell Key</guilabel> and click <guibutton>Continue</guibutton></para>
+      </listitem>
+      <listitem>
+        <para>Enter a description of what the key is to be used for. You can use your e-mail address or any other reminder. You can also specify advanced options for the key: see below.</para>
+      </listitem>
+      <listitem>
+        <para>Click <guibutton>Create</guibutton> to 
+				create the new key, or <guibutton>Create and Set Up</guibutton> 
+				to create the key and set up another computer to use it for authentication.</para>
+      </listitem>
+      <listitem>
+        <para>The <guilabel>Passphrase for New Secure Shell Key</guilabel> 
+				 dialog opens.
+				 Enter the passphrase twice for your new key.
+			</para>
+			<tip>
+				<para>
+					Use similar practices to generating a 
+					strong password when choosing a 
+					passphrase. The difference between a 
+					password and a passphrase is that, in a 
+					passphrase, spaces are valid characters.
+				</para>				
+			</tip>
+      </listitem>
+    </orderedlist>
     
-    <sect2 id="ssh-fields-description">
-      <title>Fields description</title>
-      <para>
-	Fields to fill for creating a new <acronym>SSH</acronym> key:
-      </para>
-		<variablelist>
-			<varlistentry>
-				<term><guilabel>Key Description</guilabel></term>
-				<listitem>
-					<para>
-					This is a description of what the key is meant for. 
-					You con use your e-mail address or any other remainder.
-					</para>
-				</listitem>
-		
-			</varlistentry>
-		</variablelist>
-    </sect2>
+
 		
 		<sect2 id="seahorse-ssh-advanced-options">
-		<title>Using advanced options</title>
+		<title>Advanced options</title>
 			<para>
-				To use advanced options for creating a new key, 
-				use the <guibutton>Advanced key options</guibutton> 
-				expander.
+			  Expand the <guilabel>Advanced key options</guilabel> section to specify the following options for a new key:
 			</para>
-			<para>
-				The advanced options fields are detailed below.
-			</para>	
-			
+		
 			<variablelist>
 			<varlistentry>
 				<term><guilabel>Encryption Type</guilabel></term>
@@ -561,32 +564,6 @@
 				</listitem>
 			</varlistentry>
 			</variablelist>
-		</sect2>
-
-		<sect2 id="seahorse-ssh-generate">
-			<title>Creating the key</title>
-			<para> 
-				Once you have completed all the fields, 
-				press <guibutton>Create</guibutton> to 
-				create a new SSH key or <guibutton>Create and Set Up</guibutton> 
-				to create the key and set up another computer to use it for authentication.
-			</para>
-			<para>
-				 <guilabel>Passphrase for New Secure Shell Key</guilabel> 
-				 dialog will be shown.
-			</para>
-			<para>
-				Enter the passphrase twice for your new key.
-			</para>
-			<tip>
-				<para>
-					Use similar practices to generating a 
-					strong password when choosing a 
-					passphrase. The difference between a 
-					password and a passphrase is that, in a 
-					passphrase, spaces are valid characters.
-				</para>				
-			</tip>
 		</sect2>
 	</sect1>
 	
