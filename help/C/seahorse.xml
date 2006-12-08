@@ -265,201 +265,135 @@
 	</sect2>
     </sect1>
 
-	<sect1 id="pgp-generate">
-		<title>Creating OpenPGP Keys</title>
-		<para>
-			OpenPGP is a non proprietary protocol for encrypting e-mail with the use of public key
-			cryptography based on <acronym>PGP</acronym>. It defines standard formats for encrypted messages, signatures, private keys 
-			and certificates for exchanging public keys. 
-		</para>
-		<para>
-			Public keys cryptography is a concept which involve the use of two keys:
-			a <emphasis>public key</emphasis>, that you can give to anyone with whom
-			you would like to communicate, and a <emphasis>private key</emphasis> which is
-			private and must be kept secret.
-		</para>
+  <sect1 id="pgp-generate">
+    <title>Creating OpenPGP Keys</title>
     <para>
-      To create OpenPGP keys in <application>&app;</application>, choose
-      <menuchoice><guimenu>Key</guimenu><guimenuitem>Create Key Pair</guimenuitem></menuchoice> from the menubar, then 
-      choose <guilabel>PGP Key</guilabel> and click on <guibutton>Continue</guibutton>.
+      OpenPGP is a non proprietary protocol for encrypting e-mail with the use of public key
+      cryptography based on <acronym>PGP</acronym>. It defines standard formats for encrypted messages, signatures, private keys 
+      and certificates for exchanging public keys. 
     </para>
-		<!--para>
-			After following the instructions above, you will be 
-			presented with a dialog to fill in. The fields are detailed 
-			below.
-		</para-->
-    <sect2 id="pgp-fields-description">
-      <title>Fields description</title>
+    <para>
+      Public keys cryptography is a concept which involve the use of two keys:
+      a <emphasis>public key</emphasis>, that you can give to anyone with whom
+      you would like to communicate, and a <emphasis>private key</emphasis> which is
+      private and must be kept secret.
+    </para>
+    <para>
+      To create OpenPGP keys:
+      <orderedlist>
+	<listitem>
+	  <para>
+	    Choose <menuchoice><guimenu>Key</guimenu><guimenuitem>Create Key Pair</guimenuitem></menuchoice>
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    Select <guilabel>PGP Key</guilabel> and click <guibutton>Continue</guibutton>
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    Enter your full name (first - last), your e-mail address and any additional information. 
+	    You can also specify advanced options for the key: see below. 
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    Click <guibutton>Create</guibutton> to create the new key pair.
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    The <guilabel>Passphrase for New PGP Key</guilabel> opens. 
+	    Enter the passphrase twice for your new key.
+	  </para>
+	</listitem>
+      </orderedlist>
+    </para>
+    <tip>
       <para>
-	Fields to fill for creating a new <acronym>PGP</acronym> key:
+	Use similar practices to generating a strong password when choosing a 
+	passphrase. The difference between a password and a passphrase is that, 
+	in a passphrase, spaces are valid characters.
+      </para>				
+    </tip>
+    
+    <sect2 id="seahorse-pgp-advanced-mode">
+      <title>Advanced options</title>
+      <para>
+	Expand the <guibutton>Advanced key options</guibutton> 
+	section to specify the following options for a new key:
       </para>
-		<variablelist>
-		<varlistentry>
-			<term><guilabel>Full Name</guilabel></term>
-			<listitem>
-				<para>
-					Enter your full name in the form
-					<programlisting>&lt;first&gt; &lt;last&gt;</programlisting>
-					A middle name or initial is optional.
-				</para>
-				<para>
-					<note>
-						<para>
-							You must enter at least 5 characters in this field.
-						</para>
-					</note> 
-				</para>
-			</listitem>
-		</varlistentry>
-		<varlistentry>
-			<term><guilabel>Email Address</guilabel></term>
-			<listitem>
-				<para>
-					Your email address is how most
-					people will locate your key on a
-					key server or other key provider.
-					Make sure it is correct before
-					continuing.
-				</para>
-				<para>
-					<note>
-						<para>It should be of the form 
-						<programlisting><replaceable>&lt;username&gt;</replaceable>@<replaceable>&lt;domainname&gt;</replaceable></programlisting>
-						</para>
-					</note>
-						
-				</para>
-			</listitem>
-		</varlistentry>
-		<varlistentry>
-			<term><guilabel>Comment</guilabel></term>
-			<listitem>
-				<para>
-					The comment field can be used to 
-					place any additional information 
-					into the displayed name of your new 
-					key pair.  This information can be 
-					searched for on key servers.
-				</para>
-			</listitem>
-		</varlistentry>
-		</variablelist>
+      <variablelist>
+	<varlistentry>
+	  <term><guilabel>Encryption Type</guilabel></term>
+	  <listitem>
+	    <para>
+	      This field specifies the encryption algorithms used 
+	      to generate your keys.
+	    </para>
+	    <variablelist>
+	      <varlistentry>
+		<term><acronym>DSA</acronym> ElGamal</term>
+		<listitem>
+		  <para>
+		    This is the suggested choice as it will allow 
+		    you to encrypt, decrypt, sign and verify as needed.
+		  </para>
+		</listitem>
+	      </varlistentry>
+	      <varlistentry>
+		<term><acronym>DSA</acronym></term>
+		<listitem>
+		  <para>
+		    Will allow signing only.
+		  </para>
+		</listitem>
+	      </varlistentry>
+	      <varlistentry>
+		<term><acronym>RSA</acronym></term>
+		<listitem>
+		  <para>
+		    Will allow signing only.
+		  </para>
+		</listitem>
+	      </varlistentry>
+	    </variablelist>
+	  </listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term><guilabel>Key Strength (bits)</guilabel></term>
+	  <listitem>
+	    <para>
+	      This is the length of the key in bits. The longer the key, 
+	      the more secure it will be, provided a strong passphrase is
+	      used. Conversely, performing any operation with a longer key 
+	      will require more time than it would with a shorter key. Acceptable 
+	      values are between 1024 and 4096 bits. At least 2048 bits is recommended.
+	    </para>
+	  </listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term><guilabel>Expiration Date</guilabel></term>
+	  <listitem>
+	    <para>
+	      This is the date at which the key will cease to be usable for 
+	      performing encryption or signing operations. A reasonable time 
+	      to set it to is 6 months. You will have to either change the 
+	      expiration date or generate a new key or subkey after this amount 
+	      of time passes.  
+	      <note>
+		<para>
+		  Sign your new key with your old one before it expires 
+		  to preserve your trust status.
+		</para>
+	      </note>
+	    </para>
+	  </listitem>
+	</varlistentry>
+      </variablelist>
     </sect2>
-
-		<sect2 id="seahorse-pgp-advanced-mode">
-		<title>Using advanced options</title>
-			<para>
-				To use advanced options for creating a new key, 
-				use the <guibutton>Advanced key options</guibutton> 
-				expander.
-			</para>
-			<para>
-				The advanced options fields are detailed below.
-			</para>
-
-		<variablelist>
-		<varlistentry>
-			<term><guilabel>Encryption Type</guilabel></term>
-			<listitem>
-				<para>
-					This field specifies the encryption 
-					algorithms used to generate your keys.
-				</para>
-				<variablelist>
-					<varlistentry>
-						<term><acronym>DSA</acronym> ElGamal</term>
-						<listitem>
-							<para>
-								This is the suggested 
-								choice as it will allow 
-								you to encrypt, decrypt,
-								sign and verify as needed.
-							</para>
-						</listitem>
-					</varlistentry>
-					<varlistentry>
-						<term><acronym>DSA</acronym></term>
-						<listitem>
-							<para>
-								Will allow signing only.
-							</para>
-						</listitem>
-					</varlistentry>
-					<varlistentry>
-						<term><acronym>RSA</acronym></term>
-						<listitem>
-							<para>
-								Will allow signing only.
-							</para>
-						</listitem>
-					</varlistentry>
-				</variablelist>
-			</listitem>
-		</varlistentry>
-		<varlistentry>
-			<term><guilabel>Key Strength (bits)</guilabel></term>
-			<listitem>
-				<para>
-					This is the length of the key in bits.  
-					The longer the key, the more secure it 
-					will be, provided a strong passphrase is
-					used.  Conversely, performing any
-					operation with a longer key will require 
-					more time than it would with a shorter 
-					key.  Acceptable values are between 1024 
-					and 4096 bits.  At least 2048 bits is recommended.
-				</para>
-			</listitem>
-		</varlistentry>
-		<varlistentry>
-			<term><guilabel>Expiration Date</guilabel></term>
-			<listitem>
-				<para>
-					This is the date at which the key will 
-					cease to be usable for performing 
-					encryption or signing operations.  A 
-					reasonable time to set it to is 6 
-					months.  You will have to either change the 
-					expiration date or generate a new 
-					key or subkey after this amount of time passes.  
-					<note>
-						<para>
-							Sign your new key with your old one 
-							before it expires to preserve your trust status.
-						</para>
-					</note>
-				</para>
-			</listitem>
-		</varlistentry>
-		</variablelist>
-		</sect2>
-		
-		<sect2 id="seahorse-pgp-create">
-			<title>Creating the keys</title>
-				<para>
-					Once you have completed all the fields, 
-					press <guibutton>Create</guibutton> to 
-					create a new key pair.
-				</para>
-				<para>
-					The <guilabel>Passphrase for New PGP Key</guilabel> 
-					dialog will be shown.
-				</para>
-				<para>
-					Enter the passphrase twice for your new key.
-				</para>
-				<tip>
-					<para>
-						Use similar practices to generating a 
-						strong password when choosing a 
-						passphrase. The difference between a 
-						password and a passphrase is that, in a 
-						passphrase, spaces are valid characters.
-					</para>				
-				</tip>
-		</sect2>
-
-	</sect1>
+  </sect1>
 	
 	
 	<sect1 id="ssh-generate">
@@ -482,7 +416,7 @@
         <para>Choose <menuchoice><guimenu>Key</guimenu><guimenuitem>Create Key Pair</guimenuitem></menuchoice></para>
       </listitem>
       <listitem>
-        <para>Choose <guilabel>Secure Shell Key</guilabel> and click <guibutton>Continue</guibutton></para>
+        <para>Select <guilabel>Secure Shell Key</guilabel> and click <guibutton>Continue</guibutton></para>
       </listitem>
       <listitem>
         <para>Enter a description of what the key is to be used for. You can use your e-mail address or any other reminder. You can also specify advanced options for the key: see below.</para>
@@ -865,8 +799,7 @@
 						<menuchoice>
 							<guimenu>Edit</guimenu>
 							<guimenuitem>Delete Key</guimenuitem>
-						</menuchoice> 
-						from the menubar.
+						</menuchoice>.
 					</para>
 				</listitem>
 				</itemizedlist>
@@ -1222,8 +1155,7 @@
 					<menuchoice>
 						<guimenu>Edit</guimenu>
 						<guimenuitem>Delete Key</guimenuitem>
-					</menuchoice> 
-					from the menubar.
+					</menuchoice>.
 				</para>
 			</listitem>
 			</itemizedlist>
@@ -1238,8 +1170,7 @@
 			<menuchoice>
 				<guimenu>Key</guimenu>
 				<guimenuitem>Import</guimenuitem>
-			</menuchoice>
-			from the menubar and select, from the file chooser, a file containing at least one ASCII armored public key. 
+			</menuchoice> and select, from the file chooser, a file containing at least one ASCII armored public key. 
 		</para>
 		<para>
 			Importing can also be performed by pasting the keys inside <application>&app;</application>:
@@ -1260,8 +1191,7 @@
 				<menuchoice>
 					<guimenu>Edit</guimenu>
 					<guimenuitem>Paste Keys</guimenuitem>
-				</menuchoice> 
-				from the menubar.
+				</menuchoice>.
 			</para>
 		</listitem>
 		</itemizedlist>
@@ -1276,7 +1206,7 @@
 			<menuchoice>
 				<guimenu>Key</guimenu>
 				<guimenuitem>Export</guimenuitem>
-			</menuchoice> from the menubar. 
+			</menuchoice>. 
 		</para>
 		<para>
 			You can also export keys to the clipboard in an 
@@ -1303,15 +1233,15 @@
 	<sect1 id="backup">
 		<title>Backing up Keyrings</title>
 		<para>
-			You can back up your public and private keyrings to an archived file by:
+			To back up your public and private keyrings to an archived file:
 		<itemizedlist>
 			<listitem>
 				<para> 
-					Choosing
+					Choose
 					<menuchoice>
 						<guimenu>Key</guimenu>
 						<guimenuitem>Back up Keyrings</guimenuitem>
-					</menuchoice> from the menubar,
+					</menuchoice>,
 				</para>
 			</listitem>
 			<listitem>
@@ -1354,7 +1284,7 @@
 					or <menuchoice>
 						<guimenu>Key</guimenu>
 						<guimenuitem>Sign</guimenuitem>
-					</menuchoice> from the menubar,
+					</menuchoice>,
 				</para>
 				</listitem>
 				<listitem>
