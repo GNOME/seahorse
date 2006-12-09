@@ -28,7 +28,7 @@ seahorse_tool_SOURCES = \
 seahorse_tool_LDADD = \
     $(top_builddir)/libseahorse/libseahorse.a \
     $(top_builddir)/libcryptui/libcryptui.la \
-    $(SEAHORSE_LIBS)
+    $(SEAHORSE_LIBS) $(LIBCRYPTUI_LIBS)
 
 # The new mime system
 mimedir = $(datadir)/mime/packages

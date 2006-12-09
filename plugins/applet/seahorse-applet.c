@@ -160,7 +160,6 @@ static void
 init_context (SeahorseApplet *sapplet)
 {
     SeahorseAppletPrivate *priv;
-    SeahorseOperation *op;
     
     priv = SEAHORSE_APPLET_GET_PRIVATE (sapplet);
     if (!priv->context) {
