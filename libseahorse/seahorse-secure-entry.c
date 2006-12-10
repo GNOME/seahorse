@@ -507,7 +507,7 @@ seahorse_secure_entry_init (SeahorseSecureEntry *entry)
     gtk_widget_set_style (GTK_WIDGET (entry), style); 
 
     entry->text_size = MIN_SIZE;
-    WITH_SECURE_MEM (entry->text = g_malloc(entry->text_size));
+    WITH_SECURE_MEM (entry->text = g_malloc(entry->text_size + 1));
     entry->text[0] = '\0';
 
     entry->visibility = FALSE;
@@ -1093,8 +1093,8 @@ seahorse_secure_entry_insert_text (GtkEditable *editable, const gchar *new_text,
 
     WITH_SECURE_MEM (text = g_new (gchar, new_text_length + 1));
 
-    text[new_text_length] = '\0';
     strncpy (text, new_text, new_text_length);
+    text[new_text_length] = '\0';
 
     g_signal_emit_by_name (editable, "insert_text", text, 
                            new_text_length, position);
@@ -1278,7 +1278,7 @@ seahorse_secure_entry_real_insert_text (GtkEditable *editable, const gchar *new_
             }
         }
 
-        WITH_SECURE_MEM (entry->text = g_realloc (entry->text, entry->text_size));
+        WITH_SECURE_MEM (entry->text = g_realloc (entry->text, entry->text_size + 1));
     }
 
     _index = g_utf8_offset_to_pointer (entry->text, *position) - entry->text;

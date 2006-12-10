@@ -164,10 +164,12 @@ typedef union {
 #endif
 
 #define DEFAULT_POOLSIZE 16384
+#define MEMBLOCK_SIG 0xAABBCCDD
 
 typedef struct memblock_struct MEMBLOCK;
     
 struct memblock_struct {
+    unsigned sig;
     unsigned size;
     union {
     MEMBLOCK *next;
@@ -359,6 +361,7 @@ retry:
         mb = (void*)((char*)pool + poollen);
         poollen += size;
         mb->size = size;
+        mb->sig = MEMBLOCK_SIG;
     } else if(!compressed) {
         compressed = 1;
         compress_pool();
@@ -386,6 +389,8 @@ seahorse_secure_memory_realloc (void *p, size_t newsize)
 
     mb = (MEMBLOCK*)((char*)p - ((size_t) &((MEMBLOCK*)0)->u.aligned.c));
     size = mb->size;
+
+    g_assert(mb->sig == MEMBLOCK_SIG);
     
     if( newsize <= size )
         return p; /* it is easier not to shrink the memory */
@@ -410,6 +415,8 @@ seahorse_secure_memory_free (void *a)
 
     mb = (MEMBLOCK*)((char*)a - ((size_t) &((MEMBLOCK*)0)->u.aligned.c));
     size = mb->size;
+
+    g_assert(mb->sig == MEMBLOCK_SIG);
     
     DEBUG_SECMEM(("SECMEM: freeing %x bytes\n", size));
     
@@ -420,6 +427,7 @@ seahorse_secure_memory_free (void *a)
     WIPE_MEMORY2 (mb, 0x55, size );
     WIPE_MEMORY2 (mb, 0x00, size );
     mb->size = size;
+    mb->sig = MEMBLOCK_SIG;
     mb->u.next = unused_blocks;
     unused_blocks = mb;
     cur_blocks--;
