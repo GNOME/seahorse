@@ -514,7 +514,7 @@ gpg_detect_agent ()
  * SSH AGENT 
  */
 
-const guchar REQ_MESSAGE[] = { 0x01, 0x00, 0x00, 0x00, SEAHORSE_SSH_PING_MSG };
+const guchar REQ_MESSAGE[] = { 0x00, 0x00, 0x00, 0x01, SEAHORSE_SSH_PING_MSG };
 const guint RESP_INDEX = 4;
 const guint RESP_VALUE = SEAHORSE_SSH_PING_MSG;
 

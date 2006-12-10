@@ -231,6 +231,26 @@ show_session_properties (GtkWidget *widget, gpointer data)
         seahorse_util_handle_error (err, _("Couldn't open the Session Properties"));
 }
 
+/* Startup our agent */ 	 
+static void 	 
+start_agent (GtkWidget *widget, gpointer data) 	 
+{ 	 
+    GError *err = NULL; 	 
+    gint status; 	 
+ 	 
+    g_spawn_command_line_sync ("seahorse-agent", NULL, NULL, &status, &err); 	 
+ 	 
+    if (err) 	 
+        seahorse_util_handle_error (err, _("Couldn't start the 'seahorse-agent' program")); 	 
+    else if (!(WIFEXITED (status) && WEXITSTATUS (status) == 0)) 	 
+        seahorse_util_handle_error (NULL, _("The 'seahorse-agent' program exited unsuccessfully.")); 	 
+    else { 	 
+        /* Show the next message about starting up automatically */ 	 
+        gtk_widget_hide (gtk_widget_get_parent (gtk_widget_get_parent (widget))); 	 
+        gtk_widget_show (GTK_WIDGET (data)); 	 
+    }
+}
+
 /* Generate the Hand Cursor */
 void
 set_hand_cursor_on_realize(GtkWidget *widget, gpointer user_data)
@@ -276,78 +296,12 @@ paint_button_label_as_link (GtkButton *button, GtkLabel *label)
         gdk_color_free (link_color);
 }
 
-
-static void 
-start_seahorse_daemon (SeahorseWidget *swidget)
-{
-    DBusConnection *conn;
-    DBusError err;
-    dbus_bool_t ret;
-    dbus_uint32_t reply;
-    GtkWidget *widget;
-    
-    dbus_error_init (&err);
-    
-    conn = dbus_bus_get (DBUS_BUS_SESSION, &err);
-    if (!conn) {
-        g_warning ("Accessing DBUS session bus failed: %s", err.message);
-        dbus_error_free (&err);
-        return;
-    }
-    
-    /* Check if seahorse-daemon is running */
-    ret = dbus_bus_name_has_owner (conn, "org.gnome.seahorse", &err);
-    if (dbus_error_is_set (&err)) {
-        g_warning ("Couldn't check if seahorse-daemon is running: %s", err.message);
-        dbus_error_free (&err);
-        return;
-    }
-    
-    if (ret)
-        return;
-    
-    /* Start seahorse daemon */
-    ret = dbus_bus_start_service_by_name (conn, "org.gnome.seahorse", 0, &reply, &err);
-    if (!ret) {
-        seahorse_util_show_error (GTK_WINDOW (seahorse_widget_get_top (swidget)), 
-                                  _("Couldn't start seahorse-daemon"), 
-                                  _("The program 'seahorse-daemon' is necessary for the caching of passphrases"));
-        g_warning ("Couldn't start seahorse-daemon: %s", err.message);
-        return;
-    }
-    
-    /* Show message about seahorse-daemon being started */
-    widget = glade_xml_get_widget (swidget->xml, "agent-started");
-    g_return_if_fail (widget != NULL);
-    gtk_widget_show (widget);
-}
-
-static void 
-focus_cache_tab (GtkNotebook *notebook, GtkNotebookPage *p, 
-                 guint page_num, SeahorseWidget *swidget)
-{
-    const gchar *name;
-    GtkWidget *page;
-    
-    if (g_object_get_data (G_OBJECT (swidget), "seahorse-daemon-inited"))
-        return;
-
-    page = gtk_notebook_get_nth_page (notebook, page_num);
-    g_return_if_fail (page != NULL);
-    
-    name = glade_get_widget_name (page);
-    if (name && strcmp (name, "cache-tab") == 0) {
-        start_seahorse_daemon (swidget);
-        g_object_set_data (G_OBJECT (swidget), "seahorse-daemon-inited", swidget);
-    }
-}
-
 /* Initialize the cache tab */
 void
 seahorse_prefs_cache (SeahorseWidget *swidget)
 {
-    GtkWidget *notebook;
     GtkWidget *w, *w2;
+    gboolean display_start = FALSE;
     
     g_return_if_fail (swidget != NULL);
 
@@ -405,12 +359,12 @@ seahorse_prefs_cache (SeahorseWidget *swidget)
     glade_xml_signal_connect_data (swidget->xml, "on_session_link",
                                    G_CALLBACK (show_session_properties), NULL);
                                    
-    notebook = seahorse_widget_get_widget (swidget, "notebook");
-    g_return_if_fail (notebook != NULL);
-    g_signal_connect_after (notebook, "switch-page", G_CALLBACK (focus_cache_tab), swidget);
-    
     /* Disable GPG agent prefs if another agent is running or error */
     switch (seahorse_passphrase_detect_agent (SKEY_PGP)) {
+    case SEAHORSE_AGENT_NONE:
+        display_start = TRUE;
+        break;
+        
     case SEAHORSE_AGENT_UNKNOWN:
     case SEAHORSE_AGENT_OTHER:
         g_warning ("Another GPG agent may be running. Disabling cache preferences.");
@@ -421,12 +375,17 @@ seahorse_prefs_cache (SeahorseWidget *swidget)
         if (w != NULL)
             gtk_widget_show (w);
         break;
+
     default:
         break;
     };
     
     /* Disable SSH agent prefs if no SSH is running or error */
     switch (seahorse_passphrase_detect_agent (SKEY_SSH)) {
+    case SEAHORSE_AGENT_OTHER:
+        display_start = TRUE;
+        break;
+
     case SEAHORSE_AGENT_UNKNOWN:
     case SEAHORSE_AGENT_NONE:
         g_warning ("No SSH agent is running. Disabling cache preferences.");
@@ -437,7 +396,19 @@ seahorse_prefs_cache (SeahorseWidget *swidget)
         if (w != NULL)
             gtk_widget_show (w);
         break;
+
     default:
         break;
     };
+
+    /* Show the start link */
+    if (display_start) {
+        w = seahorse_widget_get_widget (swidget, "agent-start");
+        g_return_if_fail (w != NULL);
+        gtk_widget_show (w);
+        w = seahorse_widget_get_widget (swidget, "agent-started");
+        g_return_if_fail (w != NULL);
+        glade_xml_signal_connect_data (swidget->xml, "on_start_link",
+                                       G_CALLBACK (start_agent), w);
+    }
 }
