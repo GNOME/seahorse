@@ -16,8 +16,9 @@ seahorse\-daemon \- seahorse pass phrase caching agent
 .PP
 Seahorse is a GNOME application for managing encryption keys. 
 .PP
-This is the daemon program which provides services to other parts of Seahorse, 
-and shares your keys over the network if so desired.
+This is the agent program for seahorse which keeps a temporary secure
+storage of your pass phrases. It also works with the SSH agent to prompt
+you for SSH passphrases.
 
 .SH "OPTIONS"
 
@@ -34,8 +35,14 @@ Display brief usage message and exit.
 .SS "Application options"
 .\" Begin List
 .TP
+\fB\-c, \-\-cshell\fR
+Print variables in for a C type shell.
+.TP
 \fB\-d, \-\-no\-daemonize\fR
 Do not daemonize seahorse\-daemon.
+.TP
+\fB\-\-v, \-\-variables\fR
+Display variables instead of editing gpg.conf.
 .\" End List
 
 .SS "Additional options"
@@ -44,7 +51,7 @@ In addition, the usual GTK+ and GNOME command line options apply. See the output
 
 .SH "VERSION"
 .PP
-This man page describes \fBseahorse\-daemon\fR version 0.9.x.
+This man page describes \fBseahorse\-daemon\fR version 0.9.
 
 .SH "BUGS"
 .PP
@@ -98,4 +105,4 @@ Documentation and help files are covered by GFDL license.
 .SH "SEE ALSO"
 .PP
 \fBseahorse-tool(1)\fR,
-\fBseahorse-agent(1)\fR,
+\fBseahorse-daemon(1)\fR

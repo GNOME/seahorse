@@ -7,7 +7,6 @@ INCLUDES = -I$(top_builddir) \
 	-I$(top_srcdir) \
 	-I$(top_srcdir)/libcryptui \
 	-I$(top_srcdir)/libseahorse \
-	-I$(top_srcdir)/daemon \
 	$(SEAHORSE_CFLAGS) \
 	$(AGENT_CFLAGS) \
 	-DDATA_DIR=\""$(datadir)"\" \
@@ -16,23 +15,39 @@ INCLUDES = -I$(top_builddir) \
 	-DPIXMAPSDIR=\""$(pixmapsdir)"\" \
 	-DLIBCRYPTUI_API_SUBJECT_TO_CHANGE
 
-noinst_LIBRARIES = libseahorseagent.a
+bin_PROGRAMS = seahorse-agent
 
 if WITH_SSH
-SSH_SOURCES = seahorse-agent-ssh.c
+SSH_SRCS = seahorse-agent-ssh.c
 else
-SSH_SOURCES = 
+SSH_SRCS = 
 endif
 
-libseahorseagent_a_SOURCES = seahorse-agent.c seahorse-agent.h seahorse-agent-actions.c \
-                             seahorse-agent-cache.c seahorse-agent-prompt.c seahorse-agent-io.c \
-                             seahorse-agent-status.c $(SSH_SOURCES)
+seahorse_agent_SOURCES = seahorse-agent.c seahorse-agent.h seahorse-agent-main.c \
+						 seahorse-agent-actions.c seahorse-agent-cache.c seahorse-agent-prompt.c \
+						 seahorse-agent-io.c seahorse-agent-status.c $(SSH_SRCS)
+
+seahorse_agent_LDADD = \
+    $(top_builddir)/libseahorse/libseahorse.a \
+    $(top_builddir)/libcryptui/libcryptui.la \
+    $(SEAHORSE_LIBS)
 
 glade_DATA = \
 	seahorse-agent-cache.glade 
 
+man_MANS = seahorse-agent.1
+
 EXTRA_DIST = \
+    $(man_MANS) \
 	$(glade_DATA) 
 
 CLEANFILES = *.gladep* *.bak \
 	$(desktop_DATA)
+
+if HAVE_USER_MLOCK
+# Don't make the daemon setuid
+else
+# Make the daemon setuid
+install-exec-hook:
+	chmod u+s $(DESTDIR)$(bindir)/seahorse-daemon
+endif

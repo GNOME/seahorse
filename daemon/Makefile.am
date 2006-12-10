@@ -7,7 +7,6 @@ INCLUDES = -I$(top_builddir) \
 	-I$(top_srcdir) \
 	-I$(top_srcdir)/libcryptui \
 	-I$(top_srcdir)/libseahorse \
-	-I$(top_srcdir)/agent \
 	$(SEAHORSE_CFLAGS) \
 	-DDATA_DIR=\""$(datadir)"\" \
 	-DSEAHORSE_GLADEDIR=\""$(gladedir)"\" \
@@ -22,12 +21,6 @@ BUILT_SOURCES = \
 	seahorse-service-keyset-bindings.h \
 	seahorse-service-crypto-bindings.h 
 
-if WITH_AGENT
-AGENT_LIB = $(top_builddir)/agent/libseahorseagent.a $(AGENT_LIBS)
-else
-AGENT_LIB = 
-endif
-
 if WITH_SHARING
 SHARING_SRCS = seahorse-hkp-server.c seahorse-sharing.c 
 else
@@ -41,7 +34,6 @@ seahorse_daemon_SOURCES = \
     $(SHARING_SRCS)
 
 seahorse_daemon_LDADD = \
-    $(AGENT_LIB) \
     $(top_builddir)/libseahorse/libseahorse.a \
     $(top_builddir)/libcryptui/libcryptui.la \
     $(SEAHORSE_LIBS)

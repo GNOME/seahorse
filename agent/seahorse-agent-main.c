@@ -1,7 +1,7 @@
 /*
  * Seahorse
  *
- * Copyright (C) 2005 Nate Nielsen
+ * Copyright (C) 2006 Nate Nielsen
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,24 +33,27 @@
 #include <gnome.h>
 
 #include "config.h"
-#include "seahorse-daemon.h"
-#include "seahorse-secure-memory.h"
-#include "seahorse-gtkstock.h"
 #include "seahorse-context.h"
+#include "seahorse-gtkstock.h"
+#include "seahorse-agent.h"
+#include "seahorse-secure-memory.h"
 
 static gboolean g_daemonize = TRUE;
 static gboolean g_quit = FALSE;
 
-static const gchar *daemon_icons[] = {
-    SEAHORSE_ICON_SHARING,
-    NULL
-};
-
-
 static const struct poptOption options[] = {
 	{ "no-daemonize", 'd', POPT_ARG_NONE | POPT_ARG_VAL, &g_daemonize, FALSE,
-	  N_("Do not daemonize seahorse-daemon"), NULL },
+	  N_("Do not daemonize seahorse-agent"), NULL },
 
+	{ "cshell", 'c', POPT_ARG_NONE | POPT_ARG_VAL, &seahorse_agent_cshell, TRUE,
+	  N_("Print variables in for a C type shell"), NULL },
+
+	{ "variables", 'v', POPT_ARG_NONE | POPT_ARG_VAL, &seahorse_agent_displayvars, TRUE,
+	  N_("Display variables instead of editing conf files (gpg.conf, ssh agent socket)"), NULL },
+
+	{ "execute", 'x', POPT_ARG_NONE | POPT_ARG_VAL, &seahorse_agent_execvars, TRUE,
+	  N_("Execute other arguments on the command line"), NULL },
+      
 	POPT_AUTOHELP
 	
 	POPT_TABLEEND
@@ -99,6 +102,10 @@ daemonize (const gchar **exec)
 
     /* The parent process or not daemonizing ... */
 
+    /* Let the agent do it's thing */
+    seahorse_agent_postfork (pid);
+    seahorse_agent_ssh_postfork (pid);
+    
     if (g_daemonize) {
 
         /* If we were asked to exec another program, do that here */
@@ -184,7 +191,7 @@ prepare_logging ()
                 G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING | 
                 G_LOG_LEVEL_MESSAGE | G_LOG_LEVEL_INFO;
                 
-    openlog ("seahorse-daemon", LOG_PID, LOG_AUTH);
+    openlog ("seahorse-agent", LOG_PID, LOG_AUTH);
     
     g_log_set_handler (NULL, flags, log_handler, NULL);
     g_log_set_handler ("Glib", flags, log_handler, NULL);
@@ -204,6 +211,8 @@ int main(int argc, char* argv[])
     GnomeProgram *program = NULL;
     GnomeClient *client = NULL;
     const char **args = NULL;
+    poptContext pctx;
+    GValue value = { 0, };
 
     seahorse_secure_memory_init (65536);
     
@@ -220,11 +229,25 @@ int main(int argc, char* argv[])
     if (setuid (getuid ()) == -1 || setgid (getgid ()) == -1)
 #endif
         err (1, _("couldn't drop privileges properly"));
-    
-    program = gnome_program_init("seahorse-daemon", VERSION, LIBGNOMEUI_MODULE, argc, argv,
+
+    program = gnome_program_init("seahorse-agent", VERSION, LIBGNOMEUI_MODULE, argc, argv,
                     GNOME_PARAM_POPT_TABLE, options,
-                    GNOME_PARAM_HUMAN_READABLE_NAME, _("Encryption Daemon (Seahorse)"),
+                    GNOME_PARAM_HUMAN_READABLE_NAME, _("Key Agent (Seahorse)"),
                     GNOME_PARAM_APP_DATADIR, DATA_DIR, NULL);
+
+    seahorse_agent_prefork ();
+    seahorse_agent_ssh_prefork ();
+    
+    /* If we need to run another program, then prepare that */
+    if (seahorse_agent_execvars) {
+        g_value_init (&value, G_TYPE_POINTER);
+        g_object_get_property (G_OBJECT (program), GNOME_PARAM_POPT_CONTEXT, &value);
+    
+        pctx = g_value_get_pointer (&value);
+        g_value_unset (&value);
+
+        args = poptGetArgs(pctx);
+    }
 
     /* 
      * All functions after this point have to print messages 
@@ -244,20 +267,19 @@ int main(int argc, char* argv[])
 
     /* Insert Icons into Stock */
     seahorse_gtkstock_init ();
-    seahorse_gtkstock_add_icons (daemon_icons);
     
     /* Make the default SeahorseContext */
     seahorse_context_new (SEAHORSE_CONTEXT_APP | SEAHORSE_CONTEXT_DAEMON, 0);
     op = seahorse_context_load_local_keys (SCTX_APP ());
     g_object_unref (op);
     
-    /* Initialize the various daemon components */
-    seahorse_dbus_server_init ();
-
-#ifdef WITH_SHARING
-    seahorse_sharing_init ();
+    if (!seahorse_agent_init ())
+        seahorse_agent_uninit ();
+#ifdef WITH_SSH
+    if (!seahorse_agent_ssh_init ())
+        seahorse_agent_ssh_uninit ();
 #endif
-
+    
     /* Sometimes we've already gotten a quit signal */
     if(!g_quit) {
         g_timeout_add (100, check_quit, NULL);
@@ -266,12 +288,11 @@ int main(int argc, char* argv[])
     }
 
     /* And now clean them all up */
-#ifdef WITH_SHARING
-    seahorse_sharing_cleanup ();
+    seahorse_agent_uninit ();
+#ifdef WITH_SSH
+    seahorse_agent_ssh_uninit ();
 #endif
     
-    seahorse_dbus_server_cleanup ();
-
     seahorse_context_destroy (SCTX_APP ());
 
     return 0;
