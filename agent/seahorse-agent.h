@@ -59,6 +59,7 @@ void seahorse_agent_uninit ();
 extern gboolean seahorse_agent_displayvars;
 extern gboolean seahorse_agent_cshell;
 extern gboolean seahorse_agent_execvars;
+extern gboolean seahorse_agent_any_display;
 
 /* -----------------------------------------------------------------------------
  * seahorse-agent-io.c

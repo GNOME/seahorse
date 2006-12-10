@@ -39,6 +39,9 @@
 
 #include "seahorse-agent.h"
 
+/* Set from seahorse-agent-main.c */
+gboolean seahorse_agent_any_display = FALSE;
+
 /* Override the DEBUG_REFRESH_ENABLE switch here */
 /* #define DEBUG_AGENTIO_ENABLE 0 */
 
@@ -298,8 +301,13 @@ x11_display_dot_offset (const gchar *d)
 static gboolean
 x11_displays_eq (const gchar *d1, const gchar *d2) 
 {
-    guint l1 = x11_display_dot_offset (d1);
-    guint l2 = x11_display_dot_offset (d2);
+    guint l1, l2;
+
+    if (seahorse_agent_any_display)
+        return TRUE;
+
+	l1 = x11_display_dot_offset (d1);
+    l2 = x11_display_dot_offset (d2);
     return (g_ascii_strncasecmp (d1, d2, l1 > l2 ? l1 : l2) == 0);
 }
 

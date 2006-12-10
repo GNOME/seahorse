@@ -54,6 +54,9 @@ static const struct poptOption options[] = {
 	{ "execute", 'x', POPT_ARG_NONE | POPT_ARG_VAL, &seahorse_agent_execvars, TRUE,
 	  N_("Execute other arguments on the command line"), NULL },
       
+	{ "any-display", 'A', POPT_ARG_NONE | POPT_ARG_VAL, &seahorse_agent_any_display, TRUE,
+	  N_("Allow GPG agent request from any display"), NULL },
+      
 	POPT_AUTOHELP
 	
 	POPT_TABLEEND
