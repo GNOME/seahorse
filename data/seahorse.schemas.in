@@ -9,7 +9,8 @@
 			<locale name="C">
 				<short>Whether the GPG password cache is enabled</short>
 				<long>This option enables the GPG password cache in the 
-				seahorse-daemon program.</long>
+				seahorse-agent program. The 'use-agent' setting in gpg.conf
+				affects this setting.</long>
 			</locale>
 		</schema>
         <schema>
@@ -32,7 +33,7 @@
             <default>TRUE</default>
             <locale name="C">
                 <short>Whether to automatically load SSH keys on demand.</short>
-                <long>When set seahorse-daemon will try to automatically load 
+                <long>When set seahorse-agent will try to automatically load 
                 the users SSH keys when needed. This is equivalent to using
                 the ssh-add utility.</long>
             </locale>
@@ -45,7 +46,7 @@
 			<default>TRUE</default>
 			<locale name="C">
 				<short>Expire passwords in the cache</short>
-				<long>When set, seahorse-daemon expires GPG passwords in 
+				<long>When set, seahorse-agent expires GPG passwords in 
 				its cache after a peried of time. </long>
 			</locale>
 		</schema>
@@ -58,7 +59,7 @@
 			<locale name="C">
 				<short>The time (in minutes) to cache GPG passwords</short>
 				<long>This is the amount of time, specified in minutes,
-				to cache GPG passwords in seahorse-daemon. </long>
+				to cache GPG passwords in seahorse-agent. </long>
 			</locale>
 		</schema>
 		<schema>
@@ -69,7 +70,7 @@
 			<default>TRUE</default>
 			<locale name="C">
 				<short>Prompt before using GPG passwords in cache</short>
-				<long>Set to 'true' to have seahorse-daemon prompt before
+				<long>Set to 'true' to have seahorse-agent prompt before
 				giving out passwords it has cached.</long>
 			</locale>
 		</schema>

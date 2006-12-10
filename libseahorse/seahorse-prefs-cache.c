@@ -45,6 +45,60 @@
 #define METHOD_INTERNAL     "internal"
 
 /* -----------------------------------------------------------------------------
+ * GPG CONF
+ */
+
+static const char* gpg_confs[] = {
+    "use-agent",
+    NULL
+};
+
+/* Loads the main 'use-agent' gpg.conf into gconf 'cache_enabled */
+static void 
+load_gpg_conf ()
+{
+    GError *error = NULL;
+    char *values[2];
+
+    if (!seahorse_gpg_options_find_vals (gpg_confs, values, &error)) {
+        g_warning ("couldn't read gpg 'use-agent' configuration: %s", error ? error->message : "");
+	  	g_clear_error (&error);
+        return;
+    }
+
+    seahorse_gconf_set_boolean (SETTING_CACHE, values[0] ? TRUE : FALSE);
+}
+
+/* Saves the gconf 'cache_enabled' setting into 'use-agent' in gpg.conf */
+static void 
+save_gpg_conf ()
+{
+    GError *error = NULL;
+    gboolean set;
+    char *values[2];
+
+    set = seahorse_gconf_get_boolean (SETTING_CACHE);
+
+    if (!seahorse_gpg_options_find_vals (gpg_confs, values, &error)) {
+        g_warning ("couldn't read gpg 'use-agent' configuration: %s", error ? error->message : "");
+	  	g_clear_error (&error);
+        return;
+    }
+
+    /* Don't modify needlessly */
+    if ((values[0] ? TRUE : FALSE) == set)
+        return;
+
+    values[0] = set ? "" : NULL;
+    values[1] = NULL; /* null teriminate */
+
+    if (!seahorse_gpg_options_change_vals (gpg_confs, values, &error)) {
+        g_warning ("couldn't modify gpg 'use-agent' configuration: %s", error ? error->message : "");
+        g_clear_error (&error);
+    }
+}
+
+/* -----------------------------------------------------------------------------
  *  CONTROLS
  */
 
@@ -103,7 +157,6 @@ cache_gconf_notify (GConfClient *client, guint id,
     update_cache_choices (gconf_entry_get_key (entry), swidget);
 }
 
-
 static void
 save_cache_choices (GtkWidget *unused, SeahorseWidget *swidget)
 {
@@ -120,7 +173,7 @@ save_cache_choices (GtkWidget *unused, SeahorseWidget *swidget)
     if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
         seahorse_gconf_set_boolean (SETTING_CACHE, FALSE);
         gtk_widget_set_sensitive (widget_ttl, FALSE);
-        
+        save_gpg_conf ();        
         return;
     }
     
@@ -135,6 +188,7 @@ save_cache_choices (GtkWidget *unused, SeahorseWidget *swidget)
         ttl = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (widget_ttl));
         seahorse_gconf_set_boolean (SETTING_EXPIRE, ttl > 0 ? TRUE : FALSE);
         seahorse_gconf_set_integer (SETTING_TTL, ttl);
+        save_gpg_conf ();
         return;
     }
     
@@ -149,6 +203,7 @@ save_cache_choices (GtkWidget *unused, SeahorseWidget *swidget)
         seahorse_gconf_set_string (SETTING_METHOD, METHOD_GNOME);
         gtk_widget_set_sensitive (widget_ttl, FALSE);
         seahorse_gconf_set_boolean (SETTING_EXPIRE, FALSE);
+        save_gpg_conf ();
     }
 
 #endif /* WITH_GNOME_KEYRING */
@@ -295,6 +350,9 @@ seahorse_prefs_cache (SeahorseWidget *swidget)
     GtkWidget *w, *w2;
     
     g_return_if_fail (swidget != NULL);
+
+    /* Update gconf from gpg.conf */
+    load_gpg_conf ();
 
     /* Initial values, then listen */
     update_cache_choices (SETTING_CACHE, swidget);

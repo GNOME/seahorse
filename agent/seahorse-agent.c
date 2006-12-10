@@ -49,15 +49,13 @@ static gboolean seahorse_agent_enabled = FALSE;
 /* PUBLISHING AGENT INFO ---------------------------------------------------- */
 
 /* The GPG settings we modify */
-static const gchar *confs[4] = {
+static const gchar *confs[2] = {
     "gpg-agent-info",
-    "use-agent",
-    "no-use-agent",
     NULL
 };
     
 /* Previous gpg.conf settings */
-static gchar *prev_values[4];
+static gchar *prev_values[2];
 
 /* Print out the socket name info: <name>:<pid>:<protocol_version> */
 static void
@@ -90,7 +88,7 @@ process_gpg_conf (const gchar *socket, pid_t pid)
 {
     GError *error = NULL;
     gchar *agent_info;
-    gchar *values[4];
+    gchar *values[2];
     gboolean b;
 
     g_assert (socket && socket[0]);
@@ -104,17 +102,13 @@ process_gpg_conf (const gchar *socket, pid_t pid)
 	  	g_clear_error (&error);
     
         prev_values[0] = NULL;  /* gpg-agent-info */
-        prev_values[1] = NULL;  /* use-agent */
-        prev_values[2] = NULL;  /* no-use-agent */
-        prev_values[3] = NULL;  /* null terminate */
+        prev_values[1] = NULL;  /* null terminate */
     }
 
     agent_info = g_strdup_printf ("%s:%lu:1", socket, (unsigned long) pid);
     
     values[0] = agent_info;     /* gpg-agent-info */
-    values[1] = "";             /* use-agent */
-    values[2] = NULL;           /* no-use-agent */
-    values[3] = NULL;           /* null teriminate */
+    values[1] = NULL;           /* null teriminate */
     
     b = seahorse_gpg_options_change_vals (confs, values, &error);
 
