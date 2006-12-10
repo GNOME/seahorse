@@ -236,10 +236,17 @@ read_ssh_message (GIOChannel* source, gsize* length)
         /* Now read the actual msg */
         g_io_channel_read_chars (source, (gchar*)buf, r, &bytes, &err);
         
-        if (err != NULL || bytes != r) {
+        if (err != NULL) {
             g_critical ("couldn't read from socket: %s (%d/%d/%d)", 
                          err && err->message ? err->message : "", r, bytes, *length);
             g_clear_error (&err);
+            g_string_free (msg, TRUE);
+            return NULL;
+        }
+
+        if (bytes != r) {
+            g_warning ("protocol error. bad number of bytes read: (%d/%d/%d)", 
+                       r, bytes, *length);
             g_string_free (msg, TRUE);
             return NULL;
         }
@@ -653,6 +660,13 @@ seahorse_agent_ssh_prefork ()
         return;
 
     ssh_agent_enabled = TRUE;
+
+    /* 
+     * If we're not going to display environment variables, or 
+     * execute a process, then swap sockets (in order to proxy) now.
+     */
+    if (!seahorse_agent_displayvars && !seahorse_agent_execvars)
+        swap_sockets ();
 }
 
 void
@@ -661,13 +675,14 @@ seahorse_agent_ssh_postfork (pid_t child)
     if (!ssh_agent_enabled)
         return;
 
-    /* If any of these fail, they simply exit */
+    /* 
+     * If we're displaying environment variables, or 
+     * executing a sub process, then do that here.
+     */
     if (seahorse_agent_displayvars)
         process_display (child);
     else if (seahorse_agent_execvars)
         process_setenv (child);
-    else 
-        swap_sockets ();
 }
 
 gboolean
