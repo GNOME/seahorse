@@ -351,6 +351,8 @@ gconf_notify (GConfClient *client, guint id, GConfEntry *entry, gpointer data)
 void
 seahorse_agent_status_init ()
 {
+    seahorse_agent_status_update ();
+
     /* Listen for changes on the AUTH key */
     g_notify_id = seahorse_gconf_notify (SETTING_DISPLAY, gconf_notify, NULL);
 }
