@@ -31,6 +31,7 @@
 #include "seahorse-pgp-key.h"
 #include "seahorse-agent.h"
 #include "seahorse-context.h"
+#include "seahorse-gconf.h"
 #include "seahorse-widget.h"
 #include "seahorse-secure-memory.h"
 #include "seahorse-util.h"
@@ -46,6 +47,9 @@ static GtkWidget *g_image = NULL;
 
 /* For the popup window */
 static SeahorseWidget *g_window = NULL;
+
+/* gconf notify id for diaplying the cache */
+static guint g_notify_id = 0;   
 
 /* -----------------------------------------------------------------------------
  *  Popup Window
@@ -331,9 +335,25 @@ docklet_create ()
     g_object_ref (G_OBJECT (g_docklet));
 }
 
+/* Called when the display gconf key changes */
+static void
+gconf_notify (GConfClient *client, guint id, GConfEntry *entry, gpointer data)
+{
+    if (g_str_equal (SETTING_DISPLAY, gconf_entry_get_key (entry)))
+        seahorse_agent_status_update ();
+}
+
 /* -----------------------------------------------------------------------------
  * PUBLIC
  */
+
+/* Initialize the status code */
+void
+seahorse_agent_status_init ()
+{
+    /* Listen for changes on the AUTH key */
+    g_notify_id = seahorse_gconf_notify (SETTING_DISPLAY, gconf_notify, NULL);
+}
 
 /* Called when quiting */
 void
@@ -343,18 +363,27 @@ seahorse_agent_status_cleanup ()
 
     if (g_window)
         window_destroy ();
+
+    if (g_notify_id) {
+        seahorse_gconf_unnotify (g_notify_id);
+        g_notify_id = 0;
+    }
 }
 
 /* Cache calls this when changes occur */
 void
 seahorse_agent_status_update ()
 {
-    gboolean have = (seahorse_agent_cache_count () > 0);
-    
+    gboolean have = seahorse_gconf_get_boolean (SETTING_DISPLAY);
+
+    if (have) {
+        /* Only show when allowed to display, and have cached keys */
+        have = (seahorse_agent_cache_count () > 0)
 #ifdef WITH_SSH
-    if (!have) 
-        have = (seahorse_agent_ssh_count_keys () > 0);
+                || (seahorse_agent_ssh_count_keys () > 0)
 #endif 
+        ;
+    }
     
     if (have && !g_docklet)
         docklet_create ();
@@ -365,3 +394,4 @@ seahorse_agent_status_update ()
     if (g_window)
         window_update_keys ();
 }
+

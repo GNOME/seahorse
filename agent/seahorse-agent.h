@@ -40,6 +40,7 @@
 #define SETTING_TTL         AGENT_SETTINGS "/cache_ttl"
 #define SETTING_EXPIRE      AGENT_SETTINGS "/cache_expire"
 #define SETTING_AUTH        AGENT_SETTINGS "/cache_authorize"
+#define SETTING_DISPLAY     AGENT_SETTINGS "/cache_display"
 #define SETTING_AGENT_SSH   AGENT_SETTINGS "/load_ssh"
 #define METHOD_GNOME        "gnome"
 
@@ -122,6 +123,7 @@ void seahorse_agent_prompt_cleanup ();
  * seahorse-agent-status.c
  */
 
+void seahorse_agent_status_init ();
 void seahorse_agent_status_cleanup ();
 void seahorse_agent_status_update ();
 

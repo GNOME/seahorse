@@ -178,6 +178,7 @@ seahorse_agent_init ()
     /* Initialize our sub systems */
     seahorse_agent_actions_init ();
     seahorse_agent_cache_init ();
+    seahorse_agent_status_init ();
     
     return TRUE;
 }
