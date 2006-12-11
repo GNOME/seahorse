@@ -54,7 +54,7 @@
 
 #define UNPARSEABLE_KEY     _("Unparseable Key ID")
 #define UNKNOWN_KEY         _("Unknown/Invalid Key")
-#define TRANSIENT_ID        "TRANSIENT"
+#define TRANSIENT_ID        "TRANSIENTTRANSIENT"
 
 typedef struct sa_cache_t {
     gchar *id;                  /* The password id */
@@ -361,6 +361,7 @@ build_key_list (gpointer key, gpointer value, GList **keys)
     GQuark keyid;
     
     keyid = seahorse_pgp_key_get_cannonical_id (it->id);
+    g_return_if_fail (keyid);
 
     skey = seahorse_context_find_key (SCTX_APP (), keyid, SKEY_LOC_LOCAL);
     if (!skey) {

@@ -186,6 +186,8 @@ seahorse_unknown_source_add_key (SeahorseUnknownSource *usrc, GQuark keyid,
 {
     SeahorseKey *skey;
 
+    g_return_val_if_fail (keyid != 0, NULL);
+
     skey = seahorse_context_get_key (SCTX_APP (), SEAHORSE_KEY_SOURCE (usrc), keyid);
     if (!skey) {
         skey = SEAHORSE_KEY (seahorse_unknown_key_new (usrc, keyid));
