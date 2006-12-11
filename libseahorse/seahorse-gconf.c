@@ -61,7 +61,7 @@ get_global_client (void)
     
     /* Initialize gconf if needed */
     if (!gconf_is_initialized ()) {
-        char *argv[] = { "seahorse-preferences", NULL };
+        char *argv[] = { "seahorse", NULL };
         
         if (!gconf_init (1, argv, &error)) {
             if (handle_error (&error))
@@ -85,6 +85,12 @@ get_global_client (void)
     }
     
     return global_gconf_client;
+}
+
+void
+seahorse_gconf_disconnect ()
+{
+    global_client_free ();
 }
 
 void

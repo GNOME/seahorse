@@ -35,6 +35,7 @@
 #include "config.h"
 #include "seahorse-context.h"
 #include "seahorse-gtkstock.h"
+#include "seahorse-gconf.h"
 #include "seahorse-agent.h"
 #include "seahorse-secure-memory.h"
 
@@ -235,7 +236,7 @@ int main(int argc, char* argv[])
 
     program = gnome_program_init("seahorse-agent", VERSION, LIBGNOMEUI_MODULE, argc, argv,
                     GNOME_PARAM_POPT_TABLE, options,
-                    GNOME_PARAM_HUMAN_READABLE_NAME, _("Key Agent (Seahorse)"),
+                    GNOME_PARAM_HUMAN_READABLE_NAME, _("Encryption Key Agent (Seahorse)"),
                     GNOME_PARAM_APP_DATADIR, DATA_DIR, NULL);
 
     seahorse_agent_prefork ();
@@ -261,6 +262,10 @@ int main(int argc, char* argv[])
     /* Handle some signals */
     signal (SIGINT, on_quit);
     signal (SIGTERM, on_quit);
+
+    /* Force gconf to reconnect after daemonizing */
+    if (g_daemonize)
+        seahorse_gconf_disconnect ();    
     
     client = gnome_master_client();
     g_signal_connect(client, "die", G_CALLBACK(client_die), NULL);
