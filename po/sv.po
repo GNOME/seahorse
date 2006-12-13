@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-11-24 07:24+0100\n"
-"PO-Revision-Date: 2006-11-24 12:27+0100\n"
+"POT-Creation-Date: 2006-12-13 18:35+0100\n"
+"PO-Revision-Date: 2006-12-13 18:41+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -28,11 +28,11 @@ msgid "Please enter a passphrase to use."
 msgstr "Ange en lösenfras att använda."
 
 #. Warn and put in defaults
-#: ../agent/seahorse-agent.c:103
+#: ../agent/seahorse-agent.c:101
 msgid "couldn't read gpg configuration, will try to create"
 msgstr "kunde inte läsa gpg-konfiguration, kommer att försöka skapa"
 
-#: ../agent/seahorse-agent.c:125
+#: ../agent/seahorse-agent.c:119
 #, c-format
 msgid "couldn't modify gpg configuration: %s"
 msgstr "kunde inte ändra gpg-konfiguration: %s"
@@ -55,7 +55,7 @@ msgstr "Ej tolkningsbart nyckel-id"
 msgid "Unknown/Invalid Key"
 msgstr "Okänd/Ogiltig nyckel"
 
-#: ../agent/seahorse-agent-cache.c:448
+#: ../agent/seahorse-agent-cache.c:449
 #, c-format
 msgid "PGP Key: %s"
 msgstr "PGP-nyckel: %s"
@@ -88,6 +88,48 @@ msgstr "_Töm mellanlager"
 msgid "_Show Window"
 msgstr "_Visa fönster"
 
+#: ../agent/seahorse-agent-main.c:47
+msgid "Do not daemonize seahorse-agent"
+msgstr "Kör inte seahorse-agent som en demon"
+
+#: ../agent/seahorse-agent-main.c:50
+msgid "Print variables in for a C type shell"
+msgstr "Skriv ut variabler för ett C-liknande skal"
+
+#: ../agent/seahorse-agent-main.c:53
+msgid "Display variables instead of editing conf files (gpg.conf, ssh agent socket)"
+msgstr "Visa variabler istället för att redigera konfigurationsfiler (gpg.conf, ssh agent-uttag)"
+
+#: ../agent/seahorse-agent-main.c:56
+msgid "Execute other arguments on the command line"
+msgstr "Kör andra argument på kommandoraden"
+
+#: ../agent/seahorse-agent-main.c:59
+msgid "Allow GPG agent request from any display"
+msgstr "Tillåt GPG-agentbegäran från valfri display"
+
+#: ../agent/seahorse-agent-main.c:80
+#: ../daemon/seahorse-daemon.c:74
+msgid "couldn't fork process"
+msgstr "kunde inte grena process"
+
+#: ../agent/seahorse-agent-main.c:86
+#: ../daemon/seahorse-daemon.c:80
+msgid "couldn't create new process group"
+msgstr "kunde inte skapa ny processgrupp"
+
+#: ../agent/seahorse-agent-main.c:235
+#: ../daemon/seahorse-daemon.c:223
+#: ../plugins/applet/seahorse-applet.c:1010
+#: ../plugins/nautilus/seahorse-tool.c:571
+#: ../src/main.c:59
+msgid "couldn't drop privileges properly"
+msgstr "kunde inte korrekt släppa privilegier"
+
+#: ../agent/seahorse-agent-main.c:239
+msgid "Encryption Key Agent (Seahorse)"
+msgstr "Krypteringsnyckelagent (Seahorse)"
+
 #: ../agent/seahorse-agent-prompt.c:216
 msgid "Authorize Passphrase Access"
 msgstr "Auktorisera lösenfrasåtkomst"
@@ -105,42 +147,15 @@ msgid "_Authorize"
 msgstr "_Auktorisera"
 
 #. Make the uid column
-#: ../agent/seahorse-agent-status.c:149
+#: ../agent/seahorse-agent-status.c:153
 msgid "Key Name"
 msgstr "Nyckelnamn"
 
-#: ../daemon/seahorse-daemon.c:56
-msgid "Do not daemonize seahorse-agent"
-msgstr "Kör inte seahorse-agent som en demon"
+#: ../daemon/seahorse-daemon.c:53
+msgid "Do not daemonize seahorse-daemon"
+msgstr "Kör inte seahorse-daemon som en demon"
 
-#: ../daemon/seahorse-daemon.c:60
-msgid "Print variables in for a C type shell"
-msgstr "Skriv ut variabler för ett C-liknande skal"
-
-#: ../daemon/seahorse-daemon.c:63
-msgid "Display variables instead of editing conf files (gpg.conf, ssh agent socket)"
-msgstr "Visa variabler istället för att redigera konfigurationsfiler (gpg.conf, ssh agent-uttag)"
-
-#: ../daemon/seahorse-daemon.c:66
-msgid "Execute other arguments on the command line"
-msgstr "Kör andra argument på kommandoraden"
-
-#: ../daemon/seahorse-daemon.c:88
-msgid "couldn't fork process"
-msgstr "kunde inte grena process"
-
-#: ../daemon/seahorse-daemon.c:94
-msgid "couldn't create new process group"
-msgstr "kunde inte skapa ny processgrupp"
-
-#: ../daemon/seahorse-daemon.c:245
-#: ../plugins/applet/seahorse-applet.c:1011
-#: ../plugins/nautilus/seahorse-tool.c:571
-#: ../src/main.c:59
-msgid "couldn't drop privileges properly"
-msgstr "kunde inte korrekt släppa privilegier"
-
-#: ../daemon/seahorse-daemon.c:249
+#: ../daemon/seahorse-daemon.c:227
 msgid "Encryption Daemon (Seahorse)"
 msgstr "Krypteringsdemon (Seahorse)"
 
@@ -254,170 +269,178 @@ msgid "Controls the visibility of the validity column for the key manager."
 msgstr "Styr synligheten för giltighetskolumnen för nyckelhanteraren."
 
 #: ../data/seahorse.schemas.in.h:9
+msgid "Display cache reminder in the notification area"
+msgstr "Visa cachepåminnare i notifieringsytan"
+
+#: ../data/seahorse.schemas.in.h:10
 msgid "Display clipboard after decrypting"
 msgstr "Visa urklipp efter dekryptering"
 
-#: ../data/seahorse.schemas.in.h:10
+#: ../data/seahorse.schemas.in.h:11
 msgid "Display clipboard after encrypting"
 msgstr "Visa urklipp efter kryptering"
 
-#: ../data/seahorse.schemas.in.h:11
+#: ../data/seahorse.schemas.in.h:12
 msgid "Enable DNS-SD sharing"
 msgstr "Aktivera DNS-SD-delning"
 
-#: ../data/seahorse.schemas.in.h:12
+#: ../data/seahorse.schemas.in.h:13
 msgid "Enables DNS-SD (Apple Bonjour) sharing of keys. seahorse-daemon must running and must be built with HKP and DNS-SD support."
 msgstr "Aktiverar DNS-SD-delning (Apple Bonjour) av nycklar. seahorse-daemon måste köra och måste vara byggd med stöd för HKP och DNS-SD."
 
-#: ../data/seahorse.schemas.in.h:13
+#: ../data/seahorse.schemas.in.h:14
 msgid "Expire passwords in the cache"
 msgstr "Låt alla lösenord i mellanlager gå ut"
 
-#: ../data/seahorse.schemas.in.h:14
+#: ../data/seahorse.schemas.in.h:15
 msgid "ID of the default key"
 msgstr "Id för standardnyckeln"
 
-#: ../data/seahorse.schemas.in.h:15
+#: ../data/seahorse.schemas.in.h:16
 msgid "If set to 'gnome' uses gnome-keyring to cache passwords. When set to 'internal' uses internal cache."
 msgstr "Om inställt till \"gnome\" används gnome-keyring för att mellanlagra lösenord. När inställt till \"internal\" används det interna mellanlagret."
 
-#: ../data/seahorse.schemas.in.h:16
+#: ../data/seahorse.schemas.in.h:17
 msgid "If set to true, then files encrypted with seahorse will be ASCII armor encoded."
 msgstr "Om denna är inställd till true kommer filer som är krypterade med seahorse att bli ASCII-skalkodade."
 
-#: ../data/seahorse.schemas.in.h:17
+#: ../data/seahorse.schemas.in.h:18
 msgid "If set to true, then the default key will always be added to an encryption recipients list."
 msgstr "Om detta är sant kommer standardnyckeln att alltid läggas till en lista över krypteringsmottagare."
 
-#: ../data/seahorse.schemas.in.h:18
+#: ../data/seahorse.schemas.in.h:19
 msgid "Last key used to sign a message."
 msgstr "Senaste nyckel som användes för att signera ett meddelande."
 
-#: ../data/seahorse.schemas.in.h:19
+#: ../data/seahorse.schemas.in.h:20
 msgid "Last keyserver search pattern"
 msgstr "Senaste sökmönstret för nyckelserver"
 
-#: ../data/seahorse.schemas.in.h:20
+#: ../data/seahorse.schemas.in.h:21
 msgid "Last keyservers used"
 msgstr "Senaste använda nyckelservrar"
 
-#: ../data/seahorse.schemas.in.h:21
+#: ../data/seahorse.schemas.in.h:22
 msgid "PGP Key servers"
 msgstr "PGP-nyckelservrar"
 
-#: ../data/seahorse.schemas.in.h:22
+#: ../data/seahorse.schemas.in.h:23
 msgid "Prompt before using GPG passwords in cache"
 msgstr "Fråga före mellanlagrade GPG-lösenord används"
 
-#: ../data/seahorse.schemas.in.h:23
+#: ../data/seahorse.schemas.in.h:24
 msgid "Publish keys to this keyserver."
 msgstr "Publicera nycklar på denna nyckelserver."
 
-#: ../data/seahorse.schemas.in.h:24
+#: ../data/seahorse.schemas.in.h:25
 msgid "Reflect the contents of the clipboard (whether encrypted, signed, etc...) in the panel applet icon."
 msgstr "Visa innehållet i urklipp (om krypterat, signerat, etc...) i panelprogrammets ikon."
 
-#: ../data/seahorse.schemas.in.h:25
-msgid "Set to 'true' to have seahorse-daemon prompt before giving out passwords it has cached."
-msgstr "Ställ in till \"true\" för att få seahorse-daemon att fråga innan det ger ut lösenord som har mellanlagrats."
-
 #: ../data/seahorse.schemas.in.h:26
+msgid "Set to 'false' to disable display of the cache reminder in the notification area of your panel."
+msgstr "Ställ in till \"false\" för att inaktivera visning av cachepåminnaren i notifieringsytan i din panel."
+
+#: ../data/seahorse.schemas.in.h:27
+msgid "Set to 'true' to have seahorse-agent prompt before giving out passwords it has cached."
+msgstr "Ställ in till \"true\" för att få seahorse-agent att fråga innan det ger ut lösenord som har mellanlagrats."
+
+#: ../data/seahorse.schemas.in.h:28
 msgid "Show clipboard state in panel"
 msgstr "Visa tillstånd för urklipp i panelen"
 
-#: ../data/seahorse.schemas.in.h:27
+#: ../data/seahorse.schemas.in.h:29
 msgid "Show expires column in key manager"
 msgstr "Visa utgångskolumnen i nyckelhanteraren"
 
-#: ../data/seahorse.schemas.in.h:28
+#: ../data/seahorse.schemas.in.h:30
 msgid "Show trust column in key manager"
 msgstr "Visa tillitskolumnen i nyckelhanteraren"
 
-#: ../data/seahorse.schemas.in.h:29
+#: ../data/seahorse.schemas.in.h:31
 msgid "Show type column in key manager"
 msgstr "Visa typkolumnen i nyckelhanteraren"
 
-#: ../data/seahorse.schemas.in.h:30
+#: ../data/seahorse.schemas.in.h:32
 msgid "Show validity column in key manager"
 msgstr "Visa giltighetskolumnen i nyckelhanteraren"
 
-#: ../data/seahorse.schemas.in.h:31
+#: ../data/seahorse.schemas.in.h:33
 msgid "Specify the column to sort the recipients window by. Columns are: 'name' and 'id'. Put a '-' in front of the column name to sort in descending order."
 msgstr "Ange kolumnen att sortera mottagarefönstret efter. Kolumner är: \"name\" och \"id\". Lägg till ett \"-\" i framkant av kolumnnamnet för att sortera i fallande ordning."
 
-#: ../data/seahorse.schemas.in.h:32
+#: ../data/seahorse.schemas.in.h:34
 msgid "Specify the column to sort the seahorse key manager main window by. Columns are: 'name', 'id', 'validity', 'expires', 'trust', and 'type'. Put a '-' in front of the column name to sort in descending order."
 msgstr "Ange kolumnen att sortera huvudfönstret i nyckelhanteraren Seahorse efter. Kolumner är: \"name\", \"id\", \"validity\", \"expires\", \"trust\" och \"type\". Lägg till ett \"-\" i framkant av kolumnnamnet för att sortera i omvänd ordning."
 
-#: ../data/seahorse.schemas.in.h:33
+#: ../data/seahorse.schemas.in.h:35
 msgid "The ID of the last secret key used to sign a message."
 msgstr "Identiteten för den senaste hemliga nyckel som användes för att signera ett meddelande."
 
-#: ../data/seahorse.schemas.in.h:34
+#: ../data/seahorse.schemas.in.h:36
 msgid "The column to sort the recipients by"
 msgstr "Kolumnen att sortera mottagare efter"
 
-#: ../data/seahorse.schemas.in.h:35
+#: ../data/seahorse.schemas.in.h:37
 msgid "The column to sort the seahorse keys by"
 msgstr "Kolumnen att sortera seahorse-nycklarna efter"
 
-#: ../data/seahorse.schemas.in.h:36
+#: ../data/seahorse.schemas.in.h:38
 msgid "The keyserver to publish PGP keys to. Or empty to suppress publishing of PGP keys."
 msgstr "Nyckelservern att publicera PGP-nycklar på. Eller tom för att inte publicera PGP-nycklar."
 
-#: ../data/seahorse.schemas.in.h:37
+#: ../data/seahorse.schemas.in.h:39
 msgid "The last keyserver a search was performed against or empty for all keyservers."
 msgstr "Den senaste nyckelservern som en sökning genomfördes mot eller blankt för alla nyckelservrar."
 
-#: ../data/seahorse.schemas.in.h:38
+#: ../data/seahorse.schemas.in.h:40
 msgid "The last search pattern searched for against a keyserver."
 msgstr "Det senaste sökmönstret som användes mot en nyckelserver."
 
-#: ../data/seahorse.schemas.in.h:39
+#: ../data/seahorse.schemas.in.h:41
 msgid "The time (in minutes) to cache GPG passwords"
 msgstr "Tiden (i minuter) att mellanlagra GPG-lösenord"
 
-#: ../data/seahorse.schemas.in.h:40
-msgid "This is the amount of time, specified in minutes, to cache GPG passwords in seahorse-daemon."
-msgstr "Detta är mängden tid, angivet i minuter, som GPG-lösenord i seahorse-daemon ska lagras."
-
-#: ../data/seahorse.schemas.in.h:41
-msgid "This option enables the GPG password cache in the seahorse-daemon program."
-msgstr "Detta alternativ aktiverar mellanlagring av GPG-lösenord i programmet seahorse-daemon."
-
 #: ../data/seahorse.schemas.in.h:42
+msgid "This is the amount of time, specified in minutes, to cache GPG passwords in seahorse-agent."
+msgstr "Detta är mängden tid, angivet i minuter, som GPG-lösenord i seahorse-agent ska mellanlagras."
+
+#: ../data/seahorse.schemas.in.h:43
+msgid "This option enables the GPG password cache in the seahorse-agent program. The 'use-agent' setting in gpg.conf affects this setting."
+msgstr "Detta alternativ aktiverar mellanlagring av GPG-lösenord i programmet seahorse-agent. Inställningen \"use-agent\" i gpg.conf påverkar den här inställningen."
+
+#: ../data/seahorse.schemas.in.h:44
 msgid "This specifies the default key to use for certain operations, mainly signing."
 msgstr "Detta anger standardnyckeln som ska användas för vissa åtgärder, i huvudsak signering."
 
-#: ../data/seahorse.schemas.in.h:43
-msgid "When set seahorse-daemon will try to automatically load the users SSH keys when needed. This is equivalent to using the ssh-add utility."
-msgstr "När inställt kommer seahorse-daemon att automatiskt försöka läsa in användarnas SSH-nycklar vid behov. Det här är samma som att använda verktyget ssh-add."
-
-#: ../data/seahorse.schemas.in.h:44
-msgid "When set, seahorse-daemon expires GPG passwords in its cache after a peried of time."
-msgstr "När detta alternativ är inställt låter seahorse-daemon alla GPG-lösenord i dess mellanlager gå ut efter en viss tidsperiod."
-
 #: ../data/seahorse.schemas.in.h:45
+msgid "When set seahorse-agent will try to automatically load the users SSH keys when needed. This is equivalent to using the ssh-add utility."
+msgstr "När inställd kommer seahorse-agent att automatiskt försöka läsa in användarnas SSH-nycklar vid behov. Det här är samma som att använda verktyget ssh-add."
+
+#: ../data/seahorse.schemas.in.h:46
+msgid "When set, seahorse-agent expires GPG passwords in its cache after a peried of time."
+msgstr "När detta alternativ är inställt låter seahorse-agent alla GPG-lösenord i dess mellanlager gå ut efter en viss tidsperiod."
+
+#: ../data/seahorse.schemas.in.h:47
 msgid "Where to store cached passwords."
 msgstr "Var mellanlagrade lösenord ska lagras."
 
-#: ../data/seahorse.schemas.in.h:46
+#: ../data/seahorse.schemas.in.h:48
 msgid "Whether or not modified keys should be automatically synced with the default keyserver."
 msgstr "Huruvida ändrade nycklar ska synkroniseras automatiskt med standardnyckelservern eller inte."
 
-#: ../data/seahorse.schemas.in.h:47
+#: ../data/seahorse.schemas.in.h:49
 msgid "Whether the GPG password cache is enabled"
 msgstr "Huruvida mellanlagring av GPG-lösenord är aktiverad eller inte"
 
-#: ../data/seahorse.schemas.in.h:48
+#: ../data/seahorse.schemas.in.h:50
 msgid "Whether to always encrypt to default key"
 msgstr "Huruvida kryptering alltid ska ske till standardnyckel"
 
-#: ../data/seahorse.schemas.in.h:49
+#: ../data/seahorse.schemas.in.h:51
 msgid "Whether to automatically load SSH keys on demand."
 msgstr "Huruvida automatisk inläsning av SSH-nycklar vid behov ska göras."
 
-#: ../data/seahorse.schemas.in.h:50
+#: ../data/seahorse.schemas.in.h:52
 msgid "Whether to use ASCII Armor"
 msgstr "Huruvida ASCII-pansar ska användas"
 
@@ -757,25 +780,25 @@ msgstr "Ingen: Publicera inga nycklar"
 msgid "None. Prompt for a key."
 msgstr "Ingen. Fråga efter en nyckel."
 
-#: ../libseahorse/seahorse-prefs-cache.c:176
+#: ../libseahorse/seahorse-prefs-cache.c:231
 msgid "Couldn't open the Session Properties"
 msgstr "Kunde inte öppna sessionsegenskaperna"
 
-#: ../libseahorse/seahorse-prefs-cache.c:258
-msgid "Couldn't start seahorse-daemon"
-msgstr "Kunde inte starta seahorse-daemon"
+#: ../libseahorse/seahorse-prefs-cache.c:244
+msgid "Couldn't start the 'seahorse-agent' program"
+msgstr "Kunde inte starta programmet \"seahorse-agent\""
 
-#: ../libseahorse/seahorse-prefs-cache.c:259
-msgid "The program 'seahorse-daemon' is necessary for the caching of passphrases"
-msgstr "Programmet \"seahorse-daemon\" är nödvändigt för att kunna mellanlagra lösenfraser"
+#: ../libseahorse/seahorse-prefs-cache.c:246
+msgid "The 'seahorse-agent' program exited unsuccessfully."
+msgstr "Programmet \"seahorse-agent\" avslutades med fel."
 
 #: ../libseahorse/seahorse-prefs.glade.h:1
 msgid "<b>Defaults</b>"
 msgstr "<b>Standardvärden</b>"
 
 #: ../libseahorse/seahorse-prefs.glade.h:2
-msgid "<b>Note:</b> The 'seahorse-daemon' program has been started. This program is necessary in order to cache passphrases. "
-msgstr "<b>Observera:</b> Programmet \"seahorse-daemon\" startades. Detta program är nödvändigt för att kunna mellanlagra lösenfraser. "
+msgid "<b>Note:</b> The 'seahorse-agent' program has been started. This program is necessary in order to cache passphrases. "
+msgstr "<b>Observera:</b> Programmet \"seahorse-agent\" startades. Detta program är nödvändigt för att kunna mellanlagra lösenfraser. "
 
 #: ../libseahorse/seahorse-prefs.glade.h:3
 msgid "<b>Remember PGP Passphrases</b>"
@@ -786,52 +809,56 @@ msgid "<b>Secure Shell Keys</b>"
 msgstr "<b>Secure Shell-nycklar</b>"
 
 #: ../libseahorse/seahorse-prefs.glade.h:5
+msgid "<b>Warning:</b> The 'seahorse-agent' program is not running. This program is necessary in order to cache passphrases. "
+msgstr "<b>Varning:</b> Programmet \"seahorse-agent\" körs inte. Detta program är nödvändigt för att kunna mellanlagra lösenfraser. "
+
+#: ../libseahorse/seahorse-prefs.glade.h:6
 msgid "<i>A non-supported PGP passphrase caching agent is running.</i>"
 msgstr "<i>En agent för mellanlagring av PGP-lösenfraser kör. Den stöds inte.</i>"
 
-#: ../libseahorse/seahorse-prefs.glade.h:6
+#: ../libseahorse/seahorse-prefs.glade.h:7
 msgid "<i>No SSH caching agent is running. Cannot load Secure Shell keys.</i>"
 msgstr "<i>Ingen SSH-agent för mellanlagring kör. Kan inte läsa in Secure Shell-nycklar.</i>"
 
-#: ../libseahorse/seahorse-prefs.glade.h:7
+#: ../libseahorse/seahorse-prefs.glade.h:8
 msgid "<i>This key is used to sign messages when no other key is chosen</i>"
 msgstr "<i>Den här nyckeln används för att signera meddelanden när ingen annan nyckel har valts</i>"
 
-#: ../libseahorse/seahorse-prefs.glade.h:8
+#: ../libseahorse/seahorse-prefs.glade.h:9
 msgid "Automatically load _Secure Shell keys"
 msgstr "Läs automatiskt in _Secure Shell-nycklar"
 
-#: ../libseahorse/seahorse-prefs.glade.h:9
+#: ../libseahorse/seahorse-prefs.glade.h:10
 msgid "Automatically synchronize modified keys with keyservers. "
 msgstr "Synkronisera ändrade nycklar automatiskt med nyckelservrar. "
 
-#: ../libseahorse/seahorse-prefs.glade.h:10
+#: ../libseahorse/seahorse-prefs.glade.h:11
 #: ../plugins/nautilus/seahorse-pgp-preferences.c:73
 #: ../plugins/nautilus/seahorse-pgp-preferences.desktop.in.h:2
 msgid "Encryption Preferences"
 msgstr "Krypteringsinställningar"
 
-#: ../libseahorse/seahorse-prefs.glade.h:11
+#: ../libseahorse/seahorse-prefs.glade.h:12
 msgid "Encryption Settings"
 msgstr "Krypteringsinställningar"
 
-#: ../libseahorse/seahorse-prefs.glade.h:12
+#: ../libseahorse/seahorse-prefs.glade.h:13
 msgid "Key Servers"
 msgstr "Nyckelservrar"
 
-#: ../libseahorse/seahorse-prefs.glade.h:13
+#: ../libseahorse/seahorse-prefs.glade.h:14
 msgid "Key Sharing"
 msgstr "Nyckeldelning"
 
-#: ../libseahorse/seahorse-prefs.glade.h:14
+#: ../libseahorse/seahorse-prefs.glade.h:15
 msgid "Passphrase Cache"
 msgstr "Lösenfraser"
 
-#: ../libseahorse/seahorse-prefs.glade.h:15
+#: ../libseahorse/seahorse-prefs.glade.h:16
 msgid "Session Properties"
 msgstr "Sessionsegenskaper"
 
-#: ../libseahorse/seahorse-prefs.glade.h:16
+#: ../libseahorse/seahorse-prefs.glade.h:17
 msgid ""
 "Sharing your keys allows other people on your network to use the keys you've collected. This means they can automatically encrypt things for you or those you know, without you having to send them your key.\n"
 "\n"
@@ -841,51 +868,55 @@ msgstr ""
 "\n"
 "<b>Observera:</b> Dina personliga nycklar kommer inte att komprometteras."
 
-#: ../libseahorse/seahorse-prefs.glade.h:19
-msgid ""
-"To avoid manually starting the 'seahorse-daemon' in the future\n"
-"add it to the Session Manager. "
-msgstr ""
-"För att slippa att manuellt starta \"seahorse-daemon\" i framtiden\n"
-"kan du lägga till den till Sessionshanteraren. "
+#: ../libseahorse/seahorse-prefs.glade.h:20
+msgid "Start seahorse-agent"
+msgstr "Starta seahorse-agent"
 
 #: ../libseahorse/seahorse-prefs.glade.h:21
+msgid ""
+"To avoid manually starting the 'seahorse-agent' in the future\n"
+"add it to the Session Manager. "
+msgstr ""
+"För att slippa att manuellt starta \"seahorse-agent\" i framtiden\n"
+"kan du lägga till den till Sessionshanteraren. "
+
+#: ../libseahorse/seahorse-prefs.glade.h:23
 msgid "When _encrypting, always include myself as a recipient"
 msgstr "När _kryptering sker, inkludera alltid mig själv som en mottagare"
 
-#: ../libseahorse/seahorse-prefs.glade.h:22
+#: ../libseahorse/seahorse-prefs.glade.h:24
 msgid "_Always remember passphrases whenever logged in"
 msgstr "_Kom alltid ihåg lösenfrasen när inloggad"
 
-#: ../libseahorse/seahorse-prefs.glade.h:23
+#: ../libseahorse/seahorse-prefs.glade.h:25
 msgid "_Ask me before using a cached passphrase"
 msgstr "_Fråga mig före en mellanlagrad lösenfras används"
 
-#: ../libseahorse/seahorse-prefs.glade.h:24
+#: ../libseahorse/seahorse-prefs.glade.h:26
 msgid "_Default Key:"
 msgstr "_Standardnyckel:"
 
-#: ../libseahorse/seahorse-prefs.glade.h:25
+#: ../libseahorse/seahorse-prefs.glade.h:27
 msgid "_Find Keys Using:"
 msgstr "_Sök nycklar med:"
 
-#: ../libseahorse/seahorse-prefs.glade.h:26
+#: ../libseahorse/seahorse-prefs.glade.h:28
 msgid "_Never remember passphrases"
 msgstr "_Kom aldrig ihåg några lösenfraser"
 
-#: ../libseahorse/seahorse-prefs.glade.h:27
+#: ../libseahorse/seahorse-prefs.glade.h:29
 msgid "_Publish Keys To:"
 msgstr "_Publicera nycklar på:"
 
-#: ../libseahorse/seahorse-prefs.glade.h:28
+#: ../libseahorse/seahorse-prefs.glade.h:30
 msgid "_Remember passphrases for"
 msgstr "_Kom ihåg lösenfraser i"
 
-#: ../libseahorse/seahorse-prefs.glade.h:29
+#: ../libseahorse/seahorse-prefs.glade.h:31
 msgid "_Share my keys with others on my network"
 msgstr "_Dela mina nycklar med andra på mitt nätverk"
 
-#: ../libseahorse/seahorse-prefs.glade.h:30
+#: ../libseahorse/seahorse-prefs.glade.h:32
 msgid "minutes"
 msgstr "minuter"
 
@@ -1247,16 +1278,16 @@ msgstr "_Hjälp"
 msgid "_Preferences"
 msgstr "Inställni_ngar"
 
-#: ../plugins/applet/seahorse-applet.c:310
+#: ../plugins/applet/seahorse-applet.c:309
 msgid "seahorse-applet"
 msgstr "seahorse-applet"
 
-#: ../plugins/applet/seahorse-applet.c:312
-#: ../plugins/applet/seahorse-applet.c:833
+#: ../plugins/applet/seahorse-applet.c:311
+#: ../plugins/applet/seahorse-applet.c:832
 msgid "Use PGP/GPG to encrypt/decrypt/sign/verify/import the clipboard."
 msgstr "Använd PGP/GPG för att kryptera/dekryptera/signera/validera/importera urklippet."
 
-#: ../plugins/applet/seahorse-applet.c:317
+#: ../plugins/applet/seahorse-applet.c:316
 #: ../src/seahorse-key-manager.c:869
 msgid "translator-credits"
 msgstr ""
@@ -1266,102 +1297,102 @@ msgstr ""
 "Skicka synpunkter på översättningen till\n"
 "tp-sv@listor.tp-sv.se"
 
-#: ../plugins/applet/seahorse-applet.c:320
+#: ../plugins/applet/seahorse-applet.c:319
 #: ../src/seahorse-key-manager.c:872
 msgid "Seahorse Project Homepage"
 msgstr "Seahorse-projektets webbplats"
 
 #. Get the recipient list
-#: ../plugins/applet/seahorse-applet.c:375
+#: ../plugins/applet/seahorse-applet.c:374
 #: ../plugins/epiphany/seahorse-extension.c:251
 #: ../plugins/gedit/seahorse-gedit.c:332
 msgid "Choose Recipient Keys"
 msgstr "Välj mottagarnycklar"
 
-#: ../plugins/applet/seahorse-applet.c:394
+#: ../plugins/applet/seahorse-applet.c:393
 msgid "Encrypted Text"
 msgstr "Krypterad text"
 
-#: ../plugins/applet/seahorse-applet.c:396
+#: ../plugins/applet/seahorse-applet.c:395
 msgid "Encryption Failed"
 msgstr "Kryptering misslyckades"
 
-#: ../plugins/applet/seahorse-applet.c:397
+#: ../plugins/applet/seahorse-applet.c:396
 msgid "The clipboard could not be encrypted."
 msgstr "Urklippet kunde inte krypteras."
 
-#: ../plugins/applet/seahorse-applet.c:431
+#: ../plugins/applet/seahorse-applet.c:430
 #: ../plugins/epiphany/seahorse-extension.c:296
 #: ../plugins/gedit/seahorse-gedit.c:611
 msgid "Choose Key to Sign with"
 msgstr "Välj nyckel att signera med"
 
-#: ../plugins/applet/seahorse-applet.c:450
+#: ../plugins/applet/seahorse-applet.c:449
 msgid "Signed Text"
 msgstr "Signerad text"
 
-#: ../plugins/applet/seahorse-applet.c:452
+#: ../plugins/applet/seahorse-applet.c:451
 msgid "Signing Failed"
 msgstr "Signering misslyckades"
 
-#: ../plugins/applet/seahorse-applet.c:453
+#: ../plugins/applet/seahorse-applet.c:452
 msgid "The clipboard could not be Signed."
 msgstr "Urklippet kunde inte signeras."
 
-#: ../plugins/applet/seahorse-applet.c:496
+#: ../plugins/applet/seahorse-applet.c:495
 #: ../plugins/epiphany/seahorse-extension.c:340
 msgid "Import Failed"
 msgstr "Importering misslyckades"
 
-#: ../plugins/applet/seahorse-applet.c:497
+#: ../plugins/applet/seahorse-applet.c:496
 #: ../plugins/epiphany/seahorse-extension.c:341
 msgid "Keys were found but not imported."
 msgstr "Nycklar hittades men importerades inte."
 
-#: ../plugins/applet/seahorse-applet.c:528
+#: ../plugins/applet/seahorse-applet.c:527
 #: ../plugins/epiphany/seahorse-extension.c:374
 msgid "Decrypting Failed"
 msgstr "Dekryptering misslyckades"
 
-#: ../plugins/applet/seahorse-applet.c:529
+#: ../plugins/applet/seahorse-applet.c:528
 #: ../plugins/epiphany/seahorse-extension.c:375
 msgid "Text may be malformed."
 msgstr "Texten kan vara felformulerad."
 
-#: ../plugins/applet/seahorse-applet.c:580
+#: ../plugins/applet/seahorse-applet.c:579
 msgid "No PGP key or message was found on clipboard"
 msgstr "Ingen PGP-nyckel eller meddelande hittades i urklipp"
 
-#: ../plugins/applet/seahorse-applet.c:581
+#: ../plugins/applet/seahorse-applet.c:580
 msgid "No PGP data found."
 msgstr "Inget PGP-data hittades."
 
-#: ../plugins/applet/seahorse-applet.c:614
+#: ../plugins/applet/seahorse-applet.c:613
 msgid "Decrypted Text"
 msgstr "Dekrypterad text"
 
-#: ../plugins/applet/seahorse-applet.c:682
+#: ../plugins/applet/seahorse-applet.c:681
 msgid "Could not display the help file"
 msgstr "Kunde inte visa hjälpfilen"
 
-#: ../plugins/applet/seahorse-applet.c:745
+#: ../plugins/applet/seahorse-applet.c:744
 msgid "_Encrypt Clipboard"
 msgstr "_Kryptera urklipp"
 
-#: ../plugins/applet/seahorse-applet.c:752
+#: ../plugins/applet/seahorse-applet.c:751
 msgid "_Sign Clipboard"
 msgstr "_Signera urklipp"
 
-#: ../plugins/applet/seahorse-applet.c:759
+#: ../plugins/applet/seahorse-applet.c:758
 msgid "_Decrypt/Verify Clipboard"
 msgstr "_Dekryptera/Validera urklipp"
 
-#: ../plugins/applet/seahorse-applet.c:765
+#: ../plugins/applet/seahorse-applet.c:764
 msgid "_Import Keys from Clipboard"
 msgstr "_Importera nycklar från urklipp"
 
-#: ../plugins/applet/seahorse-applet.c:830
-#: ../plugins/applet/seahorse-applet.c:832
+#: ../plugins/applet/seahorse-applet.c:829
+#: ../plugins/applet/seahorse-applet.c:831
 msgid "Encryption Applet"
 msgstr "Panelprogram för kryptering"
 
@@ -2614,12 +2645,12 @@ msgid_plural "<b>%d keys are selected for syncing</b>"
 msgstr[0] "<b>%d nyckel är markerad för synkronisering</b>"
 msgstr[1] "<b>%d nycklar är markerade för synkronisering</b>"
 
-#: ../src/seahorse-keyserver-sync.c:211
+#: ../src/seahorse-keyserver-sync.c:214
 msgid "Syncing keys"
 msgstr "Synkroniserar nycklar"
 
 #. Show the progress window if necessary
-#: ../src/seahorse-keyserver-sync.c:239
+#: ../src/seahorse-keyserver-sync.c:246
 msgid "Syncing keys..."
 msgstr "Synkroniserar nycklar..."
 
@@ -3381,6 +3412,11 @@ msgstr "_Datornamn:"
 msgid "_Login Name:"
 msgstr "_Inloggningsnamn:"
 
+#~ msgid ""
+#~ "The program 'seahorse-daemon' is necessary for the caching of passphrases"
+#~ msgstr ""
+#~ "Programmet \"seahorse-daemon\" är nödvändigt för att kunna mellanlagra "
+#~ "lösenfraser"
 #~ msgid "New Secure Shell Key Passphrase"
 #~ msgstr "Ny lösenfras för Secure Shell-nyckel"
 #~ msgid "<b>_Advanced Options</b>"
