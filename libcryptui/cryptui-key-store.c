@@ -835,7 +835,7 @@ cryptui_key_store_have_selected_keys (CryptUIKeyStore *ckstore, GtkTreeView *vie
     g_return_val_if_fail (GTK_IS_TREE_VIEW (view), FALSE);
     
     if (ckstore->priv->use_checks) {
-        GtkTreeModel* model = GTK_TREE_MODEL (ckstore);
+        GtkTreeModel* model = GTK_TREE_MODEL (ckstore->priv->store);
         GtkTreeIter iter;
         gboolean check;
             
@@ -866,7 +866,7 @@ cryptui_key_store_get_selected_keys (CryptUIKeyStore *ckstore, GtkTreeView *view
     g_return_val_if_fail (GTK_IS_TREE_VIEW (view), NULL);
     
     if (ckstore->priv->use_checks) {
-        GtkTreeModel* model = GTK_TREE_MODEL (ckstore);
+        GtkTreeModel* model = GTK_TREE_MODEL (ckstore->priv->store);
         GtkTreeIter iter;
         gboolean check;
             
