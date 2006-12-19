@@ -9,12 +9,12 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: seahorse\n"
+"Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-12-11 18:00+0100\n"
-"PO-Revision-Date: 2006-12-11 18:13+0100\n"
+"POT-Creation-Date: 2006-12-19 15:21+0100\n"
+"PO-Revision-Date: 2006-12-19 15:24+0100\n"
 "Last-Translator: \n"
-"Language-Team:  Spanish GNOME Team <traductores@es.gnome.org>\n"
+"Language-Team:  <en@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -95,6 +95,46 @@ msgstr "_Vaciar caché"
 msgid "_Show Window"
 msgstr "_Mostrar ventana"
 
+#: ../agent/seahorse-agent-main.c:47
+msgid "Do not daemonize seahorse-agent"
+msgstr "No demonizar seahorse-agent"
+
+#: ../agent/seahorse-agent-main.c:50
+msgid "Print variables in for a C type shell"
+msgstr "Imprimir variables para un shell de tipo C"
+
+#: ../agent/seahorse-agent-main.c:53
+msgid "Display variables instead of editing conf files (gpg.conf, ssh agent socket)"
+msgstr ""
+"Mostrar variables en vez de editar archivos de configuración (gpg.conf, ssh "
+"agent socket)"
+
+#: ../agent/seahorse-agent-main.c:56
+msgid "Execute other arguments on the command line"
+msgstr "Ejecutar otros argumentos en la línea de comandos"
+
+#: ../agent/seahorse-agent-main.c:59
+msgid "Allow GPG agent request from any display"
+msgstr "Permitir que el agente GPG solicite desde cualquier pantalla"
+
+#: ../agent/seahorse-agent-main.c:80 ../daemon/seahorse-daemon.c:74
+msgid "couldn't fork process"
+msgstr "no se pudo bifurcar el proceso"
+
+#: ../agent/seahorse-agent-main.c:86 ../daemon/seahorse-daemon.c:80
+msgid "couldn't create new process group"
+msgstr "no se pudo crear un grupo de proceso nuevo"
+
+#: ../agent/seahorse-agent-main.c:235 ../daemon/seahorse-daemon.c:223
+#: ../plugins/applet/seahorse-applet.c:1010
+#: ../plugins/nautilus/seahorse-tool.c:571 ../src/main.c:59
+msgid "couldn't drop privileges properly"
+msgstr "no se pudieron dejar los privilegios de forma apropiada"
+
+#: ../agent/seahorse-agent-main.c:239
+msgid "Encryption Key Agent (Seahorse)"
+msgstr "Agente de claves de encriptación (Seahorse)"
+
 #: ../agent/seahorse-agent-prompt.c:216
 msgid "Authorize Passphrase Access"
 msgstr "Frase de paso de autorización"
@@ -112,28 +152,15 @@ msgid "_Authorize"
 msgstr "_Autorizar"
 
 #. Make the uid column
-#: ../agent/seahorse-agent-status.c:149
+#: ../agent/seahorse-agent-status.c:153
 msgid "Key Name"
 msgstr "Nombre de la clave"
 
-#: ../daemon/seahorse-daemon.c:52
+#: ../daemon/seahorse-daemon.c:53
 msgid "Do not daemonize seahorse-daemon"
 msgstr "No demonizar seahorse-daemon"
 
-#: ../daemon/seahorse-daemon.c:73
-msgid "couldn't fork process"
-msgstr "no se pudo bifurcar el proceso"
-
-#: ../daemon/seahorse-daemon.c:79
-msgid "couldn't create new process group"
-msgstr "no se pudo crear un grupo de proceso nuevo"
-
-#: ../daemon/seahorse-daemon.c:222 ../plugins/applet/seahorse-applet.c:1010
-#: ../plugins/nautilus/seahorse-tool.c:571 ../src/main.c:59
-msgid "couldn't drop privileges properly"
-msgstr "no se pudieron dejar los privilegios de forma apropiada"
-
-#: ../daemon/seahorse-daemon.c:226
+#: ../daemon/seahorse-daemon.c:227
 msgid "Encryption Daemon (Seahorse)"
 msgstr "Demonio de encriptación (Seahorse)"
 
@@ -254,27 +281,29 @@ msgstr ""
 
 #: ../data/seahorse.schemas.in.h:7
 msgid "Controls the visibility of the type column for the key manager."
-msgstr ""
-"Controla la visibilidad de la columna de tipo del administrador de claves."
+msgstr "Controla la visibilidad de la columna de tipo del administrador de claves."
 
 #: ../data/seahorse.schemas.in.h:8
 msgid "Controls the visibility of the validity column for the key manager."
-msgstr ""
-"Controla la visibilidad de la columna de validez del administrador de claves"
+msgstr "Controla la visibilidad de la columna de validez del administrador de claves"
 
 #: ../data/seahorse.schemas.in.h:9
+msgid "Display cache reminder in the notification area"
+msgstr "Mostrar recordatorio de caché en el área de notificación"
+
+#: ../data/seahorse.schemas.in.h:10
 msgid "Display clipboard after decrypting"
 msgstr "Mostrar portapapeles después de desencriptar"
 
-#: ../data/seahorse.schemas.in.h:10
+#: ../data/seahorse.schemas.in.h:11
 msgid "Display clipboard after encrypting"
 msgstr "Mostrar portapapeles después de encriptar"
 
-#: ../data/seahorse.schemas.in.h:11
+#: ../data/seahorse.schemas.in.h:12
 msgid "Enable DNS-SD sharing"
 msgstr "Activar compartición DNS-SD"
 
-#: ../data/seahorse.schemas.in.h:12
+#: ../data/seahorse.schemas.in.h:13
 msgid ""
 "Enables DNS-SD (Apple Bonjour) sharing of keys. seahorse-daemon must running "
 "and must be built with HKP and DNS-SD support."
@@ -282,15 +311,15 @@ msgstr ""
 "Activa la compartición de claves por DNS-DN (Apple Bonjour). Seahorse-daemon "
 "debe ejecutarse y debe compilarse con soporte HKP y DNS-SD."
 
-#: ../data/seahorse.schemas.in.h:13
+#: ../data/seahorse.schemas.in.h:14
 msgid "Expire passwords in the cache"
 msgstr "Caducar contraseñas en la caché"
 
-#: ../data/seahorse.schemas.in.h:14
+#: ../data/seahorse.schemas.in.h:15
 msgid "ID of the default key"
 msgstr "ID de la clave predeterminada"
 
-#: ../data/seahorse.schemas.in.h:15
+#: ../data/seahorse.schemas.in.h:16
 msgid ""
 "If set to 'gnome' uses gnome-keyring to cache passwords. When set to "
 "'internal' uses internal cache."
@@ -298,7 +327,7 @@ msgstr ""
 "Si se establece a «gnome» usa gnome-keyring para cachear las contraseñas. "
 "Cuando se establece a «internal» usa una caché interna."
 
-#: ../data/seahorse.schemas.in.h:16
+#: ../data/seahorse.schemas.in.h:17
 msgid ""
 "If set to true, then files encrypted with seahorse will be ASCII armor "
 "encoded."
@@ -306,7 +335,7 @@ msgstr ""
 "Si se establece a «true», entonces los archivos encriptados con seahorse "
 "serán codificados con armadura ASCII."
 
-#: ../data/seahorse.schemas.in.h:17
+#: ../data/seahorse.schemas.in.h:18
 msgid ""
 "If set to true, then the default key will always be added to an encryption "
 "recipients list."
@@ -314,31 +343,31 @@ msgstr ""
 "Si se establece a verdadero, entonces la clave predeterminada será añadida "
 "siempre a la lista de destinatarios de encriptado."
 
-#: ../data/seahorse.schemas.in.h:18
+#: ../data/seahorse.schemas.in.h:19
 msgid "Last key used to sign a message."
 msgstr "Última clave usada para firmar un mensaje."
 
-#: ../data/seahorse.schemas.in.h:19
+#: ../data/seahorse.schemas.in.h:20
 msgid "Last keyserver search pattern"
 msgstr "Patrón de búsqueda del último servidor de claves"
 
-#: ../data/seahorse.schemas.in.h:20
+#: ../data/seahorse.schemas.in.h:21
 msgid "Last keyservers used"
 msgstr "Últimos servidores de claves usados"
 
-#: ../data/seahorse.schemas.in.h:21
+#: ../data/seahorse.schemas.in.h:22
 msgid "PGP Key servers"
 msgstr "Servidores de claves PGP"
 
-#: ../data/seahorse.schemas.in.h:22
+#: ../data/seahorse.schemas.in.h:23
 msgid "Prompt before using GPG passwords in cache"
 msgstr "Preguntar entes de usar las contraseñas GPG en la caché"
 
-#: ../data/seahorse.schemas.in.h:23
+#: ../data/seahorse.schemas.in.h:24
 msgid "Publish keys to this keyserver."
 msgstr "Publicar claves a este  servidor de claves."
 
-#: ../data/seahorse.schemas.in.h:24
+#: ../data/seahorse.schemas.in.h:25
 msgid ""
 "Reflect the contents of the clipboard (whether encrypted, signed, etc...) in "
 "the panel applet icon."
@@ -346,33 +375,41 @@ msgstr ""
 "Refleja el contenido del portapapeles (ya sea encriptado, firmado, etc...) "
 "en el icono de la miniaplicación del panel. "
 
-#: ../data/seahorse.schemas.in.h:25
+#: ../data/seahorse.schemas.in.h:26
+msgid ""
+"Set to 'false' to disable display of the cache reminder in the notification "
+"area of your panel."
+msgstr "Establecer a «falso» para desactivar la visualización del recordatorio de caché en el área de notificación del panel."
+
+#: ../data/seahorse.schemas.in.h:27
 msgid ""
 "Set to 'true' to have seahorse-agent prompt before giving out passwords it "
 "has cached."
-msgstr "Establecer a 'true' para que seahorse-agent pregunte antes de sacar contraseñas que haya cacheado."
+msgstr ""
+"Establecer a 'true' para que seahorse-agent pregunte antes de sacar "
+"contraseñas que haya cacheado."
 
-#: ../data/seahorse.schemas.in.h:26
+#: ../data/seahorse.schemas.in.h:28
 msgid "Show clipboard state in panel"
 msgstr "Mostrar el estado del portapapeles en el panel"
 
-#: ../data/seahorse.schemas.in.h:27
+#: ../data/seahorse.schemas.in.h:29
 msgid "Show expires column in key manager"
 msgstr "Muestra la columna de caducidad en el administrador de claves"
 
-#: ../data/seahorse.schemas.in.h:28
+#: ../data/seahorse.schemas.in.h:30
 msgid "Show trust column in key manager"
 msgstr "Muestra la columna de confianza en el administrador de claves"
 
-#: ../data/seahorse.schemas.in.h:29
+#: ../data/seahorse.schemas.in.h:31
 msgid "Show type column in key manager"
 msgstr "Muestra el tipo de columna en el administrador de claves"
 
-#: ../data/seahorse.schemas.in.h:30
+#: ../data/seahorse.schemas.in.h:32
 msgid "Show validity column in key manager"
 msgstr "Muestra la columna de validez en el administrador de claves"
 
-#: ../data/seahorse.schemas.in.h:31
+#: ../data/seahorse.schemas.in.h:33
 msgid ""
 "Specify the column to sort the recipients window by. Columns are: 'name' and "
 "'id'. Put a '-' in front of the column name to sort in descending order."
@@ -381,7 +418,7 @@ msgstr ""
 "columnas son: «nombre» e «id». Ponga un «-» en frente del nombre de la "
 "columna para ordenarlos en orden descendente."
 
-#: ../data/seahorse.schemas.in.h:32
+#: ../data/seahorse.schemas.in.h:34
 msgid ""
 "Specify the column to sort the seahorse key manager main window by. Columns "
 "are: 'name', 'id', 'validity', 'expires', 'trust', and 'type'. Put a '-' in "
@@ -392,19 +429,19 @@ msgstr ""
 "«confianza» y «tipo». Ponga un «-» en frente del nombre de la columna para "
 "ordenarlos en orden descendente."
 
-#: ../data/seahorse.schemas.in.h:33
+#: ../data/seahorse.schemas.in.h:35
 msgid "The ID of the last secret key used to sign a message."
 msgstr "El ID de la última clave secreta usada para firmar un mensaje."
 
-#: ../data/seahorse.schemas.in.h:34
+#: ../data/seahorse.schemas.in.h:36
 msgid "The column to sort the recipients by"
 msgstr "La columna por la que ordenar los destinatarios"
 
-#: ../data/seahorse.schemas.in.h:35
+#: ../data/seahorse.schemas.in.h:37
 msgid "The column to sort the seahorse keys by"
 msgstr "La columna por la que ordenar las claves de seahorse"
 
-#: ../data/seahorse.schemas.in.h:36
+#: ../data/seahorse.schemas.in.h:38
 msgid ""
 "The keyserver to publish PGP keys to. Or empty to suppress publishing of PGP "
 "keys."
@@ -412,7 +449,7 @@ msgstr ""
 "El servidor de claves donde publicar las claves PGP. O vacío para suprimir "
 "la publicación de claves PGP."
 
-#: ../data/seahorse.schemas.in.h:37
+#: ../data/seahorse.schemas.in.h:39
 msgid ""
 "The last keyserver a search was performed against or empty for all "
 "keyservers."
@@ -420,51 +457,58 @@ msgstr ""
 "El último servidor de claves donde se realizó una búsqueda, o déjelo vacío "
 "para todos los servidores de claves."
 
-#: ../data/seahorse.schemas.in.h:38
+#: ../data/seahorse.schemas.in.h:40
 msgid "The last search pattern searched for against a keyserver."
 msgstr "El último patrón de búsqueda usado en un servidor de claves."
 
-#: ../data/seahorse.schemas.in.h:39
-msgid "The time (in minutes) to cache GPG passwords"
-msgstr ""
-"El tiempo (en minutos) durante el que se recordarán las contraseñas GPG"
-
-#: ../data/seahorse.schemas.in.h:40
-msgid ""
-"This is the amount of time, specified in minutes, to cache GPG passwords in "
-"seahorse-agent."
-msgstr "Esta es la cantidad de tiempo, especificado en minutos, en que se cachearán contraseñas GPG en el seahorse-agent."
-
 #: ../data/seahorse.schemas.in.h:41
-msgid ""
-"This option enables the GPG password cache in the seahorse-agent program. "
-"The 'use-agent' setting in gpg.conf affects this setting."
-msgstr "Esta opción activa la caché de contraseñas de GPG en programa seahorse-agent. El ajuste 'use-agent' en gpg.conf afecta este ajuste."
+msgid "The time (in minutes) to cache GPG passwords"
+msgstr "El tiempo (en minutos) durante el que se recordarán las contraseñas GPG"
 
 #: ../data/seahorse.schemas.in.h:42
 msgid ""
-"This specifies the default key to use for certain operations, mainly signing."
+"This is the amount of time, specified in minutes, to cache GPG passwords in "
+"seahorse-agent."
+msgstr ""
+"Esta es la cantidad de tiempo, especificado en minutos, en que se cachearán "
+"contraseñas GPG en el seahorse-agent."
+
+#: ../data/seahorse.schemas.in.h:43
+msgid ""
+"This option enables the GPG password cache in the seahorse-agent program. "
+"The 'use-agent' setting in gpg.conf affects this setting."
+msgstr ""
+"Esta opción activa la caché de contraseñas de GPG en programa seahorse-"
+"agent. El ajuste 'use-agent' en gpg.conf afecta este ajuste."
+
+#: ../data/seahorse.schemas.in.h:44
+msgid "This specifies the default key to use for certain operations, mainly signing."
 msgstr ""
 "Esto especifica la clave predeterminada que se usa para ciertas operaciones, "
 "principalmente para la firma."
 
-#: ../data/seahorse.schemas.in.h:43
+#: ../data/seahorse.schemas.in.h:45
 msgid ""
 "When set seahorse-agent will try to automatically load the users SSH keys "
 "when needed. This is equivalent to using the ssh-add utility."
-msgstr "Cuando se configure seahorse-agent se intentarán cargar automáticamente las claves SSH de los usuarios cuando se necesiten. Esto es equivalente a usar la utilidad ssh-add."
+msgstr ""
+"Cuando se configure seahorse-agent se intentarán cargar automáticamente las "
+"claves SSH de los usuarios cuando se necesiten. Esto es equivalente a usar "
+"la utilidad ssh-add."
 
-#: ../data/seahorse.schemas.in.h:44
+#: ../data/seahorse.schemas.in.h:46
 msgid ""
 "When set, seahorse-agent expires GPG passwords in its cache after a peried "
 "of time."
-msgstr "Cuando está configurado, seahorse-agent caduca las contraseñas GPG en su caché tras un período de tiempo."
+msgstr ""
+"Cuando está configurado, seahorse-agent caduca las contraseñas GPG en su "
+"caché tras un período de tiempo."
 
-#: ../data/seahorse.schemas.in.h:45
+#: ../data/seahorse.schemas.in.h:47
 msgid "Where to store cached passwords."
 msgstr "Dónde almacenar las contraseñas cacheadas."
 
-#: ../data/seahorse.schemas.in.h:46
+#: ../data/seahorse.schemas.in.h:48
 msgid ""
 "Whether or not modified keys should be automatically synced with the default "
 "keyserver."
@@ -472,19 +516,19 @@ msgstr ""
 "Indica si las claves modificadas deben o no sincronizarse automáticamente "
 "con el servidor de claves predeterminado."
 
-#: ../data/seahorse.schemas.in.h:47
+#: ../data/seahorse.schemas.in.h:49
 msgid "Whether the GPG password cache is enabled"
 msgstr "Indica si está activado la caché de contraseñas GPG"
 
-#: ../data/seahorse.schemas.in.h:48
+#: ../data/seahorse.schemas.in.h:50
 msgid "Whether to always encrypt to default key"
 msgstr "Indica si se debe encriptar siempre con la clave predeterminada"
 
-#: ../data/seahorse.schemas.in.h:49
+#: ../data/seahorse.schemas.in.h:51
 msgid "Whether to automatically load SSH keys on demand."
 msgstr "Indica si se deben cargar las claves SSH bajo demanda."
 
-#: ../data/seahorse.schemas.in.h:50
+#: ../data/seahorse.schemas.in.h:52
 msgid "Whether to use ASCII Armor"
 msgstr "Indica si se debe usar armadura ASCII"
 
@@ -755,7 +799,7 @@ msgid "Public PGP Key"
 msgstr "Clave PGP pública"
 
 #: ../libseahorse/seahorse-pgp-key.c:165
-#: ../src/seahorse-pgp-private-key-properties.glade.h:34
+#: ../src/seahorse-pgp-private-key-properties.glade.h:35
 msgid "Private PGP Key"
 msgstr "Clave PGP privada"
 
@@ -851,7 +895,9 @@ msgstr "<b>Predeterminado</b>"
 msgid ""
 "<b>Note:</b> The 'seahorse-agent' program has been started. This program is "
 "necessary in order to cache passphrases. "
-msgstr "<b>Nota:</b> El programa 'seahorse-agent' ha sido iniciado. Este programa es necesario para cachear frases de paso."
+msgstr ""
+"<b>Nota:</b> El programa 'seahorse-agent' ha sido iniciado. Este programa es "
+"necesario para cachear frases de paso."
 
 #: ../libseahorse/seahorse-prefs.glade.h:3
 msgid "<b>Remember PGP Passphrases</b>"
@@ -865,7 +911,9 @@ msgstr "<b>Claves de shell segura</b>"
 msgid ""
 "<b>Warning:</b> The 'seahorse-agent' program is not running. This program is "
 "necessary in order to cache passphrases. "
-msgstr "<b>Advertencia:</b> El programa 'seahorse-agent' no está funcionando. Este programa es necesario para cachear frases de paso."
+msgstr ""
+"<b>Advertencia:</b> El programa 'seahorse-agent' no está funcionando. Este "
+"programa es necesario para cachear frases de paso."
 
 #: ../libseahorse/seahorse-prefs.glade.h:6
 msgid "<i>A non-supported PGP passphrase caching agent is running.</i>"
@@ -1013,10 +1061,8 @@ msgid "Selection Bound"
 msgstr "Borde de selección"
 
 #: ../libseahorse/seahorse-secure-entry.c:279
-msgid ""
-"The position of the opposite end of the selection from the cursor in chars"
-msgstr ""
-"La posición del final opuesto de la selección desde el cursor en caracteres"
+msgid "The position of the opposite end of the selection from the cursor in chars"
+msgstr "La posición del final opuesto de la selección desde el cursor en caracteres"
 
 #: ../libseahorse/seahorse-secure-entry.c:283
 msgid "Maximum length"
@@ -1070,8 +1116,7 @@ msgstr "Ajuste del desplazamiento"
 
 #: ../libseahorse/seahorse-secure-entry.c:303
 msgid "Number of pixels of the entry scrolled off the screen to the left"
-msgstr ""
-"Número de píxeles de la entrada desplazados de la pantalla a la izquierda"
+msgstr "Número de píxeles de la entrada desplazados de la pantalla a la izquierda"
 
 #: ../libseahorse/seahorse-secure-entry.c:307
 msgid "Text"
@@ -1104,8 +1149,7 @@ msgid "No keys usable for signing"
 msgstr "No hay claves disponibles para firmar"
 
 #: ../libseahorse/seahorse-signer.c:58
-msgid ""
-"You have no personal PGP keys that can be used to sign a document or message."
+msgid "You have no personal PGP keys that can be used to sign a document or message."
 msgstr ""
 "No tiene claves PGP personales que se puedan usar para firmar un documento o "
 "mensaje."
@@ -1328,8 +1372,7 @@ msgstr "Encriptado de texto del portapapeles"
 
 #: ../plugins/applet/GNOME_SeahorseApplet.server.in.in.h:2
 msgid "Encrypt, decrypt or sign the clipboard (uses PGP type encryption)."
-msgstr ""
-"Encripta, desencripta o firma el portapapeles (usa encriptación tipo PGP)."
+msgstr "Encripta, desencripta o firma el portapapeles (usa encriptación tipo PGP)."
 
 #: ../plugins/applet/GNOME_SeahorseApplet.server.in.in.h:3
 msgid "Seahorse Applet Factory"
@@ -1609,7 +1652,7 @@ msgstr[0] "Encriptar el archivo seleccionado"
 msgstr[1] "Encriptar los archivos seleccionados"
 
 #: ../plugins/nautilus-ext/seahorse-nautilus.c:168
-#: ../src/seahorse-pgp-private-key-properties.glade.h:37
+#: ../src/seahorse-pgp-private-key-properties.glade.h:38
 msgid "Sign"
 msgstr "Firmar"
 
@@ -2733,6 +2776,10 @@ msgstr ""
 "no estarán disponibles para otros."
 
 #: ../src/seahorse-keyserver-sync.glade.h:5
+msgid "_Key Servers"
+msgstr "Servidores de _claves"
+
+#: ../src/seahorse-keyserver-sync.glade.h:6
 msgid "_Sync"
 msgstr "_Sincronizar"
 
@@ -2807,8 +2854,7 @@ msgstr "<b>Opciones _avanzadas de clave</b>"
 
 #: ../src/seahorse-pgp-generate.glade.h:2
 msgid "A PGP key allows you to encrypt email or files to other people."
-msgstr ""
-"Una clave PGP le permite encriptar correo-e o archivos para otra gente."
+msgstr "Una clave PGP le permite encriptar correo-e o archivos para otra gente."
 
 #: ../src/seahorse-pgp-generate.glade.h:3
 msgid "Algoritms here"
@@ -2982,35 +3028,39 @@ msgstr "Predominar confianza del _propietario:"
 msgid "Owner"
 msgstr "Propietario"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:35
+#: ../src/seahorse-pgp-private-key-properties.glade.h:34
+msgid "Primary"
+msgstr "Primario"
+
+#: ../src/seahorse-pgp-private-key-properties.glade.h:36
 msgid "Remove this photo from this key"
 msgstr "Quitar esta foto de la clave"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:36
+#: ../src/seahorse-pgp-private-key-properties.glade.h:37
 msgid "Revoke"
 msgstr "Revocar"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:38
+#: ../src/seahorse-pgp-private-key-properties.glade.h:39
 #: ../src/seahorse-pgp-public-key-properties.glade.h:31
 msgid "Strength:"
 msgstr "Fortaleza:"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:39
+#: ../src/seahorse-pgp-private-key-properties.glade.h:40
 #: ../src/seahorse-pgp-public-key-properties.glade.h:32
 msgid "The owner of the key revoked the key. It can no longer be used."
 msgstr "El propietario de la clave revocó la clave. No se puede usar más."
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:40
+#: ../src/seahorse-pgp-private-key-properties.glade.h:41
 #: ../src/seahorse-pgp-public-key-properties.glade.h:33
 msgid "This key expired on: (placeholder)"
 msgstr "Esta clave caducó el: (placeholder)"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:41
+#: ../src/seahorse-pgp-private-key-properties.glade.h:42
 #: ../src/seahorse-pgp-public-key-properties.glade.h:36
 msgid "Type:"
 msgstr "Tipo:"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:42
+#: ../src/seahorse-pgp-private-key-properties.glade.h:43
 msgid ""
 "Unknown\n"
 "Never\n"
@@ -3024,7 +3074,11 @@ msgstr ""
 "Completa\n"
 "Última"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:47
+#: ../src/seahorse-pgp-private-key-properties.glade.h:48
+msgid "_Add Name"
+msgstr "_Añadir nombre"
+
+#: ../src/seahorse-pgp-private-key-properties.glade.h:49
 msgid "_Export Complete Key:"
 msgstr "_Exportar la clave completa:"
 
@@ -3068,15 +3122,12 @@ msgid "I trust signatures from '%s' on other keys "
 msgstr "Confío en las firmas de %s de otras claves"
 
 #: ../src/seahorse-pgp-public-key-properties.glade.h:26
-msgid ""
-"If you no longer trust this person's identity, <i>revoke</i> your signature:"
-msgstr ""
-"Si no confías más en la identidad de esta persona, <i>revoca</i> tu firma:"
+msgid "If you no longer trust this person's identity, <i>revoke</i> your signature:"
+msgstr "Si no confías más en la identidad de esta persona, <i>revoca</i> tu firma:"
 
 #: ../src/seahorse-pgp-public-key-properties.glade.h:34
 msgid "To indicate your trust of this key to others, <i>sign</i> this key:"
-msgstr ""
-"Para indicar a otros que confía en esta clave, <i>firme</i> esta clave:"
+msgstr "Para indicar a otros que confía en esta clave, <i>firme</i> esta clave:"
 
 #: ../src/seahorse-pgp-public-key-properties.glade.h:37
 msgid ""
@@ -3098,8 +3149,7 @@ msgstr "Usted _confía en el propietario:"
 
 #: ../src/seahorse-pgp-public-key-properties.glade.h:43
 msgid "Your trust is manually specified on the <i>Details</i> tab."
-msgstr ""
-"Su confianza está especificada manualmente en la solapa <i>Detalles</i>."
+msgstr "Su confianza está especificada manualmente en la solapa <i>Detalles</i>."
 
 #: ../src/seahorse-pgp-public-key-properties.glade.h:44
 msgid "_Only display the signatures of people I trust"
@@ -3318,10 +3368,8 @@ msgid "If signature can be revoked"
 msgstr "Indica si la firma puede ser revocada"
 
 #: ../src/seahorse-sign.glade.h:15
-msgid ""
-"If signature is local to the key ring and won't be exported with the key"
-msgstr ""
-"Si la firma es local al depósito de claves y no será exportada con la clave"
+msgid "If signature is local to the key ring and won't be exported with the key"
+msgstr "Si la firma es local al depósito de claves y no será exportada con la clave"
 
 #: ../src/seahorse-sign.glade.h:16
 msgid "Sign Key"
@@ -3402,6 +3450,10 @@ msgid "_Create and Set Up"
 msgstr "_Crear y configurar"
 
 #: ../src/seahorse-ssh-generate.glade.h:13
+msgid "_Just Create Key"
+msgstr "_Tan sólo crear clave"
+
+#: ../src/seahorse-ssh-generate.glade.h:14
 msgid "_Key Description:"
 msgstr "_Descripción de la clave:"
 
@@ -3456,8 +3508,7 @@ msgstr "E_xportar la clave completa"
 
 #: ../src/seahorse-ssh-key-properties.glade.h:21
 msgid "The owner of this key is _authorized to connect to this computer"
-msgstr ""
-"El propietario de esta clave está _autorizado para conectar a este equipo"
+msgstr "El propietario de esta clave está _autorizado para conectar a este equipo"
 
 #: ../src/seahorse-ssh-key-properties.glade.h:22
 msgid "Used to connect to other computers."
@@ -3497,20 +3548,3 @@ msgstr "_Equipo:"
 msgid "_Login Name:"
 msgstr "_Usuario:"
 
-#~ msgid "Print variables in for a C type shell"
-#~ msgstr "Imprimir variables para un shell de tipo C"
-
-#~ msgid ""
-#~ "Display variables instead of editing conf files (gpg.conf, ssh agent "
-#~ "socket)"
-#~ msgstr ""
-#~ "Mostrar variables en vez de editar archivos de configuración (gpg.conf, "
-#~ "ssh agent socket)"
-
-#~ msgid "Execute other arguments on the command line"
-#~ msgstr "Ejecutar otros argumentos en la línea de comandos"
-
-#~ msgid ""
-#~ "The program 'seahorse-daemon' is necessary for the caching of passphrases"
-#~ msgstr ""
-#~ "El programa 'seahorse-daemon' es necesario para cachear frases de paso"
