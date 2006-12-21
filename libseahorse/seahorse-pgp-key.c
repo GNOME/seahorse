@@ -271,7 +271,9 @@ seahorse_pgp_key_get_name_markup (SeahorseKey *skey, guint index)
     SeahorsePGPKey *pkey;
     gpgme_user_id_t uid;
     gchar *email, *name, *comment, *ret;
-    
+    gboolean strike = FALSE;
+    guint flags;
+
     g_assert (SEAHORSE_IS_PGP_KEY (skey));
     pkey = SEAHORSE_PGP_KEY (skey);
 
@@ -281,15 +283,23 @@ seahorse_pgp_key_get_name_markup (SeahorseKey *skey, guint index)
     name = convert_string (uid->name, TRUE);
     email = convert_string (uid->email, TRUE);
     comment = convert_string (uid->comment, TRUE);
+
+    flags = seahorse_key_get_flags (skey);
+    if (uid->revoked || flags & CRYPTUI_FLAG_EXPIRED || 
+        flags & CRYPTUI_FLAG_REVOKED || flags & CRYPTUI_FLAG_DISABLED)
+        strike = TRUE;
     
-    ret = g_strconcat (name, 
+    ret = g_strconcat (strike ? "<span strikethrough='true'>" : "",
+            name,
             "<span foreground='#555555' size='small' rise='0'>",
             email && email[0] ? "  " : "",
             email && email[0] ? email : "",
             comment && comment[0] ? "  '" : "",
             comment && comment[0] ? comment : "",
             comment && comment[0] ? "'" : "",
-            "</span>", NULL);
+            "</span>", 
+            strike ? "</span>" : "",
+            NULL);
     
     g_free (name);
     g_free (comment);
