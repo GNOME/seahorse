@@ -27,7 +27,6 @@
 #include <gnome.h>
 #include <glade/glade-xml.h>
 
-#include "eggtrayicon.h"
 #include "seahorse-pgp-key.h"
 #include "seahorse-agent.h"
 #include "seahorse-context.h"
@@ -42,8 +41,7 @@
  */
 
 /* For the docklet icon */
-static EggTrayIcon *g_docklet = NULL;
-static GtkWidget *g_image = NULL;
+static GtkStatusIcon *g_docklet = NULL;
 
 /* For the popup window */
 static SeahorseWidget *g_window = NULL;
@@ -231,48 +229,36 @@ on_settings_activate (GtkWidget *item, gpointer data)
     }
 }
 
-/* Called when icon destroyed */
+/* Called when icon clicked */
 static void
-tray_destroyed (GtkWidget *widget, void *data)
+tray_activate (GtkStatusIcon *icon, void *data)
 {
-    g_object_unref (G_OBJECT (g_docklet));
-    g_docklet = NULL;
+    window_show ();
 }
 
 /* Called when icon clicked */
 static void
-tray_clicked (GtkWidget *button, GdkEventButton *event, void *data)
+tray_popup_menu (GtkStatusIcon *icon, guint button, guint32 timestamp, void *data)
 {
-    if (event->type != GDK_BUTTON_PRESS)
-        return;
+    GtkWidget *menu;
+    GladeXML *xml;
 
-    /* Right click, show menu */
-    if (event->button == 3) {
-        GtkWidget *menu;
-        GladeXML *xml;
-        xml =
-            glade_xml_new (SEAHORSE_GLADEDIR "seahorse-agent-cache.glade",
-                           "context-menu", NULL);
-        menu = glade_xml_get_widget (xml, "context-menu");
-        glade_xml_signal_connect_data (xml, "on_clear_cache_activate",
-                                       G_CALLBACK (on_clear_cache_activate), NULL);
-        glade_xml_signal_connect_data (xml, "on_show_window_activate",
-                                       G_CALLBACK (on_show_window_activate), NULL);
-        glade_xml_signal_connect_data (xml, "on_settings_activate",
-                                       G_CALLBACK (on_settings_activate), NULL);
+    xml = glade_xml_new (SEAHORSE_GLADEDIR "seahorse-agent-cache.glade",
+                         "context-menu", NULL);
+    menu = glade_xml_get_widget (xml, "context-menu");
+    glade_xml_signal_connect_data (xml, "on_clear_cache_activate",
+                                   G_CALLBACK (on_clear_cache_activate), NULL);
+    glade_xml_signal_connect_data (xml, "on_show_window_activate",
+                                   G_CALLBACK (on_show_window_activate), NULL);
+    glade_xml_signal_connect_data (xml, "on_settings_activate",
+                                   G_CALLBACK (on_settings_activate), NULL);
 
-        gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
-                        seahorse_util_determine_popup_menu_position,
-                        (gpointer) button,
-                        event->button, gtk_get_current_event_time ());
-        gtk_widget_show (menu);
-        g_object_unref (xml);
-    }
+    gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
+                    gtk_status_icon_position_menu, icon, button, timestamp);
+    if (button == 0)
+        gtk_menu_shell_select_first (GTK_MENU_SHELL (menu), FALSE);
 
-    /* Left click show status */
-    else if (event->button == 1) {
-        window_show ();
-    }
+    g_object_unref (xml);
 }
 
 /* Remove tray icon */
@@ -280,10 +266,6 @@ static void
 docklet_destroy ()
 {
     if (g_docklet) {
-        g_signal_handlers_disconnect_by_func (G_OBJECT (g_docklet),
-                                              G_CALLBACK (tray_destroyed), NULL);
-        gtk_widget_destroy (GTK_WIDGET (g_docklet));
-
         g_object_unref (G_OBJECT (g_docklet));
         g_docklet = NULL;
     }
@@ -306,33 +288,11 @@ docklet_create ()
         docklet_destroy ();
     }
 
-    g_docklet = egg_tray_icon_new ("seahorse-agent");
-    box = gtk_event_box_new ();
+    g_docklet = gtk_status_icon_new_from_stock (GTK_STOCK_DIALOG_AUTHENTICATION);
 
-    /* 
-     * TODO: Is loading an external file a security risk? It may well be
-     * with all the image vulnerabilities going around. We may want to 
-     * encode this image and include in the code.
-     */
-
-    g_image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_AUTHENTICATION, 
-                                        GTK_ICON_SIZE_LARGE_TOOLBAR);
-
-    g_signal_connect (G_OBJECT (g_docklet), "destroy", G_CALLBACK (tray_destroyed),
-                      NULL);
-    g_signal_connect (G_OBJECT (box), "button-press-event",
-                      G_CALLBACK (tray_clicked), NULL);
-
-    gtk_container_add (GTK_CONTAINER (box), g_image);
-    gtk_container_add (GTK_CONTAINER (g_docklet), box);
-
-    if (!gtk_check_version (2, 4, 0))
-        g_object_set (G_OBJECT (box), "visible-window", FALSE, NULL);
-
-    gtk_widget_show_all (GTK_WIDGET (g_docklet));
-
-    /* ref the docklet before we bandy it about the place */
-    g_object_ref (G_OBJECT (g_docklet));
+    g_signal_connect (G_OBJECT (g_docklet), "activate", G_CALLBACK (tray_activate), NULL);
+    g_signal_connect (G_OBJECT (g_docklet), "popup-menu", G_CALLBACK (tray_popup_menu), NULL);
+    gtk_status_icon_set_visible (g_docklet, TRUE);
 }
 
 /* Called when the display gconf key changes */

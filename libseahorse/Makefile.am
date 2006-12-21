@@ -83,7 +83,6 @@ libseahorse_a_SOURCES = \
 	seahorse-progress.c seahorse-progress.h \
 	seahorse-gconf.c seahorse-gconf.h \
 	seahorse-dns-sd.c seahorse-dns-sd.h \
-	eggtrayicon.c eggtrayicon.h \
 	seahorse-gtkstock.c seahorse-gtkstock.h \
 	seahorse-notification.c \
 	seahorse-secure-memory.c seahorse-secure-memory.h \
