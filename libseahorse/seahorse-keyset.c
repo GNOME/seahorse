@@ -117,7 +117,8 @@ key_removed (SeahorseContext *sctx, SeahorseKey *skey, SeahorseKeyset *skset)
     g_assert (SEAHORSE_IS_KEY (skey));
     g_assert (SEAHORSE_IS_KEYSET (skset));
 
-    maybe_remove_key (skset, skey);
+    if (g_hash_table_lookup (skset->pv->keys, skey))
+        remove_key (skey, NULL, skset);
 }
 
 static void
