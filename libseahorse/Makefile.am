@@ -89,6 +89,7 @@ libseahorse_a_SOURCES = \
 	seahorse-secure-memory.c seahorse-secure-memory.h \
 	seahorse-secure-entry.c seahorse-secure-entry.h \
 	seahorse-algo.c seahorse-algo.h \
+	seahorse-unix-signal.c seahorse-unix-signal.h \
 	$(BUILT_SOURCES) \
 	$(AGENT_SRCS) \
 	$(KEYSERVER_SRCS) \

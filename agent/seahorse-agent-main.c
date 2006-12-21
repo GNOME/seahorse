@@ -37,13 +37,15 @@
 #include "seahorse-gtkstock.h"
 #include "seahorse-gconf.h"
 #include "seahorse-agent.h"
+#include "seahorse-unix-signal.h"
 #include "seahorse-secure-memory.h"
 
-static gboolean g_daemonize = TRUE;
-static gboolean g_quit = FALSE;
+static gboolean agent_daemonize = TRUE;
+static gboolean agent_running = FALSE;
+static gboolean agent_quit = FALSE;
 
 static const struct poptOption options[] = {
-	{ "no-daemonize", 'd', POPT_ARG_NONE | POPT_ARG_VAL, &g_daemonize, FALSE,
+	{ "no-daemonize", 'd', POPT_ARG_NONE | POPT_ARG_VAL, &agent_daemonize, FALSE,
 	  N_("Do not daemonize seahorse-agent"), NULL },
 
 	{ "cshell", 'c', POPT_ARG_NONE | POPT_ARG_VAL, &seahorse_agent_cshell, TRUE,
@@ -74,7 +76,7 @@ daemonize (const gchar **exec)
     pid_t pid;
     int i;
 
-    if (g_daemonize) {
+    if (agent_daemonize) {
         switch ((pid = fork ())) {
         case -1:
             err (1, _("couldn't fork process"));
@@ -110,7 +112,7 @@ daemonize (const gchar **exec)
     seahorse_agent_postfork (pid);
     seahorse_agent_ssh_postfork (pid);
     
-    if (g_daemonize) {
+    if (agent_daemonize) {
 
         /* If we were asked to exec another program, do that here */
         if (!exec || !exec[0])
@@ -130,20 +132,11 @@ daemonize (const gchar **exec)
 }
 
 static void
-on_quit (int signal)
+unix_signal (int signal)
 {
-    g_quit = 1;
-}
-
-static gboolean
-check_quit (gpointer data)
-{
-    if (g_quit) {
+    agent_quit = TRUE;
+    if (agent_running)
         gtk_main_quit ();
-        return FALSE;
-    }
-
-    return TRUE;
 }
 
 static void
@@ -260,11 +253,11 @@ int main(int argc, char* argv[])
     daemonize (args);
 
     /* Handle some signals */
-    signal (SIGINT, on_quit);
-    signal (SIGTERM, on_quit);
+    seahorse_unix_signal_register (SIGINT, unix_signal);
+    seahorse_unix_signal_register (SIGTERM, unix_signal);
 
     /* Force gconf to reconnect after daemonizing */
-    if (g_daemonize)
+    if (agent_daemonize)
         seahorse_gconf_disconnect ();    
     
     client = gnome_master_client();
@@ -289,8 +282,8 @@ int main(int argc, char* argv[])
 #endif
     
     /* Sometimes we've already gotten a quit signal */
-    if(!g_quit) {
-        g_timeout_add (100, check_quit, NULL);
+    if(!agent_quit) {
+        agent_running = TRUE;
         gtk_main ();
         g_message ("left gtk_main\n");
     }

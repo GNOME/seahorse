@@ -52,6 +52,23 @@
  * if their TTL expires. 
  */
 
+/* Override the DEBUG_CACHE switch here */
+/* #define DEBUG_CACHE_ENABLE 0 */
+
+#ifndef DEBUG_CACHE_ENABLE
+#if _DEBUG
+#define DEBUG_CACHE_ENABLE 1
+#else
+#define DEBUG_CACHE_ENABLE 0
+#endif
+#endif
+
+#if DEBUG_CACHE_ENABLE
+#define DEBUG_CACHE(x)     g_printerr x
+#else
+#define DEBUG_CACHE(x)
+#endif
+
 #define UNPARSEABLE_KEY     _("Unparseable Key ID")
 #define UNKNOWN_KEY         _("Unknown/Invalid Key")
 #define TRANSIENT_ID        "TRANSIENTTRANSIENT"
@@ -67,9 +84,71 @@ typedef struct sa_cache_t {
 static GHashTable *g_cache = NULL;      /* Hash of ids to sa_cache_t */
 static GMemChunk *g_memory = NULL;      /* Memory for sa_cache_t's */
 static guint g_notify_id = 0;           /* gconf notify id */
+static guint g_timeout_id = 0;          /* timeout of next expire */
+
+gboolean seahorse_agent_cache_check (gpointer);
 
 /* -----------------------------------------------------------------------------
  */
+
+static gint
+calc_ttl ()
+{
+    if (!seahorse_gconf_get_boolean (SETTING_CACHE)) {
+        /* No caching */
+        return 0;
+    }
+
+    if (seahorse_gconf_get_boolean (SETTING_EXPIRE)) {
+        /* How long to cache. gconf has in minutes, we want seconds */
+        return seahorse_gconf_get_integer (SETTING_TTL) * 60;
+    }
+
+    return -1;
+};
+
+static void
+find_next_expiry (gpointer key, gpointer value, gpointer user_data)
+{
+    sa_cache_t *it = (sa_cache_t *) value;
+    time_t *next = (time_t*)user_data;
+
+    if (*next < it->stamp)
+        *next = it->stamp;
+}
+
+/* Called to calculate and setup next expiry timeout */
+static void 
+setup_next_expiry (gboolean nextonly)
+{
+    time_t now, first = 0;
+    gint ms, ttl;
+
+    if (g_hash_table_size (g_cache) == 0)
+        return;
+    ttl = calc_ttl ();
+    if (ttl == -1) /* cache indefinitely */
+        return;
+
+    g_hash_table_foreach (g_cache, find_next_expiry, &first);
+    if (!first)
+        return;
+
+    if (g_timeout_id)
+        g_source_remove (g_timeout_id);
+    now = time (NULL);
+    first += ttl;
+
+    /* Already expired, so clear in a second */
+    if (!nextonly && first <= now)
+        first = now;
+
+    ms = ((first - now) + 1) * 1000;
+    g_timeout_id = g_timeout_add (ms, seahorse_agent_cache_check, NULL);
+
+    DEBUG_CACHE (("[cache] next expiry in %d seconds\n", ms / 1000));
+}
+
 
 /* Check each cache item for expiry */
 static gboolean
@@ -100,30 +179,24 @@ cache_enumerator (gpointer key, gpointer value, gpointer user_data)
 gboolean
 seahorse_agent_cache_check (gpointer unused)
 {
-    gint ttl = -1;
+    g_timeout_id = 0;
 
     if (!g_cache)
         return FALSE;
 
     if (g_hash_table_size (g_cache) > 0) {
-        if (!seahorse_gconf_get_boolean (SETTING_CACHE)) {
-            /* No caching */
-            ttl = 0;
-        }
-
-        else if (seahorse_gconf_get_boolean (SETTING_EXPIRE)) {
-            /* How long to cache. gconf has in minutes, we want seconds */
-            ttl = seahorse_gconf_get_integer (SETTING_TTL) * 60;
-        }
-
+        gint ttl = calc_ttl ();
         /* negative means cache indefinitely */
         if (ttl != -1) {
-            if (g_hash_table_foreach_remove (g_cache, cache_enumerator, &ttl) > 0)
+            if (g_hash_table_foreach_remove (g_cache, cache_enumerator, &ttl) > 0) {
+                DEBUG_CACHE (("[cache] expired cached secrets\n"));
                 seahorse_agent_status_update ();
+                setup_next_expiry (TRUE);
+            }
         }
     }
 
-    return TRUE;
+    return FALSE;
 }
 
 /* Callback to free a cache item */
@@ -154,8 +227,10 @@ gconf_notify (GConfClient *client, guint id, GConfEntry *entry, gpointer data)
         if (!gconf_value_get_bool (gconf_entry_get_value (entry)))
 			seahorse_agent_cache_clearall (NULL);
 	}
-}
 
+    /* TTL setting may have changed, so... */
+    setup_next_expiry (FALSE);
+}
 
 /* Initialize the cache */
 void
@@ -171,9 +246,6 @@ seahorse_agent_cache_init ()
         g_hash_table_new_full (g_str_hash, g_str_equal, NULL, destroy_cache_item);
     g_memory = g_mem_chunk_create (SeahorseAgentPassReq, 128, G_ALLOC_AND_FREE);
 
-    /* Handle the cache timeouts */
-    g_timeout_add (1000, seahorse_agent_cache_check, g_cache);
-    
     err = gpgme_engine_check_version (proto);
     g_return_if_fail (GPG_IS_OK (err));
    
@@ -200,6 +272,11 @@ seahorse_agent_cache_uninit ()
     if (g_notify_id) {
         seahorse_gconf_unnotify (g_notify_id);
         g_notify_id = 0;
+    }
+
+    if (g_timeout_id) {
+        g_source_remove (g_timeout_id);
+        g_timeout_id = 0;
     }
 }
 
@@ -270,6 +347,7 @@ seahorse_agent_internal_clear (const gchar *id)
 
     /* UI hooks */
     seahorse_agent_status_update ();
+    setup_next_expiry (FALSE);
 }
 
 /* Callback for clearing all items */
@@ -291,8 +369,10 @@ seahorse_agent_cache_clearall ()
 {
     g_assert (g_cache != NULL);
 
-    if (g_hash_table_foreach_remove (g_cache, remove_cache_item, NULL) > 0)
+    if (g_hash_table_foreach_remove (g_cache, remove_cache_item, NULL) > 0) {
         seahorse_agent_status_update ();
+        setup_next_expiry (FALSE);
+    }
 }
 
 
@@ -342,6 +422,7 @@ seahorse_agent_internal_set (const gchar *id, const gchar *pass, gboolean lock)
 
     /* UI hooks */
     seahorse_agent_status_update ();
+    setup_next_expiry (FALSE);
 }
 
 /* Returns number of passwords in the cache */

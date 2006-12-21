@@ -38,9 +38,11 @@
 #include "seahorse-gconf.h"
 #include "seahorse-gtkstock.h"
 #include "seahorse-context.h"
+#include "seahorse-unix-signal.h"
 
-static gboolean g_daemonize = TRUE;
-static gboolean g_quit = FALSE;
+static gboolean daemon_daemonize = TRUE;
+static gboolean daemon_running = FALSE;
+static gboolean daemon_quit = FALSE;
 
 static const gchar *daemon_icons[] = {
     SEAHORSE_ICON_SHARING,
@@ -49,7 +51,7 @@ static const gchar *daemon_icons[] = {
 
 
 static const struct poptOption options[] = {
-	{ "no-daemonize", 'd', POPT_ARG_NONE | POPT_ARG_VAL, &g_daemonize, FALSE,
+	{ "no-daemonize", 'd', POPT_ARG_NONE | POPT_ARG_VAL, &daemon_daemonize, FALSE,
 	  N_("Do not daemonize seahorse-daemon"), NULL },
 
 	POPT_AUTOHELP
@@ -68,7 +70,7 @@ daemonize (const gchar **exec)
     pid_t pid;
     int i;
 
-    if (g_daemonize) {
+    if (daemon_daemonize) {
         switch ((pid = fork ())) {
         case -1:
             err (1, _("couldn't fork process"));
@@ -100,7 +102,7 @@ daemonize (const gchar **exec)
 
     /* The parent process or not daemonizing ... */
 
-    if (g_daemonize) {
+    if (daemon_daemonize) {
 
         /* If we were asked to exec another program, do that here */
         if (!exec || !exec[0])
@@ -120,20 +122,11 @@ daemonize (const gchar **exec)
 }
 
 static void
-on_quit (int signal)
+unix_signal (int signal)
 {
-    g_quit = 1;
-}
-
-static gboolean
-check_quit (gpointer data)
-{
-    if (g_quit) {
+    daemon_quit = TRUE;
+    if (daemon_running)
         gtk_main_quit ();
-        return FALSE;
-    }
-
-    return TRUE;
 }
 
 static void
@@ -234,11 +227,11 @@ int main(int argc, char* argv[])
     daemonize (args);
 
     /* Handle some signals */
-    signal (SIGINT, on_quit);
-    signal (SIGTERM, on_quit);
+    seahorse_unix_signal_register (SIGINT, unix_signal);
+    seahorse_unix_signal_register (SIGTERM, unix_signal);
 
     /* Force gconf to reconnect after daemonizing */
-    if (g_daemonize)
+    if (daemon_daemonize)
         seahorse_gconf_disconnect ();    
         
     client = gnome_master_client();
@@ -264,8 +257,8 @@ int main(int argc, char* argv[])
 #endif
 
     /* Sometimes we've already gotten a quit signal */
-    if(!g_quit) {
-        g_timeout_add (100, check_quit, NULL);
+    if(!daemon_quit) {
+        daemon_running = TRUE;
         gtk_main ();
         g_message ("left gtk_main\n");
     }
