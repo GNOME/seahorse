@@ -40,7 +40,7 @@
 #include "seahorse-context.h"
 #include "seahorse-unix-signal.h"
 
-static gboolean daemon_daemonize = TRUE;
+static gboolean daemon_no_daemonize = FALSE;
 static gboolean daemon_running = FALSE;
 static gboolean daemon_quit = FALSE;
 
@@ -49,18 +49,14 @@ static const gchar *daemon_icons[] = {
     NULL
 };
 
-
-static const struct poptOption options[] = {
-	{ "no-daemonize", 'd', POPT_ARG_NONE | POPT_ARG_VAL, &daemon_daemonize, FALSE,
-	  N_("Do not daemonize seahorse-daemon"), NULL },
-
-	POPT_AUTOHELP
-	
-	POPT_TABLEEND
+static const GOptionEntry options[] = {
+    { "no-daemonize", 'd', 0, G_OPTION_ARG_NONE, &daemon_no_daemonize, 
+        N_("Do not daemonize seahorse-daemon"), NULL },
+    { NULL }
 };
 
 static void
-daemonize (const gchar **exec)
+daemonize ()
 {
     /* 
      * We can't use the normal daemon call, because we have
@@ -70,7 +66,7 @@ daemonize (const gchar **exec)
     pid_t pid;
     int i;
 
-    if (daemon_daemonize) {
+    if (!daemon_no_daemonize) {
         switch ((pid = fork ())) {
         case -1:
             err (1, _("couldn't fork process"));
@@ -101,24 +97,8 @@ daemonize (const gchar **exec)
     }
 
     /* The parent process or not daemonizing ... */
-
-    if (daemon_daemonize) {
-
-        /* If we were asked to exec another program, do that here */
-        if (!exec || !exec[0])
-            exit (0);
-
-        execvp (exec[0], (char**)exec);
-	    g_critical ("couldn't exec %s: %s\n", exec[0], strerror (errno));
-	    exit (1);
-
-    } else {
-
-        /* We can't overlay our process with the exec one if not daemonizing */
-        if (exec && exec[0])
-            g_warning ("cannot execute process when not daemonizing: %s", exec[0]);    
-
-    }
+    if (!daemon_no_daemonize)
+        exit (0);
 }
 
 static void
@@ -195,9 +175,8 @@ client_die ()
 int main(int argc, char* argv[])
 {
     SeahorseOperation *op;
-    GnomeProgram *program = NULL;
     GnomeClient *client = NULL;
-    const char **args = NULL;
+    GOptionContext *octx = NULL;
 
     seahorse_secure_memory_init (65536);
     
@@ -215,8 +194,11 @@ int main(int argc, char* argv[])
 #endif
         err (1, _("couldn't drop privileges properly"));
     
-    program = gnome_program_init("seahorse-daemon", VERSION, LIBGNOMEUI_MODULE, argc, argv,
-                    GNOME_PARAM_POPT_TABLE, options,
+    octx = g_option_context_new ("");
+    g_option_context_add_main_entries (octx, options, GETTEXT_PACKAGE);
+
+    gnome_program_init ("seahorse-daemon", VERSION, LIBGNOMEUI_MODULE, argc, argv,
+                    GNOME_PARAM_GOPTION_CONTEXT, octx,
                     GNOME_PARAM_HUMAN_READABLE_NAME, _("Encryption Daemon (Seahorse)"),
                     GNOME_PARAM_APP_DATADIR, DATA_DIR, NULL);
 
@@ -224,14 +206,14 @@ int main(int argc, char* argv[])
      * All functions after this point have to print messages 
      * nicely and not just called exit() 
      */
-    daemonize (args);
+    daemonize ();
 
     /* Handle some signals */
     seahorse_unix_signal_register (SIGINT, unix_signal);
     seahorse_unix_signal_register (SIGTERM, unix_signal);
 
     /* Force gconf to reconnect after daemonizing */
-    if (daemon_daemonize)
+    if (!daemon_no_daemonize)
         seahorse_gconf_disconnect ();    
         
     client = gnome_master_client();

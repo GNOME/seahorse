@@ -40,33 +40,35 @@
 #include "seahorse-unix-signal.h"
 #include "seahorse-secure-memory.h"
 
-static gboolean agent_daemonize = TRUE;
+static gboolean agent_no_daemonize = FALSE;
 static gboolean agent_running = FALSE;
 static gboolean agent_quit = FALSE;
+static gchar **agent_exec_args = NULL;
 
-static const struct poptOption options[] = {
-	{ "no-daemonize", 'd', POPT_ARG_NONE | POPT_ARG_VAL, &agent_daemonize, FALSE,
-	  N_("Do not daemonize seahorse-agent"), NULL },
+static const GOptionEntry options[] = {
+    { "no-daemonize", 'd', 0, G_OPTION_ARG_NONE, &agent_no_daemonize, 
+        N_("Do not daemonize seahorse-agent"), NULL },
 
-	{ "cshell", 'c', POPT_ARG_NONE | POPT_ARG_VAL, &seahorse_agent_cshell, TRUE,
-	  N_("Print variables in for a C type shell"), NULL },
+    { "cshell", 'c', 0, G_OPTION_ARG_NONE, &seahorse_agent_cshell, 
+        N_("Print variables in for a C type shell"), NULL },
 
-	{ "variables", 'v', POPT_ARG_NONE | POPT_ARG_VAL, &seahorse_agent_displayvars, TRUE,
-	  N_("Display variables instead of editing conf files (gpg.conf, ssh agent socket)"), NULL },
+    { "variables", 'v', 0, G_OPTION_ARG_NONE, &seahorse_agent_displayvars, 
+        N_("Display variables instead of editing conf files (gpg.conf, ssh agent socket)"), NULL },
 
-	{ "execute", 'x', POPT_ARG_NONE | POPT_ARG_VAL, &seahorse_agent_execvars, TRUE,
-	  N_("Execute other arguments on the command line"), NULL },
+    { "execute", 'x', 0, G_OPTION_ARG_NONE, &seahorse_agent_execvars, 
+        N_("Execute other arguments on the command line"), NULL },
       
-	{ "any-display", 'A', POPT_ARG_NONE | POPT_ARG_VAL, &seahorse_agent_any_display, TRUE,
-	  N_("Allow GPG agent request from any display"), NULL },
+    { "any-display", 'A', 0, G_OPTION_ARG_NONE, &seahorse_agent_any_display, 
+        N_("Allow GPG agent request from any display"), NULL },
       
-	POPT_AUTOHELP
-	
-	POPT_TABLEEND
+    { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_STRING_ARRAY, &agent_exec_args, 
+        NULL, N_("command ...") },
+
+    { NULL }
 };
 
 static void
-daemonize (const gchar **exec)
+daemonize (gchar **exec)
 {
     /* 
      * We can't use the normal daemon call, because we have
@@ -76,7 +78,10 @@ daemonize (const gchar **exec)
     pid_t pid;
     int i;
 
-    if (agent_daemonize) {
+    if (agent_no_daemonize) {
+        pid = getpid ();
+
+    } else {
         switch ((pid = fork ())) {
         case -1:
             err (1, _("couldn't fork process"));
@@ -101,18 +106,19 @@ daemonize (const gchar **exec)
         };
     }
 
-    /* Not daemonizing */
-    else {
-        pid = getpid ();
-    }
-
     /* The parent process or not daemonizing ... */
 
     /* Let the agent do it's thing */
     seahorse_agent_postfork (pid);
     seahorse_agent_ssh_postfork (pid);
     
-    if (agent_daemonize) {
+    if (agent_no_daemonize) {
+
+        /* We can't overlay our process with the exec one if not daemonizing */
+        if (exec && exec[0])
+            g_warning ("cannot execute process when not daemonizing: %s", exec[0]);    
+
+    } else {
 
         /* If we were asked to exec another program, do that here */
         if (!exec || !exec[0])
@@ -121,12 +127,6 @@ daemonize (const gchar **exec)
         execvp (exec[0], (char**)exec);
 	    g_critical ("couldn't exec %s: %s\n", exec[0], strerror (errno));
 	    exit (1);
-
-    } else {
-
-        /* We can't overlay our process with the exec one if not daemonizing */
-        if (exec && exec[0])
-            g_warning ("cannot execute process when not daemonizing: %s", exec[0]);    
 
     }
 }
@@ -205,11 +205,8 @@ client_die ()
 int main(int argc, char* argv[])
 {
     SeahorseOperation *op;
-    GnomeProgram *program = NULL;
     GnomeClient *client = NULL;
-    const char **args = NULL;
-    poptContext pctx;
-    GValue value = { 0, };
+    GOptionContext *octx = NULL;
 
     seahorse_secure_memory_init (65536);
     
@@ -226,38 +223,37 @@ int main(int argc, char* argv[])
     if (setuid (getuid ()) == -1 || setgid (getgid ()) == -1)
 #endif
         err (1, _("couldn't drop privileges properly"));
+    
+    octx = g_option_context_new ("");
+    g_option_context_add_main_entries (octx, options, GETTEXT_PACKAGE);
 
-    program = gnome_program_init("seahorse-agent", VERSION, LIBGNOMEUI_MODULE, argc, argv,
-                    GNOME_PARAM_POPT_TABLE, options,
+    gnome_program_init("seahorse-agent", VERSION, LIBGNOMEUI_MODULE, argc, argv,
+                    GNOME_PARAM_GOPTION_CONTEXT, octx,
                     GNOME_PARAM_HUMAN_READABLE_NAME, _("Encryption Key Agent (Seahorse)"),
                     GNOME_PARAM_APP_DATADIR, DATA_DIR, NULL);
 
     seahorse_agent_prefork ();
     seahorse_agent_ssh_prefork ();
-    
-    /* If we need to run another program, then prepare that */
-    if (seahorse_agent_execvars) {
-        g_value_init (&value, G_TYPE_POINTER);
-        g_object_get_property (G_OBJECT (program), GNOME_PARAM_POPT_CONTEXT, &value);
-    
-        pctx = g_value_get_pointer (&value);
-        g_value_unset (&value);
 
-        args = poptGetArgs(pctx);
-    }
+    if (seahorse_agent_execvars && 
+        (!agent_exec_args || !agent_exec_args[0]))
+        errx (2, _("no command specified to execute"));
 
     /* 
      * All functions after this point have to print messages 
      * nicely and not just called exit() 
      */
-    daemonize (args);
+    daemonize (seahorse_agent_execvars ? agent_exec_args : NULL);
+
+    g_strfreev (agent_exec_args);
+    agent_exec_args = NULL;
 
     /* Handle some signals */
     seahorse_unix_signal_register (SIGINT, unix_signal);
     seahorse_unix_signal_register (SIGTERM, unix_signal);
 
     /* Force gconf to reconnect after daemonizing */
-    if (agent_daemonize)
+    if (!agent_no_daemonize)
         seahorse_gconf_disconnect ();    
     
     client = gnome_master_client();

@@ -38,22 +38,20 @@ static gboolean show_sharing = FALSE;
 static gboolean show_applet = FALSE;
 #endif
 
-static const struct poptOption options[] = {
+static const GOptionEntry options[] = {
 #ifdef WITH_AGENT    
-	{ "cache", 'c', POPT_ARG_NONE | POPT_ARG_VAL, &show_cache, TRUE,
+	{ "cache", 'c', 0, G_OPTION_ARG_NONE, &show_cache,
 	    N_("For internal use"), NULL },
 #endif 
 #ifdef WITH_SHARING   
-	{ "sharing", 's', POPT_ARG_NONE | POPT_ARG_VAL, &show_sharing, TRUE,
+	{ "sharing", 's', 0, G_OPTION_ARG_NONE, &show_sharing, 
 	    N_("For internal use"), NULL },
 #endif 
 #ifdef WITH_APPLET   
-	{ "applet", 's', POPT_ARG_NONE | POPT_ARG_VAL, &show_applet, TRUE,
+	{ "applet", 's', 0, G_OPTION_ARG_NONE, &show_applet, 
 	    N_("For internal use"), NULL },
 #endif 
-        
-	POPT_AUTOHELP
-	POPT_TABLEEND
+    { NULL }
 };
 
 static void
@@ -65,11 +63,15 @@ destroyed (GtkObject *object, gpointer data)
 int
 main (int argc, char **argv)
 {
-	SeahorseWidget *swidget;
+    SeahorseWidget *swidget;
     SeahorseOperation *op;
+    GOptionContext *octx = NULL;
+
+    octx = g_option_context_new ("");
+    g_option_context_add_main_entries (octx, options, GETTEXT_PACKAGE);
 
     gnome_program_init ("seahorse-preferences", VERSION, LIBGNOMEUI_MODULE, argc, argv,
-                GNOME_PARAM_POPT_TABLE, options,
+                GNOME_PARAM_GOPTION_CONTEXT, octx,
                 GNOME_PARAM_HUMAN_READABLE_NAME, _("Encryption Preferences"),
                 GNOME_PARAM_APP_DATADIR, DATA_DIR, NULL);
 

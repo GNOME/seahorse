@@ -38,42 +38,38 @@
  * ARGUMENT PARSING 
  */
 
-typedef enum _CmdLineMode {
-    MODE_NONE,
-    MODE_IMPORT,
-    MODE_ENCRYPT,
-    MODE_SIGN,
-    MODE_ENCRYPT_SIGN,
-    MODE_DECRYPT,
-    MODE_VERIFY
-} CmdLineMode;
-
+static gchar **arg_uris = NULL;
 static gboolean read_uris = FALSE;
-static CmdLineMode cmd_mode = MODE_NONE; 
+static gboolean mode_import = FALSE;
+static gboolean mode_encrypt = FALSE;
+static gboolean mode_sign = FALSE;
+static gboolean mode_encrypt_sign = FALSE;
+static gboolean mode_decrypt = FALSE;
+static gboolean mode_verify = FALSE;
 
-static const struct poptOption options[] = {
-    { "import", 'i', POPT_ARG_NONE | POPT_ARG_VAL, &cmd_mode, MODE_IMPORT,
-      N_("Import keys from the file"), NULL },
-    { "encrypt", 'e', POPT_ARG_NONE | POPT_ARG_VAL, &cmd_mode, MODE_ENCRYPT,
-      N_("Encrypt file"), NULL },
-    { "sign", 's', POPT_ARG_NONE | POPT_ARG_VAL, &cmd_mode, MODE_SIGN,
-      N_("Sign file with default key"), NULL },
-    { "encrypt-sign", 'n', POPT_ARG_NONE | POPT_ARG_VAL, &cmd_mode, MODE_ENCRYPT_SIGN,
-      N_("Encrypt and sign file with default key"), NULL },
-    { "decrypt", 'd', POPT_ARG_NONE | POPT_ARG_VAL, &cmd_mode, MODE_DECRYPT,
-      N_("Decrypt encrypted file"), NULL },
-    { "verify", 'v', POPT_ARG_NONE | POPT_ARG_VAL, &cmd_mode, MODE_VERIFY,
-      N_("Verify signature file"), NULL },
-    { "uri-list", 'T', POPT_ARG_NONE | POPT_ARG_VAL, &read_uris, TRUE,
-      N_("Read list of URIs on standard in"), NULL },
-    
-    POPT_AUTOHELP
-    POPT_TABLEEND
+static const GOptionEntry options[] = {
+    { "import", 'i', 0, G_OPTION_ARG_NONE, &mode_import,
+        N_("Import keys from the file"), NULL },
+    { "encrypt", 'e', 0, G_OPTION_ARG_NONE, &mode_encrypt,
+        N_("Encrypt file"), NULL },
+    { "sign", 's', 0, G_OPTION_ARG_NONE, &mode_sign,
+        N_("Sign file with default key"), NULL },
+    { "encrypt-sign", 'n', 0, G_OPTION_ARG_NONE, &mode_encrypt_sign,
+        N_("Encrypt and sign file with default key"), NULL },
+    { "decrypt", 'd', 0, G_OPTION_ARG_NONE, &mode_decrypt,
+        N_("Decrypt encrypted file"), NULL },
+    { "verify", 'v', 0, G_OPTION_ARG_NONE, &mode_verify,
+        N_("Verify signature file"), NULL },
+    { "uri-list", 'T', 0, G_OPTION_ARG_NONE, &read_uris,
+        N_("Read list of URIs on standard in"), NULL },
+    { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_STRING_ARRAY, &arg_uris, 
+        NULL, N_("file ...") },
+    { NULL }
 };
 
 /* Returns a null terminated array of uris, use g_strfreev to free */
 static gchar** 
-read_uri_arguments (poptContext pctx)
+read_uri_arguments ()
 {
     /* Read uris from stdin */
     if (read_uris) {
@@ -104,7 +100,10 @@ read_uri_arguments (poptContext pctx)
     /* Multiple arguments on command line */
     } else {
        
-        return seahorse_util_strvec_dup (poptGetArgs(pctx));
+        gchar **args = arg_uris;
+        arg_uris = NULL;
+        return args;
+
     }
 }
 
@@ -545,14 +544,11 @@ check_dialogs (gpointer dummy)
 int
 main (int argc, char **argv)
 {
+    GOptionContext *octx = NULL;
     SeahorseToolMode mode;
-    GnomeProgram *program = NULL;
     SeahorseContext *sctx;
     gchar **uris = NULL;
     int ret = 0;
-    poptContext pctx;
-    GValue value = { 0, };
-
 
     seahorse_secure_memory_init (65536);
     
@@ -582,31 +578,21 @@ main (int argc, char **argv)
      * operations, the other shows the progress window, handles cancel.
      */
     seahorse_tool_progress_init (argc, argv);
-    
+        
+    octx = g_option_context_new ("");
+    g_option_context_add_main_entries (octx, options, GETTEXT_PACKAGE);
+
     /* Main operation process */
-    program = gnome_program_init("seahorse-tool", VERSION, LIBGNOMEUI_MODULE, argc, argv,
-                                 GNOME_PARAM_POPT_TABLE, options,
-                                 GNOME_PARAM_HUMAN_READABLE_NAME, _("File Encryption Tool"),
-                                 GNOME_PARAM_APP_DATADIR, DATA_DIR, NULL);
-
-    g_value_init (&value, G_TYPE_POINTER);
-    g_object_get_property (G_OBJECT (program), GNOME_PARAM_POPT_CONTEXT, &value);
-    
-    pctx = g_value_get_pointer (&value);
-    g_value_unset (&value);
-
-    if (cmd_mode == MODE_NONE) {
-        fprintf (stderr, "seahorse-tool: must specify an operation");
-        poptPrintHelp (pctx, stdout, 0);
-        return 2;
-    }
+    gnome_program_init("seahorse-tool", VERSION, LIBGNOMEUI_MODULE, argc, argv,
+                       GNOME_PARAM_GOPTION_CONTEXT, octx,
+                       GNOME_PARAM_HUMAN_READABLE_NAME, _("File Encryption Tool"),
+                       GNOME_PARAM_APP_DATADIR, DATA_DIR, NULL);
 
     /* Load up all our arguments */
-    uris = read_uri_arguments(pctx);
+    uris = read_uri_arguments ();
 
     if(!uris || !uris[0]) {
         fprintf (stderr, "seahorse-tool: must specify files");
-        poptPrintHelp (pctx, stdout, 0);
         return 2;
     }
 
@@ -619,9 +605,7 @@ main (int argc, char **argv)
     /* The basic settings for the operation */
     memset (&mode, 0, sizeof (mode));
     
-    switch (cmd_mode) {
-    case MODE_ENCRYPT_SIGN:
-    case MODE_ENCRYPT:
+    if (mode_encrypt_sign || mode_encrypt) {
         mode.recipients = prompt_recipients (&mode.signer);
         if (mode.recipients) {
             mode.title = _("Encrypting");
@@ -629,38 +613,38 @@ main (int argc, char **argv)
             mode.startcb = encrypt_sign_start;
             mode.package = TRUE;
         }
-        break;
-    case MODE_SIGN:
+
+    } else if (mode_sign) {
         mode.signer = prompt_signer ();
         if (mode.signer) {
             mode.title = _("Signing");
             mode.errmsg = _("Couldn't sign file: %s");
             mode.startcb = sign_start;
         }
-        break;
-    case MODE_IMPORT:
+
+    } else if (mode_import) {
         mode.title = _("Importing");
         mode.errmsg = _("Couldn't import keys from file: %s");
         mode.startcb = import_start;
         mode.donecb = import_done;
         mode.imports = 0;
-        break;
-    case MODE_DECRYPT:
+
+    } else if (mode_decrypt) {
         mode.title = _("Decrypting");
         mode.errmsg = _("Couldn't decrypt file: %s");
         mode.startcb = decrypt_start;
         mode.donecb = decrypt_done;
-        break;
-    case MODE_VERIFY:
+
+    } else if (mode_verify) {
         mode.title = _("Verifying");
         mode.errmsg = _("Couldn't verify file: %s");
         mode.startcb = verify_start;
         mode.donecb = verify_done;
-        break;
-    default:
-        g_assert_not_reached ();
-        break;
-    };
+
+    } else {
+        fprintf (stderr, "seahorse-tool: must specify an operation");
+        return 2;
+    }
     
     /* Must at least have a start cb to do something */
     if (mode.startcb) {
@@ -669,15 +653,8 @@ main (int argc, char **argv)
     
         /* Any results necessary */
         if (ret == 0) {
-            
-            switch (cmd_mode) {
-            case MODE_IMPORT:
+            if (mode_import)
                 import_show (&mode);
-                break;
-            default:
-                break;
-            };
-            
         }
     }
     
