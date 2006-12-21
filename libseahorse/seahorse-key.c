@@ -531,6 +531,7 @@ const gchar*
 seahorse_key_get_rawid (GQuark keyid)
 {
     const gchar* id = g_quark_to_string (keyid);
+    g_return_val_if_fail (id != NULL, NULL);
     const gchar* t = strchr (id, ':');
     return t ? t + 1 : id;
 }
