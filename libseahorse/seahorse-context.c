@@ -744,12 +744,13 @@ seahorse_context_load_local_keys (SeahorseContext *sctx)
     return mop ? SEAHORSE_OPERATION (mop) : op;  
 }
 
-static void 
+static gboolean 
 load_local_keys (SeahorseContext *sctx)
 {
     SeahorseOperation *op = seahorse_context_load_local_keys (sctx);
     g_return_if_fail (op != NULL);
     g_object_unref (op);
+    return FALSE;
 }
 
 void
