@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-12-20 03:34+0000\n"
-"PO-Revision-Date: 2006-12-20 12:55+0100\n"
+"POT-Creation-Date: 2006-12-27 03:39+0000\n"
+"PO-Revision-Date: 2006-12-27 14:35+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -37,25 +37,15 @@ msgstr "kunde inte läsa gpg-konfiguration, kommer att försöka skapa"
 msgid "couldn't modify gpg configuration: %s"
 msgstr "kunde inte ändra gpg-konfiguration: %s"
 
-#. -----------------------------------------------------------------------------
-#. * INTERNAL PASSWORD CACHE
-#.
-#.
-#. * Implementation of the password cache. Note that only passwords
-#. * are stored in secure memory, all else is allocated normally.
-#. *
-#. * Cache items can be locked which guarantees they'll stay around even
-#. * if their TTL expires.
-#.
-#: ../agent/seahorse-agent-cache.c:55
+#: ../agent/seahorse-agent-cache.c:72
 msgid "Unparseable Key ID"
 msgstr "Ej tolkningsbart nyckel-id"
 
-#: ../agent/seahorse-agent-cache.c:56
+#: ../agent/seahorse-agent-cache.c:73
 msgid "Unknown/Invalid Key"
 msgstr "Okänd/Ogiltig nyckel"
 
-#: ../agent/seahorse-agent-cache.c:449
+#: ../agent/seahorse-agent-cache.c:530
 #, c-format
 msgid "PGP Key: %s"
 msgstr "PGP-nyckel: %s"
@@ -88,47 +78,55 @@ msgstr "_Töm mellanlager"
 msgid "_Show Window"
 msgstr "_Visa fönster"
 
-#: ../agent/seahorse-agent-main.c:47
+#: ../agent/seahorse-agent-main.c:50
 msgid "Do not daemonize seahorse-agent"
 msgstr "Kör inte seahorse-agent som en demon"
 
-#: ../agent/seahorse-agent-main.c:50
+#: ../agent/seahorse-agent-main.c:53
 msgid "Print variables in for a C type shell"
 msgstr "Skriv ut variabler för ett C-liknande skal"
 
-#: ../agent/seahorse-agent-main.c:53
+#: ../agent/seahorse-agent-main.c:56
 msgid "Display variables instead of editing conf files (gpg.conf, ssh agent socket)"
 msgstr "Visa variabler istället för att redigera konfigurationsfiler (gpg.conf, ssh agent-uttag)"
 
-#: ../agent/seahorse-agent-main.c:56
+#: ../agent/seahorse-agent-main.c:59
 msgid "Execute other arguments on the command line"
 msgstr "Kör andra argument på kommandoraden"
 
-#: ../agent/seahorse-agent-main.c:59
+#: ../agent/seahorse-agent-main.c:62
 msgid "Allow GPG agent request from any display"
 msgstr "Tillåt GPG-agentbegäran från valfri display"
 
-#: ../agent/seahorse-agent-main.c:80
-#: ../daemon/seahorse-daemon.c:74
+#: ../agent/seahorse-agent-main.c:65
+msgid "command ..."
+msgstr "kommando ..."
+
+#: ../agent/seahorse-agent-main.c:87
+#: ../daemon/seahorse-daemon.c:72
 msgid "couldn't fork process"
 msgstr "kunde inte grena process"
 
-#: ../agent/seahorse-agent-main.c:86
-#: ../daemon/seahorse-daemon.c:80
+#: ../agent/seahorse-agent-main.c:93
+#: ../daemon/seahorse-daemon.c:78
 msgid "couldn't create new process group"
 msgstr "kunde inte skapa ny processgrupp"
 
-#: ../agent/seahorse-agent-main.c:235
-#: ../daemon/seahorse-daemon.c:223
+#: ../agent/seahorse-agent-main.c:225
+#: ../daemon/seahorse-daemon.c:195
 #: ../plugins/applet/seahorse-applet.c:1010
-#: ../plugins/nautilus/seahorse-tool.c:571
+#: ../plugins/nautilus/seahorse-tool.c:567
 #: ../src/main.c:59
 msgid "couldn't drop privileges properly"
 msgstr "kunde inte korrekt släppa privilegier"
 
-#: ../agent/seahorse-agent-main.c:239
+#: ../agent/seahorse-agent-main.c:232
 msgid "Encryption Key Agent (Seahorse)"
 msgstr "Krypteringsnyckelagent (Seahorse)"
+
+#: ../agent/seahorse-agent-main.c:240
+msgid "no command specified to execute"
+msgstr "inget kommandot angivet att köra"
 
 #: ../agent/seahorse-agent-prompt.c:216
 msgid "Authorize Passphrase Access"
@@ -147,15 +145,15 @@ msgid "_Authorize"
 msgstr "_Auktorisera"
 
 #. Make the uid column
-#: ../agent/seahorse-agent-status.c:153
+#: ../agent/seahorse-agent-status.c:151
 msgid "Key Name"
 msgstr "Nyckelnamn"
 
-#: ../daemon/seahorse-daemon.c:53
+#: ../daemon/seahorse-daemon.c:54
 msgid "Do not daemonize seahorse-daemon"
 msgstr "Kör inte seahorse-daemon som en demon"
 
-#: ../daemon/seahorse-daemon.c:227
+#: ../daemon/seahorse-daemon.c:202
 msgid "Encryption Daemon (Seahorse)"
 msgstr "Krypteringsdemon (Seahorse)"
 
@@ -483,14 +481,6 @@ msgstr "Namn"
 msgid "Key ID"
 msgstr "Nyckel-id"
 
-#: ../libseahorse/eggtrayicon.c:127
-msgid "Orientation"
-msgstr "Orientering"
-
-#: ../libseahorse/eggtrayicon.c:128
-msgid "The orientation of the tray."
-msgstr "Lådans orientering."
-
 #: ../libseahorse/seahorse-add-keyserver.glade.h:1
 msgid ":"
 msgstr ":"
@@ -714,13 +704,13 @@ msgstr "Publik PGP-nyckel"
 msgid "Private PGP Key"
 msgstr "Privat PGP-nyckel"
 
-#: ../libseahorse/seahorse-pgp-key.c:684
+#: ../libseahorse/seahorse-pgp-key.c:694
 #: ../libseahorse/seahorse-validity.c:31
 #: ../src/seahorse-key-properties.c:1089
 msgid "Unknown"
 msgstr "Okänd"
 
-#: ../libseahorse/seahorse-pgp-key.c:686
+#: ../libseahorse/seahorse-pgp-key.c:696
 msgid "ElGamal"
 msgstr "ElGamal"
 
@@ -833,7 +823,7 @@ msgid "Automatically synchronize modified keys with keyservers. "
 msgstr "Synkronisera ändrade nycklar automatiskt med nyckelservrar. "
 
 #: ../libseahorse/seahorse-prefs.glade.h:11
-#: ../plugins/nautilus/seahorse-pgp-preferences.c:73
+#: ../plugins/nautilus/seahorse-pgp-preferences.c:75
 #: ../plugins/nautilus/seahorse-pgp-preferences.desktop.in.h:2
 msgid "Encryption Preferences"
 msgstr "Krypteringsinställningar"
@@ -1563,74 +1553,78 @@ msgstr "För intern användning"
 msgid "Configure key servers and other encryption settings"
 msgstr "Konfigurera nyckelservrar och andra krypteringsinställningar"
 
-#: ../plugins/nautilus/seahorse-tool.c:56
+#: ../plugins/nautilus/seahorse-tool.c:52
 msgid "Import keys from the file"
 msgstr "Importera nycklar från filen"
 
-#: ../plugins/nautilus/seahorse-tool.c:58
+#: ../plugins/nautilus/seahorse-tool.c:54
 msgid "Encrypt file"
 msgstr "Kryptera fil"
 
-#: ../plugins/nautilus/seahorse-tool.c:60
+#: ../plugins/nautilus/seahorse-tool.c:56
 msgid "Sign file with default key"
 msgstr "Signera fil med standardnyckeln"
 
-#: ../plugins/nautilus/seahorse-tool.c:62
+#: ../plugins/nautilus/seahorse-tool.c:58
 msgid "Encrypt and sign file with default key"
 msgstr "Kryptera och signera fil med standardnyckeln"
 
-#: ../plugins/nautilus/seahorse-tool.c:64
+#: ../plugins/nautilus/seahorse-tool.c:60
 msgid "Decrypt encrypted file"
 msgstr "Dekryptera krypterad fil"
 
-#: ../plugins/nautilus/seahorse-tool.c:66
+#: ../plugins/nautilus/seahorse-tool.c:62
 msgid "Verify signature file"
 msgstr "Validera signaturfil"
 
-#: ../plugins/nautilus/seahorse-tool.c:68
+#: ../plugins/nautilus/seahorse-tool.c:64
 msgid "Read list of URIs on standard in"
 msgstr "Läser in lista på URL:er från standard in"
 
-#: ../plugins/nautilus/seahorse-tool.c:129
+#: ../plugins/nautilus/seahorse-tool.c:66
+msgid "file ..."
+msgstr "fil ..."
+
+#: ../plugins/nautilus/seahorse-tool.c:128
 msgid "Choose Recipients"
 msgstr "Välj mottagare"
 
-#: ../plugins/nautilus/seahorse-tool.c:191
-#: ../plugins/nautilus/seahorse-tool.c:273
+#: ../plugins/nautilus/seahorse-tool.c:190
+#: ../plugins/nautilus/seahorse-tool.c:272
 msgid "Couldn't load keys"
 msgstr "Kunde inte läsa in nycklar"
 
-#: ../plugins/nautilus/seahorse-tool.c:207
+#: ../plugins/nautilus/seahorse-tool.c:206
 #, c-format
 msgid "Choose Encrypted File Name for '%s'"
 msgstr "Välj krypterat filnamn för \"%s\""
 
-#: ../plugins/nautilus/seahorse-tool.c:257
+#: ../plugins/nautilus/seahorse-tool.c:256
 msgid "Choose Signer"
 msgstr "Välj signerare"
 
-#: ../plugins/nautilus/seahorse-tool.c:292
+#: ../plugins/nautilus/seahorse-tool.c:291
 #, c-format
 msgid "Choose Signature File Name for '%s'"
 msgstr "Välj signaturfilnamn för \"%s\""
 
-#: ../plugins/nautilus/seahorse-tool.c:372
+#: ../plugins/nautilus/seahorse-tool.c:371
 msgid "Imported key"
 msgstr "Importerad nyckel"
 
-#: ../plugins/nautilus/seahorse-tool.c:373
+#: ../plugins/nautilus/seahorse-tool.c:372
 #: ../src/seahorse-key-manager.c:405
 #, c-format
 msgid "Imported %d keys"
 msgstr "Importerade %d nycklar"
 
 #. File to decrypt to
-#: ../plugins/nautilus/seahorse-tool.c:394
+#: ../plugins/nautilus/seahorse-tool.c:393
 #, c-format
 msgid "Choose Decrypted File Name for '%s'"
 msgstr "Välj dekrypterat filnamn för \"%s\""
 
-#: ../plugins/nautilus/seahorse-tool.c:450
+#: ../plugins/nautilus/seahorse-tool.c:449
 #, c-format
 msgid "Choose Original File for '%s'"
 msgstr "Välj originalfil för \"%s\""
@@ -1640,55 +1634,55 @@ msgstr "Välj originalfil för \"%s\""
 #. * The last thing we want to do is cascade a big pile of error
 #. * dialogs at the user.
 #.
-#: ../plugins/nautilus/seahorse-tool.c:522
+#: ../plugins/nautilus/seahorse-tool.c:521
 msgid "No valid signatures found"
 msgstr "Inga giltiga signaturer hittades"
 
-#: ../plugins/nautilus/seahorse-tool.c:589
+#: ../plugins/nautilus/seahorse-tool.c:588
 msgid "File Encryption Tool"
 msgstr "Filkrypteringsverktyg"
 
-#: ../plugins/nautilus/seahorse-tool.c:627
+#: ../plugins/nautilus/seahorse-tool.c:611
 msgid "Encrypting"
 msgstr "Kryptering"
 
-#: ../plugins/nautilus/seahorse-tool.c:628
+#: ../plugins/nautilus/seahorse-tool.c:612
 #, c-format
 msgid "Couldn't encrypt file: %s"
 msgstr "Kunde inte kryptera fil: %s"
 
-#: ../plugins/nautilus/seahorse-tool.c:636
+#: ../plugins/nautilus/seahorse-tool.c:620
 msgid "Signing"
 msgstr "Signering"
 
-#: ../plugins/nautilus/seahorse-tool.c:637
+#: ../plugins/nautilus/seahorse-tool.c:621
 #, c-format
 msgid "Couldn't sign file: %s"
 msgstr "Kunde inte signera fil: %s"
 
-#: ../plugins/nautilus/seahorse-tool.c:642
+#: ../plugins/nautilus/seahorse-tool.c:626
 msgid "Importing"
 msgstr "Importering"
 
-#: ../plugins/nautilus/seahorse-tool.c:643
+#: ../plugins/nautilus/seahorse-tool.c:627
 #, c-format
 msgid "Couldn't import keys from file: %s"
 msgstr "Kunde inte importera nycklar från fil: %s"
 
-#: ../plugins/nautilus/seahorse-tool.c:649
+#: ../plugins/nautilus/seahorse-tool.c:633
 msgid "Decrypting"
 msgstr "Dekrypterar"
 
-#: ../plugins/nautilus/seahorse-tool.c:650
+#: ../plugins/nautilus/seahorse-tool.c:634
 #, c-format
 msgid "Couldn't decrypt file: %s"
 msgstr "Kunde inte dekryptera fil: %s"
 
-#: ../plugins/nautilus/seahorse-tool.c:655
+#: ../plugins/nautilus/seahorse-tool.c:639
 msgid "Verifying"
 msgstr "Validerar"
 
-#: ../plugins/nautilus/seahorse-tool.c:656
+#: ../plugins/nautilus/seahorse-tool.c:640
 #, c-format
 msgid "Couldn't verify file: %s"
 msgstr "Kunde inte validera fil: %s"
@@ -3428,6 +3422,10 @@ msgstr "_Datornamn:"
 msgid "_Login Name:"
 msgstr "_Inloggningsnamn:"
 
+#~ msgid "Orientation"
+#~ msgstr "Orientering"
+#~ msgid "The orientation of the tray."
+#~ msgstr "Lådans orientering."
 #~ msgid ""
 #~ "The program 'seahorse-daemon' is necessary for the caching of passphrases"
 #~ msgstr ""
