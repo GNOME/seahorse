@@ -2,7 +2,7 @@
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
 "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
 	<!ENTITY legal SYSTEM "legal.xml">
-	<!ENTITY appversion "0.9.7">
+	<!ENTITY appversion "0.9.9">
 	<!ENTITY manrevision "3.1">
 	<!ENTITY date "July 2005">
 	<!ENTITY app "Passwords and Encryption Keys">
@@ -116,9 +116,9 @@
       You can use <application>&app;</application> to create and  manage <acronym>PGP</acronym> and <acronym>SSH</acronym> keys.
     </para>
     <para>
-      <application>&app;</application> provides integration and 
-      a front end to many of the features of <ulink url="http://www.gnupg.org" type="http">Gnu Privacy Guard (GPG)</ulink>
-      with the <ulink url="http://www.gnome.org">GNOME</ulink> desktop. 
+      <application>&app;</application> provides a front end to many of the features of 
+      <ulink url="http://www.gnupg.org" type="http">Gnu Privacy Guard (GPG)</ulink> and 
+      integrates with multiple components of the <ulink url="http://www.gnome.org">GNOME</ulink> desktop. 
     </para>
  			<para>
 				Features of <application>&app;</application> include:
@@ -273,7 +273,7 @@
       and certificates for exchanging public keys. 
     </para>
     <para>
-      Public keys cryptography is a concept which involve the use of two keys:
+      Public key cryptography is a concept which involves the use of two keys:
       a <emphasis>public key</emphasis>, that you can give to anyone with whom
       you would like to communicate, and a <emphasis>private key</emphasis> which is
       private and must be kept secret.
@@ -304,7 +304,7 @@
 	</listitem>
 	<listitem>
 	  <para>
-	    The <guilabel>Passphrase for New PGP Key</guilabel> dialog opens. 
+	    The <guilabel>Passphrase for New PGP Key</guilabel> dialog will open. 
 	    Enter the passphrase twice for your new key.
 	  </para>
 	</listitem>
@@ -313,7 +313,7 @@
     <tip>
       <para>
 	Use similar practices to generating a strong password when choosing a 
-	passphrase. The difference between a password and a passphrase is that, 
+	passphrase. The main difference between a password and a passphrase is that, 
 	in a passphrase, spaces are valid characters.
       </para>				
     </tip>
@@ -378,8 +378,8 @@
 	  <listitem>
 	    <para>
 	      This is the date at which the key will cease to be usable for 
-	      performing encryption or signing operations. A reasonable time 
-	      to set it to is 6 months. You will have to either change the 
+	      performing encryption or signing operations. 6 months is a reasonable time 
+	      to set it to. You will have to either change the 
 	      expiration date or generate a new key or subkey after this amount 
 	      of time passes.  
 	      <note>
@@ -399,7 +399,8 @@
 	<sect1 id="ssh-generate">
 	<title>Creating Secure Shell Keys</title>
 	<para>
-		Secure Shell (<acronym>SSH</acronym>) is a way of logging into a remote computer to execute command on that machine. 
+		Secure Shell (<acronym>SSH</acronym>) is a way of logging into a remote computer to execute commands 
+		on that machine. 
 		SSH keys are used in key-based authentication system, as an alternative to the default password 
 		authentication system.
 		With key-based authentication there is no need to manually type a password to authenticate. 
@@ -435,7 +436,7 @@
 				<para>
 					Use similar practices to generating a 
 					strong password when choosing a 
-					passphrase. The difference between a 
+					passphrase. The main difference between a 
 					password and a passphrase is that, in a 
 					passphrase, spaces are valid characters.
 				</para>				
@@ -658,7 +659,7 @@
 			<title>Adding a User ID</title>
 				<para>
 					Adding a user ID is useful when you want to have 
-					an identity for your job and one for your frineds. 
+					an identity for your job and one for your friends. 
 				</para>
 				<para>
 					To add a user ID to a key:
@@ -750,8 +751,9 @@
             These identities can be signed just like normal user IDs. A photo ID must be in JPEG 
             format and is recommended to be no larger than 240x288 pixels.</para>
       <para>
-	<application>&app;</application> supports resizing of images and can also convert on the fly from 
-	  any image format supported by <acronym>GDK</acronym> library.
+	  If the chosen image is not of the required file type or size <application>&app;</application> 
+	  can resize and convert it on the fly from 
+	  any image format supported by the <acronym>GDK</acronym> library.
       </para>
     </sect2>
 		
@@ -817,7 +819,7 @@
 		<para>
 			Each OpenPGP key has a single master key used 
 			to sign only. Subkeys are used to encrypt and 
-			to sign also. In this way, if your sub key is 
+			to sign as well. In this way, if your sub key is 
 			compromised, you don't need to revoke your master key.
 		</para>
 		<variablelist>
@@ -902,7 +904,7 @@
 					<term><acronym>DSA</acronym></term>
 					<listitem>
 						<para>
-							Use the <emphasis>Digital Sign Algorithm</emphasis> 
+							Use the <emphasis>Digital Signature Algorithm</emphasis> 
 							(<acronym>DSA</acronym>) to create the subkey. 
 							This subkey can sign only.
 						</para>
@@ -1017,7 +1019,7 @@
 							<term>Not Used</term>
 							<listitem>
 								<para>
-									The key isn't used anymore.
+									The key is not used anymore.
 								</para>
 							</listitem>
 						</varlistentry>
@@ -1026,7 +1028,7 @@
 				</listitem>
 				<listitem>
 					<para>
-						Enter a description of the revoke,
+						Enter a description of why you are revoking the key,
 					</para>
 				</listitem>
 				<listitem>
@@ -1264,7 +1266,7 @@
 	<sect1 id="sign">
 		<title>Signing a Key</title>
 		<para>
-			Signing another's person key means you're giving trust to that person. 
+			Signing another person's key means you are giving trust to that person. 
 			Before signing a key, you have to carefully check the key's fingerprint 
 			to be sure that the key really belongs to that person.
 		</para>
@@ -1310,7 +1312,7 @@
   <sect1 id="file-manager">
     <title>File Manager Integration</title>
     <para>
-      <application>&app;</application> integrates with <application><ulink url="ghelp:user-guide?nautilus">Nautilus</ulink></application> file manager.  You can encrypt, decrypt, sign and verify files as well as import public keys from the file manager window without launching <application>&app;</application>.
+      <application>&app;</application> integrates with <application><ulink url="ghelp:user-guide?nautilus">Nautilus</ulink></application>.  You can encrypt, decrypt, sign and verify files as well as import public keys from the file manager window without launching <application>&app;</application>.
     </para>
     <sect2 id="encrypt-fm">
       <title>Encrypting Files</title>
@@ -1352,7 +1354,7 @@
 	  </listitem>
 	  <listitem>
 	    <para>
-	      Insert, if asked, the passphrase of your private key.
+	      If asked, enter the passphrase of your private key.
 	    </para>
 	  </listitem>
 	</itemizedlist>
@@ -1370,7 +1372,7 @@
 	  </listitem>
 	  <listitem>
 	    <para>
-	      Insert, if asked, the passphrase of your private key.
+	      If asked, enter the passphrase of your private key.
 	    </para>
 	  </listitem>
 	</itemizedlist>
@@ -1389,7 +1391,7 @@
   <sect1 id="text-editor">
     <title>Text Editor Integration</title>
     <para>
-      To enable <application>&app;</application> plugin in <application><ulink url="ghelp:gedit" type="help">Gedit</ulink></application> text editor, perform the following steps:
+      To enable Text Encryption plugin in <application><ulink url="ghelp:gedit" type="help">Gedit</ulink></application>, the GNOME text editor, perform the following steps:
       <itemizedlist>
 	<listitem>
 	  <para>
@@ -1513,7 +1515,7 @@
 	    <listitem>
 	      <para>
 		Shows the <guilabel>Type</guilabel> column, indicating whether the key 
-		is an OpenPGP or a S/MIME certificate.
+		is an OpenPGP, SSH key or a S/MIME certificate.
 	      </para>
 	      <note>
 		<para>
@@ -1593,8 +1595,8 @@
 	      </para>
 	      <note>
 		<para>
-		  If you don't select this and you don't select yourself as a 
-		  recipient you will be unable to decrypt any files you encrypt.
+		  If you do not select this and you do not select yourself as a 
+		  recipient you will not be unable to decrypt any files you encrypt.
 		</para>
 	      </note>
 	    </listitem>
@@ -1609,7 +1611,7 @@
 	  perform many operations that require entering your passphrase without 
 	  re-entering it every time. <command>seahorse-daemon</command> takes the 
 	  place of <command>gpg-agent</command>. Letting the cached passphrases 
-	  expire is usually a good idea. This will then require rentering your 
+	  expire is usually a good idea. This will then require re-entering your 
 	  passphrase, but adds security.
 	</para>
 	<variablelist>
@@ -1631,7 +1633,7 @@
 	    </listitem>
 	  </varlistentry>
 	  <varlistentry>
-	    <term><guilabel>Always remeber passphrases whenever logged in</guilabel></term>
+	    <term><guilabel>Always remember passphrases whenever logged in</guilabel></term>
 	    <listitem>
 	      <para>
 		Sets to remember any passphrases whenever you are logged in the session.
@@ -1701,12 +1703,6 @@
 	  to the remote search dialog. Using these local "key servers" will most 
 	  likely be faster than accessing remote servers.
 	</para>
-	<note>
-	  <para>
-	    To enable key sharing, you must have started <command>mDNSResponder
-	    </command> before <command>seahorse-daemon</command>.
-	  </para>
-	</note>
       </sect3>
     </sect2>
   </sect1>
