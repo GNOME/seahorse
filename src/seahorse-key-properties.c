@@ -1221,7 +1221,9 @@ do_details (SeahorseWidget *swidget)
 
     widget = glade_xml_get_widget (swidget->xml, "details-expires-label");
     if (widget) {
-        if (subkey->expires == 0)
+        if (seahorse_key_get_location (skey) == SKEY_LOC_REMOTE)
+            fp_label = NULL;
+        else if (subkey->expires == 0)
             fp_label = g_strdup (_("Never"));
         else
             fp_label = seahorse_util_get_date_string (subkey->expires);
