@@ -2,7 +2,7 @@
 pixmapdir = $(datadir)/pixmaps/
 pixmap_DATA = seahorse-applet.svg
 
-iconsvgdir = $(datadir)/pixmaps/seahorse/scaleable/
+iconsvgdir = $(datadir)/pixmaps/seahorse/scalable/
 iconsvg_DATA = seahorse.svg \
                 seahorse-preferences.svg \
                 seahorse-applet.svg \

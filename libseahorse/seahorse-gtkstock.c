@@ -129,7 +129,7 @@ add_icons (const gchar **icons, const gchar **themed)
         source = make_icon_source (*icons, "48x48", "png", GTK_ICON_SIZE_DIALOG);
         gtk_icon_set_add_source (iconset, source);
         gtk_icon_source_free (source);
-        source = make_icon_source (*icons, "scaleable", "svg", -1);
+        source = make_icon_source (*icons, "scalable", "svg", -1);
         gtk_icon_set_add_source (iconset, source);
         gtk_icon_source_free (source);
         
