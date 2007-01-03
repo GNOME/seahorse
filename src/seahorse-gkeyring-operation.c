@@ -272,6 +272,8 @@ seahorse_gkeyring_operation_update_info (SeahorseGKeyringItem *git, GnomeKeyring
     pv = SEAHORSE_GKEYRING_OPERATION_GET_PRIVATE (gop);
     
     keyring_name = seahorse_gkeyring_source_get_keyring_name (SEAHORSE_GKEYRING_SOURCE (sksrc));
+    g_return_val_if_fail (keyring_name != NULL, NULL);
+
     pv->keyid = seahorse_key_get_keyid (SEAHORSE_KEY (git));
     
     /* Start actual save request */

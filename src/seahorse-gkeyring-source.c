@@ -248,6 +248,10 @@ remove_key_from_context (gpointer kt, SeahorseKey *dummy, SeahorseKeySource *sks
 static void
 process_next_item (SeahorseListOperation *lop)
 {
+    g_assert (lop);
+    g_assert (SEAHORSE_IS_GKEYRING_SOURCE (lop->gsrc));
+    g_assert (lop->gsrc->pv->keyring_name != NULL);
+
     seahorse_operation_mark_progress_full (SEAHORSE_OPERATION (lop), NULL, 
                                            lop->total - g_list_length (lop->remaining), 
                                            lop->total);
@@ -327,6 +331,9 @@ start_list_operation (SeahorseGKeyringSource *gsrc, GQuark keyid)
 {
     SeahorseListOperation *lop;
     GList *keys, *l;
+
+    g_assert (SEAHORSE_IS_GKEYRING_SOURCE (gsrc));
+    g_assert (gsrc->pv->keyring_name);
 
     lop = g_object_new (SEAHORSE_TYPE_LIST_OPERATION, NULL);
     lop->gsrc = gsrc;
@@ -467,14 +474,16 @@ init_keyring_name (SeahorseGKeyringSource *gsrc, GError **err)
     /* Get default keyring name when no other keyring has been specified */
     res = gnome_keyring_get_default_keyring_sync (&(gsrc->pv->keyring_name));
     if (res != GNOME_KEYRING_RESULT_OK)
-        g_warning ("couldn't get default keyring: (code %d)", res);
+        g_warning ("couldn't get default gnome-keyring keyring: (code %d)", res);
     
     ret = seahorse_gkeyring_operation_parse_error (res, err);
     if(!ret)
         return FALSE;
     
-    /* Hmmm, this happens sometimes, need to figure out why */
-    g_return_val_if_fail (gsrc->pv->keyring_name != NULL, FALSE);
+    /* Happens when user has not yet initialized a keyring */
+    if (!gsrc->pv->keyring_name)
+        g_message ("no default gnome-keyring keyring found");
+
     return TRUE;
 }
 
@@ -550,7 +559,9 @@ seahorse_gkeyring_source_load (SeahorseKeySource *src, GQuark keyid)
     if (!init_keyring_name (gsrc, &err))
         return seahorse_operation_new_complete (err);
 
-    g_assert (gsrc->pv->keyring_name);
+    /* No keyring, act as if no items */
+    if (!gsrc->pv->keyring_name) 
+        return seahorse_operation_new_complete (NULL);
 
     lop = start_list_operation (gsrc, keyid);
     seahorse_multi_operation_take (gsrc->pv->operations, SEAHORSE_OPERATION (lop));
@@ -626,7 +637,9 @@ seahorse_gkeyring_source_remove (SeahorseKeySource *sksrc, SeahorseKey *skey,
     if (!init_keyring_name (gsrc, err))
         return FALSE;
 
-    g_assert (gsrc->pv->keyring_name);
+    /* No keyring, act as if deleted */
+    if (!gsrc->pv->keyring_name) 
+        return TRUE;
     
     res = gnome_keyring_item_delete_sync (gsrc->pv->keyring_name, git->item_id);
     ret = seahorse_gkeyring_operation_parse_error (res, err);
