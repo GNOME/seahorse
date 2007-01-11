@@ -198,7 +198,7 @@ show_password_toggled (GtkToggleButton *button, SeahorseWidget *swidget)
         return;
     
     seahorse_secure_entry_set_visibility (SEAHORSE_SECURE_ENTRY (widget), 
-                                          !gtk_toggle_button_get_active (button));
+                                          gtk_toggle_button_get_active (button));
 }
 
 static void
@@ -242,7 +242,7 @@ password_expander_activate (GtkExpander *expander, SeahorseWidget *swidget)
     /* Always have a hidden password when opening box */
     widget = seahorse_widget_get_widget (swidget, "show-password-check");
     g_return_if_fail (widget != NULL);
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
 }
 
 static void
