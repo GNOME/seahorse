@@ -9,14 +9,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-11-17 21:14+0000\n"
+"POT-Creation-Date: 2007-01-04 01:55+0000\n"
 "PO-Revision-Date: 2006-11-18 13:05+0200\n"
 "Last-Translator: Khaled Hosny <khaledhosny@eglug.org>\n"
 "Language-Team: Arabic <support@eglug.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=n==1 ? 0 : n==2 ? 1 : n>=3 && n<=10 ? 2 : 3\n\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 0 : n==2 ? 1 : n>=3 && n<=10 ? 2 : "
+"3\n"
+"\n"
 "X-Poedit-Language: Arabic\n"
 "X-Generator: KBabel 1.11.4\n"
 
@@ -31,42 +33,34 @@ msgid "Please enter a passphrase to use."
 msgstr "أدخل مجموعة الرموز للاستخدام"
 
 #. Warn and put in defaults
-#: ../agent/seahorse-agent.c:91
+#: ../agent/seahorse-agent.c:101
 msgid "couldn't read gpg configuration, will try to create"
 msgstr ""
 
-#: ../agent/seahorse-agent.c:113
+#: ../agent/seahorse-agent.c:119
 #, fuzzy, c-format
 msgid "couldn't modify gpg configuration: %s"
 msgstr "لا يمكن اﻻتصال بخادم الإعداد"
 
-#. -----------------------------------------------------------------------------
-#. * INTERNAL PASSWORD CACHE
-#.
-#.
-#. * Implementation of the password cache. Note that only passwords
-#. * are stored in secure memory, all else is allocated normally.
-#. *
-#. * Cache items can be locked which guarantees they'll stay around even
-#. * if their TTL expires.
-#.
-#: ../agent/seahorse-agent-cache.c:55
+#: ../agent/seahorse-agent-cache.c:72
 #, fuzzy
 msgid "Unparseable Key ID"
 msgstr "هوية _مفتاح PGP/GPG:"
 
-#: ../agent/seahorse-agent-cache.c:56
+#: ../agent/seahorse-agent-cache.c:73
 #, fuzzy
 msgid "Unknown/Invalid Key"
 msgstr "نوع مفتاح غير سليم: %s."
 
-#: ../agent/seahorse-agent-cache.c:448
+#: ../agent/seahorse-agent-cache.c:530
 #, fuzzy, c-format
 msgid "PGP Key: %s"
 msgstr "هوية _مفتاح PGP/GPG:"
 
 #: ../agent/seahorse-agent-cache.glade.h:1
-msgid "<b>Warning</b>: Your system is not configured to cache passphrases in secure memory."
+msgid ""
+"<b>Warning</b>: Your system is not configured to cache passphrases in secure "
+"memory."
 msgstr ""
 
 #: ../agent/seahorse-agent-cache.glade.h:2
@@ -99,6 +93,56 @@ msgstr "م_سح التاريخ"
 msgid "_Show Window"
 msgstr "إظهار/إخفاء شريط حالة النّافذة."
 
+#: ../agent/seahorse-agent-main.c:50
+msgid "Do not daemonize seahorse-agent"
+msgstr ""
+
+#: ../agent/seahorse-agent-main.c:53
+msgid "Print variables in for a C type shell"
+msgstr ""
+
+#: ../agent/seahorse-agent-main.c:56
+msgid ""
+"Display variables instead of editing conf files (gpg.conf, ssh agent socket)"
+msgstr ""
+
+#: ../agent/seahorse-agent-main.c:59
+msgid "Execute other arguments on the command line"
+msgstr ""
+
+#: ../agent/seahorse-agent-main.c:62
+msgid "Allow GPG agent request from any display"
+msgstr ""
+
+#: ../agent/seahorse-agent-main.c:65
+msgid "command ..."
+msgstr ""
+
+#: ../agent/seahorse-agent-main.c:87 ../daemon/seahorse-daemon.c:72
+#, fuzzy
+msgid "couldn't fork process"
+msgstr "%s: X!لا يمكن تشعيب عملية خادم"
+
+#: ../agent/seahorse-agent-main.c:93 ../daemon/seahorse-daemon.c:78
+#, fuzzy
+msgid "couldn't create new process group"
+msgstr "لا يمكن البدء في تحميل برنامج جديد"
+
+#: ../agent/seahorse-agent-main.c:225 ../daemon/seahorse-daemon.c:195
+#: ../plugins/applet/seahorse-applet.c:1010
+#: ../plugins/nautilus/seahorse-tool.c:567 ../src/main.c:59
+msgid "couldn't drop privileges properly"
+msgstr ""
+
+#: ../agent/seahorse-agent-main.c:232
+#, fuzzy
+msgid "Encryption Key Agent (Seahorse)"
+msgstr "بدأ خادم بيجل؟"
+
+#: ../agent/seahorse-agent-main.c:240
+msgid "no command specified to execute"
+msgstr ""
+
 #: ../agent/seahorse-agent-prompt.c:216
 #, fuzzy
 msgid "Authorize Passphrase Access"
@@ -117,53 +161,27 @@ msgid "_Authorize"
 msgstr ""
 
 #. Make the uid column
-#: ../agent/seahorse-agent-status.c:149
+#: ../agent/seahorse-agent-status.c:151
 #, fuzzy
 msgid "Key Name"
 msgstr "اسم المفتاح:"
 
-#: ../daemon/seahorse-daemon.c:56
-msgid "Do not daemonize seahorse-agent"
-msgstr ""
-
-#: ../daemon/seahorse-daemon.c:60
-msgid "Print variables in for a C type shell"
-msgstr ""
-
-#: ../daemon/seahorse-daemon.c:63
-msgid "Display variables instead of editing gpg.conf"
-msgstr ""
-
-#: ../daemon/seahorse-daemon.c:85
+#: ../daemon/seahorse-daemon.c:54
 #, fuzzy
-msgid "couldn't fork process"
-msgstr "%s: X!لا يمكن تشعيب عملية خادم"
+msgid "Do not daemonize seahorse-daemon"
+msgstr "لم يمكن الاتصال بخادم HAL"
 
-#: ../daemon/seahorse-daemon.c:91
-#, fuzzy
-msgid "couldn't create new process group"
-msgstr "لا يمكن البدء في تحميل برنامج جديد"
-
-#: ../daemon/seahorse-daemon.c:222
-#: ../plugins/applet/seahorse-applet.c:1011
-#: ../plugins/nautilus/seahorse-tool.c:571
-#: ../src/main.c:59
-msgid "couldn't drop privileges properly"
-msgstr ""
-
-#: ../daemon/seahorse-daemon.c:226
+#: ../daemon/seahorse-daemon.c:202
 #, fuzzy
 msgid "Encryption Daemon (Seahorse)"
 msgstr "بدأ خادم بيجل؟"
 
-#: ../daemon/seahorse-service.c:103
-#: ../daemon/seahorse-service.c:127
+#: ../daemon/seahorse-service.c:103 ../daemon/seahorse-service.c:127
 #, fuzzy, c-format
 msgid "Invalid or unrecognized key type: %s"
 msgstr "مفتاح GConf \"%s\" مضبوط لنوع غير صحيح\n"
 
-#: ../daemon/seahorse-service.c:181
-#: ../daemon/seahorse-service-keyset.c:123
+#: ../daemon/seahorse-service.c:181 ../daemon/seahorse-service-keyset.c:123
 #: ../daemon/seahorse-service-keyset.c:152
 #, fuzzy, c-format
 msgid "Invalid or unrecognized key: %s"
@@ -216,8 +234,7 @@ msgstr "نوع غير صحيح للإعدادات %s في %s"
 msgid "Invalid key id: %s"
 msgstr "ID مجموعة غير سليم"
 
-#: ../daemon/seahorse-sharing.c:71
-#: ../daemon/seahorse-sharing.c:215
+#: ../daemon/seahorse-sharing.c:71 ../daemon/seahorse-sharing.c:215
 #, fuzzy
 msgid "Couldn't share keys"
 msgstr "_سرد المفاتيح الحديثة"
@@ -237,15 +254,21 @@ msgid "%s's encryption keys"
 msgstr "<b>مفاتيح التحول</b>"
 
 #: ../data/seahorse.schemas.in.h:1
-msgid "A list of key server URIs to search for remote PGP keys. In later versions a display name can be included, by appending a space and then the name."
+msgid ""
+"A list of key server URIs to search for remote PGP keys. In later versions a "
+"display name can be included, by appending a space and then the name."
 msgstr ""
 
 #: ../data/seahorse.schemas.in.h:2
-msgid "After performing an decrypt or verify operation from the applet, display the resulting text in a window."
+msgid ""
+"After performing an decrypt or verify operation from the applet, display the "
+"resulting text in a window."
 msgstr ""
 
 #: ../data/seahorse.schemas.in.h:3
-msgid "After performing an encrypt or signing operation from the applet, display the resulting text in a window."
+msgid ""
+"After performing an encrypt or signing operation from the applet, display "
+"the resulting text in a window."
 msgstr ""
 
 #: ../data/seahorse.schemas.in.h:4
@@ -270,174 +293,216 @@ msgid "Controls the visibility of the validity column for the key manager."
 msgstr ""
 
 #: ../data/seahorse.schemas.in.h:9
-msgid "Display clipboard after decrypting"
+msgid "Display cache reminder in the notification area"
 msgstr ""
 
 #: ../data/seahorse.schemas.in.h:10
-msgid "Display clipboard after encrypting"
+msgid "Display clipboard after decrypting"
 msgstr ""
 
 #: ../data/seahorse.schemas.in.h:11
-msgid "Enable DNS-SD sharing"
+msgid "Display clipboard after encrypting"
 msgstr ""
 
 #: ../data/seahorse.schemas.in.h:12
-msgid "Enables DNS-SD (Apple Bonjour) sharing of keys. seahorse-daemon must running and must be built with HKP and DNS-SD support."
+msgid "Enable DNS-SD sharing"
 msgstr ""
 
 #: ../data/seahorse.schemas.in.h:13
+msgid ""
+"Enables DNS-SD (Apple Bonjour) sharing of keys. seahorse-daemon must running "
+"and must be built with HKP and DNS-SD support."
+msgstr ""
+
+#: ../data/seahorse.schemas.in.h:14
 #, fuzzy
 msgid "Expire passwords in the cache"
 msgstr "حجم مخبأ القرص، بالميجابايت."
 
-#: ../data/seahorse.schemas.in.h:14
+#: ../data/seahorse.schemas.in.h:15
 #, fuzzy
 msgid "ID of the default key"
 msgstr "هوية _مفتاح PGP/GPG:"
 
-#: ../data/seahorse.schemas.in.h:15
-msgid "If set to 'gnome' uses gnome-keyring to cache passwords. When set to 'internal' uses internal cache."
-msgstr ""
-
 #: ../data/seahorse.schemas.in.h:16
-msgid "If set to true, then files encrypted with seahorse will be ASCII armor encoded."
+msgid ""
+"If set to 'gnome' uses gnome-keyring to cache passwords. When set to "
+"'internal' uses internal cache."
 msgstr ""
 
 #: ../data/seahorse.schemas.in.h:17
-msgid "If set to true, then the default key will always be added to an encryption recipients list."
+msgid ""
+"If set to true, then files encrypted with seahorse will be ASCII armor "
+"encoded."
 msgstr ""
 
 #: ../data/seahorse.schemas.in.h:18
-msgid "Last key used to sign a message."
+msgid ""
+"If set to true, then the default key will always be added to an encryption "
+"recipients list."
 msgstr ""
 
 #: ../data/seahorse.schemas.in.h:19
-msgid "Last keyserver search pattern"
+msgid "Last key used to sign a message."
 msgstr ""
 
 #: ../data/seahorse.schemas.in.h:20
+msgid "Last keyserver search pattern"
+msgstr ""
+
+#: ../data/seahorse.schemas.in.h:21
 #, fuzzy
 msgid "Last keyservers used"
 msgstr "لم يعد مستخدما"
 
-#: ../data/seahorse.schemas.in.h:21
+#: ../data/seahorse.schemas.in.h:22
 #, fuzzy
 msgid "PGP Key servers"
 msgstr "هوية _مفتاح PGP/GPG:"
 
-#: ../data/seahorse.schemas.in.h:22
+#: ../data/seahorse.schemas.in.h:23
 msgid "Prompt before using GPG passwords in cache"
 msgstr ""
 
-#: ../data/seahorse.schemas.in.h:23
+#: ../data/seahorse.schemas.in.h:24
 msgid "Publish keys to this keyserver."
 msgstr ""
 
-#: ../data/seahorse.schemas.in.h:24
-msgid "Reflect the contents of the clipboard (whether encrypted, signed, etc...) in the panel applet icon."
-msgstr ""
-
 #: ../data/seahorse.schemas.in.h:25
-msgid "Set to 'true' to have seahorse-daemon prompt before giving out passwords it has cached."
+msgid ""
+"Reflect the contents of the clipboard (whether encrypted, signed, etc...) in "
+"the panel applet icon."
 msgstr ""
 
 #: ../data/seahorse.schemas.in.h:26
-msgid "Show clipboard state in panel"
+msgid ""
+"Set to 'false' to disable display of the cache reminder in the notification "
+"area of your panel."
 msgstr ""
 
 #: ../data/seahorse.schemas.in.h:27
-msgid "Show expires column in key manager"
+msgid ""
+"Set to 'true' to have seahorse-agent prompt before giving out passwords it "
+"has cached."
 msgstr ""
 
 #: ../data/seahorse.schemas.in.h:28
-msgid "Show trust column in key manager"
+msgid "Show clipboard state in panel"
 msgstr ""
 
 #: ../data/seahorse.schemas.in.h:29
-msgid "Show type column in key manager"
+msgid "Show expires column in key manager"
 msgstr ""
 
 #: ../data/seahorse.schemas.in.h:30
-msgid "Show validity column in key manager"
+msgid "Show trust column in key manager"
 msgstr ""
 
 #: ../data/seahorse.schemas.in.h:31
-msgid "Specify the column to sort the recipients window by. Columns are: 'name' and 'id'. Put a '-' in front of the column name to sort in descending order."
+msgid "Show type column in key manager"
 msgstr ""
 
 #: ../data/seahorse.schemas.in.h:32
-msgid "Specify the column to sort the seahorse key manager main window by. Columns are: 'name', 'id', 'validity', 'expires', 'trust', and 'type'. Put a '-' in front of the column name to sort in descending order."
+msgid "Show validity column in key manager"
 msgstr ""
 
 #: ../data/seahorse.schemas.in.h:33
-msgid "The ID of the last secret key used to sign a message."
+msgid ""
+"Specify the column to sort the recipients window by. Columns are: 'name' and "
+"'id'. Put a '-' in front of the column name to sort in descending order."
 msgstr ""
 
 #: ../data/seahorse.schemas.in.h:34
-msgid "The column to sort the recipients by"
+msgid ""
+"Specify the column to sort the seahorse key manager main window by. Columns "
+"are: 'name', 'id', 'validity', 'expires', 'trust', and 'type'. Put a '-' in "
+"front of the column name to sort in descending order."
 msgstr ""
 
 #: ../data/seahorse.schemas.in.h:35
-msgid "The column to sort the seahorse keys by"
+msgid "The ID of the last secret key used to sign a message."
 msgstr ""
 
 #: ../data/seahorse.schemas.in.h:36
-msgid "The keyserver to publish PGP keys to. Or empty to suppress publishing of PGP keys."
+msgid "The column to sort the recipients by"
 msgstr ""
 
 #: ../data/seahorse.schemas.in.h:37
-msgid "The last keyserver a search was performed against or empty for all keyservers."
+msgid "The column to sort the seahorse keys by"
 msgstr ""
 
 #: ../data/seahorse.schemas.in.h:38
-msgid "The last search pattern searched for against a keyserver."
+msgid ""
+"The keyserver to publish PGP keys to. Or empty to suppress publishing of PGP "
+"keys."
 msgstr ""
 
 #: ../data/seahorse.schemas.in.h:39
-msgid "The time (in minutes) to cache GPG passwords"
+msgid ""
+"The last keyserver a search was performed against or empty for all "
+"keyservers."
 msgstr ""
 
 #: ../data/seahorse.schemas.in.h:40
-msgid "This is the amount of time, specified in minutes, to cache GPG passwords in seahorse-daemon."
+msgid "The last search pattern searched for against a keyserver."
 msgstr ""
 
 #: ../data/seahorse.schemas.in.h:41
-msgid "This option enables the GPG password cache in the seahorse-daemon program."
+msgid "The time (in minutes) to cache GPG passwords"
 msgstr ""
 
 #: ../data/seahorse.schemas.in.h:42
-msgid "This specifies the default key to use for certain operations, mainly signing."
+msgid ""
+"This is the amount of time, specified in minutes, to cache GPG passwords in "
+"seahorse-agent."
 msgstr ""
 
 #: ../data/seahorse.schemas.in.h:43
-msgid "When set seahorse-daemon will try to automatically load the users SSH keys when needed. This is equivalent to using the ssh-add utility."
+msgid ""
+"This option enables the GPG password cache in the seahorse-agent program. "
+"The 'use-agent' setting in gpg.conf affects this setting."
 msgstr ""
 
 #: ../data/seahorse.schemas.in.h:44
-msgid "When set, seahorse-daemon expires GPG passwords in its cache after a peried of time."
+msgid ""
+"This specifies the default key to use for certain operations, mainly signing."
 msgstr ""
 
 #: ../data/seahorse.schemas.in.h:45
-msgid "Where to store cached passwords."
+msgid ""
+"When set seahorse-agent will try to automatically load the users SSH keys "
+"when needed. This is equivalent to using the ssh-add utility."
 msgstr ""
 
 #: ../data/seahorse.schemas.in.h:46
-msgid "Whether or not modified keys should be automatically synced with the default keyserver."
+msgid ""
+"When set, seahorse-agent expires GPG passwords in its cache after a peried "
+"of time."
 msgstr ""
 
 #: ../data/seahorse.schemas.in.h:47
-msgid "Whether the GPG password cache is enabled"
+msgid "Where to store cached passwords."
 msgstr ""
 
 #: ../data/seahorse.schemas.in.h:48
-msgid "Whether to always encrypt to default key"
+msgid ""
+"Whether or not modified keys should be automatically synced with the default "
+"keyserver."
 msgstr ""
 
 #: ../data/seahorse.schemas.in.h:49
-msgid "Whether to automatically load SSH keys on demand."
+msgid "Whether the GPG password cache is enabled"
 msgstr ""
 
 #: ../data/seahorse.schemas.in.h:50
+msgid "Whether to always encrypt to default key"
+msgstr ""
+
+#: ../data/seahorse.schemas.in.h:51
+msgid "Whether to automatically load SSH keys on demand."
+msgstr ""
+
+#: ../data/seahorse.schemas.in.h:52
 #, fuzzy
 msgid "Whether to use ASCII Armor"
 msgstr "فيما إذا ستستخدم صورة الخلفيّة"
@@ -474,15 +539,20 @@ msgstr "_تحرير كرسالةٍ جديدة..."
 msgid "None (Don't Sign)"
 msgstr "لا تصبح خادم"
 
-#: ../libseahorse/eggtrayicon.c:127
+#. TODO: Icons
+#: ../libcryptui/cryptui-key-list.c:117
+#: ../src/seahorse-key-manager-store.c:954
+#: ../src/seahorse-key-properties.c:865
 #, fuzzy
-msgid "Orientation"
-msgstr "الإتّجاه"
+msgid "Name"
+msgstr "اسم"
 
-#: ../libseahorse/eggtrayicon.c:128
+#: ../libcryptui/cryptui-key-list.c:120
+#: ../src/seahorse-key-manager-store.c:966
+#: ../src/seahorse-key-properties.c:1713
 #, fuzzy
-msgid "The orientation of the tray."
-msgstr "إتجاه الطبق."
+msgid "Key ID"
+msgstr "هوية _مفتاح PGP/GPG:"
 
 #: ../libseahorse/seahorse-add-keyserver.glade.h:1
 msgid ":"
@@ -591,6 +661,92 @@ msgstr "_سرد المفاتيح الحديثة"
 msgid "Sending keys to key server..."
 msgstr "يجب تحديد مفتاح أو أكثر لالتلقي\n"
 
+#: ../libseahorse/seahorse-notification.c:557
+#: ../libseahorse/seahorse-notification.c:573
+#, fuzzy, c-format
+msgid "Imported %i key"
+msgid_plural "Imported %i keys"
+msgstr[0] "اتفاق على المفتاح"
+msgstr[1] ""
+
+#: ../libseahorse/seahorse-notification.c:558
+#: ../libseahorse/seahorse-notification.c:574
+#, fuzzy
+msgid "Key Imported"
+msgid_plural "Keys Imported"
+msgstr[0] "اتفاق على المفتاح"
+msgstr[1] "اتفاق على المفتاح"
+msgstr[2] "اتفاق على المفتاح"
+msgstr[3] "اتفاق على المفتاح"
+
+#: ../libseahorse/seahorse-notification.c:601
+#, c-format
+msgid "Signed by <i><key id='%s'/> <b>expired</b></i> on %s."
+msgstr ""
+
+#: ../libseahorse/seahorse-notification.c:602
+#, fuzzy
+msgid "Invalid Signature"
+msgstr "لم يحدَّد إسم مجلّد\n"
+
+#: ../libseahorse/seahorse-notification.c:607
+#, c-format
+msgid "Signed by <i><key id='%s'/></i> on %s <b>Expired</b>."
+msgstr ""
+
+#: ../libseahorse/seahorse-notification.c:608
+#, fuzzy
+msgid "Expired Signature"
+msgstr "توقيع سليم"
+
+#: ../libseahorse/seahorse-notification.c:613
+#, c-format
+msgid "Signed by <i><key id='%s'/> <b>Revoked</b></i> on %s."
+msgstr ""
+
+#: ../libseahorse/seahorse-notification.c:614
+#, fuzzy
+msgid "Revoked Signature"
+msgstr "توقيع سليم"
+
+#: ../libseahorse/seahorse-notification.c:619
+#, c-format
+msgid "Signed by <i><key id='%s'/></i> on %s."
+msgstr ""
+
+#: ../libseahorse/seahorse-notification.c:620
+#, fuzzy
+msgid "Good Signature"
+msgstr "توقيع سليم"
+
+#: ../libseahorse/seahorse-notification.c:625
+#, fuzzy
+msgid "Signing key not in keyring."
+msgstr "يجب تحديد مفتاح أو أكثر لالتلقي\n"
+
+#: ../libseahorse/seahorse-notification.c:626
+#, fuzzy
+msgid "Unknown Signature"
+msgstr "توقيع سليم"
+
+#: ../libseahorse/seahorse-notification.c:630
+msgid "Bad or forged signature. The signed data was modified."
+msgstr ""
+
+#: ../libseahorse/seahorse-notification.c:631
+#, fuzzy
+msgid "Bad Signature"
+msgstr "'.'·و '..'·أسماء مجلّدات محجوزة."
+
+#: ../libseahorse/seahorse-notification.c:639
+#, fuzzy
+msgid "Couldn't verify signature."
+msgstr "ادخال كتابة تنبئيا"
+
+#: ../libseahorse/seahorse-notify.glade.h:1
+msgid "Notification Messages"
+msgstr ""
+
 #: ../libseahorse/seahorse-passphrase.c:175
 msgid "Passphrase"
 msgstr ""
@@ -631,8 +787,7 @@ msgstr "_إدخل نص جديد"
 msgid "Enter passphrase"
 msgstr "أدخل كلمة المرور"
 
-#: ../libseahorse/seahorse-pgp-key.c:140
-#: ../libseahorse/seahorse-ssh-key.c:112
+#: ../libseahorse/seahorse-pgp-key.c:140 ../libseahorse/seahorse-ssh-key.c:112
 #: ../src/seahorse-gkeyring-item.c:231
 #, fuzzy
 msgid "Invalid"
@@ -645,19 +800,18 @@ msgid "Public PGP Key"
 msgstr "مفتاح الموضوع العام"
 
 #: ../libseahorse/seahorse-pgp-key.c:165
-#: ../src/seahorse-pgp-private-key-properties.glade.h:34
+#: ../src/seahorse-pgp-private-key-properties.glade.h:35
 #, fuzzy
 msgid "Private PGP Key"
 msgstr "جاري احداث مفتاح خاص."
 
-#: ../libseahorse/seahorse-pgp-key.c:684
-#: ../libseahorse/seahorse-validity.c:31
+#: ../libseahorse/seahorse-pgp-key.c:694 ../libseahorse/seahorse-validity.c:31
 #: ../src/seahorse-key-properties.c:1089
 #, fuzzy
 msgid "Unknown"
 msgstr "مجهول"
 
-#: ../libseahorse/seahorse-pgp-key.c:686
+#: ../libseahorse/seahorse-pgp-key.c:696
 msgid "ElGamal"
 msgstr ""
 
@@ -682,11 +836,12 @@ msgid "Loading Keys..."
 msgstr "<b>مفاتيح التحول</b>"
 
 #: ../libseahorse/seahorse-pgp-source.c:820
-msgid "Invalid key data (missing UIDs). This may be due to a computer with a date set in the future or a missing self-signature."
+msgid ""
+"Invalid key data (missing UIDs). This may be due to a computer with a date "
+"set in the future or a missing self-signature."
 msgstr ""
 
-#: ../libseahorse/seahorse-pgp-source.c:941
-#: ../src/seahorse-key-manager.c:454
+#: ../libseahorse/seahorse-pgp-source.c:941 ../src/seahorse-key-manager.c:454
 #: ../src/seahorse-key-manager.c:500
 #, fuzzy
 msgid "Importing Keys"
@@ -703,7 +858,9 @@ msgid "Not a valid Key Server address."
 msgstr "العنوان الذي قدمته غير صحيح."
 
 #: ../libseahorse/seahorse-prefs.c:61
-msgid "For help contact your system adminstrator or the administrator of the key server."
+msgid ""
+"For help contact your system adminstrator or the administrator of the key "
+"server."
 msgstr ""
 
 #: ../libseahorse/seahorse-prefs.c:172
@@ -725,17 +882,18 @@ msgstr ""
 msgid "None. Prompt for a key."
 msgstr "توقّعت `%s' تلقّيت `%s' للمفتاح %s"
 
-#: ../libseahorse/seahorse-prefs-cache.c:176
+#: ../libseahorse/seahorse-prefs-cache.c:231
 #, fuzzy
 msgid "Couldn't open the Session Properties"
 msgstr "لا يمكن فتح جلسة لـ%s"
 
-#: ../libseahorse/seahorse-prefs-cache.c:258
-msgid "Couldn't start seahorse-daemon"
-msgstr ""
+#: ../libseahorse/seahorse-prefs-cache.c:244
+#, fuzzy
+msgid "Couldn't start the 'seahorse-agent' program"
+msgstr "لم يمكن الاتصال بخادم HAL"
 
-#: ../libseahorse/seahorse-prefs-cache.c:259
-msgid "The program 'seahorse-daemon' is necessary for the caching of passphrases"
+#: ../libseahorse/seahorse-prefs-cache.c:246
+msgid "The 'seahorse-agent' program exited unsuccessfully."
 msgstr ""
 
 #: ../libseahorse/seahorse-prefs.glade.h:1
@@ -744,7 +902,9 @@ msgid "<b>Defaults</b>"
 msgstr "الا_فتراضيّات"
 
 #: ../libseahorse/seahorse-prefs.glade.h:2
-msgid "<b>Note:</b> The 'seahorse-daemon' program has been started. This program is necessary in order to cache passphrases. "
+msgid ""
+"<b>Note:</b> The 'seahorse-agent' program has been started. This program is "
+"necessary in order to cache passphrases. "
 msgstr ""
 
 #: ../libseahorse/seahorse-prefs.glade.h:3
@@ -758,112 +918,125 @@ msgid "<b>Secure Shell Keys</b>"
 msgstr "خدمات صدفة \"shell\" آمنة"
 
 #: ../libseahorse/seahorse-prefs.glade.h:5
-msgid "<i>A non-supported PGP passphrase caching agent is running.</i>"
+msgid ""
+"<b>Warning:</b> The 'seahorse-agent' program is not running. This program is "
+"necessary in order to cache passphrases. "
 msgstr ""
 
 #: ../libseahorse/seahorse-prefs.glade.h:6
-msgid "<i>No SSH caching agent is running. Cannot load Secure Shell keys.</i>"
+msgid "<i>A non-supported PGP passphrase caching agent is running.</i>"
 msgstr ""
 
 #: ../libseahorse/seahorse-prefs.glade.h:7
-msgid "<i>This key is used to sign messages when no other key is chosen</i>"
+msgid "<i>No SSH caching agent is running. Cannot load Secure Shell keys.</i>"
 msgstr ""
 
 #: ../libseahorse/seahorse-prefs.glade.h:8
-msgid "Automatically load _Secure Shell keys"
+msgid "<i>This key is used to sign messages when no other key is chosen</i>"
 msgstr ""
 
 #: ../libseahorse/seahorse-prefs.glade.h:9
-msgid "Automatically synchronize modified keys with keyservers. "
+msgid "Automatically load _Secure Shell keys"
 msgstr ""
 
 #: ../libseahorse/seahorse-prefs.glade.h:10
-#: ../plugins/nautilus/seahorse-pgp-preferences.c:73
+msgid "Automatically synchronize modified keys with keyservers. "
+msgstr ""
+
+#: ../libseahorse/seahorse-prefs.glade.h:11
+#: ../plugins/nautilus/seahorse-pgp-preferences.c:75
 #: ../plugins/nautilus/seahorse-pgp-preferences.desktop.in.h:2
 #, fuzzy
 msgid "Encryption Preferences"
 msgstr "خيارات داشر"
 
-#: ../libseahorse/seahorse-prefs.glade.h:11
+#: ../libseahorse/seahorse-prefs.glade.h:12
 #, fuzzy
 msgid "Encryption Settings"
 msgstr "اختر الإعدادات"
 
-#: ../libseahorse/seahorse-prefs.glade.h:12
+#: ../libseahorse/seahorse-prefs.glade.h:13
 #, fuzzy
 msgid "Key Servers"
 msgstr "<b>خوادم DNS</b>"
 
-#: ../libseahorse/seahorse-prefs.glade.h:13
+#: ../libseahorse/seahorse-prefs.glade.h:14
 #, fuzzy
 msgid "Key Sharing"
 msgstr "اتفاق على المفتاح"
 
-#: ../libseahorse/seahorse-prefs.glade.h:14
+#: ../libseahorse/seahorse-prefs.glade.h:15
 #, fuzzy
 msgid "Passphrase Cache"
 msgstr "حجم مخبأ القرص"
 
-#: ../libseahorse/seahorse-prefs.glade.h:15
+#: ../libseahorse/seahorse-prefs.glade.h:16
 #, fuzzy
 msgid "Session Properties"
 msgstr "خصائص القائمة"
 
-#: ../libseahorse/seahorse-prefs.glade.h:16
+#: ../libseahorse/seahorse-prefs.glade.h:17
 msgid ""
-"Sharing your keys allows other people on your network to use the keys you've collected. This means they can automatically encrypt things for you or those you know, without you having to send them your key.\n"
+"Sharing your keys allows other people on your network to use the keys you've "
+"collected. This means they can automatically encrypt things for you or those "
+"you know, without you having to send them your key.\n"
 "\n"
 "<b>Note:</b> Your personal keys will not be compromised."
 msgstr ""
 
-#: ../libseahorse/seahorse-prefs.glade.h:19
+#: ../libseahorse/seahorse-prefs.glade.h:20
+#, fuzzy
+msgid "Start seahorse-agent"
+msgstr "بريمج جافا"
+
+#: ../libseahorse/seahorse-prefs.glade.h:21
 msgid ""
-"To avoid manually starting the 'seahorse-daemon' in the future\n"
+"To avoid manually starting the 'seahorse-agent' in the future\n"
 "add it to the Session Manager. "
 msgstr ""
 
-#: ../libseahorse/seahorse-prefs.glade.h:21
+#: ../libseahorse/seahorse-prefs.glade.h:23
 msgid "When _encrypting, always include myself as a recipient"
 msgstr ""
 
-#: ../libseahorse/seahorse-prefs.glade.h:22
+#: ../libseahorse/seahorse-prefs.glade.h:24
 msgid "_Always remember passphrases whenever logged in"
 msgstr ""
 
-#: ../libseahorse/seahorse-prefs.glade.h:23
+#: ../libseahorse/seahorse-prefs.glade.h:25
 msgid "_Ask me before using a cached passphrase"
 msgstr ""
 
-#: ../libseahorse/seahorse-prefs.glade.h:24
+#: ../libseahorse/seahorse-prefs.glade.h:26
 #, fuzzy
 msgid "_Default Key:"
 msgstr "اتفاق على المفتاح"
 
-#: ../libseahorse/seahorse-prefs.glade.h:25
+#: ../libseahorse/seahorse-prefs.glade.h:27
 #, fuzzy
 msgid "_Find Keys Using:"
 msgstr "تم الاتصال مع %s باستخدام %s"
 
-#: ../libseahorse/seahorse-prefs.glade.h:26
+#: ../libseahorse/seahorse-prefs.glade.h:28
 #, fuzzy
 msgid "_Never remember passphrases"
 msgstr "تذكّر كلمة المرور هذه"
 
-#: ../libseahorse/seahorse-prefs.glade.h:27
+#: ../libseahorse/seahorse-prefs.glade.h:29
 #, fuzzy
 msgid "_Publish Keys To:"
 msgstr "ربط مفاتيح اﻻختصار بالأوامر"
 
-#: ../libseahorse/seahorse-prefs.glade.h:28
+#: ../libseahorse/seahorse-prefs.glade.h:30
 #, fuzzy
 msgid "_Remember passphrases for"
 msgstr "ت_خزين كلمة المرور لهذه الجلسة"
 
-#: ../libseahorse/seahorse-prefs.glade.h:29
+#: ../libseahorse/seahorse-prefs.glade.h:31
 msgid "_Share my keys with others on my network"
 msgstr ""
 
-#: ../libseahorse/seahorse-prefs.glade.h:30
+#: ../libseahorse/seahorse-prefs.glade.h:32
 #, fuzzy
 msgid "minutes"
 msgstr "دقائق"
@@ -900,7 +1073,8 @@ msgstr "المنتقى مثبّت"
 
 #: ../libseahorse/seahorse-secure-entry.c:279
 #, fuzzy
-msgid "The position of the opposite end of the selection from the cursor in chars"
+msgid ""
+"The position of the opposite end of the selection from the cursor in chars"
 msgstr "موقع النهاية المعكوسة للمنتقى من المؤشر في الرموز"
 
 #: ../libseahorse/seahorse-secure-entry.c:283
@@ -940,8 +1114,12 @@ msgstr "تنشيط الافتراضات"
 
 #: ../libseahorse/seahorse-secure-entry.c:295
 #, fuzzy
-msgid "Whether to activate the default widget (such as the default button in a dialog) when Enter is pressed"
-msgstr "فيما اذا وجب تنشيط القطعة الافتراضية (مثل الزر الافتراضي في حوار ما)عند نقر زر الادخال"
+msgid ""
+"Whether to activate the default widget (such as the default button in a "
+"dialog) when Enter is pressed"
+msgstr ""
+"فيما اذا وجب تنشيط القطعة الافتراضية (مثل الزر الافتراضي في حوار ما)عند نقر "
+"زر الادخال"
 
 #: ../libseahorse/seahorse-secure-entry.c:299
 #, fuzzy
@@ -994,13 +1172,13 @@ msgstr "مسح نادل STUN"
 
 #. TODO: We should be giving an error message that allows them to
 #. generate or import a key
-#: ../libseahorse/seahorse-signer.c:57
-#: ../src/seahorse-sign.c:159
+#: ../libseahorse/seahorse-signer.c:57 ../src/seahorse-sign.c:159
 msgid "No keys usable for signing"
 msgstr ""
 
 #: ../libseahorse/seahorse-signer.c:58
-msgid "You have no personal PGP keys that can be used to sign a document or message."
+msgid ""
+"You have no personal PGP keys that can be used to sign a document or message."
 msgstr ""
 
 #: ../libseahorse/seahorse-signer.glade.h:1
@@ -1017,8 +1195,7 @@ msgstr "تشفير هذه الرسالة باستخدام PGP"
 msgid "(Unreadable Secure Shell Key)"
 msgstr ""
 
-#: ../libseahorse/seahorse-ssh-key.c:94
-#: ../libseahorse/seahorse-ssh-key.c:98
+#: ../libseahorse/seahorse-ssh-key.c:94 ../libseahorse/seahorse-ssh-key.c:98
 #: ../libseahorse/seahorse-ssh-source.c:746
 #: ../src/seahorse-generate-select.c:145
 #: ../src/seahorse-ssh-key-properties.glade.h:20
@@ -1087,11 +1264,12 @@ msgid "Enter Key Passphrase"
 msgstr "خطأ في مفتاح Gconf"
 
 #: ../libseahorse/seahorse-ssh-operation.c:890
-msgid "New Secure Shell Key Passphrase"
-msgstr ""
+#, fuzzy
+msgid "Passphrase for New Secure Shell Key"
+msgstr "توقّعت `%s' تلقّيت `%s' للمفتاح %s"
 
 #: ../libseahorse/seahorse-ssh-operation.c:891
-msgid "Enter a passphrase for your new SSH key."
+msgid "Enter a passphrase for your new Secure Shell key."
 msgstr ""
 
 #: ../libseahorse/seahorse-ssh-operation.c:1029
@@ -1138,6 +1316,11 @@ msgstr "اتفاق على المفتاح"
 msgid "Unknown Key"
 msgstr "اتفاق على المفتاح"
 
+#: ../libseahorse/seahorse-unknown-source.c:128
+#, fuzzy
+msgid "Unavailable Key"
+msgstr "غير متوفّر"
+
 #: ../libseahorse/seahorse-util.c:188
 msgid "%Y-%m-%d"
 msgstr ""
@@ -1178,8 +1361,7 @@ msgstr ""
 msgid "All key files"
 msgstr "إلغاء إختيار جميع الملفات"
 
-#: ../libseahorse/seahorse-util.c:819
-#: ../libseahorse/seahorse-util.c:859
+#: ../libseahorse/seahorse-util.c:819 ../libseahorse/seahorse-util.c:859
 #: ../src/seahorse-photos.c:239
 #, fuzzy
 msgid "All files"
@@ -1202,27 +1384,22 @@ msgstr ""
 msgid "_Replace"
 msgstr "است_بدال"
 
-#: ../libseahorse/seahorse-validity.c:33
-#: ../src/seahorse-key-properties.c:1095
-#: ../src/seahorse-key-properties.c:1225
-#: ../src/seahorse-key-properties.c:1297
+#: ../libseahorse/seahorse-validity.c:33 ../src/seahorse-key-properties.c:1095
+#: ../src/seahorse-key-properties.c:1227 ../src/seahorse-key-properties.c:1299
 #, fuzzy
 msgid "Never"
 msgstr "أبداً"
 
-#: ../libseahorse/seahorse-validity.c:35
-#: ../src/seahorse-key-properties.c:1102
+#: ../libseahorse/seahorse-validity.c:35 ../src/seahorse-key-properties.c:1102
 msgid "Marginal"
 msgstr ""
 
-#: ../libseahorse/seahorse-validity.c:37
-#: ../src/seahorse-key-properties.c:1108
+#: ../libseahorse/seahorse-validity.c:37 ../src/seahorse-key-properties.c:1108
 #, fuzzy
 msgid "Full"
 msgstr "_كامل"
 
-#: ../libseahorse/seahorse-validity.c:39
-#: ../src/seahorse-key-properties.c:1114
+#: ../libseahorse/seahorse-validity.c:39 ../src/seahorse-key-properties.c:1114
 msgid "Ultimate"
 msgstr ""
 
@@ -1231,8 +1408,7 @@ msgstr ""
 msgid "Disabled"
 msgstr "معطل"
 
-#: ../libseahorse/seahorse-validity.c:43
-#: ../src/seahorse-key-properties.c:1293
+#: ../libseahorse/seahorse-validity.c:43 ../src/seahorse-key-properties.c:1295
 #, fuzzy
 msgid "Revoked"
 msgstr "أبطلت الشّهادة"
@@ -1257,14 +1433,13 @@ msgid "Seahorse Applet Factory"
 msgstr "مصنع بريمج منتقي الرموز"
 
 #: ../plugins/applet/GNOME_SeahorseApplet.xml.h:1
-#: ../src/seahorse-key-manager.c:1189
+#: ../src/seahorse-key-manager.c:1190
 #, fuzzy
 msgid "_About"
 msgstr "_حول"
 
 #: ../plugins/applet/GNOME_SeahorseApplet.xml.h:2
-#: ../src/seahorse-key-manager.c:1173
-#: ../src/seahorse-keyserver-results.c:379
+#: ../src/seahorse-key-manager.c:1174 ../src/seahorse-keyserver-results.c:379
 #, fuzzy
 msgid "_Help"
 msgstr "م_ساعدة"
@@ -1274,136 +1449,134 @@ msgstr "م_ساعدة"
 msgid "_Preferences"
 msgstr "الت_فضيلات"
 
-#: ../plugins/applet/seahorse-applet.c:310
+#: ../plugins/applet/seahorse-applet.c:309
 #, fuzzy
 msgid "seahorse-applet"
 msgstr "بريمج جافا"
 
-#: ../plugins/applet/seahorse-applet.c:312
-#: ../plugins/applet/seahorse-applet.c:833
+#: ../plugins/applet/seahorse-applet.c:311
+#: ../plugins/applet/seahorse-applet.c:832
 msgid "Use PGP/GPG to encrypt/decrypt/sign/verify/import the clipboard."
 msgstr ""
 
-#: ../plugins/applet/seahorse-applet.c:317
-#: ../src/seahorse-key-manager.c:868
+#: ../plugins/applet/seahorse-applet.c:316 ../src/seahorse-key-manager.c:869
 #, fuzzy
 msgid "translator-credits"
 msgstr "Yousef Raffah يوسف رفه (yousef@raffah.com)"
 
-#: ../plugins/applet/seahorse-applet.c:320
-#: ../src/seahorse-key-manager.c:871
+#: ../plugins/applet/seahorse-applet.c:319 ../src/seahorse-key-manager.c:872
 msgid "Seahorse Project Homepage"
 msgstr ""
 
 #. Get the recipient list
-#: ../plugins/applet/seahorse-applet.c:375
+#: ../plugins/applet/seahorse-applet.c:374
 #: ../plugins/epiphany/seahorse-extension.c:251
 #: ../plugins/gedit/seahorse-gedit.c:332
 #, fuzzy
 msgid "Choose Recipient Keys"
 msgstr "_سرد المفاتيح الحديثة"
 
-#: ../plugins/applet/seahorse-applet.c:394
+#: ../plugins/applet/seahorse-applet.c:393
 #, fuzzy
 msgid "Encrypted Text"
 msgstr "نص العلامة."
 
-#: ../plugins/applet/seahorse-applet.c:396
+#: ../plugins/applet/seahorse-applet.c:395
 #, fuzzy
 msgid "Encryption Failed"
 msgstr "فشل الاختبار %d"
 
-#: ../plugins/applet/seahorse-applet.c:397
+#: ../plugins/applet/seahorse-applet.c:396
 #, fuzzy
 msgid "The clipboard could not be encrypted."
 msgstr "لم يمكن إيجاد “%s”"
 
-#: ../plugins/applet/seahorse-applet.c:431
+#: ../plugins/applet/seahorse-applet.c:430
 #: ../plugins/epiphany/seahorse-extension.c:296
 #: ../plugins/gedit/seahorse-gedit.c:611
 #, fuzzy
 msgid "Choose Key to Sign with"
 msgstr "توقيع الرسالة بمفتاح PGP الخاص بك"
 
-#: ../plugins/applet/seahorse-applet.c:450
+#: ../plugins/applet/seahorse-applet.c:449
 #, fuzzy
 msgid "Signed Text"
 msgstr "نص العلامة."
 
-#: ../plugins/applet/seahorse-applet.c:452
+#: ../plugins/applet/seahorse-applet.c:451
 #, fuzzy
 msgid "Signing Failed"
 msgstr "فشل الاختبار %d"
 
-#: ../plugins/applet/seahorse-applet.c:453
+#: ../plugins/applet/seahorse-applet.c:452
 #, fuzzy
 msgid "The clipboard could not be Signed."
 msgstr "لم يمكن إيجاد “%s”"
 
-#: ../plugins/applet/seahorse-applet.c:496
+#: ../plugins/applet/seahorse-applet.c:495
 #: ../plugins/epiphany/seahorse-extension.c:340
 #, fuzzy
 msgid "Import Failed"
 msgstr "فشل الإستيراد"
 
-#: ../plugins/applet/seahorse-applet.c:497
+#: ../plugins/applet/seahorse-applet.c:496
 #: ../plugins/epiphany/seahorse-extension.c:341
 msgid "Keys were found but not imported."
 msgstr ""
 
-#: ../plugins/applet/seahorse-applet.c:528
+#: ../plugins/applet/seahorse-applet.c:527
 #: ../plugins/epiphany/seahorse-extension.c:374
 #, fuzzy
 msgid "Decrypting Failed"
 msgstr "فشل الاختبار %d"
 
-#: ../plugins/applet/seahorse-applet.c:529
+#: ../plugins/applet/seahorse-applet.c:528
 #: ../plugins/epiphany/seahorse-extension.c:375
 #, fuzzy
 msgid "Text may be malformed."
 msgstr "قد يكون الخط واسعا جدا"
 
-#: ../plugins/applet/seahorse-applet.c:580
+#: ../plugins/applet/seahorse-applet.c:579
 msgid "No PGP key or message was found on clipboard"
 msgstr ""
 
-#: ../plugins/applet/seahorse-applet.c:581
+#: ../plugins/applet/seahorse-applet.c:580
 #, fuzzy
 msgid "No PGP data found."
 msgstr "لم يمكن ايجاد تيمات اللعبة."
 
-#: ../plugins/applet/seahorse-applet.c:614
+#: ../plugins/applet/seahorse-applet.c:613
 #, fuzzy
 msgid "Decrypted Text"
 msgstr "نص العلامة."
 
-#: ../plugins/applet/seahorse-applet.c:682
+#: ../plugins/applet/seahorse-applet.c:681
 #, fuzzy
 msgid "Could not display the help file"
 msgstr "لا يمكن فتح مستند المساعدة"
 
-#: ../plugins/applet/seahorse-applet.c:745
+#: ../plugins/applet/seahorse-applet.c:744
 #, fuzzy
 msgid "_Encrypt Clipboard"
 msgstr "لصق الحافظة الوسيطة"
 
-#: ../plugins/applet/seahorse-applet.c:752
+#: ../plugins/applet/seahorse-applet.c:751
 #, fuzzy
 msgid "_Sign Clipboard"
 msgstr "لصق الحافظة الوسيطة"
 
-#: ../plugins/applet/seahorse-applet.c:759
+#: ../plugins/applet/seahorse-applet.c:758
 #, fuzzy
 msgid "_Decrypt/Verify Clipboard"
 msgstr "لصق من الحافظة"
 
-#: ../plugins/applet/seahorse-applet.c:765
+#: ../plugins/applet/seahorse-applet.c:764
 #, fuzzy
 msgid "_Import Keys from Clipboard"
 msgstr "لصق نص من الحافظة الوسيطة"
 
-#: ../plugins/applet/seahorse-applet.c:830
-#: ../plugins/applet/seahorse-applet.c:832
+#: ../plugins/applet/seahorse-applet.c:829
+#: ../plugins/applet/seahorse-applet.c:831
 #, fuzzy
 msgid "Encryption Applet"
 msgstr "بريمج جافا"
@@ -1465,10 +1638,8 @@ msgstr "نص العلامة."
 msgid "Couldn't encrypt text"
 msgstr "ادخال كتابة تنبئيا"
 
-#: ../plugins/gedit/seahorse-gedit.c:387
-#: ../src/seahorse-key-manager.c:395
-#: ../src/seahorse-key-manager.c:463
-#: ../src/seahorse-key-manager.c:484
+#: ../plugins/gedit/seahorse-gedit.c:387 ../src/seahorse-key-manager.c:395
+#: ../src/seahorse-key-manager.c:463 ../src/seahorse-key-manager.c:484
 #, fuzzy
 msgid "Couldn't import keys"
 msgstr "_سرد المفاتيح الحديثة"
@@ -1501,8 +1672,7 @@ msgstr "نص العلامة."
 msgid "Verified text"
 msgstr "نص العلامة."
 
-#: ../plugins/gedit/seahorse-gedit.c:582
-#: ../src/seahorse-key-manager.c:404
+#: ../plugins/gedit/seahorse-gedit.c:582 ../src/seahorse-key-manager.c:404
 #, fuzzy, c-format
 msgid "Imported %d key"
 msgid_plural "Imported %d keys"
@@ -1577,7 +1747,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: ../plugins/nautilus-ext/seahorse-nautilus.c:168
-#: ../src/seahorse-pgp-private-key-properties.glade.h:37
+#: ../src/seahorse-pgp-private-key-properties.glade.h:38
 #, fuzzy
 msgid "Sign"
 msgstr "نص العلامة"
@@ -1600,83 +1770,86 @@ msgstr "واحدة الضّغط المستخدمة."
 msgid "Configure key servers and other encryption settings"
 msgstr ""
 
-#: ../plugins/nautilus/seahorse-tool.c:56
+#: ../plugins/nautilus/seahorse-tool.c:52
 #, fuzzy
 msgid "Import keys from the file"
 msgstr "إستيراد علامات المواقع من ملف"
 
-#: ../plugins/nautilus/seahorse-tool.c:58
+#: ../plugins/nautilus/seahorse-tool.c:54
 #, fuzzy
 msgid "Encrypt file"
 msgstr "إنتقاء ملف"
 
-#: ../plugins/nautilus/seahorse-tool.c:60
+#: ../plugins/nautilus/seahorse-tool.c:56
 #, fuzzy
 msgid "Sign file with default key"
 msgstr "توقيع الرسالة بمفتاح PGP الخاص بك"
 
-#: ../plugins/nautilus/seahorse-tool.c:62
+#: ../plugins/nautilus/seahorse-tool.c:58
 msgid "Encrypt and sign file with default key"
 msgstr ""
 
-#: ../plugins/nautilus/seahorse-tool.c:64
+#: ../plugins/nautilus/seahorse-tool.c:60
 #, fuzzy
 msgid "Decrypt encrypted file"
 msgstr "حفظ الملف كـ"
 
-#: ../plugins/nautilus/seahorse-tool.c:66
+#: ../plugins/nautilus/seahorse-tool.c:62
 #, fuzzy
 msgid "Verify signature file"
 msgstr "توقيع سليم، تعذّر التّحقّق من المرسِل"
 
-#: ../plugins/nautilus/seahorse-tool.c:68
+#: ../plugins/nautilus/seahorse-tool.c:64
 msgid "Read list of URIs on standard in"
 msgstr ""
 
-#: ../plugins/nautilus/seahorse-tool.c:129
+#: ../plugins/nautilus/seahorse-tool.c:66
+msgid "file ..."
+msgstr ""
+
+#: ../plugins/nautilus/seahorse-tool.c:128
 #, fuzzy
 msgid "Choose Recipients"
 msgstr "المستلمون يحتوون"
 
-#: ../plugins/nautilus/seahorse-tool.c:191
-#: ../plugins/nautilus/seahorse-tool.c:273
+#: ../plugins/nautilus/seahorse-tool.c:190
+#: ../plugins/nautilus/seahorse-tool.c:272
 #, fuzzy
 msgid "Couldn't load keys"
 msgstr "لم يمكن تحميل واجهة '%s'."
 
-#: ../plugins/nautilus/seahorse-tool.c:207
+#: ../plugins/nautilus/seahorse-tool.c:206
 #, fuzzy, c-format
 msgid "Choose Encrypted File Name for '%s'"
 msgstr "اسم الملف الحاوي على رسوم الورق."
 
-#: ../plugins/nautilus/seahorse-tool.c:257
+#: ../plugins/nautilus/seahorse-tool.c:256
 #, fuzzy
 msgid "Choose Signer"
 msgstr "موقّع الجسم"
 
-#: ../plugins/nautilus/seahorse-tool.c:292
+#: ../plugins/nautilus/seahorse-tool.c:291
 #, fuzzy, c-format
 msgid "Choose Signature File Name for '%s'"
 msgstr "ادخل إسما لهذا التوقيع."
 
-#: ../plugins/nautilus/seahorse-tool.c:372
+#: ../plugins/nautilus/seahorse-tool.c:371
 #, fuzzy
 msgid "Imported key"
 msgstr "اتفاق على المفتاح"
 
-#: ../plugins/nautilus/seahorse-tool.c:373
-#: ../src/seahorse-key-manager.c:405
+#: ../plugins/nautilus/seahorse-tool.c:372 ../src/seahorse-key-manager.c:405
 #, fuzzy, c-format
 msgid "Imported %d keys"
 msgstr "<b>مفاتيح التحول</b>"
 
 #. File to decrypt to
-#: ../plugins/nautilus/seahorse-tool.c:394
+#: ../plugins/nautilus/seahorse-tool.c:393
 #, fuzzy, c-format
 msgid "Choose Decrypted File Name for '%s'"
 msgstr "اسم الملف الحاوي على رسوم الورق."
 
-#: ../plugins/nautilus/seahorse-tool.c:450
+#: ../plugins/nautilus/seahorse-tool.c:449
 #, fuzzy, c-format
 msgid "Choose Original File for '%s'"
 msgstr "اختيار لونا للمذكرة"
@@ -1686,60 +1859,60 @@ msgstr "اختيار لونا للمذكرة"
 #. * The last thing we want to do is cascade a big pile of error
 #. * dialogs at the user.
 #.
-#: ../plugins/nautilus/seahorse-tool.c:522
+#: ../plugins/nautilus/seahorse-tool.c:521
 #, fuzzy
 msgid "No valid signatures found"
 msgstr "لم يحدَّد إسم مجلّد\n"
 
-#: ../plugins/nautilus/seahorse-tool.c:589
+#: ../plugins/nautilus/seahorse-tool.c:588
 #, fuzzy
 msgid "File Encryption Tool"
 msgstr "أداة تقرير خلال"
 
-#: ../plugins/nautilus/seahorse-tool.c:627
+#: ../plugins/nautilus/seahorse-tool.c:611
 msgid "Encrypting"
 msgstr ""
 
-#: ../plugins/nautilus/seahorse-tool.c:628
+#: ../plugins/nautilus/seahorse-tool.c:612
 #, fuzzy, c-format
 msgid "Couldn't encrypt file: %s"
 msgstr "لم يمكن فتح الملفّ '%s': %s"
 
-#: ../plugins/nautilus/seahorse-tool.c:636
+#: ../plugins/nautilus/seahorse-tool.c:620
 #, fuzzy
 msgid "Signing"
 msgstr "التّوقيع"
 
-#: ../plugins/nautilus/seahorse-tool.c:637
+#: ../plugins/nautilus/seahorse-tool.c:621
 #, fuzzy, c-format
 msgid "Couldn't sign file: %s"
 msgstr "لم يمكن فتح الملفّ '%s': %s"
 
-#: ../plugins/nautilus/seahorse-tool.c:642
+#: ../plugins/nautilus/seahorse-tool.c:626
 #, fuzzy
 msgid "Importing"
 msgstr "جاري الاستيراد..."
 
-#: ../plugins/nautilus/seahorse-tool.c:643
+#: ../plugins/nautilus/seahorse-tool.c:627
 #, fuzzy, c-format
 msgid "Couldn't import keys from file: %s"
 msgstr "استيراد المؤشّرات من الملف المحدّد"
 
-#: ../plugins/nautilus/seahorse-tool.c:649
+#: ../plugins/nautilus/seahorse-tool.c:633
 msgid "Decrypting"
 msgstr ""
 
-#: ../plugins/nautilus/seahorse-tool.c:650
+#: ../plugins/nautilus/seahorse-tool.c:634
 #, fuzzy, c-format
 msgid "Couldn't decrypt file: %s"
 msgstr "لم يمكن فتح الملفّ '%s': %s"
 
-#: ../plugins/nautilus/seahorse-tool.c:655
+#: ../plugins/nautilus/seahorse-tool.c:639
 #, fuzzy
 msgid "Verifying"
 msgstr "جاري التأكد من التهيئة..."
 
-#: ../plugins/nautilus/seahorse-tool.c:656
+#: ../plugins/nautilus/seahorse-tool.c:640
 #, fuzzy, c-format
 msgid "Couldn't verify file: %s"
 msgstr "لم يمكن فتح الملفّ '%s': %s"
@@ -1793,8 +1966,7 @@ msgstr "جاري تحضير الصفحات..."
 msgid "Couldn't list files"
 msgstr "اسرد الملفات فقط"
 
-#: ../src/main.c:75
-#: ../src/seahorse-key-manager.c:863
+#: ../src/main.c:75 ../src/seahorse-key-manager.c:864
 #, fuzzy
 msgid "Encryption Key Manager"
 msgstr "مدير الصوت - الصفحة %d/%d"
@@ -1809,8 +1981,7 @@ msgstr "أضف دفتر عناوين"
 msgid "Add subkey to %s"
 msgstr "مُرفق للإضافة."
 
-#: ../src/seahorse-add-subkey.glade.h:1
-#: ../src/seahorse-pgp-generate.c:44
+#: ../src/seahorse-add-subkey.glade.h:1 ../src/seahorse-pgp-generate.c:44
 #, fuzzy
 msgid "DSA (sign only)"
 msgstr "الاتّصالات المشفّرة فقط"
@@ -1865,8 +2036,7 @@ msgstr "لا تتقبل _أبدا"
 msgid "RSA (encrypt only)"
 msgstr "الاتّصالات المشفّرة فقط"
 
-#: ../src/seahorse-add-subkey.glade.h:12
-#: ../src/seahorse-pgp-generate.c:45
+#: ../src/seahorse-add-subkey.glade.h:12 ../src/seahorse-pgp-generate.c:45
 #, fuzzy
 msgid "RSA (sign only)"
 msgstr "الاتّصالات المشفّرة فقط"
@@ -1891,8 +2061,7 @@ msgstr "رقم ID المستخدم"
 msgid "Create the new user ID"
 msgstr "ID المستخدم %sَل موجودة مسبقاً"
 
-#: ../src/seahorse-add-uid.glade.h:3
-#: ../src/seahorse-pgp-generate.glade.h:8
+#: ../src/seahorse-add-uid.glade.h:3 ../src/seahorse-pgp-generate.glade.h:8
 #, fuzzy
 msgid "Full _Name:"
 msgstr "الإ_سم الكامل..."
@@ -1915,8 +2084,7 @@ msgstr ""
 msgid "Optional email address"
 msgstr "عنوان البريد الالكتروني للموصول"
 
-#: ../src/seahorse-add-uid.glade.h:8
-#: ../src/seahorse-pgp-generate.glade.h:13
+#: ../src/seahorse-add-uid.glade.h:8 ../src/seahorse-pgp-generate.glade.h:14
 #, fuzzy
 msgid "_Email Address:"
 msgstr "عنوان البريد الإلكتروني"
@@ -1943,7 +2111,9 @@ msgstr "فا_صل جديد"
 
 #: ../src/seahorse-delete.c:39
 #, c-format
-msgid "%s is a private key. Make sure you have a backup. Do you still want to delete it?"
+msgid ""
+"%s is a private key. Make sure you have a backup. Do you still want to "
+"delete it?"
 msgstr ""
 
 #: ../src/seahorse-delete.c:73
@@ -1985,8 +2155,7 @@ msgstr "ID المستخدم %sَل موجودة مسبقاً"
 msgid "Manage your passwords and encryption keys"
 msgstr ""
 
-#: ../src/seahorse.desktop.in.in.h:2
-#: ../src/seahorse-key-manager.glade.h:7
+#: ../src/seahorse.desktop.in.in.h:2 ../src/seahorse-key-manager.glade.h:7
 #, fuzzy
 msgid "Passwords and Encryption Keys"
 msgstr "عرض و حذف الكوكيس و كلمات السر"
@@ -2016,8 +2185,7 @@ msgstr "تغ_يير حالة الأحرف"
 msgid "Never Expires"
 msgstr "ينقضي عند:"
 
-#: ../src/seahorse-expires.glade.h:3
-#: ../src/seahorse-revoke.glade.h:11
+#: ../src/seahorse-expires.glade.h:3 ../src/seahorse-revoke.glade.h:11
 #, fuzzy
 msgid "Revoke key"
 msgstr "اتفاق على المفتاح"
@@ -2042,6 +2210,23 @@ msgstr ""
 #, fuzzy
 msgid "Create a New Key"
 msgstr "إنشاء مفتاح جديد"
+
+#: ../src/seahorse-gkeyring-item.c:248
+#, fuzzy
+msgid "Web Password"
+msgstr "جودة كلمة السر:"
+
+#: ../src/seahorse-gkeyring-item.c:250
+#, fuzzy
+msgid "Network Password"
+msgstr "كلمة المرور للشبكة"
+
+#: ../src/seahorse-gkeyring-item.c:252
+#: ../src/seahorse-gkeyring-item-properties.c:116
+#: ../src/seahorse-gkeyring-source.c:525
+#, fuzzy
+msgid "Password"
+msgstr "كلمة السّر"
 
 #: ../src/seahorse-gkeyring-item-properties.c:90
 msgid "Access a network share or resource"
@@ -2069,13 +2254,6 @@ msgstr ""
 #, fuzzy
 msgid "Network Credentials"
 msgstr "واجهة الشبكة"
-
-#: ../src/seahorse-gkeyring-item-properties.c:116
-#: ../src/seahorse-gkeyring-item.c:252
-#: ../src/seahorse-gkeyring-source.c:516
-#, fuzzy
-msgid "Password"
-msgstr "كلمة السّر"
 
 #: ../src/seahorse-gkeyring-item-properties.c:177
 #, fuzzy
@@ -2182,16 +2360,6 @@ msgstr "إسم التسجيل"
 msgid "[server]"
 msgstr "ال_خادم:"
 
-#: ../src/seahorse-gkeyring-item.c:248
-#, fuzzy
-msgid "Web Password"
-msgstr "جودة كلمة السر:"
-
-#: ../src/seahorse-gkeyring-item.c:250
-#, fuzzy
-msgid "Network Password"
-msgstr "كلمة المرور للشبكة"
-
 #: ../src/seahorse-gkeyring-operation.c:206
 #, fuzzy
 msgid "Access to the keyring was denied"
@@ -2226,18 +2394,18 @@ msgstr "الشهادة موجودة مسبقا."
 msgid "Internal error accessing GNOME keyring"
 msgstr ""
 
-#: ../src/seahorse-gkeyring-operation.c:284
+#: ../src/seahorse-gkeyring-operation.c:286
 #, fuzzy
 msgid "Saving item..."
 msgstr "عنصر _جديد"
 
-#: ../src/seahorse-gkeyring-source.c:351
+#: ../src/seahorse-gkeyring-source.c:358
 #, fuzzy
 msgid "Retrieving key"
 msgstr "اتفاق على المفتاح"
 
 #. Start listing of ids
-#: ../src/seahorse-gkeyring-source.c:365
+#: ../src/seahorse-gkeyring-source.c:372
 #, fuzzy
 msgid "Listing passwords"
 msgstr "تذكر كلمات السر"
@@ -2251,25 +2419,21 @@ msgstr "لم يمكن فتح الملفّ '%s': %s"
 msgid "Unrecognized key type, or invalid data format"
 msgstr ""
 
-#: ../src/seahorse-key-manager.c:557
-#: ../src/seahorse-keyserver-results.c:217
+#: ../src/seahorse-key-manager.c:557 ../src/seahorse-keyserver-results.c:217
 msgid "Couldn't retrieve data from key server"
 msgstr ""
 
-#: ../src/seahorse-key-manager.c:573
-#: ../src/seahorse-keyserver-results.c:233
+#: ../src/seahorse-key-manager.c:573 ../src/seahorse-keyserver-results.c:233
 #, fuzzy, c-format
 msgid "Copied %d key"
 msgstr "اتفاق على المفتاح"
 
-#: ../src/seahorse-key-manager.c:574
-#: ../src/seahorse-keyserver-results.c:234
+#: ../src/seahorse-key-manager.c:574 ../src/seahorse-keyserver-results.c:234
 #, fuzzy, c-format
 msgid "Copied %d keys"
 msgstr "<b>مفاتيح التحول</b>"
 
-#: ../src/seahorse-key-manager.c:597
-#: ../src/seahorse-keyserver-results.c:193
+#: ../src/seahorse-key-manager.c:597 ../src/seahorse-keyserver-results.c:193
 #: ../src/seahorse-keyserver-results.c:258
 #, fuzzy
 msgid "Retrieving keys"
@@ -2287,8 +2451,7 @@ msgstr ""
 msgid "Export public key"
 msgstr "مفتاح الموضوع العام"
 
-#: ../src/seahorse-key-manager.c:653
-#: ../src/seahorse-key-properties.c:1030
+#: ../src/seahorse-key-manager.c:653 ../src/seahorse-key-properties.c:1030
 #: ../src/seahorse-ssh-key-properties.c:240
 #, fuzzy, c-format
 msgid "Couldn't export key to \"%s\""
@@ -2303,236 +2466,228 @@ msgstr "<b>مفاتيح التحول</b>"
 msgid "Back up Keyrings to Archive"
 msgstr ""
 
-#: ../src/seahorse-key-manager.c:861
+#: ../src/seahorse-key-manager.c:862
 msgid "seahorse"
 msgstr ""
 
-#: ../src/seahorse-key-manager.c:944
-#: ../src/seahorse-keyserver-results.c:298
+#: ../src/seahorse-key-manager.c:945 ../src/seahorse-keyserver-results.c:298
 #, fuzzy, c-format
 msgid "Selected %d key"
 msgstr "تحرير المفتاح المنتقى"
 
-#: ../src/seahorse-key-manager.c:945
-#: ../src/seahorse-keyserver-results.c:299
+#: ../src/seahorse-key-manager.c:946 ../src/seahorse-keyserver-results.c:299
 #, fuzzy, c-format
 msgid "Selected %d keys"
 msgstr "<b>مفاتيح التحول</b>"
 
 #. Top menu items
-#: ../src/seahorse-key-manager.c:1170
-#: ../src/seahorse-keyserver-results.c:377
+#: ../src/seahorse-key-manager.c:1171 ../src/seahorse-keyserver-results.c:377
 #, fuzzy
 msgid "_Key"
 msgstr "[مفتاح]"
 
-#: ../src/seahorse-key-manager.c:1171
-#: ../src/seahorse-keyserver-results.c:378
+#: ../src/seahorse-key-manager.c:1172 ../src/seahorse-keyserver-results.c:378
 #, fuzzy
 msgid "_Edit"
 msgstr "_تحرير"
 
-#: ../src/seahorse-key-manager.c:1172
+#: ../src/seahorse-key-manager.c:1173
 #, fuzzy
 msgid "_View"
 msgstr "_اعرض"
 
 #. Key Actions
-#: ../src/seahorse-key-manager.c:1176
+#: ../src/seahorse-key-manager.c:1177
 #, fuzzy
 msgid "_Create New Key..."
 msgstr "إنشاء مفتاح جديد"
 
-#: ../src/seahorse-key-manager.c:1177
+#: ../src/seahorse-key-manager.c:1178
 #, fuzzy
 msgid "Create a new personal key"
 msgstr "إنشاء قائمة مراسَلين جديدة"
 
-#: ../src/seahorse-key-manager.c:1178
+#: ../src/seahorse-key-manager.c:1179
 #, fuzzy
 msgid "_Import..."
 msgstr "إ_ستيراد"
 
-#: ../src/seahorse-key-manager.c:1179
+#: ../src/seahorse-key-manager.c:1180
 msgid "Import keys into your keyring from a file"
 msgstr ""
 
-#: ../src/seahorse-key-manager.c:1180
+#: ../src/seahorse-key-manager.c:1181
 #, fuzzy
 msgid "_Back up Keyrings..."
 msgstr "أدر حزمة المفاتيح الخاصة بك"
 
-#: ../src/seahorse-key-manager.c:1181
+#: ../src/seahorse-key-manager.c:1182
 #, fuzzy
 msgid "Back up all keys"
 msgstr "قُ_لْ جميع مفاتيح الإبحار"
 
-#: ../src/seahorse-key-manager.c:1182
+#: ../src/seahorse-key-manager.c:1183
 #, fuzzy
 msgid "Paste _Keys"
 msgstr "<b>مفاتيح التحول</b>"
 
-#: ../src/seahorse-key-manager.c:1183
+#: ../src/seahorse-key-manager.c:1184
 #, fuzzy
 msgid "Import keys from the clipboard"
 msgstr "لصق نص من الحافظة الوسيطة"
 
-#: ../src/seahorse-key-manager.c:1185
+#: ../src/seahorse-key-manager.c:1186
 #, fuzzy
 msgid "_Quit"
 msgstr "إ_نهي"
 
-#: ../src/seahorse-key-manager.c:1186
+#: ../src/seahorse-key-manager.c:1187
 #, fuzzy
 msgid "Close this program"
 msgstr "حول هذا البرنامج..."
 
-#: ../src/seahorse-key-manager.c:1187
+#: ../src/seahorse-key-manager.c:1188
 #, fuzzy
 msgid "Prefere_nces"
 msgstr "التّف_ضيلات"
 
-#: ../src/seahorse-key-manager.c:1188
+#: ../src/seahorse-key-manager.c:1189
 msgid "Change preferences for this program"
 msgstr ""
 
-#: ../src/seahorse-key-manager.c:1190
+#: ../src/seahorse-key-manager.c:1191
 #, fuzzy
 msgid "About this program"
 msgstr "حول هذا البرنامج..."
 
-#: ../src/seahorse-key-manager.c:1192
+#: ../src/seahorse-key-manager.c:1193
 #, fuzzy
 msgid "_Remote"
 msgstr "عن بعد"
 
-#: ../src/seahorse-key-manager.c:1194
-#: ../src/seahorse-keyserver-results.c:383
+#: ../src/seahorse-key-manager.c:1195 ../src/seahorse-keyserver-results.c:383
 #, fuzzy
 msgid "_Contents"
 msgstr "_المحتويات"
 
-#: ../src/seahorse-key-manager.c:1195
-#: ../src/seahorse-keyserver-results.c:384
+#: ../src/seahorse-key-manager.c:1196 ../src/seahorse-keyserver-results.c:384
 #, fuzzy
 msgid "Show Seahorse help"
 msgstr "إظهار زر 'مساعدة'"
 
-#: ../src/seahorse-key-manager.c:1199
+#: ../src/seahorse-key-manager.c:1200
 #, fuzzy
 msgid "Key T_ypes"
 msgstr "اتفاق على المفتاح"
 
-#: ../src/seahorse-key-manager.c:1200
+#: ../src/seahorse-key-manager.c:1201
 #, fuzzy
 msgid "Show key type column"
 msgstr "اظهر جدول العنوان فقط"
 
-#: ../src/seahorse-key-manager.c:1201
+#: ../src/seahorse-key-manager.c:1202
 #, fuzzy
 msgid "Key _Expiry"
 msgstr "اتفاق على المفتاح"
 
-#: ../src/seahorse-key-manager.c:1202
+#: ../src/seahorse-key-manager.c:1203
 #, fuzzy
 msgid "Show key expiry column"
 msgstr "اظهر جدول العنوان فقط"
 
-#: ../src/seahorse-key-manager.c:1203
+#: ../src/seahorse-key-manager.c:1204
 #, fuzzy
 msgid "Key _Trust"
 msgstr "_ثق بالـ CA"
 
-#: ../src/seahorse-key-manager.c:1204
+#: ../src/seahorse-key-manager.c:1205
 #, fuzzy
 msgid "Show owner trust column"
 msgstr "عرض عمود مستخدم الأعمال عند بدأ التشغيل"
 
-#: ../src/seahorse-key-manager.c:1205
+#: ../src/seahorse-key-manager.c:1206
 #, fuzzy
 msgid "Key _Validity"
 msgstr "اتفاق على المفتاح"
 
-#: ../src/seahorse-key-manager.c:1206
+#: ../src/seahorse-key-manager.c:1207
 #, fuzzy
 msgid "Show key validity column"
 msgstr "اظهر جدول العنوان فقط"
 
-#: ../src/seahorse-key-manager.c:1210
-#: ../src/seahorse-keyserver-results.c:395
+#: ../src/seahorse-key-manager.c:1211 ../src/seahorse-keyserver-results.c:395
 #, fuzzy
 msgid "P_roperties"
 msgstr "خ_صائص"
 
-#: ../src/seahorse-key-manager.c:1211
-#: ../src/seahorse-keyserver-results.c:396
+#: ../src/seahorse-key-manager.c:1212 ../src/seahorse-keyserver-results.c:396
 #, fuzzy
 msgid "Show key properties"
 msgstr "اظهار خصائص المحفوظة"
 
-#: ../src/seahorse-key-manager.c:1212
+#: ../src/seahorse-key-manager.c:1213
 #, fuzzy
 msgid "E_xport Public Key..."
 msgstr "مفتاح الموضوع العام"
 
-#: ../src/seahorse-key-manager.c:1213
+#: ../src/seahorse-key-manager.c:1214
 msgid "Export public part of key to a file"
 msgstr ""
 
-#: ../src/seahorse-key-manager.c:1214
+#: ../src/seahorse-key-manager.c:1215
 #, fuzzy
 msgid "_Copy Public Key"
 msgstr "مفتاح الموضوع العام"
 
-#: ../src/seahorse-key-manager.c:1215
+#: ../src/seahorse-key-manager.c:1216
 msgid "Copy public part of selected keys to the clipboard"
 msgstr ""
 
-#: ../src/seahorse-key-manager.c:1216
+#: ../src/seahorse-key-manager.c:1217
 #, fuzzy
 msgid "_Delete Key"
 msgstr "ح_ذف مفتاح"
 
-#: ../src/seahorse-key-manager.c:1217
+#: ../src/seahorse-key-manager.c:1218
 #, fuzzy
 msgid "Delete selected keys"
 msgstr "_حذف المهام المنتقاة"
 
-#: ../src/seahorse-key-manager.c:1221
+#: ../src/seahorse-key-manager.c:1222
 #, fuzzy
 msgid "_Sign..."
 msgstr "نص العلامة"
 
-#: ../src/seahorse-key-manager.c:1222
+#: ../src/seahorse-key-manager.c:1223
 #, fuzzy
 msgid "Sign public key"
 msgstr "مفتاح الموضوع العام"
 
-#: ../src/seahorse-key-manager.c:1226
+#: ../src/seahorse-key-manager.c:1227
 msgid "Set Up Computer for _Secure Shell..."
 msgstr ""
 
-#: ../src/seahorse-key-manager.c:1227
-msgid "Send public Secure Shell key to another machine, and enable logins using that key."
+#: ../src/seahorse-key-manager.c:1228
+msgid ""
+"Send public Secure Shell key to another machine, and enable logins using "
+"that key."
 msgstr ""
 
-#: ../src/seahorse-key-manager.c:1231
-#: ../src/seahorse-keyserver-results.c:404
+#: ../src/seahorse-key-manager.c:1232 ../src/seahorse-keyserver-results.c:404
 #, fuzzy
 msgid "_Find Remote Keys..."
 msgstr "_سرد المفاتيح الحديثة"
 
-#: ../src/seahorse-key-manager.c:1232
-#: ../src/seahorse-keyserver-results.c:405
+#: ../src/seahorse-key-manager.c:1233 ../src/seahorse-keyserver-results.c:405
 msgid "Search for keys on a key server"
 msgstr ""
 
-#: ../src/seahorse-key-manager.c:1233
+#: ../src/seahorse-key-manager.c:1234
 #, fuzzy
 msgid "_Sync and Publish Keys..."
 msgstr "تزمين معالجا text/plain و text/*"
 
-#: ../src/seahorse-key-manager.c:1234
+#: ../src/seahorse-key-manager.c:1235
 msgid "Publish and/or sync your keys with those online."
 msgstr ""
 
@@ -2586,7 +2741,7 @@ msgid "_Trusted Keys"
 msgstr "<b>مفاتيح التحول</b>"
 
 #: ../src/seahorse-key-manager-store.c:311
-#: ../src/seahorse-key-properties.c:1294
+#: ../src/seahorse-key-properties.c:1296
 #, fuzzy
 msgid "Expired"
 msgstr "المؤهّلات المشار إليها قد إنتهت صلاحيّتها."
@@ -2608,18 +2763,6 @@ msgstr ""
 msgid "Couldn't write key to file"
 msgstr "تعذّر الكتابة في ملف BMP "
 
-#: ../src/seahorse-key-manager-store.c:954
-#: ../src/seahorse-key-properties.c:865
-#, fuzzy
-msgid "Name"
-msgstr "اسم"
-
-#: ../src/seahorse-key-manager-store.c:966
-#: ../src/seahorse-key-properties.c:1711
-#, fuzzy
-msgid "Key ID"
-msgstr "هوية _مفتاح PGP/GPG:"
-
 #: ../src/seahorse-key-manager-store.c:972
 #, fuzzy
 msgid "Validity"
@@ -2634,7 +2777,7 @@ msgstr "_ثق بالـ CA"
 
 #. The key type column
 #: ../src/seahorse-key-manager-store.c:985
-#: ../src/seahorse-key-properties.c:1272
+#: ../src/seahorse-key-properties.c:1274
 #, fuzzy
 msgid "Type"
 msgstr "النّوع"
@@ -2649,14 +2792,12 @@ msgstr "تاريخ آخر"
 msgid "Couldn't change primary user ID"
 msgstr ""
 
-#: ../src/seahorse-key-properties.c:300
-#: ../src/seahorse-key-properties.c:1424
+#: ../src/seahorse-key-properties.c:300 ../src/seahorse-key-properties.c:1426
 #, fuzzy
 msgid "[Unknown]"
 msgstr "مجهول"
 
-#: ../src/seahorse-key-properties.c:398
-#: ../src/seahorse-key-properties.c:1708
+#: ../src/seahorse-key-properties.c:398 ../src/seahorse-key-properties.c:1710
 #, fuzzy
 msgid "Name/Email"
 msgstr "ارسل بريد إلكتروني إلى  <b>%(name)s</b> (%(email)s)"
@@ -2681,9 +2822,8 @@ msgstr "(مجهول)"
 msgid "This key expired on: %s"
 msgstr "عملية مفتاح على الدليل"
 
-#: ../src/seahorse-key-properties.c:984
-#: ../src/seahorse-key-properties.c:1374
-#: ../src/seahorse-key-properties.c:1393
+#: ../src/seahorse-key-properties.c:984 ../src/seahorse-key-properties.c:1376
+#: ../src/seahorse-key-properties.c:1395
 #, fuzzy
 msgid "Unable to change trust"
 msgstr "تحوّل إلى شاشة _موجودة"
@@ -2694,33 +2834,32 @@ msgstr "تحوّل إلى شاشة _موجودة"
 msgid "Export Complete Key"
 msgstr "خطأ في مفتاح Gconf"
 
-#: ../src/seahorse-key-properties.c:1269
+#: ../src/seahorse-key-properties.c:1271
 #, fuzzy
 msgid "ID"
 msgstr "الهوية"
 
-#: ../src/seahorse-key-properties.c:1275
+#: ../src/seahorse-key-properties.c:1277
 #, fuzzy
 msgid "Created"
 msgstr "تاريخ الإنشاء"
 
-#: ../src/seahorse-key-properties.c:1278
+#: ../src/seahorse-key-properties.c:1280
 #, fuzzy
 msgid "Expires"
 msgstr "تنتهي صلاحيتها"
 
-#: ../src/seahorse-key-properties.c:1281
+#: ../src/seahorse-key-properties.c:1283
 #, fuzzy
 msgid "Status"
 msgstr "الحالة"
 
-#: ../src/seahorse-key-properties.c:1284
+#: ../src/seahorse-key-properties.c:1286
 #, fuzzy
 msgid "Strength"
 msgstr "<b>قوّة الإشارة</b>"
 
-#: ../src/seahorse-key-properties.c:1293
-#: ../src/seahorse-key-properties.c:1294
+#: ../src/seahorse-key-properties.c:1295 ../src/seahorse-key-properties.c:1296
 #, fuzzy
 msgid "Good"
 msgstr "جيّد"
@@ -2833,7 +2972,9 @@ msgid "Find Remote Keys"
 msgstr "_سرد المفاتيح الحديثة"
 
 #: ../src/seahorse-keyserver-search.glade.h:4
-msgid "This will find keys for others on the Internet. These keys can then be imported into your local key ring."
+msgid ""
+"This will find keys for others on the Internet. These keys can then be "
+"imported into your local key ring."
 msgstr ""
 
 #: ../src/seahorse-keyserver-search.glade.h:5
@@ -2868,13 +3009,13 @@ msgid_plural "<b>%d keys are selected for syncing</b>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../src/seahorse-keyserver-sync.c:211
+#: ../src/seahorse-keyserver-sync.c:214
 #, fuzzy
 msgid "Syncing keys"
 msgstr "<b>مفاتيح التحول</b>"
 
 #. Show the progress window if necessary
-#: ../src/seahorse-keyserver-sync.c:239
+#: ../src/seahorse-keyserver-sync.c:246
 #, fuzzy
 msgid "Syncing keys..."
 msgstr "<b>مفاتيح التحول</b>"
@@ -2889,14 +3030,25 @@ msgid "Sync Keys"
 msgstr "<b>مفاتيح التحول</b>"
 
 #: ../src/seahorse-keyserver-sync.glade.h:3
-msgid "This will publish the keys in your keyring so they're available for others to use. You'll also get any changes others have made since you received their keys."
+msgid ""
+"This will publish the keys in your keyring so they're available for others "
+"to use. You'll also get any changes others have made since you received "
+"their keys."
 msgstr ""
 
 #: ../src/seahorse-keyserver-sync.glade.h:4
-msgid "This will retrieve any changes others have made since you received their keys. No key server has been chosen for publishing, so your keys will not be made available to others."
+msgid ""
+"This will retrieve any changes others have made since you received their "
+"keys. No key server has been chosen for publishing, so your keys will not be "
+"made available to others."
 msgstr ""
 
 #: ../src/seahorse-keyserver-sync.glade.h:5
+#, fuzzy
+msgid "_Key Servers"
+msgstr "<b>خوادم DNS</b>"
+
+#: ../src/seahorse-keyserver-sync.glade.h:6
 #, fuzzy
 msgid "_Sync"
 msgstr "أصناف المزامنة:"
@@ -2906,7 +3058,9 @@ msgid "<b>You have selected multiple files or folders</b>"
 msgstr ""
 
 #: ../src/seahorse-multi-encrypt.glade.h:2
-msgid "Because the files are located remotely, each file will be encrypted separately."
+msgid ""
+"Because the files are located remotely, each file will be encrypted "
+"separately."
 msgstr ""
 
 #: ../src/seahorse-multi-encrypt.glade.h:3
@@ -2950,31 +3104,32 @@ msgstr ""
 msgid "Couldn't generate PGP key"
 msgstr "هوية _مفتاح PGP/GPG:"
 
-#. TODO: This needs to be a double prompt
-#: ../src/seahorse-pgp-generate.c:140
+#: ../src/seahorse-pgp-generate.c:139
 #, fuzzy
-msgid "Passphrase for New Key"
+msgid "Passphrase for New PGP Key"
 msgstr "توقّعت `%s' تلقّيت `%s' للمفتاح %s"
 
-#: ../src/seahorse-pgp-generate.c:141
-msgid "Enter the passphrase for your new key twice"
-msgstr ""
+#: ../src/seahorse-pgp-generate.c:140
+#, fuzzy
+msgid "Enter the passphrase for your new key twice."
+msgstr "ادخل كلمة السر لـ %s"
 
-#: ../src/seahorse-pgp-generate.c:150
+#: ../src/seahorse-pgp-generate.c:149
 #, fuzzy
 msgid "Couldn't generate key"
 msgstr ""
 "لم يمكن ازالت ضبط المفتاح. كان الخطأ:\n"
 "%s"
 
-#: ../src/seahorse-pgp-generate.c:152
+#: ../src/seahorse-pgp-generate.c:151
 #, fuzzy
 msgid "Generating key"
 msgstr "جاري احداث مفتاح خاص."
 
 #: ../src/seahorse-pgp-generate.glade.h:1
+#: ../src/seahorse-ssh-generate.glade.h:1
 #, fuzzy
-msgid "<b>_Advanced Options</b>"
+msgid "<b>_Advanced key options</b>"
 msgstr "إخفاء خيارات القرص المتقدّمة"
 
 #: ../src/seahorse-pgp-generate.glade.h:2
@@ -3024,6 +3179,11 @@ msgid "Ne_ver Expires"
 msgstr "إيجاد الت_الي"
 
 #: ../src/seahorse-pgp-generate.glade.h:12
+#, fuzzy
+msgid "New PGP Key"
+msgstr "هوية _مفتاح PGP/GPG:"
+
+#: ../src/seahorse-pgp-generate.glade.h:13
 #, fuzzy
 msgid "_Comment:"
 msgstr "_تعليق:"
@@ -3183,38 +3343,42 @@ msgstr "إتّحاد سلطات الشّهادات"
 msgid "Owner"
 msgstr "المالك"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:35
+#: ../src/seahorse-pgp-private-key-properties.glade.h:34
+msgid "Primary"
+msgstr ""
+
+#: ../src/seahorse-pgp-private-key-properties.glade.h:36
 #, fuzzy
 msgid "Remove this photo from this key"
 msgstr "ازل هذا المعيار من البحث"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:36
+#: ../src/seahorse-pgp-private-key-properties.glade.h:37
 msgid "Revoke"
 msgstr ""
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:38
+#: ../src/seahorse-pgp-private-key-properties.glade.h:39
 #: ../src/seahorse-pgp-public-key-properties.glade.h:31
 #, fuzzy
 msgid "Strength:"
 msgstr "<b>قوّة الإشارة</b>"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:39
+#: ../src/seahorse-pgp-private-key-properties.glade.h:40
 #: ../src/seahorse-pgp-public-key-properties.glade.h:32
 msgid "The owner of the key revoked the key. It can no longer be used."
 msgstr ""
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:40
+#: ../src/seahorse-pgp-private-key-properties.glade.h:41
 #: ../src/seahorse-pgp-public-key-properties.glade.h:33
 msgid "This key expired on: (placeholder)"
 msgstr ""
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:41
+#: ../src/seahorse-pgp-private-key-properties.glade.h:42
 #: ../src/seahorse-pgp-public-key-properties.glade.h:36
 #, fuzzy
 msgid "Type:"
 msgstr "النّوع:"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:42
+#: ../src/seahorse-pgp-private-key-properties.glade.h:43
 msgid ""
 "Unknown\n"
 "Never\n"
@@ -3223,7 +3387,12 @@ msgid ""
 "Ultimate"
 msgstr ""
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:47
+#: ../src/seahorse-pgp-private-key-properties.glade.h:48
+#, fuzzy
+msgid "_Add Name"
+msgstr "اسم"
+
+#: ../src/seahorse-pgp-private-key-properties.glade.h:49
 #, fuzzy
 msgid "_Export Complete Key:"
 msgstr "خطأ في مفتاح Gconf"
@@ -3272,7 +3441,8 @@ msgid "I trust signatures from '%s' on other keys "
 msgstr ""
 
 #: ../src/seahorse-pgp-public-key-properties.glade.h:26
-msgid "If you no longer trust this person's identity, <i>revoke</i> your signature:"
+msgid ""
+"If you no longer trust this person's identity, <i>revoke</i> your signature:"
 msgstr ""
 
 #: ../src/seahorse-pgp-public-key-properties.glade.h:34
@@ -3334,7 +3504,9 @@ msgid "_Resize"
 msgstr "ت_حجيم"
 
 #: ../src/seahorse-photos.c:125
-msgid "This is not a image file, or an unrecognized kind of image file. Try to use a JPEG image."
+msgid ""
+"This is not a image file, or an unrecognized kind of image file. Try to use "
+"a JPEG image."
 msgstr ""
 
 #: ../src/seahorse-photos.c:221
@@ -3351,8 +3523,7 @@ msgstr "إلغاء إختيار جميع الملفات"
 msgid "Choose Photo to Add to Key"
 msgstr ""
 
-#: ../src/seahorse-photos.c:285
-#: ../src/seahorse-photos.c:289
+#: ../src/seahorse-photos.c:285 ../src/seahorse-photos.c:289
 #, fuzzy
 msgid "Couldn't add photo"
 msgstr "تفضيلات صورة تسجيل الدخول"
@@ -3387,7 +3558,9 @@ msgstr ""
 
 #: ../src/seahorse-revoke.c:106
 #, c-format
-msgid "You are about to add %s as a revoker for %s. This operation cannot be undone! Are you sure you want to continue?"
+msgid ""
+"You are about to add %s as a revoker for %s. This operation cannot be "
+"undone! Are you sure you want to continue?"
 msgstr ""
 
 #: ../src/seahorse-revoke.c:121
@@ -3466,7 +3639,9 @@ msgstr ""
 "%s"
 
 #: ../src/seahorse-sign.c:160
-msgid "You have no personal PGP keys that can be used to indicate your trust of this key."
+msgid ""
+"You have no personal PGP keys that can be used to indicate your trust of "
+"this key."
 msgstr ""
 
 #: ../src/seahorse-sign.glade.h:1
@@ -3502,7 +3677,8 @@ msgstr ""
 
 #: ../src/seahorse-sign.glade.h:10
 msgid ""
-"<i>Very Carefully:</i> Select this only if you are absolutely sure that this\n"
+"<i>Very Carefully:</i> Select this only if you are absolutely sure that "
+"this\n"
 "key is genuine."
 msgstr ""
 
@@ -3519,7 +3695,8 @@ msgid "If signature can be revoked"
 msgstr ""
 
 #: ../src/seahorse-sign.glade.h:15
-msgid "If signature is local to the key ring and won't be exported with the key"
+msgid ""
+"If signature is local to the key ring and won't be exported with the key"
 msgstr ""
 
 #: ../src/seahorse-sign.glade.h:16
@@ -3566,11 +3743,6 @@ msgstr ""
 msgid "Creating Secure Shell Key"
 msgstr ""
 
-#: ../src/seahorse-ssh-generate.glade.h:1
-#, fuzzy
-msgid "<b>_Advanced key options</b>"
-msgstr "إخفاء خيارات القرص المتقدّمة"
-
 #: ../src/seahorse-ssh-generate.glade.h:2
 msgid ""
 "<i>Use your email address, and any other reminder\n"
@@ -3600,6 +3772,11 @@ msgid "_Create and Set Up"
 msgstr "ضبط إعدادات الحاسوب اليدوي"
 
 #: ../src/seahorse-ssh-generate.glade.h:13
+#, fuzzy
+msgid "_Just Create Key"
+msgstr "إنشاء مفتاح جديد"
+
+#: ../src/seahorse-ssh-generate.glade.h:14
 #, fuzzy
 msgid "_Key Description:"
 msgstr "الوصف يحتوي على"
@@ -3704,3 +3881,14 @@ msgstr "اسم أيقونة الحاسوب على سطح المكتب"
 msgid "_Login Name:"
 msgstr "اسم الموصول"
 
+#, fuzzy
+#~ msgid "Orientation"
+#~ msgstr "الإتّجاه"
+
+#, fuzzy
+#~ msgid "The orientation of the tray."
+#~ msgstr "إتجاه الطبق."
+
+#, fuzzy
+#~ msgid "<b>_Advanced Options</b>"
+#~ msgstr "إخفاء خيارات القرص المتقدّمة"
