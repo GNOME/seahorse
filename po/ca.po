@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse 0.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-11 00:42+0100\n"
-"PO-Revision-Date: 2007-01-11 01:45+0100\n"
+"POT-Creation-Date: 2007-01-11 23:11+0100\n"
+"PO-Revision-Date: 2007-01-15 21:50+0100\n"
 "Last-Translator: Josep Puigdemont i Casamajó <josep.puigdemont@gmail.com>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "MIME-Version: 1.0\n"
@@ -54,7 +54,7 @@ msgid ""
 "<b>Warning</b>: Your system is not configured to cache passphrases in secure "
 "memory."
 msgstr ""
-"<b>Avís</b>: Aquest sistema no està configurar per encauar contrasenyes en "
+"<b>Avís</b>: Aquest sistema no està configurat per a encauar contrasenyes en "
 "memòria segura."
 
 #: ../agent/seahorse-agent-cache.glade.h:2
@@ -68,7 +68,7 @@ msgstr "Claus de xifratge encauades"
 # FIXME?
 #: ../agent/seahorse-agent-cache.glade.h:4
 msgid "Change passphrase cache settings."
-msgstr "Canvia les preferències del canvi de contrasenya."
+msgstr "Canvia les preferències de la memòria cau de contrasenyes."
 
 #: ../agent/seahorse-agent-cache.glade.h:5
 msgid "Clear passphrase cache"
@@ -84,7 +84,7 @@ msgstr "Mo_stra la finestra"
 
 #: ../agent/seahorse-agent-main.c:50
 msgid "Do not daemonize seahorse-agent"
-msgstr "No creeis un dimoni per al seahorse-agent"
+msgstr "No creïs un dimoni per al seahorse-agent"
 
 #: ../agent/seahorse-agent-main.c:53
 msgid "Print variables in for a C type shell"
@@ -155,7 +155,7 @@ msgstr "Nom de la clau"
 
 #: ../daemon/seahorse-daemon.c:54
 msgid "Do not daemonize seahorse-daemon"
-msgstr "No creeis un dimoni per al seahorse-daemon"
+msgstr "No creïs cap dimoni per al seahorse-daemon"
 
 #: ../daemon/seahorse-daemon.c:202
 msgid "Encryption Daemon (Seahorse)"
@@ -176,7 +176,7 @@ msgstr "La clau no és vàlida o no s'ha reconegut: %s"
 #: ../daemon/seahorse-service-crypto.c:227
 #, c-format
 msgid "Invalid or unrecognized signer: %s"
-msgstr "El signador no és vàlid o no s'ha reconegut: %s"
+msgstr "El signant no és vàlid o no s'ha reconegut: %s"
 
 #: ../daemon/seahorse-service-crypto.c:127
 #: ../daemon/seahorse-service-crypto.c:234
@@ -201,7 +201,7 @@ msgstr "No s'ha especificat cap destinatari"
 
 #: ../daemon/seahorse-service-crypto.c:222
 msgid "No signer specified"
-msgstr "No s'ha especificador cap firmant"
+msgstr "No s'ha especificat cap firmant"
 
 #: ../daemon/seahorse-service-crypto.c:277
 #, c-format
@@ -242,19 +242,24 @@ msgid ""
 "display name can be included, by appending a space and then the name."
 msgstr ""
 "Una llista d'URI de servidors de claus on cercar claus PGP remotes. En "
-"versions recents s'hi pot incloure un nom, afegint un espai i després el nom."
+"versions recents s'hi pot incloure un nom descriptiu, afegint un espai i "
+"després el nom."
 
 #: ../data/seahorse.schemas.in.h:2
 msgid ""
 "After performing an decrypt or verify operation from the applet, display the "
 "resulting text in a window."
 msgstr ""
+"Després de desxifrar o verificar amb la miniaplicació, mostra el text "
+"resultant en una finestra."
 
 #: ../data/seahorse.schemas.in.h:3
 msgid ""
 "After performing an encrypt or signing operation from the applet, display "
 "the resulting text in a window."
 msgstr ""
+"Després de xifrar o signar amb la miniaplicació, mostra el text resultant en "
+"una finestra."
 
 #: ../data/seahorse.schemas.in.h:4
 msgid "Auto Sync Keys"
@@ -278,19 +283,19 @@ msgstr "Controla la visibilitat de la columna validesa en el gestor de claus."
 
 #: ../data/seahorse.schemas.in.h:9
 msgid "Display cache reminder in the notification area"
-msgstr ""
+msgstr "Mostra un recordatori de la memòria cau a l'àrea de notificació"
 
 #: ../data/seahorse.schemas.in.h:10
 msgid "Display clipboard after decrypting"
-msgstr ""
+msgstr "Mostra el porta-retalls després de desxifrar"
 
 #: ../data/seahorse.schemas.in.h:11
 msgid "Display clipboard after encrypting"
-msgstr ""
+msgstr "Mostra el porta-retalls després de xifrar"
 
 #: ../data/seahorse.schemas.in.h:12
 msgid "Enable DNS-SD sharing"
-msgstr "Habilita el comprtiment amb DNS-SD"
+msgstr "Habilita la compartició amb DNS-SD"
 
 #: ../data/seahorse.schemas.in.h:13
 msgid ""
@@ -314,14 +319,16 @@ msgid ""
 "If set to 'gnome' uses gnome-keyring to cache passwords. When set to "
 "'internal' uses internal cache."
 msgstr ""
+"Si s'estableix a «gnome», s'emprarà el gnome-keyring per a encauar-hi "
+"contrasenyes. Si s'hi posa «internal», s'emprarà la memòria cau interna."
 
 #: ../data/seahorse.schemas.in.h:17
 msgid ""
 "If set to true, then files encrypted with seahorse will be ASCII armor "
 "encoded."
 msgstr ""
-"Si s'estableix a cert, els fitxers xifrats amb el seahorse estaran "
-"codificats amb una armadura ASCII."
+"Si s'estableix a cert, es codificaran els fitxers xifrats amb el seahorse  "
+"amb una armadura ASCII."
 
 #: ../data/seahorse.schemas.in.h:18
 msgid ""
@@ -333,7 +340,7 @@ msgstr ""
 
 #: ../data/seahorse.schemas.in.h:19
 msgid "Last key used to sign a message."
-msgstr "L'última clau utilitzada per a signar un missatge."
+msgstr "L'última clau emprada per a signar un missatge."
 
 #: ../data/seahorse.schemas.in.h:20
 msgid "Last keyserver search pattern"
@@ -360,12 +367,16 @@ msgid ""
 "Reflect the contents of the clipboard (whether encrypted, signed, etc...) in "
 "the panel applet icon."
 msgstr ""
+"Reflecteix els continguts del porta-retalls (ja siguin xifrats, signats, "
+"etc...) a la icona de la miniaplicació del quadre."
 
 #: ../data/seahorse.schemas.in.h:26
 msgid ""
 "Set to 'false' to disable display of the cache reminder in the notification "
 "area of your panel."
 msgstr ""
+"Establiu-ho a «fals» perquè no es mostri el recordatori de la memòria cau a "
+"l'àrea de notificació del quadre."
 
 #: ../data/seahorse.schemas.in.h:27
 msgid ""
@@ -377,7 +388,7 @@ msgstr ""
 
 #: ../data/seahorse.schemas.in.h:28
 msgid "Show clipboard state in panel"
-msgstr ""
+msgstr "Mostra l'estat del porta-retalls al quadre"
 
 #: ../data/seahorse.schemas.in.h:29
 msgid "Show expires column in key manager"
@@ -402,7 +413,7 @@ msgid ""
 msgstr ""
 "Especifiqueu la columna amb la qual s'ordenarà la finestra de destinataris. "
 "Les columnes són: «name», i «id». Poseu un «-» al davant del nom de la "
-"columna per ordenar al revés."
+"columna per ordenar-la al revés."
 
 #: ../data/seahorse.schemas.in.h:34
 msgid ""
@@ -413,11 +424,11 @@ msgstr ""
 "Especifiqueu la columna amb la qual s'ordenarà la finestra principal del "
 "gestor de claus Seahorse. Les columnes són: «name», «id», «validity», "
 "«expires», «trust», «length» i «type». Poseu un «-» al davant del nom de la "
-"columna per ordenar al revés."
+"columna per ordenar-la al revés."
 
 #: ../data/seahorse.schemas.in.h:35
 msgid "The ID of the last secret key used to sign a message."
-msgstr "L'ID de l'última clau secreta utilitzada per a signar un missatge."
+msgstr "L'ID de l'última clau secreta emprada per a signar un missatge."
 
 #: ../data/seahorse.schemas.in.h:36
 msgid "The column to sort the recipients by"
@@ -480,6 +491,9 @@ msgid ""
 "When set seahorse-agent will try to automatically load the users SSH keys "
 "when needed. This is equivalent to using the ssh-add utility."
 msgstr ""
+"Quan s'estableix a seahorse-agent, s'intentarà carregar automàticament les "
+"claus SSH dels usuaris quan es necessitin. Això és equivalent a emprar "
+"l'utilitat ssh-add."
 
 # FIXME: bad english
 #: ../data/seahorse.schemas.in.h:46
@@ -512,7 +526,7 @@ msgstr "Si sempre es xifra amb la clau predeterminada"
 
 #: ../data/seahorse.schemas.in.h:51
 msgid "Whether to automatically load SSH keys on demand."
-msgstr "Si s'han de carregar claus SSH automàticament a solicitud."
+msgstr "Si s'han de carregar claus SSH automàticament a petició."
 
 #: ../data/seahorse.schemas.in.h:52
 msgid "Whether to use ASCII Armor"
@@ -590,7 +604,7 @@ msgstr "element temporal inicial"
 #, c-format
 msgid "Search was not specific enough. Server '%s' found too many keys."
 msgstr ""
-"La cerca no era prou específica. El servidor «%s» ha trobat massa claus."
+"La cerca no ha estat prou específica. El servidor «%s» ha trobat massa claus."
 
 #: ../libseahorse/seahorse-hkp-source.c:361
 #, c-format
@@ -670,10 +684,11 @@ msgid_plural "Keys Imported"
 msgstr[0] "S'ha importat la clau"
 msgstr[1] "S'han importat les claus"
 
+# FIXME si "%s" és "dijous blah", l'article a "el %s" hi sobra (josep)
 #: ../libseahorse/seahorse-notification.c:601
 #, c-format
 msgid "Signed by <i><key id='%s'/> <b>expired</b></i> on %s."
-msgstr ""
+msgstr "Signat per <i><key id='%s'/> <b>expirat</b></i> el %s."
 
 #: ../libseahorse/seahorse-notification.c:602
 msgid "Invalid Signature"
@@ -682,20 +697,20 @@ msgstr "La signatura no és vàlida"
 #: ../libseahorse/seahorse-notification.c:607
 #, c-format
 msgid "Signed by <i><key id='%s'/></i> on %s <b>Expired</b>."
-msgstr ""
+msgstr "Signat per <i><key id='%s'/></i> el %s <b>Expirat</b>."
 
 #: ../libseahorse/seahorse-notification.c:608
 msgid "Expired Signature"
-msgstr "La signatura ha expirat"
+msgstr "La signatura ha caducat"
 
 #: ../libseahorse/seahorse-notification.c:613
 #, c-format
 msgid "Signed by <i><key id='%s'/> <b>Revoked</b></i> on %s."
-msgstr ""
+msgstr "Signat per <i><key id='%s'/> <b>Revocat</b></i> el %s."
 
 #: ../libseahorse/seahorse-notification.c:614
 msgid "Revoked Signature"
-msgstr "La signatura és revocada"
+msgstr "La signatura ha estat revocada"
 
 #: ../libseahorse/seahorse-notification.c:619
 #, c-format
@@ -708,7 +723,7 @@ msgstr "La signatura és bona"
 
 #: ../libseahorse/seahorse-notification.c:625
 msgid "Signing key not in keyring."
-msgstr "La clau de la signatura no és a l'anell de claus."
+msgstr "La clau de signatura no és a l'anell de claus."
 
 #
 #: ../libseahorse/seahorse-notification.c:626
@@ -718,8 +733,8 @@ msgstr "La signatura és desconeguda"
 #: ../libseahorse/seahorse-notification.c:630
 msgid "Bad or forged signature. The signed data was modified."
 msgstr ""
-"La signatura no és bona ho ha estat falsificada. Les dades signades es van "
-"modificar."
+"La signatura no és bona, o bé ha estat falsificada. Les dades signades han "
+"estat modificades."
 
 #: ../libseahorse/seahorse-notification.c:631
 msgid "Bad Signature"
@@ -768,10 +783,11 @@ msgstr "Entreu una contrasenya nova"
 msgid "Enter passphrase"
 msgstr "Entreu la contrasenya"
 
+# La signatura/contrasenya (josep)
 #: ../libseahorse/seahorse-pgp-key.c:140 ../libseahorse/seahorse-ssh-key.c:112
 #: ../src/seahorse-gkeyring-item.c:231
 msgid "Invalid"
-msgstr ""
+msgstr "Invàlida"
 
 #: ../libseahorse/seahorse-pgp-key.c:162
 #: ../src/seahorse-pgp-public-key-properties.glade.h:30
@@ -815,6 +831,8 @@ msgid ""
 "Invalid key data (missing UIDs). This may be due to a computer with a date "
 "set in the future or a missing self-signature."
 msgstr ""
+"Les dades de la clau no són vàlides (manquen UIDs). Pot ser que sigui perquè "
+"un ordinador té la data al futur, o que manqui una autosignatura."
 
 #: ../libseahorse/seahorse-pgp-source.c:941 ../src/seahorse-key-manager.c:454
 #: ../src/seahorse-key-manager.c:500
@@ -834,7 +852,7 @@ msgid ""
 "For help contact your system adminstrator or the administrator of the key "
 "server."
 msgstr ""
-"Per a més ajuda contacteu el vostre administrador de sistemes o a "
+"Per a més ajuda contacteu el vostre administrador de sistemes o "
 "l'administrador del servidor de claus."
 
 #: ../libseahorse/seahorse-prefs.c:172
@@ -902,18 +920,23 @@ msgstr ""
 #: ../libseahorse/seahorse-prefs.glade.h:7
 msgid "<i>No SSH caching agent is running. Cannot load Secure Shell keys.</i>"
 msgstr ""
+"<i>No hi ha cap agent d'encauament SSH executant-se. No s'han pogut carregar "
+"les claus de l'intèrpret d'ordres segur.</i>"
 
 #: ../libseahorse/seahorse-prefs.glade.h:8
 msgid "<i>This key is used to sign messages when no other key is chosen</i>"
 msgstr ""
+"<i>Aquesta clau s'empra per a signar missatges quan no s'escull cap altra "
+"clau</i>"
 
 #: ../libseahorse/seahorse-prefs.glade.h:9
 msgid "Automatically load _Secure Shell keys"
-msgstr ""
+msgstr "Carrega automàticament les claus de l'intèrpret d'ordres _segur"
 
 #: ../libseahorse/seahorse-prefs.glade.h:10
 msgid "Automatically synchronize modified keys with keyservers. "
 msgstr ""
+"Sincronitza automàtixament les claus modificades amb els servidors de claus. "
 
 #: ../libseahorse/seahorse-prefs.glade.h:11
 #: ../plugins/nautilus/seahorse-pgp-preferences.c:75
@@ -949,10 +972,10 @@ msgid ""
 "\n"
 "<b>Note:</b> Your personal keys will not be compromised."
 msgstr ""
-"Compartició de claus a d'altres persones de la vostra xarxa per tal que usin "
-"les claus que heu recollit. Això vol dir que ells us poden xifrar coses "
-"automàticament, o a persones que coneixeu, sense haver d'enviar-los les "
-"vostres claus.\n"
+"La compartició de claus permet a altres persones de la vostra xarxa "
+"utilitzar les claus que heu recollit. Això vol dir que ells us poden xifrar "
+"coses automàticament, o a persones que coneixeu, sense haver d'enviar-los "
+"les vostres claus.\n"
 "\n"
 "<b>Nota:</b> Això no comprometrà les vostres claus personals."
 
@@ -1087,7 +1110,7 @@ msgstr "Amplada en caràcters"
 #: ../libseahorse/seahorse-secure-entry.c:299
 msgid "Number of characters to leave space for in the entry"
 msgstr ""
-"La quantitat de caràcters per als que s'ha de deixar espai en l'entrada"
+"La quantitat de caràcters per als quals s'ha de deixar espai en l'entrada"
 
 #: ../libseahorse/seahorse-secure-entry.c:303
 msgid "Scroll offset"
@@ -1108,11 +1131,11 @@ msgstr "El contingut de l'entrada"
 
 #: ../libseahorse/seahorse-secure-entry.c:311
 msgid "Visibility"
-msgstr ""
+msgstr "Visibilitat"
 
 #: ../libseahorse/seahorse-secure-entry.c:311
 msgid "Whether contents are drawn using invisible character"
-msgstr ""
+msgstr "Si els continguts s'escriuen amb caràcters invisibles"
 
 #: ../libseahorse/seahorse-server-source.c:468
 msgid "LDAP Key Server"
@@ -1126,12 +1149,14 @@ msgstr "Servidors de claus HTTP"
 #. generate or import a key
 #: ../libseahorse/seahorse-signer.c:57 ../src/seahorse-sign.c:159
 msgid "No keys usable for signing"
-msgstr "No hi ha claus que es puguin per servir per a signar"
+msgstr "No hi ha claus que es puguin fer servir per a signar"
 
 #: ../libseahorse/seahorse-signer.c:58
 msgid ""
 "You have no personal PGP keys that can be used to sign a document or message."
 msgstr ""
+"No teniu claus PGP personals que es puguin emprar per a signar cap document "
+"o missatge."
 
 #: ../libseahorse/seahorse-signer.glade.h:1
 msgid "Choose Signing Key"
@@ -1163,7 +1188,7 @@ msgstr "Clau pública d'intèrpret d'ordres segur"
 #: ../libseahorse/seahorse-ssh-operation.c:135
 #: ../libseahorse/seahorse-ssh-operation.c:697
 msgid "The ssh command was terminated unexpectedly."
-msgstr "L'ordre ssh a acabat inesperadament."
+msgstr "L'ordre ssh ha acabat inesperadament."
 
 #: ../libseahorse/seahorse-ssh-operation.c:143
 msgid "The SSH command failed."
@@ -1171,7 +1196,7 @@ msgstr "Ha fallat l'ordre SSH."
 
 #: ../libseahorse/seahorse-ssh-operation.c:441
 msgid "Secure Shell key"
-msgstr ""
+msgstr "Clau d'intèrpret d'ordres segur"
 
 #: ../libseahorse/seahorse-ssh-operation.c:704
 msgid "The ssh command failed."
@@ -1243,7 +1268,7 @@ msgstr "Importa clau"
 
 #: ../libseahorse/seahorse-unknown-key.c:67
 msgid "Unavailable"
-msgstr ""
+msgstr "No disponible"
 
 #: ../libseahorse/seahorse-unknown-key.c:87
 #, c-format
@@ -1353,7 +1378,7 @@ msgstr "Xifratge de text del porta-retalls"
 
 #: ../plugins/applet/GNOME_SeahorseApplet.server.in.in.h:2
 msgid "Encrypt, decrypt or sign the clipboard (uses PGP type encryption)."
-msgstr ""
+msgstr "Xifreu, desxifreu o signeu el porta-retalls (empra xifratge PGP)."
 
 #: ../plugins/applet/GNOME_SeahorseApplet.server.in.in.h:3
 msgid "Seahorse Applet Factory"
@@ -1381,6 +1406,8 @@ msgstr "miniaplicació-seahorse"
 #: ../plugins/applet/seahorse-applet.c:832
 msgid "Use PGP/GPG to encrypt/decrypt/sign/verify/import the clipboard."
 msgstr ""
+"Empra el PGP/GPG per a xifrar, desxifrar, signar, verificar, o importar el "
+"porta-retalls."
 
 #: ../plugins/applet/seahorse-applet.c:316 ../src/seahorse-key-manager.c:869
 msgid "translator-credits"
@@ -1479,7 +1506,7 @@ msgstr "_Desxifra/verifica el porta-retalls"
 
 #: ../plugins/applet/seahorse-applet.c:764
 msgid "_Import Keys from Clipboard"
-msgstr ":Importa claus del porta-retalls"
+msgstr "_Importa claus del porta-retalls"
 
 #: ../plugins/applet/seahorse-applet.c:829
 #: ../plugins/applet/seahorse-applet.c:831
@@ -1488,7 +1515,7 @@ msgstr "Miniaplicació de xifratge"
 
 #: ../plugins/applet/seahorse-applet-preferences.glade.h:1
 msgid "<b>Display clipboard contents after:</b>"
-msgstr ""
+msgstr "<b>Mostra el contingut del porta-retalls al cap de:</b>"
 
 #: ../plugins/applet/seahorse-applet-preferences.glade.h:2
 msgid "Clipboard Encryption Preferences"
@@ -1496,15 +1523,15 @@ msgstr "Preferències del xifratge del porta-retalls"
 
 #: ../plugins/applet/seahorse-applet-preferences.glade.h:3
 msgid "_Decrypting or verifying the clipboard"
-msgstr ""
+msgstr "En _desxifrar o verificar el porta-retalls"
 
 #: ../plugins/applet/seahorse-applet-preferences.glade.h:4
 msgid "_Encrypting or signing the clipboard"
-msgstr ""
+msgstr "En _xifrar o signar el porta-retalls"
 
 #: ../plugins/applet/seahorse-applet-preferences.glade.h:5
 msgid "_Show clipboard state in panel"
-msgstr ""
+msgstr "_Mostra l'estat del porta-retalls al quadre"
 
 #: ../plugins/epiphany/seahorse-extension.c:601
 msgid "_Encrypt"
@@ -1680,11 +1707,11 @@ msgstr "Llegeix una llista d'URI de l'entrada estàndard"
 
 #: ../plugins/nautilus/seahorse-tool.c:66
 msgid "file ..."
-msgstr ""
+msgstr "fitxer ..."
 
 #: ../plugins/nautilus/seahorse-tool.c:128
 msgid "Choose Recipients"
-msgstr "Escolliu destinataris"
+msgstr "Escolliu els destinataris"
 
 #: ../plugins/nautilus/seahorse-tool.c:190
 #: ../plugins/nautilus/seahorse-tool.c:272
@@ -1698,7 +1725,7 @@ msgstr "Escolliu el nom de fitxer xifrat per a «%s»"
 
 #: ../plugins/nautilus/seahorse-tool.c:256
 msgid "Choose Signer"
-msgstr "Escolliu un signador"
+msgstr "Escolliu un signant"
 
 #: ../plugins/nautilus/seahorse-tool.c:291
 #, c-format
@@ -1832,7 +1859,7 @@ msgstr "No s'han pogut llistar els fitxers"
 
 #: ../src/main.c:75 ../src/seahorse-key-manager.c:864
 msgid "Encryption Key Manager"
-msgstr "Gestor de clause de xifratge"
+msgstr "Gestor de claus de xifratge"
 
 #: ../src/seahorse-add-subkey.c:110
 msgid "Couldn't add subkey"
@@ -2030,15 +2057,15 @@ msgstr "Revoca la clau"
 
 #: ../src/seahorse-generate-select.c:143
 msgid "Used to encrypt email and files"
-msgstr "Utilitzat per a xifrar correus i fitxers"
+msgstr "Emprades per a xifrar correus i fitxers"
 
 #: ../src/seahorse-generate-select.c:146
 msgid "Used to access other computers (eg: via a terminal)"
-msgstr ""
+msgstr "Emprades per a accedir a ordinadors (p.ex.: via un terminal)"
 
 #: ../src/seahorse-generate-select.glade.h:1
 msgid "<b>_Select the kind of key you wish to create:</b>"
-msgstr ""
+msgstr "<b>_Seleccioneu el tipus de clau que vulgueu crear:</b>"
 
 #: ../src/seahorse-generate-select.glade.h:2
 msgid "C_ontinue"
@@ -2064,7 +2091,7 @@ msgstr "Contrasenya"
 
 #: ../src/seahorse-gkeyring-item-properties.c:90
 msgid "Access a network share or resource"
-msgstr "Accedeix a un recurs compratit de xarxa"
+msgstr "Accedeix a un recurs compartit de xarxa"
 
 #: ../src/seahorse-gkeyring-item-properties.c:94
 msgid "Access a website"
@@ -2076,7 +2103,7 @@ msgstr "Desbloca una clau PGP"
 
 #: ../src/seahorse-gkeyring-item-properties.c:101
 msgid "Unlocks a Secure Shell key"
-msgstr "Desbloca un aclau d'intèrpret d'ordres segur"
+msgstr "Desbloca una clau d'intèrpret d'ordres segur"
 
 # FIXME
 #: ../src/seahorse-gkeyring-item-properties.c:104
@@ -2205,7 +2232,7 @@ msgstr "S'ha produït un error intern en accedir a l'anell de claus del GNOME"
 
 #: ../src/seahorse-gkeyring-operation.c:286
 msgid "Saving item..."
-msgstr "S'estan desant l'element..."
+msgstr "S'està desant l'element..."
 
 #: ../src/seahorse-gkeyring-source.c:358
 msgid "Retrieving key"
@@ -2218,7 +2245,7 @@ msgstr "S'estan mostrant les contrasenyes"
 
 #: ../src/seahorse-key-manager.c:443
 msgid "Couldn't read file"
-msgstr "No s'han pogut llegir el fitxer"
+msgstr "No s'ha pogut llegir el fitxer"
 
 #: ../src/seahorse-key-manager.c:484
 msgid "Unrecognized key type, or invalid data format"
@@ -2246,11 +2273,11 @@ msgstr "S'estan recuperant les claus"
 
 #: ../src/seahorse-key-manager.c:623
 msgid "Couldn't export key"
-msgstr "No s'han pogut exportar la clau"
+msgstr "No s'ha pogut exportar la clau"
 
 #: ../src/seahorse-key-manager.c:643
 msgid "Export public key"
-msgstr "Exporta clau pública"
+msgstr "Exporta una clau pública"
 
 #: ../src/seahorse-key-manager.c:653 ../src/seahorse-key-properties.c:1030
 #: ../src/seahorse-ssh-key-properties.c:240
@@ -2441,6 +2468,8 @@ msgid ""
 "Send public Secure Shell key to another machine, and enable logins using "
 "that key."
 msgstr ""
+"Envia la clau pública de l'intèrpret d'ordres segur a un altre ordinador, i "
+"habilita connexions que emprin aquesta clau."
 
 #: ../src/seahorse-key-manager.c:1232 ../src/seahorse-keyserver-results.c:404
 msgid "_Find Remote Keys..."
@@ -2512,7 +2541,7 @@ msgstr "ID d'usuari"
 
 #: ../src/seahorse-key-manager-store.c:697
 msgid "Couldn't retrieve key data"
-msgstr "No s'ha pogut recuperar dades de la clau"
+msgstr "No s'han pogut recuperar les dades de la clau"
 
 #: ../src/seahorse-key-manager-store.c:729
 msgid "Couldn't write key to file"
@@ -2541,7 +2570,7 @@ msgstr "Data de caducitat"
 
 #: ../src/seahorse-key-properties.c:206
 msgid "Couldn't change primary user ID"
-msgstr "No s'ha pogut canviar l'ID de l'usuari primari"
+msgstr "No s'ha pogut canviar l'ID primari de l'usuari"
 
 #: ../src/seahorse-key-properties.c:300 ../src/seahorse-key-properties.c:1426
 msgid "[Unknown]"
@@ -2615,7 +2644,7 @@ msgstr "S'estan important claus de servidors de claus"
 #: ../src/seahorse-keyserver-results.c:180
 #, c-format
 msgid "Couldn't write keys to file: %s"
-msgstr "No s'han pogut escriure les clau a un fitxer: %s"
+msgstr "No s'han pogut escriure les claus a un fitxer: %s"
 
 #: ../src/seahorse-keyserver-results.c:169
 msgid "Save Remote Keys"
@@ -2699,7 +2728,7 @@ msgid ""
 "This will find keys for others on the Internet. These keys can then be "
 "imported into your local key ring."
 msgstr ""
-"Això cercarà claus d'altes persones a Internet. Aquestes claus es poden "
+"Això cercarà claus d'altres persones a Internet. Aquestes claus es poden "
 "importar més tard al vostre anell de claus local."
 
 #: ../src/seahorse-keyserver-search.glade.h:5
@@ -2717,7 +2746,7 @@ msgstr "Ce_rca claus que continguin: "
 #: ../src/seahorse-keyserver-sync.c:44
 #, c-format
 msgid "Couldn't publish keys to server: %s"
-msgstr "No s'han pogut publicar les clau al servidor: %s"
+msgstr "No s'han pogut publicar les claus al servidor: %s"
 
 #: ../src/seahorse-keyserver-sync.c:59
 #, c-format
@@ -2766,7 +2795,7 @@ msgid ""
 msgstr ""
 "Això recuperarà els canvis que d'altres hagin fet des de la darrera vegada "
 "que vau rebre les seves claus. Atès que no s'ha seleccionat cap servidor on "
-"publicar les vostres claus, no estaran disponibles a d'atres persones."
+"publicar les vostres claus, no estaran disponibles a altres persones."
 
 #: ../src/seahorse-keyserver-sync.glade.h:5
 msgid "_Key Servers"
@@ -2846,7 +2875,7 @@ msgstr "<b>Opcions _avançades de la clau</b>"
 
 #: ../src/seahorse-pgp-generate.glade.h:2
 msgid "A PGP key allows you to encrypt email or files to other people."
-msgstr ""
+msgstr "Una clau PGP us permet xifrar correus o fitxers per a altres persones."
 
 #: ../src/seahorse-pgp-generate.glade.h:3
 msgid "Algoritms here"
@@ -2919,7 +2948,7 @@ msgstr "<b>Identificador de la clau:</b>"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:7
 msgid "<b>Key Names and Signatures</b>"
-msgstr "<b>Servidors de claus i signatures:</b>"
+msgstr "<b>Noms de claus i signatures:</b>"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:8
 #: ../src/seahorse-pgp-public-key-properties.glade.h:7
@@ -2971,7 +3000,7 @@ msgstr "Creada:"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:20
 msgid "Decrypt files and email sent to you."
-msgstr ""
+msgstr "Desxifreu fitxers i correus que us enviïn."
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:21
 msgid "Delete"
@@ -3013,7 +3042,7 @@ msgstr "Noms i signatures"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:32
 msgid "Override Owner _Trust:"
-msgstr "Substitueix la _confiança en el propietari:"
+msgstr "No facis cas de la _confiança en el propietari:"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:33
 #: ../src/seahorse-pgp-public-key-properties.glade.h:29
@@ -3044,13 +3073,11 @@ msgstr "Força:"
 msgid "The owner of the key revoked the key. It can no longer be used."
 msgstr "El propietari de la clau l'ha revocada, no es pot fer servir més."
 
-# FIXME: Placeholder -> agafador d'espai (termcat dixit)
 #: ../src/seahorse-pgp-private-key-properties.glade.h:41
 #: ../src/seahorse-pgp-public-key-properties.glade.h:33
 msgid "This key expired on: (placeholder)"
-msgstr "Aquesta clau va caducar el: (agafador d'espai)"
+msgstr "Aquesta clau va caducar el: (text variable)"
 
-#
 #: ../src/seahorse-pgp-private-key-properties.glade.h:42
 #: ../src/seahorse-pgp-public-key-properties.glade.h:36
 msgid "Type:"
@@ -3104,6 +3131,8 @@ msgstr "<b>_Altres noms:</b>"
 msgid "<b>_People who have signed this key:</b>"
 msgstr "<b>_Gent que ha signat aquesta clau:</b>"
 
+# FIXME: "Xifra els fitxers i envia'ls per correu electrònic al "
+# "propietari de la clau" ? (David)
 #: ../src/seahorse-pgp-public-key-properties.glade.h:20
 msgid "Encrypt files and email to the key's owner "
 msgstr "Xifra fitxers i correus al propietari de la clau "
@@ -3128,6 +3157,7 @@ msgstr ""
 #: ../src/seahorse-pgp-public-key-properties.glade.h:34
 msgid "To indicate your trust of this key to others, <i>sign</i> this key:"
 msgstr ""
+"Per a indicar la vostra confiança en aquesta clau a altres, <i>signeu<i>-la:"
 
 # FIXME: Completament/Totalment (Josep)
 #: ../src/seahorse-pgp-public-key-properties.glade.h:37
@@ -3156,11 +3186,11 @@ msgstr ""
 
 #: ../src/seahorse-pgp-public-key-properties.glade.h:44
 msgid "_Only display the signatures of people I trust"
-msgstr ""
+msgstr "Només m_ostra signatures de gent en qui confiï"
 
 #: ../src/seahorse-pgp-public-key-properties.glade.h:45
 msgid "_Revoke Signature"
-msgstr "_Revoca la signatures"
+msgstr "_Revoca la signatura"
 
 #: ../src/seahorse-pgp-public-key-properties.glade.h:46
 msgid "_Sign this Key"
@@ -3176,6 +3206,8 @@ msgid ""
 "<big><b>The photo is too large</b></big>\n"
 "The recommended size for a photo on your key is %d x %d pixels."
 msgstr ""
+"<big><b>La fotografia és massa gran</b></big>\n"
+"Es recomana que la mida de la fotografia sigui de %d x %d píxels."
 
 #: ../src/seahorse-photos.c:75
 msgid "_Don't Resize"
@@ -3212,6 +3244,7 @@ msgstr "No s'ha pogut afegir la fotografia"
 #: ../src/seahorse-photos.c:286
 msgid "The file could not be loaded. It may be in an invalid format"
 msgstr ""
+"No s'ha pogut carregar el fitxer, pot ser que estigui en un format invàlid."
 
 #: ../src/seahorse-photos.c:317
 msgid "Are you sure you want to remove the current photo from your key?"
@@ -3258,7 +3291,7 @@ msgstr "La clau ha estat compromesa"
 
 #: ../src/seahorse-revoke.glade.h:3
 msgid "Key has been superseded"
-msgstr "La clau ha estat actualitzada!!!"
+msgstr "La clau ha estat reemplaçada"
 
 #: ../src/seahorse-revoke.glade.h:4
 msgid "Key is no longer used"
@@ -3287,7 +3320,7 @@ msgstr "Re_voca"
 
 #: ../src/seahorse-revoke.glade.h:10
 msgid "Reason for revoking the key"
-msgstr "Motiu pel que es revoca la clau"
+msgstr "Motiu pel qual es revoca la clau"
 
 #: ../src/seahorse-revoke.glade.h:12
 msgid "Superseded"
@@ -3311,6 +3344,8 @@ msgid ""
 "You have no personal PGP keys that can be used to indicate your trust of "
 "this key."
 msgstr ""
+"No teniu cap clau PGP que es pugui emprar per a indicar que confieu en "
+"aquesta clau."
 
 #: ../src/seahorse-sign.glade.h:1
 msgid "<b>How carefully have you checked this key?</b>"
@@ -3318,7 +3353,7 @@ msgstr "<b>Amb _quin deteniment heu comprovat aquesta clau?</b>"
 
 #: ../src/seahorse-sign.glade.h:2
 msgid "<b>How others will see this signature:</b>"
-msgstr ""
+msgstr "<b>La manera en què altres veuran aquesta signatura:</b>"
 
 #: ../src/seahorse-sign.glade.h:3
 msgid "<b>Sign key as:</b>"
@@ -3330,6 +3365,9 @@ msgid ""
 "is owned by the person who claims to own it. For example, you could\n"
 "read the key fingerprint to the owner over the phone. "
 msgstr ""
+"<i>Casualment:</i> vol dir que heu fet una verificació per sobre que la clau "
+"és de la persona que diu ser-ne la propietària. Per exemple, heu llegit "
+"l'empremta digital de la clau a aquesta persona per telèfon. "
 
 #: ../src/seahorse-sign.glade.h:7
 msgid "<i>Key Name</i>"
@@ -3340,6 +3378,8 @@ msgid ""
 "<i>Not at all:</i> means you believe the key is owned by the person who \n"
 "claims to own it, but you could not or did not verify this to be a fact."
 msgstr ""
+"<i>De cap manera:</i> vol dir que creieu que la clau és propietat de la "
+"persona que diu ser-ne la propietària, però que no heu pogut verificar-ho."
 
 #: ../src/seahorse-sign.glade.h:10
 msgid ""
@@ -3347,14 +3387,16 @@ msgid ""
 "this\n"
 "key is genuine."
 msgstr ""
+"<i>Amb molt deteniment:</i> seleccioneu aquesta opció només si esteu "
+"absolutament segur que aquesta clau és genuïna."
 
 #: ../src/seahorse-sign.glade.h:12
 msgid "By signing you indicate your trust that this key belongs to:"
-msgstr ""
+msgstr "En signar esteu indicant que confieu que aquesta clau pertany a:"
 
 #: ../src/seahorse-sign.glade.h:13
 msgid "I can _revoke this signature at a later date."
-msgstr ""
+msgstr "Puc _revocar aquesta clau més endavant."
 
 #: ../src/seahorse-sign.glade.h:14
 msgid "If signature can be revoked"
@@ -3377,6 +3419,10 @@ msgid ""
 "have also used email to check that the email address belongs to the\n"
 "owner."
 msgstr ""
+"Podríeu emprar una fotografia que sigui difícil de falsificar (com ara un\n"
+"passaport) per a verificar personalment que el nom a la clau és correcte.\n"
+"També hauríeu d'haver emprat el correu per a verificar que l'adreça pertany\n"
+"al seu propietari."
 
 #: ../src/seahorse-sign.glade.h:21
 msgid "_Casually"
@@ -3388,7 +3434,7 @@ msgstr "_De cap manera"
 
 #: ../src/seahorse-sign.glade.h:23
 msgid "_Others may not see this signature"
-msgstr ""
+msgstr "_Altres no poden veure aquesta fotografia"
 
 #: ../src/seahorse-sign.glade.h:25
 msgid "_Signer:"
@@ -3411,6 +3457,8 @@ msgid ""
 "<i>Use your email address, and any other reminder\n"
 " you need about what this key is for.</i>"
 msgstr ""
+"<i>Empreu la vostra adreça de correu, i qualsevol altre recordatori\n"
+" que us calgui per recordar per a què és aquesta clau.</i>"
 
 #: ../src/seahorse-ssh-generate.glade.h:4
 msgid ""
@@ -3418,16 +3466,21 @@ msgid ""
 "computers using SSH, without entering a different password \n"
 "for each of them."
 msgstr ""
+"Una clau d'intèrpret d'ordres segur (SSH) us permet connectar de manera\n"
+"segura a ordinadors emprant SSH, sense haver de teclejar diferents\n"
+"contrasenyes per a cada un d'ells."
 
 #: ../src/seahorse-ssh-generate.glade.h:8
 msgid ""
 "If there is already a computer you want to use this key with, you \n"
 "can set up that computer to recognize your key now. "
 msgstr ""
+"Si voleu emprar aquesta clau amb algun ordinador que sapigueu, podeu \n"
+"configurar-lo ara per tal que reconegui aquesta clau. "
 
 #: ../src/seahorse-ssh-generate.glade.h:11
 msgid "New Secure Shell Key"
-msgstr ""
+msgstr "Nova clau d'intèrpret d'ordres segur"
 
 #: ../src/seahorse-ssh-generate.glade.h:12
 msgid "_Create and Set Up"
@@ -3456,7 +3509,7 @@ msgstr "No s'ha pogut canvia la contrasenya de la clau."
 
 #: ../src/seahorse-ssh-key-properties.glade.h:1
 msgid "/home/nate/.ssh/blah_rsa"
-msgstr ""
+msgstr "/home/josep/.ssh/bla_rsa"
 
 #: ../src/seahorse-ssh-key-properties.glade.h:2
 msgid "00:00:00:00:00"
@@ -3485,7 +3538,7 @@ msgstr "<b>Confiança</b>"
 #: ../src/seahorse-ssh-key-properties.glade.h:14
 #, no-c-format
 msgid "<i>This only applies to the '%s'</i> account."
-msgstr ""
+msgstr "<i>Això només val per al compte «%s»</i>."
 
 #: ../src/seahorse-ssh-key-properties.glade.h:17
 msgid "E_xport Complete Key"
@@ -3494,14 +3547,17 @@ msgstr "E_xporta la clau completa"
 #: ../src/seahorse-ssh-key-properties.glade.h:21
 msgid "The owner of this key is _authorized to connect to this computer"
 msgstr ""
+"S'_autoritza al propietari d'aquesta clau a connectar-se a aquest ordinador"
 
 #: ../src/seahorse-ssh-key-properties.glade.h:22
 msgid "Used to connect to other computers."
-msgstr ""
+msgstr "Emprades per a connectar a altres ordinadors."
 
 #: ../src/seahorse-ssh-upload.c:42
 msgid "Couldn't configure Secure Shell keys on remote computer."
 msgstr ""
+"No s'han pogut configurar les claus de l'intèrpret d'ordres segur en "
+"l'ordinador remot."
 
 #. Show the progress window if necessary
 #: ../src/seahorse-ssh-upload.c:140
@@ -3510,11 +3566,11 @@ msgstr "S'estan configurant les claus de l'intèrpret d'ordres segur..."
 
 #: ../src/seahorse-ssh-upload.glade.h:1
 msgid "<i>eg: fileserver.example.com</i>"
-msgstr ""
+msgstr "<i>p.ex.: servidorfitxers.exemple.com</i>"
 
 #: ../src/seahorse-ssh-upload.glade.h:2
 msgid "Set Up Computer for SSH Connection"
-msgstr ""
+msgstr "Configura l'ordinador per a connexions SSH"
 
 #: ../src/seahorse-ssh-upload.glade.h:4
 msgid ""
@@ -3522,10 +3578,12 @@ msgid ""
 "uses SSH, you must already have a login account on that \n"
 "computer."
 msgstr ""
+"Per emprar la clau d'intèrpret d'ordres segur en un altre ordinador\n"
+"que empri SSH, heu de tenir un compte en aquell ordinador."
 
 #: ../src/seahorse-ssh-upload.glade.h:7
 msgid "_Computer Name:"
-msgstr ""
+msgstr "Nom de l'_ordinador:"
 
 #: ../src/seahorse-ssh-upload.glade.h:8
 msgid "_Login Name:"
