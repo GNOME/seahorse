@@ -498,7 +498,8 @@ static void
 seahorse_secure_entry_init (SeahorseSecureEntry *entry)
 {
     GtkStyle *style;
-    
+    GtkWidget *tempent;
+
     GTK_WIDGET_SET_FLAGS (entry, GTK_CAN_FOCUS);
 
     /* Get the RC style for a normal GtkEntry */
@@ -511,11 +512,16 @@ seahorse_secure_entry_init (SeahorseSecureEntry *entry)
     entry->text[0] = '\0';
 
     entry->visibility = FALSE;
-    entry->invisible_char = 0x25cf;
     entry->width_chars = -1;
     entry->is_cell_renderer = FALSE;
     entry->editing_canceled = FALSE;
     entry->has_frame = TRUE;
+
+    /* Use the invisible_char from GtkEntry */
+    tempent = gtk_entry_new ();
+    entry->invisible_char = gtk_entry_get_invisible_char (GTK_ENTRY (tempent));
+    g_object_ref_sink (tempent);
+    g_object_unref (tempent);
 
     /* 
      * This object is completely private. No external entity can gain a reference
