@@ -380,6 +380,7 @@ seahorse_agent_cache_clearall ()
 void
 seahorse_agent_internal_set (const gchar *id, const gchar *pass, gboolean lock)
 {
+    gboolean allocated = FALSE;
     gboolean cache;
     sa_cache_t *it;
 
@@ -404,6 +405,7 @@ seahorse_agent_internal_set (const gchar *id, const gchar *pass, gboolean lock)
         it = g_chunk_new (sa_cache_t, g_memory);
         memset (it, 0, sizeof (*it));
         it->id = g_strdup (id);
+        allocated = TRUE;
     }
 
     g_assert (it->id != NULL);
@@ -418,7 +420,8 @@ seahorse_agent_internal_set (const gchar *id, const gchar *pass, gboolean lock)
     it->stamp = cache ? time (NULL) : 0;
     it->locked = lock ? TRUE : FALSE;
 
-    g_hash_table_replace (g_cache, it->id, it);
+    if(allocated)
+        g_hash_table_replace (g_cache, it->id, it);
 
     /* UI hooks */
     seahorse_agent_status_update ();
