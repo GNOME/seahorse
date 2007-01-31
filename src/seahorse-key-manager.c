@@ -1197,14 +1197,14 @@ static const GtkActionEntry ui_entries[] = {
 };
 
 static const GtkToggleActionEntry view_entries[] = {
-    { "view-type", NULL, N_("Key T_ypes"), NULL,
-             N_("Show key type column"), G_CALLBACK (view_type_column), FALSE },
-    { "view-expires", NULL, N_("Key _Expiry"), NULL,
-             N_("Show key expiry column"), G_CALLBACK (view_expiry_column), FALSE },
-    { "view-trust", NULL, N_("Key _Trust"), NULL,
+    { "view-type", NULL, N_("T_ypes"), NULL,
+             N_("Show type column"), G_CALLBACK (view_type_column), FALSE },
+    { "view-expires", NULL, N_("_Expiry"), NULL,
+             N_("Show expiry column"), G_CALLBACK (view_expiry_column), FALSE },
+    { "view-trust", NULL, N_("_Trust"), NULL,
              N_("Show owner trust column"), G_CALLBACK (view_trust_column), FALSE },
-    { "view-validity", NULL, N_("Key _Validity"), NULL,
-             N_("Show key validity column"), G_CALLBACK (view_validity_column), FALSE },
+    { "view-validity", NULL, N_("_Validity"), NULL,
+             N_("Show validity column"), G_CALLBACK (view_validity_column), FALSE },
 };
 
 static const GtkActionEntry key_entries[] = {
