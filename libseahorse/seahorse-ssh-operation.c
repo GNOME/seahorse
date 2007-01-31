@@ -132,7 +132,7 @@ watch_ssh_process (GPid pid, gint status, SeahorseSSHOperation *sop)
         /* Was killed */
         if (!WIFEXITED (status)) {
             seahorse_operation_mark_done (SEAHORSE_OPERATION (sop), FALSE, 
-                g_error_new (SEAHORSE_ERROR, 0, _("The ssh command was terminated unexpectedly.")));
+                g_error_new (SEAHORSE_ERROR, 0, _("The SSH command was terminated unexpectedly.")));
             
         /* Command failed */
         } else if (WEXITSTATUS (status) != 0) {
@@ -694,14 +694,14 @@ seahorse_ssh_operation_sync (SeahorseSSHSource *ssrc, const gchar *command,
     
     if (!WIFEXITED (status)) {
         g_critical ("SSH command didn't exit properly: %s", command);
-        g_set_error (error, SEAHORSE_ERROR, 0, "%s", _("The ssh command was terminated unexpectedly."));
+        g_set_error (error, SEAHORSE_ERROR, 0, "%s", _("The SSH command was terminated unexpectedly."));
         g_free (sout);
         g_free (serr);
         return NULL;
     }
     
     if (WEXITSTATUS (status) != 0) {
-        g_set_error (error, SEAHORSE_ERROR, 0, "%s", _("The ssh command failed."));
+        g_set_error (error, SEAHORSE_ERROR, 0, "%s", _("The SSH command failed."));
         g_warning ("SSH command failed: %s (%d)", command, WEXITSTATUS (status));
         if (serr && serr[0])
             g_warning ("SSH error output: %s", serr);

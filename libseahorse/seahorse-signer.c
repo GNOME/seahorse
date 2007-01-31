@@ -76,12 +76,12 @@ seahorse_signer_get ()
             
     combo = glade_xml_get_widget (swidget->xml, "signer-select");
     g_return_val_if_fail (combo != NULL, NULL);
-    seahorse_combo_keys_attach (GTK_OPTION_MENU (combo), skset, NULL);
+    seahorse_combo_keys_attach (GTK_COMBO_BOX (combo), skset, NULL);
     g_object_unref (skset);
     
     /* Select the last key used */
     id = seahorse_gconf_get_string (SEAHORSE_LASTSIGNER_KEY);
-    seahorse_combo_keys_set_active_id (GTK_OPTION_MENU (combo), g_quark_from_string (id));
+    seahorse_combo_keys_set_active_id (GTK_COMBO_BOX (combo), g_quark_from_string (id));
     g_free (id); 
     
     widget = seahorse_widget_get_top (swidget);
@@ -101,7 +101,7 @@ seahorse_signer_get ()
     }
 
     if (ok) {
-        skey = seahorse_combo_keys_get_active (GTK_OPTION_MENU (combo));
+        skey = seahorse_combo_keys_get_active (GTK_COMBO_BOX (combo));
         g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (skey), NULL);
 
         /* Save this as the last key signed with */

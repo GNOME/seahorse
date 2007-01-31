@@ -144,8 +144,8 @@ seahorse_keyserver_sync_show (GList *keys)
     
     /* The details message */
     n = g_list_length (keys);
-    t = g_strdup_printf (ngettext ("<b>%d key is selected for syncing</b>", 
-                                   "<b>%d keys are selected for syncing</b>", n), n);
+    t = g_strdup_printf (ngettext ("<b>%d key is selected for synchronizing</b>", 
+                                   "<b>%d keys are selected for synchronizing</b>", n), n);
     
     w = glade_xml_get_widget (swidget->xml, "detail-message");
     g_return_val_if_fail (swidget != NULL, win);
@@ -195,7 +195,7 @@ seahorse_keyserver_sync (GList *keys)
 
     mop = seahorse_multi_operation_new ();
 
-    /* And now syncing keys from the servers */
+    /* And now synchronizing keys from the servers */
     ks = seahorse_gconf_get_string_list (KEYSERVER_KEY);
     ks = seahorse_server_source_purge_keyservers (ks);
     

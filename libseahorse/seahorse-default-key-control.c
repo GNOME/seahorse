@@ -25,67 +25,112 @@
 
 /* TODO: This file should be renamed to seahorse-combo-keys.c once we're using SVN */
 
+enum {
+  COMBO_STRING,
+  COMBO_POINTER,
+  N_COLUMNS
+};
+
 /* -----------------------------------------------------------------------------
  * HELPERS 
  */
 
 static void
-key_added (SeahorseKeyset *skset, SeahorseKey *skey, GtkOptionMenu *combo)
+key_added (SeahorseKeyset *skset, SeahorseKey *skey, GtkComboBox *combo)
 {
-    GtkWidget *menu;
-    GtkWidget *item;
+    GtkListStore *model;
+    GtkTreeIter iter;
     gchar *userid;
     
     g_return_if_fail (skey != NULL);
     g_return_if_fail (combo != NULL);
     
-    menu = gtk_option_menu_get_menu (combo);
+    model = GTK_LIST_STORE (gtk_combo_box_get_model (combo));
     
     userid = seahorse_key_get_display_name (skey);
-    item = gtk_menu_item_new_with_label (userid);
+
+    gtk_list_store_append (model, &iter);
+    gtk_list_store_set (model, &iter,
+                        COMBO_STRING, userid,
+                        COMBO_POINTER, skey,
+                        -1);
+
     g_free (userid);
-
-    g_object_set_data (G_OBJECT (item), "key", skey);
-
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-    gtk_widget_show (item);
     
-    seahorse_keyset_set_closure (skset, skey, item);
+    seahorse_keyset_set_closure (skset, skey, GINT_TO_POINTER (TRUE));
 }
 
 static void
 key_changed (SeahorseKeyset *skset, SeahorseKey *skey, SeahorseKeyChange change, 
-             GtkWidget *item, GtkOptionMenu *combo)
+             GtkWidget *closure, GtkComboBox *combo)
 {
-    GList *children;
+    GtkTreeModel *model;
+    GtkTreeIter iter;
+    gboolean valid;
     gchar *userid;
+    gpointer pntr;
+    SeahorseKey *skeyfrommodel;
     
     g_return_if_fail (skey != NULL);
-    g_return_if_fail (item != NULL);
 
-    children = gtk_container_get_children (GTK_CONTAINER (item));
+    model = gtk_combo_box_get_model (combo);
+    valid = gtk_tree_model_get_iter_first (model, &iter);
     
-    if (children && GTK_IS_LABEL (children->data)) {
+    while (valid) {
+        gtk_tree_model_get (model, &iter,
+                            COMBO_POINTER, pntr,
+                            -1);
+                            
+        skeyfrommodel = SEAHORSE_KEY (pntr);
+        
+        if (skeyfrommodel == skey) {
         userid = seahorse_key_get_display_name (skey);
-        gtk_label_set_text (GTK_LABEL (children->data), userid);
+            gtk_list_store_set (GTK_LIST_STORE (model), &iter,
+                                COMBO_STRING, userid,
+                                -1);
+                                
         g_free (userid);
+            break;
     }
     
-    g_list_free (children);
+        valid = gtk_tree_model_iter_next (model, &iter);
+    }
 }
 
 static void
-key_removed (SeahorseKeyset *skset, SeahorseKey *skey, GtkWidget *item, 
-             GtkOptionMenu *combo)
+key_removed (SeahorseKeyset *skset, SeahorseKey *skey, GtkWidget *closure, 
+             GtkComboBox *combo)
 {
+    GtkTreeModel *model;
+    GtkTreeIter iter;
+    gpointer pntr;
+    gboolean valid;
+    SeahorseKey *skeyfrommodel;
+    
     g_return_if_fail (skey != NULL);
-    g_return_if_fail (item != NULL);
+    g_return_if_fail (combo != NULL);
 
-    gtk_widget_destroy (item);
+    model = gtk_combo_box_get_model (combo);
+    
+    while (valid) {
+        gtk_tree_model_get (model, &iter,
+                            COMBO_POINTER, pntr,
+                            -1);
+                            
+        skeyfrommodel = SEAHORSE_KEY (pntr);
+        
+        if (skeyfrommodel == skey) {
+            gtk_list_store_remove (GTK_LIST_STORE (model), &iter);
+                                
+            break;
+        }
+        
+        valid = gtk_tree_model_iter_next (model, &iter);
+    }
 }
 
 static void
-combo_destroyed (GtkOptionMenu *combo, SeahorseKeyset *skset)
+combo_destroyed (GtkComboBox *combo, SeahorseKeyset *skset)
 {
     g_signal_handlers_disconnect_by_func (skset, key_added, combo);
     g_signal_handlers_disconnect_by_func (skset, key_changed, combo);
@@ -97,19 +142,27 @@ combo_destroyed (GtkOptionMenu *combo, SeahorseKeyset *skset)
  */
 
 void 
-seahorse_combo_keys_attach (GtkOptionMenu *combo, SeahorseKeyset *skset,
+seahorse_combo_keys_attach (GtkComboBox *combo, SeahorseKeyset *skset,
                             const gchar *none_option)
 {
-    GtkMenu *menu;
-    GtkWidget *item;
+    GtkTreeModel *model;
+    GtkTreeIter iter;
+    GtkCellRenderer *renderer;
     SeahorseKey *skey;
     GList *l, *keys;
 
     /* Setup the None Option */
-    menu = GTK_MENU (gtk_option_menu_get_menu (combo));
-    if (!menu) {
-        menu = GTK_MENU (gtk_menu_new ());
-        gtk_option_menu_set_menu (combo, GTK_WIDGET (menu));
+    model = gtk_combo_box_get_model (combo);
+    if (!model) {
+        model = GTK_TREE_MODEL (gtk_list_store_new (N_COLUMNS, G_TYPE_STRING, G_TYPE_POINTER));
+        gtk_combo_box_set_model (combo, model);
+        
+        gtk_cell_layout_clear (GTK_CELL_LAYOUT (combo));
+        renderer = gtk_cell_renderer_text_new ();
+        
+        gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo), renderer, TRUE);
+        gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (combo), renderer,
+                                       "text", COMBO_STRING);                            
     }
 
     /* Setup the key list */
@@ -125,16 +178,16 @@ seahorse_combo_keys_attach (GtkOptionMenu *combo, SeahorseKeyset *skset,
     g_signal_connect_after (skset, "removed", G_CALLBACK (key_removed), combo);
 
     if (none_option) {
-        item = gtk_separator_menu_item_new ();
-        gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), item);
-        gtk_widget_show (item);
-        
-        item = gtk_menu_item_new_with_label (none_option);
-        gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), item);
-        gtk_widget_show (item);
+        gtk_list_store_prepend (GTK_LIST_STORE (model), &iter);
+        gtk_list_store_set (GTK_LIST_STORE (model), &iter,
+                            COMBO_STRING, none_option,
+                            COMBO_POINTER, NULL,
+                            -1);    
     }
 
-    gtk_option_menu_set_history (combo, 0);
+    gtk_tree_model_get_iter_first (model, &iter);
+    
+    gtk_combo_box_set_active_iter (combo, &iter);
     
     /* Cleanup */
     g_object_ref (skset);
@@ -143,74 +196,77 @@ seahorse_combo_keys_attach (GtkOptionMenu *combo, SeahorseKeyset *skset,
 }
 
 void
-seahorse_combo_keys_set_active_id (GtkOptionMenu *combo, GQuark keyid)
+seahorse_combo_keys_set_active_id (GtkComboBox *combo, GQuark keyid)
 {
     SeahorseKey *skey;
-    GtkContainer *menu;
-    GList *l, *children;
+    GtkTreeModel *model;
+    GtkTreeIter iter;
+    gboolean valid;
+    gpointer pointer;
     guint i;
     
-    g_return_if_fail (GTK_IS_OPTION_MENU (combo));
+    g_return_if_fail (GTK_IS_COMBO_BOX (combo));
 
-    menu = GTK_CONTAINER (gtk_option_menu_get_menu (combo));
-    g_return_if_fail (menu != NULL);
+    model = gtk_combo_box_get_model (combo);
+    g_return_if_fail (model != NULL);
     
-    children = gtk_container_get_children (menu);
+    valid = gtk_tree_model_get_iter_first (model, &iter);
+    i = 0;
     
-    for (i = 0, l = children; l != NULL; i++, l = g_list_next (l)) {
-        skey = SEAHORSE_KEY (g_object_get_data (l->data, "key"));
+    while (valid) {
+        gtk_tree_model_get (model, &iter,
+                            COMBO_POINTER, &pointer,
+                            -1);
+                            
+        skey = SEAHORSE_KEY (pointer);
         
         if (!keyid) {
             if (!skey) {
-                gtk_option_menu_set_history (combo, i);
+                gtk_combo_box_set_active_iter (combo, &iter);
                 break;
             }
         } else if (skey != NULL) {
             if (keyid == seahorse_key_get_keyid (skey)) {
-                gtk_option_menu_set_history (combo, i);
+                gtk_combo_box_set_active_iter (combo, &iter);
                 break;
             }
         }
-    }
 
-    g_list_free (children);
+        valid = gtk_tree_model_iter_next (model, &iter);
+        i++;
+    }
 }
 
 void 
-seahorse_combo_keys_set_active (GtkOptionMenu *combo, SeahorseKey *skey)
+seahorse_combo_keys_set_active (GtkComboBox *combo, SeahorseKey *skey)
 {
     seahorse_combo_keys_set_active_id (combo, 
                 skey == NULL ? 0 : seahorse_key_get_keyid (skey));
 }
 
 SeahorseKey* 
-seahorse_combo_keys_get_active (GtkOptionMenu *combo)
+seahorse_combo_keys_get_active (GtkComboBox *combo)
 {
-    SeahorseKey *skey = NULL;
-    GtkContainer *menu;
-    GList *l, *children;
-    guint i;
+    GtkTreeModel *model;
+    GtkTreeIter iter;
+    gpointer pointer;
     
-    g_return_val_if_fail (GTK_IS_OPTION_MENU (combo), NULL);
+    g_return_val_if_fail (GTK_IS_COMBO_BOX (combo), NULL);
     
-    menu = GTK_CONTAINER (gtk_option_menu_get_menu (combo));
-    g_return_val_if_fail (menu != NULL, NULL);
+    model = gtk_combo_box_get_model (combo);
+    g_return_val_if_fail (model != NULL, NULL);
     
-    children = gtk_container_get_children (menu);
+    gtk_combo_box_get_active_iter(combo, &iter);
     
-    for (i = 0, l = children; l != NULL; i++, l = g_list_next (l)) {
-        if (i == gtk_option_menu_get_history (combo)) {
-           skey = SEAHORSE_KEY (g_object_get_data (l->data, "key"));
-           break;
-        }
-    }
+    gtk_tree_model_get (model, &iter,
+                        COMBO_POINTER, &pointer,
+                        -1);
 
-    g_list_free (children);
-    return skey;
+    return SEAHORSE_KEY (pointer);
 }
 
 GQuark 
-seahorse_combo_keys_get_active_id (GtkOptionMenu *combo)
+seahorse_combo_keys_get_active_id (GtkComboBox *combo)
 {
     SeahorseKey *skey = seahorse_combo_keys_get_active (combo);
     return skey == NULL ? 0 : seahorse_key_get_keyid (skey);

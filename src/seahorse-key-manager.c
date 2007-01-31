@@ -1232,7 +1232,7 @@ static const GtkActionEntry keyserver_entries[] = {
     { "remote-find", GTK_STOCK_FIND, N_("_Find Remote Keys..."), "",
             N_("Search for keys on a key server"), G_CALLBACK (search_activate) }, 
     { "remote-sync", GTK_STOCK_REFRESH, N_("_Sync and Publish Keys..."), "",
-            N_("Publish and/or sync your keys with those online."), G_CALLBACK (sync_activate) }, 
+            N_("Publish and/or synchronize your keys with those online."), G_CALLBACK (sync_activate) }, 
 };
 
 void

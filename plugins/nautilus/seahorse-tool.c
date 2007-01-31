@@ -63,7 +63,7 @@ static const GOptionEntry options[] = {
     { "uri-list", 'T', 0, G_OPTION_ARG_NONE, &read_uris,
         N_("Read list of URIs on standard in"), NULL },
     { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_STRING_ARRAY, &arg_uris, 
-        NULL, N_("file ...") },
+        NULL, N_("file...") },
     { NULL }
 };
 

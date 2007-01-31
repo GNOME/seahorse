@@ -85,7 +85,7 @@ ok_clicked (SeahorseWidget *swidget)
     /* Signer */
     w = glade_xml_get_widget (swidget->xml, "signer-select");
     g_return_val_if_fail (w != NULL, FALSE);
-    signer = seahorse_combo_keys_get_active (GTK_OPTION_MENU (w));
+    signer = seahorse_combo_keys_get_active (GTK_COMBO_BOX (w));
     
     g_assert (!signer || (SEAHORSE_IS_PGP_KEY (signer) && 
                           seahorse_key_get_etype (signer) == SKEY_PRIVATE));
@@ -209,7 +209,7 @@ seahorse_sign_show (SeahorsePGPKey *pkey, guint uid)
     /* Signer box */
     w = glade_xml_get_widget (swidget->xml, "signer-select");
     g_return_if_fail (w != NULL);
-    seahorse_combo_keys_attach (GTK_OPTION_MENU (w), skset, NULL);
+    seahorse_combo_keys_attach (GTK_COMBO_BOX (w), skset, NULL);
 
     /* Image */
     w = glade_xml_get_widget (swidget->xml, "sign-image");

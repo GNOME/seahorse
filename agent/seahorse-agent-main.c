@@ -53,7 +53,7 @@ static const GOptionEntry options[] = {
         N_("Print variables in for a C type shell"), NULL },
 
     { "variables", 'v', 0, G_OPTION_ARG_NONE, &seahorse_agent_displayvars, 
-        N_("Display variables instead of editing conf files (gpg.conf, ssh agent socket)"), NULL },
+        N_("Display variables instead of editing conf files (gpg.conf, SSH agent socket)"), NULL },
 
     { "execute", 'x', 0, G_OPTION_ARG_NONE, &seahorse_agent_execvars, 
         N_("Execute other arguments on the command line"), NULL },
@@ -62,7 +62,7 @@ static const GOptionEntry options[] = {
         N_("Allow GPG agent request from any display"), NULL },
       
     { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_STRING_ARRAY, &agent_exec_args, 
-        NULL, N_("command ...") },
+        NULL, N_("command...") },
 
     { NULL }
 };

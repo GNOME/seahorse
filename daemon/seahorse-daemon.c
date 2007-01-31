@@ -51,7 +51,7 @@ static const gchar *daemon_icons[] = {
 
 static const GOptionEntry options[] = {
     { "no-daemonize", 'd', 0, G_OPTION_ARG_NONE, &daemon_no_daemonize, 
-        N_("Do not daemonize seahorse-daemon"), NULL },
+        N_("Do not run seahorse-daemon as a daemon"), NULL },
     { NULL }
 };
 

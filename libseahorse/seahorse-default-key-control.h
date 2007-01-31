@@ -22,7 +22,7 @@
 /** 
  * seahorse_combo_keys_*: Shows a list of keys in a dropdown for selection.
  * 
- * - Attaches to a GtkOptionMenu
+ * - Attaches to a GtkComboBox
  * - Gets its list of keys from a SeahorseKeyset.
  */
  
@@ -34,18 +34,18 @@
 #include <gtk/gtk.h>
 #include "seahorse-keyset.h"
 
-void                        seahorse_combo_keys_attach              (GtkOptionMenu *combo,
+void                        seahorse_combo_keys_attach              (GtkComboBox *combo,
                                                                      SeahorseKeyset *skset,
                                                                      const gchar *none_option);
 
-void                        seahorse_combo_keys_set_active_id       (GtkOptionMenu *combo,
+void                        seahorse_combo_keys_set_active_id       (GtkComboBox *combo,
                                                                      GQuark keyid);
 
-void                        seahorse_combo_keys_set_active          (GtkOptionMenu *combo,
+void                        seahorse_combo_keys_set_active          (GtkComboBox *combo,
                                                                      SeahorseKey *skey);
 
-SeahorseKey*                seahorse_combo_keys_get_active          (GtkOptionMenu *combo);
+SeahorseKey*                seahorse_combo_keys_get_active          (GtkComboBox *combo);
 
-GQuark                      seahorse_combo_keys_get_active_id       (GtkOptionMenu *combo);
+GQuark                      seahorse_combo_keys_get_active_id       (GtkComboBox *combo);
 
 #endif /* __SEAHORSE_COMBO_KEYS_H__ */

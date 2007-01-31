@@ -456,7 +456,7 @@ setup_sharing (SeahorseWidget *swidget)
 /* -------------------------------------------------------------------------- */
 
 static void
-default_key_changed (GtkOptionMenu *combo, gpointer *data)
+default_key_changed (GtkComboBox *combo, gpointer *data)
 {
     GQuark keyid = seahorse_combo_keys_get_active_id (combo);
     seahorse_gconf_set_string (SEAHORSE_DEFAULT_KEY, keyid == 0 ? "" : g_quark_to_string (keyid));
@@ -464,7 +464,7 @@ default_key_changed (GtkOptionMenu *combo, gpointer *data)
 
 static void
 gconf_notification (GConfClient *gclient, guint id, GConfEntry *entry, 
-                    GtkOptionMenu *combo)
+                    GtkComboBox *combo)
 {
     GQuark keyid = g_quark_from_string (gconf_value_get_string (gconf_entry_get_value (entry)));
     seahorse_combo_keys_set_active_id (combo, keyid);
@@ -505,15 +505,15 @@ seahorse_prefs_new ()
                                  SKEY_LOC_LOCAL, 
                                  SKEY_FLAG_CAN_SIGN, 
                                  SKEY_FLAG_EXPIRED | SKEY_FLAG_REVOKED | SKEY_FLAG_DISABLED);
-    seahorse_combo_keys_attach (GTK_OPTION_MENU (widget), skset, _("None. Prompt for a key."));
+    seahorse_combo_keys_attach (GTK_COMBO_BOX (widget), skset, _("None. Prompt for a key."));
     g_object_unref (skset);
     
-    seahorse_combo_keys_set_active_id (GTK_OPTION_MENU (widget), 
+    seahorse_combo_keys_set_active_id (GTK_COMBO_BOX (widget), 
                                        g_quark_from_string (seahorse_gconf_get_string (SEAHORSE_DEFAULT_KEY)));
     g_signal_connect (widget, "changed", G_CALLBACK (default_key_changed), NULL);
 
     gconf_id = seahorse_gconf_notify (SEAHORSE_DEFAULT_KEY, 
-                                      (GConfClientNotifyFunc)gconf_notification, GTK_OPTION_MENU (widget));
+                                      (GConfClientNotifyFunc)gconf_notification, GTK_COMBO_BOX (widget));
     g_signal_connect (widget, "destroy", G_CALLBACK (remove_gconf_notification), GINT_TO_POINTER (gconf_id));
     
 #ifdef WITH_AGENT   
