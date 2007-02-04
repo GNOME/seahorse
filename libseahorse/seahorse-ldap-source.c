@@ -937,7 +937,7 @@ get_callback (SeahorseOperation *op, LDAPMessage *result)
         key = get_string_attribute (lop->ldap, result, sinfo->key_attr);
         
         if (key == NULL) {
-            g_warning ("keyserver missing pgp key data");
+            g_warning ("key server missing pgp key data");
             fail_ldap_operation (lop, LDAP_NO_SUCH_OBJECT); 
         }
         

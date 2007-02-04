@@ -211,7 +211,7 @@ seahorse_keyserver_sync (GList *keys)
                         seahorse_key_source_get_ktype (sksrc), SKEY_LOC_LOCAL);
         
         if (lsksrc) {
-            op = seahorse_transfer_operation_new (_("Syncing keys"), sksrc, lsksrc, keyids);
+            op = seahorse_transfer_operation_new (_("Synchronizing keys"), sksrc, lsksrc, keyids);
             g_return_if_fail (op != NULL);
 
             seahorse_multi_operation_take (mop, op);
@@ -243,6 +243,6 @@ seahorse_keyserver_sync (GList *keys)
     g_free (keyserver);
     
     /* Show the progress window if necessary */
-    seahorse_progress_show (SEAHORSE_OPERATION (mop), _("Syncing keys..."), FALSE);
+    seahorse_progress_show (SEAHORSE_OPERATION (mop), _("Synchronizing keys..."), FALSE);
     g_object_unref (mop);
 }
