@@ -10,9 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-03 22:20-0200\n"
-"PO-Revision-Date: 2007-02-03 21:55-0200\n"
-"Last-Translator: Luiz Fernando da Silva Armesto <luiz.armesto@gmail.com>\n"
+"POT-Creation-Date: 2007-02-05 00:38-0200\n"
+"PO-Revision-Date: 2007-02-05 01:13-0200\n"
+"Last-Translator: Leonardo Ferreira Fontenelle <leo.fontenelle@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <gnome-l10n-br@listas.cipsga.org.br>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -338,16 +338,16 @@ msgstr ""
 "destinatários de uma criptografia."
 
 #: ../data/seahorse.schemas.in.h:19
-msgid "Last key used to sign a message."
-msgstr "Última chave usada para assinar uma mensagem."
-
-#: ../data/seahorse.schemas.in.h:20
-msgid "Last keyserver search pattern"
+msgid "Last key server search pattern"
 msgstr "Último padrão de pesquisa de servidor de chaves"
 
+#: ../data/seahorse.schemas.in.h:20
+msgid "Last key servers used"
+msgstr "Último servidores usado"
+
 #: ../data/seahorse.schemas.in.h:21
-msgid "Last keyservers used"
-msgstr "Último servidor usado"
+msgid "Last key used to sign a message."
+msgstr "Última chave usada para assinar uma mensagem."
 
 #: ../data/seahorse.schemas.in.h:22
 msgid "PGP Key servers"
@@ -358,7 +358,7 @@ msgid "Prompt before using GPG passwords in cache"
 msgstr "Perguntar antes de usar senhas GPG em cache"
 
 #: ../data/seahorse.schemas.in.h:24
-msgid "Publish keys to this keyserver."
+msgid "Publish keys to this key server."
 msgstr "Publicar chaves para este servidor."
 
 #: ../data/seahorse.schemas.in.h:25
@@ -422,7 +422,7 @@ msgid ""
 msgstr ""
 "Especifique a coluna para ordenar a janela principal do gerenciador de "
 "chaves seahorse. Colunas são: 'Nome', 'ID', 'Validade', 'Expiração', "
-"'Confiança' e 'Tipo', Coloque um '-' na frente do nome da coluna para "
+"'Confiança' e 'Tipo'. Coloque um '-' na frente do nome da coluna para "
 "ordenar em ordem decrescente."
 
 #: ../data/seahorse.schemas.in.h:35
@@ -439,22 +439,22 @@ msgstr "A coluna pela qual ordenar as chaves do seahorse"
 
 #: ../data/seahorse.schemas.in.h:38
 msgid ""
-"The keyserver to publish PGP keys to. Or empty to suppress publishing of PGP "
-"keys."
+"The key server to publish PGP keys to. Or empty to suppress publishing of "
+"PGP keys."
 msgstr ""
 "O servidor de chaves para publicar chave PGP. Ou vazio para suprimir a "
 "publicação de chaves PGP."
 
 #: ../data/seahorse.schemas.in.h:39
 msgid ""
-"The last keyserver a search was performed against or empty for all "
-"keyservers."
+"The last key server a search was performed against or empty for all key "
+"servers."
 msgstr ""
 "O último servidor de chaves onde foi realizada pesquisa ou vazio para todos "
 "servidores."
 
 #: ../data/seahorse.schemas.in.h:40
-msgid "The last search pattern searched for against a keyserver."
+msgid "The last search pattern searched for against a key server."
 msgstr "O último padrão de pesquisa procurado."
 
 #: ../data/seahorse.schemas.in.h:41
@@ -494,7 +494,7 @@ msgstr ""
 
 #: ../data/seahorse.schemas.in.h:46
 msgid ""
-"When set, seahorse-agent expires GPG passwords in its cache after a peried "
+"When set, seahorse-agent expires GPG passwords in its cache after a period "
 "of time."
 msgstr ""
 "Quando definido, seahorse-agent expira as senhas GPG do cache depois de um "
@@ -507,30 +507,30 @@ msgstr "Onde armazenar as senhas em cache."
 #: ../data/seahorse.schemas.in.h:48
 msgid ""
 "Whether or not modified keys should be automatically synced with the default "
-"keyserver."
+"key server."
 msgstr ""
-"Se deve ou não sincronizar automaticamente as chaves modificadas com o "
-"servidor padrão."
+"Sincronizar automaticamente ou não as chaves modificadas com o servidor "
+"padrão."
 
 #: ../data/seahorse.schemas.in.h:49
 msgid "Whether the GPG password cache is enabled"
-msgstr "Se o cache de senhas GPG está habilitado"
+msgstr "Ativar ou não o cache de senhas GPG"
 
 #: ../data/seahorse.schemas.in.h:50
 msgid "Whether to always encrypt to default key"
-msgstr "Se sempre criptografar com a chave padrão"
+msgstr "Sempre criptografar ou não com a chave padrão"
 
 #: ../data/seahorse.schemas.in.h:51
 msgid "Whether to automatically load SSH keys on demand."
-msgstr "Se deve ler automaticamente as chaves SSH de acordo com a demanda."
+msgstr "Ler automaticamente ou não as chaves SSH de acordo com a demanda."
 
 #: ../data/seahorse.schemas.in.h:52
 msgid "Whether to use ASCII Armor"
-msgstr "Se usar Armadura ASCII"
+msgstr "Usar ou não Armadura ASCII"
 
 #: ../libcryptui/cryptui-key-chooser.c:156
 msgid "All Keys"
-msgstr "Todas Chaves."
+msgstr "Todas as Chaves"
 
 #: ../libcryptui/cryptui-key-chooser.c:157
 msgid "Selected Recipients"
@@ -885,7 +885,7 @@ msgid ""
 "necessary in order to cache passphrases. "
 msgstr ""
 "<b>Nota:</b> O programa 'seahorse-agent' foi iniciado. Este programa é "
-"necessário para o cache de frases secretas."
+"necessário para o cache de frases secretas. "
 
 #: ../libseahorse/seahorse-prefs.glade.h:3
 msgid "<b>Remember PGP Passphrases</b>"
@@ -901,13 +901,13 @@ msgid ""
 "necessary in order to cache passphrases. "
 msgstr ""
 "<b>Aviso:</b> O programa 'seahorse-agent' não está sendo executado. Este "
-"programa é necessário para o cache de frases secretas."
+"programa é necessário para o cache de frases secretas. "
 
 #: ../libseahorse/seahorse-prefs.glade.h:6
 msgid "<i>A non-supported PGP passphrase caching agent is running.</i>"
 msgstr ""
 "<i>Um agente de cache não suportado de frases secretas PGP está sendo "
-"executado</i>"
+"executado.</i>"
 
 #: ../libseahorse/seahorse-prefs.glade.h:7
 msgid "<i>No SSH caching agent is running. Cannot load Secure Shell keys.</i>"
@@ -926,8 +926,8 @@ msgid "Automatically load _Secure Shell keys"
 msgstr "Ler automaticamente chaves de _Shell Seguro"
 
 #: ../libseahorse/seahorse-prefs.glade.h:10
-msgid "Automatically synchronize modified keys with keyservers. "
-msgstr "Sincronizar automaticamente chaves modificadas com servidor."
+msgid "Automatically synchronize modified keys with key servers. "
+msgstr "Sincronizar automaticamente chaves modificadas com servidores. "
 
 #: ../libseahorse/seahorse-prefs.glade.h:11
 msgid "Encryption Settings"
@@ -1082,7 +1082,7 @@ msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
 msgstr ""
-"Se deve ativar o widget padrão (tal como o botão padrão em uma caixa de "
+"Ativar ou não o widget padrão (tal como o botão padrão em uma caixa de "
 "diálogo) quando o Enter é pressionado"
 
 #: ../libseahorse/seahorse-secure-entry.c:299
@@ -1116,7 +1116,7 @@ msgstr "Visibilidade"
 
 #: ../libseahorse/seahorse-secure-entry.c:311
 msgid "Whether contents are drawn using invisible character"
-msgstr "Se o conteúdo é desenhado usando caracteres de máscara"
+msgstr "Desenhar ou não o conteúdo usando caracteres de máscara"
 
 #: ../libseahorse/seahorse-server-source.c:468
 msgid "LDAP Key Server"
@@ -1174,7 +1174,7 @@ msgstr "O comando SSH falhou."
 
 #: ../libseahorse/seahorse-ssh-operation.c:441
 msgid "Secure Shell key"
-msgstr "cave de Shell Seguro"
+msgstr "Chave de Shell Seguro"
 
 #. Just prompt over and over again
 #: ../libseahorse/seahorse-ssh-operation.c:727
@@ -1440,7 +1440,7 @@ msgstr "Importação Falhou"
 #: ../plugins/applet/seahorse-applet.c:496
 #: ../plugins/epiphany/seahorse-extension.c:341
 msgid "Keys were found but not imported."
-msgstr "Chaves encontradas mas não importadas"
+msgstr "Chaves encontradas mas não importadas."
 
 #: ../plugins/applet/seahorse-applet.c:527
 #: ../plugins/epiphany/seahorse-extension.c:374
@@ -1797,8 +1797,8 @@ msgstr "Não foi possível verificar arquivo: %s"
 #, c-format
 msgid "You have selected %d file "
 msgid_plural "You have selected %d files "
-msgstr[0] "Você selecionou %d arquivo"
-msgstr[1] "Você selecionou %d arquivos"
+msgstr[0] "Você selecionou %d arquivo "
+msgstr[1] "Você selecionou %d arquivos "
 
 #. TRANSLATOR: This string will become
 #. * "You have selected %d files and %d folders"
@@ -1906,7 +1906,7 @@ msgstr "Não foi possível adicionar a id de usuário"
 #: ../src/seahorse-add-uid.c:103
 #, c-format
 msgid "Add user ID to %s"
-msgstr "Adicionar ID  a %s"
+msgstr "Adicionar ID a %s"
 
 #: ../src/seahorse-add-uid.glade.h:1
 msgid "Add User ID"
@@ -2031,7 +2031,7 @@ msgstr "Nunca Expira"
 
 #: ../src/seahorse-expires.glade.h:3 ../src/seahorse-revoke.glade.h:11
 msgid "Revoke key"
-msgstr "Revogar Chave"
+msgstr "Revogar chave"
 
 #: ../src/seahorse-generate-select.c:143
 msgid "Used to encrypt email and files"
@@ -2184,7 +2184,7 @@ msgstr "Acesso ao chaveiro foi negado"
 
 #: ../src/seahorse-gkeyring-operation.c:209
 msgid "The GNOME keyring daemon is not running"
-msgstr "O \"GNOME keyring daemon\" está sendo executado"
+msgstr "O \"GNOME keyring daemon\" não está sendo executado"
 
 #: ../src/seahorse-gkeyring-operation.c:212
 msgid "The keyring has already been unlocked"
@@ -2732,12 +2732,12 @@ msgstr[0] "<b>%d chave foi selecionada para sincronização</b>"
 msgstr[1] "<b>%d chaves foram selecionadas para sincronização</b>"
 
 #: ../src/seahorse-keyserver-sync.c:214
-msgid "Syncing keys"
+msgid "Synchronizing keys"
 msgstr "Sincronizando chaves"
 
 #. Show the progress window if necessary
 #: ../src/seahorse-keyserver-sync.c:246
-msgid "Syncing keys..."
+msgid "Synchronizing keys..."
 msgstr "Sincronizando chaves..."
 
 #: ../src/seahorse-keyserver-sync.glade.h:1
@@ -3120,7 +3120,7 @@ msgstr "Eu confio em assinaturas de '%s' em outras chaves "
 msgid ""
 "If you no longer trust this person's identity, <i>revoke</i> your signature:"
 msgstr ""
-"Se você não confia mais nesta identidade dessa pessoa, <i>revogue<i> sua "
+"Se você não confia mais nesta identidade dessa pessoa, <i>revogue</i> sua "
 "assinatura:"
 
 #: ../src/seahorse-pgp-public-key-properties.glade.h:34
@@ -3369,10 +3369,10 @@ msgid ""
 "have also used email to check that the email address belongs to the\n"
 "owner."
 msgstr ""
-"Você pode se esforçar para fazer a identifficação da foto (como um "
+"Você pode esforçar-se para fazer a identificação da foto (como um "
 "passaporte) \n"
 "para checar pessoalmente que o nome na chave está correto. Você também \n"
-"deve ter usado  o e-mail para checar que aquele endereço de e-mail pertence\n"
+"deve ter usado o e-mail para checar que aquele endereço de e-mail pertence\n"
 "ao dono."
 
 #: ../src/seahorse-sign.glade.h:18
