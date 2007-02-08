@@ -32,7 +32,8 @@
 #include "seahorse-gpg-options.h"
 
 #define  GPG_CONF_HEADER    "# FILE CREATED BY SEAHORSE\n\n"
-#define  GPG_VERSION_PREFIX   "1."
+#define  GPG_VERSION_PREFIX1   "1."
+#define  GPG_VERSION_PREFIX2   "2."
 
 static gchar gpg_homedir[MAXPATHLEN];
 static gboolean gpg_options_inited = FALSE;
@@ -245,9 +246,11 @@ gpg_options_init (GError **err)
         /* 
          * Make sure it's the right version for us to be messing 
          * around with the configuration file.
+		 * Both 1.* and 2.* are suitable.
          */
         g_return_val_if_fail (engine && engine->version && engine->file_name &&
-                              g_str_has_prefix (engine->version, GPG_VERSION_PREFIX),
+                              (g_str_has_prefix (engine->version, GPG_VERSION_PREFIX1) ||
+                               g_str_has_prefix (engine->version, GPG_VERSION_PREFIX2)),
                               (seahorse_util_gpgme_to_error
                                (GPG_E (GPG_ERR_INV_ENGINE), err), FALSE));
 
@@ -462,7 +465,7 @@ process_conf_edits (GArray *lines, const gchar *options[], gchar *values[])
     }
 
     /* Append any that haven't been added but need to */
-    for (i = 0, opt = options; *opt != NULL; *opt++, i++) {
+    for (i = 0, opt = options; *opt != NULL; (*opt)++, i++) {
         /* Are we setting this value? */
         if (values[i]) {
 

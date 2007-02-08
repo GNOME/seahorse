@@ -99,9 +99,14 @@ struct _SeahorseAgentConn {
 
 #define ASS_OPT_DISPLAY "display="
 
+/* Options */
+#define ASS_FLAG_DATA   "data"
+#define ASS_FLAG_CHECK  "check"
+
 /* Responses */
 #define ASS_OK      "OK "
 #define ASS_ERR     "ERR "
+#define ASS_DATA    "D "
 #define NL          "\n"
 
 /* -------------------------------------------------------------------------- */
@@ -242,30 +247,70 @@ decode_assuan_arg (gchar *arg)
     }
 }
 
+/* Parse an assuan argument that we recognize */
+static guint32
+parse_assuan_flag (gchar *flag)
+{
+    g_assert (flag);
+    if (g_str_equal (flag, "data"))
+        return SEAHORSE_AGENT_PASS_AS_DATA;
+    return 0;
+}
+
 /* Split a line into each of it's arguments. This modifies line */
 static void
-split_arguments (gchar *line, ...)
+split_arguments (gchar *line, guint32 *flags, ...)
 {
     gchar **cur;
+    gchar *flag;
     va_list ap;
 
-    va_start (ap, line);
+    va_start (ap, flags);
 
+    /* Initial white space */
     while (*line && isspace (*line))
         line++;
-
-    while ((cur = va_arg (ap, gchar **)) != NULL) {
-        if (*line) {
-            *cur = line;
-
+    
+    /* The flags */
+    if (flags) {
+        *flags = 0;
+        
+        while (*line) {
+            /* Options start with a double dash */
+            if(!(line[0] == '-' && line[1] == '-'))
+                break;
+            line +=2;
+            flag = line;
+        
+            /* All non-whitespace */
             while (*line && !isspace (*line))
                 line++;
 
+            /* Skip and null any whitespace */
             while (*line && isspace (*line)) {
                 *line = 0;
                 line++;
             }
+        
+            *flags |= parse_assuan_flag (flag);
+        }
+    }
+    
+    /* The arguments */
+    while ((cur = va_arg (ap, gchar **)) != NULL) {
+        if (*line) {
+            *cur = line;
 
+            /* All non-whitespace */
+            while (*line && !isspace (*line))
+                line++;
+
+            /* Skip and null any whitespace */
+            while (*line && isspace (*line)) {
+                *line = 0;
+                line++;
+            }
+            
             decode_assuan_arg (*cur);
         } else {
             *cur = NULL;
@@ -340,7 +385,7 @@ process_line (SeahorseAgentConn *cn, gchar *string)
     if (strcasecmp (string, ASS_OPTION) == 0) {
         gchar *option;
         
-        split_arguments (args, &option, NULL);
+        split_arguments (args, NULL, &option, NULL);
         
         if (!option) {
             seahorse_agent_io_reply (cn, FALSE, "105 parameter error");
@@ -373,6 +418,7 @@ process_line (SeahorseAgentConn *cn, gchar *string)
         gchar *errmsg;
         gchar *prompt;
         gchar *description;
+        guint32 flags;
 
         /* We don't answer this unless it's from the right terminal */
         if (!cn->terminal_ok) {
@@ -381,7 +427,7 @@ process_line (SeahorseAgentConn *cn, gchar *string)
             return;
         }
                 
-        split_arguments (args, &id, &errmsg, &prompt, &description, NULL);
+        split_arguments (args, &flags, &id, &errmsg, &prompt, &description, NULL);
 
         if (!id || !errmsg || !prompt || !description) {
             seahorse_agent_io_reply (cn, FALSE, "105 parameter error");
@@ -398,7 +444,7 @@ process_line (SeahorseAgentConn *cn, gchar *string)
         if (is_null_argument (description))
             description = NULL;
 
-        seahorse_agent_actions_getpass (cn, id, errmsg, prompt, description);
+        seahorse_agent_actions_getpass (cn, flags, id, errmsg, prompt, description);
     }
 
     else if (strcasecmp (string, ASS_CLRPASS) == 0) {
@@ -411,7 +457,7 @@ process_line (SeahorseAgentConn *cn, gchar *string)
             return;
         }
 
-        split_arguments (args, &id, NULL);
+        split_arguments (args, NULL, &id, NULL);
 
         if (!id) {
             seahorse_agent_io_reply (cn, FALSE, "105 parameter error");
@@ -551,6 +597,29 @@ seahorse_agent_io_reply (SeahorseAgentConn *cn, gboolean ok, const gchar *respon
 
     /* After sending back a response we're ready for more */
     cn->input = TRUE;
+    return;
+}
+
+void
+seahorse_agent_io_data (SeahorseAgentConn *cn, const gchar *data)
+{
+    int fd;
+
+    /* The connection could have closed in the meantime */
+    if (!is_valid_conn (cn))
+        return;
+
+    DEBUG_AGENTIO (("[agent-io] send data:\n%s%s\n", ASS_DATA, data));
+
+    fd = g_io_channel_unix_get_fd (cn->iochannel);
+
+    if (write_raw_data (fd, ASS_DATA, KL (ASS_DATA)) == -1 ||
+        write_raw_data (fd, data, -1) == -1 ||
+	write_raw_data (fd, NL, KL (NL)) == -1) {
+        /* error message already printed */
+        disconnect (cn);
+    }
+
     return;
 }
 

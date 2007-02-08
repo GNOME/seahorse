@@ -74,10 +74,13 @@ const gchar* seahorse_agent_io_get_socket ();
 int seahorse_agent_io_init ();
 void seahorse_agent_io_uninit ();
 void seahorse_agent_io_reply (SeahorseAgentConn *rq, gboolean ok, const gchar *response);
+void seahorse_agent_io_data (SeahorseAgentConn *cn, const gchar *data);
 
 /* -----------------------------------------------------------------------------
  * seahorse-agent-actions.c
  */
+
+#define SEAHORSE_AGENT_PASS_AS_DATA    0x00000001
 
 typedef struct _SeahorseAgentPassReq {
     const gchar *id;
@@ -85,12 +88,13 @@ typedef struct _SeahorseAgentPassReq {
     const gchar *prompt;
     const gchar *description;
     SeahorseAgentConn *request;
+    guint32 flags;
 } SeahorseAgentPassReq;
 
 void seahorse_agent_actions_init ();
 void seahorse_agent_actions_uninit ();
-void seahorse_agent_actions_getpass (SeahorseAgentConn *rq, gchar *id, gchar *errmsg,
-                                     gchar *prompt, gchar *desc);
+void seahorse_agent_actions_getpass (SeahorseAgentConn *rq, guint32 flags, gchar *id,
+                                     gchar *errmsg, gchar *prompt, gchar *desc);
 void seahorse_agent_actions_clrpass (SeahorseAgentConn *rq, gchar *id);
 void seahorse_agent_actions_doneauth (SeahorseAgentPassReq *pr, gboolean authorized);
 void seahorse_agent_actions_donepass (SeahorseAgentPassReq *pr, const gchar *pass);

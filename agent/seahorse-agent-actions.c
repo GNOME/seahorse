@@ -98,8 +98,8 @@ seahorse_agent_actions_uninit ()
 
 /* Called for the assuan GET_PASSPHRASE command */
 void
-seahorse_agent_actions_getpass (SeahorseAgentConn * rq, gchar * id,
-                                gchar * errmsg, gchar * prompt, gchar * desc)
+seahorse_agent_actions_getpass (SeahorseAgentConn *rq, guint32 flags, gchar *id,
+                                gchar *errmsg, gchar* prompt, gchar *desc)
 {
     SeahorseAgentPassReq *pr;
     const gchar *pass;
@@ -113,9 +113,14 @@ seahorse_agent_actions_getpass (SeahorseAgentConn * rq, gchar * id,
          * just reply now, without going to the queue.
          */
         if ((pass = seahorse_agent_cache_get (id)) != NULL) {
-            enc = encode_password (pass);
-            seahorse_agent_io_reply (rq, TRUE, enc);
-            seahorse_secure_memory_free (enc);
+            if (pr->flags & SEAHORSE_AGENT_PASS_AS_DATA) {
+                seahorse_agent_io_data (rq, pass);
+                seahorse_agent_io_reply (rq, TRUE, NULL);
+            } else {
+                enc = encode_password (pass);
+                seahorse_agent_io_reply (rq, TRUE, enc);
+                seahorse_secure_memory_free (enc);
+            }
             return;
         }
     }
@@ -123,6 +128,7 @@ seahorse_agent_actions_getpass (SeahorseAgentConn * rq, gchar * id,
     /* A new queue item */
     pr = g_chunk_new (SeahorseAgentPassReq, g_memory);
     memset (pr, 0, sizeof (*pr));
+    pr->flags = flags;
     pr->id = id ? g_strdup (id) : NULL;
     pr->errmsg = errmsg ? g_strdup (errmsg) : NULL;
     pr->prompt = g_strdup (prompt ? prompt : _("Passphrase:"));
@@ -176,16 +182,21 @@ seahorse_agent_actions_doneauth (SeahorseAgentPassReq * pr, gboolean authorized)
 
 /* Called when a password prompt completes (send back new passord) */
 void
-seahorse_agent_actions_donepass (SeahorseAgentPassReq * pr, const gchar * pass)
+seahorse_agent_actions_donepass (SeahorseAgentPassReq *pr, const gchar *pass)
 {
     gchar *enc;
     
     if (pass == NULL)
         seahorse_agent_io_reply (pr->request, FALSE, "111 cancelled");
     else {
-        enc = encode_password (pass);
-        seahorse_agent_io_reply (pr->request, TRUE, enc);
-        seahorse_secure_memory_free (enc);
+        if (pr->flags & SEAHORSE_AGENT_PASS_AS_DATA) {
+            seahorse_agent_io_data (pr->request, pass);
+            seahorse_agent_io_reply (pr->request, TRUE, NULL);
+        } else {
+            enc = encode_password (pass);
+            seahorse_agent_io_reply (pr->request, TRUE, enc);
+            seahorse_secure_memory_free (enc);
+        }
     }
 
     free_passreq (pr);
