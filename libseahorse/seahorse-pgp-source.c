@@ -693,7 +693,7 @@ keyload_handler (SeahorseLoadOperation *lop)
         /* During a refresh if only new or removed keys */
         if (lop->checks) {
 
-            /* Make note that this key exists in keyring */
+            /* Make note that this key exists in key ring */
             g_hash_table_remove (lop->checks, GUINT_TO_POINTER (keyid));
 
         }

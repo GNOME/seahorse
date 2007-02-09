@@ -103,7 +103,7 @@ import_done (SeahorseOperation *op, SeahorseWidget *swidget)
     
     if (!seahorse_operation_is_successful (op)) {
         seahorse_operation_copy_error (op, &err);
-        seahorse_util_handle_error (err, _("Couldn't import keys into keyring"));
+        seahorse_util_handle_error (err, _("Couldn't import keys into key ring"));
     }
 }
 
@@ -391,7 +391,7 @@ static const GtkActionEntry ui_entries[] = {
 
 static const GtkActionEntry public_entries[] = {
     { "key-import-keyring", GTK_STOCK_ADD, N_("_Import"), "",
-            N_("Import selected keys to local keyring"), G_CALLBACK (import_activate) },
+            N_("Import selected keys to local key ring"), G_CALLBACK (import_activate) },
     { "key-properties", GTK_STOCK_PROPERTIES, N_("P_roperties"), NULL,
             N_("Show key properties"), G_CALLBACK (properties_activate) }, 
     { "key-export-file", GTK_STOCK_SAVE_AS, N_("Save Key As..."), "<control><shift>S",

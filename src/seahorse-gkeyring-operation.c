@@ -203,19 +203,19 @@ seahorse_gkeyring_operation_parse_error (GnomeKeyringResult result, GError **err
     /* An error mark it as such */
     switch (result) {
     case GNOME_KEYRING_RESULT_DENIED:
-        message = _("Access to the keyring was denied");
+        message = _("Access to the key ring was denied");
         break;
     case GNOME_KEYRING_RESULT_NO_KEYRING_DAEMON:
-        message = _("The GNOME keyring daemon is not running");
+        message = _("The gnome-keyring daemon is not running");
         break;
     case GNOME_KEYRING_RESULT_ALREADY_UNLOCKED:
-        message = _("The keyring has already been unlocked");
+        message = _("The key ring has already been unlocked");
         break;
     case GNOME_KEYRING_RESULT_NO_SUCH_KEYRING:
-        message = _("No such keyring exists");
+        message = _("No such key ring exists");
         break;
     case GNOME_KEYRING_RESULT_IO_ERROR:
-        message = _("Couldn't communicate with keyring daemon");
+        message = _("Couldn't communicate with key ring daemon");
         break;
     case GNOME_KEYRING_RESULT_ALREADY_EXISTS:
         message = _("The item already exists");
@@ -224,7 +224,7 @@ seahorse_gkeyring_operation_parse_error (GnomeKeyringResult result, GError **err
         g_warning ("bad arguments passed to gnome-keyring API");
         /* Fall through */
     default:
-        message = _("Internal error accessing GNOME keyring");
+        message = _("Internal error accessing gnome-keyring");
         break;
     }
     

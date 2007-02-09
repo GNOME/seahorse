@@ -61,7 +61,7 @@ enum {
 
 struct _SeahorseGKeyringSourcePrivate {
     SeahorseMultiOperation *operations;     /* A list of all current operations */    
-    gchar *keyring_name;                    /* The keyring name */
+    gchar *keyring_name;                    /* The key ring name */
 };
 
 G_DEFINE_TYPE (SeahorseGKeyringSource, seahorse_gkeyring_source, SEAHORSE_TYPE_KEY_SOURCE);
@@ -471,7 +471,7 @@ init_keyring_name (SeahorseGKeyringSource *gsrc, GError **err)
     if (gsrc->pv->keyring_name)
         return TRUE;
 
-    /* Get default keyring name when no other keyring has been specified */
+    /* Get default key ring name when no other key ring has been specified */
     res = gnome_keyring_get_default_keyring_sync (&(gsrc->pv->keyring_name));
     if (res != GNOME_KEYRING_RESULT_OK)
         g_warning ("couldn't get default gnome-keyring keyring: (code %d)", res);
@@ -480,9 +480,9 @@ init_keyring_name (SeahorseGKeyringSource *gsrc, GError **err)
     if(!ret)
         return FALSE;
     
-    /* Happens when user has not yet initialized a keyring */
+    /* Happens when user has not yet initialized a key ring */
     if (!gsrc->pv->keyring_name)
-        g_message ("no default gnome-keyring keyring found");
+        g_message ("no default gnome-keyring key ring found");
 
     return TRUE;
 }

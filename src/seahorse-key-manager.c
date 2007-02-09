@@ -681,7 +681,7 @@ backup_activate (GtkWidget *widget, SeahorseWidget *swidget)
     gchar *ext, *t;
     const gchar* home_dir = NULL;
     
-    dialog = seahorse_util_chooser_save_new (_("Back up Keyrings to Archive"), 
+    dialog = seahorse_util_chooser_save_new (_("Back up Key Rings to Archive"), 
                 GTK_WINDOW(glade_xml_get_widget (swidget->xml, "key-manager")));
     seahorse_util_chooser_show_archive_files (dialog);	    	    	    
 
@@ -1072,7 +1072,7 @@ tab_changed (GtkWidget *widget, GtkNotebookPage *page, guint page_num,
     
     /* 
      * Because gnome-keyring can throw prompts etc... we delay loading 
-     * of the gnome keyring items until we first access them. 
+     * of the gnome key ring items until we first access them. 
      */
     
 #ifdef WITH_GNOME_KEYRING
@@ -1177,8 +1177,8 @@ static const GtkActionEntry ui_entries[] = {
     { "key-generate", GTK_STOCK_NEW, N_("_Create New Key..."), "<control>N", 
             N_("Create a new personal key"), G_CALLBACK (generate_activate) },
     { "key-import-file", GTK_STOCK_OPEN, N_("_Import..."), "<control>I",
-            N_("Import keys into your keyring from a file"), G_CALLBACK (import_activate) },
-    { "key-backup", GTK_STOCK_SAVE, N_("_Back up Keyrings..."), "",
+            N_("Import keys into your key ring from a file"), G_CALLBACK (import_activate) },
+    { "key-backup", GTK_STOCK_SAVE, N_("_Back up Key Rings..."), "",
             N_("Back up all keys"), G_CALLBACK (backup_activate) }, 
     { "key-import-clipboard", GTK_STOCK_PASTE, N_("Paste _Keys"), "<control>V",
             N_("Import keys from the clipboard"), G_CALLBACK (paste_activate) }, 

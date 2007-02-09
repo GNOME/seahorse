@@ -26,7 +26,7 @@
  * - Lists all the keys in ~/.ssh/ by searching through every file.
  * - Loads public keys from ~/.ssh/authorized_keys and ~/.ssh/other_keys.seahorse
  * - Adds the keys it loads to the SeahorseContext.
- * - Monitors ~/.ssh for changes and reloads the keyring as necessary.
+ * - Monitors ~/.ssh for changes and reloads the key ring as necessary.
  * 
  * Properties:
  *  ktype: (GQuark) The ktype (ie: SKEY_SSH) of keys originating from this 

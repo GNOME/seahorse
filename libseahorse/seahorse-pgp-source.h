@@ -28,7 +28,7 @@
  * - Adds the keys it loads to the SeahorseContext.
  * - Eventually a lot of stuff from seahorse-op.* should probably be merged
  *   into this class.
- * - Monitors ~/.gnupg for changes and reloads the keyring as necessary.
+ * - Monitors ~/.gnupg for changes and reloads the key ring as necessary.
  * 
  * Properties:
  *  ktype: (GQuark) The ktype (ie: SKEY_PGP) of keys originating from this 
