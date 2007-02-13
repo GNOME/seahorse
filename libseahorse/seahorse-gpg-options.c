@@ -382,7 +382,6 @@ static void
 process_conf_edits (GArray *lines, const gchar *options[], gchar *values[])
 {
     gboolean comment;
-    const gchar **opt;
     gchar *t;
     gchar *n;
     gchar *line;
@@ -417,11 +416,11 @@ process_conf_edits (GArray *lines, const gchar *options[], gchar *values[])
                     n++;
             }
 
-            for (i = 0, opt = options; *opt != NULL; opt++, i++) {
-                if (!g_str_has_prefix (n, *opt))
+            for (i = 0; options[i] != NULL; i++) {
+                if (!g_str_has_prefix (n, options[i]))
                     continue;
 
-                t = n + strlen (*opt);
+                t = n + strlen (options[i]);
                 if (t[0] != 0 && !g_ascii_isspace (t[0]))
                     continue;
 
@@ -465,17 +464,17 @@ process_conf_edits (GArray *lines, const gchar *options[], gchar *values[])
     }
 
     /* Append any that haven't been added but need to */
-    for (i = 0, opt = options; *opt != NULL; (*opt)++, i++) {
+    for (i = 0; options[i] != NULL; i++) {
         /* Are we setting this value? */
         if (values[i]) {
 
             /* A line with a value */
             if (values[i][0])
-                n = g_strconcat (*opt, " ", values[i], NULL);
+                n = g_strconcat (options[i], " ", values[i], NULL);
 
             /* A setting without a value */
             else
-                n = g_strdup (*opt);
+                n = g_strdup (options[i]);
 
             g_array_append_val (lines, n);
         }
