@@ -547,7 +547,7 @@ ssh_detect_agent ()
     memset (&sunaddr, 0, sizeof (sunaddr));
     sunaddr.sun_family = AF_UNIX;
     g_strlcpy (sunaddr.sun_path, socketpath, sizeof (sunaddr.sun_path));
-    if (connect (agentfd, (struct sockaddr*) &sunaddr, sizeof sunaddr) < 0) {
+    if (connect (agentfd, (struct sockaddr*) &sunaddr, sizeof (sunaddr)) < 0) {
         g_warning ("couldn't connect to SSH agent at: %s: %s", socketpath, 
                    g_strerror (errno));
         close (agentfd);
