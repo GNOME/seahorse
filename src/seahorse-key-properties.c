@@ -23,6 +23,7 @@
 
 /* TODO: Make sure to free when getting text from seahorse_pgp_key_* */
 
+#include "config.h"
 #include <gnome.h>
 #include <time.h>
 

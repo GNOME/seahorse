@@ -1,14 +1,15 @@
 gladedir = $(datadir)/seahorse/glade/
+localedir = $(datadir)/locale
 
 INCLUDES = -I$(top_builddir) \
-    -I$(top_srcdir) \
-    -I$(top_srcdir)/libcryptui \
-    -I$(top_srcdir)/libseahorse \
-    $(SEAHORSE_CFLAGS) \
-    -DLOCALEDIR=\"$(localedir)\" \
-    -DDATA_DIR=\""$(datadir)"\" \
-    -DSEAHORSE_GLADEDIR=\""$(gladedir)"\" \
-    -DLIBCRYPTUI_API_SUBJECT_TO_CHANGE
+	-I$(top_srcdir) \
+	-I$(top_srcdir)/libcryptui \
+	-I$(top_srcdir)/libseahorse \
+	$(SEAHORSE_CFLAGS) \
+	-DLOCALEDIR=\"$(localedir)\" \
+	-DDATA_DIR=\""$(datadir)"\" \
+	-DSEAHORSE_GLADEDIR=\""$(gladedir)"\" \
+	-DLIBCRYPTUI_API_SUBJECT_TO_CHANGE
 
 bin_PROGRAMS = seahorse-preferences seahorse-tool
 

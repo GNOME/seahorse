@@ -23,7 +23,7 @@
 #include <config.h>
 #endif
 
-#include <libgnome/gnome-i18n.h>
+#include <glib/gi18n-lib.h>
 
 #include <errno.h>
 #include <unistd.h>

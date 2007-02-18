@@ -20,11 +20,10 @@
  */
  
 #include <stdlib.h>
-#include <libintl.h>
+#include <config.h>
 #include <gnome.h>
 #include <libsoup/soup.h>
 
-#include "config.h"
 #include "seahorse-gpgmex.h"
 #include "seahorse-operation.h"
 #include "seahorse-hkp-source.h"

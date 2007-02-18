@@ -20,12 +20,12 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include <config.h>
 #include <gnome.h>
 #include <glade/glade.h>
 #include <glade/glade-build.h>
 
 #include "seahorse-widget.h"
-#include "config.h"
 #include "seahorse-gtkstock.h"
 
 #define STATUS "status"

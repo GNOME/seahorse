@@ -1,17 +1,18 @@
-
 @INTLTOOL_SCHEMAS_RULE@
 
 # PLUGIN ----------------------------------------------------------------
 
 plugindir = $(libdir)/gedit-2/plugins
 
+localedir = $(datadir)/locale
+
 INCLUDES = \
-    -I$(top_srcdir) \
-    -I$(top_srcdir)/libcryptui \
-    -DGEDIT_LOCALEDIR=\"$(localedir)\" \
+	-I$(top_srcdir) \
+	-I$(top_srcdir)/libcryptui \
+	-DGEDIT_LOCALEDIR=\"$(localedir)\" \
 	-DLIBCRYPTUI_API_SUBJECT_TO_CHANGE \
 	$(GEDIT_CFLAGS) \
-    $(LIBCRYPTUI_CFLAGS)
+	$(LIBCRYPTUI_CFLAGS)
 
 plugin_LTLIBRARIES = libseahorse-pgp.la
 

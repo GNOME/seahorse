@@ -20,7 +20,7 @@
  */
 
 #include <stdlib.h>
-#include <libintl.h>
+#include <config.h>
 #include <gnome.h>
 
 #include "seahorse-operation.h"
