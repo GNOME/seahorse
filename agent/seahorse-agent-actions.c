@@ -113,7 +113,7 @@ seahorse_agent_actions_getpass (SeahorseAgentConn *rq, guint32 flags, gchar *id,
          * just reply now, without going to the queue.
          */
         if ((pass = seahorse_agent_cache_get (id)) != NULL) {
-            if (pr->flags & SEAHORSE_AGENT_PASS_AS_DATA) {
+            if (flags & SEAHORSE_AGENT_PASS_AS_DATA) {
                 seahorse_agent_io_data (rq, pass);
                 seahorse_agent_io_reply (rq, TRUE, NULL);
             } else {
