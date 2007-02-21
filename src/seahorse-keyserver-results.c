@@ -82,11 +82,11 @@ set_status_text (SeahorseWidget *swidget, const gchar *msg)
 }
 
 static void
-set_numbered_status (SeahorseWidget *swidget, const gchar *t1, const gchar *t2, guint num)
+set_numbered_status (SeahorseWidget *swidget, const gchar *message, guint num)
 {
     gchar *msg;
     
-    msg = g_strdup_printf (ngettext (t1, t2, num), num);
+    msg = g_strdup_printf (message, num);
     set_status_text (swidget, msg);
     g_free (msg);
 }
@@ -230,8 +230,8 @@ copy_done (SeahorseOperation *op, SeahorseWidget *swidget)
 
     num = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (op), "num-keys"));
     if (num > 0) {
-        set_numbered_status (swidget, _("Copied %d key"), 
-                                      _("Copied %d keys"), num);
+        set_numbered_status (swidget, ngettext ("Copied %d key", 
+                                                "Copied %d keys", num), num);
     }
 }
 
@@ -295,8 +295,8 @@ selection_changed (GtkTreeSelection *selection, SeahorseWidget *swidget)
 	rows = gtk_tree_selection_count_selected_rows (selection);
 	
 	if (rows > 0) {
-        set_numbered_status (swidget, _("Selected %d key"), 
-                                      _("Selected %d keys"), rows);
+        set_numbered_status (swidget, ngettext ("Selected %d key", 
+                                                "Selected %d keys", rows), rows);
 	}
 	
     actions = seahorse_widget_find_actions (swidget, "key");

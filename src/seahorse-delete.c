@@ -77,7 +77,8 @@ ask_keys (GList* keys)
     } else {
         question = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
     	                                   GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE,
-                                           _("Are you sure you want to permanently delete %d keys?"), 
+                                           ngettext ("Are you sure you want to permanently delete %d key?",
+                                        	     "Are you sure you want to permanently delete %d keys?", nkeys),
                                            nkeys);
     }
 

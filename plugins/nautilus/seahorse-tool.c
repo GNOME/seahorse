@@ -368,8 +368,11 @@ import_show (SeahorseToolMode *mode)
     if (mode->imports <= 0)
         return;
     
-    t = g_strdup_printf (mode->imports == 1 ? _("Imported key") : 
-                                              _("Imported %d keys"), mode->imports);
+    if (mode->imports == 1)
+	t = g_strdup_printf (_("Imported key"));
+    else
+	t = g_strdup_printf (ngettext ("Imported %d key", "Imported %d keys", mode->imports), mode->imports);
+        
     dlg = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
                                   GTK_MESSAGE_INFO, GTK_BUTTONS_OK, t);
     g_free (t);
