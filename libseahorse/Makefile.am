@@ -102,7 +102,7 @@ xloadimage_SOURCES = ../src/seahorse-xloadimage.c
 
 seahorse_ssh_askpass_SOURCES = seahorse-ssh-askpass.c
 seahorse_ssh_askpass_LDADD = \
-	$(top_builddir)/libseahorse/libseahorse.a \
+	libseahorse.a \
 	$(top_builddir)/libcryptui/libcryptui.la \
 	$(SEAHORSE_LIBS)
 
