@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse.it\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-20 23:15+0100\n"
-"PO-Revision-Date: 2007-02-11 15:43+0100\n"
+"POT-Creation-Date: 2007-03-01 22:46+0100\n"
+"PO-Revision-Date: 2007-02-23 22:47+0100\n"
 "Last-Translator: Milo Casagrande <milo_casagrande@yahoo.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "MIME-Version: 1.0\n"
@@ -125,7 +125,7 @@ msgstr "impossibile creare il gruppo del nuovo processo"
 
 #: ../agent/seahorse-agent-main.c:225 ../daemon/seahorse-daemon.c:195
 #: ../plugins/applet/seahorse-applet.c:1010
-#: ../plugins/nautilus/seahorse-tool.c:567 ../src/main.c:59
+#: ../plugins/nautilus/seahorse-tool.c:570 ../src/main.c:59
 msgid "couldn't drop privileges properly"
 msgstr "impossibile rilasciare i privilegi"
 
@@ -1579,7 +1579,8 @@ msgstr "Testo decifrato"
 msgid "Verified text"
 msgstr "Testo verificato"
 
-#: ../plugins/gedit/seahorse-gedit.c:582 ../src/seahorse-key-manager.c:404
+#: ../plugins/gedit/seahorse-gedit.c:582
+#: ../plugins/nautilus/seahorse-tool.c:374 ../src/seahorse-key-manager.c:404
 #, c-format
 msgid "Imported %d key"
 msgid_plural "Imported %d keys"
@@ -1725,22 +1726,17 @@ msgstr "Scegli firmatario"
 msgid "Choose Signature File Name for '%s'"
 msgstr "Scegliere il nome del file della firma per «%s»"
 
-#: ../plugins/nautilus/seahorse-tool.c:371
+#: ../plugins/nautilus/seahorse-tool.c:372
 msgid "Imported key"
 msgstr "Chiave importata"
 
-#: ../plugins/nautilus/seahorse-tool.c:372 ../src/seahorse-key-manager.c:405
-#, c-format
-msgid "Imported %d keys"
-msgstr "Importate %d chiavi"
-
 #. File to decrypt to
-#: ../plugins/nautilus/seahorse-tool.c:393
+#: ../plugins/nautilus/seahorse-tool.c:396
 #, c-format
 msgid "Choose Decrypted File Name for '%s'"
 msgstr "Scegliere il nome del file decifrato per «%s»"
 
-#: ../plugins/nautilus/seahorse-tool.c:449
+#: ../plugins/nautilus/seahorse-tool.c:452
 #, c-format
 msgid "Choose Original File for '%s'"
 msgstr "Scegliere il file originale per «%s»"
@@ -1750,55 +1746,55 @@ msgstr "Scegliere il file originale per «%s»"
 #. * The last thing we want to do is cascade a big pile of error
 #. * dialogs at the user.
 #.
-#: ../plugins/nautilus/seahorse-tool.c:521
+#: ../plugins/nautilus/seahorse-tool.c:524
 msgid "No valid signatures found"
 msgstr "Nessuna firma valida trovata"
 
-#: ../plugins/nautilus/seahorse-tool.c:588
+#: ../plugins/nautilus/seahorse-tool.c:591
 msgid "File Encryption Tool"
 msgstr "Strumento di cifratura dei file"
 
-#: ../plugins/nautilus/seahorse-tool.c:611
+#: ../plugins/nautilus/seahorse-tool.c:614
 msgid "Encrypting"
 msgstr "Cifratura"
 
-#: ../plugins/nautilus/seahorse-tool.c:612
+#: ../plugins/nautilus/seahorse-tool.c:615
 #, c-format
 msgid "Couldn't encrypt file: %s"
 msgstr "Impossibile cifrare il file: %s"
 
-#: ../plugins/nautilus/seahorse-tool.c:620
+#: ../plugins/nautilus/seahorse-tool.c:623
 msgid "Signing"
 msgstr "Firma"
 
-#: ../plugins/nautilus/seahorse-tool.c:621
+#: ../plugins/nautilus/seahorse-tool.c:624
 #, c-format
 msgid "Couldn't sign file: %s"
 msgstr "Impossibile firmare il file: %s"
 
-#: ../plugins/nautilus/seahorse-tool.c:626
+#: ../plugins/nautilus/seahorse-tool.c:629
 msgid "Importing"
 msgstr "Importazione"
 
-#: ../plugins/nautilus/seahorse-tool.c:627
+#: ../plugins/nautilus/seahorse-tool.c:630
 #, c-format
 msgid "Couldn't import keys from file: %s"
 msgstr "Impossibile importare le chiavi dal file: %s"
 
-#: ../plugins/nautilus/seahorse-tool.c:633
+#: ../plugins/nautilus/seahorse-tool.c:636
 msgid "Decrypting"
 msgstr "Decifratura"
 
-#: ../plugins/nautilus/seahorse-tool.c:634
+#: ../plugins/nautilus/seahorse-tool.c:637
 #, c-format
 msgid "Couldn't decrypt file: %s"
 msgstr "Impossibile decifrare il file: %s"
 
-#: ../plugins/nautilus/seahorse-tool.c:639
+#: ../plugins/nautilus/seahorse-tool.c:642
 msgid "Verifying"
 msgstr "Verifica"
 
-#: ../plugins/nautilus/seahorse-tool.c:640
+#: ../plugins/nautilus/seahorse-tool.c:643
 #, c-format
 msgid "Couldn't verify file: %s"
 msgstr "Impossibile verificare il file: %s"
@@ -1984,28 +1980,30 @@ msgstr "Cancellare definitivamente %s?"
 
 #: ../src/seahorse-delete.c:80
 #, c-format
-msgid "Are you sure you want to permanently delete %d keys?"
-msgstr "Cancellare definitivamente %d chiavi?"
+msgid "Are you sure you want to permanently delete %d key?"
+msgid_plural "Are you sure you want to permanently delete %d keys?"
+msgstr[0] "Cancellare definitivamente %d chiave?"
+msgstr[1] "Cancellare definitivamente %d chiavi?"
 
-#: ../src/seahorse-delete.c:123
+#: ../src/seahorse-delete.c:124
 msgid "Couldn't delete key"
 msgstr "Impossibile cancellare la chiave"
 
-#: ../src/seahorse-delete.c:138
+#: ../src/seahorse-delete.c:139
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
 msgstr "Cancellare definitivamente la sottochiave %d di %s?"
 
-#: ../src/seahorse-delete.c:161
+#: ../src/seahorse-delete.c:162
 msgid "Couldn't delete subkey"
 msgstr "Imposibile cancellare la sottochiave"
 
-#: ../src/seahorse-delete.c:180
+#: ../src/seahorse-delete.c:181
 #, c-format
 msgid "Are you sure you want to permanently delete the '%s' user ID?"
 msgstr "Cancellare definitivamente l'ID utente «%s»?"
 
-#: ../src/seahorse-delete.c:205
+#: ../src/seahorse-delete.c:206
 msgid "Couldn't delete user id"
 msgstr "Impossibile cancellare l'ID utente"
 
@@ -2245,12 +2243,9 @@ msgstr "Impossibile ottenere i dati dal server di chiavi"
 #: ../src/seahorse-key-manager.c:573 ../src/seahorse-keyserver-results.c:233
 #, c-format
 msgid "Copied %d key"
-msgstr "%d chiave copiata"
-
-#: ../src/seahorse-key-manager.c:574 ../src/seahorse-keyserver-results.c:234
-#, c-format
-msgid "Copied %d keys"
-msgstr "%d chiavi copiate"
+msgid_plural "Copied %d keys"
+msgstr[0] "%d chiave copiata"
+msgstr[1] "%d chiavi copiate"
 
 #: ../src/seahorse-key-manager.c:597 ../src/seahorse-keyserver-results.c:193
 #: ../src/seahorse-keyserver-results.c:258
@@ -2286,12 +2281,9 @@ msgstr "seahorse"
 #: ../src/seahorse-key-manager.c:945 ../src/seahorse-keyserver-results.c:298
 #, c-format
 msgid "Selected %d key"
-msgstr "%d chiave selezionata"
-
-#: ../src/seahorse-key-manager.c:946 ../src/seahorse-keyserver-results.c:299
-#, c-format
-msgid "Selected %d keys"
-msgstr "%d chiavi selezionate"
+msgid_plural "Selected %d keys"
+msgstr[0] "%d chiave selezionata"
+msgstr[1] "%d chiavi selezionate"
 
 #. Top menu items
 #: ../src/seahorse-key-manager.c:1171 ../src/seahorse-keyserver-results.c:377
@@ -3555,4 +3547,4 @@ msgstr "Nome per il _login:"
 
 #: ../src/seahorse-ssh-upload.glade.h:9
 msgid "_Set Up"
-msgstr ""
+msgstr "C_onfigura"
