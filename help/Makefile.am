@@ -18,4 +18,4 @@ DOC_FIGURES = \
 	figures/text-editor.png \
 	figures/seahorse-window.png
 
-DOC_LINGUAS = en_GB es it sv
+DOC_LINGUAS = en_GB es fr it sv
