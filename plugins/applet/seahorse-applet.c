@@ -992,6 +992,9 @@ seahorse_applet_factory (PanelApplet *applet, const gchar *iid, gpointer data)
 int 
 main (int argc, char *argv [])
 {
+    bindtextdomain (GETTEXT_PACKAGE, GNOMELOCALEDIR);
+    bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+    textdomain (GETTEXT_PACKAGE);
 
     seahorse_secure_memory_init (65536);
     
