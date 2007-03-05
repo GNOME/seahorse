@@ -1,308 +1,333 @@
 # Copyright (C) 2000 Free Software Foundation, Inc.
 # Yuri Syrota <rasta@renome.rovno.ua>, 2000.
-# Maxim Dziumanenko <mvd@mylinux.com.ua>, 2004
+# Maxim Dziumanenko <dziumanenko@gmail.com>, 2004-2007
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-03 19:44-0700\n"
-"PO-Revision-Date: 2004-04-21 18:25+0200\n"
-"Last-Translator: Maxim Dziumanenko <mvd@mylinux.com.ua>\n"
+"POT-Creation-Date: 2007-03-05 07:52+0200\n"
+"PO-Revision-Date: 2007-03-03 18:25+0200\n"
+"Last-Translator: Maxim Dziumanenko <dziumanenko@gmail.com>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
+"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: agent/eggtrayicon.c:121
-msgid "Orientation"
-msgstr ""
+#: ../agent/seahorse-agent-actions.c:134
+#: ../libseahorse/seahorse-ssh-operation.c:445
+msgid "Passphrase:"
+msgstr "Пароль:"
 
-#: agent/eggtrayicon.c:122
-msgid "The orientation of the tray."
-msgstr ""
-
-#: agent/gtk-secure-entry.c:457
-msgid "Cursor Position"
-msgstr ""
-
-#: agent/gtk-secure-entry.c:459
-msgid "The current position of the insertion cursor in chars"
-msgstr ""
-
-#: agent/gtk-secure-entry.c:466
-msgid "Selection Bound"
-msgstr ""
-
-#: agent/gtk-secure-entry.c:468
-msgid ""
-"The position of the opposite end of the selection from the cursor in chars"
-msgstr ""
-
-#: agent/gtk-secure-entry.c:475
-msgid "Maximum length"
-msgstr ""
-
-#: agent/gtk-secure-entry.c:477
-msgid "Maximum number of characters for this entry. Zero if no maximum"
-msgstr ""
-
-#: agent/gtk-secure-entry.c:485
-msgid "Has Frame"
-msgstr ""
-
-#: agent/gtk-secure-entry.c:487
-msgid "FALSE removes outside bevel from entry"
-msgstr ""
-
-#: agent/gtk-secure-entry.c:496
-msgid "Invisible character"
-msgstr ""
-
-#: agent/gtk-secure-entry.c:498
-msgid "The character to use when masking entry contents (in \"password mode\")"
-msgstr ""
-
-#: agent/gtk-secure-entry.c:507
-msgid "Activates default"
-msgstr ""
-
-#: agent/gtk-secure-entry.c:509
-msgid ""
-"Whether to activate the default widget (such as the default button in a "
-"dialog) when Enter is pressed"
-msgstr ""
-
-#: agent/gtk-secure-entry.c:514
-msgid "Width in chars"
-msgstr ""
-
-#: agent/gtk-secure-entry.c:516
-msgid "Number of characters to leave space for in the entry"
-msgstr ""
-
-#: agent/gtk-secure-entry.c:524
-msgid "Scroll offset"
-msgstr ""
-
-#: agent/gtk-secure-entry.c:526
-msgid "Number of pixels of the entry scrolled off the screen to the left"
-msgstr ""
-
-#: agent/gtk-secure-entry.c:533
-#, fuzzy
-msgid "Text"
-msgstr "Лише текст"
-
-#: agent/gtk-secure-entry.c:535
-msgid "The contents of the entry"
-msgstr ""
-
-#: agent/gtk-secure-entry.c:692
-msgid "Select on focus"
-msgstr ""
-
-#: agent/gtk-secure-entry.c:694
-msgid "Whether to select the contents of an entry when it is focused"
-msgstr ""
-
-#: agent/seahorse-agent-actions.c:97
-#, fuzzy
-msgid "Password:"
-msgstr "Парольна фраза:"
-
-#: agent/seahorse-agent-actions.c:98
-msgid "Please enter a password to use."
-msgstr ""
-
-#: agent/seahorse-agent-cache.c:46
-msgid "Unparseable Key ID"
-msgstr ""
-
-#: agent/seahorse-agent-cache.c:47
-msgid "Unknown/Invalid Key"
-msgstr ""
-
-#: agent/seahorse-agent-cache.glade.h:1
-msgid ""
-"<b>Warning</b>: Your system is not configured to cache passwords are in "
-"secure memory."
-msgstr ""
-
-#: agent/seahorse-agent-cache.glade.h:2
-msgid "Cached GPG Passwords"
-msgstr ""
-
-#: agent/seahorse-agent-cache.glade.h:3
-msgid "Clear GPG password cache"
-msgstr ""
-
-#: agent/seahorse-agent-cache.glade.h:4
-msgid "_Clear Cache"
-msgstr ""
-
-#: agent/seahorse-agent-cache.glade.h:5
-msgid "_Show Window"
-msgstr ""
-
-#: agent/seahorse-agent-prompt.c:200
-msgid "GPG Password"
-msgstr ""
-
-#: agent/seahorse-agent-prompt.c:365
-msgid "Authorize Password Access"
-msgstr ""
-
-#: agent/seahorse-agent-prompt.c:400
-msgid "The password is cached in memory."
-msgstr ""
-
-#: agent/seahorse-agent-prompt.c:417
-msgid "_Authorize"
-msgstr ""
-
-#. Make the column
-#: agent/seahorse-agent-status.c:126
-#, fuzzy
-msgid "Cached GPG Keys"
-msgstr "Вибір ключів"
+#: ../agent/seahorse-agent-actions.c:135
+msgid "Please enter a passphrase to use."
+msgstr "Введіть пароль"
 
 #. Warn and put in defaults
-#: agent/seahorse-agent.c:100
+#: ../agent/seahorse-agent.c:101
 msgid "couldn't read gpg configuration, will try to create"
 msgstr ""
+"не вдається прочитати параметри gpg, спробуємо створити нову конфігурацію"
 
-#: agent/seahorse-agent.c:122
+#: ../agent/seahorse-agent.c:119
 #, c-format
 msgid "couldn't modify gpg configuration: %s"
-msgstr ""
+msgstr "не вдається змінити параметри gpg: %s"
 
-#: agent/seahorse-agent.c:142
-msgid "couldn't fork process"
-msgstr ""
+#: ../agent/seahorse-agent-cache.c:72
+msgid "Unparseable Key ID"
+msgstr "При розборі ідентифікатора ключа виникла помилка"
 
-#: agent/seahorse-agent.c:148
-msgid "couldn't create new process group"
-msgstr ""
+#: ../agent/seahorse-agent-cache.c:73
+msgid "Unknown/Invalid Key"
+msgstr "Некоректний ключ"
 
-#: agent/seahorse-agent.c:178
+#: ../agent/seahorse-agent-cache.c:533
 #, c-format
-msgid "usage: seahorse-agent [-cdv]\n"
-msgstr ""
+msgid "PGP Key: %s"
+msgstr "Ключ PGP: %s"
 
-#: agent/seahorse-agent.c:276
+#: ../agent/seahorse-agent-cache.glade.h:1
+msgid ""
+"<b>Warning</b>: Your system is not configured to cache passphrases in secure "
+"memory."
+msgstr ""
+"<b>Попередження</b>: Конфігурація системи не дозволяє зберігати паролі у "
+"безпечної пам'яті."
+
+#: ../agent/seahorse-agent-cache.glade.h:2
+msgid "Cache _Preferences"
+msgstr "_Параметри запам'ятовування"
+
+#: ../agent/seahorse-agent-cache.glade.h:3
+msgid "Cached Encryption Keys"
+msgstr "Кешовані ключі шифрування"
+
+#: ../agent/seahorse-agent-cache.glade.h:4
+msgid "Change passphrase cache settings."
+msgstr "Змінити параметри запам'ятовування ключів."
+
+#: ../agent/seahorse-agent-cache.glade.h:5
+msgid "Clear passphrase cache"
+msgstr "Очистить пам'ять ключів"
+
+#: ../agent/seahorse-agent-cache.glade.h:6
+msgid "_Clear Cache"
+msgstr "О_чистити пам'ять"
+
+#: ../agent/seahorse-agent-cache.glade.h:7
+msgid "_Show Window"
+msgstr "_Показати вікно"
+
+#: ../agent/seahorse-agent-main.c:50
+msgid "Do not daemonize seahorse-agent"
+msgstr "Не зберігати агент seahorse у пам'яті"
+
+#: ../agent/seahorse-agent-main.c:53
+msgid "Print variables in for a C type shell"
+msgstr "Вивести змінні оточення для інтерпретатора командного рядка типу csh"
+
+#: ../agent/seahorse-agent-main.c:56
+msgid ""
+"Display variables instead of editing conf files (gpg.conf, SSH agent socket)"
+msgstr ""
+"Вивести змінні оточення замість правки конфігураційних файлів (gpg.conf, "
+"з'єднання з агентом SSH)"
+
+#: ../agent/seahorse-agent-main.c:59
+msgid "Execute other arguments on the command line"
+msgstr "Додати інші параметри до командного рядка"
+
+#: ../agent/seahorse-agent-main.c:62
+msgid "Allow GPG agent request from any display"
+msgstr "Дозволити доступ до агента GPG з будь-якого робочого місця"
+
+#: ../agent/seahorse-agent-main.c:65
+msgid "command..."
+msgstr "команда..."
+
+#: ../agent/seahorse-agent-main.c:87 ../daemon/seahorse-daemon.c:72
+msgid "couldn't fork process"
+msgstr "не вдається створити процес"
+
+#: ../agent/seahorse-agent-main.c:93 ../daemon/seahorse-daemon.c:78
+msgid "couldn't create new process group"
+msgstr "не вдається створити нову групу процесів"
+
+#: ../agent/seahorse-agent-main.c:225 ../daemon/seahorse-daemon.c:195
+#: ../plugins/applet/seahorse-applet.c:1013
+#: ../plugins/nautilus/seahorse-tool.c:570 ../src/main.c:59
 msgid "couldn't drop privileges properly"
+msgstr "не вдається коректно встановити права доступу"
+
+#: ../agent/seahorse-agent-main.c:232
+msgid "Encryption Key Agent (Seahorse)"
+msgstr "Агент ключів шифрування (Seahorse)"
+
+#: ../agent/seahorse-agent-main.c:240
+msgid "no command specified to execute"
+msgstr "не задано команди для виконання"
+
+#: ../agent/seahorse-agent-prompt.c:216
+msgid "Authorize Passphrase Access"
+msgstr "Авторизований доступ до ключів"
+
+#: ../agent/seahorse-agent-prompt.c:251
+msgid "The passphrase is cached in memory."
+msgstr "Ключ збережений у пам'яті."
+
+#: ../agent/seahorse-agent-prompt.c:256
+msgid "Always ask me before using a cached passphrase"
+msgstr "Запитувати підтвердження перед використанням ключа з пам'яті"
+
+#: ../agent/seahorse-agent-prompt.c:273
+msgid "_Authorize"
+msgstr "_Авторизувати"
+
+#. Make the uid column
+#: ../agent/seahorse-agent-status.c:151
+msgid "Key Name"
+msgstr "Назва ключа"
+
+#: ../daemon/seahorse-daemon.c:54
+msgid "Do not run seahorse-daemon as a daemon"
+msgstr "Не залишати менеджер seahorse у пам'яті"
+
+#: ../daemon/seahorse-daemon.c:202
+msgid "Encryption Daemon (Seahorse)"
+msgstr "Менеджер шифрування (Seahorse)"
+
+#: ../daemon/seahorse-service.c:103 ../daemon/seahorse-service.c:127
+#, c-format
+msgid "Invalid or unrecognized key type: %s"
+msgstr "Некоректний чи нерозпізнаний тип ключа: %s"
+
+#: ../daemon/seahorse-service.c:181 ../daemon/seahorse-service-keyset.c:123
+#: ../daemon/seahorse-service-keyset.c:152
+#, c-format
+msgid "Invalid or unrecognized key: %s"
+msgstr "Некоректний чи нерозпізнаний ключ: %s"
+
+#: ../daemon/seahorse-service-crypto.c:120
+#: ../daemon/seahorse-service-crypto.c:227
+#, c-format
+msgid "Invalid or unrecognized signer: %s"
+msgstr "Некоректний чи нерозпізнаний автор підпису: %s"
+
+#: ../daemon/seahorse-service-crypto.c:127
+#: ../daemon/seahorse-service-crypto.c:234
+#, c-format
+msgid "Key is not valid for signing: %s"
+msgstr "Ключ не може використовуватись для створення підпису: %s"
+
+#: ../daemon/seahorse-service-crypto.c:139
+#, c-format
+msgid "Invalid or unrecognized recipient: %s"
+msgstr "Некоректний або нерозпізнаний отримувач: %s"
+
+#: ../daemon/seahorse-service-crypto.c:147
+#, c-format
+msgid "Key is not a valid recipient for encryption: %s"
+msgstr "Ключ отримувача не може використовуватись для шифрування: %s"
+
+#: ../daemon/seahorse-service-crypto.c:156
+msgid "No recipients specified"
+msgstr "Не вказаний отримувач"
+
+#: ../daemon/seahorse-service-crypto.c:222
+msgid "No signer specified"
+msgstr "Не вказаний автор підпису"
+
+#: ../daemon/seahorse-service-crypto.c:277
+#, c-format
+msgid "Invalid key type for decryption: %s"
+msgstr "Некоректний ключ для розшифровування: %s"
+
+#: ../daemon/seahorse-service-crypto.c:339
+#, c-format
+msgid "Invalid key type for verifying: %s"
+msgstr "Некоректний ключ для перевірки підпису: %s"
+
+#: ../daemon/seahorse-service-keyset.c:186
+#, c-format
+msgid "Invalid key id: %s"
+msgstr "Некоректний ідентифікатор ключа: %s"
+
+#: ../daemon/seahorse-sharing.c:71 ../daemon/seahorse-sharing.c:215
+msgid "Couldn't share keys"
+msgstr "Не вдається опублікувати ключі"
+
+#: ../daemon/seahorse-sharing.c:72
+msgid "Can't publish discovery information on the network."
+msgstr "Не вдається опублікувати інформацію про пошук ключів у мережі."
+
+#. Translators: The %s will get filled in with the user name
+#. of the user, to form a genitive. If this is difficult to
+#. translate correctly so that it will work correctly in your
+#. language, you may use something equivalent to
+#. "Shared keys of %s".
+#: ../daemon/seahorse-sharing.c:92
+#, c-format
+msgid "%s's encryption keys"
+msgstr "Ключі шифрування %s"
+
+#: ../data/seahorse.schemas.in.h:1
+msgid ""
+"A list of key server URIs to search for remote PGP keys. In later versions a "
+"display name can be included, by appending a space and then the name."
 msgstr ""
+"Список URI серверів ключів для пошуку ключів PGP. У більш пізніх версіях "
+"можна вказувати рядки через пробіл."
 
-#: bonobo/Seahorse_PGP_File_Listener.server.in.in.h:1
-msgid "Decrypt..."
-msgstr "Розшифрувати..."
-
-#: bonobo/Seahorse_PGP_File_Listener.server.in.in.h:2
-msgid "Decryption operations on PGP encrypted files"
-msgstr "Операції розшифровування файлів, що зашифровані PGP"
-
-#: bonobo/Seahorse_PGP_File_Listener.server.in.in.h:3
-msgid "Encrypt and sign operations on files"
-msgstr "Операції шифрування та підписування файлів"
-
-#: bonobo/Seahorse_PGP_File_Listener.server.in.in.h:4
-msgid "Encrypt..."
-msgstr "Шифрувати...."
-
-#: bonobo/Seahorse_PGP_File_Listener.server.in.in.h:5
-msgid "Import"
-msgstr "Імпорт"
-
-#: bonobo/Seahorse_PGP_File_Listener.server.in.in.h:6
-msgid "Import operation on PGP key files"
-msgstr "Операція імпорту файлів ключів PGP"
-
-#: bonobo/Seahorse_PGP_File_Listener.server.in.in.h:7
-msgid "Seahorse PGP decrypt operations"
-msgstr "Seahorse операції розшифровування PGP"
-
-#: bonobo/Seahorse_PGP_File_Listener.server.in.in.h:8
-msgid "Seahorse PGP encrypt and sign operations"
-msgstr "Seahorse операції шифрування та підписування PGP"
-
-#: bonobo/Seahorse_PGP_File_Listener.server.in.in.h:9
-msgid "Seahorse PGP import operation"
-msgstr "Seahorse операції імпорту PGP"
-
-#: bonobo/Seahorse_PGP_File_Listener.server.in.in.h:10
-msgid "Seahorse PGP verify operation"
-msgstr "Seahorse операції перевірки PGP"
-
-#: bonobo/Seahorse_PGP_File_Listener.server.in.in.h:11
-#, fuzzy
-msgid "Sign"
-msgstr "_Підписати"
-
-#: bonobo/Seahorse_PGP_File_Listener.server.in.in.h:12
-msgid "Verify"
-msgstr "Перевірити"
-
-#: bonobo/Seahorse_PGP_File_Listener.server.in.in.h:13
-msgid "Verify operation on PGP signed files"
-msgstr "Операція перевірки файлів, що підписані PGP"
-
-#: data/seahorse.schemas.in.h:1
-msgid "A list of key server URIs to search for remote PGP keys."
+#: ../data/seahorse.schemas.in.h:2
+msgid ""
+"After performing an decrypt or verify operation from the applet, display the "
+"resulting text in a window."
 msgstr ""
+"Після завершення операції розшифровування або перевірки підпису з аплету, "
+"відображати результат у спливаючому вікні."
 
-#: data/seahorse.schemas.in.h:2
+#: ../data/seahorse.schemas.in.h:3
+msgid ""
+"After performing an encrypt or signing operation from the applet, display "
+"the resulting text in a window."
+msgstr ""
+"Після виконання операції шифрування чи створення підпису, відображати "
+"результат у спливаючому вікні."
+
+#: ../data/seahorse.schemas.in.h:4
+msgid "Auto Sync Keys"
+msgstr "Автоматично синхронізувати ключі"
+
+#: ../data/seahorse.schemas.in.h:5
 msgid "Controls the visibility of the expires column for the key manager."
 msgstr ""
-"Визначає видимість стовпчика скінчення терміну дії ключа у менеджері ключів."
+"Визначає видимість стовпчика закінчення терміну дії ключа у менеджері ключів."
 
-#: data/seahorse.schemas.in.h:3
-msgid "Controls the visibility of the length column for the key manager."
-msgstr "Визначає видимість стовпчика довжини ключа у менеджері ключів."
-
-#: data/seahorse.schemas.in.h:4
+#: ../data/seahorse.schemas.in.h:6
 msgid "Controls the visibility of the trust column for the key manager."
 msgstr "Визначає видимість стовпчика довіри ключа у менеджері ключів."
 
-#: data/seahorse.schemas.in.h:5
+#: ../data/seahorse.schemas.in.h:7
 msgid "Controls the visibility of the type column for the key manager."
 msgstr "Визначає видимість стовпчика типу ключа у менеджері ключів."
 
-#: data/seahorse.schemas.in.h:6
+#: ../data/seahorse.schemas.in.h:8
 msgid "Controls the visibility of the validity column for the key manager."
 msgstr "Визначає видимість стовпчика дійсності ключа у менеджері ключів."
 
-#: data/seahorse.schemas.in.h:7
-msgid "Expire passwords in the cache"
+#: ../data/seahorse.schemas.in.h:9
+msgid "Display cache reminder in the notification area"
 msgstr ""
+"Відображати нагадування про збереження ключів у пам'яті у області сповіщення"
 
-#: data/seahorse.schemas.in.h:8
-msgid "How often to show progress during listing"
-msgstr "Як часто показувати перебіг при перегляді"
+#: ../data/seahorse.schemas.in.h:10
+msgid "Display clipboard after decrypting"
+msgstr "Показувати буфер обміну після розшифровування"
 
-#: data/seahorse.schemas.in.h:9
+#: ../data/seahorse.schemas.in.h:11
+msgid "Display clipboard after encrypting"
+msgstr "Показувати буфер обміну після шифрування"
+
+#: ../data/seahorse.schemas.in.h:12
+msgid "Enable DNS-SD sharing"
+msgstr "Публікувати ключі через DNS-SD"
+
+#: ../data/seahorse.schemas.in.h:13
+msgid ""
+"Enables DNS-SD (Apple Bonjour) sharing of keys. seahorse-daemon must running "
+"and must be built with HKP and DNS-SD support."
+msgstr ""
+"Публікувати ключі через протокол DNS-SD (Apple Bonjour). Менеджер ключів "
+"seahorse повинен залишатись у пам'яті та мати змогу працювати з HKP та DNS-"
+"SD."
+
+#: ../data/seahorse.schemas.in.h:14
+msgid "Expire passwords in the cache"
+msgstr "Відмічати застарілі паролі у пам'яті"
+
+#: ../data/seahorse.schemas.in.h:15
 msgid "ID of the default key"
 msgstr "Ідентифікатор типового ключа"
 
-#: data/seahorse.schemas.in.h:10
+#: ../data/seahorse.schemas.in.h:16
 msgid ""
-"If set to true, then all output from pgp operations will be ASCII text. "
-"Files will have a '.asc' extension."
+"If set to 'gnome' uses gnome-keyring to cache passwords. When set to "
+"'internal' uses internal cache."
 msgstr ""
-"Якщо встановлено, тоді весь вивід від pgp операцій буде у вигляді ASCII "
-"тексту. Файли матимуть розширення '.asc'."
+"Якщо значення 'gnome', для зберігання ключів буде використовуватись програма "
+"керування в'язками gnome-keyring. У іншому випадку буде використовуватись "
+"внутрішній кеш."
 
-#: data/seahorse.schemas.in.h:11
+#: ../data/seahorse.schemas.in.h:17
 msgid ""
-"If set to true, then output from certain pgp operations will be in canonical "
-"text mode. Text mode is generally only needed for RFC 2015 signatures. RFC "
-"3156 removes the need for text mode."
-msgstr ""
-"Якщо встановлено, тоді весь вивід від певних pgp операцій буде у канонічному "
-"текстовому режимі. Взагалі, текстовий режим потрібен лише для RFC 2015 "
-"підписів. RFC 3156 скасовує необхідність текстового режиму."
+"If set to true, then files encrypted with seahorse will be ASCII armor "
+"encoded."
+msgstr "Якщо встановлено, зашифровані файли будуть закодовані у ASCII."
 
-#: data/seahorse.schemas.in.h:12
+#: ../data/seahorse.schemas.in.h:18
 msgid ""
 "If set to true, then the default key will always be added to an encryption "
 "recipients list."
@@ -310,1801 +335,2894 @@ msgstr ""
 "Якщо встановлено, до списку отримувачів шифрування буде завжди додаватись "
 "типовий ключ."
 
-#: data/seahorse.schemas.in.h:13
-msgid "Last keyserver search pattern"
-msgstr ""
+#: ../data/seahorse.schemas.in.h:19
+msgid "Last key server search pattern"
+msgstr "Шаблон останнього пошуку на сервері ключів"
 
-#: data/seahorse.schemas.in.h:14
-msgid "Last keyserver used"
-msgstr ""
+#: ../data/seahorse.schemas.in.h:20
+msgid "Last key servers used"
+msgstr "Останній використаний сервер ключів"
 
-#: data/seahorse.schemas.in.h:15
-#, fuzzy
+#: ../data/seahorse.schemas.in.h:21
+msgid "Last key used to sign a message."
+msgstr "Останній ключ, що використовувався для підпису"
+
+#: ../data/seahorse.schemas.in.h:22
 msgid "PGP Key servers"
-msgstr "Настройки PGP"
+msgstr "Сервери ключів PGP"
 
-#: data/seahorse.schemas.in.h:16
+#: ../data/seahorse.schemas.in.h:23
 msgid "Prompt before using GPG passwords in cache"
-msgstr ""
+msgstr "Питати перед використанням ключа GPG з пам'яті"
 
-#: data/seahorse.schemas.in.h:17
+#: ../data/seahorse.schemas.in.h:24
+msgid "Publish keys to this key server."
+msgstr "Експортувати ключі на цей сервер."
+
+#: ../data/seahorse.schemas.in.h:25
+msgid ""
+"Reflect the contents of the clipboard (whether encrypted, signed, etc...) in "
+"the panel applet icon."
+msgstr ""
+"Відображати стан буферу обміну (зашифрований, підписаний та т.і.) у значку "
+"аплету панелі."
+
+#: ../data/seahorse.schemas.in.h:26
+msgid ""
+"Set to 'false' to disable display of the cache reminder in the notification "
+"area of your panel."
+msgstr ""
+"Використовується значення 'false', щоб вимкнути повідомлення про кешовані "
+"ключі у області сповіщення на панелі."
+
+#: ../data/seahorse.schemas.in.h:27
 msgid ""
 "Set to 'true' to have seahorse-agent prompt before giving out passwords it "
 "has cached."
 msgstr ""
+"Використовується значення 'true' для запиту підтвердження при використанні "
+"ключа, збереженого у пам'яті."
 
-#: data/seahorse.schemas.in.h:18
+#: ../data/seahorse.schemas.in.h:28
+msgid "Show clipboard state in panel"
+msgstr "Показувати на панелі стан буферу обміну"
+
+#: ../data/seahorse.schemas.in.h:29
 msgid "Show expires column in key manager"
 msgstr "Показ у менеджері ключів стовпчика терміну дії"
 
-#: data/seahorse.schemas.in.h:19
-msgid "Show length column in key manager"
-msgstr "Показ у менеджері ключів стовпчика довжини"
-
-#: data/seahorse.schemas.in.h:20
+#: ../data/seahorse.schemas.in.h:30
 msgid "Show trust column in key manager"
 msgstr "Показ у менеджері ключів стовпчика довіри"
 
-#: data/seahorse.schemas.in.h:21
+#: ../data/seahorse.schemas.in.h:31
 msgid "Show type column in key manager"
 msgstr "Показ у менеджері ключів стовпчика типу ключа"
 
-#: data/seahorse.schemas.in.h:22
+#: ../data/seahorse.schemas.in.h:32
 msgid "Show validity column in key manager"
 msgstr "Показ у менеджері ключів стовпчика дійсності ключа"
 
-#: data/seahorse.schemas.in.h:23
+#: ../data/seahorse.schemas.in.h:33
 msgid ""
-"Specify the column to sort the recipients window by. Columns are: 'name', "
-"'id' and 'validity', Put a '-' in front of the column name to sort in "
-"descending order."
+"Specify the column to sort the recipients window by. Columns are: 'name' and "
+"'id'. Put a '-' in front of the column name to sort in descending order."
 msgstr ""
+"Задати ідентифікатор стовпчика за яким впорядковувати таблицю отримувачів. "
+"Можливі значення 'name' та 'id'. Якщо значення починається з '-', отримувачі "
+"впорядковуються у зворотному порядку."
 
-#: data/seahorse.schemas.in.h:24
+#: ../data/seahorse.schemas.in.h:34
 msgid ""
 "Specify the column to sort the seahorse key manager main window by. Columns "
-"are: 'name', 'id', 'validity', 'expires', 'trust', 'length' and 'type'. Put "
-"a '-' in front of the column name to sort in descending order."
+"are: 'name', 'id', 'validity', 'expires', 'trust', and 'type'. Put a '-' in "
+"front of the column name to sort in descending order."
 msgstr ""
+"Задати ідентифікатор стовпчика за яким впорядковувати таблицю ключів. "
+"Можливі значення 'name', 'id', 'validity', 'expires', 'trust', та 'type'. "
+"Якщо значення починається з '-', ключі впорядковуються у зворотному порядку."
 
-#: data/seahorse.schemas.in.h:25
+#: ../data/seahorse.schemas.in.h:35
+msgid "The ID of the last secret key used to sign a message."
+msgstr ""
+"Ідентифікатор останнього секретного ключа, що використовувався для підпису "
+"повідомлення."
+
+#: ../data/seahorse.schemas.in.h:36
 msgid "The column to sort the recipients by"
-msgstr ""
+msgstr "Колонка для впорядковування отримувачів"
 
-#: data/seahorse.schemas.in.h:26
+#: ../data/seahorse.schemas.in.h:37
 msgid "The column to sort the seahorse keys by"
-msgstr ""
+msgstr "Колонка для впорядковування ключів"
 
-#: data/seahorse.schemas.in.h:27
+#: ../data/seahorse.schemas.in.h:38
 msgid ""
-"The last keyserver a search was performed against. Or empty for all "
-"keyservers."
+"The key server to publish PGP keys to. Or empty to suppress publishing of "
+"PGP keys."
 msgstr ""
+"Сервер ключів для публікації ключів PGP. Якщо значення немає, ключі не "
+"публікуються."
 
-#: data/seahorse.schemas.in.h:28
-msgid "The last search pattern searched for against a keyserver."
+#: ../data/seahorse.schemas.in.h:39
+msgid ""
+"The last key server a search was performed against or empty for all key "
+"servers."
 msgstr ""
+"Останній сервер, на якому шукались ключі, якщо немає значення - "
+"використовувались усі сервери."
 
-#: data/seahorse.schemas.in.h:29
+#: ../data/seahorse.schemas.in.h:40
+msgid "The last search pattern searched for against a key server."
+msgstr "Останній шаблон пошуку на сервері ключів."
+
+#: ../data/seahorse.schemas.in.h:41
 msgid "The time (in minutes) to cache GPG passwords"
-msgstr ""
+msgstr "Час (в хвилинах) для зберігання у пам'яті паролів GPG"
 
-#: data/seahorse.schemas.in.h:30
+#: ../data/seahorse.schemas.in.h:42
 msgid ""
 "This is the amount of time, specified in minutes, to cache GPG passwords in "
 "seahorse-agent."
 msgstr ""
+"Час у хвилинах, протягом якого seahorse-agent зберігає значення паролів GPG."
 
-#: data/seahorse.schemas.in.h:31
+#: ../data/seahorse.schemas.in.h:43
 msgid ""
-"This option enables the GPG password cache in the seahorse-agent daemon."
+"This option enables the GPG password cache in the seahorse-agent program. "
+"The 'use-agent' setting in gpg.conf affects this setting."
 msgstr ""
+"Цей параметр вмикає збереження використаних паролів до ключів GPG у пам'яті. "
+"Параметр 'use-agent' у файлі gpg.conf також відповідає за цей параметр."
 
-#: data/seahorse.schemas.in.h:32
-msgid ""
-"This specifies how often the progress signal is emitted during a listing "
-"operation. By default, the signal is emitted for every 20 keys processed. A "
-"value of -1 will cause the signal to never be emitted."
-msgstr ""
-"Вказує як часто подається сигнал перебігу при операції заповнення списку. "
-"Типово, сигнал подається через кожні 20 оброблених ключів. Значення -1 "
-"призводить до вимикання подавання сигналу."
-
-#: data/seahorse.schemas.in.h:33
-#, fuzzy
+#: ../data/seahorse.schemas.in.h:44
 msgid ""
 "This specifies the default key to use for certain operations, mainly signing."
-msgstr ""
-"Визначає типовий ключ для деяких операцій, головним чином підписування."
+msgstr "Типовий ключ для деяких операцій, в основному для з'єднання підпису."
 
-#: data/seahorse.schemas.in.h:34
+#: ../data/seahorse.schemas.in.h:45
 msgid ""
-"When set seahorse-agent expires GPG passwords in it's cache after a peried "
+"When set seahorse-agent will try to automatically load the users SSH keys "
+"when needed. This is equivalent to using the ssh-add utility."
+msgstr ""
+"Коли встановлено, seahorse-agent буде автоматично завантажувати ключі SSH "
+"користувача за вимогою. Це еквівалентно використанню програми ssh-add."
+
+#: ../data/seahorse.schemas.in.h:46
+msgid ""
+"When set, seahorse-agent expires GPG passwords in its cache after a period "
 "of time."
 msgstr ""
+"Якщо встановлено, агент seahorse буде автоматично видаляти кешовані паролі "
+"GPG після закінчення інтервалу часу."
 
-#: data/seahorse.schemas.in.h:35
+#: ../data/seahorse.schemas.in.h:47
+msgid "Where to store cached passwords."
+msgstr "Місце для зберігання кешованих паролів."
+
+#: ../data/seahorse.schemas.in.h:48
+msgid ""
+"Whether or not modified keys should be automatically synced with the default "
+"key server."
+msgstr "Автоматично синхронізувати змінені ключі з сервером."
+
+#: ../data/seahorse.schemas.in.h:49
 msgid "Whether the GPG password cache is enabled"
-msgstr ""
+msgstr "Чи пам'ятати паролі GPG"
 
-#: data/seahorse.schemas.in.h:36
+#: ../data/seahorse.schemas.in.h:50
 msgid "Whether to always encrypt to default key"
-msgstr "Чи завжди шифрувати типовий ключ"
+msgstr "Завжди шифрувати типовим ключем"
 
-#: data/seahorse.schemas.in.h:37
+#: ../data/seahorse.schemas.in.h:51
+msgid "Whether to automatically load SSH keys on demand."
+msgstr "Чи завантажувати ключі SSH автоматично за запитом"
+
+#: ../data/seahorse.schemas.in.h:52
 msgid "Whether to use ASCII Armor"
 msgstr "Використовувати ASCII захист"
 
-#: data/seahorse.schemas.in.h:38
-msgid "Whether to use canonical text mode"
-msgstr "Чи використовувати канонічний текстовий режим"
+#: ../libcryptui/cryptui-key-chooser.c:156
+msgid "All Keys"
+msgstr "Усі ключі"
 
-#. Make the column
-#: libseahorse/seahorse-key-store.c:750 src/seahorse-key-properties.c:380
-#: src/seahorse-key-properties.c:474
+#: ../libcryptui/cryptui-key-chooser.c:157
+msgid "Selected Recipients"
+msgstr "Обрані отримувачі"
+
+#: ../libcryptui/cryptui-key-chooser.c:158
+msgid "Search Results"
+msgstr "Результати пошуку"
+
+#. Filter Label
+#: ../libcryptui/cryptui-key-chooser.c:168
+msgid "Search _for:"
+msgstr "_Пошук:"
+
+#. Sign Label
+#: ../libcryptui/cryptui-key-chooser.c:223
+msgid "_Sign message as:"
+msgstr "П_ідписати повідомлення як:"
+
+#: ../libcryptui/cryptui-key-chooser.c:235
+msgid "None (Don't Sign)"
+msgstr "Ні (не підписувати)"
+
+#. TODO: Icons
+#: ../libcryptui/cryptui-key-list.c:117
+#: ../src/seahorse-key-manager-store.c:954
+#: ../src/seahorse-key-properties.c:866
 msgid "Name"
 msgstr "Ім'я"
 
-#. Make the column
-#: libseahorse/seahorse-key-store.c:753 src/seahorse-key-properties.c:377
+#: ../libcryptui/cryptui-key-list.c:120
+#: ../src/seahorse-key-manager-store.c:966
+#: ../src/seahorse-key-properties.c:1714
 msgid "Key ID"
 msgstr "Ідентифікатор ключа"
 
-#: libseahorse/seahorse-ldap-source.c:651
+#: ../libseahorse/seahorse-add-keyserver.glade.h:1
+msgid ":"
+msgstr ":"
+
+#: ../libseahorse/seahorse-add-keyserver.glade.h:2
+msgid "Add Key Server"
+msgstr "Додати сервер ключів"
+
+#: ../libseahorse/seahorse-add-keyserver.glade.h:3
+msgid "Host:"
+msgstr "Вузол:"
+
+#: ../libseahorse/seahorse-add-keyserver.glade.h:4
+msgid "Key Server Type:"
+msgstr "Тип сервера ключів:"
+
+#: ../libseahorse/seahorse-add-keyserver.glade.h:5
+#: ../src/seahorse-ssh-upload.glade.h:3
+msgid "The host name or address of the server."
+msgstr "Назва вузла чи адреса сервера."
+
+#: ../libseahorse/seahorse-add-keyserver.glade.h:6
+msgid "The port to access the server on."
+msgstr "Порт для доступу до сервера."
+
+#: ../libseahorse/seahorse-add-keyserver.glade.h:7
+msgid "initial temporary item"
+msgstr "початковий тимчасовий елемент"
+
+#: ../libseahorse/seahorse-hkp-source.c:358
+#, c-format
+msgid "Search was not specific enough. Server '%s' found too many keys."
+msgstr ""
+"Параметри пошуку були недостатньо визначеними. Сервер '%s' видав надто "
+"багато ключів."
+
+#: ../libseahorse/seahorse-hkp-source.c:360
+#, c-format
+msgid "Couldn't communicate with server '%s': %s"
+msgstr "Не вдається зв'язатись з сервером '%s': %s"
+
+#: ../libseahorse/seahorse-hkp-source.c:563
+msgid "Searching for keys..."
+msgstr "Пошук ключів..."
+
+#: ../libseahorse/seahorse-hkp-source.c:639
+msgid "Uploading keys..."
+msgstr "Завантаження ключів..."
+
+#: ../libseahorse/seahorse-hkp-source.c:715
+msgid "Retrieving keys..."
+msgstr "Отримання ключів..."
+
+#: ../libseahorse/seahorse-hkp-source.c:764
+#, c-format
+msgid "Searching for keys on: %s"
+msgstr "Пошук ключів на сервері: %s"
+
+#. The ldap_cb and chain_cb were set in seahorse_ldap_operation_start
+#: ../libseahorse/seahorse-hkp-source.c:857
+#: ../libseahorse/seahorse-hkp-source.c:929
+#: ../libseahorse/seahorse-ldap-source.c:650
+#, c-format
+msgid "Connecting to: %s"
+msgstr "З'єднання: %s"
+
+#: ../libseahorse/seahorse-ldap-source.c:443
+#, c-format
+msgid "Couldn't communicate with '%s': %s"
+msgstr "Не вдається зв'язатись з '%s': %s"
+
+#: ../libseahorse/seahorse-ldap-source.c:623
+#, c-format
+msgid "Couldn't resolve address: %s"
+msgstr "Не вдається визначити адресу: %s"
+
+#: ../libseahorse/seahorse-ldap-source.c:699
+#, c-format
+msgid "Resolving server address: %s"
+msgstr "Визначення адреси сервера: %s"
+
+#: ../libseahorse/seahorse-ldap-source.c:873
 #, c-format
 msgid "Searching for keys containing '%s'..."
-msgstr ""
+msgstr "Пошук ключів, що містять '%s'..."
 
-#. TODO: We can update a percentage when there's more than one key
-#: libseahorse/seahorse-ldap-source.c:825
+#: ../libseahorse/seahorse-ldap-source.c:900
+#, c-format
+msgid "Searching for key id '%s'..."
+msgstr "Пошук ідентифікатора ключа '%s'..."
+
+#: ../libseahorse/seahorse-ldap-source.c:1001
 msgid "Retrieving remote keys..."
-msgstr ""
+msgstr "Отримання віддалених ключів..."
 
-#. TODO: We can update a percentage when there's more than one key
-#: libseahorse/seahorse-ldap-source.c:950
-#, fuzzy
+#: ../libseahorse/seahorse-ldap-source.c:1134
 msgid "Sending keys to key server..."
-msgstr "Експортувати ключ на сервер ключів"
+msgstr "Надсилання ключів на сервер..."
 
-#: libseahorse/seahorse-passphrase.c:61
-#, fuzzy, c-format
-msgid "Bad passphrase! Try again for '%s'"
-msgstr "Неправильна парольна фраза! Спробуйте ще раз для %s"
+#: ../libseahorse/seahorse-notification.c:557
+#: ../libseahorse/seahorse-notification.c:573
+#, c-format
+msgid "Imported %i key"
+msgid_plural "Imported %i keys"
+msgstr[0] "Імпортовано %d ключ"
+msgstr[1] "Імпортовано %d ключі"
+msgstr[2] "Імпортовано %d ключів"
 
-#: libseahorse/seahorse-passphrase.c:63
-#, fuzzy, c-format
+#: ../libseahorse/seahorse-notification.c:558
+#: ../libseahorse/seahorse-notification.c:574
+msgid "Key Imported"
+msgid_plural "Keys Imported"
+msgstr[0] "Ключ імпортований"
+msgstr[1] "Ключ імпортований"
+msgstr[2] "Ключ імпортований"
+
+#: ../libseahorse/seahorse-notification.c:601
+#, c-format
+msgid "Signed by <i><key id='%s'/> <b>expired</b></i> on %s."
+msgstr "Підписано <i><key id='%s'/> <b>закінчився</b></i> %s."
+
+#: ../libseahorse/seahorse-notification.c:602
+msgid "Invalid Signature"
+msgstr "Некоректний підпис"
+
+#: ../libseahorse/seahorse-notification.c:607
+#, c-format
+msgid "Signed by <i><key id='%s'/></i> on %s <b>Expired</b>."
+msgstr "Підписано <i><key id='%s'/></i> %s <b>термін дії закінчився</b>."
+
+#: ../libseahorse/seahorse-notification.c:608
+msgid "Expired Signature"
+msgstr "Прострочений підпис"
+
+#: ../libseahorse/seahorse-notification.c:613
+#, c-format
+msgid "Signed by <i><key id='%s'/> <b>Revoked</b></i> on %s."
+msgstr "Підписано <i><key id='%s'/> <b>Підпис відкликано</b></i> %s."
+
+#: ../libseahorse/seahorse-notification.c:614
+msgid "Revoked Signature"
+msgstr "Відкликані підписи"
+
+#: ../libseahorse/seahorse-notification.c:619
+#, c-format
+msgid "Signed by <i><key id='%s'/></i> on %s."
+msgstr "Підписано <i><key id='%s'/></i> %s."
+
+#: ../libseahorse/seahorse-notification.c:620
+msgid "Good Signature"
+msgstr "Правильний підпис"
+
+#: ../libseahorse/seahorse-notification.c:625
+msgid "Signing key not in keyring."
+msgstr "Ключ підпису не знайдений у в'язці."
+
+#: ../libseahorse/seahorse-notification.c:626
+msgid "Unknown Signature"
+msgstr "Невідомий підпис"
+
+#: ../libseahorse/seahorse-notification.c:630
+msgid "Bad or forged signature. The signed data was modified."
+msgstr "Неправильний або підроблений підпис. Дата підпису була змінена."
+
+#: ../libseahorse/seahorse-notification.c:631
+msgid "Bad Signature"
+msgstr "Неправильний підпис"
+
+#: ../libseahorse/seahorse-notification.c:639
+msgid "Couldn't verify signature."
+msgstr "Не вдається перевірити підпис."
+
+#: ../libseahorse/seahorse-notify.glade.h:1
+msgid "Notification Messages"
+msgstr "Повідомлення сповіщення"
+
+#: ../libseahorse/seahorse-passphrase.c:175
+msgid "Passphrase"
+msgstr "Пароль"
+
+#: ../libseahorse/seahorse-passphrase.c:178
+msgid "Password:"
+msgstr "Пароль:"
+
+#: ../libseahorse/seahorse-passphrase.c:240
+msgid "Confirm:"
+msgstr "Підтвердження:"
+
+#: ../libseahorse/seahorse-passphrase.c:323
+msgid "Wrong passphrase."
+msgstr "Неправильний пароль."
+
+#: ../libseahorse/seahorse-passphrase.c:327
+#, c-format
 msgid "Enter new passphrase for '%s'"
-msgstr "Введення парольної фрази для %s"
+msgstr "Введіть новий пароль для '%s'"
 
-#: libseahorse/seahorse-passphrase.c:65
-#, fuzzy, c-format
+#: ../libseahorse/seahorse-passphrase.c:329
+#, c-format
 msgid "Enter passphrase for '%s'"
-msgstr "Введення парольної фрази для %s"
+msgstr "Введіть пароль для '%s'"
 
-#: libseahorse/seahorse-passphrase.glade.h:1
-#: libseahorse/seahorse-recipients.glade.h:1 src/seahorse-add-uid.glade.h:1
-#: src/seahorse-change-passphrase.glade.h:1
-#: src/seahorse-generate-adv.glade.h:1 src/seahorse-generate-druid.glade.h:1
-#: src/seahorse-keyserver-search.glade.h:1
-#: src/seahorse-multi-encrypt.glade.h:1 src/seahorse-revoke.glade.h:1
-msgid "*"
-msgstr "*"
+#: ../libseahorse/seahorse-passphrase.c:332
+#: ../src/seahorse-change-passphrase.glade.h:4
+msgid "Enter new passphrase"
+msgstr "Введіть новий пароль"
 
-#: libseahorse/seahorse-passphrase.glade.h:2
-msgid "Enter Passphrase"
-msgstr "Введення парольної фрази"
+#: ../libseahorse/seahorse-passphrase.c:334
+msgid "Enter passphrase"
+msgstr "Введіть пароль"
 
-#: libseahorse/seahorse-passphrase.glade.h:3
-msgid "Passphrase for key"
-msgstr "Парольна фраза для ключа"
+#: ../libseahorse/seahorse-pgp-key.c:140 ../libseahorse/seahorse-ssh-key.c:112
+#: ../src/seahorse-gkeyring-item.c:231
+msgid "Invalid"
+msgstr "Некоректний"
 
-#: libseahorse/seahorse-prefs-cache.c:352
-msgid "Couldn't open the Session Properties"
-msgstr ""
+#: ../libseahorse/seahorse-pgp-key.c:162
+#: ../src/seahorse-pgp-public-key-properties.glade.h:30
+msgid "Public PGP Key"
+msgstr "Відкритий ключ PGP"
 
-#: libseahorse/seahorse-prefs-cache.c:365
-msgid "Couldn't start the 'seahorse-agent' program"
-msgstr ""
+#: ../libseahorse/seahorse-pgp-key.c:165
+#: ../src/seahorse-pgp-private-key-properties.glade.h:35
+msgid "Private PGP Key"
+msgstr "Закритий ключ PGP"
 
-#: libseahorse/seahorse-prefs-cache.c:367
-msgid "The 'seahorse-agent' program exited unsucessfully."
-msgstr ""
+#: ../libseahorse/seahorse-pgp-key.c:694 ../libseahorse/seahorse-validity.c:31
+#: ../src/seahorse-key-properties.c:1090
+msgid "Unknown"
+msgstr "Невідомо"
 
-#: libseahorse/seahorse-prefs-cache.c:415
-msgid "Another password caching agent is running. Disabling cache preferences."
-msgstr ""
+#: ../libseahorse/seahorse-pgp-key.c:696
+msgid "ElGamal"
+msgstr "ElGamal"
 
-#: libseahorse/seahorse-prefs.c:36
-#, fuzzy
-msgid "[Add a key server here]"
-msgstr "Якщо дія ключа ніколи не закінчується"
-
-#: libseahorse/seahorse-prefs.c:190
-msgid "URL"
-msgstr ""
-
-#: libseahorse/seahorse-prefs.c:315
-msgid "_Ascii Armor"
-msgstr "_Ascii захист"
-
-#: libseahorse/seahorse-prefs.c:317
-msgid "_Text Mode"
-msgstr "_Текстовий режим"
-
-#: libseahorse/seahorse-prefs.c:319
-msgid "_Encrypt to Self"
-msgstr "_Зашифрувати для себе"
-
-#: libseahorse/seahorse-prefs.glade.h:1
-msgid " minutes"
-msgstr ""
-
-#: libseahorse/seahorse-prefs.glade.h:2
-msgid ""
-"<b>Note:</b> The 'seahorse-agent' program was started. This program is "
-"necessary in order for caching of passwords. "
-msgstr ""
-
-#: libseahorse/seahorse-prefs.glade.h:3
-msgid ""
-"<b>Warning:</b> The 'seahorse-agent' program is not running. This program is "
-"necessary in order for caching of passwords. "
-msgstr ""
-
-#: libseahorse/seahorse-prefs.glade.h:4
-msgid "Cache _GPG passwords in memory"
-msgstr ""
-
-#: libseahorse/seahorse-prefs.glade.h:5
-#, fuzzy
-msgid "Encryption Settings"
-msgstr "Шифрування та підписування..."
-
-#: libseahorse/seahorse-prefs.glade.h:6
-#, fuzzy
-msgid "Key Servers"
-msgstr "Термін дії ключа ніколи не закінчується"
-
-#: libseahorse/seahorse-prefs.glade.h:7
-#, fuzzy
-msgid "Key Servers:"
-msgstr "Термін дії ключа ніколи не закінчується"
-
-#: libseahorse/seahorse-prefs.glade.h:8
-#: plugins/nautilus/seahorse-pgp-preferences.c:48
-#: plugins/nautilus/seahorse-pgp-preferences.desktop.in.h:2
-msgid "PGP Preferences"
-msgstr "Настройки PGP"
-
-#: libseahorse/seahorse-prefs.glade.h:9
-msgid "Password Cache"
-msgstr ""
-
-#: libseahorse/seahorse-prefs.glade.h:10
-#, fuzzy
-msgid "Session Properties"
-msgstr "Властивості %s"
-
-#: libseahorse/seahorse-prefs.glade.h:11
-msgid "Start seahorse-agent"
-msgstr ""
-
-#: libseahorse/seahorse-prefs.glade.h:12
-msgid "You can add it to your Startup Programs in: "
-msgstr ""
-
-#: libseahorse/seahorse-prefs.glade.h:13
-msgid "_Ask me before using a cached password"
-msgstr ""
-
-#: libseahorse/seahorse-prefs.glade.h:14
-msgid "_Default Key:"
-msgstr "_Типовий ключ:"
-
-#: libseahorse/seahorse-prefs.glade.h:15
-msgid "_Expire passwords from memory after "
-msgstr ""
-
-#: libseahorse/seahorse-prefs.glade.h:16
-msgid "_Use default key to sign"
-msgstr ""
+#: ../libseahorse/seahorse-pgp-source.c:367
+#: ../libseahorse/seahorse-server-source.c:209
+#: ../src/seahorse-generate-select.c:142
+msgid "PGP Key"
+msgstr "Ключ PGP"
 
 #. TODO: We can use the GPGME progress to make this more accurate
-#: libseahorse/seahorse-pgp-source.c:524
-#, fuzzy, c-format
+#: ../libseahorse/seahorse-pgp-source.c:723
+#, c-format
 msgid "Loaded %d key"
 msgid_plural "Loaded %d keys"
 msgstr[0] "Завантажено %d ключ"
-msgstr[1] "Завантажено %d ключ"
+msgstr[1] "Завантажено %d ключі"
+msgstr[2] "Завантажено %d ключів"
 
-#: libseahorse/seahorse-pgp-source.c:588
-#, fuzzy
+#: ../libseahorse/seahorse-pgp-source.c:778
 msgid "Loading Keys..."
-msgstr "Завантаження ключа %d"
+msgstr "Завантаження ключів..."
 
-#: libseahorse/seahorse-recipients-store.c:153
-#: src/seahorse-key-manager-store.c:285
-msgid "Validity"
-msgstr "Дійсність"
-
-#: libseahorse/seahorse-recipients.c:54
-#, fuzzy, c-format
-msgid "Selected %d recipient"
-msgid_plural "Selected %d recipients"
-msgstr[0] "Внесено в список %d ключів"
-msgstr[1] "Внесено в список %d ключів"
-
-#: libseahorse/seahorse-recipients.c:58
-#, fuzzy, c-format
-msgid "Selected %d not fully valid recipient"
-msgid_plural "Selected %d not fully valid recipients"
-msgstr[0] ""
-"Виділено %d не повністю дійсних ключів та %d повністю дійсних ключів"
-msgstr[1] ""
-"Виділено %d не повністю дійсних ключів та %d повністю дійсних ключів"
-
-#. TRANSLATOR: This string will become
-#. * "Selected %d recipients (%d not fully valid)"
-#: libseahorse/seahorse-recipients.c:66
-#, fuzzy, c-format
-msgid "Selected %d recipient "
-msgid_plural "Selected %d recipients "
-msgstr[0] "Внесено в список %d ключів"
-msgstr[1] "Внесено в список %d ключів"
-
-#. TRANSLATOR: This string will become
-#. * "Selected %d recipients (%d not fully valid)"
-#: libseahorse/seahorse-recipients.c:71
-#, fuzzy, c-format
-msgid "(%d not fully valid)"
-msgid_plural "(%d not fully valid)"
-msgstr[0] ""
-"Виділено %d не повністю дійсних ключів та %d повністю дійсних ключів"
-msgstr[1] ""
-"Виділено %d не повністю дійсних ключів та %d повністю дійсних ключів"
-
-#. TRANSLATOR: "%s%s" are "Selected %d recipients (%d not fully valid)"
-#. * Swap order with "%2$s%1$s" if needed
-#. TRANSLATOR: "%s%s" are "You have selected %d files and %d folders"
-#. * Swap order with "%2$s%1$s" if needed
-#: libseahorse/seahorse-recipients.c:76 src/seahorse-process-multiple.c:58
-#, c-format
-msgid "%s%s"
-msgstr ""
-
-#: libseahorse/seahorse-recipients.glade.h:2
+#: ../libseahorse/seahorse-pgp-source.c:821
 msgid ""
-"All Keys\n"
-"Selected Keys\n"
-"Search Results"
+"Invalid key data (missing UIDs). This may be due to a computer with a date "
+"set in the future or a missing self-signature."
 msgstr ""
+"Некоректні дані ключа (відсутні ідентифікатори користувача). Причиною можуть "
+"бути некоректний час у комп'ютері, наприклад, час у майбутньому або "
+"відсутній підпис."
 
-#: libseahorse/seahorse-recipients.glade.h:5
-msgid "Choose Keys"
-msgstr "Вибір ключів"
+#: ../libseahorse/seahorse-pgp-source.c:942 ../src/seahorse-key-manager.c:454
+#: ../src/seahorse-key-manager.c:500
+msgid "Importing Keys"
+msgstr "Імпорт ключів"
 
-#: libseahorse/seahorse-recipients.glade.h:6
-msgid "Search _for: "
+#: ../libseahorse/seahorse-pgp-source.c:975
+msgid "Exporting Keys"
+msgstr "Експорт ключа"
+
+#: ../libseahorse/seahorse-prefs.c:60
+msgid "Not a valid Key Server address."
+msgstr "Некоректна адреса сервера ключів."
+
+#: ../libseahorse/seahorse-prefs.c:61
+msgid ""
+"For help contact your system adminstrator or the administrator of the key "
+"server."
 msgstr ""
+"Для отримання довідки зв'яжіться з Вашим адміністратором та адміністратором "
+"сервера ключів."
 
-#: libseahorse/seahorse-signatures.c:49
-#, fuzzy
-msgid "[Unknown Key]"
-msgstr "Невідомо"
+#: ../libseahorse/seahorse-prefs.c:172
+msgid "URL"
+msgstr "URL"
 
-#: libseahorse/seahorse-signatures.c:66
+#: ../libseahorse/seahorse-prefs.c:356
+msgid "Custom"
+msgstr "Інший"
+
+#: ../libseahorse/seahorse-prefs.c:426
+msgid "None: Don't publish keys"
+msgstr "Немає: не публікувати ключі"
+
+#: ../libseahorse/seahorse-prefs.c:508
+msgid "None. Prompt for a key."
+msgstr "Немає. Запитувати ключ."
+
+#: ../libseahorse/seahorse-prefs-cache.c:231
+msgid "Couldn't open the Session Properties"
+msgstr "Не вдається запустити діалог налаштовування параметрів сеансу"
+
+#: ../libseahorse/seahorse-prefs-cache.c:244
+msgid "Couldn't start the 'seahorse-agent' program"
+msgstr "Не вдається запустити програму 'seahorse-agent'"
+
+#: ../libseahorse/seahorse-prefs-cache.c:246
+msgid "The 'seahorse-agent' program exited unsuccessfully."
+msgstr "Програма 'seahorse-agent' завершилась невдачею."
+
+#: ../libseahorse/seahorse-prefs.glade.h:1
+msgid "<b>Defaults</b>"
+msgstr "<b>Типово</b>"
+
+#: ../libseahorse/seahorse-prefs.glade.h:2
+msgid ""
+"<b>Note:</b> The 'seahorse-agent' program has been started. This program is "
+"necessary in order to cache passphrases. "
+msgstr ""
+"<b>Зауважте:</b> Була запущена програма 'seahorse-agent'. Ця програма "
+"використовується для зберігання паролів у пам'яті. "
+
+#: ../libseahorse/seahorse-prefs.glade.h:3
+msgid "<b>Remember PGP Passphrases</b>"
+msgstr "<b>Запам'ятовувати паролі PGP</b>"
+
+#: ../libseahorse/seahorse-prefs.glade.h:4
+msgid "<b>Secure Shell Keys</b>"
+msgstr "<b>Ключі віддаленого командного рядка</b>"
+
+#: ../libseahorse/seahorse-prefs.glade.h:5
+msgid ""
+"<b>Warning:</b> The 'seahorse-agent' program is not running. This program is "
+"necessary in order to cache passphrases. "
+msgstr ""
+"<b>Попередження:</b> Програма 'seahorse-agent' не запущена. Ця програма "
+"потрібна для зберігання паролів у пам'яті. "
+
+#: ../libseahorse/seahorse-prefs.glade.h:6
+msgid "<i>A non-supported PGP passphrase caching agent is running.</i>"
+msgstr ""
+"<i>Запущений непідтримуваний агент зберігання паролів PGP у пам'яті.</i>"
+
+#: ../libseahorse/seahorse-prefs.glade.h:7
+msgid "<i>No SSH caching agent is running. Cannot load Secure Shell keys.</i>"
+msgstr ""
+"<i>Агент зберігання у пам'яті ключів SSH не запущений. Не вдається "
+"завантажити ключі віддаленого командного рядка.</i>"
+
+#: ../libseahorse/seahorse-prefs.glade.h:8
+msgid "<i>This key is used to sign messages when no other key is chosen</i>"
+msgstr ""
+"<i>Цей ключ буде використаний для підпису повідомлень, якщо не вибраний "
+"інший ключ</i>"
+
+#: ../libseahorse/seahorse-prefs.glade.h:9
+msgid "Automatically load _Secure Shell keys"
+msgstr "Автоматично _завантажувати ключі віддаленого командного рядка"
+
+#: ../libseahorse/seahorse-prefs.glade.h:10
+msgid "Automatically synchronize modified keys with key servers. "
+msgstr "Автоматично синхронізувати змінені ключі з серверами ключівю. "
+
+#: ../libseahorse/seahorse-prefs.glade.h:11
+msgid "Encryption Settings"
+msgstr "Параметри шифрування"
+
+#: ../libseahorse/seahorse-prefs.glade.h:12
+msgid "Key Servers"
+msgstr "Сервери ключів"
+
+#: ../libseahorse/seahorse-prefs.glade.h:13
+msgid "Key Sharing"
+msgstr "Публікація ключів"
+
+#: ../libseahorse/seahorse-prefs.glade.h:14
+msgid "Passphrase Cache"
+msgstr "Пам'ять паролів"
+
+#: ../libseahorse/seahorse-prefs.glade.h:15
+msgid "Session Properties"
+msgstr "Властивості сеансу"
+
+#: ../libseahorse/seahorse-prefs.glade.h:16
+msgid ""
+"Sharing your keys allows other people on your network to use the keys you've "
+"collected. This means they can automatically encrypt things for you or those "
+"you know, without you having to send them your key.\n"
+"\n"
+"<b>Note:</b> Your personal keys will not be compromised."
+msgstr ""
+"Публікація ключів у вашій мережі дозволяє використовувати усім сусідам "
+"ключі, що зібрані у вас. Це означає, що можна шифрувати дані для знайомих не "
+"надсилаючи їм свій ключ.\n"
+"\n"
+"<b>Зауважте:</b> При цьому ваші особисті ключі не піддаватись небезпеці."
+
+#: ../libseahorse/seahorse-prefs.glade.h:19
+msgid "Start seahorse-agent"
+msgstr "Запустити seahorse-agent"
+
+#: ../libseahorse/seahorse-prefs.glade.h:20
+msgid ""
+"To avoid manually starting the 'seahorse-agent' in the future\n"
+"add it to the Session Manager. "
+msgstr ""
+"Щоб не запускати 'seahorse-agent' вручну у майбутньому,\n"
+"додайте його до програми налаштовування сеансу. "
+
+#: ../libseahorse/seahorse-prefs.glade.h:22
+msgid "When _encrypting, always include myself as a recipient"
+msgstr "При _шифруванні включати себе у список отримувачів"
+
+#: ../libseahorse/seahorse-prefs.glade.h:23
+msgid "_Always remember passphrases whenever logged in"
+msgstr "_Завжди запам'ятовувати паролі під час сеансу"
+
+#: ../libseahorse/seahorse-prefs.glade.h:24
+msgid "_Ask me before using a cached passphrase"
+msgstr "_Питати перед використанням ключа з пам'яті"
+
+#: ../libseahorse/seahorse-prefs.glade.h:25
+msgid "_Default Key:"
+msgstr "_Типовий ключ:"
+
+#: ../libseahorse/seahorse-prefs.glade.h:26
+msgid "_Find Keys Using:"
+msgstr "Зн_айти ключі за допомогою:"
+
+#: ../libseahorse/seahorse-prefs.glade.h:27
+msgid "_Never remember passphrases"
+msgstr "_Ніколи не пам'ятати пароль"
+
+#: ../libseahorse/seahorse-prefs.glade.h:28
+msgid "_Publish Keys To:"
+msgstr "_Публікувати ключі:"
+
+#: ../libseahorse/seahorse-prefs.glade.h:29
+msgid "_Remember passphrases for"
+msgstr "_Пам'ятати паролі на"
+
+#: ../libseahorse/seahorse-prefs.glade.h:30
+msgid "_Share my keys with others on my network"
+msgstr "Публик_увати ключі для іншх у мережі"
+
+#: ../libseahorse/seahorse-prefs.glade.h:31
+msgid "minutes"
+msgstr "хвилин"
+
+#: ../libseahorse/seahorse-progress.glade.h:1
+msgid "<b>Progress Message</b>"
+msgstr "<b>Повідомлення виконання</b>"
+
+#: ../libseahorse/seahorse-progress.glade.h:2
+msgid "Progress Status"
+msgstr "Статус виконання"
+
+#: ../libseahorse/seahorse-progress.glade.h:3
+msgid "Progress Title"
+msgstr "Заголовок виконання"
+
+#: ../libseahorse/seahorse-secure-entry.c:275
+msgid "Cursor Position"
+msgstr "Позиція курсору"
+
+#: ../libseahorse/seahorse-secure-entry.c:275
+msgid "The current position of the insertion cursor in chars"
+msgstr "Поточна позиція курсору вставки у символах"
+
+#: ../libseahorse/seahorse-secure-entry.c:279
+msgid "Selection Bound"
+msgstr "Межі виділення"
+
+#: ../libseahorse/seahorse-secure-entry.c:279
+msgid ""
+"The position of the opposite end of the selection from the cursor in chars"
+msgstr "Положення протилежного кінця виділення від курсору у символах"
+
+#: ../libseahorse/seahorse-secure-entry.c:283
+msgid "Maximum length"
+msgstr "Максимальна довжина"
+
+#: ../libseahorse/seahorse-secure-entry.c:283
+msgid "Maximum number of characters for this entry. Zero if no maximum"
+msgstr ""
+"Максимальна кількість символів у полі вводу. Нуль означає відсутність "
+"максимуму"
+
+#: ../libseahorse/seahorse-secure-entry.c:287
+msgid "Has Frame"
+msgstr "Наявність області"
+
+#: ../libseahorse/seahorse-secure-entry.c:287
+msgid "FALSE removes outside bevel from entry"
+msgstr "Значення FALSE видаляє зайве з поля вводу"
+
+#: ../libseahorse/seahorse-secure-entry.c:291
+msgid "Invisible character"
+msgstr "Невидимий символ"
+
+#: ../libseahorse/seahorse-secure-entry.c:291
+msgid "The character to use when masking entry contents (in \"password mode\")"
+msgstr ""
+"Символ, що використовується для приховування змісту поля вводу у режимі "
+"вводу пароля"
+
+#: ../libseahorse/seahorse-secure-entry.c:295
+msgid "Activates default"
+msgstr "Активувати типове"
+
+#: ../libseahorse/seahorse-secure-entry.c:295
+msgid ""
+"Whether to activate the default widget (such as the default button in a "
+"dialog) when Enter is pressed"
+msgstr ""
+"Чи активувати типове вікно (наприклад, кнопку діалогу), коли натиснена "
+"клавіша Enter."
+
+#: ../libseahorse/seahorse-secure-entry.c:299
+msgid "Width in chars"
+msgstr "Ширина у символах"
+
+#: ../libseahorse/seahorse-secure-entry.c:299
+msgid "Number of characters to leave space for in the entry"
+msgstr "Число символів, що зарезервовані у полі вводу"
+
+#: ../libseahorse/seahorse-secure-entry.c:303
+msgid "Scroll offset"
+msgstr "Відступ прокрутки"
+
+#: ../libseahorse/seahorse-secure-entry.c:303
+msgid "Number of pixels of the entry scrolled off the screen to the left"
+msgstr "Число пікселів у полі вводу для прокрутки ліворуч"
+
+#: ../libseahorse/seahorse-secure-entry.c:307
+msgid "Text"
+msgstr "Текст"
+
+#: ../libseahorse/seahorse-secure-entry.c:307
+msgid "The contents of the entry"
+msgstr "Зміст поля вводу"
+
+#: ../libseahorse/seahorse-secure-entry.c:311
+msgid "Visibility"
+msgstr "Видимість"
+
+#: ../libseahorse/seahorse-secure-entry.c:311
+msgid "Whether contents are drawn using invisible character"
+msgstr "Відображати зміст прихованими символами"
+
+#: ../libseahorse/seahorse-server-source.c:467
+msgid "LDAP Key Server"
+msgstr "Сервер ключів LDAP"
+
+#: ../libseahorse/seahorse-server-source.c:470
+msgid "HTTP Key Server"
+msgstr "Сервер ключів HTTP"
+
+#. TODO: We should be giving an error message that allows them to
+#. generate or import a key
+#: ../libseahorse/seahorse-signer.c:57 ../src/seahorse-sign.c:159
+msgid "No keys usable for signing"
+msgstr "Немає придатних ключів для підпису"
+
+#: ../libseahorse/seahorse-signer.c:58
+msgid ""
+"You have no personal PGP keys that can be used to sign a document or message."
+msgstr ""
+"Немає особистого ключа PGP, придатного для підпису документу або "
+"повідомлення."
+
+#: ../libseahorse/seahorse-signer.glade.h:1
+msgid "_Sign message with key:"
+msgstr "_Підписати повідомлення ключем:"
+
+#: ../libseahorse/seahorse-ssh-key.c:90
+msgid "(Unreadable Secure Shell Key)"
+msgstr "(ключ оболонки віддаленого командного рядка, що не відображаєтсья)"
+
+#: ../libseahorse/seahorse-ssh-key.c:94 ../libseahorse/seahorse-ssh-key.c:98
+#: ../libseahorse/seahorse-ssh-source.c:746
+#: ../src/seahorse-generate-select.c:145
+#: ../src/seahorse-ssh-key-properties.glade.h:20
+msgid "Secure Shell Key"
+msgstr "Ключ SSH"
+
+#: ../libseahorse/seahorse-ssh-key.c:126
+msgid "Private Secure Shell Key"
+msgstr "Приватний ключ SSH"
+
+#: ../libseahorse/seahorse-ssh-key.c:129
+msgid "Public Secure Shell Key"
+msgstr "Відкритий ключ SSH"
+
+#: ../libseahorse/seahorse-ssh-operation.c:135
+#: ../libseahorse/seahorse-ssh-operation.c:697
+msgid "The SSH command was terminated unexpectedly."
+msgstr "Команда SSH несподівано завершилась."
+
+#: ../libseahorse/seahorse-ssh-operation.c:143
+#: ../libseahorse/seahorse-ssh-operation.c:704
+msgid "The SSH command failed."
+msgstr "Команда SSH закінчилась невдало."
+
+#: ../libseahorse/seahorse-ssh-operation.c:441
+msgid "Secure Shell key"
+msgstr "Ключ віддаленого командного рядка"
+
+#. Just prompt over and over again
+#: ../libseahorse/seahorse-ssh-operation.c:727
+msgid "Secure Shell Passphrase"
+msgstr "Пароль віддаленого командного рядка"
+
+#: ../libseahorse/seahorse-ssh-operation.c:808
+msgid "Old Key Passphrase"
+msgstr "Старий пароль"
+
+#: ../libseahorse/seahorse-ssh-operation.c:809
 #, c-format
-msgid "%s: Good signature from (<b>expired</b>) '%s' on %s"
-msgstr ""
+msgid "Enter the old passphrase for: %s"
+msgstr "Введіть старий пароль для %s"
 
-#: libseahorse/seahorse-signatures.c:70
+#: ../libseahorse/seahorse-ssh-operation.c:813
+msgid "New Key Passphrase"
+msgstr "Новий пароль"
+
+#: ../libseahorse/seahorse-ssh-operation.c:814
 #, c-format
-msgid "%s: <b>Expired</b> signature from '%s' on %s"
-msgstr ""
+msgid "Enter the new passphrase for: %s"
+msgstr "Введіть новий пароль для %s"
 
-#: libseahorse/seahorse-signatures.c:74
+#: ../libseahorse/seahorse-ssh-operation.c:822
+msgid "Enter Key Passphrase"
+msgstr "Введіть пароль ключа"
+
+#: ../libseahorse/seahorse-ssh-operation.c:890
+msgid "Passphrase for New Secure Shell Key"
+msgstr "Пароль для нового ключа віддаленого командного рядка"
+
+#: ../libseahorse/seahorse-ssh-operation.c:891
+msgid "Enter a passphrase for your new Secure Shell key."
+msgstr "Введіть пароль для нового ключа віддаленого командного рядка."
+
+#: ../libseahorse/seahorse-ssh-operation.c:1029
+msgid "Secure Shell Key Passphrase"
+msgstr "Пароль ключа віддаленого командного рядка"
+
+#: ../libseahorse/seahorse-ssh-operation.c:1029
 #, c-format
-msgid "%s: Good signature from (<b>revoked</b>) '%s' on %s"
-msgstr ""
+msgid "Enter the passphrase for: %s"
+msgstr "Введіть пароль для %s"
 
-#: libseahorse/seahorse-signatures.c:78
+#: ../libseahorse/seahorse-ssh-operation.c:1030
+msgid "Save this passphrase in my keyring"
+msgstr "Зберегти пароль у в'язці ключів"
+
+#: ../libseahorse/seahorse-ssh-operation.c:1104
 #, c-format
-msgid "%s: Good signature from '%s' on %s"
-msgstr ""
+msgid "Importing key: %s"
+msgstr "Імпорт ключа: %s"
 
-#: libseahorse/seahorse-signatures.c:82
-#, fuzzy, c-format
-msgid "%s: Signing key not in key ring"
-msgstr "Ключ підпису не у комплекті ключів"
+#: ../libseahorse/seahorse-ssh-operation.c:1106
+msgid "Importing key. Enter passphrase"
+msgstr "Імпорт ключа. Введіть пароль"
 
-#: libseahorse/seahorse-signatures.c:85
-#, fuzzy, c-format
-msgid "%s: <b>Bad</b> signature"
-msgstr "Неправильний підпис"
+#: ../libseahorse/seahorse-ssh-operation.c:1108
+#: ../src/seahorse-key-manager.c:513
+#: ../src/seahorse-pgp-keys.desktop.in.in.h:1
+msgid "Import Key"
+msgstr "Імпортувати ключ"
 
-#: libseahorse/seahorse-signatures.c:88
-#, fuzzy, c-format
-msgid "%s: Not a signature"
-msgstr "Не підпис"
+#: ../libseahorse/seahorse-unknown-key.c:67
+msgid "Unavailable"
+msgstr "Недоступно"
 
-#: libseahorse/seahorse-signatures.c:91
-#, fuzzy, c-format
-msgid "%s: Verification error"
-msgstr "Помилка при перевірці"
+#: ../libseahorse/seahorse-unknown-key.c:87
+#, c-format
+msgid "Unknown Key: %s"
+msgstr "Невідомий ключ: %s"
 
-#: libseahorse/seahorse-signatures.glade.h:1
-msgid "<big><b>Signatures found are listed below:  </b></big>"
-msgstr ""
+#: ../libseahorse/seahorse-unknown-key.c:119
+msgid "Unknown Key"
+msgstr "Невідомий ключ"
 
-#: libseahorse/seahorse-signatures.glade.h:2
-msgid "Signature Verification"
-msgstr "Перевірка підпису"
+#: ../libseahorse/seahorse-unknown-source.c:128
+msgid "Unavailable Key"
+msgstr "Недоступний ключ"
 
-#: libseahorse/seahorse-util.c:127
+#: ../libseahorse/seahorse-util.c:188
 msgid "%Y-%m-%d"
 msgstr "%d-%M-%Y"
 
-#: libseahorse/seahorse-util.c:701
+#: ../libseahorse/seahorse-util.c:379
+msgid "Key Data"
+msgstr "Дані ключа"
+
+#: ../libseahorse/seahorse-util.c:381
+msgid "Multiple Keys"
+msgstr "Декілька ключів"
+
+#: ../libseahorse/seahorse-util.c:694
 msgid "Couldn't run file-roller"
-msgstr ""
+msgstr "Не вдається запустити програму менеджер архівів File-Roller"
 
-#: libseahorse/seahorse-util.c:706
+#: ../libseahorse/seahorse-util.c:699
+#: ../plugins/nautilus/seahorse-tool-files.c:645
+msgid "Couldn't package files"
+msgstr "Не вдається запакувати файли"
+
+#: ../libseahorse/seahorse-util.c:700
 msgid "The file-roller process did not complete successfully"
-msgstr ""
+msgstr "Програма менеджер архівів File-Roller завершилась невдало"
 
-#: libseahorse/seahorse-util.c:746
-msgid "All PGP key files"
-msgstr ""
+#: ../libseahorse/seahorse-util.c:710
+msgid "Couldn't set permissions on backup file."
+msgstr "Не вдається встановити права доступу до резервного файлу."
 
-#: libseahorse/seahorse-util.c:752 libseahorse/seahorse-util.c:792
+#. Filter for PGP keys. We also include *.asc, as in many
+#. cases that extension is associated with text/plain
+#: ../libseahorse/seahorse-util.c:812
+msgid "All key files"
+msgstr "Усі файли ключів"
+
+#: ../libseahorse/seahorse-util.c:819 ../libseahorse/seahorse-util.c:859
+#: ../src/seahorse-photos.c:239
 msgid "All files"
-msgstr ""
+msgstr "Усі файли"
 
-#: libseahorse/seahorse-util.c:785
+#: ../libseahorse/seahorse-util.c:852
 msgid "Archive files"
-msgstr ""
+msgstr "Архівні файли"
 
-#: libseahorse/seahorse-util.c:814
+#: ../libseahorse/seahorse-util.c:893
 msgid ""
 "<b>A file already exists with this name.</b>\n"
 "\n"
 "Do you want to replace it with a new file?"
 msgstr ""
+"<b>Файл з такою назвою існує.</b>\n"
+"\n"
+"Замінити його новим файлом?"
 
-#: libseahorse/seahorse-util.c:817
+#: ../libseahorse/seahorse-util.c:896
 msgid "_Replace"
-msgstr ""
+msgstr "_Замінити"
 
-#: libseahorse/seahorse-validity.c:31 src/seahorse-key-manager-store.c:148
-#: src/seahorse-key-properties.glade.h:20
-msgid "Unknown"
-msgstr "Невідомо"
-
-#: libseahorse/seahorse-validity.c:33 src/seahorse-key-properties.glade.h:10
+#: ../libseahorse/seahorse-validity.c:33 ../src/seahorse-key-properties.c:1096
+#: ../src/seahorse-key-properties.c:1228 ../src/seahorse-key-properties.c:1300
 msgid "Never"
 msgstr "Ніколи"
 
-#: libseahorse/seahorse-validity.c:35 src/seahorse-key-properties.glade.h:8
+#: ../libseahorse/seahorse-validity.c:35 ../src/seahorse-key-properties.c:1103
 msgid "Marginal"
-msgstr "Незначна"
+msgstr "Іноді"
 
-#: libseahorse/seahorse-validity.c:37 src/seahorse-key-properties.glade.h:6
+#: ../libseahorse/seahorse-validity.c:37 ../src/seahorse-key-properties.c:1109
 msgid "Full"
-msgstr "Повна"
+msgstr "Повністю"
 
-#: libseahorse/seahorse-validity.c:39 src/seahorse-key-properties.glade.h:18
+#: ../libseahorse/seahorse-validity.c:39 ../src/seahorse-key-properties.c:1115
 msgid "Ultimate"
-msgstr "Максимальна"
+msgstr "Безумовно"
 
-#: libseahorse/seahorse-validity.c:41
+#: ../libseahorse/seahorse-validity.c:41
 msgid "Disabled"
 msgstr "Вимкнений"
 
-#: libseahorse/seahorse-validity.c:43 src/seahorse-key-properties.c:204
+#: ../libseahorse/seahorse-validity.c:43 ../src/seahorse-key-properties.c:1296
 msgid "Revoked"
 msgstr "Відкликаний"
 
-#: libseahorse/seahorse-widget.c:210
+#: ../libseahorse/seahorse-widget.c:311
 #, c-format
 msgid "Could not display help: %s"
+msgstr "Не вдається відобразити довідку: %s"
+
+#: ../plugins/applet/GNOME_SeahorseApplet.server.in.in.h:1
+msgid "Clipboard Text Encryption"
+msgstr "Шифрування буфера обміну"
+
+#: ../plugins/applet/GNOME_SeahorseApplet.server.in.in.h:2
+msgid "Encrypt, decrypt or sign the clipboard (uses PGP type encryption)."
 msgstr ""
+"Зашифрувати, розшифрувати чи підписати буфер обміну за допомогою ключа PGP"
 
-#: plugins/gedit/seahorse-gedit.c:45
-#, fuzzy
-msgid "_Encrypt..."
-msgstr "Шифрувати...."
+#: ../plugins/applet/GNOME_SeahorseApplet.server.in.in.h:3
+msgid "Seahorse Applet Factory"
+msgstr "Фабрика аплету панелі Seahorse"
 
-#: plugins/gedit/seahorse-gedit.c:48
-msgid "PGP Encrypt the selected text"
+#: ../plugins/applet/GNOME_SeahorseApplet.xml.h:1
+#: ../src/seahorse-key-manager.c:1190
+msgid "_About"
+msgstr "_Про програму"
+
+#: ../plugins/applet/GNOME_SeahorseApplet.xml.h:2
+#: ../src/seahorse-key-manager.c:1174 ../src/seahorse-keyserver-results.c:379
+msgid "_Help"
+msgstr "_Довідка"
+
+#: ../plugins/applet/GNOME_SeahorseApplet.xml.h:3
+msgid "_Preferences"
+msgstr "_Параметри"
+
+#: ../plugins/applet/seahorse-applet.c:309
+msgid "seahorse-applet"
+msgstr "seahorse-applet"
+
+#: ../plugins/applet/seahorse-applet.c:311
+#: ../plugins/applet/seahorse-applet.c:832
+msgid "Use PGP/GPG to encrypt/decrypt/sign/verify/import the clipboard."
 msgstr ""
+"Використання ключів PGP/GPG для шифрування чи підписи змісту буфера обміну."
 
-#: plugins/gedit/seahorse-gedit.c:50
-msgid "Decr_ypt/Verify"
+#: ../plugins/applet/seahorse-applet.c:316 ../src/seahorse-key-manager.c:869
+msgid "translator-credits"
 msgstr ""
+"Юрій Сирота <yuriy@beer.com>\n"
+"Максим Дзюманенко <dziumanenko@gmail.com>"
 
-#: plugins/gedit/seahorse-gedit.c:53
-#, fuzzy
-msgid "Decrypt and/or Verify PGP text"
-msgstr "Розшифрувати і перевірити підписи..."
+#: ../plugins/applet/seahorse-applet.c:319 ../src/seahorse-key-manager.c:872
+msgid "Seahorse Project Homepage"
+msgstr "Домашня сторінка проекту Seahorse"
 
-#: plugins/gedit/seahorse-gedit.c:55
-#, fuzzy
-msgid "Sig_n..."
-msgstr "Підписати..."
+#. Get the recipient list
+#: ../plugins/applet/seahorse-applet.c:374
+#: ../plugins/epiphany/seahorse-extension.c:251
+#: ../plugins/gedit/seahorse-gedit.c:332
+msgid "Choose Recipient Keys"
+msgstr "Обрати ключі отримувачів"
 
-#: plugins/gedit/seahorse-gedit.c:58
-msgid "PGP Sign the selected text"
-msgstr ""
+#: ../plugins/applet/seahorse-applet.c:393
+msgid "Encrypted Text"
+msgstr "Зашифрований текст"
 
-#: plugins/gedit/seahorse-gedit.c:220
-msgid "Couldn't encrypt text"
-msgstr ""
+#: ../plugins/applet/seahorse-applet.c:395
+msgid "Encryption Failed"
+msgstr "Не вдається зашифрувати"
 
-#: plugins/gedit/seahorse-gedit.c:227
-#, fuzzy
+#: ../plugins/applet/seahorse-applet.c:396
+msgid "The clipboard could not be encrypted."
+msgstr "Зміст буферу обміну не вдається зашифрувати."
+
+#: ../plugins/applet/seahorse-applet.c:430
+#: ../plugins/epiphany/seahorse-extension.c:296
+#: ../plugins/gedit/seahorse-gedit.c:611
+msgid "Choose Key to Sign with"
+msgstr "Виберіть ключ для підпису"
+
+#: ../plugins/applet/seahorse-applet.c:449
+msgid "Signed Text"
+msgstr "Підписаний текст"
+
+#: ../plugins/applet/seahorse-applet.c:451
+msgid "Signing Failed"
+msgstr "Не вдається підписатись"
+
+#: ../plugins/applet/seahorse-applet.c:452
+msgid "The clipboard could not be Signed."
+msgstr "Зміст буферу обміну не вдається підписати."
+
+#: ../plugins/applet/seahorse-applet.c:495
+#: ../plugins/epiphany/seahorse-extension.c:340
+msgid "Import Failed"
+msgstr "Не вдається імпортувати"
+
+#: ../plugins/applet/seahorse-applet.c:496
+#: ../plugins/epiphany/seahorse-extension.c:341
+msgid "Keys were found but not imported."
+msgstr "Ключі були знайдені, але не імпортовані"
+
+#: ../plugins/applet/seahorse-applet.c:527
+#: ../plugins/epiphany/seahorse-extension.c:374
+msgid "Decrypting Failed"
+msgstr "Розшифровка закінчилась невдало"
+
+#: ../plugins/applet/seahorse-applet.c:528
+#: ../plugins/epiphany/seahorse-extension.c:375
+msgid "Text may be malformed."
+msgstr "Форматування тексту могло бути втрачено."
+
+#: ../plugins/applet/seahorse-applet.c:579
+msgid "No PGP key or message was found on clipboard"
+msgstr "У буфері обміну не знайдено ключ PGP чи зашифроване повідомлення"
+
+#: ../plugins/applet/seahorse-applet.c:580
+msgid "No PGP data found."
+msgstr "Дані PGP не знайдені."
+
+#: ../plugins/applet/seahorse-applet.c:613
+msgid "Decrypted Text"
+msgstr "Розшифрований текст"
+
+#: ../plugins/applet/seahorse-applet.c:681
+msgid "Could not display the help file"
+msgstr "Не вдається показати зміст файлу довідки"
+
+#: ../plugins/applet/seahorse-applet.c:744
+msgid "_Encrypt Clipboard"
+msgstr "_Зашифрувати буфер обміну"
+
+#: ../plugins/applet/seahorse-applet.c:751
+msgid "_Sign Clipboard"
+msgstr "_Підписати буфер обміну"
+
+#: ../plugins/applet/seahorse-applet.c:758
+msgid "_Decrypt/Verify Clipboard"
+msgstr "_Розшифрувати чи перевірити буфер обміну"
+
+#: ../plugins/applet/seahorse-applet.c:764
+msgid "_Import Keys from Clipboard"
+msgstr "_Імпортувати ключі з буферу обміну"
+
+#: ../plugins/applet/seahorse-applet.c:829
+#: ../plugins/applet/seahorse-applet.c:831
+msgid "Encryption Applet"
+msgstr "Аплет шифрування"
+
+#: ../plugins/applet/seahorse-applet-preferences.glade.h:1
+msgid "<b>Display clipboard contents after:</b>"
+msgstr "<b>Показувати зміст буферу обміну після:</b>"
+
+#: ../plugins/applet/seahorse-applet-preferences.glade.h:2
+msgid "Clipboard Encryption Preferences"
+msgstr "Параметри шифрування буферу обміну"
+
+#: ../plugins/applet/seahorse-applet-preferences.glade.h:3
+msgid "_Decrypting or verifying the clipboard"
+msgstr "_Розшифровки чи перевірки змісту"
+
+#: ../plugins/applet/seahorse-applet-preferences.glade.h:4
+msgid "_Encrypting or signing the clipboard"
+msgstr "_Шифрування чи підпис змісту"
+
+#: ../plugins/applet/seahorse-applet-preferences.glade.h:5
+msgid "_Show clipboard state in panel"
+msgstr "_Показувати зміст буферу обміну на панелі"
+
+#: ../plugins/epiphany/seahorse-extension.c:601
+msgid "_Encrypt"
+msgstr "_Шифрувати"
+
+#: ../plugins/epiphany/seahorse-extension.c:608
+#: ../src/seahorse-sign.glade.h:21
+msgid "_Sign"
+msgstr "_Підписати"
+
+#: ../plugins/epiphany/seahorse-extension.c:615
+msgid "_Decrypt/Verify"
+msgstr "_Розшифрувати чи перевірити"
+
+#: ../plugins/epiphany/seahorse-extension.c:622
+msgid "_Import Key"
+msgstr "_Імпортувати ключ"
+
+#: ../plugins/gedit/seahorse-gedit.c:265
+msgid "Couldn't connect to seahorse-daemon"
+msgstr "Не вдається з'єднатись з демоном seahorse"
+
+#: ../plugins/gedit/seahorse-gedit.c:354
 msgid "Encrypted text"
-msgstr "Зашифрувати файл"
+msgstr "Зашифрувати текст"
 
-#: plugins/gedit/seahorse-gedit.c:245
-#, fuzzy
+#: ../plugins/gedit/seahorse-gedit.c:357
+msgid "Couldn't encrypt text"
+msgstr "Не вдається зашифрувати текст"
+
+#: ../plugins/gedit/seahorse-gedit.c:387 ../src/seahorse-key-manager.c:395
+#: ../src/seahorse-key-manager.c:463 ../src/seahorse-key-manager.c:484
 msgid "Couldn't import keys"
-msgstr "Імпортувати ключі"
+msgstr "Не вдається імпортувати ключі"
 
-#: plugins/gedit/seahorse-gedit.c:248
+#: ../plugins/gedit/seahorse-gedit.c:396
 msgid "Keys found but not imported"
-msgstr ""
+msgstr "Ключі знайдені але не імпортовані"
 
-#: plugins/gedit/seahorse-gedit.c:269 plugins/gedit/seahorse-gedit.c:290
+#: ../plugins/gedit/seahorse-gedit.c:430
 msgid "Couldn't decrypt text"
-msgstr ""
+msgstr "Не вдається розшифрувати текст"
 
-#: plugins/gedit/seahorse-gedit.c:353
-#, fuzzy
-msgid "No PGP encrypted or signed text is selected."
-msgstr "Шифрований та підписаний файл - %s"
+#: ../plugins/gedit/seahorse-gedit.c:462
+msgid "Couldn't verify text"
+msgstr "Не вдається перевірити текст"
 
-#: plugins/gedit/seahorse-gedit.c:384
-#, fuzzy
+#: ../plugins/gedit/seahorse-gedit.c:510
+msgid "No encrypted or signed text is selected."
+msgstr "Не виділено зашифрованого або підписаного тексту."
+
+#: ../plugins/gedit/seahorse-gedit.c:540
 msgid "Decrypted text"
-msgstr "Розшифрований файл - %s"
+msgstr "Розшифрований текст"
 
-#: plugins/gedit/seahorse-gedit.c:391
+#: ../plugins/gedit/seahorse-gedit.c:547
 msgid "Verified text"
-msgstr ""
+msgstr "Перевірений текст"
 
-#: plugins/gedit/seahorse-gedit.c:422
+#: ../plugins/gedit/seahorse-gedit.c:582
+#: ../plugins/nautilus/seahorse-tool.c:374 ../src/seahorse-key-manager.c:404
 #, c-format
-msgid "Block %d"
-msgstr ""
-
-#: plugins/gedit/seahorse-gedit.c:437
-#, fuzzy, c-format
 msgid "Imported %d key"
 msgid_plural "Imported %d keys"
-msgstr[0] "Імпортовано %d ключів"
-msgstr[1] "Імпортовано %d ключів"
+msgstr[0] "Імпортовано %d ключ"
+msgstr[1] "Імпортовано %d ключі"
+msgstr[2] "Імпортовано %d ключів"
 
-#: plugins/gedit/seahorse-gedit.c:475 plugins/gedit/seahorse-gedit.c:486
-msgid "Couldn't sign text"
-msgstr ""
-
-#: plugins/gedit/seahorse-gedit.c:493
-#, fuzzy
+#: ../plugins/gedit/seahorse-gedit.c:633
 msgid "Signed text"
-msgstr "Підписати ключ"
+msgstr "Підписаний текст"
 
-#: plugins/gedit/seahorse-gedit.schemas.in.h:1
-msgid "Enable the seahorse PGP encryption plugin for gedit."
-msgstr ""
+#: ../plugins/gedit/seahorse-gedit.c:636
+msgid "Couldn't sign text"
+msgstr "Не вдається підписати текст"
 
-#: plugins/gedit/seahorse-gedit.schemas.in.h:2
+#: ../plugins/gedit/seahorse-gedit-plugin.c:133
+msgid "_Encrypt..."
+msgstr "_Зашифрувати..."
+
+#: ../plugins/gedit/seahorse-gedit-plugin.c:134
+msgid "Encrypt the selected text"
+msgstr "Зашифрувати виділений текст"
+
+#: ../plugins/gedit/seahorse-gedit-plugin.c:135
+msgid "Decr_ypt/Verify"
+msgstr "_Розшифрувати чи перевірити"
+
+#: ../plugins/gedit/seahorse-gedit-plugin.c:136
+msgid "Decrypt and/or Verify text"
+msgstr "Розшифрувати та перевірити підписи..."
+
+#: ../plugins/gedit/seahorse-gedit-plugin.c:137
+msgid "Sig_n..."
+msgstr "Пі_дписати..."
+
+#: ../plugins/gedit/seahorse-gedit-plugin.c:138
+msgid "Sign the selected text"
+msgstr "Підписати виділений текст"
+
+#: ../plugins/gedit/seahorse-gedit.schemas.in.h:1
+msgid "Enable the seahorse encryption plugin for gedit."
+msgstr "Увімкнути модуль шифрування за допомогою seahorse для GEdit."
+
+#: ../plugins/gedit/seahorse-gedit.schemas.in.h:2
 msgid "Enable the seahorse gedit plugin"
-msgstr ""
+msgstr "Увімкнути модуль шифрування для редактора GEdit"
 
-#: plugins/gedit/seahorse-pgp.gedit-plugin.desktop.in.h:1
-#, fuzzy
-msgid "PGP Encryption"
-msgstr "Зашифрувати файл"
+#: ../plugins/gedit/seahorse-pgp.gedit-plugin.desktop.in.h:1
+msgid "Text Encryption"
+msgstr "Шифрування тексту"
 
-#: plugins/gedit/seahorse-pgp.gedit-plugin.desktop.in.h:2
-#, fuzzy
-msgid "The PGP encrypt plugin performs encryption operations on text."
-msgstr "Seahorse операції шифрування та підписування PGP"
+#: ../plugins/gedit/seahorse-pgp.gedit-plugin.desktop.in.h:2
+msgid "This plugin performs encryption operations on text."
+msgstr "Цей модуль дозволяє шифрувати та підписувати текст."
 
-#: plugins/nautilus/seahorse-pgp-preferences.desktop.in.h:1
-msgid "Configure PGP"
-msgstr "Настройка PGP"
+#: ../plugins/nautilus-ext/seahorse-nautilus.c:161
+msgid "Encrypt..."
+msgstr "Шифрувати...."
 
-#: src/main.c:48
+#: ../plugins/nautilus-ext/seahorse-nautilus.c:162
+msgid "Encrypt (and optionally sign) the selected file"
+msgid_plural "Encrypt the selected files"
+msgstr[0] "Зашифрувати та, можливо, підписати виділений файл"
+msgstr[1] "Зашифрувати та, можливо, підписати виділені файли"
+msgstr[2] "Зашифрувати та, можливо, підписати виділені файли"
+
+#: ../plugins/nautilus-ext/seahorse-nautilus.c:168
+#: ../src/seahorse-pgp-private-key-properties.glade.h:38
+msgid "Sign"
+msgstr "Підписати"
+
+#: ../plugins/nautilus-ext/seahorse-nautilus.c:169
+msgid "Sign the selected file"
+msgid_plural "Sign the selected files"
+msgstr[0] "Підписати виділений файл"
+msgstr[1] "Підписати виділені файли"
+msgstr[2] "Підписати виділені файли"
+
+#: ../plugins/nautilus/seahorse-pgp-preferences.c:43
+#: ../plugins/nautilus/seahorse-pgp-preferences.c:47
+#: ../plugins/nautilus/seahorse-pgp-preferences.c:51
+msgid "For internal use"
+msgstr "Для внутрішнього використання"
+
+#: ../plugins/nautilus/seahorse-pgp-preferences.c:78
+#: ../plugins/nautilus/seahorse-pgp-preferences.desktop.in.h:2
+msgid "Encryption Preferences"
+msgstr "Параметри шифрування"
+
+#: ../plugins/nautilus/seahorse-pgp-preferences.desktop.in.h:1
+msgid "Configure key servers and other encryption settings"
+msgstr "Налаштовування сервера ключів та інші параметри шифрування"
+
+#: ../plugins/nautilus/seahorse-tool.c:52
 msgid "Import keys from the file"
 msgstr "Імпортувати ключі з файлу"
 
-#: src/main.c:51
+#: ../plugins/nautilus/seahorse-tool.c:54
 msgid "Encrypt file"
 msgstr "Зашифрувати файл"
 
-#: src/main.c:54
+#: ../plugins/nautilus/seahorse-tool.c:56
 msgid "Sign file with default key"
 msgstr "Підписати файл типовим ключем"
 
-#: src/main.c:57
+#: ../plugins/nautilus/seahorse-tool.c:58
 msgid "Encrypt and sign file with default key"
 msgstr "Зашифрувати та підписати типовим ключем"
 
-#: src/main.c:60
+#: ../plugins/nautilus/seahorse-tool.c:60
 msgid "Decrypt encrypted file"
 msgstr "Розшифрувати шифрований файл"
 
-#: src/main.c:63
+#: ../plugins/nautilus/seahorse-tool.c:62
 msgid "Verify signature file"
 msgstr "Перевірити підпису файлу"
 
-#: src/main.c:66
+#: ../plugins/nautilus/seahorse-tool.c:64
 msgid "Read list of URIs on standard in"
-msgstr ""
+msgstr "Прочитати список URI зі стандартного вводу"
 
-#: src/main.c:146 src/seahorse-key-manager.c:112
-#, fuzzy, c-format
-msgid "Couldn't import keys from \"%s\""
-msgstr "Імпортувати ключі з файла"
+#: ../plugins/nautilus/seahorse-tool.c:66
+msgid "file..."
+msgstr "файл..."
 
-#: src/main.c:154
-#, fuzzy
-msgid "Imported key"
-msgstr "Імпортувати ключі"
+#: ../plugins/nautilus/seahorse-tool.c:128
+msgid "Choose Recipients"
+msgstr "Вибрати отримувачів"
 
-#: src/main.c:155
-#, c-format
-msgid "Imported %d keys"
-msgstr "Імпортовано %d ключів"
+#: ../plugins/nautilus/seahorse-tool.c:190
+#: ../plugins/nautilus/seahorse-tool.c:272
+msgid "Couldn't load keys"
+msgstr "Не вдається завантажити ключі"
 
-#: src/main.c:193
+#: ../plugins/nautilus/seahorse-tool.c:206
 #, c-format
 msgid "Choose Encrypted File Name for '%s'"
-msgstr ""
+msgstr "Виберіть зашифровану назву файлу для '%s'"
 
-#: src/main.c:205
+#: ../plugins/nautilus/seahorse-tool.c:256
+msgid "Choose Signer"
+msgstr "Вибрати автора підпису"
+
+#: ../plugins/nautilus/seahorse-tool.c:291
 #, c-format
-msgid "Couldn't encrypt \"%s\""
-msgstr ""
-
-#: src/main.c:258
-#, fuzzy, c-format
 msgid "Choose Signature File Name for '%s'"
-msgstr "Файл підпису - %s"
+msgstr "Виберіть назву файлу підпису для '%s'"
 
-#: src/main.c:266
-#, c-format
-msgid "Couldn't sign \"%s\""
-msgstr ""
+#: ../plugins/nautilus/seahorse-tool.c:372
+msgid "Imported key"
+msgstr "Ключ імпортований"
 
-#: src/main.c:298
+#. File to decrypt to
+#: ../plugins/nautilus/seahorse-tool.c:396
 #, c-format
 msgid "Choose Decrypted File Name for '%s'"
-msgstr ""
+msgstr "Виберіть файл для розшифрованого змісту '%s'"
 
-#: src/main.c:305
-#, c-format
-msgid "Couldn't decrypt \"%s\""
-msgstr ""
-
-#: src/main.c:357
+#: ../plugins/nautilus/seahorse-tool.c:452
 #, c-format
 msgid "Choose Original File for '%s'"
-msgstr ""
+msgstr "Виберіть оригінал для '%s'"
 
-#: src/main.c:385
+#.
+#. * TODO: What should happen with multiple files at this point.
+#. * The last thing we want to do is cascade a big pile of error
+#. * dialogs at the user.
+#.
+#: ../plugins/nautilus/seahorse-tool.c:524
+msgid "No valid signatures found"
+msgstr "Не знайдено необхідних підписів"
+
+#: ../plugins/nautilus/seahorse-tool.c:591
+msgid "File Encryption Tool"
+msgstr "Інструмент шифрування файлів"
+
+#: ../plugins/nautilus/seahorse-tool.c:614
+msgid "Encrypting"
+msgstr "Шифрування"
+
+#: ../plugins/nautilus/seahorse-tool.c:615
 #, c-format
-msgid "Couldn't verify \"%s\""
-msgstr ""
+msgid "Couldn't encrypt file: %s"
+msgstr "Не вдається зашифрувати файл: %s"
 
-#: src/main.c:431 src/seahorse.desktop.in.h:1
-msgid "GPG Keys Manager"
-msgstr "Менеджер ключів GPG"
+#: ../plugins/nautilus/seahorse-tool.c:623
+msgid "Signing"
+msgstr "Підпис"
 
-#: src/seahorse-add-subkey.c:110
+#: ../plugins/nautilus/seahorse-tool.c:624
+#, c-format
+msgid "Couldn't sign file: %s"
+msgstr "Не вдається підписатм файл: %s"
+
+#: ../plugins/nautilus/seahorse-tool.c:629
+msgid "Importing"
+msgstr "Імпорт"
+
+#: ../plugins/nautilus/seahorse-tool.c:630
+#, c-format
+msgid "Couldn't import keys from file: %s"
+msgstr "Не вдається імпортувати ключ з файлу: %s"
+
+#: ../plugins/nautilus/seahorse-tool.c:636
+msgid "Decrypting"
+msgstr "Розшифровування"
+
+#: ../plugins/nautilus/seahorse-tool.c:637
+#, c-format
+msgid "Couldn't decrypt file: %s"
+msgstr "Не вдається розшифрувати файл: %s"
+
+#: ../plugins/nautilus/seahorse-tool.c:642
+msgid "Verifying"
+msgstr "Перевірка"
+
+#: ../plugins/nautilus/seahorse-tool.c:643
+#, c-format
+msgid "Couldn't verify file: %s"
+msgstr "Не вдається перевірити підпис файлу: %s"
+
+#. TRANSLATOR: This string will become
+#. * "You have selected %d files and %d folders"
+#: ../plugins/nautilus/seahorse-tool-files.c:155
+#, c-format
+msgid "You have selected %d file "
+msgid_plural "You have selected %d files "
+msgstr[0] "Вибрано %d файл "
+msgstr[1] "Вибрано %d файли"
+msgstr[2] "Вибрано %d файли"
+
+#. TRANSLATOR: This string will become
+#. * "You have selected %d files and %d folders"
+#: ../plugins/nautilus/seahorse-tool-files.c:160
+#, c-format
+msgid "and %d folder"
+msgid_plural "and %d folders"
+msgstr[0] "та %d каталог"
+msgstr[1] "та %d каталоги"
+msgstr[2] "та %d каталогів"
+
+#. TRANSLATOR: "%s%s" are "You have selected %d files and %d folders"
+#. * Swap order with "%2$s%1$s" if needed
+#: ../plugins/nautilus/seahorse-tool-files.c:165
+#, c-format
+msgid "<b>%s%s</b>"
+msgstr "<b>%s%s</b>"
+
+#. should never be called for just one file
+#: ../plugins/nautilus/seahorse-tool-files.c:174
+#, c-format
+msgid "You have selected %d files"
+msgstr "Вибрано %d файлів"
+
+#: ../plugins/nautilus/seahorse-tool-files.c:179
+#, c-format
+msgid "You have selected %d folder"
+msgid_plural "You have selected %d folders"
+msgstr[0] "Вибрано %d каталог"
+msgstr[1] "Вибрано %d каталоги"
+msgstr[2] "Вибрано %d каталоги"
+
+#: ../plugins/nautilus/seahorse-tool-files.c:626
+msgid "Preparing..."
+msgstr "Підготовка..."
+
+#: ../plugins/nautilus/seahorse-tool-files.c:635
+#: ../plugins/nautilus/seahorse-tool-files.c:658
+msgid "Couldn't list files"
+msgstr "Не вдається перерахувати файли"
+
+#: ../src/main.c:75 ../src/seahorse-key-manager.c:864
+msgid "Encryption Key Manager"
+msgstr "Менеджер ключів шифрування"
+
+#: ../src/seahorse-add-subkey.c:111
 msgid "Couldn't add subkey"
-msgstr ""
+msgstr "Не вдається додати підключ"
 
-#: src/seahorse-add-subkey.c:126
+#: ../src/seahorse-add-subkey.c:127
 #, c-format
 msgid "Add subkey to %s"
 msgstr "Додати підключ до %s"
 
-#: src/seahorse-add-subkey.glade.h:1 src/seahorse-generate-adv.glade.h:5
+#: ../src/seahorse-add-subkey.glade.h:1 ../src/seahorse-pgp-generate.c:44
 msgid "DSA (sign only)"
 msgstr "DSA (лише підпис)"
 
-#: src/seahorse-add-subkey.glade.h:2
+#: ../src/seahorse-add-subkey.glade.h:2
 msgid "ElGamal (encrypt only)"
 msgstr "ElGamal (лише шифрування)"
 
-#. expires
-#: src/seahorse-add-subkey.glade.h:3 src/seahorse-generate-adv.glade.h:6
-#: src/seahorse-generate-druid.glade.h:14 src/seahorse-key-properties.c:209
+#: ../src/seahorse-add-subkey.glade.h:3
 msgid "Expiration Date:"
 msgstr "Дата закінчення дії:"
 
-#: src/seahorse-add-subkey.glade.h:4
+#: ../src/seahorse-add-subkey.glade.h:4
 msgid "Generate a new subkey"
 msgstr "Створити новий підключ"
 
-#: src/seahorse-add-subkey.glade.h:5 src/seahorse-generate-adv.glade.h:10
-#: src/seahorse-key-properties.c:232
+#: ../src/seahorse-add-subkey.glade.h:5
 msgid "If key never expires"
 msgstr "Якщо дія ключа ніколи не закінчується"
 
-#: src/seahorse-add-subkey.glade.h:6 src/seahorse-generate-adv.glade.h:12
+#: ../src/seahorse-add-subkey.glade.h:6
 msgid "Key _Length:"
 msgstr "Дов_жина ключа:"
 
-#: src/seahorse-add-subkey.glade.h:7 src/seahorse-generate-adv.glade.h:13
+#: ../src/seahorse-add-subkey.glade.h:7
 msgid "Key _Type:"
 msgstr "Т_ип ключа:"
 
-#: src/seahorse-add-subkey.glade.h:8 src/seahorse-generate-adv.glade.h:14
+#: ../src/seahorse-add-subkey.glade.h:8
 msgid "Key type / algorithm"
 msgstr "Тип/алгоритм ключа"
 
-#: src/seahorse-add-subkey.glade.h:9 src/seahorse-generate-adv.glade.h:15
+#: ../src/seahorse-add-subkey.glade.h:9
 msgid "Length of Key"
 msgstr "Довжина ключа"
 
-#: src/seahorse-add-subkey.glade.h:10 src/seahorse-generate-adv.glade.h:17
-#: src/seahorse-key-properties.c:230
+#: ../src/seahorse-add-subkey.glade.h:10
 msgid "Never E_xpires"
 msgstr "Ніколи _не закінчується термін дії"
 
-#: src/seahorse-add-subkey.glade.h:11
+#: ../src/seahorse-add-subkey.glade.h:11
 msgid "RSA (encrypt only)"
 msgstr "RSA (лише шифрування)"
 
-#: src/seahorse-add-subkey.glade.h:12 src/seahorse-generate-adv.glade.h:21
+#: ../src/seahorse-add-subkey.glade.h:12 ../src/seahorse-pgp-generate.c:45
 msgid "RSA (sign only)"
 msgstr "RSA (лише підпис)"
 
-#: src/seahorse-add-uid.c:81
+#: ../src/seahorse-add-uid.c:82
 msgid "Couldn't add user id"
-msgstr ""
+msgstr "Не вдається додати ідентифікатор користувача"
 
-#: src/seahorse-add-uid.c:104
+#: ../src/seahorse-add-uid.c:104
 #, c-format
 msgid "Add user ID to %s"
-msgstr "Додавання ідентифікатора користувача до %s"
+msgstr "Додати ідентифікатор користувача до %s"
 
-#: src/seahorse-add-uid.glade.h:2
+#: ../src/seahorse-add-uid.glade.h:1
 msgid "Add User ID"
-msgstr "Додавання ідентифікатора користувача"
+msgstr "Додати ідентифікатор користувача"
 
-#: src/seahorse-add-uid.glade.h:3
+#: ../src/seahorse-add-uid.glade.h:2
 msgid "Create the new user ID"
 msgstr "Створити новий ідентифікатор користувача"
 
-#: src/seahorse-add-uid.glade.h:4 src/seahorse-generate-adv.glade.h:7
+#: ../src/seahorse-add-uid.glade.h:3 ../src/seahorse-pgp-generate.glade.h:8
 msgid "Full _Name:"
 msgstr "Повне _ім'я:"
 
-#: src/seahorse-add-uid.glade.h:5 src/seahorse-generate-adv.glade.h:11
+#: ../src/seahorse-add-uid.glade.h:4
 msgid "Key Co_mment:"
 msgstr "_Коментар до ключа:"
 
-#: src/seahorse-add-uid.glade.h:6 src/seahorse-generate-adv.glade.h:16
+#: ../src/seahorse-add-uid.glade.h:5
 msgid "Must be at least 5 characters long"
 msgstr "Довжина повинна бути не менша ніж 5 символів"
 
-#: src/seahorse-add-uid.glade.h:7 src/seahorse-generate-adv.glade.h:18
-#: src/seahorse-generate-druid.glade.h:23
+#: ../src/seahorse-add-uid.glade.h:6
 msgid "Optional comment describing key"
 msgstr "Необов'язковий коментар з описом ключа"
 
-#: src/seahorse-add-uid.glade.h:8 src/seahorse-generate-adv.glade.h:19
-#: src/seahorse-generate-druid.glade.h:24
+#: ../src/seahorse-add-uid.glade.h:7
 msgid "Optional email address"
-msgstr "Необов'язкова електронна адреса"
+msgstr "Необов'язкова адреса ел.пошти"
 
-#: src/seahorse-add-uid.glade.h:9 src/seahorse-generate-adv.glade.h:22
+#: ../src/seahorse-add-uid.glade.h:8 ../src/seahorse-pgp-generate.glade.h:14
 msgid "_Email Address:"
-msgstr "_Електронна адреса"
+msgstr "_Адреса ел.пошти"
 
-#: src/seahorse-change-passphrase.glade.h:2
+#: ../src/seahorse-change-passphrase.glade.h:1
 msgid "Change Passphrase"
-msgstr "Зміна парольної фрази"
+msgstr "Змінити пароль"
 
-#: src/seahorse-change-passphrase.glade.h:3
-#: src/seahorse-generate-adv.glade.h:2
+#: ../src/seahorse-change-passphrase.glade.h:2
 msgid "Con_firm Passphrase:"
-msgstr "Підт_вердження парольної фрази:"
+msgstr "Підт_вердження паролю:"
 
-#: src/seahorse-change-passphrase.glade.h:4
+#: ../src/seahorse-change-passphrase.glade.h:3
 msgid "Confirm new passphrase"
-msgstr "Підтвердіть парольну фразу"
+msgstr "Підтвердіть новий пароль"
 
-#: src/seahorse-change-passphrase.glade.h:5
-msgid "Enter new passphrase"
-msgstr "Введіть нову парольну фразу"
-
-#: src/seahorse-change-passphrase.glade.h:6
+#: ../src/seahorse-change-passphrase.glade.h:5
 msgid "New _Passphrase:"
-msgstr "_Нова парольна фраза:"
+msgstr "_Новий пароль:"
 
-#: src/seahorse-delete.c:39
+#: ../src/seahorse-delete.c:40
 #, c-format
-msgid "%s is a key pair! Do you still want to delete it?"
-msgstr "%s є парою ключів! Однак бажаєте видалити?"
+msgid ""
+"%s is a private key. Make sure you have a backup. Do you still want to "
+"delete it?"
+msgstr ""
+"%s є закритим ключем. Переконайтесь що залишилась його резервна копія. Досі "
+"бажаєте видалити?"
 
-#: src/seahorse-delete.c:70
+#: ../src/seahorse-delete.c:74
 #, c-format
 msgid "Are you sure you want to permanently delete %s?"
 msgstr "Ви впевнені, що бажаєте остаточно видалити %s?"
 
-#: src/seahorse-delete.c:116
-#, fuzzy
-msgid "Couldn't delete key"
-msgstr "Видалити ключ"
+#: ../src/seahorse-delete.c:80
+#, c-format
+msgid "Are you sure you want to permanently delete %d key?"
+msgid_plural "Are you sure you want to permanently delete %d keys?"
+msgstr[0] "Ви дійсно бажаєте остаточно видалити %d ключ?"
+msgstr[1] "Ви дійсно бажаєте остаточно видалити %d ключі?"
+msgstr[2] "Ви дійсно бажаєте остаточно видалити %d ключів?"
 
-#: src/seahorse-delete.c:134
+#: ../src/seahorse-delete.c:124
+msgid "Couldn't delete key"
+msgstr "Не вдається видалити ключ"
+
+#: ../src/seahorse-delete.c:139
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
-msgstr "Ви впевнені, що бажаєте остаточно видалити підключ %d з %s?"
+msgstr "Ви впевнені, що бажаєте остаточно видалити підключ %d з ключа %s?"
 
-#: src/seahorse-delete.c:156
-#, fuzzy
+#: ../src/seahorse-delete.c:162
 msgid "Couldn't delete subkey"
-msgstr "Видалити підключ %d"
+msgstr "Не вдається видалити підключ"
 
-#: src/seahorse-delete.c:174
-#, fuzzy, c-format
+#: ../src/seahorse-delete.c:181
+#, c-format
 msgid "Are you sure you want to permanently delete the '%s' user ID?"
-msgstr "Ви впевнені, що бажаєте остаточно видалити %s?"
+msgstr "Ви дійсно бажаєте видалити ідентифікатор користувача '%s'?"
 
-#: src/seahorse-delete.c:197
+#: ../src/seahorse-delete.c:206
 msgid "Couldn't delete user id"
-msgstr ""
+msgstr "Не вдається видалити ідентифікатор користувача"
 
-#: src/seahorse-generate-adv.c:141 src/seahorse-generate-druid.c:167
-#, fuzzy
-msgid "Couldn't generate key"
-msgstr "Видалити ключ"
+#: ../src/seahorse.desktop.in.in.h:1
+msgid "Manage your passwords and encryption keys"
+msgstr "Керування паролями та ключами шифрування"
 
-#: src/seahorse-generate-adv.glade.h:3
-msgid "Confirmation of passphrase"
-msgstr "Підтвердження парольної фрази"
+#: ../src/seahorse.desktop.in.in.h:2 ../src/seahorse-key-manager.glade.h:7
+msgid "Passwords and Encryption Keys"
+msgstr "Паролі та ключі шифрування"
 
-#: src/seahorse-generate-adv.glade.h:4
-msgid "DSA & ElGamal"
-msgstr "DSA та ElGamal"
+#: ../src/seahorse-expires.c:67
+msgid "Couldn't change expiry date"
+msgstr "Не вдається змінити термін дії"
 
-#: src/seahorse-generate-adv.glade.h:8
-msgid "Generate a Key"
-msgstr "Створення ключа"
+#: ../src/seahorse-expires.c:131
+#, c-format
+msgid "Expiry for Subkey %d of %s"
+msgstr "Термін дії для підключа %d ключа %s"
 
-#: src/seahorse-generate-adv.glade.h:9
-msgid "Generate a new key"
-msgstr "Створити новий ключ"
+#: ../src/seahorse-expires.c:133
+#, c-format
+msgid "Expiry for %s"
+msgstr "Закінчується за %s"
 
-#: src/seahorse-generate-adv.glade.h:20 src/seahorse-generate-druid.glade.h:26
-msgid "Passphrase to secure key"
-msgstr "Парольна фраза для захисту ключа"
+#: ../src/seahorse-expires.glade.h:1
+msgid "C_hange"
+msgstr "_Змінити"
 
-#: src/seahorse-generate-adv.glade.h:23
-msgid "_Generate"
-msgstr "С_творити"
-
-#: src/seahorse-generate-adv.glade.h:24
-msgid "_Passphrase:"
-msgstr "_Парольна фраза:"
-
-#: src/seahorse-generate-druid.glade.h:2
-msgid ""
-"Before selecting apply to start key generation, please make sure all of your "
-"previous settings are correct."
-msgstr ""
-"Перед натисканням кнопки \"Застосувати\", переконайтесь, що всі введені вами "
-"параметри коректні."
-
-#: src/seahorse-generate-druid.glade.h:3
-#, fuzzy
-msgid ""
-"Choosing a passphrase is an integral part of creating a strong key. Like a "
-"password, a passphrase should contain letters, numbers, and punctuation. "
-"Additionally, a passphrase can contain spaces, meaning it can contain many "
-"words. \n"
-"\n"
-"You should pick a phrase that is easy to rememeber and contains punctuation. "
-"Take this phrase, adjust the case of various letters, and change some of the "
-"letters into numbers or punctuation, reminiscent of \"leet speak\", but "
-"don't make it so obscure to the point where you can't remember it."
-msgstr ""
-"Вибір парольної фрази є невід'ємною частиною створення надійного ключа. Як і "
-"пароль парольна фраза повинна містити символи, числа та знаки пунктуації.  "
-"Крім того, парольна фраза може містити пробіли, це означає, що вона може "
-"складатись з кількох слів. Необхідно вибрати фразу зі знаками пунктуації, "
-"яку ви легко запам'ятаєте. Вибравши фразу, замініть у ній регістр деяких "
-"літер, та перетворіть деякі літери у числа або знаки пунктуації, але не "
-"змінюйте її на стільки, що ви не зможете пригадати її."
-
-#: src/seahorse-generate-druid.glade.h:6
-msgid "Comment:"
-msgstr "Коментар:"
-
-#: src/seahorse-generate-druid.glade.h:7
-msgid "Confirm"
-msgstr "Підтвердження"
-
-#: src/seahorse-generate-druid.glade.h:8
-#, fuzzy
-msgid "Confirm Passphrase:"
-msgstr "Підтвердження парольної фрази: "
-
-#: src/seahorse-generate-druid.glade.h:9
-msgid "Confirm passphrase"
-msgstr "Підтвердіть парольну фразу"
-
-#: src/seahorse-generate-druid.glade.h:10
-msgid "Date the Key Expires"
-msgstr "Дата закінчення терміну дії"
-
-#: src/seahorse-generate-druid.glade.h:11
-#, fuzzy
-msgid "Email Address:"
-msgstr "_Електронна адреса"
-
-#: src/seahorse-generate-druid.glade.h:12
-msgid "Enter Name - Must be at least five letters."
-msgstr "Введіть ім'я - повинно складатись принаймні з п'яти символів."
-
-#: src/seahorse-generate-druid.glade.h:13 src/seahorse-key-manager-store.c:289
-msgid "Expiration Date"
-msgstr "Дата закінчення терміну дії"
-
-#: src/seahorse-generate-druid.glade.h:15
-msgid "Extra High Security"
-msgstr "Дуже висока безпека"
-
-#: src/seahorse-generate-druid.glade.h:16
-#, fuzzy
-msgid "Full Name:"
-msgstr "Повне ім'я: "
-
-#: src/seahorse-generate-druid.glade.h:17
-msgid "High Security"
-msgstr "Висока безпека"
-
-#: src/seahorse-generate-druid.glade.h:18
-#, fuzzy
-msgid "Key Generation Assistant"
-msgstr "Дата створення ключа"
-
-#: src/seahorse-generate-druid.glade.h:19
-#, fuzzy
-msgid "Key Generation Assistant Complete"
-msgstr "Помічник з генерування GPG ключів: завершення"
-
-#: src/seahorse-generate-druid.glade.h:20
-#, fuzzy
-msgid ""
-"Keys must be given an appropriate expiration date. For most people, the "
-"default option of \"never expires\" is sufficient. If you only plan on using "
-"the key for a certain period of time, i.e. for a specific project, you "
-"should pick an expiration date after the projected completion of your "
-"project. After the expiration date, your private key will still be able to "
-"decrypt messages or data encrypted with your public key. However, your "
-"private key will no longer sign messages or data."
-msgstr ""
-"Ключі повинні мати відповідний термін дії. Для більшості користувачів "
-"підійде типовий варіант - ключ без обмеження терміну дії. Якщо ви плануєте "
-"використовувати ключ протягом деякого проміжку часу, наприклад, у певному "
-"проекті, слід вибрати час закінчення дії ключа після завершення вашого "
-"проекту. Після закінчення терміну дії, ваш приватний ключ все ще може "
-"використовуватись для розшифровування повідомлень або даних, зашифрованих "
-"вашим публічним ключем. Але його буде неможливо використати для підписування "
-"повідомлень чи даних."
-
-#: src/seahorse-generate-druid.glade.h:21
-msgid "Medium Security"
-msgstr "Середня безпека"
-
-#: src/seahorse-generate-druid.glade.h:22 src/seahorse-key-manager-store.c:192
-#: src/seahorse-key-properties.c:216
+#: ../src/seahorse-expires.glade.h:2
 msgid "Never Expires"
 msgstr "Ніколи не закінчується"
 
-#: src/seahorse-generate-druid.glade.h:25
-msgid "Passphrase"
-msgstr "Парольна фраза"
+#: ../src/seahorse-expires.glade.h:3 ../src/seahorse-revoke.glade.h:11
+msgid "Revoke key"
+msgstr "Відкликати ключ"
 
-#: src/seahorse-generate-druid.glade.h:27
-msgid "Passphrase:"
-msgstr "Парольна фраза:"
+#: ../src/seahorse-generate-select.c:143
+msgid "Used to encrypt email and files"
+msgstr "Використовується для шифрування пошти та файлів"
 
-#: src/seahorse-generate-druid.glade.h:28
-msgid "Personal Information"
-msgstr "Особиста інформація"
-
-#: src/seahorse-generate-druid.glade.h:29
-#, fuzzy
-msgid "Seahorse Key Generation Assistant"
-msgstr "Помічник генерування ключів"
-
-#: src/seahorse-generate-druid.glade.h:30
-msgid "Security Level"
-msgstr "Рівень безпеки"
-
-#: src/seahorse-generate-druid.glade.h:31
-#, fuzzy
-msgid ""
-"The Medium Security level is the default and should be acceptable for "
-"general everyday usage.  \n"
-"\n"
-"The High Security level should be selected if you know your data will be "
-"actively scrutinized.  The Extra High level should be selected if you know "
-"your data is actively scrutinized and will be under cryptographic attack."
+#: ../src/seahorse-generate-select.c:146
+msgid "Used to access other computers (eg: via a terminal)"
 msgstr ""
-"Середній рівень безпеки є типовим. Він повинен підійти для щоденного "
-"використання. Якщо ви знаєте, що ваші дані будуть ретельно досліджуватись, "
-"слід вибрати високий рівень безпеки.Дуже високий рівень безпеки слід "
-"вибирати, якщо вам відомо, що ваші дані будуть ретельно досліджуватись та "
-"зазнають спроби криптографічного злому."
+"Використовується для доступу до інших комп'ютерів, наприклад, через термінал."
 
-#: src/seahorse-generate-druid.glade.h:34
-#, fuzzy
-msgid ""
-"This assistant will guide you through the steps of creating a GPG key pair."
-msgstr "Цей помічник проведе вас по кроках створення пари GPG ключів."
+#: ../src/seahorse-generate-select.glade.h:1
+msgid "<b>_Select the kind of key you wish to create:</b>"
+msgstr "<b>_Виберіть тип ключа, який треба створити:</b>"
 
-#: src/seahorse-generate-druid.glade.h:35
-#, fuzzy
-msgid ""
-"To create a key and tie it to your identity, the following information is "
-"needed: Full Name, Email Address, and Comment.  \n"
-"\n"
-"These values will be given to the name of your key in the following "
-"manner:                              \n"
-"\n"
-"Full Name (Comment) <email address>."
-msgstr ""
-"Для створення ключа та пов'язування його з вашою особою, необхідно ввести "
-"наступну інформацію: повне ім'я, адресу електронної пошти та коментар. З цих "
-"значень буде сформовано назву вашого ключа у наступному порядку:  Повне ім'я "
-"(коментар) <електронна адреса>."
+#: ../src/seahorse-generate-select.glade.h:2
+msgid "C_ontinue"
+msgstr "Пр_одовжити"
 
-#: src/seahorse-generate-druid.glade.h:40
-msgid "druidpage_pass"
-msgstr "druidpage_pass"
-
-#: src/seahorse-generate-druid.glade.h:41
-msgid "druidpage_pinfo"
-msgstr "druidpage_pinfo"
-
-#: src/seahorse-generate-druid.glade.h:42
-msgid "keygen_druid"
-msgstr "keygen_druid"
-
-#: src/seahorse-generate-select.glade.h:1
-msgid "Advanced"
-msgstr "Розширений"
-
-#: src/seahorse-generate-select.glade.h:2
-msgid "Assistant"
-msgstr ""
-
-#: src/seahorse-generate-select.glade.h:3
-msgid "Continue"
-msgstr ""
-
-#: src/seahorse-generate-select.glade.h:4
-#, fuzzy
-msgid "Generate Key"
-msgstr "Створення ключа"
-
-#: src/seahorse-generate-select.glade.h:5
-#, fuzzy
-msgid "Generate a key via the assistant."
-msgstr "Створити ключ за допомогою помічника."
-
-#: src/seahorse-generate-select.glade.h:6
-msgid "Generate a key with the advanced dialog."
-msgstr "Створити ключ за допомогою розширеного діалогу."
-
-#: src/seahorse-generate-select.glade.h:7
-#, fuzzy
-msgid "Select a method to generate your new key:"
-msgstr "Виберіть метод створення вашого нового ключа."
-
-#: src/seahorse-generate-select.glade.h:8
-msgid "radio_druid"
-msgstr "radio_druid"
-
-#: src/seahorse-key-manager-store.c:136
-msgid "RSA"
-msgstr ""
-
-#: src/seahorse-key-manager-store.c:138
-msgid "RSA-E"
-msgstr ""
-
-#: src/seahorse-key-manager-store.c:140
-msgid "RSA-S"
-msgstr ""
-
-#: src/seahorse-key-manager-store.c:142
-msgid "ELG-E"
-msgstr ""
-
-#: src/seahorse-key-manager-store.c:144
-msgid "DSA"
-msgstr ""
-
-#: src/seahorse-key-manager-store.c:146
-msgid "ELG"
-msgstr ""
-
-#: src/seahorse-key-manager-store.c:185 src/seahorse-key-properties.c:206
-msgid "Expired"
-msgstr "Термін вийшов"
-
-#: src/seahorse-key-manager-store.c:293
-msgid "Trust"
-msgstr "Довіряти"
-
-#: src/seahorse-key-manager-store.c:297
-msgid "Length"
-msgstr "Довжина"
-
-#: src/seahorse-key-manager-store.c:301
-msgid "Type"
-msgstr "Тип"
-
-#: src/seahorse-key-manager.c:101
-#, fuzzy
-msgid "Import Key"
-msgstr "Імпорт ключів"
-
-#: src/seahorse-key-manager.c:133
-#, fuzzy
-msgid "Couldn't import keys from clipboard"
-msgstr "Імпортувати ключі з буферу обміну"
-
-#: src/seahorse-key-manager.c:170
-#, fuzzy
-msgid "Couldn't export key to clipboard"
-msgstr "Експортувати ключі у буфер обміну"
-
-#: src/seahorse-key-manager.c:200
-#, fuzzy
-msgid "Export Key"
-msgstr "Експорт ключа"
-
-#: src/seahorse-key-manager.c:213 src/seahorse-keyserver-results.c:129
-#, c-format
-msgid "Couldn't export key to \"%s\""
-msgstr ""
-
-#: src/seahorse-key-manager.c:230
-msgid "Backup Keyrings to Archive"
-msgstr ""
-
-#: src/seahorse-key-manager.c:399
-msgid "translator_credits"
-msgstr ""
-"Юрій Сирота <yuriy@beer.com>\n"
-"Максим Дзюманенко <mvd@mylinux.com.ua>"
-
-#: src/seahorse-key-manager.c:419
-msgid "seahorse"
-msgstr "морський коник"
-
-#: src/seahorse-key-manager.c:584
-#, c-format
-msgid "Couldn't import key from \"%s\""
-msgstr ""
-
-#: src/seahorse-key-manager.glade.h:1
-msgid "<big><b>First time options:</b></big>"
-msgstr ""
-
-#: src/seahorse-key-manager.glade.h:2
-msgid "Add P_hoto ID..."
-msgstr "Додати _фото ідентифікатор..."
-
-#: src/seahorse-key-manager.glade.h:3
-msgid "Add Sub_key..."
-msgstr "Додати підкл_юч..."
-
-#: src/seahorse-key-manager.glade.h:4
-msgid "Add _Revoker..."
-msgstr "Додати _відкликання..."
-
-#: src/seahorse-key-manager.glade.h:5
-msgid "Add _User ID..."
-msgstr "Додати ідентифікатор _користувача"
-
-#: src/seahorse-key-manager.glade.h:6
-msgid "Add a new subkey"
-msgstr "Стерти новий підключ"
-
-#: src/seahorse-key-manager.glade.h:7
-msgid "Add a new user ID"
-msgstr "Додати новий ідентифікатор користувача"
-
-#: src/seahorse-key-manager.glade.h:8
-msgid "Add a photo ID"
-msgstr "Додати фото ідентифікатор"
-
-#: src/seahorse-key-manager.glade.h:9
-msgid "Add the default key as a revoker"
-msgstr "Додати типовий ключ як ключ відкликання"
-
-#: src/seahorse-key-manager.glade.h:10
-#, fuzzy
-msgid "Backup all keys"
-msgstr "Створити резервну копію"
-
-#: src/seahorse-key-manager.glade.h:11
-msgid "Change passphrase of secret key"
-msgstr "Змінити пароль таємного ключа"
-
-#: src/seahorse-key-manager.glade.h:12
-msgid "Collapse all listings"
-msgstr "Згорнути всі списки"
-
-#: src/seahorse-key-manager.glade.h:13
-msgid "Create a new key"
+#: ../src/seahorse-generate-select.glade.h:3
+msgid "Create a New Key"
 msgstr "Створити новий ключ"
 
-#: src/seahorse-key-manager.glade.h:14
-msgid "Create a revocation certificate"
-msgstr "Створити сертифікат відкликання"
+#: ../src/seahorse-gkeyring-item.c:248
+msgid "Web Password"
+msgstr "Пароль веб"
 
-#: src/seahorse-key-manager.glade.h:15
-msgid "Delete key"
-msgstr "Видалити ключ"
+#: ../src/seahorse-gkeyring-item.c:250
+msgid "Network Password"
+msgstr "Мережний пароль"
 
-#: src/seahorse-key-manager.glade.h:16
-msgid "E_xport"
-msgstr "_Експорт"
+#: ../src/seahorse-gkeyring-item.c:252
+#: ../src/seahorse-gkeyring-item-properties.c:116
+#: ../src/seahorse-gkeyring-source.c:525
+msgid "Password"
+msgstr "Пароль"
 
-#: src/seahorse-key-manager.glade.h:17
-msgid "E_xport..."
-msgstr "_Експорт..."
+#: ../src/seahorse-gkeyring-item-properties.c:90
+msgid "Access a network share or resource"
+msgstr "Надає доступ до мережного сховища чи ресурсу"
 
-#: src/seahorse-key-manager.glade.h:18
-msgid "Expand all listings"
-msgstr "Розгорнути всі списки"
+#: ../src/seahorse-gkeyring-item-properties.c:94
+msgid "Access a website"
+msgstr "Надає доступ до веб-сайту"
 
-#: src/seahorse-key-manager.glade.h:19
-#: src/seahorse-keyserver-results.glade.h:2
-msgid "Export key"
-msgstr "Експортувати ключ"
+#: ../src/seahorse-gkeyring-item-properties.c:98
+msgid "Unlocks a PGP key"
+msgstr "Розблокувати ключ PGP"
 
-#: src/seahorse-key-manager.glade.h:20
-#: src/seahorse-keyserver-results.glade.h:3
+#: ../src/seahorse-gkeyring-item-properties.c:101
+msgid "Unlocks a Secure Shell key"
+msgstr "Розблокувати ключ віддаленого командного рядка"
+
+#: ../src/seahorse-gkeyring-item-properties.c:104
+msgid "Saved password or login"
+msgstr "Збережений пароль чи обліковий запис"
+
+#: ../src/seahorse-gkeyring-item-properties.c:116
+msgid "Network Credentials"
+msgstr "Мережні рекомендації"
+
+#: ../src/seahorse-gkeyring-item-properties.c:177
+msgid "Couldn't change password."
+msgstr "Не вдається змінити пароль."
+
+#: ../src/seahorse-gkeyring-item-properties.c:284
+msgid "Couldn't set description."
+msgstr "Не вдається відновити опис."
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:1
+msgid "<b>Description:</b>"
+msgstr "<b>Опис:</b>"
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:2
+msgid "<b>Login:</b>"
+msgstr "<b>Обліковий запис:</b>"
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:3
+msgid "<b>Password:</b>"
+msgstr "<b>Пароль:</b>"
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:4
+msgid "<b>Server:</b>"
+msgstr "<b>Сервер:</b>"
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:5
+#: ../src/seahorse-pgp-public-key-properties.glade.h:9
+#: ../src/seahorse-ssh-key-properties.glade.h:9
+msgid "<b>Technical Details:</b>"
+msgstr "<b>Подробиці:</b>"
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:6
+#: ../src/seahorse-pgp-private-key-properties.glade.h:13
+#: ../src/seahorse-pgp-public-key-properties.glade.h:12
+#: ../src/seahorse-ssh-key-properties.glade.h:11
+msgid "<b>Type:</b>"
+msgstr "<b>Тип:</b>"
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:7
+#: ../src/seahorse-pgp-private-key-properties.glade.h:14
+#: ../src/seahorse-pgp-public-key-properties.glade.h:13
+#: ../src/seahorse-ssh-key-properties.glade.h:12
+msgid "<b>Use:</b>"
+msgstr "<b>Призначення:</b>"
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:8
+#: ../src/seahorse-pgp-private-key-properties.glade.h:22
+#: ../src/seahorse-pgp-public-key-properties.glade.h:19
+#: ../src/seahorse-ssh-key-properties.glade.h:16
+msgid "Details"
+msgstr "Подробиці"
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:9
+#: ../src/seahorse-ssh-key-properties.glade.h:18
+msgid "Key"
+msgstr "Ключ"
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:10
+#: ../src/seahorse-pgp-private-key-properties.glade.h:29
+#: ../src/seahorse-pgp-public-key-properties.glade.h:28
+#: ../src/seahorse-ssh-key-properties.glade.h:19
+msgid "Key Properties"
+msgstr "Властивості ключа"
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:11
+msgid "Show pass_word"
+msgstr "Показати _пароль"
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:12
+msgid "[Type here]"
+msgstr "[тип]"
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:13
+msgid "[Use here]"
+msgstr "[використання]"
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:14
+msgid "[details]\n"
+msgstr "[подробиці]\n"
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:16
+msgid "[login]"
+msgstr "[обліковий запис]"
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:17
+msgid "[server]"
+msgstr "[сервер]"
+
+#: ../src/seahorse-gkeyring-operation.c:206
+msgid "Access to the key ring was denied"
+msgstr "Доступ до в'язки заборонений"
+
+#: ../src/seahorse-gkeyring-operation.c:209
+msgid "The gnome-keyring daemon is not running"
+msgstr "Служба в'язок GNOME не запущена"
+
+#: ../src/seahorse-gkeyring-operation.c:212
+msgid "The key ring has already been unlocked"
+msgstr "В'язок вже розблокувати"
+
+#: ../src/seahorse-gkeyring-operation.c:215
+msgid "No such key ring exists"
+msgstr "Немає такого в'язки"
+
+#: ../src/seahorse-gkeyring-operation.c:218
+msgid "Couldn't communicate with key ring daemon"
+msgstr "Не вдається зв'язатися з службою в'язок"
+
+#: ../src/seahorse-gkeyring-operation.c:221
+msgid "The item already exists"
+msgstr "Елемент вже існує"
+
+#: ../src/seahorse-gkeyring-operation.c:227
+msgid "Internal error accessing gnome-keyring"
+msgstr "Внутрішня помилка при доступі до в'язок GNOME"
+
+#: ../src/seahorse-gkeyring-operation.c:286
+msgid "Saving item..."
+msgstr "Збереження елементу..."
+
+#: ../src/seahorse-gkeyring-source.c:358
+msgid "Retrieving key"
+msgstr "Отримання ключа"
+
+#. Start listing of ids
+#: ../src/seahorse-gkeyring-source.c:372
+msgid "Listing passwords"
+msgstr "Список паролів"
+
+#: ../src/seahorse-key-manager.c:443
+msgid "Couldn't read file"
+msgstr "Не вдається прочитати файл"
+
+#: ../src/seahorse-key-manager.c:484
+msgid "Unrecognized key type, or invalid data format"
+msgstr "Невідомий тип ключа чи некоректний формат даних"
+
+#: ../src/seahorse-key-manager.c:557 ../src/seahorse-keyserver-results.c:217
+msgid "Couldn't retrieve data from key server"
+msgstr "Не вдається отримати дані з сервера ключів"
+
+#: ../src/seahorse-key-manager.c:573 ../src/seahorse-keyserver-results.c:233
+#, c-format
+msgid "Copied %d key"
+msgid_plural "Copied %d keys"
+msgstr[0] "Скопійовано %d ключ"
+msgstr[1] "Скопійовано %d ключі"
+msgstr[2] "Скопійовано %d ключів"
+
+#: ../src/seahorse-key-manager.c:597 ../src/seahorse-keyserver-results.c:193
+#: ../src/seahorse-keyserver-results.c:258
+msgid "Retrieving keys"
+msgstr "Отримання ключів"
+
+#: ../src/seahorse-key-manager.c:623
+msgid "Couldn't export key"
+msgstr "Не вдається експортувати ключі"
+
+#: ../src/seahorse-key-manager.c:643
 msgid "Export public key"
 msgstr "Експортувати публічний ключ"
 
-#: src/seahorse-key-manager.glade.h:21
-msgid "Filter: "
-msgstr ""
+#: ../src/seahorse-key-manager.c:653 ../src/seahorse-key-properties.c:1031
+#: ../src/seahorse-ssh-key-properties.c:240
+#, c-format
+msgid "Couldn't export key to \"%s\""
+msgstr "Не вдається експортувати ключі у \"%s\""
 
-#: src/seahorse-key-manager.glade.h:22
-#, fuzzy
-msgid "Generate a new key of your own: "
-msgstr "Створити новий ключ"
+#: ../src/seahorse-key-manager.c:665
+msgid "Exporting keys"
+msgstr "Експорт ключів"
 
-#: src/seahorse-key-manager.glade.h:23
-#, fuzzy
-msgid "Import existing keys from a file:"
-msgstr "Імпортувати ключі з файлу"
+#: ../src/seahorse-key-manager.c:684
+msgid "Back up Key Rings to Archive"
+msgstr "Зберегти в'язки у архів"
 
-#: src/seahorse-key-manager.glade.h:24
-msgid "Import keys"
-msgstr "Імпортувати ключі"
+#: ../src/seahorse-key-manager.c:862
+msgid "seahorse"
+msgstr "seahorse"
 
-#: src/seahorse-key-manager.glade.h:25
-#: src/seahorse-keyserver-results.glade.h:8
-msgid "Seahorse - GPG Key Manager"
-msgstr "Seahorse - Менеджер GPG ключів"
+#: ../src/seahorse-key-manager.c:945 ../src/seahorse-keyserver-results.c:298
+#, c-format
+msgid "Selected %d key"
+msgid_plural "Selected %d keys"
+msgstr[0] "Виділено %d ключ"
+msgstr[1] "Виділено %d ключі"
+msgstr[2] "Виділено %d ключів"
 
-#: src/seahorse-key-manager.glade.h:26
-#, fuzzy
-msgid "Search for keys on a key server"
-msgstr "Експортувати ключ на сервер ключів"
-
-#: src/seahorse-key-manager.glade.h:27
-#: src/seahorse-keyserver-results.glade.h:9
-msgid "Show Seahorse help"
-msgstr "Показати довідку з Seahorse"
-
-#: src/seahorse-key-manager.glade.h:28
-#: src/seahorse-keyserver-results.glade.h:10
-msgid "Show key properties"
-msgstr "Показати властивості ключа"
-
-#: src/seahorse-key-manager.glade.h:29
-#: src/seahorse-keyserver-results.glade.h:11
-msgid "Sign key"
-msgstr "Підписати ключ"
-
-#: src/seahorse-key-manager.glade.h:30
-msgid "Sign public key"
-msgstr "Підписати публічний ключ"
-
-#: src/seahorse-key-manager.glade.h:31
-msgid "To get started with encryption you'll need keys."
-msgstr ""
-
-#: src/seahorse-key-manager.glade.h:32
-#, fuzzy
-msgid "_Backup Keyrings..."
-msgstr "_Резервне копіювання..."
-
-#: src/seahorse-key-manager.glade.h:33
-msgid "_Change Passphrase..."
-msgstr "З_міна парольної фрази..."
-
-#: src/seahorse-key-manager.glade.h:34
-msgid "_Collapse All"
-msgstr "_Згорнути все"
-
-#: src/seahorse-key-manager.glade.h:35
-#: src/seahorse-keyserver-results.glade.h:12
-msgid "_Contents"
-msgstr "_Зміст"
-
-#: src/seahorse-key-manager.glade.h:36
-msgid "_Copy"
-msgstr ""
-
-#: src/seahorse-key-manager.glade.h:37
-#: src/seahorse-keyserver-results.glade.h:13
-#, fuzzy
-msgid "_Copy Key"
-msgstr "_Ключ"
-
-#: src/seahorse-key-manager.glade.h:38 src/seahorse-key-properties.glade.h:25
-msgid "_Delete"
-msgstr "В_идалити"
-
-#: src/seahorse-key-manager.glade.h:39
-#, fuzzy
-msgid "_Delete Key"
-msgstr "Видалити ключ"
-
-#: src/seahorse-key-manager.glade.h:40
-msgid "_Expand All"
-msgstr "_Розгорнути все"
-
-#: src/seahorse-key-manager.glade.h:41
-msgid "_Find Remote Keys..."
-msgstr ""
-
-#: src/seahorse-key-manager.glade.h:42
-msgid "_Generate Revocation Certificate..."
-msgstr "С_творити сертифікат відкликання..."
-
-#: src/seahorse-key-manager.glade.h:43
-#: src/seahorse-keyserver-results.glade.h:14
-msgid "_Import"
-msgstr "_Імпорт"
-
-#: src/seahorse-key-manager.glade.h:44
-msgid "_Import..."
-msgstr "_Імпорт..."
-
-#: src/seahorse-key-manager.glade.h:45
-#: src/seahorse-keyserver-results.glade.h:16
+#. Top menu items
+#: ../src/seahorse-key-manager.c:1171 ../src/seahorse-keyserver-results.c:377
 msgid "_Key"
 msgstr "_Ключ"
 
-#: src/seahorse-key-manager.glade.h:46
-msgid "_New..."
-msgstr "_Створити..."
+#: ../src/seahorse-key-manager.c:1172 ../src/seahorse-keyserver-results.c:378
+msgid "_Edit"
+msgstr "_Правка"
 
-#: src/seahorse-key-manager.glade.h:47
-#, fuzzy
-msgid "_Paste Key"
-msgstr "_Типовий ключ:"
+#: ../src/seahorse-key-manager.c:1173
+msgid "_View"
+msgstr "_Вигляд"
 
-#: src/seahorse-key-manager.glade.h:48
-#: src/seahorse-keyserver-results.glade.h:17
-msgid "_Properties"
-msgstr "В_ластивості"
+#. Key Actions
+#: ../src/seahorse-key-manager.c:1177
+msgid "_Create New Key..."
+msgstr "_Створити новий ключ..."
 
-#: src/seahorse-key-manager.glade.h:49
-msgid "_Remote Search"
-msgstr ""
+#: ../src/seahorse-key-manager.c:1178
+msgid "Create a new personal key"
+msgstr "Створити новий персональний ключ"
 
-#: src/seahorse-key-manager.glade.h:50 src/seahorse-key-properties.glade.h:28
-#: src/seahorse-sign.glade.h:17
-msgid "_Sign"
-msgstr "_Підписати"
-
-#: src/seahorse-key-manager.glade.h:51
-msgid "_Sign..."
-msgstr "_Підписати..."
-
-#. key id
-#: src/seahorse-key-properties.c:179
-msgid "Key ID:"
-msgstr "Ідентифікатор ключа:"
-
-#: src/seahorse-key-properties.c:179
-msgid "Key identifier"
-msgstr "Ідентифікатор ключа"
-
-#. type
-#: src/seahorse-key-properties.c:184
-msgid "Type:"
-msgstr "Тип:"
-
-#: src/seahorse-key-properties.c:184
-msgid "Algorithm"
-msgstr "Алгоритм"
-
-#. created
-#: src/seahorse-key-properties.c:192
-msgid "Created:"
-msgstr "Створено:"
-
-#: src/seahorse-key-properties.c:192
-msgid "Key creation date"
-msgstr "Дата створення ключа"
-
-#. length
-#: src/seahorse-key-properties.c:196
-msgid "Length:"
-msgstr "Довжина:"
-
-#. status
-#: src/seahorse-key-properties.c:201
-msgid "Status:"
-msgstr "Стан:"
-
-#: src/seahorse-key-properties.c:202
-msgid "Good"
-msgstr "Правильний"
-
-#: src/seahorse-key-properties.c:266
-#, c-format
-msgid "%s Properties"
-msgstr "Властивості %s"
-
-#: src/seahorse-key-properties.c:302
-#, fuzzy
-msgid "All Signatures"
-msgstr "Декілька підписів"
-
-#: src/seahorse-key-properties.c:553
-#, fuzzy
-msgid "Couldn't change primary user ID"
-msgstr "Встановити як головний ідентифікатор користувача"
-
-#: src/seahorse-key-properties.c:626 src/seahorse-key-properties.glade.h:27
-msgid "_Revoke"
-msgstr "Від_кликати"
-
-#: src/seahorse-key-properties.c:630
-#, c-format
-msgid "Revoke subkey %d"
-msgstr "Відкликати підключ %d"
-
-#: src/seahorse-key-properties.c:639
-#, c-format
-msgid "Subkey %d"
-msgstr "Підключ %d"
-
-#: src/seahorse-key-properties.c:651
-#, c-format
-msgid "Delete subkey %d"
-msgstr "Видалити підключ %d"
-
-#: src/seahorse-key-properties.glade.h:1
-msgid "All"
-msgstr "Всі"
-
-#: src/seahorse-key-properties.glade.h:2
-#, fuzzy
-msgid "Change _Passphrase"
-msgstr "Зміна парольної фрази"
-
-#: src/seahorse-key-properties.glade.h:3
-msgid "Dis_abled"
-msgstr "_Вимкнений"
-
-#: src/seahorse-key-properties.glade.h:4
-msgid "Disabled keys cannot be used for operations"
-msgstr "Вимкнені ключі не можуть використовуватись для роботи"
-
-#: src/seahorse-key-properties.glade.h:5
-msgid "Fingerprint:"
-msgstr "Відбиток:"
-
-#: src/seahorse-key-properties.glade.h:7
-msgid "Fully trust owner"
-msgstr "Повна довіра власнику"
-
-#: src/seahorse-key-properties.glade.h:9
-msgid "Marginally trust owner"
-msgstr "Незначна довіра власнику"
-
-#: src/seahorse-key-properties.glade.h:11
-msgid "Never trust owner"
-msgstr "Не довіряти власнику"
-
-#: src/seahorse-key-properties.glade.h:12
-msgid "Owner _Trust:"
-msgstr "Дов_іра власнику:"
-
-#: src/seahorse-key-properties.glade.h:13
-msgid "Owner is unknown"
-msgstr "Власник невідомий"
-
-#: src/seahorse-key-properties.glade.h:14
-#, fuzzy
-msgid "Primary ID:"
-msgstr "_Головний"
-
-#: src/seahorse-key-properties.glade.h:15
-msgid "Primary Key"
-msgstr "Головний ключ"
-
-#: src/seahorse-key-properties.glade.h:16
-#, fuzzy
-msgid "Signatures"
-msgstr "_Підписи:"
-
-#: src/seahorse-key-properties.glade.h:17
-msgid "Trust placed in owner's ability to sign keys"
-msgstr "Довіра впливає на здатність власника підписувати ключі"
-
-#: src/seahorse-key-properties.glade.h:19
-msgid "Unique key identifier"
-msgstr "Унікальний ідентифікатор ключа"
-
-#: src/seahorse-key-properties.glade.h:21
-msgid "User IDs"
-msgstr "Ідентифікатор користувача"
-
-#: src/seahorse-key-properties.glade.h:22
-#, fuzzy
-msgid "User IDs:"
-msgstr "Ідентифікатор користувача"
-
-#: src/seahorse-key-properties.glade.h:23
-msgid "Your personal key"
-msgstr "Ваш особистий ключ"
-
-#: src/seahorse-key-properties.glade.h:24
-msgid "_Add"
-msgstr ""
-
-#: src/seahorse-key-properties.glade.h:26
-msgid "_Primary"
-msgstr "_Головний"
-
-#: src/seahorse-key-properties.glade.h:29
-msgid "_Signatures:"
-msgstr "_Підписи:"
-
-#: src/seahorse-keyserver-results.c:87 src/seahorse-keyserver-results.c:156
-#, fuzzy
-msgid "Couldn't retrieve key data from key server"
-msgstr "Імпортувати ключа з сервера ключів"
-
-#: src/seahorse-keyserver-results.c:100
-#, fuzzy
-msgid "Couldn't import keys into keyring"
-msgstr "Імпортувати ключі"
-
-#: src/seahorse-keyserver-results.c:121
-msgid "Save Remote Keys"
-msgstr ""
-
-#: src/seahorse-keyserver-results.c:217
-#, fuzzy, c-format
-msgid "Selected %d keys"
-msgstr "Внесено в список %d ключів"
-
-#: src/seahorse-keyserver-results.c:301
-#, fuzzy
-msgid "Remote Keys"
-msgstr "Відкликати ключ"
-
-#: src/seahorse-keyserver-results.c:303
-#, c-format
-msgid "Remote Keys Containing '%s'"
-msgstr ""
-
-#: src/seahorse-keyserver-results.glade.h:1
-#, fuzzy
-msgid "Copy the selected key to the clipboard"
-msgstr "Експортувати ключі у буфер обміну"
-
-#: src/seahorse-keyserver-results.glade.h:4
-msgid "Find Remote Keys on Key Servers"
-msgstr ""
-
-#: src/seahorse-keyserver-results.glade.h:5
-msgid "Find Remote Keys..."
-msgstr ""
-
-#: src/seahorse-keyserver-results.glade.h:6
-msgid "Import selected keys to local keyring"
-msgstr ""
-
-#: src/seahorse-keyserver-results.glade.h:7
-#, fuzzy
-msgid "Save the key to a file"
-msgstr "Експортувати ключі у файл"
-
-#: src/seahorse-keyserver-results.glade.h:15
-#, fuzzy
-msgid "_Import to Keyring..."
+#: ../src/seahorse-key-manager.c:1179
+msgid "_Import..."
 msgstr "_Імпорт..."
 
-#. The all key servers option
-#: src/seahorse-keyserver-search.c:195
-msgid "All Key Servers"
-msgstr ""
+#: ../src/seahorse-key-manager.c:1180
+msgid "Import keys into your key ring from a file"
+msgstr "Імпортувати ключі у в'язку з файлу"
 
-#: src/seahorse-keyserver-search.glade.h:2
-msgid "Find Remote Keys"
-msgstr ""
+#: ../src/seahorse-key-manager.c:1181
+msgid "_Back up Key Rings..."
+msgstr "_Резервне копіювання в'язок..."
 
-#: src/seahorse-keyserver-search.glade.h:3
-msgid "Search _for key containing:"
-msgstr ""
+#: ../src/seahorse-key-manager.c:1182
+msgid "Back up all keys"
+msgstr "Копіювати всі ключі у резервний файл"
 
-#: src/seahorse-keyserver-search.glade.h:4
-msgid "Where to search:"
-msgstr ""
+#: ../src/seahorse-key-manager.c:1183
+msgid "Paste _Keys"
+msgstr "Вст_авити ключі"
 
-#: src/seahorse-keyserver-search.glade.h:5
-msgid "_Search"
-msgstr ""
+#: ../src/seahorse-key-manager.c:1184
+msgid "Import keys from the clipboard"
+msgstr "Імпортувати ключі з буферу обміну"
 
-#: src/seahorse-multi-encrypt.glade.h:2
-msgid "<b>You have selected multiple files or folders</b>"
-msgstr ""
+#: ../src/seahorse-key-manager.c:1186
+msgid "_Quit"
+msgstr "Ви_йти"
 
-#: src/seahorse-multi-encrypt.glade.h:3
-msgid ""
-"Because the files are located remotely, each file will be encrypted "
-"seperately."
-msgstr ""
+#: ../src/seahorse-key-manager.c:1187
+msgid "Close this program"
+msgstr "Закрити програму"
 
-#: src/seahorse-multi-encrypt.glade.h:4
-#, fuzzy
-msgid "Encrypt Multiple Files"
-msgstr "Шифрований файл - %s"
+#: ../src/seahorse-key-manager.c:1188
+msgid "Prefere_nces"
+msgstr "П_араметри"
 
-#: src/seahorse-multi-encrypt.glade.h:5
-#, fuzzy
-msgid "Encrypt each file seperately"
-msgstr "Шифрований файл - %s"
+#: ../src/seahorse-key-manager.c:1189
+msgid "Change preferences for this program"
+msgstr "Налаштувати програму"
 
-#: src/seahorse-multi-encrypt.glade.h:6
-msgid "Encrypt packed together in a package"
-msgstr ""
+#: ../src/seahorse-key-manager.c:1191
+msgid "About this program"
+msgstr "Про цю програму"
 
-#: src/seahorse-multi-encrypt.glade.h:7
-msgid "Package Name:"
-msgstr ""
+#: ../src/seahorse-key-manager.c:1193
+msgid "_Remote"
+msgstr "_Мережа"
 
-#: src/seahorse-multi-encrypt.glade.h:8
-msgid "Packaging:"
-msgstr ""
+#: ../src/seahorse-key-manager.c:1195 ../src/seahorse-keyserver-results.c:383
+msgid "_Contents"
+msgstr "_Зміст"
 
-#: src/seahorse-multi-encrypt.glade.h:9
-msgid "encrypted-package.rar"
-msgstr ""
+#: ../src/seahorse-key-manager.c:1196 ../src/seahorse-keyserver-results.c:384
+msgid "Show Seahorse help"
+msgstr "Показати довідку з Seahorse"
 
-#: src/seahorse-pgp-encrypted.desktop.in.h:1
-msgid "Decrypt PGP File (Seahorse)"
-msgstr ""
+#: ../src/seahorse-key-manager.c:1200
+msgid "T_ypes"
+msgstr "_Тип"
 
-#: src/seahorse-pgp-signature.desktop.in.h:1
-#, fuzzy
-msgid "Verify PGP Signature (Seahorse)"
-msgstr "Перевірити підпису файлу"
+#: ../src/seahorse-key-manager.c:1201
+msgid "Show type column"
+msgstr "Показати колонку типу ключа"
 
-#: src/seahorse-preferences.c:49 src/seahorse-preferences.glade.h:3
-msgid "Key Manager"
-msgstr "Менеджер ключів"
+#: ../src/seahorse-key-manager.c:1202
+msgid "_Expiry"
+msgstr "_Закінчується"
 
-#: src/seahorse-preferences.c:54
-#, fuzzy
-msgid "Visible Columns:"
-msgstr "Видимі стовпчики"
+#: ../src/seahorse-key-manager.c:1203
+msgid "Show expiry column"
+msgstr "Показати колонку терміну дії"
 
-#: src/seahorse-preferences.c:63
-msgid "_Validity"
-msgstr "Д_ійсність"
-
-#: src/seahorse-preferences.c:65 src/seahorse-sign.glade.h:13
-msgid "_Expires"
-msgstr "_Закінчується термін"
-
-#: src/seahorse-preferences.c:67
+#: ../src/seahorse-key-manager.c:1204
 msgid "_Trust"
 msgstr "До_віра"
 
-#: src/seahorse-preferences.c:69
-msgid "_Length"
-msgstr "_Довжина"
+#: ../src/seahorse-key-manager.c:1205
+msgid "Show owner trust column"
+msgstr "Показати колонку довіри власника"
 
-#: src/seahorse-preferences.c:71
-msgid "T_ype"
-msgstr "_Тип"
+#: ../src/seahorse-key-manager.c:1206
+msgid "_Validity"
+msgstr "Д_ійсність"
 
-#: src/seahorse-preferences.glade.h:1
-msgid "Close Preferences"
-msgstr "Закрити настройки"
+#: ../src/seahorse-key-manager.c:1207
+msgid "Show validity column"
+msgstr "Показати колонку правильності"
 
-#: src/seahorse-preferences.glade.h:2
-#, fuzzy
-msgid "Default Key:"
-msgstr "_Типовий ключ:"
+#: ../src/seahorse-key-manager.c:1211 ../src/seahorse-keyserver-results.c:395
+msgid "P_roperties"
+msgstr "В_ластивості"
 
-#: src/seahorse-preferences.glade.h:4
-msgid "Preferences Help"
-msgstr "Довідка з настройок"
+#: ../src/seahorse-key-manager.c:1212 ../src/seahorse-keyserver-results.c:396
+msgid "Show key properties"
+msgstr "Показати властивості ключа"
 
-#: src/seahorse-preferences.glade.h:5
-msgid "Seahorse Preferences"
-msgstr "Настройки Seahorse"
+#: ../src/seahorse-key-manager.c:1213
+msgid "E_xport Public Key..."
+msgstr "_Експортувати публічний ключ..."
 
-#: src/seahorse-preferences.glade.h:6
-msgid "Visible Columns"
-msgstr "Видимі стовпчики"
+#: ../src/seahorse-key-manager.c:1214
+msgid "Export public part of key to a file"
+msgstr "Експортувати відкриту частину ключа у файл"
 
-#. TRANSLATOR: This string will become
-#. * "You have selected %d files and %d folders"
-#: src/seahorse-process-multiple.c:48
-#, c-format
-msgid "You have selected %d file "
-msgid_plural "You have selected %d files "
-msgstr[0] ""
-msgstr[1] ""
+#: ../src/seahorse-key-manager.c:1215
+msgid "_Copy Public Key"
+msgstr "К_опіювати відкритий ключ"
 
-#. TRANSLATOR: This string will become
-#. * "You have selected %d files and %d folders"
-#: src/seahorse-process-multiple.c:53
-#, c-format
-msgid "and %d folder"
-msgid_plural "and %d folders"
-msgstr[0] ""
-msgstr[1] ""
+#: ../src/seahorse-key-manager.c:1216
+msgid "Copy public part of selected keys to the clipboard"
+msgstr "Копіювати відкриту частину виділених ключів у буфер обміну"
 
-#. should never be called for just one file
-#: src/seahorse-process-multiple.c:66
-#, c-format
-msgid "You have selected %d files"
+#: ../src/seahorse-key-manager.c:1217
+msgid "_Delete Key"
+msgstr "В_идалити ключ"
+
+#: ../src/seahorse-key-manager.c:1218
+msgid "Delete selected keys"
+msgstr "Видалити виділені ключі"
+
+#: ../src/seahorse-key-manager.c:1222
+msgid "_Sign..."
+msgstr "_Підписати..."
+
+#: ../src/seahorse-key-manager.c:1223
+msgid "Sign public key"
+msgstr "Підписати публічний ключ"
+
+#: ../src/seahorse-key-manager.c:1227
+msgid "Set Up Computer for _Secure Shell..."
+msgstr "Налаштувати _віддалений вхід на комп'ютері..."
+
+#: ../src/seahorse-key-manager.c:1228
+msgid ""
+"Send public Secure Shell key to another machine, and enable logins using "
+"that key."
 msgstr ""
+"Надіслати відкритий ключ віддаленого командного рядка на іншу машину та "
+"налаштувати вхід з використанням цього ключа."
 
-#: src/seahorse-process-multiple.c:70
+#: ../src/seahorse-key-manager.c:1232 ../src/seahorse-keyserver-results.c:404
+msgid "_Find Remote Keys..."
+msgstr "З_найти віддалені ключі..."
+
+#: ../src/seahorse-key-manager.c:1233 ../src/seahorse-keyserver-results.c:405
+msgid "Search for keys on a key server"
+msgstr "Шукати ключі на сервері ключів"
+
+#: ../src/seahorse-key-manager.c:1234
+msgid "_Sync and Publish Keys..."
+msgstr "_Синхронізувати та опублікувати ключі..."
+
+#: ../src/seahorse-key-manager.c:1235
+msgid "Publish and/or synchronize your keys with those online."
+msgstr "Опублікувати ключі та синхронізувати з серверами у мережі."
+
+#: ../src/seahorse-key-manager.glade.h:1
+msgid "<big><b>First time options:</b></big>"
+msgstr "<big><b>Параметри для першого запуску:</b></big>"
+
+#: ../src/seahorse-key-manager.glade.h:2
+msgid "Filter:"
+msgstr "Фільтр:"
+
+#: ../src/seahorse-key-manager.glade.h:3
+msgid "Generate a new key of your own: "
+msgstr "Створити новий ключ для себе: "
+
+#: ../src/seahorse-key-manager.glade.h:4
+msgid "Import existing keys from a file:"
+msgstr "Імпортувати новий ключ для себе:"
+
+#: ../src/seahorse-key-manager.glade.h:5
+msgid "My _Personal Keys"
+msgstr "_Особисті ключі"
+
+#: ../src/seahorse-key-manager.glade.h:6
+msgid "Other _Collected Keys"
+msgstr "Інші _зібрані ключі"
+
+#: ../src/seahorse-key-manager.glade.h:8
+msgid "To get started with encryption you will need keys."
+msgstr "Для початку роботи с шифруванням треба створити ключі."
+
+#: ../src/seahorse-key-manager.glade.h:9
+#: ../src/seahorse-keyserver-results.c:393
+msgid "_Import"
+msgstr "_Імпорт"
+
+#: ../src/seahorse-key-manager.glade.h:10
+msgid "_Passwords"
+msgstr "_Паролі"
+
+#: ../src/seahorse-key-manager.glade.h:11
+msgid "_Trusted Keys"
+msgstr "_Довірені ключі"
+
+#: ../src/seahorse-key-manager-store.c:311
+#: ../src/seahorse-key-properties.c:1297
+msgid "Expired"
+msgstr "Термін вийшов"
+
+#: ../src/seahorse-key-manager-store.c:364
+msgid "User ID"
+msgstr "Ідентифікатор користувача"
+
+#: ../src/seahorse-key-manager-store.c:697
+msgid "Couldn't retrieve key data"
+msgstr "Не вдається отримати данні ключа"
+
+#: ../src/seahorse-key-manager-store.c:729
+msgid "Couldn't write key to file"
+msgstr "Не вдається записати ключ у файл"
+
+#: ../src/seahorse-key-manager-store.c:972
+msgid "Validity"
+msgstr "Дійсність"
+
+#. Trust column
+#: ../src/seahorse-key-manager-store.c:979
+#: ../src/seahorse-pgp-public-key-properties.glade.h:35
+msgid "Trust"
+msgstr "Довіряти"
+
+#. The key type column
+#: ../src/seahorse-key-manager-store.c:985
+#: ../src/seahorse-key-properties.c:1275
+msgid "Type"
+msgstr "Тип"
+
+#. Expiry date column
+#: ../src/seahorse-key-manager-store.c:991
+msgid "Expiration Date"
+msgstr "Закінчується дія"
+
+#: ../src/seahorse-key-properties.c:207
+msgid "Couldn't change primary user ID"
+msgstr "Ну вдається змінити головний ідентифікатор користувача"
+
+#: ../src/seahorse-key-properties.c:301 ../src/seahorse-key-properties.c:1427
+msgid "[Unknown]"
+msgstr "[Невідомо]"
+
+#: ../src/seahorse-key-properties.c:399 ../src/seahorse-key-properties.c:1711
+msgid "Name/Email"
+msgstr "Ім'я/ел. пошта"
+
+#: ../src/seahorse-key-properties.c:404
+msgid "Signature ID"
+msgstr "Ідентифікатор підпису"
+
+#: ../src/seahorse-key-properties.c:555
+msgid "Couldn't change primary photo"
+msgstr "Не вдається змінити головну фотографію"
+
+#: ../src/seahorse-key-properties.c:801
+msgid "(unknown)"
+msgstr "(невідомо)"
+
+#: ../src/seahorse-key-properties.c:804
 #, c-format
-msgid "You have selected %d folder"
-msgid_plural "You have selected %d folders"
-msgstr[0] ""
-msgstr[1] ""
+msgid "This key expired on: %s"
+msgstr "Цей ключ закінчився %s"
 
-#: src/seahorse-revoke.c:52
-#, fuzzy
+#: ../src/seahorse-key-properties.c:985 ../src/seahorse-key-properties.c:1377
+#: ../src/seahorse-key-properties.c:1396
+msgid "Unable to change trust"
+msgstr "Не вдається змінити рівень довіри"
+
+#: ../src/seahorse-key-properties.c:1006
+#: ../src/seahorse-ssh-key-properties.c:215
+msgid "Export Complete Key"
+msgstr "Експортувати ключ повністю"
+
+#: ../src/seahorse-key-properties.c:1272
+msgid "ID"
+msgstr "Ідентифікатор"
+
+#: ../src/seahorse-key-properties.c:1278
+msgid "Created"
+msgstr "Створено"
+
+#: ../src/seahorse-key-properties.c:1281
+msgid "Expires"
+msgstr "Закінчується дія"
+
+#: ../src/seahorse-key-properties.c:1284
+msgid "Status"
+msgstr "Стан"
+
+#: ../src/seahorse-key-properties.c:1287
+msgid "Strength"
+msgstr "Міцність"
+
+#: ../src/seahorse-key-properties.c:1296 ../src/seahorse-key-properties.c:1297
+msgid "Good"
+msgstr "Добра"
+
+#: ../src/seahorse-keyserver-results.c:106
+msgid "Couldn't import keys into key ring"
+msgstr "Не вдається імпортувати ключі у в'язку"
+
+#: ../src/seahorse-keyserver-results.c:127
+msgid "Importing keys from key servers"
+msgstr "Імпортувати ключі з сервера ключів"
+
+#: ../src/seahorse-keyserver-results.c:146
+#: ../src/seahorse-keyserver-results.c:180
+#, c-format
+msgid "Couldn't write keys to file: %s"
+msgstr "Не вдається записати ключі у файл: %s"
+
+#: ../src/seahorse-keyserver-results.c:169
+msgid "Save Remote Keys"
+msgstr "Зберегти віддалені ключі"
+
+#: ../src/seahorse-keyserver-results.c:351
+msgid "No matching keys found"
+msgstr "Не знайдено відповідних ключів"
+
+#: ../src/seahorse-keyserver-results.c:381
+msgid "_Close"
+msgstr "_Закрити"
+
+#: ../src/seahorse-keyserver-results.c:382
+msgid "Close this window"
+msgstr "Закрити це вікно"
+
+#: ../src/seahorse-keyserver-results.c:386
+msgid "_Expand All"
+msgstr "_Розгорнути все"
+
+#: ../src/seahorse-keyserver-results.c:387
+msgid "Expand all listings"
+msgstr "Розгорнути всі списки"
+
+#: ../src/seahorse-keyserver-results.c:388
+msgid "_Collapse All"
+msgstr "_Згорнути все"
+
+#: ../src/seahorse-keyserver-results.c:389
+msgid "Collapse all listings"
+msgstr "Згорнути всі списки"
+
+#: ../src/seahorse-keyserver-results.c:394
+msgid "Import selected keys to local key ring"
+msgstr "Імпортувати виділені ключі у локальну в'язку"
+
+#: ../src/seahorse-keyserver-results.c:397
+msgid "Save Key As..."
+msgstr "Зберегти ключ як..."
+
+#: ../src/seahorse-keyserver-results.c:398
+msgid "Save selected keys as a file"
+msgstr "Зберегти виділені ключі у файл"
+
+#: ../src/seahorse-keyserver-results.c:399
+msgid "_Copy Key"
+msgstr "_Копіювати ключ"
+
+#: ../src/seahorse-keyserver-results.c:400
+msgid "Copy selected keys to the clipboard"
+msgstr "Копіювати виділений ключ у буфер обміну"
+
+#: ../src/seahorse-keyserver-results.c:457
+msgid "Remote Keys"
+msgstr "Ключі з мережі"
+
+#: ../src/seahorse-keyserver-results.c:459
+#, c-format
+msgid "Remote Keys Containing '%s'"
+msgstr "Ключі з мережі, що містять '%s'"
+
+#: ../src/seahorse-keyserver-results.glade.h:1
+msgid "Remote Encryption Keys"
+msgstr "Ключі шифрування з мережі"
+
+#: ../src/seahorse-keyserver-search.glade.h:1
+msgid "<b>Key Servers:</b>"
+msgstr "<b>Сервери ключів:</b>"
+
+#: ../src/seahorse-keyserver-search.glade.h:2
+msgid "<b>Shared Keys Near Me:</b>"
+msgstr "<b>Ключі, що публікуються у локальній мережі:</b>"
+
+#: ../src/seahorse-keyserver-search.glade.h:3
+msgid "Find Remote Keys"
+msgstr "Знайти ключі у мережі"
+
+#: ../src/seahorse-keyserver-search.glade.h:4
+msgid ""
+"This will find keys for others on the Internet. These keys can then be "
+"imported into your local key ring."
+msgstr ""
+"Так можна знайти інші ключі у мережі. Ці ключі будуть внесені у локальну "
+"в'язу."
+
+#: ../src/seahorse-keyserver-search.glade.h:5
+msgid "Where to search:"
+msgstr "Де шукати:"
+
+#: ../src/seahorse-keyserver-search.glade.h:6
+msgid "_Search"
+msgstr "_Пошук"
+
+#: ../src/seahorse-keyserver-search.glade.h:7
+msgid "_Search for keys containing: "
+msgstr "П_ошук ключів, що містять: "
+
+#: ../src/seahorse-keyserver-sync.c:44
+#, c-format
+msgid "Couldn't publish keys to server: %s"
+msgstr "Не вдається опублікувати ключі на сервері: %s"
+
+#: ../src/seahorse-keyserver-sync.c:59
+#, c-format
+msgid "Couldn't retrieve keys from server: %s"
+msgstr "Не вдається завантажити ключі з сервера: %s"
+
+#: ../src/seahorse-keyserver-sync.c:147
+#, c-format
+msgid "<b>%d key is selected for synchronizing</b>"
+msgid_plural "<b>%d keys are selected for synchronizing</b>"
+msgstr[0] "<b>%d ключ вибрано для синхронізації</b>"
+msgstr[1] "<b>%d ключі вибрано для синхронізації</b>"
+msgstr[2] "<b>%d ключі вибрано для синхронізації</b>"
+
+#: ../src/seahorse-keyserver-sync.c:214
+msgid "Synchronizing keys"
+msgstr "Синхронізуватися ключів"
+
+#. Show the progress window if necessary
+#: ../src/seahorse-keyserver-sync.c:246
+msgid "Synchronizing keys..."
+msgstr "Синхронізація ключів..."
+
+#: ../src/seahorse-keyserver-sync.glade.h:1
+msgid "<b>X keys are selected for synchronizing</b>"
+msgstr "<b>X ключів вибрано для синхронізації</b>"
+
+#: ../src/seahorse-keyserver-sync.glade.h:2
+msgid "Sync Keys"
+msgstr "Синхронізувати ключі"
+
+#: ../src/seahorse-keyserver-sync.glade.h:3
+msgid ""
+"This will publish the keys in your key ring so they're available for others "
+"to use. You'll also get any changes others have made since you received "
+"their keys."
+msgstr ""
+"Зараз ключі з вашої в'язки будуть опубліковані на сервері та стануть "
+"доступними для інших. Також ви отримаєте інформацію, що оновлюється з "
+"останнього підключення до сервера ключів."
+
+#: ../src/seahorse-keyserver-sync.glade.h:4
+msgid ""
+"This will retrieve any changes others have made since you received their "
+"keys. No key server has been chosen for publishing, so your keys will not be "
+"made available to others."
+msgstr ""
+"Зараз усі зміни, зроблені з останнього з'єднання до сервера будуть "
+"перенесені на комп'ютер. Серверів для публікації ключів обрано не було, тому "
+"ваші ключі не будуть доступні іншим."
+
+#: ../src/seahorse-keyserver-sync.glade.h:5
+msgid "_Key Servers"
+msgstr "_Сервера ключів"
+
+#: ../src/seahorse-keyserver-sync.glade.h:6
+msgid "_Sync"
+msgstr "_Синхронізувати"
+
+#: ../src/seahorse-multi-encrypt.glade.h:1
+msgid "<b>You have selected multiple files or folders</b>"
+msgstr "<b>Ви виділили декілька файлів та каталогів</b>"
+
+#: ../src/seahorse-multi-encrypt.glade.h:2
+msgid ""
+"Because the files are located remotely, each file will be encrypted "
+"separately."
+msgstr ""
+"Оскільки файли знаходяться на мережних ресурсах, кожен з них буде "
+"зашифрований окремо."
+
+#: ../src/seahorse-multi-encrypt.glade.h:3
+msgid "Encrypt Multiple Files"
+msgstr "Зашифрувати декілька файлів"
+
+#: ../src/seahorse-multi-encrypt.glade.h:4
+msgid "Encrypt each file separately"
+msgstr "Зашифровувати кожен файл окремо"
+
+#: ../src/seahorse-multi-encrypt.glade.h:5
+msgid "Encrypt packed together in a package"
+msgstr "Зашифрувати запаковані у архів"
+
+#: ../src/seahorse-multi-encrypt.glade.h:6
+msgid "Package Name:"
+msgstr "Назва архіву:"
+
+#: ../src/seahorse-multi-encrypt.glade.h:7
+msgid "Packaging:"
+msgstr "Пакевання:"
+
+#: ../src/seahorse-multi-encrypt.glade.h:8
+msgid "encrypted-package.rar"
+msgstr "encrypted-package.rar"
+
+#: ../src/seahorse-pgp-encrypted.desktop.in.in.h:1
+msgid "Decrypt File"
+msgstr "Розшифрувати файл"
+
+#: ../src/seahorse-pgp-generate.c:43
+msgid "DSA Elgamal"
+msgstr "DSA ElGamal"
+
+#: ../src/seahorse-pgp-generate.c:54
+msgid "Couldn't generate PGP key"
+msgstr "Не вдається створити ключ PGP"
+
+#: ../src/seahorse-pgp-generate.c:139
+msgid "Passphrase for New PGP Key"
+msgstr "Пароль для нового PGP ключа"
+
+#: ../src/seahorse-pgp-generate.c:140
+msgid "Enter the passphrase for your new key twice."
+msgstr "Введіть пароль для нового ключа двічі."
+
+#: ../src/seahorse-pgp-generate.c:149
+msgid "Couldn't generate key"
+msgstr "Не вдається створити ключ"
+
+#: ../src/seahorse-pgp-generate.c:151
+msgid "Generating key"
+msgstr "Створення ключа"
+
+#: ../src/seahorse-pgp-generate.glade.h:1
+#: ../src/seahorse-ssh-generate.glade.h:1
+msgid "<b>_Advanced key options</b>"
+msgstr "<b>_Додаткові параметри ключа</b>"
+
+#: ../src/seahorse-pgp-generate.glade.h:2
+msgid "A PGP key allows you to encrypt email or files to other people."
+msgstr "Ключ PGP дозволяє шифрувати пошту та файли для інших людей."
+
+#: ../src/seahorse-pgp-generate.glade.h:3
+msgid "Algorithms here"
+msgstr "Алгоритмт"
+
+#: ../src/seahorse-pgp-generate.glade.h:4
+msgid "C_reate"
+msgstr "_Створити"
+
+#: ../src/seahorse-pgp-generate.glade.h:5
+msgid "Create a PGP Key"
+msgstr "Створити новий ключ PGP"
+
+#: ../src/seahorse-pgp-generate.glade.h:6
+msgid "E_xpiration Date:"
+msgstr "_Термін закінчення:"
+
+#: ../src/seahorse-pgp-generate.glade.h:7
+#: ../src/seahorse-ssh-generate.glade.h:7
+msgid "Encryption _Type:"
+msgstr "_Тип шифрування:"
+
+#: ../src/seahorse-pgp-generate.glade.h:9
+msgid "Generate a new key"
+msgstr "Створити новий ключ"
+
+#: ../src/seahorse-pgp-generate.glade.h:10
+#: ../src/seahorse-ssh-generate.glade.h:10
+msgid "Key _Strength (bits):"
+msgstr "_Міцність ключа (біти):"
+
+#: ../src/seahorse-pgp-generate.glade.h:11
+msgid "Ne_ver Expires"
+msgstr "Н_іколи не закінчується"
+
+#: ../src/seahorse-pgp-generate.glade.h:12
+msgid "New PGP Key"
+msgstr "Новий ключ PGP"
+
+#: ../src/seahorse-pgp-generate.glade.h:13
+msgid "_Comment:"
+msgstr "_Коментар:"
+
+#: ../src/seahorse-pgp-private-key-properties.glade.h:1
+msgid "<b>Actions</b>"
+msgstr "<b>Дії</b>"
+
+#: ../src/seahorse-pgp-private-key-properties.glade.h:2
+#: ../src/seahorse-pgp-public-key-properties.glade.h:1
+msgid "<b>Comment:</b>"
+msgstr "<b>Коментарі:</b>"
+
+#: ../src/seahorse-pgp-private-key-properties.glade.h:3
+msgid "<b>Dates</b>"
+msgstr "<b>Дати</b>"
+
+#: ../src/seahorse-pgp-private-key-properties.glade.h:4
+#: ../src/seahorse-pgp-public-key-properties.glade.h:3
+msgid "<b>Email:</b>"
+msgstr "<b>Ел. пошта:</b>"
+
+#: ../src/seahorse-pgp-private-key-properties.glade.h:5
+msgid "<b>Fingerprint</b>"
+msgstr "<b>Відбиток</b>"
+
+#: ../src/seahorse-pgp-private-key-properties.glade.h:6
+#: ../src/seahorse-pgp-public-key-properties.glade.h:6
+msgid "<b>Key ID:</b>"
+msgstr "<b>Ідентифікатор ключа:</b>"
+
+#: ../src/seahorse-pgp-private-key-properties.glade.h:7
+msgid "<b>Key Names and Signatures</b>"
+msgstr "<b>Імена ключів та підписи</b>"
+
+#: ../src/seahorse-pgp-private-key-properties.glade.h:8
+#: ../src/seahorse-pgp-public-key-properties.glade.h:7
+#: ../src/seahorse-ssh-key-properties.glade.h:7
+msgid "<b>Name:</b>"
+msgstr "<b>Ім'я:</b>"
+
+#: ../src/seahorse-pgp-private-key-properties.glade.h:9
+#: ../src/seahorse-pgp-public-key-properties.glade.h:8
+msgid "<b>Photo </b>"
+msgstr "<b>Фотографія</b>"
+
+#: ../src/seahorse-pgp-private-key-properties.glade.h:10
+msgid "<b>Technical Details</b>"
+msgstr "<b>Подробиці</b>"
+
+#: ../src/seahorse-pgp-private-key-properties.glade.h:11
+#: ../src/seahorse-pgp-public-key-properties.glade.h:10
+msgid "<b>This key has been revoked</b>"
+msgstr "<b>Цей ключ був відкликаний</b>"
+
+#: ../src/seahorse-pgp-private-key-properties.glade.h:12
+#: ../src/seahorse-pgp-public-key-properties.glade.h:11
+msgid "<b>This key has expired</b>"
+msgstr "<b>Термін дії цього ключа закінчився</b>"
+
+#: ../src/seahorse-pgp-private-key-properties.glade.h:15
+#: ../src/seahorse-pgp-public-key-properties.glade.h:17
+msgid "<b>_Subkeys</b>"
+msgstr "<b>_Підключі</b>"
+
+#: ../src/seahorse-pgp-private-key-properties.glade.h:16
+msgid "Add"
+msgstr "Додати"
+
+#: ../src/seahorse-pgp-private-key-properties.glade.h:17
+msgid "Add a photo to this key"
+msgstr "Додати фотографію"
+
+#: ../src/seahorse-pgp-private-key-properties.glade.h:18
+#: ../src/seahorse-ssh-key-properties.glade.h:15
+msgid "Change _Passphrase"
+msgstr "Змінити _пароль"
+
+#: ../src/seahorse-pgp-private-key-properties.glade.h:19
+#: ../src/seahorse-pgp-public-key-properties.glade.h:18
+msgid "Created:"
+msgstr "Створено:"
+
+#: ../src/seahorse-pgp-private-key-properties.glade.h:20
+msgid "Decrypt files and email sent to you."
+msgstr "Дозволяє розшифрувати фали та поштові повідомлення."
+
+#: ../src/seahorse-pgp-private-key-properties.glade.h:21
+msgid "Delete"
+msgstr "Видалити"
+
+#: ../src/seahorse-pgp-private-key-properties.glade.h:23
+msgid "Expire"
+msgstr "Закінчується дія"
+
+#: ../src/seahorse-pgp-private-key-properties.glade.h:24
+#: ../src/seahorse-pgp-public-key-properties.glade.h:21
+msgid "Expires:"
+msgstr "Закінчується дія:"
+
+#: ../src/seahorse-pgp-private-key-properties.glade.h:25
+msgid "Export"
+msgstr "Експортувати"
+
+#: ../src/seahorse-pgp-private-key-properties.glade.h:26
+msgid "Go to next photo"
+msgstr "Перейти до наступної фотографії"
+
+#: ../src/seahorse-pgp-private-key-properties.glade.h:27
+msgid "Go to previous photo"
+msgstr "Перейти до наступної фотографії"
+
+#: ../src/seahorse-pgp-private-key-properties.glade.h:28
+#: ../src/seahorse-pgp-public-key-properties.glade.h:27
+msgid "Key ID:"
+msgstr "Ідентифікатор ключа:"
+
+#: ../src/seahorse-pgp-private-key-properties.glade.h:30
+msgid "Make this photo the primary photo"
+msgstr "Зробити цю фотографію головною"
+
+#: ../src/seahorse-pgp-private-key-properties.glade.h:31
+msgid "Names and Signatures"
+msgstr "Імена та підписи"
+
+#: ../src/seahorse-pgp-private-key-properties.glade.h:32
+msgid "Override Owner _Trust:"
+msgstr "Ігнорувати _довіру власника:"
+
+#: ../src/seahorse-pgp-private-key-properties.glade.h:33
+#: ../src/seahorse-pgp-public-key-properties.glade.h:29
+msgid "Owner"
+msgstr "Власника"
+
+#: ../src/seahorse-pgp-private-key-properties.glade.h:34
+msgid "Primary"
+msgstr "Первинний"
+
+#: ../src/seahorse-pgp-private-key-properties.glade.h:36
+msgid "Remove this photo from this key"
+msgstr "Видалити фотографію з цього ключа"
+
+#: ../src/seahorse-pgp-private-key-properties.glade.h:37
+msgid "Revoke"
+msgstr "Відкликати"
+
+#: ../src/seahorse-pgp-private-key-properties.glade.h:39
+#: ../src/seahorse-pgp-public-key-properties.glade.h:31
+msgid "Strength:"
+msgstr "Міцність:"
+
+#: ../src/seahorse-pgp-private-key-properties.glade.h:40
+#: ../src/seahorse-pgp-public-key-properties.glade.h:32
+msgid "The owner of the key revoked the key. It can no longer be used."
+msgstr "Власник відкликав ключ. Його не можна використовувати."
+
+#: ../src/seahorse-pgp-private-key-properties.glade.h:41
+#: ../src/seahorse-pgp-public-key-properties.glade.h:33
+msgid "This key expired on: (placeholder)"
+msgstr "Термін дії цього ключа закінчився: (час)"
+
+#: ../src/seahorse-pgp-private-key-properties.glade.h:42
+#: ../src/seahorse-pgp-public-key-properties.glade.h:36
+msgid "Type:"
+msgstr "Тип:"
+
+#: ../src/seahorse-pgp-private-key-properties.glade.h:43
+msgid ""
+"Unknown\n"
+"Never\n"
+"Marginal\n"
+"Full\n"
+"Ultimate"
+msgstr ""
+"невідомий\n"
+"ніколи\n"
+"іноді\n"
+"повністю\n"
+"безумовно"
+
+#: ../src/seahorse-pgp-private-key-properties.glade.h:48
+msgid "_Add Name"
+msgstr "_Додати назву"
+
+#: ../src/seahorse-pgp-private-key-properties.glade.h:49
+msgid "_Export Complete Key:"
+msgstr "Експортувати _повний ключ"
+
+#: ../src/seahorse-pgp-public-key-properties.glade.h:2
+msgid "<b>Dates:</b>"
+msgstr "<b>Дати:</b>"
+
+#: ../src/seahorse-pgp-public-key-properties.glade.h:4
+#: ../src/seahorse-ssh-key-properties.glade.h:4
+msgid "<b>Fingerprint:</b>"
+msgstr "<b>Відбиток:</b>"
+
+#: ../src/seahorse-pgp-public-key-properties.glade.h:5
+msgid "<b>Indicate Trust:</b>"
+msgstr "<b>Рівень довіри:</b>"
+
+#: ../src/seahorse-pgp-public-key-properties.glade.h:14
+msgid "<b>Your trust of this key</b>"
+msgstr "<b>Ваша довіра цьому ключу</b>"
+
+#: ../src/seahorse-pgp-public-key-properties.glade.h:15
+msgid "<b>_Other Names:</b>"
+msgstr "<b>_Інші імена:</b>"
+
+#: ../src/seahorse-pgp-public-key-properties.glade.h:16
+msgid "<b>_People who have signed this key:</b>"
+msgstr "<b>_Люди, які підписали цей ключ:</b>"
+
+#: ../src/seahorse-pgp-public-key-properties.glade.h:20
+msgid "Encrypt files and email to the key's owner "
+msgstr "Дозволяє шифрувати файли та пошту для власника ключа "
+
+#: ../src/seahorse-pgp-public-key-properties.glade.h:23
+#, no-c-format
+msgid "I have checked that this key belongs to '%s'"
+msgstr "Я перевірив, що цей ключ належить '%s'"
+
+#: ../src/seahorse-pgp-public-key-properties.glade.h:25
+#, no-c-format
+msgid "I trust signatures from '%s' on other keys "
+msgstr "Я довіряю підписам для '%s' від інших ключів "
+
+#: ../src/seahorse-pgp-public-key-properties.glade.h:26
+msgid ""
+"If you no longer trust this person's identity, <i>revoke</i> your signature:"
+msgstr ""
+"Якщо ви не довіряєте автентичності цієї людини, <i>відкликайте</i> ваш "
+"підпис:"
+
+#: ../src/seahorse-pgp-public-key-properties.glade.h:34
+msgid "To indicate your trust of this key to others, <i>sign</i> this key:"
+msgstr ""
+"Щоб показати вашу довіру до цього ключа іншим, <i>підпишіть</i> цей ключ:"
+
+#: ../src/seahorse-pgp-public-key-properties.glade.h:37
+msgid ""
+"Unknown\n"
+"Never\n"
+"Marginally\n"
+"Fully\n"
+"Ultimately"
+msgstr ""
+"невідомо\n"
+"ніколи\n"
+"іноді\n"
+"повністю\n"
+"беумовно"
+
+#: ../src/seahorse-pgp-public-key-properties.glade.h:42
+msgid "You _Trust the Owner:"
+msgstr "Ви д_овіряєте власнику:"
+
+#: ../src/seahorse-pgp-public-key-properties.glade.h:43
+msgid "Your trust is manually specified on the <i>Details</i> tab."
+msgstr "Рівень довіри задається у закладці <i>подробиці</i>."
+
+#: ../src/seahorse-pgp-public-key-properties.glade.h:44
+msgid "_Only display the signatures of people I trust"
+msgstr "Показувати лише підписи людей, яким я _довіряю"
+
+#: ../src/seahorse-pgp-public-key-properties.glade.h:45
+msgid "_Revoke Signature"
+msgstr "_Відкликати підпис"
+
+#: ../src/seahorse-pgp-public-key-properties.glade.h:46
+msgid "_Sign this Key"
+msgstr "_Підписати ключ"
+
+#: ../src/seahorse-pgp-signature.desktop.in.in.h:1
+msgid "Verify Signature"
+msgstr "Перевірити підпис"
+
+#: ../src/seahorse-photos.c:70
+#, c-format
+msgid ""
+"<big><b>The photo is too large</b></big>\n"
+"The recommended size for a photo on your key is %d x %d pixels."
+msgstr ""
+"<big><b>Фотографія надто велика</b></big>\n"
+"Рекомендований розмір фотографії -  %d x %d точок."
+
+#: ../src/seahorse-photos.c:75
+msgid "_Don't Resize"
+msgstr "_Не змінювати розмір"
+
+#: ../src/seahorse-photos.c:76
+msgid "_Resize"
+msgstr "_Змінювати розмір"
+
+#: ../src/seahorse-photos.c:125
+msgid ""
+"This is not a image file, or an unrecognized kind of image file. Try to use "
+"a JPEG image."
+msgstr ""
+"Це не файл зображення чи він не розпізнаний коректно. Спробуйте використати "
+"зображення у форматі JPEG."
+
+#: ../src/seahorse-photos.c:221
+msgid "All image files"
+msgstr "Всі файли зображення"
+
+#: ../src/seahorse-photos.c:234
+msgid "All JPEG files"
+msgstr "Всі файли формату JPEG"
+
+#: ../src/seahorse-photos.c:258
+msgid "Choose Photo to Add to Key"
+msgstr "Виберіть фотографію для додавання до ключа"
+
+#: ../src/seahorse-photos.c:285 ../src/seahorse-photos.c:289
+msgid "Couldn't add photo"
+msgstr "Не вдається додати фотографію"
+
+#: ../src/seahorse-photos.c:286
+msgid "The file could not be loaded. It may be in an invalid format"
+msgstr "Не вдається завантажити файл. Може бути, він має некоректний формат"
+
+#: ../src/seahorse-photos.c:317
+msgid "Are you sure you want to remove the current photo from your key?"
+msgstr "Ви дійсно хочете видалити поточну фотографію з ключа?"
+
+#: ../src/seahorse-photos.c:330
+msgid "Couldn't delete photo"
+msgstr "Не вдається видалити зображення"
+
+#: ../src/seahorse-revoke.c:54
 msgid "Couldn't revoke subkey"
-msgstr "Відкликати підключ %d"
+msgstr "Не вдається відкликати підключ"
 
-#: src/seahorse-revoke.c:76
+#: ../src/seahorse-revoke.c:77
 #, c-format
 msgid "Revoke Subkey %d of %s"
-msgstr "Відкликання підключа %d з %s"
+msgstr "Відкликання підключа %d ключа %s"
 
-#: src/seahorse-revoke.c:78
+#: ../src/seahorse-revoke.c:79
 #, c-format
 msgid "Revoke %s"
 msgstr "Відкликання %s"
 
-#: src/seahorse-revoke.c:105
+#: ../src/seahorse-revoke.c:107
 #, c-format
 msgid ""
 "You are about to add %s as a revoker for %s. This operation cannot be "
@@ -2113,319 +3231,308 @@ msgstr ""
 "Ви намагаєтесь додати %s як ключ відкликання до %s. Цю операцію неможливо "
 "скасувати! Ви впевнені, що бажаєте продовжити?"
 
-#: src/seahorse-revoke.c:120
+#: ../src/seahorse-revoke.c:122
 msgid "Couldn't add revoker"
-msgstr ""
+msgstr "Не вдається додати позначку про відкликання"
 
-#: src/seahorse-revoke.glade.h:2
+#: ../src/seahorse-revoke.glade.h:1
 msgid "Compromised"
 msgstr "Скомпрометований"
 
-#: src/seahorse-revoke.glade.h:3
+#: ../src/seahorse-revoke.glade.h:2
 msgid "Key has been compromised"
 msgstr "Ключ був скомпрометований"
 
-#: src/seahorse-revoke.glade.h:4
+#: ../src/seahorse-revoke.glade.h:3
 msgid "Key has been superseded"
 msgstr "Ключ був замінений"
 
-#: src/seahorse-revoke.glade.h:5
+#: ../src/seahorse-revoke.glade.h:4
 msgid "Key is no longer used"
 msgstr "Ключ вже не використовується"
 
-#: src/seahorse-revoke.glade.h:6
+#: ../src/seahorse-revoke.glade.h:5
 msgid "No Reason"
 msgstr "Немає причини"
 
-#: src/seahorse-revoke.glade.h:7
+#: ../src/seahorse-revoke.glade.h:6
 msgid "No reason for revoking key"
 msgstr "Причина відкликання ключа не зазначена"
 
-#: src/seahorse-revoke.glade.h:8
+#: ../src/seahorse-revoke.glade.h:7
 msgid "Not Used"
 msgstr "Не використовується"
 
-#: src/seahorse-revoke.glade.h:9
+#: ../src/seahorse-revoke.glade.h:8
 msgid "Optional description of revocation"
 msgstr "Необов'язковий опис відкликання"
 
-#: src/seahorse-revoke.glade.h:10
+#: ../src/seahorse-revoke.glade.h:9
 msgid "Re_voke"
 msgstr "_Відкликати"
 
-#: src/seahorse-revoke.glade.h:11
+#: ../src/seahorse-revoke.glade.h:10
 msgid "Reason for revoking the key"
 msgstr "Причина відкликання ключа"
 
-#: src/seahorse-revoke.glade.h:12
-msgid "Revoke key"
-msgstr "Відкликати ключ"
-
-#: src/seahorse-revoke.glade.h:13
+#: ../src/seahorse-revoke.glade.h:12
 msgid "Superseded"
 msgstr "Замінений"
 
-#: src/seahorse-revoke.glade.h:14
+#: ../src/seahorse-revoke.glade.h:13
 msgid "_Description:"
 msgstr "_Опис:"
 
-#: src/seahorse-revoke.glade.h:15
+#: ../src/seahorse-revoke.glade.h:14
 msgid "_Reason:"
 msgstr "_Причина:"
 
-#: src/seahorse-sign.c:57
+#: ../src/seahorse-sign.c:97
 msgid "Couldn't sign key"
-msgstr ""
+msgstr "Не вдається підписати ключ"
 
-#: src/seahorse-sign.c:81
-#, c-format
-msgid "Are you sure you want to sign all user IDs for %s?"
-msgstr ""
-"Ви впевнені, що бажаєте підписати всі ідентифікатори користувача для %s?"
-
-#: src/seahorse-sign.c:127
-#, fuzzy, c-format
-msgid "Are you sure you want to sign the '%s' user ID?"
-msgstr ""
-"Ви впевнені, що бажаєте підписати всі ідентифікатори користувача для %s?"
-
-#: src/seahorse-sign.glade.h:1
-msgid "Casually"
-msgstr "Недбало"
-
-#: src/seahorse-sign.glade.h:2
-msgid "Default answer"
-msgstr "Типова відповідь"
-
-#: src/seahorse-sign.glade.h:3
-msgid "Have casually checked key"
-msgstr "Ключ був перевірений поверхнево"
-
-#: src/seahorse-sign.glade.h:4
-msgid "Have checked key very carefully"
-msgstr "Ключ був ретельно перевірений"
-
-#: src/seahorse-sign.glade.h:5
-msgid "Have not checked key"
-msgstr "Ключ не був перевірений"
-
-#: src/seahorse-sign.glade.h:6
-msgid "If signature can be revoked"
-msgstr "Чи може підпис бути відкликаним"
-
-#: src/seahorse-sign.glade.h:7
-msgid "If signature expires with key"
-msgstr "Чи термін дії підпису закінчується з терміном дії ключа"
-
-#: src/seahorse-sign.glade.h:8
+#: ../src/seahorse-sign.c:160
 msgid ""
-"If signature is local to the key ring and won't be exported with the key"
+"You have no personal PGP keys that can be used to indicate your trust of "
+"this key."
 msgstr ""
-"Чи є підпис локальним для комплекту ключів та не буде експортуватись з ключем"
+"У вас немає особистого ключа PGP, необхідного для того, щоб висловити довіру "
+"цьому ключу."
 
-#: src/seahorse-sign.glade.h:9
-msgid "No answer"
-msgstr "Немає відповіді"
+#: ../src/seahorse-sign.glade.h:1
+msgid "<b>How carefully have you checked this key?</b>"
+msgstr "<b>Наскільки докладно ви перевірили цей ключ?</b>"
 
-#: src/seahorse-sign.glade.h:10
-msgid "Not at all"
-msgstr "Не перевірявся"
+#: ../src/seahorse-sign.glade.h:2
+msgid "<b>How others will see this signature:</b>"
+msgstr "<b>Інші побачать цей підпис як:</b>"
 
-#: src/seahorse-sign.glade.h:11
-msgid "Sign Key"
-msgstr "Підписати ключ"
+#: ../src/seahorse-sign.glade.h:3
+msgid "<b>Sign key as:</b>"
+msgstr "<b>Підписати ключ як:</b>"
 
-#: src/seahorse-sign.glade.h:12
-msgid "Very carefully"
-msgstr "Дуже ретельно"
+#: ../src/seahorse-sign.glade.h:4
+msgid ""
+"<i>Casually:</i> means you have done a casual verification that the key\n"
+"is owned by the person who claims to own it. For example, you could\n"
+"read the key fingerprint to the owner over the phone. "
+msgstr ""
+"<i>Поверхнево:</i> означає, що ви провели поверхневу перевірку того,\n"
+"що цей ключ належить тому, хто записаний власником. Наприклад, ви\n"
+"звірили відбитки ключа, переданні по телефону від власника. "
 
-#: src/seahorse-sign.glade.h:14
-msgid "_How carefully have you checked this key?"
-msgstr "_Наскільки ретельно ви перевірили цей ключ?"
+#: ../src/seahorse-sign.glade.h:7
+msgid "<i>Key Name</i>"
+msgstr "<i>Назва ключа</i>"
 
-#: src/seahorse-sign.glade.h:15
-msgid "_Local"
-msgstr "_Локальний"
+#: ../src/seahorse-sign.glade.h:8
+msgid ""
+"<i>Not at all:</i> means you believe the key is owned by the person who \n"
+"claims to own it, but you could not or did not verify this to be a fact."
+msgstr ""
+"<i>Не зовсім:</i> означає, що ви вірите, ще цей ключ належить тому, хто "
+"записаний власником, але ви не можете перевірити це або не перевіряти."
 
-#: src/seahorse-sign.glade.h:16
-msgid "_Revocable"
-msgstr "Може _відкликатись"
+#: ../src/seahorse-sign.glade.h:10
+msgid ""
+"<i>Very Carefully:</i> Select this only if you are absolutely sure that "
+"this\n"
+"key is genuine."
+msgstr ""
+"<i>Дуже бережно:</i> Вибирайте цей варіант лише коли ви впевнені, що цей "
+"ключ дійсно належить власнику."
 
-#: src/seahorse.desktop.in.h:2
-msgid "Manage your GPG keys"
-msgstr "Керування вашими ключами GPG"
+#: ../src/seahorse-sign.glade.h:12
+msgid "By signing you indicate your trust that this key belongs to:"
+msgstr ""
+"Підписуючи ключ, ви заявляєте про свою довіру тому, кому належить цей ключ:"
 
-#, fuzzy
-#~ msgid "Loaded %d key pair"
-#~ msgid_plural "Loaded %d key pairs"
-#~ msgstr[0] "Завантажено %d пар ключів"
-#~ msgstr[1] "Завантажено %d пар ключів"
+#: ../src/seahorse-sign.glade.h:13
+msgid "I can _revoke this signature at a later date."
+msgstr "Я можу _відкликати цей підпис пізніше."
 
-#, fuzzy
-#~ msgid "Loaded %d new key"
-#~ msgid_plural "Loaded %d new keys"
-#~ msgstr[0] "Завантажено %d нових ключів"
-#~ msgstr[1] "Завантажено %d нових ключів"
+#: ../src/seahorse-sign.glade.h:14
+msgid ""
+"You could use a hard to forge photo identification (such as a passport) \n"
+"to personally check that the name on the key is correct. You should \n"
+"have also used email to check that the email address belongs to the\n"
+"owner."
+msgstr ""
+"Ви можете використовувати ідентифікацію по фотографію, яка складно "
+"обходиться\n"
+"(наприклад, фотографії у паспорті), щоб особисто впевнитись у коректності\n"
+"ключа. Ви повинні також перевірити, що адреса електронної пошти належить\n"
+"власнику, надсилаючи поштове повідомлення власнику."
 
-#~ msgid "Listed %d keys"
-#~ msgstr "Внесено в список %d ключів"
+#: ../src/seahorse-sign.glade.h:18
+msgid "_Casually"
+msgstr "_Поверхнево"
 
-#~ msgid "Operation complete"
-#~ msgstr "Операція завершена"
+#: ../src/seahorse-sign.glade.h:19
+msgid "_Not at all"
+msgstr "_Не зовсім"
 
-#~ msgid "PGP"
-#~ msgstr "PGP"
+#: ../src/seahorse-sign.glade.h:20
+msgid "_Others may not see this signature"
+msgstr "_Інші можуть не бачити цей підпис"
 
-#~ msgid "Controls the visibility of the key manager's statusbar."
-#~ msgstr "Визначає видимість рядка стану у менеджері ключів."
+#: ../src/seahorse-sign.glade.h:22
+msgid "_Signer:"
+msgstr "_Автор підпису:"
 
-#~ msgid "Controls the visibility of the key manager's toolbar."
-#~ msgstr "Визначає видимість панелі інструментів у менеджері ключів."
+#: ../src/seahorse-sign.glade.h:23
+msgid "_Very Carefully"
+msgstr "Дуже _обережно"
 
-#~ msgid "If the statusbar is visible"
-#~ msgstr "Видимість рядка стану"
+#: ../src/seahorse-ssh-generate.c:40
+msgid "Couldn't generate Secure Shell key"
+msgstr "Не вдається створити ключ для віддаленого командного рядка"
 
-#~ msgid "If the toolbar is visible"
-#~ msgstr "Видимість панелі інструментів"
+#: ../src/seahorse-ssh-generate.c:127
+msgid "Creating Secure Shell Key"
+msgstr "Створення ключа віддаленого командного рядка"
 
-#~ msgid "Style of toolbar buttons and labels"
-#~ msgstr "Стиль кнопок та позначок панелі інструментів"
+#: ../src/seahorse-ssh-generate.glade.h:2
+msgid ""
+"<i>Use your email address, and any other reminder\n"
+" you need about what this key is for.</i>"
+msgstr ""
+"<i>Використовуйте вашу адресу електронної пошти або іншу інформацію\n"
+" щоб нагадати про призначення цього ключа.</i>"
 
-#~ msgid ""
-#~ "The toolbar button and label style. Options are 'default', 'both', "
-#~ "'both_horiz', 'icons', and 'text'."
-#~ msgstr ""
-#~ "Стиль кнопок та позначок панелі інструментів. Можливі варіанти "
-#~ "'default' (типовий), 'both' (обидва), 'both_horiz' (обидва "
-#~ "горизонтально), 'icons' (значки), та 'text' (текст)."
+#: ../src/seahorse-ssh-generate.glade.h:4
+msgid ""
+"A Secure Shell (SSH) key lets you connect securely to trusted\n"
+"computers using SSH, without entering a different password \n"
+"for each of them."
+msgstr ""
+"Ключі віддаленого командного рядка (SSH) дозволяють безпечно та впевнено\n"
+"використовувати віддалені комп'ютери через протокол SSH, без потреби\n"
+"вводити пароль для кожного з них."
 
-#~ msgid "Good, signing key expired"
-#~ msgstr "Правильний, термін дії ключа підпису вийшов"
+#: ../src/seahorse-ssh-generate.glade.h:8
+msgid ""
+"If there is already a computer you want to use this key with, you \n"
+"can set up that computer to recognize your key now. "
+msgstr ""
+"Якщо вже є комп'ютер, з яким можна використовувати цей ключ\n"
+"його можна налаштувати зараз. "
 
-#~ msgid "Signer:"
-#~ msgstr "Підписано:"
+#: ../src/seahorse-ssh-generate.glade.h:11
+msgid "New Secure Shell Key"
+msgstr "Новий ключ віддаленого командного рядка"
 
-#~ msgid "FILE"
-#~ msgstr "ФАЙЛ"
+#: ../src/seahorse-ssh-generate.glade.h:12
+msgid "_Create and Set Up"
+msgstr "Створити та _встановити"
 
-#~ msgid "Decrypt encrypt file and verify any signatures it contains"
-#~ msgstr ""
-#~ "Розшифрувати шифрований файл та перевірити будь-які підписи, які він "
-#~ "містить"
+#: ../src/seahorse-ssh-generate.glade.h:13
+msgid "_Just Create Key"
+msgstr "_Просто створити ключ"
 
-#~ msgid "Choose a file to export to"
-#~ msgstr "Виберіть файл для експорту"
+#: ../src/seahorse-ssh-generate.glade.h:14
+msgid "_Key Description:"
+msgstr "_Опис ключа:"
 
-#~ msgid "Export to _Clipboard:"
-#~ msgstr "Експорт у _буфер обміну"
+#: ../src/seahorse-ssh-key-properties.c:117
+msgid "Couldn't rename key."
+msgstr "Не вдається перейменувати ключ."
 
-#~ msgid "Export to _File:"
-#~ msgstr "Експорт у _файл:"
+#: ../src/seahorse-ssh-key-properties.c:157
+msgid "Couldn't change authorization for key."
+msgstr "Не вдається змінити параметри авторизації для цього ключа."
 
-#~ msgid "Export to _Server:"
-#~ msgstr "Експорт на с_ервер:"
+#: ../src/seahorse-ssh-key-properties.c:171
+msgid "Couldn't change passhrase for key."
+msgstr "Не вдається змінити пароль для цього ключа."
 
-#~ msgid "Key server web address"
-#~ msgstr "Адреса сервера ключів"
+#: ../src/seahorse-ssh-key-properties.glade.h:1
+msgid "/home/nate/.ssh/blah_rsa"
+msgstr "/home/nate/.ssh/blah_rsa"
 
-#~ msgid "Name of file to export to"
-#~ msgstr "Назва файлу для експорту"
+#: ../src/seahorse-ssh-key-properties.glade.h:2
+msgid "00:00:00:00:00"
+msgstr "00:00:00:00:00"
 
-#~ msgid "www.keyserver.net/en"
-#~ msgstr "www.keyserver.net/en"
+#: ../src/seahorse-ssh-key-properties.glade.h:3
+msgid "<b>Algorithm:</b>"
+msgstr "<b>Алгоритм:</b>"
 
-#~ msgid "Email Address: "
-#~ msgstr "Електронна адреса: "
+#: ../src/seahorse-ssh-key-properties.glade.h:5
+msgid "<b>Identifier:</b>"
+msgstr "<b>Ідентифікатор:</b>"
 
-#~ msgid "Expiration Date: "
-#~ msgstr "Дата закінчення дії:"
+#: ../src/seahorse-ssh-key-properties.glade.h:6
+msgid "<b>Location:</b>"
+msgstr "<b>Розташування:</b>"
 
-#~ msgid "Seahorse GPG Key Generation Druid"
-#~ msgstr "Помічник з генерування GPG ключів"
+#: ../src/seahorse-ssh-key-properties.glade.h:8
+msgid "<b>Strength:</b>"
+msgstr "<b>Міцність:</b>"
 
-#~ msgid "Druid"
-#~ msgstr "Помічник"
+#: ../src/seahorse-ssh-key-properties.glade.h:10
+msgid "<b>Trust</b>"
+msgstr "<b>Довіра</b>"
 
-#~ msgid "Method Select"
-#~ msgstr "Вибір метода"
+#: ../src/seahorse-ssh-key-properties.glade.h:14
+#, no-c-format
+msgid "<i>This only applies to the '%s'</i> account."
+msgstr "<i>Це застосовується лише до облікового запису '%s'</i>."
 
-#~ msgid "Enter a unique key id"
-#~ msgstr "Введіть унікальний ідентифікатор ключа"
+#: ../src/seahorse-ssh-key-properties.glade.h:17
+msgid "E_xport Complete Key"
+msgstr "_Експортувати повний ключ"
 
-#~ msgid "Import from _Clipboard:"
-#~ msgstr "Імпорт з _буферу обміну:"
+#: ../src/seahorse-ssh-key-properties.glade.h:21
+msgid "The owner of this key is _authorized to connect to this computer"
+msgstr "Власник цього ключа _авторизований для з'єднання з цим комп'ютером"
 
-#~ msgid "Import from _File:"
-#~ msgstr "Імпорт з _файла:"
+#: ../src/seahorse-ssh-key-properties.glade.h:22
+msgid "Used to connect to other computers."
+msgstr "Використовується для з'єднання з іншим комп'ютерами."
 
-#~ msgid "Import from _Server:"
-#~ msgstr "Імпорт з с_ервера:"
+#: ../src/seahorse-ssh-upload.c:42
+msgid "Couldn't configure Secure Shell keys on remote computer."
+msgstr ""
+"Не видаляється налаштувати ключі віддаленого командного рядка на сервері."
 
-#~ msgid "Import keys from selected source"
-#~ msgstr "Імпортувати ключі з вибраного джерела"
+#. Show the progress window if necessary
+#: ../src/seahorse-ssh-upload.c:140
+msgid "Configuring Secure Shell Keys..."
+msgstr "Налаштовування ключів віддаленого командного рядка..."
 
-#~ msgid "Select File to Import"
-#~ msgstr "Вибір файлу для імпорту"
+#: ../src/seahorse-ssh-upload.glade.h:1
+msgid "<i>eg: fileserver.example.com</i>"
+msgstr "<i>наприклад: fileserver.example.com</i>"
 
-#~ msgid "Select or enter a key server's web address"
-#~ msgstr "Виберіть або введіть веб-адресу сервера ключів"
+#: ../src/seahorse-ssh-upload.glade.h:2
+msgid "Set Up Computer for SSH Connection"
+msgstr "Налаштувати комп'ютер для роботи з SSH"
 
-#~ msgid "_Key ID:"
-#~ msgstr "_Ідентифікатор ключа:"
+#: ../src/seahorse-ssh-upload.glade.h:4
+msgid ""
+"To use your Secure Shell key with another computer that\n"
+"uses SSH, you must already have a login account on that \n"
+"computer."
+msgstr ""
+"Щоб використовувати віддалений командний рядок на комп'ютері,\n"
+"що використовує SSH, необхідно створити обліковий запис\n"
+"на цьому комп'ютері."
 
-#~ msgid "View statusbar"
-#~ msgstr "Показати рядок стану"
+#: ../src/seahorse-ssh-upload.glade.h:7
+msgid "_Computer Name:"
+msgstr "_Комп'ютер:"
 
-#~ msgid "View toolbar"
-#~ msgstr "Показати панель інструментів"
+#: ../src/seahorse-ssh-upload.glade.h:8
+msgid "_Login Name:"
+msgstr "_Обліковий запис:"
 
-#~ msgid "_Statusbar"
-#~ msgstr "Рядок _стану"
+#: ../src/seahorse-ssh-upload.glade.h:9
+msgid "_Set Up"
+msgstr "_Встановити"
 
-#~ msgid "_Toolbar"
-#~ msgstr "_Панель інструментів"
-
-#~ msgid "User ID %d"
-#~ msgstr "Ідентифікатор користувача %d"
-
-#~ msgid "User ID"
-#~ msgstr "Ідентифікатор користувача"
-
-#~ msgid "Ciphers"
-#~ msgstr "Шифри"
-
-#~ msgid "Hashes"
-#~ msgstr "Хеші"
-
-#~ msgid "Compression"
-#~ msgstr "Стиснення"
-
-#~ msgid "Desktop Default"
-#~ msgstr "З настройок стільниці"
-
-#~ msgid "Icons Only"
-#~ msgstr "Лише значки"
-
-#~ msgid "Only show icons"
-#~ msgstr "Показувати лише значки"
-
-#~ msgid "Only show text"
-#~ msgstr "Показувати лише текст"
-
-#~ msgid "Show text below icons"
-#~ msgstr "Показувати текст під значками"
-
-#~ msgid "Show text beside icons"
-#~ msgstr "Показувати текст поруч зі значками"
-
-#~ msgid "Text Below Icons"
-#~ msgstr "Текст під значками"
-
-#~ msgid "Text Beside Icons"
-#~ msgstr "Текст поруч зі значками"
-
-#~ msgid "Toolbar _Style:"
-#~ msgstr "Стиль _панелі інструментів:"
-
-#~ msgid "Use system settings"
-#~ msgstr "Використовувати системне значення"
+#~ msgid "Sign the selected fileВибрано %d файл "
+#~ msgid_plural "Sign the selected files"
+#~ msgstr[0] "Підписати виділений файл"
+#~ msgstr[1] "Підписати виділений файли"
+#~ msgstr[2] "Підписати виділений файли"
