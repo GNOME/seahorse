@@ -556,7 +556,8 @@ process_setenv (pid_t pid)
     /* Memory doesn't need to be freed */
     var = g_strdup_printf ("%lu", (long unsigned int) pid);
     g_setenv ("SSH_AGENT_PID", var, TRUE);
-    g_setenv ("SSH_AUTH_SOCK", ssh_agent_sockname, TRUE);
+    var = g_strdup (ssh_agent_sockname);
+    g_setenv ("SSH_AUTH_SOCK", var, TRUE);
 }
 
 static gboolean
@@ -633,6 +634,11 @@ swap_sockets ()
  * PUBLIC 
  */
 
+/* 
+ * Called before forking as a daemon, creates the SSH agent 
+ * socket. This socket path needs to be present and decided
+ * on before the fork.
+ */
 void
 seahorse_agent_ssh_prefork ()
 {
@@ -669,6 +675,11 @@ seahorse_agent_ssh_prefork ()
         swap_sockets ();
 }
 
+/* 
+ * Called after forking off the agent daemon child. At this 
+ * point we communicate the socket path to the environment
+ * or diddle sockets as requested.
+ */
 void
 seahorse_agent_ssh_postfork (pid_t child)
 {
@@ -683,6 +694,16 @@ seahorse_agent_ssh_postfork (pid_t child)
         process_display (child);
     else if (seahorse_agent_execvars)
         process_setenv (child);
+}
+
+/* 
+ * Called when we run another program (such as seahorse-preferences)
+ * to setup the environment appropriately for that process.
+ */
+void 
+seahorse_agent_ssh_childsetup ()
+{
+    process_setenv (getpid ());
 }
 
 gboolean
@@ -807,3 +828,4 @@ seahorse_agent_ssh_clearall ()
     
     g_free (output);
 }
+

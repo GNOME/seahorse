@@ -51,6 +51,7 @@
 /* Called from the original process before and after fork */
 void seahorse_agent_prefork ();
 void seahorse_agent_postfork (pid_t child);
+void seahorse_agent_childsetup ();
 
 /* Called in the new child process */
 gboolean seahorse_agent_init ();
@@ -140,6 +141,7 @@ void seahorse_agent_status_update ();
 /* Called from the original process before and after fork */
 void     seahorse_agent_ssh_prefork ();
 void     seahorse_agent_ssh_postfork (pid_t child);
+void     seahorse_agent_ssh_childsetup ();
 
 gboolean seahorse_agent_ssh_init ();
 GList*   seahorse_agent_ssh_cached_keys ();

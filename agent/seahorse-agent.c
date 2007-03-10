@@ -129,6 +129,11 @@ unprocess_gpg_conf ()
     seahorse_gpg_options_change_vals (confs, prev_values, NULL);
 }
 
+/* 
+ * Called before forking as a daemon, creates the GPG agent 
+ * socket. This socket path needs to be present and decided
+ * on before the fork.
+ */
 void
 seahorse_agent_prefork ()
 {
@@ -146,6 +151,11 @@ seahorse_agent_prefork ()
         _exit (1); /* Message already printed */
 }
 
+/* 
+ * Called after forking off the agent daemon child. At this 
+ * point we communicate the socket path to the environment
+ * or gpg.conf as requested.
+ */
 void
 seahorse_agent_postfork (pid_t child)
 {
@@ -164,6 +174,19 @@ seahorse_agent_postfork (pid_t child)
         process_setenv (socket, child);
     else
         process_gpg_conf (socket, child);    
+}
+
+/* 
+ * Called when we run another program (such as seahorse-preferences)
+ * to setup the environment appropriately for that process.
+ */
+void 
+seahorse_agent_childsetup ()
+{
+    const gchar *socket = seahorse_agent_io_get_socket ();
+    g_return_if_fail (socket != NULL);
+
+    process_setenv (socket, getpid ());
 }
 
 gboolean

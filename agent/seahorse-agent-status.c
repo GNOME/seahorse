@@ -217,12 +217,26 @@ on_show_window_activate (GtkWidget *item, gpointer data)
     window_show ();
 }
 
+static void 
+on_settings_childsetup (gpointer unused)
+{
+    seahorse_agent_childsetup ();
+    seahorse_agent_ssh_childsetup ();
+}
+
 static void
 on_settings_activate (GtkWidget *item, gpointer data)
 {
     GError *err = NULL;
-    g_spawn_command_line_async ("seahorse-preferences --cache", &err);
-    
+    gchar* args[3];
+
+    args[0] = "seahorse-preferences";
+    args[1] = "--cache";
+    args[2] = NULL;
+
+    g_spawn_async (NULL, args, NULL, G_SPAWN_SEARCH_PATH, 
+                   on_settings_childsetup, NULL, NULL, &err);
+
     if (err != NULL) {
         g_warning ("couldn't execute seahorse-preferences: %s", err->message);
         g_error_free (err);
