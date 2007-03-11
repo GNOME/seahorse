@@ -475,6 +475,8 @@ import_text (SeahorseWidget *swidget, const gchar *text)
     GQuark ktype;
     guint len;
     
+    g_assert (text != NULL);
+    
     len = strlen (text);
     
     /* Figure out what key format we're dealing with here */
@@ -526,7 +528,8 @@ import_activate (GtkWidget *widget, SeahorseWidget *swidget)
 static void
 clipboard_received (GtkClipboard *board, const gchar *text, SeahorseWidget *swidget)
 {
-    import_text (swidget, text);
+    if (text != NULL)
+        import_text (swidget, text);
 }
 
 /* Pastes key from keyboard */
