@@ -66,6 +66,8 @@ remove_key  (SeahorseKey *skey, gpointer closure, SeahorseKeyset *skset)
 {
     if (!closure)
         closure = g_hash_table_lookup (skset->pv->keys, skey);
+
+g_printerr("removing key\n");
     
     g_hash_table_remove (skset->pv->keys, skey);
     remove_update (skey, closure, skset);
@@ -82,6 +84,8 @@ maybe_add_key (SeahorseKeyset *skset, SeahorseKey *skey)
     
     if (!skset->pv->pred || !seahorse_key_predicate_match (skset->pv->pred, skey))
         return FALSE;
+
+g_printerr("adding key\n");
     
     g_hash_table_replace (skset->pv->keys, skey, GINT_TO_POINTER (TRUE));
     g_signal_emit (skset, signals[ADDED], 0, skey);
