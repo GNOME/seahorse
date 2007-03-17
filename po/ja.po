@@ -1,21 +1,24 @@
 # Seahorse ja.po.
-# Copyright (C) 1999-2006 Free Software Foundation, Inc.
+# Copyright (C) 1999-2007 Free Software Foundation, Inc.
 # Anthony Mulcahy <anthony@kcn.ne.jp>, 1999, 2000.
-# Takeshi AIHANA <aihana@gnome.gr.jp>, 2000-2006.
+# Takeshi AIHANA <takeshi.aihana@gmail.com>, 2000-2007.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: seahorse HEAD\n"
+"Project-Id-Version: seahorse trunk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-03-13 01:08+0900\n"
-"PO-Revision-Date: 2006-05-05 16:11+0900\n"
-"Last-Translator: Takeshi AIHANA <aihana@gnome.gr.jp>\n"
+"POT-Creation-Date: 2007-03-17 15:42+0900\n"
+"PO-Revision-Date: 2007-03-17 15:24+0900\n"
+"Last-Translator: Takeshi AIHANA <takeshi.aihana@gmail.com>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
+# 参考: 
+# PGP に関する訳語表 (http://pgp.iijlab.net/trans/)
+# GPG の README 翻訳 (http://www.hyuki.com/gnu/gnupg-v12-readme.html)
 #: ../agent/seahorse-agent-actions.c:134
 #: ../libseahorse/seahorse-ssh-operation.c:445
 msgid "Passphrase:"
@@ -23,17 +26,17 @@ msgstr "パスフレーズ:"
 
 #: ../agent/seahorse-agent-actions.c:135
 msgid "Please enter a passphrase to use."
-msgstr "パスワードを入力して下さい"
+msgstr "使用するパスフレーズを入力して下さい"
 
 #. Warn and put in defaults
 #: ../agent/seahorse-agent.c:101
 msgid "couldn't read gpg configuration, will try to create"
-msgstr "GPG 設定を読み込めませんでした (新しく生成してみて下さい)"
+msgstr "GPG の設定を読み込めませんでした (新しく生成してみて下さい)"
 
 #: ../agent/seahorse-agent.c:119
 #, c-format
 msgid "couldn't modify gpg configuration: %s"
-msgstr "GPG 設定を変更できませんでした: %s"
+msgstr "GPG の設定を変更できませんでした: %s"
 
 #: ../agent/seahorse-agent-cache.c:72
 msgid "Unparseable Key ID"
@@ -41,7 +44,7 @@ msgstr "解析できない鍵 ID"
 
 #: ../agent/seahorse-agent-cache.c:73
 msgid "Unknown/Invalid Key"
-msgstr "不明な鍵、または不正な鍵です"
+msgstr "不明または不正な鍵です"
 
 #: ../agent/seahorse-agent-cache.c:533
 #, c-format
@@ -57,22 +60,20 @@ msgstr ""
 "設定が有効になっていません。"
 
 #: ../agent/seahorse-agent-cache.glade.h:2
-#, fuzzy
 msgid "Cache _Preferences"
-msgstr "この設定ダイアログを閉じます"
+msgstr "キャッシュの設定(_P)"
 
 #: ../agent/seahorse-agent-cache.glade.h:3
 msgid "Cached Encryption Keys"
 msgstr "キャッシュした暗号鍵"
 
 #: ../agent/seahorse-agent-cache.glade.h:4
-#, fuzzy
 msgid "Change passphrase cache settings."
-msgstr "キャッシュしたパスフレーズのクリア"
+msgstr "パスワード・キャッシュの設定を変更します"
 
 #: ../agent/seahorse-agent-cache.glade.h:5
 msgid "Clear passphrase cache"
-msgstr "キャッシュしたパスフレーズのクリア"
+msgstr "パスフレーズのキャッシュをクリアします"
 
 #: ../agent/seahorse-agent-cache.glade.h:6
 msgid "_Clear Cache"
@@ -88,25 +89,26 @@ msgstr "seahorse-daemon をデーモン化しないで起動する"
 
 #: ../agent/seahorse-agent-main.c:53
 msgid "Print variables in for a C type shell"
-msgstr "C Shell の変数を表示する"
+msgstr "C-シェルの変数を表示する"
 
 #: ../agent/seahorse-agent-main.c:56
-#, fuzzy
 msgid ""
 "Display variables instead of editing conf files (gpg.conf, SSH agent socket)"
-msgstr "gpg.conf を編集しないで変数を表示する"
+msgstr ""
+"設定ファイル (gpg.conf, SSH エージェントのソケット) を編集しないで変数を表示"
+"する"
 
 #: ../agent/seahorse-agent-main.c:59
 msgid "Execute other arguments on the command line"
-msgstr ""
+msgstr "実行する他のコマンドを指定する"
 
 #: ../agent/seahorse-agent-main.c:62
 msgid "Allow GPG agent request from any display"
-msgstr ""
+msgstr "任意のディスプレイから GPG エージェントの要求を許可する"
 
 #: ../agent/seahorse-agent-main.c:65
 msgid "command..."
-msgstr ""
+msgstr "コマンド..."
 
 #: ../agent/seahorse-agent-main.c:87 ../daemon/seahorse-daemon.c:72
 msgid "couldn't fork process"
@@ -123,27 +125,24 @@ msgid "couldn't drop privileges properly"
 msgstr "正しく特権を無効にできませんでした"
 
 #: ../agent/seahorse-agent-main.c:232
-#, fuzzy
 msgid "Encryption Key Agent (Seahorse)"
-msgstr "暗号鍵デーモン (Seahorse)"
+msgstr "暗号鍵エージェント (Seahorse)"
 
 #: ../agent/seahorse-agent-main.c:240
 msgid "no command specified to execute"
-msgstr ""
+msgstr "実行するコマンドが指定されていません"
 
 #: ../agent/seahorse-agent-prompt.c:216
-#, fuzzy
 msgid "Authorize Passphrase Access"
-msgstr "認証パスワード・アクセス"
+msgstr "認証パスフレーズのアクセス"
 
 #: ../agent/seahorse-agent-prompt.c:251
 msgid "The passphrase is cached in memory."
 msgstr "パスフレーズをメモリの中にキャッシュしました。"
 
 #: ../agent/seahorse-agent-prompt.c:256
-#, fuzzy
 msgid "Always ask me before using a cached passphrase"
-msgstr "キャッシュしたパスフレーズを使用する前に警告する(_A)"
+msgstr "キャッシュしたパスフレーズを使用する前に警告する"
 
 #: ../agent/seahorse-agent-prompt.c:273
 msgid "_Authorize"
@@ -151,14 +150,12 @@ msgstr "認証(_A)"
 
 #. Make the uid column
 #: ../agent/seahorse-agent-status.c:151
-#, fuzzy
 msgid "Key Name"
-msgstr "名前"
+msgstr "鍵の名前"
 
 #: ../daemon/seahorse-daemon.c:54
-#, fuzzy
 msgid "Do not run seahorse-daemon as a daemon"
-msgstr "プログラム `seahorse-agent` を起動できませんでした"
+msgstr "seahorse-daemon をデーモン化しない"
 
 #: ../daemon/seahorse-daemon.c:202
 msgid "Encryption Daemon (Seahorse)"
@@ -190,12 +187,12 @@ msgstr "署名に対して鍵が有効になっていません: %s"
 #: ../daemon/seahorse-service-crypto.c:139
 #, c-format
 msgid "Invalid or unrecognized recipient: %s"
-msgstr "受取人が間違っているか認識できません: %s"
+msgstr "受取人が間違っているかまたは認識できません: %s"
 
 #: ../daemon/seahorse-service-crypto.c:147
 #, c-format
 msgid "Key is not a valid recipient for encryption: %s"
-msgstr "Key is not a valid recipient for encryption: %s"
+msgstr "暗号化に対して妥当な受取人ではありません: %s"
 
 #: ../daemon/seahorse-service-crypto.c:156
 msgid "No recipients specified"
@@ -216,9 +213,9 @@ msgid "Invalid key type for verifying: %s"
 msgstr "検証する鍵の種類が間違っています: %s"
 
 #: ../daemon/seahorse-service-keyset.c:186
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid key id: %s"
-msgstr "検証する鍵の種類が間違っています: %s"
+msgstr "鍵 ID が間違っています: %s"
 
 #: ../daemon/seahorse-sharing.c:71 ../daemon/seahorse-sharing.c:215
 msgid "Couldn't share keys"
@@ -226,7 +223,7 @@ msgstr "鍵を共有できませんでした"
 
 #: ../daemon/seahorse-sharing.c:72
 msgid "Can't publish discovery information on the network."
-msgstr "ネットワークで Discovery 情報を公開できません"
+msgstr "Discovery 情報をネットワーク上に公開できません"
 
 #. Translators: The %s will get filled in with the user name
 #. of the user, to form a genitive. If this is difficult to
@@ -262,9 +259,8 @@ msgstr ""
 "アプレットから暗号化または署名を行ったら、その結果をウィンドウに表示します。"
 
 #: ../data/seahorse.schemas.in.h:4
-#, fuzzy
 msgid "Auto Sync Keys"
-msgstr "鍵の同期"
+msgstr "鍵を自動的に同期する"
 
 #: ../data/seahorse.schemas.in.h:5
 msgid "Controls the visibility of the expires column for the key manager."
@@ -284,7 +280,7 @@ msgstr "鍵マネージャの有効性エントリの表示/非表示を制御�
 
 #: ../data/seahorse.schemas.in.h:9
 msgid "Display cache reminder in the notification area"
-msgstr ""
+msgstr "通知エリアにキャッシュのリマインダーを表示する"
 
 #: ../data/seahorse.schemas.in.h:10
 msgid "Display clipboard after decrypting"
@@ -338,18 +334,16 @@ msgid ""
 msgstr "TRUE にすると、常にデフォルトの鍵を暗号の受取人一覧に追加されます。"
 
 #: ../data/seahorse.schemas.in.h:19
-#, fuzzy
 msgid "Last key server search pattern"
 msgstr "最後に使用した鍵サーバの検索パターン"
 
 #: ../data/seahorse.schemas.in.h:20
-#, fuzzy
 msgid "Last key servers used"
 msgstr "最後に使用した鍵サーバ"
 
 #: ../data/seahorse.schemas.in.h:21
 msgid "Last key used to sign a message."
-msgstr "メッセージを署名する際に使用した最後の鍵です。"
+msgstr "メッセージに署名した際に使用した最後の鍵です。"
 
 #: ../data/seahorse.schemas.in.h:22
 msgid "PGP Key servers"
@@ -360,7 +354,6 @@ msgid "Prompt before using GPG passwords in cache"
 msgstr "キャッシュした GPG パスワードを利用する前に警告する"
 
 #: ../data/seahorse.schemas.in.h:24
-#, fuzzy
 msgid "Publish keys to this key server."
 msgstr "この鍵サーバで鍵を公開する"
 
@@ -377,15 +370,16 @@ msgid ""
 "Set to 'false' to disable display of the cache reminder in the notification "
 "area of your panel."
 msgstr ""
+"FALSE にするとパネルの通知エリアの中にキャッシュのリマインダーを表示しなくな"
+"ります。"
 
 #: ../data/seahorse.schemas.in.h:27
-#, fuzzy
 msgid ""
 "Set to 'true' to have seahorse-agent prompt before giving out passwords it "
 "has cached."
 msgstr ""
-"TRUE にすると、キャッシュしたパスワードを公開する前に `seahorse-daemon` が警"
-"告します。"
+"TRUE にすると、キャッシュしたパスワードを公開する前に seahorse-agent が警告し"
+"ます。"
 
 #: ../data/seahorse.schemas.in.h:28
 msgid "Show clipboard state in panel"
@@ -408,13 +402,12 @@ msgid "Show validity column in key manager"
 msgstr "鍵マネージャの中に \"有効性\" の項目を表示する"
 
 #: ../data/seahorse.schemas.in.h:33
-#, fuzzy
 msgid ""
 "Specify the column to sort the recipients window by. Columns are: 'name' and "
 "'id'. Put a '-' in front of the column name to sort in descending order."
 msgstr ""
-"受取人ウィンドウに表示する項目を指定します。指定可能な項目: 'name'、'id' と "
-"'validity' (各項目の先頭に '-' を付与すると逆順に並べます)"
+"受取人ウィンドウに表示する項目の並び替え指定します。指定可能な項目: 'name' "
+"と 'id' (各項目の先頭に '-' を付与すると逆順に並べます)"
 
 #: ../data/seahorse.schemas.in.h:34
 msgid ""
@@ -439,45 +432,42 @@ msgid "The column to sort the seahorse keys by"
 msgstr "Seahorse 鍵マネージャに表示する情報"
 
 #: ../data/seahorse.schemas.in.h:38
-#, fuzzy
 msgid ""
 "The key server to publish PGP keys to. Or empty to suppress publishing of "
 "PGP keys."
-msgstr "PGP 鍵を公開するキーサーバです。空にすると PGP 鍵の公開を禁止します。"
+msgstr "PGP 鍵を公開する鍵サーバです。空にすると PGP 鍵の公開を禁止します。"
 
 #: ../data/seahorse.schemas.in.h:39
-#, fuzzy
 msgid ""
 "The last key server a search was performed against or empty for all key "
 "servers."
 msgstr ""
-"最後に検索を実行した鍵サーバです。全ての鍵サーバが対象の場合は空にして下さ"
-"い。"
+"最後に検索を実行した鍵サーバです。全ての鍵サーバを対象とする場合は空にして下"
+"さい。"
 
 #: ../data/seahorse.schemas.in.h:40
-#, fuzzy
 msgid "The last search pattern searched for against a key server."
-msgstr "鍵サーバに対して最後に行った検索パターンです。"
+msgstr "鍵サーバに対して最後に実施した検索パターンです。"
 
 #: ../data/seahorse.schemas.in.h:41
 msgid "The time (in minutes) to cache GPG passwords"
 msgstr "GPG パスワードをキャッシュする時間"
 
 #: ../data/seahorse.schemas.in.h:42
-#, fuzzy
 msgid ""
 "This is the amount of time, specified in minutes, to cache GPG passwords in "
 "seahorse-agent."
 msgstr ""
-"`seahorse-agent` の中に GPG パスワードをキャッシュしておく時間 (分単位) を指"
-"定します。"
+"seahorse-agent の中に GPG パスワードをキャッシュしておく時間 (分単位) を指定"
+"します。"
 
 #: ../data/seahorse.schemas.in.h:43
-#, fuzzy
 msgid ""
 "This option enables the GPG password cache in the seahorse-agent program. "
 "The 'use-agent' setting in gpg.conf affects this setting."
-msgstr "`seahorse-agent` デーモンの中に GPG パスワードをキャッシュします。"
+msgstr ""
+"seahorse-agent プログラムの中に GPG パスワードをキャッシュします。これを有効"
+"にするには gpg.conf ファイルで 'use-agent' を指定して下さい。"
 
 #: ../data/seahorse.schemas.in.h:44
 msgid ""
@@ -489,26 +479,26 @@ msgid ""
 "When set seahorse-agent will try to automatically load the users SSH keys "
 "when needed. This is equivalent to using the ssh-add utility."
 msgstr ""
+"これを TRUE にすると、seahorse-agent は必要に応じてユーザの SSH 鍵を自動的に"
+"読み込むようになります。これは ssh-agent コマンドを利用することと等価です。"
 
 #: ../data/seahorse.schemas.in.h:46
-#, fuzzy
 msgid ""
 "When set, seahorse-agent expires GPG passwords in its cache after a period "
 "of time."
 msgstr ""
-"`seahorse-agent` の中にキャッシュした GPG パスワードの有効期限が切れたらセッ"
-"トします。"
+"TRUE にすると、seahorse-agent の中にキャッシュした GPG パスワードの有効期限が"
+"切れたことになります。"
 
 #: ../data/seahorse.schemas.in.h:47
-#, fuzzy
 msgid "Where to store cached passwords."
-msgstr "GPG パスワードをキャッシュする時間"
+msgstr "キャッシュしたパスワードを格納する場所"
 
 #: ../data/seahorse.schemas.in.h:48
 msgid ""
 "Whether or not modified keys should be automatically synced with the default "
 "key server."
-msgstr ""
+msgstr "変更した鍵を自動的にデフォルトの鍵サーバと同期するかどうかです。"
 
 #: ../data/seahorse.schemas.in.h:49
 msgid "Whether the GPG password cache is enabled"
@@ -520,40 +510,35 @@ msgstr "常にデフォルトの鍵を暗号化するかどうか"
 
 #: ../data/seahorse.schemas.in.h:51
 msgid "Whether to automatically load SSH keys on demand."
-msgstr ""
+msgstr "自動的にSSH鍵を要求に応じて読み込むかどうか"
 
 #: ../data/seahorse.schemas.in.h:52
 msgid "Whether to use ASCII Armor"
 msgstr "ASCII 保護を使用するかどうか"
 
 #: ../libcryptui/cryptui-key-chooser.c:156
-#, fuzzy
 msgid "All Keys"
-msgstr "全てのファイル"
+msgstr "全ての鍵から検索"
 
 #: ../libcryptui/cryptui-key-chooser.c:157
-#, fuzzy
 msgid "Selected Recipients"
-msgstr "%d人の受取人を選択しました"
+msgstr "選択した受取人から検索"
 
 #: ../libcryptui/cryptui-key-chooser.c:158
 msgid "Search Results"
-msgstr ""
+msgstr "結果から検索"
 
 #. Filter Label
 #: ../libcryptui/cryptui-key-chooser.c:168
-#, fuzzy
 msgid "Search _for:"
 msgstr "検索(_F):"
 
 #. Sign Label
 #: ../libcryptui/cryptui-key-chooser.c:223
-#, fuzzy
 msgid "_Sign message as:"
-msgstr "次のの鍵を使ってメッセージに署名する(_S):"
+msgstr "次の鍵を使ってメッセージに署名する(_S):"
 
 #: ../libcryptui/cryptui-key-chooser.c:235
-#, fuzzy
 msgid "None (Don't Sign)"
 msgstr "なし (署名しない)"
 
@@ -568,7 +553,7 @@ msgstr "名前"
 #: ../src/seahorse-key-manager-store.c:966
 #: ../src/seahorse-key-properties.c:1714
 msgid "Key ID"
-msgstr "鍵のID"
+msgstr "鍵 ID"
 
 #: ../libseahorse/seahorse-add-keyserver.glade.h:1
 msgid ":"
@@ -607,29 +592,26 @@ msgstr ""
 "た"
 
 #: ../libseahorse/seahorse-hkp-source.c:360
-#, fuzzy, c-format
+#, c-format
 msgid "Couldn't communicate with server '%s': %s"
-msgstr "'%s' と通信できませんでした: %s"
+msgstr "サーバ '%s' と通信できませんでした: %s"
 
 #: ../libseahorse/seahorse-hkp-source.c:563
-#, fuzzy
 msgid "Searching for keys..."
-msgstr "鍵 (ID='%s') の検索中..."
+msgstr "鍵の検索中..."
 
 #: ../libseahorse/seahorse-hkp-source.c:639
-#, fuzzy
 msgid "Uploading keys..."
 msgstr "鍵の読み込み中..."
 
 #: ../libseahorse/seahorse-hkp-source.c:715
-#, fuzzy
 msgid "Retrieving keys..."
-msgstr "リモートの鍵の取得中..."
+msgstr "鍵の取得中..."
 
 #: ../libseahorse/seahorse-hkp-source.c:764
-#, fuzzy, c-format
+#, c-format
 msgid "Searching for keys on: %s"
-msgstr "鍵 (ID='%s') の検索中..."
+msgstr "次のサーバから鍵の検索中: %s"
 
 #. The ldap_cb and chain_cb were set in seahorse_ldap_operation_start
 #: ../libseahorse/seahorse-hkp-source.c:857
@@ -645,14 +627,14 @@ msgid "Couldn't communicate with '%s': %s"
 msgstr "'%s' と通信できませんでした: %s"
 
 #: ../libseahorse/seahorse-ldap-source.c:623
-#, fuzzy, c-format
+#, c-format
 msgid "Couldn't resolve address: %s"
-msgstr "サーバから鍵を取得できませんでした: %s"
+msgstr "次のアドレスを解決できませんでした: %s"
 
 #: ../libseahorse/seahorse-ldap-source.c:699
 #, c-format
 msgid "Resolving server address: %s"
-msgstr "サーバのアドレスを解決しています: %s"
+msgstr "次のサーバのアドレスを解決しています: %s"
 
 #: ../libseahorse/seahorse-ldap-source.c:873
 #, c-format
@@ -674,105 +656,95 @@ msgstr "鍵を鍵サーバへ転送中..."
 
 #: ../libseahorse/seahorse-notification.c:557
 #: ../libseahorse/seahorse-notification.c:573
-#, fuzzy, c-format
+#, c-format
 msgid "Imported %i key"
 msgid_plural "Imported %i keys"
-msgstr[0] "%d個の鍵をインポートしました"
-msgstr[1] "%d個の鍵をインポートしました"
+msgstr[0] " %d個の鍵をインポートしました"
+msgstr[1] " %d個の鍵をインポートしました"
 
 #: ../libseahorse/seahorse-notification.c:558
 #: ../libseahorse/seahorse-notification.c:574
-#, fuzzy
 msgid "Key Imported"
 msgid_plural "Keys Imported"
 msgstr[0] "鍵のインポートが完了しました"
+msgstr[1] "鍵のインポートが完了しました"
 
 #: ../libseahorse/seahorse-notification.c:601
 #, c-format
 msgid "Signed by <i><key id='%s'/> <b>expired</b></i> on %s."
-msgstr ""
+msgstr "%2$s にある<b>期限切れ</b>の<i><key id='%1$s'/></i>で署名しました"
 
 #: ../libseahorse/seahorse-notification.c:602
-#, fuzzy
 msgid "Invalid Signature"
-msgstr "%s: 署名ではありません"
+msgstr "おかしな署名です"
 
 #: ../libseahorse/seahorse-notification.c:607
 #, c-format
 msgid "Signed by <i><key id='%s'/></i> on %s <b>Expired</b>."
-msgstr ""
+msgstr "%2$s にある<b>期限切れ</b>の<i><key id='%1$s'/></i>で署名しました"
 
 #: ../libseahorse/seahorse-notification.c:608
-#, fuzzy
 msgid "Expired Signature"
-msgstr "シグネチャの検証"
+msgstr "期限切れの署名です"
 
 #: ../libseahorse/seahorse-notification.c:613
 #, c-format
 msgid "Signed by <i><key id='%s'/> <b>Revoked</b></i> on %s."
-msgstr ""
+msgstr "%2$s にある<b>失効した</b><i><key id='%1$s'/>で署名しました"
 
 #: ../libseahorse/seahorse-notification.c:614
-#, fuzzy
 msgid "Revoked Signature"
-msgstr "署名(_S):"
+msgstr "失効した署名"
 
 #: ../libseahorse/seahorse-notification.c:619
 #, c-format
 msgid "Signed by <i><key id='%s'/></i> on %s."
-msgstr ""
+msgstr "%2$s にある<i><key id='%1$s'/></i>で署名しました"
 
 #: ../libseahorse/seahorse-notification.c:620
-#, fuzzy
 msgid "Good Signature"
-msgstr "署名(_S):"
+msgstr "良い署名です"
 
 #: ../libseahorse/seahorse-notification.c:625
-#, fuzzy
 msgid "Signing key not in keyring."
-msgstr "鍵を鍵サーバへ転送中..."
+msgstr "署名用の鍵がキーリングの中にありません"
 
 #: ../libseahorse/seahorse-notification.c:626
-#, fuzzy
 msgid "Unknown Signature"
-msgstr "署名(_S):"
+msgstr "不明な署名です"
 
 #: ../libseahorse/seahorse-notification.c:630
 msgid "Bad or forged signature. The signed data was modified."
 msgstr ""
+"おかしな署名または偽造された署名です (署名したデータは変更されています)"
 
 #: ../libseahorse/seahorse-notification.c:631
-#, fuzzy
 msgid "Bad Signature"
-msgstr "署名"
+msgstr "おかしな署名です"
 
 #: ../libseahorse/seahorse-notification.c:639
-#, fuzzy
 msgid "Couldn't verify signature."
-msgstr "文字列を解読できませんでした"
+msgstr "署名を解読できませんでした"
 
 #: ../libseahorse/seahorse-notify.glade.h:1
 msgid "Notification Messages"
-msgstr ""
+msgstr "通知メッセージ"
 
 #: ../libseahorse/seahorse-passphrase.c:175
 msgid "Passphrase"
 msgstr "パスフレーズ"
 
 #: ../libseahorse/seahorse-passphrase.c:178
-#, fuzzy
 msgid "Password:"
-msgstr "パスワードのキャッシュ"
+msgstr "パスワード:"
 
 #: ../libseahorse/seahorse-passphrase.c:240
-#, fuzzy
 msgid "Confirm:"
-msgstr "確認"
+msgstr "パスワードの確認:"
 
 #: ../libseahorse/seahorse-passphrase.c:323
-#, fuzzy
 msgid "Wrong passphrase."
-msgstr "新しパスフレーズの確認です"
+msgstr "パスフレーズが間違っています"
 
 #: ../libseahorse/seahorse-passphrase.c:327
 #, c-format
@@ -787,27 +759,26 @@ msgstr "'%s' のパスフレーズを入力して下さい"
 #: ../libseahorse/seahorse-passphrase.c:332
 #: ../src/seahorse-change-passphrase.glade.h:4
 msgid "Enter new passphrase"
-msgstr "新しいパスフレーズを入力します"
+msgstr "新しいパスフレーズを入力して下さい"
 
 #: ../libseahorse/seahorse-passphrase.c:334
-#, fuzzy
 msgid "Enter passphrase"
-msgstr "パスフレーズの入力"
+msgstr "パスフレーズを入力して下さい"
 
 #: ../libseahorse/seahorse-pgp-key.c:140 ../libseahorse/seahorse-ssh-key.c:112
 #: ../src/seahorse-gkeyring-item.c:231
 msgid "Invalid"
-msgstr ""
+msgstr "間違っています"
 
 #: ../libseahorse/seahorse-pgp-key.c:162
 #: ../src/seahorse-pgp-public-key-properties.glade.h:30
 msgid "Public PGP Key"
-msgstr "公開 PGP 鍵"
+msgstr "公開用の PGP 鍵"
 
 #: ../libseahorse/seahorse-pgp-key.c:165
 #: ../src/seahorse-pgp-private-key-properties.glade.h:35
 msgid "Private PGP Key"
-msgstr "プライベートな PGP 鍵"
+msgstr "個人的に利用する PGP 鍵"
 
 #: ../libseahorse/seahorse-pgp-key.c:694 ../libseahorse/seahorse-validity.c:31
 #: ../src/seahorse-key-properties.c:1090
@@ -829,8 +800,8 @@ msgstr "PGP 鍵"
 #, c-format
 msgid "Loaded %d key"
 msgid_plural "Loaded %d keys"
-msgstr[0] "%d 個の鍵を読み込みました"
-msgstr[1] "%d 個の鍵を読み込みました"
+msgstr[0] " %d個の鍵を読み込みました"
+msgstr[1] " %d個の鍵を読み込みました"
 
 #: ../libseahorse/seahorse-pgp-source.c:778
 msgid "Loading Keys..."
@@ -841,15 +812,16 @@ msgid ""
 "Invalid key data (missing UIDs). This may be due to a computer with a date "
 "set in the future or a missing self-signature."
 msgstr ""
+"鍵データが間違っています (UID がありません)。これはコンピュータの日付が未来を"
+"指しているか、あるいは自分自身の署名が存在しない場合に発生する場合がありま"
+"す。"
 
 #: ../libseahorse/seahorse-pgp-source.c:942 ../src/seahorse-key-manager.c:454
 #: ../src/seahorse-key-manager.c:502
-#, fuzzy
 msgid "Importing Keys"
 msgstr "鍵のインポート"
 
 #: ../libseahorse/seahorse-pgp-source.c:975
-#, fuzzy
 msgid "Exporting Keys"
 msgstr "鍵のエキスポート"
 
@@ -884,69 +856,66 @@ msgid "Couldn't open the Session Properties"
 msgstr "セッションのプロパティを開けませんでした"
 
 #: ../libseahorse/seahorse-prefs-cache.c:244
-#, fuzzy
 msgid "Couldn't start the 'seahorse-agent' program"
-msgstr "プログラム `seahorse-agent` を起動できませんでした"
+msgstr "'seahorse-agent' を起動できませんでした"
 
 #: ../libseahorse/seahorse-prefs-cache.c:246
 msgid "The 'seahorse-agent' program exited unsuccessfully."
-msgstr ""
+msgstr "'seahorse-agent' が強制終了しました"
 
 #: ../libseahorse/seahorse-prefs.glade.h:1
-#, fuzzy
 msgid "<b>Defaults</b>"
-msgstr "<b>日付</b>"
+msgstr "<b>デフォルト</b>"
 
 #: ../libseahorse/seahorse-prefs.glade.h:2
-#, fuzzy
 msgid ""
 "<b>Note:</b> The 'seahorse-agent' program has been started. This program is "
 "necessary in order to cache passphrases. "
 msgstr ""
-"<b>注意</b> 'seahorse-agent' を起動しました。このプログラムはパスワードを"
-"キャッシュするために必要です。"
+"<b>注記</b> 'seahorse-agent' を起動しました。このプログラムはパスフレーズを"
+"キャッシュする際に使用します。"
 
 #: ../libseahorse/seahorse-prefs.glade.h:3
-#, fuzzy
 msgid "<b>Remember PGP Passphrases</b>"
-msgstr "パスフレーズの入力"
+msgstr "<b>PGP パスフレーズの保存</b>"
 
 #: ../libseahorse/seahorse-prefs.glade.h:4
-#, fuzzy
 msgid "<b>Secure Shell Keys</b>"
-msgstr "<b>副鍵(_S)</b>"
+msgstr "<b>セキュア・シェルの鍵</b>"
 
 #: ../libseahorse/seahorse-prefs.glade.h:5
-#, fuzzy
 msgid ""
 "<b>Warning:</b> The 'seahorse-agent' program is not running. This program is "
 "necessary in order to cache passphrases. "
 msgstr ""
-"<b>注意</b> 'seahorse-agent' を起動しました。このプログラムはパスワードを"
-"キャッシュするために必要です。"
+"<b>注意</b> 'seahorse-agent' が起動されていません。このプログラムはパスフレー"
+"ズをキャッシュする際に必要になります。"
 
 #: ../libseahorse/seahorse-prefs.glade.h:6
-#, fuzzy
 msgid "<i>A non-supported PGP passphrase caching agent is running.</i>"
 msgstr ""
-"別のパスフレーズのキャッシュ・エージェントが実行中です (キャッシュの設定を無"
-"効にします)"
+"<i>PGP パスフレーズのキャッシュをサポートしていないエージェントが実行中です</"
+"i>"
 
 #: ../libseahorse/seahorse-prefs.glade.h:7
 msgid "<i>No SSH caching agent is running. Cannot load Secure Shell keys.</i>"
 msgstr ""
+"<i>SSH 用のキャッシュ・エージェントが実行されていません (セキュア・シェルの鍵"
+"を読み込めません)</i>"
 
 #: ../libseahorse/seahorse-prefs.glade.h:8
 msgid "<i>This key is used to sign messages when no other key is chosen</i>"
 msgstr ""
+"<i>この鍵は、他に鍵が何も選択されていない時にメッセージに署名するために使用し"
+"ます</i>"
 
 #: ../libseahorse/seahorse-prefs.glade.h:9
 msgid "Automatically load _Secure Shell keys"
-msgstr ""
+msgstr "セキュア・シェルの鍵を自動的に読み込む(_S)"
 
 #: ../libseahorse/seahorse-prefs.glade.h:10
 msgid "Automatically synchronize modified keys with key servers. "
-msgstr ""
+msgstr "変更した鍵を鍵サーバと自動的に同期する"
 
 #: ../libseahorse/seahorse-prefs.glade.h:11
 msgid "Encryption Settings"
@@ -957,14 +926,12 @@ msgid "Key Servers"
 msgstr "鍵サーバ"
 
 #: ../libseahorse/seahorse-prefs.glade.h:13
-#, fuzzy
 msgid "Key Sharing"
-msgstr "鍵マネージャ"
+msgstr "鍵の共有"
 
 #: ../libseahorse/seahorse-prefs.glade.h:14
-#, fuzzy
 msgid "Passphrase Cache"
-msgstr "パスフレーズ"
+msgstr "パスフレーズのキャッシュ"
 
 #: ../libseahorse/seahorse-prefs.glade.h:15
 msgid "Session Properties"
@@ -982,65 +949,59 @@ msgstr ""
 "るようになります。すなわち、いちいち相手に鍵を送ることなく、あなたの鍵 (もし"
 "くはあなたが知っている鍵) を自動的に暗号化してもらえるということです。\n"
 "\n"
-"<b>注意:</b> 個人の鍵は公開しないようにして下さい。"
+"<b>注記:</b> 個人的に使用する鍵は公開しないようにして下さい。"
 
 #: ../libseahorse/seahorse-prefs.glade.h:19
-#, fuzzy
 msgid "Start seahorse-agent"
-msgstr "Seahorse アプレット"
+msgstr "seahorse-agent の起動"
 
 #: ../libseahorse/seahorse-prefs.glade.h:20
-#, fuzzy
 msgid ""
 "To avoid manually starting the 'seahorse-agent' in the future\n"
 "add it to the Session Manager. "
 msgstr ""
-"Seahorce デーモンを手動で起動するのではなく、将来はセッション・マネージャに追"
-"加する予定です"
+"手動で 'seahorse-agent' を起動するのではなく、将来のバージョンではセッショ"
+"ン・マネージャに追加する予定です。"
 
 #: ../libseahorse/seahorse-prefs.glade.h:22
 msgid "When _encrypting, always include myself as a recipient"
-msgstr ""
+msgstr "暗号化する際に、常に自分自身を受取人に含める(_E)"
 
 #: ../libseahorse/seahorse-prefs.glade.h:23
 msgid "_Always remember passphrases whenever logged in"
-msgstr "ログインする時にパスフレーズを保存する(_A)"
+msgstr "ログインしたらパスフレーズを保存する(_A)"
 
 #: ../libseahorse/seahorse-prefs.glade.h:24
 msgid "_Ask me before using a cached passphrase"
 msgstr "キャッシュしたパスフレーズを使用する前に警告する(_A)"
 
 #: ../libseahorse/seahorse-prefs.glade.h:25
-#, fuzzy
 msgid "_Default Key:"
-msgstr "デフォルトの鍵:"
+msgstr "デフォルトの鍵(_D):"
 
 #: ../libseahorse/seahorse-prefs.glade.h:26
 msgid "_Find Keys Using:"
 msgstr "検索するサーバ(_F):"
 
 #: ../libseahorse/seahorse-prefs.glade.h:27
-#, fuzzy
 msgid "_Never remember passphrases"
-msgstr "新しいパスフレーズを入力します"
+msgstr "パスフレーズを保存しない(_N)"
 
 #: ../libseahorse/seahorse-prefs.glade.h:28
 msgid "_Publish Keys To:"
 msgstr "鍵の公開先(_P):"
 
 #: ../libseahorse/seahorse-prefs.glade.h:29
-#, fuzzy
 msgid "_Remember passphrases for"
-msgstr "'%s' のパスフレーズを入力して下さい"
+msgstr "パスフレーズを記憶する時間(_R): "
 
 #: ../libseahorse/seahorse-prefs.glade.h:30
 msgid "_Share my keys with others on my network"
 msgstr "自分の鍵をネットワーク上で共有する(_S)"
 
 #: ../libseahorse/seahorse-prefs.glade.h:31
-#, fuzzy
 msgid "minutes"
-msgstr " 分後"
+msgstr " 分間"
 
 #: ../libseahorse/seahorse-progress.glade.h:1
 msgid "<b>Progress Message</b>"
@@ -1110,7 +1071,7 @@ msgstr ""
 
 #: ../libseahorse/seahorse-secure-entry.c:299
 msgid "Width in chars"
-msgstr "幅"
+msgstr "幅 (文字単位)"
 
 #: ../libseahorse/seahorse-secure-entry.c:299
 msgid "Number of characters to leave space for in the entry"
@@ -1134,59 +1095,55 @@ msgstr "エントリの内容です"
 
 #: ../libseahorse/seahorse-secure-entry.c:311
 msgid "Visibility"
-msgstr ""
+msgstr "表示可否"
 
 #: ../libseahorse/seahorse-secure-entry.c:311
 msgid "Whether contents are drawn using invisible character"
-msgstr ""
+msgstr "データの内容を表示するかどうかです"
 
 #: ../libseahorse/seahorse-server-source.c:467
-#, fuzzy
 msgid "LDAP Key Server"
-msgstr "鍵サーバ"
+msgstr "LDAP の鍵サーバ"
 
 #: ../libseahorse/seahorse-server-source.c:470
-#, fuzzy
 msgid "HTTP Key Server"
-msgstr "鍵サーバ"
+msgstr "HTTP の鍵サーバ"
 
 #. TODO: We should be giving an error message that allows them to
 #. generate or import a key
 #: ../libseahorse/seahorse-signer.c:57 ../src/seahorse-sign.c:159
-#, fuzzy
 msgid "No keys usable for signing"
-msgstr "<b>%d 個の鍵を同期します</b>"
+msgstr "署名に利用できる鍵ではありません"
 
 #: ../libseahorse/seahorse-signer.c:58
 msgid ""
 "You have no personal PGP keys that can be used to sign a document or message."
 msgstr ""
+"ドキュメントやメッセージに署名する際に使用する個人的な PGP 鍵を所有していませ"
+"ん。"
 
 #: ../libseahorse/seahorse-signer.glade.h:1
 msgid "_Sign message with key:"
-msgstr "次のの鍵を使ってメッセージに署名する(_S):"
+msgstr "次の鍵を使ってメッセージに署名する(_S):"
 
 #: ../libseahorse/seahorse-ssh-key.c:90
-#, fuzzy
 msgid "(Unreadable Secure Shell Key)"
-msgstr "(解析できない SSH 鍵)"
+msgstr "(読み込むことができない SSH 鍵)"
 
 #: ../libseahorse/seahorse-ssh-key.c:94 ../libseahorse/seahorse-ssh-key.c:98
 #: ../libseahorse/seahorse-ssh-source.c:746
 #: ../src/seahorse-generate-select.c:145
 #: ../src/seahorse-ssh-key-properties.glade.h:20
 msgid "Secure Shell Key"
-msgstr ""
+msgstr "セキュア・シェルの鍵"
 
 #: ../libseahorse/seahorse-ssh-key.c:126
-#, fuzzy
 msgid "Private Secure Shell Key"
-msgstr "プライベートな PGP 鍵"
+msgstr "個人的なセキュア・シェルの鍵"
 
 #: ../libseahorse/seahorse-ssh-key.c:129
-#, fuzzy
 msgid "Public Secure Shell Key"
-msgstr "公開 PGP 鍵"
+msgstr "公開可能なセキュア・シェルの鍵"
 
 #: ../libseahorse/seahorse-ssh-operation.c:135
 #: ../libseahorse/seahorse-ssh-operation.c:697
@@ -1200,72 +1157,64 @@ msgstr "SSH コマンドの投入に失敗しました"
 
 #: ../libseahorse/seahorse-ssh-operation.c:441
 msgid "Secure Shell key"
-msgstr ""
+msgstr "セキュア・シェルの鍵"
 
 #. Just prompt over and over again
 #: ../libseahorse/seahorse-ssh-operation.c:727
-#, fuzzy
 msgid "Secure Shell Passphrase"
-msgstr "SSH のパスフレーズ"
+msgstr "セキュア・シェルのパスフレーズ"
 
 #: ../libseahorse/seahorse-ssh-operation.c:808
-#, fuzzy
 msgid "Old Key Passphrase"
-msgstr "パスフレーズ"
+msgstr "古い鍵のパスフレーズ"
 
 #: ../libseahorse/seahorse-ssh-operation.c:809
-#, fuzzy, c-format
+#, c-format
 msgid "Enter the old passphrase for: %s"
-msgstr "'%s' の新しいパスフレーズを入力して下さい"
+msgstr "'%s' の古いパスフレーズを入力して下さい"
 
 #: ../libseahorse/seahorse-ssh-operation.c:813
-#, fuzzy
 msgid "New Key Passphrase"
-msgstr "新しいパスフレーズ(_P):"
+msgstr "新しい鍵のパスフレーズ"
 
 #: ../libseahorse/seahorse-ssh-operation.c:814
-#, fuzzy, c-format
+#, c-format
 msgid "Enter the new passphrase for: %s"
 msgstr "'%s' の新しいパスフレーズを入力して下さい"
 
 #: ../libseahorse/seahorse-ssh-operation.c:822
-#, fuzzy
 msgid "Enter Key Passphrase"
-msgstr "新しいパスフレーズを入力します"
+msgstr "鍵のパスフレーズを入力します"
 
 #: ../libseahorse/seahorse-ssh-operation.c:890
-#, fuzzy
 msgid "Passphrase for New Secure Shell Key"
-msgstr "セキュアな鍵のパスフレーズを入力します"
+msgstr "セキュア・シェルで使用する新しい鍵のパスフレーズ"
 
 #: ../libseahorse/seahorse-ssh-operation.c:891
-#, fuzzy
 msgid "Enter a passphrase for your new Secure Shell key."
-msgstr "プライマリのユーザ ID に変更できませんでした"
+msgstr "セキュア・シェルで使用する新しい鍵のパスフレーズを入力して下さい"
 
 #: ../libseahorse/seahorse-ssh-operation.c:1029
-#, fuzzy
 msgid "Secure Shell Key Passphrase"
-msgstr "SSH のパスフレーズ"
+msgstr "セキュア・シェルで使用する鍵のパスフレーズ"
 
 #: ../libseahorse/seahorse-ssh-operation.c:1029
-#, fuzzy, c-format
+#, c-format
 msgid "Enter the passphrase for: %s"
-msgstr "'%s' の新しいパスフレーズを入力して下さい"
+msgstr "'%s' のパスフレーズを入力して下さい"
 
 #: ../libseahorse/seahorse-ssh-operation.c:1030
 msgid "Save this passphrase in my keyring"
-msgstr ""
+msgstr "このパスフレーズをキーリングに保存する"
 
 #: ../libseahorse/seahorse-ssh-operation.c:1104
-#, fuzzy, c-format
+#, c-format
 msgid "Importing key: %s"
-msgstr "インポート"
+msgstr "鍵のインポート: %s"
 
 #: ../libseahorse/seahorse-ssh-operation.c:1106
-#, fuzzy
 msgid "Importing key. Enter passphrase"
-msgstr "パスフレーズの入力"
+msgstr "鍵をインポートします (パスフレーズを入力して下さい)"
 
 #: ../libseahorse/seahorse-ssh-operation.c:1108
 #: ../src/seahorse-key-manager.c:515
@@ -1275,31 +1224,28 @@ msgstr "鍵のインポート"
 
 #: ../libseahorse/seahorse-unknown-key.c:67
 msgid "Unavailable"
-msgstr ""
+msgstr "利用不可"
 
 #: ../libseahorse/seahorse-unknown-key.c:87
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown Key: %s"
-msgstr "不明な鍵、または不正な鍵です"
+msgstr "不明な鍵: %s"
 
 #: ../libseahorse/seahorse-unknown-key.c:119
-#, fuzzy
 msgid "Unknown Key"
-msgstr "不明"
+msgstr "不明な鍵です"
 
 #: ../libseahorse/seahorse-unknown-source.c:128
-#, fuzzy
 msgid "Unavailable Key"
-msgstr "解析できない鍵 ID"
+msgstr "利用できない鍵"
 
 #: ../libseahorse/seahorse-util.c:188
 msgid "%Y-%m-%d"
-msgstr "%Y/%m/%d"
+msgstr "%Y-%m-%d"
 
 #: ../libseahorse/seahorse-util.c:379
-#, fuzzy
 msgid "Key Data"
-msgstr "鍵のID"
+msgstr "鍵のデータ"
 
 #: ../libseahorse/seahorse-util.c:381
 msgid "Multiple Keys"
@@ -1307,22 +1253,20 @@ msgstr "複数の鍵"
 
 #: ../libseahorse/seahorse-util.c:694
 msgid "Couldn't run file-roller"
-msgstr "`file-roller` を起動できませんでした"
+msgstr "'file-roller' を起動できませんでした"
 
 #: ../libseahorse/seahorse-util.c:699
 #: ../plugins/nautilus/seahorse-tool-files.c:645
-#, fuzzy
 msgid "Couldn't package files"
-msgstr "有効期限を変更できませんでした"
+msgstr "ファイルを書庫に格納できませんでした"
 
 #: ../libseahorse/seahorse-util.c:700
 msgid "The file-roller process did not complete successfully"
-msgstr "プロセス `file-roller` の起動に失敗しました"
+msgstr "'file-roller' の起動に失敗しました"
 
 #: ../libseahorse/seahorse-util.c:710
-#, fuzzy
 msgid "Couldn't set permissions on backup file."
-msgstr "セッションのプロパティを開けませんでした"
+msgstr "バックアップ・ファイルの権限を設定できませんでした"
 
 #. Filter for PGP keys. We also include *.asc, as in many
 #. cases that extension is associated with text/plain
@@ -1361,15 +1305,15 @@ msgstr "信用しない"
 
 #: ../libseahorse/seahorse-validity.c:35 ../src/seahorse-key-properties.c:1103
 msgid "Marginal"
-msgstr "ぎりぎりの信用"
+msgstr "ぎりぎり信用する"
 
 #: ../libseahorse/seahorse-validity.c:37 ../src/seahorse-key-properties.c:1109
 msgid "Full"
-msgstr "全て信用"
+msgstr "完全に信用する"
 
 #: ../libseahorse/seahorse-validity.c:39 ../src/seahorse-key-properties.c:1115
 msgid "Ultimate"
-msgstr "究極の信用"
+msgstr "究極に信用する"
 
 #: ../libseahorse/seahorse-validity.c:41
 msgid "Disabled"
@@ -1377,7 +1321,7 @@ msgstr "無効にする"
 
 #: ../libseahorse/seahorse-validity.c:43 ../src/seahorse-key-properties.c:1296
 msgid "Revoked"
-msgstr "破棄済み"
+msgstr "失効済み"
 
 #: ../libseahorse/seahorse-widget.c:311
 #, c-format
@@ -1386,11 +1330,11 @@ msgstr "ヘルプを表示できませんでした: %s"
 
 #: ../plugins/applet/GNOME_SeahorseApplet.server.in.in.h:1
 msgid "Clipboard Text Encryption"
-msgstr "クリップボードで暗号化"
+msgstr "クリップボードにある文字列の暗号化"
 
 #: ../plugins/applet/GNOME_SeahorseApplet.server.in.in.h:2
 msgid "Encrypt, decrypt or sign the clipboard (uses PGP type encryption)."
-msgstr "クリップボードの内容を PGP を使って暗号化したり解読したり、署名します"
+msgstr "クリップボードの内容を PGP を使って暗号化したり解読したり署名します"
 
 #: ../plugins/applet/GNOME_SeahorseApplet.server.in.in.h:3
 msgid "Seahorse Applet Factory"
@@ -1424,7 +1368,7 @@ msgstr ""
 #: ../plugins/applet/seahorse-applet.c:316 ../src/seahorse-key-manager.c:872
 msgid "translator-credits"
 msgstr ""
-"相花 毅 <aihana@gnome.gr.jp>\n"
+"相花 毅 <takeshi.aihana@gmail.com>\n"
 "Anthony Mulcahy <anthony@kcn.ne.jp>\n"
 "日本GNOMEユーザー会 http://www.gnome.gr.jp"
 
@@ -1436,23 +1380,20 @@ msgstr "Seahorse プロジェクトのページ"
 #: ../plugins/applet/seahorse-applet.c:374
 #: ../plugins/epiphany/seahorse-extension.c:251
 #: ../plugins/gedit/seahorse-gedit.c:332
-#, fuzzy
 msgid "Choose Recipient Keys"
-msgstr "受取人の選択"
+msgstr "受取人の鍵の選択"
 
 #: ../plugins/applet/seahorse-applet.c:393
-#, fuzzy
 msgid "Encrypted Text"
-msgstr "文字列の暗号化が完了しました"
+msgstr "暗号化した文字列"
 
 #: ../plugins/applet/seahorse-applet.c:395
-#, fuzzy
 msgid "Encryption Failed"
-msgstr "暗号化の設定"
+msgstr "暗号化に失敗しました"
 
 #: ../plugins/applet/seahorse-applet.c:396
 msgid "The clipboard could not be encrypted."
-msgstr ""
+msgstr "クリップボードの内容を暗号化できませんでした。"
 
 #: ../plugins/applet/seahorse-applet.c:430
 #: ../plugins/epiphany/seahorse-extension.c:296
@@ -1461,59 +1402,52 @@ msgid "Choose Key to Sign with"
 msgstr "署名で使う鍵の選択"
 
 #: ../plugins/applet/seahorse-applet.c:449
-#, fuzzy
 msgid "Signed Text"
-msgstr "文字列の署名が完了しました"
+msgstr "署名した文字列"
 
 #: ../plugins/applet/seahorse-applet.c:451
-#, fuzzy
 msgid "Signing Failed"
-msgstr "署名(_S)"
+msgstr "署名に失敗しました"
 
 #: ../plugins/applet/seahorse-applet.c:452
 msgid "The clipboard could not be Signed."
-msgstr ""
+msgstr "クリップボードの内容に署名できませんでした。"
 
 #: ../plugins/applet/seahorse-applet.c:495
 #: ../plugins/epiphany/seahorse-extension.c:340
-#, fuzzy
 msgid "Import Failed"
-msgstr "鍵のインポート"
+msgstr "インポートに失敗しました"
 
 #: ../plugins/applet/seahorse-applet.c:496
 #: ../plugins/epiphany/seahorse-extension.c:341
-#, fuzzy
 msgid "Keys were found but not imported."
-msgstr "鍵は見つかりましたが、インポートしていません"
+msgstr "鍵は見つかりましたがインポートしていません。"
 
 #: ../plugins/applet/seahorse-applet.c:527
 #: ../plugins/epiphany/seahorse-extension.c:374
-#, fuzzy
 msgid "Decrypting Failed"
-msgstr "ファイルの暗号化解除"
+msgstr "復号かに失敗しました"
 
 #: ../plugins/applet/seahorse-applet.c:528
 #: ../plugins/epiphany/seahorse-extension.c:375
 msgid "Text may be malformed."
-msgstr ""
+msgstr "文字列が壊れています。"
 
 #: ../plugins/applet/seahorse-applet.c:579
 msgid "No PGP key or message was found on clipboard"
-msgstr ""
+msgstr "クリップボードの中に PGP 鍵または文字列がありません"
 
 #: ../plugins/applet/seahorse-applet.c:580
 msgid "No PGP data found."
-msgstr ""
+msgstr "PGP データが見つかりませんでした。"
 
 #: ../plugins/applet/seahorse-applet.c:613
-#, fuzzy
 msgid "Decrypted Text"
-msgstr "文字列の解読が完了しました"
+msgstr "復号化した文字列"
 
 #: ../plugins/applet/seahorse-applet.c:681
-#, fuzzy
 msgid "Could not display the help file"
-msgstr "ヘルプを表示できませんでした: %s"
+msgstr "ヘルプ・ファイルを表示できませんでした"
 
 #: ../plugins/applet/seahorse-applet.c:744
 msgid "_Encrypt Clipboard"
@@ -1525,48 +1459,40 @@ msgstr "署名する(_S)"
 
 #: ../plugins/applet/seahorse-applet.c:758
 msgid "_Decrypt/Verify Clipboard"
-msgstr "解読/検証する(_D)"
+msgstr "復号/検証する(_D)"
 
 #: ../plugins/applet/seahorse-applet.c:764
-#, fuzzy
 msgid "_Import Keys from Clipboard"
-msgstr "クリップボードから鍵をインポートできませんでした"
+msgstr "クリップボードから鍵のインポート(_I)"
 
 #: ../plugins/applet/seahorse-applet.c:829
 #: ../plugins/applet/seahorse-applet.c:831
-#, fuzzy
 msgid "Encryption Applet"
-msgstr "暗号化の設定"
+msgstr "暗号化アプレット"
 
 #: ../plugins/applet/seahorse-applet-preferences.glade.h:1
-#, fuzzy
 msgid "<b>Display clipboard contents after:</b>"
-msgstr "暗号化したら結果を表示する"
+msgstr "<b>次の処理の後にクリップボードの内容を表示する:</b>"
 
 #: ../plugins/applet/seahorse-applet-preferences.glade.h:2
-#, fuzzy
 msgid "Clipboard Encryption Preferences"
-msgstr "暗号化の設定"
+msgstr "クリップボードの内容を暗号化する設定"
 
 #: ../plugins/applet/seahorse-applet-preferences.glade.h:3
-#, fuzzy
 msgid "_Decrypting or verifying the clipboard"
-msgstr "解読/検証する(_D)"
+msgstr "復号/検証する(_D)"
 
 #: ../plugins/applet/seahorse-applet-preferences.glade.h:4
-#, fuzzy
 msgid "_Encrypting or signing the clipboard"
-msgstr "暗号化する(_E)"
+msgstr "クリップボードの内容を暗号化または署名した後(_E)"
 
 #: ../plugins/applet/seahorse-applet-preferences.glade.h:5
-#, fuzzy
 msgid "_Show clipboard state in panel"
-msgstr "クリップボードの内容をパネルに表示する"
+msgstr "クリップボードの状態を表示する(_S)"
 
 #: ../plugins/epiphany/seahorse-extension.c:601
-#, fuzzy
 msgid "_Encrypt"
-msgstr "暗号化..."
+msgstr "暗号化(_E)"
 
 #: ../plugins/epiphany/seahorse-extension.c:608
 #: ../src/seahorse-sign.glade.h:21
@@ -1574,19 +1500,16 @@ msgid "_Sign"
 msgstr "署名(_S)"
 
 #: ../plugins/epiphany/seahorse-extension.c:615
-#, fuzzy
 msgid "_Decrypt/Verify"
-msgstr "解読/検証する(_D)"
+msgstr "復号/検証する(_D)"
 
 #: ../plugins/epiphany/seahorse-extension.c:622
-#, fuzzy
 msgid "_Import Key"
-msgstr "鍵のインポート"
+msgstr "鍵のインポート(_I)"
 
 #: ../plugins/gedit/seahorse-gedit.c:265
-#, fuzzy
 msgid "Couldn't connect to seahorse-daemon"
-msgstr "プログラム `seahorse-agent` を起動できませんでした"
+msgstr "'seahorse-daemon' に接続できませんでした"
 
 #: ../plugins/gedit/seahorse-gedit.c:354
 msgid "Encrypted text"
@@ -1610,9 +1533,8 @@ msgid "Couldn't decrypt text"
 msgstr "文字列を解読できませんでした"
 
 #: ../plugins/gedit/seahorse-gedit.c:462
-#, fuzzy
 msgid "Couldn't verify text"
-msgstr "文字列を解読できませんでした"
+msgstr "文字列を検証できませんでした"
 
 #: ../plugins/gedit/seahorse-gedit.c:510
 msgid "No encrypted or signed text is selected."
@@ -1631,8 +1553,8 @@ msgstr "文字列の検証が完了しました"
 #, c-format
 msgid "Imported %d key"
 msgid_plural "Imported %d keys"
-msgstr[0] "%d個の鍵をインポートしました"
-msgstr[1] "%d個の鍵をインポートしました"
+msgstr[0] " %d個の鍵をインポートしました"
+msgstr[1] " %d個の鍵をインポートしました"
 
 #: ../plugins/gedit/seahorse-gedit.c:633
 msgid "Signed text"
@@ -1643,42 +1565,36 @@ msgid "Couldn't sign text"
 msgstr "文字列に署名できませんでした"
 
 #: ../plugins/gedit/seahorse-gedit-plugin.c:133
-#, fuzzy
 msgid "_Encrypt..."
-msgstr "暗号化..."
+msgstr "暗号化(_E)..."
 
 #: ../plugins/gedit/seahorse-gedit-plugin.c:134
-#, fuzzy
 msgid "Encrypt the selected text"
-msgstr "文字列の暗号化が完了しました"
+msgstr "選択した文字列を暗号化します"
 
 #: ../plugins/gedit/seahorse-gedit-plugin.c:135
-#, fuzzy
 msgid "Decr_ypt/Verify"
-msgstr "解読/検証する(_D)"
+msgstr "復号/検証する(_Y)"
 
 #: ../plugins/gedit/seahorse-gedit-plugin.c:136
-#, fuzzy
 msgid "Decrypt and/or Verify text"
-msgstr "文字列の解読が完了しました"
+msgstr "文字列の復号化と検証 (またはどちらか) が完了しました"
 
 #: ../plugins/gedit/seahorse-gedit-plugin.c:137
-#, fuzzy
 msgid "Sig_n..."
-msgstr "署名(_S)..."
+msgstr "署名(_N)..."
 
 #: ../plugins/gedit/seahorse-gedit-plugin.c:138
-#, fuzzy
 msgid "Sign the selected text"
 msgstr "指定した文字列に署名します"
 
 #: ../plugins/gedit/seahorse-gedit.schemas.in.h:1
 msgid "Enable the seahorse encryption plugin for gedit."
-msgstr "gEdit 向けの Seahorse 暗号化プラグインを有効にします。"
+msgstr "gedit 向けの Seahorse 暗号化プラグインを有効にします。"
 
 #: ../plugins/gedit/seahorse-gedit.schemas.in.h:2
 msgid "Enable the seahorse gedit plugin"
-msgstr "gEdit プラグインを有効にする"
+msgstr "gedit プラグインを有効にする"
 
 #: ../plugins/gedit/seahorse-pgp.gedit-plugin.desktop.in.h:1
 msgid "Text Encryption"
@@ -1693,29 +1609,27 @@ msgid "Encrypt..."
 msgstr "暗号化..."
 
 #: ../plugins/nautilus-ext/seahorse-nautilus.c:162
-#, fuzzy
 msgid "Encrypt (and optionally sign) the selected file"
 msgid_plural "Encrypt the selected files"
-msgstr[0] "指定したアーカイブを暗号化します"
+msgstr[0] "指定したファイルを暗号化します"
+msgstr[1] "指定した複数のファイルを暗号化します"
 
 #: ../plugins/nautilus-ext/seahorse-nautilus.c:168
 #: ../src/seahorse-pgp-private-key-properties.glade.h:38
-#, fuzzy
 msgid "Sign"
-msgstr "署名(_S)"
+msgstr "署名"
 
 #: ../plugins/nautilus-ext/seahorse-nautilus.c:169
-#, fuzzy
 msgid "Sign the selected file"
 msgid_plural "Sign the selected files"
-msgstr[0] "指定した文字列に署名します"
+msgstr[0] "指定したファイルに署名します"
+msgstr[1] "指定した複数のファイルに署名します"
 
 #: ../plugins/nautilus/seahorse-pgp-preferences.c:43
 #: ../plugins/nautilus/seahorse-pgp-preferences.c:47
 #: ../plugins/nautilus/seahorse-pgp-preferences.c:51
-#, fuzzy
 msgid "For internal use"
-msgstr "貴方の個人鍵です"
+msgstr "個人で使用するのが目的"
 
 #: ../plugins/nautilus/seahorse-pgp-preferences.c:78
 #: ../plugins/nautilus/seahorse-pgp-preferences.desktop.in.h:2
@@ -1728,7 +1642,7 @@ msgstr "鍵サーバと暗号化の設定を行います"
 
 #: ../plugins/nautilus/seahorse-tool.c:52
 msgid "Import keys from the file"
-msgstr "鍵をファイルからインポートする"
+msgstr "ファイルから鍵をインポートする"
 
 #: ../plugins/nautilus/seahorse-tool.c:54
 msgid "Encrypt file"
@@ -1756,7 +1670,7 @@ msgstr "標準入力から URI のリストを読み込む"
 
 #: ../plugins/nautilus/seahorse-tool.c:66
 msgid "file..."
-msgstr ""
+msgstr "ファイル..."
 
 #: ../plugins/nautilus/seahorse-tool.c:128
 msgid "Choose Recipients"
@@ -1764,9 +1678,8 @@ msgstr "受取人の選択"
 
 #: ../plugins/nautilus/seahorse-tool.c:190
 #: ../plugins/nautilus/seahorse-tool.c:272
-#, fuzzy
 msgid "Couldn't load keys"
-msgstr "副鍵を追加できませんでした"
+msgstr "鍵を読み込めませんでした"
 
 #: ../plugins/nautilus/seahorse-tool.c:206
 #, c-format
@@ -1774,9 +1687,8 @@ msgid "Choose Encrypted File Name for '%s'"
 msgstr "'%s' に対する暗号化したファイルを選択して下さい"
 
 #: ../plugins/nautilus/seahorse-tool.c:256
-#, fuzzy
 msgid "Choose Signer"
-msgstr "署名する鍵の選択"
+msgstr "署名者の選択"
 
 #: ../plugins/nautilus/seahorse-tool.c:291
 #, c-format
@@ -1791,7 +1703,7 @@ msgstr "鍵のインポートが完了しました"
 #: ../plugins/nautilus/seahorse-tool.c:396
 #, c-format
 msgid "Choose Decrypted File Name for '%s'"
-msgstr "'%s' に対する暗号化解除したファイルを選択して下さい"
+msgstr "'%s' に対する復号化したファイルを選択して下さい"
 
 #: ../plugins/nautilus/seahorse-tool.c:452
 #, c-format
@@ -1804,64 +1716,57 @@ msgstr "'%s' のオリジナル・ファイルを選択して下さい"
 #. * dialogs at the user.
 #.
 #: ../plugins/nautilus/seahorse-tool.c:524
-#, fuzzy
 msgid "No valid signatures found"
-msgstr "%s: 署名ではありません"
+msgstr "妥当な署名が見つかりませんでした"
 
 #: ../plugins/nautilus/seahorse-tool.c:591
-#, fuzzy
 msgid "File Encryption Tool"
-msgstr "文字列の暗号化"
+msgstr "ファイルの暗号化ツール"
 
 #: ../plugins/nautilus/seahorse-tool.c:614
-#, fuzzy
 msgid "Encrypting"
-msgstr "ファイルを暗号化する"
+msgstr "暗号化"
 
 #: ../plugins/nautilus/seahorse-tool.c:615
-#, fuzzy, c-format
+#, c-format
 msgid "Couldn't encrypt file: %s"
-msgstr "\"%s\" を暗号化できませんでした"
+msgstr "ファイルを暗号化できませんでした: %s"
 
 #: ../plugins/nautilus/seahorse-tool.c:623
-#, fuzzy
 msgid "Signing"
-msgstr "署名(_S)"
+msgstr "署名"
 
 #: ../plugins/nautilus/seahorse-tool.c:624
-#, fuzzy, c-format
+#, c-format
 msgid "Couldn't sign file: %s"
-msgstr "\"%s\" に署名できませんでした"
+msgstr "ファイルに署名できませんでした: %s"
 
 #: ../plugins/nautilus/seahorse-tool.c:629
-#, fuzzy
 msgid "Importing"
 msgstr "インポート"
 
 #: ../plugins/nautilus/seahorse-tool.c:630
-#, fuzzy, c-format
+#, c-format
 msgid "Couldn't import keys from file: %s"
-msgstr "\"%s\" から鍵をインポートできませんでした"
+msgstr "ファイルから鍵をインポートできませんでした: %s"
 
 #: ../plugins/nautilus/seahorse-tool.c:636
-#, fuzzy
 msgid "Decrypting"
-msgstr "ファイルの暗号化解除"
+msgstr "復号化"
 
 #: ../plugins/nautilus/seahorse-tool.c:637
-#, fuzzy, c-format
+#, c-format
 msgid "Couldn't decrypt file: %s"
-msgstr "\"%s\" を解読できませんでした"
+msgstr "ファイルを復号化できませんでした: %s"
 
 #: ../plugins/nautilus/seahorse-tool.c:642
-#, fuzzy
 msgid "Verifying"
 msgstr "検証"
 
 #: ../plugins/nautilus/seahorse-tool.c:643
-#, fuzzy, c-format
+#, c-format
 msgid "Couldn't verify file: %s"
-msgstr "\"%s\" を検証できませんでした"
+msgstr "ファイルの妥当性を検証できませんでした: %s"
 
 #. TRANSLATOR: This string will become
 #. * "You have selected %d files and %d folders"
@@ -1869,8 +1774,8 @@ msgstr "\"%s\" を検証できませんでした"
 #, c-format
 msgid "You have selected %d file "
 msgid_plural "You have selected %d files "
-msgstr[0] "%d個のファイルと"
-msgstr[1] "%d個のファイルと"
+msgstr[0] " %d個のファイルと"
+msgstr[1] " %d個のファイルと"
 
 #. TRANSLATOR: This string will become
 #. * "You have selected %d files and %d folders"
@@ -1878,28 +1783,28 @@ msgstr[1] "%d個のファイルと"
 #, c-format
 msgid "and %d folder"
 msgid_plural "and %d folders"
-msgstr[0] "%d個のフォルダを選択しました"
-msgstr[1] "%d個のフォルダを選択しました"
+msgstr[0] " %d個のフォルダを選択しました"
+msgstr[1] " %d個のフォルダを選択しました"
 
 #. TRANSLATOR: "%s%s" are "You have selected %d files and %d folders"
 #. * Swap order with "%2$s%1$s" if needed
 #: ../plugins/nautilus/seahorse-tool-files.c:165
-#, fuzzy, c-format
+#, c-format
 msgid "<b>%s%s</b>"
-msgstr "<b>日付</b>"
+msgstr "<b>%s%s</b>"
 
 #. should never be called for just one file
 #: ../plugins/nautilus/seahorse-tool-files.c:174
 #, c-format
 msgid "You have selected %d files"
-msgstr "%d個のファイルを選択しました"
+msgstr " %d個のファイルを選択しました"
 
 #: ../plugins/nautilus/seahorse-tool-files.c:179
 #, c-format
 msgid "You have selected %d folder"
 msgid_plural "You have selected %d folders"
-msgstr[0] "%d個のフォルダを選択しました"
-msgstr[1] "%d個のフォルダを選択しました"
+msgstr[0] " %d個のフォルダを選択しました"
+msgstr[1] " %d個のフォルダを選択しました"
 
 #: ../plugins/nautilus/seahorse-tool-files.c:626
 msgid "Preparing..."
@@ -1907,9 +1812,8 @@ msgstr "準備中..."
 
 #: ../plugins/nautilus/seahorse-tool-files.c:635
 #: ../plugins/nautilus/seahorse-tool-files.c:658
-#, fuzzy
 msgid "Couldn't list files"
-msgstr "鍵をインポートできませんでした"
+msgstr "ファイルの一覧を生成できませんでした"
 
 #: ../src/main.c:75 ../src/seahorse-key-manager.c:867
 msgid "Encryption Key Manager"
@@ -1922,7 +1826,7 @@ msgstr "副鍵を追加できませんでした"
 #: ../src/seahorse-add-subkey.c:127
 #, c-format
 msgid "Add subkey to %s"
-msgstr "%s への副鍵の追加"
+msgstr "%s へ副鍵を追加する"
 
 #: ../src/seahorse-add-subkey.glade.h:1 ../src/seahorse-pgp-generate.c:44
 msgid "DSA (sign only)"
@@ -1938,11 +1842,11 @@ msgstr "有効期限:"
 
 #: ../src/seahorse-add-subkey.glade.h:4
 msgid "Generate a new subkey"
-msgstr "新しい副鍵を生成します"
+msgstr "新しい副鍵の生成"
 
 #: ../src/seahorse-add-subkey.glade.h:5
 msgid "If key never expires"
-msgstr "鍵の有効期限を設定しない場合にチェックします"
+msgstr "鍵の有効期限を設定しない場合にＯＮにします"
 
 #: ../src/seahorse-add-subkey.glade.h:6
 msgid "Key _Length:"
@@ -1954,7 +1858,7 @@ msgstr "鍵の種類(_T):"
 
 #: ../src/seahorse-add-subkey.glade.h:8
 msgid "Key type / algorithm"
-msgstr "鍵の種類 / 暗号化アルゴリズムを選択します"
+msgstr "鍵の種類または暗号化アルゴリズムを選択します"
 
 #: ../src/seahorse-add-subkey.glade.h:9
 msgid "Length of Key"
@@ -1979,15 +1883,15 @@ msgstr "ユーザ ID を追加できませんでした"
 #: ../src/seahorse-add-uid.c:104
 #, c-format
 msgid "Add user ID to %s"
-msgstr "%s へのユーザ ID の追加"
+msgstr "%s へユーザ ID を追加する"
 
 #: ../src/seahorse-add-uid.glade.h:1
 msgid "Add User ID"
-msgstr "ユーザ IDの追加"
+msgstr "ユーザ ID の追加"
 
 #: ../src/seahorse-add-uid.glade.h:2
 msgid "Create the new user ID"
-msgstr "新しいユーザ ID を生成します"
+msgstr "新しいユーザ ID の生成"
 
 #: ../src/seahorse-add-uid.glade.h:3 ../src/seahorse-pgp-generate.glade.h:8
 msgid "Full _Name:"
@@ -1995,11 +1899,11 @@ msgstr "氏名(_N):"
 
 #: ../src/seahorse-add-uid.glade.h:4
 msgid "Key Co_mment:"
-msgstr "鍵のコメント(_M):"
+msgstr "鍵の説明(_M):"
 
 #: ../src/seahorse-add-uid.glade.h:5
 msgid "Must be at least 5 characters long"
-msgstr "名前は 5文字以上にして下さい"
+msgstr "名前は５文字以上にして下さい"
 
 #: ../src/seahorse-add-uid.glade.h:6
 msgid "Optional comment describing key"
@@ -2023,29 +1927,32 @@ msgstr "パスフレーズの確認(_F):"
 
 #: ../src/seahorse-change-passphrase.glade.h:3
 msgid "Confirm new passphrase"
-msgstr "新しパスフレーズの確認です"
+msgstr "確認のため、もう一度新しいパスフレーズを入力して下さい"
 
 #: ../src/seahorse-change-passphrase.glade.h:5
 msgid "New _Passphrase:"
 msgstr "新しいパスフレーズ(_P):"
 
 #: ../src/seahorse-delete.c:40
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s is a private key. Make sure you have a backup. Do you still want to "
 "delete it?"
-msgstr "%s は鍵ペアです！ 本当に削除してもよろしいですか？"
+msgstr ""
+"%s は個人的な鍵のようです。バックアップしているか確認して下さい。それでも削除"
+"しますか？"
 
 #: ../src/seahorse-delete.c:74
 #, c-format
 msgid "Are you sure you want to permanently delete %s?"
-msgstr "本当に鍵 %s を永久に削除してもよろしいですか？"
+msgstr "本当に鍵 (%s) を永久に削除してもよろしいですか？"
 
 #: ../src/seahorse-delete.c:80
-#, fuzzy, c-format
+#, c-format
 msgid "Are you sure you want to permanently delete %d key?"
 msgid_plural "Are you sure you want to permanently delete %d keys?"
-msgstr[0] "本当に鍵 %s を永久に削除してもよろしいですか？"
+msgstr[0] "本当に %d個の鍵を永久に削除してもよろしいですか？"
+msgstr[1] "本当に %d個の鍵を永久に削除してもよろしいですか？"
 
 #: ../src/seahorse-delete.c:124
 msgid "Couldn't delete key"
@@ -2070,14 +1977,12 @@ msgid "Couldn't delete user id"
 msgstr "ユーザ ID を削除できませんでした"
 
 #: ../src/seahorse.desktop.in.in.h:1
-#, fuzzy
 msgid "Manage your passwords and encryption keys"
-msgstr "お使いの暗号鍵を管理するツールです"
+msgstr "パスワードや暗号鍵を管理します"
 
 #: ../src/seahorse.desktop.in.in.h:2 ../src/seahorse-key-manager.glade.h:7
-#, fuzzy
 msgid "Passwords and Encryption Keys"
-msgstr "キャッシュした暗号鍵"
+msgstr "パスワードと暗号鍵"
 
 #: ../src/seahorse-expires.c:67
 msgid "Couldn't change expiry date"
@@ -2103,100 +2008,89 @@ msgstr "有効期限を設定しない"
 
 #: ../src/seahorse-expires.glade.h:3 ../src/seahorse-revoke.glade.h:11
 msgid "Revoke key"
-msgstr "鍵の破棄"
+msgstr "鍵の失効"
 
 #: ../src/seahorse-generate-select.c:143
-#, fuzzy
 msgid "Used to encrypt email and files"
-msgstr "暗号化したファイルを解読する"
+msgstr "メールやファイルを暗号化する際に使用します"
 
 #: ../src/seahorse-generate-select.c:146
 msgid "Used to access other computers (eg: via a terminal)"
-msgstr ""
+msgstr "端末などから他のコンピュータにアクセスする際に使用します"
 
 #: ../src/seahorse-generate-select.glade.h:1
 msgid "<b>_Select the kind of key you wish to create:</b>"
 msgstr "<b>生成する鍵の種類を選択して下さい(_S):</b>"
 
 #: ../src/seahorse-generate-select.glade.h:2
-#, fuzzy
 msgid "C_ontinue"
-msgstr "続行(_C)"
+msgstr "続行(_O)"
 
 #: ../src/seahorse-generate-select.glade.h:3
 msgid "Create a New Key"
 msgstr "新しい鍵の生成"
 
 #: ../src/seahorse-gkeyring-item.c:248
-#, fuzzy
 msgid "Web Password"
-msgstr "パスワードのキャッシュ"
+msgstr "ウェブのパスワード"
 
 #: ../src/seahorse-gkeyring-item.c:250
-#, fuzzy
 msgid "Network Password"
-msgstr "パスワードのキャッシュ"
+msgstr "ネットワークのパスワード"
 
 #: ../src/seahorse-gkeyring-item.c:252
 #: ../src/seahorse-gkeyring-item-properties.c:116
 #: ../src/seahorse-gkeyring-source.c:525
-#, fuzzy
 msgid "Password"
-msgstr "パスワードのキャッシュ"
+msgstr "パスワード"
 
 #: ../src/seahorse-gkeyring-item-properties.c:90
 msgid "Access a network share or resource"
-msgstr ""
+msgstr "ネットワーク共有やリソースへのアクセス"
 
 #: ../src/seahorse-gkeyring-item-properties.c:94
 msgid "Access a website"
-msgstr ""
+msgstr "ウェブサイトへのアクセス"
 
 #: ../src/seahorse-gkeyring-item-properties.c:98
 msgid "Unlocks a PGP key"
-msgstr ""
+msgstr "PGP 鍵の復号化"
 
 #: ../src/seahorse-gkeyring-item-properties.c:101
 msgid "Unlocks a Secure Shell key"
-msgstr ""
+msgstr "セキュア・シェルの鍵の復号化"
 
 #: ../src/seahorse-gkeyring-item-properties.c:104
 msgid "Saved password or login"
-msgstr ""
+msgstr "パスワードの保存やログイン"
 
 #: ../src/seahorse-gkeyring-item-properties.c:116
 msgid "Network Credentials"
-msgstr ""
+msgstr "ネットワークの証明書"
 
 #: ../src/seahorse-gkeyring-item-properties.c:177
-#, fuzzy
 msgid "Couldn't change password."
-msgstr "有効期限を変更できませんでした"
+msgstr "パスワードを変更できませんでした"
 
 #: ../src/seahorse-gkeyring-item-properties.c:284
-#, fuzzy
 msgid "Couldn't set description."
-msgstr "文字列を解読できませんでした"
+msgstr "説明を追加できませんでした"
 
 #: ../src/seahorse-gkeyring-item-properties.glade.h:1
-#, fuzzy
 msgid "<b>Description:</b>"
-msgstr "補足(_D):"
+msgstr "<b>説明:</b>"
 
 #: ../src/seahorse-gkeyring-item-properties.glade.h:2
-#, fuzzy
 msgid "<b>Login:</b>"
-msgstr "<b>日付</b>"
+msgstr "<b>ログイン名:</b>"
 
 #: ../src/seahorse-gkeyring-item-properties.glade.h:3
-#, fuzzy
 msgid "<b>Password:</b>"
-msgstr "パスワードのキャッシュ"
+msgstr "<b>パスワード:</b>"
 
 #: ../src/seahorse-gkeyring-item-properties.glade.h:4
-#, fuzzy
 msgid "<b>Server:</b>"
-msgstr "<b>鍵サーバ:</b>"
+msgstr "<b>サーバ名:</b>"
 
 #: ../src/seahorse-gkeyring-item-properties.glade.h:5
 #: ../src/seahorse-pgp-public-key-properties.glade.h:9
@@ -2208,17 +2102,15 @@ msgstr "<b>詳細:</b>"
 #: ../src/seahorse-pgp-private-key-properties.glade.h:13
 #: ../src/seahorse-pgp-public-key-properties.glade.h:12
 #: ../src/seahorse-ssh-key-properties.glade.h:11
-#, fuzzy
 msgid "<b>Type:</b>"
-msgstr "<b>所有者</b>"
+msgstr "<b>種類:</b>"
 
 #: ../src/seahorse-gkeyring-item-properties.glade.h:7
 #: ../src/seahorse-pgp-private-key-properties.glade.h:14
 #: ../src/seahorse-pgp-public-key-properties.glade.h:13
 #: ../src/seahorse-ssh-key-properties.glade.h:12
-#, fuzzy
 msgid "<b>Use:</b>"
-msgstr "<b>名前:</b>"
+msgstr "<b>用途:</b>"
 
 #: ../src/seahorse-gkeyring-item-properties.glade.h:8
 #: ../src/seahorse-pgp-private-key-properties.glade.h:22
@@ -2229,9 +2121,8 @@ msgstr "詳細"
 
 #: ../src/seahorse-gkeyring-item-properties.glade.h:9
 #: ../src/seahorse-ssh-key-properties.glade.h:18
-#, fuzzy
 msgid "Key"
-msgstr "鍵(_K)"
+msgstr "鍵"
 
 #: ../src/seahorse-gkeyring-item-properties.glade.h:10
 #: ../src/seahorse-pgp-private-key-properties.glade.h:29
@@ -2241,107 +2132,97 @@ msgid "Key Properties"
 msgstr "鍵のプロパティ"
 
 #: ../src/seahorse-gkeyring-item-properties.glade.h:11
-#, fuzzy
 msgid "Show pass_word"
-msgstr "パスワードのキャッシュ"
+msgstr "パスワードの内容を表示する(_W)"
 
 #: ../src/seahorse-gkeyring-item-properties.glade.h:12
 msgid "[Type here]"
-msgstr ""
+msgstr "[Type here]"
 
 #: ../src/seahorse-gkeyring-item-properties.glade.h:13
 msgid "[Use here]"
-msgstr ""
+msgstr "[Use here]"
 
 #: ../src/seahorse-gkeyring-item-properties.glade.h:14
-#, fuzzy
 msgid "[details]\n"
-msgstr "詳細"
+msgstr "[details]\n"
 
 #: ../src/seahorse-gkeyring-item-properties.glade.h:16
 msgid "[login]"
-msgstr ""
+msgstr "[login]"
 
-# 参考: http://pgp.iijlab.net/trans/
 #: ../src/seahorse-gkeyring-item-properties.glade.h:17
-#, fuzzy
 msgid "[server]"
-msgstr "信用しない"
+msgstr "[server]"
 
 #: ../src/seahorse-gkeyring-operation.c:206
 msgid "Access to the key ring was denied"
-msgstr ""
+msgstr "キーリングへのアクセスが拒否されました"
 
 #: ../src/seahorse-gkeyring-operation.c:209
 msgid "The gnome-keyring daemon is not running"
-msgstr ""
+msgstr "gnome-keyring デーモンが起動されていません"
 
 #: ../src/seahorse-gkeyring-operation.c:212
 msgid "The key ring has already been unlocked"
-msgstr ""
+msgstr "そのキーリングは既にロックされています"
 
 #: ../src/seahorse-gkeyring-operation.c:215
 msgid "No such key ring exists"
-msgstr ""
+msgstr "そのようなキーリングは存在しません"
 
 #: ../src/seahorse-gkeyring-operation.c:218
-#, fuzzy
 msgid "Couldn't communicate with key ring daemon"
-msgstr "'%s' と通信できませんでした: %s"
+msgstr "キーリング・デーモンと通信できませんでした"
 
 #: ../src/seahorse-gkeyring-operation.c:221
 msgid "The item already exists"
-msgstr ""
+msgstr "そのアイテムは既に登録されています"
 
 #: ../src/seahorse-gkeyring-operation.c:227
 msgid "Internal error accessing gnome-keyring"
-msgstr ""
+msgstr "gnome-keyring へアクセスする際に内部エラーが発生しました"
 
 #: ../src/seahorse-gkeyring-operation.c:286
-#, fuzzy
 msgid "Saving item..."
-msgstr "鍵の読み込み中..."
+msgstr "アイテムの保存中..."
 
 #: ../src/seahorse-gkeyring-source.c:358
-#, fuzzy
 msgid "Retrieving key"
-msgstr "リモートの鍵の取得中..."
+msgstr "鍵の取得中"
 
 #. Start listing of ids
 #: ../src/seahorse-gkeyring-source.c:372
 msgid "Listing passwords"
-msgstr ""
+msgstr "パスワード入力待ち"
 
 #: ../src/seahorse-key-manager.c:443
-#, fuzzy
 msgid "Couldn't read file"
-msgstr "鍵をインポートできませんでした"
+msgstr "ファイルを読み込めませんでした"
 
 #: ../src/seahorse-key-manager.c:486
 msgid "Unrecognized key type, or invalid data format"
-msgstr ""
+msgstr "鍵の種類を認識できない、またはデータのフォーマットが間違っています"
 
 #: ../src/seahorse-key-manager.c:560 ../src/seahorse-keyserver-results.c:217
-#, fuzzy
 msgid "Couldn't retrieve data from key server"
 msgstr "鍵サーバから鍵データを取得できませんでした"
 
 #: ../src/seahorse-key-manager.c:576 ../src/seahorse-keyserver-results.c:233
-#, fuzzy, c-format
+#, c-format
 msgid "Copied %d key"
 msgid_plural "Copied %d keys"
-msgstr[0] "%d 個の鍵を読み込みました"
+msgstr[0] " %d個の鍵をコピーしました"
+msgstr[1] " %d個の鍵をコピーしました"
 
 #: ../src/seahorse-key-manager.c:600 ../src/seahorse-keyserver-results.c:193
 #: ../src/seahorse-keyserver-results.c:258
-#, fuzzy
 msgid "Retrieving keys"
-msgstr "リモートの鍵の取得中..."
+msgstr "鍵の取得中"
 
 #: ../src/seahorse-key-manager.c:626
-#, fuzzy
 msgid "Couldn't export key"
-msgstr "鍵をインポートできませんでした"
+msgstr "鍵をエキスポートできませんでした"
 
 #: ../src/seahorse-key-manager.c:646
 msgid "Export public key"
@@ -2354,12 +2235,10 @@ msgid "Couldn't export key to \"%s\""
 msgstr "\"%s\" へ鍵をエキスポートできませんでした"
 
 #: ../src/seahorse-key-manager.c:668
-#, fuzzy
 msgid "Exporting keys"
 msgstr "鍵のエキスポート"
 
 #: ../src/seahorse-key-manager.c:687
-#, fuzzy
 msgid "Back up Key Rings to Archive"
 msgstr "キーリングを書庫へバックアップします"
 
@@ -2368,10 +2247,11 @@ msgid "seahorse"
 msgstr "Seahorse"
 
 #: ../src/seahorse-key-manager.c:948 ../src/seahorse-keyserver-results.c:298
-#, fuzzy, c-format
+#, c-format
 msgid "Selected %d key"
 msgid_plural "Selected %d keys"
-msgstr[0] "%d 個の鍵を選択しました"
+msgstr[0] " %d個の鍵を選択しました"
+msgstr[1] " %d個の鍵を選択しました"
 
 #. Top menu items
 #: ../src/seahorse-key-manager.c:1174 ../src/seahorse-keyserver-results.c:377
@@ -2388,43 +2268,36 @@ msgstr "表示(_V)"
 
 #. Key Actions
 #: ../src/seahorse-key-manager.c:1180
-#, fuzzy
 msgid "_Create New Key..."
-msgstr "新しい鍵を生成します"
+msgstr "新しい鍵の生成(_C)..."
 
 #: ../src/seahorse-key-manager.c:1181
-#, fuzzy
 msgid "Create a new personal key"
-msgstr "新しい鍵を生成します"
+msgstr "新しい個人用の鍵を生成します"
 
 #: ../src/seahorse-key-manager.c:1182
 msgid "_Import..."
 msgstr "インポート(_I)..."
 
 #: ../src/seahorse-key-manager.c:1183
-#, fuzzy
 msgid "Import keys into your key ring from a file"
-msgstr "既存の鍵をファイルからインポートする: "
+msgstr "ファイルの中から鍵をキーリングの中に取り込みます"
 
 #: ../src/seahorse-key-manager.c:1184
-#, fuzzy
 msgid "_Back up Key Rings..."
 msgstr "キーリングのバックアップ(_B)..."
 
 #: ../src/seahorse-key-manager.c:1185
-#, fuzzy
 msgid "Back up all keys"
-msgstr "全ての鍵をバックアップします"
+msgstr "全ての鍵のバックアップを作成します"
 
 #: ../src/seahorse-key-manager.c:1186
-#, fuzzy
 msgid "Paste _Keys"
-msgstr "鍵の貼り付け(_P)"
+msgstr "鍵の貼り付け(_K)"
 
 #: ../src/seahorse-key-manager.c:1187
-#, fuzzy
 msgid "Import keys from the clipboard"
-msgstr "鍵をファイルからインポートする"
+msgstr "クリップボードから鍵を取り込みます"
 
 #: ../src/seahorse-key-manager.c:1189
 msgid "_Quit"
@@ -2459,80 +2332,68 @@ msgid "Show Seahorse help"
 msgstr "Seahorse のヘルプを表示します"
 
 #: ../src/seahorse-key-manager.c:1203
-#, fuzzy
 msgid "T_ypes"
-msgstr "種類(Y)"
+msgstr "種類(_Y)"
 
 #: ../src/seahorse-key-manager.c:1204
-#, fuzzy
 msgid "Show type column"
-msgstr "鍵マネージャの中に \"種類\" の項目を表示する"
+msgstr "\"種類\" の項目を表示する"
 
 #: ../src/seahorse-key-manager.c:1205
-#, fuzzy
 msgid "_Expiry"
 msgstr "有効期限(_E)"
 
 #: ../src/seahorse-key-manager.c:1206
-#, fuzzy
 msgid "Show expiry column"
-msgstr "鍵マネージャの中に \"期限\" の項目を表示する"
+msgstr "\"有効期限\" の項目を表示する"
 
 #: ../src/seahorse-key-manager.c:1207
 msgid "_Trust"
 msgstr "信用度(_T)"
 
 #: ../src/seahorse-key-manager.c:1208
-#, fuzzy
 msgid "Show owner trust column"
-msgstr "鍵マネージャの中に \"信用度\" の項目を表示する"
+msgstr "\"信用度\" の項目を表示する"
 
 #: ../src/seahorse-key-manager.c:1209
 msgid "_Validity"
-msgstr "有効性(_V)"
+msgstr "妥当性(_V)"
 
 #: ../src/seahorse-key-manager.c:1210
-#, fuzzy
 msgid "Show validity column"
-msgstr "鍵マネージャの中に \"有効性\" の項目を表示する"
+msgstr "\"妥当性\" の項目を表示する"
 
 #: ../src/seahorse-key-manager.c:1214 ../src/seahorse-keyserver-results.c:395
-#, fuzzy
 msgid "P_roperties"
-msgstr "プロパティ(_P)"
+msgstr "プロパティ(_R)"
 
 #: ../src/seahorse-key-manager.c:1215 ../src/seahorse-keyserver-results.c:396
 msgid "Show key properties"
 msgstr "鍵のプロパティを表示します"
 
 #: ../src/seahorse-key-manager.c:1216
-#, fuzzy
 msgid "E_xport Public Key..."
-msgstr "公開鍵を書き出します"
+msgstr "公開鍵のエキスポート(_X)..."
 
 #: ../src/seahorse-key-manager.c:1217
-#, fuzzy
 msgid "Export public part of key to a file"
-msgstr "公開鍵を書き出します"
+msgstr "公開鍵をファイルへ書き出します"
 
 #: ../src/seahorse-key-manager.c:1218
-#, fuzzy
 msgid "_Copy Public Key"
-msgstr "鍵のコピー(_C)"
+msgstr "公開鍵のコピー(_C)"
 
 #: ../src/seahorse-key-manager.c:1219
-#, fuzzy
 msgid "Copy public part of selected keys to the clipboard"
-msgstr "選択した鍵をクリップボードへコピーします"
+msgstr "選択した公開鍵をクリップボードへコピーします"
 
 #: ../src/seahorse-key-manager.c:1220
 msgid "_Delete Key"
 msgstr "鍵の削除(_D)"
 
 #: ../src/seahorse-key-manager.c:1221
-#, fuzzy
 msgid "Delete selected keys"
-msgstr "%d 個の鍵を選択しました"
+msgstr "選択した鍵を削除します"
 
 #: ../src/seahorse-key-manager.c:1225
 msgid "_Sign..."
@@ -2544,16 +2405,14 @@ msgstr "公開鍵に署名します"
 
 #: ../src/seahorse-key-manager.c:1230
 msgid "Set Up Computer for _Secure Shell..."
-msgstr ""
+msgstr "セキュア・シェルの設定(_S)..."
 
 #: ../src/seahorse-key-manager.c:1231
-#, fuzzy
 msgid ""
 "Send public Secure Shell key to another machine, and enable logins using "
 "that key."
 msgstr ""
-"SSH の公開鍵を他のコンピュータに送信し、それを使ってログインできるようにしま"
-"す"
+"SSH の鍵を他のコンピュータに送信し、それを使ってログインできるようにします"
 
 #: ../src/seahorse-key-manager.c:1235 ../src/seahorse-keyserver-results.c:404
 msgid "_Find Remote Keys..."
@@ -2568,7 +2427,6 @@ msgid "_Sync and Publish Keys..."
 msgstr "鍵の公開と同期(_S)..."
 
 #: ../src/seahorse-key-manager.c:1238
-#, fuzzy
 msgid "Publish and/or synchronize your keys with those online."
 msgstr "この鍵を公開してオンラインの鍵と同期します"
 
@@ -2593,14 +2451,12 @@ msgid "My _Personal Keys"
 msgstr "個人の鍵(_P)"
 
 #: ../src/seahorse-key-manager.glade.h:6
-#, fuzzy
 msgid "Other _Collected Keys"
-msgstr "%d 個の鍵を選択しました"
+msgstr "収集した他の鍵(_C)"
 
 #: ../src/seahorse-key-manager.glade.h:8
-#, fuzzy
 msgid "To get started with encryption you will need keys."
-msgstr "暗号化を始めるには、鍵が必要です。"
+msgstr "暗号化を始めるには鍵が必要です。"
 
 #: ../src/seahorse-key-manager.glade.h:9
 #: ../src/seahorse-keyserver-results.c:393
@@ -2608,14 +2464,12 @@ msgid "_Import"
 msgstr "インポート(_I)"
 
 #: ../src/seahorse-key-manager.glade.h:10
-#, fuzzy
 msgid "_Passwords"
-msgstr "パスワードのキャッシュ"
+msgstr "パスワード(_P)"
 
 #: ../src/seahorse-key-manager.glade.h:11
-#, fuzzy
 msgid "_Trusted Keys"
-msgstr "鍵の貼り付け(_P)"
+msgstr "信用する鍵(_T)"
 
 #: ../src/seahorse-key-manager-store.c:311
 #: ../src/seahorse-key-properties.c:1297
@@ -2627,18 +2481,16 @@ msgid "User ID"
 msgstr "ユーザ ID"
 
 #: ../src/seahorse-key-manager-store.c:697
-#, fuzzy
 msgid "Couldn't retrieve key data"
-msgstr "鍵サーバから鍵データを取得できませんでした"
+msgstr "鍵データを取得できませんでした"
 
 #: ../src/seahorse-key-manager-store.c:729
-#, fuzzy
 msgid "Couldn't write key to file"
-msgstr "\"%s\" へ鍵をエキスポートできませんでした"
+msgstr "鍵をファイルへ書き込めませんでした"
 
 #: ../src/seahorse-key-manager-store.c:972
 msgid "Validity"
-msgstr "有効性"
+msgstr "妥当性"
 
 #. Trust column
 #: ../src/seahorse-key-manager-store.c:979
@@ -2662,34 +2514,29 @@ msgid "Couldn't change primary user ID"
 msgstr "プライマリのユーザ ID に変更できませんでした"
 
 #: ../src/seahorse-key-properties.c:301 ../src/seahorse-key-properties.c:1427
-#, fuzzy
 msgid "[Unknown]"
-msgstr "不明"
+msgstr "[不明]"
 
 #: ../src/seahorse-key-properties.c:399 ../src/seahorse-key-properties.c:1711
-#, fuzzy
 msgid "Name/Email"
-msgstr "E-メール・アドレス:"
+msgstr "名前/E-メール"
 
 #: ../src/seahorse-key-properties.c:404
-#, fuzzy
 msgid "Signature ID"
-msgstr "署名"
+msgstr "署名 ID"
 
 #: ../src/seahorse-key-properties.c:555
-#, fuzzy
 msgid "Couldn't change primary photo"
-msgstr "プライマリのユーザ ID に変更できませんでした"
+msgstr "プライマリの画像を変更できませんでした"
 
 #: ../src/seahorse-key-properties.c:801
-#, fuzzy
 msgid "(unknown)"
-msgstr "不明"
+msgstr "(不明)"
 
 #: ../src/seahorse-key-properties.c:804
-#, fuzzy, c-format
+#, c-format
 msgid "This key expired on: %s"
-msgstr "この鍵の有効期限を指定する(_X):"
+msgstr "この鍵の有効期限: %s"
 
 #: ../src/seahorse-key-properties.c:985 ../src/seahorse-key-properties.c:1377
 #: ../src/seahorse-key-properties.c:1396
@@ -2699,60 +2546,53 @@ msgstr "信用度を変更できません"
 #: ../src/seahorse-key-properties.c:1006
 #: ../src/seahorse-ssh-key-properties.c:215
 msgid "Export Complete Key"
-msgstr "完成した鍵のエキスポート"
+msgstr "鍵のエキスポート"
 
 #: ../src/seahorse-key-properties.c:1272
 msgid "ID"
 msgstr "ID"
 
 #: ../src/seahorse-key-properties.c:1278
-#, fuzzy
 msgid "Created"
-msgstr "生成済み:"
+msgstr "生成済み"
 
 #: ../src/seahorse-key-properties.c:1281
-#, fuzzy
 msgid "Expires"
-msgstr "有効期限(_E):"
+msgstr "有効期限"
 
 #: ../src/seahorse-key-properties.c:1284
-#, fuzzy
 msgid "Status"
-msgstr "ステータス:"
+msgstr "状態"
 
 #: ../src/seahorse-key-properties.c:1287
-#, fuzzy
 msgid "Strength"
-msgstr "強度:"
+msgstr "強度"
 
 #: ../src/seahorse-key-properties.c:1296 ../src/seahorse-key-properties.c:1297
 msgid "Good"
-msgstr "Good"
+msgstr "良い"
 
 #: ../src/seahorse-keyserver-results.c:106
-#, fuzzy
 msgid "Couldn't import keys into key ring"
 msgstr "鍵をキーリングへインポートできませんでした"
 
 #: ../src/seahorse-keyserver-results.c:127
-#, fuzzy
 msgid "Importing keys from key servers"
-msgstr "鍵をファイルからインポートする"
+msgstr "鍵を鍵サーバからインポートする"
 
 #: ../src/seahorse-keyserver-results.c:146
 #: ../src/seahorse-keyserver-results.c:180
-#, fuzzy, c-format
+#, c-format
 msgid "Couldn't write keys to file: %s"
-msgstr "鍵を公開できませんでした: %s"
+msgstr "鍵をファイルへ書き込めませんでした: %s"
 
 #: ../src/seahorse-keyserver-results.c:169
 msgid "Save Remote Keys"
 msgstr "リモートの鍵の保存"
 
 #: ../src/seahorse-keyserver-results.c:351
-#, fuzzy
 msgid "No matching keys found"
-msgstr "一致する鍵がサーバ '%s' にはありませんでした"
+msgstr "一致する鍵が見つかりませんでした"
 
 #: ../src/seahorse-keyserver-results.c:381
 msgid "_Close"
@@ -2779,26 +2619,22 @@ msgid "Collapse all listings"
 msgstr "全てのリストを畳みます"
 
 #: ../src/seahorse-keyserver-results.c:394
-#, fuzzy
 msgid "Import selected keys to local key ring"
-msgstr "指定した鍵をローカルのキーリングへインポートします"
+msgstr "選択した鍵をローカルのキーリングへインポートします"
 
 #: ../src/seahorse-keyserver-results.c:397
-#, fuzzy
 msgid "Save Key As..."
 msgstr "別名で保存..."
 
 #: ../src/seahorse-keyserver-results.c:398
-#, fuzzy
 msgid "Save selected keys as a file"
-msgstr "鍵をファイルへ保存します"
+msgstr "選択した鍵をファイルへ保存します"
 
 #: ../src/seahorse-keyserver-results.c:399
 msgid "_Copy Key"
 msgstr "鍵のコピー(_C)"
 
 #: ../src/seahorse-keyserver-results.c:400
-#, fuzzy
 msgid "Copy selected keys to the clipboard"
 msgstr "選択した鍵をクリップボードへコピーします"
 
@@ -2858,41 +2694,37 @@ msgid "Couldn't retrieve keys from server: %s"
 msgstr "サーバから鍵を取得できませんでした: %s"
 
 #: ../src/seahorse-keyserver-sync.c:147
-#, fuzzy, c-format
+#, c-format
 msgid "<b>%d key is selected for synchronizing</b>"
 msgid_plural "<b>%d keys are selected for synchronizing</b>"
-msgstr[0] "<b>%d個の鍵を同期します</b>"
-msgstr[1] "<b>%d個の鍵を同期します</b>"
+msgstr[0] "<b> %d個の鍵を同期します</b>"
+msgstr[1] "<b> %d個の鍵を同期します</b>"
 
 #: ../src/seahorse-keyserver-sync.c:214
-#, fuzzy
 msgid "Synchronizing keys"
-msgstr "鍵の同期中..."
+msgstr "鍵の同期"
 
 #. Show the progress window if necessary
 #: ../src/seahorse-keyserver-sync.c:246
-#, fuzzy
 msgid "Synchronizing keys..."
 msgstr "鍵の同期中..."
 
 #: ../src/seahorse-keyserver-sync.glade.h:1
-#, fuzzy
 msgid "<b>X keys are selected for synchronizing</b>"
-msgstr "<b>X 個の鍵を同期します</b>"
+msgstr "<b>選択したＸ個の鍵を同期します</b>"
 
 #: ../src/seahorse-keyserver-sync.glade.h:2
 msgid "Sync Keys"
 msgstr "鍵の同期"
 
 #: ../src/seahorse-keyserver-sync.glade.h:3
-#, fuzzy
 msgid ""
 "This will publish the keys in your key ring so they're available for others "
 "to use. You'll also get any changes others have made since you received "
 "their keys."
 msgstr ""
-"キーリングにある鍵を公開し、他の人達から利用できるようにします。さらに鍵を同"
-"期して変更点を取得します。"
+"キーリングの中にある鍵を公開して他の人達から利用できるようにします。さらに鍵"
+"を同期して変更内容を適用します。"
 
 #: ../src/seahorse-keyserver-sync.glade.h:4
 msgid ""
@@ -2904,9 +2736,8 @@ msgstr ""
 "ていないので、他の人達から利用することはできません。"
 
 #: ../src/seahorse-keyserver-sync.glade.h:5
-#, fuzzy
 msgid "_Key Servers"
-msgstr "鍵サーバ"
+msgstr "鍵サーバ(_K)"
 
 #: ../src/seahorse-keyserver-sync.glade.h:6
 msgid "_Sync"
@@ -2917,7 +2748,6 @@ msgid "<b>You have selected multiple files or folders</b>"
 msgstr "<b>複数のファイルまたはフォルダを選択しました</b>"
 
 #: ../src/seahorse-multi-encrypt.glade.h:2
-#, fuzzy
 msgid ""
 "Because the files are located remotely, each file will be encrypted "
 "separately."
@@ -2930,13 +2760,12 @@ msgid "Encrypt Multiple Files"
 msgstr "複数のファイルの暗号化"
 
 #: ../src/seahorse-multi-encrypt.glade.h:4
-#, fuzzy
 msgid "Encrypt each file separately"
 msgstr "それぞれのファイルを別々に暗号化する"
 
 #: ../src/seahorse-multi-encrypt.glade.h:5
 msgid "Encrypt packed together in a package"
-msgstr "一度パッケージの中にまとめて暗号化する"
+msgstr "パッケージの中にまとめて暗号化する"
 
 #: ../src/seahorse-multi-encrypt.glade.h:6
 msgid "Package Name:"
@@ -2952,27 +2781,23 @@ msgstr "encrypted-package.rar"
 
 #: ../src/seahorse-pgp-encrypted.desktop.in.in.h:1
 msgid "Decrypt File"
-msgstr "ファイルの暗号化解除"
+msgstr "ファイルの復号化"
 
 #: ../src/seahorse-pgp-generate.c:43
-#, fuzzy
 msgid "DSA Elgamal"
-msgstr "DSA と ElGamal"
+msgstr "DSA Elgamal"
 
 #: ../src/seahorse-pgp-generate.c:54
-#, fuzzy
 msgid "Couldn't generate PGP key"
-msgstr "鍵を生成できませんでした"
+msgstr "PGP 鍵を生成できませんでした"
 
 #: ../src/seahorse-pgp-generate.c:139
-#, fuzzy
 msgid "Passphrase for New PGP Key"
-msgstr "セキュアな鍵のパスフレーズを入力します"
+msgstr "新しい PGP 鍵のパスフレーズ"
 
 #: ../src/seahorse-pgp-generate.c:140
-#, fuzzy
 msgid "Enter the passphrase for your new key twice."
-msgstr "'%s' の新しいパスフレーズを入力して下さい"
+msgstr "新しい鍵のパスフレーズを二回入力して下さい:"
 
 #: ../src/seahorse-pgp-generate.c:149
 msgid "Couldn't generate key"
@@ -2984,39 +2809,34 @@ msgstr "鍵の生成中"
 
 #: ../src/seahorse-pgp-generate.glade.h:1
 #: ../src/seahorse-ssh-generate.glade.h:1
-#, fuzzy
 msgid "<b>_Advanced key options</b>"
-msgstr "<b>日付</b>"
+msgstr "<b>拡張オプション(_A)</b>"
 
 #: ../src/seahorse-pgp-generate.glade.h:2
 msgid "A PGP key allows you to encrypt email or files to other people."
 msgstr ""
+"PGP の鍵を利用すると他の人達に暗号化したメールやファイルを送信できます。"
 
 #: ../src/seahorse-pgp-generate.glade.h:3
-#, fuzzy
 msgid "Algorithms here"
-msgstr "アルゴリズムです"
+msgstr "Algorithms here"
 
 #: ../src/seahorse-pgp-generate.glade.h:4
-#, fuzzy
 msgid "C_reate"
-msgstr "生成済み:"
+msgstr "生成(_R)"
 
 #: ../src/seahorse-pgp-generate.glade.h:5
-#, fuzzy
 msgid "Create a PGP Key"
-msgstr "新しい鍵の生成"
+msgstr "PGP 鍵の生成"
 
 #: ../src/seahorse-pgp-generate.glade.h:6
-#, fuzzy
 msgid "E_xpiration Date:"
-msgstr "有効期限:"
+msgstr "有効期限(_X):"
 
 #: ../src/seahorse-pgp-generate.glade.h:7
 #: ../src/seahorse-ssh-generate.glade.h:7
-#, fuzzy
 msgid "Encryption _Type:"
-msgstr "暗号鍵マネージャ"
+msgstr "暗号化の種類(_T):"
 
 #: ../src/seahorse-pgp-generate.glade.h:9
 msgid "Generate a new key"
@@ -3024,35 +2844,29 @@ msgstr "新しい鍵を生成します"
 
 #: ../src/seahorse-pgp-generate.glade.h:10
 #: ../src/seahorse-ssh-generate.glade.h:10
-#, fuzzy
 msgid "Key _Strength (bits):"
-msgstr "鍵の長さ(_L):"
+msgstr "鍵の長さ (ビット)(_S):"
 
 #: ../src/seahorse-pgp-generate.glade.h:11
-#, fuzzy
 msgid "Ne_ver Expires"
-msgstr "有効期限を設定しない"
+msgstr "有効期限を設定しない(_V)"
 
 #: ../src/seahorse-pgp-generate.glade.h:12
-#, fuzzy
 msgid "New PGP Key"
-msgstr "PGP 鍵"
+msgstr "新しい PGP 鍵"
 
 #: ../src/seahorse-pgp-generate.glade.h:13
-#, fuzzy
 msgid "_Comment:"
-msgstr "コメント:"
+msgstr "コメント(_C):"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:1
-#, fuzzy
 msgid "<b>Actions</b>"
-msgstr "<b>日付</b>"
+msgstr "<b>アクション</b>"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:2
 #: ../src/seahorse-pgp-public-key-properties.glade.h:1
-#, fuzzy
 msgid "<b>Comment:</b>"
-msgstr "コメント:"
+msgstr "<b>コメント:</b>"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:3
 msgid "<b>Dates</b>"
@@ -3060,20 +2874,17 @@ msgstr "<b>日付</b>"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:4
 #: ../src/seahorse-pgp-public-key-properties.glade.h:3
-#, fuzzy
 msgid "<b>Email:</b>"
-msgstr "<b>日付</b>"
+msgstr "<b>E-メール・アドレス:</b>"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:5
-#, fuzzy
 msgid "<b>Fingerprint</b>"
-msgstr "指紋:"
+msgstr "<b>指紋</b>"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:6
 #: ../src/seahorse-pgp-public-key-properties.glade.h:6
-#, fuzzy
 msgid "<b>Key ID:</b>"
-msgstr "鍵のID:"
+msgstr "<b>鍵 ID:</b>"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:7
 msgid "<b>Key Names and Signatures</b>"
@@ -3087,9 +2898,8 @@ msgstr "<b>名前:</b>"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:9
 #: ../src/seahorse-pgp-public-key-properties.glade.h:8
-#, fuzzy
 msgid "<b>Photo </b>"
-msgstr "<b>プロパティ</b>"
+msgstr "<b> 画像 </b>"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:10
 msgid "<b>Technical Details</b>"
@@ -3098,29 +2908,25 @@ msgstr "<b>鍵の詳細</b>"
 #: ../src/seahorse-pgp-private-key-properties.glade.h:11
 #: ../src/seahorse-pgp-public-key-properties.glade.h:10
 msgid "<b>This key has been revoked</b>"
-msgstr "<b>この鍵は破棄されました</b>"
+msgstr "<b>この鍵は失効しています</b>"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:12
 #: ../src/seahorse-pgp-public-key-properties.glade.h:11
-#, fuzzy
 msgid "<b>This key has expired</b>"
-msgstr "この鍵の有効期限を指定する(_X):"
+msgstr "<b>この鍵の有効期限は次のとおり:</b>"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:15
 #: ../src/seahorse-pgp-public-key-properties.glade.h:17
-#, fuzzy
 msgid "<b>_Subkeys</b>"
 msgstr "<b>副鍵(_S)</b>"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:16
-#, fuzzy
 msgid "Add"
-msgstr "追加(_A)"
+msgstr "追加"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:17
-#, fuzzy
 msgid "Add a photo to this key"
-msgstr "Photo ID を鍵に追加します"
+msgstr "この鍵に画像を登録します"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:18
 #: ../src/seahorse-ssh-key-properties.glade.h:15
@@ -3130,57 +2936,53 @@ msgstr "パスフレーズの変更(_P)"
 #: ../src/seahorse-pgp-private-key-properties.glade.h:19
 #: ../src/seahorse-pgp-public-key-properties.glade.h:18
 msgid "Created:"
-msgstr "生成済み:"
+msgstr "生成:"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:20
 msgid "Decrypt files and email sent to you."
-msgstr ""
+msgstr "送付されたファイルやメールを復号化する"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:21
-#, fuzzy
 msgid "Delete"
-msgstr "削除(_D)"
+msgstr "削除"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:23
-#, fuzzy
 msgid "Expire"
 msgstr "期限切れ"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:24
 #: ../src/seahorse-pgp-public-key-properties.glade.h:21
 msgid "Expires:"
-msgstr "有効期限(_E):"
+msgstr "有効期限:"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:25
-#, fuzzy
 msgid "Export"
-msgstr "エキスポート(_X)"
+msgstr "エキスポート"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:26
 msgid "Go to next photo"
-msgstr "次の写真へジャンプします"
+msgstr "次の画像へジャンプします"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:27
 msgid "Go to previous photo"
-msgstr "前の写真へジャンプします"
+msgstr "前の画像へジャンプします"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:28
 #: ../src/seahorse-pgp-public-key-properties.glade.h:27
 msgid "Key ID:"
-msgstr "鍵のID:"
+msgstr "鍵 ID:"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:30
 msgid "Make this photo the primary photo"
-msgstr "このアイコンを第一のアイコンにします"
+msgstr "この画像をプライマリの画像にします"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:31
-#, fuzzy
 msgid "Names and Signatures"
-msgstr "名前/署名"
+msgstr "名前と署名"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:32
 msgid "Override Owner _Trust:"
-msgstr "所有者の信用度の変更(_T):"
+msgstr "所有者の信用度(_T):"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:33
 #: ../src/seahorse-pgp-public-key-properties.glade.h:29
@@ -3189,16 +2991,15 @@ msgstr "所有者"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:34
 msgid "Primary"
-msgstr ""
+msgstr "プライマリ"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:36
 msgid "Remove this photo from this key"
 msgstr "このアイコンを削除します"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:37
-#, fuzzy
 msgid "Revoke"
-msgstr "破棄済み"
+msgstr "失効"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:39
 #: ../src/seahorse-pgp-public-key-properties.glade.h:31
@@ -3212,9 +3013,8 @@ msgstr "所有者が鍵を破棄したので、もう利用できません"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:41
 #: ../src/seahorse-pgp-public-key-properties.glade.h:33
-#, fuzzy
 msgid "This key expired on: (placeholder)"
-msgstr "この鍵の有効期限を指定する(_X):"
+msgstr "この鍵の有効期限: (placeholder)"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:42
 #: ../src/seahorse-pgp-public-key-properties.glade.h:36
@@ -3237,19 +3037,16 @@ msgstr ""
 "絶対に信用 (自分自身)"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:48
-#, fuzzy
 msgid "_Add Name"
-msgstr "名前"
+msgstr "名前の追加(_A)"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:49
-#, fuzzy
 msgid "_Export Complete Key:"
-msgstr "完成した鍵のエキスポート"
+msgstr "鍵のエキスポート(_E):"
 
 #: ../src/seahorse-pgp-public-key-properties.glade.h:2
-#, fuzzy
 msgid "<b>Dates:</b>"
-msgstr "<b>日付</b>"
+msgstr "<b>日付:</b>"
 
 #: ../src/seahorse-pgp-public-key-properties.glade.h:4
 #: ../src/seahorse-ssh-key-properties.glade.h:4
@@ -3258,45 +3055,42 @@ msgstr "<b>指紋:</b>"
 
 #: ../src/seahorse-pgp-public-key-properties.glade.h:5
 msgid "<b>Indicate Trust:</b>"
-msgstr "<b>信用度の提示(_T):</b>"
+msgstr "<b>信用度の提示:</b>"
 
 #: ../src/seahorse-pgp-public-key-properties.glade.h:14
 msgid "<b>Your trust of this key</b>"
 msgstr "<b>この鍵の信用度</b>"
 
 #: ../src/seahorse-pgp-public-key-properties.glade.h:15
-#, fuzzy
 msgid "<b>_Other Names:</b>"
-msgstr "<b>所有者の名前(_O)</b>"
+msgstr "<b>他の名前(_O):</b>"
 
 #: ../src/seahorse-pgp-public-key-properties.glade.h:16
 msgid "<b>_People who have signed this key:</b>"
-msgstr "<b>この鍵を署名している人(_P):</b>"
+msgstr "<b>この鍵に署名している人(_P):</b>"
 
 #: ../src/seahorse-pgp-public-key-properties.glade.h:20
 msgid "Encrypt files and email to the key's owner "
-msgstr ""
+msgstr "鍵の所有者へ送付するファイルやメールを暗号化する"
 
 #: ../src/seahorse-pgp-public-key-properties.glade.h:23
 #, no-c-format
 msgid "I have checked that this key belongs to '%s'"
-msgstr ""
+msgstr "この鍵が '%s' に属していることを確認した"
 
 #: ../src/seahorse-pgp-public-key-properties.glade.h:25
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "I trust signatures from '%s' on other keys "
-msgstr ""
-"署名がキーリングに対してローカルなもので、鍵を使ってエキスポートしていない場"
-"合に選択します"
+msgstr "他の鍵にある '%s' からの署名を信用する"
 
 #: ../src/seahorse-pgp-public-key-properties.glade.h:26
 msgid ""
 "If you no longer trust this person's identity, <i>revoke</i> your signature:"
-msgstr ""
+msgstr "この人物を信用しないのであれば、署名を<i>失効</i>しておいて下さい:"
 
 #: ../src/seahorse-pgp-public-key-properties.glade.h:34
 msgid "To indicate your trust of this key to others, <i>sign</i> this key:"
-msgstr ""
+msgstr "この鍵の信用度を定義する場合は、この鍵に<i>署名</i>して下さい:"
 
 #: ../src/seahorse-pgp-public-key-properties.glade.h:37
 msgid ""
@@ -3306,28 +3100,31 @@ msgid ""
 "Fully\n"
 "Ultimately"
 msgstr ""
+"不明\n"
+"信用しない\n"
+"ぎりぎり信用する\n"
+"完全に信用する\n"
+"究極に信用する"
 
 #: ../src/seahorse-pgp-public-key-properties.glade.h:42
 msgid "You _Trust the Owner:"
-msgstr ""
+msgstr "この所有者の信用度(_T):"
 
 #: ../src/seahorse-pgp-public-key-properties.glade.h:43
 msgid "Your trust is manually specified on the <i>Details</i> tab."
-msgstr ""
+msgstr "[<i>詳細</i>] タブで信用度を細かく指定できます:"
 
 #: ../src/seahorse-pgp-public-key-properties.glade.h:44
 msgid "_Only display the signatures of people I trust"
-msgstr ""
+msgstr "信用している人達の署名だけを表示する(_O)"
 
 #: ../src/seahorse-pgp-public-key-properties.glade.h:45
-#, fuzzy
 msgid "_Revoke Signature"
-msgstr "署名(_S):"
+msgstr "署名の失効(_R)"
 
 #: ../src/seahorse-pgp-public-key-properties.glade.h:46
-#, fuzzy
 msgid "_Sign this Key"
-msgstr "鍵に署名する"
+msgstr "署名(_S)"
 
 #: ../src/seahorse-pgp-signature.desktop.in.in.h:1
 msgid "Verify Signature"
@@ -3339,62 +3136,62 @@ msgid ""
 "<big><b>The photo is too large</b></big>\n"
 "The recommended size for a photo on your key is %d x %d pixels."
 msgstr ""
+"<big><b>画像のサイズが大きすぎます</b></big>\n"
+"推奨する画像のサイズは %d x %d ピクセルです。"
 
 #: ../src/seahorse-photos.c:75
 msgid "_Don't Resize"
-msgstr ""
+msgstr "大きさを変更しない(_D)"
 
 #: ../src/seahorse-photos.c:76
 msgid "_Resize"
-msgstr ""
+msgstr "大きさを変更する(_R)"
 
 #: ../src/seahorse-photos.c:125
 msgid ""
 "This is not a image file, or an unrecognized kind of image file. Try to use "
 "a JPEG image."
 msgstr ""
+"これは画像ファイルではないか、または認識できない種類の画像ファイルです。JPEG "
+"の画像を指定してみて下さい。"
 
 #: ../src/seahorse-photos.c:221
-#, fuzzy
 msgid "All image files"
-msgstr "全ての鍵ファイル"
+msgstr "全ての画像ファイル"
 
 #: ../src/seahorse-photos.c:234
-#, fuzzy
 msgid "All JPEG files"
-msgstr "全てのファイル"
+msgstr "全ての JPEG ファイル"
 
 #: ../src/seahorse-photos.c:258
 msgid "Choose Photo to Add to Key"
-msgstr ""
+msgstr "鍵に登録する画像の選択"
 
 #: ../src/seahorse-photos.c:285 ../src/seahorse-photos.c:289
-#, fuzzy
 msgid "Couldn't add photo"
-msgstr "破棄指定鍵に追加できませんでした"
+msgstr "画像を登録できませんでした"
 
 #: ../src/seahorse-photos.c:286
 msgid "The file could not be loaded. It may be in an invalid format"
 msgstr ""
+"ファイルを読み込めませんでした (フォーマットが間違っているかもしれません)"
 
 #: ../src/seahorse-photos.c:317
-#, fuzzy
 msgid "Are you sure you want to remove the current photo from your key?"
-msgstr "本当にユーザ ID '%s' を永久に削除してもよろしいですか？"
+msgstr "本当にこの鍵に登録した画像を除してもよろしいですか？"
 
 #: ../src/seahorse-photos.c:330
-#, fuzzy
 msgid "Couldn't delete photo"
-msgstr "鍵を削除できませんでした"
+msgstr "画像を削除できませんでした"
 
 #: ../src/seahorse-revoke.c:54
 msgid "Couldn't revoke subkey"
-msgstr "副鍵を破棄できませんでした"
+msgstr "副鍵を失効できませんでした"
 
 #: ../src/seahorse-revoke.c:77
 #, c-format
 msgid "Revoke Subkey %d of %s"
-msgstr "副鍵 %d (%s) を破棄します"
+msgstr "副鍵 %d (%s) を失効させます"
 
 #: ../src/seahorse-revoke.c:79
 #, c-format
@@ -3407,12 +3204,12 @@ msgid ""
 "You are about to add %s as a revoker for %s. This operation cannot be "
 "undone! Are you sure you want to continue?"
 msgstr ""
-"%s を %s の Revoker (鍵の破棄) として追加しようとしています。この処理は取り消"
-"しができません！ 続行してもよろしいですか？"
+"%s を %s の Revoker (失効) として追加しようとしています。この処理は取り消しが"
+"できません！ 続行してもよろしいですか？"
 
 #: ../src/seahorse-revoke.c:122
 msgid "Couldn't add revoker"
-msgstr "破棄指定鍵に追加できませんでした"
+msgstr "Revoker に追加できませんでした"
 
 #: ../src/seahorse-revoke.glade.h:1
 msgid "Compromised"
@@ -3448,11 +3245,11 @@ msgstr "オプションで破棄の簡単な説明を入力します"
 
 #: ../src/seahorse-revoke.glade.h:9
 msgid "Re_voke"
-msgstr "破棄(_V)"
+msgstr "失効(_V)"
 
 #: ../src/seahorse-revoke.glade.h:10
 msgid "Reason for revoking the key"
-msgstr "鍵を破棄する理由です"
+msgstr "鍵を失効させる理由です"
 
 #: ../src/seahorse-revoke.glade.h:12
 msgid "Superseded"
@@ -3464,7 +3261,7 @@ msgstr "補足(_D):"
 
 #: ../src/seahorse-revoke.glade.h:14
 msgid "_Reason:"
-msgstr "事由(_R):"
+msgstr "理由(_R):"
 
 #: ../src/seahorse-sign.c:97
 msgid "Couldn't sign key"
@@ -3474,20 +3271,19 @@ msgstr "鍵に署名できませんでした"
 msgid ""
 "You have no personal PGP keys that can be used to indicate your trust of "
 "this key."
-msgstr ""
+msgstr "この鍵の信用度を表すのに使用する個人的な PGP 鍵がありません。"
 
 #: ../src/seahorse-sign.glade.h:1
-#, fuzzy
 msgid "<b>How carefully have you checked this key?</b>"
-msgstr "この鍵をどれくらい注意深くチェックしたか？(_H)"
+msgstr "<b>この鍵のチェックの度合い(_H)</b>"
 
 #: ../src/seahorse-sign.glade.h:2
 msgid "<b>How others will see this signature:</b>"
-msgstr ""
+msgstr "<b>この署名をどこまで公開するか:</b>"
 
 #: ../src/seahorse-sign.glade.h:3
 msgid "<b>Sign key as:</b>"
-msgstr ""
+msgstr "<b>鍵の署名者:</b>"
 
 #: ../src/seahorse-sign.glade.h:4
 msgid ""
@@ -3495,16 +3291,25 @@ msgid ""
 "is owned by the person who claims to own it. For example, you could\n"
 "read the key fingerprint to the owner over the phone. "
 msgstr ""
+"「<i>軽くチェックした</i>」は\n"
+"鍵の所有を主張した人物によって所有されていることを\n"
+"さりげなく確認したことを意味します。例えば、\n"
+"電話越しに鍵の指紋を所有者と読み合うことができる\n"
+"レベルです。"
 
 #: ../src/seahorse-sign.glade.h:7
 msgid "<i>Key Name</i>"
-msgstr ""
+msgstr "<i>Key Name</i>"
 
 #: ../src/seahorse-sign.glade.h:8
 msgid ""
 "<i>Not at all:</i> means you believe the key is owned by the person who \n"
 "claims to own it, but you could not or did not verify this to be a fact."
 msgstr ""
+"「<i>全くチェックしていない</i>」は\n"
+"鍵の所有を主張した人物によって所有されていることを\n"
+"信用したレベルを意味します。但し、その真偽を確認\n"
+"していない、またはできない状態です。"
 
 #: ../src/seahorse-sign.glade.h:10
 msgid ""
@@ -3512,14 +3317,17 @@ msgid ""
 "this\n"
 "key is genuine."
 msgstr ""
+"「<i>かなり注意深くチェックした</i>」は\n"
+"この鍵が本物であることを完全に把握している\n"
+"場合にのみ選択して下さい。"
 
 #: ../src/seahorse-sign.glade.h:12
 msgid "By signing you indicate your trust that this key belongs to:"
-msgstr ""
+msgstr "署名を行うことで、次に属す鍵を信用したものと見なします:"
 
 #: ../src/seahorse-sign.glade.h:13
 msgid "I can _revoke this signature at a later date."
-msgstr ""
+msgstr "後日、この署名を失効させることができる(_R)"
 
 #: ../src/seahorse-sign.glade.h:14
 msgid ""
@@ -3528,46 +3336,47 @@ msgid ""
 "have also used email to check that the email address belongs to the\n"
 "owner."
 msgstr ""
+"鍵の名前が妥当であることを個人的に証明するために、\n"
+"例えばパスポートに貼ってある写真ようなものを利用して\n"
+"身元を偽造するのを困難にさせることが可能です。\n"
+"さらに、所有者を証明するために E-メール・アドレスも\n"
+"利用した方が良いでしょう。"
 
 #: ../src/seahorse-sign.glade.h:18
-#, fuzzy
 msgid "_Casually"
-msgstr "偶然チェックした"
+msgstr "軽くチェックした(_C)"
 
 #: ../src/seahorse-sign.glade.h:19
-#, fuzzy
 msgid "_Not at all"
-msgstr "全くチェックしていない"
+msgstr "全くチェックしていない(_N)"
 
 #: ../src/seahorse-sign.glade.h:20
 msgid "_Others may not see this signature"
-msgstr ""
+msgstr "この署名を他人に公開しない(_O)"
 
 #: ../src/seahorse-sign.glade.h:22
-#, fuzzy
 msgid "_Signer:"
-msgstr "署名(_S)"
+msgstr "署名者(_S):"
 
 #: ../src/seahorse-sign.glade.h:23
-#, fuzzy
 msgid "_Very Carefully"
-msgstr "とても注意深くチェックした"
+msgstr "かなり注意深くチェックした(_V)"
 
 #: ../src/seahorse-ssh-generate.c:40
-#, fuzzy
 msgid "Couldn't generate Secure Shell key"
-msgstr "鍵を生成できませんでした"
+msgstr "SSH 鍵を生成できませんでした"
 
 #: ../src/seahorse-ssh-generate.c:127
-#, fuzzy
 msgid "Creating Secure Shell Key"
-msgstr "新しい鍵を生成します"
+msgstr "SSH 鍵の生成"
 
 #: ../src/seahorse-ssh-generate.glade.h:2
 msgid ""
 "<i>Use your email address, and any other reminder\n"
 " you need about what this key is for.</i>"
 msgstr ""
+"<i>この鍵を識別できる文字列と\n"
+"E-メール・アドレスを組み合わせて指定してみて下さい。</i>"
 
 #: ../src/seahorse-ssh-generate.glade.h:4
 msgid ""
@@ -3575,115 +3384,107 @@ msgid ""
 "computers using SSH, without entering a different password \n"
 "for each of them."
 msgstr ""
+"セキュア・シェル (SSH) の鍵を利用すると、\n"
+"SSH を使って信用できるコンピュータに安全に接続できます\n"
+"(コンピュータ毎に複数のパスワードを用意しておく必要はありません)。"
 
 #: ../src/seahorse-ssh-generate.glade.h:8
 msgid ""
 "If there is already a computer you want to use this key with, you \n"
 "can set up that computer to recognize your key now. "
 msgstr ""
+"この鍵を利用するコンピュータが既に存在しているのであれば\n"
+"この鍵を認識するようにコンピュータ側を設定して下さい。"
 
 #: ../src/seahorse-ssh-generate.glade.h:11
 msgid "New Secure Shell Key"
-msgstr ""
+msgstr "新しいセキュア・シェルの鍵"
 
 #: ../src/seahorse-ssh-generate.glade.h:12
-#, fuzzy
 msgid "_Create and Set Up"
-msgstr "新しい鍵を生成します"
+msgstr "生成と設定(_C)"
 
 #: ../src/seahorse-ssh-generate.glade.h:13
-#, fuzzy
 msgid "_Just Create Key"
-msgstr "新しい鍵を生成します"
+msgstr "生成のみ(_J)"
 
 #: ../src/seahorse-ssh-generate.glade.h:14
-#, fuzzy
 msgid "_Key Description:"
-msgstr "補足(_D):"
+msgstr "鍵の説明(_K):"
 
 #: ../src/seahorse-ssh-key-properties.c:117
-#, fuzzy
 msgid "Couldn't rename key."
-msgstr "鍵を生成できませんでした"
+msgstr "鍵の名前を変更できませんでした"
 
 #: ../src/seahorse-ssh-key-properties.c:157
-#, fuzzy
 msgid "Couldn't change authorization for key."
-msgstr "プライマリのユーザ ID に変更できませんでした"
+msgstr "鍵の認証を変更できませんでした"
 
 #: ../src/seahorse-ssh-key-properties.c:171
-#, fuzzy
 msgid "Couldn't change passhrase for key."
-msgstr "プライマリのユーザ ID に変更できませんでした"
+msgstr "鍵のパスフレーズを変更できませんでした"
 
 #: ../src/seahorse-ssh-key-properties.glade.h:1
 msgid "/home/nate/.ssh/blah_rsa"
-msgstr ""
+msgstr "/home/nate/.ssh/blah_rsa"
 
 #: ../src/seahorse-ssh-key-properties.glade.h:2
 msgid "00:00:00:00:00"
-msgstr ""
+msgstr "00:00:00:00:00"
 
 #: ../src/seahorse-ssh-key-properties.glade.h:3
-#, fuzzy
 msgid "<b>Algorithm:</b>"
-msgstr "アルゴリズムです"
+msgstr "<b>アルゴリズム:</b>"
 
 #: ../src/seahorse-ssh-key-properties.glade.h:5
-#, fuzzy
 msgid "<b>Identifier:</b>"
-msgstr "コメント:"
+msgstr "<b>識別番号:</b>"
 
 #: ../src/seahorse-ssh-key-properties.glade.h:6
-#, fuzzy
 msgid "<b>Location:</b>"
-msgstr "<b>日付</b>"
+msgstr "<b>場所:</b>"
 
 #: ../src/seahorse-ssh-key-properties.glade.h:8
-#, fuzzy
 msgid "<b>Strength:</b>"
-msgstr "強度:"
+msgstr "<b>強度:</b>"
 
 #: ../src/seahorse-ssh-key-properties.glade.h:10
-#, fuzzy
 msgid "<b>Trust</b>"
-msgstr "<b>信用度の提示(_T):</b>"
+msgstr "<b>信用度</b>"
 
 #: ../src/seahorse-ssh-key-properties.glade.h:14
 #, no-c-format
 msgid "<i>This only applies to the '%s'</i> account."
-msgstr ""
+msgstr "この鍵を <i>'%s'</i> というアカウントにのみ適用します。"
 
 #: ../src/seahorse-ssh-key-properties.glade.h:17
 msgid "E_xport Complete Key"
-msgstr "完成した鍵のエキスポート(_X)"
+msgstr "鍵のエキスポート(_X)"
 
 #: ../src/seahorse-ssh-key-properties.glade.h:21
 msgid "The owner of this key is _authorized to connect to this computer"
-msgstr ""
+msgstr "リモートのコンピュータへ接続したら、この鍵の所有者で認証を行う(_A)"
 
 #: ../src/seahorse-ssh-key-properties.glade.h:22
 msgid "Used to connect to other computers."
-msgstr ""
+msgstr "他のコンピュータに接続する際に使用する"
 
 #: ../src/seahorse-ssh-upload.c:42
-#, fuzzy
 msgid "Couldn't configure Secure Shell keys on remote computer."
-msgstr "SSH 鍵の設定..."
+msgstr "リモートのコンピュータ上にある SSH 鍵を設定できませんでした"
 
 #. Show the progress window if necessary
 #: ../src/seahorse-ssh-upload.c:140
-#, fuzzy
 msgid "Configuring Secure Shell Keys..."
-msgstr "鍵の読み込み中..."
+msgstr "SSH 鍵の設定中..."
 
 #: ../src/seahorse-ssh-upload.glade.h:1
 msgid "<i>eg: fileserver.example.com</i>"
-msgstr ""
+msgstr "<i>例: fileserver.example.com</i>"
 
 #: ../src/seahorse-ssh-upload.glade.h:2
 msgid "Set Up Computer for SSH Connection"
-msgstr ""
+msgstr "SSH 接続を行うコンピュータの設定"
 
 #: ../src/seahorse-ssh-upload.glade.h:4
 msgid ""
@@ -3691,112 +3492,18 @@ msgid ""
 "uses SSH, you must already have a login account on that \n"
 "computer."
 msgstr ""
+"SSH 鍵を別のコンピュータで利用する場合は、\n"
+"そのコンピュータのログイン・アカウントが\n"
+"必要になります。"
 
 #: ../src/seahorse-ssh-upload.glade.h:7
 msgid "_Computer Name:"
-msgstr ""
+msgstr "コンピュータの名前(_C):"
 
 #: ../src/seahorse-ssh-upload.glade.h:8
-#, fuzzy
 msgid "_Login Name:"
-msgstr "ログイン名:"
+msgstr "ログイン名(_L):"
 
 #: ../src/seahorse-ssh-upload.glade.h:9
 msgid "_Set Up"
-msgstr ""
-
-#~ msgid "Orientation"
-#~ msgstr "向き"
-
-#~ msgid "The orientation of the tray."
-#~ msgstr "トレイの向きです。"
-
-#~ msgid "_Armor Encode Files"
-#~ msgstr "ファイルを ASCII 保護する(_A)"
-
-#~ msgid "_Default Signing Key:"
-#~ msgstr "デフォルトの署名鍵(_D):"
-
-#~ msgid "_Encrypt to Self"
-#~ msgstr "鍵そのものを暗号化する(_E)"
-
-#~ msgid "Choose Signing Key"
-#~ msgstr "署名する鍵の選択"
-
-#~ msgid "SSH Key"
-#~ msgstr "SSH 鍵"
-
-#, fuzzy
-#~ msgid "SSH key"
-#~ msgstr "SSH 鍵"
-
-#, fuzzy
-#~ msgid "New SSH Passphrase"
-#~ msgstr "SSH のパスフレーズ"
-
-#, fuzzy
-#~ msgid "Enter the SSH passphrase for: %s"
-#~ msgstr "'%s' の新しいパスフレーズを入力して下さい"
-
-#~ msgid "Imported %d keys"
-#~ msgstr "%d 個の鍵をインポートしました"
-
-#~ msgid "Encryption Keys"
-#~ msgstr "鍵の暗号化"
-
-#, fuzzy
-#~ msgid "Copied %d keys"
-#~ msgstr "%d 個の鍵を読み込みました"
-
-#~ msgid "Export Key"
-#~ msgstr "鍵のエキスポート"
-
-#~ msgid "Selected %d keys"
-#~ msgstr "%d 個の鍵を選択しました"
-
-#~ msgid "E_xport..."
-#~ msgstr "エキスポート(_X)..."
-
-#~ msgid "Configure SSH Key for Computer..."
-#~ msgstr "SSH 鍵の設定..."
-
-#~ msgid "Keys I _Trust"
-#~ msgstr "信用している鍵(_T)"
-
-#~ msgid "Keys I've _Collected "
-#~ msgstr "収集した鍵(_C)"
-
-#, fuzzy
-#~ msgid "Email"
-#~ msgstr "E-メール・アドレス:"
-
-#, fuzzy
-#~ msgid "Comment"
-#~ msgstr "コメント:"
-
-#~ msgid "Key Manager"
-#~ msgstr "鍵マネージャ"
-
-#~ msgid "Close Preferences"
-#~ msgstr "この設定ダイアログを閉じます"
-
-#~ msgid "Preferences Help"
-#~ msgstr "設定ダイアログに関するヘルプです"
-
-#~ msgid "Seahorse Preferences"
-#~ msgstr "Seahorse の設定"
-
-#~ msgid "Visible Columns"
-#~ msgstr "表示するエントリ"
-
-#~ msgid "If signature can be revoked"
-#~ msgstr "署名を破棄できるものにする場合に選択します"
-
-#~ msgid ""
-#~ "If signature is local to the key ring and won't be exported with the key"
-#~ msgstr ""
-#~ "署名がキーリングに対してローカルなもので、鍵を使ってエキスポートしていない"
-#~ "場合に選択します"
-
-#~ msgid "Sign Key"
-#~ msgstr "鍵に署名する"
+msgstr "設定(_S)"
