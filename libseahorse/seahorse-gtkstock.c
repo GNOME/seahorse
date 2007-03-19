@@ -175,8 +175,10 @@ seahorse_gtkstock_init(void)
 
     if (stock_initted)
         return;
-
     stock_initted = TRUE;
+    
+    gtk_window_set_default_icon_name ("seahorse");
+    
     add_icons (seahorse_icons, themed_icons);
 }
 
