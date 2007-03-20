@@ -63,7 +63,8 @@ gchar*               seahorse_ssh_operation_sync         (SeahorseSSHSource *ssr
 SeahorseOperation*   seahorse_ssh_operation_upload       (SeahorseSSHSource *ssrc,
                                                           GList *keys,
                                                           const gchar *username,
-                                                          const gchar *hostname);
+                                                          const gchar *hostname, 
+                                                          const gchar *port);
 
 /* result: the generated SeahorseKey */
 SeahorseOperation*   seahorse_ssh_operation_generate     (SeahorseSSHSource *src, 

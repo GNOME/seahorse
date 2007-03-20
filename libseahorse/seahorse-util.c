@@ -27,6 +27,7 @@
 #include <time.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <string.h>
 
 #include <gnome.h>
 #include <libgnomevfs/gnome-vfs.h>
@@ -1221,6 +1222,49 @@ seahorse_util_string_slist_equal (GSList *l1, GSList *l2)
     }
     
     return !l1 && !l2;   
+}
+
+gboolean 
+seahorse_util_string_is_whitespace (const gchar *text)
+{
+    g_assert (text);
+    g_assert (g_utf8_validate (text, -1, NULL));
+    
+    while (*text) {
+        if (!g_unichar_isspace (g_utf8_get_char (text)))
+            return FALSE;
+        text = g_utf8_next_char (text);
+    }
+    return TRUE;
+}
+
+void
+seahorse_util_string_trim_whitespace (gchar *text)
+{
+    gchar *b, *e, *n;
+    
+    g_assert (text);
+    g_assert (g_utf8_validate (text, -1, NULL));
+    
+    /* Trim the front */
+    b = text;
+    while (*b && g_unichar_isspace (g_utf8_get_char (b)))
+        b = g_utf8_next_char (b);
+    
+    /* Trim the end */
+    n = e = b + strlen (b);
+    while (n >= b) {
+        if (*n && !g_unichar_isspace (g_utf8_get_char (n)))
+            break;
+        e = n;
+        n = g_utf8_prev_char (e);
+    }
+    
+    g_assert (b >= text);
+    g_assert (e >= b);
+
+    *e = 0;
+    g_memmove (text, b, (e + 1) - b);
 }
 
 /* Callback to determine where a popup menu should be placed */

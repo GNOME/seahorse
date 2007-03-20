@@ -47,21 +47,37 @@ static void
 input_changed (GtkWidget *dummy, SeahorseWidget *swidget)
 {
     GtkWidget *widget;
-    const gchar *user, *host;
+    const gchar *user, *host, *port;
+    gchar *t = NULL;
 
     widget = glade_xml_get_widget (swidget->xml, "user-label");
     user = gtk_entry_get_text (GTK_ENTRY (widget));
+    g_return_if_fail (user && g_utf8_validate (user, -1, NULL));
 
     widget = glade_xml_get_widget (swidget->xml, "host-label");
     host = gtk_entry_get_text (GTK_ENTRY (widget));
+    g_return_if_fail (host && g_utf8_validate (host, -1, NULL));
+    
+    /* Take off port if necessary */
+    port = strchr (host, ':');
+    if (port) {
+        
+        /* Copy hostname out */
+        g_assert (port >= host);
+        host = t = g_strndup (host, port - host);
+    }
 
     widget = glade_xml_get_widget (swidget->xml, "ok");
-    gtk_widget_set_sensitive (widget, user && user[0] && host && host[0]);
+    gtk_widget_set_sensitive (widget, host[0] && !seahorse_util_string_is_whitespace (host) && 
+                                      user[0] && !seahorse_util_string_is_whitespace (user));
+    
+    /* Possibly allocated host */
+    g_free (t);
 }
 
 
 static SeahorseOperation*
-upload_via_source (const gchar *user, const gchar *host, GList *keys)
+upload_via_source (const gchar *user, const gchar *host, const gchar *port, GList *keys)
 {
     SeahorseMultiOperation *mop = NULL;
     SeahorseOperation *op = NULL;
@@ -94,7 +110,7 @@ upload_via_source (const gchar *user, const gchar *host, GList *keys)
         }
 
         /* Start an upload process */
-        op = seahorse_ssh_operation_upload (SEAHORSE_SSH_SOURCE (sksrc), keys, user, host);
+        op = seahorse_ssh_operation_upload (SEAHORSE_SSH_SOURCE (sksrc), keys, user, host, port);
         g_return_val_if_fail (op != NULL, NULL);
 
         /* And combine if necessary */
@@ -115,24 +131,46 @@ upload_keys (SeahorseWidget *swidget)
 {
     SeahorseOperation *op;
     GtkWidget *widget;
-    const gchar *user, *host;
+    const gchar *cuser, *chost;
+    gchar *user, *host, *port;
     GList *keys;
-
-    widget = glade_xml_get_widget (swidget->xml, "user-label");
-    user = gtk_entry_get_text (GTK_ENTRY (widget));
-    g_return_if_fail (user && user[0]);
-    
-    widget = glade_xml_get_widget (swidget->xml, "host-label");
-    host = gtk_entry_get_text (GTK_ENTRY (widget));
-    g_return_if_fail (host && host[0]);
 
     keys = (GList*)g_object_steal_data (G_OBJECT (swidget), "upload-keys");
     g_return_if_fail (keys != NULL);
+
+    widget = glade_xml_get_widget (swidget->xml, "user-label");
+    cuser = gtk_entry_get_text (GTK_ENTRY (widget));
+    g_return_if_fail (cuser && g_utf8_validate (cuser, -1, NULL));
+    
+    widget = glade_xml_get_widget (swidget->xml, "host-label");
+    chost = (gchar*)gtk_entry_get_text (GTK_ENTRY (widget));
+    g_return_if_fail (chost && g_utf8_validate (chost, -1, NULL));
+    
+    user = g_strdup (cuser);
+    host = g_strdup (chost);
+
+    /* Port is anything past a colon */
+    port = strchr (host, ':');
+    if (port) {
+        *port = 0;
+        port++;
+        
+        /* Trim and check */
+        seahorse_util_string_trim_whitespace (port);
+        if (!port[0])
+            port = NULL;
+    }
+
+    seahorse_util_string_trim_whitespace (host);
+    seahorse_util_string_trim_whitespace (user);
     
     /* This frees |keys| */
-    op = upload_via_source (user, host, keys);
+    op = upload_via_source (user, host, port, keys);
+
+    g_free (host);
+    g_free (user);
+
     g_return_if_fail (op != NULL);
-    
     seahorse_operation_watch (op, G_CALLBACK (upload_complete), NULL, NULL);
     
     /* Show the progress window if necessary */
