@@ -178,6 +178,8 @@ seahorse_passphrase_prompt_show (const gchar *title, const gchar *description,
         prompt = _("Password:"); 
     
     w = gtk_dialog_new_with_buttons (title, NULL, GTK_DIALOG_NO_SEPARATOR, NULL);
+    gtk_window_set_icon_name (GTK_WINDOW (w), GTK_STOCK_DIALOG_AUTHENTICATION);
+
     dialog = GTK_DIALOG (w);
 
     g_signal_connect (G_OBJECT (dialog), "size-request",
