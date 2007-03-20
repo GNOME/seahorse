@@ -1175,7 +1175,7 @@ seahorse_util_string_up_first (const gchar *orig)
     /* Just use ASCII functions when not UTF8 */        
     } else {
         ret = g_strdup (orig);
-        g_ascii_toupper (ret[0]);
+        ret[0] = g_ascii_toupper (ret[0]);
     }
     
     return ret;

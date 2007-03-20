@@ -117,7 +117,6 @@ upload_keys (SeahorseWidget *swidget)
     GtkWidget *widget;
     const gchar *user, *host;
     GList *keys;
-    gchar *t;
 
     widget = glade_xml_get_widget (swidget->xml, "user-label");
     user = gtk_entry_get_text (GTK_ENTRY (widget));

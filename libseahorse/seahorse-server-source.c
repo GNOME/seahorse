@@ -313,7 +313,6 @@ static SeahorseOperation*
 seahorse_server_source_load (SeahorseKeySource *src, GQuark keyid)
 {
     SeahorseServerSource *ssrc;
-    GList *keys, *l;
     
     g_assert (SEAHORSE_IS_KEY_SOURCE (src));
     ssrc = SEAHORSE_SERVER_SOURCE (src);

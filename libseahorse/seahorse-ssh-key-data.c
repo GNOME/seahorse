@@ -172,7 +172,7 @@ parse_lines_block (gchar ***lx, const gchar *start, const gchar* end)
     }
     
     /* Look for the end */
-    for ( ; *lines; *lines++) {
+    for ( ; *lines; lines++) {
         g_string_append (result, *lines);
         g_string_append_c (result, '\n');
         if (strstr (*lines, end)) 
