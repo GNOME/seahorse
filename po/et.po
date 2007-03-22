@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: Seahorse HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-02-25 14:31+0000\n"
-"PO-Revision-Date: 2007-03-07 07:33+0200\n"
+"PO-Revision-Date: 2007-03-18 08:47+0200\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -157,7 +157,7 @@ msgstr "Programmi seahorse-daemon käivitamine mitte-deemonina"
 
 #: ../daemon/seahorse-daemon.c:202
 msgid "Encryption Daemon (Seahorse)"
-msgstr ""
+msgstr "Krüptimisdeemon ((Seahorse)"
 
 #: ../daemon/seahorse-service.c:103
 #: ../daemon/seahorse-service.c:127
@@ -548,14 +548,14 @@ msgid "Connecting to: %s"
 msgstr "Ühenduse loomine: %s"
 
 #: ../libseahorse/seahorse-ldap-source.c:443
-#, fuzzy, c-format
+#, c-format
 msgid "Couldn't communicate with '%s': %s"
-msgstr "Embleemi nimega '%s' pole võimalik eemaldada."
+msgstr ""
 
 #: ../libseahorse/seahorse-ldap-source.c:623
-#, fuzzy, c-format
+#, c-format
 msgid "Couldn't resolve address: %s"
-msgstr "Server ei suutnud lahendada aadressi `%s'"
+msgstr "Aadressi pole võimalik lahendada: %s"
 
 #: ../libseahorse/seahorse-ldap-source.c:699
 #, c-format
@@ -563,14 +563,14 @@ msgid "Resolving server address: %s"
 msgstr "Serveri aadressi lahendamine: %s"
 
 #: ../libseahorse/seahorse-ldap-source.c:873
-#, fuzzy, c-format
+#, c-format
 msgid "Searching for keys containing '%s'..."
-msgstr "Te otsite %s."
+msgstr "Stringi '%s' sisaldavate võtmete otsimine..."
 
 #: ../libseahorse/seahorse-ldap-source.c:900
-#, fuzzy, c-format
+#, c-format
 msgid "Searching for key id '%s'..."
-msgstr "PGP/GPG _võtme ID:"
+msgstr "Võtme id '%s' otsimine..."
 
 #: ../libseahorse/seahorse-ldap-source.c:1001
 msgid "Retrieving remote keys..."
@@ -679,7 +679,7 @@ msgstr ""
 #: ../libseahorse/seahorse-passphrase.c:329
 #, c-format
 msgid "Enter passphrase for '%s'"
-msgstr ""
+msgstr "Sisesta võtme '%s' parool"
 
 #: ../libseahorse/seahorse-passphrase.c:332
 #: ../src/seahorse-change-passphrase.glade.h:4
@@ -749,9 +749,8 @@ msgid "Exporting Keys"
 msgstr "Võtmete eksportimine"
 
 #: ../libseahorse/seahorse-prefs.c:60
-#, fuzzy
 msgid "Not a valid Key Server address."
-msgstr "%s on vigane serverinimi"
+msgstr ""
 
 #: ../libseahorse/seahorse-prefs.c:61
 msgid "For help contact your system adminstrator or the administrator of the key server."
@@ -774,9 +773,8 @@ msgid "None. Prompt for a key."
 msgstr "Puudub. Võtme kohta kuvatakse dialoog."
 
 #: ../libseahorse/seahorse-prefs-cache.c:231
-#, fuzzy
 msgid "Couldn't open the Session Properties"
-msgstr "Seanssi pole võimalik %s jaoks avada"
+msgstr "Seansi omadusi pole võimalik avada"
 
 #: ../libseahorse/seahorse-prefs-cache.c:244
 msgid "Couldn't start the 'seahorse-agent' program"
@@ -795,9 +793,8 @@ msgid "<b>Note:</b> The 'seahorse-agent' program has been started. This program 
 msgstr ""
 
 #: ../libseahorse/seahorse-prefs.glade.h:3
-#, fuzzy
 msgid "<b>Remember PGP Passphrases</b>"
-msgstr "PGP-kodeeritud fail"
+msgstr "<b>PGP-paroolide meeldejätmine</b>"
 
 #: ../libseahorse/seahorse-prefs.glade.h:4
 msgid "<b>Secure Shell Keys</b>"
@@ -818,10 +815,12 @@ msgstr ""
 #: ../libseahorse/seahorse-prefs.glade.h:8
 msgid "<i>This key is used to sign messages when no other key is chosen</i>"
 msgstr ""
+"<i>Seda võtit kasutatakse sõnumite allkirjastamiseks juhul, kui "
+"allkirjastamisel pole ühtegi teist võtit valitud</i>"
 
 #: ../libseahorse/seahorse-prefs.glade.h:9
 msgid "Automatically load _Secure Shell keys"
-msgstr ""
+msgstr "Secure S_hell'i võtmed laaditakse automaatselt"
 
 #: ../libseahorse/seahorse-prefs.glade.h:10
 msgid "Automatically synchronize modified keys with key servers. "
@@ -866,39 +865,35 @@ msgstr ""
 
 #: ../libseahorse/seahorse-prefs.glade.h:22
 msgid "When _encrypting, always include myself as a recipient"
-msgstr ""
+msgstr "Krüptimisel määratakse alati ka _ennast saajate hulka"
 
 #: ../libseahorse/seahorse-prefs.glade.h:23
 msgid "_Always remember passphrases whenever logged in"
-msgstr ""
+msgstr "Paroole peetakse meeles kuni _ollakse sisse logitud"
 
 #: ../libseahorse/seahorse-prefs.glade.h:24
 msgid "_Ask me before using a cached passphrase"
-msgstr ""
+msgstr "E_nne puhverdatud parooli kasutamist küsitakse kinnitust"
 
 #: ../libseahorse/seahorse-prefs.glade.h:25
 msgid "_Default Key:"
 msgstr "_Vaikimisi võti:"
 
 #: ../libseahorse/seahorse-prefs.glade.h:26
-#, fuzzy
 msgid "_Find Keys Using:"
-msgstr "redutseerin kasutades reeglit %d (%s)"
+msgstr "Võtmete _otsimiseks kasutatakse:"
 
 #: ../libseahorse/seahorse-prefs.glade.h:27
-#, fuzzy
 msgid "_Never remember passphrases"
-msgstr "_Parool jäetakse meelde"
+msgstr "Paroole _ei jäeta kunagi meelde"
 
 #: ../libseahorse/seahorse-prefs.glade.h:28
-#, fuzzy
 msgid "_Publish Keys To:"
-msgstr "Muud failid"
+msgstr "Kuhu _võtmed avalikustatakse:"
 
 #: ../libseahorse/seahorse-prefs.glade.h:29
-#, fuzzy
 msgid "_Remember passphrases for"
-msgstr "Parooli meeldejätmine selle seansi ajaks"
+msgstr "_Paroole peetakse meeles kuni"
 
 #: ../libseahorse/seahorse-prefs.glade.h:30
 msgid "_Share my keys with others on my network"
@@ -995,7 +990,7 @@ msgstr "Tekst"
 
 #: ../libseahorse/seahorse-secure-entry.c:307
 msgid "The contents of the entry"
-msgstr ""
+msgstr "Kirje sisu"
 
 #: ../libseahorse/seahorse-secure-entry.c:311
 msgid "Visibility"
@@ -1043,14 +1038,12 @@ msgid "Secure Shell Key"
 msgstr "Secure shell'i võti"
 
 #: ../libseahorse/seahorse-ssh-key.c:126
-#, fuzzy
 msgid "Private Secure Shell Key"
-msgstr "       --private-key-type=TÜÜP  privaatvõtme tüüp, PEM või DER.\n"
+msgstr "Secure Shell'i salajane võti"
 
 #: ../libseahorse/seahorse-ssh-key.c:129
-#, fuzzy
 msgid "Public Secure Shell Key"
-msgstr "Toetamata avaliku võtme tüüp"
+msgstr "Secure Shell'i avalik võti"
 
 #: ../libseahorse/seahorse-ssh-operation.c:135
 #: ../libseahorse/seahorse-ssh-operation.c:697
@@ -1095,15 +1088,12 @@ msgid "Enter Key Passphrase"
 msgstr "Parooli sisestamine %s jaoks"
 
 #: ../libseahorse/seahorse-ssh-operation.c:890
-#, fuzzy
 msgid "Passphrase for New Secure Shell Key"
-msgstr ""
-"Sisestage sellele salajasele võtmele uus parool.\n"
-"\n"
+msgstr "Parool uuele Secure Shelli võtmele"
 
 #: ../libseahorse/seahorse-ssh-operation.c:891
 msgid "Enter a passphrase for your new Secure Shell key."
-msgstr ""
+msgstr "Sisesta oma Secure Shell'i võtmele parool."
 
 #: ../libseahorse/seahorse-ssh-operation.c:1029
 #, fuzzy
@@ -1246,7 +1236,7 @@ msgid "Revoked"
 msgstr "Tühistatud"
 
 #: ../libseahorse/seahorse-widget.c:311
-#, fuzzy, c-format
+#, c-format
 msgid "Could not display help: %s"
 msgstr "Abiteavet pole võimalik kuvada: %s"
 
@@ -1323,9 +1313,8 @@ msgstr "Manust pole võimalik salvestada."
 #: ../plugins/applet/seahorse-applet.c:430
 #: ../plugins/epiphany/seahorse-extension.c:296
 #: ../plugins/gedit/seahorse-gedit.c:611
-#, fuzzy
 msgid "Choose Key to Sign with"
-msgstr "Allkirjastab sõnumi sinu PGP võtme abil"
+msgstr "Allkirjastamiseks võtme valimine"
 
 #: ../plugins/applet/seahorse-applet.c:449
 msgid "Signed Text"
@@ -1342,7 +1331,6 @@ msgstr "Manust pole võimalik salvestada."
 
 #: ../plugins/applet/seahorse-applet.c:495
 #: ../plugins/epiphany/seahorse-extension.c:340
-#, fuzzy
 msgid "Import Failed"
 msgstr "Tõrge importimisel"
 
@@ -1437,19 +1425,16 @@ msgid "_Import Key"
 msgstr "_Impordi võti"
 
 #: ../plugins/gedit/seahorse-gedit.c:265
-#, fuzzy
 msgid "Couldn't connect to seahorse-daemon"
-msgstr "HAL deemoniga ei suudeta ühendust luua"
+msgstr "Deemoniga seahorse-daemon pole võimalik ühenduda"
 
 #: ../plugins/gedit/seahorse-gedit.c:354
-#, fuzzy
 msgid "Encrypted text"
-msgstr "Ainult tekst"
+msgstr "Krüptitud tekst"
 
 #: ../plugins/gedit/seahorse-gedit.c:357
-#, fuzzy
 msgid "Couldn't encrypt text"
-msgstr "_Ainult tähtis tekst"
+msgstr "Teksti pole võimalik krüptida"
 
 #: ../plugins/gedit/seahorse-gedit.c:387
 #: ../src/seahorse-key-manager.c:395
@@ -1476,7 +1461,7 @@ msgstr "Krüptitud või allkirjastatud teksti pole valitud."
 
 #: ../plugins/gedit/seahorse-gedit.c:540
 msgid "Decrypted text"
-msgstr ""
+msgstr "Dekrüptitud tekst"
 
 #: ../plugins/gedit/seahorse-gedit.c:547
 msgid "Verified text"
@@ -1485,72 +1470,63 @@ msgstr "Verifitseeritud tekst"
 #: ../plugins/gedit/seahorse-gedit.c:582
 #: ../plugins/nautilus/seahorse-tool.c:374
 #: ../src/seahorse-key-manager.c:404
-#, fuzzy, c-format
+#, c-format
 msgid "Imported %d key"
 msgid_plural "Imported %d keys"
-msgstr[0] "Võtmeklient"
-msgstr[1] ""
+msgstr[0] "Imporditud %d võti"
+msgstr[1] "Imporditud %d võtit"
 
 #: ../plugins/gedit/seahorse-gedit.c:633
-#, fuzzy
 msgid "Signed text"
-msgstr "Ainult tekst"
+msgstr "Allkirjastatud tekst"
 
 #: ../plugins/gedit/seahorse-gedit.c:636
-#, fuzzy
 msgid "Couldn't sign text"
-msgstr "_Ainult tähtis tekst"
+msgstr "Teksti pole võimalik allkirjastada"
 
 #: ../plugins/gedit/seahorse-gedit-plugin.c:133
 msgid "_Encrypt..."
 msgstr "_Krüpti..."
 
 #: ../plugins/gedit/seahorse-gedit-plugin.c:134
-#, fuzzy
 msgid "Encrypt the selected text"
-msgstr "Valitud teksti kustutamine"
+msgstr "Valitud teksti krüptimine"
 
 #: ../plugins/gedit/seahorse-gedit-plugin.c:135
-#, fuzzy
 msgid "Decr_ypt/Verify"
-msgstr "   v   kontrollida partitsioonitabelit"
+msgstr "_Dekrüpti/verifitseeri"
 
 #: ../plugins/gedit/seahorse-gedit-plugin.c:136
 msgid "Decrypt and/or Verify text"
-msgstr ""
+msgstr "Teksti dekrüptimine ja/või verifitseerimine"
 
 #: ../plugins/gedit/seahorse-gedit-plugin.c:137
-#, fuzzy
 msgid "Sig_n..."
-msgstr "<b>_Allkirjad</b>"
+msgstr "_Allkirjasta..."
 
 #: ../plugins/gedit/seahorse-gedit-plugin.c:138
-#, fuzzy
 msgid "Sign the selected text"
-msgstr "Valitud teksti kustutamine"
+msgstr "Valitud teksti allkirjastamine"
 
 #: ../plugins/gedit/seahorse-gedit.schemas.in.h:1
 msgid "Enable the seahorse encryption plugin for gedit."
-msgstr ""
+msgstr "Gedit'i seahorse krüptimisplugina lubamine."
 
 #: ../plugins/gedit/seahorse-gedit.schemas.in.h:2
-#, fuzzy
 msgid "Enable the seahorse gedit plugin"
-msgstr "Kas gedit peab autotaandeid lubama."
+msgstr "Seahorde gedit plugina lubamine"
 
 #: ../plugins/gedit/seahorse-pgp.gedit-plugin.desktop.in.h:1
-#, fuzzy
 msgid "Text Encryption"
-msgstr "Nõua krüptimist"
+msgstr "Teksti krüptimine"
 
 #: ../plugins/gedit/seahorse-pgp.gedit-plugin.desktop.in.h:2
 msgid "This plugin performs encryption operations on text."
-msgstr ""
+msgstr "Selle plugina abil krüptitakse teksti."
 
 #: ../plugins/nautilus-ext/seahorse-nautilus.c:161
-#, fuzzy
 msgid "Encrypt..."
-msgstr "Krüpti"
+msgstr "Krüpti..."
 
 #: ../plugins/nautilus-ext/seahorse-nautilus.c:162
 msgid "Encrypt (and optionally sign) the selected file"
@@ -1589,30 +1565,28 @@ msgid "Import keys from the file"
 msgstr "Võtmete importimine failist"
 
 #: ../plugins/nautilus/seahorse-tool.c:54
-#, fuzzy
 msgid "Encrypt file"
-msgstr "Fail on rikutud."
+msgstr "Faili krüptimine"
 
 #: ../plugins/nautilus/seahorse-tool.c:56
-#, fuzzy
 msgid "Sign file with default key"
-msgstr "Väljastab vaikeseadetega gimprc faili."
+msgstr "Faili allkirjastamine vaikimisi võtmega"
 
 #: ../plugins/nautilus/seahorse-tool.c:58
 msgid "Encrypt and sign file with default key"
-msgstr ""
+msgstr "Faili krüptimine ja allkirjastamine vaikimisi võtmega"
 
 #: ../plugins/nautilus/seahorse-tool.c:60
 msgid "Decrypt encrypted file"
-msgstr ""
+msgstr "Krüptitud faili lahtikrüptimine"
 
 #: ../plugins/nautilus/seahorse-tool.c:62
 msgid "Verify signature file"
-msgstr ""
+msgstr "Allkirjafaili verifitseerimine"
 
 #: ../plugins/nautilus/seahorse-tool.c:64
 msgid "Read list of URIs on standard in"
-msgstr ""
+msgstr "URI-de loetelu lugemine standardsisendist"
 
 #: ../plugins/nautilus/seahorse-tool.c:66
 msgid "file..."
@@ -1624,29 +1598,26 @@ msgstr "Saajate valimine"
 
 #: ../plugins/nautilus/seahorse-tool.c:190
 #: ../plugins/nautilus/seahorse-tool.c:272
-#, fuzzy
 msgid "Couldn't load keys"
-msgstr "'%s' liidest pole võimalik laadida."
+msgstr "Võtmeid pole võimalik laadida"
 
 #: ../plugins/nautilus/seahorse-tool.c:206
-#, fuzzy, c-format
+#, c-format
 msgid "Choose Encrypted File Name for '%s'"
-msgstr "Kaardigraafika faili nimi."
+msgstr ""
 
 #: ../plugins/nautilus/seahorse-tool.c:256
-#, fuzzy
 msgid "Choose Signer"
-msgstr "CRL allkirjastaja"
+msgstr "Allkirjastaja valimine"
 
 #: ../plugins/nautilus/seahorse-tool.c:291
-#, fuzzy, c-format
+#, c-format
 msgid "Choose Signature File Name for '%s'"
-msgstr "Sisesta nimi sellele allkirja jaoks."
+msgstr ""
 
 #: ../plugins/nautilus/seahorse-tool.c:372
-#, fuzzy
 msgid "Imported key"
-msgstr "Võtmeklient"
+msgstr "Imporditud võti"
 
 #. File to decrypt to
 #: ../plugins/nautilus/seahorse-tool.c:396
@@ -1655,9 +1626,9 @@ msgid "Choose Decrypted File Name for '%s'"
 msgstr "'%s' dekrüptitud faili nime valimine"
 
 #: ../plugins/nautilus/seahorse-tool.c:452
-#, fuzzy, c-format
+#, c-format
 msgid "Choose Original File for '%s'"
-msgstr "%S kokkuvõtmine..."
+msgstr "Faili '%s' algupärase faili valimine"
 
 #.
 #. * TODO: What should happen with multiple files at this point.
@@ -1665,111 +1636,104 @@ msgstr "%S kokkuvõtmine..."
 #. * dialogs at the user.
 #.
 #: ../plugins/nautilus/seahorse-tool.c:524
-#, fuzzy
 msgid "No valid signatures found"
-msgstr "ei leia OpenPGP andmeid.\n"
+msgstr ""
 
 #: ../plugins/nautilus/seahorse-tool.c:591
-#, fuzzy
 msgid "File Encryption Tool"
-msgstr "Aja seadistusprogramm"
+msgstr "Failide krüptimise tööriist"
 
 #: ../plugins/nautilus/seahorse-tool.c:614
-#, fuzzy
 msgid "Encrypting"
-msgstr "Sõnumi krüptimine"
+msgstr "Krüptimine"
 
 #: ../plugins/nautilus/seahorse-tool.c:615
-#, fuzzy, c-format
+#, c-format
 msgid "Couldn't encrypt file: %s"
-msgstr "faili %s ei saa avada: %s"
+msgstr "Faili pole võimalik krüptida: %s"
 
 #: ../plugins/nautilus/seahorse-tool.c:623
-#, fuzzy
 msgid "Signing"
 msgstr "Allkirjastamine"
 
 #: ../plugins/nautilus/seahorse-tool.c:624
-#, fuzzy, c-format
+#, c-format
 msgid "Couldn't sign file: %s"
-msgstr "faili %s ei saa avada: %s"
+msgstr "Faili pole võimalik allkirjastada: %s"
 
 #: ../plugins/nautilus/seahorse-tool.c:629
-#, fuzzy
 msgid "Importing"
-msgstr "Imporditakse \"{0}\""
+msgstr "Importimine"
 
 #: ../plugins/nautilus/seahorse-tool.c:630
-#, fuzzy, c-format
+#, c-format
 msgid "Couldn't import keys from file: %s"
-msgstr "Järjehoidjate importimine määratud failist"
+msgstr "Falist pole võimalik võtmeid importida: %s"
 
 #: ../plugins/nautilus/seahorse-tool.c:636
 msgid "Decrypting"
 msgstr "Dekrüptimine"
 
 #: ../plugins/nautilus/seahorse-tool.c:637
-#, fuzzy, c-format
+#, c-format
 msgid "Couldn't decrypt file: %s"
-msgstr "faili %s ei saa avada: %s"
+msgstr "Faili pole võimalik dekrüptida: %s"
 
 #: ../plugins/nautilus/seahorse-tool.c:642
 msgid "Verifying"
 msgstr "Verifitseerimine"
 
 #: ../plugins/nautilus/seahorse-tool.c:643
-#, fuzzy, c-format
+#, c-format
 msgid "Couldn't verify file: %s"
-msgstr "faili %s ei saa avada: %s"
+msgstr "Faili pole võimalik verifitseerida: %s"
 
 #. TRANSLATOR: This string will become
 #. * "You have selected %d files and %d folders"
 #: ../plugins/nautilus/seahorse-tool-files.c:155
-#, fuzzy, c-format
+#, c-format
 msgid "You have selected %d file "
 msgid_plural "You have selected %d files "
-msgstr[0] "Ühtegi faili pole valitud"
-msgstr[1] ""
+msgstr[0] "Sa oled valinud %d faili"
+msgstr[1] "Sa oled valinud %d faili"
 
 #. TRANSLATOR: This string will become
 #. * "You have selected %d files and %d folders"
 #: ../plugins/nautilus/seahorse-tool-files.c:160
-#, fuzzy, c-format
+#, c-format
 msgid "and %d folder"
 msgid_plural "and %d folders"
-msgstr[0] "_Ava kaust"
-msgstr[1] ""
+msgstr[0] "ja %d kataloogi"
+msgstr[1] "ja %d kataloogi"
 
 #. TRANSLATOR: "%s%s" are "You have selected %d files and %d folders"
 #. * Swap order with "%2$s%1$s" if needed
 #: ../plugins/nautilus/seahorse-tool-files.c:165
 #, c-format
 msgid "<b>%s%s</b>"
-msgstr ""
+msgstr "<b>%s%s</b>"
 
 #. should never be called for just one file
 #: ../plugins/nautilus/seahorse-tool-files.c:174
-#, fuzzy, c-format
+#, c-format
 msgid "You have selected %d files"
-msgstr "Ühtegi faili pole valitud."
+msgstr "Sa oled valinud %d faili"
 
 #: ../plugins/nautilus/seahorse-tool-files.c:179
-#, fuzzy, c-format
+#, c-format
 msgid "You have selected %d folder"
 msgid_plural "You have selected %d folders"
-msgstr[0] "Valitud kausta kustutamine"
-msgstr[1] ""
+msgstr[0] "Sa oled valinud %d kataloogi"
+msgstr[1] "Sa oled valinud %d kataloogi"
 
 #: ../plugins/nautilus/seahorse-tool-files.c:626
-#, fuzzy
 msgid "Preparing..."
-msgstr "Valmistun..."
+msgstr "Ettevalmistamine..."
 
 #: ../plugins/nautilus/seahorse-tool-files.c:635
 #: ../plugins/nautilus/seahorse-tool-files.c:658
-#, fuzzy
 msgid "Couldn't list files"
-msgstr "Ainult failide loendile"
+msgstr ""
 
 #: ../src/main.c:75
 #: ../src/seahorse-key-manager.c:864
@@ -1777,14 +1741,13 @@ msgid "Encryption Key Manager"
 msgstr "Krüptimisvõtmete haldur"
 
 #: ../src/seahorse-add-subkey.c:111
-#, fuzzy
 msgid "Couldn't add subkey"
-msgstr "Lisa sahtlisse"
+msgstr "Alamvõtit pole võimalik lisada"
 
 #: ../src/seahorse-add-subkey.c:127
-#, fuzzy, c-format
+#, c-format
 msgid "Add subkey to %s"
-msgstr "Lisa sahtlisse"
+msgstr ""
 
 #: ../src/seahorse-add-subkey.glade.h:1
 #: ../src/seahorse-pgp-generate.c:44
@@ -1800,14 +1763,12 @@ msgid "Expiration Date:"
 msgstr "Aegumiskuupäev:"
 
 #: ../src/seahorse-add-subkey.glade.h:4
-#, fuzzy
 msgid "Generate a new subkey"
-msgstr "genereeri uus võtmepaar"
+msgstr "Uue alamvõtme genereerimine"
 
 #: ../src/seahorse-add-subkey.glade.h:5
-#, fuzzy
 msgid "If key never expires"
-msgstr "Klahv _hülgamisel tehakse piiksu"
+msgstr ""
 
 #: ../src/seahorse-add-subkey.glade.h:6
 msgid "Key _Length:"
@@ -2008,19 +1969,16 @@ msgid "Create a New Key"
 msgstr "Uue võtme loomine"
 
 #: ../src/seahorse-gkeyring-item.c:248
-#, fuzzy
 msgid "Web Password"
-msgstr "%s - Vajalik on parool"
+msgstr "Veebiparool"
 
 #: ../src/seahorse-gkeyring-item.c:250
-#, fuzzy
 msgid "Network Password"
 msgstr "Võrguparool"
 
 #: ../src/seahorse-gkeyring-item.c:252
 #: ../src/seahorse-gkeyring-item-properties.c:116
 #: ../src/seahorse-gkeyring-source.c:525
-#, fuzzy
 msgid "Password"
 msgstr "Parool"
 
@@ -2048,29 +2006,24 @@ msgid "Saved password or login"
 msgstr "Vigane hüüdnimi või parool."
 
 #: ../src/seahorse-gkeyring-item-properties.c:116
-#, fuzzy
 msgid "Network Credentials"
-msgstr "Vigased volitused"
+msgstr ""
 
 #: ../src/seahorse-gkeyring-item-properties.c:177
-#, fuzzy
 msgid "Couldn't change password."
-msgstr "Jabber'i parooli muutmine"
+msgstr "Parooli pole võimalik muuta."
 
 #: ../src/seahorse-gkeyring-item-properties.c:284
-#, fuzzy
 msgid "Couldn't set description."
-msgstr "%s: Grupi ID'd (groupid) pole võimalik %d-ks seada"
+msgstr "Kirjeldust pole võimalik määrata."
 
 #: ../src/seahorse-gkeyring-item-properties.glade.h:1
-#, fuzzy
 msgid "<b>Description:</b>"
 msgstr "<b>Kirjeldus:</b>"
 
 #: ../src/seahorse-gkeyring-item-properties.glade.h:2
-#, fuzzy
 msgid "<b>Login:</b>"
-msgstr "Kasutajanimi"
+msgstr ""
 
 #: ../src/seahorse-gkeyring-item-properties.glade.h:3
 msgid "<b>Password:</b>"
@@ -2116,9 +2069,8 @@ msgstr "Võti"
 #: ../src/seahorse-pgp-private-key-properties.glade.h:29
 #: ../src/seahorse-pgp-public-key-properties.glade.h:28
 #: ../src/seahorse-ssh-key-properties.glade.h:19
-#, fuzzy
 msgid "Key Properties"
-msgstr "Käivitaja eelistused"
+msgstr "Võtme omadused"
 
 #: ../src/seahorse-gkeyring-item-properties.glade.h:11
 #, fuzzy
@@ -2146,9 +2098,8 @@ msgid "[login]"
 msgstr "Kasutajanimi"
 
 #: ../src/seahorse-gkeyring-item-properties.glade.h:17
-#, fuzzy
 msgid "[server]"
-msgstr "<b>_Server:</b>"
+msgstr "[server]"
 
 #: ../src/seahorse-gkeyring-operation.c:206
 #, fuzzy
@@ -2166,11 +2117,11 @@ msgstr ""
 
 #: ../src/seahorse-gkeyring-operation.c:215
 msgid "No such key ring exists"
-msgstr ""
+msgstr "Sellist võtmerõngast pole olemas"
 
 #: ../src/seahorse-gkeyring-operation.c:218
 msgid "Couldn't communicate with key ring daemon"
-msgstr ""
+msgstr "Võtmerõngadeemoniga pole võimalik suhelda"
 
 #: ../src/seahorse-gkeyring-operation.c:221
 #, fuzzy
@@ -2179,23 +2130,20 @@ msgstr "Kaust on juba olemas"
 
 #: ../src/seahorse-gkeyring-operation.c:227
 msgid "Internal error accessing gnome-keyring"
-msgstr ""
+msgstr "Sisemine viga gnome-keyring'iga suhtlemisel"
 
 #: ../src/seahorse-gkeyring-operation.c:286
-#, fuzzy
 msgid "Saving item..."
-msgstr "Loendi kirje"
+msgstr ""
 
 #: ../src/seahorse-gkeyring-source.c:358
-#, fuzzy
 msgid "Retrieving key"
-msgstr "Võtmeklient"
+msgstr "Võtme vastuvõtmine"
 
 #. Start listing of ids
 #: ../src/seahorse-gkeyring-source.c:372
-#, fuzzy
 msgid "Listing passwords"
-msgstr "Unusta _paroolid"
+msgstr ""
 
 #: ../src/seahorse-key-manager.c:443
 msgid "Couldn't read file"
@@ -2235,9 +2183,9 @@ msgstr "Avaliku võtme eksportimine"
 #: ../src/seahorse-key-manager.c:653
 #: ../src/seahorse-key-properties.c:1031
 #: ../src/seahorse-ssh-key-properties.c:240
-#, fuzzy, c-format
+#, c-format
 msgid "Couldn't export key to \"%s\""
-msgstr "ekspordi võtmed võtmeserverisse"
+msgstr ""
 
 #: ../src/seahorse-key-manager.c:665
 msgid "Exporting keys"
@@ -2280,9 +2228,8 @@ msgid "_Create New Key..."
 msgstr "Loo _uus võti..."
 
 #: ../src/seahorse-key-manager.c:1178
-#, fuzzy
 msgid "Create a new personal key"
-msgstr "      uusi tühistamisi: %lu\n"
+msgstr "Uue isikliku võtme loomine"
 
 #: ../src/seahorse-key-manager.c:1179
 msgid "_Import..."
@@ -2290,7 +2237,7 @@ msgstr "_Impordi..."
 
 #: ../src/seahorse-key-manager.c:1180
 msgid "Import keys into your key ring from a file"
-msgstr ""
+msgstr "Failis olevate võtmete importimine võtmerõngasse"
 
 #: ../src/seahorse-key-manager.c:1181
 msgid "_Back up Key Rings..."
@@ -2329,9 +2276,8 @@ msgid "About this program"
 msgstr "Programmist lähemalt..."
 
 #: ../src/seahorse-key-manager.c:1193
-#, fuzzy
 msgid "_Remote"
-msgstr "Kauglogimine"
+msgstr ""
 
 #: ../src/seahorse-key-manager.c:1195
 #: ../src/seahorse-keyserver-results.c:383
@@ -2368,14 +2314,12 @@ msgid "Show owner trust column"
 msgstr "Omaniku usaldamise veeru näitamine"
 
 #: ../src/seahorse-key-manager.c:1206
-#, fuzzy
 msgid "_Validity"
-msgstr "<b>Kehtivus</b>"
+msgstr "_Kehtivus"
 
 #: ../src/seahorse-key-manager.c:1207
-#, fuzzy
 msgid "Show validity column"
-msgstr "Näita asukoha veergu"
+msgstr "Kehtivuse veeru näitamine"
 
 #: ../src/seahorse-key-manager.c:1211
 #: ../src/seahorse-keyserver-results.c:395
@@ -2429,9 +2373,8 @@ msgstr ""
 
 #: ../src/seahorse-key-manager.c:1232
 #: ../src/seahorse-keyserver-results.c:404
-#, fuzzy
 msgid "_Find Remote Keys..."
-msgstr "võtmete eksportimine: pole veel teostatud"
+msgstr ""
 
 #: ../src/seahorse-key-manager.c:1233
 #: ../src/seahorse-keyserver-results.c:405
@@ -2544,9 +2487,8 @@ msgid "Signature ID"
 msgstr "Allkirja ID"
 
 #: ../src/seahorse-key-properties.c:555
-#, fuzzy
 msgid "Couldn't change primary photo"
-msgstr "Vabandust, \"%s\" gruppi pole võimalik muuta."
+msgstr "Peamist fotot pole võimalik muuta"
 
 #: ../src/seahorse-key-properties.c:801
 msgid "(unknown)"
@@ -2603,27 +2545,23 @@ msgstr "Võtmete importimine serverist"
 
 #: ../src/seahorse-keyserver-results.c:146
 #: ../src/seahorse-keyserver-results.c:180
-#, fuzzy, c-format
+#, c-format
 msgid "Couldn't write keys to file: %s"
-msgstr "BMP-faili pole võimalik kirjutada"
+msgstr "Võtmeid pole võimalik faili kirjutada: %s"
 
 #: ../src/seahorse-keyserver-results.c:169
-#, fuzzy
 msgid "Save Remote Keys"
-msgstr "võtmete eksportimine: pole veel teostatud"
+msgstr "Kaugvõtmete salvestamine"
 
 #: ../src/seahorse-keyserver-results.c:351
-#, fuzzy
 msgid "No matching keys found"
-msgstr "absoluutselt usaldatavaid võtmeid pole\n"
+msgstr "Vastavaid võtmeid ei leitud"
 
 #: ../src/seahorse-keyserver-results.c:381
-#, fuzzy
 msgid "_Close"
 msgstr "_Sulge"
 
 #: ../src/seahorse-keyserver-results.c:382
-#, fuzzy
 msgid "Close this window"
 msgstr "Selle akna sulgemine"
 
@@ -2652,39 +2590,33 @@ msgid "Import selected keys to local key ring"
 msgstr ""
 
 #: ../src/seahorse-keyserver-results.c:397
-#, fuzzy
 msgid "Save Key As..."
-msgstr "Salvesta fail kui..."
+msgstr "Salvesta võti kui..."
 
 #: ../src/seahorse-keyserver-results.c:398
-#, fuzzy
 msgid "Save selected keys as a file"
-msgstr "Sõnumi salvestamine tekstifaili"
+msgstr "Vailitud võtmete salvestamine faili"
 
 #: ../src/seahorse-keyserver-results.c:399
-#, fuzzy
 msgid "_Copy Key"
-msgstr "_Kopeeri võtme nimi"
+msgstr "_Kopeeri võti"
 
 #: ../src/seahorse-keyserver-results.c:400
-#, fuzzy
 msgid "Copy selected keys to the clipboard"
-msgstr "Valitud sõnumi(te) kopeerimine lõikelauale"
+msgstr "Valitud võtmete kopeerimine lõikelauale"
 
 #: ../src/seahorse-keyserver-results.c:457
-#, fuzzy
 msgid "Remote Keys"
-msgstr "_Kiirklahvid:"
+msgstr "Kaugvõtmed"
 
 #: ../src/seahorse-keyserver-results.c:459
-#, fuzzy, c-format
+#, c-format
 msgid "Remote Keys Containing '%s'"
-msgstr "Otsi lahtreid, mis sisaldavad"
+msgstr "Stringi '%s' sisaldavad kaugvõtmed"
 
 #: ../src/seahorse-keyserver-results.glade.h:1
-#, fuzzy
 msgid "Remote Encryption Keys"
-msgstr "võtmete eksportimine: pole veel teostatud"
+msgstr ""
 
 #: ../src/seahorse-keyserver-search.glade.h:1
 msgid "<b>Key Servers:</b>"
@@ -2695,9 +2627,8 @@ msgid "<b>Shared Keys Near Me:</b>"
 msgstr ""
 
 #: ../src/seahorse-keyserver-search.glade.h:3
-#, fuzzy
 msgid "Find Remote Keys"
-msgstr "võtmete eksportimine: pole veel teostatud"
+msgstr "Otsi kaugvõtmeid"
 
 #: ../src/seahorse-keyserver-search.glade.h:4
 msgid "This will find keys for others on the Internet. These keys can then be imported into your local key ring."
@@ -2705,7 +2636,7 @@ msgstr ""
 
 #: ../src/seahorse-keyserver-search.glade.h:5
 msgid "Where to search:"
-msgstr "Mis serveritest otsitakse:"
+msgstr "Millistest serveritest otsitakse:"
 
 #: ../src/seahorse-keyserver-search.glade.h:6
 msgid "_Search"
@@ -2738,9 +2669,8 @@ msgstr "Võtmete sünkroniseerimine"
 
 #. Show the progress window if necessary
 #: ../src/seahorse-keyserver-sync.c:246
-#, fuzzy
 msgid "Synchronizing keys..."
-msgstr "_Kiirklahvid:"
+msgstr "Võtmete sünkroniseerimine..."
 
 #: ../src/seahorse-keyserver-sync.glade.h:1
 msgid "<b>X keys are selected for synchronizing</b>"
@@ -2837,18 +2767,16 @@ msgid "A PGP key allows you to encrypt email or files to other people."
 msgstr "PGP-võti võimaldab sul teistele saatmiseks krüptida e-posti või faile."
 
 #: ../src/seahorse-pgp-generate.glade.h:3
-#, fuzzy
 msgid "Algorithms here"
-msgstr "Paki siia lahti"
+msgstr ""
 
 #: ../src/seahorse-pgp-generate.glade.h:4
 msgid "C_reate"
 msgstr "L_oo"
 
 #: ../src/seahorse-pgp-generate.glade.h:5
-#, fuzzy
 msgid "Create a PGP Key"
-msgstr "Uue võtme loomine"
+msgstr "PGP-võtme loomine"
 
 #: ../src/seahorse-pgp-generate.glade.h:6
 msgid "E_xpiration Date:"
@@ -2860,9 +2788,8 @@ msgid "Encryption _Type:"
 msgstr "_Krüptimise liik:"
 
 #: ../src/seahorse-pgp-generate.glade.h:9
-#, fuzzy
 msgid "Generate a new key"
-msgstr "genereeri uus võtmepaar"
+msgstr ""
 
 #: ../src/seahorse-pgp-generate.glade.h:10
 #: ../src/seahorse-ssh-generate.glade.h:10
@@ -2882,7 +2809,6 @@ msgid "_Comment:"
 msgstr "_Kommentaar:"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:1
-#, fuzzy
 msgid "<b>Actions</b>"
 msgstr "<b>Tegevused</b>"
 
@@ -3133,7 +3059,6 @@ msgid ""
 msgstr ""
 
 #: ../src/seahorse-pgp-public-key-properties.glade.h:42
-#, fuzzy
 msgid "You _Trust the Owner:"
 msgstr "Sinu _usaldus omaniku vastu:"
 
@@ -3367,7 +3292,7 @@ msgstr ""
 
 #: ../src/seahorse-ssh-generate.c:40
 msgid "Couldn't generate Secure Shell key"
-msgstr ""
+msgstr "Secure Shell'i võtit pole võimalik luua"
 
 #: ../src/seahorse-ssh-generate.c:127
 msgid "Creating Secure Shell Key"
@@ -3378,6 +3303,8 @@ msgid ""
 "<i>Use your email address, and any other reminder\n"
 " you need about what this key is for.</i>"
 msgstr ""
+"<i>Sisesta siia näiteks oma e-posti aadress või mõni\n"
+"muu string, mis aitab võtme otstarvet meeles pidada.</i>"
 
 #: ../src/seahorse-ssh-generate.glade.h:4
 msgid ""
@@ -3385,6 +3312,9 @@ msgid ""
 "computers using SSH, without entering a different password \n"
 "for each of them."
 msgstr ""
+"Secure Shell'i (SSH) võti võimaldab sul SSH abil turvaliselt\n"
+"ühenduda teistesse arvutitesse ilma, et sa peaksid iga arvuti\n"
+"jaoks parooli sisestama."
 
 #: ../src/seahorse-ssh-generate.glade.h:8
 msgid ""
@@ -3488,6 +3418,8 @@ msgid ""
 "uses SSH, you must already have a login account on that \n"
 "computer."
 msgstr ""
+"Secure Shell'i võtme kasutamisel teise arvutisse\n"
+"sisselogimiseks peab sul olema teises arvutis konto."
 
 #: ../src/seahorse-ssh-upload.glade.h:7
 msgid "_Computer Name:"
