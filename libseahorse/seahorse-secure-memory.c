@@ -30,6 +30,9 @@
 #include <unistd.h>
 #include <string.h> 
 #include <stdlib.h>
+#include <stdio.h>
+#include <stdarg.h>
+#include <assert.h>
 
 #if defined(HAVE_MLOCK) || defined(HAVE_MMAP)
 #include <sys/mman.h>
@@ -55,13 +58,27 @@ static int have_secure = 0;
 #endif
 
 #if DEBUG_SECMEM_ENABLE
-#define DEBUG_SECMEM(x) g_printerr x
+#define DEBUG_SECMEM(x) printerr x
 #else
 #define DEBUG_SECMEM(x) 
 #endif
 
-gpointer
-g_malloc (gulong size)
+/* 
+ * Use our own message printing function so that 
+ * any glib allocations during their message printing
+ * won't cause a loop.
+ */
+static void 
+printerr (const gchar* msg, ...)
+{
+    va_list va;
+    va_start (va, msg);
+    vfprintf (stderr, msg, va);
+    va_end (va);
+}
+
+static gpointer
+switch_malloc (gsize size)
 {
     gpointer p;
 
@@ -71,36 +88,32 @@ g_malloc (gulong size)
         p = (gpointer) seahorse_secure_memory_malloc (size);
     else
         p = (gpointer) malloc (size);
-    if (!p)
-        g_error ("could not allocate %ld bytes", size);
     return p;
 }
 
-gpointer
-g_malloc0 (gulong size)
+static gpointer
+switch_calloc (gsize num, gsize size)
 {
     gpointer p;
 
-    if (size == 0)
+    if (size == 0 || num == 0)
         return NULL;
     if (seahorse_use_secure_mem && have_secure) {
-        p = (gpointer) seahorse_secure_memory_malloc (size);
+        p = (gpointer) seahorse_secure_memory_malloc (size * num);
         if (p)
-            memset (p, 0, size);
+            memset (p, 0, size * num);
     } else
-        p = (gpointer) calloc (size, 1);
-    if (!p)
-        g_error("could not allocate %ld bytes", size);
+        p = (gpointer) calloc (num, size);
     return p;
 }
 
-gpointer
-g_realloc (gpointer mem, gulong size)
+static gpointer
+switch_realloc (gpointer mem, gsize size)
 {
     gpointer p;
 
     if (size == 0) {
-        g_free (mem);
+        free (mem);
         return NULL;
     }
 
@@ -116,16 +129,11 @@ g_realloc (gpointer mem, gulong size)
 
     else
         p = (gpointer) realloc(mem, size);
-    
-
-    if (!p)
-        g_error("could not reallocate %lu bytes", (gulong) size);
-
     return p;
 }
 
-void
-g_free(gpointer mem)
+static void
+switch_free (gpointer mem)
 {
     if (mem) {
         if (seahorse_secure_memory_check (mem))
@@ -204,7 +212,7 @@ lock_pool(void *p, size_t n)
 
     if (err) {
         if (errno != EPERM && errno != EAGAIN)
-            g_warning ("can't lock memory: %s", g_strerror (err));
+            printerr ("can't lock memory: %s", strerror (err));
     }
 
 #elif defined(HAVE_MLOCK)
@@ -230,14 +238,14 @@ lock_pool(void *p, size_t n)
 
     if( err ) {
         if(errno != EPERM && errno != EAGAIN)
-            g_warning ("can't lock memory: %s", g_strerror (err));
+            printerr ("can't lock memory: %s", strerror (err));
     } else {
         have_secure = 1;
     }
     
 #else /* defined(HAVE_MLOCK) */
     
-    g_warning ("Please note that you don't have secure memory on this system");
+    printerr ("Please note that you don't have secure memory on this system");
 #endif
 }
 
@@ -267,7 +275,7 @@ init_pool( size_t n)
     {
         int fd = open("/dev/zero", O_RDWR);
         if (fd == -1) {
-            g_warning ("can't open /dev/zero: %s", g_strerror(errno));
+            printerr ("can't open /dev/zero: %s", strerror(errno));
             pool = (void*)-1;
         } else {
             pool = mmap (0, poolsize, PROT_READ | PROT_WRITE,
@@ -277,8 +285,8 @@ init_pool( size_t n)
 # endif /* MAP_ANONYMOUS */
     
     if (pool == (void*)-1)
-        g_message ("can't mmap pool of %u bytes: %s - using malloc\n",
-                   (unsigned)poolsize, g_strerror (errno));
+        printerr ("can't mmap pool of %u bytes: %s - using malloc\n",
+                   (unsigned)poolsize, strerror (errno));
     else {
         pool_is_mmapped = 1;
         pool_okay = 1;
@@ -288,7 +296,7 @@ init_pool( size_t n)
     
     if( !pool_okay ) {
         pool = malloc (poolsize);
-        g_assert (pool);
+        assert (pool);
         pool_okay = 1;
     }
     
@@ -312,6 +320,15 @@ seahorse_secure_memory_have ()
 void
 seahorse_secure_memory_init (size_t n)
 {
+    GMemVTable vtable;
+    
+    memset (&vtable, 0, sizeof (vtable));
+    vtable.malloc = switch_malloc;
+    vtable.realloc = switch_realloc;
+    vtable.free = switch_free;
+    vtable.calloc = switch_calloc;
+    g_mem_set_vtable (&vtable);
+    
     if(!n) {
 #ifdef USE_CAPABILITIES
         /* drop all capabilities */
@@ -322,12 +339,12 @@ seahorse_secure_memory_init (size_t n)
     } else {
         if (n < DEFAULT_POOLSIZE)
             n = DEFAULT_POOLSIZE;
-        g_assert (!pool_okay);
+        assert (!pool_okay);
         init_pool (n);
     }
     
     if (!have_secure)
-        g_printerr ("WARNING: not using secure memory for passwords\n");
+        printerr ("WARNING: not using secure memory for passwords\n");
 }
 
 void*
@@ -336,7 +353,7 @@ seahorse_secure_memory_malloc (size_t size)
     MEMBLOCK *mb, *mb2;
     int compressed = 0;
 
-    g_assert (pool_okay);
+    assert (pool_okay);
 
     /* blocks are always a multiple of 32 */
     size += sizeof (MEMBLOCK);
@@ -390,7 +407,7 @@ seahorse_secure_memory_realloc (void *p, size_t newsize)
     mb = (MEMBLOCK*)((char*)p - ((size_t) &((MEMBLOCK*)0)->u.aligned.c));
     size = mb->size;
 
-    g_assert(mb->sig == MEMBLOCK_SIG);
+    assert (mb->sig == MEMBLOCK_SIG);
     
     if( newsize <= size )
         return p; /* it is easier not to shrink the memory */
@@ -416,7 +433,7 @@ seahorse_secure_memory_free (void *a)
     mb = (MEMBLOCK*)((char*)a - ((size_t) &((MEMBLOCK*)0)->u.aligned.c));
     size = mb->size;
 
-    g_assert(mb->sig == MEMBLOCK_SIG);
+    assert (mb->sig == MEMBLOCK_SIG);
     
     DEBUG_SECMEM(("SECMEM: freeing %x bytes\n", size));
     
@@ -468,7 +485,7 @@ seahorse_secure_memory_dump ()
     if (!have_secure)
         return;
     
-    g_printerr ("secmem usage: %u/%u bytes in %u/%u blocks of pool %lu/%lu\n",
-                cur_alloced, max_alloced, cur_blocks, max_blocks, 
-                (unsigned long)poollen, (unsigned long)poolsize);
+    printerr ("secmem usage: %u/%u bytes in %u/%u blocks of pool %lu/%lu\n",
+              cur_alloced, max_alloced, cur_blocks, max_blocks, 
+              (unsigned long)poollen, (unsigned long)poolsize);
 }

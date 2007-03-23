@@ -33,6 +33,7 @@ extern gboolean seahorse_use_secure_mem;
         seahorse_use_secure_mem = tmp; \
     } while (0)
 
+/* This must be called before any glib/gtk/gnome functions */
 void    seahorse_secure_memory_init         (size_t npool);
 
 void    seahorse_secure_memory_term         ();
