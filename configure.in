@@ -42,7 +42,7 @@ AC_CHECK_FUNCS(mlock)
 SEAHORSE_CHECK_MLOCK()
 
 PKG_CHECK_MODULES(SEAHORSE, libgnome-2.0 >= 2.14 libgnomeui-2.0 
-                  libglade-2.0 gconf-2.0 gtk+-2.0 >= 2.4.0 gnome-vfs-2.0)
+                  libglade-2.0 gconf-2.0 gtk+-2.0 >= 2.10.0 gnome-vfs-2.0)
 
 AC_MSG_CHECKING([for some Win32 platform])
 case "$host" in
@@ -297,7 +297,7 @@ else
     echo "enabling nautilus plugin..."
     echo "checking for supported versions of nautilus..."
 
-    PKG_CHECK_MODULES(NAUTILUS, [libnautilus-extension >= 2.9.0 glib-2.0 >= 2.6.0],
+    PKG_CHECK_MODULES(NAUTILUS, [libnautilus-extension >= 2.9.0 glib-2.0 >= 2.10.0],
                       [enable_nautilus=yes],[enable_nautilus=no])
 
     # The new Nautilus extension
@@ -437,7 +437,7 @@ else
     LIBCRYPTUI_MAJOR=$LIBCRYPTUI_CURRENT.$LIBCRYPTUI_REVISION
     AC_SUBST(LIBCRYPTUI_MAJOR)
     
-    PKG_CHECK_MODULES(LIBCRYPTUI, gtk+-2.0 >= 2.4.0 gconf-2.0)
+    PKG_CHECK_MODULES(LIBCRYPTUI, gtk+-2.0 >= 2.10.0 gconf-2.0)
 
     LIBCRYPTUI_CFLAGS="$LIBCRYPTUI_CFLAGS $DBUS_CFLAGS"
     LIBCRYPTUI_LIBS="$LIBCRYPTUI_LIBS $DBUS_LIBS" 
