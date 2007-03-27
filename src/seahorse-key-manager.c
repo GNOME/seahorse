@@ -829,14 +829,14 @@ about_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
     static gboolean been_here = FALSE;
     
-	static const gchar *authors[] = {
+	const gchar *authors[] = {
 		"Jacob Perkins <jap1@users.sourceforge.net>",
 		"Jose Carlos Garcia Sogo <jsogo@users.sourceforge.net>",
 		"Jean Schurger <yshark@schurger.org>",
         "Nate Nielsen <nielsen@memberwebs.com>",
         "Adam Schreiber <sadam@clemson.edu>",
         "",
-        "Contributions:",
+        _("Contributions:"),
         "Albrecht Dreß <albrecht.dress@arcor.de>",
         "Jim Pharis <binbrain@gmail.com>",
 		NULL
