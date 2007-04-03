@@ -112,7 +112,7 @@ SeahorseKeyPredicate pred_password = {
 #define SEC_RING "/secring.gpg"
 #define PUB_RING "/pubring.gpg"
 
-static void selection_changed (GtkTreeSelection *notused, SeahorseWidget *swidget);
+static gboolean selection_changed (SeahorseWidget *swidget);
 
 /* SIGNAL CALLBACKS --------------------------------------------------------- */
 
@@ -220,7 +220,7 @@ set_current_tab (SeahorseWidget *swidget, guint tabid)
         if (get_tab_id (gtk_notebook_get_nth_page (notebook, i)) == tabid)
         {
             gtk_notebook_set_current_page (notebook, i);
-            selection_changed (NULL, swidget);
+            selection_changed (swidget);
             return;
         }
     }
@@ -891,8 +891,8 @@ row_activated (GtkTreeView *treeview, GtkTreePath *path, GtkTreeViewColumn *arg2
         show_properties (skey);
 }
 
-static void
-selection_changed (GtkTreeSelection *notused, SeahorseWidget *swidget)
+static gboolean
+selection_changed (SeahorseWidget *swidget)
 {
     GtkTreeView *view;
     GtkWidget *tab;
@@ -985,6 +985,19 @@ selection_changed (GtkTreeSelection *notused, SeahorseWidget *swidget)
     actions = seahorse_widget_find_actions (swidget, "ssh");
     gtk_action_group_set_sensitive (actions, ktype == SKEY_SSH);
 #endif    
+    
+    /* This is called as a one-time idle handler, return FALSE so we don't get run again */
+    return FALSE;
+}
+
+static void
+selection_changed_later (GtkTreeSelection *notused, SeahorseWidget *swidget)
+{
+    /* 
+     * Due to various problems with GtkTreeModelFilter we delay the action
+     * just a bit. These problems are fixed in later versions of GTK. 
+     */
+    g_idle_add ((GSourceFunc)selection_changed, swidget);
 }
 
 static void
@@ -1071,7 +1084,7 @@ tab_changed (GtkWidget *widget, GtkNotebookPage *page, guint page_num,
     /* Don't track the selected key when tab is changed on purpose */
     g_object_set_data (G_OBJECT (swidget), TRACK_SELECTED_KEY, NULL);
     
-    selection_changed (NULL, swidget);
+    selection_changed (swidget);
     
     /* 
      * Because gnome-keyring can throw prompts etc... we delay loading 
@@ -1261,7 +1274,7 @@ initialize_tab (SeahorseWidget *swidget, const gchar *tabwidget, guint tabid,
     
     selection = gtk_tree_view_get_selection (view);
     gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
-    g_signal_connect (selection, "changed", G_CALLBACK (selection_changed), swidget);
+    g_signal_connect (selection, "changed", G_CALLBACK (selection_changed_later), swidget);
     
     /* Add new key store and associate it */
     skstore = seahorse_key_manager_store_new (skset, view);
@@ -1407,7 +1420,7 @@ seahorse_key_manager_show (SeahorseOperation *op)
     /* To show first time dialog */
     g_timeout_add (1000, (GSourceFunc)first_timer, swidget);
     
-    selection_changed (NULL, swidget);
+    selection_changed (swidget);
     
     return win;
 }
