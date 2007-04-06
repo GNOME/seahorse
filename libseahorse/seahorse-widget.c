@@ -298,7 +298,8 @@ seahorse_widget_show_help (SeahorseWidget *swidget)
 {
     GError *err = NULL;
 
-    if (g_str_equal (swidget->name, "key-manager"))
+    if (g_str_equal (swidget->name, "key-manager") || 
+        g_str_equal (swidget->name, "keyserver-results"))
         gnome_help_display (PACKAGE, "introduction", &err);
     else
         gnome_help_display (PACKAGE, swidget->name, &err);
