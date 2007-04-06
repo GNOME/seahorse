@@ -352,6 +352,7 @@ seahorse_ssh_key_data_filter_file (const gchar *filename, SeahorseSSHKeyData *ad
     gchar *contents = NULL;
     gchar **lines, **l;
     gboolean ret;
+    gboolean first = TRUE;
     
     /* By default filter out teh one we're adding */
     if (!remove)
@@ -371,14 +372,17 @@ seahorse_ssh_key_data_filter_file (const gchar *filename, SeahorseSSHKeyData *ad
     for (l = lines; *l; l++) {
         if (seahorse_ssh_key_data_match (*l, -1, remove))
             continue;
+        if (!first)
+            g_string_append_c (results, '\n');
+        first = FALSE;
         g_string_append (results, *l);
-        g_string_append_c (results, '\n');
     }
     
     /* Add any that need adding */
     if (add) {
+        if(!first)
+            g_string_append_c (results, '\n');
         g_string_append (results, add->rawdata);
-        g_string_append_c (results, '\n');
     }
     
     g_strfreev (lines);
