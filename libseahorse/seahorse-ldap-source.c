@@ -654,7 +654,7 @@ resolved_callback (gpointer unused, guint status, SeahorseLDAPOperation *lop)
     /* The ldap_cb and chain_cb were set in seahorse_ldap_operation_start */
     
     t = g_strdup_printf (_("Connecting to: %s"), server);
-    seahorse_operation_mark_progress (SEAHORSE_OPERATION (lop), t, 0.0);
+    seahorse_operation_mark_progress (SEAHORSE_OPERATION (lop), t, -1);
     g_free (t);
 
     g_free (server);
@@ -703,7 +703,7 @@ seahorse_ldap_operation_start (SeahorseLDAPSource *lsrc, OpLDAPCallback cb,
     lop->addr = soup_address_new (server, LDAP_PORT);
     
     t = g_strdup_printf (_("Resolving server address: %s"), server);
-    seahorse_operation_mark_progress (SEAHORSE_OPERATION (lop), t, 0.0);
+    seahorse_operation_mark_progress (SEAHORSE_OPERATION (lop), t, -1);
     g_free (t);
 
     g_free (server);
@@ -842,7 +842,7 @@ start_search (SeahorseOperation *op, LDAPMessage *result)
     g_return_val_if_fail (filter != NULL, FALSE);
 
     t = (gchar*)g_object_get_data (G_OBJECT (lop), "details");
-    seahorse_operation_mark_progress (SEAHORSE_OPERATION (lop), t, 0.0);
+    seahorse_operation_mark_progress (SEAHORSE_OPERATION (lop), t, -1);
     
     sinfo = get_ldap_server_info (lop->lsrc, TRUE);
 
