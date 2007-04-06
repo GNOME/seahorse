@@ -273,18 +273,22 @@ get_algo_attribute (LDAP* ld, LDAPMessage *res, const char *attribute)
     return a;
 }
 
-/* Escapes a value so it's safe to use in an LDAP filter */
+/* 
+ * Escapes a value so it's safe to use in an LDAP filter. Also trims
+ * any spaces which cause problems with some LDAP servers.
+ */
 static gchar*
 escape_ldap_value (const gchar *v)
 {
     GString *value;
+    gchar* result;
     
     g_assert (v);
     value = g_string_sized_new (strlen(v));
     
     for ( ; *v; v++) {
         switch(*v) {
-        case ' ': case '#': case ',': case '+': case '\\':
+        case '#': case ',': case '+': case '\\':
         case '/': case '\"': case '<': case '>': case ';':
             value = g_string_append_c (value, '\\');
             value = g_string_append_c (value, *v);
@@ -299,7 +303,9 @@ escape_ldap_value (const gchar *v)
         value = g_string_append_c (value, *v);
     }
     
-    return g_string_free (value, FALSE);
+    result = g_string_free (value, FALSE);
+    g_strstrip (result);
+    return result;
 }
 
 /* -----------------------------------------------------------------------------
@@ -839,6 +845,10 @@ start_search (SeahorseOperation *op, LDAPMessage *result)
     seahorse_operation_mark_progress (SEAHORSE_OPERATION (lop), t, 0.0);
     
     sinfo = get_ldap_server_info (lop->lsrc, TRUE);
+
+    DEBUG_LDAP (("[ldap] Searching Server ... base: %s, filter: %s\n", 
+                 sinfo->base_dn, filter));
+    
     r = ldap_search_ext (lop->ldap, sinfo->base_dn, LDAP_SCOPE_SUBTREE,
                          filter, (char**)kPGPAttributes, 0,
                          NULL, NULL, NULL, 0, &(lop->ldap_op));    
