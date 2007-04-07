@@ -27,6 +27,9 @@
 #include "seahorse-algo.h"
 #include "seahorse-util.h"
 
+#define SSH_PRIVATE_BEGIN "-----BEGIN "
+#define SSH_PRIVATE_END   "-----END "
+
 /* -----------------------------------------------------------------------------
  * HELPERS
  */
@@ -194,7 +197,7 @@ parse_private_data (gchar ***lx)
     if (comment) 
         comment += strlen (SSH_KEY_SECRET_SIG);
     
-    rawdata = parse_lines_block (lx, "-----BEGIN ", "-----END ");
+    rawdata = parse_lines_block (lx, SSH_PRIVATE_BEGIN, SSH_PRIVATE_END);
     if (rawdata) {
         secdata = g_new0 (SeahorseSSHSecData, 1);
         if (comment)
@@ -238,7 +241,8 @@ seahorse_ssh_key_data_parse (const gchar *data, SeahorseSSHPublicKeyParsed publi
             ;
 
         /* See if we have a private key coming up */
-        if (strstr (line, SSH_KEY_SECRET_SIG)) {
+        if (strstr (line, SSH_KEY_SECRET_SIG) || 
+            strstr (line, SSH_PRIVATE_BEGIN)) {
             
             secdata = parse_private_data (&l);
             if (secdata) {

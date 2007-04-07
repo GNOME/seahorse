@@ -40,6 +40,14 @@
     </magic>
   </mime-type>
   
+  <!-- TODO: Figure out the proper mime type here -->
+  <mime-type type="application/x-pem-key">
+    <magic priority="90">
+      <match type="string" value="-----BEGIN RSA PRIVATE KEY-----" offset="0"/>
+      <match type="string" value="-----BEGIN DSA PRIVATE KEY-----" offset="0"/>
+    </magic>
+  </mime-type>
+  
 </mime-info>
 
 

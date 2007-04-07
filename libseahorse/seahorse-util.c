@@ -727,7 +727,9 @@ seahorse_util_detect_mime_type (const gchar *mime)
         return SKEY_PGP;
     
 #ifdef WITH_SSH 
-    else if (g_ascii_strcasecmp (mime, "application/x-ssh-key") == 0)
+    /* TODO: For now all PEM keys are treated as SSH keys */
+    else if (g_ascii_strcasecmp (mime, "application/x-ssh-key") == 0 ||
+             g_ascii_strcasecmp (mime, "application/x-pem-key") == 0)
         return SKEY_SSH;
 #endif 
     
@@ -812,7 +814,11 @@ seahorse_util_chooser_show_key_files (GtkWidget *dialog)
        cases that extension is associated with text/plain */
     gtk_file_filter_set_name (filter, _("All key files"));
     gtk_file_filter_add_mime_type (filter, "application/pgp-keys");
-    gtk_file_filter_add_pattern (filter, "*.asc");    
+#ifdef WITH_SSH 
+    gtk_file_filter_add_mime_type (filter, "application/x-ssh-key");
+    gtk_file_filter_add_mime_type (filter, "application/x-pem-key");
+#endif
+    gtk_file_filter_add_pattern (filter, "*.asc");
     gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);    
     gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dialog), filter);
 
