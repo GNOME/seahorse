@@ -1,12 +1,31 @@
+seahorse 1.0.1
+--------------
+ 
+    * Fix a crash when deleting keys.
+    * Require GTK+ 2.10 without which 1.0 didn't build
+    * Use /tmp directory for agent sockets, so that seahorse 
+      works for people with home directories on NFS/AFS
+    * Fixed importing of private keys from ssh-keygen
+    * Fixed checks for memory locking
+    * Epiphany plugin now builds with Epiphany 2.18 [Adam Schreiber]
+    * Set a default icon for all seahorse windows.
+    * Now able to use ports other than '22' when sending an SSH 
+      key to another computer.
+    * Internationalization fixes [Bjoern Voigt]
+    * Handle openssh's authorized_keys file more cleanly
+    * Handle spaces in a search text when searching an LDAP server
+    * Help now works in 'Search Results' window [Adam Schreiber]
+    * Other minor fixes
+
 seahorse 1.0
 ------------
 
     * Seahorse requires an install of GPG 1.x
     * Fixed crash when pasting from an empty clipboard into Key 
-    Manager window [Adam Schreiber]
+      Manager window [Adam Schreiber]
     * Put seahorse in appropriate GNOME menu categories [Adam Schreiber]
     * Setup correct enviornment variables for processes started from
-    seahorse-agent 
+      seahorse-agent 
     * Localization fixes [Nickolay V. Shmyrev]
     * Fix building on multiple cores [Gilles Dartiguelongue]
 
