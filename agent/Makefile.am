@@ -45,9 +45,10 @@ CLEANFILES = *.gladep* *.bak \
 	$(desktop_DATA)
 
 if HAVE_USER_MLOCK
-# Don't make the daemon setuid
+# Don't make the agent setuid
 else
-# Make the daemon setuid
+# Make the agent setuid
 install-exec-hook:
-	chmod u+s $(DESTDIR)$(bindir)/seahorse-daemon
+	chmod u+s $(DESTDIR)$(bindir)/seahorse-agent
 endif
+
