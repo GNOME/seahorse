@@ -476,12 +476,13 @@ context_menu_cb (EphyEmbed *embed,
     is_input = mozilla_is_input (embed);
 
     if (is_input == FALSE)
-        return FALSE;
-        
-	text = mozilla_get_text (embed);
+        text = NULL;
+    else
+        text = mozilla_get_text (embed);
 	
 	if (text != NULL)
-        texttype = detect_text_type (text, -1, NULL, NULL);   
+        texttype = detect_text_type (text, -1, NULL, NULL);
+      
 
 	action = gtk_action_group_get_action (data->action_group, ENCRYPT_ACTION);
 	g_return_val_if_fail (action != NULL, FALSE);	
