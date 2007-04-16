@@ -55,10 +55,9 @@ AC_DEFUN([SEAHORSE_CHECK_MLOCK],
                 #include <fcntl.h>
 
                 int main () {
-                    pool;
                     long int pgsize = getpagesize ();
                     char *pool = malloc (4096 + pgsize);
-                    if(!pool)
+                    if (!pool)
                         return 2;
                     pool += (pgsize - ((long int)pool % pgsize));
                     if (mlock (pool, 4096) < 0) {
@@ -66,11 +65,16 @@ AC_DEFUN([SEAHORSE_CHECK_MLOCK],
                             return 1;
                         return 2;
                     }
+                    /* Configure is being run as root? */
+                    if (geteuid () == 0) {
+                        printf("assuming "); 
+                        return 1;
+                    }
                     return 0;
                 }
             ],
-            seahorse_cv_have_user_mlock="no",
             seahorse_cv_have_user_mlock="yes",
+            seahorse_cv_have_user_mlock="no",
             seahorse_cv_have_user_mlock="assume-no"
            )
          )

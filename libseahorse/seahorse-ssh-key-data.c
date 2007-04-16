@@ -27,6 +27,9 @@
 #include "seahorse-algo.h"
 #include "seahorse-util.h"
 
+#define SSH_PRIVATE_BEGIN "-----BEGIN "
+#define SSH_PRIVATE_END   "-----END "
+
 /* -----------------------------------------------------------------------------
  * HELPERS
  */
@@ -172,7 +175,7 @@ parse_lines_block (gchar ***lx, const gchar *start, const gchar* end)
     }
     
     /* Look for the end */
-    for ( ; *lines; *lines++) {
+    for ( ; *lines; lines++) {
         g_string_append (result, *lines);
         g_string_append_c (result, '\n');
         if (strstr (*lines, end)) 
@@ -194,7 +197,7 @@ parse_private_data (gchar ***lx)
     if (comment) 
         comment += strlen (SSH_KEY_SECRET_SIG);
     
-    rawdata = parse_lines_block (lx, "-----BEGIN ", "-----END ");
+    rawdata = parse_lines_block (lx, SSH_PRIVATE_BEGIN, SSH_PRIVATE_END);
     if (rawdata) {
         secdata = g_new0 (SeahorseSSHSecData, 1);
         if (comment)
@@ -238,7 +241,8 @@ seahorse_ssh_key_data_parse (const gchar *data, SeahorseSSHPublicKeyParsed publi
             ;
 
         /* See if we have a private key coming up */
-        if (strstr (line, SSH_KEY_SECRET_SIG)) {
+        if (strstr (line, SSH_KEY_SECRET_SIG) || 
+            strstr (line, SSH_PRIVATE_BEGIN)) {
             
             secdata = parse_private_data (&l);
             if (secdata) {
@@ -352,6 +356,7 @@ seahorse_ssh_key_data_filter_file (const gchar *filename, SeahorseSSHKeyData *ad
     gchar *contents = NULL;
     gchar **lines, **l;
     gboolean ret;
+    gboolean first = TRUE;
     
     /* By default filter out teh one we're adding */
     if (!remove)
@@ -371,14 +376,17 @@ seahorse_ssh_key_data_filter_file (const gchar *filename, SeahorseSSHKeyData *ad
     for (l = lines; *l; l++) {
         if (seahorse_ssh_key_data_match (*l, -1, remove))
             continue;
+        if (!first)
+            g_string_append_c (results, '\n');
+        first = FALSE;
         g_string_append (results, *l);
-        g_string_append_c (results, '\n');
     }
     
     /* Add any that need adding */
     if (add) {
+        if(!first)
+            g_string_append_c (results, '\n');
         g_string_append (results, add->rawdata);
-        g_string_append_c (results, '\n');
     }
     
     g_strfreev (lines);

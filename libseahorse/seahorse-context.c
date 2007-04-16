@@ -748,7 +748,7 @@ static gboolean
 load_local_keys (SeahorseContext *sctx)
 {
     SeahorseOperation *op = seahorse_context_load_local_keys (sctx);
-    g_return_if_fail (op != NULL);
+    g_return_val_if_fail (op != NULL, FALSE);
     g_object_unref (op);
     return FALSE;
 }

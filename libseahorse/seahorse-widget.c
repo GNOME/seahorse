@@ -298,7 +298,8 @@ seahorse_widget_show_help (SeahorseWidget *swidget)
 {
     GError *err = NULL;
 
-    if (g_str_equal (swidget->name, "key-manager"))
+    if (g_str_equal (swidget->name, "key-manager") || 
+        g_str_equal (swidget->name, "keyserver-results"))
         gnome_help_display (PACKAGE, "introduction", &err);
     else
         gnome_help_display (PACKAGE, swidget->name, &err);
@@ -306,7 +307,7 @@ seahorse_widget_show_help (SeahorseWidget *swidget)
     if (err != NULL) {
         GtkWidget *dialog;
 
-        dialog = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, 
+        dialog = gtk_message_dialog_new (GTK_WINDOW (seahorse_widget_get_top (swidget)), GTK_DIALOG_MODAL, 
                                          GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, 
                                          _("Could not display help: %s"),
                                          err->message);

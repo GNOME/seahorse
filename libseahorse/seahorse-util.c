@@ -27,6 +27,7 @@
 #include <time.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <string.h>
 
 #include <gnome.h>
 #include <libgnomevfs/gnome-vfs.h>
@@ -726,7 +727,9 @@ seahorse_util_detect_mime_type (const gchar *mime)
         return SKEY_PGP;
     
 #ifdef WITH_SSH 
-    else if (g_ascii_strcasecmp (mime, "application/x-ssh-key") == 0)
+    /* TODO: For now all PEM keys are treated as SSH keys */
+    else if (g_ascii_strcasecmp (mime, "application/x-ssh-key") == 0 ||
+             g_ascii_strcasecmp (mime, "application/x-pem-key") == 0)
         return SKEY_SSH;
 #endif 
     
@@ -811,7 +814,11 @@ seahorse_util_chooser_show_key_files (GtkWidget *dialog)
        cases that extension is associated with text/plain */
     gtk_file_filter_set_name (filter, _("All key files"));
     gtk_file_filter_add_mime_type (filter, "application/pgp-keys");
-    gtk_file_filter_add_pattern (filter, "*.asc");    
+#ifdef WITH_SSH 
+    gtk_file_filter_add_mime_type (filter, "application/x-ssh-key");
+    gtk_file_filter_add_mime_type (filter, "application/x-pem-key");
+#endif
+    gtk_file_filter_add_pattern (filter, "*.asc");
     gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);    
     gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dialog), filter);
 
@@ -1175,7 +1182,7 @@ seahorse_util_string_up_first (const gchar *orig)
     /* Just use ASCII functions when not UTF8 */        
     } else {
         ret = g_strdup (orig);
-        g_ascii_toupper (ret[0]);
+        ret[0] = g_ascii_toupper (ret[0]);
     }
     
     return ret;
@@ -1221,6 +1228,49 @@ seahorse_util_string_slist_equal (GSList *l1, GSList *l2)
     }
     
     return !l1 && !l2;   
+}
+
+gboolean 
+seahorse_util_string_is_whitespace (const gchar *text)
+{
+    g_assert (text);
+    g_assert (g_utf8_validate (text, -1, NULL));
+    
+    while (*text) {
+        if (!g_unichar_isspace (g_utf8_get_char (text)))
+            return FALSE;
+        text = g_utf8_next_char (text);
+    }
+    return TRUE;
+}
+
+void
+seahorse_util_string_trim_whitespace (gchar *text)
+{
+    gchar *b, *e, *n;
+    
+    g_assert (text);
+    g_assert (g_utf8_validate (text, -1, NULL));
+    
+    /* Trim the front */
+    b = text;
+    while (*b && g_unichar_isspace (g_utf8_get_char (b)))
+        b = g_utf8_next_char (b);
+    
+    /* Trim the end */
+    n = e = b + strlen (b);
+    while (n >= b) {
+        if (*n && !g_unichar_isspace (g_utf8_get_char (n)))
+            break;
+        e = n;
+        n = g_utf8_prev_char (e);
+    }
+    
+    g_assert (b >= text);
+    g_assert (e >= b);
+
+    *e = 0;
+    g_memmove (text, b, (e + 1) - b);
 }
 
 /* Callback to determine where a popup menu should be placed */

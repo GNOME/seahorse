@@ -121,8 +121,8 @@ seahorse_agent_io_socket ()
     
     g_assert (g_socket == -1);
 
-    /* We build put the socket in a directory called ~/.gnome2/seahorse-XXXXXX */
-    t = gnome_util_home_file (SOCKET_DIR);
+    /* We build put the socket in a directory called /tmp/seahorse-XXXXXX */
+    t = g_build_filename (g_get_tmp_dir (), SOCKET_DIR, NULL);
     strncpy (g_socket_name, t, KL (g_socket_name));
     g_free (t);
 

@@ -166,6 +166,10 @@ GSList*     seahorse_util_string_slist_copy   (GSList *slist);
 
 gboolean    seahorse_util_string_slist_equal  (GSList *sl1, GSList *sl2);
 
+gboolean    seahorse_util_string_is_whitespace (const gchar *text);
+
+void        seahorse_util_string_trim_whitespace (gchar *text);
+
 void        seahorse_util_determine_popup_menu_position  (GtkMenu *menu,
                                                            int *x,
                                                            int *y,

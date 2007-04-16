@@ -288,8 +288,6 @@ docklet_destroy ()
 static void
 docklet_create ()
 {
-    GtkWidget *box;
-
     if (g_docklet) {
         /* 
          * If this is being called when a tray icon exists, it's 

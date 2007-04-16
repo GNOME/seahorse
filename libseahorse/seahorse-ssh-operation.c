@@ -729,7 +729,7 @@ upload_password_cb (SeahorseSSHOperation *sop, const gchar* msg)
 
 SeahorseOperation*  
 seahorse_ssh_operation_upload (SeahorseSSHSource *ssrc, GList *keys, 
-                               const gchar *username, const gchar *hostname)
+                               const gchar *username, const gchar *hostname, const gchar *port)
 {
     SeahorseSSHOperationPrivate *pv;
     SeahorseOperation *op;
@@ -742,6 +742,9 @@ seahorse_ssh_operation_upload (SeahorseSSHSource *ssrc, GList *keys,
     g_return_val_if_fail (keys != NULL, NULL);
     g_return_val_if_fail (username && username[0], NULL);
     g_return_val_if_fail (hostname && hostname[0], NULL);
+    
+    if (port && !port[0])
+        port = NULL;
     
     gerr = gpgme_data_new (&data);
     g_return_val_if_fail (GPG_IS_OK (gerr), NULL);
@@ -771,9 +774,11 @@ seahorse_ssh_operation_upload (SeahorseSSHSource *ssrc, GList *keys,
      * and then appends all input data onto the end of .ssh/authorized_keys
      */
     /* TODO: Important, we should handle the host checking properly */
-    cmd = g_strdup_printf (SSH_PATH " %s@%s -o StrictHostKeyChecking=no "
+    cmd = g_strdup_printf (SSH_PATH " '%s@%s' %s '%s' -o StrictHostKeyChecking=no "
                                     "\"umask 077; test -d .ssh || mkdir .ssh ; cat >> .ssh/authorized_keys\"", 
-                           username, hostname);
+                           username, hostname, 
+                           port ? "-p" : "", 
+                           port ? port : "");
     input = gpgme_data_release_and_get_mem (data, &length);
     
     op = seahorse_ssh_operation_new (ssrc, cmd, input, length, NULL);
@@ -848,7 +853,7 @@ seahorse_ssh_operation_change_passphrase (SeahorseSSHKey *skey)
     ssrc = seahorse_key_get_source (SEAHORSE_KEY (skey));
     g_return_val_if_fail (SEAHORSE_IS_SSH_SOURCE (ssrc), NULL);
     
-    cmd = g_strdup_printf (SSH_KEYGEN_PATH " -p -f %s", skey->keydata->privfile);
+    cmd = g_strdup_printf (SSH_KEYGEN_PATH " -p -f '%s'", skey->keydata->privfile);
     op = seahorse_ssh_operation_new (SEAHORSE_SSH_SOURCE (ssrc), cmd, NULL, -1, skey);
     g_free (cmd);
     
@@ -917,7 +922,7 @@ seahorse_ssh_operation_generate (SeahorseSSHSource *src, const gchar *email,
     if (bits == 0)
         bits = 2048;
     
-    cmd = g_strdup_printf (SSH_KEYGEN_PATH " -b %d -t %s -C %s -f '%s'",
+    cmd = g_strdup_printf (SSH_KEYGEN_PATH " -b '%d' -t '%s' -C '%s' -f '%s'",
                            bits, algo, comment, filename);
     g_free (comment);
     

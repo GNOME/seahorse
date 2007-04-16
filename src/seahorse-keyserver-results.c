@@ -442,6 +442,7 @@ seahorse_keyserver_results_show (SeahorseOperation *op, const gchar *search)
     GtkActionGroup *actions;
     GtkAction *action;
     gchar *title, *t;
+    gchar *pattern;
     
     swidget = seahorse_widget_new_allow_multiple ("keyserver-results");
     g_return_val_if_fail (swidget != NULL, NULL);
@@ -452,11 +453,15 @@ seahorse_keyserver_results_show (SeahorseOperation *op, const gchar *search)
     g_object_set_data (G_OBJECT (swidget), "operation", op);
     seahorse_operation_watch (op, G_CALLBACK (operation_done), NULL, swidget);
     g_signal_connect (win, "destroy", G_CALLBACK (window_destroyed), swidget);
+    
+    /* Many key servers ignore spaces at the beginning and end, so we do too */
+    pattern = g_strdup (search);
+    g_strstrip (pattern);
 
     if (!search)
         title = g_strdup (_("Remote Keys"));
     else 
-        title = g_strdup_printf(_("Remote Keys Containing '%s'"), search);
+        title = g_strdup_printf(_("Remote Keys Containing '%s'"), pattern);
     gtk_window_set_title (win, title);
     g_free (title);
     
@@ -520,7 +525,7 @@ seahorse_keyserver_results_show (SeahorseOperation *op, const gchar *search)
     pred->etype = SKEY_PUBLIC;
     pred->location = SKEY_LOC_REMOTE;
     pred->custom = (SeahorseKeyPredFunc)filter_keyset;
-    pred->custom_data = t = g_utf8_casefold (search, -1);
+    pred->custom_data = t = g_utf8_casefold (pattern, -1);
   
     /* Our keyset all nicely filtered */
     skset = seahorse_keyset_new_full (pred);
@@ -534,6 +539,8 @@ seahorse_keyserver_results_show (SeahorseOperation *op, const gchar *search)
     g_object_unref (skset);
     
     selection_changed (selection, swidget);
+    
+    g_free (pattern);
 
     return win;
 }
