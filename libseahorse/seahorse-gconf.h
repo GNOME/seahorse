@@ -35,6 +35,7 @@
 #define MULTI_EXTENSION_KEY SEAHORSE_DESKTOP_KEYS "/package_extension"
 #define MULTI_SEPERATE_KEY SEAHORSE_DESKTOP_KEYS "/multi_seperate"
 #define KEYSERVER_KEY SEAHORSE_DESKTOP_KEYS "/keyservers/all_keyservers"
+#define AUTORETRIEVE_KEY SEAHORSE_DESKTOP_KEYS "/keyservers/auto_retrieve"
 #define AUTOSYNC_KEY SEAHORSE_DESKTOP_KEYS "/keyservers/auto_sync"
 #define LASTSEARCH_KEY SEAHORSE_DESKTOP_KEYS "/keyservers/search_text"
 #define LASTSERVERS_KEY SEAHORSE_DESKTOP_KEYS "/keyservers/search_keyservers"

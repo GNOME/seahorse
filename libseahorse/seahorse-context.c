@@ -1067,7 +1067,7 @@ seahorse_context_discover_keys (SeahorseContext *sctx, GQuark ktype,
     }
     
     /* Start a discover process on all todiscover */
-    if (todiscover) {
+    if (seahorse_gconf_get_boolean (AUTORETRIEVE_KEY) && todiscover) {
         op = seahorse_context_retrieve_keys (sctx, ktype, todiscover, NULL);
 
         /* Add unknown keys for all these */
