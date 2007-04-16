@@ -158,12 +158,22 @@ seahorse_util_error_domain ()
  * @err  Resulting GError object
  **/
 void    
-seahorse_util_gpgme_to_error(gpgme_error_t gerr, GError** err)
+seahorse_util_gpgme_to_error (gpgme_error_t gerr, GError** err)
 {
+    gpgme_err_code_t code;
+    
     /* Make sure this is actually an error */
-    g_assert(!GPG_IS_OK(gerr));
-    g_set_error(err, SEAHORSE_GPGME_ERROR, gpgme_err_code(gerr), 
-                            "%s", gpgme_strerror(gerr));
+    g_assert (!GPG_IS_OK(gerr));
+    code = gpgme_err_code (gerr);
+    
+    /* Special case some error messages */
+    if (code == GPG_ERR_DECRYPT_FAILED) {
+        g_set_error (err, SEAHORSE_GPGME_ERROR, code, "%s", 
+                     _("Decryption failed. You probably do not have the decryption key."));
+    } else {
+        g_set_error (err, SEAHORSE_GPGME_ERROR, code, "%s", 
+                     gpgme_strerror (gerr));
+    }
 }
 
 /** 
