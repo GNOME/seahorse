@@ -922,7 +922,7 @@ seahorse_ssh_operation_generate (SeahorseSSHSource *src, const gchar *email,
     if (bits == 0)
         bits = 2048;
     
-    cmd = g_strdup_printf (SSH_KEYGEN_PATH " -b '%d' -t '%s' -C '%s' -f '%s'",
+    cmd = g_strdup_printf (SSH_KEYGEN_PATH " -b '%d' -t '%s' -C %s -f '%s'",
                            bits, algo, comment, filename);
     g_free (comment);
     

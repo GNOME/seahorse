@@ -31,6 +31,9 @@
 #include "seahorse-progress.h"
 #include "seahorse-gtkstock.h"
 
+#define DSA_SIZE 1024
+#define DEFAULT_RSA_SIZE 2048
+
 static void
 completion_handler (SeahorseOperation *op, gpointer data)
 {
@@ -57,6 +60,25 @@ upload_handler (SeahorseOperation *op, gpointer data)
     keys = g_list_append (NULL, skey);
     seahorse_ssh_upload_prompt (keys);
     g_list_free (keys);
+}
+
+static void
+on_change (GtkComboBox *combo, SeahorseWidget *swidget)
+{
+    const gchar *t;    
+    GtkWidget *widget;
+    
+    widget = seahorse_widget_get_widget (swidget, "bits-entry");
+    g_return_if_fail (widget != NULL);
+    
+    t = gtk_combo_box_get_active_text (combo);
+    if (t && strstr (t, "DSA")) {
+        gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), DSA_SIZE);
+        gtk_widget_set_sensitive (widget, FALSE);
+    } else {
+        gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), DEFAULT_RSA_SIZE);
+        gtk_widget_set_sensitive (widget, TRUE);
+    }
 }
 
 static void
@@ -150,6 +172,9 @@ seahorse_ssh_generate_show (SeahorseSSHSource *src)
     
     g_object_ref (src);
     g_object_set_data_full (G_OBJECT (swidget), "key-source", src, g_object_unref);
+    
+    g_signal_connect (G_OBJECT (seahorse_widget_get_widget (swidget, "algorithm-choice")), "changed", 
+                    G_CALLBACK (on_change), swidget);
     
     g_signal_connect (seahorse_widget_get_top (swidget), "response", 
                     G_CALLBACK (on_response), swidget);
