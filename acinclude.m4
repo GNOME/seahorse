@@ -50,6 +50,7 @@ AC_DEFUN([SEAHORSE_CHECK_MLOCK],
                 #include <stdlib.h>
                 #include <unistd.h>
                 #include <errno.h>
+                #include <stdio.h>
                 #include <sys/mman.h>
                 #include <sys/types.h>
                 #include <fcntl.h>
