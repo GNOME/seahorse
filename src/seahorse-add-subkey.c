@@ -31,14 +31,27 @@
 #define EXPIRES "expires"
 #define LENGTH "length"
 
+enum {
+  COMBO_STRING,
+  COMBO_INT,
+  N_COLUMNS
+};
+
 static void
-type_changed (GtkOptionMenu *optionmenu, SeahorseWidget *swidget)
+type_changed (GtkComboBox *combo, SeahorseWidget *swidget)
 {
 	gint type;
 	GtkSpinButton *length;
-	
+    GtkTreeModel *model;
+    GtkTreeIter iter;
+    	
 	length = GTK_SPIN_BUTTON (glade_xml_get_widget (swidget->xml, LENGTH));
-	type = gtk_option_menu_get_history (optionmenu);
+	
+	model = gtk_combo_box_get_model (combo);
+	gtk_combo_box_get_active_iter (combo, &iter);
+	gtk_tree_model_get (model, &iter,
+                        COMBO_INT, &type,
+                        -1);
 	
 	switch (type) {
 		/* DSA */
@@ -68,14 +81,24 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 {
 	SeahorseKeyWidget *skwidget;
 	SeahorseKeyEncType real_type;
-	guint type, length;
+	gint type;
+	guint length;
 	time_t expires;
 	gpgme_error_t err;
 	GtkWidget *widget;
+	GtkComboBox *combo;
+	GtkTreeModel *model;
+    GtkTreeIter iter;
 	
 	skwidget = SEAHORSE_KEY_WIDGET (swidget);
-	type = gtk_option_menu_get_history (GTK_OPTION_MENU (
-		glade_xml_get_widget (swidget->xml, "type")));
+	
+	combo = GTK_COMBO_BOX (glade_xml_get_widget (swidget->xml, "type"));
+	gtk_combo_box_get_active_iter (combo, &iter);
+	model = gtk_combo_box_get_model (combo);
+	gtk_tree_model_get (model, &iter,
+                        COMBO_INT, &type,
+                        -1);	
+		
 	length = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (
 		glade_xml_get_widget (swidget->xml, LENGTH)));
 	
@@ -118,6 +141,10 @@ seahorse_add_subkey_new (SeahorsePGPKey *pkey)
 {
 	SeahorseWidget *swidget;
     gchar *userid;
+    GtkComboBox* combo;
+    GtkTreeModel *model;
+    GtkTreeIter iter;
+    GtkCellRenderer *renderer;
 	
 	swidget = seahorse_key_widget_new ("add-subkey", SEAHORSE_KEY (pkey));
 	g_return_if_fail (swidget != NULL);
@@ -126,8 +153,46 @@ seahorse_add_subkey_new (SeahorsePGPKey *pkey)
 	gtk_window_set_title (GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)),
 		g_strdup_printf (_("Add subkey to %s"), userid));
     g_free (userid);
-	
-	glade_xml_signal_connect_data (swidget->xml, "ok_clicked",
+    
+    combo = GTK_COMBO_BOX (glade_xml_get_widget (swidget->xml, "type"));
+    model = GTK_TREE_MODEL (gtk_list_store_new (N_COLUMNS, G_TYPE_STRING, G_TYPE_INT));
+    
+    gtk_combo_box_set_model (combo, model);
+        
+    gtk_cell_layout_clear (GTK_CELL_LAYOUT (combo));
+    renderer = gtk_cell_renderer_text_new ();
+    
+    gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo), renderer, TRUE);
+    gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (combo), renderer,
+                                    "text", COMBO_STRING);
+                                    
+    gtk_list_store_append (GTK_LIST_STORE (model), &iter);
+    gtk_list_store_set (GTK_LIST_STORE (model), &iter,
+                        COMBO_STRING, _("DSA (sign only)"),
+                        COMBO_INT, 0,
+                        -1);
+                        
+    gtk_combo_box_set_active_iter (combo, &iter);
+    
+    gtk_list_store_append (GTK_LIST_STORE (model), &iter);
+    gtk_list_store_set (GTK_LIST_STORE (model), &iter,
+                        COMBO_STRING, _("ElGamal (encrypt only)"),
+                        COMBO_INT, 1,
+                        -1);
+                        
+	gtk_list_store_append (GTK_LIST_STORE (model), &iter);
+    gtk_list_store_set (GTK_LIST_STORE (model), &iter,
+                        COMBO_STRING, _("RSA (sign only)"),
+                        COMBO_INT, 2,
+                        -1);
+    
+	gtk_list_store_append (GTK_LIST_STORE (model), &iter);
+    gtk_list_store_set (GTK_LIST_STORE (model), &iter,
+                        COMBO_STRING, _("RSA (encrypt only)"),
+                        COMBO_INT, 3,
+                        -1);
+    
+    glade_xml_signal_connect_data (swidget->xml, "ok_clicked",
 		G_CALLBACK (ok_clicked), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "never_expires_toggled",
 		G_CALLBACK (never_expires_toggled), swidget);
