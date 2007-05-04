@@ -300,9 +300,9 @@ seahorse_widget_show_help (SeahorseWidget *swidget)
 
     if (g_str_equal (swidget->name, "key-manager") || 
         g_str_equal (swidget->name, "keyserver-results"))
-        gnome_help_display (PACKAGE, "introduction", &err);
+        gnome_help_display_with_doc_id (NULL, PACKAGE, PACKAGE, "introduction", &err);
     else
-        gnome_help_display (PACKAGE, swidget->name, &err);
+       gnome_help_display_with_doc_id (NULL, PACKAGE, PACKAGE, swidget->name, &err);
 
     if (err != NULL) {
         GtkWidget *dialog;
