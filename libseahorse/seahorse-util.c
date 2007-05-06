@@ -175,17 +175,40 @@ seahorse_util_gpgme_to_error (gpgme_error_t gerr, GError** err)
                      gpgme_strerror (gerr));
     }
 }
-
 /** 
  * seahorse_util_get_date_string:
  * @time: Time value to parse
  *
- * Creates a string representation of @time.
+ * Creates a string representation of @time for use with gpg.
  *
  * Returns: A string representing @time
  **/
 gchar*
 seahorse_util_get_date_string (const time_t time)
+{
+	GDate *created_date;
+	gchar *created_string;
+	
+	if (time == 0)
+		return "0";
+	
+	created_date = g_date_new ();
+	g_date_set_time (created_date, time);
+	created_string = g_new (gchar, 11);
+	g_date_strftime (created_string, 11, "%Y-%m-%d", created_date);
+	return created_string;
+}
+
+/** 
+ * seahorse_util_get_display_date_string:
+ * @time: Time value to parse
+ *
+ * Creates a string representation of @time for display in the UI.
+ *
+ * Returns: A string representing @time
+ **/
+gchar*
+seahorse_util_get_display_date_string (const time_t time)
 {
 	GDate *created_date;
 	gchar *created_string;

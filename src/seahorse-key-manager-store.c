@@ -318,7 +318,7 @@ update_key_row (SeahorseKeyManagerStore *skstore, SeahorseKey *skey, guint uid,
                 expires_date = G_MAXLONG;
             }
             else
-                expires = seahorse_util_get_date_string (expires_date);
+                expires = seahorse_util_get_display_date_string (expires_date);
         }
         
         /* Only differentiate if the view shows more than one type of key */

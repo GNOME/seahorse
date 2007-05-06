@@ -49,7 +49,9 @@ typedef enum {
 #define SEAHORSE_EXT_PGP ".pgp"
 #define SEAHORSE_EXT_GPG ".gpg"
 
-gchar*		seahorse_util_get_date_string		(const time_t		time);
+gchar*		seahorse_util_get_date_string		    (const time_t		time);
+gchar*		seahorse_util_get_display_date_string   (const time_t		time);
+
 
 #define SEAHORSE_GPGME_ERROR  (seahorse_util_gpgme_error_domain ())
 

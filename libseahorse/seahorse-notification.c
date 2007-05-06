@@ -641,7 +641,7 @@ seahorse_notify_signatures (const gchar* data, gpgme_verify_result_t status)
     };
 
     if (sig) {
-        gchar *date = seahorse_util_get_date_string (status->signatures->timestamp);
+        gchar *date = seahorse_util_get_display_date_string (status->signatures->timestamp);
         gchar *id = seahorse_context_keyid_to_dbus (SCTX_APP (), seahorse_key_get_keyid (skey), 0);
         body = g_markup_printf_escaped (body, id, date);
         g_free (date);

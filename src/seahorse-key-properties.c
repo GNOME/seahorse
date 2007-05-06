@@ -800,7 +800,7 @@ do_owner (SeahorseWidget *swidget)
             if (expires_date == 0) 
                 t = g_strdup (_("(unknown)"));
             else
-                t = seahorse_util_get_date_string (expires_date);
+                t = seahorse_util_get_display_date_string (expires_date);
             text = g_strdup_printf (_("This key expired on: %s"), t);
                 
             gtk_label_set_text (GTK_LABEL (widget), text);
@@ -1209,7 +1209,7 @@ do_details (SeahorseWidget *swidget)
 
     widget = glade_xml_get_widget (swidget->xml, "details-created-label");
     if (widget) {
-        fp_label = seahorse_util_get_date_string (subkey->timestamp); 
+        fp_label = seahorse_util_get_display_date_string (subkey->timestamp); 
         gtk_label_set_text (GTK_LABEL (widget), fp_label);
         g_free (fp_label);
     }
@@ -1227,7 +1227,7 @@ do_details (SeahorseWidget *swidget)
         else if (subkey->expires == 0)
             fp_label = g_strdup (_("Never"));
         else
-            fp_label = seahorse_util_get_date_string (subkey->expires);
+            fp_label = seahorse_util_get_display_date_string (subkey->expires);
         gtk_label_set_text (GTK_LABEL (widget), fp_label);
         g_free (fp_label);
     }
@@ -1299,9 +1299,9 @@ do_details (SeahorseWidget *swidget)
         if (subkey->expires == 0)
             expiration_date = g_strdup (_("Never"));
         else
-            expiration_date = seahorse_util_get_date_string (subkey->expires);
+            expiration_date = seahorse_util_get_display_date_string (subkey->expires);
 
-        created_date = seahorse_util_get_date_string (subkey->timestamp);
+        created_date = seahorse_util_get_display_date_string (subkey->timestamp);
         
         length = g_ascii_dtostr(dbuffer, G_ASCII_DTOSTR_BUF_SIZE, subkey->length);
 
