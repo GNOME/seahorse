@@ -28,7 +28,7 @@
 #include "seahorse-libdialogs.h"
 #include "seahorse-widget.h"
 #include "seahorse-validity.h"
-#include "seahorse-default-key-control.h"
+#include "seahorse-combo-keys.h"
 #include "seahorse-gconf.h"
 #include "seahorse-pgp-key.h"
 #include "seahorse-util.h"

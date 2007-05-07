@@ -29,7 +29,7 @@
 #include "seahorse-util.h"
 #include "seahorse-keyset.h"
 #include "seahorse-gtkstock.h"
-#include "seahorse-default-key-control.h"
+#include "seahorse-combo-keys.h"
 #include "seahorse-gconf.h"
 
 #ifdef WITH_KEYSERVER

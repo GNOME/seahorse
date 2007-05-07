@@ -26,8 +26,6 @@
  * - Gets its list of keys from a SeahorseKeyset.
  */
  
-/* TODO: This file should be renamed to seahorse-combo-keys.h once we're using SVN */
- 
 #ifndef __SEAHORSE_COMBO_KEYS_H__
 #define __SEAHORSE_COMBO_KEYS_H__
 

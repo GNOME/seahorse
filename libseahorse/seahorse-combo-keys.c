@@ -19,11 +19,9 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include "seahorse-default-key-control.h"
+#include "seahorse-combo-keys.h"
 #include "seahorse-key.h"
 #include "seahorse-gconf.h"
-
-/* TODO: This file should be renamed to seahorse-combo-keys.c once we're using SVN */
 
 enum {
   COMBO_STRING,

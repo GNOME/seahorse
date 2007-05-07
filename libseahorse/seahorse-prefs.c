@@ -25,7 +25,7 @@
 #include "seahorse-prefs.h"
 #include "seahorse-util.h"
 #include "seahorse-check-button-control.h"
-#include "seahorse-default-key-control.h"
+#include "seahorse-combo-keys.h"
 #include "seahorse-keyserver-control.h"
 #include "seahorse-server-source.h"
 #include "seahorse-gconf.h"
