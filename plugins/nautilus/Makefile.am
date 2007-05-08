@@ -49,11 +49,6 @@ uninstall-local:
 endif
 
 @INTLTOOL_DESKTOP_RULE@
-olddesktopdir = $(datadir)/control-center-2.0/capplets
-olddesktop_in_files = seahorse-pgp-preferences.desktop.in
-olddesktop_DATA = $(olddesktop_in_files:.desktop.in=.desktop)
-
-@INTLTOOL_DESKTOP_RULE@
 desktopdir = $(datadir)/applications
 desktop_in_files = seahorse-pgp-preferences.desktop.in
 desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
