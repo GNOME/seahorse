@@ -598,17 +598,20 @@ seahorse_notify_signatures (const gchar* data, gpgme_verify_result_t status)
     /* Figure out what to display */
     switch (gpgme_err_code (status->signatures->status))  {
     case GPG_ERR_KEY_EXPIRED:
+	/* TRANSLATORS: <key id='xxx'> is a custom markup tag, do not translate. */
         body = _("Signed by <i><key id='%s'/> <b>expired</b></i> on %s.");
         title = _("Invalid Signature");
         icon = ICON_PREFIX "seahorse-sign-bad.png";
         sig = TRUE;
         break;
+	/* TRANSLATORS: <key id='xxx'> is a custom markup tag, do not translate. */
     case GPG_ERR_SIG_EXPIRED:
         body = _("Signed by <i><key id='%s'/></i> on %s <b>Expired</b>.");
         title = _("Expired Signature");
         icon = ICON_PREFIX "seahorse-sign-bad.png";
         sig = TRUE;
         break;
+	/* TRANSLATORS: <key id='xxx'> is a custom markup tag, do not translate. */
     case GPG_ERR_CERT_REVOKED:
         body = _("Signed by <i><key id='%s'/> <b>Revoked</b></i> on %s.");
         title = _("Revoked Signature");
@@ -616,6 +619,7 @@ seahorse_notify_signatures (const gchar* data, gpgme_verify_result_t status)
         sig = TRUE;
         break;
     case GPG_ERR_NO_ERROR:
+	/* TRANSLATORS: <key id='xxx'> is a custom markup tag, do not translate. */
         body = _("Signed by <i><key id='%s'/></i> on %s.");
         title = _("Good Signature");
         icon = ICON_PREFIX "seahorse-sign-ok.png";

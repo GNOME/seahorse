@@ -49,6 +49,7 @@ static const GOptionEntry options[] = {
     { "no-daemonize", 'd', 0, G_OPTION_ARG_NONE, &agent_no_daemonize, 
         N_("Do not daemonize seahorse-agent"), NULL },
 
+    /* TRANSLATORS: An example of a 'C type shell' is 'csh' often used by *BSD instead of bash */
     { "cshell", 'c', 0, G_OPTION_ARG_NONE, &seahorse_agent_cshell, 
         N_("Print variables in for a C type shell"), NULL },
 
@@ -58,6 +59,7 @@ static const GOptionEntry options[] = {
     { "execute", 'x', 0, G_OPTION_ARG_NONE, &seahorse_agent_execvars, 
         N_("Execute other arguments on the command line"), NULL },
       
+    /* TRANSLATORS: A 'display' is a an X display */
     { "any-display", 'A', 0, G_OPTION_ARG_NONE, &seahorse_agent_any_display, 
         N_("Allow GPG agent request from any display"), NULL },
       

@@ -610,7 +610,10 @@ dvi_received (GtkClipboard *board, const gchar *text, SeahorseApplet *sapplet)
         detect_received (board, rawtext, sapplet);
         
         if (seahorse_gconf_get_boolean (DISPLAY_CLIPBOARD_DEC_KEY) == TRUE)
+        {
+            /* TRANSLATORS: This means 'The text that was decrypted' */
             display_text (_("Decrypted Text"), rawtext, TRUE);
+        }
         
         g_free (rawtext);
         rawtext = NULL;
