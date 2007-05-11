@@ -119,6 +119,7 @@ seahorse_service_import_keys (SeahorseService *svc, gchar *ktype,
     GArray *a;
     GList *l;
     gchar *t;
+    guint keynum = 0;
     
     sksrc = seahorse_context_find_key_source (SCTX_APP (), g_quark_from_string (ktype), 
                                               SKEY_LOC_LOCAL);
@@ -143,7 +144,11 @@ seahorse_service_import_keys (SeahorseService *svc, gchar *ktype,
         t = seahorse_context_keyid_to_dbus (SCTX_APP (), 
                                 seahorse_key_get_keyid (SEAHORSE_KEY (l->data)), 0);
         g_array_append_val (a, t);
+        keynum = keynum + 1;
     }
+    
+    if (keynum > 0)
+        seahorse_notify_import (keynum);
     
     *keys = (gchar**)g_array_free (a, FALSE);
     
