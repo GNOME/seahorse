@@ -353,19 +353,19 @@ set_numbered_status (SeahorseWidget *swidget, const gchar *message, guint num)
 
 /* Shows the properties for a given key */
 static void
-show_properties (SeahorseKey *skey)
+show_properties (SeahorseKey *skey, GtkWindow *parent)
 {
     g_assert (skey);
     
     if (SEAHORSE_IS_PGP_KEY (skey))
-        seahorse_key_properties_new (SEAHORSE_PGP_KEY (skey));
+        seahorse_key_properties_new (SEAHORSE_PGP_KEY (skey), parent);
 #ifdef WITH_SSH    
     else if (SEAHORSE_IS_SSH_KEY (skey))
-        seahorse_ssh_key_properties_new (SEAHORSE_SSH_KEY (skey));
+        seahorse_ssh_key_properties_new (SEAHORSE_SSH_KEY (skey), parent);
 #endif 
 #ifdef WITH_GNOME_KEYRING
     else if (SEAHORSE_IS_GKEYRING_ITEM (skey))
-        seahorse_gkeyring_item_properties_new (SEAHORSE_GKEYRING_ITEM (skey));
+        seahorse_gkeyring_item_properties_new (SEAHORSE_GKEYRING_ITEM (skey), parent);
 #endif
 }
 
@@ -373,14 +373,14 @@ show_properties (SeahorseKey *skey)
 static void
 generate_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
-    seahorse_generate_select_show ();
+    seahorse_generate_select_show (GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)));
 }
 
 /* Loads Key generation assistant for first time users */
 static void
 new_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 {
-    seahorse_generate_select_show ();
+    seahorse_generate_select_show (GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)));
 }
 
 static void
@@ -611,7 +611,7 @@ properties_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
 	SeahorseKey *skey = get_selected_key (swidget, NULL);
 	if (skey != NULL)
-        show_properties (skey);
+        show_properties (skey, GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)));
 }
 
 static void
@@ -727,14 +727,16 @@ sign_activate (GtkWidget *widget, SeahorseWidget *swidget)
 
     skey = get_selected_key (swidget, &uid);
     if (SEAHORSE_IS_PGP_KEY (skey))
-        seahorse_sign_show (SEAHORSE_PGP_KEY (skey), uid);
+        seahorse_sign_show (SEAHORSE_PGP_KEY (skey), 
+                            GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)), 
+                            uid);
 }
 
 static void
 search_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
 #ifdef WITH_KEYSERVER
-    seahorse_keyserver_search_show ();
+    seahorse_keyserver_search_show (GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)));
 #endif
 }
 
@@ -756,7 +758,7 @@ sync_activate (GtkWidget *widget, SeahorseWidget *swidget)
     
     if (keys == NULL)
         keys = seahorse_context_find_keys (SCTX_APP (), SKEY_PGP, 0, SKEY_LOC_LOCAL);
-    seahorse_keyserver_sync_show (keys);
+    seahorse_keyserver_sync_show (keys,GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)));
     g_list_free (keys);
 #endif
 }
@@ -778,7 +780,7 @@ setup_sshkey_activate (GtkWidget *widget, SeahorseWidget *swidget)
     }    
     
     if (keys != NULL)
-        seahorse_ssh_upload_prompt (keys);
+        seahorse_ssh_upload_prompt (keys, GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)));
 #endif 
 }
 
@@ -812,7 +814,7 @@ delete_activate (GtkWidget *widget, SeahorseWidget *swidget)
 static void
 preferences_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
-    seahorse_preferences_show (NULL);
+    seahorse_preferences_show (GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)), NULL);
 }
 
 /* Makes URL in About Dialog Clickable */
@@ -888,7 +890,7 @@ row_activated (GtkTreeView *treeview, GtkTreePath *path, GtkTreeViewColumn *arg2
 
     skey = seahorse_key_manager_store_get_key_from_path (view, path, NULL);
     if (skey != NULL)
-        show_properties (skey);
+        show_properties (skey, GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)));
 }
 
 static gboolean
@@ -1295,7 +1297,7 @@ seahorse_key_manager_show (SeahorseOperation *op)
     GtkActionGroup *actions;
     GtkAction *action;
     
-    swidget = seahorse_widget_new ("key-manager");
+    swidget = seahorse_widget_new ("key-manager", NULL);
     win = GTK_WINDOW (seahorse_widget_get_top (swidget));
     
     notebook = GTK_NOTEBOOK (seahorse_widget_get_widget (swidget, "notebook"));

@@ -79,7 +79,7 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 static void
 configure_clicked (GtkButton *button, SeahorseWidget *swidget)
 {
-    seahorse_preferences_show ("keyserver-tab");
+    seahorse_preferences_show (GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)), "keyserver-tab");
 }
 
 static void
@@ -129,7 +129,7 @@ unhook_notification (GtkWidget *widget, gpointer data)
  * Returns the new window.
  **/
 GtkWindow*
-seahorse_keyserver_sync_show (GList *keys)
+seahorse_keyserver_sync_show (GList *keys, GtkWindow *parent)
 {
     SeahorseWidget *swidget;
     GtkWindow *win;
@@ -137,7 +137,7 @@ seahorse_keyserver_sync_show (GList *keys)
     guint n, notify_id;
     gchar *t;
     
-    swidget = seahorse_widget_new ("keyserver-sync");
+    swidget = seahorse_widget_new ("keyserver-sync", parent);
     g_return_val_if_fail (swidget != NULL, NULL);
     
     win = GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name));

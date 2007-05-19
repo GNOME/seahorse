@@ -45,7 +45,7 @@ completion_handler (SeahorseOperation *op, gpointer data)
 }
 
 static void
-upload_handler (SeahorseOperation *op, gpointer data)
+upload_handler (SeahorseOperation *op, SeahorseWidget *swidget)
 {
     SeahorseSSHKey *skey;
     GList *keys;
@@ -58,7 +58,7 @@ upload_handler (SeahorseOperation *op, gpointer data)
     g_return_if_fail (SEAHORSE_IS_SSH_KEY (skey));
     
     keys = g_list_append (NULL, skey);
-    seahorse_ssh_upload_prompt (keys);
+    seahorse_ssh_upload_prompt (keys, GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)));
     g_list_free (keys);
 }
 
@@ -144,19 +144,19 @@ on_response (GtkDialog *dialog, guint response, SeahorseWidget *swidget)
     
     /* When completed upload */
     if (upload)
-        seahorse_operation_watch (op, G_CALLBACK (upload_handler), NULL, NULL);
+        seahorse_operation_watch (op, G_CALLBACK (upload_handler), NULL, swidget);
     
     seahorse_progress_show (op, _("Creating Secure Shell Key"), TRUE);
     g_object_unref (op);
 }
 
 void
-seahorse_ssh_generate_show (SeahorseSSHSource *src)
+seahorse_ssh_generate_show (SeahorseSSHSource *src, GtkWindow *parent)
 {
     SeahorseWidget *swidget;
     GtkWidget *widget;
     
-    swidget = seahorse_widget_new ("ssh-generate");
+    swidget = seahorse_widget_new ("ssh-generate", parent);
     
     /* Widget already present */
     if (swidget == NULL)

@@ -137,7 +137,7 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 }
 
 void
-seahorse_add_subkey_new (SeahorsePGPKey *pkey)
+seahorse_add_subkey_new (SeahorsePGPKey *pkey, GtkWindow *parent)
 {
 	SeahorseWidget *swidget;
     gchar *userid;
@@ -146,7 +146,7 @@ seahorse_add_subkey_new (SeahorsePGPKey *pkey)
     GtkTreeIter iter;
     GtkCellRenderer *renderer;
 	
-	swidget = seahorse_key_widget_new ("add-subkey", SEAHORSE_KEY (pkey));
+	swidget = seahorse_key_widget_new ("add-subkey", parent, SEAHORSE_KEY (pkey));
 	g_return_if_fail (swidget != NULL);
 	
     userid = seahorse_key_get_name (SEAHORSE_KEY (pkey), 0);

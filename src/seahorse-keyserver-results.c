@@ -50,7 +50,7 @@ close_activate (GtkWidget *widget, SeahorseWidget *swidget)
 static void
 search_activate (GtkWidget *widget, SeahorseWidget *swidget)
 {
-    seahorse_keyserver_search_show ();
+    seahorse_keyserver_search_show (GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)));
 }
 
 /* Loads key properties if a key is selected */
@@ -64,7 +64,8 @@ properties_activate (GtkWidget *widget, SeahorseWidget *swidget)
     
     /* TODO: Handle multiple types of keys here */
     if (skey != NULL && SEAHORSE_IS_PGP_KEY (skey))
-        seahorse_key_properties_new (SEAHORSE_PGP_KEY (skey));
+        seahorse_key_properties_new (SEAHORSE_PGP_KEY (skey), 
+                                     GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)));
 }
 
 static void 
@@ -283,7 +284,8 @@ row_activated (GtkTreeView *treeview, GtkTreePath *path, GtkTreeViewColumn *arg2
     
     skey = seahorse_key_manager_store_get_key_from_path (GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, KEY_LIST)), path, NULL);
     if (skey != NULL && SEAHORSE_IS_PGP_KEY (skey))
-        seahorse_key_properties_new (SEAHORSE_PGP_KEY (skey));
+        seahorse_key_properties_new (SEAHORSE_PGP_KEY (skey),
+                                     GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)));
 }
 
 static void
@@ -430,7 +432,7 @@ filter_keyset (SeahorseKey *skey, const gchar* search)
  * Returns the new window created.
  **/
 GtkWindow* 
-seahorse_keyserver_results_show (SeahorseOperation *op, const gchar *search)
+seahorse_keyserver_results_show (SeahorseOperation *op, GtkWindow *parent, const gchar *search)
 {
     SeahorseKeyManagerStore *skstore;
     SeahorseKeyPredicate *pred;
@@ -444,7 +446,7 @@ seahorse_keyserver_results_show (SeahorseOperation *op, const gchar *search)
     gchar *title, *t;
     gchar *pattern;
     
-    swidget = seahorse_widget_new_allow_multiple ("keyserver-results");
+    swidget = seahorse_widget_new_allow_multiple ("keyserver-results", parent);
     g_return_val_if_fail (swidget != NULL, NULL);
     
     win = GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name));

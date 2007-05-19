@@ -228,16 +228,18 @@ widget_delete_event (GtkWidget *widget, GdkEvent *event, SeahorseWidget *swidget
 /**
  * seahorse_widget_new:
  * @name: Name of widget, filename part of glade file, and name of main window
+ * @parent: GtkWindow to make the parent of the new swidget
  *
  * Creates a new #SeahorseWidget.
  *
  * Returns: The new #SeahorseWidget, or NULL if the widget already exists
  **/
 SeahorseWidget*
-seahorse_widget_new (const gchar *name)
+seahorse_widget_new (const gchar *name, GtkWindow *parent)
 {
-    /* Check if have widget hash */
+        /* Check if have widget hash */
     SeahorseWidget *swidget = seahorse_widget_find (name);
+    GtkWindow *window;
     
     /* If widget already exists, present */
     if (swidget != NULL) {
@@ -250,6 +252,11 @@ seahorse_widget_new (const gchar *name)
     if(!widgets)
         widgets = g_hash_table_new ((GHashFunc)g_str_hash, (GCompareFunc)g_str_equal);
     g_hash_table_insert (widgets, g_strdup (name), swidget);
+    
+    if (parent != NULL) {
+        window = GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name));
+        gtk_window_set_transient_for (window, parent);
+    }
 
     /* We don't care about this floating business */
     g_object_ref (GTK_OBJECT (swidget));
@@ -259,17 +266,24 @@ seahorse_widget_new (const gchar *name)
 }
 
 /**
- * seahorse_widget_new:
+ * seahorse_widget_new_allow_multiple:
  * @name: Name of widget, filename part of glade file, and name of main window
+ * @parent: GtkWindow to make the parent of the new swidget
  *
  * Creates a new #SeahorseWidget without checking if it already exists.
  *
  * Returns: The new #SeahorseWidget
  **/
 SeahorseWidget*
-seahorse_widget_new_allow_multiple (const gchar *name)
+seahorse_widget_new_allow_multiple (const gchar *name, GtkWindow *parent)
 {
+    GtkWindow *window;
     SeahorseWidget *swidget = g_object_new (SEAHORSE_TYPE_WIDGET, "name", name,  NULL);
+    
+    if (parent != NULL) {
+        window = GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name));
+        gtk_window_set_transient_for (window, parent);
+    }
     
     /* We don't care about this floating business */
     g_object_ref (GTK_OBJECT (swidget));

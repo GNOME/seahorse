@@ -205,14 +205,14 @@ algorithm_changed (GtkComboBox *combo, SeahorseWidget *swidget)
 }
 
 void
-seahorse_pgp_generate_show (SeahorsePGPSource *sksrc)
+seahorse_pgp_generate_show (SeahorsePGPSource *sksrc, GtkWindow *parent)
 {
     SeahorseWidget *swidget;
     GtkWidget *widget;
     gulong expires;
     guint i;
     
-    swidget = seahorse_widget_new ("pgp-generate");
+    swidget = seahorse_widget_new ("pgp-generate", parent);
     
     /* Widget already present */
     if (swidget == NULL)

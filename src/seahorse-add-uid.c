@@ -91,12 +91,12 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
  * Creates a new #SeahorseKeyWidget dialog for adding a user ID to @skey.
  **/
 void
-seahorse_add_uid_new (SeahorsePGPKey *pkey)
+seahorse_add_uid_new (SeahorsePGPKey *pkey, GtkWindow *parent)
 {
 	SeahorseWidget *swidget;
     gchar *userid;
 	
-	swidget = seahorse_key_widget_new ("add-uid", SEAHORSE_KEY (pkey));
+	swidget = seahorse_key_widget_new ("add-uid", parent, SEAHORSE_KEY (pkey));
 	g_return_if_fail (swidget != NULL);
 	
     userid = seahorse_key_get_name (SEAHORSE_KEY (pkey), 0);

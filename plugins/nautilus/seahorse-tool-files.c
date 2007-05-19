@@ -206,7 +206,7 @@ prepare_dialog (FilesCtx *ctx, guint nfolders, guint nfiles, gchar* pkguri)
     
     g_assert (pkguri);
 
-    swidget = seahorse_widget_new ("multi-encrypt");
+    swidget = seahorse_widget_new ("multi-encrypt", NULL);
     g_return_val_if_fail (swidget != NULL, NULL);
     
     /* The main 'selected' message */

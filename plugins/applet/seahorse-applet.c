@@ -642,7 +642,7 @@ properties_cb (BonoboUIComponent *uic, SeahorseApplet *sapplet, const char *verb
     /* SeahorseWidget needs a SeahorseContext initialized */
     init_context (sapplet);
     
-    swidget = seahorse_widget_new ("applet-preferences");
+    swidget = seahorse_widget_new ("applet-preferences", NULL);
     
     widget = glade_xml_get_widget (swidget->xml, swidget->name);
 

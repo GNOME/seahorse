@@ -28,6 +28,6 @@
 #include "seahorse-widget.h"
 
 /* Loads generate dialog */
-void	seahorse_generate_select_show	(void);
+void	seahorse_generate_select_show	(GtkWindow *parent);
 
 #endif /* __SEAHORSE_GENERATE_SELECT_H__ */

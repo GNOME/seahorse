@@ -35,9 +35,9 @@
  * Creates a new or shows the current preferences dialog.
  **/
 void
-seahorse_preferences_show (const gchar *tabid)
+seahorse_preferences_show (GtkWindow *parent, const gchar *tabid)
 {   
-    SeahorseWidget *swidget = seahorse_prefs_new ();
+    SeahorseWidget *swidget = seahorse_prefs_new (parent);
     GtkWidget *tab;
     
     if (tabid) {

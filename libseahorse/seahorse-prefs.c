@@ -339,7 +339,8 @@ keyserver_add_clicked (GtkButton *button, SeahorseWidget *sw)
     GtkTreeStore *store;
     GtkTreeIter iter;
     
-    swidget = seahorse_widget_new_allow_multiple ("add-keyserver");
+    swidget = seahorse_widget_new_allow_multiple ("add-keyserver",
+                                                  GTK_WINDOW (glade_xml_get_widget (sw->xml, sw->name)));
     g_return_if_fail (swidget != NULL);
     
     widget = glade_xml_get_widget (swidget->xml, "keyserver-type");
@@ -485,14 +486,14 @@ remove_gconf_notification (GObject *obj, gpointer data)
  * Returns: The preferences window.
  **/
 SeahorseWidget *
-seahorse_prefs_new ()
+seahorse_prefs_new (GtkWindow *parent)
 {
     SeahorseKeyset *skset;
     SeahorseWidget *swidget;
     GtkWidget *widget;
     guint gconf_id;
     
-    swidget = seahorse_widget_new ("prefs");
+    swidget = seahorse_widget_new ("prefs", parent);
     
     widget = glade_xml_get_widget (swidget->xml, "encrypt-self");
     seahorse_check_button_gconf_attach (GTK_CHECK_BUTTON (widget), ENCRYPTSELF_KEY);

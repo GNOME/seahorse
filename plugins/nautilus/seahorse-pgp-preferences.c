@@ -88,7 +88,7 @@ main (int argc, char **argv)
     /* Let operation take care of itself */
     g_object_unref (op);
    
-    swidget = seahorse_prefs_new ();
+    swidget = seahorse_prefs_new (NULL);
 	g_signal_connect (seahorse_widget_get_top (swidget), "destroy", 
                       G_CALLBACK (destroyed), NULL);
 

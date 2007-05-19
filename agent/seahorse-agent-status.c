@@ -178,7 +178,7 @@ window_show ()
         return;
     }
 
-    g_window = seahorse_widget_new ("agent-cache");
+    g_window = seahorse_widget_new ("agent-cache", NULL);
     w = glade_xml_get_widget (g_window->xml, g_window->name);
 
     g_signal_connect (G_OBJECT (w), "delete_event", G_CALLBACK (delete_event), NULL);

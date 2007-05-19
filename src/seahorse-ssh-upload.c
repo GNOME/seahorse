@@ -185,7 +185,7 @@ upload_keys (SeahorseWidget *swidget)
  * Prompt a dialog to upload keys.
  **/
 void
-seahorse_ssh_upload_prompt (GList *keys)
+seahorse_ssh_upload_prompt (GList *keys, GtkWindow *parent)
 {
     SeahorseWidget *swidget;
     GtkWindow *win;
@@ -193,7 +193,7 @@ seahorse_ssh_upload_prompt (GList *keys)
     
     g_return_if_fail (keys != NULL);
     
-    swidget = seahorse_widget_new_allow_multiple ("ssh-upload");
+    swidget = seahorse_widget_new_allow_multiple ("ssh-upload", parent);
     g_return_if_fail (swidget != NULL);
     
     win = GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name));

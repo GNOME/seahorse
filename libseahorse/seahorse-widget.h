@@ -70,9 +70,11 @@ struct _SeahorseWidgetClass {
 
 GType            seahorse_widget_get_type ();
 
-SeahorseWidget*  seahorse_widget_new                (const gchar      *name);
+SeahorseWidget*  seahorse_widget_new                (const gchar      *name,
+                                                     GtkWindow        *parent);
 
-SeahorseWidget*  seahorse_widget_new_allow_multiple (const gchar      *name);
+SeahorseWidget*  seahorse_widget_new_allow_multiple (const gchar      *name,
+                                                     GtkWindow        *parent);
 
 SeahorseWidget*  seahorse_widget_find               (const gchar      *name);
 

@@ -373,14 +373,16 @@ properties_response (GtkDialog *dialog, int response, SeahorseWidget *swidget)
 }
 
 void
-seahorse_gkeyring_item_properties_new (SeahorseGKeyringItem *git)
+seahorse_gkeyring_item_properties_new (SeahorseGKeyringItem *git, GtkWindow *parent)
 {
     SeahorseKey *key = SEAHORSE_KEY (git);
     SeahorseKeySource *sksrc;
     SeahorseWidget *swidget = NULL;
     GtkWidget *widget;
 
-    swidget = seahorse_key_widget_new ("gkeyring-item-properties", key);    
+    swidget = seahorse_key_widget_new ("gkeyring-item-properties",
+                                       parent, 
+                                       key);    
     
     /* This happens if the window is already open */
     if (swidget == NULL)

@@ -29,6 +29,6 @@
 #define SHOW_LENGTH_KEY LISTING_SCHEMAS "/show_length"
 #define SHOW_TYPE_KEY LISTING_SCHEMAS "/show_type"
 
-void seahorse_preferences_show  (const gchar *tabid);
+void seahorse_preferences_show  (GtkWindow *parent, const gchar *tabid);
 
 #endif /* __SEAHORSE_PREFERENCES_H__ */

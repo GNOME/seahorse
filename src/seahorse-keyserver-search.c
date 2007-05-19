@@ -318,7 +318,9 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
     op = seahorse_context_load_remote_keys (SCTX_APP(), search);
     
     /* Open the new result window */    
-    seahorse_keyserver_results_show (op, search);
+    seahorse_keyserver_results_show (op, 
+                                     GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)), 
+                                     search);
 
     free_keyserver_selection (selection);
     seahorse_widget_destroy (swidget);
@@ -327,7 +329,7 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 static void
 configure_clicked (GtkButton *button, SeahorseWidget *swidget)
 {
-    seahorse_preferences_show ("keyserver-tab");
+    seahorse_preferences_show (GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)), "keyserver-tab");
 }
 
 static void
@@ -345,7 +347,7 @@ cleanup_signals (GtkWidget *widget, SeahorseWidget *swidget)
  * Returns the new window.
  **/
 GtkWindow*
-seahorse_keyserver_search_show ()
+seahorse_keyserver_search_show (GtkWindow *parent)
 {	
     SeahorseServiceDiscovery *ssd;
 	SeahorseWidget *swidget;
@@ -353,7 +355,7 @@ seahorse_keyserver_search_show ()
     GtkWidget *w;
     gchar *search;
         
-	swidget = seahorse_widget_new ("keyserver-search");
+	swidget = seahorse_widget_new ("keyserver-search", parent);
 	g_return_val_if_fail (swidget != NULL, NULL);
  
     win = GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name));

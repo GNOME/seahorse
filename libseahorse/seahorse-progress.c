@@ -257,7 +257,7 @@ progress_show (SeahorseOperation *operation)
         return FALSE;
     }
         
-    swidget = seahorse_widget_new_allow_multiple ("progress");
+    swidget = seahorse_widget_new_allow_multiple ("progress", NULL);
     g_return_val_if_fail (swidget != NULL, FALSE);
 
     /* Release our reference on the operation when this window is destroyed */    

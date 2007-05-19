@@ -68,11 +68,11 @@ choose_keytype(SeahorseWidget *swidget)
     seahorse_widget_destroy (swidget);
     
     if (ktype == SKEY_PGP)
-        seahorse_pgp_generate_show (SEAHORSE_PGP_SOURCE (sksrc));
+        seahorse_pgp_generate_show (SEAHORSE_PGP_SOURCE (sksrc), GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)));
         
 #ifdef WITH_SSH 
     else if (ktype == SKEY_SSH)
-        seahorse_ssh_generate_show (SEAHORSE_SSH_SOURCE (sksrc));
+        seahorse_ssh_generate_show (SEAHORSE_SSH_SOURCE (sksrc), GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)));
 #endif 
     
     else
@@ -119,7 +119,7 @@ add_key_type (GtkListStore *store, GQuark type, const char *stock_icon,
 }
 
 void
-seahorse_generate_select_show ()
+seahorse_generate_select_show (GtkWindow *parent)
 {
     SeahorseWidget *swidget;
     GtkListStore *store;
@@ -128,7 +128,7 @@ seahorse_generate_select_show ()
     GtkTreeIter iter;
     GtkWidget *widget;
     
-    swidget = seahorse_widget_new ("generate-select");
+    swidget = seahorse_widget_new ("generate-select", parent);
     
     /* Widget already exists */
     if (swidget == NULL)

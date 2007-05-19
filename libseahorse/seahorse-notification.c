@@ -325,7 +325,7 @@ setup_fallback_notification (SeahorseNotification *snotif, gboolean urgent,
     
     swidget = seahorse_widget_find ("notify");
     if (!swidget) {
-        swidget = seahorse_widget_new ("notify");
+        swidget = seahorse_widget_new ("notify", NULL);
         g_return_if_fail (swidget != NULL);
     }
     

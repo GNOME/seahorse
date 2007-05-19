@@ -139,7 +139,7 @@ choice_toggled (GtkToggleButton *toggle, SeahorseWidget *swidget)
 }
 
 void
-seahorse_sign_show (SeahorsePGPKey *pkey, guint uid)
+seahorse_sign_show (SeahorsePGPKey *pkey, GtkWindow *parent, guint uid)
 {
     SeahorseKeyset *skset;
     GtkWidget *w;
@@ -161,7 +161,7 @@ seahorse_sign_show (SeahorsePGPKey *pkey, guint uid)
         return;
     }
 
-    swidget = seahorse_key_widget_new_with_index ("sign", SEAHORSE_KEY (pkey), uid);
+    swidget = seahorse_key_widget_new_with_index ("sign", parent, SEAHORSE_KEY (pkey), uid);
     g_return_if_fail (swidget != NULL);
 
     /* ... Except for when calling this, which is messed up */

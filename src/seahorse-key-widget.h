@@ -51,11 +51,13 @@ struct _SeahorseKeyWidgetClass {
 GType           seahorse_key_widget_get_type    (void);
 
 SeahorseWidget*	seahorse_key_widget_new         (gchar              *name,
+                                                 GtkWindow          *parent,
                                                  SeahorseKey        *skey);
 
 SeahorseWidget*	seahorse_key_widget_new_with_index	(gchar          *name,
-                                                 SeahorseKey        *skey,
-                                                 guint              index);
+                                                     GtkWindow          *parent,
+                                                     SeahorseKey        *skey,
+                                                     guint              index);
 
 gboolean        seahorse_key_widget_can_create  (gchar              *name,
                                                  SeahorseKey        *skey);

@@ -29,7 +29,7 @@
 #include "seahorse-context.h"
 #include "seahorse-widget.h"
 
-SeahorseWidget *    seahorse_prefs_new          (void);
+SeahorseWidget *    seahorse_prefs_new          (GtkWindow *parent);
 
 void                seahorse_prefs_add_tab      (SeahorseWidget *swidget,
                                                  GtkWidget *label,

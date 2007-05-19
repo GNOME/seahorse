@@ -302,8 +302,7 @@ seahorse_photo_add (SeahorsePGPKey *pkey, GtkWindow *parent, const gchar *path)
 }
 
 gboolean
-seahorse_photo_delete (SeahorsePGPKey *pkey, gpgmex_photo_id_t photo, 
-                       GtkWindow *parent)
+seahorse_photo_delete (SeahorsePGPKey *pkey, GtkWindow *parent, gpgmex_photo_id_t photo)
 {
     gpgme_error_t gerr;
     GtkWidget *dlg;

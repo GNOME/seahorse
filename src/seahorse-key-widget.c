@@ -199,7 +199,7 @@ seahorse_key_widget_destroyed (GtkObject *skey, SeahorseKeyWidget *skwidget)
  * the focus is grabbed.
  */
 static SeahorseWidget*
-seahorse_key_widget_create (gchar *name, SeahorseKey *skey, guint index)
+seahorse_key_widget_create (gchar *name, GtkWindow *parent, SeahorseKey *skey, guint index)
 {
     SeahorseWidget *swidget = NULL;     // widget to lookup or create
     GHashTable *widgets = NULL;         // hash of widgets from types
@@ -259,15 +259,18 @@ seahorse_key_widget_create (gchar *name, SeahorseKey *skey, guint index)
     gtk_window_group_add_window (group, GTK_WINDOW (widget));
     gtk_grab_add (widget);
     
+    if (parent != NULL)
+        gtk_window_set_transient_for (GTK_WINDOW (widget), parent);
+    
     return swidget;
 }
 
 SeahorseWidget*
-seahorse_key_widget_new (gchar *name, SeahorseKey *skey)
+seahorse_key_widget_new (gchar *name, GtkWindow *parent, SeahorseKey *skey)
 {
     SeahorseWidget *swidget;
     
-    swidget = seahorse_key_widget_create (name, skey, 0);
+    swidget = seahorse_key_widget_create (name, parent, skey, 0);
     
     /* We don't care about this floating business */
     g_object_ref (GTK_OBJECT (swidget));
@@ -277,11 +280,11 @@ seahorse_key_widget_new (gchar *name, SeahorseKey *skey)
 }
 
 SeahorseWidget*
-seahorse_key_widget_new_with_index (gchar *name, SeahorseKey *skey, guint index)
+seahorse_key_widget_new_with_index (gchar *name, GtkWindow *parent, SeahorseKey *skey, guint index)
 {
     SeahorseWidget *swidget;
     
-    swidget = seahorse_key_widget_create (name, skey, index);
+    swidget = seahorse_key_widget_create (name, parent, skey, index);
     
     /* We don't care about this floating business */
     g_object_ref (GTK_OBJECT (swidget));

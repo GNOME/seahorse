@@ -83,7 +83,7 @@ expires_toggled (GtkWidget *widget, SeahorseWidget *swidget)
 }
 
 void
-seahorse_expires_new (SeahorsePGPKey *pkey, guint index)
+seahorse_expires_new (SeahorsePGPKey *pkey, GtkWindow *parent, guint index)
 {
 	SeahorseWidget *swidget;
     gpgme_subkey_t subkey;
@@ -94,7 +94,7 @@ seahorse_expires_new (SeahorsePGPKey *pkey, guint index)
 	g_return_if_fail (pkey != NULL && SEAHORSE_IS_PGP_KEY (pkey));
 	g_return_if_fail (index <= seahorse_pgp_key_get_num_subkeys (pkey));
 	
-	swidget = seahorse_key_widget_new_with_index ("expires", SEAHORSE_KEY (pkey), index);
+	swidget = seahorse_key_widget_new_with_index ("expires", parent, SEAHORSE_KEY (pkey), index);
 	g_return_if_fail (swidget != NULL);
 	
 	glade_xml_signal_connect_data (swidget->xml, "on_calendar_change_button_clicked",

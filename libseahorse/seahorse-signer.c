@@ -34,7 +34,7 @@
 #include "seahorse-util.h"
 
 SeahorsePGPKey*
-seahorse_signer_get ()
+seahorse_signer_get (GtkWindow *parent)
 {
     SeahorseWidget *swidget;
     SeahorseKeyset *skset;
@@ -71,7 +71,7 @@ seahorse_signer_get ()
         return SEAHORSE_PGP_KEY (skey);
     }
     
-    swidget = seahorse_widget_new ("signer");
+    swidget = seahorse_widget_new ("signer", parent);
     g_return_val_if_fail (swidget != NULL, NULL);
             
     combo = glade_xml_get_widget (swidget->xml, "signer-select");

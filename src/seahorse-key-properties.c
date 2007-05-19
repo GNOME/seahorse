@@ -138,7 +138,7 @@ signature_row_activated(GtkTreeView *treeview, GtkTreePath *path, GtkTreeViewCol
     
 	if (skey != NULL) {
 	   if (SEAHORSE_IS_PGP_KEY (skey))
-	       seahorse_key_properties_new (SEAHORSE_PGP_KEY (skey));
+	       seahorse_key_properties_new (SEAHORSE_PGP_KEY (skey), GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)));
     }
 }
 
@@ -188,7 +188,8 @@ names_add_clicked (GtkWidget *widget, SeahorseWidget *swidget)
     SeahorseKey *skey;
     
     skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
-    seahorse_add_uid_new (SEAHORSE_PGP_KEY (skey));
+    seahorse_add_uid_new (SEAHORSE_PGP_KEY (skey), 
+                          GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)));
 }
 
 static void 
@@ -229,7 +230,9 @@ names_sign_clicked (GtkWidget *widget, SeahorseWidget *swidget)
     index = names_get_selected_uid (swidget);
 
     if (index >= 1) {
-        seahorse_sign_show (SEAHORSE_PGP_KEY (skey), index - 1);
+        seahorse_sign_show (SEAHORSE_PGP_KEY (skey), 
+                            GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)),
+                            index - 1);
 
 #ifdef WITH_KEYSERVER
         if (seahorse_gconf_get_boolean(AUTOSYNC_KEY) == TRUE) {
@@ -527,8 +530,8 @@ owner_photo_delete_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
     pkey = SEAHORSE_PGP_KEY (SEAHORSE_KEY_WIDGET (swidget)->skey);
     g_assert (SEAHORSE_IS_PGP_KEY (pkey));
     
-    if (seahorse_photo_delete (pkey, photoid, 
-                GTK_WINDOW (seahorse_widget_get_top (swidget))))
+    if (seahorse_photo_delete (pkey, GTK_WINDOW (seahorse_widget_get_top (swidget)),
+                               photoid))
         g_object_set_data (G_OBJECT (swidget), "current-photoid", NULL);
 }
 
@@ -711,7 +714,9 @@ owner_sign_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
     index = owner_get_selected_uid (swidget);
 
     if (index >= 1) 
-        seahorse_sign_show (SEAHORSE_PGP_KEY (skey), index - 1);
+        seahorse_sign_show (SEAHORSE_PGP_KEY (skey),
+                            GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)), 
+                            index - 1);
 }
 
 static void
@@ -939,7 +944,8 @@ details_add_subkey_button_clicked (GtkButton *button, SeahorseWidget *swidget)
 	skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
 	pkey = SEAHORSE_PGP_KEY (skey);
 	
-	seahorse_add_subkey_new (pkey);
+	seahorse_add_subkey_new (pkey, 
+	                         GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)));
 }
 
 static void
@@ -955,7 +961,9 @@ details_revoke_subkey_button_clicked (GtkButton *button, SeahorseWidget *swidget
 {
 	SeahorseKey *skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
 
-	seahorse_revoke_new (SEAHORSE_PGP_KEY (skey), get_selected_subkey (swidget));
+	seahorse_revoke_new (SEAHORSE_PGP_KEY (skey), 
+	                     GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)), 
+	                     get_selected_subkey (swidget));
 }
 
 static void
@@ -1054,7 +1062,9 @@ details_calendar_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 	if (-1 == index) {
 		index = 0;
 	}
-	seahorse_expires_new (SEAHORSE_PGP_KEY (skey), index);	
+	seahorse_expires_new (SEAHORSE_PGP_KEY (skey), 
+	                      GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)), 
+	                      index);	
 }
 
 static void
@@ -1502,7 +1512,9 @@ static void
 trust_sign_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 {
     g_return_if_fail (SEAHORSE_IS_PGP_KEY (SEAHORSE_KEY_WIDGET (swidget)->skey));
-    seahorse_sign_show (SEAHORSE_PGP_KEY (SEAHORSE_KEY_WIDGET (swidget)->skey), 0);
+    seahorse_sign_show (SEAHORSE_PGP_KEY (SEAHORSE_KEY_WIDGET (swidget)->skey), 
+                        GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)),
+                        0);
 }
 
 static void
@@ -1794,12 +1806,12 @@ properties_destroyed (GtkObject *object, SeahorseWidget *swidget)
 }
 
 static SeahorseWidget*
-setup_public_properties (SeahorsePGPKey *pkey)
+setup_public_properties (SeahorsePGPKey *pkey, GtkWindow *parent)
 {
     SeahorseWidget *swidget;
     GtkWidget *widget;
 
-    swidget = seahorse_key_widget_new ("pgp-public-key-properties", SEAHORSE_KEY (pkey));    
+    swidget = seahorse_key_widget_new ("pgp-public-key-properties", parent, SEAHORSE_KEY (pkey));    
     
     /* This happens if the window is already open */
     if (swidget == NULL)
@@ -1831,12 +1843,12 @@ setup_public_properties (SeahorsePGPKey *pkey)
 }
 
 static SeahorseWidget*
-setup_private_properties (SeahorsePGPKey *pkey)
+setup_private_properties (SeahorsePGPKey *pkey, GtkWindow *parent)
 {
     SeahorseWidget *swidget;
     GtkWidget *widget;
 
-    swidget = seahorse_key_widget_new ("pgp-private-key-properties", SEAHORSE_KEY (pkey));
+    swidget = seahorse_key_widget_new ("pgp-private-key-properties", parent, SEAHORSE_KEY (pkey));
 
     /* This happens if the window is already open */
     if (swidget == NULL)
@@ -1868,7 +1880,7 @@ setup_private_properties (SeahorsePGPKey *pkey)
 }
 
 void
-seahorse_key_properties_new (SeahorsePGPKey *pkey)
+seahorse_key_properties_new (SeahorsePGPKey *pkey, GtkWindow *parent)
 {
     SeahorseKey *skey = SEAHORSE_KEY (pkey);
     SeahorseKeySource *sksrc;
@@ -1890,9 +1902,9 @@ seahorse_key_properties_new (SeahorsePGPKey *pkey)
     }
     
     if (seahorse_key_get_etype (skey) == SKEY_PUBLIC)
-        swidget = setup_public_properties (pkey);
+        swidget = setup_public_properties (pkey, parent);
     else
-        swidget = setup_private_properties (pkey);       
+        swidget = setup_private_properties (pkey, parent);       
     
     if (swidget)
         seahorse_widget_show (swidget);

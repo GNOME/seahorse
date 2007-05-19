@@ -29,18 +29,16 @@
 
 GtkWindow*	seahorse_key_manager_show	        (SeahorseOperation *op);
 
-GtkWindow*  seahorse_keyserver_search_show      (void);
+GtkWindow*  seahorse_keyserver_search_show      (GtkWindow *parent);
 
-GtkWindow*  seahorse_keyserver_sync_show        (GList *keys);
+GtkWindow*  seahorse_keyserver_sync_show        (GList *keys,
+                                                 GtkWindow *parent);
 
 GtkWindow*  seahorse_keyserver_results_show     (SeahorseOperation *op,
+                                                 GtkWindow *parent,
                                                  const gchar *search_text);
 
-void        seahorse_generate_select_show       (void);
-
-void        seahorse_generate_adv_show          (void);
-
-void        seahorse_generate_druid_show        (void);
+void        seahorse_generate_select_show       (GtkWindow *parent);
 
 void        seahorse_delete_show                (GList *keys);
 

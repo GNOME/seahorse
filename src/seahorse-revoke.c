@@ -57,7 +57,7 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 }
 
 void
-seahorse_revoke_new (SeahorsePGPKey *pkey, guint index)
+seahorse_revoke_new (SeahorsePGPKey *pkey, GtkWindow *parent, guint index)
 {
 	SeahorseWidget *swidget;
 	gchar *title;
@@ -66,7 +66,7 @@ seahorse_revoke_new (SeahorsePGPKey *pkey, guint index)
 	g_return_if_fail (pkey != NULL && SEAHORSE_IS_PGP_KEY (pkey));
 	g_return_if_fail (index <= seahorse_pgp_key_get_num_subkeys (pkey));
 	
-	swidget = seahorse_key_widget_new_with_index ("revoke", SEAHORSE_KEY (pkey), index);
+	swidget = seahorse_key_widget_new_with_index ("revoke", parent, SEAHORSE_KEY (pkey), index);
 	g_return_if_fail (swidget != NULL);
 	
 	glade_xml_signal_connect_data (swidget->xml, "ok_clicked",
@@ -84,7 +84,7 @@ seahorse_revoke_new (SeahorsePGPKey *pkey, guint index)
 }
 
 void
-seahorse_add_revoker_new (SeahorsePGPKey *pkey)
+seahorse_add_revoker_new (SeahorsePGPKey *pkey, GtkWindow *parent)
 {
 	SeahorsePGPKey *revoker;
 	GtkWidget *dialog;
@@ -95,14 +95,14 @@ seahorse_add_revoker_new (SeahorsePGPKey *pkey)
 	g_return_if_fail (pkey != NULL && SEAHORSE_IS_PGP_KEY (pkey));
 
     /* TODO: Limit to selecting only PGP keys */
-    revoker = SEAHORSE_PGP_KEY (seahorse_signer_get ());
+    revoker = SEAHORSE_PGP_KEY (seahorse_signer_get (parent));
     if (revoker == NULL)
         return;
 	
     userid1 = seahorse_key_get_name (SEAHORSE_KEY (revoker), 0);
     userid2 = seahorse_key_get_name (SEAHORSE_KEY (pkey), 0);
 
-	dialog = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
+	dialog = gtk_message_dialog_new (parent, GTK_DIALOG_MODAL,
 		GTK_MESSAGE_WARNING, GTK_BUTTONS_YES_NO,
 		_("You are about to add %s as a revoker for %s."
 		" This operation cannot be undone! Are you sure you want to continue?"),

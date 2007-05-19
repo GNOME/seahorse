@@ -324,7 +324,9 @@ seahorse_ssh_key_properties_new (SeahorseSSHKey *skey)
     SeahorseWidget *swidget = NULL;
     GtkWidget *widget;
 
-    swidget = seahorse_key_widget_new ("ssh-key-properties", key);    
+    swidget = seahorse_key_widget_new ("ssh-key-properties",
+                                       GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)),
+                                       key);    
     
     /* This happens if the window is already open */
     if (swidget == NULL)
