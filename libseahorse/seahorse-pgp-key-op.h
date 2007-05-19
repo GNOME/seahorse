@@ -45,7 +45,7 @@ typedef enum {
 	/* ElGamal subkey, encrypt only. See #ELGAMAL_MIN and #LENGTH_MAX.
 	 * Only used in seahorse_ops_key_add_subkey().
 	 */
-	ELGAMAL = 3,
+	ELGAMAL = 4,
 	/* RSA key, sign only. Can be a subkey or a primary key.
 	 * See #RSA_MIN and #RSA_MAX.
 	 */
