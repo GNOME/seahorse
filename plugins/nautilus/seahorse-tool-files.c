@@ -61,6 +61,169 @@ free_file_info (FileInfo *file, gpointer unused)
     g_free (file);
 }
 
+/* Included from file-roller/src/main.c for file types */
+
+typedef enum {
+	FR_FILE_TYPE_ACE,
+	FR_FILE_TYPE_AR,
+	FR_FILE_TYPE_ARJ,
+	FR_FILE_TYPE_BZIP,
+	FR_FILE_TYPE_BZIP2,
+	FR_FILE_TYPE_COMPRESS,
+	FR_FILE_TYPE_CPIO,
+	FR_FILE_TYPE_DEB,
+	FR_FILE_TYPE_ISO,
+	FR_FILE_TYPE_EAR,
+	FR_FILE_TYPE_EXE,
+	FR_FILE_TYPE_GZIP,
+	FR_FILE_TYPE_JAR,
+	FR_FILE_TYPE_LHA,
+	FR_FILE_TYPE_LZOP,
+	FR_FILE_TYPE_RAR,
+	FR_FILE_TYPE_RPM,
+	FR_FILE_TYPE_TAR,
+	FR_FILE_TYPE_TAR_BZ,
+	FR_FILE_TYPE_TAR_BZ2,
+	FR_FILE_TYPE_TAR_GZ,
+	FR_FILE_TYPE_TAR_LZOP,
+	FR_FILE_TYPE_TAR_COMPRESS,
+	FR_FILE_TYPE_STUFFIT,
+	FR_FILE_TYPE_WAR,
+	FR_FILE_TYPE_ZIP,
+	FR_FILE_TYPE_ZOO,
+	FR_FILE_TYPE_7ZIP,
+	FR_FILE_TYPE_NULL
+} FRFileType;
+
+typedef struct {
+	char       *command;
+	gboolean    can_open;
+	gboolean    can_save;
+	gboolean    support_many_files;
+	FRFileType  file_type;
+} FRCommandDescription;
+
+typedef struct {
+	FRFileType  id;
+	char       *ext;
+	char       *mime_type;
+	char       *name;
+} FRFileTypeDescription;
+
+FRFileTypeDescription file_type_desc[] = {
+	{ FR_FILE_TYPE_ACE,          ".ace",     "application/x-ace", N_("Ace (.ace)") },
+	{ FR_FILE_TYPE_AR,           ".ar",      "application/x-ar", N_("Ar (.ar)") },
+	{ FR_FILE_TYPE_ARJ,          ".arj",     "application/x-arj", N_("Arj (.arj)") },
+	{ FR_FILE_TYPE_BZIP,         ".bz",      "application/x-bzip", NULL },
+	{ FR_FILE_TYPE_BZIP2,        ".bz2",     "application/x-bzip", NULL },
+	{ FR_FILE_TYPE_COMPRESS,     ".Z",       "application/x-compress", NULL },
+	{ FR_FILE_TYPE_CPIO,         ".cpio",    "application/x-cpio", NULL },
+	{ FR_FILE_TYPE_DEB,          ".deb",     "application/x-deb", NULL },
+	{ FR_FILE_TYPE_ISO,          ".iso",     "application/x-cd-image", NULL },
+	{ FR_FILE_TYPE_EAR,          ".ear",     "application/x-ear", N_("Ear (.ear)") },
+	{ FR_FILE_TYPE_EXE,          ".exe",     "application/x-ms-dos-executable", N_("Self-extracting zip (.exe)") },
+	{ FR_FILE_TYPE_GZIP,         ".gz",      "application/x-gzip", NULL},
+	{ FR_FILE_TYPE_JAR,          ".jar",     "application/x-jar", N_("Jar (.jar)")},
+	{ FR_FILE_TYPE_LHA,          ".lzh",     "application/x-lha", N_("Lha (.lzh)") },
+	{ FR_FILE_TYPE_LZOP,         ".lzo",     "application/x-lzop", NULL },
+	{ FR_FILE_TYPE_RAR,          ".rar",     "application/x-rar", N_("Rar (.rar)") },
+	{ FR_FILE_TYPE_RPM,          ".rpm",     "application/x-rpm", NULL },
+	{ FR_FILE_TYPE_TAR,          ".tar",     "application/x-tar", N_("Tar uncompressed (.tar)") },
+	{ FR_FILE_TYPE_TAR_BZ,       ".tar.bz",  "application/x-bzip-compressed-tar", N_("Tar compressed with bzip (.tar.bz)") },
+	{ FR_FILE_TYPE_TAR_BZ2,      ".tar.bz2", "application/x-bzip-compressed-tar", N_("Tar compressed with bzip2 (.tar.bz2)") },
+	{ FR_FILE_TYPE_TAR_GZ,       ".tar.gz",  "application/x-compressed-tar", N_("Tar compressed with gzip (.tar.gz)") },
+	{ FR_FILE_TYPE_TAR_LZOP,     ".tar.lzo", "application/x-lzop-compressed-tar", N_("Tar compressed with lzop (.tar.lzo)") },
+	{ FR_FILE_TYPE_TAR_COMPRESS, ".tar.Z",   "application/x-compressed-tar", N_("Tar compressed with compress (.tar.Z)") },
+	{ FR_FILE_TYPE_STUFFIT,      ".sit",     "application/x-stuffit", NULL },
+	{ FR_FILE_TYPE_WAR,          ".war",     "application/zip", N_("War (.war)") },
+	{ FR_FILE_TYPE_ZIP,          ".zip",     "application/zip", N_("Zip (.zip)") },
+	{ FR_FILE_TYPE_ZOO,          ".zoo",     "application/x-zoo", N_("Zoo (.zoo)") },
+	{ FR_FILE_TYPE_7ZIP,         ".7z",      "application/x-7z-compressed", N_("7-Zip (.7z)") }
+};
+
+FRCommandDescription command_desc[] = {
+	{ "tar",        TRUE,  TRUE,  TRUE,  FR_FILE_TYPE_TAR },
+	{ "zip",        TRUE,  TRUE,  TRUE,  FR_FILE_TYPE_ZIP },
+	{ "unzip",      TRUE,  FALSE, TRUE,  FR_FILE_TYPE_ZIP },
+	{ "rar",        TRUE,  TRUE,  TRUE,  FR_FILE_TYPE_RAR },
+	{ "gzip",       TRUE,  TRUE,  FALSE, FR_FILE_TYPE_GZIP },
+	{ "bzip2",      TRUE,  TRUE,  FALSE, FR_FILE_TYPE_BZIP2 },
+	{ "unace",      TRUE,  FALSE, TRUE,  FR_FILE_TYPE_ACE },
+	{ "ar",         TRUE,  TRUE,  TRUE,  FR_FILE_TYPE_AR },
+	{ "ar",         TRUE,  FALSE, TRUE,  FR_FILE_TYPE_DEB },
+	{ "arj",        TRUE,  TRUE,  TRUE,  FR_FILE_TYPE_ARJ },
+	{ "bzip2",      TRUE,  FALSE, FALSE, FR_FILE_TYPE_BZIP },
+	{ "compress",   TRUE,  TRUE,  FALSE, FR_FILE_TYPE_COMPRESS },
+	{ "cpio",       TRUE,  FALSE, FALSE, FR_FILE_TYPE_CPIO },
+	{ "isoinfo",    TRUE,  FALSE, TRUE,  FR_FILE_TYPE_ISO },
+	{ "zip",        TRUE,  TRUE,  TRUE,  FR_FILE_TYPE_EAR },
+	{ "zip",        TRUE,  TRUE,  TRUE,  FR_FILE_TYPE_JAR },
+	{ "zip",        TRUE,  FALSE,  TRUE,  FR_FILE_TYPE_EXE },
+	{ "lha",        TRUE,  TRUE,  TRUE,  FR_FILE_TYPE_LHA },
+	{ "lzop",       TRUE,  TRUE,  FALSE, FR_FILE_TYPE_LZOP },
+	{ "rpm2cpio",   TRUE,  FALSE, TRUE,  FR_FILE_TYPE_RPM },
+	{ "uncompress", TRUE,  FALSE, FALSE, FR_FILE_TYPE_COMPRESS },
+	{ "unstuff",    TRUE,  FALSE, FALSE, FR_FILE_TYPE_STUFFIT },
+	{ "zip",        TRUE,  TRUE,  TRUE,  FR_FILE_TYPE_WAR },
+	{ "zoo",        TRUE,  TRUE,  TRUE,  FR_FILE_TYPE_ZOO },
+	{ "7za",        TRUE,  TRUE,  TRUE,  FR_FILE_TYPE_7ZIP },
+	{ "7zr",        TRUE,  TRUE,  TRUE,  FR_FILE_TYPE_7ZIP }
+};
+
+FRCommandDescription tar_command_desc[] = {
+	{ "gzip",      TRUE,  TRUE,  TRUE,  FR_FILE_TYPE_TAR_GZ },
+	{ "bzip2",     TRUE,  TRUE,  TRUE,  FR_FILE_TYPE_TAR_BZ2 },
+	{ "bzip",      FALSE, TRUE,  TRUE,  FR_FILE_TYPE_TAR_BZ },
+	{ "lzop",      TRUE,  TRUE,  TRUE,  FR_FILE_TYPE_TAR_LZOP },
+	{ "compress",  TRUE,  TRUE,  TRUE,  FR_FILE_TYPE_TAR_COMPRESS }
+};
+
+FRFileType save_type[32];
+
+gboolean
+is_program_in_path (const char *filename)
+{
+	char *str;
+	int   result = FALSE;
+
+	str = g_find_program_in_path (filename);
+	if (str != NULL) {
+		g_free (str);
+		result = TRUE;
+	}
+
+	return result;
+}
+
+static void
+compute_supported_archive_types (void)
+{
+	int i, j;
+	int s_i = 0;
+
+	for (i = 0; i < G_N_ELEMENTS (command_desc); i++) {
+		FRCommandDescription com = command_desc[i];
+
+		if (!is_program_in_path (com.command))
+			continue;
+
+		if (strcmp (com.command, "tar") == 0)
+			for (j = 0; j < G_N_ELEMENTS (tar_command_desc); j++) {
+				FRCommandDescription com2 = tar_command_desc[j];
+
+				if (!is_program_in_path (com2.command))
+					continue;
+				save_type[s_i++] = com2.file_type;
+			}
+
+		if (com.can_save && com.support_many_files)
+			save_type[s_i++] = com.file_type;
+	}
+
+	save_type[s_i++] = FR_FILE_TYPE_NULL;
+}
+
+
 /* -----------------------------------------------------------------------------
  * CHECK STEP
  */
@@ -194,15 +357,19 @@ seperate_toggled (GtkWidget *widget, GtkWidget *package)
 
 /* Build the multiple file dialog */
 static SeahorseWidget*
-prepare_dialog (FilesCtx *ctx, guint nfolders, guint nfiles, gchar* pkguri)
+prepare_dialog (FilesCtx *ctx, guint nfolders, guint nfiles, gchar* pkguri, gchar* ext)
 {
     SeahorseWidget *swidget;
     const gchar* pkg;
     GtkWidget *tog;
     GtkWidget *w;
+    GtkWidget *combo;
     gchar *msg;
     gboolean sep;
-    gint sel;
+    gint sel, i;
+    GtkCellRenderer *cell;
+    GtkTreeModel *store;
+	FRFileType *save_type_list;
     
     g_assert (pkguri);
 
@@ -235,6 +402,31 @@ prepare_dialog (FilesCtx *ctx, guint nfolders, guint nfiles, gchar* pkguri)
         w = glade_xml_get_widget (swidget->xml, "package-name");
         pkg = seahorse_util_uri_split_last (pkguri);
         gtk_entry_set_text (GTK_ENTRY (w), pkg);
+        
+        /* Setup the URI combo box */
+        combo = glade_xml_get_widget (swidget->xml, "package-extension");
+        store = GTK_TREE_MODEL (gtk_list_store_new (1, G_TYPE_STRING));
+        gtk_combo_box_set_model (GTK_COMBO_BOX (combo), store); 
+        fprintf(stderr, "Model added\n");  
+        g_object_unref (store);
+
+        gtk_cell_layout_clear (GTK_CELL_LAYOUT (combo));
+        cell = gtk_cell_renderer_text_new ();
+        gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo), cell, TRUE);
+        gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo), cell,
+                                        "text", 0,
+                                        NULL);
+        
+        compute_supported_archive_types ();
+        
+        save_type_list = save_type;
+        
+        for (i = 0; save_type_list[i] != FR_FILE_TYPE_NULL; i++) {
+    		gtk_combo_box_append_text (GTK_COMBO_BOX (combo),
+    					   file_type_desc[save_type_list[i]].ext);
+		    if (strcmp(ext, file_type_desc[save_type_list[i]].ext) == 0)
+		        gtk_combo_box_set_active (GTK_COMBO_BOX (combo), i);
+    	}
     
         if(sep) {
             gtk_widget_grab_focus (w);
@@ -256,6 +448,7 @@ get_results (SeahorseWidget *swidget)
 {
     const gchar* name;
     const gchar* t;
+    gchar *full_name, *ext;
     GtkWidget *w;
     gboolean sep;
     
@@ -269,6 +462,10 @@ get_results (SeahorseWidget *swidget)
         w = glade_xml_get_widget (swidget->xml, "package-name");
         name = gtk_entry_get_text (GTK_ENTRY (w));
         
+        w = glade_xml_get_widget (swidget->xml, "package-extension");
+        ext = gtk_combo_box_get_active_text (GTK_COMBO_BOX (w));
+        
+        
         /* No paths */
         t = strrchr(name, '/');
         name = t ? ++t : name;
@@ -276,18 +473,14 @@ get_results (SeahorseWidget *swidget)
         /* If someone goes out of their way to delete the file name, 
          * we're simply unimpressed and put back a default. */
         if(name[0] == 0)
-            name = "encrypted-package.zip";
+            name = "encrypted-package";
+        
+        full_name = g_strdup_printf("%s%s", name, ext);
             
         /* Save the extension */
-        t = strchr(name, '.');
-        if(t != NULL)
-        {
-            t++;
-            if(t[0] != 0) 
-                seahorse_gconf_set_string (MULTI_EXTENSION_KEY, t);
-        }
-        
-        return g_strdup(name);
+        seahorse_gconf_set_string (MULTI_EXTENSION_KEY, ext);
+
+        return full_name;
     }
     
     return NULL;
@@ -322,7 +515,7 @@ step_process_multiple (FilesCtx *ctx, const gchar **orig_uris, GError **err)
         
     /* The package extension */
     if ((ext = seahorse_gconf_get_string (MULTI_EXTENSION_KEY)) == NULL)
-        ext = g_strdup ("zip"); /* Yes this happens when the schema isn't installed */    
+        ext = g_strdup (".zip"); /* Yes this happens when the schema isn't installed */    
         
     /* Figure out a good URI for our package */
     for (l = ctx->files; l; l = g_list_next (l)) {
@@ -332,17 +525,10 @@ step_process_multiple (FilesCtx *ctx, const gchar **orig_uris, GError **err)
         }
     }
     
-    /* Add proper extensions etc... */
-    g_assert (pkg_uri);
-    t = seahorse_util_uri_replace_ext (pkg_uri, ext);
-    g_free (pkg_uri);
-    g_free (ext);
-    
-    pkg_uri = seahorse_util_uri_unique (t);
-    g_free (t);
-        
     /* This sets up but doesn't run the dialog */    
-    swidget = prepare_dialog (ctx, nfolders, nfiles, pkg_uri);
+    swidget = prepare_dialog (ctx, nfolders, nfiles, pkg_uri, ext);
+    
+    g_free (ext);
     
     dlg = seahorse_widget_get_top (swidget);
     
