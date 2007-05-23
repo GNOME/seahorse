@@ -137,14 +137,14 @@ on_response (GtkDialog *dialog, guint response, SeahorseWidget *swidget)
     op = seahorse_ssh_operation_generate (src, email, type, bits);
     g_return_if_fail (op != NULL);
     
-    seahorse_widget_destroy (swidget);
-    
     /* Watch for errors so we can display */
     seahorse_operation_watch (op, G_CALLBACK (completion_handler), NULL, NULL);
     
     /* When completed upload */
     if (upload)
         seahorse_operation_watch (op, G_CALLBACK (upload_handler), NULL, swidget);
+    
+    seahorse_widget_destroy (swidget);
     
     seahorse_progress_show (op, _("Creating Secure Shell Key"), TRUE);
     g_object_unref (op);

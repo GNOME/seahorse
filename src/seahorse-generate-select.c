@@ -65,8 +65,6 @@ choose_keytype(SeahorseWidget *swidget)
     sksrc = seahorse_context_find_key_source (SCTX_APP (), ktype, SKEY_LOC_LOCAL);
     g_return_if_fail (sksrc != NULL);
     
-    seahorse_widget_destroy (swidget);
-    
     if (ktype == SKEY_PGP)
         seahorse_pgp_generate_show (SEAHORSE_PGP_SOURCE (sksrc), GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)));
         
@@ -77,6 +75,8 @@ choose_keytype(SeahorseWidget *swidget)
     
     else
         g_return_if_reached ();
+
+    seahorse_widget_destroy (swidget);
 }
 
 static void
