@@ -25,13 +25,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Seahorse 0.3.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-03-14 03:28+0000\n"
-"PO-Revision-Date: 2007-03-23 19:13+0100\n"
-"Last-Translator: Ask Hjorth Larsen <asklarsen@gmail.com>\n"
+"POT-Creation-Date: 2007-05-25 00:50+0200\n"
+"PO-Revision-Date: 2007-03-30 17:50+0100\n"
+"Last-Translator: Peter Bach <bach.peter@gmail.com>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: ../agent/seahorse-agent-actions.c:134
 #: ../libseahorse/seahorse-ssh-operation.c:445
@@ -69,7 +70,9 @@ msgstr "PGP-nøgle: %s"
 msgid ""
 "<b>Warning</b>: Your system is not configured to cache passphrases in secure "
 "memory."
-msgstr "<b>Advarsel</b>: Dit system er ikke indstillet til at lagre adgangskoder i sikker hukommelse."
+msgstr ""
+"<b>Advarsel</b>: Dit system er ikke indstillet til at lagre adgangskoder i "
+"sikker hukommelse."
 
 #: ../agent/seahorse-agent-cache.glade.h:2
 msgid "Cache _Preferences"
@@ -100,47 +103,49 @@ msgid "Do not daemonize seahorse-agent"
 msgstr "Gør ikke seahorse-agent til dæmon"
 
 # Dette ved jeg slet ikke hvad betyder
-#: ../agent/seahorse-agent-main.c:53
+#: ../agent/seahorse-agent-main.c:54
 msgid "Print variables in for a C type shell"
 msgstr "Udskriv variable til C-lignende skal"
 
-#: ../agent/seahorse-agent-main.c:56
+#: ../agent/seahorse-agent-main.c:57
 msgid ""
 "Display variables instead of editing conf files (gpg.conf, SSH agent socket)"
-msgstr "Vis variable i stedet for at redigere conf-filer (gpg.conf, sokkel til SSH-agent)"
+msgstr ""
+"Vis variable i stedet for at redigere conf-filer (gpg.conf, sokkel til SSH-"
+"agent)"
 
-#: ../agent/seahorse-agent-main.c:59
+#: ../agent/seahorse-agent-main.c:60
 msgid "Execute other arguments on the command line"
 msgstr "Eksekvér andre argumenter på kommandolinjen"
 
 # Flertydig
-#: ../agent/seahorse-agent-main.c:62
+#: ../agent/seahorse-agent-main.c:64
 msgid "Allow GPG agent request from any display"
 msgstr "Tillad GPG-agentforespørgsel fra enhver skærm"
 
-#: ../agent/seahorse-agent-main.c:65
+#: ../agent/seahorse-agent-main.c:67
 msgid "command..."
 msgstr "kommando..."
 
-#: ../agent/seahorse-agent-main.c:87 ../daemon/seahorse-daemon.c:72
+#: ../agent/seahorse-agent-main.c:89 ../daemon/seahorse-daemon.c:72
 msgid "couldn't fork process"
 msgstr "kunne ikke forgrene proces"
 
-#: ../agent/seahorse-agent-main.c:93 ../daemon/seahorse-daemon.c:78
+#: ../agent/seahorse-agent-main.c:95 ../daemon/seahorse-daemon.c:78
 msgid "couldn't create new process group"
 msgstr "kunne ikke oprette ny procesgruppe"
 
-#: ../agent/seahorse-agent-main.c:225 ../daemon/seahorse-daemon.c:195
-#: ../plugins/applet/seahorse-applet.c:1013
+#: ../agent/seahorse-agent-main.c:227 ../daemon/seahorse-daemon.c:195
+#: ../plugins/applet/seahorse-applet.c:1016
 #: ../plugins/nautilus/seahorse-tool.c:570 ../src/main.c:59
 msgid "couldn't drop privileges properly"
 msgstr "kunne ikke opgive rettighederne korrekt"
 
-#: ../agent/seahorse-agent-main.c:232
+#: ../agent/seahorse-agent-main.c:234
 msgid "Encryption Key Agent (Seahorse)"
 msgstr "Krypteringsnøgle-agent (Seahorse)"
 
-#: ../agent/seahorse-agent-main.c:240
+#: ../agent/seahorse-agent-main.c:242
 msgid "no command specified to execute"
 msgstr "ingen kommando specificeret til eksekvering"
 
@@ -148,15 +153,15 @@ msgstr "ingen kommando specificeret til eksekvering"
 msgid "Authorize Passphrase Access"
 msgstr "Autorisér adgang med adgangskode"
 
-#: ../agent/seahorse-agent-prompt.c:251
+#: ../agent/seahorse-agent-prompt.c:252
 msgid "The passphrase is cached in memory."
 msgstr "Adgangskoden lagres i hukommelsen."
 
-#: ../agent/seahorse-agent-prompt.c:256
+#: ../agent/seahorse-agent-prompt.c:257
 msgid "Always ask me before using a cached passphrase"
 msgstr "Spørg mig altid før en lagret adgangskode anvendes"
 
-#: ../agent/seahorse-agent-prompt.c:273
+#: ../agent/seahorse-agent-prompt.c:274
 msgid "_Authorize"
 msgstr "_Autorisér"
 
@@ -173,12 +178,12 @@ msgstr "Kør ikke seahorse-daemon som dæmon"
 msgid "Encryption Daemon (Seahorse)"
 msgstr "Krypteringdæmon (Seahorse)"
 
-#: ../daemon/seahorse-service.c:103 ../daemon/seahorse-service.c:127
+#: ../daemon/seahorse-service.c:103 ../daemon/seahorse-service.c:128
 #, c-format
 msgid "Invalid or unrecognized key type: %s"
 msgstr "Ugyldig eller ukendt nøgletype: %s"
 
-#: ../daemon/seahorse-service.c:181 ../daemon/seahorse-service-keyset.c:123
+#: ../daemon/seahorse-service.c:186 ../daemon/seahorse-service-keyset.c:123
 #: ../daemon/seahorse-service-keyset.c:152
 #, c-format
 msgid "Invalid or unrecognized key: %s"
@@ -255,248 +260,307 @@ msgstr "%ss krypteringsnøgler"
 msgid ""
 "A list of key server URIs to search for remote PGP keys. In later versions a "
 "display name can be included, by appending a space and then the name."
-msgstr "En liste af nøgleserver-URI'er hvorpå der søges efter fjerne PGP-nøgler. I nyere versioner kan et navn inkluderes ved at efterstille et mellemrum og derpå navnet."
+msgstr ""
+"En liste af nøgleserver-URI'er hvorpå der søges efter fjerne PGP-nøgler. I "
+"nyere versioner kan et navn inkluderes ved at efterstille et mellemrum og "
+"derpå navnet."
 
 #: ../data/seahorse.schemas.in.h:2
 msgid ""
 "After performing an decrypt or verify operation from the applet, display the "
 "resulting text in a window."
-msgstr "Vis den resulterende tekst i et vindue efter dekrypterings- eller verificeringsoperation i panelprogrammet."
+msgstr ""
+"Vis den resulterende tekst i et vindue efter dekrypterings- eller "
+"verificeringsoperation i panelprogrammet."
 
 #: ../data/seahorse.schemas.in.h:3
 msgid ""
 "After performing an encrypt or signing operation from the applet, display "
 "the resulting text in a window."
-msgstr "Vis den resulterende tekst i et vindue efter krypterings- eller underskrivelsesoperation i panelprogrammet."
+msgstr ""
+"Vis den resulterende tekst i et vindue efter krypterings- eller "
+"underskrivelsesoperation i panelprogrammet."
 
 #: ../data/seahorse.schemas.in.h:4
+#, fuzzy
+msgid "Auto Retrieve Keys"
+msgstr "Henter nøgler"
+
+#: ../data/seahorse.schemas.in.h:5
 msgid "Auto Sync Keys"
 msgstr "Synkronisér nøgler automatisk"
 
-#: ../data/seahorse.schemas.in.h:5
+#: ../data/seahorse.schemas.in.h:6
 msgid "Controls the visibility of the expires column for the key manager."
 msgstr "Bestemmer synligheden af nøglehåndteringens udløbstidskolonne."
 
-#: ../data/seahorse.schemas.in.h:6
+#: ../data/seahorse.schemas.in.h:7
 msgid "Controls the visibility of the trust column for the key manager."
 msgstr "Bestemmer synligheden af nøglehåndteringens troværdighedskolonne."
 
-#: ../data/seahorse.schemas.in.h:7
+#: ../data/seahorse.schemas.in.h:8
 msgid "Controls the visibility of the type column for the key manager."
 msgstr "Bestemmer synligheden af nøglehåndteringens typekolonne."
 
-#: ../data/seahorse.schemas.in.h:8
+#: ../data/seahorse.schemas.in.h:9
 msgid "Controls the visibility of the validity column for the key manager."
 msgstr "Bestemmer synligheden af nøglehåndteringens gyldighedskolonne."
 
-#: ../data/seahorse.schemas.in.h:9
+#: ../data/seahorse.schemas.in.h:10
 msgid "Display cache reminder in the notification area"
 msgstr "Vis cachepåmindelse i statusfeltet"
 
-#: ../data/seahorse.schemas.in.h:10
+#: ../data/seahorse.schemas.in.h:11
 msgid "Display clipboard after decrypting"
 msgstr "Vis klippebord efter dekryptering"
 
-#: ../data/seahorse.schemas.in.h:11
+#: ../data/seahorse.schemas.in.h:12
 msgid "Display clipboard after encrypting"
 msgstr "Vis klippebord efter kryptering"
 
-#: ../data/seahorse.schemas.in.h:12
+#: ../data/seahorse.schemas.in.h:13
 msgid "Enable DNS-SD sharing"
 msgstr "Aktiver DNS-SD deling"
 
-#: ../data/seahorse.schemas.in.h:13
-msgid ""
-"Enables DNS-SD (Apple Bonjour) sharing of keys. seahorse-daemon must running "
-"and must be built with HKP and DNS-SD support."
-msgstr "Aktiverer DNS-SD (Apple Bonjour) deling af nøgler. seahorse-daemon skal køre og skal være kompileret med HKP- og DNS-SD-understøttelse."
-
 #: ../data/seahorse.schemas.in.h:14
+#, fuzzy
+msgid ""
+"Enables DNS-SD (Apple Bonjour) sharing of keys. seahorse-daemon must be "
+"running and must be built with HKP and DNS-SD support."
+msgstr ""
+"Aktiverer DNS-SD (Apple Bonjour) deling af nøgler. seahorse-daemon skal køre "
+"og skal være kompileret med HKP- og DNS-SD-understøttelse."
+
+#: ../data/seahorse.schemas.in.h:15
 msgid "Expire passwords in the cache"
 msgstr "Lad adgangskoder i cache udløbe"
 
-#: ../data/seahorse.schemas.in.h:15
+#: ../data/seahorse.schemas.in.h:16
 msgid "ID of the default key"
 msgstr "ID for standardnøglen"
 
-#: ../data/seahorse.schemas.in.h:16
+#: ../data/seahorse.schemas.in.h:17
 msgid ""
 "If set to 'gnome' uses gnome-keyring to cache passwords. When set to "
 "'internal' uses internal cache."
-msgstr "Hvis denne sættes til \"gnome\", benyttes gnome-keyring til kodeordscache. Sættes den til \"internal\", benyttes intern cache."
-
-#: ../data/seahorse.schemas.in.h:17
-msgid ""
-"If set to true, then files encrypted with seahorse will be ASCII armor "
-"encoded."
-msgstr "Hvis denne sættes til \"true\", vil seahorse ASCII-pansre krypterede filer."
+msgstr ""
+"Hvis denne sættes til \"gnome\", benyttes gnome-keyring til kodeordscache. "
+"Sættes den til \"internal\", benyttes intern cache."
 
 #: ../data/seahorse.schemas.in.h:18
 msgid ""
-"If set to true, then the default key will always be added to an encryption "
-"recipients list."
-msgstr "Hvis denne sættes til \"true\", vil standardnøglen altid blive føjet til modtagerlisten ved kryptering."
+"If set to true, then files encrypted with seahorse will be ASCII armor "
+"encoded."
+msgstr ""
+"Hvis denne sættes til \"true\", vil seahorse ASCII-pansre krypterede filer."
 
 #: ../data/seahorse.schemas.in.h:19
+msgid ""
+"If set to true, then the default key will always be added to an encryption "
+"recipients list."
+msgstr ""
+"Hvis denne sættes til \"true\", vil standardnøglen altid blive føjet til "
+"modtagerlisten ved kryptering."
+
+#: ../data/seahorse.schemas.in.h:20
 msgid "Last key server search pattern"
 msgstr "Sidste nøgleserver-søgestreng"
 
-#: ../data/seahorse.schemas.in.h:20
+#: ../data/seahorse.schemas.in.h:21
 msgid "Last key servers used"
 msgstr "Sidst benyttede nøgleservere"
 
-#: ../data/seahorse.schemas.in.h:21
+#: ../data/seahorse.schemas.in.h:22
 msgid "Last key used to sign a message."
 msgstr "Sidst benyttede nøgle til underskrift af meddelelse."
 
-#: ../data/seahorse.schemas.in.h:22
+#: ../data/seahorse.schemas.in.h:23
 msgid "PGP Key servers"
 msgstr "PGP-nøgleservere"
 
-#: ../data/seahorse.schemas.in.h:23
+#: ../data/seahorse.schemas.in.h:24
 msgid "Prompt before using GPG passwords in cache"
 msgstr "Spørg før GPG-adgangskoder i cache benyttes"
 
-#: ../data/seahorse.schemas.in.h:24
+#: ../data/seahorse.schemas.in.h:25
 msgid "Publish keys to this key server."
 msgstr "Offentliggør nøgler til denne nøgleserver."
 
-#: ../data/seahorse.schemas.in.h:25
+#: ../data/seahorse.schemas.in.h:26
 msgid ""
 "Reflect the contents of the clipboard (whether encrypted, signed, etc...) in "
 "the panel applet icon."
-msgstr "Afbild klippebordets egenskaber (hvorvidt indholdet er krypteret, underskrevet osv.) i panelprogram-ikonet."
-
-#: ../data/seahorse.schemas.in.h:26
-msgid ""
-"Set to 'false' to disable display of the cache reminder in the notification "
-"area of your panel."
-msgstr "Sæt til \"false\" for at deaktivere visning af cachepåmindelser i panelets statusfelt."
+msgstr ""
+"Afbild klippebordets egenskaber (hvorvidt indholdet er krypteret, "
+"underskrevet osv.) i panelprogram-ikonet."
 
 #: ../data/seahorse.schemas.in.h:27
 msgid ""
-"Set to 'true' to have seahorse-agent prompt before giving out passwords it "
-"has cached."
-msgstr "Sæt til \"true\" for at få seahorse-agent til at spørge før den oplyser kodeord fra cache."
+"Set to 'false' to disable display of the cache reminder in the notification "
+"area of your panel."
+msgstr ""
+"Sæt til \"false\" for at deaktivere visning af cachepåmindelser i panelets "
+"statusfelt."
 
 #: ../data/seahorse.schemas.in.h:28
+msgid ""
+"Set to 'true' to have seahorse-agent prompt before giving out passwords it "
+"has cached."
+msgstr ""
+"Sæt til \"true\" for at få seahorse-agent til at spørge før den oplyser "
+"kodeord fra cache."
+
+#: ../data/seahorse.schemas.in.h:29
 msgid "Show clipboard state in panel"
 msgstr "Vis klippebordstilstand i panel"
 
-#: ../data/seahorse.schemas.in.h:29
+#: ../data/seahorse.schemas.in.h:30
 msgid "Show expires column in key manager"
 msgstr "Vis udløbstidskolonne i nøglehåndtering"
 
-#: ../data/seahorse.schemas.in.h:30
+#: ../data/seahorse.schemas.in.h:31
 msgid "Show trust column in key manager"
 msgstr "Vis tillidskolonnen i nøglehåndtering"
 
-#: ../data/seahorse.schemas.in.h:31
+#: ../data/seahorse.schemas.in.h:32
 msgid "Show type column in key manager"
 msgstr "Vis typekolonne i nøglehåndtering"
 
-#: ../data/seahorse.schemas.in.h:32
+#: ../data/seahorse.schemas.in.h:33
 msgid "Show validity column in key manager"
 msgstr "Vis gyldighedskolonne i nøglehåndtering"
 
-#: ../data/seahorse.schemas.in.h:33
+#: ../data/seahorse.schemas.in.h:34
 msgid ""
 "Specify the column to sort the recipients window by. Columns are: 'name' and "
 "'id'. Put a '-' in front of the column name to sort in descending order."
-msgstr "Angiv kolonnen hvormed modtagervinduet sorteres. Kolonnerne er: \"name\" og \"id\". Skriv \"-\" foran kolonnenavnet for at sortere i aftagende rækkefølge."
+msgstr ""
+"Angiv kolonnen hvormed modtagervinduet sorteres. Kolonnerne er: \"name\" og "
+"\"id\". Skriv \"-\" foran kolonnenavnet for at sortere i aftagende "
+"rækkefølge."
 
-#: ../data/seahorse.schemas.in.h:34
+#: ../data/seahorse.schemas.in.h:35
 msgid ""
 "Specify the column to sort the seahorse key manager main window by. Columns "
 "are: 'name', 'id', 'validity', 'expires', 'trust', and 'type'. Put a '-' in "
 "front of the column name to sort in descending order."
-msgstr "Angiv kolonnen hvormed seahorse-nøglehåndterings hovedvindue sorteres. Kolonnerne er: \"name\", \"id\", \"validity\", \"expires\", \"trust\" og \"type\". Skriv en \"-\" foran kolonnenavnet for at sortere i aftagende rækkefølge."
-
-#: ../data/seahorse.schemas.in.h:35
-msgid "The ID of the last secret key used to sign a message."
-msgstr "ID for den sidste hemmelige nøgle der blev benyttet til at underskrive en meddelelse."
+msgstr ""
+"Angiv kolonnen hvormed seahorse-nøglehåndterings hovedvindue sorteres. "
+"Kolonnerne er: \"name\", \"id\", \"validity\", \"expires\", \"trust\" og "
+"\"type\". Skriv en \"-\" foran kolonnenavnet for at sortere i aftagende "
+"rækkefølge."
 
 #: ../data/seahorse.schemas.in.h:36
+msgid "The ID of the last secret key used to sign a message."
+msgstr ""
+"ID for den sidste hemmelige nøgle der blev benyttet til at underskrive en "
+"meddelelse."
+
+#: ../data/seahorse.schemas.in.h:37
 msgid "The column to sort the recipients by"
 msgstr "Kolonnen hvormed modtagere sorteres"
 
-#: ../data/seahorse.schemas.in.h:37
+#: ../data/seahorse.schemas.in.h:38
 msgid "The column to sort the seahorse keys by"
 msgstr "Kolonnen hvormed seahorse-nøglerne sorteres"
 
-#: ../data/seahorse.schemas.in.h:38
+#: ../data/seahorse.schemas.in.h:39
 msgid ""
 "The key server to publish PGP keys to. Or empty to suppress publishing of "
 "PGP keys."
-msgstr "Nøgleserveren hvorpå PGP-nøgler offentliggøres, eller tom hvis PGP-nøgler ikke ønskes offentliggjort."
+msgstr ""
+"Nøgleserveren hvorpå PGP-nøgler offentliggøres, eller tom hvis PGP-nøgler "
+"ikke ønskes offentliggjort."
 
-#: ../data/seahorse.schemas.in.h:39
+#: ../data/seahorse.schemas.in.h:40
 msgid ""
 "The last key server a search was performed against or empty for all key "
 "servers."
-msgstr "Nøgleserveren hvorpå der sidst blev udført en søgning, eller alle nøgleservere hvis tom."
+msgstr ""
+"Nøgleserveren hvorpå der sidst blev udført en søgning, eller alle "
+"nøgleservere hvis tom."
 
-#: ../data/seahorse.schemas.in.h:40
+#: ../data/seahorse.schemas.in.h:41
 msgid "The last search pattern searched for against a key server."
 msgstr "Det sidste søgemønster anvendt på en nøgleserver."
 
-#: ../data/seahorse.schemas.in.h:41
+#: ../data/seahorse.schemas.in.h:42
 msgid "The time (in minutes) to cache GPG passwords"
 msgstr "Tiden (i minutter) hvori GPG-kodeord gemmes"
 
-#: ../data/seahorse.schemas.in.h:42
+#: ../data/seahorse.schemas.in.h:43
 msgid ""
 "This is the amount of time, specified in minutes, to cache GPG passwords in "
 "seahorse-agent."
-msgstr "Dette er tidsrummet i minutter, hvori GPG-kodeord bliver cachet i seahorse-agent."
-
-#: ../data/seahorse.schemas.in.h:43
-msgid ""
-"This option enables the GPG password cache in the seahorse-agent program. "
-"The 'use-agent' setting in gpg.conf affects this setting."
-msgstr "Denne indstilling aktiverer GPG-kodeordscachen i programmet seahorse-agent. Indstillingen \"use-agent\" i gpg.conf har indflydelse på denne indstilling."
+msgstr ""
+"Dette er tidsrummet i minutter, hvori GPG-kodeord bliver cachet i seahorse-"
+"agent."
 
 #: ../data/seahorse.schemas.in.h:44
 msgid ""
-"This specifies the default key to use for certain operations, mainly signing."
-msgstr "Specificerer standardnøglen der benyttes ved visse operationer, hovedsageligt underskrift."
+"This option enables the GPG password cache in the seahorse-agent program. "
+"The 'use-agent' setting in gpg.conf affects this setting."
+msgstr ""
+"Denne indstilling aktiverer GPG-kodeordscachen i programmet seahorse-agent. "
+"Indstillingen \"use-agent\" i gpg.conf har indflydelse på denne indstilling."
 
 #: ../data/seahorse.schemas.in.h:45
 msgid ""
-"When set seahorse-agent will try to automatically load the users SSH keys "
-"when needed. This is equivalent to using the ssh-add utility."
-msgstr "Når denne er indstillet til det, vil seahorse-agent automatisk forsøge at hente brugerens SSH-nøgler når det er nødvendigt. Dette er ækvivalent med at bruge ssh-add værktøjet."
+"This specifies the default key to use for certain operations, mainly signing."
+msgstr ""
+"Specificerer standardnøglen der benyttes ved visse operationer, "
+"hovedsageligt underskrift."
 
 #: ../data/seahorse.schemas.in.h:46
 msgid ""
-"When set, seahorse-agent expires GPG passwords in its cache after a period "
-"of time."
-msgstr "Ved tilvalg vil seahorse-agent lade GPG-kodeord i cachen udløbe efter en vis tidsperiode."
+"When set seahorse-agent will try to automatically load the users SSH keys "
+"when needed. This is equivalent to using the ssh-add utility."
+msgstr ""
+"Når denne er indstillet til det, vil seahorse-agent automatisk forsøge at "
+"hente brugerens SSH-nøgler når det er nødvendigt. Dette er ækvivalent med at "
+"bruge ssh-add værktøjet."
 
 #: ../data/seahorse.schemas.in.h:47
+msgid ""
+"When set, seahorse-agent expires GPG passwords in its cache after a period "
+"of time."
+msgstr ""
+"Ved tilvalg vil seahorse-agent lade GPG-kodeord i cachen udløbe efter en vis "
+"tidsperiode."
+
+#: ../data/seahorse.schemas.in.h:48
 msgid "Where to store cached passwords."
 msgstr "Hvor cachede kodeord lagres."
 
-#: ../data/seahorse.schemas.in.h:48
+#: ../data/seahorse.schemas.in.h:49
+#, fuzzy
+msgid "Whether or not keys should be automatically retrieved from key servers."
+msgstr ""
+"Hvorvidt ændrede nøgler automatisk skal synkroniseres ved "
+"standardnøgleserveren."
+
+#: ../data/seahorse.schemas.in.h:50
 msgid ""
 "Whether or not modified keys should be automatically synced with the default "
 "key server."
-msgstr "Hvorvidt ændrede nøgler automatisk skal synkroniseres ved standardnøgleserveren."
+msgstr ""
+"Hvorvidt ændrede nøgler automatisk skal synkroniseres ved "
+"standardnøgleserveren."
 
-#: ../data/seahorse.schemas.in.h:49
+#: ../data/seahorse.schemas.in.h:51
 msgid "Whether the GPG password cache is enabled"
 msgstr "Hvorvidt GPG-kodeordscachen er aktiveret"
 
 # Hvad betyder det at kryptere "til" en nøgle?
-#: ../data/seahorse.schemas.in.h:50
+#: ../data/seahorse.schemas.in.h:52
 msgid "Whether to always encrypt to default key"
 msgstr "Hvorvidt der altid krypteres til standardnøgle"
 
-#: ../data/seahorse.schemas.in.h:51
+#: ../data/seahorse.schemas.in.h:53
 msgid "Whether to automatically load SSH keys on demand."
 msgstr "Hvorvidt SSH-nøgler automatisk indlæses når der er brug for dem."
 
-#: ../data/seahorse.schemas.in.h:52
+#: ../data/seahorse.schemas.in.h:54
 msgid "Whether to use ASCII Armor"
 msgstr "Hvorvidt der benyttes ASCII-pansring"
 
@@ -529,13 +593,13 @@ msgstr "Ingen (underskriv ikke)"
 #. TODO: Icons
 #: ../libcryptui/cryptui-key-list.c:117
 #: ../src/seahorse-key-manager-store.c:954
-#: ../src/seahorse-key-properties.c:866
+#: ../src/seahorse-key-properties.c:871
 msgid "Name"
 msgstr "Navn"
 
 #: ../libcryptui/cryptui-key-list.c:120
 #: ../src/seahorse-key-manager-store.c:966
-#: ../src/seahorse-key-properties.c:1714
+#: ../src/seahorse-key-properties.c:1726
 msgid "Key ID"
 msgstr "Nøgle-ID"
 
@@ -565,15 +629,12 @@ msgstr "Værtsnavn eller adresser for serveren."
 msgid "The port to access the server on."
 msgstr "Porten der benyttes til at forbinde til serveren."
 
-# Mærkeligt.
-#: ../libseahorse/seahorse-add-keyserver.glade.h:7
-msgid "initial temporary item"
-msgstr "indledningsvis midlertidigt objekt"
-
 #: ../libseahorse/seahorse-hkp-source.c:358
 #, c-format
 msgid "Search was not specific enough. Server '%s' found too many keys."
-msgstr "Søgningen var ikke tilstrækkeligt specifik. Serveren \"%s\" fandt for mange nøgler."
+msgstr ""
+"Søgningen var ikke tilstrækkeligt specifik. Serveren \"%s\" fandt for mange "
+"nøgler."
 
 #: ../libseahorse/seahorse-hkp-source.c:360
 #, c-format
@@ -600,41 +661,41 @@ msgstr "Søger efter nøgler på: %s"
 #. The ldap_cb and chain_cb were set in seahorse_ldap_operation_start
 #: ../libseahorse/seahorse-hkp-source.c:857
 #: ../libseahorse/seahorse-hkp-source.c:929
-#: ../libseahorse/seahorse-ldap-source.c:650
+#: ../libseahorse/seahorse-ldap-source.c:656
 #, c-format
 msgid "Connecting to: %s"
 msgstr "Forbinder til: %s"
 
-#: ../libseahorse/seahorse-ldap-source.c:443
+#: ../libseahorse/seahorse-ldap-source.c:449
 #, c-format
 msgid "Couldn't communicate with '%s': %s"
 msgstr "Kunne ikke kommunikere med \"%s\": %s"
 
-#: ../libseahorse/seahorse-ldap-source.c:623
+#: ../libseahorse/seahorse-ldap-source.c:629
 #, c-format
 msgid "Couldn't resolve address: %s"
 msgstr "Kunne ikke finde adressen: %s"
 
-#: ../libseahorse/seahorse-ldap-source.c:699
+#: ../libseahorse/seahorse-ldap-source.c:705
 #, c-format
 msgid "Resolving server address: %s"
 msgstr "Finder serveradresse: %s"
 
-#: ../libseahorse/seahorse-ldap-source.c:873
+#: ../libseahorse/seahorse-ldap-source.c:883
 #, c-format
 msgid "Searching for keys containing '%s'..."
 msgstr "Søger efter nøgler der indeholder \"%s\"..."
 
-#: ../libseahorse/seahorse-ldap-source.c:900
+#: ../libseahorse/seahorse-ldap-source.c:910
 #, c-format
 msgid "Searching for key id '%s'..."
 msgstr "Søger efter nøgle-ID \"%s\"..."
 
-#: ../libseahorse/seahorse-ldap-source.c:1001
+#: ../libseahorse/seahorse-ldap-source.c:1011
 msgid "Retrieving remote keys..."
 msgstr "Henter fjerne nøgler..."
 
-#: ../libseahorse/seahorse-ldap-source.c:1134
+#: ../libseahorse/seahorse-ldap-source.c:1144
 msgid "Sending keys to key server..."
 msgstr "Sender nøgler til nøgleserver..."
 
@@ -654,60 +715,64 @@ msgstr[0] "Nøgle importeret"
 msgstr[1] "Nøgler importeret"
 
 # Mærkelige tags
-#: ../libseahorse/seahorse-notification.c:601
+#. TRANSLATORS: <key id='xxx'> is a custom markup tag, do not translate.
+#: ../libseahorse/seahorse-notification.c:602
 #, c-format
 msgid "Signed by <i><key id='%s'/> <b>expired</b></i> on %s."
 msgstr "Underskrevet af <i><key id=\"%s\"/> <b>udløbet</b></i> den %s."
 
-#: ../libseahorse/seahorse-notification.c:602
+#: ../libseahorse/seahorse-notification.c:603
 msgid "Invalid Signature"
 msgstr "Ugyldig underskrift"
 
-#: ../libseahorse/seahorse-notification.c:607
+#: ../libseahorse/seahorse-notification.c:609
 #, c-format
 msgid "Signed by <i><key id='%s'/></i> on %s <b>Expired</b>."
 msgstr "Underskrevet af <i><key id=\"%s\"/></i> den %s <b>Udløbet</b>."
 
-#: ../libseahorse/seahorse-notification.c:608
+#: ../libseahorse/seahorse-notification.c:610
 msgid "Expired Signature"
 msgstr "Udløbet underskrift"
 
-#: ../libseahorse/seahorse-notification.c:613
+#: ../libseahorse/seahorse-notification.c:616
 #, c-format
 msgid "Signed by <i><key id='%s'/> <b>Revoked</b></i> on %s."
 msgstr "Underskrevet af <i><key id=\"%s\"/> <b>Tilbagekaldt</b></i> den %s."
 
 # Enten en ugyldiggjort underskrift eller også har de ugyldiggjort en underskrift. Oversættelsen kan forstås på begge måder så det skulle være ok
-#: ../libseahorse/seahorse-notification.c:614
+#: ../libseahorse/seahorse-notification.c:617
 msgid "Revoked Signature"
 msgstr "Underskrift tilbagekaldt"
 
-#: ../libseahorse/seahorse-notification.c:619
+#. TRANSLATORS: <key id='xxx'> is a custom markup tag, do not translate.
+#: ../libseahorse/seahorse-notification.c:623
 #, c-format
 msgid "Signed by <i><key id='%s'/></i> on %s."
 msgstr "Underskrevet af <i><key id=\"%s\"/></i> den %s."
 
-#: ../libseahorse/seahorse-notification.c:620
+#: ../libseahorse/seahorse-notification.c:624
 msgid "Good Signature"
 msgstr "Gyldig underskrift"
 
-#: ../libseahorse/seahorse-notification.c:625
+#: ../libseahorse/seahorse-notification.c:629
 msgid "Signing key not in keyring."
 msgstr "Underskriver nøgle der ikke er i nøgleringen."
 
-#: ../libseahorse/seahorse-notification.c:626
+#: ../libseahorse/seahorse-notification.c:630
 msgid "Unknown Signature"
 msgstr "Ukendt underskrift"
 
-#: ../libseahorse/seahorse-notification.c:630
+#: ../libseahorse/seahorse-notification.c:634
 msgid "Bad or forged signature. The signed data was modified."
-msgstr "Ugyldig eller forfalsket underskrift. De underskrevne data er blevet modificeret."
+msgstr ""
+"Ugyldig eller forfalsket underskrift. De underskrevne data er blevet "
+"modificeret."
 
-#: ../libseahorse/seahorse-notification.c:631
+#: ../libseahorse/seahorse-notification.c:635
 msgid "Bad Signature"
 msgstr "Ugyldig underskrift"
 
-#: ../libseahorse/seahorse-notification.c:639
+#: ../libseahorse/seahorse-notification.c:643
 msgid "Couldn't verify signature."
 msgstr "Kunne ikke verificere underskrift."
 
@@ -723,30 +788,30 @@ msgstr "Adgangskode"
 msgid "Password:"
 msgstr "Kodeord:"
 
-#: ../libseahorse/seahorse-passphrase.c:240
+#: ../libseahorse/seahorse-passphrase.c:242
 msgid "Confirm:"
 msgstr "Bekræft:"
 
-#: ../libseahorse/seahorse-passphrase.c:323
+#: ../libseahorse/seahorse-passphrase.c:325
 msgid "Wrong passphrase."
 msgstr "Forkert adgangskode."
 
-#: ../libseahorse/seahorse-passphrase.c:327
+#: ../libseahorse/seahorse-passphrase.c:329
 #, c-format
 msgid "Enter new passphrase for '%s'"
 msgstr "Skriv ny adgangskode til \"%s\""
 
-#: ../libseahorse/seahorse-passphrase.c:329
+#: ../libseahorse/seahorse-passphrase.c:331
 #, c-format
 msgid "Enter passphrase for '%s'"
 msgstr "Skriv adgangskode til \"%s\""
 
-#: ../libseahorse/seahorse-passphrase.c:332
+#: ../libseahorse/seahorse-passphrase.c:334
 #: ../src/seahorse-change-passphrase.glade.h:4
 msgid "Enter new passphrase"
 msgstr "Skriv ny adgangskode"
 
-#: ../libseahorse/seahorse-passphrase.c:334
+#: ../libseahorse/seahorse-passphrase.c:336
 msgid "Enter passphrase"
 msgstr "Skriv adgangskode"
 
@@ -766,7 +831,7 @@ msgid "Private PGP Key"
 msgstr "Privat PGP-nøgle"
 
 #: ../libseahorse/seahorse-pgp-key.c:694 ../libseahorse/seahorse-validity.c:31
-#: ../src/seahorse-key-properties.c:1090
+#: ../src/seahorse-key-properties.c:1100
 msgid "Unknown"
 msgstr "Ukendt"
 
@@ -797,7 +862,9 @@ msgstr "Indlæser nøgler..."
 msgid ""
 "Invalid key data (missing UIDs). This may be due to a computer with a date "
 "set in the future or a missing self-signature."
-msgstr "Ugyldige nøgledata (manglende UID'er). Dette kan skyldes at en computer har dato indstillet til fremtiden eller en manglende egenunderskrift."
+msgstr ""
+"Ugyldige nøgledata (manglende UID'er). Dette kan skyldes at en computer har "
+"dato indstillet til fremtiden eller en manglende egenunderskrift."
 
 #: ../libseahorse/seahorse-pgp-source.c:942 ../src/seahorse-key-manager.c:454
 #: ../src/seahorse-key-manager.c:502
@@ -816,22 +883,23 @@ msgstr "Ugyldig nøgleserver-adresse."
 msgid ""
 "For help contact your system adminstrator or the administrator of the key "
 "server."
-msgstr "Kontakt din systemadministrator eller nøgleserverens administrator for hjælp."
+msgstr ""
+"Kontakt din systemadministrator eller nøgleserverens administrator for hjælp."
 
 # hvis det skal oversættes til andet end URL, så er det relevant hvorvidt oversættelsen skal begynde med stort eller småt
 #: ../libseahorse/seahorse-prefs.c:172
 msgid "URL"
 msgstr "URL"
 
-#: ../libseahorse/seahorse-prefs.c:356
+#: ../libseahorse/seahorse-prefs.c:357
 msgid "Custom"
 msgstr "Tilpasset"
 
-#: ../libseahorse/seahorse-prefs.c:426
+#: ../libseahorse/seahorse-prefs.c:427
 msgid "None: Don't publish keys"
 msgstr "Ingen: Offentliggør ikke nøgler"
 
-#: ../libseahorse/seahorse-prefs.c:508
+#: ../libseahorse/seahorse-prefs.c:509
 msgid "None. Prompt for a key."
 msgstr "Ingen. Spørg om en nøgle."
 
@@ -845,7 +913,9 @@ msgstr "Kunne ikke starte programmet \"seahorse-agent\""
 
 #: ../libseahorse/seahorse-prefs-cache.c:246
 msgid "The 'seahorse-agent' program exited unsuccessfully."
-msgstr "Programmet \"seahorse-agent\" blev afsluttet uden at have fuldført sin opgave."
+msgstr ""
+"Programmet \"seahorse-agent\" blev afsluttet uden at have fuldført sin "
+"opgave."
 
 #: ../libseahorse/seahorse-prefs.glade.h:1
 msgid "<b>Defaults</b>"
@@ -855,7 +925,9 @@ msgstr "<b>Forvalg</b>"
 msgid ""
 "<b>Note:</b> The 'seahorse-agent' program has been started. This program is "
 "necessary in order to cache passphrases. "
-msgstr "<b>Bemærk:</b> Programmet \"seahorse-agent\" er blevet startet. Dette program er nødvendigt til lagring af adgangskoder i cache. "
+msgstr ""
+"<b>Bemærk:</b> Programmet \"seahorse-agent\" er blevet startet. Dette "
+"program er nødvendigt til lagring af adgangskoder i cache. "
 
 #: ../libseahorse/seahorse-prefs.glade.h:3
 msgid "<b>Remember PGP Passphrases</b>"
@@ -869,11 +941,15 @@ msgstr "<b>SSH-nøgler</b>"
 msgid ""
 "<b>Warning:</b> The 'seahorse-agent' program is not running. This program is "
 "necessary in order to cache passphrases. "
-msgstr "<b>Advarsel:</b> Programmet \"seahorse-agent\" kører ikke. Dette program er nødvendigt for lagring af adgangskoder i cache. "
+msgstr ""
+"<b>Advarsel:</b> Programmet \"seahorse-agent\" kører ikke. Dette program er "
+"nødvendigt for lagring af adgangskoder i cache. "
 
 #: ../libseahorse/seahorse-prefs.glade.h:6
 msgid "<i>A non-supported PGP passphrase caching agent is running.</i>"
-msgstr "<i>Der kører en agent til cache-lagring af PGP-adgangskoder, men agenten er ikke understøttet.</i>"
+msgstr ""
+"<i>Der kører en agent til cache-lagring af PGP-adgangskoder, men agenten er "
+"ikke understøttet.</i>"
 
 #: ../libseahorse/seahorse-prefs.glade.h:7
 msgid "<i>No SSH caching agent is running. Cannot load Secure Shell keys.</i>"
@@ -881,38 +957,51 @@ msgstr "<i>Ingen SSH-cacheagent kører. Kan ikke indlæse SSH-nøgler.</i>"
 
 #: ../libseahorse/seahorse-prefs.glade.h:8
 msgid "<i>This key is used to sign messages when no other key is chosen</i>"
-msgstr "<i>Denne nøgle bruges til at underskrive meddelelser når ingen anden nøgle er udvalgt</i>"
+msgstr ""
+"<i>Denne nøgle bruges til at underskrive meddelelser når ingen anden nøgle "
+"er udvalgt</i>"
 
 #: ../libseahorse/seahorse-prefs.glade.h:9
 msgid "Automatically load _Secure Shell keys"
 msgstr "Indlæs automatisk _SSH-nøgler"
 
 #: ../libseahorse/seahorse-prefs.glade.h:10
-msgid "Automatically synchronize modified keys with key servers. "
+#, fuzzy
+msgid "Automatically retrieve keys from key servers."
 msgstr "Synkronisér automatisk ændrede nøgler med nøgleservere. "
 
 #: ../libseahorse/seahorse-prefs.glade.h:11
+msgid "Automatically synchronize modified keys with key servers. "
+msgstr "Synkronisér automatisk ændrede nøgler med nøgleservere. "
+
+#: ../libseahorse/seahorse-prefs.glade.h:12
+#: ../plugins/nautilus/seahorse-pgp-preferences.c:78
+#: ../plugins/nautilus/seahorse-pgp-preferences.desktop.in.h:2
+msgid "Encryption Preferences"
+msgstr "Krypteringsindstillinger"
+
+#: ../libseahorse/seahorse-prefs.glade.h:13
 msgid "Encryption Settings"
 msgstr "Krypteringsindstillinger"
 
-#: ../libseahorse/seahorse-prefs.glade.h:12
+#: ../libseahorse/seahorse-prefs.glade.h:14
 msgid "Key Servers"
 msgstr "Nøgleservere"
 
-#: ../libseahorse/seahorse-prefs.glade.h:13
+#: ../libseahorse/seahorse-prefs.glade.h:15
 msgid "Key Sharing"
 msgstr "Nøgledeling"
 
-#: ../libseahorse/seahorse-prefs.glade.h:14
+#: ../libseahorse/seahorse-prefs.glade.h:16
 msgid "Passphrase Cache"
 msgstr "Adgangskodecache"
 
 # Der refereres til Session Properties flere steder, så det skal nok hedde det samme
-#: ../libseahorse/seahorse-prefs.glade.h:15
+#: ../libseahorse/seahorse-prefs.glade.h:17
 msgid "Session Properties"
 msgstr "Sessionindstillinger"
 
-#: ../libseahorse/seahorse-prefs.glade.h:16
+#: ../libseahorse/seahorse-prefs.glade.h:18
 msgid ""
 "Sharing your keys allows other people on your network to use the keys you've "
 "collected. This means they can automatically encrypt things for you or those "
@@ -920,15 +1009,17 @@ msgid ""
 "\n"
 "<b>Note:</b> Your personal keys will not be compromised."
 msgstr ""
-"Deling af dine nøgler tillader andre mennesker på dit netværk at bruge de nøgler du har samlet. Dette betyder at de automatisk kan kryptere ting for dig eller dine bekendte, uden at du behøver sende dem din nøgle.\n"
+"Deling af dine nøgler tillader andre mennesker på dit netværk at bruge de "
+"nøgler du har samlet. Dette betyder at de automatisk kan kryptere ting for "
+"dig eller dine bekendte, uden at du behøver sende dem din nøgle.\n"
 "\n"
 "<b>Bemærk:</b> Dine personlige nøgler bliver ikke kompromitteret."
 
-#: ../libseahorse/seahorse-prefs.glade.h:19
+#: ../libseahorse/seahorse-prefs.glade.h:21
 msgid "Start seahorse-agent"
 msgstr "Start seahorse-agent"
 
-#: ../libseahorse/seahorse-prefs.glade.h:20
+#: ../libseahorse/seahorse-prefs.glade.h:22
 msgid ""
 "To avoid manually starting the 'seahorse-agent' in the future\n"
 "add it to the Session Manager. "
@@ -936,45 +1027,46 @@ msgstr ""
 "Føj \"seahorse-agent\" til i sessionshåndteringen hvis du\n"
 "ikke ønsker at starte det manuelt i fremtiden. "
 
-#: ../libseahorse/seahorse-prefs.glade.h:22
+#: ../libseahorse/seahorse-prefs.glade.h:24
 msgid "When _encrypting, always include myself as a recipient"
 msgstr "Inkludér altid mig selv som modtager under _kryptering"
 
 # Kan man sige dette?
-#: ../libseahorse/seahorse-prefs.glade.h:23
+#: ../libseahorse/seahorse-prefs.glade.h:25
 msgid "_Always remember passphrases whenever logged in"
 msgstr "_Husk altid adgangskoder når logget på"
 
-#: ../libseahorse/seahorse-prefs.glade.h:24
+#: ../libseahorse/seahorse-prefs.glade.h:26
 msgid "_Ask me before using a cached passphrase"
 msgstr "Spørg _mig inden benyttelse af en adgangskode fra cache"
 
-#: ../libseahorse/seahorse-prefs.glade.h:25
+#: ../libseahorse/seahorse-prefs.glade.h:27
 msgid "_Default Key:"
 msgstr "_Standardnøgle:"
 
-#: ../libseahorse/seahorse-prefs.glade.h:26
-msgid "_Find Keys Using:"
+#: ../libseahorse/seahorse-prefs.glade.h:28
+#, fuzzy
+msgid "_Find Keys Via:"
 msgstr "_Find nøgler ved brug af:"
 
-#: ../libseahorse/seahorse-prefs.glade.h:27
+#: ../libseahorse/seahorse-prefs.glade.h:29
 msgid "_Never remember passphrases"
 msgstr "Husk _aldrig adgangskoder"
 
-#: ../libseahorse/seahorse-prefs.glade.h:28
+#: ../libseahorse/seahorse-prefs.glade.h:30
 msgid "_Publish Keys To:"
 msgstr "_Offentliggør nøgler til:"
 
 # Det er nok en timeout
-#: ../libseahorse/seahorse-prefs.glade.h:29
+#: ../libseahorse/seahorse-prefs.glade.h:31
 msgid "_Remember passphrases for"
 msgstr "Husk _adgangskoder i"
 
-#: ../libseahorse/seahorse-prefs.glade.h:30
+#: ../libseahorse/seahorse-prefs.glade.h:32
 msgid "_Share my keys with others on my network"
 msgstr "_Del mine nøgler med andre mit netværk"
 
-#: ../libseahorse/seahorse-prefs.glade.h:31
+#: ../libseahorse/seahorse-prefs.glade.h:33
 msgid "minutes"
 msgstr "minutter"
 
@@ -991,98 +1083,11 @@ msgstr "Forløbsstatus"
 msgid "Progress Title"
 msgstr "Forløbstitel"
 
-#: ../libseahorse/seahorse-secure-entry.c:275
-msgid "Cursor Position"
-msgstr "Markørposition"
-
-# ...antal tegn fra begyndelsen af den streng der implicit refereres til?
-#: ../libseahorse/seahorse-secure-entry.c:275
-msgid "The current position of the insertion cursor in chars"
-msgstr "Den nuværende placering af indsætningsmarkøren målt i antal tegn"
-
-#: ../libseahorse/seahorse-secure-entry.c:279
-msgid "Selection Bound"
-msgstr "Markeringsgrænse"
-
-# Dette lyder helvedes dårligt. Men det gør det alligevel også på engelsk...
-#: ../libseahorse/seahorse-secure-entry.c:279
-msgid ""
-"The position of the opposite end of the selection from the cursor in chars"
-msgstr "Placeringen af den modsatte ende af markeringen fra markøren i antal tegn"
-
-#: ../libseahorse/seahorse-secure-entry.c:283
-msgid "Maximum length"
-msgstr "Maksimal længde"
-
-#: ../libseahorse/seahorse-secure-entry.c:283
-msgid "Maximum number of characters for this entry. Zero if no maximum"
-msgstr "Maksimalt antal tegn for denne post. Nul hvis intet maksimum"
-
-# Mystisk.
-#: ../libseahorse/seahorse-secure-entry.c:287
-msgid "Has Frame"
-msgstr "Har ramme"
-
-#: ../libseahorse/seahorse-secure-entry.c:287
-msgid "FALSE removes outside bevel from entry"
-msgstr "FALSE fjerner den ydre skråkant fra posten"
-
-#: ../libseahorse/seahorse-secure-entry.c:291
-msgid "Invisible character"
-msgstr "Usynligt tegn"
-
-#: ../libseahorse/seahorse-secure-entry.c:291
-msgid "The character to use when masking entry contents (in \"password mode\")"
-msgstr "Tegnet der benyttes til at maskere postindhold (i \"kodeords-tilstand\")"
-
-#: ../libseahorse/seahorse-secure-entry.c:295
-msgid "Activates default"
-msgstr "Anvender forvalg"
-
-#: ../libseahorse/seahorse-secure-entry.c:295
-msgid ""
-"Whether to activate the default widget (such as the default button in a "
-"dialog) when Enter is pressed"
-msgstr "Hvorvidt forvalgskontrollen (såsom den forvalgte knap i en dialog) aktiveres når der trykkes Enter"
-
-#: ../libseahorse/seahorse-secure-entry.c:299
-msgid "Width in chars"
-msgstr "Bredde i tegn"
-
-#: ../libseahorse/seahorse-secure-entry.c:299
-msgid "Number of characters to leave space for in the entry"
-msgstr "Antallet af tegn der reserveres plads til i posten"
-
-#: ../libseahorse/seahorse-secure-entry.c:303
-msgid "Scroll offset"
-msgstr "Rulleudgangspunkt"
-
-#: ../libseahorse/seahorse-secure-entry.c:303
-msgid "Number of pixels of the entry scrolled off the screen to the left"
-msgstr "Antallet af pixler fra posten der er rullet til venstre ud af skærmen"
-
-#: ../libseahorse/seahorse-secure-entry.c:307
-msgid "Text"
-msgstr "Tekst"
-
-#: ../libseahorse/seahorse-secure-entry.c:307
-msgid "The contents of the entry"
-msgstr "Indholdet af posten"
-
-#: ../libseahorse/seahorse-secure-entry.c:311
-msgid "Visibility"
-msgstr "Synlighed"
-
-# Hvilken invisible character? Dem er der jo mange af. De må mene flere af slagsen
-#: ../libseahorse/seahorse-secure-entry.c:311
-msgid "Whether contents are drawn using invisible character"
-msgstr "Hvorvidt indholdet anføres med usynlige tegn"
-
-#: ../libseahorse/seahorse-server-source.c:467
+#: ../libseahorse/seahorse-server-source.c:466
 msgid "LDAP Key Server"
 msgstr "LDAP-nøgleserver"
 
-#: ../libseahorse/seahorse-server-source.c:470
+#: ../libseahorse/seahorse-server-source.c:469
 msgid "HTTP Key Server"
 msgstr "HTTP-nøgleserver"
 
@@ -1095,7 +1100,9 @@ msgstr "Ingen brugbare nøgler til underskrift"
 #: ../libseahorse/seahorse-signer.c:58
 msgid ""
 "You have no personal PGP keys that can be used to sign a document or message."
-msgstr "Du har ingen personlige PGP-nøgler der kan bruges til at underskrive et dokument eller en meddelelse."
+msgstr ""
+"Du har ingen personlige PGP-nøgler der kan bruges til at underskrive et "
+"dokument eller en meddelelse."
 
 #: ../libseahorse/seahorse-signer.glade.h:1
 msgid "_Sign message with key:"
@@ -1139,59 +1146,59 @@ msgstr "SSH-nøgle"
 msgid "Secure Shell Passphrase"
 msgstr "SSH-adgangskode"
 
-#: ../libseahorse/seahorse-ssh-operation.c:808
+#: ../libseahorse/seahorse-ssh-operation.c:813
 msgid "Old Key Passphrase"
 msgstr "Adgangskode til gammel nøgle"
 
-#: ../libseahorse/seahorse-ssh-operation.c:809
+#: ../libseahorse/seahorse-ssh-operation.c:814
 #, c-format
 msgid "Enter the old passphrase for: %s"
 msgstr "Skriv den gamle adgangskode til: %s"
 
-#: ../libseahorse/seahorse-ssh-operation.c:813
+#: ../libseahorse/seahorse-ssh-operation.c:818
 msgid "New Key Passphrase"
 msgstr "Ny nøgleadgangskode"
 
-#: ../libseahorse/seahorse-ssh-operation.c:814
+#: ../libseahorse/seahorse-ssh-operation.c:819
 #, c-format
 msgid "Enter the new passphrase for: %s"
 msgstr "Skriv den nye adgangskode til: %s"
 
-#: ../libseahorse/seahorse-ssh-operation.c:822
+#: ../libseahorse/seahorse-ssh-operation.c:827
 msgid "Enter Key Passphrase"
 msgstr "Skriv nøgleadgangskode"
 
-#: ../libseahorse/seahorse-ssh-operation.c:890
+#: ../libseahorse/seahorse-ssh-operation.c:895
 msgid "Passphrase for New Secure Shell Key"
 msgstr "Adgangskode til ny SSH-nøgle"
 
-#: ../libseahorse/seahorse-ssh-operation.c:891
+#: ../libseahorse/seahorse-ssh-operation.c:896
 msgid "Enter a passphrase for your new Secure Shell key."
 msgstr "Skriv en adgangskode til din nye SSH-nøgle."
 
-#: ../libseahorse/seahorse-ssh-operation.c:1029
+#: ../libseahorse/seahorse-ssh-operation.c:1034
 msgid "Secure Shell Key Passphrase"
 msgstr "Adgangskode til SSH-nøgle"
 
-#: ../libseahorse/seahorse-ssh-operation.c:1029
+#: ../libseahorse/seahorse-ssh-operation.c:1034
 #, c-format
 msgid "Enter the passphrase for: %s"
 msgstr "Skriv adgangskoden til: %s"
 
-#: ../libseahorse/seahorse-ssh-operation.c:1030
+#: ../libseahorse/seahorse-ssh-operation.c:1035
 msgid "Save this passphrase in my keyring"
 msgstr "Gem denne adgangskode i min nøglering"
 
-#: ../libseahorse/seahorse-ssh-operation.c:1104
+#: ../libseahorse/seahorse-ssh-operation.c:1109
 #, c-format
 msgid "Importing key: %s"
 msgstr "Importerer nøgle: %s"
 
-#: ../libseahorse/seahorse-ssh-operation.c:1106
+#: ../libseahorse/seahorse-ssh-operation.c:1111
 msgid "Importing key. Enter passphrase"
 msgstr "Importerer nøgle. Skriv adgangskode"
 
-#: ../libseahorse/seahorse-ssh-operation.c:1108
+#: ../libseahorse/seahorse-ssh-operation.c:1113
 #: ../src/seahorse-key-manager.c:515
 #: ../src/seahorse-pgp-keys.desktop.in.in.h:1
 msgid "Import Key"
@@ -1214,52 +1221,56 @@ msgstr "Ukendt nøgle"
 msgid "Unavailable Key"
 msgstr "Utilgængelig nøgle"
 
-#: ../libseahorse/seahorse-util.c:188
+#: ../libseahorse/seahorse-util.c:172
+msgid "Decryption failed. You probably do not have the decryption key."
+msgstr ""
+
+#: ../libseahorse/seahorse-util.c:222
 msgid "%Y-%m-%d"
 msgstr "%d/%m %Y"
 
-#: ../libseahorse/seahorse-util.c:379
+#: ../libseahorse/seahorse-util.c:413
 msgid "Key Data"
 msgstr "Nøgledata"
 
-#: ../libseahorse/seahorse-util.c:381
+#: ../libseahorse/seahorse-util.c:415
 msgid "Multiple Keys"
 msgstr "Adskillige nøgler"
 
-#: ../libseahorse/seahorse-util.c:694
+#: ../libseahorse/seahorse-util.c:728
 msgid "Couldn't run file-roller"
 msgstr "Kunne ikke køre Filpakker"
 
 # Package er flertydig
-#: ../libseahorse/seahorse-util.c:699
-#: ../plugins/nautilus/seahorse-tool-files.c:645
+#: ../libseahorse/seahorse-util.c:733
+#: ../plugins/nautilus/seahorse-tool-files.c:831
 msgid "Couldn't package files"
 msgstr "Kunne ikke pakke filer"
 
-#: ../libseahorse/seahorse-util.c:700
+#: ../libseahorse/seahorse-util.c:734
 msgid "The file-roller process did not complete successfully"
 msgstr "Filpakker-processen gennemførte ikke sin opgave"
 
-#: ../libseahorse/seahorse-util.c:710
+#: ../libseahorse/seahorse-util.c:744
 msgid "Couldn't set permissions on backup file."
 msgstr "Kunne ikke ændre rettigheder for backupfilen."
 
 #. Filter for PGP keys. We also include *.asc, as in many
 #. cases that extension is associated with text/plain
-#: ../libseahorse/seahorse-util.c:812
+#: ../libseahorse/seahorse-util.c:848
 msgid "All key files"
 msgstr "Alle nøglefiler"
 
-#: ../libseahorse/seahorse-util.c:819 ../libseahorse/seahorse-util.c:859
+#: ../libseahorse/seahorse-util.c:859 ../libseahorse/seahorse-util.c:899
 #: ../src/seahorse-photos.c:239
 msgid "All files"
 msgstr "Alle filer"
 
-#: ../libseahorse/seahorse-util.c:852
+#: ../libseahorse/seahorse-util.c:892
 msgid "Archive files"
 msgstr "Arkivfiler"
 
-#: ../libseahorse/seahorse-util.c:893
+#: ../libseahorse/seahorse-util.c:933
 msgid ""
 "<b>A file already exists with this name.</b>\n"
 "\n"
@@ -1269,25 +1280,25 @@ msgstr ""
 "\n"
 "Vil du erstatte den med en ny fil?"
 
-#: ../libseahorse/seahorse-util.c:896
+#: ../libseahorse/seahorse-util.c:936
 msgid "_Replace"
 msgstr "_Erstat"
 
-#: ../libseahorse/seahorse-validity.c:33 ../src/seahorse-key-properties.c:1096
-#: ../src/seahorse-key-properties.c:1228 ../src/seahorse-key-properties.c:1300
+#: ../libseahorse/seahorse-validity.c:33 ../src/seahorse-key-properties.c:1106
+#: ../src/seahorse-key-properties.c:1238 ../src/seahorse-key-properties.c:1310
 msgid "Never"
 msgstr "Aldrig"
 
-#: ../libseahorse/seahorse-validity.c:35 ../src/seahorse-key-properties.c:1103
+#: ../libseahorse/seahorse-validity.c:35 ../src/seahorse-key-properties.c:1113
 msgid "Marginal"
 msgstr "Underordnet"
 
-#: ../libseahorse/seahorse-validity.c:37 ../src/seahorse-key-properties.c:1109
+#: ../libseahorse/seahorse-validity.c:37 ../src/seahorse-key-properties.c:1119
 msgid "Full"
 msgstr "Fuld"
 
 # "This level of trust should only be assigned to your own keys", står der i dokumentationen, så ultimativ må være en nogenlunde oversættelse
-#: ../libseahorse/seahorse-validity.c:39 ../src/seahorse-key-properties.c:1115
+#: ../libseahorse/seahorse-validity.c:39 ../src/seahorse-key-properties.c:1125
 msgid "Ultimate"
 msgstr "Ultimativ"
 
@@ -1295,11 +1306,11 @@ msgstr "Ultimativ"
 msgid "Disabled"
 msgstr "Deaktiveret"
 
-#: ../libseahorse/seahorse-validity.c:43 ../src/seahorse-key-properties.c:1296
+#: ../libseahorse/seahorse-validity.c:43 ../src/seahorse-key-properties.c:1306
 msgid "Revoked"
 msgstr "Tilbagekaldt"
 
-#: ../libseahorse/seahorse-widget.c:311
+#: ../libseahorse/seahorse-widget.c:326
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Kunne ikke vise hjælp: %s"
@@ -1310,19 +1321,20 @@ msgstr "Kryptering af klippebordstekst"
 
 #: ../plugins/applet/GNOME_SeahorseApplet.server.in.in.h:2
 msgid "Encrypt, decrypt or sign the clipboard (uses PGP type encryption)."
-msgstr "Kryptér, dekryptér eller underskriv klippebordet (bruger PGP-kryptering)."
+msgstr ""
+"Kryptér, dekryptér eller underskriv klippebordet (bruger PGP-kryptering)."
 
 #: ../plugins/applet/GNOME_SeahorseApplet.server.in.in.h:3
 msgid "Seahorse Applet Factory"
 msgstr "Seahorse panelprogramsfabrik"
 
 #: ../plugins/applet/GNOME_SeahorseApplet.xml.h:1
-#: ../src/seahorse-key-manager.c:1193
+#: ../src/seahorse-key-manager.c:1208
 msgid "_About"
 msgstr "_Om"
 
 #: ../plugins/applet/GNOME_SeahorseApplet.xml.h:2
-#: ../src/seahorse-key-manager.c:1177 ../src/seahorse-keyserver-results.c:379
+#: ../src/seahorse-key-manager.c:1192 ../src/seahorse-keyserver-results.c:381
 msgid "_Help"
 msgstr "_Hjælp"
 
@@ -1335,11 +1347,13 @@ msgid "seahorse-applet"
 msgstr "seahorse-panelprogram"
 
 #: ../plugins/applet/seahorse-applet.c:311
-#: ../plugins/applet/seahorse-applet.c:832
+#: ../plugins/applet/seahorse-applet.c:835
 msgid "Use PGP/GPG to encrypt/decrypt/sign/verify/import the clipboard."
-msgstr "Brug PGP/GPG til at kryptere/dekryptere/underskrive/verificere/importere klippebordet."
+msgstr ""
+"Brug PGP/GPG til at kryptere/dekryptere/underskrive/verificere/importere "
+"klippebordet."
 
-#: ../plugins/applet/seahorse-applet.c:316 ../src/seahorse-key-manager.c:872
+#: ../plugins/applet/seahorse-applet.c:316 ../src/seahorse-key-manager.c:874
 msgid "translator-credits"
 msgstr ""
 "Ask Hjorth Larsen\n"
@@ -1348,7 +1362,7 @@ msgstr ""
 "Dansk-gruppen <dansk@dansk-gruppen.dk>\"\n"
 "Mere info: http://www.dansk-gruppen.dk"
 
-#: ../plugins/applet/seahorse-applet.c:319 ../src/seahorse-key-manager.c:875
+#: ../plugins/applet/seahorse-applet.c:319 ../src/seahorse-key-manager.c:877
 msgid "Seahorse Project Homepage"
 msgstr "Seahorse projekthjemmeside"
 
@@ -1418,32 +1432,33 @@ msgid "No PGP data found."
 msgstr "Ingen PGP-data fundet."
 
 # Er det datid af "at dekryptere", eller markerer det en tekst som er blevet dekrypteret?
-#: ../plugins/applet/seahorse-applet.c:613
+#. TRANSLATORS: This means 'The text that was decrypted'
+#: ../plugins/applet/seahorse-applet.c:615
 msgid "Decrypted Text"
 msgstr "Dekrypteret tekst"
 
-#: ../plugins/applet/seahorse-applet.c:681
+#: ../plugins/applet/seahorse-applet.c:684
 msgid "Could not display the help file"
 msgstr "Kunne ikke vise hjælpefilen"
 
-#: ../plugins/applet/seahorse-applet.c:744
+#: ../plugins/applet/seahorse-applet.c:747
 msgid "_Encrypt Clipboard"
 msgstr "_Kryptér klippebord"
 
-#: ../plugins/applet/seahorse-applet.c:751
+#: ../plugins/applet/seahorse-applet.c:754
 msgid "_Sign Clipboard"
 msgstr "_Underskriv klippebord"
 
-#: ../plugins/applet/seahorse-applet.c:758
+#: ../plugins/applet/seahorse-applet.c:761
 msgid "_Decrypt/Verify Clipboard"
 msgstr "_Dekryptér/verificér klippebord"
 
-#: ../plugins/applet/seahorse-applet.c:764
+#: ../plugins/applet/seahorse-applet.c:767
 msgid "_Import Keys from Clipboard"
 msgstr "_Importér nøgler fra klippebord"
 
-#: ../plugins/applet/seahorse-applet.c:829
-#: ../plugins/applet/seahorse-applet.c:831
+#: ../plugins/applet/seahorse-applet.c:832
+#: ../plugins/applet/seahorse-applet.c:834
 msgid "Encryption Applet"
 msgstr "Krypteringspanelprogram"
 
@@ -1468,20 +1483,20 @@ msgid "_Show clipboard state in panel"
 msgstr "_Vis klippebordstilstand i panelet"
 
 # At dømme efter de refererende kodelinjer, er følgende strenge elementer i en ny menu, og altså kan genvejstast _K genbruges
-#: ../plugins/epiphany/seahorse-extension.c:601
+#: ../plugins/epiphany/seahorse-extension.c:602
 msgid "_Encrypt"
 msgstr "_Kryptér"
 
-#: ../plugins/epiphany/seahorse-extension.c:608
+#: ../plugins/epiphany/seahorse-extension.c:609
 #: ../src/seahorse-sign.glade.h:21
 msgid "_Sign"
 msgstr "_Underskriv"
 
-#: ../plugins/epiphany/seahorse-extension.c:615
+#: ../plugins/epiphany/seahorse-extension.c:616
 msgid "_Decrypt/Verify"
 msgstr "_Dekryptér/verificér"
 
-#: ../plugins/epiphany/seahorse-extension.c:622
+#: ../plugins/epiphany/seahorse-extension.c:623
 msgid "_Import Key"
 msgstr "_Importér nøgle"
 
@@ -1608,11 +1623,6 @@ msgstr[1] "Underskriv de valgte filer"
 #: ../plugins/nautilus/seahorse-pgp-preferences.c:51
 msgid "For internal use"
 msgstr "Til intern benyttelse"
-
-#: ../plugins/nautilus/seahorse-pgp-preferences.c:78
-#: ../plugins/nautilus/seahorse-pgp-preferences.desktop.in.h:2
-msgid "Encryption Preferences"
-msgstr "Krypteringsindstillinger"
 
 #: ../plugins/nautilus/seahorse-pgp-preferences.desktop.in.h:1
 msgid "Configure key servers and other encryption settings"
@@ -1746,9 +1756,81 @@ msgstr "Verificerer"
 msgid "Couldn't verify file: %s"
 msgstr "Kunne ikke verificere fil: %s"
 
+#: ../plugins/nautilus/seahorse-tool-files.c:114
+msgid "Ace (.ace)"
+msgstr ""
+
+#: ../plugins/nautilus/seahorse-tool-files.c:115
+msgid "Ar (.ar)"
+msgstr ""
+
+#: ../plugins/nautilus/seahorse-tool-files.c:116
+msgid "Arj (.arj)"
+msgstr ""
+
+#: ../plugins/nautilus/seahorse-tool-files.c:123
+msgid "Ear (.ear)"
+msgstr ""
+
+#: ../plugins/nautilus/seahorse-tool-files.c:124
+msgid "Self-extracting zip (.exe)"
+msgstr ""
+
+#: ../plugins/nautilus/seahorse-tool-files.c:126
+msgid "Jar (.jar)"
+msgstr ""
+
+#: ../plugins/nautilus/seahorse-tool-files.c:127
+msgid "Lha (.lzh)"
+msgstr ""
+
+#: ../plugins/nautilus/seahorse-tool-files.c:129
+msgid "Rar (.rar)"
+msgstr ""
+
+#: ../plugins/nautilus/seahorse-tool-files.c:131
+msgid "Tar uncompressed (.tar)"
+msgstr ""
+
+#: ../plugins/nautilus/seahorse-tool-files.c:132
+msgid "Tar compressed with bzip (.tar.bz)"
+msgstr ""
+
+#: ../plugins/nautilus/seahorse-tool-files.c:133
+msgid "Tar compressed with bzip2 (.tar.bz2)"
+msgstr ""
+
+#: ../plugins/nautilus/seahorse-tool-files.c:134
+msgid "Tar compressed with gzip (.tar.gz)"
+msgstr ""
+
+#: ../plugins/nautilus/seahorse-tool-files.c:135
+msgid "Tar compressed with lzop (.tar.lzo)"
+msgstr ""
+
+#: ../plugins/nautilus/seahorse-tool-files.c:136
+msgid "Tar compressed with compress (.tar.Z)"
+msgstr ""
+
+#: ../plugins/nautilus/seahorse-tool-files.c:138
+msgid "War (.war)"
+msgstr ""
+
+#: ../plugins/nautilus/seahorse-tool-files.c:139
+msgid "Zip (.zip)"
+msgstr ""
+
+#: ../plugins/nautilus/seahorse-tool-files.c:140
+msgid "Zoo (.zoo)"
+msgstr ""
+
+#: ../plugins/nautilus/seahorse-tool-files.c:141
+msgid "7-Zip (.7z)"
+msgstr ""
+
 #. TRANSLATOR: This string will become
 #. * "You have selected %d files and %d folders"
-#: ../plugins/nautilus/seahorse-tool-files.c:155
+#: ../plugins/nautilus/seahorse-tool-files.c:318
 #, c-format
 msgid "You have selected %d file "
 msgid_plural "You have selected %d files "
@@ -1757,7 +1839,7 @@ msgstr[1] "Du har markeret %d filer "
 
 #. TRANSLATOR: This string will become
 #. * "You have selected %d files and %d folders"
-#: ../plugins/nautilus/seahorse-tool-files.c:160
+#: ../plugins/nautilus/seahorse-tool-files.c:323
 #, c-format
 msgid "and %d folder"
 msgid_plural "and %d folders"
@@ -1766,93 +1848,89 @@ msgstr[1] "og %d mapper"
 
 #. TRANSLATOR: "%s%s" are "You have selected %d files and %d folders"
 #. * Swap order with "%2$s%1$s" if needed
-#: ../plugins/nautilus/seahorse-tool-files.c:165
+#: ../plugins/nautilus/seahorse-tool-files.c:328
 #, c-format
 msgid "<b>%s%s</b>"
 msgstr "<b>%s%s</b>"
 
 #. should never be called for just one file
-#: ../plugins/nautilus/seahorse-tool-files.c:174
+#: ../plugins/nautilus/seahorse-tool-files.c:337
 #, c-format
 msgid "You have selected %d files"
 msgstr "Du har markeret %d filer"
 
-#: ../plugins/nautilus/seahorse-tool-files.c:179
+#: ../plugins/nautilus/seahorse-tool-files.c:342
 #, c-format
 msgid "You have selected %d folder"
 msgid_plural "You have selected %d folders"
 msgstr[0] "Du har markeret %d mappe"
 msgstr[1] "Du har markeret %d mapper"
 
-#: ../plugins/nautilus/seahorse-tool-files.c:626
+#: ../plugins/nautilus/seahorse-tool-files.c:812
 msgid "Preparing..."
 msgstr "Forbereder..."
 
-#: ../plugins/nautilus/seahorse-tool-files.c:635
-#: ../plugins/nautilus/seahorse-tool-files.c:658
+#: ../plugins/nautilus/seahorse-tool-files.c:821
+#: ../plugins/nautilus/seahorse-tool-files.c:844
 msgid "Couldn't list files"
 msgstr "Kunne ikke vise filliste"
 
-#: ../src/main.c:75 ../src/seahorse-key-manager.c:867
+#: ../src/main.c:75 ../src/seahorse-key-manager.c:869
 msgid "Encryption Key Manager"
 msgstr "Krypteringsnøgle-håndtering"
 
-#: ../src/seahorse-add-subkey.c:111
+#: ../src/seahorse-add-subkey.c:134
 msgid "Couldn't add subkey"
 msgstr "Kunne ikke tilføje undernøgle"
 
-#: ../src/seahorse-add-subkey.c:127
+#: ../src/seahorse-add-subkey.c:154
 #, c-format
 msgid "Add subkey to %s"
 msgstr "Føj undernøgle til %s"
 
-#: ../src/seahorse-add-subkey.glade.h:1 ../src/seahorse-pgp-generate.c:44
+#: ../src/seahorse-add-subkey.c:171 ../src/seahorse-pgp-generate.c:44
 msgid "DSA (sign only)"
 msgstr "DSA (underskriv kun)"
 
-#: ../src/seahorse-add-subkey.glade.h:2
+#: ../src/seahorse-add-subkey.c:179
 msgid "ElGamal (encrypt only)"
 msgstr "ElGamal (kryptér kun)"
 
-#: ../src/seahorse-add-subkey.glade.h:3
-msgid "Expiration Date:"
-msgstr "Udløbsdato:"
+#: ../src/seahorse-add-subkey.c:185 ../src/seahorse-pgp-generate.c:45
+msgid "RSA (sign only)"
+msgstr "RSA (underskriv kun)"
 
-#: ../src/seahorse-add-subkey.glade.h:4
-msgid "Generate a new subkey"
-msgstr "Opret en ny undernøgle"
-
-#: ../src/seahorse-add-subkey.glade.h:5
-msgid "If key never expires"
-msgstr "Om nøglen aldrig udløber"
-
-#: ../src/seahorse-add-subkey.glade.h:6
-msgid "Key _Length:"
-msgstr "Nøgle_længde:"
-
-#: ../src/seahorse-add-subkey.glade.h:7
-msgid "Key _Type:"
-msgstr "Nøgle_type:"
-
-#: ../src/seahorse-add-subkey.glade.h:8
-msgid "Key type / algorithm"
-msgstr "Nøgletype / algoritme"
-
-#: ../src/seahorse-add-subkey.glade.h:9
-msgid "Length of Key"
-msgstr "Nøglelængde"
-
-#: ../src/seahorse-add-subkey.glade.h:10
-msgid "Never E_xpires"
-msgstr "Udløber _aldrig"
-
-#: ../src/seahorse-add-subkey.glade.h:11
+#: ../src/seahorse-add-subkey.c:191
 msgid "RSA (encrypt only)"
 msgstr "RSA (kryptér kun)"
 
-#: ../src/seahorse-add-subkey.glade.h:12 ../src/seahorse-pgp-generate.c:45
-msgid "RSA (sign only)"
-msgstr "RSA (underskriv kun)"
+#: ../src/seahorse-add-subkey.glade.h:1
+msgid "Expiration Date:"
+msgstr "Udløbsdato:"
+
+#: ../src/seahorse-add-subkey.glade.h:2
+msgid "Generate a new subkey"
+msgstr "Opret en ny undernøgle"
+
+#: ../src/seahorse-add-subkey.glade.h:3
+msgid "If key never expires"
+msgstr "Om nøglen aldrig udløber"
+
+#: ../src/seahorse-add-subkey.glade.h:4
+msgid "Key _Length:"
+msgstr "Nøgle_længde:"
+
+#: ../src/seahorse-add-subkey.glade.h:5
+msgid "Key _Type:"
+msgstr "Nøgle_type:"
+
+#: ../src/seahorse-add-subkey.glade.h:6
+msgid "Length of Key"
+msgstr "Nøglelængde"
+
+#: ../src/seahorse-add-subkey.glade.h:7
+msgid "Never E_xpires"
+msgstr "Udløber _aldrig"
 
 #: ../src/seahorse-add-uid.c:82
 msgid "Couldn't add user id"
@@ -1917,7 +1995,9 @@ msgstr "Ny _adgangskode:"
 msgid ""
 "%s is a private key. Make sure you have a backup. Do you still want to "
 "delete it?"
-msgstr "%s er en privat nøgle. Vær sikker på at have en sikkerhedskopi. Vil du stadig slette den?"
+msgstr ""
+"%s er en privat nøgle. Vær sikker på at have en sikkerhedskopi. Vil du "
+"stadig slette den?"
 
 #: ../src/seahorse-delete.c:74
 #, c-format
@@ -1983,7 +2063,7 @@ msgstr "_Ændr"
 msgid "Never Expires"
 msgstr "Udløber aldrig"
 
-#: ../src/seahorse-expires.glade.h:3 ../src/seahorse-revoke.glade.h:11
+#: ../src/seahorse-expires.glade.h:3 ../src/seahorse-revoke.glade.h:4
 msgid "Revoke key"
 msgstr "Tilbagekald nøgle"
 
@@ -2113,25 +2193,15 @@ msgstr "Nøgleegenskaber"
 msgid "Show pass_word"
 msgstr "Vis kode_ord"
 
-# Type = skriv, eller type=type? Nedenfor står der "use here"...
 #: ../src/seahorse-gkeyring-item-properties.glade.h:12
-msgid "[Type here]"
-msgstr "[Type her]"
-
-# Use=brug eller use=funktion?
-#: ../src/seahorse-gkeyring-item-properties.glade.h:13
-msgid "[Use here]"
-msgstr "[Formål her]"
-
-#: ../src/seahorse-gkeyring-item-properties.glade.h:14
 msgid "[details]\n"
 msgstr "[detaljer]\n"
 
-#: ../src/seahorse-gkeyring-item-properties.glade.h:16
+#: ../src/seahorse-gkeyring-item-properties.glade.h:14
 msgid "[login]"
 msgstr "[brugernavn]"
 
-#: ../src/seahorse-gkeyring-item-properties.glade.h:17
+#: ../src/seahorse-gkeyring-item-properties.glade.h:15
 msgid "[server]"
 msgstr "[server]"
 
@@ -2184,19 +2254,19 @@ msgstr "Kunne ikke læse fil"
 msgid "Unrecognized key type, or invalid data format"
 msgstr "Ukendt nøgletype eller ugyldigt dataformat"
 
-#: ../src/seahorse-key-manager.c:560 ../src/seahorse-keyserver-results.c:217
+#: ../src/seahorse-key-manager.c:560 ../src/seahorse-keyserver-results.c:218
 msgid "Couldn't retrieve data from key server"
 msgstr "Kunne ikke hente data fra nøgleserveren"
 
-#: ../src/seahorse-key-manager.c:576 ../src/seahorse-keyserver-results.c:233
+#: ../src/seahorse-key-manager.c:576 ../src/seahorse-keyserver-results.c:234
 #, c-format
 msgid "Copied %d key"
 msgid_plural "Copied %d keys"
 msgstr[0] "Kopierede %d nøgle"
 msgstr[1] "Kopierede %d nøgler"
 
-#: ../src/seahorse-key-manager.c:600 ../src/seahorse-keyserver-results.c:193
-#: ../src/seahorse-keyserver-results.c:258
+#: ../src/seahorse-key-manager.c:600 ../src/seahorse-keyserver-results.c:194
+#: ../src/seahorse-keyserver-results.c:259
 msgid "Retrieving keys"
 msgstr "Henter nøgler"
 
@@ -2208,7 +2278,7 @@ msgstr "Kunne ikke eksportere nøgle"
 msgid "Export public key"
 msgstr "Eksportér offentlig nøgle"
 
-#: ../src/seahorse-key-manager.c:656 ../src/seahorse-key-properties.c:1031
+#: ../src/seahorse-key-manager.c:656 ../src/seahorse-key-properties.c:1039
 #: ../src/seahorse-ssh-key-properties.c:240
 #, c-format
 msgid "Couldn't export key to \"%s\""
@@ -2222,11 +2292,15 @@ msgstr "Eksporterer nøgler"
 msgid "Back up Key Rings to Archive"
 msgstr "Gem sikkerhedskopier af nøgleringe i et arkiv"
 
-#: ../src/seahorse-key-manager.c:865
+#: ../src/seahorse-key-manager.c:841
+msgid "Contributions:"
+msgstr "Bidrag:"
+
+#: ../src/seahorse-key-manager.c:867
 msgid "seahorse"
 msgstr "seahorse"
 
-#: ../src/seahorse-key-manager.c:948 ../src/seahorse-keyserver-results.c:298
+#: ../src/seahorse-key-manager.c:950 ../src/seahorse-keyserver-results.c:300
 #, c-format
 msgid "Selected %d key"
 msgid_plural "Selected %d keys"
@@ -2234,179 +2308,181 @@ msgstr[0] "Markerede %d nøgle"
 msgstr[1] "Markerede %d nøgler"
 
 #. Top menu items
-#: ../src/seahorse-key-manager.c:1174 ../src/seahorse-keyserver-results.c:377
+#: ../src/seahorse-key-manager.c:1189 ../src/seahorse-keyserver-results.c:379
 msgid "_Key"
 msgstr "_Nøgler"
 
-#: ../src/seahorse-key-manager.c:1175 ../src/seahorse-keyserver-results.c:378
+#: ../src/seahorse-key-manager.c:1190 ../src/seahorse-keyserver-results.c:380
 msgid "_Edit"
 msgstr "_Redigér"
 
-#: ../src/seahorse-key-manager.c:1176
+#: ../src/seahorse-key-manager.c:1191
 msgid "_View"
 msgstr "_Vis"
 
 #. Key Actions
-#: ../src/seahorse-key-manager.c:1180
+#: ../src/seahorse-key-manager.c:1195
 msgid "_Create New Key..."
 msgstr "_Opret ny nøgle..."
 
-#: ../src/seahorse-key-manager.c:1181
+#: ../src/seahorse-key-manager.c:1196
 msgid "Create a new personal key"
 msgstr "Opret en ny personlig nøgle"
 
-#: ../src/seahorse-key-manager.c:1182
+#: ../src/seahorse-key-manager.c:1197
 msgid "_Import..."
 msgstr "_Importér..."
 
-#: ../src/seahorse-key-manager.c:1183
+#: ../src/seahorse-key-manager.c:1198
 msgid "Import keys into your key ring from a file"
 msgstr "Importér nøgler til din nøglering fra en fil"
 
-#: ../src/seahorse-key-manager.c:1184
+#: ../src/seahorse-key-manager.c:1199
 msgid "_Back up Key Rings..."
 msgstr "Lav _sikkerhedskopi af nøgleringe..."
 
-#: ../src/seahorse-key-manager.c:1185
+#: ../src/seahorse-key-manager.c:1200
 msgid "Back up all keys"
 msgstr "Lav sikkerhedskopi af alle nøgler"
 
-#: ../src/seahorse-key-manager.c:1186
+#: ../src/seahorse-key-manager.c:1201
 msgid "Paste _Keys"
 msgstr "Indsæt _nøgler"
 
-#: ../src/seahorse-key-manager.c:1187
+#: ../src/seahorse-key-manager.c:1202
 msgid "Import keys from the clipboard"
 msgstr "Importér nøgler fra klippebordet"
 
-#: ../src/seahorse-key-manager.c:1189
+#: ../src/seahorse-key-manager.c:1204
 msgid "_Quit"
 msgstr "_Afslut"
 
-#: ../src/seahorse-key-manager.c:1190
+#: ../src/seahorse-key-manager.c:1205
 msgid "Close this program"
 msgstr "Luk dette program"
 
-#: ../src/seahorse-key-manager.c:1191
+#: ../src/seahorse-key-manager.c:1206
 msgid "Prefere_nces"
 msgstr "_Indstillinger"
 
-#: ../src/seahorse-key-manager.c:1192
+#: ../src/seahorse-key-manager.c:1207
 msgid "Change preferences for this program"
 msgstr "Ændr indstillinger for dette program"
 
-#: ../src/seahorse-key-manager.c:1194
+#: ../src/seahorse-key-manager.c:1209
 msgid "About this program"
 msgstr "Om dette program"
 
-#: ../src/seahorse-key-manager.c:1196
+#: ../src/seahorse-key-manager.c:1211
 msgid "_Remote"
 msgstr "_Fjern"
 
-#: ../src/seahorse-key-manager.c:1198 ../src/seahorse-keyserver-results.c:383
+#: ../src/seahorse-key-manager.c:1213 ../src/seahorse-keyserver-results.c:385
 msgid "_Contents"
 msgstr "_Indhold"
 
-#: ../src/seahorse-key-manager.c:1199 ../src/seahorse-keyserver-results.c:384
+#: ../src/seahorse-key-manager.c:1214 ../src/seahorse-keyserver-results.c:386
 msgid "Show Seahorse help"
 msgstr "Vis Seahorse-hjælp"
 
-#: ../src/seahorse-key-manager.c:1203
+#: ../src/seahorse-key-manager.c:1218
 msgid "T_ypes"
 msgstr "T_yper"
 
-#: ../src/seahorse-key-manager.c:1204
+#: ../src/seahorse-key-manager.c:1219
 msgid "Show type column"
 msgstr "Vis typekolonnen"
 
-#: ../src/seahorse-key-manager.c:1205
+#: ../src/seahorse-key-manager.c:1220
 msgid "_Expiry"
 msgstr "_Udløb"
 
-#: ../src/seahorse-key-manager.c:1206
+#: ../src/seahorse-key-manager.c:1221
 msgid "Show expiry column"
 msgstr "Vis udløbskolonnen"
 
 # verb. vs. subst.
-#: ../src/seahorse-key-manager.c:1207
+#: ../src/seahorse-key-manager.c:1222
 msgid "_Trust"
 msgstr "_Tillid"
 
-#: ../src/seahorse-key-manager.c:1208
+#: ../src/seahorse-key-manager.c:1223
 msgid "Show owner trust column"
 msgstr "Vis ejertillids-kolonnen"
 
-#: ../src/seahorse-key-manager.c:1209
+#: ../src/seahorse-key-manager.c:1224
 msgid "_Validity"
 msgstr "_Gyldighed"
 
-#: ../src/seahorse-key-manager.c:1210
+#: ../src/seahorse-key-manager.c:1225
 msgid "Show validity column"
 msgstr "Vis gyldighedskolonnen"
 
-#: ../src/seahorse-key-manager.c:1214 ../src/seahorse-keyserver-results.c:395
+#: ../src/seahorse-key-manager.c:1229 ../src/seahorse-keyserver-results.c:397
 msgid "P_roperties"
 msgstr "_Egenskaber"
 
-#: ../src/seahorse-key-manager.c:1215 ../src/seahorse-keyserver-results.c:396
+#: ../src/seahorse-key-manager.c:1230 ../src/seahorse-keyserver-results.c:398
 msgid "Show key properties"
 msgstr "Vis nøgleegenskaber"
 
-#: ../src/seahorse-key-manager.c:1216
+#: ../src/seahorse-key-manager.c:1231
 msgid "E_xport Public Key..."
 msgstr "Eks_portér offentlig nøgle..."
 
-#: ../src/seahorse-key-manager.c:1217
+#: ../src/seahorse-key-manager.c:1232
 msgid "Export public part of key to a file"
 msgstr "Eksportér den offentlige del af en nøgle til en fil"
 
-#: ../src/seahorse-key-manager.c:1218
+#: ../src/seahorse-key-manager.c:1233
 msgid "_Copy Public Key"
 msgstr "_Kopiér offentlig nøgle"
 
-#: ../src/seahorse-key-manager.c:1219
+#: ../src/seahorse-key-manager.c:1234
 msgid "Copy public part of selected keys to the clipboard"
 msgstr "Kopiér den offentlige del af de markerede nøgler til klippebordet"
 
-#: ../src/seahorse-key-manager.c:1220
+#: ../src/seahorse-key-manager.c:1235
 msgid "_Delete Key"
 msgstr "_Slet nøgle"
 
-#: ../src/seahorse-key-manager.c:1221
+#: ../src/seahorse-key-manager.c:1236
 msgid "Delete selected keys"
 msgstr "Slet markerede nøgler"
 
-#: ../src/seahorse-key-manager.c:1225
+#: ../src/seahorse-key-manager.c:1240
 msgid "_Sign..."
 msgstr "_Underskriv..."
 
-#: ../src/seahorse-key-manager.c:1226
+#: ../src/seahorse-key-manager.c:1241
 msgid "Sign public key"
 msgstr "Underskriv offentlig nøgle"
 
-#: ../src/seahorse-key-manager.c:1230
+#: ../src/seahorse-key-manager.c:1245
 msgid "Set Up Computer for _Secure Shell..."
 msgstr "Konfigurér computer til _SSH..."
 
-#: ../src/seahorse-key-manager.c:1231
+#: ../src/seahorse-key-manager.c:1246
 msgid ""
 "Send public Secure Shell key to another machine, and enable logins using "
 "that key."
-msgstr "Send offentlig SSH-nøgle til en anden maskine og tillad indlogning ved hjælp af den nøgle."
+msgstr ""
+"Send offentlig SSH-nøgle til en anden maskine og tillad indlogning ved hjælp "
+"af den nøgle."
 
-#: ../src/seahorse-key-manager.c:1235 ../src/seahorse-keyserver-results.c:404
+#: ../src/seahorse-key-manager.c:1250 ../src/seahorse-keyserver-results.c:406
 msgid "_Find Remote Keys..."
 msgstr "_Find fjerne nøgler..."
 
-#: ../src/seahorse-key-manager.c:1236 ../src/seahorse-keyserver-results.c:405
+#: ../src/seahorse-key-manager.c:1251 ../src/seahorse-keyserver-results.c:407
 msgid "Search for keys on a key server"
 msgstr "Søg efter nøgler på en nøgleserver"
 
-#: ../src/seahorse-key-manager.c:1237
+#: ../src/seahorse-key-manager.c:1252
 msgid "_Sync and Publish Keys..."
 msgstr "S_ynkronisér og offentliggør nøgler..."
 
-#: ../src/seahorse-key-manager.c:1238
+#: ../src/seahorse-key-manager.c:1253
 msgid "Publish and/or synchronize your keys with those online."
 msgstr "Offentliggør og/eller synkronisér dine nøgler med andre på nettet."
 
@@ -2439,7 +2515,7 @@ msgid "To get started with encryption you will need keys."
 msgstr "For at kunne benytte kryptering har du brug for nøgler."
 
 #: ../src/seahorse-key-manager.glade.h:9
-#: ../src/seahorse-keyserver-results.c:393
+#: ../src/seahorse-keyserver-results.c:395
 msgid "_Import"
 msgstr "_Importér"
 
@@ -2452,7 +2528,7 @@ msgid "_Trusted Keys"
 msgstr "_Betroede nøgler"
 
 #: ../src/seahorse-key-manager-store.c:311
-#: ../src/seahorse-key-properties.c:1297
+#: ../src/seahorse-key-properties.c:1307
 msgid "Expired"
 msgstr "Udløbet"
 
@@ -2474,13 +2550,13 @@ msgstr "Gyldighed"
 
 #. Trust column
 #: ../src/seahorse-key-manager-store.c:979
-#: ../src/seahorse-pgp-public-key-properties.glade.h:35
+#: ../src/seahorse-pgp-public-key-properties.glade.h:34
 msgid "Trust"
 msgstr "Tillid"
 
 #. The key type column
 #: ../src/seahorse-key-manager-store.c:985
-#: ../src/seahorse-key-properties.c:1275
+#: ../src/seahorse-key-properties.c:1285
 msgid "Type"
 msgstr "Type"
 
@@ -2489,141 +2565,141 @@ msgstr "Type"
 msgid "Expiration Date"
 msgstr "Udløbsdato"
 
-#: ../src/seahorse-key-properties.c:207
+#: ../src/seahorse-key-properties.c:208
 msgid "Couldn't change primary user ID"
 msgstr "Kunne ikke ændre primær bruger-ID"
 
-#: ../src/seahorse-key-properties.c:301 ../src/seahorse-key-properties.c:1427
+#: ../src/seahorse-key-properties.c:304 ../src/seahorse-key-properties.c:1437
 msgid "[Unknown]"
 msgstr "[Ukendt]"
 
-#: ../src/seahorse-key-properties.c:399 ../src/seahorse-key-properties.c:1711
+#: ../src/seahorse-key-properties.c:402 ../src/seahorse-key-properties.c:1723
 msgid "Name/Email"
 msgstr "Navn/e-postadresse"
 
-#: ../src/seahorse-key-properties.c:404
+#: ../src/seahorse-key-properties.c:407
 msgid "Signature ID"
 msgstr "Underskrifts-ID"
 
-#: ../src/seahorse-key-properties.c:555
+#: ../src/seahorse-key-properties.c:558
 msgid "Couldn't change primary photo"
 msgstr "Kunne ikke ændre primært billede"
 
-#: ../src/seahorse-key-properties.c:801
+#: ../src/seahorse-key-properties.c:806
 msgid "(unknown)"
 msgstr "(ukendt)"
 
-#: ../src/seahorse-key-properties.c:804
+#: ../src/seahorse-key-properties.c:809
 #, c-format
 msgid "This key expired on: %s"
 msgstr "Denne nøgle udløb den: %s"
 
-#: ../src/seahorse-key-properties.c:985 ../src/seahorse-key-properties.c:1377
-#: ../src/seahorse-key-properties.c:1396
+#: ../src/seahorse-key-properties.c:993 ../src/seahorse-key-properties.c:1387
+#: ../src/seahorse-key-properties.c:1406
 msgid "Unable to change trust"
 msgstr "Kunne ikke ændre tillidsindstilling"
 
-#: ../src/seahorse-key-properties.c:1006
+#: ../src/seahorse-key-properties.c:1014
 #: ../src/seahorse-ssh-key-properties.c:215
 msgid "Export Complete Key"
 msgstr "Eksportér fuldstændig nøgle"
 
-#: ../src/seahorse-key-properties.c:1272
+#: ../src/seahorse-key-properties.c:1282
 msgid "ID"
 msgstr "ID"
 
-#: ../src/seahorse-key-properties.c:1278
+#: ../src/seahorse-key-properties.c:1288
 msgid "Created"
 msgstr "Oprettet"
 
-#: ../src/seahorse-key-properties.c:1281
+#: ../src/seahorse-key-properties.c:1291
 msgid "Expires"
 msgstr "Udløber"
 
-#: ../src/seahorse-key-properties.c:1284
+#: ../src/seahorse-key-properties.c:1294
 msgid "Status"
 msgstr "Status"
 
-#: ../src/seahorse-key-properties.c:1287
+#: ../src/seahorse-key-properties.c:1297
 msgid "Strength"
 msgstr "Styrke"
 
-#: ../src/seahorse-key-properties.c:1296 ../src/seahorse-key-properties.c:1297
+#: ../src/seahorse-key-properties.c:1306 ../src/seahorse-key-properties.c:1307
 msgid "Good"
 msgstr "God"
 
-#: ../src/seahorse-keyserver-results.c:106
+#: ../src/seahorse-keyserver-results.c:107
 msgid "Couldn't import keys into key ring"
 msgstr "Kunne ikke importere nøgler til nøglering"
 
-#: ../src/seahorse-keyserver-results.c:127
+#: ../src/seahorse-keyserver-results.c:128
 msgid "Importing keys from key servers"
 msgstr "Importerer nøgler fra nøgleservere"
 
-#: ../src/seahorse-keyserver-results.c:146
-#: ../src/seahorse-keyserver-results.c:180
+#: ../src/seahorse-keyserver-results.c:147
+#: ../src/seahorse-keyserver-results.c:181
 #, c-format
 msgid "Couldn't write keys to file: %s"
 msgstr "Kunne ikke skrive nøgler til filen: %s"
 
-#: ../src/seahorse-keyserver-results.c:169
+#: ../src/seahorse-keyserver-results.c:170
 msgid "Save Remote Keys"
 msgstr "Gem fjerne nøgler"
 
-#: ../src/seahorse-keyserver-results.c:351
+#: ../src/seahorse-keyserver-results.c:353
 msgid "No matching keys found"
 msgstr "Ingen passende nøgler fundet"
 
-#: ../src/seahorse-keyserver-results.c:381
+#: ../src/seahorse-keyserver-results.c:383
 msgid "_Close"
 msgstr "_Luk"
 
-#: ../src/seahorse-keyserver-results.c:382
+#: ../src/seahorse-keyserver-results.c:384
 msgid "Close this window"
 msgstr "Luk dette vindue"
 
-#: ../src/seahorse-keyserver-results.c:386
+#: ../src/seahorse-keyserver-results.c:388
 msgid "_Expand All"
 msgstr "_Udfold alle"
 
 # Gad vide hvad dette refererer til.
-#: ../src/seahorse-keyserver-results.c:387
+#: ../src/seahorse-keyserver-results.c:389
 msgid "Expand all listings"
 msgstr "Udfold alle kataloger"
 
-#: ../src/seahorse-keyserver-results.c:388
+#: ../src/seahorse-keyserver-results.c:390
 msgid "_Collapse All"
 msgstr "_Sammenfold alle"
 
-#: ../src/seahorse-keyserver-results.c:389
+#: ../src/seahorse-keyserver-results.c:391
 msgid "Collapse all listings"
 msgstr "Sammenfold alle kataloger"
 
-#: ../src/seahorse-keyserver-results.c:394
+#: ../src/seahorse-keyserver-results.c:396
 msgid "Import selected keys to local key ring"
 msgstr "Importér markerede nøgler til lokal nøglering"
 
-#: ../src/seahorse-keyserver-results.c:397
+#: ../src/seahorse-keyserver-results.c:399
 msgid "Save Key As..."
 msgstr "Gem nøgle som..."
 
-#: ../src/seahorse-keyserver-results.c:398
+#: ../src/seahorse-keyserver-results.c:400
 msgid "Save selected keys as a file"
 msgstr "Gem markerede nøgler som en fil"
 
-#: ../src/seahorse-keyserver-results.c:399
+#: ../src/seahorse-keyserver-results.c:401
 msgid "_Copy Key"
 msgstr "_Kopiér nøgle"
 
-#: ../src/seahorse-keyserver-results.c:400
+#: ../src/seahorse-keyserver-results.c:402
 msgid "Copy selected keys to the clipboard"
 msgstr "Kopiér markerede nøgler til klippebord"
 
-#: ../src/seahorse-keyserver-results.c:457
+#: ../src/seahorse-keyserver-results.c:464
 msgid "Remote Keys"
 msgstr "Fjerne nøgler"
 
-#: ../src/seahorse-keyserver-results.c:459
+#: ../src/seahorse-keyserver-results.c:466
 #, c-format
 msgid "Remote Keys Containing '%s'"
 msgstr "Fjerne nøgler indeholdende \"%s\""
@@ -2648,7 +2724,9 @@ msgstr "Find fjerne nøgler"
 msgid ""
 "This will find keys for others on the Internet. These keys can then be "
 "imported into your local key ring."
-msgstr "Dette vil finde andres nøgler på Internet. Disse nøgler kan så importeres til din lokale nøglering."
+msgstr ""
+"Dette vil finde andres nøgler på Internet. Disse nøgler kan så importeres "
+"til din lokale nøglering."
 
 #: ../src/seahorse-keyserver-search.glade.h:5
 msgid "Where to search:"
@@ -2701,14 +2779,20 @@ msgid ""
 "This will publish the keys in your key ring so they're available for others "
 "to use. You'll also get any changes others have made since you received "
 "their keys."
-msgstr "Dette vil offentliggøre nøglerne i din nøglering så de er tilgængelige for andre. Du vil også modtage de ændringer som andre har foretaget siden du modtog deres nøgler."
+msgstr ""
+"Dette vil offentliggøre nøglerne i din nøglering så de er tilgængelige for "
+"andre. Du vil også modtage de ændringer som andre har foretaget siden du "
+"modtog deres nøgler."
 
 #: ../src/seahorse-keyserver-sync.glade.h:4
 msgid ""
 "This will retrieve any changes others have made since you received their "
 "keys. No key server has been chosen for publishing, so your keys will not be "
 "made available to others."
-msgstr "Dette vil hente de ændringer som andre har foretaget siden du modtog deres nøgler. Ingen nøgleserver er valgt til offentliggørelse, så dine nøgler vil ikke blive offentliggjort for andre."
+msgstr ""
+"Dette vil hente de ændringer som andre har foretaget siden du modtog deres "
+"nøgler. Ingen nøgleserver er valgt til offentliggørelse, så dine nøgler vil "
+"ikke blive offentliggjort for andre."
 
 #: ../src/seahorse-keyserver-sync.glade.h:5
 msgid "_Key Servers"
@@ -2750,7 +2834,8 @@ msgid "Packaging:"
 msgstr "Pakketype:"
 
 #: ../src/seahorse-multi-encrypt.glade.h:8
-msgid "encrypted-package.rar"
+#, fuzzy
+msgid "encrypted-package"
 msgstr "krypteret-pakke.rar"
 
 #: ../src/seahorse-pgp-encrypted.desktop.in.in.h:1
@@ -2788,7 +2873,8 @@ msgstr "<b>_Avancerede nøgleindstillinger</b>"
 
 #: ../src/seahorse-pgp-generate.glade.h:2
 msgid "A PGP key allows you to encrypt email or files to other people."
-msgstr "En PGP-nøgle tillader dig at kryptere e-post eller filer til andre mennesker."
+msgstr ""
+"En PGP-nøgle tillader dig at kryptere e-post eller filer til andre mennesker."
 
 #: ../src/seahorse-pgp-generate.glade.h:3
 msgid "Algorithms here"
@@ -2983,20 +3069,15 @@ msgstr "Styrke:"
 #: ../src/seahorse-pgp-private-key-properties.glade.h:40
 #: ../src/seahorse-pgp-public-key-properties.glade.h:32
 msgid "The owner of the key revoked the key. It can no longer be used."
-msgstr "Nøglen er blevet tilbagekaldt af dens ejer. Den kan ikke længere bruges."
+msgstr ""
+"Nøglen er blevet tilbagekaldt af dens ejer. Den kan ikke længere bruges."
 
-# Hvad gør vi med placeholder?
 #: ../src/seahorse-pgp-private-key-properties.glade.h:41
-#: ../src/seahorse-pgp-public-key-properties.glade.h:33
-msgid "This key expired on: (placeholder)"
-msgstr "Denne nøgle udløb den: (placeholder)"
-
-#: ../src/seahorse-pgp-private-key-properties.glade.h:42
-#: ../src/seahorse-pgp-public-key-properties.glade.h:36
+#: ../src/seahorse-pgp-public-key-properties.glade.h:35
 msgid "Type:"
 msgstr "Type:"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:43
+#: ../src/seahorse-pgp-private-key-properties.glade.h:42
 msgid ""
 "Unknown\n"
 "Never\n"
@@ -3010,11 +3091,11 @@ msgstr ""
 "Fuld\n"
 "Ultimativ"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:48
+#: ../src/seahorse-pgp-private-key-properties.glade.h:47
 msgid "_Add Name"
 msgstr "_Tilføj navn"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:49
+#: ../src/seahorse-pgp-private-key-properties.glade.h:48
 msgid "_Export Complete Key:"
 msgstr "_Eksportér fuldstændig nøgle:"
 
@@ -3060,13 +3141,17 @@ msgstr "Jeg stoler på underskrifter fra \"%s\" på andre nøgler "
 #: ../src/seahorse-pgp-public-key-properties.glade.h:26
 msgid ""
 "If you no longer trust this person's identity, <i>revoke</i> your signature:"
-msgstr "Hvis du ikke længere stoler på denne persons identitet, så <i>tilbagekald</i> din underskrift:"
+msgstr ""
+"Hvis du ikke længere stoler på denne persons identitet, så <i>tilbagekald</"
+"i> din underskrift:"
 
-#: ../src/seahorse-pgp-public-key-properties.glade.h:34
+#: ../src/seahorse-pgp-public-key-properties.glade.h:33
 msgid "To indicate your trust of this key to others, <i>sign</i> this key:"
-msgstr "<i>Underskriv</i> denne nøgle for at angive din tillid til den overfor andre personer:"
+msgstr ""
+"<i>Underskriv</i> denne nøgle for at angive din tillid til den overfor andre "
+"personer:"
 
-#: ../src/seahorse-pgp-public-key-properties.glade.h:37
+#: ../src/seahorse-pgp-public-key-properties.glade.h:36
 msgid ""
 "Unknown\n"
 "Never\n"
@@ -3080,23 +3165,23 @@ msgstr ""
 "Fuldt\n"
 "Ultimativt"
 
-#: ../src/seahorse-pgp-public-key-properties.glade.h:42
+#: ../src/seahorse-pgp-public-key-properties.glade.h:41
 msgid "You _Trust the Owner:"
 msgstr "Du _stoler på ejeren:"
 
-#: ../src/seahorse-pgp-public-key-properties.glade.h:43
+#: ../src/seahorse-pgp-public-key-properties.glade.h:42
 msgid "Your trust is manually specified on the <i>Details</i> tab."
 msgstr "Din tillid angives manuelt på <i>Detaljer</i>-fanebladet."
 
-#: ../src/seahorse-pgp-public-key-properties.glade.h:44
+#: ../src/seahorse-pgp-public-key-properties.glade.h:43
 msgid "_Only display the signatures of people I trust"
 msgstr "Vis _kun underskrifter fra personer jeg stoler på"
 
-#: ../src/seahorse-pgp-public-key-properties.glade.h:45
+#: ../src/seahorse-pgp-public-key-properties.glade.h:44
 msgid "_Revoke Signature"
 msgstr "_Tilbagekald underskrift"
 
-#: ../src/seahorse-pgp-public-key-properties.glade.h:46
+#: ../src/seahorse-pgp-public-key-properties.glade.h:45
 msgid "_Sign this Key"
 msgstr "_Underskriv denne nøgle"
 
@@ -3126,7 +3211,9 @@ msgstr "_Skalér"
 msgid ""
 "This is not a image file, or an unrecognized kind of image file. Try to use "
 "a JPEG image."
-msgstr "Dette er ikke en billedfil, eller det er en ukendt billedfils-type. Prøv at bruge et JPEG-billede."
+msgstr ""
+"Dette er ikke en billedfil, eller det er en ukendt billedfils-type. Prøv at "
+"bruge et JPEG-billede."
 
 #: ../src/seahorse-photos.c:221
 msgid "All image files"
@@ -3148,11 +3235,11 @@ msgstr "Kunne ikke tilføje billede"
 msgid "The file could not be loaded. It may be in an invalid format"
 msgstr "Filen kunne ikke indlæses. Måske benytter den et ugyldigt format"
 
-#: ../src/seahorse-photos.c:317
+#: ../src/seahorse-photos.c:316
 msgid "Are you sure you want to remove the current photo from your key?"
 msgstr "Er du sikker på at du vil fjerne det nuværende billede fra din nøgle?"
 
-#: ../src/seahorse-photos.c:330
+#: ../src/seahorse-photos.c:329
 msgid "Couldn't delete photo"
 msgstr "Kunne ikke slette billede"
 
@@ -3163,7 +3250,7 @@ msgstr "Kunne ikke tilbagekalde undernøgle"
 #: ../src/seahorse-revoke.c:77
 #, c-format
 msgid "Revoke Subkey %d of %s"
-msgstr "Tilbagekald undernøgle %d af %d"
+msgstr "Tilbagekald undernøgle %d af %s"
 
 #: ../src/seahorse-revoke.c:79
 #, c-format
@@ -3175,61 +3262,31 @@ msgstr "Tilbagekald %s"
 msgid ""
 "You are about to add %s as a revoker for %s. This operation cannot be "
 "undone! Are you sure you want to continue?"
-msgstr "Du er ved at tilføje %s som tilbagekalder for %s. Denne operation kan ikke fortrydes! Er du sikker på at du vil fortsætte?"
+msgstr ""
+"Du er ved at tilføje %s som tilbagekalder for %s. Denne operation kan ikke "
+"fortrydes! Er du sikker på at du vil fortsætte?"
 
 #: ../src/seahorse-revoke.c:122
 msgid "Couldn't add revoker"
 msgstr "Kunne ikke tilføje tilbagekalder"
 
 #: ../src/seahorse-revoke.glade.h:1
-msgid "Compromised"
-msgstr "Kompromitteret"
-
-#: ../src/seahorse-revoke.glade.h:2
-msgid "Key has been compromised"
-msgstr "Nøglen er kompromitteret"
-
-#: ../src/seahorse-revoke.glade.h:3
-msgid "Key has been superseded"
-msgstr "Nøglen er blevet erstattet"
-
-#: ../src/seahorse-revoke.glade.h:4
-msgid "Key is no longer used"
-msgstr "Nøglen er ikke længere i brug"
-
-#: ../src/seahorse-revoke.glade.h:5
-msgid "No Reason"
-msgstr "Ingen grund"
-
-#: ../src/seahorse-revoke.glade.h:6
-msgid "No reason for revoking key"
-msgstr "Ingen grund til at tilbagekalde nøgle"
-
-#: ../src/seahorse-revoke.glade.h:7
-msgid "Not Used"
-msgstr "Ubenyttet"
-
-#: ../src/seahorse-revoke.glade.h:8
 msgid "Optional description of revocation"
 msgstr "Valgfri beskrivelse af tilbagekaldelse"
 
-#: ../src/seahorse-revoke.glade.h:9
+#: ../src/seahorse-revoke.glade.h:2
 msgid "Re_voke"
 msgstr "Tilbage_kald"
 
-#: ../src/seahorse-revoke.glade.h:10
+#: ../src/seahorse-revoke.glade.h:3
 msgid "Reason for revoking the key"
 msgstr "Grund for tilbagekaldelse af nøglen"
 
-#: ../src/seahorse-revoke.glade.h:12
-msgid "Superseded"
-msgstr "Erstattet"
-
-#: ../src/seahorse-revoke.glade.h:13
+#: ../src/seahorse-revoke.glade.h:5
 msgid "_Description:"
 msgstr "_Beskrivelse:"
 
-#: ../src/seahorse-revoke.glade.h:14
+#: ../src/seahorse-revoke.glade.h:6
 msgid "_Reason:"
 msgstr "_Grund:"
 
@@ -3241,7 +3298,9 @@ msgstr "Kunne ikke underskrive nøgle"
 msgid ""
 "You have no personal PGP keys that can be used to indicate your trust of "
 "this key."
-msgstr "Du har ingen personlige PGP-nøgler der kan bruges til at angive din tillid til denne nøgle."
+msgstr ""
+"Du har ingen personlige PGP-nøgler der kan bruges til at angive din tillid "
+"til denne nøgle."
 
 #: ../src/seahorse-sign.glade.h:1
 msgid "<b>How carefully have you checked this key?</b>"
@@ -3325,11 +3384,11 @@ msgstr "_Underskriver:"
 msgid "_Very Carefully"
 msgstr "_Meget omhyggeligt"
 
-#: ../src/seahorse-ssh-generate.c:40
+#: ../src/seahorse-ssh-generate.c:43
 msgid "Couldn't generate Secure Shell key"
 msgstr "Kunne ikke generere SSH-nøgle"
 
-#: ../src/seahorse-ssh-generate.c:127
+#: ../src/seahorse-ssh-generate.c:149
 msgid "Creating Secure Shell Key"
 msgstr "Genererer SSH-nøgle"
 
@@ -3430,7 +3489,8 @@ msgstr "Eks_portér fuldstændig nøgle"
 
 #: ../src/seahorse-ssh-key-properties.glade.h:21
 msgid "The owner of this key is _authorized to connect to this computer"
-msgstr "Ejeren af denne nøgle har _rettigheder til at forbinde til denne computer"
+msgstr ""
+"Ejeren af denne nøgle har _rettigheder til at forbinde til denne computer"
 
 #: ../src/seahorse-ssh-key-properties.glade.h:22
 msgid "Used to connect to other computers."
@@ -3441,7 +3501,7 @@ msgid "Couldn't configure Secure Shell keys on remote computer."
 msgstr "Kunne ikke konfigurere SSH-nøgler på den fjerne computer."
 
 #. Show the progress window if necessary
-#: ../src/seahorse-ssh-upload.c:140
+#: ../src/seahorse-ssh-upload.c:177
 msgid "Configuring Secure Shell Keys..."
 msgstr "Konfigurerer SSH-nøgler..."
 
@@ -3474,6 +3534,122 @@ msgstr "_Brugernavn:"
 #: ../src/seahorse-ssh-upload.glade.h:9
 msgid "_Set Up"
 msgstr "_Konfigurér"
+
+# Mærkeligt.
+#~ msgid "initial temporary item"
+#~ msgstr "indledningsvis midlertidigt objekt"
+
+#~ msgid "Cursor Position"
+#~ msgstr "Markørposition"
+
+# ...antal tegn fra begyndelsen af den streng der implicit refereres til?
+#~ msgid "The current position of the insertion cursor in chars"
+#~ msgstr "Den nuværende placering af indsætningsmarkøren målt i antal tegn"
+
+#~ msgid "Selection Bound"
+#~ msgstr "Markeringsgrænse"
+
+# Dette lyder helvedes dårligt. Men det gør det alligevel også på engelsk...
+#~ msgid ""
+#~ "The position of the opposite end of the selection from the cursor in chars"
+#~ msgstr ""
+#~ "Placeringen af den modsatte ende af markeringen fra markøren i antal tegn"
+
+#~ msgid "Maximum length"
+#~ msgstr "Maksimal længde"
+
+#~ msgid "Maximum number of characters for this entry. Zero if no maximum"
+#~ msgstr "Maksimalt antal tegn for denne post. Nul hvis intet maksimum"
+
+# Mystisk.
+#~ msgid "Has Frame"
+#~ msgstr "Har ramme"
+
+#~ msgid "FALSE removes outside bevel from entry"
+#~ msgstr "FALSE fjerner den ydre skråkant fra posten"
+
+#~ msgid "Invisible character"
+#~ msgstr "Usynligt tegn"
+
+#~ msgid ""
+#~ "The character to use when masking entry contents (in \"password mode\")"
+#~ msgstr ""
+#~ "Tegnet der benyttes til at maskere postindhold (i \"kodeords-tilstand\")"
+
+#~ msgid "Activates default"
+#~ msgstr "Anvender forvalg"
+
+#~ msgid ""
+#~ "Whether to activate the default widget (such as the default button in a "
+#~ "dialog) when Enter is pressed"
+#~ msgstr ""
+#~ "Hvorvidt forvalgskontrollen (såsom den forvalgte knap i en dialog) "
+#~ "aktiveres når der trykkes Enter"
+
+#~ msgid "Width in chars"
+#~ msgstr "Bredde i tegn"
+
+#~ msgid "Number of characters to leave space for in the entry"
+#~ msgstr "Antallet af tegn der reserveres plads til i posten"
+
+#~ msgid "Scroll offset"
+#~ msgstr "Rulleudgangspunkt"
+
+#~ msgid "Number of pixels of the entry scrolled off the screen to the left"
+#~ msgstr ""
+#~ "Antallet af pixler fra posten der er rullet til venstre ud af skærmen"
+
+#~ msgid "Text"
+#~ msgstr "Tekst"
+
+#~ msgid "The contents of the entry"
+#~ msgstr "Indholdet af posten"
+
+#~ msgid "Visibility"
+#~ msgstr "Synlighed"
+
+# Hvilken invisible character? Dem er der jo mange af. De må mene flere af slagsen
+#~ msgid "Whether contents are drawn using invisible character"
+#~ msgstr "Hvorvidt indholdet anføres med usynlige tegn"
+
+#~ msgid "Key type / algorithm"
+#~ msgstr "Nøgletype / algoritme"
+
+# Type = skriv, eller type=type? Nedenfor står der "use here"...
+#~ msgid "[Type here]"
+#~ msgstr "[Type her]"
+
+# Use=brug eller use=funktion?
+#~ msgid "[Use here]"
+#~ msgstr "[Formål her]"
+
+# Hvad gør vi med placeholder?
+#~ msgid "This key expired on: (placeholder)"
+#~ msgstr "Denne nøgle udløb den: (placeholder)"
+
+#~ msgid "Compromised"
+#~ msgstr "Kompromitteret"
+
+#~ msgid "Key has been compromised"
+#~ msgstr "Nøglen er kompromitteret"
+
+#~ msgid "Key has been superseded"
+#~ msgstr "Nøglen er blevet erstattet"
+
+#~ msgid "Key is no longer used"
+#~ msgstr "Nøglen er ikke længere i brug"
+
+#~ msgid "No Reason"
+#~ msgstr "Ingen grund"
+
+#~ msgid "No reason for revoking key"
+#~ msgstr "Ingen grund til at tilbagekalde nøgle"
+
+#~ msgid "Not Used"
+#~ msgstr "Ubenyttet"
+
+#~ msgid "Superseded"
+#~ msgstr "Erstattet"
 
 #, fuzzy
 #~ msgid "The orientation of the tray."
