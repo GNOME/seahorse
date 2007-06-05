@@ -46,10 +46,6 @@ static const GOptionEntry options[] = {
 	{ "sharing", 's', 0, G_OPTION_ARG_NONE, &show_sharing, 
 	    N_("For internal use"), NULL },
 #endif 
-#ifdef WITH_APPLET   
-	{ "applet", 's', 0, G_OPTION_ARG_NONE, &show_applet, 
-	    N_("For internal use"), NULL },
-#endif 
     { NULL }
 };
 
@@ -104,12 +100,7 @@ main (int argc, char **argv)
         seahorse_prefs_select_tab (swidget, tab);
     }
 #endif
-#ifdef WITH_APPLET	
-    if (show_applet) {
-        GtkWidget *tab = glade_xml_get_widget (swidget->xml, "applet-tab");
-        seahorse_prefs_select_tab (swidget, tab);
-    }
-#endif       
+   
 	gtk_main();
 	return 0;
 }
