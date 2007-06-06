@@ -248,7 +248,8 @@ gpg_options_init (GError **err)
          * around with the configuration file.
          */
         g_return_val_if_fail (engine && engine->version && engine->file_name &&
-                              (g_str_has_prefix (engine->version, GPG_VERSION_PREFIX1)),
+                              (g_str_has_prefix (engine->version, GPG_VERSION_PREFIX1) ||
+                               g_str_has_prefix (engine->version, GPG_VERSION_PREFIX2)),
                               (seahorse_util_gpgme_to_error (GPG_E (GPG_ERR_INV_ENGINE), err), FALSE));
 
         /* Now run the binary and read in the home directory */
