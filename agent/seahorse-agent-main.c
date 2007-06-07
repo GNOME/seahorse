@@ -224,6 +224,10 @@ int main(int argc, char* argv[])
 #endif
         err (1, _("couldn't drop privileges properly"));
     
+    bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
+    bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+    textdomain (GETTEXT_PACKAGE);
+    
     octx = g_option_context_new ("");
     g_option_context_add_main_entries (octx, options, GETTEXT_PACKAGE);
 
