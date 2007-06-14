@@ -318,14 +318,14 @@ properties_response (GtkDialog *dialog, int response, SeahorseWidget *swidget)
 }
 
 void
-seahorse_ssh_key_properties_new (SeahorseSSHKey *skey)
+seahorse_ssh_key_properties_new (SeahorseSSHKey *skey, GtkWindow *parent)
 {
     SeahorseKey *key = SEAHORSE_KEY (skey);
     SeahorseWidget *swidget = NULL;
     GtkWidget *widget;
 
     swidget = seahorse_key_widget_new ("ssh-key-properties",
-                                       GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)),
+                                       parent,
                                        key);    
     
     /* This happens if the window is already open */
