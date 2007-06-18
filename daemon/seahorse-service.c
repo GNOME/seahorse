@@ -146,11 +146,11 @@ seahorse_service_import_keys (SeahorseService *svc, gchar *ktype,
         g_array_append_val (a, t);
         keynum = keynum + 1;
     }
+        
+    *keys = (gchar**)g_array_free (a, FALSE);
     
     if (keynum > 0)
-        seahorse_notify_import (keynum);
-    
-    *keys = (gchar**)g_array_free (a, FALSE);
+    seahorse_notify_import (keynum, *keys);
     
     g_object_unref (op);
     return TRUE;

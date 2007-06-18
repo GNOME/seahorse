@@ -42,7 +42,7 @@ void            seahorse_notify_signatures_local    (const gchar* data,
                                                      gpgme_verify_result_t status,
                                                      GtkWidget *attachto);
 
-void            seahorse_notify_import              (guint keys);
+void            seahorse_notify_import              (guint keynum, gchar **keys);
                                                      
 void            seahorse_notify_import_local        (guint keys,
                                                      GtkWidget *attachto);

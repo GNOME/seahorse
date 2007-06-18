@@ -552,11 +552,26 @@ seahorse_notification_display (const gchar *summary, const gchar *body,
 #define ICON_PREFIX     DATA_DIR "/pixmaps/seahorse/48x48/"
 
 void
-seahorse_notify_import (guint keys)
+seahorse_notify_import (guint keynum, gchar **keys)
 {
-    gchar *body = g_strdup_printf(ngettext("Imported %i key", "Imported %i keys", keys), keys);
-    const gchar *title = ngettext("Key Imported", "Keys Imported", keys);
+    gchar *body, *t;
+    gchar **keyptr;
+    const gchar *title = ngettext("Key Imported", "Keys Imported", keynum);
     const gchar *icon = ICON_PREFIX "seahorse-key.png";
+    
+    if (keynum > 4) 
+        body = g_strdup_printf(ngettext("Imported %i key", "Imported %i keys", keynum), keynum);
+    else {
+        body = g_strdup_printf(ngettext("Imported a key for", "Imported keys for", keynum));
+        
+        keyptr = keys;
+        
+        for (keyptr; *keyptr; keyptr++) {
+            t = g_strdup_printf ("%s\n<key id='%s' field=\"display-name\"/>", body, *keyptr);
+            g_free (body);
+            body = t;
+        }
+    }
     
     /* Always try and display in the daemon */
     if (seahorse_context_is_daemon (SCTX_APP ()))
