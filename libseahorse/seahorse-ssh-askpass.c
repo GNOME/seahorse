@@ -81,13 +81,17 @@ int main (int argc, char* argv[])
     
     gtk_init (&argc, &argv);
 
+    bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
+    bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+    textdomain (GETTEXT_PACKAGE);
+
     /* Non buffered stdout */
     setvbuf(stdout, 0, _IONBF, 0);
 
     if (argc > 1)
         message = g_strjoinv (" ", argv + 1);
     else 
-        message = g_strdup ("Enter your Secure Shell passphrase:");
+        message = g_strdup (_("Enter your Secure Shell passphrase:"));
 
     /* Check if we're being handed a password from seahorse */
     pass = askpass_command ("PASSWORD", message);
