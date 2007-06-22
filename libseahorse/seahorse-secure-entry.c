@@ -38,7 +38,7 @@
  */
  
 /* 
- * Modified for inclusion into seahorse by Nate Nielsen 
+ * Modified for inclusion into seahorse by Stef Walter 
  */
 
 #include <stdlib.h>

@@ -2,7 +2,7 @@
  * Seahorse
  *
  * Copyright (C) 2003 Jacob Perkins
- * Copyright (C) 2004 Nate Nielsen
+ * Copyright (C) 2004 Stefan Walter
  * Copyright (C) 2005 Adam Schreiber
  *
  * This program is free software; you can redistribute it and/or modify

@@ -2,7 +2,7 @@
  * Seahorse
  *
  * Copyright (C) 2003 Jacob Perkins
- * Copyright (C) 2005 Nate Nielsen
+ * Copyright (C) 2005 Stefan Walter
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -835,7 +835,7 @@ about_activate (GtkWidget *widget, SeahorseWidget *swidget)
 		"Jacob Perkins <jap1@users.sourceforge.net>",
 		"Jose Carlos Garcia Sogo <jsogo@users.sourceforge.net>",
 		"Jean Schurger <yshark@schurger.org>",
-        "Nate Nielsen <nielsen@memberwebs.com>",
+        "Stef Walter <stef@memberwebs.com>",
         "Adam Schreiber <sadam@clemson.edu>",
         "",
         _("Contributions:"),
@@ -853,7 +853,7 @@ about_activate (GtkWidget *widget, SeahorseWidget *swidget)
 
     static const gchar *artists[] = {
         "Jacob Perkins <jap1@users.sourceforge.net>",
-        "Nate Nielsen <nielsen@memberwebs.com>",
+        "Stef Walter <stef@memberwebs.com>",
         NULL
     };
 

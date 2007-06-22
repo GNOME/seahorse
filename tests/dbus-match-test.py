@@ -17,7 +17,7 @@ service = dbus.Interface(proxy_obj, 'org.gnome.seahorse.KeyService')
 proxy_obj = bus.get_object('org.gnome.seahorse', '/org/gnome/seahorse/keys/openpgp')
 keyset = dbus.Interface(proxy_obj, "org.gnome.seahorse.Keys")
 
-(keys, unmatched) = keyset.MatchKeys(['Nate Nielsen', 'sadam@clemson.edu', 'flooey@blah.com'], 0x00000010)
+(keys, unmatched) = keyset.MatchKeys(['Stef Walter', 'sadam@clemson.edu', 'flooey@blah.com'], 0x00000010)
 print keys
 print unmatched
 

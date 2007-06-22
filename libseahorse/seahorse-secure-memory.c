@@ -20,7 +20,7 @@
 
 /* 
  * Originally from pinentry in gnupg.
- * Modifications cleanup and integration with glib by Nate Nielsen 
+ * Modifications cleanup and integration with glib by Stef Walter 
  */
 
 #include "config.h"

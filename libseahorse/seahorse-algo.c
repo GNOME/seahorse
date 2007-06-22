@@ -22,7 +22,7 @@
  * needed on buffers full of bytes, and then call MD5Final, which
  * will fill a supplied 16-byte array with the digest.
  *
- * Minor modifications by Nate Nielsen <nielsen@memberwebs.com>
+ * Minor modifications by Stef Walter <stef@memberwebs.com>
  */
 
 #include <string.h>

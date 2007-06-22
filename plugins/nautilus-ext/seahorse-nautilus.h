@@ -18,7 +18,7 @@
  *  Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  *  Author: Fernando Herrera <fernando.herrera@tecsidel.es>
- *          Nate Nielsen <nielsen@memberwebs.com>
+ *          Stef Walter <stef@memberwebs.com>
  * 
  */
 

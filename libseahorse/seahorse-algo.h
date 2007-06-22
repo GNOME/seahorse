@@ -25,7 +25,7 @@
  *  - Ian Jackson <ijackson@nyx.cs.du.edu>.
  * Still in the public domain.
  * 
- * Some minor additions by Nate Nielsen <nielsen@memberwebs.com>
+ * Some minor additions by Stef Walter <stef@memberwebs.com>
  */
  
 #ifndef __SEAHORSE_ALGO_H__

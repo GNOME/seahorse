@@ -285,7 +285,7 @@ about_cb (BonoboUIComponent *uic, SeahorseApplet *sapplet, const gchar *verbname
     
     static const gchar *authors [] = {
         "Adam Schreiber <sadam@clemson.edu>",
-        "Nate Nielsen <nielsen@memberwebs.com>",
+        "Stef Walter <stef@memberwebs.com>",
         NULL    
     };
 
@@ -295,7 +295,7 @@ about_cb (BonoboUIComponent *uic, SeahorseApplet *sapplet, const gchar *verbname
     };
     
     static const gchar *artists[] = {
-        "Nate Nielsen <nielsen@memberwebs.com>",
+        "Stef Walter <stef@memberwebs.com>",
         NULL    
     };
     
