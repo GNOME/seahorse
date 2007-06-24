@@ -1,158 +1,85 @@
-<?xml version="1.0"?>
-<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
-"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
-	<!ENTITY legal SYSTEM "legal.xml">
-	<!ENTITY appversion "0.9.0">
-	<!ENTITY manrevision "1.0">
-	<!ENTITY date "December 2005">
-	<!ENTITY applet "Encryption Applet">
-	<!ENTITY project "Seahorse Project">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!ENTITY legal SYSTEM "legal.xml">
+<!ENTITY appversion "0.9.0">
+<!ENTITY manrevision "1.0">
+<!ENTITY date "December 2005">
+<!ENTITY applet "Encryption Applet">
+<!ENTITY project "Seahorse Project">
 ]>
-
-<article id="index">
+<article id="index" lang="sv">
 	<articleinfo>
-		<title
->&applet; Manual V&manrevision;</title>
+		<title>Handbok för Krypteringspanelprogram v1.0</title>
+	    <abstract role="description">
+		  <para>Krypteringspanelprogram är ett grafiskt gränssnitt för att hantera och använda krypteringsnycklar.</para>
+		</abstract>
 		<copyright>
-			<year
->2005</year>
-			<holder
->Adam Schreiber</holder>
-		</copyright>
-		<publisher>
-			<publishername
->Seahorse Project</publishername>
+			<year>2005</year>
+			<holder>Adam Schreiber</holder>
+		</copyright><copyright><year>2007</year><holder>Daniel Nylander (po@danielnylander.se)</holder></copyright>
+		<publisher role="maintainer">
+			<publishername>Seahorse-projektet</publishername>
 		</publisher>
 		&legal;
 		<authorgroup>
-			<author
-><firstname
->Adam</firstname
-> <surname
->Schreiber</surname
-> <affiliation
-><orgname
->Seahorse Project</orgname
-> <address
-> <email
->sadam@clemson.edu</email
-> </address
-> </affiliation>
+			<author>
+				<firstname>Adam</firstname>
+				<surname>Schreiber</surname>
+				<affiliation>
+					<orgname>Seahorse-projektet</orgname>
+					<address>
+						<email>sadam@clemson.edu</email>
+					</address>
+				</affiliation>
 			</author>
 		</authorgroup>
+		<publisher role="maintainer">
+			<publishername>Seahorse-projektet</publishername>
+		</publisher>
 		<revhistory>
 			<revision>
-				<revnumber
->&applet; Manual V0.9.0</revnumber>
-				<date
->July 2005</date>
+				<revnumber>Handbok för Krypteringspanelprogram v0.9.0</revnumber>
+				<date>Juli 2005</date>
 				<revdescription>
-					<para role="author"
->Adam Schreiber <email
->sadam@clemson.edu</email
-> </para>
-					<para role="publisher"
->Seahorse-projektet</para>
+					<para role="author">Adam Schreiber <email>sadam@clemson.edu</email></para>
+					<para role="publisher">Seahorse-projektet</para>
 				</revdescription>
 			</revision>
 		</revhistory>
-		<releaseinfo
->This manual describes version &appversion; of &applet;</releaseinfo>
+		<releaseinfo>Den här handboken beskriver version 0.9.0 av Krypteringspanelprogram</releaseinfo>
 		<legalnotice>
-			<title
->Återkoppling</title>
-			<para
->To report a bug or make a suggestion regarding &applet; application or this manual, follow the directions in the <ulink url="ghelp:gnome-feedback" type="help"
->Gnome Feedback Page</ulink
->. </para>
+			<title>Återkoppling</title>
+			<para>För att rapportera ett fel eller föreslå någonting angående programmet Krypteringspanelprogram eller den här handboken, följ anvisningarna på <ulink url="ghelp:gnome-feedback" type="help">GNOME:s återkopplingssida</ulink>.</para>
 		</legalnotice>
 	</articleinfo>
 	<indexterm zone="index">
-		<primary
->&applet;</primary>
+		<primary>&applet;</primary>
 	</indexterm>
 	<sect1 id="introduction">
-		<title
->Introduktion</title>
-		<para
-><application
->&applet;</application
-> performs the various encryption operations using standard OpenPGP methods. You will need to have already created an OpenPGP key with <application
->Encryption Key Manager</application
-> and imported the public keys of those you want to encrypt to or verify signatures of. </para
-> 
+		<title>Introduktion</title>
+		<para><application>Krypteringspanelprogram</application> genomför olika krypteringsåtgärder med standardiserade OpenPGP-metoder. Du behöver en redan skapad OpenPGP-nyckel av <application>Hanterare för krypteringsnycklar</application> och importerat de publika nycklarna för de som du vill kryptera till eller validera signaturer för.</para> 
 		<sect2 id="seahorse-applet-introduction-add">
-            <title
->To Add <application
->&applet;</application
-> to a Panel</title>
-            <para
->To add <application
->&applet;</application
-> to a panel, right-click on the panel, then choose <guimenuitem
->Add to Panel</guimenuitem
->. Select <application
->&applet;</application
-> in the <application
->Add to the panel</application
-> dialog, then click <guibutton
->OK</guibutton
->. </para>
-            <para
->The layout of the <application
->&applet;</application
-> varies depending on the size and type of panel in which the applet resides. </para>
+            <title>Lägg till <application>Krypteringspanelprogram</application> till en panel</title>
+            <para>För att lägga till <application>Krypteringspanelprogram</application> till en panel kan du högerklicka på panelen och sedan välja <guimenuitem>Lägg till i panelen</guimenuitem>. Välj <application>Krypteringspanelprogram</application> i dialogrutan <application>Lägg till i panelen</application>, klicka sedan på <guibutton>OK</guibutton>.</para>
+            <para>Layouten för <application>Krypteringspanelprogram</application> varierar beroende på storlek och typ av panel i vilken panelprogrammet ligger.</para>
         </sect2>
 	</sect1>
     <sect1 id="usage">
-        <title
->Användning</title>
-        <para
->The &applet; operates on both the Ctrl-C/V and the select/middle click clipboards. Simply copy the desired text using the method of your choice, select the encryption operation from the left click menu, follow the prompts and paste the new contents of the clipboard into your application or view them in a display window after enabling the appropriate option in the <xref linkend="prefs"/> </para>
+        <title>Användning</title>
+        <para>Krypteringspanelprogram fungerar både med urklipp via Ctrl-C/V och markera/mittenklicka. Kopiera helt enkelt den önskade texten med din favoritmetod, välj krypteringsåtgärd från vänsterklickmenyn, följ anvisningarna och klistra in det nya innehållet i urklippet till ditt program eller visa den i ett visningsfönster efter att du har aktiverat det lämpliga alternativet i <xref linkend="prefs"/></para>
     </sect1>
 	<sect1 id="prefs">
-	   <title
->&applet; Preferences</title>
-	   <para
->The preferences for the <application
->&applet;</application
-> are part of your <application
->Encryption Preferences</application
-> and can be edited by selecting <menuchoice
-><guimenu
->Desktop</guimenu
-> <guimenuitem
->Preferences</guimenuitem
-><guimenuitem
->Encryption Preferences</guimenuitem
-></menuchoice
->, or by right clicking on the <application
->&applet;</application
-> and selecting <guimenuitem
->Preferences</guimenuitem
->. </para
-> 
+	   <title>Inställningar för Krypteringspanelprogram</title>
+	   <para>Inställningarna för <application>Krypteringspanelprogram</application> är en del av dina <application>Krypteringsinställningar</application> och kan redigeras genom att välja <menuchoice><guimenu>Skrivbord</guimenu><guimenuitem>Inställningar</guimenuitem><guimenuitem>Krypteringsinställningar</guimenuitem></menuchoice>, eller genom att högerklicka på <application>Krypteringspanelprogram</application> och välja <guimenuitem>Inställningar</guimenuitem>.</para> 
 	   <sect2 id="display">
-	       <title
->Visningsalternativ</title>
-	       <para
->Dessa alternativ påverkar huruvida ett fönster visar den resulterande texten som skapas när en krypteringsåtgärd genomförs. Aktivera dessa alternativ kan vara användbart när man läser webbaserad e-post eller hanterar andra krypteringsfunktioner där ett fält inte kanske är direkt tillgängligt eller att omedelbar visning krävs. </para>
+	       <title>Visningsalternativ</title>
+	       <para>Dessa alternativ påverkar huruvida ett fönster visar den resulterande texten som skapas när en krypteringsåtgärd genomförs. Aktivera dessa alternativ kan vara användbart när man läser webbaserad e-post eller hanterar andra krypteringsfunktioner där ett fält kanske inte är direkt tillgängligt eller att omedelbar visning krävs.</para>
 	   </sect2>
 	</sect1>
 	<sect1 id="about">
-		<title
->About &applet;</title>
-		<para
->&project; was written by Jacob Perkins. The current maintainer is Stef Walter. This manual is by Adam Schreiber. The project's web site was designed by Jim Pharis. To find more information about Seahorse, please visit the <ulink url="http://seahorse.sourceforge.net" type="http"
->&project; web page</ulink
->. </para>
-		<para
->För att rapportera ett fel eller föreslå någonting angående det här programmet eller den här handboken, följ anvisningarna i det här <ulink url="ghelp:gnome-feedback" type="help"
->dokumentet</ulink
->. </para>
-		<para
->Det här programmet distribueras under villkoren för GNU General Public License som publicerats av Free Software Foundation; antingen version 2 av licensen, eller (enligt dig själv) någon senare version. En kopia av den här licensen kan hittas på den här <ulink url="ghelp:gpl" type="help"
->länken</ulink
->, eller i filen COPYING som inkluderats i källkoden för det här programmet. </para>
+		<title>Om Krypteringspanelprogram</title>
+		<para>Seahorse-projektet skrevs av Jacob Perkins. Den nuvarande ansvarige är Stef Walter. Den här handboken skrevs av Adam Schreiber. Projektets webbplats designades av Jim Pharis. För att hitta mer information om Seahorse, besök <ulink url="http://seahorse.sourceforge.net" type="http">Seahorse-projektets webbplats</ulink>.</para>
+		<para>För att rapportera ett fel eller föreslå någonting angående det här programmet eller den här handboken, följ anvisningarna i det här <ulink url="ghelp:gnome-feedback" type="help">dokumentet</ulink>.</para>
+		<para>Det här programmet distribueras under villkoren för GNU General Public License som publicerats av Free Software Foundation; antingen version 2 av licensen, eller (enligt dig) någon senare version. En kopia av den här licensen kan hittas på den här <ulink url="ghelp:gpl" type="help">länken</ulink>, eller i filen COPYING som inkluderats med källkoden för det här programmet.</para>
 	</sect1>
 </article>
