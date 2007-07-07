@@ -239,18 +239,17 @@ seahorse_agent_cache_init ()
     gpgme_protocol_t proto = GPGME_PROTOCOL_OpenPGP;
     gpgme_error_t err;
  
-    g_assert (g_cache == NULL);
-    g_assert (g_memory == NULL);
+    if ((g_cache == NULL) && (g_memory == NULL)) {
+        g_cache =
+            g_hash_table_new_full (g_str_hash, g_str_equal, NULL, destroy_cache_item);
+        g_memory = g_mem_chunk_create (SeahorseAgentPassReq, 128, G_ALLOC_AND_FREE);
 
-    g_cache =
-        g_hash_table_new_full (g_str_hash, g_str_equal, NULL, destroy_cache_item);
-    g_memory = g_mem_chunk_create (SeahorseAgentPassReq, 128, G_ALLOC_AND_FREE);
-
-    err = gpgme_engine_check_version (proto);
-    g_return_if_fail (GPG_IS_OK (err));
-   
-    /* Listen for changes on the AUTH key */
-    g_notify_id = seahorse_gconf_notify (SETTING_AUTH, gconf_notify, NULL);
+        err = gpgme_engine_check_version (proto);
+        g_return_if_fail (GPG_IS_OK (err));
+       
+        /* Listen for changes on the AUTH key */
+        g_notify_id = seahorse_gconf_notify (SETTING_AUTH, gconf_notify, NULL);
+    }
 }
 
 /* Uninitialize and free up cache memory */

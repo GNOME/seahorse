@@ -714,6 +714,8 @@ seahorse_agent_ssh_init ()
 
     g_assert (!ssh_agent_initialized);
     
+    seahorse_agent_cache_init ();
+    
     if (listen (ssh_agent_socket, 5) < 0) {
         g_warning ("couldn't listen on SSH proxy socket: %s: %s", ssh_agent_sockname, g_strerror (errno));
         return FALSE;
