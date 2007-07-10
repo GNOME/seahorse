@@ -341,6 +341,7 @@ display_text (gchar *title, gchar *text, gboolean editable)
     gtk_text_view_set_editable (GTK_TEXT_VIEW (text_view), editable);
     gtk_text_view_set_left_margin (GTK_TEXT_VIEW (text_view), 8);
     gtk_text_view_set_right_margin (GTK_TEXT_VIEW (text_view), 8);
+    gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (text_view), GTK_WRAP_WORD);
     gtk_container_add (GTK_CONTAINER (scrolled_window), text_view);
     
     buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (text_view));
