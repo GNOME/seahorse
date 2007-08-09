@@ -6,13 +6,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse 0.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-23 12:06+0200\n"
-"PO-Revision-Date: 2007-06-23 12:13+0200\n"
-"Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
+"POT-Creation-Date: 2007-08-09 10:56+0200\n"
+"PO-Revision-Date: 2007-07-30 20:06+0100\n"
+"Last-Translator: Espen Stefansen <espenas@gmail.com>\n"
 "Language-Team: Norwegian <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8-bit\n"
+"Content-Transfer-Encoding: 8bit\n"
 
 #: ../agent/seahorse-agent-actions.c:134
 #: ../libseahorse/seahorse-ssh-operation.c:445
@@ -41,7 +41,7 @@ msgstr ""
 msgid "Unknown/Invalid Key"
 msgstr "Ukjent/ugyldig nøkkel"
 
-#: ../agent/seahorse-agent-cache.c:533
+#: ../agent/seahorse-agent-cache.c:532
 #, c-format
 msgid "PGP Key: %s"
 msgstr "PGP-nøkkel: %s"
@@ -103,7 +103,7 @@ msgstr ""
 
 #: ../agent/seahorse-agent-main.c:67
 msgid "command..."
-msgstr ""
+msgstr "kommando..."
 
 #: ../agent/seahorse-agent-main.c:89 ../daemon/seahorse-daemon.c:72
 msgid "couldn't fork process"
@@ -114,7 +114,7 @@ msgid "couldn't create new process group"
 msgstr ""
 
 #: ../agent/seahorse-agent-main.c:227 ../daemon/seahorse-daemon.c:195
-#: ../plugins/applet/seahorse-applet.c:1016
+#: ../plugins/applet/seahorse-applet.c:1017
 #: ../plugins/nautilus/seahorse-tool.c:570 ../src/main.c:59
 msgid "couldn't drop privileges properly"
 msgstr ""
@@ -192,10 +192,12 @@ msgid "Key is not a valid recipient for encryption: %s"
 msgstr ""
 
 #: ../daemon/seahorse-service-crypto.c:156
+#, c-format
 msgid "No recipients specified"
 msgstr "Ingen mottakere oppgitt"
 
 #: ../daemon/seahorse-service-crypto.c:222
+#, c-format
 msgid "No signer specified"
 msgstr "Ingen signerer oppgitt"
 
@@ -533,7 +535,7 @@ msgstr "Nøkkel-ID"
 
 #: ../libseahorse/seahorse-add-keyserver.glade.h:1
 msgid ":"
-msgstr ""
+msgstr ":"
 
 #: ../libseahorse/seahorse-add-keyserver.glade.h:2
 msgid "Add Key Server"
@@ -640,6 +642,7 @@ msgstr[0] "Importerte %i nøkkel"
 msgstr[1] "Importerte %i nøkler"
 
 #: ../libseahorse/seahorse-notification.c:565
+#, c-format
 msgid "Imported a key for"
 msgid_plural "Imported keys for"
 msgstr[0] "Importerte en nøkkel for"
@@ -721,6 +724,7 @@ msgid "Confirm:"
 msgstr "Bekreft:"
 
 #: ../libseahorse/seahorse-passphrase.c:325
+#, c-format
 msgid "Wrong passphrase."
 msgstr "Feil passordfrase."
 
@@ -1004,11 +1008,11 @@ msgstr ""
 
 #: ../libseahorse/seahorse-prefs.glade.h:40
 msgid "gtk-apply"
-msgstr ""
+msgstr "gtk-apply"
 
 #: ../libseahorse/seahorse-prefs.glade.h:41
 msgid "gtk-clear"
-msgstr ""
+msgstr "gtk-clear"
 
 #: ../libseahorse/seahorse-prefs.glade.h:42
 msgid "minutes"
@@ -1076,6 +1080,7 @@ msgstr ""
 
 #: ../libseahorse/seahorse-ssh-operation.c:135
 #: ../libseahorse/seahorse-ssh-operation.c:697
+#, c-format
 msgid "The SSH command was terminated unexpectedly."
 msgstr ""
 
@@ -1295,7 +1300,7 @@ msgid "seahorse-applet"
 msgstr "seahorse-applet"
 
 #: ../plugins/applet/seahorse-applet.c:311
-#: ../plugins/applet/seahorse-applet.c:835
+#: ../plugins/applet/seahorse-applet.c:836
 msgid "Use PGP/GPG to encrypt/decrypt/sign/verify/import the clipboard."
 msgstr ""
 
@@ -1308,97 +1313,97 @@ msgid "Seahorse Project Homepage"
 msgstr "Nettside for Seahorse"
 
 #. Get the recipient list
-#: ../plugins/applet/seahorse-applet.c:374
+#: ../plugins/applet/seahorse-applet.c:375
 #: ../plugins/epiphany/seahorse-extension.c:251
 #: ../plugins/gedit/seahorse-gedit.c:332
 msgid "Choose Recipient Keys"
 msgstr ""
 
-#: ../plugins/applet/seahorse-applet.c:393
+#: ../plugins/applet/seahorse-applet.c:394
 msgid "Encrypted Text"
 msgstr "Kryptert tekst"
 
-#: ../plugins/applet/seahorse-applet.c:395
+#: ../plugins/applet/seahorse-applet.c:396
 msgid "Encryption Failed"
 msgstr "Kryptering feilet"
 
-#: ../plugins/applet/seahorse-applet.c:396
+#: ../plugins/applet/seahorse-applet.c:397
 msgid "The clipboard could not be encrypted."
 msgstr ""
 
-#: ../plugins/applet/seahorse-applet.c:430
+#: ../plugins/applet/seahorse-applet.c:431
 #: ../plugins/epiphany/seahorse-extension.c:296
 #: ../plugins/gedit/seahorse-gedit.c:611
 msgid "Choose Key to Sign with"
 msgstr ""
 
-#: ../plugins/applet/seahorse-applet.c:449
+#: ../plugins/applet/seahorse-applet.c:450
 msgid "Signed Text"
 msgstr "Signert tekst"
 
-#: ../plugins/applet/seahorse-applet.c:451
+#: ../plugins/applet/seahorse-applet.c:452
 msgid "Signing Failed"
 msgstr "Signering feilet"
 
-#: ../plugins/applet/seahorse-applet.c:452
+#: ../plugins/applet/seahorse-applet.c:453
 msgid "The clipboard could not be Signed."
 msgstr ""
 
-#: ../plugins/applet/seahorse-applet.c:495
+#: ../plugins/applet/seahorse-applet.c:496
 #: ../plugins/epiphany/seahorse-extension.c:340
 msgid "Import Failed"
 msgstr "Importering feilet"
 
-#: ../plugins/applet/seahorse-applet.c:496
+#: ../plugins/applet/seahorse-applet.c:497
 #: ../plugins/epiphany/seahorse-extension.c:341
 msgid "Keys were found but not imported."
 msgstr ""
 
-#: ../plugins/applet/seahorse-applet.c:527
+#: ../plugins/applet/seahorse-applet.c:528
 #: ../plugins/epiphany/seahorse-extension.c:374
 msgid "Decrypting Failed"
 msgstr "Dekryptering feilet"
 
-#: ../plugins/applet/seahorse-applet.c:528
+#: ../plugins/applet/seahorse-applet.c:529
 #: ../plugins/epiphany/seahorse-extension.c:375
 msgid "Text may be malformed."
 msgstr ""
 
-#: ../plugins/applet/seahorse-applet.c:579
+#: ../plugins/applet/seahorse-applet.c:580
 msgid "No PGP key or message was found on clipboard"
 msgstr ""
 
-#: ../plugins/applet/seahorse-applet.c:580
+#: ../plugins/applet/seahorse-applet.c:581
 msgid "No PGP data found."
 msgstr "Ingen PGP-data funnet."
 
 #. TRANSLATORS: This means 'The text that was decrypted'
-#: ../plugins/applet/seahorse-applet.c:615
+#: ../plugins/applet/seahorse-applet.c:616
 msgid "Decrypted Text"
 msgstr "Dekryptert tekst"
 
-#: ../plugins/applet/seahorse-applet.c:684
+#: ../plugins/applet/seahorse-applet.c:685
 msgid "Could not display the help file"
 msgstr "Kunne ikke vise hjelpfilen"
 
-#: ../plugins/applet/seahorse-applet.c:747
+#: ../plugins/applet/seahorse-applet.c:748
 msgid "_Encrypt Clipboard"
 msgstr "Krypt_er utklippstavlen"
 
-#: ../plugins/applet/seahorse-applet.c:754
+#: ../plugins/applet/seahorse-applet.c:755
 msgid "_Sign Clipboard"
 msgstr "_Signer utklippstavlen"
 
-#: ../plugins/applet/seahorse-applet.c:761
+#: ../plugins/applet/seahorse-applet.c:762
 msgid "_Decrypt/Verify Clipboard"
 msgstr ""
 
-#: ../plugins/applet/seahorse-applet.c:767
+#: ../plugins/applet/seahorse-applet.c:768
 msgid "_Import Keys from Clipboard"
 msgstr "_Importer nøkler fra utklippstavlen"
 
-#: ../plugins/applet/seahorse-applet.c:832
-#: ../plugins/applet/seahorse-applet.c:834
+#: ../plugins/applet/seahorse-applet.c:833
+#: ../plugins/applet/seahorse-applet.c:835
 msgid "Encryption Applet"
 msgstr "Panelprogram for kryptering"
 
@@ -1599,7 +1604,7 @@ msgstr ""
 
 #: ../plugins/nautilus/seahorse-tool.c:66
 msgid "file..."
-msgstr ""
+msgstr "fil..."
 
 #: ../plugins/nautilus/seahorse-tool.c:128
 msgid "Choose Recipients"
@@ -1625,6 +1630,7 @@ msgid "Choose Signature File Name for '%s'"
 msgstr "Signaturfil er %s"
 
 #: ../plugins/nautilus/seahorse-tool.c:372
+#, c-format
 msgid "Imported key"
 msgstr "Importert nøkkel"
 
@@ -1645,6 +1651,7 @@ msgstr ""
 #. * dialogs at the user.
 #.
 #: ../plugins/nautilus/seahorse-tool.c:524
+#, c-format
 msgid "No valid signatures found"
 msgstr "Ingen gyldige signaturer funnet"
 
@@ -1699,19 +1706,19 @@ msgstr "Kunne ikke verifisere fil: %s"
 
 #: ../plugins/nautilus/seahorse-tool-files.c:114
 msgid "Ace (.ace)"
-msgstr ""
+msgstr "Ace (.ace)"
 
 #: ../plugins/nautilus/seahorse-tool-files.c:115
 msgid "Ar (.ar)"
-msgstr ""
+msgstr "Ar (.ar)"
 
 #: ../plugins/nautilus/seahorse-tool-files.c:116
 msgid "Arj (.arj)"
-msgstr ""
+msgstr "Arj (.arj)"
 
 #: ../plugins/nautilus/seahorse-tool-files.c:123
 msgid "Ear (.ear)"
-msgstr ""
+msgstr "Ear (.ear)"
 
 #: ../plugins/nautilus/seahorse-tool-files.c:124
 msgid "Self-extracting zip (.exe)"
@@ -1719,15 +1726,15 @@ msgstr ""
 
 #: ../plugins/nautilus/seahorse-tool-files.c:126
 msgid "Jar (.jar)"
-msgstr ""
+msgstr "Jar (.jar)"
 
 #: ../plugins/nautilus/seahorse-tool-files.c:127
 msgid "Lha (.lzh)"
-msgstr ""
+msgstr "Lha (.lzh)"
 
 #: ../plugins/nautilus/seahorse-tool-files.c:129
 msgid "Rar (.rar)"
-msgstr ""
+msgstr "Rar (.rar)"
 
 #: ../plugins/nautilus/seahorse-tool-files.c:131
 msgid "Tar uncompressed (.tar)"
@@ -1755,19 +1762,19 @@ msgstr ""
 
 #: ../plugins/nautilus/seahorse-tool-files.c:138
 msgid "War (.war)"
-msgstr ""
+msgstr "War (.war)"
 
 #: ../plugins/nautilus/seahorse-tool-files.c:139
 msgid "Zip (.zip)"
-msgstr ""
+msgstr "Zip (.zip)"
 
 #: ../plugins/nautilus/seahorse-tool-files.c:140
 msgid "Zoo (.zoo)"
-msgstr ""
+msgstr "Zoo (.zoo)"
 
 #: ../plugins/nautilus/seahorse-tool-files.c:141
 msgid "7-Zip (.7z)"
-msgstr ""
+msgstr "7-Zip (.7z)"
 
 #. TRANSLATOR: This string will become
 #. * "You have selected %d files and %d folders"
@@ -1798,7 +1805,7 @@ msgstr ""
 #: ../plugins/nautilus/seahorse-tool-files.c:337
 #, c-format
 msgid "You have selected %d files"
-msgstr ""
+msgstr "Du har valgt %d filer"
 
 #: ../plugins/nautilus/seahorse-tool-files.c:342
 #, c-format
@@ -1809,7 +1816,7 @@ msgstr[1] ""
 
 #: ../plugins/nautilus/seahorse-tool-files.c:812
 msgid "Preparing..."
-msgstr ""
+msgstr "Forbereder..."
 
 #: ../plugins/nautilus/seahorse-tool-files.c:821
 #: ../plugins/nautilus/seahorse-tool-files.c:844
@@ -1867,7 +1874,7 @@ msgstr "Nøkkel_type:"
 
 #: ../src/seahorse-add-subkey.glade.h:6
 msgid "Length of Key"
-msgstr ""
+msgstr "Lengde på nøkkel"
 
 #: ../src/seahorse-add-subkey.glade.h:7
 msgid "Never E_xpires"
@@ -2038,7 +2045,7 @@ msgstr ""
 #: ../src/seahorse-gkeyring-item-properties.c:116
 #: ../src/seahorse-gkeyring-source.c:525
 msgid "Password"
-msgstr ""
+msgstr "Passord"
 
 #: ../src/seahorse-gkeyring-item-properties.c:90
 msgid "Access a network share or resource"
@@ -2134,7 +2141,7 @@ msgstr "Vis pass_ord"
 
 #: ../src/seahorse-gkeyring-item-properties.glade.h:12
 msgid "[details]\n"
-msgstr ""
+msgstr "[detaljer]\n"
 
 #: ../src/seahorse-gkeyring-item-properties.glade.h:14
 msgid "[login]"
@@ -2142,7 +2149,7 @@ msgstr ""
 
 #: ../src/seahorse-gkeyring-item-properties.glade.h:15
 msgid "[server]"
-msgstr ""
+msgstr "[server]"
 
 #: ../src/seahorse-gkeyring-operation.c:206
 msgid "Access to the key ring was denied"
@@ -2333,9 +2340,8 @@ msgid "Show Seahorse help"
 msgstr "Vis hjelp for Seahorse"
 
 #: ../src/seahorse-key-manager.c:1218
-#, fuzzy
 msgid "T_ypes"
-msgstr "T_ype"
+msgstr "T_yper"
 
 #: ../src/seahorse-key-manager.c:1219
 msgid "Show type column"
@@ -2535,14 +2541,12 @@ msgid "Couldn't change primary user ID"
 msgstr "Sett som primær bruker-ID"
 
 #: ../src/seahorse-key-properties.c:304 ../src/seahorse-key-properties.c:1437
-#, fuzzy
 msgid "[Unknown]"
-msgstr "Ukjent"
+msgstr "[Ukjent]"
 
 #: ../src/seahorse-key-properties.c:402 ../src/seahorse-key-properties.c:1723
-#, fuzzy
 msgid "Name/Email"
-msgstr "_E-postadresse:"
+msgstr "Navn/e-post"
 
 #: ../src/seahorse-key-properties.c:407
 #, fuzzy
@@ -2555,9 +2559,8 @@ msgid "Couldn't change primary photo"
 msgstr "Sett som primær bruker-ID"
 
 #: ../src/seahorse-key-properties.c:806
-#, fuzzy
 msgid "(unknown)"
-msgstr "Ukjent"
+msgstr "(ukjent)"
 
 #: ../src/seahorse-key-properties.c:809
 #, c-format
@@ -2577,22 +2580,19 @@ msgstr "Eksporter nøkler"
 
 #: ../src/seahorse-key-properties.c:1282
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: ../src/seahorse-key-properties.c:1288
-#, fuzzy
 msgid "Created"
-msgstr "Opprettet:"
+msgstr "Opprettet"
 
 #: ../src/seahorse-key-properties.c:1291
-#, fuzzy
 msgid "Expires"
-msgstr "_Utgår:"
+msgstr "Utgår"
 
 #: ../src/seahorse-key-properties.c:1294
-#, fuzzy
 msgid "Status"
-msgstr "Status:"
+msgstr "Status"
 
 #: ../src/seahorse-key-properties.c:1297
 #, fuzzy
@@ -2629,11 +2629,11 @@ msgstr ""
 
 #: ../src/seahorse-keyserver-results.c:383
 msgid "_Close"
-msgstr ""
+msgstr "_Lukk"
 
 #: ../src/seahorse-keyserver-results.c:384
 msgid "Close this window"
-msgstr ""
+msgstr "Lukk dette vinduet"
 
 #: ../src/seahorse-keyserver-results.c:388
 msgid "_Expand All"
@@ -2666,9 +2666,8 @@ msgid "Save selected keys as a file"
 msgstr "Eksporter nøkler til en fil"
 
 #: ../src/seahorse-keyserver-results.c:401
-#, fuzzy
 msgid "_Copy Key"
-msgstr "Nø_kler"
+msgstr "_Kopier nøkkel"
 
 #: ../src/seahorse-keyserver-results.c:402
 #, fuzzy
@@ -2715,7 +2714,7 @@ msgstr ""
 
 #: ../src/seahorse-keyserver-search.glade.h:6
 msgid "_Search"
-msgstr ""
+msgstr "_Søk"
 
 #: ../src/seahorse-keyserver-search.glade.h:7
 #, fuzzy
@@ -2910,9 +2909,8 @@ msgid "New PGP Key"
 msgstr "_Forvalgt nøkkel:"
 
 #: ../src/seahorse-pgp-generate.glade.h:13
-#, fuzzy
 msgid "_Comment:"
-msgstr "Nøkkel-ko_mmentar:"
+msgstr "_Kommentar:"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:1
 #, fuzzy
@@ -2927,7 +2925,7 @@ msgstr "Nøkkel-ko_mmentar:"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:3
 msgid "<b>Dates</b>"
-msgstr ""
+msgstr "<b>Datoer</b>"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:4
 #: ../src/seahorse-pgp-public-key-properties.glade.h:3
@@ -2954,7 +2952,7 @@ msgstr ""
 #: ../src/seahorse-pgp-public-key-properties.glade.h:7
 #: ../src/seahorse-ssh-key-properties.glade.h:7
 msgid "<b>Name:</b>"
-msgstr ""
+msgstr "<b>Navn:</b>"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:9
 #: ../src/seahorse-pgp-public-key-properties.glade.h:8
@@ -3054,7 +3052,7 @@ msgstr ""
 #: ../src/seahorse-pgp-private-key-properties.glade.h:33
 #: ../src/seahorse-pgp-public-key-properties.glade.h:29
 msgid "Owner"
-msgstr ""
+msgstr "Eier"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:34
 #, fuzzy
@@ -3106,9 +3104,8 @@ msgid "_Export Complete Key:"
 msgstr "Eksporter nøkler"
 
 #: ../src/seahorse-pgp-public-key-properties.glade.h:2
-#, fuzzy
 msgid "<b>Dates:</b>"
-msgstr "_Egenskaper"
+msgstr "<b>Datoer:</b>"
 
 #: ../src/seahorse-pgp-public-key-properties.glade.h:4
 #: ../src/seahorse-ssh-key-properties.glade.h:4
@@ -3207,6 +3204,7 @@ msgid "_Resize"
 msgstr ""
 
 #: ../src/seahorse-photos.c:125
+#, c-format
 msgid ""
 "This is not a image file, or an unrecognized kind of image file. Try to use "
 "a JPEG image."
@@ -3434,7 +3432,7 @@ msgstr "Passord for privat nøkkel"
 
 #: ../src/seahorse-ssh-key-properties.glade.h:1
 msgid "/home/nate/.ssh/blah_rsa"
-msgstr ""
+msgstr "/home/nate/.ssh/blah_rsa"
 
 #: ../src/seahorse-ssh-key-properties.glade.h:2
 msgid "00:00:00:00:00"
