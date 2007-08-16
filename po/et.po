@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: Seahorse HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-06-23 03:26+0100\n"
-"PO-Revision-Date: 2007-07-22 17:16+0300\n"
+"PO-Revision-Date: 2007-08-03 23:42+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -183,7 +183,7 @@ msgstr "Vigane või tundmatu allkirjastaja: %s"
 #: ../daemon/seahorse-service-crypto.c:234
 #, c-format
 msgid "Key is not valid for signing: %s"
-msgstr ""
+msgstr "Võti pole allkirjastamiseks sobilik: %s"
 
 #: ../daemon/seahorse-service-crypto.c:139
 #, c-format
@@ -247,6 +247,8 @@ msgid ""
 "After performing an decrypt or verify operation from the applet, display the "
 "resulting text in a window."
 msgstr ""
+"Pärast rakendist käivitatud lahtikrüptimist või verifitseerimist kuvatakse "
+"tulemus eraldi aknas."
 
 #: ../data/seahorse.schemas.in.h:3
 msgid ""
@@ -315,6 +317,9 @@ msgid ""
 "If set to 'gnome' uses gnome-keyring to cache passwords. When set to "
 "'internal' uses internal cache."
 msgstr ""
+"Väärtuse 'gnome' korral kasutatakse paroolide puhverdamiseks GNOME "
+"võtmerõngast (gnome-keyring), väärtuse 'internal' korral aga sisemist "
+"puhvrit."
 
 #: ../data/seahorse.schemas.in.h:18
 msgid ""
@@ -369,6 +374,8 @@ msgid ""
 "Set to 'true' to have seahorse-agent prompt before giving out passwords it "
 "has cached."
 msgstr ""
+"Kui märgitud, siis seahorse-agent küsib enne iga puhverdatud parooli "
+"väljaandmist kinnitust."
 
 #: ../data/seahorse.schemas.in.h:29
 msgid "Show clipboard state in panel"
@@ -420,6 +427,8 @@ msgid ""
 "The key server to publish PGP keys to. Or empty to suppress publishing of "
 "PGP keys."
 msgstr ""
+"PGP-võtmete avalikustamiseks kasutatav võtmeserver. Kui võtmeid ei soovita "
+"avalikustada, siis on see tühi."
 
 #: ../data/seahorse.schemas.in.h:40
 msgid ""
@@ -446,6 +455,9 @@ msgid ""
 "This option enables the GPG password cache in the seahorse-agent program. "
 "The 'use-agent' setting in gpg.conf affects this setting."
 msgstr ""
+"Selle võtme abil lubatakse GPG paroolide puhverdamine programmi "
+"seahorse-agent poolt. Selle võtmega on seotud failis gpg.conf olev "
+"'use-agent' parameeter."
 
 #: ../data/seahorse.schemas.in.h:45
 msgid ""
@@ -457,6 +469,8 @@ msgid ""
 "When set seahorse-agent will try to automatically load the users SSH keys "
 "when needed. This is equivalent to using the ssh-add utility."
 msgstr ""
+"Kui määratud, siis seahorse-agent proovib vajaduse korral SSH võtmed "
+"automaatselt laadida. See on sama, mis utiliidi ssh-add kasutamine."
 
 #: ../data/seahorse.schemas.in.h:47
 msgid ""
@@ -472,13 +486,15 @@ msgstr "Kus puhverdatud paroole säilitatakse."
 
 #: ../data/seahorse.schemas.in.h:49
 msgid "Whether or not keys should be automatically retrieved from key servers."
-msgstr ""
+msgstr "Kas võtmeid tuleb võtmeserveritest automaatselt tõmmata või mitte."
 
 #: ../data/seahorse.schemas.in.h:50
 msgid ""
 "Whether or not modified keys should be automatically synced with the default "
 "key server."
 msgstr ""
+"Kas muudetud võtmed tuleb automaatselt võtmeserveriga sünkroniseerida või "
+"mitte."
 
 #: ../data/seahorse.schemas.in.h:51
 msgid "Whether the GPG password cache is enabled"
@@ -564,6 +580,7 @@ msgstr "Serveri port, kuhu tuleb ühenduda."
 #, c-format
 msgid "Search was not specific enough. Server '%s' found too many keys."
 msgstr ""
+"Otsing polnud piisavalt täpne. Server '%s' tagastas liiga palju võtmeid."
 
 #: ../libseahorse/seahorse-hkp-source.c:360
 #, c-format
@@ -730,7 +747,7 @@ msgstr "Vale parool."
 #: ../libseahorse/seahorse-passphrase.c:329
 #, c-format
 msgid "Enter new passphrase for '%s'"
-msgstr ""
+msgstr "Sisesta '%s' jaoks uus parool"
 
 #: ../libseahorse/seahorse-passphrase.c:331
 #, c-format
@@ -873,10 +890,13 @@ msgstr ""
 #: ../libseahorse/seahorse-prefs.glade.h:6
 msgid "<i>A non-supported PGP passphrase caching agent is running.</i>"
 msgstr ""
+"<i>Hetkel töötab PGP-paroolide puhverdamisagent, mis pole toetatud.</i>"
 
 #: ../libseahorse/seahorse-prefs.glade.h:7
 msgid "<i>No SSH caching agent is running. Cannot load Secure Shell keys.</i>"
 msgstr ""
+"<i>SSH puhverdamisagent ei tööta. Secure Shell'i võtmeid pole võimalik "
+"laadida.</i>"
 
 #: ../libseahorse/seahorse-prefs.glade.h:8
 msgid "<i>This key is used to sign messages when no other key is chosen</i>"
@@ -901,7 +921,7 @@ msgid ""
 "Changing the master password failed.  Make certain that you entered the "
 "correct original master password."
 msgstr ""
-"Tõrge peaparooli vahetamisel.  Veendu, et Sa sisestasid algse peaparooli "
+"Tõrge peaparooli muutmisel.  Veendu, et Sa sisestasid algse peaparooli "
 "õigesti."
 
 #: ../libseahorse/seahorse-prefs.glade.h:13
@@ -928,6 +948,9 @@ msgid ""
 "required for authentication.  A <b>master password</b> is used to protect "
 "these secrets.  The <b>master password</b> can be changed below."
 msgstr ""
+"GNOME Võtmerõngas salvestab paroole, võrguvõtmeid ja muid autentimiseks "
+"tarvilikke saladusi. <b>Peaparooli</b> kasutatakse nende saladuste "
+"kaitsmiseks. Allpool on võimalik <b>peaparooli</b> muuta."
 
 #: ../libseahorse/seahorse-prefs.glade.h:18
 msgid "Key Servers"
@@ -968,7 +991,7 @@ msgstr "Käivita seahorse-agent"
 
 #: ../libseahorse/seahorse-prefs.glade.h:28
 msgid "The master password was successfully changed."
-msgstr ""
+msgstr "Peaparool on edukalt muudetud."
 
 #: ../libseahorse/seahorse-prefs.glade.h:29
 msgid ""
@@ -996,7 +1019,7 @@ msgstr "_Vaikimisi võti:"
 
 #: ../libseahorse/seahorse-prefs.glade.h:35
 msgid "_Find Keys Via:"
-msgstr ""
+msgstr "Võtmete _otsimise asukohad:"
 
 #: ../libseahorse/seahorse-prefs.glade.h:36
 msgid "_Never remember passphrases"
@@ -1183,6 +1206,8 @@ msgstr ""
 #: ../libseahorse/seahorse-util.c:172
 msgid "Decryption failed. You probably do not have the decryption key."
 msgstr ""
+"Tõrge lahtikrüptimisel. Arvatavasti pole sul lahtkirüptimiseks vajalikku "
+"võtit."
 
 #: ../libseahorse/seahorse-util.c:222
 msgid "%Y-%m-%d"
@@ -1276,10 +1301,12 @@ msgstr "Lõikepuhvri teksti krüptimine"
 #: ../plugins/applet/GNOME_SeahorseApplet.server.in.in.h:2
 msgid "Encrypt, decrypt or sign the clipboard (uses PGP type encryption)."
 msgstr ""
+"Lõikelaua krüptimine, lahtikrüptimine ja allkirjastamine (PGP-krüptimise "
+"abil."
 
 #: ../plugins/applet/GNOME_SeahorseApplet.server.in.in.h:3
 msgid "Seahorse Applet Factory"
-msgstr ""
+msgstr "Seahorse rakendi Factory"
 
 #: ../plugins/applet/GNOME_SeahorseApplet.xml.h:1
 #: ../src/seahorse-key-manager.c:1208
@@ -1375,7 +1402,7 @@ msgstr ""
 
 #: ../plugins/applet/seahorse-applet.c:579
 msgid "No PGP key or message was found on clipboard"
-msgstr ""
+msgstr "Lõikelaualt ei leitud ei PGP-võtit ega ka sõnumit"
 
 #: ../plugins/applet/seahorse-applet.c:580
 msgid "No PGP data found."
@@ -1438,7 +1465,7 @@ msgstr "_Krüpti"
 #: ../plugins/epiphany/seahorse-extension.c:609
 #: ../src/seahorse-sign.glade.h:21
 msgid "_Sign"
-msgstr "_Allkirjasta"
+msgstr "All_kirjasta"
 
 #: ../plugins/epiphany/seahorse-extension.c:616
 msgid "_Decrypt/Verify"
@@ -1467,7 +1494,7 @@ msgstr "Võtmeid pole võimalik importida"
 
 #: ../plugins/gedit/seahorse-gedit.c:396
 msgid "Keys found but not imported"
-msgstr ""
+msgstr "Võtmed leiti, kuid neid ei imporditud"
 
 #: ../plugins/gedit/seahorse-gedit.c:430
 msgid "Couldn't decrypt text"
@@ -1948,7 +1975,7 @@ msgstr ""
 #: ../src/seahorse-delete.c:74
 #, c-format
 msgid "Are you sure you want to permanently delete %s?"
-msgstr "Kas sa soovid %s jäädavalt kustutada?"
+msgstr "Kas sa soovid '%s' jäädavalt kustutada?"
 
 #: ../src/seahorse-delete.c:80
 #, c-format
@@ -1964,7 +1991,7 @@ msgstr "Võtit pole võimalik kustutada"
 #: ../src/seahorse-delete.c:139
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
-msgstr ""
+msgstr "Kas sa soovid jäädavalt kustutada omaniku %2$s alamvõtme %1$d?"
 
 #: ../src/seahorse-delete.c:162
 msgid "Couldn't delete subkey"
@@ -2003,7 +2030,7 @@ msgstr ""
 
 #: ../src/seahorse-expires.glade.h:1
 msgid "C_hange"
-msgstr ""
+msgstr "_Muuda"
 
 #: ../src/seahorse-expires.glade.h:2
 msgid "Never Expires"
@@ -2049,11 +2076,11 @@ msgstr "Parool"
 
 #: ../src/seahorse-gkeyring-item-properties.c:90
 msgid "Access a network share or resource"
-msgstr ""
+msgstr "Ligipääs võrgus olevale kataloogile või ressursile"
 
 #: ../src/seahorse-gkeyring-item-properties.c:94
 msgid "Access a website"
-msgstr ""
+msgstr "Ligipääs veebisaidile"
 
 #: ../src/seahorse-gkeyring-item-properties.c:98
 msgid "Unlocks a PGP key"
@@ -2152,7 +2179,7 @@ msgstr "[server]"
 
 #: ../src/seahorse-gkeyring-operation.c:206
 msgid "Access to the key ring was denied"
-msgstr ""
+msgstr "Ligipääs võtmerõngale on keelatud"
 
 #: ../src/seahorse-gkeyring-operation.c:209
 msgid "The gnome-keyring daemon is not running"
@@ -2160,7 +2187,7 @@ msgstr "GNOME võtmerõnga deemon pole käivitatud"
 
 #: ../src/seahorse-gkeyring-operation.c:212
 msgid "The key ring has already been unlocked"
-msgstr ""
+msgstr "Võtmerõngas on juba lukust lahti"
 
 #: ../src/seahorse-gkeyring-operation.c:215
 msgid "No such key ring exists"
@@ -2189,7 +2216,7 @@ msgstr "Võtme vastuvõtmine"
 #. Start listing of ids
 #: ../src/seahorse-gkeyring-source.c:372
 msgid "Listing passwords"
-msgstr ""
+msgstr "Paroolide nimekirja kuvamine"
 
 #: ../src/seahorse-key-manager.c:443
 msgid "Couldn't read file"
@@ -2404,7 +2431,7 @@ msgstr ""
 
 #: ../src/seahorse-key-manager.c:1245
 msgid "Set Up Computer for _Secure Shell..."
-msgstr "Määra arvuti _Secure shell'i jaoks"
+msgstr "Määra _Secure shell'i jaoks arvuti..."
 
 #: ../src/seahorse-key-manager.c:1246
 msgid ""
@@ -2666,6 +2693,8 @@ msgid ""
 "This will find keys for others on the Internet. These keys can then be "
 "imported into your local key ring."
 msgstr ""
+"Selle dialoogi abil leitakse Internetist teiste isikute võtmeid. Neid on "
+"võimalik kohalikku võtmerõngasse importida."
 
 #: ../src/seahorse-keyserver-search.glade.h:5
 msgid "Where to search:"
@@ -2743,7 +2772,7 @@ msgstr "<b>Sul on valitud mitu võtit või kataloogi</b>"
 msgid ""
 "Because the files are located remotely, each file will be encrypted "
 "separately."
-msgstr ""
+msgstr "Kuna failid pole kohalikul kettal, siis krüptitakse iga fail eraldi."
 
 #: ../src/seahorse-multi-encrypt.glade.h:3
 msgid "Encrypt Multiple Files"
@@ -2933,7 +2962,7 @@ msgstr "Sinule saadetud e-posti ja failide lahtikrüptimiseks."
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:21
 msgid "Delete"
-msgstr ""
+msgstr "Kustuta"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:23
 msgid "Expire"
@@ -2946,7 +2975,7 @@ msgstr "Aegub:"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:25
 msgid "Export"
-msgstr ""
+msgstr "Ekspordi"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:26
 msgid "Go to next photo"
@@ -3013,6 +3042,11 @@ msgid ""
 "Full\n"
 "Ultimate"
 msgstr ""
+"Tundmatu\n"
+"Ei iial\n"
+"Vähesel määral\n"
+"Täielik\n"
+"Ülim"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:47
 msgid "_Add Name"
@@ -3020,7 +3054,7 @@ msgstr "Lisa _nimi"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:48
 msgid "_Export Complete Key:"
-msgstr ""
+msgstr "Võtme täielik _eksport:"
 
 #: ../src/seahorse-pgp-public-key-properties.glade.h:2
 msgid "<b>Dates:</b>"
@@ -3041,7 +3075,7 @@ msgstr "<b>Sinu usaldus selle võtme vastu</b>"
 
 #: ../src/seahorse-pgp-public-key-properties.glade.h:15
 msgid "<b>_Other Names:</b>"
-msgstr ""
+msgstr "<b>_Teised nimed:</b>"
 
 #: ../src/seahorse-pgp-public-key-properties.glade.h:16
 msgid "<b>_People who have signed this key:</b>"
@@ -3082,6 +3116,11 @@ msgid ""
 "Fully\n"
 "Ultimately"
 msgstr ""
+"Tundmatu\n"
+"Ei iial\n"
+"Vähesel määral\n"
+"Täielikult\n"
+"Ülimalt"
 
 #: ../src/seahorse-pgp-public-key-properties.glade.h:41
 msgid "You _Trust the Owner:"
@@ -3150,11 +3189,11 @@ msgstr "Fotot pole võimalik lisada"
 
 #: ../src/seahorse-photos.c:286
 msgid "The file could not be loaded. It may be in an invalid format"
-msgstr ""
+msgstr "Faili pole võimalik laadida. Võib-olla on see vigases vormingus."
 
 #: ../src/seahorse-photos.c:316
 msgid "Are you sure you want to remove the current photo from your key?"
-msgstr ""
+msgstr "Kas soovid võtmelt eemaldada seal praegu olevat fotot?"
 
 #: ../src/seahorse-photos.c:329
 msgid "Couldn't delete photo"
@@ -3214,6 +3253,8 @@ msgid ""
 "You have no personal PGP keys that can be used to indicate your trust of "
 "this key."
 msgstr ""
+"Sul pole isiklikke PGP-võtmeid, mida saaks kasutada selle võtme usaldatavuse "
+"määramiseks."
 
 #: ../src/seahorse-sign.glade.h:1
 msgid "<b>How carefully have you checked this key?</b>"
@@ -3233,6 +3274,9 @@ msgid ""
 "is owned by the person who claims to own it. For example, you could\n"
 "read the key fingerprint to the owner over the phone. "
 msgstr ""
+"<i>Pealiskaudselt</i> täehdab, et sa oled mitte põgusalt kontrollinud, kas \n"
+"võti kuulub isikule, kes väidab selle võtme enesele kuuluvat. Näiteks on \n"
+"võtme omanik telefonitsi kinnitanud võtme sõrmejälje vastavust."
 
 #: ../src/seahorse-sign.glade.h:7
 msgid "<i>Key Name</i>"
@@ -3243,6 +3287,9 @@ msgid ""
 "<i>Not at all:</i> means you believe the key is owned by the person who \n"
 "claims to own it, but you could not or did not verify this to be a fact."
 msgstr ""
+"<i>Mitte üldse</i> tähendab, et sa usud selle võtme kuuluvat isikule, kes \n"
+"väidab selle võtme enesele kuuluvat, kuid sul pole olnud võimalik seda \n"
+"asjaolu kontrollida või pole sa lihtsalt seda teinud."
 
 #: ../src/seahorse-sign.glade.h:10
 msgid ""
@@ -3250,6 +3297,8 @@ msgid ""
 "this\n"
 "key is genuine."
 msgstr ""
+"<i>Väga hoolikalt</i> - vali see ainult juhul, kui sa oled täiesti kindel, \n"
+"et see võti kuulub selle omanikule."
 
 #: ../src/seahorse-sign.glade.h:12
 msgid "By signing you indicate your trust that this key belongs to:"
@@ -3267,6 +3316,9 @@ msgid ""
 "have also used email to check that the email address belongs to the\n"
 "owner."
 msgstr ""
+"Selle valiku jaoks peaks sa olema ise kontrollinud selle inimese isikut \n"
+"tõendavat pildiga dokumenti (näiteks ID-kaarti või passi). Samuti peaks\n"
+"sa olema kontrollinud, kas e-posti aadress vastab omanikule."
 
 #: ../src/seahorse-sign.glade.h:18
 msgid "_Casually"
@@ -3278,7 +3330,7 @@ msgstr "_Mitte üldse"
 
 #: ../src/seahorse-sign.glade.h:20
 msgid "_Others may not see this signature"
-msgstr "_Teised ei saa seda allkirja näha"
+msgstr "_Teised ei tohi seda allkirja näha"
 
 #: ../src/seahorse-sign.glade.h:22
 msgid "_Signer:"
@@ -3416,8 +3468,8 @@ msgid ""
 "uses SSH, you must already have a login account on that \n"
 "computer."
 msgstr ""
-"Secure Shell'i võtme kasutamisel teise arvutisse\n"
-"sisselogimiseks peab sul olema teises arvutis konto."
+"Secure Shell'i võtme kasutamisel võrguarvutisse\n"
+"sisselogimiseks peab sul olema selles arvutis konto."
 
 #: ../src/seahorse-ssh-upload.glade.h:7
 msgid "_Computer Name:"
@@ -3430,12 +3482,6 @@ msgstr "_Konto nimi:"
 #: ../src/seahorse-ssh-upload.glade.h:9
 msgid "_Set Up"
 msgstr "_Määra"
-
-#~ msgid "Cursor Position"
-#~ msgstr "Kursori asukoht"
-
-#~ msgid "Maximum length"
-#~ msgstr "Suurim pikkus"
 
 #~ msgid "Maximum number of characters for this entry. Zero if no maximum"
 #~ msgstr ""
