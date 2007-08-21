@@ -208,8 +208,8 @@ calc_network_item_markup (SeahorseGKeyringItem *git)
                                object ? object : "");
     }
     
-    ret = g_strdup_printf ("%s<span foreground='#555555' size='small' rise='0'>%s</span>",
-                           display, uri ? uri : "");
+    ret = g_markup_printf_escaped ("%s<span foreground='#555555' size='small' rise='0'>%s</span>",
+                                   display, uri ? uri : "");
     g_free (display);
     g_free (uri);
     
