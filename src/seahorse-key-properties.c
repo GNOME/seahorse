@@ -525,7 +525,7 @@ owner_photo_delete_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 
     photoid = (gpgmex_photo_id_t)g_object_get_data (G_OBJECT (swidget), 
                                                     "current-photoid");
-    g_assert (photoid != NULL);
+    g_return_if_fail (photoid != NULL);
 
     pkey = SEAHORSE_PGP_KEY (SEAHORSE_KEY_WIDGET (swidget)->skey);
     g_assert (SEAHORSE_IS_PGP_KEY (pkey));
@@ -546,7 +546,7 @@ owner_photo_primary_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 
     photoid = (gpgmex_photo_id_t)g_object_get_data (G_OBJECT (swidget), 
                                                     "current-photoid");
-    g_assert (photoid != NULL);
+    g_return_if_fail (photoid != NULL);
         
     skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
     pkey = SEAHORSE_PGP_KEY (skey);
@@ -976,10 +976,9 @@ trust_changed (GtkComboBox *selection, SeahorseWidget *swidget)
 	gpgme_error_t err;
 	gboolean set;
 	
-	set = gtk_combo_box_get_active_iter (selection, &iter);
-	g_assert (set);
+    set = gtk_combo_box_get_active_iter (selection, &iter);
 	
-	if (set) {
+    if (set) {
     	skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
     	
     	model = gtk_combo_box_get_model (selection);
