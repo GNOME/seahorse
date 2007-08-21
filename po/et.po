@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: Seahorse HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-06-23 03:26+0100\n"
-"PO-Revision-Date: 2007-08-03 23:42+0300\n"
+"PO-Revision-Date: 2007-08-20 19:45+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -143,7 +143,7 @@ msgstr "Parool on puhvermälus."
 
 #: ../agent/seahorse-agent-prompt.c:257
 msgid "Always ask me before using a cached passphrase"
-msgstr ""
+msgstr "Seda küsitakse alati enne puhverdatud parooli kasutamist"
 
 #: ../agent/seahorse-agent-prompt.c:274
 msgid "_Authorize"
@@ -241,6 +241,9 @@ msgid ""
 "A list of key server URIs to search for remote PGP keys. In later versions a "
 "display name can be included, by appending a space and then the name."
 msgstr ""
+"PGP-kaugvõtmete otsimiseks kasutatavate võtmeserverite URI-de nimekiri. "
+"Hilisemates versioonides võidakse siia kaasata ka kuvatav nimi, lisades "
+"URI-le tühiku ja nime."
 
 #: ../data/seahorse.schemas.in.h:2
 msgid ""
@@ -255,6 +258,8 @@ msgid ""
 "After performing an encrypt or signing operation from the applet, display "
 "the resulting text in a window."
 msgstr ""
+"Pärast rakendi poolt teostatud krüptimist või allkirjastamit kuvatakse "
+"tulemus eraldi aknas."
 
 #: ../data/seahorse.schemas.in.h:4
 msgid "Auto Retrieve Keys"
@@ -332,6 +337,8 @@ msgid ""
 "If set to true, then the default key will always be added to an encryption "
 "recipients list."
 msgstr ""
+"Kui määratud, siis vaikimisi võti lisatakse alati krüptogrammi vastuvõtjate "
+"nimekirjale."
 
 #: ../data/seahorse.schemas.in.h:20
 msgid "Last key server search pattern"
@@ -602,7 +609,7 @@ msgstr "Võtmete vastuvõtmine..."
 #: ../libseahorse/seahorse-hkp-source.c:764
 #, c-format
 msgid "Searching for keys on: %s"
-msgstr ""
+msgstr "Võtmete otsimine asukohast: %s"
 
 #. The ldap_cb and chain_cb were set in seahorse_ldap_operation_start
 #: ../libseahorse/seahorse-hkp-source.c:857
@@ -984,6 +991,12 @@ msgid ""
 "\n"
 "<b>Note:</b> Your personal keys will not be compromised."
 msgstr ""
+"Sinu võtmete jagamine võimaldab teistel Sinu võrgus asuvatel kasutajatel "
+"pruukida Sinu poolt kogutud võtmeid. See tähendab, et kasutajatel on "
+"automaatselt võimalik krüptida asju Sinu jaoks ja Sinu poolt kogutud võtmete "
+"omanike jaoks krüptida ilma, et Sa peaksid neile ise võtmeid saatma.\n"
+"\n"
+"<b>Märkus:</b> Sinu isiklikud võtmed pole selle tõttu ohustatud."
 
 #: ../libseahorse/seahorse-prefs.glade.h:27
 msgid "Start seahorse-agent"
@@ -1039,11 +1052,11 @@ msgstr "_Minu võtmed on jagatud minu võrgus olevatele kasutajatele"
 
 #: ../libseahorse/seahorse-prefs.glade.h:40
 msgid "gtk-apply"
-msgstr ""
+msgstr "gtk-apply"
 
 #: ../libseahorse/seahorse-prefs.glade.h:41
 msgid "gtk-clear"
-msgstr ""
+msgstr "gtk-clear"
 
 #: ../libseahorse/seahorse-prefs.glade.h:42
 msgid "minutes"
@@ -1259,6 +1272,9 @@ msgid ""
 "\n"
 "Do you want to replace it with a new file?"
 msgstr ""
+"<b>Sellise nimega fail on juba olemas.</b>\n"
+"\n"
+"Kas sa soovid seda asendada uue failiga?"
 
 #: ../libseahorse/seahorse-util.c:936
 msgid "_Replace"
@@ -1388,7 +1404,7 @@ msgstr "Tõrge importimisel"
 #: ../plugins/applet/seahorse-applet.c:496
 #: ../plugins/epiphany/seahorse-extension.c:341
 msgid "Keys were found but not imported."
-msgstr ""
+msgstr "Võtmed leiti, kuid neid ei imporditud."
 
 #: ../plugins/applet/seahorse-applet.c:527
 #: ../plugins/epiphany/seahorse-extension.c:374
@@ -1398,7 +1414,7 @@ msgstr "Tõrge lahtikrüptimisel"
 #: ../plugins/applet/seahorse-applet.c:528
 #: ../plugins/epiphany/seahorse-extension.c:375
 msgid "Text may be malformed."
-msgstr ""
+msgstr "Teksti võib olla vigaselt vormindatud"
 
 #: ../plugins/applet/seahorse-applet.c:579
 msgid "No PGP key or message was found on clipboard"
@@ -1469,7 +1485,7 @@ msgstr "All_kirjasta"
 
 #: ../plugins/epiphany/seahorse-extension.c:616
 msgid "_Decrypt/Verify"
-msgstr ""
+msgstr "K_rüpti lahti/verifitseeri"
 
 #: ../plugins/epiphany/seahorse-extension.c:623
 msgid "_Import Key"
@@ -1904,7 +1920,7 @@ msgstr "Võtme pikkus"
 
 #: ../src/seahorse-add-subkey.glade.h:7
 msgid "Never E_xpires"
-msgstr ""
+msgstr "Ei aegu _kunagi"
 
 #: ../src/seahorse-add-uid.c:82
 msgid "Couldn't add user id"
@@ -2092,11 +2108,11 @@ msgstr "Secure Shell'i võtme lukust lahtivõtmine"
 
 #: ../src/seahorse-gkeyring-item-properties.c:104
 msgid "Saved password or login"
-msgstr ""
+msgstr "Salvestatud parool või konto"
 
 #: ../src/seahorse-gkeyring-item-properties.c:116
 msgid "Network Credentials"
-msgstr ""
+msgstr "Võrgutõendid"
 
 #: ../src/seahorse-gkeyring-item-properties.c:177
 msgid "Couldn't change password."
@@ -2270,7 +2286,7 @@ msgstr ""
 
 #: ../src/seahorse-key-manager.c:867
 msgid "seahorse"
-msgstr ""
+msgstr "seahorse"
 
 #: ../src/seahorse-key-manager.c:950 ../src/seahorse-keyserver-results.c:300
 #, c-format
@@ -3394,7 +3410,7 @@ msgstr "Võtit pole võimalik ümber nimetada."
 
 #: ../src/seahorse-ssh-key-properties.c:157
 msgid "Couldn't change authorization for key."
-msgstr ""
+msgstr "Võtme autoriseerimist pole võimalik muuta."
 
 #: ../src/seahorse-ssh-key-properties.c:171
 msgid "Couldn't change passhrase for key."
