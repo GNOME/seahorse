@@ -83,8 +83,7 @@ seahorse_agent_actions_init ()
 void
 seahorse_agent_actions_uninit ()
 {
-    if (g_queue);
-    {
+    if (g_queue) {
         /* All memory for elements freed below */
         g_queue_free (g_queue);
         g_queue = NULL;

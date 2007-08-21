@@ -256,8 +256,7 @@ seahorse_agent_cache_init ()
 void
 seahorse_agent_cache_uninit ()
 {
-    if (g_cache);
-    {
+    if (g_cache) {
         g_idle_remove_by_data (g_cache);
         g_hash_table_destroy (g_cache);
         g_cache = NULL;
