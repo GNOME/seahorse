@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-02 19:12+0300\n"
+"POT-Creation-Date: 2007-08-22 16:13+0300\n"
 "PO-Revision-Date: 2007-04-04 06:52+0300\n"
 "Last-Translator: Ilkka Tuohela <hile@iki.fi>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
@@ -16,12 +16,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../agent/seahorse-agent-actions.c:134
+#: ../agent/seahorse-agent-actions.c:133
 #: ../libseahorse/seahorse-ssh-operation.c:445
 msgid "Passphrase:"
 msgstr "Tunnuslause:"
 
-#: ../agent/seahorse-agent-actions.c:135
+#: ../agent/seahorse-agent-actions.c:134
 msgid "Please enter a passphrase to use."
 msgstr "Anna käytettävä tunnuslause."
 
@@ -43,7 +43,7 @@ msgstr "Tulkintakelvoton avaintunniste"
 msgid "Unknown/Invalid Key"
 msgstr "Tuntematon tai virheellinen avain"
 
-#: ../agent/seahorse-agent-cache.c:533
+#: ../agent/seahorse-agent-cache.c:531
 #, c-format
 msgid "PGP Key: %s"
 msgstr "PGP-avain: %s"
@@ -116,7 +116,7 @@ msgid "couldn't create new process group"
 msgstr "uutta prosessiryhmää ei voi luoda"
 
 #: ../agent/seahorse-agent-main.c:227 ../daemon/seahorse-daemon.c:195
-#: ../plugins/applet/seahorse-applet.c:1016
+#: ../plugins/applet/seahorse-applet.c:1017
 #: ../plugins/nautilus/seahorse-tool.c:570 ../src/main.c:59
 msgid "couldn't drop privileges properly"
 msgstr "Oikeuksia ei voitu tiputtaa kunnolla"
@@ -192,10 +192,12 @@ msgid "Key is not a valid recipient for encryption: %s"
 msgstr "Avain ei kelpaa salaukseen: %s"
 
 #: ../daemon/seahorse-service-crypto.c:156
+#, c-format
 msgid "No recipients specified"
 msgstr "Vastaanottajia ei annettu"
 
 #: ../daemon/seahorse-service-crypto.c:222
+#, c-format
 msgid "No signer specified"
 msgstr "Allekirjoittajaa ei annettu"
 
@@ -302,8 +304,8 @@ msgid ""
 "Enables DNS-SD (Apple Bonjour) sharing of keys. seahorse-daemon must be "
 "running and must be built with HKP and DNS-SD support."
 msgstr ""
-"Ottaa käyttöön avainten DNS-SD (Apple Bonjour)-jaon. Seahorse-"
-"daemon täytyy olla käynnissä ja käännetty HKP- ja DNS-SD -tuen kanssa."
+"Ottaa käyttöön avainten DNS-SD (Apple Bonjour)-jaon. Seahorse-daemon täytyy "
+"olla käynnissä ja käännetty HKP- ja DNS-SD -tuen kanssa."
 
 #: ../data/seahorse.schemas.in.h:15
 msgid "Expire passwords in the cache"
@@ -370,10 +372,10 @@ msgstr ""
 
 #: ../data/seahorse.schemas.in.h:27
 msgid ""
-"Set to 'false' to disable display of the cache reminder in the notification "
+"Set to 'true' to enable display of the cache reminder in the notification "
 "area of your panel."
 msgstr ""
-"Aseta epätodeksi, jos et halua näyttää välimuistin muistutinkuvaketta "
+"Aseta todeksi, jos haluat näyttää välimuistista muistutuksen paneelin "
 "ilmoitusalueella."
 
 #: ../data/seahorse.schemas.in.h:28
@@ -565,7 +567,7 @@ msgstr "Nimi"
 
 #: ../libcryptui/cryptui-key-list.c:120
 #: ../src/seahorse-key-manager-store.c:966
-#: ../src/seahorse-key-properties.c:1726
+#: ../src/seahorse-key-properties.c:1725
 msgid "Key ID"
 msgstr "Avaimen tunniste"
 
@@ -679,6 +681,7 @@ msgstr[0] "Tuotiin %d avain"
 msgstr[1] "Tuotiin %d avainta"
 
 #: ../libseahorse/seahorse-notification.c:565
+#, c-format
 msgid "Imported a key for"
 msgid_plural "Imported keys for"
 msgstr[0] "Tuotiin avain käyttäjälle"
@@ -761,6 +764,7 @@ msgid "Confirm:"
 msgstr "Vahvista:"
 
 #: ../libseahorse/seahorse-passphrase.c:325
+#, c-format
 msgid "Wrong passphrase."
 msgstr "Väärä tunnuslause."
 
@@ -799,7 +803,7 @@ msgid "Private PGP Key"
 msgstr "Yksityinen PGP-avain"
 
 #: ../libseahorse/seahorse-pgp-key.c:694 ../libseahorse/seahorse-validity.c:31
-#: ../src/seahorse-key-properties.c:1100
+#: ../src/seahorse-key-properties.c:1099
 msgid "Unknown"
 msgstr "Tuntematon"
 
@@ -942,8 +946,8 @@ msgid ""
 "Changing the master password failed.  Make certain that you entered the "
 "correct original master password."
 msgstr ""
-"Pääsalasanan vaihto ei onnistunut. Varmista, että annat oikean "
-"alkuperäisen pääsalasana."
+"Pääsalasanan vaihto ei onnistunut. Varmista, että annat oikean alkuperäisen "
+"pääsalasana."
 
 #: ../libseahorse/seahorse-prefs.glade.h:13
 msgid "Confirm Master Password:"
@@ -969,10 +973,9 @@ msgid ""
 "required for authentication.  A <b>master password</b> is used to protect "
 "these secrets.  The <b>master password</b> can be changed below."
 msgstr ""
-"Gnomen avainrengas tallentaa salasanoja, verkon avaimia, tunnuslauseita "
-"ja muita kirjautumiseen vaadittavia salaisuuksia. <b>Pääsalasanaa</b> "
-"käytetään näiden suojaamiseen. <b>Pääsalasana</b> voi vaihtaa alta."
-
+"Gnomen avainrengas tallentaa salasanoja, verkon avaimia, tunnuslauseita ja "
+"muita kirjautumiseen vaadittavia salaisuuksia. <b>Pääsalasanaa</b> käytetään "
+"näiden suojaamiseen. <b>Pääsalasana</b> voi vaihtaa alta."
 
 #: ../libseahorse/seahorse-prefs.glade.h:18
 msgid "Key Servers"
@@ -1139,6 +1142,7 @@ msgstr "Julkinen SSH-avain"
 
 #: ../libseahorse/seahorse-ssh-operation.c:135
 #: ../libseahorse/seahorse-ssh-operation.c:697
+#, c-format
 msgid "The SSH command was terminated unexpectedly."
 msgstr "SSH-komento keskeytettiin odottamatta."
 
@@ -1293,20 +1297,20 @@ msgstr ""
 msgid "_Replace"
 msgstr "Ko_rvaa"
 
-#: ../libseahorse/seahorse-validity.c:33 ../src/seahorse-key-properties.c:1106
-#: ../src/seahorse-key-properties.c:1238 ../src/seahorse-key-properties.c:1310
+#: ../libseahorse/seahorse-validity.c:33 ../src/seahorse-key-properties.c:1105
+#: ../src/seahorse-key-properties.c:1237 ../src/seahorse-key-properties.c:1309
 msgid "Never"
 msgstr "Ei koskaan"
 
-#: ../libseahorse/seahorse-validity.c:35 ../src/seahorse-key-properties.c:1113
+#: ../libseahorse/seahorse-validity.c:35 ../src/seahorse-key-properties.c:1112
 msgid "Marginal"
 msgstr "Jonkin verran"
 
-#: ../libseahorse/seahorse-validity.c:37 ../src/seahorse-key-properties.c:1119
+#: ../libseahorse/seahorse-validity.c:37 ../src/seahorse-key-properties.c:1118
 msgid "Full"
 msgstr "Kokonaan"
 
-#: ../libseahorse/seahorse-validity.c:39 ../src/seahorse-key-properties.c:1125
+#: ../libseahorse/seahorse-validity.c:39 ../src/seahorse-key-properties.c:1124
 msgid "Ultimate"
 msgstr "Ehdottomasti"
 
@@ -1314,7 +1318,7 @@ msgstr "Ehdottomasti"
 msgid "Disabled"
 msgstr "Ei käytössä"
 
-#: ../libseahorse/seahorse-validity.c:43 ../src/seahorse-key-properties.c:1306
+#: ../libseahorse/seahorse-validity.c:43 ../src/seahorse-key-properties.c:1305
 msgid "Revoked"
 msgstr "Peruutettu"
 
@@ -1354,7 +1358,7 @@ msgid "seahorse-applet"
 msgstr "seahorse-applet"
 
 #: ../plugins/applet/seahorse-applet.c:311
-#: ../plugins/applet/seahorse-applet.c:835
+#: ../plugins/applet/seahorse-applet.c:836
 msgid "Use PGP/GPG to encrypt/decrypt/sign/verify/import the clipboard."
 msgstr ""
 "Käytä PGP:tä leikepöydän salaukseen, salauksen purkuun, allekirjoitukseen, "
@@ -1373,97 +1377,97 @@ msgid "Seahorse Project Homepage"
 msgstr "Seahorse-projektin kotisivu"
 
 #. Get the recipient list
-#: ../plugins/applet/seahorse-applet.c:374
+#: ../plugins/applet/seahorse-applet.c:375
 #: ../plugins/epiphany/seahorse-extension.c:251
 #: ../plugins/gedit/seahorse-gedit.c:332
 msgid "Choose Recipient Keys"
 msgstr "Valitse vastaanottajien avaimet"
 
-#: ../plugins/applet/seahorse-applet.c:393
+#: ../plugins/applet/seahorse-applet.c:394
 msgid "Encrypted Text"
 msgstr "Salattu teksti"
 
-#: ../plugins/applet/seahorse-applet.c:395
+#: ../plugins/applet/seahorse-applet.c:396
 msgid "Encryption Failed"
 msgstr "Salaus epäonnistui"
 
-#: ../plugins/applet/seahorse-applet.c:396
+#: ../plugins/applet/seahorse-applet.c:397
 msgid "The clipboard could not be encrypted."
 msgstr "Leikepöytää ei voitu salata."
 
-#: ../plugins/applet/seahorse-applet.c:430
+#: ../plugins/applet/seahorse-applet.c:431
 #: ../plugins/epiphany/seahorse-extension.c:296
 #: ../plugins/gedit/seahorse-gedit.c:611
 msgid "Choose Key to Sign with"
 msgstr "Valitse allekirjoitusavain"
 
-#: ../plugins/applet/seahorse-applet.c:449
+#: ../plugins/applet/seahorse-applet.c:450
 msgid "Signed Text"
 msgstr "Allekirjoitettu teksti"
 
-#: ../plugins/applet/seahorse-applet.c:451
+#: ../plugins/applet/seahorse-applet.c:452
 msgid "Signing Failed"
 msgstr "Allekirjoitus epäonnistui"
 
-#: ../plugins/applet/seahorse-applet.c:452
+#: ../plugins/applet/seahorse-applet.c:453
 msgid "The clipboard could not be Signed."
 msgstr "Leikepöytää ei voitu allekirjoittaa."
 
-#: ../plugins/applet/seahorse-applet.c:495
+#: ../plugins/applet/seahorse-applet.c:496
 #: ../plugins/epiphany/seahorse-extension.c:340
 msgid "Import Failed"
 msgstr "Tuonti epäonnistui"
 
-#: ../plugins/applet/seahorse-applet.c:496
+#: ../plugins/applet/seahorse-applet.c:497
 #: ../plugins/epiphany/seahorse-extension.c:341
 msgid "Keys were found but not imported."
 msgstr "Avaimia löytyi mutta niitä ei tuotu."
 
-#: ../plugins/applet/seahorse-applet.c:527
+#: ../plugins/applet/seahorse-applet.c:528
 #: ../plugins/epiphany/seahorse-extension.c:374
 msgid "Decrypting Failed"
 msgstr "Salauksen purku epäonnistui"
 
-#: ../plugins/applet/seahorse-applet.c:528
+#: ../plugins/applet/seahorse-applet.c:529
 #: ../plugins/epiphany/seahorse-extension.c:375
 msgid "Text may be malformed."
 msgstr "Teksti voi olla vioittunut."
 
-#: ../plugins/applet/seahorse-applet.c:579
+#: ../plugins/applet/seahorse-applet.c:580
 msgid "No PGP key or message was found on clipboard"
 msgstr "Leikepöydältä ei löytynyt PGP-avainta tai viestiä"
 
-#: ../plugins/applet/seahorse-applet.c:580
+#: ../plugins/applet/seahorse-applet.c:581
 msgid "No PGP data found."
 msgstr "PGP-salattua tietoa ei löytynyt."
 
 #. TRANSLATORS: This means 'The text that was decrypted'
-#: ../plugins/applet/seahorse-applet.c:615
+#: ../plugins/applet/seahorse-applet.c:616
 msgid "Decrypted Text"
 msgstr "Salauksesta purettu teksti"
 
-#: ../plugins/applet/seahorse-applet.c:684
+#: ../plugins/applet/seahorse-applet.c:685
 msgid "Could not display the help file"
 msgstr "Ohjetiedostoa ei voitu näyttää"
 
-#: ../plugins/applet/seahorse-applet.c:747
+#: ../plugins/applet/seahorse-applet.c:748
 msgid "_Encrypt Clipboard"
 msgstr "_Salattu leikepöytä"
 
-#: ../plugins/applet/seahorse-applet.c:754
+#: ../plugins/applet/seahorse-applet.c:755
 msgid "_Sign Clipboard"
 msgstr "_Allekirjoita leikepöytä"
 
-#: ../plugins/applet/seahorse-applet.c:761
+#: ../plugins/applet/seahorse-applet.c:762
 msgid "_Decrypt/Verify Clipboard"
 msgstr "_Pura tai varmista leikepöytä"
 
-#: ../plugins/applet/seahorse-applet.c:767
+#: ../plugins/applet/seahorse-applet.c:768
 msgid "_Import Keys from Clipboard"
 msgstr "_Tuo avaimia leikepöydältä"
 
-#: ../plugins/applet/seahorse-applet.c:832
-#: ../plugins/applet/seahorse-applet.c:834
+#: ../plugins/applet/seahorse-applet.c:833
+#: ../plugins/applet/seahorse-applet.c:835
 msgid "Encryption Applet"
 msgstr "Salaussovelma"
 
@@ -1687,6 +1691,7 @@ msgid "Choose Signature File Name for '%s'"
 msgstr "Valitse allekirjoitustiedoston nimi kohteelle \"%s\""
 
 #: ../plugins/nautilus/seahorse-tool.c:372
+#, c-format
 msgid "Imported key"
 msgstr "Tuotiin avain"
 
@@ -1707,6 +1712,7 @@ msgstr "Valitse alkuperäinen tiedosto tiedostolle \"%s\""
 #. * dialogs at the user.
 #.
 #: ../plugins/nautilus/seahorse-tool.c:524
+#, c-format
 msgid "No valid signatures found"
 msgstr "Kelvollisia allekirjoituksia ei löydy"
 
@@ -2279,7 +2285,7 @@ msgstr "Avaimia ei voitu viedä"
 msgid "Export public key"
 msgstr "Vie julkinen avain"
 
-#: ../src/seahorse-key-manager.c:656 ../src/seahorse-key-properties.c:1039
+#: ../src/seahorse-key-manager.c:656 ../src/seahorse-key-properties.c:1038
 #: ../src/seahorse-ssh-key-properties.c:240
 #, c-format
 msgid "Couldn't export key to \"%s\""
@@ -2528,7 +2534,7 @@ msgid "_Trusted Keys"
 msgstr "_Luotetut avaimet"
 
 #: ../src/seahorse-key-manager-store.c:311
-#: ../src/seahorse-key-properties.c:1307
+#: ../src/seahorse-key-properties.c:1306
 msgid "Expired"
 msgstr "Vanhentunut"
 
@@ -2556,7 +2562,7 @@ msgstr "Luottamus"
 
 #. The key type column
 #: ../src/seahorse-key-manager-store.c:985
-#: ../src/seahorse-key-properties.c:1285
+#: ../src/seahorse-key-properties.c:1284
 msgid "Type"
 msgstr "Tyyppi"
 
@@ -2569,11 +2575,11 @@ msgstr "Vanhenemispäivä"
 msgid "Couldn't change primary user ID"
 msgstr "Ensisijaista käyttäjätunnistetta ei voitu vaihtaa"
 
-#: ../src/seahorse-key-properties.c:304 ../src/seahorse-key-properties.c:1437
+#: ../src/seahorse-key-properties.c:304 ../src/seahorse-key-properties.c:1436
 msgid "[Unknown]"
 msgstr "[Tuntematon]"
 
-#: ../src/seahorse-key-properties.c:402 ../src/seahorse-key-properties.c:1723
+#: ../src/seahorse-key-properties.c:402 ../src/seahorse-key-properties.c:1722
 msgid "Name/Email"
 msgstr "Nimi/Sähköposti"
 
@@ -2594,37 +2600,37 @@ msgstr "(tuntematon)"
 msgid "This key expired on: %s"
 msgstr "Tämä avainta vanhenee: %s"
 
-#: ../src/seahorse-key-properties.c:993 ../src/seahorse-key-properties.c:1387
-#: ../src/seahorse-key-properties.c:1406
+#: ../src/seahorse-key-properties.c:992 ../src/seahorse-key-properties.c:1386
+#: ../src/seahorse-key-properties.c:1405
 msgid "Unable to change trust"
 msgstr "Luotettavuutta ei voitu muuttaa"
 
-#: ../src/seahorse-key-properties.c:1014
+#: ../src/seahorse-key-properties.c:1013
 #: ../src/seahorse-ssh-key-properties.c:215
 msgid "Export Complete Key"
 msgstr "Vie koko avain"
 
-#: ../src/seahorse-key-properties.c:1282
+#: ../src/seahorse-key-properties.c:1281
 msgid "ID"
 msgstr "Tunniste"
 
-#: ../src/seahorse-key-properties.c:1288
+#: ../src/seahorse-key-properties.c:1287
 msgid "Created"
 msgstr "Luotu"
 
-#: ../src/seahorse-key-properties.c:1291
+#: ../src/seahorse-key-properties.c:1290
 msgid "Expires"
 msgstr "Vanhenee"
 
-#: ../src/seahorse-key-properties.c:1294
+#: ../src/seahorse-key-properties.c:1293
 msgid "Status"
 msgstr "Tila"
 
-#: ../src/seahorse-key-properties.c:1297
+#: ../src/seahorse-key-properties.c:1296
 msgid "Strength"
 msgstr "Vahvuus"
 
-#: ../src/seahorse-key-properties.c:1306 ../src/seahorse-key-properties.c:1307
+#: ../src/seahorse-key-properties.c:1305 ../src/seahorse-key-properties.c:1306
 msgid "Good"
 msgstr "Hyvä"
 
@@ -3202,6 +3208,7 @@ msgid "_Resize"
 msgstr "_Muuta kokoa"
 
 #: ../src/seahorse-photos.c:125
+#, c-format
 msgid ""
 "This is not a image file, or an unrecognized kind of image file. Try to use "
 "a JPEG image."
