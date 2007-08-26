@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-21 15:26+0700\n"
-"PO-Revision-Date: 2007-07-21 15:38+0700\n"
+"POT-Creation-Date: 2007-08-26 22:48+0700\n"
+"PO-Revision-Date: 2007-08-26 22:51+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -16,12 +16,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: ../agent/seahorse-agent-actions.c:134
+#: ../agent/seahorse-agent-actions.c:133
 #: ../libseahorse/seahorse-ssh-operation.c:445
 msgid "Passphrase:"
 msgstr "วลีรหัสผ่าน:"
 
-#: ../agent/seahorse-agent-actions.c:135
+#: ../agent/seahorse-agent-actions.c:134
 msgid "Please enter a passphrase to use."
 msgstr "กรุณาป้อนวลีรหัสผ่านที่จะใช้"
 
@@ -43,7 +43,7 @@ msgstr "หมายเลขกุญแจอยู่ในรูปแบบ
 msgid "Unknown/Invalid Key"
 msgstr "กุญแจไม่รู้จัก/ผิดพลาด"
 
-#: ../agent/seahorse-agent-cache.c:532
+#: ../agent/seahorse-agent-cache.c:531
 #, c-format
 msgid "PGP Key: %s"
 msgstr "กุญแจ PGP: %s"
@@ -188,10 +188,12 @@ msgid "Key is not a valid recipient for encryption: %s"
 msgstr "กุญแจไม่ใช่ผู้รับของการเข้ารหัสลับที่ถูกต้อง: %s"
 
 #: ../daemon/seahorse-service-crypto.c:156
+#, c-format
 msgid "No recipients specified"
 msgstr "ไม่ได้ระบุผู้รับ"
 
 #: ../daemon/seahorse-service-crypto.c:222
+#, c-format
 msgid "No signer specified"
 msgstr "ไม่ได้ระบุผู้เซ็น"
 
@@ -363,9 +365,9 @@ msgstr ""
 
 #: ../data/seahorse.schemas.in.h:27
 msgid ""
-"Set to 'false' to disable display of the cache reminder in the notification "
+"Set to 'true' to enable display of the cache reminder in the notification "
 "area of your panel."
-msgstr "กำหนดเป็น 'false' เพื่อปิดการแสดงการเตือนเนื้อหาแคชในพื้นที่แจ้งเตือนของพาเนลของคุณ"
+msgstr "กำหนดเป็นค่าจริง เพื่อเปิดใช้การเตือนเนื้อหาแคชในพื้นที่แจ้งเตือนของพาเนลของคุณ"
 
 #: ../data/seahorse.schemas.in.h:28
 msgid ""
@@ -541,7 +543,7 @@ msgstr "ชื่อ"
 
 #: ../libcryptui/cryptui-key-list.c:120
 #: ../src/seahorse-key-manager-store.c:966
-#: ../src/seahorse-key-properties.c:1726
+#: ../src/seahorse-key-properties.c:1725
 msgid "Key ID"
 msgstr "หมายเลขกุญแจ"
 
@@ -652,6 +654,7 @@ msgid_plural "Imported %i keys"
 msgstr[0] "นำเข้ากุญแจ %i ดอกแล้ว"
 
 #: ../libseahorse/seahorse-notification.c:565
+#, c-format
 msgid "Imported a key for"
 msgid_plural "Imported keys for"
 msgstr[0] "นำเข้ากุญแจสำหรับ"
@@ -731,6 +734,7 @@ msgid "Confirm:"
 msgstr "ยืนยัน:"
 
 #: ../libseahorse/seahorse-passphrase.c:325
+#, c-format
 msgid "Wrong passphrase."
 msgstr "วลีรหัสผ่านไม่ถูกต้อง"
 
@@ -769,7 +773,7 @@ msgid "Private PGP Key"
 msgstr "กุญแจ PGP ส่วนตัว"
 
 #: ../libseahorse/seahorse-pgp-key.c:694 ../libseahorse/seahorse-validity.c:31
-#: ../src/seahorse-key-properties.c:1100
+#: ../src/seahorse-key-properties.c:1099
 msgid "Unknown"
 msgstr "ไม่ทราบ"
 
@@ -1028,14 +1032,6 @@ msgid "_Share my keys with others on my network"
 msgstr "เปิดกุญแจของข้าพเจ้าให้ผู้อื่นใ_ช้ร่วมในเครือข่าย"
 
 #: ../libseahorse/seahorse-prefs.glade.h:40
-msgid "gtk-apply"
-msgstr "gtk-apply"
-
-#: ../libseahorse/seahorse-prefs.glade.h:41
-msgid "gtk-clear"
-msgstr "gtk-clear"
-
-#: ../libseahorse/seahorse-prefs.glade.h:42
 msgid "minutes"
 msgstr "นาที"
 
@@ -1099,6 +1095,7 @@ msgstr "กุญแจสาธารณะสำหรับเชลล์น
 
 #: ../libseahorse/seahorse-ssh-operation.c:135
 #: ../libseahorse/seahorse-ssh-operation.c:697
+#, c-format
 msgid "The SSH command was terminated unexpectedly."
 msgstr "คำสั่ง SSH จบการทำงานกลางคัน"
 
@@ -1253,20 +1250,20 @@ msgstr ""
 msgid "_Replace"
 msgstr "เขียน_ทับ"
 
-#: ../libseahorse/seahorse-validity.c:33 ../src/seahorse-key-properties.c:1106
-#: ../src/seahorse-key-properties.c:1238 ../src/seahorse-key-properties.c:1310
+#: ../libseahorse/seahorse-validity.c:33 ../src/seahorse-key-properties.c:1105
+#: ../src/seahorse-key-properties.c:1237 ../src/seahorse-key-properties.c:1309
 msgid "Never"
 msgstr "ไม่เลย"
 
-#: ../libseahorse/seahorse-validity.c:35 ../src/seahorse-key-properties.c:1113
+#: ../libseahorse/seahorse-validity.c:35 ../src/seahorse-key-properties.c:1112
 msgid "Marginal"
 msgstr "ก้ำกึ่ง"
 
-#: ../libseahorse/seahorse-validity.c:37 ../src/seahorse-key-properties.c:1119
+#: ../libseahorse/seahorse-validity.c:37 ../src/seahorse-key-properties.c:1118
 msgid "Full"
 msgstr "เต็มที่"
 
-#: ../libseahorse/seahorse-validity.c:39 ../src/seahorse-key-properties.c:1125
+#: ../libseahorse/seahorse-validity.c:39 ../src/seahorse-key-properties.c:1124
 msgid "Ultimate"
 msgstr "เต็มพิกัด"
 
@@ -1274,7 +1271,7 @@ msgstr "เต็มพิกัด"
 msgid "Disabled"
 msgstr "ปิดใช้งาน"
 
-#: ../libseahorse/seahorse-validity.c:43 ../src/seahorse-key-properties.c:1306
+#: ../libseahorse/seahorse-validity.c:43 ../src/seahorse-key-properties.c:1305
 msgid "Revoked"
 msgstr "เพิกถอน"
 
@@ -1640,6 +1637,7 @@ msgid "Choose Signature File Name for '%s'"
 msgstr "ตั้งชื่อแฟ้มลายเซ็นสำหรับ '%s'"
 
 #: ../plugins/nautilus/seahorse-tool.c:372
+#, c-format
 msgid "Imported key"
 msgstr "กุญแจนำเข้า"
 
@@ -1660,6 +1658,7 @@ msgstr "ตั้งชื่อแฟ้มสำหรับข้อมูล
 #. * dialogs at the user.
 #.
 #: ../plugins/nautilus/seahorse-tool.c:524
+#, c-format
 msgid "No valid signatures found"
 msgstr "ไม่พบลายเซ็นที่ใช้การได้"
 
@@ -2225,7 +2224,7 @@ msgstr "ไม่สามารถส่งออกกุญแจ"
 msgid "Export public key"
 msgstr "ส่งออกกุญแจสาธารณะ"
 
-#: ../src/seahorse-key-manager.c:656 ../src/seahorse-key-properties.c:1039
+#: ../src/seahorse-key-manager.c:656 ../src/seahorse-key-properties.c:1038
 #: ../src/seahorse-ssh-key-properties.c:240
 #, c-format
 msgid "Couldn't export key to \"%s\""
@@ -2471,7 +2470,7 @@ msgid "_Trusted Keys"
 msgstr "กุญแจเ_ชื่อถือ"
 
 #: ../src/seahorse-key-manager-store.c:311
-#: ../src/seahorse-key-properties.c:1307
+#: ../src/seahorse-key-properties.c:1306
 msgid "Expired"
 msgstr "หมดอายุ"
 
@@ -2499,7 +2498,7 @@ msgstr "เชื่อถือ"
 
 #. The key type column
 #: ../src/seahorse-key-manager-store.c:985
-#: ../src/seahorse-key-properties.c:1285
+#: ../src/seahorse-key-properties.c:1284
 msgid "Type"
 msgstr "ชนิด"
 
@@ -2512,11 +2511,11 @@ msgstr "วันหมดอายุ"
 msgid "Couldn't change primary user ID"
 msgstr "ไม่สามารถเปลี่ยนหมายเลขผู้ใช้หลัก"
 
-#: ../src/seahorse-key-properties.c:304 ../src/seahorse-key-properties.c:1437
+#: ../src/seahorse-key-properties.c:304 ../src/seahorse-key-properties.c:1436
 msgid "[Unknown]"
 msgstr "[ไม่ทราบ]"
 
-#: ../src/seahorse-key-properties.c:402 ../src/seahorse-key-properties.c:1723
+#: ../src/seahorse-key-properties.c:402 ../src/seahorse-key-properties.c:1722
 msgid "Name/Email"
 msgstr "ชื่อ/อีเมล"
 
@@ -2537,37 +2536,37 @@ msgstr "(ไม่ทราบ)"
 msgid "This key expired on: %s"
 msgstr "กุญแจนี้หมดอายุแล้วเมื่อ: %s"
 
-#: ../src/seahorse-key-properties.c:993 ../src/seahorse-key-properties.c:1387
-#: ../src/seahorse-key-properties.c:1406
+#: ../src/seahorse-key-properties.c:992 ../src/seahorse-key-properties.c:1386
+#: ../src/seahorse-key-properties.c:1405
 msgid "Unable to change trust"
 msgstr "ไม่สามารถเปลี่ยนค่าความเชื่อถือ"
 
-#: ../src/seahorse-key-properties.c:1014
+#: ../src/seahorse-key-properties.c:1013
 #: ../src/seahorse-ssh-key-properties.c:215
 msgid "Export Complete Key"
 msgstr "ส่งออกกุญแจทั้งหมด"
 
-#: ../src/seahorse-key-properties.c:1282
+#: ../src/seahorse-key-properties.c:1281
 msgid "ID"
 msgstr "หมายเลข"
 
-#: ../src/seahorse-key-properties.c:1288
+#: ../src/seahorse-key-properties.c:1287
 msgid "Created"
 msgstr "สร้าง"
 
-#: ../src/seahorse-key-properties.c:1291
+#: ../src/seahorse-key-properties.c:1290
 msgid "Expires"
 msgstr "หมดอายุ"
 
-#: ../src/seahorse-key-properties.c:1294
+#: ../src/seahorse-key-properties.c:1293
 msgid "Status"
 msgstr "สถานะ"
 
-#: ../src/seahorse-key-properties.c:1297
+#: ../src/seahorse-key-properties.c:1296
 msgid "Strength"
 msgstr "ความแข็งแรง"
 
-#: ../src/seahorse-key-properties.c:1306 ../src/seahorse-key-properties.c:1307
+#: ../src/seahorse-key-properties.c:1305 ../src/seahorse-key-properties.c:1306
 msgid "Good"
 msgstr "ดี"
 
@@ -3137,6 +3136,7 @@ msgid "_Resize"
 msgstr "_ปรับขนาด"
 
 #: ../src/seahorse-photos.c:125
+#, c-format
 msgid ""
 "This is not a image file, or an unrecognized kind of image file. Try to use "
 "a JPEG image."
@@ -3450,6 +3450,12 @@ msgstr "ชื่อเ_ข้าระบบ:"
 #: ../src/seahorse-ssh-upload.glade.h:9
 msgid "_Set Up"
 msgstr "_ตั้งค่า"
+
+#~ msgid "gtk-apply"
+#~ msgstr "gtk-apply"
+
+#~ msgid "gtk-clear"
+#~ msgstr "gtk-clear"
 
 #~ msgid "initial temporary item"
 #~ msgstr "รายการชั่วคราวเริ่มแรก"
