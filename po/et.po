@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Seahorse HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-23 03:26+0100\n"
-"PO-Revision-Date: 2007-08-20 19:45+0300\n"
+"POT-Creation-Date: 2007-08-23 03:31+0100\n"
+"PO-Revision-Date: 2007-08-24 16:35+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -20,12 +20,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../agent/seahorse-agent-actions.c:134
+#: ../agent/seahorse-agent-actions.c:133
 #: ../libseahorse/seahorse-ssh-operation.c:445
 msgid "Passphrase:"
 msgstr "Parool:"
 
-#: ../agent/seahorse-agent-actions.c:135
+#: ../agent/seahorse-agent-actions.c:134
 msgid "Please enter a passphrase to use."
 msgstr "Palun sisesta kasutatav parool."
 
@@ -47,7 +47,7 @@ msgstr "Analüüsimatu võtme ID"
 msgid "Unknown/Invalid Key"
 msgstr "Tundmatu/vigane võti"
 
-#: ../agent/seahorse-agent-cache.c:533
+#: ../agent/seahorse-agent-cache.c:531
 #, c-format
 msgid "PGP Key: %s"
 msgstr "PGP-võti: %s"
@@ -120,7 +120,7 @@ msgid "couldn't create new process group"
 msgstr "uut protsessigruppi pole võimalik luua"
 
 #: ../agent/seahorse-agent-main.c:227 ../daemon/seahorse-daemon.c:195
-#: ../plugins/applet/seahorse-applet.c:1016
+#: ../plugins/applet/seahorse-applet.c:1017
 #: ../plugins/nautilus/seahorse-tool.c:570 ../src/main.c:59
 msgid "couldn't drop privileges properly"
 msgstr ""
@@ -242,8 +242,8 @@ msgid ""
 "display name can be included, by appending a space and then the name."
 msgstr ""
 "PGP-kaugvõtmete otsimiseks kasutatavate võtmeserverite URI-de nimekiri. "
-"Hilisemates versioonides võidakse siia kaasata ka kuvatav nimi, lisades "
-"URI-le tühiku ja nime."
+"Hilisemates versioonides võidakse siia kaasata ka kuvatav nimi, lisades URI-"
+"le tühiku ja nime."
 
 #: ../data/seahorse.schemas.in.h:2
 msgid ""
@@ -271,19 +271,19 @@ msgstr "Automaatne võtmete sünkroniseerimine"
 
 #: ../data/seahorse.schemas.in.h:6
 msgid "Controls the visibility of the expires column for the key manager."
-msgstr ""
+msgstr "Võtmehalduris aegumise veeru nähtavaloleku määramine."
 
 #: ../data/seahorse.schemas.in.h:7
 msgid "Controls the visibility of the trust column for the key manager."
-msgstr ""
+msgstr "Võtmehalduris usalduse veeru nähtavaloleku määramine."
 
 #: ../data/seahorse.schemas.in.h:8
 msgid "Controls the visibility of the type column for the key manager."
-msgstr ""
+msgstr "Võtmehalduris liigi veeru nähtavaloleku määramine."
 
 #: ../data/seahorse.schemas.in.h:9
 msgid "Controls the visibility of the validity column for the key manager."
-msgstr ""
+msgstr "Võtmehalduris kehtivuse veeru nähtavaloleku määramine."
 
 #: ../data/seahorse.schemas.in.h:10
 msgid "Display cache reminder in the notification area"
@@ -372,9 +372,11 @@ msgstr ""
 
 #: ../data/seahorse.schemas.in.h:27
 msgid ""
-"Set to 'false' to disable display of the cache reminder in the notification "
+"Set to 'true' to enable display of the cache reminder in the notification "
 "area of your panel."
 msgstr ""
+"Kui määratud, siis on puhvri meeldetuletuse kuvamine paneeli teatealal "
+"lubatud."
 
 #: ../data/seahorse.schemas.in.h:28
 msgid ""
@@ -462,9 +464,9 @@ msgid ""
 "This option enables the GPG password cache in the seahorse-agent program. "
 "The 'use-agent' setting in gpg.conf affects this setting."
 msgstr ""
-"Selle võtme abil lubatakse GPG paroolide puhverdamine programmi "
-"seahorse-agent poolt. Selle võtmega on seotud failis gpg.conf olev "
-"'use-agent' parameeter."
+"Selle võtme abil lubatakse GPG paroolide puhverdamine programmi seahorse-"
+"agent poolt. Selle võtmega on seotud failis gpg.conf olev 'use-agent' "
+"parameeter."
 
 #: ../data/seahorse.schemas.in.h:45
 msgid ""
@@ -554,7 +556,7 @@ msgstr "Nimi"
 
 #: ../libcryptui/cryptui-key-list.c:120
 #: ../src/seahorse-key-manager-store.c:966
-#: ../src/seahorse-key-properties.c:1726
+#: ../src/seahorse-key-properties.c:1725
 msgid "Key ID"
 msgstr "Võtme ID"
 
@@ -786,7 +788,7 @@ msgid "Private PGP Key"
 msgstr "Salajane PGP-võti"
 
 #: ../libseahorse/seahorse-pgp-key.c:694 ../libseahorse/seahorse-validity.c:31
-#: ../src/seahorse-key-properties.c:1100
+#: ../src/seahorse-key-properties.c:1099
 msgid "Unknown"
 msgstr "Tundmatu"
 
@@ -1051,14 +1053,6 @@ msgid "_Share my keys with others on my network"
 msgstr "_Minu võtmed on jagatud minu võrgus olevatele kasutajatele"
 
 #: ../libseahorse/seahorse-prefs.glade.h:40
-msgid "gtk-apply"
-msgstr "gtk-apply"
-
-#: ../libseahorse/seahorse-prefs.glade.h:41
-msgid "gtk-clear"
-msgstr "gtk-clear"
-
-#: ../libseahorse/seahorse-prefs.glade.h:42
 msgid "minutes"
 msgstr "minutit"
 
@@ -1280,20 +1274,20 @@ msgstr ""
 msgid "_Replace"
 msgstr "_Asenda"
 
-#: ../libseahorse/seahorse-validity.c:33 ../src/seahorse-key-properties.c:1106
-#: ../src/seahorse-key-properties.c:1238 ../src/seahorse-key-properties.c:1310
+#: ../libseahorse/seahorse-validity.c:33 ../src/seahorse-key-properties.c:1105
+#: ../src/seahorse-key-properties.c:1237 ../src/seahorse-key-properties.c:1309
 msgid "Never"
 msgstr "Mitte kunagi"
 
-#: ../libseahorse/seahorse-validity.c:35 ../src/seahorse-key-properties.c:1113
+#: ../libseahorse/seahorse-validity.c:35 ../src/seahorse-key-properties.c:1112
 msgid "Marginal"
 msgstr "Vähesel määral"
 
-#: ../libseahorse/seahorse-validity.c:37 ../src/seahorse-key-properties.c:1119
+#: ../libseahorse/seahorse-validity.c:37 ../src/seahorse-key-properties.c:1118
 msgid "Full"
 msgstr "Täielik"
 
-#: ../libseahorse/seahorse-validity.c:39 ../src/seahorse-key-properties.c:1125
+#: ../libseahorse/seahorse-validity.c:39 ../src/seahorse-key-properties.c:1124
 msgid "Ultimate"
 msgstr "Ülim"
 
@@ -1301,7 +1295,7 @@ msgstr "Ülim"
 msgid "Disabled"
 msgstr "Keelatud"
 
-#: ../libseahorse/seahorse-validity.c:43 ../src/seahorse-key-properties.c:1306
+#: ../libseahorse/seahorse-validity.c:43 ../src/seahorse-key-properties.c:1305
 msgid "Revoked"
 msgstr "Tühistatud"
 
@@ -1343,7 +1337,7 @@ msgid "seahorse-applet"
 msgstr "seahorse-rakend"
 
 #: ../plugins/applet/seahorse-applet.c:311
-#: ../plugins/applet/seahorse-applet.c:835
+#: ../plugins/applet/seahorse-applet.c:836
 msgid "Use PGP/GPG to encrypt/decrypt/sign/verify/import the clipboard."
 msgstr ""
 "PGP/GPG kasutamine lõikepuhvri sisu krüptimiseks, lahtikrüptimiseks, "
@@ -1360,97 +1354,97 @@ msgid "Seahorse Project Homepage"
 msgstr "Seahorse projekti koduleht"
 
 #. Get the recipient list
-#: ../plugins/applet/seahorse-applet.c:374
+#: ../plugins/applet/seahorse-applet.c:375
 #: ../plugins/epiphany/seahorse-extension.c:251
 #: ../plugins/gedit/seahorse-gedit.c:332
 msgid "Choose Recipient Keys"
 msgstr "Adressaatide võtmete valimine"
 
-#: ../plugins/applet/seahorse-applet.c:393
+#: ../plugins/applet/seahorse-applet.c:394
 msgid "Encrypted Text"
 msgstr "Krüptitud tekst"
 
-#: ../plugins/applet/seahorse-applet.c:395
+#: ../plugins/applet/seahorse-applet.c:396
 msgid "Encryption Failed"
 msgstr "Tõrge krüptimisel"
 
-#: ../plugins/applet/seahorse-applet.c:396
+#: ../plugins/applet/seahorse-applet.c:397
 msgid "The clipboard could not be encrypted."
 msgstr "Lõikelaua sisu pole võimalik krüptida."
 
-#: ../plugins/applet/seahorse-applet.c:430
+#: ../plugins/applet/seahorse-applet.c:431
 #: ../plugins/epiphany/seahorse-extension.c:296
 #: ../plugins/gedit/seahorse-gedit.c:611
 msgid "Choose Key to Sign with"
 msgstr "Allkirjastamiseks võtme valimine"
 
-#: ../plugins/applet/seahorse-applet.c:449
+#: ../plugins/applet/seahorse-applet.c:450
 msgid "Signed Text"
 msgstr "Allkirjastatud tekst"
 
-#: ../plugins/applet/seahorse-applet.c:451
+#: ../plugins/applet/seahorse-applet.c:452
 msgid "Signing Failed"
 msgstr "Tõrge allkirjastamisel"
 
-#: ../plugins/applet/seahorse-applet.c:452
+#: ../plugins/applet/seahorse-applet.c:453
 msgid "The clipboard could not be Signed."
 msgstr "Lõikelaua sisu pole võimalik allkirjastada."
 
-#: ../plugins/applet/seahorse-applet.c:495
+#: ../plugins/applet/seahorse-applet.c:496
 #: ../plugins/epiphany/seahorse-extension.c:340
 msgid "Import Failed"
 msgstr "Tõrge importimisel"
 
-#: ../plugins/applet/seahorse-applet.c:496
+#: ../plugins/applet/seahorse-applet.c:497
 #: ../plugins/epiphany/seahorse-extension.c:341
 msgid "Keys were found but not imported."
 msgstr "Võtmed leiti, kuid neid ei imporditud."
 
-#: ../plugins/applet/seahorse-applet.c:527
+#: ../plugins/applet/seahorse-applet.c:528
 #: ../plugins/epiphany/seahorse-extension.c:374
 msgid "Decrypting Failed"
 msgstr "Tõrge lahtikrüptimisel"
 
-#: ../plugins/applet/seahorse-applet.c:528
+#: ../plugins/applet/seahorse-applet.c:529
 #: ../plugins/epiphany/seahorse-extension.c:375
 msgid "Text may be malformed."
 msgstr "Teksti võib olla vigaselt vormindatud"
 
-#: ../plugins/applet/seahorse-applet.c:579
+#: ../plugins/applet/seahorse-applet.c:580
 msgid "No PGP key or message was found on clipboard"
 msgstr "Lõikelaualt ei leitud ei PGP-võtit ega ka sõnumit"
 
-#: ../plugins/applet/seahorse-applet.c:580
+#: ../plugins/applet/seahorse-applet.c:581
 msgid "No PGP data found."
 msgstr "PGP andmeid ei leitud."
 
 #. TRANSLATORS: This means 'The text that was decrypted'
-#: ../plugins/applet/seahorse-applet.c:615
+#: ../plugins/applet/seahorse-applet.c:616
 msgid "Decrypted Text"
 msgstr "Dekrüptitud tekst"
 
-#: ../plugins/applet/seahorse-applet.c:684
+#: ../plugins/applet/seahorse-applet.c:685
 msgid "Could not display the help file"
 msgstr "Abifaili pole võimalik kuvada"
 
-#: ../plugins/applet/seahorse-applet.c:747
+#: ../plugins/applet/seahorse-applet.c:748
 msgid "_Encrypt Clipboard"
 msgstr "_Krüpti lõikepuhvri sisu"
 
-#: ../plugins/applet/seahorse-applet.c:754
+#: ../plugins/applet/seahorse-applet.c:755
 msgid "_Sign Clipboard"
 msgstr "_Allkirjasta lõikepuhvri sisu"
 
-#: ../plugins/applet/seahorse-applet.c:761
+#: ../plugins/applet/seahorse-applet.c:762
 msgid "_Decrypt/Verify Clipboard"
 msgstr "_Dekrüpti/verifitseeri lõikepuhvri sisu"
 
-#: ../plugins/applet/seahorse-applet.c:767
+#: ../plugins/applet/seahorse-applet.c:768
 msgid "_Import Keys from Clipboard"
 msgstr "_Impordi lõikepuhvris olevad võtmed"
 
-#: ../plugins/applet/seahorse-applet.c:832
-#: ../plugins/applet/seahorse-applet.c:834
+#: ../plugins/applet/seahorse-applet.c:833
+#: ../plugins/applet/seahorse-applet.c:835
 msgid "Encryption Applet"
 msgstr "Krüptimisrakend"
 
@@ -2266,7 +2260,7 @@ msgstr "Võtit pole võimalik eksportida"
 msgid "Export public key"
 msgstr "Avaliku võtme eksportimine"
 
-#: ../src/seahorse-key-manager.c:656 ../src/seahorse-key-properties.c:1039
+#: ../src/seahorse-key-manager.c:656 ../src/seahorse-key-properties.c:1038
 #: ../src/seahorse-ssh-key-properties.c:240
 #, c-format
 msgid "Couldn't export key to \"%s\""
@@ -2513,7 +2507,7 @@ msgid "_Trusted Keys"
 msgstr "_Usaldusväärsed võtmed"
 
 #: ../src/seahorse-key-manager-store.c:311
-#: ../src/seahorse-key-properties.c:1307
+#: ../src/seahorse-key-properties.c:1306
 msgid "Expired"
 msgstr "Aegunud"
 
@@ -2541,7 +2535,7 @@ msgstr "Usaldus"
 
 #. The key type column
 #: ../src/seahorse-key-manager-store.c:985
-#: ../src/seahorse-key-properties.c:1285
+#: ../src/seahorse-key-properties.c:1284
 msgid "Type"
 msgstr "Liik"
 
@@ -2554,11 +2548,11 @@ msgstr "Aegumiskuupäev"
 msgid "Couldn't change primary user ID"
 msgstr "Peamist kasutaja ID-d pole võimalik muuta"
 
-#: ../src/seahorse-key-properties.c:304 ../src/seahorse-key-properties.c:1437
+#: ../src/seahorse-key-properties.c:304 ../src/seahorse-key-properties.c:1436
 msgid "[Unknown]"
 msgstr "[Tundmatu]"
 
-#: ../src/seahorse-key-properties.c:402 ../src/seahorse-key-properties.c:1723
+#: ../src/seahorse-key-properties.c:402 ../src/seahorse-key-properties.c:1722
 msgid "Name/Email"
 msgstr "Nimi/E-post"
 
@@ -2579,37 +2573,37 @@ msgstr "(tundmatu)"
 msgid "This key expired on: %s"
 msgstr "See võti aegus: %s"
 
-#: ../src/seahorse-key-properties.c:993 ../src/seahorse-key-properties.c:1387
-#: ../src/seahorse-key-properties.c:1406
+#: ../src/seahorse-key-properties.c:992 ../src/seahorse-key-properties.c:1386
+#: ../src/seahorse-key-properties.c:1405
 msgid "Unable to change trust"
 msgstr "Usaldust pole võimalik muuta"
 
-#: ../src/seahorse-key-properties.c:1014
+#: ../src/seahorse-key-properties.c:1013
 #: ../src/seahorse-ssh-key-properties.c:215
 msgid "Export Complete Key"
 msgstr "Võtme täielik eksport"
 
-#: ../src/seahorse-key-properties.c:1282
+#: ../src/seahorse-key-properties.c:1281
 msgid "ID"
 msgstr "ID"
 
-#: ../src/seahorse-key-properties.c:1288
+#: ../src/seahorse-key-properties.c:1287
 msgid "Created"
 msgstr "Loodud"
 
-#: ../src/seahorse-key-properties.c:1291
+#: ../src/seahorse-key-properties.c:1290
 msgid "Expires"
 msgstr "Aegumine"
 
-#: ../src/seahorse-key-properties.c:1294
+#: ../src/seahorse-key-properties.c:1293
 msgid "Status"
 msgstr "Olek"
 
-#: ../src/seahorse-key-properties.c:1297
+#: ../src/seahorse-key-properties.c:1296
 msgid "Strength"
 msgstr "Tugevus"
 
-#: ../src/seahorse-key-properties.c:1306 ../src/seahorse-key-properties.c:1307
+#: ../src/seahorse-key-properties.c:1305 ../src/seahorse-key-properties.c:1306
 msgid "Good"
 msgstr "Hea"
 
@@ -3418,11 +3412,11 @@ msgstr "Võtme parooli pole võimalik muuta."
 
 #: ../src/seahorse-ssh-key-properties.glade.h:1
 msgid "/home/nate/.ssh/blah_rsa"
-msgstr ""
+msgstr "/home/nate/.ssh/blah_rsa"
 
 #: ../src/seahorse-ssh-key-properties.glade.h:2
 msgid "00:00:00:00:00"
-msgstr ""
+msgstr "00:00:00:00:00"
 
 #: ../src/seahorse-ssh-key-properties.glade.h:3
 msgid "<b>Algorithm:</b>"
