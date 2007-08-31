@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: Seahorse HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-08-23 03:31+0100\n"
-"PO-Revision-Date: 2007-08-24 16:35+0300\n"
+"PO-Revision-Date: 2007-08-30 22:59+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -411,6 +411,9 @@ msgid ""
 "Specify the column to sort the recipients window by. Columns are: 'name' and "
 "'id'. Put a '-' in front of the column name to sort in descending order."
 msgstr ""
+"Mis veeru järgi vastuvõtjate aknas andmeid sorditakse. Võimalikud väärtused "
+"on: 'name' (nimi) ja 'id'. Pööratud järjestuse kasutamiseks tuleb veeru nime "
+"algusesse lisada '-'."
 
 #: ../data/seahorse.schemas.in.h:35
 msgid ""
@@ -418,6 +421,10 @@ msgid ""
 "are: 'name', 'id', 'validity', 'expires', 'trust', and 'type'. Put a '-' in "
 "front of the column name to sort in descending order."
 msgstr ""
+"Mis veeru järgi seahorse võtmehalduri peaaknas andmeid sorditakse. "
+"Võimalikud väärtused on: 'name' (nimi), 'id', 'validity' (kehtivus), "
+"'expires' (aegumine), 'trust' (usaldus) ja 'type' (liik). Pööratud "
+"järjestuse kasutamiseks tuleb veeru nime algusesse lisada '-'."
 
 #: ../data/seahorse.schemas.in.h:36
 msgid "The ID of the last secret key used to sign a message."
@@ -679,7 +686,7 @@ msgstr[1] ""
 #: ../libseahorse/seahorse-notification.c:617
 #, c-format
 msgid "Signed by <i><key id='%s'/> <b>expired</b></i> on %s."
-msgstr ""
+msgstr "Allkirjastaja: <i><key id='%s'/>, <b>aegunud</b></i>: %s."
 
 #: ../libseahorse/seahorse-notification.c:618
 msgid "Invalid Signature"
@@ -697,7 +704,7 @@ msgstr "Aegunud allkiri"
 #: ../libseahorse/seahorse-notification.c:631
 #, c-format
 msgid "Signed by <i><key id='%s'/> <b>Revoked</b></i> on %s."
-msgstr ""
+msgstr "Allkirjastaja: <i><key id='%s'/>, <b>tühistatud</b></i>: %s."
 
 #: ../libseahorse/seahorse-notification.c:632
 msgid "Revoked Signature"
@@ -1195,7 +1202,7 @@ msgstr "Võtme importimine"
 
 #: ../libseahorse/seahorse-unknown-key.c:67
 msgid "Unavailable"
-msgstr ""
+msgstr "Pole saadaval"
 
 #: ../libseahorse/seahorse-unknown-key.c:87
 #, c-format
@@ -1208,7 +1215,7 @@ msgstr "Tundmatu võti"
 
 #: ../libseahorse/seahorse-unknown-source.c:128
 msgid "Unavailable Key"
-msgstr ""
+msgstr "Võti pole saadaval"
 
 #: ../libseahorse/seahorse-util.c:172
 msgid "Decryption failed. You probably do not have the decryption key."
@@ -1689,7 +1696,7 @@ msgstr "Faili '%s' algupärase faili valimine"
 #.
 #: ../plugins/nautilus/seahorse-tool.c:524
 msgid "No valid signatures found"
-msgstr ""
+msgstr "Kehtivaid allkirju ei leitud"
 
 #: ../plugins/nautilus/seahorse-tool.c:591
 msgid "File Encryption Tool"
@@ -1870,7 +1877,7 @@ msgstr "Alamvõtit pole võimalik lisada"
 #: ../src/seahorse-add-subkey.c:154
 #, c-format
 msgid "Add subkey to %s"
-msgstr ""
+msgstr "Alamvõtme lisamine omanikule %s"
 
 #: ../src/seahorse-add-subkey.c:171 ../src/seahorse-pgp-generate.c:44
 msgid "DSA (sign only)"
@@ -2031,7 +2038,7 @@ msgstr "Aegumise kuupäeva pole võimalik muuta"
 #: ../src/seahorse-expires.c:131
 #, c-format
 msgid "Expiry for Subkey %d of %s"
-msgstr ""
+msgstr "Omaniku %2$s %1$d. alamvõtme aegumise määramine"
 
 #: ../src/seahorse-expires.c:133
 #, c-format
@@ -2234,7 +2241,7 @@ msgstr "Faili pole võimalik lugeda"
 
 #: ../src/seahorse-key-manager.c:486
 msgid "Unrecognized key type, or invalid data format"
-msgstr ""
+msgstr "Tundmatu võtme liik või on andmed vigased"
 
 #: ../src/seahorse-key-manager.c:560 ../src/seahorse-keyserver-results.c:218
 msgid "Couldn't retrieve data from key server"
@@ -2276,7 +2283,7 @@ msgstr "Võtmerõngaste varundamine arhiivi"
 
 #: ../src/seahorse-key-manager.c:841
 msgid "Contributions:"
-msgstr ""
+msgstr "Kaasaaitajad:"
 
 #: ../src/seahorse-key-manager.c:867
 msgid "seahorse"
@@ -2976,7 +2983,7 @@ msgstr "Kustuta"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:23
 msgid "Expire"
-msgstr ""
+msgstr "Määra aegumine"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:24
 #: ../src/seahorse-pgp-public-key-properties.glade.h:21
@@ -3027,7 +3034,7 @@ msgstr "Sellelt võtmelt foto eemaldamine"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:37
 msgid "Revoke"
-msgstr ""
+msgstr "Tühista"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:39
 #: ../src/seahorse-pgp-public-key-properties.glade.h:31
@@ -3216,7 +3223,7 @@ msgstr "Alamvõtit pole võimalik tühistada"
 #: ../src/seahorse-revoke.c:77
 #, c-format
 msgid "Revoke Subkey %d of %s"
-msgstr ""
+msgstr "Omaniku %2$s %1$d. alamvõtme tühistamine"
 
 #: ../src/seahorse-revoke.c:79
 #, c-format
