@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse trunk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-18 23:29+0900\n"
-"PO-Revision-Date: 2007-07-18 23:29+0900\n"
+"POT-Creation-Date: 2007-09-01 19:13+0900\n"
+"PO-Revision-Date: 2007-09-01 19:13+0900\n"
 "Last-Translator: Takeshi AIHANA <takeshi.aihana@gmail.com>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -19,12 +19,12 @@ msgstr ""
 # 参考: 
 # PGP に関する訳語表 (http://pgp.iijlab.net/trans/)
 # GPG の README 翻訳 (http://www.hyuki.com/gnu/gnupg-v12-readme.html)
-#: ../agent/seahorse-agent-actions.c:134
+#: ../agent/seahorse-agent-actions.c:133
 #: ../libseahorse/seahorse-ssh-operation.c:445
 msgid "Passphrase:"
 msgstr "パスフレーズ:"
 
-#: ../agent/seahorse-agent-actions.c:135
+#: ../agent/seahorse-agent-actions.c:134
 msgid "Please enter a passphrase to use."
 msgstr "使用するパスフレーズを入力して下さい"
 
@@ -46,7 +46,7 @@ msgstr "解析できない鍵 ID"
 msgid "Unknown/Invalid Key"
 msgstr "不明または不正な鍵です"
 
-#: ../agent/seahorse-agent-cache.c:532
+#: ../agent/seahorse-agent-cache.c:531
 #, c-format
 msgid "PGP Key: %s"
 msgstr "PGP 鍵: %s"
@@ -195,10 +195,12 @@ msgid "Key is not a valid recipient for encryption: %s"
 msgstr "暗号化に対して妥当な受取人ではありません: %s"
 
 #: ../daemon/seahorse-service-crypto.c:156
+#, c-format
 msgid "No recipients specified"
 msgstr "受取人が指定されていません"
 
 #: ../daemon/seahorse-service-crypto.c:222
+#, c-format
 msgid "No signer specified"
 msgstr "署名者が指定されていません"
 
@@ -371,11 +373,10 @@ msgstr ""
 
 #: ../data/seahorse.schemas.in.h:27
 msgid ""
-"Set to 'false' to disable display of the cache reminder in the notification "
+"Set to 'true' to enable display of the cache reminder in the notification "
 "area of your panel."
 msgstr ""
-"FALSE にするとパネルの通知エリアの中にキャッシュのリマインダーを表示しなくな"
-"ります。"
+"TRUE にするとパネルの通知エリアの中にキャッシュのリマインダーを表示します。"
 
 #: ../data/seahorse.schemas.in.h:28
 msgid ""
@@ -559,7 +560,7 @@ msgstr "名前"
 
 #: ../libcryptui/cryptui-key-list.c:120
 #: ../src/seahorse-key-manager-store.c:966
-#: ../src/seahorse-key-properties.c:1726
+#: ../src/seahorse-key-properties.c:1725
 msgid "Key ID"
 msgstr "鍵 ID"
 
@@ -674,6 +675,7 @@ msgstr[0] " %d個の鍵をインポートしました"
 msgstr[1] " %d個の鍵をインポートしました"
 
 #: ../libseahorse/seahorse-notification.c:565
+#, c-format
 msgid "Imported a key for"
 msgid_plural "Imported keys for"
 msgstr[0] "次の鍵のインポートが完了しました: "
@@ -755,6 +757,7 @@ msgid "Confirm:"
 msgstr "パスワードの確認:"
 
 #: ../libseahorse/seahorse-passphrase.c:325
+#, c-format
 msgid "Wrong passphrase."
 msgstr "パスフレーズが間違っています"
 
@@ -793,7 +796,7 @@ msgid "Private PGP Key"
 msgstr "個人的に利用する PGP 鍵"
 
 #: ../libseahorse/seahorse-pgp-key.c:694 ../libseahorse/seahorse-validity.c:31
-#: ../src/seahorse-key-properties.c:1100
+#: ../src/seahorse-key-properties.c:1099
 msgid "Unknown"
 msgstr "不明"
 
@@ -1061,14 +1064,6 @@ msgid "_Share my keys with others on my network"
 msgstr "自分の鍵をネットワーク上で共有する(_S)"
 
 #: ../libseahorse/seahorse-prefs.glade.h:40
-msgid "gtk-apply"
-msgstr "gtk-apply"
-
-#: ../libseahorse/seahorse-prefs.glade.h:41
-msgid "gtk-clear"
-msgstr "gtk-clear"
-
-#: ../libseahorse/seahorse-prefs.glade.h:42
 msgid "minutes"
 msgstr " 分間"
 
@@ -1134,6 +1129,7 @@ msgstr "公開可能なセキュア・シェルの鍵"
 
 #: ../libseahorse/seahorse-ssh-operation.c:135
 #: ../libseahorse/seahorse-ssh-operation.c:697
+#, c-format
 msgid "The SSH command was terminated unexpectedly."
 msgstr "SSH のコマンドが強制終了しました"
 
@@ -1289,20 +1285,20 @@ msgid "_Replace"
 msgstr "上書きする(_R)"
 
 # 参考: http://pgp.iijlab.net/trans/
-#: ../libseahorse/seahorse-validity.c:33 ../src/seahorse-key-properties.c:1106
-#: ../src/seahorse-key-properties.c:1238 ../src/seahorse-key-properties.c:1310
+#: ../libseahorse/seahorse-validity.c:33 ../src/seahorse-key-properties.c:1105
+#: ../src/seahorse-key-properties.c:1237 ../src/seahorse-key-properties.c:1309
 msgid "Never"
 msgstr "信用しない"
 
-#: ../libseahorse/seahorse-validity.c:35 ../src/seahorse-key-properties.c:1113
+#: ../libseahorse/seahorse-validity.c:35 ../src/seahorse-key-properties.c:1112
 msgid "Marginal"
 msgstr "ぎりぎり信用する"
 
-#: ../libseahorse/seahorse-validity.c:37 ../src/seahorse-key-properties.c:1119
+#: ../libseahorse/seahorse-validity.c:37 ../src/seahorse-key-properties.c:1118
 msgid "Full"
 msgstr "完全に信用する"
 
-#: ../libseahorse/seahorse-validity.c:39 ../src/seahorse-key-properties.c:1125
+#: ../libseahorse/seahorse-validity.c:39 ../src/seahorse-key-properties.c:1124
 msgid "Ultimate"
 msgstr "究極に信用する"
 
@@ -1310,7 +1306,7 @@ msgstr "究極に信用する"
 msgid "Disabled"
 msgstr "無効にする"
 
-#: ../libseahorse/seahorse-validity.c:43 ../src/seahorse-key-properties.c:1306
+#: ../libseahorse/seahorse-validity.c:43 ../src/seahorse-key-properties.c:1305
 msgid "Revoked"
 msgstr "失効済み"
 
@@ -1682,6 +1678,7 @@ msgid "Choose Signature File Name for '%s'"
 msgstr "'%s' に対する署名ファイルを選択して下さい"
 
 #: ../plugins/nautilus/seahorse-tool.c:372
+#, c-format
 msgid "Imported key"
 msgstr "鍵のインポートが完了しました"
 
@@ -1702,6 +1699,7 @@ msgstr "'%s' のオリジナル・ファイルを選択して下さい"
 #. * dialogs at the user.
 #.
 #: ../plugins/nautilus/seahorse-tool.c:524
+#, c-format
 msgid "No valid signatures found"
 msgstr "妥当な署名が見つかりませんでした"
 
@@ -2274,7 +2272,7 @@ msgstr "鍵をエキスポートできませんでした"
 msgid "Export public key"
 msgstr "公開鍵を書き出します"
 
-#: ../src/seahorse-key-manager.c:656 ../src/seahorse-key-properties.c:1039
+#: ../src/seahorse-key-manager.c:656 ../src/seahorse-key-properties.c:1038
 #: ../src/seahorse-ssh-key-properties.c:240
 #, c-format
 msgid "Couldn't export key to \"%s\""
@@ -2522,7 +2520,7 @@ msgid "_Trusted Keys"
 msgstr "信用する鍵(_T)"
 
 #: ../src/seahorse-key-manager-store.c:311
-#: ../src/seahorse-key-properties.c:1307
+#: ../src/seahorse-key-properties.c:1306
 msgid "Expired"
 msgstr "期限切れ"
 
@@ -2550,7 +2548,7 @@ msgstr "信用度"
 
 #. The key type column
 #: ../src/seahorse-key-manager-store.c:985
-#: ../src/seahorse-key-properties.c:1285
+#: ../src/seahorse-key-properties.c:1284
 msgid "Type"
 msgstr "種類"
 
@@ -2563,11 +2561,11 @@ msgstr "有効期限"
 msgid "Couldn't change primary user ID"
 msgstr "プライマリのユーザ ID に変更できませんでした"
 
-#: ../src/seahorse-key-properties.c:304 ../src/seahorse-key-properties.c:1437
+#: ../src/seahorse-key-properties.c:304 ../src/seahorse-key-properties.c:1436
 msgid "[Unknown]"
 msgstr "[不明]"
 
-#: ../src/seahorse-key-properties.c:402 ../src/seahorse-key-properties.c:1723
+#: ../src/seahorse-key-properties.c:402 ../src/seahorse-key-properties.c:1722
 msgid "Name/Email"
 msgstr "名前/E-メール"
 
@@ -2588,37 +2586,37 @@ msgstr "(不明)"
 msgid "This key expired on: %s"
 msgstr "この鍵の有効期限: %s"
 
-#: ../src/seahorse-key-properties.c:993 ../src/seahorse-key-properties.c:1387
-#: ../src/seahorse-key-properties.c:1406
+#: ../src/seahorse-key-properties.c:992 ../src/seahorse-key-properties.c:1386
+#: ../src/seahorse-key-properties.c:1405
 msgid "Unable to change trust"
 msgstr "信用度を変更できません"
 
-#: ../src/seahorse-key-properties.c:1014
+#: ../src/seahorse-key-properties.c:1013
 #: ../src/seahorse-ssh-key-properties.c:215
 msgid "Export Complete Key"
 msgstr "鍵のエキスポート"
 
-#: ../src/seahorse-key-properties.c:1282
+#: ../src/seahorse-key-properties.c:1281
 msgid "ID"
 msgstr "ID"
 
-#: ../src/seahorse-key-properties.c:1288
+#: ../src/seahorse-key-properties.c:1287
 msgid "Created"
 msgstr "生成済み"
 
-#: ../src/seahorse-key-properties.c:1291
+#: ../src/seahorse-key-properties.c:1290
 msgid "Expires"
 msgstr "有効期限"
 
-#: ../src/seahorse-key-properties.c:1294
+#: ../src/seahorse-key-properties.c:1293
 msgid "Status"
 msgstr "状態"
 
-#: ../src/seahorse-key-properties.c:1297
+#: ../src/seahorse-key-properties.c:1296
 msgid "Strength"
 msgstr "強度"
 
-#: ../src/seahorse-key-properties.c:1306 ../src/seahorse-key-properties.c:1307
+#: ../src/seahorse-key-properties.c:1305 ../src/seahorse-key-properties.c:1306
 msgid "Good"
 msgstr "良い"
 
@@ -3193,6 +3191,7 @@ msgid "_Resize"
 msgstr "大きさを変更する(_R)"
 
 #: ../src/seahorse-photos.c:125
+#, c-format
 msgid ""
 "This is not a image file, or an unrecognized kind of image file. Try to use "
 "a JPEG image."
