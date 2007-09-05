@@ -554,10 +554,12 @@ seahorse_gkeyring_item_get_use (SeahorseGKeyringItem *git)
     if (git->attributes) {
         val = seahorse_gkeyring_item_get_attribute (git, "seahorse-key-type");
         if (val) {
+			if (strcmp (val, SKEY_PGP_STR) == 0)
+                return SEAHORSE_GKEYRING_USE_PGP;
+#ifdef WITH_SSH
             if (strcmp (val, SKEY_SSH_STR) == 0)
                 return SEAHORSE_GKEYRING_USE_SSH;
-            else if (strcmp (val, SKEY_PGP_STR) == 0)
-                return SEAHORSE_GKEYRING_USE_PGP;
+#endif
         }
     }
     
@@ -574,3 +576,4 @@ seahorse_gkeyring_item_get_cannonical (guint32 item_id)
     buf[BUF_LEN - 1] = 0;
     return g_quark_from_string (buf);
 }
+
