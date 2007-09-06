@@ -430,6 +430,12 @@ setup_keyservers (SeahorseWidget *swidget)
     gtk_container_add (GTK_CONTAINER (w), GTK_WIDGET (skc));
     gtk_widget_show_all (w);
     
+    
+    w = glade_xml_get_widget(swidget->xml, "auto_retrieve");
+    g_return_if_fail (w != NULL);
+    
+    seahorse_check_button_gconf_attach (GTK_CHECK_BUTTON(w), AUTORETRIEVE_KEY);
+    
     w = glade_xml_get_widget(swidget->xml, "auto_sync");
     g_return_if_fail (w != NULL);
     
