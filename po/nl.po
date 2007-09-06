@@ -23,8 +23,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Seahorse\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-20 18:45+0200\n"
-"PO-Revision-Date: 2007-07-20 18:48+0200\n"
+"POT-Creation-Date: 2007-09-06 23:21+0200\n"
+"PO-Revision-Date: 2007-09-06 23:21+0200\n"
 "Last-Translator: Wouter Bolsterlee <wbolster@gnome.org>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
@@ -32,12 +32,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../agent/seahorse-agent-actions.c:134
+#: ../agent/seahorse-agent-actions.c:133
 #: ../libseahorse/seahorse-ssh-operation.c:445
 msgid "Passphrase:"
 msgstr "Wachtwoordzin:"
 
-#: ../agent/seahorse-agent-actions.c:135
+#: ../agent/seahorse-agent-actions.c:134
 msgid "Please enter a passphrase to use."
 msgstr "Geef een wachtwoordzin om te gebruiken."
 
@@ -59,7 +59,7 @@ msgstr "Onverwerkbare sleutel-ID"
 msgid "Unknown/Invalid Key"
 msgstr "Onbekende/Ongeldige sleutel"
 
-#: ../agent/seahorse-agent-cache.c:532
+#: ../agent/seahorse-agent-cache.c:531
 #, c-format
 msgid "PGP Key: %s"
 msgstr "PGP-Sleutel: %s"
@@ -210,10 +210,12 @@ msgid "Key is not a valid recipient for encryption: %s"
 msgstr "Sleutel niet geldig als geadresseerde van versleuteling: ‘%s’"
 
 #: ../daemon/seahorse-service-crypto.c:156
+#, c-format
 msgid "No recipients specified"
 msgstr "Geen geadresseerden opgegeven"
 
 #: ../daemon/seahorse-service-crypto.c:222
+#, c-format
 msgid "No signer specified"
 msgstr "Geen ondertekenaar opgegeven"
 
@@ -354,8 +356,8 @@ msgid ""
 "If set to true, then the default key will always be added to an encryption "
 "recipients list."
 msgstr ""
-"Indien ingeschakeld zal de standaardsleutel altijd aan een de lijst van"
-"geadresseerden van de versleuteling worden toegevoegd."
+"Indien ingeschakeld zal de standaardsleutel altijd aan een de lijst "
+"vangeadresseerden van de versleuteling worden toegevoegd."
 
 #: ../data/seahorse.schemas.in.h:20
 msgid "Last key server search pattern"
@@ -391,10 +393,11 @@ msgstr ""
 
 #: ../data/seahorse.schemas.in.h:27
 msgid ""
-"Set to 'false' to disable display of the cache reminder in the notification "
+"Set to 'true' to enable display of the cache reminder in the notification "
 "area of your panel."
 msgstr ""
-"Indien ingeschakeld wordt de buffergeheugensteun op het paneel getoond."
+"Indien ingeschakeld wordt de buffergeheugensteun in het mededelingengebied "
+"van het paneel getoond."
 
 #: ../data/seahorse.schemas.in.h:28
 msgid ""
@@ -588,7 +591,7 @@ msgstr "Naam"
 
 #: ../libcryptui/cryptui-key-list.c:120
 #: ../src/seahorse-key-manager-store.c:966
-#: ../src/seahorse-key-properties.c:1726
+#: ../src/seahorse-key-properties.c:1725
 msgid "Key ID"
 msgstr "Sleutel-id"
 
@@ -701,6 +704,7 @@ msgstr[0] "%i sleutel geïmporteerd"
 msgstr[1] "%i sleutels geïmporteerd"
 
 #: ../libseahorse/seahorse-notification.c:565
+#, c-format
 msgid "Imported a key for"
 msgid_plural "Imported keys for"
 msgstr[0] "Sleutel geïmporteerd voor"
@@ -783,6 +787,7 @@ msgid "Confirm:"
 msgstr "Wachtwoord (nogmaals):"
 
 #: ../libseahorse/seahorse-passphrase.c:325
+#, c-format
 msgid "Wrong passphrase."
 msgstr "Wachtwoordzin incorrect."
 
@@ -821,7 +826,7 @@ msgid "Private PGP Key"
 msgstr "Privé PGP-sleutel"
 
 #: ../libseahorse/seahorse-pgp-key.c:694 ../libseahorse/seahorse-validity.c:31
-#: ../src/seahorse-key-properties.c:1100
+#: ../src/seahorse-key-properties.c:1099
 msgid "Unknown"
 msgstr "Onbekend"
 
@@ -889,7 +894,7 @@ msgstr "Aangepast"
 msgid "None: Don't publish keys"
 msgstr "Geen: Geen sleutels publiceren"
 
-#: ../libseahorse/seahorse-prefs.c:681
+#: ../libseahorse/seahorse-prefs.c:687
 msgid "None. Prompt for a key."
 msgstr "Geen (om sleutel vragen)"
 
@@ -1095,14 +1100,6 @@ msgid "_Share my keys with others on my network"
 msgstr "Mijn sleutels _delen met anderen op mijn netwerk"
 
 #: ../libseahorse/seahorse-prefs.glade.h:40
-msgid "gtk-apply"
-msgstr "gtk-apply"
-
-#: ../libseahorse/seahorse-prefs.glade.h:41
-msgid "gtk-clear"
-msgstr "gtk-clear"
-
-#: ../libseahorse/seahorse-prefs.glade.h:42
 msgid "minutes"
 msgstr "minuten"
 
@@ -1168,6 +1165,7 @@ msgstr "Publieke SSH-sleutel"
 
 #: ../libseahorse/seahorse-ssh-operation.c:135
 #: ../libseahorse/seahorse-ssh-operation.c:697
+#, c-format
 msgid "The SSH command was terminated unexpectedly."
 msgstr "De SSH-opdracht is onverwacht beëindigd."
 
@@ -1323,20 +1321,20 @@ msgstr ""
 msgid "_Replace"
 msgstr "_Vervangen"
 
-#: ../libseahorse/seahorse-validity.c:33 ../src/seahorse-key-properties.c:1106
-#: ../src/seahorse-key-properties.c:1238 ../src/seahorse-key-properties.c:1310
+#: ../libseahorse/seahorse-validity.c:33 ../src/seahorse-key-properties.c:1105
+#: ../src/seahorse-key-properties.c:1237 ../src/seahorse-key-properties.c:1309
 msgid "Never"
 msgstr "Nooit"
 
-#: ../libseahorse/seahorse-validity.c:35 ../src/seahorse-key-properties.c:1113
+#: ../libseahorse/seahorse-validity.c:35 ../src/seahorse-key-properties.c:1112
 msgid "Marginal"
 msgstr "Gedeeltelijk"
 
-#: ../libseahorse/seahorse-validity.c:37 ../src/seahorse-key-properties.c:1119
+#: ../libseahorse/seahorse-validity.c:37 ../src/seahorse-key-properties.c:1118
 msgid "Full"
 msgstr "Volledig"
 
-#: ../libseahorse/seahorse-validity.c:39 ../src/seahorse-key-properties.c:1125
+#: ../libseahorse/seahorse-validity.c:39 ../src/seahorse-key-properties.c:1124
 msgid "Ultimate"
 msgstr "Meer dan volledig"
 
@@ -1344,7 +1342,7 @@ msgstr "Meer dan volledig"
 msgid "Disabled"
 msgstr "Uitgeschakeld"
 
-#: ../libseahorse/seahorse-validity.c:43 ../src/seahorse-key-properties.c:1306
+#: ../libseahorse/seahorse-validity.c:43 ../src/seahorse-key-properties.c:1305
 msgid "Revoked"
 msgstr "Ingetrokken"
 
@@ -1723,6 +1721,7 @@ msgid "Choose Signature File Name for '%s'"
 msgstr "Naam voor handtekeningbestand kiezen voor ‘%s’"
 
 #: ../plugins/nautilus/seahorse-tool.c:372
+#, c-format
 msgid "Imported key"
 msgstr "Geïmporteerde sleutel"
 
@@ -1743,6 +1742,7 @@ msgstr "Oorspronkelijk bestand kiezen voor ‘%s’"
 #. * dialogs at the user.
 #.
 #: ../plugins/nautilus/seahorse-tool.c:524
+#, c-format
 msgid "No valid signatures found"
 msgstr "Geen geldige handtekening gevonden"
 
@@ -2319,7 +2319,7 @@ msgstr "Kon sleutel(s) niet exporteren"
 msgid "Export public key"
 msgstr "Publieke sleutel exporteren"
 
-#: ../src/seahorse-key-manager.c:656 ../src/seahorse-key-properties.c:1039
+#: ../src/seahorse-key-manager.c:656 ../src/seahorse-key-properties.c:1038
 #: ../src/seahorse-ssh-key-properties.c:240
 #, c-format
 msgid "Couldn't export key to \"%s\""
@@ -2570,7 +2570,7 @@ msgid "_Trusted Keys"
 msgstr "_Vertrouwde sleutels:"
 
 #: ../src/seahorse-key-manager-store.c:311
-#: ../src/seahorse-key-properties.c:1307
+#: ../src/seahorse-key-properties.c:1306
 msgid "Expired"
 msgstr "Verlopen"
 
@@ -2598,7 +2598,7 @@ msgstr "Vertrouwen"
 
 #. The key type column
 #: ../src/seahorse-key-manager-store.c:985
-#: ../src/seahorse-key-properties.c:1285
+#: ../src/seahorse-key-properties.c:1284
 msgid "Type"
 msgstr "Type"
 
@@ -2611,11 +2611,11 @@ msgstr "Verloopdatum"
 msgid "Couldn't change primary user ID"
 msgstr "Kon primaire gebruiker-id niet wijzigen"
 
-#: ../src/seahorse-key-properties.c:304 ../src/seahorse-key-properties.c:1437
+#: ../src/seahorse-key-properties.c:304 ../src/seahorse-key-properties.c:1436
 msgid "[Unknown]"
 msgstr "[Onbekend]"
 
-#: ../src/seahorse-key-properties.c:402 ../src/seahorse-key-properties.c:1723
+#: ../src/seahorse-key-properties.c:402 ../src/seahorse-key-properties.c:1722
 msgid "Name/Email"
 msgstr "Naam/E-mail"
 
@@ -2636,37 +2636,37 @@ msgstr "(onbekend)"
 msgid "This key expired on: %s"
 msgstr "Deze sleutel is verlopen op %s"
 
-#: ../src/seahorse-key-properties.c:993 ../src/seahorse-key-properties.c:1387
-#: ../src/seahorse-key-properties.c:1406
+#: ../src/seahorse-key-properties.c:992 ../src/seahorse-key-properties.c:1386
+#: ../src/seahorse-key-properties.c:1405
 msgid "Unable to change trust"
 msgstr "Kon vertrouwen niet aanpassen"
 
-#: ../src/seahorse-key-properties.c:1014
+#: ../src/seahorse-key-properties.c:1013
 #: ../src/seahorse-ssh-key-properties.c:215
 msgid "Export Complete Key"
 msgstr "Volledige sleutel exporteren"
 
-#: ../src/seahorse-key-properties.c:1282
+#: ../src/seahorse-key-properties.c:1281
 msgid "ID"
 msgstr "ID"
 
-#: ../src/seahorse-key-properties.c:1288
+#: ../src/seahorse-key-properties.c:1287
 msgid "Created"
 msgstr "Aangemaakt"
 
-#: ../src/seahorse-key-properties.c:1291
+#: ../src/seahorse-key-properties.c:1290
 msgid "Expires"
 msgstr "Verloopdatum"
 
-#: ../src/seahorse-key-properties.c:1294
+#: ../src/seahorse-key-properties.c:1293
 msgid "Status"
 msgstr "Status"
 
-#: ../src/seahorse-key-properties.c:1297
+#: ../src/seahorse-key-properties.c:1296
 msgid "Strength"
 msgstr "Sterkte"
 
-#: ../src/seahorse-key-properties.c:1306 ../src/seahorse-key-properties.c:1307
+#: ../src/seahorse-key-properties.c:1305 ../src/seahorse-key-properties.c:1306
 msgid "Good"
 msgstr "Goed"
 
@@ -3253,6 +3253,7 @@ msgid "_Resize"
 msgstr "Her_schalen"
 
 #: ../src/seahorse-photos.c:125
+#, c-format
 msgid ""
 "This is not a image file, or an unrecognized kind of image file. Try to use "
 "a JPEG image."
@@ -3585,3 +3586,9 @@ msgstr "_Gebruikersnaam:"
 #: ../src/seahorse-ssh-upload.glade.h:9
 msgid "_Set Up"
 msgstr "In_stellen"
+
+#~ msgid "gtk-apply"
+#~ msgstr "gtk-apply"
+
+#~ msgid "gtk-clear"
+#~ msgstr "gtk-clear"
