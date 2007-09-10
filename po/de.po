@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse2 cvs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-08-12 13:54+0200\n"
-"PO-Revision-Date: 2007-08-12 13:56+0200\n"
+"POT-Creation-Date: 2007-09-10 12:43+0200\n"
+"PO-Revision-Date: 2007-09-10 12:43+0200\n"
 "Last-Translator: Tim Bordemann <t.bordemann@web.de>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -16,12 +16,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../agent/seahorse-agent-actions.c:134
+#: ../agent/seahorse-agent-actions.c:133
 #: ../libseahorse/seahorse-ssh-operation.c:445
 msgid "Passphrase:"
 msgstr "Kennwort:"
 
-#: ../agent/seahorse-agent-actions.c:135
+#: ../agent/seahorse-agent-actions.c:134
 msgid "Please enter a passphrase to use."
 msgstr "Bitte geben Sie das zu verwendende Kennwort ein."
 
@@ -30,7 +30,7 @@ msgstr "Bitte geben Sie das zu verwendende Kennwort ein."
 msgid "couldn't read gpg configuration, will try to create"
 msgstr ""
 "Die GPG-Konfiguration konnte nicht gelesen werden. Es wird versucht, sie neu "
-"zu erstellen."
+"anzulegen."
 
 #: ../agent/seahorse-agent.c:119
 #, c-format
@@ -45,7 +45,7 @@ msgstr "Unlesbare Schlüsselkennung"
 msgid "Unknown/Invalid Key"
 msgstr "Unbekannter oder ungültiger Schlüssel"
 
-#: ../agent/seahorse-agent-cache.c:532
+#: ../agent/seahorse-agent-cache.c:531
 #, c-format
 msgid "PGP Key: %s"
 msgstr "PGP-Schlüssel: %s"
@@ -99,7 +99,7 @@ msgstr ""
 
 #: ../agent/seahorse-agent-main.c:60
 msgid "Execute other arguments on the command line"
-msgstr "Andere Argumente auf der Kommandozeile ausführen"
+msgstr "Andere Argumente in der Befehlszeile ausführen"
 
 #: ../agent/seahorse-agent-main.c:64
 msgid "Allow GPG agent request from any display"
@@ -115,7 +115,7 @@ msgstr "Duplikat (Fork) des Prozesses konnte nicht erzeugt werden."
 
 #: ../agent/seahorse-agent-main.c:95 ../daemon/seahorse-daemon.c:78
 msgid "couldn't create new process group"
-msgstr "Neue Prozess-Gruppe konnte nicht erstellt werden."
+msgstr "Neue Prozess-Gruppe konnte nicht angelegt werden."
 
 #: ../agent/seahorse-agent-main.c:227 ../daemon/seahorse-daemon.c:195
 #: ../plugins/applet/seahorse-applet.c:1017
@@ -195,10 +195,12 @@ msgid "Key is not a valid recipient for encryption: %s"
 msgstr "Dieser Schlüssel ist kein gültiger Empfänger zum Verschlüsseln: %s"
 
 #: ../daemon/seahorse-service-crypto.c:156
+#, c-format
 msgid "No recipients specified"
 msgstr "Keine Empfänger angegeben."
 
 #: ../daemon/seahorse-service-crypto.c:222
+#, c-format
 msgid "No signer specified"
 msgstr "Keine Signierer angegeben."
 
@@ -291,7 +293,7 @@ msgstr ""
 #: ../data/seahorse.schemas.in.h:10
 msgid "Display cache reminder in the notification area"
 msgstr ""
-"Im Benachrichtigungsfeld ein Icon zur Erinnerung von Zwischenspeicherungen "
+"Im Benachrichtigungsfeld ein Symbol zur Erinnerung von Zwischenspeicherungen "
 "anzeigen"
 
 #: ../data/seahorse.schemas.in.h:11
@@ -379,15 +381,15 @@ msgid ""
 "the panel applet icon."
 msgstr ""
 "Status des Inhalts der Zwischenablage (verschlüsselt, signiert, etc …) durch "
-"das Symbol im Benachrichtigungsfeld anzeigen."
+"das Symbol im Applet anzeigen."
 
 #: ../data/seahorse.schemas.in.h:27
 msgid ""
-"Set to 'false' to disable display of the cache reminder in the notification "
+"Set to 'true' to enable display of the cache reminder in the notification "
 "area of your panel."
 msgstr ""
-"Deaktivieren Sie dies, damit kein Icon über die Zwischenspeicherung im "
-"Benachrichtigungsfeld angezeigt wird."
+"Diesen Wert auf »TRUE« setzen, damit kein Symbol im Panel angezeigt wird,"
+"welches über den Status der Zwischenspeicherung informiert."
 
 #: ../data/seahorse.schemas.in.h:28
 msgid ""
@@ -399,7 +401,7 @@ msgstr ""
 
 #: ../data/seahorse.schemas.in.h:29
 msgid "Show clipboard state in panel"
-msgstr "Zeige den Status der Zwischenablage im Benachrichtigungsfeld an"
+msgstr "Zeige den Status der Zwischenablage im Panel an"
 
 #: ../data/seahorse.schemas.in.h:30
 msgid "Show expires column in key manager"
@@ -590,7 +592,7 @@ msgstr "Name"
 
 #: ../libcryptui/cryptui-key-list.c:120
 #: ../src/seahorse-key-manager-store.c:966
-#: ../src/seahorse-key-properties.c:1726
+#: ../src/seahorse-key-properties.c:1725
 msgid "Key ID"
 msgstr "Schlüsselkennung"
 
@@ -705,6 +707,7 @@ msgstr[0] "%i Schlüssel importiert."
 msgstr[1] "%i Schlüssel importiert."
 
 #: ../libseahorse/seahorse-notification.c:565
+#, c-format
 msgid "Imported a key for"
 msgid_plural "Imported keys for"
 msgstr[0] "Ein Schlüssel importiert für"
@@ -786,6 +789,7 @@ msgid "Confirm:"
 msgstr "Wiederholung:"
 
 #: ../libseahorse/seahorse-passphrase.c:325
+#, c-format
 msgid "Wrong passphrase."
 msgstr "Falsches Kennwort"
 
@@ -824,7 +828,7 @@ msgid "Private PGP Key"
 msgstr "Geheimer PGP-Schlüssel"
 
 #: ../libseahorse/seahorse-pgp-key.c:694 ../libseahorse/seahorse-validity.c:31
-#: ../src/seahorse-key-properties.c:1100
+#: ../src/seahorse-key-properties.c:1099
 msgid "Unknown"
 msgstr "Unbekannt"
 
@@ -892,7 +896,7 @@ msgstr "Benutzerdefiniert"
 msgid "None: Don't publish keys"
 msgstr "Keiner: Schlüssel nicht veröffentlichen"
 
-#: ../libseahorse/seahorse-prefs.c:681
+#: ../libseahorse/seahorse-prefs.c:687
 msgid "None. Prompt for a key."
 msgstr "Keiner. Jedes Mal nachfragen."
 
@@ -973,8 +977,8 @@ msgid ""
 "Changing the master password failed.  Make certain that you entered the "
 "correct original master password."
 msgstr ""
-"Das Ändern des Passworts ist fehlgeschlagen. Stellen Sie sicher, dass Sie "
-"das Passwort korrekt eingegeben haben."
+"Das Ändern des Passworts ist gescheitert. Stellen Sie sicher, dass Sie das "
+"Passwort korrekt eingegeben haben."
 
 #: ../libseahorse/seahorse-prefs.glade.h:13
 msgid "Confirm Master Password:"
@@ -988,7 +992,7 @@ msgstr "Einstellungen"
 
 #: ../libseahorse/seahorse-prefs.glade.h:15
 msgid "Encryption Settings"
-msgstr "Einstellungen"
+msgstr "Einstellungen zur Verschlüsselung"
 
 #: ../libseahorse/seahorse-prefs.glade.h:16
 msgid "GNOME Keyring"
@@ -1099,14 +1103,6 @@ msgid "_Share my keys with others on my network"
 msgstr "_Meine Schlüssel über das Netzwerk freigeben"
 
 #: ../libseahorse/seahorse-prefs.glade.h:40
-msgid "gtk-apply"
-msgstr "gtk-apply"
-
-#: ../libseahorse/seahorse-prefs.glade.h:41
-msgid "gtk-clear"
-msgstr "gtk-clear"
-
-#: ../libseahorse/seahorse-prefs.glade.h:42
 msgid "minutes"
 msgstr "Minuten"
 
@@ -1172,6 +1168,7 @@ msgstr "Öffentlicher SSH-Schlüssel"
 
 #: ../libseahorse/seahorse-ssh-operation.c:135
 #: ../libseahorse/seahorse-ssh-operation.c:697
+#, c-format
 msgid "The SSH command was terminated unexpectedly."
 msgstr "Der SSH-Befehl wurde unerwartet beendet."
 
@@ -1267,8 +1264,8 @@ msgstr "Nicht verfügbarer Schlüssel"
 #: ../libseahorse/seahorse-util.c:172
 msgid "Decryption failed. You probably do not have the decryption key."
 msgstr ""
-"Die Entschlüsselung ist fehlgeschlagen. Vermutlich fehlt Ihnen der "
-"dazugehörige Schlüssel."
+"Die Entschlüsselung ist gescheitert. Vermutlich fehlt Ihnen der dazugehörige "
+"Schlüssel."
 
 #: ../libseahorse/seahorse-util.c:222
 msgid "%Y-%m-%d"
@@ -1328,20 +1325,20 @@ msgstr ""
 msgid "_Replace"
 msgstr "_Ersetzen"
 
-#: ../libseahorse/seahorse-validity.c:33 ../src/seahorse-key-properties.c:1106
-#: ../src/seahorse-key-properties.c:1238 ../src/seahorse-key-properties.c:1310
+#: ../libseahorse/seahorse-validity.c:33 ../src/seahorse-key-properties.c:1105
+#: ../src/seahorse-key-properties.c:1237 ../src/seahorse-key-properties.c:1309
 msgid "Never"
 msgstr "Nie"
 
-#: ../libseahorse/seahorse-validity.c:35 ../src/seahorse-key-properties.c:1113
+#: ../libseahorse/seahorse-validity.c:35 ../src/seahorse-key-properties.c:1112
 msgid "Marginal"
 msgstr "Geringfügig"
 
-#: ../libseahorse/seahorse-validity.c:37 ../src/seahorse-key-properties.c:1119
+#: ../libseahorse/seahorse-validity.c:37 ../src/seahorse-key-properties.c:1118
 msgid "Full"
 msgstr "Vollkommen"
 
-#: ../libseahorse/seahorse-validity.c:39 ../src/seahorse-key-properties.c:1125
+#: ../libseahorse/seahorse-validity.c:39 ../src/seahorse-key-properties.c:1124
 msgid "Ultimate"
 msgstr "Absolut"
 
@@ -1349,7 +1346,7 @@ msgstr "Absolut"
 msgid "Disabled"
 msgstr "Deaktiviert"
 
-#: ../libseahorse/seahorse-validity.c:43 ../src/seahorse-key-properties.c:1306
+#: ../libseahorse/seahorse-validity.c:43 ../src/seahorse-key-properties.c:1305
 msgid "Revoked"
 msgstr "Widerrufen"
 
@@ -1403,8 +1400,8 @@ msgstr ""
 "Christian Meyer <chrisime@gnome.org>\n"
 "Martin Bretschneider <martin.bretschneider@gmx.de>\n"
 "Manuel Borchers <m.borchers@gnome-de.org>\n"
-"Tim Bordemann <t.bordemann@web.de>\n"
-"Henrik Kröger <henrikkroeger@googlemail.com>"
+"Henrik Kröger <henrikkroeger@googlemail.com>\n"
+"Tim Bordemann <t.bordemann@web.de>"
 
 #: ../plugins/applet/seahorse-applet.c:319 ../src/seahorse-key-manager.c:877
 msgid "Seahorse Project Homepage"
@@ -1433,7 +1430,7 @@ msgstr "Die Zwischenablage konnte nicht verschlüsselt werden."
 #: ../plugins/epiphany/seahorse-extension.c:296
 #: ../plugins/gedit/seahorse-gedit.c:611
 msgid "Choose Key to Sign with"
-msgstr "Wählen Sie einen Schlüssel zum Signieren."
+msgstr "Wählen Sie einen Schlüssel zum Signieren aus."
 
 #: ../plugins/applet/seahorse-applet.c:450
 msgid "Signed Text"
@@ -1525,7 +1522,7 @@ msgstr "_Verschlüsseln oder Signieren der Zwischenablage"
 
 #: ../plugins/applet/seahorse-applet-preferences.glade.h:5
 msgid "_Show clipboard state in panel"
-msgstr "_Zeige den Status der Zwischenablage im Benachrichtigungsfeld an"
+msgstr "_Zeige den Status der Zwischenablage im Panel an"
 
 #: ../plugins/epiphany/seahorse-extension.c:602
 msgid "_Encrypt"
@@ -1728,6 +1725,7 @@ msgid "Choose Signature File Name for '%s'"
 msgstr "Name für die Signaturdatei von »%s« auswählen"
 
 #: ../plugins/nautilus/seahorse-tool.c:372
+#, c-format
 msgid "Imported key"
 msgstr "Importierter Schlüssel"
 
@@ -1748,6 +1746,7 @@ msgstr "Original-Datei für »%s« auswählen"
 #. * dialogs at the user.
 #.
 #: ../plugins/nautilus/seahorse-tool.c:524
+#, c-format
 msgid "No valid signatures found"
 msgstr "Keine gültigen Signaturen gefunden."
 
@@ -1991,7 +1990,7 @@ msgstr "Benutzerkennung hinzufügen"
 
 #: ../src/seahorse-add-uid.glade.h:2
 msgid "Create the new user ID"
-msgstr "Neue Benutzerkennung erstellen"
+msgstr "Neue Benutzerkennung anlegen"
 
 #: ../src/seahorse-add-uid.glade.h:3 ../src/seahorse-pgp-generate.glade.h:8
 msgid "Full _Name:"
@@ -2324,7 +2323,7 @@ msgstr "Konnte den Schlüssel nicht exportieren."
 msgid "Export public key"
 msgstr "Öffentlichen Schlüssel exportieren."
 
-#: ../src/seahorse-key-manager.c:656 ../src/seahorse-key-properties.c:1039
+#: ../src/seahorse-key-manager.c:656 ../src/seahorse-key-properties.c:1038
 #: ../src/seahorse-ssh-key-properties.c:240
 #, c-format
 msgid "Couldn't export key to \"%s\""
@@ -2576,7 +2575,7 @@ msgid "_Trusted Keys"
 msgstr "_Vertrauenswürdige Schlüssel"
 
 #: ../src/seahorse-key-manager-store.c:311
-#: ../src/seahorse-key-properties.c:1307
+#: ../src/seahorse-key-properties.c:1306
 msgid "Expired"
 msgstr "Abgelaufen"
 
@@ -2604,7 +2603,7 @@ msgstr "Vertrauen"
 
 #. The key type column
 #: ../src/seahorse-key-manager-store.c:985
-#: ../src/seahorse-key-properties.c:1285
+#: ../src/seahorse-key-properties.c:1284
 msgid "Type"
 msgstr "Typ"
 
@@ -2617,11 +2616,11 @@ msgstr "Ablaufdatum"
 msgid "Couldn't change primary user ID"
 msgstr "Die primäre Benutzerkennung konnte nicht geändert werden."
 
-#: ../src/seahorse-key-properties.c:304 ../src/seahorse-key-properties.c:1437
+#: ../src/seahorse-key-properties.c:304 ../src/seahorse-key-properties.c:1436
 msgid "[Unknown]"
 msgstr "[Unbekannt]"
 
-#: ../src/seahorse-key-properties.c:402 ../src/seahorse-key-properties.c:1723
+#: ../src/seahorse-key-properties.c:402 ../src/seahorse-key-properties.c:1722
 msgid "Name/Email"
 msgstr "Name / E-Mail"
 
@@ -2642,37 +2641,37 @@ msgstr "(unbekannt)"
 msgid "This key expired on: %s"
 msgstr "Dieser Schlüssel ist am %s abgelaufen."
 
-#: ../src/seahorse-key-properties.c:993 ../src/seahorse-key-properties.c:1387
-#: ../src/seahorse-key-properties.c:1406
+#: ../src/seahorse-key-properties.c:992 ../src/seahorse-key-properties.c:1386
+#: ../src/seahorse-key-properties.c:1405
 msgid "Unable to change trust"
 msgstr "Konnte die Vertrauenseinstellung nicht ändern."
 
-#: ../src/seahorse-key-properties.c:1014
+#: ../src/seahorse-key-properties.c:1013
 #: ../src/seahorse-ssh-key-properties.c:215
 msgid "Export Complete Key"
 msgstr "Gesamten Schlüssel exportieren"
 
-#: ../src/seahorse-key-properties.c:1282
+#: ../src/seahorse-key-properties.c:1281
 msgid "ID"
 msgstr "Kennung"
 
-#: ../src/seahorse-key-properties.c:1288
+#: ../src/seahorse-key-properties.c:1287
 msgid "Created"
 msgstr "Erzeugt"
 
-#: ../src/seahorse-key-properties.c:1291
+#: ../src/seahorse-key-properties.c:1290
 msgid "Expires"
 msgstr "Läuft ab"
 
-#: ../src/seahorse-key-properties.c:1294
+#: ../src/seahorse-key-properties.c:1293
 msgid "Status"
 msgstr "Status"
 
-#: ../src/seahorse-key-properties.c:1297
+#: ../src/seahorse-key-properties.c:1296
 msgid "Strength"
 msgstr "Länge"
 
-#: ../src/seahorse-key-properties.c:1306 ../src/seahorse-key-properties.c:1307
+#: ../src/seahorse-key-properties.c:1305 ../src/seahorse-key-properties.c:1306
 msgid "Good"
 msgstr "Gut"
 
@@ -3255,6 +3254,7 @@ msgid "_Resize"
 msgstr "_Größe anpassen"
 
 #: ../src/seahorse-photos.c:125
+#, c-format
 msgid ""
 "This is not a image file, or an unrecognized kind of image file. Try to use "
 "a JPEG image."
@@ -3272,7 +3272,7 @@ msgstr "JPEG-Dateien"
 
 #: ../src/seahorse-photos.c:258
 msgid "Choose Photo to Add to Key"
-msgstr "Wählen Sie ein Foto, um es zum Schlüssel hinzuzufügen."
+msgstr "Wählen Sie ein Foto aus, um es dem Schlüssel hinzuzufügen."
 
 #: ../src/seahorse-photos.c:285 ../src/seahorse-photos.c:289
 msgid "Couldn't add photo"
@@ -3463,17 +3463,17 @@ msgid ""
 "for each of them."
 msgstr ""
 "Ein SSH-Schlüssel ermöglicht es Ihnen, sich per SSH auf einem sicheren Weg\n"
-"an Rechnern anzumelden; Passwörter\n"
-"werden dadurch nicht mehr benötigt. "
+"an Rechnern anzumelden; Passwörter werden dadurch nicht mehr benötigt. "
 
 #: ../src/seahorse-ssh-generate.glade.h:8
 msgid ""
 "If there is already a computer you want to use this key with, you \n"
 "can set up that computer to recognize your key now. "
 msgstr ""
-"Falls es bereits einen Rechner gibt, für den Sie diesen Schlüssel nutzen "
-"möchten, können\n"
-"Sie den Rechner jetzt so einrichten, dass er diesen Schlüssel erkennt."
+"Falls es bereits einen Rechner gibt, für den Sie diesen Schlüssel nutzen\n"
+"möchten, können Sie den Rechner jetzt so einrichten, dass er diesen "
+"Schlüssel\n"
+"erkennt."
 
 #: ../src/seahorse-ssh-generate.glade.h:11
 msgid "New Secure Shell Key"
@@ -3521,7 +3521,7 @@ msgstr "<b>Schlüsselkennung:</b>"
 
 #: ../src/seahorse-ssh-key-properties.glade.h:6
 msgid "<b>Location:</b>"
-msgstr "<b>Speicherort:</b>"
+msgstr "<b>Ort:</b>"
 
 #: ../src/seahorse-ssh-key-properties.glade.h:8
 msgid "<b>Strength:</b>"
@@ -3534,7 +3534,7 @@ msgstr "<b>Vertrauen</b>"
 #: ../src/seahorse-ssh-key-properties.glade.h:14
 #, no-c-format
 msgid "<i>This only applies to the '%s'</i> account."
-msgstr "<i>Dies gilt nur für den Accont »%s«.</i>"
+msgstr "<i>Dies gilt nur für den Account »%s«.</i>"
 
 #: ../src/seahorse-ssh-key-properties.glade.h:17
 msgid "E_xport Complete Key"
@@ -3585,11 +3585,17 @@ msgstr "_Rechnername:"
 
 #: ../src/seahorse-ssh-upload.glade.h:8
 msgid "_Login Name:"
-msgstr "_Login-Name:"
+msgstr "_Anmeldename:"
 
 #: ../src/seahorse-ssh-upload.glade.h:9
 msgid "_Set Up"
 msgstr "_Einrichten"
+
+#~ msgid "gtk-apply"
+#~ msgstr "gtk-apply"
+
+#~ msgid "gtk-clear"
+#~ msgstr "gtk-clear"
 
 #~ msgid "initial temporary item"
 #~ msgstr "temporärer Anfangseintrag"
