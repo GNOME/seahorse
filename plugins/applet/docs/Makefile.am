@@ -5,4 +5,4 @@ DOC_MODULE = seahorse-applet
 DOC_ENTITIES = legal.xml
 DOC_INCLUDES = 
 DOC_FIGURES = 
-DOC_LINGUAS = es it sv
+DOC_LINGUAS = es it sv vi
