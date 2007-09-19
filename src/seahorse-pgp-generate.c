@@ -65,7 +65,6 @@ on_response (GtkDialog *dialog, guint response, SeahorseWidget *swidget)
     const gchar *email;
     const gchar *comment;
     const gchar *pass;
-    const gchar *t;
     gpgme_error_t gerr;
     gint sel;
     guint type;
@@ -114,7 +113,7 @@ on_response (GtkDialog *dialog, guint response, SeahorseWidget *swidget)
     g_return_if_fail (widget != NULL);
     bits = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (widget));
     if (bits < 512 || bits > 8192) {
-        g_message ("invalid key size: %s defaulting to 2048", t);
+        g_message ("invalid key size: %s defaulting to 2048", available_algorithms[sel].desc);
         bits = 2048;
     }
     

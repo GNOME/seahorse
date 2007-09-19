@@ -366,7 +366,7 @@ prepare_dialog (FilesCtx *ctx, guint nfolders, guint nfiles, gchar* pkguri, gcha
     GtkWidget *combo;
     gchar *msg;
     gboolean sep;
-    gint sel, i;
+    gint i;
     GtkCellRenderer *cell;
     GtkTreeModel *store;
 	FRFileType *save_type_list;
@@ -407,7 +407,6 @@ prepare_dialog (FilesCtx *ctx, guint nfolders, guint nfiles, gchar* pkguri, gcha
         combo = glade_xml_get_widget (swidget->xml, "package-extension");
         store = GTK_TREE_MODEL (gtk_list_store_new (1, G_TYPE_STRING));
         gtk_combo_box_set_model (GTK_COMBO_BOX (combo), store); 
-        fprintf(stderr, "Model added\n");  
         g_object_unref (store);
 
         gtk_cell_layout_clear (GTK_CELL_LAYOUT (combo));
@@ -428,9 +427,9 @@ prepare_dialog (FilesCtx *ctx, guint nfolders, guint nfiles, gchar* pkguri, gcha
 		        gtk_combo_box_set_active (GTK_COMBO_BOX (combo), i);
     	}
     
-        if(sep) {
+        if(sep == FALSE) {
             gtk_widget_grab_focus (w);
-            gtk_editable_select_region (GTK_EDITABLE (w), 0, sel);
+            gtk_editable_select_region (GTK_EDITABLE (w), 0, strlen (pkg));
         }
 
         /* Setup the main radio buttons */

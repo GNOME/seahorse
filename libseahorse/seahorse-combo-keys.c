@@ -76,7 +76,7 @@ key_changed (SeahorseKeyset *skset, SeahorseKey *skey, SeahorseKeyChange change,
     
     while (valid) {
         gtk_tree_model_get (model, &iter,
-                            COMBO_POINTER, pntr,
+                            COMBO_POINTER, &pntr,
                             -1);
                             
         skeyfrommodel = SEAHORSE_KEY (pntr);
@@ -109,10 +109,11 @@ key_removed (SeahorseKeyset *skset, SeahorseKey *skey, GtkWidget *closure,
     g_return_if_fail (combo != NULL);
 
     model = gtk_combo_box_get_model (combo);
+    valid = gtk_tree_model_get_iter_first (model, &iter);
     
     while (valid) {
         gtk_tree_model_get (model, &iter,
-                            COMBO_POINTER, pntr,
+                            COMBO_POINTER, &pntr,
                             -1);
                             
         skeyfrommodel = SEAHORSE_KEY (pntr);

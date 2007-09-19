@@ -994,8 +994,10 @@ set_keyring_passphrase (SeahorseKey *skey, const gchar *pass)
     const gchar *id;
     gchar *display;
     
-    g_assert (id != NULL);
+    g_assert ((skey != NULL) && (pass != NULL));
+    
     id = seahorse_key_get_rawid (seahorse_key_get_keyid (skey));
+    g_assert (id != NULL);
     display = seahorse_key_get_display_name (skey);
     
     attributes = gnome_keyring_attribute_list_new ();
