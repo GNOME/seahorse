@@ -24,6 +24,7 @@
 #include <signal.h>
 
 #include <gnome.h>
+#include <libgnomevfs/gnome-vfs.h>
 
 #include "seahorse-gtkstock.h"
 #include "seahorse-util.h"
@@ -274,7 +275,7 @@ seahorse_tool_progress_update (gdouble fract, const gchar *message)
     gchar *msg;
     
     if (message != NULL)
-        msg = gnome_vfs_unescape_string (message);
+        msg = gnome_vfs_unescape_string (message, NULL);
     else
         msg = g_strdup (""); 
 
