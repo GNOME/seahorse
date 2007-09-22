@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-28 06:50+0900\n"
-"PO-Revision-Date: 2007-03-01 09:35+0900\n"
+"POT-Creation-Date: 2007-09-22 21:48+0900\n"
+"PO-Revision-Date: 2007-09-22 22:08+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Korean <gnome-kr-hackers@lists.kldp.net>\n"
 "MIME-Version: 1.0\n"
@@ -14,14 +14,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: ../agent/seahorse-agent-actions.c:134
+#: ../agent/seahorse-agent-actions.c:133
 #: ../libseahorse/seahorse-ssh-operation.c:445
 msgid "Passphrase:"
-msgstr "열쇠글:"
+msgstr "암호:"
 
-#: ../agent/seahorse-agent-actions.c:135
+#: ../agent/seahorse-agent-actions.c:134
 msgid "Please enter a passphrase to use."
-msgstr "사용할 열쇠글을 입력하십시오."
+msgstr "사용할 암호를 입력하십시오."
 
 #. Warn and put in defaults
 #: ../agent/seahorse-agent.c:101
@@ -41,7 +41,7 @@ msgstr "파싱할 수 없는 키 아이디"
 msgid "Unknown/Invalid Key"
 msgstr "알 수 없거나 잘못된 키"
 
-#: ../agent/seahorse-agent-cache.c:533
+#: ../agent/seahorse-agent-cache.c:531
 #, c-format
 msgid "PGP Key: %s"
 msgstr "PGP 키: %s"
@@ -50,9 +50,7 @@ msgstr "PGP 키: %s"
 msgid ""
 "<b>Warning</b>: Your system is not configured to cache passphrases in secure "
 "memory."
-msgstr ""
-"<b>경고</b>: 이 시스템은 메모리 안에 열쇠글을 임시 저장할 때 안전한 메모리를 "
-"사용할 수 없게 되어 있습니다."
+msgstr "<b>경고</b>: 이 시스템은 메모리 안에 암호를 임시 저장할 때 안전한 메모리를 사용할 수 없게 되어 있습니다."
 
 #: ../agent/seahorse-agent-cache.glade.h:2
 msgid "Cache _Preferences"
@@ -64,11 +62,11 @@ msgstr "임시 저장한 암호화 키"
 
 #: ../agent/seahorse-agent-cache.glade.h:4
 msgid "Change passphrase cache settings."
-msgstr "열쇠글 임시 저장 설정을 바꿉니다."
+msgstr "암호 임시 저장 설정을 바꿉니다."
 
 #: ../agent/seahorse-agent-cache.glade.h:5
 msgid "Clear passphrase cache"
-msgstr "열쇠글 임시 저장 비우기"
+msgstr "암호 임시 저장 비우기"
 
 #: ../agent/seahorse-agent-cache.glade.h:6
 msgid "_Clear Cache"
@@ -82,64 +80,64 @@ msgstr "창 표시(_S)"
 msgid "Do not daemonize seahorse-agent"
 msgstr "seahorse-agent를 데몬으로 실행하지 않습니다"
 
-#: ../agent/seahorse-agent-main.c:53
+#: ../agent/seahorse-agent-main.c:54
 msgid "Print variables in for a C type shell"
 msgstr "C 쉘에 호환되도록 변수를 표시"
 
-#: ../agent/seahorse-agent-main.c:56
+#: ../agent/seahorse-agent-main.c:57
 msgid ""
 "Display variables instead of editing conf files (gpg.conf, SSH agent socket)"
 msgstr ""
 "설정 파일을 (gpg.conf, SSH 에이전트 소켓) 편집하지 않고 변수를 표시합니다."
 
-#: ../agent/seahorse-agent-main.c:59
+#: ../agent/seahorse-agent-main.c:60
 msgid "Execute other arguments on the command line"
 msgstr "명령행에서 기타 인자를 실행합니다"
 
-#: ../agent/seahorse-agent-main.c:62
+#: ../agent/seahorse-agent-main.c:64
 msgid "Allow GPG agent request from any display"
 msgstr "모든 디스플레이에서 GPG 에이전트 요청을 받아들입니다"
 
-#: ../agent/seahorse-agent-main.c:65
+#: ../agent/seahorse-agent-main.c:67
 msgid "command..."
 msgstr "<명령어>..."
 
-#: ../agent/seahorse-agent-main.c:87 ../daemon/seahorse-daemon.c:72
+#: ../agent/seahorse-agent-main.c:89 ../daemon/seahorse-daemon.c:72
 msgid "couldn't fork process"
 msgstr "프로세스를 포크할 수 없습니다"
 
-#: ../agent/seahorse-agent-main.c:93 ../daemon/seahorse-daemon.c:78
+#: ../agent/seahorse-agent-main.c:95 ../daemon/seahorse-daemon.c:78
 msgid "couldn't create new process group"
 msgstr "새 프로세스 그룹을 만들 수 없습니다"
 
-#: ../agent/seahorse-agent-main.c:225 ../daemon/seahorse-daemon.c:195
-#: ../plugins/applet/seahorse-applet.c:1010
+#: ../agent/seahorse-agent-main.c:227 ../daemon/seahorse-daemon.c:195
+#: ../plugins/applet/seahorse-applet.c:1023
 #: ../plugins/nautilus/seahorse-tool.c:570 ../src/main.c:59
 msgid "couldn't drop privileges properly"
 msgstr "관리자 권한을 올바르게 포기하지 못했습니다"
 
-#: ../agent/seahorse-agent-main.c:232
+#: ../agent/seahorse-agent-main.c:238
 msgid "Encryption Key Agent (Seahorse)"
 msgstr "암호화 키 에이전트 (시호스)"
 
-#: ../agent/seahorse-agent-main.c:240
+#: ../agent/seahorse-agent-main.c:246
 msgid "no command specified to execute"
 msgstr "실행할 명령어를 지정하지 않았습니다"
 
 #: ../agent/seahorse-agent-prompt.c:216
 msgid "Authorize Passphrase Access"
-msgstr "열쇠글 접속 인증"
+msgstr "암호 접속 인증"
 
-#: ../agent/seahorse-agent-prompt.c:251
+#: ../agent/seahorse-agent-prompt.c:252
 msgid "The passphrase is cached in memory."
-msgstr "열쇠글을 메모리에 임시 저장합니다."
+msgstr "암호를 메모리에 임시 저장합니다."
 
 # check box
-#: ../agent/seahorse-agent-prompt.c:256
+#: ../agent/seahorse-agent-prompt.c:257
 msgid "Always ask me before using a cached passphrase"
-msgstr "임시 저장한 열쇠글을 사용할 때 항상 물어보기"
+msgstr "임시 저장한 암호를 사용할 때 항상 물어보기"
 
-#: ../agent/seahorse-agent-prompt.c:273
+#: ../agent/seahorse-agent-prompt.c:274
 msgid "_Authorize"
 msgstr "인증(_A)"
 
@@ -156,12 +154,12 @@ msgstr "seahorse-daemon을 데몬으로 실행하지 않습니다"
 msgid "Encryption Daemon (Seahorse)"
 msgstr "암호화 데몬 (시호스)"
 
-#: ../daemon/seahorse-service.c:103 ../daemon/seahorse-service.c:127
+#: ../daemon/seahorse-service.c:103 ../daemon/seahorse-service.c:128
 #, c-format
 msgid "Invalid or unrecognized key type: %s"
 msgstr "키 종류가 잘못되었거나 종류를 알 수 없습니다: %s"
 
-#: ../daemon/seahorse-service.c:181 ../daemon/seahorse-service-keyset.c:123
+#: ../daemon/seahorse-service.c:186 ../daemon/seahorse-service-keyset.c:123
 #: ../daemon/seahorse-service-keyset.c:152
 #, c-format
 msgid "Invalid or unrecognized key: %s"
@@ -191,10 +189,12 @@ msgid "Key is not a valid recipient for encryption: %s"
 msgstr "해당 키는 암호화 수신자로 사용할 수 없습니다: %s"
 
 #: ../daemon/seahorse-service-crypto.c:156
+#, c-format
 msgid "No recipients specified"
 msgstr "수신자를 지정하지 않았습니다"
 
 #: ../daemon/seahorse-service-crypto.c:222
+#, c-format
 msgid "No signer specified"
 msgstr "서명에 사용할 키를 지정하지 않았습니다"
 
@@ -257,102 +257,104 @@ msgstr ""
 "다."
 
 #: ../data/seahorse.schemas.in.h:4
+msgid "Auto Retrieve Keys"
+msgstr "자동 키 가져오기"
+
+#: ../data/seahorse.schemas.in.h:5
 msgid "Auto Sync Keys"
 msgstr "자동 키 동기화"
 
-#: ../data/seahorse.schemas.in.h:5
+#: ../data/seahorse.schemas.in.h:6
 msgid "Controls the visibility of the expires column for the key manager."
 msgstr "키 관리자의 만료 열을 표시할 지 조정합니다."
 
-#: ../data/seahorse.schemas.in.h:6
+#: ../data/seahorse.schemas.in.h:7
 msgid "Controls the visibility of the trust column for the key manager."
 msgstr "키 관리자의 신뢰 열을 표시할 지 조정합니다."
 
-#: ../data/seahorse.schemas.in.h:7
+#: ../data/seahorse.schemas.in.h:8
 msgid "Controls the visibility of the type column for the key manager."
 msgstr "키 관리자의 종류 열을 표시할 지 조정합니다."
 
-#: ../data/seahorse.schemas.in.h:8
+#: ../data/seahorse.schemas.in.h:9
 msgid "Controls the visibility of the validity column for the key manager."
 msgstr "키 관리자의 확인 열을 표시할 지 조정합니다."
 
-#: ../data/seahorse.schemas.in.h:9
+#: ../data/seahorse.schemas.in.h:10
 msgid "Display cache reminder in the notification area"
 msgstr "알림 영역에 임시 저장 알림 표시"
 
-#: ../data/seahorse.schemas.in.h:10
+#: ../data/seahorse.schemas.in.h:11
 msgid "Display clipboard after decrypting"
 msgstr "복호화한 다음에 클립보드 표시"
 
-#: ../data/seahorse.schemas.in.h:11
+#: ../data/seahorse.schemas.in.h:12
 msgid "Display clipboard after encrypting"
 msgstr "암호화한 다음에 클립보드 표시"
 
-#: ../data/seahorse.schemas.in.h:12
+#: ../data/seahorse.schemas.in.h:13
 msgid "Enable DNS-SD sharing"
 msgstr "DNS-SD 공유 사용"
 
-#: ../data/seahorse.schemas.in.h:13
+#: ../data/seahorse.schemas.in.h:14
 msgid ""
-"Enables DNS-SD (Apple Bonjour) sharing of keys. seahorse-daemon must running "
-"and must be built with HKP and DNS-SD support."
+"Enables DNS-SD (Apple Bonjour) sharing of keys. seahorse-daemon must be "
+"running and must be built with HKP and DNS-SD support."
 msgstr ""
 "DNS-SD(애플 봉쥬르)를 통해 키를 공유합니다.  seahorse-daemon을 실행해야 하고 "
 "HKP 및 DNS-SD 기능을 포함해 빌드해야 합니다."
 
-#: ../data/seahorse.schemas.in.h:14
-msgid "Expire passwords in the cache"
-msgstr "임시 저장한 열쇠글 만료"
-
 #: ../data/seahorse.schemas.in.h:15
+msgid "Expire passwords in the cache"
+msgstr "임시 저장한 암호 만료"
+
+#: ../data/seahorse.schemas.in.h:16
 msgid "ID of the default key"
 msgstr "기본 키의 아이디"
 
-#: ../data/seahorse.schemas.in.h:16
+#: ../data/seahorse.schemas.in.h:17
 msgid ""
 "If set to 'gnome' uses gnome-keyring to cache passwords. When set to "
 "'internal' uses internal cache."
-msgstr ""
-"'gnome'이라고 설정하면 열쇠글을 임시 저장할 때 gnome-keyring을 사용합니다. "
-"'internal'이라고 설정하면 내부 임시 저장을 사용합니다."
+msgstr "'gnome'이라고 설정하면 암호를 임시 저장할 때 gnome-keyring을 사용합니다. 'internal'이라고 설정하면 내부 임시 저장을 사용합니다."
 
-#: ../data/seahorse.schemas.in.h:17
+#: ../data/seahorse.schemas.in.h:18
 msgid ""
 "If set to true, then files encrypted with seahorse will be ASCII armor "
 "encoded."
 msgstr "참이면, 시호스가 암호화한 파일은 아스키 형식으로 인코딩합니다."
 
-#: ../data/seahorse.schemas.in.h:18
+#: ../data/seahorse.schemas.in.h:19
 msgid ""
 "If set to true, then the default key will always be added to an encryption "
 "recipients list."
 msgstr "참이면, 기본 키를 항상 암호화 수신자 목록에 넣습니다."
 
-#: ../data/seahorse.schemas.in.h:19
+#: ../data/seahorse.schemas.in.h:20
 msgid "Last key server search pattern"
 msgstr "최근의 키 서버 찾기 문자열"
 
-#: ../data/seahorse.schemas.in.h:20
+#: ../data/seahorse.schemas.in.h:21
 msgid "Last key servers used"
 msgstr "최근에 사용한 키 서버"
 
-#: ../data/seahorse.schemas.in.h:21
+#: ../data/seahorse.schemas.in.h:22
 msgid "Last key used to sign a message."
 msgstr "최근에 메세지를 서명할 때 사용한 키."
 
-#: ../data/seahorse.schemas.in.h:22
+#: ../data/seahorse.schemas.in.h:23
 msgid "PGP Key servers"
 msgstr "PGP 키 서버"
 
-#: ../data/seahorse.schemas.in.h:23
-msgid "Prompt before using GPG passwords in cache"
-msgstr "임시 저장한 GPG 열쇠글을 사용하기 전에 확인 질문"
-
 #: ../data/seahorse.schemas.in.h:24
+msgid "Prompt before using GPG passwords in cache"
+msgstr "임시 저장한 GPG 암호를 사용하기 전에 확인 질문"
+
+#: ../data/seahorse.schemas.in.h:25
 msgid "Publish keys to this key server."
 msgstr "이 키 서버에 키 공개."
 
-#: ../data/seahorse.schemas.in.h:25
+#: ../data/seahorse.schemas.in.h:26
 msgid ""
 "Reflect the contents of the clipboard (whether encrypted, signed, etc...) in "
 "the panel applet icon."
@@ -360,39 +362,39 @@ msgstr ""
 "클립보드의 내용을 (암호화되었는지, 서명되었는지 등등..) 패널 애플릿 아이콘에 "
 "표시합니다."
 
-#: ../data/seahorse.schemas.in.h:26
-msgid ""
-"Set to 'false' to disable display of the cache reminder in the notification "
-"area of your panel."
-msgstr "거짓이면 패널의 알림 영역에 임시 저장 알림을 표시하지 않습니다."
-
 #: ../data/seahorse.schemas.in.h:27
+msgid ""
+"Set to 'true' to enable display of the cache reminder in the notification "
+"area of your panel."
+msgstr "참으로 설정하면 패널의 알림 영역에 남은 캐시를 표시합니다."
+
+#: ../data/seahorse.schemas.in.h:28
 msgid ""
 "Set to 'true' to have seahorse-agent prompt before giving out passwords it "
 "has cached."
-msgstr "참이면 seahorse-agent가 임시 저장한 열쇠글을 사용하기 전에 물어봅니다."
+msgstr "참이면 seahorse-agent가 임시 저장한 암호를 사용하기 전에 물어봅니다."
 
-#: ../data/seahorse.schemas.in.h:28
+#: ../data/seahorse.schemas.in.h:29
 msgid "Show clipboard state in panel"
 msgstr "패널에 클립보드 상태 표시"
 
-#: ../data/seahorse.schemas.in.h:29
+#: ../data/seahorse.schemas.in.h:30
 msgid "Show expires column in key manager"
 msgstr "키 관리자에서 만료 열 표시"
 
-#: ../data/seahorse.schemas.in.h:30
+#: ../data/seahorse.schemas.in.h:31
 msgid "Show trust column in key manager"
 msgstr "키 관리자에서 신뢰 열 표시"
 
-#: ../data/seahorse.schemas.in.h:31
+#: ../data/seahorse.schemas.in.h:32
 msgid "Show type column in key manager"
 msgstr "키 관리자에서 종류 열 표시"
 
-#: ../data/seahorse.schemas.in.h:32
+#: ../data/seahorse.schemas.in.h:33
 msgid "Show validity column in key manager"
 msgstr "키 관리자에서 확인 열 표시"
 
-#: ../data/seahorse.schemas.in.h:33
+#: ../data/seahorse.schemas.in.h:34
 msgid ""
 "Specify the column to sort the recipients window by. Columns are: 'name' and "
 "'id'. Put a '-' in front of the column name to sort in descending order."
@@ -400,7 +402,7 @@ msgstr ""
 "수신자 창에서 어떤 열에 맞춰 정렬할 지 지정합니다. 열은 'name'과 'id'가 있습"
 "니다. 내림차순으로 정렬하려면 열 이름 앞에 '-' 기호를 붙이십시오."
 
-#: ../data/seahorse.schemas.in.h:34
+#: ../data/seahorse.schemas.in.h:35
 msgid ""
 "Specify the column to sort the seahorse key manager main window by. Columns "
 "are: 'name', 'id', 'validity', 'expires', 'trust', and 'type'. Put a '-' in "
@@ -410,58 +412,56 @@ msgstr ""
 "'name', 'id', 'validity', 'expires', 'trust'와 'type'이 있습니다. 내림차순으"
 "로 정렬하려면 열 이름 앞에 '-' 기호를 붙이십시오."
 
-#: ../data/seahorse.schemas.in.h:35
+#: ../data/seahorse.schemas.in.h:36
 msgid "The ID of the last secret key used to sign a message."
 msgstr "최근에 메세지를 서명하는 데 사용한 비밀 키의 아이디."
 
-#: ../data/seahorse.schemas.in.h:36
+#: ../data/seahorse.schemas.in.h:37
 msgid "The column to sort the recipients by"
 msgstr "수신자 창을 정렬할 때 사용할 열"
 
-#: ../data/seahorse.schemas.in.h:37
+#: ../data/seahorse.schemas.in.h:38
 msgid "The column to sort the seahorse keys by"
 msgstr "시호스 키 창을 정렬할 때 사용할 열"
 
-#: ../data/seahorse.schemas.in.h:38
+#: ../data/seahorse.schemas.in.h:39
 msgid ""
 "The key server to publish PGP keys to. Or empty to suppress publishing of "
 "PGP keys."
 msgstr "PGP 키를 공개할 키 서버. 비워두면 PGP 키를 공개하지 않습니다."
 
-#: ../data/seahorse.schemas.in.h:39
+#: ../data/seahorse.schemas.in.h:40
 msgid ""
 "The last key server a search was performed against or empty for all key "
 "servers."
 msgstr "최근에 찾기에 사용한 키 서버, 빈 문자열이면 모든 키 서버."
 
-#: ../data/seahorse.schemas.in.h:40
+#: ../data/seahorse.schemas.in.h:41
 msgid "The last search pattern searched for against a key server."
 msgstr "최근에 키 서버에서 찾은 찾기 문자열."
 
-#: ../data/seahorse.schemas.in.h:41
-msgid "The time (in minutes) to cache GPG passwords"
-msgstr "GPG 열쇠글을 임시 저장할 시간 (분 단위)"
-
 #: ../data/seahorse.schemas.in.h:42
-msgid ""
-"This is the amount of time, specified in minutes, to cache GPG passwords in "
-"seahorse-agent."
-msgstr "seahorse-agent에서 GPG 열쇠글을 임시 저장할 시간입니다. 분 단위."
+msgid "The time (in minutes) to cache GPG passwords"
+msgstr "GPG 암호를 임시 저장할 시간 (분 단위)"
 
 #: ../data/seahorse.schemas.in.h:43
 msgid ""
-"This option enables the GPG password cache in the seahorse-agent program. "
-"The 'use-agent' setting in gpg.conf affects this setting."
-msgstr ""
-"seahorse-agent 프로그램의 GPG 열쇠글 임시 저장 기능을 사용합니다. gpg.conf의 "
-"'use-agent' 설정이 이 설정에 영향을 미칩니다."
+"This is the amount of time, specified in minutes, to cache GPG passwords in "
+"seahorse-agent."
+msgstr "seahorse-agent에서 GPG 암호를 임시 저장할 시간입니다. 분 단위."
 
 #: ../data/seahorse.schemas.in.h:44
+msgid ""
+"This option enables the GPG password cache in the seahorse-agent program. "
+"The 'use-agent' setting in gpg.conf affects this setting."
+msgstr "seahorse-agent 프로그램의 GPG 암호 임시 저장 기능을 사용합니다. gpg.conf의 'use-agent' 설정이 이 설정에 영향을 미칩니다."
+
+#: ../data/seahorse.schemas.in.h:45
 msgid ""
 "This specifies the default key to use for certain operations, mainly signing."
 msgstr "특정 동작에 사용할 (주로 서명 용도) 기본 키를 지정합니다."
 
-#: ../data/seahorse.schemas.in.h:45
+#: ../data/seahorse.schemas.in.h:46
 msgid ""
 "When set seahorse-agent will try to automatically load the users SSH keys "
 "when needed. This is equivalent to using the ssh-add utility."
@@ -469,37 +469,41 @@ msgstr ""
 "참이면 seahorse-agent에서 필요할 때마다 사용자의 SSH 키를 자동으로 읽어들입니"
 "다.  ssh-add 유틸리티를 사용하는 것과 마찬가지입니다."
 
-#: ../data/seahorse.schemas.in.h:46
+#: ../data/seahorse.schemas.in.h:47
 msgid ""
 "When set, seahorse-agent expires GPG passwords in its cache after a period "
 "of time."
 msgstr ""
-"참이면 일정 시간이 지난 후에 seahorse-agent가 임시 저장한 GPG 열쇠글을 지웁니"
+"참이면 일정 시간이 지난 후에 seahorse-agent가 임시 저장한 GPG 암호를 지웁니"
 "다."
 
-#: ../data/seahorse.schemas.in.h:47
-msgid "Where to store cached passwords."
-msgstr "열쇠글을 임시 저장할 위치."
-
 #: ../data/seahorse.schemas.in.h:48
+msgid "Where to store cached passwords."
+msgstr "암호를 임시 저장할 위치."
+
+#: ../data/seahorse.schemas.in.h:49
+msgid "Whether or not keys should be automatically retrieved from key servers."
+msgstr "키 서버에서 키를 자동으로 가져올 지 여부."
+
+#: ../data/seahorse.schemas.in.h:50
 msgid ""
 "Whether or not modified keys should be automatically synced with the default "
 "key server."
 msgstr "내가 바꾼 키를 기본 키 서버의 내용과 자동으로 동기화할 지 여부."
 
-#: ../data/seahorse.schemas.in.h:49
+#: ../data/seahorse.schemas.in.h:51
 msgid "Whether the GPG password cache is enabled"
-msgstr "GPG 열쇠글을 임시 저장할 지 여부"
+msgstr "GPG 암호를 임시 저장할 지 여부"
 
-#: ../data/seahorse.schemas.in.h:50
+#: ../data/seahorse.schemas.in.h:52
 msgid "Whether to always encrypt to default key"
 msgstr "항상 기본 키에 대해 암호화할 지 여부"
 
-#: ../data/seahorse.schemas.in.h:51
+#: ../data/seahorse.schemas.in.h:53
 msgid "Whether to automatically load SSH keys on demand."
 msgstr "자동으로 필요에 따라 SSH 키를 읽어들일 지 여부."
 
-#: ../data/seahorse.schemas.in.h:52
+#: ../data/seahorse.schemas.in.h:54
 msgid "Whether to use ASCII Armor"
 msgstr "아스키 형식을 사용할 지 여부"
 
@@ -532,13 +536,13 @@ msgstr "없음 (서명하지 않음)"
 #. TODO: Icons
 #: ../libcryptui/cryptui-key-list.c:117
 #: ../src/seahorse-key-manager-store.c:954
-#: ../src/seahorse-key-properties.c:866
+#: ../src/seahorse-key-properties.c:871
 msgid "Name"
 msgstr "이름"
 
 #: ../libcryptui/cryptui-key-list.c:120
 #: ../src/seahorse-key-manager-store.c:966
-#: ../src/seahorse-key-properties.c:1714
+#: ../src/seahorse-key-properties.c:1725
 msgid "Key ID"
 msgstr "키 아이디"
 
@@ -566,10 +570,6 @@ msgstr "서버의 호스트 이름 혹은 IP 주소."
 #: ../libseahorse/seahorse-add-keyserver.glade.h:6
 msgid "The port to access the server on."
 msgstr "서버에 접속할 때 쓸 포트."
-
-#: ../libseahorse/seahorse-add-keyserver.glade.h:7
-msgid "initial temporary item"
-msgstr "최초 임시 항목"
 
 #: ../libseahorse/seahorse-hkp-source.c:358
 #, c-format
@@ -603,110 +603,118 @@ msgstr "다음에서 키를 찾는 중입니다: %s"
 #. The ldap_cb and chain_cb were set in seahorse_ldap_operation_start
 #: ../libseahorse/seahorse-hkp-source.c:857
 #: ../libseahorse/seahorse-hkp-source.c:929
-#: ../libseahorse/seahorse-ldap-source.c:650
+#: ../libseahorse/seahorse-ldap-source.c:656
 #, c-format
 msgid "Connecting to: %s"
 msgstr "다음에 연결하는 중입니다: %s"
 
-#: ../libseahorse/seahorse-ldap-source.c:443
+#: ../libseahorse/seahorse-ldap-source.c:449
 #, c-format
 msgid "Couldn't communicate with '%s': %s"
 msgstr "'%s'에 통신할 수 없습니다: %s"
 
-#: ../libseahorse/seahorse-ldap-source.c:623
+#: ../libseahorse/seahorse-ldap-source.c:629
 #, c-format
 msgid "Couldn't resolve address: %s"
 msgstr "주소의 IP를 찾을 수 없습니다: %s"
 
-#: ../libseahorse/seahorse-ldap-source.c:699
+#: ../libseahorse/seahorse-ldap-source.c:705
 #, c-format
 msgid "Resolving server address: %s"
 msgstr "서버 주소의 IP를 찾는 중입니다: %s"
 
-#: ../libseahorse/seahorse-ldap-source.c:873
+#: ../libseahorse/seahorse-ldap-source.c:883
 #, c-format
 msgid "Searching for keys containing '%s'..."
 msgstr "'%s'이(가) 들어 있는 키를 찾는 중입니다..."
 
-#: ../libseahorse/seahorse-ldap-source.c:900
+#: ../libseahorse/seahorse-ldap-source.c:910
 #, c-format
 msgid "Searching for key id '%s'..."
 msgstr "'%s' 키 아이디를 찾는 중입니다..."
 
-#: ../libseahorse/seahorse-ldap-source.c:1001
+#: ../libseahorse/seahorse-ldap-source.c:1011
 msgid "Retrieving remote keys..."
 msgstr "원격 키를 가져오는 중입니다..."
 
-#: ../libseahorse/seahorse-ldap-source.c:1134
+#: ../libseahorse/seahorse-ldap-source.c:1144
 msgid "Sending keys to key server..."
 msgstr "키를 키 서버에 보내는 중입니다..."
 
-#: ../libseahorse/seahorse-notification.c:557
-#: ../libseahorse/seahorse-notification.c:573
+#: ../libseahorse/seahorse-notification.c:559
+#: ../libseahorse/seahorse-notification.c:589
+msgid "Key Imported"
+msgid_plural "Keys Imported"
+msgstr[0] "키를 가져왔습니다"
+
+#: ../libseahorse/seahorse-notification.c:563
+#: ../libseahorse/seahorse-notification.c:588
 #, c-format
 msgid "Imported %i key"
 msgid_plural "Imported %i keys"
 msgstr[0] "키 %i개를 가져왔습니다"
 
-#: ../libseahorse/seahorse-notification.c:558
-#: ../libseahorse/seahorse-notification.c:574
-msgid "Key Imported"
-msgid_plural "Keys Imported"
+#: ../libseahorse/seahorse-notification.c:565
+#, c-format
+msgid "Imported a key for"
+msgid_plural "Imported keys for"
 msgstr[0] "키를 가져왔습니다"
 
-#: ../libseahorse/seahorse-notification.c:601
+#. TRANSLATORS: <key id='xxx'> is a custom markup tag, do not translate.
+#: ../libseahorse/seahorse-notification.c:617
 #, c-format
 msgid "Signed by <i><key id='%s'/> <b>expired</b></i> on %s."
 msgstr "서명한 키: <i><key id='%s'/>, %s에 <b>만료됨</b></i>."
 
-#: ../libseahorse/seahorse-notification.c:602
+#: ../libseahorse/seahorse-notification.c:618
 msgid "Invalid Signature"
 msgstr "잘못된 서명"
 
-#: ../libseahorse/seahorse-notification.c:607
+#: ../libseahorse/seahorse-notification.c:624
 #, c-format
 msgid "Signed by <i><key id='%s'/></i> on %s <b>Expired</b>."
 msgstr "서명한 키: <i>%2$s의 <key id='%1$s'/>, <b>만료됨</b></i>."
 
-#: ../libseahorse/seahorse-notification.c:608
+#: ../libseahorse/seahorse-notification.c:625
 msgid "Expired Signature"
 msgstr "만료된 서명"
 
-#: ../libseahorse/seahorse-notification.c:613
+#: ../libseahorse/seahorse-notification.c:631
 #, c-format
 msgid "Signed by <i><key id='%s'/> <b>Revoked</b></i> on %s."
 msgstr "서명한 키: <i><key id='%s'/>, %s에 <b>철회됨</b></i>."
 
-#: ../libseahorse/seahorse-notification.c:614
+#: ../libseahorse/seahorse-notification.c:632
 msgid "Revoked Signature"
 msgstr "철회한 서명"
 
-#: ../libseahorse/seahorse-notification.c:619
+#. TRANSLATORS: <key id='xxx'> is a custom markup tag, do not translate.
+#: ../libseahorse/seahorse-notification.c:638
 #, c-format
 msgid "Signed by <i><key id='%s'/></i> on %s."
 msgstr "서명한 키: <i>%2$s의 <key id='%1$s'/></i>."
 
-#: ../libseahorse/seahorse-notification.c:620
+#: ../libseahorse/seahorse-notification.c:639
 msgid "Good Signature"
 msgstr "올바른 서명"
 
-#: ../libseahorse/seahorse-notification.c:625
+#: ../libseahorse/seahorse-notification.c:644
 msgid "Signing key not in keyring."
 msgstr "서명할 때 쓴 키가 키 모음에 없습니다."
 
-#: ../libseahorse/seahorse-notification.c:626
+#: ../libseahorse/seahorse-notification.c:645
 msgid "Unknown Signature"
 msgstr "알 수 없는 서명"
 
-#: ../libseahorse/seahorse-notification.c:630
+#: ../libseahorse/seahorse-notification.c:649
 msgid "Bad or forged signature. The signed data was modified."
 msgstr "서명이 틀렸거나 조작되었습니다. 서명한 데이터가 바뀌었습니다."
 
-#: ../libseahorse/seahorse-notification.c:631
+#: ../libseahorse/seahorse-notification.c:650
 msgid "Bad Signature"
 msgstr "서명 틀림"
 
-#: ../libseahorse/seahorse-notification.c:639
+#: ../libseahorse/seahorse-notification.c:658
 msgid "Couldn't verify signature."
 msgstr "서명이 올바른 지 확인할 수 없습니다."
 
@@ -716,38 +724,39 @@ msgstr "알림 메세지"
 
 #: ../libseahorse/seahorse-passphrase.c:175
 msgid "Passphrase"
-msgstr "열쇠글"
+msgstr "암호"
 
 #: ../libseahorse/seahorse-passphrase.c:178
 msgid "Password:"
-msgstr "열쇠글:"
+msgstr "암호:"
 
-#: ../libseahorse/seahorse-passphrase.c:240
+#: ../libseahorse/seahorse-passphrase.c:242
 msgid "Confirm:"
 msgstr "다시 입력:"
 
-#: ../libseahorse/seahorse-passphrase.c:323
-msgid "Wrong passphrase."
-msgstr "열쇠글이 틀렸습니다."
-
-#: ../libseahorse/seahorse-passphrase.c:327
+#: ../libseahorse/seahorse-passphrase.c:325
 #, c-format
-msgid "Enter new passphrase for '%s'"
-msgstr "'%s'에 대한 새 열쇠글을 입력하십시오"
+msgid "Wrong passphrase."
+msgstr "암호가 틀렸습니다."
 
 #: ../libseahorse/seahorse-passphrase.c:329
 #, c-format
-msgid "Enter passphrase for '%s'"
-msgstr "'%s'에 대한 열쇠글을 입력하십시오"
+msgid "Enter new passphrase for '%s'"
+msgstr "'%s'에 대한 새 암호를 입력하십시오"
 
-#: ../libseahorse/seahorse-passphrase.c:332
-#: ../src/seahorse-change-passphrase.glade.h:4
-msgid "Enter new passphrase"
-msgstr "새 열쇠글을 입력하십시오"
+#: ../libseahorse/seahorse-passphrase.c:331
+#, c-format
+msgid "Enter passphrase for '%s'"
+msgstr "'%s'에 대한 암호를 입력하십시오"
 
 #: ../libseahorse/seahorse-passphrase.c:334
+#: ../src/seahorse-change-passphrase.glade.h:4
+msgid "Enter new passphrase"
+msgstr "새 암호를 입력하십시오"
+
+#: ../libseahorse/seahorse-passphrase.c:336
 msgid "Enter passphrase"
-msgstr "열쇠글을 입력하십시오"
+msgstr "암호를 입력하십시오"
 
 #: ../libseahorse/seahorse-pgp-key.c:140 ../libseahorse/seahorse-ssh-key.c:112
 #: ../src/seahorse-gkeyring-item.c:231
@@ -765,7 +774,7 @@ msgid "Private PGP Key"
 msgstr "개인 PGP 키"
 
 #: ../libseahorse/seahorse-pgp-key.c:694 ../libseahorse/seahorse-validity.c:31
-#: ../src/seahorse-key-properties.c:1090
+#: ../src/seahorse-key-properties.c:1099
 msgid "Unknown"
 msgstr "알 수 없음"
 
@@ -799,7 +808,7 @@ msgstr ""
 "나 자체 서명을 하지 않았기 때문일 것입니다."
 
 #: ../libseahorse/seahorse-pgp-source.c:942 ../src/seahorse-key-manager.c:454
-#: ../src/seahorse-key-manager.c:500
+#: ../src/seahorse-key-manager.c:502
 msgid "Importing Keys"
 msgstr "키를 가져오는 중"
 
@@ -807,36 +816,36 @@ msgstr "키를 가져오는 중"
 msgid "Exporting Keys"
 msgstr "키를 내보내는 중"
 
-#: ../libseahorse/seahorse-prefs.c:60
+#: ../libseahorse/seahorse-prefs.c:62
 msgid "Not a valid Key Server address."
 msgstr "올바른 키 서버 주소가 아닙니다."
 
-#: ../libseahorse/seahorse-prefs.c:61
+#: ../libseahorse/seahorse-prefs.c:63
 msgid ""
 "For help contact your system adminstrator or the administrator of the key "
 "server."
 msgstr ""
 "도움이 필요하면 시스템 관리자 혹은 해당 키 서버의 관리자에게 문의하십시오."
 
-#: ../libseahorse/seahorse-prefs.c:172
+#: ../libseahorse/seahorse-prefs.c:174
 msgid "URL"
 msgstr "URL"
 
-#: ../libseahorse/seahorse-prefs.c:356
+#: ../libseahorse/seahorse-prefs.c:359
 msgid "Custom"
 msgstr "사용자 설정"
 
-#: ../libseahorse/seahorse-prefs.c:426
+#: ../libseahorse/seahorse-prefs.c:429
 msgid "None: Don't publish keys"
 msgstr "없음: 키를 공개하지 않음"
 
-#: ../libseahorse/seahorse-prefs.c:508
+#: ../libseahorse/seahorse-prefs.c:687
 msgid "None. Prompt for a key."
 msgstr "없음. 어떤 키를 사용할 지 물어봄."
 
 #: ../libseahorse/seahorse-prefs-cache.c:231
 msgid "Couldn't open the Session Properties"
-msgstr "세션 등록 정보를 열 수 없습니다"
+msgstr "세션 속성을 열 수 없습니다"
 
 #: ../libseahorse/seahorse-prefs-cache.c:244
 msgid "Couldn't start the 'seahorse-agent' program"
@@ -855,12 +864,12 @@ msgid ""
 "<b>Note:</b> The 'seahorse-agent' program has been started. This program is "
 "necessary in order to cache passphrases. "
 msgstr ""
-"<b>알림:</b> 'seahorse-agent' 프로그램을 시작했습니다. 열쇠글을 임시 저장하려"
+"<b>알림:</b> 'seahorse-agent' 프로그램을 시작했습니다. 암호를 임시 저장하려"
 "면 이 프로그램이 필요합니다."
 
 #: ../libseahorse/seahorse-prefs.glade.h:3
 msgid "<b>Remember PGP Passphrases</b>"
-msgstr "<b>PGP 열쇠글 기억</b>"
+msgstr "<b>PGP 암호 기억</b>"
 
 #: ../libseahorse/seahorse-prefs.glade.h:4
 msgid "<b>Secure Shell Keys</b>"
@@ -871,13 +880,13 @@ msgid ""
 "<b>Warning:</b> The 'seahorse-agent' program is not running. This program is "
 "necessary in order to cache passphrases. "
 msgstr ""
-"<b>경고:</b> 'seahorse-agent' 프로그램이 동작하고 있지 않습니다. 열쇠글을 임"
+"<b>경고:</b> 'seahorse-agent' 프로그램이 동작하고 있지 않습니다. 암호를 임"
 "시 저장하려면 이 프로그램이 필요합니다."
 
 #: ../libseahorse/seahorse-prefs.glade.h:6
 msgid "<i>A non-supported PGP passphrase caching agent is running.</i>"
 msgstr ""
-"<i>지원하지 않는 PGP 열쇠글 임시 저장 에이전트가 동작하고 있습니다.</i>"
+"<i>지원하지 않는 PGP 암호 임시 저장 에이전트가 동작하고 있습니다.</i>"
 
 #: ../libseahorse/seahorse-prefs.glade.h:7
 msgid "<i>No SSH caching agent is running. Cannot load Secure Shell keys.</i>"
@@ -896,30 +905,69 @@ msgid "Automatically load _Secure Shell keys"
 msgstr "자동으로 보안 쉘 키 읽어들이기(_S)"
 
 #: ../libseahorse/seahorse-prefs.glade.h:10
+msgid "Automatically retrieve keys from key servers."
+msgstr "키 서버에서 키를 자동으로 가져옵니다."
+
+#: ../libseahorse/seahorse-prefs.glade.h:11
 msgid "Automatically synchronize modified keys with key servers. "
 msgstr "자동으로 내용이 바뀐 키를 키 서버와 동기화."
 
-#: ../libseahorse/seahorse-prefs.glade.h:11
+#: ../libseahorse/seahorse-prefs.glade.h:12
+msgid ""
+"Changing the master password failed.  Make certain that you entered the "
+"correct original master password."
+msgstr "마스터 암호 바꾸기가 실패했습니다.  기존 마스터 암호를 제대로 입력했는지 확인하십시오."
+
+#: ../libseahorse/seahorse-prefs.glade.h:13
+msgid "Confirm Master Password:"
+msgstr "마스터 암호 다시 입력:"
+
+#: ../libseahorse/seahorse-prefs.glade.h:14
+#: ../plugins/nautilus/seahorse-pgp-preferences.c:74
+#: ../plugins/nautilus/seahorse-pgp-preferences.desktop.in.h:2
+msgid "Encryption Preferences"
+msgstr "암호화 기본 설정"
+
+#: ../libseahorse/seahorse-prefs.glade.h:15
 msgid "Encryption Settings"
 msgstr "암호화 설정"
 
-#: ../libseahorse/seahorse-prefs.glade.h:12
+#: ../libseahorse/seahorse-prefs.glade.h:16
+msgid "GNOME Keyring"
+msgstr "그놈 키 모음"
+
+#: ../libseahorse/seahorse-prefs.glade.h:17
+msgid ""
+"GNOME Keyring stores passwords, network keys, passphrases and other secrets "
+"required for authentication.  A <b>master password</b> is used to protect "
+"these secrets.  The <b>master password</b> can be changed below."
+msgstr "그놈 키 모음은 암호, 네트워크 키 및 기타 인증에 필요한 비밀 정보들을 저장하고 있습니다.  이러한 사항들을 보호하는 용도로 <b>마스터 암호</b>가 필요합니다.  아래에서 <b>마스터 암호</b>를 바꿀 수 있습니다."
+
+#: ../libseahorse/seahorse-prefs.glade.h:18
 msgid "Key Servers"
 msgstr "키 서버"
 
-#: ../libseahorse/seahorse-prefs.glade.h:13
+#: ../libseahorse/seahorse-prefs.glade.h:19
 msgid "Key Sharing"
 msgstr "키 공유"
 
-#: ../libseahorse/seahorse-prefs.glade.h:14
+#: ../libseahorse/seahorse-prefs.glade.h:20
+msgid "New Master Password:"
+msgstr "새 마스터 암호:"
+
+#: ../libseahorse/seahorse-prefs.glade.h:21
+msgid "Original Master Password:"
+msgstr "예전 마스터 암호:"
+
+#: ../libseahorse/seahorse-prefs.glade.h:22
 msgid "Passphrase Cache"
-msgstr "열쇠글 임시 저장"
+msgstr "암호 임시 저장"
 
-#: ../libseahorse/seahorse-prefs.glade.h:15
+#: ../libseahorse/seahorse-prefs.glade.h:23
 msgid "Session Properties"
-msgstr "세션 등록 정보"
+msgstr "세션 속성"
 
-#: ../libseahorse/seahorse-prefs.glade.h:16
+#: ../libseahorse/seahorse-prefs.glade.h:24
 msgid ""
 "Sharing your keys allows other people on your network to use the keys you've "
 "collected. This means they can automatically encrypt things for you or those "
@@ -933,11 +981,15 @@ msgstr ""
 "\n"
 "<b>알림:</b> 개인 키는 유출되지 않습니다."
 
-#: ../libseahorse/seahorse-prefs.glade.h:19
+#: ../libseahorse/seahorse-prefs.glade.h:27
 msgid "Start seahorse-agent"
 msgstr "seahorse-agent 시작"
 
-#: ../libseahorse/seahorse-prefs.glade.h:20
+#: ../libseahorse/seahorse-prefs.glade.h:28
+msgid "The master password was successfully changed."
+msgstr "마스터 암호를 성공적으로 바꿨습니다."
+
+#: ../libseahorse/seahorse-prefs.glade.h:29
 msgid ""
 "To avoid manually starting the 'seahorse-agent' in the future\n"
 "add it to the Session Manager. "
@@ -945,43 +997,43 @@ msgstr ""
 "나중에도 계속 'seahorse-agent'를 수동으로 시작하지 않으려면\n"
 "세션 관리자에 'seahorse-agent'를 더하십시오."
 
-#: ../libseahorse/seahorse-prefs.glade.h:22
+#: ../libseahorse/seahorse-prefs.glade.h:31
 msgid "When _encrypting, always include myself as a recipient"
 msgstr "암호화할 때 항상 자기 자신을 수신자로 넣기(_E)"
 
-#: ../libseahorse/seahorse-prefs.glade.h:23
+#: ../libseahorse/seahorse-prefs.glade.h:32
 msgid "_Always remember passphrases whenever logged in"
-msgstr "로그인할 때마다 항상 열쇠글 기억(_A)"
+msgstr "로그인할 때마다 항상 암호 기억(_A)"
 
-#: ../libseahorse/seahorse-prefs.glade.h:24
+#: ../libseahorse/seahorse-prefs.glade.h:33
 msgid "_Ask me before using a cached passphrase"
-msgstr "임시 저장한 열쇠글을 사용할 때 물어보기(_A)"
+msgstr "임시 저장한 암호를 사용할 때 물어보기(_A)"
 
-#: ../libseahorse/seahorse-prefs.glade.h:25
+#: ../libseahorse/seahorse-prefs.glade.h:34
 msgid "_Default Key:"
 msgstr "기본 키(_D):"
 
-#: ../libseahorse/seahorse-prefs.glade.h:26
-msgid "_Find Keys Using:"
+#: ../libseahorse/seahorse-prefs.glade.h:35
+msgid "_Find Keys Via:"
 msgstr "키를 찾을 때 사용(_F):"
 
-#: ../libseahorse/seahorse-prefs.glade.h:27
+#: ../libseahorse/seahorse-prefs.glade.h:36
 msgid "_Never remember passphrases"
-msgstr "열쇠글을 기억하지 않기(_N)"
+msgstr "암호를 기억하지 않기(_N)"
 
-#: ../libseahorse/seahorse-prefs.glade.h:28
+#: ../libseahorse/seahorse-prefs.glade.h:37
 msgid "_Publish Keys To:"
 msgstr "키를 공개할 위치(_P):"
 
-#: ../libseahorse/seahorse-prefs.glade.h:29
+#: ../libseahorse/seahorse-prefs.glade.h:38
 msgid "_Remember passphrases for"
-msgstr "열쇠글을 다음 시간동안 기억(_R): "
+msgstr "암호를 다음 시간동안 기억(_R): "
 
-#: ../libseahorse/seahorse-prefs.glade.h:30
+#: ../libseahorse/seahorse-prefs.glade.h:39
 msgid "_Share my keys with others on my network"
 msgstr "내 키를 네트워크의 다른 사람들과 공유(_S)"
 
-#: ../libseahorse/seahorse-prefs.glade.h:31
+#: ../libseahorse/seahorse-prefs.glade.h:40
 msgid "minutes"
 msgstr "분"
 
@@ -997,96 +1049,11 @@ msgstr "진행 상태"
 msgid "Progress Title"
 msgstr "진행 제목"
 
-#: ../libseahorse/seahorse-secure-entry.c:275
-msgid "Cursor Position"
-msgstr "커서 위치"
-
-#: ../libseahorse/seahorse-secure-entry.c:275
-msgid "The current position of the insertion cursor in chars"
-msgstr "입력 커서의 현재 위치 (문자 단위)"
-
-#: ../libseahorse/seahorse-secure-entry.c:279
-msgid "Selection Bound"
-msgstr "선택 범위"
-
-#: ../libseahorse/seahorse-secure-entry.c:279
-msgid ""
-"The position of the opposite end of the selection from the cursor in chars"
-msgstr "선택한 부분에서 현재 커서의 반대쪽에 있는 끝의 위치 (문자 단위)"
-
-#: ../libseahorse/seahorse-secure-entry.c:283
-msgid "Maximum length"
-msgstr "최대 길이"
-
-#: ../libseahorse/seahorse-secure-entry.c:283
-msgid "Maximum number of characters for this entry. Zero if no maximum"
-msgstr "이 입력창의 최대 문자 개수.  0이면 무제한"
-
-#: ../libseahorse/seahorse-secure-entry.c:287
-msgid "Has Frame"
-msgstr "프레임 있음"
-
-#: ../libseahorse/seahorse-secure-entry.c:287
-msgid "FALSE removes outside bevel from entry"
-msgstr "거짓이면 입력창 주변의 테두리가 없어집니다"
-
-#: ../libseahorse/seahorse-secure-entry.c:291
-msgid "Invisible character"
-msgstr "감추는 글자"
-
-#: ../libseahorse/seahorse-secure-entry.c:291
-msgid "The character to use when masking entry contents (in \"password mode\")"
-msgstr "입력 창의 내용을 감출 때 사용할 글자 (\"열쇠글 모드\"에서)"
-
-#: ../libseahorse/seahorse-secure-entry.c:295
-msgid "Activates default"
-msgstr "기본값 활성화"
-
-#: ../libseahorse/seahorse-secure-entry.c:295
-msgid ""
-"Whether to activate the default widget (such as the default button in a "
-"dialog) when Enter is pressed"
-msgstr ""
-"Enter 키를 눌렀을 때 기본 위젯을 활성화할 지 여부 (예를 들어 대화 상자에서 기"
-"본 단추 따위)"
-
-#: ../libseahorse/seahorse-secure-entry.c:299
-msgid "Width in chars"
-msgstr "너비, 문자 수 단위"
-
-#: ../libseahorse/seahorse-secure-entry.c:299
-msgid "Number of characters to leave space for in the entry"
-msgstr "입력 창에 그 만큼의 공간을 확보할 문자 수"
-
-#: ../libseahorse/seahorse-secure-entry.c:303
-msgid "Scroll offset"
-msgstr "스크롤 오프셋"
-
-#: ../libseahorse/seahorse-secure-entry.c:303
-msgid "Number of pixels of the entry scrolled off the screen to the left"
-msgstr "입력창을 좌측으로 스크롤할 픽셀 수"
-
-#: ../libseahorse/seahorse-secure-entry.c:307
-msgid "Text"
-msgstr "텍스트"
-
-#: ../libseahorse/seahorse-secure-entry.c:307
-msgid "The contents of the entry"
-msgstr "입력창의 내용"
-
-#: ../libseahorse/seahorse-secure-entry.c:311
-msgid "Visibility"
-msgstr "보임"
-
-#: ../libseahorse/seahorse-secure-entry.c:311
-msgid "Whether contents are drawn using invisible character"
-msgstr "숨김 문자를 사용해 내용을 표시할 지 여부."
-
-#: ../libseahorse/seahorse-server-source.c:467
+#: ../libseahorse/seahorse-server-source.c:466
 msgid "LDAP Key Server"
 msgstr "LDAP 키 서버"
 
-#: ../libseahorse/seahorse-server-source.c:470
+#: ../libseahorse/seahorse-server-source.c:469
 msgid "HTTP Key Server"
 msgstr "HTTP 키 서버"
 
@@ -1104,6 +1071,10 @@ msgstr "문서나 메세지에 서명할 때 쓸 수 있는 개인 PGP 키가 �
 #: ../libseahorse/seahorse-signer.glade.h:1
 msgid "_Sign message with key:"
 msgstr "메세지 서명에 사용할 키(_S):"
+
+#: ../libseahorse/seahorse-ssh-askpass.c:94
+msgid "Enter your Secure Shell passphrase:"
+msgstr "보안 쉘 암호를 입력하십시오:"
 
 #: ../libseahorse/seahorse-ssh-key.c:90
 msgid "(Unreadable Secure Shell Key)"
@@ -1126,6 +1097,7 @@ msgstr "공개 보안 쉘 키"
 
 #: ../libseahorse/seahorse-ssh-operation.c:135
 #: ../libseahorse/seahorse-ssh-operation.c:697
+#, c-format
 msgid "The SSH command was terminated unexpectedly."
 msgstr "SSH 명령이 예상치 못하게 끝났습니다."
 
@@ -1141,62 +1113,62 @@ msgstr "보안 쉘 키"
 #. Just prompt over and over again
 #: ../libseahorse/seahorse-ssh-operation.c:727
 msgid "Secure Shell Passphrase"
-msgstr "보안 쉘 열쇠글"
-
-#: ../libseahorse/seahorse-ssh-operation.c:808
-msgid "Old Key Passphrase"
-msgstr "예전 키 열쇠글"
-
-#: ../libseahorse/seahorse-ssh-operation.c:809
-#, c-format
-msgid "Enter the old passphrase for: %s"
-msgstr "다음에 대한 예전 열쇠글을 입력하십시오: %s"
+msgstr "보안 쉘 암호"
 
 #: ../libseahorse/seahorse-ssh-operation.c:813
-msgid "New Key Passphrase"
-msgstr "새 키 열쇠글"
+msgid "Old Key Passphrase"
+msgstr "예전 키 암호"
 
 #: ../libseahorse/seahorse-ssh-operation.c:814
 #, c-format
+msgid "Enter the old passphrase for: %s"
+msgstr "다음에 대한 예전 암호를 입력하십시오: %s"
+
+#: ../libseahorse/seahorse-ssh-operation.c:818
+msgid "New Key Passphrase"
+msgstr "새 키 암호"
+
+#: ../libseahorse/seahorse-ssh-operation.c:819
+#, c-format
 msgid "Enter the new passphrase for: %s"
-msgstr "다음에 대한 새 열쇠글을 입력하십시오: %s"
+msgstr "다음에 대한 새 암호를 입력하십시오: %s"
 
-#: ../libseahorse/seahorse-ssh-operation.c:822
+#: ../libseahorse/seahorse-ssh-operation.c:827
 msgid "Enter Key Passphrase"
-msgstr "키 열쇠글을 입력하십시오"
+msgstr "키 암호를 입력하십시오"
 
-#: ../libseahorse/seahorse-ssh-operation.c:890
+#: ../libseahorse/seahorse-ssh-operation.c:895
 msgid "Passphrase for New Secure Shell Key"
-msgstr "새 보안 쉘 키의 열쇠글"
+msgstr "새 보안 쉘 키의 암호"
 
-#: ../libseahorse/seahorse-ssh-operation.c:891
+#: ../libseahorse/seahorse-ssh-operation.c:896
 msgid "Enter a passphrase for your new Secure Shell key."
-msgstr "새 보안 쉘 키에 대한 열쇠글을 입력하십시오."
+msgstr "새 보안 쉘 키에 대한 암호를 입력하십시오."
 
-#: ../libseahorse/seahorse-ssh-operation.c:1029
+#: ../libseahorse/seahorse-ssh-operation.c:1036
 msgid "Secure Shell Key Passphrase"
-msgstr "보안 쉘 키 열쇠글"
+msgstr "보안 쉘 키 암호"
 
-#: ../libseahorse/seahorse-ssh-operation.c:1029
+#: ../libseahorse/seahorse-ssh-operation.c:1036
 #, c-format
 msgid "Enter the passphrase for: %s"
-msgstr "다음에 대한 열쇠글을 입력하십시오: %s"
+msgstr "다음에 대한 암호를 입력하십시오: %s"
 
-#: ../libseahorse/seahorse-ssh-operation.c:1030
+#: ../libseahorse/seahorse-ssh-operation.c:1037
 msgid "Save this passphrase in my keyring"
-msgstr "이 열쇠글을 내 키 모음에 저장"
+msgstr "이 암호를 내 키 모음에 저장"
 
-#: ../libseahorse/seahorse-ssh-operation.c:1104
+#: ../libseahorse/seahorse-ssh-operation.c:1111
 #, c-format
 msgid "Importing key: %s"
 msgstr "키를 가져오는 중입니다: %s"
 
-#: ../libseahorse/seahorse-ssh-operation.c:1106
+#: ../libseahorse/seahorse-ssh-operation.c:1113
 msgid "Importing key. Enter passphrase"
-msgstr "키를 가져오는 중입니다. 열쇠글을 입력하십시오"
+msgstr "키를 가져오는 중입니다. 암호를 입력하십시오"
 
-#: ../libseahorse/seahorse-ssh-operation.c:1108
-#: ../src/seahorse-key-manager.c:513
+#: ../libseahorse/seahorse-ssh-operation.c:1115
+#: ../src/seahorse-key-manager.c:515
 #: ../src/seahorse-pgp-keys.desktop.in.in.h:1
 msgid "Import Key"
 msgstr "키 가져오기"
@@ -1218,51 +1190,55 @@ msgstr "알 수 없는 키"
 msgid "Unavailable Key"
 msgstr "사용할 수 없는 키"
 
-#: ../libseahorse/seahorse-util.c:188
+#: ../libseahorse/seahorse-util.c:172
+msgid "Decryption failed. You probably do not have the decryption key."
+msgstr "암호화 해제가 실패했습니다. 해제 키를 가지고 있지 않은 것 같습니다."
+
+#: ../libseahorse/seahorse-util.c:222
 msgid "%Y-%m-%d"
 msgstr "%Y-%m-%d"
 
-#: ../libseahorse/seahorse-util.c:379
+#: ../libseahorse/seahorse-util.c:413
 msgid "Key Data"
 msgstr "키 데이터"
 
-#: ../libseahorse/seahorse-util.c:381
+#: ../libseahorse/seahorse-util.c:415
 msgid "Multiple Keys"
 msgstr "여러 개 키"
 
-#: ../libseahorse/seahorse-util.c:694
+#: ../libseahorse/seahorse-util.c:728
 msgid "Couldn't run file-roller"
 msgstr "file-roller를 실행할 수 없습니다"
 
-#: ../libseahorse/seahorse-util.c:699
-#: ../plugins/nautilus/seahorse-tool-files.c:645
+#: ../libseahorse/seahorse-util.c:733
+#: ../plugins/nautilus/seahorse-tool-files.c:830
 msgid "Couldn't package files"
 msgstr "파일을 묶을 수 없습니다"
 
-#: ../libseahorse/seahorse-util.c:700
+#: ../libseahorse/seahorse-util.c:734
 msgid "The file-roller process did not complete successfully"
 msgstr "file-roller 프로세스가 성공적으로 끝나지 않았습니다"
 
-#: ../libseahorse/seahorse-util.c:710
+#: ../libseahorse/seahorse-util.c:744
 msgid "Couldn't set permissions on backup file."
 msgstr "백업 파일의 접근 권한을 설정할 수 없습니다."
 
 #. Filter for PGP keys. We also include *.asc, as in many
 #. cases that extension is associated with text/plain
-#: ../libseahorse/seahorse-util.c:812
+#: ../libseahorse/seahorse-util.c:848
 msgid "All key files"
 msgstr "모든 키 파일"
 
-#: ../libseahorse/seahorse-util.c:819 ../libseahorse/seahorse-util.c:859
+#: ../libseahorse/seahorse-util.c:859 ../libseahorse/seahorse-util.c:899
 #: ../src/seahorse-photos.c:239
 msgid "All files"
 msgstr "모든 파일"
 
-#: ../libseahorse/seahorse-util.c:852
+#: ../libseahorse/seahorse-util.c:892
 msgid "Archive files"
 msgstr "아카이브 파일"
 
-#: ../libseahorse/seahorse-util.c:893
+#: ../libseahorse/seahorse-util.c:933
 msgid ""
 "<b>A file already exists with this name.</b>\n"
 "\n"
@@ -1272,24 +1248,24 @@ msgstr ""
 "\n"
 "새로 만들 파일로 덮어 쓰시겠습니까?"
 
-#: ../libseahorse/seahorse-util.c:896
+#: ../libseahorse/seahorse-util.c:936
 msgid "_Replace"
 msgstr "바꾸기(_R)"
 
-#: ../libseahorse/seahorse-validity.c:33 ../src/seahorse-key-properties.c:1096
-#: ../src/seahorse-key-properties.c:1228 ../src/seahorse-key-properties.c:1300
+#: ../libseahorse/seahorse-validity.c:33 ../src/seahorse-key-properties.c:1105
+#: ../src/seahorse-key-properties.c:1237 ../src/seahorse-key-properties.c:1309
 msgid "Never"
 msgstr "하지 않음"
 
-#: ../libseahorse/seahorse-validity.c:35 ../src/seahorse-key-properties.c:1103
+#: ../libseahorse/seahorse-validity.c:35 ../src/seahorse-key-properties.c:1112
 msgid "Marginal"
 msgstr "어느 정도"
 
-#: ../libseahorse/seahorse-validity.c:37 ../src/seahorse-key-properties.c:1109
+#: ../libseahorse/seahorse-validity.c:37 ../src/seahorse-key-properties.c:1118
 msgid "Full"
 msgstr "완전히"
 
-#: ../libseahorse/seahorse-validity.c:39 ../src/seahorse-key-properties.c:1115
+#: ../libseahorse/seahorse-validity.c:39 ../src/seahorse-key-properties.c:1124
 msgid "Ultimate"
 msgstr "절대적으로"
 
@@ -1297,11 +1273,11 @@ msgstr "절대적으로"
 msgid "Disabled"
 msgstr "사용하지 않음"
 
-#: ../libseahorse/seahorse-validity.c:43 ../src/seahorse-key-properties.c:1296
+#: ../libseahorse/seahorse-validity.c:43 ../src/seahorse-key-properties.c:1305
 msgid "Revoked"
 msgstr "철회됨"
 
-#: ../libseahorse/seahorse-widget.c:311
+#: ../libseahorse/seahorse-widget.c:326
 #, c-format
 msgid "Could not display help: %s"
 msgstr "도움말을 표시할 수 없습니다: %s"
@@ -1319,12 +1295,12 @@ msgid "Seahorse Applet Factory"
 msgstr "시호스 애플릿 팩토리"
 
 #: ../plugins/applet/GNOME_SeahorseApplet.xml.h:1
-#: ../src/seahorse-key-manager.c:1190
+#: ../src/seahorse-key-manager.c:1208
 msgid "_About"
 msgstr "정보(_A)"
 
 #: ../plugins/applet/GNOME_SeahorseApplet.xml.h:2
-#: ../src/seahorse-key-manager.c:1174 ../src/seahorse-keyserver-results.c:379
+#: ../src/seahorse-key-manager.c:1192 ../src/seahorse-keyserver-results.c:381
 msgid "_Help"
 msgstr "도움말(_H)"
 
@@ -1337,111 +1313,112 @@ msgid "seahorse-applet"
 msgstr "시호스 애플릿"
 
 #: ../plugins/applet/seahorse-applet.c:311
-#: ../plugins/applet/seahorse-applet.c:832
+#: ../plugins/applet/seahorse-applet.c:836
 msgid "Use PGP/GPG to encrypt/decrypt/sign/verify/import the clipboard."
 msgstr ""
 "PGP/GPG를 사용해 클립보드에 대해 암호화/복호화/서명/서명 확인/가져오기를 합니"
 "다."
 
-#: ../plugins/applet/seahorse-applet.c:316 ../src/seahorse-key-manager.c:869
+#: ../plugins/applet/seahorse-applet.c:316 ../src/seahorse-key-manager.c:874
 msgid "translator-credits"
 msgstr "류창우 <cwryu@debian.org>"
 
-#: ../plugins/applet/seahorse-applet.c:319 ../src/seahorse-key-manager.c:872
+#: ../plugins/applet/seahorse-applet.c:319 ../src/seahorse-key-manager.c:877
 msgid "Seahorse Project Homepage"
 msgstr "시호스 프로젝트 홈페이지"
 
 #. Get the recipient list
-#: ../plugins/applet/seahorse-applet.c:374
+#: ../plugins/applet/seahorse-applet.c:375
 #: ../plugins/epiphany/seahorse-extension.c:251
 #: ../plugins/gedit/seahorse-gedit.c:332
 msgid "Choose Recipient Keys"
 msgstr "수신자 키 선택"
 
-#: ../plugins/applet/seahorse-applet.c:393
+#: ../plugins/applet/seahorse-applet.c:394
 msgid "Encrypted Text"
 msgstr "암호화한 텍스트"
 
-#: ../plugins/applet/seahorse-applet.c:395
+#: ../plugins/applet/seahorse-applet.c:396
 msgid "Encryption Failed"
 msgstr "암호화가 실패했습니다"
 
-#: ../plugins/applet/seahorse-applet.c:396
+#: ../plugins/applet/seahorse-applet.c:397
 msgid "The clipboard could not be encrypted."
 msgstr "클립보드 내용을 암호화할 수 없습니다."
 
-#: ../plugins/applet/seahorse-applet.c:430
+#: ../plugins/applet/seahorse-applet.c:431
 #: ../plugins/epiphany/seahorse-extension.c:296
 #: ../plugins/gedit/seahorse-gedit.c:611
 msgid "Choose Key to Sign with"
 msgstr "서명할 때 사용할 키를 선택하십시오"
 
-#: ../plugins/applet/seahorse-applet.c:449
+#: ../plugins/applet/seahorse-applet.c:450
 msgid "Signed Text"
 msgstr "서명한 텍스트"
 
-#: ../plugins/applet/seahorse-applet.c:451
+#: ../plugins/applet/seahorse-applet.c:452
 msgid "Signing Failed"
 msgstr "서명 실패"
 
-#: ../plugins/applet/seahorse-applet.c:452
+#: ../plugins/applet/seahorse-applet.c:453
 msgid "The clipboard could not be Signed."
 msgstr "클립보드에 서명할 수 없습니다."
 
-#: ../plugins/applet/seahorse-applet.c:495
+#: ../plugins/applet/seahorse-applet.c:496
 #: ../plugins/epiphany/seahorse-extension.c:340
 msgid "Import Failed"
 msgstr "가져오기 실패"
 
-#: ../plugins/applet/seahorse-applet.c:496
+#: ../plugins/applet/seahorse-applet.c:497
 #: ../plugins/epiphany/seahorse-extension.c:341
 msgid "Keys were found but not imported."
 msgstr "키가 있지만 가져오지 않았습니다."
 
-#: ../plugins/applet/seahorse-applet.c:527
+#: ../plugins/applet/seahorse-applet.c:528
 #: ../plugins/epiphany/seahorse-extension.c:374
 msgid "Decrypting Failed"
 msgstr "복호화가 실패했습니다"
 
-#: ../plugins/applet/seahorse-applet.c:528
+#: ../plugins/applet/seahorse-applet.c:529
 #: ../plugins/epiphany/seahorse-extension.c:375
 msgid "Text may be malformed."
 msgstr "텍스트가 망가진 것 같습니다."
 
-#: ../plugins/applet/seahorse-applet.c:579
+#: ../plugins/applet/seahorse-applet.c:580
 msgid "No PGP key or message was found on clipboard"
 msgstr "클립보드에 PGP 키나 메세지가 없습니다"
 
-#: ../plugins/applet/seahorse-applet.c:580
+#: ../plugins/applet/seahorse-applet.c:581
 msgid "No PGP data found."
 msgstr "PGP 데이터를 찾지 못했습니다."
 
-#: ../plugins/applet/seahorse-applet.c:613
+#. TRANSLATORS: This means 'The text that was decrypted'
+#: ../plugins/applet/seahorse-applet.c:616
 msgid "Decrypted Text"
 msgstr "복호화한 텍스트"
 
-#: ../plugins/applet/seahorse-applet.c:681
+#: ../plugins/applet/seahorse-applet.c:685
 msgid "Could not display the help file"
 msgstr "도움말 파일을 표시할 수 없습니다"
 
-#: ../plugins/applet/seahorse-applet.c:744
+#: ../plugins/applet/seahorse-applet.c:748
 msgid "_Encrypt Clipboard"
 msgstr "클립보드 암호화(_E)"
 
-#: ../plugins/applet/seahorse-applet.c:751
+#: ../plugins/applet/seahorse-applet.c:755
 msgid "_Sign Clipboard"
 msgstr "클립보드 서명(_S)"
 
-#: ../plugins/applet/seahorse-applet.c:758
+#: ../plugins/applet/seahorse-applet.c:762
 msgid "_Decrypt/Verify Clipboard"
 msgstr "클립보드 복호화/서명 확인(_D)"
 
-#: ../plugins/applet/seahorse-applet.c:764
+#: ../plugins/applet/seahorse-applet.c:768
 msgid "_Import Keys from Clipboard"
 msgstr "클립보드의 키 가져오기(_I)"
 
-#: ../plugins/applet/seahorse-applet.c:829
-#: ../plugins/applet/seahorse-applet.c:831
+#: ../plugins/applet/seahorse-applet.c:833
+#: ../plugins/applet/seahorse-applet.c:835
 msgid "Encryption Applet"
 msgstr "암호화 애플릿"
 
@@ -1465,20 +1442,20 @@ msgstr "클립보드 암호화 혹은 서명(_E)"
 msgid "_Show clipboard state in panel"
 msgstr "패널에 클립보드 상태 표시(_S)"
 
-#: ../plugins/epiphany/seahorse-extension.c:601
+#: ../plugins/epiphany/seahorse-extension.c:602
 msgid "_Encrypt"
 msgstr "암호화(_E)"
 
-#: ../plugins/epiphany/seahorse-extension.c:608
+#: ../plugins/epiphany/seahorse-extension.c:609
 #: ../src/seahorse-sign.glade.h:21
 msgid "_Sign"
 msgstr "서명(_S)"
 
-#: ../plugins/epiphany/seahorse-extension.c:615
+#: ../plugins/epiphany/seahorse-extension.c:616
 msgid "_Decrypt/Verify"
 msgstr "복호화/서명 확인(_D)"
 
-#: ../plugins/epiphany/seahorse-extension.c:622
+#: ../plugins/epiphany/seahorse-extension.c:623
 msgid "_Import Key"
 msgstr "키 가져오기(_I)"
 
@@ -1495,7 +1472,7 @@ msgid "Couldn't encrypt text"
 msgstr "텍스트를 암호화할 수 없습니다"
 
 #: ../plugins/gedit/seahorse-gedit.c:387 ../src/seahorse-key-manager.c:395
-#: ../src/seahorse-key-manager.c:463 ../src/seahorse-key-manager.c:484
+#: ../src/seahorse-key-manager.c:463 ../src/seahorse-key-manager.c:486
 msgid "Couldn't import keys"
 msgstr "키를 가져올 수 없습니다"
 
@@ -1599,14 +1576,8 @@ msgstr[0] "선택한 파일에 서명"
 
 #: ../plugins/nautilus/seahorse-pgp-preferences.c:43
 #: ../plugins/nautilus/seahorse-pgp-preferences.c:47
-#: ../plugins/nautilus/seahorse-pgp-preferences.c:51
 msgid "For internal use"
 msgstr "내부 용도"
-
-#: ../plugins/nautilus/seahorse-pgp-preferences.c:78
-#: ../plugins/nautilus/seahorse-pgp-preferences.desktop.in.h:2
-msgid "Encryption Preferences"
-msgstr "암호화 기본 설정"
 
 #: ../plugins/nautilus/seahorse-pgp-preferences.desktop.in.h:1
 msgid "Configure key servers and other encryption settings"
@@ -1677,6 +1648,7 @@ msgid "Choose Signature File Name for '%s'"
 msgstr "'%s'의 서명 파일 이름을 선택하십시오"
 
 #: ../plugins/nautilus/seahorse-tool.c:372
+#, c-format
 msgid "Imported key"
 msgstr "가져온 키"
 
@@ -1699,6 +1671,7 @@ msgstr "'%s'의 원래 파일 이름을 선택하십시오"
 #. * dialogs at the user.
 #.
 #: ../plugins/nautilus/seahorse-tool.c:524
+#, c-format
 msgid "No valid signatures found"
 msgstr "올바른 서명을 찾을 수 없습니다"
 
@@ -1751,9 +1724,81 @@ msgstr "서명 확인 중입니다"
 msgid "Couldn't verify file: %s"
 msgstr "파일 서명을 확인할 수 없습니다: %s"
 
+#: ../plugins/nautilus/seahorse-tool-files.c:114
+msgid "Ace (.ace)"
+msgstr "ACE (.ace)"
+
+#: ../plugins/nautilus/seahorse-tool-files.c:115
+msgid "Ar (.ar)"
+msgstr "AR (.ar)"
+
+#: ../plugins/nautilus/seahorse-tool-files.c:116
+msgid "Arj (.arj)"
+msgstr "ARJ (.arj)"
+
+#: ../plugins/nautilus/seahorse-tool-files.c:123
+msgid "Ear (.ear)"
+msgstr "EAR (.ear)"
+
+#: ../plugins/nautilus/seahorse-tool-files.c:124
+msgid "Self-extracting zip (.exe)"
+msgstr "자체 풀리는 ZIP (.exe)"
+
+#: ../plugins/nautilus/seahorse-tool-files.c:126
+msgid "Jar (.jar)"
+msgstr "JAR (.jar)"
+
+#: ../plugins/nautilus/seahorse-tool-files.c:127
+msgid "Lha (.lzh)"
+msgstr "LHA (.lzh)"
+
+#: ../plugins/nautilus/seahorse-tool-files.c:129
+msgid "Rar (.rar)"
+msgstr "RAR (.rar)"
+
+#: ../plugins/nautilus/seahorse-tool-files.c:131
+msgid "Tar uncompressed (.tar)"
+msgstr "TAR 압축하지 않음 (.tar)"
+
+#: ../plugins/nautilus/seahorse-tool-files.c:132
+msgid "Tar compressed with bzip (.tar.bz)"
+msgstr "TAR BZIP으로 압축 (.tar.bz)"
+
+#: ../plugins/nautilus/seahorse-tool-files.c:133
+msgid "Tar compressed with bzip2 (.tar.bz2)"
+msgstr "TAR BZIP2로 압축 (.tar.bz2)"
+
+#: ../plugins/nautilus/seahorse-tool-files.c:134
+msgid "Tar compressed with gzip (.tar.gz)"
+msgstr "TAR GZIP으로 압축 (.tar.gz)"
+
+#: ../plugins/nautilus/seahorse-tool-files.c:135
+msgid "Tar compressed with lzop (.tar.lzo)"
+msgstr "TAR LZOP으로 압축 (.tar.lzo)"
+
+#: ../plugins/nautilus/seahorse-tool-files.c:136
+msgid "Tar compressed with compress (.tar.Z)"
+msgstr "TAR compress로 압축 (.tar.Z)"
+
+#: ../plugins/nautilus/seahorse-tool-files.c:138
+msgid "War (.war)"
+msgstr "WAR (.war)"
+
+#: ../plugins/nautilus/seahorse-tool-files.c:139
+msgid "Zip (.zip)"
+msgstr "ZIP (.zip)"
+
+#: ../plugins/nautilus/seahorse-tool-files.c:140
+msgid "Zoo (.zoo)"
+msgstr "ZOO (.zoo)"
+
+#: ../plugins/nautilus/seahorse-tool-files.c:141
+msgid "7-Zip (.7z)"
+msgstr "7-ZIP (.7z)"
+
 #. TRANSLATOR: This string will become
 #. * "You have selected %d files and %d folders"
-#: ../plugins/nautilus/seahorse-tool-files.c:155
+#: ../plugins/nautilus/seahorse-tool-files.c:318
 #, c-format
 msgid "You have selected %d file "
 msgid_plural "You have selected %d files "
@@ -1761,7 +1806,7 @@ msgstr[0] "%d개 파일을 선택했습니다"
 
 #. TRANSLATOR: This string will become
 #. * "You have selected %d files and %d folders"
-#: ../plugins/nautilus/seahorse-tool-files.c:160
+#: ../plugins/nautilus/seahorse-tool-files.c:323
 #, c-format
 msgid "and %d folder"
 msgid_plural "and %d folders"
@@ -1769,92 +1814,88 @@ msgstr[0] "%d개 폴더 및"
 
 #. TRANSLATOR: "%s%s" are "You have selected %d files and %d folders"
 #. * Swap order with "%2$s%1$s" if needed
-#: ../plugins/nautilus/seahorse-tool-files.c:165
+#: ../plugins/nautilus/seahorse-tool-files.c:328
 #, c-format
 msgid "<b>%s%s</b>"
 msgstr "<b>%2$s%1$s</b>"
 
 #. should never be called for just one file
-#: ../plugins/nautilus/seahorse-tool-files.c:174
+#: ../plugins/nautilus/seahorse-tool-files.c:337
 #, c-format
 msgid "You have selected %d files"
 msgstr "%d개 파일을 선택했습니다"
 
-#: ../plugins/nautilus/seahorse-tool-files.c:179
+#: ../plugins/nautilus/seahorse-tool-files.c:342
 #, c-format
 msgid "You have selected %d folder"
 msgid_plural "You have selected %d folders"
 msgstr[0] "%d개 폴더를 선택했습니다"
 
-#: ../plugins/nautilus/seahorse-tool-files.c:626
+#: ../plugins/nautilus/seahorse-tool-files.c:811
 msgid "Preparing..."
 msgstr "준비하는 중..."
 
-#: ../plugins/nautilus/seahorse-tool-files.c:635
-#: ../plugins/nautilus/seahorse-tool-files.c:658
+#: ../plugins/nautilus/seahorse-tool-files.c:820
+#: ../plugins/nautilus/seahorse-tool-files.c:843
 msgid "Couldn't list files"
 msgstr "파일의 목록을 만들 수 없습니다"
 
-#: ../src/main.c:75 ../src/seahorse-key-manager.c:864
+#: ../src/main.c:75 ../src/seahorse-key-manager.c:869
 msgid "Encryption Key Manager"
 msgstr "암호화 키 관리자"
 
-#: ../src/seahorse-add-subkey.c:111
+#: ../src/seahorse-add-subkey.c:134
 msgid "Couldn't add subkey"
 msgstr "서브키를 더할 수 없습니다"
 
-#: ../src/seahorse-add-subkey.c:127
+#: ../src/seahorse-add-subkey.c:154
 #, c-format
 msgid "Add subkey to %s"
 msgstr "%s에 서브키 더하기"
 
-#: ../src/seahorse-add-subkey.glade.h:1 ../src/seahorse-pgp-generate.c:44
+#: ../src/seahorse-add-subkey.c:171 ../src/seahorse-pgp-generate.c:44
 msgid "DSA (sign only)"
 msgstr "DSA (서명 전용)"
 
-#: ../src/seahorse-add-subkey.glade.h:2
+#: ../src/seahorse-add-subkey.c:179
 msgid "ElGamal (encrypt only)"
 msgstr "ElGamal (암호화 전용)"
 
-#: ../src/seahorse-add-subkey.glade.h:3
-msgid "Expiration Date:"
-msgstr "만료 날짜:"
+#: ../src/seahorse-add-subkey.c:185 ../src/seahorse-pgp-generate.c:45
+msgid "RSA (sign only)"
+msgstr "RSA (서명 전용)"
 
-#: ../src/seahorse-add-subkey.glade.h:4
-msgid "Generate a new subkey"
-msgstr "새 서브키 만들기"
-
-#: ../src/seahorse-add-subkey.glade.h:5
-msgid "If key never expires"
-msgstr "키가 만료되지 않는 지 여부"
-
-#: ../src/seahorse-add-subkey.glade.h:6
-msgid "Key _Length:"
-msgstr "키 길이(_L):"
-
-#: ../src/seahorse-add-subkey.glade.h:7
-msgid "Key _Type:"
-msgstr "키 종류(_T):"
-
-#: ../src/seahorse-add-subkey.glade.h:8
-msgid "Key type / algorithm"
-msgstr "키 종류 / 알고리즘"
-
-#: ../src/seahorse-add-subkey.glade.h:9
-msgid "Length of Key"
-msgstr "키의 길이"
-
-#: ../src/seahorse-add-subkey.glade.h:10
-msgid "Never E_xpires"
-msgstr "만료되지 않음(_X)"
-
-#: ../src/seahorse-add-subkey.glade.h:11
+#: ../src/seahorse-add-subkey.c:191
 msgid "RSA (encrypt only)"
 msgstr "RSA (암호화 전용)"
 
-#: ../src/seahorse-add-subkey.glade.h:12 ../src/seahorse-pgp-generate.c:45
-msgid "RSA (sign only)"
-msgstr "RSA (서명 전용)"
+#: ../src/seahorse-add-subkey.glade.h:1
+msgid "Expiration Date:"
+msgstr "만료 날짜:"
+
+#: ../src/seahorse-add-subkey.glade.h:2
+msgid "Generate a new subkey"
+msgstr "새 서브키 만들기"
+
+#: ../src/seahorse-add-subkey.glade.h:3
+msgid "If key never expires"
+msgstr "키가 만료되지 않는 지 여부"
+
+#: ../src/seahorse-add-subkey.glade.h:4
+msgid "Key _Length:"
+msgstr "키 길이(_L):"
+
+#: ../src/seahorse-add-subkey.glade.h:5
+msgid "Key _Type:"
+msgstr "키 종류(_T):"
+
+#: ../src/seahorse-add-subkey.glade.h:6
+msgid "Length of Key"
+msgstr "키의 길이"
+
+#: ../src/seahorse-add-subkey.glade.h:7
+msgid "Never E_xpires"
+msgstr "만료되지 않음(_X)"
 
 #: ../src/seahorse-add-uid.c:82
 msgid "Couldn't add user id"
@@ -1899,19 +1940,19 @@ msgstr "전자메일 주소(_E):"
 
 #: ../src/seahorse-change-passphrase.glade.h:1
 msgid "Change Passphrase"
-msgstr "열쇠글 바꾸기"
+msgstr "암호 바꾸기"
 
 #: ../src/seahorse-change-passphrase.glade.h:2
 msgid "Con_firm Passphrase:"
-msgstr "열쇠글 다시 입력(_F):"
+msgstr "암호 다시 입력(_F):"
 
 #: ../src/seahorse-change-passphrase.glade.h:3
 msgid "Confirm new passphrase"
-msgstr "새 열쇠글 다시 입력"
+msgstr "새 암호 다시 입력"
 
 #: ../src/seahorse-change-passphrase.glade.h:5
 msgid "New _Passphrase:"
-msgstr "새 열쇠글(_P):"
+msgstr "새 암호(_P):"
 
 #: ../src/seahorse-delete.c:40
 #, c-format
@@ -1957,11 +1998,11 @@ msgstr "사용자 아이디를 지울 수 없습니다"
 
 #: ../src/seahorse.desktop.in.in.h:1
 msgid "Manage your passwords and encryption keys"
-msgstr "열쇠글 및 암호화 키를 관리합니다"
+msgstr "암호 및 암호화 키를 관리합니다"
 
 #: ../src/seahorse.desktop.in.in.h:2 ../src/seahorse-key-manager.glade.h:7
 msgid "Passwords and Encryption Keys"
-msgstr "열쇠글 및 암호화 키"
+msgstr "암호 및 암호화 키"
 
 #: ../src/seahorse-expires.c:67
 msgid "Couldn't change expiry date"
@@ -1985,7 +2026,7 @@ msgstr "바꾸기(_H)"
 msgid "Never Expires"
 msgstr "만료되지 않음"
 
-#: ../src/seahorse-expires.glade.h:3 ../src/seahorse-revoke.glade.h:11
+#: ../src/seahorse-expires.glade.h:3 ../src/seahorse-revoke.glade.h:4
 msgid "Revoke key"
 msgstr "키 철회"
 
@@ -2011,17 +2052,17 @@ msgstr "새 키 만들기"
 
 #: ../src/seahorse-gkeyring-item.c:248
 msgid "Web Password"
-msgstr "웹 열쇠글"
+msgstr "웹 암호"
 
 #: ../src/seahorse-gkeyring-item.c:250
 msgid "Network Password"
-msgstr "네트워크 열쇠글"
+msgstr "네트워크 암호"
 
 #: ../src/seahorse-gkeyring-item.c:252
 #: ../src/seahorse-gkeyring-item-properties.c:116
 #: ../src/seahorse-gkeyring-source.c:525
 msgid "Password"
-msgstr "열쇠글"
+msgstr "암호"
 
 #: ../src/seahorse-gkeyring-item-properties.c:90
 msgid "Access a network share or resource"
@@ -2041,7 +2082,7 @@ msgstr "보안 쉘 키 잠금 해제"
 
 #: ../src/seahorse-gkeyring-item-properties.c:104
 msgid "Saved password or login"
-msgstr "저장한 열쇠글 혹은 로그인"
+msgstr "저장한 암호 혹은 로그인"
 
 #: ../src/seahorse-gkeyring-item-properties.c:116
 msgid "Network Credentials"
@@ -2049,7 +2090,7 @@ msgstr "네트워크 인증서"
 
 #: ../src/seahorse-gkeyring-item-properties.c:177
 msgid "Couldn't change password."
-msgstr "열쇠글을 바꿀 수 없습니다."
+msgstr "암호를 바꿀 수 없습니다."
 
 #: ../src/seahorse-gkeyring-item-properties.c:284
 msgid "Couldn't set description."
@@ -2065,7 +2106,7 @@ msgstr "<b>로그인:</b>"
 
 #: ../src/seahorse-gkeyring-item-properties.glade.h:3
 msgid "<b>Password:</b>"
-msgstr "<b>열쇠글:</b>"
+msgstr "<b>암호:</b>"
 
 #: ../src/seahorse-gkeyring-item-properties.glade.h:4
 msgid "<b>Server:</b>"
@@ -2108,29 +2149,21 @@ msgstr "키"
 #: ../src/seahorse-pgp-public-key-properties.glade.h:28
 #: ../src/seahorse-ssh-key-properties.glade.h:19
 msgid "Key Properties"
-msgstr "키 등록 정보"
+msgstr "키 속성"
 
 #: ../src/seahorse-gkeyring-item-properties.glade.h:11
 msgid "Show pass_word"
-msgstr "열쇠글 표시(_W)"
+msgstr "암호 표시(_W)"
 
 #: ../src/seahorse-gkeyring-item-properties.glade.h:12
-msgid "[Type here]"
-msgstr "[여기에 입력]"
-
-#: ../src/seahorse-gkeyring-item-properties.glade.h:13
-msgid "[Use here]"
-msgstr "[여기에 사용]"
-
-#: ../src/seahorse-gkeyring-item-properties.glade.h:14
 msgid "[details]\n"
 msgstr "[자세한 정보]\n"
 
-#: ../src/seahorse-gkeyring-item-properties.glade.h:16
+#: ../src/seahorse-gkeyring-item-properties.glade.h:14
 msgid "[login]"
 msgstr "[로그인]"
 
-#: ../src/seahorse-gkeyring-item-properties.glade.h:17
+#: ../src/seahorse-gkeyring-item-properties.glade.h:15
 msgid "[server]"
 msgstr "[서버]"
 
@@ -2173,218 +2206,222 @@ msgstr "키를 가져오는 중입니다"
 #. Start listing of ids
 #: ../src/seahorse-gkeyring-source.c:372
 msgid "Listing passwords"
-msgstr "열쇠글 목록을 만드는 중입니다"
+msgstr "암호 목록을 만드는 중입니다"
 
 #: ../src/seahorse-key-manager.c:443
 msgid "Couldn't read file"
 msgstr "파일을 읽을 수 없습니다"
 
-#: ../src/seahorse-key-manager.c:484
+#: ../src/seahorse-key-manager.c:486
 msgid "Unrecognized key type, or invalid data format"
 msgstr "키 종류를 알 수 없거나, 데이터 형식이 잘못되었습니다"
 
-#: ../src/seahorse-key-manager.c:557 ../src/seahorse-keyserver-results.c:217
+#: ../src/seahorse-key-manager.c:560 ../src/seahorse-keyserver-results.c:218
 msgid "Couldn't retrieve data from key server"
 msgstr "키 서버에서 데이터를 가져올 수 없습니다"
 
-#: ../src/seahorse-key-manager.c:573 ../src/seahorse-keyserver-results.c:233
+#: ../src/seahorse-key-manager.c:576 ../src/seahorse-keyserver-results.c:234
 #, c-format
 msgid "Copied %d key"
 msgid_plural "Copied %d keys"
 msgstr[0] "키 %d개를 복사했습니다"
 
-#: ../src/seahorse-key-manager.c:597 ../src/seahorse-keyserver-results.c:193
-#: ../src/seahorse-keyserver-results.c:258
+#: ../src/seahorse-key-manager.c:600 ../src/seahorse-keyserver-results.c:194
+#: ../src/seahorse-keyserver-results.c:259
 msgid "Retrieving keys"
 msgstr "키를 가져오는 중입니다"
 
-#: ../src/seahorse-key-manager.c:623
+#: ../src/seahorse-key-manager.c:626
 msgid "Couldn't export key"
 msgstr "키를 내보낼 수 없습니다"
 
-#: ../src/seahorse-key-manager.c:643
+#: ../src/seahorse-key-manager.c:646
 msgid "Export public key"
 msgstr "공개 키 내보내기"
 
-#: ../src/seahorse-key-manager.c:653 ../src/seahorse-key-properties.c:1031
+#: ../src/seahorse-key-manager.c:656 ../src/seahorse-key-properties.c:1038
 #: ../src/seahorse-ssh-key-properties.c:240
 #, c-format
 msgid "Couldn't export key to \"%s\""
 msgstr "키를 \"%s\"에 내보낼 수 없습니다"
 
-#: ../src/seahorse-key-manager.c:665
+#: ../src/seahorse-key-manager.c:668
 msgid "Exporting keys"
 msgstr "키를 내보내는 중입니다"
 
-#: ../src/seahorse-key-manager.c:684
+#: ../src/seahorse-key-manager.c:687
 msgid "Back up Key Rings to Archive"
 msgstr "키 모음을 아카이브에 백업하기"
 
-#: ../src/seahorse-key-manager.c:862
+#: ../src/seahorse-key-manager.c:841
+msgid "Contributions:"
+msgstr "기여한 사람들:"
+
+#: ../src/seahorse-key-manager.c:867
 msgid "seahorse"
 msgstr "시호스"
 
-#: ../src/seahorse-key-manager.c:945 ../src/seahorse-keyserver-results.c:298
+#: ../src/seahorse-key-manager.c:950 ../src/seahorse-keyserver-results.c:300
 #, c-format
 msgid "Selected %d key"
 msgid_plural "Selected %d keys"
 msgstr[0] "%d개 키를 선택했습니다"
 
 #. Top menu items
-#: ../src/seahorse-key-manager.c:1171 ../src/seahorse-keyserver-results.c:377
+#: ../src/seahorse-key-manager.c:1189 ../src/seahorse-keyserver-results.c:379
 msgid "_Key"
 msgstr "키(_K)"
 
-#: ../src/seahorse-key-manager.c:1172 ../src/seahorse-keyserver-results.c:378
+#: ../src/seahorse-key-manager.c:1190 ../src/seahorse-keyserver-results.c:380
 msgid "_Edit"
 msgstr "편집(_E)"
 
-#: ../src/seahorse-key-manager.c:1173
+#: ../src/seahorse-key-manager.c:1191
 msgid "_View"
 msgstr "보기(_V)"
 
 #. Key Actions
-#: ../src/seahorse-key-manager.c:1177
+#: ../src/seahorse-key-manager.c:1195
 msgid "_Create New Key..."
 msgstr "새 키 만들기(_C)..."
 
-#: ../src/seahorse-key-manager.c:1178
+#: ../src/seahorse-key-manager.c:1196
 msgid "Create a new personal key"
 msgstr "새 개인 키를 만듭니다"
 
-#: ../src/seahorse-key-manager.c:1179
+#: ../src/seahorse-key-manager.c:1197
 msgid "_Import..."
 msgstr "가져오기(_I)..."
 
-#: ../src/seahorse-key-manager.c:1180
+#: ../src/seahorse-key-manager.c:1198
 msgid "Import keys into your key ring from a file"
 msgstr "파일에서 키를 내 키 모음으로 가져옵니다"
 
-#: ../src/seahorse-key-manager.c:1181
+#: ../src/seahorse-key-manager.c:1199
 msgid "_Back up Key Rings..."
 msgstr "키 모음 백업(_B)..."
 
-#: ../src/seahorse-key-manager.c:1182
+#: ../src/seahorse-key-manager.c:1200
 msgid "Back up all keys"
 msgstr "모든 키를 백업합니다"
 
-#: ../src/seahorse-key-manager.c:1183
+#: ../src/seahorse-key-manager.c:1201
 msgid "Paste _Keys"
 msgstr "키 붙여 넣기(_K)"
 
-#: ../src/seahorse-key-manager.c:1184
+#: ../src/seahorse-key-manager.c:1202
 msgid "Import keys from the clipboard"
 msgstr "클립보드에서 키를 가져옵니다"
 
-#: ../src/seahorse-key-manager.c:1186
+#: ../src/seahorse-key-manager.c:1204
 msgid "_Quit"
 msgstr "끝내기(_Q)"
 
-#: ../src/seahorse-key-manager.c:1187
+#: ../src/seahorse-key-manager.c:1205
 msgid "Close this program"
 msgstr "이 프로그램을 닫습니다"
 
-#: ../src/seahorse-key-manager.c:1188
+#: ../src/seahorse-key-manager.c:1206
 msgid "Prefere_nces"
 msgstr "기본 설정(_N)"
 
-#: ../src/seahorse-key-manager.c:1189
+#: ../src/seahorse-key-manager.c:1207
 msgid "Change preferences for this program"
 msgstr "이 프로그램의 기본 설정을 바꿉니다"
 
-#: ../src/seahorse-key-manager.c:1191
+#: ../src/seahorse-key-manager.c:1209
 msgid "About this program"
 msgstr "이 프로그램에 대한 정보"
 
-#: ../src/seahorse-key-manager.c:1193
+#: ../src/seahorse-key-manager.c:1211
 msgid "_Remote"
 msgstr "원격(_R)"
 
-#: ../src/seahorse-key-manager.c:1195 ../src/seahorse-keyserver-results.c:383
+#: ../src/seahorse-key-manager.c:1213 ../src/seahorse-keyserver-results.c:385
 msgid "_Contents"
 msgstr "차례(_C)"
 
-#: ../src/seahorse-key-manager.c:1196 ../src/seahorse-keyserver-results.c:384
+#: ../src/seahorse-key-manager.c:1214 ../src/seahorse-keyserver-results.c:386
 msgid "Show Seahorse help"
 msgstr "시호스 도움말을 표시합니다"
 
-#: ../src/seahorse-key-manager.c:1200
+#: ../src/seahorse-key-manager.c:1218
 msgid "T_ypes"
 msgstr "종류(_Y)"
 
-#: ../src/seahorse-key-manager.c:1201
+#: ../src/seahorse-key-manager.c:1219
 msgid "Show type column"
 msgstr "종류 열을 표시합니다"
 
-#: ../src/seahorse-key-manager.c:1202
+#: ../src/seahorse-key-manager.c:1220
 msgid "_Expiry"
 msgstr "만료(_E)"
 
-#: ../src/seahorse-key-manager.c:1203
+#: ../src/seahorse-key-manager.c:1221
 msgid "Show expiry column"
 msgstr "만료 열을 표시합니다"
 
-#: ../src/seahorse-key-manager.c:1204
+#: ../src/seahorse-key-manager.c:1222
 msgid "_Trust"
 msgstr "신뢰(_T)"
 
-#: ../src/seahorse-key-manager.c:1205
+#: ../src/seahorse-key-manager.c:1223
 msgid "Show owner trust column"
 msgstr "소유자 신뢰 열을 표시합니다"
 
-#: ../src/seahorse-key-manager.c:1206
+#: ../src/seahorse-key-manager.c:1224
 msgid "_Validity"
 msgstr "확인(_V)"
 
-#: ../src/seahorse-key-manager.c:1207
+#: ../src/seahorse-key-manager.c:1225
 msgid "Show validity column"
 msgstr "확인 열 표시"
 
-#: ../src/seahorse-key-manager.c:1211 ../src/seahorse-keyserver-results.c:395
+#: ../src/seahorse-key-manager.c:1229 ../src/seahorse-keyserver-results.c:397
 msgid "P_roperties"
-msgstr "등록 정보(_R)"
+msgstr "속성(_R)"
 
-#: ../src/seahorse-key-manager.c:1212 ../src/seahorse-keyserver-results.c:396
+#: ../src/seahorse-key-manager.c:1230 ../src/seahorse-keyserver-results.c:398
 msgid "Show key properties"
-msgstr "키 등록 정보를 표시합니다"
+msgstr "키 속성을 표시합니다"
 
-#: ../src/seahorse-key-manager.c:1213
+#: ../src/seahorse-key-manager.c:1231
 msgid "E_xport Public Key..."
 msgstr "공개 키 내보내기(_X)..."
 
-#: ../src/seahorse-key-manager.c:1214
+#: ../src/seahorse-key-manager.c:1232
 msgid "Export public part of key to a file"
 msgstr "키의 공개 부분을 파일로 내보냅니다"
 
-#: ../src/seahorse-key-manager.c:1215
+#: ../src/seahorse-key-manager.c:1233
 msgid "_Copy Public Key"
 msgstr "공개 키 복사(_C)"
 
-#: ../src/seahorse-key-manager.c:1216
+#: ../src/seahorse-key-manager.c:1234
 msgid "Copy public part of selected keys to the clipboard"
 msgstr "선택한 키의 공개 부분을 클립보드에 복사합니다"
 
-#: ../src/seahorse-key-manager.c:1217
+#: ../src/seahorse-key-manager.c:1235
 msgid "_Delete Key"
 msgstr "키 지우기(_D)"
 
-#: ../src/seahorse-key-manager.c:1218
+#: ../src/seahorse-key-manager.c:1236
 msgid "Delete selected keys"
 msgstr "선택한 키를 지웁니다"
 
-#: ../src/seahorse-key-manager.c:1222
+#: ../src/seahorse-key-manager.c:1240
 msgid "_Sign..."
 msgstr "서명(_S)..."
 
-#: ../src/seahorse-key-manager.c:1223
+#: ../src/seahorse-key-manager.c:1241
 msgid "Sign public key"
 msgstr "공개 키에 서명합니다"
 
-#: ../src/seahorse-key-manager.c:1227
+#: ../src/seahorse-key-manager.c:1245
 msgid "Set Up Computer for _Secure Shell..."
 msgstr "컴퓨터에 보안쉘 설정(_S)..."
 
-#: ../src/seahorse-key-manager.c:1228
+#: ../src/seahorse-key-manager.c:1246
 msgid ""
 "Send public Secure Shell key to another machine, and enable logins using "
 "that key."
@@ -2392,19 +2429,19 @@ msgstr ""
 "보안쉘 공개 키를 다른 컴퓨터에 보내고, 그 키를 사용해 로그인할 수 있게 만듭니"
 "다."
 
-#: ../src/seahorse-key-manager.c:1232 ../src/seahorse-keyserver-results.c:404
+#: ../src/seahorse-key-manager.c:1250 ../src/seahorse-keyserver-results.c:406
 msgid "_Find Remote Keys..."
 msgstr "원격 키 찾기(_F)..."
 
-#: ../src/seahorse-key-manager.c:1233 ../src/seahorse-keyserver-results.c:405
+#: ../src/seahorse-key-manager.c:1251 ../src/seahorse-keyserver-results.c:407
 msgid "Search for keys on a key server"
 msgstr "키 서버에서 키를 찾습니다"
 
-#: ../src/seahorse-key-manager.c:1234
+#: ../src/seahorse-key-manager.c:1252
 msgid "_Sync and Publish Keys..."
 msgstr "키 동기화 및 공개(_S)..."
 
-#: ../src/seahorse-key-manager.c:1235
+#: ../src/seahorse-key-manager.c:1253
 msgid "Publish and/or synchronize your keys with those online."
 msgstr "자기 키를 온라인에 공개하거나 온라인에 있는 키와 동기화합니다."
 
@@ -2437,20 +2474,20 @@ msgid "To get started with encryption you will need keys."
 msgstr "암호화를 시작하려면 키가 있어야 합니다."
 
 #: ../src/seahorse-key-manager.glade.h:9
-#: ../src/seahorse-keyserver-results.c:393
+#: ../src/seahorse-keyserver-results.c:395
 msgid "_Import"
 msgstr "가져오기(_I)"
 
 #: ../src/seahorse-key-manager.glade.h:10
 msgid "_Passwords"
-msgstr "열쇠글(_P)"
+msgstr "암호(_P)"
 
 #: ../src/seahorse-key-manager.glade.h:11
 msgid "_Trusted Keys"
 msgstr "신뢰하는 키(_T)"
 
 #: ../src/seahorse-key-manager-store.c:311
-#: ../src/seahorse-key-properties.c:1297
+#: ../src/seahorse-key-properties.c:1306
 msgid "Expired"
 msgstr "만료됨"
 
@@ -2478,7 +2515,7 @@ msgstr "신뢰"
 
 #. The key type column
 #: ../src/seahorse-key-manager-store.c:985
-#: ../src/seahorse-key-properties.c:1275
+#: ../src/seahorse-key-properties.c:1284
 msgid "Type"
 msgstr "종류"
 
@@ -2487,141 +2524,141 @@ msgstr "종류"
 msgid "Expiration Date"
 msgstr "만료 날짜"
 
-#: ../src/seahorse-key-properties.c:207
+#: ../src/seahorse-key-properties.c:208
 msgid "Couldn't change primary user ID"
 msgstr "주요 사용자 아이디를 바꿀 수 없습니다"
 
-#: ../src/seahorse-key-properties.c:301 ../src/seahorse-key-properties.c:1427
+#: ../src/seahorse-key-properties.c:304 ../src/seahorse-key-properties.c:1436
 msgid "[Unknown]"
 msgstr "[알 수 없음]"
 
-#: ../src/seahorse-key-properties.c:399 ../src/seahorse-key-properties.c:1711
+#: ../src/seahorse-key-properties.c:402 ../src/seahorse-key-properties.c:1722
 msgid "Name/Email"
 msgstr "이름/전자메일"
 
-#: ../src/seahorse-key-properties.c:404
+#: ../src/seahorse-key-properties.c:407
 msgid "Signature ID"
 msgstr "서명 아이디"
 
-#: ../src/seahorse-key-properties.c:555
+#: ../src/seahorse-key-properties.c:558
 msgid "Couldn't change primary photo"
 msgstr "주요 사진을 바꿀 수 없습니다"
 
-#: ../src/seahorse-key-properties.c:801
+#: ../src/seahorse-key-properties.c:806
 msgid "(unknown)"
 msgstr "(알 수 없음)"
 
-#: ../src/seahorse-key-properties.c:804
+#: ../src/seahorse-key-properties.c:809
 #, c-format
 msgid "This key expired on: %s"
 msgstr "이 키는 다음 날짜에 만료되었습니다: %s"
 
-#: ../src/seahorse-key-properties.c:985 ../src/seahorse-key-properties.c:1377
-#: ../src/seahorse-key-properties.c:1396
+#: ../src/seahorse-key-properties.c:992 ../src/seahorse-key-properties.c:1386
+#: ../src/seahorse-key-properties.c:1405
 msgid "Unable to change trust"
 msgstr "신뢰도를 바꿀 수 없습니다"
 
-#: ../src/seahorse-key-properties.c:1006
+#: ../src/seahorse-key-properties.c:1013
 #: ../src/seahorse-ssh-key-properties.c:215
 msgid "Export Complete Key"
 msgstr "전체 키 내보내기"
 
-#: ../src/seahorse-key-properties.c:1272
+#: ../src/seahorse-key-properties.c:1281
 msgid "ID"
 msgstr "아이디"
 
-#: ../src/seahorse-key-properties.c:1278
+#: ../src/seahorse-key-properties.c:1287
 msgid "Created"
 msgstr "만든 때"
 
-#: ../src/seahorse-key-properties.c:1281
+#: ../src/seahorse-key-properties.c:1290
 msgid "Expires"
 msgstr "만료"
 
-#: ../src/seahorse-key-properties.c:1284
+#: ../src/seahorse-key-properties.c:1293
 msgid "Status"
 msgstr "상태"
 
-#: ../src/seahorse-key-properties.c:1287
+#: ../src/seahorse-key-properties.c:1296
 msgid "Strength"
 msgstr "강도"
 
 # 번역주: revoked/expired의 상대말로 써야 하는데 괜찮을지?
-#: ../src/seahorse-key-properties.c:1296 ../src/seahorse-key-properties.c:1297
+#: ../src/seahorse-key-properties.c:1305 ../src/seahorse-key-properties.c:1306
 msgid "Good"
 msgstr "좋음"
 
-#: ../src/seahorse-keyserver-results.c:106
+#: ../src/seahorse-keyserver-results.c:107
 msgid "Couldn't import keys into key ring"
 msgstr "키를 키 모음으로 가져올 수 없습니다"
 
-#: ../src/seahorse-keyserver-results.c:127
+#: ../src/seahorse-keyserver-results.c:128
 msgid "Importing keys from key servers"
 msgstr "키 서버에서 키를 가져오는 중입니다"
 
-#: ../src/seahorse-keyserver-results.c:146
-#: ../src/seahorse-keyserver-results.c:180
+#: ../src/seahorse-keyserver-results.c:147
+#: ../src/seahorse-keyserver-results.c:181
 #, c-format
 msgid "Couldn't write keys to file: %s"
 msgstr "키를 다음 파일에 쓸 수 없습니다: %s"
 
-#: ../src/seahorse-keyserver-results.c:169
+#: ../src/seahorse-keyserver-results.c:170
 msgid "Save Remote Keys"
 msgstr "원격 키 저장"
 
-#: ../src/seahorse-keyserver-results.c:351
+#: ../src/seahorse-keyserver-results.c:353
 msgid "No matching keys found"
 msgstr "해당하는 키가 없습니다"
 
-#: ../src/seahorse-keyserver-results.c:381
+#: ../src/seahorse-keyserver-results.c:383
 msgid "_Close"
 msgstr "닫기(_C)"
 
-#: ../src/seahorse-keyserver-results.c:382
+#: ../src/seahorse-keyserver-results.c:384
 msgid "Close this window"
 msgstr "이 창을 닫습니다"
 
-#: ../src/seahorse-keyserver-results.c:386
+#: ../src/seahorse-keyserver-results.c:388
 msgid "_Expand All"
 msgstr "모두 펴기(_E)"
 
-#: ../src/seahorse-keyserver-results.c:387
+#: ../src/seahorse-keyserver-results.c:389
 msgid "Expand all listings"
 msgstr "모든 목록을 펼칩니다"
 
-#: ../src/seahorse-keyserver-results.c:388
+#: ../src/seahorse-keyserver-results.c:390
 msgid "_Collapse All"
 msgstr "모두 감추기(_C)"
 
-#: ../src/seahorse-keyserver-results.c:389
+#: ../src/seahorse-keyserver-results.c:391
 msgid "Collapse all listings"
 msgstr "모든 목록을 감춥니다"
 
-#: ../src/seahorse-keyserver-results.c:394
+#: ../src/seahorse-keyserver-results.c:396
 msgid "Import selected keys to local key ring"
 msgstr "선택한 키를 로컬 키 모음에 가져옵니다"
 
-#: ../src/seahorse-keyserver-results.c:397
+#: ../src/seahorse-keyserver-results.c:399
 msgid "Save Key As..."
 msgstr "키를 다른 이름으로 저장..."
 
-#: ../src/seahorse-keyserver-results.c:398
+#: ../src/seahorse-keyserver-results.c:400
 msgid "Save selected keys as a file"
 msgstr "선택한 키를 파일로 저장합니다"
 
-#: ../src/seahorse-keyserver-results.c:399
+#: ../src/seahorse-keyserver-results.c:401
 msgid "_Copy Key"
 msgstr "키 복사(_C)"
 
-#: ../src/seahorse-keyserver-results.c:400
+#: ../src/seahorse-keyserver-results.c:402
 msgid "Copy selected keys to the clipboard"
 msgstr "선택한 키를 클립보드에 복사합니다"
 
-#: ../src/seahorse-keyserver-results.c:457
+#: ../src/seahorse-keyserver-results.c:464
 msgid "Remote Keys"
 msgstr "원격 키"
 
-#: ../src/seahorse-keyserver-results.c:459
+#: ../src/seahorse-keyserver-results.c:466
 #, c-format
 msgid "Remote Keys Containing '%s'"
 msgstr "'%s'이(가) 들어 있는 원격 키"
@@ -2700,7 +2737,9 @@ msgid ""
 "This will publish the keys in your key ring so they're available for others "
 "to use. You'll also get any changes others have made since you received "
 "their keys."
-msgstr "내 키 모음에 들어 있는 키를 다른 사람이 쓸 수 있게 공개합니다. 또 내가 키를 받은 뒤에 다른 사람이 바꾼 내용이 있으면 그 키의 내용을 가져오게 됩니다."
+msgstr ""
+"내 키 모음에 들어 있는 키를 다른 사람이 쓸 수 있게 공개합니다. 또 내가 키를 "
+"받은 뒤에 다른 사람이 바꾼 내용이 있으면 그 키의 내용을 가져오게 됩니다."
 
 #: ../src/seahorse-keyserver-sync.glade.h:4
 msgid ""
@@ -2751,8 +2790,8 @@ msgid "Packaging:"
 msgstr "묶는 방법:"
 
 #: ../src/seahorse-multi-encrypt.glade.h:8
-msgid "encrypted-package.rar"
-msgstr "암호화한-묶음.rar"
+msgid "encrypted-package"
+msgstr "암호화한-묶음"
 
 #: ../src/seahorse-pgp-encrypted.desktop.in.in.h:1
 msgid "Decrypt File"
@@ -2766,19 +2805,19 @@ msgstr "DSA Elgamal"
 msgid "Couldn't generate PGP key"
 msgstr "PGP 키를 만들 수 없습니다"
 
-#: ../src/seahorse-pgp-generate.c:139
+#: ../src/seahorse-pgp-generate.c:138
 msgid "Passphrase for New PGP Key"
-msgstr "새 PGP 키의 열쇠글"
+msgstr "새 PGP 키의 암호"
 
-#: ../src/seahorse-pgp-generate.c:140
+#: ../src/seahorse-pgp-generate.c:139
 msgid "Enter the passphrase for your new key twice."
-msgstr "새 키의 열쇠글을 두 번 입력하십시오."
+msgstr "새 키의 암호를 두 번 입력하십시오."
 
-#: ../src/seahorse-pgp-generate.c:149
+#: ../src/seahorse-pgp-generate.c:148
 msgid "Couldn't generate key"
 msgstr "키를 만들 수 없습니다"
 
-#: ../src/seahorse-pgp-generate.c:151
+#: ../src/seahorse-pgp-generate.c:150
 msgid "Generating key"
 msgstr "키를 만드는 중입니다"
 
@@ -2907,7 +2946,7 @@ msgstr "이 키에 사진을 더합니다"
 #: ../src/seahorse-pgp-private-key-properties.glade.h:18
 #: ../src/seahorse-ssh-key-properties.glade.h:15
 msgid "Change _Passphrase"
-msgstr "열쇠글 바꾸기(_P)"
+msgstr "암호 바꾸기(_P)"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:19
 #: ../src/seahorse-pgp-public-key-properties.glade.h:18
@@ -2988,16 +3027,11 @@ msgid "The owner of the key revoked the key. It can no longer be used."
 msgstr "키의 소유자가 키를 철회했습니다. 이 키는 더 이상 사용할 수 없습니다."
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:41
-#: ../src/seahorse-pgp-public-key-properties.glade.h:33
-msgid "This key expired on: (placeholder)"
-msgstr "이 키는 다음 날짜에 만료되었습니다: (placeholder)"
-
-#: ../src/seahorse-pgp-private-key-properties.glade.h:42
 #: ../src/seahorse-pgp-public-key-properties.glade.h:36
 msgid "Type:"
 msgstr "종류:"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:43
+#: ../src/seahorse-pgp-private-key-properties.glade.h:42
 msgid ""
 "Unknown\n"
 "Never\n"
@@ -3011,11 +3045,11 @@ msgstr ""
 "완전히\n"
 "절대적으로"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:48
+#: ../src/seahorse-pgp-private-key-properties.glade.h:47
 msgid "_Add Name"
 msgstr "이름 더하기(_A)"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:49
+#: ../src/seahorse-pgp-private-key-properties.glade.h:48
 msgid "_Export Complete Key:"
 msgstr "전체 키 내보내기(_E):"
 
@@ -3061,7 +3095,12 @@ msgstr "'%s'이(가) 다른 키에 한 서명을 신뢰합니다"
 #: ../src/seahorse-pgp-public-key-properties.glade.h:26
 msgid ""
 "If you no longer trust this person's identity, <i>revoke</i> your signature:"
-msgstr "이 사람의 키라는 걸 더 이상 신뢰하지 않으면, 자기 서명을 <i>철회</i>하십시오:"
+msgstr ""
+"이 사람의 키라는 걸 더 이상 신뢰하지 않으면, 자기 서명을 <i>철회</i>하십시오:"
+
+#: ../src/seahorse-pgp-public-key-properties.glade.h:33
+msgid "This key expired on: (placeholder)"
+msgstr "이 키는 다음 날짜에 만료되었습니다: (placeholder)"
 
 #: ../src/seahorse-pgp-public-key-properties.glade.h:34
 msgid "To indicate your trust of this key to others, <i>sign</i> this key:"
@@ -3123,6 +3162,7 @@ msgid "_Resize"
 msgstr "크기 조정(_R)"
 
 #: ../src/seahorse-photos.c:125
+#, c-format
 msgid ""
 "This is not a image file, or an unrecognized kind of image file. Try to use "
 "a JPEG image."
@@ -3150,11 +3190,11 @@ msgstr "사진을 덧붙일 수 없습니다"
 msgid "The file could not be loaded. It may be in an invalid format"
 msgstr "파일을 읽어들일 수 업습니다. 형식이 잘못되었습니다"
 
-#: ../src/seahorse-photos.c:317
+#: ../src/seahorse-photos.c:316
 msgid "Are you sure you want to remove the current photo from your key?"
 msgstr "정말로 현재 사진을 키에서 지우시겠습니까?"
 
-#: ../src/seahorse-photos.c:330
+#: ../src/seahorse-photos.c:329
 msgid "Couldn't delete photo"
 msgstr "사진을 지울 수 없습니다"
 
@@ -3186,54 +3226,22 @@ msgid "Couldn't add revoker"
 msgstr "철회 표시를 붙일 수 없습니다"
 
 #: ../src/seahorse-revoke.glade.h:1
-msgid "Compromised"
-msgstr "안전하지 않음"
-
-#: ../src/seahorse-revoke.glade.h:2
-msgid "Key has been compromised"
-msgstr "키가 안전하지 않습니다"
-
-#: ../src/seahorse-revoke.glade.h:3
-msgid "Key has been superseded"
-msgstr "키가 대체되었습니다"
-
-#: ../src/seahorse-revoke.glade.h:4
-msgid "Key is no longer used"
-msgstr "키를 더 이상 사용하지 않습니다"
-
-#: ../src/seahorse-revoke.glade.h:5
-msgid "No Reason"
-msgstr "이유 없음"
-
-#: ../src/seahorse-revoke.glade.h:6
-msgid "No reason for revoking key"
-msgstr "키 철회에 이유가 없습니다"
-
-#: ../src/seahorse-revoke.glade.h:7
-msgid "Not Used"
-msgstr "사용하지 않음"
-
-#: ../src/seahorse-revoke.glade.h:8
 msgid "Optional description of revocation"
 msgstr "철회하는 이유 (선택 정보)"
 
-#: ../src/seahorse-revoke.glade.h:9
+#: ../src/seahorse-revoke.glade.h:2
 msgid "Re_voke"
 msgstr "철회(_V)"
 
-#: ../src/seahorse-revoke.glade.h:10
+#: ../src/seahorse-revoke.glade.h:3
 msgid "Reason for revoking the key"
 msgstr "키를 철회하는 이유"
 
-#: ../src/seahorse-revoke.glade.h:12
-msgid "Superseded"
-msgstr "대체됨"
-
-#: ../src/seahorse-revoke.glade.h:13
+#: ../src/seahorse-revoke.glade.h:5
 msgid "_Description:"
 msgstr "설명(_D):"
 
-#: ../src/seahorse-revoke.glade.h:14
+#: ../src/seahorse-revoke.glade.h:6
 msgid "_Reason:"
 msgstr "이유(_R):"
 
@@ -3330,11 +3338,11 @@ msgstr "서명에 사용할 키(_S):"
 msgid "_Very Carefully"
 msgstr "매우 철저히(_V)"
 
-#: ../src/seahorse-ssh-generate.c:40
+#: ../src/seahorse-ssh-generate.c:43
 msgid "Couldn't generate Secure Shell key"
 msgstr "보안 쉘 키를 만들 수 없습니다"
 
-#: ../src/seahorse-ssh-generate.c:127
+#: ../src/seahorse-ssh-generate.c:149
 msgid "Creating Secure Shell Key"
 msgstr "보안 쉘 키를 만드는 중입니다"
 
@@ -3353,7 +3361,7 @@ msgid ""
 "for each of them."
 msgstr ""
 "보안 쉘 (SSH) 키를 이용하면 신뢰하는 컴퓨터에 안전하게 SSH를\n"
-"이용해 연결할 수 있습니다. 컴퓨터마다 열쇠글을 입력할 필요가\n"
+"이용해 연결할 수 있습니다. 컴퓨터마다 암호를 입력할 필요가\n"
 "없게 됩니다."
 
 #: ../src/seahorse-ssh-generate.glade.h:8
@@ -3390,7 +3398,7 @@ msgstr "이 키에 대한 인증을 바꿀 수 없습니다."
 
 #: ../src/seahorse-ssh-key-properties.c:171
 msgid "Couldn't change passhrase for key."
-msgstr "키의 열쇠글을 바꿀 수 없습니다."
+msgstr "키의 암호를 바꿀 수 없습니다."
 
 #: ../src/seahorse-ssh-key-properties.glade.h:1
 msgid "/home/nate/.ssh/blah_rsa"
@@ -3442,7 +3450,7 @@ msgid "Couldn't configure Secure Shell keys on remote computer."
 msgstr "원격 컴퓨터의 보안 쉘 키를 설정할 수 없습니다."
 
 #. Show the progress window if necessary
-#: ../src/seahorse-ssh-upload.c:140
+#: ../src/seahorse-ssh-upload.c:177
 msgid "Configuring Secure Shell Keys..."
 msgstr "보안 쉘 키를 설정하는 중입니다..."
 
