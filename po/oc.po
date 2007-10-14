@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse 0.9.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-08-23 03:31+0100\n"
+"POT-Creation-Date: 2007-10-13 17:50+0200\n"
 "PO-Revision-Date: 2007-09-01 18:58+0200\n"
 "Last-Translator: Yannig MARCHEGAY (Kokoyaya) <yannig@marchegay.org>\n"
 "Language-Team: Occitan (post 1500) <ubuntu-l10n-oci@lists.ubuntu.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: ../agent/seahorse-agent-actions.c:133
 #: ../libseahorse/seahorse-ssh-operation.c:445
@@ -189,10 +189,12 @@ msgid "Key is not a valid recipient for encryption: %s"
 msgstr ""
 
 #: ../daemon/seahorse-service-crypto.c:156
+#, c-format
 msgid "No recipients specified"
 msgstr ""
 
 #: ../daemon/seahorse-service-crypto.c:222
+#, c-format
 msgid "No signer specified"
 msgstr ""
 
@@ -621,17 +623,24 @@ msgstr ""
 #: ../libseahorse/seahorse-notification.c:559
 #: ../libseahorse/seahorse-notification.c:589
 msgid "Key Imported"
-msgstr ""
+msgid_plural "Keys Imported"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ../libseahorse/seahorse-notification.c:563
 #: ../libseahorse/seahorse-notification.c:588
 #, c-format
 msgid "Imported %i key"
-msgstr ""
+msgid_plural "Imported %i keys"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ../libseahorse/seahorse-notification.c:565
+#, c-format
 msgid "Imported a key for"
-msgstr ""
+msgid_plural "Imported keys for"
+msgstr[0] ""
+msgstr[1] ""
 
 #. TRANSLATORS: <key id='xxx'> is a custom markup tag, do not translate.
 #: ../libseahorse/seahorse-notification.c:617
@@ -710,6 +719,7 @@ msgid "Confirm:"
 msgstr "Confirmar :"
 
 #: ../libseahorse/seahorse-passphrase.c:325
+#, c-format
 msgid "Wrong passphrase."
 msgstr ""
 
@@ -766,7 +776,9 @@ msgstr "Clau PGP"
 #: ../libseahorse/seahorse-pgp-source.c:723
 #, c-format
 msgid "Loaded %d key"
-msgstr ""
+msgid_plural "Loaded %d keys"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ../libseahorse/seahorse-pgp-source.c:778
 msgid "Loading Keys..."
@@ -809,7 +821,7 @@ msgstr "Personalisat"
 msgid "None: Don't publish keys"
 msgstr ""
 
-#: ../libseahorse/seahorse-prefs.c:681
+#: ../libseahorse/seahorse-prefs.c:687
 msgid "None. Prompt for a key."
 msgstr ""
 
@@ -1051,6 +1063,7 @@ msgstr ""
 
 #: ../libseahorse/seahorse-ssh-operation.c:135
 #: ../libseahorse/seahorse-ssh-operation.c:697
+#, c-format
 msgid "The SSH command was terminated unexpectedly."
 msgstr ""
 
@@ -1098,29 +1111,29 @@ msgstr ""
 msgid "Enter a passphrase for your new Secure Shell key."
 msgstr ""
 
-#: ../libseahorse/seahorse-ssh-operation.c:1034
+#: ../libseahorse/seahorse-ssh-operation.c:1036
 msgid "Secure Shell Key Passphrase"
 msgstr ""
 
-#: ../libseahorse/seahorse-ssh-operation.c:1034
+#: ../libseahorse/seahorse-ssh-operation.c:1036
 #, c-format
 msgid "Enter the passphrase for: %s"
 msgstr ""
 
-#: ../libseahorse/seahorse-ssh-operation.c:1035
+#: ../libseahorse/seahorse-ssh-operation.c:1037
 msgid "Save this passphrase in my keyring"
 msgstr ""
 
-#: ../libseahorse/seahorse-ssh-operation.c:1109
+#: ../libseahorse/seahorse-ssh-operation.c:1111
 #, c-format
 msgid "Importing key: %s"
 msgstr ""
 
-#: ../libseahorse/seahorse-ssh-operation.c:1111
+#: ../libseahorse/seahorse-ssh-operation.c:1113
 msgid "Importing key. Enter passphrase"
 msgstr ""
 
-#: ../libseahorse/seahorse-ssh-operation.c:1113
+#: ../libseahorse/seahorse-ssh-operation.c:1115
 #: ../src/seahorse-key-manager.c:515
 #: ../src/seahorse-pgp-keys.desktop.in.in.h:1
 msgid "Import Key"
@@ -1164,7 +1177,7 @@ msgid "Couldn't run file-roller"
 msgstr ""
 
 #: ../libseahorse/seahorse-util.c:733
-#: ../plugins/nautilus/seahorse-tool-files.c:831
+#: ../plugins/nautilus/seahorse-tool-files.c:830
 msgid "Couldn't package files"
 msgstr ""
 
@@ -1452,7 +1465,9 @@ msgstr ""
 #: ../plugins/nautilus/seahorse-tool.c:374 ../src/seahorse-key-manager.c:404
 #, c-format
 msgid "Imported %d key"
-msgstr ""
+msgid_plural "Imported %d keys"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ../plugins/gedit/seahorse-gedit.c:633
 msgid "Signed text"
@@ -1508,7 +1523,9 @@ msgstr ""
 
 #: ../plugins/nautilus-ext/seahorse-nautilus.c:162
 msgid "Encrypt (and optionally sign) the selected file"
-msgstr ""
+msgid_plural "Encrypt the selected files"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ../plugins/nautilus-ext/seahorse-nautilus.c:168
 #: ../src/seahorse-pgp-private-key-properties.glade.h:38
@@ -1517,7 +1534,9 @@ msgstr ""
 
 #: ../plugins/nautilus-ext/seahorse-nautilus.c:169
 msgid "Sign the selected file"
-msgstr ""
+msgid_plural "Sign the selected files"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ../plugins/nautilus/seahorse-pgp-preferences.c:43
 #: ../plugins/nautilus/seahorse-pgp-preferences.c:47
@@ -1584,6 +1603,7 @@ msgid "Choose Signature File Name for '%s'"
 msgstr ""
 
 #: ../plugins/nautilus/seahorse-tool.c:372
+#, c-format
 msgid "Imported key"
 msgstr "Clau importada"
 
@@ -1604,6 +1624,7 @@ msgstr ""
 #. * dialogs at the user.
 #.
 #: ../plugins/nautilus/seahorse-tool.c:524
+#, c-format
 msgid "No valid signatures found"
 msgstr ""
 
@@ -1733,14 +1754,18 @@ msgstr "7-Zip (.7z)"
 #: ../plugins/nautilus/seahorse-tool-files.c:318
 #, c-format
 msgid "You have selected %d file "
-msgstr ""
+msgid_plural "You have selected %d files "
+msgstr[0] ""
+msgstr[1] ""
 
 #. TRANSLATOR: This string will become
 #. * "You have selected %d files and %d folders"
 #: ../plugins/nautilus/seahorse-tool-files.c:323
 #, c-format
 msgid "and %d folder"
-msgstr ""
+msgid_plural "and %d folders"
+msgstr[0] ""
+msgstr[1] ""
 
 #. TRANSLATOR: "%s%s" are "You have selected %d files and %d folders"
 #. * Swap order with "%2$s%1$s" if needed
@@ -1758,14 +1783,16 @@ msgstr ""
 #: ../plugins/nautilus/seahorse-tool-files.c:342
 #, c-format
 msgid "You have selected %d folder"
-msgstr ""
+msgid_plural "You have selected %d folders"
+msgstr[0] ""
+msgstr[1] ""
 
-#: ../plugins/nautilus/seahorse-tool-files.c:812
+#: ../plugins/nautilus/seahorse-tool-files.c:811
 msgid "Preparing..."
 msgstr "Preparacion..."
 
-#: ../plugins/nautilus/seahorse-tool-files.c:821
-#: ../plugins/nautilus/seahorse-tool-files.c:844
+#: ../plugins/nautilus/seahorse-tool-files.c:820
+#: ../plugins/nautilus/seahorse-tool-files.c:843
 msgid "Couldn't list files"
 msgstr ""
 
@@ -1898,7 +1925,9 @@ msgstr ""
 #: ../src/seahorse-delete.c:80
 #, c-format
 msgid "Are you sure you want to permanently delete %d key?"
-msgstr ""
+msgid_plural "Are you sure you want to permanently delete %d keys?"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ../src/seahorse-delete.c:124
 msgid "Couldn't delete key"
@@ -2149,7 +2178,9 @@ msgstr ""
 #: ../src/seahorse-key-manager.c:576 ../src/seahorse-keyserver-results.c:234
 #, c-format
 msgid "Copied %d key"
-msgstr ""
+msgid_plural "Copied %d keys"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ../src/seahorse-key-manager.c:600 ../src/seahorse-keyserver-results.c:194
 #: ../src/seahorse-keyserver-results.c:259
@@ -2189,7 +2220,9 @@ msgstr ""
 #: ../src/seahorse-key-manager.c:950 ../src/seahorse-keyserver-results.c:300
 #, c-format
 msgid "Selected %d key"
-msgstr ""
+msgid_plural "Selected %d keys"
+msgstr[0] ""
+msgstr[1] ""
 
 #. Top menu items
 #: ../src/seahorse-key-manager.c:1189 ../src/seahorse-keyserver-results.c:379
@@ -2632,7 +2665,9 @@ msgstr ""
 #: ../src/seahorse-keyserver-sync.c:147
 #, c-format
 msgid "<b>%d key is selected for synchronizing</b>"
-msgstr ""
+msgid_plural "<b>%d keys are selected for synchronizing</b>"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ../src/seahorse-keyserver-sync.c:214
 msgid "Synchronizing keys"
@@ -2719,19 +2754,19 @@ msgstr ""
 msgid "Couldn't generate PGP key"
 msgstr ""
 
-#: ../src/seahorse-pgp-generate.c:139
+#: ../src/seahorse-pgp-generate.c:138
 msgid "Passphrase for New PGP Key"
 msgstr ""
 
-#: ../src/seahorse-pgp-generate.c:140
+#: ../src/seahorse-pgp-generate.c:139
 msgid "Enter the passphrase for your new key twice."
 msgstr ""
 
-#: ../src/seahorse-pgp-generate.c:149
+#: ../src/seahorse-pgp-generate.c:148
 msgid "Couldn't generate key"
 msgstr ""
 
-#: ../src/seahorse-pgp-generate.c:151
+#: ../src/seahorse-pgp-generate.c:150
 msgid "Generating key"
 msgstr ""
 
@@ -3060,6 +3095,7 @@ msgid "_Resize"
 msgstr ""
 
 #: ../src/seahorse-photos.c:125
+#, c-format
 msgid ""
 "This is not a image file, or an unrecognized kind of image file. Try to use "
 "a JPEG image."
