@@ -429,7 +429,9 @@ setup_keyservers (SeahorseWidget *swidget)
     skc = seahorse_keyserver_control_new (PUBLISH_TO_KEY, _("None: Don't publish keys"));
     gtk_container_add (GTK_CONTAINER (w), GTK_WIDGET (skc));
     gtk_widget_show_all (w);
-    
+
+    w = glade_xml_get_widget (swidget->xml, "keyserver-publish-to-label");
+    gtk_label_set_mnemonic_widget (GTK_LABEL (w), GTK_WIDGET (skc));
     
     w = glade_xml_get_widget(swidget->xml, "auto_retrieve");
     g_return_if_fail (w != NULL);
@@ -595,6 +597,7 @@ setup_gnome_keyring (SeahorseWidget *swidget)
     GtkWidget *entry;
     GtkWidget *table;
     GtkWidget *widget;
+    GtkWidget *label;
     
     table = seahorse_widget_get_widget (swidget, "entry-table");
     
@@ -604,7 +607,10 @@ setup_gnome_keyring (SeahorseWidget *swidget)
     g_object_set_data (G_OBJECT (table), "old-master", entry);
     g_signal_connect (G_OBJECT (entry), "activate", G_CALLBACK (keyring_new_cb), table);
     g_signal_connect (G_OBJECT (entry), "changed", G_CALLBACK (keyring_entry_changed_cb), swidget);
-    
+
+    label = seahorse_widget_get_widget (swidget, "current-pwd-label");
+    gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
+
     entry = seahorse_secure_entry_new ();
     gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 1, 2, 
                       GTK_EXPAND|GTK_FILL, GTK_EXPAND|GTK_FILL, 0, 0);
@@ -612,13 +618,19 @@ setup_gnome_keyring (SeahorseWidget *swidget)
     g_signal_connect (G_OBJECT (entry), "activate", G_CALLBACK (keyring_confirm_cb), table);
     g_signal_connect (G_OBJECT (entry), "changed", G_CALLBACK (keyring_entry_changed_cb), swidget);
     
+    label = seahorse_widget_get_widget (swidget, "new-pwd-label");
+    gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
+
     entry = seahorse_secure_entry_new ();
     gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 2, 3, 
                       GTK_EXPAND|GTK_FILL, GTK_EXPAND|GTK_FILL, 0, 0);
     g_object_set_data (G_OBJECT (table), "confirm-master", entry);
     g_signal_connect (G_OBJECT (entry), "activate", G_CALLBACK (keyring_enter_cb), swidget);
     g_signal_connect (G_OBJECT (entry), "changed", G_CALLBACK (keyring_entry_changed_cb), swidget); 
-    
+
+    label = seahorse_widget_get_widget (swidget, "confirm-pwd-label");
+    gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
+
     gtk_widget_show_all (table);                  
     
     widget = seahorse_widget_get_widget (swidget, "change-master-button");
