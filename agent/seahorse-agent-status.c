@@ -32,7 +32,6 @@
 #include "seahorse-context.h"
 #include "seahorse-gconf.h"
 #include "seahorse-widget.h"
-#include "seahorse-secure-memory.h"
 #include "seahorse-util.h"
  
 /* 
@@ -187,14 +186,6 @@ window_show ()
                                    G_CALLBACK (close_clicked), g_window);
     glade_xml_signal_connect_data (g_window->xml, "clear_clicked",
                                    G_CALLBACK (clear_clicked), g_window);
-
-    /* The secure memory warning */
-    if (!seahorse_secure_memory_have ()) {
-        GdkColor color = { 0, 0xffff, 0, 0 };
-        w = glade_xml_get_widget (g_window->xml, "insecure_label");
-        gtk_widget_modify_fg (w, GTK_STATE_NORMAL, &color);
-        gtk_widget_show (w);
-    }
 
     window_update_keys ();
 }

@@ -192,8 +192,6 @@ save_cache_choices (GtkWidget *unused, SeahorseWidget *swidget)
         return;
     }
     
-#ifdef WITH_GNOME_KEYRING
-    
     widget = seahorse_widget_get_widget (swidget, "keyring-cache");
     g_return_if_fail (widget != NULL);
     
@@ -204,10 +202,7 @@ save_cache_choices (GtkWidget *unused, SeahorseWidget *swidget)
         gtk_widget_set_sensitive (widget_ttl, FALSE);
         seahorse_gconf_set_boolean (SETTING_EXPIRE, FALSE);
         save_gpg_conf ();
-    }
-
-#endif /* WITH_GNOME_KEYRING */
-    
+    }    
 }
 
 static void
@@ -325,11 +320,7 @@ seahorse_prefs_cache (SeahorseWidget *swidget)
     
     w = seahorse_widget_get_widget (swidget, "keyring-cache");
     g_return_if_fail (w != NULL);
-#ifdef WITH_GNOME_KEYRING    
     g_signal_connect_after (w, "toggled", G_CALLBACK (save_cache_choices), swidget);
-#else
-    gtk_widget_hide (w);
-#endif 
     
     w = seahorse_widget_get_widget (swidget, "ttl");
     g_return_if_fail (w != NULL);

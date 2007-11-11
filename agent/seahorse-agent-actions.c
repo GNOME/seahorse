@@ -27,7 +27,8 @@
 
 #include "seahorse-gconf.h"
 #include "seahorse-agent.h"
-#include "seahorse-secure-memory.h"
+
+#include <gnome-keyring-memory.h>
 
 /*
  * Implements a queue of SeahorseAgentPassReq items. We can only show one dialog
@@ -52,12 +53,7 @@ encode_password (const gchar *pass)
 
     /* Encode the password */
     c = sizeof (gchar *) * ((strlen (pass) * 2) + 1);
-    k = enc = (gchar *) seahorse_secure_memory_malloc (c);
-    if (!enc) {
-        g_critical ("out of secure memory");
-        return NULL;
-    }
-    memset (enc, 0, c);
+    k = enc = gnome_keyring_memory_new (gchar, c);
 
     /* Simple hex encoding */
     while (*pass) {
@@ -118,7 +114,7 @@ seahorse_agent_actions_getpass (SeahorseAgentConn *rq, guint32 flags, gchar *id,
             } else {
                 enc = encode_password (pass);
                 seahorse_agent_io_reply (rq, TRUE, enc);
-                seahorse_secure_memory_free (enc);
+                gnome_keyring_memory_free (enc);
             }
             return;
         }
@@ -194,7 +190,7 @@ seahorse_agent_actions_donepass (SeahorseAgentPassReq *pr, const gchar *pass)
         } else {
             enc = encode_password (pass);
             seahorse_agent_io_reply (pr->request, TRUE, enc);
-            seahorse_secure_memory_free (enc);
+            gnome_keyring_memory_free (enc);
         }
     }
 

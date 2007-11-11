@@ -27,14 +27,12 @@
 
 #include <gnome.h>
 
-#ifdef WITH_GNOME_KEYRING
 #include <gnome-keyring.h>
-#endif
+#include <gnome-keyring-memory.h>
 
 #include "seahorse-gconf.h"
 #include "seahorse-gpgmex.h"
 #include "seahorse-agent.h"
-#include "seahorse-secure-memory.h"
 #include "seahorse-key-source.h"
 #include "seahorse-pgp-key.h"
 #include "seahorse-context.h"
@@ -212,7 +210,7 @@ destroy_cache_item (gpointer data)
             g_free (it->desc);
 
         if (it->pass)
-            seahorse_secure_memory_free (it->pass);
+            gnome_keyring_memory_free (it->pass);
 
         g_chunk_free (it, g_memory);
     }
@@ -410,8 +408,8 @@ seahorse_agent_internal_set (const gchar *id, const gchar *pass, gboolean lock)
 
     /* Work with the password */
     if (it->pass)
-        seahorse_secure_memory_free (it->pass);
-    it->pass = seahorse_secure_memory_malloc (strlen (pass) + 1);
+        gnome_keyring_memory_free (it->pass);
+    it->pass = gnome_keyring_memory_alloc (strlen (pass) + 1);
     strcpy (it->pass, pass);
 
     /* If not caching set to the epoch which should always expire */
@@ -475,8 +473,6 @@ seahorse_agent_cache_get_keys ()
 #define KEYRING_ATTR_KEYID "openpgp-keyid"
 #define KEYRING_VAL_GPG "openpgp"
 
-#ifdef WITH_GNOME_KEYRING
-
 static gboolean 
 only_internal_cache ()
 {
@@ -503,16 +499,12 @@ gkeyring_keyid (const gchar *fullid)
     return fullid + (len > 16 ? len - 16 : 0);
 }
 
-#endif /* WITH_GNOME_KEYRING */
-    
 void
 seahorse_agent_cache_set (const gchar *id, const gchar *pass, gboolean lock)
 {
     /* Store in our internal cache */
     seahorse_agent_internal_set (id, pass, lock);
 
-#ifdef WITH_GNOME_KEYRING
-    
     /* Store in gnome-keyring */
     if (id && !only_internal_cache ()) {
         
@@ -545,9 +537,6 @@ seahorse_agent_cache_set (const gchar *id, const gchar *pass, gboolean lock)
         if (res != GNOME_KEYRING_RESULT_OK)
             g_warning ("Couldn't store password in keyring: (code %d)", res);
     }
-    
-#endif /* WITH_GNOME_KEYRING */
-    
 }
 
 void
@@ -555,8 +544,6 @@ seahorse_agent_cache_clear (const gchar *id)
 {
     /* Clear from our internal cache */
     seahorse_agent_internal_clear (id);
-    
-#ifdef WITH_GNOME_KEYRING 
     
     /* Clear from gnome-keyring */
     if (id && !only_internal_cache ()) {
@@ -588,9 +575,6 @@ seahorse_agent_cache_clear (const gchar *id)
         }
         
     }
-    
-#endif /* WITH_GNOME_KEYRING */
-
 }
 
 const gchar* 
@@ -600,8 +584,6 @@ seahorse_agent_cache_get (const gchar *id)
     
     /* Always look in our own keyring first */
     ret = seahorse_agent_internal_get (id);
-        
-#ifdef WITH_GNOME_KEYRING 
     
     /* Clear from gnome-keyring */
     if (!ret && id && !only_internal_cache ()) {
@@ -640,8 +622,6 @@ seahorse_agent_cache_get (const gchar *id)
         
     }
     
-#endif /* WITH_GNOME_KEYRING */
-    
     return ret;
 }
 
@@ -652,8 +632,6 @@ seahorse_agent_cache_has (const gchar *id, gboolean lock)
     if (seahorse_agent_internal_has (id, lock))
         return TRUE;
     
-#ifdef WITH_GNOME_KEYRING 
-
     /* Retrieve from keyring and lock in local */
     if (id && !only_internal_cache ()) {
         
@@ -665,8 +643,6 @@ seahorse_agent_cache_has (const gchar *id, gboolean lock)
         seahorse_agent_internal_set (id, pass, TRUE);
         return TRUE;
     }
-
-#endif /* WITH_GNOME_KEYRING */
     
     return FALSE;
 }

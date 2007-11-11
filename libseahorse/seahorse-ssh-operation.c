@@ -30,9 +30,7 @@
 #include "seahorse-gpgmex.h"
 #include "seahorse-passphrase.h"
 
-#ifdef WITH_GNOME_KEYRING
 #include <gnome-keyring.h>
-#endif
 
 #ifndef DEBUG_OPERATION_ENABLE
 #if _DEBUG
@@ -941,8 +939,6 @@ seahorse_ssh_operation_generate (SeahorseSSHSource *src, const gchar *email,
  * LOAD KEY INTO AGENT
  */ 
 
-#ifdef WITH_GNOME_KEYRING
-
 #define KEYRING_ATTR_TYPE "seahorse-key-type"
 #define KEYRING_ATTR_KEYID "openssh-keyid"
 #define KEYRING_VAL_SSH "openssh"
@@ -1012,12 +1008,9 @@ set_keyring_passphrase (SeahorseKey *skey, const gchar *pass)
         g_warning ("Couldn't store password in keyring: (code %d)", res);
 }
 
-#endif /* WITH_GNOME_KEYRING */
-
 static const gchar*
 load_password_cb (SeahorseSSHOperation *sop, const gchar* msg)
 {
-#ifdef WITH_GNOME_KEYRING
     SeahorseSSHOperationPrivate *pv = SEAHORSE_SSH_OPERATION_GET_PRIVATE (sop);
     gchar* pass;
 
@@ -1031,7 +1024,6 @@ load_password_cb (SeahorseSSHOperation *sop, const gchar* msg)
         }
         pv->prompt_requests++;
     }
-#endif /* WITH_GNOME_KEYRING */
     
     return prompt_passphrase (sop, _("Secure Shell Key Passphrase"), _("Enter the passphrase for: %s"), 
                               _("Save this passphrase in my keyring"), FALSE);
@@ -1040,7 +1032,6 @@ load_password_cb (SeahorseSSHOperation *sop, const gchar* msg)
 static void
 load_result_cb (SeahorseSSHOperation *sop)
 {
-#ifdef WITH_GNOME_KEYRING
     SeahorseSSHOperationPrivate *pv = SEAHORSE_SSH_OPERATION_GET_PRIVATE (sop);
     const gchar* pass;
     
@@ -1048,7 +1039,6 @@ load_result_cb (SeahorseSSHOperation *sop)
         pass = seahorse_passphrase_prompt_get (pv->prompt_dialog);
         set_keyring_passphrase (pv->prompt_skey, pass);
     }
-#endif /* WITH_GNOME_KEYRING */
 }
 
 SeahorseOperation*

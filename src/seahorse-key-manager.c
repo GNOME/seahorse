@@ -51,10 +51,8 @@
 #include "seahorse-ssh-key.h"
 #endif
 
-#ifdef WITH_GNOME_KEYRING
 #include "seahorse-gkeyring-item.h"
 #include "seahorse-gkeyring-source.h"
-#endif
 
 #define TRACK_SELECTED_KEY    "track-selected-keyid"
 #define TRACK_SELECTED_TAB    "track-selected-tabid"
@@ -116,8 +114,6 @@ static gboolean selection_changed (SeahorseWidget *swidget);
 
 /* SIGNAL CALLBACKS --------------------------------------------------------- */
 
-#ifdef WITH_GNOME_KEYRING
-
 /* Loads gnome-keyring keys when first accessed */
 static void
 load_gkeyring_items (SeahorseWidget *swidget, SeahorseContext *sctx)
@@ -137,8 +133,6 @@ load_gkeyring_items (SeahorseWidget *swidget, SeahorseContext *sctx)
     /* Monitor loading progress */
     seahorse_progress_status_set_operation (swidget, op);
 }
-
-#endif /* WITH_GNOME_KEYRING */
 
 /* Quits seahorse */
 static void
@@ -363,10 +357,8 @@ show_properties (SeahorseKey *skey, GtkWindow *parent)
     else if (SEAHORSE_IS_SSH_KEY (skey))
         seahorse_ssh_key_properties_new (SEAHORSE_SSH_KEY (skey), parent);
 #endif 
-#ifdef WITH_GNOME_KEYRING
     else if (SEAHORSE_IS_GKEYRING_ITEM (skey))
         seahorse_gkeyring_item_properties_new (SEAHORSE_GKEYRING_ITEM (skey), parent);
-#endif
 }
 
 /* Loads generate dialog */
@@ -1093,10 +1085,8 @@ tab_changed (GtkWidget *widget, GtkNotebookPage *page, guint page_num,
      * of the gnome key ring items until we first access them. 
      */
     
-#ifdef WITH_GNOME_KEYRING
     if (get_tab_id (get_current_tab (swidget)) == TAB_PASSWORD)
         load_gkeyring_items (swidget, SCTX_APP ());
-#endif
 }
 
 static gboolean
@@ -1389,19 +1379,7 @@ seahorse_key_manager_show (SeahorseOperation *op)
     initialize_tab (swidget, "pub-key-tab", TAB_PUBLIC, "pub-key-list", &pred_public);
     initialize_tab (swidget, "trust-key-tab", TAB_TRUSTED, "trust-key-list", &pred_trusted);
     initialize_tab (swidget, "sec-key-tab", TAB_PRIVATE, "sec-key-list", &pred_private);
-
-#ifdef WITH_GNOME_KEYRING
     initialize_tab (swidget, "password-tab", TAB_PASSWORD, "password-list", &pred_password);
-#else
-    {
-        guint page;
-        w = seahorse_widget_get_widget (swidget, "password-tab");
-        g_return_val_if_fail (w, win);
-        page = gtk_notebook_page_num (notebook, w);
-        g_return_val_if_fail (page != -1, win);
-        gtk_notebook_remove_page (notebook, page);
-    }
-#endif
     
     /* Set focus to the current key list */
     w = GTK_WIDGET (get_current_view (swidget));

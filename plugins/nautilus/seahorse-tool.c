@@ -553,22 +553,8 @@ main (int argc, char **argv)
     gchar **uris = NULL;
     int ret = 0;
 
-    seahorse_secure_memory_init (65536);
-    
-    /* We need to drop privileges completely for security */
-#if defined(HAVE_SETRESUID) && defined(HAVE_SETRESGID)
-
-    /* Not in header files for all OSs, even where present */
-    int setresuid(uid_t ruid, uid_t euid, uid_t suid);
-    int setresgid(gid_t rgid, gid_t egid, gid_t sgid);
-  
-    if (setresuid (getuid (), getuid (), getuid ()) == -1 ||
-        setresgid (getgid (), getgid (), getgid ()) == -1)
-#else
-    if (setuid (getuid ()) == -1 || setgid (getgid ()) == -1)
-#endif
-        g_error (_("couldn't drop privileges properly"));
-    
+    seahorse_secure_memory_init ();
+        
 #ifdef ENABLE_NLS
     bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
     bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");

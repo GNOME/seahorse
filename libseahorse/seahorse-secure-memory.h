@@ -27,27 +27,13 @@ extern gboolean seahorse_use_secure_mem;
 
 #define WITH_SECURE_MEM(EXP) \
     do { \
-        gboolean tmp = seahorse_use_secure_mem; \
+        gboolean _tmp = seahorse_use_secure_mem; \
         seahorse_use_secure_mem = TRUE; \
         EXP; \
-        seahorse_use_secure_mem = tmp; \
+        seahorse_use_secure_mem = _tmp; \
     } while (0)
 
 /* This must be called before any glib/gtk/gnome functions */
-void    seahorse_secure_memory_init         (size_t npool);
-
-void    seahorse_secure_memory_term         ();
-
-int     seahorse_secure_memory_have         ();
-
-void*   seahorse_secure_memory_malloc       (size_t size);
-
-void*   seahorse_secure_memory_realloc      (void *a, size_t newsize);
-
-void    seahorse_secure_memory_free         (void *a);
-
-int     seahorse_secure_memory_check        (const void *p);
-
-void    seahorse_secure_memory_dump_stats   (void);
+void    seahorse_secure_memory_init         (void);
 
 #endif /* _SEAHORSE_SECURE_MEMORY_H_ */

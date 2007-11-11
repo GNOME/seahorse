@@ -26,14 +26,14 @@ else
 SSH_SRCS = 
 endif
 
-if WITH_GNOME_KEYRING
-GNOME_KEYRING_SRCS = seahorse-gkeyring-item.c seahorse-gkeyring-item.h 
-GNOME_KEYRING_SRCS += seahorse-gkeyring-source.c seahorse-gkeyring-source.h
-GNOME_KEYRING_SRCS += seahorse-gkeyring-operation.c seahorse-gkeyring-operation.h
-GNOME_KEYRING_SRCS += seahorse-gkeyring-item-properties.c
-else
-GNOME_KEYRING_SRCS = 
-endif
+GNOME_KEYRING_SRCS = \
+	seahorse-gkeyring-item.c \
+	seahorse-gkeyring-item.h \
+	seahorse-gkeyring-source.c \
+	seahorse-gkeyring-source.h \
+	seahorse-gkeyring-operation.c \
+	seahorse-gkeyring-operation.h \
+	seahorse-gkeyring-item-properties.c
 
 bin_PROGRAMS = seahorse
 
