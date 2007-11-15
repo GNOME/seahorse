@@ -565,7 +565,10 @@ else
             
             EPIPHANY_EXTENSION_INIT([$E_API_VERSION], [$EPIPHANY_REQUIRED])
             AC_SUBST([E_API_VERSION])
-            
+
+            EPIPHANY_EXTENSIONS_DIR=$(pkg-config --variable=extensionsdir epiphany-$E_API_VERSION)
+            AC_SUBST([EPIPHANY_EXTENSIONS_DIR])
+
             AC_SUBST([EPIPHANY_DEPENDENCY_CFLAGS])
             AC_SUBST([EPIPHANY_DEPENDENCY_LIBS])
             AC_SUBST([MOZILLA_COMPONENT_CFLAGS])
