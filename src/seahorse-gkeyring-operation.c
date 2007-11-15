@@ -30,9 +30,7 @@
 #include "seahorse-gpgmex.h"
 #include "seahorse-passphrase.h"
 
-#ifdef WITH_GNOME_KEYRING
 #include <gnome-keyring.h>
-#endif
 
 #ifndef DEBUG_OPERATION_ENABLE
 #if _DEBUG

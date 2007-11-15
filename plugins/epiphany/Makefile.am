@@ -1,6 +1,6 @@
 SUBDIRS = mozilla
 
-extensiondir = $(libdir)/epiphany/$(E_API_VERSION)/extensions
+extensiondir = $(EPIPHANY_EXTENSIONS_DIR)
 extension_LTLIBRARIES = libseahorseextension.la
 
 libseahorseextension_la_SOURCES =	\
