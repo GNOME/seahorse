@@ -17,15 +17,9 @@ INCLUDES = -I$(top_builddir) \
 
 bin_PROGRAMS = seahorse-agent
 
-if WITH_SSH
-SSH_SRCS = seahorse-agent-ssh.c
-else
-SSH_SRCS = 
-endif
-
 seahorse_agent_SOURCES = seahorse-agent.c seahorse-agent.h seahorse-agent-main.c \
 						 seahorse-agent-actions.c seahorse-agent-cache.c seahorse-agent-prompt.c \
-						 seahorse-agent-io.c seahorse-agent-status.c $(SSH_SRCS)
+						 seahorse-agent-io.c seahorse-agent-status.c
 
 seahorse_agent_LDADD = \
     $(top_builddir)/libseahorse/libseahorse.a \

@@ -88,9 +88,6 @@ static void
 clear_clicked (GtkButton *button, SeahorseWidget *swidget)
 {
     seahorse_agent_cache_clearall ();
-#ifdef WITH_SSH
-    seahorse_agent_ssh_clearall ();
-#endif
     window_destroy ();
 }
 
@@ -158,11 +155,6 @@ window_update_keys ()
     
     /* The keys from the PGP cache */
     add_keys_to_store (store, seahorse_agent_cache_get_keys ());
-    
-#ifdef WITH_SSH
-    /* And  the ones from the SSH agent */
-    add_keys_to_store (store, seahorse_agent_ssh_cached_keys ());
-#endif
 }
 
 /* Display the status window */
@@ -212,7 +204,6 @@ static void
 on_settings_childsetup (gpointer unused)
 {
     seahorse_agent_childsetup ();
-    seahorse_agent_ssh_childsetup ();
 }
 
 static void
@@ -343,11 +334,7 @@ seahorse_agent_status_update ()
 
     if (have) {
         /* Only show when allowed to display, and have cached keys */
-        have = (seahorse_agent_cache_count () > 0)
-#ifdef WITH_SSH
-                || (seahorse_agent_ssh_count_keys () > 0)
-#endif 
-        ;
+        have = (seahorse_agent_cache_count () > 0);
     }
     
     if (have && !g_docklet)

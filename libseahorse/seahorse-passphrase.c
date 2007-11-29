@@ -516,24 +516,13 @@ gpg_detect_agent ()
  * SSH AGENT 
  */
 
-const guchar REQ_MESSAGE[] = { 0x00, 0x00, 0x00, 0x01, SEAHORSE_SSH_PING_MSG };
-const guint RESP_INDEX = 4;
-const guint RESP_VALUE = SEAHORSE_SSH_PING_MSG;
-
 static SeahorseAgentType
 ssh_detect_agent ()
 {
     SeahorseAgentType ret;
     const gchar *socketpath;
     struct sockaddr_un sunaddr;
-    guchar buf[16];
-    GIOChannel *io;
     int agentfd;
-    gsize bytes_read = 0;
-    GError *err = NULL;
-    
-    /* Guarantee we have enough space */
-    g_assert (sizeof (buf) > RESP_INDEX);
     
     socketpath = g_getenv ("SSH_AUTH_SOCK");
     if (!socketpath || !socketpath[0])
@@ -555,30 +544,10 @@ ssh_detect_agent ()
         close (agentfd);
         return SEAHORSE_AGENT_UNKNOWN;
     }
-    
-    io = g_io_channel_unix_new (agentfd);
-    g_io_channel_set_close_on_unref (io, TRUE);
-    g_io_channel_set_encoding (io, NULL, NULL);
-    g_io_channel_set_buffered (io, FALSE);
 
-    /* Send and receive our message */
-    if (g_io_channel_write_chars (io, (const gchar*)REQ_MESSAGE, sizeof (REQ_MESSAGE), NULL, 
-                                  &err) == G_IO_STATUS_NORMAL) {
-        g_io_channel_read_chars (io, (gchar*)buf, sizeof (buf), &bytes_read, &err);
-    }
-    
-    if (!err) {
-        if (bytes_read > RESP_INDEX && buf[RESP_INDEX] == RESP_VALUE)
-            ret = SEAHORSE_AGENT_SEAHORSE;
-        else
-            ret = SEAHORSE_AGENT_OTHER;
-    } else {
-        g_warning ("couldn't check for SSH agent: %s", err ? err->message : "");
-        ret = SEAHORSE_AGENT_UNKNOWN;
-    }
-    
-    g_io_channel_unref (io);
-    return ret;
+    shutdown (agentfd, SHUT_RDWR);
+    close (agentfd);
+    return SEAHORSE_AGENT_OTHER; 
 }
 
 /* -------------------------------------------------------------------------- */

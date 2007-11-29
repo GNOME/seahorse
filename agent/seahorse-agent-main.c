@@ -54,7 +54,7 @@ static const GOptionEntry options[] = {
         N_("Print variables in for a C type shell"), NULL },
 
     { "variables", 'v', 0, G_OPTION_ARG_NONE, &seahorse_agent_displayvars, 
-        N_("Display variables instead of editing conf files (gpg.conf, SSH agent socket)"), NULL },
+        N_("Display variables instead of editing gpg.conf file"), NULL },
 
     { "execute", 'x', 0, G_OPTION_ARG_NONE, &seahorse_agent_execvars, 
         N_("Execute other arguments on the command line"), NULL },
@@ -112,7 +112,6 @@ daemonize (gchar **exec)
 
     /* Let the agent do it's thing */
     seahorse_agent_postfork (pid);
-    seahorse_agent_ssh_postfork (pid);
     
     if (agent_no_daemonize) {
 
@@ -225,7 +224,6 @@ int main(int argc, char* argv[])
                     GNOME_PARAM_APP_DATADIR, DATA_DIR, NULL);
 
     seahorse_agent_prefork ();
-    seahorse_agent_ssh_prefork ();
 
     if (seahorse_agent_execvars && 
         (!agent_exec_args || !agent_exec_args[0]))
@@ -264,10 +262,6 @@ int main(int argc, char* argv[])
     
     if (!seahorse_agent_init ())
         seahorse_agent_uninit ();
-#ifdef WITH_SSH
-    if (!seahorse_agent_ssh_init ())
-        seahorse_agent_ssh_uninit ();
-#endif
     
     /* Sometimes we've already gotten a quit signal */
     if(!agent_quit) {
@@ -278,9 +272,6 @@ int main(int argc, char* argv[])
 
     /* And now clean them all up */
     seahorse_agent_uninit ();
-#ifdef WITH_SSH
-    seahorse_agent_ssh_uninit ();
-#endif
     
     seahorse_context_destroy (SCTX_APP ());
 

@@ -41,7 +41,6 @@
 #define SETTING_EXPIRE      AGENT_SETTINGS "/cache_expire"
 #define SETTING_AUTH        AGENT_SETTINGS "/cache_authorize"
 #define SETTING_DISPLAY     AGENT_SETTINGS "/cache_display"
-#define SETTING_AGENT_SSH   AGENT_SETTINGS "/load_ssh"
 #define METHOD_GNOME        "gnome"
 
 /* -----------------------------------------------------------------------------
@@ -131,22 +130,5 @@ void seahorse_agent_prompt_cleanup ();
 void seahorse_agent_status_init ();
 void seahorse_agent_status_cleanup ();
 void seahorse_agent_status_update ();
-
-/* -----------------------------------------------------------------------------
- * seahorse-agent-ssh.c
- */
- 
-#define SEAHORSE_SSH_PING_MSG             252
-
-/* Called from the original process before and after fork */
-void     seahorse_agent_ssh_prefork ();
-void     seahorse_agent_ssh_postfork (pid_t child);
-void     seahorse_agent_ssh_childsetup ();
-
-gboolean seahorse_agent_ssh_init ();
-GList*   seahorse_agent_ssh_cached_keys ();
-guint    seahorse_agent_ssh_count_keys ();
-void     seahorse_agent_ssh_clearall ();
-void     seahorse_agent_ssh_uninit ();
 
 #endif /* __SEAHORSE_AGENT_H__ */

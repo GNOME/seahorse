@@ -341,10 +341,6 @@ seahorse_prefs_cache (SeahorseWidget *swidget)
     paint_button_label_as_link (GTK_BUTTON (w), GTK_LABEL(w2));
     g_signal_connect (GTK_WIDGET (w), "realize", G_CALLBACK (set_hand_cursor_on_realize), NULL);
 
-    w = seahorse_widget_get_widget (swidget, "auto-load-ssh");
-    g_return_if_fail (w != NULL);
-    seahorse_check_button_gconf_attach (GTK_CHECK_BUTTON (w), SETTING_AGENT_SSH);
-    
     /* End -- Setup daemon button visuals */
     
     glade_xml_signal_connect_data (swidget->xml, "on_session_link",
@@ -371,27 +367,6 @@ seahorse_prefs_cache (SeahorseWidget *swidget)
         break;
     };
     
-    /* Disable SSH agent prefs if no SSH is running or error */
-    switch (seahorse_passphrase_detect_agent (SKEY_SSH)) {
-    case SEAHORSE_AGENT_OTHER:
-        display_start = TRUE;
-        break;
-
-    case SEAHORSE_AGENT_UNKNOWN:
-    case SEAHORSE_AGENT_NONE:
-        g_warning ("No SSH agent is running. Disabling cache preferences.");
-        w = seahorse_widget_get_widget (swidget, "ssh-area");
-        if (w != NULL)
-            gtk_widget_hide (w);
-        w = seahorse_widget_get_widget (swidget, "ssh-message");
-        if (w != NULL)
-            gtk_widget_show (w);
-        break;
-
-    default:
-        break;
-    };
-
     /* Show the start link */
     if (display_start) {
         w = seahorse_widget_get_widget (swidget, "agent-start");
