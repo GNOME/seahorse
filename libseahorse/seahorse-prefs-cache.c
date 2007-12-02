@@ -330,6 +330,11 @@ seahorse_prefs_cache (SeahorseWidget *swidget)
     w = seahorse_widget_get_widget (swidget, "authorize");
     g_return_if_fail (w != NULL);
     seahorse_check_button_gconf_attach (GTK_CHECK_BUTTON (w), SETTING_AUTH);
+    
+    /* Display status check button */
+    w = seahorse_widget_get_widget (swidget, "display_status");
+    g_return_if_fail (w != NULL);
+    seahorse_check_button_gconf_attach (GTK_CHECK_BUTTON (w), SETTING_DISPLAY);
 
     /* Setup daemon button visuals */
     w = seahorse_widget_get_widget (swidget, "session-link");
