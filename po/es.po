@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse.HEAD.es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-11-11 16:36+0000\n"
-"PO-Revision-Date: 2007-11-12 15:08+0100\n"
+"POT-Creation-Date: 2007-12-02 23:36+0000\n"
+"PO-Revision-Date: 2007-12-06 17:03+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -92,10 +92,8 @@ msgid "Print variables in for a C type shell"
 msgstr "Imprimir variables para un shell de tipo C"
 
 #: ../agent/seahorse-agent-main.c:57
-msgid "Display variables instead of editing conf files (gpg.conf, SSH agent socket)"
-msgstr ""
-"Mostrar variables en vez de editar archivos de configuración (gpg.conf, SSH "
-"agent socket)"
+msgid "Display variables instead of editing gpg.conf file"
+msgstr "Mostrar variables en vez de editar el archivo gpg.conf"
 
 #: ../agent/seahorse-agent-main.c:60
 msgid "Execute other arguments on the command line"
@@ -117,11 +115,11 @@ msgstr "no se pudo bifurcar el proceso"
 msgid "couldn't create new process group"
 msgstr "no se pudo crear un grupo de proceso nuevo"
 
-#: ../agent/seahorse-agent-main.c:224
+#: ../agent/seahorse-agent-main.c:223
 msgid "Encryption Key Agent (Seahorse)"
 msgstr "Agente de claves de cifrado (Seahorse)"
 
-#: ../agent/seahorse-agent-main.c:232
+#: ../agent/seahorse-agent-main.c:230
 msgid "no command specified to execute"
 msgstr "no se especificó un comando a ejecutar"
 
@@ -142,7 +140,7 @@ msgid "_Authorize"
 msgstr "_Autorizar"
 
 #. Make the uid column
-#: ../agent/seahorse-agent-status.c:150
+#: ../agent/seahorse-agent-status.c:147
 msgid "Key Name"
 msgstr "Nombre de la clave"
 
@@ -485,32 +483,23 @@ msgstr ""
 
 #: ../data/seahorse.schemas.in.h:46
 msgid ""
-"When set seahorse-agent will try to automatically load the users SSH keys "
-"when needed. This is equivalent to using the ssh-add utility."
-msgstr ""
-"Cuando se configure seahorse-agent se intentarán cargar automáticamente las "
-"claves SSH de los usuarios cuando se necesiten. Esto es equivalente a usar "
-"la utilidad ssh-add."
-
-#: ../data/seahorse.schemas.in.h:47
-msgid ""
 "When set, seahorse-agent expires GPG passwords in its cache after a period "
 "of time."
 msgstr ""
 "Cuando está configurado, seahorse-agent caduca las contraseñas GPG en su "
 "caché tras un periodo de tiempo."
 
-#: ../data/seahorse.schemas.in.h:48
+#: ../data/seahorse.schemas.in.h:47
 msgid "Where to store cached passwords."
 msgstr "Dónde almacenar las contraseñas cacheadas."
 
-#: ../data/seahorse.schemas.in.h:49
+#: ../data/seahorse.schemas.in.h:48
 msgid "Whether or not keys should be automatically retrieved from key servers."
 msgstr ""
 "Indica si las claves modificadas deben o no sincronizarse automáticamente "
 "con los servidores de claves."
 
-#: ../data/seahorse.schemas.in.h:50
+#: ../data/seahorse.schemas.in.h:49
 msgid ""
 "Whether or not modified keys should be automatically synced with the default "
 "key server."
@@ -518,19 +507,15 @@ msgstr ""
 "Indica si las claves modificadas deben o no sincronizarse automáticamente "
 "con el servidor de claves predeterminado."
 
-#: ../data/seahorse.schemas.in.h:51
+#: ../data/seahorse.schemas.in.h:50
 msgid "Whether the GPG password cache is enabled"
 msgstr "Indica si está activado la caché de contraseñas GPG"
 
-#: ../data/seahorse.schemas.in.h:52
+#: ../data/seahorse.schemas.in.h:51
 msgid "Whether to always encrypt to default key"
 msgstr "Indica si se debe cifrar siempre con la clave predeterminada"
 
-#: ../data/seahorse.schemas.in.h:53
-msgid "Whether to automatically load SSH keys on demand."
-msgstr "Indica si se deben cargar las claves SSH bajo demanda."
-
-#: ../data/seahorse.schemas.in.h:54
+#: ../data/seahorse.schemas.in.h:52
 msgid "Whether to use ASCII Armor"
 msgstr "Indica si se debe usar armadura ASCII"
 
@@ -902,10 +887,6 @@ msgid "<b>Remember PGP Passphrases</b>"
 msgstr "<b>Recordar frases de paso PGP</b>"
 
 #: ../libseahorse/seahorse-prefs.glade.h:4
-msgid "<b>Secure Shell Keys</b>"
-msgstr "<b>Claves de shell segura</b>"
-
-#: ../libseahorse/seahorse-prefs.glade.h:5
 msgid ""
 "<b>Warning:</b> The 'seahorse-agent' program is not running. This program is "
 "necessary in order to cache passphrases. "
@@ -913,43 +894,33 @@ msgstr ""
 "<b>Advertencia:</b> El programa 'seahorse-agent' no está funcionando. Este "
 "programa es necesario para cachear frases de paso."
 
-#: ../libseahorse/seahorse-prefs.glade.h:6
+#: ../libseahorse/seahorse-prefs.glade.h:5
 msgid "<i>A non-supported PGP passphrase caching agent is running.</i>"
 msgstr ""
 "<i>Se está ejecutando un agente de caché de frases de paso no soportado por "
 "PGP.</i>"
 
-#: ../libseahorse/seahorse-prefs.glade.h:7
-msgid "<i>No SSH caching agent is running. Cannot load Secure Shell keys.</i>"
-msgstr ""
-"<i>No se está ejecutando ningún agente de cacheo ssh. No se pueden cargar "
-"claves de shell segura.</i>"
-
-#: ../libseahorse/seahorse-prefs.glade.h:8
+#: ../libseahorse/seahorse-prefs.glade.h:6
 msgid "<i>This key is used to sign messages when no other key is chosen</i>"
 msgstr ""
 "<i>Esta clave se usa para firmar mensajes cuando no se elige ninguna otra "
 "clave</i>"
 
-#: ../libseahorse/seahorse-prefs.glade.h:9
+#: ../libseahorse/seahorse-prefs.glade.h:7
 msgid "As_k me before using a cached passphrase"
 msgstr "_Preguntarme antes de usar una frase de paso cacheada"
 
-#: ../libseahorse/seahorse-prefs.glade.h:10
-msgid "Automatically load _Secure Shell keys"
-msgstr "Cargar claves de shell _segura automáticamente"
-
-#: ../libseahorse/seahorse-prefs.glade.h:11
+#: ../libseahorse/seahorse-prefs.glade.h:8
 msgid "Automatically retrieve keys from _key servers"
 msgstr "Obtener automáticamente las claves de los servidores de _claves"
 
-#: ../libseahorse/seahorse-prefs.glade.h:12
+#: ../libseahorse/seahorse-prefs.glade.h:9
 msgid "Automatically synchronize _modified keys with key servers"
 msgstr ""
 "Sincronizar automáticamente las claves _modificadas con los servidores de "
 "claves"
 
-#: ../libseahorse/seahorse-prefs.glade.h:13
+#: ../libseahorse/seahorse-prefs.glade.h:10
 msgid ""
 "Changing the master password failed.  Make certain that you entered the "
 "correct original master password."
@@ -957,28 +928,28 @@ msgstr ""
 "Falló el cambio de la contraseña maestra. Asegúrese de que introdujo la "
 "contraseña maestra original correctamente."
 
-#: ../libseahorse/seahorse-prefs.glade.h:14
+#: ../libseahorse/seahorse-prefs.glade.h:11
 msgid "Confirm ne_w master password:"
 msgstr "Confirme la _nueva contraseña maestra:"
 
-#: ../libseahorse/seahorse-prefs.glade.h:15
+#: ../libseahorse/seahorse-prefs.glade.h:12
 msgid "Current _master password:"
 msgstr "Contraseña _maestra actual:"
 
-#: ../libseahorse/seahorse-prefs.glade.h:16
+#: ../libseahorse/seahorse-prefs.glade.h:13
 #: ../plugins/nautilus/seahorse-pgp-preferences.c:74
 msgid "Encryption Preferences"
 msgstr "Preferencias de cifrado"
 
-#: ../libseahorse/seahorse-prefs.glade.h:17
+#: ../libseahorse/seahorse-prefs.glade.h:14
 msgid "Encryption Settings"
 msgstr "Opciones de cifrado"
 
-#: ../libseahorse/seahorse-prefs.glade.h:18
+#: ../libseahorse/seahorse-prefs.glade.h:15
 msgid "GNOME Keyring"
 msgstr "Depósito de claves"
 
-#: ../libseahorse/seahorse-prefs.glade.h:19
+#: ../libseahorse/seahorse-prefs.glade.h:16
 msgid ""
 "GNOME Keyring stores passwords, network keys, passphrases and other secrets "
 "required for authentication.  A <b>master password</b> is used to protect "
@@ -989,23 +960,23 @@ msgstr ""
 "se usa para proteger estos secretos. La <b>contraseña maestra</b> se puede "
 "cambiar debajo."
 
-#: ../libseahorse/seahorse-prefs.glade.h:20
+#: ../libseahorse/seahorse-prefs.glade.h:17
 msgid "Key Servers"
 msgstr "Servidores de claves"
 
-#: ../libseahorse/seahorse-prefs.glade.h:21
+#: ../libseahorse/seahorse-prefs.glade.h:18
 msgid "Key Sharing"
 msgstr "Compartición de claves"
 
-#: ../libseahorse/seahorse-prefs.glade.h:22
+#: ../libseahorse/seahorse-prefs.glade.h:19
 msgid "Passphrase Cache"
 msgstr "Caché de frase de paso"
 
-#: ../libseahorse/seahorse-prefs.glade.h:23
+#: ../libseahorse/seahorse-prefs.glade.h:20
 msgid "Session _Properties"
 msgstr "_Propiedades de la sesión"
 
-#: ../libseahorse/seahorse-prefs.glade.h:24
+#: ../libseahorse/seahorse-prefs.glade.h:21
 msgid ""
 "Sharing your keys allows other people on your network to use the keys you've "
 "collected. This means they can automatically encrypt things for you or those "
@@ -1020,15 +991,19 @@ msgstr ""
 "\n"
 "<b>Nota:</b> Sus claves personales no serán comprometidas."
 
-#: ../libseahorse/seahorse-prefs.glade.h:27
+#: ../libseahorse/seahorse-prefs.glade.h:24
+msgid "Show _icon in status area when passphrases are in memory"
+msgstr "Mostrar un _icono en el área de estado cuando las frases de paso están en la memoria"
+
+#: ../libseahorse/seahorse-prefs.glade.h:25
 msgid "Start sea_horse-agent"
 msgstr "Iniciar sea_horse-agent"
 
-#: ../libseahorse/seahorse-prefs.glade.h:28
+#: ../libseahorse/seahorse-prefs.glade.h:26
 msgid "The master password was successfully changed."
 msgstr "La contraseña maestra se cambió correctamente."
 
-#: ../libseahorse/seahorse-prefs.glade.h:29
+#: ../libseahorse/seahorse-prefs.glade.h:27
 msgid ""
 "To avoid manually starting the 'seahorse-agent' in the future\n"
 "add it to the Session Manager. "
@@ -1036,43 +1011,43 @@ msgstr ""
 "Para evitar iniciar 'seahorse-agent' manualmente en el futuro,\n"
 "añádalo al gestor de sesión."
 
-#: ../libseahorse/seahorse-prefs.glade.h:31
+#: ../libseahorse/seahorse-prefs.glade.h:29
 msgid "When _encrypting, always include myself as a recipient"
 msgstr "Al ci_frar, siempre incluirme a mí mismo como destinatario"
 
-#: ../libseahorse/seahorse-prefs.glade.h:32
+#: ../libseahorse/seahorse-prefs.glade.h:30
 msgid "_Always remember passphrases whenever logged in"
 msgstr "_Siempre recordar las frases de paso dentro de una sesión"
 
-#: ../libseahorse/seahorse-prefs.glade.h:33
+#: ../libseahorse/seahorse-prefs.glade.h:31
 msgid "_Default key:"
 msgstr "Clave _predeterminada:"
 
-#: ../libseahorse/seahorse-prefs.glade.h:34
+#: ../libseahorse/seahorse-prefs.glade.h:32
 msgid "_Find keys via:"
 msgstr "_Buscar claves vía:"
 
-#: ../libseahorse/seahorse-prefs.glade.h:35
+#: ../libseahorse/seahorse-prefs.glade.h:33
 msgid "_Never remember passphrases"
 msgstr "_Nunca recordar frases de paso"
 
-#: ../libseahorse/seahorse-prefs.glade.h:36
+#: ../libseahorse/seahorse-prefs.glade.h:34
 msgid "_New master password:"
 msgstr "_Nueva contraseña maestra:"
 
-#: ../libseahorse/seahorse-prefs.glade.h:37
+#: ../libseahorse/seahorse-prefs.glade.h:35
 msgid "_Publish keys to:"
 msgstr "_Publicar claves en:"
 
-#: ../libseahorse/seahorse-prefs.glade.h:38
+#: ../libseahorse/seahorse-prefs.glade.h:36
 msgid "_Remember passphrases for"
 msgstr "_Recordar frases de paso durante"
 
-#: ../libseahorse/seahorse-prefs.glade.h:39
+#: ../libseahorse/seahorse-prefs.glade.h:37
 msgid "_Share my keys with others on my network"
 msgstr "_Compartir mis claves con otros en mi red"
 
-#: ../libseahorse/seahorse-prefs.glade.h:40
+#: ../libseahorse/seahorse-prefs.glade.h:38
 msgid "minutes"
 msgstr "minutos"
 
@@ -2183,35 +2158,35 @@ msgstr "Uso:"
 msgid "_Description:"
 msgstr "_Descripción:"
 
-#: ../src/seahorse-gkeyring-operation.c:206
+#: ../src/seahorse-gkeyring-operation.c:204
 msgid "Access to the key ring was denied"
 msgstr "Se ha denegado el acceso al deposito de claves"
 
-#: ../src/seahorse-gkeyring-operation.c:209
+#: ../src/seahorse-gkeyring-operation.c:207
 msgid "The gnome-keyring daemon is not running"
 msgstr "El demonio gnome-keyring no está ejecutándose"
 
-#: ../src/seahorse-gkeyring-operation.c:212
+#: ../src/seahorse-gkeyring-operation.c:210
 msgid "The key ring has already been unlocked"
 msgstr "El depósito de claves ya ha sido desbloqueado"
 
-#: ../src/seahorse-gkeyring-operation.c:215
+#: ../src/seahorse-gkeyring-operation.c:213
 msgid "No such key ring exists"
 msgstr "No existe dicho depósito de claves"
 
-#: ../src/seahorse-gkeyring-operation.c:218
+#: ../src/seahorse-gkeyring-operation.c:216
 msgid "Couldn't communicate with key ring daemon"
 msgstr "No se pudo comunicar con el demonio del depósito de claves"
 
-#: ../src/seahorse-gkeyring-operation.c:221
+#: ../src/seahorse-gkeyring-operation.c:219
 msgid "The item already exists"
 msgstr "El elemento ya existe"
 
-#: ../src/seahorse-gkeyring-operation.c:227
+#: ../src/seahorse-gkeyring-operation.c:225
 msgid "Internal error accessing gnome-keyring"
 msgstr "Error interno al acceder a gnome-keyring"
 
-#: ../src/seahorse-gkeyring-operation.c:286
+#: ../src/seahorse-gkeyring-operation.c:284
 msgid "Saving item..."
 msgstr "Guardando elemento..."
 
@@ -2357,7 +2332,7 @@ msgstr "_Remota"
 
 #: ../src/seahorse-key-manager.c:1203 ../src/seahorse-keyserver-results.c:385
 msgid "_Contents"
-msgstr "_Contenido"
+msgstr "_Índice"
 
 #: ../src/seahorse-key-manager.c:1204 ../src/seahorse-keyserver-results.c:386
 msgid "Show Seahorse help"
