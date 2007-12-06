@@ -21,7 +21,11 @@
 
 #include "config.h"
 #include <gnome.h>
+#include <glib.h>
+#include <glib/gprintf.h>
 #include <libgnomevfs/gnome-vfs.h>
+
+#include <dbus/dbus-glib-bindings.h>
 
 #include "cryptui.h"
 
@@ -33,6 +37,8 @@
 #include "seahorse-gtkstock.h"
 #include "seahorse-gconf.h"
 #include "seahorse-util.h"
+
+#define IMPORT_BUFFER_SIZE 50*1<<10 /* 50 kB */
 
 /* -----------------------------------------------------------------------------
  * ARGUMENT PARSING 
@@ -105,6 +111,34 @@ read_uri_arguments ()
         return args;
 
     }
+}
+
+/* -----------------------------------------------------------------------------
+ * Initialize Crypto 
+ */
+ 
+ /* Setup in init_crypt */
+DBusGConnection *dbus_connection = NULL;
+DBusGProxy      *dbus_key_proxy = NULL;
+
+static gboolean
+init_crypt ()
+{
+    GError *error = NULL;
+    
+    if (!dbus_connection) {
+        dbus_connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
+        if (!dbus_connection) {
+            
+            return FALSE;
+        }
+
+        dbus_key_proxy = dbus_g_proxy_new_for_name (dbus_connection, "org.gnome.seahorse",
+                                               "/org/gnome/seahorse/keys",
+                                               "org.gnome.seahorse.KeyService");
+    }
+    
+    return TRUE;
 }
 
 /* -----------------------------------------------------------------------------
@@ -319,15 +353,53 @@ sign_start (SeahorseToolMode *mode, const gchar *uri, gpgme_data_t uridata,
  * IMPORT 
  */
 
+static gchar *buffer;
+static DBusGProxyCall* import_proxy_call;
+
+static void
+proxy_call_notification (DBusGProxy *proxy, DBusGProxyCall *call_id, 
+                         void *data)
+{
+    SeahorseOperation *op;
+    op = SEAHORSE_OPERATION (data);
+    seahorse_operation_mark_progress (op, _("Import is complete"), 1);
+    seahorse_operation_mark_done (op, FALSE, NULL);
+    
+    g_free (buffer);
+}
+
 static gboolean
 import_start (SeahorseToolMode *mode, const gchar *uri, gpgme_data_t uridata,
               SeahorsePGPOperation *pop, GError **err)
 {
+    size_t size;
+    SeahorseOperation *op;
     gpgme_error_t gerr;
     
     /* Start actual import */
-    gerr = gpgme_op_import_start (pop->gctx, uridata);
-    if (!GPG_IS_OK (gerr)) {
+    
+    op = SEAHORSE_OPERATION (pop);
+    
+    init_crypt();
+
+    buffer = g_malloc0(IMPORT_BUFFER_SIZE); /* Allocate memory for key data */
+    
+    size = gpgme_data_read (uridata, (void*) buffer, IMPORT_BUFFER_SIZE);
+    
+    if (size > 0) {
+        import_proxy_call = dbus_g_proxy_begin_call (dbus_key_proxy, "ImportKeys", 
+                                                     proxy_call_notification,
+                                                     pop, NULL,
+                                                     G_TYPE_STRING, "openpgp",
+                                                     G_TYPE_STRING, buffer,
+                                                     G_TYPE_INVALID);
+        
+        seahorse_operation_mark_start (op);
+        seahorse_operation_mark_progress (op, _("Importing keys ..."), 0.5);
+    } else {
+        g_free (buffer);
+        
+        gerr = gpgme_err_code_from_errno (errno);        
         seahorse_util_gpgme_to_error (gerr, err);
         return FALSE;
     }
@@ -339,21 +411,29 @@ static gboolean
 import_done (SeahorseToolMode *mode, const gchar *uri, gpgme_data_t uridata,
              SeahorsePGPOperation *pop, GError **err)
 {
-    gpgme_import_result_t results;
-    gpgme_import_status_t import;
-    int i;
+    gchar **keys, **k;
+    gint nkeys = 0;
+    gboolean ret;
     
-    /* Figure out how many keys were imported */
-    results = gpgme_op_import_result (pop->gctx);
-    if (results) {
-        for (i = 0, import = results->imports; 
-             i < results->considered && import; 
-             import = import->next) {
-            if (GPG_IS_OK (import->result))
-                mode->imports++;
-        }
+    ret = dbus_g_proxy_end_call (dbus_key_proxy, import_proxy_call, err,
+                                 G_TYPE_STRV, &keys,
+                                 G_TYPE_INVALID);
+                           
+    if (ret) {
+        for (k = keys, nkeys = 0; *k; k++)
+            nkeys++;
+        g_strfreev (keys);
+        
+        if (!nkeys)
+            seahorse_notification_display(_("Import Failed"),
+                                      _("Keys were found but not imported."),
+                                      FALSE,
+                                      NULL,
+                                      NULL);
     }
-
+    
+    g_object_unref (dbus_key_proxy);
+    
     return FALSE;
 }
 
