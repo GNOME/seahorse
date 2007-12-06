@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse.HEAD.es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-12-02 23:36+0000\n"
-"PO-Revision-Date: 2007-12-06 17:03+0100\n"
+"POT-Creation-Date: 2007-12-06 16:06+0000\n"
+"PO-Revision-Date: 2007-12-06 18:07+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -105,7 +105,7 @@ msgstr "Permitir que el agente GPG solicite desde cualquier pantalla"
 
 #: ../agent/seahorse-agent-main.c:67
 msgid "command..."
-msgstr "comando..."
+msgstr "comando…"
 
 #: ../agent/seahorse-agent-main.c:89 ../daemon/seahorse-daemon.c:72
 msgid "couldn't fork process"
@@ -364,7 +364,7 @@ msgid ""
 "Reflect the contents of the clipboard (whether encrypted, signed, etc...) in "
 "the panel applet icon."
 msgstr ""
-"Refleja el contenido del portapapeles (ya sea cifrado, firmado, etc...) en "
+"Refleja el contenido del portapapeles (ya sea cifrado, firmado, etc…) en "
 "el icono de la miniaplicación del panel. "
 
 #: ../data/seahorse.schemas.in.h:27
@@ -597,15 +597,15 @@ msgstr "No se pudo comunicar con  el servidor «%s»: %s"
 
 #: ../libseahorse/seahorse-hkp-source.c:563
 msgid "Searching for keys..."
-msgstr "Buscando claves..."
+msgstr "Buscando claves…"
 
 #: ../libseahorse/seahorse-hkp-source.c:639
 msgid "Uploading keys..."
-msgstr "Subiendo claves..."
+msgstr "Subiendo claves…"
 
 #: ../libseahorse/seahorse-hkp-source.c:715
 msgid "Retrieving keys..."
-msgstr "Obteniendo claves..."
+msgstr "Obteniendo claves…"
 
 #: ../libseahorse/seahorse-hkp-source.c:764
 #, c-format
@@ -647,11 +647,11 @@ msgstr "Buscando la clave con id «%s»…"
 
 #: ../libseahorse/seahorse-ldap-source.c:1011
 msgid "Retrieving remote keys..."
-msgstr "Obteniendo claves remotas..."
+msgstr "Obteniendo claves remotas…"
 
 #: ../libseahorse/seahorse-ldap-source.c:1144
 msgid "Sending keys to key server..."
-msgstr "Enviando claves al servidor de claves..."
+msgstr "Enviando claves al servidor de claves…"
 
 #: ../libseahorse/seahorse-notification.c:559
 #: ../libseahorse/seahorse-notification.c:589
@@ -811,7 +811,7 @@ msgstr[1] "%d claves cargadas"
 
 #: ../libseahorse/seahorse-pgp-source.c:778
 msgid "Loading Keys..."
-msgstr "Cargando claves..."
+msgstr "Cargando claves…"
 
 #: ../libseahorse/seahorse-pgp-source.c:821
 msgid ""
@@ -993,7 +993,9 @@ msgstr ""
 
 #: ../libseahorse/seahorse-prefs.glade.h:24
 msgid "Show _icon in status area when passphrases are in memory"
-msgstr "Mostrar un _icono en el área de estado cuando las frases de paso están en la memoria"
+msgstr ""
+"Mostrar un _icono en el área de estado cuando las frases de paso están en la "
+"memoria"
 
 #: ../libseahorse/seahorse-prefs.glade.h:25
 msgid "Start sea_horse-agent"
@@ -1374,11 +1376,13 @@ msgstr "El portapapeles no se pudo firmar."
 
 #: ../plugins/applet/seahorse-applet.c:496
 #: ../plugins/epiphany/seahorse-extension.c:340
+#: ../plugins/nautilus/seahorse-tool.c:428
 msgid "Import Failed"
 msgstr "No se pudo importar"
 
 #: ../plugins/applet/seahorse-applet.c:497
 #: ../plugins/epiphany/seahorse-extension.c:341
+#: ../plugins/nautilus/seahorse-tool.c:429
 msgid "Keys were found but not imported."
 msgstr "Se encontraron claves, pero no se importaron."
 
@@ -1509,7 +1513,7 @@ msgid "Verified text"
 msgstr "Texto verificado"
 
 #: ../plugins/gedit/seahorse-gedit.c:582
-#: ../plugins/nautilus/seahorse-tool.c:374 ../src/seahorse-key-manager.c:396
+#: ../plugins/nautilus/seahorse-tool.c:454 ../src/seahorse-key-manager.c:396
 #, c-format
 msgid "Imported %d key"
 msgid_plural "Imported %d keys"
@@ -1526,7 +1530,7 @@ msgstr "No se pudo firmar el texto"
 
 #: ../plugins/gedit/seahorse-gedit-plugin.c:133
 msgid "_Encrypt..."
-msgstr "Ci_frar..."
+msgstr "Ci_frar…"
 
 #: ../plugins/gedit/seahorse-gedit-plugin.c:134
 msgid "Encrypt the selected text"
@@ -1542,7 +1546,7 @@ msgstr "Descifrar y/o verificar el texto"
 
 #: ../plugins/gedit/seahorse-gedit-plugin.c:137
 msgid "Sig_n..."
-msgstr "_Firmar..."
+msgstr "_Firmar…"
 
 #: ../plugins/gedit/seahorse-gedit-plugin.c:138
 msgid "Sign the selected text"
@@ -1566,7 +1570,7 @@ msgstr "Este complemento realiza operaciones de cifrado en texto."
 
 #: ../plugins/nautilus-ext/seahorse-nautilus.c:161
 msgid "Encrypt..."
-msgstr "Cifrar..."
+msgstr "Cifrar…"
 
 #: ../plugins/nautilus-ext/seahorse-nautilus.c:162
 msgid "Encrypt (and optionally sign) the selected file"
@@ -1598,72 +1602,80 @@ msgstr "Configurar los servidores de claves y otras opciones de cifrado"
 msgid "Encryption and Keyrings"
 msgstr "Cifrado y depósitos de claves"
 
-#: ../plugins/nautilus/seahorse-tool.c:52
+#: ../plugins/nautilus/seahorse-tool.c:58
 msgid "Import keys from the file"
 msgstr "Importar claves desde el archivo"
 
-#: ../plugins/nautilus/seahorse-tool.c:54
+#: ../plugins/nautilus/seahorse-tool.c:60
 msgid "Encrypt file"
 msgstr "Cifrar un archivo"
 
-#: ../plugins/nautilus/seahorse-tool.c:56
+#: ../plugins/nautilus/seahorse-tool.c:62
 msgid "Sign file with default key"
 msgstr "Firmar archivo con la clave predeterminada"
 
-#: ../plugins/nautilus/seahorse-tool.c:58
+#: ../plugins/nautilus/seahorse-tool.c:64
 msgid "Encrypt and sign file with default key"
 msgstr "Cifrar y firmar el archivo con la clave predeterminada"
 
-#: ../plugins/nautilus/seahorse-tool.c:60
+#: ../plugins/nautilus/seahorse-tool.c:66
 msgid "Decrypt encrypted file"
 msgstr "Descifrar un archivo cifrado"
 
-#: ../plugins/nautilus/seahorse-tool.c:62
+#: ../plugins/nautilus/seahorse-tool.c:68
 msgid "Verify signature file"
 msgstr "Verificar firma del archivo"
 
-#: ../plugins/nautilus/seahorse-tool.c:64
+#: ../plugins/nautilus/seahorse-tool.c:70
 msgid "Read list of URIs on standard in"
 msgstr "Leer lista de URIs estándar en"
 
-#: ../plugins/nautilus/seahorse-tool.c:66
+#: ../plugins/nautilus/seahorse-tool.c:72
 msgid "file..."
-msgstr "archivo..."
+msgstr "archivo…"
 
-#: ../plugins/nautilus/seahorse-tool.c:128
+#: ../plugins/nautilus/seahorse-tool.c:162
 msgid "Choose Recipients"
 msgstr "Elija los destinatarios"
 
-#: ../plugins/nautilus/seahorse-tool.c:190
-#: ../plugins/nautilus/seahorse-tool.c:272
+#: ../plugins/nautilus/seahorse-tool.c:224
+#: ../plugins/nautilus/seahorse-tool.c:306
 msgid "Couldn't load keys"
 msgstr "No se pueden cargar las claves"
 
-#: ../plugins/nautilus/seahorse-tool.c:206
+#: ../plugins/nautilus/seahorse-tool.c:240
 #, c-format
 msgid "Choose Encrypted File Name for '%s'"
 msgstr "Elija un nombre de archivo cifrado para «%s»"
 
-#: ../plugins/nautilus/seahorse-tool.c:256
+#: ../plugins/nautilus/seahorse-tool.c:290
 msgid "Choose Signer"
 msgstr "Elegir clave de firma"
 
-#: ../plugins/nautilus/seahorse-tool.c:291
+#: ../plugins/nautilus/seahorse-tool.c:325
 #, c-format
 msgid "Choose Signature File Name for '%s'"
 msgstr "Elija un nombre para el archivo de firma de «%s»"
 
-#: ../plugins/nautilus/seahorse-tool.c:372
+#: ../plugins/nautilus/seahorse-tool.c:365
+msgid "Import is complete"
+msgstr "La importación está completada"
+
+#: ../plugins/nautilus/seahorse-tool.c:398
+msgid "Importing keys ..."
+msgstr "Importando claves…"
+
+#: ../plugins/nautilus/seahorse-tool.c:452
 msgid "Imported key"
 msgstr "Clave importada"
 
 #. File to decrypt to
-#: ../plugins/nautilus/seahorse-tool.c:396
+#: ../plugins/nautilus/seahorse-tool.c:476
 #, c-format
 msgid "Choose Decrypted File Name for '%s'"
 msgstr "Elija el nombre de archivo descifrado para «%s»"
 
-#: ../plugins/nautilus/seahorse-tool.c:452
+#: ../plugins/nautilus/seahorse-tool.c:532
 #, c-format
 msgid "Choose Original File for '%s'"
 msgstr "Elija el archivo original para «%s»"
@@ -1673,55 +1685,55 @@ msgstr "Elija el archivo original para «%s»"
 #. * The last thing we want to do is cascade a big pile of error
 #. * dialogs at the user.
 #.
-#: ../plugins/nautilus/seahorse-tool.c:524
+#: ../plugins/nautilus/seahorse-tool.c:604
 msgid "No valid signatures found"
 msgstr "No se encontraron firmas inválidas"
 
-#: ../plugins/nautilus/seahorse-tool.c:577
+#: ../plugins/nautilus/seahorse-tool.c:657
 msgid "File Encryption Tool"
 msgstr "Herramienta de cifrado de archivos"
 
-#: ../plugins/nautilus/seahorse-tool.c:600
+#: ../plugins/nautilus/seahorse-tool.c:680
 msgid "Encrypting"
 msgstr "Cifrando"
 
-#: ../plugins/nautilus/seahorse-tool.c:601
+#: ../plugins/nautilus/seahorse-tool.c:681
 #, c-format
 msgid "Couldn't encrypt file: %s"
 msgstr "No se pudo cifrar el archivo: «%s»"
 
-#: ../plugins/nautilus/seahorse-tool.c:609
+#: ../plugins/nautilus/seahorse-tool.c:689
 msgid "Signing"
 msgstr "Firmado"
 
-#: ../plugins/nautilus/seahorse-tool.c:610
+#: ../plugins/nautilus/seahorse-tool.c:690
 #, c-format
 msgid "Couldn't sign file: %s"
 msgstr "No se pudo firmar el archivo: «%s»"
 
-#: ../plugins/nautilus/seahorse-tool.c:615
+#: ../plugins/nautilus/seahorse-tool.c:695
 msgid "Importing"
 msgstr "Importación"
 
-#: ../plugins/nautilus/seahorse-tool.c:616
+#: ../plugins/nautilus/seahorse-tool.c:696
 #, c-format
 msgid "Couldn't import keys from file: %s"
 msgstr "No se pudieron importar claves del archivo: «%s»"
 
-#: ../plugins/nautilus/seahorse-tool.c:622
+#: ../plugins/nautilus/seahorse-tool.c:702
 msgid "Decrypting"
 msgstr "Descifrado"
 
-#: ../plugins/nautilus/seahorse-tool.c:623
+#: ../plugins/nautilus/seahorse-tool.c:703
 #, c-format
 msgid "Couldn't decrypt file: %s"
 msgstr "No se pudo descifrar el archivo: «%s»"
 
-#: ../plugins/nautilus/seahorse-tool.c:628
+#: ../plugins/nautilus/seahorse-tool.c:708
 msgid "Verifying"
 msgstr "Verificación"
 
-#: ../plugins/nautilus/seahorse-tool.c:629
+#: ../plugins/nautilus/seahorse-tool.c:709
 #, c-format
 msgid "Couldn't verify file: %s"
 msgstr "No se pudo verificar el archivo: «%s»"
@@ -1838,7 +1850,7 @@ msgstr[1] "Ha seleccionado %d carpetas"
 
 #: ../plugins/nautilus/seahorse-tool-files.c:811
 msgid "Preparing..."
-msgstr "Preparando..."
+msgstr "Preparando…"
 
 #: ../plugins/nautilus/seahorse-tool-files.c:820
 #: ../plugins/nautilus/seahorse-tool-files.c:843
@@ -2188,7 +2200,7 @@ msgstr "Error interno al acceder a gnome-keyring"
 
 #: ../src/seahorse-gkeyring-operation.c:284
 msgid "Saving item..."
-msgstr "Guardando elemento..."
+msgstr "Guardando elemento…"
 
 #: ../src/seahorse-gkeyring-source.c:358
 msgid "Retrieving key"
@@ -2276,7 +2288,7 @@ msgstr "_Ver"
 #. Key Actions
 #: ../src/seahorse-key-manager.c:1185
 msgid "_Create New Key..."
-msgstr "_Crear clave..."
+msgstr "_Crear clave…"
 
 #: ../src/seahorse-key-manager.c:1186
 msgid "Create a new personal key"
@@ -2284,7 +2296,7 @@ msgstr "Crear una clave personal"
 
 #: ../src/seahorse-key-manager.c:1187
 msgid "_Import..."
-msgstr "_Importar..."
+msgstr "_Importar…"
 
 #: ../src/seahorse-key-manager.c:1188
 msgid "Import keys into your key ring from a file"
@@ -2292,7 +2304,7 @@ msgstr "Importar claves en el depósito desde un archivo"
 
 #: ../src/seahorse-key-manager.c:1189
 msgid "_Back up Key Rings..."
-msgstr "_Respaldar depósitos de claves..."
+msgstr "_Respaldar depósitos de claves…"
 
 #: ../src/seahorse-key-manager.c:1190
 msgid "Back up all keys"
@@ -2380,7 +2392,7 @@ msgstr "Mostrar propiedades de la clave"
 
 #: ../src/seahorse-key-manager.c:1221
 msgid "E_xport Public Key..."
-msgstr "E_xportar clave pública..."
+msgstr "E_xportar clave pública…"
 
 #: ../src/seahorse-key-manager.c:1222
 msgid "Export public part of key to a file"
@@ -2404,7 +2416,7 @@ msgstr "Borrar las claves seleccionadas"
 
 #: ../src/seahorse-key-manager.c:1230
 msgid "_Sign..."
-msgstr "_Firmar..."
+msgstr "_Firmar…"
 
 #: ../src/seahorse-key-manager.c:1231
 msgid "Sign public key"
@@ -2412,7 +2424,7 @@ msgstr "Firmar clave pública"
 
 #: ../src/seahorse-key-manager.c:1235
 msgid "Set Up Computer for _Secure Shell..."
-msgstr "Configurar el equipo para Shell _Segura..."
+msgstr "Configurar el equipo para Shell _Segura…"
 
 #: ../src/seahorse-key-manager.c:1236
 msgid ""
@@ -2424,7 +2436,7 @@ msgstr ""
 
 #: ../src/seahorse-key-manager.c:1240 ../src/seahorse-keyserver-results.c:406
 msgid "_Find Remote Keys..."
-msgstr "_Buscar claves remotas..."
+msgstr "_Buscar claves remotas…"
 
 #: ../src/seahorse-key-manager.c:1241 ../src/seahorse-keyserver-results.c:407
 msgid "Search for keys on a key server"
@@ -2432,7 +2444,7 @@ msgstr "Buscar claves en un servidor de claves"
 
 #: ../src/seahorse-key-manager.c:1242
 msgid "_Sync and Publish Keys..."
-msgstr "_Sincronizar y publicar claves..."
+msgstr "_Sincronizar y publicar claves…"
 
 #: ../src/seahorse-key-manager.c:1243
 msgid "Publish and/or synchronize your keys with those online."
@@ -2632,7 +2644,7 @@ msgstr "Importar las claves seleccionadas en el depósito local"
 
 #: ../src/seahorse-keyserver-results.c:399
 msgid "Save Key As..."
-msgstr "Guardar clave como..."
+msgstr "Guardar clave como…"
 
 #: ../src/seahorse-keyserver-results.c:400
 msgid "Save selected keys as a file"
@@ -2715,7 +2727,7 @@ msgstr "Sincronizando claves"
 #. Show the progress window if necessary
 #: ../src/seahorse-keyserver-sync.c:246
 msgid "Synchronizing keys..."
-msgstr "Sincronizando claves..."
+msgstr "Sincronizando claves…"
 
 #: ../src/seahorse-keyserver-sync.glade.h:1
 msgid "<b>X keys are selected for synchronizing</b>"
@@ -3477,7 +3489,7 @@ msgstr "No se pudo confiar en las claves de Shell Segura en el equipo remoto."
 #. Show the progress window if necessary
 #: ../src/seahorse-ssh-upload.c:177
 msgid "Configuring Secure Shell Keys..."
-msgstr "Configurando las claves de Shell Segura..."
+msgstr "Configurando las claves de Shell Segura…"
 
 #: ../src/seahorse-ssh-upload.glade.h:1
 msgid "<i>eg: fileserver.example.com</i>"
