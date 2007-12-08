@@ -20,7 +20,6 @@
  */
 #include <config.h>
 #include <gnome.h>
-#include <gnome-keyring.h>
 
 #include "config.h"
 #include "seahorse-prefs.h"
@@ -34,8 +33,11 @@
 #include "seahorse-gtkstock.h"
 #include "seahorse-secure-entry.h"
 
-/* From seahorse_preferences_cache.c */
+/* From seahorse-prefs-cache.c */
 void seahorse_prefs_cache (SeahorseWidget *widget);
+
+/* From sehorse-prefs-keyrings.c */
+void seahorse_prefs_keyrings (SeahorseWidget *widget);
 
 /* Key Server Prefs --------------------------------------------------------- */
 
@@ -464,186 +466,6 @@ setup_sharing (SeahorseWidget *swidget)
 
 #endif /* WITH_SHARING */
 
-#ifdef WITH_GNOME_KEYRING
-
-/* GNOME Keyring Prefs ------------------------------------------------------ */
-
-/* When enter is pressed in the old-master entry, move */
-static void
-keyring_new_cb (GtkWidget *widget, GtkTable *table)
-{
-    GtkWidget *entry = GTK_WIDGET (g_object_get_data (G_OBJECT (table), "new-master"));
-    g_assert (SEAHORSE_IS_SECURE_ENTRY (entry));
-    gtk_widget_grab_focus (entry);
-}
-
-/* When enter is pressed in the new-master entry, move */
-static void
-keyring_confirm_cb (GtkWidget *widget, GtkTable *table)
-{
-    GtkWidget *entry = GTK_WIDGET (g_object_get_data (G_OBJECT (table), "confirm-master"));
-    g_assert (SEAHORSE_IS_SECURE_ENTRY (entry));
-    gtk_widget_grab_focus (entry);
-}
-
-static void
-keyring_entry_changed_cb (GtkEditable *editable, SeahorseWidget *swidget)
-{
-    SeahorseSecureEntry *old, *entry, *confirm;
-    GtkWidget *widget;
-    
-    widget = seahorse_widget_get_widget (swidget, "entry-table");
-    
-    old = SEAHORSE_SECURE_ENTRY (g_object_get_data (G_OBJECT (widget), "old-master"));
-    entry = SEAHORSE_SECURE_ENTRY (g_object_get_data (G_OBJECT (widget), "new-master"));
-    confirm = SEAHORSE_SECURE_ENTRY (g_object_get_data (G_OBJECT (widget), "confirm-master"));
-    
-    widget = seahorse_widget_get_widget (swidget, "change-master-button");
-    
-    gtk_widget_set_sensitive (widget, 
-                              ((strcmp (seahorse_secure_entry_get_text (entry), 
-                                      seahorse_secure_entry_get_text (confirm)) == 0) 
-                               && (strlen (seahorse_secure_entry_get_text (entry)) != 0)
-                               && (strlen (seahorse_secure_entry_get_text (old)) != 0)));
-    
-    widget = seahorse_widget_get_widget (swidget, "clear-master-button");
-    
-    gtk_widget_set_sensitive (widget, 
-                              ((strlen (seahorse_secure_entry_get_text (old)) != 0)
-                               || (strlen (seahorse_secure_entry_get_text (entry)) != 0)
-                               || (strlen (seahorse_secure_entry_get_text (confirm)) != 0)));  
-}
-
-static void
-keyring_clear_clicked (GtkButton *button, GtkTable *table)
-{
-    SeahorseSecureEntry *old, *entry, *confirm;
-    
-    old = SEAHORSE_SECURE_ENTRY (g_object_get_data (G_OBJECT (table), "old-master"));
-    entry = SEAHORSE_SECURE_ENTRY (g_object_get_data (G_OBJECT (table), "new-master"));
-    confirm = SEAHORSE_SECURE_ENTRY (g_object_get_data (G_OBJECT (table), "confirm-master"));
-    
-    seahorse_secure_entry_set_text (old, "");
-    seahorse_secure_entry_set_text (entry, "");
-    seahorse_secure_entry_set_text (confirm, "");
-}
-
-static void
-keyring_apply_clicked (GtkButton *button, SeahorseWidget *swidget)
-{
-    GtkWidget *widget, *table;
-    SeahorseSecureEntry *old, *entry, *confirm;
-    GnomeKeyringResult result;
-    gchar *default_keyring;
-    
-    table = seahorse_widget_get_widget (swidget, "entry-table");
-    
-    old = SEAHORSE_SECURE_ENTRY (g_object_get_data (G_OBJECT (table), "old-master"));
-    entry = SEAHORSE_SECURE_ENTRY (g_object_get_data (G_OBJECT (table), "new-master"));
-    confirm = SEAHORSE_SECURE_ENTRY (g_object_get_data (G_OBJECT (table), "confirm-master"));
-    
-    result = gnome_keyring_get_default_keyring_sync (&default_keyring);
-    
-    if (result == GNOME_KEYRING_RESULT_OK) {
-        result = gnome_keyring_change_password_sync (default_keyring, 
-                                                     seahorse_secure_entry_get_text (old),
-                                                     seahorse_secure_entry_get_text (entry));
-                                                     
-        if (result != GNOME_KEYRING_RESULT_OK) {
-            widget = seahorse_widget_get_widget (swidget, "success-box");
-            gtk_widget_hide (widget);
-            
-            widget = seahorse_widget_get_widget (swidget, "failure-box");
-            gtk_widget_show (widget);
-        } else {
-            widget = seahorse_widget_get_widget (swidget, "success-box");
-            gtk_widget_show (widget);
-            
-            widget = seahorse_widget_get_widget (swidget, "failure-box");
-            gtk_widget_hide (widget);
-        }
-    }
-    
-    keyring_clear_clicked (NULL, GTK_TABLE (table));
-    
-    widget = seahorse_widget_get_widget (swidget, "clear-master-button");
-    gtk_widget_set_sensitive (widget, FALSE);
-}
-
-/* When enter is pressed in the confirm entry, we simulate clicking apply */
-static void
-keyring_enter_cb (GtkEditable *editable, SeahorseWidget *swidget)
-{
-    SeahorseSecureEntry *old, *entry, *confirm;
-    GtkWidget *widget;
-    
-    widget = seahorse_widget_get_widget (swidget, "entry-table");
-    
-    old = SEAHORSE_SECURE_ENTRY (g_object_get_data (G_OBJECT (widget), "old-master"));
-    entry = SEAHORSE_SECURE_ENTRY (g_object_get_data (G_OBJECT (widget), "new-master"));
-    confirm = SEAHORSE_SECURE_ENTRY (g_object_get_data (G_OBJECT (widget), "confirm-master"));
-    
-    if ((strlen (seahorse_secure_entry_get_text (old)) != 0) && 
-        (strcmp (seahorse_secure_entry_get_text (entry), 
-                 seahorse_secure_entry_get_text (confirm)) == 0)) {
-        
-        keyring_apply_clicked (NULL, swidget);
-    }
-}
-
-static void
-setup_gnome_keyring (SeahorseWidget *swidget)
-{
-    GtkWidget *entry;
-    GtkWidget *table;
-    GtkWidget *widget;
-    GtkWidget *label;
-    
-    table = seahorse_widget_get_widget (swidget, "entry-table");
-    
-    entry = seahorse_secure_entry_new ();
-    gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 0, 1, 
-                      GTK_EXPAND|GTK_FILL, GTK_EXPAND|GTK_FILL, 0, 0);
-    g_object_set_data (G_OBJECT (table), "old-master", entry);
-    g_signal_connect (G_OBJECT (entry), "activate", G_CALLBACK (keyring_new_cb), table);
-    g_signal_connect (G_OBJECT (entry), "changed", G_CALLBACK (keyring_entry_changed_cb), swidget);
-
-    label = seahorse_widget_get_widget (swidget, "current-pwd-label");
-    gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
-
-    entry = seahorse_secure_entry_new ();
-    gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 1, 2, 
-                      GTK_EXPAND|GTK_FILL, GTK_EXPAND|GTK_FILL, 0, 0);
-    g_object_set_data (G_OBJECT (table), "new-master", entry);
-    g_signal_connect (G_OBJECT (entry), "activate", G_CALLBACK (keyring_confirm_cb), table);
-    g_signal_connect (G_OBJECT (entry), "changed", G_CALLBACK (keyring_entry_changed_cb), swidget);
-    
-    label = seahorse_widget_get_widget (swidget, "new-pwd-label");
-    gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
-
-    entry = seahorse_secure_entry_new ();
-    gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 2, 3, 
-                      GTK_EXPAND|GTK_FILL, GTK_EXPAND|GTK_FILL, 0, 0);
-    g_object_set_data (G_OBJECT (table), "confirm-master", entry);
-    g_signal_connect (G_OBJECT (entry), "activate", G_CALLBACK (keyring_enter_cb), swidget);
-    g_signal_connect (G_OBJECT (entry), "changed", G_CALLBACK (keyring_entry_changed_cb), swidget); 
-
-    label = seahorse_widget_get_widget (swidget, "confirm-pwd-label");
-    gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
-
-    gtk_widget_show_all (table);                  
-    
-    widget = seahorse_widget_get_widget (swidget, "change-master-button");
-    gtk_widget_set_sensitive (widget, FALSE);
-    g_signal_connect (G_OBJECT (widget), "clicked", G_CALLBACK (keyring_apply_clicked), swidget);
-    
-    widget = seahorse_widget_get_widget (swidget, "clear-master-button");
-    gtk_widget_set_sensitive (widget, FALSE);
-    g_signal_connect (G_OBJECT (widget), "clicked", G_CALLBACK (keyring_clear_clicked), table);
-}
-
-#endif /* WITH_GNOME_KEYRING */
-
 /* -------------------------------------------------------------------------- */
 
 static void
@@ -731,13 +553,7 @@ seahorse_prefs_new (GtkWindow *parent)
     seahorse_prefs_remove_tab (swidget, widget);
 #endif    
 
-#ifdef WITH_GNOME_KEYRING
-    setup_gnome_keyring (swidget);
-#else
-    widget = glade_xml_get_widget (swidget->xml, "keyring-tab");
-    g_return_val_if_fail (GTK_IS_WIDGET (widget), swidget);
-    seahorse_prefs_remove_tab (swidget, widget);
-#endif
+    seahorse_prefs_keyrings (swidget);
 
     seahorse_widget_show (swidget);
     return swidget;

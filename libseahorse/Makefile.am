@@ -78,6 +78,7 @@ libseahorse_a_SOURCES = \
 	seahorse-vfs-data.c seahorse-vfs-data.h \
 	seahorse-gpgmex.h seahorse-gpgmex-op.c seahorse-gpgmex-util.c \
 	seahorse-prefs.c seahorse-prefs.h \
+	seahorse-prefs-keyrings.c \
 	seahorse-operation.c seahorse-operation.h \
     seahorse-transfer-operation.c seahorse-transfer-operation.h \
 	seahorse-progress.c seahorse-progress.h \
@@ -116,6 +117,7 @@ seahorse-marshal.c: seahorse-marshal.list $(GLIB_GENMARSHAL)
 glade_DATA = \
 	seahorse-signer.glade \
 	seahorse-prefs.glade \
+	seahorse-add-keyring.glade \
 	seahorse-add-keyserver.glade \
 	seahorse-progress.glade \
 	seahorse-notify.glade

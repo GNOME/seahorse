@@ -388,6 +388,15 @@ seahorse_widget_set_visible (SeahorseWidget *swidget, const char *identifier,
         gtk_widget_hide (widget);
 }
 
+void             
+seahorse_widget_set_sensitive (SeahorseWidget *swidget, const char *identifier,
+                               gboolean sensitive)
+{
+    GtkWidget *widget = glade_xml_get_widget (swidget->xml, identifier);
+    g_return_if_fail (widget != NULL);
+    gtk_widget_set_sensitive (widget, sensitive);
+}
+
 /**
  * seahorse_widget_destroy:
  * @swidget: #SeahorseWidget to destroy
