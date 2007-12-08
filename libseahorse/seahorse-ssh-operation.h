@@ -75,10 +75,6 @@ SeahorseOperation*   seahorse_ssh_operation_generate     (SeahorseSSHSource *src
 /* result: nothing */
 SeahorseOperation*   seahorse_ssh_operation_change_passphrase (SeahorseSSHKey *skey);
 
-/* result: nothing */
-SeahorseOperation*   seahorse_ssh_operation_agent_load     (SeahorseSSHSource *src, 
-                                                            SeahorseSSHKey *skey);
-
 /* result: fingerprint of imported key */
 SeahorseOperation*   seahorse_ssh_operation_import_public  (SeahorseSSHSource *ssrc,
                                                             SeahorseSSHKeyData *data,

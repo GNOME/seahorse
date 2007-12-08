@@ -1041,26 +1041,6 @@ load_result_cb (SeahorseSSHOperation *sop)
     }
 }
 
-SeahorseOperation*
-seahorse_ssh_operation_agent_load (SeahorseSSHSource *src, SeahorseSSHKey *skey)
-{
-    SeahorseSSHOperationPrivate *pv;
-    SeahorseOperation *op;
-    gchar *cmd;
-    
-    g_return_val_if_fail (skey->keydata->privfile, NULL);
-    
-    cmd = g_strdup_printf (SSH_ADD_PATH " '%s'", skey->keydata->privfile);
-    op = seahorse_ssh_operation_new (src, cmd, NULL, 0, skey);
-    g_free (cmd);
-    
-    pv = SEAHORSE_SSH_OPERATION_GET_PRIVATE (op);
-    pv->result_cb = load_result_cb;
-    pv->password_cb = load_password_cb;
-    
-    return op;
-}
-
 /* -----------------------------------------------------------------------------
  * IMPORT A PUBLIC KEY 
  */
