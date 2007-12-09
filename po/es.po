@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse.HEAD.es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-12-08 22:04+0000\n"
-"PO-Revision-Date: 2007-12-09 21:19+0100\n"
+"POT-Creation-Date: 2007-12-09 20:42+0000\n"
+"PO-Revision-Date: 2007-12-09 22:04+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -570,7 +570,9 @@ msgstr "Nombre del nuevo depósito:"
 msgid ""
 "Please choose a name for the new keyring. You will be prompted for an unlock "
 "password."
-msgstr "Elija un nombre para el depósito nuevo. Se le preguntará una contraseña de desbloqueo."
+msgstr ""
+"Elija un nombre para el depósito nuevo. Se le preguntará una contraseña de "
+"desbloqueo."
 
 #: ../libseahorse/seahorse-add-keyring.glade.h:4
 #: ../libseahorse/seahorse-add-keyserver.glade.h:5
@@ -787,7 +789,7 @@ msgid "Enter passphrase"
 msgstr "Introduzca la frase de paso"
 
 #: ../libseahorse/seahorse-pgp-key.c:140 ../libseahorse/seahorse-ssh-key.c:112
-#: ../src/seahorse-gkeyring-item.c:231
+#: ../src/seahorse-gkeyring-item.c:232
 msgid "Invalid"
 msgstr "Inválido"
 
@@ -919,12 +921,12 @@ msgid "Couldn't change keyring password"
 msgstr "No se pudo cambiar la contraseña del depósito"
 
 #: ../libseahorse/seahorse-prefs.glade.h:1
-msgid "<b>Default Keyring</b>"
-msgstr "<b>Depósito predeterminado</b>"
+msgid "<b>Default Key</b>"
+msgstr "<b>Clave predeterminada</b>"
 
 #: ../libseahorse/seahorse-prefs.glade.h:2
-msgid "<b>Defaults</b>"
-msgstr "<b>Predeterminado</b>"
+msgid "<b>Default Storage Location</b>"
+msgstr "<b>Lugar de almacenamiento predeterminado</b>"
 
 #: ../libseahorse/seahorse-prefs.glade.h:3
 msgid ""
@@ -935,8 +937,8 @@ msgstr ""
 "necesario para cachear frases de paso."
 
 #: ../libseahorse/seahorse-prefs.glade.h:4
-msgid "<b>Password Keyrings</b>"
-msgstr "<b>Depósitos de contraseñas</b>"
+msgid "<b>Password Storage Locations</b>"
+msgstr "<b>Lugares de almacenamiento de contraseñas</b>"
 
 #: ../libseahorse/seahorse-prefs.glade.h:5
 msgid "<b>Remember PGP Passphrases</b>"
@@ -981,29 +983,28 @@ msgid "Change Unlock _Password"
 msgstr "Cambiar la _contraseña de desbloqueo"
 
 #: ../libseahorse/seahorse-prefs.glade.h:13
-#: ../plugins/nautilus/seahorse-pgp-preferences.c:74
-msgid "Encryption Preferences"
-msgstr "Preferencias de cifrado"
+msgid "Encryption"
+msgstr "Cifrado"
 
 #: ../libseahorse/seahorse-prefs.glade.h:14
-msgid "Encryption Settings"
-msgstr "Opciones de cifrado"
-
-#: ../libseahorse/seahorse-prefs.glade.h:15
 msgid "Key Servers"
 msgstr "Servidores de claves"
 
-#: ../libseahorse/seahorse-prefs.glade.h:16
+#: ../libseahorse/seahorse-prefs.glade.h:15
 msgid "Key Sharing"
 msgstr "Compartición de claves"
 
+#: ../libseahorse/seahorse-prefs.glade.h:16
+msgid "PGP Passphrases"
+msgstr "Frase de paso PGP"
+
 #: ../libseahorse/seahorse-prefs.glade.h:17
-msgid "Passphrase Cache"
-msgstr "Caché de frase de paso"
+msgid "Password Storage"
+msgstr "Almacenamiento de contraseñas"
 
 #: ../libseahorse/seahorse-prefs.glade.h:18
-msgid "Passwords"
-msgstr "Contraseñas"
+msgid "Password and Encryption Settings"
+msgstr "Ajustes de contraseñas y cifrado"
 
 #: ../libseahorse/seahorse-prefs.glade.h:19
 msgid "Session _Properties"
@@ -1047,8 +1048,8 @@ msgid "When _encrypting, always include myself as a recipient"
 msgstr "Al ci_frar, siempre incluirme a mí mismo como destinatario"
 
 #: ../libseahorse/seahorse-prefs.glade.h:28
-msgid "_Add Keyring"
-msgstr "_Añadir depósito"
+msgid "_Add Storage"
+msgstr "_Añadir almacenamiento"
 
 #: ../libseahorse/seahorse-prefs.glade.h:29
 msgid "_Always remember passphrases whenever logged in"
@@ -1079,8 +1080,8 @@ msgid "_Remember passphrases for"
 msgstr "_Recordar frases de paso durante"
 
 #: ../libseahorse/seahorse-prefs.glade.h:36
-msgid "_Remove Keyring"
-msgstr "_Eliminar depósito"
+msgid "_Remove Storage"
+msgstr "_Eliminar almacenamiento"
 
 #: ../libseahorse/seahorse-prefs.glade.h:37
 msgid "_Share my keys with others on my network"
@@ -1631,6 +1632,10 @@ msgstr[1] "Firmar los archivos seleccionados"
 msgid "For internal use"
 msgstr "Para uso interno"
 
+#: ../plugins/nautilus/seahorse-pgp-preferences.c:74
+msgid "Encryption Preferences"
+msgstr "Preferencias de cifrado"
+
 #: ../plugins/nautilus/seahorse-pgp-preferences.desktop.in.h:1
 msgid "Configure key servers and other encryption settings"
 msgstr "Configurar los servidores de claves y otras opciones de cifrado"
@@ -2105,107 +2110,135 @@ msgstr "_Continuar"
 msgid "Create a New Key"
 msgstr "Crea una clave nueva"
 
-#: ../src/seahorse-gkeyring-item.c:248
+#: ../src/seahorse-gkeyring-item.c:249
 msgid "Web Password"
 msgstr "Contraseña web"
 
-#: ../src/seahorse-gkeyring-item.c:250
+#: ../src/seahorse-gkeyring-item.c:251
 msgid "Network Password"
 msgstr "Contraseña de red"
 
-#: ../src/seahorse-gkeyring-item.c:252
-#: ../src/seahorse-gkeyring-item-properties.c:116
-#: ../src/seahorse-gkeyring-source.c:496
+#: ../src/seahorse-gkeyring-item.c:253
+#: ../src/seahorse-gkeyring-item-properties.c:119
+#: ../src/seahorse-gkeyring-source.c:546
 msgid "Password"
 msgstr "Contraseña"
 
-#: ../src/seahorse-gkeyring-item-properties.c:90
+#: ../src/seahorse-gkeyring-item-properties.c:93
 msgid "Access a network share or resource"
 msgstr "Acceder a un recurso de red o carpeta compartida"
 
-#: ../src/seahorse-gkeyring-item-properties.c:94
+#: ../src/seahorse-gkeyring-item-properties.c:97
 msgid "Access a website"
 msgstr "Acceder a un sitio web"
 
-#: ../src/seahorse-gkeyring-item-properties.c:98
+#: ../src/seahorse-gkeyring-item-properties.c:101
 msgid "Unlocks a PGP key"
 msgstr "Desbloquea una clave PGP"
 
-#: ../src/seahorse-gkeyring-item-properties.c:101
+#: ../src/seahorse-gkeyring-item-properties.c:104
 msgid "Unlocks a Secure Shell key"
 msgstr "Desbloquea una clave de shell segura"
 
-#: ../src/seahorse-gkeyring-item-properties.c:104
+#: ../src/seahorse-gkeyring-item-properties.c:107
 msgid "Saved password or login"
 msgstr "Contraseña o usuario guardado"
 
-#: ../src/seahorse-gkeyring-item-properties.c:116
+#: ../src/seahorse-gkeyring-item-properties.c:119
 msgid "Network Credentials"
 msgstr "Credenciales de red"
 
-#: ../src/seahorse-gkeyring-item-properties.c:177
+#: ../src/seahorse-gkeyring-item-properties.c:180
 msgid "Couldn't change password."
 msgstr "No se puede cambiar la contraseña"
 
-#: ../src/seahorse-gkeyring-item-properties.c:284
+#: ../src/seahorse-gkeyring-item-properties.c:287
 msgid "Couldn't set description."
 msgstr "No se pudo establecer la descripción."
+
+#: ../src/seahorse-gkeyring-item-properties.c:496
+msgid "Couldn't set application access."
+msgstr "No se pudo establecer el acceso de la aplicación."
 
 #: ../src/seahorse-gkeyring-item-properties.glade.h:1
 msgid "<b>Password:</b>"
 msgstr "<b>Contraseña:</b>"
 
 #: ../src/seahorse-gkeyring-item-properties.glade.h:2
+msgid "<b>Path:</b>"
+msgstr "<b>Ruta:</b>"
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:3
+msgid "<b>Permissions:</b>"
+msgstr "<b>Permisos:</b>"
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:4
 #: ../src/seahorse-pgp-public-key-properties.glade.h:9
 #: ../src/seahorse-ssh-key-properties.glade.h:9
 msgid "<b>Technical Details:</b>"
 msgstr "<b>Detalles técnicos:</b>"
 
-#: ../src/seahorse-gkeyring-item-properties.glade.h:3
+#: ../src/seahorse-gkeyring-item-properties.glade.h:5
+msgid "Applications"
+msgstr "Aplicaciones"
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:6
 #: ../src/seahorse-pgp-private-key-properties.glade.h:22
 #: ../src/seahorse-pgp-public-key-properties.glade.h:19
 #: ../src/seahorse-ssh-key-properties.glade.h:16
 msgid "Details"
 msgstr "Detalles"
 
-#: ../src/seahorse-gkeyring-item-properties.glade.h:4
+#: ../src/seahorse-gkeyring-item-properties.glade.h:7
 #: ../src/seahorse-ssh-key-properties.glade.h:18
 msgid "Key"
 msgstr "Clave"
 
-#: ../src/seahorse-gkeyring-item-properties.glade.h:5
+#: ../src/seahorse-gkeyring-item-properties.glade.h:8
 #: ../src/seahorse-pgp-private-key-properties.glade.h:29
 #: ../src/seahorse-pgp-public-key-properties.glade.h:28
 #: ../src/seahorse-ssh-key-properties.glade.h:19
 msgid "Key Properties"
 msgstr "Propiedades de la clave"
 
-#: ../src/seahorse-gkeyring-item-properties.glade.h:6
+#: ../src/seahorse-gkeyring-item-properties.glade.h:9
 msgid "Login:"
 msgstr "Usuario:"
 
-#: ../src/seahorse-gkeyring-item-properties.glade.h:7
+#: ../src/seahorse-gkeyring-item-properties.glade.h:10
 msgid "Server:"
 msgstr "Servidor:"
 
-#: ../src/seahorse-gkeyring-item-properties.glade.h:8
+#: ../src/seahorse-gkeyring-item-properties.glade.h:11
 msgid "Show pass_word"
 msgstr "Mostrar _contraseña"
 
-#: ../src/seahorse-gkeyring-item-properties.glade.h:9
+#: ../src/seahorse-gkeyring-item-properties.glade.h:12
 #: ../src/seahorse-pgp-private-key-properties.glade.h:41
 #: ../src/seahorse-pgp-public-key-properties.glade.h:35
 msgid "Type:"
 msgstr "Tipo:"
 
-#: ../src/seahorse-gkeyring-item-properties.glade.h:10
+#: ../src/seahorse-gkeyring-item-properties.glade.h:13
 msgid "Use:"
 msgstr "Uso:"
 
-#: ../src/seahorse-gkeyring-item-properties.glade.h:11
+#: ../src/seahorse-gkeyring-item-properties.glade.h:14
+msgid "_Delete"
+msgstr "_Borrar"
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:15
 #: ../src/seahorse-revoke.glade.h:5
 msgid "_Description:"
 msgstr "_Descripción:"
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:16
+msgid "_Read"
+msgstr "_Leer"
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:17
+msgid "_Write"
+msgstr "_Escribir"
 
 #: ../src/seahorse-gkeyring-operation.c:204
 msgid "Access to the key ring was denied"
@@ -2235,16 +2268,17 @@ msgstr "El elemento ya existe"
 msgid "Internal error accessing gnome-keyring"
 msgstr "Error interno al acceder a gnome-keyring"
 
-#: ../src/seahorse-gkeyring-operation.c:284
+#: ../src/seahorse-gkeyring-operation.c:282
+#: ../src/seahorse-gkeyring-operation.c:314
 msgid "Saving item..."
 msgstr "Guardando elemento…"
 
-#: ../src/seahorse-gkeyring-source.c:356
+#: ../src/seahorse-gkeyring-source.c:403
 msgid "Retrieving key"
 msgstr "Obteniendo clave"
 
 #. Start listing of ids
-#: ../src/seahorse-gkeyring-source.c:370
+#: ../src/seahorse-gkeyring-source.c:417
 msgid "Listing passwords"
 msgstr "Listando contraseñas"
 
