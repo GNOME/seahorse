@@ -40,6 +40,7 @@ enum {
     PROP_ITEM_ID,
     PROP_ITEM_INFO,
     PROP_ITEM_ATTRIBUTES,
+    PROP_ITEM_ACL,
     PROP_DISPLAY_NAME,
     PROP_DISPLAY_ID,
     PROP_SIMPLE_NAME,
@@ -333,6 +334,9 @@ seahorse_gkeyring_item_get_property (GObject *object, guint prop_id,
     case PROP_ITEM_ATTRIBUTES:
         g_value_set_pointer (value, git->attributes);
         break;
+    case PROP_ITEM_ACL:
+    	g_value_set_pointer (value, git->acl);
+    	break;
     case PROP_DISPLAY_NAME:
         g_value_take_string (value, seahorse_gkeyring_item_get_name (skey, 0));
         break;
@@ -406,6 +410,13 @@ seahorse_gkeyring_item_set_property (GObject *object, guint prop_id, const GValu
             changed_key (git);
         }
         break;
+    case PROP_ITEM_ACL:
+        if (git->acl != g_value_get_pointer (value)) {
+            gnome_keyring_acl_free (git->acl);
+            git->acl = g_value_get_pointer (value);
+            changed_key (git);
+        }
+        break;
     }
 }
 
@@ -421,6 +432,9 @@ seahorse_gkeyring_item_object_finalize (GObject *gobject)
     if (git->attributes)
         gnome_keyring_attribute_list_free (git->attributes);
     git->attributes = NULL;
+    
+    gnome_keyring_acl_free (git->acl);
+    git->acl = NULL;
     
     G_OBJECT_CLASS (seahorse_gkeyring_item_parent_class)->finalize (gobject);
 }
@@ -456,6 +470,10 @@ seahorse_gkeyring_item_class_init (SeahorseGKeyringItemClass *klass)
                               
     g_object_class_install_property (gobject_class, PROP_ITEM_ATTRIBUTES,
         g_param_spec_pointer ("item-attributes", "Item Attributes", "GNOME Keyring Item Attributes",
+                              G_PARAM_READWRITE));
+
+    g_object_class_install_property (gobject_class, PROP_ITEM_ACL,
+        g_param_spec_pointer ("item-acl", "Item ACL", "GNOME Keyring Item ACL",
                               G_PARAM_READWRITE));
 
     g_object_class_install_property (gobject_class, PROP_DISPLAY_NAME,
@@ -502,12 +520,13 @@ seahorse_gkeyring_item_class_init (SeahorseGKeyringItemClass *klass)
 
 SeahorseGKeyringItem* 
 seahorse_gkeyring_item_new (SeahorseKeySource *sksrc, guint32 item_id, 
-                            GnomeKeyringItemInfo *info, GnomeKeyringAttributeList *attributes)
+                            GnomeKeyringItemInfo *info, GnomeKeyringAttributeList *attributes, 
+                            GList *acl)
 {
     SeahorseGKeyringItem *git;
     git = g_object_new (SEAHORSE_TYPE_GKEYRING_ITEM, "key-source", sksrc, 
                         "item-id", item_id, "item-info", info, 
-                        "item-attributes", attributes, NULL);
+                        "item-attributes", attributes, "item-acl", acl, NULL);
     
     /* We don't care about this floating business */
     g_object_ref (GTK_OBJECT (git));

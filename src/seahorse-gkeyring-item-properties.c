@@ -31,6 +31,9 @@
 #include "seahorse-secure-memory.h"
 #include "seahorse-secure-entry.h"
 
+/* -----------------------------------------------------------------------------
+ * MAIN TAB 
+ */
 
 static void
 load_password (SeahorseWidget *swidget, SeahorseGKeyringItem *git)
@@ -297,6 +300,10 @@ description_focus_out (GtkWidget* widget, GdkEventFocus *event, SeahorseWidget *
     return FALSE;
 }
 
+/* -----------------------------------------------------------------------------
+ * DETAILS TAB
+ */
+
 static void 
 do_details (SeahorseWidget *swidget)
 {
@@ -339,11 +346,235 @@ do_details (SeahorseWidget *swidget)
     g_string_free (details, TRUE);
 }
 
+/* -----------------------------------------------------------------------------
+ * APPLICATIONS TAB 
+ */
+
+static gint
+selected_application_index (SeahorseWidget *swidget)
+{
+    GtkTreeView *tree;
+    GtkTreePath *path;
+    GtkTreeModel *model;
+    GtkTreeSelection *selection;
+    GtkTreeIter iter;
+    gint* indices;
+    gint ret;
+    
+    tree = GTK_TREE_VIEW (seahorse_widget_get_widget (swidget, "application-list"));
+    g_return_val_if_fail (GTK_IS_TREE_VIEW (tree), -1);
+    
+    selection = gtk_tree_view_get_selection (tree);
+    if (!gtk_tree_selection_get_selected (selection, &model, &iter))
+        return -1;
+        
+    path = gtk_tree_model_get_path (model, &iter);
+    g_return_val_if_fail (path, -1);
+    
+    indices = gtk_tree_path_get_indices (path);
+    g_return_val_if_fail (indices, -1);
+    
+    ret = *indices;
+    gtk_tree_path_free (path);
+    
+    return ret;
+}
+
+static void
+update_application_details (SeahorseWidget *swidget)
+{
+    SeahorseKey *key;
+    SeahorseGKeyringItem *git;
+    GnomeKeyringAccessControl *ac;
+    GtkLabel *label;
+    GtkToggleButton *toggle;
+    GnomeKeyringAccessType access;
+    gint index;
+    gchar *path;
+    
+    key = SEAHORSE_KEY_WIDGET (swidget)->skey;
+    git = SEAHORSE_GKEYRING_ITEM (key);
+
+    index = selected_application_index (swidget);
+    if (index < 0) {
+        ac = NULL;
+    } else {
+        ac = (GnomeKeyringAccessControl*)g_list_nth_data (git->acl, index);
+        g_return_if_fail (ac);
+    }
+        
+    seahorse_widget_set_sensitive (swidget, "application-details", ac != NULL);
+    
+    label = GTK_LABEL (seahorse_widget_get_widget (swidget, "application-path"));
+    g_return_if_fail (GTK_IS_LABEL (label));
+    path = ac ? gnome_keyring_item_ac_get_path_name (ac) : NULL;
+    gtk_label_set_text (label, path ? path : "");
+    g_free (path);
+
+    g_object_set_data (G_OBJECT (swidget), "updating", "updating");
+    access = ac ? gnome_keyring_item_ac_get_access_type (ac) : 0;
+    
+    toggle = GTK_TOGGLE_BUTTON (seahorse_widget_get_widget (swidget, "application-read"));
+    g_return_if_fail (GTK_IS_TOGGLE_BUTTON (toggle));
+    gtk_toggle_button_set_active (toggle, access & GNOME_KEYRING_ACCESS_READ);    
+
+    toggle = GTK_TOGGLE_BUTTON (seahorse_widget_get_widget (swidget, "application-write"));
+    g_return_if_fail (GTK_IS_TOGGLE_BUTTON (toggle));    
+    gtk_toggle_button_set_active (toggle, access & GNOME_KEYRING_ACCESS_WRITE);    
+
+    toggle = GTK_TOGGLE_BUTTON (seahorse_widget_get_widget (swidget, "application-delete"));
+    g_return_if_fail (GTK_IS_TOGGLE_BUTTON (toggle));
+    gtk_toggle_button_set_active (toggle, access & GNOME_KEYRING_ACCESS_REMOVE);
+    
+    g_object_set_data (G_OBJECT (swidget), "updating", NULL);
+}
+
+static void
+application_selection_changed (GtkTreeSelection *selection, SeahorseWidget *swidget)
+{
+    update_application_details (swidget);
+}
+
+static void 
+merge_toggle_button_access (SeahorseWidget *swidget, const gchar *identifier, 
+                            GnomeKeyringAccessType *access, GnomeKeyringAccessType type)
+{
+    GtkToggleButton *toggle;
+    
+    toggle = GTK_TOGGLE_BUTTON (seahorse_widget_get_widget (swidget, identifier));
+    g_return_if_fail (GTK_IS_TOGGLE_BUTTON (toggle));
+    if (gtk_toggle_button_get_active (toggle))
+        *access |= type;
+    else
+        *access &= ~type;
+}
+
+static void
+application_access_toggled (GtkCheckButton *check, SeahorseWidget *swidget)
+{
+    SeahorseKey *key;
+    SeahorseGKeyringItem *git;
+    SeahorseOperation *op;
+    GnomeKeyringAccessType access;
+    GnomeKeyringAccessControl *ac;
+    GError *err = NULL;
+    GList *acl;
+    guint index;
+    
+    /* Just us setting up the controls, not the user */
+    if (g_object_get_data (G_OBJECT (swidget), "updating"))
+        return;
+    
+    key = SEAHORSE_KEY_WIDGET (swidget)->skey;
+    git = SEAHORSE_GKEYRING_ITEM (key);
+
+    index = selected_application_index (swidget);
+    g_return_if_fail (index >= 0);
+    
+    acl = gnome_keyring_acl_copy (git->acl);
+    ac = (GnomeKeyringAccessControl*)g_list_nth_data (acl, index);
+    g_return_if_fail (ac);
+    
+    access = gnome_keyring_item_ac_get_access_type (ac);
+    
+    merge_toggle_button_access (swidget, "application-read", &access, GNOME_KEYRING_ACCESS_READ);    
+    merge_toggle_button_access (swidget, "application-write", &access, GNOME_KEYRING_ACCESS_WRITE);    
+    merge_toggle_button_access (swidget, "application-delete", &access, GNOME_KEYRING_ACCESS_REMOVE);    
+
+    if (access != gnome_keyring_item_ac_get_access_type (ac)) {
+        
+        gnome_keyring_item_ac_set_access_type (ac, access);
+
+        seahorse_widget_set_sensitive (swidget, "application-details", FALSE);
+        
+        op = seahorse_gkeyring_operation_update_acl (git, acl);
+        g_return_if_fail (op);
+        
+        seahorse_operation_wait (op);
+        if (!seahorse_operation_is_successful (op)) {
+            seahorse_operation_copy_error (op, &err);
+            seahorse_util_handle_error (err, _("Couldn't set application access."));
+            update_application_details (swidget);
+        }
+                
+        seahorse_widget_set_sensitive (swidget, "application-details", TRUE);        
+    }
+    
+    gnome_keyring_acl_free (acl);
+}
+
+static void 
+do_application (SeahorseWidget *swidget)
+{
+    SeahorseKey *key;
+    SeahorseGKeyringItem *git;
+    GtkTreeView *tree;
+    GtkListStore *store;
+    GtkTreeModel *model;
+    GtkTreeIter iter;
+    GtkCellRenderer *renderer;
+    GnomeKeyringAccessControl *ac;
+    GtkTreeViewColumn *column;
+    GList *acl;
+    gboolean valid;
+    gchar *display;
+
+    key = SEAHORSE_KEY_WIDGET (swidget)->skey;
+    git = SEAHORSE_GKEYRING_ITEM (key);
+
+    tree = GTK_TREE_VIEW (seahorse_widget_get_widget (swidget, "application-list"));
+    g_return_if_fail (tree);
+    
+    model = gtk_tree_view_get_model (tree);
+    if (!model) {
+        store = gtk_list_store_new (1, GTK_TYPE_STRING);
+        model = GTK_TREE_MODEL (store);
+        gtk_tree_view_set_model (tree, model);
+        
+        renderer = gtk_cell_renderer_text_new ();
+        column = gtk_tree_view_column_new_with_attributes ("name", renderer, "text", 0, NULL);
+        gtk_tree_view_append_column (tree, column);
+    } else {
+        store = GTK_LIST_STORE (model);
+    }
+    
+    acl = git->acl;
+    
+    /* Fill in the tree store, replacing any rows already present */
+    valid = gtk_tree_model_get_iter_first (model, &iter);
+    for ( ; acl; acl = g_list_next (acl)) {
+    
+        ac = (GnomeKeyringAccessControl*)acl->data;
+        g_return_if_fail (ac);
+        
+        if (!valid)
+            gtk_list_store_append (store, &iter);
+
+        display = gnome_keyring_item_ac_get_display_name (ac);
+        gtk_list_store_set (store, &iter, 0, display ? display : "", -1);
+        g_free (display);
+        
+        if (valid)
+            valid = gtk_tree_model_iter_next (model, &iter);
+    }
+    
+    /* Remove all the remaining rows */
+    while (valid)
+        valid = gtk_list_store_remove (store, &iter);
+        
+    update_application_details (swidget);
+}
+
+/* -----------------------------------------------------------------------------
+ * GENERAL
+ */
+
 static void
 key_changed (SeahorseKey *skey, SeahorseKeyChange change, SeahorseWidget *swidget)
 {
     do_main (swidget);
     do_details (swidget);
+    do_application (swidget);
 }
 
 static void
@@ -408,6 +639,7 @@ seahorse_gkeyring_item_properties_new (SeahorseGKeyringItem *git, GtkWindow *par
 
     do_main (swidget);
     do_details (swidget);
+    do_application (swidget);
     
     widget = seahorse_widget_get_widget (swidget, "password-expander");
     g_return_if_fail (widget);
@@ -421,6 +653,12 @@ seahorse_gkeyring_item_properties_new (SeahorseGKeyringItem *git, GtkWindow *par
     g_signal_connect (widget, "activate", G_CALLBACK (description_activate), swidget);
     g_signal_connect (widget, "focus-out-event", G_CALLBACK (description_focus_out), swidget);
 
-    if (swidget)
-        seahorse_widget_show (swidget);
+    glade_xml_signal_connect_data (swidget->xml, "application_access_toggled", 
+                                   G_CALLBACK (application_access_toggled), swidget);
+
+    widget = seahorse_widget_get_widget (swidget, "application-list");
+    g_return_if_fail (GTK_IS_TREE_VIEW (widget));
+    
+    g_signal_connect (gtk_tree_view_get_selection (GTK_TREE_VIEW (widget)), "changed", 
+                      G_CALLBACK (application_selection_changed), swidget);
 }

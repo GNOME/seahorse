@@ -56,4 +56,8 @@ gboolean            seahorse_gkeyring_operation_parse_error        (GnomeKeyring
 SeahorseOperation*   seahorse_gkeyring_operation_update_info       (SeahorseGKeyringItem *git,
                                                                     GnomeKeyringItemInfo *info);
 
+/* result: nothing */
+SeahorseOperation*   seahorse_gkeyring_operation_update_acl        (SeahorseGKeyringItem *git,
+                                                                    GList *acl);
+
 #endif /* __SEAHORSE_GKEYRING_OPERATION_H__ */

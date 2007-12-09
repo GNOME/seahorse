@@ -85,6 +85,12 @@ static void         key_destroyed           (SeahorseKey *skey, SeahorseKeySourc
 #define SEAHORSE_IS_LIST_OPERATION_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_LIST_OPERATION))
 #define SEAHORSE_LIST_OPERATION_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_LIST_OPERATION, SeahorseListOperationClass))
 
+enum {
+    PART_INFO = 0x01,
+    PART_ATTRS = 0x02,
+    PART_ACL = 0x04
+};
+
 DECLARE_OPERATION (List, list)
 
     SeahorseGKeyringSource *gsrc;
@@ -92,12 +98,16 @@ DECLARE_OPERATION (List, list)
     GList *remaining;
     guint total;
     
+    guint32 current_parts;
     guint32 current_id;
     guint32 info_flags;
     GnomeKeyringItemInfo *current_info;
     GnomeKeyringAttributeList *current_attrs;
+    GList *current_acl;
     
     gpointer request;
+    gpointer request_attrs;
+    gpointer request_acl;
     
     GHashTable *checks;
 
@@ -142,12 +152,76 @@ keyring_operation_failed (SeahorseListOperation *lop, GnomeKeyringResult result)
     if (!seahorse_operation_is_running (op))
         return;
     
-    g_assert (lop->request == NULL);
+    if (lop->request)
+        gnome_keyring_cancel_request (lop->request);
+    lop->request = NULL;
+
+    if (lop->request_attrs)
+        gnome_keyring_cancel_request (lop->request_attrs);
+    lop->request_attrs = NULL;
+
+    if (lop->request_acl)
+        gnome_keyring_cancel_request (lop->request_acl);
+    lop->request_acl = NULL;
     
     seahorse_gkeyring_operation_parse_error (result, &err);
     g_assert (err != NULL);
     
     seahorse_operation_mark_done (op, FALSE, err);
+}
+
+static gboolean
+have_complete_item (SeahorseListOperation *lop)
+{
+    SeahorseGKeyringItem *git = NULL;
+    SeahorseGKeyringItem *prev;
+    GQuark keyid;
+    
+    g_assert (lop->current_id);
+    
+    if (lop->current_parts != (PART_INFO | PART_ATTRS | PART_ACL))
+        return FALSE;
+    
+    g_assert (lop->current_info);
+  
+    keyid = seahorse_gkeyring_item_get_cannonical (lop->current_id);
+    g_return_val_if_fail (keyid, FALSE);
+    
+    /* Mark this key as seen */
+    if (lop->checks)
+        g_hash_table_remove (lop->checks, GUINT_TO_POINTER (keyid));
+    
+    g_assert (SEAHORSE_IS_GKEYRING_SOURCE (lop->gsrc));
+    prev = SEAHORSE_GKEYRING_ITEM (seahorse_context_get_key (SCTX_APP (), 
+                                   SEAHORSE_KEY_SOURCE (lop->gsrc), keyid));
+
+    /* Check if we can just replace the key on the object */
+    if (prev != NULL) {
+        g_object_set (prev, "item-info", lop->current_info, NULL);
+        if (lop->current_attrs)
+            g_object_set (prev, "item-attributes", lop->current_attrs, NULL);
+        g_object_set (prev, "item-acl", lop->current_acl, NULL);
+		
+        lop->current_info = NULL;
+        lop->current_acl = NULL;
+        lop->current_attrs = NULL;
+        return TRUE;
+    }
+    
+    git = seahorse_gkeyring_item_new (SEAHORSE_KEY_SOURCE (lop->gsrc), lop->current_id, 
+                                      lop->current_info, lop->current_attrs, lop->current_acl);
+ 
+    /* We listen in to get notified of changes on this key */
+    g_signal_connect (git, "changed", G_CALLBACK (key_changed), SEAHORSE_KEY_SOURCE (lop->gsrc));
+    g_signal_connect (git, "destroy", G_CALLBACK (key_destroyed), SEAHORSE_KEY_SOURCE (lop->gsrc));
+
+    /* Add to context */ 
+    seahorse_context_take_key (SCTX_APP (), SEAHORSE_KEY (git));
+
+    lop->current_info = NULL;
+    lop->current_acl = NULL;
+    lop->current_attrs = NULL;
+    return TRUE;
 }
 
 static void 
@@ -168,7 +242,10 @@ item_info_ready (GnomeKeyringResult result, GnomeKeyringItemInfo *info,
     g_assert (!lop->current_info);
     
     lop->current_info = gnome_keyring_item_info_copy (info);
-    process_next_item (lop);
+    lop->current_parts |= PART_INFO;
+    
+    if (have_complete_item (lop))
+        process_next_item (lop);
 }
 
 static void 
@@ -178,7 +255,7 @@ item_attrs_ready (GnomeKeyringResult result, GnomeKeyringAttributeList *attribut
     if (result == GNOME_KEYRING_RESULT_CANCELLED)
         return;
     
-    lop->request = NULL;
+    lop->request_attrs = NULL;
 
     if (result != GNOME_KEYRING_RESULT_OK) {
         keyring_operation_failed (lop, result);
@@ -189,47 +266,33 @@ item_attrs_ready (GnomeKeyringResult result, GnomeKeyringAttributeList *attribut
     g_assert (!lop->current_attrs);
     
     lop->current_attrs = gnome_keyring_attribute_list_copy (attributes);
-    process_next_item (lop);
+    lop->current_parts |= PART_ATTRS;
+    
+    if (have_complete_item (lop))
+        process_next_item (lop);
 }
 
-static void
-have_complete_item (SeahorseListOperation *lop)
+static void 
+item_acl_ready (GnomeKeyringResult result, GList *acl, SeahorseListOperation *lop)
 {
-    SeahorseGKeyringItem *git = NULL;
-    SeahorseGKeyringItem *prev;
-    GQuark keyid;
+    if (result == GNOME_KEYRING_RESULT_CANCELLED)
+        return;
     
-    g_assert (lop->current_id);
-    g_assert (lop->current_info);
-  
-    keyid = seahorse_gkeyring_item_get_cannonical (lop->current_id);
-    g_return_if_fail (keyid);
-    
-    /* Mark this key as seen */
-    if (lop->checks)
-        g_hash_table_remove (lop->checks, GUINT_TO_POINTER (keyid));
-    
-    g_assert (SEAHORSE_IS_GKEYRING_SOURCE (lop->gsrc));
-    prev = SEAHORSE_GKEYRING_ITEM (seahorse_context_get_key (SCTX_APP (), 
-                                   SEAHORSE_KEY_SOURCE (lop->gsrc), keyid));
+    lop->request_acl = NULL;
 
-    /* Check if we can just replace the key on the object */
-    if (prev != NULL) {
-        g_object_set (prev, "item-info", lop->current_info, NULL);
-        if (lop->current_attrs)
-            g_object_set (prev, "item-attributes", lop->current_attrs, NULL);
+    if (result != GNOME_KEYRING_RESULT_OK) {
+        keyring_operation_failed (lop, result);
         return;
     }
     
-    git = seahorse_gkeyring_item_new (SEAHORSE_KEY_SOURCE (lop->gsrc), lop->current_id, 
-                                      lop->current_info, lop->current_attrs);
- 
-    /* We listen in to get notified of changes on this key */
-    g_signal_connect (git, "changed", G_CALLBACK (key_changed), SEAHORSE_KEY_SOURCE (lop->gsrc));
-    g_signal_connect (git, "destroy", G_CALLBACK (key_destroyed), SEAHORSE_KEY_SOURCE (lop->gsrc));
-
-    /* Add to context */ 
-    seahorse_context_take_key (SCTX_APP (), SEAHORSE_KEY (git));
+    g_assert (lop->current_id);
+    g_assert (!lop->current_acl);
+    
+    lop->current_acl = gnome_keyring_acl_copy (acl);
+    lop->current_parts |= PART_ACL;
+    
+    if (have_complete_item (lop))
+        process_next_item (lop);
 }
 
 /* Remove the given key from the context */
@@ -255,23 +318,11 @@ process_next_item (SeahorseListOperation *lop)
                                            lop->total - g_list_length (lop->remaining), 
                                            lop->total);
     
-    if (lop->current_id) {
-        
-        /* Info loaded, now attributes */
-        if (lop->current_info && !lop->current_attrs) {
-            g_assert (!lop->request);
-            lop->request = gnome_keyring_item_get_attributes (lop->gsrc->pv->keyring_name, 
-                lop->current_id, (GnomeKeyringOperationGetAttributesCallback)item_attrs_ready, lop, NULL);
-            return;
-        }
-
-        g_assert (lop->current_info && lop->current_attrs);
-        have_complete_item (lop);
-        
-        lop->current_id = 0;
-        lop->current_info = NULL;
-        lop->current_attrs = NULL;
-    }
+   lop->current_id = 0;
+   lop->current_parts = 0;
+   g_assert (!lop->current_info);
+   g_assert (!lop->current_attrs);
+   g_assert (!lop->current_acl);
     
     /* Check if we're done */
     if (g_list_length (lop->remaining) == 0) {
@@ -291,18 +342,16 @@ process_next_item (SeahorseListOperation *lop)
     
     g_assert (!lop->request);
 
-	/* 
-	 * Check for the new gnome_keyring_item_get_info_full() function. 
- 	 * TODO: Once this is in a stable release of gnome-keyring, remove defs.
- 	 */
-#ifdef GNOME_KEYRING_ITEM_INFO_ALL
+    /* The various callbacks agree on when the item is fully loaded */
     lop->request = gnome_keyring_item_get_info_full (lop->gsrc->pv->keyring_name, 
                                 lop->current_id, lop->info_flags, 
                                 (GnomeKeyringOperationGetItemInfoCallback)item_info_ready, lop, NULL);
-#else
-    lop->request = gnome_keyring_item_get_info (lop->gsrc->pv->keyring_name, 
-                lop->current_id, (GnomeKeyringOperationGetItemInfoCallback)item_info_ready, lop, NULL);
-#endif
+
+    lop->request_attrs = gnome_keyring_item_get_attributes (lop->gsrc->pv->keyring_name, lop->current_id, 
+                                (GnomeKeyringOperationGetAttributesCallback)item_attrs_ready, lop, NULL);
+	                            
+    lop->request_acl = gnome_keyring_item_get_acl (lop->gsrc->pv->keyring_name, lop->current_id, 
+                                (GnomeKeyringOperationGetListCallback)item_acl_ready, lop, NULL);
 }
 
 static void 
@@ -347,11 +396,9 @@ start_list_operation (SeahorseGKeyringSource *gsrc, GQuark keyid)
         
         lop->remaining = g_list_prepend (lop->remaining, GUINT_TO_POINTER (id));
         lop->total = 1;
-
-#ifdef GNOME_KEYRING_ITEM_INFO_ALL
-        /* TODO: Once this is in a stable release of gnome-keyring, remove defs. */
+        
+        /* Load everything including the secret */
         lop->info_flags = GNOME_KEYRING_ITEM_INFO_ALL;
-#endif
         
         seahorse_operation_mark_progress (SEAHORSE_OPERATION (lop), _("Retrieving key"), -1);
         process_next_item (lop);
@@ -412,6 +459,9 @@ seahorse_list_operation_finalize (GObject *gobject)
     if (lop->current_attrs)
         gnome_keyring_attribute_list_free (lop->current_attrs);
     lop->current_attrs = NULL;
+    if (lop->current_acl)
+        gnome_keyring_acl_free (lop->current_acl);
+    lop->current_acl = NULL;
     
     if (lop->checks)
         g_hash_table_destroy (lop->checks);

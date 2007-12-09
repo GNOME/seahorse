@@ -73,6 +73,7 @@ struct _SeahorseGKeyringItem {
     guint32                     item_id;
     GnomeKeyringItemInfo        *info;
     GnomeKeyringAttributeList   *attributes;
+    GList                       *acl;
 };
 
 struct _SeahorseGKeyringItemClass {
@@ -83,7 +84,8 @@ struct _SeahorseGKeyringItemClass {
 SeahorseGKeyringItem*   seahorse_gkeyring_item_new              (SeahorseKeySource *sksrc,
                                                                  guint32 item_id, 
                                                                  GnomeKeyringItemInfo *info,
-                                                                 GnomeKeyringAttributeList *attributes);
+                                                                 GnomeKeyringAttributeList *attributes,
+                                                                 GList *acl);
 
 GType                   seahorse_gkeyring_item_get_type         (void);
 
