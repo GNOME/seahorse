@@ -246,7 +246,7 @@ seahorse_service_discovery_init (SeahorseServiceDiscovery *ssd)
     ssd->priv->client = avahi_client_new (seahorse_util_dns_sd_get_poll (), 
                                           0, client_callback, ssd, &aerr);
     if (!ssd->priv->client) {
-        g_warning ("DNS-SD initialization failed: %s", avahi_strerror (aerr));
+        g_message ("DNS-SD initialization failed: %s", avahi_strerror (aerr));
         return;
     }
     
