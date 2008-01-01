@@ -39,16 +39,6 @@
 
 #define KEY_MANAGER_SORT_KEY "/apps/seahorse/listing/sort_by"
 
-/* Drag and drop targent entries */
-const GtkTargetEntry seahorse_target_entries[] = {
-    { "text/uri-list", 0, TEXT_URIS },
-    { "text/plain", 0, TEXT_PLAIN },
-    { "STRING", 0, TEXT_PLAIN }
-};
-
-guint seahorse_n_targets = 
-    sizeof (seahorse_target_entries) / sizeof (seahorse_target_entries[0]);
-
 enum {
     PROP_0,
     PROP_KEYSET,
@@ -87,7 +77,7 @@ static const gchar* col_ids[] = {
     "trust"
 };
 
-static GType col_types[] = {
+static const GType col_types[] = {
     G_TYPE_BOOLEAN,
     G_TYPE_STRING,
     G_TYPE_STRING,
@@ -681,7 +671,7 @@ drag_data_get (GtkWidget *widget, GdkDragContext *context,
     gchar *text;
 
     DBG_PRINT (("drag_data_get %d -->\n", info)); 
-    
+
     op = (SeahorseOperation*)g_object_get_data (G_OBJECT (widget), "drag-operation");
     if (op == NULL) {
         DBG_PRINT (("No operation in drag"));
@@ -703,14 +693,13 @@ drag_data_get (GtkWidget *widget, GdkDragContext *context,
     
     text = seahorse_util_write_data_to_text (data, NULL);
     g_return_if_fail (text != NULL);
-    
+
     if (info == TEXT_PLAIN) {
         DBG_PRINT (("returning key text\n"));
-        t = text;
-
-    } else {
+        gtk_selection_data_set_text (selection_data, text, strlen (text));
+    } else if (info == TEXT_URIS) {
         t = (gchar*)g_object_get_data (G_OBJECT (widget), "drag-file");
-        
+
         if (t == NULL) {
             keys = g_object_get_data (G_OBJECT (widget), "drag-keys");
             g_return_if_fail (keys != NULL);
@@ -731,14 +720,13 @@ drag_data_get (GtkWidget *widget, GdkDragContext *context,
                 t = NULL;
             }
         }
+
+        if (t != NULL) {
+            char *uris[2] = { t, NULL };
+            gtk_selection_data_set_uris (selection_data, uris);
+        }
     }
     
-    if (t != NULL) {
-        DBG_PRINT (("%s\n", t));
-        gtk_selection_data_set (selection_data,  selection_data->target, 8, 
-                                (const guchar*)t, strlen (t));
-    }
-
     DBG_PRINT(("drag_data_get <--\n"));
 
     g_free(text);
@@ -763,7 +751,7 @@ seahorse_key_manager_store_init (SeahorseKeyManagerStore *skstore)
     skstore->priv = g_new0 (SeahorseKeyManagerStorePriv, 1);
     
     /* Setup the store */
-    seahorse_key_model_set_column_types (SEAHORSE_KEY_MODEL (skstore), N_COLS, col_types);
+    seahorse_key_model_set_column_types (SEAHORSE_KEY_MODEL (skstore), N_COLS, (GType *) col_types);
     
     /* Setup the sort and filter */
     skstore->priv->filter = GTK_TREE_MODEL_FILTER (gtk_tree_model_filter_new (GTK_TREE_MODEL (skstore), NULL));
@@ -931,6 +919,7 @@ seahorse_key_manager_store_new (SeahorseKeyset *skset, GtkTreeView *view)
     SeahorseKeyPredicate *pred;
     GtkCellRenderer *renderer;
     gchar *sort;
+    GtkTargetList *targets;
     
     skstore = g_object_new (SEAHORSE_TYPE_KEY_MANAGER_STORE, "keyset", skset, NULL);
 
@@ -1013,7 +1002,12 @@ seahorse_key_manager_store_new (SeahorseKeyset *skset, GtkTreeView *view)
     g_signal_connect (G_OBJECT (view), "drag_end",  G_CALLBACK (drag_end), skstore);
 
     gtk_drag_source_set (GTK_WIDGET (view), GDK_BUTTON1_MASK | GDK_BUTTON2_MASK,
-                         seahorse_target_entries, seahorse_n_targets, GDK_ACTION_COPY);
+                         NULL, 0, GDK_ACTION_COPY);
+    targets = gtk_target_list_new (NULL, 0);
+    gtk_target_list_add_uri_targets (targets, TEXT_URIS);
+    gtk_target_list_add_text_targets (targets, TEXT_PLAIN);
+    gtk_drag_source_set_target_list (GTK_WIDGET (view), targets);
+    gtk_target_list_unref (targets);
 
     return skstore;
 }

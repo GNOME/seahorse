@@ -77,16 +77,12 @@ SeahorseKey*        seahorse_key_manager_store_get_selected_key  (GtkTreeView *v
                                                                   guint *uid);
 
 /* -----------------------------------------------------------------------------
- * DRAG AND DROP 
+ * DRAG AND DROP
  */
 
 enum SeahorseTargetTypes {
     TEXT_PLAIN,
     TEXT_URIS
 };
-
-/* Drag and drop targent entries */
-extern const GtkTargetEntry seahorse_target_entries[];
-extern guint seahorse_n_targets;
 
 #endif /* __SEAHORSE_KEY_MANAGER_STORE_H__ */

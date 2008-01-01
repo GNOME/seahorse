@@ -1035,25 +1035,16 @@ target_drag_data_received (GtkWidget *widget, GdkDragContext *context, gint x, g
     gchar** u;
     
     DBG_PRINT(("DragDataReceived -->\n"));
-    g_return_if_fail (data != NULL);
-    
-    switch(info) {
-    case TEXT_PLAIN:
-        import_text (swidget, (const gchar*)(data->data));
-        break;
-        
-    case TEXT_URIS:
-        uris = g_strsplit ((const gchar*)data->data, "\n", 0);
+
+    if (info == TEXT_PLAIN) {
+        import_text (swidget, (const gchar *) gtk_selection_data_get_text (data));
+    } else if (info == TEXT_URIS) {
+        uris = gtk_selection_data_get_uris (data);
         for(u = uris; *u; u++)
             g_strstrip (*u);
         import_files (swidget, (const gchar**)uris);
         g_strfreev (uris);
-        break;
-        
-    default:
-        g_assert_not_reached ();
-        break;
-    } 
+    }
 
     DBG_PRINT(("DragDataReceived <--\n"));
 }
@@ -1286,6 +1277,7 @@ seahorse_key_manager_show (SeahorseOperation *op)
     GtkWindow *win;
     GtkActionGroup *actions;
     GtkAction *action;
+    GtkTargetList *targets;
     
     swidget = seahorse_widget_new ("key-manager", NULL);
     win = GTK_WINDOW (seahorse_widget_get_top (swidget));
@@ -1390,7 +1382,13 @@ seahorse_key_manager_show (SeahorseOperation *op)
     
     /* Setup drops */
     gtk_drag_dest_set (GTK_WIDGET (win), GTK_DEST_DEFAULT_ALL, 
-                seahorse_target_entries, seahorse_n_targets, GDK_ACTION_COPY);
+                       NULL, 0, GDK_ACTION_COPY);
+    targets = gtk_target_list_new (NULL, 0);
+    gtk_target_list_add_uri_targets (targets, TEXT_URIS);
+    gtk_target_list_add_text_targets (targets, TEXT_PLAIN);
+    gtk_drag_dest_set_target_list (GTK_WIDGET (win), targets);
+    gtk_target_list_unref (targets);
+
     gtk_signal_connect (GTK_OBJECT (win), "drag_data_received",
                 GTK_SIGNAL_FUNC (target_drag_data_received), swidget);
                         
