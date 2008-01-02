@@ -1,18 +1,18 @@
 # GPG-võtmehalduri Seahorse eesti keele tõlge.
 # Estonian translation of Seahorse.
 #
-# Copyright (C) 2007 The GNOME Project.
+# Copyright (C) 2007, 2008 The GNOME Project.
 # This file is distributed under the same license as the Seahorse package.
 #
 # Priit Laes <amd@store20.com>, 2007.
-# Ivar Smolin <okul@linux.ee>, 2007.
+# Ivar Smolin <okul@linux.ee>, 2007, 2008.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Seahorse HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-08-23 03:31+0100\n"
-"PO-Revision-Date: 2007-09-16 10:32+0300\n"
+"POT-Creation-Date: 2007-12-17 16:59+0000\n"
+"PO-Revision-Date: 2008-01-02 11:00+0200\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -20,12 +20,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../agent/seahorse-agent-actions.c:133
-#: ../libseahorse/seahorse-ssh-operation.c:445
+#: ../agent/seahorse-agent-actions.c:129
+#: ../libseahorse/seahorse-ssh-operation.c:443
 msgid "Passphrase:"
 msgstr "Parool:"
 
-#: ../agent/seahorse-agent-actions.c:134
+#: ../agent/seahorse-agent-actions.c:130
 msgid "Please enter a passphrase to use."
 msgstr "Palun sisesta kasutatav parool."
 
@@ -39,15 +39,15 @@ msgstr "gpg seadistusi pole võimalik lugeda, neid proovitakse luua"
 msgid "couldn't modify gpg configuration: %s"
 msgstr "gpg sätteid pole võimalik muuta: %s"
 
-#: ../agent/seahorse-agent-cache.c:72
+#: ../agent/seahorse-agent-cache.c:70
 msgid "Unparseable Key ID"
 msgstr "Analüüsimatu võtme ID"
 
-#: ../agent/seahorse-agent-cache.c:73
+#: ../agent/seahorse-agent-cache.c:71
 msgid "Unknown/Invalid Key"
 msgstr "Tundmatu/vigane võti"
 
-#: ../agent/seahorse-agent-cache.c:531
+#: ../agent/seahorse-agent-cache.c:523
 #, c-format
 msgid "PGP Key: %s"
 msgstr "PGP-võti: %s"
@@ -93,11 +93,8 @@ msgid "Print variables in for a C type shell"
 msgstr "Muutujate printimine C-tüüpi kestprogrammi jaoks"
 
 #: ../agent/seahorse-agent-main.c:57
-msgid ""
-"Display variables instead of editing conf files (gpg.conf, SSH agent socket)"
-msgstr ""
-"Seadistusfailide (gpg.conf, SSH agendi sokkel) muutmise asemel muutujate "
-"kuvamine"
+msgid "Display variables instead of editing gpg.conf file"
+msgstr "Seadistusfailide muutmise asemel muutujate kuvamine"
 
 #: ../agent/seahorse-agent-main.c:60
 msgid "Execute other arguments on the command line"
@@ -119,17 +116,11 @@ msgstr "protsessi pole võimalik forkida!"
 msgid "couldn't create new process group"
 msgstr "uut protsessigruppi pole võimalik luua"
 
-#: ../agent/seahorse-agent-main.c:227 ../daemon/seahorse-daemon.c:195
-#: ../plugins/applet/seahorse-applet.c:1017
-#: ../plugins/nautilus/seahorse-tool.c:570 ../src/main.c:59
-msgid "couldn't drop privileges properly"
-msgstr ""
-
-#: ../agent/seahorse-agent-main.c:238
+#: ../agent/seahorse-agent-main.c:223
 msgid "Encryption Key Agent (Seahorse)"
 msgstr "Krüptimisvõtmete agent (Seahorse)"
 
-#: ../agent/seahorse-agent-main.c:246
+#: ../agent/seahorse-agent-main.c:230
 msgid "no command specified to execute"
 msgstr "käivitamiseks pole käsku määratud"
 
@@ -150,7 +141,7 @@ msgid "_Authorize"
 msgstr "_Autoriseeri"
 
 #. Make the uid column
-#: ../agent/seahorse-agent-status.c:151
+#: ../agent/seahorse-agent-status.c:147
 msgid "Key Name"
 msgstr "Võtme nimi"
 
@@ -158,7 +149,7 @@ msgstr "Võtme nimi"
 msgid "Do not run seahorse-daemon as a daemon"
 msgstr "Programmi seahorse-daemon käivitamine mitte-deemonina"
 
-#: ../daemon/seahorse-daemon.c:202
+#: ../daemon/seahorse-daemon.c:188
 msgid "Encryption Daemon (Seahorse)"
 msgstr "Krüptimisdeemon (Seahorse)"
 
@@ -482,29 +473,21 @@ msgstr ""
 
 #: ../data/seahorse.schemas.in.h:46
 msgid ""
-"When set seahorse-agent will try to automatically load the users SSH keys "
-"when needed. This is equivalent to using the ssh-add utility."
-msgstr ""
-"Kui määratud, siis seahorse-agent proovib vajaduse korral SSH võtmed "
-"automaatselt laadida. See on sama, mis utiliidi ssh-add kasutamine."
-
-#: ../data/seahorse.schemas.in.h:47
-msgid ""
 "When set, seahorse-agent expires GPG passwords in its cache after a period "
 "of time."
 msgstr ""
 "Kui määratud, siis seahorse-agent määrab puhvris olevad GPG paroolid pärast "
 "teatavat ajaperioodi aegunuks."
 
-#: ../data/seahorse.schemas.in.h:48
+#: ../data/seahorse.schemas.in.h:47
 msgid "Where to store cached passwords."
 msgstr "Kus puhverdatud paroole säilitatakse."
 
-#: ../data/seahorse.schemas.in.h:49
+#: ../data/seahorse.schemas.in.h:48
 msgid "Whether or not keys should be automatically retrieved from key servers."
 msgstr "Kas võtmeid tuleb võtmeserveritest automaatselt tõmmata või mitte."
 
-#: ../data/seahorse.schemas.in.h:50
+#: ../data/seahorse.schemas.in.h:49
 msgid ""
 "Whether or not modified keys should be automatically synced with the default "
 "key server."
@@ -512,19 +495,15 @@ msgstr ""
 "Kas muudetud võtmed tuleb automaatselt võtmeserveriga sünkroniseerida või "
 "mitte."
 
-#: ../data/seahorse.schemas.in.h:51
+#: ../data/seahorse.schemas.in.h:50
 msgid "Whether the GPG password cache is enabled"
 msgstr "Kas GPG paroolipuhver on lubatud või mitte"
 
-#: ../data/seahorse.schemas.in.h:52
+#: ../data/seahorse.schemas.in.h:51
 msgid "Whether to always encrypt to default key"
 msgstr "Kas vaikimisi võti krüptitakse alati või mitte"
 
-#: ../data/seahorse.schemas.in.h:53
-msgid "Whether to automatically load SSH keys on demand."
-msgstr "Kas SSH-võtmed laaditakse nõudmise korral alati või mitte."
-
-#: ../data/seahorse.schemas.in.h:54
+#: ../data/seahorse.schemas.in.h:52
 msgid "Whether to use ASCII Armor"
 msgstr ""
 
@@ -567,6 +546,26 @@ msgstr "Nimi"
 msgid "Key ID"
 msgstr "Võtme ID"
 
+#: ../libseahorse/seahorse-add-keyring.glade.h:1
+msgid "Add Password Keyring"
+msgstr "Parooli võtmerõnga lisamine"
+
+#: ../libseahorse/seahorse-add-keyring.glade.h:2
+msgid "New Keyring Name:"
+msgstr "Uue võtmerõnga nimi:"
+
+#: ../libseahorse/seahorse-add-keyring.glade.h:3
+msgid ""
+"Please choose a name for the new keyring. You will be prompted for an unlock "
+"password."
+msgstr ""
+
+#: ../libseahorse/seahorse-add-keyring.glade.h:4
+#: ../libseahorse/seahorse-add-keyserver.glade.h:5
+#: ../src/seahorse-ssh-upload.glade.h:3
+msgid "The host name or address of the server."
+msgstr "Serveri hostinimi või aadress."
+
 #: ../libseahorse/seahorse-add-keyserver.glade.h:1
 msgid ":"
 msgstr ":"
@@ -582,11 +581,6 @@ msgstr "Host:"
 #: ../libseahorse/seahorse-add-keyserver.glade.h:4
 msgid "Key Server Type:"
 msgstr "Võtmeserveri liik:"
-
-#: ../libseahorse/seahorse-add-keyserver.glade.h:5
-#: ../src/seahorse-ssh-upload.glade.h:3
-msgid "The host name or address of the server."
-msgstr "Serveri hostinimi või aadress."
 
 #: ../libseahorse/seahorse-add-keyserver.glade.h:6
 msgid "The port to access the server on."
@@ -780,7 +774,7 @@ msgid "Enter passphrase"
 msgstr "Parooli sisestamine"
 
 #: ../libseahorse/seahorse-pgp-key.c:140 ../libseahorse/seahorse-ssh-key.c:112
-#: ../src/seahorse-gkeyring-item.c:231
+#: ../src/seahorse-gkeyring-item.c:232
 msgid "Invalid"
 msgstr "Vigane"
 
@@ -827,8 +821,8 @@ msgid ""
 "set in the future or a missing self-signature."
 msgstr ""
 
-#: ../libseahorse/seahorse-pgp-source.c:942 ../src/seahorse-key-manager.c:454
-#: ../src/seahorse-key-manager.c:502
+#: ../libseahorse/seahorse-pgp-source.c:942 ../src/seahorse-key-manager.c:446
+#: ../src/seahorse-key-manager.c:494
 msgid "Importing Keys"
 msgstr "Võtmete importimine"
 
@@ -836,50 +830,87 @@ msgstr "Võtmete importimine"
 msgid "Exporting Keys"
 msgstr "Võtmete eksportimine"
 
-#: ../libseahorse/seahorse-prefs.c:62
+#: ../libseahorse/seahorse-prefs.c:64
 msgid "Not a valid Key Server address."
 msgstr "Võtmeserveri aadress on vigane."
 
-#: ../libseahorse/seahorse-prefs.c:63
+#: ../libseahorse/seahorse-prefs.c:65
 msgid ""
 "For help contact your system adminstrator or the administrator of the key "
 "server."
 msgstr ""
 "Abi saamiseks võta ühendust oma süsteemihalduriga või võtmeserveri halduriga."
 
-#: ../libseahorse/seahorse-prefs.c:174
+#: ../libseahorse/seahorse-prefs.c:176
 msgid "URL"
 msgstr "URL"
 
-#: ../libseahorse/seahorse-prefs.c:359
+#: ../libseahorse/seahorse-prefs.c:361
 msgid "Custom"
 msgstr "Kohandatud"
 
-#: ../libseahorse/seahorse-prefs.c:429
+#: ../libseahorse/seahorse-prefs.c:431
 msgid "None: Don't publish keys"
 msgstr "Puudub: võtmeid ei avalikustata"
 
-#: ../libseahorse/seahorse-prefs.c:681
+#: ../libseahorse/seahorse-prefs.c:521
 msgid "None. Prompt for a key."
 msgstr "Puudub. Võtme kohta kuvatakse dialoog."
 
-#: ../libseahorse/seahorse-prefs-cache.c:231
+#: ../libseahorse/seahorse-prefs-cache.c:226
 msgid "Couldn't open the Session Properties"
 msgstr "Seansi omadusi pole võimalik avada"
 
-#: ../libseahorse/seahorse-prefs-cache.c:244
+#: ../libseahorse/seahorse-prefs-cache.c:239
 msgid "Couldn't start the 'seahorse-agent' program"
 msgstr "Programmi 'seahorse-agent' pole võimalik käivitada."
 
-#: ../libseahorse/seahorse-prefs-cache.c:246
+#: ../libseahorse/seahorse-prefs-cache.c:241
 msgid "The 'seahorse-agent' program exited unsuccessfully."
 msgstr "Programm 'seahorse-agent' lõpetas veaga."
 
+#: ../libseahorse/seahorse-prefs-keyrings.c:205
+msgid "<i>Automatically unlocked when user logs in.</i>"
+msgstr ""
+
+#: ../libseahorse/seahorse-prefs-keyrings.c:242
+msgid "Couldn't get default password keyring"
+msgstr "Vaikimisi parooli võtmerõngast pole võimalik hankida"
+
+#: ../libseahorse/seahorse-prefs-keyrings.c:265
+msgid "Couldn't get list of password keyrings"
+msgstr "Paroolide võtmerõngaste nimekirja pole võimalik hankida"
+
+#: ../libseahorse/seahorse-prefs-keyrings.c:321
+msgid "Couldn't set default password keyring"
+msgstr "Vaikimisi parooli võtmerõngast pole võimalik määrata"
+
+#: ../libseahorse/seahorse-prefs-keyrings.c:403
+msgid "Couldn't remove keyring"
+msgstr "Võtmerõngast pole võimalik eemaldada"
+
+#: ../libseahorse/seahorse-prefs-keyrings.c:421
+#, c-format
+msgid "Are you sure you want to permanently delete the '%s' keyring?"
+msgstr "Kas sa soovid võtmerõnga '%s' jäädavalt kustutada?"
+
+#: ../libseahorse/seahorse-prefs-keyrings.c:469
+msgid "Couldn't add keyring"
+msgstr "Võtmerõngast pole võimalik lisada"
+
+#: ../libseahorse/seahorse-prefs-keyrings.c:526
+msgid "Couldn't change keyring password"
+msgstr "Võtmerõnga parooli pole võimalik muuta"
+
 #: ../libseahorse/seahorse-prefs.glade.h:1
-msgid "<b>Defaults</b>"
-msgstr "<b>Vaikesätted</b>"
+msgid "<b>Default Key</b>"
+msgstr "<b>Vaikimisi võti</b>"
 
 #: ../libseahorse/seahorse-prefs.glade.h:2
+msgid "<b>Default Keyring</b>"
+msgstr "<b>Vaikimisi võtmerõngas</b>"
+
+#: ../libseahorse/seahorse-prefs.glade.h:3
 msgid ""
 "<b>Note:</b> The 'seahorse-agent' program has been started. This program is "
 "necessary in order to cache passphrases. "
@@ -887,15 +918,15 @@ msgstr ""
 "<b>Märkus:</b> Programm 'seahorse-agent' on käivitatud. Seda programmi on "
 "tarvis paroolide puhverdamiseks."
 
-#: ../libseahorse/seahorse-prefs.glade.h:3
+#: ../libseahorse/seahorse-prefs.glade.h:4
+msgid "<b>Password Keyrings</b>"
+msgstr "<b>Paroolide võtmerõngad</b>"
+
+#: ../libseahorse/seahorse-prefs.glade.h:5
 msgid "<b>Remember PGP Passphrases</b>"
 msgstr "<b>PGP-paroolide meeldejätmine</b>"
 
-#: ../libseahorse/seahorse-prefs.glade.h:4
-msgid "<b>Secure Shell Keys</b>"
-msgstr "<b>Secure shell'i võtmed</b>"
-
-#: ../libseahorse/seahorse-prefs.glade.h:5
+#: ../libseahorse/seahorse-prefs.glade.h:6
 msgid ""
 "<b>Warning:</b> The 'seahorse-agent' program is not running. This program is "
 "necessary in order to cache passphrases. "
@@ -903,16 +934,10 @@ msgstr ""
 "<b>Hoiatus:</b> Programm 'seahorse-agent' ei tööta. Seda programmi on tarvis "
 "paroolide puhverdamiseks."
 
-#: ../libseahorse/seahorse-prefs.glade.h:6
+#: ../libseahorse/seahorse-prefs.glade.h:7
 msgid "<i>A non-supported PGP passphrase caching agent is running.</i>"
 msgstr ""
 "<i>Hetkel töötab PGP-paroolide puhverdamisagent, mis pole toetatud.</i>"
-
-#: ../libseahorse/seahorse-prefs.glade.h:7
-msgid "<i>No SSH caching agent is running. Cannot load Secure Shell keys.</i>"
-msgstr ""
-"<i>SSH puhverdamisagent ei tööta. Secure Shell'i võtmeid pole võimalik "
-"laadida.</i>"
 
 #: ../libseahorse/seahorse-prefs.glade.h:8
 msgid "<i>This key is used to sign messages when no other key is chosen</i>"
@@ -921,78 +946,50 @@ msgstr ""
 "ühtegi teist võtit valitud</i>"
 
 #: ../libseahorse/seahorse-prefs.glade.h:9
-msgid "Automatically load _Secure Shell keys"
-msgstr "Secure S_hell'i võtmed laaditakse automaatselt"
+msgid "As_k me before using a cached passphrase"
+msgstr "E_nne puhverdatud parooli kasutamist küsitakse kinnitust"
 
 #: ../libseahorse/seahorse-prefs.glade.h:10
-msgid "Automatically retrieve keys from key servers."
-msgstr "Võtmeserveritest võetakse võtmed vastu automaatselt."
+msgid "Automatically retrieve keys from _key servers"
+msgstr "Võtmese_rveritest võetakse võtmed vastu automaatselt"
 
 #: ../libseahorse/seahorse-prefs.glade.h:11
-msgid "Automatically synchronize modified keys with key servers. "
-msgstr "Muudetud võtmed sünkroniseeritakse automaatselt võtmeserveritega."
+msgid "Automatically synchronize _modified keys with key servers"
+msgstr "_Muudetud võtmed sünkroniseeritakse automaatselt võtmeserveritega"
 
 #: ../libseahorse/seahorse-prefs.glade.h:12
-msgid ""
-"Changing the master password failed.  Make certain that you entered the "
-"correct original master password."
-msgstr ""
-"Tõrge peaparooli muutmisel.  Veendu, et Sa sisestasid algse peaparooli "
-"õigesti."
+msgid "Change Unlock _Password"
+msgstr "Muuda luku avamise _parooli"
 
 #: ../libseahorse/seahorse-prefs.glade.h:13
-msgid "Confirm Master Password:"
-msgstr "Peaparooli kinnitus:"
+msgid "Encryption"
+msgstr "Krüptimine"
 
 #: ../libseahorse/seahorse-prefs.glade.h:14
-#: ../plugins/nautilus/seahorse-pgp-preferences.c:74
-#: ../plugins/nautilus/seahorse-pgp-preferences.desktop.in.h:2
-msgid "Encryption Preferences"
-msgstr "Krüptimiseelistused"
-
-#: ../libseahorse/seahorse-prefs.glade.h:15
-msgid "Encryption Settings"
-msgstr "Krüptimissätted"
-
-#: ../libseahorse/seahorse-prefs.glade.h:16
-msgid "GNOME Keyring"
-msgstr "GNOME'i võtmerõngas"
-
-#: ../libseahorse/seahorse-prefs.glade.h:17
-msgid ""
-"GNOME Keyring stores passwords, network keys, passphrases and other secrets "
-"required for authentication.  A <b>master password</b> is used to protect "
-"these secrets.  The <b>master password</b> can be changed below."
-msgstr ""
-"GNOME Võtmerõngas salvestab paroole, võrguvõtmeid ja muid autentimiseks "
-"tarvilikke saladusi. <b>Peaparooli</b> kasutatakse nende saladuste "
-"kaitsmiseks. Allpool on võimalik <b>peaparooli</b> muuta."
-
-#: ../libseahorse/seahorse-prefs.glade.h:18
 msgid "Key Servers"
 msgstr "Võtmeserverid"
 
-#: ../libseahorse/seahorse-prefs.glade.h:19
+#: ../libseahorse/seahorse-prefs.glade.h:15
 msgid "Key Sharing"
 msgstr "Võtmete jagamine"
 
+#: ../libseahorse/seahorse-prefs.glade.h:16
+msgid "PGP Passphrases"
+msgstr "PGP-paroolid"
+
+#: ../libseahorse/seahorse-prefs.glade.h:17
+msgid "Password Keyrings"
+msgstr "Paroolide võtmerõngad"
+
+#: ../libseahorse/seahorse-prefs.glade.h:18
+msgid "Password and Encryption Settings"
+msgstr "Parooli- ja krüptimissätted"
+
+#: ../libseahorse/seahorse-prefs.glade.h:19
+msgid "Session _Properties"
+msgstr "Seansi _omadused"
+
 #: ../libseahorse/seahorse-prefs.glade.h:20
-msgid "New Master Password:"
-msgstr "Peaparool:"
-
-#: ../libseahorse/seahorse-prefs.glade.h:21
-msgid "Original Master Password:"
-msgstr "Algne peaparool:"
-
-#: ../libseahorse/seahorse-prefs.glade.h:22
-msgid "Passphrase Cache"
-msgstr "Paroolipuhver"
-
-#: ../libseahorse/seahorse-prefs.glade.h:23
-msgid "Session Properties"
-msgstr "Seansi omadused"
-
-#: ../libseahorse/seahorse-prefs.glade.h:24
 msgid ""
 "Sharing your keys allows other people on your network to use the keys you've "
 "collected. This means they can automatically encrypt things for you or those "
@@ -1007,15 +1004,15 @@ msgstr ""
 "\n"
 "<b>Märkus:</b> Sinu isiklikud võtmed pole selle tõttu ohustatud."
 
-#: ../libseahorse/seahorse-prefs.glade.h:27
-msgid "Start seahorse-agent"
-msgstr "Käivita seahorse-agent"
+#: ../libseahorse/seahorse-prefs.glade.h:23
+msgid "Show _icon in status area when passphrases are in memory"
+msgstr ""
 
-#: ../libseahorse/seahorse-prefs.glade.h:28
-msgid "The master password was successfully changed."
-msgstr "Peaparool on edukalt muudetud."
+#: ../libseahorse/seahorse-prefs.glade.h:24
+msgid "Start sea_horse-agent"
+msgstr "Käivita sea_horse-agent"
 
-#: ../libseahorse/seahorse-prefs.glade.h:29
+#: ../libseahorse/seahorse-prefs.glade.h:25
 msgid ""
 "To avoid manually starting the 'seahorse-agent' in the future\n"
 "add it to the Session Manager. "
@@ -1023,55 +1020,55 @@ msgstr ""
 "Et tulevikus vältida 'seahorse-agent' käsitsi käivitamist,\n"
 "tuleks see lisada seansi poolt käivitatavate programmide hulka."
 
-#: ../libseahorse/seahorse-prefs.glade.h:31
+#: ../libseahorse/seahorse-prefs.glade.h:27
 msgid "When _encrypting, always include myself as a recipient"
 msgstr "Krüptimisel määratakse alati ka _ennast saajate hulka"
 
-#: ../libseahorse/seahorse-prefs.glade.h:32
+#: ../libseahorse/seahorse-prefs.glade.h:28
+msgid "_Add Keyring"
+msgstr "_Lisa võtmerõngas"
+
+#: ../libseahorse/seahorse-prefs.glade.h:29
 msgid "_Always remember passphrases whenever logged in"
 msgstr "Paroole peetakse meeles kuni _ollakse sisse logitud"
 
-#: ../libseahorse/seahorse-prefs.glade.h:33
-msgid "_Ask me before using a cached passphrase"
-msgstr "E_nne puhverdatud parooli kasutamist küsitakse kinnitust"
-
-#: ../libseahorse/seahorse-prefs.glade.h:34
-msgid "_Default Key:"
+#: ../libseahorse/seahorse-prefs.glade.h:30
+msgid "_Default key:"
 msgstr "_Vaikimisi võti:"
 
-#: ../libseahorse/seahorse-prefs.glade.h:35
-msgid "_Find Keys Via:"
+#: ../libseahorse/seahorse-prefs.glade.h:31
+msgid "_Find keys via:"
 msgstr "Võtmete _otsimise asukohad:"
 
-#: ../libseahorse/seahorse-prefs.glade.h:36
+#: ../libseahorse/seahorse-prefs.glade.h:32
+msgid "_Location for application passwords:"
+msgstr ""
+
+#: ../libseahorse/seahorse-prefs.glade.h:33
 msgid "_Never remember passphrases"
 msgstr "Paroole _ei jäeta kunagi meelde"
 
-#: ../libseahorse/seahorse-prefs.glade.h:37
-msgid "_Publish Keys To:"
-msgstr "Kuhu _võtmed avalikustatakse:"
+#: ../libseahorse/seahorse-prefs.glade.h:34
+msgid "_Publish keys to:"
+msgstr "Kuhu võtmed _avalikustatakse:"
 
-#: ../libseahorse/seahorse-prefs.glade.h:38
+#: ../libseahorse/seahorse-prefs.glade.h:35
 msgid "_Remember passphrases for"
 msgstr "_Paroole peetakse meeles kuni"
 
-#: ../libseahorse/seahorse-prefs.glade.h:39
+#: ../libseahorse/seahorse-prefs.glade.h:36
+msgid "_Remove Keyring"
+msgstr "_Eemalda võtmerõngas"
+
+#: ../libseahorse/seahorse-prefs.glade.h:37
 msgid "_Share my keys with others on my network"
 msgstr "_Minu võtmed on jagatud minu võrgus olevatele kasutajatele"
 
-#: ../libseahorse/seahorse-prefs.glade.h:40
+#: ../libseahorse/seahorse-prefs.glade.h:38
 msgid "minutes"
 msgstr "minutit"
 
 #: ../libseahorse/seahorse-progress.glade.h:1
-msgid "<b>Progress Message</b>"
-msgstr "<b>Edenemisteade</b>"
-
-#: ../libseahorse/seahorse-progress.glade.h:2
-msgid "Progress Status"
-msgstr "Edenemise olek"
-
-#: ../libseahorse/seahorse-progress.glade.h:3
 msgid "Progress Title"
 msgstr "Edenemise pealkiri"
 
@@ -1123,79 +1120,79 @@ msgstr "Secure Shell'i salajane võti"
 msgid "Public Secure Shell Key"
 msgstr "Secure Shell'i avalik võti"
 
-#: ../libseahorse/seahorse-ssh-operation.c:135
-#: ../libseahorse/seahorse-ssh-operation.c:697
+#: ../libseahorse/seahorse-ssh-operation.c:133
+#: ../libseahorse/seahorse-ssh-operation.c:695
 msgid "The SSH command was terminated unexpectedly."
 msgstr "SSH käsk katkestas ootamatult."
 
-#: ../libseahorse/seahorse-ssh-operation.c:143
-#: ../libseahorse/seahorse-ssh-operation.c:704
+#: ../libseahorse/seahorse-ssh-operation.c:141
+#: ../libseahorse/seahorse-ssh-operation.c:702
 msgid "The SSH command failed."
 msgstr "Tõrge SSH käsu täitmisel."
 
-#: ../libseahorse/seahorse-ssh-operation.c:441
+#: ../libseahorse/seahorse-ssh-operation.c:439
 msgid "Secure Shell key"
 msgstr "Secure Shell'i võti"
 
 #. Just prompt over and over again
-#: ../libseahorse/seahorse-ssh-operation.c:727
+#: ../libseahorse/seahorse-ssh-operation.c:725
 msgid "Secure Shell Passphrase"
 msgstr "Secure Shell'i parool"
 
-#: ../libseahorse/seahorse-ssh-operation.c:813
+#: ../libseahorse/seahorse-ssh-operation.c:811
 msgid "Old Key Passphrase"
 msgstr "Võtme vana parool"
 
-#: ../libseahorse/seahorse-ssh-operation.c:814
+#: ../libseahorse/seahorse-ssh-operation.c:812
 #, c-format
 msgid "Enter the old passphrase for: %s"
 msgstr "Sisesta vana parool järgnevale võtmele: %s"
 
-#: ../libseahorse/seahorse-ssh-operation.c:818
+#: ../libseahorse/seahorse-ssh-operation.c:816
 msgid "New Key Passphrase"
 msgstr "Uue võtme parool"
 
-#: ../libseahorse/seahorse-ssh-operation.c:819
+#: ../libseahorse/seahorse-ssh-operation.c:817
 #, c-format
 msgid "Enter the new passphrase for: %s"
 msgstr "Sisesta uus parool järgnevale võtmele: %s"
 
-#: ../libseahorse/seahorse-ssh-operation.c:827
+#: ../libseahorse/seahorse-ssh-operation.c:825
 msgid "Enter Key Passphrase"
 msgstr "Võtme parooli sisestamine"
 
-#: ../libseahorse/seahorse-ssh-operation.c:895
+#: ../libseahorse/seahorse-ssh-operation.c:893
 msgid "Passphrase for New Secure Shell Key"
 msgstr "Parool uuele Secure Shelli võtmele"
 
-#: ../libseahorse/seahorse-ssh-operation.c:896
+#: ../libseahorse/seahorse-ssh-operation.c:894
 msgid "Enter a passphrase for your new Secure Shell key."
 msgstr "Sisesta oma Secure Shell'i võtmele parool."
 
-#: ../libseahorse/seahorse-ssh-operation.c:1034
+#: ../libseahorse/seahorse-ssh-operation.c:1028
 msgid "Secure Shell Key Passphrase"
 msgstr "Secure Shell'i võtme parool"
 
-#: ../libseahorse/seahorse-ssh-operation.c:1034
+#: ../libseahorse/seahorse-ssh-operation.c:1028
 #, c-format
 msgid "Enter the passphrase for: %s"
 msgstr "Parooli sisestamine: %s"
 
-#: ../libseahorse/seahorse-ssh-operation.c:1035
+#: ../libseahorse/seahorse-ssh-operation.c:1029
 msgid "Save this passphrase in my keyring"
 msgstr "Salvestada selle võtme parool minu võtmerõngasse"
 
-#: ../libseahorse/seahorse-ssh-operation.c:1109
+#: ../libseahorse/seahorse-ssh-operation.c:1081
 #, c-format
 msgid "Importing key: %s"
 msgstr "Võtme importimine: %s"
 
-#: ../libseahorse/seahorse-ssh-operation.c:1111
+#: ../libseahorse/seahorse-ssh-operation.c:1083
 msgid "Importing key. Enter passphrase"
 msgstr "Võtme importimine. Sisesta parool"
 
-#: ../libseahorse/seahorse-ssh-operation.c:1113
-#: ../src/seahorse-key-manager.c:515
+#: ../libseahorse/seahorse-ssh-operation.c:1085
+#: ../src/seahorse-key-manager.c:507
 #: ../src/seahorse-pgp-keys.desktop.in.in.h:1
 msgid "Import Key"
 msgstr "Võtme importimine"
@@ -1240,7 +1237,7 @@ msgid "Couldn't run file-roller"
 msgstr "Käsku file-roller pole võimalik käivitada"
 
 #: ../libseahorse/seahorse-util.c:733
-#: ../plugins/nautilus/seahorse-tool-files.c:831
+#: ../plugins/nautilus/seahorse-tool-files.c:830
 msgid "Couldn't package files"
 msgstr "Faile pole võimalik pakkida"
 
@@ -1326,14 +1323,14 @@ msgid "Seahorse Applet Factory"
 msgstr "Seahorse rakendi Factory"
 
 #: ../plugins/applet/GNOME_SeahorseApplet.xml.h:1
-#: ../src/seahorse-key-manager.c:1208
+#: ../src/seahorse-key-manager.c:1198
 msgid "_About"
 msgstr "_Programmist lähemalt"
 
 #: ../plugins/applet/GNOME_SeahorseApplet.xml.h:2
-#: ../src/seahorse-key-manager.c:1192 ../src/seahorse-keyserver-results.c:381
+#: ../src/seahorse-key-manager.c:1182 ../src/seahorse-keyserver-results.c:381
 msgid "_Help"
-msgstr "_Abi"
+msgstr "A_bi"
 
 #: ../plugins/applet/GNOME_SeahorseApplet.xml.h:3
 msgid "_Preferences"
@@ -1350,13 +1347,13 @@ msgstr ""
 "PGP/GPG kasutamine lõikepuhvri sisu krüptimiseks, lahtikrüptimiseks, "
 "allkirjastamiseks, verifitseerimiseks ja importimiseks."
 
-#: ../plugins/applet/seahorse-applet.c:316 ../src/seahorse-key-manager.c:874
+#: ../plugins/applet/seahorse-applet.c:316 ../src/seahorse-key-manager.c:866
 msgid "translator-credits"
 msgstr ""
 "Priit Laes <amd@store20.com>, 2007.\n"
-"Ivar Smolin <okul@linux.ee>, 2007."
+"Ivar Smolin <okul@linux.ee>, 2007, 2008."
 
-#: ../plugins/applet/seahorse-applet.c:319 ../src/seahorse-key-manager.c:877
+#: ../plugins/applet/seahorse-applet.c:319 ../src/seahorse-key-manager.c:869
 msgid "Seahorse Project Homepage"
 msgstr "Seahorse projekti koduleht"
 
@@ -1399,11 +1396,13 @@ msgstr "Lõikelaua sisu pole võimalik allkirjastada."
 
 #: ../plugins/applet/seahorse-applet.c:496
 #: ../plugins/epiphany/seahorse-extension.c:340
+#: ../plugins/nautilus/seahorse-tool.c:428
 msgid "Import Failed"
 msgstr "Tõrge importimisel"
 
 #: ../plugins/applet/seahorse-applet.c:497
 #: ../plugins/epiphany/seahorse-extension.c:341
+#: ../plugins/nautilus/seahorse-tool.c:429
 msgid "Keys were found but not imported."
 msgstr "Võtmed leiti, kuid neid ei imporditud."
 
@@ -1504,8 +1503,8 @@ msgstr "Krüptitud tekst"
 msgid "Couldn't encrypt text"
 msgstr "Teksti pole võimalik krüptida"
 
-#: ../plugins/gedit/seahorse-gedit.c:387 ../src/seahorse-key-manager.c:395
-#: ../src/seahorse-key-manager.c:463 ../src/seahorse-key-manager.c:486
+#: ../plugins/gedit/seahorse-gedit.c:387 ../src/seahorse-key-manager.c:387
+#: ../src/seahorse-key-manager.c:455 ../src/seahorse-key-manager.c:478
 msgid "Couldn't import keys"
 msgstr "Võtmeid pole võimalik importida"
 
@@ -1534,7 +1533,7 @@ msgid "Verified text"
 msgstr "Verifitseeritud tekst"
 
 #: ../plugins/gedit/seahorse-gedit.c:582
-#: ../plugins/nautilus/seahorse-tool.c:374 ../src/seahorse-key-manager.c:404
+#: ../plugins/nautilus/seahorse-tool.c:454 ../src/seahorse-key-manager.c:396
 #, c-format
 msgid "Imported %d key"
 msgid_plural "Imported %d keys"
@@ -1615,76 +1614,96 @@ msgstr[1] "Valitud failide allkirjastamine"
 msgid "For internal use"
 msgstr "Sisemiseks kasutuseks"
 
+#: ../plugins/nautilus/seahorse-pgp-preferences.c:74
+msgid "Encryption Preferences"
+msgstr "Krüptimiseelistused"
+
 #: ../plugins/nautilus/seahorse-pgp-preferences.desktop.in.h:1
 msgid "Configure key servers and other encryption settings"
 msgstr "Võtmeserverite ja teiste krüptosätete määramine"
 
-#: ../plugins/nautilus/seahorse-tool.c:52
+#: ../plugins/nautilus/seahorse-pgp-preferences.desktop.in.h:2
+msgid "Encryption and Keyrings"
+msgstr "Krüptimine ja võtmerõngad"
+
+#: ../plugins/nautilus/seahorse-pgp-preferences.desktop.in.h:3
+msgid "Seahorse Preferences"
+msgstr "Seahorse eelistused"
+
+#: ../plugins/nautilus/seahorse-tool.c:58
 msgid "Import keys from the file"
 msgstr "Võtmete importimine failist"
 
-#: ../plugins/nautilus/seahorse-tool.c:54
+#: ../plugins/nautilus/seahorse-tool.c:60
 msgid "Encrypt file"
 msgstr "Faili krüptimine"
 
-#: ../plugins/nautilus/seahorse-tool.c:56
+#: ../plugins/nautilus/seahorse-tool.c:62
 msgid "Sign file with default key"
 msgstr "Faili allkirjastamine vaikimisi võtmega"
 
-#: ../plugins/nautilus/seahorse-tool.c:58
+#: ../plugins/nautilus/seahorse-tool.c:64
 msgid "Encrypt and sign file with default key"
 msgstr "Faili krüptimine ja allkirjastamine vaikimisi võtmega"
 
-#: ../plugins/nautilus/seahorse-tool.c:60
+#: ../plugins/nautilus/seahorse-tool.c:66
 msgid "Decrypt encrypted file"
 msgstr "Krüptitud faili lahtikrüptimine"
 
-#: ../plugins/nautilus/seahorse-tool.c:62
+#: ../plugins/nautilus/seahorse-tool.c:68
 msgid "Verify signature file"
 msgstr "Allkirjafaili verifitseerimine"
 
-#: ../plugins/nautilus/seahorse-tool.c:64
+#: ../plugins/nautilus/seahorse-tool.c:70
 msgid "Read list of URIs on standard in"
 msgstr "URI-de loetelu lugemine standardsisendist"
 
-#: ../plugins/nautilus/seahorse-tool.c:66
+#: ../plugins/nautilus/seahorse-tool.c:72
 msgid "file..."
 msgstr "fail..."
 
-#: ../plugins/nautilus/seahorse-tool.c:128
+#: ../plugins/nautilus/seahorse-tool.c:162
 msgid "Choose Recipients"
 msgstr "Saajate valimine"
 
-#: ../plugins/nautilus/seahorse-tool.c:190
-#: ../plugins/nautilus/seahorse-tool.c:272
+#: ../plugins/nautilus/seahorse-tool.c:224
+#: ../plugins/nautilus/seahorse-tool.c:306
 msgid "Couldn't load keys"
 msgstr "Võtmeid pole võimalik laadida"
 
-#: ../plugins/nautilus/seahorse-tool.c:206
+#: ../plugins/nautilus/seahorse-tool.c:240
 #, c-format
 msgid "Choose Encrypted File Name for '%s'"
 msgstr ""
 
-#: ../plugins/nautilus/seahorse-tool.c:256
+#: ../plugins/nautilus/seahorse-tool.c:290
 msgid "Choose Signer"
 msgstr "Allkirjastaja valimine"
 
-#: ../plugins/nautilus/seahorse-tool.c:291
+#: ../plugins/nautilus/seahorse-tool.c:325
 #, c-format
 msgid "Choose Signature File Name for '%s'"
 msgstr ""
 
-#: ../plugins/nautilus/seahorse-tool.c:372
+#: ../plugins/nautilus/seahorse-tool.c:365
+msgid "Import is complete"
+msgstr "Võtmete importimine on lõpule viidud"
+
+#: ../plugins/nautilus/seahorse-tool.c:398
+msgid "Importing keys ..."
+msgstr "Võtmete importimine..."
+
+#: ../plugins/nautilus/seahorse-tool.c:452
 msgid "Imported key"
 msgstr "Imporditud võti"
 
 #. File to decrypt to
-#: ../plugins/nautilus/seahorse-tool.c:396
+#: ../plugins/nautilus/seahorse-tool.c:476
 #, c-format
 msgid "Choose Decrypted File Name for '%s'"
 msgstr "'%s' lahtikrüptitud faili nime valimine"
 
-#: ../plugins/nautilus/seahorse-tool.c:452
+#: ../plugins/nautilus/seahorse-tool.c:532
 #, c-format
 msgid "Choose Original File for '%s'"
 msgstr "Faili '%s' algupärase faili valimine"
@@ -1694,55 +1713,55 @@ msgstr "Faili '%s' algupärase faili valimine"
 #. * The last thing we want to do is cascade a big pile of error
 #. * dialogs at the user.
 #.
-#: ../plugins/nautilus/seahorse-tool.c:524
+#: ../plugins/nautilus/seahorse-tool.c:604
 msgid "No valid signatures found"
 msgstr "Kehtivaid allkirju ei leitud"
 
-#: ../plugins/nautilus/seahorse-tool.c:591
+#: ../plugins/nautilus/seahorse-tool.c:657
 msgid "File Encryption Tool"
 msgstr "Failide krüptimise tööriist"
 
-#: ../plugins/nautilus/seahorse-tool.c:614
+#: ../plugins/nautilus/seahorse-tool.c:680
 msgid "Encrypting"
 msgstr "Krüptimine"
 
-#: ../plugins/nautilus/seahorse-tool.c:615
+#: ../plugins/nautilus/seahorse-tool.c:681
 #, c-format
 msgid "Couldn't encrypt file: %s"
 msgstr "Faili pole võimalik krüptida: %s"
 
-#: ../plugins/nautilus/seahorse-tool.c:623
+#: ../plugins/nautilus/seahorse-tool.c:689
 msgid "Signing"
 msgstr "Allkirjastamine"
 
-#: ../plugins/nautilus/seahorse-tool.c:624
+#: ../plugins/nautilus/seahorse-tool.c:690
 #, c-format
 msgid "Couldn't sign file: %s"
 msgstr "Faili pole võimalik allkirjastada: %s"
 
-#: ../plugins/nautilus/seahorse-tool.c:629
+#: ../plugins/nautilus/seahorse-tool.c:695
 msgid "Importing"
 msgstr "Importimine"
 
-#: ../plugins/nautilus/seahorse-tool.c:630
+#: ../plugins/nautilus/seahorse-tool.c:696
 #, c-format
 msgid "Couldn't import keys from file: %s"
 msgstr "Falist pole võimalik võtmeid importida: %s"
 
-#: ../plugins/nautilus/seahorse-tool.c:636
+#: ../plugins/nautilus/seahorse-tool.c:702
 msgid "Decrypting"
 msgstr "Dekrüptimine"
 
-#: ../plugins/nautilus/seahorse-tool.c:637
+#: ../plugins/nautilus/seahorse-tool.c:703
 #, c-format
 msgid "Couldn't decrypt file: %s"
 msgstr "Faili pole võimalik lahti krüptida: %s"
 
-#: ../plugins/nautilus/seahorse-tool.c:642
+#: ../plugins/nautilus/seahorse-tool.c:708
 msgid "Verifying"
 msgstr "Verifitseerimine"
 
-#: ../plugins/nautilus/seahorse-tool.c:643
+#: ../plugins/nautilus/seahorse-tool.c:709
 #, c-format
 msgid "Couldn't verify file: %s"
 msgstr "Faili pole võimalik verifitseerida: %s"
@@ -1857,16 +1876,16 @@ msgid_plural "You have selected %d folders"
 msgstr[0] "Sa oled valinud %d kataloogi"
 msgstr[1] "Sa oled valinud %d kataloogi"
 
-#: ../plugins/nautilus/seahorse-tool-files.c:812
+#: ../plugins/nautilus/seahorse-tool-files.c:811
 msgid "Preparing..."
 msgstr "Ettevalmistamine..."
 
-#: ../plugins/nautilus/seahorse-tool-files.c:821
-#: ../plugins/nautilus/seahorse-tool-files.c:844
+#: ../plugins/nautilus/seahorse-tool-files.c:820
+#: ../plugins/nautilus/seahorse-tool-files.c:843
 msgid "Couldn't list files"
 msgstr ""
 
-#: ../src/main.c:75 ../src/seahorse-key-manager.c:869
+#: ../src/main.c:61 ../src/seahorse-key-manager.c:861
 msgid "Encryption Key Manager"
 msgstr "Krüptimisvõtmete haldur"
 
@@ -2031,6 +2050,10 @@ msgstr "Sinu paroolide ja krüptimisvõtmete haldamine"
 msgid "Passwords and Encryption Keys"
 msgstr "Paroolid ja krüptimisvõtmed"
 
+#: ../src/seahorse.desktop.in.in.h:3
+msgid "Seahorse"
+msgstr "Seahorse"
+
 #: ../src/seahorse-expires.c:67
 msgid "Couldn't change expiry date"
 msgstr "Aegumise kuupäeva pole võimalik muuta"
@@ -2049,13 +2072,13 @@ msgstr ""
 msgid "C_hange"
 msgstr "_Muuda"
 
-#: ../src/seahorse-expires.glade.h:2
-msgid "Never Expires"
-msgstr "Ei aegu kunagi"
-
-#: ../src/seahorse-expires.glade.h:3 ../src/seahorse-revoke.glade.h:4
+#: ../src/seahorse-expires.glade.h:2 ../src/seahorse-revoke.glade.h:4
 msgid "Revoke key"
 msgstr "Võtme tühistamine"
+
+#: ../src/seahorse-expires.glade.h:3
+msgid "_Never expires"
+msgstr "_Ei aegu kunagi"
 
 #: ../src/seahorse-generate-select.c:143
 msgid "Used to encrypt email and files"
@@ -2077,219 +2100,233 @@ msgstr "_Jätka"
 msgid "Create a New Key"
 msgstr "Uue võtme loomine"
 
-#: ../src/seahorse-gkeyring-item.c:248
+#: ../src/seahorse-gkeyring-item.c:249
 msgid "Web Password"
 msgstr "Veebiparool"
 
-#: ../src/seahorse-gkeyring-item.c:250
+#: ../src/seahorse-gkeyring-item.c:251
 msgid "Network Password"
 msgstr "Võrguparool"
 
-#: ../src/seahorse-gkeyring-item.c:252
-#: ../src/seahorse-gkeyring-item-properties.c:116
-#: ../src/seahorse-gkeyring-source.c:525
+#: ../src/seahorse-gkeyring-item.c:253
+#: ../src/seahorse-gkeyring-item-properties.c:119
+#: ../src/seahorse-gkeyring-source.c:546
 msgid "Password"
 msgstr "Parool"
 
-#: ../src/seahorse-gkeyring-item-properties.c:90
+#: ../src/seahorse-gkeyring-item-properties.c:93
 msgid "Access a network share or resource"
 msgstr "Ligipääs võrgus olevale kataloogile või ressursile"
 
-#: ../src/seahorse-gkeyring-item-properties.c:94
+#: ../src/seahorse-gkeyring-item-properties.c:97
 msgid "Access a website"
 msgstr "Ligipääs veebisaidile"
 
-#: ../src/seahorse-gkeyring-item-properties.c:98
+#: ../src/seahorse-gkeyring-item-properties.c:101
 msgid "Unlocks a PGP key"
 msgstr "PGP-võtme lukust lahtivõtmine"
 
-#: ../src/seahorse-gkeyring-item-properties.c:101
+#: ../src/seahorse-gkeyring-item-properties.c:104
 msgid "Unlocks a Secure Shell key"
 msgstr "Secure Shell'i võtme lukust lahtivõtmine"
 
-#: ../src/seahorse-gkeyring-item-properties.c:104
+#: ../src/seahorse-gkeyring-item-properties.c:107
 msgid "Saved password or login"
 msgstr "Salvestatud parool või konto"
 
-#: ../src/seahorse-gkeyring-item-properties.c:116
+#: ../src/seahorse-gkeyring-item-properties.c:119
 msgid "Network Credentials"
 msgstr "Võrgutõendid"
 
-#: ../src/seahorse-gkeyring-item-properties.c:177
+#: ../src/seahorse-gkeyring-item-properties.c:180
 msgid "Couldn't change password."
 msgstr "Parooli pole võimalik muuta."
 
-#: ../src/seahorse-gkeyring-item-properties.c:284
+#: ../src/seahorse-gkeyring-item-properties.c:287
 msgid "Couldn't set description."
 msgstr "Kirjeldust pole võimalik määrata."
 
+#: ../src/seahorse-gkeyring-item-properties.c:496
+msgid "Couldn't set application access."
+msgstr "Rakenduse ligipääsu pole võimalik määrata."
+
 #: ../src/seahorse-gkeyring-item-properties.glade.h:1
-msgid "<b>Description:</b>"
-msgstr "<b>Kirjeldus:</b>"
-
-#: ../src/seahorse-gkeyring-item-properties.glade.h:2
-msgid "<b>Login:</b>"
-msgstr "<b>Konto:</b>"
-
-#: ../src/seahorse-gkeyring-item-properties.glade.h:3
 msgid "<b>Password:</b>"
 msgstr "<b>Parool:</b>"
 
-#: ../src/seahorse-gkeyring-item-properties.glade.h:4
-msgid "<b>Server:</b>"
-msgstr "<b>Server:</b>"
+#: ../src/seahorse-gkeyring-item-properties.glade.h:2
+msgid "<b>Path:</b>"
+msgstr "<b>Rada:</b>"
 
-#: ../src/seahorse-gkeyring-item-properties.glade.h:5
+#: ../src/seahorse-gkeyring-item-properties.glade.h:3
+msgid "<b>Permissions:</b>"
+msgstr "<b>Pääsuõigused:</b>"
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:4
 #: ../src/seahorse-pgp-public-key-properties.glade.h:9
 #: ../src/seahorse-ssh-key-properties.glade.h:9
 msgid "<b>Technical Details:</b>"
 msgstr "<b>Tehnilised üksikasjad:</b>"
 
+#: ../src/seahorse-gkeyring-item-properties.glade.h:5
+msgid "Applications"
+msgstr "Rakendused"
+
 #: ../src/seahorse-gkeyring-item-properties.glade.h:6
-#: ../src/seahorse-pgp-private-key-properties.glade.h:13
-#: ../src/seahorse-pgp-public-key-properties.glade.h:12
-#: ../src/seahorse-ssh-key-properties.glade.h:11
-msgid "<b>Type:</b>"
-msgstr "<b>Liik:</b>"
-
-#: ../src/seahorse-gkeyring-item-properties.glade.h:7
-#: ../src/seahorse-pgp-private-key-properties.glade.h:14
-#: ../src/seahorse-pgp-public-key-properties.glade.h:13
-#: ../src/seahorse-ssh-key-properties.glade.h:12
-msgid "<b>Use:</b>"
-msgstr "<b>Kasutus:</b>"
-
-#: ../src/seahorse-gkeyring-item-properties.glade.h:8
 #: ../src/seahorse-pgp-private-key-properties.glade.h:22
 #: ../src/seahorse-pgp-public-key-properties.glade.h:19
 #: ../src/seahorse-ssh-key-properties.glade.h:16
 msgid "Details"
 msgstr "Üksikasjad"
 
-#: ../src/seahorse-gkeyring-item-properties.glade.h:9
+#: ../src/seahorse-gkeyring-item-properties.glade.h:7
 #: ../src/seahorse-ssh-key-properties.glade.h:18
 msgid "Key"
 msgstr "Võti"
 
-#: ../src/seahorse-gkeyring-item-properties.glade.h:10
+#: ../src/seahorse-gkeyring-item-properties.glade.h:8
 #: ../src/seahorse-pgp-private-key-properties.glade.h:29
 #: ../src/seahorse-pgp-public-key-properties.glade.h:28
 #: ../src/seahorse-ssh-key-properties.glade.h:19
 msgid "Key Properties"
 msgstr "Võtme omadused"
 
+#: ../src/seahorse-gkeyring-item-properties.glade.h:9
+msgid "Login:"
+msgstr "Konto:"
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:10
+msgid "Server:"
+msgstr "Server:"
+
 #: ../src/seahorse-gkeyring-item-properties.glade.h:11
 msgid "Show pass_word"
 msgstr "_Parooli näidatakse"
 
 #: ../src/seahorse-gkeyring-item-properties.glade.h:12
-msgid "[details]\n"
-msgstr "[üksikasjad]\n"
+#: ../src/seahorse-pgp-private-key-properties.glade.h:41
+#: ../src/seahorse-pgp-public-key-properties.glade.h:35
+msgid "Type:"
+msgstr "Liik:"
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:13
+msgid "Use:"
+msgstr ""
 
 #: ../src/seahorse-gkeyring-item-properties.glade.h:14
-msgid "[login]"
-msgstr "[konto]"
+msgid "_Delete"
+msgstr "_Kustuta"
 
 #: ../src/seahorse-gkeyring-item-properties.glade.h:15
-msgid "[server]"
-msgstr "[server]"
+#: ../src/seahorse-revoke.glade.h:5
+msgid "_Description:"
+msgstr "_Kirjeldus:"
 
-#: ../src/seahorse-gkeyring-operation.c:206
+#: ../src/seahorse-gkeyring-item-properties.glade.h:16
+msgid "_Read"
+msgstr ""
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:17
+msgid "_Write"
+msgstr ""
+
+#: ../src/seahorse-gkeyring-operation.c:204
 msgid "Access to the key ring was denied"
 msgstr "Ligipääs võtmerõngale on keelatud"
 
-#: ../src/seahorse-gkeyring-operation.c:209
+#: ../src/seahorse-gkeyring-operation.c:207
 msgid "The gnome-keyring daemon is not running"
 msgstr "GNOME võtmerõnga deemon pole käivitatud"
 
-#: ../src/seahorse-gkeyring-operation.c:212
+#: ../src/seahorse-gkeyring-operation.c:210
 msgid "The key ring has already been unlocked"
 msgstr "Võtmerõngas on juba lukust lahti"
 
-#: ../src/seahorse-gkeyring-operation.c:215
+#: ../src/seahorse-gkeyring-operation.c:213
 msgid "No such key ring exists"
 msgstr "Sellist võtmerõngast pole olemas"
 
-#: ../src/seahorse-gkeyring-operation.c:218
+#: ../src/seahorse-gkeyring-operation.c:216
 msgid "Couldn't communicate with key ring daemon"
 msgstr "Võtmerõngadeemoniga pole võimalik suhelda"
 
-#: ../src/seahorse-gkeyring-operation.c:221
+#: ../src/seahorse-gkeyring-operation.c:219
 msgid "The item already exists"
 msgstr "Kirje on juba olemas"
 
-#: ../src/seahorse-gkeyring-operation.c:227
+#: ../src/seahorse-gkeyring-operation.c:225
 msgid "Internal error accessing gnome-keyring"
 msgstr "Sisemine viga gnome-keyring'iga suhtlemisel"
 
-#: ../src/seahorse-gkeyring-operation.c:286
+#: ../src/seahorse-gkeyring-operation.c:282
+#: ../src/seahorse-gkeyring-operation.c:314
 msgid "Saving item..."
 msgstr "Kirje salvestamine..."
 
-#: ../src/seahorse-gkeyring-source.c:358
+#: ../src/seahorse-gkeyring-source.c:403
 msgid "Retrieving key"
 msgstr "Võtme vastuvõtmine"
 
 #. Start listing of ids
-#: ../src/seahorse-gkeyring-source.c:372
+#: ../src/seahorse-gkeyring-source.c:417
 msgid "Listing passwords"
 msgstr "Paroolide nimekirja kuvamine"
 
-#: ../src/seahorse-key-manager.c:443
+#: ../src/seahorse-key-manager.c:435
 msgid "Couldn't read file"
 msgstr "Faili pole võimalik lugeda"
 
-#: ../src/seahorse-key-manager.c:486
+#: ../src/seahorse-key-manager.c:478
 msgid "Unrecognized key type, or invalid data format"
 msgstr "Tundmatu võtme liik või on andmed vigased"
 
-#: ../src/seahorse-key-manager.c:560 ../src/seahorse-keyserver-results.c:218
+#: ../src/seahorse-key-manager.c:552 ../src/seahorse-keyserver-results.c:218
 msgid "Couldn't retrieve data from key server"
 msgstr "Võtit pole võtmeserverist võimalik vastu võtta"
 
-#: ../src/seahorse-key-manager.c:576 ../src/seahorse-keyserver-results.c:234
+#: ../src/seahorse-key-manager.c:568 ../src/seahorse-keyserver-results.c:234
 #, c-format
 msgid "Copied %d key"
 msgid_plural "Copied %d keys"
 msgstr[0] "Kopeeritud %d võti"
 msgstr[1] "Kopeeritud %d võtit"
 
-#: ../src/seahorse-key-manager.c:600 ../src/seahorse-keyserver-results.c:194
+#: ../src/seahorse-key-manager.c:592 ../src/seahorse-keyserver-results.c:194
 #: ../src/seahorse-keyserver-results.c:259
 msgid "Retrieving keys"
 msgstr "Võtmete vastuvõtmine"
 
-#: ../src/seahorse-key-manager.c:626
+#: ../src/seahorse-key-manager.c:618
 msgid "Couldn't export key"
 msgstr "Võtit pole võimalik eksportida"
 
-#: ../src/seahorse-key-manager.c:646
+#: ../src/seahorse-key-manager.c:638
 msgid "Export public key"
 msgstr "Avaliku võtme eksportimine"
 
-#: ../src/seahorse-key-manager.c:656 ../src/seahorse-key-properties.c:1038
+#: ../src/seahorse-key-manager.c:648 ../src/seahorse-key-properties.c:1038
 #: ../src/seahorse-ssh-key-properties.c:240
 #, c-format
 msgid "Couldn't export key to \"%s\""
 msgstr ""
 
-#: ../src/seahorse-key-manager.c:668
+#: ../src/seahorse-key-manager.c:660
 msgid "Exporting keys"
 msgstr "Võtmete eksportimine"
 
-#: ../src/seahorse-key-manager.c:687
+#: ../src/seahorse-key-manager.c:679
 msgid "Back up Key Rings to Archive"
 msgstr "Võtmerõngaste varundamine arhiivi"
 
-#: ../src/seahorse-key-manager.c:841
+#: ../src/seahorse-key-manager.c:833
 msgid "Contributions:"
 msgstr "Kaasaaitajad:"
 
-#: ../src/seahorse-key-manager.c:867
+#: ../src/seahorse-key-manager.c:859
 msgid "seahorse"
 msgstr "seahorse"
 
-#: ../src/seahorse-key-manager.c:950 ../src/seahorse-keyserver-results.c:300
+#: ../src/seahorse-key-manager.c:942 ../src/seahorse-keyserver-results.c:300
 #, c-format
 msgid "Selected %d key"
 msgid_plural "Selected %d keys"
@@ -2297,178 +2334,178 @@ msgstr[0] "Valitud %d võti"
 msgstr[1] "Valitud %d võtit"
 
 #. Top menu items
-#: ../src/seahorse-key-manager.c:1189 ../src/seahorse-keyserver-results.c:379
+#: ../src/seahorse-key-manager.c:1179 ../src/seahorse-keyserver-results.c:379
 msgid "_Key"
 msgstr "Võ_ti"
 
-#: ../src/seahorse-key-manager.c:1190 ../src/seahorse-keyserver-results.c:380
+#: ../src/seahorse-key-manager.c:1180 ../src/seahorse-keyserver-results.c:380
 msgid "_Edit"
 msgstr "_Redaktor"
 
-#: ../src/seahorse-key-manager.c:1191
+#: ../src/seahorse-key-manager.c:1181
 msgid "_View"
 msgstr "_Vaade"
 
 #. Key Actions
-#: ../src/seahorse-key-manager.c:1195
+#: ../src/seahorse-key-manager.c:1185
 msgid "_Create New Key..."
 msgstr "Loo _uus võti..."
 
-#: ../src/seahorse-key-manager.c:1196
+#: ../src/seahorse-key-manager.c:1186
 msgid "Create a new personal key"
 msgstr "Uue isikliku võtme loomine"
 
-#: ../src/seahorse-key-manager.c:1197
+#: ../src/seahorse-key-manager.c:1187
 msgid "_Import..."
 msgstr "_Impordi..."
 
-#: ../src/seahorse-key-manager.c:1198
+#: ../src/seahorse-key-manager.c:1188
 msgid "Import keys into your key ring from a file"
 msgstr "Failis olevate võtmete importimine võtmerõngasse"
 
-#: ../src/seahorse-key-manager.c:1199
+#: ../src/seahorse-key-manager.c:1189
 msgid "_Back up Key Rings..."
 msgstr "_Varunda võtmerõngad..."
 
-#: ../src/seahorse-key-manager.c:1200
+#: ../src/seahorse-key-manager.c:1190
 msgid "Back up all keys"
 msgstr "Kõikidest võtmetest varukoopia loomine"
 
-#: ../src/seahorse-key-manager.c:1201
+#: ../src/seahorse-key-manager.c:1191
 msgid "Paste _Keys"
 msgstr "_Aseta võtmed"
 
-#: ../src/seahorse-key-manager.c:1202
+#: ../src/seahorse-key-manager.c:1192
 msgid "Import keys from the clipboard"
 msgstr "Võtmete importimine lõikepuhvrist"
 
-#: ../src/seahorse-key-manager.c:1204
+#: ../src/seahorse-key-manager.c:1194
 msgid "_Quit"
 msgstr "_Välju"
 
-#: ../src/seahorse-key-manager.c:1205
+#: ../src/seahorse-key-manager.c:1195
 msgid "Close this program"
 msgstr "Programmi sulgemine"
 
-#: ../src/seahorse-key-manager.c:1206
+#: ../src/seahorse-key-manager.c:1196
 msgid "Prefere_nces"
 msgstr "_Eelistused"
 
-#: ../src/seahorse-key-manager.c:1207
+#: ../src/seahorse-key-manager.c:1197
 msgid "Change preferences for this program"
 msgstr "Programmi eelistuste määramine"
 
-#: ../src/seahorse-key-manager.c:1209
+#: ../src/seahorse-key-manager.c:1199
 msgid "About this program"
 msgstr "Programmist lähemalt..."
 
-#: ../src/seahorse-key-manager.c:1211
+#: ../src/seahorse-key-manager.c:1201
 msgid "_Remote"
 msgstr "_Kaugvalikud"
 
-#: ../src/seahorse-key-manager.c:1213 ../src/seahorse-keyserver-results.c:385
+#: ../src/seahorse-key-manager.c:1203 ../src/seahorse-keyserver-results.c:385
 msgid "_Contents"
 msgstr "_Sisu"
 
-#: ../src/seahorse-key-manager.c:1214 ../src/seahorse-keyserver-results.c:386
+#: ../src/seahorse-key-manager.c:1204 ../src/seahorse-keyserver-results.c:386
 msgid "Show Seahorse help"
 msgstr "Seahorse abiteabe näitamine"
 
-#: ../src/seahorse-key-manager.c:1218
+#: ../src/seahorse-key-manager.c:1208
 msgid "T_ypes"
 msgstr "_Liigid"
 
-#: ../src/seahorse-key-manager.c:1219
+#: ../src/seahorse-key-manager.c:1209
 msgid "Show type column"
 msgstr "Liigi veeru näitamine"
 
-#: ../src/seahorse-key-manager.c:1220
+#: ../src/seahorse-key-manager.c:1210
 msgid "_Expiry"
 msgstr "_Aegumine"
 
-#: ../src/seahorse-key-manager.c:1221
+#: ../src/seahorse-key-manager.c:1211
 msgid "Show expiry column"
 msgstr "Aegumise veeru näitamine"
 
-#: ../src/seahorse-key-manager.c:1222
+#: ../src/seahorse-key-manager.c:1212
 msgid "_Trust"
 msgstr "_Usaldus"
 
-#: ../src/seahorse-key-manager.c:1223
+#: ../src/seahorse-key-manager.c:1213
 msgid "Show owner trust column"
 msgstr "Omaniku usaldamise veeru näitamine"
 
-#: ../src/seahorse-key-manager.c:1224
+#: ../src/seahorse-key-manager.c:1214
 msgid "_Validity"
 msgstr "_Kehtivus"
 
-#: ../src/seahorse-key-manager.c:1225
+#: ../src/seahorse-key-manager.c:1215
 msgid "Show validity column"
 msgstr "Kehtivuse veeru näitamine"
 
-#: ../src/seahorse-key-manager.c:1229 ../src/seahorse-keyserver-results.c:397
+#: ../src/seahorse-key-manager.c:1219 ../src/seahorse-keyserver-results.c:397
 msgid "P_roperties"
 msgstr "_Omadused"
 
-#: ../src/seahorse-key-manager.c:1230 ../src/seahorse-keyserver-results.c:398
+#: ../src/seahorse-key-manager.c:1220 ../src/seahorse-keyserver-results.c:398
 msgid "Show key properties"
 msgstr "Võtme omaduste näitamine"
 
-#: ../src/seahorse-key-manager.c:1231
+#: ../src/seahorse-key-manager.c:1221
 msgid "E_xport Public Key..."
 msgstr "_Ekspordi avalik võti..."
 
-#: ../src/seahorse-key-manager.c:1232
+#: ../src/seahorse-key-manager.c:1222
 msgid "Export public part of key to a file"
 msgstr "Võtme avaliku osa eksportimine faili"
 
-#: ../src/seahorse-key-manager.c:1233
+#: ../src/seahorse-key-manager.c:1223
 msgid "_Copy Public Key"
 msgstr "_Kopeeri avalik võti"
 
-#: ../src/seahorse-key-manager.c:1234
+#: ../src/seahorse-key-manager.c:1224
 msgid "Copy public part of selected keys to the clipboard"
 msgstr "Valitud võtmete avaliku osa kopeerimine lõikepuhvrisse"
 
-#: ../src/seahorse-key-manager.c:1235
+#: ../src/seahorse-key-manager.c:1225
 msgid "_Delete Key"
 msgstr "Ku_stuta võti"
 
-#: ../src/seahorse-key-manager.c:1236
+#: ../src/seahorse-key-manager.c:1226
 msgid "Delete selected keys"
 msgstr "Valitud võtmete kustutamine"
 
-#: ../src/seahorse-key-manager.c:1240
+#: ../src/seahorse-key-manager.c:1230
 msgid "_Sign..."
 msgstr "_Allkirjasta..."
 
-#: ../src/seahorse-key-manager.c:1241
+#: ../src/seahorse-key-manager.c:1231
 msgid "Sign public key"
 msgstr ""
 
-#: ../src/seahorse-key-manager.c:1245
+#: ../src/seahorse-key-manager.c:1235
 msgid "Set Up Computer for _Secure Shell..."
 msgstr "Määra _Secure shell'i jaoks arvuti..."
 
-#: ../src/seahorse-key-manager.c:1246
+#: ../src/seahorse-key-manager.c:1236
 msgid ""
 "Send public Secure Shell key to another machine, and enable logins using "
 "that key."
 msgstr ""
 
-#: ../src/seahorse-key-manager.c:1250 ../src/seahorse-keyserver-results.c:406
+#: ../src/seahorse-key-manager.c:1240 ../src/seahorse-keyserver-results.c:406
 msgid "_Find Remote Keys..."
 msgstr "_Otsi võtmeid võrgust..."
 
-#: ../src/seahorse-key-manager.c:1251 ../src/seahorse-keyserver-results.c:407
+#: ../src/seahorse-key-manager.c:1241 ../src/seahorse-keyserver-results.c:407
 msgid "Search for keys on a key server"
 msgstr "Võtmete otsimine võtmeserverist"
 
-#: ../src/seahorse-key-manager.c:1252
+#: ../src/seahorse-key-manager.c:1242
 msgid "_Sync and Publish Keys..."
 msgstr "Sü_nkroniseeri ja avalikusta võtmed..."
 
-#: ../src/seahorse-key-manager.c:1253
+#: ../src/seahorse-key-manager.c:1243
 msgid "Publish and/or synchronize your keys with those online."
 msgstr ""
 
@@ -2827,19 +2864,19 @@ msgstr "DSA Elgamal"
 msgid "Couldn't generate PGP key"
 msgstr "PGP-võtit pole võimalik genereerida"
 
-#: ../src/seahorse-pgp-generate.c:139
+#: ../src/seahorse-pgp-generate.c:138
 msgid "Passphrase for New PGP Key"
 msgstr "Uue PGP-võtme parool"
 
-#: ../src/seahorse-pgp-generate.c:140
+#: ../src/seahorse-pgp-generate.c:139
 msgid "Enter the passphrase for your new key twice."
 msgstr "Sisesta oma uuele võtmele parool (2 korda)."
 
-#: ../src/seahorse-pgp-generate.c:149
+#: ../src/seahorse-pgp-generate.c:148
 msgid "Couldn't generate key"
 msgstr "Võtit pole võimalik genereerida"
 
-#: ../src/seahorse-pgp-generate.c:151
+#: ../src/seahorse-pgp-generate.c:150
 msgid "Generating key"
 msgstr "Võtme genereerimine"
 
@@ -2950,6 +2987,18 @@ msgstr "<b>See võti on tühistatud</b>"
 msgid "<b>This key has expired</b>"
 msgstr "<b>See võti on aegunud</b>"
 
+#: ../src/seahorse-pgp-private-key-properties.glade.h:13
+#: ../src/seahorse-pgp-public-key-properties.glade.h:12
+#: ../src/seahorse-ssh-key-properties.glade.h:11
+msgid "<b>Type:</b>"
+msgstr "<b>Liik:</b>"
+
+#: ../src/seahorse-pgp-private-key-properties.glade.h:14
+#: ../src/seahorse-pgp-public-key-properties.glade.h:13
+#: ../src/seahorse-ssh-key-properties.glade.h:12
+msgid "<b>Use:</b>"
+msgstr "<b>Kasutus:</b>"
+
 #: ../src/seahorse-pgp-private-key-properties.glade.h:15
 #: ../src/seahorse-pgp-public-key-properties.glade.h:17
 msgid "<b>_Subkeys</b>"
@@ -3045,11 +3094,6 @@ msgstr "Tugevus:"
 #: ../src/seahorse-pgp-public-key-properties.glade.h:32
 msgid "The owner of the key revoked the key. It can no longer be used."
 msgstr "Selle võtme omanik tühistas võtme. Seda pole võimalik rohkem kasutada."
-
-#: ../src/seahorse-pgp-private-key-properties.glade.h:41
-#: ../src/seahorse-pgp-public-key-properties.glade.h:35
-msgid "Type:"
-msgstr "Liik:"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:42
 msgid ""
@@ -3216,28 +3260,60 @@ msgstr "Kas soovid võtmelt eemaldada seal praegu olevat fotot?"
 msgid "Couldn't delete photo"
 msgstr "Fotot pole võimalik kustutada"
 
-#: ../src/seahorse-revoke.c:54
+#: ../src/seahorse-revoke.c:72
 msgid "Couldn't revoke subkey"
 msgstr "Alamvõtit pole võimalik tühistada"
 
-#: ../src/seahorse-revoke.c:77
+#: ../src/seahorse-revoke.c:99
 #, c-format
 msgid "Revoke Subkey %d of %s"
 msgstr "Omaniku %2$s %1$d. alamvõtme tühistamine"
 
-#: ../src/seahorse-revoke.c:79
+#: ../src/seahorse-revoke.c:101
 #, c-format
 msgid "Revoke %s"
 msgstr ""
 
-#: ../src/seahorse-revoke.c:107
+#: ../src/seahorse-revoke.c:112
+msgid "No reason"
+msgstr "Põhjendus puudub"
+
+#: ../src/seahorse-revoke.c:113
+msgid "No reason for revoking key"
+msgstr "Võtme tühistamisele pole põhjendust määratud"
+
+#: ../src/seahorse-revoke.c:119
+msgid "Compromised"
+msgstr "Kompromiteeritud"
+
+#: ../src/seahorse-revoke.c:120
+msgid "Key has been compromised"
+msgstr "Võti on kompromiteeritud"
+
+#: ../src/seahorse-revoke.c:126
+msgid "Superseded"
+msgstr "Asendatud"
+
+#: ../src/seahorse-revoke.c:127
+msgid "Key has been superseded"
+msgstr "Võti on asendatud"
+
+#: ../src/seahorse-revoke.c:133
+msgid "Not Used"
+msgstr "Pole kasutusel"
+
+#: ../src/seahorse-revoke.c:134
+msgid "Key is no longer used"
+msgstr "Võti pole enam kasutusel"
+
+#: ../src/seahorse-revoke.c:173
 #, c-format
 msgid ""
 "You are about to add %s as a revoker for %s. This operation cannot be "
 "undone! Are you sure you want to continue?"
 msgstr ""
 
-#: ../src/seahorse-revoke.c:122
+#: ../src/seahorse-revoke.c:188
 msgid "Couldn't add revoker"
 msgstr "Tühistajat pole võimalik lisada"
 
@@ -3252,10 +3328,6 @@ msgstr "_Tühista"
 #: ../src/seahorse-revoke.glade.h:3
 msgid "Reason for revoking the key"
 msgstr "Võtme tühistamise põhjus"
-
-#: ../src/seahorse-revoke.glade.h:5
-msgid "_Description:"
-msgstr "_Kirjeldus:"
 
 #: ../src/seahorse-revoke.glade.h:6
 msgid "_Reason:"
@@ -3500,6 +3572,80 @@ msgstr "_Konto nimi:"
 msgid "_Set Up"
 msgstr "_Määra"
 
+#~ msgid ""
+#~ "When set seahorse-agent will try to automatically load the users SSH keys "
+#~ "when needed. This is equivalent to using the ssh-add utility."
+#~ msgstr ""
+#~ "Kui määratud, siis seahorse-agent proovib vajaduse korral SSH võtmed "
+#~ "automaatselt laadida. See on sama, mis utiliidi ssh-add kasutamine."
+
+#~ msgid "Whether to automatically load SSH keys on demand."
+#~ msgstr "Kas SSH-võtmed laaditakse nõudmise korral alati või mitte."
+
+#~ msgid "<b>Secure Shell Keys</b>"
+#~ msgstr "<b>Secure shell'i võtmed</b>"
+
+#~ msgid ""
+#~ "<i>No SSH caching agent is running. Cannot load Secure Shell keys.</i>"
+#~ msgstr ""
+#~ "<i>SSH puhverdamisagent ei tööta. Secure Shell'i võtmeid pole võimalik "
+#~ "laadida.</i>"
+
+#~ msgid "Automatically load _Secure Shell keys"
+#~ msgstr "Secure S_hell'i võtmed laaditakse automaatselt"
+
+#~ msgid ""
+#~ "Changing the master password failed.  Make certain that you entered the "
+#~ "correct original master password."
+#~ msgstr ""
+#~ "Tõrge peaparooli muutmisel.  Veendu, et Sa sisestasid algse peaparooli "
+#~ "õigesti."
+
+#~ msgid "Confirm Master Password:"
+#~ msgstr "Peaparooli kinnitus:"
+
+#~ msgid ""
+#~ "GNOME Keyring stores passwords, network keys, passphrases and other "
+#~ "secrets required for authentication.  A <b>master password</b> is used to "
+#~ "protect these secrets.  The <b>master password</b> can be changed below."
+#~ msgstr ""
+#~ "GNOME Võtmerõngas salvestab paroole, võrguvõtmeid ja muid autentimiseks "
+#~ "tarvilikke saladusi. <b>Peaparooli</b> kasutatakse nende saladuste "
+#~ "kaitsmiseks. Allpool on võimalik <b>peaparooli</b> muuta."
+
+#~ msgid "New Master Password:"
+#~ msgstr "Peaparool:"
+
+#~ msgid "Original Master Password:"
+#~ msgstr "Algne peaparool:"
+
+#~ msgid "Passphrase Cache"
+#~ msgstr "Paroolipuhver"
+
+#~ msgid "The master password was successfully changed."
+#~ msgstr "Peaparool on edukalt muudetud."
+
+#~ msgid "<b>Progress Message</b>"
+#~ msgstr "<b>Edenemisteade</b>"
+
+#~ msgid "Progress Status"
+#~ msgstr "Edenemise olek"
+
+#~ msgid "<b>Login:</b>"
+#~ msgstr "<b>Konto:</b>"
+
+#~ msgid "<b>Server:</b>"
+#~ msgstr "<b>Server:</b>"
+
+#~ msgid "[details]\n"
+#~ msgstr "[üksikasjad]\n"
+
+#~ msgid "[login]"
+#~ msgstr "[konto]"
+
+#~ msgid "[server]"
+#~ msgstr "[server]"
+
 #~ msgid "Maximum number of characters for this entry. Zero if no maximum"
 #~ msgstr ""
 #~ "Suurim märkide arv sellel väljal. Null tähendab, et pikkus pole piiratud"
@@ -3511,27 +3657,3 @@ msgstr "_Määra"
 #~ "The character to use when masking entry contents (in \"password mode\")"
 #~ msgstr ""
 #~ "Välja sisu maskimiseks kasutatav märk (nö \"paroolisisestamise režiimis\")"
-
-#~ msgid "Compromised"
-#~ msgstr "Kompromiteeritud"
-
-#~ msgid "Key has been compromised"
-#~ msgstr "Võti on kompromiteeritud"
-
-#~ msgid "Key has been superseded"
-#~ msgstr "Võti on asendatud"
-
-#~ msgid "Key is no longer used"
-#~ msgstr "Võti pole enam kasutusel"
-
-#~ msgid "No Reason"
-#~ msgstr "Põhjendus puudub"
-
-#~ msgid "No reason for revoking key"
-#~ msgstr "Võtme tühistamisele pole põhjendust määratud"
-
-#~ msgid "Not Used"
-#~ msgstr "Pole kasutusel"
-
-#~ msgid "Superseded"
-#~ msgstr "Asendatud"
