@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: Seahorse HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-12-17 16:59+0000\n"
-"PO-Revision-Date: 2008-01-02 11:00+0200\n"
+"PO-Revision-Date: 2008-01-06 19:19+0200\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -98,7 +98,7 @@ msgstr "Seadistusfailide muutmise asemel muutujate kuvamine"
 
 #: ../agent/seahorse-agent-main.c:60
 msgid "Execute other arguments on the command line"
-msgstr ""
+msgstr "Teiste argumentide käivitamine käsureal"
 
 #: ../agent/seahorse-agent-main.c:64
 msgid "Allow GPG agent request from any display"
@@ -126,7 +126,7 @@ msgstr "käivitamiseks pole käsku määratud"
 
 #: ../agent/seahorse-agent-prompt.c:216
 msgid "Authorize Passphrase Access"
-msgstr ""
+msgstr "Parooliligipääsu autoriseerimine"
 
 #: ../agent/seahorse-agent-prompt.c:252
 msgid "The passphrase is cached in memory."
@@ -184,7 +184,7 @@ msgstr "Vigane või tundmatu saaja: %s"
 #: ../daemon/seahorse-service-crypto.c:147
 #, c-format
 msgid "Key is not a valid recipient for encryption: %s"
-msgstr ""
+msgstr "Võti pole krüptimiseks sobilik: %s"
 
 #: ../daemon/seahorse-service-crypto.c:156
 msgid "No recipients specified"
@@ -215,7 +215,7 @@ msgstr "Võtmeid pole võimalik jagada"
 
 #: ../daemon/seahorse-sharing.c:72
 msgid "Can't publish discovery information on the network."
-msgstr ""
+msgstr "Tuvastatud andmeid pole võimalik võrgus avaldada."
 
 #. Translators: The %s will get filled in with the user name
 #. of the user, to form a genitive. If this is difficult to
@@ -322,6 +322,8 @@ msgid ""
 "If set to true, then files encrypted with seahorse will be ASCII armor "
 "encoded."
 msgstr ""
+"Kui märgitud, siis seahorse poolt krüptitud failid väljastatakse ASCII-"
+"vormingus, vastasel juhul aga mitte."
 
 #: ../data/seahorse.schemas.in.h:19
 msgid ""
@@ -353,13 +355,15 @@ msgstr "Kinnituse küsimine enne puhvris olevate GPG paroolide kasutamise"
 
 #: ../data/seahorse.schemas.in.h:25
 msgid "Publish keys to this key server."
-msgstr "Võtmete publitseerimine sellesse võtmeserverisse."
+msgstr "Võtmed avalikustatakse selles võtmeserveris."
 
 #: ../data/seahorse.schemas.in.h:26
 msgid ""
 "Reflect the contents of the clipboard (whether encrypted, signed, etc...) in "
 "the panel applet icon."
 msgstr ""
+"Lõikelaua sisu (kui see on krüptitud või allkirjastatus vms.) kohta "
+"vastukaja näitamine paneelirakendi ikoonil."
 
 #: ../data/seahorse.schemas.in.h:27
 msgid ""
@@ -442,6 +446,8 @@ msgid ""
 "The last key server a search was performed against or empty for all key "
 "servers."
 msgstr ""
+"Viimane võtmeserver, millest otsingut läbi viidi. Tühi väärtus tähendab "
+"kõiki võtmeservereid."
 
 #: ../data/seahorse.schemas.in.h:41
 msgid "The last search pattern searched for against a key server."
@@ -470,6 +476,8 @@ msgstr ""
 msgid ""
 "This specifies the default key to use for certain operations, mainly signing."
 msgstr ""
+"Sellega määratakse teatavateks tegevusteks (peamiselt allkirjastamiseks) "
+"vaikimisi võti."
 
 #: ../data/seahorse.schemas.in.h:46
 msgid ""
@@ -505,7 +513,7 @@ msgstr "Kas vaikimisi võti krüptitakse alati või mitte"
 
 #: ../data/seahorse.schemas.in.h:52
 msgid "Whether to use ASCII Armor"
-msgstr ""
+msgstr "Kas kasutada ASCII-vormingut või mitte"
 
 #: ../libcryptui/cryptui-key-chooser.c:156
 msgid "All Keys"
@@ -559,6 +567,8 @@ msgid ""
 "Please choose a name for the new keyring. You will be prompted for an unlock "
 "password."
 msgstr ""
+"Palun määra uuele võtmerõngale nimi. Lukust lahtivõtmise kohta küsitakse "
+"parooli."
 
 #: ../libseahorse/seahorse-add-keyring.glade.h:4
 #: ../libseahorse/seahorse-add-keyserver.glade.h:5
@@ -689,7 +699,7 @@ msgstr "Vigane allkiri"
 #: ../libseahorse/seahorse-notification.c:624
 #, c-format
 msgid "Signed by <i><key id='%s'/></i> on %s <b>Expired</b>."
-msgstr ""
+msgstr "Allkirjastanud <i><key id='%s'/></i> %s, <b>aegunud</b>."
 
 #: ../libseahorse/seahorse-notification.c:625
 msgid "Expired Signature"
@@ -716,7 +726,7 @@ msgstr "Hea allkiri"
 
 #: ../libseahorse/seahorse-notification.c:644
 msgid "Signing key not in keyring."
-msgstr "Signeerimisvõti pole võtmerõngas."
+msgstr "Allkirjastamise võti pole võtmerõngas."
 
 #: ../libseahorse/seahorse-notification.c:645
 msgid "Unknown Signature"
@@ -724,7 +734,7 @@ msgstr "Tundmatu allkiri"
 
 #: ../libseahorse/seahorse-notification.c:649
 msgid "Bad or forged signature. The signed data was modified."
-msgstr ""
+msgstr "Halb või võltsitud allkiri. Allkirjastatud andmeid on muudetud."
 
 #: ../libseahorse/seahorse-notification.c:650
 msgid "Bad Signature"
@@ -820,6 +830,9 @@ msgid ""
 "Invalid key data (missing UIDs). This may be due to a computer with a date "
 "set in the future or a missing self-signature."
 msgstr ""
+"Vigased võtme andmed (kasutaja ID-id on puudu). See võib olla põhjustatud "
+"sellest, et arvuti kellaaeg on tulevikus või puudub enese poolt loodud "
+"allkiri."
 
 #: ../libseahorse/seahorse-pgp-source.c:942 ../src/seahorse-key-manager.c:446
 #: ../src/seahorse-key-manager.c:494
@@ -871,7 +884,7 @@ msgstr "Programm 'seahorse-agent' lõpetas veaga."
 
 #: ../libseahorse/seahorse-prefs-keyrings.c:205
 msgid "<i>Automatically unlocked when user logs in.</i>"
-msgstr ""
+msgstr "<i>Kasutaja sisselogimisel automaatselt lukust lahti võetud.</i>"
 
 #: ../libseahorse/seahorse-prefs-keyrings.c:242
 msgid "Couldn't get default password keyring"
@@ -1006,7 +1019,7 @@ msgstr ""
 
 #: ../libseahorse/seahorse-prefs.glade.h:23
 msgid "Show _icon in status area when passphrases are in memory"
-msgstr ""
+msgstr "Mälus olevate paroolide korral näidatakse olekupiirkonnas _ikooni"
 
 #: ../libseahorse/seahorse-prefs.glade.h:24
 msgid "Start sea_horse-agent"
@@ -1042,7 +1055,7 @@ msgstr "Võtmete _otsimise asukohad:"
 
 #: ../libseahorse/seahorse-prefs.glade.h:32
 msgid "_Location for application passwords:"
-msgstr ""
+msgstr "Rakenduste _paroolide asukoht:"
 
 #: ../libseahorse/seahorse-prefs.glade.h:33
 msgid "_Never remember passphrases"
@@ -1230,7 +1243,7 @@ msgstr "Võtme andmed"
 
 #: ../libseahorse/seahorse-util.c:415
 msgid "Multiple Keys"
-msgstr ""
+msgstr "Mitu võtit"
 
 #: ../libseahorse/seahorse-util.c:728
 msgid "Couldn't run file-roller"
@@ -1674,7 +1687,7 @@ msgstr "Võtmeid pole võimalik laadida"
 #: ../plugins/nautilus/seahorse-tool.c:240
 #, c-format
 msgid "Choose Encrypted File Name for '%s'"
-msgstr ""
+msgstr "Määra '%s' jaoks krüptitud faili nimi"
 
 #: ../plugins/nautilus/seahorse-tool.c:290
 msgid "Choose Signer"
@@ -1683,7 +1696,7 @@ msgstr "Allkirjastaja valimine"
 #: ../plugins/nautilus/seahorse-tool.c:325
 #, c-format
 msgid "Choose Signature File Name for '%s'"
-msgstr ""
+msgstr "Määra '%s' jaoks allkirjafaili nimi"
 
 #: ../plugins/nautilus/seahorse-tool.c:365
 msgid "Import is complete"
@@ -1883,7 +1896,7 @@ msgstr "Ettevalmistamine..."
 #: ../plugins/nautilus/seahorse-tool-files.c:820
 #: ../plugins/nautilus/seahorse-tool-files.c:843
 msgid "Couldn't list files"
-msgstr ""
+msgstr "Failide nimekirja pole võimalik töödelda"
 
 #: ../src/main.c:61 ../src/seahorse-key-manager.c:861
 msgid "Encryption Key Manager"
@@ -1949,7 +1962,7 @@ msgstr "Kasutaja ID-d pole võimalik lisada"
 #: ../src/seahorse-add-uid.c:104
 #, c-format
 msgid "Add user ID to %s"
-msgstr ""
+msgstr "Võtmele %s kasutaja ID lisamine"
 
 #: ../src/seahorse-add-uid.glade.h:1
 msgid "Add User ID"
@@ -2066,7 +2079,7 @@ msgstr "Omaniku %2$s %1$d. alamvõtme aegumise määramine"
 #: ../src/seahorse-expires.c:133
 #, c-format
 msgid "Expiry for %s"
-msgstr ""
+msgstr "Omaniku %s võtme aegumise määramine"
 
 #: ../src/seahorse-expires.glade.h:1
 msgid "C_hange"
@@ -2211,11 +2224,11 @@ msgstr "Liik:"
 
 #: ../src/seahorse-gkeyring-item-properties.glade.h:13
 msgid "Use:"
-msgstr ""
+msgstr "Kasutus:"
 
 #: ../src/seahorse-gkeyring-item-properties.glade.h:14
 msgid "_Delete"
-msgstr "_Kustuta"
+msgstr "_Kustutamine"
 
 #: ../src/seahorse-gkeyring-item-properties.glade.h:15
 #: ../src/seahorse-revoke.glade.h:5
@@ -2224,11 +2237,11 @@ msgstr "_Kirjeldus:"
 
 #: ../src/seahorse-gkeyring-item-properties.glade.h:16
 msgid "_Read"
-msgstr ""
+msgstr "_Lugemine"
 
 #: ../src/seahorse-gkeyring-item-properties.glade.h:17
 msgid "_Write"
-msgstr ""
+msgstr "_Kirjutamine"
 
 #: ../src/seahorse-gkeyring-operation.c:204
 msgid "Access to the key ring was denied"
@@ -2308,7 +2321,7 @@ msgstr "Avaliku võtme eksportimine"
 #: ../src/seahorse-ssh-key-properties.c:240
 #, c-format
 msgid "Couldn't export key to \"%s\""
-msgstr ""
+msgstr "Võtit pole asukohale \"%s\" võimalik eksportida"
 
 #: ../src/seahorse-key-manager.c:660
 msgid "Exporting keys"
@@ -2481,17 +2494,19 @@ msgstr "_Allkirjasta..."
 
 #: ../src/seahorse-key-manager.c:1231
 msgid "Sign public key"
-msgstr ""
+msgstr "Avaliku võtme allkirjastamine"
 
 #: ../src/seahorse-key-manager.c:1235
 msgid "Set Up Computer for _Secure Shell..."
-msgstr "Määra _Secure shell'i jaoks arvuti..."
+msgstr "Määra _Secure Shell'i jaoks arvuti..."
 
 #: ../src/seahorse-key-manager.c:1236
 msgid ""
 "Send public Secure Shell key to another machine, and enable logins using "
 "that key."
 msgstr ""
+"Secure Shell'i võtme saatmine teise masinasse ja selle võtme abil "
+"sisselogimise lubamine."
 
 #: ../src/seahorse-key-manager.c:1240 ../src/seahorse-keyserver-results.c:406
 msgid "_Find Remote Keys..."
@@ -2507,7 +2522,7 @@ msgstr "Sü_nkroniseeri ja avalikusta võtmed..."
 
 #: ../src/seahorse-key-manager.c:1243
 msgid "Publish and/or synchronize your keys with those online."
-msgstr ""
+msgstr "Sinu võtmete avaldamine ja/või sünkroniseerimine võtmeserveriga."
 
 #: ../src/seahorse-key-manager.glade.h:1
 msgid "<big><b>First time options:</b></big>"
@@ -2728,7 +2743,7 @@ msgstr "Stringi '%s' sisaldavad kaugvõtmed"
 
 #: ../src/seahorse-keyserver-results.glade.h:1
 msgid "Remote Encryption Keys"
-msgstr ""
+msgstr "Krüptimise kaugvõtmed"
 
 #: ../src/seahorse-keyserver-search.glade.h:1
 msgid "<b>Key Servers:</b>"
@@ -2736,7 +2751,7 @@ msgstr "<b>Võtmeserverid:</b>"
 
 #: ../src/seahorse-keyserver-search.glade.h:2
 msgid "<b>Shared Keys Near Me:</b>"
-msgstr ""
+msgstr "<b>Minu ligiduses avaldatud võtmed:</b>"
 
 #: ../src/seahorse-keyserver-search.glade.h:3
 msgid "Find Remote Keys"
@@ -2802,6 +2817,9 @@ msgid ""
 "to use. You'll also get any changes others have made since you received "
 "their keys."
 msgstr ""
+"Käesolevaga avaldatakse sinu võtmerõngas olevad võtmed võtmeserveris "
+"kasutamiseks teistele kasutajatele, samuti hangitakse vahepeal teiste "
+"kasutajate võtmetes tehtud muudatused."
 
 #: ../src/seahorse-keyserver-sync.glade.h:4
 msgid ""
@@ -2809,6 +2827,9 @@ msgid ""
 "keys. No key server has been chosen for publishing, so your keys will not be "
 "made available to others."
 msgstr ""
+"Käesolevaga hangitakse võtmeserverist vahepeal teiste kasutajate võtmetes "
+"tehtud muudatused. Avalikustamiseks pole võtmeserverit valitud, seega pole "
+"võimalik sinu võtmeid teistele kättesaadavaks teha."
 
 #: ../src/seahorse-keyserver-sync.glade.h:5
 msgid "_Key Servers"
@@ -3066,7 +3087,7 @@ msgstr "Nimed ja allkirjad"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:32
 msgid "Override Owner _Trust:"
-msgstr ""
+msgstr "Omaniku _usalduse asendamine:"
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:33
 #: ../src/seahorse-pgp-public-key-properties.glade.h:29
@@ -3272,7 +3293,7 @@ msgstr "Omaniku %2$s %1$d. alamvõtme tühistamine"
 #: ../src/seahorse-revoke.c:101
 #, c-format
 msgid "Revoke %s"
-msgstr ""
+msgstr "Omaniku %s võtme tühistamine"
 
 #: ../src/seahorse-revoke.c:112
 msgid "No reason"
@@ -3312,6 +3333,8 @@ msgid ""
 "You are about to add %s as a revoker for %s. This operation cannot be "
 "undone! Are you sure you want to continue?"
 msgstr ""
+"Sa oled lisamas omaniku %1$s võtmele tühistajat %2$s. Seda tegevust pole "
+"võimalik hiljem tagasi pöörata. Oled sa valmis jätkama?"
 
 #: ../src/seahorse-revoke.c:188
 msgid "Couldn't add revoker"
@@ -3355,7 +3378,7 @@ msgstr "<b>Kuidas teised seda allkirja peaksid nägema:</b>"
 
 #: ../src/seahorse-sign.glade.h:3
 msgid "<b>Sign key as:</b>"
-msgstr ""
+msgstr "<b>Võtmed allkirjastatakse kui:</b>"
 
 #: ../src/seahorse-sign.glade.h:4
 msgid ""
@@ -3460,6 +3483,8 @@ msgid ""
 "If there is already a computer you want to use this key with, you \n"
 "can set up that computer to recognize your key now. "
 msgstr ""
+"Kui sa soovid mõnes arvutis seda võtit kasutada, siis on võimalik\n"
+"panna see arvuti sinu võtit ära tundma."
 
 #: ../src/seahorse-ssh-generate.glade.h:11
 msgid "New Secure Shell Key"
@@ -3467,7 +3492,7 @@ msgstr "Uus Secure Shell'i võti"
 
 #: ../src/seahorse-ssh-generate.glade.h:12
 msgid "_Create and Set Up"
-msgstr "L_oo võti ja määra sätted"
+msgstr "L_oo võti ja säti paika"
 
 #: ../src/seahorse-ssh-generate.glade.h:13
 msgid "_Just Create Key"
