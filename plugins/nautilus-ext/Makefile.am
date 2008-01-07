@@ -5,7 +5,7 @@ INCLUDES = -I$(top_builddir) 	\
 	-DGNOMELOCALEDIR=\""$(datadir)/locale"\"
 
 # There doesn't seem to be a way to get this dynamically
-nautilus_extensiondir=$(libdir)/nautilus/extensions-1.0
+nautilus_extensiondir=$(NAUTILUS_EXTENSION_DIR)
 
 nautilus_extension_LTLIBRARIES=libnautilus-seahorse.la
 

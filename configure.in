@@ -41,6 +41,8 @@ AC_CHECK_FUNCS(strsep)
 AC_CHECK_FUNCS(mlock)
 SEAHORSE_CHECK_MLOCK()
 
+AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
+
 PKG_CHECK_MODULES(SEAHORSE, libgnome-2.0 >= 2.14 libgnomeui-2.0 
                   libglade-2.0 gconf-2.0 gtk+-2.0 >= 2.10.0 gnome-vfs-2.0)
 
@@ -297,7 +299,7 @@ else
     echo "enabling nautilus plugin..."
     echo "checking for supported versions of nautilus..."
 
-    PKG_CHECK_MODULES(NAUTILUS, [libnautilus-extension >= 2.9.0 glib-2.0 >= 2.10.0],
+    PKG_CHECK_MODULES(NAUTILUS, [libnautilus-extension >= 2.12.0 glib-2.0 >= 2.10.0],
                       [enable_nautilus=yes],[enable_nautilus=no])
 
     # The new Nautilus extension
@@ -305,6 +307,12 @@ else
         with_nautilus_ext=yes
         AC_SUBST(NAUTILUS_CFLAGS)
         AC_SUBST(NAUTILUS_LIBS)
+    fi
+
+    # Fetch the extension directory
+    if test "$enable_nautilus" = "yes"; then
+	NAUTILUS_EXTENSION_DIR=`$PKG_CONFIG --variable=extensiondir libnautilus-extension`
+	AC_SUBST(NAUTILUS_EXTENSION_DIR)
     fi
 fi
 
