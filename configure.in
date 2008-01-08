@@ -299,7 +299,7 @@ else
     echo "enabling nautilus plugin..."
     echo "checking for supported versions of nautilus..."
 
-    PKG_CHECK_MODULES(NAUTILUS, [libnautilus-extension >= 2.12.0 glib-2.0 >= 2.10.0],
+    PKG_CHECK_MODULES(NAUTILUS, [libnautilus-extension >= 2.12.0 glib-2.0 >= 2.10.0 gnome-vfs-2.0],
                       [enable_nautilus=yes],[enable_nautilus=no])
 
     # The new Nautilus extension

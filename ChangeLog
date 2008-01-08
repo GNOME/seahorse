@@ -1,3 +1,14 @@
+2008-01-08  Wouter Bolsterlee  <wbolster@svn.gnome.org>
+
+    * configure.in:
+
+    Add gnome-vfs libs for the nautilus extension since
+    they're not automatically pulled in with Nautilus
+    anymore (Nautilus uses GIO now). The real fix would of
+    course be to convert the code to GIO, but this
+    workaround at least fixes the build for now. See also
+    bug #501542.
+
 2008-01-07  Adam Schreiber  <sadam@clemson.edu>
 
 	* plugins/nautilus-ext/Makefile.am (nautilus_extensiondir): 
@@ -6,7 +17,7 @@
 	Fixes bug #505990
 
 2008-01-01  Adam Schreiber  <sadam@clemson.edu>
-    
+
     * src/seahorse-key-manager-store.c:
     * src/seahorse-key-manager-store.h:
     * src/seahorse-key-manager.c: Support all text targets that gtk supports.
@@ -29,7 +40,7 @@
     change, and use the word 'keyring' for consistency.
 
 2007-12-14  Adam Schreiber  <sadam@clemson.edu>
-    
+
     * plugins/nautilus/seahorse-pgp-preferences.desktop.in:
     * src/seahorse.desktop.in.in: Use name field correctly.
     Patch from JP Rosevear.  Fixes bug #503648
@@ -61,7 +72,7 @@
     * libseahorse/seahorse-widget.h:
     * src/seahorse-gkeyring-source.c: Add gnome-keyring-manager functionality
     to seahorse.
-    
+
 2007-12-08  Stef Walter  <stef@memberwebs.com>
 
     * configure.in:
@@ -70,12 +81,12 @@
     related operations which are no longer needed.
 	
 2007-12-06  Adam Schreiber  <sadam@clemson.edu>
-    
+
     * plugins/nautilus/seahorse-tool.c: Switched import to use DBus interface.
     Fixes bug #416458
 
 2007-12-02  Adam Schreiber  <sadam@clemson.edu>
-    
+
     * libseahorse/seahorse-prefs.glade:
     * libseahorse/seahorse-prefs-cache.c: Adds UI to show/hide cache 
     icon.  Patch from Stef Walter.  Fixes bug #432891
@@ -104,9 +115,9 @@
     * libseahorse/seahorse-prefs.glade:
     * libseahorse/seahorse-prefs-cache.c: Remove SSH agent, since a proper 
     one now exists in gnome-keyring. Fixes bug #413278
-    
+
 2007-11-15  Adam Schreiber  <sadam@clemson.edu>
-    
+
     * src/seahorse-gkeyring-operation.c: Some how this was missed too.
     * plugins/epiphany/Makefile.am: Forgot to check it in
     * configure.in: Don't hard code epiphany extensions dir.  Patch from
@@ -146,7 +157,7 @@
     to GtkComboBox.  Fixes bug #475757
 
 2007-10-30  Adam Schreiber  <sadam@clemson.edu>
-    
+
     * libseahorse/seahorse-keyserver-control.c:
     * libseahorse/seahorse-keyserver-control.h: Clean up 
     keyserver-control.  Patch from Christian Persch.  
@@ -250,12 +261,12 @@
     * agent/seahorse-agent-actions.c:
     * agent/seahorse-agent-cache.c: Fix badly placed semi-colons which 
     shortcircuit if()s. Patch by  Dave Jones. Fixes bug #467485
-    
+
 2007-08-21  Stef Walter  <stef@memberwebs.com>
 
     * src/seahorse-gkeyring-item.c: Properly escape any markup characters in 
     a gnome-keyring item name. Fixes bug #453188
-    
+
 2007-08-21  Stef Walter  <stef@memberwebs.com>
 
     * src/seahorse-key-properties.c: Remove assertions in UI code that we 
@@ -265,12 +276,12 @@
 
     * libseahorse/seahorse-progress.glade: Progress operations now show up in 
     the task list properly. Fixes bug #445767
-    
+
 2007-08-20  Stef Walter  <stef@memberwebs.com>
 
     * data/seahorse.schemas.in: Hide agent try icon by default.
     Fixes bug #432891
-    
+
 2007-08-12  Stef Walter  <stef@memberwebs.com>
 
     * configure.in: Bump version
@@ -288,13 +299,13 @@
     * MAINTAINERS: Changed format to match discussion on d-d-l
 
 2007-07-16  Adam Schreiber  <sadam@clemson.edu>
-    
+
     * help/C/seahorse.xml: Add documentation for changing the password
     on the default gnome-keyring key ring.  Patch by Milo Casagrande.
     Fixes bug #453043
 
 2007-07-10  Adam Schreiber  <sadam@clemson.edu>
-    
+
     * plugins/applet/seahorse-applet.c: Add word wrapping to window that
     displays text.
 
@@ -309,9 +320,9 @@
     * NEWS:
     * README:
     * configure.in: Release 2.19.5
-    
+
 2007-07-07  Adam Schreiber  <sadam@clemson.edu>
-    
+
     * agent/seahorse-agent-cache.c:
     * agent/seahorse-agent-ssh.c: When only using the ssh portion of 
     seahorse-agent, still init the cache.  Patch from Ted Percival.
@@ -329,9 +340,9 @@
     * Use my real name in copyrights, and proper email address.
     This change touched most files in the project, in comments 
     and strings. 
-    
+
 2007-06-22  Adam Schreiber  <sadam@clemson.edu>
-    
+
     * libseahorse/seahorse-ssh-askpass.c: Internationalize properly.
     Patch from Gabor Kelemen.  Fixes bug #450087
 
@@ -348,7 +359,7 @@
     * configure.in: Release 2.19.4
 
 2007-06-18  Adam Schreiber  <sadam@clemson.edu>
-    
+
     * libseahorse/seahorse-prefs.c:
     * libseahorse/seahorse-prefs.glade: Add ability to change gnome-keyring
     master password.  Fixes bug #356575 
@@ -358,39 +369,39 @@
     when using the DBus interface.  Partially fixes bug #416458
 
 2007-06-14  Adam Schreiber  <sadam@clemson.edu>
-    
+
     * src/seahorse-ssh-key-properties.c: Fix null access while creating window.
     Fixes bug #447450
 
 2007-06-09  Adam Schreiber  <sadam@clemson.edu>
-    
+
     * plugins/nautilus/seahorse-tool-progress.c: Unescape gnome-vfs strings
     before display.  Fixes bug #445769
 
 2007-06-07  Adam Schreiber  <sadam@clemson.edu>
-    
+
     * configure.in: Remove errant pidgin plugin checks.  Fixes bug #445323 
     * agent/seahorse-agent-main.c: Internationalize the notification area.
     Fixes bug #443920
 
 2007-06-06  Adam Schreiber  <sadam@clemson.edu>
-    
+
     * configure.in:
     * libseahorse/seahorse-gpg-options.c: Re-enable building with gpg-2.0.x.
     Fixes bug #444259
 
 2007-06-04  Adam Schreiber  <sadam@clemson.edu>
-    
+
     * plugins/nautilus/seahorse-pgp-preferences.c: There is not an applet tab. 
 
 2007-05-23  Adam Schreiber  <sadam@clemson.edu>
-    
+
     * src/seahorse-generate-select.c:
     * src/seahorse-ssh-generate.c: Don't destroy swidgets until we're 
     finished with them.  Patch by Christian Persch.  Fixes bug #440778
 
 2007-05-19  Adam Schreiber  <sadam@clemson.edu>
-    
+
     * agent/seahorse-agent.1: Patch by Sebastian Dröge.  Fixes bug #438559
     * plugins/nautilus/seahorse-tool-files.c:
     * src/seahorse-multi-encrypt.glade: Add file-roller style extensions to
@@ -435,7 +446,7 @@
     be synchoronized with gpg.  Fixes bug #439479
 
 2007-05-15  Adam Schreiber  <sadam@clemson.edu>
-    
+
     * configure.in: Bump epiphany api version.  Fixes bug #438563
 
 2007-05-11  Nate Nielsen  <nielsen@memberwebs.com>
@@ -467,7 +478,7 @@
    strings. Fixes bug #418979
 
 2007-05-08  Adam Schreiber  <sadam@clemson.edu>
-    
+
     * plugins/nautilus/Makefile.am: Remove rule to install desktop files in 
     /usr/share/control-center-2.0/capplets/.  Fixes bug #436840
 
@@ -529,7 +540,7 @@
 
     * libseahorse/seahorse-util.c: Provide a better 'decrypt
     failed' error message. Fixes bug #355062
-    
+
 2007-04-16  Nate Nielsen  <nielsen@memberwebs.com>
 
     * data/seahorse.schemas.in: 
@@ -537,13 +548,13 @@
     * libseahorse/seahorse-gconf.h:
     * libseahorse/seahorse-prefs.glade: Add option to disable 
     auto-retrieval from key servers. See bug #366798
-    
+
 2007-04-16  Nate Nielsen  <nielsen@memberwebs.com>
 
     * Merged changes from gnome-2-18 branch. (r1654 - r1729)
 
 2007-04-15  Adam Schreiber  <sadam@clemson.edu>
-    
+
     * plugins/epiphany/seahorse-extension.c: Fix problem with context
     menu items always appearing.
 
@@ -556,7 +567,7 @@
 
     * agent/Makefile.am: Set proper binary as setuid. 
     Fixes bug #427586
-    
+
 2007-04-07  Nate Nielsen  <nielsen@memberwebs.com>
 
     * configure.in: Bump version number
@@ -573,43 +584,43 @@
     * libseahorse/seahorse-util.c:
     * plugins/nautilus/seahorse.xml: Enable importing of plain SSH
     keys, generated elsewhere. Fixes bug #424473
-    
+
 2007-04-06  Nate Nielsen  <nielsen@memberwebs.com>
 
     * libseahorse/seahorse-widget.c: Make 'Keyserver Results' window help
     work properly. Patch from Adam Schreiber. Fixes bug #421615
-    
+
 2007-04-06  Nate Nielsen  <nielsen@memberwebs.com>
 
     * libseahorse/seahorse-ldap-source.c: Make progress bar pulse 
     properly during an LDAP search. Fixes bug #355850
-    
+
 2007-04-06  Nate Nielsen  <nielsen@memberwebs.com>
 
     * libseahorse/seahorse-ldap-source.c: 
     * src/seahorse-keyserver-results.c: Handle spaces properly in LDAP 
     search filters. 
-    
+
 2007-04-06  Nate Nielsen  <nielsen@memberwebs.com>
 
     * libseahorse/seahorse-ssh-key-data.c: Don't add extra lines to 
     .ssh/authorized_keys when moving keys around. Fixes bug #352929
-    
+
 2007-04-03  Nate Nielsen  <nielsen@memberwebs.com>
 
     * src/seahorse-key-manager.c: Fix crasher when deleting more than one 
     private keys. Fixes bug #417901
-    
+
 2007-04-03  Nate Nielsen  <nielsen@memberwebs.com>
 
     * src/seahorse-pgp-private-key-properties.glade: Show expired date properly
     in warning message for private keys.
-    
+
 2007-03-27  Adam Schreiber <sadam@clemson.edu>
-    
+
     * src/seahorse-key-manager.c: Fix il8n of the about dialog.
     Patch from Bjoern Voigt.  Fixes bug #423082
-    
+
 2007-03-22  Nate Nielsen  <nielsen@memberwebs.com>
 
     * configure.in: 
@@ -623,7 +634,7 @@
     * libseahorse/seahorse-util.h:
     * src/seahorse-ssh-upload.c: Recognize port properly in SSH key upload 
     Fixes bug #418205
-    
+
 2007-03-19  Nate Nielsen  <nielsen@memberwebs.com>
 
     * agent/seahorse-agent-status.c:
@@ -632,7 +643,7 @@
     * libseahorse/seahorse-ssh-key-data.c: (possible crasher)
     * libseahorse/seahorse-util.c: (minor capitalization bug)
     * src/seahorse-ssh-upload.c: Satisfy compiler warnings.
-    
+
 2007-03-19  Nate Nielsen  <nielsen@memberwebs.com>
 
     * agent/seahorse-agent-prompt.c: 
@@ -643,7 +654,7 @@
 
     * libseahorse/seahorse-gtkstock.c: Setup a default icon for processes.
     Fixes bug #419264
-    
+
 2007-03-17  Adam Schreiber  <sadam@clemson.edu>
 
     * libseahorse/seahorse-widget.c: Link swidget error dialogs to their 
@@ -655,7 +666,7 @@
 
     * acinclude.m4: Fixed mlock checks. Fixes bug #417757 and 
     bug #417758
-    
+
 2007-03-17  Nate Nielsen  <nielsen@memberwebs.com>
 
     * agent/seahorse-agent-io.c: Use /tmp directory for agent sockets
@@ -663,5 +674,5 @@
 2007-03-17  Nate Nielsen  <nielsen@memberwebs.com>
 
     * configure.in: Bump version number
-    
+
 === seahorse-1.0 ===
