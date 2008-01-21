@@ -587,9 +587,14 @@ seahorse_util_uri_replace_ext (const gchar *uri, const gchar *ext)
             *dot = 0;
     }
  
-    strcat (ret, ".");
+    /* Only begin extension with . if provided extension doesn't start with
+       one already. */
+    if(ext[0] != '.')
+        strcat (ret, ".");
+
+    /* Finally append the caller's provided extension. */
     strcat (ret, ext);
-    return ret;    
+    return ret;
 }
 
 /* Context for callback below */
