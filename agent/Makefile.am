@@ -1,7 +1,12 @@
 
+autostartdir = $(sysconfdir)/xdg/autostart
 gladedir = $(datadir)/seahorse/glade/
 localedir = $(datadir)/locale
 pixmapsdir = $(datadir)/pixmaps/
+
+autostart_in_files = seahorse-agent.desktop.in
+autostart_DATA = $(autostart_in_files:.desktop.in=.desktop)
+@INTLTOOL_DESKTOP_RULE@
 
 INCLUDES = -I$(top_builddir) \
 	-I$(top_srcdir) \
@@ -32,10 +37,13 @@ glade_DATA = \
 man_MANS = seahorse-agent.1
 
 EXTRA_DIST = \
-    $(man_MANS) \
+	$(man_MANS)			\
+	seahorse-agent.desktop.in.in	\
 	$(glade_DATA) 
 
-CLEANFILES = *.gladep* *.bak \
+CLEANFILES = \
+	*.gladep* *.bak 	\
+	$(autostart_DATA)	\
 	$(desktop_DATA)
 
 if HAVE_USER_MLOCK
