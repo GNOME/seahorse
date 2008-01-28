@@ -214,83 +214,6 @@ save_ttl (GtkSpinButton *spinner, SeahorseWidget *swidget)
     seahorse_gconf_set_integer (SETTING_TTL, ttl);
 }
 
-/* Start up the gnome-session-properties */
-static void
-show_session_properties (GtkWidget *widget, gpointer data)
-{
-    GError *err = NULL;
-
-    g_spawn_command_line_async ("gnome-session-properties", &err);
-
-    if (err)
-        seahorse_util_handle_error (err, _("Couldn't open the Session Properties"));
-}
-
-/* Startup our agent */ 	 
-static void 	 
-start_agent (GtkWidget *widget, gpointer data) 	 
-{ 	 
-    GError *err = NULL; 	 
-    gint status; 	 
- 	 
-    g_spawn_command_line_sync ("seahorse-agent", NULL, NULL, &status, &err); 	 
- 	 
-    if (err) 	 
-        seahorse_util_handle_error (err, _("Couldn't start the 'seahorse-agent' program")); 	 
-    else if (!(WIFEXITED (status) && WEXITSTATUS (status) == 0)) 	 
-        seahorse_util_handle_error (NULL, _("The 'seahorse-agent' program exited unsuccessfully.")); 	 
-    else { 	 
-        /* Show the next message about starting up automatically */ 	 
-        gtk_widget_hide (gtk_widget_get_parent (gtk_widget_get_parent (widget))); 	 
-        gtk_widget_show (GTK_WIDGET (data)); 	 
-    }
-}
-
-/* Generate the Hand Cursor */
-void
-set_hand_cursor_on_realize(GtkWidget *widget, gpointer user_data)
-{
-    GdkCursor *cursor;
-
-    cursor = gdk_cursor_new (GDK_HAND2);
-    gdk_window_set_cursor (GTK_BUTTON (widget)->event_window, cursor);
-    gdk_cursor_unref (cursor);
-}
-
-/* Find button label, underline and paint it blue. 
- * TODO: Get the system theme link color and use that instead of default blue.
- **/
-void
-paint_button_label_as_link (GtkButton *button, GtkLabel *label)
-{
-    const gchar * button_text;
-    gchar *markup;
-    
-    button_text = gtk_label_get_label (label);
-    
-    markup = g_strdup_printf ("<u>%s</u>", button_text);
-    gtk_label_set_markup (GTK_LABEL (label), markup);
-    g_free (markup);
-
-    GdkColor *link_color;
-    GdkColor blue = { 0, 0x0000, 0x0000, 0xffff }; /* Default color */
-
-    /* Could optionaly set link_color to the current theme color... */
-    link_color = &blue;
-
-    gtk_widget_modify_fg (GTK_WIDGET (label),
-                  GTK_STATE_NORMAL, link_color);
-    gtk_widget_modify_fg (GTK_WIDGET (label),
-                  GTK_STATE_ACTIVE, link_color);
-    gtk_widget_modify_fg (GTK_WIDGET (label),
-                  GTK_STATE_PRELIGHT, link_color);
-    gtk_widget_modify_fg (GTK_WIDGET (label),
-                  GTK_STATE_SELECTED, link_color);
-
-    if (link_color != &blue)
-        gdk_color_free (link_color);
-}
-
 /* Initialize the cache tab */
 void
 seahorse_prefs_cache (SeahorseWidget *swidget)
@@ -336,30 +259,16 @@ seahorse_prefs_cache (SeahorseWidget *swidget)
     g_return_if_fail (w != NULL);
     seahorse_check_button_gconf_attach (GTK_CHECK_BUTTON (w), SETTING_DISPLAY);
 
-    /* Setup daemon button visuals */
-    w = seahorse_widget_get_widget (swidget, "session-link");
-    g_return_if_fail (w != NULL);
-    
-    w2 = seahorse_widget_get_widget (swidget, "label-session-properties");
-    g_return_if_fail (w2 != NULL);
-    
-    paint_button_label_as_link (GTK_BUTTON (w), GTK_LABEL(w2));
-    g_signal_connect (GTK_WIDGET (w), "realize", G_CALLBACK (set_hand_cursor_on_realize), NULL);
-
     /* End -- Setup daemon button visuals */
-    
-    glade_xml_signal_connect_data (swidget->xml, "on_session_link",
-                                   G_CALLBACK (show_session_properties), NULL);
                                    
     /* Disable GPG agent prefs if another agent is running or error */
     switch (seahorse_passphrase_detect_agent (SKEY_PGP)) {
     case SEAHORSE_AGENT_NONE:
-        display_start = TRUE;
         break;
         
     case SEAHORSE_AGENT_UNKNOWN:
     case SEAHORSE_AGENT_OTHER:
-        g_warning ("Another GPG agent may be running. Disabling cache preferences.");
+        g_warning ("Invalid or no GPG agent is running. Disabling cache preferences.");
         w = seahorse_widget_get_widget (swidget, "pgp-area");
         if (w != NULL)
             gtk_widget_hide (w);
@@ -371,15 +280,4 @@ seahorse_prefs_cache (SeahorseWidget *swidget)
     default:
         break;
     };
-    
-    /* Show the start link */
-    if (display_start) {
-        w = seahorse_widget_get_widget (swidget, "agent-start");
-        g_return_if_fail (w != NULL);
-        gtk_widget_show (w);
-        w = seahorse_widget_get_widget (swidget, "agent-started");
-        g_return_if_fail (w != NULL);
-        glade_xml_signal_connect_data (swidget->xml, "on_start_link",
-                                       G_CALLBACK (start_agent), w);
-    }
 }
