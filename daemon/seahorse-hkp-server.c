@@ -21,8 +21,6 @@
  
 #include <gnome.h>
 #include <libsoup/soup.h>
-#include <libsoup/soup-server.h>
-#include <libsoup/soup-address.h>
 
 #include "config.h"
 #include "seahorse-gpgmex.h"
@@ -122,36 +120,6 @@ escape_html (const gchar *str)
     }
     
     return g_string_free (html, FALSE);
-}
-
-static GHashTable*
-parse_query_string (gchar *query)
-{
-    GHashTable *args;
-    gchar **vec, **l;
-    gchar *key, *val;
-    
-    args = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
-    if (query && query[0])
-    {
-        vec = g_strsplit (query, "&", 0);
-        for (l = vec; *l; l++) {
-
-            key = g_strdup (*l);
-            val = strchr (key, '=');
-
-            if(val) {
-                *val = 0;
-                val++;
-            }
-
-            g_hash_table_replace (args, key, val);
-        }
-        
-        g_strfreev (vec);
-    }
-    
-    return args;
 }
 
 static gchar*
@@ -292,7 +260,7 @@ static guint
 lookup_handle_error (SoupMessage *msg, const gchar *details, gpgme_error_t gerr)
 {
     gchar *t = g_strdup_printf (HKP_ERROR_RESPONSE, details);
-    soup_message_set_response (msg, "text/html", SOUP_BUFFER_SYSTEM_OWNED, t, strlen(t));
+    soup_message_set_response (msg, "text/html", SOUP_MEMORY_TAKE, t, strlen(t));
     
     if (!GPG_IS_OK (gerr))
         g_warning ("HKP Server GPG error: %s", gpgme_strerror (gerr));
@@ -359,7 +327,7 @@ lookup_handle_index (SoupMessage *msg, GHashTable *args, gboolean verbose)
     }
     
     resp = g_string_free (response, FALSE);
-    soup_message_set_response (msg, "text/html", SOUP_BUFFER_SYSTEM_OWNED, 
+    soup_message_set_response (msg, "text/html", SOUP_MEMORY_TAKE, 
                                resp, strlen (resp));
     return SOUP_STATUS_OK;
 }
@@ -403,38 +371,33 @@ lookup_handle_get (SoupMessage *msg, GHashTable *args)
     g_free (key);
     
     t = g_string_free (response, FALSE);
-    soup_message_set_response (msg, "text/html", SOUP_BUFFER_SYSTEM_OWNED, 
+    soup_message_set_response (msg, "text/html", SOUP_MEMORY_TAKE, 
                                t, strlen(t));
     return SOUP_STATUS_OK;
 }
 
 static void
-lookup_callback (SoupServerContext *context, SoupMessage *msg, gpointer data)
+lookup_callback (SoupServer *server, SoupMessage *msg,
+                 const gchar *path, GHashTable *args,
+                 SoupClientContext *context, gpointer data)
 {
-    const SoupUri *uri;
-    GHashTable *args;
     const gchar *t;
     guint code = SOUP_STATUS_INTERNAL_SERVER_ERROR;
 
-    soup_message_add_header (msg->response_headers, "Connection", "close");
+    soup_message_headers_append (msg->response_headers, "Connection", "close");
     
-    if(context->method_id != SOUP_METHOD_ID_GET) {
+    if(msg->method != SOUP_METHOD_GET) {
         soup_message_set_status (msg, SOUP_STATUS_METHOD_NOT_ALLOWED);
         return;
     }
  
     /* Parse the arguments */
-    uri = soup_message_get_uri (msg);
-    g_return_if_fail (uri != NULL);
-    
-    if (!uri->query || !uri->query[0]) {
+    if (!args || !g_hash_table_size (args)) {
         code = lookup_handle_error (msg, "pks request had no query string", GPG_OK);
         soup_message_set_status (msg, SOUP_STATUS_METHOD_NOT_ALLOWED);
         return;
     }
 
-    args = parse_query_string (uri->query ? uri->query : "");
-    
     /* Figure out the operation */
     t = (const gchar*)g_hash_table_lookup (args, "op");    
     if(!t || !t[0])
@@ -452,26 +415,29 @@ lookup_callback (SoupServerContext *context, SoupMessage *msg, gpointer data)
     else
         code = lookup_handle_error(msg, "pks request had an invalid <b>op</b> property", GPG_OK);
     
-    g_hash_table_destroy (args);
     soup_message_set_status (msg, code);
 }
 
 static void
-add_callback (SoupServerContext *context, SoupMessage *msg, gpointer data)
+add_callback (SoupServer *server, SoupMessage *msg,
+              const gchar *path, GHashTable *args,
+              SoupClientContext *context, gpointer data)
 {
-    soup_message_set_response (msg, "text/html", SOUP_BUFFER_STATIC, 
+    soup_message_set_response (msg, "text/html", SOUP_MEMORY_STATIC, 
                                HKP_ADD_RESPONSE, strlen(HKP_ADD_RESPONSE));
     soup_message_set_status (msg, SOUP_STATUS_METHOD_NOT_ALLOWED);
-    soup_message_add_header (msg->response_headers, "Connection", "close");
+    soup_message_headers_append (msg->response_headers, "Connection", "close");
 }
 
 static void
-default_callback (SoupServerContext *context, SoupMessage *msg, gpointer data)
+default_callback (SoupServer *server, SoupMessage *msg,
+                  const char *path, GHashTable *args,
+                  SoupClientContext *context, gpointer data)
 {
-    soup_message_set_response (msg, "text/html", SOUP_BUFFER_STATIC, 
+    soup_message_set_response (msg, "text/html", SOUP_MEMORY_STATIC, 
                                HKP_NOTFOUND_RESPONSE, strlen(HKP_NOTFOUND_RESPONSE));
     soup_message_set_status (msg, SOUP_STATUS_NOT_FOUND);
-    soup_message_add_header (msg->response_headers, "Connection", "close");
+    soup_message_headers_append (msg->response_headers, "Connection", "close");
 }    
 
 GQuark
@@ -515,13 +481,11 @@ seahorse_hkp_server_start(GError **err)
         return FALSE;
     }
 
-    soup_server_add_handler (soup_server, "/pks/lookup", NULL, lookup_callback, NULL, NULL);
-    soup_server_add_handler (soup_server, "/pks/add", NULL, add_callback, NULL, NULL);
-	soup_server_add_handler (soup_server, NULL, NULL, default_callback, NULL, NULL);    
+    soup_server_add_handler (soup_server, "/pks/lookup", lookup_callback, NULL, NULL);
+    soup_server_add_handler (soup_server, "/pks/add", add_callback, NULL, NULL);
+    soup_server_add_handler (soup_server, NULL, default_callback, NULL, NULL);    
     
-    /* Running refs, so unref */
     soup_server_run_async (soup_server);
-    g_object_unref (soup_server);
     
     return TRUE;
 }

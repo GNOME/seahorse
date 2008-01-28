@@ -708,7 +708,8 @@ seahorse_ldap_operation_start (SeahorseLDAPSource *lsrc, OpLDAPCallback cb,
 
     g_free (server);
     
-    soup_address_resolve_async (lop->addr, (SoupAddressCallback)resolved_callback, lop);
+    soup_address_resolve_async (lop->addr, NULL, NULL,
+                                (SoupAddressCallback)resolved_callback, lop);
     
 #else /* no WITH_SOUP */
     
