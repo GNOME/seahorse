@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-01-28 09:32+0100\n"
-"PO-Revision-Date: 2008-01-28 09:33+0100\n"
+"POT-Creation-Date: 2008-01-28 23:43+0100\n"
+"PO-Revision-Date: 2008-01-28 23:44+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -519,36 +519,36 @@ msgstr "Typ av nyckelserver:"
 msgid "The port to access the server on."
 msgstr "Porten att komma åt servern på."
 
-#: ../libseahorse/seahorse-hkp-source.c:358
+#: ../libseahorse/seahorse-hkp-source.c:323
 #, c-format
 msgid "Search was not specific enough. Server '%s' found too many keys."
 msgstr "Sökning var inte tillräckligt specifik. Servern \"%s\" hittade för många nycklar."
 
-#: ../libseahorse/seahorse-hkp-source.c:360
+#: ../libseahorse/seahorse-hkp-source.c:325
 #, c-format
 msgid "Couldn't communicate with server '%s': %s"
 msgstr "Kunde inte kommunicera med servern \"%s\": %s"
 
-#: ../libseahorse/seahorse-hkp-source.c:563
+#: ../libseahorse/seahorse-hkp-source.c:521
 msgid "Searching for keys..."
 msgstr "Söker efter nycklar..."
 
-#: ../libseahorse/seahorse-hkp-source.c:639
+#: ../libseahorse/seahorse-hkp-source.c:592
 msgid "Uploading keys..."
 msgstr "Skickar upp nycklar..."
 
-#: ../libseahorse/seahorse-hkp-source.c:715
+#: ../libseahorse/seahorse-hkp-source.c:665
 msgid "Retrieving keys..."
 msgstr "Hämtar nycklar..."
 
-#: ../libseahorse/seahorse-hkp-source.c:764
+#: ../libseahorse/seahorse-hkp-source.c:710
 #, c-format
 msgid "Searching for keys on: %s"
 msgstr "Söker efter nycklar på: %s"
 
 #. The ldap_cb and chain_cb were set in seahorse_ldap_operation_start
-#: ../libseahorse/seahorse-hkp-source.c:857
-#: ../libseahorse/seahorse-hkp-source.c:929
+#: ../libseahorse/seahorse-hkp-source.c:802
+#: ../libseahorse/seahorse-hkp-source.c:874
 #: ../libseahorse/seahorse-ldap-source.c:656
 #, c-format
 msgid "Connecting to: %s"
@@ -569,21 +569,21 @@ msgstr "Kunde inte slå upp adress: %s"
 msgid "Resolving server address: %s"
 msgstr "Slår upp serveradress: %s"
 
-#: ../libseahorse/seahorse-ldap-source.c:883
+#: ../libseahorse/seahorse-ldap-source.c:884
 #, c-format
 msgid "Searching for keys containing '%s'..."
 msgstr "Söker efter nycklar som innehåller \"%s\"..."
 
-#: ../libseahorse/seahorse-ldap-source.c:910
+#: ../libseahorse/seahorse-ldap-source.c:911
 #, c-format
 msgid "Searching for key id '%s'..."
 msgstr "Söker efter nyckel-id \"%s\"..."
 
-#: ../libseahorse/seahorse-ldap-source.c:1011
+#: ../libseahorse/seahorse-ldap-source.c:1012
 msgid "Retrieving remote keys..."
 msgstr "Hämtar fjärrnycklar..."
 
-#: ../libseahorse/seahorse-ldap-source.c:1144
+#: ../libseahorse/seahorse-ldap-source.c:1145
 msgid "Sending keys to key server..."
 msgstr "Skickar nycklar till nyckelserver..."
 
@@ -789,18 +789,6 @@ msgstr "Ingen: Publicera inga nycklar"
 msgid "None. Prompt for a key."
 msgstr "Ingen. Fråga efter en nyckel."
 
-#: ../libseahorse/seahorse-prefs-cache.c:226
-msgid "Couldn't open the Session Properties"
-msgstr "Kunde inte öppna sessionsegenskaperna"
-
-#: ../libseahorse/seahorse-prefs-cache.c:239
-msgid "Couldn't start the 'seahorse-agent' program"
-msgstr "Kunde inte starta programmet \"seahorse-agent\""
-
-#: ../libseahorse/seahorse-prefs-cache.c:241
-msgid "The 'seahorse-agent' program exited unsuccessfully."
-msgstr "Programmet \"seahorse-agent\" avslutades med fel."
-
 #: ../libseahorse/seahorse-prefs-keyrings.c:205
 msgid "<i>Automatically unlocked when user logs in.</i>"
 msgstr "<i>Automatiskt upplåst när användare loggar in.</i>"
@@ -843,74 +831,62 @@ msgid "<b>Default Keyring</b>"
 msgstr "<b>Standardnyckelring</b>"
 
 #: ../libseahorse/seahorse-prefs.glade.h:3
-msgid "<b>Note:</b> The 'seahorse-agent' program has been started. This program is necessary in order to cache passphrases. "
-msgstr "<b>Observera:</b> Programmet \"seahorse-agent\" startades. Detta program är nödvändigt för att kunna mellanlagra lösenfraser. "
-
-#: ../libseahorse/seahorse-prefs.glade.h:4
 msgid "<b>Password Keyrings</b>"
 msgstr "<b>Lösenordsnyckelringar</b>"
 
-#: ../libseahorse/seahorse-prefs.glade.h:5
+#: ../libseahorse/seahorse-prefs.glade.h:4
 msgid "<b>Remember PGP Passphrases</b>"
 msgstr "<b>Kom ihåg PGP-lösenfraser</b>"
 
+#: ../libseahorse/seahorse-prefs.glade.h:5
+msgid "<i>A supported PGP passphrase caching agent is not running.</i>"
+msgstr "<i>En stödd mellanlagringsagent för PGP-lösenfraser är inte igång.</i>"
+
 #: ../libseahorse/seahorse-prefs.glade.h:6
-msgid "<b>Warning:</b> The 'seahorse-agent' program is not running. This program is necessary in order to cache passphrases. "
-msgstr "<b>Varning:</b> Programmet \"seahorse-agent\" körs inte. Detta program är nödvändigt för att kunna mellanlagra lösenfraser. "
-
-#: ../libseahorse/seahorse-prefs.glade.h:7
-msgid "<i>A non-supported PGP passphrase caching agent is running.</i>"
-msgstr "<i>En agent för mellanlagring av PGP-lösenfraser kör. Den stöds inte.</i>"
-
-#: ../libseahorse/seahorse-prefs.glade.h:8
 msgid "<i>This key is used to sign messages when no other key is chosen</i>"
 msgstr "<i>Den här nyckeln används för att signera meddelanden när ingen annan nyckel har valts</i>"
 
-#: ../libseahorse/seahorse-prefs.glade.h:9
+#: ../libseahorse/seahorse-prefs.glade.h:7
 msgid "As_k me before using a cached passphrase"
 msgstr "F_råga mig innan en mellanlagrad lösenfras används"
 
-#: ../libseahorse/seahorse-prefs.glade.h:10
+#: ../libseahorse/seahorse-prefs.glade.h:8
 msgid "Automatically retrieve keys from _key servers"
 msgstr "Hämta nycklar automatiskt från _nyckelservrar"
 
-#: ../libseahorse/seahorse-prefs.glade.h:11
+#: ../libseahorse/seahorse-prefs.glade.h:9
 msgid "Automatically synchronize _modified keys with key servers"
 msgstr "Synkronisera automatiskt _ändrade nycklar med nyckelservrar"
 
-#: ../libseahorse/seahorse-prefs.glade.h:12
+#: ../libseahorse/seahorse-prefs.glade.h:10
 msgid "Change Unlock _Password"
 msgstr "Byt _lösenord för upplåsning"
 
-#: ../libseahorse/seahorse-prefs.glade.h:13
+#: ../libseahorse/seahorse-prefs.glade.h:11
 msgid "Encryption"
 msgstr "Kryptering"
 
-#: ../libseahorse/seahorse-prefs.glade.h:14
+#: ../libseahorse/seahorse-prefs.glade.h:12
 msgid "Key Servers"
 msgstr "Nyckelservrar"
 
-#: ../libseahorse/seahorse-prefs.glade.h:15
+#: ../libseahorse/seahorse-prefs.glade.h:13
 msgid "Key Sharing"
 msgstr "Nyckeldelning"
 
-#: ../libseahorse/seahorse-prefs.glade.h:16
+#: ../libseahorse/seahorse-prefs.glade.h:14
 msgid "PGP Passphrases"
 msgstr "PGP-lösenfraser"
 
-#: ../libseahorse/seahorse-prefs.glade.h:17
+#: ../libseahorse/seahorse-prefs.glade.h:15
 msgid "Password Keyrings"
 msgstr "Lösenordsnyckelringar"
 
-#: ../libseahorse/seahorse-prefs.glade.h:18
+#: ../libseahorse/seahorse-prefs.glade.h:16
 msgid "Password and Encryption Settings"
 msgstr "Inställningar för lösenord och kryptering"
 
-#: ../libseahorse/seahorse-prefs.glade.h:19
-msgid "Session _Properties"
-msgstr "Sessions_egenskaper"
-
-#: ../libseahorse/seahorse-prefs.glade.h:20
+#: ../libseahorse/seahorse-prefs.glade.h:17
 msgid ""
 "Sharing your keys allows other people on your network to use the keys you've collected. This means they can automatically encrypt things for you or those you know, without you having to send them your key.\n"
 "\n"
@@ -920,67 +896,55 @@ msgstr ""
 "\n"
 "<b>Observera:</b> Dina personliga nycklar kommer inte att komprometteras."
 
-#: ../libseahorse/seahorse-prefs.glade.h:23
+#: ../libseahorse/seahorse-prefs.glade.h:20
 msgid "Show _icon in status area when passphrases are in memory"
 msgstr "Visa _ikon i statusrutan när lösenfraser finns i minnet"
 
-#: ../libseahorse/seahorse-prefs.glade.h:24
-msgid "Start sea_horse-agent"
-msgstr "Starta sea_horse-agent"
-
-#: ../libseahorse/seahorse-prefs.glade.h:25
-msgid ""
-"To avoid manually starting the 'seahorse-agent' in the future\n"
-"add it to the Session Manager. "
-msgstr ""
-"För att slippa att manuellt starta \"seahorse-agent\" i framtiden\n"
-"kan du lägga till den till Sessionshanteraren. "
-
-#: ../libseahorse/seahorse-prefs.glade.h:27
+#: ../libseahorse/seahorse-prefs.glade.h:21
 msgid "When _encrypting, always include myself as a recipient"
 msgstr "När _kryptering sker, inkludera alltid mig själv som en mottagare"
 
-#: ../libseahorse/seahorse-prefs.glade.h:28
+#: ../libseahorse/seahorse-prefs.glade.h:22
 msgid "_Add Keyring"
 msgstr "_Lägg till nyckelring"
 
-#: ../libseahorse/seahorse-prefs.glade.h:29
+#: ../libseahorse/seahorse-prefs.glade.h:23
 msgid "_Always remember passphrases whenever logged in"
 msgstr "_Kom alltid ihåg lösenfrasen när inloggad"
 
-#: ../libseahorse/seahorse-prefs.glade.h:30
+#: ../libseahorse/seahorse-prefs.glade.h:24
 msgid "_Default key:"
 msgstr "_Standardnyckel:"
 
-#: ../libseahorse/seahorse-prefs.glade.h:31
+#: ../libseahorse/seahorse-prefs.glade.h:25
 msgid "_Find keys via:"
 msgstr "_Hitta nycklar via:"
 
-#: ../libseahorse/seahorse-prefs.glade.h:32
+#: ../libseahorse/seahorse-prefs.glade.h:26
 msgid "_Location for application passwords:"
 msgstr "_Plats för programlösenord:"
 
-#: ../libseahorse/seahorse-prefs.glade.h:33
+#: ../libseahorse/seahorse-prefs.glade.h:27
 msgid "_Never remember passphrases"
 msgstr "_Kom aldrig ihåg några lösenfraser"
 
-#: ../libseahorse/seahorse-prefs.glade.h:34
+#: ../libseahorse/seahorse-prefs.glade.h:28
 msgid "_Publish keys to:"
 msgstr "_Publicera nycklar på:"
 
-#: ../libseahorse/seahorse-prefs.glade.h:35
+#: ../libseahorse/seahorse-prefs.glade.h:29
 msgid "_Remember passphrases for"
 msgstr "_Kom ihåg lösenfraser i"
 
-#: ../libseahorse/seahorse-prefs.glade.h:36
+#: ../libseahorse/seahorse-prefs.glade.h:30
 msgid "_Remove Keyring"
 msgstr "_Ta bort nyckelring"
 
-#: ../libseahorse/seahorse-prefs.glade.h:37
+#: ../libseahorse/seahorse-prefs.glade.h:31
 msgid "_Share my keys with others on my network"
 msgstr "_Dela mina nycklar med andra på mitt nätverk"
 
-#: ../libseahorse/seahorse-prefs.glade.h:38
+#: ../libseahorse/seahorse-prefs.glade.h:32
 msgid "minutes"
 msgstr "minuter"
 
@@ -3487,6 +3451,34 @@ msgstr "_Inloggningsnamn:"
 msgid "_Set Up"
 msgstr "_Konfigurera"
 
+#~ msgid "Couldn't open the Session Properties"
+#~ msgstr "Kunde inte öppna sessionsegenskaperna"
+#~ msgid "Couldn't start the 'seahorse-agent' program"
+#~ msgstr "Kunde inte starta programmet \"seahorse-agent\""
+#~ msgid "The 'seahorse-agent' program exited unsuccessfully."
+#~ msgstr "Programmet \"seahorse-agent\" avslutades med fel."
+#~ msgid ""
+#~ "<b>Note:</b> The 'seahorse-agent' program has been started. This program "
+#~ "is necessary in order to cache passphrases. "
+#~ msgstr ""
+#~ "<b>Observera:</b> Programmet \"seahorse-agent\" startades. Detta program "
+#~ "är nödvändigt för att kunna mellanlagra lösenfraser. "
+#~ msgid ""
+#~ "<b>Warning:</b> The 'seahorse-agent' program is not running. This program "
+#~ "is necessary in order to cache passphrases. "
+#~ msgstr ""
+#~ "<b>Varning:</b> Programmet \"seahorse-agent\" körs inte. Detta program är "
+#~ "nödvändigt för att kunna mellanlagra lösenfraser. "
+#~ msgid "Session _Properties"
+#~ msgstr "Sessions_egenskaper"
+#~ msgid "Start sea_horse-agent"
+#~ msgstr "Starta sea_horse-agent"
+#~ msgid ""
+#~ "To avoid manually starting the 'seahorse-agent' in the future\n"
+#~ "add it to the Session Manager. "
+#~ msgstr ""
+#~ "För att slippa att manuellt starta \"seahorse-agent\" i framtiden\n"
+#~ "kan du lägga till den till Sessionshanteraren. "
 #~ msgid "Seahorse Preferences"
 #~ msgstr "Inställningar för Seahorse"
 #~ msgid "<b>Default Storage Location</b>"
