@@ -35,8 +35,7 @@ EXTRA_DIST = \
 	$(glade_DATA) 
 
 CLEANFILES = \
-	*.gladep* *.bak 	\
-	$(desktop_DATA)
+	*.gladep* *.bak
 
 if HAVE_USER_MLOCK
 # Don't make the agent setuid
