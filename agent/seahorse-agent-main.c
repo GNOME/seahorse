@@ -40,6 +40,7 @@
 #include "seahorse-unix-signal.h"
 #include "seahorse-secure-memory.h"
 
+static gboolean display_vars_dummy = TRUE;
 static gboolean agent_no_daemonize = FALSE;
 static gboolean agent_running = FALSE;
 static gboolean agent_quit = FALSE;
@@ -53,8 +54,9 @@ static const GOptionEntry options[] = {
     { "cshell", 'c', 0, G_OPTION_ARG_NONE, &seahorse_agent_cshell, 
         N_("Print variables in for a C type shell"), NULL },
 
-    { "variables", 'v', 0, G_OPTION_ARG_NONE, &seahorse_agent_displayvars, 
-        N_("Display variables instead of editing gpg.conf file"), NULL },
+    /* This is the default but is kept here for backward compatibility */
+    { "variables", 'v', 0, G_OPTION_ARG_NONE, &display_vars_dummy, 
+        N_("Display environment variables (the default)"), NULL },
 
     { "execute", 'x', 0, G_OPTION_ARG_NONE, &seahorse_agent_execvars, 
         N_("Execute other arguments on the command line"), NULL },

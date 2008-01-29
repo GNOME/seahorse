@@ -34,28 +34,17 @@
 
 #include <gnome.h>
 
-#include "config.h"
 #include "seahorse-agent.h"
 #include "seahorse-gpg-options.h"
 #include "seahorse-passphrase.h"
 #include "seahorse-pgp-key.h"
 
-gboolean seahorse_agent_displayvars = FALSE;
 gboolean seahorse_agent_cshell = FALSE;
 gboolean seahorse_agent_execvars = FALSE;
 
 static gboolean seahorse_agent_enabled = FALSE;
 
 /* PUBLISHING AGENT INFO ---------------------------------------------------- */
-
-/* The GPG settings we modify */
-static const gchar *confs[2] = {
-    "gpg-agent-info",
-    NULL
-};
-    
-/* Previous gpg.conf settings */
-static gchar *prev_values[2];
 
 /* Print out the socket name info: <name>:<pid>:<protocol_version> */
 static void
@@ -80,53 +69,6 @@ process_setenv (const gchar *socket, pid_t pid)
     /* Memory doesn't need to be freed */
     var = g_strdup_printf ("%s:%lu:1", socket, (long unsigned int) pid);
     g_setenv ("GPG_AGENT_INFO", var, TRUE);
-}
-
-/* Add our agent info to gpg.conf */
-static void
-process_gpg_conf (const gchar *socket, pid_t pid)
-{
-    GError *error = NULL;
-    gchar *agent_info;
-    gchar *values[2];
-    gboolean b;
-
-    g_assert (socket && socket[0]);
-    memset (prev_values, 0, sizeof (prev_values));
-
-    /* Read in the current values for the options */
-    if (!seahorse_gpg_options_find_vals (confs, prev_values, &error)) {
-    
-        /* Warn and put in defaults */
-        warnx (_("couldn't read gpg configuration, will try to create"));
-	  	g_clear_error (&error);
-    
-        prev_values[0] = NULL;  /* gpg-agent-info */
-        prev_values[1] = NULL;  /* null terminate */
-    }
-
-    agent_info = g_strdup_printf ("%s:%lu:1", socket, (unsigned long) pid);
-    
-    values[0] = agent_info;     /* gpg-agent-info */
-    values[1] = NULL;           /* null teriminate */
-    
-    b = seahorse_gpg_options_change_vals (confs, values, &error);
-
-    g_free (agent_info);
-
-    if (!b) {
-        g_assert (error);
-        errx (1, _("couldn't modify gpg configuration: %s"),
-              error ? error->message : "");
-        g_clear_error (&error);
-    }
-}
-
-/* Remove our agent info from gpg.conf */
-static void
-unprocess_gpg_conf ()
-{
-    seahorse_gpg_options_change_vals (confs, prev_values, NULL);
 }
 
 /* 
@@ -154,7 +96,7 @@ seahorse_agent_prefork ()
 /* 
  * Called after forking off the agent daemon child. At this 
  * point we communicate the socket path to the environment
- * or gpg.conf as requested.
+ * as requested.
  */
 void
 seahorse_agent_postfork (pid_t child)
@@ -168,12 +110,10 @@ seahorse_agent_postfork (pid_t child)
     g_return_if_fail (socket != NULL);
     
     /* If any of these fail, they simply exit */
-    if (seahorse_agent_displayvars)
-        process_display (socket, child);
-    else if(seahorse_agent_execvars)
+    if(seahorse_agent_execvars)
         process_setenv (socket, child);
-    else
-        process_gpg_conf (socket, child);    
+    else 
+        process_display (socket, child);
 }
 
 /* 
@@ -212,9 +152,6 @@ seahorse_agent_uninit ()
     if(!seahorse_agent_enabled)
         return;
 
-    if (!seahorse_agent_displayvars)
-        unprocess_gpg_conf ();
-        
     /* If any windows are open this closes them */
     seahorse_agent_prompt_cleanup ();
     seahorse_agent_status_cleanup ();
