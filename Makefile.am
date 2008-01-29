@@ -48,7 +48,8 @@ DISTCLEANFILES = \
     
 DISTCHECK_CONFIGURE_FLAGS = \
     --disable-scrollkeeper \
-    --disable-update-mime-database
+    --disable-update-mime-database \
+    --with-nautilus-ext-dir=/tmp
 
 distuninstallcheck:
 	@:

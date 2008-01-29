@@ -5,7 +5,7 @@ AC_PREREQ(2.52)
 dnl ****************************************************************************
 dnl MAIN SEAHORSE VERSION (update after release)
 
-AC_INIT(seahorse, 2.21.5)
+AC_INIT(seahorse, 2.21.90)
 
 dnl ****************************************************************************
 dnl LIBCRYPTUI libtool versioning
@@ -309,10 +309,23 @@ else
         AC_SUBST(NAUTILUS_LIBS)
     fi
 
+	dnl   We have this --with-nautils-ext-dir option primarily so it 
+	dnl   can work with DISTCHECK_CONFIGURE_FLAGS in Makefile.am
+	dnl   and get around autotools limitations.
+	 
+    AC_ARG_WITH([nautilus-ext-dir],
+                [AC_HELP_STRING([--with-nautilus-ext-dir=DIR],
+                                [directory to nautilus extension config])],
+                [], [with_nautilus_ext_dir=""])
+
     # Fetch the extension directory
     if test "$enable_nautilus" = "yes"; then
-	NAUTILUS_EXTENSION_DIR=`$PKG_CONFIG --variable=extensiondir libnautilus-extension`
-	AC_SUBST(NAUTILUS_EXTENSION_DIR)
+        if test -z "$with_nautilus_ext_dir"; then
+            NAUTILUS_EXTENSION_DIR=`$PKG_CONFIG --variable=extensiondir libnautilus-extension`
+        else
+            NAUTILUS_EXTENSION_DIR="$with_nautilus_ext_dir"
+        fi
+        AC_SUBST(NAUTILUS_EXTENSION_DIR)
     fi
 fi
 
