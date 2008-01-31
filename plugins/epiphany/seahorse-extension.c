@@ -567,6 +567,14 @@ build_ui (WindowData *data)
 	gtk_ui_manager_ensure_update (manager);
 }
 
+
+#if EPHY_NOTAB == 1
+static void
+impl_attach_tab (EphyExtension *extension,
+		 EphyWindow *window,
+		 EphyEmbed *embed)
+{
+#else
 static void
 impl_attach_tab (EphyExtension *extension,
 		 EphyWindow *window,
@@ -575,12 +583,20 @@ impl_attach_tab (EphyExtension *extension,
 	EphyEmbed *embed;
 
 	embed = ephy_tab_get_embed (tab);
+#endif
 	g_return_if_fail (EPHY_IS_EMBED (embed));
 
 	g_signal_connect (embed, "ge_context_menu",
 			  G_CALLBACK (context_menu_cb), window);
 }
 
+#if EPHY_NOTAB == 1
+static void
+impl_detach_tab (EphyExtension *extension,
+		 EphyWindow *window,
+		 EphyEmbed *embed)
+{
+#else
 static void
 impl_detach_tab (EphyExtension *extension,
 		 EphyWindow *window,
@@ -589,6 +605,7 @@ impl_detach_tab (EphyExtension *extension,
 	EphyEmbed *embed;
 
 	embed = ephy_tab_get_embed (tab);
+#endif
 	g_return_if_fail (EPHY_IS_EMBED (embed));
 
 	g_signal_handlers_disconnect_by_func
