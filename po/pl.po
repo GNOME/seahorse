@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-09-15 19:31+0200\n"
-"PO-Revision-Date: 2007-08-29 00:23+0100\n"
+"POT-Creation-Date: 2008-02-07 22:04+0100\n"
+"PO-Revision-Date: 2008-02-06 16:19+0100\n"
 "Last-Translator: Tomasz Dominikowski <dominikowski@gmail.com>\n"
 "Language-Team: Polish <gnome-l10n@lists.aviary.pl>\n"
 "MIME-Version: 1.0\n"
@@ -21,34 +21,24 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 
-#: ../agent/seahorse-agent-actions.c:133
-#: ../libseahorse/seahorse-ssh-operation.c:445
+#: ../agent/seahorse-agent-actions.c:129
+#: ../libseahorse/seahorse-ssh-operation.c:443
 msgid "Passphrase:"
 msgstr "Hasło:"
 
-#: ../agent/seahorse-agent-actions.c:134
+#: ../agent/seahorse-agent-actions.c:130
 msgid "Please enter a passphrase to use."
 msgstr "Wpisz hasło."
 
-#. Warn and put in defaults
-#: ../agent/seahorse-agent.c:101
-msgid "couldn't read gpg configuration, will try to create"
-msgstr "nie można odczytać konfiguracji gpg, próba utworzenia"
-
-#: ../agent/seahorse-agent.c:119
-#, c-format
-msgid "couldn't modify gpg configuration: %s"
-msgstr "nie można zmodyfikować konfiguracji gpg: %s"
-
-#: ../agent/seahorse-agent-cache.c:72
+#: ../agent/seahorse-agent-cache.c:70
 msgid "Unparseable Key ID"
 msgstr "Niezrozumiały ID klucza"
 
-#: ../agent/seahorse-agent-cache.c:73
+#: ../agent/seahorse-agent-cache.c:71
 msgid "Unknown/Invalid Key"
 msgstr "Nieznany/nieprawidłowy klucz"
 
-#: ../agent/seahorse-agent-cache.c:531
+#: ../agent/seahorse-agent-cache.c:523
 #, c-format
 msgid "PGP Key: %s"
 msgstr "Klucz PGP: %s"
@@ -85,52 +75,43 @@ msgstr "_Wyczyść pamięć podręczną"
 msgid "_Show Window"
 msgstr "Wyświetl _okno"
 
-#: ../agent/seahorse-agent-main.c:50
+#: ../agent/seahorse-agent-main.c:51
 msgid "Do not daemonize seahorse-agent"
 msgstr "Uruchamia seahorse-agent bez przechodzenia do pracy w tle"
 
-#: ../agent/seahorse-agent-main.c:54
+#: ../agent/seahorse-agent-main.c:55
 msgid "Print variables in for a C type shell"
 msgstr "Wypisywanie zmiennych dla powłoki C"
 
-#: ../agent/seahorse-agent-main.c:57
-msgid ""
-"Display variables instead of editing conf files (gpg.conf, SSH agent socket)"
-msgstr ""
-"Wypisywanie zmiennych zamiast edytowania plików konfiguracyjnych (gpg.conf, "
-"gniazdo agenta SSH)"
+#: ../agent/seahorse-agent-main.c:59
+msgid "Display environment variables (the default)"
+msgstr "Wyświetlanie zmiennych środowiskowych (domyślne)"
 
-#: ../agent/seahorse-agent-main.c:60
+#: ../agent/seahorse-agent-main.c:62
 msgid "Execute other arguments on the command line"
 msgstr "Wykonuje polecenia z pozostałych argumentów linii poleceń"
 
-#: ../agent/seahorse-agent-main.c:64
+#: ../agent/seahorse-agent-main.c:66
 msgid "Allow GPG agent request from any display"
 msgstr "Zezwala na przyjmowanie żądań agenta GPG z dowolnego ekranu"
 
-#: ../agent/seahorse-agent-main.c:67
+#: ../agent/seahorse-agent-main.c:69
 msgid "command..."
 msgstr "polecenie..."
 
-#: ../agent/seahorse-agent-main.c:89 ../daemon/seahorse-daemon.c:72
+#: ../agent/seahorse-agent-main.c:91 ../daemon/seahorse-daemon.c:72
 msgid "couldn't fork process"
 msgstr "nie można uruchomić nowego procesu"
 
-#: ../agent/seahorse-agent-main.c:95 ../daemon/seahorse-daemon.c:78
+#: ../agent/seahorse-agent-main.c:97 ../daemon/seahorse-daemon.c:78
 msgid "couldn't create new process group"
 msgstr "nie można utworzyć nowej grupy procesów"
 
-#: ../agent/seahorse-agent-main.c:227 ../daemon/seahorse-daemon.c:195
-#: ../plugins/applet/seahorse-applet.c:1017
-#: ../plugins/nautilus/seahorse-tool.c:570 ../src/main.c:59
-msgid "couldn't drop privileges properly"
-msgstr "nie można zrzucić uprawnień"
-
-#: ../agent/seahorse-agent-main.c:238
+#: ../agent/seahorse-agent-main.c:225
 msgid "Encryption Key Agent (Seahorse)"
 msgstr "Agent kluczy szyfrujących (Seahorse)"
 
-#: ../agent/seahorse-agent-main.c:246
+#: ../agent/seahorse-agent-main.c:232
 msgid "no command specified to execute"
 msgstr "nie określono polecenia do uruchomienia"
 
@@ -151,7 +132,7 @@ msgid "_Authorize"
 msgstr "_Autoryzuj"
 
 #. Make the uid column
-#: ../agent/seahorse-agent-status.c:151
+#: ../agent/seahorse-agent-status.c:147
 msgid "Key Name"
 msgstr "Nazwa klucza"
 
@@ -159,7 +140,7 @@ msgstr "Nazwa klucza"
 msgid "Do not run seahorse-daemon as a daemon"
 msgstr "Uruchamia seahorse-daemon bez przechodzenia do pracy w tle"
 
-#: ../daemon/seahorse-daemon.c:202
+#: ../daemon/seahorse-daemon.c:188
 msgid "Encryption Daemon (Seahorse)"
 msgstr "Demon szyfrowania (Seahorse)"
 
@@ -496,31 +477,22 @@ msgstr ""
 
 #: ../data/seahorse.schemas.in.h:46
 msgid ""
-"When set seahorse-agent will try to automatically load the users SSH keys "
-"when needed. This is equivalent to using the ssh-add utility."
-msgstr ""
-"Gdy zaznaczone, seahorse-agent będzie w razie potrzeby próbował "
-"automatycznie wczytać klucze SSH użytkownika. Jest to równoznaczne z użyciem "
-"polecenia ssh-add."
-
-#: ../data/seahorse.schemas.in.h:47
-msgid ""
 "When set, seahorse-agent expires GPG passwords in its cache after a period "
 "of time."
 msgstr ""
 "Gdy zaznaczone, hasła w pamięci podręcznej programu seahorse-agent będą "
 "wygasały po upływie ustalonego czasu."
 
-#: ../data/seahorse.schemas.in.h:48
+#: ../data/seahorse.schemas.in.h:47
 msgid "Where to store cached passwords."
 msgstr "Miejsce przechowywania haseł pamięci podręcznej."
 
-#: ../data/seahorse.schemas.in.h:49
+#: ../data/seahorse.schemas.in.h:48
 msgid "Whether or not keys should be automatically retrieved from key servers."
 msgstr ""
 "Określa, czy klucze będą automatycznie synchronizowane z serwerami kluczy."
 
-#: ../data/seahorse.schemas.in.h:50
+#: ../data/seahorse.schemas.in.h:49
 msgid ""
 "Whether or not modified keys should be automatically synced with the default "
 "key server."
@@ -528,19 +500,15 @@ msgstr ""
 "Określa, czy zmodyfikowane klucze będą automatycznie synchronizowane z "
 "domyślnym serwerem kluczy."
 
-#: ../data/seahorse.schemas.in.h:51
+#: ../data/seahorse.schemas.in.h:50
 msgid "Whether the GPG password cache is enabled"
 msgstr "Określa, czy pamięć podręczna haseł GPG jest włączona"
 
-#: ../data/seahorse.schemas.in.h:52
+#: ../data/seahorse.schemas.in.h:51
 msgid "Whether to always encrypt to default key"
 msgstr "Określa, czy zawsze szyfrować domyślnym kluczem"
 
-#: ../data/seahorse.schemas.in.h:53
-msgid "Whether to automatically load SSH keys on demand."
-msgstr "Określa, czy w razie potrzeby automatycznie wczytywać klucze SSH."
-
-#: ../data/seahorse.schemas.in.h:54
+#: ../data/seahorse.schemas.in.h:52
 msgid "Whether to use ASCII Armor"
 msgstr "Określa, czy używać otoczki ASCII"
 
@@ -572,16 +540,38 @@ msgstr "Nie podpisuj"
 
 #. TODO: Icons
 #: ../libcryptui/cryptui-key-list.c:117
-#: ../src/seahorse-key-manager-store.c:954
+#: ../src/seahorse-key-manager-store.c:943
 #: ../src/seahorse-key-properties.c:871
 msgid "Name"
 msgstr "Nazwa"
 
 #: ../libcryptui/cryptui-key-list.c:120
-#: ../src/seahorse-key-manager-store.c:966
+#: ../src/seahorse-key-manager-store.c:955
 #: ../src/seahorse-key-properties.c:1725
 msgid "Key ID"
 msgstr "ID klucza"
+
+#: ../libseahorse/seahorse-add-keyring.glade.h:1
+msgid "Add Password Keyring"
+msgstr "Dodaj bazę kluczy z hasłami"
+
+#: ../libseahorse/seahorse-add-keyring.glade.h:2
+msgid "New Keyring Name:"
+msgstr "Nazwa nowej bazy kluczy:"
+
+#: ../libseahorse/seahorse-add-keyring.glade.h:3
+msgid ""
+"Please choose a name for the new keyring. You will be prompted for an unlock "
+"password."
+msgstr ""
+"Proszę wybrać nazwę dla nowej bazy kluczy. Użytkownik zostanie poproszony o "
+"hasło odblokowywujące."
+
+#: ../libseahorse/seahorse-add-keyring.glade.h:4
+#: ../libseahorse/seahorse-add-keyserver.glade.h:5
+#: ../src/seahorse-ssh-upload.glade.h:3
+msgid "The host name or address of the server."
+msgstr "Nazwa lub adres serwera."
 
 #: ../libseahorse/seahorse-add-keyserver.glade.h:1
 msgid ":"
@@ -599,47 +589,42 @@ msgstr "Host:"
 msgid "Key Server Type:"
 msgstr "Typ serwera kluczy:"
 
-#: ../libseahorse/seahorse-add-keyserver.glade.h:5
-#: ../src/seahorse-ssh-upload.glade.h:3
-msgid "The host name or address of the server."
-msgstr "Nazwa lub adres serwera."
-
 #: ../libseahorse/seahorse-add-keyserver.glade.h:6
 msgid "The port to access the server on."
 msgstr "Numer portu serwera."
 
-#: ../libseahorse/seahorse-hkp-source.c:358
+#: ../libseahorse/seahorse-hkp-source.c:323
 #, c-format
 msgid "Search was not specific enough. Server '%s' found too many keys."
 msgstr ""
 "Kryterium wyszukiwania nie było dostatecznie sprecyzowane. Serwer \"%s\" "
 "znalazł zbyt wiele pasujących kluczy."
 
-#: ../libseahorse/seahorse-hkp-source.c:360
+#: ../libseahorse/seahorse-hkp-source.c:325
 #, c-format
 msgid "Couldn't communicate with server '%s': %s"
 msgstr "Nie można połączyć się z serwerem \"%s\": %s"
 
-#: ../libseahorse/seahorse-hkp-source.c:563
+#: ../libseahorse/seahorse-hkp-source.c:521
 msgid "Searching for keys..."
 msgstr "Wyszukiwanie kluczy..."
 
-#: ../libseahorse/seahorse-hkp-source.c:639
+#: ../libseahorse/seahorse-hkp-source.c:592
 msgid "Uploading keys..."
 msgstr "Wysyłanie kluczy..."
 
-#: ../libseahorse/seahorse-hkp-source.c:715
+#: ../libseahorse/seahorse-hkp-source.c:665
 msgid "Retrieving keys..."
 msgstr "Pobieranie kluczy..."
 
-#: ../libseahorse/seahorse-hkp-source.c:764
+#: ../libseahorse/seahorse-hkp-source.c:710
 #, c-format
 msgid "Searching for keys on: %s"
 msgstr "Wyszukiwanie kluczy na: %s"
 
 #. The ldap_cb and chain_cb were set in seahorse_ldap_operation_start
-#: ../libseahorse/seahorse-hkp-source.c:857
-#: ../libseahorse/seahorse-hkp-source.c:929
+#: ../libseahorse/seahorse-hkp-source.c:802
+#: ../libseahorse/seahorse-hkp-source.c:874
 #: ../libseahorse/seahorse-ldap-source.c:656
 #, c-format
 msgid "Connecting to: %s"
@@ -660,21 +645,21 @@ msgstr "Nie można pobrać adresu IP dla nazwy: %s"
 msgid "Resolving server address: %s"
 msgstr "Pobieranie adresu IP serwera: %s"
 
-#: ../libseahorse/seahorse-ldap-source.c:883
+#: ../libseahorse/seahorse-ldap-source.c:884
 #, c-format
 msgid "Searching for keys containing '%s'..."
 msgstr "Wyszukiwanie kluczy zawierających \"%s\"..."
 
-#: ../libseahorse/seahorse-ldap-source.c:910
+#: ../libseahorse/seahorse-ldap-source.c:911
 #, c-format
 msgid "Searching for key id '%s'..."
 msgstr "Wyszukiwanie klucza o id \"%s\"..."
 
-#: ../libseahorse/seahorse-ldap-source.c:1011
+#: ../libseahorse/seahorse-ldap-source.c:1012
 msgid "Retrieving remote keys..."
 msgstr "Pobieranie zdalnych kluczy..."
 
-#: ../libseahorse/seahorse-ldap-source.c:1144
+#: ../libseahorse/seahorse-ldap-source.c:1145
 msgid "Sending keys to key server..."
 msgstr "Wysyłanie kluczy do serwera kluczy..."
 
@@ -802,17 +787,17 @@ msgid "Enter passphrase"
 msgstr "Wpisz hasło"
 
 #: ../libseahorse/seahorse-pgp-key.c:140 ../libseahorse/seahorse-ssh-key.c:112
-#: ../src/seahorse-gkeyring-item.c:231
+#: ../src/seahorse-gkeyring-item.c:232
 msgid "Invalid"
 msgstr "Nieważny"
 
 #: ../libseahorse/seahorse-pgp-key.c:162
-#: ../src/seahorse-pgp-public-key-properties.glade.h:30
+#: ../src/seahorse-pgp-public-key-properties.glade.h:31
 msgid "Public PGP Key"
 msgstr "Publiczny klucz PGP"
 
 #: ../libseahorse/seahorse-pgp-key.c:165
-#: ../src/seahorse-pgp-private-key-properties.glade.h:35
+#: ../src/seahorse-pgp-private-key-properties.glade.h:36
 msgid "Private PGP Key"
 msgstr "Prywatny klucz PGP"
 
@@ -852,8 +837,8 @@ msgstr ""
 "Nieprawidłowe dane klucza (brakujące UIDy). Przyczyną tego może być "
 "nieprawidłowo ustawiona data w systemie lub brakujący podpis własny."
 
-#: ../libseahorse/seahorse-pgp-source.c:942 ../src/seahorse-key-manager.c:454
-#: ../src/seahorse-key-manager.c:502
+#: ../libseahorse/seahorse-pgp-source.c:942 ../src/seahorse-key-manager.c:446
+#: ../src/seahorse-key-manager.c:494
 msgid "Importing Keys"
 msgstr "Importowanie kluczy"
 
@@ -861,11 +846,11 @@ msgstr "Importowanie kluczy"
 msgid "Exporting Keys"
 msgstr "Eksportowanie kluczy"
 
-#: ../libseahorse/seahorse-prefs.c:62
+#: ../libseahorse/seahorse-prefs.c:64
 msgid "Not a valid Key Server address."
 msgstr "Nieprawidłowy adres serwera kluczy."
 
-#: ../libseahorse/seahorse-prefs.c:63
+#: ../libseahorse/seahorse-prefs.c:65
 msgid ""
 "For help contact your system adminstrator or the administrator of the key "
 "server."
@@ -873,154 +858,124 @@ msgstr ""
 "Aby uzyskać pomoc, należy skontaktować się z administratorem systemu lub "
 "administratorem serwera kluczy."
 
-#: ../libseahorse/seahorse-prefs.c:174
+#: ../libseahorse/seahorse-prefs.c:176
 msgid "URL"
 msgstr "URL"
 
-#: ../libseahorse/seahorse-prefs.c:359
+#: ../libseahorse/seahorse-prefs.c:361
 msgid "Custom"
 msgstr "Inny"
 
-#: ../libseahorse/seahorse-prefs.c:429
+#: ../libseahorse/seahorse-prefs.c:431
 msgid "None: Don't publish keys"
 msgstr "Brak: bez publikowania kluczy"
 
-#: ../libseahorse/seahorse-prefs.c:687
+#: ../libseahorse/seahorse-prefs.c:521
 msgid "None. Prompt for a key."
 msgstr "Brak. Wyświetlanie zapytania o wybór klucza."
 
-#: ../libseahorse/seahorse-prefs-cache.c:231
-msgid "Couldn't open the Session Properties"
-msgstr "Nie można otworzyć właściwości sesji"
+#: ../libseahorse/seahorse-prefs-keyrings.c:205
+msgid "<i>Automatically unlocked when user logs in.</i>"
+msgstr "<i>Automatyczne odblokowywanie przy zalogowaniu użytkownika</i>"
 
-#: ../libseahorse/seahorse-prefs-cache.c:244
-msgid "Couldn't start the 'seahorse-agent' program"
-msgstr "Nie można uruchomić programu seahorse-agent"
+#: ../libseahorse/seahorse-prefs-keyrings.c:242
+msgid "Couldn't get default password keyring"
+msgstr "Nie można otrzymać domyślnej bazy kluczy haseł"
 
-#: ../libseahorse/seahorse-prefs-cache.c:246
-msgid "The 'seahorse-agent' program exited unsuccessfully."
-msgstr "Program \"seahorse-agent\" zakończył działanie niepowodzeniem."
+#: ../libseahorse/seahorse-prefs-keyrings.c:265
+msgid "Couldn't get list of password keyrings"
+msgstr "Nie można otrzymać listy bazy kluczy haseł"
+
+#: ../libseahorse/seahorse-prefs-keyrings.c:321
+msgid "Couldn't set default password keyring"
+msgstr "Nie można ustawić domyślnej bazy kluczy haseł"
+
+#: ../libseahorse/seahorse-prefs-keyrings.c:403
+msgid "Couldn't remove keyring"
+msgstr "Nie można usunąć bazy kluczy"
+
+#: ../libseahorse/seahorse-prefs-keyrings.c:421
+#, c-format
+msgid "Are you sure you want to permanently delete the '%s' keyring?"
+msgstr "Czy na pewno trwale usunąć bazę kluczy \"%s\"?"
+
+#: ../libseahorse/seahorse-prefs-keyrings.c:469
+msgid "Couldn't add keyring"
+msgstr "Nie można dodać bazy kluczy"
+
+#: ../libseahorse/seahorse-prefs-keyrings.c:526
+msgid "Couldn't change keyring password"
+msgstr "Nie można zmienić hasła bazy kluczy"
 
 #: ../libseahorse/seahorse-prefs.glade.h:1
-msgid "<b>Defaults</b>"
-msgstr "<b>Domyślne</b>"
+msgid "<b>Default Key</b>"
+msgstr "<b>Domyślny klucz</b>"
 
 #: ../libseahorse/seahorse-prefs.glade.h:2
-msgid ""
-"<b>Note:</b> The 'seahorse-agent' program has been started. This program is "
-"necessary in order to cache passphrases. "
-msgstr ""
-"<b>Uwaga:</b> Program \"seahorse-agent\" został uruchomiony. Program ten "
-"jest niezbędny do umożliwienia przechowywania haseł w pamięci podręcznej."
+msgid "<b>Default Keyring</b>"
+msgstr "<b>Domyślna baza kluczy</b>"
 
 #: ../libseahorse/seahorse-prefs.glade.h:3
+msgid "<b>Password Keyrings</b>"
+msgstr "<b>Baza kluczy haseł</b>"
+
+#: ../libseahorse/seahorse-prefs.glade.h:4
 msgid "<b>Remember PGP Passphrases</b>"
 msgstr "<b>Zapamiętywanie haseł PGP</b>"
 
-#: ../libseahorse/seahorse-prefs.glade.h:4
-msgid "<b>Secure Shell Keys</b>"
-msgstr "<b>Klucze SSH</b>"
-
 #: ../libseahorse/seahorse-prefs.glade.h:5
-msgid ""
-"<b>Warning:</b> The 'seahorse-agent' program is not running. This program is "
-"necessary in order to cache passphrases. "
+msgid "<i>A supported PGP passphrase caching agent is not running.</i>"
 msgstr ""
-"<b>Ostrzeżenie:</b> Program \"seahorse-agent\" nie jest uruchomiony. Aby "
-"możliwe było przechowywanie haseł w pamięci podręcznej, program ten musi być "
-"uruchomiony."
+"<i>Osługiwany agent pamięci podręcznej haseł PGP nie jest uruchomiony.</i>"
 
 #: ../libseahorse/seahorse-prefs.glade.h:6
-msgid "<i>A non-supported PGP passphrase caching agent is running.</i>"
-msgstr ""
-"<i>Uruchomiony jest nieobsługiwany agent pamięci podręcznej haseł PGP.</i>"
-
-#: ../libseahorse/seahorse-prefs.glade.h:7
-msgid "<i>No SSH caching agent is running. Cannot load Secure Shell keys.</i>"
-msgstr ""
-"<i>Agent pamięci podręcznej SSH nie jest uruchomiony.\n"
-"Nie można wczytać kluczy SSH.</i>"
-
-#: ../libseahorse/seahorse-prefs.glade.h:8
 msgid "<i>This key is used to sign messages when no other key is chosen</i>"
 msgstr ""
 "<i>Ten klucz będzie używany do podpisywania wiadomości,\n"
 " gdy nie zostanie wybrany żaden inny klucz</i>"
 
+#: ../libseahorse/seahorse-prefs.glade.h:7
+msgid "As_k me before using a cached passphrase"
+msgstr "Wyświe_tlanie zapytania przed użyciem zapamiętanego hasła"
+
+#: ../libseahorse/seahorse-prefs.glade.h:8
+msgid "Automatically retrieve keys from _key servers"
+msgstr "Automatyczne synchronizowanie kluczy z serwerów _kluczy."
+
 #: ../libseahorse/seahorse-prefs.glade.h:9
-msgid "Automatically load _Secure Shell keys"
-msgstr "_Automatyczne wczytywanie kluczy SSH"
+msgid "Automatically synchronize _modified keys with key servers"
+msgstr ""
+"Automatyczne synchronizowanie z_modyfikowanych kluczy z serwerami kluczy"
 
 #: ../libseahorse/seahorse-prefs.glade.h:10
-msgid "Automatically retrieve keys from key servers."
-msgstr "Automatyczne synchronizowanie kluczy z serwerów kluczy."
+msgid "Change Unlock _Password"
+msgstr "Zmień _hasło odblokowywujące"
 
 #: ../libseahorse/seahorse-prefs.glade.h:11
-msgid "Automatically synchronize modified keys with key servers. "
-msgstr "Automatyczne synchronizowanie zmodyfikowanych kluczy"
+msgid "Encryption"
+msgstr "Szyfrowanie"
 
 #: ../libseahorse/seahorse-prefs.glade.h:12
-msgid ""
-"Changing the master password failed.  Make certain that you entered the "
-"correct original master password."
-msgstr ""
-"Zmiana hasła głównego nie powiodła się. Proszę się upewnić, że pierwotne "
-"hasło główne zostało wprowadzone poprawnie."
-
-#: ../libseahorse/seahorse-prefs.glade.h:13
-msgid "Confirm Master Password:"
-msgstr "Proszę potwierdzić nowe hasło główne:"
-
-#: ../libseahorse/seahorse-prefs.glade.h:14
-#: ../plugins/nautilus/seahorse-pgp-preferences.c:74
-#: ../plugins/nautilus/seahorse-pgp-preferences.desktop.in.h:2
-msgid "Encryption Preferences"
-msgstr "Preferencje szyfrowania"
-
-#: ../libseahorse/seahorse-prefs.glade.h:15
-msgid "Encryption Settings"
-msgstr "Ustawienia szyfrowania"
-
-#: ../libseahorse/seahorse-prefs.glade.h:16
-msgid "GNOME Keyring"
-msgstr "Baza kluczy GNOME"
-
-#: ../libseahorse/seahorse-prefs.glade.h:17
-msgid ""
-"GNOME Keyring stores passwords, network keys, passphrases and other secrets "
-"required for authentication.  A <b>master password</b> is used to protect "
-"these secrets.  The <b>master password</b> can be changed below."
-msgstr ""
-"Baza kluczy GNOME przechowuje hasła, klucze sieciowe, tzw. długie hasła i "
-"inne poufne informacje wymagane do uwierzytelniania. <b>Hasło główne</b> "
-"jest używane do ochrony tych informacji. <b>Hasło główne</b> może zostać "
-"zmienione poniżej."
-
-#: ../libseahorse/seahorse-prefs.glade.h:18
 msgid "Key Servers"
 msgstr "Serwery kluczy"
 
-#: ../libseahorse/seahorse-prefs.glade.h:19
+#: ../libseahorse/seahorse-prefs.glade.h:13
 msgid "Key Sharing"
 msgstr "Udostępnianie kluczy"
 
-#: ../libseahorse/seahorse-prefs.glade.h:20
-msgid "New Master Password:"
-msgstr "Nowe hasło główne:"
+#: ../libseahorse/seahorse-prefs.glade.h:14
+msgid "PGP Passphrases"
+msgstr "Hasła PGP"
 
-#: ../libseahorse/seahorse-prefs.glade.h:21
-msgid "Original Master Password:"
-msgstr "Pierwotne hasło główne:"
+#: ../libseahorse/seahorse-prefs.glade.h:15
+msgid "Password Keyrings"
+msgstr "Bazy kluczy haseł"
 
-#: ../libseahorse/seahorse-prefs.glade.h:22
-msgid "Passphrase Cache"
-msgstr "Pamięć podręczna haseł"
+#: ../libseahorse/seahorse-prefs.glade.h:16
+msgid "Password and Encryption Settings"
+msgstr "Hasło i ustawienia szyfrowania"
 
-#: ../libseahorse/seahorse-prefs.glade.h:23
-msgid "Session Properties"
-msgstr "Właściwości sesji"
-
-#: ../libseahorse/seahorse-prefs.glade.h:24
+#: ../libseahorse/seahorse-prefs.glade.h:17
 msgid ""
 "Sharing your keys allows other people on your network to use the keys you've "
 "collected. This means they can automatically encrypt things for you or those "
@@ -1035,71 +990,59 @@ msgstr ""
 "\n"
 "<b>Uwaga:</b> Klucze prywatne nie zostaną ujawnione."
 
-#: ../libseahorse/seahorse-prefs.glade.h:27
-msgid "Start seahorse-agent"
-msgstr "Uruchom seahorse-agent"
+#: ../libseahorse/seahorse-prefs.glade.h:20
+msgid "Show _icon in status area when passphrases are in memory"
+msgstr "Wyświetlanie _ikony w obszarze stanu gdy hasła znajdują się w pamięci"
 
-#: ../libseahorse/seahorse-prefs.glade.h:28
-msgid "The master password was successfully changed."
-msgstr "Hasło główne zostało zmienione z powodzeniem."
-
-#: ../libseahorse/seahorse-prefs.glade.h:29
-msgid ""
-"To avoid manually starting the 'seahorse-agent' in the future\n"
-"add it to the Session Manager. "
-msgstr ""
-"Aby uniknąć w przyszłości ręcznego uruchamiania \"seahorse-agent\",\n"
-"należy dodać go do menedżera sesji."
-
-#: ../libseahorse/seahorse-prefs.glade.h:31
+#: ../libseahorse/seahorse-prefs.glade.h:21
 msgid "When _encrypting, always include myself as a recipient"
 msgstr "D_ołączanie siebie do listy odbiorców zaszyfrowanych danych"
 
-#: ../libseahorse/seahorse-prefs.glade.h:32
+#: ../libseahorse/seahorse-prefs.glade.h:22
+msgid "_Add Keyring"
+msgstr "Dod_aj bazę kluczy"
+
+#: ../libseahorse/seahorse-prefs.glade.h:23
 msgid "_Always remember passphrases whenever logged in"
 msgstr "Pamiętanie haseł od momentu _zalogowania"
 
-#: ../libseahorse/seahorse-prefs.glade.h:33
-msgid "_Ask me before using a cached passphrase"
-msgstr "_Wyświetlanie zapytania przed użyciem zapamiętanego hasła"
-
-#: ../libseahorse/seahorse-prefs.glade.h:34
-msgid "_Default Key:"
+#: ../libseahorse/seahorse-prefs.glade.h:24
+msgid "_Default key:"
 msgstr "_Domyślny klucz:"
 
-#: ../libseahorse/seahorse-prefs.glade.h:35
-msgid "_Find Keys Via:"
+#: ../libseahorse/seahorse-prefs.glade.h:25
+msgid "_Find keys via:"
 msgstr "_Wyszukiwanie kluczy poprzez:"
 
-#: ../libseahorse/seahorse-prefs.glade.h:36
+#: ../libseahorse/seahorse-prefs.glade.h:26
+msgid "_Location for application passwords:"
+msgstr "_Położenie dla haseł aplikacji:"
+
+#: ../libseahorse/seahorse-prefs.glade.h:27
 msgid "_Never remember passphrases"
 msgstr "_Bez zapamiętywania haseł"
 
-#: ../libseahorse/seahorse-prefs.glade.h:37
-msgid "_Publish Keys To:"
-msgstr "_Publikowanie kluczy na:"
+#: ../libseahorse/seahorse-prefs.glade.h:28
+msgid "_Publish keys to:"
+msgstr "O_publikuj klucze na:"
 
-#: ../libseahorse/seahorse-prefs.glade.h:38
+#: ../libseahorse/seahorse-prefs.glade.h:29
 msgid "_Remember passphrases for"
 msgstr "_Pamiętanie haseł przez"
 
-#: ../libseahorse/seahorse-prefs.glade.h:39
+#: ../libseahorse/seahorse-prefs.glade.h:30
+msgid "_Remove Keyring"
+msgstr "_Usuń bazę kluczy"
+
+#: ../libseahorse/seahorse-prefs.glade.h:31
 msgid "_Share my keys with others on my network"
 msgstr "_Udostępnianie kluczy w sieci lokalnej"
 
-#: ../libseahorse/seahorse-prefs.glade.h:40
+#: ../libseahorse/seahorse-prefs.glade.h:32
 msgid "minutes"
 msgstr "minut"
 
 #: ../libseahorse/seahorse-progress.glade.h:1
-msgid "<b>Progress Message</b>"
-msgstr "<b>Komunikat postępu</b>"
-
-#: ../libseahorse/seahorse-progress.glade.h:2
-msgid "Progress Status"
-msgstr "Stan postępu"
-
-#: ../libseahorse/seahorse-progress.glade.h:3
 msgid "Progress Title"
 msgstr "Tytuł postępu"
 
@@ -1139,7 +1082,7 @@ msgstr "(nieczytelny klucz SSH)"
 #: ../libseahorse/seahorse-ssh-key.c:94 ../libseahorse/seahorse-ssh-key.c:98
 #: ../libseahorse/seahorse-ssh-source.c:746
 #: ../src/seahorse-generate-select.c:145
-#: ../src/seahorse-ssh-key-properties.glade.h:20
+#: ../src/seahorse-ssh-key-properties.glade.h:21
 msgid "Secure Shell Key"
 msgstr "Klucz SSH"
 
@@ -1151,80 +1094,80 @@ msgstr "Prywatny klucz SSH"
 msgid "Public Secure Shell Key"
 msgstr "Publiczny klucz SSH"
 
-#: ../libseahorse/seahorse-ssh-operation.c:135
-#: ../libseahorse/seahorse-ssh-operation.c:697
+#: ../libseahorse/seahorse-ssh-operation.c:133
+#: ../libseahorse/seahorse-ssh-operation.c:695
 #, c-format
 msgid "The SSH command was terminated unexpectedly."
 msgstr "Polecenie SSH zostało nieoczekiwanie zakończone."
 
-#: ../libseahorse/seahorse-ssh-operation.c:143
-#: ../libseahorse/seahorse-ssh-operation.c:704
+#: ../libseahorse/seahorse-ssh-operation.c:141
+#: ../libseahorse/seahorse-ssh-operation.c:702
 msgid "The SSH command failed."
 msgstr "Polecenie SSH nie powiodło się."
 
-#: ../libseahorse/seahorse-ssh-operation.c:441
+#: ../libseahorse/seahorse-ssh-operation.c:439
 msgid "Secure Shell key"
 msgstr "Klucz SSH"
 
 #. Just prompt over and over again
-#: ../libseahorse/seahorse-ssh-operation.c:727
+#: ../libseahorse/seahorse-ssh-operation.c:725
 msgid "Secure Shell Passphrase"
 msgstr "Hasło SSH"
 
-#: ../libseahorse/seahorse-ssh-operation.c:813
+#: ../libseahorse/seahorse-ssh-operation.c:811
 msgid "Old Key Passphrase"
 msgstr "Stare hasło klucza"
 
-#: ../libseahorse/seahorse-ssh-operation.c:814
+#: ../libseahorse/seahorse-ssh-operation.c:812
 #, c-format
 msgid "Enter the old passphrase for: %s"
 msgstr "Stare hasło dla: %s"
 
-#: ../libseahorse/seahorse-ssh-operation.c:818
+#: ../libseahorse/seahorse-ssh-operation.c:816
 msgid "New Key Passphrase"
 msgstr "Nowe hasło klucza"
 
-#: ../libseahorse/seahorse-ssh-operation.c:819
+#: ../libseahorse/seahorse-ssh-operation.c:817
 #, c-format
 msgid "Enter the new passphrase for: %s"
 msgstr "Nowe hasło dla: %s"
 
-#: ../libseahorse/seahorse-ssh-operation.c:827
+#: ../libseahorse/seahorse-ssh-operation.c:825
 msgid "Enter Key Passphrase"
 msgstr "Hasło klucza"
 
-#: ../libseahorse/seahorse-ssh-operation.c:895
+#: ../libseahorse/seahorse-ssh-operation.c:893
 msgid "Passphrase for New Secure Shell Key"
 msgstr "Hasło dla nowego klucza SSH"
 
-#: ../libseahorse/seahorse-ssh-operation.c:896
+#: ../libseahorse/seahorse-ssh-operation.c:894
 msgid "Enter a passphrase for your new Secure Shell key."
 msgstr "Hasło nowego klucza SSH"
 
-#: ../libseahorse/seahorse-ssh-operation.c:1034
+#: ../libseahorse/seahorse-ssh-operation.c:1028
 msgid "Secure Shell Key Passphrase"
 msgstr "Hasło klucza SSH"
 
-#: ../libseahorse/seahorse-ssh-operation.c:1034
+#: ../libseahorse/seahorse-ssh-operation.c:1028
 #, c-format
 msgid "Enter the passphrase for: %s"
 msgstr "Hasło dla: %s"
 
-#: ../libseahorse/seahorse-ssh-operation.c:1035
+#: ../libseahorse/seahorse-ssh-operation.c:1029
 msgid "Save this passphrase in my keyring"
 msgstr "Zapisanie tego hasła w zbiorze kluczy"
 
-#: ../libseahorse/seahorse-ssh-operation.c:1109
+#: ../libseahorse/seahorse-ssh-operation.c:1081
 #, c-format
 msgid "Importing key: %s"
 msgstr "Importowanie klucza: %s"
 
-#: ../libseahorse/seahorse-ssh-operation.c:1111
+#: ../libseahorse/seahorse-ssh-operation.c:1083
 msgid "Importing key. Enter passphrase"
 msgstr "Importowanie klucza. Wpisz hasło"
 
-#: ../libseahorse/seahorse-ssh-operation.c:1113
-#: ../src/seahorse-key-manager.c:515
+#: ../libseahorse/seahorse-ssh-operation.c:1085
+#: ../src/seahorse-key-manager.c:507
 #: ../src/seahorse-pgp-keys.desktop.in.in.h:1
 msgid "Import Key"
 msgstr "Importowanie klucza"
@@ -1263,39 +1206,39 @@ msgstr "Dane klucza"
 msgid "Multiple Keys"
 msgstr "Wiele kluczy"
 
-#: ../libseahorse/seahorse-util.c:728
+#: ../libseahorse/seahorse-util.c:733
 msgid "Couldn't run file-roller"
 msgstr "Nie można uruchomić programu file-roller"
 
-#: ../libseahorse/seahorse-util.c:733
-#: ../plugins/nautilus/seahorse-tool-files.c:831
+#: ../libseahorse/seahorse-util.c:738
+#: ../plugins/nautilus/seahorse-tool-files.c:830
 msgid "Couldn't package files"
 msgstr "Nie można zarchiwizować plików"
 
-#: ../libseahorse/seahorse-util.c:734
+#: ../libseahorse/seahorse-util.c:739
 msgid "The file-roller process did not complete successfully"
 msgstr "Proces file-roller nie zakończył się powodzeniem"
 
-#: ../libseahorse/seahorse-util.c:744
+#: ../libseahorse/seahorse-util.c:749
 msgid "Couldn't set permissions on backup file."
 msgstr "Nie można ustawić uprawnień dla pliku kopii zapasowej."
 
 #. Filter for PGP keys. We also include *.asc, as in many
 #. cases that extension is associated with text/plain
-#: ../libseahorse/seahorse-util.c:848
+#: ../libseahorse/seahorse-util.c:853
 msgid "All key files"
 msgstr "Wszystkie pliki kluczy"
 
-#: ../libseahorse/seahorse-util.c:859 ../libseahorse/seahorse-util.c:899
+#: ../libseahorse/seahorse-util.c:864 ../libseahorse/seahorse-util.c:904
 #: ../src/seahorse-photos.c:239
 msgid "All files"
 msgstr "Wszystkie pliki"
 
-#: ../libseahorse/seahorse-util.c:892
+#: ../libseahorse/seahorse-util.c:897
 msgid "Archive files"
 msgstr "Pliki archiwów"
 
-#: ../libseahorse/seahorse-util.c:933
+#: ../libseahorse/seahorse-util.c:938
 msgid ""
 "<b>A file already exists with this name.</b>\n"
 "\n"
@@ -1305,7 +1248,7 @@ msgstr ""
 "\n"
 "Czy zastąpić go nowym plikiem?"
 
-#: ../libseahorse/seahorse-util.c:936
+#: ../libseahorse/seahorse-util.c:941
 msgid "_Replace"
 msgstr "_Zastąp"
 
@@ -1353,12 +1296,12 @@ msgid "Seahorse Applet Factory"
 msgstr "Fabryka apletów seahorse"
 
 #: ../plugins/applet/GNOME_SeahorseApplet.xml.h:1
-#: ../src/seahorse-key-manager.c:1208
+#: ../src/seahorse-key-manager.c:1189
 msgid "_About"
 msgstr "_O programie"
 
 #: ../plugins/applet/GNOME_SeahorseApplet.xml.h:2
-#: ../src/seahorse-key-manager.c:1192 ../src/seahorse-keyserver-results.c:381
+#: ../src/seahorse-key-manager.c:1173 ../src/seahorse-keyserver-results.c:381
 msgid "_Help"
 msgstr "_Pomoc"
 
@@ -1377,11 +1320,11 @@ msgstr ""
 "Używa PGP/GPG do szyfrowania/odszyfrowywania/podpisywania/weryfikowania/"
 "importowania schowka."
 
-#: ../plugins/applet/seahorse-applet.c:316 ../src/seahorse-key-manager.c:874
+#: ../plugins/applet/seahorse-applet.c:316 ../src/seahorse-key-manager.c:866
 msgid "translator-credits"
 msgstr "GNOME PL Team <gnome-l10n@lists.aviary.pl>"
 
-#: ../plugins/applet/seahorse-applet.c:319 ../src/seahorse-key-manager.c:877
+#: ../plugins/applet/seahorse-applet.c:319 ../src/seahorse-key-manager.c:869
 msgid "Seahorse Project Homepage"
 msgstr "Strona domowa projektu Seahorse"
 
@@ -1424,11 +1367,13 @@ msgstr "Schowek nie mógł zostać podpisany."
 
 #: ../plugins/applet/seahorse-applet.c:496
 #: ../plugins/epiphany/seahorse-extension.c:340
+#: ../plugins/nautilus/seahorse-tool.c:428
 msgid "Import Failed"
 msgstr "Importowanie nie powiodło się"
 
 #: ../plugins/applet/seahorse-applet.c:497
 #: ../plugins/epiphany/seahorse-extension.c:341
+#: ../plugins/nautilus/seahorse-tool.c:429
 msgid "Keys were found but not imported."
 msgstr "Znaleziono klucze ale nie zostały one zaimportowane."
 
@@ -1500,20 +1445,20 @@ msgstr "_Szyfrowanie lub podpisywanie schowka"
 msgid "_Show clipboard state in panel"
 msgstr "_Wyświetlanie stanu schowka na panelu"
 
-#: ../plugins/epiphany/seahorse-extension.c:602
+#: ../plugins/epiphany/seahorse-extension.c:619
 msgid "_Encrypt"
 msgstr "_Szyfruj"
 
-#: ../plugins/epiphany/seahorse-extension.c:609
+#: ../plugins/epiphany/seahorse-extension.c:626
 #: ../src/seahorse-sign.glade.h:21
 msgid "_Sign"
 msgstr "_Podpisz"
 
-#: ../plugins/epiphany/seahorse-extension.c:616
+#: ../plugins/epiphany/seahorse-extension.c:633
 msgid "_Decrypt/Verify"
 msgstr "_Odszyfruj/Weryfikuj"
 
-#: ../plugins/epiphany/seahorse-extension.c:623
+#: ../plugins/epiphany/seahorse-extension.c:640
 msgid "_Import Key"
 msgstr "I_mportuj klucz"
 
@@ -1529,8 +1474,8 @@ msgstr "Tekst zaszyfrowany"
 msgid "Couldn't encrypt text"
 msgstr "Nie można zaszyfrować tekstu"
 
-#: ../plugins/gedit/seahorse-gedit.c:387 ../src/seahorse-key-manager.c:395
-#: ../src/seahorse-key-manager.c:463 ../src/seahorse-key-manager.c:486
+#: ../plugins/gedit/seahorse-gedit.c:387 ../src/seahorse-key-manager.c:387
+#: ../src/seahorse-key-manager.c:455 ../src/seahorse-key-manager.c:478
 msgid "Couldn't import keys"
 msgstr "Nie można zaimportować kluczy"
 
@@ -1559,7 +1504,7 @@ msgid "Verified text"
 msgstr "Zweryfikowany tekst"
 
 #: ../plugins/gedit/seahorse-gedit.c:582
-#: ../plugins/nautilus/seahorse-tool.c:374 ../src/seahorse-key-manager.c:404
+#: ../plugins/nautilus/seahorse-tool.c:454 ../src/seahorse-key-manager.c:396
 #, c-format
 msgid "Imported %d key"
 msgid_plural "Imported %d keys"
@@ -1627,7 +1572,7 @@ msgstr[1] "Szyfrowanie (i opcjonalne podpisanie) zaznaczonych plików"
 msgstr[2] "Szyfrowanie (i opcjonalne podpisanie) zaznaczonych plików"
 
 #: ../plugins/nautilus-ext/seahorse-nautilus.c:168
-#: ../src/seahorse-pgp-private-key-properties.glade.h:38
+#: ../src/seahorse-pgp-private-key-properties.glade.h:39
 msgid "Sign"
 msgstr "Podpisz"
 
@@ -1643,77 +1588,93 @@ msgstr[2] "Podpisz zaznaczone pliki"
 msgid "For internal use"
 msgstr "Do użytku wewnętrznego"
 
+#: ../plugins/nautilus/seahorse-pgp-preferences.c:74
+msgid "Encryption Preferences"
+msgstr "Preferencje szyfrowania"
+
 #: ../plugins/nautilus/seahorse-pgp-preferences.desktop.in.h:1
 msgid "Configure key servers and other encryption settings"
 msgstr "Konfigurowanie serwerów kluczy i innych ustawień szyfrowania"
 
-#: ../plugins/nautilus/seahorse-tool.c:52
+#: ../plugins/nautilus/seahorse-pgp-preferences.desktop.in.h:2
+msgid "Encryption and Keyrings"
+msgstr "Szyfrowaine i bazy kluczy"
+
+#: ../plugins/nautilus/seahorse-tool.c:58
 msgid "Import keys from the file"
 msgstr "Importuje klucze z pliku"
 
-#: ../plugins/nautilus/seahorse-tool.c:54
+#: ../plugins/nautilus/seahorse-tool.c:60
 msgid "Encrypt file"
 msgstr "Szyfruje plik"
 
-#: ../plugins/nautilus/seahorse-tool.c:56
+#: ../plugins/nautilus/seahorse-tool.c:62
 msgid "Sign file with default key"
 msgstr "Podpisuje plik domyślnym kluczem"
 
-#: ../plugins/nautilus/seahorse-tool.c:58
+#: ../plugins/nautilus/seahorse-tool.c:64
 msgid "Encrypt and sign file with default key"
 msgstr "Szyfruje i podpisuje plik domyślnym kluczem"
 
-#: ../plugins/nautilus/seahorse-tool.c:60
+#: ../plugins/nautilus/seahorse-tool.c:66
 msgid "Decrypt encrypted file"
 msgstr "Rozszyfrowuje plik"
 
-#: ../plugins/nautilus/seahorse-tool.c:62
+#: ../plugins/nautilus/seahorse-tool.c:68
 msgid "Verify signature file"
 msgstr "Weryfikuje podpis pliku"
 
-#: ../plugins/nautilus/seahorse-tool.c:64
+#: ../plugins/nautilus/seahorse-tool.c:70
 msgid "Read list of URIs on standard in"
 msgstr "Odczytuje listę URI ze standardowego wejścia"
 
-#: ../plugins/nautilus/seahorse-tool.c:66
+#: ../plugins/nautilus/seahorse-tool.c:72
 msgid "file..."
 msgstr "plik..."
 
-#: ../plugins/nautilus/seahorse-tool.c:128
+#: ../plugins/nautilus/seahorse-tool.c:162
 msgid "Choose Recipients"
 msgstr "Wybór odbiorców"
 
-#: ../plugins/nautilus/seahorse-tool.c:190
-#: ../plugins/nautilus/seahorse-tool.c:272
+#: ../plugins/nautilus/seahorse-tool.c:224
+#: ../plugins/nautilus/seahorse-tool.c:306
 msgid "Couldn't load keys"
 msgstr "Nie można wczytać kluczy"
 
-#: ../plugins/nautilus/seahorse-tool.c:206
+#: ../plugins/nautilus/seahorse-tool.c:240
 #, c-format
 msgid "Choose Encrypted File Name for '%s'"
 msgstr "Wybór nazwy zaszyfrowanego pliku dla \"%s\""
 
-#: ../plugins/nautilus/seahorse-tool.c:256
+#: ../plugins/nautilus/seahorse-tool.c:290
 msgid "Choose Signer"
 msgstr "Wybór osoby podpisującej"
 
-#: ../plugins/nautilus/seahorse-tool.c:291
+#: ../plugins/nautilus/seahorse-tool.c:325
 #, c-format
 msgid "Choose Signature File Name for '%s'"
 msgstr "Wybór nazwy pliku podpisu dla \"%s\""
 
-#: ../plugins/nautilus/seahorse-tool.c:372
+#: ../plugins/nautilus/seahorse-tool.c:365
+msgid "Import is complete"
+msgstr "Importowanie ukończone"
+
+#: ../plugins/nautilus/seahorse-tool.c:398
+msgid "Importing keys ..."
+msgstr "Importowanie kluczy ..."
+
+#: ../plugins/nautilus/seahorse-tool.c:452
 #, c-format
 msgid "Imported key"
 msgstr "Zaimportowany klucz"
 
 #. File to decrypt to
-#: ../plugins/nautilus/seahorse-tool.c:396
+#: ../plugins/nautilus/seahorse-tool.c:476
 #, c-format
 msgid "Choose Decrypted File Name for '%s'"
 msgstr "Wybór nazwy odszyfrowanego pliku dla \"%s\""
 
-#: ../plugins/nautilus/seahorse-tool.c:452
+#: ../plugins/nautilus/seahorse-tool.c:532
 #, c-format
 msgid "Choose Original File for '%s'"
 msgstr "Wybór pliku oryginału dla \"%s\""
@@ -1723,56 +1684,56 @@ msgstr "Wybór pliku oryginału dla \"%s\""
 #. * The last thing we want to do is cascade a big pile of error
 #. * dialogs at the user.
 #.
-#: ../plugins/nautilus/seahorse-tool.c:524
+#: ../plugins/nautilus/seahorse-tool.c:604
 #, c-format
 msgid "No valid signatures found"
 msgstr "Nie znaleziono prawidłowych podpisów"
 
-#: ../plugins/nautilus/seahorse-tool.c:591
+#: ../plugins/nautilus/seahorse-tool.c:657
 msgid "File Encryption Tool"
 msgstr "Narzędzie do szyfrowania plików"
 
-#: ../plugins/nautilus/seahorse-tool.c:614
+#: ../plugins/nautilus/seahorse-tool.c:680
 msgid "Encrypting"
 msgstr "Szyfrowanie"
 
-#: ../plugins/nautilus/seahorse-tool.c:615
+#: ../plugins/nautilus/seahorse-tool.c:681
 #, c-format
 msgid "Couldn't encrypt file: %s"
 msgstr "Nie można zaszyfrować pliku: %s"
 
-#: ../plugins/nautilus/seahorse-tool.c:623
+#: ../plugins/nautilus/seahorse-tool.c:689
 msgid "Signing"
 msgstr "Podpisywanie"
 
-#: ../plugins/nautilus/seahorse-tool.c:624
+#: ../plugins/nautilus/seahorse-tool.c:690
 #, c-format
 msgid "Couldn't sign file: %s"
 msgstr "Nie można podpisać pliku: %s"
 
-#: ../plugins/nautilus/seahorse-tool.c:629
+#: ../plugins/nautilus/seahorse-tool.c:695
 msgid "Importing"
 msgstr "Importowanie"
 
-#: ../plugins/nautilus/seahorse-tool.c:630
+#: ../plugins/nautilus/seahorse-tool.c:696
 #, c-format
 msgid "Couldn't import keys from file: %s"
 msgstr "Nie można zaimportować kluczy z pliku: %s"
 
-#: ../plugins/nautilus/seahorse-tool.c:636
+#: ../plugins/nautilus/seahorse-tool.c:702
 msgid "Decrypting"
 msgstr "Odszyfrowywanie"
 
-#: ../plugins/nautilus/seahorse-tool.c:637
+#: ../plugins/nautilus/seahorse-tool.c:703
 #, c-format
 msgid "Couldn't decrypt file: %s"
 msgstr "Nie można odszyfrować pliku: %s"
 
-#: ../plugins/nautilus/seahorse-tool.c:642
+#: ../plugins/nautilus/seahorse-tool.c:708
 msgid "Verifying"
 msgstr "Weryfikowanie"
 
-#: ../plugins/nautilus/seahorse-tool.c:643
+#: ../plugins/nautilus/seahorse-tool.c:709
 #, c-format
 msgid "Couldn't verify file: %s"
 msgstr "Nie można zweryfikować pliku: %s"
@@ -1890,16 +1851,16 @@ msgstr[0] "Zaznaczono %d folder"
 msgstr[1] "Zaznaczono %d foldery"
 msgstr[2] "Zaznaczono %d folderów"
 
-#: ../plugins/nautilus/seahorse-tool-files.c:812
+#: ../plugins/nautilus/seahorse-tool-files.c:811
 msgid "Preparing..."
 msgstr "Przygotowywanie..."
 
-#: ../plugins/nautilus/seahorse-tool-files.c:821
-#: ../plugins/nautilus/seahorse-tool-files.c:844
+#: ../plugins/nautilus/seahorse-tool-files.c:820
+#: ../plugins/nautilus/seahorse-tool-files.c:843
 msgid "Couldn't list files"
 msgstr "Nie można odczytać listy plików"
 
-#: ../src/main.c:75 ../src/seahorse-key-manager.c:869
+#: ../src/main.c:61 ../src/seahorse-key-manager.c:861
 msgid "Encryption Key Manager"
 msgstr "Menedżer kluczy szyfrujących"
 
@@ -2083,13 +2044,13 @@ msgstr "Data wygaśnięcia dla %s"
 msgid "C_hange"
 msgstr "Z_mień"
 
-#: ../src/seahorse-expires.glade.h:2
-msgid "Never Expires"
-msgstr "Nie wygasa"
-
-#: ../src/seahorse-expires.glade.h:3 ../src/seahorse-revoke.glade.h:4
+#: ../src/seahorse-expires.glade.h:2 ../src/seahorse-revoke.glade.h:4
 msgid "Revoke key"
 msgstr "Unieważnia klucz"
+
+#: ../src/seahorse-expires.glade.h:3
+msgid "_Never expires"
+msgstr "_Nigdy nie wygasa"
 
 #: ../src/seahorse-generate-select.c:143
 msgid "Used to encrypt email and files"
@@ -2111,177 +2072,195 @@ msgstr "_Do przodu"
 msgid "Create a New Key"
 msgstr "Tworzenie nowego klucza"
 
-#: ../src/seahorse-gkeyring-item.c:248
+#: ../src/seahorse-gkeyring-item.c:249
 msgid "Web Password"
 msgstr "Hasło witryny WWW"
 
-#: ../src/seahorse-gkeyring-item.c:250
+#: ../src/seahorse-gkeyring-item.c:251
 msgid "Network Password"
 msgstr "Hasło sieciowe"
 
-#: ../src/seahorse-gkeyring-item.c:252
-#: ../src/seahorse-gkeyring-item-properties.c:116
-#: ../src/seahorse-gkeyring-source.c:525
+#: ../src/seahorse-gkeyring-item.c:253
+#: ../src/seahorse-gkeyring-item-properties.c:119
+#: ../src/seahorse-gkeyring-source.c:546
 msgid "Password"
 msgstr "Hasło"
 
-#: ../src/seahorse-gkeyring-item-properties.c:90
+#: ../src/seahorse-gkeyring-item-properties.c:93
 msgid "Access a network share or resource"
 msgstr "Otwiera dostęp do udziału sieciowego lub zasobu"
 
-#: ../src/seahorse-gkeyring-item-properties.c:94
+#: ../src/seahorse-gkeyring-item-properties.c:97
 msgid "Access a website"
 msgstr "Otwiera dostęp do witryny WWW"
 
-#: ../src/seahorse-gkeyring-item-properties.c:98
+#: ../src/seahorse-gkeyring-item-properties.c:101
 msgid "Unlocks a PGP key"
 msgstr "Odblokowuje klucz PGP"
 
-#: ../src/seahorse-gkeyring-item-properties.c:101
+#: ../src/seahorse-gkeyring-item-properties.c:104
 msgid "Unlocks a Secure Shell key"
 msgstr "Odblokowuje klucz SSH"
 
-#: ../src/seahorse-gkeyring-item-properties.c:104
+#: ../src/seahorse-gkeyring-item-properties.c:107
 msgid "Saved password or login"
 msgstr "Zapisane hasło lub login"
 
-#: ../src/seahorse-gkeyring-item-properties.c:116
+#: ../src/seahorse-gkeyring-item-properties.c:119
 msgid "Network Credentials"
 msgstr "Sieciowe dane uwierzytelniające"
 
-#: ../src/seahorse-gkeyring-item-properties.c:177
+#: ../src/seahorse-gkeyring-item-properties.c:180
 msgid "Couldn't change password."
 msgstr "Nie można zmienić hasła."
 
-#: ../src/seahorse-gkeyring-item-properties.c:284
+#: ../src/seahorse-gkeyring-item-properties.c:287
 msgid "Couldn't set description."
 msgstr "Nie można ustawić opisu."
 
+#: ../src/seahorse-gkeyring-item-properties.c:496
+msgid "Couldn't set application access."
+msgstr "Nie można ustawić dostępu aplikacji."
+
 #: ../src/seahorse-gkeyring-item-properties.glade.h:1
-msgid "<b>Description:</b>"
-msgstr "<b>Opis:</b>"
-
-#: ../src/seahorse-gkeyring-item-properties.glade.h:2
-msgid "<b>Login:</b>"
-msgstr "<b>Login:</b>"
-
-#: ../src/seahorse-gkeyring-item-properties.glade.h:3
 msgid "<b>Password:</b>"
 msgstr "<b>Hasło:</b>"
 
-#: ../src/seahorse-gkeyring-item-properties.glade.h:4
-msgid "<b>Server:</b>"
-msgstr "<b>Serwer:</b>"
+#: ../src/seahorse-gkeyring-item-properties.glade.h:2
+msgid "<b>Path:</b>"
+msgstr "<b>Ścieżka:</b>"
 
-#: ../src/seahorse-gkeyring-item-properties.glade.h:5
+#: ../src/seahorse-gkeyring-item-properties.glade.h:3
+msgid "<b>Permissions:</b>"
+msgstr "<b>Uprawnienia:</b>"
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:4
 #: ../src/seahorse-pgp-public-key-properties.glade.h:9
 #: ../src/seahorse-ssh-key-properties.glade.h:9
 msgid "<b>Technical Details:</b>"
 msgstr "<b>Szczegóły techniczne:</b>"
 
+#: ../src/seahorse-gkeyring-item-properties.glade.h:5
+msgid "Applications"
+msgstr "Aplikacje"
+
 #: ../src/seahorse-gkeyring-item-properties.glade.h:6
-#: ../src/seahorse-pgp-private-key-properties.glade.h:13
-#: ../src/seahorse-pgp-public-key-properties.glade.h:12
-#: ../src/seahorse-ssh-key-properties.glade.h:11
-msgid "<b>Type:</b>"
-msgstr "<b>Typ:</b>"
-
-#: ../src/seahorse-gkeyring-item-properties.glade.h:7
-#: ../src/seahorse-pgp-private-key-properties.glade.h:14
-#: ../src/seahorse-pgp-public-key-properties.glade.h:13
-#: ../src/seahorse-ssh-key-properties.glade.h:12
-msgid "<b>Use:</b>"
-msgstr "<b>Zastosowanie:</b>"
-
-#: ../src/seahorse-gkeyring-item-properties.glade.h:8
-#: ../src/seahorse-pgp-private-key-properties.glade.h:22
-#: ../src/seahorse-pgp-public-key-properties.glade.h:19
-#: ../src/seahorse-ssh-key-properties.glade.h:16
+#: ../src/seahorse-pgp-private-key-properties.glade.h:23
+#: ../src/seahorse-pgp-public-key-properties.glade.h:20
+#: ../src/seahorse-ssh-key-properties.glade.h:17
 msgid "Details"
 msgstr "Szczegóły"
 
-#: ../src/seahorse-gkeyring-item-properties.glade.h:9
-#: ../src/seahorse-ssh-key-properties.glade.h:18
+#: ../src/seahorse-gkeyring-item-properties.glade.h:7
+#: ../src/seahorse-ssh-key-properties.glade.h:19
 msgid "Key"
 msgstr "Klucz"
 
-#: ../src/seahorse-gkeyring-item-properties.glade.h:10
-#: ../src/seahorse-pgp-private-key-properties.glade.h:29
-#: ../src/seahorse-pgp-public-key-properties.glade.h:28
-#: ../src/seahorse-ssh-key-properties.glade.h:19
+#: ../src/seahorse-gkeyring-item-properties.glade.h:8
+#: ../src/seahorse-pgp-private-key-properties.glade.h:30
+#: ../src/seahorse-pgp-public-key-properties.glade.h:29
+#: ../src/seahorse-ssh-key-properties.glade.h:20
 msgid "Key Properties"
 msgstr "Właściwości klucza"
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:9
+msgid "Login:"
+msgstr "Login:"
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:10
+msgid "Server:"
+msgstr "Serwer:"
 
 #: ../src/seahorse-gkeyring-item-properties.glade.h:11
 msgid "Show pass_word"
 msgstr "_Wyświetlanie hasła"
 
 #: ../src/seahorse-gkeyring-item-properties.glade.h:12
-msgid "[details]\n"
-msgstr "[szczegóły]\n"
+#: ../src/seahorse-pgp-private-key-properties.glade.h:42
+#: ../src/seahorse-pgp-public-key-properties.glade.h:36
+msgid "Type:"
+msgstr "Typ:"
 
+#. To translators: This is the noun not the verb.
 #: ../src/seahorse-gkeyring-item-properties.glade.h:14
-msgid "[login]"
-msgstr "[login]"
+msgid "Use:"
+msgstr "Użyj:"
 
-#: ../src/seahorse-gkeyring-item-properties.glade.h:15
-msgid "[server]"
-msgstr "[serwer]"
+#. To translators: This is the infinitive not the imperative.
+#: ../src/seahorse-gkeyring-item-properties.glade.h:16
+msgid "_Delete"
+msgstr "_Usunięcie"
 
-#: ../src/seahorse-gkeyring-operation.c:206
+#: ../src/seahorse-gkeyring-item-properties.glade.h:17
+#: ../src/seahorse-revoke.glade.h:5
+msgid "_Description:"
+msgstr "_Opis:"
+
+#. To translators: This is the infinitive not the imperative.
+#: ../src/seahorse-gkeyring-item-properties.glade.h:19
+msgid "_Read"
+msgstr "_Odczyt"
+
+#. To translators: This is the infinitive not the imperative.
+#: ../src/seahorse-gkeyring-item-properties.glade.h:21
+msgid "_Write"
+msgstr "_Zapis"
+
+#: ../src/seahorse-gkeyring-operation.c:204
 msgid "Access to the key ring was denied"
 msgstr "Odmowa dostępu do zbioru kluczy"
 
-#: ../src/seahorse-gkeyring-operation.c:209
+#: ../src/seahorse-gkeyring-operation.c:207
 msgid "The gnome-keyring daemon is not running"
 msgstr "Proces gnome-keyring nie jest uruchomiony"
 
-#: ../src/seahorse-gkeyring-operation.c:212
+#: ../src/seahorse-gkeyring-operation.c:210
 msgid "The key ring has already been unlocked"
 msgstr "Zbiór kluczy został już odblokowany"
 
-#: ../src/seahorse-gkeyring-operation.c:215
+#: ../src/seahorse-gkeyring-operation.c:213
 msgid "No such key ring exists"
 msgstr "Nie istnieje taki zbiór kluczy"
 
-#: ../src/seahorse-gkeyring-operation.c:218
+#: ../src/seahorse-gkeyring-operation.c:216
 msgid "Couldn't communicate with key ring daemon"
 msgstr "Nie można połączyć się z demonem zbioru kluczy"
 
-#: ../src/seahorse-gkeyring-operation.c:221
+#: ../src/seahorse-gkeyring-operation.c:219
 msgid "The item already exists"
 msgstr "Element już istnieje"
 
-#: ../src/seahorse-gkeyring-operation.c:227
+#: ../src/seahorse-gkeyring-operation.c:225
 msgid "Internal error accessing gnome-keyring"
 msgstr "Błąd wewnętrzny przy próbie dostępu do gnome-keyring"
 
-#: ../src/seahorse-gkeyring-operation.c:286
+#: ../src/seahorse-gkeyring-operation.c:282
+#: ../src/seahorse-gkeyring-operation.c:314
 msgid "Saving item..."
 msgstr "Zapisywanie elementu..."
 
-#: ../src/seahorse-gkeyring-source.c:358
+#: ../src/seahorse-gkeyring-source.c:403
 msgid "Retrieving key"
 msgstr "Pobieranie klucza"
 
 #. Start listing of ids
-#: ../src/seahorse-gkeyring-source.c:372
+#: ../src/seahorse-gkeyring-source.c:417
 msgid "Listing passwords"
 msgstr "Tworzenie listy haseł"
 
-#: ../src/seahorse-key-manager.c:443
+#: ../src/seahorse-key-manager.c:435
 msgid "Couldn't read file"
 msgstr "Nie można odczytać pliku"
 
-#: ../src/seahorse-key-manager.c:486
+#: ../src/seahorse-key-manager.c:478
 msgid "Unrecognized key type, or invalid data format"
 msgstr "Nierozpoznany typ klucza lub nieprawidłowy format danych"
 
-#: ../src/seahorse-key-manager.c:560 ../src/seahorse-keyserver-results.c:218
+#: ../src/seahorse-key-manager.c:552 ../src/seahorse-keyserver-results.c:218
 msgid "Couldn't retrieve data from key server"
 msgstr "Nie można pobrać danych z serwera kluczy"
 
-#: ../src/seahorse-key-manager.c:576 ../src/seahorse-keyserver-results.c:234
+#: ../src/seahorse-key-manager.c:568 ../src/seahorse-keyserver-results.c:234
 #, c-format
 msgid "Copied %d key"
 msgid_plural "Copied %d keys"
@@ -2289,42 +2268,42 @@ msgstr[0] "Skopiowano %d klucz"
 msgstr[1] "Skopiowano %d klucze"
 msgstr[2] "Skopiowano %d kluczy"
 
-#: ../src/seahorse-key-manager.c:600 ../src/seahorse-keyserver-results.c:194
+#: ../src/seahorse-key-manager.c:592 ../src/seahorse-keyserver-results.c:194
 #: ../src/seahorse-keyserver-results.c:259
 msgid "Retrieving keys"
 msgstr "Pobieranie kluczy"
 
-#: ../src/seahorse-key-manager.c:626
+#: ../src/seahorse-key-manager.c:618
 msgid "Couldn't export key"
 msgstr "Nie można wyeksportować klucza"
 
-#: ../src/seahorse-key-manager.c:646
+#: ../src/seahorse-key-manager.c:638
 msgid "Export public key"
 msgstr "Eksportowanie klucza publicznego"
 
-#: ../src/seahorse-key-manager.c:656 ../src/seahorse-key-properties.c:1038
+#: ../src/seahorse-key-manager.c:648 ../src/seahorse-key-properties.c:1038
 #: ../src/seahorse-ssh-key-properties.c:240
 #, c-format
 msgid "Couldn't export key to \"%s\""
 msgstr "Niemożna wyeksportować klucza do \"%s\""
 
-#: ../src/seahorse-key-manager.c:668
+#: ../src/seahorse-key-manager.c:660
 msgid "Exporting keys"
 msgstr "Eksportowanie kluczy"
 
-#: ../src/seahorse-key-manager.c:687
+#: ../src/seahorse-key-manager.c:679
 msgid "Back up Key Rings to Archive"
 msgstr "Wykonywanie kopii zapasowej zbiorów kluczy"
 
-#: ../src/seahorse-key-manager.c:841
+#: ../src/seahorse-key-manager.c:833
 msgid "Contributions:"
 msgstr "Współpraca:"
 
-#: ../src/seahorse-key-manager.c:867
+#: ../src/seahorse-key-manager.c:859
 msgid "seahorse"
 msgstr "seahorse"
 
-#: ../src/seahorse-key-manager.c:950 ../src/seahorse-keyserver-results.c:300
+#: ../src/seahorse-key-manager.c:942 ../src/seahorse-keyserver-results.c:300
 #, c-format
 msgid "Selected %d key"
 msgid_plural "Selected %d keys"
@@ -2333,160 +2312,160 @@ msgstr[1] "Zaznaczono %d klucze"
 msgstr[2] "Zaznaczono %d kluczy"
 
 #. Top menu items
-#: ../src/seahorse-key-manager.c:1189 ../src/seahorse-keyserver-results.c:379
+#: ../src/seahorse-key-manager.c:1170 ../src/seahorse-keyserver-results.c:379
 msgid "_Key"
 msgstr "_Klucz"
 
-#: ../src/seahorse-key-manager.c:1190 ../src/seahorse-keyserver-results.c:380
+#: ../src/seahorse-key-manager.c:1171 ../src/seahorse-keyserver-results.c:380
 msgid "_Edit"
 msgstr "_Edycja"
 
-#: ../src/seahorse-key-manager.c:1191
+#: ../src/seahorse-key-manager.c:1172
 msgid "_View"
 msgstr "_Widok"
 
 #. Key Actions
-#: ../src/seahorse-key-manager.c:1195
+#: ../src/seahorse-key-manager.c:1176
 msgid "_Create New Key..."
 msgstr "_Utwórz nowy klucz..."
 
-#: ../src/seahorse-key-manager.c:1196
+#: ../src/seahorse-key-manager.c:1177
 msgid "Create a new personal key"
 msgstr "Tworzy nowy klucz osobisty"
 
-#: ../src/seahorse-key-manager.c:1197
+#: ../src/seahorse-key-manager.c:1178
 msgid "_Import..."
 msgstr "I_mportuj..."
 
-#: ../src/seahorse-key-manager.c:1198
+#: ../src/seahorse-key-manager.c:1179
 msgid "Import keys into your key ring from a file"
 msgstr "Importuje klucze z pliku do zbioru kluczy"
 
-#: ../src/seahorse-key-manager.c:1199
+#: ../src/seahorse-key-manager.c:1180
 msgid "_Back up Key Rings..."
 msgstr "_Archiwizuj zbiory kluczy..."
 
-#: ../src/seahorse-key-manager.c:1200
+#: ../src/seahorse-key-manager.c:1181
 msgid "Back up all keys"
 msgstr "Tworzy kopię zapasową wszystkich kluczy"
 
-#: ../src/seahorse-key-manager.c:1201
+#: ../src/seahorse-key-manager.c:1182
 msgid "Paste _Keys"
 msgstr "_Wklej klucze"
 
-#: ../src/seahorse-key-manager.c:1202
+#: ../src/seahorse-key-manager.c:1183
 msgid "Import keys from the clipboard"
 msgstr "Importuje klucze ze schowka"
 
-#: ../src/seahorse-key-manager.c:1204
+#: ../src/seahorse-key-manager.c:1185
 msgid "_Quit"
 msgstr "Za_kończ"
 
-#: ../src/seahorse-key-manager.c:1205
+#: ../src/seahorse-key-manager.c:1186
 msgid "Close this program"
 msgstr "Kończy działanie programu"
 
-#: ../src/seahorse-key-manager.c:1206
+#: ../src/seahorse-key-manager.c:1187
 msgid "Prefere_nces"
 msgstr "_Preferencje"
 
-#: ../src/seahorse-key-manager.c:1207
+#: ../src/seahorse-key-manager.c:1188
 msgid "Change preferences for this program"
 msgstr "Zmienia preferencje dla tego programu"
 
-#: ../src/seahorse-key-manager.c:1209
+#: ../src/seahorse-key-manager.c:1190
 msgid "About this program"
 msgstr "Informacje o tym programie"
 
-#: ../src/seahorse-key-manager.c:1211
+#: ../src/seahorse-key-manager.c:1192
 msgid "_Remote"
 msgstr "_Zdalne"
 
-#: ../src/seahorse-key-manager.c:1213 ../src/seahorse-keyserver-results.c:385
+#: ../src/seahorse-key-manager.c:1194 ../src/seahorse-keyserver-results.c:385
 msgid "_Contents"
 msgstr "_Zawartość"
 
-#: ../src/seahorse-key-manager.c:1214 ../src/seahorse-keyserver-results.c:386
+#: ../src/seahorse-key-manager.c:1195 ../src/seahorse-keyserver-results.c:386
 msgid "Show Seahorse help"
 msgstr "Otwiera podręcznik programu Seahorse"
 
-#: ../src/seahorse-key-manager.c:1218
+#: ../src/seahorse-key-manager.c:1199
 msgid "T_ypes"
 msgstr "_Typy"
 
-#: ../src/seahorse-key-manager.c:1219
+#: ../src/seahorse-key-manager.c:1200
 msgid "Show type column"
 msgstr "Wyświetlanie kolumny typu"
 
-#: ../src/seahorse-key-manager.c:1220
+#: ../src/seahorse-key-manager.c:1201
 msgid "_Expiry"
 msgstr "_Wygasanie"
 
-#: ../src/seahorse-key-manager.c:1221
+#: ../src/seahorse-key-manager.c:1202
 msgid "Show expiry column"
 msgstr "Wyświetlanie kolumny terminu wygaśnięcia"
 
-#: ../src/seahorse-key-manager.c:1222
+#: ../src/seahorse-key-manager.c:1203
 msgid "_Trust"
 msgstr "_Zaufanie"
 
-#: ../src/seahorse-key-manager.c:1223
+#: ../src/seahorse-key-manager.c:1204
 msgid "Show owner trust column"
 msgstr "Wyświetlanie kolumny zaufania"
 
-#: ../src/seahorse-key-manager.c:1224
+#: ../src/seahorse-key-manager.c:1205
 msgid "_Validity"
 msgstr "_Poprawność"
 
-#: ../src/seahorse-key-manager.c:1225
+#: ../src/seahorse-key-manager.c:1206
 msgid "Show validity column"
 msgstr "Wyświetlanie kolumny poprawności"
 
-#: ../src/seahorse-key-manager.c:1229 ../src/seahorse-keyserver-results.c:397
+#: ../src/seahorse-key-manager.c:1210 ../src/seahorse-keyserver-results.c:397
 msgid "P_roperties"
 msgstr "_Właściwości"
 
-#: ../src/seahorse-key-manager.c:1230 ../src/seahorse-keyserver-results.c:398
+#: ../src/seahorse-key-manager.c:1211 ../src/seahorse-keyserver-results.c:398
 msgid "Show key properties"
 msgstr "Wyświetla właściwości klucza"
 
-#: ../src/seahorse-key-manager.c:1231
+#: ../src/seahorse-key-manager.c:1212
 msgid "E_xport Public Key..."
 msgstr "_Eksportuj klucz publiczny..."
 
-#: ../src/seahorse-key-manager.c:1232
+#: ../src/seahorse-key-manager.c:1213
 msgid "Export public part of key to a file"
 msgstr "Eksportuje część publiczną klucza do pliku"
 
-#: ../src/seahorse-key-manager.c:1233
+#: ../src/seahorse-key-manager.c:1214
 msgid "_Copy Public Key"
 msgstr "_Kopiuj klucz publiczny"
 
-#: ../src/seahorse-key-manager.c:1234
+#: ../src/seahorse-key-manager.c:1215
 msgid "Copy public part of selected keys to the clipboard"
 msgstr "Kopiuje publiczne części zaznaczonych kluczy do schowka"
 
-#: ../src/seahorse-key-manager.c:1235
+#: ../src/seahorse-key-manager.c:1216
 msgid "_Delete Key"
 msgstr "_Usuń klucz"
 
-#: ../src/seahorse-key-manager.c:1236
+#: ../src/seahorse-key-manager.c:1217
 msgid "Delete selected keys"
 msgstr "Usuwa zaznaczone klucze"
 
-#: ../src/seahorse-key-manager.c:1240
+#: ../src/seahorse-key-manager.c:1221
 msgid "_Sign..."
 msgstr "_Podpisz..."
 
-#: ../src/seahorse-key-manager.c:1241
+#: ../src/seahorse-key-manager.c:1222
 msgid "Sign public key"
 msgstr "Podpisuje klucz publiczny"
 
-#: ../src/seahorse-key-manager.c:1245
+#: ../src/seahorse-key-manager.c:1226
 msgid "Set Up Computer for _Secure Shell..."
 msgstr "Przygotuj komputer do połączeń _SSH..."
 
-#: ../src/seahorse-key-manager.c:1246
+#: ../src/seahorse-key-manager.c:1227
 msgid ""
 "Send public Secure Shell key to another machine, and enable logins using "
 "that key."
@@ -2494,19 +2473,19 @@ msgstr ""
 "Wysyła publiczny klucz SSH na inny komputer i włącza możliwość zdalnego "
 "logowania za pomocą tego klucza."
 
-#: ../src/seahorse-key-manager.c:1250 ../src/seahorse-keyserver-results.c:406
+#: ../src/seahorse-key-manager.c:1231 ../src/seahorse-keyserver-results.c:406
 msgid "_Find Remote Keys..."
 msgstr "_Szukaj kluczy zdalnych..."
 
-#: ../src/seahorse-key-manager.c:1251 ../src/seahorse-keyserver-results.c:407
+#: ../src/seahorse-key-manager.c:1232 ../src/seahorse-keyserver-results.c:407
 msgid "Search for keys on a key server"
 msgstr "Wyszukiwanie kluczy na serwerze kluczy"
 
-#: ../src/seahorse-key-manager.c:1252
+#: ../src/seahorse-key-manager.c:1233
 msgid "_Sync and Publish Keys..."
 msgstr "_Synchronizuj i publikuj klucze..."
 
-#: ../src/seahorse-key-manager.c:1253
+#: ../src/seahorse-key-manager.c:1234
 msgid "Publish and/or synchronize your keys with those online."
 msgstr "Publikuje i/lub synchronizuje klucze lokalne z kluczami zdalnymi."
 
@@ -2551,41 +2530,41 @@ msgstr "_Hasła"
 msgid "_Trusted Keys"
 msgstr "_Zaufane klucze"
 
-#: ../src/seahorse-key-manager-store.c:311
+#: ../src/seahorse-key-manager-store.c:301
 #: ../src/seahorse-key-properties.c:1306
 msgid "Expired"
 msgstr "Wygasa"
 
-#: ../src/seahorse-key-manager-store.c:364
+#: ../src/seahorse-key-manager-store.c:354
 msgid "User ID"
 msgstr "Identyfikator użytkownika"
 
-#: ../src/seahorse-key-manager-store.c:697
+#: ../src/seahorse-key-manager-store.c:687
 msgid "Couldn't retrieve key data"
 msgstr "Nie można pobrać danych klucza"
 
-#: ../src/seahorse-key-manager-store.c:729
+#: ../src/seahorse-key-manager-store.c:718
 msgid "Couldn't write key to file"
 msgstr "Nie można zapisać klucza do pliku"
 
-#: ../src/seahorse-key-manager-store.c:972
+#: ../src/seahorse-key-manager-store.c:961
 msgid "Validity"
 msgstr "Poprawność"
 
 #. Trust column
-#: ../src/seahorse-key-manager-store.c:979
-#: ../src/seahorse-pgp-public-key-properties.glade.h:34
+#: ../src/seahorse-key-manager-store.c:968
+#: ../src/seahorse-pgp-public-key-properties.glade.h:35
 msgid "Trust"
 msgstr "Zaufanie"
 
 #. The key type column
-#: ../src/seahorse-key-manager-store.c:985
+#: ../src/seahorse-key-manager-store.c:974
 #: ../src/seahorse-key-properties.c:1284
 msgid "Type"
 msgstr "Typ"
 
 #. Expiry date column
-#: ../src/seahorse-key-manager-store.c:991
+#: ../src/seahorse-key-manager-store.c:980
 msgid "Expiration Date"
 msgstr "Data wygaśnięcia"
 
@@ -2875,19 +2854,19 @@ msgstr "DSA ElGamal"
 msgid "Couldn't generate PGP key"
 msgstr "Nie można wygenerować klucza PGP"
 
-#: ../src/seahorse-pgp-generate.c:139
+#: ../src/seahorse-pgp-generate.c:138
 msgid "Passphrase for New PGP Key"
 msgstr "Hasło dla nowego klucza PGP"
 
-#: ../src/seahorse-pgp-generate.c:140
+#: ../src/seahorse-pgp-generate.c:139
 msgid "Enter the passphrase for your new key twice."
 msgstr "Należy dwukrotnie wpisać hasło dla nowego klucza."
 
-#: ../src/seahorse-pgp-generate.c:149
+#: ../src/seahorse-pgp-generate.c:148
 msgid "Couldn't generate key"
 msgstr "Nie można wygenerować klucza"
 
-#: ../src/seahorse-pgp-generate.c:151
+#: ../src/seahorse-pgp-generate.c:150
 msgid "Generating key"
 msgstr "Generowanie klucza"
 
@@ -2998,110 +2977,118 @@ msgstr "<b>Ten klucz został unieważniony</b>"
 msgid "<b>This key has expired</b>"
 msgstr "<b>Ten klucz wygasł</b>"
 
+#: ../src/seahorse-pgp-private-key-properties.glade.h:13
+#: ../src/seahorse-pgp-public-key-properties.glade.h:12
+#: ../src/seahorse-ssh-key-properties.glade.h:11
+msgid "<b>Type:</b>"
+msgstr "<b>Typ:</b>"
+
+#. To translators: This is the noun not the verb.
 #: ../src/seahorse-pgp-private-key-properties.glade.h:15
-#: ../src/seahorse-pgp-public-key-properties.glade.h:17
+#: ../src/seahorse-pgp-public-key-properties.glade.h:14
+#: ../src/seahorse-ssh-key-properties.glade.h:13
+msgid "<b>Use:</b>"
+msgstr "<b>Zastosowanie:</b>"
+
+#: ../src/seahorse-pgp-private-key-properties.glade.h:16
+#: ../src/seahorse-pgp-public-key-properties.glade.h:18
 msgid "<b>_Subkeys</b>"
 msgstr "<b>_Podklucze</b>"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:16
+#: ../src/seahorse-pgp-private-key-properties.glade.h:17
 msgid "Add"
 msgstr "Dodaj"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:17
+#: ../src/seahorse-pgp-private-key-properties.glade.h:18
 msgid "Add a photo to this key"
 msgstr "Dodaje zdjęcie do tego klucza"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:18
-#: ../src/seahorse-ssh-key-properties.glade.h:15
+#: ../src/seahorse-pgp-private-key-properties.glade.h:19
+#: ../src/seahorse-ssh-key-properties.glade.h:16
 msgid "Change _Passphrase"
 msgstr "Zmień _hasło"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:19
-#: ../src/seahorse-pgp-public-key-properties.glade.h:18
+#: ../src/seahorse-pgp-private-key-properties.glade.h:20
+#: ../src/seahorse-pgp-public-key-properties.glade.h:19
 msgid "Created:"
 msgstr "Utworzony:"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:20
+#: ../src/seahorse-pgp-private-key-properties.glade.h:21
 msgid "Decrypt files and email sent to you."
 msgstr "Odszyfrowuje odebrane pliki i wiadomości."
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:21
+#: ../src/seahorse-pgp-private-key-properties.glade.h:22
 msgid "Delete"
 msgstr "Usuń"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:23
+#: ../src/seahorse-pgp-private-key-properties.glade.h:24
 msgid "Expire"
 msgstr "Wygasanie"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:24
-#: ../src/seahorse-pgp-public-key-properties.glade.h:21
+#: ../src/seahorse-pgp-private-key-properties.glade.h:25
+#: ../src/seahorse-pgp-public-key-properties.glade.h:22
 msgid "Expires:"
 msgstr "Wygasa:"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:25
+#: ../src/seahorse-pgp-private-key-properties.glade.h:26
 msgid "Export"
 msgstr "Eksportuj"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:26
+#: ../src/seahorse-pgp-private-key-properties.glade.h:27
 msgid "Go to next photo"
 msgstr "Przechodzi do następnego zdjęcia"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:27
+#: ../src/seahorse-pgp-private-key-properties.glade.h:28
 msgid "Go to previous photo"
 msgstr "Przechodzi do poprzedniego zdjęcia"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:28
-#: ../src/seahorse-pgp-public-key-properties.glade.h:27
+#: ../src/seahorse-pgp-private-key-properties.glade.h:29
+#: ../src/seahorse-pgp-public-key-properties.glade.h:28
 msgid "Key ID:"
 msgstr "ID klucza:"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:30
+#: ../src/seahorse-pgp-private-key-properties.glade.h:31
 msgid "Make this photo the primary photo"
 msgstr "Ustawia to zdjęcie jako podstawowe"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:31
+#: ../src/seahorse-pgp-private-key-properties.glade.h:32
 msgid "Names and Signatures"
 msgstr "Nazwy i podpisy"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:32
+#: ../src/seahorse-pgp-private-key-properties.glade.h:33
 msgid "Override Owner _Trust:"
 msgstr "Zmi_ana zaufania do właściciela:"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:33
-#: ../src/seahorse-pgp-public-key-properties.glade.h:29
+#: ../src/seahorse-pgp-private-key-properties.glade.h:34
+#: ../src/seahorse-pgp-public-key-properties.glade.h:30
 msgid "Owner"
 msgstr "Właściciel"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:34
+#: ../src/seahorse-pgp-private-key-properties.glade.h:35
 msgid "Primary"
 msgstr "Główny"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:36
+#: ../src/seahorse-pgp-private-key-properties.glade.h:37
 msgid "Remove this photo from this key"
 msgstr "Usuwa to zdjęcie z tego klucza"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:37
+#: ../src/seahorse-pgp-private-key-properties.glade.h:38
 msgid "Revoke"
 msgstr "Unieważnij"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:39
-#: ../src/seahorse-pgp-public-key-properties.glade.h:31
+#: ../src/seahorse-pgp-private-key-properties.glade.h:40
+#: ../src/seahorse-pgp-public-key-properties.glade.h:32
 msgid "Strength:"
 msgstr "Długość:"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:40
-#: ../src/seahorse-pgp-public-key-properties.glade.h:32
+#: ../src/seahorse-pgp-private-key-properties.glade.h:41
+#: ../src/seahorse-pgp-public-key-properties.glade.h:33
 msgid "The owner of the key revoked the key. It can no longer be used."
 msgstr ""
 "Ten klucz został unieważniony przez właściciela. Klucz nie może być dłużej "
 "używany."
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:41
-#: ../src/seahorse-pgp-public-key-properties.glade.h:35
-msgid "Type:"
-msgstr "Typ:"
-
-#: ../src/seahorse-pgp-private-key-properties.glade.h:42
+#: ../src/seahorse-pgp-private-key-properties.glade.h:43
 msgid ""
 "Unknown\n"
 "Never\n"
@@ -3115,11 +3102,11 @@ msgstr ""
 "Pełne\n"
 "Absolutne"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:47
+#: ../src/seahorse-pgp-private-key-properties.glade.h:48
 msgid "_Add Name"
 msgstr "_Dodaj nazwę"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:48
+#: ../src/seahorse-pgp-private-key-properties.glade.h:49
 msgid "_Export Complete Key:"
 msgstr "_Eksportowanie całego klucza:"
 
@@ -3136,45 +3123,45 @@ msgstr "<b>Odcisk palca:</b>"
 msgid "<b>Indicate Trust:</b>"
 msgstr "<b>Wskaźnik zaufania:</b>"
 
-#: ../src/seahorse-pgp-public-key-properties.glade.h:14
+#: ../src/seahorse-pgp-public-key-properties.glade.h:15
 msgid "<b>Your trust of this key</b>"
 msgstr "<b>Zaufanie do tego klucza</b>"
 
-#: ../src/seahorse-pgp-public-key-properties.glade.h:15
+#: ../src/seahorse-pgp-public-key-properties.glade.h:16
 msgid "<b>_Other Names:</b>"
 msgstr "<b>I_nne nazwy:</b>"
 
-#: ../src/seahorse-pgp-public-key-properties.glade.h:16
+#: ../src/seahorse-pgp-public-key-properties.glade.h:17
 msgid "<b>_People who have signed this key:</b>"
 msgstr "<b>Osoby, które podpisały ten klucz:</b>"
 
-#: ../src/seahorse-pgp-public-key-properties.glade.h:20
+#: ../src/seahorse-pgp-public-key-properties.glade.h:21
 msgid "Encrypt files and email to the key's owner "
 msgstr "Szyfrowanie plików i wiadomości do właściciela klucza"
 
-#: ../src/seahorse-pgp-public-key-properties.glade.h:23
+#: ../src/seahorse-pgp-public-key-properties.glade.h:24
 #, no-c-format
 msgid "I have checked that this key belongs to '%s'"
 msgstr "Sprawdzono, że klucz ten należy do \"%s\""
 
-#: ../src/seahorse-pgp-public-key-properties.glade.h:25
+#: ../src/seahorse-pgp-public-key-properties.glade.h:26
 #, no-c-format
 msgid "I trust signatures from '%s' on other keys "
 msgstr "Zaufanie do podpisów złożonych przez \"%s\" pod innymi kluczami"
 
-#: ../src/seahorse-pgp-public-key-properties.glade.h:26
+#: ../src/seahorse-pgp-public-key-properties.glade.h:27
 msgid ""
 "If you no longer trust this person's identity, <i>revoke</i> your signature:"
 msgstr ""
 "Jeżeli nie jesteś już pewien tożsamości tej osoby, <i>unieważnij</i> swój "
 "podpis:"
 
-#: ../src/seahorse-pgp-public-key-properties.glade.h:33
+#: ../src/seahorse-pgp-public-key-properties.glade.h:34
 msgid "To indicate your trust of this key to others, <i>sign</i> this key:"
 msgstr ""
 "Aby wskazać innym twoje zaufanie do tego klucza, <i>podpisz</i> ten klucz:"
 
-#: ../src/seahorse-pgp-public-key-properties.glade.h:36
+#: ../src/seahorse-pgp-public-key-properties.glade.h:37
 msgid ""
 "Unknown\n"
 "Never\n"
@@ -3188,23 +3175,23 @@ msgstr ""
 "Pełne\n"
 "Absolutne"
 
-#: ../src/seahorse-pgp-public-key-properties.glade.h:41
+#: ../src/seahorse-pgp-public-key-properties.glade.h:42
 msgid "You _Trust the Owner:"
 msgstr "_Zaufanie do właściciela:"
 
-#: ../src/seahorse-pgp-public-key-properties.glade.h:42
+#: ../src/seahorse-pgp-public-key-properties.glade.h:43
 msgid "Your trust is manually specified on the <i>Details</i> tab."
 msgstr "Twoje zaufanie jest określane ręcznie w karcie <i>Szczegóły</i>."
 
-#: ../src/seahorse-pgp-public-key-properties.glade.h:43
+#: ../src/seahorse-pgp-public-key-properties.glade.h:44
 msgid "_Only display the signatures of people I trust"
 msgstr "_Wyświetlanie tylko podpisów od osób do których mam zaufanie"
 
-#: ../src/seahorse-pgp-public-key-properties.glade.h:44
+#: ../src/seahorse-pgp-public-key-properties.glade.h:45
 msgid "_Revoke Signature"
 msgstr "_Unieważnij podpis"
 
-#: ../src/seahorse-pgp-public-key-properties.glade.h:45
+#: ../src/seahorse-pgp-public-key-properties.glade.h:46
 msgid "_Sign this Key"
 msgstr "_Podpisz ten klucz"
 
@@ -3266,21 +3253,53 @@ msgstr "Czy na pewno usunąć bieżące zdjęcie z klucza?"
 msgid "Couldn't delete photo"
 msgstr "Nie można usunąć zdjęcia"
 
-#: ../src/seahorse-revoke.c:54
+#: ../src/seahorse-revoke.c:72
 msgid "Couldn't revoke subkey"
 msgstr "Nie można unieważnić podklucza"
 
-#: ../src/seahorse-revoke.c:77
+#: ../src/seahorse-revoke.c:99
 #, c-format
 msgid "Revoke Subkey %d of %s"
 msgstr "Unieważnij podklucz %d klucza %s"
 
-#: ../src/seahorse-revoke.c:79
+#: ../src/seahorse-revoke.c:101
 #, c-format
 msgid "Revoke %s"
 msgstr "Unieważnij %s"
 
-#: ../src/seahorse-revoke.c:107
+#: ../src/seahorse-revoke.c:112
+msgid "No reason"
+msgstr "Brak powodu"
+
+#: ../src/seahorse-revoke.c:113
+msgid "No reason for revoking key"
+msgstr "Brak powodu do unieważnienia klucza"
+
+#: ../src/seahorse-revoke.c:119
+msgid "Compromised"
+msgstr "Naruszenie ochrony danych"
+
+#: ../src/seahorse-revoke.c:120
+msgid "Key has been compromised"
+msgstr "Doszło do naruszenia ochrony danych"
+
+#: ../src/seahorse-revoke.c:126
+msgid "Superseded"
+msgstr "Zastąpiony"
+
+#: ../src/seahorse-revoke.c:127
+msgid "Key has been superseded"
+msgstr "Klucz został zastąpiony"
+
+#: ../src/seahorse-revoke.c:133
+msgid "Not Used"
+msgstr "Nie używany"
+
+#: ../src/seahorse-revoke.c:134
+msgid "Key is no longer used"
+msgstr "Klucz nie jest już używany"
+
+#: ../src/seahorse-revoke.c:173
 #, c-format
 msgid ""
 "You are about to add %s as a revoker for %s. This operation cannot be "
@@ -3289,7 +3308,7 @@ msgstr ""
 "Chcesz dodać %s jako unieważnienie %s. Operacja ta nie będzie mogła być "
 "cofnięta!Czy na pewno chcesz kontynuować?"
 
-#: ../src/seahorse-revoke.c:122
+#: ../src/seahorse-revoke.c:188
 msgid "Couldn't add revoker"
 msgstr "Nie można dodać unieważnienia"
 
@@ -3304,10 +3323,6 @@ msgstr "Unie_ważnij"
 #: ../src/seahorse-revoke.glade.h:3
 msgid "Reason for revoking the key"
 msgstr "Powód unieważnienia klucza"
-
-#: ../src/seahorse-revoke.glade.h:5
-msgid "_Description:"
-msgstr "_Opis:"
 
 #: ../src/seahorse-revoke.glade.h:6
 msgid "_Reason:"
@@ -3505,21 +3520,21 @@ msgstr "<b>Długość:</b>"
 msgid "<b>Trust</b>"
 msgstr "<b>Zaufanie</b>"
 
-#: ../src/seahorse-ssh-key-properties.glade.h:14
+#: ../src/seahorse-ssh-key-properties.glade.h:15
 #, no-c-format
 msgid "<i>This only applies to the '%s'</i> account."
 msgstr "<i>Ma zastosowanie tylko do konta \"%s\".</i>"
 
-#: ../src/seahorse-ssh-key-properties.glade.h:17
+#: ../src/seahorse-ssh-key-properties.glade.h:18
 msgid "E_xport Complete Key"
 msgstr "_Wyeksportuj cały klucz"
 
-#: ../src/seahorse-ssh-key-properties.glade.h:21
+#: ../src/seahorse-ssh-key-properties.glade.h:22
 msgid "The owner of this key is _authorized to connect to this computer"
 msgstr ""
 "Właściciel tego klucza jest uprawniony do łączenia się z tym komputerem"
 
-#: ../src/seahorse-ssh-key-properties.glade.h:22
+#: ../src/seahorse-ssh-key-properties.glade.h:23
 msgid "Used to connect to other computers."
 msgstr "Używany do łączenia się z innymi komputerami."
 
@@ -3561,6 +3576,135 @@ msgstr "_Login:"
 #: ../src/seahorse-ssh-upload.glade.h:9
 msgid "_Set Up"
 msgstr "_Przygotuj"
+
+#~ msgid "couldn't read gpg configuration, will try to create"
+#~ msgstr "nie można odczytać konfiguracji gpg, próba utworzenia"
+
+#~ msgid "couldn't modify gpg configuration: %s"
+#~ msgstr "nie można zmodyfikować konfiguracji gpg: %s"
+
+#~ msgid ""
+#~ "Display variables instead of editing conf files (gpg.conf, SSH agent "
+#~ "socket)"
+#~ msgstr ""
+#~ "Wypisywanie zmiennych zamiast edytowania plików konfiguracyjnych (gpg."
+#~ "conf, gniazdo agenta SSH)"
+
+#~ msgid "couldn't drop privileges properly"
+#~ msgstr "nie można zrzucić uprawnień"
+
+#~ msgid ""
+#~ "When set seahorse-agent will try to automatically load the users SSH keys "
+#~ "when needed. This is equivalent to using the ssh-add utility."
+#~ msgstr ""
+#~ "Gdy zaznaczone, seahorse-agent będzie w razie potrzeby próbował "
+#~ "automatycznie wczytać klucze SSH użytkownika. Jest to równoznaczne z "
+#~ "użyciem polecenia ssh-add."
+
+#~ msgid "Whether to automatically load SSH keys on demand."
+#~ msgstr "Określa, czy w razie potrzeby automatycznie wczytywać klucze SSH."
+
+#~ msgid "Couldn't open the Session Properties"
+#~ msgstr "Nie można otworzyć właściwości sesji"
+
+#~ msgid "Couldn't start the 'seahorse-agent' program"
+#~ msgstr "Nie można uruchomić programu seahorse-agent"
+
+#~ msgid "The 'seahorse-agent' program exited unsuccessfully."
+#~ msgstr "Program \"seahorse-agent\" zakończył działanie niepowodzeniem."
+
+#~ msgid ""
+#~ "<b>Note:</b> The 'seahorse-agent' program has been started. This program "
+#~ "is necessary in order to cache passphrases. "
+#~ msgstr ""
+#~ "<b>Uwaga:</b> Program \"seahorse-agent\" został uruchomiony. Program ten "
+#~ "jest niezbędny do umożliwienia przechowywania haseł w pamięci podręcznej."
+
+#~ msgid "<b>Secure Shell Keys</b>"
+#~ msgstr "<b>Klucze SSH</b>"
+
+#~ msgid ""
+#~ "<b>Warning:</b> The 'seahorse-agent' program is not running. This program "
+#~ "is necessary in order to cache passphrases. "
+#~ msgstr ""
+#~ "<b>Ostrzeżenie:</b> Program \"seahorse-agent\" nie jest uruchomiony. Aby "
+#~ "możliwe było przechowywanie haseł w pamięci podręcznej, program ten musi "
+#~ "być uruchomiony."
+
+#~ msgid ""
+#~ "<i>No SSH caching agent is running. Cannot load Secure Shell keys.</i>"
+#~ msgstr ""
+#~ "<i>Agent pamięci podręcznej SSH nie jest uruchomiony.\n"
+#~ "Nie można wczytać kluczy SSH.</i>"
+
+#~ msgid "Automatically load _Secure Shell keys"
+#~ msgstr "_Automatyczne wczytywanie kluczy SSH"
+
+#~ msgid ""
+#~ "Changing the master password failed.  Make certain that you entered the "
+#~ "correct original master password."
+#~ msgstr ""
+#~ "Zmiana hasła głównego nie powiodła się. Proszę się upewnić, że pierwotne "
+#~ "hasło główne zostało wprowadzone poprawnie."
+
+#~ msgid "Confirm Master Password:"
+#~ msgstr "Proszę potwierdzić nowe hasło główne:"
+
+#~ msgid ""
+#~ "GNOME Keyring stores passwords, network keys, passphrases and other "
+#~ "secrets required for authentication.  A <b>master password</b> is used to "
+#~ "protect these secrets.  The <b>master password</b> can be changed below."
+#~ msgstr ""
+#~ "Baza kluczy GNOME przechowuje hasła, klucze sieciowe, tzw. długie hasła i "
+#~ "inne poufne informacje wymagane do uwierzytelniania. <b>Hasło główne</b> "
+#~ "jest używane do ochrony tych informacji. <b>Hasło główne</b> może zostać "
+#~ "zmienione poniżej."
+
+#~ msgid "New Master Password:"
+#~ msgstr "Nowe hasło główne:"
+
+#~ msgid "Original Master Password:"
+#~ msgstr "Pierwotne hasło główne:"
+
+#~ msgid "Passphrase Cache"
+#~ msgstr "Pamięć podręczna haseł"
+
+#~ msgid "Session Properties"
+#~ msgstr "Właściwości sesji"
+
+#~ msgid "Start seahorse-agent"
+#~ msgstr "Uruchom seahorse-agent"
+
+#~ msgid "The master password was successfully changed."
+#~ msgstr "Hasło główne zostało zmienione z powodzeniem."
+
+#~ msgid ""
+#~ "To avoid manually starting the 'seahorse-agent' in the future\n"
+#~ "add it to the Session Manager. "
+#~ msgstr ""
+#~ "Aby uniknąć w przyszłości ręcznego uruchamiania \"seahorse-agent\",\n"
+#~ "należy dodać go do menedżera sesji."
+
+#~ msgid "<b>Progress Message</b>"
+#~ msgstr "<b>Komunikat postępu</b>"
+
+#~ msgid "Progress Status"
+#~ msgstr "Stan postępu"
+
+#~ msgid "<b>Login:</b>"
+#~ msgstr "<b>Login:</b>"
+
+#~ msgid "<b>Server:</b>"
+#~ msgstr "<b>Serwer:</b>"
+
+#~ msgid "[details]\n"
+#~ msgstr "[szczegóły]\n"
+
+#~ msgid "[login]"
+#~ msgstr "[login]"
+
+#~ msgid "[server]"
+#~ msgstr "[serwer]"
 
 #~ msgid "initial temporary item"
 #~ msgstr "początkowy element tymczasowy"
@@ -3645,27 +3789,3 @@ msgstr "_Przygotuj"
 
 #~ msgid "This key expired on: (placeholder)"
 #~ msgstr "Ten klucz wygasł dnia: (placeholder)"
-
-#~ msgid "Compromised"
-#~ msgstr "Naruszenie ochrony danych"
-
-#~ msgid "Key has been compromised"
-#~ msgstr "Doszło do naruszenia ochrony danych"
-
-#~ msgid "Key has been superseded"
-#~ msgstr "Klucz został zastąpiony"
-
-#~ msgid "Key is no longer used"
-#~ msgstr "Klucz nie jest już używany"
-
-#~ msgid "No Reason"
-#~ msgstr "Brak powodu"
-
-#~ msgid "No reason for revoking key"
-#~ msgstr "Brak powodu do unieważnienia klucza"
-
-#~ msgid "Not Used"
-#~ msgstr "Nie używany"
-
-#~ msgid "Superseded"
-#~ msgstr "Zastąpiony"
