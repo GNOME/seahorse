@@ -1,14 +1,14 @@
 # Thai translation of seahorse.
-# Copyright (C) 2007 Free Software Foundation, Inc.
+# Copyright (C) 2007-2008 Free Software Foundation, Inc.
 # This file is distributed under the same license as the seahorse package.
-# Theppitak Karoonboonyanan <thep@linux.thai.net>, 2007.
+# Theppitak Karoonboonyanan <thep@linux.thai.net>, 2007-2008.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-08-26 22:48+0700\n"
-"PO-Revision-Date: 2007-08-26 22:51+0700\n"
+"POT-Creation-Date: 2008-02-09 17:36+0700\n"
+"PO-Revision-Date: 2008-02-09 20:27+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -16,34 +16,24 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: ../agent/seahorse-agent-actions.c:133
-#: ../libseahorse/seahorse-ssh-operation.c:445
+#: ../agent/seahorse-agent-actions.c:129
+#: ../libseahorse/seahorse-ssh-operation.c:443
 msgid "Passphrase:"
 msgstr "วลีรหัสผ่าน:"
 
-#: ../agent/seahorse-agent-actions.c:134
+#: ../agent/seahorse-agent-actions.c:130
 msgid "Please enter a passphrase to use."
 msgstr "กรุณาป้อนวลีรหัสผ่านที่จะใช้"
 
-#. Warn and put in defaults
-#: ../agent/seahorse-agent.c:101
-msgid "couldn't read gpg configuration, will try to create"
-msgstr "ไม่สามารถอ่านค่าตั้ง gpg ได้ จะพยายามสร้างค่าตั้ง"
-
-#: ../agent/seahorse-agent.c:119
-#, c-format
-msgid "couldn't modify gpg configuration: %s"
-msgstr "ไม่สามารถเปลี่ยนแปลงค่าตั้ง gpg ได้: %s"
-
-#: ../agent/seahorse-agent-cache.c:72
+#: ../agent/seahorse-agent-cache.c:70
 msgid "Unparseable Key ID"
 msgstr "หมายเลขกุญแจอยู่ในรูปแบบที่แจงไม่ได้"
 
-#: ../agent/seahorse-agent-cache.c:73
+#: ../agent/seahorse-agent-cache.c:71
 msgid "Unknown/Invalid Key"
 msgstr "กุญแจไม่รู้จัก/ผิดพลาด"
 
-#: ../agent/seahorse-agent-cache.c:531
+#: ../agent/seahorse-agent-cache.c:523
 #, c-format
 msgid "PGP Key: %s"
 msgstr "กุญแจ PGP: %s"
@@ -78,50 +68,43 @@ msgstr "_ล้างแคช"
 msgid "_Show Window"
 msgstr "แ_สดงหน้าต่าง"
 
-#: ../agent/seahorse-agent-main.c:50
+#: ../agent/seahorse-agent-main.c:51
 msgid "Do not daemonize seahorse-agent"
 msgstr "ไม่ต้องแปรสภาพ seahorse-agent เป็นดีมอน"
 
-#: ../agent/seahorse-agent-main.c:54
+#: ../agent/seahorse-agent-main.c:55
 msgid "Print variables in for a C type shell"
 msgstr "พิมพ์การกำหนดตัวแปรสำหรับเชลล์แบบ C"
 
-#: ../agent/seahorse-agent-main.c:57
-msgid ""
-"Display variables instead of editing conf files (gpg.conf, SSH agent socket)"
-msgstr "แสดงตัวแปรแทนการแก้ไขแฟ้มค่าตั้ง (gpg.conf, ซ็อกเก็ตของเอเจนต์ SSH)"
+#: ../agent/seahorse-agent-main.c:59
+msgid "Display environment variables (the default)"
+msgstr "แสดงตัวแปรสภาพแวดล้อม (ค่าปริยาย)"
 
-#: ../agent/seahorse-agent-main.c:60
+#: ../agent/seahorse-agent-main.c:62
 msgid "Execute other arguments on the command line"
 msgstr "เรียกทำงานอาร์กิวเมนต์ที่เหลือในบรรทัดคำสั่ง"
 
-#: ../agent/seahorse-agent-main.c:64
+#: ../agent/seahorse-agent-main.c:66
 msgid "Allow GPG agent request from any display"
 msgstr "ยอมให้ส่งคำร้องเอเจนต์ GPG จากดิสเพลย์ใดก็ได้"
 
-#: ../agent/seahorse-agent-main.c:67
+#: ../agent/seahorse-agent-main.c:69
 msgid "command..."
 msgstr "คำสั่ง..."
 
-#: ../agent/seahorse-agent-main.c:89 ../daemon/seahorse-daemon.c:72
+#: ../agent/seahorse-agent-main.c:91 ../daemon/seahorse-daemon.c:72
 msgid "couldn't fork process"
 msgstr "ไม่สามารถ fork โพรเซสได้"
 
-#: ../agent/seahorse-agent-main.c:95 ../daemon/seahorse-daemon.c:78
+#: ../agent/seahorse-agent-main.c:97 ../daemon/seahorse-daemon.c:78
 msgid "couldn't create new process group"
 msgstr "ไม่สามารถสร้างกลุ่มโพรเซสใหม่ได้"
 
-#: ../agent/seahorse-agent-main.c:227 ../daemon/seahorse-daemon.c:195
-#: ../plugins/applet/seahorse-applet.c:1017
-#: ../plugins/nautilus/seahorse-tool.c:570 ../src/main.c:59
-msgid "couldn't drop privileges properly"
-msgstr "ไม่สามารถลดอภิสิทธิ์ได้อย่างเหมาะสม"
-
-#: ../agent/seahorse-agent-main.c:238
+#: ../agent/seahorse-agent-main.c:225
 msgid "Encryption Key Agent (Seahorse)"
 msgstr "เอเจนต์กุญแจเข้ารหัสลับ (Seahorse)"
 
-#: ../agent/seahorse-agent-main.c:246
+#: ../agent/seahorse-agent-main.c:232
 msgid "no command specified to execute"
 msgstr "ไม่ได้ระบุคำสั่งที่จะเรียกทำงาน"
 
@@ -142,7 +125,7 @@ msgid "_Authorize"
 msgstr "_อนุญาต"
 
 #. Make the uid column
-#: ../agent/seahorse-agent-status.c:151
+#: ../agent/seahorse-agent-status.c:147
 msgid "Key Name"
 msgstr "ชื่อกุญแจ"
 
@@ -150,7 +133,7 @@ msgstr "ชื่อกุญแจ"
 msgid "Do not run seahorse-daemon as a daemon"
 msgstr "ไม่ต้องเรียกทำงาน seahorse-daemon แบบดีมอน"
 
-#: ../daemon/seahorse-daemon.c:202
+#: ../daemon/seahorse-daemon.c:188
 msgid "Encryption Daemon (Seahorse)"
 msgstr "ดีมอนเข้ารหัสลับ (Seahorse)"
 
@@ -466,45 +449,33 @@ msgstr "ระบุกุญแจปริยายที่จะใช้ส
 
 #: ../data/seahorse.schemas.in.h:46
 msgid ""
-"When set seahorse-agent will try to automatically load the users SSH keys "
-"when needed. This is equivalent to using the ssh-add utility."
-msgstr ""
-"เมื่อเปิดใช้ค่านี้ seahorse-agent จะพยายามโหลดกุญแจ SSH ของผู้ใช้โดยอัตโนมัติเมื่อจำเป็นต้องใช้ "
-"การโหลดดังกล่าวมีผลเสมือนกับใช้เครื่องมือ ssh-add นั่นเอง"
-
-#: ../data/seahorse.schemas.in.h:47
-msgid ""
 "When set, seahorse-agent expires GPG passwords in its cache after a period "
 "of time."
 msgstr "เมื่อกำหนดใช้ข้อนี้ seahorse-agent จะเลิกใช้รหัสผ่าน GPG ในแคชหลังจากครบกำหนดเวลา"
 
-#: ../data/seahorse.schemas.in.h:48
+#: ../data/seahorse.schemas.in.h:47
 msgid "Where to store cached passwords."
 msgstr "แหล่งเก็บแคชรหัสผ่าน"
 
-#: ../data/seahorse.schemas.in.h:49
+#: ../data/seahorse.schemas.in.h:48
 msgid "Whether or not keys should be automatically retrieved from key servers."
 msgstr "จะดึงข้อมูลกุญแจจากเซิร์ฟเวอร์กุญแจต่างๆ โดยอัตโนมัติหรือไม่"
 
-#: ../data/seahorse.schemas.in.h:50
+#: ../data/seahorse.schemas.in.h:49
 msgid ""
 "Whether or not modified keys should be automatically synced with the default "
 "key server."
 msgstr "จะปรับข้อมูลกุญแจที่มีการเปลี่ยนแปลงให้ตรงกับเซิร์ฟเวอร์กุญแจปริยายโดยอัตโนมัติหรือไม่"
 
-#: ../data/seahorse.schemas.in.h:51
+#: ../data/seahorse.schemas.in.h:50
 msgid "Whether the GPG password cache is enabled"
 msgstr "จะเปิดใช้แคชรหัสผ่าน GPG หรือไม่"
 
-#: ../data/seahorse.schemas.in.h:52
+#: ../data/seahorse.schemas.in.h:51
 msgid "Whether to always encrypt to default key"
 msgstr "จะเข้ารหัสลับถึงกุญแจปริยายหรือไม่"
 
-#: ../data/seahorse.schemas.in.h:53
-msgid "Whether to automatically load SSH keys on demand."
-msgstr "จะโหลดกุญแจ SSH โดยอัตโนมัติตามความต้องการหรือไม่"
-
-#: ../data/seahorse.schemas.in.h:54
+#: ../data/seahorse.schemas.in.h:52
 msgid "Whether to use ASCII Armor"
 msgstr "จะใช้การหุ้มด้วย ASCII หรือไม่"
 
@@ -536,16 +507,36 @@ msgstr "ไม่ต้อง (ไม่เซ็น)"
 
 #. TODO: Icons
 #: ../libcryptui/cryptui-key-list.c:117
-#: ../src/seahorse-key-manager-store.c:954
+#: ../src/seahorse-key-manager-store.c:943
 #: ../src/seahorse-key-properties.c:871
 msgid "Name"
 msgstr "ชื่อ"
 
 #: ../libcryptui/cryptui-key-list.c:120
-#: ../src/seahorse-key-manager-store.c:966
+#: ../src/seahorse-key-manager-store.c:955
 #: ../src/seahorse-key-properties.c:1725
 msgid "Key ID"
 msgstr "หมายเลขกุญแจ"
+
+#: ../libseahorse/seahorse-add-keyring.glade.h:1
+msgid "Add Password Keyring"
+msgstr "สร้างพวงกุญแจเก็บรหัสผ่าน"
+
+#: ../libseahorse/seahorse-add-keyring.glade.h:2
+msgid "New Keyring Name:"
+msgstr "ตั้งชื่อพวงกุญแจ:"
+
+#: ../libseahorse/seahorse-add-keyring.glade.h:3
+msgid ""
+"Please choose a name for the new keyring. You will be prompted for an unlock "
+"password."
+msgstr "กรุณาตั้งชื่อพวงกุญแจที่จะสร้าง โปรแกรมจะให้คุณตั้งรหัสผ่านสำหรับปลดล็อคพวงกุญแจในภายหลัง"
+
+#: ../libseahorse/seahorse-add-keyring.glade.h:4
+#: ../libseahorse/seahorse-add-keyserver.glade.h:5
+#: ../src/seahorse-ssh-upload.glade.h:3
+msgid "The host name or address of the server."
+msgstr "ชื่อโฮสต์หรือที่อยู่ของเซิร์ฟเวอร์"
 
 #: ../libseahorse/seahorse-add-keyserver.glade.h:1
 msgid ":"
@@ -563,45 +554,40 @@ msgstr "โฮสต์:"
 msgid "Key Server Type:"
 msgstr "ชนิดของเซิร์ฟเวอร์กุญแจ:"
 
-#: ../libseahorse/seahorse-add-keyserver.glade.h:5
-#: ../src/seahorse-ssh-upload.glade.h:3
-msgid "The host name or address of the server."
-msgstr "ชื่อโฮสต์หรือที่อยู่ของเซิร์ฟเวอร์"
-
 #: ../libseahorse/seahorse-add-keyserver.glade.h:6
 msgid "The port to access the server on."
 msgstr "หมายเลขพอร์ตที่จะเข้าใช้เซิร์ฟเวอร์"
 
-#: ../libseahorse/seahorse-hkp-source.c:358
+#: ../libseahorse/seahorse-hkp-source.c:323
 #, c-format
 msgid "Search was not specific enough. Server '%s' found too many keys."
 msgstr "การค้นหายังไม่เจาะจงพอ พบกุญแจในเซิร์ฟเวอร์ '%s' จำนวนมากเกินไป"
 
-#: ../libseahorse/seahorse-hkp-source.c:360
+#: ../libseahorse/seahorse-hkp-source.c:325
 #, c-format
 msgid "Couldn't communicate with server '%s': %s"
 msgstr "ไม่สามารถติดต่อสื่อสารกับเซิร์ฟเวอร์ '%s': %s"
 
-#: ../libseahorse/seahorse-hkp-source.c:563
+#: ../libseahorse/seahorse-hkp-source.c:521
 msgid "Searching for keys..."
 msgstr "กำลังค้นหากุญแจ..."
 
-#: ../libseahorse/seahorse-hkp-source.c:639
+#: ../libseahorse/seahorse-hkp-source.c:592
 msgid "Uploading keys..."
 msgstr "กำลังอัปโหลดกุญแจ..."
 
-#: ../libseahorse/seahorse-hkp-source.c:715
+#: ../libseahorse/seahorse-hkp-source.c:665
 msgid "Retrieving keys..."
 msgstr "กำลังดึงกุญแจ..."
 
-#: ../libseahorse/seahorse-hkp-source.c:764
+#: ../libseahorse/seahorse-hkp-source.c:710
 #, c-format
 msgid "Searching for keys on: %s"
 msgstr "กำลังค้นหากุญแจที่: %s"
 
 #. The ldap_cb and chain_cb were set in seahorse_ldap_operation_start
-#: ../libseahorse/seahorse-hkp-source.c:857
-#: ../libseahorse/seahorse-hkp-source.c:929
+#: ../libseahorse/seahorse-hkp-source.c:802
+#: ../libseahorse/seahorse-hkp-source.c:874
 #: ../libseahorse/seahorse-ldap-source.c:656
 #, c-format
 msgid "Connecting to: %s"
@@ -622,21 +608,21 @@ msgstr "ไม่สามารถเปิดหาที่อยู่: %s"
 msgid "Resolving server address: %s"
 msgstr "กำลังเปิดหาที่อยู่เซิร์ฟเวอร์: %s"
 
-#: ../libseahorse/seahorse-ldap-source.c:883
+#: ../libseahorse/seahorse-ldap-source.c:884
 #, c-format
 msgid "Searching for keys containing '%s'..."
 msgstr "กำลังค้นหากุญแจที่มี '%s'..."
 
-#: ../libseahorse/seahorse-ldap-source.c:910
+#: ../libseahorse/seahorse-ldap-source.c:911
 #, c-format
 msgid "Searching for key id '%s'..."
 msgstr "กำลังค้นหากุญแจหมายเลข '%s'..."
 
-#: ../libseahorse/seahorse-ldap-source.c:1011
+#: ../libseahorse/seahorse-ldap-source.c:1012
 msgid "Retrieving remote keys..."
 msgstr "กำลังดึงกุญแจจากเครือข่าย..."
 
-#: ../libseahorse/seahorse-ldap-source.c:1144
+#: ../libseahorse/seahorse-ldap-source.c:1145
 msgid "Sending keys to key server..."
 msgstr "กำลังส่งกุญแจไปยังเซิร์ฟเวอร์กุญแจ..."
 
@@ -758,17 +744,17 @@ msgid "Enter passphrase"
 msgstr "กรุณาป้อนวลีรหัสผ่าน"
 
 #: ../libseahorse/seahorse-pgp-key.c:140 ../libseahorse/seahorse-ssh-key.c:112
-#: ../src/seahorse-gkeyring-item.c:231
+#: ../src/seahorse-gkeyring-item.c:232
 msgid "Invalid"
 msgstr "ผิดพลาด"
 
 #: ../libseahorse/seahorse-pgp-key.c:162
-#: ../src/seahorse-pgp-public-key-properties.glade.h:30
+#: ../src/seahorse-pgp-public-key-properties.glade.h:31
 msgid "Public PGP Key"
 msgstr "กุญแจ PGP สาธารณะ"
 
 #: ../libseahorse/seahorse-pgp-key.c:165
-#: ../src/seahorse-pgp-private-key-properties.glade.h:35
+#: ../src/seahorse-pgp-private-key-properties.glade.h:36
 msgid "Private PGP Key"
 msgstr "กุญแจ PGP ส่วนตัว"
 
@@ -807,8 +793,8 @@ msgstr ""
 "สาเหตุอาจเกิดจากการตั้งเวลาของเครื่องคอมพิวเตอร์ไว้เป็นเวลาอนาคต "
 "หรือกุญแจไม่มีลายเซ็นเจ้าของกำกับ"
 
-#: ../libseahorse/seahorse-pgp-source.c:942 ../src/seahorse-key-manager.c:454
-#: ../src/seahorse-key-manager.c:502
+#: ../libseahorse/seahorse-pgp-source.c:942 ../src/seahorse-key-manager.c:446
+#: ../src/seahorse-key-manager.c:494
 msgid "Importing Keys"
 msgstr "กำลังนำเข้ากุญแจ"
 
@@ -816,156 +802,131 @@ msgstr "กำลังนำเข้ากุญแจ"
 msgid "Exporting Keys"
 msgstr "กำลังส่งออกกุญแจ"
 
-#: ../libseahorse/seahorse-prefs.c:62
+#: ../libseahorse/seahorse-prefs.c:64
 msgid "Not a valid Key Server address."
 msgstr "ที่อยู่เซิร์ฟเวอร์กุญแจไม่ถูกต้อง"
 
-#: ../libseahorse/seahorse-prefs.c:63
+#: ../libseahorse/seahorse-prefs.c:65
 msgid ""
 "For help contact your system adminstrator or the administrator of the key "
 "server."
 msgstr ""
 "หากต้องการความช่วยเหลือ กรุณาติดต่อผู้ดูแลระบบของคุณ หรือผู้ดูแลระบบของเครื่องเซิร์ฟเวอร์กุญแจ"
 
-#: ../libseahorse/seahorse-prefs.c:174
+#: ../libseahorse/seahorse-prefs.c:176
 msgid "URL"
 msgstr "URL"
 
-#: ../libseahorse/seahorse-prefs.c:359
+#: ../libseahorse/seahorse-prefs.c:361
 msgid "Custom"
 msgstr "กำหนดเอง"
 
-#: ../libseahorse/seahorse-prefs.c:429
+#: ../libseahorse/seahorse-prefs.c:431
 msgid "None: Don't publish keys"
 msgstr "ไม่ต้อง: ไม่ต้องประกาศกุญแจ"
 
-#: ../libseahorse/seahorse-prefs.c:681
+#: ../libseahorse/seahorse-prefs.c:521
 msgid "None. Prompt for a key."
 msgstr "ไม่มี ให้ถามหากุญแจเอา"
 
-#: ../libseahorse/seahorse-prefs-cache.c:231
-msgid "Couldn't open the Session Properties"
-msgstr "ไม่สามารถเปิดเครื่องมือตั้งค่าของวาระ"
+#: ../libseahorse/seahorse-prefs-keyrings.c:205
+msgid "<i>Automatically unlocked when user logs in.</i>"
+msgstr "<i>ปลดล็อคโดยอัตโนมัติเมื่อผู้ใช้เข้าระบบ</i>"
 
-#: ../libseahorse/seahorse-prefs-cache.c:244
-msgid "Couldn't start the 'seahorse-agent' program"
-msgstr "เรียกโปรแกรม 'seahorse-agent' ไม่สำเร็จ"
+#: ../libseahorse/seahorse-prefs-keyrings.c:242
+msgid "Couldn't get default password keyring"
+msgstr "ไม่สามารถอ่านพวงกุญแจปริยายสำหรับเก็บรหัสผ่าน"
 
-#: ../libseahorse/seahorse-prefs-cache.c:246
-msgid "The 'seahorse-agent' program exited unsuccessfully."
-msgstr "โปรแกรม 'seahorse-agent' จบการทำงานแบบไม่สำเร็จ"
+#: ../libseahorse/seahorse-prefs-keyrings.c:265
+msgid "Couldn't get list of password keyrings"
+msgstr "ไม่สามารถอ่านรายชื่อพวงกุญแจเก็บรหัสผ่าน"
+
+#: ../libseahorse/seahorse-prefs-keyrings.c:321
+msgid "Couldn't set default password keyring"
+msgstr "ไม่สามารถกำหนดพวงกุญแจปริยายสำหรับเก็บรหัสผ่าน"
+
+#: ../libseahorse/seahorse-prefs-keyrings.c:403
+msgid "Couldn't remove keyring"
+msgstr "ไม่สามารถลบพวงกุญแจ"
+
+#: ../libseahorse/seahorse-prefs-keyrings.c:421
+#, c-format
+msgid "Are you sure you want to permanently delete the '%s' keyring?"
+msgstr "ยืนยันหรือไม่ว่าต้องการลบพวงกุญแจ '%s' อย่างถาวร?"
+
+#: ../libseahorse/seahorse-prefs-keyrings.c:469
+msgid "Couldn't add keyring"
+msgstr "ไม่สามารถเพิ่มพวงกุญแจ"
+
+#: ../libseahorse/seahorse-prefs-keyrings.c:526
+msgid "Couldn't change keyring password"
+msgstr "ไม่สามารถเปลี่ยนรหัสผ่านพวงกุญแจ"
 
 #: ../libseahorse/seahorse-prefs.glade.h:1
-msgid "<b>Defaults</b>"
-msgstr "<b>ค่าปริยาย</b>"
+msgid "<b>Default Key</b>"
+msgstr "<b>กุญแจปริยาย</b>"
 
 #: ../libseahorse/seahorse-prefs.glade.h:2
-msgid ""
-"<b>Note:</b> The 'seahorse-agent' program has been started. This program is "
-"necessary in order to cache passphrases. "
-msgstr ""
-"<b>หมายเหตุ:</b> โปรแกรม 'seahorse-agent' กำลังทำงานอยู่ "
-"จำเป็นต้องใช้โปรแกรมนี้ในการแคชวลีรหัสผ่าน"
+msgid "<b>Default Keyring</b>"
+msgstr "<b>พวงกุญแจปริยาย</b>"
 
 #: ../libseahorse/seahorse-prefs.glade.h:3
+msgid "<b>Password Keyrings</b>"
+msgstr "<b>พวงกุญแจเก็บรหัสผ่าน</b>"
+
+#: ../libseahorse/seahorse-prefs.glade.h:4
 msgid "<b>Remember PGP Passphrases</b>"
 msgstr "<b>จำวลีรหัสผ่าน PGP</b>"
 
-#: ../libseahorse/seahorse-prefs.glade.h:4
-msgid "<b>Secure Shell Keys</b>"
-msgstr "<b>กุญแจเชลล์นิรภัย</b>"
-
 #: ../libseahorse/seahorse-prefs.glade.h:5
-msgid ""
-"<b>Warning:</b> The 'seahorse-agent' program is not running. This program is "
-"necessary in order to cache passphrases. "
-msgstr ""
-"<b>คำเตือน:</b> โปรแกรม 'seahorse-agent' ไม่ได้ทำงานอยู่ "
-"จำเป็นต้องใช้โปรแกรมนี้ในการแคชวลีรหัสผ่าน"
+msgid "<i>A supported PGP passphrase caching agent is not running.</i>"
+msgstr "<i>ไม่มีเอเจนต์สำหรับแคชวลีรหัสผ่าน PGP ที่รองรับทำงานอยู่</i>"
 
 #: ../libseahorse/seahorse-prefs.glade.h:6
-msgid "<i>A non-supported PGP passphrase caching agent is running.</i>"
-msgstr "<i>มีเอเจนต์สำหรับแคชวลีรหัสผ่าน PGP ที่ไม่สนับสนุนกำลังทำงานอยู่</i>"
-
-#: ../libseahorse/seahorse-prefs.glade.h:7
-msgid "<i>No SSH caching agent is running. Cannot load Secure Shell keys.</i>"
-msgstr "<i>ไม่มีเอเจนต์สำหรับแคช SSH ทำงานอยู่ จึงไม่สามารถโหลดกุญแจเชลล์นิรภัยได้</i>"
-
-#: ../libseahorse/seahorse-prefs.glade.h:8
 msgid "<i>This key is used to sign messages when no other key is chosen</i>"
 msgstr "<i>กุญแจนี้จะถูกใช้ในการเซ็นกำกับข้อความเมื่อไม่มีการเลือกกุญแจอื่น</i>"
 
+#: ../libseahorse/seahorse-prefs.glade.h:7
+msgid "As_k me before using a cached passphrase"
+msgstr "_ถามก่อนที่จะใช้วลีรหัสผ่านที่แคชไว้"
+
+#: ../libseahorse/seahorse-prefs.glade.h:8
+msgid "Automatically retrieve keys from _key servers"
+msgstr "ดึ_งข้อมูลกุญแจจากเซิร์ฟเวอร์กุญแจโดยอัตโนมัติ"
+
 #: ../libseahorse/seahorse-prefs.glade.h:9
-msgid "Automatically load _Secure Shell keys"
-msgstr "โหลดกุญแจเ_ชลล์นิรภัยโดยอัตโนมัติ"
+msgid "Automatically synchronize _modified keys with key servers"
+msgstr "ปรั_บข้อมูลกุญแจที่มีการเปลี่ยนแปลงให้ตรงกับเซิร์ฟเวอร์กุญแจโดยอัตโนมัติ"
 
 #: ../libseahorse/seahorse-prefs.glade.h:10
-msgid "Automatically retrieve keys from key servers."
-msgstr "ดึงข้อมูลกุญแจจากเซิร์ฟเวอร์กุญแจโดยอัตโนมัติ"
+msgid "Change Unlock _Password"
+msgstr "เ_ปลี่ยนรหัสผ่านปลดล็อค"
 
 #: ../libseahorse/seahorse-prefs.glade.h:11
-msgid "Automatically synchronize modified keys with key servers. "
-msgstr "ปรับข้อมูลกุญแจที่มีการเปลี่ยนแปลงให้ตรงกับเซิร์ฟเวอร์กุญแจโดยอัตโนมัติ"
+msgid "Encryption"
+msgstr "การเข้ารหัสลับ"
 
 #: ../libseahorse/seahorse-prefs.glade.h:12
-msgid ""
-"Changing the master password failed.  Make certain that you entered the "
-"correct original master password."
-msgstr "เปลี่ยนรหัสผ่านหลักไม่สำเร็จ แน่ใจหรือว่าคุณได้ป้อนรหัสผ่านหลักเดิมถูกต้อง"
-
-#: ../libseahorse/seahorse-prefs.glade.h:13
-msgid "Confirm Master Password:"
-msgstr "ยืนยันรหัสผ่านหลัก:"
-
-#: ../libseahorse/seahorse-prefs.glade.h:14
-#: ../plugins/nautilus/seahorse-pgp-preferences.c:74
-#: ../plugins/nautilus/seahorse-pgp-preferences.desktop.in.h:2
-msgid "Encryption Preferences"
-msgstr "ปรับแต่งการเข้ารหัสลับ"
-
-#: ../libseahorse/seahorse-prefs.glade.h:15
-msgid "Encryption Settings"
-msgstr "ค่าตั้งการเข้ารหัสลับ"
-
-#: ../libseahorse/seahorse-prefs.glade.h:16
-msgid "GNOME Keyring"
-msgstr "พวงกุญแจ GNOME"
-
-#: ../libseahorse/seahorse-prefs.glade.h:17
-msgid ""
-"GNOME Keyring stores passwords, network keys, passphrases and other secrets "
-"required for authentication.  A <b>master password</b> is used to protect "
-"these secrets.  The <b>master password</b> can be changed below."
-msgstr ""
-"พวงกุญแจ GNOME จะเก็บรหัสผ่าน, กุญแจเครือข่าย, วลีรหัสผ่าน "
-"และรหัสลับสำหรับยืนยันตัวบุคคลทั้งหลาย <b>รหัสผ่านหลัก</b> จะใช้รักษาข้อมูลลับเหล่านี้ "
-"ซึ่งคุณสามารถเปลี่ยน <b>รหัสผ่านหลัก</b> ได้ที่ด้านล่างนี้"
-
-#: ../libseahorse/seahorse-prefs.glade.h:18
 msgid "Key Servers"
 msgstr "เซิร์ฟเวอร์กุญแจ"
 
-#: ../libseahorse/seahorse-prefs.glade.h:19
+#: ../libseahorse/seahorse-prefs.glade.h:13
 msgid "Key Sharing"
 msgstr "การเปิดกุญแจให้ใช้ร่วม"
 
-#: ../libseahorse/seahorse-prefs.glade.h:20
-msgid "New Master Password:"
-msgstr "ตั้งรหัสผ่านหลัก:"
+#: ../libseahorse/seahorse-prefs.glade.h:14
+msgid "PGP Passphrases"
+msgstr "วลีรหัสผ่าน PGP"
 
-#: ../libseahorse/seahorse-prefs.glade.h:21
-msgid "Original Master Password:"
-msgstr "รหัสผ่านหลักเดิม:"
+#: ../libseahorse/seahorse-prefs.glade.h:15
+msgid "Password Keyrings"
+msgstr "พวงกุญแจเก็บรหัสผ่าน"
 
-#: ../libseahorse/seahorse-prefs.glade.h:22
-msgid "Passphrase Cache"
-msgstr "แคชวลีรหัสผ่าน"
+#: ../libseahorse/seahorse-prefs.glade.h:16
+msgid "Password and Encryption Settings"
+msgstr "ค่าตั้งรหัสผ่านและการเข้ารหัสลับ"
 
-#: ../libseahorse/seahorse-prefs.glade.h:23
-msgid "Session Properties"
-msgstr "ตั้งค่าวาระ"
-
-#: ../libseahorse/seahorse-prefs.glade.h:24
+#: ../libseahorse/seahorse-prefs.glade.h:17
 msgid ""
 "Sharing your keys allows other people on your network to use the keys you've "
 "collected. This means they can automatically encrypt things for you or those "
@@ -979,71 +940,59 @@ msgstr ""
 "\n"
 "<b>หมายเหตุ:</b> กุญแจส่วนตัวของคุณจะไม่ถูกเปิดเผย"
 
-#: ../libseahorse/seahorse-prefs.glade.h:27
-msgid "Start seahorse-agent"
-msgstr "เรียก seahorse-agent"
+#: ../libseahorse/seahorse-prefs.glade.h:20
+msgid "Show _icon in status area when passphrases are in memory"
+msgstr "แสดงไ_อคอนในพื้นที่สถานะเมื่อมีวลีรหัสผ่านอยู่ในหน่วยความจำ"
 
-#: ../libseahorse/seahorse-prefs.glade.h:28
-msgid "The master password was successfully changed."
-msgstr "เปลี่ยนรหัสผ่านหลักเรียบร้อยแล้ว"
-
-#: ../libseahorse/seahorse-prefs.glade.h:29
-msgid ""
-"To avoid manually starting the 'seahorse-agent' in the future\n"
-"add it to the Session Manager. "
-msgstr ""
-"เพื่อเลี่ยงการเรียก 'seahorse-agent' เองทุกครั้งในครั้งต่อๆ ไป\n"
-"คุณสามารถเพิ่มการเรียกในโปรแกรมจัดการวาระได้เลย"
-
-#: ../libseahorse/seahorse-prefs.glade.h:31
+#: ../libseahorse/seahorse-prefs.glade.h:21
 msgid "When _encrypting, always include myself as a recipient"
 msgstr "เมื่อเ_ข้ารหัสลับ นับข้าพเจ้าเป็นผู้รับด้วย"
 
-#: ../libseahorse/seahorse-prefs.glade.h:32
+#: ../libseahorse/seahorse-prefs.glade.h:22
+msgid "_Add Keyring"
+msgstr "เ_พิ่มพวงกุญแจ"
+
+#: ../libseahorse/seahorse-prefs.glade.h:23
 msgid "_Always remember passphrases whenever logged in"
 msgstr "จำวลีรหัสผ่านเ_สมอเมื่อเข้าระบบ"
 
-#: ../libseahorse/seahorse-prefs.glade.h:33
-msgid "_Ask me before using a cached passphrase"
-msgstr "_ถามก่อนที่จะใช้วลีรหัสผ่านที่แคชไว้"
-
-#: ../libseahorse/seahorse-prefs.glade.h:34
-msgid "_Default Key:"
+#: ../libseahorse/seahorse-prefs.glade.h:24
+msgid "_Default key:"
 msgstr "กุญแจ_ปริยาย:"
 
-#: ../libseahorse/seahorse-prefs.glade.h:35
-msgid "_Find Keys Via:"
+#: ../libseahorse/seahorse-prefs.glade.h:25
+msgid "_Find keys via:"
 msgstr "_หากุญแจผ่าน:"
 
-#: ../libseahorse/seahorse-prefs.glade.h:36
+#: ../libseahorse/seahorse-prefs.glade.h:26
+msgid "_Location for application passwords:"
+msgstr "_ตำแหน่งสำหรับรหัสผ่านของโปรแกรมต่างๆ:"
+
+#: ../libseahorse/seahorse-prefs.glade.h:27
 msgid "_Never remember passphrases"
 msgstr "ไ_ม่จำวลีรหัสผ่าน"
 
-#: ../libseahorse/seahorse-prefs.glade.h:37
-msgid "_Publish Keys To:"
+#: ../libseahorse/seahorse-prefs.glade.h:28
+msgid "_Publish keys to:"
 msgstr "_ประกาศกุญแจไปที่:"
 
-#: ../libseahorse/seahorse-prefs.glade.h:38
+#: ../libseahorse/seahorse-prefs.glade.h:29
 msgid "_Remember passphrases for"
 msgstr "_จำวลีรหัสผ่านเป็นเวลา"
 
-#: ../libseahorse/seahorse-prefs.glade.h:39
+#: ../libseahorse/seahorse-prefs.glade.h:30
+msgid "_Remove Keyring"
+msgstr "_ลบพวงกุญแจ"
+
+#: ../libseahorse/seahorse-prefs.glade.h:31
 msgid "_Share my keys with others on my network"
 msgstr "เปิดกุญแจของข้าพเจ้าให้ผู้อื่นใ_ช้ร่วมในเครือข่าย"
 
-#: ../libseahorse/seahorse-prefs.glade.h:40
+#: ../libseahorse/seahorse-prefs.glade.h:32
 msgid "minutes"
 msgstr "นาที"
 
 #: ../libseahorse/seahorse-progress.glade.h:1
-msgid "<b>Progress Message</b>"
-msgstr "<b>ข้อความความคืบหน้า</b>"
-
-#: ../libseahorse/seahorse-progress.glade.h:2
-msgid "Progress Status"
-msgstr "สถานะของความคืบหน้า"
-
-#: ../libseahorse/seahorse-progress.glade.h:3
 msgid "Progress Title"
 msgstr "ชื่อเรื่องของความคืบหน้า"
 
@@ -1081,7 +1030,7 @@ msgstr "(กุญแจเชลล์นิรภัยที่อ่าน�
 #: ../libseahorse/seahorse-ssh-key.c:94 ../libseahorse/seahorse-ssh-key.c:98
 #: ../libseahorse/seahorse-ssh-source.c:746
 #: ../src/seahorse-generate-select.c:145
-#: ../src/seahorse-ssh-key-properties.glade.h:20
+#: ../src/seahorse-ssh-key-properties.glade.h:21
 msgid "Secure Shell Key"
 msgstr "กุญแจเชลล์นิรภัย"
 
@@ -1093,80 +1042,80 @@ msgstr "กุญแจส่วนตัวสำหรับเชลล์น
 msgid "Public Secure Shell Key"
 msgstr "กุญแจสาธารณะสำหรับเชลล์นิรภัย"
 
-#: ../libseahorse/seahorse-ssh-operation.c:135
-#: ../libseahorse/seahorse-ssh-operation.c:697
+#: ../libseahorse/seahorse-ssh-operation.c:133
+#: ../libseahorse/seahorse-ssh-operation.c:695
 #, c-format
 msgid "The SSH command was terminated unexpectedly."
 msgstr "คำสั่ง SSH จบการทำงานกลางคัน"
 
-#: ../libseahorse/seahorse-ssh-operation.c:143
-#: ../libseahorse/seahorse-ssh-operation.c:704
+#: ../libseahorse/seahorse-ssh-operation.c:141
+#: ../libseahorse/seahorse-ssh-operation.c:702
 msgid "The SSH command failed."
 msgstr "คำสั่ง SSH ล้มเหลว"
 
-#: ../libseahorse/seahorse-ssh-operation.c:441
+#: ../libseahorse/seahorse-ssh-operation.c:439
 msgid "Secure Shell key"
 msgstr "กุญแจเชลล์นิรภัย"
 
 #. Just prompt over and over again
-#: ../libseahorse/seahorse-ssh-operation.c:727
+#: ../libseahorse/seahorse-ssh-operation.c:725
 msgid "Secure Shell Passphrase"
 msgstr "วลีรหัสผ่านเชลล์นิรภัย"
 
-#: ../libseahorse/seahorse-ssh-operation.c:813
+#: ../libseahorse/seahorse-ssh-operation.c:811
 msgid "Old Key Passphrase"
 msgstr "วลีรหัสผ่านเก่าสำหรับกุญแจ"
 
-#: ../libseahorse/seahorse-ssh-operation.c:814
+#: ../libseahorse/seahorse-ssh-operation.c:812
 #, c-format
 msgid "Enter the old passphrase for: %s"
 msgstr "กรุณาป้อนวลีรหัสผ่านเก่าสำหรับ: %s"
 
-#: ../libseahorse/seahorse-ssh-operation.c:818
+#: ../libseahorse/seahorse-ssh-operation.c:816
 msgid "New Key Passphrase"
 msgstr "วลีรหัสผ่านใหม่สำหรับกุญแจ"
 
-#: ../libseahorse/seahorse-ssh-operation.c:819
+#: ../libseahorse/seahorse-ssh-operation.c:817
 #, c-format
 msgid "Enter the new passphrase for: %s"
 msgstr "กรุณาตั้งวลีรหัสผ่านใหม่สำหรับ: %s"
 
-#: ../libseahorse/seahorse-ssh-operation.c:827
+#: ../libseahorse/seahorse-ssh-operation.c:825
 msgid "Enter Key Passphrase"
 msgstr "กรุณาป้อนวลีรหัสผ่านสำหรับกุญแจ"
 
-#: ../libseahorse/seahorse-ssh-operation.c:895
+#: ../libseahorse/seahorse-ssh-operation.c:893
 msgid "Passphrase for New Secure Shell Key"
 msgstr "วลีรหัสผ่านสำหรับกุญแจเชลล์นิรภัยใหม่"
 
-#: ../libseahorse/seahorse-ssh-operation.c:896
+#: ../libseahorse/seahorse-ssh-operation.c:894
 msgid "Enter a passphrase for your new Secure Shell key."
 msgstr "กรุณาตั้งวลีรหัสผ่านสำหรับกุญแจเชลล์นิรภัยใหม่ของคุณ"
 
-#: ../libseahorse/seahorse-ssh-operation.c:1034
+#: ../libseahorse/seahorse-ssh-operation.c:1028
 msgid "Secure Shell Key Passphrase"
 msgstr "วลีรหัสผ่านสำหรับกุญแจเชลล์นิรภัย"
 
-#: ../libseahorse/seahorse-ssh-operation.c:1034
+#: ../libseahorse/seahorse-ssh-operation.c:1028
 #, c-format
 msgid "Enter the passphrase for: %s"
 msgstr "กรุณาป้อนวลีรหัสผ่านสำหรับ: %s"
 
-#: ../libseahorse/seahorse-ssh-operation.c:1035
+#: ../libseahorse/seahorse-ssh-operation.c:1029
 msgid "Save this passphrase in my keyring"
 msgstr "บันทึกวลีรหัสผ่านนี้ในพวงกุญแจของข้าพเจ้า"
 
-#: ../libseahorse/seahorse-ssh-operation.c:1109
+#: ../libseahorse/seahorse-ssh-operation.c:1081
 #, c-format
 msgid "Importing key: %s"
 msgstr "กำลังนำเข้ากุญแจ: %s"
 
-#: ../libseahorse/seahorse-ssh-operation.c:1111
+#: ../libseahorse/seahorse-ssh-operation.c:1083
 msgid "Importing key. Enter passphrase"
 msgstr "กำลังนำเข้ากุญแจ กรุณาป้อนวลีรหัสผ่าน"
 
-#: ../libseahorse/seahorse-ssh-operation.c:1113
-#: ../src/seahorse-key-manager.c:515
+#: ../libseahorse/seahorse-ssh-operation.c:1085
+#: ../src/seahorse-key-manager.c:507
 #: ../src/seahorse-pgp-keys.desktop.in.in.h:1
 msgid "Import Key"
 msgstr "นำเข้ากุญแจ"
@@ -1204,39 +1153,39 @@ msgstr "ข้อมูลกุญแจ"
 msgid "Multiple Keys"
 msgstr "กุญแจหลายดอก"
 
-#: ../libseahorse/seahorse-util.c:728
+#: ../libseahorse/seahorse-util.c:733
 msgid "Couldn't run file-roller"
 msgstr "ไม่สามารถเรียก file-roller"
 
-#: ../libseahorse/seahorse-util.c:733
-#: ../plugins/nautilus/seahorse-tool-files.c:831
+#: ../libseahorse/seahorse-util.c:738
+#: ../plugins/nautilus/seahorse-tool-files.c:830
 msgid "Couldn't package files"
 msgstr "ไม่สามารถจัดเก็บแฟ้ม"
 
-#: ../libseahorse/seahorse-util.c:734
+#: ../libseahorse/seahorse-util.c:739
 msgid "The file-roller process did not complete successfully"
 msgstr "โพรเซส file-roller ทำงานไม่สำเร็จสมบูรณ์"
 
-#: ../libseahorse/seahorse-util.c:744
+#: ../libseahorse/seahorse-util.c:749
 msgid "Couldn't set permissions on backup file."
 msgstr "ไม่สามารถกำหนดสิทธิ์ให้กับแฟ้มสำรอง"
 
 #. Filter for PGP keys. We also include *.asc, as in many
 #. cases that extension is associated with text/plain
-#: ../libseahorse/seahorse-util.c:848
+#: ../libseahorse/seahorse-util.c:853
 msgid "All key files"
 msgstr "แฟ้มกุญแจทั้งหมด"
 
-#: ../libseahorse/seahorse-util.c:859 ../libseahorse/seahorse-util.c:899
+#: ../libseahorse/seahorse-util.c:864 ../libseahorse/seahorse-util.c:904
 #: ../src/seahorse-photos.c:239
 msgid "All files"
 msgstr "แฟ้มทั้งหมด"
 
-#: ../libseahorse/seahorse-util.c:892
+#: ../libseahorse/seahorse-util.c:897
 msgid "Archive files"
 msgstr "แฟ้มจัดเก็บ"
 
-#: ../libseahorse/seahorse-util.c:933
+#: ../libseahorse/seahorse-util.c:938
 msgid ""
 "<b>A file already exists with this name.</b>\n"
 "\n"
@@ -1246,7 +1195,7 @@ msgstr ""
 "\n"
 "คุณต้องการเขียนทับด้วยแฟ้มใหม่หรือไม่?"
 
-#: ../libseahorse/seahorse-util.c:936
+#: ../libseahorse/seahorse-util.c:941
 msgid "_Replace"
 msgstr "เขียน_ทับ"
 
@@ -1294,12 +1243,12 @@ msgid "Seahorse Applet Factory"
 msgstr "โรงงานแอพเพล็ต Seahorse"
 
 #: ../plugins/applet/GNOME_SeahorseApplet.xml.h:1
-#: ../src/seahorse-key-manager.c:1208
+#: ../src/seahorse-key-manager.c:1189
 msgid "_About"
 msgstr "เ_กี่ยวกับ"
 
 #: ../plugins/applet/GNOME_SeahorseApplet.xml.h:2
-#: ../src/seahorse-key-manager.c:1192 ../src/seahorse-keyserver-results.c:381
+#: ../src/seahorse-key-manager.c:1173 ../src/seahorse-keyserver-results.c:381
 msgid "_Help"
 msgstr "_วิธีใช้"
 
@@ -1317,11 +1266,11 @@ msgid "Use PGP/GPG to encrypt/decrypt/sign/verify/import the clipboard."
 msgstr ""
 "ใช้ PGP/GPG ในการ เข้ารหัสลับ/ถอดรหัสลับ/เซ็นกำกับ/ตรวจสอบยืนยัน/นำเข้า ข้อความในคลิปบอร์ด"
 
-#: ../plugins/applet/seahorse-applet.c:316 ../src/seahorse-key-manager.c:874
+#: ../plugins/applet/seahorse-applet.c:316 ../src/seahorse-key-manager.c:866
 msgid "translator-credits"
 msgstr "เทพพิทักษ์ การุญบุญญานันท์ <thep@linux.thai.net>"
 
-#: ../plugins/applet/seahorse-applet.c:319 ../src/seahorse-key-manager.c:877
+#: ../plugins/applet/seahorse-applet.c:319 ../src/seahorse-key-manager.c:869
 msgid "Seahorse Project Homepage"
 msgstr "โฮมเพจโครงการ Seahorse"
 
@@ -1364,11 +1313,13 @@ msgstr "ไม่สามารถเซ็นกำกับข้อควา
 
 #: ../plugins/applet/seahorse-applet.c:496
 #: ../plugins/epiphany/seahorse-extension.c:340
+#: ../plugins/nautilus/seahorse-tool.c:428
 msgid "Import Failed"
 msgstr "นำเข้าไม่สำเร็จ"
 
 #: ../plugins/applet/seahorse-applet.c:497
 #: ../plugins/epiphany/seahorse-extension.c:341
+#: ../plugins/nautilus/seahorse-tool.c:429
 msgid "Keys were found but not imported."
 msgstr "พบกุญแจแต่นำเข้าไม่สำเร็จ"
 
@@ -1440,20 +1391,20 @@ msgstr "เ_ข้ารหัสลับหรือเซ็นกำกั�
 msgid "_Show clipboard state in panel"
 msgstr "แ_สดงสถานะคลิปบอร์ดในพาเนล"
 
-#: ../plugins/epiphany/seahorse-extension.c:602
+#: ../plugins/epiphany/seahorse-extension.c:619
 msgid "_Encrypt"
 msgstr "เ_ข้ารหัสลับ"
 
-#: ../plugins/epiphany/seahorse-extension.c:609
+#: ../plugins/epiphany/seahorse-extension.c:626
 #: ../src/seahorse-sign.glade.h:21
 msgid "_Sign"
 msgstr "เ_ซ็นกำกับ"
 
-#: ../plugins/epiphany/seahorse-extension.c:616
+#: ../plugins/epiphany/seahorse-extension.c:633
 msgid "_Decrypt/Verify"
 msgstr "_ถอดรหัสลับ/ตรวจสอบยืนยัน"
 
-#: ../plugins/epiphany/seahorse-extension.c:623
+#: ../plugins/epiphany/seahorse-extension.c:640
 msgid "_Import Key"
 msgstr "_นำเข้ากุญแจ"
 
@@ -1469,8 +1420,8 @@ msgstr "ข้อความเข้ารหัสลับ"
 msgid "Couldn't encrypt text"
 msgstr "ไม่สามารถเข้ารหัสลับข้อความ"
 
-#: ../plugins/gedit/seahorse-gedit.c:387 ../src/seahorse-key-manager.c:395
-#: ../src/seahorse-key-manager.c:463 ../src/seahorse-key-manager.c:486
+#: ../plugins/gedit/seahorse-gedit.c:387 ../src/seahorse-key-manager.c:387
+#: ../src/seahorse-key-manager.c:455 ../src/seahorse-key-manager.c:478
 msgid "Couldn't import keys"
 msgstr "ไม่สามารถนำเข้ากุญแจ"
 
@@ -1499,7 +1450,7 @@ msgid "Verified text"
 msgstr "ข้อความตรวจสอบยืนยันแล้ว"
 
 #: ../plugins/gedit/seahorse-gedit.c:582
-#: ../plugins/nautilus/seahorse-tool.c:374 ../src/seahorse-key-manager.c:404
+#: ../plugins/nautilus/seahorse-tool.c:454 ../src/seahorse-key-manager.c:396
 #, c-format
 msgid "Imported %d key"
 msgid_plural "Imported %d keys"
@@ -1563,7 +1514,7 @@ msgid_plural "Encrypt the selected files"
 msgstr[0] "เข้ารหัสลับ (และอาจเซ็นกำกับ) แฟ้มที่เลือก"
 
 #: ../plugins/nautilus-ext/seahorse-nautilus.c:168
-#: ../src/seahorse-pgp-private-key-properties.glade.h:38
+#: ../src/seahorse-pgp-private-key-properties.glade.h:39
 msgid "Sign"
 msgstr "เซ็นกำกับ"
 
@@ -1577,77 +1528,93 @@ msgstr[0] "เซ็นกำกับแฟ้มที่เลือก"
 msgid "For internal use"
 msgstr "สำหรับใช้เป็นการภายใน"
 
+#: ../plugins/nautilus/seahorse-pgp-preferences.c:74
+msgid "Encryption Preferences"
+msgstr "ปรับแต่งการเข้ารหัสลับ"
+
 #: ../plugins/nautilus/seahorse-pgp-preferences.desktop.in.h:1
 msgid "Configure key servers and other encryption settings"
 msgstr "ตั้งค่าเซิร์ฟเวอร์กุญแจและค่าตั้งอื่นๆ เกี่ยวกับการเข้ารหัสลับ"
 
-#: ../plugins/nautilus/seahorse-tool.c:52
+#: ../plugins/nautilus/seahorse-pgp-preferences.desktop.in.h:2
+msgid "Encryption and Keyrings"
+msgstr "การเข้ารหัสลับและพวงกุญแจ"
+
+#: ../plugins/nautilus/seahorse-tool.c:58
 msgid "Import keys from the file"
 msgstr "นำเข้ากุญแจจากแฟ้ม"
 
-#: ../plugins/nautilus/seahorse-tool.c:54
+#: ../plugins/nautilus/seahorse-tool.c:60
 msgid "Encrypt file"
 msgstr "เข้ารหัสลับแฟ้ม"
 
-#: ../plugins/nautilus/seahorse-tool.c:56
+#: ../plugins/nautilus/seahorse-tool.c:62
 msgid "Sign file with default key"
 msgstr "เซ็นกำกับแฟ้มด้วยกุญแจปริยาย"
 
-#: ../plugins/nautilus/seahorse-tool.c:58
+#: ../plugins/nautilus/seahorse-tool.c:64
 msgid "Encrypt and sign file with default key"
 msgstr "เข้ารหัสลับและเซ็นกำกับแฟ้มด้วยกุญแจปริยาย"
 
-#: ../plugins/nautilus/seahorse-tool.c:60
+#: ../plugins/nautilus/seahorse-tool.c:66
 msgid "Decrypt encrypted file"
 msgstr "ถอดรหัสลับแฟ้ม"
 
-#: ../plugins/nautilus/seahorse-tool.c:62
+#: ../plugins/nautilus/seahorse-tool.c:68
 msgid "Verify signature file"
 msgstr "ตรวจสอบยืนยันแฟ้มลายเซ็น"
 
-#: ../plugins/nautilus/seahorse-tool.c:64
+#: ../plugins/nautilus/seahorse-tool.c:70
 msgid "Read list of URIs on standard in"
 msgstr "อ่านรายการ URI จากอินพุตมาตรฐาน"
 
-#: ../plugins/nautilus/seahorse-tool.c:66
+#: ../plugins/nautilus/seahorse-tool.c:72
 msgid "file..."
 msgstr "แฟ้ม..."
 
-#: ../plugins/nautilus/seahorse-tool.c:128
+#: ../plugins/nautilus/seahorse-tool.c:162
 msgid "Choose Recipients"
 msgstr "เลือกผู้รับ"
 
-#: ../plugins/nautilus/seahorse-tool.c:190
-#: ../plugins/nautilus/seahorse-tool.c:272
+#: ../plugins/nautilus/seahorse-tool.c:224
+#: ../plugins/nautilus/seahorse-tool.c:306
 msgid "Couldn't load keys"
 msgstr "ไม่สามารถโหลดกุญแจ"
 
-#: ../plugins/nautilus/seahorse-tool.c:206
+#: ../plugins/nautilus/seahorse-tool.c:240
 #, c-format
 msgid "Choose Encrypted File Name for '%s'"
 msgstr "ตั้งชื่อแฟ้มเข้ารหัสลับสำหรับ '%s'"
 
-#: ../plugins/nautilus/seahorse-tool.c:256
+#: ../plugins/nautilus/seahorse-tool.c:290
 msgid "Choose Signer"
 msgstr "เลือกผู้เซ็น"
 
-#: ../plugins/nautilus/seahorse-tool.c:291
+#: ../plugins/nautilus/seahorse-tool.c:325
 #, c-format
 msgid "Choose Signature File Name for '%s'"
 msgstr "ตั้งชื่อแฟ้มลายเซ็นสำหรับ '%s'"
 
-#: ../plugins/nautilus/seahorse-tool.c:372
+#: ../plugins/nautilus/seahorse-tool.c:365
+msgid "Import is complete"
+msgstr "การนำเข้าเสร็จสมบูรณ์"
+
+#: ../plugins/nautilus/seahorse-tool.c:398
+msgid "Importing keys ..."
+msgstr "กำลังนำเข้ากุญแจ..."
+
+#: ../plugins/nautilus/seahorse-tool.c:452
 #, c-format
 msgid "Imported key"
 msgstr "กุญแจนำเข้า"
 
 #. File to decrypt to
-#: ../plugins/nautilus/seahorse-tool.c:396
+#: ../plugins/nautilus/seahorse-tool.c:476
 #, c-format
 msgid "Choose Decrypted File Name for '%s'"
 msgstr "ตั้งชื่อแฟ้มถอดรหัสลับสำหรับ '%s'"
 
-#: ../plugins/nautilus/seahorse-tool.c:452
+#: ../plugins/nautilus/seahorse-tool.c:532
 #, c-format
 msgid "Choose Original File for '%s'"
 msgstr "ตั้งชื่อแฟ้มสำหรับข้อมูลเริ่มแรกสำหรับ '%s'"
@@ -1657,56 +1624,56 @@ msgstr "ตั้งชื่อแฟ้มสำหรับข้อมูล
 #. * The last thing we want to do is cascade a big pile of error
 #. * dialogs at the user.
 #.
-#: ../plugins/nautilus/seahorse-tool.c:524
+#: ../plugins/nautilus/seahorse-tool.c:604
 #, c-format
 msgid "No valid signatures found"
 msgstr "ไม่พบลายเซ็นที่ใช้การได้"
 
-#: ../plugins/nautilus/seahorse-tool.c:591
+#: ../plugins/nautilus/seahorse-tool.c:657
 msgid "File Encryption Tool"
 msgstr "เครื่องมือเข้ารหัสลับแฟ้ม"
 
-#: ../plugins/nautilus/seahorse-tool.c:614
+#: ../plugins/nautilus/seahorse-tool.c:680
 msgid "Encrypting"
 msgstr "กำลังเข้ารหัสลับ"
 
-#: ../plugins/nautilus/seahorse-tool.c:615
+#: ../plugins/nautilus/seahorse-tool.c:681
 #, c-format
 msgid "Couldn't encrypt file: %s"
 msgstr "ไม่สามารถเข้ารหัสลับแฟ้ม: %s"
 
-#: ../plugins/nautilus/seahorse-tool.c:623
+#: ../plugins/nautilus/seahorse-tool.c:689
 msgid "Signing"
 msgstr "กำลังเซ็นกำกับ"
 
-#: ../plugins/nautilus/seahorse-tool.c:624
+#: ../plugins/nautilus/seahorse-tool.c:690
 #, c-format
 msgid "Couldn't sign file: %s"
 msgstr "ไม่สามารถเซ็นกำกับแฟ้ม: %s"
 
-#: ../plugins/nautilus/seahorse-tool.c:629
+#: ../plugins/nautilus/seahorse-tool.c:695
 msgid "Importing"
 msgstr "กำลังนำเข้า"
 
-#: ../plugins/nautilus/seahorse-tool.c:630
+#: ../plugins/nautilus/seahorse-tool.c:696
 #, c-format
 msgid "Couldn't import keys from file: %s"
 msgstr "ไม่สามารถนำเข้ากุญแจจากแฟ้ม: %s"
 
-#: ../plugins/nautilus/seahorse-tool.c:636
+#: ../plugins/nautilus/seahorse-tool.c:702
 msgid "Decrypting"
 msgstr "กำลังถอดรหัสลับ"
 
-#: ../plugins/nautilus/seahorse-tool.c:637
+#: ../plugins/nautilus/seahorse-tool.c:703
 #, c-format
 msgid "Couldn't decrypt file: %s"
 msgstr "ไม่สามารถถอดรหัสลับแฟ้ม: %s"
 
-#: ../plugins/nautilus/seahorse-tool.c:642
+#: ../plugins/nautilus/seahorse-tool.c:708
 msgid "Verifying"
 msgstr "กำลังตรวจสอบยืนยัน"
 
-#: ../plugins/nautilus/seahorse-tool.c:643
+#: ../plugins/nautilus/seahorse-tool.c:709
 #, c-format
 msgid "Couldn't verify file: %s"
 msgstr "ไม่สามารถตรวจสอบยืนยันแฟ้ม: %s"
@@ -1818,16 +1785,16 @@ msgid "You have selected %d folder"
 msgid_plural "You have selected %d folders"
 msgstr[0] "คุณได้เลือกโฟลเดอร์ %d โฟลเดอร์"
 
-#: ../plugins/nautilus/seahorse-tool-files.c:812
+#: ../plugins/nautilus/seahorse-tool-files.c:811
 msgid "Preparing..."
 msgstr "กำลังเตรียมการ..."
 
-#: ../plugins/nautilus/seahorse-tool-files.c:821
-#: ../plugins/nautilus/seahorse-tool-files.c:844
+#: ../plugins/nautilus/seahorse-tool-files.c:820
+#: ../plugins/nautilus/seahorse-tool-files.c:843
 msgid "Couldn't list files"
 msgstr "ไม่สามารถไล่เรียงรายการแฟ้ม"
 
-#: ../src/main.c:75 ../src/seahorse-key-manager.c:869
+#: ../src/main.c:61 ../src/seahorse-key-manager.c:861
 msgid "Encryption Key Manager"
 msgstr "โปรแกรมจัดการกุญแจเข้ารหัสลับ"
 
@@ -2007,13 +1974,13 @@ msgstr "วันหมดอายุสำหรับ %s"
 msgid "C_hange"
 msgstr "เ_ปลี่ยน"
 
-#: ../src/seahorse-expires.glade.h:2
-msgid "Never Expires"
-msgstr "ไม่มีวันหมดอายุ"
-
-#: ../src/seahorse-expires.glade.h:3 ../src/seahorse-revoke.glade.h:4
+#: ../src/seahorse-expires.glade.h:2 ../src/seahorse-revoke.glade.h:4
 msgid "Revoke key"
 msgstr "เพิกถอนกุญแจ"
+
+#: ../src/seahorse-expires.glade.h:3
+msgid "_Never expires"
+msgstr "ไ_ม่มีวันหมดอายุ"
 
 #: ../src/seahorse-generate-select.c:143
 msgid "Used to encrypt email and files"
@@ -2035,396 +2002,414 @@ msgstr "_ต่อไป"
 msgid "Create a New Key"
 msgstr "สร้างกุญแจใหม่"
 
-#: ../src/seahorse-gkeyring-item.c:248
+#: ../src/seahorse-gkeyring-item.c:249
 msgid "Web Password"
 msgstr "รหัสผ่านเว็บ"
 
-#: ../src/seahorse-gkeyring-item.c:250
+#: ../src/seahorse-gkeyring-item.c:251
 msgid "Network Password"
 msgstr "รหัสผ่านเครือข่าย"
 
-#: ../src/seahorse-gkeyring-item.c:252
-#: ../src/seahorse-gkeyring-item-properties.c:116
-#: ../src/seahorse-gkeyring-source.c:525
+#: ../src/seahorse-gkeyring-item.c:253
+#: ../src/seahorse-gkeyring-item-properties.c:119
+#: ../src/seahorse-gkeyring-source.c:546
 msgid "Password"
 msgstr "รหัสผ่าน"
 
-#: ../src/seahorse-gkeyring-item-properties.c:90
+#: ../src/seahorse-gkeyring-item-properties.c:93
 msgid "Access a network share or resource"
 msgstr "เข้าใช้โฟลเดอร์ใช้ร่วมหรือทรัพยากรในเครือข่าย"
 
-#: ../src/seahorse-gkeyring-item-properties.c:94
+#: ../src/seahorse-gkeyring-item-properties.c:97
 msgid "Access a website"
 msgstr "เข้าใช้เว็บไซต์"
 
-#: ../src/seahorse-gkeyring-item-properties.c:98
+#: ../src/seahorse-gkeyring-item-properties.c:101
 msgid "Unlocks a PGP key"
 msgstr "ไขกุญแจ PGP"
 
-#: ../src/seahorse-gkeyring-item-properties.c:101
+#: ../src/seahorse-gkeyring-item-properties.c:104
 msgid "Unlocks a Secure Shell key"
 msgstr "ไขกุญแจเชลล์นิรภัย"
 
-#: ../src/seahorse-gkeyring-item-properties.c:104
+#: ../src/seahorse-gkeyring-item-properties.c:107
 msgid "Saved password or login"
 msgstr "รหัสผ่านหรือชื่อเข้าระบบที่บันทึกไว้"
 
-#: ../src/seahorse-gkeyring-item-properties.c:116
+#: ../src/seahorse-gkeyring-item-properties.c:119
 msgid "Network Credentials"
 msgstr "รหัสลับเครือข่าย"
 
-#: ../src/seahorse-gkeyring-item-properties.c:177
+#: ../src/seahorse-gkeyring-item-properties.c:180
 msgid "Couldn't change password."
 msgstr "ไม่สามารถเปลี่ยนรหัสผ่าน"
 
-#: ../src/seahorse-gkeyring-item-properties.c:284
+#: ../src/seahorse-gkeyring-item-properties.c:287
 msgid "Couldn't set description."
 msgstr "ไม่สามารถกำหนดคำบรรยาย"
 
+#: ../src/seahorse-gkeyring-item-properties.c:496
+msgid "Couldn't set application access."
+msgstr "ไม่สามารถกำหนดการเข้าถึงของโปรแกรมประยุกต์"
+
 #: ../src/seahorse-gkeyring-item-properties.glade.h:1
-msgid "<b>Description:</b>"
-msgstr "<b>คำบรรยาย:</b>"
-
-#: ../src/seahorse-gkeyring-item-properties.glade.h:2
-msgid "<b>Login:</b>"
-msgstr "<b>ชื่อเข้าระบบ:</b>"
-
-#: ../src/seahorse-gkeyring-item-properties.glade.h:3
 msgid "<b>Password:</b>"
 msgstr "<b>รหัสผ่าน:</b>"
 
-#: ../src/seahorse-gkeyring-item-properties.glade.h:4
-msgid "<b>Server:</b>"
-msgstr "<b>เซิร์ฟเวอร์:</b>"
+#: ../src/seahorse-gkeyring-item-properties.glade.h:2
+msgid "<b>Path:</b>"
+msgstr "<b>พาธ:</b>"
 
-#: ../src/seahorse-gkeyring-item-properties.glade.h:5
+#: ../src/seahorse-gkeyring-item-properties.glade.h:3
+msgid "<b>Permissions:</b>"
+msgstr "<b>การอนุญาต:</b>"
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:4
 #: ../src/seahorse-pgp-public-key-properties.glade.h:9
 #: ../src/seahorse-ssh-key-properties.glade.h:9
 msgid "<b>Technical Details:</b>"
 msgstr "<b>รายละเอียดทางเทคนิค:</b>"
 
+#: ../src/seahorse-gkeyring-item-properties.glade.h:5
+msgid "Applications"
+msgstr "โปรแกรมประยุกต์"
+
 #: ../src/seahorse-gkeyring-item-properties.glade.h:6
-#: ../src/seahorse-pgp-private-key-properties.glade.h:13
-#: ../src/seahorse-pgp-public-key-properties.glade.h:12
-#: ../src/seahorse-ssh-key-properties.glade.h:11
-msgid "<b>Type:</b>"
-msgstr "<b>ชนิด:</b>"
-
-#: ../src/seahorse-gkeyring-item-properties.glade.h:7
-#: ../src/seahorse-pgp-private-key-properties.glade.h:14
-#: ../src/seahorse-pgp-public-key-properties.glade.h:13
-#: ../src/seahorse-ssh-key-properties.glade.h:12
-msgid "<b>Use:</b>"
-msgstr "<b>การใช้งาน:</b>"
-
-#: ../src/seahorse-gkeyring-item-properties.glade.h:8
-#: ../src/seahorse-pgp-private-key-properties.glade.h:22
-#: ../src/seahorse-pgp-public-key-properties.glade.h:19
-#: ../src/seahorse-ssh-key-properties.glade.h:16
+#: ../src/seahorse-pgp-private-key-properties.glade.h:23
+#: ../src/seahorse-pgp-public-key-properties.glade.h:20
+#: ../src/seahorse-ssh-key-properties.glade.h:17
 msgid "Details"
 msgstr "รายละเอียด"
 
-#: ../src/seahorse-gkeyring-item-properties.glade.h:9
-#: ../src/seahorse-ssh-key-properties.glade.h:18
+#: ../src/seahorse-gkeyring-item-properties.glade.h:7
+#: ../src/seahorse-ssh-key-properties.glade.h:19
 msgid "Key"
 msgstr "กุญแจ"
 
-#: ../src/seahorse-gkeyring-item-properties.glade.h:10
-#: ../src/seahorse-pgp-private-key-properties.glade.h:29
-#: ../src/seahorse-pgp-public-key-properties.glade.h:28
-#: ../src/seahorse-ssh-key-properties.glade.h:19
+#: ../src/seahorse-gkeyring-item-properties.glade.h:8
+#: ../src/seahorse-pgp-private-key-properties.glade.h:30
+#: ../src/seahorse-pgp-public-key-properties.glade.h:29
+#: ../src/seahorse-ssh-key-properties.glade.h:20
 msgid "Key Properties"
 msgstr "คุณสมบัติกุญแจ"
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:9
+msgid "Login:"
+msgstr "ชื่อเข้าระบบ:"
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:10
+msgid "Server:"
+msgstr "เซิร์ฟเวอร์:"
 
 #: ../src/seahorse-gkeyring-item-properties.glade.h:11
 msgid "Show pass_word"
 msgstr "แสดง_รหัสผ่าน"
 
 #: ../src/seahorse-gkeyring-item-properties.glade.h:12
-msgid "[details]\n"
-msgstr "[รายละเอียด]\n"
+#: ../src/seahorse-pgp-private-key-properties.glade.h:42
+#: ../src/seahorse-pgp-public-key-properties.glade.h:36
+msgid "Type:"
+msgstr "ชนิด:"
 
+#. To translators: This is the noun not the verb.
 #: ../src/seahorse-gkeyring-item-properties.glade.h:14
-msgid "[login]"
-msgstr "[ชื่อเข้าระบบ]"
+msgid "Use:"
+msgstr "การใช้งาน:"
 
-#: ../src/seahorse-gkeyring-item-properties.glade.h:15
-msgid "[server]"
-msgstr "[เซิร์ฟเวอร์]"
+#. To translators: This is the infinitive not the imperative.
+#: ../src/seahorse-gkeyring-item-properties.glade.h:16
+msgid "_Delete"
+msgstr "_ลบ"
 
-#: ../src/seahorse-gkeyring-operation.c:206
+#: ../src/seahorse-gkeyring-item-properties.glade.h:17
+#: ../src/seahorse-revoke.glade.h:5
+msgid "_Description:"
+msgstr "_คำอธิบาย:"
+
+#. To translators: This is the infinitive not the imperative.
+#: ../src/seahorse-gkeyring-item-properties.glade.h:19
+msgid "_Read"
+msgstr "_อ่าน"
+
+#. To translators: This is the infinitive not the imperative.
+#: ../src/seahorse-gkeyring-item-properties.glade.h:21
+msgid "_Write"
+msgstr "เ_ขียน"
+
+#: ../src/seahorse-gkeyring-operation.c:204
 msgid "Access to the key ring was denied"
 msgstr "ไม่ได้รับอนุญาตให้เข้าใช้พวงกุญแจ"
 
-#: ../src/seahorse-gkeyring-operation.c:209
+#: ../src/seahorse-gkeyring-operation.c:207
 msgid "The gnome-keyring daemon is not running"
 msgstr "ดีมอน gnome-keyring ไม่ได้ทำงานอยู่"
 
-#: ../src/seahorse-gkeyring-operation.c:212
+#: ../src/seahorse-gkeyring-operation.c:210
 msgid "The key ring has already been unlocked"
 msgstr "พวงกุญแจถูกปลดล็อคไปแล้ว"
 
-#: ../src/seahorse-gkeyring-operation.c:215
+#: ../src/seahorse-gkeyring-operation.c:213
 msgid "No such key ring exists"
 msgstr "ไม่มีพวงกุญแจที่ว่านี้อยู่"
 
-#: ../src/seahorse-gkeyring-operation.c:218
+#: ../src/seahorse-gkeyring-operation.c:216
 msgid "Couldn't communicate with key ring daemon"
 msgstr "ไม่สามารถติดต่อสื่อสารกับดีมอนพวงกุญแจ"
 
-#: ../src/seahorse-gkeyring-operation.c:221
+#: ../src/seahorse-gkeyring-operation.c:219
 msgid "The item already exists"
 msgstr "มีรายการนี้อยู่ก่อนแล้ว"
 
-#: ../src/seahorse-gkeyring-operation.c:227
+#: ../src/seahorse-gkeyring-operation.c:225
 msgid "Internal error accessing gnome-keyring"
 msgstr "เกิดข้อผิดพลาดภายในขณะเข้าใช้ gnome-keyring"
 
-#: ../src/seahorse-gkeyring-operation.c:286
+#: ../src/seahorse-gkeyring-operation.c:282
+#: ../src/seahorse-gkeyring-operation.c:314
 msgid "Saving item..."
 msgstr "กำลังบันทึกรายการ..."
 
-#: ../src/seahorse-gkeyring-source.c:358
+#: ../src/seahorse-gkeyring-source.c:403
 msgid "Retrieving key"
 msgstr "กำลังดึงกุญแจ"
 
 #. Start listing of ids
-#: ../src/seahorse-gkeyring-source.c:372
+#: ../src/seahorse-gkeyring-source.c:417
 msgid "Listing passwords"
 msgstr "กำลังไล่เรียงรหัสผ่าน"
 
-#: ../src/seahorse-key-manager.c:443
+#: ../src/seahorse-key-manager.c:435
 msgid "Couldn't read file"
 msgstr "ไม่สามารถอ่านแฟ้ม"
 
-#: ../src/seahorse-key-manager.c:486
+#: ../src/seahorse-key-manager.c:478
 msgid "Unrecognized key type, or invalid data format"
 msgstr "ไม่รู้จักชนิดกุญแจ หรือรูปแบบข้อมูลไม่ถูกต้อง"
 
-#: ../src/seahorse-key-manager.c:560 ../src/seahorse-keyserver-results.c:218
+#: ../src/seahorse-key-manager.c:552 ../src/seahorse-keyserver-results.c:218
 msgid "Couldn't retrieve data from key server"
 msgstr "ไม่สามารถดึงข้อมูลจากเซิร์ฟเวอร์กุญแจ"
 
-#: ../src/seahorse-key-manager.c:576 ../src/seahorse-keyserver-results.c:234
+#: ../src/seahorse-key-manager.c:568 ../src/seahorse-keyserver-results.c:234
 #, c-format
 msgid "Copied %d key"
 msgid_plural "Copied %d keys"
 msgstr[0] "ทำสำเนากุญแจแล้ว %d ดอก"
 
-#: ../src/seahorse-key-manager.c:600 ../src/seahorse-keyserver-results.c:194
+#: ../src/seahorse-key-manager.c:592 ../src/seahorse-keyserver-results.c:194
 #: ../src/seahorse-keyserver-results.c:259
 msgid "Retrieving keys"
 msgstr "กำลังดึงข้อมูลกุญแจ"
 
-#: ../src/seahorse-key-manager.c:626
+#: ../src/seahorse-key-manager.c:618
 msgid "Couldn't export key"
 msgstr "ไม่สามารถส่งออกกุญแจ"
 
-#: ../src/seahorse-key-manager.c:646
+#: ../src/seahorse-key-manager.c:638
 msgid "Export public key"
 msgstr "ส่งออกกุญแจสาธารณะ"
 
-#: ../src/seahorse-key-manager.c:656 ../src/seahorse-key-properties.c:1038
+#: ../src/seahorse-key-manager.c:648 ../src/seahorse-key-properties.c:1038
 #: ../src/seahorse-ssh-key-properties.c:240
 #, c-format
 msgid "Couldn't export key to \"%s\""
 msgstr "ไม่สามารถส่งออกกุญแจไปยัง \"%s\""
 
-#: ../src/seahorse-key-manager.c:668
+#: ../src/seahorse-key-manager.c:660
 msgid "Exporting keys"
 msgstr "กำลังส่งออกกุญแจ"
 
-#: ../src/seahorse-key-manager.c:687
+#: ../src/seahorse-key-manager.c:679
 msgid "Back up Key Rings to Archive"
 msgstr "สำรองพวงกุญแจลงในแฟ้มจัดเก็บ"
 
-#: ../src/seahorse-key-manager.c:841
+#: ../src/seahorse-key-manager.c:833
 msgid "Contributions:"
 msgstr "ผู้ร่วมสมทบ:"
 
-#: ../src/seahorse-key-manager.c:867
+#: ../src/seahorse-key-manager.c:859
 msgid "seahorse"
 msgstr "seahorse"
 
-#: ../src/seahorse-key-manager.c:950 ../src/seahorse-keyserver-results.c:300
+#: ../src/seahorse-key-manager.c:942 ../src/seahorse-keyserver-results.c:300
 #, c-format
 msgid "Selected %d key"
 msgid_plural "Selected %d keys"
 msgstr[0] "เลือกกุญแจ %d ดอก"
 
 #. Top menu items
-#: ../src/seahorse-key-manager.c:1189 ../src/seahorse-keyserver-results.c:379
+#: ../src/seahorse-key-manager.c:1170 ../src/seahorse-keyserver-results.c:379
 msgid "_Key"
 msgstr "กุญแ_จ"
 
-#: ../src/seahorse-key-manager.c:1190 ../src/seahorse-keyserver-results.c:380
+#: ../src/seahorse-key-manager.c:1171 ../src/seahorse-keyserver-results.c:380
 msgid "_Edit"
 msgstr "แ_ก้ไข"
 
-#: ../src/seahorse-key-manager.c:1191
+#: ../src/seahorse-key-manager.c:1172
 msgid "_View"
 msgstr "มุ_มมอง"
 
 #. Key Actions
-#: ../src/seahorse-key-manager.c:1195
+#: ../src/seahorse-key-manager.c:1176
 msgid "_Create New Key..."
 msgstr "_สร้างกุญแจใหม่..."
 
-#: ../src/seahorse-key-manager.c:1196
+#: ../src/seahorse-key-manager.c:1177
 msgid "Create a new personal key"
 msgstr "สร้างกุญแจส่วนตัวใหม่"
 
-#: ../src/seahorse-key-manager.c:1197
+#: ../src/seahorse-key-manager.c:1178
 msgid "_Import..."
 msgstr "_นำเข้า..."
 
-#: ../src/seahorse-key-manager.c:1198
+#: ../src/seahorse-key-manager.c:1179
 msgid "Import keys into your key ring from a file"
 msgstr "นำเข้ากุญแจจากแฟ้มเข้าในพวงกุญแจของคุณ"
 
-#: ../src/seahorse-key-manager.c:1199
+#: ../src/seahorse-key-manager.c:1180
 msgid "_Back up Key Rings..."
 msgstr "สำ_รองพวงกุญแจ..."
 
-#: ../src/seahorse-key-manager.c:1200
+#: ../src/seahorse-key-manager.c:1181
 msgid "Back up all keys"
 msgstr "สำรองกุญแจทั้งหมด"
 
-#: ../src/seahorse-key-manager.c:1201
+#: ../src/seahorse-key-manager.c:1182
 msgid "Paste _Keys"
 msgstr "แ_ปะกุญแจ"
 
-#: ../src/seahorse-key-manager.c:1202
+#: ../src/seahorse-key-manager.c:1183
 msgid "Import keys from the clipboard"
 msgstr "นำเข้ากุญแจจากคลิปบอร์ด"
 
-#: ../src/seahorse-key-manager.c:1204
+#: ../src/seahorse-key-manager.c:1185
 msgid "_Quit"
 msgstr "_ออก"
 
-#: ../src/seahorse-key-manager.c:1205
+#: ../src/seahorse-key-manager.c:1186
 msgid "Close this program"
 msgstr "ปิดโปรแกรมนี้"
 
-#: ../src/seahorse-key-manager.c:1206
+#: ../src/seahorse-key-manager.c:1187
 msgid "Prefere_nces"
 msgstr "ปรับแ_ต่ง"
 
-#: ../src/seahorse-key-manager.c:1207
+#: ../src/seahorse-key-manager.c:1188
 msgid "Change preferences for this program"
 msgstr "ปรับแต่งโปรแกรมนี้"
 
-#: ../src/seahorse-key-manager.c:1209
+#: ../src/seahorse-key-manager.c:1190
 msgid "About this program"
 msgstr "เกี่ยวกับโปรแกรมนี้"
 
-#: ../src/seahorse-key-manager.c:1211
+#: ../src/seahorse-key-manager.c:1192
 msgid "_Remote"
 msgstr "เ_ครือข่าย"
 
-#: ../src/seahorse-key-manager.c:1213 ../src/seahorse-keyserver-results.c:385
+#: ../src/seahorse-key-manager.c:1194 ../src/seahorse-keyserver-results.c:385
 msgid "_Contents"
 msgstr "เนื้อ_หา"
 
-#: ../src/seahorse-key-manager.c:1214 ../src/seahorse-keyserver-results.c:386
+#: ../src/seahorse-key-manager.c:1195 ../src/seahorse-keyserver-results.c:386
 msgid "Show Seahorse help"
 msgstr "แสดงวิธีใช้ Seahorse"
 
-#: ../src/seahorse-key-manager.c:1218
+#: ../src/seahorse-key-manager.c:1199
 msgid "T_ypes"
 msgstr "_ชนิด"
 
-#: ../src/seahorse-key-manager.c:1219
+#: ../src/seahorse-key-manager.c:1200
 msgid "Show type column"
 msgstr "แสดงคอลัมน์ชนิดกุญแจ"
 
-#: ../src/seahorse-key-manager.c:1220
+#: ../src/seahorse-key-manager.c:1201
 msgid "_Expiry"
 msgstr "วันห_มดอายุ"
 
-#: ../src/seahorse-key-manager.c:1221
+#: ../src/seahorse-key-manager.c:1202
 msgid "Show expiry column"
 msgstr "แสดงคอลัมน์วันหมดอายุกุญแจ"
 
-#: ../src/seahorse-key-manager.c:1222
+#: ../src/seahorse-key-manager.c:1203
 msgid "_Trust"
 msgstr "ความเชื่อ_ถือ"
 
-#: ../src/seahorse-key-manager.c:1223
+#: ../src/seahorse-key-manager.c:1204
 msgid "Show owner trust column"
 msgstr "แสดงคอลัมน์ความเชื่อถือของเจ้าของ"
 
-#: ../src/seahorse-key-manager.c:1224
+#: ../src/seahorse-key-manager.c:1205
 msgid "_Validity"
 msgstr "สถานะ_มีผลใช้งาน"
 
-#: ../src/seahorse-key-manager.c:1225
+#: ../src/seahorse-key-manager.c:1206
 msgid "Show validity column"
 msgstr "แสดงคอลัมน์สถานะมีผลใช้งาน"
 
-#: ../src/seahorse-key-manager.c:1229 ../src/seahorse-keyserver-results.c:397
+#: ../src/seahorse-key-manager.c:1210 ../src/seahorse-keyserver-results.c:397
 msgid "P_roperties"
 msgstr "คุณ_สมบัติ"
 
-#: ../src/seahorse-key-manager.c:1230 ../src/seahorse-keyserver-results.c:398
+#: ../src/seahorse-key-manager.c:1211 ../src/seahorse-keyserver-results.c:398
 msgid "Show key properties"
 msgstr "แสดงคุณสมบัติของกุญแจ"
 
-#: ../src/seahorse-key-manager.c:1231
+#: ../src/seahorse-key-manager.c:1212
 msgid "E_xport Public Key..."
 msgstr "_ส่งออกกุญแจสาธารณะ..."
 
-#: ../src/seahorse-key-manager.c:1232
+#: ../src/seahorse-key-manager.c:1213
 msgid "Export public part of key to a file"
 msgstr "ส่งออกข้อมูลส่วนสาธารณะของกุญแจลงในแฟ้ม"
 
-#: ../src/seahorse-key-manager.c:1233
+#: ../src/seahorse-key-manager.c:1214
 msgid "_Copy Public Key"
 msgstr "_คัดลอกกุญแจสาธารณะ"
 
-#: ../src/seahorse-key-manager.c:1234
+#: ../src/seahorse-key-manager.c:1215
 msgid "Copy public part of selected keys to the clipboard"
 msgstr "คัดลอกข้อมูลส่วนสาธารณะของกุญแจลงในคลิปบอร์ด"
 
-#: ../src/seahorse-key-manager.c:1235
+#: ../src/seahorse-key-manager.c:1216
 msgid "_Delete Key"
 msgstr "_ลบกุญแจ"
 
-#: ../src/seahorse-key-manager.c:1236
+#: ../src/seahorse-key-manager.c:1217
 msgid "Delete selected keys"
 msgstr "ลบกุญแจที่เลือก"
 
-#: ../src/seahorse-key-manager.c:1240
+#: ../src/seahorse-key-manager.c:1221
 msgid "_Sign..."
 msgstr "เ_ซ็น..."
 
-#: ../src/seahorse-key-manager.c:1241
+#: ../src/seahorse-key-manager.c:1222
 msgid "Sign public key"
 msgstr "เซ็นรับรองกุญแจสาธารณะ"
 
-#: ../src/seahorse-key-manager.c:1245
+#: ../src/seahorse-key-manager.c:1226
 msgid "Set Up Computer for _Secure Shell..."
 msgstr "ตั้งค่าคอมพิวเตอร์สำหรับเ_ชลล์นิรภัย..."
 
-#: ../src/seahorse-key-manager.c:1246
+#: ../src/seahorse-key-manager.c:1227
 msgid ""
 "Send public Secure Shell key to another machine, and enable logins using "
 "that key."
 msgstr "ส่งกุญแจสาธารณะสำหรับเชลล์นิรภัยไปยังเครื่องอื่น และเปิดใช้การเข้าระบบด้วยกุญแจดังกล่าว"
 
-#: ../src/seahorse-key-manager.c:1250 ../src/seahorse-keyserver-results.c:406
+#: ../src/seahorse-key-manager.c:1231 ../src/seahorse-keyserver-results.c:406
 msgid "_Find Remote Keys..."
 msgstr "_หากุญแจในเครือข่าย..."
 
-#: ../src/seahorse-key-manager.c:1251 ../src/seahorse-keyserver-results.c:407
+#: ../src/seahorse-key-manager.c:1232 ../src/seahorse-keyserver-results.c:407
 msgid "Search for keys on a key server"
 msgstr "ค้นหากุญแจในเซิร์ฟเวอร์กุญแจ"
 
-#: ../src/seahorse-key-manager.c:1252
+#: ../src/seahorse-key-manager.c:1233
 msgid "_Sync and Publish Keys..."
 msgstr "_ปรับและประกาศกุญแจ..."
 
-#: ../src/seahorse-key-manager.c:1253
+#: ../src/seahorse-key-manager.c:1234
 msgid "Publish and/or synchronize your keys with those online."
 msgstr "ประกาศ และ/หรือ ปรับข้อมูลกุญแจของคุณกับค่าออนไลน์ให้ตรงกัน"
 
@@ -2469,41 +2454,41 @@ msgstr "_รหัสผ่าน"
 msgid "_Trusted Keys"
 msgstr "กุญแจเ_ชื่อถือ"
 
-#: ../src/seahorse-key-manager-store.c:311
+#: ../src/seahorse-key-manager-store.c:301
 #: ../src/seahorse-key-properties.c:1306
 msgid "Expired"
 msgstr "หมดอายุ"
 
-#: ../src/seahorse-key-manager-store.c:364
+#: ../src/seahorse-key-manager-store.c:354
 msgid "User ID"
 msgstr "หมายเลขผู้ใช้"
 
-#: ../src/seahorse-key-manager-store.c:697
+#: ../src/seahorse-key-manager-store.c:687
 msgid "Couldn't retrieve key data"
 msgstr "ไม่สามารถดึงข้อมูลกุญแจ"
 
-#: ../src/seahorse-key-manager-store.c:729
+#: ../src/seahorse-key-manager-store.c:718
 msgid "Couldn't write key to file"
 msgstr "ไม่สามารถเขียนกุญแจลงแฟ้ม"
 
-#: ../src/seahorse-key-manager-store.c:972
+#: ../src/seahorse-key-manager-store.c:961
 msgid "Validity"
 msgstr "มีผลใช้งาน"
 
 #. Trust column
-#: ../src/seahorse-key-manager-store.c:979
-#: ../src/seahorse-pgp-public-key-properties.glade.h:34
+#: ../src/seahorse-key-manager-store.c:968
+#: ../src/seahorse-pgp-public-key-properties.glade.h:35
 msgid "Trust"
 msgstr "เชื่อถือ"
 
 #. The key type column
-#: ../src/seahorse-key-manager-store.c:985
+#: ../src/seahorse-key-manager-store.c:974
 #: ../src/seahorse-key-properties.c:1284
 msgid "Type"
 msgstr "ชนิด"
 
 #. Expiry date column
-#: ../src/seahorse-key-manager-store.c:991
+#: ../src/seahorse-key-manager-store.c:980
 msgid "Expiration Date"
 msgstr "วันหมดอายุ"
 
@@ -2786,19 +2771,19 @@ msgstr "DSA Elgamal"
 msgid "Couldn't generate PGP key"
 msgstr "ไม่สามารถสร้างกุญแจ PGP"
 
-#: ../src/seahorse-pgp-generate.c:139
+#: ../src/seahorse-pgp-generate.c:138
 msgid "Passphrase for New PGP Key"
 msgstr "วลีรหัสผ่านสำหรับกุญแจ PGP ใหม่"
 
-#: ../src/seahorse-pgp-generate.c:140
+#: ../src/seahorse-pgp-generate.c:139
 msgid "Enter the passphrase for your new key twice."
 msgstr "กรุณาป้อนวลีรหัสผ่านสำหรับกุญแจใหม่ของคุณซ้ำสองครั้ง"
 
-#: ../src/seahorse-pgp-generate.c:149
+#: ../src/seahorse-pgp-generate.c:148
 msgid "Couldn't generate key"
 msgstr "ไม่สามารถสร้างกุญแจ"
 
-#: ../src/seahorse-pgp-generate.c:151
+#: ../src/seahorse-pgp-generate.c:150
 msgid "Generating key"
 msgstr "กำลังสร้างกุญแจ"
 
@@ -2909,108 +2894,116 @@ msgstr "<b>กุญแจนี้ถูกเพิกถอนแล้ว</b
 msgid "<b>This key has expired</b>"
 msgstr "<b>กุญแจนี้หมดอายุแล้ว</b>"
 
+#: ../src/seahorse-pgp-private-key-properties.glade.h:13
+#: ../src/seahorse-pgp-public-key-properties.glade.h:12
+#: ../src/seahorse-ssh-key-properties.glade.h:11
+msgid "<b>Type:</b>"
+msgstr "<b>ชนิด:</b>"
+
+#. To translators: This is the noun not the verb.
 #: ../src/seahorse-pgp-private-key-properties.glade.h:15
-#: ../src/seahorse-pgp-public-key-properties.glade.h:17
+#: ../src/seahorse-pgp-public-key-properties.glade.h:14
+#: ../src/seahorse-ssh-key-properties.glade.h:13
+msgid "<b>Use:</b>"
+msgstr "<b>การใช้งาน:</b>"
+
+#: ../src/seahorse-pgp-private-key-properties.glade.h:16
+#: ../src/seahorse-pgp-public-key-properties.glade.h:18
 msgid "<b>_Subkeys</b>"
 msgstr "<b>กุญแจ_ย่อย</b>"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:16
+#: ../src/seahorse-pgp-private-key-properties.glade.h:17
 msgid "Add"
 msgstr "เพิ่ม"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:17
+#: ../src/seahorse-pgp-private-key-properties.glade.h:18
 msgid "Add a photo to this key"
 msgstr "เพิ่มรูปให้กับกุญแจนี้"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:18
-#: ../src/seahorse-ssh-key-properties.glade.h:15
+#: ../src/seahorse-pgp-private-key-properties.glade.h:19
+#: ../src/seahorse-ssh-key-properties.glade.h:16
 msgid "Change _Passphrase"
 msgstr "เปลี่ยน_วลีรหัสผ่าน"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:19
-#: ../src/seahorse-pgp-public-key-properties.glade.h:18
+#: ../src/seahorse-pgp-private-key-properties.glade.h:20
+#: ../src/seahorse-pgp-public-key-properties.glade.h:19
 msgid "Created:"
 msgstr "สร้าง:"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:20
+#: ../src/seahorse-pgp-private-key-properties.glade.h:21
 msgid "Decrypt files and email sent to you."
 msgstr "ถอดรหัสลับแฟ้มและอีเมลที่ส่งถึงคุณ"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:21
+#: ../src/seahorse-pgp-private-key-properties.glade.h:22
 msgid "Delete"
 msgstr "ลบ"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:23
+#: ../src/seahorse-pgp-private-key-properties.glade.h:24
 msgid "Expire"
 msgstr "หมดอายุ"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:24
-#: ../src/seahorse-pgp-public-key-properties.glade.h:21
+#: ../src/seahorse-pgp-private-key-properties.glade.h:25
+#: ../src/seahorse-pgp-public-key-properties.glade.h:22
 msgid "Expires:"
 msgstr "หมดอายุ"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:25
+#: ../src/seahorse-pgp-private-key-properties.glade.h:26
 msgid "Export"
 msgstr "ส่งออก"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:26
+#: ../src/seahorse-pgp-private-key-properties.glade.h:27
 msgid "Go to next photo"
 msgstr "ไปยังรูปถัดไป"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:27
+#: ../src/seahorse-pgp-private-key-properties.glade.h:28
 msgid "Go to previous photo"
 msgstr "ไปยังรูปก่อนหน้า"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:28
-#: ../src/seahorse-pgp-public-key-properties.glade.h:27
+#: ../src/seahorse-pgp-private-key-properties.glade.h:29
+#: ../src/seahorse-pgp-public-key-properties.glade.h:28
 msgid "Key ID:"
 msgstr "หมายเลขกุญแจ:"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:30
+#: ../src/seahorse-pgp-private-key-properties.glade.h:31
 msgid "Make this photo the primary photo"
 msgstr "กำหนดให้รูปนี้เป็นรูปหลัก"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:31
+#: ../src/seahorse-pgp-private-key-properties.glade.h:32
 msgid "Names and Signatures"
 msgstr "ชื่อและลายเซ็น"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:32
+#: ../src/seahorse-pgp-private-key-properties.glade.h:33
 msgid "Override Owner _Trust:"
 msgstr "ทับค่าความเ_ชื่อถือของเจ้าของ:"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:33
-#: ../src/seahorse-pgp-public-key-properties.glade.h:29
+#: ../src/seahorse-pgp-private-key-properties.glade.h:34
+#: ../src/seahorse-pgp-public-key-properties.glade.h:30
 msgid "Owner"
 msgstr "เจ้าของ"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:34
+#: ../src/seahorse-pgp-private-key-properties.glade.h:35
 msgid "Primary"
 msgstr "กุญแจหลัก"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:36
+#: ../src/seahorse-pgp-private-key-properties.glade.h:37
 msgid "Remove this photo from this key"
 msgstr "ลบรูปนี้จากกุญแจนี้"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:37
+#: ../src/seahorse-pgp-private-key-properties.glade.h:38
 msgid "Revoke"
 msgstr "เพิกถอน"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:39
-#: ../src/seahorse-pgp-public-key-properties.glade.h:31
+#: ../src/seahorse-pgp-private-key-properties.glade.h:40
+#: ../src/seahorse-pgp-public-key-properties.glade.h:32
 msgid "Strength:"
 msgstr "ความแข็งแรง:"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:40
-#: ../src/seahorse-pgp-public-key-properties.glade.h:32
+#: ../src/seahorse-pgp-private-key-properties.glade.h:41
+#: ../src/seahorse-pgp-public-key-properties.glade.h:33
 msgid "The owner of the key revoked the key. It can no longer be used."
 msgstr "เจ้าของกุญแจได้เพิกถอนกุญแจแล้ว จึงไม่สามารถใช้การได้อีก"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:41
-#: ../src/seahorse-pgp-public-key-properties.glade.h:35
-msgid "Type:"
-msgstr "ชนิด:"
-
-#: ../src/seahorse-pgp-private-key-properties.glade.h:42
+#: ../src/seahorse-pgp-private-key-properties.glade.h:43
 msgid ""
 "Unknown\n"
 "Never\n"
@@ -3024,11 +3017,11 @@ msgstr ""
 "เต็มที่\n"
 "เต็มพิกัด"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:47
+#: ../src/seahorse-pgp-private-key-properties.glade.h:48
 msgid "_Add Name"
 msgstr "เ_พิ่มชื่อ"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:48
+#: ../src/seahorse-pgp-private-key-properties.glade.h:49
 msgid "_Export Complete Key:"
 msgstr "_ส่งออกกุญแจทั้งดอก:"
 
@@ -3045,42 +3038,42 @@ msgstr "<b>ลายนิ้วมือ:</b>"
 msgid "<b>Indicate Trust:</b>"
 msgstr "<b>ระบุความเชื่อถือ:</b>"
 
-#: ../src/seahorse-pgp-public-key-properties.glade.h:14
+#: ../src/seahorse-pgp-public-key-properties.glade.h:15
 msgid "<b>Your trust of this key</b>"
 msgstr "<b>ความเชื่อถือของคุณต่อกุญแจนี้</b>"
 
-#: ../src/seahorse-pgp-public-key-properties.glade.h:15
+#: ../src/seahorse-pgp-public-key-properties.glade.h:16
 msgid "<b>_Other Names:</b>"
 msgstr "<b>ชื่อ_อื่น:</b>"
 
-#: ../src/seahorse-pgp-public-key-properties.glade.h:16
+#: ../src/seahorse-pgp-public-key-properties.glade.h:17
 msgid "<b>_People who have signed this key:</b>"
 msgstr "<b>_ผู้ที่เซ็นรับรองกุญแจนี้:</b>"
 
-#: ../src/seahorse-pgp-public-key-properties.glade.h:20
+#: ../src/seahorse-pgp-public-key-properties.glade.h:21
 msgid "Encrypt files and email to the key's owner "
 msgstr "เข้ารหัสลับแฟ้มและอีเมลที่ส่งถึงเจ้าของกุญแจ"
 
-#: ../src/seahorse-pgp-public-key-properties.glade.h:23
+#: ../src/seahorse-pgp-public-key-properties.glade.h:24
 #, no-c-format
 msgid "I have checked that this key belongs to '%s'"
 msgstr "ข้าพเจ้าได้ตรวจสอบแล้วว่ากุญแจนี้เป็นของ '%s'"
 
-#: ../src/seahorse-pgp-public-key-properties.glade.h:25
+#: ../src/seahorse-pgp-public-key-properties.glade.h:26
 #, no-c-format
 msgid "I trust signatures from '%s' on other keys "
 msgstr "ข้าพเจ้าเชื่อถือลายเซ็นของ '%s' ในกุญแจอื่น"
 
-#: ../src/seahorse-pgp-public-key-properties.glade.h:26
+#: ../src/seahorse-pgp-public-key-properties.glade.h:27
 msgid ""
 "If you no longer trust this person's identity, <i>revoke</i> your signature:"
 msgstr "ถ้าคุณไม่เชื่อถือความมีตัวตนของบุคคลนี้อีกต่อไป ให้ <i>เพิกถอน</i> ลายเซ็นของคุณ:"
 
-#: ../src/seahorse-pgp-public-key-properties.glade.h:33
+#: ../src/seahorse-pgp-public-key-properties.glade.h:34
 msgid "To indicate your trust of this key to others, <i>sign</i> this key:"
 msgstr "เพื่อบอกคนอื่นว่าคุณเชื่อถือกุญแจนี้ ให้ <i>เซ็นรับรอง</i> กุญแจนี้:"
 
-#: ../src/seahorse-pgp-public-key-properties.glade.h:36
+#: ../src/seahorse-pgp-public-key-properties.glade.h:37
 msgid ""
 "Unknown\n"
 "Never\n"
@@ -3094,23 +3087,23 @@ msgstr ""
 "เต็มที่\n"
 "เต็มพิกัด"
 
-#: ../src/seahorse-pgp-public-key-properties.glade.h:41
+#: ../src/seahorse-pgp-public-key-properties.glade.h:42
 msgid "You _Trust the Owner:"
 msgstr "คุณ_เชื่อถือเจ้าของ:"
 
-#: ../src/seahorse-pgp-public-key-properties.glade.h:42
+#: ../src/seahorse-pgp-public-key-properties.glade.h:43
 msgid "Your trust is manually specified on the <i>Details</i> tab."
 msgstr "ความเชื่อถือของคุณ คุณต้องระบุเองในแท็บ <i>รายละเอียด</i>"
 
-#: ../src/seahorse-pgp-public-key-properties.glade.h:43
+#: ../src/seahorse-pgp-public-key-properties.glade.h:44
 msgid "_Only display the signatures of people I trust"
 msgstr "แสดงลายเซ็นของผู้ที่ข้าพเจ้าเชื่อถือเ_ท่านั้น"
 
-#: ../src/seahorse-pgp-public-key-properties.glade.h:44
+#: ../src/seahorse-pgp-public-key-properties.glade.h:45
 msgid "_Revoke Signature"
 msgstr "เ_พิกถอนลายเซ็น"
 
-#: ../src/seahorse-pgp-public-key-properties.glade.h:45
+#: ../src/seahorse-pgp-public-key-properties.glade.h:46
 msgid "_Sign this Key"
 msgstr "เ_ซ็นรับรองกุญแจนี้"
 
@@ -3170,21 +3163,53 @@ msgstr "ยืนยันหรือไม่ ว่าคุณต้อง�
 msgid "Couldn't delete photo"
 msgstr "ไม่สามารถลบรูป"
 
-#: ../src/seahorse-revoke.c:54
+#: ../src/seahorse-revoke.c:72
 msgid "Couldn't revoke subkey"
 msgstr "ไม่สามารถเพิกถอนกุญแจย่อย"
 
-#: ../src/seahorse-revoke.c:77
+#: ../src/seahorse-revoke.c:99
 #, c-format
 msgid "Revoke Subkey %d of %s"
 msgstr "เพิกถอนกุญแจย่อย %d ของ %s"
 
-#: ../src/seahorse-revoke.c:79
+#: ../src/seahorse-revoke.c:101
 #, c-format
 msgid "Revoke %s"
 msgstr "เพิกถอน %s"
 
-#: ../src/seahorse-revoke.c:107
+#: ../src/seahorse-revoke.c:112
+msgid "No reason"
+msgstr "ไม่มีเหตุผล"
+
+#: ../src/seahorse-revoke.c:113
+msgid "No reason for revoking key"
+msgstr "ไม่มีเหตุลสำหรับการเพิกถอนกุญแจ"
+
+#: ../src/seahorse-revoke.c:119
+msgid "Compromised"
+msgstr "ถูกเจาะ"
+
+#: ../src/seahorse-revoke.c:120
+msgid "Key has been compromised"
+msgstr "กุญแจถูกเจาะ"
+
+#: ../src/seahorse-revoke.c:126
+msgid "Superseded"
+msgstr "ถูกแทนที่"
+
+#: ../src/seahorse-revoke.c:127
+msgid "Key has been superseded"
+msgstr "มีกุญแจอื่นแทนที่"
+
+#: ../src/seahorse-revoke.c:133
+msgid "Not Used"
+msgstr "ไม่ใช้"
+
+#: ../src/seahorse-revoke.c:134
+msgid "Key is no longer used"
+msgstr "ไม่ใช้กุญแจอีกแล้ว"
+
+#: ../src/seahorse-revoke.c:173
 #, c-format
 msgid ""
 "You are about to add %s as a revoker for %s. This operation cannot be "
@@ -3193,7 +3218,7 @@ msgstr ""
 "คุณกำลังจะเพิ่ม %s เป็นผู้เพิกถอนสำหรับ %s การกระทำนี้จะไม่สามารถย้อนคืนได้! "
 "ยืนยันที่จะทำต่อไปหรือไม่?"
 
-#: ../src/seahorse-revoke.c:122
+#: ../src/seahorse-revoke.c:188
 msgid "Couldn't add revoker"
 msgstr "ไม่สามารถเพิ่มผู้เพิกถอน"
 
@@ -3208,10 +3233,6 @@ msgstr "เ_พิกถอน"
 #: ../src/seahorse-revoke.glade.h:3
 msgid "Reason for revoking the key"
 msgstr "เหตุผลสำหรับการเพิกถอนกุญแจ"
-
-#: ../src/seahorse-revoke.glade.h:5
-msgid "_Description:"
-msgstr "_คำอธิบาย:"
 
 #: ../src/seahorse-revoke.glade.h:6
 msgid "_Reason:"
@@ -3396,20 +3417,20 @@ msgstr "<b>ความแข็งแรง:</b>"
 msgid "<b>Trust</b>"
 msgstr "<b>ความเชื่อมั่น</b>"
 
-#: ../src/seahorse-ssh-key-properties.glade.h:14
+#: ../src/seahorse-ssh-key-properties.glade.h:15
 #, no-c-format
 msgid "<i>This only applies to the '%s'</i> account."
 msgstr "<i>ตัวเลือกนี้ใช้ได้กับบัญชี '%s' เท่านั้น</i>"
 
-#: ../src/seahorse-ssh-key-properties.glade.h:17
+#: ../src/seahorse-ssh-key-properties.glade.h:18
 msgid "E_xport Complete Key"
 msgstr "_ส่งออกกุญแจทั้งดอก"
 
-#: ../src/seahorse-ssh-key-properties.glade.h:21
+#: ../src/seahorse-ssh-key-properties.glade.h:22
 msgid "The owner of this key is _authorized to connect to this computer"
 msgstr "เจ้าของกุญแจนี้ได้รับ_อนุญาตให้เชื่อมต่อกับคอมพิวเตอร์นี้"
 
-#: ../src/seahorse-ssh-key-properties.glade.h:22
+#: ../src/seahorse-ssh-key-properties.glade.h:23
 msgid "Used to connect to other computers."
 msgstr "ใช้เชื่อมต่อไปยังคอมพิวเตอร์เครื่องอื่น"
 
@@ -3450,6 +3471,127 @@ msgstr "ชื่อเ_ข้าระบบ:"
 #: ../src/seahorse-ssh-upload.glade.h:9
 msgid "_Set Up"
 msgstr "_ตั้งค่า"
+
+#~ msgid "couldn't read gpg configuration, will try to create"
+#~ msgstr "ไม่สามารถอ่านค่าตั้ง gpg ได้ จะพยายามสร้างค่าตั้ง"
+
+#~ msgid "couldn't modify gpg configuration: %s"
+#~ msgstr "ไม่สามารถเปลี่ยนแปลงค่าตั้ง gpg ได้: %s"
+
+#~ msgid ""
+#~ "Display variables instead of editing conf files (gpg.conf, SSH agent "
+#~ "socket)"
+#~ msgstr "แสดงตัวแปรแทนการแก้ไขแฟ้มค่าตั้ง (gpg.conf, ซ็อกเก็ตของเอเจนต์ SSH)"
+
+#~ msgid "couldn't drop privileges properly"
+#~ msgstr "ไม่สามารถลดอภิสิทธิ์ได้อย่างเหมาะสม"
+
+#~ msgid ""
+#~ "When set seahorse-agent will try to automatically load the users SSH keys "
+#~ "when needed. This is equivalent to using the ssh-add utility."
+#~ msgstr ""
+#~ "เมื่อเปิดใช้ค่านี้ seahorse-agent จะพยายามโหลดกุญแจ SSH "
+#~ "ของผู้ใช้โดยอัตโนมัติเมื่อจำเป็นต้องใช้ การโหลดดังกล่าวมีผลเสมือนกับใช้เครื่องมือ ssh-add "
+#~ "นั่นเอง"
+
+#~ msgid "Whether to automatically load SSH keys on demand."
+#~ msgstr "จะโหลดกุญแจ SSH โดยอัตโนมัติตามความต้องการหรือไม่"
+
+#~ msgid "Couldn't open the Session Properties"
+#~ msgstr "ไม่สามารถเปิดเครื่องมือตั้งค่าของวาระ"
+
+#~ msgid "Couldn't start the 'seahorse-agent' program"
+#~ msgstr "เรียกโปรแกรม 'seahorse-agent' ไม่สำเร็จ"
+
+#~ msgid "The 'seahorse-agent' program exited unsuccessfully."
+#~ msgstr "โปรแกรม 'seahorse-agent' จบการทำงานแบบไม่สำเร็จ"
+
+#~ msgid ""
+#~ "<b>Note:</b> The 'seahorse-agent' program has been started. This program "
+#~ "is necessary in order to cache passphrases. "
+#~ msgstr ""
+#~ "<b>หมายเหตุ:</b> โปรแกรม 'seahorse-agent' กำลังทำงานอยู่ "
+#~ "จำเป็นต้องใช้โปรแกรมนี้ในการแคชวลีรหัสผ่าน"
+
+#~ msgid "<b>Secure Shell Keys</b>"
+#~ msgstr "<b>กุญแจเชลล์นิรภัย</b>"
+
+#~ msgid ""
+#~ "<b>Warning:</b> The 'seahorse-agent' program is not running. This program "
+#~ "is necessary in order to cache passphrases. "
+#~ msgstr ""
+#~ "<b>คำเตือน:</b> โปรแกรม 'seahorse-agent' ไม่ได้ทำงานอยู่ "
+#~ "จำเป็นต้องใช้โปรแกรมนี้ในการแคชวลีรหัสผ่าน"
+
+#~ msgid ""
+#~ "<i>No SSH caching agent is running. Cannot load Secure Shell keys.</i>"
+#~ msgstr "<i>ไม่มีเอเจนต์สำหรับแคช SSH ทำงานอยู่ จึงไม่สามารถโหลดกุญแจเชลล์นิรภัยได้</i>"
+
+#~ msgid "Automatically load _Secure Shell keys"
+#~ msgstr "โหลดกุญแจเ_ชลล์นิรภัยโดยอัตโนมัติ"
+
+#~ msgid ""
+#~ "Changing the master password failed.  Make certain that you entered the "
+#~ "correct original master password."
+#~ msgstr "เปลี่ยนรหัสผ่านหลักไม่สำเร็จ แน่ใจหรือว่าคุณได้ป้อนรหัสผ่านหลักเดิมถูกต้อง"
+
+#~ msgid "Confirm Master Password:"
+#~ msgstr "ยืนยันรหัสผ่านหลัก:"
+
+#~ msgid ""
+#~ "GNOME Keyring stores passwords, network keys, passphrases and other "
+#~ "secrets required for authentication.  A <b>master password</b> is used to "
+#~ "protect these secrets.  The <b>master password</b> can be changed below."
+#~ msgstr ""
+#~ "พวงกุญแจ GNOME จะเก็บรหัสผ่าน, กุญแจเครือข่าย, วลีรหัสผ่าน "
+#~ "และรหัสลับสำหรับยืนยันตัวบุคคลทั้งหลาย <b>รหัสผ่านหลัก</b> จะใช้รักษาข้อมูลลับเหล่านี้ "
+#~ "ซึ่งคุณสามารถเปลี่ยน <b>รหัสผ่านหลัก</b> ได้ที่ด้านล่างนี้"
+
+#~ msgid "New Master Password:"
+#~ msgstr "ตั้งรหัสผ่านหลัก:"
+
+#~ msgid "Original Master Password:"
+#~ msgstr "รหัสผ่านหลักเดิม:"
+
+#~ msgid "Passphrase Cache"
+#~ msgstr "แคชวลีรหัสผ่าน"
+
+#~ msgid "Session Properties"
+#~ msgstr "ตั้งค่าวาระ"
+
+#~ msgid "Start seahorse-agent"
+#~ msgstr "เรียก seahorse-agent"
+
+#~ msgid "The master password was successfully changed."
+#~ msgstr "เปลี่ยนรหัสผ่านหลักเรียบร้อยแล้ว"
+
+#~ msgid ""
+#~ "To avoid manually starting the 'seahorse-agent' in the future\n"
+#~ "add it to the Session Manager. "
+#~ msgstr ""
+#~ "เพื่อเลี่ยงการเรียก 'seahorse-agent' เองทุกครั้งในครั้งต่อๆ ไป\n"
+#~ "คุณสามารถเพิ่มการเรียกในโปรแกรมจัดการวาระได้เลย"
+
+#~ msgid "<b>Progress Message</b>"
+#~ msgstr "<b>ข้อความความคืบหน้า</b>"
+
+#~ msgid "Progress Status"
+#~ msgstr "สถานะของความคืบหน้า"
+
+#~ msgid "<b>Login:</b>"
+#~ msgstr "<b>ชื่อเข้าระบบ:</b>"
+
+#~ msgid "<b>Server:</b>"
+#~ msgstr "<b>เซิร์ฟเวอร์:</b>"
+
+#~ msgid "[details]\n"
+#~ msgstr "[รายละเอียด]\n"
+
+#~ msgid "[login]"
+#~ msgstr "[ชื่อเข้าระบบ]"
+
+#~ msgid "[server]"
+#~ msgstr "[เซิร์ฟเวอร์]"
 
 #~ msgid "gtk-apply"
 #~ msgstr "gtk-apply"
@@ -3535,30 +3677,6 @@ msgstr "_ตั้งค่า"
 
 #~ msgid "This key expired on: (placeholder)"
 #~ msgstr "กุญแจนี้หมดอายุแล้วเมื่อ: (placeholder)"
-
-#~ msgid "Compromised"
-#~ msgstr "ถูกเจาะ"
-
-#~ msgid "Key has been compromised"
-#~ msgstr "กุญแจถูกเจาะ"
-
-#~ msgid "Key has been superseded"
-#~ msgstr "มีกุญแจอื่นแทนที่"
-
-#~ msgid "Key is no longer used"
-#~ msgstr "ไม่ใช้กุญแจอีกแล้ว"
-
-#~ msgid "No Reason"
-#~ msgstr "ไม่มีเหตุผล"
-
-#~ msgid "No reason for revoking key"
-#~ msgstr "ไม่มีเหตุลสำหรับการเพิกถอนกุญแจ"
-
-#~ msgid "Not Used"
-#~ msgstr "ไม่ใช้"
-
-#~ msgid "Superseded"
-#~ msgstr "ถูกแทนที่"
 
 #~ msgid "Imported %d keys"
 #~ msgstr "นำเข้ากุญแจแล้ว %d ดอก"
