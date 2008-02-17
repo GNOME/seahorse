@@ -6,6 +6,7 @@
 # Reinout van Schouwen <reinouts@gnome.org>, 2007
 # Vincent van Adrighem <adrighem@gnome.org>, 2007
 # Wouter Bolsterlee <wbolster@gnome.org>, 2007
+# Daniel van Eeden <gnomenl@gnome.org>, 2007
 #
 # armor         harnas
 # decrypt       ontcijferen
@@ -18,59 +19,46 @@
 # trust         vertrouwen
 # validity      geldigheid
 # verify        verifiëren of controleren
+# compromised	in gevaar gebracht
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Seahorse\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-09-06 23:21+0200\n"
-"PO-Revision-Date: 2007-09-06 23:21+0200\n"
-"Last-Translator: Wouter Bolsterlee <wbolster@gnome.org>\n"
+"POT-Creation-Date: 2008-01-29 04:03+0000\n"
+"PO-Revision-Date: 2008-02-17 21:22+0100\n"
+"Last-Translator: Daniel van Eeden <gnomenl@myname.nl>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../agent/seahorse-agent-actions.c:133
-#: ../libseahorse/seahorse-ssh-operation.c:445
+#: ../agent/seahorse-agent-actions.c:129
+#: ../libseahorse/seahorse-ssh-operation.c:443
 msgid "Passphrase:"
 msgstr "Wachtwoordzin:"
 
-#: ../agent/seahorse-agent-actions.c:134
+#: ../agent/seahorse-agent-actions.c:130
 msgid "Please enter a passphrase to use."
 msgstr "Geef een wachtwoordzin om te gebruiken."
 
-#. Warn and put in defaults
-#: ../agent/seahorse-agent.c:101
-msgid "couldn't read gpg configuration, will try to create"
-msgstr "kon gpg-configuratie niet lezen, zal deze proberen aan te maken"
-
-#: ../agent/seahorse-agent.c:119
-#, c-format
-msgid "couldn't modify gpg configuration: %s"
-msgstr "kon gpg-configuratie niet aanpassen: %s"
-
-#: ../agent/seahorse-agent-cache.c:72
+#: ../agent/seahorse-agent-cache.c:70
 msgid "Unparseable Key ID"
 msgstr "Onverwerkbare sleutel-ID"
 
-#: ../agent/seahorse-agent-cache.c:73
+#: ../agent/seahorse-agent-cache.c:71
 msgid "Unknown/Invalid Key"
 msgstr "Onbekende/Ongeldige sleutel"
 
-#: ../agent/seahorse-agent-cache.c:531
+#: ../agent/seahorse-agent-cache.c:523
 #, c-format
 msgid "PGP Key: %s"
 msgstr "PGP-Sleutel: %s"
 
 #: ../agent/seahorse-agent-cache.glade.h:1
-msgid ""
-"<b>Warning</b>: Your system is not configured to cache passphrases in secure "
-"memory."
-msgstr ""
-"<b>Waarschuwing</b>: Uw systeem is niet ingesteld om wachtwoordzinnen te "
-"bufferen in beveiligd geheugen."
+msgid "<b>Warning</b>: Your system is not configured to cache passphrases in secure memory."
+msgstr "<b>Waarschuwing</b>: Uw systeem is niet ingesteld om wachtwoordzinnen te bufferen in beveiligd geheugen."
 
 #: ../agent/seahorse-agent-cache.glade.h:2
 msgid "Cache _Preferences"
@@ -96,52 +84,45 @@ msgstr "Opslag _wissen"
 msgid "_Show Window"
 msgstr "_Venster tonen"
 
-#: ../agent/seahorse-agent-main.c:50
+#: ../agent/seahorse-agent-main.c:51
 msgid "Do not daemonize seahorse-agent"
 msgstr "Seahorse-agent niet als voorziening starten"
 
-#: ../agent/seahorse-agent-main.c:54
+#: ../agent/seahorse-agent-main.c:55
 msgid "Print variables in for a C type shell"
 msgstr "Variabelen voor een C-achtige shell tonen"
 
-#: ../agent/seahorse-agent-main.c:57
-msgid ""
-"Display variables instead of editing conf files (gpg.conf, SSH agent socket)"
-msgstr ""
-"Variabelen weergeven in plaats van conf-bestanden bewerken (gpg.conf, ssh "
-"agent socket)"
+#: ../agent/seahorse-agent-main.c:59
+msgid "Display environment variables (the default)"
+msgstr "Weergave omgevingsvariabelen (de standaard)"
 
-#: ../agent/seahorse-agent-main.c:60
+#: ../agent/seahorse-agent-main.c:62
 msgid "Execute other arguments on the command line"
 msgstr "Andere parameters uitvoeren"
 
-#: ../agent/seahorse-agent-main.c:64
+#: ../agent/seahorse-agent-main.c:66
 msgid "Allow GPG agent request from any display"
 msgstr "GPG-verzoeken vanaf elk display toelaten"
 
-#: ../agent/seahorse-agent-main.c:67
+#: ../agent/seahorse-agent-main.c:69
 msgid "command..."
 msgstr "opdracht…"
 
-#: ../agent/seahorse-agent-main.c:89 ../daemon/seahorse-daemon.c:72
+#: ../agent/seahorse-agent-main.c:91
+#: ../daemon/seahorse-daemon.c:72
 msgid "couldn't fork process"
 msgstr "kon proces niet afsplitsen"
 
-#: ../agent/seahorse-agent-main.c:95 ../daemon/seahorse-daemon.c:78
+#: ../agent/seahorse-agent-main.c:97
+#: ../daemon/seahorse-daemon.c:78
 msgid "couldn't create new process group"
 msgstr "kon geen nieuwe procesgroep aanmaken"
 
-#: ../agent/seahorse-agent-main.c:227 ../daemon/seahorse-daemon.c:195
-#: ../plugins/applet/seahorse-applet.c:1017
-#: ../plugins/nautilus/seahorse-tool.c:570 ../src/main.c:59
-msgid "couldn't drop privileges properly"
-msgstr "kon rechten niet op juist wijze verlagen"
-
-#: ../agent/seahorse-agent-main.c:238
+#: ../agent/seahorse-agent-main.c:225
 msgid "Encryption Key Agent (Seahorse)"
 msgstr "Versleutelings-agent (Seahorse)"
 
-#: ../agent/seahorse-agent-main.c:246
+#: ../agent/seahorse-agent-main.c:232
 msgid "no command specified to execute"
 msgstr "geen uit te voeren opdracht aangegeven"
 
@@ -164,7 +145,7 @@ msgid "_Authorize"
 msgstr "_Autoriseren"
 
 #. Make the uid column
-#: ../agent/seahorse-agent-status.c:151
+#: ../agent/seahorse-agent-status.c:147
 msgid "Key Name"
 msgstr "Sleutelnaam"
 
@@ -172,16 +153,18 @@ msgstr "Sleutelnaam"
 msgid "Do not run seahorse-daemon as a daemon"
 msgstr "Seahorse niet als voorziening starten"
 
-#: ../daemon/seahorse-daemon.c:202
+#: ../daemon/seahorse-daemon.c:188
 msgid "Encryption Daemon (Seahorse)"
 msgstr "Versleutelingsvoorziening (Seahorse)"
 
-#: ../daemon/seahorse-service.c:103 ../daemon/seahorse-service.c:128
+#: ../daemon/seahorse-service.c:103
+#: ../daemon/seahorse-service.c:128
 #, c-format
 msgid "Invalid or unrecognized key type: %s"
 msgstr "Ongeldig of onbekend sleuteltype ‘%s’"
 
-#: ../daemon/seahorse-service.c:186 ../daemon/seahorse-service-keyset.c:123
+#: ../daemon/seahorse-service.c:186
+#: ../daemon/seahorse-service-keyset.c:123
 #: ../daemon/seahorse-service-keyset.c:152
 #, c-format
 msgid "Invalid or unrecognized key: %s"
@@ -210,12 +193,10 @@ msgid "Key is not a valid recipient for encryption: %s"
 msgstr "Sleutel niet geldig als geadresseerde van versleuteling: ‘%s’"
 
 #: ../daemon/seahorse-service-crypto.c:156
-#, c-format
 msgid "No recipients specified"
 msgstr "Geen geadresseerden opgegeven"
 
 #: ../daemon/seahorse-service-crypto.c:222
-#, c-format
 msgid "No signer specified"
 msgstr "Geen ondertekenaar opgegeven"
 
@@ -234,7 +215,8 @@ msgstr "Ongeldig sleuteltype voor verificatie: %s"
 msgid "Invalid key id: %s"
 msgstr "Ongeldige sleutel-id: %s"
 
-#: ../daemon/seahorse-sharing.c:71 ../daemon/seahorse-sharing.c:215
+#: ../daemon/seahorse-sharing.c:71
+#: ../daemon/seahorse-sharing.c:215
 msgid "Couldn't share keys"
 msgstr "Kan sleutels niet delen"
 
@@ -253,28 +235,16 @@ msgid "%s's encryption keys"
 msgstr "Gedeelde sleutels van %s"
 
 #: ../data/seahorse.schemas.in.h:1
-msgid ""
-"A list of key server URIs to search for remote PGP keys. In later versions a "
-"display name can be included, by appending a space and then the name."
-msgstr ""
-"Een lijst van serveradressen die doorzocht kunnen worden op PGP-sleutels. U "
-"kunt een alias opgeven door een spatie gevolgd door de naam te gebruiken."
+msgid "A list of key server URIs to search for remote PGP keys. In later versions a display name can be included, by appending a space and then the name."
+msgstr "Een lijst van serveradressen die doorzocht kunnen worden op PGP-sleutels. U kunt een alias opgeven door een spatie gevolgd door de naam te gebruiken."
 
 #: ../data/seahorse.schemas.in.h:2
-msgid ""
-"After performing an decrypt or verify operation from the applet, display the "
-"resulting text in a window."
-msgstr ""
-"De resulterende tekst na het uitvoeren van een ontcijfer- of verificatie-"
-"actie vanaf het applet in een venster tonen."
+msgid "After performing an decrypt or verify operation from the applet, display the resulting text in a window."
+msgstr "De resulterende tekst na het uitvoeren van een ontcijfer- of verificatie-actie vanaf het applet in een venster tonen."
 
 #: ../data/seahorse.schemas.in.h:3
-msgid ""
-"After performing an encrypt or signing operation from the applet, display "
-"the resulting text in a window."
-msgstr ""
-"De resulterende tekst na het uitvoeren van een versleutel- of onderteken-"
-"operatie vanaf het applet in een venster tonen."
+msgid "After performing an encrypt or signing operation from the applet, display the resulting text in a window."
+msgstr "De resulterende tekst na het uitvoeren van een versleutel- of onderteken-operatie vanaf het applet in een venster tonen."
 
 #: ../data/seahorse.schemas.in.h:4
 msgid "Auto Retrieve Keys"
@@ -290,8 +260,7 @@ msgstr "Bepaalt de zichtbaarheid van de verloopt-kolom in de sleutelbeheerder."
 
 #: ../data/seahorse.schemas.in.h:7
 msgid "Controls the visibility of the trust column for the key manager."
-msgstr ""
-"Bepaalt de zichtbaarheid van de vertrouwen-kolom in de sleutelbeheerder."
+msgstr "Bepaalt de zichtbaarheid van de vertrouwen-kolom in de sleutelbeheerder."
 
 #: ../data/seahorse.schemas.in.h:8
 msgid "Controls the visibility of the type column for the key manager."
@@ -299,8 +268,7 @@ msgstr "Bepaalt de zichtbaarheid van de type-kolom in de sleutelbeheerder."
 
 #: ../data/seahorse.schemas.in.h:9
 msgid "Controls the visibility of the validity column for the key manager."
-msgstr ""
-"Bepaalt de zichtbaarheid van de geldigheid-kolom in de sleutelbeheerder."
+msgstr "Bepaalt de zichtbaarheid van de geldigheid-kolom in de sleutelbeheerder."
 
 #: ../data/seahorse.schemas.in.h:10
 msgid "Display cache reminder in the notification area"
@@ -319,13 +287,8 @@ msgid "Enable DNS-SD sharing"
 msgstr "Sleutels delen via DNS-SD"
 
 #: ../data/seahorse.schemas.in.h:14
-msgid ""
-"Enables DNS-SD (Apple Bonjour) sharing of keys. seahorse-daemon must be "
-"running and must be built with HKP and DNS-SD support."
-msgstr ""
-"Delen van sleutels via DNS-SD (Avahi, Apple Bonjour, Zeroconf) inschakelen. "
-"De toepassing ‘seahorse-daemon’ moet actief zijn en KHP en DNS-SD "
-"ondersteunen."
+msgid "Enables DNS-SD (Apple Bonjour) sharing of keys. seahorse-daemon must be running and must be built with HKP and DNS-SD support."
+msgstr "Delen van sleutels via DNS-SD (Avahi, Apple Bonjour, Zeroconf) inschakelen. De toepassing ‘seahorse-daemon’ moet actief zijn en KHP en DNS-SD ondersteunen."
 
 #: ../data/seahorse.schemas.in.h:15
 msgid "Expire passwords in the cache"
@@ -336,28 +299,16 @@ msgid "ID of the default key"
 msgstr "ID van de standaardsleutel"
 
 #: ../data/seahorse.schemas.in.h:17
-msgid ""
-"If set to 'gnome' uses gnome-keyring to cache passwords. When set to "
-"'internal' uses internal cache."
-msgstr ""
-"Gebruikt de gnome-keyring wanneer ingesteld op ‘gnome’ en eigen opslag "
-"wanneer ingesteld op ‘internal’."
+msgid "If set to 'gnome' uses gnome-keyring to cache passwords. When set to 'internal' uses internal cache."
+msgstr "Gebruikt de gnome-keyring wanneer ingesteld op ‘gnome’ en eigen opslag wanneer ingesteld op ‘internal’."
 
 #: ../data/seahorse.schemas.in.h:18
-msgid ""
-"If set to true, then files encrypted with seahorse will be ASCII armor "
-"encoded."
-msgstr ""
-"Indien ingeschakeld zullen bestanden die versleuteld zijn met seahorse een "
-"ASCII-harnas krijgen."
+msgid "If set to true, then files encrypted with seahorse will be ASCII armor encoded."
+msgstr "Indien ingeschakeld zullen bestanden die versleuteld zijn met seahorse een ASCII-harnas krijgen."
 
 #: ../data/seahorse.schemas.in.h:19
-msgid ""
-"If set to true, then the default key will always be added to an encryption "
-"recipients list."
-msgstr ""
-"Indien ingeschakeld zal de standaardsleutel altijd aan een de lijst "
-"vangeadresseerden van de versleuteling worden toegevoegd."
+msgid "If set to true, then the default key will always be added to an encryption recipients list."
+msgstr "Indien ingeschakeld zal de standaardsleutel altijd aan een de lijst vangeadresseerden van de versleuteling worden toegevoegd."
 
 #: ../data/seahorse.schemas.in.h:20
 msgid "Last key server search pattern"
@@ -384,28 +335,16 @@ msgid "Publish keys to this key server."
 msgstr "Sleutels verzenden naar deze sleutelserver."
 
 #: ../data/seahorse.schemas.in.h:26
-msgid ""
-"Reflect the contents of the clipboard (whether encrypted, signed, etc...) in "
-"the panel applet icon."
-msgstr ""
-"De status van het klembord (versleuteld, ondertekend, …) weergeven in het "
-"paneelpictogram."
+msgid "Reflect the contents of the clipboard (whether encrypted, signed, etc...) in the panel applet icon."
+msgstr "De status van het klembord (versleuteld, ondertekend, …) weergeven in het paneelpictogram."
 
 #: ../data/seahorse.schemas.in.h:27
-msgid ""
-"Set to 'true' to enable display of the cache reminder in the notification "
-"area of your panel."
-msgstr ""
-"Indien ingeschakeld wordt de buffergeheugensteun in het mededelingengebied "
-"van het paneel getoond."
+msgid "Set to 'true' to enable display of the cache reminder in the notification area of your panel."
+msgstr "Indien ingeschakeld wordt de buffergeheugensteun in het mededelingengebied van het paneel getoond."
 
 #: ../data/seahorse.schemas.in.h:28
-msgid ""
-"Set to 'true' to have seahorse-agent prompt before giving out passwords it "
-"has cached."
-msgstr ""
-"Indien ingeschakeld vraagt ‘seahorse-agent’ om wachtwoorden voordat het "
-"opgeslagen wachtwoorden vrijgeeft."
+msgid "Set to 'true' to have seahorse-agent prompt before giving out passwords it has cached."
+msgstr "Indien ingeschakeld vraagt ‘seahorse-agent’ om wachtwoorden voordat het opgeslagen wachtwoorden vrijgeeft."
 
 #: ../data/seahorse.schemas.in.h:29
 msgid "Show clipboard state in panel"
@@ -429,29 +368,16 @@ msgstr "‘Geldigheid’-kolom tonen in de sleutelbeheerder"
 
 # Bug! dit kan makkelijker
 #: ../data/seahorse.schemas.in.h:34
-msgid ""
-"Specify the column to sort the recipients window by. Columns are: 'name' and "
-"'id'. Put a '-' in front of the column name to sort in descending order."
-msgstr ""
-"De kolom waarop gesorteerd wordt in het geadresseerden-venster. Mogelijke "
-"waardes zijn ‘name’ en ‘id’. Zet een ‘-’ voor de kolomnaam om in omgekeerde "
-"volgorde te sorteren."
+msgid "Specify the column to sort the recipients window by. Columns are: 'name' and 'id'. Put a '-' in front of the column name to sort in descending order."
+msgstr "De kolom waarop gesorteerd wordt in het geadresseerden-venster. Mogelijke waardes zijn ‘name’ en ‘id’. Zet een ‘-’ voor de kolomnaam om in omgekeerde volgorde te sorteren."
 
 #: ../data/seahorse.schemas.in.h:35
-msgid ""
-"Specify the column to sort the seahorse key manager main window by. Columns "
-"are: 'name', 'id', 'validity', 'expires', 'trust', and 'type'. Put a '-' in "
-"front of the column name to sort in descending order."
-msgstr ""
-"De kolom waarop gesorteerd wordt in het sleutelbeheer-hoofdvenster. "
-"Mogelijke waardes zijn ‘name’, ‘id’, ‘validity’, ‘expires’, ‘trust’ en "
-"‘type’.Zet een ‘-’ voor de kolomnaam om in omgekeerde volgorde te sorteren."
+msgid "Specify the column to sort the seahorse key manager main window by. Columns are: 'name', 'id', 'validity', 'expires', 'trust', and 'type'. Put a '-' in front of the column name to sort in descending order."
+msgstr "De kolom waarop gesorteerd wordt in het sleutelbeheer-hoofdvenster. Mogelijke waardes zijn ‘name’, ‘id’, ‘validity’, ‘expires’, ‘trust’ en ‘type’.Zet een ‘-’ voor de kolomnaam om in omgekeerde volgorde te sorteren."
 
 #: ../data/seahorse.schemas.in.h:36
 msgid "The ID of the last secret key used to sign a message."
-msgstr ""
-"Het id van de laatste gebruikte sleutel voor het ondertekenen van een "
-"bericht."
+msgstr "Het id van de laatste gebruikte sleutel voor het ondertekenen van een bericht."
 
 #: ../data/seahorse.schemas.in.h:37
 msgid "The column to sort the recipients by"
@@ -462,20 +388,12 @@ msgid "The column to sort the seahorse keys by"
 msgstr "De kolom waarop de seahorse-sleutels worden gesorteerd"
 
 #: ../data/seahorse.schemas.in.h:39
-msgid ""
-"The key server to publish PGP keys to. Or empty to suppress publishing of "
-"PGP keys."
-msgstr ""
-"De sleutelserver om PGP-sleutels naartoe te zenden (een leeg veld zorgt "
-"ervoor dat er geen PGP-sleutels verzonden worden)."
+msgid "The key server to publish PGP keys to. Or empty to suppress publishing of PGP keys."
+msgstr "De sleutelserver om PGP-sleutels naartoe te zenden (een leeg veld zorgt ervoor dat er geen PGP-sleutels verzonden worden)."
 
 #: ../data/seahorse.schemas.in.h:40
-msgid ""
-"The last key server a search was performed against or empty for all key "
-"servers."
-msgstr ""
-"De laatstgebruikte sleutelserver waarop een zoekopdracht is uitgevoerd (een "
-"leeg veld zorgt ervoordat alle sleutelservers doorzocht worden)."
+msgid "The last key server a search was performed against or empty for all key servers."
+msgstr "De laatstgebruikte sleutelserver waarop een zoekopdracht is uitgevoerd (een leeg veld zorgt ervoordat alle sleutelservers doorzocht worden)."
 
 #: ../data/seahorse.schemas.in.h:41
 msgid "The last search pattern searched for against a key server."
@@ -486,73 +404,42 @@ msgid "The time (in minutes) to cache GPG passwords"
 msgstr "De periode dat GPG wachtwoorden worden gebufferd (in minuten)"
 
 #: ../data/seahorse.schemas.in.h:43
-msgid ""
-"This is the amount of time, specified in minutes, to cache GPG passwords in "
-"seahorse-agent."
-msgstr ""
-"Dit is hoelang, uitgedrukt in minuten, GPG-wachtwoorden worden gebufferd in "
-"seahorse-agent."
+msgid "This is the amount of time, specified in minutes, to cache GPG passwords in seahorse-agent."
+msgstr "Dit is hoelang, uitgedrukt in minuten, GPG-wachtwoorden worden gebufferd in seahorse-agent."
 
 #: ../data/seahorse.schemas.in.h:44
-msgid ""
-"This option enables the GPG password cache in the seahorse-agent program. "
-"The 'use-agent' setting in gpg.conf affects this setting."
-msgstr ""
-"Met deze optie wordt de GPG-wachtwoordbuffer aangezet in seahorse-agent. De "
-"optie ‘use-agent’ in gpg.conf bepaalt deze instelling."
+msgid "This option enables the GPG password cache in the seahorse-agent program. The 'use-agent' setting in gpg.conf affects this setting."
+msgstr "Met deze optie wordt de GPG-wachtwoordbuffer aangezet in seahorse-agent. De optie ‘use-agent’ in gpg.conf bepaalt deze instelling."
 
 #: ../data/seahorse.schemas.in.h:45
-msgid ""
-"This specifies the default key to use for certain operations, mainly signing."
-msgstr ""
-"De standaardsleutel voor bepaalde acties, voornamelijk voor ondertekenen."
+msgid "This specifies the default key to use for certain operations, mainly signing."
+msgstr "De standaardsleutel voor bepaalde acties, voornamelijk voor ondertekenen."
 
 #: ../data/seahorse.schemas.in.h:46
-msgid ""
-"When set seahorse-agent will try to automatically load the users SSH keys "
-"when needed. This is equivalent to using the ssh-add utility."
-msgstr ""
-"Indien ingeschakeld zal seahorse automatisch SSH-sleutels laden. Deze "
-"service komt overeen met ssh-add."
+msgid "When set, seahorse-agent expires GPG passwords in its cache after a period of time."
+msgstr "Indien ingeschakeld laat de seahorse-agent gebufferde GPG-wachtwoorden na een bepaalde periode verlopen."
 
 #: ../data/seahorse.schemas.in.h:47
-msgid ""
-"When set, seahorse-agent expires GPG passwords in its cache after a period "
-"of time."
-msgstr ""
-"Indien ingeschakeld laat de seahorse-agent gebufferde GPG-wachtwoorden na "
-"een bepaalde periode verlopen."
-
-#: ../data/seahorse.schemas.in.h:48
 msgid "Where to store cached passwords."
 msgstr "Geeft aan waar gebufferde wachtwoorden worden opgeslagen."
 
-#: ../data/seahorse.schemas.in.h:49
+#: ../data/seahorse.schemas.in.h:48
 msgid "Whether or not keys should be automatically retrieved from key servers."
-msgstr ""
-"Gefet aan of sleutels automatisch opgehaald moeten worden van sleutelservers."
+msgstr "Gefet aan of sleutels automatisch opgehaald moeten worden van sleutelservers."
+
+#: ../data/seahorse.schemas.in.h:49
+msgid "Whether or not modified keys should be automatically synced with the default key server."
+msgstr "Geeft aan of aangepaste sleutels automatisch gesyncroniseerd moeten worden met de standaard sleutelserver."
 
 #: ../data/seahorse.schemas.in.h:50
-msgid ""
-"Whether or not modified keys should be automatically synced with the default "
-"key server."
-msgstr ""
-"Geeft aan of aangepaste sleutels automatisch gesyncroniseerd moeten worden "
-"met de standaard sleutelserver."
-
-#: ../data/seahorse.schemas.in.h:51
 msgid "Whether the GPG password cache is enabled"
 msgstr "Geeft aan of de GPG-wachtwoordbuffer is ingeschakeld"
 
-#: ../data/seahorse.schemas.in.h:52
+#: ../data/seahorse.schemas.in.h:51
 msgid "Whether to always encrypt to default key"
 msgstr "Geef aan of de standaardsleutel altijd moet worden versleuteld"
 
-#: ../data/seahorse.schemas.in.h:53
-msgid "Whether to automatically load SSH keys on demand."
-msgstr "Geeft aan of SSH-sleutels automatisch geladen worden indien nodig."
-
-#: ../data/seahorse.schemas.in.h:54
+#: ../data/seahorse.schemas.in.h:52
 msgid "Whether to use ASCII Armor"
 msgstr "Of een ASCII-harnas moet worden gebruikt"
 
@@ -584,16 +471,34 @@ msgstr "Geen (Niet ondertekenen)"
 
 #. TODO: Icons
 #: ../libcryptui/cryptui-key-list.c:117
-#: ../src/seahorse-key-manager-store.c:954
+#: ../src/seahorse-key-manager-store.c:943
 #: ../src/seahorse-key-properties.c:871
 msgid "Name"
 msgstr "Naam"
 
 #: ../libcryptui/cryptui-key-list.c:120
-#: ../src/seahorse-key-manager-store.c:966
+#: ../src/seahorse-key-manager-store.c:955
 #: ../src/seahorse-key-properties.c:1725
 msgid "Key ID"
 msgstr "Sleutel-id"
+
+#: ../libseahorse/seahorse-add-keyring.glade.h:1
+msgid "Add Password Keyring"
+msgstr "Wachtwoord sleutelbos toevoegen"
+
+#: ../libseahorse/seahorse-add-keyring.glade.h:2
+msgid "New Keyring Name:"
+msgstr "Nieuwe sleutelnaam:"
+
+#: ../libseahorse/seahorse-add-keyring.glade.h:3
+msgid "Please choose a name for the new keyring. You will be prompted for an unlock password."
+msgstr "Kies een naam voor de nieuwe sleutelbos. U word gevraagd voor een ontgrendel wachtwoord."
+
+#: ../libseahorse/seahorse-add-keyring.glade.h:4
+#: ../libseahorse/seahorse-add-keyserver.glade.h:5
+#: ../src/seahorse-ssh-upload.glade.h:3
+msgid "The host name or address of the server."
+msgstr "De computernaam of het adres van de server."
 
 #: ../libseahorse/seahorse-add-keyserver.glade.h:1
 msgid ":"
@@ -611,45 +516,40 @@ msgstr "Serveradres:"
 msgid "Key Server Type:"
 msgstr "Servertype:"
 
-#: ../libseahorse/seahorse-add-keyserver.glade.h:5
-#: ../src/seahorse-ssh-upload.glade.h:3
-msgid "The host name or address of the server."
-msgstr "De computernaam of het adres van de server."
-
 #: ../libseahorse/seahorse-add-keyserver.glade.h:6
 msgid "The port to access the server on."
 msgstr "De te gebruiken poort voor benadering van de server."
 
-#: ../libseahorse/seahorse-hkp-source.c:358
+#: ../libseahorse/seahorse-hkp-source.c:323
 #, c-format
 msgid "Search was not specific enough. Server '%s' found too many keys."
 msgstr "Te algemene zoekopdracht; te veel sleutels gevonden op server ‘%s’."
 
-#: ../libseahorse/seahorse-hkp-source.c:360
+#: ../libseahorse/seahorse-hkp-source.c:325
 #, c-format
 msgid "Couldn't communicate with server '%s': %s"
 msgstr "Kon niet communiceren met ‘%s’: %s"
 
-#: ../libseahorse/seahorse-hkp-source.c:563
+#: ../libseahorse/seahorse-hkp-source.c:521
 msgid "Searching for keys..."
 msgstr "Zoeken naar sleutels…"
 
-#: ../libseahorse/seahorse-hkp-source.c:639
+#: ../libseahorse/seahorse-hkp-source.c:592
 msgid "Uploading keys..."
 msgstr "Sleutels verzenden…"
 
-#: ../libseahorse/seahorse-hkp-source.c:715
+#: ../libseahorse/seahorse-hkp-source.c:665
 msgid "Retrieving keys..."
 msgstr "Sleutels ophalen…"
 
-#: ../libseahorse/seahorse-hkp-source.c:764
+#: ../libseahorse/seahorse-hkp-source.c:710
 #, c-format
 msgid "Searching for keys on: %s"
 msgstr "Zoeken naar sleutels op ‘%s’"
 
 #. The ldap_cb and chain_cb were set in seahorse_ldap_operation_start
-#: ../libseahorse/seahorse-hkp-source.c:857
-#: ../libseahorse/seahorse-hkp-source.c:929
+#: ../libseahorse/seahorse-hkp-source.c:802
+#: ../libseahorse/seahorse-hkp-source.c:874
 #: ../libseahorse/seahorse-ldap-source.c:656
 #, c-format
 msgid "Connecting to: %s"
@@ -670,21 +570,21 @@ msgstr "Opzoeken van adres mislukt: %s"
 msgid "Resolving server address: %s"
 msgstr "Opzoeken van serveradres: %s"
 
-#: ../libseahorse/seahorse-ldap-source.c:883
+#: ../libseahorse/seahorse-ldap-source.c:884
 #, c-format
 msgid "Searching for keys containing '%s'..."
 msgstr "Zoeken naar sleutels die ‘%s’ bevatten…"
 
-#: ../libseahorse/seahorse-ldap-source.c:910
+#: ../libseahorse/seahorse-ldap-source.c:911
 #, c-format
 msgid "Searching for key id '%s'..."
 msgstr "Zoeken naar sleutel-id ‘%s’…"
 
-#: ../libseahorse/seahorse-ldap-source.c:1011
+#: ../libseahorse/seahorse-ldap-source.c:1012
 msgid "Retrieving remote keys..."
 msgstr "Sleutels ophalen…"
 
-#: ../libseahorse/seahorse-ldap-source.c:1144
+#: ../libseahorse/seahorse-ldap-source.c:1145
 msgid "Sending keys to key server..."
 msgstr "Sleutels verzenden naar sleutelserver…"
 
@@ -704,7 +604,6 @@ msgstr[0] "%i sleutel geïmporteerd"
 msgstr[1] "%i sleutels geïmporteerd"
 
 #: ../libseahorse/seahorse-notification.c:565
-#, c-format
 msgid "Imported a key for"
 msgid_plural "Imported keys for"
 msgstr[0] "Sleutel geïmporteerd voor"
@@ -758,9 +657,7 @@ msgstr "Onbekende handtekening"
 
 #: ../libseahorse/seahorse-notification.c:649
 msgid "Bad or forged signature. The signed data was modified."
-msgstr ""
-"Incorrecte of vervalste handtekening. De ondertekende gegevens zijn niet "
-"authentiek."
+msgstr "Incorrecte of vervalste handtekening. De ondertekende gegevens zijn niet authentiek."
 
 #: ../libseahorse/seahorse-notification.c:650
 msgid "Bad Signature"
@@ -787,7 +684,6 @@ msgid "Confirm:"
 msgstr "Wachtwoord (nogmaals):"
 
 #: ../libseahorse/seahorse-passphrase.c:325
-#, c-format
 msgid "Wrong passphrase."
 msgstr "Wachtwoordzin incorrect."
 
@@ -810,8 +706,9 @@ msgstr "Nieuwe wachtwoordzin opgeven"
 msgid "Enter passphrase"
 msgstr "Wachtwoordzin opgeven"
 
-#: ../libseahorse/seahorse-pgp-key.c:140 ../libseahorse/seahorse-ssh-key.c:112
-#: ../src/seahorse-gkeyring-item.c:231
+#: ../libseahorse/seahorse-pgp-key.c:140
+#: ../libseahorse/seahorse-ssh-key.c:112
+#: ../src/seahorse-gkeyring-item.c:232
 msgid "Invalid"
 msgstr "Ongeldig"
 
@@ -825,7 +722,8 @@ msgstr "Publieke PGP-sleutel"
 msgid "Private PGP Key"
 msgstr "Privé PGP-sleutel"
 
-#: ../libseahorse/seahorse-pgp-key.c:694 ../libseahorse/seahorse-validity.c:31
+#: ../libseahorse/seahorse-pgp-key.c:694
+#: ../libseahorse/seahorse-validity.c:31
 #: ../src/seahorse-key-properties.c:1099
 msgid "Unknown"
 msgstr "Onbekend"
@@ -853,16 +751,12 @@ msgid "Loading Keys..."
 msgstr "Sleutels laden…"
 
 #: ../libseahorse/seahorse-pgp-source.c:821
-msgid ""
-"Invalid key data (missing UIDs). This may be due to a computer with a date "
-"set in the future or a missing self-signature."
-msgstr ""
-"Ongeldige data (geen UIDs). Dit kan veroorzaakt worden doordat een computer "
-"een incorrecte datum ingesteld heeft, of dat de sleutel onjuist ondertekend "
-"is."
+msgid "Invalid key data (missing UIDs). This may be due to a computer with a date set in the future or a missing self-signature."
+msgstr "Ongeldige data (geen UIDs). Dit kan veroorzaakt worden doordat een computer een incorrecte datum ingesteld heeft, of dat de sleutel onjuist ondertekend is."
 
-#: ../libseahorse/seahorse-pgp-source.c:942 ../src/seahorse-key-manager.c:454
-#: ../src/seahorse-key-manager.c:502
+#: ../libseahorse/seahorse-pgp-source.c:942
+#: ../src/seahorse-key-manager.c:446
+#: ../src/seahorse-key-manager.c:494
 msgid "Importing Keys"
 msgstr "Sleutels importeren"
 
@@ -870,248 +764,194 @@ msgstr "Sleutels importeren"
 msgid "Exporting Keys"
 msgstr "Sleutels exporteren"
 
-#: ../libseahorse/seahorse-prefs.c:62
+#: ../libseahorse/seahorse-prefs.c:64
 msgid "Not a valid Key Server address."
 msgstr "Ongeldig sleutelserveradres."
 
-#: ../libseahorse/seahorse-prefs.c:63
-msgid ""
-"For help contact your system adminstrator or the administrator of the key "
-"server."
-msgstr ""
-"Indien u hulp wenst dient u contact op te nemen met uw systeembeheerder of "
-"de systeembeheerder van de sleutelserver."
+#: ../libseahorse/seahorse-prefs.c:65
+msgid "For help contact your system adminstrator or the administrator of the key server."
+msgstr "Indien u hulp wenst dient u contact op te nemen met uw systeembeheerder of de systeembeheerder van de sleutelserver."
 
-#: ../libseahorse/seahorse-prefs.c:174
+#: ../libseahorse/seahorse-prefs.c:176
 msgid "URL"
 msgstr "URL"
 
-#: ../libseahorse/seahorse-prefs.c:359
+#: ../libseahorse/seahorse-prefs.c:361
 msgid "Custom"
 msgstr "Aangepast"
 
-#: ../libseahorse/seahorse-prefs.c:429
+#: ../libseahorse/seahorse-prefs.c:431
 msgid "None: Don't publish keys"
 msgstr "Geen: Geen sleutels publiceren"
 
-#: ../libseahorse/seahorse-prefs.c:687
+#: ../libseahorse/seahorse-prefs.c:521
 msgid "None. Prompt for a key."
 msgstr "Geen (om sleutel vragen)"
 
-#: ../libseahorse/seahorse-prefs-cache.c:231
-msgid "Couldn't open the Session Properties"
-msgstr "Kon de sessie-eigenschappen niet openen"
+#: ../libseahorse/seahorse-prefs-keyrings.c:205
+msgid "<i>Automatically unlocked when user logs in.</i>"
+msgstr "<i>Automatisch ontsleutelen wanneer de gebruiker zich aanmeld.</i>"
 
-#: ../libseahorse/seahorse-prefs-cache.c:244
-msgid "Couldn't start the 'seahorse-agent' program"
-msgstr "Kon het programma ‘seahorse-agent’ niet starten"
+#: ../libseahorse/seahorse-prefs-keyrings.c:242
+msgid "Couldn't get default password keyring"
+msgstr "Kon standaardwachtwoordsleutelbos niet verkrijgen"
 
-#: ../libseahorse/seahorse-prefs-cache.c:246
-msgid "The 'seahorse-agent' program exited unsuccessfully."
-msgstr "Het programma ‘seahorse-agent’ eindigde met een foutcode."
+#: ../libseahorse/seahorse-prefs-keyrings.c:265
+msgid "Couldn't get list of password keyrings"
+msgstr "Kon de lijst met wachtwoord sleutelbossen niet verkrijgen"
+
+#: ../libseahorse/seahorse-prefs-keyrings.c:321
+msgid "Couldn't set default password keyring"
+msgstr "Kon de standaardwachtwoordsleutelbos niet instellen"
+
+#: ../libseahorse/seahorse-prefs-keyrings.c:403
+msgid "Couldn't remove keyring"
+msgstr "Kan sleutelbos niet verwijderen"
+
+#: ../libseahorse/seahorse-prefs-keyrings.c:421
+#, c-format
+msgid "Are you sure you want to permanently delete the '%s' keyring?"
+msgstr "Weet u zeker dat u de sleutelbos ‘%s’ permanent wilt verwijderen?"
+
+#: ../libseahorse/seahorse-prefs-keyrings.c:469
+msgid "Couldn't add keyring"
+msgstr "Kon sleutelbos niet toevoegen"
+
+#: ../libseahorse/seahorse-prefs-keyrings.c:526
+msgid "Couldn't change keyring password"
+msgstr "Kan sleutelbos wachtwoord niet wijzigen"
 
 #: ../libseahorse/seahorse-prefs.glade.h:1
-msgid "<b>Defaults</b>"
-msgstr "<b>Standaardinstellingen</b>"
+msgid "<b>Default Key</b>"
+msgstr "<b>Standaardsleutel</b>"
 
-# te cachen/in de buffer op te slaan
 #: ../libseahorse/seahorse-prefs.glade.h:2
-msgid ""
-"<b>Note:</b> The 'seahorse-agent' program has been started. This program is "
-"necessary in order to cache passphrases. "
-msgstr ""
-"<b>Let op:</b> Het programma ‘seahorse-agent’ is opgestart. Dit programma is "
-"nodig om wachtwoordzinnen in de buffer op te slaan."
+msgid "<b>Default Keyring</b>"
+msgstr "<b>Standaardsleutelbos</b>"
 
 #: ../libseahorse/seahorse-prefs.glade.h:3
+msgid "<b>Password Keyrings</b>"
+msgstr "<b>Wachtwoord sleutelbos</b>"
+
+#: ../libseahorse/seahorse-prefs.glade.h:4
 msgid "<b>Remember PGP Passphrases</b>"
 msgstr "<b>PGP-wachtwoordzinnen onthouden</b>"
 
-#: ../libseahorse/seahorse-prefs.glade.h:4
-msgid "<b>Secure Shell Keys</b>"
-msgstr "<b>SSH-sleutels</b>"
-
 #: ../libseahorse/seahorse-prefs.glade.h:5
-msgid ""
-"<b>Warning:</b> The 'seahorse-agent' program is not running. This program is "
-"necessary in order to cache passphrases. "
-msgstr ""
-"<b>Waarschuwing:</b>  Het programma ‘seahorse-agent’ is niet opgestart. Dit "
-"programma is nodig om wachtwoordzinnen in de buffer op te slaan."
+msgid "<i>A supported PGP passphrase caching agent is not running.</i>"
+msgstr "<i>Er is geen ondersteunde buffering voor PGP-wachtwoordzinnen actief.</i>"
 
 #: ../libseahorse/seahorse-prefs.glade.h:6
-msgid "<i>A non-supported PGP passphrase caching agent is running.</i>"
-msgstr ""
-"<i>Er is een niet-ondersteunde buffering voor PGP-wachtwoordzinnen actief.</"
-"i>"
-
-#: ../libseahorse/seahorse-prefs.glade.h:7
-msgid "<i>No SSH caching agent is running. Cannot load Secure Shell keys.</i>"
-msgstr "<i>Er is geen SSH-buffering actief. Kan sleutels niet laden.</i>"
-
-#: ../libseahorse/seahorse-prefs.glade.h:8
 msgid "<i>This key is used to sign messages when no other key is chosen</i>"
-msgstr ""
-"<i>Deze sleutel dient voor het ondertekenen van berichten wanneer er geen "
-"andere sleutel is gekozen</i>"
-
-#: ../libseahorse/seahorse-prefs.glade.h:9
-msgid "Automatically load _Secure Shell keys"
-msgstr "_SSH-sleutels automatisch laden"
-
-#: ../libseahorse/seahorse-prefs.glade.h:10
-msgid "Automatically retrieve keys from key servers."
-msgstr "Gewijzigde sleutels automatisch opvragen van sleutelservers."
-
-#: ../libseahorse/seahorse-prefs.glade.h:11
-msgid "Automatically synchronize modified keys with key servers. "
-msgstr "Gewijzigde sleutels automatisch synchroniseren met sleutelservers."
-
-#: ../libseahorse/seahorse-prefs.glade.h:12
-msgid ""
-"Changing the master password failed.  Make certain that you entered the "
-"correct original master password."
-msgstr ""
-"Het hoofdwachwoord kon niet veranderd worden. Controleer of het huidige "
-"hoofdwachwoord correct is ingevuld."
-
-#: ../libseahorse/seahorse-prefs.glade.h:13
-msgid "Confirm Master Password:"
-msgstr "Hoofdwachtwoord bevestigen:"
-
-#: ../libseahorse/seahorse-prefs.glade.h:14
-#: ../plugins/nautilus/seahorse-pgp-preferences.c:74
-#: ../plugins/nautilus/seahorse-pgp-preferences.desktop.in.h:2
-msgid "Encryption Preferences"
-msgstr "Versleutelingsvoorkeuren"
-
-#: ../libseahorse/seahorse-prefs.glade.h:15
-msgid "Encryption Settings"
-msgstr "Versleutelingsinstellingen"
-
-#: ../libseahorse/seahorse-prefs.glade.h:16
-msgid "GNOME Keyring"
-msgstr "Gnome-sleutelbos"
-
-#: ../libseahorse/seahorse-prefs.glade.h:17
-msgid ""
-"GNOME Keyring stores passwords, network keys, passphrases and other secrets "
-"required for authentication.  A <b>master password</b> is used to protect "
-"these secrets.  The <b>master password</b> can be changed below."
-msgstr ""
-"De Gnome-sleutelbos onthoudt wachtwoorden, netwerksleutels, wachtwoordzinnen "
-"en andere codes die voor authenticatie nodig zijn. Een <b>hoofdwachtwoord</"
-"b> is nodig om deze wachtwoorden te beveiligen. Het hoofdwachtwoord kan "
-"hieronder gewijzigd worden."
-
-#: ../libseahorse/seahorse-prefs.glade.h:18
-msgid "Key Servers"
-msgstr "Sleutelservers"
-
-#: ../libseahorse/seahorse-prefs.glade.h:19
-msgid "Key Sharing"
-msgstr "Sleutels delen"
-
-#: ../libseahorse/seahorse-prefs.glade.h:20
-msgid "New Master Password:"
-msgstr "Nieuw hoofdwachtwoord:"
-
-#: ../libseahorse/seahorse-prefs.glade.h:21
-msgid "Original Master Password:"
-msgstr "Huidige hoofdwachtwoord:"
-
-#: ../libseahorse/seahorse-prefs.glade.h:22
-msgid "Passphrase Cache"
-msgstr "Wachtwoordbuffer"
-
-#: ../libseahorse/seahorse-prefs.glade.h:23
-msgid "Session Properties"
-msgstr "Sessie-eigenschappen"
-
-#: ../libseahorse/seahorse-prefs.glade.h:24
-msgid ""
-"Sharing your keys allows other people on your network to use the keys you've "
-"collected. This means they can automatically encrypt things for you or those "
-"you know, without you having to send them your key.\n"
-"\n"
-"<b>Note:</b> Your personal keys will not be compromised."
-msgstr ""
-"Het delen van sleutels stelt andere mensen op uw netwerk in staat om de "
-"sleutels die u heeft verzameld, te gebruiken. Dit betekent dat zij "
-"automatisch dingen voor u of voor uw kennissen kunnen versleutelen, zonder "
-"dat u hen uw sleutel hoeft te sturen.\n"
-"\n"
-"<b>Let op:</b> Uw persoonlijke sleutels worden niet bekendgemaakt."
-
-#: ../libseahorse/seahorse-prefs.glade.h:27
-msgid "Start seahorse-agent"
-msgstr "Seahorse-agent opstarten"
-
-#: ../libseahorse/seahorse-prefs.glade.h:28
-msgid "The master password was successfully changed."
-msgstr "Het hoofdwachtwoord is veranderd."
-
-#: ../libseahorse/seahorse-prefs.glade.h:29
-msgid ""
-"To avoid manually starting the 'seahorse-agent' in the future\n"
-"add it to the Session Manager. "
-msgstr ""
-"Om te voorkomen dat u in de toekomst handmatig ‘seahorse-agent’ moet "
-"opstarten\n"
-"kunt u het toevoegen aan het sessiebeheer."
-
-#: ../libseahorse/seahorse-prefs.glade.h:31
-msgid "When _encrypting, always include myself as a recipient"
-msgstr "Altijd mijzelf als geadresseerde vermelden bij ve_rsleutelen"
-
-#: ../libseahorse/seahorse-prefs.glade.h:32
-msgid "_Always remember passphrases whenever logged in"
-msgstr "Wachtwoordzinnen _altijd onthouden wanneer aangemeld"
+msgstr "<i>Deze sleutel dient voor het ondertekenen van berichten wanneer er geen andere sleutel is gekozen</i>"
 
 # toestemming staat er in het engels niet bij, maar wordt wel
 # geimpliceerd
-#: ../libseahorse/seahorse-prefs.glade.h:33
-msgid "_Ask me before using a cached passphrase"
+#: ../libseahorse/seahorse-prefs.glade.h:7
+msgid "As_k me before using a cached passphrase"
 msgstr "_Toestemming vragen voor gebruik van een gebufferde wachtwoordzin"
 
-#: ../libseahorse/seahorse-prefs.glade.h:34
-msgid "_Default Key:"
+#: ../libseahorse/seahorse-prefs.glade.h:8
+msgid "Automatically retrieve keys from _key servers"
+msgstr "S_leutels automatisch opvragen van sleutelservers."
+
+#: ../libseahorse/seahorse-prefs.glade.h:9
+msgid "Automatically synchronize _modified keys with key servers"
+msgstr "Gewijzigde sleutels automatisch synchroniseren met sleutelservers"
+
+#: ../libseahorse/seahorse-prefs.glade.h:10
+msgid "Change Unlock _Password"
+msgstr "_Ontgrendel wachtwoord veranderen"
+
+# encrypt is hier een werkwoord
+#: ../libseahorse/seahorse-prefs.glade.h:11
+msgid "Encryption"
+msgstr "Versleutelen"
+
+#: ../libseahorse/seahorse-prefs.glade.h:12
+msgid "Key Servers"
+msgstr "Sleutelservers"
+
+#: ../libseahorse/seahorse-prefs.glade.h:13
+msgid "Key Sharing"
+msgstr "Sleutels delen"
+
+#: ../libseahorse/seahorse-prefs.glade.h:14
+msgid "PGP Passphrases"
+msgstr "PGP Wachtwoordzin"
+
+#: ../libseahorse/seahorse-prefs.glade.h:15
+msgid "Password Keyrings"
+msgstr "Wachtwoord sleutelbossen"
+
+#: ../libseahorse/seahorse-prefs.glade.h:16
+msgid "Password and Encryption Settings"
+msgstr "Wachtwoord en versleutel voorkeuren"
+
+#: ../libseahorse/seahorse-prefs.glade.h:17
+msgid ""
+"Sharing your keys allows other people on your network to use the keys you've collected. This means they can automatically encrypt things for you or those you know, without you having to send them your key.\n"
+"\n"
+"<b>Note:</b> Your personal keys will not be compromised."
+msgstr ""
+"Het delen van sleutels stelt andere mensen op uw netwerk in staat om de sleutels die u heeft verzameld, te gebruiken. Dit betekent dat zij automatisch dingen voor u of voor uw kennissen kunnen versleutelen, zonder dat u hen uw sleutel hoeft te sturen.\n"
+"\n"
+"<b>Let op:</b> Uw persoonlijke sleutels worden niet bekendgemaakt."
+
+#: ../libseahorse/seahorse-prefs.glade.h:20
+msgid "Show _icon in status area when passphrases are in memory"
+msgstr "Toon p_ictogram in mededelingsgebied als een wachtwoordzin in de buffer staat"
+
+#: ../libseahorse/seahorse-prefs.glade.h:21
+msgid "When _encrypting, always include myself as a recipient"
+msgstr "Altijd mijzelf als geadresseerde vermelden bij ve_rsleutelen"
+
+#: ../libseahorse/seahorse-prefs.glade.h:22
+msgid "_Add Keyring"
+msgstr "_Sleutelbos toevoegen"
+
+#: ../libseahorse/seahorse-prefs.glade.h:23
+msgid "_Always remember passphrases whenever logged in"
+msgstr "Wachtwoordzinnen _altijd onthouden wanneer aangemeld"
+
+#: ../libseahorse/seahorse-prefs.glade.h:24
+msgid "_Default key:"
 msgstr "_Standaardsleutel:"
 
-#: ../libseahorse/seahorse-prefs.glade.h:35
-msgid "_Find Keys Via:"
+#: ../libseahorse/seahorse-prefs.glade.h:25
+msgid "_Find keys via:"
 msgstr "Sleutels _zoeken met:"
 
-#: ../libseahorse/seahorse-prefs.glade.h:36
+#: ../libseahorse/seahorse-prefs.glade.h:26
+msgid "_Location for application passwords:"
+msgstr "_Locatie voor toepassingswachtwoorden:"
+
+#: ../libseahorse/seahorse-prefs.glade.h:27
 msgid "_Never remember passphrases"
 msgstr "Wachtwoordzinnen _nooit onthouden"
 
-#: ../libseahorse/seahorse-prefs.glade.h:37
-msgid "_Publish Keys To:"
+#: ../libseahorse/seahorse-prefs.glade.h:28
+msgid "_Publish keys to:"
 msgstr "Sleutels _publiceren naar:"
 
 # Hier moet eigenlijk een %s ofzo (Wouter Bolsterlee)
-#: ../libseahorse/seahorse-prefs.glade.h:38
+#: ../libseahorse/seahorse-prefs.glade.h:29
 msgid "_Remember passphrases for"
 msgstr "_Wachtwoordzin onthouden gedurende"
 
-#: ../libseahorse/seahorse-prefs.glade.h:39
+#: ../libseahorse/seahorse-prefs.glade.h:30
+msgid "_Remove Keyring"
+msgstr "Sleutel ve_rwijdern van sleutelbos"
+
+#: ../libseahorse/seahorse-prefs.glade.h:31
 msgid "_Share my keys with others on my network"
 msgstr "Mijn sleutels _delen met anderen op mijn netwerk"
 
-#: ../libseahorse/seahorse-prefs.glade.h:40
+#: ../libseahorse/seahorse-prefs.glade.h:32
 msgid "minutes"
 msgstr "minuten"
 
 #: ../libseahorse/seahorse-progress.glade.h:1
-msgid "<b>Progress Message</b>"
-msgstr "<b>Voortgangsbericht</b>"
-
-#: ../libseahorse/seahorse-progress.glade.h:2
-msgid "Progress Status"
-msgstr "Voortgangsstatus"
-
-#: ../libseahorse/seahorse-progress.glade.h:3
 msgid "Progress Title"
 msgstr "Voortgangstitel"
 
@@ -1125,16 +965,14 @@ msgstr "HTTP-sleutelserver"
 
 #. TODO: We should be giving an error message that allows them to
 #. generate or import a key
-#: ../libseahorse/seahorse-signer.c:57 ../src/seahorse-sign.c:159
+#: ../libseahorse/seahorse-signer.c:57
+#: ../src/seahorse-sign.c:159
 msgid "No keys usable for signing"
 msgstr "Geen bruikbare sleutels voor ondertekening"
 
 #: ../libseahorse/seahorse-signer.c:58
-msgid ""
-"You have no personal PGP keys that can be used to sign a document or message."
-msgstr ""
-"U heeft geen persoonlijke PGP-sleutels die te gebruiken zijn om een document "
-"of bericht mee te ondertekenen."
+msgid "You have no personal PGP keys that can be used to sign a document or message."
+msgstr "U heeft geen persoonlijke PGP-sleutels die te gebruiken zijn om een document of bericht mee te ondertekenen."
 
 #: ../libseahorse/seahorse-signer.glade.h:1
 msgid "_Sign message with key:"
@@ -1148,7 +986,8 @@ msgstr "SSH-wachtwoordzin opgeven:"
 msgid "(Unreadable Secure Shell Key)"
 msgstr "(Onleesbare SSH-sleutel)"
 
-#: ../libseahorse/seahorse-ssh-key.c:94 ../libseahorse/seahorse-ssh-key.c:98
+#: ../libseahorse/seahorse-ssh-key.c:94
+#: ../libseahorse/seahorse-ssh-key.c:98
 #: ../libseahorse/seahorse-ssh-source.c:746
 #: ../src/seahorse-generate-select.c:145
 #: ../src/seahorse-ssh-key-properties.glade.h:20
@@ -1163,80 +1002,79 @@ msgstr "Privé SSH-sleutel"
 msgid "Public Secure Shell Key"
 msgstr "Publieke SSH-sleutel"
 
-#: ../libseahorse/seahorse-ssh-operation.c:135
-#: ../libseahorse/seahorse-ssh-operation.c:697
-#, c-format
+#: ../libseahorse/seahorse-ssh-operation.c:133
+#: ../libseahorse/seahorse-ssh-operation.c:695
 msgid "The SSH command was terminated unexpectedly."
 msgstr "De SSH-opdracht is onverwacht beëindigd."
 
-#: ../libseahorse/seahorse-ssh-operation.c:143
-#: ../libseahorse/seahorse-ssh-operation.c:704
+#: ../libseahorse/seahorse-ssh-operation.c:141
+#: ../libseahorse/seahorse-ssh-operation.c:702
 msgid "The SSH command failed."
 msgstr "De SSH-opdracht is mislukt."
 
-#: ../libseahorse/seahorse-ssh-operation.c:441
+#: ../libseahorse/seahorse-ssh-operation.c:439
 msgid "Secure Shell key"
 msgstr "SSH-sleutel"
 
 #. Just prompt over and over again
-#: ../libseahorse/seahorse-ssh-operation.c:727
+#: ../libseahorse/seahorse-ssh-operation.c:725
 msgid "Secure Shell Passphrase"
 msgstr "SSH-wachtwoordzin"
 
-#: ../libseahorse/seahorse-ssh-operation.c:813
+#: ../libseahorse/seahorse-ssh-operation.c:811
 msgid "Old Key Passphrase"
 msgstr "Huidige wachtwoordzin voor sleutel"
 
-#: ../libseahorse/seahorse-ssh-operation.c:814
+#: ../libseahorse/seahorse-ssh-operation.c:812
 #, c-format
 msgid "Enter the old passphrase for: %s"
 msgstr "Voer de huidige wachtwoordzin in voor: %s"
 
-#: ../libseahorse/seahorse-ssh-operation.c:818
+#: ../libseahorse/seahorse-ssh-operation.c:816
 msgid "New Key Passphrase"
 msgstr "Nieuwe wachtwoordzin voor sleutel"
 
-#: ../libseahorse/seahorse-ssh-operation.c:819
+#: ../libseahorse/seahorse-ssh-operation.c:817
 #, c-format
 msgid "Enter the new passphrase for: %s"
 msgstr "Nieuwe wachtwoordzin voor ‘%s’ invoeren"
 
-#: ../libseahorse/seahorse-ssh-operation.c:827
+#: ../libseahorse/seahorse-ssh-operation.c:825
 msgid "Enter Key Passphrase"
 msgstr "Voer wachtwoordzin in"
 
-#: ../libseahorse/seahorse-ssh-operation.c:895
+#: ../libseahorse/seahorse-ssh-operation.c:893
 msgid "Passphrase for New Secure Shell Key"
 msgstr "Wachtwoordzin voor nieuwe SSH-sleutel"
 
-#: ../libseahorse/seahorse-ssh-operation.c:896
+#: ../libseahorse/seahorse-ssh-operation.c:894
 msgid "Enter a passphrase for your new Secure Shell key."
 msgstr "Voer een wachtwoordzin in voor uw nieuwe SSH-sleutel."
 
-#: ../libseahorse/seahorse-ssh-operation.c:1034
+#: ../libseahorse/seahorse-ssh-operation.c:1028
 msgid "Secure Shell Key Passphrase"
 msgstr "Wachtwoordzin voor SSH-sleutel"
 
-#: ../libseahorse/seahorse-ssh-operation.c:1034
+#: ../libseahorse/seahorse-ssh-operation.c:1028
 #, c-format
 msgid "Enter the passphrase for: %s"
 msgstr "Wachtwoord invoeren voor: %s"
 
-#: ../libseahorse/seahorse-ssh-operation.c:1035
+#: ../libseahorse/seahorse-ssh-operation.c:1029
 msgid "Save this passphrase in my keyring"
 msgstr "Wachtwoord opslaan in mijn sleutelbos"
 
-#: ../libseahorse/seahorse-ssh-operation.c:1109
+#: ../libseahorse/seahorse-ssh-operation.c:1081
 #, c-format
 msgid "Importing key: %s"
 msgstr "Sleutel importeren: %s"
 
-#: ../libseahorse/seahorse-ssh-operation.c:1111
+#: ../libseahorse/seahorse-ssh-operation.c:1083
 msgid "Importing key. Enter passphrase"
 msgstr "Sleutel importeren. Voer wachtwooord in"
 
-#: ../libseahorse/seahorse-ssh-operation.c:1113
-#: ../src/seahorse-key-manager.c:515
+#: ../libseahorse/seahorse-ssh-operation.c:1085
+#: ../src/seahorse-key-manager.c:507
 #: ../src/seahorse-pgp-keys.desktop.in.in.h:1
 msgid "Import Key"
 msgstr "Sleutel importeren"
@@ -1260,8 +1098,7 @@ msgstr "Sleutel niet beschikbaar"
 
 #: ../libseahorse/seahorse-util.c:172
 msgid "Decryption failed. You probably do not have the decryption key."
-msgstr ""
-"Ontcijferen mislukt. Waarschijnlijk is de ontcijfersleutel niet beschikbaar."
+msgstr "Ontcijferen mislukt. Waarschijnlijk is de ontcijfersleutel niet beschikbaar."
 
 #: ../libseahorse/seahorse-util.c:222
 msgid "%Y-%m-%d"
@@ -1275,39 +1112,40 @@ msgstr "Sleutelgegevens"
 msgid "Multiple Keys"
 msgstr "Meerdere sleutels"
 
-#: ../libseahorse/seahorse-util.c:728
+#: ../libseahorse/seahorse-util.c:733
 msgid "Couldn't run file-roller"
 msgstr "Kon file-roller niet uitvoeren"
 
-#: ../libseahorse/seahorse-util.c:733
-#: ../plugins/nautilus/seahorse-tool-files.c:831
+#: ../libseahorse/seahorse-util.c:738
+#: ../plugins/nautilus/seahorse-tool-files.c:830
 msgid "Couldn't package files"
 msgstr "Kan bestanden niet inpakken"
 
-#: ../libseahorse/seahorse-util.c:734
+#: ../libseahorse/seahorse-util.c:739
 msgid "The file-roller process did not complete successfully"
 msgstr "Het ‘file-roller’ proces is niet juist voltooid"
 
-#: ../libseahorse/seahorse-util.c:744
+#: ../libseahorse/seahorse-util.c:749
 msgid "Couldn't set permissions on backup file."
 msgstr "Kan rechten niet instellen op reservekopie."
 
 #. Filter for PGP keys. We also include *.asc, as in many
 #. cases that extension is associated with text/plain
-#: ../libseahorse/seahorse-util.c:848
+#: ../libseahorse/seahorse-util.c:853
 msgid "All key files"
 msgstr "Alle sleutelbestanden"
 
-#: ../libseahorse/seahorse-util.c:859 ../libseahorse/seahorse-util.c:899
+#: ../libseahorse/seahorse-util.c:864
+#: ../libseahorse/seahorse-util.c:904
 #: ../src/seahorse-photos.c:239
 msgid "All files"
 msgstr "Alle bestanden"
 
-#: ../libseahorse/seahorse-util.c:892
+#: ../libseahorse/seahorse-util.c:897
 msgid "Archive files"
 msgstr "Archiefbestanden"
 
-#: ../libseahorse/seahorse-util.c:933
+#: ../libseahorse/seahorse-util.c:938
 msgid ""
 "<b>A file already exists with this name.</b>\n"
 "\n"
@@ -1317,24 +1155,29 @@ msgstr ""
 "\n"
 "Wilt u het overschrijven met een nieuw bestand?"
 
-#: ../libseahorse/seahorse-util.c:936
+#: ../libseahorse/seahorse-util.c:941
 msgid "_Replace"
 msgstr "_Vervangen"
 
-#: ../libseahorse/seahorse-validity.c:33 ../src/seahorse-key-properties.c:1105
-#: ../src/seahorse-key-properties.c:1237 ../src/seahorse-key-properties.c:1309
+#: ../libseahorse/seahorse-validity.c:33
+#: ../src/seahorse-key-properties.c:1105
+#: ../src/seahorse-key-properties.c:1237
+#: ../src/seahorse-key-properties.c:1309
 msgid "Never"
 msgstr "Nooit"
 
-#: ../libseahorse/seahorse-validity.c:35 ../src/seahorse-key-properties.c:1112
+#: ../libseahorse/seahorse-validity.c:35
+#: ../src/seahorse-key-properties.c:1112
 msgid "Marginal"
 msgstr "Gedeeltelijk"
 
-#: ../libseahorse/seahorse-validity.c:37 ../src/seahorse-key-properties.c:1118
+#: ../libseahorse/seahorse-validity.c:37
+#: ../src/seahorse-key-properties.c:1118
 msgid "Full"
 msgstr "Volledig"
 
-#: ../libseahorse/seahorse-validity.c:39 ../src/seahorse-key-properties.c:1124
+#: ../libseahorse/seahorse-validity.c:39
+#: ../src/seahorse-key-properties.c:1124
 msgid "Ultimate"
 msgstr "Meer dan volledig"
 
@@ -1342,7 +1185,8 @@ msgstr "Meer dan volledig"
 msgid "Disabled"
 msgstr "Uitgeschakeld"
 
-#: ../libseahorse/seahorse-validity.c:43 ../src/seahorse-key-properties.c:1305
+#: ../libseahorse/seahorse-validity.c:43
+#: ../src/seahorse-key-properties.c:1305
 msgid "Revoked"
 msgstr "Ingetrokken"
 
@@ -1357,21 +1201,20 @@ msgstr "Klembordtekst versleutelen"
 
 #: ../plugins/applet/GNOME_SeahorseApplet.server.in.in.h:2
 msgid "Encrypt, decrypt or sign the clipboard (uses PGP type encryption)."
-msgstr ""
-"De klembordinhoud versleutelen, ontcijferen of ondertekenen (met PGP-"
-"encryptie)."
+msgstr "De klembordinhoud versleutelen, ontcijferen of ondertekenen (met PGP-encryptie)."
 
 #: ../plugins/applet/GNOME_SeahorseApplet.server.in.in.h:3
 msgid "Seahorse Applet Factory"
 msgstr "Seahorse appletfabriek"
 
 #: ../plugins/applet/GNOME_SeahorseApplet.xml.h:1
-#: ../src/seahorse-key-manager.c:1208
+#: ../src/seahorse-key-manager.c:1189
 msgid "_About"
 msgstr "In_fo"
 
 #: ../plugins/applet/GNOME_SeahorseApplet.xml.h:2
-#: ../src/seahorse-key-manager.c:1192 ../src/seahorse-keyserver-results.c:381
+#: ../src/seahorse-key-manager.c:1173
+#: ../src/seahorse-keyserver-results.c:381
 msgid "_Help"
 msgstr "_Hulp"
 
@@ -1386,21 +1229,22 @@ msgstr "seahorse-applet"
 #: ../plugins/applet/seahorse-applet.c:311
 #: ../plugins/applet/seahorse-applet.c:836
 msgid "Use PGP/GPG to encrypt/decrypt/sign/verify/import the clipboard."
-msgstr ""
-"PGP/GPG gebruiken om de klembordinhoud te versleutelen/ontcijferen/"
-"ondertekenen/verifiëren/importeren."
+msgstr "PGP/GPG gebruiken om de klembordinhoud te versleutelen/ontcijferen/ondertekenen/verifiëren/importeren."
 
-#: ../plugins/applet/seahorse-applet.c:316 ../src/seahorse-key-manager.c:874
+#: ../plugins/applet/seahorse-applet.c:316
+#: ../src/seahorse-key-manager.c:866
 msgid "translator-credits"
 msgstr ""
 "Vincent van Adrighem\n"
 "Wouter Bolsterlee\n"
 "Tino Meinen\n"
 "Reinout van Schouwen\n"
+"Daniel van Eeden\n"
 "\n"
 "Kijk voor meer info op http://nl.gnome.org/"
 
-#: ../plugins/applet/seahorse-applet.c:319 ../src/seahorse-key-manager.c:877
+#: ../plugins/applet/seahorse-applet.c:319
+#: ../src/seahorse-key-manager.c:869
 msgid "Seahorse Project Homepage"
 msgstr "Homepage van het Seahorse-project"
 
@@ -1444,11 +1288,13 @@ msgstr "Het klembord kan niet worden ondertekend."
 
 #: ../plugins/applet/seahorse-applet.c:496
 #: ../plugins/epiphany/seahorse-extension.c:340
+#: ../plugins/nautilus/seahorse-tool.c:428
 msgid "Import Failed"
 msgstr "Importeren mislukt"
 
 #: ../plugins/applet/seahorse-applet.c:497
 #: ../plugins/epiphany/seahorse-extension.c:341
+#: ../plugins/nautilus/seahorse-tool.c:429
 msgid "Keys were found but not imported."
 msgstr "Er zijn sleutels gevonden maar niet geïmporteerd."
 
@@ -1550,8 +1396,10 @@ msgstr "Vesleutelde tekst"
 msgid "Couldn't encrypt text"
 msgstr "Tekst kon niet versleuteld worden"
 
-#: ../plugins/gedit/seahorse-gedit.c:387 ../src/seahorse-key-manager.c:395
-#: ../src/seahorse-key-manager.c:463 ../src/seahorse-key-manager.c:486
+#: ../plugins/gedit/seahorse-gedit.c:387
+#: ../src/seahorse-key-manager.c:387
+#: ../src/seahorse-key-manager.c:455
+#: ../src/seahorse-key-manager.c:478
 msgid "Couldn't import keys"
 msgstr "Kon sleutels niet importeren"
 
@@ -1580,7 +1428,8 @@ msgid "Verified text"
 msgstr "Geverifieerde tekst"
 
 #: ../plugins/gedit/seahorse-gedit.c:582
-#: ../plugins/nautilus/seahorse-tool.c:374 ../src/seahorse-key-manager.c:404
+#: ../plugins/nautilus/seahorse-tool.c:454
+#: ../src/seahorse-key-manager.c:396
 #, c-format
 msgid "Imported %d key"
 msgid_plural "Imported %d keys"
@@ -1661,77 +1510,92 @@ msgstr[1] "Bestanden versleutelen"
 msgid "For internal use"
 msgstr "Alleen voor intern gebruik"
 
+#: ../plugins/nautilus/seahorse-pgp-preferences.c:74
+msgid "Encryption Preferences"
+msgstr "Versleutelingsvoorkeuren"
+
 #: ../plugins/nautilus/seahorse-pgp-preferences.desktop.in.h:1
 msgid "Configure key servers and other encryption settings"
 msgstr "Sleutelservers en andere versleutelingsinstellingen"
 
-#: ../plugins/nautilus/seahorse-tool.c:52
+#: ../plugins/nautilus/seahorse-pgp-preferences.desktop.in.h:2
+msgid "Encryption and Keyrings"
+msgstr "Versleuteling en sleutelbossen"
+
+#: ../plugins/nautilus/seahorse-tool.c:58
 msgid "Import keys from the file"
 msgstr "Sleutels uit bestand importeren"
 
-#: ../plugins/nautilus/seahorse-tool.c:54
+#: ../plugins/nautilus/seahorse-tool.c:60
 msgid "Encrypt file"
 msgstr "Bestand versleutelen"
 
-#: ../plugins/nautilus/seahorse-tool.c:56
+#: ../plugins/nautilus/seahorse-tool.c:62
 msgid "Sign file with default key"
 msgstr "Bestand ondertekenen met standaardsleutel"
 
-#: ../plugins/nautilus/seahorse-tool.c:58
+#: ../plugins/nautilus/seahorse-tool.c:64
 msgid "Encrypt and sign file with default key"
 msgstr "Bestand versleutelen en ondertekenen met standaardsleutel"
 
-#: ../plugins/nautilus/seahorse-tool.c:60
+#: ../plugins/nautilus/seahorse-tool.c:66
 msgid "Decrypt encrypted file"
 msgstr "Een versleuteld bestand ontcijferenen"
 
-#: ../plugins/nautilus/seahorse-tool.c:62
+#: ../plugins/nautilus/seahorse-tool.c:68
 msgid "Verify signature file"
 msgstr "Handtekeningbestand verifiëren"
 
-#: ../plugins/nautilus/seahorse-tool.c:64
+#: ../plugins/nautilus/seahorse-tool.c:70
 msgid "Read list of URIs on standard in"
 msgstr "Lijst met URI's lezen op de standaard invoer"
 
-#: ../plugins/nautilus/seahorse-tool.c:66
+#: ../plugins/nautilus/seahorse-tool.c:72
 msgid "file..."
 msgstr "bestand…"
 
-#: ../plugins/nautilus/seahorse-tool.c:128
+#: ../plugins/nautilus/seahorse-tool.c:162
 msgid "Choose Recipients"
 msgstr "Geadresseerden kiezen"
 
-#: ../plugins/nautilus/seahorse-tool.c:190
-#: ../plugins/nautilus/seahorse-tool.c:272
+#: ../plugins/nautilus/seahorse-tool.c:224
+#: ../plugins/nautilus/seahorse-tool.c:306
 msgid "Couldn't load keys"
 msgstr "Kan sleutels niet laden"
 
-#: ../plugins/nautilus/seahorse-tool.c:206
+#: ../plugins/nautilus/seahorse-tool.c:240
 #, c-format
 msgid "Choose Encrypted File Name for '%s'"
 msgstr "Naam voor versleuteld bestand kiezen voor '%s'"
 
-#: ../plugins/nautilus/seahorse-tool.c:256
+#: ../plugins/nautilus/seahorse-tool.c:290
 msgid "Choose Signer"
 msgstr "Ondertekening kiezen"
 
-#: ../plugins/nautilus/seahorse-tool.c:291
+#: ../plugins/nautilus/seahorse-tool.c:325
 #, c-format
 msgid "Choose Signature File Name for '%s'"
 msgstr "Naam voor handtekeningbestand kiezen voor ‘%s’"
 
-#: ../plugins/nautilus/seahorse-tool.c:372
-#, c-format
+#: ../plugins/nautilus/seahorse-tool.c:365
+msgid "Import is complete"
+msgstr "Importeren is compleet"
+
+#: ../plugins/nautilus/seahorse-tool.c:398
+msgid "Importing keys ..."
+msgstr "Sleutels importeren..."
+
+#: ../plugins/nautilus/seahorse-tool.c:452
 msgid "Imported key"
 msgstr "Geïmporteerde sleutel"
 
 #. File to decrypt to
-#: ../plugins/nautilus/seahorse-tool.c:396
+#: ../plugins/nautilus/seahorse-tool.c:476
 #, c-format
 msgid "Choose Decrypted File Name for '%s'"
 msgstr "Naam voor ontcijferd bestand kiezen voor ‘%s’"
 
-#: ../plugins/nautilus/seahorse-tool.c:452
+#: ../plugins/nautilus/seahorse-tool.c:532
 #, c-format
 msgid "Choose Original File for '%s'"
 msgstr "Oorspronkelijk bestand kiezen voor ‘%s’"
@@ -1741,58 +1605,57 @@ msgstr "Oorspronkelijk bestand kiezen voor ‘%s’"
 #. * The last thing we want to do is cascade a big pile of error
 #. * dialogs at the user.
 #.
-#: ../plugins/nautilus/seahorse-tool.c:524
-#, c-format
+#: ../plugins/nautilus/seahorse-tool.c:604
 msgid "No valid signatures found"
 msgstr "Geen geldige handtekening gevonden"
 
-#: ../plugins/nautilus/seahorse-tool.c:591
+#: ../plugins/nautilus/seahorse-tool.c:657
 msgid "File Encryption Tool"
 msgstr "Bestandsversleuteling"
 
 # encrypt is hier een werkwoord
-#: ../plugins/nautilus/seahorse-tool.c:614
+#: ../plugins/nautilus/seahorse-tool.c:680
 msgid "Encrypting"
 msgstr "Versleutelen"
 
-#: ../plugins/nautilus/seahorse-tool.c:615
+#: ../plugins/nautilus/seahorse-tool.c:681
 #, c-format
 msgid "Couldn't encrypt file: %s"
 msgstr "Kan bestand niet versleutelen: %s"
 
-#: ../plugins/nautilus/seahorse-tool.c:623
+#: ../plugins/nautilus/seahorse-tool.c:689
 msgid "Signing"
 msgstr "Ondertekenen"
 
-#: ../plugins/nautilus/seahorse-tool.c:624
+#: ../plugins/nautilus/seahorse-tool.c:690
 #, c-format
 msgid "Couldn't sign file: %s"
 msgstr "Kan bestand niet ondertekenen: %s"
 
-#: ../plugins/nautilus/seahorse-tool.c:629
+#: ../plugins/nautilus/seahorse-tool.c:695
 msgid "Importing"
 msgstr "Importeren"
 
-#: ../plugins/nautilus/seahorse-tool.c:630
+#: ../plugins/nautilus/seahorse-tool.c:696
 #, c-format
 msgid "Couldn't import keys from file: %s"
 msgstr "Kan sleutels niet importeren vanuit bestand: %s"
 
 # encrypt is hier een werkwoord
-#: ../plugins/nautilus/seahorse-tool.c:636
+#: ../plugins/nautilus/seahorse-tool.c:702
 msgid "Decrypting"
 msgstr "Ontcijferen"
 
-#: ../plugins/nautilus/seahorse-tool.c:637
+#: ../plugins/nautilus/seahorse-tool.c:703
 #, c-format
 msgid "Couldn't decrypt file: %s"
 msgstr "Kan bestand niet ontcijferen: %s"
 
-#: ../plugins/nautilus/seahorse-tool.c:642
+#: ../plugins/nautilus/seahorse-tool.c:708
 msgid "Verifying"
 msgstr "Verifiëren"
 
-#: ../plugins/nautilus/seahorse-tool.c:643
+#: ../plugins/nautilus/seahorse-tool.c:709
 #, c-format
 msgid "Couldn't verify file: %s"
 msgstr "Kan bestand verifiëren: %s"
@@ -1907,16 +1770,17 @@ msgid_plural "You have selected %d folders"
 msgstr[0] "U heeft %d map geselecteerd"
 msgstr[1] "U heeft %d mappen geselecteerd"
 
-#: ../plugins/nautilus/seahorse-tool-files.c:812
+#: ../plugins/nautilus/seahorse-tool-files.c:811
 msgid "Preparing..."
 msgstr "Voorbereiden…"
 
-#: ../plugins/nautilus/seahorse-tool-files.c:821
-#: ../plugins/nautilus/seahorse-tool-files.c:844
+#: ../plugins/nautilus/seahorse-tool-files.c:820
+#: ../plugins/nautilus/seahorse-tool-files.c:843
 msgid "Couldn't list files"
 msgstr "Kan bestandslijst niet opvragen"
 
-#: ../src/main.c:75 ../src/seahorse-key-manager.c:869
+#: ../src/main.c:61
+#: ../src/seahorse-key-manager.c:861
 msgid "Encryption Key Manager"
 msgstr "Cryptografische sleutels beheren"
 
@@ -1929,7 +1793,8 @@ msgstr "Kon subsleutel niet toevoegen"
 msgid "Add subkey to %s"
 msgstr "Subsleutel aan %s toevoegen"
 
-#: ../src/seahorse-add-subkey.c:171 ../src/seahorse-pgp-generate.c:44
+#: ../src/seahorse-add-subkey.c:171
+#: ../src/seahorse-pgp-generate.c:44
 msgid "DSA (sign only)"
 msgstr "DSA (alleen ondertekenen)"
 
@@ -1937,7 +1802,8 @@ msgstr "DSA (alleen ondertekenen)"
 msgid "ElGamal (encrypt only)"
 msgstr "ElGamal (alleen versleutelen)"
 
-#: ../src/seahorse-add-subkey.c:185 ../src/seahorse-pgp-generate.c:45
+#: ../src/seahorse-add-subkey.c:185
+#: ../src/seahorse-pgp-generate.c:45
 msgid "RSA (sign only)"
 msgstr "RSA (alleen ondertekenen)"
 
@@ -1990,7 +1856,8 @@ msgstr "Gebruiker-id toevoegen"
 msgid "Create the new user ID"
 msgstr "Nieuwe gebruiker-id aanmaken"
 
-#: ../src/seahorse-add-uid.glade.h:3 ../src/seahorse-pgp-generate.glade.h:8
+#: ../src/seahorse-add-uid.glade.h:3
+#: ../src/seahorse-pgp-generate.glade.h:8
 msgid "Full _Name:"
 msgstr "Volledige _Naam:"
 
@@ -2011,7 +1878,8 @@ msgstr "Optioneel commentaar als beschrijving van sleutel"
 msgid "Optional email address"
 msgstr "Optioneel e-mailadres"
 
-#: ../src/seahorse-add-uid.glade.h:8 ../src/seahorse-pgp-generate.glade.h:14
+#: ../src/seahorse-add-uid.glade.h:8
+#: ../src/seahorse-pgp-generate.glade.h:14
 msgid "_Email Address:"
 msgstr "_E-mailadres:"
 
@@ -2033,12 +1901,8 @@ msgstr "Nieuwe _wachtwoordzin:"
 
 #: ../src/seahorse-delete.c:40
 #, c-format
-msgid ""
-"%s is a private key. Make sure you have a backup. Do you still want to "
-"delete it?"
-msgstr ""
-"%s is een privésleutel! Zorg voor een backup! Moet deze sleutel echt "
-"verwijderd worden?"
+msgid "%s is a private key. Make sure you have a backup. Do you still want to delete it?"
+msgstr "%s is een privésleutel! Zorg voor een backup! Moet deze sleutel echt verwijderd worden?"
 
 #: ../src/seahorse-delete.c:74
 #, c-format
@@ -2078,7 +1942,8 @@ msgstr "Kon gebruiker-id niet verwijderen"
 msgid "Manage your passwords and encryption keys"
 msgstr "Uw cryptografische sleutels en wachtwoorden beheren"
 
-#: ../src/seahorse.desktop.in.in.h:2 ../src/seahorse-key-manager.glade.h:7
+#: ../src/seahorse.desktop.in.in.h:2
+#: ../src/seahorse-key-manager.glade.h:7
 msgid "Passwords and Encryption Keys"
 msgstr "Wachtwoorden en sleutels"
 
@@ -2101,12 +1966,13 @@ msgid "C_hange"
 msgstr "_Wijzigen"
 
 #: ../src/seahorse-expires.glade.h:2
-msgid "Never Expires"
-msgstr "Verloopt nooit"
-
-#: ../src/seahorse-expires.glade.h:3 ../src/seahorse-revoke.glade.h:4
+#: ../src/seahorse-revoke.glade.h:4
 msgid "Revoke key"
 msgstr "Sleutel intrekken"
+
+#: ../src/seahorse-expires.glade.h:3
+msgid "_Never expires"
+msgstr "Verloopt _nooit"
 
 #: ../src/seahorse-generate-select.c:143
 msgid "Used to encrypt email and files"
@@ -2129,219 +1995,238 @@ msgstr "D_oorgaan"
 msgid "Create a New Key"
 msgstr "Nieuwe sleutel aanmaken"
 
-#: ../src/seahorse-gkeyring-item.c:248
+#: ../src/seahorse-gkeyring-item.c:249
 msgid "Web Password"
 msgstr "Webwachtwoord"
 
-#: ../src/seahorse-gkeyring-item.c:250
+#: ../src/seahorse-gkeyring-item.c:251
 msgid "Network Password"
 msgstr "Netwerkwachtwoord"
 
-#: ../src/seahorse-gkeyring-item.c:252
-#: ../src/seahorse-gkeyring-item-properties.c:116
-#: ../src/seahorse-gkeyring-source.c:525
+#: ../src/seahorse-gkeyring-item.c:253
+#: ../src/seahorse-gkeyring-item-properties.c:119
+#: ../src/seahorse-gkeyring-source.c:546
 msgid "Password"
 msgstr "Wachtwoord"
 
-#: ../src/seahorse-gkeyring-item-properties.c:90
+#: ../src/seahorse-gkeyring-item-properties.c:93
 msgid "Access a network share or resource"
 msgstr "Gedeelde map of andere netwerkdata benaderen"
 
-#: ../src/seahorse-gkeyring-item-properties.c:94
+#: ../src/seahorse-gkeyring-item-properties.c:97
 msgid "Access a website"
 msgstr "Website openen"
 
-#: ../src/seahorse-gkeyring-item-properties.c:98
+#: ../src/seahorse-gkeyring-item-properties.c:101
 msgid "Unlocks a PGP key"
 msgstr "PGP-sleutel ontgrendelen"
 
-#: ../src/seahorse-gkeyring-item-properties.c:101
+#: ../src/seahorse-gkeyring-item-properties.c:104
 msgid "Unlocks a Secure Shell key"
 msgstr "SSH-sleutel ontgrendelen"
 
-#: ../src/seahorse-gkeyring-item-properties.c:104
+#: ../src/seahorse-gkeyring-item-properties.c:107
 msgid "Saved password or login"
 msgstr "Opgeslagen wachtwoord of aanmelding"
 
-#: ../src/seahorse-gkeyring-item-properties.c:116
+#: ../src/seahorse-gkeyring-item-properties.c:119
 msgid "Network Credentials"
 msgstr "Netwerkaanmeldgegevens"
 
-#: ../src/seahorse-gkeyring-item-properties.c:177
+#: ../src/seahorse-gkeyring-item-properties.c:180
 msgid "Couldn't change password."
 msgstr "Kan wachtwoord niet wijzigen"
 
-#: ../src/seahorse-gkeyring-item-properties.c:284
+#: ../src/seahorse-gkeyring-item-properties.c:287
 msgid "Couldn't set description."
 msgstr "Kan omschrijving niet instellen."
 
+#: ../src/seahorse-gkeyring-item-properties.c:496
+msgid "Couldn't set application access."
+msgstr "Kan toepassingstoegang niet instellen."
+
 #: ../src/seahorse-gkeyring-item-properties.glade.h:1
-msgid "<b>Description:</b>"
-msgstr "<b>Omschrijving:</b>"
-
-#: ../src/seahorse-gkeyring-item-properties.glade.h:2
-msgid "<b>Login:</b>"
-msgstr "<b>Gebruikersnaam:</b>"
-
-#: ../src/seahorse-gkeyring-item-properties.glade.h:3
 msgid "<b>Password:</b>"
 msgstr "<b>Wachtwoord:</b>"
 
-#: ../src/seahorse-gkeyring-item-properties.glade.h:4
-msgid "<b>Server:</b>"
-msgstr "<b>Server:</b>"
+#: ../src/seahorse-gkeyring-item-properties.glade.h:2
+msgid "<b>Path:</b>"
+msgstr "<b>Pad:</b>"
 
-#: ../src/seahorse-gkeyring-item-properties.glade.h:5
+#: ../src/seahorse-gkeyring-item-properties.glade.h:3
+msgid "<b>Permissions:</b>"
+msgstr "<b>Permissies:</b>"
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:4
 #: ../src/seahorse-pgp-public-key-properties.glade.h:9
 #: ../src/seahorse-ssh-key-properties.glade.h:9
 msgid "<b>Technical Details:</b>"
 msgstr "<b>Technische details:</b>"
 
+#: ../src/seahorse-gkeyring-item-properties.glade.h:5
+msgid "Applications"
+msgstr "Toepassingen"
+
 #: ../src/seahorse-gkeyring-item-properties.glade.h:6
-#: ../src/seahorse-pgp-private-key-properties.glade.h:13
-#: ../src/seahorse-pgp-public-key-properties.glade.h:12
-#: ../src/seahorse-ssh-key-properties.glade.h:11
-msgid "<b>Type:</b>"
-msgstr "<b>Type:</b>"
-
-#: ../src/seahorse-gkeyring-item-properties.glade.h:7
-#: ../src/seahorse-pgp-private-key-properties.glade.h:14
-#: ../src/seahorse-pgp-public-key-properties.glade.h:13
-#: ../src/seahorse-ssh-key-properties.glade.h:12
-msgid "<b>Use:</b>"
-msgstr "<b>Gebruik:</b>"
-
-#: ../src/seahorse-gkeyring-item-properties.glade.h:8
 #: ../src/seahorse-pgp-private-key-properties.glade.h:22
 #: ../src/seahorse-pgp-public-key-properties.glade.h:19
 #: ../src/seahorse-ssh-key-properties.glade.h:16
 msgid "Details"
 msgstr "Details"
 
-#: ../src/seahorse-gkeyring-item-properties.glade.h:9
+#: ../src/seahorse-gkeyring-item-properties.glade.h:7
 #: ../src/seahorse-ssh-key-properties.glade.h:18
 msgid "Key"
 msgstr "Sleutel"
 
-#: ../src/seahorse-gkeyring-item-properties.glade.h:10
+#: ../src/seahorse-gkeyring-item-properties.glade.h:8
 #: ../src/seahorse-pgp-private-key-properties.glade.h:29
 #: ../src/seahorse-pgp-public-key-properties.glade.h:28
 #: ../src/seahorse-ssh-key-properties.glade.h:19
 msgid "Key Properties"
 msgstr "Sleutel-eigenschappen"
 
+#: ../src/seahorse-gkeyring-item-properties.glade.h:9
+msgid "Login:"
+msgstr "_Aanmeldnaam:"
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:10
+msgid "Server:"
+msgstr "Server:"
+
 #: ../src/seahorse-gkeyring-item-properties.glade.h:11
 msgid "Show pass_word"
 msgstr "_Wachtwoord tonen"
 
 #: ../src/seahorse-gkeyring-item-properties.glade.h:12
-msgid "[details]\n"
-msgstr "[details]\n"
+#: ../src/seahorse-pgp-private-key-properties.glade.h:41
+#: ../src/seahorse-pgp-public-key-properties.glade.h:35
+msgid "Type:"
+msgstr "Type:"
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:13
+msgid "Use:"
+msgstr "Gebruik:"
 
 #: ../src/seahorse-gkeyring-item-properties.glade.h:14
-msgid "[login]"
-msgstr "[gebruikersnaam]"
+msgid "_Delete"
+msgstr "Verwij_deren"
 
 #: ../src/seahorse-gkeyring-item-properties.glade.h:15
-msgid "[server]"
-msgstr "[server]"
+#: ../src/seahorse-revoke.glade.h:5
+msgid "_Description:"
+msgstr "_Beschrijving:"
 
-#: ../src/seahorse-gkeyring-operation.c:206
+#: ../src/seahorse-gkeyring-item-properties.glade.h:16
+msgid "_Read"
+msgstr "_Lezen"
+
+#: ../src/seahorse-gkeyring-item-properties.glade.h:17
+msgid "_Write"
+msgstr "Sch_rijven"
+
+#: ../src/seahorse-gkeyring-operation.c:204
 msgid "Access to the key ring was denied"
 msgstr "Toegang tot sleutelbos geweigerd"
 
-#: ../src/seahorse-gkeyring-operation.c:209
+#: ../src/seahorse-gkeyring-operation.c:207
 msgid "The gnome-keyring daemon is not running"
 msgstr "De Gnome sleutelbos-voorziening is niet actief"
 
-#: ../src/seahorse-gkeyring-operation.c:212
+#: ../src/seahorse-gkeyring-operation.c:210
 msgid "The key ring has already been unlocked"
 msgstr "Sleutelbos is reeds geopend"
 
-#: ../src/seahorse-gkeyring-operation.c:215
+#: ../src/seahorse-gkeyring-operation.c:213
 msgid "No such key ring exists"
 msgstr "Deze sleutelbos bestaat niet"
 
-#: ../src/seahorse-gkeyring-operation.c:218
+#: ../src/seahorse-gkeyring-operation.c:216
 msgid "Couldn't communicate with key ring daemon"
 msgstr "Kan niet met de sleutelbos-voorziening communiceren"
 
-#: ../src/seahorse-gkeyring-operation.c:221
+#: ../src/seahorse-gkeyring-operation.c:219
 msgid "The item already exists"
 msgstr "Dit item bestaat al"
 
-#: ../src/seahorse-gkeyring-operation.c:227
+#: ../src/seahorse-gkeyring-operation.c:225
 msgid "Internal error accessing gnome-keyring"
 msgstr "Interne fout bij openen van de Gnome sleutelbos"
 
-#: ../src/seahorse-gkeyring-operation.c:286
+#: ../src/seahorse-gkeyring-operation.c:282
+#: ../src/seahorse-gkeyring-operation.c:314
 msgid "Saving item..."
 msgstr "Item opslaan…"
 
-#: ../src/seahorse-gkeyring-source.c:358
+#: ../src/seahorse-gkeyring-source.c:403
 msgid "Retrieving key"
 msgstr "Sleutel ophalen"
 
 #. Start listing of ids
-#: ../src/seahorse-gkeyring-source.c:372
+#: ../src/seahorse-gkeyring-source.c:417
 msgid "Listing passwords"
 msgstr "Wachtwoordlijst opbouwen"
 
-#: ../src/seahorse-key-manager.c:443
+#: ../src/seahorse-key-manager.c:435
 msgid "Couldn't read file"
 msgstr "Kan bestand niet lezen"
 
-#: ../src/seahorse-key-manager.c:486
+#: ../src/seahorse-key-manager.c:478
 msgid "Unrecognized key type, or invalid data format"
 msgstr "Onbekend sleuteltype of ongeldige dataopmaak"
 
-#: ../src/seahorse-key-manager.c:560 ../src/seahorse-keyserver-results.c:218
+#: ../src/seahorse-key-manager.c:552
+#: ../src/seahorse-keyserver-results.c:218
 msgid "Couldn't retrieve data from key server"
 msgstr "Kon gegevens niet van sleutelserver halen"
 
-#: ../src/seahorse-key-manager.c:576 ../src/seahorse-keyserver-results.c:234
+#: ../src/seahorse-key-manager.c:568
+#: ../src/seahorse-keyserver-results.c:234
 #, c-format
 msgid "Copied %d key"
 msgid_plural "Copied %d keys"
 msgstr[0] "%d sleutel gekopieerd"
 msgstr[1] "%d sleutels gekopieerd:"
 
-#: ../src/seahorse-key-manager.c:600 ../src/seahorse-keyserver-results.c:194
+#: ../src/seahorse-key-manager.c:592
+#: ../src/seahorse-keyserver-results.c:194
 #: ../src/seahorse-keyserver-results.c:259
 msgid "Retrieving keys"
 msgstr "Sleutels ophalen…"
 
-#: ../src/seahorse-key-manager.c:626
+#: ../src/seahorse-key-manager.c:618
 msgid "Couldn't export key"
 msgstr "Kon sleutel(s) niet exporteren"
 
-#: ../src/seahorse-key-manager.c:646
+#: ../src/seahorse-key-manager.c:638
 msgid "Export public key"
 msgstr "Publieke sleutel exporteren"
 
-#: ../src/seahorse-key-manager.c:656 ../src/seahorse-key-properties.c:1038
+#: ../src/seahorse-key-manager.c:648
+#: ../src/seahorse-key-properties.c:1038
 #: ../src/seahorse-ssh-key-properties.c:240
 #, c-format
 msgid "Couldn't export key to \"%s\""
 msgstr "Kon sleutel niet exporteren naar ‘%s’"
 
-#: ../src/seahorse-key-manager.c:668
+#: ../src/seahorse-key-manager.c:660
 msgid "Exporting keys"
 msgstr "Sleutels exporteren"
 
-#: ../src/seahorse-key-manager.c:687
+#: ../src/seahorse-key-manager.c:679
 msgid "Back up Key Rings to Archive"
 msgstr "Backup van sleutelbos naar archief maken"
 
-#: ../src/seahorse-key-manager.c:841
+#: ../src/seahorse-key-manager.c:833
 msgid "Contributions:"
 msgstr "Bijdragen:"
 
-#: ../src/seahorse-key-manager.c:867
+#: ../src/seahorse-key-manager.c:859
 msgid "seahorse"
 msgstr "seahorse"
 
-#: ../src/seahorse-key-manager.c:950 ../src/seahorse-keyserver-results.c:300
+#: ../src/seahorse-key-manager.c:942
+#: ../src/seahorse-keyserver-results.c:300
 #, c-format
 msgid "Selected %d key"
 msgid_plural "Selected %d keys"
@@ -2349,180 +2234,184 @@ msgstr[0] "%d sleutel geselecteerd"
 msgstr[1] "%d sleutels geselecteerd"
 
 #. Top menu items
-#: ../src/seahorse-key-manager.c:1189 ../src/seahorse-keyserver-results.c:379
+#: ../src/seahorse-key-manager.c:1170
+#: ../src/seahorse-keyserver-results.c:379
 msgid "_Key"
 msgstr "_Sleutel"
 
-#: ../src/seahorse-key-manager.c:1190 ../src/seahorse-keyserver-results.c:380
+#: ../src/seahorse-key-manager.c:1171
+#: ../src/seahorse-keyserver-results.c:380
 msgid "_Edit"
 msgstr "Be_werken"
 
-#: ../src/seahorse-key-manager.c:1191
+#: ../src/seahorse-key-manager.c:1172
 msgid "_View"
 msgstr "Beel_d"
 
 #. Key Actions
-#: ../src/seahorse-key-manager.c:1195
+#: ../src/seahorse-key-manager.c:1176
 msgid "_Create New Key..."
 msgstr "Nieuwe sleutel maken…"
 
-#: ../src/seahorse-key-manager.c:1196
+#: ../src/seahorse-key-manager.c:1177
 msgid "Create a new personal key"
 msgstr "Nieuwe persoonlijke sleutel maken…"
 
-#: ../src/seahorse-key-manager.c:1197
+#: ../src/seahorse-key-manager.c:1178
 msgid "_Import..."
 msgstr "_Importeren…"
 
-#: ../src/seahorse-key-manager.c:1198
+#: ../src/seahorse-key-manager.c:1179
 msgid "Import keys into your key ring from a file"
 msgstr "Bestaande sleutels in sleutelbos importeren van een bestand"
 
-#: ../src/seahorse-key-manager.c:1199
+#: ../src/seahorse-key-manager.c:1180
 msgid "_Back up Key Rings..."
 msgstr "_Backup maken van sleutelbos…"
 
-#: ../src/seahorse-key-manager.c:1200
+#: ../src/seahorse-key-manager.c:1181
 msgid "Back up all keys"
 msgstr "Backup maken van alle sleutels"
 
-#: ../src/seahorse-key-manager.c:1201
+#: ../src/seahorse-key-manager.c:1182
 msgid "Paste _Keys"
 msgstr "Sleutels kpla_ken"
 
-#: ../src/seahorse-key-manager.c:1202
+#: ../src/seahorse-key-manager.c:1183
 msgid "Import keys from the clipboard"
 msgstr "Sleutels van klembord importeren"
 
-#: ../src/seahorse-key-manager.c:1204
+#: ../src/seahorse-key-manager.c:1185
 msgid "_Quit"
 msgstr "A_fsluiten"
 
-#: ../src/seahorse-key-manager.c:1205
+#: ../src/seahorse-key-manager.c:1186
 msgid "Close this program"
 msgstr "Deze toepassing afsluiten"
 
-#: ../src/seahorse-key-manager.c:1206
+#: ../src/seahorse-key-manager.c:1187
 msgid "Prefere_nces"
 msgstr "_Voorkeuren"
 
-#: ../src/seahorse-key-manager.c:1207
+#: ../src/seahorse-key-manager.c:1188
 msgid "Change preferences for this program"
 msgstr "Voorkeuren voor deze toepassing wijzigen"
 
-#: ../src/seahorse-key-manager.c:1209
+#: ../src/seahorse-key-manager.c:1190
 msgid "About this program"
 msgstr "Info over deze toepassing…"
 
-#: ../src/seahorse-key-manager.c:1211
+#: ../src/seahorse-key-manager.c:1192
 msgid "_Remote"
 msgstr "_Remote"
 
-#: ../src/seahorse-key-manager.c:1213 ../src/seahorse-keyserver-results.c:385
+#: ../src/seahorse-key-manager.c:1194
+#: ../src/seahorse-keyserver-results.c:385
 msgid "_Contents"
 msgstr "_Inhoud"
 
-#: ../src/seahorse-key-manager.c:1214 ../src/seahorse-keyserver-results.c:386
+#: ../src/seahorse-key-manager.c:1195
+#: ../src/seahorse-keyserver-results.c:386
 msgid "Show Seahorse help"
 msgstr "Hulpdocument tonen"
 
-#: ../src/seahorse-key-manager.c:1218
+#: ../src/seahorse-key-manager.c:1199
 msgid "T_ypes"
 msgstr "T_ypes"
 
-#: ../src/seahorse-key-manager.c:1219
+#: ../src/seahorse-key-manager.c:1200
 msgid "Show type column"
 msgstr "Type-kolom tonen in de sleutelbeheerder"
 
-#: ../src/seahorse-key-manager.c:1220
+#: ../src/seahorse-key-manager.c:1201
 msgid "_Expiry"
 msgstr "_Verloopdatum"
 
-#: ../src/seahorse-key-manager.c:1221
+#: ../src/seahorse-key-manager.c:1202
 msgid "Show expiry column"
 msgstr "Verloopdatum-kolom tonen"
 
-#: ../src/seahorse-key-manager.c:1222
+#: ../src/seahorse-key-manager.c:1203
 msgid "_Trust"
 msgstr "_Vertrouwen"
 
-#: ../src/seahorse-key-manager.c:1223
+#: ../src/seahorse-key-manager.c:1204
 msgid "Show owner trust column"
 msgstr "Vertrouwen-kolom tonen"
 
-#: ../src/seahorse-key-manager.c:1224
+#: ../src/seahorse-key-manager.c:1205
 msgid "_Validity"
 msgstr "_Geldigheid"
 
-#: ../src/seahorse-key-manager.c:1225
+#: ../src/seahorse-key-manager.c:1206
 msgid "Show validity column"
 msgstr "Geldigheid-kolom tonen"
 
-#: ../src/seahorse-key-manager.c:1229 ../src/seahorse-keyserver-results.c:397
+#: ../src/seahorse-key-manager.c:1210
+#: ../src/seahorse-keyserver-results.c:397
 msgid "P_roperties"
 msgstr "_Eigenschappen"
 
-#: ../src/seahorse-key-manager.c:1230 ../src/seahorse-keyserver-results.c:398
+#: ../src/seahorse-key-manager.c:1211
+#: ../src/seahorse-keyserver-results.c:398
 msgid "Show key properties"
 msgstr "Sleuteleigenschappen tonen"
 
-#: ../src/seahorse-key-manager.c:1231
+#: ../src/seahorse-key-manager.c:1212
 msgid "E_xport Public Key..."
 msgstr "Publieke sleutel e_xporteren…"
 
-#: ../src/seahorse-key-manager.c:1232
+#: ../src/seahorse-key-manager.c:1213
 msgid "Export public part of key to a file"
 msgstr "Publiek gedeelte van sleutel naar bestand exporteren"
 
-#: ../src/seahorse-key-manager.c:1233
+#: ../src/seahorse-key-manager.c:1214
 msgid "_Copy Public Key"
 msgstr "Publieke sleutel _kopiëren"
 
-#: ../src/seahorse-key-manager.c:1234
+#: ../src/seahorse-key-manager.c:1215
 msgid "Copy public part of selected keys to the clipboard"
 msgstr "Publiek gedeelte van geselecteerde sleutels naar het klembord kopiëren"
 
-#: ../src/seahorse-key-manager.c:1235
+#: ../src/seahorse-key-manager.c:1216
 msgid "_Delete Key"
 msgstr "Sleutel _verwijderen"
 
-#: ../src/seahorse-key-manager.c:1236
+#: ../src/seahorse-key-manager.c:1217
 msgid "Delete selected keys"
 msgstr "Geselecteerde sleutels verwijderen"
 
-#: ../src/seahorse-key-manager.c:1240
+#: ../src/seahorse-key-manager.c:1221
 msgid "_Sign..."
 msgstr "_Ondertekenen…"
 
-#: ../src/seahorse-key-manager.c:1241
+#: ../src/seahorse-key-manager.c:1222
 msgid "Sign public key"
 msgstr "Publieke sleutel ondertekenen"
 
-#: ../src/seahorse-key-manager.c:1245
+#: ../src/seahorse-key-manager.c:1226
 msgid "Set Up Computer for _Secure Shell..."
 msgstr "Computer klaarmaken voor _SSH…"
 
-#: ../src/seahorse-key-manager.c:1246
-msgid ""
-"Send public Secure Shell key to another machine, and enable logins using "
-"that key."
-msgstr ""
-"Openbare SSH-sleutel naar een andere machine sturen zodat u zich daar later "
-"zonder wachtwoord kunt aanmelden."
+#: ../src/seahorse-key-manager.c:1227
+msgid "Send public Secure Shell key to another machine, and enable logins using that key."
+msgstr "Openbare SSH-sleutel naar een andere machine sturen zodat u zich daar later zonder wachtwoord kunt aanmelden."
 
-#: ../src/seahorse-key-manager.c:1250 ../src/seahorse-keyserver-results.c:406
+#: ../src/seahorse-key-manager.c:1231
+#: ../src/seahorse-keyserver-results.c:406
 msgid "_Find Remote Keys..."
 msgstr "Sleutels op afstand _zoeken…"
 
-#: ../src/seahorse-key-manager.c:1251 ../src/seahorse-keyserver-results.c:407
+#: ../src/seahorse-key-manager.c:1232
+#: ../src/seahorse-keyserver-results.c:407
 msgid "Search for keys on a key server"
 msgstr "Zoeken naar sleutels op een sleutelserver"
 
-#: ../src/seahorse-key-manager.c:1252
+#: ../src/seahorse-key-manager.c:1233
 msgid "_Sync and Publish Keys..."
 msgstr "_Sleutels synchroniseren en publiceren…"
 
-#: ../src/seahorse-key-manager.c:1253
+#: ../src/seahorse-key-manager.c:1234
 msgid "Publish and/or synchronize your keys with those online."
 msgstr "Sleutels delen en synchroniseren met on-line sleutels"
 
@@ -2569,41 +2458,41 @@ msgstr "_Wachtwoorden"
 msgid "_Trusted Keys"
 msgstr "_Vertrouwde sleutels:"
 
-#: ../src/seahorse-key-manager-store.c:311
+#: ../src/seahorse-key-manager-store.c:301
 #: ../src/seahorse-key-properties.c:1306
 msgid "Expired"
 msgstr "Verlopen"
 
-#: ../src/seahorse-key-manager-store.c:364
+#: ../src/seahorse-key-manager-store.c:354
 msgid "User ID"
 msgstr "Gebruiker-id"
 
-#: ../src/seahorse-key-manager-store.c:697
+#: ../src/seahorse-key-manager-store.c:687
 msgid "Couldn't retrieve key data"
 msgstr "Kon sleutelgegevens niet ophalen"
 
-#: ../src/seahorse-key-manager-store.c:729
+#: ../src/seahorse-key-manager-store.c:718
 msgid "Couldn't write key to file"
 msgstr "Kon sleutel niet naar bestand schrijven"
 
-#: ../src/seahorse-key-manager-store.c:972
+#: ../src/seahorse-key-manager-store.c:961
 msgid "Validity"
 msgstr "Geldigheid"
 
 #. Trust column
-#: ../src/seahorse-key-manager-store.c:979
+#: ../src/seahorse-key-manager-store.c:968
 #: ../src/seahorse-pgp-public-key-properties.glade.h:34
 msgid "Trust"
 msgstr "Vertrouwen"
 
 #. The key type column
-#: ../src/seahorse-key-manager-store.c:985
+#: ../src/seahorse-key-manager-store.c:974
 #: ../src/seahorse-key-properties.c:1284
 msgid "Type"
 msgstr "Type"
 
 #. Expiry date column
-#: ../src/seahorse-key-manager-store.c:991
+#: ../src/seahorse-key-manager-store.c:980
 msgid "Expiration Date"
 msgstr "Verloopdatum"
 
@@ -2611,11 +2500,13 @@ msgstr "Verloopdatum"
 msgid "Couldn't change primary user ID"
 msgstr "Kon primaire gebruiker-id niet wijzigen"
 
-#: ../src/seahorse-key-properties.c:304 ../src/seahorse-key-properties.c:1436
+#: ../src/seahorse-key-properties.c:304
+#: ../src/seahorse-key-properties.c:1436
 msgid "[Unknown]"
 msgstr "[Onbekend]"
 
-#: ../src/seahorse-key-properties.c:402 ../src/seahorse-key-properties.c:1722
+#: ../src/seahorse-key-properties.c:402
+#: ../src/seahorse-key-properties.c:1722
 msgid "Name/Email"
 msgstr "Naam/E-mail"
 
@@ -2636,7 +2527,8 @@ msgstr "(onbekend)"
 msgid "This key expired on: %s"
 msgstr "Deze sleutel is verlopen op %s"
 
-#: ../src/seahorse-key-properties.c:992 ../src/seahorse-key-properties.c:1386
+#: ../src/seahorse-key-properties.c:992
+#: ../src/seahorse-key-properties.c:1386
 #: ../src/seahorse-key-properties.c:1405
 msgid "Unable to change trust"
 msgstr "Kon vertrouwen niet aanpassen"
@@ -2666,7 +2558,8 @@ msgstr "Status"
 msgid "Strength"
 msgstr "Sterkte"
 
-#: ../src/seahorse-key-properties.c:1305 ../src/seahorse-key-properties.c:1306
+#: ../src/seahorse-key-properties.c:1305
+#: ../src/seahorse-key-properties.c:1306
 msgid "Good"
 msgstr "Goed"
 
@@ -2762,12 +2655,8 @@ msgid "Find Remote Keys"
 msgstr "Sleutels op afstand zoeken"
 
 #: ../src/seahorse-keyserver-search.glade.h:4
-msgid ""
-"This will find keys for others on the Internet. These keys can then be "
-"imported into your local key ring."
-msgstr ""
-"U kunt sleutels van anderen zoeken op internet. Deze sleutels kunnen "
-"vervolgens worden geïmporteerd in uw locale sleutelbos."
+msgid "This will find keys for others on the Internet. These keys can then be imported into your local key ring."
+msgstr "U kunt sleutels van anderen zoeken op internet. Deze sleutels kunnen vervolgens worden geïmporteerd in uw locale sleutelbos."
 
 #: ../src/seahorse-keyserver-search.glade.h:5
 msgid "Where to search:"
@@ -2816,24 +2705,12 @@ msgid "Sync Keys"
 msgstr "Sleutels synchroniseren"
 
 #: ../src/seahorse-keyserver-sync.glade.h:3
-msgid ""
-"This will publish the keys in your key ring so they're available for others "
-"to use. You'll also get any changes others have made since you received "
-"their keys."
-msgstr ""
-"Hiermee kunt u de sleutels in de sleutelbos publiceren en voor anderen "
-"beschikbaar maken. Daarnaast worden anderen gemaakte wijzigingen aan "
-"sleutels doorgevoerd."
+msgid "This will publish the keys in your key ring so they're available for others to use. You'll also get any changes others have made since you received their keys."
+msgstr "Hiermee kunt u de sleutels in de sleutelbos publiceren en voor anderen beschikbaar maken. Daarnaast worden anderen gemaakte wijzigingen aan sleutels doorgevoerd."
 
 #: ../src/seahorse-keyserver-sync.glade.h:4
-msgid ""
-"This will retrieve any changes others have made since you received their "
-"keys. No key server has been chosen for publishing, so your keys will not be "
-"made available to others."
-msgstr ""
-"Hiermee kunt u alle door anderen gemaakte wijzigingen ophalen. Er is geen "
-"sleutelserver voor het publiceren van sleutels ingesteld, dus uw sleutels "
-"zullen niet voor anderen beschikbaar gemaakt worden."
+msgid "This will retrieve any changes others have made since you received their keys. No key server has been chosen for publishing, so your keys will not be made available to others."
+msgstr "Hiermee kunt u alle door anderen gemaakte wijzigingen ophalen. Er is geen sleutelserver voor het publiceren van sleutels ingesteld, dus uw sleutels zullen niet voor anderen beschikbaar gemaakt worden."
 
 #: ../src/seahorse-keyserver-sync.glade.h:5
 msgid "_Key Servers"
@@ -2848,12 +2725,8 @@ msgid "<b>You have selected multiple files or folders</b>"
 msgstr "<b>U heeft meerdere bestanden of mappen geselecteerd</b>"
 
 #: ../src/seahorse-multi-encrypt.glade.h:2
-msgid ""
-"Because the files are located remotely, each file will be encrypted "
-"separately."
-msgstr ""
-"Omdat de bestanden zich op andere machine bevinden, zal elk bestand "
-"afzonderlijk worden versleuteld."
+msgid "Because the files are located remotely, each file will be encrypted separately."
+msgstr "Omdat de bestanden zich op andere machine bevinden, zal elk bestand afzonderlijk worden versleuteld."
 
 #: ../src/seahorse-multi-encrypt.glade.h:3
 msgid "Encrypt Multiple Files"
@@ -2894,19 +2767,19 @@ msgstr "DSA ElGamal"
 msgid "Couldn't generate PGP key"
 msgstr "Kon PGP-sleutel niet aanmaken"
 
-#: ../src/seahorse-pgp-generate.c:139
+#: ../src/seahorse-pgp-generate.c:138
 msgid "Passphrase for New PGP Key"
 msgstr "Wachtwoordzin voor nieuwe sleutel"
 
-#: ../src/seahorse-pgp-generate.c:140
+#: ../src/seahorse-pgp-generate.c:139
 msgid "Enter the passphrase for your new key twice."
 msgstr "Voer de wachtwoordzin voor de nieuwe sleutel tweemaal in."
 
-#: ../src/seahorse-pgp-generate.c:149
+#: ../src/seahorse-pgp-generate.c:148
 msgid "Couldn't generate key"
 msgstr "Kon sleutel niet genereren"
 
-#: ../src/seahorse-pgp-generate.c:151
+#: ../src/seahorse-pgp-generate.c:150
 msgid "Generating key"
 msgstr "Sleutel aanmaken…"
 
@@ -2917,9 +2790,7 @@ msgstr "<b>Ge_avanceerde sleutelopties</b>"
 
 #: ../src/seahorse-pgp-generate.glade.h:2
 msgid "A PGP key allows you to encrypt email or files to other people."
-msgstr ""
-"Met een PGP-sleutel kunt u anderen versleutelde berichten of bestanden "
-"sturen."
+msgstr "Met een PGP-sleutel kunt u anderen versleutelde berichten of bestanden sturen."
 
 # huh? (Wouter Bolsterlee)
 #: ../src/seahorse-pgp-generate.glade.h:3
@@ -3020,6 +2891,18 @@ msgstr "<b>Deze sleutel is ingetrokken</b>"
 msgid "<b>This key has expired</b>"
 msgstr "<b>Deze sleutel is verlopen</b>"
 
+#: ../src/seahorse-pgp-private-key-properties.glade.h:13
+#: ../src/seahorse-pgp-public-key-properties.glade.h:12
+#: ../src/seahorse-ssh-key-properties.glade.h:11
+msgid "<b>Type:</b>"
+msgstr "<b>Type:</b>"
+
+#: ../src/seahorse-pgp-private-key-properties.glade.h:14
+#: ../src/seahorse-pgp-public-key-properties.glade.h:13
+#: ../src/seahorse-ssh-key-properties.glade.h:12
+msgid "<b>Use:</b>"
+msgstr "<b>Gebruik:</b>"
+
 #: ../src/seahorse-pgp-private-key-properties.glade.h:15
 #: ../src/seahorse-pgp-public-key-properties.glade.h:17
 msgid "<b>_Subkeys</b>"
@@ -3114,13 +2997,7 @@ msgstr "Sterkte:"
 #: ../src/seahorse-pgp-private-key-properties.glade.h:40
 #: ../src/seahorse-pgp-public-key-properties.glade.h:32
 msgid "The owner of the key revoked the key. It can no longer be used."
-msgstr ""
-"De sleutel is door de eigeneaar ingetrokken en is daardoor onbruikbaar."
-
-#: ../src/seahorse-pgp-private-key-properties.glade.h:41
-#: ../src/seahorse-pgp-public-key-properties.glade.h:35
-msgid "Type:"
-msgstr "Type:"
+msgstr "De sleutel is door de eigeneaar ingetrokken en is daardoor onbruikbaar."
 
 #: ../src/seahorse-pgp-private-key-properties.glade.h:42
 msgid ""
@@ -3184,17 +3061,12 @@ msgid "I trust signatures from '%s' on other keys "
 msgstr "Ik vertrouw ondertekeningen van ‘%s’ op andere sleutels"
 
 #: ../src/seahorse-pgp-public-key-properties.glade.h:26
-msgid ""
-"If you no longer trust this person's identity, <i>revoke</i> your signature:"
-msgstr ""
-"Als u de identiteit van deze persoon in twijfel trekt, kunt u uw "
-"ondertekening <i>intrekken</i>:"
+msgid "If you no longer trust this person's identity, <i>revoke</i> your signature:"
+msgstr "Als u de identiteit van deze persoon in twijfel trekt, kunt u uw ondertekening <i>intrekken</i>:"
 
 #: ../src/seahorse-pgp-public-key-properties.glade.h:33
 msgid "To indicate your trust of this key to others, <i>sign</i> this key:"
-msgstr ""
-"Om aan te geven dat u deze sleutel vertrouwt kunt u deze sleutel "
-"<i>ondertekenen</i>:"
+msgstr "Om aan te geven dat u deze sleutel vertrouwt kunt u deze sleutel <i>ondertekenen</i>:"
 
 #: ../src/seahorse-pgp-public-key-properties.glade.h:36
 msgid ""
@@ -3216,8 +3088,7 @@ msgstr "Eigenaar _volledig vertrouwen"
 
 #: ../src/seahorse-pgp-public-key-properties.glade.h:42
 msgid "Your trust is manually specified on the <i>Details</i> tab."
-msgstr ""
-"Uw vertrouwen kan handmatig ingesteld worden in het tabblad <i>Details</i>."
+msgstr "Uw vertrouwen kan handmatig ingesteld worden in het tabblad <i>Details</i>."
 
 #: ../src/seahorse-pgp-public-key-properties.glade.h:43
 msgid "_Only display the signatures of people I trust"
@@ -3253,13 +3124,8 @@ msgid "_Resize"
 msgstr "Her_schalen"
 
 #: ../src/seahorse-photos.c:125
-#, c-format
-msgid ""
-"This is not a image file, or an unrecognized kind of image file. Try to use "
-"a JPEG image."
-msgstr ""
-"Dit bestand is geen ondersteund afbeeldingsbestand. Probeer een JPEG-foto te "
-"gebruiken."
+msgid "This is not a image file, or an unrecognized kind of image file. Try to use a JPEG image."
+msgstr "Dit bestand is geen ondersteund afbeeldingsbestand. Probeer een JPEG-foto te gebruiken."
 
 #: ../src/seahorse-photos.c:221
 msgid "All image files"
@@ -3273,7 +3139,8 @@ msgstr "JPEG-bestanden"
 msgid "Choose Photo to Add to Key"
 msgstr "Foto kiezen om aan sleutel toe te voegen"
 
-#: ../src/seahorse-photos.c:285 ../src/seahorse-photos.c:289
+#: ../src/seahorse-photos.c:285
+#: ../src/seahorse-photos.c:289
 msgid "Couldn't add photo"
 msgstr "Kon foto niet toevoegen"
 
@@ -3289,30 +3156,58 @@ msgstr "Weet u zeker dat u de foto van deze sleutel wilt verwijderen?"
 msgid "Couldn't delete photo"
 msgstr "Kon foto niet verwijderen"
 
-#: ../src/seahorse-revoke.c:54
+#: ../src/seahorse-revoke.c:72
 msgid "Couldn't revoke subkey"
 msgstr "Kon subsleutel niet herroepen"
 
-#: ../src/seahorse-revoke.c:77
+#: ../src/seahorse-revoke.c:99
 #, c-format
 msgid "Revoke Subkey %d of %s"
 msgstr "Subsleutel %d van %s herroepen"
 
-#: ../src/seahorse-revoke.c:79
+#: ../src/seahorse-revoke.c:101
 #, c-format
 msgid "Revoke %s"
 msgstr "%s herroepen"
 
-#: ../src/seahorse-revoke.c:107
-#, c-format
-msgid ""
-"You are about to add %s as a revoker for %s. This operation cannot be "
-"undone! Are you sure you want to continue?"
-msgstr ""
-"%s zal als (mogelijke) intrekker van %s toegevoegd worden. Dit kan niet "
-"ongedaan gemaakt worden. Weet u zeker dat u verder wilt gaan?"
+#: ../src/seahorse-revoke.c:112
+msgid "No reason"
+msgstr "Geen reden"
 
-#: ../src/seahorse-revoke.c:122
+#: ../src/seahorse-revoke.c:113
+msgid "No reason for revoking key"
+msgstr "Geen reden tot intrekken van sleutel"
+
+#: ../src/seahorse-revoke.c:119
+msgid "Compromised"
+msgstr "In gevaar gebracht"
+
+#: ../src/seahorse-revoke.c:120
+msgid "Key has been compromised"
+msgstr "De sleutel is in gevaar gebracht"
+
+#: ../src/seahorse-revoke.c:126
+msgid "Superseded"
+msgstr "Verouderd"
+
+#: ../src/seahorse-revoke.c:127
+msgid "Key has been superseded"
+msgstr "De sleutel is verouderd"
+
+#: ../src/seahorse-revoke.c:133
+msgid "Not Used"
+msgstr "Niet gebruikt"
+
+#: ../src/seahorse-revoke.c:134
+msgid "Key is no longer used"
+msgstr "Sleutel is niet langer in gebruik"
+
+#: ../src/seahorse-revoke.c:173
+#, c-format
+msgid "You are about to add %s as a revoker for %s. This operation cannot be undone! Are you sure you want to continue?"
+msgstr "%s zal als (mogelijke) intrekker van %s toegevoegd worden. Dit kan niet ongedaan gemaakt worden. Weet u zeker dat u verder wilt gaan?"
+
+#: ../src/seahorse-revoke.c:188
 msgid "Couldn't add revoker"
 msgstr "Kon intrekker niet toevoegen"
 
@@ -3328,10 +3223,6 @@ msgstr "Intre_kken"
 msgid "Reason for revoking the key"
 msgstr "Reden tot intrekken van sleutel"
 
-#: ../src/seahorse-revoke.glade.h:5
-msgid "_Description:"
-msgstr "_Beschrijving:"
-
 #: ../src/seahorse-revoke.glade.h:6
 msgid "_Reason:"
 msgstr "_Reden:"
@@ -3341,12 +3232,8 @@ msgid "Couldn't sign key"
 msgstr "Kon sleutel niet ondertekenen"
 
 #: ../src/seahorse-sign.c:160
-msgid ""
-"You have no personal PGP keys that can be used to indicate your trust of "
-"this key."
-msgstr ""
-"U heeft geen persoonlijke PGP-sleutels die gebruikt kunnen worden om uw "
-"vertrouwen in deze sleutel aan te geven."
+msgid "You have no personal PGP keys that can be used to indicate your trust of this key."
+msgstr "U heeft geen persoonlijke PGP-sleutels die gebruikt kunnen worden om uw vertrouwen in deze sleutel aan te geven."
 
 #: ../src/seahorse-sign.glade.h:1
 msgid "<b>How carefully have you checked this key?</b>"
@@ -3386,19 +3273,15 @@ msgstr ""
 
 #: ../src/seahorse-sign.glade.h:10
 msgid ""
-"<i>Very Carefully:</i> Select this only if you are absolutely sure that "
-"this\n"
+"<i>Very Carefully:</i> Select this only if you are absolutely sure that this\n"
 "key is genuine."
 msgstr ""
-"<i>Uiterst zorgvuldig:</i> Selecteer dit alleen indien u absoluut zeker bent "
-"dat deze\n"
+"<i>Uiterst zorgvuldig:</i> Selecteer dit alleen indien u absoluut zeker bent dat deze\n"
 "sleutel authentiek is."
 
 #: ../src/seahorse-sign.glade.h:12
 msgid "By signing you indicate your trust that this key belongs to:"
-msgstr ""
-"Door te ondertekenen geeft u uw vertrouwen aan dat deze sleutel toebehoort "
-"aan:"
+msgstr "Door te ondertekenen geeft u uw vertrouwen aan dat deze sleutel toebehoort aan:"
 
 #: ../src/seahorse-sign.glade.h:13
 msgid "I can _revoke this signature at a later date."
@@ -3411,11 +3294,8 @@ msgid ""
 "have also used email to check that the email address belongs to the\n"
 "owner."
 msgstr ""
-"U kunt een moeilijk te vervalsen identiteitsbewijs gebruiken (zoals een "
-"paspoort) om persoonlijk na te gaan dat de naam op deze sleutel correct "
-"is. \n"
-"U dient tevens via e-mail te controleren dat het e-mailadres daadwerkelijke "
-"toebehoort aan de eigenaar."
+"U kunt een moeilijk te vervalsen identiteitsbewijs gebruiken (zoals een paspoort) om persoonlijk na te gaan dat de naam op deze sleutel correct is. \n"
+"U dient tevens via e-mail te controleren dat het e-mailadres daadwerkelijke toebehoort aan de eigenaar."
 
 # losjes luchtig eenvoudig gemakkelijk, onzorgvuldig,oppervlakkig.
 #: ../src/seahorse-sign.glade.h:18
@@ -3451,9 +3331,7 @@ msgstr "SSH-sleutel aanmaken"
 msgid ""
 "<i>Use your email address, and any other reminder\n"
 " you need about what this key is for.</i>"
-msgstr ""
-"<i>Gebruik uw e-mailadres en een geheugensteuntje om te onthouden waar deze "
-"sleutel voor dient.</i>"
+msgstr "<i>Gebruik uw e-mailadres en een geheugensteuntje om te onthouden waar deze sleutel voor dient.</i>"
 
 #: ../src/seahorse-ssh-generate.glade.h:4
 msgid ""
@@ -3540,9 +3418,7 @@ msgstr "Volledige sleutel e_xporteren"
 
 #: ../src/seahorse-ssh-key-properties.glade.h:21
 msgid "The owner of this key is _authorized to connect to this computer"
-msgstr ""
-"De eigenaar van _deze sleutel heeft toestemming om te verbinden met deze "
-"computer"
+msgstr "De eigenaar van _deze sleutel heeft toestemming om te verbinden met deze computer"
 
 #: ../src/seahorse-ssh-key-properties.glade.h:22
 msgid "Used to connect to other computers."
@@ -3587,8 +3463,30 @@ msgstr "_Gebruikersnaam:"
 msgid "_Set Up"
 msgstr "In_stellen"
 
-#~ msgid "gtk-apply"
-#~ msgstr "gtk-apply"
+#~ msgid "couldn't read gpg configuration, will try to create"
+#~ msgstr "kon gpg-configuratie niet lezen, zal deze proberen aan te maken"
+#~ msgid "couldn't modify gpg configuration: %s"
+#~ msgstr "kon gpg-configuratie niet aanpassen: %s"
+#~ msgid ""
+#~ "Display variables instead of editing conf files (gpg.conf, SSH agent "
+#~ "socket)"
+#~ msgstr ""
+#~ "Variabelen weergeven in plaats van conf-bestanden bewerken (gpg.conf, ssh "
+#~ "agent socket)"
+#~ msgid "couldn't drop privileges properly"
+#~ msgstr "kon rechten niet op juist wijze verlagen"
+#~ msgid ""
+#~ "When set seahorse-agent will try to automatically load the users SSH keys "
+#~ "when needed. This is equivalent to using the ssh-add utility."
+#~ msgstr ""
+#~ "Indien ingeschakeld zal seahorse automatisch SSH-sleutels laden. Deze "
+#~ "service komt overeen met ssh-add."
+#~ msgid "Whether to automatically load SSH keys on demand."
+#~ msgstr "Geeft aan of SSH-sleutels automatisch geladen worden indien nodig."
+#~ msgid "Couldn't open the Session Properties"
+#~ msgstr "Kon de sessie-eigenschappen niet openen"
+#~ msgid "Couldn't start the 'seahorse-agent' program"
+#~ msgstr "Kon het programma ‘seahorse-agent’ niet starten"
+#~ msgid "The 'seahorse-agent' program exited unsuccessfully."
+#~ msgstr "Het programma ‘seahorse-agent’ eindigde met een foutcode."
 
-#~ msgid "gtk-clear"
-#~ msgstr "gtk-clear"
