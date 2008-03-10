@@ -72,11 +72,3 @@ service_DATA = $(service_in_files:.service.in=.service)
 # Rule to make the service file with bindir expanded
 $(service_DATA): $(service_in_files) Makefile
 	@sed -e "s|\@bindir\@|$(bindir)|" $< > $@
-
-if HAVE_USER_MLOCK
-# Don't make the daemon setuid
-else
-# Make the daemon setuid
-install-exec-hook:
-	chmod u+s $(DESTDIR)$(bindir)/seahorse-daemon
-endif

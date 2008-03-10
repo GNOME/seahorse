@@ -36,12 +36,3 @@ EXTRA_DIST = \
 
 CLEANFILES = \
 	*.gladep* *.bak
-
-if HAVE_USER_MLOCK
-# Don't make the agent setuid
-else
-# Make the agent setuid
-install-exec-hook:
-	chmod u+s $(DESTDIR)$(bindir)/seahorse-agent
-endif
-
