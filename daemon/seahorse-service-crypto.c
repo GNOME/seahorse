@@ -309,7 +309,8 @@ seahorse_service_crypto_decrypt_text (SeahorseServiceCrypto *crypto,
             if (!(flags & FLAG_QUIET))
                 seahorse_notify_signatures (NULL, status);
             if (status->signatures->summary & GPGME_SIGSUM_GREEN ||
-                status->signatures->summary & GPGME_SIGSUM_VALID) {
+                status->signatures->summary & GPGME_SIGSUM_VALID ||
+                status->signatures->summary & GPGME_SIGSUM_KEY_MISSING) {
                 keyid = seahorse_pgp_key_get_cannonical_id (status->signatures->fpr);
                 *signer = seahorse_context_keyid_to_dbus (SCTX_APP (), keyid, 0);
             }
@@ -371,7 +372,8 @@ seahorse_service_crypto_verify_text (SeahorseServiceCrypto *crypto,
             if (!(flags & FLAG_QUIET))
                 seahorse_notify_signatures (NULL, status);
             if (status->signatures->summary & GPGME_SIGSUM_GREEN ||
-                status->signatures->summary & GPGME_SIGSUM_VALID) {
+                status->signatures->summary & GPGME_SIGSUM_VALID ||
+                status->signatures->summary & GPGME_SIGSUM_KEY_MISSING) {
                 keyid = seahorse_pgp_key_get_cannonical_id (status->signatures->fpr);
                 *signer = seahorse_context_keyid_to_dbus (SCTX_APP (), keyid, 0);
             }
