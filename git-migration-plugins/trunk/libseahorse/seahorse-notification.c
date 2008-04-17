@@ -578,9 +578,7 @@ seahorse_notify_import (guint keynum, gchar **keys)
     else {
         body = g_strdup_printf(ngettext("Imported a key for", "Imported keys for", keynum));
         
-        keyptr = keys;
-        
-        for (keyptr; *keyptr; keyptr++) {
+        for (keyptr = keys; *keyptr; keyptr++) {
             t = g_strdup_printf ("%s\n<key id='%s' field=\"display-name\"/>", body, *keyptr);
             g_free (body);
             body = t;
@@ -608,8 +606,6 @@ seahorse_notify_signatures (const gchar* data, gpgme_verify_result_t status)
     const gchar *icon = NULL;
     gchar *title, *body;
     gboolean sig = FALSE;
-    GSList *rawids;
-    GList *keys;
     
     /* Figure out what to display */
     switch (gpgme_err_code (status->signatures->status))  {
