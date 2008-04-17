@@ -33,9 +33,6 @@ static gboolean show_cache = FALSE;
 #ifdef WITH_SHARING
 static gboolean show_sharing = FALSE;
 #endif
-#ifdef WITH_APPLET
-static gboolean show_applet = FALSE;
-#endif
 
 static const GOptionEntry options[] = {
 #ifdef WITH_AGENT    
