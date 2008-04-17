@@ -33,7 +33,7 @@
 #include <gnome.h>
 
 #include "config.h"
-#include "seahorse-context.h"
+#include "seahorse-operation.h"
 #include "seahorse-gtkstock.h"
 #include "seahorse-gconf.h"
 #include "seahorse-agent.h"
@@ -257,11 +257,6 @@ int main(int argc, char* argv[])
     /* Insert Icons into Stock */
     seahorse_gtkstock_init ();
     
-    /* Make the default SeahorseContext */
-    seahorse_context_new (SEAHORSE_CONTEXT_APP | SEAHORSE_CONTEXT_DAEMON, 0);
-    op = seahorse_context_load_local_keys (SCTX_APP ());
-    g_object_unref (op);
-    
     if (!seahorse_agent_init ())
         seahorse_agent_uninit ();
     
@@ -274,8 +269,6 @@ int main(int argc, char* argv[])
 
     /* And now clean them all up */
     seahorse_agent_uninit ();
-    
-    seahorse_context_destroy (SCTX_APP ());
 
     return 0;
 }

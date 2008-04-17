@@ -23,15 +23,11 @@
 #include <gnome.h>
 #include <locale.h>
 
-#include "seahorse-context.h"
 #include "seahorse-prefs.h"
 #include "seahorse-gtkstock.h"
 
 #ifdef WITH_AGENT
 static gboolean show_cache = FALSE;
-#endif
-#ifdef WITH_SHARING
-static gboolean show_sharing = FALSE;
 #endif
 #ifdef WITH_APPLET
 static gboolean show_applet = FALSE;
@@ -40,10 +36,6 @@ static gboolean show_applet = FALSE;
 static const GOptionEntry options[] = {
 #ifdef WITH_AGENT    
 	{ "cache", 'c', 0, G_OPTION_ARG_NONE, &show_cache,
-	    N_("For internal use"), NULL },
-#endif 
-#ifdef WITH_SHARING   
-	{ "sharing", 's', 0, G_OPTION_ARG_NONE, &show_sharing, 
 	    N_("For internal use"), NULL },
 #endif 
     { NULL }
@@ -59,7 +51,6 @@ int
 main (int argc, char **argv)
 {
     SeahorseWidget *swidget;
-    SeahorseOperation *op;
     GOptionContext *octx = NULL;
 
     bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
@@ -77,13 +68,6 @@ main (int argc, char **argv)
     /* Insert Icons into Stock */ 
     seahorse_gtkstock_init();
     
-    /* The default SeahorseContext */
-    seahorse_context_new (SEAHORSE_CONTEXT_APP, 0);
-    op = seahorse_context_load_local_keys (SCTX_APP ());
-    
-    /* Let operation take care of itself */
-    g_object_unref (op);
-   
     swidget = seahorse_prefs_new (NULL);
 	g_signal_connect (seahorse_widget_get_top (swidget), "destroy", 
                       G_CALLBACK (destroyed), NULL);
@@ -91,12 +75,6 @@ main (int argc, char **argv)
 #ifdef WITH_AGENT	
     if (show_cache) {
         GtkWidget *tab = glade_xml_get_widget (swidget->xml, "cache-tab");
-        seahorse_prefs_select_tab (swidget, tab);
-    }
-#endif
-#ifdef WITH_SHARING	
-    if (show_sharing) {
-        GtkWidget *tab = glade_xml_get_widget (swidget->xml, "sharing-tab");
         seahorse_prefs_select_tab (swidget, tab);
     }
 #endif

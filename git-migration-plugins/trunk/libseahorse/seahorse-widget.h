@@ -38,9 +38,8 @@
 #define __SEAHORSE_WIDGET_H__
 
 #include <glib.h>
+#include <gtk/gtk.h>
 #include <glade/glade-xml.h>
-
-#include "seahorse-context.h"
 
 #define SEAHORSE_TYPE_WIDGET            (seahorse_widget_get_type ())
 #define SEAHORSE_WIDGET(obj)            (GTK_CHECK_CAST ((obj), SEAHORSE_TYPE_WIDGET, SeahorseWidget))

@@ -629,7 +629,6 @@ main (int argc, char **argv)
 {
     GOptionContext *octx = NULL;
     SeahorseToolMode mode;
-    SeahorseContext *sctx;
     gchar **uris = NULL;
     int ret = 0;
 
@@ -667,9 +666,6 @@ main (int argc, char **argv)
 
     /* Insert Icons into Stock */ 
     seahorse_gtkstock_init();
-    
-    /* Make the default SeahorseContext */
-    sctx = seahorse_context_new (SEAHORSE_CONTEXT_APP, 0);
     
     /* The basic settings for the operation */
     memset (&mode, 0, sizeof (mode));
@@ -739,8 +735,6 @@ main (int argc, char **argv)
     
     g_strfreev (uris);
     
-    seahorse_context_destroy (sctx);
-        
     if (gnome_vfs_initialized ())
         gnome_vfs_shutdown ();
     

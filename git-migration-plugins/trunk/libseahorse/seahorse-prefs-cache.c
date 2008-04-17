@@ -25,12 +25,11 @@
 #include <sys/wait.h>
 
 #include <stdlib.h>
-#include <gnome.h>
+#include <gtk/gtk.h>
 
 #define DBUS_API_SUBJECT_TO_CHANGE
 #include <dbus/dbus.h>
 
-#include "seahorse-context.h"
 #include "seahorse-widget.h"
 #include "seahorse-gpg-options.h"
 #include "seahorse-gconf.h"
@@ -38,9 +37,6 @@
 #include "seahorse-check-button-control.h"
 #include "agent/seahorse-agent.h"
 #include "seahorse-passphrase.h"
-
-#include "seahorse-pgp-key.h"
-#include "seahorse-ssh-key.h"
 
 #define METHOD_INTERNAL     "internal"
 
@@ -262,7 +258,7 @@ seahorse_prefs_cache (SeahorseWidget *swidget)
     /* End -- Setup daemon button visuals */
                                    
     /* Disable GPG agent prefs if another agent is running or error */
-    switch (seahorse_passphrase_detect_agent (SKEY_PGP)) {
+    switch (seahorse_passphrase_detect_agent ()) {
     case SEAHORSE_AGENT_NONE:
         break;
         

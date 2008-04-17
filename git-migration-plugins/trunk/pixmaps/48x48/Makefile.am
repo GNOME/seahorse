@@ -9,10 +9,6 @@ icon48_DATA = seahorse.png \
                 seahorse-applet-text.png \
                 seahorse-applet-unknown.png \
                 seahorse-key.png \
-                seahorse-key-personal.png \
-                seahorse-key-ssh.png \
-                seahorse-person.png \
-                seahorse-share-keys.png \
                 seahorse-sign.png \
                 seahorse-sign-bad.png \
                 seahorse-sign-ok.png \

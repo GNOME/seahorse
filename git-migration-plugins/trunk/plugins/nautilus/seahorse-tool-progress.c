@@ -156,7 +156,6 @@ static int
 progress_main (int argc, char* argv[])
 {
     SeahorseOperation *op;
-    SeahorseContext *sctx;
     GIOChannel *io;
     
     gtk_init (&argc, &argv);
@@ -164,9 +163,6 @@ progress_main (int argc, char* argv[])
     /* Insert Icons into Stock */ 
     seahorse_gtkstock_init();
     
-    /* New app context, without loading any keys */
-    sctx = seahorse_context_new (SEAHORSE_CONTEXT_APP, -1);
-
     op = g_object_new (SEAHORSE_TYPE_OPERATION, NULL);
     seahorse_operation_mark_start (op);
     
@@ -186,7 +182,6 @@ progress_main (int argc, char* argv[])
     
     if (seahorse_operation_is_running (op))
         seahorse_operation_mark_done (op, FALSE, NULL);
-    seahorse_context_destroy (sctx);
         
     return 0;
 }

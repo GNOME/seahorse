@@ -30,15 +30,10 @@
 #define SEAHORSE_STOCK_SEAHORSE     "seahorse"
 #define SEAHORSE_STOCK_KEY          "seahorse-key"
 #define SEAHORSE_STOCK_SECRET       "seahorse-key-personal"
-#define SEAHORSE_STOCK_KEY_SSH      "seahorse-key-ssh"
-#define SEAHORSE_STOCK_PERSON       "seahorse-person"
 #define SEAHORSE_STOCK_SIGN         "seahorse-sign"
 #define SEAHORSE_STOCK_SIGN_OK      "seahorse-sign-ok"
 #define SEAHORSE_STOCK_SIGN_BAD     "seahorse-sign-bad"
 #define SEAHORSE_STOCK_SIGN_UNKNOWN "seahorse-sign-unknown"
-#define SEAHORSE_STOCK_SHARING      "seahorse-share-keys"
-
-#define SEAHORSE_THEMED_WEBBROWSER  "web-browser"
 
 void    seahorse_gtkstock_init          (void);
 

@@ -22,12 +22,13 @@
 #include <sys/types.h>
 #include <stdlib.h>
 #include <fcntl.h>
+#include <errno.h>
+#include <string.h>
 
-#include <gnome.h>
+#include <gtk/gtk.h>
 #include <libgnomevfs/gnome-vfs.h>
 
 #include "seahorse-gpgmex.h"
-#include "seahorse-context.h"
 #include "seahorse-vfs-data.h"
 #include "seahorse-util.h"
 

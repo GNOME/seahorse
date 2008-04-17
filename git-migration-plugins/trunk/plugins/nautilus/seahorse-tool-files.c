@@ -29,7 +29,6 @@
 #include <libgnomevfs/gnome-vfs.h>
 
 #include "seahorse-tool.h"
-#include "seahorse-context.h"
 #include "seahorse-util.h"
 #include "seahorse-widget.h"
 #include "seahorse-gconf.h"

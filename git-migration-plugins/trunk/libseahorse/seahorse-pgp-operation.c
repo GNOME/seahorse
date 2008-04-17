@@ -20,8 +20,8 @@
  */
 
 #include "config.h"
+#include "seahorse-passphrase.h"
 #include "seahorse-pgp-operation.h"
-#include "seahorse-pgp-source.h"
 #include "seahorse-gpgmex.h"
 #include "seahorse-util.h"
 
@@ -319,10 +319,23 @@ static void
 seahorse_pgp_operation_init (SeahorsePGPOperation *pop)
 {
     SeahorsePGPOperationPrivate *pv = SEAHORSE_PGP_OPERATION_GET_PRIVATE (pop);
+    gpgme_protocol_t proto = GPGME_PROTOCOL_OpenPGP;
+    gpgme_error_t err;
+    gpgme_ctx_t ctx;
+ 
+    err = gpgme_engine_check_version (proto);
+    g_return_if_fail (GPG_IS_OK (err));
+   
+    err = gpgme_new (&ctx);
+    g_return_if_fail (GPG_IS_OK (err));
+   
+    err = gpgme_set_protocol (ctx, proto);
+    g_return_if_fail (GPG_IS_OK (err));
     
-    pop->gctx = seahorse_pgp_source_new_context ();
-    g_return_if_fail (pop->gctx != NULL);
-    
+    gpgme_set_passphrase_cb (ctx, (gpgme_passphrase_cb_t)seahorse_passphrase_get, NULL);
+    gpgme_set_keylist_mode (ctx, GPGME_KEYLIST_MODE_LOCAL);
+
+    pop->gctx = ctx;
     pv->busy = FALSE;
     
     /* Setup with the context */

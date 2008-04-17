@@ -27,9 +27,8 @@
 #include <gnome.h>
 #include <glade/glade-xml.h>
 
-#include "seahorse-pgp-key.h"
 #include "seahorse-agent.h"
-#include "seahorse-context.h"
+#include "seahorse-gtkstock.h"
 #include "seahorse-gconf.h"
 #include "seahorse-widget.h"
 #include "seahorse-util.h"
@@ -93,27 +92,25 @@ clear_clicked (GtkButton *button, SeahorseWidget *swidget)
 
 /* Add a row to the tree for a given password */
 static void
-add_keys_to_store (GtkTreeStore *store, GList *keys)
+add_keys_to_store (GtkTreeStore *store, GList *names)
 {
-    GList *k;
+    GList *l;
     GtkTreeIter iter;
-    gchar *userid;
     
-    for (k = keys; k; k = g_list_next (k)) {
+    for (l = names; l; l = g_list_next (l)) {
         
         /* Add a new row to the model */
         gtk_tree_store_append (store, &iter, NULL);
         
-        userid = seahorse_key_get_display_name (SEAHORSE_KEY (k->data));
         gtk_tree_store_set (store, &iter, 
-                    UID_COLUMN, userid,
-                    ICON_COLUMN, seahorse_key_get_stock_id (SEAHORSE_KEY (k->data)),
+                    UID_COLUMN, l->data,
+                    ICON_COLUMN, SEAHORSE_STOCK_SECRET,
                     -1);
         
-        g_free (userid);
+        g_free (l->data);
     }
     
-    g_list_free (keys);
+    g_list_free (names);
 }
 
 /* Called when the cache changes and window is open */
@@ -154,7 +151,7 @@ window_update_keys ()
     }
     
     /* The keys from the PGP cache */
-    add_keys_to_store (store, seahorse_agent_cache_get_keys ());
+    add_keys_to_store (store, seahorse_agent_cache_get_key_names ());
 }
 
 /* Display the status window */

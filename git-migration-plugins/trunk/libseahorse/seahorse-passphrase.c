@@ -37,7 +37,9 @@
 #include <syslog.h>
 #include <fcntl.h>
 
-#include <gnome.h>
+#include <glib/gi18n.h>
+#include <gtk/gtk.h>
+#include <gdk/gdkkeysyms.h>
 #include <glade/glade-xml.h>
 
 #include "seahorse-gpgmex.h"
@@ -48,9 +50,6 @@
 #include "seahorse-secure-entry.h"
 #include "seahorse-gpg-options.h"
 #include "agent/seahorse-agent.h"
-
-#include "seahorse-ssh-key.h"
-#include "seahorse-pgp-key.h"
 
 #define HIG_SMALL      6        /* gnome hig small space in pixels */
 #define HIG_LARGE     12        /* gnome hig large space in pixels */
@@ -512,53 +511,12 @@ gpg_detect_agent ()
     return SEAHORSE_AGENT_NONE;
 }
 
-/* -----------------------------------------------------------------------------
- * SSH AGENT 
- */
-
-static SeahorseAgentType
-ssh_detect_agent ()
-{
-    SeahorseAgentType ret;
-    const gchar *socketpath;
-    struct sockaddr_un sunaddr;
-    int agentfd;
-    
-    socketpath = g_getenv ("SSH_AUTH_SOCK");
-    if (!socketpath || !socketpath[0])
-        return SEAHORSE_AGENT_NONE;
-    
-    /* Try to connect to the real agent */
-    agentfd = socket (AF_UNIX, SOCK_STREAM, 0);
-    if (agentfd == -1) {
-        g_warning ("couldn't create socket: %s", g_strerror (errno));
-        return SEAHORSE_AGENT_UNKNOWN;
-    }
-    
-    memset (&sunaddr, 0, sizeof (sunaddr));
-    sunaddr.sun_family = AF_UNIX;
-    g_strlcpy (sunaddr.sun_path, socketpath, sizeof (sunaddr.sun_path));
-    if (connect (agentfd, (struct sockaddr*) &sunaddr, sizeof (sunaddr)) < 0) {
-        g_warning ("couldn't connect to SSH agent at: %s: %s", socketpath, 
-                   g_strerror (errno));
-        close (agentfd);
-        return SEAHORSE_AGENT_UNKNOWN;
-    }
-
-    shutdown (agentfd, SHUT_RDWR);
-    close (agentfd);
-    return SEAHORSE_AGENT_OTHER; 
-}
-
 /* -------------------------------------------------------------------------- */
 
 /* Check if the agent is running */
 SeahorseAgentType
-seahorse_passphrase_detect_agent (GQuark ktype)
+seahorse_passphrase_detect_agent (void)
 {
-    if (ktype == SKEY_PGP)
-        return gpg_detect_agent ();
-    if (ktype == SKEY_SSH)
-        return ssh_detect_agent ();
-    g_return_val_if_reached (SEAHORSE_AGENT_UNKNOWN);
+    return gpg_detect_agent ();
 }
+

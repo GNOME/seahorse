@@ -28,7 +28,6 @@
 
 #include "seahorse-operation.h"
 #include "seahorse-widget.h"
-#include "seahorse-context.h"
 
 /* -----------------------------------------------------------------------------
  * SEAHORSE APPBAR HOOKS

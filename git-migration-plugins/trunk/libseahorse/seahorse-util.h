@@ -32,12 +32,6 @@
 #include <gpgme.h>
 
 #include "config.h"
-#include "seahorse-context.h"
-
-#ifdef WITH_SHARING
-#include <avahi-client/client.h>
-const AvahiPoll* seahorse_util_dns_sd_get_poll ();
-#endif
 
 typedef enum {
     SEAHORSE_CRYPT_SUFFIX,
@@ -88,8 +82,6 @@ gboolean    seahorse_util_print_fd          (int fd,
 gboolean    seahorse_util_printf_fd         (int fd, 
                                              const char* data, ...);
                              
-gchar*      seahorse_util_filename_for_keys (GList *keys);
-                                             
 gboolean    seahorse_util_uri_exists        (const gchar* uri);
 
 gchar*      seahorse_util_uri_unique        (const gchar* uri);
@@ -106,13 +98,6 @@ gchar**     seahorse_util_uris_expand       (const gchar **uris);
 gboolean    seahorse_util_uris_package      (const gchar* package, 
                                              const gchar** uris);
 
-GQuark      seahorse_util_detect_mime_type   (const gchar *mime);
-
-GQuark      seahorse_util_detect_data_type   (const gchar *data,
-                                              guint length);
-
-GQuark      seahorse_util_detect_file_type   (const gchar *uri);
-
 gboolean    seahorse_util_write_file_private            (const gchar* filename,
                                                          const gchar* contents,
                                                          GError **err);
@@ -126,9 +111,6 @@ GtkWidget*  seahorse_util_chooser_save_new              (const gchar *title,
 void        seahorse_util_chooser_show_key_files        (GtkWidget *dialog);
 
 void        seahorse_util_chooser_show_archive_files    (GtkWidget *dialog);
-
-void        seahorse_util_chooser_set_filename          (GtkWidget *dialog, 
-                                                         GList *keys);
 
 gchar*      seahorse_util_chooser_open_prompt           (GtkWidget *dialog);
 
@@ -147,12 +129,6 @@ gchar*      seahorse_util_remove_suffix     (const gchar        *path,
 gchar**     seahorse_util_strvec_dup        (const gchar        **vec);
 
 guint       seahorse_util_strvec_length       (const gchar      **vec);
-
-gpgme_key_t* seahorse_util_keylist_to_keys    (GList *keys);
-
-GList*       seahorse_util_keylist_sort       (GList *keys);
-
-GList*       seahorse_util_keylist_splice     (GList *keys);
 
 void         seahorse_util_free_keys          (gpgme_key_t* keys);
 

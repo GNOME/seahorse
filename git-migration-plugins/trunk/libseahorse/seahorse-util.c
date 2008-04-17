@@ -28,8 +28,11 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
+#include <errno.h>
 
-#include <gnome.h>
+#include <glib.h>
+#include <glib/gi18n.h>
+#include <gtk/gtk.h>
 #include <libgnomevfs/gnome-vfs.h>
 
 #ifdef WITH_SHARING
@@ -39,14 +42,8 @@
 
 #include "seahorse-gpgmex.h"
 #include "seahorse-util.h"
-#include "seahorse-key.h"
-#include "seahorse-pgp-key.h"
 #include "seahorse-gconf.h"
 #include "seahorse-vfs-data.h"
-
-#ifdef WITH_SSH
-#include "seahorse-ssh-key.h"
-#endif
 
 static const gchar *bad_filename_chars = "/\\<>|";
 
@@ -397,31 +394,6 @@ seahorse_util_printf_fd (int fd, const char* fmt, ...)
 }
 
 
-gchar*      
-seahorse_util_filename_for_keys (GList *keys)
-{
-    SeahorseKey *skey;
-    gchar *t, *r;
-    
-    g_return_val_if_fail (g_list_length (keys) > 0, NULL);
-
-    if (g_list_length (keys) == 1) {
-        g_return_val_if_fail (SEAHORSE_IS_KEY (keys->data), NULL);
-        skey = SEAHORSE_KEY (keys->data);
-        t = seahorse_key_get_simple_name (skey);
-        if (t == NULL)
-            t = g_strdup (_("Key Data"));
-    } else {
-        t = g_strdup (_("Multiple Keys"));
-    }
-    
-    g_strstrip (t);
-    g_strdelimit (t, bad_filename_chars, '_');
-    r = g_strconcat (t, SEAHORSE_EXT_ASC, NULL);
-    g_free (t);
-    return r;
-}
-
 /** 
  * seahorse_util_uri_get_last:
  * @uri: The uri to parse
@@ -753,56 +725,6 @@ seahorse_util_uris_package (const gchar* package, const char** uris)
     return TRUE;
 }
 
-GQuark
-seahorse_util_detect_mime_type (const gchar *mime)
-{
-    if (!mime || g_ascii_strcasecmp (mime, GNOME_VFS_MIME_TYPE_UNKNOWN) == 0) {
-        g_warning ("couldn't get mime type for data");
-        return 0;
-    }
-
-    if (g_ascii_strcasecmp (mime, "application/pgp-keys") == 0)
-        return SKEY_PGP;
-    
-#ifdef WITH_SSH 
-    /* TODO: For now all PEM keys are treated as SSH keys */
-    else if (g_ascii_strcasecmp (mime, "application/x-ssh-key") == 0 ||
-             g_ascii_strcasecmp (mime, "application/x-pem-key") == 0)
-        return SKEY_SSH;
-#endif 
-    
-    g_warning ("unsupported type of key data: %s", mime);
-    return 0;
-}
-
-GQuark
-seahorse_util_detect_data_type (const gchar *data, guint length)
-{
-    const gchar* mime = gnome_vfs_get_mime_type_for_data (data, length);
-    return seahorse_util_detect_mime_type (mime);
-}
-
-GQuark
-seahorse_util_detect_file_type (const gchar *uri)
-{
-    GnomeVFSResult res;
-    GnomeVFSFileInfo *info;
-    GQuark ret = 0;
-    
-    info = gnome_vfs_file_info_new ();
-    res = gnome_vfs_get_file_info (uri, info, 
-            GNOME_VFS_FILE_INFO_GET_MIME_TYPE | GNOME_VFS_FILE_INFO_FORCE_SLOW_MIME_TYPE);
-    
-    if (res == GNOME_VFS_OK)
-        ret = seahorse_util_detect_mime_type (info->mime_type);
-    else
-        g_warning ("couldn't get mime type for: %s: %s", uri, 
-                   gnome_vfs_result_to_string (res));
-
-    gnome_vfs_file_info_unref (info);
-    return ret;
-}
-
 gboolean
 seahorse_util_write_file_private (const gchar* filename, const gchar* contents, GError **err)
 {
@@ -852,10 +774,6 @@ seahorse_util_chooser_show_key_files (GtkWidget *dialog)
        cases that extension is associated with text/plain */
     gtk_file_filter_set_name (filter, _("All key files"));
     gtk_file_filter_add_mime_type (filter, "application/pgp-keys");
-#ifdef WITH_SSH 
-    gtk_file_filter_add_mime_type (filter, "application/x-ssh-key");
-    gtk_file_filter_add_mime_type (filter, "application/x-pem-key");
-#endif
     gtk_file_filter_add_pattern (filter, "*.asc");
     gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);    
     gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dialog), filter);
@@ -906,18 +824,6 @@ seahorse_util_chooser_show_archive_files (GtkWidget *dialog)
     gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);   
 }
 
-void
-seahorse_util_chooser_set_filename (GtkWidget *dialog, GList *keys)
-{
-    gchar *t = NULL;
-    
-    if (g_list_length (keys) > 0) {
-        t = seahorse_util_filename_for_keys (keys);
-        gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), t);
-        g_free (t);
-    }
-}
-    
 gchar*      
 seahorse_util_chooser_save_prompt (GtkWidget *dialog)
 {
@@ -1104,25 +1010,6 @@ seahorse_util_strvec_length (const gchar **vec)
     return len;
 }
 
-/* TODO: This function no longer makes sense once we 
-   have multiple key and encryption types */
-gpgme_key_t* 
-seahorse_util_keylist_to_keys (GList *keys)
-{
-    gpgme_key_t *recips;
-    int i;
-    
-    recips = g_new0 (gpgme_key_t, g_list_length (keys) + 1);
-    
-    for (i = 0; keys != NULL; keys = g_list_next (keys), i++) {
-        g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (keys->data), recips);
-        recips[i] = SEAHORSE_PGP_KEY (keys->data)->pubkey;
-        gpgmex_key_ref (recips[i]);
-    }
-    
-    return recips;
-}
-
 void
 seahorse_util_free_keys (gpgme_key_t* keys)
 {
@@ -1132,61 +1019,6 @@ seahorse_util_free_keys (gpgme_key_t* keys)
     while (*k)
         gpgmex_key_unref (*(k++));
     g_free (keys);
-}
-
-static gint 
-sort_keys_by_source (SeahorseKey *k1, SeahorseKey *k2)
-{
-    SeahorseKeySource *sk1, *sk2;
-    
-    g_assert (SEAHORSE_IS_KEY (k1));
-    g_assert (SEAHORSE_IS_KEY (k2));
-    
-    sk1 = seahorse_key_get_source (k1);
-    sk2 = seahorse_key_get_source (k2);
-    
-    if (sk1 == sk2)
-        return 0;
-    
-    return sk1 < sk2 ? -1 : 1;
-}
-
-GList*        
-seahorse_util_keylist_sort (GList *keys)
-{
-    return g_list_sort (keys, (GCompareFunc)sort_keys_by_source);
-}
-
-GList*       
-seahorse_util_keylist_splice (GList *keys)
-{
-    SeahorseKeySource *psk = NULL;
-    SeahorseKeySource *sk;
-    GList *prev = NULL;
-    
-    /* Note that the keylist must be sorted */
-    
-    for ( ; keys; keys = g_list_next (keys)) {
-     
-        g_return_val_if_fail (SEAHORSE_IS_KEY (keys->data), NULL);
-        sk = seahorse_key_get_source (SEAHORSE_KEY (keys->data));
-        
-        /* Found a disconuity */
-        if (psk && sk != psk) {
-            g_assert (prev != NULL);
-            
-            /* Break the list */
-            prev->next = NULL;
-            
-            /* And return the new list */
-            return keys;
-        }
-        
-        psk = sk;
-        prev = keys;
-    }
-    
-    return NULL;
 }
 
 gboolean    
@@ -1341,48 +1173,3 @@ seahorse_util_determine_popup_menu_position (GtkMenu *menu, int *x, int *y,
         *push_in = TRUE;
 }            
 
-/* -----------------------------------------------------------------------------
- * DNS-SD Stuff 
- */
-
-#ifdef WITH_SHARING
-
-/* 
- * We have this stuff here because it needs to:
- *  - Be usable from libseahorse and anything within libseahorse
- *  - Be initialized properly only once per process. 
- */
-
-#include <avahi-glib/glib-watch.h>
-#include <avahi-glib/glib-malloc.h>
-
-static AvahiGLibPoll *avahi_poll = NULL;
-
-static void
-free_avahi ()
-{
-    if (avahi_poll)
-        avahi_glib_poll_free (avahi_poll);
-    avahi_poll = NULL;
-}
-
-const AvahiPoll*
-seahorse_util_dns_sd_get_poll ()
-{
-    if (!avahi_poll) {
-        
-        avahi_set_allocator (avahi_glib_allocator ());
-        
-        avahi_poll = avahi_glib_poll_new (NULL, G_PRIORITY_DEFAULT);
-        if (!avahi_poll) {
-            g_warning ("couldn't initialize avahi glib poll integration");
-            return NULL;
-        }
-        
-        g_atexit (free_avahi);
-    }
-    
-    return avahi_glib_poll_get (avahi_poll);
-}
-
-#endif

@@ -111,7 +111,7 @@ gboolean seahorse_agent_cache_has (const gchar *id, gboolean lock);
 void seahorse_agent_cache_clear (const gchar *id);
 void seahorse_agent_cache_clearall ();
 guint seahorse_agent_cache_count ();
-GList* seahorse_agent_cache_get_keys ();
+GList* seahorse_agent_cache_get_key_names ();
 
 /* -----------------------------------------------------------------------------
  * seahorse-agent-prompt.c

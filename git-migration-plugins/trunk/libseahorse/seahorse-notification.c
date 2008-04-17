@@ -22,8 +22,13 @@
 #include "config.h"
 
 #include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <glib.h>
+#include <string.h>
 
+#include <cryptui.h>
+
+#include "seahorse-gpgmex.h"
 #include "seahorse-libdialogs.h"
 #include "seahorse-util.h"
 
@@ -49,7 +54,7 @@ typedef struct _SeahorseNotification {
     gchar *message;
     const gchar *icon;
 
-    GList *keys;
+    GList *keyids;
     GObject *widget;
     
 } SeahorseNotification;
@@ -60,44 +65,28 @@ typedef struct _SeahorseNotificationClass {
 
 G_DEFINE_TYPE (SeahorseNotification, seahorse_notification, G_TYPE_OBJECT);
 
+static CryptUIKeyset *keyset = NULL;
+
 /* -----------------------------------------------------------------------------
  * INTERNAL HELPERS 
  */
 
-/* Forward Declaration */
-static void key_changed (SeahorseKey *skey, SeahorseKeyChange change, SeahorseNotification *snotif);
-
 static void
 insert_key_field (GString *res, const gchar *key, const gchar *field)
 {
-    SeahorseKey *skey;
-    GValue value;
-    GValue svalue;
-    gchar *str;
-    guint uid;
-    
-    skey = seahorse_context_key_from_dbus (SCTX_APP (), key, &uid);
-    if (!skey) {
-        g_warning ("key '%s' in key text does not exist", key);
-        return;
-    }
-    
+    gchar *str, *esc;
+
+
     /* A default field */
     if (!field)
         field = "display-name";
     
-    memset (&value, 0, sizeof (value));
-    memset (&svalue, 0, sizeof (value));
-    
-    if (seahorse_key_lookup_property (skey, uid, field, &value)) {
-        g_value_init (&svalue, G_TYPE_STRING);
-        if (g_value_transform (&value, &svalue)) {
-            str = g_markup_escape_text (g_value_get_string (&svalue), -1);
-            g_string_append (res, str);
-            g_free (str);
-        }
-        g_value_unset (&svalue);
-        g_value_unset (&value);
+    str = cryptui_keyset_key_get_string (keyset, key, field);
+    if (str) {
+        esc = g_markup_escape_text (str, -1);
+        g_string_append (res, esc);
+        g_free (esc);
+        g_free (str);
     }
 }
 
@@ -358,11 +347,26 @@ setup_fallback_notification (SeahorseNotification *snotif, gboolean urgent,
 }
 
 static void 
-key_changed (SeahorseKey *skey, SeahorseKeyChange change, SeahorseNotification *snotif)
+key_changed (CryptUIKeyset *keyset, const gchar *key, SeahorseNotification *snotif)
 {
+    GList *l;
+    gboolean matched = FALSE;
+
     if (!snotif->widget)
         return;
+
+    g_return_if_fail (key);
+
+    for (l = snotif->keyids; l; l = g_list_next (l)) {
+        if (strcmp (key, l->data) == 0) {
+            matched = TRUE;
+            break;
+        }
+    }
     
+    if (!matched)
+        return;
+
 #ifdef HAVE_LIBNOTIFY
     if (NOTIFY_IS_NOTIFICATION (snotif->widget))
         update_libnotify_notification (snotif);
@@ -377,7 +381,6 @@ keys_start_element (GMarkupParseContext *ctx, const gchar *element_name,
                     gpointer user_data, GError **error)
 {
     SeahorseNotification* snotif = SEAHORSE_NOTIFICATION (user_data);
-    SeahorseKey *skey;
 
     if (strcmp (element_name, "key") == 0) {
         
@@ -395,13 +398,17 @@ keys_start_element (GMarkupParseContext *ctx, const gchar *element_name,
             g_warning ("key text <key> element requires the following attributes\n"
                        "     <key id=\"xxxxx\" field=\"xxxxx\"/>");
         
-        skey = seahorse_context_key_from_dbus (SCTX_APP (), key, NULL);
-        if (skey) {
-            snotif->keys = g_list_append (snotif->keys, skey);
-            g_signal_connect (skey, "changed", G_CALLBACK (key_changed), snotif);
-        }
+        snotif->keyids = g_list_append (snotif->keyids, g_strdup (key));
     }
     
+}
+
+void
+free_keyset (void)
+{
+    if (keyset)
+        g_object_unref (keyset);
+    keyset = NULL;
 }
 
 /* -----------------------------------------------------------------------------
@@ -411,7 +418,13 @@ keys_start_element (GMarkupParseContext *ctx, const gchar *element_name,
 static void
 seahorse_notification_init (SeahorseNotification *snotif)
 {
+    if (!keyset) {
+        keyset = cryptui_keyset_new ("openpgp", TRUE);
+        g_return_if_fail (keyset);
+        g_atexit (free_keyset);
+    }
 
+    g_signal_connect (keyset, "changed", G_CALLBACK (key_changed), snotif);
 }
 
 static void
@@ -432,10 +445,10 @@ seahorse_notification_dispose (GObject *gobject)
 
     snotif->widget = NULL;
     
-    for (l = snotif->keys; l; l = g_list_next (l)) 
-        g_signal_handlers_disconnect_by_func (l->data, key_changed, snotif);
-    g_list_free (snotif->keys);
-    snotif->keys = NULL;
+    for (l = snotif->keyids; l; l = g_list_next (l)) 
+        g_free (l->data);
+    g_list_free (snotif->keyids);
+    snotif->keyids = NULL;
     
     G_OBJECT_CLASS (seahorse_notification_parent_class)->dispose (gobject);
 }
@@ -445,6 +458,7 @@ seahorse_notification_finalize (GObject *gobject)
 {
     SeahorseNotification *snotif = SEAHORSE_NOTIFICATION (gobject);
     
+    g_signal_handlers_disconnect_by_func (keyset, key_changed, snotif);
     g_assert (!snotif->widget);
     
     if (snotif->heading)
@@ -574,10 +588,7 @@ seahorse_notify_import (guint keynum, gchar **keys)
     }
     
     /* Always try and display in the daemon */
-    if (seahorse_context_is_daemon (SCTX_APP ()))
-        seahorse_notification_display (title, body, FALSE, icon, NULL);
-    else
-        cryptui_display_notification (title, body, icon, FALSE);
+    cryptui_display_notification (title, body, icon, FALSE);
 
     g_free (body);
 }
@@ -599,17 +610,7 @@ seahorse_notify_signatures (const gchar* data, gpgme_verify_result_t status)
     gboolean sig = FALSE;
     GSList *rawids;
     GList *keys;
-    SeahorseKey *skey;
     
-    /* Discover the key in question */
-    rawids = g_slist_append (NULL, status->signatures->fpr);
-    keys = seahorse_context_discover_keys (SCTX_APP (), SKEY_PGP, rawids);
-    g_slist_free (rawids);
-    
-    g_return_if_fail (keys != NULL);
-    skey = SEAHORSE_KEY (keys->data);
-    g_list_free (keys);
-
     /* Figure out what to display */
     switch (gpgme_err_code (status->signatures->status))  {
     case GPG_ERR_KEY_EXPIRED:
@@ -661,7 +662,7 @@ seahorse_notify_signatures (const gchar* data, gpgme_verify_result_t status)
 
     if (sig) {
         gchar *date = seahorse_util_get_display_date_string (status->signatures->timestamp);
-        gchar *id = seahorse_context_keyid_to_dbus (SCTX_APP (), seahorse_key_get_keyid (skey), 0);
+        gchar *id = g_strdup_printf ("openpgp:%s", status->signatures->fpr);
         body = g_markup_printf_escaped (body, id, date);
         g_free (date);
         g_free (id);
@@ -677,10 +678,7 @@ seahorse_notify_signatures (const gchar* data, gpgme_verify_result_t status)
     }
 
     /* Always try and display in the daemon */
-    if (seahorse_context_is_daemon (SCTX_APP ()))
-        seahorse_notification_display (title, body, !sig, icon, NULL);
-    else
-        cryptui_display_notification (title, body, icon, !sig);
+    cryptui_display_notification (title, body, icon, !sig);
 
     g_free (title);
     g_free (body);

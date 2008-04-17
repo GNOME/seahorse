@@ -28,7 +28,6 @@
 
 #include "seahorse-gpgmex.h"
 #include "seahorse-util.h"
-#include "seahorse-context.h"
 #include "seahorse-gpg-options.h"
 
 #define  GPG_CONF_HEADER    "# FILE CREATED BY SEAHORSE\n\n"

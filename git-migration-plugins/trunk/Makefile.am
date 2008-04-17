@@ -15,8 +15,7 @@ SUBDIRS = libcryptui \
           help \
           pixmaps \
           plugins \
-          $(AGENT_DIR) \
-          daemon 
+          $(AGENT_DIR)
 
 EXTRA_DIST = \
     AUTHORS \
@@ -30,7 +29,6 @@ EXTRA_DIST = \
     NEWS \
     README \
     THANKS \
-    TODO \
     intltool-extract.in \
     intltool-merge.in \
     intltool-update.in \

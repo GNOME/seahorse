@@ -29,8 +29,6 @@
 
 #include "seahorse-applet.h"
 #include "seahorse-gtkstock.h"
-#include "seahorse-context.h"
-#include "seahorse-pgp-key.h"
 #include "seahorse-libdialogs.h"
 #include "seahorse-widget.h"
 #include "seahorse-util.h"
@@ -142,7 +140,6 @@ static const SeahorsePGPHeader seahorse_pgp_headers[] = {
 typedef struct _SeahorseAppletPrivate {
     GtkWidget           *image;
     GtkTooltips         *tooltips;
-    SeahorseContext     *context;
     GtkClipboard        *board;
     GtkWidget           *menu;
     SeahorseTextType    clipboard_contents;
@@ -155,18 +152,6 @@ G_DEFINE_TYPE (SeahorseApplet, seahorse_applet, PANEL_TYPE_APPLET);
 /* -----------------------------------------------------------------------------
  * INTERNAL HELPERS
  */
-
-static void
-init_context (SeahorseApplet *sapplet)
-{
-    SeahorseAppletPrivate *priv;
-    
-    priv = SEAHORSE_APPLET_GET_PRIVATE (sapplet);
-    if (!priv->context) {
-        priv->context = seahorse_context_new (SEAHORSE_CONTEXT_APP, SKEY_PGP);
-        seahorse_context_load_local_keys_async (priv->context);
-    }
-}
 
 SeahorseTextType    
 detect_text_type (const gchar *text, gint len, const gchar **start, const gchar **end)
@@ -640,9 +625,6 @@ properties_cb (BonoboUIComponent *uic, SeahorseApplet *sapplet, const char *verb
     GtkWidget *widget;
     GdkPixbuf *pixbuf;
     
-    /* SeahorseWidget needs a SeahorseContext initialized */
-    init_context (sapplet);
-    
     swidget = seahorse_widget_new ("applet-preferences", NULL);
     
     widget = glade_xml_get_widget (swidget->xml, swidget->name);
@@ -887,10 +869,6 @@ seahorse_applet_finalize (GObject *object)
     SeahorseAppletPrivate *priv = SEAHORSE_APPLET_GET_PRIVATE (object);
 
     if (priv) {
-        if (priv->context)
-            seahorse_context_destroy (priv->context);
-        priv->context = NULL;
-        
         if (priv->menu)
             gtk_widget_destroy (priv->menu);
         priv->menu = NULL;

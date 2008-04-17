@@ -20,8 +20,11 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <config.h>
-#include <gnome.h>
+#include "config.h"
+
+#include <string.h>
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <glade/glade.h>
 #include <glade/glade-build.h>
 
@@ -105,18 +108,10 @@ class_init (SeahorseWidgetClass *klass)
                              NULL, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 }
 
-/* Destroy widget when context is destroyed */
-static void
-context_destroyed (GtkObject *object, SeahorseWidget *swidget)
-{
-	seahorse_widget_destroy (swidget);
-}
-
 static void
 object_init (SeahorseWidget *swidget)
 {
-    g_signal_connect_after (SCTX_APP(), "destroy", 
-                G_CALLBACK (context_destroyed), swidget);
+
 }
 
 /* Disconnects callbacks, destroys main window widget,
@@ -137,7 +132,6 @@ object_finalize (GObject *gobject)
     	}
     }
 
-	g_signal_handlers_disconnect_by_func (SCTX_APP (), context_destroyed, swidget);
     if (glade_xml_get_widget (swidget->xml, swidget->name))
 	    gtk_widget_destroy (glade_xml_get_widget (swidget->xml, swidget->name));
 	

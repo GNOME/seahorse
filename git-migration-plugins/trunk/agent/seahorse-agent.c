@@ -37,7 +37,6 @@
 #include "seahorse-agent.h"
 #include "seahorse-gpg-options.h"
 #include "seahorse-passphrase.h"
-#include "seahorse-pgp-key.h"
 
 gboolean seahorse_agent_cshell = FALSE;
 gboolean seahorse_agent_execvars = FALSE;
@@ -80,7 +79,7 @@ void
 seahorse_agent_prefork ()
 {
     /* Detect and see if there's an agent */
-    switch (seahorse_passphrase_detect_agent (SKEY_PGP)) {
+    switch (seahorse_passphrase_detect_agent ()) {
     case SEAHORSE_AGENT_NONE:
         break;
     default:
