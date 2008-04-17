@@ -25,6 +25,7 @@
 
 #include <epiphany/ephy-extension.h>
 #include <epiphany/ephy-embed.h>
+#include <epiphany/ephy-embed-container.h>
 
 #include "eel-gconf-extensions.h"
 #include "ephy-debug.h"
@@ -239,7 +240,7 @@ encrypt_seahorse_cb (GtkAction *action, EphyWindow *window)
     
     init_crypt();
     
-	embed = ephy_window_get_active_embed (window);
+	embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
 	g_return_if_fail (EPHY_IS_EMBED (embed));
 
 	/* ask gecko for the input */
@@ -285,7 +286,7 @@ sign_seahorse_cb (GtkAction *action, EphyWindow *window)
     
     init_crypt();
     
-	embed = ephy_window_get_active_embed (window);
+	embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
 	g_return_if_fail (EPHY_IS_EMBED (embed));
 
 	/* ask gecko for the input */
@@ -419,7 +420,7 @@ dvi_seahorse_cb (GtkAction *action, EphyWindow *window)
     
     init_crypt();
     
-	embed = ephy_window_get_active_embed (window);
+	embed = ephy_embed_container_get_active_child (EPHY_EMBED_CONTAINER (window));
 	g_return_if_fail (EPHY_IS_EMBED (embed));
 
 	/* ask gecko for the input */
