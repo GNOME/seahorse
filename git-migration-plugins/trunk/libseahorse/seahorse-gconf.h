@@ -28,7 +28,12 @@
 #include <gconf/gconf-client.h>
 
 #include <gtk/gtk.h>
-#include "cryptui-defines.h"
+
+#define SEAHORSE_DESKTOP_KEYS           "/desktop/pgp"
+#define SEAHORSE_DEFAULT_KEY            SEAHORSE_DESKTOP_KEYS "/default_key"
+#define SEAHORSE_LASTSIGNER_KEY         SEAHORSE_DESKTOP_KEYS "/last_signer"
+#define SEAHORSE_ENCRYPTSELF_KEY        SEAHORSE_DESKTOP_KEYS "/encrypt_to_self"
+#define SEAHORSE_RECIPIENTS_SORT_KEY    SEAHORSE_DESKTOP_KEYS "/recipients/sort_by"
 
 #define ARMOR_KEY SEAHORSE_DESKTOP_KEYS "/ascii_armor"
 #define ENCRYPTSELF_KEY SEAHORSE_DESKTOP_KEYS "/encrypt_to_self"

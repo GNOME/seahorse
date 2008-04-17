@@ -12,9 +12,7 @@ INCLUDES = \
 	$(GNOME_APPLETS_CFLAGS)	\
 	-I$(includedir) \
 	-I$(top_srcdir)/libseahorse \
-	-I$(top_srcdir)/libcryptui \
 	$(SEAHORSE_CFLAGS) \
-	$(LIBCRYPTUI_CFLAGS) \
 	-DGNOMELOCALEDIR=\"$(localedir)\" \
 	-DUIDIR=\"$(uidir)\" \
 	-DDATADIR=\""$(datadir)"\" \
@@ -33,7 +31,6 @@ seahorse_applet_SOURCES = \
 seahorse_applet_LDADD = \
 	$(GNOME_APPLETS_LIBS) \
 	$(top_builddir)/libseahorse/libseahorse.a \
-	$(top_builddir)/libcryptui/libcryptui.la \
 	$(SEAHORSE_LIBS) \
 	$(LIBCRYPTUI_LIBS)
 

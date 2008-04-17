@@ -33,7 +33,6 @@
 #include <gnome.h>
 
 #include "config.h"
-#include "seahorse-operation.h"
 #include "seahorse-gtkstock.h"
 #include "seahorse-gconf.h"
 #include "seahorse-agent.h"
@@ -207,7 +206,6 @@ client_die ()
 
 int main(int argc, char* argv[])
 {
-    SeahorseOperation *op;
     GnomeClient *client = NULL;
     GOptionContext *octx = NULL;
 

@@ -4,7 +4,6 @@ pixmapsdir = $(datadir)/pixmaps/
 
 INCLUDES = -I$(top_builddir) \
 	-I$(top_srcdir) \
-	-I$(top_srcdir)/libcryptui \
 	-I$(top_srcdir)/libseahorse \
 	$(SEAHORSE_CFLAGS) \
 	$(AGENT_CFLAGS) \
@@ -22,7 +21,6 @@ seahorse_agent_SOURCES = seahorse-agent.c seahorse-agent.h seahorse-agent-main.c
 
 seahorse_agent_LDADD = \
     $(top_builddir)/libseahorse/libseahorse.a \
-    $(top_builddir)/libcryptui/libcryptui.la \
     $(SEAHORSE_LIBS)
 
 glade_DATA = \

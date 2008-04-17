@@ -30,7 +30,6 @@ libseahorse_a_SOURCES = \
 	seahorse-pgp-operation.c seahorse-pgp-operation.h \
 	seahorse-widget.c seahorse-widget.h \
 	seahorse-util.c seahorse-util.h \
-	seahorse-validity.c seahorse-validity.h \
 	seahorse-check-button-control.c seahorse-check-button-control.h \
 	seahorse-gpg-options.c seahorse-gpg-options.h \
 	seahorse-passphrase.c seahorse-passphrase.h \

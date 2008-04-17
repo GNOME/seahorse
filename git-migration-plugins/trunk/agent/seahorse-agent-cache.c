@@ -443,8 +443,6 @@ seahorse_agent_cache_count ()
 static gchar*
 extract_key_name (gpgme_key_t key)
 {
-    gchar *ret;
-    
     g_return_val_if_fail (key && key->uids && key->uids->uid, g_strdup (""));
     
     /* If not utf8 valid, assume latin 1 */
@@ -461,7 +459,7 @@ build_key_name (const gchar *id)
     gpgme_key_t key;
     gchar *ret;
     
-    g_return_if_fail (g_gpgme_ctx);
+    g_return_val_if_fail (g_gpgme_ctx, g_strdup (""));
 	    
     gerr = gpgme_get_key (g_gpgme_ctx, id, &key, 1);
     if (!GPG_IS_OK (gerr)) {
@@ -538,7 +536,6 @@ seahorse_agent_cache_set (const gchar *id, const gchar *pass, gboolean lock)
         GnomeKeyringAttributeList *attributes = NULL;
         guint item_id;
         gchar *desc = NULL, *name;
-        GQuark keyid;
 
         name = build_key_name (id);
         desc = g_strdup_printf (_("PGP Key: %s"), name);

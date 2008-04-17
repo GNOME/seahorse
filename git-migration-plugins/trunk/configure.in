@@ -8,17 +8,6 @@ dnl MAIN SEAHORSE VERSION (update after release)
 AC_INIT(seahorse-plugins, 2.23.0)
 
 dnl ****************************************************************************
-dnl LIBCRYPTUI libtool versioning
-dnl CURRENT : REVISION : AGE
-dnl   +1    :     0    : +1   == new interface that does not break old one.
-dnl   +1    :     0    :  0   == removed an interface. Breaks old apps.
-dnl    ?    :    +1    :  ?   == internal changes that doesn't break anything.
-
-LIBCRYPTUI_CURRENT=0
-LIBCRYPTUI_REVISION=0
-LIBCRYPTUI_AGE=0
-
-dnl ****************************************************************************
 
 AC_CONFIG_SRCDIR(libseahorse/seahorse-util.c)
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
@@ -277,26 +266,18 @@ SEAHORSE_LIBS="$SEAHORSE_LIBS $DBUS_LIBS"
 dnl ****************************************************************************
 dnl LIBCRYPTUI
 dnl ****************************************************************************
-   
-if test "$enable_dbus" != "yes"; then
-    echo "disabling libcryptui: no dbus support"
-else
-    
-    LIBCRYPTUI_LT_RELEASE=$LIBCRYPTUI_CURRENT:$LIBCRYPTUI_REVISION:$LIBCRYPTUI_AGE
-    AC_SUBST(LIBCRYPTUI_LT_RELEASE)
 
-    LIBCRYPTUI_MAJOR=$LIBCRYPTUI_CURRENT.$LIBCRYPTUI_REVISION
-    AC_SUBST(LIBCRYPTUI_MAJOR)
-    
-    PKG_CHECK_MODULES(LIBCRYPTUI, gtk+-2.0 >= 2.10.0 gconf-2.0)
-
-    LIBCRYPTUI_CFLAGS="$LIBCRYPTUI_CFLAGS $DBUS_CFLAGS"
-    LIBCRYPTUI_LIBS="$LIBCRYPTUI_LIBS $DBUS_LIBS" 
-        
-    AC_SUBST(LIBCRYPTUI_CFLAGS)
-    AC_SUBST(LIBCRYPTUI_LIBS)
+PKG_CHECK_MODULES([LIBCRYPTUI], cryptui-0.0, [enable_cryptui=yes],[enable_cryptui=no])
+if test "$enable_cryptui" = "no"; then
+    AC_MSG_ERROR([libcryptui from seahorse not found.])
 fi
 
+AC_SUBST([LIBCRYPTUI_CFLAGS])
+AC_SUBST([LIBCRYPTUI_LIBS])
+
+SEAHORSE_CFLAGS="$SEAHORSE_CFLAGS $LIBCRYPTUI_CFLAGS"
+SEAHORSE_LIBS="$SEAHORSE_LIBS $LIBCRYPTUI_LIBS"
+   
 dnl ****************************************************************************
 dnl EPIPHANY
 dnl ****************************************************************************
@@ -666,9 +647,6 @@ dnl ****************************************************************************
 
 AC_OUTPUT([
 Makefile
-libcryptui/cryptui.pc
-libcryptui/Makefile
-libcryptui/tests/Makefile
 libseahorse/Makefile
 po/Makefile.in
 help/Makefile

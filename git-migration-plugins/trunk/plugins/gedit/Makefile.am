@@ -8,10 +8,10 @@ localedir = $(datadir)/locale
 
 INCLUDES = \
 	-I$(top_srcdir) \
-	-I$(top_srcdir)/libcryptui \
 	-DGEDIT_LOCALEDIR=\"$(localedir)\" \
 	-DLIBCRYPTUI_API_SUBJECT_TO_CHANGE \
 	$(GEDIT_CFLAGS) \
+	$(DBUS_CFLAGS) \
 	$(LIBCRYPTUI_CFLAGS)
 
 plugin_LTLIBRARIES = libseahorse-pgp.la
@@ -24,8 +24,7 @@ endif
 
 libseahorse_pgp_la_SOURCES = seahorse-gedit.c seahorse-gedit.h $(PLUGIN_SRCS)
 libseahorse_pgp_la_LDFLAGS = $(PLUGIN_LIBTOOL_FLAGS)
-libseahorse_pgp_la_LIBADD = $(GEDIT_LIBS) $(LIBCRYPTUI_LIBS) \
-    $(top_builddir)/libcryptui/libcryptui.la
+libseahorse_pgp_la_LIBADD = $(GEDIT_LIBS) $(DBUS_LIBS) $(LIBCRYPTUI_LIBS) 
 
 plugin_in_files = seahorse-pgp.gedit-plugin.desktop.in
 

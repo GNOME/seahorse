@@ -16,7 +16,6 @@ libseahorseextension_la_CPPFLAGS = \
 	-DSHARE_DIR=\"$(pkgdatadir)\"				\
     -DEPHY_EXTENSIONS_LOCALEDIR=\"$(datadir)/locale\"	\
 	$(AM_CPPFLAGS) \
-	-I$(top_srcdir)/libcryptui \
 	-DLIBCRYPTUI_API_SUBJECT_TO_CHANGE
 
 libseahorseextension_la_CFLAGS = \
@@ -26,7 +25,7 @@ libseahorseextension_la_CFLAGS = \
 
 libseahorseextension_la_LIBADD =	\
 	mozilla/libsbmozilla.la	\
-	$(top_builddir)/libcryptui/libcryptui.la \
+	$(LIBCRYPTUI_LIBS) \
 	$(MOZILLA_COMPONENT_LIBS)
 
 libseahorseextension_la_LDFLAGS = \

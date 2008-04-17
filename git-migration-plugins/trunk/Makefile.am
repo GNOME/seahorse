@@ -8,8 +8,7 @@ else
 AGENT_DIR = 
 endif
 
-SUBDIRS = libcryptui \
-          libseahorse \
+SUBDIRS = libseahorse \
           po \
           data \
           help \
@@ -21,7 +20,6 @@ EXTRA_DIST = \
     AUTHORS \
     COPYING \
     COPYING-DOCS \
-    COPYING-LIBCRYPTUI \
     ChangeLog \
     HACKING \
     INSTALL \

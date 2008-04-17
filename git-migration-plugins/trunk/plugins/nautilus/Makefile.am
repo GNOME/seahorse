@@ -3,7 +3,6 @@ localedir = $(datadir)/locale
 
 INCLUDES = -I$(top_builddir) \
 	-I$(top_srcdir) \
-	-I$(top_srcdir)/libcryptui \
 	-I$(top_srcdir)/libseahorse \
 	$(SEAHORSE_CFLAGS) \
 	-DLOCALEDIR=\"$(localedir)\" \
@@ -17,7 +16,6 @@ seahorse_preferences_SOURCES = seahorse-pgp-preferences.c
 
 seahorse_preferences_LDADD = \
     $(top_builddir)/libseahorse/libseahorse.a \
-    $(top_builddir)/libcryptui/libcryptui.la \
     $(SEAHORSE_LIBS)
     
 seahorse_tool_SOURCES = \
@@ -28,7 +26,6 @@ seahorse_tool_SOURCES = \
 
 seahorse_tool_LDADD = \
     $(top_builddir)/libseahorse/libseahorse.a \
-    $(top_builddir)/libcryptui/libcryptui.la \
     $(SEAHORSE_LIBS) $(LIBCRYPTUI_LIBS)
 
 # The new mime system
