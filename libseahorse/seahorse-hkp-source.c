@@ -821,6 +821,7 @@ seahorse_hkp_source_export_raw (SeahorseKeySource *sksrc, GSList *keyids,
     gchar *t;
     SoupURI *uri;
     const gchar *fpr;
+    gchar hexfpr[11];
     GHashTable *form;
     guint len;
     GSList *l;
@@ -847,6 +848,9 @@ seahorse_hkp_source_export_raw (SeahorseKeySource *sksrc, GSList *keyids,
                                         (GDestroyNotify)gpgmex_data_release);
     }
     
+    /* prepend the hex prefix (0x) to make keyservers happy */
+    strncpy(hexfpr, "0x", 3);
+
     form = g_hash_table_new (g_str_hash, g_str_equal);
     for (l = keyids; l; l = g_slist_next (l)) {
 
@@ -855,10 +859,12 @@ seahorse_hkp_source_export_raw (SeahorseKeySource *sksrc, GSList *keyids,
         len = strlen (fpr);
         if (len > 8)
             fpr += (len - 8);
+	
+        strncpy(hexfpr + 2, fpr, 9);
 
         /* The get key URI */
         g_hash_table_insert (form, "op", "get");
-        g_hash_table_insert (form, "search", (char *)fpr);
+        g_hash_table_insert (form, "search", (char *)hexfpr);
         soup_uri_set_query_from_form (uri, form);
 
         message = soup_message_new_from_uri ("GET", uri);
