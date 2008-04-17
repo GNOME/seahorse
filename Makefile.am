@@ -2,12 +2,6 @@
 
 ACLOCAL_AMFLAGS = -I m4
 
-if WITH_AGENT
-AGENT_DIR = agent
-else
-AGENT_DIR = 
-endif
-
 SUBDIRS = libcryptui \
           libseahorse \
           src \
@@ -15,8 +9,6 @@ SUBDIRS = libcryptui \
           data \
           help \
           pixmaps \
-          plugins \
-          $(AGENT_DIR) \
           daemon 
 
 EXTRA_DIST = \
@@ -48,8 +40,7 @@ DISTCLEANFILES = \
     
 DISTCHECK_CONFIGURE_FLAGS = \
     --disable-scrollkeeper \
-    --disable-update-mime-database \
-    --with-nautilus-ext-dir=/tmp
+    --disable-update-mime-database
 
 distuninstallcheck:
 	@:

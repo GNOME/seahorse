@@ -42,13 +42,4 @@ gpgme_error_t   seahorse_passphrase_get             (gconstpointer dummy,
                                                      const char* passphrase_info, 
                                                      int prev_bad, int fd);
 
-typedef enum {
-    SEAHORSE_AGENT_UNKNOWN,
-    SEAHORSE_AGENT_NONE,
-    SEAHORSE_AGENT_OTHER,
-    SEAHORSE_AGENT_SEAHORSE
-} SeahorseAgentType;
-
-SeahorseAgentType seahorse_passphrase_detect_agent ();
-
 #endif /* __SEAHORSE_PASSPHRASE__ */

@@ -20,12 +20,6 @@ noinst_LIBRARIES = libseahorse.a
 BUILT_SOURCES = \
 	seahorse-marshal.c seahorse-marshal.h
 
-if WITH_AGENT
-AGENT_SRCS = seahorse-prefs-cache.c
-else
-AGENT_SRCS = 
-endif
-
 if WITH_LDAP
 LDAP_SRCS = seahorse-ldap-source.c seahorse-ldap-source.h
 else
@@ -91,7 +85,6 @@ libseahorse_a_SOURCES = \
 	seahorse-algo.c seahorse-algo.h \
 	seahorse-unix-signal.c seahorse-unix-signal.h \
 	$(BUILT_SOURCES) \
-	$(AGENT_SRCS) \
 	$(KEYSERVER_SRCS) \
 	$(LDAP_SRCS) \
 	$(HKP_SRCS) \

@@ -30,7 +30,6 @@
 #include <gtk/gtk.h>
 #include "cryptui-defines.h"
 
-#define ARMOR_KEY SEAHORSE_DESKTOP_KEYS "/ascii_armor"
 #define ENCRYPTSELF_KEY SEAHORSE_DESKTOP_KEYS "/encrypt_to_self"
 #define MULTI_EXTENSION_KEY SEAHORSE_DESKTOP_KEYS "/package_extension"
 #define MULTI_SEPERATE_KEY SEAHORSE_DESKTOP_KEYS "/multi_seperate"

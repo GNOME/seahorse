@@ -468,28 +468,6 @@ setup_sharing (SeahorseWidget *swidget)
 
 /* -------------------------------------------------------------------------- */
 
-static void
-default_key_changed (GtkComboBox *combo, gpointer *data)
-{
-    GQuark keyid = seahorse_combo_keys_get_active_id (combo);
-    seahorse_gconf_set_string (SEAHORSE_DEFAULT_KEY, keyid == 0 ? "" : g_quark_to_string (keyid));
-}
-
-static void
-gconf_notification (GConfClient *gclient, guint id, GConfEntry *entry, 
-                    GtkComboBox *combo)
-{
-    GQuark keyid = g_quark_from_string (gconf_value_get_string (gconf_entry_get_value (entry)));
-    seahorse_combo_keys_set_active_id (combo, keyid);
-}
-
-static void
-remove_gconf_notification (GObject *obj, gpointer data)
-{
-    guint gconf_id = GPOINTER_TO_INT (data);
-    seahorse_gconf_unnotify (gconf_id);
-}
-
 /**
  * seahorse_prefs_new
  * 
@@ -500,43 +478,11 @@ remove_gconf_notification (GObject *obj, gpointer data)
 SeahorseWidget *
 seahorse_prefs_new (GtkWindow *parent)
 {
-    SeahorseKeyset *skset;
     SeahorseWidget *swidget;
     GtkWidget *widget;
-    guint gconf_id;
     
     swidget = seahorse_widget_new ("prefs", parent);
     
-    widget = glade_xml_get_widget (swidget->xml, "encrypt-self");
-    seahorse_check_button_gconf_attach (GTK_CHECK_BUTTON (widget), ENCRYPTSELF_KEY);
-    
-    widget = glade_xml_get_widget (swidget->xml, "signer-select");
-    g_return_val_if_fail (widget != NULL, NULL);
-
-    skset = seahorse_keyset_new (SKEY_PGP, 
-                                 SKEY_PRIVATE, 
-                                 SKEY_LOC_LOCAL, 
-                                 SKEY_FLAG_CAN_SIGN, 
-                                 SKEY_FLAG_EXPIRED | SKEY_FLAG_REVOKED | SKEY_FLAG_DISABLED);
-    seahorse_combo_keys_attach (GTK_COMBO_BOX (widget), skset, _("None. Prompt for a key."));
-    g_object_unref (skset);
-    
-    seahorse_combo_keys_set_active_id (GTK_COMBO_BOX (widget), 
-                                       g_quark_from_string (seahorse_gconf_get_string (SEAHORSE_DEFAULT_KEY)));
-    g_signal_connect (widget, "changed", G_CALLBACK (default_key_changed), NULL);
-
-    gconf_id = seahorse_gconf_notify (SEAHORSE_DEFAULT_KEY, 
-                                      (GConfClientNotifyFunc)gconf_notification, GTK_COMBO_BOX (widget));
-    g_signal_connect (widget, "destroy", G_CALLBACK (remove_gconf_notification), GINT_TO_POINTER (gconf_id));
-    
-#ifdef WITH_AGENT   
-    seahorse_prefs_cache (swidget);
-#else
-    widget = glade_xml_get_widget (swidget->xml, "cache-tab");
-    g_return_val_if_fail (GTK_IS_WIDGET (widget), swidget);
-    seahorse_prefs_remove_tab (swidget, widget);
-#endif
-
 #ifdef WITH_KEYSERVER
     setup_keyservers (swidget);
 #else
