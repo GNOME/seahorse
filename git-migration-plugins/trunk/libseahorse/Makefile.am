@@ -97,9 +97,7 @@ libseahorse_a_SOURCES = \
 	$(HKP_SRCS) \
 	$(SSH_SRCS)
 
-seahorselibexecbin_PROGRAMS = xloadimage seahorse-ssh-askpass
-
-xloadimage_SOURCES = ../src/seahorse-xloadimage.c
+seahorselibexecbin_PROGRAMS = seahorse-ssh-askpass
 
 seahorse_ssh_askpass_SOURCES = seahorse-ssh-askpass.c
 seahorse_ssh_askpass_LDADD = \

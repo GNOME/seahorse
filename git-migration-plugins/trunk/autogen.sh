@@ -4,7 +4,7 @@
 srcdir=`dirname $0`
 test -z "$srcdir" && srcdir=.
 
-PKG_NAME="seahorse"
+PKG_NAME="seahorse-plugins"
 
 (test -f $srcdir/configure.in) || {
     echo -n "**Error**: Directory "\`$srcdir\'" does not look like the"

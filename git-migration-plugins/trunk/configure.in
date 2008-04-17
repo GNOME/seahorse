@@ -5,7 +5,7 @@ AC_PREREQ(2.52)
 dnl ****************************************************************************
 dnl MAIN SEAHORSE VERSION (update after release)
 
-AC_INIT(seahorse, 2.23.0)
+AC_INIT(seahorse-plugins, 2.23.0)
 
 dnl ****************************************************************************
 dnl LIBCRYPTUI libtool versioning
@@ -20,7 +20,7 @@ LIBCRYPTUI_AGE=0
 
 dnl ****************************************************************************
 
-AC_CONFIG_SRCDIR(src/main.c)
+AC_CONFIG_SRCDIR(daemon/seahorse-daemon.c)
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 AM_CONFIG_HEADER(config.h)
 AM_MAINTAINER_MODE
@@ -848,7 +848,6 @@ dnl ****************************************************************************
 
 AC_OUTPUT([
 Makefile
-seahorse.spec
 libcryptui/cryptui.pc
 libcryptui/Makefile
 libcryptui/tests/Makefile
@@ -860,11 +859,6 @@ pixmaps/Makefile
 pixmaps/22x22/Makefile
 pixmaps/48x48/Makefile
 pixmaps/scalable/Makefile
-src/Makefile
-src/seahorse.desktop.in
-src/seahorse-pgp-encrypted.desktop.in
-src/seahorse-pgp-keys.desktop.in
-src/seahorse-pgp-signature.desktop.in
 agent/Makefile
 daemon/Makefile
 plugins/Makefile
