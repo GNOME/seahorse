@@ -1,0 +1,34 @@
+<oaf_info>
+
+    <oaf_server iid="OAFIID:GNOME_SeahorseApplet_Factory" type="exe"
+                    location="@LIBDIR@/seahorse/seahorse-applet">
+
+        <oaf_attribute name="repo_ids" type="stringv">
+            <item value="IDL:Bonobo/GenericFactory:1.0"/>
+            <item value="IDL:Bonobo/Unknown:1.0"/>
+        </oaf_attribute>
+        <oaf_attribute name="name" type="string" _value="Seahorse Applet Factory"/>
+        <oaf_attribute name="description" type="string" _value="Seahorse Applet Factory"/>
+
+    </oaf_server>
+
+    <oaf_server iid="OAFIID:GNOME_SeahorseApplet"
+                    type="factory" location="OAFIID:GNOME_SeahorseApplet_Factory">
+
+        <oaf_attribute name="repo_ids" type="stringv">
+            <item value="IDL:GNOME/Vertigo/PanelAppletShell:1.0"/>
+            <item value="IDL:Bonobo/Control:1.0"/>
+            <item value="IDL:Bonobo/Unknown:1.0"/>
+        </oaf_attribute>
+    
+        <oaf_attribute name="name" type="string" _value="Clipboard Text Encryption"/>
+        <oaf_attribute name="description" type="string" _value="Encrypt, decrypt or sign the clipboard (uses PGP type encryption)."/>
+        <oaf_attribute name="panel:icon" type="string" value="seahorse-applet"/>
+        <oaf_attribute name="bugzilla:bugzilla" type="string" value="GNOME"/>
+        <oaf_attribute name="bugzilla:product" type="string" value="seahorse"/>
+        <oaf_attribute name="bugzilla:component" type="string" value="Applet"/>
+        <oaf_attribute name="bugzilla:other_binaries" type="string" value="seahorse-applet"/>
+
+    </oaf_server>
+
+</oaf_info>

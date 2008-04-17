@@ -1,0 +1,1082 @@
+/*
+ * Seahorse
+ *
+ * Copyright (C) 2004-2006 Stefan Walter
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the
+ * Free Software Foundation, Inc.,
+ * 59 Temple Place, Suite 330,
+ * Boston, MA 02111-1307, USA.
+ */
+
+#include <config.h>
+#include <stdlib.h>
+#include <libintl.h>
+#include <gnome.h>
+#include <libgnomevfs/gnome-vfs.h>
+
+#include "seahorse-gpgmex.h"
+#include "seahorse-pgp-source.h"
+#include "seahorse-operation.h"
+#include "seahorse-util.h"
+#include "seahorse-pgp-key.h"
+#include "seahorse-pgp-key-op.h"
+#include "seahorse-libdialogs.h"
+#include "seahorse-gpg-options.h"
+#include "seahorse-passphrase.h"
+#include "seahorse-pgp-operation.h"
+
+/* TODO: Verify properly that all keys we deal with are PGP keys */
+
+/* Override the DEBUG_REFRESH_ENABLE switch here */
+#define DEBUG_REFRESH_ENABLE 0
+
+#ifndef DEBUG_REFRESH_ENABLE
+#if _DEBUG
+#define DEBUG_REFRESH_ENABLE 1
+#else
+#define DEBUG_REFRESH_ENABLE 0
+#endif
+#endif
+
+#if DEBUG_REFRESH_ENABLE
+#define DEBUG_REFRESH(x)    g_printerr(x)
+#else
+#define DEBUG_REFRESH(x)
+#endif
+
+/* Amount of keys to load in a batch */
+#define DEFAULT_LOAD_BATCH 200
+
+enum {
+    LOAD_FULL = 0x01,
+    LOAD_PHOTOS = 0x02
+};
+
+enum {
+    PROP_0,
+    PROP_KEY_TYPE,
+    PROP_KEY_DESC,
+    PROP_LOCATION
+};
+
+/* Initialise a GPGME context for PGP keys */
+static gpgme_error_t
+init_gpgme (gpgme_ctx_t *ctx)
+{
+    gpgme_protocol_t proto = GPGME_PROTOCOL_OpenPGP;
+    gpgme_error_t err;
+ 
+    err = gpgme_engine_check_version (proto);
+    g_return_val_if_fail (GPG_IS_OK (err), err);
+   
+    err = gpgme_new (ctx);
+    g_return_val_if_fail (GPG_IS_OK (err), err);
+   
+    err = gpgme_set_protocol (*ctx, proto);
+    g_return_val_if_fail (GPG_IS_OK (err), err);
+    
+    gpgme_set_passphrase_cb (*ctx, (gpgme_passphrase_cb_t)seahorse_passphrase_get, 
+                             NULL);
+   
+    gpgme_set_keylist_mode (*ctx, GPGME_KEYLIST_MODE_LOCAL);
+    return err;
+}
+
+/* -----------------------------------------------------------------------------
+ * LOAD OPERATION 
+ */
+ 
+
+#define SEAHORSE_TYPE_LOAD_OPERATION            (seahorse_load_operation_get_type ())
+#define SEAHORSE_LOAD_OPERATION(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_LOAD_OPERATION, SeahorseLoadOperation))
+#define SEAHORSE_LOAD_OPERATION_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_LOAD_OPERATION, SeahorseLoadOperationClass))
+#define SEAHORSE_IS_LOAD_OPERATION(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_LOAD_OPERATION))
+#define SEAHORSE_IS_LOAD_OPERATION_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_LOAD_OPERATION))
+#define SEAHORSE_LOAD_OPERATION_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_LOAD_OPERATION, SeahorseLoadOperationClass))
+
+DECLARE_OPERATION (Load, load)
+    /*< private >*/
+    SeahorsePGPSource *psrc;        /* Key source to add keys to when found */
+    gpgme_ctx_t ctx;                /* GPGME context we're loading from */
+    gboolean secret;                /* Loading secret keys */
+    guint loaded;                   /* Number of keys we've loaded */
+    guint batch;                    /* Number to load in a batch, or 0 for synchronous */
+    guint stag;                     /* The event source handler id (for stopping a load) */
+    guint parts;                    /* Parts to load*/
+    GHashTable *checks;             /* When refreshing this is our set of missing keys */
+END_DECLARE_OPERATION        
+
+IMPLEMENT_OPERATION (Load, load)
+
+static SeahorseLoadOperation*   seahorse_load_operation_start   (SeahorsePGPSource *psrc, 
+                                                                 const gchar **pattern, 
+                                                                 guint parts,
+                                                                 gboolean secret);
+
+static gboolean                 scheduled_dummy                 (gpointer data);
+
+/* -----------------------------------------------------------------------------
+ * EXPORT 
+ */
+ 
+typedef struct _ExportContext {
+    GArray *keyids;
+    guint at;
+    gpgme_data_t data;
+} ExportContext;
+
+static void
+free_export_context (gpointer p)
+{
+    ExportContext *ctx = (ExportContext*)p;
+    if (!ctx)
+        return;
+    g_array_free (ctx->keyids, TRUE);
+    g_free (ctx);
+}
+
+static void
+export_key_callback (SeahorsePGPOperation *pop, ExportContext *ctx)
+{
+    gpgme_error_t gerr;
+    
+    if (seahorse_operation_is_running (SEAHORSE_OPERATION (pop)))
+        seahorse_operation_mark_progress_full (SEAHORSE_OPERATION (pop), NULL, 
+                                               ctx->at, ctx->keyids->len);
+    
+    /* Done, no need to do anything further */
+    if (ctx->at >= ctx->keyids->len)
+        return;
+    
+    /* Do the next key in the list */
+    gerr = gpgme_op_export_start (pop->gctx, g_array_index (ctx->keyids, const char*, ctx->at), 
+                                  0, ctx->data);
+    ctx->at++;
+    
+    if (!GPG_IS_OK (gerr))
+        seahorse_pgp_operation_mark_failed (pop, gerr);
+}
+
+
+/* -----------------------------------------------------------------------------
+ * PGP Source
+ */
+    
+struct _SeahorsePGPSourcePrivate {
+    guint scheduled_refresh;                /* Source for refresh timeout */
+    GnomeVFSMonitorHandle *monitor_handle;  /* For monitoring the .gnupg directory */
+    SeahorseMultiOperation *operations;     /* A list of all current operations */    
+    GList *orphan_secret;                   /* Orphan secret keys */
+};
+
+G_DEFINE_TYPE (SeahorsePGPSource, seahorse_pgp_source, SEAHORSE_TYPE_KEY_SOURCE);
+
+/* GObject handlers */
+static void seahorse_pgp_source_dispose         (GObject *gobject);
+static void seahorse_pgp_source_finalize        (GObject *gobject);
+static void seahorse_pgp_source_set_property    (GObject *object, guint prop_id, 
+                                                 const GValue *value, GParamSpec *pspec);
+static void seahorse_pgp_source_get_property    (GObject *object, guint prop_id,
+                                                 GValue *value, GParamSpec *pspec);
+
+/* SeahorseKeySource methods */
+static void                seahorse_pgp_source_stop             (SeahorseKeySource *src);
+static guint               seahorse_pgp_source_get_state        (SeahorseKeySource *src);
+static SeahorseOperation*  seahorse_pgp_source_load             (SeahorseKeySource *src,
+                                                                 GQuark keyid);
+static SeahorseOperation*  seahorse_pgp_source_import           (SeahorseKeySource *sksrc, 
+                                                                 gpgme_data_t data);
+static SeahorseOperation*  seahorse_pgp_source_export           (SeahorseKeySource *sksrc, 
+                                                                 GList *keys,
+                                                                 gboolean complete, 
+                                                                 gpgme_data_t data);
+static gboolean            seahorse_pgp_source_remove           (SeahorseKeySource *sksrc, 
+                                                                 SeahorseKey *skey,
+                                                                 guint name, 
+                                                                 GError **error);
+
+/* Other forward decls */
+static void                monitor_gpg_homedir                  (GnomeVFSMonitorHandle *handle, 
+                                                                 const gchar *monitor_uri,
+                                                                 const gchar *info_uri, 
+                                                                 GnomeVFSMonitorEventType event_type,
+                                                                 gpointer user_data);
+static void                cancel_scheduled_refresh             (SeahorsePGPSource *psrc);
+                                                                 
+static GObjectClass *parent_class = NULL;
+
+/* Initialize the basic class stuff */
+static void
+seahorse_pgp_source_class_init (SeahorsePGPSourceClass *klass)
+{
+    GObjectClass *gobject_class;
+    SeahorseKeySourceClass *key_class;
+   
+    parent_class = g_type_class_peek_parent (klass);
+    gobject_class = G_OBJECT_CLASS (klass);
+    gobject_class->dispose = seahorse_pgp_source_dispose;
+    gobject_class->finalize = seahorse_pgp_source_finalize;
+    gobject_class->set_property = seahorse_pgp_source_set_property;
+    gobject_class->get_property = seahorse_pgp_source_get_property;
+    
+    key_class = SEAHORSE_KEY_SOURCE_CLASS (klass);    
+    key_class->load = seahorse_pgp_source_load;
+    key_class->stop = seahorse_pgp_source_stop;
+    key_class->get_state = seahorse_pgp_source_get_state;
+    key_class->import = seahorse_pgp_source_import;
+    key_class->export = seahorse_pgp_source_export;
+    key_class->remove = seahorse_pgp_source_remove;
+ 
+    g_object_class_install_property (gobject_class, PROP_KEY_TYPE,
+        g_param_spec_uint ("key-type", "Key Type", "Key type that originates from this key source.", 
+                           0, G_MAXUINT, SKEY_UNKNOWN, G_PARAM_READABLE));
+                           
+    g_object_class_install_property (gobject_class, PROP_KEY_DESC,
+        g_param_spec_string ("key-desc", "Key Desc", "Description for keys that originate here.",
+                             NULL, G_PARAM_READABLE));
+
+    g_object_class_install_property (gobject_class, PROP_LOCATION,
+        g_param_spec_uint ("location", "Key Location", "Where the key is stored. See SeahorseKeyLoc", 
+                           0, G_MAXUINT, SKEY_LOC_INVALID, G_PARAM_READABLE));    
+}
+
+/* init context, private vars, set prefs, connect signals */
+static void
+seahorse_pgp_source_init (SeahorsePGPSource *psrc)
+{
+    gpgme_error_t err;
+    const gchar *gpg_homedir;
+    GnomeVFSResult res;
+    gchar *uri;
+    
+    err = init_gpgme (&(psrc->gctx));
+    g_return_if_fail (GPG_IS_OK (err));
+    
+    /* init private vars */
+    psrc->pv = g_new0 (SeahorsePGPSourcePrivate, 1);
+    
+    psrc->pv->operations = seahorse_multi_operation_new ();
+    
+    psrc->pv->scheduled_refresh = 0;
+    psrc->pv->monitor_handle = NULL;
+    
+    gpg_homedir = seahorse_gpg_homedir ();
+    uri = gnome_vfs_make_uri_canonical (gpg_homedir);
+    g_return_if_fail (uri != NULL);
+    
+    res = gnome_vfs_monitor_add (&(psrc->pv->monitor_handle), uri, 
+                                 GNOME_VFS_MONITOR_DIRECTORY, 
+                                 monitor_gpg_homedir, psrc);
+    g_free (uri);
+    
+    if (res != GNOME_VFS_OK) {
+        psrc->pv->monitor_handle = NULL;
+        g_warning ("couldn't monitor the GPG home directory: %s", gpg_homedir);
+    }
+}
+
+/* dispose of all our internal references */
+static void
+seahorse_pgp_source_dispose (GObject *gobject)
+{
+    SeahorsePGPSource *psrc;
+    GList *l;
+    
+    /*
+     * Note that after this executes the rest of the object should
+     * still work without a segfault. This basically nullifies the 
+     * object, but doesn't free it.
+     * 
+     * This function should also be able to run multiple times.
+     */
+  
+    psrc = SEAHORSE_PGP_SOURCE (gobject);
+    g_assert (psrc->pv);
+    
+    /* Clear out all operations */
+    if (psrc->pv->operations) {
+        if(seahorse_operation_is_running (SEAHORSE_OPERATION (psrc->pv->operations)))
+            seahorse_operation_cancel (SEAHORSE_OPERATION (psrc->pv->operations));
+        g_object_unref (psrc->pv->operations);
+        psrc->pv->operations = NULL;
+    }
+
+    cancel_scheduled_refresh (psrc);    
+    
+    if (psrc->pv->monitor_handle) {
+        gnome_vfs_monitor_cancel (psrc->pv->monitor_handle);
+        psrc->pv->monitor_handle = NULL;
+    }
+    
+    for (l = psrc->pv->orphan_secret; l; l = g_list_next (l)) 
+        g_object_unref (l->data);
+    g_list_free (psrc->pv->orphan_secret);
+    psrc->pv->orphan_secret = NULL;
+    
+    if (psrc->gctx)
+        gpgme_release (psrc->gctx);
+    
+    G_OBJECT_CLASS (parent_class)->dispose (gobject);
+}
+
+/* free private vars */
+static void
+seahorse_pgp_source_finalize (GObject *gobject)
+{
+    SeahorsePGPSource *psrc;
+  
+    psrc = SEAHORSE_PGP_SOURCE (gobject);
+    g_assert (psrc->pv);
+    
+    /* All monitoring and scheduling should be done */
+    g_assert (psrc->pv->scheduled_refresh == 0);
+    g_assert (psrc->pv->monitor_handle == 0);
+    
+    g_free (psrc->pv);
+ 
+    G_OBJECT_CLASS (parent_class)->finalize (gobject);
+}
+
+static void 
+seahorse_pgp_source_set_property (GObject *object, guint prop_id, const GValue *value, 
+                                  GParamSpec *pspec)
+{
+    
+}
+
+static void 
+seahorse_pgp_source_get_property (GObject *object, guint prop_id, GValue *value, 
+                                  GParamSpec *pspec)
+{
+    switch (prop_id) {
+    case PROP_KEY_TYPE:
+        g_value_set_uint (value, SKEY_PGP);
+        break;
+    case PROP_KEY_DESC:
+        g_value_set_string (value, _("PGP Key"));
+        break;
+    case PROP_LOCATION:
+        g_value_set_uint (value, SKEY_LOC_LOCAL);
+        break;
+    }
+}
+
+/* --------------------------------------------------------------------------
+ * HELPERS 
+ */
+
+
+static void
+key_changed (SeahorseKey *skey, SeahorseKeyChange change, SeahorseKeySource *sksrc)
+{
+    SeahorsePGPKey *pkey;
+    SeahorsePGPSource *psrc;
+    SeahorseKeyEType etype;
+    SeahorseLoadOperation *lop;
+    const gchar *patterns[2];
+    guint parts;
+    
+    /* TODO: We need to fix these key change flags. Currently the only thing
+     * that sets 'ALL' is when we replace a key in an skey. We don't 
+     * need to reload in that case */
+    
+    if (change == SKEY_CHANGE_ALL)
+        return;
+    
+    etype = seahorse_key_get_etype (skey);
+    
+    g_return_if_fail (SEAHORSE_IS_PGP_KEY (skey));
+    pkey = SEAHORSE_PGP_KEY (skey);
+    g_return_if_fail (pkey->pubkey);
+    
+    psrc = SEAHORSE_PGP_SOURCE (seahorse_key_get_source (skey));
+    g_assert (SEAHORSE_IS_PGP_SOURCE (psrc));
+    
+    patterns[0] = seahorse_pgp_key_get_id (pkey->pubkey, 0);
+    patterns[1] = NULL;
+    
+    parts = 0;
+    if (seahorse_key_get_loaded (skey) == SKEY_INFO_COMPLETE) {
+        parts |= LOAD_FULL;
+        if (change == SKEY_CHANGE_PHOTOS || change == SKEY_CHANGE_UIDS)
+            parts |= LOAD_PHOTOS;
+    }
+    
+    /* Schedule a dummy refresh. This blocks all monitoring for a while */
+    cancel_scheduled_refresh (psrc);
+    psrc->pv->scheduled_refresh = g_timeout_add (500, scheduled_dummy, psrc);
+    DEBUG_REFRESH ("scheduled a dummy refresh\n");
+    
+    lop = seahorse_load_operation_start (psrc, patterns, parts, FALSE);
+    seahorse_multi_operation_take (psrc->pv->operations, SEAHORSE_OPERATION (lop));
+
+    if (etype == SKEY_PRIVATE) {
+        lop = seahorse_load_operation_start (psrc, patterns, parts, TRUE);
+        seahorse_multi_operation_take (psrc->pv->operations, SEAHORSE_OPERATION (lop));
+    }
+}
+
+static void
+key_destroyed (SeahorseKey *skey, SeahorseKeySource *sksrc)
+{
+    g_signal_handlers_disconnect_by_func (skey, key_changed, sksrc);
+    g_signal_handlers_disconnect_by_func (skey, key_destroyed, sksrc);
+}
+
+/* Remove the given key from the context */
+static void
+remove_key_from_context (gpointer kt, SeahorseKey *dummy, SeahorsePGPSource *psrc)
+{
+    /* This function gets called as a GHRFunc on the lctx->checks hashtable. */
+    GQuark keyid = GPOINTER_TO_UINT (kt);
+    SeahorseKey *skey;
+    
+    skey = seahorse_context_get_key (SCTX_APP (), SEAHORSE_KEY_SOURCE (psrc), keyid);
+    if (skey != NULL)
+        seahorse_context_remove_key (SCTX_APP (), skey);
+}
+
+/* Add a key to the context  */
+static SeahorsePGPKey*
+add_key_to_context (SeahorsePGPSource *psrc, gpgme_key_t key, gpgmex_photo_id_t photos)
+{
+    SeahorsePGPKey *pkey = NULL;
+    SeahorsePGPKey *prev;
+    const gchar *id;
+    GQuark keyid;
+    GList *l;
+    
+    id = seahorse_pgp_key_get_id (key, 0);
+    keyid = seahorse_pgp_key_get_cannonical_id (id);
+    g_return_val_if_fail (keyid, NULL);
+    
+    g_assert (SEAHORSE_IS_PGP_SOURCE (psrc));
+    prev = SEAHORSE_PGP_KEY (seahorse_context_get_key (SCTX_APP (), SEAHORSE_KEY_SOURCE (psrc), keyid));
+    
+    /* Check if we can just replace the key on the object */
+    if (prev != NULL) {
+        if (key->secret) 
+            g_object_set (prev, "seckey", key, NULL);
+        else
+            g_object_set (prev, "pubkey", key, NULL);
+        
+        if (prev->photoids)
+            gpgmex_photo_id_free_all (prev->photoids);
+        prev->photoids = photos;
+        
+        return prev;
+    }
+    
+    /* Create a new key with secret */    
+    if (key->secret) {
+        pkey = seahorse_pgp_key_new (SEAHORSE_KEY_SOURCE (psrc), NULL, key);
+        
+        /* Since we don't have a public key yet, save this away */
+        psrc->pv->orphan_secret = g_list_append (psrc->pv->orphan_secret, pkey);
+        
+        if (photos)
+            gpgmex_photo_id_free_all (photos);
+        
+        /* No key was loaded as far as everyone is concerned */
+        return NULL;
+    }
+ 
+    /* Just a new public key */
+
+    /* Check for orphans */
+    for (l = psrc->pv->orphan_secret; l; l = g_list_next (l)) {
+        
+        /* Look for a matching key */
+        if (g_str_equal (id, seahorse_pgp_key_get_id (SEAHORSE_PGP_KEY(l->data)->seckey, 0))) {
+            
+            /* Set it up properly */
+            pkey = SEAHORSE_PGP_KEY (l->data);
+            g_object_set (pkey, "pubkey", key, NULL);
+            
+            /* Remove item from orphan list cleanly */
+            psrc->pv->orphan_secret = g_list_remove_link (psrc->pv->orphan_secret, l);
+            g_list_free (l);
+            break;
+        }
+    }
+
+    if (pkey == NULL)
+        pkey = seahorse_pgp_key_new (SEAHORSE_KEY_SOURCE (psrc), key, NULL);
+    
+    /* We listen in to get notified of changes on this key */
+    g_signal_connect (pkey, "changed", G_CALLBACK (key_changed), SEAHORSE_KEY_SOURCE (psrc));
+    g_signal_connect (pkey, "destroy", G_CALLBACK (key_destroyed), SEAHORSE_KEY_SOURCE (psrc));
+
+    /* Add to context */ 
+    seahorse_context_take_key (SCTX_APP (), SEAHORSE_KEY (pkey));
+
+    if (pkey->photoids)
+        gpgmex_photo_id_free_all (pkey->photoids);
+    pkey->photoids = photos;
+    
+    return pkey; 
+}
+
+/* -----------------------------------------------------------------------------
+ *  GPG HOME DIR MONITORING
+ */
+
+static gboolean
+scheduled_refresh (gpointer data)
+{
+    SeahorsePGPSource *psrc = SEAHORSE_PGP_SOURCE (data);
+
+    DEBUG_REFRESH ("scheduled refresh event ocurring now\n");
+    cancel_scheduled_refresh (psrc);
+    seahorse_key_source_load_async (SEAHORSE_KEY_SOURCE (psrc), 0);
+    
+    return FALSE; /* don't run again */
+}
+
+static gboolean
+scheduled_dummy (gpointer data)
+{
+    SeahorsePGPSource *psrc = SEAHORSE_PGP_SOURCE (data);
+    DEBUG_REFRESH ("dummy refresh event occurring now\n");
+    psrc->pv->scheduled_refresh = 0;
+    return FALSE; /* don't run again */    
+}
+
+static void
+cancel_scheduled_refresh (SeahorsePGPSource *psrc)
+{
+    if (psrc->pv->scheduled_refresh != 0) {
+        DEBUG_REFRESH ("cancelling scheduled refresh event\n");
+        g_source_remove (psrc->pv->scheduled_refresh);
+        psrc->pv->scheduled_refresh = 0;
+    }
+}
+        
+static void
+monitor_gpg_homedir (GnomeVFSMonitorHandle *handle, const gchar *monitor_uri,
+                     const gchar *info_uri, GnomeVFSMonitorEventType event_type,
+                     gpointer user_data)
+{
+    SeahorsePGPSource *psrc = SEAHORSE_PGP_SOURCE (user_data);
+    
+    if (g_str_has_suffix (info_uri, SEAHORSE_EXT_GPG) && 
+        (event_type == GNOME_VFS_MONITOR_EVENT_CREATED || 
+         event_type == GNOME_VFS_MONITOR_EVENT_CHANGED ||
+         event_type == GNOME_VFS_MONITOR_EVENT_DELETED)) {
+        if (psrc->pv->scheduled_refresh == 0) {
+            DEBUG_REFRESH ("scheduling refresh event due to file changes\n");
+            psrc->pv->scheduled_refresh = g_timeout_add (500, scheduled_refresh, psrc);
+        }
+    }
+}
+
+/* --------------------------------------------------------------------------
+ *  OPERATION STUFF 
+ */
+ 
+static void 
+seahorse_load_operation_init (SeahorseLoadOperation *lop)
+{
+    gpgme_error_t err;
+    
+    err = init_gpgme (&(lop->ctx));
+    if (!GPG_IS_OK (err)) 
+        g_return_if_reached ();
+    
+    lop->checks = NULL;
+    lop->batch = DEFAULT_LOAD_BATCH;
+    lop->stag = 0;
+}
+
+static void 
+seahorse_load_operation_dispose (GObject *gobject)
+{
+    SeahorseLoadOperation *lop = SEAHORSE_LOAD_OPERATION (gobject);
+    
+    /*
+     * Note that after this executes the rest of the object should
+     * still work without a segfault. This basically nullifies the 
+     * object, but doesn't free it.
+     * 
+     * This function should also be able to run multiple times.
+     */
+  
+    if (lop->stag) {
+        g_source_remove (lop->stag);
+        lop->stag = 0;
+    }
+
+    if (lop->psrc) {
+        g_object_unref (lop->psrc);
+        lop->psrc = NULL;
+    }
+
+    G_OBJECT_CLASS (operation_parent_class)->dispose (gobject);  
+}
+
+static void 
+seahorse_load_operation_finalize (GObject *gobject)
+{
+    SeahorseLoadOperation *lop = SEAHORSE_LOAD_OPERATION (gobject);
+    
+    if (lop->checks)    
+        g_hash_table_destroy (lop->checks);
+
+    g_assert (lop->stag == 0);
+    g_assert (lop->psrc == NULL);
+
+    if (lop->ctx)
+        gpgme_release (lop->ctx);
+        
+    G_OBJECT_CLASS (operation_parent_class)->finalize (gobject);  
+}
+
+static void 
+seahorse_load_operation_cancel (SeahorseOperation *operation)
+{
+    SeahorseLoadOperation *lop = SEAHORSE_LOAD_OPERATION (operation);    
+
+    gpgme_op_keylist_end (lop->ctx);
+    seahorse_operation_mark_done (operation, TRUE, NULL);
+}
+
+/* Completes one batch of key loading */
+static gboolean
+keyload_handler (SeahorseLoadOperation *lop)
+{
+    SeahorsePGPKey *pkey;
+    gpgmex_photo_id_t photos;
+    gpgme_key_t key;
+    guint batch;
+    const gchar *id;
+    GQuark keyid;
+    gchar *t;
+    
+    g_assert (SEAHORSE_IS_LOAD_OPERATION (lop));
+    
+    /* We load until done if batch is zero */
+    batch = lop->batch == 0 ? ~0 : lop->batch;
+
+    while (batch-- > 0) {
+    
+        if (!GPG_IS_OK (gpgme_op_keylist_next (lop->ctx, &key))) {
+        
+            gpgme_op_keylist_end (lop->ctx);
+        
+            /* If we were a refresh loader, then we remove the keys we didn't find */
+            if (lop->checks) 
+                g_hash_table_foreach (lop->checks, (GHFunc)remove_key_from_context, lop->psrc);
+            
+            seahorse_operation_mark_done (SEAHORSE_OPERATION (lop), FALSE, NULL);         
+            return FALSE; /* Remove event handler */
+        }
+        
+        id = seahorse_pgp_key_get_id (key, 0);
+        keyid = seahorse_pgp_key_get_cannonical_id (id);
+        
+        /* Invalid id from GPG ? */
+        if (!keyid) {
+            gpgmex_key_unref (key);
+            continue;
+        }
+        
+        /* During a refresh if only new or removed keys */
+        if (lop->checks) {
+
+            /* Make note that this key exists in key ring */
+            g_hash_table_remove (lop->checks, GUINT_TO_POINTER (keyid));
+
+        }
+        
+        /* Load additional info */
+        photos = NULL;
+        if (lop->parts & LOAD_PHOTOS)
+            seahorse_pgp_key_op_photoid_load (lop->psrc, key, &photos);
+
+        pkey = add_key_to_context (lop->psrc, key, photos);
+        
+        gpgmex_key_unref (key);
+        lop->loaded++;
+    }
+    
+    /* More to do, so queue for next round */        
+    if (lop->stag == 0) {
+    
+        /* If it returns TRUE (like any good GSourceFunc) it means
+         * it needs to stick around, so we register an idle handler */
+        lop->stag = g_idle_add_full (G_PRIORITY_LOW, (GSourceFunc)keyload_handler, 
+                                     lop, NULL);
+    }
+    
+    /* TODO: We can use the GPGME progress to make this more accurate */
+    t = g_strdup_printf (ngettext("Loaded %d key", "Loaded %d keys", lop->loaded), lop->loaded);
+    seahorse_operation_mark_progress (SEAHORSE_OPERATION (lop), t, 0.0);
+    g_free (t);
+    
+    return TRUE; 
+}
+
+static SeahorseLoadOperation*
+seahorse_load_operation_start (SeahorsePGPSource *psrc, const gchar **pattern, 
+                               guint parts, gboolean secret)
+{
+    SeahorsePGPSourcePrivate *priv;
+    SeahorseLoadOperation *lop;
+    gpgme_error_t err;
+    GList *keys, *l;
+    SeahorseKey *skey;
+    
+    g_assert (SEAHORSE_IS_PGP_SOURCE (psrc));
+    priv = psrc->pv;
+
+    lop = g_object_new (SEAHORSE_TYPE_LOAD_OPERATION, NULL);    
+    lop->psrc = psrc;
+    lop->secret = secret;
+    g_object_ref (psrc);
+    
+    /* See which extra parts we should load */
+    lop->parts = parts;
+    if (parts & LOAD_FULL) 
+        gpgme_set_keylist_mode (lop->ctx, GPGME_KEYLIST_MODE_SIGS | 
+                gpgme_get_keylist_mode (lop->ctx));
+    
+    /* Start the key listing */
+    if (pattern)
+        err = gpgme_op_keylist_ext_start (lop->ctx, pattern, secret, 0);
+    else
+        err = gpgme_op_keylist_start (lop->ctx, NULL, secret);
+    g_return_val_if_fail (GPG_IS_OK (err), lop);
+    
+    /* Loading all the keys? */
+    if (!pattern) {
+     
+        lop->checks = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, NULL);
+        keys = seahorse_context_get_keys (SCTX_APP (), SEAHORSE_KEY_SOURCE (psrc));
+        for (l = keys; l; l = g_list_next (l)) {
+            skey = SEAHORSE_KEY (l->data);
+            if (secret && seahorse_key_get_etype (skey) != SKEY_PRIVATE) 
+                continue;
+            g_hash_table_insert (lop->checks, GUINT_TO_POINTER (seahorse_key_get_keyid (l->data)), 
+                                              GUINT_TO_POINTER (TRUE));
+        }
+        g_list_free (keys);
+        
+    }
+    
+    seahorse_operation_mark_start (SEAHORSE_OPERATION (lop));
+    seahorse_operation_mark_progress (SEAHORSE_OPERATION (lop), _("Loading Keys..."), 0.0);
+    
+    /* Run one iteration of the handler */
+    keyload_handler (lop);
+ 
+    return lop;
+}    
+
+static void
+prepare_import_results (SeahorsePGPOperation *pop, SeahorsePGPSource *psrc)
+{
+    SeahorseKey *skey;
+    SeahorseLoadOperation *lop;
+    gpgme_import_result_t results;
+    gpgme_import_status_t import;
+    SeahorseKeySource *sksrc;
+    GList *keys = NULL;
+    const gchar **patterns = NULL;
+    GError *err = NULL;
+    gchar *msg;
+    GQuark keyid;
+    guint i;
+    
+    sksrc = SEAHORSE_KEY_SOURCE (psrc);
+
+    /* Figure out which keys were imported */
+    results = gpgme_op_import_result (pop->gctx);
+    if (results) {
+            
+        /* Dig out all the fingerprints for use as load patterns */
+        patterns = (const gchar**)g_new0(gchar*, results->considered + 1);
+        for (i = 0, import = results->imports; 
+             i < results->considered && import; 
+             import = import->next) {
+            if (GPG_IS_OK (import->result))
+                patterns[i++] = import->fpr;
+        }
+        
+        /* See if we've managed to import any ... */
+        if (!patterns[0] && results->considered > 0) {
+            
+            /* ... try and find out why */
+            if (results->no_user_id) {
+                msg = _("Invalid key data (missing UIDs). This may be due to a computer with a date set in the future or a missing self-signature.");
+                g_set_error (&err, SEAHORSE_ERROR, -1, "%s", msg);
+                seahorse_operation_mark_done (SEAHORSE_OPERATION (pop), FALSE, err);
+                return;
+            }
+        }
+
+        /* Reload public keys */
+        lop = seahorse_load_operation_start (psrc, patterns, LOAD_FULL, FALSE);
+        seahorse_operation_wait (SEAHORSE_OPERATION (lop));
+        g_object_unref (lop);
+
+        /* Reload secret keys */
+        lop = seahorse_load_operation_start (psrc, patterns, LOAD_FULL, TRUE);
+        seahorse_operation_wait (SEAHORSE_OPERATION (lop));
+        g_object_unref (lop);
+            
+        g_free (patterns);
+            
+        /* Now get a list of the new keys */
+        for (import = results->imports; import; import = import->next) {
+            if (!GPG_IS_OK (import->result))
+                continue;
+            
+            keyid = seahorse_pgp_key_get_cannonical_id (import->fpr);
+            if (!keyid) {
+                g_warning ("imported non key with strange keyid: %s", import->fpr);
+                continue;
+            }
+            
+            skey = seahorse_context_get_key (SCTX_APP (), sksrc, keyid);
+            if (skey == NULL) {
+                g_warning ("imported key but then couldn't find it in keyring: %s", 
+                           import->fpr);
+                continue;
+            }
+            
+            keys = g_list_prepend (keys, skey);
+        }
+    }
+    
+    seahorse_operation_mark_result (SEAHORSE_OPERATION (pop), keys, 
+                                    (GDestroyNotify)g_list_free);
+}
+
+/* --------------------------------------------------------------------------
+ * METHODS
+ */
+
+static SeahorseOperation*
+seahorse_pgp_source_load (SeahorseKeySource *src, GQuark keyid)
+{
+    SeahorsePGPSource *psrc;
+    SeahorseLoadOperation *lop;
+    const gchar *match = NULL;
+    const gchar *patterns[2];
+    
+    g_assert (SEAHORSE_IS_KEY_SOURCE (src));
+    psrc = SEAHORSE_PGP_SOURCE (src);
+    
+    /* Schedule a dummy refresh. This blocks all monitoring for a while */
+    cancel_scheduled_refresh (psrc);
+    psrc->pv->scheduled_refresh = g_timeout_add (500, scheduled_dummy, psrc);
+    DEBUG_REFRESH ("scheduled a dummy refresh\n");
+ 
+    if (keyid)
+        match = seahorse_key_get_rawid (keyid);
+    
+    patterns[0] = match;
+    patterns[1] = NULL;
+
+    DEBUG_REFRESH ("refreshing keys...\n");
+
+    /* Secret keys */
+    lop = seahorse_load_operation_start (psrc, match ? patterns : NULL, 
+                                         match ? LOAD_FULL | LOAD_PHOTOS : 0, FALSE);
+    seahorse_multi_operation_take (psrc->pv->operations, SEAHORSE_OPERATION (lop));
+
+    /* Public keys */
+    lop = seahorse_load_operation_start (psrc, match ? patterns : NULL, 
+                                         match ? LOAD_FULL | LOAD_PHOTOS : 0, TRUE);
+    seahorse_multi_operation_take (psrc->pv->operations, SEAHORSE_OPERATION (lop));
+
+    g_object_ref (psrc->pv->operations);
+    return SEAHORSE_OPERATION (psrc->pv->operations);
+}
+
+static void
+seahorse_pgp_source_stop (SeahorseKeySource *src)
+{
+    SeahorsePGPSource *psrc;
+    
+    g_assert (SEAHORSE_IS_KEY_SOURCE (src));
+    psrc = SEAHORSE_PGP_SOURCE (src);
+    
+    if(seahorse_operation_is_running (SEAHORSE_OPERATION (psrc->pv->operations)))
+        seahorse_operation_cancel (SEAHORSE_OPERATION (psrc->pv->operations));
+}
+
+static guint
+seahorse_pgp_source_get_state (SeahorseKeySource *src)
+{
+    SeahorsePGPSource *psrc;
+    
+    g_assert (SEAHORSE_IS_KEY_SOURCE (src));
+    psrc = SEAHORSE_PGP_SOURCE (src);
+    
+    return seahorse_operation_is_running (SEAHORSE_OPERATION (psrc->pv->operations)) ? 
+                                          SKSRC_LOADING : 0;
+}
+
+static SeahorseOperation* 
+seahorse_pgp_source_import (SeahorseKeySource *sksrc, gpgme_data_t data)
+{
+    SeahorsePGPOperation *pop;
+    SeahorsePGPSource *psrc;
+    gpgme_error_t gerr;
+    
+    g_return_val_if_fail (SEAHORSE_IS_PGP_SOURCE (sksrc), NULL);
+    psrc = SEAHORSE_PGP_SOURCE (sksrc);
+    
+    pop = seahorse_pgp_operation_new (_("Importing Keys"));
+    g_return_val_if_fail (pop != NULL, NULL);
+    
+    gpgme_data_seek (data, 0, SEEK_SET);
+    gerr = gpgme_op_import_start (pop->gctx, data);
+    
+    g_signal_connect (pop, "results", G_CALLBACK (prepare_import_results), psrc);
+    g_object_set_data_full (G_OBJECT (pop), "source-data", data, 
+                            (GDestroyNotify)gpgmex_data_release);
+    
+    /* Couldn't start import */
+    if (!GPG_IS_OK (gerr))
+        seahorse_pgp_operation_mark_failed (pop, gerr);
+    
+    return SEAHORSE_OPERATION (pop);
+}
+
+static SeahorseOperation* 
+seahorse_pgp_source_export (SeahorseKeySource *sksrc, GList *keys, 
+                            gboolean complete, gpgme_data_t data)
+{
+    SeahorsePGPOperation *pop;
+    SeahorsePGPSource *psrc;
+    SeahorsePGPKey *pkey;
+    SeahorseKey *skey;
+    ExportContext *ctx;
+    gpgme_error_t gerr = GPG_OK;
+    const gchar *keyid;
+    GList *l;
+    
+    g_return_val_if_fail (SEAHORSE_IS_PGP_SOURCE (sksrc), NULL);
+    psrc = SEAHORSE_PGP_SOURCE (sksrc);
+
+    pop = seahorse_pgp_operation_new (_("Exporting Keys"));
+    g_return_val_if_fail (pop != NULL, NULL);
+
+    if (data == NULL) {
+        
+        /* Tie to operation when we create our own (auto-free) */
+        data = gpgmex_data_new ();
+        seahorse_operation_mark_result (SEAHORSE_OPERATION (pop), data, 
+                                        (GDestroyNotify)gpgmex_data_release);
+    } else {
+       
+        /* Don't free when people pass us their own data */
+        seahorse_operation_mark_result (SEAHORSE_OPERATION (pop), data, NULL);
+    }
+    
+    gpgme_set_armor (pop->gctx, TRUE);
+    gpgme_set_textmode (pop->gctx, TRUE);
+
+    /* Export context for asynchronous export */
+    ctx = g_new0(ExportContext, 1);
+    ctx->keyids = g_array_new (TRUE, TRUE, sizeof (gchar*));
+    ctx->at = 0;
+    ctx->data = data;
+    g_object_set_data_full (G_OBJECT (pop), "export-context", ctx, free_export_context);
+    
+    for (l = keys; l != NULL; l = g_list_next (l)) {
+        
+        g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (l->data), NULL);
+        pkey = SEAHORSE_PGP_KEY (l->data);
+        
+        skey = SEAHORSE_KEY (l->data);       
+        g_return_val_if_fail (skey->sksrc == sksrc, NULL);
+        
+        /* Building list */
+        keyid = seahorse_pgp_key_get_id (pkey->pubkey, 0);
+        g_array_append_val (ctx->keyids, keyid);
+        
+        /* Exporting of secret keys is synchronous */
+        if (complete && skey->etype == SKEY_PRIVATE) {
+            
+            gerr = gpgmex_op_export_secret (pop->gctx, 
+                        seahorse_pgp_key_get_id (pkey->seckey, 0), data);
+            
+            if (!GPG_IS_OK (gerr))
+                break;
+        }
+    }
+
+    if (!GPG_IS_OK (gerr))
+        seahorse_pgp_operation_mark_failed (pop, gerr);
+    else
+    {
+        g_signal_connect (pop, "results", G_CALLBACK (export_key_callback), ctx);
+        export_key_callback (pop, ctx);
+    }
+    
+    return SEAHORSE_OPERATION (pop);
+}
+
+static gboolean            
+seahorse_pgp_source_remove (SeahorseKeySource *sksrc, SeahorseKey *skey,
+                            guint name, GError **error)
+{
+    gpgme_error_t gerr;
+    
+    g_assert (!error || !*error);
+    g_assert (seahorse_key_get_source (skey) == sksrc);
+
+    if (name > 0)
+        gerr = seahorse_pgp_key_op_del_uid (SEAHORSE_PGP_KEY (skey), name);
+    else if (seahorse_key_get_etype (skey) == SKEY_PRIVATE) 
+        gerr = seahorse_pgp_key_pair_op_delete (SEAHORSE_PGP_KEY (skey));
+    else 
+        gerr = seahorse_pgp_key_op_delete (SEAHORSE_PGP_KEY (skey));
+    
+    if (!GPG_IS_OK (gerr)) {
+        seahorse_util_gpgme_to_error (gerr, error);
+        return FALSE;
+    }
+    
+    seahorse_key_source_load_async (sksrc, 0);
+    return TRUE;
+}
+
+/* -------------------------------------------------------------------------- 
+ * FUNCTIONS
+ */
+
+/**
+ * seahorse_pgp_source_new
+ * 
+ * Creates a new PGP key source
+ * 
+ * Returns: The key source.
+ **/
+SeahorsePGPSource*
+seahorse_pgp_source_new (void)
+{
+   return g_object_new (SEAHORSE_TYPE_PGP_SOURCE, NULL);
+}   
+
+gpgme_ctx_t          
+seahorse_pgp_source_new_context ()
+{
+    gpgme_ctx_t ctx = NULL;
+    g_return_val_if_fail (GPG_IS_OK (init_gpgme (&ctx)), NULL);
+    return ctx;
+}
