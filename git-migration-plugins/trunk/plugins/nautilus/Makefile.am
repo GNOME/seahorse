@@ -47,7 +47,10 @@ endif
 
 @INTLTOOL_DESKTOP_RULE@
 desktopdir = $(datadir)/applications
-desktop_in_files = seahorse-pgp-preferences.desktop.in
+desktop_in_files = seahorse-pgp-preferences.desktop.in \
+	seahorse-pgp-encrypted.desktop.in \
+	seahorse-pgp-signature.desktop.in \
+	seahorse-pgp-keys.desktop.in 
 desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 
 man_MANS = seahorse-tool.1
@@ -56,7 +59,14 @@ EXTRA_DIST = \
     $(man_MANS) \
     $(mime_DATA) \
     $(mimeinfo_DATA) \
-    $(desktop_in_files) 
+    $(desktop_in_files) \
+    seahorse-pgp-encrypted.desktop.in.in \
+    seahorse-pgp-keys.desktop.in.in \
+    seahorse-pgp-signature.desktop.in.in 
 
 CLEANFILES = *.bak \
-	$(desktop_DATA)
+	$(desktop_DATA) \
+	seahorse-pgp-encrypted.desktop.in \
+	seahorse-pgp-keys.desktop.in \
+	seahorse-pgp-signature.desktop.in
+
