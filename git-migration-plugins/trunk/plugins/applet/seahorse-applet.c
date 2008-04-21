@@ -40,6 +40,7 @@
 #define SHOW_CLIPBOARD_STATE_KEY      APPLET_SCHEMAS "/show_clipboard_state"
 #define DISPLAY_CLIPBOARD_ENC_KEY     APPLET_SCHEMAS "/display_encrypted_clipboard"
 #define DISPLAY_CLIPBOARD_DEC_KEY     APPLET_SCHEMAS "/display_decrypted_clipboard"
+#define DISPLAY_CLIPBOARD_VER_KEY     APPLET_SCHEMAS "/display_verified_clipboard"
 
 /* -----------------------------------------------------------------------------
  * Initialize Crypto 
@@ -595,8 +596,10 @@ dvi_received (GtkClipboard *board, const gchar *text, SeahorseApplet *sapplet)
         gtk_clipboard_set_text (board, rawtext, strlen (rawtext));
         detect_received (board, rawtext, sapplet);
         
-        if (seahorse_gconf_get_boolean (DISPLAY_CLIPBOARD_DEC_KEY) == TRUE)
-        {
+        if (((type == SEAHORSE_TEXT_TYPE_MESSAGE) && 
+             (seahorse_gconf_get_boolean (DISPLAY_CLIPBOARD_DEC_KEY) == TRUE)) || 
+            ((type == SEAHORSE_TEXT_TYPE_SIGNED) && 
+             (seahorse_gconf_get_boolean (DISPLAY_CLIPBOARD_VER_KEY) == TRUE))) {
             /* TRANSLATORS: This means 'The text that was decrypted' */
             display_text (_("Decrypted Text"), rawtext, TRUE);
         }
@@ -653,6 +656,10 @@ properties_cb (BonoboUIComponent *uic, SeahorseApplet *sapplet, const char *verb
     widget = glade_xml_get_widget (swidget->xml, "display-decrypted-clipboard");
     if (widget && GTK_IS_CHECK_BUTTON (widget))
         seahorse_check_button_gconf_attach (GTK_CHECK_BUTTON (widget), DISPLAY_CLIPBOARD_DEC_KEY);
+        
+    widget = glade_xml_get_widget (swidget->xml, "display-verified-clipboard");
+    if (widget && GTK_IS_CHECK_BUTTON (widget))
+        seahorse_check_button_gconf_attach (GTK_CHECK_BUTTON (widget), DISPLAY_CLIPBOARD_VER_KEY);    
     
     seahorse_widget_show (swidget);
 }
