@@ -30,7 +30,8 @@
 #include "seahorse-widget.h"
 #include "seahorse-util.h"
 #include "seahorse-key-dialogs.h"
-#include "seahorse-pgp-key-op.h"
+
+#include "pgp/seahorse-pgp-key-op.h"
 
 #define DEFAULT_WIDTH    120
 #define DEFAULT_HEIGHT   150

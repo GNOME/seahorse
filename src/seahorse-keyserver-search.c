@@ -22,15 +22,16 @@
 #include <gnome.h>
 
 #include "seahorse-widget.h"
-#include "seahorse-gpgmex.h"
 #include "seahorse-util.h"
 #include "seahorse-context.h"
 #include "seahorse-windows.h"
 #include "seahorse-preferences.h"
-#include "seahorse-server-source.h"
 #include "seahorse-gconf.h"
 #include "seahorse-context.h"
 #include "seahorse-dns-sd.h"
+
+#include "pgp/seahorse-gpgmex.h"
+#include "pgp/seahorse-server-source.h"
 
 typedef struct _KeyserverSelection {
     GSList *names;

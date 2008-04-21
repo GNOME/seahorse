@@ -34,9 +34,12 @@ seahorse_daemon_SOURCES = \
     $(SHARING_SRCS)
 
 seahorse_daemon_LDADD = \
-    $(top_builddir)/libseahorse/libseahorse.a \
-    $(top_builddir)/libcryptui/libcryptui.la \
-    $(SEAHORSE_LIBS)
+	$(top_builddir)/libseahorse/libseahorse.la \
+	$(top_builddir)/pgp/libsea-pgp.la \
+	$(top_builddir)/ssh/libsea-ssh.la \
+	$(top_builddir)/common/libsea-common.la \
+	$(top_builddir)/libcryptui/libcryptui.la \
+	$(SEAHORSE_LIBS)
 
 man_MANS = seahorse-daemon.1
 

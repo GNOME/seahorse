@@ -37,16 +37,14 @@
 #include <avahi-glib/glib-malloc.h>
 #endif 
 
-#include "seahorse-gpgmex.h"
 #include "seahorse-util.h"
 #include "seahorse-key.h"
-#include "seahorse-pgp-key.h"
 #include "seahorse-gconf.h"
 #include "seahorse-vfs-data.h"
 
-#ifdef WITH_SSH
-#include "seahorse-ssh-key.h"
-#endif
+#include "pgp/sea-pgp.h"
+#include "ssh/sea-ssh.h"
+#include "pgp/seahorse-gpgmex.h"
 
 static const gchar *bad_filename_chars = "/\\<>|";
 
@@ -762,13 +760,13 @@ seahorse_util_detect_mime_type (const gchar *mime)
     }
 
     if (g_ascii_strcasecmp (mime, "application/pgp-keys") == 0)
-        return SKEY_PGP;
+        return SEA_PGP;
     
 #ifdef WITH_SSH 
     /* TODO: For now all PEM keys are treated as SSH keys */
     else if (g_ascii_strcasecmp (mime, "application/x-ssh-key") == 0 ||
              g_ascii_strcasecmp (mime, "application/x-pem-key") == 0)
-        return SKEY_SSH;
+        return SEA_SSH;
 #endif 
     
     g_warning ("unsupported type of key data: %s", mime);
@@ -1102,25 +1100,6 @@ seahorse_util_strvec_length (const gchar **vec)
     while (*(vec++))
         len++;
     return len;
-}
-
-/* TODO: This function no longer makes sense once we 
-   have multiple key and encryption types */
-gpgme_key_t* 
-seahorse_util_keylist_to_keys (GList *keys)
-{
-    gpgme_key_t *recips;
-    int i;
-    
-    recips = g_new0 (gpgme_key_t, g_list_length (keys) + 1);
-    
-    for (i = 0; keys != NULL; keys = g_list_next (keys), i++) {
-        g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (keys->data), recips);
-        recips[i] = SEAHORSE_PGP_KEY (keys->data)->pubkey;
-        gpgmex_key_ref (recips[i]);
-    }
-    
-    return recips;
 }
 
 void

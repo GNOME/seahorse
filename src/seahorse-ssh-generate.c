@@ -22,14 +22,15 @@
 #include "config.h"
 #include <gnome.h>
 
-#include "seahorse-ssh-source.h"
-#include "seahorse-ssh-key.h"
-#include "seahorse-ssh-operation.h"
 #include "seahorse-widget.h"
 #include "seahorse-util.h"
 #include "seahorse-key-dialogs.h"
 #include "seahorse-progress.h"
 #include "seahorse-gtkstock.h"
+
+#include "ssh/seahorse-ssh-source.h"
+#include "ssh/seahorse-ssh-key.h"
+#include "ssh/seahorse-ssh-operation.h"
 
 #define DSA_SIZE 1024
 #define DEFAULT_RSA_SIZE 2048

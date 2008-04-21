@@ -32,7 +32,8 @@
 #include "seahorse-util.h"
 #include "seahorse-dns-sd.h"
 #include "seahorse-context.h"
-#include "seahorse-server-source.h"
+
+#include "pgp/seahorse-server-source.h"
 
 /* Override the DEBUG_DNSSD_ENABLE switch here */
 /* #define DEBUG_DNSSD_ENABLE 1 */

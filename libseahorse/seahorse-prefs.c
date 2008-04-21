@@ -18,20 +18,22 @@
  * 59 Temple Place, Suite 330,
  * Boston, MA 02111-1307, USA.
  */
-#include <config.h>
+#include "config.h"
 #include <gnome.h>
 
-#include "config.h"
 #include "seahorse-prefs.h"
 #include "seahorse-util.h"
 #include "seahorse-check-button-control.h"
 #include "seahorse-combo-keys.h"
 #include "seahorse-keyserver-control.h"
-#include "seahorse-server-source.h"
 #include "seahorse-gconf.h"
-#include "seahorse-pgp-key.h"
 #include "seahorse-gtkstock.h"
 #include "seahorse-secure-entry.h"
+
+#include "common/sea-registry.h"
+
+#include "pgp/sea-pgp.h"
+#include "pgp/seahorse-server-source.h"
 
 /* From seahorse-prefs-cache.c */
 void seahorse_prefs_cache (SeahorseWidget *widget);

@@ -23,8 +23,6 @@
 #ifndef __SEAHORSE_WINDOWS_H__
 #define __SEAHORSE_WINDOWS_H__
 
-#include <gpgme.h>
-
 #include "seahorse-context.h"
 
 GtkWindow*	seahorse_key_manager_show	        (SeahorseOperation *op);

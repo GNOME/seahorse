@@ -22,20 +22,21 @@
 #include <config.h>
 #include <gnome.h>
 
-#include "seahorse-gpgmex.h"
 #include "seahorse-windows.h"
 #include "seahorse-widget.h"
 #include "seahorse-preferences.h"
 #include "seahorse-util.h"
 #include "seahorse-operation.h"
 #include "seahorse-key.h"
-#include "seahorse-pgp-key.h"
 #include "seahorse-operation.h"
 #include "seahorse-progress.h"
 #include "seahorse-key-manager-store.h"
 #include "seahorse-key-widget.h"
 #include "seahorse-key-dialogs.h"
 #include "seahorse-vfs-data.h"
+
+#include "pgp/seahorse-gpgmex.h"
+#include "pgp/seahorse-pgp-key.h"
 
 #define KEY_LIST "key_list"
 
@@ -523,7 +524,7 @@ seahorse_keyserver_results_show (SeahorseOperation *op, GtkWindow *parent, const
     
     /* Our predicate for filtering keys */
     pred = g_new0 (SeahorseKeyPredicate, 1);
-    pred->ktype = SKEY_PGP;
+    pred->ktype = SEA_PGP;
     pred->etype = SKEY_PUBLIC;
     pred->location = SKEY_LOC_REMOTE;
     pred->custom = (SeahorseKeyPredFunc)filter_keyset;

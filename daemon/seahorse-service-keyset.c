@@ -180,7 +180,7 @@ seahorse_service_keyset_discover_keys (SeahorseServiceKeyset *keyset, const gcha
     
     /* Check to make sure the key ids are valid */
     for (k = keyids; *k; k++) {
-        keyid = seahorse_key_source_cannonical_keyid (keyset->ktype, *k);
+        keyid = seahorse_key_source_canonize_keyid (keyset->ktype, *k);
         if (!keyid) {
             g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID, 
                          _("Invalid key id: %s"), *k);

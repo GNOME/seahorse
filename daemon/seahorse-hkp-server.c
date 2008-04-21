@@ -23,8 +23,9 @@
 #include <libsoup/soup.h>
 
 #include "config.h"
-#include "seahorse-gpgmex.h"
 #include "seahorse-daemon.h"
+
+#include "pgp/seahorse-gpgmex.h"
 
 /* 
  * DEBUG: Set to number other than zero, in order to run HKP 

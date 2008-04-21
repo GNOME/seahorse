@@ -29,10 +29,11 @@
 #include "seahorse-windows.h"
 #include "seahorse-util.h"
 #include "seahorse-libdialogs.h"
-#include "seahorse-pgp-source.h"
-#include "seahorse-pgp-key.h"
 #include "seahorse-gtkstock.h"
 #include "seahorse-secure-memory.h"
+
+#include "pgp/seahorse-pgp-key.h"
+#include "pgp/seahorse-pgp-source.h"
 
 /* Initializes context and preferences, then loads key manager */
 int

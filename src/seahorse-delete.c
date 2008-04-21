@@ -22,10 +22,11 @@
 #include <config.h>
 #include <gnome.h>
 
-#include "seahorse-gpgmex.h"
 #include "seahorse-windows.h"
-#include "seahorse-pgp-key-op.h"
 #include "seahorse-util.h"
+
+#include "pgp/seahorse-gpgmex.h"
+#include "pgp/seahorse-pgp-key-op.h"
 
 static gboolean
 ask_key_pair (SeahorseKey *skey)

@@ -2,14 +2,25 @@
 
 ACLOCAL_AMFLAGS = -I m4
 
-SUBDIRS = libcryptui \
-          libseahorse \
-          src \
-          po \
-          data \
-          help \
-          pixmaps \
-          daemon 
+if WITH_SSH
+SSH_DIR = ssh
+else
+SSH_DIR = 
+endif
+
+SUBDIRS = \
+	libcryptui \
+	common \
+	libseahorse \
+	gkr \
+	pgp \
+	$(SSH_DIR) \
+	src \
+	po \
+	data \
+	help \
+	pixmaps \
+	daemon 
 
 EXTRA_DIST = \
     AUTHORS \

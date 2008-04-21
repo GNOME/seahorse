@@ -22,12 +22,13 @@
 #include <config.h>
 #include <gnome.h>
  
-#include "seahorse-gpgmex.h"
 #include "seahorse-key-dialogs.h"
 #include "seahorse-key-widget.h"
-#include "seahorse-pgp-key-op.h"
 #include "seahorse-libdialogs.h"
 #include "seahorse-util.h"
+
+#include "pgp/seahorse-gpgmex.h"
+#include "pgp/seahorse-pgp-key-op.h"
 
 static void
 ok_clicked (GtkButton *button, SeahorseWidget *swidget)

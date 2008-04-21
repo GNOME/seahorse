@@ -28,7 +28,6 @@
 
 #include <gtk/gtk.h>
 #include "cryptui.h"
-#include <gpgme.h>
 
 typedef enum {
     SEAHORSE_VALIDITY_REVOKED =     CRYPTUI_VALIDITY_REVOKED,
@@ -39,8 +38,6 @@ typedef enum {
     SEAHORSE_VALIDITY_FULL =        CRYPTUI_VALIDITY_FULL,
     SEAHORSE_VALIDITY_ULTIMATE =    CRYPTUI_VALIDITY_ULTIMATE
 } SeahorseValidity;
-
-SeahorseValidity    seahorse_validity_from_gpgme    (gpgme_validity_t validity);
 
 const gchar*        seahorse_validity_get_string    (SeahorseValidity validity);
 

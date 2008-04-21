@@ -24,11 +24,13 @@
 #include "seahorse-key-widget.h"
 #include "seahorse-util.h"
 #include "seahorse-key.h"
-#include "seahorse-ssh-key.h"
-#include "seahorse-ssh-operation.h"
 #include "seahorse-vfs-data.h"
-#include "seahorse-gpgmex.h"
 #include "seahorse-gtkstock.h"
+
+#include "pgp/seahorse-gpgmex.h"
+
+#include "ssh/seahorse-ssh-key.h"
+#include "ssh/seahorse-ssh-operation.h"
 
 #define NOTEBOOK "notebook"
 

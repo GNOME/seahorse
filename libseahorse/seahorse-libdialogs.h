@@ -31,16 +31,6 @@
 
 #include "seahorse-context.h"
 #include "seahorse-widget.h"
-#include "seahorse-pgp-key.h"
-
-SeahorsePGPKey* seahorse_signer_get                 (GtkWindow *parent);
-
-void            seahorse_notify_signatures          (const gchar* data, 
-                                                     gpgme_verify_result_t status);
-
-void            seahorse_notify_signatures_local    (const gchar* data, 
-                                                     gpgme_verify_result_t status,
-                                                     GtkWidget *attachto);
 
 void            seahorse_notify_import              (guint keynum, gchar **keys);
                                                      

@@ -26,10 +26,11 @@
 #include <gnome.h>
 #include <libgnomevfs/gnome-vfs.h>
 
-#include "seahorse-gpgmex.h"
 #include "seahorse-context.h"
 #include "seahorse-vfs-data.h"
 #include "seahorse-util.h"
+
+#include "pgp/seahorse-gpgmex.h"
 
 #define PROGRESS_BLOCK  16 * 1024
 

@@ -40,16 +40,13 @@
 #include <gnome.h>
 #include <glade/glade-xml.h>
 
-#include "seahorse-gpgmex.h"
 #include "seahorse-libdialogs.h"
 #include "seahorse-widget.h"
 #include "seahorse-util.h"
 #include "seahorse-passphrase.h"
 #include "seahorse-secure-entry.h"
-#include "seahorse-gpg-options.h"
 
-#include "seahorse-ssh-key.h"
-#include "seahorse-pgp-key.h"
+#include "pgp/seahorse-gpgmex.h"
 
 #define HIG_SMALL      6        /* gnome hig small space in pixels */
 #define HIG_LARGE     12        /* gnome hig large space in pixels */
@@ -300,59 +297,4 @@ seahorse_passphrase_prompt_checked (GtkDialog *dialog)
 {
     GtkToggleButton *button = GTK_TOGGLE_BUTTON (g_object_get_data (G_OBJECT (dialog), "check-option"));
     return GTK_IS_TOGGLE_BUTTON (button) ? gtk_toggle_button_get_active (button) : FALSE;
-}
-
-
-gpgme_error_t
-seahorse_passphrase_get (gconstpointer dummy, const gchar *passphrase_hint, 
-                         const char* passphrase_info, int flags, int fd)
-{
-    GtkDialog *dialog;
-    gpgme_error_t err;
-    gchar **split_uid = NULL;
-    gchar *label = NULL;
-    gchar *errmsg = NULL;
-    const gchar *pass;
-    
-    if (passphrase_info && strlen(passphrase_info) < 16)
-        flags |= SEAHORSE_PASS_NEW;
-    
-    if (passphrase_hint)
-        split_uid = g_strsplit (passphrase_hint, " ", 2);
-
-    if (flags & SEAHORSE_PASS_BAD) 
-        errmsg = g_strdup_printf (_("Wrong passphrase."));
-    
-    if (split_uid && split_uid[0] && split_uid[1]) {
-        if (flags & SEAHORSE_PASS_NEW) 
-            label = g_strdup_printf (_("Enter new passphrase for '%s'"), split_uid[1]);
-        else 
-            label = g_strdup_printf (_("Enter passphrase for '%s'"), split_uid[1]);
-    } else {
-        if (flags & SEAHORSE_PASS_NEW) 
-            label = g_strdup (_("Enter new passphrase"));
-        else 
-            label = g_strdup (_("Enter passphrase"));
-    }
-
-    g_strfreev (split_uid);
-
-    dialog = seahorse_passphrase_prompt_show (NULL, errmsg ? errmsg : label, 
-                                              NULL, NULL, FALSE);
-    g_free (label);
-    g_free (errmsg);
-    
-    switch (gtk_dialog_run (dialog)) {
-    case GTK_RESPONSE_ACCEPT:
-        pass = seahorse_passphrase_prompt_get (dialog);
-        seahorse_util_printf_fd (fd, "%s\n", pass);
-        err = GPG_OK;
-        break;
-    default:
-        err = GPG_E (GPG_ERR_CANCELED);
-        break;
-    };
-    
-    gtk_widget_destroy (GTK_WIDGET (dialog));
-    return err;
 }

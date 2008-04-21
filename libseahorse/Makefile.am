@@ -15,46 +15,20 @@ INCLUDES = -I$(top_builddir) \
 	-DEXECDIR=\""$(seahorselibexecbindir)"\" \
 	-DLIBCRYPTUI_API_SUBJECT_TO_CHANGE 
 
-noinst_LIBRARIES = libseahorse.a
+noinst_LTLIBRARIES = libseahorse.la
 
 BUILT_SOURCES = \
 	seahorse-marshal.c seahorse-marshal.h
 
-if WITH_LDAP
-LDAP_SRCS = seahorse-ldap-source.c seahorse-ldap-source.h
-else
-LDAP_SRCS = 
-endif
-
-if WITH_HKP
-HKP_SRCS = seahorse-hkp-source.c seahorse-hkp-source.h
-else
-HKP_SRCS =
-endif
-
 if WITH_KEYSERVER
-KEYSERVER_SRCS = seahorse-server-source.c seahorse-server-source.h 
-KEYSERVER_SRCS += seahorse-keyserver-control.c seahorse-keyserver-control.h
+KEYSERVER_SRCS = seahorse-keyserver-control.c seahorse-keyserver-control.h
 else
 KEYSERVER_SRCS = 
 endif
 
-if WITH_SSH
-SSH_SRCS = seahorse-ssh-key-data.c seahorse-ssh-key-data.h
-SSH_SRCS += seahorse-ssh-key.c seahorse-ssh-key.h 
-SSH_SRCS += seahorse-ssh-source.c seahorse-ssh-source.h
-SSH_SRCS += seahorse-ssh-operation.c seahorse-ssh-operation.h
-else
-SSH_SRCS = 
-endif
-
-libseahorse_a_SOURCES = \
+libseahorse_la_SOURCES = \
 	seahorse-key.c seahorse-key.h \
 	seahorse-key-source.c seahorse-key-source.h \
-	seahorse-pgp-key.c seahorse-pgp-key.h \
-	seahorse-pgp-key-op.c seahorse-pgp-key-op.h \
-	seahorse-pgp-source.c seahorse-pgp-source.h \
-	seahorse-pgp-operation.c seahorse-pgp-operation.h \
     seahorse-unknown-key.c seahorse-unknown-key.h \
     seahorse-unknown-source.c seahorse-unknown-source.h \
 	seahorse-context.c seahorse-context.h \
@@ -65,12 +39,9 @@ libseahorse_a_SOURCES = \
 	seahorse-validity.c seahorse-validity.h \
 	seahorse-check-button-control.c seahorse-check-button-control.h \
 	seahorse-combo-keys.c seahorse-combo-keys.h \
-	seahorse-gpg-options.c seahorse-gpg-options.h \
 	seahorse-passphrase.c seahorse-passphrase.h \
-	seahorse-signer.c \
 	seahorse-libdialogs.h \
 	seahorse-vfs-data.c seahorse-vfs-data.h \
-	seahorse-gpgmex.h seahorse-gpgmex-op.c seahorse-gpgmex-util.c \
 	seahorse-prefs.c seahorse-prefs.h \
 	seahorse-prefs-keyrings.c \
 	seahorse-operation.c seahorse-operation.h \
@@ -82,23 +53,17 @@ libseahorse_a_SOURCES = \
 	seahorse-notification.c \
 	seahorse-secure-memory.c seahorse-secure-memory.h \
 	seahorse-secure-entry.c seahorse-secure-entry.h \
-	seahorse-algo.c seahorse-algo.h \
 	seahorse-unix-signal.c seahorse-unix-signal.h \
 	$(BUILT_SOURCES) \
-	$(KEYSERVER_SRCS) \
-	$(LDAP_SRCS) \
-	$(HKP_SRCS) \
-	$(SSH_SRCS)
+	$(KEYSERVER_SRCS)
+	
+libseahorse_la_LIBADD = \
+	$(top_builddir)/common/libsea-common.la \
+	$(top_builddir)/libcryptui/libcryptui.la
 
-seahorselibexecbin_PROGRAMS = xloadimage seahorse-ssh-askpass
+seahorselibexecbin_PROGRAMS = xloadimage
 
 xloadimage_SOURCES = ../src/seahorse-xloadimage.c
-
-seahorse_ssh_askpass_SOURCES = seahorse-ssh-askpass.c
-seahorse_ssh_askpass_LDADD = \
-	libseahorse.a \
-	$(top_builddir)/libcryptui/libcryptui.la \
-	$(SEAHORSE_LIBS)
 
 seahorse-marshal.h: seahorse-marshal.list $(GLIB_GENMARSHAL)
 	$(GLIB_GENMARSHAL) $< --header --prefix=seahorse_marshal > $@
@@ -108,7 +73,6 @@ seahorse-marshal.c: seahorse-marshal.list $(GLIB_GENMARSHAL)
 	$(GLIB_GENMARSHAL) $< --body --prefix=seahorse_marshal >> $@
 
 glade_DATA = \
-	seahorse-signer.glade \
 	seahorse-prefs.glade \
 	seahorse-add-keyring.glade \
 	seahorse-add-keyserver.glade \

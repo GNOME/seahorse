@@ -25,7 +25,6 @@
 #include <gconf/gconf-client.h>
 #include <libgnomevfs/gnome-vfs.h>
 
-#include "seahorse-gpgmex.h"
 #include "seahorse-windows.h"
 #include "seahorse-widget.h"
 #include "seahorse-progress.h"
@@ -35,24 +34,26 @@
 #include "seahorse-validity.h"
 #include "seahorse-key-manager-store.h"
 #include "seahorse-key-dialogs.h"
-#include "seahorse-pgp-key-op.h"
 #include "seahorse-key-widget.h"
-#include "seahorse-gpg-options.h"
 #include "seahorse-gconf.h"
 #include "seahorse-gtkstock.h"
 #include "seahorse-key-source.h"
 #include "seahorse-vfs-data.h"
+
+#include "pgp/seahorse-gpgmex.h"
+#include "pgp/seahorse-gpg-options.h"
+#include "pgp/seahorse-pgp-key-op.h"
 
 #ifdef WITH_KEYSERVER
 #include "seahorse-keyserver-sync.h"
 #endif
 
 #ifdef WITH_SSH
-#include "seahorse-ssh-key.h"
+#include "ssh/seahorse-ssh-key.h"
 #endif
 
-#include "seahorse-gkeyring-item.h"
-#include "seahorse-gkeyring-source.h"
+#include "gkr/seahorse-gkeyring-item.h"
+#include "gkr/seahorse-gkeyring-source.h"
 
 #define TRACK_SELECTED_KEY    "track-selected-keyid"
 #define TRACK_SELECTED_TAB    "track-selected-tabid"
@@ -741,7 +742,7 @@ sync_activate (GtkWidget *widget, SeahorseWidget *swidget)
     
     /* Only supported on PGP keys */
     for (l = keys; l; l = g_list_next (l)) {
-        if (seahorse_key_get_ktype (SEAHORSE_KEY (l->data)) != SKEY_PGP) {
+        if (seahorse_key_get_ktype (SEAHORSE_KEY (l->data)) != SEA_PGP) {
             keys = l = g_list_delete_link (keys, l);
             if (keys == NULL)
                 break;
@@ -749,7 +750,7 @@ sync_activate (GtkWidget *widget, SeahorseWidget *swidget)
     }
     
     if (keys == NULL)
-        keys = seahorse_context_find_keys (SCTX_APP (), SKEY_PGP, 0, SKEY_LOC_LOCAL);
+        keys = seahorse_context_find_keys (SCTX_APP (), SEA_PGP, 0, SKEY_LOC_LOCAL);
     seahorse_keyserver_sync_show (keys,GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)));
     g_list_free (keys);
 #endif
@@ -764,7 +765,7 @@ setup_sshkey_activate (GtkWidget *widget, SeahorseWidget *swidget)
     
     /* Only supported on SSH keys */
     for (l = keys; l; l = g_list_next (l)) {
-        if (seahorse_key_get_ktype (SEAHORSE_KEY (l->data)) != SKEY_SSH) {
+        if (seahorse_key_get_ktype (SEAHORSE_KEY (l->data)) != SEA_SSH) {
             keys = l = g_list_delete_link (keys, l);
             if (keys == NULL)
                 break;
@@ -973,11 +974,11 @@ selection_changed (SeahorseWidget *swidget)
     gtk_action_group_set_sensitive (actions, selected);
     
     actions = seahorse_widget_find_actions (swidget, "pgp");
-    gtk_action_group_set_sensitive (actions, ((ktype == SKEY_PGP) && (seahorse_key_get_etype (skey) != SKEY_PRIVATE)));
+    gtk_action_group_set_sensitive (actions, ((ktype == SEA_PGP) && (seahorse_key_get_etype (skey) != SKEY_PRIVATE)));
     
 #ifdef WITH_SSH    
     actions = seahorse_widget_find_actions (swidget, "ssh");
-    gtk_action_group_set_sensitive (actions, ktype == SKEY_SSH);
+    gtk_action_group_set_sensitive (actions, ktype == SEA_SSH);
 #endif    
     
     /* This is called as a one-time idle handler, return FALSE so we don't get run again */

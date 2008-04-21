@@ -25,24 +25,19 @@
 #include <libintl.h>
 #include <gnome.h>
 
-#include "seahorse-pgp-key.h"
-#include "seahorse-pgp-source.h"
 #include "seahorse-context.h"
 #include "seahorse-marshal.h"
 #include "seahorse-libdialogs.h"
 #include "seahorse-gconf.h"
 #include "seahorse-util.h"
-#include "seahorse-server-source.h"
-#include "seahorse-pgp-source.h"
 #include "seahorse-dns-sd.h"
 #include "seahorse-transfer-operation.h"
 #include "seahorse-unknown-source.h"
 #include "seahorse-unknown-key.h"
 
-#ifdef WITH_SSH
-#include "seahorse-ssh-key.h"
-#include "seahorse-ssh-source.h"
-#endif
+#include "common/sea-registry.h"
+
+#include "pgp/seahorse-server-source.h"
 
 /* The application main context */
 SeahorseContext* app_context = NULL;
@@ -205,49 +200,44 @@ seahorse_context_app (void)
 SeahorseContext*
 seahorse_context_new (guint flags, guint ktype)
 {
-    SeahorseContext *sctx = g_object_new (SEAHORSE_TYPE_CONTEXT, NULL);
+	SeahorseContext *sctx = g_object_new (SEAHORSE_TYPE_CONTEXT, NULL);
     
-    if (flags & SEAHORSE_CONTEXT_DAEMON)
-        sctx->is_daemon = TRUE;
+    	if (flags & SEAHORSE_CONTEXT_DAEMON)
+	    sctx->is_daemon = TRUE;
     
-    if (flags & SEAHORSE_CONTEXT_APP) {
+	if (flags & SEAHORSE_CONTEXT_APP) {
+		
+		GList *l, *types;
+		
+		types = sea_registry_find_types (NULL, "key-source", "local", NULL);
+		for (l = types; l; l = g_list_next (l)) {
+			SeahorseKeySource *src = g_object_new (GPOINTER_TO_UINT (l->data), NULL);
+			seahorse_context_take_key_source (sctx, src);
+		}
+		g_list_free (types);
 
-        if (ktype >= 0) {
-            /* Add the default key sources */
-            if (ktype == 0 || ktype == SKEY_PGP) {
-                SeahorsePGPSource *pgpsrc = seahorse_pgp_source_new ();
-                seahorse_context_take_key_source (sctx, SEAHORSE_KEY_SOURCE (pgpsrc));     
-            }
-#ifdef WITH_SSH        
-            if (ktype == 0 || ktype == SKEY_SSH) {
-                SeahorseSSHSource *sshsrc = seahorse_ssh_source_new ();
-                seahorse_context_take_key_source (sctx, SEAHORSE_KEY_SOURCE (sshsrc));     
-            }
-#endif
-        }
-
-        /* DNS-SD discovery */    
-        sctx->pv->discovery = seahorse_service_discovery_new ();
+		/* DNS-SD discovery */    
+		sctx->pv->discovery = seahorse_service_discovery_new ();
         
-        /* Automatically added remote key sources */
-        sctx->pv->auto_sources = g_hash_table_new_full (g_str_hash, g_str_equal,
+		/* Automatically added remote key sources */
+		sctx->pv->auto_sources = g_hash_table_new_full (g_str_hash, g_str_equal,
                                                         g_free, NULL);
 
-        /* Listen for new gconf remote key sources automatically */
-        sctx->pv->notify_id = seahorse_gconf_notify (KEYSERVER_KEY, 
+		/* Listen for new gconf remote key sources automatically */
+		sctx->pv->notify_id = seahorse_gconf_notify (KEYSERVER_KEY, 
                                     (GConfClientNotifyFunc)refresh_keyservers, sctx);
         
-        if (app_context)
-            g_object_unref (app_context);
+		if (app_context)
+			g_object_unref (app_context);
         
-        g_object_ref (sctx);
-        gtk_object_sink (GTK_OBJECT (sctx));
-        app_context = sctx;
+		g_object_ref (sctx);
+		gtk_object_sink (GTK_OBJECT (sctx));
+		app_context = sctx;
         
-        refresh_keyservers (NULL, 0, NULL, sctx);
-    }
+		refresh_keyservers (NULL, 0, NULL, sctx);
+	}
     
-    return sctx;
+	return sctx;
 }
 
 /**
@@ -1017,7 +1007,7 @@ seahorse_context_discover_keys (SeahorseContext *sctx, GQuark ktype,
     /* Check all the keyids */
     for (l = rawids; l; l = g_slist_next (l)) {
         
-        keyid = seahorse_key_source_cannonical_keyid (ktype, (gchar*)l->data);
+        keyid = seahorse_key_source_canonize_keyid (ktype, (gchar*)l->data);
         if (!keyid) {
             /* TODO: Try and match this partial keyid */
             g_warning ("invalid keyid: %s", (gchar*)l->data);

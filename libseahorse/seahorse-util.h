@@ -29,7 +29,6 @@
 
 #include <gtk/gtk.h>
 #include <time.h>
-#include <gpgme.h>
 
 #include "config.h"
 #include "seahorse-context.h"
@@ -147,8 +146,6 @@ gchar*      seahorse_util_remove_suffix     (const gchar        *path,
 gchar**     seahorse_util_strvec_dup        (const gchar        **vec);
 
 guint       seahorse_util_strvec_length       (const gchar      **vec);
-
-gpgme_key_t* seahorse_util_keylist_to_keys    (GList *keys);
 
 GList*       seahorse_util_keylist_sort       (GList *keys);
 

@@ -27,9 +27,10 @@
 #include "seahorse-service.h"
 #include "seahorse-context.h"
 #include "seahorse-key-source.h"
-#include "seahorse-gpgmex.h"
 #include "seahorse-util.h"
 #include "seahorse-libdialogs.h"
+
+#include "pgp/seahorse-gpgmex.h"
 
 #define KEYSET_PATH "/org/gnome/seahorse/keys/%s"
 #define KEYSET_PATH_LOCAL "/org/gnome/seahorse/keys/%s/local"

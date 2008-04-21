@@ -27,18 +27,19 @@
 #include <gnome.h>
 #include <time.h>
 
-#include "seahorse-gpgmex.h"
 #include "seahorse-key-dialogs.h"
 #include "seahorse-key-widget.h"
 #include "seahorse-util.h"
 #include "seahorse-key.h"
-#include "seahorse-pgp-key.h"
-#include "seahorse-pgp-key-op.h"
 #include "seahorse-gtkstock.h"
 #include "seahorse-windows.h"
 #include "seahorse-vfs-data.h"
 #include "seahorse-key-model.h"
 #include "seahorse-gconf.h"
+
+#include "pgp/seahorse-gpgmex.h"
+#include "pgp/seahorse-pgp-key.h"
+#include "pgp/seahorse-pgp-key-op.h"
 
 #ifdef WITH_KEYSERVER
 #include "seahorse-keyserver-sync.h"
@@ -346,7 +347,7 @@ names_populate (SeahorseWidget *swidget, GtkTreeStore *store, SeahorsePGPKey *pk
         }
         
         /* Pass it to 'DiscoverKeys' for resolution/download */
-        keys = seahorse_context_discover_keys (SCTX_APP (), SKEY_PGP, rawids);
+        keys = seahorse_context_discover_keys (SCTX_APP (), SEA_PGP, rawids);
         g_slist_free (rawids);
         rawids = NULL;
         
@@ -1480,7 +1481,7 @@ signatures_populate_model (SeahorseWidget *swidget, SeahorseKeyModel *skmodel)
         rawids = unique_slist_strings (rawids);
         
         /* Pass it to 'DiscoverKeys' for resolution/download */
-        keys = seahorse_context_discover_keys (SCTX_APP (), SKEY_PGP, rawids);
+        keys = seahorse_context_discover_keys (SCTX_APP (), SEA_PGP, rawids);
         g_slist_free (rawids);
         rawids = NULL;
         

@@ -24,12 +24,13 @@
 #include "seahorse-key-widget.h"
 #include "seahorse-util.h"
 #include "seahorse-key.h"
-#include "seahorse-gkeyring-item.h"
-#include "seahorse-gkeyring-source.h"
-#include "seahorse-gkeyring-operation.h"
 #include "seahorse-gtkstock.h"
 #include "seahorse-secure-memory.h"
 #include "seahorse-secure-entry.h"
+
+#include "gkr/seahorse-gkeyring-item.h"
+#include "gkr/seahorse-gkeyring-source.h"
+#include "gkr/seahorse-gkeyring-operation.h"
 
 /* -----------------------------------------------------------------------------
  * MAIN TAB 

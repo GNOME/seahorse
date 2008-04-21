@@ -29,7 +29,7 @@
  *   created it.
  * 
  * Properties base classes must implement:
- *  ktype: (GQuark) The ktype (ie: SKEY_PGP) of keys originating from this 
+ *  ktype: (GQuark) The ktype (ie: SEA_PGP) of keys originating from this 
  *         key source.
  *  key-desc: (gchar*) Description for the type of keys originating here.
  *  location: (SeahorseKeyLoc) The location of keys that come from this 
@@ -43,10 +43,11 @@
 #define __SEAHORSE_KEY_SOURCE_H__
 
 #include <gnome.h>
-#include <gpgme.h>
 
 #include "seahorse-key.h"
 #include "seahorse-operation.h"
+
+#include "pgp/seahorse-gpgmex.h"
 
 #define SEAHORSE_TYPE_KEY_SOURCE            (seahorse_key_source_get_type ())
 #define SEAHORSE_KEY_SOURCE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_KEY_SOURCE, SeahorseKeySource))
@@ -67,7 +68,16 @@ typedef enum {
 
 typedef struct _SeahorseKeySourceClass {
     GtkObjectClass parent_class;
+    
+    /* class props ----------------------------------------------------- */
+    const GQuark key_type;
+    const gchar *display_name;
+    const gchar **mime_types;
 
+    /* class methods --------------------------------------------------- */
+    
+    GQuark (*canonize_keyid) (const gchar *keyid);
+    
     /* virtual methods ------------------------------------------------- */
 
     /**
@@ -212,7 +222,11 @@ GQuark              seahorse_key_source_get_ktype        (SeahorseKeySource *sks
 
 SeahorseKeyLoc      seahorse_key_source_get_location     (SeahorseKeySource *sksrc);
 
-GQuark              seahorse_key_source_cannonical_keyid (GQuark ktype, 
+GQuark              seahorse_key_source_canonize_keyid   (GQuark ktype, 
                                                           const gchar *keyid);
+
+GQuark              seahorse_key_source_mime_to_ktype    (const gchar *mimetype);
+
+const gchar*        seahorse_key_source_type_get_description (GType type);
 
 #endif /* __SEAHORSE_KEY_SOURCE_H__ */

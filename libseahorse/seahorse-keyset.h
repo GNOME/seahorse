@@ -113,11 +113,4 @@ void                seahorse_keyset_set_closure        (SeahorseKeyset *skset,
                                                         SeahorseKey *skey,
                                                         gpointer closure);
 
-/* -----------------------------------------------------------------------------
- * SOME COMMON KEYSETS 
- */
- 
-SeahorseKeyset*     seahorse_keyset_pgp_signers_new     ();
-
-
 #endif /* __SEAHORSE_KEY_SET_H__ */

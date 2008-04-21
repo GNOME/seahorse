@@ -23,16 +23,21 @@
 
 #include "seahorse-service.h"
 #include "seahorse-key.h"
-#include "seahorse-pgp-key.h"
-#include "seahorse-pgp-operation.h"
 #include "seahorse-gconf.h"
 #include "seahorse-util.h"
 #include "seahorse-libdialogs.h"
+
+#include "pgp/seahorse-pgp-key.h"
+#include "pgp/seahorse-pgp-operation.h"
 
 /* flags from seahorse-service-cyrpto.xml */
 #define FLAG_QUIET 0x01
 
 G_DEFINE_TYPE (SeahorseServiceCrypto, seahorse_service_crypto, G_TYPE_OBJECT);
+
+/* Note that we can't use GTK stock here, as we hand these icons off 
+   to other processes in the case of notifications */
+#define ICON_PREFIX     DATA_DIR "/pixmaps/seahorse/48x48/"
 
 /* -----------------------------------------------------------------------------
  * PUBLIC METHODS
@@ -87,6 +92,114 @@ process_crypto_result (SeahorsePGPOperation *pop, gpgme_error_t gstarterr,
         return FALSE;
     }
 }
+
+static gpgme_key_t* 
+keylist_to_keys (GList *keys)
+{
+	gpgme_key_t *recips;
+	int i;
+
+	recips = g_new0 (gpgme_key_t, g_list_length (keys) + 1);
+
+	for (i = 0; keys != NULL; keys = g_list_next (keys), i++) {
+		g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (keys->data), recips);
+		recips[i] = SEAHORSE_PGP_KEY (keys->data)->pubkey;
+		gpgmex_key_ref (recips[i]);
+	}
+
+	return recips;
+}
+
+static void
+notify_signatures (const gchar* data, gpgme_verify_result_t status)
+{
+	const gchar *icon = NULL;
+	gchar *title, *body;
+	gboolean sig = FALSE;
+	GSList *rawids;
+	GList *keys;
+	SeahorseKey *skey;
+
+	/* Discover the key in question */
+	rawids = g_slist_append (NULL, status->signatures->fpr);
+	keys = seahorse_context_discover_keys (SCTX_APP (), SEA_PGP, rawids);
+	g_slist_free (rawids);
+
+	g_return_if_fail (keys != NULL);
+	skey = SEAHORSE_KEY (keys->data);
+	g_list_free (keys);
+
+	/* Figure out what to display */
+	switch (gpgme_err_code (status->signatures->status)) {
+	case GPG_ERR_KEY_EXPIRED:
+		/* TRANSLATORS: <key id='xxx'> is a custom markup tag, do not translate. */
+		body = _("Signed by <i><key id='%s'/> <b>expired</b></i> on %s.");
+		title = _("Invalid Signature");
+		icon = ICON_PREFIX "seahorse-sign-bad.png";
+		sig = TRUE;
+		break;
+		/* TRANSLATORS: <key id='xxx'> is a custom markup tag, do not translate. */
+	case GPG_ERR_SIG_EXPIRED:
+		body  = _("Signed by <i><key id='%s'/></i> on %s <b>Expired</b>.");
+		title = _("Expired Signature");
+		icon = ICON_PREFIX "seahorse-sign-bad.png";
+		sig = TRUE;
+		break;
+		/* TRANSLATORS: <key id='xxx'> is a custom markup tag, do not translate. */
+	case GPG_ERR_CERT_REVOKED:
+		body = _("Signed by <i><key id='%s'/> <b>Revoked</b></i> on %s.");
+		title = _("Revoked Signature");
+		icon = ICON_PREFIX "seahorse-sign-bad.png";
+		sig = TRUE;
+		break;
+	case GPG_ERR_NO_ERROR:
+		/* TRANSLATORS: <key id='xxx'> is a custom markup tag, do not translate. */
+		body = _("Signed by <i><key id='%s'/></i> on %s.");
+		title = _("Good Signature");
+		icon = ICON_PREFIX "seahorse-sign-ok.png";
+		sig = TRUE;
+		break;
+	case GPG_ERR_NO_PUBKEY:
+		body = _("Signing key not in keyring.");
+		title = _("Unknown Signature");
+		icon = ICON_PREFIX "seahorse-sign-unknown.png";
+		break;
+	case GPG_ERR_BAD_SIGNATURE:
+		body = _("Bad or forged signature. The signed data was modified.");
+		title = _("Bad Signature");
+		icon = ICON_PREFIX "seahorse-sign-bad.png";
+		break;
+	case GPG_ERR_NO_DATA:
+		return;
+	default:
+		if (!GPG_IS_OK (status->signatures->status))
+			seahorse_util_handle_gpgme (status->signatures->status, 
+			                            _("Couldn't verify signature."));
+		return;
+	};
+
+	if (sig) {
+		gchar *date = seahorse_util_get_display_date_string (status->signatures->timestamp);
+		gchar *id = seahorse_context_keyid_to_dbus (SCTX_APP (), seahorse_key_get_keyid (skey), 0);
+		body = g_markup_printf_escaped (body, id, date);
+		g_free (date);
+		g_free (id);
+	} else {
+		body = g_strdup (body);
+	}
+
+	if (data) {
+		data = seahorse_util_uri_get_last (data);
+		title = g_strdup_printf ("%s: %s", data, title);
+	} else {
+		title = g_strdup (title);
+	}
+
+	seahorse_notification_display (title, body, !sig, icon, NULL);
+
+	g_free(title);
+	g_free(body);
+}    
 
 /* -----------------------------------------------------------------------------
  * DBUS METHODS 
@@ -177,7 +290,7 @@ seahorse_service_crypto_encrypt_text (SeahorseServiceCrypto *crypto,
     }
 
     /* Make keys into the right format for GPGME */
-    recips = seahorse_util_keylist_to_keys (recipkeys);
+    recips = keylist_to_keys (recipkeys);
     g_list_free (recipkeys);
     
     /* Do the encryption */
@@ -272,7 +385,7 @@ seahorse_service_crypto_decrypt_text (SeahorseServiceCrypto *crypto,
     gboolean ret = TRUE;
     GQuark keyid;
     
-    if (!g_str_equal (ktype, g_quark_to_string (SKEY_PGP))) {
+    if (!g_str_equal (ktype, g_quark_to_string (SEA_PGP))) {
         g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID,
                      _("Invalid key type for decryption: %s"), ktype);
         return FALSE;        
@@ -307,7 +420,7 @@ seahorse_service_crypto_decrypt_text (SeahorseServiceCrypto *crypto,
     
         if (status->signatures) {
             if (!(flags & FLAG_QUIET))
-                seahorse_notify_signatures (NULL, status);
+                notify_signatures (NULL, status);
             if (status->signatures->summary & GPGME_SIGSUM_GREEN ||
                 status->signatures->summary & GPGME_SIGSUM_VALID ||
                 status->signatures->summary & GPGME_SIGSUM_KEY_MISSING) {
@@ -335,7 +448,7 @@ seahorse_service_crypto_verify_text (SeahorseServiceCrypto *crypto,
     gboolean ret = TRUE;
     GQuark keyid;
     
-    if (!g_str_equal (ktype, g_quark_to_string (SKEY_PGP))) {
+    if (!g_str_equal (ktype, g_quark_to_string (SEA_PGP))) {
         g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID,
                      _("Invalid key type for verifying: %s"), ktype);
         return FALSE;        
@@ -370,7 +483,7 @@ seahorse_service_crypto_verify_text (SeahorseServiceCrypto *crypto,
     
         if (status->signatures) {
             if (!(flags & FLAG_QUIET))
-                seahorse_notify_signatures (NULL, status);
+                notify_signatures (NULL, status);
             if (status->signatures->summary & GPGME_SIGSUM_GREEN ||
                 status->signatures->summary & GPGME_SIGSUM_VALID ||
                 status->signatures->summary & GPGME_SIGSUM_KEY_MISSING) {

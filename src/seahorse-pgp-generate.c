@@ -22,15 +22,16 @@
 #include "config.h"
 #include <gnome.h>
 
-#include "seahorse-pgp-source.h"
-#include "seahorse-pgp-key.h"
-#include "seahorse-pgp-key-op.h"
 #include "seahorse-widget.h"
 #include "seahorse-util.h"
 #include "seahorse-key-dialogs.h"
 #include "seahorse-progress.h"
 #include "seahorse-gtkstock.h"
 #include "seahorse-passphrase.h"
+
+#include "pgp/seahorse-pgp-key.h"
+#include "pgp/seahorse-pgp-key-op.h"
+#include "pgp/seahorse-pgp-source.h"
 
 typedef struct _AlgorithmDesc {
     const gchar* desc;

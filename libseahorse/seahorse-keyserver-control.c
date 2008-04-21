@@ -24,7 +24,8 @@
 #include "seahorse-keyserver-control.h"
 #include "seahorse-key.h"
 #include "seahorse-gconf.h"
-#include "seahorse-server-source.h"
+
+#include "pgp/seahorse-server-source.h"
 
 #define UPDATING    "updating"
 

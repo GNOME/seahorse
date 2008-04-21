@@ -26,13 +26,14 @@
 #include <gtk/gtk.h>
 
 #include "seahorse-context.h"
-#include "seahorse-pgp-key.h"
+
+#include "pgp/seahorse-pgp-key.h"
 
 #ifdef WITH_SSH
-#include "seahorse-ssh-key.h"
+#include "ssh/seahorse-ssh-key.h"
 #endif
 
-#include "seahorse-gkeyring-item.h"
+#include "gkr/seahorse-gkeyring-item.h"
 
 void        seahorse_key_properties_new (SeahorsePGPKey     *pkey,
                                          GtkWindow          *parent);

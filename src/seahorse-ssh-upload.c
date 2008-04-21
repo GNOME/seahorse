@@ -28,9 +28,10 @@
 #include "seahorse-windows.h"
 #include "seahorse-progress.h"
 #include "seahorse-gtkstock.h"
-#include "seahorse-ssh-source.h"
-#include "seahorse-ssh-key.h"
-#include "seahorse-ssh-operation.h"
+
+#include "ssh/seahorse-ssh-source.h"
+#include "ssh/seahorse-ssh-key.h"
+#include "ssh/seahorse-ssh-operation.h"
 
 static void 
 upload_complete (SeahorseOperation *op, gpointer dummy)

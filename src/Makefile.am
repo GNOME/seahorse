@@ -27,12 +27,6 @@ SSH_SRCS =
 endif
 
 GNOME_KEYRING_SRCS = \
-	seahorse-gkeyring-item.c \
-	seahorse-gkeyring-item.h \
-	seahorse-gkeyring-source.c \
-	seahorse-gkeyring-source.h \
-	seahorse-gkeyring-operation.c \
-	seahorse-gkeyring-operation.h \
 	seahorse-gkeyring-item-properties.c
 
 bin_PROGRAMS = seahorse
@@ -58,7 +52,11 @@ seahorse_SOURCES = main.c \
     $(SSH_SRCS)
 
 seahorse_LDADD = \
-	$(top_builddir)/libseahorse/libseahorse.a \
+	$(top_builddir)/libseahorse/libseahorse.la \
+	$(top_builddir)/pgp/libsea-pgp.la \
+	$(top_builddir)/ssh/libsea-ssh.la \
+	$(top_builddir)/gkr/libsea-gkr.la \
+	$(top_builddir)/common/libsea-common.la \  
 	$(top_builddir)/libcryptui/libcryptui.la \
 	$(SEAHORSE_LIBS)
 
@@ -86,24 +84,14 @@ glade_DATA = \
 	seahorse-keyserver-sync.glade 
 
 desktopdir = $(datadir)/applications
-desktop_in_files = seahorse.desktop.in \
-				   seahorse-pgp-encrypted.desktop.in \
-				   seahorse-pgp-signature.desktop.in \
-				   seahorse-pgp-keys.desktop.in 
+desktop_in_files = seahorse.desktop.in 
 desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 @INTLTOOL_DESKTOP_RULE@
 
 EXTRA_DIST = \
     $(glade_DATA) \
-    seahorse.desktop.in.in \
-    seahorse-pgp-encrypted.desktop.in.in \
-    seahorse-pgp-keys.desktop.in.in \
-    seahorse-pgp-signature.desktop.in.in 
+    seahorse.desktop.in.in 
 
 CLEANFILES = *.gladep* *.bak \
     $(desktop_DATA) \
-    seahorse.desktop.in \
-    seahorse-pgp-encrypted.desktop.in \
-    seahorse-pgp-keys.desktop.in \
-    seahorse-pgp-signature.desktop.in
-    
+    seahorse.desktop.in 

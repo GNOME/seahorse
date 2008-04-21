@@ -28,13 +28,14 @@
 #include "seahorse-validity.h"
 #include "seahorse-util.h"
 #include "seahorse-gconf.h"
-#include "seahorse-gpgmex.h"
 #include "eggtreemultidnd.h"
-#include "seahorse-pgp-key.h"
 #include "seahorse-vfs-data.h"
 
+#include "pgp/seahorse-gpgmex.h"
+#include "pgp/seahorse-pgp-key.h"
+
 #ifdef WITH_SSH
-#include "seahorse-ssh-key.h"
+#include "ssh/seahorse-ssh-key.h"
 #endif 
 
 #define KEY_MANAGER_SORT_KEY "/apps/seahorse/listing/sort_by"

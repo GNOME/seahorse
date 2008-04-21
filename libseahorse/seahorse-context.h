@@ -41,7 +41,6 @@
 #define __SEAHORSE_CONTEXT_H__
 
 #include <gtk/gtk.h>
-#include <gpgme.h>
 
 #include "seahorse-key.h"
 #include "seahorse-key-source.h"

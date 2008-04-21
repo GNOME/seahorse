@@ -23,9 +23,10 @@
 #include <gnome.h>
 
 #include "seahorse-transfer-operation.h"
-#include "seahorse-pgp-source.h"
 #include "seahorse-util.h"
-#include "seahorse-gpgmex.h"
+
+#include "pgp/seahorse-gpgmex.h"
+#include "pgp/seahorse-pgp-source.h"
 
 #ifndef DEBUG_OPERATION_ENABLE
 #if _DEBUG

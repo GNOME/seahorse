@@ -22,15 +22,16 @@
 
 #include <gnome.h>
 
-#include "seahorse-gpgmex.h"
 #include "seahorse-windows.h"
 #include "seahorse-key-widget.h"
-#include "seahorse-pgp-key-op.h"
 #include "seahorse-util.h"
 #include "seahorse-keyset.h"
 #include "seahorse-gtkstock.h"
 #include "seahorse-combo-keys.h"
 #include "seahorse-gconf.h"
+
+#include "pgp/seahorse-gpgmex.h"
+#include "pgp/seahorse-pgp-key-op.h"
 
 #ifdef WITH_KEYSERVER
 #include "seahorse-keyserver-sync.h"

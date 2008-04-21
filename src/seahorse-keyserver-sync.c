@@ -24,15 +24,16 @@
 
 #include "seahorse-widget.h"
 #include "seahorse-util.h"
-#include "seahorse-gpgmex.h"
 #include "seahorse-context.h"
 #include "seahorse-windows.h"
 #include "seahorse-progress.h"
 #include "seahorse-preferences.h"
-#include "seahorse-server-source.h"
 #include "seahorse-gconf.h"
 #include "seahorse-transfer-operation.h"
 #include "seahorse-keyserver-sync.h"
+
+#include "pgp/seahorse-gpgmex.h"
+#include "pgp/seahorse-server-source.h"
 
 static void 
 sync_import_complete (SeahorseOperation *op, SeahorseKeySource *sksrc)

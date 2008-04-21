@@ -564,9 +564,7 @@ seahorse_notify_import (guint keynum, gchar **keys)
     else {
         body = g_strdup_printf(ngettext("Imported a key for", "Imported keys for", keynum));
         
-        keyptr = keys;
-        
-        for (keyptr; *keyptr; keyptr++) {
+        for (keyptr = keys; *keyptr; keyptr++) {
             t = g_strdup_printf ("%s\n<key id='%s' field=\"display-name\"/>", body, *keyptr);
             g_free (body);
             body = t;
@@ -590,98 +588,3 @@ seahorse_notify_import_local (guint keys, GtkWidget *attachto)
                                    FALSE, ICON_PREFIX "seahorse-key.png", attachto);
     g_free (body);
 }
-
-void
-seahorse_notify_signatures (const gchar* data, gpgme_verify_result_t status)
-{
-    const gchar *icon = NULL;
-    gchar *title, *body;
-    gboolean sig = FALSE;
-    GSList *rawids;
-    GList *keys;
-    SeahorseKey *skey;
-    
-    /* Discover the key in question */
-    rawids = g_slist_append (NULL, status->signatures->fpr);
-    keys = seahorse_context_discover_keys (SCTX_APP (), SKEY_PGP, rawids);
-    g_slist_free (rawids);
-    
-    g_return_if_fail (keys != NULL);
-    skey = SEAHORSE_KEY (keys->data);
-    g_list_free (keys);
-
-    /* Figure out what to display */
-    switch (gpgme_err_code (status->signatures->status))  {
-    case GPG_ERR_KEY_EXPIRED:
-	/* TRANSLATORS: <key id='xxx'> is a custom markup tag, do not translate. */
-        body = _("Signed by <i><key id='%s'/> <b>expired</b></i> on %s.");
-        title = _("Invalid Signature");
-        icon = ICON_PREFIX "seahorse-sign-bad.png";
-        sig = TRUE;
-        break;
-	/* TRANSLATORS: <key id='xxx'> is a custom markup tag, do not translate. */
-    case GPG_ERR_SIG_EXPIRED:
-        body = _("Signed by <i><key id='%s'/></i> on %s <b>Expired</b>.");
-        title = _("Expired Signature");
-        icon = ICON_PREFIX "seahorse-sign-bad.png";
-        sig = TRUE;
-        break;
-	/* TRANSLATORS: <key id='xxx'> is a custom markup tag, do not translate. */
-    case GPG_ERR_CERT_REVOKED:
-        body = _("Signed by <i><key id='%s'/> <b>Revoked</b></i> on %s.");
-        title = _("Revoked Signature");
-        icon = ICON_PREFIX "seahorse-sign-bad.png";
-        sig = TRUE;
-        break;
-    case GPG_ERR_NO_ERROR:
-	/* TRANSLATORS: <key id='xxx'> is a custom markup tag, do not translate. */
-        body = _("Signed by <i><key id='%s'/></i> on %s.");
-        title = _("Good Signature");
-        icon = ICON_PREFIX "seahorse-sign-ok.png";
-        sig = TRUE;
-        break;
-    case GPG_ERR_NO_PUBKEY:
-        body = _("Signing key not in keyring.");
-        title = _("Unknown Signature");
-        icon = ICON_PREFIX "seahorse-sign-unknown.png";
-        break;
-    case GPG_ERR_BAD_SIGNATURE:
-        body = _("Bad or forged signature. The signed data was modified.");
-        title = _("Bad Signature");
-        icon = ICON_PREFIX "seahorse-sign-bad.png";
-        break;
-    case GPG_ERR_NO_DATA:
-        return;
-    default:
-        if (!GPG_IS_OK (status->signatures->status)) 
-            seahorse_util_handle_gpgme (status->signatures->status, 
-                                        _("Couldn't verify signature."));
-        return;
-    };
-
-    if (sig) {
-        gchar *date = seahorse_util_get_display_date_string (status->signatures->timestamp);
-        gchar *id = seahorse_context_keyid_to_dbus (SCTX_APP (), seahorse_key_get_keyid (skey), 0);
-        body = g_markup_printf_escaped (body, id, date);
-        g_free (date);
-        g_free (id);
-    } else {
-        body = g_strdup (body);
-    }
-    
-    if (data) {
-        data = seahorse_util_uri_get_last (data);
-        title = g_strdup_printf ("%s: %s", data, title); 
-    } else {
-        title = g_strdup (title);
-    }
-
-    /* Always try and display in the daemon */
-    if (seahorse_context_is_daemon (SCTX_APP ()))
-        seahorse_notification_display (title, body, !sig, icon, NULL);
-    else
-        cryptui_display_notification (title, body, icon, !sig);
-
-    g_free (title);
-    g_free (body);
-}    
