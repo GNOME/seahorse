@@ -21,11 +21,13 @@ libseahorseextension_la_CPPFLAGS = \
 libseahorseextension_la_CFLAGS = \
 	$(EPIPHANY_DEPENDENCY_CFLAGS)	\
 	$(LIBCRYPTUI_CFLAGS) \
+	$(SEAHORSE_CFLAGS) \
 	$(AM_CFLAGS)
 
 libseahorseextension_la_LIBADD =	\
 	mozilla/libsbmozilla.la	\
 	$(LIBCRYPTUI_LIBS) \
+	$(SEAHORSE_LIBS) \
 	$(MOZILLA_COMPONENT_LIBS)
 
 libseahorseextension_la_LDFLAGS = \
