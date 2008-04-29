@@ -30,9 +30,9 @@
 #include "seahorse-gtkstock.h"
 #include "seahorse-secure-entry.h"
 
-#include "common/sea-registry.h"
+#include "common/seahorse-registry.h"
 
-#include "pgp/sea-pgp.h"
+#include "pgp/seahorse-pgp.h"
 #include "pgp/seahorse-server-source.h"
 
 /* From seahorse-prefs-cache.c */

@@ -32,7 +32,7 @@
 #include "seahorse-passphrase.h"
 #include "seahorse-gkeyring-operation.h"
 
-#include "common/sea-registry.h"
+#include "common/seahorse-registry.h"
 
 #include <gnome-keyring.h>
 
@@ -749,7 +749,7 @@ seahorse_gkeyring_source_class_init (SeahorseGKeyringSourceClass *klass)
                            0, G_MAXUINT, SKEY_LOC_INVALID, G_PARAM_READABLE));    
     
     
-	sea_registry_register_type (NULL, SEAHORSE_TYPE_GKEYRING_SOURCE, "key-source", "local", SEAHORSE_GKR_STR, NULL);
+	seahorse_registry_register_type (NULL, SEAHORSE_TYPE_GKEYRING_SOURCE, "key-source", "local", SEAHORSE_GKR_STR, NULL);
 }
 
 /* -------------------------------------------------------------------------- 

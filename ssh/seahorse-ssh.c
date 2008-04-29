@@ -19,14 +19,13 @@
  * 02111-1307, USA.  
  */
 
-#ifndef SEAHORSEGKR_H_
-#define SEAHORSEGKR_H_
+#include "config.h"
 
-#include "common/seahorse-registry.h"
+#include "seahorse-ssh.h"
 
-#define SEAHORSE_GKR_STR                     "gnome-keyring"
-#define SEAHORSE_GKR                         (g_quark_from_static_string (SEAHORSE_GKR_STR))
+#include "seahorse-ssh-source.h"
 
-extern const SeahorseRegisterType SEAHORSE_GKR_REGISTRY[];
-
-#endif /*SEAHORSEGKR_H_*/
+const SeahorseRegisterType SEAHORSE_SSH_REGISTRY[] = {
+	seahorse_ssh_source_get_type,
+	NULL
+};

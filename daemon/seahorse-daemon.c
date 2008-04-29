@@ -28,13 +28,13 @@
 #include "seahorse-secure-memory.h"
 #include "seahorse-unix-signal.h"
 
-#include "common/sea-cleanup.h"
-#include "common/sea-registry.h"
+#include "common/seahorse-cleanup.h"
+#include "common/seahorse-registry.h"
 
-#include "pgp/sea-pgp.h"
+#include "pgp/seahorse-pgp.h"
 
 #ifdef WITH_SSH
-#include "ssh/sea-ssh.h"
+#include "ssh/seahorse-ssh.h"
 #endif
 
 #include <gnome.h>
@@ -223,8 +223,8 @@ int main(int argc, char* argv[])
     seahorse_gtkstock_add_icons (daemon_icons);
     
     /* Load the various components */
-    sea_registry_load_types (NULL, SEA_PGP_REGISTRY);
-    sea_registry_load_types (NULL, SEA_SSH_REGISTRY);
+    seahorse_registry_load_types (NULL, SEAHORSE_PGP_REGISTRY);
+    seahorse_registry_load_types (NULL, SEAHORSE_SSH_REGISTRY);
 
     /* Make the default SeahorseContext */
     seahorse_context_new (SEAHORSE_CONTEXT_APP | SEAHORSE_CONTEXT_DAEMON, 0);
@@ -253,7 +253,7 @@ int main(int argc, char* argv[])
     seahorse_dbus_server_cleanup ();
 
     seahorse_context_destroy (SCTX_APP ());
-    sea_cleanup_perform ();
+    seahorse_cleanup_perform ();
 
     return 0;
 }

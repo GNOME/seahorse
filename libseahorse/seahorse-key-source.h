@@ -29,7 +29,7 @@
  *   created it.
  * 
  * Properties base classes must implement:
- *  ktype: (GQuark) The ktype (ie: SEA_PGP) of keys originating from this 
+ *  ktype: (GQuark) The ktype (ie: SEAHORSE_PGP) of keys originating from this 
  *         key source.
  *  key-desc: (gchar*) Description for the type of keys originating here.
  *  location: (SeahorseKeyLoc) The location of keys that come from this 

@@ -204,7 +204,7 @@ seahorse_server_get_property (GObject *object, guint prop_id, GValue *value,
         g_value_set_string (value, ssrc->priv->uri);
         break;
     case PROP_KEY_TYPE:
-        g_value_set_uint (value, SEA_PGP);
+        g_value_set_uint (value, SEAHORSE_PGP);
         break;
     case PROP_KEY_DESC:
         g_value_set_string (value, _("PGP Key"));

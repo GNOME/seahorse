@@ -743,7 +743,7 @@ seahorse_ssh_source_get_property (GObject *object, guint prop_id, GValue *value,
     
     switch (prop_id) {
     case PROP_KEY_TYPE:
-        g_value_set_uint (value, SEA_SSH);
+        g_value_set_uint (value, SEAHORSE_SSH);
         break;
     case PROP_KEY_DESC:
         g_value_set_string (value, _("Secure Shell Key"));
@@ -861,7 +861,7 @@ seahorse_ssh_source_class_init (SeahorseSSHSourceClass *klass)
         g_param_spec_string ("base-directory", "Key directory", "Directory where the keys are stored",
                              NULL, G_PARAM_READABLE));
     
-	sea_registry_register_type (NULL, SEAHORSE_TYPE_SSH_SOURCE, "key-source", "local", SEA_SSH_STR, NULL);
+	seahorse_registry_register_type (NULL, SEAHORSE_TYPE_SSH_SOURCE, "key-source", "local", SEAHORSE_SSH_STR, NULL);
 }
 
 /* -----------------------------------------------------------------------------

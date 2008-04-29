@@ -26,7 +26,7 @@
 #include "seahorse-unknown-source.h"
 #include "seahorse-unknown-key.h"
 
-#include "common/sea-registry.h"
+#include "common/seahorse-registry.h"
 
 enum {
     PROP_0,
@@ -171,7 +171,7 @@ seahorse_unknown_source_class_init (SeahorseUnknownSourceClass *klass)
         g_param_spec_uint ("location", "Key Location", "Where the key is stored. See SeahorseKeyLoc", 
                            0, G_MAXUINT, SKEY_LOC_INVALID, G_PARAM_READABLE));    
     
-	sea_registry_register_type (NULL, SEAHORSE_TYPE_UNKNOWN_SOURCE, "key-source", NULL);
+	seahorse_registry_register_type (NULL, SEAHORSE_TYPE_UNKNOWN_SOURCE, "key-source", NULL);
 }
 
 /* -----------------------------------------------------------------------------

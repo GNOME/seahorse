@@ -66,11 +66,11 @@ choose_keytype(SeahorseWidget *swidget)
     sksrc = seahorse_context_find_key_source (SCTX_APP (), ktype, SKEY_LOC_LOCAL);
     g_return_if_fail (sksrc != NULL);
     
-    if (ktype == SEA_PGP)
+    if (ktype == SEAHORSE_PGP)
         seahorse_pgp_generate_show (SEAHORSE_PGP_SOURCE (sksrc), GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)));
         
 #ifdef WITH_SSH 
-    else if (ktype == SEA_SSH)
+    else if (ktype == SEAHORSE_SSH)
         seahorse_ssh_generate_show (SEAHORSE_SSH_SOURCE (sksrc), GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)));
 #endif 
     
@@ -140,10 +140,10 @@ seahorse_generate_select_show (GtkWindow *parent)
     
     /* Build our tree store */
     store = gtk_list_store_newv (KEY_N_COLUMNS, (GType*)key_columns);
-    add_key_type (store, SEA_PGP, SEAHORSE_STOCK_SECRET, _("PGP Key"), 
+    add_key_type (store, SEAHORSE_PGP, SEAHORSE_STOCK_SECRET, _("PGP Key"), 
                   _("Used to encrypt email and files"));
 #ifdef WITH_SSH
-    add_key_type (store, SEA_SSH, SEAHORSE_STOCK_KEY_SSH, _("Secure Shell Key"),
+    add_key_type (store, SEAHORSE_SSH, SEAHORSE_STOCK_KEY_SSH, _("Secure Shell Key"),
                   _("Used to access other computers (eg: via a terminal)"));
 #endif /* WITH_SSH */
     

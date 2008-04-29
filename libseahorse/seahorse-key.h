@@ -38,7 +38,7 @@
  *      (ie: the DBUS format)
  *   raw-id: (gchar*) The raw backend specific key identifier
  *   key-desc: (gchar*) A description of the key type.
- *   ktype: (GQuark) The type of key (ie: SEA_PGP). 
+ *   ktype: (GQuark) The type of key (ie: SEAHORSE_PGP). 
  *   etype: (SeahorseKeyEType) The encryption type (ie: SKEY_PUBLIC)
  *   flags: (guint) Flags on the capabilities of the key (ie: SeahorseKeyFlags)
  *   location: (SeahorseKeyLoc) The location this key is stored. (ie: SKEY_LOC_REMOTE)

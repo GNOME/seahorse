@@ -45,7 +45,7 @@
 
 #include "seahorse-key.h"
 
-#include "pgp/sea-pgp.h"
+#include "pgp/seahorse-pgp.h"
 #include "pgp/seahorse-gpgmex.h"
 #include "pgp/seahorse-pgp-source.h"
 

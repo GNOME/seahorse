@@ -317,7 +317,7 @@ seahorse_pgp_source_class_init (SeahorsePGPSourceClass *klass)
         g_param_spec_uint ("location", "Key Location", "Where the key is stored. See SeahorseKeyLoc", 
                            0, G_MAXUINT, SKEY_LOC_INVALID, G_PARAM_READABLE));    
     
-	sea_registry_register_type (NULL, SEAHORSE_TYPE_PGP_SOURCE, "key-source", "local", SEA_PGP_STR, NULL);
+	seahorse_registry_register_type (NULL, SEAHORSE_TYPE_PGP_SOURCE, "key-source", "local", SEAHORSE_PGP_STR, NULL);
 
 }
 
@@ -432,7 +432,7 @@ seahorse_pgp_source_get_property (GObject *object, guint prop_id, GValue *value,
 {
     switch (prop_id) {
     case PROP_KEY_TYPE:
-        g_value_set_uint (value, SEA_PGP);
+        g_value_set_uint (value, SEAHORSE_PGP);
         break;
     case PROP_KEY_DESC:
         g_value_set_string (value, _("PGP Key"));
@@ -1020,7 +1020,7 @@ seahorse_pgp_source_import (SeahorseKeySource *sksrc, GInputStream *input)
     	pop = seahorse_pgp_operation_new (_("Importing Keys"));
     	g_return_val_if_fail (pop != NULL, NULL);
     
-	data = sea_gpgme_input_data (input);
+	data = seahorse_gpgme_input_data (input);
 	g_return_val_if_fail (data, NULL);
     
 	gerr = gpgme_op_import_start (pop->gctx, data);
@@ -1065,7 +1065,7 @@ seahorse_pgp_source_export (SeahorseKeySource *sksrc, GList *keys,
         gpgme_set_armor (pop->gctx, TRUE);
         gpgme_set_textmode (pop->gctx, TRUE);
         
-        data = sea_gpgme_output_data (output);
+        data = seahorse_gpgme_output_data (output);
         g_return_val_if_fail (data, NULL);
 
         /* Export context for asynchronous export */

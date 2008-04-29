@@ -130,7 +130,7 @@ changed_key (SeahorsePGPKey *pkey)
     SeahorseKey *skey = SEAHORSE_KEY (pkey);
     
     skey->keyid = 0;
-    skey->ktype = SEA_PGP;
+    skey->ktype = SEAHORSE_PGP;
     
     if (!pkey->pubkey) {
         
@@ -203,7 +203,7 @@ changed_key (SeahorsePGPKey *pkey)
     }
     
     if (!skey->keyid)
-        skey->keyid = g_quark_from_string (SEA_PGP_STR ":UNKNOWN UNKNOWN ");
+        skey->keyid = g_quark_from_string (SEAHORSE_PGP_STR ":UNKNOWN UNKNOWN ");
     
     seahorse_key_changed (skey, SKEY_CHANGE_ALL);
 }
@@ -879,7 +879,7 @@ seahorse_pgp_key_get_cannonical_id (const gchar *id)
     if (len > 16)
         id += len - 16;
     
-    t = g_strdup_printf ("%s:%s", SEA_PGP_STR, id);
+    t = g_strdup_printf ("%s:%s", SEAHORSE_PGP_STR, id);
     keyid = g_quark_from_string (t);
     g_free (t);
     

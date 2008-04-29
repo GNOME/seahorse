@@ -100,7 +100,7 @@ changed_key (SeahorseSSHKey *skey)
     }
     
     /* Now start setting the main SeahorseKey fields */
-    key->ktype = SEA_SSH;
+    key->ktype = SEAHORSE_SSH;
     key->keyid = 0;
     
     if (!skey->keydata || !skey->keydata->fingerprint) {
@@ -131,7 +131,7 @@ changed_key (SeahorseSSHKey *skey)
     }
     
     if (!key->keyid)
-        key->keyid = g_quark_from_string (SEA_SSH_STR ":UNKNOWN ");
+        key->keyid = g_quark_from_string (SEAHORSE_SSH_STR ":UNKNOWN ");
     
     seahorse_key_changed (key, SKEY_CHANGE_ALL);
 }
@@ -406,7 +406,7 @@ seahorse_ssh_key_get_cannonical_id (const gchar *id)
     /* Not enough characters */
     g_return_val_if_fail (off == 0, 0);
 
-    hex = g_strdup_printf ("%s:%s", SEA_SSH_STR, canonical_id);
+    hex = g_strdup_printf ("%s:%s", SEAHORSE_SSH_STR, canonical_id);
     ret = g_quark_from_string (hex);
     
     g_free (canonical_id);

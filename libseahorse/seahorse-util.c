@@ -26,9 +26,9 @@
 #include "seahorse-key.h"
 #include "seahorse-gconf.h"
 
-#include "pgp/sea-pgp.h"
+#include "pgp/seahorse-pgp.h"
 
-#include "ssh/sea-ssh.h"
+#include "ssh/seahorse-ssh.h"
 
 #include <gio/gio.h>
 #include <glib/gstdio.h>
@@ -656,13 +656,13 @@ seahorse_util_detect_mime_type (const gchar *mime)
 
 	if (g_ascii_strcasecmp (mime, "application/pgp-encrypted") == 0 ||
 	    g_ascii_strcasecmp (mime, "application/pgp-keys") == 0)
-		return SEA_PGP;
+		return SEAHORSE_PGP;
     
 #ifdef WITH_SSH 
 	/* TODO: For now all PEM keys are treated as SSH keys */
 	else if (g_ascii_strcasecmp (mime, "application/x-ssh-key") == 0 ||
 	         g_ascii_strcasecmp (mime, "application/x-pem-key") == 0)
-		return SEA_SSH;
+		return SEAHORSE_SSH;
 #endif 
     
 	g_warning ("unsupported type of key data: %s", mime);

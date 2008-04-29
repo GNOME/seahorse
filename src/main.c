@@ -29,15 +29,15 @@
 #include "seahorse-gtkstock.h"
 #include "seahorse-secure-memory.h"
 
-#include "common/sea-cleanup.h"
-#include "common/sea-registry.h"
+#include "common/seahorse-cleanup.h"
+#include "common/seahorse-registry.h"
 
-#include "pgp/sea-pgp.h"
+#include "pgp/seahorse-pgp.h"
 #include "pgp/seahorse-pgp-key.h"
 #include "pgp/seahorse-pgp-source.h"
 
 #ifdef WITH_SSH
-#include "ssh/sea-ssh.h"
+#include "ssh/seahorse-ssh.h"
 #endif
 
 #include "gkr/seahorse-gkr.h"
@@ -76,8 +76,8 @@ main (int argc, char **argv)
     seahorse_gtkstock_init ();
     
     /* Initialize the various components */
-    sea_registry_load_types (NULL, SEA_PGP_REGISTRY);
-    sea_registry_load_types (NULL, SEA_SSH_REGISTRY);
+    seahorse_registry_load_types (NULL, SEAHORSE_PGP_REGISTRY);
+    seahorse_registry_load_types (NULL, SEAHORSE_SSH_REGISTRY);
     
     /* Make the default SeahorseContext */
     seahorse_context_new (SEAHORSE_CONTEXT_APP, 0);
@@ -88,6 +88,6 @@ main (int argc, char **argv)
     
     gtk_main ();
     
-    sea_cleanup_perform ();
+    seahorse_cleanup_perform ();
     return ret;
 }

@@ -535,7 +535,7 @@ seahorse_keyserver_results_show (SeahorseOperation *op, GtkWindow *parent, const
     
     /* Our predicate for filtering keys */
     pred = g_new0 (SeahorseKeyPredicate, 1);
-    pred->ktype = SEA_PGP;
+    pred->ktype = SEAHORSE_PGP;
     pred->etype = SKEY_PUBLIC;
     pred->location = SKEY_LOC_REMOTE;
     pred->custom = (SeahorseKeyPredFunc)filter_keyset;

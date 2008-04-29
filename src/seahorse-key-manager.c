@@ -759,7 +759,7 @@ sync_activate (GtkWidget *widget, SeahorseWidget *swidget)
     
     /* Only supported on PGP keys */
     for (l = keys; l; l = g_list_next (l)) {
-        if (seahorse_key_get_ktype (SEAHORSE_KEY (l->data)) != SEA_PGP) {
+        if (seahorse_key_get_ktype (SEAHORSE_KEY (l->data)) != SEAHORSE_PGP) {
             keys = l = g_list_delete_link (keys, l);
             if (keys == NULL)
                 break;
@@ -767,7 +767,7 @@ sync_activate (GtkWidget *widget, SeahorseWidget *swidget)
     }
     
     if (keys == NULL)
-        keys = seahorse_context_find_keys (SCTX_APP (), SEA_PGP, 0, SKEY_LOC_LOCAL);
+        keys = seahorse_context_find_keys (SCTX_APP (), SEAHORSE_PGP, 0, SKEY_LOC_LOCAL);
     seahorse_keyserver_sync_show (keys,GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)));
     g_list_free (keys);
 #endif
@@ -782,7 +782,7 @@ setup_sshkey_activate (GtkWidget *widget, SeahorseWidget *swidget)
     
     /* Only supported on SSH keys */
     for (l = keys; l; l = g_list_next (l)) {
-        if (seahorse_key_get_ktype (SEAHORSE_KEY (l->data)) != SEA_SSH) {
+        if (seahorse_key_get_ktype (SEAHORSE_KEY (l->data)) != SEAHORSE_SSH) {
             keys = l = g_list_delete_link (keys, l);
             if (keys == NULL)
                 break;
@@ -991,11 +991,11 @@ selection_changed (SeahorseWidget *swidget)
     gtk_action_group_set_sensitive (actions, selected);
     
     actions = seahorse_widget_find_actions (swidget, "pgp");
-    gtk_action_group_set_sensitive (actions, ((ktype == SEA_PGP) && (seahorse_key_get_etype (skey) != SKEY_PRIVATE)));
+    gtk_action_group_set_sensitive (actions, ((ktype == SEAHORSE_PGP) && (seahorse_key_get_etype (skey) != SKEY_PRIVATE)));
     
 #ifdef WITH_SSH    
     actions = seahorse_widget_find_actions (swidget, "ssh");
-    gtk_action_group_set_sensitive (actions, ktype == SEA_SSH);
+    gtk_action_group_set_sensitive (actions, ktype == SEAHORSE_SSH);
 #endif    
     
     /* This is called as a one-time idle handler, return FALSE so we don't get run again */

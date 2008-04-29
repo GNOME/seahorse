@@ -29,7 +29,7 @@
  * - Monitors ~/.ssh for changes and reloads the key ring as necessary.
  * 
  * Properties:
- *  ktype: (GQuark) The ktype (ie: SEA_SSH) of keys originating from this 
+ *  ktype: (GQuark) The ktype (ie: SEAHORSE_SSH) of keys originating from this 
            key source.
  *  location: (SeahorseKeyLoc) The location of keys that come from this 
  *         source. (ie: SKEY_LOC_LOCAL)

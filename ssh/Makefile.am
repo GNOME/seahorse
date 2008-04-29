@@ -14,17 +14,17 @@ INCLUDES = -I$(top_builddir) \
 	-DEXECDIR=\""$(seahorselibexecbindir)"\" \
 	-DLIBCRYPTUI_API_SUBJECT_TO_CHANGE 
 
-noinst_LTLIBRARIES = libsea-ssh.la
+noinst_LTLIBRARIES = libseahorse-ssh.la
 
-libsea_ssh_la_SOURCES = \
-	sea-ssh.c sea-ssh.h \
+libseahorse_ssh_la_SOURCES = \
+	seahorse-ssh.c seahorse-ssh.h \
 	seahorse-algo.c seahorse-algo.h \
 	seahorse-ssh-key-data.c seahorse-ssh-key-data.h \
 	seahorse-ssh-key.c seahorse-ssh-key.h  \
 	seahorse-ssh-source.c seahorse-ssh-source.h \
 	seahorse-ssh-operation.c seahorse-ssh-operation.h
 	
-libsea_ssh_la_LIBADD = \
+libseahorse_ssh_la_LIBADD = \
 	$(top_builddir)/libseahorse/libseahorse.la \
 	$(top_builddir)/libcryptui/libcryptui.la
 

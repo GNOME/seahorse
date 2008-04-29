@@ -18,15 +18,16 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
  * 02111-1307, USA.  
  */
+   
+#ifndef GKRCLEANUP_H_
+#define GKRCLEANUP_H_
 
-#ifndef SEAHORSEGKR_H_
-#define SEAHORSEGKR_H_
+#include <glib.h>
 
-#include "common/seahorse-registry.h"
+void    seahorse_cleanup_register        (GDestroyNotify notify, gpointer user_data);
 
-#define SEAHORSE_GKR_STR                     "gnome-keyring"
-#define SEAHORSE_GKR                         (g_quark_from_static_string (SEAHORSE_GKR_STR))
+void    seahorse_cleanup_unregister      (GDestroyNotify notify, gpointer user_data);
 
-extern const SeahorseRegisterType SEAHORSE_GKR_REGISTRY[];
+void    seahorse_cleanup_perform         (void);
 
-#endif /*SEAHORSEGKR_H_*/
+#endif /* GKRCLEANUP_H_ */

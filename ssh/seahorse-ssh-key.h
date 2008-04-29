@@ -41,7 +41,7 @@
 
 #include <gtk/gtk.h>
 
-#include "sea-ssh.h"
+#include "seahorse-ssh.h"
 #include "seahorse-key.h"
 #include "seahorse-ssh-source.h"
 #include "seahorse-ssh-key-data.h"

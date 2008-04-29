@@ -224,7 +224,7 @@ static struct gpgme_data_cbs output_cbs =
 };
 
 gpgme_data_t
-sea_gpgme_output_data (GOutputStream* output)
+seahorse_gpgme_output_data (GOutputStream* output)
 {
 	gpgme_error_t gerr;
 	gpgme_data_t ret = NULL;
@@ -318,7 +318,7 @@ static struct gpgme_data_cbs input_cbs =
 };
 
 gpgme_data_t
-sea_gpgme_input_data (GInputStream* input)
+seahorse_gpgme_input_data (GInputStream* input)
 {
 	gpgme_error_t gerr;
 	gpgme_data_t ret = NULL;

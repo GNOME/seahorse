@@ -27,7 +27,7 @@
 #include "seahorse-context.h"
 #include "seahorse-util.h"
 
-#include "common/sea-registry.h"
+#include "common/seahorse-registry.h"
 
 G_DEFINE_TYPE (SeahorseKeySource, seahorse_key_source, G_TYPE_OBJECT);
 
@@ -382,7 +382,7 @@ seahorse_key_source_canonize_keyid (GQuark ktype, const gchar *keyid)
 
 	g_return_val_if_fail (keyid != NULL, 0);
     
-	type = sea_registry_find_type (NULL, "key-source", g_quark_to_string (ktype), "local", NULL);
+	type = seahorse_registry_find_type (NULL, "key-source", g_quark_to_string (ktype), "local", NULL);
 	g_return_val_if_fail (type, 0);
 	
 	klass = SEAHORSE_KEY_SOURCE_CLASS (g_type_class_peek (type));

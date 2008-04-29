@@ -57,7 +57,7 @@ libseahorse_la_SOURCES = \
 	$(KEYSERVER_SRCS)
 	
 libseahorse_la_LIBADD = \
-	$(top_builddir)/common/libsea-common.la \
+	$(top_builddir)/common/libseahorse-common.la \
 	$(top_builddir)/libcryptui/libcryptui.la
 
 seahorselibexecbin_PROGRAMS = xloadimage

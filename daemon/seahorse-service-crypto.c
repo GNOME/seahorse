@@ -125,7 +125,7 @@ notify_signatures (const gchar* data, gpgme_verify_result_t status)
 
 	/* Discover the key in question */
 	rawids = g_slist_append (NULL, status->signatures->fpr);
-	keys = seahorse_context_discover_keys (SCTX_APP (), SEA_PGP, rawids);
+	keys = seahorse_context_discover_keys (SCTX_APP (), SEAHORSE_PGP, rawids);
 	g_slist_free (rawids);
 
 	g_return_if_fail (keys != NULL);
@@ -388,7 +388,7 @@ seahorse_service_crypto_decrypt_text (SeahorseServiceCrypto *crypto,
     gboolean ret = TRUE;
     GQuark keyid;
     
-    if (!g_str_equal (ktype, g_quark_to_string (SEA_PGP))) {
+    if (!g_str_equal (ktype, g_quark_to_string (SEAHORSE_PGP))) {
         g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID,
                      _("Invalid key type for decryption: %s"), ktype);
         return FALSE;        
@@ -451,7 +451,7 @@ seahorse_service_crypto_verify_text (SeahorseServiceCrypto *crypto,
     gboolean ret = TRUE;
     GQuark keyid;
     
-    if (!g_str_equal (ktype, g_quark_to_string (SEA_PGP))) {
+    if (!g_str_equal (ktype, g_quark_to_string (SEAHORSE_PGP))) {
         g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID,
                      _("Invalid key type for verifying: %s"), ktype);
         return FALSE;        

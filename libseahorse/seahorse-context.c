@@ -35,7 +35,7 @@
 #include "seahorse-unknown-source.h"
 #include "seahorse-unknown-key.h"
 
-#include "common/sea-registry.h"
+#include "common/seahorse-registry.h"
 
 #include "pgp/seahorse-server-source.h"
 
@@ -209,7 +209,7 @@ seahorse_context_new (guint flags, guint ktype)
 		
 		GList *l, *types;
 		
-		types = sea_registry_find_types (NULL, "key-source", "local", NULL);
+		types = seahorse_registry_find_types (NULL, "key-source", "local", NULL);
 		for (l = types; l; l = g_list_next (l)) {
 			SeahorseKeySource *src = g_object_new (GPOINTER_TO_UINT (l->data), NULL);
 			seahorse_context_take_key_source (sctx, src);

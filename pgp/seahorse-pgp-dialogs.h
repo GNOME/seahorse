@@ -24,8 +24,8 @@
  * Various UI elements and dialogs used in libseahorse.
  */
  
-#ifndef __SEA_PGP_DIALOGS_H__
-#define __SEA_PGP_DIALOGS_H__
+#ifndef __SEAHORSE_PGP_DIALOGS_H__
+#define __SEAHORSE_PGP_DIALOGS_H__
 
 #include <gtk/gtk.h>
 
@@ -35,4 +35,4 @@ SeahorsePGPKey* seahorse_signer_get                 (GtkWindow *parent);
 
 void            seahorse_pgp_handle_gpgme_error     (gpgme_error_t err, const gchar* desc, ...);
 
-#endif /* __SEA_PGP_DIALOGS_H__ */
+#endif /* __SEAHORSE_PGP_DIALOGS_H__ */

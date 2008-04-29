@@ -573,10 +573,10 @@ seahorse_gkeyring_item_get_use (SeahorseGKeyringItem *git)
     if (git->attributes) {
         val = seahorse_gkeyring_item_get_attribute (git, "seahorse-key-type");
         if (val) {
-			if (strcmp (val, SEA_PGP_STR) == 0)
+			if (strcmp (val, SEAHORSE_PGP_STR) == 0)
                 return SEAHORSE_GKEYRING_USE_PGP;
 #ifdef WITH_SSH
-            if (strcmp (val, SEA_SSH_STR) == 0)
+            if (strcmp (val, SEAHORSE_SSH_STR) == 0)
                 return SEAHORSE_GKEYRING_USE_SSH;
 #endif
         }

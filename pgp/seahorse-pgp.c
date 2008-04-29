@@ -19,14 +19,26 @@
  * 02111-1307, USA.  
  */
 
-#ifndef SEAHORSEGKR_H_
-#define SEAHORSEGKR_H_
+#include "config.h"
 
-#include "common/seahorse-registry.h"
+#include "seahorse-pgp.h"
 
-#define SEAHORSE_GKR_STR                     "gnome-keyring"
-#define SEAHORSE_GKR                         (g_quark_from_static_string (SEAHORSE_GKR_STR))
+#include "seahorse-pgp-source.h"
 
-extern const SeahorseRegisterType SEAHORSE_GKR_REGISTRY[];
-
-#endif /*SEAHORSEGKR_H_*/
+#ifdef WITH_LDAP
+#include "seahorse-ldap-source.h"
+#endif
+#ifdef WITH_HKP
+#include "seahorse-hkp-source.h"
+#endif
+	
+const SeahorseRegisterType SEAHORSE_PGP_REGISTRY[] = {
+	seahorse_pgp_source_get_type,
+#ifdef WITH_LDAP
+	seahorse_ldap_source_get_type,
+#endif
+#ifdef WITH_HKP
+	seahorse_hkp_source_get_type,
+#endif
+	NULL
+};

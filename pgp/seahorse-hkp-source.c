@@ -721,7 +721,7 @@ seahorse_hkp_source_get_property (GObject *object, guint prop_id, GValue *value,
 {
     switch (prop_id) {
     case PROP_KEY_TYPE:
-        g_value_set_uint (value, SEA_PGP);
+        g_value_set_uint (value, SEAHORSE_PGP);
         break;
     case PROP_KEY_DESC:
         g_value_set_string (value, _("PGP Key"));
@@ -963,7 +963,7 @@ seahorse_hkp_source_class_init (SeahorseHKPSourceClass *klass)
 	        g_param_spec_string ("key-desc", "Key Desc", "Description for keys that originate here.",
 	                             NULL, G_PARAM_READABLE));
 	    
-	sea_registry_register_type (NULL, SEAHORSE_TYPE_HKP_SOURCE, "key-source", "remote", SEA_PGP_STR, NULL);
+	seahorse_registry_register_type (NULL, SEAHORSE_TYPE_HKP_SOURCE, "key-source", "remote", SEAHORSE_PGP_STR, NULL);
 }
 
 

@@ -24,5 +24,5 @@ libseahorse_gkr_la_SOURCES = \
 	
 libseahorse_gkr_la_LIBADD = \
 	$(top_builddir)/libseahorse/libseahorse.la \
-	$(top_builddir)/common/libsea-common.la \
+	$(top_builddir)/common/libseahorse-common.la \
 	$(top_builddir)/libcryptui/libcryptui.la
