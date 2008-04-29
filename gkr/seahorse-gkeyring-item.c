@@ -239,7 +239,7 @@ changed_key (SeahorseGKeyringItem *git)
     skey->loaded = (secret == NULL) ? SKEY_INFO_BASIC : SKEY_INFO_COMPLETE;
     g_free (secret);
 
-    skey->ktype = SKEY_GKEYRING;
+    skey->ktype = SEAHORSE_GKR;
     skey->location = SKEY_LOC_LOCAL;
     skey->etype = SKEY_CREDENTIALS;
     skey->flags = 0;
@@ -588,10 +588,10 @@ seahorse_gkeyring_item_get_use (SeahorseGKeyringItem *git)
 GQuark
 seahorse_gkeyring_item_get_cannonical (guint32 item_id)
 {
-    #define BUF_LEN (G_N_ELEMENTS (SKEY_GKEYRING_STR) + 16)
+    #define BUF_LEN (G_N_ELEMENTS (SEAHORSE_GKR_STR) + 16)
     gchar buf[BUF_LEN];
     
-    snprintf(buf, BUF_LEN - 1, "%s:%08X", SKEY_GKEYRING_STR, item_id);
+    snprintf(buf, BUF_LEN - 1, "%s:%08X", SEAHORSE_GKR_STR, item_id);
     buf[BUF_LEN - 1] = 0;
     return g_quark_from_string (buf);
 }

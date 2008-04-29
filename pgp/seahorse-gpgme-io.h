@@ -1,8 +1,7 @@
 /*
  * Seahorse
  *
- * Copyright (C) 2003 Jacob Perkins
- * Copyright (C) 2004-2005 Stefan Walter
+ * Copyright (C) 2008 Stefan Walter
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,16 +20,17 @@
  */
 
 /**
- * Various UI elements and dialogs used in libseahorse.
+ * A gpgme_data_t implementation which maps to a gio handle.
+ * Allows for accessing data on remote machines (ie: smb, sftp)
  */
  
-#ifndef __SEA_PGP_DIALOGS_H__
-#define __SEA_PGP_DIALOGS_H__
+#ifndef __SEA_GPGME_IO__
+#define __SEA_GPGME_IO__
 
-#include <gtk/gtk.h>
+#include <gpgme.h>
+#include <gio/gio.h>
 
-#include "pgp/seahorse-pgp-key.h"
+gpgme_data_t        sea_gpgme_input_data           (GInputStream* input);
+gpgme_data_t        sea_gpgme_output_data          (GOutputStream* output);
 
-SeahorsePGPKey* seahorse_signer_get                 (GtkWindow *parent);
-
-#endif /* __SEA_PGP_DIALOGS_H__ */
+#endif /* __SEA_GPGME_IO__ */

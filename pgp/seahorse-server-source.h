@@ -67,9 +67,6 @@ struct _SeahorseServerSourceClass {
 
 GType        seahorse_server_source_get_type         (void);
 
-void         seahorse_server_source_add_key          (SeahorseServerSource *ssrc,
-                                                      gpgme_key_t key);
-
 void         seahorse_server_source_take_operation   (SeahorseServerSource *ssrc,
                                                       SeahorseOperation *operation);
 

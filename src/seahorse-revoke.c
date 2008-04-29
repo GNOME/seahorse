@@ -19,15 +19,14 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <config.h> 
-#include <gnome.h>
+#include "config.h"
  
 #include "seahorse-key-dialogs.h"
 #include "seahorse-key-widget.h"
 #include "seahorse-libdialogs.h"
 #include "seahorse-util.h"
 
-#include "pgp/seahorse-gpgmex.h"
+#include "pgp/seahorse-pgp-dialogs.h"
 #include "pgp/seahorse-pgp-key-op.h"
 
 enum {
@@ -70,7 +69,7 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 		err = seahorse_pgp_key_op_revoke_subkey (SEAHORSE_PGP_KEY (skwidget->skey), 
                                              skwidget->index, reason, description);
 		if (!GPG_IS_OK (err))
-			seahorse_util_handle_gpgme (err, _("Couldn't revoke subkey"));
+			seahorse_pgp_handle_gpgme_error (err, _("Couldn't revoke subkey"));
 	}
 	seahorse_widget_destroy (swidget);
 }
@@ -186,5 +185,5 @@ seahorse_add_revoker_new (SeahorsePGPKey *pkey, GtkWindow *parent)
 	
 	err = seahorse_pgp_key_pair_op_add_revoker (pkey, revoker);
 	if (!GPG_IS_OK (err))
-		seahorse_util_handle_gpgme (err, _("Couldn't add revoker"));
+		seahorse_pgp_handle_gpgme_error (err, _("Couldn't add revoker"));
 }

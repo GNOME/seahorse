@@ -288,7 +288,7 @@ event_cb (void *data, gpgme_event_io_t type, void *type_data)
                 
                 /* Other Errors */
                 if (*gerr)
-                    seahorse_util_gpgme_to_error (*gerr, &error);
+                    seahorse_gpgme_to_error (*gerr, &error);
                 
                 /* No error, results available */
                 else
@@ -445,6 +445,6 @@ seahorse_pgp_operation_mark_failed (SeahorsePGPOperation *pop, gpgme_error_t ger
     if (!seahorse_operation_is_running (op))
         seahorse_operation_mark_start (op);
     
-    seahorse_util_gpgme_to_error (gerr, &err);
+    seahorse_gpgme_to_error (gerr, &err);
     seahorse_operation_mark_done (op, FALSE, err);
 }

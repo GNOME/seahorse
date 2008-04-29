@@ -19,6 +19,26 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include "config.h"
+
+#include "seahorse-context.h"
+#include "seahorse-daemon.h"
+#include "seahorse-gconf.h"
+#include "seahorse-gtkstock.h"
+#include "seahorse-secure-memory.h"
+#include "seahorse-unix-signal.h"
+
+#include "common/sea-cleanup.h"
+#include "common/sea-registry.h"
+
+#include "pgp/sea-pgp.h"
+
+#ifdef WITH_SSH
+#include "ssh/sea-ssh.h"
+#endif
+
+#include <gnome.h>
+
 #include <sys/types.h>
 #include <sys/signal.h>
 
@@ -29,16 +49,6 @@
 #include <unistd.h>
 #include <syslog.h>
 #include <fcntl.h>
-
-#include <gnome.h>
-
-#include "config.h"
-#include "seahorse-daemon.h"
-#include "seahorse-secure-memory.h"
-#include "seahorse-gconf.h"
-#include "seahorse-gtkstock.h"
-#include "seahorse-context.h"
-#include "seahorse-unix-signal.h"
 
 static gboolean daemon_no_daemonize = FALSE;
 static gboolean daemon_running = FALSE;
@@ -212,6 +222,10 @@ int main(int argc, char* argv[])
     seahorse_gtkstock_init ();
     seahorse_gtkstock_add_icons (daemon_icons);
     
+    /* Load the various components */
+    sea_registry_load_types (NULL, SEA_PGP_REGISTRY);
+    sea_registry_load_types (NULL, SEA_SSH_REGISTRY);
+
     /* Make the default SeahorseContext */
     seahorse_context_new (SEAHORSE_CONTEXT_APP | SEAHORSE_CONTEXT_DAEMON, 0);
     op = seahorse_context_load_local_keys (SCTX_APP ());
@@ -239,6 +253,7 @@ int main(int argc, char* argv[])
     seahorse_dbus_server_cleanup ();
 
     seahorse_context_destroy (SCTX_APP ());
+    sea_cleanup_perform ();
 
     return 0;
 }

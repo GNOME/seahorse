@@ -29,8 +29,6 @@
 #include "seahorse-util.h"
 #include "seahorse-passphrase.h"
 
-#include "pgp/seahorse-gpgmex.h"
-
 #include <gnome-keyring.h>
 
 #ifndef DEBUG_OPERATION_ENABLE

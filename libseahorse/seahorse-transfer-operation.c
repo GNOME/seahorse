@@ -25,9 +25,6 @@
 #include "seahorse-transfer-operation.h"
 #include "seahorse-util.h"
 
-#include "pgp/seahorse-gpgmex.h"
-#include "pgp/seahorse-pgp-source.h"
-
 #ifndef DEBUG_OPERATION_ENABLE
 #if _DEBUG
 #define DEBUG_OPERATION_ENABLE 1
@@ -49,7 +46,7 @@
 typedef struct _SeahorseTransferOperationPrivate {
     SeahorseOperation *operation;   /* The current operation in progress */
     gchar *message;                 /* A progress message to display */
-    gpgme_data_t data;              /* Hold onto the data */
+    GMemoryOutputStream *output;    /* Hold onto the data */
     gboolean individually;          /* Individually export keys, not as one block */
 } SeahorseTransferOperationPrivate;
 
@@ -158,10 +155,9 @@ export_done (SeahorseOperation *op, SeahorseTransferOperation *top)
     SeahorseTransferOperationPrivate *pv = SEAHORSE_TRANSFER_OPERATION_GET_PRIVATE (top);
     GError *err = NULL;
     gboolean done = FALSE;
-    gpgme_data_t data;
-    gpgme_error_t gerr;
-    size_t len;
-    gchar *raw;
+    GInputStream *input;
+    gpointer data;
+    gsize size;
     
     g_assert (op == pv->operation);
     DEBUG_OPERATION (("[transfer] export done\n"));
@@ -192,25 +188,20 @@ export_done (SeahorseOperation *op, SeahorseTransferOperation *top)
     
     DEBUG_OPERATION (("[transfer] starting import\n"));
     
-    /* 
-     * HACK: Strange bug in GPGME. It won't accept our gpgme_data_t unless
-     * we rebuild it. 
-     */
-    
-    raw = gpgme_data_release_and_get_mem (pv->data, &len);
-    pv->data = NULL;
-    
-    gerr = gpgme_data_new_from_mem (&data, raw, len, 0);
-    g_return_if_fail (GPG_IS_OK (gerr));
+    	/* Build an input stream for this */
+	data = g_memory_output_stream_get_data (pv->output);
+	size = seahorse_util_memory_output_length (pv->output);
+	g_return_if_fail (data);
 
-    /* This frees data */
-    pv->operation = seahorse_key_source_import (top->to, data);
-    g_return_if_fail (pv->operation != NULL);
+	input = g_memory_input_stream_new_from_data (g_memdup (data, size), size, g_free);
+	g_return_if_fail (input);
+	
+	/* This frees data */
+	pv->operation = seahorse_key_source_import (top->to, input);
+	g_return_if_fail (pv->operation != NULL);
+	
+	g_object_unref (input);
     
-    /* Free this data with the operation */
-    g_object_set_data_full (G_OBJECT (pv->operation), "raw-data", 
-                            raw, (GDestroyNotify)free);
-
     /* And mark us as started */
     seahorse_operation_mark_start (SEAHORSE_OPERATION (top));
     seahorse_operation_mark_progress (SEAHORSE_OPERATION (top), pv->message ? pv->message : 
@@ -235,7 +226,7 @@ start_transfer (SeahorseTransferOperation *top)
     g_assert (keyids && from);
     
     pv = SEAHORSE_TRANSFER_OPERATION_GET_PRIVATE (top);
-    pv->operation = seahorse_key_source_export_raw (from, keyids, pv->data);
+    pv->operation = seahorse_key_source_export_raw (from, keyids, G_OUTPUT_STREAM (pv->output));
     g_return_val_if_fail (pv->operation != NULL, FALSE);
     
     seahorse_operation_watch (pv->operation, G_CALLBACK (export_done), 
@@ -250,8 +241,8 @@ start_transfer (SeahorseTransferOperation *top)
 static void 
 seahorse_transfer_operation_init (SeahorseTransferOperation *top)
 {
-    SeahorseTransferOperationPrivate *pv = SEAHORSE_TRANSFER_OPERATION_GET_PRIVATE (top);
-    pv->data = gpgmex_data_new ();
+	SeahorseTransferOperationPrivate *pv = SEAHORSE_TRANSFER_OPERATION_GET_PRIVATE (top);
+	pv->output = G_MEMORY_OUTPUT_STREAM (g_memory_output_stream_new (NULL, 0, g_realloc, g_free));
 }
 
 static void 
@@ -331,9 +322,9 @@ seahorse_transfer_operation_finalize (GObject *gobject)
         g_object_unref (top->to);
     top->to = NULL;
     
-    if (pv->data)
-        gpgme_data_release (pv->data);
-    pv->data = NULL;
+	if (pv->output)
+	    g_object_unref (pv->output);
+	pv->output = NULL;
     
     g_free (pv->message);
     pv->message = NULL;

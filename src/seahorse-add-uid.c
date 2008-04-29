@@ -19,14 +19,13 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <config.h> 
-#include <gnome.h>
+#include "config.h" 
  
 #include "seahorse-key-dialogs.h"
 #include "seahorse-key-widget.h"
 #include "seahorse-util.h"
 
-#include "pgp/seahorse-gpgmex.h"
+#include "pgp/seahorse-pgp-dialogs.h"
 #include "pgp/seahorse-pgp-key-op.h"
 
 #define NAME "name"
@@ -80,7 +79,7 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 	err = seahorse_pgp_key_pair_op_add_uid (SEAHORSE_PGP_KEY (skey),
 		                                name, email, comment);
 	if (!GPG_IS_OK (err))
-		seahorse_util_handle_gpgme (err, _("Couldn't add user id"));
+		seahorse_pgp_handle_gpgme_error (err, _("Couldn't add user id"));
 	else
 		seahorse_widget_destroy (swidget);
 }

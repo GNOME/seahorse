@@ -31,7 +31,7 @@ GType                sea_registry_get_type        (void) G_GNUC_CONST;
 SeaRegistry*         sea_registry_get             (void);
 
 void                 sea_registry_load_types      (SeaRegistry *registry, 
-                                                   SeaRegisterType *types);
+                                                   const SeaRegisterType *types);
 
 void                 sea_registry_register_type   (SeaRegistry *registry, 
                                                    GType type, const gchar *category, 

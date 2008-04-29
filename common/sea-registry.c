@@ -163,7 +163,7 @@ sea_registry_get (void)
 }
 
 void
-sea_registry_load_types (SeaRegistry *registry, SeaRegisterType *types)
+sea_registry_load_types (SeaRegistry *registry, const SeaRegisterType *types)
 {
 	GType type;
 	gpointer klass;
@@ -174,6 +174,8 @@ sea_registry_load_types (SeaRegistry *registry, SeaRegisterType *types)
 		
 		klass = g_type_class_ref (type);
 		g_type_class_unref (klass);
+		
+		++types;
 	}
 }
 

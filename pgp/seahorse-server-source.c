@@ -79,6 +79,7 @@ seahorse_server_source_class_init (SeahorseServerSourceClass *klass)
     
     key_class = SEAHORSE_KEY_SOURCE_CLASS (klass);
         
+    key_class->canonize_keyid = seahorse_pgp_key_get_cannonical_id;
     key_class->load = seahorse_server_source_load;
     key_class->stop = seahorse_server_source_stop;
     key_class->get_state = seahorse_server_source_get_state;

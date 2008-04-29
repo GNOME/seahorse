@@ -19,15 +19,14 @@
  * Boston, MA 02111-1307, USA.
  */
  
-#include <config.h>
-#include <gnome.h>
+#include "config.h"
  
 #include "seahorse-key-dialogs.h"
 #include "seahorse-key-widget.h"
 #include "seahorse-libdialogs.h"
 #include "seahorse-util.h"
 
-#include "pgp/seahorse-gpgmex.h"
+#include "pgp/seahorse-pgp-dialogs.h"
 #include "pgp/seahorse-pgp-key-op.h"
 
 static void
@@ -65,7 +64,7 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
         err = seahorse_pgp_key_pair_op_set_expires (pkey, index, expiry);
     
 		if (!GPG_IS_OK (err))
-			seahorse_util_handle_gpgme (err, _("Couldn't change expiry date"));
+			seahorse_pgp_handle_gpgme_error (err, _("Couldn't change expiry date"));
 	}
     
 	seahorse_widget_destroy (swidget);

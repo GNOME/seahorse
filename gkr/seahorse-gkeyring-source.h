@@ -26,7 +26,7 @@
  * - Adds the keys it loads to the SeahorseContext.
  * 
  * Properties:
- *  ktype: (GQuark) The ktype (ie: SKEY_GKEYRING) of keys originating from this 
+ *  ktype: (GQuark) The ktype (ie: SEAHORSE_GKR) of keys originating from this 
            key source.
  *  location: (SeahorseKeyLoc) The location of keys that come from this 
  *         source. (ie: SKEY_LOC_LOCAL)

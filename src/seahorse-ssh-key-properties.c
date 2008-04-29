@@ -18,16 +18,13 @@
  * 59 Temple Place, Suite 330,
  * Boston, MA 02111-1307, USA.
  */
-#include <config.h>
-#include <gnome.h>
+#include "config.h"
 
 #include "seahorse-key-widget.h"
-#include "seahorse-util.h"
-#include "seahorse-key.h"
-#include "seahorse-vfs-data.h"
-#include "seahorse-gtkstock.h"
 
-#include "pgp/seahorse-gpgmex.h"
+#include "seahorse-gtkstock.h"
+#include "seahorse-key.h"
+#include "seahorse-util.h"
 
 #include "ssh/seahorse-ssh-key.h"
 #include "ssh/seahorse-ssh-operation.h"
@@ -205,7 +202,8 @@ export_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
     SeahorseKeySource *sksrc;
     SeahorseOperation *op;
     SeahorseKey *skey;
-    gpgme_data_t data;
+    GFileOutputStream *output;
+    GFile *file;
     GtkWidget *dialog;
     gchar* uri = NULL;
     GError *err = NULL;
@@ -226,17 +224,19 @@ export_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
     sksrc = seahorse_key_get_source (skey);
     g_assert (SEAHORSE_IS_KEY_SOURCE (sksrc));
     
-    data = seahorse_vfs_data_create (uri, SEAHORSE_VFS_WRITE, &err);
+	file = g_file_new_for_uri (uri);
+	output = g_file_replace (file, NULL, FALSE, 0, NULL, &err);  
+	g_object_unref (file);
+	
+	if (output) {
+		op = seahorse_key_source_export (sksrc, keys, TRUE, G_OUTPUT_STREAM (output));
     
-    if (data) {
-        op = seahorse_key_source_export (sksrc, keys, TRUE, data);
-    
-        seahorse_operation_wait (op);
-        gpgmex_data_release (data);
-        
-        if (!seahorse_operation_is_successful (op))
-            seahorse_operation_copy_error (op, &err);
-    }
+		seahorse_operation_wait (op);
+		g_object_unref (output);
+		
+		if (!seahorse_operation_is_successful (op))
+			seahorse_operation_copy_error (op, &err);
+	}
     
     if (err)
         seahorse_util_handle_error (err, _("Couldn't export key to \"%s\""),

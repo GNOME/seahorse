@@ -542,7 +542,7 @@ seahorse_gkeyring_source_get_property (GObject *object, guint prop_id, GValue *v
         g_value_set_string (value, gsrc->pv->keyring_name);
         break;
     case PROP_KEY_TYPE:
-        g_value_set_uint (value, SKEY_GKEYRING);
+        g_value_set_uint (value, SEAHORSE_GKR);
         break;
     case PROP_KEY_DESC:
         g_value_set_string (value, _("Password"));
@@ -611,24 +611,30 @@ seahorse_gkeyring_source_get_state (SeahorseKeySource *src)
 
 
 static SeahorseOperation* 
-seahorse_gkeyring_source_import (SeahorseKeySource *sksrc, gpgme_data_t data)
+seahorse_gkeyring_source_import (SeahorseKeySource *sksrc, GInputStream *input)
 {
-    GError *err = NULL;
-    
-    /* TODO: Implement properly */
-    g_set_error (&err, 0, 0, "gnome-keyring import support not implemented");
-    return seahorse_operation_new_complete (err);   
+	GError *err = NULL;
+
+	g_return_val_if_fail (SEAHORSE_IS_GKEYRING_SOURCE (sksrc), NULL);
+	g_return_val_if_fail (G_IS_INPUT_STREAM (input), NULL);
+
+	/* TODO: Implement properly */
+	g_set_error (&err, 0, 0, "gnome-keyring import support not implemented");
+	return seahorse_operation_new_complete (err);   
 }
 
 static SeahorseOperation* 
 seahorse_gkeyring_source_export (SeahorseKeySource *sksrc, GList *keys, 
-                                 gboolean complete, gpgme_data_t data)
+                                 gboolean complete, GOutputStream *output)
 {
-    GError *err = NULL;
+	GError *err = NULL;
     
-    /* TODO: Implement properly */
-    g_set_error (&err, 0, 0, "gnome-keyring export support not implemented");
-    return seahorse_operation_new_complete (err);    
+	g_return_val_if_fail (SEAHORSE_IS_GKEYRING_SOURCE (sksrc), NULL);
+	g_return_val_if_fail (G_IS_OUTPUT_STREAM (output), NULL);
+    
+	/* TODO: Implement properly */
+	g_set_error (&err, 0, 0, "gnome-keyring export support not implemented");
+	return seahorse_operation_new_complete (err);    
 }
 
 static gboolean            
@@ -743,7 +749,7 @@ seahorse_gkeyring_source_class_init (SeahorseGKeyringSourceClass *klass)
                            0, G_MAXUINT, SKEY_LOC_INVALID, G_PARAM_READABLE));    
     
     
-	sea_registry_register_type (NULL, SEAHORSE_TYPE_GKEYRING_SOURCE, "key-source", "local", SKEY_GKEYRING_STR, NULL);
+	sea_registry_register_type (NULL, SEAHORSE_TYPE_GKEYRING_SOURCE, "key-source", "local", SEAHORSE_GKR_STR, NULL);
 }
 
 /* -------------------------------------------------------------------------- 

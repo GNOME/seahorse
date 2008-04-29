@@ -30,7 +30,6 @@
 #include "seahorse-context.h"
 #include "seahorse-dns-sd.h"
 
-#include "pgp/seahorse-gpgmex.h"
 #include "pgp/seahorse-server-source.h"
 
 typedef struct _KeyserverSelection {

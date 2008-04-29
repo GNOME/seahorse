@@ -40,6 +40,12 @@
 #define GPG_OK              (gpgme_error (GPG_ERR_NO_ERROR))
 #define GPG_E(e)            (gpgme_error (e))
 
+#define SEAHORSE_GPGME_ERROR  (seahorse_gpgme_error_domain ())
+
+GQuark      seahorse_gpgme_error_domain    (void);
+
+void        seahorse_gpgme_to_error        (gpgme_error_t gerr, GError** err);
+
 /* -----------------------------------------------------------------------------
  * DATA ALLOCATION
  */
@@ -112,6 +118,8 @@ void        gpgmex_key_ref           (gpgme_key_t key);
 void        gpgmex_key_unref         (gpgme_key_t key);
 
 void        gpgmex_combine_keys      (gpgme_key_t k, gpgme_key_t key);
+
+void        gpgmex_free_keys         (gpgme_key_t* keys);
 
 gpgmex_photo_id_t 
             gpgmex_photo_id_alloc    (guint uid);

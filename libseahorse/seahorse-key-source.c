@@ -182,51 +182,52 @@ seahorse_key_source_get_state (SeahorseKeySource *sksrc)
 }
 
 SeahorseOperation* 
-seahorse_key_source_import (SeahorseKeySource *sksrc, gpgme_data_t data)
+seahorse_key_source_import (SeahorseKeySource *sksrc, GInputStream *input)
 {
-    SeahorseKeySourceClass *klass;
+	SeahorseKeySourceClass *klass;
     
-    g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (sksrc), NULL);
-    klass = SEAHORSE_KEY_SOURCE_GET_CLASS (sksrc);   
-    g_return_val_if_fail (klass->import != NULL, NULL);
+	g_return_val_if_fail (G_IS_INPUT_STREAM (input), NULL);
     
-    return (*klass->import) (sksrc, data);  
+	g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (sksrc), NULL);
+	klass = SEAHORSE_KEY_SOURCE_GET_CLASS (sksrc);   
+	g_return_val_if_fail (klass->import != NULL, NULL);
+    
+	return (*klass->import) (sksrc, input);  
 }
 
 gboolean            
-seahorse_key_source_import_sync (SeahorseKeySource *sksrc, gpgme_data_t data,
+seahorse_key_source_import_sync (SeahorseKeySource *sksrc, GInputStream *input,
                                  GError **err)
 {
-    SeahorseOperation *op;
-    gboolean ret;
+	SeahorseOperation *op;
+    	gboolean ret;
 
-    op = seahorse_key_source_import (sksrc, data);
-    g_return_val_if_fail (op != NULL, FALSE);
+	g_return_val_if_fail (G_IS_INPUT_STREAM (input), NULL);
+
+	op = seahorse_key_source_import (sksrc, input);
+	g_return_val_if_fail (op != NULL, FALSE);
     
-    seahorse_operation_wait (op);
-    ret = seahorse_operation_is_successful (op);
-    if (!ret)
-        seahorse_operation_copy_error (op, err);
+	seahorse_operation_wait (op);
+	ret = seahorse_operation_is_successful (op);
+	if (!ret)
+		seahorse_operation_copy_error (op, err);
     
-    g_object_unref (op);
-    return ret;    
+	g_object_unref (op);
+	return ret;    
 }
 
 SeahorseOperation*
-seahorse_key_source_export_keys (GList *keys, gpgme_data_t data)
+seahorse_key_source_export_keys (GList *keys, GOutputStream *output)
 {
     SeahorseOperation *op = NULL;
     SeahorseMultiOperation *mop = NULL;
     SeahorseKeySource *sksrc;
     SeahorseKey *skey;
-    gboolean allocated = FALSE;
     GList *next;
     
-    if (!data) {
-        data = gpgmex_data_new ();
-        allocated = TRUE;
-    }
-    
+	g_return_val_if_fail (G_IS_OUTPUT_STREAM (output), NULL);
+	g_object_ref (output);
+
     /* Sort by key source */
     keys = g_list_copy (keys);
     keys = seahorse_util_keylist_sort (keys);
@@ -250,7 +251,7 @@ seahorse_key_source_export_keys (GList *keys, gpgme_data_t data)
         }
         
         /* We pass our own data object, to which data is appended */
-        op = seahorse_key_source_export (sksrc, keys, FALSE, data);
+        op = seahorse_key_source_export (sksrc, keys, FALSE, output);
         g_return_val_if_fail (op != NULL, FALSE);
 
         g_list_free (keys);
@@ -264,8 +265,7 @@ seahorse_key_source_export_keys (GList *keys, gpgme_data_t data)
          * Setup the result data properly, as we would if it was a 
          * single export operation.
          */
-        seahorse_operation_mark_result (op, data, 
-                             allocated ? (GDestroyNotify)gpgmex_data_release : NULL);
+        seahorse_operation_mark_result (op, output, g_object_unref);
     }
     
     if (!op) 
@@ -276,62 +276,66 @@ seahorse_key_source_export_keys (GList *keys, gpgme_data_t data)
 
 SeahorseOperation* 
 seahorse_key_source_export (SeahorseKeySource *sksrc, GList *keys, 
-                            gboolean complete, gpgme_data_t data)
+                            gboolean complete, GOutputStream *output)
 {
-    SeahorseKeySourceClass *klass;
-    SeahorseOperation *op;
-    GSList *keyids = NULL;
-    GList *l;
+	SeahorseKeySourceClass *klass;
+	SeahorseOperation *op;
+	GSList *keyids = NULL;
+	GList *l;
     
-    g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (sksrc), NULL);
-    klass = SEAHORSE_KEY_SOURCE_GET_CLASS (sksrc);   
-    if (klass->export) 
-        return (*klass->export) (sksrc, keys, complete, data);    
+	g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (sksrc), NULL);
+	g_return_val_if_fail (G_IS_OUTPUT_STREAM (output), NULL);
+	
+	klass = SEAHORSE_KEY_SOURCE_GET_CLASS (sksrc);   
+	if (klass->export)
+		return (*klass->export) (sksrc, keys, complete, output);
 
-    /* Either export or export_raw must be implemented */
-    g_return_val_if_fail (klass->export_raw != NULL, NULL);
+	/* Either export or export_raw must be implemented */
+	g_return_val_if_fail (klass->export_raw != NULL, NULL);
     
-    for (l = keys; l; l = g_list_next (l)) 
-        keyids = g_slist_prepend (keyids, GUINT_TO_POINTER (seahorse_key_get_keyid (l->data)));
+	for (l = keys; l; l = g_list_next (l)) 
+		keyids = g_slist_prepend (keyids, GUINT_TO_POINTER (seahorse_key_get_keyid (l->data)));
     
-    keyids = g_slist_reverse (keyids);
-    op = (*klass->export_raw) (sksrc, keyids, data);
-    g_slist_free (keyids);
-    return op;
-
+	keyids = g_slist_reverse (keyids);
+	op = (*klass->export_raw) (sksrc, keyids, output);	
+	g_slist_free (keyids);
+	return op;
 }
 
 SeahorseOperation* 
 seahorse_key_source_export_raw (SeahorseKeySource *sksrc, GSList *keyids, 
-                                gpgme_data_t data)
+                                GOutputStream *output)
 {
-    SeahorseKeySourceClass *klass;
-    SeahorseOperation *op;
-    SeahorseKey *skey;
-    GList *keys = NULL;
-    GSList *l;
+	SeahorseKeySourceClass *klass;
+	SeahorseOperation *op;
+	SeahorseKey *skey;
+	GList *keys = NULL;
+	gboolean owned = FALSE;
+	GSList *l;
     
-    g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (sksrc), NULL);
-    klass = SEAHORSE_KEY_SOURCE_GET_CLASS (sksrc);   
+	g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (sksrc), NULL);
+	g_return_val_if_fail (output == NULL || G_IS_OUTPUT_STREAM (output), NULL);
+
+	klass = SEAHORSE_KEY_SOURCE_GET_CLASS (sksrc);   
     
-    /* Either export or export_raw must be implemented */
-    if (klass->export_raw)
-        return (*klass->export_raw)(sksrc, keyids, data);
+	/* Either export or export_raw must be implemented */
+	if (klass->export_raw)
+		return (*klass->export_raw)(sksrc, keyids, output);
     
-    g_return_val_if_fail (klass->export != NULL, NULL);
+	g_return_val_if_fail (klass->export != NULL, NULL);
         
-    for (l = keyids; l; l = g_slist_next (l)) {
-        skey = seahorse_context_get_key (SCTX_APP (), sksrc, GPOINTER_TO_UINT (l->data));
+	for (l = keyids; l; l = g_slist_next (l)) {
+		skey = seahorse_context_get_key (SCTX_APP (), sksrc, GPOINTER_TO_UINT (l->data));
         
-        /* TODO: A proper error message here 'not found' */
-        if (skey)
-            keys = g_list_prepend (keys, skey);
-    }
+		/* TODO: A proper error message here 'not found' */
+		if (skey)
+			keys = g_list_prepend (keys, skey);
+	}
     
-    keys = g_list_reverse (keys);
-    op = (*klass->export) (sksrc, keys, FALSE, data);
-    g_list_free (keys);
-    return op;
+	keys = g_list_reverse (keys);
+	op = (*klass->export) (sksrc, keys, FALSE, output);
+	g_list_free (keys);
+	return op;
 }
 
 gboolean            

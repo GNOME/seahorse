@@ -14,10 +14,15 @@ INCLUDES = -I$(top_builddir) \
 	-DEXECDIR=\""$(seahorselibexecbindir)"\" \
 	-DLIBCRYPTUI_API_SUBJECT_TO_CHANGE 
 
-noinst_LTLIBRARIES = libsea-gkr.la
+noinst_LTLIBRARIES = libseahorse-gkr.la
 
-libsea_gkr_la_SOURCES = \
+libseahorse_gkr_la_SOURCES = \
+	seahorse-gkr.c seahorse-gkr.h \
 	seahorse-gkeyring-item.c seahorse-gkeyring-item.h \
 	seahorse-gkeyring-source.c seahorse-gkeyring-source.h \
 	seahorse-gkeyring-operation.c seahorse-gkeyring-operation.h
 	
+libseahorse_gkr_la_LIBADD = \
+	$(top_builddir)/libseahorse/libseahorse.la \
+	$(top_builddir)/common/libsea-common.la \
+	$(top_builddir)/libcryptui/libcryptui.la

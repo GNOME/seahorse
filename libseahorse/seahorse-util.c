@@ -21,6 +21,23 @@
  */
 
 #include "config.h"
+
+#include "seahorse-util.h"
+#include "seahorse-key.h"
+#include "seahorse-gconf.h"
+
+#include "pgp/sea-pgp.h"
+
+#include "ssh/sea-ssh.h"
+
+#include <gio/gio.h>
+#include <glib/gstdio.h>
+
+#ifdef WITH_SHARING
+#include <avahi-glib/glib-watch.h>
+#include <avahi-glib/glib-malloc.h>
+#endif 
+
 #include <sys/wait.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -28,23 +45,6 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
-
-#include <gnome.h>
-#include <libgnomevfs/gnome-vfs.h>
-
-#ifdef WITH_SHARING
-#include <avahi-glib/glib-watch.h>
-#include <avahi-glib/glib-malloc.h>
-#endif 
-
-#include "seahorse-util.h"
-#include "seahorse-key.h"
-#include "seahorse-gconf.h"
-#include "seahorse-vfs-data.h"
-
-#include "pgp/sea-pgp.h"
-#include "ssh/sea-ssh.h"
-#include "pgp/seahorse-gpgmex.h"
 
 static const gchar *bad_filename_chars = "/\\<>|";
 
@@ -67,38 +67,6 @@ seahorse_util_show_error (GtkWindow *parent, const gchar *heading, const gchar *
 	
 	gtk_dialog_run (GTK_DIALOG (error));
 	gtk_widget_destroy (error);
-}
-
-/**
- * seahorse_util_handle_gpgme:
- * @err: Error value
- *
- * Shows an error dialog for @err.
- **/
-void
-seahorse_util_handle_gpgme (gpgme_error_t err, const char* desc, ...)
-{
-    gchar *t = NULL;
-
-    switch (gpgme_err_code(err)) {
-    case GPG_ERR_CANCELED:
-    case GPG_ERR_NO_ERROR:
-    case GPG_ERR_ECANCELED:
-        return;
-    default: 
-        break;
-    }
-
-    va_list ap;
-    va_start(ap, desc);
-  
-    if (desc) 
-        t = g_strdup_vprintf (desc, ap);
-
-    va_end(ap);
-        
-    seahorse_util_show_error (NULL, t, gpgme_strerror (err));
-    g_free(t);
 }
 
 void
@@ -125,19 +93,6 @@ seahorse_util_handle_error (GError* err, const char* desc, ...)
 }    
 
 /**
- * seahorse_util_gpgme_error_domain
- * Returns: The GError domain for gpgme errors
- **/
-GQuark
-seahorse_util_gpgme_error_domain ()
-{
-    static GQuark q = 0;
-    if(q == 0)
-        q = g_quark_from_static_string ("seahorse-gpgme-error");
-    return q;
-}
-
-/**
  * seahorse_util_error_domain
  * Returns: The GError domain for generic seahorse errors
  **/
@@ -150,29 +105,6 @@ seahorse_util_error_domain ()
     return q;
 }
 
-/**
- * seahorse_util_gpgme_to_error
- * @gerr GPGME error
- * @err  Resulting GError object
- **/
-void    
-seahorse_util_gpgme_to_error (gpgme_error_t gerr, GError** err)
-{
-    gpgme_err_code_t code;
-    
-    /* Make sure this is actually an error */
-    g_assert (!GPG_IS_OK(gerr));
-    code = gpgme_err_code (gerr);
-    
-    /* Special case some error messages */
-    if (code == GPG_ERR_DECRYPT_FAILED) {
-        g_set_error (err, SEAHORSE_GPGME_ERROR, code, "%s", 
-                     _("Decryption failed. You probably do not have the decryption key."));
-    } else {
-        g_set_error (err, SEAHORSE_GPGME_ERROR, code, "%s", 
-                     gpgme_strerror (gerr));
-    }
-}
 /** 
  * seahorse_util_get_date_string:
  * @time: Time value to parse
@@ -248,7 +180,7 @@ seahorse_util_set_text_view_string (GtkTextView *view, GString *string)
 }
 
 /**
- * seahorse_util_write_data_to_text:
+ * seahorse_util_read_to_text:
  * @data: Data to write
  * @len: Length of the data
  *
@@ -257,29 +189,33 @@ seahorse_util_set_text_view_string (GtkTextView *view, GString *string)
  * Returns: The string read from data
  **/
 gchar*
-seahorse_util_write_data_to_text (gpgme_data_t data, guint *len)
+seahorse_util_read_to_text (GInputStream *input, guint *len)
 {
-    gint size = 128;
-    gchar *buffer, *text;
-    guint nread = 0;
-    GString *string;
+	gint size = 128;
+	gchar *buffer, *text;
+	gsize nread = 0;
+	GString *string;
+	GSeekable *seek;
 
-    gpgme_data_seek (data, 0, SEEK_SET);
+	if (G_IS_SEEKABLE (input)) {
+		seek = G_SEEKABLE (input);
+		g_seekable_seek (seek, 0, SEEK_SET, NULL, NULL);
+	}
 
-    string = g_string_new ("");
-    buffer = g_new (gchar, size);
+	string = g_string_new ("");
+	buffer = g_new (gchar, size);
     
-    while ((nread = gpgme_data_read (data, buffer, size)) > 0)
-        string = g_string_append_len (string, buffer, nread);
+	while (g_input_stream_read_all (input, buffer, size, &nread, NULL, NULL) && nread == size)
+		string = g_string_append_len (string, buffer, nread);
 
-    if (len)
-        *len = string->len;
+	if (len)
+		*len = string->len;
     
-    text = string->str;
-    g_string_free (string, FALSE);
-    g_free (buffer);
-    
-    return text;
+	text = string->str;
+	g_string_free (string, FALSE);
+	g_free (buffer);
+	
+	return text;
 }
 
 /** 
@@ -288,23 +224,24 @@ seahorse_util_write_data_to_text (gpgme_data_t data, guint *len)
  * Breaks out one block of data (usually a key)
  * 
  * @buf: A string buffer to write the data to.
- * @data: The GPGME data block to read from.
+ * @input: The input stream to read from.
  * @start: The start signature to look for.
  * @end: The end signature to look for.
  * 
  * Returns: The number of bytes copied.
  */
 guint
-seahorse_util_read_data_block (GString *buf, gpgme_data_t data, 
+seahorse_util_read_data_block (GString *buf, GInputStream *input, 
                                const gchar *start, const gchar* end)
 {
     const gchar *t;
     guint copied = 0;
     gchar ch;
+    gsize read;
      
     /* Look for the beginning */
     t = start;
-    while (gpgme_data_read (data, &ch, 1) == 1) {
+    while (g_input_stream_read_all (input, &ch, 1, &read, NULL, NULL) && read == 1) {
         
         /* Match next char */            
         if (*t == ch)
@@ -320,7 +257,7 @@ seahorse_util_read_data_block (GString *buf, gpgme_data_t data,
     
     /* Look for the end */
     t = end;
-    while (gpgme_data_read (data, &ch, 1) == 1) {
+    while (g_input_stream_read_all (input, &ch, 1, &read, NULL, NULL) && read == 1) {
         
         /* Match next char */
         if (*t == ch)
@@ -335,6 +272,36 @@ seahorse_util_read_data_block (GString *buf, gpgme_data_t data,
     }
     
     return copied;
+}
+
+gsize
+seahorse_util_memory_output_length (GMemoryOutputStream *output)
+{
+	GSeekable *seekable;
+	goffset offset, end;
+	
+	/* 
+	 * This is a replacement for g_memory_output_stream_get_data_size()
+	 * which is not available in current version of glib.
+	 */
+	
+	g_return_val_if_fail (G_IS_MEMORY_OUTPUT_STREAM (output), 0);
+	g_return_val_if_fail (G_IS_SEEKABLE (output), 0);
+	
+	seekable = G_SEEKABLE (output);
+	offset = g_seekable_tell (seekable);
+	
+	if (!g_seekable_seek (seekable, 0, G_SEEK_END, NULL, NULL))
+		g_return_val_if_reached (0);
+	
+	end = g_seekable_tell (seekable);
+	
+	if (offset != end) {
+		if (!g_seekable_seek (seekable, offset, G_SEEK_SET, NULL, NULL))
+			g_return_val_if_reached (0);
+	}
+	
+	return (gsize)end;
 }
 
 /** 
@@ -481,16 +448,16 @@ seahorse_util_uri_split_last (gchar* uri)
 gboolean
 seahorse_util_uri_exists (const gchar* uri)
 {
-    GnomeVFSURI* vuri;    
-    gboolean exists;
+	GFile *file;
+	gboolean exists;
 
-    vuri = gnome_vfs_uri_new (uri);
-    g_return_val_if_fail (vuri != NULL, FALSE);
-    
-    exists = gnome_vfs_uri_exists (vuri);
-    gnome_vfs_uri_unref (vuri);
-    
-    return exists;
+	file = g_file_new_for_uri (uri);
+	g_return_val_if_fail (file, FALSE);
+	
+	exists = g_file_query_exists (file, NULL);
+	g_object_unref (file);
+	
+	return exists;
 }       
     
 /**
@@ -595,78 +562,6 @@ seahorse_util_uri_replace_ext (const gchar *uri, const gchar *ext)
     return ret;
 }
 
-/* Context for callback below */
-typedef struct _VisitUriCtx
-{
-    GArray* files;
-    const gchar* base_uri;
-}
-VisitUriCtx;
-
-/* Called for each sub file or directory */
-static gboolean
-visit_uri (const gchar *rel_path, GnomeVFSFileInfo *info, gboolean recursing_will_loop,
-                gpointer data, gboolean *recurse)
-{
-    VisitUriCtx* ctx = (VisitUriCtx*)data;
-    gchar* t = g_strconcat (ctx->base_uri, "/", rel_path, NULL);
-    gchar* uri = gnome_vfs_make_uri_canonical (t);
-    g_free (t);
-
-    if(info->type != GNOME_VFS_FILE_TYPE_DIRECTORY)
-        g_array_append_val (ctx->files, uri);
-
-    *recurse = !recursing_will_loop;
-    return TRUE;
-}
-
-/**
- * seahorse_util_uris_expand
- * @uris: The null-terminated vector of URIs to enumerate
- * 
- * Find all files in the given set of uris.                                         
- * 
- * Returns: Newly allocated null-terminated string vector of URIs.
- */
-gchar** 
-seahorse_util_uris_expand (const gchar** uris)
-{
-    GnomeVFSFileInfo* info;
-    GArray* files  = NULL;
-    const gchar** u;
-    gchar* uri;
-
-    files = g_array_new (TRUE, FALSE, sizeof(gchar*));    
-    info = gnome_vfs_file_info_new ();
-    
-    for(u = uris; *u; u++) {
-
-        uri = gnome_vfs_make_uri_canonical (*u);
-
-        if (gnome_vfs_get_file_info (uri, info, GNOME_VFS_FILE_INFO_DEFAULT) == GNOME_VFS_OK &&
-            info->type == GNOME_VFS_FILE_TYPE_DIRECTORY) 
-        {
-                VisitUriCtx ctx;
-                ctx.files = files;
-                ctx.base_uri = uri;
-                
-                gnome_vfs_directory_visit (uri, GNOME_VFS_FILE_INFO_DEFAULT, 
-                    GNOME_VFS_DIRECTORY_VISIT_DEFAULT | GNOME_VFS_DIRECTORY_VISIT_LOOPCHECK,
-                    visit_uri, &ctx);
-               
-        /* Not a directory */     
-        } else {
-           
-            g_array_append_val (files, uri);
-            uri = NULL; /* To prevent freeing below */
-        }
-        
-        g_free (uri);
-    }            
-    
-    return (gchar**)g_array_free (files, FALSE);            
-}
-
 /**
  * seahorse_util_uris_package
  * @package: Package uri
@@ -687,41 +582,51 @@ seahorse_util_uris_package (const gchar* package, const char** uris)
     gchar *cmd;
     gchar *t;
     gchar *x;
-    GnomeVFSFileInfo *info;
-    GnomeVFSResult result;
+    GFile *file, *fpackage;
     
-    t = gnome_vfs_get_local_path_from_uri (package);
-    x = g_shell_quote(t);
-    g_free(t);
+    	fpackage = g_file_new_for_uri (package);
+    	t = g_file_get_path (fpackage);
+    	x = g_shell_quote (t);
+    	g_free (t);
     
-    /* create execution */
-    str = g_string_new ("");
-    g_string_printf (str, "file-roller --add-to=%s", x);
-    g_free(x);
+    	/* create execution */
+    	str = g_string_new ("");
+    	g_string_printf (str, "file-roller --add-to=%s", x);
+    	g_free (x);
     
-    while(*uris) {
-        /* We should never be passed any remote uris at this point */
-        x = gnome_vfs_make_uri_canonical (*uris);
-        
-        t = gnome_vfs_get_local_path_from_uri (x);
-        g_free(x);
-        
-        g_return_val_if_fail (t != NULL, FALSE);
+    	while(*uris) {
+    		/* We should never be passed any remote uris at this point */
+    		x = g_uri_parse_scheme (*uris);
+    		if (x) 
+    			file = g_file_new_for_uri (*uris);
+    		else
+    			file = g_file_new_for_path (*uris);
+    		g_free (x);
+    		
+    		t = g_file_get_path (file);
+    		g_object_unref (file);
+    		g_return_val_if_fail (t != NULL, FALSE);
 
-        x = g_shell_quote(t);
-        g_free(t);
+    		x = g_shell_quote (t);
+    		g_free (t);
 
-        g_string_append_printf (str, " %s", x);
-        g_free(x);
+    		g_string_append_printf (str, " %s", x);
+    		g_free (x);
         
-        uris++;
-    }
+    		uris++;
+    	}
         
-    /* Execute the command */
-    cmd = g_string_free (str, FALSE);
-    r = g_spawn_command_line_sync (cmd, &out, NULL, &status, &err);
-    g_free (cmd); 
+    	/* Execute the command */
+    	cmd = g_string_free (str, FALSE);
+    	r = g_spawn_command_line_sync (cmd, &out, NULL, &status, &err);
+    	g_free (cmd); 
     
+    	/* TODO: This won't work for remote packages if we support them in the future */
+    	t = g_file_get_path (fpackage);
+	g_chmod (t, S_IRUSR | S_IWUSR);
+	g_free (t);
+    	g_object_unref (fpackage);
+
     if (out) {
         g_print (out);
         g_free (out);
@@ -738,67 +643,62 @@ seahorse_util_uris_package (const gchar* package, const char** uris)
         return FALSE;
     }
     
-    info = gnome_vfs_file_info_new ();
-	info->permissions = GNOME_VFS_PERM_USER_READ | GNOME_VFS_PERM_USER_WRITE;
-	result = gnome_vfs_set_file_info (package, info, GNOME_VFS_SET_FILE_INFO_PERMISSIONS);
-    gnome_vfs_file_info_unref (info);
-	    
-	if (result != GNOME_VFS_OK) {
-    	seahorse_util_handle_error (err, _("Couldn't set permissions on backup file."));
-        return FALSE;
-    }
-
     return TRUE;
 }
 
 GQuark
 seahorse_util_detect_mime_type (const gchar *mime)
 {
-    if (!mime || g_ascii_strcasecmp (mime, GNOME_VFS_MIME_TYPE_UNKNOWN) == 0) {
-        g_warning ("couldn't get mime type for data");
-        return 0;
-    }
+	if (!mime || g_ascii_strcasecmp (mime, "application/octet-stream") == 0) {
+		g_warning ("couldn't get mime type for data");
+		return 0;
+	}
 
-    if (g_ascii_strcasecmp (mime, "application/pgp-keys") == 0)
-        return SEA_PGP;
+	if (g_ascii_strcasecmp (mime, "application/pgp-encrypted") == 0 ||
+	    g_ascii_strcasecmp (mime, "application/pgp-keys") == 0)
+		return SEA_PGP;
     
 #ifdef WITH_SSH 
-    /* TODO: For now all PEM keys are treated as SSH keys */
-    else if (g_ascii_strcasecmp (mime, "application/x-ssh-key") == 0 ||
-             g_ascii_strcasecmp (mime, "application/x-pem-key") == 0)
-        return SEA_SSH;
+	/* TODO: For now all PEM keys are treated as SSH keys */
+	else if (g_ascii_strcasecmp (mime, "application/x-ssh-key") == 0 ||
+	         g_ascii_strcasecmp (mime, "application/x-pem-key") == 0)
+		return SEA_SSH;
 #endif 
     
-    g_warning ("unsupported type of key data: %s", mime);
-    return 0;
+	g_warning ("unsupported type of key data: %s", mime);
+	return 0;
 }
 
 GQuark
 seahorse_util_detect_data_type (const gchar *data, guint length)
 {
-    const gchar* mime = gnome_vfs_get_mime_type_for_data (data, length);
-    return seahorse_util_detect_mime_type (mime);
+	gboolean uncertain;
+	gchar *mime;
+	GQuark type;
+	
+	mime = g_content_type_guess (NULL, (const guchar*)data, length, &uncertain);
+	g_return_val_if_fail (mime, 0);
+	
+	type = seahorse_util_detect_mime_type (mime);
+	g_free (mime);
+	
+	return type;
 }
 
 GQuark
 seahorse_util_detect_file_type (const gchar *uri)
 {
-    GnomeVFSResult res;
-    GnomeVFSFileInfo *info;
-    GQuark ret = 0;
-    
-    info = gnome_vfs_file_info_new ();
-    res = gnome_vfs_get_file_info (uri, info, 
-            GNOME_VFS_FILE_INFO_GET_MIME_TYPE | GNOME_VFS_FILE_INFO_FORCE_SLOW_MIME_TYPE);
-    
-    if (res == GNOME_VFS_OK)
-        ret = seahorse_util_detect_mime_type (info->mime_type);
-    else
-        g_warning ("couldn't get mime type for: %s: %s", uri, 
-                   gnome_vfs_result_to_string (res));
-
-    gnome_vfs_file_info_unref (info);
-    return ret;
+	gboolean uncertain;
+	gchar *mime;
+	GQuark type;
+	
+	mime = g_content_type_guess (uri, NULL, 0, &uncertain);
+	g_return_val_if_fail (mime, 0);
+	
+	type = seahorse_util_detect_mime_type (mime);
+	g_free (mime);
+	
+	return type;
 }
 
 gboolean
@@ -1100,17 +1000,6 @@ seahorse_util_strvec_length (const gchar **vec)
     while (*(vec++))
         len++;
     return len;
-}
-
-void
-seahorse_util_free_keys (gpgme_key_t* keys)
-{
-    gpgme_key_t* k = keys;
-    if (!keys)
-        return;
-    while (*k)
-        gpgmex_key_unref (*(k++));
-    g_free (keys);
 }
 
 static gint 

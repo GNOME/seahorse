@@ -20,7 +20,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <gnome.h>
+#include "config.h"
 
 #include "seahorse-windows.h"
 #include "seahorse-key-widget.h"
@@ -30,7 +30,7 @@
 #include "seahorse-combo-keys.h"
 #include "seahorse-gconf.h"
 
-#include "pgp/seahorse-gpgmex.h"
+#include "pgp/seahorse-pgp-dialogs.h"
 #include "pgp/seahorse-pgp-key-op.h"
 
 #ifdef WITH_KEYSERVER
@@ -95,7 +95,7 @@ ok_clicked (SeahorseWidget *swidget)
                                     SEAHORSE_PGP_KEY (signer), 
                                     skwidget->index + 1, check, options);
     if (!GPG_IS_OK (err))
-        seahorse_util_handle_gpgme (err, _("Couldn't sign key"));
+        seahorse_pgp_handle_gpgme_error (err, _("Couldn't sign key"));
     
     seahorse_widget_destroy (swidget);
     

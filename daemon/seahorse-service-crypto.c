@@ -19,7 +19,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <glib.h>
+#include "config.h"
 
 #include "seahorse-service.h"
 #include "seahorse-key.h"
@@ -27,8 +27,11 @@
 #include "seahorse-util.h"
 #include "seahorse-libdialogs.h"
 
+#include "pgp/seahorse-pgp-dialogs.h"
 #include "pgp/seahorse-pgp-key.h"
 #include "pgp/seahorse-pgp-operation.h"
+
+#include <glib.h>
 
 /* flags from seahorse-service-cyrpto.xml */
 #define FLAG_QUIET 0x01
@@ -173,7 +176,7 @@ notify_signatures (const gchar* data, gpgme_verify_result_t status)
 		return;
 	default:
 		if (!GPG_IS_OK (status->signatures->status))
-			seahorse_util_handle_gpgme (status->signatures->status, 
+			seahorse_pgp_handle_gpgme_error (status->signatures->status, 
 			                            _("Couldn't verify signature."));
 		return;
 	};
@@ -303,7 +306,7 @@ seahorse_service_crypto_encrypt_text (SeahorseServiceCrypto *crypto,
                                        plain, cipher);
     }
     
-    seahorse_util_free_keys (recips);
+    gpgmex_free_keys (recips);
 
     /* Frees cipher */
     ret = process_crypto_result (pop, gerr, cipher, crypttext, error);

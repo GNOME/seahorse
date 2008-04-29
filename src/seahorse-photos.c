@@ -31,6 +31,7 @@
 #include "seahorse-util.h"
 #include "seahorse-key-dialogs.h"
 
+#include "pgp/seahorse-pgp-dialogs.h"
 #include "pgp/seahorse-pgp-key-op.h"
 
 #define DEFAULT_WIDTH    120
@@ -287,7 +288,7 @@ seahorse_photo_add (SeahorsePGPKey *pkey, GtkWindow *parent, const gchar *path)
                                       _("The file could not be loaded. It may be in an invalid format"));
         
         else
-            seahorse_util_handle_gpgme (gerr, _("Couldn't add photo"));
+            seahorse_pgp_handle_gpgme_error (gerr, _("Couldn't add photo"));
 
         res = FALSE;
     }
@@ -327,7 +328,7 @@ seahorse_photo_delete (SeahorsePGPKey *pkey, GtkWindow *parent, gpgmex_photo_id_
     
     gerr = seahorse_pgp_key_op_photoid_delete (pkey, photo->uid);
     if (!GPG_IS_OK (gerr)) {
-        seahorse_util_handle_gpgme (gerr, _("Couldn't delete photo"));
+	    seahorse_pgp_handle_gpgme_error (gerr, _("Couldn't delete photo"));
         return FALSE;
     }
     

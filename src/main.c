@@ -20,10 +20,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <config.h>
-#include <gnome.h>
-#include <libgnomevfs/gnome-vfs.h>
-#include <locale.h>
+#include "config.h"
 
 #include "seahorse-context.h"
 #include "seahorse-windows.h"
@@ -32,8 +29,21 @@
 #include "seahorse-gtkstock.h"
 #include "seahorse-secure-memory.h"
 
+#include "common/sea-cleanup.h"
+#include "common/sea-registry.h"
+
+#include "pgp/sea-pgp.h"
 #include "pgp/seahorse-pgp-key.h"
 #include "pgp/seahorse-pgp-source.h"
+
+#ifdef WITH_SSH
+#include "ssh/sea-ssh.h"
+#endif
+
+#include "gkr/seahorse-gkr.h"
+
+#include <gnome.h>
+#include <locale.h>
 
 /* Initializes context and preferences, then loads key manager */
 int
@@ -63,7 +73,11 @@ main (int argc, char **argv)
                        GNOME_PARAM_APP_DATADIR, DATA_DIR, NULL);
 
     /* Insert Icons into Stock */ 
-    seahorse_gtkstock_init();
+    seahorse_gtkstock_init ();
+    
+    /* Initialize the various components */
+    sea_registry_load_types (NULL, SEA_PGP_REGISTRY);
+    sea_registry_load_types (NULL, SEA_SSH_REGISTRY);
     
     /* Make the default SeahorseContext */
     seahorse_context_new (SEAHORSE_CONTEXT_APP, 0);
@@ -74,8 +88,6 @@ main (int argc, char **argv)
     
     gtk_main ();
     
-    if (gnome_vfs_initialized ())
-        gnome_vfs_shutdown ();
-    
+    sea_cleanup_perform ();
     return ret;
 }

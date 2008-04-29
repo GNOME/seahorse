@@ -20,7 +20,6 @@
  */
 
 #include "config.h"
-#include <gnome.h>
 
 #include "seahorse-widget.h"
 #include "seahorse-util.h"
@@ -29,6 +28,7 @@
 #include "seahorse-gtkstock.h"
 #include "seahorse-passphrase.h"
 
+#include "pgp/seahorse-pgp-dialogs.h"
 #include "pgp/seahorse-pgp-key.h"
 #include "pgp/seahorse-pgp-key-op.h"
 #include "pgp/seahorse-pgp-source.h"
@@ -146,7 +146,7 @@ on_response (GtkDialog *dialog, guint response, SeahorseWidget *swidget)
                                            pass, type, bits, expires, &gerr);
     
         if (!GPG_IS_OK (gerr)) {
-            seahorse_util_handle_gpgme (gerr, _("Couldn't generate key"));
+            seahorse_pgp_handle_gpgme_error (gerr, _("Couldn't generate key"));
         } else {
             seahorse_progress_show (op, _("Generating key"), TRUE);
             seahorse_operation_watch (op, G_CALLBACK (completion_handler), NULL, NULL);

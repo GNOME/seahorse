@@ -26,6 +26,8 @@
 #include "seahorse-unknown-source.h"
 #include "seahorse-unknown-key.h"
 
+#include "common/sea-registry.h"
+
 enum {
     PROP_0,
     PROP_KEY_TYPE,
@@ -78,7 +80,7 @@ seahorse_unknown_source_get_state (SeahorseKeySource *src)
 }
 
 static SeahorseOperation* 
-seahorse_unknown_source_import (SeahorseKeySource *sksrc, gpgme_data_t data)
+seahorse_unknown_source_import (SeahorseKeySource *sksrc, GInputStream *input)
 {
     g_return_val_if_reached (NULL);
     return NULL;
@@ -86,7 +88,7 @@ seahorse_unknown_source_import (SeahorseKeySource *sksrc, gpgme_data_t data)
 
 static SeahorseOperation* 
 seahorse_unknown_source_export_raw (SeahorseKeySource *sksrc, GSList *keyids, 
-                                    gpgme_data_t data)
+                                    GOutputStream *output)
 {
     g_return_val_if_reached (NULL);
     return NULL;
@@ -169,7 +171,7 @@ seahorse_unknown_source_class_init (SeahorseUnknownSourceClass *klass)
         g_param_spec_uint ("location", "Key Location", "Where the key is stored. See SeahorseKeyLoc", 
                            0, G_MAXUINT, SKEY_LOC_INVALID, G_PARAM_READABLE));    
     
-    sea_registry_register_type (SEAHORSE_TYPE_UNKNOWN_SOURCE, "key-source", NULL);
+	sea_registry_register_type (NULL, SEAHORSE_TYPE_UNKNOWN_SOURCE, "key-source", NULL);
 }
 
 /* -----------------------------------------------------------------------------

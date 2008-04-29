@@ -19,13 +19,12 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <config.h>
-#include <gnome.h>
+#include "config.h"
 
 #include "seahorse-windows.h"
 #include "seahorse-util.h"
 
-#include "pgp/seahorse-gpgmex.h"
+#include "pgp/seahorse-pgp-dialogs.h"
 #include "pgp/seahorse-pgp-key-op.h"
 
 static gboolean
@@ -160,7 +159,7 @@ seahorse_delete_subkey_new (SeahorsePGPKey *pkey, guint index)
 	
 	err = seahorse_pgp_key_op_del_subkey (pkey, index);
 	if (!GPG_IS_OK (err))
-		seahorse_util_handle_gpgme (err, _("Couldn't delete subkey"));
+		seahorse_pgp_handle_gpgme_error (err, _("Couldn't delete subkey"));
 }
 
 void

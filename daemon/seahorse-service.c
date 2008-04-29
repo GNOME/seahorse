@@ -32,6 +32,8 @@
 
 #include "pgp/seahorse-gpgmex.h"
 
+#include <gio/gio.h>
+
 #define KEYSET_PATH "/org/gnome/seahorse/keys/%s"
 #define KEYSET_PATH_LOCAL "/org/gnome/seahorse/keys/%s/local"
 
@@ -115,8 +117,7 @@ seahorse_service_import_keys (SeahorseService *svc, gchar *ktype,
 {
     SeahorseKeySource *sksrc;
     SeahorseOperation *op;
-    gpgme_data_t gdata;
-    gpgme_error_t gerr;
+    GInputStream *input;
     GArray *a;
     GList *l;
     gchar *t;
@@ -130,14 +131,11 @@ seahorse_service_import_keys (SeahorseService *svc, gchar *ktype,
         return FALSE;
     }
     
-    /* TODO: We should be doing base64 on these */
-    gerr = gpgme_data_new_from_mem (&gdata, data, strlen (data), 0);
-    if (!GPG_IS_OK (gerr)) {
-        seahorse_util_gpgme_to_error (gerr, error);
-        return FALSE;
-    }
+	/* TODO: We should be doing base64 on these */
+	input = g_memory_input_stream_new_from_data (data, strlen (data), NULL);
+	g_return_val_if_fail (input, FALSE);
     
-    op = seahorse_key_source_import (sksrc, gdata);
+    op = seahorse_key_source_import (sksrc, G_INPUT_STREAM (input));
     seahorse_operation_wait (op);
     
     a = g_array_new (TRUE, TRUE, sizeof (gchar*));
@@ -150,11 +148,13 @@ seahorse_service_import_keys (SeahorseService *svc, gchar *ktype,
         
     *keys = (gchar**)g_array_free (a, FALSE);
     
-    if (keynum > 0)
-    seahorse_notify_import (keynum, *keys);
+	if (keynum > 0)
+		seahorse_notify_import (keynum, *keys);
     
-    g_object_unref (op);
-    return TRUE;
+	g_object_unref (op);
+	g_object_unref (input);
+
+	return TRUE;
 }
 
 gboolean
@@ -164,25 +164,17 @@ seahorse_service_export_keys (SeahorseService *svc, gchar *ktype,
     SeahorseKeySource *sksrc;
     SeahorseOperation *op;
     SeahorseKey *skey;
-    gpgme_data_t gdata;
-    gpgme_error_t gerr;
+    GMemoryOutputStream *output;
     GList *next;
     GList *l = NULL;
     GQuark type;
     
     type = g_quark_from_string (ktype);
     
-    gerr = gpgme_data_new (&gdata);
-    if (!GPG_IS_OK (gerr)) {
-        seahorse_util_gpgme_to_error (gerr, error);
-        return FALSE;
-    }    
-    
     while (*keys) {
         skey = seahorse_context_key_from_dbus (SCTX_APP (), *keys, 0);
         
         if (!skey || seahorse_key_get_ktype (skey) != type) {
-            gpgme_data_release (gdata);
             g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID, 
                          _("Invalid or unrecognized key: %s"), *keys);
             return FALSE;
@@ -192,6 +184,9 @@ seahorse_service_export_keys (SeahorseService *svc, gchar *ktype,
         keys++;
     }    
 
+    output = G_MEMORY_OUTPUT_STREAM (g_memory_output_stream_new (NULL, 0, g_realloc, NULL));
+    g_return_val_if_fail (output, FALSE);
+    
     /* Sort by key source */
     l = seahorse_util_keylist_sort (l);
     
@@ -207,7 +202,7 @@ seahorse_service_export_keys (SeahorseService *svc, gchar *ktype,
         g_return_val_if_fail (sksrc != NULL, FALSE);
         
         /* We pass our own data object, to which data is appended */
-        op = seahorse_key_source_export (sksrc, l, FALSE, gdata);
+        op = seahorse_key_source_export (sksrc, l, FALSE, G_OUTPUT_STREAM (output));
         g_return_val_if_fail (op != NULL, FALSE);
 
         g_list_free (l);
@@ -223,7 +218,7 @@ seahorse_service_export_keys (SeahorseService *svc, gchar *ktype,
             seahorse_operation_copy_error (op, error);
             g_object_unref (op);
             
-            gpgme_data_release (gdata);
+            g_object_unref (output);
             return FALSE;
         }        
         
@@ -231,8 +226,10 @@ seahorse_service_export_keys (SeahorseService *svc, gchar *ktype,
     } 
     
     /* TODO: We should be base64 encoding this */
-    *data = seahorse_util_write_data_to_text (gdata, NULL);
-    gpgmex_data_release (gdata);
+    *data = g_memory_output_stream_get_data (output);
+    
+    /* The above pointer is not freed, because we passed null to g_memory_output_stream_new() */
+    g_object_unref (output);
     return TRUE;
 }
 

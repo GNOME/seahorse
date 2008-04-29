@@ -42,12 +42,11 @@
 #ifndef __SEAHORSE_KEY_SOURCE_H__
 #define __SEAHORSE_KEY_SOURCE_H__
 
-#include <gnome.h>
-
 #include "seahorse-key.h"
 #include "seahorse-operation.h"
 
-#include "pgp/seahorse-gpgmex.h"
+#include <gio/gio.h>
+#include <glib-object.h>
 
 #define SEAHORSE_TYPE_KEY_SOURCE            (seahorse_key_source_get_type ())
 #define SEAHORSE_KEY_SOURCE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_KEY_SOURCE, SeahorseKeySource))
@@ -117,43 +116,43 @@ typedef struct _SeahorseKeySourceClass {
     /**
      * import
      * @sksrc: The #SeahorseKeySource to import into.
-     * @data: The data to import (takes ownership).
+     * @input: The data to import.
      *
      * Import keys into the key source. When operation is 'done' a GList of 
      * updated keys may be found as the operation result. 
      * 
      * Returns: The import operation
      */
-    SeahorseOperation* (*import) (SeahorseKeySource *sksrc, gpgme_data_t data);
+    SeahorseOperation* (*import) (SeahorseKeySource *sksrc, GInputStream *input);
 
     /**
      * export
      * @sksrc: The #SeahorseKeySource to export from.
      * @keys: A list of keys to export.
      * @complete: Whether to export the secret key too.
-     * @data: Optional data object to export to (not freed).
+     * @data: Output stream to export to.
      *
      * Import keys into the key source. When operation is 'done' the result
-     * of the operation will be a gpgme_data_t 
+     * of the operation will be a GOutputStream
      * 
      * Returns: The export operation
      */    
     SeahorseOperation* (*export) (SeahorseKeySource *sksrc, GList *keys, 
-                                  gboolean complete, gpgme_data_t data);
+                                  gboolean complete, GOutputStream *output);
 
     /**
      * export_raw
      * @sksrc: The #SeahorseKeySource to export from.
      * @keys: A list of key ids to export.
-     * @data: Optional data object to export to (not freed).
+     * @data: output stream to export to.
      *
      * Import keys into the key source. When operation is 'done' the result
-     * of the operation will be a gpgme_data_t 
+     * of the operation will be a GOutputStream
      * 
      * Returns: The export operation
      */    
     SeahorseOperation* (*export_raw) (SeahorseKeySource *sksrc, GSList *keyids, 
-                                      gpgme_data_t data);
+                                      GOutputStream *output);
 
     /**
      * remove
@@ -192,24 +191,24 @@ SeahorseOperation*  seahorse_key_source_search           (SeahorseKeySource *sks
 
 /* Takes ownership of |data| */
 SeahorseOperation*  seahorse_key_source_import           (SeahorseKeySource *sksrc,
-                                                          gpgme_data_t data);
+                                                          GInputStream *input);
 
 /* Takes ownership of |data| */
 gboolean            seahorse_key_source_import_sync      (SeahorseKeySource *sksrc,
-                                                          gpgme_data_t data,
+                                                          GInputStream *input,
                                                           GError **err);
 
 SeahorseOperation*  seahorse_key_source_export_keys      (GList *keys, 
-                                                          gpgme_data_t data);
+                                                          GOutputStream *output);
 
 SeahorseOperation*  seahorse_key_source_export           (SeahorseKeySource *sksrc,
                                                           GList *keys,
                                                           gboolean complete,
-                                                          gpgme_data_t data);
+                                                          GOutputStream *output);
 
 SeahorseOperation*  seahorse_key_source_export_raw       (SeahorseKeySource *sksrc, 
                                                           GSList *keyids, 
-                                                          gpgme_data_t data);
+                                                          GOutputStream *output);
 
 void                seahorse_key_source_stop             (SeahorseKeySource *sksrc);
 

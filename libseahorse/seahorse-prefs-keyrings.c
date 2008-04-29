@@ -307,7 +307,7 @@ keyring_default_done (GnomeKeyringResult result, gpointer data)
         
         /* 
          * Update the main seahorse gkeyring source 
-         * TODO: We shouldn't have to define SKEY_GKEYRING here again
+         * TODO: We shouldn't have to define SEAHORSE_GKR here again
          */
         src = seahorse_context_find_key_source (SCTX_APP (), 
                                                 g_quark_from_static_string ("gnome-keyring"), 

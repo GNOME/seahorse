@@ -24,26 +24,26 @@
 /* TODO: Make sure to free when getting text from seahorse_pgp_key_* */
 
 #include "config.h"
-#include <gnome.h>
-#include <time.h>
 
 #include "seahorse-key-dialogs.h"
+
+#include "seahorse-gconf.h"
+#include "seahorse-gtkstock.h"
+#include "seahorse-key.h"
+#include "seahorse-key-model.h"
 #include "seahorse-key-widget.h"
 #include "seahorse-util.h"
-#include "seahorse-key.h"
-#include "seahorse-gtkstock.h"
 #include "seahorse-windows.h"
-#include "seahorse-vfs-data.h"
-#include "seahorse-key-model.h"
-#include "seahorse-gconf.h"
 
-#include "pgp/seahorse-gpgmex.h"
+#include "pgp/seahorse-pgp-dialogs.h"
 #include "pgp/seahorse-pgp-key.h"
 #include "pgp/seahorse-pgp-key-op.h"
 
 #ifdef WITH_KEYSERVER
 #include "seahorse-keyserver-sync.h"
 #endif
+
+#include <time.h>
 
 #define NOTEBOOK "notebook"
 
@@ -206,7 +206,7 @@ names_primary_clicked (GtkWidget *widget, SeahorseWidget *swidget)
     if (index > 0) {
         err = seahorse_pgp_key_op_primary_uid (SEAHORSE_PGP_KEY (skey), index);
         if (!GPG_IS_OK (err)) 
-            seahorse_util_handle_gpgme (err, _("Couldn't change primary user ID"));
+            seahorse_pgp_handle_gpgme_error (err, _("Couldn't change primary user ID"));
     }
 }
 
@@ -556,7 +556,7 @@ owner_photo_primary_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
     
     gerr = seahorse_pgp_key_op_photoid_primary (pkey, uid);
     if (!GPG_IS_OK (gerr))
-        seahorse_util_handle_gpgme (gerr, _("Couldn't change primary photo"));
+	    seahorse_pgp_handle_gpgme_error (gerr, _("Couldn't change primary photo"));
 }
 
 static void
@@ -990,7 +990,7 @@ trust_changed (GtkComboBox *selection, SeahorseWidget *swidget)
     	if (seahorse_key_get_trust (skey) != trust) {
     		err = seahorse_pgp_key_op_set_trust (SEAHORSE_PGP_KEY (skey), trust);
     		if (err) {
-    			seahorse_util_handle_gpgme (err, _("Unable to change trust"));
+    			seahorse_pgp_handle_gpgme_error (err, _("Unable to change trust"));
     		}
     	}
     }
@@ -1005,7 +1005,8 @@ details_export_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
     GtkWidget *dialog;
     gchar* uri = NULL;
     GError *err = NULL;
-    gpgme_data_t data;
+    GFile *file;
+    GFileOutputStream *output;
     GList *keys = NULL;
     
     skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
@@ -1023,21 +1024,23 @@ details_export_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
     sksrc = seahorse_key_get_source (skey);
     g_assert (SEAHORSE_IS_KEY_SOURCE (sksrc));
     
-    data = seahorse_vfs_data_create (uri, SEAHORSE_VFS_WRITE, &err);
+	file = g_file_new_for_uri (uri);
+	output = g_file_replace (file, NULL, FALSE, 0, NULL, &err);  
+	g_object_unref (file);
     
-    if (data) {
-        op = seahorse_key_source_export (sksrc, keys, TRUE, data);
+	if (output) {
+		op = seahorse_key_source_export (sksrc, keys, TRUE, G_OUTPUT_STREAM (output));
     
-        seahorse_operation_wait (op);
-        gpgmex_data_release (data);
+		seahorse_operation_wait (op);
+		g_object_unref (output);
         
-        if (!seahorse_operation_is_successful (op))
-            seahorse_operation_copy_error (op, &err);
-    }
+		if (!seahorse_operation_is_successful (op))
+			seahorse_operation_copy_error (op, &err);
+	}
     
-    if (err)
-        seahorse_util_handle_error (err, _("Couldn't export key to \"%s\""),
-                                    seahorse_util_uri_get_last (uri));
+	if (err)
+		seahorse_util_handle_error (err, _("Couldn't export key to \"%s\""),
+		                            seahorse_util_uri_get_last (uri));
     
     g_list_free (keys);
     g_free (uri);
@@ -1384,7 +1387,7 @@ trust_marginal_toggled (GtkToggleButton *toggle, SeahorseWidget *swidget)
     if (seahorse_key_get_trust (skey) != trust) {
         err = seahorse_pgp_key_op_set_trust (SEAHORSE_PGP_KEY (skey), trust);
         if (err)
-            seahorse_util_handle_gpgme (err, _("Unable to change trust"));
+        	seahorse_pgp_handle_gpgme_error (err, _("Unable to change trust"));
     }
 }
 
@@ -1403,7 +1406,7 @@ trust_complete_toggled (GtkToggleButton *toggle, SeahorseWidget *swidget)
     if (seahorse_key_get_trust (skey) != trust) {
         err = seahorse_pgp_key_op_set_trust (SEAHORSE_PGP_KEY (skey), trust);
         if (err)
-            seahorse_util_handle_gpgme (err, _("Unable to change trust"));
+        	seahorse_pgp_handle_gpgme_error (err, _("Unable to change trust"));
     }
 }
 

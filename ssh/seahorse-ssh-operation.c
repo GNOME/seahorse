@@ -29,8 +29,6 @@
 #include "seahorse-util.h"
 #include "seahorse-passphrase.h"
 
-#include "pgp/seahorse-gpgmex.h"
-
 #include <gnome-keyring.h>
 
 #ifndef DEBUG_OPERATION_ENABLE
@@ -732,9 +730,8 @@ seahorse_ssh_operation_upload (SeahorseSSHSource *ssrc, GList *keys,
 {
     SeahorseSSHOperationPrivate *pv;
     SeahorseOperation *op;
-    gpgme_data_t data;
-    gpgme_error_t gerr;
-    gchar *input;
+    GMemoryOutputStream *output;
+    gchar *data;
     size_t length;
     gchar *cmd;
     
@@ -745,12 +742,12 @@ seahorse_ssh_operation_upload (SeahorseSSHSource *ssrc, GList *keys,
     if (port && !port[0])
         port = NULL;
     
-    gerr = gpgme_data_new (&data);
-    g_return_val_if_fail (GPG_IS_OK (gerr), NULL);
-    
-    /* Buffer for what we send to the server */
-    op = seahorse_key_source_export (SEAHORSE_KEY_SOURCE (ssrc), keys, FALSE, data);
-    g_return_val_if_fail (op != NULL, NULL);
+    	output = G_MEMORY_OUTPUT_STREAM (g_memory_output_stream_new (NULL, 0, g_realloc, NULL));
+    	g_return_val_if_fail (output, NULL);
+    	
+    	/* Buffer for what we send to the server */
+    	op = seahorse_key_source_export (SEAHORSE_KEY_SOURCE (ssrc), keys, FALSE, G_OUTPUT_STREAM (output));
+    	g_return_val_if_fail (op != NULL, NULL);
     
     /* 
      * We happen to know that seahorse_ssh_source_export always returns
@@ -761,7 +758,7 @@ seahorse_ssh_operation_upload (SeahorseSSHSource *ssrc, GList *keys,
     
     /* Return any errors */
     if (!seahorse_operation_is_successful (op)) {
-        gpgme_data_release (data);
+        g_object_unref (output);
         return op;
     }
     
@@ -778,12 +775,15 @@ seahorse_ssh_operation_upload (SeahorseSSHSource *ssrc, GList *keys,
                            username, hostname, 
                            port ? "-p" : "", 
                            port ? port : "");
-    input = gpgme_data_release_and_get_mem (data, &length);
     
-    op = seahorse_ssh_operation_new (ssrc, cmd, input, length, NULL);
+	data = g_memory_output_stream_get_data (output);
+	length = seahorse_util_memory_output_length (output);
+	g_object_unref (output);
     
-    g_free (cmd);
-    free (input);
+	op = seahorse_ssh_operation_new (ssrc, cmd, data, length, NULL);
+    
+	g_free (cmd);
+	g_free (data);
 
     pv = SEAHORSE_SSH_OPERATION_GET_PRIVATE (op);
     pv->password_cb = upload_password_cb;

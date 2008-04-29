@@ -46,8 +46,6 @@
 #include "seahorse-passphrase.h"
 #include "seahorse-secure-entry.h"
 
-#include "pgp/seahorse-gpgmex.h"
-
 #define HIG_SMALL      6        /* gnome hig small space in pixels */
 #define HIG_LARGE     12        /* gnome hig large space in pixels */
 

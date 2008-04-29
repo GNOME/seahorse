@@ -20,21 +20,20 @@
  */
 
 #include "config.h"
-#include <stdlib.h>
-#include <unistd.h>
-#include <gnome.h>
-#include <fcntl.h>
-#include <glib/gstdio.h>
-#include <libgnomevfs/gnome-vfs.h>
+
 
 #include "seahorse-ssh-source.h"
-#include "seahorse-operation.h"
-#include "seahorse-util.h"
-
-#include "pgp/seahorse-gpgmex.h"
 
 #include "seahorse-ssh-key.h"
 #include "seahorse-ssh-operation.h"
+
+#include "seahorse-operation.h"
+#include "seahorse-util.h"
+
+#include <glib/gstdio.h>
+
+#include <unistd.h>
+#include <fcntl.h>
 
 /* Override DEBUG switches here */
 #define DEBUG_REFRESH_ENABLE 0
@@ -65,7 +64,7 @@ enum {
 struct _SeahorseSSHSourcePrivate {
     gchar *ssh_homedir;                     /* Home directory for SSH keys */
     guint scheduled_refresh;                /* Source for refresh timeout */
-    GnomeVFSMonitorHandle *monitor_handle;  /* For monitoring the .ssh directory */
+    GFileMonitor *monitor_handle;           /* For monitoring the .ssh directory */
 };
 
 typedef struct _LoadContext {
@@ -204,31 +203,34 @@ ends_with (const gchar *haystack, const gchar *needle)
 }
 
 static void
-monitor_ssh_homedir (GnomeVFSMonitorHandle *handle, const gchar *monitor_uri,
-                     const gchar *info_uri, GnomeVFSMonitorEventType event_type,
-                     SeahorseSSHSource *ssrc)
+monitor_ssh_homedir (GFileMonitor *handle, GFile *file, GFile *other_file,
+                     GFileMonitorEvent event_type, SeahorseSSHSource *ssrc)
 {
-    gchar *path;
+	gchar *path;
     
-    if (ssrc->priv->scheduled_refresh != 0 ||
-        (event_type != GNOME_VFS_MONITOR_EVENT_CREATED && 
-         event_type != GNOME_VFS_MONITOR_EVENT_CHANGED &&
-         event_type != GNOME_VFS_MONITOR_EVENT_DELETED))
-        return;
+	if (ssrc->priv->scheduled_refresh != 0 ||
+	    (event_type != G_FILE_MONITOR_EVENT_CHANGED && 
+	     event_type != G_FILE_MONITOR_EVENT_CHANGES_DONE_HINT &&
+	     event_type != G_FILE_MONITOR_EVENT_DELETED &&
+	     event_type != G_FILE_MONITOR_EVENT_CREATED))
+		return;
     
-    path = gnome_vfs_get_local_path_from_uri (info_uri);
-    if (path == NULL)
-        return;
+	path = g_file_get_path (file);
+	if (path == NULL)
+		return;
 
-    /* Filter out any noise */
-    if (event_type != GNOME_VFS_MONITOR_EVENT_DELETED && 
-        !ends_with (path, AUTHORIZED_KEYS_FILE) &&
-        !ends_with (path, OTHER_KEYS_FILE) && 
-        !check_file_for_ssh_private (ssrc, path))
-        return;
-    
-    DEBUG_REFRESH ("scheduling refresh event due to file changes\n");
-    ssrc->priv->scheduled_refresh = g_timeout_add (500, (GSourceFunc)scheduled_refresh, ssrc);
+	/* Filter out any noise */
+	if (event_type != G_FILE_MONITOR_EVENT_DELETED && 
+	    !ends_with (path, AUTHORIZED_KEYS_FILE) &&
+	    !ends_with (path, OTHER_KEYS_FILE) && 
+	    !check_file_for_ssh_private (ssrc, path)) {
+		g_free (path);
+		return;
+	}
+
+	g_free (path);
+	DEBUG_REFRESH ("scheduling refresh event due to file changes\n");
+	ssrc->priv->scheduled_refresh = g_timeout_add (500, (GSourceFunc)scheduled_refresh, ssrc);
 }
 
 static void
@@ -432,15 +434,6 @@ import_private_key (SeahorseSSHSecData *data, gpointer arg)
     return TRUE;
 }
 
-static gboolean 
-write_gpgme_data (gpgme_data_t data, const gchar *str)
-{
-    int len = strlen (str);
-    int r = gpgme_data_write (data, str, len);
-
-    return len == r;
-}
-
 /* -----------------------------------------------------------------------------
  * OBJECT
  */
@@ -573,13 +566,16 @@ seahorse_ssh_source_get_state (SeahorseKeySource *src)
 }
 
 static SeahorseOperation* 
-seahorse_ssh_source_import (SeahorseKeySource *sksrc, gpgme_data_t data)
+seahorse_ssh_source_import (SeahorseKeySource *sksrc, GInputStream *input)
 {
     SeahorseSSHSource *ssrc = SEAHORSE_SSH_SOURCE (sksrc);
     ImportContext ctx;
     gchar *contents;
+    
+    	g_return_val_if_fail (SEAHORSE_IS_SSH_SOURCE (ssrc), NULL);
+    	g_return_val_if_fail (G_IS_INPUT_STREAM (input), NULL);
 
-    contents = seahorse_util_write_data_to_text (data, NULL);
+    	contents = seahorse_util_read_to_text (input, NULL);
     
     memset (&ctx, 0, sizeof (ctx));
     ctx.ssrc = ssrc;
@@ -595,16 +591,19 @@ seahorse_ssh_source_import (SeahorseKeySource *sksrc, gpgme_data_t data)
 
 static SeahorseOperation* 
 seahorse_ssh_source_export (SeahorseKeySource *sksrc, GList *keys, 
-                            gboolean complete, gpgme_data_t data)
+                            gboolean complete, GOutputStream *output)
 {
     SeahorseSSHKeyData *keydata;
+    SeahorseOperation *op;
     gchar *results = NULL;
     gchar *raw = NULL;
     GError *error = NULL;
     SeahorseKey *skey;
     GList *l;
+    gsize written;
     
     g_return_val_if_fail (SEAHORSE_IS_SSH_SOURCE (sksrc), NULL);
+    g_return_val_if_fail (G_IS_OUTPUT_STREAM (output), NULL);
     
     for (l = keys; l; l = g_list_next (l)) {
         skey = SEAHORSE_KEY (l->data);
@@ -646,25 +645,27 @@ seahorse_ssh_source_export (SeahorseKeySource *sksrc, GList *keys,
             g_warning ("private key without public, not exporting: %s", keydata->privfile);
         }
         
-        if (results) {
-            
-            /* Write the data out */
-            if (write_gpgme_data (data, results) == FALSE) {
-                g_set_error (&error, G_FILE_ERROR, g_file_error_from_errno (errno),
-                             strerror (errno));
-            }
-            
-            g_free (results);
-        }
+        	/* Write the data out */
+        	if (results) {
+        		if (g_output_stream_write_all (output, results, strlen (results), 
+        		                               &written, NULL, &error))
+        			g_output_stream_flush (output, NULL, &error);
+        		g_free (results);
+        	}
 
-        g_free (raw);
+        	g_free (raw);
         
-        if (error != NULL)
-            break;
-        
-    }
-
-    return seahorse_operation_new_complete (error);
+        	if (error != NULL)
+        		break;
+    	}
+    
+    	if (error == NULL)
+    		g_output_stream_close (output, NULL, &error);
+    
+    	op = seahorse_operation_new_complete (error);
+    	g_object_ref (output);
+    	seahorse_operation_mark_result (op, output, g_object_unref);
+    	return op;
 }
 
 static gboolean            
@@ -759,18 +760,18 @@ seahorse_ssh_source_get_property (GObject *object, guint prop_id, GValue *value,
 static void
 seahorse_ssh_source_dispose (GObject *gobject)
 {
-    SeahorseSSHSource *ssrc = SEAHORSE_SSH_SOURCE (gobject);
+	SeahorseSSHSource *ssrc = SEAHORSE_SSH_SOURCE (gobject);
     
-    g_assert (ssrc->priv);
+	g_assert (ssrc->priv);
 
-    cancel_scheduled_refresh (ssrc);    
+	cancel_scheduled_refresh (ssrc);    
     
-    if (ssrc->priv->monitor_handle) {
-        gnome_vfs_monitor_cancel (ssrc->priv->monitor_handle);
-        ssrc->priv->monitor_handle = NULL;
-    }
-    
-    G_OBJECT_CLASS (seahorse_ssh_source_parent_class)->dispose (gobject);
+	if (ssrc->priv->monitor_handle) {
+		g_object_unref (ssrc->priv->monitor_handle);
+		ssrc->priv->monitor_handle = NULL;
+	}
+
+	G_OBJECT_CLASS (seahorse_ssh_source_parent_class)->dispose (gobject);
 }
 
 static void
@@ -791,35 +792,36 @@ seahorse_ssh_source_finalize (GObject *gobject)
 static void
 seahorse_ssh_source_init (SeahorseSSHSource *ssrc)
 {
-    GnomeVFSResult res;
-    gchar *uri;
-    
-    /* init private vars */
-    ssrc->priv = g_new0 (SeahorseSSHSourcePrivate, 1);
-    
-    ssrc->priv->scheduled_refresh = 0;
-    ssrc->priv->monitor_handle = NULL;
+	GError *err = NULL;
+	GFile *file;
 
-    ssrc->priv->ssh_homedir = g_strdup_printf ("%s/.ssh/", g_get_home_dir ());
+	/* init private vars */
+	ssrc->priv = g_new0 (SeahorseSSHSourcePrivate, 1);
     
-    /* Make the .ssh directory if it doesn't exist */
-    if (!g_file_test (ssrc->priv->ssh_homedir, G_FILE_TEST_EXISTS)) {
-        if (g_mkdir (ssrc->priv->ssh_homedir, 0700) == -1)
-            g_warning ("couldn't create .ssh directory: %s", ssrc->priv->ssh_homedir);
-            return;
-    }
+	ssrc->priv->scheduled_refresh = 0;
+	ssrc->priv->monitor_handle = NULL;
+
+	ssrc->priv->ssh_homedir = g_strdup_printf ("%s/.ssh/", g_get_home_dir ());
     
-    uri = gnome_vfs_make_uri_canonical (ssrc->priv->ssh_homedir);
-    g_return_if_fail (uri != NULL);
-    res = gnome_vfs_monitor_add (&(ssrc->priv->monitor_handle), uri, 
-                                 GNOME_VFS_MONITOR_DIRECTORY, 
-                                 (GnomeVFSMonitorCallback)monitor_ssh_homedir, ssrc);
-    g_free (uri);
+	/* Make the .ssh directory if it doesn't exist */
+	if (!g_file_test (ssrc->priv->ssh_homedir, G_FILE_TEST_EXISTS)) {
+		if (g_mkdir (ssrc->priv->ssh_homedir, 0700) == -1)
+			g_warning ("couldn't create .ssh directory: %s", ssrc->priv->ssh_homedir);
+		return;
+	}
     
-    if (res != GNOME_VFS_OK) {
-        ssrc->priv->monitor_handle = NULL;
-        g_return_if_reached ();
-    }
+	file = g_file_new_for_path (ssrc->priv->ssh_homedir);
+	g_return_if_fail (file != NULL);
+	
+	ssrc->priv->monitor_handle = g_file_monitor_directory (file, G_FILE_MONITOR_NONE, NULL, &err);
+	g_object_unref (file);
+	
+	if (ssrc->priv->monitor_handle)
+		g_signal_connect (ssrc->priv->monitor_handle, "changed", 
+		                  G_CALLBACK (monitor_ssh_homedir), ssrc);
+	else
+		g_warning ("couldn't monitor ssh directory: %s: %s", 
+		           ssrc->priv->ssh_homedir, err && err->message ? err->message : "");
 }
 
 static void
@@ -835,6 +837,7 @@ seahorse_ssh_source_class_init (SeahorseSSHSourceClass *klass)
     gobject_class->set_property = seahorse_ssh_source_set_property;
     gobject_class->get_property = seahorse_ssh_source_get_property;
     
+    parent_class->canonize_keyid = seahorse_ssh_key_get_cannonical_id;
     parent_class->load = seahorse_ssh_source_load;
     parent_class->stop = seahorse_ssh_source_stop;
     parent_class->get_state = seahorse_ssh_source_get_state;

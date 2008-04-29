@@ -42,6 +42,8 @@
 
 #include "seahorse-key-source.h"
 
+#include <gpgme.h>
+
 #define SEAHORSE_TYPE_PGP_SOURCE            (seahorse_pgp_source_get_type ())
 #define SEAHORSE_PGP_SOURCE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_PGP_SOURCE, SeahorsePGPSource))
 #define SEAHORSE_PGP_SOURCE_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_PGP_SOURCE, SeahorsePGPSourceClass))

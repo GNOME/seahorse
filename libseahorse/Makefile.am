@@ -41,7 +41,6 @@ libseahorse_la_SOURCES = \
 	seahorse-combo-keys.c seahorse-combo-keys.h \
 	seahorse-passphrase.c seahorse-passphrase.h \
 	seahorse-libdialogs.h \
-	seahorse-vfs-data.c seahorse-vfs-data.h \
 	seahorse-prefs.c seahorse-prefs.h \
 	seahorse-prefs-keyrings.c \
 	seahorse-operation.c seahorse-operation.h \

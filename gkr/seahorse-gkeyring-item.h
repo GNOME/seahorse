@@ -42,7 +42,10 @@
 #include <gtk/gtk.h>
 #include <gnome-keyring.h>
 
+#include "seahorse-gkr.h"
+
 #include "seahorse-key.h"
+#include "seahorse-key-source.h"
 
 typedef enum {
     SEAHORSE_GKEYRING_USE_OTHER,
@@ -51,9 +54,6 @@ typedef enum {
     SEAHORSE_GKEYRING_USE_PGP,
     SEAHORSE_GKEYRING_USE_SSH,
 } SeahorseGKeyringUse;
-
-#define SKEY_GKEYRING_STR                       "gnome-keyring"
-#define SKEY_GKEYRING                           (g_quark_from_static_string (SKEY_GKEYRING_STR))
 
 #define SEAHORSE_TYPE_GKEYRING_ITEM             (seahorse_gkeyring_item_get_type ())
 #define SEAHORSE_GKEYRING_ITEM(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_GKEYRING_ITEM, SeahorseGKeyringItem))

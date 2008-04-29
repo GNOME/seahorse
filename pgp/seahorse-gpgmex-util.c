@@ -19,16 +19,45 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include "config.h"
+
+#include "pgp/seahorse-gpgmex.h"
+
+#include <glib.h>
+#include <glib/gi18n.h>
+
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
 #include <errno.h>
 
-#include "config.h"
-#include <glib.h>
+GQuark
+seahorse_gpgme_error_domain (void)
+{
+	static GQuark q = 0;
+	if (q == 0)
+		q = g_quark_from_static_string ("seahorse-gpgme-error");
+	return q;
+}
 
-#include "pgp/seahorse-gpgmex.h"
-
+void    
+seahorse_gpgme_to_error (gpgme_error_t gerr, GError** err)
+{
+	gpgme_err_code_t code;
+    
+    	/* Make sure this is actually an error */
+   	 g_assert (!GPG_IS_OK(gerr));
+    	code = gpgme_err_code (gerr);
+    
+    	/* Special case some error messages */
+    	if (code == GPG_ERR_DECRYPT_FAILED) {
+    		g_set_error (err, SEAHORSE_GPGME_ERROR, code, "%s", 
+    		             _("Decryption failed. You probably do not have the decryption key."));
+    	} else {
+    		g_set_error (err, SEAHORSE_GPGME_ERROR, code, "%s", 
+    		             gpgme_strerror (gerr));
+    	}
+}
 /* -----------------------------------------------------------------------------
  * DATA
  */
@@ -457,6 +486,17 @@ gpgmex_combine_keys (gpgme_key_t k, gpgme_key_t key)
 		if (!found)
 			gpgmex_key_copy_subkey (k, subkey);
 	}
+}
+
+void
+gpgmex_free_keys (gpgme_key_t* keys)
+{
+	gpgme_key_t* k = keys;
+	if (!keys)
+		return;
+	while (*k)
+		gpgmex_key_unref (*(k++));
+	g_free (keys);
 }
 
 gpgmex_photo_id_t 

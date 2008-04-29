@@ -52,34 +52,26 @@ gchar*		seahorse_util_get_date_string		    (const time_t		time);
 gchar*		seahorse_util_get_display_date_string   (const time_t		time);
 
 
-#define SEAHORSE_GPGME_ERROR  (seahorse_util_gpgme_error_domain ())
-
-GQuark      seahorse_util_gpgme_error_domain ();
-
 #define SEAHORSE_ERROR  (seahorse_util_error_domain ())
 
 GQuark      seahorse_util_error_domain ();
-
-void        seahorse_util_gpgme_to_error        (gpgme_error_t gerr, 
-                                                 GError** err);
 
 void        seahorse_util_show_error            (GtkWindow          *parent,
                                                  const gchar        *heading,
                                                  const gchar        *message);
                                                  
-void        seahorse_util_handle_gpgme          (gpgme_error_t      err,
-                                                 const gchar*       desc, ...);
-
 void        seahorse_util_handle_error          (GError*            err,
                                                  const char*        desc, ...);
 
-gchar*      seahorse_util_write_data_to_text    (gpgme_data_t       data,
+gchar*      seahorse_util_read_to_text          (GInputStream *     input,
                                                  guint              *len);
 
 guint       seahorse_util_read_data_block       (GString            *buf, 
-                                                 gpgme_data_t       data, 
+                                                 GInputStream*      input, 
                                                  const gchar        *start, 
                                                  const gchar*       end);
+
+gsize       seahorse_util_memory_output_length  (GMemoryOutputStream *output);
 
 gboolean    seahorse_util_print_fd          (int fd, 
                                              const char* data);
@@ -99,8 +91,6 @@ gchar*      seahorse_util_uri_replace_ext   (const gchar *uri,
 const gchar* seahorse_util_uri_get_last     (const gchar* uri);
 
 const gchar* seahorse_util_uri_split_last   (gchar* uri);
-
-gchar**     seahorse_util_uris_expand       (const gchar **uris);
 
 gboolean    seahorse_util_uris_package      (const gchar* package, 
                                              const gchar** uris);
@@ -150,8 +140,6 @@ guint       seahorse_util_strvec_length       (const gchar      **vec);
 GList*       seahorse_util_keylist_sort       (GList *keys);
 
 GList*       seahorse_util_keylist_splice     (GList *keys);
-
-void         seahorse_util_free_keys          (gpgme_key_t* keys);
 
 gboolean    seahorse_util_string_equals       (const gchar *s1, const gchar *s2);
 

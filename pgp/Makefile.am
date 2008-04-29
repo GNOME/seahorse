@@ -35,15 +35,17 @@ KEYSERVER_SRCS =
 endif
 
 libsea_pgp_la_SOURCES = \
+	seahorse-gpgme-io.c seahorse-gpgme-io.h \
 	seahorse-gpgmex.h seahorse-gpgmex-op.c seahorse-gpgmex-util.c \
 	seahorse-gpg-options.c seahorse-gpg-options.h \
 	sea-pgp.c sea-pgp.h \
 	sea-pgp-keysets.c sea-pgp-keysets.h \
+	seahorse-pgp-error.c \
 	seahorse-pgp-key.c seahorse-pgp-key.h \
 	seahorse-pgp-key-op.c seahorse-pgp-key-op.h \
 	seahorse-pgp-source.c seahorse-pgp-source.h \
 	seahorse-pgp-operation.c seahorse-pgp-operation.h \
-	seahorse-signer.c sea-pgp-dialogs.h \
+	seahorse-signer.c seahorse-pgp-dialogs.h \
 	$(KEYSERVER_SRCS) \
 	$(LDAP_SRCS) \
 	$(HKP_SRCS)

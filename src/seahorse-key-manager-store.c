@@ -29,9 +29,7 @@
 #include "seahorse-util.h"
 #include "seahorse-gconf.h"
 #include "eggtreemultidnd.h"
-#include "seahorse-vfs-data.h"
 
-#include "pgp/seahorse-gpgmex.h"
 #include "pgp/seahorse-pgp-key.h"
 
 #ifdef WITH_SSH
@@ -584,7 +582,7 @@ drag_begin (GtkWidget *widget, GdkDragContext *context, SeahorseKeyManagerStore 
     SeahorseMultiOperation *mop = NULL;
     SeahorseOperation *op = NULL;
     GList *next, *keys, *sel_keys = NULL;
-    gpgme_data_t data = NULL;
+    GOutputStream *output = NULL;
     SeahorseKey *skey;
     
     DBG_PRINT (("drag_begin -->\n"));
@@ -611,16 +609,16 @@ drag_begin (GtkWidget *widget, GdkDragContext *context, SeahorseKeyManagerStore 
             if (!mop) 
                 mop = seahorse_multi_operation_new ();
             
-            /* The data object where we export to */
-            if (!data) {
-                data = gpgmex_data_new ();
-                g_object_set_data_full (G_OBJECT (mop), "result-data", data,
-                                        (GDestroyNotify)gpgmex_data_release);
-            }
+ 			/* The data object where we export to */
+			if (!output) {
+				output = g_memory_output_stream_new (NULL, 0, g_realloc, g_free);
+				g_object_set_data_full (G_OBJECT (mop), "result-data", output,
+				                        (GDestroyNotify)g_object_unref);
+			}
         
-            /* We pass our own data object, to which data is appended */
-            op = seahorse_key_source_export (sksrc, keys, FALSE, data);
-            g_return_if_fail (op != NULL);
+			/* We pass our own data object, to which data is appended */
+			op = seahorse_key_source_export (sksrc, keys, FALSE, output);
+			g_return_if_fail (op != NULL);
 
             g_list_free (keys);
             keys = next;
@@ -668,7 +666,7 @@ drag_data_get (GtkWidget *widget, GdkDragContext *context,
     gchar *t, *n;
     GList *keys;
     GError *err = NULL;
-    gpgme_data_t data;
+    GMemoryOutputStream *output;
     gchar *text;
 
     DBG_PRINT (("drag_data_get %d -->\n", info)); 
@@ -689,10 +687,10 @@ drag_data_get (GtkWidget *widget, GdkDragContext *context,
         return;
     }
     
-    data = (gpgme_data_t)g_object_get_data (G_OBJECT (op), "result-data");
-    g_return_if_fail (data != NULL);
+    output = g_object_get_data (G_OBJECT (op), "result-data");
+    g_return_if_fail (G_IS_MEMORY_OUTPUT_STREAM (output));
     
-    text = seahorse_util_write_data_to_text (data, NULL);
+    text = g_memory_output_stream_get_data (output);
     g_return_if_fail (text != NULL);
 
     if (info == TEXT_PLAIN) {
@@ -715,7 +713,7 @@ drag_data_get (GtkWidget *widget, GdkDragContext *context,
             
             DBG_PRINT (("writing to temp file: %s\n", t));
             
-            if (!seahorse_vfs_set_file_contents (t, text, strlen (text), &err)) {
+            if (!g_file_set_contents (t, text, strlen (text), &err)) {
                 seahorse_util_handle_error (err, _("Couldn't write key to file"));
                 g_object_set_data (G_OBJECT (widget), "drag-file", NULL);
                 t = NULL;

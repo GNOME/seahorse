@@ -32,7 +32,6 @@
 #include "seahorse-transfer-operation.h"
 #include "seahorse-keyserver-sync.h"
 
-#include "pgp/seahorse-gpgmex.h"
 #include "pgp/seahorse-server-source.h"
 
 static void 

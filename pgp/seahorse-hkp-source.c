@@ -19,19 +19,18 @@
  * Boston, MA 02111-1307, USA.
  */
  
-#include <stdlib.h>
-#include <config.h>
-#include <gnome.h>
-#include <libsoup/soup.h>
+#include "config.h"
 
-#include "seahorse-operation.h"
 #include "seahorse-hkp-source.h"
-#include "seahorse-util.h"
-#include "seahorse-gconf.h"
-#include "seahorse-vfs-data.h"
 
-#include "pgp/seahorse-gpgmex.h"
-#include "pgp/seahorse-pgp-key.h"
+#include "seahorse-gpgmex.h"
+#include "seahorse-pgp-key.h"
+
+#include "seahorse-gconf.h"
+#include "seahorse-operation.h"
+#include "seahorse-util.h"
+
+#include <libsoup/soup.h>
 
 #ifdef WITH_HKP
 
@@ -647,10 +646,11 @@ get_callback (SoupSession *session, SoupMessage *msg, SeahorseHKPOperation *hop)
     GError *err = NULL;
     const gchar *start;
     const gchar *end;
-    gpgme_data_t data;
+    GOutputStream *output;
     const gchar *text;
     gboolean ret;
     guint len;
+    gsize written;
     
     if (hop->cancelling)
         return;
@@ -671,28 +671,29 @@ get_callback (SoupSession *session, SoupMessage *msg, SeahorseHKPOperation *hop)
         if(!detect_key (text, len, &start, &end))
             break;
         
-        /* Any key blocks get written to our result data */
-        data = (gpgme_data_t)seahorse_operation_get_result (SEAHORSE_OPERATION (hop));
-        g_return_if_fail (data != NULL);
-            
-	ret = gpgmex_data_write_all (data, start, end - start) > 0 &&
-	      gpgmex_data_write_all (data, "\n", -1) > 0;
+		/* Any key blocks get written to our result data */
+		output = seahorse_operation_get_result (SEAHORSE_OPERATION (hop));
+		g_return_if_fail (G_IS_OUTPUT_STREAM (output));
 
-	if (!ret)
-		g_set_error (&err, G_FILE_ERROR, g_file_error_from_errno (errno), 
-		             "%s", strerror (errno));
+		ret = g_output_stream_write_all (output, start, end - start, &written, NULL, &err) &&
+		      g_output_stream_write_all (output, "\n", 1, &written, NULL, &err) &&
+		      g_output_stream_flush (output, NULL, &err);
 
-        if (!ret) {
-            seahorse_operation_mark_done (SEAHORSE_OPERATION (hop), FALSE, err);
-            return;
-        }
-    }
+		if (!ret) {
+			seahorse_operation_mark_done (SEAHORSE_OPERATION (hop), FALSE, err);
+			return;
+		}
+    	}
         
-    if (--hop->requests <= 0)
-        seahorse_operation_mark_done (SEAHORSE_OPERATION (hop), FALSE, NULL);
-    else
-        seahorse_operation_mark_progress_full (SEAHORSE_OPERATION (hop), _("Retrieving keys..."), 
-                                               hop->requests, hop->total);
+    	if (--hop->requests <= 0) {
+    		output = seahorse_operation_get_result (SEAHORSE_OPERATION (hop));
+    		g_return_if_fail (G_IS_OUTPUT_STREAM (output));
+    		g_output_stream_close (output, NULL, &err);
+    		seahorse_operation_mark_done (SEAHORSE_OPERATION (hop), FALSE, err);
+    	} else {
+    		seahorse_operation_mark_progress_full (SEAHORSE_OPERATION (hop), _("Retrieving keys..."), 
+    		                                       hop->requests, hop->total);
+    	}
 }
 
  
@@ -790,7 +791,7 @@ seahorse_hkp_source_load (SeahorseKeySource *src, GQuark keyid)
 }
 
 static SeahorseOperation* 
-seahorse_hkp_source_import (SeahorseKeySource *sksrc, gpgme_data_t data)
+seahorse_hkp_source_import (SeahorseKeySource *sksrc, GInputStream *input)
 {
     SeahorseHKPOperation *hop;
     SeahorseHKPSource *hsrc;
@@ -803,13 +804,16 @@ seahorse_hkp_source_import (SeahorseKeySource *sksrc, gpgme_data_t data)
     GSList *l;
     guint len;
     
-    g_assert (SEAHORSE_IS_HKP_SOURCE (sksrc));
+    g_return_val_if_fail (SEAHORSE_IS_HKP_SOURCE (sksrc), NULL);
     hsrc = SEAHORSE_HKP_SOURCE (sksrc);
+    
+    g_return_val_if_fail (G_IS_INPUT_STREAM (input), NULL);
+    g_object_ref (input);
     
     for (;;) {
      
         buf = g_string_sized_new (2048);
-        len = seahorse_util_read_data_block (buf, data, "-----BEGIN PGP PUBLIC KEY BLOCK-----",
+        len = seahorse_util_read_data_block (buf, input, "-----BEGIN PGP PUBLIC KEY BLOCK-----",
                                              "-----END PGP PUBLIC KEY BLOCK-----");
     
         if (len > 0) {
@@ -820,8 +824,10 @@ seahorse_hkp_source_import (SeahorseKeySource *sksrc, gpgme_data_t data)
         }
     }
     
-    if (g_slist_length (keydata) == 0)
-        return seahorse_operation_new_complete (NULL);
+    	if (g_slist_length (keydata) == 0) {
+    		g_object_unref (input);
+    		return seahorse_operation_new_complete (NULL);
+    	}
     
     /* Figure out the URI we're sending to */    
     uri = get_http_server_uri (sksrc, "/pks/add");
@@ -855,15 +861,15 @@ seahorse_hkp_source_import (SeahorseKeySource *sksrc, gpgme_data_t data)
 
     soup_uri_free (uri);
     
-    seahorse_util_string_slist_free (keydata);
-    gpgmex_data_release (data);
+    	seahorse_util_string_slist_free (keydata);
+    	g_object_unref (input);
     
     return SEAHORSE_OPERATION (hop);
 }
 
 static SeahorseOperation*  
 seahorse_hkp_source_export_raw (SeahorseKeySource *sksrc, GSList *keyids,
-                                gpgme_data_t data)
+                                GOutputStream *output)
 {
     SeahorseHKPOperation *hop;
     SeahorseHKPSource *hsrc;
@@ -877,6 +883,8 @@ seahorse_hkp_source_export_raw (SeahorseKeySource *sksrc, GSList *keyids,
     GSList *l;
     
     g_return_val_if_fail (SEAHORSE_IS_HKP_SOURCE (sksrc), NULL);
+    g_return_val_if_fail (output == NULL || G_IS_OUTPUT_STREAM (output), NULL);
+
     hsrc = SEAHORSE_HKP_SOURCE (sksrc);
     
     if (g_slist_length (keyids) == 0)
@@ -888,16 +896,9 @@ seahorse_hkp_source_export_raw (SeahorseKeySource *sksrc, GSList *keyids,
     /* New operation started */    
     hop = setup_hkp_operation (hsrc);
 
-    if (data) {
-        /* Note that we don't auto-free this */
-        seahorse_operation_mark_result (SEAHORSE_OPERATION (hop), data, NULL);
-    } else {
-        /* But when we auto create a data object then we free it */
-        data = gpgmex_data_new ();
-        seahorse_operation_mark_result (SEAHORSE_OPERATION (hop), data, 
-                                        (GDestroyNotify)gpgmex_data_release);
-    }
-    
+	g_object_ref (output);
+	seahorse_operation_mark_result (SEAHORSE_OPERATION (hop), output, g_object_unref);
+
     /* prepend the hex prefix (0x) to make keyservers happy */
     strncpy(hexfpr, "0x", 3);
 
@@ -946,6 +947,7 @@ seahorse_hkp_source_class_init (SeahorseHKPSourceClass *klass)
 	gobject_class->get_property = seahorse_hkp_source_get_property;
 
 	key_class = SEAHORSE_KEY_SOURCE_CLASS (klass);
+	key_class->canonize_keyid = seahorse_pgp_key_get_cannonical_id;
 	key_class->load = seahorse_hkp_source_load;
 	key_class->search = seahorse_hkp_source_search;
 	key_class->import = seahorse_hkp_source_import;

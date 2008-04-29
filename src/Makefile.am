@@ -55,7 +55,7 @@ seahorse_LDADD = \
 	$(top_builddir)/libseahorse/libseahorse.la \
 	$(top_builddir)/pgp/libsea-pgp.la \
 	$(top_builddir)/ssh/libsea-ssh.la \
-	$(top_builddir)/gkr/libsea-gkr.la \
+	$(top_builddir)/gkr/libseahorse-gkr.la \
 	$(top_builddir)/common/libsea-common.la \  
 	$(top_builddir)/libcryptui/libcryptui.la \
 	$(SEAHORSE_LIBS)
