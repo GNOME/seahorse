@@ -22,9 +22,12 @@
 #include <sys/param.h>
 #include <sys/wait.h>
 #include <sys/file.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 #include <gpgme.h>
 #include <string.h>
 #include <errno.h>
+#include <fcntl.h>
 
 #include "seahorse-gpgmex.h"
 #include "seahorse-util.h"

@@ -26,7 +26,6 @@
 #include <sys/stat.h>
 #include <sys/un.h>
 
-#include <paths.h>
 #include <stddef.h>
 #include <stdlib.h>
 #include <unistd.h>
