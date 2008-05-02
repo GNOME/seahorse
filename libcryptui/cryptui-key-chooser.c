@@ -482,7 +482,7 @@ void
 cryptui_key_chooser_set_recipients (CryptUIKeyChooser *chooser, GList *keys)
 {
     g_return_if_fail (chooser->priv->keylist != NULL);
-    return cryptui_key_list_set_selected_keys (chooser->priv->keylist, keys);
+    cryptui_key_list_set_selected_keys (chooser->priv->keylist, keys);
 }
 
 const gchar*
@@ -496,7 +496,7 @@ void
 cryptui_key_chooser_set_signer (CryptUIKeyChooser *chooser, const gchar *key)
 {
     g_return_if_fail (chooser->priv->keycombo != NULL);
-    return cryptui_key_combo_set_key (chooser->priv->keycombo, key);
+    cryptui_key_combo_set_key (chooser->priv->keycombo, key);
 }
 
 CryptUIKeyChooserMode
