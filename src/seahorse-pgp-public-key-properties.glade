@@ -1155,7 +1155,7 @@
 				    <widget class="GtkCheckButton" id="trust-marginal-check">
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
-				      <property name="label" translatable="yes">I have checked that this key belongs to '%s'</property>
+				      <property name="label" translatable="yes">I trust signatures from '%s' on other keys</property>
 				      <property name="use_underline">True</property>
 				      <property name="relief">GTK_RELIEF_NORMAL</property>
 				      <property name="focus_on_click">True</property>
@@ -1163,27 +1163,6 @@
 				      <property name="inconsistent">False</property>
 				      <property name="draw_indicator">True</property>
 				      <signal name="toggled" handler="trust_marginal_toggled" last_modification_time="Sun, 26 Mar 2006 23:05:41 GMT"/>
-				    </widget>
-				    <packing>
-				      <property name="padding">0</property>
-				      <property name="expand">False</property>
-				      <property name="fill">False</property>
-				    </packing>
-				  </child>
-
-				  <child>
-				    <widget class="GtkCheckButton" id="trust-complete-check">
-				      <property name="visible">True</property>
-				      <property name="sensitive">False</property>
-				      <property name="can_focus">True</property>
-				      <property name="label" translatable="yes">I trust signatures from '%s' on other keys </property>
-				      <property name="use_underline">True</property>
-				      <property name="relief">GTK_RELIEF_NORMAL</property>
-				      <property name="focus_on_click">True</property>
-				      <property name="active">False</property>
-				      <property name="inconsistent">False</property>
-				      <property name="draw_indicator">True</property>
-				      <signal name="toggled" handler="trust_complete_toggled" last_modification_time="Sun, 26 Mar 2006 23:05:29 GMT"/>
 				    </widget>
 				    <packing>
 				      <property name="padding">0</property>
@@ -1206,10 +1185,10 @@
 				  <property name="spacing">12</property>
 
 				  <child>
-				    <widget class="GtkLabel" id="label22226">
+				    <widget class="GtkLabel" id="trust-sign-label">
 				      <property name="width_request">270</property>
 				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">To indicate your trust of this key to others, &lt;i&gt;sign&lt;/i&gt; this key:</property>
+				      <property name="label" translatable="yes">If you believe that the person that owns this key is '%s', &lt;i&gt;sign&lt;/i&gt; this key:</property>
 				      <property name="use_underline">False</property>
 				      <property name="use_markup">True</property>
 				      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1324,10 +1303,10 @@
 				  <property name="spacing">12</property>
 
 				  <child>
-				    <widget class="GtkLabel" id="label103">
+				    <widget class="GtkLabel" id="trust-revoke-label">
 				      <property name="width_request">270</property>
 				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">If you no longer trust this person's identity, &lt;i&gt;revoke&lt;/i&gt; your signature:</property>
+				      <property name="label" translatable="yes">If you no longer trust that '%s' owns this key, &lt;i&gt;revoke&lt;/i&gt; your signature:</property>
 				      <property name="use_underline">False</property>
 				      <property name="use_markup">True</property>
 				      <property name="justify">GTK_JUSTIFY_LEFT</property>

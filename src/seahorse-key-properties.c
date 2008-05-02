@@ -84,10 +84,19 @@ printf_glade_widget (SeahorseWidget *swidget, const gchar *name, const gchar *st
     widget = glade_xml_get_widget (swidget->xml, name);
     if (!widget)
         return; 
-    
-    label = gtk_button_get_label (GTK_BUTTON (widget));
+
+    if (!GTK_IS_LABEL (widget))    
+        label = gtk_button_get_label (GTK_BUTTON (widget));
+    else
+        label = gtk_label_get_text (widget);
+        
     text = g_strdup_printf (label, str);
-    gtk_button_set_label (GTK_BUTTON (widget), text);
+    
+    if (!GTK_IS_LABEL (widget))
+        gtk_button_set_label (GTK_BUTTON (widget), text);
+    else
+        gtk_label_set_text (GTK_LABEL (widget), text);
+        
     g_free (text);
 }
 
@@ -1549,7 +1558,8 @@ do_trust_signals (SeahorseWidget *swidget)
         /* Fill in trust labels with name .This only happens once, so it sits here. */
         user = seahorse_pgp_key_get_userid_name (SEAHORSE_PGP_KEY (skey), 0);
         printf_glade_widget (swidget, "trust-marginal-check", user);
-        printf_glade_widget (swidget, "trust-complete-check", user);
+        printf_glade_widget (swidget, "trust-sign-label", user);
+        printf_glade_widget (swidget, "trust-revoke-label", user);
         g_free (user);
         
     } else {
@@ -1563,8 +1573,6 @@ do_trust_signals (SeahorseWidget *swidget)
 
     glade_xml_signal_connect_data (swidget->xml, "trust_marginal_toggled",
                                    G_CALLBACK (trust_marginal_toggled), swidget);
-    glade_xml_signal_connect_data (swidget->xml, "trust_complete_toggled",
-                                   G_CALLBACK (trust_complete_toggled), swidget);
                                    
     glade_xml_signal_connect_data (swidget->xml, "on_signatures_tree_row_activated",
                                    G_CALLBACK (signature_row_activated), swidget);
@@ -1607,7 +1615,6 @@ do_trust (SeahorseWidget *swidget)
         show_glade_widget (swidget, "sign-area", FALSE);
         show_glade_widget (swidget, "revoke-area", FALSE);
         sensitive_glade_widget (swidget, "trust-marginal-check", FALSE);
-        sensitive_glade_widget (swidget, "trust-complete-check", FALSE);
         set_glade_image (swidget, "sign-image", SEAHORSE_STOCK_SIGN_UNKNOWN);
         
     /* Local keys */
@@ -1678,18 +1685,11 @@ do_trust (SeahorseWidget *swidget)
             gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), trust != SEAHORSE_VALIDITY_UNKNOWN);
             g_signal_handlers_unblock_by_func (widget, trust_marginal_toggled, swidget);
         
-            widget = seahorse_widget_get_widget (swidget, "trust-complete-check");
-            g_return_if_fail (widget != NULL);
-            
-            g_signal_handlers_block_by_func (widget, trust_complete_toggled, swidget);
-            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), trust == SEAHORSE_VALIDITY_FULL);
-            gtk_widget_set_sensitive (widget, trust != SEAHORSE_VALIDITY_UNKNOWN);
-            g_signal_handlers_unblock_by_func (widget, trust_complete_toggled, swidget);
         }
     
         /* Signing and revoking */
         sigpersonal = seahorse_pgp_key_have_signatures (pkey, SKEY_PGPSIG_PERSONAL);
-        show_glade_widget (swidget, "sign-area", !sigpersonal && trusted);
+        show_glade_widget (swidget, "sign-area", !sigpersonal);
         show_glade_widget (swidget, "revoke-area", sigpersonal);
         
         /* The image */
