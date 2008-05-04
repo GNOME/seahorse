@@ -12,6 +12,7 @@ INCLUDES = -I$(top_builddir) \
 	-DSEAHORSE_GLADEDIR=\""$(gladedir)"\" \
 	-DLOCALEDIR=\"$(localedir)\" \
 	-DEXECDIR=\""$(seahorselibexecbindir)"\" \
+	-DLDAP_DEPRECATED \
 	-DLIBCRYPTUI_API_SUBJECT_TO_CHANGE 
 
 noinst_LTLIBRARIES = libseahorse-pgp.la

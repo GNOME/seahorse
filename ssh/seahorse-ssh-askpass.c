@@ -20,9 +20,16 @@
  */
  
 #include "config.h"
-#include <gnome.h>
+
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
+#include <glib.h>
+#include <glib/gi18n.h>
+#include <gtk/gtk.h>
 
 static FILE* seahorse_link = NULL;
  

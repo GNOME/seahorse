@@ -5,6 +5,7 @@ pixmapsdir = $(datadir)/pixmaps/
 
 INCLUDES = -I$(top_builddir) \
 	-I$(top_srcdir) \
+	-I$(top_srcdir)/libegg \
 	-I$(top_srcdir)/libcryptui \
 	-I$(top_srcdir)/libseahorse \
 	$(SEAHORSE_CFLAGS) \
@@ -58,6 +59,7 @@ seahorse_LDADD = \
 	$(top_builddir)/gkr/libseahorse-gkr.la \
 	$(top_builddir)/common/libseahorse-common.la \  
 	$(top_builddir)/libcryptui/libcryptui.la \
+	$(top_builddir)/libegg/libeggdatetime.la \
 	$(SEAHORSE_LIBS)
 
 glade_DATA = \

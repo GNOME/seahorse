@@ -20,6 +20,10 @@
  */
 
 #include "config.h"
+
+#include <string.h>
+ 
+#include <glib/gi18n.h>
  
 #include "seahorse-key-dialogs.h"
 #include "seahorse-key-widget.h"

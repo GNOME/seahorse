@@ -25,6 +25,10 @@
 
 #include "config.h"
 
+#include <string.h>
+  
+#include <glib/gi18n.h>
+
 #include "seahorse-key-dialogs.h"
 
 #include "seahorse-gconf.h"
@@ -88,7 +92,7 @@ printf_glade_widget (SeahorseWidget *swidget, const gchar *name, const gchar *st
     if (!GTK_IS_LABEL (widget))    
         label = gtk_button_get_label (GTK_BUTTON (widget));
     else
-        label = gtk_label_get_text (widget);
+        label = gtk_label_get_text (GTK_LABEL (widget));
         
     text = g_strdup_printf (label, str);
     
@@ -1392,25 +1396,6 @@ trust_marginal_toggled (GtkToggleButton *toggle, SeahorseWidget *swidget)
     
     trust = gtk_toggle_button_get_active (toggle) ?
             SEAHORSE_VALIDITY_MARGINAL : SEAHORSE_VALIDITY_UNKNOWN;
-    
-    if (seahorse_key_get_trust (skey) != trust) {
-        err = seahorse_pgp_key_op_set_trust (SEAHORSE_PGP_KEY (skey), trust);
-        if (err)
-        	seahorse_pgp_handle_gpgme_error (err, _("Unable to change trust"));
-    }
-}
-
-static void
-trust_complete_toggled (GtkToggleButton *toggle, SeahorseWidget *swidget)
-{
-    SeahorseKey *skey;
-    guint trust;
-    gpgme_error_t err;
-    
-    skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
-    
-    trust = gtk_toggle_button_get_active (toggle) ?
-            SEAHORSE_VALIDITY_FULL : SEAHORSE_VALIDITY_MARGINAL;
     
     if (seahorse_key_get_trust (skey) != trust) {
         err = seahorse_pgp_key_op_set_trust (SEAHORSE_PGP_KEY (skey), trust);

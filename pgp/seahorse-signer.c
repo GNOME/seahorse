@@ -19,9 +19,11 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <stdlib.h>
 #include <config.h>
-#include <gnome.h>
+
+#include <stdlib.h>
+
+#include <glib/gi18n.h>
 
 #include "seahorse-operation.h"
 #include "seahorse-progress.h"
@@ -33,6 +35,7 @@
 #include "seahorse-util.h"
 
 #include "pgp/seahorse-pgp-key.h"
+#include "pgp/seahorse-pgp-keysets.h"
 
 SeahorsePGPKey*
 seahorse_signer_get (GtkWindow *parent)

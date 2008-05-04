@@ -22,7 +22,12 @@
  */
 
 #include "config.h"
-#include <gnome.h>
+
+#include <errno.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
 #include <glib/gstdio.h>
 
 #include "seahorse-util.h"

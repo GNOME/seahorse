@@ -41,8 +41,14 @@ AC_CHECK_FUNCS(strsep)
 
 AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
 
-PKG_CHECK_MODULES(SEAHORSE, libgnome-2.0 >= 2.14 libgnomeui-2.0
-                  libglade-2.0 gconf-2.0 gtk+-2.0 >= 2.10.0 gio-2.0)
+PKG_CHECK_MODULES(GTK, gtk+-2.0 >= 2.10)
+AC_SUBST([GTK_LIBS])
+AC_SUBST([GTK_CFLAGS])
+ 
+  AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
+PKG_CHECK_MODULES(SEAHORSE, libglade-2.0 gconf-2.0 gtk+-2.0 >= 2.10.0 
+gnome-vfs-2.0)
+
 
 AC_MSG_CHECKING([for some Win32 platform])
 case "$host" in
@@ -437,7 +443,7 @@ AC_ARG_ENABLE(debug,
 	    [Compile binaries in debug mode]))
 
 if test "$enable_debug" = "yes"; then
-  CFLAGS="$CFLAGS -g -O0 -Wall"
+  CFLAGS="$CFLAGS -g -O0 -DBONOBO_DISABLE_DEPRECATED -DDISABLE_DEPRECATED -Wall -Werror"
   AC_DEFINE_UNQUOTED(_DEBUG, 1, [In debug mode])
   echo "enabling debug compile mode"
 else 
@@ -499,6 +505,7 @@ gkr/Makefile
 libcryptui/cryptui.pc
 libcryptui/Makefile
 libcryptui/tests/Makefile
+libegg/Makefile
 libseahorse/Makefile
 pgp/Makefile
 po/Makefile.in

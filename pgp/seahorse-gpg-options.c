@@ -28,7 +28,8 @@
 #include <string.h>
 #include <errno.h>
 #include <fcntl.h>
-
+#include <unistd.h>
+#include <sys/stat.h>
 
 #include "seahorse-util.h"
 #include "seahorse-context.h"

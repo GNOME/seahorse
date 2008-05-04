@@ -21,7 +21,11 @@
  */
 
 #include "config.h"
-#include <gnome.h>
+
+#include <string.h>
+#include <unistd.h>
+
+#include <glib/gi18n.h>
 
 #include "seahorse-key-manager-store.h"
 #include "seahorse-preferences.h"

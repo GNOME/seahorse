@@ -32,8 +32,12 @@
 
 #include <glib/gstdio.h>
 
+#include <string.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <errno.h>
+
+#include <glib/gi18n.h>
 
 /* Override DEBUG switches here */
 #define DEBUG_REFRESH_ENABLE 0

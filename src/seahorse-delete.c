@@ -21,6 +21,8 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
+
 #include "seahorse-windows.h"
 #include "seahorse-util.h"
 

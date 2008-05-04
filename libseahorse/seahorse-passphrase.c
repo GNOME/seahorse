@@ -36,8 +36,13 @@
 #include <unistd.h>
 #include <syslog.h>
 #include <fcntl.h>
+#include <errno.h>
 
-#include <gnome.h>
+#include <glib.h>
+#include <glib/gi18n.h>
+
+#include <gdk/gdkkeysyms.h>
+
 #include <glade/glade-xml.h>
 
 #include "seahorse-libdialogs.h"

@@ -20,7 +20,8 @@
  */
  
 #include "config.h"
-#include <gnome.h>
+
+#include <string.h>
 
 #include "seahorse-key-model.h"
 #include "seahorse-marshal.h"

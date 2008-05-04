@@ -19,9 +19,12 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <stdlib.h>
 #include <config.h>
-#include <gnome.h>
+
+#include <stdlib.h>
+#include <string.h>
+
+#include <glib/gi18n.h>
 
 #include "seahorse-gpgmex.h"
 #include "seahorse-operation.h"

@@ -21,8 +21,6 @@
 
 #include "config.h"
 
-#include <gnome.h>
-
 #ifdef WITH_SHARING 
 #include <avahi-client/client.h>
 #include <avahi-client/lookup.h>

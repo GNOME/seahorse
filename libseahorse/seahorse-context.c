@@ -21,9 +21,10 @@
  */
 
 #include "config.h"
+
 #include <stdlib.h>
+#include <string.h>
 #include <libintl.h>
-#include <gnome.h>
 
 #include "seahorse-context.h"
 #include "seahorse-marshal.h"

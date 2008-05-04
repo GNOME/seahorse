@@ -19,10 +19,12 @@
  * Boston, MA 02111-1307, USA.
  */
  
-#include <gnome.h>
 #include <libsoup/soup.h>
 
 #include "config.h"
+#include "errno.h"
+#include "string.h"
+
 #include "seahorse-daemon.h"
 
 #include "pgp/seahorse-gpgmex.h"

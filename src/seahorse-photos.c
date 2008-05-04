@@ -23,8 +23,10 @@
 
 #include <sys/stat.h>
 #include <errno.h>
+#include <unistd.h>
 
-#include <gnome.h>
+#include <glib/gi18n.h>
+
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
 #include "seahorse-widget.h"
@@ -93,7 +95,7 @@ save_to_fd (const gchar *buf, gsize count, GError **error, gpointer data)
     written = write (fd, buf, count);
     if (written != count) {
         g_set_error (error, G_FILE_ERROR, g_file_error_from_errno (errno), 
-                     "%s", strerror (errno));
+                     "%s", g_strerror (errno));
         return FALSE;
     }
     
@@ -130,7 +132,7 @@ prepare_photo_id (GtkWindow *parent, gchar *path, gchar **result, GError **error
     
     /* Check if it's a JPEG */
     name = gdk_pixbuf_format_get_name (format);
-    r = strcmp (name, "jpeg") == 0;
+    r = g_strcmp0 (name, "jpeg") == 0;
     g_free (name);
     
     /* JPEGs we can use straight up */

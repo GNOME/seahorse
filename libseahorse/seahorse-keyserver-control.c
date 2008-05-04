@@ -292,7 +292,7 @@ populate_combo (SeahorseKeyserverControl *skc, gboolean gconf)
                                            COL_TEXT, keyserver,
                                            COL_INFO, OPTION_KEYSERVER,
                                            -1);
-        if (chosen && strcmp (chosen, keyserver) == 0) {
+        if (chosen && g_strcmp0 (chosen, keyserver) == 0) {
             chosen_iter = iter;
             chosen_iter_set = TRUE;
         }

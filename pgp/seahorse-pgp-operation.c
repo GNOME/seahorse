@@ -20,6 +20,7 @@
  */
 
 #include "config.h"
+
 #include "seahorse-util.h"
 
 #include "pgp/seahorse-gpgmex.h"

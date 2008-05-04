@@ -21,6 +21,13 @@
 
 #include "config.h"
 
+#include <time.h>
+#include <string.h>
+ 
+#include <glib/gi18n.h>
+ 
+#include "egg-datetime.h"
+
 #include "seahorse-widget.h"
 #include "seahorse-util.h"
 #include "seahorse-key-dialogs.h"
@@ -56,6 +63,28 @@ completion_handler (SeahorseOperation *op, gpointer data)
     }
 }
 
+static GtkWidget *
+_seahorse_pgp_generate_get_expiry_date (SeahorseWidget *swidget)
+{
+    GtkWidget *widget;
+    GList *children;
+
+    g_return_val_if_fail (swidget != NULL, NULL);
+
+    widget = seahorse_widget_get_widget (swidget, "expiry-date-container");
+    g_return_val_if_fail (widget != NULL, NULL);
+
+    children = gtk_container_get_children (GTK_CONTAINER (widget));
+    g_return_val_if_fail (children, NULL);
+
+    /* The first widget should be the expiry-date */
+    widget = g_list_nth_data (children, 0);
+
+    g_list_free (children);
+
+    return widget;
+}
+
 static void
 on_response (GtkDialog *dialog, guint response, SeahorseWidget *swidget)
 {
@@ -69,7 +98,7 @@ on_response (GtkDialog *dialog, guint response, SeahorseWidget *swidget)
     gpgme_error_t gerr;
     gint sel;
     guint type;
-    glong expires;
+    time_t expires;
     guint bits;
     
     if (response == GTK_RESPONSE_HELP) {
@@ -123,11 +152,11 @@ on_response (GtkDialog *dialog, guint response, SeahorseWidget *swidget)
     g_return_if_fail (widget != NULL);
     if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
         expires = 0;
-    else 
-    {
-        widget = seahorse_widget_get_widget (swidget, "expiry-date");
-        g_return_if_fail (widget != NULL);
-        expires = gnome_date_edit_get_time (GNOME_DATE_EDIT (widget));
+    else {
+        widget = _seahorse_pgp_generate_get_expiry_date (swidget);
+        g_return_if_fail (widget);
+
+        egg_datetime_get_as_time_t (EGG_DATETIME (widget), &expires);
     }
 
     sksrc = SEAHORSE_PGP_SOURCE (g_object_get_data (G_OBJECT (swidget), "key-source"));
@@ -182,8 +211,9 @@ expires_toggled (GtkToggleButton *button, SeahorseWidget *swidget)
 {
     GtkWidget *widget;
     
-    widget = seahorse_widget_get_widget (swidget, "expiry-date");
-    g_return_if_fail (widget != NULL);
+    widget = _seahorse_pgp_generate_get_expiry_date (swidget);
+    g_return_if_fail (widget);
+
     gtk_widget_set_sensitive (widget, !gtk_toggle_button_get_active (button));
 }
 
@@ -209,7 +239,7 @@ seahorse_pgp_generate_show (SeahorsePGPSource *sksrc, GtkWindow *parent)
 {
     SeahorseWidget *swidget;
     GtkWidget *widget;
-    gulong expires;
+    time_t expires;
     guint i;
     
     swidget = seahorse_widget_new ("pgp-generate", parent);
@@ -232,12 +262,13 @@ seahorse_pgp_generate_show (SeahorsePGPSource *sksrc, GtkWindow *parent)
     gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
     algorithm_changed (GTK_COMBO_BOX (widget), swidget);
     
-    /* Default expiry date */
-    widget = seahorse_widget_get_widget (swidget, "expiry-date");
-    g_return_if_fail (widget != NULL);
-    expires = time(NULL);
+    expires = time (NULL);
     expires += (60 * 60 * 24 * 365); /* Seconds in a year */
-    gnome_date_edit_set_time (GNOME_DATE_EDIT (widget), expires);
+
+    /* Default expiry date */
+    widget = seahorse_widget_get_widget (swidget, "expiry-date-container");
+    g_return_if_fail (widget != NULL);
+    gtk_box_pack_start (GTK_BOX (widget), egg_datetime_new_from_time_t (expires), TRUE, TRUE, 0);
     
     g_object_ref (sksrc);
     g_object_set_data_full (G_OBJECT (swidget), "key-source", sksrc, g_object_unref);

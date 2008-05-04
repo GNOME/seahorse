@@ -21,7 +21,11 @@
  */
 
 #include "config.h"
-#include <gnome.h>
+
+#include <string.h>
+
+#include <glib/gi18n.h>
+
 #include <gconf/gconf-client.h>
 
 #include "seahorse-windows.h"
@@ -832,8 +836,9 @@ static void about_dialog_activate_link_cb (GtkAboutDialog *about,
                                            const gchar *url,
                                            gpointer data)
 {
-    gnome_url_show (url, NULL);
+    g_app_info_launch_default_for_uri (url, NULL, NULL);
 }
+
 
 /* Shows about dialog */
 static void
@@ -1075,12 +1080,51 @@ filter_changed (GtkWidget *widget, SeahorseKeyManagerStore* skstore)
     g_object_set (skstore, "filter", text, NULL);
 }
 
+static GtkWidget *
+_seahorse_get_manager_get_filter (SeahorseWidget *swidget)
+{
+    GtkWidget *widget = NULL;
+    GList *children = NULL;
+    gint items = 0;
+
+    widget = seahorse_widget_get_widget (swidget, "toolbar-placeholder");
+    g_return_val_if_fail (widget, NULL);
+
+    children = gtk_container_get_children (GTK_CONTAINER (widget));
+    g_return_val_if_fail (children, NULL);
+
+    /* Toolbar is the first (and only) widget */
+    widget = g_list_nth_data (children, 0);
+    g_list_free (children); children = NULL;
+
+    items = gtk_toolbar_get_n_items (GTK_TOOLBAR (widget));
+    widget = GTK_WIDGET (gtk_toolbar_get_nth_item (GTK_TOOLBAR (widget), items - 1));
+
+    children = gtk_container_get_children (GTK_CONTAINER (widget));
+    g_return_val_if_fail (children, NULL);
+
+    /* hbox */
+    widget = g_list_nth_data (children, 0);
+    g_list_free (children); children = NULL;
+
+    children = gtk_container_get_children (GTK_CONTAINER (widget));
+    g_return_val_if_fail (children, NULL);
+
+    /* the 2nd item is the entry */
+    widget = g_list_nth_data (children, 1);
+    g_return_val_if_fail (widget, NULL);
+
+    g_list_free (children); children = NULL;
+
+    return widget;
+}
+
 /* Clear filter when the tab changes */
 static void
 tab_changed (GtkWidget *widget, GtkNotebookPage *page, guint page_num, 
              SeahorseWidget *swidget)
 {
-    GtkWidget *entry = glade_xml_get_widget (swidget->xml, "filter");
+    GtkWidget *entry = _seahorse_get_manager_get_filter (swidget);
     g_return_if_fail (entry != NULL);
     gtk_entry_set_text (GTK_ENTRY (entry), "");
     
@@ -1282,8 +1326,8 @@ initialize_tab (SeahorseWidget *swidget, const gchar *tabwidget, guint tabid,
     g_object_set_data_full (G_OBJECT (view), "key-store", skstore, g_object_unref);
     
     /* For the filtering */
-    glade_xml_signal_connect_data(swidget->xml, "on_filter_changed",
-                                  G_CALLBACK(filter_changed), skstore);
+    g_signal_connect (_seahorse_get_manager_get_filter (swidget), "changed",
+                      G_CALLBACK (filter_changed), skstore);
 }
 
 GtkWindow* 
@@ -1296,7 +1340,10 @@ seahorse_key_manager_show (SeahorseOperation *op)
     GtkActionGroup *actions;
     GtkAction *action;
     GtkTargetList *targets;
-    
+    GtkBox *hbox = NULL;
+    GList *children = NULL;
+    GtkToolItem *item = NULL;
+
     swidget = seahorse_widget_new ("key-manager", NULL);
     win = GTK_WINDOW (seahorse_widget_get_top (swidget));
     
@@ -1373,9 +1420,9 @@ seahorse_key_manager_show (SeahorseOperation *op)
 		G_CALLBACK (row_activated), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "key_list_button_pressed",
 		G_CALLBACK (key_list_button_pressed), swidget);
+
 	glade_xml_signal_connect_data (swidget->xml, "key_list_popup_menu",
 		G_CALLBACK (key_list_popup_menu), swidget);
-        
 	/* first time signals */
 	glade_xml_signal_connect_data (swidget->xml, "import_button_clicked",
 		G_CALLBACK (import_activate), swidget);
@@ -1385,19 +1432,57 @@ seahorse_key_manager_show (SeahorseOperation *op)
     /* The notebook */
     g_signal_connect_after (notebook, "switch-page", G_CALLBACK(tab_changed), swidget);
     
+    /* Set focus to the current key list */
+    w = GTK_WIDGET (get_current_view (swidget));
+    gtk_widget_grab_focus (w);
+
+    /* Flush updates */
+    gtk_ui_manager_ensure_update (swidget->ui);
+
+    w = glade_xml_get_widget (swidget->xml, "toolbar-placeholder");
+    g_assert (w);
+    
+    children = gtk_container_get_children (GTK_CONTAINER (w));
+    g_assert (children);
+    
+    /* The toolbar is the first (and only) element */
+    w = g_list_nth_data (children, 0);
+    g_assert (w);
+
+    /* Insert a separator to right align the filter */
+    item = gtk_separator_tool_item_new ();
+    gtk_separator_tool_item_set_draw (GTK_SEPARATOR_TOOL_ITEM (item), FALSE);
+    gtk_tool_item_set_expand (item, TRUE);
+    gtk_widget_show_all (GTK_WIDGET (item));
+
+    gtk_toolbar_insert (GTK_TOOLBAR (w), GTK_TOOL_ITEM (item), -1);
+
+    /* Insert a filter bar */
+    hbox = GTK_BOX (gtk_hbox_new (FALSE, 0));
+    gtk_box_pack_start (hbox, gtk_label_new (_("Filter:")), FALSE, TRUE, 3);
+    gtk_box_pack_start (hbox, gtk_entry_new (), FALSE, TRUE, 0);
+    gtk_box_pack_start (hbox, gtk_label_new (NULL), FALSE, FALSE, 0);
+    gtk_widget_show_all (GTK_WIDGET (hbox));
+
+    item = gtk_tool_item_new ();
+    gtk_container_add (GTK_CONTAINER (item), GTK_WIDGET (hbox));
+    gtk_widget_show_all (GTK_WIDGET (item));
+
+    gtk_toolbar_insert (GTK_TOOLBAR (w), GTK_TOOL_ITEM (item), -1);
+
     /* Initialize the tabs, and associate them up */
     initialize_tab (swidget, "pub-key-tab", TAB_PUBLIC, "pub-key-list", &pred_public);
     initialize_tab (swidget, "trust-key-tab", TAB_TRUSTED, "trust-key-list", &pred_trusted);
     initialize_tab (swidget, "sec-key-tab", TAB_PRIVATE, "sec-key-list", &pred_private);
     initialize_tab (swidget, "password-tab", TAB_PASSWORD, "password-list", &pred_password);
-    
+
     /* Set focus to the current key list */
     w = GTK_WIDGET (get_current_view (swidget));
     gtk_widget_grab_focus (w);
-    
+
     /* To avoid flicker */
     seahorse_widget_show (swidget);
-    
+
     /* Setup drops */
     gtk_drag_dest_set (GTK_WIDGET (win), GTK_DEST_DEFAULT_ALL, 
                        NULL, 0, GDK_ACTION_COPY);

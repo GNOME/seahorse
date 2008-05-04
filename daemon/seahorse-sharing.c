@@ -20,7 +20,8 @@
  */
 
 #include <config.h>
-#include <gnome.h>
+
+#include <glib/gi18n.h>
 
 #include <avahi-client/client.h>
 #include <avahi-client/publish.h>

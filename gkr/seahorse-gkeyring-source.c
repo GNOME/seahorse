@@ -20,9 +20,12 @@
  */
 
 #include "config.h"
+
 #include <stdlib.h>
+#include <string.h>
 #include <libintl.h>
-#include <gnome.h>
+
+#include <glib/gi18n.h>
 
 #include "seahorse-gkeyring-source.h"
 #include "seahorse-operation.h"

@@ -19,7 +19,8 @@
  * Boston, MA 02111-1307, USA.
  */
 #include <config.h>
-#include <gnome.h>
+
+#include <glib/gi18n.h>
 
 #include "seahorse-key-widget.h"
 #include "seahorse-util.h"

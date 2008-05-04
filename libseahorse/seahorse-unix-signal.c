@@ -29,8 +29,9 @@
 #include <unistd.h>
 #include <syslog.h>
 #include <fcntl.h>
+#include <string.h>
+#include <errno.h>
 
-#include <gnome.h>
 #include "seahorse-unix-signal.h"
 
 #define MAX_SIGNAL 32

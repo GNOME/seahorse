@@ -20,7 +20,6 @@
  */
  
 #include "config.h"
-#include <gnome.h>
 
 #include "seahorse-key-source.h"
 #include "seahorse-marshal.h"
@@ -202,7 +201,7 @@ seahorse_key_source_import_sync (SeahorseKeySource *sksrc, GInputStream *input,
 	SeahorseOperation *op;
     	gboolean ret;
 
-	g_return_val_if_fail (G_IS_INPUT_STREAM (input), NULL);
+	g_return_val_if_fail (G_IS_INPUT_STREAM (input), FALSE);
 
 	op = seahorse_key_source_import (sksrc, input);
 	g_return_val_if_fail (op != NULL, FALSE);
@@ -310,7 +309,6 @@ seahorse_key_source_export_raw (SeahorseKeySource *sksrc, GSList *keyids,
 	SeahorseOperation *op;
 	SeahorseKey *skey;
 	GList *keys = NULL;
-	gboolean owned = FALSE;
 	GSList *l;
     
 	g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (sksrc), NULL);

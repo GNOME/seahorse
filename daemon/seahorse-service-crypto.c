@@ -31,7 +31,10 @@
 #include "pgp/seahorse-pgp-key.h"
 #include "pgp/seahorse-pgp-operation.h"
 
+#include <string.h>
+
 #include <glib.h>
+#include <glib/gi18n.h>
 
 /* flags from seahorse-service-cyrpto.xml */
 #define FLAG_QUIET 0x01
@@ -80,7 +83,7 @@ process_crypto_result (SeahorsePGPOperation *pop, gpgme_error_t gstarterr,
         
         data = gpgme_data_release_and_get_mem (cryptdata, &len);
         *result = g_strndup (data, len);
-        free (data);
+        g_free (data);
         
         return TRUE;
         

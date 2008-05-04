@@ -20,10 +20,15 @@
  */
 
 #include "config.h"
+
 #include <sys/wait.h>
 #include <sys/socket.h>
-#include <gnome.h>
+#include <string.h>
+#include <errno.h>
 #include <fcntl.h>
+#include <unistd.h>
+
+#include <glib/gi18n.h>
 
 #include "seahorse-ssh-operation.h"
 #include "seahorse-util.h"
@@ -940,6 +945,7 @@ seahorse_ssh_operation_generate (SeahorseSSHSource *src, const gchar *email,
  * LOAD KEY INTO AGENT
  */ 
 
+#if 0
 #define KEYRING_ATTR_TYPE "seahorse-key-type"
 #define KEYRING_ATTR_KEYID "openssh-keyid"
 #define KEYRING_VAL_SSH "openssh"
@@ -1041,6 +1047,7 @@ load_result_cb (SeahorseSSHOperation *sop)
         set_keyring_passphrase (pv->prompt_skey, pass);
     }
 }
+#endif
 
 /* -----------------------------------------------------------------------------
  * IMPORT A PUBLIC KEY 

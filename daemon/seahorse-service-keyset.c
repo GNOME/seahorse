@@ -20,7 +20,11 @@
  */
 
 #include "config.h"
+
+#include <string.h>
+
 #include <glib.h>
+#include <glib/gi18n.h>
 
 #include "seahorse-service.h"
 #include "seahorse-util.h"

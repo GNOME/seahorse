@@ -19,7 +19,8 @@
  * Boston, MA 02111-1307, USA.
  */
 #include "config.h"
-#include <gnome.h>
+
+#include <glib/gi18n.h>
 
 #include "seahorse-prefs.h"
 #include "seahorse-util.h"
@@ -481,7 +482,6 @@ SeahorseWidget *
 seahorse_prefs_new (GtkWindow *parent)
 {
     SeahorseWidget *swidget;
-    GtkWidget *widget;
     
     swidget = seahorse_widget_new ("prefs", parent);
     

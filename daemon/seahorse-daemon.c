@@ -37,7 +37,7 @@
 #include "ssh/seahorse-ssh.h"
 #endif
 
-#include <gnome.h>
+#include <glib/gi18n.h>
 
 #include <sys/types.h>
 #include <sys/signal.h>
@@ -176,16 +176,9 @@ prepare_logging ()
     g_log_set_handler ("Gnome", flags, log_handler, NULL);
 }
 
-static void
-client_die ()
-{
-    gtk_main_quit ();
-}
-
 int main(int argc, char* argv[])
 {
     SeahorseOperation *op;
-    GnomeClient *client = NULL;
     GOptionContext *octx = NULL;
 
     seahorse_secure_memory_init ();
@@ -193,10 +186,7 @@ int main(int argc, char* argv[])
     octx = g_option_context_new ("");
     g_option_context_add_main_entries (octx, options, GETTEXT_PACKAGE);
 
-    gnome_program_init ("seahorse-daemon", VERSION, LIBGNOMEUI_MODULE, argc, argv,
-                    GNOME_PARAM_GOPTION_CONTEXT, octx,
-                    GNOME_PARAM_HUMAN_READABLE_NAME, _("Encryption Daemon (Seahorse)"),
-                    GNOME_PARAM_APP_DATADIR, DATA_DIR, NULL);
+    gtk_init_with_args (&argc, &argv, _("Encryption Daemon (Seahorse)"), (GOptionEntry *) options, GETTEXT_PACKAGE, NULL);
 
     /* 
      * All functions after this point have to print messages 
@@ -212,9 +202,6 @@ int main(int argc, char* argv[])
     if (!daemon_no_daemonize)
         seahorse_gconf_disconnect ();    
         
-    client = gnome_master_client();
-    g_signal_connect(client, "die", G_CALLBACK(client_die), NULL);
-    
     /* We log to the syslog */
     prepare_logging ();
 

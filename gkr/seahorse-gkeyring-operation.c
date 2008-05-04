@@ -20,10 +20,12 @@
  */
 
 #include "config.h"
+
 #include <sys/wait.h>
 #include <sys/socket.h>
-#include <gnome.h>
 #include <fcntl.h>
+
+#include <glib/gi18n.h>
 
 #include "seahorse-gkeyring-operation.h"
 #include "seahorse-util.h"

@@ -42,8 +42,10 @@
 
 #include "gkr/seahorse-gkr.h"
 
-#include <gnome.h>
 #include <locale.h>
+#include <stdlib.h>
+  
+#include <glib/gi18n.h>
 
 /* Initializes context and preferences, then loads key manager */
 int
@@ -68,9 +70,7 @@ main (int argc, char **argv)
     gpgme_set_locale(NULL, LC_MESSAGES, setlocale(LC_MESSAGES, NULL));
 #endif
 
-    gnome_program_init(PACKAGE, VERSION, LIBGNOMEUI_MODULE, argc, argv,
-                       GNOME_PARAM_HUMAN_READABLE_NAME, _("Encryption Key Manager"),
-                       GNOME_PARAM_APP_DATADIR, DATA_DIR, NULL);
+    gtk_init_with_args (&argc, &argv, _("Encryption Key Manager"), NULL, GETTEXT_PACKAGE, NULL);
 
     /* Insert Icons into Stock */ 
     seahorse_gtkstock_init ();

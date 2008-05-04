@@ -21,6 +21,12 @@
 
 #include "config.h"
 
+#include <string.h>
+#include <stdlib.h>
+#include <errno.h>
+
+#include <glib/gi18n.h>
+
 #include "seahorse-ldap-source.h"
 
 #include "seahorse-gpgmex.h"

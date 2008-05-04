@@ -47,7 +47,7 @@
 #ifndef __SEAHORSE_OPERATION_H__
 #define __SEAHORSE_OPERATION_H__
 
-#include <gnome.h>
+#include <glib-object.h>
 
 #define SEAHORSE_TYPE_OPERATION            (seahorse_operation_get_type ())
 #define SEAHORSE_OPERATION(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_OPERATION, SeahorseOperation))

@@ -21,8 +21,13 @@
  
 #include "config.h"
 
+#include <string.h>
+#include <libintl.h>
+
 #include <gtk/gtk.h>
+
 #include <glib.h>
+#include <glib/gi18n.h>
 
 #include "seahorse-libdialogs.h"
 #include "seahorse-util.h"

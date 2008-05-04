@@ -20,6 +20,10 @@
  */
 
 #include "config.h" 
+
+#include <glib/gi18n.h>
+
+#include "egg-datetime.h"
  
 #include "seahorse-key-dialogs.h"
 #include "seahorse-key-widget.h"
@@ -28,7 +32,6 @@
 #include "pgp/seahorse-pgp-dialogs.h"
 #include "pgp/seahorse-pgp-key-op.h"
 
-#define EXPIRES "expires"
 #define LENGTH "length"
 
 enum {
@@ -69,11 +72,38 @@ type_changed (GtkComboBox *combo, SeahorseWidget *swidget)
 	}
 }
 
+static GtkWidget *
+_seahorse_add_subkey_get_expires (SeahorseWidget *swidget)
+{
+    GtkWidget *widget;
+    GList *children;
+
+    g_return_val_if_fail (swidget != NULL, NULL);
+
+    widget = seahorse_widget_get_widget (swidget, "table1");
+    g_return_val_if_fail (widget != NULL, NULL);
+
+    children = gtk_container_get_children (GTK_CONTAINER (widget));
+    g_return_val_if_fail (children, NULL);
+
+    /* The fifth element should be expires */
+    widget = g_list_nth_data (children, 5);
+
+    g_list_free (children);
+
+    return widget;
+}
+
 static void
 never_expires_toggled (GtkToggleButton *togglebutton, SeahorseWidget *swidget)
 {
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, EXPIRES),
-		!gtk_toggle_button_get_active (togglebutton));
+    GtkWidget *widget;
+
+    widget = _seahorse_add_subkey_get_expires (swidget);
+    g_return_if_fail (widget);
+
+    gtk_widget_set_sensitive (GTK_WIDGET (widget),
+                              !gtk_toggle_button_get_active (togglebutton));
 }
 
 static void
@@ -105,9 +135,12 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (
 	glade_xml_get_widget (swidget->xml, "never_expires"))))
 		expires = 0;
-	else
-		expires = gnome_date_edit_get_time (GNOME_DATE_EDIT (
-			glade_xml_get_widget (swidget->xml, EXPIRES)));
+	else {
+        widget = _seahorse_add_subkey_get_expires (swidget);
+        g_return_if_fail (widget);
+
+        egg_datetime_get_as_time_t (EGG_DATETIME (widget), &expires);
+   }
 	
 	switch (type) {
 		case 0:
@@ -145,6 +178,7 @@ seahorse_add_subkey_new (SeahorsePGPKey *pkey, GtkWindow *parent)
     GtkTreeModel *model;
     GtkTreeIter iter;
     GtkCellRenderer *renderer;
+    GtkWidget *widget;
 	
 	swidget = seahorse_key_widget_new ("add-subkey", parent, SEAHORSE_KEY (pkey));
 	g_return_if_fail (swidget != NULL);
@@ -198,4 +232,8 @@ seahorse_add_subkey_new (SeahorsePGPKey *pkey, GtkWindow *parent)
 		G_CALLBACK (never_expires_toggled), swidget);
 	glade_xml_signal_connect_data (swidget->xml, "type_changed",
 		G_CALLBACK (type_changed), swidget);
+
+    widget = seahorse_widget_get_widget (swidget, "table1");
+    g_return_if_fail (widget != NULL);
+    gtk_table_attach_defaults (GTK_TABLE (widget), egg_datetime_new (), 1, 2, 2, 3);
 }

@@ -20,6 +20,8 @@
  */
 #include "config.h"
 
+#include <glib/gi18n.h>
+
 #include "seahorse-key-widget.h"
 
 #include "seahorse-gtkstock.h"

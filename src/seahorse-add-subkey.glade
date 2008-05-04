@@ -2,7 +2,6 @@
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
 <!--*- mode: xml -*-->
 <glade-interface>
-  <requires lib="gnome"/>
   <widget class="GtkDialog" id="add-subkey">
     <property name="visible">True</property>
     <property name="border_width">5</property>
@@ -22,78 +21,18 @@
             <property name="column_spacing">12</property>
             <property name="row_spacing">6</property>
             <child>
-              <widget class="GtkComboBox" id="type">
-                <property name="visible">True</property>
-                <signal name="changed" handler="type_changed"/>
-              </widget>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="right_attach">3</property>
-                <property name="y_options"></property>
-              </packing>
+              <placeholder/>
             </child>
             <child>
-              <widget class="GtkSpinButton" id="length">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="adjustment">1024 768 1024 32 128 128</property>
-                <property name="climb_rate">128</property>
-                <property name="snap_to_ticks">True</property>
-                <property name="numeric">True</property>
-                <property name="tooltip" translatable="yes">Length of Key</property>
-              </widget>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="right_attach">3</property>
-                <property name="top_attach">1</property>
-                <property name="bottom_attach">2</property>
-                <property name="y_options"></property>
-              </packing>
-            </child>
-            <child>
-              <widget class="GtkCheckButton" id="never_expires">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="label" translatable="yes">Never E_xpires</property>
-                <property name="use_underline">True</property>
-                <property name="active">True</property>
-                <property name="draw_indicator">True</property>
-                <property name="tooltip" translatable="yes">If key never expires</property>
-                <signal name="toggled" handler="never_expires_toggled"/>
-              </widget>
-              <packing>
-                <property name="left_attach">2</property>
-                <property name="right_attach">3</property>
-                <property name="top_attach">2</property>
-                <property name="bottom_attach">3</property>
-                <property name="x_options">GTK_FILL</property>
-                <property name="y_options"></property>
-              </packing>
-            </child>
-            <child>
-              <widget class="GtkLabel" id="label3">
+              <widget class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Expiration Date:</property>
+                <property name="label" translatable="yes">Key _Type:</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">type</property>
               </widget>
               <packing>
-                <property name="top_attach">2</property>
-                <property name="bottom_attach">3</property>
                 <property name="x_options">GTK_FILL</property>
-                <property name="y_options"></property>
-              </packing>
-            </child>
-            <child>
-              <widget class="GnomeDateEdit" id="expires">
-                <property name="visible">True</property>
-                <property name="sensitive">False</property>
-                <property name="dateedit_flags"></property>
-              </widget>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="right_attach">2</property>
-                <property name="top_attach">2</property>
-                <property name="bottom_attach">3</property>
                 <property name="y_options"></property>
               </packing>
             </child>
@@ -113,15 +52,65 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkLabel" id="label1">
+              <widget class="GtkLabel" id="label3">
                 <property name="visible">True</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Key _Type:</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">type</property>
+                <property name="label" translatable="yes">Expiration Date:</property>
               </widget>
               <packing>
+                <property name="top_attach">2</property>
+                <property name="bottom_attach">3</property>
                 <property name="x_options">GTK_FILL</property>
+                <property name="y_options"></property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkCheckButton" id="never_expires">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="tooltip" translatable="yes">If key never expires</property>
+                <property name="label" translatable="yes">Never E_xpires</property>
+                <property name="use_underline">True</property>
+                <property name="response_id">0</property>
+                <property name="active">True</property>
+                <property name="draw_indicator">True</property>
+                <signal name="toggled" handler="never_expires_toggled"/>
+              </widget>
+              <packing>
+                <property name="left_attach">2</property>
+                <property name="right_attach">3</property>
+                <property name="top_attach">2</property>
+                <property name="bottom_attach">3</property>
+                <property name="x_options">GTK_FILL</property>
+                <property name="y_options"></property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkSpinButton" id="length">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="tooltip" translatable="yes">Length of Key</property>
+                <property name="adjustment">1024 768 1024 32 128 128</property>
+                <property name="climb_rate">128</property>
+                <property name="snap_to_ticks">True</property>
+                <property name="numeric">True</property>
+              </widget>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="right_attach">3</property>
+                <property name="top_attach">1</property>
+                <property name="bottom_attach">2</property>
+                <property name="y_options"></property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkComboBox" id="type">
+                <property name="visible">True</property>
+                <signal name="changed" handler="type_changed"/>
+              </widget>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="right_attach">3</property>
                 <property name="y_options"></property>
               </packing>
             </child>
@@ -165,9 +154,9 @@
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
+                <property name="tooltip" translatable="yes">Generate a new subkey</property>
                 <property name="label">gtk-ok</property>
                 <property name="use_stock">True</property>
-                <property name="tooltip" translatable="yes">Generate a new subkey</property>
                 <property name="response_id">-5</property>
                 <signal name="clicked" handler="ok_clicked"/>
               </widget>

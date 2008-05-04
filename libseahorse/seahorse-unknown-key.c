@@ -20,7 +20,8 @@
  */
 
 #include "config.h"
-#include <gnome.h>
+
+#include <glib/gi18n.h>
 
 #include "seahorse-unknown-key.h"
 #include "seahorse-unknown-source.h"

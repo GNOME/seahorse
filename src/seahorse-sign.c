@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
+
 #include "seahorse-windows.h"
 #include "seahorse-key-widget.h"
 #include "seahorse-util.h"
@@ -32,6 +34,7 @@
 
 #include "pgp/seahorse-pgp-dialogs.h"
 #include "pgp/seahorse-pgp-key-op.h"
+#include "pgp/seahorse-pgp-keysets.h"
 
 #ifdef WITH_KEYSERVER
 #include "seahorse-keyserver-sync.h"

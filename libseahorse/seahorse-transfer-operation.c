@@ -20,7 +20,8 @@
  */
  
 #include "config.h"
-#include <gnome.h>
+
+#include <stdlib.h>
 
 #include "seahorse-transfer-operation.h"
 #include "seahorse-util.h"

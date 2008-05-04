@@ -8,7 +8,7 @@ else
 SSH_DIR = 
 endif
 
-SUBDIRS = \
+SUBDIRS = libegg \
 	libcryptui \
 	common \
 	libseahorse \

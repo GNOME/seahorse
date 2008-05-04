@@ -20,7 +20,10 @@
  */
 
 #include "config.h"
-#include <gnome.h>
+
+#include <string.h>
+
+#include <glib/gi18n.h>
 
 #include "seahorse-context.h"
 #include "seahorse-key-source.h"
@@ -34,6 +37,11 @@
 #ifdef WITH_SSH
 #include "ssh/seahorse-ssh-key.h"
 #endif 
+
+/* XXX Copied from libgnomeui */
+#define GNOME_STOCK_AUTHENTICATION      "gnome-stock-authentication"
+#define GNOME_STOCK_BOOK_OPEN           "gnome-stock-book-open"
+#define GNOME_STOCK_BLANK               "gnome-stock-blank"
 
 enum {
     PROP_0,

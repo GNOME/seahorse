@@ -19,7 +19,9 @@
  * Boston, MA 02111-1307, USA.
  */
 #include <config.h>
-#include <gnome.h>
+
+#include <glib/gi18n.h>
+
 #include <gnome-keyring.h>
 
 #include "seahorse-context.h"
@@ -155,7 +157,7 @@ update_default_keyring (SeahorseWidget *swidget)
         gtk_tree_model_get (model, &iter, KEYRING_NAME, &t, -1);
         g_assert (t);
         
-        match = (strcmp (t, keyring) == 0);
+        match = (g_strcmp0 (t, keyring) == 0);
         g_free (t);
          
         if (match) {
@@ -194,14 +196,14 @@ refresh_keyring_model (SeahorseWidget *swidget, GList *list)
     
         /* We don't list the 'session' keyring */
         name = (gchar*)list->data;
-        if (strcmp (name, "session") == 0)
+        if (g_strcmp0 (name, "session") == 0)
             continue;
 
         if (!valid)
             gtk_list_store_append (store, &iter);
 
         /* Figure out the name and markup */
-        if (strcmp (name, "login") == 0)
+        if (g_strcmp0 (name, "login") == 0)
             comments = _("<i>Automatically unlocked when user logs in.</i>");
         else
             comments = "";
