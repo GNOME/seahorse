@@ -1343,12 +1343,17 @@ seahorse_key_manager_show (SeahorseOperation *op)
     GtkBox *hbox = NULL;
     GList *children = NULL;
     GtkToolItem *item = NULL;
+    gchar *title;
 
     swidget = seahorse_widget_new ("key-manager", NULL);
     win = GTK_WINDOW (seahorse_widget_get_top (swidget));
     
     notebook = GTK_NOTEBOOK (seahorse_widget_get_widget (swidget, "notebook"));
     g_return_val_if_fail (notebook != NULL, win);
+    
+    title = g_strdup_printf(_("Passwords and Encryption Keys"));
+    gtk_window_set_title (win, title);
+    g_free (title);
     
     /* General normal actions */
     actions = gtk_action_group_new ("main");
