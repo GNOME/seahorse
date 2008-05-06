@@ -29,9 +29,6 @@
 #include <glade/glade.h>
 #include <glade/glade-build.h>
 
-#include <libgnomevfs/gnome-vfs.h>
-#include <libgnomevfs/gnome-vfs-result.h>
-
 #include "seahorse-widget.h"
 #include "seahorse-gtkstock.h"
 
@@ -317,8 +314,9 @@ seahorse_widget_find (const gchar *name)
 void
 seahorse_widget_show_help (SeahorseWidget *swidget)
 {
+    GError *error = NULL;
     gchar *document = NULL;
-    GnomeVFSResult error;
+    GtkWidget *dialog = NULL;
 
     if (g_str_equal (swidget->name, "key-manager") || 
         g_str_equal (swidget->name, "keyserver-results")) {
@@ -327,20 +325,18 @@ seahorse_widget_show_help (SeahorseWidget *swidget)
         document = g_strdup_printf ("ghelp:" PACKAGE "?%s", swidget->name);
     }
 
-    error = gnome_vfs_url_show (document);
-    g_free (document);
-
-    if (error != GNOME_VFS_OK) {
-        GtkWidget *dialog;
-
-        dialog = gtk_message_dialog_new (GTK_WINDOW (seahorse_widget_get_top (swidget)), GTK_DIALOG_MODAL, 
-                                         GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, 
-                                         _("Could not display help: %s"),
-                                         gnome_vfs_result_to_string (error));
-        g_signal_connect (G_OBJECT (dialog), "response",
-                          G_CALLBACK (gtk_widget_destroy), NULL);
+    if (!g_app_info_launch_default_for_uri (document, NULL, &error)) {
+        dialog = gtk_message_dialog_new (GTK_WINDOW (seahorse_widget_get_top (swidget)),
+                                         GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK,
+                                         _("Could not display help: %s"), error->message);
+        g_signal_connect (G_OBJECT (dialog), "response", G_CALLBACK (gtk_widget_destroy), NULL);
         gtk_widget_show (dialog);
     }
+
+    g_free (document);
+
+    if (error)
+        g_error_free (error);
 }
 
 /**
