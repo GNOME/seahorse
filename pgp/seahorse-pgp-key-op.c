@@ -2346,7 +2346,7 @@ photoid_load_transit (guint current_state, gpgme_status_code_t status,
                       const gchar *args, gpointer data, gpgme_error_t *err)
 {
     PhotoIdLoadParm *parm = (PhotoIdLoadParm*)data;
-    guint next_state;
+    guint next_state = 0;
     struct stat buf;
     GError *error = NULL;
 	

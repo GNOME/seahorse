@@ -76,7 +76,7 @@ find_attribute_int (GnomeKeyringAttributeList *attrs, const gchar *name)
     
     for (i = 0; i < attrs->len; i++) {
         GnomeKeyringAttribute *attr = &(gnome_keyring_attribute_list_index (attrs, i));
-        if (g_strcasecmp (name, attr->name) == 0 && 
+        if (g_ascii_strcasecmp (name, attr->name) == 0 && 
             attr->type == GNOME_KEYRING_ATTRIBUTE_TYPE_UINT32)
             return attr->value.integer;
     }
@@ -96,7 +96,7 @@ is_network_item (SeahorseGKeyringItem *git, const gchar *match)
         return TRUE;
     
     protocol = seahorse_gkeyring_item_get_attribute (git, "protocol");
-    return protocol && g_strncasecmp (protocol, match, strlen (match)) == 0;
+    return protocol && g_ascii_strncasecmp (protocol, match, strlen (match)) == 0;
 }
 
 static gboolean 
@@ -558,7 +558,7 @@ seahorse_gkeyring_item_get_attribute (SeahorseGKeyringItem *git, const gchar *na
     
     for (i = 0; i < git->attributes->len; i++) {
         GnomeKeyringAttribute *attr = &(gnome_keyring_attribute_list_index (git->attributes, i));
-        if (g_strcasecmp (name, attr->name) == 0 && 
+        if (g_ascii_strcasecmp (name, attr->name) == 0 && 
             attr->type == GNOME_KEYRING_ATTRIBUTE_TYPE_STRING)
             return attr->value.string;
     }

@@ -108,6 +108,8 @@ do_main (SeahorseWidget *swidget)
     case SEAHORSE_GKEYRING_USE_OTHER:
         label = _("Saved password or login");
         break;
+    default:
+        g_assert_not_reached ();
     }
     
     widget = seahorse_widget_get_widget (swidget, "use-field");

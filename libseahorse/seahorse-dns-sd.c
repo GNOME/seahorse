@@ -117,7 +117,8 @@ resolve_callback (AvahiServiceResolver *resolver, AvahiIfIndex iface, AvahiProto
     case AVAHI_RESOLVER_FOUND:
         
         /* Make sure it's our type ... */
-        if (g_strcasecmp (HKP_SERVICE_TYPE, type) != 0)
+        /* XXX Is the service always guaranteed to be ascii? */
+        if (g_ascii_strcasecmp (HKP_SERVICE_TYPE, type) != 0)
             break;
         
 #ifndef DISCOVER_THIS_HOST
@@ -164,7 +165,8 @@ browse_callback(AvahiServiceBrowser *browser, AvahiIfIndex iface, AvahiProtocol 
     g_assert (SEAHORSE_IS_SERVICE_DISCOVERY (ssd));
     g_assert (browser == ssd->priv->browser);
     
-    if (g_strcasecmp (HKP_SERVICE_TYPE, type) != 0)
+     /* XXX Is the service always guaranteed to be ascii? */
+    if (g_ascii_strcasecmp (HKP_SERVICE_TYPE, type) != 0)
         return;
 
     switch (event) {

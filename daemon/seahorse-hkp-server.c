@@ -290,7 +290,7 @@ lookup_handle_index (SoupMessage *msg, GHashTable *args, gboolean verbose)
     
     /* Get the various necessary arguments */
     t = (gchar*)g_hash_table_lookup(args, "fingerprint");
-    if (t && g_strcasecmp(t, "on") == 0)
+    if (t && g_ascii_strcasecmp(t, "on") == 0)
         fingerprints = TRUE;
     
     search = (const gchar*)g_hash_table_lookup(args, "search");
@@ -406,13 +406,13 @@ lookup_callback (SoupServer *server, SoupMessage *msg,
     if(!t || !t[0])
         code = lookup_handle_error(msg, "pks request did not include an <b>op</b> property", GPG_OK);
     
-    else if(g_strcasecmp(t, "index") == 0)
+    else if(g_ascii_strcasecmp(t, "index") == 0)
         code = lookup_handle_index(msg, args, FALSE);
     
-    else if(g_strcasecmp(t, "vindex") == 0)
+    else if(g_ascii_strcasecmp(t, "vindex") == 0)
         code = lookup_handle_index(msg, args, TRUE);
     
-    else if(g_strcasecmp(t, "get") == 0)
+    else if(g_ascii_strcasecmp(t, "get") == 0)
         code = lookup_handle_get(msg, args);
     
     else

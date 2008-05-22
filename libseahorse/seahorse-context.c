@@ -365,7 +365,7 @@ seahorse_context_find_key_sources (SeahorseContext *sctx, GQuark ktype,
 SeahorseKeySource*  
 seahorse_context_remote_key_source (SeahorseContext *sctx, const gchar *uri)
 {
-    SeahorseKeySource *ks;
+    SeahorseKeySource *ks = NULL;
     gboolean found = FALSE;
     gchar *ks_uri;
     GSList *l;

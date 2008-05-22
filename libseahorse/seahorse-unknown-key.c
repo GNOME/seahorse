@@ -110,7 +110,7 @@ seahorse_unknown_key_get_property (GObject *object, guint prop_id,
     
     switch (prop_id) {
     case PROP_DISPLAY_NAME:
-        g_value_set_string_take_ownership (value, 
+        g_value_take_string (value, 
                 seahorse_unknown_key_get_name (SEAHORSE_KEY (ukey), 0));
         break;
     case PROP_DISPLAY_ID:

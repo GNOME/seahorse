@@ -116,7 +116,7 @@ int
 gpgmex_data_write_all (gpgme_data_t data, const void* buffer, size_t len)
 {
 	guchar *text = (guchar*)buffer;
-	gint written;
+	gint written = 0;
     
 	if (len < 0)
 		len = strlen ((gchar*)text);

@@ -1,3 +1,25 @@
+2008-05-21  Saleem Abdulrasool  <compnerd@compnerd.org>
+
+	reviewed by: Adam Schreiber  <sadam@clemson.edu>
+
+	* configure.in:
+	* daemon/seahorse-hkp-server.c: (lookup_handle_index),
+	(lookup_callback):
+	* gkr/seahorse-gkeyring-item.c: (find_attribute_int),
+	(is_network_item), (seahorse_gkeyring_item_get_attribute):
+	* libseahorse/seahorse-context.c:
+	(seahorse_context_remote_key_source):
+	* libseahorse/seahorse-dns-sd.c: (resolve_callback),
+	(browse_callback):
+	* libseahorse/seahorse-unknown-key.c:
+	(seahorse_unknown_key_get_property):
+	* libseahorse/seahorse-util.c: (seahorse_util_get_date_string),
+	(seahorse_util_get_display_date_string):
+	* pgp/seahorse-gpgmex-util.c: (gpgmex_data_write_all):
+	* pgp/seahorse-pgp-key-op.c: (photoid_load_transit):
+	* src/seahorse-gkeyring-item-properties.c: (do_main):
+		Fix compiling with -Werror and fix typo of -DG_DISABLE_DEPRECATED.
+
 2008-05-17  Adam Schreiber  <sadam@clemson.edu>
 
     * libseahorse/seahorse-passphrase.c: Grab keyboard focus

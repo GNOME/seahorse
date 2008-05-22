@@ -442,7 +442,7 @@ AC_ARG_ENABLE(debug,
 	    [Compile binaries in debug mode]))
 
 if test "$enable_debug" = "yes"; then
-  CFLAGS="$CFLAGS -g -O0 -DBONOBO_DISABLE_DEPRECATED -DDISABLE_DEPRECATED -Wall -Werror"
+  CFLAGS="$CFLAGS -g -O0 -DBONOBO_DISABLE_DEPRECATED -DG_DISABLE_DEPRECATED -Wall -Werror"
   AC_DEFINE_UNQUOTED(_DEBUG, 1, [In debug mode])
   echo "enabling debug compile mode"
 else 
