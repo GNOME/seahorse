@@ -22,6 +22,7 @@
 #include "config.h"
 
 #include <sys/wait.h>
+#include <signal.h>
 #include <sys/socket.h>
 #include <string.h>
 #include <errno.h>
