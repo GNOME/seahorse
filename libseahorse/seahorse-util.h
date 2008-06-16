@@ -56,7 +56,7 @@ gchar*		seahorse_util_get_display_date_string   (const time_t		time);
 
 GQuark      seahorse_util_error_domain ();
 
-void        seahorse_util_show_error            (GtkWindow          *parent,
+void        seahorse_util_show_error            (GtkWidget          *parent,
                                                  const gchar        *heading,
                                                  const gchar        *message);
                                                  

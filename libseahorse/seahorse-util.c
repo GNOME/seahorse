@@ -51,21 +51,36 @@
 static const gchar *bad_filename_chars = "/\\<>|";
 
 void
-seahorse_util_show_error (GtkWindow *parent, const gchar *heading, const gchar *message)
+seahorse_util_show_error (GtkWidget *parent, const gchar *heading, const gchar *message)
 {
 	GtkWidget *error;
-    gchar *t;
+	gchar *text;
     
-	g_return_if_fail (message);
+	g_return_if_fail (message || heading);
+	if (!message)
+		message = "";
     
-    if (heading)
-        t = g_strconcat("<big><b>", heading, "</b></big>\n\n", message, NULL);
-    else
-        t = g_strdup (message);
+	if (heading)
+		text = g_strconcat("<big><b>", heading, "</b></big>\n\n", message, NULL);
+	else
+		text = g_strdup (message);
 	
-	error = gtk_message_dialog_new_with_markup (parent, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR,
-		GTK_BUTTONS_CLOSE, t);
-    g_free (t);
+	if (parent) {
+		if (!GTK_IS_WIDGET (parent)) {
+			g_warn_if_reached ();
+			parent = NULL;
+		} else {
+			if (!GTK_IS_WINDOW (parent)) 
+				parent = gtk_widget_get_toplevel (parent);
+			if (!GTK_IS_WINDOW (parent) && GTK_WIDGET_TOPLEVEL (parent))
+				parent = NULL;
+		}
+	}
+	
+	error = gtk_message_dialog_new_with_markup (GTK_WINDOW (parent), 
+	                                            GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR,
+	                                            GTK_BUTTONS_CLOSE, text);
+	g_free (text);
 	
 	gtk_dialog_run (GTK_DIALOG (error));
 	gtk_widget_destroy (error);

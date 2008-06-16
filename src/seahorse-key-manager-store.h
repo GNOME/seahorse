@@ -76,13 +76,4 @@ GList*              seahorse_key_manager_store_get_selected_keys (GtkTreeView *v
 SeahorseKey*        seahorse_key_manager_store_get_selected_key  (GtkTreeView *view,
                                                                   guint *uid);
 
-/* -----------------------------------------------------------------------------
- * DRAG AND DROP
- */
-
-enum SeahorseTargetTypes {
-    TEXT_PLAIN,
-    TEXT_URIS
-};
-
 #endif /* __SEAHORSE_KEY_MANAGER_STORE_H__ */

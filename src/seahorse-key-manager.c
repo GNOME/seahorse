@@ -56,6 +56,11 @@
 #include "gkr/seahorse-gkeyring-item.h"
 #include "gkr/seahorse-gkeyring-source.h"
 
+enum SeahorseTargetTypes {
+    TEXT_PLAIN,
+    TEXT_URIS
+};
+
 #define TRACK_SELECTED_KEY    "track-selected-keyid"
 #define TRACK_SELECTED_TAB    "track-selected-tabid"
 
@@ -460,7 +465,7 @@ import_files (SeahorseWidget *swidget, const gchar **uris)
     g_object_unref (mop);
         
     if (errmsg->len) {
-        seahorse_util_show_error (GTK_WINDOW (seahorse_widget_get_top (swidget)),
+        seahorse_util_show_error (seahorse_widget_get_top (swidget),
                                   _("Couldn't import keys"), errmsg->str);
     }
     
@@ -483,7 +488,7 @@ import_text (SeahorseWidget *swidget, const gchar *text)
     /* Figure out what key format we're dealing with here */
     ktype = seahorse_util_detect_data_type (text, len);
     if (!ktype) {
-        seahorse_util_show_error (GTK_WINDOW (seahorse_widget_get_top (swidget)),
+        seahorse_util_show_error (seahorse_widget_get_top (swidget),
                 _("Couldn't import keys"), _("Unrecognized key type, or invalid data format"));
         return;
     }
