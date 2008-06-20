@@ -34,11 +34,11 @@
 #include "seahorse-key.h"
 
 #define SEAHORSE_TYPE_KEY_MODEL               (seahorse_key_model_get_type ())
-#define SEAHORSE_KEY_MODEL(obj)               (GTK_CHECK_CAST ((obj), SEAHORSE_TYPE_KEY_MODEL, SeahorseKeyModel))
-#define SEAHORSE_KEY_MODEL_CLASS(klass)       (GTK_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_KEY_MODEL, SeahorseKeyModelClass))
-#define SEAHORSE_IS_KEY_MODEL(obj)            (GTK_CHECK_TYPE ((obj), SEAHORSE_TYPE_KEY_MODEL))
-#define SEAHORSE_IS_KEY_MODEL_CLASS(klass)    (GTK_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_KEY_MODEL))
-#define SEAHORSE_KEY_MODEL_GET_CLASS(obj)     (GTK_CHECK_GET_CLASS ((obj), SEAHORSE_TYPE_KEY_MODEL, SeahorseKeyModelClass))
+#define SEAHORSE_KEY_MODEL(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_KEY_MODEL, SeahorseKeyModel))
+#define SEAHORSE_KEY_MODEL_CLASS(klass)       (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_KEY_MODEL, SeahorseKeyModelClass))
+#define SEAHORSE_IS_KEY_MODEL(obj)            (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_KEY_MODEL))
+#define SEAHORSE_IS_KEY_MODEL_CLASS(klass)    (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_KEY_MODEL))
+#define SEAHORSE_KEY_MODEL_GET_CLASS(obj)     (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_KEY_MODEL, SeahorseKeyModelClass))
 
 typedef struct _SeahorseKeyModel SeahorseKeyModel;
 typedef struct _SeahorseKeyModelClass SeahorseKeyModelClass;

@@ -69,11 +69,11 @@
 #define SKEY_UNKNOWN                    0
 
 #define SEAHORSE_TYPE_KEY               (seahorse_key_get_type ())
-#define SEAHORSE_KEY(obj)               (GTK_CHECK_CAST ((obj), SEAHORSE_TYPE_KEY, SeahorseKey))
-#define SEAHORSE_KEY_CLASS(klass)       (GTK_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_KEY, SeahorseKeyClass))
-#define SEAHORSE_IS_KEY(obj)            (GTK_CHECK_TYPE ((obj), SEAHORSE_TYPE_KEY))
-#define SEAHORSE_IS_KEY_CLASS(klass)    (GTK_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_KEY))
-#define SEAHORSE_KEY_GET_CLASS(obj)     (GTK_CHECK_GET_CLASS ((obj), SEAHORSE_TYPE_KEY, SeahorseKeyClass))
+#define SEAHORSE_KEY(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_KEY, SeahorseKey))
+#define SEAHORSE_KEY_CLASS(klass)       (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_KEY, SeahorseKeyClass))
+#define SEAHORSE_IS_KEY(obj)            (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_KEY))
+#define SEAHORSE_IS_KEY_CLASS(klass)    (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_KEY))
+#define SEAHORSE_KEY_GET_CLASS(obj)     (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_KEY, SeahorseKeyClass))
 
 /* 
  * These types should never change. These values are exported via DBUS. In the 

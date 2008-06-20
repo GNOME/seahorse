@@ -85,7 +85,7 @@ struct _EggDateTimeClass
 
 
 /* Constructors */
-GtkType         egg_datetime_get_type        (void);
+GType         egg_datetime_get_type        (void);
 GtkWidget      *egg_datetime_new       (void); 
 GtkWidget      *egg_datetime_new_from_time_t    (time_t t);
 GtkWidget      *egg_datetime_new_from_struct_tm (struct tm *tm);

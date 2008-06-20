@@ -43,11 +43,11 @@
 #include "seahorse-context.h"
 
 #define SEAHORSE_TYPE_WIDGET            (seahorse_widget_get_type ())
-#define SEAHORSE_WIDGET(obj)            (GTK_CHECK_CAST ((obj), SEAHORSE_TYPE_WIDGET, SeahorseWidget))
-#define SEAHORSE_WIDGET_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_WIDGET, SeahorseWidgetClass))
-#define SEAHORSE_IS_WIDGET(obj)         (GTK_CHECK_TYPE ((obj), SEAHORSE_TYPE_WIDGET))
-#define SEAHORSE_IS_WIDGET_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_WIDGET))
-#define SEAHORSE_WIDGET_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), SEAHORSE_TYPE_WIDGET, SeahorseWidgetClass))
+#define SEAHORSE_WIDGET(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_WIDGET, SeahorseWidget))
+#define SEAHORSE_WIDGET_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_WIDGET, SeahorseWidgetClass))
+#define SEAHORSE_IS_WIDGET(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_WIDGET))
+#define SEAHORSE_IS_WIDGET_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_WIDGET))
+#define SEAHORSE_WIDGET_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_WIDGET, SeahorseWidgetClass))
 
 typedef struct _SeahorseWidget SeahorseWidget;
 typedef struct _SeahorseWidgetClass SeahorseWidgetClass;

@@ -34,11 +34,11 @@ typedef enum _CryptUIKeyChooserMode {
 } CryptUIKeyChooserMode;
 
 #define CRYPTUI_TYPE_KEY_CHOOSER             (cryptui_key_chooser_get_type ())
-#define CRYPTUI_KEY_CHOOSER(obj)             (GTK_CHECK_CAST ((obj), CRYPTUI_TYPE_KEY_CHOOSER, CryptUIKeyChooser))
-#define CRYPTUI_KEY_CHOOSER_CLASS(klass)     (GTK_CHECK_CLASS_CAST ((klass), CRYPTUI_TYPE_KEY_CHOOSER, CryptUIKeyChooser))
-#define CRYPTUI_IS_KEY_CHOOSER(obj)          (GTK_CHECK_TYPE ((obj), CRYPTUI_TYPE_KEY_CHOOSER))
-#define CRYPTUI_IS_KEY_CHOOSER_CLASS(klass)  (GTK_CHECK_CLASS_TYPE ((klass), CRYPTUI_TYPE_KEY_CHOOSER))
-#define CRYPTUI_KEY_CHOOSER_GET_CLASS(obj)   (GTK_CHECK_GET_CLASS ((obj), CRYPTUI_TYPE_KEY_CHOOSER, CryptUIKeyChooser))
+#define CRYPTUI_KEY_CHOOSER(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), CRYPTUI_TYPE_KEY_CHOOSER, CryptUIKeyChooser))
+#define CRYPTUI_KEY_CHOOSER_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), CRYPTUI_TYPE_KEY_CHOOSER, CryptUIKeyChooser))
+#define CRYPTUI_IS_KEY_CHOOSER(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), CRYPTUI_TYPE_KEY_CHOOSER))
+#define CRYPTUI_IS_KEY_CHOOSER_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), CRYPTUI_TYPE_KEY_CHOOSER))
+#define CRYPTUI_KEY_CHOOSER_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), CRYPTUI_TYPE_KEY_CHOOSER, CryptUIKeyChooser))
 
 typedef struct _CryptUIKeyChooser CryptUIKeyChooser;
 typedef struct _CryptUIKeyChooserPriv CryptUIKeyChooserPriv;

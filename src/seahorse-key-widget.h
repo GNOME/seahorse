@@ -28,11 +28,11 @@
 #include "seahorse-key.h"
 
 #define SEAHORSE_TYPE_KEY_WIDGET		(seahorse_key_widget_get_type ())
-#define SEAHORSE_KEY_WIDGET(obj)		(GTK_CHECK_CAST ((obj), SEAHORSE_TYPE_KEY_WIDGET, SeahorseKeyWidget))
-#define SEAHORSE_KEY_WIDGET_CLASS(klass)	(GTK_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_KEY_WIDGET, SeahorseKeyWidgetClass))
-#define SEAHORSE_IS_KEY_WIDGET(obj)		(GTK_CHECK_TYPE ((obj), SEAHORSE_TYPE_KEY_WIDGET))
-#define SEAHORSE_IS_KEY_WIDGET_CLASS(klass)	(GTK_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_KEY_WIDGET))
-#define SEAHORSE_KEY_WIDGET_GET_CLASS(obj)	(GTK_CHECK_GET_CLASS ((obj), SEAHORSE_TYPE_KEY_WIDGET, SeahorseKeyWidgetClass))
+#define SEAHORSE_KEY_WIDGET(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_KEY_WIDGET, SeahorseKeyWidget))
+#define SEAHORSE_KEY_WIDGET_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_KEY_WIDGET, SeahorseKeyWidgetClass))
+#define SEAHORSE_IS_KEY_WIDGET(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_KEY_WIDGET))
+#define SEAHORSE_IS_KEY_WIDGET_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_KEY_WIDGET))
+#define SEAHORSE_KEY_WIDGET_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_KEY_WIDGET, SeahorseKeyWidgetClass))
 
 typedef struct _SeahorseKeyWidget SeahorseKeyWidget;
 typedef struct _SeahorseKeyWidgetClass SeahorseKeyWidgetClass;

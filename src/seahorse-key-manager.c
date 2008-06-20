@@ -1503,7 +1503,7 @@ seahorse_key_manager_show (SeahorseOperation *op)
     gtk_target_list_unref (targets);
 
     gtk_signal_connect (GTK_OBJECT (win), "drag_data_received",
-                GTK_SIGNAL_FUNC (target_drag_data_received), swidget);
+                G_CALLBACK (target_drag_data_received), swidget);
                         
     /* Hook progress bar in */
     seahorse_progress_status_set_operation (swidget, op);

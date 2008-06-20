@@ -34,11 +34,11 @@
 #include <glib.h>
 
 #define SEAHORSE_TYPE_SERVICE_DISCOVERY             (seahorse_service_discovery_get_type ())
-#define SEAHORSE_SERVICE_DISCOVERY(obj)	            (GTK_CHECK_CAST ((obj), SEAHORSE_TYPE_SERVICE_DISCOVERY, SeahorseServiceDiscovery))
-#define SEAHORSE_SERVICE_DISCOVERY_CLASS(klass)	    (GTK_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_SERVICE_DISCOVERY, SeahorseServiceDiscoveryClass))
-#define SEAHORSE_IS_SERVICE_DISCOVERY(obj)		    (GTK_CHECK_TYPE ((obj), SEAHORSE_TYPE_SERVICE_DISCOVERY))
-#define SEAHORSE_IS_SERVICE_DISCOVERY_CLASS(klass)	(GTK_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_SERVICE_DISCOVERY))
-#define SEAHORSE_SERVICE_DISCOVERY_GET_CLASS(obj)	(GTK_CHECK_GET_CLASS ((obj), SEAHORSE_TYPE_SERVICE_DISCOVERY, SeahorseServiceDiscoveryClass))
+#define SEAHORSE_SERVICE_DISCOVERY(obj)	            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_SERVICE_DISCOVERY, SeahorseServiceDiscovery))
+#define SEAHORSE_SERVICE_DISCOVERY_CLASS(klass)	    (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_SERVICE_DISCOVERY, SeahorseServiceDiscoveryClass))
+#define SEAHORSE_IS_SERVICE_DISCOVERY(obj)		    (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_SERVICE_DISCOVERY))
+#define SEAHORSE_IS_SERVICE_DISCOVERY_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_SERVICE_DISCOVERY))
+#define SEAHORSE_SERVICE_DISCOVERY_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_SERVICE_DISCOVERY, SeahorseServiceDiscoveryClass))
 
 typedef struct _SeahorseServiceDiscovery SeahorseServiceDiscovery;
 typedef struct _SeahorseServiceDiscoveryClass SeahorseServiceDiscoveryClass;

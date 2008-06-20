@@ -266,10 +266,10 @@ static void  update_time_label      (EggDateTime *edt);
 static GtkHBoxClass *parent_class = NULL;
 
 
-GtkType
+GType
 egg_datetime_get_type (void)
 {
-   static GtkType datetime_type = 0;
+   static GType datetime_type = 0;
 
    if (!datetime_type) {
       static const GTypeInfo datetime_info = {

@@ -55,11 +55,11 @@ struct _CryptUIKeysetClass {
 #include "cryptui.h"
 
 #define CRYPTUI_TYPE_KEYSET               (cryptui_keyset_get_type ())
-#define CRYPTUI_KEYSET(obj)               (GTK_CHECK_CAST ((obj), CRYPTUI_TYPE_KEYSET, CryptUIKeyset))
-#define CRYPTUI_KEYSET_CLASS(klass)       (GTK_CHECK_CLASS_CAST ((klass), CRYPTUI_TYPE_KEYSET, CryptUIKeysetClass))
-#define CRYPTUI_IS_KEYSET(obj)            (GTK_CHECK_TYPE ((obj), CRYPTUI_TYPE_KEYSET))
-#define CRYPTUI_IS_KEYSET_CLASS(klass)    (GTK_CHECK_CLASS_TYPE ((klass), CRYPTUI_TYPE_KEYSET))
-#define CRYPTUI_KEYSET_GET_CLASS(obj)     (GTK_CHECK_GET_CLASS ((obj), CRYPTUI_TYPE_KEYSET, CryptUIKeysetClass))
+#define CRYPTUI_KEYSET(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), CRYPTUI_TYPE_KEYSET, CryptUIKeyset))
+#define CRYPTUI_KEYSET_CLASS(klass)       (G_TYPE_CHECK_CLASS_CAST ((klass), CRYPTUI_TYPE_KEYSET, CryptUIKeysetClass))
+#define CRYPTUI_IS_KEYSET(obj)            (G_TYPE_CHECK_INSTANCE_TYPE ((obj), CRYPTUI_TYPE_KEYSET))
+#define CRYPTUI_IS_KEYSET_CLASS(klass)    (G_TYPE_CHECK_CLASS_TYPE ((klass), CRYPTUI_TYPE_KEYSET))
+#define CRYPTUI_KEYSET_GET_CLASS(obj)     (G_TYPE_INSTANCE_GET_CLASS ((obj), CRYPTUI_TYPE_KEYSET, CryptUIKeysetClass))
 
 GType               cryptui_keyset_get_type           (void);
 

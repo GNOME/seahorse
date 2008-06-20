@@ -30,11 +30,11 @@
 #include "seahorse-key-model.h"
 
 #define SEAHORSE_TYPE_KEY_MANAGER_STORE             (seahorse_key_manager_store_get_type ())
-#define SEAHORSE_KEY_MANAGER_STORE(obj)             (GTK_CHECK_CAST ((obj), SEAHORSE_TYPE_KEY_MANAGER_STORE, SeahorseKeyManagerStore))
-#define SEAHORSE_KEY_MANAGER_STORE_CLASS(klass)     (GTK_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_KEY_MANAGER_STORE, SeahorseKeyManagerStoreClass))
-#define SEAHORSE_IS_KEY_MANAGER_STORE(obj)          (GTK_CHECK_TYPE ((obj), SEAHORSE_TYPE_KEY_MANAGER_STORE))
-#define SEAHORSE_IS_KEY_MANAGER_STORE_CLASS(klass)  (GTK_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_KEY_MANAGER_STORE))
-#define SEAHORSE_KEY_MANAGER_STORE_GET_CLASS(obj)   (GTK_CHECK_GET_CLASS ((obj), SEAHORSE_TYPE_KEY_MANAGER_STORE, SeahorseKeyManagerStoreClass))
+#define SEAHORSE_KEY_MANAGER_STORE(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_KEY_MANAGER_STORE, SeahorseKeyManagerStore))
+#define SEAHORSE_KEY_MANAGER_STORE_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_KEY_MANAGER_STORE, SeahorseKeyManagerStoreClass))
+#define SEAHORSE_IS_KEY_MANAGER_STORE(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_KEY_MANAGER_STORE))
+#define SEAHORSE_IS_KEY_MANAGER_STORE_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_KEY_MANAGER_STORE))
+#define SEAHORSE_KEY_MANAGER_STORE_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_KEY_MANAGER_STORE, SeahorseKeyManagerStoreClass))
 
 typedef struct _SeahorseKeyManagerStore SeahorseKeyManagerStore;
 typedef struct _SeahorseKeyManagerStorePriv SeahorseKeyManagerStorePriv;

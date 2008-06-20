@@ -51,11 +51,11 @@
 #include "seahorse-key-source.h"
 
 #define SEAHORSE_TYPE_KEYSET               (seahorse_keyset_get_type ())
-#define SEAHORSE_KEYSET(obj)               (GTK_CHECK_CAST ((obj), SEAHORSE_TYPE_KEYSET, SeahorseKeyset))
-#define SEAHORSE_KEYSET_CLASS(klass)       (GTK_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_KEYSET, SeahorseKeysetClass))
-#define SEAHORSE_IS_KEYSET(obj)            (GTK_CHECK_TYPE ((obj), SEAHORSE_TYPE_KEYSET))
-#define SEAHORSE_IS_KEYSET_CLASS(klass)    (GTK_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_KEYSET))
-#define SEAHORSE_KEYSET_GET_CLASS(obj)     (GTK_CHECK_GET_CLASS ((obj), SEAHORSE_TYPE_KEYSET, SeahorseKeysetClass))
+#define SEAHORSE_KEYSET(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_KEYSET, SeahorseKeyset))
+#define SEAHORSE_KEYSET_CLASS(klass)       (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_KEYSET, SeahorseKeysetClass))
+#define SEAHORSE_IS_KEYSET(obj)            (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_KEYSET))
+#define SEAHORSE_IS_KEYSET_CLASS(klass)    (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_KEYSET))
+#define SEAHORSE_KEYSET_GET_CLASS(obj)     (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_KEYSET, SeahorseKeysetClass))
 
 typedef struct _SeahorseKeyset SeahorseKeyset;
 typedef struct _SeahorseKeysetClass SeahorseKeysetClass;
