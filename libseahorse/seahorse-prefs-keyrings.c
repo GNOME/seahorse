@@ -240,7 +240,7 @@ refreshed_default (GnomeKeyringResult result, const gchar* name, gpointer data)
         update_default_keyring (swidget);
         
     } else if (result != GNOME_KEYRING_RESULT_CANCELLED) {
-        seahorse_util_show_error (seahorse_widget_get_top (swidget),
+        seahorse_util_show_error (seahorse_widget_get_toplevel (swidget),
                                   _("Couldn't get default password keyring"),
                                   gnome_keyring_result_to_message (result));
     }    
@@ -263,7 +263,7 @@ refreshed_keyrings (GnomeKeyringResult result, GList *list, gpointer data)
         update_default_keyring (swidget);
         
     } else if (result != GNOME_KEYRING_RESULT_CANCELLED) {
-        seahorse_util_show_error (seahorse_widget_get_top (swidget),
+        seahorse_util_show_error (seahorse_widget_get_toplevel (swidget),
                                   _("Couldn't get list of password keyrings"),
                                   gnome_keyring_result_to_message (result));
     }
@@ -319,7 +319,7 @@ keyring_default_done (GnomeKeyringResult result, gpointer data)
         
     /* Setting the default keyring failed */
     } else if (result != GNOME_KEYRING_RESULT_CANCELLED) {     
-        seahorse_util_show_error (seahorse_widget_get_top (swidget),
+        seahorse_util_show_error (seahorse_widget_get_toplevel (swidget),
                                   _("Couldn't set default password keyring"),
                                   gnome_keyring_result_to_message (result));
     }
@@ -401,7 +401,7 @@ keyring_remove_done (GnomeKeyringResult result, gpointer data)
         
     /* Setting the default keyring failed */
     } else if (result != GNOME_KEYRING_RESULT_CANCELLED) {     
-        seahorse_util_show_error (seahorse_widget_get_top (swidget),
+        seahorse_util_show_error (seahorse_widget_get_toplevel (swidget),
                                   _("Couldn't remove keyring"),
                                   gnome_keyring_result_to_message (result));
     }
@@ -418,7 +418,7 @@ keyring_remove_clicked (GtkButton *button, SeahorseWidget *swidget)
     keyring = selected_keyring (swidget);
     g_return_if_fail (keyring);
 
-    question = gtk_message_dialog_new (GTK_WINDOW (seahorse_widget_get_top (swidget)), 
+    question = gtk_message_dialog_new (GTK_WINDOW (seahorse_widget_get_toplevel (swidget)), 
                                        GTK_DIALOG_MODAL, GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE,
                                        _("Are you sure you want to permanently delete the '%s' keyring?"), 
                                        keyring);
@@ -467,7 +467,7 @@ keyring_add_done (GnomeKeyringResult result, gpointer data)
         
     /* Setting the default keyring failed */
     } else if (result != GNOME_KEYRING_RESULT_CANCELLED) {     
-        seahorse_util_show_error (seahorse_widget_get_top (swidget),
+        seahorse_util_show_error (seahorse_widget_get_toplevel (swidget),
                                   _("Couldn't add keyring"),
                                   gnome_keyring_result_to_message (result));
     }
@@ -483,7 +483,7 @@ keyring_add_clicked (GtkButton *button, SeahorseWidget *swidget)
     gint response;
     
     swadd = seahorse_widget_new_allow_multiple ("add-keyring",
-                                                GTK_WINDOW (seahorse_widget_get_top (swidget)));
+                                                GTK_WINDOW (seahorse_widget_get_toplevel (swidget)));
     g_return_if_fail (swadd);
     
     entry = GTK_ENTRY (seahorse_widget_get_widget (swadd, "keyring-name"));
@@ -493,7 +493,7 @@ keyring_add_clicked (GtkButton *button, SeahorseWidget *swidget)
                                    G_CALLBACK (keyring_name_changed), swadd);
     keyring_name_changed (entry, swadd);
 
-    response = gtk_dialog_run (GTK_DIALOG (seahorse_widget_get_top (swadd)));
+    response = gtk_dialog_run (GTK_DIALOG (seahorse_widget_get_toplevel (swadd)));
     if (response == GTK_RESPONSE_ACCEPT) {
         
         keyring = gtk_entry_get_text (entry);
@@ -524,7 +524,7 @@ keyring_password_done (GnomeKeyringResult result, gpointer data)
         
     /* Setting the default keyring failed */
     } else if (result != GNOME_KEYRING_RESULT_CANCELLED) {     
-        seahorse_util_show_error (seahorse_widget_get_top (swidget),
+        seahorse_util_show_error (seahorse_widget_get_toplevel (swidget),
                                   _("Couldn't change keyring password"),
                                   gnome_keyring_result_to_message (result));
     }

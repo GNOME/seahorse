@@ -23,24 +23,25 @@
 #include "config.h"
 
 #include "seahorse-context.h"
-#include "seahorse-windows.h"
 #include "seahorse-util.h"
 #include "seahorse-libdialogs.h"
 #include "seahorse-gtkstock.h"
 #include "seahorse-secure-memory.h"
 
+#include "seahorse-key-manager.h"
+
 #include "common/seahorse-cleanup.h"
 #include "common/seahorse-registry.h"
 
-#include "pgp/seahorse-pgp.h"
+#include "pgp/seahorse-pgp-module.h"
 #include "pgp/seahorse-pgp-key.h"
 #include "pgp/seahorse-pgp-source.h"
 
 #ifdef WITH_SSH
-#include "ssh/seahorse-ssh.h"
+#include "ssh/seahorse-ssh-module.h"
 #endif
 
-#include "gkr/seahorse-gkr.h"
+#include "gkr/seahorse-gkr-module.h"
 
 #include <locale.h>
 #include <stdlib.h>
@@ -52,7 +53,6 @@ int
 main (int argc, char **argv)
 {
     SeahorseOperation *op = NULL;
-    GtkWindow* win;
     int ret = 0;
 
     seahorse_secure_memory_init ();
@@ -81,13 +81,17 @@ main (int argc, char **argv)
     
     /* Make the default SeahorseContext */
     seahorse_context_new (SEAHORSE_CONTEXT_APP, 0);
-    op = seahorse_context_load_local_keys (SCTX_APP());
+    op = seahorse_context_load_local_keys (SCTX_APP ());
 
-    win = seahorse_key_manager_show (op);
-    g_signal_connect_after (G_OBJECT (win), "destroy", gtk_main_quit, NULL);
+    /* Load these components after loading local keys */
+    seahorse_registry_load_types (NULL, SEAHORSE_GKR_REGISTRY);
+
+    seahorse_key_manager_show (op);
+    g_signal_connect_after (SCTX_APP (), "destroy", gtk_main_quit, NULL);
     
     gtk_main ();
-    
+
+
     seahorse_cleanup_perform ();
     return ret;
 }

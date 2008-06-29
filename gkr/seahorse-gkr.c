@@ -19,13 +19,15 @@
  * 02111-1307, USA.  
  */
 
-#include "config.h"
-
 #include "seahorse-gkr.h"
+#include <stdlib.h>
+#include <string.h>
 
-#include "seahorse-gkeyring-source.h"
 
-const SeahorseRegisterType SEAHORSE_GKR_REGISTRY[] = {
-	seahorse_gkeyring_source_get_type,
-	NULL
-};
+
+
+
+
+
+
+

@@ -237,6 +237,15 @@ seahorse_operation_get_error (SeahorseOperation *op)
     return op->error;
 }
 
+void
+seahorse_operation_display_error (SeahorseOperation *operation, 
+                                  const gchar *title, GtkWidget *parent)
+{
+	g_return_if_fail (SEAHORSE_IS_OPERATION (operation));
+	g_return_if_fail (operation->error);
+	seahorse_util_handle_error (operation->error, "%s", title);
+}
+
 gpointer
 seahorse_operation_get_result (SeahorseOperation *op)
 {
@@ -250,26 +259,23 @@ seahorse_operation_wait (SeahorseOperation *op)
 }
 
 void
-seahorse_operation_watch (SeahorseOperation *operation, GCallback done_callback,
-                          GCallback progress_callback, gpointer userdata)
+seahorse_operation_watch (SeahorseOperation *operation, SeahorseDoneFunc done_callback,
+                          gpointer donedata, SeahorseProgressFunc progress_callback, gpointer progdata)
 {
-    typedef void (*DoneCb) (SeahorseOperation*, gpointer);
-    typedef void (*ProgressCb) (SeahorseOperation*, const gchar*, gdouble, gpointer);
-
     if (!seahorse_operation_is_running (operation)) {
         if (done_callback)
-            ((DoneCb)done_callback) (operation, userdata);
+            (done_callback) (operation, donedata);
         return;
     }
     
     if (done_callback)
-        g_signal_connect (operation, "done", done_callback, userdata);
+        g_signal_connect (operation, "done", G_CALLBACK (done_callback), donedata);
     
     if (progress_callback) {
-        ((ProgressCb)progress_callback) (operation, 
+        (progress_callback) (operation, 
                 seahorse_operation_get_message (operation),
-                seahorse_operation_get_progress (operation), userdata);
-        g_signal_connect (operation, "progress", progress_callback, userdata);
+                seahorse_operation_get_progress (operation), progdata);
+        g_signal_connect (operation, "progress", G_CALLBACK (progress_callback), progdata);
     }
 }
 
@@ -579,8 +585,8 @@ seahorse_multi_operation_take (SeahorseMultiOperation* mop, SeahorseOperation *o
     DEBUG_OPERATION (("[multi-operation 0x%08X] adding part: 0x%08X\n", (guint)mop, (guint)op));
     
     mop->operations = seahorse_operation_list_add (mop->operations, op);
-    seahorse_operation_watch (op, G_CALLBACK (multi_operation_done), 
-                              G_CALLBACK (multi_operation_progress), mop);
+    seahorse_operation_watch (op, (SeahorseDoneFunc)multi_operation_done, mop,
+                              (SeahorseProgressFunc)multi_operation_progress, mop);
 }
 
 /* -----------------------------------------------------------------------------

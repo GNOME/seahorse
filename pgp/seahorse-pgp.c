@@ -19,26 +19,15 @@
  * 02111-1307, USA.  
  */
 
-#include "config.h"
-
 #include "seahorse-pgp.h"
+#include <stdlib.h>
+#include <string.h>
 
-#include "seahorse-pgp-source.h"
 
-#ifdef WITH_LDAP
-#include "seahorse-ldap-source.h"
-#endif
-#ifdef WITH_HKP
-#include "seahorse-hkp-source.h"
-#endif
-	
-const SeahorseRegisterType SEAHORSE_PGP_REGISTRY[] = {
-	seahorse_pgp_source_get_type,
-#ifdef WITH_LDAP
-	seahorse_ldap_source_get_type,
-#endif
-#ifdef WITH_HKP
-	seahorse_hkp_source_get_type,
-#endif
-	NULL
-};
+
+
+
+
+
+
+

@@ -19,13 +19,15 @@
  * 02111-1307, USA.  
  */
 
-#include "config.h"
-
 #include "seahorse-ssh.h"
+#include <stdlib.h>
+#include <string.h>
 
-#include "seahorse-ssh-source.h"
 
-const SeahorseRegisterType SEAHORSE_SSH_REGISTRY[] = {
-	seahorse_ssh_source_get_type,
-	NULL
-};
+
+
+
+
+
+
+

@@ -33,7 +33,7 @@
 
 #include "common/seahorse-registry.h"
 
-#include "pgp/seahorse-pgp.h"
+#include "pgp/seahorse-pgp-module.h"
 #include "pgp/seahorse-server-source.h"
 
 /* From seahorse-prefs-cache.c */
@@ -372,7 +372,7 @@ keyserver_add_clicked (GtkButton *button, SeahorseWidget *sw)
     glade_xml_signal_connect_data (swidget->xml, "on_uri_changed", 
                                    G_CALLBACK (uri_changed), swidget);
 
-    response = gtk_dialog_run (GTK_DIALOG (seahorse_widget_get_top (swidget)));
+    response = gtk_dialog_run (GTK_DIALOG (seahorse_widget_get_toplevel (swidget)));
     if (response == GTK_RESPONSE_ACCEPT) {
         
         result = calculate_keyserver_uri (swidget);
@@ -425,7 +425,7 @@ setup_keyservers (SeahorseWidget *swidget)
             
     notify_id = seahorse_gconf_notify (KEYSERVER_KEY, (GConfClientNotifyFunc)gconf_notify, 
                                        swidget);
-    g_signal_connect (seahorse_widget_get_top (swidget), "destroy", 
+    g_signal_connect (seahorse_widget_get_toplevel (swidget), "destroy", 
                         G_CALLBACK (gconf_unnotify), GINT_TO_POINTER (notify_id));
                         
     w = glade_xml_get_widget (swidget->xml, "keyserver-publish");

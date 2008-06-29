@@ -63,6 +63,8 @@ void        seahorse_util_show_error            (GtkWidget          *parent,
 void        seahorse_util_handle_error          (GError*            err,
                                                  const char*        desc, ...);
 
+gboolean    seahorse_util_prompt_delete         (const gchar *text);
+
 gchar*      seahorse_util_read_to_text          (GInputStream *     input,
                                                  guint              *len);
 
@@ -106,22 +108,22 @@ gboolean    seahorse_util_write_file_private            (const gchar* filename,
                                                          const gchar* contents,
                                                          GError **err);
 
-GtkWidget*  seahorse_util_chooser_open_new              (const gchar *title,
+GtkDialog*  seahorse_util_chooser_open_new              (const gchar *title,
                                                          GtkWindow *parent);
 
-GtkWidget*  seahorse_util_chooser_save_new              (const gchar *title,
+GtkDialog*  seahorse_util_chooser_save_new              (const gchar *title,
                                                          GtkWindow *parent);
 
-void        seahorse_util_chooser_show_key_files        (GtkWidget *dialog);
+void        seahorse_util_chooser_show_key_files        (GtkDialog *dialog);
 
-void        seahorse_util_chooser_show_archive_files    (GtkWidget *dialog);
+void        seahorse_util_chooser_show_archive_files    (GtkDialog *dialog);
 
-void        seahorse_util_chooser_set_filename          (GtkWidget *dialog, 
+void        seahorse_util_chooser_set_filename          (GtkDialog *dialog, 
                                                          GList *keys);
 
-gchar*      seahorse_util_chooser_open_prompt           (GtkWidget *dialog);
+gchar*      seahorse_util_chooser_open_prompt           (GtkDialog *dialog);
 
-gchar*      seahorse_util_chooser_save_prompt           (GtkWidget *dialog);
+gchar*      seahorse_util_chooser_save_prompt           (GtkDialog *dialog);
 
 gboolean	seahorse_util_check_suffix		(const gchar		*path,
                                              SeahorseSuffix     suffix);

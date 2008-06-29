@@ -31,8 +31,49 @@
 
 #include "pgp/seahorse-pgp-key.h"
 
+void            seahorse_pgp_sign_prompt           (SeahorsePGPKey *pkey,
+                                                    guint uid,
+                                                    GtkWindow *parent);
+
 SeahorsePGPKey* seahorse_signer_get                 (GtkWindow *parent);
 
 void            seahorse_pgp_handle_gpgme_error     (gpgme_error_t err, const gchar* desc, ...);
+
+void            seahorse_pgp_key_properties_show    (SeahorsePGPKey *pkey,
+                                                     GtkWindow *parent);
+
+void            seahorse_pgp_generate_show          (SeahorsePGPSource *sksrc,
+                                                     GtkWindow *parent);
+
+void            seahorse_pgp_add_revoker_new        (SeahorsePGPKey *pkey,
+                                                     GtkWindow *parent);
+
+void            seahorse_pgp_expires_new            (SeahorsePGPKey *pkey,
+                                                     GtkWindow *parent,
+                                                     guint index);
+
+void            seahorse_pgp_add_subkey_new         (SeahorsePGPKey *pkey,
+                                                     GtkWindow *parent);
+
+void            seahorse_pgp_add_uid_new            (SeahorsePGPKey *pkey,
+                                                     GtkWindow *parent);
+
+void            seahorse_pgp_revoke_new             (SeahorsePGPKey *pkey,
+                                                     GtkWindow *parent,
+                                                     guint index);
+
+gboolean        seahorse_pgp_photo_add              (SeahorsePGPKey *pkey, 
+                                                     GtkWindow *parent,
+                                                     const gchar *path);
+                                         
+gboolean        seahorse_pgp_photo_delete           (SeahorsePGPKey *pkey,
+                                                     GtkWindow *parent,
+                                                     gpgmex_photo_id_t photo);
+
+void            seahorse_pgp_delete_subkey_new      (SeahorsePGPKey *pkey,
+                                                     guint index);
+
+void            seahorse_pgp_delete_userid_show     (SeahorseKey *skey, 
+                                                     guint index);
 
 #endif /* __SEAHORSE_PGP_DIALOGS_H__ */

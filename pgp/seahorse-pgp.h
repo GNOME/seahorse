@@ -19,14 +19,21 @@
  * 02111-1307, USA.  
  */
 
-#ifndef SEAHORSEPGP_H_
-#define SEAHORSEPGP_H_
+#ifndef __SEAHORSE_PGP_H__
+#define __SEAHORSE_PGP_H__
 
-#include "common/seahorse-registry.h"
+#include <glib.h>
+#include <glib-object.h>
 
-#define SEAHORSE_PGP_STR                     "openpgp"
-#define SEAHORSE_PGP                         (g_quark_from_static_string (SEAHORSE_PGP_STR))
+G_BEGIN_DECLS
 
-extern const SeahorseRegisterType SEAHORSE_PGP_REGISTRY[];
 
-#endif /*SEAHORSEPGP_H_*/
+
+#define SEAHORSE_PGP_TYPE_STR "openpgp"
+#define SEAHORSE_PGP_TYPE g_quark_from_string ("openpgp")
+#define SEAHORSE_PGP_STOCK_ICON "seahorse-key-personal"
+
+
+G_END_DECLS
+
+#endif

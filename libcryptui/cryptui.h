@@ -32,6 +32,10 @@ G_BEGIN_DECLS
 
 #include "cryptui-keyset.h"
 
+/* 
+ * Never ever change a values already present. These values are used
+ * across applications, DBus etc... 
+ */
 typedef enum {
     CRYPTUI_ENCTYPE_NONE =       0,
     CRYPTUI_ENCTYPE_SYMMETRIC =  1,
@@ -42,6 +46,10 @@ typedef enum {
     _CRYPTUI_ENCTYPE_MAXVALUE
 } CryptUIEncType;
 
+/* 
+ * Never ever change a values already present. These values are used
+ * across applications, DBus etc... 
+ */
 typedef enum {
     CRYPTUI_FLAG_IS_VALID =    0x0001,
     CRYPTUI_FLAG_CAN_ENCRYPT = 0x0002,
@@ -52,6 +60,10 @@ typedef enum {
     CRYPTUI_FLAG_TRUSTED =     0x1000
 } CryptUIKeyFlags;
 
+/* 
+ * Never ever change a values already present. These values are used
+ * across applications, DBus etc... 
+ */
 typedef enum {
     CRYPTUI_LOC_INVALID =        0,    /* An invalid key */
     CRYPTUI_LOC_MISSING =       10,    /* A key we don't know anything about */
@@ -60,6 +72,10 @@ typedef enum {
     CRYPTUI_LOC_LOCAL =        100,    /* A key on the local machine */
 } CryptUILocation;
 
+/* 
+ * Never ever change a values already present. These values are used
+ * across applications, DBus etc... 
+ */
 typedef enum {
     CRYPTUI_VALIDITY_REVOKED =   -3,
     CRYPTUI_VALIDITY_DISABLED =  -2,

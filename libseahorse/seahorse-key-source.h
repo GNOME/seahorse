@@ -201,6 +201,9 @@ gboolean            seahorse_key_source_import_sync      (SeahorseKeySource *sks
 SeahorseOperation*  seahorse_key_source_export_keys      (GList *keys, 
                                                           GOutputStream *output);
 
+gboolean            seahorse_key_source_delete_keys      (GList *keys, 
+                                                          GError **error);
+
 SeahorseOperation*  seahorse_key_source_export           (SeahorseKeySource *sksrc,
                                                           GList *keys,
                                                           gboolean complete,

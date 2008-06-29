@@ -31,10 +31,10 @@
 #include "common/seahorse-cleanup.h"
 #include "common/seahorse-registry.h"
 
-#include "pgp/seahorse-pgp.h"
+#include "pgp/seahorse-pgp-module.h"
 
 #ifdef WITH_SSH
-#include "ssh/seahorse-ssh.h"
+#include "ssh/seahorse-ssh-module.h"
 #endif
 
 #include <glib/gi18n.h>

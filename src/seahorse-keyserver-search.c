@@ -23,7 +23,7 @@
 #include "seahorse-widget.h"
 #include "seahorse-util.h"
 #include "seahorse-context.h"
-#include "seahorse-windows.h"
+#include "seahorse-keyserver-results.h"
 #include "seahorse-preferences.h"
 #include "seahorse-gconf.h"
 #include "seahorse-context.h"
@@ -347,7 +347,7 @@ cleanup_signals (GtkWidget *widget, SeahorseWidget *swidget)
  **/
 GtkWindow*
 seahorse_keyserver_search_show (GtkWindow *parent)
-{	
+{
     SeahorseServiceDiscovery *ssd;
 	SeahorseWidget *swidget;
     GtkWindow *win;

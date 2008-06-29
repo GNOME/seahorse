@@ -88,7 +88,7 @@ seahorse_signer_get (GtkWindow *parent)
     seahorse_combo_keys_set_active_id (GTK_COMBO_BOX (combo), g_quark_from_string (id));
     g_free (id); 
     
-    widget = seahorse_widget_get_top (swidget);
+    widget = seahorse_widget_get_toplevel (swidget);
     seahorse_widget_show (swidget);
     
     while (!done) {

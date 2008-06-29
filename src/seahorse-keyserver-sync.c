@@ -42,8 +42,9 @@ sync_import_complete (SeahorseOperation *op, SeahorseKeySource *sksrc)
     
     if (!seahorse_operation_is_successful (op)) {
         seahorse_operation_copy_error (op, &err);
-        seahorse_util_handle_error (err, _("Couldn't publish keys to server: %s"), 
+        seahorse_util_handle_error (err, _("Couldn't publish keys to server"), 
                                     seahorse_gconf_get_string (PUBLISH_TO_KEY));
+        g_clear_error (&err);
     }    
 }
 
@@ -59,6 +60,7 @@ sync_export_complete (SeahorseOperation *op, SeahorseKeySource *sksrc)
         seahorse_operation_copy_error (op, &err);
         seahorse_util_handle_error (err, _("Couldn't retrieve keys from server: %s"), 
                                     keyserver);
+        g_clear_error (&err);
         g_free (keyserver);
     }    
 }
@@ -216,7 +218,7 @@ seahorse_keyserver_sync (GList *keys)
             g_return_if_fail (op != NULL);
 
             seahorse_multi_operation_take (mop, op);
-            seahorse_operation_watch (op, G_CALLBACK (sync_export_complete), NULL, sksrc);
+            seahorse_operation_watch (op, (SeahorseDoneFunc) sync_export_complete, sksrc, NULL, NULL);
         }
     }
     
@@ -235,7 +237,7 @@ seahorse_keyserver_sync (GList *keys)
             g_return_if_fail (sksrc != NULL);
 
             seahorse_multi_operation_take (mop, op);
-            seahorse_operation_watch (op, G_CALLBACK (sync_import_complete), NULL, sksrc);
+            seahorse_operation_watch (op, (SeahorseDoneFunc) sync_import_complete, sksrc, NULL, NULL);
 
         }
     }

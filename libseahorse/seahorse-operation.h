@@ -48,6 +48,7 @@
 #define __SEAHORSE_OPERATION_H__
 
 #include <glib-object.h>
+#include <gtk/gtk.h>
 
 #define SEAHORSE_TYPE_OPERATION            (seahorse_operation_get_type ())
 #define SEAHORSE_OPERATION(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_OPERATION, SeahorseOperation))
@@ -120,13 +121,22 @@ void                seahorse_operation_copy_error  (SeahorseOperation *operation
 
 const GError*       seahorse_operation_get_error   (SeahorseOperation *operation);
 
+void                seahorse_operation_display_error (SeahorseOperation *operation, 
+                                                      const gchar *title,
+                                                      GtkWidget *parent);
+
 void                seahorse_operation_wait        (SeahorseOperation *operation);
+
+typedef void (*SeahorseDoneFunc) (SeahorseOperation *op, gpointer userdata);
+typedef void (*SeahorseProgressFunc) (SeahorseOperation *op, const gchar *status, 
+                                      gdouble progress, gpointer userdata);
 
 /* When called on an already complete operation, the callbacks are called immediately */
 void                seahorse_operation_watch       (SeahorseOperation *operation,
-                                                    GCallback done_callback,
-                                                    GCallback progress_callback,
-                                                    gpointer userdata);
+                                                    SeahorseDoneFunc done_callback,
+                                                    gpointer donedata,
+                                                    SeahorseProgressFunc progress_callback,
+                                                    gpointer progdata);
 
 #define             seahorse_operation_get_progress(op) \
                                                    ((op)->progress)

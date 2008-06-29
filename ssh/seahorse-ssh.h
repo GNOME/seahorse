@@ -19,14 +19,21 @@
  * 02111-1307, USA.  
  */
 
-#ifndef SEASSH_H_
-#define SEASSH_H_
+#ifndef __SEAHORSE_SSH_H__
+#define __SEAHORSE_SSH_H__
 
-#include "common/seahorse-registry.h"
+#include <glib.h>
+#include <glib-object.h>
 
-#define SEAHORSE_SSH_STR                     "openssh"
-#define SEAHORSE_SSH                         (g_quark_from_static_string (SEAHORSE_SSH_STR))
+G_BEGIN_DECLS
 
-extern const SeahorseRegisterType SEAHORSE_SSH_REGISTRY[];
 
-#endif /*SEASSH_H_*/
+
+#define SEAHORSE_SSH_TYPE_STR "openssh"
+#define SEAHORSE_SSH_TYPE g_quark_from_string ("openssh")
+#define SEAHORSE_SSH_STOCK_ICON "seahorse-key-ssh"
+
+
+G_END_DECLS
+
+#endif

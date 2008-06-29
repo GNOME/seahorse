@@ -273,6 +273,39 @@ seahorse_key_source_export_keys (GList *keys, GOutputStream *output)
     return op;
 }
 
+gboolean
+seahorse_key_source_delete_keys (GList *keys, GError **error)
+{
+	SeahorseKeySource *sksrc;
+	SeahorseKey *skey;
+	GList *next;
+	    
+	/* Sort by key source */
+	keys = g_list_copy (keys);
+	keys = seahorse_util_keylist_sort (keys);
+	    
+	while (keys) {
+	     
+		/* Break off one set (same keysource) */
+		next = seahorse_util_keylist_splice (keys);
+
+		g_assert (SEAHORSE_IS_KEY (keys->data));
+		skey = SEAHORSE_KEY (keys->data);
+
+		/* Export from this key source */        
+		sksrc = seahorse_key_get_source (skey);
+		g_return_val_if_fail (sksrc != NULL, FALSE);
+
+		if (!seahorse_key_source_remove (sksrc, skey, 0, error))
+			return FALSE;
+		
+		g_list_free (keys);
+		keys = next;
+	}
+    
+	return TRUE;
+}
+
 SeahorseOperation* 
 seahorse_key_source_export (SeahorseKeySource *sksrc, GList *keys, 
                             gboolean complete, GOutputStream *output)

@@ -192,7 +192,7 @@ seahorse_context_finalize (GObject *gobject)
 }
 
 SeahorseContext*
-seahorse_context_app (void)
+seahorse_context_for_app (void)
 {
     g_return_val_if_fail (app_context != NULL, NULL);
     return app_context;

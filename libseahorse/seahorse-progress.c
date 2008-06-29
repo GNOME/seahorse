@@ -157,6 +157,7 @@ seahorse_progress_status_set_operation (SeahorseWidget *swidget,
         disconnect_progress (swidget, prev);
     }
         
+    g_object_ref (operation);
     g_object_set_data_full (G_OBJECT (swidget), "operation", operation, 
                             (GDestroyNotify)g_object_unref);
     g_signal_connect (swidget, "destroy", 
@@ -290,7 +291,7 @@ progress_show (SeahorseOperation *operation)
     /* Cancel events */
     glade_xml_signal_connect_data (swidget->xml, "cancel_clicked",
                                    G_CALLBACK (progress_operation_cancel), operation);
-    g_signal_connect (seahorse_widget_get_top (swidget), "delete_event",
+    g_signal_connect (seahorse_widget_get_toplevel (swidget), "delete_event",
                       G_CALLBACK (progress_delete_event), operation);
     
     /* Done and cleanup */

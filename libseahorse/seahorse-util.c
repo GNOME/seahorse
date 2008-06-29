@@ -26,9 +26,9 @@
 #include "seahorse-key.h"
 #include "seahorse-gconf.h"
 
-#include "pgp/seahorse-pgp.h"
+#include "pgp/seahorse-pgp-module.h"
 
-#include "ssh/seahorse-ssh.h"
+#include "ssh/seahorse-ssh-module.h"
 
 #include <gio/gio.h>
 #include <glib/gstdio.h>
@@ -105,9 +105,31 @@ seahorse_util_handle_error (GError* err, const char* desc, ...)
     
     seahorse_util_show_error (NULL, t, err->message ? err->message : "");
     g_free(t);
-    
-    g_clear_error (&err);
 }    
+
+gboolean
+seahorse_util_prompt_delete (const gchar *text)
+{
+	GtkWidget *warning, *button;
+	gint response;
+	
+	warning = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
+	                                  GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE,
+	                                  "%s", text);
+    
+	button = gtk_button_new_from_stock(GTK_STOCK_CANCEL);
+	gtk_dialog_add_action_widget (GTK_DIALOG (warning), GTK_WIDGET (button), GTK_RESPONSE_REJECT);
+	gtk_widget_show (button);
+	
+	button = gtk_button_new_from_stock(GTK_STOCK_DELETE);
+	gtk_dialog_add_action_widget (GTK_DIALOG (warning), GTK_WIDGET (button), GTK_RESPONSE_ACCEPT);
+	gtk_widget_show (button);
+	
+	response = gtk_dialog_run (GTK_DIALOG (warning));
+	gtk_widget_destroy (warning);
+	
+	return (response == GTK_RESPONSE_ACCEPT);
+}
 
 /**
  * seahorse_util_error_domain
@@ -651,6 +673,7 @@ seahorse_util_uris_package (const gchar* package, const char** uris)
     
     if (!r) {
         seahorse_util_handle_error (err, _("Couldn't run file-roller"));
+        g_clear_error (&err);
         return FALSE;
     }
     
@@ -727,39 +750,39 @@ seahorse_util_write_file_private (const gchar* filename, const gchar* contents, 
     return ret;
 }
 
-GtkWidget*
+GtkDialog*
 seahorse_util_chooser_save_new (const gchar *title, GtkWindow *parent)
 {
-    GtkWidget *dialog;
+    GtkDialog *dialog;
     
-    dialog = gtk_file_chooser_dialog_new (title, 
+    dialog = GTK_DIALOG (gtk_file_chooser_dialog_new (title, 
                 parent, GTK_FILE_CHOOSER_ACTION_SAVE, 
                 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
                 GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
-                NULL);
+                NULL));
 
-    gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
+    gtk_dialog_set_default_response (dialog, GTK_RESPONSE_ACCEPT);
     gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (dialog), FALSE);
     return dialog;
 }
 
-GtkWidget*
+GtkDialog*
 seahorse_util_chooser_open_new (const gchar *title, GtkWindow *parent)
 {
-    GtkWidget *dialog;
+    GtkDialog *dialog;
     
-    dialog = gtk_file_chooser_dialog_new (title, 
+    dialog = GTK_DIALOG (gtk_file_chooser_dialog_new (title, 
                 parent, GTK_FILE_CHOOSER_ACTION_OPEN, 
                 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
                 GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
-                NULL);
+                NULL));
 
-    gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
+    gtk_dialog_set_default_response (dialog, GTK_RESPONSE_ACCEPT);
     gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (dialog), FALSE);
     return dialog;
 }
 void
-seahorse_util_chooser_show_key_files (GtkWidget *dialog)
+seahorse_util_chooser_show_key_files (GtkDialog *dialog)
 {
     GtkFileFilter* filter = gtk_file_filter_new ();
     
@@ -782,7 +805,7 @@ seahorse_util_chooser_show_key_files (GtkWidget *dialog)
 }
 
 void
-seahorse_util_chooser_show_archive_files (GtkWidget *dialog)
+seahorse_util_chooser_show_archive_files (GtkDialog *dialog)
 {
     GtkFileFilter* filter;
     int i;
@@ -822,7 +845,7 @@ seahorse_util_chooser_show_archive_files (GtkWidget *dialog)
 }
 
 void
-seahorse_util_chooser_set_filename (GtkWidget *dialog, GList *keys)
+seahorse_util_chooser_set_filename (GtkDialog *dialog, GList *keys)
 {
     gchar *t = NULL;
     
@@ -834,12 +857,12 @@ seahorse_util_chooser_set_filename (GtkWidget *dialog, GList *keys)
 }
     
 gchar*      
-seahorse_util_chooser_save_prompt (GtkWidget *dialog)
+seahorse_util_chooser_save_prompt (GtkDialog *dialog)
 {
     GtkWidget* edlg;
     gchar *uri = NULL;
     
-    while (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT) {
+    while (gtk_dialog_run (dialog) == GTK_RESPONSE_ACCEPT) {
      
         uri = gtk_file_chooser_get_uri(GTK_FILE_CHOOSER (dialog));
 
@@ -874,13 +897,13 @@ seahorse_util_chooser_save_prompt (GtkWidget *dialog)
 }
 
 gchar*      
-seahorse_util_chooser_open_prompt (GtkWidget *dialog)
+seahorse_util_chooser_open_prompt (GtkDialog *dialog)
 {
     gchar *uri = NULL;
     
-    if(gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
+    if(gtk_dialog_run (dialog) == GTK_RESPONSE_ACCEPT)
         uri = gtk_file_chooser_get_uri (GTK_FILE_CHOOSER (dialog));
-        
+
     gtk_widget_destroy (dialog);
     return uri;
 }
@@ -923,7 +946,7 @@ seahorse_util_check_suffix (const gchar *path, SeahorseSuffix suffix)
 gchar*
 seahorse_util_add_suffix (const gchar *path, SeahorseSuffix suffix, const gchar *prompt)
 {
-    GtkWidget *dialog;
+    GtkDialog *dialog;
     const gchar *ext;
     gchar *uri;
     gchar *t;
@@ -948,6 +971,7 @@ seahorse_util_add_suffix (const gchar *path, SeahorseSuffix suffix, const gchar 
         uri = NULL;
             
         uri = seahorse_util_chooser_save_prompt (dialog);
+        gtk_widget_destroy (dialog);
     }
 
     return uri;         
@@ -965,7 +989,7 @@ seahorse_util_add_suffix (const gchar *path, SeahorseSuffix suffix, const gchar 
 gchar*
 seahorse_util_remove_suffix (const gchar *path, const gchar *prompt)
 {
-    GtkWidget *dialog;
+    GtkDialog *dialog;
     gchar *uri;
     gchar *t;
     
@@ -985,6 +1009,7 @@ seahorse_util_remove_suffix (const gchar *path, const gchar *prompt)
         uri = NULL;
             
         uri = seahorse_util_chooser_save_prompt (dialog);
+        gtk_widget_destroy (dialog);
     }   
     
     return uri;

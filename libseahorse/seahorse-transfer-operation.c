@@ -208,8 +208,8 @@ export_done (SeahorseOperation *op, SeahorseTransferOperation *top)
     seahorse_operation_mark_progress (SEAHORSE_OPERATION (top), pv->message ? pv->message : 
                                       seahorse_operation_get_message (pv->operation), 0.5);
     
-    seahorse_operation_watch (pv->operation, G_CALLBACK (import_done), 
-                              G_CALLBACK (import_progress), top);
+    seahorse_operation_watch (pv->operation, (SeahorseDoneFunc)import_done, top,
+                              (SeahorseProgressFunc)import_progress, top);
 }
 
 
@@ -230,8 +230,8 @@ start_transfer (SeahorseTransferOperation *top)
     pv->operation = seahorse_key_source_export_raw (from, keyids, G_OUTPUT_STREAM (pv->output));
     g_return_val_if_fail (pv->operation != NULL, FALSE);
     
-    seahorse_operation_watch (pv->operation, G_CALLBACK (export_done), 
-                              G_CALLBACK (export_progress), top);
+    seahorse_operation_watch (pv->operation, (SeahorseDoneFunc) export_done, top,
+                              (SeahorseProgressFunc)export_progress, top);
     return FALSE;
 };
 

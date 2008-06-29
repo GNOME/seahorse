@@ -23,7 +23,7 @@
 
 #include "seahorse-gconf.h"
 
-#include "seahorse-pgp.h"
+#include "seahorse-pgp-module.h"
 #include "seahorse-pgp-keysets.h"
 
 /* -----------------------------------------------------------------------------

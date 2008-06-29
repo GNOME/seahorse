@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<api version="1.0">
+<namespace name="Seahorse">
+	<object name="Commands" parent="GLib.Object" type-name="SeahorseCommands" get-type="seahorse_commands_get_type">
+		<method name="show_properties" symbol="seahorse_commands_show_properties">
+			<parameters>
+				<parameter name="self" type="Seahorse.Commands*"/>
+				<parameter name="key" type="Seahorse.Key*"/>
+			</parameters>
+			<return-type type="void"/>
+		</method>
+		<method name="delete_keys" symbol="seahorse_commands_delete_keys">
+			<parameters>
+				<parameter name="self" type="Seahorse.Commands*"/>
+				<parameter name="keys" type="GLib.List*"/>
+			</parameters>
+			<return-type type="void"/>
+		</method>
+		<property name="view" type="Seahorse.View*" readable="1" writable="1"/>
+		<property name="ktype" type="GLib.Quark" readable="1"/>
+		<property name="command_actions" type="Gtk.ActionGroup*" readable="1"/>
+		<property name="ui_definition" type="string*" readable="1"/>
+	</object>
+	<object name="Generator" parent="GLib.Object" type-name="SeahorseGenerator" get-type="seahorse_generator_get_type">
+		<property name="actions" type="Gtk.ActionGroup*" readable="1"/>
+	</object>
+	<interface name="SeahorseView" get-type="seahorse_view_get_type">
+		<requires>
+			<object name="GLib.Object"/>
+		</requires>
+		<method name="get_selected_keys" symbol="seahorse_view_get_selected_keys">
+			<parameters>
+				<parameter name="self" type="Seahorse.View*"/>
+			</parameters>
+			<return-type type="GLib.List*" transfer="full"/>
+		</method>
+		<method name="set_selected_keys" symbol="seahorse_view_set_selected_keys">
+			<parameters>
+				<parameter name="self" type="Seahorse.View*"/>
+				<parameter name="keys" type="GLib.List*"/>
+			</parameters>
+			<return-type type="void"/>
+		</method>
+		<method name="get_selected_key_and_uid" symbol="seahorse_view_get_selected_key_and_uid">
+			<parameters>
+				<parameter name="self" type="Seahorse.View*"/>
+				<parameter name="uid" type="uint" direction="out" transfer="full"/>
+			</parameters>
+			<return-type type="Seahorse.Key*"/>
+		</method>
+		<property name="selected_key" type="Seahorse.Key*" readable="1" writable="1"/>
+		<property name="current_keyset" type="Seahorse.Keyset*" readable="1"/>
+		<property name="window" type="Gtk.Window*" readable="1"/>
+		<signal name="selection_changed">
+			<parameters>
+			</parameters>
+			<return-type type="void"/>
+		</signal>
+	</interface>
+</namespace>
+</api>

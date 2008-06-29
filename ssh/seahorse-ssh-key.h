@@ -41,10 +41,15 @@
 
 #include <gtk/gtk.h>
 
-#include "seahorse-ssh.h"
 #include "seahorse-key.h"
-#include "seahorse-ssh-source.h"
+#include "seahorse-key-source.h"
+#include "seahorse-operation.h"
+
+#include "seahorse-ssh-module.h"
 #include "seahorse-ssh-key-data.h"
+
+/* For vala's sake */
+#define SEAHORSE_SSH_TYPE_KEY            SEAHORSE_TYPE_SSH_KEY
 
 #define SEAHORSE_TYPE_SSH_KEY            (seahorse_ssh_key_get_type ())
 #define SEAHORSE_SSH_KEY(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_SSH_KEY, SeahorseSSHKey))

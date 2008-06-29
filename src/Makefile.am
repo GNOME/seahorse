@@ -13,51 +13,55 @@ INCLUDES = -I$(top_builddir) \
 	-DSEAHORSE_GLADEDIR=\""$(gladedir)"\" \
 	-DLOCALEDIR=\"$(localedir)\" \
 	-DPIXMAPSDIR=\""$(pixmapsdir)"\" \
-	-DLIBCRYPTUI_API_SUBJECT_TO_CHANGE
+	-DLIBCRYPTUI_API_SUBJECT_TO_CHANGE \
+	-DGETTEXT_PACKAGE=\""seahorse\""
+
+VALA_SRCS = \
+	seahorse-viewer.vala \
+	seahorse-generate-select.vala \
+	seahorse-key-manager.vala \
+	seahorse-keyserver-results.vala
+	
+VALA_VAPIS = \
+	$(top_srcdir)/bugs.vapi \
+	$(top_srcdir)/config.vapi \
+	$(top_srcdir)/libseahorse/libseahorse-c.vapi \
+	$(top_srcdir)/libseahorse/libseahorse.vapi
+	
+VALA_CFILES = $(VALA_SRCS:.vala=.c)
+VALA_HFILES = $(VALA_SRCS:.vala=.h)
+
+SUFFIXES = .vala .c .h
+
+vala-build.stamp: $(VALA_SRCS) $(VALA_VAPIS)
+	$(VALAC) -C $(VALA_PKGS) $(VALA_VAPIS) $(VALA_SRCS)
+	date +'%s' > $@
+
+BUILT_SOURCES = \
+	vala-build.stamp
 
 if WITH_KEYSERVER
-KEYSERVER_SRCS = seahorse-keyserver-search.c seahorse-keyserver-results.c seahorse-keyserver-sync.c seahorse-keyserver-sync.h
+KEYSERVER_SRCS = seahorse-keyserver-search.c seahorse-keyserver-sync.c seahorse-keyserver-sync.h
 else
 KEYSERVER_SRCS = 
 endif
 
-if WITH_SSH
-SSH_SRCS = seahorse-ssh-key-properties.c seahorse-ssh-upload.c seahorse-ssh-generate.c
-else
-SSH_SRCS = 
-endif
-
-GNOME_KEYRING_SRCS = \
-	seahorse-gkeyring-item-properties.c
-
 bin_PROGRAMS = seahorse
 
 seahorse_SOURCES = main.c \
-	seahorse-key-widget.c seahorse-key-widget.h \
-	seahorse-key-manager-store.c seahorse-key-manager-store.h \
 	seahorse-preferences.c seahorse-preferences.h \
-	seahorse-key-manager.c eggtreemultidnd.c eggtreemultidnd.h \
-	seahorse-generate-select.c seahorse-pgp-generate.c \
+	eggtreemultidnd.c eggtreemultidnd.h \
+	seahorse-key-manager-store.c seahorse-key-manager-store.h \
 	seahorse-windows.h \
-	seahorse-key-properties.c \
-	seahorse-photos.c \
-	seahorse-revoke.c \
-	seahorse-expires.c \
-	seahorse-sign.c \
-	seahorse-delete.c \
-	seahorse-add-uid.c \
-	seahorse-add-subkey.c \
-	seahorse-key-dialogs.h \
 	$(KEYSERVER_SRCS) \
-    $(GNOME_KEYRING_SRCS) \
-    $(SSH_SRCS)
+	$(VALA_CFILES) $(VALA_HFILES)
 
 seahorse_LDADD = \
 	$(top_builddir)/libseahorse/libseahorse.la \
 	$(top_builddir)/pgp/libseahorse-pgp.la \
 	$(top_builddir)/ssh/libseahorse-ssh.la \
 	$(top_builddir)/gkr/libseahorse-gkr.la \
-	$(top_builddir)/common/libseahorse-common.la \  
+	$(top_builddir)/common/libseahorse-common.la \
 	$(top_builddir)/libcryptui/libcryptui.la \
 	$(top_builddir)/libegg/libeggdatetime.la \
 	$(SEAHORSE_LIBS)
@@ -65,21 +69,8 @@ seahorse_LDADD = \
 glade_DATA = \
 	seahorse-key-manager.glade \
 	seahorse-key-manager.ui \
-	seahorse-pgp-public-key-properties.glade \
-	seahorse-pgp-private-key-properties.glade \
-	seahorse-pgp-generate.glade \
-	seahorse-ssh-key-properties.glade \
-	seahorse-ssh-upload.glade \
-	seahorse-ssh-generate.glade \
-	seahorse-gkeyring-item-properties.glade \
-	seahorse-revoke.glade \
-	seahorse-expires.glade \
 	seahorse-change-passphrase.glade \
-	seahorse-sign.glade \
 	seahorse-generate-select.glade \
-	seahorse-add-uid.glade \
-	seahorse-add-subkey.glade \
-	seahorse-multi-encrypt.glade \
 	seahorse-keyserver-search.glade \
 	seahorse-keyserver-results.glade \
 	seahorse-keyserver-results.ui \
@@ -91,9 +82,14 @@ desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 @INTLTOOL_DESKTOP_RULE@
 
 EXTRA_DIST = \
-    $(glade_DATA) \
-    seahorse.desktop.in.in 
+	$(glade_DATA) \
+	seahorse.desktop.in.in \
+	vala-build.stamp \
+	$(VALA_CFILES) $(VALA_HFILES) \
+	$(VALA_SRCS)
 
 CLEANFILES = *.gladep* *.bak \
     $(desktop_DATA) \
+    $(VALA_CFILES) $(VALA_HFILES) \
+    vala-build.stamp \
     seahorse.desktop.in 

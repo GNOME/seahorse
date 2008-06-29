@@ -87,11 +87,11 @@ enum SeahorseContextType {
     SEAHORSE_CONTEXT_DAEMON = 2,
 };
 
-#define             SCTX_APP()                          (seahorse_context_app ())
+#define             SCTX_APP()                          (seahorse_context_for_app ())
 
 GType               seahorse_context_get_type           (void);
 
-SeahorseContext*    seahorse_context_app                (void);
+SeahorseContext*    seahorse_context_for_app            (void);
 
 SeahorseContext*    seahorse_context_new                (guint              flags,
                                                          guint              ktype);

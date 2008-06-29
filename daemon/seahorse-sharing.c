@@ -214,6 +214,7 @@ start_sharing ()
         
         if (!seahorse_hkp_server_start (&err)) {
             seahorse_util_handle_error (err, _("Couldn't share keys"));
+            g_clear_error (&err);
             return;
         }
 

@@ -45,7 +45,7 @@
 
 #include "seahorse-key.h"
 
-#include "pgp/seahorse-pgp.h"
+#include "pgp/seahorse-pgp-module.h"
 #include "pgp/seahorse-gpgmex.h"
 #include "pgp/seahorse-pgp-source.h"
 
@@ -55,6 +55,10 @@ enum {
 };
 
 #define SEAHORSE_TYPE_PGP_KEY            (seahorse_pgp_key_get_type ())
+
+/* For vala's sake */
+#define SEAHORSE_PGP_TYPE_KEY 		SEAHORSE_TYPE_PGP_KEY
+
 #define SEAHORSE_PGP_KEY(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_PGP_KEY, SeahorsePGPKey))
 #define SEAHORSE_PGP_KEY_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_PGP_KEY, SeahorsePGPKeyClass))
 #define SEAHORSE_IS_PGP_KEY(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_PGP_KEY))

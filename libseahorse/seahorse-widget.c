@@ -326,7 +326,7 @@ seahorse_widget_show_help (SeahorseWidget *swidget)
     }
 
     if (!g_app_info_launch_default_for_uri (document, NULL, &error)) {
-        dialog = gtk_message_dialog_new (GTK_WINDOW (seahorse_widget_get_top (swidget)),
+        dialog = gtk_message_dialog_new (GTK_WINDOW (seahorse_widget_get_toplevel (swidget)),
                                          GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK,
                                          _("Could not display help: %s"), error->message);
         g_signal_connect (G_OBJECT (dialog), "response", G_CALLBACK (gtk_widget_destroy), NULL);
@@ -339,8 +339,15 @@ seahorse_widget_show_help (SeahorseWidget *swidget)
         g_error_free (error);
 }
 
+const gchar*
+seahorse_widget_get_name (SeahorseWidget   *swidget)
+{
+	g_return_val_if_fail (SEAHORSE_IS_WIDGET (swidget), NULL);
+	return swidget->name;
+}
+
 /**
- * seahorse_widget_get_top
+ * seahorse_widget_get_toplevel
  * @swidget: The seahorse widget
  * 
  * Return the top level widget in this seahorse widget
@@ -348,7 +355,7 @@ seahorse_widget_show_help (SeahorseWidget *swidget)
  * Returns: The top level widget
  **/
 GtkWidget*      
-seahorse_widget_get_top     (SeahorseWidget     *swidget)
+seahorse_widget_get_toplevel (SeahorseWidget     *swidget)
 {
     GtkWidget *widget = glade_xml_get_widget (swidget->xml, swidget->name);
     g_return_val_if_fail (widget != NULL, NULL);
@@ -373,9 +380,6 @@ void
 seahorse_widget_show (SeahorseWidget *swidget)
 {
     GtkWidget *widget;
-
-    if (swidget->ui)
-        gtk_ui_manager_ensure_update (swidget->ui);
 
     widget = glade_xml_get_widget (swidget->xml, swidget->name);
     g_return_if_fail (widget != NULL);
@@ -420,156 +424,10 @@ seahorse_widget_destroy (SeahorseWidget *swidget)
     }
 }
 
-/* UI MANAGER CODE ---------------------------------------------------------- */
-
-static void
-ui_add_widget (GtkUIManager *ui, GtkWidget *widget, SeahorseWidget *swidget)
+void
+seahorse_widget_connect_glade_signal (SeahorseWidget *swidget, const char *event, 
+                                      GtkCallback callback, gpointer userdata)
 {
-    GtkWidget *holder;
-    const gchar *name;
-    
-    /* We automatically add menus and toolbars */
-    if (GTK_IS_MENU_BAR (widget))
-        name = "menu-placeholder";
-    else
-        name = "toolbar-placeholder";
-    
-    if (name != NULL) {
-        /* Find the appropriate position in the glade file */
-        holder = glade_xml_get_widget (swidget->xml, name);
-        if (holder != NULL)
-            gtk_container_add (GTK_CONTAINER (holder), widget);
-        else
-            g_warning ("no place holder found for: %s", name);
-    }
-}
-
-static void
-ui_load (SeahorseWidget *swidget)
-{
-    GtkWidget *w;
-    GError *err = NULL;
-    gchar *path;
-    
-    if (!swidget->ui) {
-        
-        /* Load the menu/toolbar description file */
-        swidget->ui = gtk_ui_manager_new ();
-    	path = g_strdup_printf ("%sseahorse-%s.ui", SEAHORSE_GLADEDIR, swidget->name);
-        gtk_ui_manager_add_ui_from_file (swidget->ui, path, &err);
-		g_free (path);
-        
-        if (err) {
-            g_warning ("couldn't load ui description for '%s': %s", swidget->name, err->message);
-            g_error_free (err);
-            return;
-        }
-
-        /* The widgets get added in an idle loop later */
-        g_signal_connect (swidget->ui, "add-widget", G_CALLBACK (ui_add_widget), swidget);
-        
-        /* Attach accelerators to the window */
-        w = glade_xml_get_widget (swidget->xml, swidget->name);
-        if (GTK_IS_WINDOW (w))
-            gtk_window_add_accel_group (GTK_WINDOW (w), gtk_ui_manager_get_accel_group (swidget->ui));
-    }    
-}
-
-static void
-cleanup_actions (GtkActionGroup *group)
-{
-    GList *actions, *l;
-    
-    #define ELIPSIS "..."
-    #define ELIPSIS_LEN 3
-    
-    actions = gtk_action_group_list_actions (group);    
-    
-    for (l = actions; l; l = g_list_next (l)) {
-        GtkAction *action = GTK_ACTION (l->data);
-        gchar *label;
-        guint len;
-        
-        /* Remove the ellipsis from the end of action labels if present */
-        g_object_get (action, "short-label", &label, NULL);
-        if (label) {
-            len = strlen (label);
-            if (strcmp (ELIPSIS, label + (len - ELIPSIS_LEN)) == 0) {
-                label[len - ELIPSIS_LEN] = 0;
-                g_object_set (action, "short-label", label, NULL);
-            }
-            g_free (label);
-        }
-    }
- 
-    g_list_free (actions);    
-}
-
-/**
- * seahorse_widget_get_ui_widget
- * @swidget: The #SeahorseWidget.
- * @path: The path to the widget. See gtk_ui_manager_get_widget
- * 
- * Returns a piece of generated UI. Note this doesn't look in the glade
- * file but rather looks in the GtkUIManager UI. If no UI has been loaded 
- * then one will be loaded. The UI file has the same name as the glade file 
- * but with a 'ui' extension. 
- */
-GtkWidget*
-seahorse_widget_get_ui_widget (SeahorseWidget *swidget, const gchar *path)
-{
-    g_return_val_if_fail (SEAHORSE_IS_WIDGET (swidget), NULL);
-    
-    ui_load (swidget);    
-    g_return_val_if_fail (swidget->ui, NULL);
-    
-    return gtk_ui_manager_get_widget (swidget->ui, path);
-}
-
-/**
- * seahorse_widget_add_actions
- * @swidget: The #SeahorseWidget.
- * @actions: A #GtkActionGroup to add to the UI.
- * 
- * Adds a GtkActionGroup to this widget's GtkUIManager UI. If no UI
- * has been loaded then one will be loaded. The UI file has the same
- * name as the glade file but with a 'ui' extension. 
- */
-void             
-seahorse_widget_add_actions (SeahorseWidget *swidget, GtkActionGroup *actions)
-{
-    g_return_if_fail (SEAHORSE_IS_WIDGET (swidget));
-    
-    ui_load (swidget);    
-    g_return_if_fail (swidget->ui);
-
-    cleanup_actions (actions);
-    gtk_ui_manager_insert_action_group (swidget->ui, actions, -1);
-}
-
-/** 
- * seahorse_widget_find_actions
- * @swidget: The #SeahorseWidget.
- * @name: The name of the action group.
- * 
- * Find an #GtkActionGroup previously added to this widget.
- * 
- * Returns: The action group.
- */
-GtkActionGroup*
-seahorse_widget_find_actions (SeahorseWidget *swidget, const gchar *name)
-{
-    GList *l;
-    
-    g_return_val_if_fail (SEAHORSE_IS_WIDGET (swidget), NULL);
-    
-    if (!swidget->ui)
-        return NULL;
-    
-    for (l = gtk_ui_manager_get_action_groups (swidget->ui); l; l = g_list_next (l)) {
-        if (g_str_equal (gtk_action_group_get_name (GTK_ACTION_GROUP (l->data)), name)) 
-            return GTK_ACTION_GROUP (l->data);
-    }
-    
-    return NULL;
+	g_return_if_fail (SEAHORSE_IS_WIDGET (swidget));
+	glade_xml_signal_connect_data (swidget->xml, event, G_CALLBACK (callback), userdata);
 }

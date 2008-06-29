@@ -19,14 +19,20 @@
  * 02111-1307, USA.  
  */
 
-#ifndef SEAHORSEGKR_H_
-#define SEAHORSEGKR_H_
+#ifndef __SEAHORSE_GKR_H__
+#define __SEAHORSE_GKR_H__
 
-#include "common/seahorse-registry.h"
+#include <glib.h>
+#include <glib-object.h>
 
-#define SEAHORSE_GKR_STR                     "gnome-keyring"
-#define SEAHORSE_GKR                         (g_quark_from_static_string (SEAHORSE_GKR_STR))
+G_BEGIN_DECLS
 
-extern const SeahorseRegisterType SEAHORSE_GKR_REGISTRY[];
 
-#endif /*SEAHORSEGKR_H_*/
+
+#define SEAHORSE_GKEYRING_TYPE_STR "gnome-keyring"
+#define SEAHORSE_GKEYRING_TYPE g_quark_from_string ("gnome-keyring")
+
+
+G_END_DECLS
+
+#endif

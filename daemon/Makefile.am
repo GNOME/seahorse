@@ -39,6 +39,7 @@ seahorse_daemon_LDADD = \
 	$(top_builddir)/ssh/libseahorse-ssh.la \
 	$(top_builddir)/common/libseahorse-common.la \
 	$(top_builddir)/libcryptui/libcryptui.la \
+	$(top_builddir)/libegg/libeggdatetime.la \
 	$(SEAHORSE_LIBS)
 
 man_MANS = seahorse-daemon.1

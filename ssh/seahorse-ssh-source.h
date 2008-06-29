@@ -38,6 +38,7 @@
 #ifndef __SEAHORSE_SSH_SOURCE_H__
 #define __SEAHORSE_SSH_SOURCE_H__
 
+#include "seahorse-ssh-key.h"
 #include "seahorse-key-source.h"
 
 #define SEAHORSE_TYPE_SSH_SOURCE            (seahorse_ssh_source_get_type ())

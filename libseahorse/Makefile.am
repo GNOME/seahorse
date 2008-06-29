@@ -13,12 +13,34 @@ INCLUDES = -I$(top_builddir) \
 	-DLOCALEDIR=\"$(localedir)\" \
 	-DPIXMAPSDIR=\""$(pixmapsdir)"\" \
 	-DEXECDIR=\""$(seahorselibexecbindir)"\" \
-	-DLIBCRYPTUI_API_SUBJECT_TO_CHANGE 
+	-DLIBCRYPTUI_API_SUBJECT_TO_CHANGE
 
-noinst_LTLIBRARIES = libseahorse.la
+VALA_SRCS = \
+	seahorse-view.vala \
+	seahorse-commands.vala \
+	seahorse-generator.vala
+	
+VALA_PKGS = \
+	--vapidir . \
+	--pkg libseahorse-c
+
+VALA_CFILES = $(VALA_SRCS:.vala=.c)
+VALA_HFILES = $(VALA_SRCS:.vala=.h)
+
+SUFFIXES = .vala .c .h
+
+vala-build.stamp: $(VALA_SRCS)
+	$(VALAC) -C -X "$(INCLUDES)" --library libseahorse $(VALA_PKGS) $^ --basedir ./
+	date +'%s' > $@
+
+MARSHAL_SRCS = \
+	seahorse-marshal.c seahorse-marshal.h
 
 BUILT_SOURCES = \
-	seahorse-marshal.c seahorse-marshal.h
+	$(MARSHAL_SRCS) \
+	vala-build.stamp
+
+noinst_LTLIBRARIES = libseahorse.la
 
 if WITH_KEYSERVER
 KEYSERVER_SRCS = seahorse-keyserver-control.c seahorse-keyserver-control.h
@@ -29,6 +51,7 @@ endif
 libseahorse_la_SOURCES = \
 	seahorse-key.c seahorse-key.h \
 	seahorse-key-source.c seahorse-key-source.h \
+	seahorse-key-widget.c seahorse-key-widget.h \
     seahorse-unknown-key.c seahorse-unknown-key.h \
     seahorse-unknown-source.c seahorse-unknown-source.h \
 	seahorse-context.c seahorse-context.h \
@@ -53,16 +76,13 @@ libseahorse_la_SOURCES = \
 	seahorse-secure-memory.c seahorse-secure-memory.h \
 	seahorse-secure-entry.c seahorse-secure-entry.h \
 	seahorse-unix-signal.c seahorse-unix-signal.h \
-	$(BUILT_SOURCES) \
+	$(MARSHAL_SRCS) \
+	$(VALA_CFILES) $(VALA_HFILES) \
 	$(KEYSERVER_SRCS)
 	
 libseahorse_la_LIBADD = \
 	$(top_builddir)/common/libseahorse-common.la \
 	$(top_builddir)/libcryptui/libcryptui.la
-
-seahorselibexecbin_PROGRAMS = xloadimage
-
-xloadimage_SOURCES = ../src/seahorse-xloadimage.c
 
 seahorse-marshal.h: seahorse-marshal.list $(GLIB_GENMARSHAL)
 	$(GLIB_GENMARSHAL) $< --header --prefix=seahorse_marshal > $@
@@ -79,4 +99,13 @@ glade_DATA = \
 	seahorse-notify.glade
 
 EXTRA_DIST = $(glade_DATA) \
+	vala-build.stamp \
+	$(VALA_SRCS) \
+	libseahorse-c.vapi \
+	libseahorse.vapi \
+	$(VALA_CFILES) $(VALA_HFILES) \
 	seahorse-marshal.list
+
+CLEAN_FILES = \
+	vala-build.stamp \
+	$(VALA_CFILES) $(VALA_HFILES)

@@ -60,7 +60,6 @@ struct _SeahorseWidget {
     gchar *name;
     
     /*< private >*/
-    GtkUIManager   *ui;
     gboolean destroying;
 };
 
@@ -78,7 +77,9 @@ SeahorseWidget*  seahorse_widget_new_allow_multiple (const gchar      *name,
 
 SeahorseWidget*  seahorse_widget_find               (const gchar      *name);
 
-GtkWidget*       seahorse_widget_get_top            (SeahorseWidget   *swidget);
+const gchar*     seahorse_widget_get_name           (SeahorseWidget   *swidget);
+
+GtkWidget*       seahorse_widget_get_toplevel       (SeahorseWidget   *swidget);
 
 GtkWidget*       seahorse_widget_get_widget         (SeahorseWidget   *swidget,
                                                      const char       *identifier);
@@ -95,15 +96,11 @@ void             seahorse_widget_set_sensitive      (SeahorseWidget   *swidget,
                                                      const char       *identifier,
                                                      gboolean         sensitive);
 
+void             seahorse_widget_connect_glade_signal (SeahorseWidget *swidget, 
+                                                       const char     *event,
+                                                       GtkCallback    callback,
+                                                       gpointer       userdata);
+
 void             seahorse_widget_destroy            (SeahorseWidget   *swidget);
-
-GtkWidget*       seahorse_widget_get_ui_widget      (SeahorseWidget *swidget, 
-                                                     const gchar *path);
-
-void             seahorse_widget_add_actions        (SeahorseWidget   *swidget,
-                                                     GtkActionGroup   *actions);
-
-GtkActionGroup*  seahorse_widget_find_actions       (SeahorseWidget   *swidget, 
-                                                     const gchar *name);
 
 #endif /* __SEAHORSE_WIDGET_H__ */

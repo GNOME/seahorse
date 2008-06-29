@@ -256,7 +256,7 @@ gboolean          seahorse_key_lookup_property    (SeahorseKey        *skey,
  * KEY PREDICATES
  */
  
-typedef gboolean (*SeahorseKeyPredFunc) (SeahorseKey *key, gpointer data);
+typedef gboolean (*SeahorseKeyPredicateFunc) (SeahorseKey *key, gpointer data);
 
 /* Used for searching, filtering keys */
 typedef struct _SeahorseKeyPredicate {
@@ -271,8 +271,8 @@ typedef struct _SeahorseKeyPredicate {
     struct _SeahorseKeySource *sksrc;   /* key source keys must be from or NULL */
 
     /* Custom function */
-    SeahorseKeyPredFunc custom;
-    gpointer custom_data;
+    SeahorseKeyPredicateFunc custom;
+    gpointer custom_target;
     
 } SeahorseKeyPredicate;
 

@@ -41,7 +41,9 @@ EXTRA_DIST = \
     intltool-merge.in \
     intltool-update.in \
     gnome-doc-utils.make \
-    omf.make 
+    omf.make \
+    bugs.vapi \
+    config.vapi
 
 DISTCLEANFILES = \
     gnome-doc-utils.make \

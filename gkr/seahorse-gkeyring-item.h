@@ -42,7 +42,7 @@
 #include <gtk/gtk.h>
 #include <gnome-keyring.h>
 
-#include "seahorse-gkr.h"
+#include "seahorse-gkr-module.h"
 
 #include "seahorse-key.h"
 #include "seahorse-key-source.h"
@@ -56,6 +56,7 @@ typedef enum {
 } SeahorseGKeyringUse;
 
 #define SEAHORSE_TYPE_GKEYRING_ITEM             (seahorse_gkeyring_item_get_type ())
+#define SEAHORSE_GKEYRING_TYPE_ITEM SEAHORSE_TYPE_GKEYRING_ITEM
 #define SEAHORSE_GKEYRING_ITEM(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_GKEYRING_ITEM, SeahorseGKeyringItem))
 #define SEAHORSE_GKEYRING_ITEM_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_GKEYRING_ITEM, SeahorseGKeyringItemClass))
 #define SEAHORSE_IS_GKEYRING_ITEM(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_GKEYRING_ITEM))

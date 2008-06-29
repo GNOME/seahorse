@@ -45,7 +45,7 @@ seahorse_key_predicate_match (SeahorseKeyPredicate *kl, SeahorseKey *skey)
     if (kl->sksrc && (kl->sksrc != skey->sksrc))
         return FALSE;
     /* Any custom stuff last */
-    if (kl->custom && !((kl->custom)(skey, kl->custom_data)))
+    if (kl->custom && !((kl->custom)(skey, kl->custom_target)))
         return FALSE;
     return TRUE;
 }
