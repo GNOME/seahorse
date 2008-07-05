@@ -50,6 +50,7 @@ struct _CryptUIKeyChooserPriv {
     CryptUIKeyStore         *ckstore;
     GtkTreeView             *keylist;
     GtkComboBox             *keycombo;
+    GtkCheckButton          *signercheck;
     
     GtkComboBox             *filtermode;
     GtkEntry                *filtertext;
@@ -140,6 +141,22 @@ signer_changed (GtkWidget *widget, CryptUIKeyChooser *chooser)
     
     g_signal_emit (chooser, signals[CHANGED], 0);
 }
+
+static void
+signer_toggled (GtkWidget *widget, CryptUIKeyChooser *chooser)
+{
+    g_assert (chooser->priv->signercheck);
+    
+    if (chooser->priv->enforce_prefs) {
+        set_keyset_value ((CryptUIKeyset *) g_object_get_data ((GObject*) (chooser->priv->signercheck), "ckset"), 
+                          SEAHORSE_LASTSIGNER_KEY, 
+                          (gchar*) g_object_get_data ((GObject*) (chooser->priv->signercheck), "key"));
+    }
+    
+    g_signal_emit (chooser, signals[CHANGED], 0);
+    
+}
+
 static void
 construct_recipients (CryptUIKeyChooser *chooser, GtkBox *box)
 {
@@ -215,38 +232,67 @@ construct_signer (CryptUIKeyChooser *chooser, GtkBox *box)
     CryptUIKeyStore *ckstore;
     GtkWidget *hbox;
     GtkWidget *label;
+    guint count;
+    GList *keys;
+    gchar *keyname, *labelstr;
 
-    /* Top filter box */
-    hbox = gtk_hbox_new (FALSE, 12);
-    
-    /* Sign Label */
-    label = gtk_label_new (_("_Sign message as:"));
-    gtk_label_set_use_underline (GTK_LABEL (label), TRUE);
-    gtk_container_add (GTK_CONTAINER (hbox), label);
-    gtk_box_set_child_packing (GTK_BOX (hbox), label, 
-                               FALSE, TRUE, 0, GTK_PACK_START);
     
     /* TODO: HIG and beautification */
-    
-    /* TODO: When only one key is present this should be a checkbox
-       ie: 'Sign this Message (as 'key name') */
-    
+        
     if (!(chooser->priv->mode & CRYPTUI_KEY_CHOOSER_MUSTSIGN))
         none_option = _("None (Don't Sign)");
 
     /* The Sign combo */
     ckstore = cryptui_key_store_new (chooser->priv->ckset, TRUE, none_option);
     cryptui_key_store_set_filter (ckstore, signer_filter, NULL);
-    chooser->priv->keycombo = cryptui_key_combo_new (ckstore);
+
+    count = cryptui_key_store_get_count (ckstore);
+    
+    if (count == 1) {
+        keys = cryptui_key_store_get_all_keys (ckstore);
+        
+        keyname = cryptui_keyset_key_display_name (ckstore->ckset, (gchar*) keys->data);
+        fprintf (stderr, "Display name is: %s\n", keyname);
+        labelstr = g_strdup_printf (_("Sign this message as %s"), keyname);
+        fprintf (stderr, "labelstr is: %s\nCreating check button", labelstr);
+        
+        chooser->priv->signercheck = (GtkCheckButton*) gtk_check_button_new_with_label (labelstr);
+        g_object_set_data ((GObject*) (chooser->priv->signercheck), "ckset", ckstore->ckset);
+        g_object_set_data ((GObject*) (chooser->priv->signercheck), "key", keys->data);
+        
+        g_signal_connect (chooser->priv->signercheck , "toggled", G_CALLBACK (signer_toggled), chooser);
+
+        /* Add it in */
+        gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (chooser->priv->signercheck));
+        gtk_box_set_child_packing (box, GTK_WIDGET (chooser->priv->signercheck), FALSE, TRUE, 0, GTK_PACK_START);
+
+        
+        g_free (labelstr);
+        g_free (keyname);
+        g_list_free (keys);
+    } else if (count > 1) {
+        /* Top filter box */
+        hbox = gtk_hbox_new (FALSE, 12);
+        
+        /* Sign Label */
+        label = gtk_label_new (_("_Sign message as:"));
+        gtk_label_set_use_underline (GTK_LABEL (label), TRUE);
+        gtk_container_add (GTK_CONTAINER (hbox), label);
+        gtk_box_set_child_packing (GTK_BOX (hbox), label, 
+                                   FALSE, TRUE, 0, GTK_PACK_START);
+        
+        chooser->priv->keycombo = cryptui_key_combo_new (ckstore);
+        g_signal_connect (chooser->priv->keycombo, "changed", G_CALLBACK (signer_changed), chooser);
+        gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (chooser->priv->keycombo));
+        gtk_box_set_child_packing (GTK_BOX (hbox), GTK_WIDGET (chooser->priv->keycombo), 
+                                   TRUE, TRUE, 0, GTK_PACK_START);
+                                                              
+        /* Add it in */
+        gtk_container_add (GTK_CONTAINER (box), hbox);
+        gtk_box_set_child_packing (box, hbox, FALSE, TRUE, 0, GTK_PACK_START);
+    }
+    
     g_object_unref (ckstore);
-    g_signal_connect (chooser->priv->keycombo, "changed", G_CALLBACK (signer_changed), chooser);
-    gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (chooser->priv->keycombo));
-    gtk_box_set_child_packing (GTK_BOX (hbox), GTK_WIDGET (chooser->priv->keycombo), 
-                               TRUE, TRUE, 0, GTK_PACK_START);
-                               
-    /* Add it in */
-    gtk_container_add (GTK_CONTAINER (box), hbox);
-    gtk_box_set_child_packing (box, hbox, FALSE, TRUE, 0, GTK_PACK_START);
 }
 
 /* -----------------------------------------------------------------------------
@@ -280,7 +326,7 @@ cryptui_key_chooser_constructor (GType type, guint n_props, GObjectConstructPara
     if (chooser->priv->mode & CRYPTUI_KEY_CHOOSER_SIGNER) {
         construct_signer (chooser, GTK_BOX (obj));
         
-        if (chooser->priv->enforce_prefs) {
+        if (chooser->priv->enforce_prefs && chooser->priv->keycombo) {
             gchar *id = get_keyset_value (cryptui_key_combo_get_keyset (chooser->priv->keycombo), 
                                           SEAHORSE_LASTSIGNER_KEY);
             cryptui_key_combo_set_key (chooser->priv->keycombo, id);
@@ -295,6 +341,8 @@ cryptui_key_chooser_constructor (GType type, guint n_props, GObjectConstructPara
         gtk_widget_grab_focus (GTK_WIDGET (chooser->priv->keylist));
     else if (chooser->priv->keycombo)
         gtk_widget_grab_focus (GTK_WIDGET (chooser->priv->keycombo));
+    else if (chooser->priv->signercheck)
+        gtk_widget_grab_focus (GTK_WIDGET (chooser->priv->signercheck));
         
     chooser->priv->initialized = TRUE;
     return obj;
@@ -488,8 +536,13 @@ cryptui_key_chooser_set_recipients (CryptUIKeyChooser *chooser, GList *keys)
 const gchar*
 cryptui_key_chooser_get_signer (CryptUIKeyChooser *chooser)
 {
-    g_return_val_if_fail (chooser->priv->keycombo != NULL, NULL);
-    return cryptui_key_combo_get_key (chooser->priv->keycombo);
+    if (chooser->priv->keycombo != NULL)
+        return cryptui_key_combo_get_key (chooser->priv->keycombo);
+    else if (chooser->priv->signercheck != NULL)
+        return gtk_toggle_button_get_active (chooser->priv->signercheck) ? 
+                (gchar*) g_object_get_data ((GObject*) (chooser->priv->signercheck), "key"):NULL;
+    else
+        return NULL;
 }
 
 void

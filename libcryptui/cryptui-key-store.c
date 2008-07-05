@@ -368,8 +368,11 @@ static gboolean
 refilter_now (CryptUIKeyStore* ckstore)
 {
     cryptui_keyset_refresh (ckstore->ckset);
+    
     gtk_tree_model_filter_refilter (ckstore->priv->filter);    
     ckstore->priv->filter_stag = 0;
+    
+    g_object_unref (ckstore);
     return FALSE;
 }
 
@@ -377,8 +380,12 @@ refilter_now (CryptUIKeyStore* ckstore)
 static void
 refilter_later (CryptUIKeyStore* ckstore)
 {
+    g_assert (ckstore->ckset != NULL);
+    
     if (ckstore->priv->filter_stag != 0)
         g_source_remove (ckstore->priv->filter_stag);
+        
+    g_object_ref (ckstore);
     ckstore->priv->filter_stag = g_timeout_add (200, (GSourceFunc)refilter_now, ckstore);
 }
 
@@ -824,6 +831,13 @@ cryptui_key_store_get_all_keys (CryptUIKeyStore *ckstore)
 {
     g_return_val_if_fail (CRYPTUI_KEY_STORE (ckstore), NULL);
     return cryptui_keyset_get_keys (ckstore->ckset);
+}
+
+guint
+cryptui_key_store_get_count (CryptUIKeyStore *ckstore)
+{
+    g_return_val_if_fail (CRYPTUI_KEY_STORE (ckstore), 0);
+    return cryptui_keyset_get_count (ckstore->ckset);    
 }
 
 gboolean            

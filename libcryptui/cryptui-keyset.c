@@ -408,6 +408,8 @@ cryptui_keyset_refresh (CryptUIKeyset *keyset)
     gchar **k, **keys = NULL; 
     GError *error = NULL;
     
+    g_assert (keyset != NULL);
+    
     /* Make note of all the keys we had prior to refresh */
     check = g_hash_table_new (g_str_hash, g_str_equal);
     g_hash_table_foreach (keyset->priv->keys, (GHFunc)keys_to_hash, check);

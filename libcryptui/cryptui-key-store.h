@@ -106,6 +106,8 @@ const gchar*        cryptui_key_store_get_key_from_path     (CryptUIKeyStore *ck
 
 GList*              cryptui_key_store_get_all_keys          (CryptUIKeyStore *ckstore);
 
+guint               cryptui_key_store_get_count          (CryptUIKeyStore *ckstore);
+
 gboolean            cryptui_key_store_have_selected_keys    (CryptUIKeyStore *ckstore,
                                                              GtkTreeView *view);
 
