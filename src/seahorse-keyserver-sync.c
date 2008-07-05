@@ -88,19 +88,24 @@ configure_clicked (GtkButton *button, SeahorseWidget *swidget)
 static void
 update_message (SeahorseWidget *swidget)
 {
-    GtkWidget *w, *w2;
+    GtkWidget *w, *w2, *sync_button;
     gchar *t;
     
     w = glade_xml_get_widget (swidget->xml, "publish-message");
     w2 = glade_xml_get_widget (swidget->xml, "sync-message");
+    sync_button = glade_xml_get_widget (swidget->xml, "sync-button");
 
     t = seahorse_gconf_get_string (PUBLISH_TO_KEY);
     if (t && t[0]) {
         gtk_widget_show (w);
         gtk_widget_hide (w2);
+        
+        gtk_widget_set_sensitive (sync_button, TRUE);
     } else {
         gtk_widget_hide (w);
         gtk_widget_show (w2);
+        
+        gtk_widget_set_sensitive (sync_button, FALSE);
     }
     g_free (t);
 }
