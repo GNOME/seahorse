@@ -175,11 +175,11 @@ construct_recipients (CryptUIKeyChooser *chooser, GtkBox *box)
     gtk_combo_box_append_text (chooser->priv->filtermode, _("Search Results"));
     gtk_combo_box_set_active (chooser->priv->filtermode, 0);
     g_signal_connect (chooser->priv->filtermode, "changed", 
-                      G_CALLBACK (filtermode_changed), chooser);
+                        G_CALLBACK (filtermode_changed), chooser);
     gtk_widget_set_size_request (GTK_WIDGET (chooser->priv->filtermode), 140, -1);
     gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (chooser->priv->filtermode));
     gtk_box_set_child_packing (GTK_BOX (hbox), GTK_WIDGET (chooser->priv->filtermode), 
-                               FALSE, TRUE, 0, GTK_PACK_START);
+                                FALSE, TRUE, 0, GTK_PACK_START);
     
     /* Filter Label */
     label = gtk_label_new (_("Search _for:"));
@@ -187,24 +187,24 @@ construct_recipients (CryptUIKeyChooser *chooser, GtkBox *box)
     gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
     gtk_container_add (GTK_CONTAINER (hbox), label);
     gtk_box_set_child_packing (GTK_BOX (hbox), label, 
-                               TRUE, TRUE, 0, GTK_PACK_START);
+                                TRUE, TRUE, 0, GTK_PACK_START);
 
     /* Filter Entry */
     chooser->priv->filtertext = GTK_ENTRY (gtk_entry_new ());
     gtk_entry_set_max_length (chooser->priv->filtertext, 256);
     gtk_widget_set_size_request (GTK_WIDGET (chooser->priv->filtertext), 140, -1);
     g_signal_connect (chooser->priv->filtertext, "changed", 
-                      G_CALLBACK (filtertext_changed), chooser);
+                        G_CALLBACK (filtertext_changed), chooser);
     g_signal_connect (chooser->priv->filtertext, "activate", 
-                      G_CALLBACK (filtertext_activate), chooser);
+                        G_CALLBACK (filtertext_activate), chooser);
     gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (chooser->priv->filtertext));
     gtk_box_set_child_packing (GTK_BOX (hbox), GTK_WIDGET (chooser->priv->filtertext), 
-                               FALSE, TRUE, 0, GTK_PACK_START);
+                                FALSE, TRUE, 0, GTK_PACK_START);
 
     /* Add Filter box */
     gtk_container_add (GTK_CONTAINER (box), hbox);
     gtk_box_set_child_packing (GTK_BOX (box), hbox, 
-                               FALSE, TRUE, 0, GTK_PACK_START);
+                                FALSE, TRUE, 0, GTK_PACK_START);
 
     chooser->priv->ckstore = cryptui_key_store_new (chooser->priv->ckset, TRUE, NULL);
     cryptui_key_store_set_sortable (chooser->priv->ckstore, TRUE);
@@ -212,7 +212,7 @@ construct_recipients (CryptUIKeyChooser *chooser, GtkBox *box)
     
     /* Main Key list */
     chooser->priv->keylist = cryptui_key_list_new (chooser->priv->ckstore, 
-                                                   CRYPTUI_KEY_LIST_CHECKS);
+                                                    CRYPTUI_KEY_LIST_CHECKS);
     gtk_tree_view_set_enable_search (GTK_TREE_VIEW (chooser->priv->keylist), FALSE);
     scroll = gtk_scrolled_window_new (NULL, NULL);
     gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scroll), 
@@ -539,7 +539,7 @@ cryptui_key_chooser_get_signer (CryptUIKeyChooser *chooser)
     if (chooser->priv->keycombo != NULL)
         return cryptui_key_combo_get_key (chooser->priv->keycombo);
     else if (chooser->priv->signercheck != NULL)
-        return gtk_toggle_button_get_active (chooser->priv->signercheck) ? 
+        return gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (chooser->priv->signercheck)) ? 
                 (gchar*) g_object_get_data ((GObject*) (chooser->priv->signercheck), "key"):NULL;
     else
         return NULL;
