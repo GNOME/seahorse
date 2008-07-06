@@ -21,6 +21,7 @@
 
 #include "config.h"
 #include <gtk/gtk.h>
+#include <glib/gi18n-lib.h>
 #include <string.h>
 #include <stdlib.h>
 
@@ -198,6 +199,22 @@ cryptui_prompt_signer (CryptUIKeyset *keyset, const gchar *title)
     
     gtk_widget_destroy (dialog);
     return signer;
+}
+
+void                
+cryptui_need_to_get_keys ()
+{
+    GtkWidget *dialog;
+    gchar *argv[2] = {"seahorse", NULL};
+
+    dialog = gtk_message_dialog_new_with_markup (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_OK,
+                                          _("No encryption keys were found with which to perform the operation you requested.  The program <b>Passwords and Encryption Keys</b> will now be started so that you may either create a key or import one."));
+               
+    if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_OK) {
+        gtk_widget_destroy (dialog);    
+        
+        g_spawn_async (NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL, NULL, NULL, NULL);
+    }
 }
 
 /* -----------------------------------------------------------------------------

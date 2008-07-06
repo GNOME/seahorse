@@ -109,6 +109,16 @@ gchar**             cryptui_prompt_recipients (CryptUIKeyset *keyset,
 
 gchar*              cryptui_prompt_signer (CryptUIKeyset *keyset, const gchar *title);
 
+/*
+ * This function creates a dialog when a consumer of the library needs the user to 
+ * create or import at least one key for the application to perform the necessary
+ * action.  It will inform the user of the need to create or import a key and launch
+ * the seahorse (Passwords and Encryption Keys) application so that they may do so.
+ * 
+ * quit: whether to run gtk_main_quit () after launching seahorse
+ */
+void                cryptui_need_to_get_keys ();
+
 G_END_DECLS
 
 #endif /* __CRYPT_UI_H__ */
