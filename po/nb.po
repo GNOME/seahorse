@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse 2.21.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-07-01 10:38+0200\n"
-"PO-Revision-Date: 2008-07-01 10:41+0200\n"
+"POT-Creation-Date: 2008-07-09 13:05+0200\n"
+"PO-Revision-Date: 2008-07-09 13:19+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -169,7 +169,7 @@ msgstr "Krypteringsnøkler for %s"
 msgid ""
 "A list of key server URIs to search for remote PGP keys. In later versions a "
 "display name can be included, by appending a space and then the name."
-msgstr ""
+msgstr "En liste med URIer til nøkkeltjenere for å søke etter eksterne PGP-nøkler. I senere versjoner kan et visningsnavn tas med ved å legge til et mellomrom og så navnet."
 
 #: ../data/seahorse.schemas.in.h:2
 msgid "Auto Retrieve Keys"
@@ -215,7 +215,7 @@ msgstr "ID for forvalgt nøkkel"
 msgid ""
 "If set to true, then files encrypted with seahorse will be ASCII armor "
 "encoded."
-msgstr ""
+msgstr "Hvis denne settes til «true» vil filer som krypteres med seahorse kodes med «ASCII-armor»."
 
 #: ../data/seahorse.schemas.in.h:12
 msgid ""
@@ -265,18 +265,18 @@ msgstr "Vis gyldighetskolonnen i nøkkelhåndtereren"
 msgid ""
 "Specify the column to sort the recipients window by. Columns are: 'name' and "
 "'id'. Put a '-' in front of the column name to sort in descending order."
-msgstr ""
+msgstr "Oppgi kolonne for sortering av mottakervinduet. Kolonne kan være: «name» og «id». Sett «-» foran kolonnenavnet for å sortere i synkende rekkefølge."
 
 #: ../data/seahorse.schemas.in.h:23
 msgid ""
 "Specify the column to sort the seahorse key manager main window by. Columns "
 "are: 'name', 'id', 'validity', 'expires', 'trust', and 'type'. Put a '-' in "
 "front of the column name to sort in descending order."
-msgstr ""
+msgstr "Oppgi kolonne for sortering av hovedvindu i seahorse nøkkelhåndterer. Kolonner kan være: «name», «id», «validity», «expires», «trust» og «type». Sett «-» foran kolonnenavnet for å sortere i synkende rekkefølge."
 
 #: ../data/seahorse.schemas.in.h:24
 msgid "The ID of the last secret key used to sign a message."
-msgstr ""
+msgstr "ID for siste hemmelige nøkkel som ble brukt til å signere en melding."
 
 #: ../data/seahorse.schemas.in.h:25
 msgid "The column to sort the recipients by"
@@ -290,32 +290,32 @@ msgstr "Kolonne nøkler skal sorteres etter i seahorse"
 msgid ""
 "The key server to publish PGP keys to. Or empty to suppress publishing of "
 "PGP keys."
-msgstr ""
+msgstr "Nøkkeltjener som brukes for publisering av PGP-nøkler. Ingen verdi stopper publisering av PGP-nøkler."
 
 #: ../data/seahorse.schemas.in.h:28
 msgid ""
 "The last key server a search was performed against or empty for all key "
 "servers."
-msgstr ""
+msgstr "Siste nøkkeltjener et søk ble utført mot eller tom for alle nøkkeltjenere."
 
 #: ../data/seahorse.schemas.in.h:29
 msgid "The last search pattern searched for against a key server."
-msgstr ""
+msgstr "Siste søkemønster brukt mot en nøkkeltjener."
 
 #: ../data/seahorse.schemas.in.h:30
 msgid ""
 "This specifies the default key to use for certain operations, mainly signing."
-msgstr ""
+msgstr "Dette oppgir forvalgt nøkkel som skal brukes for visse operasjoner, hovedsaklig signering."
 
 #: ../data/seahorse.schemas.in.h:31
 msgid "Whether or not keys should be automatically retrieved from key servers."
-msgstr ""
+msgstr "Om nøkler skal hentes fra nøkkeltjenere automatisk."
 
 #: ../data/seahorse.schemas.in.h:32
 msgid ""
 "Whether or not modified keys should be automatically synced with the default "
 "key server."
-msgstr ""
+msgstr "Om endrede nøkler skal synkroniseres med forvalgt nøkkeltjener automatisk."
 
 #: ../data/seahorse.schemas.in.h:33
 msgid "Whether to always encrypt to default key"
@@ -516,31 +516,36 @@ msgstr "Er du sikker på at du vil slette passordet «%s»?"
 msgid "Are you sure you want to delete %d passwords?"
 msgstr "Er du sikker på at du vil slette %d passord?"
 
-#: ../libcryptui/cryptui-key-chooser.c:156
+#: ../libcryptui/cryptui-key-chooser.c:173
 msgid "All Keys"
 msgstr "Alle nøkler"
 
-#: ../libcryptui/cryptui-key-chooser.c:157
+#: ../libcryptui/cryptui-key-chooser.c:174
 msgid "Selected Recipients"
 msgstr "Valgte mottakere"
 
-#: ../libcryptui/cryptui-key-chooser.c:158
+#: ../libcryptui/cryptui-key-chooser.c:175
 msgid "Search Results"
 msgstr "Søkeresultater"
 
 #. Filter Label
-#: ../libcryptui/cryptui-key-chooser.c:168
+#: ../libcryptui/cryptui-key-chooser.c:185
 msgid "Search _for:"
 msgstr "Søk _etter:"
 
-#. Sign Label
-#: ../libcryptui/cryptui-key-chooser.c:223
-msgid "_Sign message as:"
-msgstr "_Signer melding som:"
-
-#: ../libcryptui/cryptui-key-chooser.c:235
+#: ../libcryptui/cryptui-key-chooser.c:243
 msgid "None (Don't Sign)"
 msgstr "Ingen (Ikke signer)"
+
+#: ../libcryptui/cryptui-key-chooser.c:256
+#, c-format
+msgid "Sign this message as %s"
+msgstr "Signer denne meldingen som %s"
+
+#. Sign Label
+#: ../libcryptui/cryptui-key-chooser.c:278
+msgid "_Sign message as:"
+msgstr "_Signer melding som:"
 
 #. TODO: Icons
 #: ../libcryptui/cryptui-key-list.c:117
@@ -1135,6 +1140,13 @@ msgstr "Tilbakekalt"
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Kunne ikke vise hjelp: %s"
+
+#: ../libcryptui/cryptui.c:211
+msgid ""
+"No encryption keys were found with which to perform the operation you "
+"requested.  The program <b>Passwords and Encryption Keys</b> will now be "
+"started so that you may either create a key or import one."
+msgstr "Fant ingen krypteringsnøkler for å utføre operasjonen du forespurte. Programmet <b>Passord og krypteringsnøkler</b> vil nå startes slik at du kan lage en nøkkel eller importere en."
 
 #: ../pgp/seahorse-add-subkey.glade.h:1
 msgid "Expiration Date:"
@@ -2457,19 +2469,19 @@ msgstr "Kunne ikke publisere nøkler til tjener"
 msgid "Couldn't retrieve keys from server: %s"
 msgstr "Kunne ikke motta nøkler fra nøkkeltjener: %s"
 
-#: ../src/seahorse-keyserver-sync.c:150
+#: ../src/seahorse-keyserver-sync.c:155
 #, c-format
 msgid "<b>%d key is selected for synchronizing</b>"
 msgid_plural "<b>%d keys are selected for synchronizing</b>"
 msgstr[0] "<b>%d nøkkel er valgt for synkronisering</b>"
 msgstr[1] "<b>%d nøkler er valgt for synkronisering</b>"
 
-#: ../src/seahorse-keyserver-sync.c:217
+#: ../src/seahorse-keyserver-sync.c:222
 msgid "Synchronizing keys"
 msgstr "Synkroniserer nøkler"
 
 #. Show the progress window if necessary
-#: ../src/seahorse-keyserver-sync.c:249
+#: ../src/seahorse-keyserver-sync.c:254
 msgid "Synchronizing keys..."
 msgstr "Synkroniserer nøkler..."
 
@@ -2609,7 +2621,9 @@ msgstr "%s er en privat nøkkel. Er du sikker på at du vil fortsette?"
 msgid ""
 "One or more of the deleted keys are private keys. Are you sure you want to "
 "proceed?"
-msgstr "En eller flere av nøklene som skal slettes er private nøkler. Er du sikker på at du vil fortsette?"
+msgstr ""
+"En eller flere av nøklene som skal slettes er private nøkler. Er du sikker "
+"på at du vil fortsette?"
 
 #: ../src/seahorse-viewer.vala:338
 msgid "Couldn't retrieve data from key server"
@@ -2899,4 +2913,3 @@ msgstr "På_loggingsnavn:"
 #: ../ssh/seahorse-ssh-upload.glade.h:9
 msgid "_Set Up"
 msgstr "_Sett opp"
-
