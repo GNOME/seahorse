@@ -77,11 +77,11 @@ AC_DEFUN([VALA_PROG_VALAC],[
 		AC_REQUIRE([AC_PROG_AWK])
 		AC_MSG_CHECKING([valac is at least version $1])
 
-		if "${VALAC}" --version | "${AWK}" -v r='$1' 'function vn(s) { if (3 == split(s,v,".")) return (v[1]*1000+v[2])*1000+v[3]; else exit 2; } /^Vala / { exit vn(r) > vn($[2]) }'; then
+		if "${VALAC}" --version | "${AWK}" -v r='$1' 'function vn(s) { if (3 == split(s,v,".")) return (v[1]*1000+v[2])*1000+v[3]; else exit 2; } /^Vala / { exit vn(r) < vn($2) }'; then
 			AC_MSG_RESULT([yes])
 		else
 			AC_MSG_RESULT([no])
-			AC_MSG_ERROR([Vala $1 not found.])
+			VALAC=
 		fi
 	fi
 ])

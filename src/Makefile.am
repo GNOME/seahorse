@@ -90,6 +90,8 @@ EXTRA_DIST = \
 
 CLEANFILES = *.gladep* *.bak \
     $(desktop_DATA) \
-    $(VALA_CFILES) $(VALA_HFILES) \
-    vala-build.stamp \
     seahorse.desktop.in 
+
+vala-clean:
+	rm -f vala-build.stamp $(VALA_CFILES) $(VALA_HFILES)
+

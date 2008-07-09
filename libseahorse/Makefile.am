@@ -106,6 +106,6 @@ EXTRA_DIST = $(glade_DATA) \
 	$(VALA_CFILES) $(VALA_HFILES) \
 	seahorse-marshal.list
 
-CLEAN_FILES = \
-	vala-build.stamp \
-	$(VALA_CFILES) $(VALA_HFILES)
+vala-clean:
+	rm -f vala-build.stamp $(VALA_CFILES) $(VALA_HFILES)
+

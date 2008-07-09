@@ -63,6 +63,6 @@ EXTRA_DIST = \
 	$(VALA_CFILES) $(VALA_HFILES) \
 	$(VALA_SRCS)
 
-CLEAN_FILES = \
-	vala-build.stamp \
-	$(VALA_CFILES) $(VALA_HFILES)
+vala-clean:
+	rm -f vala-build.stamp $(VALA_CFILES) $(VALA_HFILES)
+
