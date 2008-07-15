@@ -31,7 +31,9 @@
 #include "common/seahorse-cleanup.h"
 #include "common/seahorse-registry.h"
 
+#ifdef WITH_PGP
 #include "pgp/seahorse-pgp-module.h"
+#endif
 
 #ifdef WITH_SSH
 #include "ssh/seahorse-ssh-module.h"
@@ -210,8 +212,12 @@ int main(int argc, char* argv[])
     seahorse_gtkstock_add_icons (daemon_icons);
     
     /* Load the various components */
+#ifdef WITH_PGP
     seahorse_registry_load_types (NULL, SEAHORSE_PGP_REGISTRY);
+#endif
+#ifdef WITH_SSH
     seahorse_registry_load_types (NULL, SEAHORSE_SSH_REGISTRY);
+#endif
 
     /* Make the default SeahorseContext */
     seahorse_context_new (SEAHORSE_CONTEXT_APP | SEAHORSE_CONTEXT_DAEMON, 0);

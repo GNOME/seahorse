@@ -8,12 +8,18 @@ else
 SSH_DIR = 
 endif
 
+if WITH_PGP
+PGP_DIR = pgp
+else
+PGP_DIR = 
+endif
+
 SUBDIRS = libegg \
 	libcryptui \
 	common \
 	libseahorse \
 	gkr \
-	pgp \
+	$(PGP_DIR) \
 	$(SSH_DIR) \
 	src \
 	po \

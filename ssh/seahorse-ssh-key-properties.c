@@ -223,7 +223,7 @@ export_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
     seahorse_util_chooser_set_filename (dialog, keys);
 
     uri = seahorse_util_chooser_save_prompt (dialog);
-    gtk_widget_destroy (dialog);
+    gtk_widget_destroy (GTK_WIDGET (dialog));
     if(!uri) 
         return;
     

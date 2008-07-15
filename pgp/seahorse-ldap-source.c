@@ -33,6 +33,7 @@
 #include "seahorse-pgp-key.h"
 
 #include "seahorse-operation.h"
+#include "seahorse-servers.h"
 #include "seahorse-util.h"
 
 #include <ldap.h>
@@ -1406,6 +1407,7 @@ seahorse_ldap_source_class_init (SeahorseLDAPSourceClass *klass)
 	                             NULL, G_PARAM_READABLE));
 	    
 	seahorse_registry_register_type (NULL, SEAHORSE_TYPE_LDAP_SOURCE, "key-source", "remote", SEAHORSE_PGP_STR, NULL);
+	seahorse_servers_register_type ("ldap", _("LDAP Key Server"), seahorse_ldap_is_valid_uri);
 }
 
 

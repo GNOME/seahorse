@@ -33,9 +33,11 @@
 #include "common/seahorse-cleanup.h"
 #include "common/seahorse-registry.h"
 
+#ifdef WITH_PGP
 #include "pgp/seahorse-pgp-module.h"
 #include "pgp/seahorse-pgp-key.h"
 #include "pgp/seahorse-pgp-source.h"
+#endif
 
 #ifdef WITH_SSH
 #include "ssh/seahorse-ssh-module.h"
@@ -76,8 +78,12 @@ main (int argc, char **argv)
     seahorse_gtkstock_init ();
     
     /* Initialize the various components */
+#ifdef WITH_PGP
     seahorse_registry_load_types (NULL, SEAHORSE_PGP_REGISTRY);
+#endif
+#ifdef WITH_SSH
     seahorse_registry_load_types (NULL, SEAHORSE_SSH_REGISTRY);
+#endif
     
     /* Make the default SeahorseContext */
     seahorse_context_new (SEAHORSE_CONTEXT_APP, 0);

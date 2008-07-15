@@ -34,12 +34,6 @@
 #include "seahorse-gconf.h"
 #include "eggtreemultidnd.h"
 
-#include "pgp/seahorse-pgp-key.h"
-
-#ifdef WITH_SSH
-#include "ssh/seahorse-ssh-key.h"
-#endif 
-
 #define KEY_MANAGER_SORT_KEY "/apps/seahorse/listing/sort_by"
 
 enum {

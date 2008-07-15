@@ -20,7 +20,7 @@
  */
 
 /** 
- * SeahorsePGPOperation: Operations to be done on gnome-keyring items
+ * SeahorseGKeyringOperation: Operations to be done on gnome-keyring items
  * 
  * - Derived from SeahorseOperation
  *

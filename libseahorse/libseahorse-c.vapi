@@ -184,8 +184,12 @@ namespace Seahorse {
 		[CCode (cname = "LISTING_SCHEMAS", cheader_filename = "seahorse-preferences.h")]
 		public const string LISTING_SCHEMAS;
 		
+		[CCode (cname = "KEYSERVER_KEY", cheader_filename = "seahorse-gconf.h")]
+		public const string KEYSERVER_KEY;		
+		
 		public bool get_boolean (string key);
 		public void set_boolean (string key, bool value);
+		public GLib.SList<string> get_string_list (string key);
 		public void notify_lazy (string key, GConf.ClientNotifyFunc func, Gtk.Object lifetime);
 	}
 	

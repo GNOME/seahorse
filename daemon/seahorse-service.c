@@ -35,8 +35,6 @@
 #include "seahorse-util.h"
 #include "seahorse-libdialogs.h"
 
-#include "pgp/seahorse-gpgmex.h"
-
 #include <gio/gio.h>
 
 #define KEYSET_PATH "/org/gnome/seahorse/keys/%s"

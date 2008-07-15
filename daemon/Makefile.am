@@ -27,16 +27,32 @@ else
 SHARING_SRCS = 
 endif
 
+if WITH_PGP
+PGP_LDADD = $(top_builddir)/pgp/libseahorse-pgp.la
+PGP_SRCS = seahorse-service-crypto.c
+else
+PGP_LDADD = 
+PGP_SRCS = 
+endif
+
+if WITH_SSH
+SSH_LDADD = $(top_builddir)/ssh/libseahorse-ssh.la
+else
+SSH_LDADD = 
+endif
+
 seahorse_daemon_SOURCES = \
     seahorse-daemon.c seahorse-daemon.h \
     seahorse-dbus-server.c seahorse-service.c seahorse-service.h \
-    seahorse-service-keyset.c seahorse-service-crypto.c \
+    seahorse-service-keyset.c \
+    $(PGP_SRCS) \
     $(SHARING_SRCS)
+
 
 seahorse_daemon_LDADD = \
 	$(top_builddir)/libseahorse/libseahorse.la \
-	$(top_builddir)/pgp/libseahorse-pgp.la \
-	$(top_builddir)/ssh/libseahorse-ssh.la \
+	$(PGP_LDADD) \
+	$(SSH_LDADD) \
 	$(top_builddir)/common/libseahorse-common.la \
 	$(top_builddir)/libcryptui/libcryptui.la \
 	$(top_builddir)/libegg/libeggdatetime.la \

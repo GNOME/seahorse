@@ -892,7 +892,7 @@ seahorse_util_chooser_save_prompt (GtkDialog *dialog)
             break;
     }
   
-    gtk_widget_destroy (dialog);
+    gtk_widget_destroy (GTK_WIDGET (dialog));
     return uri;
 }
 
@@ -904,7 +904,7 @@ seahorse_util_chooser_open_prompt (GtkDialog *dialog)
     if(gtk_dialog_run (dialog) == GTK_RESPONSE_ACCEPT)
         uri = gtk_file_chooser_get_uri (GTK_FILE_CHOOSER (dialog));
 
-    gtk_widget_destroy (dialog);
+    gtk_widget_destroy (GTK_WIDGET (dialog));
     return uri;
 }
 
@@ -971,7 +971,7 @@ seahorse_util_add_suffix (const gchar *path, SeahorseSuffix suffix, const gchar 
         uri = NULL;
             
         uri = seahorse_util_chooser_save_prompt (dialog);
-        gtk_widget_destroy (dialog);
+        gtk_widget_destroy (GTK_WIDGET (dialog));
     }
 
     return uri;         
@@ -1009,7 +1009,7 @@ seahorse_util_remove_suffix (const gchar *path, const gchar *prompt)
         uri = NULL;
             
         uri = seahorse_util_chooser_save_prompt (dialog);
-        gtk_widget_destroy (dialog);
+        gtk_widget_destroy (GTK_WIDGET (dialog));
     }   
     
     return uri;

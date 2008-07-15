@@ -46,6 +46,18 @@ else
 KEYSERVER_SRCS = 
 endif
 
+if WITH_PGP
+PGP_LDADD = $(top_builddir)/pgp/libseahorse-pgp.la
+else
+PGP_LDADD = 
+endif
+
+if WITH_SSH
+SSH_LDADD = $(top_builddir)/ssh/libseahorse-ssh.la
+else
+SSH_LDADD = 
+endif
+
 bin_PROGRAMS = seahorse
 
 seahorse_SOURCES = main.c \
@@ -58,8 +70,8 @@ seahorse_SOURCES = main.c \
 
 seahorse_LDADD = \
 	$(top_builddir)/libseahorse/libseahorse.la \
-	$(top_builddir)/pgp/libseahorse-pgp.la \
-	$(top_builddir)/ssh/libseahorse-ssh.la \
+	$(PGP_LDADD) \
+	$(SSH_LDADD) \
 	$(top_builddir)/gkr/libseahorse-gkr.la \
 	$(top_builddir)/common/libseahorse-common.la \
 	$(top_builddir)/libcryptui/libcryptui.la \

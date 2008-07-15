@@ -72,14 +72,4 @@ void         seahorse_server_source_take_operation   (SeahorseServerSource *ssrc
 
 SeahorseServerSource* seahorse_server_source_new     (const gchar *uri);
 
-GSList*     seahorse_server_source_get_types         ();
-
-GSList*     seahorse_server_source_get_descriptions  ();
-
-gboolean    seahorse_server_source_valid_uri         (const gchar *uri);
-
-GSList*     seahorse_server_source_parse_keyservers  (GSList *keyservers);
-
-GSList*		seahorse_server_source_purge_keyservers	 (GSList *keyservers);
-
 #endif /* __SEAHORSE_SERVER_SOURCE_H__ */

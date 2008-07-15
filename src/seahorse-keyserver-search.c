@@ -20,16 +20,14 @@
  */
 
 
-#include "seahorse-widget.h"
-#include "seahorse-util.h"
-#include "seahorse-context.h"
-#include "seahorse-keyserver-results.h"
-#include "seahorse-preferences.h"
-#include "seahorse-gconf.h"
 #include "seahorse-context.h"
 #include "seahorse-dns-sd.h"
-
-#include "pgp/seahorse-server-source.h"
+#include "seahorse-gconf.h"
+#include "seahorse-keyserver-results.h"
+#include "seahorse-preferences.h"
+#include "seahorse-servers.h"
+#include "seahorse-util.h"
+#include "seahorse-widget.h"
 
 typedef struct _KeyserverSelection {
     GSList *names;
@@ -265,8 +263,8 @@ refresh_keyservers (GConfClient *client, guint id, GConfEntry *entry, SeahorseWi
     w = glade_xml_get_widget (swidget->xml, "key-server-list");
     g_return_if_fail (w != NULL);
 
-    keyservers = seahorse_gconf_get_string_list (KEYSERVER_KEY);
-    names = seahorse_server_source_parse_keyservers (keyservers);
+    keyservers = seahorse_servers_get_uris ();
+    names = seahorse_servers_get_names ();
     populate_keyserver_list (swidget, w, keyservers, names);
     
     seahorse_util_string_slist_free (keyservers);

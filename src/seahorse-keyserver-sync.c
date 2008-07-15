@@ -23,17 +23,16 @@
 
 #include <glib/gi18n.h>
 
-#include "seahorse-widget.h"
-#include "seahorse-util.h"
 #include "seahorse-context.h"
-#include "seahorse-windows.h"
+#include "seahorse-gconf.h"
+#include "seahorse-keyserver-sync.h"
 #include "seahorse-progress.h"
 #include "seahorse-preferences.h"
-#include "seahorse-gconf.h"
+#include "seahorse-servers.h"
 #include "seahorse-transfer-operation.h"
-#include "seahorse-keyserver-sync.h"
-
-#include "pgp/seahorse-server-source.h"
+#include "seahorse-util.h"
+#include "seahorse-widget.h"
+#include "seahorse-windows.h"
 
 static void 
 sync_import_complete (SeahorseOperation *op, SeahorseKeySource *sksrc)
@@ -204,8 +203,7 @@ seahorse_keyserver_sync (GList *keys)
     mop = seahorse_multi_operation_new ();
 
     /* And now synchronizing keys from the servers */
-    ks = seahorse_gconf_get_string_list (KEYSERVER_KEY);
-    ks = seahorse_server_source_purge_keyservers (ks);
+    ks = seahorse_servers_get_uris ();
     
     for (l = ks; l; l = g_slist_next (l)) {
         

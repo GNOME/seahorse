@@ -33,7 +33,9 @@
 #include "seahorse-secure-memory.h"
 
 /* For gnome-keyring secret type ids */
+#ifdef WITH_PGP
 #include "pgp/seahorse-pgp-key.h"
+#endif
 #ifdef WITH_SSH
 #include "ssh/seahorse-ssh-key.h"
 #endif 
@@ -581,11 +583,13 @@ seahorse_gkeyring_item_get_use (SeahorseGKeyringItem *git)
     if (git->attributes) {
         val = seahorse_gkeyring_item_get_attribute (git, "seahorse-key-type");
         if (val) {
-			if (strcmp (val, SEAHORSE_PGP_STR) == 0)
-                return SEAHORSE_GKEYRING_USE_PGP;
+#ifdef WITH_PGP
+        	if (strcmp (val, SEAHORSE_PGP_STR) == 0)
+        		return SEAHORSE_GKEYRING_USE_PGP;
+#endif
 #ifdef WITH_SSH
-            if (strcmp (val, SEAHORSE_SSH_STR) == 0)
-                return SEAHORSE_GKEYRING_USE_SSH;
+        	if (strcmp (val, SEAHORSE_SSH_STR) == 0)
+        		return SEAHORSE_GKEYRING_USE_SSH;
 #endif
         }
     }

@@ -33,6 +33,7 @@
 
 #include "seahorse-gconf.h"
 #include "seahorse-operation.h"
+#include "seahorse-servers.h"
 #include "seahorse-util.h"
 
 #include <libsoup/soup.h>
@@ -969,6 +970,7 @@ seahorse_hkp_source_class_init (SeahorseHKPSourceClass *klass)
 	                             NULL, G_PARAM_READABLE));
 	    
 	seahorse_registry_register_type (NULL, SEAHORSE_TYPE_HKP_SOURCE, "key-source", "remote", SEAHORSE_PGP_STR, NULL);
+	seahorse_servers_register_type ("hkp", _("HTTP Key Server"), seahorse_hkp_is_valid_uri);
 }
 
 

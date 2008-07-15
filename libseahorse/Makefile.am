@@ -16,9 +16,10 @@ INCLUDES = -I$(top_builddir) \
 	-DLIBCRYPTUI_API_SUBJECT_TO_CHANGE
 
 VALA_SRCS = \
-	seahorse-view.vala \
 	seahorse-commands.vala \
-	seahorse-generator.vala
+	seahorse-generator.vala \
+	seahorse-servers.vala \
+	seahorse-view.vala
 	
 VALA_PKGS = \
 	--vapidir . \
@@ -75,6 +76,7 @@ libseahorse_la_SOURCES = \
 	seahorse-notification.c \
 	seahorse-secure-memory.c seahorse-secure-memory.h \
 	seahorse-secure-entry.c seahorse-secure-entry.h \
+	seahorse-servers.c seahorse-servers.h \
 	seahorse-unix-signal.c seahorse-unix-signal.h \
 	$(MARSHAL_SRCS) \
 	$(VALA_CFILES) $(VALA_HFILES) \

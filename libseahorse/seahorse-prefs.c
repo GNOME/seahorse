@@ -22,19 +22,17 @@
 
 #include <glib/gi18n.h>
 
-#include "seahorse-prefs.h"
-#include "seahorse-util.h"
 #include "seahorse-check-button-control.h"
 #include "seahorse-combo-keys.h"
-#include "seahorse-keyserver-control.h"
 #include "seahorse-gconf.h"
 #include "seahorse-gtkstock.h"
+#include "seahorse-keyserver-control.h"
+#include "seahorse-prefs.h"
 #include "seahorse-secure-entry.h"
+#include "seahorse-servers.h"
+#include "seahorse-util.h"
 
 #include "common/seahorse-registry.h"
-
-#include "pgp/seahorse-pgp-module.h"
-#include "pgp/seahorse-server-source.h"
 
 /* From seahorse-prefs-cache.c */
 void seahorse_prefs_cache (SeahorseWidget *widget);
@@ -63,7 +61,7 @@ keyserver_cell_edited (GtkCellRendererText *cell, gchar *path, gchar *text,
     GtkTreeIter iter;
     gboolean ret;
     
-    if (!seahorse_server_source_valid_uri (text)) {
+    if (!seahorse_servers_is_valid_uri (text)) {
         seahorse_util_show_error (NULL, _("Not a valid Key Server address."), 
                                   _("For help contact your system adminstrator or the administrator of the key server." ));
         return;
@@ -227,8 +225,6 @@ gconf_notify (GConfClient *client, guint id, GConfEntry *entry, SeahorseWidget *
         /* Change list of GConfValue to list of strings */
         for (ks = NULL, l = gconf_value_get_list (value); l; l = l->next) 
             ks = g_slist_append (ks, (gchar*)gconf_value_get_string (l->data));
-        
-		ks = seahorse_server_source_purge_keyservers (ks);
         populate_keyservers (swidget, ks);
         g_slist_free (l); /* We don't own string values */
     }
@@ -275,7 +271,7 @@ calculate_keyserver_uri (SeahorseWidget *swidget)
     
     /* Custom URI? */
     if (scheme == NULL) {
-        if (seahorse_server_source_valid_uri (host))
+        if (seahorse_servers_is_valid_uri (host))
             return g_strdup (host);
         return NULL;
     }
@@ -289,7 +285,7 @@ calculate_keyserver_uri (SeahorseWidget *swidget)
         port = NULL;
     
     uri = g_strdup_printf("%s://%s%s%s", scheme, host, port ? ":" : "", port ? port : "");
-    if (!seahorse_server_source_valid_uri (uri)) {
+    if (!seahorse_servers_is_valid_uri (uri)) {
         g_free (uri);
         uri = NULL;
     }
@@ -353,21 +349,25 @@ keyserver_add_clicked (GtkButton *button, SeahorseWidget *sw)
     widget = glade_xml_get_widget (swidget->xml, "keyserver-type");
     g_return_if_fail (widget != NULL);
     
-    /* The list of types, plus the null 'custom' type */
-    types = seahorse_server_source_get_types ();
-    types = g_slist_append (types, g_strdup (""));
-    g_object_set_data_full (G_OBJECT (swidget), "keyserver-types", types, 
-                            (GDestroyNotify)seahorse_util_string_slist_free);
+    /* The list of types */
+    types = seahorse_servers_get_types ();
     
     /* The description for the key server types, plus custom */
-    descriptions = seahorse_server_source_get_descriptions ();
+    descriptions = NULL;
+    for (l = types; l; l = g_slist_next (l))
+	    descriptions = g_slist_append (descriptions, seahorse_servers_get_description (l->data));
     descriptions = g_slist_append (descriptions, g_strdup (_("Custom")));
     
     gtk_combo_box_remove_text (GTK_COMBO_BOX (widget), 0);    
     for (l = descriptions; l; l = g_slist_next (l))
-        gtk_combo_box_append_text (GTK_COMBO_BOX (widget), l->data);
+        gtk_combo_box_append_text (GTK_COMBO_BOX (widget), l->data ? l->data : "");
     gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
     seahorse_util_string_slist_free (descriptions);
+
+    /* Save these away for later */
+    types = g_slist_append (types, g_strdup (""));
+    g_object_set_data_full (G_OBJECT (swidget), "keyserver-types", types, 
+                            (GDestroyNotify)seahorse_util_string_slist_free);
 
     glade_xml_signal_connect_data (swidget->xml, "on_uri_changed", 
                                    G_CALLBACK (uri_changed), swidget);
@@ -404,8 +404,7 @@ setup_keyservers (SeahorseWidget *swidget)
     GSList *ks;
     guint notify_id;
     
-    ks = seahorse_gconf_get_string_list (KEYSERVER_KEY);
-	ks = seahorse_server_source_purge_keyservers (ks);
+    ks = seahorse_servers_get_uris ();
     populate_keyservers (swidget, ks);
     seahorse_util_string_slist_free (ks);
     
@@ -482,6 +481,7 @@ SeahorseWidget *
 seahorse_prefs_new (GtkWindow *parent)
 {
     SeahorseWidget *swidget;
+    GtkWidget *widget = NULL;
     
     swidget = seahorse_widget_new ("prefs", parent);
     

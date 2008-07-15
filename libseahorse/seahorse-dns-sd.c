@@ -31,7 +31,9 @@
 #include "seahorse-dns-sd.h"
 #include "seahorse-context.h"
 
+#ifdef WITH_PGP
 #include "pgp/seahorse-server-source.h"
+#endif
 
 /* Override the DEBUG_DNSSD_ENABLE switch here */
 /* #define DEBUG_DNSSD_ENABLE 1 */
@@ -80,6 +82,7 @@ G_DEFINE_TYPE (SeahorseServiceDiscovery, seahorse_service_discovery, G_TYPE_OBJE
  */
 
 #ifdef WITH_SHARING
+#ifdef WITH_PGP
 
 static void
 disconnect (SeahorseServiceDiscovery *ssd)
@@ -221,6 +224,7 @@ client_callback (AvahiClient *client, AvahiClientState state, void *data)
     }
 }
 
+#endif /* WITH_PGP */
 #endif /* WITH_SHARING */
 
 static void
@@ -238,7 +242,9 @@ service_key_list (const gchar* key, const gchar* value, GSList **arg)
 static void
 seahorse_service_discovery_init (SeahorseServiceDiscovery *ssd)
 {
+#ifdef WITH_SHARING
     int aerr;
+#endif
     
     ssd->priv = g_new0 (SeahorseServiceDiscoveryPriv, 1);
     ssd->services = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);

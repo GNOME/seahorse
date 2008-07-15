@@ -260,12 +260,12 @@ seahorse_pgp_photo_add (SeahorsePGPKey *pkey, GtkWindow *parent, const gchar *pa
     if (NULL == path) {
         chooser = seahorse_util_chooser_open_new (_("Choose Photo to Add to Key"), parent);
         gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (chooser), TRUE);
-        add_image_files (chooser);
+        add_image_files (GTK_WIDGET (chooser));
 
         if (gtk_dialog_run (GTK_DIALOG (chooser)) == GTK_RESPONSE_ACCEPT)
             filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (chooser));
 	
-        gtk_widget_destroy (chooser);
+        gtk_widget_destroy (GTK_WIDGET (chooser));
 
         if (!filename)
             return FALSE;

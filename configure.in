@@ -83,94 +83,117 @@ else
 fi
 AC_SUBST(PLUGIN_LIBTOOL_FLAGS)
 
-dnl *********************
-dnl Accepted GPG versions
-dnl *********************
-AC_ARG_ENABLE(gpg-check, 
-	AC_HELP_STRING([--disable-gpg-check], [check GPG version (default is yes)]),
-	DO_CHECK=$enableval, DO_CHECK=yes)
+dnl **************************************************************
+dnl GPG / GPGME CHECKS
+dnl **************************************************************
+
+AC_ARG_ENABLE(pgp,
+	AC_HELP_STRING([--enable-pgp], [enable PGP support (default is auto)]))
 	
-if test	"$DO_CHECK" = "yes"; then
-  accepted_versions="1.2 1.4 2.0"
-  AC_PATH_PROG(GNUPG, gpg, no)
-  ok="no"
-  if test "$GNUPG" != "no"; then
-    AC_MSG_CHECKING(for appropriate GnuPG version)
-    gnupg_version=`$GNUPG --version | grep gpg`
-    major=`echo $gnupg_version | \
-		sed 's/^gpg (GnuPG) \([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\).*/\1/'`
-    minor=`echo $gnupg_version | \
-		sed 's/^gpg (GnuPG) \([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\).*/\2/'`
-    micro=`echo $gnupg_version | \
-		sed 's/^gpg (GnuPG) \([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\).*/\3/'`
+have_gpg=""
+have_gpgme=""
+
+if test "$enable_pgp" = "no"; then
+	echo "disabling PGP support"
+else
+	AC_ARG_ENABLE(gpg-check, 
+		AC_HELP_STRING([--disable-gpg-check], [check GPG version (default is yes)]),
+		DO_CHECK=$enableval, DO_CHECK=yes)
+	
+	if test	"$DO_CHECK" = "yes"; then
+		accepted_versions="1.2 1.4 2.0"
+		AC_PATH_PROG(GNUPG, gpg, no)
+		ok="no"
+		if test "$GNUPG" != "no"; then
+			AC_MSG_CHECKING(for appropriate GnuPG version)
+			gnupg_version=`$GNUPG --version | grep gpg`
+			major=`echo $gnupg_version | \
+				sed 's/^gpg (GnuPG) \([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\).*/\1/'`
+			minor=`echo $gnupg_version | \
+				sed 's/^gpg (GnuPG) \([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\).*/\2/'`
+			micro=`echo $gnupg_version | \
+				sed 's/^gpg (GnuPG) \([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\).*/\3/'`
     
-    for ver in $accepted_versions; do
-      if test "$ver" = "$major.$minor"; then
-        AC_DEFINE_UNQUOTED(GPG_MAJOR, [$major], [GPG Major Version])
-        AC_DEFINE_UNQUOTED(GPG_MINOR, [$minor], [GPG Minor Version])
-        ok="yes"
-        break
-      fi
-    done
-    
-  fi
+			for ver in $accepted_versions; do
+				if test "$ver" = "$major.$minor"; then
+					AC_DEFINE_UNQUOTED(GPG_MAJOR, [$major], [GPG Major Version])
+					AC_DEFINE_UNQUOTED(GPG_MINOR, [$minor], [GPG Minor Version])
+					ok="yes"
+					break
+				fi
+			done
+		fi
   
-  if test "$ok" = "yes"; then
-	AC_MSG_RESULT([yes])
-  else
-	AC_MSG_ERROR([Appropriate version of GnuPG not found. Please install one of versions: $accepted_versions])
-  fi
+		if test "$ok" = "yes"; then
+			AC_MSG_RESULT([yes])
+			have_gpg="$gnupg_version"
+		else
+			AC_MSG_RESULT([no])
+		fi
+	fi
 
-fi
 
+	ok="no"
+	min_gpgme_version=1.0.0
+	AC_PATH_PROG(GPGME_CONFIG, gpgme-config, "failed")
+	if test $GPGME_CONFIG != "failed" ; then
+      		AC_MSG_CHECKING(for GPGME - version >= $min_gpgme_version)
+		req_major=`echo $min_gpgme_version | \
+			sed 's/\([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\)/\1/'`
+		req_minor=`echo $min_gpgme_version | \
+			sed 's/\([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\)/\2/'`
+		req_micro=`echo $min_gpgme_version | \
+			sed 's/\([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\)/\3/'`
+		gpgme_config_version=`$GPGME_CONFIG --version`
+		major=`echo $gpgme_config_version | \
+			sed 's/\([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\).*/\1/'`
+		minor=`echo $gpgme_config_version | \
+			sed 's/\([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\).*/\2/'`
+		micro=`echo $gpgme_config_version | \
+			sed 's/\([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\).*/\3/'`
 
-dnl **********
-dnl GPGME
-dnl **********
+		if test "$major" -eq "$req_major"; then
+			if test "$minor" -ge "$req_minor"; then
+				if test "$micro" -ge "$req_micro"; then
+					ok="yes"
+				fi
+			fi
+		fi
+	fi
 
-ok="no"
-min_gpgme_version=1.0.0
-AC_PATH_PROG(GPGME_CONFIG, gpgme-config, "failed")
-if test $GPGME_CONFIG != "failed" ; then
-      AC_MSG_CHECKING(for GPGME - version >= $min_gpgme_version)
-      req_major=`echo $min_gpgme_version | \
-		 sed 's/\([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\)/\1/'`
-      req_minor=`echo $min_gpgme_version | \
-                 sed 's/\([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\)/\2/'`
-      req_micro=`echo $min_gpgme_version | \
-                 sed 's/\([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\)/\3/'`
-      gpgme_config_version=`$GPGME_CONFIG --version`
-      major=`echo $gpgme_config_version | \
-                 sed 's/\([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\).*/\1/'`
-      minor=`echo $gpgme_config_version | \
-                 sed 's/\([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\).*/\2/'`
-      micro=`echo $gpgme_config_version | \
-		 sed 's/\([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\).*/\3/'`
-
-	if test "$major" -eq "$req_major"; then
-	   if test "$minor" -ge "$req_minor"; then
-	     if test "$micro" -ge "$req_micro"; then
-	       ok="yes"
-	     fi
-	   fi
+	if test $ok = "yes"; then
+		GPGME_CFLAGS=`$GPGME_CONFIG --cflags`
+		GPGME_LIBS=`$GPGME_CONFIG --libs`
+		AC_MSG_RESULT(yes)
+		have_gpgme="$gpgme_config_version"
+	else
+		AC_MSG_RESULT(no)
 	fi
 fi
 
-if test $ok = "yes"; then
-  GPGME_CFLAGS=`$GPGME_CONFIG --cflags`
-  GPGME_LIBS=`$GPGME_CONFIG --libs`
-  AC_MSG_RESULT(yes)
-else
-  AC_MSG_ERROR(GPGME $min_gpgme_version or later needed)
+if test "$enable_pgp" != "no" -a -n "$have_gpg" -a -n "$have_gpgme"; then
+	enable_pgp="yes"
 fi
 
-SEAHORSE_CFLAGS="$SEAHORSE_CFLAGS $GPGME_CFLAGS -O0"
-SEAHORSE_LIBS="$SEAHORSE_LIBS $GPGME_LIBS"
+if test "$enable_pgp" = "yes"; then
+	if test -z "$have_gpg"; then
+		AC_MSG_ERROR([Appropriate version of GnuPG not found. Please install one of versions: $accepted_versions])
+	fi
+			
+	if test -z "$have_gpgme"; then
+		AC_MSG_ERROR(GPGME $min_gpgme_version or later needed)
+	fi
 
+	SEAHORSE_CFLAGS="$SEAHORSE_CFLAGS $GPGME_CFLAGS -O0"
+	SEAHORSE_LIBS="$SEAHORSE_LIBS $GPGME_LIBS"
+        AC_DEFINE(WITH_PGP, 1, [With PGP Support])
+fi
 
-dnl ***************
+AM_CONDITIONAL(WITH_PGP, test "$enable_pgp" == "yes")
+
+dnl ******************************************************************************
 dnl LDAP [from gpg]
-dnl ***************
+dnl ******************************************************************************
 
 AC_MSG_CHECKING([LDAP keyserver support])
 AC_ARG_ENABLE(ldap,
@@ -313,9 +336,14 @@ AC_ARG_ENABLE(sharing,
         AC_HELP_STRING([--disable-sharing],
         [Don't compile in DNS-SD key sharing]))
 
-if test "$enable_hkp" != "yes"; then
-    echo "DNS-SD key sharing requires HKP support"
-    enable_sharing=no
+if test "$enable_pgp" != "no"; then
+	echo "DNS-SD key sharing requires PGP support"
+	enable_sharing=no
+fi
+	
+if test "$enable_hkp" = "no"; then
+    	echo "DNS-SD key sharing requires HKP support"
+	enable_sharing=no
 fi
 
 if test "$enable_sharing" = "no"; then
@@ -531,8 +559,9 @@ dnl  SUMMARY
 dnl ****************************************************************************
 
 echo "
-GnuPG Version:           $gnupg_version
-GPGME Version:           $gpgme_config_version
+PGP Support:		 $enable_pgp
+  GnuPG Version:         $have_gpg
+  GPGME Version:         $have_gpgme
 SSH Support:             $enable_ssh
 Keyserver Support:       $with_keyserver
   LDAP:                  $with_ldap

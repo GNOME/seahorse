@@ -19,13 +19,12 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include "seahorse-util.h"
 #include "seahorse-context.h"
+#include "seahorse-gconf.h"
 #include "seahorse-keyserver-control.h"
 #include "seahorse-key.h"
-#include "seahorse-gconf.h"
-
-#include "pgp/seahorse-server-source.h"
+#include "seahorse-servers.h"
+#include "seahorse-util.h"
 
 #define UPDATING    "updating"
 
@@ -281,8 +280,7 @@ populate_combo (SeahorseKeyserverControl *skc, gboolean gconf)
                                            -1);
     }
 
-    ks = seahorse_gconf_get_string_list (KEYSERVER_KEY);
-    ks = seahorse_server_source_purge_keyservers (ks);
+    ks = seahorse_servers_get_uris ();
 
     for (l = ks; l != NULL; l = g_slist_next (l)) {
         const gchar *keyserver = (const gchar *) l->data;

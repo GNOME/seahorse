@@ -27,18 +27,21 @@
 #include <libintl.h>
 
 #include "seahorse-context.h"
-#include "seahorse-marshal.h"
-#include "seahorse-libdialogs.h"
-#include "seahorse-gconf.h"
-#include "seahorse-util.h"
 #include "seahorse-dns-sd.h"
+#include "seahorse-gconf.h"
+#include "seahorse-libdialogs.h"
+#include "seahorse-marshal.h"
+#include "seahorse-servers.h"
 #include "seahorse-transfer-operation.h"
 #include "seahorse-unknown-source.h"
 #include "seahorse-unknown-key.h"
+#include "seahorse-util.h"
 
 #include "common/seahorse-registry.h"
 
+#ifdef WITH_PGP
 #include "pgp/seahorse-server-source.h"
+#endif
 
 /* The application main context */
 SeahorseContext* app_context = NULL;
@@ -821,6 +824,7 @@ refresh_keyservers (GConfClient *client, guint id, GConfEntry *entry,
                     SeahorseContext *sctx)
 {
 #ifdef WITH_KEYSERVER
+#ifdef WITH_PGP
     SeahorseServerSource *ssrc;
     GSList *keyservers, *l;
     GHashTable *check;
@@ -838,8 +842,7 @@ refresh_keyservers (GConfClient *client, guint id, GConfEntry *entry,
 
     
     /* Load and strip names from keyserver list */
-    keyservers = seahorse_gconf_get_string_list (KEYSERVER_KEY);
-    seahorse_server_source_purge_keyservers (keyservers);
+    keyservers = seahorse_servers_get_uris ();
     
     for (l = keyservers; l; l = g_slist_next (l)) {
         uri = (const gchar*)(l->data);
@@ -861,7 +864,8 @@ refresh_keyservers (GConfClient *client, guint id, GConfEntry *entry,
     g_hash_table_foreach (check, (GHFunc)auto_source_remove, sctx);
     
     g_hash_table_destroy (check);
-    seahorse_util_string_slist_free (keyservers);    
+    seahorse_util_string_slist_free (keyservers);
+#endif /* WITH_PGP */
 #endif /* WITH_KEYSERVER */
 }
 

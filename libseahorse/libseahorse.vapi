@@ -15,6 +15,16 @@ namespace Seahorse {
 	public abstract class Generator : GLib.Object {
 		public abstract Gtk.ActionGroup actions { get; }
 	}
+	[CCode (cheader_filename = "seahorse-servers.h")]
+	public class Servers : GLib.Object {
+		public static GLib.SList<string> get_types ();
+		public static string? get_description (string type);
+		public static void register_type (string type, string description, Seahorse.ValidUriFunc validate);
+		public static GLib.SList<string> get_uris ();
+		public static GLib.SList<string> get_names ();
+		public static bool is_valid_uri (string uri);
+		public Servers ();
+	}
 	[CCode (cheader_filename = "seahorse-view.h")]
 	public interface View : GLib.Object {
 		public abstract GLib.List<weak Seahorse.Key> get_selected_keys ();
@@ -25,4 +35,6 @@ namespace Seahorse {
 		public abstract Gtk.Window window { get; }
 		public signal void selection_changed ();
 	}
+	[CCode (cheader_filename = "seahorse-servers.h")]
+	public static delegate bool ValidUriFunc (string uri);
 }
