@@ -391,7 +391,9 @@ seahorse_context_remote_key_source (SeahorseContext *sctx, const gchar *uri)
             return ks;
     }
     
+    /* TODO: We need to decouple this properly */
 #ifdef WITH_KEYSERVER
+#ifdef WITH_PGP
     /* Auto generate one if possible */
     if (sctx->pv->auto_sources) {
         ks = SEAHORSE_KEY_SOURCE (seahorse_server_source_new (uri));
@@ -400,6 +402,7 @@ seahorse_context_remote_key_source (SeahorseContext *sctx, const gchar *uri)
             g_hash_table_replace (sctx->pv->auto_sources, g_strdup (uri), ks);
         }
     }
+#endif /* WITH_PGP */
 #endif /* WITH_KEYSERVER */	
     
     return ks;
@@ -805,6 +808,8 @@ seahorse_context_load_remote_keys (SeahorseContext *sctx, const gchar *search)
     return mop ? SEAHORSE_OPERATION (mop) : op;  
 }
 
+#ifdef WITH_KEYSERVER
+#ifdef WITH_PGP
 /* For copying the keys */
 static void 
 auto_source_to_hash (const gchar *uri, SeahorseKeySource *sksrc, GHashTable *ht)
@@ -818,6 +823,8 @@ auto_source_remove (const gchar* uri, SeahorseKeySource *sksrc, SeahorseContext 
     seahorse_context_remove_key_source (sctx, sksrc);
     g_hash_table_remove (sctx->pv->auto_sources, uri);
 }
+#endif 
+#endif
 
 static void
 refresh_keyservers (GConfClient *client, guint id, GConfEntry *entry, 

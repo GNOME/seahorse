@@ -82,7 +82,6 @@ G_DEFINE_TYPE (SeahorseServiceDiscovery, seahorse_service_discovery, G_TYPE_OBJE
  */
 
 #ifdef WITH_SHARING
-#ifdef WITH_PGP
 
 static void
 disconnect (SeahorseServiceDiscovery *ssd)
@@ -224,7 +223,6 @@ client_callback (AvahiClient *client, AvahiClientState state, void *data)
     }
 }
 
-#endif /* WITH_PGP */
 #endif /* WITH_SHARING */
 
 static void
@@ -242,30 +240,28 @@ service_key_list (const gchar* key, const gchar* value, GSList **arg)
 static void
 seahorse_service_discovery_init (SeahorseServiceDiscovery *ssd)
 {
-#ifdef WITH_SHARING
-    int aerr;
-#endif
-    
     ssd->priv = g_new0 (SeahorseServiceDiscoveryPriv, 1);
     ssd->services = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
     
 #ifdef WITH_SHARING
-    ssd->priv->client = avahi_client_new (seahorse_util_dns_sd_get_poll (), 
-                                          0, client_callback, ssd, &aerr);
-    if (!ssd->priv->client) {
-        g_warning ("DNS-SD initialization failed: %s", avahi_strerror (aerr));
-        return;
-    }
+	{
+		int aerr;
+		ssd->priv->client = avahi_client_new (seahorse_util_dns_sd_get_poll (), 
+		                                      0, client_callback, ssd, &aerr);
+		if (!ssd->priv->client) {
+			g_warning ("DNS-SD initialization failed: %s", avahi_strerror (aerr));
+			return;
+		}
     
-    ssd->priv->browser = avahi_service_browser_new (ssd->priv->client, AVAHI_IF_UNSPEC, 
-                                AVAHI_PROTO_UNSPEC, HKP_SERVICE_TYPE, NULL, 0, 
-                                browse_callback, ssd);
-    if (!ssd->priv->browser) {
-        g_warning ("Browsing for DNS-SD services failed: %s", 
-                   avahi_strerror (avahi_client_errno (ssd->priv->client)));
-        return;
-    }
-    
+		ssd->priv->browser = avahi_service_browser_new (ssd->priv->client, AVAHI_IF_UNSPEC, 
+		                                                AVAHI_PROTO_UNSPEC, HKP_SERVICE_TYPE, NULL, 0, 
+		                                                browse_callback, ssd);
+		if (!ssd->priv->browser) {
+			g_warning ("Browsing for DNS-SD services failed: %s", 
+			           avahi_strerror (avahi_client_errno (ssd->priv->client)));
+			return;
+		}
+	}
 #endif /* WITH_SHARING */
 }
 
@@ -286,10 +282,10 @@ seahorse_service_discovery_finalize (GObject *gobject)
 {
     SeahorseServiceDiscovery *ssd = SEAHORSE_SERVICE_DISCOVERY (gobject);
   
-#ifdef WITH_SHARING    
+#ifdef WITH_SHARING
     g_assert (ssd->priv->browser == NULL);
     g_assert (ssd->priv->client == NULL);
-#endif /* WITH_SHARING */    
+#endif     
 
     if (ssd->services)    
         g_hash_table_destroy (ssd->services);

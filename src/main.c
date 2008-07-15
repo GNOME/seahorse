@@ -35,8 +35,6 @@
 
 #ifdef WITH_PGP
 #include "pgp/seahorse-pgp-module.h"
-#include "pgp/seahorse-pgp-key.h"
-#include "pgp/seahorse-pgp-source.h"
 #endif
 
 #ifdef WITH_SSH
@@ -63,13 +61,6 @@ main (int argc, char **argv)
     bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
     bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
     textdomain (GETTEXT_PACKAGE);
-#endif
-
-    g_message("init gpgme version %s", gpgme_check_version(NULL));
-
-#ifdef ENABLE_NLS
-    gpgme_set_locale(NULL, LC_CTYPE, setlocale(LC_CTYPE, NULL));
-    gpgme_set_locale(NULL, LC_MESSAGES, setlocale(LC_MESSAGES, NULL));
 #endif
 
     gtk_init_with_args (&argc, &argv, _("Encryption Key Manager"), NULL, GETTEXT_PACKAGE, NULL);

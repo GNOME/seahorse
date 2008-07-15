@@ -290,6 +290,13 @@ seahorse_pgp_source_class_init (SeahorsePGPSourceClass *klass)
 {
     GObjectClass *gobject_class;
     SeahorseKeySourceClass *key_class;
+    
+    g_message ("init gpgme version %s", gpgme_check_version (NULL));
+    
+#ifdef ENABLE_NLS
+    gpgme_set_locale (NULL, LC_CTYPE, setlocale (LC_CTYPE, NULL));
+    gpgme_set_locale (NULL, LC_MESSAGES, setlocale (LC_MESSAGES, NULL));
+#endif
    
     parent_class = g_type_class_peek_parent (klass);
     gobject_class = G_OBJECT_CLASS (klass);
