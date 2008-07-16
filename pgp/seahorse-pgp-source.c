@@ -41,6 +41,7 @@
 
 #include <stdlib.h>
 #include <libintl.h>
+#include <locale.h>
 
 /* TODO: Verify properly that all keys we deal with are PGP keys */
 
