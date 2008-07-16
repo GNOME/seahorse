@@ -27,8 +27,13 @@ namespace Seahorse {
 		public GLib.Quark ktype { get; }
 		public static Operation export_keys (GLib.List<Key> keys, GLib.OutputStream output);
 		public static void delete_keys (GLib.List<Key> keys) throws GLib.Error;
-		public Operation import (GLib.InputStream input);
-		public Operation load (GLib.Quark keyid);
+		
+		public virtual Operation load (GLib.Quark keyid);
+		public virtual Operation search (string match);
+		public virtual Operation import (GLib.InputStream input);
+		public virtual Operation export (GLib.List<weak Key> keys, bool complete, GLib.OutputStream output);
+		public virtual Operation export_raw (GLib.List<GLib.Quark> keyids, GLib.OutputStream output);
+		public virtual void remove (Key key, uint name) throws GLib.Error; 
         }
         
         [CCode (cheader_filename = "seahorse-key.h")]
@@ -93,6 +98,7 @@ namespace Seahorse {
 
 	[CCode (cheader_filename = "seahorse-operation.h")]
 	public class Operation : GLib.Object {
+		public Operation.complete();
 		public bool is_successful ();
 		public bool is_running ();
 		public void display_error (string heading, Gtk.Widget? parent);

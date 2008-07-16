@@ -64,8 +64,6 @@ static void seahorse_server_set_property      (GObject *object, guint prop_id,
                                                const GValue *value, GParamSpec *pspec);
                                                
 /* SeahorseKeySource methods */
-static void         seahorse_server_source_stop        (SeahorseKeySource *src);
-static guint        seahorse_server_source_get_state   (SeahorseKeySource *src);
 static SeahorseOperation*  seahorse_server_source_load (SeahorseKeySource *src, GQuark keyid);
 
 static GObjectClass *parent_class = NULL;
@@ -84,8 +82,6 @@ seahorse_server_source_class_init (SeahorseServerSourceClass *klass)
         
     key_class->canonize_keyid = seahorse_pgp_key_get_cannonical_id;
     key_class->load = seahorse_server_source_load;
-    key_class->stop = seahorse_server_source_stop;
-    key_class->get_state = seahorse_server_source_get_state;
     
     gobject_class->dispose = seahorse_server_source_dispose;
     gobject_class->finalize = seahorse_server_source_finalize;
@@ -323,32 +319,6 @@ seahorse_server_source_load (SeahorseKeySource *src, GQuark keyid)
 
     /* We should never be called directly */
     return NULL;
-}
-
-static void
-seahorse_server_source_stop (SeahorseKeySource *src)
-{
-    SeahorseServerSource *ssrc;
-    
-    g_assert (SEAHORSE_IS_KEY_SOURCE (src));
-    ssrc = SEAHORSE_SERVER_SOURCE (src);
-
-    if(seahorse_operation_is_running (SEAHORSE_OPERATION (ssrc->priv->mop)))
-        seahorse_operation_cancel (SEAHORSE_OPERATION (ssrc->priv->mop));
-}
-
-static guint
-seahorse_server_source_get_state (SeahorseKeySource *src)
-{
-    SeahorseServerSource *ssrc;
-    
-    g_assert (SEAHORSE_IS_SERVER_SOURCE (src));
-    ssrc = SEAHORSE_SERVER_SOURCE (src);
-    
-    guint state = SKSRC_REMOTE;
-    if (seahorse_operation_is_running (SEAHORSE_OPERATION (ssrc->priv->mop)))
-        state |= SKSRC_LOADING;
-    return state;
 }
 
 /* Code adapted from GnuPG (file g10/keyserver.c) */

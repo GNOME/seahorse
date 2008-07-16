@@ -59,12 +59,6 @@ typedef struct _SeahorseKeySource {
     GObject             parent;   
 } SeahorseKeySource;
 
-/* Flags for the get_state method below */
-typedef enum {
-    SKSRC_REMOTE  = 0x00000001,
-    SKSRC_LOADING = 0x00000010
-} SeahorseKeySourceFlags;
-
 typedef struct _SeahorseKeySourceClass {
     GtkObjectClass parent_class;
     
@@ -101,17 +95,6 @@ typedef struct _SeahorseKeySourceClass {
      */
     SeahorseOperation* (*search) (SeahorseKeySource *sksrc, const gchar *match);
 
-    
-    /**
-     * stop
-     * @sksrc: The #SeahorseKeySource.
-     * 
-     * Stops any operations in progress. (ie: load, import, export etc...)
-     */
-    void (*stop) (SeahorseKeySource *sksrc);
-    
-    /* Get the flags for this key source */
-    guint (*get_state) (SeahorseKeySource *sksrc);
     
     /**
      * import
@@ -175,8 +158,6 @@ GType       seahorse_key_source_get_type      (void);
 /* Method helper functions ------------------------------------------- */
 
 
-guint               seahorse_key_source_get_state        (SeahorseKeySource *sksrc);
-
 SeahorseOperation*  seahorse_key_source_load             (SeahorseKeySource *sksrc,
                                                           GQuark keyid);
                                                           
@@ -212,8 +193,6 @@ SeahorseOperation*  seahorse_key_source_export           (SeahorseKeySource *sks
 SeahorseOperation*  seahorse_key_source_export_raw       (SeahorseKeySource *sksrc, 
                                                           GSList *keyids, 
                                                           GOutputStream *output);
-
-void                seahorse_key_source_stop             (SeahorseKeySource *sksrc);
 
 gboolean            seahorse_key_source_remove           (SeahorseKeySource *sksrc,
                                                           SeahorseKey *skey,

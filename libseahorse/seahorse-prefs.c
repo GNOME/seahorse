@@ -481,7 +481,9 @@ SeahorseWidget *
 seahorse_prefs_new (GtkWindow *parent)
 {
     SeahorseWidget *swidget;
+#ifndef WITH_KEYSERVER
     GtkWidget *widget = NULL;
+#endif
     
     swidget = seahorse_widget_new ("prefs", parent);
     

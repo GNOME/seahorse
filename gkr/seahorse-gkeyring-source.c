@@ -588,31 +588,6 @@ seahorse_gkeyring_source_load (SeahorseKeySource *src, GQuark keyid)
     return SEAHORSE_OPERATION (lop);
 }
 
-static void
-seahorse_gkeyring_source_stop (SeahorseKeySource *src)
-{
-    SeahorseGKeyringSource *gsrc;
-    
-    g_assert (SEAHORSE_IS_KEY_SOURCE (src));
-    gsrc = SEAHORSE_GKEYRING_SOURCE (src);
-    
-    if(seahorse_operation_is_running (SEAHORSE_OPERATION (gsrc->pv->operations)))
-        seahorse_operation_cancel (SEAHORSE_OPERATION (gsrc->pv->operations));
-}
-
-static guint
-seahorse_gkeyring_source_get_state (SeahorseKeySource *src)
-{
-    SeahorseGKeyringSource *gsrc;
-    
-    g_assert (SEAHORSE_IS_KEY_SOURCE (src));
-    gsrc = SEAHORSE_GKEYRING_SOURCE (src);
-    
-    return seahorse_operation_is_running (SEAHORSE_OPERATION (gsrc->pv->operations)) ? 
-                                          SKSRC_LOADING : 0;
-}
-
-
 static SeahorseOperation* 
 seahorse_gkeyring_source_import (SeahorseKeySource *sksrc, GInputStream *input)
 {
@@ -729,8 +704,6 @@ seahorse_gkeyring_source_class_init (SeahorseGKeyringSourceClass *klass)
     
     key_class = SEAHORSE_KEY_SOURCE_CLASS (klass);    
     key_class->load = seahorse_gkeyring_source_load;
-    key_class->stop = seahorse_gkeyring_source_stop;
-    key_class->get_state = seahorse_gkeyring_source_get_state;
     key_class->import = seahorse_gkeyring_source_import;
     key_class->export = seahorse_gkeyring_source_export;
     key_class->remove = seahorse_gkeyring_source_remove;

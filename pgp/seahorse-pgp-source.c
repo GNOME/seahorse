@@ -260,8 +260,6 @@ static void seahorse_pgp_source_get_property    (GObject *object, guint prop_id,
                                                  GValue *value, GParamSpec *pspec);
 
 /* SeahorseKeySource methods */
-static void                seahorse_pgp_source_stop             (SeahorseKeySource *src);
-static guint               seahorse_pgp_source_get_state        (SeahorseKeySource *src);
 static SeahorseOperation*  seahorse_pgp_source_load             (SeahorseKeySource *src,
                                                                  GQuark keyid);
 static SeahorseOperation*  seahorse_pgp_source_import           (SeahorseKeySource *sksrc, 
@@ -309,8 +307,6 @@ seahorse_pgp_source_class_init (SeahorsePGPSourceClass *klass)
     key_class = SEAHORSE_KEY_SOURCE_CLASS (klass);
     key_class->canonize_keyid = seahorse_pgp_key_get_cannonical_id;
     key_class->load = seahorse_pgp_source_load;
-    key_class->stop = seahorse_pgp_source_stop;
-    key_class->get_state = seahorse_pgp_source_get_state;
     key_class->import = seahorse_pgp_source_import;
     key_class->export = seahorse_pgp_source_export;
     key_class->remove = seahorse_pgp_source_remove;
@@ -988,30 +984,6 @@ seahorse_pgp_source_load (SeahorseKeySource *src, GQuark keyid)
 
     g_object_ref (psrc->pv->operations);
     return SEAHORSE_OPERATION (psrc->pv->operations);
-}
-
-static void
-seahorse_pgp_source_stop (SeahorseKeySource *src)
-{
-    SeahorsePGPSource *psrc;
-    
-    g_assert (SEAHORSE_IS_KEY_SOURCE (src));
-    psrc = SEAHORSE_PGP_SOURCE (src);
-    
-    if(seahorse_operation_is_running (SEAHORSE_OPERATION (psrc->pv->operations)))
-        seahorse_operation_cancel (SEAHORSE_OPERATION (psrc->pv->operations));
-}
-
-static guint
-seahorse_pgp_source_get_state (SeahorseKeySource *src)
-{
-    SeahorsePGPSource *psrc;
-    
-    g_assert (SEAHORSE_IS_KEY_SOURCE (src));
-    psrc = SEAHORSE_PGP_SOURCE (src);
-    
-    return seahorse_operation_is_running (SEAHORSE_OPERATION (psrc->pv->operations)) ? 
-                                          SKSRC_LOADING : 0;
 }
 
 static SeahorseOperation* 

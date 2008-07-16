@@ -68,18 +68,6 @@ seahorse_unknown_source_load (SeahorseKeySource *src, GQuark keyid)
     return seahorse_operation_new_complete (NULL);
 }
 
-static void
-seahorse_unknown_source_stop (SeahorseKeySource *src)
-{
-
-}
-
-static guint
-seahorse_unknown_source_get_state (SeahorseKeySource *src)
-{
-    return 0;
-}
-
 static SeahorseOperation* 
 seahorse_unknown_source_import (SeahorseKeySource *sksrc, GInputStream *input)
 {
@@ -154,8 +142,6 @@ seahorse_unknown_source_class_init (SeahorseUnknownSourceClass *klass)
     gobject_class->get_property = seahorse_unknown_source_get_property;
     
     parent_class->load = seahorse_unknown_source_load;
-    parent_class->stop = seahorse_unknown_source_stop;
-    parent_class->get_state = seahorse_unknown_source_get_state;
     parent_class->import = seahorse_unknown_source_import;
     parent_class->export_raw = seahorse_unknown_source_export_raw;
     parent_class->remove = seahorse_unknown_source_remove;

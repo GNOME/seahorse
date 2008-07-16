@@ -142,44 +142,6 @@ seahorse_key_source_search (SeahorseKeySource *sksrc, const gchar *match)
     return (*klass->search) (sksrc, match);
 }
 
-/**
- * seahorse_key_source_stop
- * @sksrc: A #SeahorseKeySource object
- * 
- * Stops all load operations on the #SeahorseKeySource.
- **/
-void
-seahorse_key_source_stop (SeahorseKeySource *sksrc)
-{
-    SeahorseKeySourceClass *klass;
-    
-    g_return_if_fail (SEAHORSE_IS_KEY_SOURCE (sksrc));
-    klass = SEAHORSE_KEY_SOURCE_GET_CLASS (sksrc);
-    g_return_if_fail (klass->stop != NULL);
-    
-    (*klass->stop) (sksrc);
-}
-
-/**
- * seahorse_key_source_get_state
- * @sksrc: A #SeahorseKeySource object
- * 
- * Gets the internal status of the key source object.
- * 
- * Returns: A combination of flags from seahorse-key-source.h
- **/
-guint
-seahorse_key_source_get_state (SeahorseKeySource *sksrc)
-{
-    SeahorseKeySourceClass *klass;
-    
-    g_return_val_if_fail (SEAHORSE_IS_KEY_SOURCE (sksrc), 0);
-    klass = SEAHORSE_KEY_SOURCE_GET_CLASS (sksrc);   
-    g_return_val_if_fail (klass->get_state != NULL, 0);
-    
-    return (*klass->get_state) (sksrc);
-}
-
 SeahorseOperation* 
 seahorse_key_source_import (SeahorseKeySource *sksrc, GInputStream *input)
 {

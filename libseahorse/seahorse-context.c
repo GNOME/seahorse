@@ -163,10 +163,8 @@ seahorse_context_dispose (GObject *gobject)
     sctx->pv->discovery = NULL;
         
     /* Release all the sources */
-    for (l = sctx->pv->sources; l; l = g_slist_next (l)) {
-        seahorse_key_source_stop (SEAHORSE_KEY_SOURCE (l->data));
+    for (l = sctx->pv->sources; l; l = g_slist_next (l))
         g_object_unref (SEAHORSE_KEY_SOURCE (l->data));
-    }
     g_slist_free (sctx->pv->sources);
     sctx->pv->sources = NULL;
     

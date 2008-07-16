@@ -557,18 +557,6 @@ seahorse_ssh_source_load (SeahorseKeySource *sksrc, GQuark keymatch)
     return seahorse_operation_new_complete (NULL);
 }
 
-static void
-seahorse_ssh_source_stop (SeahorseKeySource *src)
-{
-
-}
-
-static guint
-seahorse_ssh_source_get_state (SeahorseKeySource *src)
-{
-    return 0;
-}
-
 static SeahorseOperation* 
 seahorse_ssh_source_import (SeahorseKeySource *sksrc, GInputStream *input)
 {
@@ -843,8 +831,6 @@ seahorse_ssh_source_class_init (SeahorseSSHSourceClass *klass)
     
     parent_class->canonize_keyid = seahorse_ssh_key_get_cannonical_id;
     parent_class->load = seahorse_ssh_source_load;
-    parent_class->stop = seahorse_ssh_source_stop;
-    parent_class->get_state = seahorse_ssh_source_get_state;
     parent_class->import = seahorse_ssh_source_import;
     parent_class->export = seahorse_ssh_source_export;
     parent_class->remove = seahorse_ssh_source_remove;
