@@ -69,7 +69,6 @@ dnl can be requested.
 dnl --------------------------------------------------------------------------
 AC_DEFUN([VALA_PROG_VALAC],[
 	AC_PATH_PROG([VALAC], [valac], [])
-	AC_SUBST(VALAC)
 
 	if test -z "${VALAC}"; then
 		AC_MSG_WARN([No Vala compiler found. You will not be able to recompile .vala source files.])
@@ -77,11 +76,13 @@ AC_DEFUN([VALA_PROG_VALAC],[
 		AC_REQUIRE([AC_PROG_AWK])
 		AC_MSG_CHECKING([valac is at least version $1])
 
-		if "${VALAC}" --version | "${AWK}" -v r='$1' 'function vn(s) { if (3 == split(s,v,".")) return (v[1]*1000+v[2])*1000+v[3]; else exit 2; } /^Vala / { exit vn(r) < vn($2) }'; then
+		# 7
+		if "${VALAC}" --version | "${AWK}" -v r='$1' 'function vn(s) [{ if (3 == split(s,v,".")) return (v[1]*1000+v[2])*1000+v[3]; else exit 2; }] /^Vala / { exit vn(r) > vn([$]2) }'; then
 			AC_MSG_RESULT([yes])
+			AC_SUBST(VALAC)
 		else
 			AC_MSG_RESULT([no])
-			VALAC=
+			unset VALAC
 		fi
 	fi
 ])
