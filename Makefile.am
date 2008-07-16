@@ -2,6 +2,12 @@
 
 ACLOCAL_AMFLAGS = -I m4
 
+if WITH_PKCS11
+PKCS11_DIR = pkcs11
+else
+PKCS11_DIR = 
+endif
+
 if WITH_SSH
 SSH_DIR = ssh
 else
@@ -19,6 +25,7 @@ SUBDIRS = libegg \
 	common \
 	libseahorse \
 	gkr \
+	$(PKCS11_DIR) \
 	$(PGP_DIR) \
 	$(SSH_DIR) \
 	src \
