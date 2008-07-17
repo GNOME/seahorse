@@ -26,7 +26,7 @@ namespace Seahorse {
 	public abstract class Viewer : Widget, View {
 
 		private UIManager _ui_manager;
-		private ActionGroup _key_actions;
+		private ActionGroup _object_actions;
 		private HashTable<Quark, Commands> _commands;
 		private static bool _about_initialized;
 		
@@ -112,18 +112,18 @@ namespace Seahorse {
 			actions.get_action("help-show").activate += on_help_show;
 			include_actions (actions);
 		
-			_key_actions = new Gtk.ActionGroup ("key");
-			_key_actions.set_translation_domain (Config.GETTEXT_PACKAGE);
-			_key_actions.add_actions (KEY_ENTRIES, this);
-			_key_actions.get_action("key-properties").activate += on_key_properties;
-			_key_actions.get_action("key-export-file").activate += on_key_export_file;
-			_key_actions.get_action("key-export-clipboard").activate += on_key_export_clipboard;
-			_key_actions.get_action("key-delete").activate += on_key_delete;
+			_object_actions = new Gtk.ActionGroup ("key");
+			_object_actions.set_translation_domain (Config.GETTEXT_PACKAGE);
+			_object_actions.add_actions (KEY_ENTRIES, this);
+			_object_actions.get_action("key-properties").activate += on_key_properties;
+			_object_actions.get_action("key-export-file").activate += on_key_export_file;
+			_object_actions.get_action("key-export-clipboard").activate += on_key_export_clipboard;
+			_object_actions.get_action("key-delete").activate += on_key_delete;
 
     			/* Mark the properties toolbar button as important */
-    			_key_actions.get_action("key-properties").is_important = true;
+    			_object_actions.get_action("key-properties").is_important = true;
 
-			include_actions (_key_actions);
+			include_actions (_object_actions);
 		} 
 		
 		protected void ensure_updated () {
@@ -134,34 +134,34 @@ namespace Seahorse {
 			_ui_manager.insert_action_group (actions, -1);
 		}
 
-		public virtual List<weak Key> get_selected_keys () {
-			return new List<weak Key>();
+		public virtual List<weak Object> get_selected_objects () {
+			return new List<weak Object>();
 		}
 		
-		public virtual void set_selected_keys (List<Key> keys) {
+		public virtual void set_selected_objects (List<Object> objects) {
 			/* Must be overridden */
 		}
 		
-		public virtual weak Key? selected_key {
+		public virtual weak Object? selected {
 			get {
 				/* Must be overridden */
 				return null;
 			}
 			set {
-				List<weak Key> keys = new List<weak Key>();
-				keys.prepend(value);
-				set_selected_keys (keys);
+				List<weak Object> objects = new List<weak Object>();
+				objects.prepend(value);
+				set_selected_objects (objects);
 			}
 		}
 		
-		public virtual weak Keyset? current_keyset {
+		public virtual weak Set? current_set {
 			get {
 				/* Must be overridden */
 				return null;
 			}
 		}
 		
-		public virtual weak Key? get_selected_key_and_uid (out uint uid) {
+		public virtual weak Object? get_selected_object_and_uid (out uint uid) {
 			/* Must be overridden */
 			return null;
 		}
@@ -256,20 +256,20 @@ namespace Seahorse {
 			menu.show ();
 		}
 		
-		protected void show_properties (Key key) {
-			var commands = _commands.lookup(key.ktype);
+		protected void show_properties (Object obj) {
+			var commands = _commands.lookup(obj.tag);
 			if (commands != null)
-				commands.show_properties (key);
+				commands.show_properties (obj);
 		}
 		
 		private void on_key_properties (Action action) {
-			if (this.selected_key != null)
-				show_properties (this.selected_key);
+			if (this.selected != null)
+				show_properties (this.selected);
 		}
 		
-		private int compare_by_ktype (Key one, Key two) {
-			Quark kone = one.ktype;
-			Quark ktwo = two.ktype;
+		private int compare_by_tag (Object one, Object two) {
+			Quark kone = one.tag;
+			Quark ktwo = two.tag;
 			if (kone < ktwo)
 				return -1;
 			if (kone > ktwo)
@@ -277,35 +277,35 @@ namespace Seahorse {
 			return 0;
 		}
 		
-		private void delete_key_batch (List<Key> keys) {
-			assert (keys != null);
-			var commands = _commands.lookup(keys.data.ktype);
+		private void delete_object_batch (List<Object> objects) {
+			assert (objects != null);
+			var commands = _commands.lookup(objects.data.tag);
 			
 			try {
 				if (commands != null)
-					commands.delete_keys (keys);
+					commands.delete_objects (objects);
 			} catch (GLib.Error ex) {
-				Util.handle_error (ex, _("Couldn't delete keys."), window);
+				Util.handle_error (ex, _("Couldn't delete."), window);
 			}
 		}
 		
 		private void on_key_delete (Action action) {
-			List<weak Key> keys, batch;
+			List<weak Object> objects, batch;
 			
-			/* Get the selected keys and sort them by ktype */
-			keys = get_selected_keys ();
-			keys.sort ((GLib.CompareFunc)compare_by_ktype);
+			/* Get the selected objects and sort them by ktype */
+			objects = get_selected_objects ();
+			objects.sort ((GLib.CompareFunc)compare_by_tag);
 
-			uint num = keys.length();
+			uint num = objects.length();
 			if (num == 0)
 				return;
 			
-			/* Check for private keys */
-			foreach (var key in keys) {
-				if (key.etype == Key.EType.PRIVATE) {
+			/* Check for private objects */
+			foreach (var object in objects) {
+				if (object.usage == Usage.PRIVATE_KEY) {
 					string prompt;
 					if (num == 1)
-						prompt = _("%s is a private key. Are you sure you want to proceed?").printf(keys.data.display_name);
+						prompt = _("%s is a private key. Are you sure you want to proceed?").printf(objects.data.description);
 					else
 						prompt = _("One or more of the deleted keys are private keys. Are you sure you want to proceed?");
 					if (!Util.prompt_delete (prompt))
@@ -314,22 +314,22 @@ namespace Seahorse {
 			}
 			
 			Quark ktype = 0;
-			batch = new List<weak Key>();
-			foreach (Key key in keys) {
+			batch = new List<weak Object>();
+			foreach (Object object in objects) {
 			
 				/* Process that batch */
-				if (ktype != key.ktype && batch != null) {
-				 	delete_key_batch (batch);
-					batch = new List<weak Key>();
+				if (ktype != object.tag && batch != null) {
+				 	delete_object_batch (batch);
+					batch = new List<weak Object>();
 				}
 
 				/* Add to the batch */				
-				batch.prepend (key);
+				batch.prepend (object);
 			}
 			
 			/* Process last batch */
 			if (batch != null)
-				delete_key_batch (batch);
+				delete_object_batch (batch);
 		}
 		
 		private void on_copy_complete (Operation op) {
@@ -358,12 +358,12 @@ namespace Seahorse {
 		
 		private void on_key_export_clipboard (Action action) {
 		
-			var keys = get_selected_keys ();
-			if (keys == null)
+			var objects = get_selected_objects ();
+			if (objects == null)
 				return;
 				
 			OutputStream output = new MemoryOutputStream (null, 0, realloc, free);
-			Operation op = KeySource.export_keys (keys, output);
+			Operation op = Source.export_objects (objects, output);
 			
 			Progress.show (op, _("Retrieving keys"), true);
 			op.watch (on_copy_complete, null);
@@ -376,13 +376,13 @@ namespace Seahorse {
 
 		private void on_key_export_file (Action action) {
 		
-			var keys = get_selected_keys ();
-			if (keys == null)
+			var objects = get_selected_objects ();
+			if (objects == null)
 				return;
 			
 			Gtk.Dialog dialog = Util.chooser_save_new (_("Export public key"), window);
 			Util.chooser_show_key_files (dialog);
-			Util.chooser_set_filename (dialog, keys);
+			Util.chooser_set_filename (dialog, objects);
 			
 			string uri = Util.chooser_save_prompt (dialog);
 			if (uri != null) {
@@ -391,7 +391,7 @@ namespace Seahorse {
 					var file = File.new_for_uri (uri);
 					OutputStream output = file.replace (null, false, 0, null);
 					
-					Operation op = KeySource.export_keys (keys, output);
+					Operation op = Source.export_objects (objects, output);
 					Progress.show (op, _("Exporting keys"), true);
 					op.watch (on_export_done, null);
 					
@@ -405,7 +405,7 @@ namespace Seahorse {
 		}
 		
 		private void on_selection_changed (View view) {
-			_key_actions.set_sensitive (view.selected_key != null);
+			_object_actions.set_sensitive (view.selected != null);
 		}
 		
 		protected void set_status (string text) {

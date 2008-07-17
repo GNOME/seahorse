@@ -42,13 +42,13 @@ static void seahorse_commands_dispose (GObject * obj);
 
 
 
-void seahorse_commands_show_properties (SeahorseCommands* self, SeahorseKey* key) {
-	SEAHORSE_COMMANDS_GET_CLASS (self)->show_properties (self, key);
+void seahorse_commands_show_properties (SeahorseCommands* self, SeahorseObject* obj) {
+	SEAHORSE_COMMANDS_GET_CLASS (self)->show_properties (self, obj);
 }
 
 
-void seahorse_commands_delete_keys (SeahorseCommands* self, GList* keys, GError** error) {
-	SEAHORSE_COMMANDS_GET_CLASS (self)->delete_keys (self, keys, error);
+void seahorse_commands_delete_objects (SeahorseCommands* self, GList* obj, GError** error) {
+	SEAHORSE_COMMANDS_GET_CLASS (self)->delete_objects (self, obj, error);
 }
 
 

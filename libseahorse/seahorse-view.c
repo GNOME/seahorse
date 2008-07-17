@@ -27,24 +27,24 @@
 
 
 
-GList* seahorse_view_get_selected_keys (SeahorseView* self) {
-	return SEAHORSE_VIEW_GET_INTERFACE (self)->get_selected_keys (self);
+GList* seahorse_view_get_selected_objects (SeahorseView* self) {
+	return SEAHORSE_VIEW_GET_INTERFACE (self)->get_selected_objects (self);
 }
 
 
-void seahorse_view_set_selected_keys (SeahorseView* self, GList* keys) {
-	SEAHORSE_VIEW_GET_INTERFACE (self)->set_selected_keys (self, keys);
+void seahorse_view_set_selected_objects (SeahorseView* self, GList* objects) {
+	SEAHORSE_VIEW_GET_INTERFACE (self)->set_selected_objects (self, objects);
 }
 
 
-SeahorseKey* seahorse_view_get_selected_key_and_uid (SeahorseView* self, guint* uid) {
-	return SEAHORSE_VIEW_GET_INTERFACE (self)->get_selected_key_and_uid (self, uid);
+SeahorseObject* seahorse_view_get_selected_object_and_uid (SeahorseView* self, guint* uid) {
+	return SEAHORSE_VIEW_GET_INTERFACE (self)->get_selected_object_and_uid (self, uid);
 }
 
 
-SeahorseKey* seahorse_view_get_selected_key (SeahorseView* self) {
-	SeahorseKey* value;
-	g_object_get (G_OBJECT (self), "selected-key", &value, NULL);
+SeahorseObject* seahorse_view_get_selected (SeahorseView* self) {
+	SeahorseObject* value;
+	g_object_get (G_OBJECT (self), "selected", &value, NULL);
 	if (value != NULL) {
 		g_object_unref (value);
 	}
@@ -52,14 +52,14 @@ SeahorseKey* seahorse_view_get_selected_key (SeahorseView* self) {
 }
 
 
-void seahorse_view_set_selected_key (SeahorseView* self, SeahorseKey* value) {
-	g_object_set (G_OBJECT (self), "selected-key", value, NULL);
+void seahorse_view_set_selected (SeahorseView* self, SeahorseObject* value) {
+	g_object_set (G_OBJECT (self), "selected", value, NULL);
 }
 
 
-SeahorseKeyset* seahorse_view_get_current_keyset (SeahorseView* self) {
-	SeahorseKeyset* value;
-	g_object_get (G_OBJECT (self), "current-keyset", &value, NULL);
+SeahorseSet* seahorse_view_get_current_set (SeahorseView* self) {
+	SeahorseSet* value;
+	g_object_get (G_OBJECT (self), "current-set", &value, NULL);
 	if (value != NULL) {
 		g_object_unref (value);
 	}
@@ -81,8 +81,8 @@ static void seahorse_view_base_init (SeahorseViewIface * iface) {
 	static gboolean initialized = FALSE;
 	if (!initialized) {
 		initialized = TRUE;
-		g_object_interface_install_property (iface, g_param_spec_object ("selected-key", "selected-key", "selected-key", SEAHORSE_TYPE_KEY, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE | G_PARAM_WRITABLE));
-		g_object_interface_install_property (iface, g_param_spec_object ("current-keyset", "current-keyset", "current-keyset", SEAHORSE_TYPE_KEYSET, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
+		g_object_interface_install_property (iface, g_param_spec_object ("selected", "selected", "selected", SEAHORSE_TYPE_OBJECT, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE | G_PARAM_WRITABLE));
+		g_object_interface_install_property (iface, g_param_spec_object ("current-set", "current-set", "current-set", SEAHORSE_TYPE_SET, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
 		g_object_interface_install_property (iface, g_param_spec_object ("window", "window", "window", GTK_TYPE_WINDOW, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
 		g_signal_new ("selection_changed", SEAHORSE_TYPE_VIEW, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
 	}

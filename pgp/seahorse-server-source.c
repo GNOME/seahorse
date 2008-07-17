@@ -53,7 +53,7 @@ struct _SeahorseServerSourcePrivate {
     gchar *uri;
 };
 
-G_DEFINE_TYPE (SeahorseServerSource, seahorse_server_source, SEAHORSE_TYPE_KEY_SOURCE);
+G_DEFINE_TYPE (SeahorseServerSource, seahorse_server_source, SEAHORSE_TYPE_SOURCE);
 
 /* GObject handlers */
 static void seahorse_server_source_dispose    (GObject *gobject);
@@ -63,8 +63,8 @@ static void seahorse_server_get_property      (GObject *object, guint prop_id,
 static void seahorse_server_set_property      (GObject *object, guint prop_id,
                                                const GValue *value, GParamSpec *pspec);
                                                
-/* SeahorseKeySource methods */
-static SeahorseOperation*  seahorse_server_source_load (SeahorseKeySource *src, GQuark keyid);
+/* SeahorseSource methods */
+static SeahorseOperation*  seahorse_server_source_load (SeahorseSource *src, GQuark keyid);
 
 static GObjectClass *parent_class = NULL;
 
@@ -73,14 +73,14 @@ static void
 seahorse_server_source_class_init (SeahorseServerSourceClass *klass)
 {
     GObjectClass *gobject_class;
-    SeahorseKeySourceClass *key_class;
+    SeahorseSourceClass *key_class;
    
     parent_class = g_type_class_peek_parent (klass);
     gobject_class = G_OBJECT_CLASS (klass);
     
-    key_class = SEAHORSE_KEY_SOURCE_CLASS (klass);
+    key_class = SEAHORSE_SOURCE_CLASS (klass);
         
-    key_class->canonize_keyid = seahorse_pgp_key_get_cannonical_id;
+    key_class->canonize_id = seahorse_pgp_key_get_cannonical_id;
     key_class->load = seahorse_server_source_load;
     
     gobject_class->dispose = seahorse_server_source_dispose;
@@ -97,8 +97,8 @@ seahorse_server_source_class_init (SeahorseServerSourceClass *klass)
                              NULL, G_PARAM_READABLE));
 
     g_object_class_install_property (gobject_class, PROP_LOCATION,
-        g_param_spec_uint ("location", "Key Location", "Where the key is stored. See SeahorseKeyLoc", 
-                           0, G_MAXUINT, SKEY_LOC_INVALID, G_PARAM_READABLE));    
+        g_param_spec_uint ("location", "Key Location", "Where the key is stored. See SeahorseLocation", 
+                           0, G_MAXUINT, SEAHORSE_LOCATION_INVALID, G_PARAM_READABLE));    
                            
     g_object_class_install_property (gobject_class, PROP_KEY_SERVER,
             g_param_spec_string ("key-server", "Key Server",
@@ -125,7 +125,7 @@ static void
 seahorse_server_source_dispose (GObject *gobject)
 {
     SeahorseServerSource *ssrc;
-    SeahorseKeySource *sksrc;
+    SeahorseSource *sksrc;
     
     /*
      * Note that after this executes the rest of the object should
@@ -136,7 +136,7 @@ seahorse_server_source_dispose (GObject *gobject)
      */
   
     ssrc = SEAHORSE_SERVER_SOURCE (gobject);
-    sksrc = SEAHORSE_KEY_SOURCE (gobject);
+    sksrc = SEAHORSE_SOURCE (gobject);
     g_assert (ssrc->priv);
     
     /* Clear out all the operations */
@@ -209,7 +209,7 @@ seahorse_server_get_property (GObject *object, guint prop_id, GValue *value,
         g_value_set_string (value, _("PGP Key"));
         break;
     case PROP_LOCATION:
-        g_value_set_uint (value, SKEY_LOC_REMOTE);
+        g_value_set_uint (value, SEAHORSE_LOCATION_REMOTE);
         break;
     }        
 }
@@ -272,28 +272,28 @@ combine_keys (SeahorseServerSource *ssrc, gpgme_key_t k, gpgme_key_t key)
 void
 seahorse_server_source_add_key (SeahorseServerSource *ssrc, gpgme_key_t key)
 {
-    SeahorseKey *prev;
+    SeahorseObject *prev;
     SeahorsePGPKey *pkey;
     GQuark keyid;
        
     g_return_if_fail (SEAHORSE_IS_SERVER_SOURCE (ssrc));
 
     keyid = seahorse_pgp_key_get_cannonical_id (seahorse_pgp_key_get_id (key, 0));
-    prev = seahorse_context_get_key (SCTX_APP (), SEAHORSE_KEY_SOURCE (ssrc), keyid);
+    prev = seahorse_context_get_object (SCTX_APP (), SEAHORSE_SOURCE (ssrc), keyid);
     
     /* TODO: This function needs reworking after we get more key types */
     if (prev != NULL) {
         g_return_if_fail (SEAHORSE_IS_PGP_KEY (prev));
         combine_keys (ssrc, SEAHORSE_PGP_KEY (prev)->pubkey, key);
-        seahorse_key_changed (prev, SKEY_CHANGE_UIDS);
+        seahorse_object_fire_changed (prev, SKEY_CHANGE_UIDS);
         return;
     }
 
     /* A public key */
-    pkey = seahorse_pgp_key_new (SEAHORSE_KEY_SOURCE (ssrc), key, NULL);
+    pkey = seahorse_pgp_key_new (SEAHORSE_SOURCE (ssrc), key, NULL);
 
     /* Add to context */ 
-    seahorse_context_add_key (SCTX_APP (), SEAHORSE_KEY (pkey));
+    seahorse_context_add_object (SCTX_APP (), SEAHORSE_OBJECT (pkey));
 }
  
 void
@@ -310,11 +310,11 @@ seahorse_server_source_take_operation (SeahorseServerSource *ssrc, SeahorseOpera
  */
 
 static SeahorseOperation*
-seahorse_server_source_load (SeahorseKeySource *src, GQuark keyid)
+seahorse_server_source_load (SeahorseSource *src, GQuark keyid)
 {
     SeahorseServerSource *ssrc;
     
-    g_assert (SEAHORSE_IS_KEY_SOURCE (src));
+    g_assert (SEAHORSE_IS_SOURCE (src));
     ssrc = SEAHORSE_SERVER_SOURCE (src);
 
     /* We should never be called directly */

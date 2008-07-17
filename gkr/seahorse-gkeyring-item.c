@@ -26,7 +26,7 @@
 #include <glib/gi18n.h>
 
 #include "seahorse-context.h"
-#include "seahorse-key-source.h"
+#include "seahorse-source.h"
 #include "seahorse-gkeyring-item.h"
 #include "seahorse-gtkstock.h"
 #include "seahorse-util.h"
@@ -231,17 +231,18 @@ static void
 changed_key (SeahorseGKeyringItem *git)
 {
     SeahorseKey *skey = SEAHORSE_KEY (git);
+    SeahorseObject *obj = SEAHORSE_OBJECT (git);
     gchar *secret;
 
     if (!git->info) {
         
-        skey->location = SKEY_LOC_INVALID;
-        skey->etype = SKEY_ETYPE_NONE;
+        obj->_location = SEAHORSE_LOCATION_INVALID;
+        obj->_usage = SEAHORSE_USAGE_NONE;
         skey->loaded = SKEY_INFO_NONE;
-        skey->flags = SKEY_FLAG_DISABLED;
+        obj->_flags = SKEY_FLAG_DISABLED;
         skey->keydesc = _("Invalid");
         skey->rawid = NULL;
-        skey->keyid = 0;
+        obj->_id = 0;
         return;
     } 
 
@@ -249,11 +250,11 @@ changed_key (SeahorseGKeyringItem *git)
     skey->loaded = (secret == NULL) ? SKEY_INFO_BASIC : SKEY_INFO_COMPLETE;
     g_free (secret);
 
-    skey->ktype = SEAHORSE_GKR;
-    skey->location = SKEY_LOC_LOCAL;
-    skey->etype = SKEY_CREDENTIALS;
-    skey->flags = 0;
-    skey->keyid = seahorse_gkeyring_item_get_cannonical (git->item_id);
+    obj->_tag = SEAHORSE_GKR;
+    obj->_location = SEAHORSE_LOCATION_LOCAL;
+    obj->_usage = SEAHORSE_USAGE_CREDENTIALS;
+    obj->_flags = 0;
+    obj->_id = seahorse_gkeyring_item_get_cannonical (git->item_id);
 
     if (is_network_item (git, "http")) 
         skey->keydesc = _("Web Password");
@@ -262,7 +263,7 @@ changed_key (SeahorseGKeyringItem *git)
     else
         skey->keydesc = _("Password");
     
-    seahorse_key_changed (skey, SKEY_CHANGE_ALL);
+    seahorse_object_fire_changed (SEAHORSE_OBJECT (skey), SEAHORSE_OBJECT_CHANGE_ALL);
 }
 
 /* -----------------------------------------------------------------------------
@@ -529,7 +530,7 @@ seahorse_gkeyring_item_class_init (SeahorseGKeyringItemClass *klass)
  */
 
 SeahorseGKeyringItem* 
-seahorse_gkeyring_item_new (SeahorseKeySource *sksrc, guint32 item_id, 
+seahorse_gkeyring_item_new (SeahorseSource *sksrc, guint32 item_id, 
                             GnomeKeyringItemInfo *info, GnomeKeyringAttributeList *attributes, 
                             GList *acl)
 {
@@ -537,10 +538,6 @@ seahorse_gkeyring_item_new (SeahorseKeySource *sksrc, guint32 item_id,
     git = g_object_new (SEAHORSE_TYPE_GKEYRING_ITEM, "key-source", sksrc, 
                         "item-id", item_id, "item-info", info, 
                         "item-attributes", attributes, "item-acl", acl, NULL);
-    
-    /* We don't care about this floating business */
-    g_object_ref (GTK_OBJECT (git));
-    gtk_object_sink (GTK_OBJECT (git));
     return git;
 }
 

@@ -18,7 +18,9 @@ INCLUDES = -I$(top_builddir) \
 VALA_SRCS = \
 	seahorse-commands.vala \
 	seahorse-generator.vala \
+	seahorse-object.vala \
 	seahorse-servers.vala \
+	seahorse-types.vala \
 	seahorse-view.vala
 	
 VALA_PKGS = \
@@ -51,13 +53,13 @@ endif
 
 libseahorse_la_SOURCES = \
 	seahorse-key.c seahorse-key.h \
-	seahorse-key-source.c seahorse-key-source.h \
+	seahorse-source.c seahorse-source.h \
 	seahorse-key-widget.c seahorse-key-widget.h \
     seahorse-unknown-key.c seahorse-unknown-key.h \
     seahorse-unknown-source.c seahorse-unknown-source.h \
 	seahorse-context.c seahorse-context.h \
 	seahorse-widget.c seahorse-widget.h \
-	seahorse-keyset.c seahorse-keyset.h \
+	seahorse-set.c seahorse-set.h \
 	seahorse-key-model.c seahorse-key-model.h \
 	seahorse-util.c seahorse-util.h \
 	seahorse-validity.c seahorse-validity.h \

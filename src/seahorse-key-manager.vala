@@ -29,7 +29,7 @@ namespace Seahorse {
 		private Gtk.Notebook _notebook;
 		private Gtk.ActionGroup _view_actions;
 		private Gtk.Entry _filter_entry;
-		private Quark _track_selected_key;
+		private Quark _track_selected_id;
 		private uint _track_selected_tab;
 		private bool _loaded_gnome_keyring;
 		
@@ -54,48 +54,48 @@ namespace Seahorse {
 			public uint id;
 			public int page;
 			public weak Gtk.TreeView view;
-			public weak Keyset keyset;
+			public weak Set objects;
 			public weak Gtk.Widget widget;
 			public KeyManagerStore store;
 		}
 		
 		private TabInfo[] _tabs;
 
-		private static const KeyPredicate PRED_PUBLIC = {
+		private static const Object.Predicate PRED_PUBLIC = {
 			0,                                      /* ktype */
-			0,                                      /* keyid */
-			Key.Loc.LOCAL,                          /* location */
-			Key.EType.PUBLIC,                       /* etype */
+			0,                                      /* id */
+			Location.LOCAL,                         /* location */
+			Usage.PUBLIC_KEY,                       /* usage */
 			0,                                      /* flags */
 			Key.Flag.TRUSTED | Key.Flag.IS_VALID,   /* nflags */
 			null                                    /* sksrc */
 		};
 		
-		private static const KeyPredicate PRED_TRUSTED = {
+		private static const Object.Predicate PRED_TRUSTED = {
 			0,                                      /* ktype */
-			0,                                      /* keyid */
-			Key.Loc.LOCAL,                          /* location */
-			Key.EType.PUBLIC,                       /* etype */
+			0,                                      /* id */
+			Location.LOCAL,                         /* location */
+			Usage.PUBLIC_KEY,                       /* usage */
 			Key.Flag.TRUSTED | Key.Flag.IS_VALID,   /* flags */
 			0,                                      /* nflags */
 			null                                    /* sksrc */
 		};
 		
-		private static const KeyPredicate PRED_PRIVATE = {
+		private static const Object.Predicate PRED_PRIVATE = {
 			0,                                      /* ktype */
-			0,                                      /* keyid */
-			Key.Loc.LOCAL,                          /* location */
-			Key.EType.PRIVATE,                      /* etype */
+			0,                                      /* id */
+			Location.LOCAL,                         /* location */
+			Usage.PRIVATE_KEY,                      /* usage */
 			0,                                      /* flags */
 			0,                                      /* nflags */
 			null                                    /* sksrc */
 		};
 
-		private static const KeyPredicate PRED_PASSWORD = {
+		private static const Object.Predicate PRED_PASSWORD = {
 			0,                                      /* ktype */
-		 	0,                                      /* keyid */
-			Key.Loc.LOCAL,                          /* location */
-			Key.EType.CREDENTIALS,                  /* etype */
+		 	0,                                      /* id */
+			Location.LOCAL,                         /* location */
+			Usage.CREDENTIALS,                      /* usage */
 			0,                                      /* flags */
 			0,                                      /* nflags */
 			null                                    /* sksrc */
@@ -274,49 +274,49 @@ namespace Seahorse {
 			return (Gtk.Window)man.get_toplevel();
 		}
 		
-		public override List<weak Key> get_selected_keys () {
+		public override List<weak Object> get_selected_objects () {
 			TabInfo* tab = get_tab_info ();
 			if (tab == null)
-				return new List<weak Key>();
+				return new List<weak Object>();
 			return KeyManagerStore.get_selected_keys (tab->view);
 		}
 		
-		public override void set_selected_keys (List<Key> keys) {
-			List<weak Key>[] tab_lists = new List<weak Key>[(int)Tabs.NUM_TABS];
+		public override void set_selected_objects (List<Object> objects) {
+			List<weak Object>[] tab_lists = new List<weak Object>[(int)Tabs.NUM_TABS];
 			
-			/* Break keys into what's on each tab */
-			foreach (Key key in keys) {
-				TabInfo* tab = get_tab_for_key (key);
+			/* Break objects into what's on each tab */
+			foreach (Object obj in objects) {
+				TabInfo* tab = get_tab_for_object (obj);
 				if (tab == null)
 					continue;
 				
 				assert (tab->id < (int)Tabs.NUM_TABS);
-				tab_lists[tab->id].prepend (key);
+				tab_lists[tab->id].prepend (obj);
 			}
 			
 			uint highest_matched = 0;
 			TabInfo* highest_tab = null;
 			for (int i = 0; i < (int)Tabs.NUM_TABS; ++i) {
-				weak List<weak Key> list = tab_lists[i];
+				weak List<weak Object> list = tab_lists[i];
 				TabInfo* tab = &_tabs[i];
 				
-				/* Save away the tab that had the most keys */
+				/* Save away the tab that had the most objects */
 				uint num = list.length();
 				if (num > highest_matched) {
 					highest_matched = num;
 					highest_tab = tab;
 				}
 				
-				/* Select the keys on that tab */
+				/* Select the objects on that tab */
 				KeyManagerStore.set_selected_keys (tab->view, list);
 			}
 			
-			/* Change to the tab with the most keys */
+			/* Change to the tab with the most objects */
 			if (highest_tab != null)
 				set_tab_current (highest_tab);
 		}
 		
-		public override weak Key? selected_key {
+		public override weak Object? selected {
 			get {
 				TabInfo* tab = get_tab_info ();
 				if (tab == null)
@@ -324,23 +324,23 @@ namespace Seahorse {
 				return KeyManagerStore.get_selected_key (tab->view, null);
 			}
 			set {
-				List<weak Key> keys = new List<weak Key>();
-				keys.prepend (value);
-				set_selected_keys (keys);
+				List<weak Object> objects = new List<weak Object>();
+				objects.prepend (value);
+				set_selected_objects (objects);
 			}
 		}
 		
-		public override weak Key? get_selected_key_and_uid (out uint uid) {
+		public override weak Object? get_selected_object_and_uid (out uint uid) {
 			TabInfo* tab = get_tab_info ();
 			if (tab == null)
 				return null;
 			return KeyManagerStore.get_selected_key (tab->view, out uid);
 		}
 		
-		private TabInfo* get_tab_for_key (Key key) {
+		private TabInfo* get_tab_for_object (Object obj) {
 			for (int i = 0; i < (int)Tabs.NUM_TABS; ++i) {
 				TabInfo* tab = &_tabs[i];
-				if (tab->keyset.has_key (key))
+				if (tab->objects.has_object (obj))
 					return tab;
 			}
 			return null;
@@ -380,7 +380,7 @@ namespace Seahorse {
 		}
 		
 		private void initialize_tab (string tabwidget, uint tabid, 
-		                             string viewwidget, KeyPredicate pred) {
+		                             string viewwidget, Object.Predicate pred) {
 			
 			assert (tabid < (int)Tabs.NUM_TABS);
 			
@@ -391,8 +391,8 @@ namespace Seahorse {
 			_tabs[tabid].page = Bugs.notebook_page_num (_notebook, _tabs[tabid].widget);
 			return_if_fail (_tabs[tabid].page >= 0);
 			
-			Keyset keyset = new Keyset.full (ref pred);
-			_tabs[tabid].keyset = keyset;
+			Set objects = new Set.full (ref pred);
+			_tabs[tabid].objects = objects;
 			
 			/* init key list & selection settings */
 			Gtk.TreeView view = (Gtk.TreeView)get_widget (viewwidget);
@@ -406,7 +406,7 @@ namespace Seahorse {
 			view.realize();
 
 			/* Add new key store and associate it */
-			_tabs[tabid].store = new KeyManagerStore(keyset, view);
+			_tabs[tabid].store = new KeyManagerStore(objects, view);
 		}
 
 		private bool on_first_timer () {
@@ -447,8 +447,8 @@ namespace Seahorse {
 		}
 		
 		private bool on_key_list_popup_menu (Gtk.TreeView view) {
-			Key key = this.selected_key;
-			if (key != null) {
+			Object obj = this.selected;
+			if (obj != null) {
 				show_context_menu (0, Gtk.get_current_event_time ());
 				return true;
 			}
@@ -490,8 +490,8 @@ namespace Seahorse {
 					continue;
 				}
 				
-				/* All our supported key types have a local key source */
-				KeySource sksrc = Context.for_app().find_key_source (ktype, Key.Loc.LOCAL);
+				/* All our supported key types have a local source */
+				Source sksrc = Context.for_app().find_source (ktype, Location.LOCAL);
 				return_if_fail (sksrc != null);
 				
 				try {
@@ -546,7 +546,7 @@ namespace Seahorse {
 			}
 			
 			/* All our supported key types have a local key source */
-			KeySource sksrc = Context.for_app().find_key_source (ktype, Key.Loc.LOCAL);
+			Source sksrc = Context.for_app().find_source (ktype, Location.LOCAL);
 			return_if_fail (sksrc != null);
 
 			/* 
@@ -591,10 +591,10 @@ namespace Seahorse {
 		
 		private void on_remote_sync (Action action) {
 			
-			var keys = get_selected_keys ();
-			if (keys == null)
-				keys = Context.for_app().find_keys (0, 0, Key.Loc.LOCAL);
-			KeyserverSync.show (keys, window);
+			var objects = get_selected_objects ();
+			if (objects == null)
+				objects = Context.for_app().find_objects (0, 0, Location.LOCAL);
+			KeyserverSync.show (objects, window);
 		}
 		
 		private void on_app_quit (Action? action) {
@@ -667,23 +667,23 @@ namespace Seahorse {
     			}
 
 			/* Retrieve currently tracked, and reset tracking */
-			Quark keyid = _track_selected_key;
-			_track_selected_key = 0;
+			Quark keyid = _track_selected_id;
+			_track_selected_id = 0;
     
 			/* no selection, see if selected key moved to another tab */
 			if (dotracking && rows == 0 && keyid != 0) {
 
 			        /* Find it */
-				Key key = Context.for_app().find_key (keyid, Key.Loc.LOCAL);
-				if (key != null) { 
+				Object obj = Context.for_app().find_object (keyid, Location.LOCAL);
+				if (obj != null) { 
 				
 					/* If it's still around, then select it */
-					TabInfo* tab = get_tab_for_key (key);
+					TabInfo* tab = get_tab_for_object (obj);
 					if (tab != null && tab != get_tab_info ()) {
 
 						/* Make sure we don't end up in a loop  */
-						assert (_track_selected_key == 0);
-						this.selected_key = key;
+						assert (_track_selected_id == 0);
+						this.selected = obj;
 					}
 				}
 			}
@@ -692,11 +692,11 @@ namespace Seahorse {
         			set_numbered_status (Bugs.ngettext ("Selected %d key",
                                 	             "Selected %d keys", rows), rows);
         
-				List<weak Key> keys = get_selected_keys ();
+				List<weak Object> objects = get_selected_objects ();
 
 				/* If one key is selected then mark it down for following across tabs */
-				if (keys.data != null)
-					_track_selected_key = keys.data.keyid;
+				if (objects.data != null)
+					_track_selected_id = objects.data.id;
 					
 			}
     
@@ -712,7 +712,7 @@ namespace Seahorse {
 			_filter_entry.set_text ("");
 
 			/* Don't track the selected key when tab is changed on purpose */
-			_track_selected_key = 0;
+			_track_selected_id = 0;
 			fire_selection_changed ();
     
 			/* 
@@ -732,8 +732,8 @@ namespace Seahorse {
 			GLib.Type type = Registry.get().find_type ("gnome-keyring", "local", "key-source", null);
 			return_if_fail (type != 0);
 
-			KeySource sksrc = (KeySource)GLib.Object.new (type, null);
-			Context.for_app().add_key_source (sksrc);
+			var sksrc = (Source)GLib.Object.new (type, null);
+			Context.for_app().add_source (sksrc);
 			Operation op = sksrc.load (0);
 			
 			/* Monitor loading progress */

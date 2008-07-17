@@ -139,10 +139,10 @@ resolve_callback (AvahiServiceResolver *resolver, AvahiIfIndex iface, AvahiProto
         g_signal_emit (ssd, signals[ADDED], 0, service_name);
     
         /* Add it to the context */
-        if (!seahorse_context_remote_key_source (SCTX_APP (), service_uri)) {
+        if (!seahorse_context_remote_source (SCTX_APP (), service_uri)) {
             SeahorseServerSource *ssrc = seahorse_server_source_new (service_uri);
             g_return_if_fail (ssrc != NULL);
-            seahorse_context_add_key_source (SCTX_APP (), SEAHORSE_KEY_SOURCE (ssrc));
+            seahorse_context_add_source (SCTX_APP (), SEAHORSE_SOURCE (ssrc));
         }
     
         DEBUG_DNSSD (("DNS-SD added: %s %s\n", service_name, service_uri));
@@ -191,8 +191,8 @@ browse_callback(AvahiServiceBrowser *browser, AvahiIfIndex iface, AvahiProtocol 
         uri = g_hash_table_lookup (ssd->services, name);
         if (uri != NULL) {
             /* Remove it from the main context */
-            SeahorseKeySource *sksrc = seahorse_context_remote_key_source (SCTX_APP(), uri);
-            seahorse_context_remove_key_source (SCTX_APP(), sksrc);
+            SeahorseSource *sksrc = seahorse_context_remote_source (SCTX_APP(), uri);
+            seahorse_context_remove_source (SCTX_APP(), sksrc);
         }
         
         /* And remove it from our tables */

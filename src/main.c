@@ -78,7 +78,7 @@ main (int argc, char **argv)
     
     /* Make the default SeahorseContext */
     seahorse_context_new (SEAHORSE_CONTEXT_APP, 0);
-    op = seahorse_context_load_local_keys (SCTX_APP ());
+    op = seahorse_context_load_local_objects (SCTX_APP ());
 
     /* Load these components after loading local keys */
     seahorse_registry_load_types (NULL, SEAHORSE_GKR_REGISTRY);

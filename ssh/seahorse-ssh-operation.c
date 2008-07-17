@@ -752,7 +752,7 @@ seahorse_ssh_operation_upload (SeahorseSSHSource *ssrc, GList *keys,
     	g_return_val_if_fail (output, NULL);
     	
     	/* Buffer for what we send to the server */
-    	op = seahorse_key_source_export (SEAHORSE_KEY_SOURCE (ssrc), keys, FALSE, G_OUTPUT_STREAM (output));
+    	op = seahorse_source_export (SEAHORSE_SOURCE (ssrc), keys, FALSE, G_OUTPUT_STREAM (output));
     	g_return_val_if_fail (op != NULL, NULL);
     
     /* 
@@ -840,7 +840,7 @@ change_result_cb (SeahorseSSHOperation *sop)
 {
     SeahorseSSHOperationPrivate *pv = SEAHORSE_SSH_OPERATION_GET_PRIVATE (sop);
     if (pv->prompt_skey)
-        seahorse_key_source_load_async (SEAHORSE_KEY_SOURCE (sop->sksrc), 
+        seahorse_source_load_async (SEAHORSE_SOURCE (sop->sksrc), 
                                         seahorse_key_get_keyid (pv->prompt_skey));
 }
 
@@ -848,7 +848,7 @@ SeahorseOperation*
 seahorse_ssh_operation_change_passphrase (SeahorseSSHKey *skey)
 {
     SeahorseSSHOperationPrivate *pv;
-    SeahorseKeySource *ssrc;
+    SeahorseSource *ssrc;
     SeahorseOperation *op;
     gchar *cmd;
     
@@ -1216,7 +1216,7 @@ seahorse_ssh_operation_authorize (SeahorseSSHSource *ssrc, SeahorseSSHKey *skey,
     
     /* Just reload that one key */
     if (!err)
-        seahorse_key_source_load (SEAHORSE_KEY_SOURCE (ssrc), 
+        seahorse_source_load (SEAHORSE_SOURCE (ssrc), 
                                   seahorse_key_get_keyid (SEAHORSE_KEY (skey)));
     
     return seahorse_operation_new_complete (err);

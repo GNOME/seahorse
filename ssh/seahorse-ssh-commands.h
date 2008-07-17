@@ -25,7 +25,7 @@
 #include <glib.h>
 #include <glib-object.h>
 #include <seahorse-commands.h>
-#include <seahorse-key.h>
+#include <seahorse-object.h>
 #include <stdlib.h>
 #include <string.h>
 #include <gtk/gtk.h>

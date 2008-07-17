@@ -37,7 +37,7 @@ namespace Seahorse.Ssh {
         }
                 
         [CCode (cheader_filename = "seahorse-ssh-source.h")]
-        public class Source : Seahorse.KeySource {
+        public class Source : Seahorse.Source {
         	
         }
         

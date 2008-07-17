@@ -26,7 +26,7 @@
 #include <gtk/gtk.h>
 
 #include "seahorse-context.h"
-#include "seahorse-keyset.h"
+#include "seahorse-set.h"
 #include "seahorse-key-model.h"
 
 #define SEAHORSE_TYPE_KEY_MANAGER_STORE             (seahorse_key_manager_store_get_type ())
@@ -49,7 +49,7 @@ struct _SeahorseKeyManagerStore {
     SeahorseKeyModel               parent;
  
     /*< public >*/
-    SeahorseKeyset                 *skset;
+    SeahorseSet                 *skset;
     
     /*< private >*/
     SeahorseKeyManagerStorePriv    *priv;
@@ -59,7 +59,7 @@ struct _SeahorseKeyManagerStoreClass {
     SeahorseKeyModelClass           parent_class;
 };
 
-SeahorseKeyManagerStore*   seahorse_key_manager_store_new       (SeahorseKeyset *skset,
+SeahorseKeyManagerStore*   seahorse_key_manager_store_new       (SeahorseSet *skset,
                                                                  GtkTreeView *view);
 
 SeahorseKey*        seahorse_key_manager_store_get_key_from_path (GtkTreeView *view,

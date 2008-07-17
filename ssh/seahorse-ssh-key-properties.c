@@ -87,7 +87,7 @@ comment_activate (GtkWidget *entry, SeahorseWidget *swidget)
 {
     SeahorseKey *key;
     SeahorseSSHKey *skey;
-    SeahorseKeySource *sksrc;
+    SeahorseSource *sksrc;
     SeahorseOperation *op;
     const gchar *text;
     gchar *comment;
@@ -133,7 +133,7 @@ comment_focus_out (GtkWidget* widget, GdkEventFocus *event, SeahorseWidget *swid
 static void 
 trust_toggled (GtkToggleButton *button, SeahorseWidget *swidget)
 {
-    SeahorseKeySource *sksrc;
+    SeahorseSource *sksrc;
     SeahorseOperation *op;
     SeahorseKey *key;
     SeahorseSSHKey *skey;
@@ -204,7 +204,7 @@ passphrase_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 static void
 export_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 {
-    SeahorseKeySource *sksrc;
+    SeahorseSource *sksrc;
     SeahorseOperation *op;
     SeahorseKey *skey;
     GFileOutputStream *output;
@@ -228,14 +228,14 @@ export_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
         return;
     
     sksrc = seahorse_key_get_source (skey);
-    g_assert (SEAHORSE_IS_KEY_SOURCE (sksrc));
+    g_assert (SEAHORSE_IS_SOURCE (sksrc));
     
 	file = g_file_new_for_uri (uri);
 	output = g_file_replace (file, NULL, FALSE, 0, NULL, &err);  
 	g_object_unref (file);
 	
 	if (output) {
-		op = seahorse_key_source_export (sksrc, keys, TRUE, G_OUTPUT_STREAM (output));
+		op = seahorse_source_export (sksrc, keys, TRUE, G_OUTPUT_STREAM (output));
     
 		seahorse_operation_wait (op);
 		g_object_unref (output);
@@ -344,7 +344,7 @@ seahorse_ssh_key_properties_show (SeahorseSSHKey *skey, GtkWindow *parent)
 
     widget = glade_xml_get_widget (swidget->xml, swidget->name);
     g_signal_connect (widget, "response", G_CALLBACK (properties_response), swidget);
-    g_signal_connect (GTK_OBJECT (widget), "destroy", G_CALLBACK (properties_destroyed), swidget);
+    g_signal_connect (widget, "destroy", G_CALLBACK (properties_destroyed), swidget);
     g_signal_connect_after (skey, "changed", G_CALLBACK (key_changed), swidget);
     g_signal_connect_after (skey, "destroy", G_CALLBACK (key_destroyed), swidget);
 
@@ -365,7 +365,7 @@ seahorse_ssh_key_properties_show (SeahorseSSHKey *skey, GtkWindow *parent)
     g_signal_connect (widget, "activate", G_CALLBACK (comment_activate), swidget);
     g_signal_connect (widget, "focus-out-event", G_CALLBACK (comment_focus_out), swidget);
 
-    if (seahorse_key_get_etype (key) == SKEY_PRIVATE) {
+    if (seahorse_key_get_usage (key) == SEAHORSE_USAGE_PRIVATE_KEY) {
         glade_xml_signal_connect_data (swidget->xml, "export_button_clicked",
                                        G_CALLBACK (export_button_clicked), swidget);
         glade_xml_signal_connect_data (swidget->xml, "passphrase_button_clicked",

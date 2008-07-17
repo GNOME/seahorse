@@ -25,7 +25,8 @@
 #include <seahorse-ssh-key.h>
 #include <seahorse-view.h>
 #include <seahorse-util.h>
-#include <seahorse-key-source.h>
+#include <seahorse-source.h>
+#include <seahorse-types.h>
 #include <config.h>
 #include <common/seahorse-registry.h>
 #include "seahorse-ssh.h"
@@ -44,8 +45,8 @@ enum  {
 	SEAHORSE_SSH_COMMANDS_UI_DEFINITION,
 	SEAHORSE_SSH_COMMANDS_COMMAND_ACTIONS
 };
-static void seahorse_ssh_commands_real_show_properties (SeahorseCommands* base, SeahorseKey* key);
-static void seahorse_ssh_commands_real_delete_keys (SeahorseCommands* base, GList* keys, GError** error);
+static void seahorse_ssh_commands_real_show_properties (SeahorseCommands* base, SeahorseObject* key);
+static void seahorse_ssh_commands_real_delete_objects (SeahorseCommands* base, GList* keys, GError** error);
 static void seahorse_ssh_commands_on_ssh_upload (SeahorseSSHCommands* self, GtkAction* action);
 static void seahorse_ssh_commands_on_view_selection_changed (SeahorseSSHCommands* self, SeahorseView* view);
 static void _seahorse_ssh_commands_on_ssh_upload_gtk_action_activate (GtkAction* _sender, gpointer self);
@@ -58,16 +59,16 @@ static const GtkActionEntry SEAHORSE_SSH_COMMANDS_COMMAND_ENTRIES[] = {{"remote-
 static const char* SEAHORSE_SSH_COMMANDS_UI_DEF = "\n\t\t\t<ui>\n\t\t\t\n\t\t\t<menubar>\n\t\t\t\t<menu name='Remote' action='remote-menu'>\n\t\t\t\t\t<menuitem action='remote-ssh-upload'/>\n\t\t\t\t</menu>\n\t\t\t</menubar>\n\t\t\t\n\t\t\t<popup name=\"KeyPopup\">\n\t\t\t\t<menuitem action=\"remote-ssh-upload\"/>\n\t\t\t</popup>\n\t\t\t\n\t\t\t</ui>\n\t\t";
 
 
-static void seahorse_ssh_commands_real_show_properties (SeahorseCommands* base, SeahorseKey* key) {
+static void seahorse_ssh_commands_real_show_properties (SeahorseCommands* base, SeahorseObject* key) {
 	SeahorseSSHCommands * self;
 	self = SEAHORSE_SSH_COMMANDS (base);
-	g_return_if_fail (SEAHORSE_IS_KEY (key));
-	g_return_if_fail (seahorse_key_get_ktype (key) == SEAHORSE_SSH_TYPE);
+	g_return_if_fail (SEAHORSE_IS_OBJECT (key));
+	g_return_if_fail (seahorse_object_get_tag (key) == SEAHORSE_SSH_TYPE);
 	seahorse_ssh_key_properties_show (SEAHORSE_SSH_KEY (key), seahorse_view_get_window (seahorse_commands_get_view (SEAHORSE_COMMANDS (self))));
 }
 
 
-static void seahorse_ssh_commands_real_delete_keys (SeahorseCommands* base, GList* keys, GError** error) {
+static void seahorse_ssh_commands_real_delete_objects (SeahorseCommands* base, GList* keys, GError** error) {
 	SeahorseSSHCommands * self;
 	GError * inner_error;
 	guint num;
@@ -83,14 +84,14 @@ static void seahorse_ssh_commands_real_delete_keys (SeahorseCommands* base, GLis
 	if (num == 1) {
 		char* _tmp0;
 		_tmp0 = NULL;
-		prompt = (_tmp0 = g_strdup_printf (_ ("Are you sure you want to delete the secure shell key '%s'?"), seahorse_key_get_display_name (((SeahorseKey*) (SEAHORSE_KEY (((SeahorseSSHKey*) (keys->data))))))), (prompt = (g_free (prompt), NULL)), _tmp0);
+		prompt = (_tmp0 = g_strdup_printf (_ ("Are you sure you want to delete the secure shell key '%s'?"), seahorse_object_get_description (((SeahorseObject*) (((SeahorseObject*) (keys->data)))))), (prompt = (g_free (prompt), NULL)), _tmp0);
 	} else {
 		char* _tmp1;
 		_tmp1 = NULL;
 		prompt = (_tmp1 = g_strdup_printf (_ ("Are you sure you want to delete %d secure shell keys?"), num), (prompt = (g_free (prompt), NULL)), _tmp1);
 	}
 	if (seahorse_util_prompt_delete (prompt)) {
-		seahorse_key_source_delete_keys (keys, &inner_error);
+		seahorse_source_delete_objects (keys, &inner_error);
 		if (inner_error != NULL) {
 			g_propagate_error (error, inner_error);
 			prompt = (g_free (prompt), NULL);
@@ -107,21 +108,18 @@ static void seahorse_ssh_commands_on_ssh_upload (SeahorseSSHCommands* self, GtkA
 	g_return_if_fail (SEAHORSE_SSH_IS_COMMANDS (self));
 	g_return_if_fail (GTK_IS_ACTION (action));
 	ssh_keys = NULL;
-	keys = seahorse_view_get_selected_keys (seahorse_commands_get_view (SEAHORSE_COMMANDS (self)));
+	keys = seahorse_view_get_selected_objects (seahorse_commands_get_view (SEAHORSE_COMMANDS (self)));
 	{
 		GList* key_collection;
 		GList* key_it;
 		key_collection = keys;
 		for (key_it = key_collection; key_it != NULL; key_it = key_it->next) {
-			SeahorseSSHKey* _tmp0;
-			SeahorseSSHKey* key;
-			_tmp0 = NULL;
-			key = (_tmp0 = ((SeahorseSSHKey*) (key_it->data)), (_tmp0 == NULL ? NULL : g_object_ref (_tmp0)));
+			SeahorseObject* key;
+			key = ((SeahorseObject*) (key_it->data));
 			{
-				if (seahorse_key_get_ktype (SEAHORSE_KEY (key)) == SEAHORSE_SSH_TYPE && seahorse_key_get_etype (SEAHORSE_KEY (key)) == SKEY_PRIVATE) {
-					ssh_keys = g_list_append (ssh_keys, key);
+				if (seahorse_object_get_tag (key) == SEAHORSE_SSH_TYPE && seahorse_object_get_usage (key) == SEAHORSE_USAGE_PRIVATE_KEY) {
+					ssh_keys = g_list_append (ssh_keys, SEAHORSE_SSH_KEY (key));
 				}
-				(key == NULL ? NULL : (key = (g_object_unref (key), NULL)));
 			}
 		}
 	}
@@ -136,24 +134,20 @@ static void seahorse_ssh_commands_on_view_selection_changed (SeahorseSSHCommands
 	gboolean enable;
 	g_return_if_fail (SEAHORSE_SSH_IS_COMMANDS (self));
 	g_return_if_fail (SEAHORSE_IS_VIEW (view));
-	keys = seahorse_view_get_selected_keys (view);
+	keys = seahorse_view_get_selected_objects (view);
 	enable = (keys != NULL);
 	{
 		GList* key_collection;
 		GList* key_it;
 		key_collection = keys;
 		for (key_it = key_collection; key_it != NULL; key_it = key_it->next) {
-			SeahorseSSHKey* _tmp0;
-			SeahorseSSHKey* key;
-			_tmp0 = NULL;
-			key = (_tmp0 = ((SeahorseSSHKey*) (key_it->data)), (_tmp0 == NULL ? NULL : g_object_ref (_tmp0)));
+			SeahorseObject* key;
+			key = ((SeahorseObject*) (key_it->data));
 			{
-				if (seahorse_key_get_ktype (SEAHORSE_KEY (key)) != SEAHORSE_SSH_TYPE || seahorse_key_get_etype (SEAHORSE_KEY (key)) != SKEY_PRIVATE) {
+				if (seahorse_object_get_tag (key) != SEAHORSE_SSH_TYPE || seahorse_object_get_usage (key) != SEAHORSE_USAGE_PRIVATE_KEY) {
 					enable = FALSE;
-					(key == NULL ? NULL : (key = (g_object_unref (key), NULL)));
 					break;
 				}
-				(key == NULL ? NULL : (key = (g_object_unref (key), NULL)));
 			}
 		}
 	}
@@ -251,7 +245,7 @@ static void seahorse_ssh_commands_class_init (SeahorseSSHCommandsClass * klass) 
 	G_OBJECT_CLASS (klass)->constructor = seahorse_ssh_commands_constructor;
 	G_OBJECT_CLASS (klass)->dispose = seahorse_ssh_commands_dispose;
 	SEAHORSE_COMMANDS_CLASS (klass)->show_properties = seahorse_ssh_commands_real_show_properties;
-	SEAHORSE_COMMANDS_CLASS (klass)->delete_keys = seahorse_ssh_commands_real_delete_keys;
+	SEAHORSE_COMMANDS_CLASS (klass)->delete_objects = seahorse_ssh_commands_real_delete_objects;
 	g_object_class_override_property (G_OBJECT_CLASS (klass), SEAHORSE_SSH_COMMANDS_KTYPE, "ktype");
 	g_object_class_override_property (G_OBJECT_CLASS (klass), SEAHORSE_SSH_COMMANDS_UI_DEFINITION, "ui-definition");
 	g_object_class_override_property (G_OBJECT_CLASS (klass), SEAHORSE_SSH_COMMANDS_COMMAND_ACTIONS, "command-actions");

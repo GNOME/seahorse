@@ -614,7 +614,7 @@ void
 seahorse_gkeyring_item_properties_show (SeahorseGKeyringItem *git, GtkWindow *parent)
 {
     SeahorseKey *key = SEAHORSE_KEY (git);
-    SeahorseKeySource *sksrc;
+    SeahorseSource *sksrc;
     SeahorseWidget *swidget = NULL;
     GtkWidget *widget;
 
@@ -629,12 +629,12 @@ seahorse_gkeyring_item_properties_show (SeahorseGKeyringItem *git, GtkWindow *pa
     /* This causes the key source to get any specific info about the key */
     if (seahorse_key_get_loaded (key) < SKEY_INFO_COMPLETE) {
         sksrc = seahorse_key_get_source (key);
-        seahorse_key_source_load_async (sksrc, seahorse_key_get_keyid (key));
+        seahorse_source_load_async (sksrc, seahorse_key_get_keyid (key));
     }
 
     widget = glade_xml_get_widget (swidget->xml, swidget->name);
     g_signal_connect (widget, "response", G_CALLBACK (properties_response), swidget);
-    g_signal_connect (GTK_OBJECT (widget), "destroy", G_CALLBACK (properties_destroyed), swidget);
+    g_signal_connect (widget, "destroy", G_CALLBACK (properties_destroyed), swidget);
     g_signal_connect_after (git, "changed", G_CALLBACK (key_changed), swidget);
     g_signal_connect_after (git, "destroy", G_CALLBACK (key_destroyed), swidget);
 

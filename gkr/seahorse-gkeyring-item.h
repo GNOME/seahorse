@@ -45,7 +45,7 @@
 #include "seahorse-gkr-module.h"
 
 #include "seahorse-key.h"
-#include "seahorse-key-source.h"
+#include "seahorse-source.h"
 
 typedef enum {
     SEAHORSE_GKEYRING_USE_OTHER,
@@ -82,7 +82,7 @@ struct _SeahorseGKeyringItemClass {
 };
 
 // TODO: arguments specific to GKeyring Item 
-SeahorseGKeyringItem*   seahorse_gkeyring_item_new              (SeahorseKeySource *sksrc,
+SeahorseGKeyringItem*   seahorse_gkeyring_item_new              (SeahorseSource *sksrc,
                                                                  guint32 item_id, 
                                                                  GnomeKeyringItemInfo *info,
                                                                  GnomeKeyringAttributeList *attributes,

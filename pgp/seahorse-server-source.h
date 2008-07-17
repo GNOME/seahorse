@@ -23,7 +23,7 @@
  * SeahorseServerSoruce: A base class for key sources that retrieve keys
  * from remote key servers.
  * 
- * - Derived from SeahorseKeySource.
+ * - Derived from SeahorseSource.
  * - Also includes functions for parsing keyserver URIs and mapping them
  *   to the appropriate key sources (such as SeahorseHKPSource)
  * - There's some GPGME specific stuff in here that may eventually need to be 
@@ -31,7 +31,7 @@
  * 
  * Properties:
  *   key-type: (GQuark) The type of keys generated (ie: SKEY_PGP)
- *   location: (gchar*) The location of keys from this key source (ie: SKEY_LOC_REMOTE)
+ *   location: (gchar*) The location of keys from this key source (ie: SEAHORSE_LOCATION_REMOTE)
  *   key-server: (gchar*) The host:port of the keyserver to search.
  *   uri: (gchar*) Only for remote key sources. The full URI of the keyserver 
  *        being used. 
@@ -40,7 +40,7 @@
 #ifndef __SEAHORSE_SERVER_SOURCE_H__
 #define __SEAHORSE_SERVER_SOURCE_H__
 
-#include "seahorse-key-source.h"
+#include "seahorse-source.h"
 #include "seahorse-operation.h"
 
 #define SEAHORSE_TYPE_SERVER_SOURCE            (seahorse_server_source_get_type ())
@@ -55,14 +55,14 @@ typedef struct _SeahorseServerSourceClass SeahorseServerSourceClass;
 typedef struct _SeahorseServerSourcePrivate SeahorseServerSourcePrivate;
 
 struct _SeahorseServerSource {
-    SeahorseKeySource parent;
+    SeahorseSource parent;
     
     /*< private >*/
     SeahorseServerSourcePrivate *priv;
 };
 
 struct _SeahorseServerSourceClass {
-    SeahorseKeySourceClass parent_class;
+    SeahorseSourceClass parent_class;
 };
 
 GType        seahorse_server_source_get_type         (void);

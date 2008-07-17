@@ -128,7 +128,7 @@ notify_signatures (const gchar* data, gpgme_verify_result_t status)
 
 	/* Discover the key in question */
 	rawids = g_slist_append (NULL, status->signatures->fpr);
-	keys = seahorse_context_discover_keys (SCTX_APP (), SEAHORSE_PGP, rawids);
+	keys = seahorse_context_discover_objects (SCTX_APP (), SEAHORSE_PGP, rawids);
 	g_slist_free (rawids);
 
 	g_return_if_fail (keys != NULL);
@@ -186,7 +186,7 @@ notify_signatures (const gchar* data, gpgme_verify_result_t status)
 
 	if (sig) {
 		gchar *date = seahorse_util_get_display_date_string (status->signatures->timestamp);
-		gchar *id = seahorse_context_keyid_to_dbus (SCTX_APP (), seahorse_key_get_keyid (skey), 0);
+		gchar *id = seahorse_context_id_to_dbus (SCTX_APP (), seahorse_key_get_keyid (skey), 0);
 		body = g_markup_printf_escaped (body, id, date);
 		g_free (date);
 		g_free (id);
@@ -219,8 +219,8 @@ seahorse_service_crypto_encrypt_text (SeahorseServiceCrypto *crypto,
 {
     GList *recipkeys = NULL;
     SeahorsePGPOperation *pop; 
-    SeahorseKey *signkey = NULL;
-    SeahorseKey *skey;
+    SeahorseObject *signkey = NULL;
+    SeahorseObject *skey;
     gpgme_key_t *recips;
     gpgme_data_t plain, cipher;
     gpgme_error_t gerr;
@@ -233,7 +233,7 @@ seahorse_service_crypto_encrypt_text (SeahorseServiceCrypto *crypto,
     
     /* The signer */
     if (signer && signer[0]) {
-        signkey = seahorse_context_key_from_dbus (SCTX_APP (), signer, NULL);
+        signkey = seahorse_context_object_from_dbus (SCTX_APP (), signer, NULL);
         if (!signkey) {
             g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID, 
                          _("Invalid or unrecognized signer: %s"), signer);
@@ -241,7 +241,7 @@ seahorse_service_crypto_encrypt_text (SeahorseServiceCrypto *crypto,
         }
         
         if (!SEAHORSE_IS_PGP_KEY (signkey) || 
-            !(seahorse_key_get_flags (signkey) & SKEY_FLAG_CAN_SIGN)) {
+            !(seahorse_object_get_flags (signkey) & SKEY_FLAG_CAN_SIGN)) {
             g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID,
                          _("Key is not valid for signing: %s"), signer);
             return FALSE;
@@ -251,7 +251,7 @@ seahorse_service_crypto_encrypt_text (SeahorseServiceCrypto *crypto,
     /* The recipients */
     for( ; recipients[0]; recipients++)
     {
-        skey = seahorse_context_key_from_dbus (SCTX_APP (), recipients[0], NULL);
+        skey = seahorse_context_object_from_dbus (SCTX_APP (), recipients[0], NULL);
         if (!skey) {
             g_list_free (recipkeys);
             g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID, 
@@ -260,7 +260,7 @@ seahorse_service_crypto_encrypt_text (SeahorseServiceCrypto *crypto,
         }
         
         if (!SEAHORSE_IS_PGP_KEY (skey) ||
-            !(seahorse_key_get_flags (skey) & SKEY_FLAG_CAN_ENCRYPT)) {
+            !(seahorse_object_get_flags (skey) & SKEY_FLAG_CAN_ENCRYPT)) {
             g_list_free (recipkeys);
             g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID,
                          _("Key is not a valid recipient for encryption: %s"), recipients[0]);
@@ -290,7 +290,7 @@ seahorse_service_crypto_encrypt_text (SeahorseServiceCrypto *crypto,
 
     /* Add the default key if set and necessary */
     if (seahorse_gconf_get_boolean (ENCRYPTSELF_KEY)) {
-        skey = seahorse_context_get_default_key (SCTX_APP ());
+        skey = SEAHORSE_OBJECT (seahorse_context_get_default_key (SCTX_APP ()));
         if (SEAHORSE_IS_PGP_KEY (skey))
             recipkeys = g_list_append (recipkeys, skey);
     }
@@ -324,7 +324,7 @@ seahorse_service_crypto_sign_text (SeahorseServiceCrypto *crypto, const char *si
                                    int flags, const char *cleartext, char **crypttext,
                                    GError **error)
 {
-    SeahorseKey *signkey = NULL;
+    SeahorseObject *signkey = NULL;
     gpgme_error_t gerr;
     SeahorsePGPOperation *pop; 
     gpgme_data_t plain, cipher;
@@ -340,7 +340,7 @@ seahorse_service_crypto_sign_text (SeahorseServiceCrypto *crypto, const char *si
         g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID,
                      _("No signer specified"));
     
-    signkey = seahorse_context_key_from_dbus (SCTX_APP (), signer, NULL);
+    signkey = seahorse_context_object_from_dbus (SCTX_APP (), signer, NULL);
     if (!signkey) {
         g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID, 
                      _("Invalid or unrecognized signer: %s"), signer);
@@ -348,7 +348,7 @@ seahorse_service_crypto_sign_text (SeahorseServiceCrypto *crypto, const char *si
     }
         
     if (!SEAHORSE_IS_PGP_KEY (signkey) || 
-        !(seahorse_key_get_flags (signkey) & SKEY_FLAG_CAN_SIGN)) {
+        !(seahorse_object_get_flags (signkey) & SKEY_FLAG_CAN_SIGN)) {
         g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID,
                      _("Key is not valid for signing: %s"), signer);
         return FALSE;
@@ -431,7 +431,7 @@ seahorse_service_crypto_decrypt_text (SeahorseServiceCrypto *crypto,
                 status->signatures->summary & GPGME_SIGSUM_VALID ||
                 status->signatures->summary & GPGME_SIGSUM_KEY_MISSING) {
                 keyid = seahorse_pgp_key_get_cannonical_id (status->signatures->fpr);
-                *signer = seahorse_context_keyid_to_dbus (SCTX_APP (), keyid, 0);
+                *signer = seahorse_context_id_to_dbus (SCTX_APP (), keyid, 0);
             }
         }
     }
@@ -494,7 +494,7 @@ seahorse_service_crypto_verify_text (SeahorseServiceCrypto *crypto,
                 status->signatures->summary & GPGME_SIGSUM_VALID ||
                 status->signatures->summary & GPGME_SIGSUM_KEY_MISSING) {
                 keyid = seahorse_pgp_key_get_cannonical_id (status->signatures->fpr);
-                *signer = seahorse_context_keyid_to_dbus (SCTX_APP (), keyid, 0);
+                *signer = seahorse_context_id_to_dbus (SCTX_APP (), keyid, 0);
             }
         }
     }

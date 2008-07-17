@@ -22,12 +22,12 @@
 #ifndef SEAPGPKEYSETS_H_
 #define SEAPGPKEYSETS_H_
 
-#include "seahorse-keyset.h"
+#include "seahorse-set.h"
 
 /* -----------------------------------------------------------------------------
  * SOME COMMON KEYSETS 
  */
  
-SeahorseKeyset*     seahorse_keyset_pgp_signers_new     ();
+SeahorseSet*     seahorse_keyset_pgp_signers_new     ();
 
 #endif /*SEAPGPKEYSETS_H_*/

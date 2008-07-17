@@ -85,17 +85,17 @@ upload_via_source (const gchar *user, const gchar *host, const gchar *port, GLis
 {
     SeahorseMultiOperation *mop = NULL;
     SeahorseOperation *op = NULL;
-    SeahorseKeySource *sksrc;
+    SeahorseSource *sksrc;
     SeahorseKey *skey;
     GList *next;
     
-    seahorse_util_keylist_sort (keys);
+    seahorse_util_objects_sort (keys);
     g_assert (keys);
     
     while (keys) {
      
         /* Break off one set (same keysource) */
-        next = seahorse_util_keylist_splice (keys);
+        next = seahorse_util_objects_splice (keys);
         
         g_assert (SEAHORSE_IS_KEY (keys->data));
         skey = SEAHORSE_KEY (keys->data);

@@ -27,10 +27,10 @@
 #include <seahorse-widget.h>
 #include <seahorse-view.h>
 #include <gtk/gtk.h>
-#include <seahorse-key.h>
+#include <seahorse-object.h>
 #include <stdlib.h>
 #include <string.h>
-#include <seahorse-keyset.h>
+#include <seahorse-set.h>
 
 G_BEGIN_DECLS
 
@@ -53,24 +53,24 @@ struct _SeahorseViewer {
 
 struct _SeahorseViewerClass {
 	SeahorseWidgetClass parent_class;
-	GList* (*get_selected_keys) (SeahorseViewer* self);
-	void (*set_selected_keys) (SeahorseViewer* self, GList* keys);
-	SeahorseKey* (*get_selected_key_and_uid) (SeahorseViewer* self, guint* uid);
+	GList* (*get_selected_objects) (SeahorseViewer* self);
+	void (*set_selected_objects) (SeahorseViewer* self, GList* objects);
+	SeahorseObject* (*get_selected_object_and_uid) (SeahorseViewer* self, guint* uid);
 };
 
 
 void seahorse_viewer_ensure_updated (SeahorseViewer* self);
 void seahorse_viewer_include_actions (SeahorseViewer* self, GtkActionGroup* actions);
-GList* seahorse_viewer_get_selected_keys (SeahorseViewer* self);
-void seahorse_viewer_set_selected_keys (SeahorseViewer* self, GList* keys);
-SeahorseKey* seahorse_viewer_get_selected_key_and_uid (SeahorseViewer* self, guint* uid);
+GList* seahorse_viewer_get_selected_objects (SeahorseViewer* self);
+void seahorse_viewer_set_selected_objects (SeahorseViewer* self, GList* objects);
+SeahorseObject* seahorse_viewer_get_selected_object_and_uid (SeahorseViewer* self, guint* uid);
 void seahorse_viewer_show_context_menu (SeahorseViewer* self, guint button, guint time);
-void seahorse_viewer_show_properties (SeahorseViewer* self, SeahorseKey* key);
+void seahorse_viewer_show_properties (SeahorseViewer* self, SeahorseObject* obj);
 void seahorse_viewer_set_status (SeahorseViewer* self, const char* text);
 void seahorse_viewer_set_numbered_status (SeahorseViewer* self, const char* text, gint num);
-SeahorseKey* seahorse_viewer_get_selected_key (SeahorseViewer* self);
-void seahorse_viewer_set_selected_key (SeahorseViewer* self, SeahorseKey* value);
-SeahorseKeyset* seahorse_viewer_get_current_keyset (SeahorseViewer* self);
+SeahorseObject* seahorse_viewer_get_selected (SeahorseViewer* self);
+void seahorse_viewer_set_selected (SeahorseViewer* self, SeahorseObject* value);
+SeahorseSet* seahorse_viewer_get_current_set (SeahorseViewer* self);
 GType seahorse_viewer_get_type (void);
 
 

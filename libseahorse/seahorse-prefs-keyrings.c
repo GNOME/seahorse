@@ -295,7 +295,7 @@ static void
 keyring_default_done (GnomeKeyringResult result, gpointer data)
 {
     SeahorseWidget *swidget;
-    SeahorseKeySource *src;
+    SeahorseSource *src;
 
     swidget = SEAHORSE_WIDGET (data);
     g_return_if_fail (swidget);
@@ -311,11 +311,10 @@ keyring_default_done (GnomeKeyringResult result, gpointer data)
          * Update the main seahorse gkeyring source 
          * TODO: We shouldn't have to define SEAHORSE_GKR here again
          */
-        src = seahorse_context_find_key_source (SCTX_APP (), 
-                                                g_quark_from_static_string ("gnome-keyring"), 
-                                                SKEY_LOC_LOCAL);
+        src = seahorse_context_find_source (SCTX_APP (), g_quark_from_static_string ("gnome-keyring"), 
+                                            SEAHORSE_LOCATION_LOCAL);
         if (src)
-            seahorse_key_source_load_async (src, 0);
+            seahorse_source_load_async (src, 0);
         
     /* Setting the default keyring failed */
     } else if (result != GNOME_KEYRING_RESULT_CANCELLED) {     

@@ -1,18 +1,33 @@
 <?xml version="1.0"?>
 <api version="1.0">
 <namespace name="Seahorse">
+	<enum name="SeahorseLocation" get-type="seahorse_location_get_type">
+		<member name="SEAHORSE_LOCATION_INVALID"/>
+		<member name="SEAHORSE_LOCATION_MISSING"/>
+		<member name="SEAHORSE_LOCATION_SEARCHING"/>
+		<member name="SEAHORSE_LOCATION_REMOTE"/>
+		<member name="SEAHORSE_LOCATION_LOCAL"/>
+	</enum>
+	<enum name="SeahorseUsage" get-type="seahorse_usage_get_type">
+		<member name="SEAHORSE_USAGE_NONE"/>
+		<member name="SEAHORSE_USAGE_SYMMETRIC_KEY"/>
+		<member name="SEAHORSE_USAGE_PUBLIC_KEY"/>
+		<member name="SEAHORSE_USAGE_PRIVATE_KEY"/>
+		<member name="SEAHORSE_USAGE_CREDENTIALS"/>
+		<member name="SEAHORSE_USAGE_OTHER"/>
+	</enum>
 	<object name="Commands" parent="GLib.Object" type-name="SeahorseCommands" get-type="seahorse_commands_get_type">
 		<method name="show_properties" symbol="seahorse_commands_show_properties">
 			<parameters>
 				<parameter name="self" type="Seahorse.Commands*"/>
-				<parameter name="key" type="Seahorse.Key*"/>
+				<parameter name="obj" type="Seahorse.Object*"/>
 			</parameters>
 			<return-type type="void"/>
 		</method>
-		<method name="delete_keys" symbol="seahorse_commands_delete_keys">
+		<method name="delete_objects" symbol="seahorse_commands_delete_objects">
 			<parameters>
 				<parameter name="self" type="Seahorse.Commands*"/>
-				<parameter name="keys" type="GLib.List*"/>
+				<parameter name="obj" type="GLib.List*"/>
 			</parameters>
 			<return-type type="void"/>
 		</method>
@@ -23,6 +38,83 @@
 	</object>
 	<object name="Generator" parent="GLib.Object" type-name="SeahorseGenerator" get-type="seahorse_generator_get_type">
 		<property name="actions" type="Gtk.ActionGroup*" readable="1"/>
+	</object>
+	<object name="Object" parent="GLib.Object" type-name="SeahorseObject" get-type="seahorse_object_get_type">
+		<enum name="SeahorseObjectChange" get-type="seahorse_object_change_get_type">
+			<member name="SEAHORSE_OBJECT_CHANGE_ALL"/>
+			<member name="SEAHORSE_OBJECT_CHANGE_LOCATION"/>
+			<member name="SEAHORSE_OBJECT_CHANGE_PREFERRED"/>
+			<member name="SEAHORSE_OBJECT_CHANGE_MAX"/>
+		</enum>
+		<field name="_tag"/>
+		<field name="_id"/>
+		<field name="_location"/>
+		<field name="_usage"/>
+		<field name="_flags"/>
+		<field name="attached_to"/>
+		<method name="get_children" symbol="seahorse_object_get_children">
+			<parameters>
+				<parameter name="self" type="Seahorse.Object*"/>
+			</parameters>
+			<return-type type="GLib.List*" transfer="full"/>
+		</method>
+		<method name="fire_changed" symbol="seahorse_object_fire_changed">
+			<parameters>
+				<parameter name="self" type="Seahorse.Object*"/>
+				<parameter name="what" type="Seahorse.Object.Change"/>
+			</parameters>
+			<return-type type="void"/>
+		</method>
+		<property name="tag" type="GLib.Quark" readable="1"/>
+		<property name="id" type="GLib.Quark" readable="1"/>
+		<property name="location" type="Seahorse.Location" readable="1" writable="1"/>
+		<property name="usage" type="Seahorse.Usage" readable="1"/>
+		<property name="flags" type="uint" readable="1"/>
+		<property name="source" type="Seahorse.Source*" readable="1" writable="1"/>
+		<property name="preferred" type="Seahorse.Object*" readable="1" writable="1"/>
+		<property name="description" type="string*" readable="1"/>
+		<property name="markup" type="string*" readable="1"/>
+		<property name="stock_icon" type="string*" readable="1"/>
+		<property name="parent" type="Seahorse.Object*" readable="1" writable="1"/>
+		<signal name="changed">
+			<parameters>
+				<parameter name="what" type="Seahorse.Object.Change"/>
+			</parameters>
+			<return-type type="void"/>
+		</signal>
+		<signal name="hierarchy">
+			<parameters>
+			</parameters>
+			<return-type type="void"/>
+		</signal>
+		<signal name="destroy">
+			<parameters>
+			</parameters>
+			<return-type type="void"/>
+		</signal>
+		<struct name="SeahorseObjectPredicate">
+			<field name="tag"/>
+			<field name="id"/>
+			<field name="location"/>
+			<field name="usage"/>
+			<field name="flags"/>
+			<field name="nflags"/>
+			<field name="source"/>
+			<field name="custom"/>
+			<method name="match" symbol="seahorse_object_predicate_match">
+				<parameters>
+					<parameter name="self" type="Seahorse.Object.Predicate"/>
+					<parameter name="obj" type="Seahorse.Object*"/>
+				</parameters>
+				<return-type type="bool" transfer="full"/>
+			</method>
+		</struct>
+		<callback name="SeahorseObjectPredicateFunc">
+			<parameters>
+				<parameter name="obj" type="Seahorse.Object*"/>
+			</parameters>
+			<return-type type="bool" transfer="full"/>
+		</callback>
 	</object>
 	<object name="Servers" parent="GLib.Object" type-name="SeahorseServers" get-type="seahorse_servers_get_type">
 		<method name="get_types" symbol="seahorse_servers_get_types">
@@ -70,28 +162,28 @@
 		<requires>
 			<object name="GLib.Object"/>
 		</requires>
-		<method name="get_selected_keys" symbol="seahorse_view_get_selected_keys">
+		<method name="get_selected_objects" symbol="seahorse_view_get_selected_objects">
 			<parameters>
 				<parameter name="self" type="Seahorse.View*"/>
 			</parameters>
 			<return-type type="GLib.List*" transfer="full"/>
 		</method>
-		<method name="set_selected_keys" symbol="seahorse_view_set_selected_keys">
+		<method name="set_selected_objects" symbol="seahorse_view_set_selected_objects">
 			<parameters>
 				<parameter name="self" type="Seahorse.View*"/>
-				<parameter name="keys" type="GLib.List*"/>
+				<parameter name="objects" type="GLib.List*"/>
 			</parameters>
 			<return-type type="void"/>
 		</method>
-		<method name="get_selected_key_and_uid" symbol="seahorse_view_get_selected_key_and_uid">
+		<method name="get_selected_object_and_uid" symbol="seahorse_view_get_selected_object_and_uid">
 			<parameters>
 				<parameter name="self" type="Seahorse.View*"/>
 				<parameter name="uid" type="uint" direction="out" transfer="full"/>
 			</parameters>
-			<return-type type="Seahorse.Key*"/>
+			<return-type type="Seahorse.Object*"/>
 		</method>
-		<property name="selected_key" type="Seahorse.Key*" readable="1" writable="1"/>
-		<property name="current_keyset" type="Seahorse.Keyset*" readable="1"/>
+		<property name="selected" type="Seahorse.Object*" readable="1" writable="1"/>
+		<property name="current_set" type="Seahorse.Set*" readable="1"/>
 		<property name="window" type="Gtk.Window*" readable="1"/>
 		<signal name="selection_changed">
 			<parameters>

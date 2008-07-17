@@ -25,6 +25,7 @@
 
 #include "seahorse-context.h"
 #include "seahorse-gconf.h"
+#include "seahorse-key.h"
 #include "seahorse-keyserver-sync.h"
 #include "seahorse-progress.h"
 #include "seahorse-preferences.h"
@@ -35,7 +36,7 @@
 #include "seahorse-windows.h"
 
 static void 
-sync_import_complete (SeahorseOperation *op, SeahorseKeySource *sksrc)
+sync_import_complete (SeahorseOperation *op, SeahorseSource *sksrc)
 {
     GError *err = NULL;
     
@@ -48,7 +49,7 @@ sync_import_complete (SeahorseOperation *op, SeahorseKeySource *sksrc)
 }
 
 static void
-sync_export_complete (SeahorseOperation *op, SeahorseKeySource *sksrc)
+sync_export_complete (SeahorseOperation *op, SeahorseSource *sksrc)
 {
     GError *err = NULL;
     gchar *keyserver;
@@ -181,8 +182,8 @@ seahorse_keyserver_sync_show (GList *keys, GtkWindow *parent)
 void
 seahorse_keyserver_sync (GList *keys)
 {
-    SeahorseKeySource *sksrc;
-    SeahorseKeySource *lsksrc;
+    SeahorseSource *sksrc;
+    SeahorseSource *lsksrc;
     SeahorseMultiOperation *mop;
     SeahorseOperation *op;
     gchar *keyserver;
@@ -207,14 +208,14 @@ seahorse_keyserver_sync (GList *keys)
     
     for (l = ks; l; l = g_slist_next (l)) {
         
-        sksrc = seahorse_context_remote_key_source (SCTX_APP (), (const gchar*)(l->data));
+        sksrc = seahorse_context_remote_source (SCTX_APP (), (const gchar*)(l->data));
 
         /* This can happen if the URI scheme is not supported */
         if (sksrc == NULL)
             continue;
         
-        lsksrc = seahorse_context_find_key_source (SCTX_APP (), 
-                        seahorse_key_source_get_ktype (sksrc), SKEY_LOC_LOCAL);
+        lsksrc = seahorse_context_find_source (SCTX_APP (), 
+                        seahorse_source_get_ktype (sksrc), SEAHORSE_LOCATION_LOCAL);
         
         if (lsksrc) {
             op = seahorse_transfer_operation_new (_("Synchronizing keys"), sksrc, lsksrc, keyids);
@@ -231,12 +232,12 @@ seahorse_keyserver_sync (GList *keys)
     keyserver = seahorse_gconf_get_string (PUBLISH_TO_KEY);
     if (keyserver && keyserver[0]) {
         
-        sksrc = seahorse_context_remote_key_source (SCTX_APP (), keyserver);
+        sksrc = seahorse_context_remote_source (SCTX_APP (), keyserver);
 
         /* This can happen if the URI scheme is not supported */
         if (sksrc != NULL) {
 
-            op = seahorse_context_transfer_keys (SCTX_APP (), keys, sksrc);
+            op = seahorse_context_transfer_objects (SCTX_APP (), keys, sksrc);
             g_return_if_fail (sksrc != NULL);
 
             seahorse_multi_operation_take (mop, op);

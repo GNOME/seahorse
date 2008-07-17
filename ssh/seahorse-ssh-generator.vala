@@ -50,7 +50,7 @@ namespace Seahorse.Ssh {
 		}
 		
 		private void on_ssh_generate (Action action) {
-			KeySource sksrc = Context.for_app().find_key_source(Seahorse.Ssh.TYPE, Seahorse.Key.Loc.LOCAL);
+			var sksrc = Context.for_app().find_source(Seahorse.Ssh.TYPE, Seahorse.Location.LOCAL);
 			GLib.return_if_fail (sksrc != null);
 			Generate.show ((Ssh.Source)sksrc, null);
 		}

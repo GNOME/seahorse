@@ -29,6 +29,8 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 
+#include "seahorse-key.h"
+#include "seahorse-object.h"
 #include "seahorse-libdialogs.h"
 #include "seahorse-util.h"
 
@@ -54,7 +56,7 @@ typedef struct _SeahorseNotification {
     gchar *message;
     const gchar *icon;
 
-    GList *keys;
+    GList *objects;
     GObject *widget;
     
 } SeahorseNotification;
@@ -70,20 +72,20 @@ G_DEFINE_TYPE (SeahorseNotification, seahorse_notification, G_TYPE_OBJECT);
  */
 
 /* Forward Declaration */
-static void key_changed (SeahorseKey *skey, SeahorseKeyChange change, SeahorseNotification *snotif);
+static void object_changed (SeahorseObject *sobj, SeahorseObjectChange change, SeahorseNotification *snotif);
 
 static void
-insert_key_field (GString *res, const gchar *key, const gchar *field)
+insert_key_field (GString *res, const gchar *id, const gchar *field)
 {
-    SeahorseKey *skey;
+    SeahorseObject *sobj;
     GValue value;
     GValue svalue;
     gchar *str;
     guint uid;
     
-    skey = seahorse_context_key_from_dbus (SCTX_APP (), key, &uid);
-    if (!skey) {
-        g_warning ("key '%s' in key text does not exist", key);
+    sobj = seahorse_context_object_from_dbus (SCTX_APP (), id, &uid);
+    if (!sobj || !SEAHORSE_IS_KEY (sobj)) {
+        g_warning ("key '%s' in key text does not exist", id);
         return;
     }
     
@@ -94,7 +96,7 @@ insert_key_field (GString *res, const gchar *key, const gchar *field)
     memset (&value, 0, sizeof (value));
     memset (&svalue, 0, sizeof (value));
     
-    if (seahorse_key_lookup_property (skey, uid, field, &value)) {
+    if (seahorse_key_lookup_property (SEAHORSE_KEY (sobj), uid, field, &value)) {
         g_value_init (&svalue, G_TYPE_STRING);
         if (g_value_transform (&value, &svalue)) {
             str = g_markup_escape_text (g_value_get_string (&svalue), -1);
@@ -363,7 +365,7 @@ setup_fallback_notification (SeahorseNotification *snotif, gboolean urgent,
 }
 
 static void 
-key_changed (SeahorseKey *skey, SeahorseKeyChange change, SeahorseNotification *snotif)
+object_changed (SeahorseObject *sobj, SeahorseObjectChange change, SeahorseNotification *snotif)
 {
     if (!snotif->widget)
         return;
@@ -382,7 +384,7 @@ keys_start_element (GMarkupParseContext *ctx, const gchar *element_name,
                     gpointer user_data, GError **error)
 {
     SeahorseNotification* snotif = SEAHORSE_NOTIFICATION (user_data);
-    SeahorseKey *skey;
+    SeahorseObject *sobj;
 
     if (strcmp (element_name, "key") == 0) {
         
@@ -400,10 +402,10 @@ keys_start_element (GMarkupParseContext *ctx, const gchar *element_name,
             g_warning ("key text <key> element requires the following attributes\n"
                        "     <key id=\"xxxxx\" field=\"xxxxx\"/>");
         
-        skey = seahorse_context_key_from_dbus (SCTX_APP (), key, NULL);
-        if (skey) {
-            snotif->keys = g_list_append (snotif->keys, skey);
-            g_signal_connect (skey, "changed", G_CALLBACK (key_changed), snotif);
+        sobj = seahorse_context_object_from_dbus (SCTX_APP (), key, NULL);
+        if (sobj) {
+            snotif->objects = g_list_append (snotif->objects, sobj);
+            g_signal_connect (sobj, "changed", G_CALLBACK (object_changed), snotif);
         }
     }
     
@@ -437,10 +439,10 @@ seahorse_notification_dispose (GObject *gobject)
 
     snotif->widget = NULL;
     
-    for (l = snotif->keys; l; l = g_list_next (l)) 
-        g_signal_handlers_disconnect_by_func (l->data, key_changed, snotif);
-    g_list_free (snotif->keys);
-    snotif->keys = NULL;
+    for (l = snotif->objects; l; l = g_list_next (l)) 
+        g_signal_handlers_disconnect_by_func (l->data, object_changed, snotif);
+    g_list_free (snotif->objects);
+    snotif->objects = NULL;
     
     G_OBJECT_CLASS (seahorse_notification_parent_class)->dispose (gobject);
 }

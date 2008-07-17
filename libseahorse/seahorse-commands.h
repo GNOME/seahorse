@@ -24,10 +24,10 @@
 
 #include <glib.h>
 #include <glib-object.h>
-#include <seahorse-key.h>
 #include <gtk/gtk.h>
 #include <stdlib.h>
 #include <string.h>
+#include <seahorse-object.h>
 #include <seahorse-view.h>
 
 G_BEGIN_DECLS
@@ -51,13 +51,13 @@ struct _SeahorseCommands {
 
 struct _SeahorseCommandsClass {
 	GObjectClass parent_class;
-	void (*show_properties) (SeahorseCommands* self, SeahorseKey* key);
-	void (*delete_keys) (SeahorseCommands* self, GList* keys, GError** error);
+	void (*show_properties) (SeahorseCommands* self, SeahorseObject* obj);
+	void (*delete_objects) (SeahorseCommands* self, GList* obj, GError** error);
 };
 
 
-void seahorse_commands_show_properties (SeahorseCommands* self, SeahorseKey* key);
-void seahorse_commands_delete_keys (SeahorseCommands* self, GList* keys, GError** error);
+void seahorse_commands_show_properties (SeahorseCommands* self, SeahorseObject* obj);
+void seahorse_commands_delete_objects (SeahorseCommands* self, GList* obj, GError** error);
 SeahorseView* seahorse_commands_get_view (SeahorseCommands* self);
 GQuark seahorse_commands_get_ktype (SeahorseCommands* self);
 GtkActionGroup* seahorse_commands_get_command_actions (SeahorseCommands* self);

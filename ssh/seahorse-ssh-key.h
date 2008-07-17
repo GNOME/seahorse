@@ -42,7 +42,7 @@
 #include <gtk/gtk.h>
 
 #include "seahorse-key.h"
-#include "seahorse-key-source.h"
+#include "seahorse-source.h"
 #include "seahorse-operation.h"
 
 #include "seahorse-ssh-module.h"
@@ -77,7 +77,7 @@ struct _SeahorseSSHKeyClass {
     SeahorseKeyClass            parent_class;
 };
 
-SeahorseSSHKey*         seahorse_ssh_key_new                  (SeahorseKeySource *sksrc, 
+SeahorseSSHKey*         seahorse_ssh_key_new                  (SeahorseSource *sksrc, 
                                                                SeahorseSSHKeyData *data);
 
 GType                   seahorse_ssh_key_get_type             (void);

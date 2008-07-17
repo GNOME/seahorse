@@ -23,17 +23,19 @@
  * seahorse_combo_keys_*: Shows a list of keys in a dropdown for selection.
  * 
  * - Attaches to a GtkComboBox
- * - Gets its list of keys from a SeahorseKeyset.
+ * - Gets its list of keys from a SeahorseSet.
  */
  
 #ifndef __SEAHORSE_COMBO_KEYS_H__
 #define __SEAHORSE_COMBO_KEYS_H__
 
 #include <gtk/gtk.h>
-#include "seahorse-keyset.h"
+
+#include "seahorse-key.h"
+#include "seahorse-set.h"
 
 void                        seahorse_combo_keys_attach              (GtkComboBox *combo,
-                                                                     SeahorseKeyset *skset,
+                                                                     SeahorseSet *skset,
                                                                      const gchar *none_option);
 
 void                        seahorse_combo_keys_set_active_id       (GtkComboBox *combo,

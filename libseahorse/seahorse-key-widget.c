@@ -135,8 +135,7 @@ seahorse_key_widget_finalize (GObject *gobject)
         gtk_window_group_remove_window (group, GTK_WINDOW (widget));
     }
     
-    g_signal_handlers_disconnect_by_func (GTK_OBJECT (skwidget->skey),
-                                          seahorse_key_widget_destroyed, skwidget);
+    g_signal_handlers_disconnect_by_func (skwidget->skey, seahorse_key_widget_destroyed, skwidget);
     
     G_OBJECT_CLASS (parent_class)->finalize (gobject);
 }
@@ -155,7 +154,7 @@ seahorse_key_widget_set_property (GObject *object, guint prop_id,
 		/* Refs key and connects to 'destroy' signal */
 		case PROP_KEY:
 			skwidget->skey = g_value_get_object (value);
-			g_signal_connect_after (GTK_OBJECT (skwidget->skey), "destroy",
+			g_signal_connect_after (skwidget->skey, "destroy",
 				G_CALLBACK (seahorse_key_widget_destroyed), skwidget);
 			break;
 		case PROP_INDEX:

@@ -139,9 +139,9 @@ gchar**     seahorse_util_strvec_dup        (const gchar        **vec);
 
 guint       seahorse_util_strvec_length       (const gchar      **vec);
 
-GList*       seahorse_util_keylist_sort       (GList *keys);
+GList*       seahorse_util_objects_sort       (GList *objects);
 
-GList*       seahorse_util_keylist_splice     (GList *keys);
+GList*       seahorse_util_objects_splice     (GList *objects);
 
 gboolean    seahorse_util_string_equals       (const gchar *s1, const gchar *s2);
 

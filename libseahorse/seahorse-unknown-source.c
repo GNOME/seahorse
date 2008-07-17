@@ -36,16 +36,16 @@ enum {
     PROP_LOCATION
 };
 
-G_DEFINE_TYPE (SeahorseUnknownSource, seahorse_unknown_source, SEAHORSE_TYPE_KEY_SOURCE);
+G_DEFINE_TYPE (SeahorseUnknownSource, seahorse_unknown_source, SEAHORSE_TYPE_SOURCE);
 
 /* -----------------------------------------------------------------------------
  * INTERNAL
  */
 
 static void
-search_done (SeahorseOperation *op, SeahorseKey *skey)
+search_done (SeahorseOperation *op, SeahorseObject *sobj)
 {
-    skey->location = SKEY_LOC_UNKNOWN;
+	g_object_set (sobj, "location", SEAHORSE_LOCATION_MISSING, NULL);
 }
 
 /* -----------------------------------------------------------------------------
@@ -53,30 +53,30 @@ search_done (SeahorseOperation *op, SeahorseKey *skey)
  */
 
 static SeahorseOperation*
-seahorse_unknown_source_load (SeahorseKeySource *src, GQuark keyid)
+seahorse_unknown_source_load (SeahorseSource *src, GQuark id)
 {
     SeahorseUnknownSource *usrc;
     
     g_assert (SEAHORSE_IS_UNKNOWN_SOURCE (src));
     usrc = SEAHORSE_UNKNOWN_SOURCE (src);
     
-    if (keyid) {
-        g_return_val_if_fail (keyid, NULL);
-        seahorse_unknown_source_add_key (usrc, keyid, NULL);
+    if (id) {
+        g_return_val_if_fail (id, NULL);
+        seahorse_unknown_source_add_object (usrc, id, NULL);
     }
     
     return seahorse_operation_new_complete (NULL);
 }
 
 static SeahorseOperation* 
-seahorse_unknown_source_import (SeahorseKeySource *sksrc, GInputStream *input)
+seahorse_unknown_source_import (SeahorseSource *sksrc, GInputStream *input)
 {
     g_return_val_if_reached (NULL);
     return NULL;
 }
 
 static SeahorseOperation* 
-seahorse_unknown_source_export_raw (SeahorseKeySource *sksrc, GSList *keyids, 
+seahorse_unknown_source_export_raw (SeahorseSource *sksrc, GSList *ids, 
                                     GOutputStream *output)
 {
     g_return_val_if_reached (NULL);
@@ -84,11 +84,11 @@ seahorse_unknown_source_export_raw (SeahorseKeySource *sksrc, GSList *keyids,
 }
 
 static gboolean            
-seahorse_unknown_source_remove (SeahorseKeySource *sksrc, SeahorseKey *skey,
+seahorse_unknown_source_remove (SeahorseSource *sksrc, SeahorseObject *sobj,
                                 guint name, GError **error)
 {
-    g_return_val_if_fail (sksrc == seahorse_key_get_source (skey), FALSE);
-    seahorse_key_destroy (skey);
+    g_return_val_if_fail (sksrc == seahorse_object_get_source (sobj), FALSE);
+    seahorse_context_remove_object (SCTX_APP (), sobj);
     return TRUE;
 }
 
@@ -119,7 +119,7 @@ seahorse_unknown_source_get_property (GObject *object, guint prop_id, GValue *va
         g_value_set_string (value, _("Unavailable Key"));
         break;
     case PROP_LOCATION:
-        g_value_set_uint (value, SKEY_LOC_UNKNOWN);
+        g_value_set_uint (value, SEAHORSE_LOCATION_MISSING);
         break;
     }
 }
@@ -134,7 +134,7 @@ static void
 seahorse_unknown_source_class_init (SeahorseUnknownSourceClass *klass)
 {
     GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-    SeahorseKeySourceClass *parent_class = SEAHORSE_KEY_SOURCE_CLASS (klass);
+    SeahorseSourceClass *parent_class = SEAHORSE_SOURCE_CLASS (klass);
    
     seahorse_unknown_source_parent_class = g_type_class_peek_parent (klass);
     
@@ -155,8 +155,8 @@ seahorse_unknown_source_class_init (SeahorseUnknownSourceClass *klass)
                              NULL, G_PARAM_READABLE));
 
     g_object_class_install_property (gobject_class, PROP_LOCATION,
-        g_param_spec_uint ("location", "Key Location", "Where the key is stored. See SeahorseKeyLoc", 
-                           0, G_MAXUINT, SKEY_LOC_INVALID, G_PARAM_READABLE));    
+        g_param_spec_uint ("location", "Key Location", "Where the key is stored. See SeahorseLocation", 
+                           0, G_MAXUINT, SEAHORSE_LOCATION_MISSING, G_PARAM_READABLE));    
     
 	seahorse_registry_register_type (NULL, SEAHORSE_TYPE_UNKNOWN_SOURCE, "key-source", NULL);
 }
@@ -171,24 +171,24 @@ seahorse_unknown_source_new (GQuark ktype)
    return g_object_new (SEAHORSE_TYPE_UNKNOWN_SOURCE, "key-type", ktype, NULL);
 }
 
-SeahorseKey*                     
-seahorse_unknown_source_add_key (SeahorseUnknownSource *usrc, GQuark keyid,
-                                 SeahorseOperation *search)
+SeahorseObject*                     
+seahorse_unknown_source_add_object (SeahorseUnknownSource *usrc, GQuark id,
+                                    SeahorseOperation *search)
 {
-    SeahorseKey *skey;
+    SeahorseObject *sobj;
 
-    g_return_val_if_fail (keyid != 0, NULL);
+    g_return_val_if_fail (id != 0, NULL);
 
-    skey = seahorse_context_get_key (SCTX_APP (), SEAHORSE_KEY_SOURCE (usrc), keyid);
-    if (!skey) {
-        skey = SEAHORSE_KEY (seahorse_unknown_key_new (usrc, keyid));
-        seahorse_context_add_key (SCTX_APP (), skey);
+    sobj = seahorse_context_get_object (SCTX_APP (), SEAHORSE_SOURCE (usrc), id);
+    if (!sobj) {
+        sobj = SEAHORSE_OBJECT (seahorse_unknown_key_new (usrc, id));
+        seahorse_context_add_object (SCTX_APP (), sobj);
     }
     
     if (search) {
-        skey->location = SKEY_LOC_SEARCHING;
-        seahorse_operation_watch (search, (SeahorseDoneFunc) search_done, skey, NULL, NULL);
+        sobj->_location = SEAHORSE_LOCATION_SEARCHING;
+        seahorse_operation_watch (search, (SeahorseDoneFunc) search_done, sobj, NULL, NULL);
     }
     
-    return skey;
+    return sobj;
 }

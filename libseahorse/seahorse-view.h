@@ -24,9 +24,9 @@
 
 #include <glib.h>
 #include <glib-object.h>
-#include <seahorse-key.h>
-#include <seahorse-keyset.h>
+#include <seahorse-set.h>
 #include <gtk/gtk.h>
+#include <seahorse-object.h>
 
 G_BEGIN_DECLS
 
@@ -41,18 +41,18 @@ typedef struct _SeahorseViewIface SeahorseViewIface;
 
 struct _SeahorseViewIface {
 	GTypeInterface parent_iface;
-	GList* (*get_selected_keys) (SeahorseView* self);
-	void (*set_selected_keys) (SeahorseView* self, GList* keys);
-	SeahorseKey* (*get_selected_key_and_uid) (SeahorseView* self, guint* uid);
+	GList* (*get_selected_objects) (SeahorseView* self);
+	void (*set_selected_objects) (SeahorseView* self, GList* objects);
+	SeahorseObject* (*get_selected_object_and_uid) (SeahorseView* self, guint* uid);
 };
 
 
-GList* seahorse_view_get_selected_keys (SeahorseView* self);
-void seahorse_view_set_selected_keys (SeahorseView* self, GList* keys);
-SeahorseKey* seahorse_view_get_selected_key_and_uid (SeahorseView* self, guint* uid);
-SeahorseKey* seahorse_view_get_selected_key (SeahorseView* self);
-void seahorse_view_set_selected_key (SeahorseView* self, SeahorseKey* value);
-SeahorseKeyset* seahorse_view_get_current_keyset (SeahorseView* self);
+GList* seahorse_view_get_selected_objects (SeahorseView* self);
+void seahorse_view_set_selected_objects (SeahorseView* self, GList* objects);
+SeahorseObject* seahorse_view_get_selected_object_and_uid (SeahorseView* self, guint* uid);
+SeahorseObject* seahorse_view_get_selected (SeahorseView* self);
+void seahorse_view_set_selected (SeahorseView* self, SeahorseObject* value);
+SeahorseSet* seahorse_view_get_current_set (SeahorseView* self);
 GtkWindow* seahorse_view_get_window (SeahorseView* self);
 GType seahorse_view_get_type (void);
 

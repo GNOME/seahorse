@@ -250,13 +250,13 @@ basic_operation_done (GnomeKeyringResult result, SeahorseGKeyringOperation *gop)
 
     /* When operation is successful reload the key */
     g_return_if_fail (pv->keyid != 0);
-    seahorse_key_source_load_async (SEAHORSE_KEY_SOURCE (gop->gsrc), pv->keyid);
+    seahorse_source_load_async (SEAHORSE_SOURCE (gop->gsrc), pv->keyid);
 }
 
 SeahorseOperation*
 seahorse_gkeyring_operation_update_info (SeahorseGKeyringItem *git, GnomeKeyringItemInfo *info)
 {
-    SeahorseKeySource *sksrc;
+    SeahorseSource *sksrc;
     SeahorseGKeyringOperation *gop;
     SeahorseGKeyringOperationPrivate *pv;
     const gchar *keyring_name;
@@ -288,7 +288,7 @@ seahorse_gkeyring_operation_update_info (SeahorseGKeyringItem *git, GnomeKeyring
 SeahorseOperation*
 seahorse_gkeyring_operation_update_acl (SeahorseGKeyringItem *git, GList *acl)
 {
-    SeahorseKeySource *sksrc;
+    SeahorseSource *sksrc;
     SeahorseGKeyringOperation *gop;
     SeahorseGKeyringOperationPrivate *pv;
     const gchar *keyring_name;

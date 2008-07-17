@@ -27,21 +27,21 @@
  *   find etc... These are stored in the SeahorseKey structure for fast 
  *   access. The derived classes (ie: SeahorsePGPKey) keep these in sync 
  *   whenever the key changes.
- * - Each key keeps note of the SeahorseKeySource it came from.
+ * - Each key keeps note of the SeahorseSource it came from.
  *
  * Signals:
  *   destroy: The key was destroyed.
  * 
  * Properties:
- *   key-source: (SeahorseKeySource) The key source this key came from.
+ *   key-source: (SeahorseSource) The key source this key came from.
  *   key-id: (GQuark) The key identifier in the format ktype:fingerprint 
  *      (ie: the DBUS format)
  *   raw-id: (gchar*) The raw backend specific key identifier
  *   key-desc: (gchar*) A description of the key type.
  *   ktype: (GQuark) The type of key (ie: SEAHORSE_PGP). 
- *   etype: (SeahorseKeyEType) The encryption type (ie: SKEY_PUBLIC)
+ *   etype: (SeahorseUsage) The encryption type (ie: SEAHORSE_USAGE_PUBLIC_KEY)
  *   flags: (guint) Flags on the capabilities of the key (ie: SeahorseKeyFlags)
- *   location: (SeahorseKeyLoc) The location this key is stored. (ie: SKEY_LOC_REMOTE)
+ *   location: (SeahorseLocation) The location this key is stored. (ie: SEAHORSE_LOCATION_REMOTE)
  *   loaded: (SeahorseKeyInfo) How much of the key is loaded (ie: SKEY_INFO_COMPLETE)
  *   preferred: (SeahorseKey) Another representation of this key, that is better suited
  *      for use. (eg: for a remote key could point to it's local counterpart)
@@ -64,6 +64,7 @@
 #include <gtk/gtk.h>
 
 #include "cryptui.h"
+#include "seahorse-object.h"
 #include "seahorse-validity.h"
 
 #define SKEY_UNKNOWN                    0
@@ -75,31 +76,11 @@
 #define SEAHORSE_IS_KEY_CLASS(klass)    (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_KEY))
 #define SEAHORSE_KEY_GET_CLASS(obj)     (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_KEY, SeahorseKeyClass))
 
-/* 
- * These types should never change. These values are exported via DBUS. In the 
- * case of a key being in multiple locations, the highest location always 'wins'.
- */
-typedef enum {
-    SKEY_LOC_INVALID =    CRYPTUI_LOC_INVALID,    /* An invalid key */
-    SKEY_LOC_UNKNOWN =    CRYPTUI_LOC_MISSING,    /* A key we don't know anything about */
-    SKEY_LOC_SEARCHING =  CRYPTUI_LOC_SEARCHING,  /* A key we're searching for but haven't found yet */
-    SKEY_LOC_REMOTE =     CRYPTUI_LOC_REMOTE,     /* A key that we've found is present remotely */
-    SKEY_LOC_LOCAL =      CRYPTUI_LOC_LOCAL,      /* A key on the local machine */
-} SeahorseKeyLoc;
-
 typedef enum {
     SKEY_INFO_NONE,     /* We have no information on this key */
     SKEY_INFO_BASIC,    /* We have the usual basic quick info loaded */
     SKEY_INFO_COMPLETE  /* All info */
 } SeahorseKeyInfo;
-
-typedef enum {
-    SKEY_ETYPE_NONE =       CRYPTUI_ENCTYPE_NONE,       /* Any encryption type */
-    SKEY_SYMMETRIC =        CRYPTUI_ENCTYPE_SYMMETRIC,  /* A symmetric key */
-    SKEY_PUBLIC =           CRYPTUI_ENCTYPE_PUBLIC,     /* A public key */
-    SKEY_PRIVATE =          CRYPTUI_ENCTYPE_PRIVATE,    /* A private key (assumes public/keypair) */
-    SKEY_CREDENTIALS                                    /* Credentials (ie: from gnome-keyring) */
-} SeahorseKeyEType;
 
 typedef enum {
     SKEY_FLAG_IS_VALID =    CRYPTUI_FLAG_IS_VALID,
@@ -113,8 +94,8 @@ typedef enum {
 
 /* Possible key changes */
 typedef enum {
-    SKEY_CHANGE_ALL = 1,
-    SKEY_CHANGE_SIGNERS,
+    SKEY_CHANGE_ALL = SEAHORSE_OBJECT_CHANGE_ALL,
+    SKEY_CHANGE_SIGNERS = SEAHORSE_OBJECT_CHANGE_MAX,
     SKEY_CHANGE_PASS,
     SKEY_CHANGE_TRUST,
     SKEY_CHANGE_DISABLED,
@@ -122,45 +103,28 @@ typedef enum {
     SKEY_CHANGE_REVOKERS,
     SKEY_CHANGE_UIDS,
     SKEY_CHANGE_SUBKEYS,
-    SKEY_CHANGE_PHOTOS,
-    SKEY_CHANGE_PREFERRED
+    SKEY_CHANGE_PHOTOS
 } SeahorseKeyChange;
 
 /* Forward declaration */
-struct _SeahorseKeySource;
+struct _SeahorseSource;
 struct _SeahorseContext;
 
 typedef struct _SeahorseKey SeahorseKey;
 typedef struct _SeahorseKeyClass SeahorseKeyClass;
 
 struct _SeahorseKey {
-    GtkObject                   parent;
+    SeahorseObject              parent;
 
     /*< public >*/
-    GQuark                      ktype;
-    GQuark                      keyid;
     const gchar*                keydesc;
     const gchar*                rawid;
-    SeahorseKeyLoc              location;
     SeahorseKeyInfo             loaded;
-    SeahorseKeyEType            etype;
-    guint                       flags;
-    struct _SeahorseKeySource*  sksrc;
-
-    /*< private >*/
-    struct _SeahorseContext*    attached_to;
-    struct _SeahorseKey*        preferred;
 };
 
 struct _SeahorseKeyClass {
-    GtkObjectClass              parent_class;
+    SeahorseObjectClass         parent_class;
 
-    /* signals --------------------------------------------------------- */
-    
-    /* One of the key's attributes has changed */
-    void              (* changed)                 (SeahorseKey        *skey,
-                                                   SeahorseKeyChange  change);
-    
     /* virtual methods ------------------------------------------------- */
 
     /* The number of UIDs on the key */
@@ -185,21 +149,16 @@ struct _SeahorseKeyClass {
 
 GType             seahorse_key_get_type (void);
 
-void              seahorse_key_destroy            (SeahorseKey        *skey);
-
-void              seahorse_key_changed            (SeahorseKey        *skey,
-                                                   SeahorseKeyChange  change);
-
 GQuark            seahorse_key_get_keyid          (SeahorseKey        *skey);
 
 const gchar*      seahorse_key_get_rawid          (GQuark             keyid);
 
 const gchar*      seahorse_key_get_short_keyid    (SeahorseKey        *skey);
 
-struct _SeahorseKeySource*  
+struct _SeahorseSource*  
                   seahorse_key_get_source         (SeahorseKey        *skey);
 
-SeahorseKeyEType  seahorse_key_get_etype          (SeahorseKey        *skey);
+SeahorseUsage     seahorse_key_get_usage          (SeahorseKey        *skey);
 
 GQuark            seahorse_key_get_ktype          (SeahorseKey        *skey);
 
@@ -207,7 +166,7 @@ const gchar*      seahorse_key_get_desc           (SeahorseKey        *skey);
 
 SeahorseKeyInfo   seahorse_key_get_loaded         (SeahorseKey        *skey);
 
-SeahorseKeyLoc    seahorse_key_get_location       (SeahorseKey        *skey);
+SeahorseLocation  seahorse_key_get_location       (SeahorseKey        *skey);
 
 guint             seahorse_key_get_flags          (SeahorseKey        *skey);
 
@@ -243,40 +202,9 @@ guint             seahorse_key_get_length         (SeahorseKey        *skey);
 
 const gchar*      seahorse_key_get_stock_id       (SeahorseKey        *skey);
 
-void              seahorse_key_set_preferred      (SeahorseKey        *skey,
-                                                   SeahorseKey        *preferred);
-
 gboolean          seahorse_key_lookup_property    (SeahorseKey        *skey, 
                                                    guint              uid, 
                                                    const gchar        *field, 
                                                    GValue             *value);
-
-
-/* -----------------------------------------------------------------------------
- * KEY PREDICATES
- */
- 
-typedef gboolean (*SeahorseKeyPredicateFunc) (SeahorseKey *key, gpointer data);
-
-/* Used for searching, filtering keys */
-typedef struct _SeahorseKeyPredicate {
-    
-    /* Criteria */
-    GQuark ktype;                       /* Keys of this type or 0*/
-    GQuark keyid;                       /* A specific keyid or 0 */
-    SeahorseKeyLoc location;            /* Location of keys or SKEY_LOC_UNKNOWN */
-    SeahorseKeyEType etype;             /* Encryption type or SKEY_INVALID */
-    guint flags;                        /* Flags keys must have or 0 */
-    guint nflags;                       /* Flags keys must not have or 0 */
-    struct _SeahorseKeySource *sksrc;   /* key source keys must be from or NULL */
-
-    /* Custom function */
-    SeahorseKeyPredicateFunc custom;
-    gpointer custom_target;
-    
-} SeahorseKeyPredicate;
-
-gboolean 
-seahorse_key_predicate_match (SeahorseKeyPredicate *skpred, SeahorseKey *skey);
 
 #endif /* __SEAHORSE_KEY_H__ */

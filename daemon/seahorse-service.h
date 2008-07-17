@@ -25,7 +25,7 @@
 #include <glib/gerror.h>
 #include <glib-object.h>
 
-#include "seahorse-keyset.h"
+#include "seahorse-set.h"
 
 G_BEGIN_DECLS
 
@@ -98,14 +98,14 @@ typedef struct _SeahorseServiceKeysetClass SeahorseServiceKeysetClass;
 #define SEAHORSE_SERVICE_KEYSET_GET_CLASS(object)  (G_TYPE_INSTANCE_GET_CLASS((object), SEAHORSE_TYPE_SERVICE_KEYSET, SeahorseServiceKeysetClass))
 
 struct _SeahorseServiceKeyset {
-    SeahorseKeyset base;
+    SeahorseSet base;
     
     /* <public> */
     GQuark ktype;
 };
 
 struct _SeahorseServiceKeysetClass {
-    SeahorseKeysetClass base;
+    SeahorseSetClass base;
     
     /* signals --------------------------------------------------------- */
     
@@ -121,8 +121,8 @@ struct _SeahorseServiceKeysetClass {
 
 GType           seahorse_service_keyset_get_type       (void);
 
-SeahorseKeyset* seahorse_service_keyset_new            (GQuark keytype, 
-                                                        SeahorseKeyLoc location);
+SeahorseSet* seahorse_service_keyset_new            (GQuark keytype, 
+                                                        SeahorseLocation location);
 
 gboolean        seahorse_service_keyset_list_keys      (SeahorseServiceKeyset *keyset,
                                                         gchar ***keys, GError **error);

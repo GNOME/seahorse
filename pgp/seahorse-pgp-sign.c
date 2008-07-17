@@ -26,7 +26,7 @@
 
 #include "seahorse-key-widget.h"
 #include "seahorse-util.h"
-#include "seahorse-keyset.h"
+#include "seahorse-set.h"
 #include "seahorse-gtkstock.h"
 #include "seahorse-combo-keys.h"
 #include "seahorse-gconf.h"
@@ -87,7 +87,7 @@ ok_clicked (SeahorseWidget *swidget)
     signer = seahorse_combo_keys_get_active (GTK_COMBO_BOX (w));
     
     g_assert (!signer || (SEAHORSE_IS_PGP_KEY (signer) && 
-                          seahorse_key_get_etype (signer) == SKEY_PRIVATE));
+                          seahorse_key_get_usage (signer) == SEAHORSE_USAGE_PRIVATE_KEY));
     
     err = seahorse_pgp_key_op_sign (SEAHORSE_PGP_KEY (skey), 
                                     SEAHORSE_PGP_KEY (signer), 
@@ -110,9 +110,9 @@ ok_clicked (SeahorseWidget *swidget)
 }
 
 static void
-keyset_changed (SeahorseKeyset *skset, GtkWidget *widget)
+keyset_changed (SeahorseSet *skset, GtkWidget *widget)
 {
-    if (seahorse_keyset_get_count (skset) <= 1)
+    if (seahorse_set_get_count (skset) <= 1)
         gtk_widget_hide (widget);
     else
         gtk_widget_show (widget);
@@ -141,7 +141,7 @@ choice_toggled (GtkToggleButton *toggle, SeahorseWidget *swidget)
 void
 seahorse_pgp_sign_prompt (SeahorsePGPKey *pkey, guint uid, GtkWindow *parent)
 {
-    SeahorseKeyset *skset;
+    SeahorseSet *skset;
     GtkWidget *w;
     gint response;
     SeahorseWidget *swidget;
@@ -153,7 +153,7 @@ seahorse_pgp_sign_prompt (SeahorsePGPKey *pkey, guint uid, GtkWindow *parent)
     skset = seahorse_keyset_pgp_signers_new ();
     
     /* If no signing keys then we can't sign */
-    if (seahorse_keyset_get_count (skset) == 0) {
+    if (seahorse_set_get_count (skset) == 0) {
         /* TODO: We should be giving an error message that allows them to 
            generate or import a key */
         seahorse_util_show_error (NULL, _("No keys usable for signing"), 

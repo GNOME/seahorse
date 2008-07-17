@@ -221,7 +221,7 @@ int main(int argc, char* argv[])
 
     /* Make the default SeahorseContext */
     seahorse_context_new (SEAHORSE_CONTEXT_APP | SEAHORSE_CONTEXT_DAEMON, 0);
-    op = seahorse_context_load_local_keys (SCTX_APP ());
+    op = seahorse_context_load_local_objects (SCTX_APP ());
     g_object_unref (op);
     
     /* Initialize the various daemon components */

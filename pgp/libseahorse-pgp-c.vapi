@@ -37,7 +37,7 @@ namespace Seahorse.Pgp {
         }
                 
         [CCode (cheader_filename = "seahorse-pgp-source.h")]
-        public class Source : Seahorse.KeySource {
+        public class Source : Seahorse.Source {
         	
         }
         

@@ -50,7 +50,7 @@ namespace Seahorse.Pgp {
 		}
 
 		private void on_pgp_generate (Action action) {
-			KeySource sksrc = Context.for_app().find_key_source(Seahorse.Pgp.TYPE, Seahorse.Key.Loc.LOCAL);
+			var sksrc = Context.for_app().find_source(Seahorse.Pgp.TYPE, Location.LOCAL);
 			GLib.return_if_fail (sksrc != null);
 			Generate.show ((Pgp.Source)sksrc, null);
 		}

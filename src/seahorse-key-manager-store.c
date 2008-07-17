@@ -274,7 +274,7 @@ filter_callback (GtkTreeModel *model, GtkTreeIter *iter, gpointer data)
 static gboolean
 refilter_now (SeahorseKeyManagerStore* skstore)
 {
-    seahorse_keyset_refresh (skstore->skset);
+    seahorse_set_refresh (skstore->skset);
     gtk_tree_model_filter_refilter (skstore->priv->filter);    
     skstore->priv->filter_stag = 0;
     return FALSE;
@@ -295,8 +295,8 @@ update_key_row (SeahorseKeyManagerStore *skstore, SeahorseKey *skey, guint uid,
                 GtkTreeIter *iter)
 {
     SeahorseValidity validity, trust;
-    SeahorseKeyPredicate *pred;
-    SeahorseKeySource *sksrc;
+    SeahorseObjectPredicate *pred;
+    SeahorseSource *sksrc;
     const gchar *stockid;
     gulong expires_date;
     gchar *markup;
@@ -305,7 +305,7 @@ update_key_row (SeahorseKeyManagerStore *skstore, SeahorseKey *skey, guint uid,
     gchar *type;
 
     markup = seahorse_key_get_name_markup (skey, uid);
-    sec = seahorse_key_get_etype (skey) == SKEY_PRIVATE;
+    sec = seahorse_key_get_usage (skey) == SEAHORSE_USAGE_PRIVATE_KEY;
     stockid = seahorse_key_get_stock_id (skey);
     validity = seahorse_key_get_name_validity (skey, uid);
     
@@ -331,7 +331,7 @@ update_key_row (SeahorseKeyManagerStore *skstore, SeahorseKey *skey, guint uid,
         g_object_get (skstore->skset, "predicate", &pred, NULL);
         
         /* If mixed etypes, then get specific description */
-        if (pred->etype == 0 || pred->etype == SKEY_CREDENTIALS) {
+        if (pred->usage == 0 || pred->usage == SEAHORSE_USAGE_CREDENTIALS) {
             type = g_strdup (seahorse_key_get_desc (skey));
             
         /* Otherwise general description */
@@ -394,7 +394,7 @@ append_key_row (SeahorseKeyManagerStore *skstore, SeahorseKey *skey, guint uid,
 }
 
 static void
-key_added (SeahorseKeyset *skset, SeahorseKey *skey, SeahorseKeyManagerStore *skstore)
+key_added (SeahorseSet *skset, SeahorseKey *skey, SeahorseKeyManagerStore *skstore)
 {
     GtkTreeIter iter = { 0, };
     guint i, uids = seahorse_key_get_num_names (skey);
@@ -406,14 +406,14 @@ key_added (SeahorseKeyset *skset, SeahorseKey *skey, SeahorseKeyManagerStore *sk
 }
 
 static void
-key_removed (SeahorseKeyset *skset, SeahorseKey *skey, gpointer closure, 
+key_removed (SeahorseSet *skset, SeahorseKey *skey, gpointer closure, 
              SeahorseKeyManagerStore *skstore)
 {
     seahorse_key_model_remove_rows_for_key (SEAHORSE_KEY_MODEL (skstore), skey);
 }
 
 static void
-key_changed (SeahorseKeyset *skset, SeahorseKey *skey, SeahorseKeyChange change, 
+key_changed (SeahorseSet *skset, SeahorseKey *skey, SeahorseKeyChange change, 
              gpointer closure, SeahorseKeyManagerStore *skstore)
 {
     guint i, uid, old_uids, num_uids;
@@ -461,7 +461,7 @@ populate_store (SeahorseKeyManagerStore *skstore)
     GList *keys, *list = NULL;
     SeahorseKey *skey;
     
-    keys = list = seahorse_keyset_get_keys (skstore->skset);
+    keys = list = seahorse_set_get_objects (skstore->skset);
     while (list != NULL && (skey = list->data) != NULL) {
         key_added (skstore->skset, skey, skstore);
         list = g_list_next (list);
@@ -666,18 +666,18 @@ export_keys_to_output (GList *keys, GOutputStream *output, GError **error)
 {
 	SeahorseMultiOperation *mop = NULL;
 	SeahorseOperation *op;
-	SeahorseKeySource *sksrc;
+	SeahorseSource *sksrc;
 	SeahorseKey *skey;
 	GList *next;
 	gboolean ret;
 	
-	keys = seahorse_util_keylist_sort (keys);
+	keys = seahorse_util_objects_sort (keys);
 	DBG_PRINT (("exporting %d keys\n", g_list_length (keys)));
 	
 	while (keys) {
 		
 		/* Break off one set (same keysource) */
-		next = seahorse_util_keylist_splice (keys);
+		next = seahorse_util_objects_splice (keys);
 
 		g_assert (SEAHORSE_IS_KEY (keys->data));
 		skey = SEAHORSE_KEY (keys->data);
@@ -690,7 +690,7 @@ export_keys_to_output (GList *keys, GOutputStream *output, GError **error)
 			mop = seahorse_multi_operation_new ();
 
 		/* We pass our own data object, to which data is appended */
-		op = seahorse_key_source_export (sksrc, keys, FALSE, output);
+		op = seahorse_source_export (sksrc, keys, FALSE, output);
 		g_return_val_if_fail (op != NULL, FALSE);
 
 		seahorse_multi_operation_take (mop, op);
@@ -1020,7 +1020,7 @@ seahorse_key_manager_store_class_init (SeahorseKeyManagerStoreClass *klass)
   
     g_object_class_install_property (gobject_class, PROP_KEYSET,
         g_param_spec_object ("keyset", "Seahorse Keyset", "Current Seahorse Key Source to use",
-                             SEAHORSE_TYPE_KEYSET, G_PARAM_READWRITE));
+                             SEAHORSE_TYPE_SET, G_PARAM_READWRITE));
 
     g_object_class_install_property (gobject_class, PROP_MODE,
         g_param_spec_uint ("mode", "Key Store Mode", "Key store mode controls which keys to display",
@@ -1036,11 +1036,11 @@ seahorse_key_manager_store_class_init (SeahorseKeyManagerStoreClass *klass)
  */
 
 SeahorseKeyManagerStore*
-seahorse_key_manager_store_new (SeahorseKeyset *skset, GtkTreeView *view)
+seahorse_key_manager_store_new (SeahorseSet *skset, GtkTreeView *view)
 {
     SeahorseKeyManagerStore *skstore;
     GtkTreeViewColumn *col;
-    SeahorseKeyPredicate *pred;
+    SeahorseObjectPredicate *pred;
     GtkCellRenderer *renderer;
     gchar *sort;
     
@@ -1074,13 +1074,13 @@ seahorse_key_manager_store_new (SeahorseKeyset *skset, GtkTreeView *view)
     g_object_get (skset, "predicate", &pred, NULL);
     
     /* Key ID column, don't show for passwords */
-    if (pred->etype != SKEY_CREDENTIALS) {
+    if (pred->usage != SEAHORSE_USAGE_CREDENTIALS) {
         col = append_text_column (skstore, view, _("Key ID"), COL_KEYID);
         gtk_tree_view_column_set_sort_column_id (col, COL_KEYID);
     }
 
     /* Public keys show validity */
-    if (pred->etype == SKEY_PUBLIC) {
+    if (pred->usage == SEAHORSE_USAGE_PUBLIC_KEY) {
         col = append_text_column (skstore, view, _("Validity"), COL_VALIDITY_STR);
         g_object_set_data (G_OBJECT (col), "gconf-key", SHOW_VALIDITY_KEY);
         gtk_tree_view_column_set_visible (col, seahorse_gconf_get_boolean (SHOW_VALIDITY_KEY));
@@ -1151,7 +1151,7 @@ seahorse_key_manager_store_get_all_keys (GtkTreeView *view)
     
     g_return_val_if_fail (GTK_IS_TREE_VIEW (view), NULL);
     skstore = key_store_from_model (gtk_tree_view_get_model (view));
-    return seahorse_keyset_get_keys (skstore->skset);
+    return seahorse_set_get_objects (skstore->skset);
 }
 
 GList*

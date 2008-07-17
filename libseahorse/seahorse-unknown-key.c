@@ -55,16 +55,18 @@ static GObject*
 seahorse_unknown_key_constructor (GType type, guint n_props, GObjectConstructParam* props)
 {
     SeahorseKey *skey;
+    SeahorseObject *sobj;
     GObject *obj;
     
     obj = G_OBJECT_CLASS (seahorse_unknown_key_parent_class)->constructor (type, n_props, props);
     skey = SEAHORSE_KEY (obj);
+    sobj = SEAHORSE_OBJECT (obj);
     
-    if (skey->sksrc)
-        skey->ktype = seahorse_key_source_get_ktype (skey->sksrc);
-    skey->location = SKEY_LOC_UNKNOWN;
+    if (seahorse_object_get_source (sobj))
+        sobj->_tag = seahorse_source_get_ktype (seahorse_object_get_source (sobj));
+    sobj->_location = SEAHORSE_LOCATION_MISSING;
     skey->loaded = SKEY_INFO_NONE;
-    skey->etype = SKEY_ETYPE_NONE;
+    sobj->_usage = SEAHORSE_USAGE_NONE;
     skey->keydesc = _("Unavailable");
     return obj;
 }
@@ -142,14 +144,14 @@ static void
 seahorse_unknown_key_set_property (GObject *object, guint prop_id, 
                                    const GValue *value, GParamSpec *pspec)
 {
-    SeahorseUnknownKey *ukey = SEAHORSE_UNKNOWN_KEY (object);
+	SeahorseUnknownKey *ukey = SEAHORSE_UNKNOWN_KEY (object);
 
-    switch (prop_id) {
-    case PROP_KEYID:
-        ukey->keyid = g_value_get_uint (value);
-        SEAHORSE_KEY (ukey)->keyid = ukey->keyid;
-        break;
-    }
+	switch (prop_id) {
+	case PROP_KEYID:
+		ukey->keyid = g_value_get_uint (value);
+		SEAHORSE_OBJECT (ukey)->_id = ukey->keyid;
+		break;
+	}
 }
 
 static void
@@ -225,9 +227,5 @@ seahorse_unknown_key_new (SeahorseUnknownSource *sksrc, GQuark keyid)
     
     ukey = g_object_new (SEAHORSE_TYPE_UNKNOWN_KEY, "key-source", sksrc, 
                          "key-id", keyid, NULL);
-    
-    /* We don't care about this floating business */
-    g_object_ref (GTK_OBJECT (ukey));
-    gtk_object_sink (GTK_OBJECT (ukey));
     return ukey;
 }

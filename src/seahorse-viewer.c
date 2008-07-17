@@ -26,9 +26,10 @@
 #include <gio/gio.h>
 #include <seahorse-commands.h>
 #include <seahorse-util.h>
+#include <seahorse-types.h>
 #include <seahorse-operation.h>
 #include <gdk/gdk.h>
-#include <seahorse-key-source.h>
+#include <seahorse-source.h>
 #include <seahorse-progress.h>
 #include <common/seahorse-registry.h>
 
@@ -37,15 +38,15 @@
 
 struct _SeahorseViewerPrivate {
 	GtkUIManager* _ui_manager;
-	GtkActionGroup* _key_actions;
+	GtkActionGroup* _object_actions;
 	GHashTable* _commands;
 };
 
 #define SEAHORSE_VIEWER_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), SEAHORSE_TYPE_VIEWER, SeahorseViewerPrivate))
 enum  {
 	SEAHORSE_VIEWER_DUMMY_PROPERTY,
-	SEAHORSE_VIEWER_SELECTED_KEY,
-	SEAHORSE_VIEWER_CURRENT_KEYSET,
+	SEAHORSE_VIEWER_SELECTED,
+	SEAHORSE_VIEWER_CURRENT_SET,
 	SEAHORSE_VIEWER_WINDOW
 };
 static gboolean seahorse_viewer__about_initialized;
@@ -57,9 +58,9 @@ static void _seahorse_viewer_on_key_export_file_gtk_action_activate (GtkAction* 
 static void _seahorse_viewer_on_key_export_clipboard_gtk_action_activate (GtkAction* _sender, gpointer self);
 static void _seahorse_viewer_on_key_delete_gtk_action_activate (GtkAction* _sender, gpointer self);
 static void seahorse_viewer_include_basic_actions (SeahorseViewer* self);
-static GList* seahorse_viewer_real_get_selected_keys (SeahorseViewer* self);
-static void seahorse_viewer_real_set_selected_keys (SeahorseViewer* self, GList* keys);
-static SeahorseKey* seahorse_viewer_real_get_selected_key_and_uid (SeahorseViewer* self, guint* uid);
+static GList* seahorse_viewer_real_get_selected_objects (SeahorseViewer* self);
+static void seahorse_viewer_real_set_selected_objects (SeahorseViewer* self, GList* objects);
+static SeahorseObject* seahorse_viewer_real_get_selected_object_and_uid (SeahorseViewer* self, guint* uid);
 static void seahorse_viewer_on_ui_add_widget (SeahorseViewer* self, GtkUIManager* ui, GtkWidget* widget);
 static void seahorse_viewer_on_app_preferences (SeahorseViewer* self, GtkAction* action);
 static void _seahorse_viewer_on_about_link_clicked_gtk_about_dialog_activate_link_func (GtkAboutDialog* about, const char* link_, gpointer self);
@@ -67,8 +68,8 @@ static void seahorse_viewer_on_app_about (SeahorseViewer* self, GtkAction* actio
 static void seahorse_viewer_on_about_link_clicked (GtkAboutDialog* about, const char* url);
 static void seahorse_viewer_on_help_show (SeahorseViewer* self, GtkAction* action);
 static void seahorse_viewer_on_key_properties (SeahorseViewer* self, GtkAction* action);
-static gint seahorse_viewer_compare_by_ktype (SeahorseViewer* self, SeahorseKey* one, SeahorseKey* two);
-static void seahorse_viewer_delete_key_batch (SeahorseViewer* self, GList* keys);
+static gint seahorse_viewer_compare_by_tag (SeahorseViewer* self, SeahorseObject* one, SeahorseObject* two);
+static void seahorse_viewer_delete_object_batch (SeahorseViewer* self, GList* objects);
 static void seahorse_viewer_on_key_delete (SeahorseViewer* self, GtkAction* action);
 static void seahorse_viewer_on_copy_complete (SeahorseViewer* self, SeahorseOperation* op);
 static void* _g_realloc_grealloc_func (void* data, gulong size);
@@ -143,16 +144,16 @@ static void seahorse_viewer_include_basic_actions (SeahorseViewer* self) {
 	g_signal_connect_object (gtk_action_group_get_action (actions, "help-show"), "activate", ((GCallback) (_seahorse_viewer_on_help_show_gtk_action_activate)), self, 0);
 	seahorse_viewer_include_actions (self, actions);
 	_tmp0 = NULL;
-	self->priv->_key_actions = (_tmp0 = gtk_action_group_new ("key"), (self->priv->_key_actions == NULL ? NULL : (self->priv->_key_actions = (g_object_unref (self->priv->_key_actions), NULL))), _tmp0);
-	gtk_action_group_set_translation_domain (self->priv->_key_actions, GETTEXT_PACKAGE);
-	gtk_action_group_add_actions (self->priv->_key_actions, SEAHORSE_VIEWER_KEY_ENTRIES, G_N_ELEMENTS (SEAHORSE_VIEWER_KEY_ENTRIES), self);
-	g_signal_connect_object (gtk_action_group_get_action (self->priv->_key_actions, "key-properties"), "activate", ((GCallback) (_seahorse_viewer_on_key_properties_gtk_action_activate)), self, 0);
-	g_signal_connect_object (gtk_action_group_get_action (self->priv->_key_actions, "key-export-file"), "activate", ((GCallback) (_seahorse_viewer_on_key_export_file_gtk_action_activate)), self, 0);
-	g_signal_connect_object (gtk_action_group_get_action (self->priv->_key_actions, "key-export-clipboard"), "activate", ((GCallback) (_seahorse_viewer_on_key_export_clipboard_gtk_action_activate)), self, 0);
-	g_signal_connect_object (gtk_action_group_get_action (self->priv->_key_actions, "key-delete"), "activate", ((GCallback) (_seahorse_viewer_on_key_delete_gtk_action_activate)), self, 0);
+	self->priv->_object_actions = (_tmp0 = gtk_action_group_new ("key"), (self->priv->_object_actions == NULL ? NULL : (self->priv->_object_actions = (g_object_unref (self->priv->_object_actions), NULL))), _tmp0);
+	gtk_action_group_set_translation_domain (self->priv->_object_actions, GETTEXT_PACKAGE);
+	gtk_action_group_add_actions (self->priv->_object_actions, SEAHORSE_VIEWER_KEY_ENTRIES, G_N_ELEMENTS (SEAHORSE_VIEWER_KEY_ENTRIES), self);
+	g_signal_connect_object (gtk_action_group_get_action (self->priv->_object_actions, "key-properties"), "activate", ((GCallback) (_seahorse_viewer_on_key_properties_gtk_action_activate)), self, 0);
+	g_signal_connect_object (gtk_action_group_get_action (self->priv->_object_actions, "key-export-file"), "activate", ((GCallback) (_seahorse_viewer_on_key_export_file_gtk_action_activate)), self, 0);
+	g_signal_connect_object (gtk_action_group_get_action (self->priv->_object_actions, "key-export-clipboard"), "activate", ((GCallback) (_seahorse_viewer_on_key_export_clipboard_gtk_action_activate)), self, 0);
+	g_signal_connect_object (gtk_action_group_get_action (self->priv->_object_actions, "key-delete"), "activate", ((GCallback) (_seahorse_viewer_on_key_delete_gtk_action_activate)), self, 0);
 	/* Mark the properties toolbar button as important */
-	g_object_set (gtk_action_group_get_action (self->priv->_key_actions, "key-properties"), "is-important", TRUE, NULL);
-	seahorse_viewer_include_actions (self, self->priv->_key_actions);
+	g_object_set (gtk_action_group_get_action (self->priv->_object_actions, "key-properties"), "is-important", TRUE, NULL);
+	seahorse_viewer_include_actions (self, self->priv->_object_actions);
 	(actions == NULL ? NULL : (actions = (g_object_unref (actions), NULL)));
 }
 
@@ -170,37 +171,37 @@ void seahorse_viewer_include_actions (SeahorseViewer* self, GtkActionGroup* acti
 }
 
 
-static GList* seahorse_viewer_real_get_selected_keys (SeahorseViewer* self) {
+static GList* seahorse_viewer_real_get_selected_objects (SeahorseViewer* self) {
 	g_return_val_if_fail (SEAHORSE_IS_VIEWER (self), NULL);
 	return NULL;
 }
 
 
-GList* seahorse_viewer_get_selected_keys (SeahorseViewer* self) {
-	return SEAHORSE_VIEWER_GET_CLASS (self)->get_selected_keys (self);
+GList* seahorse_viewer_get_selected_objects (SeahorseViewer* self) {
+	return SEAHORSE_VIEWER_GET_CLASS (self)->get_selected_objects (self);
 }
 
 
-static void seahorse_viewer_real_set_selected_keys (SeahorseViewer* self, GList* keys) {
+static void seahorse_viewer_real_set_selected_objects (SeahorseViewer* self, GList* objects) {
 	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
-	g_return_if_fail (keys != NULL);
+	g_return_if_fail (objects != NULL);
 }
 
 
-void seahorse_viewer_set_selected_keys (SeahorseViewer* self, GList* keys) {
-	SEAHORSE_VIEWER_GET_CLASS (self)->set_selected_keys (self, keys);
+void seahorse_viewer_set_selected_objects (SeahorseViewer* self, GList* objects) {
+	SEAHORSE_VIEWER_GET_CLASS (self)->set_selected_objects (self, objects);
 }
 
 
-static SeahorseKey* seahorse_viewer_real_get_selected_key_and_uid (SeahorseViewer* self, guint* uid) {
+static SeahorseObject* seahorse_viewer_real_get_selected_object_and_uid (SeahorseViewer* self, guint* uid) {
 	g_return_val_if_fail (SEAHORSE_IS_VIEWER (self), NULL);
 	/* Must be overridden */
 	return NULL;
 }
 
 
-SeahorseKey* seahorse_viewer_get_selected_key_and_uid (SeahorseViewer* self, guint* uid) {
-	return SEAHORSE_VIEWER_GET_CLASS (self)->get_selected_key_and_uid (self, uid);
+SeahorseObject* seahorse_viewer_get_selected_object_and_uid (SeahorseViewer* self, guint* uid) {
+	return SEAHORSE_VIEWER_GET_CLASS (self)->get_selected_object_and_uid (self, uid);
 }
 
 
@@ -350,15 +351,15 @@ void seahorse_viewer_show_context_menu (SeahorseViewer* self, guint button, guin
 }
 
 
-void seahorse_viewer_show_properties (SeahorseViewer* self, SeahorseKey* key) {
+void seahorse_viewer_show_properties (SeahorseViewer* self, SeahorseObject* obj) {
 	SeahorseCommands* _tmp0;
 	SeahorseCommands* commands;
 	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
-	g_return_if_fail (SEAHORSE_IS_KEY (key));
+	g_return_if_fail (SEAHORSE_IS_OBJECT (obj));
 	_tmp0 = NULL;
-	commands = (_tmp0 = ((SeahorseCommands*) (g_hash_table_lookup (self->priv->_commands, GINT_TO_POINTER (seahorse_key_get_ktype (key))))), (_tmp0 == NULL ? NULL : g_object_ref (_tmp0)));
+	commands = (_tmp0 = ((SeahorseCommands*) (g_hash_table_lookup (self->priv->_commands, GINT_TO_POINTER (seahorse_object_get_tag (obj))))), (_tmp0 == NULL ? NULL : g_object_ref (_tmp0)));
 	if (commands != NULL) {
-		seahorse_commands_show_properties (commands, key);
+		seahorse_commands_show_properties (commands, obj);
 	}
 	(commands == NULL ? NULL : (commands = (g_object_unref (commands), NULL)));
 }
@@ -367,20 +368,20 @@ void seahorse_viewer_show_properties (SeahorseViewer* self, SeahorseKey* key) {
 static void seahorse_viewer_on_key_properties (SeahorseViewer* self, GtkAction* action) {
 	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
 	g_return_if_fail (GTK_IS_ACTION (action));
-	if (seahorse_viewer_get_selected_key (self) != NULL) {
-		seahorse_viewer_show_properties (self, seahorse_viewer_get_selected_key (self));
+	if (seahorse_viewer_get_selected (self) != NULL) {
+		seahorse_viewer_show_properties (self, seahorse_viewer_get_selected (self));
 	}
 }
 
 
-static gint seahorse_viewer_compare_by_ktype (SeahorseViewer* self, SeahorseKey* one, SeahorseKey* two) {
+static gint seahorse_viewer_compare_by_tag (SeahorseViewer* self, SeahorseObject* one, SeahorseObject* two) {
 	GQuark kone;
 	GQuark ktwo;
 	g_return_val_if_fail (SEAHORSE_IS_VIEWER (self), 0);
-	g_return_val_if_fail (SEAHORSE_IS_KEY (one), 0);
-	g_return_val_if_fail (SEAHORSE_IS_KEY (two), 0);
-	kone = seahorse_key_get_ktype (one);
-	ktwo = seahorse_key_get_ktype (two);
+	g_return_val_if_fail (SEAHORSE_IS_OBJECT (one), 0);
+	g_return_val_if_fail (SEAHORSE_IS_OBJECT (two), 0);
+	kone = seahorse_object_get_tag (one);
+	ktwo = seahorse_object_get_tag (two);
 	if (kone < ktwo) {
 		return -1;
 	}
@@ -391,19 +392,19 @@ static gint seahorse_viewer_compare_by_ktype (SeahorseViewer* self, SeahorseKey*
 }
 
 
-static void seahorse_viewer_delete_key_batch (SeahorseViewer* self, GList* keys) {
+static void seahorse_viewer_delete_object_batch (SeahorseViewer* self, GList* objects) {
 	GError * inner_error;
 	SeahorseCommands* _tmp0;
 	SeahorseCommands* commands;
 	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
-	g_return_if_fail (keys != NULL);
+	g_return_if_fail (objects != NULL);
 	inner_error = NULL;
-	g_assert (keys != NULL);
+	g_assert (objects != NULL);
 	_tmp0 = NULL;
-	commands = (_tmp0 = ((SeahorseCommands*) (g_hash_table_lookup (self->priv->_commands, GINT_TO_POINTER (seahorse_key_get_ktype (((SeahorseKey*) (((SeahorseKey*) (keys->data))))))))), (_tmp0 == NULL ? NULL : g_object_ref (_tmp0)));
+	commands = (_tmp0 = ((SeahorseCommands*) (g_hash_table_lookup (self->priv->_commands, GINT_TO_POINTER (seahorse_object_get_tag (((SeahorseObject*) (((SeahorseObject*) (objects->data))))))))), (_tmp0 == NULL ? NULL : g_object_ref (_tmp0)));
 	{
 		if (commands != NULL) {
-			seahorse_commands_delete_keys (commands, keys, &inner_error);
+			seahorse_commands_delete_objects (commands, objects, &inner_error);
 			if (inner_error != NULL) {
 				goto __catch1_g_error;
 			}
@@ -416,7 +417,7 @@ static void seahorse_viewer_delete_key_batch (SeahorseViewer* self, GList* keys)
 		ex = inner_error;
 		inner_error = NULL;
 		{
-			seahorse_util_handle_error (ex, _ ("Couldn't delete keys."), seahorse_view_get_window (SEAHORSE_VIEW (self)), NULL);
+			seahorse_util_handle_error (ex, _ ("Couldn't delete."), seahorse_view_get_window (SEAHORSE_VIEW (self)), NULL);
 			(ex == NULL ? NULL : (ex = (g_error_free (ex), NULL)));
 		}
 	}
@@ -427,7 +428,7 @@ static void seahorse_viewer_delete_key_batch (SeahorseViewer* self, GList* keys)
 
 
 static void seahorse_viewer_on_key_delete (SeahorseViewer* self, GtkAction* action) {
-	GList* keys;
+	GList* objects;
 	GList* batch;
 	GList* _tmp0;
 	guint num;
@@ -435,34 +436,34 @@ static void seahorse_viewer_on_key_delete (SeahorseViewer* self, GtkAction* acti
 	GList* _tmp4;
 	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
 	g_return_if_fail (GTK_IS_ACTION (action));
-	keys = NULL;
+	objects = NULL;
 	batch = NULL;
-	/* Get the selected keys and sort them by ktype */
+	/* Get the selected objects and sort them by ktype */
 	_tmp0 = NULL;
-	keys = (_tmp0 = seahorse_viewer_get_selected_keys (self), (keys == NULL ? NULL : (keys = (g_list_free (keys), NULL))), _tmp0);
-	keys = g_list_sort (keys, ((GCompareFunc) (seahorse_viewer_compare_by_ktype)));
-	num = g_list_length (keys);
+	objects = (_tmp0 = seahorse_viewer_get_selected_objects (self), (objects == NULL ? NULL : (objects = (g_list_free (objects), NULL))), _tmp0);
+	objects = g_list_sort (objects, ((GCompareFunc) (seahorse_viewer_compare_by_tag)));
+	num = g_list_length (objects);
 	if (num == 0) {
-		(keys == NULL ? NULL : (keys = (g_list_free (keys), NULL)));
+		(objects == NULL ? NULL : (objects = (g_list_free (objects), NULL)));
 		(batch == NULL ? NULL : (batch = (g_list_free (batch), NULL)));
 		return;
 	}
-	/* Check for private keys */
+	/* Check for private objects */
 	{
-		GList* key_collection;
-		GList* key_it;
-		key_collection = keys;
-		for (key_it = key_collection; key_it != NULL; key_it = key_it->next) {
-			SeahorseKey* key;
-			key = ((SeahorseKey*) (key_it->data));
+		GList* object_collection;
+		GList* object_it;
+		object_collection = objects;
+		for (object_it = object_collection; object_it != NULL; object_it = object_it->next) {
+			SeahorseObject* object;
+			object = ((SeahorseObject*) (object_it->data));
 			{
-				if (seahorse_key_get_etype (key) == SKEY_PRIVATE) {
+				if (seahorse_object_get_usage (object) == SEAHORSE_USAGE_PRIVATE_KEY) {
 					char* prompt;
 					prompt = NULL;
 					if (num == 1) {
 						char* _tmp1;
 						_tmp1 = NULL;
-						prompt = (_tmp1 = g_strdup_printf (_ ("%s is a private key. Are you sure you want to proceed?"), seahorse_key_get_display_name (((SeahorseKey*) (((SeahorseKey*) (keys->data)))))), (prompt = (g_free (prompt), NULL)), _tmp1);
+						prompt = (_tmp1 = g_strdup_printf (_ ("%s is a private key. Are you sure you want to proceed?"), seahorse_object_get_description (((SeahorseObject*) (((SeahorseObject*) (objects->data)))))), (prompt = (g_free (prompt), NULL)), _tmp1);
 					} else {
 						char* _tmp3;
 						const char* _tmp2;
@@ -472,7 +473,7 @@ static void seahorse_viewer_on_key_delete (SeahorseViewer* self, GtkAction* acti
 					}
 					if (!seahorse_util_prompt_delete (prompt)) {
 						prompt = (g_free (prompt), NULL);
-						(keys == NULL ? NULL : (keys = (g_list_free (keys), NULL)));
+						(objects == NULL ? NULL : (objects = (g_list_free (objects), NULL)));
 						(batch == NULL ? NULL : (batch = (g_list_free (batch), NULL)));
 						return;
 					}
@@ -485,33 +486,33 @@ static void seahorse_viewer_on_key_delete (SeahorseViewer* self, GtkAction* acti
 	_tmp4 = NULL;
 	batch = (_tmp4 = NULL, (batch == NULL ? NULL : (batch = (g_list_free (batch), NULL))), _tmp4);
 	{
-		GList* key_collection;
-		GList* key_it;
-		key_collection = keys;
-		for (key_it = key_collection; key_it != NULL; key_it = key_it->next) {
-			SeahorseKey* _tmp6;
-			SeahorseKey* key;
+		GList* object_collection;
+		GList* object_it;
+		object_collection = objects;
+		for (object_it = object_collection; object_it != NULL; object_it = object_it->next) {
+			SeahorseObject* _tmp6;
+			SeahorseObject* object;
 			_tmp6 = NULL;
-			key = (_tmp6 = ((SeahorseKey*) (key_it->data)), (_tmp6 == NULL ? NULL : g_object_ref (_tmp6)));
+			object = (_tmp6 = ((SeahorseObject*) (object_it->data)), (_tmp6 == NULL ? NULL : g_object_ref (_tmp6)));
 			{
 				/* Process that batch */
-				if (ktype != seahorse_key_get_ktype (key) && batch != NULL) {
+				if (ktype != seahorse_object_get_tag (object) && batch != NULL) {
 					GList* _tmp5;
-					seahorse_viewer_delete_key_batch (self, batch);
+					seahorse_viewer_delete_object_batch (self, batch);
 					_tmp5 = NULL;
 					batch = (_tmp5 = NULL, (batch == NULL ? NULL : (batch = (g_list_free (batch), NULL))), _tmp5);
 				}
 				/* Add to the batch */
-				batch = g_list_prepend (batch, key);
-				(key == NULL ? NULL : (key = (g_object_unref (key), NULL)));
+				batch = g_list_prepend (batch, object);
+				(object == NULL ? NULL : (object = (g_object_unref (object), NULL)));
 			}
 		}
 	}
 	/* Process last batch */
 	if (batch != NULL) {
-		seahorse_viewer_delete_key_batch (self, batch);
+		seahorse_viewer_delete_object_batch (self, batch);
 	}
-	(keys == NULL ? NULL : (keys = (g_list_free (keys), NULL)));
+	(objects == NULL ? NULL : (objects = (g_list_free (objects), NULL)));
 	(batch == NULL ? NULL : (batch = (g_list_free (batch), NULL)));
 }
 
@@ -568,21 +569,21 @@ static void _seahorse_viewer_on_copy_complete_seahorse_done_func (SeahorseOperat
 
 
 static void seahorse_viewer_on_key_export_clipboard (SeahorseViewer* self, GtkAction* action) {
-	GList* keys;
+	GList* objects;
 	GOutputStream* output;
 	SeahorseOperation* op;
 	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
 	g_return_if_fail (GTK_IS_ACTION (action));
-	keys = seahorse_viewer_get_selected_keys (self);
-	if (keys == NULL) {
-		(keys == NULL ? NULL : (keys = (g_list_free (keys), NULL)));
+	objects = seahorse_viewer_get_selected_objects (self);
+	if (objects == NULL) {
+		(objects == NULL ? NULL : (objects = (g_list_free (objects), NULL)));
 		return;
 	}
 	output = G_OUTPUT_STREAM (g_memory_output_stream_new (NULL, ((gulong) (0)), _g_realloc_grealloc_func, _g_free_gdestroy_notify));
-	op = seahorse_key_source_export_keys (keys, output);
+	op = seahorse_source_export_objects (objects, output);
 	seahorse_progress_show (op, _ ("Retrieving keys"), TRUE);
 	seahorse_operation_watch (op, _seahorse_viewer_on_copy_complete_seahorse_done_func, self, NULL, NULL);
-	(keys == NULL ? NULL : (keys = (g_list_free (keys), NULL)));
+	(objects == NULL ? NULL : (objects = (g_list_free (objects), NULL)));
 	(output == NULL ? NULL : (output = (g_object_unref (output), NULL)));
 	(op == NULL ? NULL : (op = (g_object_unref (op), NULL)));
 }
@@ -604,22 +605,22 @@ static void _seahorse_viewer_on_export_done_seahorse_done_func (SeahorseOperatio
 
 static void seahorse_viewer_on_key_export_file (SeahorseViewer* self, GtkAction* action) {
 	GError * inner_error;
-	GList* keys;
+	GList* objects;
 	GtkDialog* _tmp0;
 	GtkDialog* dialog;
 	char* uri;
 	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
 	g_return_if_fail (GTK_IS_ACTION (action));
 	inner_error = NULL;
-	keys = seahorse_viewer_get_selected_keys (self);
-	if (keys == NULL) {
-		(keys == NULL ? NULL : (keys = (g_list_free (keys), NULL)));
+	objects = seahorse_viewer_get_selected_objects (self);
+	if (objects == NULL) {
+		(objects == NULL ? NULL : (objects = (g_list_free (objects), NULL)));
 		return;
 	}
 	_tmp0 = NULL;
 	dialog = (_tmp0 = seahorse_util_chooser_save_new (_ ("Export public key"), seahorse_view_get_window (SEAHORSE_VIEW (self))), (_tmp0 == NULL ? NULL : g_object_ref (_tmp0)));
 	seahorse_util_chooser_show_key_files (dialog);
-	seahorse_util_chooser_set_filename (dialog, keys);
+	seahorse_util_chooser_set_filename (dialog, objects);
 	uri = seahorse_util_chooser_save_prompt (dialog);
 	if (uri != NULL) {
 		{
@@ -631,7 +632,7 @@ static void seahorse_viewer_on_key_export_file (SeahorseViewer* self, GtkAction*
 			if (inner_error != NULL) {
 				goto __catch2_g_error;
 			}
-			op = seahorse_key_source_export_keys (keys, output);
+			op = seahorse_source_export_objects (objects, output);
 			seahorse_progress_show (op, _ ("Exporting keys"), TRUE);
 			seahorse_operation_watch (op, _seahorse_viewer_on_export_done_seahorse_done_func, self, NULL, NULL);
 			(file == NULL ? NULL : (file = (g_object_unref (file), NULL)));
@@ -650,7 +651,7 @@ static void seahorse_viewer_on_key_export_file (SeahorseViewer* self, GtkAction*
 				seahorse_util_handle_error (ex, _ ("Couldn't export key to \"%s\""), (_tmp1 = seahorse_util_uri_get_last (uri)), NULL);
 				_tmp1 = (g_free (_tmp1), NULL);
 				(ex == NULL ? NULL : (ex = (g_error_free (ex), NULL)));
-				(keys == NULL ? NULL : (keys = (g_list_free (keys), NULL)));
+				(objects == NULL ? NULL : (objects = (g_list_free (objects), NULL)));
 				(dialog == NULL ? NULL : (dialog = (g_object_unref (dialog), NULL)));
 				uri = (g_free (uri), NULL);
 				return;
@@ -659,7 +660,7 @@ static void seahorse_viewer_on_key_export_file (SeahorseViewer* self, GtkAction*
 		__finally2:
 		;
 	}
-	(keys == NULL ? NULL : (keys = (g_list_free (keys), NULL)));
+	(objects == NULL ? NULL : (objects = (g_list_free (objects), NULL)));
 	(dialog == NULL ? NULL : (dialog = (g_object_unref (dialog), NULL)));
 	uri = (g_free (uri), NULL);
 }
@@ -668,7 +669,7 @@ static void seahorse_viewer_on_key_export_file (SeahorseViewer* self, GtkAction*
 static void seahorse_viewer_on_selection_changed (SeahorseViewer* self, SeahorseView* view) {
 	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
 	g_return_if_fail (SEAHORSE_IS_VIEW (view));
-	gtk_action_group_set_sensitive (self->priv->_key_actions, seahorse_view_get_selected_key (view) != NULL);
+	gtk_action_group_set_sensitive (self->priv->_object_actions, seahorse_view_get_selected (view) != NULL);
 }
 
 
@@ -703,9 +704,9 @@ void seahorse_viewer_set_numbered_status (SeahorseViewer* self, const char* text
 }
 
 
-SeahorseKey* seahorse_viewer_get_selected_key (SeahorseViewer* self) {
-	SeahorseKey* value;
-	g_object_get (G_OBJECT (self), "selected-key", &value, NULL);
+SeahorseObject* seahorse_viewer_get_selected (SeahorseViewer* self) {
+	SeahorseObject* value;
+	g_object_get (G_OBJECT (self), "selected", &value, NULL);
 	if (value != NULL) {
 		g_object_unref (value);
 	}
@@ -713,31 +714,31 @@ SeahorseKey* seahorse_viewer_get_selected_key (SeahorseViewer* self) {
 }
 
 
-static SeahorseKey* seahorse_viewer_real_get_selected_key (SeahorseViewer* self) {
+static SeahorseObject* seahorse_viewer_real_get_selected (SeahorseViewer* self) {
 	g_return_val_if_fail (SEAHORSE_IS_VIEWER (self), NULL);
 	/* Must be overridden */
 	return NULL;
 }
 
 
-void seahorse_viewer_set_selected_key (SeahorseViewer* self, SeahorseKey* value) {
-	g_object_set (G_OBJECT (self), "selected-key", value, NULL);
+void seahorse_viewer_set_selected (SeahorseViewer* self, SeahorseObject* value) {
+	g_object_set (G_OBJECT (self), "selected", value, NULL);
 }
 
 
-static void seahorse_viewer_real_set_selected_key (SeahorseViewer* self, SeahorseKey* value) {
-	GList* keys;
+static void seahorse_viewer_real_set_selected (SeahorseViewer* self, SeahorseObject* value) {
+	GList* objects;
 	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
-	keys = NULL;
-	keys = g_list_prepend (keys, value);
-	seahorse_viewer_set_selected_keys (self, keys);
-	(keys == NULL ? NULL : (keys = (g_list_free (keys), NULL)));
+	objects = NULL;
+	objects = g_list_prepend (objects, value);
+	seahorse_viewer_set_selected_objects (self, objects);
+	(objects == NULL ? NULL : (objects = (g_list_free (objects), NULL)));
 }
 
 
-SeahorseKeyset* seahorse_viewer_get_current_keyset (SeahorseViewer* self) {
-	SeahorseKeyset* value;
-	g_object_get (G_OBJECT (self), "current-keyset", &value, NULL);
+SeahorseSet* seahorse_viewer_get_current_set (SeahorseViewer* self) {
+	SeahorseSet* value;
+	g_object_get (G_OBJECT (self), "current-set", &value, NULL);
 	if (value != NULL) {
 		g_object_unref (value);
 	}
@@ -745,7 +746,7 @@ SeahorseKeyset* seahorse_viewer_get_current_keyset (SeahorseViewer* self) {
 }
 
 
-static SeahorseKeyset* seahorse_viewer_real_get_current_keyset (SeahorseViewer* self) {
+static SeahorseSet* seahorse_viewer_real_get_current_set (SeahorseViewer* self) {
 	g_return_val_if_fail (SEAHORSE_IS_VIEWER (self), NULL);
 	/* Must be overridden */
 	return NULL;
@@ -872,11 +873,11 @@ static void seahorse_viewer_get_property (GObject * object, guint property_id, G
 	SeahorseViewer * self;
 	self = SEAHORSE_VIEWER (object);
 	switch (property_id) {
-		case SEAHORSE_VIEWER_SELECTED_KEY:
-		g_value_set_object (value, seahorse_viewer_real_get_selected_key (self));
+		case SEAHORSE_VIEWER_SELECTED:
+		g_value_set_object (value, seahorse_viewer_real_get_selected (self));
 		break;
-		case SEAHORSE_VIEWER_CURRENT_KEYSET:
-		g_value_set_object (value, seahorse_viewer_real_get_current_keyset (self));
+		case SEAHORSE_VIEWER_CURRENT_SET:
+		g_value_set_object (value, seahorse_viewer_real_get_current_set (self));
 		break;
 		case SEAHORSE_VIEWER_WINDOW:
 		g_value_set_object (value, seahorse_viewer_real_get_window (self));
@@ -892,8 +893,8 @@ static void seahorse_viewer_set_property (GObject * object, guint property_id, c
 	SeahorseViewer * self;
 	self = SEAHORSE_VIEWER (object);
 	switch (property_id) {
-		case SEAHORSE_VIEWER_SELECTED_KEY:
-		seahorse_viewer_real_set_selected_key (self, g_value_get_object (value));
+		case SEAHORSE_VIEWER_SELECTED:
+		seahorse_viewer_real_set_selected (self, g_value_get_object (value));
 		break;
 		default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -909,20 +910,20 @@ static void seahorse_viewer_class_init (SeahorseViewerClass * klass) {
 	G_OBJECT_CLASS (klass)->set_property = seahorse_viewer_set_property;
 	G_OBJECT_CLASS (klass)->constructor = seahorse_viewer_constructor;
 	G_OBJECT_CLASS (klass)->dispose = seahorse_viewer_dispose;
-	SEAHORSE_VIEWER_CLASS (klass)->get_selected_keys = seahorse_viewer_real_get_selected_keys;
-	SEAHORSE_VIEWER_CLASS (klass)->set_selected_keys = seahorse_viewer_real_set_selected_keys;
-	SEAHORSE_VIEWER_CLASS (klass)->get_selected_key_and_uid = seahorse_viewer_real_get_selected_key_and_uid;
-	g_object_class_override_property (G_OBJECT_CLASS (klass), SEAHORSE_VIEWER_SELECTED_KEY, "selected-key");
-	g_object_class_override_property (G_OBJECT_CLASS (klass), SEAHORSE_VIEWER_CURRENT_KEYSET, "current-keyset");
+	SEAHORSE_VIEWER_CLASS (klass)->get_selected_objects = seahorse_viewer_real_get_selected_objects;
+	SEAHORSE_VIEWER_CLASS (klass)->set_selected_objects = seahorse_viewer_real_set_selected_objects;
+	SEAHORSE_VIEWER_CLASS (klass)->get_selected_object_and_uid = seahorse_viewer_real_get_selected_object_and_uid;
+	g_object_class_override_property (G_OBJECT_CLASS (klass), SEAHORSE_VIEWER_SELECTED, "selected");
+	g_object_class_override_property (G_OBJECT_CLASS (klass), SEAHORSE_VIEWER_CURRENT_SET, "current-set");
 	g_object_class_override_property (G_OBJECT_CLASS (klass), SEAHORSE_VIEWER_WINDOW, "window");
 }
 
 
 static void seahorse_viewer_seahorse_view_interface_init (SeahorseViewIface * iface) {
 	seahorse_viewer_seahorse_view_parent_iface = g_type_interface_peek_parent (iface);
-	iface->get_selected_keys = seahorse_viewer_get_selected_keys;
-	iface->set_selected_keys = seahorse_viewer_set_selected_keys;
-	iface->get_selected_key_and_uid = seahorse_viewer_get_selected_key_and_uid;
+	iface->get_selected_objects = seahorse_viewer_get_selected_objects;
+	iface->set_selected_objects = seahorse_viewer_set_selected_objects;
+	iface->get_selected_object_and_uid = seahorse_viewer_get_selected_object_and_uid;
 }
 
 
@@ -935,7 +936,7 @@ static void seahorse_viewer_dispose (GObject * obj) {
 	SeahorseViewer * self;
 	self = SEAHORSE_VIEWER (obj);
 	(self->priv->_ui_manager == NULL ? NULL : (self->priv->_ui_manager = (g_object_unref (self->priv->_ui_manager), NULL)));
-	(self->priv->_key_actions == NULL ? NULL : (self->priv->_key_actions = (g_object_unref (self->priv->_key_actions), NULL)));
+	(self->priv->_object_actions == NULL ? NULL : (self->priv->_object_actions = (g_object_unref (self->priv->_object_actions), NULL)));
 	(self->priv->_commands == NULL ? NULL : (self->priv->_commands = (g_hash_table_unref (self->priv->_commands), NULL)));
 	G_OBJECT_CLASS (seahorse_viewer_parent_class)->dispose (obj);
 }

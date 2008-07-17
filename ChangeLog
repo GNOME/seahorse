@@ -1,5 +1,89 @@
 2008-07-16  Stef Walter  <stef@memberwebs.com>
 
+	* daemon/seahorse-daemon.c:
+	* daemon/seahorse-service.c:
+	* daemon/seahorse-service.h:
+	* daemon/seahorse-service-crypto.c:
+	* daemon/seahorse-service-keyset.c:
+	* gkr/libseahorse-gkr-c.vapi:
+	* gkr/seahorse-gkeyring-item.c:
+	* gkr/seahorse-gkeyring-item.h:
+	* gkr/seahorse-gkeyring-item-properties.c:
+	* gkr/seahorse-gkeyring-operation.c:
+	* gkr/seahorse-gkeyring-source.c:
+	* gkr/seahorse-gkeyring-source.h:
+	* gkr/seahorse-gkr-commands.vala:
+	* libseahorse/libseahorse-c.vapi:
+	* libseahorse/Makefile.am:
+	* libseahorse/seahorse-combo-keys.c:
+	* libseahorse/seahorse-combo-keys.h:
+	* libseahorse/seahorse-commands.vala:
+	* libseahorse/seahorse-context.c:
+	* libseahorse/seahorse-context.h:
+	* libseahorse/seahorse-dns-sd.c:
+	* libseahorse/seahorse-key.c:
+	* libseahorse/seahorse-key.h:
+	* libseahorse/seahorse-keyset.c: (moved to seahorse-set.c)
+	* libseahorse/seahorse-keyset.h: (moved to seahorse-set.h)
+	* libseahorse/seahorse-key-source.c: (moved to seahorse-source.c)
+	* libseahorse/seahorse-key-source.h: (moved to seahorse-source.h)
+	* libseahorse/seahorse-notification.c:
+	* libseahorse/seahorse-object.vala: (added)
+	* libseahorse/seahorse-prefs-keyrings.c:
+	* libseahorse/seahorse-set.c: (moved from seahorse-keyset.c)
+	* libseahorse/seahorse-set.h: (moved from seahorse-keyset.h)
+	* libseahorse/seahorse-source.c: (moved from seahorse-key-source.c)
+	* libseahorse/seahorse-source.h: (moved from seahorse-key-source.h)
+	* libseahorse/seahorse-transfer-operation.c:
+	* libseahorse/seahorse-types.vala: (added)
+	* libseahorse/seahorse-unknown-key.c:
+	* libseahorse/seahorse-unknown-source.c:
+	* libseahorse/seahorse-unknown-source.h:
+	* libseahorse/seahorse-util.c:
+	* libseahorse/seahorse-util.h:
+	* libseahorse/seahorse-view.vala:
+	* pgp/libseahorse-pgp-c.vala:
+	* pgp/seahorse-hkp-source.c:
+	* pgp/seahorse-ldap-source.c:
+	* pgp/seahorse-pgp-commands.vala:
+	* pgp/seahorse-pgp-delete.c:
+	* pgp/seahorse-pgp-generator.vala:
+	* pgp/seahorse-pgp-key.c:
+	* pgp/seahorse-pgp-key.h:
+	* pgp/seahorse-pgp-key-op.c:
+	* pgp/seahorse-pgp-key-properties.c:
+	* pgp/seahorse-pgp-keysets.c:
+	* pgp/seahorse-pgp-keysets.h:
+	* pgp/seahorse-pgp-sign.c:
+	* pgp/seahorse-pgp-source.c:
+	* pgp/seahorse-pgp-source.h:
+	* pgp/seahorse-server-source.c:
+	* pgp/seahorse-server-source.h:
+	* pgp/seahorse-signer.c:
+	* src/main.c:
+	* src/seahorse-key-manager.vala:
+	* src/seahorse-key-manager-store.c:
+	* src/seahorse-key-manager-store.h:
+	* src/seahorse-keyserver-results.vala:
+	* src/seahorse-keyserver-search.c:
+	* src/seahorse-keyserver-sync.c:
+	* src/seahorse-viewer.vala:
+	* ssh/libseahorse-ssh-c.vapi:
+	* ssh/seahorse-delete.c:
+	* ssh/seahorse-ssh-commands.vala:
+	* ssh/seahorse-ssh-generator.vala:
+	* ssh/seahorse-ssh-key.c:
+	* ssh/seahorse-ssh-key.h:
+	* ssh/seahorse-ssh-key-properties.c:
+	* ssh/seahorse-ssh-operation.c:
+	* ssh/seahorse-ssh-source.c:
+	* ssh/seahorse-ssh-source.h:
+	* ssh/seahorse-ssh-upload.c: Refactor and add SeahorseObject class
+	as a base class of SeahorseKey, so that we can have non-key objects
+	in the mix.
+	
+2008-07-16  Stef Walter  <stef@memberwebs.com>
+
 	* pkcs11/*:
 	* Makefile.am:
 	* configure.in: Initial infrastructure for PKCS11 component.

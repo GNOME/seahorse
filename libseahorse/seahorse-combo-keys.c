@@ -34,7 +34,7 @@ enum {
  */
 
 static void
-key_added (SeahorseKeyset *skset, SeahorseKey *skey, GtkComboBox *combo)
+key_added (SeahorseSet *skset, SeahorseKey *skey, GtkComboBox *combo)
 {
     GtkListStore *model;
     GtkTreeIter iter;
@@ -55,11 +55,11 @@ key_added (SeahorseKeyset *skset, SeahorseKey *skey, GtkComboBox *combo)
 
     g_free (userid);
     
-    seahorse_keyset_set_closure (skset, skey, GINT_TO_POINTER (TRUE));
+    seahorse_set_set_closure (skset, SEAHORSE_OBJECT (skey), GINT_TO_POINTER (TRUE));
 }
 
 static void
-key_changed (SeahorseKeyset *skset, SeahorseKey *skey, SeahorseKeyChange change, 
+key_changed (SeahorseSet *skset, SeahorseKey *skey, SeahorseKeyChange change, 
              GtkWidget *closure, GtkComboBox *combo)
 {
     GtkTreeModel *model;
@@ -96,7 +96,7 @@ key_changed (SeahorseKeyset *skset, SeahorseKey *skey, SeahorseKeyChange change,
 }
 
 static void
-key_removed (SeahorseKeyset *skset, SeahorseKey *skey, GtkWidget *closure, 
+key_removed (SeahorseSet *skset, SeahorseKey *skey, GtkWidget *closure, 
              GtkComboBox *combo)
 {
     GtkTreeModel *model;
@@ -129,7 +129,7 @@ key_removed (SeahorseKeyset *skset, SeahorseKey *skey, GtkWidget *closure,
 }
 
 static void
-combo_destroyed (GtkComboBox *combo, SeahorseKeyset *skset)
+combo_destroyed (GtkComboBox *combo, SeahorseSet *skset)
 {
     g_signal_handlers_disconnect_by_func (skset, key_added, combo);
     g_signal_handlers_disconnect_by_func (skset, key_changed, combo);
@@ -141,7 +141,7 @@ combo_destroyed (GtkComboBox *combo, SeahorseKeyset *skset)
  */
 
 void 
-seahorse_combo_keys_attach (GtkComboBox *combo, SeahorseKeyset *skset,
+seahorse_combo_keys_attach (GtkComboBox *combo, SeahorseSet *skset,
                             const gchar *none_option)
 {
     GtkTreeModel *model;
@@ -165,7 +165,7 @@ seahorse_combo_keys_attach (GtkComboBox *combo, SeahorseKeyset *skset,
     }
 
     /* Setup the key list */
-    keys = seahorse_keyset_get_keys (skset);  
+    keys = seahorse_set_get_objects (skset);  
     for (l = keys; l != NULL; l = g_list_next (l)) {
         skey = SEAHORSE_KEY (l->data);
         key_added (skset, skey, combo);

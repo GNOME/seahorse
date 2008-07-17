@@ -82,7 +82,7 @@ struct _SeahorsePGPKeyClass {
     SeahorseKeyClass            parent_class;
 };
 
-SeahorsePGPKey* seahorse_pgp_key_new                  (SeahorseKeySource *sksrc,
+SeahorsePGPKey* seahorse_pgp_key_new                  (SeahorseSource *sksrc,
                                                        gpgme_key_t        pubkey,
                                                        gpgme_key_t        seckey);
 

@@ -66,11 +66,11 @@ IMPLEMENT_OPERATION_PROPS(Transfer, transfer)
 
     g_object_class_install_property (gobject_class, PROP_FROM_KEY_SOURCE,
         g_param_spec_object ("from-key-source", "From key source", "Key source keys are being transferred from",
-                             SEAHORSE_TYPE_KEY_SOURCE, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+                             SEAHORSE_TYPE_SOURCE, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
     g_object_class_install_property (gobject_class, PROP_TO_KEY_SOURCE,
         g_param_spec_object ("to-key-source", "To key source", "Key source keys are being transferred to",
-                             SEAHORSE_TYPE_KEY_SOURCE, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+                             SEAHORSE_TYPE_SOURCE, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
     g_object_class_install_property (gobject_class, PROP_MESSAGE,
         g_param_spec_string ("message", "Progress Message", "Progress message that overrides whatever GPGME gives us", 
@@ -198,7 +198,7 @@ export_done (SeahorseOperation *op, SeahorseTransferOperation *top)
 	g_return_if_fail (input);
 	
 	/* This frees data */
-	pv->operation = seahorse_key_source_import (top->to, input);
+	pv->operation = seahorse_source_import (top->to, input);
 	g_return_if_fail (pv->operation != NULL);
 	
 	g_object_unref (input);
@@ -217,7 +217,7 @@ static gboolean
 start_transfer (SeahorseTransferOperation *top)
 {
     SeahorseTransferOperationPrivate *pv = SEAHORSE_TRANSFER_OPERATION_GET_PRIVATE (top);
-    SeahorseKeySource *from;
+    SeahorseSource *from;
     GSList *keyids;
     
     g_assert (pv->operation == NULL);
@@ -227,7 +227,7 @@ start_transfer (SeahorseTransferOperation *top)
     g_assert (keyids && from);
     
     pv = SEAHORSE_TRANSFER_OPERATION_GET_PRIVATE (top);
-    pv->operation = seahorse_key_source_export_raw (from, keyids, G_OUTPUT_STREAM (pv->output));
+    pv->operation = seahorse_source_export_raw (from, keyids, G_OUTPUT_STREAM (pv->output));
     g_return_val_if_fail (pv->operation != NULL, FALSE);
     
     seahorse_operation_watch (pv->operation, (SeahorseDoneFunc) export_done, top,
@@ -356,8 +356,8 @@ seahorse_transfer_operation_cancel (SeahorseOperation *operation)
  */
 
 SeahorseOperation*
-seahorse_transfer_operation_new (const gchar *message, SeahorseKeySource *from,
-                                 SeahorseKeySource *to, GSList *keyids)
+seahorse_transfer_operation_new (const gchar *message, SeahorseSource *from,
+                                 SeahorseSource *to, GSList *keyids)
 {
     SeahorseTransferOperation *top;
     

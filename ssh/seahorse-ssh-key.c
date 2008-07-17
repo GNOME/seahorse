@@ -27,7 +27,7 @@
 #include <glib/gi18n.h>
 
 #include "seahorse-context.h"
-#include "seahorse-key-source.h"
+#include "seahorse-source.h"
 #include "seahorse-ssh-source.h"
 #include "seahorse-ssh-key.h"
 #include "seahorse-ssh-operation.h"
@@ -73,6 +73,7 @@ static void
 changed_key (SeahorseSSHKey *skey)
 {
     SeahorseKey *key = SEAHORSE_KEY (skey);
+    SeahorseObject *obj = SEAHORSE_OBJECT (skey);
 
     g_free (skey->priv->displayname);
     skey->priv->displayname = NULL;
@@ -102,40 +103,40 @@ changed_key (SeahorseSSHKey *skey)
     }
     
     /* Now start setting the main SeahorseKey fields */
-    key->ktype = SEAHORSE_SSH;
-    key->keyid = 0;
+    obj->_tag = SEAHORSE_SSH;
+    obj->_id = 0;
     
     if (!skey->keydata || !skey->keydata->fingerprint) {
         
-        key->location = SKEY_LOC_INVALID;
-        key->etype = SKEY_ETYPE_NONE;
+        obj->_location = SEAHORSE_LOCATION_INVALID;
+        obj->_usage = SEAHORSE_USAGE_NONE;
         key->loaded = SKEY_INFO_NONE;
-        key->flags = SKEY_FLAG_DISABLED;
+        obj->_flags = SKEY_FLAG_DISABLED;
         key->keydesc = _("Invalid");
         key->rawid = NULL;
         
     } else {
     
         /* The key id */
-        key->keyid = seahorse_ssh_key_get_cannonical_id (skey->keydata->fingerprint);
+        obj->_id = seahorse_ssh_key_get_cannonical_id (skey->keydata->fingerprint);
         key->rawid = skey->keydata->fingerprint;
-        key->location = SKEY_LOC_LOCAL;
+        obj->_location = SEAHORSE_LOCATION_LOCAL;
         key->loaded = SKEY_INFO_COMPLETE;
-        key->flags = skey->keydata->authorized ? SKEY_FLAG_TRUSTED : 0;
+        obj->_flags = skey->keydata->authorized ? SKEY_FLAG_TRUSTED : 0;
         
         if (skey->keydata->privfile) {
-            key->etype = SKEY_PRIVATE;
+            obj->_usage = SEAHORSE_USAGE_PRIVATE_KEY;
             key->keydesc = _("Private Secure Shell Key");
         } else {
-            key->etype = SKEY_PUBLIC;
+            obj->_usage = SEAHORSE_USAGE_PUBLIC_KEY;
             key->keydesc = _("Public Secure Shell Key");
         }
     }
     
-    if (!key->keyid)
-        key->keyid = g_quark_from_string (SEAHORSE_SSH_STR ":UNKNOWN ");
+    if (!obj->_id)
+        obj->_id = g_quark_from_string (SEAHORSE_SSH_STR ":UNKNOWN ");
     
-    seahorse_key_changed (key, SKEY_CHANGE_ALL);
+    seahorse_object_fire_changed (obj, SKEY_CHANGE_ALL);
 }
 
 static guint 
@@ -337,15 +338,11 @@ seahorse_ssh_key_class_init (SeahorseSSHKeyClass *klass)
  */
 
 SeahorseSSHKey* 
-seahorse_ssh_key_new (SeahorseKeySource *sksrc, SeahorseSSHKeyData *data)
+seahorse_ssh_key_new (SeahorseSource *sksrc, SeahorseSSHKeyData *data)
 {
     SeahorseSSHKey *skey;
     skey = g_object_new (SEAHORSE_TYPE_SSH_KEY, "key-source", sksrc, 
                          "key-data", data, NULL);
-    
-    /* We don't care about this floating business */
-    g_object_ref (GTK_OBJECT (skey));
-    gtk_object_sink (GTK_OBJECT (skey));
     return skey;
 }
 

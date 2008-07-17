@@ -101,7 +101,7 @@ ask_keys (GList* keys)
 void
 seahorse_pgp_delete_show (GList *keys)
 {
-    SeahorseKeySource *sksrc;
+    SeahorseSource *sksrc;
     SeahorseKey *skey;
     GError *error = NULL;
     GList *list = NULL;
@@ -114,14 +114,14 @@ seahorse_pgp_delete_show (GList *keys)
     for (list = keys; list != NULL; list = g_list_next (list)) {
         skey = SEAHORSE_KEY (list->data);
 
-        if (seahorse_key_get_etype (skey) == SKEY_PRIVATE && 
+        if (seahorse_key_get_usage (skey) == SEAHORSE_USAGE_PRIVATE_KEY && 
             !ask_key_pair (skey))
             break;
 
         sksrc = seahorse_key_get_source (skey);
         g_return_if_fail (sksrc != NULL);
             
-        if (!seahorse_key_source_remove (sksrc, skey, 0, &error)) {
+        if (!seahorse_source_remove (sksrc, SEAHORSE_OBJECT (skey), 0, &error)) {
             seahorse_util_handle_error (error, _("Couldn't delete key"));
             g_clear_error (&error);
         }
@@ -169,7 +169,7 @@ void
 seahorse_pgp_delete_userid_show (SeahorseKey *skey, guint index)
 {
     GtkWidget *question, *delete_button, *cancel_button;
-    SeahorseKeySource *sksrc;
+    SeahorseSource *sksrc;
     gint response;
     GError *error = NULL;
     gchar *userid;
@@ -205,7 +205,7 @@ seahorse_pgp_delete_userid_show (SeahorseKey *skey, guint index)
     sksrc = seahorse_key_get_source (skey);
     g_return_if_fail (sksrc != NULL);
     
-    if (!seahorse_key_source_remove (sksrc, skey, index, &error)) { 
+    if (!seahorse_source_remove (sksrc, SEAHORSE_OBJECT (skey), index, &error)) { 
         seahorse_util_handle_error (error, _("Couldn't delete user id"));
         g_clear_error (&error);
     }

@@ -744,26 +744,26 @@ static const char *kPGPAttributes[] = {
 static void
 add_key (SeahorseLDAPSource *ssrc, gpgme_key_t key)
 {
-    SeahorseKey *prev;
+    SeahorseObject *prev;
     SeahorsePGPKey *pkey;
     GQuark keyid;
        
     keyid = seahorse_pgp_key_get_cannonical_id (seahorse_pgp_key_get_id (key, 0));
-    prev = seahorse_context_get_key (SCTX_APP (), SEAHORSE_KEY_SOURCE (ssrc), keyid);
+    prev = seahorse_context_get_object (SCTX_APP (), SEAHORSE_SOURCE (ssrc), keyid);
     
     /* TODO: This function needs reworking after we get more key types */
     if (prev != NULL) {
         g_return_if_fail (SEAHORSE_IS_PGP_KEY (prev));
         gpgmex_combine_keys (SEAHORSE_PGP_KEY (prev)->pubkey, key);
-        seahorse_key_changed (prev, SKEY_CHANGE_UIDS);
+        seahorse_object_fire_changed (prev, SKEY_CHANGE_UIDS);
         return;
     }
 
     /* A public key */
-    pkey = seahorse_pgp_key_new (SEAHORSE_KEY_SOURCE (ssrc), key, NULL);
+    pkey = seahorse_pgp_key_new (SEAHORSE_SOURCE (ssrc), key, NULL);
 
     /* Add to context */ 
-    seahorse_context_add_key (SCTX_APP (), SEAHORSE_KEY (pkey));
+    seahorse_context_add_object (SCTX_APP (), SEAHORSE_OBJECT (pkey));
 }
 
 /* Add a key to the key source from an LDAP entry */
@@ -1273,15 +1273,15 @@ seahorse_ldap_source_get_property (GObject *object, guint prop_id, GValue *value
 }
 
 static SeahorseOperation*
-seahorse_ldap_source_load (SeahorseKeySource *src, GQuark keyid)
+seahorse_ldap_source_load (SeahorseSource *src, GQuark keyid)
 {
     SeahorseOperation *op;
     SeahorseLDAPOperation *lop = NULL;
 
-    g_assert (SEAHORSE_IS_KEY_SOURCE (src));
+    g_assert (SEAHORSE_IS_SOURCE (src));
     g_assert (SEAHORSE_IS_LDAP_SOURCE (src));
 
-    op = SEAHORSE_KEY_SOURCE_CLASS (seahorse_ldap_source_parent_class)->load (src, keyid);
+    op = SEAHORSE_SOURCE_CLASS (seahorse_ldap_source_parent_class)->load (src, keyid);
     if (op != NULL)
         return op;
     
@@ -1300,11 +1300,11 @@ seahorse_ldap_source_load (SeahorseKeySource *src, GQuark keyid)
 }
 
 static SeahorseOperation*
-seahorse_ldap_source_search (SeahorseKeySource *src, const gchar *match)
+seahorse_ldap_source_search (SeahorseSource *src, const gchar *match)
 {
     SeahorseLDAPOperation *lop = NULL;
 
-    g_assert (SEAHORSE_IS_KEY_SOURCE (src));
+    g_assert (SEAHORSE_IS_SOURCE (src));
     g_assert (SEAHORSE_IS_LDAP_SOURCE (src));
 
     /* Search for keys */
@@ -1318,7 +1318,7 @@ seahorse_ldap_source_search (SeahorseKeySource *src, const gchar *match)
 }
 
 static SeahorseOperation* 
-seahorse_ldap_source_import (SeahorseKeySource *sksrc, GInputStream *input)
+seahorse_ldap_source_import (SeahorseSource *sksrc, GInputStream *input)
 {
     SeahorseLDAPOperation *lop;
     SeahorseLDAPSource *lsrc;
@@ -1356,7 +1356,7 @@ seahorse_ldap_source_import (SeahorseKeySource *sksrc, GInputStream *input)
 }
 
 static SeahorseOperation* 
-seahorse_ldap_source_export_raw (SeahorseKeySource *sksrc, GSList *keyids, 
+seahorse_ldap_source_export_raw (SeahorseSource *sksrc, GSList *keyids, 
                                  GOutputStream *output)
 {
     SeahorseLDAPOperation *lop;
@@ -1384,13 +1384,13 @@ static void
 seahorse_ldap_source_class_init (SeahorseLDAPSourceClass *klass)
 {
 	GObjectClass *gobject_class;
-	SeahorseKeySourceClass *key_class;
+	SeahorseSourceClass *key_class;
    
 	gobject_class = G_OBJECT_CLASS (klass);
 	gobject_class->get_property = seahorse_ldap_source_get_property;
    
-	key_class = SEAHORSE_KEY_SOURCE_CLASS (klass);
-	key_class->canonize_keyid = seahorse_pgp_key_get_cannonical_id;
+	key_class = SEAHORSE_SOURCE_CLASS (klass);
+	key_class->canonize_id = seahorse_pgp_key_get_cannonical_id;
 	key_class->load = seahorse_ldap_source_load;
 	key_class->search = seahorse_ldap_source_search;
 	key_class->import = seahorse_ldap_source_import;

@@ -37,8 +37,8 @@ namespace Seahorse {
 
 		public abstract string# ui_definition { get; }
 		
-		public abstract void show_properties (Key key);
+		public abstract void show_properties (Object obj);
 		
-		public abstract void delete_keys (List<Key> keys) throws GLib.Error;
+		public abstract void delete_objects (List<Object> obj) throws GLib.Error;
 	}
 }

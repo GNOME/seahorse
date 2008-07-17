@@ -26,14 +26,14 @@
  *
  * - Usually there's only one SeahorseContext per process created by passing 
  *   |TRUE| to |seahorse_context_new|, and accessed via the |SCTX_APP| macro.
- * - Retains the list of all valid SeahorseKey objects. 
- * - Has a collection of SeahorseKeySource objects which add keys to the 
+ * - Retains the list of all valid struct _SeahorseObject objects. 
+ * - Has a collection of SeahorseSource objects which add objects to the 
  *   SeahorseContext. 
  * 
  * Signals:
- *   added: A key was added to the context.
- *   removed: A key was removed from the context.
- *   changed: A key changed.
+ *   added: A object was added to the context.
+ *   removed: A object was removed from the context.
+ *   changed: A object changed.
  *   destroy: The context was destroyed.
  */
  
@@ -42,8 +42,7 @@
 
 #include <gtk/gtk.h>
 
-#include "seahorse-key.h"
-#include "seahorse-key-source.h"
+#include "seahorse-source.h"
 #include "seahorse-dns-sd.h"
 
 #define SEAHORSE_TYPE_CONTEXT			(seahorse_context_get_type ())
@@ -52,6 +51,10 @@
 #define SEAHORSE_IS_CONTEXT(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_CONTEXT))
 #define SEAHORSE_IS_CONTEXT_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_CONTEXT))
 #define SEAHORSE_CONTEXT_GET_CLASS(obj)		(G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_CONTEXT, SeahorseContextClass))
+
+struct _SeahorseKey;
+struct _SeahorseObject;
+struct _SeahorseObjectPredicate;
 
 typedef struct _SeahorseContext SeahorseContext;
 typedef struct _SeahorseContextClass SeahorseContextClass;
@@ -72,14 +75,14 @@ struct _SeahorseContextClass {
     
     /* signals --------------------------------------------------------- */
     
-    /* A key was added to this source */
-    void (*added) (SeahorseContext *sctx, SeahorseKey *key);
+    /* A object was added to this source */
+    void (*added) (SeahorseContext *sctx, struct _SeahorseObject *sobj);
 
-    /* Removed a key from this source */
-    void (*removed) (SeahorseContext *sctx, SeahorseKey *key);
+    /* Removed a object from this source */
+    void (*removed) (SeahorseContext *sctx, struct _SeahorseObject *sobj);
     
-    /* This key has changed */
-    void (*changed) (SeahorseContext *sctx, SeahorseKey *skey, SeahorseKeyChange change);
+    /* This object has changed */
+    void (*changed) (SeahorseContext *sctx, struct _SeahorseObject *sobj, int change);
 };
 
 enum SeahorseContextType {
@@ -100,95 +103,95 @@ void                seahorse_context_destroy            (SeahorseContext    *sct
 
 #define             seahorse_context_is_daemon(ctx)     ((ctx)->is_daemon)
 
-void                seahorse_context_add_key_source     (SeahorseContext    *sctx,
-                                                         SeahorseKeySource  *sksrc);
+void                seahorse_context_add_source         (SeahorseContext    *sctx,
+                                                         SeahorseSource  *sksrc);
 
-void                seahorse_context_take_key_source    (SeahorseContext    *sctx,
-                                                         SeahorseKeySource  *sksrc);
+void                seahorse_context_take_source        (SeahorseContext    *sctx,
+                                                         SeahorseSource  *sksrc);
 
-void                seahorse_context_remove_key_source  (SeahorseContext    *sctx,
-                                                         SeahorseKeySource  *sksrc);
+void                seahorse_context_remove_source      (SeahorseContext    *sctx,
+                                                         SeahorseSource  *sksrc);
 
-SeahorseKeySource*  seahorse_context_find_key_source    (SeahorseContext    *sctx,
+SeahorseSource*     seahorse_context_find_source        (SeahorseContext    *sctx,
                                                          GQuark             ktype,
-                                                         SeahorseKeyLoc     location);
+                                                         SeahorseLocation   location);
 
-GSList*             seahorse_context_find_key_sources   (SeahorseContext    *sctx,
+GSList*             seahorse_context_find_sources       (SeahorseContext    *sctx,
                                                          GQuark             ktype,
-                                                         SeahorseKeyLoc     location);
+                                                         SeahorseLocation   location);
                                                          
 
-SeahorseKeySource*  seahorse_context_remote_key_source  (SeahorseContext    *sctx,
+SeahorseSource*     seahorse_context_remote_source      (SeahorseContext    *sctx,
                                                          const gchar        *uri);
 
-void                seahorse_context_add_key            (SeahorseContext    *sctx,
-                                                         SeahorseKey        *skey);
+void                seahorse_context_add_object         (SeahorseContext    *sctx,
+                                                         struct _SeahorseObject     *sobj);
 
-void                seahorse_context_take_key           (SeahorseContext    *sctx, 
-                                                         SeahorseKey        *skey);
+void                seahorse_context_take_object        (SeahorseContext    *sctx, 
+                                                         struct _SeahorseObject     *sobj);
 
 guint               seahorse_context_get_count          (SeahorseContext    *sctx);
 
-SeahorseKey*        seahorse_context_get_key            (SeahorseContext    *sctx,
-                                                         SeahorseKeySource  *sksrc,
-                                                         GQuark             keyid);
+struct _SeahorseObject*     seahorse_context_get_object  (SeahorseContext    *sctx,
+                                                         SeahorseSource  *sksrc,
+                                                         GQuark             id);
 
-GList*              seahorse_context_get_keys           (SeahorseContext    *sctx, 
-                                                         SeahorseKeySource  *sksrc);
+GList*              seahorse_context_get_objects        (SeahorseContext    *sctx, 
+                                                         SeahorseSource  *sksrc);
 
-SeahorseKey*        seahorse_context_find_key           (SeahorseContext    *sctx,
-                                                         GQuark             keyid,
-                                                         SeahorseKeyLoc     location);
+struct _SeahorseObject*     seahorse_context_find_object (SeahorseContext    *sctx,
+                                                         GQuark             id,
+                                                         SeahorseLocation   location);
 
-GList*              seahorse_context_find_keys          (SeahorseContext    *sctx,
+GList*              seahorse_context_find_objects       (SeahorseContext    *sctx,
                                                          GQuark             ktype,
-                                                         SeahorseKeyEType   etype,
-                                                         SeahorseKeyLoc     location);
+                                                         SeahorseUsage      usage,
+                                                         SeahorseLocation   location);
 
-GList*              seahorse_context_find_keys_full     (SeahorseContext    *sctx,
-                                                         SeahorseKeyPredicate *skpred);
+GList*              seahorse_context_find_objects_full  (SeahorseContext *sctx,
+                                                         struct _SeahorseObjectPredicate *skpred);
                                                          
-void                seahorse_context_remove_key         (SeahorseContext    *sctx,
-                                                         SeahorseKey        *skey);
+void                seahorse_context_remove_object      (SeahorseContext *sctx,
+                                                         struct _SeahorseObject *sobj);
 
-gboolean            seahorse_context_owns_key           (SeahorseContext    *sctx,
-                                                         SeahorseKey        *skey);
+gboolean            seahorse_context_owns_object        (SeahorseContext *sctx,
+                                                         struct _SeahorseObject *sobj);
 
 SeahorseServiceDiscovery*
                     seahorse_context_get_discovery      (SeahorseContext    *sctx);
 
-SeahorseKey*        seahorse_context_get_default_key    (SeahorseContext    *sctx);
+struct _SeahorseKey*   seahorse_context_get_default_key (SeahorseContext    *sctx);
 
-SeahorseOperation*  seahorse_context_load_local_keys    (SeahorseContext    *sctx);
+SeahorseOperation*  seahorse_context_load_local_objects (SeahorseContext    *sctx);
 
-void                seahorse_context_load_local_keys_async (SeahorseContext *sctx);
+void                seahorse_context_load_local_objects_async (SeahorseContext *sctx);
 
-SeahorseOperation*  seahorse_context_load_remote_keys   (SeahorseContext    *sctx,
-                                                         const gchar        *search);
+SeahorseOperation*  seahorse_context_load_remote_objects      (SeahorseContext    *sctx,
+                                                               const gchar        *search);
 
-SeahorseOperation*  seahorse_context_transfer_keys      (SeahorseContext    *sctx, 
-                                                         GList              *keys, 
-                                                         SeahorseKeySource  *to);
+SeahorseOperation*  seahorse_context_transfer_objects   (SeahorseContext    *sctx, 
+                                                         GList              *objs, 
+                                                         SeahorseSource  *to);
 
-SeahorseOperation*  seahorse_context_retrieve_keys      (SeahorseContext    *sctx, 
+SeahorseOperation*  seahorse_context_retrieve_objects   (SeahorseContext    *sctx, 
                                                          GQuark             ktype, 
-                                                         GSList             *keyids, 
-                                                         SeahorseKeySource  *to);
+                                                         GSList             *ids, 
+                                                         SeahorseSource  *to);
 
-GList*              seahorse_context_discover_keys      (SeahorseContext    *sctx, 
+GList*              seahorse_context_discover_objects   (SeahorseContext    *sctx, 
                                                          GQuark             ktype, 
-                                                         GSList             *keyids);
+                                                         GSList             *ids);
 
-SeahorseKey*        seahorse_context_key_from_dbus      (SeahorseContext    *sctx,
+struct _SeahorseObject*     seahorse_context_object_from_dbus   (SeahorseContext    *sctx,
                                                          const gchar        *dbusid,
                                                          guint              *uid);
 
-gchar*              seahorse_context_key_to_dbus        (SeahorseContext    *sctx,
-                                                         SeahorseKey        *skey,
+gchar*              seahorse_context_object_to_dbus     (SeahorseContext    *sctx,
+                                                         struct _SeahorseObject *sobj,
                                                          guint              uid);
 
-gchar*              seahorse_context_keyid_to_dbus      (SeahorseContext    *sctx,
-                                                         GQuark             keyid, 
+gchar*              seahorse_context_id_to_dbus         (SeahorseContext    *sctx,
+                                                         GQuark             id, 
                                                          guint              uid);
 
 #endif /* __SEAHORSE_CONTEXT_H__ */

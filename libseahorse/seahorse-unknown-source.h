@@ -20,22 +20,23 @@
  */
 
 /** 
- * SeahorseUnknownSource: A key source for unknown keys
+ * SeahorseUnknownSource: A  source for unknown objects
  * 
- * - Derived from SeahorseKeySource
- * - Is used for keys that haven't been found on a key server. 
+ * - Derived from SeahorseSource
+ * - Is used for objects that haven't been found on a key server. 
  * 
  * Properties:
  *  ktype: (GQuark) The ktype (ie: SKEY_UNKNOWN) of keys originating from this 
            key source.
- *  location: (SeahorseKeyLoc) The location of keys that come from this 
- *         source. (ie: SKEY_LOC_UNKNOWN)
+ *  location: (SeahorseLocation) The location of objects that come from this 
+ *         source. (ie: SEAHORSE_LOCATION_MISSING)
  */
  
 #ifndef __SEAHORSE_UNKNOWN_SOURCE_H__
 #define __SEAHORSE_UNKNOWN_SOURCE_H__
 
-#include "seahorse-key-source.h"
+#include "seahorse-object.h"
+#include "seahorse-source.h"
 
 #define SEAHORSE_TYPE_UNKNOWN_SOURCE            (seahorse_unknown_source_get_type ())
 #define SEAHORSE_UNKNOWN_SOURCE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_UNKNOWN_SOURCE, SeahorseUnknownSource))
@@ -49,22 +50,22 @@ typedef struct _SeahorseUnknownSourceClass SeahorseUnknownSourceClass;
 typedef struct _SeahorseUnknownSourcePrivate SeahorseUnknownSourcePrivate;
 
 struct _SeahorseUnknownSource {
-    SeahorseKeySource parent;
+    SeahorseSource parent;
     
     /* <public> */
     GQuark ktype;
 };
 
 struct _SeahorseUnknownSourceClass {
-    SeahorseKeySourceClass parent_class;
+    SeahorseSourceClass parent_class;
 };
 
 GType                    seahorse_unknown_source_get_type      (void);
 
 SeahorseUnknownSource*   seahorse_unknown_source_new           (GQuark ktype);
 
-SeahorseKey*             seahorse_unknown_source_add_key       (SeahorseUnknownSource *usrc,
-                                                                GQuark keyid,
+SeahorseObject*          seahorse_unknown_source_add_object    (SeahorseUnknownSource *usrc,
+                                                                GQuark id,
                                                                 SeahorseOperation *search);
 
 #endif /* __SEAHORSE_UNKNOWN_SOURCE_H__ */

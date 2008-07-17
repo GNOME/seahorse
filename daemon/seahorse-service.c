@@ -29,9 +29,10 @@
 #include <dbus/dbus-glib-bindings.h>
 
 #include "seahorse-daemon.h"
+#include "seahorse-key.h"
 #include "seahorse-service.h"
 #include "seahorse-context.h"
-#include "seahorse-key-source.h"
+#include "seahorse-source.h"
 #include "seahorse-util.h"
 #include "seahorse-libdialogs.h"
 
@@ -53,21 +54,21 @@ static void
 add_key_source (SeahorseService *svc, GQuark ktype)
 {
     const gchar *keytype = g_quark_to_string (ktype);
-    SeahorseKeyset *keyset;
+    SeahorseSet *keyset;
     gchar *dbus_id;
     
     /* Check if we have a keyset for this key type, and add if not */
     if (svc->keysets && !g_hash_table_lookup (svc->keysets, keytype)) {
 
         /* Keyset for all keys */
-        keyset = seahorse_service_keyset_new (ktype, SKEY_LOC_INVALID);
+        keyset = seahorse_service_keyset_new (ktype, SEAHORSE_LOCATION_INVALID);
         dbus_id = g_strdup_printf (KEYSET_PATH, keytype);
         dbus_g_connection_register_g_object (seahorse_dbus_server_get_connection (),
                                              dbus_id, G_OBJECT (keyset));    
         g_free (dbus_id);
         
         /* Keyset for local keys */
-        keyset = seahorse_service_keyset_new (ktype, SKEY_LOC_LOCAL);
+        keyset = seahorse_service_keyset_new (ktype, SEAHORSE_LOCATION_LOCAL);
         dbus_id = g_strdup_printf (KEYSET_PATH_LOCAL, keytype);
         dbus_g_connection_register_g_object (seahorse_dbus_server_get_connection (),
                                              dbus_id, G_OBJECT (keyset));    
@@ -118,7 +119,7 @@ gboolean
 seahorse_service_import_keys (SeahorseService *svc, gchar *ktype, 
                               gchar *data, gchar ***keys, GError **error)
 {
-    SeahorseKeySource *sksrc;
+    SeahorseSource *sksrc;
     SeahorseOperation *op;
     GInputStream *input;
     GArray *a;
@@ -126,8 +127,8 @@ seahorse_service_import_keys (SeahorseService *svc, gchar *ktype,
     gchar *t;
     guint keynum = 0;
     
-    sksrc = seahorse_context_find_key_source (SCTX_APP (), g_quark_from_string (ktype), 
-                                              SKEY_LOC_LOCAL);
+    sksrc = seahorse_context_find_source (SCTX_APP (), g_quark_from_string (ktype), 
+                                          SEAHORSE_LOCATION_LOCAL);
     if (!sksrc) {
         g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID, 
                      _("Invalid or unrecognized key type: %s"), ktype);
@@ -138,13 +139,13 @@ seahorse_service_import_keys (SeahorseService *svc, gchar *ktype,
 	input = g_memory_input_stream_new_from_data (data, strlen (data), NULL);
 	g_return_val_if_fail (input, FALSE);
     
-    op = seahorse_key_source_import (sksrc, G_INPUT_STREAM (input));
+    op = seahorse_source_import (sksrc, G_INPUT_STREAM (input));
     seahorse_operation_wait (op);
     
     a = g_array_new (TRUE, TRUE, sizeof (gchar*));
     for (l = (GList*)seahorse_operation_get_result (op); l; l = g_list_next (l)) {
-        t = seahorse_context_keyid_to_dbus (SCTX_APP (), 
-                                seahorse_key_get_keyid (SEAHORSE_KEY (l->data)), 0);
+        t = seahorse_context_id_to_dbus (SCTX_APP (), 
+                                seahorse_object_get_id (SEAHORSE_OBJECT (l->data)), 0);
         g_array_append_val (a, t);
         keynum = keynum + 1;
     }
@@ -164,9 +165,9 @@ gboolean
 seahorse_service_export_keys (SeahorseService *svc, gchar *ktype,
                               gchar **keys, gchar **data, GError **error)
 {
-    SeahorseKeySource *sksrc;
+    SeahorseSource *sksrc;
     SeahorseOperation *op;
-    SeahorseKey *skey;
+    SeahorseObject *sobj;
     GMemoryOutputStream *output;
     GList *next;
     GList *l = NULL;
@@ -175,15 +176,15 @@ seahorse_service_export_keys (SeahorseService *svc, gchar *ktype,
     type = g_quark_from_string (ktype);
     
     while (*keys) {
-        skey = seahorse_context_key_from_dbus (SCTX_APP (), *keys, 0);
+        sobj = seahorse_context_object_from_dbus (SCTX_APP (), *keys, 0);
         
-        if (!skey || seahorse_key_get_ktype (skey) != type) {
+        if (!sobj || seahorse_object_get_tag (sobj) != type) {
             g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID, 
                          _("Invalid or unrecognized key: %s"), *keys);
             return FALSE;
         }
         
-        l = g_list_prepend (l, skey);
+        l = g_list_prepend (l, sobj);
         keys++;
     }    
 
@@ -191,21 +192,21 @@ seahorse_service_export_keys (SeahorseService *svc, gchar *ktype,
     g_return_val_if_fail (output, FALSE);
     
     /* Sort by key source */
-    l = seahorse_util_keylist_sort (l);
+    l = seahorse_util_objects_sort (l);
     
     while (l) {
      
         /* Break off one set (same keysource) */
-        next = seahorse_util_keylist_splice (l);
+        next = seahorse_util_objects_splice (l);
         
-        skey = SEAHORSE_KEY (l->data);
+        sobj = SEAHORSE_OBJECT (l->data);
 
         /* Export from this key source */        
-        sksrc = seahorse_key_get_source (skey);
+        sksrc = seahorse_object_get_source (sobj);
         g_return_val_if_fail (sksrc != NULL, FALSE);
         
         /* We pass our own data object, to which data is appended */
-        op = seahorse_key_source_export (sksrc, l, FALSE, G_OUTPUT_STREAM (output));
+        op = seahorse_source_export (sksrc, l, FALSE, G_OUTPUT_STREAM (output));
         g_return_val_if_fail (op != NULL, FALSE);
 
         g_list_free (l);
@@ -266,18 +267,18 @@ seahorse_service_match_save (SeahorseService *svc, gchar *ktype, gint flags,
  */
 
 static void
-seahorse_service_added (SeahorseContext *sctx, SeahorseKey *skey, SeahorseService *svc)
+seahorse_service_added (SeahorseContext *sctx, SeahorseObject *sobj, SeahorseService *svc)
 {
-    GQuark ktype = seahorse_key_get_ktype (skey);
+    GQuark ktype = seahorse_object_get_tag (sobj);
     add_key_source (svc, ktype);
 }
 
 static void
-seahorse_service_changed (SeahorseContext *sctx, SeahorseKey *skey, 
-                          SeahorseKeyChange change, SeahorseService *svc)
+seahorse_service_changed (SeahorseContext *sctx, SeahorseObject *sobj, 
+                          SeahorseObjectChange change, SeahorseService *svc)
 {
     /* Do the same thing as when a key is added */
-    GQuark ktype = seahorse_key_get_ktype (skey);
+    GQuark ktype = seahorse_object_get_tag (sobj);
     add_key_source (svc, ktype);
 }
 
@@ -321,9 +322,9 @@ seahorse_service_init (SeahorseService *svc)
                                           g_free, g_object_unref);
     
     /* Fill in keysets for any keys already in the context */
-    srcs = seahorse_context_find_key_sources (SCTX_APP (), SKEY_UNKNOWN, SKEY_LOC_LOCAL);
+    srcs = seahorse_context_find_sources (SCTX_APP (), SKEY_UNKNOWN, SEAHORSE_LOCATION_LOCAL);
     for (l = srcs; l; l = g_slist_next (l)) 
-        add_key_source (svc, seahorse_key_source_get_ktype (SEAHORSE_KEY_SOURCE (l->data)));
+        add_key_source (svc, seahorse_source_get_ktype (SEAHORSE_SOURCE (l->data)));
     g_slist_free (srcs);
     
     /* And now listen for new key types */

@@ -25,7 +25,7 @@
 #include <glib/gi18n.h>
 
 #include "seahorse-context.h"
-#include "seahorse-key-source.h"
+#include "seahorse-source.h"
 #include "seahorse-gtkstock.h"
 
 #include "pgp/seahorse-gpgmex.h"
@@ -131,16 +131,17 @@ static void
 changed_key (SeahorsePGPKey *pkey)
 {
     SeahorseKey *skey = SEAHORSE_KEY (pkey);
+    SeahorseObject *obj = SEAHORSE_OBJECT (pkey);
     
-    skey->keyid = 0;
-    skey->ktype = SEAHORSE_PGP;
+    obj->_id = 0;
+    obj->_tag = SEAHORSE_PGP;
     
     if (!pkey->pubkey) {
         
-        skey->location = SKEY_LOC_INVALID;
-        skey->etype = SKEY_ETYPE_NONE;
+        obj->_location = SEAHORSE_LOCATION_INVALID;
+        obj->_usage = SEAHORSE_USAGE_NONE;
         skey->loaded = SKEY_INFO_NONE;
-        skey->flags = SKEY_FLAG_DISABLED;
+        obj->_flags = SKEY_FLAG_DISABLED;
         skey->keydesc = _("Invalid");
         skey->rawid = NULL;
         
@@ -148,25 +149,25 @@ changed_key (SeahorsePGPKey *pkey)
     
         /* The key id */
         if (pkey->pubkey->subkeys) {
-            skey->keyid = seahorse_pgp_key_get_cannonical_id (pkey->pubkey->subkeys->keyid);
+            obj->_id = seahorse_pgp_key_get_cannonical_id (pkey->pubkey->subkeys->keyid);
             skey->rawid = pkey->pubkey->subkeys->keyid;
         }
         
         /* The location */
         if (pkey->pubkey->keylist_mode & GPGME_KEYLIST_MODE_EXTERN && 
-            skey->location <= SKEY_LOC_REMOTE)
-            skey->location = SKEY_LOC_REMOTE;
+            obj->_location <= SEAHORSE_LOCATION_REMOTE)
+            obj->_location = SEAHORSE_LOCATION_REMOTE;
         
-        else if (skey->location <= SKEY_LOC_LOCAL)
-            skey->location = SKEY_LOC_LOCAL;
+        else if (obj->_location <= SEAHORSE_LOCATION_LOCAL)
+            obj->_location = SEAHORSE_LOCATION_LOCAL;
         
         /* The type */
         if (pkey->seckey) {
-            skey->etype = SKEY_PRIVATE;
-            skey->keydesc = _("Public PGP Key");
-        } else {
-            skey->etype = SKEY_PUBLIC;
+            obj->_usage = SEAHORSE_USAGE_PRIVATE_KEY;
             skey->keydesc = _("Private PGP Key");
+        } else {
+            obj->_usage = SEAHORSE_USAGE_PUBLIC_KEY;
+            skey->keydesc = _("Public PGP Key");
         }
 
         /* The info loaded */
@@ -177,38 +178,38 @@ changed_key (SeahorsePGPKey *pkey)
             skey->loaded = SKEY_INFO_BASIC;
         
         /* The flags */
-        skey->flags = 0;
+        obj->_flags = 0;
     
         if (!pkey->pubkey->disabled && !pkey->pubkey->expired && 
             !pkey->pubkey->revoked && !pkey->pubkey->invalid)
         {
             if (calc_validity (pkey) >= SEAHORSE_VALIDITY_MARGINAL)
-                skey->flags |= SKEY_FLAG_IS_VALID;
+                obj->_flags |= SKEY_FLAG_IS_VALID;
             if (pkey->pubkey->can_encrypt)
-                skey->flags |= SKEY_FLAG_CAN_ENCRYPT;
+                obj->_flags |= SKEY_FLAG_CAN_ENCRYPT;
             if (pkey->seckey && pkey->pubkey->can_sign)
-                skey->flags |= SKEY_FLAG_CAN_SIGN;
+                obj->_flags |= SKEY_FLAG_CAN_SIGN;
         }
         
         if (pkey->pubkey->expired)
-            skey->flags |= SKEY_FLAG_EXPIRED;
+            obj->_flags |= SKEY_FLAG_EXPIRED;
         
         if (pkey->pubkey->revoked)
-            skey->flags |= SKEY_FLAG_REVOKED;
+            obj->_flags |= SKEY_FLAG_REVOKED;
         
         if (pkey->pubkey->disabled)
-            skey->flags |= SKEY_FLAG_DISABLED;
+            obj->_flags |= SKEY_FLAG_DISABLED;
         
         if (calc_trust (pkey) >= SEAHORSE_VALIDITY_MARGINAL && 
             !pkey->pubkey->revoked && !pkey->pubkey->disabled && 
             !pkey->pubkey->expired)
-            skey->flags |= SKEY_FLAG_TRUSTED;
+            obj->_flags |= SKEY_FLAG_TRUSTED;
     }
     
-    if (!skey->keyid)
-        skey->keyid = g_quark_from_string (SEAHORSE_PGP_STR ":UNKNOWN UNKNOWN ");
+    if (!obj->_id)
+	    obj->_id = g_quark_from_string (SEAHORSE_PGP_STR ":UNKNOWN UNKNOWN ");
     
-    seahorse_key_changed (skey, SKEY_CHANGE_ALL);
+    seahorse_object_fire_changed (obj, SEAHORSE_OBJECT_CHANGE_ALL);
 }
 
 
@@ -374,7 +375,7 @@ seahorse_pgp_key_get_property (GObject *object, guint prop_id,
     case PROP_STOCK_ID:
         /* We use a pointer so we don't copy the string every time */
         g_value_set_pointer (value, 
-            skey->etype == SKEY_PRIVATE ? SEAHORSE_STOCK_SECRET : SEAHORSE_STOCK_KEY);
+            SEAHORSE_OBJECT (skey)->_usage == SEAHORSE_USAGE_PRIVATE_KEY ? SEAHORSE_STOCK_SECRET : SEAHORSE_STOCK_KEY);
         break;
     }
 }
@@ -505,16 +506,12 @@ seahorse_pgp_key_class_init (SeahorsePGPKeyClass *klass)
  * Returns: A new #SeahorsePGPKey
  **/
 SeahorsePGPKey* 
-seahorse_pgp_key_new (SeahorseKeySource *sksrc, gpgme_key_t pubkey, 
+seahorse_pgp_key_new (SeahorseSource *sksrc, gpgme_key_t pubkey, 
                       gpgme_key_t seckey)
 {
     SeahorsePGPKey *pkey;
     pkey = g_object_new (SEAHORSE_TYPE_PGP_KEY, "key-source", sksrc,
                          "pubkey", pubkey, "seckey", seckey, NULL);
-    
-    /* We don't care about this floating business */
-    g_object_ref (GTK_OBJECT (pkey));
-    gtk_object_sink (GTK_OBJECT (pkey));
     return pkey;
 }
 
@@ -835,16 +832,16 @@ seahorse_pgp_key_get_signature_text (SeahorsePGPKey *pkey, gpgme_key_sig_t signa
 guint         
 seahorse_pgp_key_get_sigtype (SeahorsePGPKey *pkey, gpgme_key_sig_t signature)
 {
-    SeahorseKey *skey;
-    GQuark keyid;
+    SeahorseObject *sobj;
+    GQuark id;
     
-    keyid = seahorse_pgp_key_get_cannonical_id (signature->keyid);
-    skey = seahorse_context_find_key (SCTX_APP (), keyid, SKEY_LOC_LOCAL);
+    id = seahorse_pgp_key_get_cannonical_id (signature->keyid);
+    sobj = seahorse_context_find_object (SCTX_APP (), id, SEAHORSE_LOCATION_LOCAL);
     
-    if (skey) {
-        if (seahorse_key_get_etype (skey) == SKEY_PRIVATE) 
+    if (sobj) {
+        if (seahorse_object_get_usage (sobj) == SEAHORSE_USAGE_PRIVATE_KEY) 
             return SKEY_PGPSIG_TRUSTED | SKEY_PGPSIG_PERSONAL;
-        if (seahorse_key_get_flags (skey) & SKEY_FLAG_TRUSTED)
+        if (seahorse_object_get_flags (sobj) & SKEY_FLAG_TRUSTED)
             return SKEY_PGPSIG_TRUSTED;
     }
 

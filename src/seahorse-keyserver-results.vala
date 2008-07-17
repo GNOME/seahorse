@@ -30,8 +30,8 @@ namespace Seahorse {
 		private Gtk.TreeView _view;
 		private Gtk.ActionGroup _key_actions;
 		private KeyManagerStore _store;
-		private Keyset _keyset; 
-		private KeyPredicate _pred;
+		private Set _objects; 
+		private Object.Predicate _pred;
 		
 		private static const Gtk.ActionEntry[] GENERAL_ENTRIES = {
     			{ "remote-menu", null, N_("_Remote") },
@@ -111,14 +111,14 @@ namespace Seahorse {
 			base.show ();
 
 			/* Our predicate for filtering keys */
-			_pred.ktype = Quark.from_string ("openpgp");
-			_pred.etype = Key.EType.PUBLIC;
-			_pred.location = Key.Loc.REMOTE;
-			_pred.custom = on_filter_keyset;
+			_pred.tag = Quark.from_string ("openpgp");
+			_pred.usage = Usage.PUBLIC_KEY;
+			_pred.location = Location.REMOTE;
+			_pred.custom = on_filter_objects;
 			  
-			/* Our keyset all nicely filtered */
-			_keyset = new Keyset.full (ref _pred);
-			_store = new KeyManagerStore (_keyset, _view);
+			/* Our set all nicely filtered */
+			_objects = new Set.full (ref _pred);
+			_store = new KeyManagerStore (_objects, _view);
 
 			on_view_selection_changed (_view.get_selection ());
 		}
@@ -142,31 +142,32 @@ namespace Seahorse {
 			}
 		}
 		
-		public override List<weak Key> get_selected_keys () {
+		public override List<weak Object> get_selected_objects () {
 			return KeyManagerStore.get_selected_keys (_view);
 		}
 		
-		public override void set_selected_keys (List<Key> keys) {
+		public override void set_selected_objects (List<Object> keys) {
 			KeyManagerStore.set_selected_keys (_view, keys);
 		}
 		
-		public override weak Key? selected_key {
+		public override weak Object? selected {
 			get { return KeyManagerStore.get_selected_key (_view, null); }
 			set { 
-				List<weak Key> keys = new List<weak Key>();
-				keys.prepend (value);
-				set_selected_keys (keys);
+				List<weak Object> keys = new List<weak Object>();
+				if (value != null)
+					keys.prepend (value);
+				set_selected_objects (keys);
 			}
 		}
 		
-		public override weak Key? get_selected_key_and_uid (out uint uid) {
+		public override weak Object? get_selected_object_and_uid (out uint uid) {
 			return KeyManagerStore.get_selected_key (_view, out uid);
 		}
 
-		private bool on_filter_keyset (Key key) {
+		private bool on_filter_objects (Object obj) {
 			if (_search_string.len() == 0)
 				return true;
-			string name = key.display_name;
+			string name = ((Key)obj).display_name;
 			return (name.casefold().str(_search_string) != null); 
 		}
 
@@ -189,7 +190,7 @@ namespace Seahorse {
 		}
 		
 		private bool on_key_list_popup_menu (Gtk.TreeView view) {
-			Key key = this.selected_key;
+			var key = this.selected;
 			if (key == null)
 				return false;
 			show_context_menu (0, Gtk.get_current_event_time ());
@@ -219,13 +220,13 @@ namespace Seahorse {
 		}
 		
 		private void on_key_import_keyring (Action action) {
-			List<weak Key> keys = get_selected_keys();
+			List<weak Object> keys = get_selected_objects();
 
 			/* No keys, nothing to do */
 			if (keys == null)
 				return;
 
-			Operation op = Context.for_app().transfer_keys (keys, null);
+			Operation op = Context.for_app().transfer_objects (keys, null);
 			Progress.show (op, _("Importing keys from key servers"), true);
 			op.watch (imported_keys, null);
 		}

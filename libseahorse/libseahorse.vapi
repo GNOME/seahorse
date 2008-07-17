@@ -2,10 +2,27 @@
 
 [CCode (cprefix = "Seahorse", lower_case_cprefix = "seahorse_")]
 namespace Seahorse {
+	[CCode (cprefix = "SEAHORSE_LOCATION_", cheader_filename = "seahorse-types.h")]
+	public enum Location {
+		INVALID,
+		MISSING,
+		SEARCHING,
+		REMOTE,
+		LOCAL
+	}
+	[CCode (cprefix = "SEAHORSE_USAGE_", cheader_filename = "seahorse-types.h")]
+	public enum Usage {
+		NONE,
+		SYMMETRIC_KEY,
+		PUBLIC_KEY,
+		PRIVATE_KEY,
+		CREDENTIALS,
+		OTHER
+	}
 	[CCode (cheader_filename = "seahorse-commands.h")]
 	public abstract class Commands : GLib.Object {
-		public abstract void show_properties (Seahorse.Key key);
-		public abstract void delete_keys (GLib.List<Seahorse.Key> keys) throws GLib.Error;
+		public abstract void show_properties (Seahorse.Object obj);
+		public abstract void delete_objects (GLib.List<Seahorse.Object> obj) throws GLib.Error;
 		public Seahorse.View view { get; construct; }
 		public abstract GLib.Quark ktype { get; }
 		public abstract Gtk.ActionGroup command_actions { get; }
@@ -14,6 +31,52 @@ namespace Seahorse {
 	[CCode (cheader_filename = "seahorse-generator.h")]
 	public abstract class Generator : GLib.Object {
 		public abstract Gtk.ActionGroup actions { get; }
+	}
+	[CCode (cheader_filename = "seahorse-object.h")]
+	public abstract class Object : GLib.Object {
+		[CCode (cprefix = "SEAHORSE_OBJECT_CHANGE_", cheader_filename = "seahorse-object.h")]
+		public enum Change {
+			ALL,
+			LOCATION,
+			PREFERRED,
+			MAX
+		}
+		protected GLib.Quark _tag;
+		protected GLib.Quark _id;
+		protected Seahorse.Location _location;
+		protected Seahorse.Usage _usage;
+		protected uint _flags;
+		public Seahorse.Context attached_to;
+		public GLib.List<weak Seahorse.Object> get_children ();
+		protected void fire_changed (Seahorse.Object.Change what);
+		public GLib.Quark tag { get; }
+		public GLib.Quark id { get; }
+		public Seahorse.Location location { get; set; }
+		public Seahorse.Usage usage { get; }
+		public uint flags { get; }
+		public Seahorse.Source source { get; set; }
+		public Seahorse.Object preferred { get; set; }
+		public abstract string# description { get; }
+		public abstract string# markup { get; }
+		public abstract string# stock_icon { get; }
+		public Seahorse.Object? parent { get; set; }
+		public signal void changed (Seahorse.Object.Change what);
+		public signal void hierarchy ();
+		public signal void destroy ();
+		[CCode (cheader_filename = "seahorse-object.h")]
+		public struct Predicate {
+			public GLib.Quark tag;
+			public GLib.Quark id;
+			public Seahorse.Location location;
+			public Seahorse.Usage usage;
+			public uint flags;
+			public uint nflags;
+			public weak Seahorse.Source? source;
+			public Seahorse.Object.PredicateFunc? custom;
+			public bool match (Seahorse.Object obj);
+		}
+		[CCode (cheader_filename = "seahorse-object.h")]
+		public delegate bool PredicateFunc (Seahorse.Object obj);
 	}
 	[CCode (cheader_filename = "seahorse-servers.h")]
 	public class Servers : GLib.Object {
@@ -27,11 +90,11 @@ namespace Seahorse {
 	}
 	[CCode (cheader_filename = "seahorse-view.h")]
 	public interface View : GLib.Object {
-		public abstract GLib.List<weak Seahorse.Key> get_selected_keys ();
-		public abstract void set_selected_keys (GLib.List<Seahorse.Key> keys);
-		public abstract weak Seahorse.Key? get_selected_key_and_uid (out uint uid);
-		public abstract Seahorse.Key? selected_key { get; set; }
-		public abstract Seahorse.Keyset? current_keyset { get; }
+		public abstract GLib.List<weak Seahorse.Object> get_selected_objects ();
+		public abstract void set_selected_objects (GLib.List<Seahorse.Object> objects);
+		public abstract weak Seahorse.Object? get_selected_object_and_uid (out uint uid);
+		public abstract Seahorse.Object? selected { get; set; }
+		public abstract Seahorse.Set? current_set { get; }
 		public abstract Gtk.Window window { get; }
 		public signal void selection_changed ();
 	}

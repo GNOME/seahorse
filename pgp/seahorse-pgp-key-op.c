@@ -69,7 +69,7 @@
 
 /**
  * seahorse_pgp_key_op_generate:
- * @sksrc: #SeahorseKeySource
+ * @sksrc: #SeahorseSource
  * @name: User ID name, must be at least 5 characters long
  * @email: Optional user ID email
  * @comment: Optional user ID comment
@@ -169,7 +169,7 @@ op_delete (SeahorsePGPKey *pkey, gboolean secret)
 	
 	err = gpgme_op_delete (psrc->gctx, pkey->pubkey, secret);
 	if (GPG_IS_OK (err))
-        seahorse_key_destroy (SEAHORSE_KEY (pkey));
+             seahorse_context_remove_object (SCTX_APP (), SEAHORSE_OBJECT (pkey));
 	
 	return err;
 }
@@ -302,7 +302,7 @@ edit_key (SeahorsePGPKey *pkey, SeahorseEditParm *parms, SeahorseKeyChange chang
     err = edit_gpgme_key (psrc, pkey->pubkey, parms);
 
     if (GPG_IS_OK (err) && (change != 0))
-        seahorse_key_changed (SEAHORSE_KEY (pkey), change);
+        seahorse_object_fire_changed (SEAHORSE_OBJECT (pkey), change);
     
     return err;
 }
@@ -487,7 +487,7 @@ seahorse_pgp_key_op_sign (SeahorsePGPKey *pkey, SeahorsePGPKey *signer,
                           const guint index, SeahorseSignCheck check, 
                           SeahorseSignOptions options)
 {
-    SeahorseKeySource *sksrc;
+    SeahorseSource *sksrc;
     SignParm *sign_parm;
     SeahorseEditParm *parms;
     gpgme_error_t err;
@@ -655,7 +655,7 @@ seahorse_pgp_key_pair_op_change_pass (SeahorsePGPKey *pkey)
 	gpgme_error_t err;
 	
 	g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (pkey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));    
-	g_return_val_if_fail (seahorse_key_get_etype (SEAHORSE_KEY (pkey)) == SKEY_PRIVATE, GPG_E (GPG_ERR_WRONG_KEY_USAGE));
+	g_return_val_if_fail (seahorse_key_get_usage (SEAHORSE_KEY (pkey)) == SEAHORSE_USAGE_PRIVATE_KEY, GPG_E (GPG_ERR_WRONG_KEY_USAGE));
 	
 	parms = seahorse_edit_parm_new (PASS_START, edit_pass_action, edit_pass_transit, NULL);
 	
@@ -799,7 +799,7 @@ seahorse_pgp_key_op_set_trust (SeahorsePGPKey *pkey, SeahorseValidity trust)
 	g_return_val_if_fail (trust >= GPGME_VALIDITY_UNKNOWN, GPG_E (GPG_ERR_INV_VALUE));
 	g_return_val_if_fail (seahorse_key_get_trust (SEAHORSE_KEY (pkey)) != trust, GPG_E (GPG_ERR_INV_VALUE));
 	
-	if (seahorse_key_get_etype (SEAHORSE_KEY (pkey)) == SKEY_PRIVATE)
+	if (seahorse_key_get_usage (SEAHORSE_KEY (pkey)) == SEAHORSE_USAGE_PRIVATE_KEY)
 		g_return_val_if_fail (trust != SEAHORSE_VALIDITY_UNKNOWN, GPG_E (GPG_ERR_INV_VALUE));
 	else
 		g_return_val_if_fail (trust != SEAHORSE_VALIDITY_ULTIMATE, GPG_E (GPG_ERR_INV_VALUE));
@@ -1067,7 +1067,7 @@ seahorse_pgp_key_pair_op_set_expires (SeahorsePGPKey *pkey,
 	gpgme_subkey_t subkey;
 	
     g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (pkey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));    
-    g_return_val_if_fail (seahorse_key_get_etype (SEAHORSE_KEY (pkey)) == SKEY_PRIVATE, GPG_E (GPG_ERR_WRONG_KEY_USAGE));
+    g_return_val_if_fail (seahorse_key_get_usage (SEAHORSE_KEY (pkey)) == SEAHORSE_USAGE_PRIVATE_KEY, GPG_E (GPG_ERR_WRONG_KEY_USAGE));
 
 	subkey = seahorse_pgp_key_get_nth_subkey (pkey, index);
 
@@ -1204,8 +1204,8 @@ seahorse_pgp_key_pair_op_add_revoker (SeahorsePGPKey *pkey, SeahorsePGPKey *revo
 	
     g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (pkey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));    
     g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (revoker), GPG_E (GPG_ERR_WRONG_KEY_USAGE));    
-    g_return_val_if_fail (seahorse_key_get_etype (SEAHORSE_KEY (pkey)) == SKEY_PRIVATE, GPG_E (GPG_ERR_WRONG_KEY_USAGE));
-    g_return_val_if_fail (seahorse_key_get_etype (SEAHORSE_KEY (revoker)) == SKEY_PRIVATE, GPG_E (GPG_ERR_WRONG_KEY_USAGE));
+    g_return_val_if_fail (seahorse_key_get_usage (SEAHORSE_KEY (pkey)) == SEAHORSE_USAGE_PRIVATE_KEY, GPG_E (GPG_ERR_WRONG_KEY_USAGE));
+    g_return_val_if_fail (seahorse_key_get_usage (SEAHORSE_KEY (revoker)) == SEAHORSE_USAGE_PRIVATE_KEY, GPG_E (GPG_ERR_WRONG_KEY_USAGE));
 
 	parms = seahorse_edit_parm_new (ADD_REVOKER_START, add_revoker_action,
 		add_revoker_transit, (gpointer)seahorse_pgp_key_get_id (revoker->pubkey, 0));
@@ -1356,7 +1356,7 @@ seahorse_pgp_key_pair_op_add_uid (SeahorsePGPKey *pkey, const gchar *name,
 	UidParm *uid_parm;
 	
     g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (pkey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));    
-    g_return_val_if_fail (seahorse_key_get_etype (SEAHORSE_KEY (pkey)) == SKEY_PRIVATE, GPG_E (GPG_ERR_WRONG_KEY_USAGE));
+    g_return_val_if_fail (seahorse_key_get_usage (SEAHORSE_KEY (pkey)) == SEAHORSE_USAGE_PRIVATE_KEY, GPG_E (GPG_ERR_WRONG_KEY_USAGE));
 	g_return_val_if_fail (name != NULL && strlen (name) >= 5, GPG_E (GPG_ERR_INV_VALUE));
 	
 	uid_parm = g_new (UidParm, 1);
@@ -1500,7 +1500,7 @@ seahorse_pgp_key_pair_op_add_subkey (SeahorsePGPKey *pkey, const SeahorseKeyEncT
 	SubkeyParm *key_parm;
 	
     g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (pkey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));    
-    g_return_val_if_fail (seahorse_key_get_etype (SEAHORSE_KEY (pkey)) == SKEY_PRIVATE, GPG_E (GPG_ERR_WRONG_KEY_USAGE));
+    g_return_val_if_fail (seahorse_key_get_usage (SEAHORSE_KEY (pkey)) == SEAHORSE_USAGE_PRIVATE_KEY, GPG_E (GPG_ERR_WRONG_KEY_USAGE));
 	
 	/* Check length range & type */
 	switch (type) {

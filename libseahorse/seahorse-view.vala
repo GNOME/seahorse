@@ -22,15 +22,15 @@
 using GLib;
 
 namespace Seahorse {
-	public interface View : Object {
+	public interface View : GLib.Object {
 		public signal void selection_changed ();
 		
-		public abstract GLib.List<weak Key> get_selected_keys ();
-		public abstract void set_selected_keys (GLib.List<Key> keys);
-		public abstract weak Key? get_selected_key_and_uid (out uint uid);
+		public abstract GLib.List<weak Object> get_selected_objects ();
+		public abstract void set_selected_objects (GLib.List<Object> objects);
+		public abstract weak Object? get_selected_object_and_uid (out uint uid);
 
-		public abstract weak Key? selected_key { get; set; }		
-		public abstract weak Keyset? current_keyset { get; }
+		public abstract weak Object? selected { get; set; }		
+		public abstract weak Set? current_set { get; }
 		public abstract weak Gtk.Window window { get; }
 	}	
 }

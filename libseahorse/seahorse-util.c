@@ -1045,15 +1045,15 @@ seahorse_util_strvec_length (const gchar **vec)
 }
 
 static gint 
-sort_keys_by_source (SeahorseKey *k1, SeahorseKey *k2)
+sort_objects_by_source (SeahorseObject *k1, SeahorseObject *k2)
 {
-    SeahorseKeySource *sk1, *sk2;
+    SeahorseSource *sk1, *sk2;
     
-    g_assert (SEAHORSE_IS_KEY (k1));
-    g_assert (SEAHORSE_IS_KEY (k2));
+    g_assert (SEAHORSE_IS_OBJECT (k1));
+    g_assert (SEAHORSE_IS_OBJECT (k2));
     
-    sk1 = seahorse_key_get_source (k1);
-    sk2 = seahorse_key_get_source (k2);
+    sk1 = seahorse_object_get_source (k1);
+    sk2 = seahorse_object_get_source (k2);
     
     if (sk1 == sk2)
         return 0;
@@ -1062,24 +1062,24 @@ sort_keys_by_source (SeahorseKey *k1, SeahorseKey *k2)
 }
 
 GList*        
-seahorse_util_keylist_sort (GList *keys)
+seahorse_util_objects_sort (GList *objects)
 {
-    return g_list_sort (keys, (GCompareFunc)sort_keys_by_source);
+    return g_list_sort (objects, (GCompareFunc)sort_objects_by_source);
 }
 
 GList*       
-seahorse_util_keylist_splice (GList *keys)
+seahorse_util_objects_splice (GList *objects)
 {
-    SeahorseKeySource *psk = NULL;
-    SeahorseKeySource *sk;
+    SeahorseSource *psk = NULL;
+    SeahorseSource *sk;
     GList *prev = NULL;
     
-    /* Note that the keylist must be sorted */
+    /* Note that the objects must be sorted */
     
-    for ( ; keys; keys = g_list_next (keys)) {
+    for ( ; objects; objects = g_list_next (objects)) {
      
-        g_return_val_if_fail (SEAHORSE_IS_KEY (keys->data), NULL);
-        sk = seahorse_key_get_source (SEAHORSE_KEY (keys->data));
+        g_return_val_if_fail (SEAHORSE_IS_OBJECT (objects->data), NULL);
+        sk = seahorse_object_get_source (SEAHORSE_OBJECT (objects->data));
         
         /* Found a disconuity */
         if (psk && sk != psk) {
@@ -1089,11 +1089,11 @@ seahorse_util_keylist_splice (GList *keys)
             prev->next = NULL;
             
             /* And return the new list */
-            return keys;
+            return objects;
         }
         
         psk = sk;
-        prev = keys;
+        prev = objects;
     }
     
     return NULL;

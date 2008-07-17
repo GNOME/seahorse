@@ -62,44 +62,44 @@ namespace Seahorse.Ssh {
 			}
 		}
 
-		public override void show_properties (Seahorse.Key key) {
-			return_if_fail (key.ktype == Seahorse.Ssh.TYPE);
+		public override void show_properties (Object key) {
+			return_if_fail (key.tag == Seahorse.Ssh.TYPE);
 			KeyProperties.show ((Ssh.Key)key, view.window);
 		}
 
-		public override void delete_keys (List<Key> keys) throws GLib.Error {
+		public override void delete_objects (List<Object> keys) throws GLib.Error {
 			uint num = keys.length();
 			if (num == 0)
 				return;
 			
 			string prompt;
 			if (num == 1)
-				prompt = _("Are you sure you want to delete the secure shell key '%s'?").printf(keys.data.display_name);
+				prompt = _("Are you sure you want to delete the secure shell key '%s'?").printf(keys.data.description);
 			else
 				prompt = _("Are you sure you want to delete %d secure shell keys?").printf(num);
 			
 			if (Util.prompt_delete (prompt))
-				KeySource.delete_keys (keys);
+				Seahorse.Source.delete_objects (keys);
 		}
 		
 		private void on_ssh_upload (Action action) {
 			List<weak Key> ssh_keys;
-			List<weak Key> keys = view.get_selected_keys ();
-			foreach (Key key in keys) {
-				if (key.ktype == Seahorse.Ssh.TYPE && 
-				    key.etype == Seahorse.Key.EType.PRIVATE)
-					ssh_keys.append (key);
+			var keys = view.get_selected_objects ();
+			foreach (var key in keys) {
+				if (key.tag == Seahorse.Ssh.TYPE && 
+				    key.usage == Seahorse.Usage.PRIVATE_KEY)
+					ssh_keys.append ((Ssh.Key)key);
 			}
 			
 			Upload.prompt (keys, view.window);
 		}
 		
 		private void on_view_selection_changed (View view) {
-			List<weak Key> keys = view.get_selected_keys ();
+			var keys = view.get_selected_objects ();
 			bool enable = (keys != null);
-			foreach (Key key in keys) {
-				if (key.ktype != Seahorse.Ssh.TYPE || 
-				    key.etype != Seahorse.Key.EType.PRIVATE) {
+			foreach (var key in keys) {
+				if (key.tag != Seahorse.Ssh.TYPE || 
+				    key.usage != Seahorse.Usage.PRIVATE_KEY) {
 					enable = false;
 					break;
 				}

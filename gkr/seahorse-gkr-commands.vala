@@ -48,24 +48,24 @@ namespace Seahorse.Gkr {
 			}
 		}
 		
-		public override void show_properties (Seahorse.Key key) {
-			return_if_fail (key.ktype == Seahorse.Gkr.TYPE);
+		public override void show_properties (Object key) {
+			return_if_fail (key.tag == Seahorse.Gkr.TYPE);
 			ItemProperties.show ((Gkr.Item)key, view.window);
 		}
 		
-		public override void delete_keys (List<Key> keys) throws GLib.Error {
+		public override void delete_objects (List<Object> keys) throws GLib.Error {
 			uint num = keys.length();
 			if (num == 0)
 				return;
 			
 			string prompt;
 			if (num == 1)
-				prompt = _("Are you sure you want to delete the password '%s'?").printf(keys.data.display_name);
+				prompt = _("Are you sure you want to delete the password '%s'?").printf(keys.data.description);
 			else
 				prompt = _("Are you sure you want to delete %d passwords?").printf(num);
 			
 			if (Util.prompt_delete (prompt))
-				KeySource.delete_keys (keys);
+				Seahorse.Source.delete_objects (keys);
 		}
 	}
 }

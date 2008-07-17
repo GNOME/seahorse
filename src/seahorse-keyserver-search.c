@@ -312,7 +312,7 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
     seahorse_gconf_set_string_list (LASTSERVERS_KEY, 
                                     selection->all ? NULL : selection->names);
                                     
-    op = seahorse_context_load_remote_keys (SCTX_APP(), search);
+    op = seahorse_context_load_remote_objects (SCTX_APP(), search);
     
     /* Open the new result window */    
     seahorse_keyserver_results_show (op, 

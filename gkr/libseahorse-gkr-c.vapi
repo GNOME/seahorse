@@ -27,7 +27,7 @@ namespace Seahorse.Gkr {
         }
                 
         [CCode (cheader_filename = "seahorse-gkeyring-source.h")]
-        public class Source : Seahorse.KeySource {
+        public class Source : Seahorse.Source {
         	
         }
         

@@ -293,17 +293,21 @@ static void
 names_update_row (SeahorseKeyModel *skmodel, SeahorseKey *skey, 
                   GtkTreeIter *iter, SeahorseWidget *swidget)
 {
-    const gchar *icon;
-    gchar *name;
+	SeahorseObject *preferred;
+	const gchar *icon;
+	gchar *name;
     
-    /* Always use the most preferred key for this keyid */
-    if (skey->preferred) {
-        while (skey->preferred)
-            skey = skey->preferred;
-        seahorse_key_model_set_row_key (skmodel, iter, skey);
-    }
+	/* Always use the most preferred key for this keyid */
+	preferred = seahorse_object_get_preferred (SEAHORSE_OBJECT (skey));
+	if (preferred) {
+		while (SEAHORSE_IS_KEY (preferred)) {
+			skey = SEAHORSE_KEY (preferred);
+			preferred = seahorse_object_get_preferred (preferred);
+		}
+		seahorse_key_model_set_row_key (skmodel, iter, skey);
+	}
 
-    icon = seahorse_key_get_location (skey) < SKEY_LOC_LOCAL ? 
+    icon = seahorse_key_get_location (skey) < SEAHORSE_LOCATION_LOCAL ? 
                 GTK_STOCK_DIALOG_QUESTION : SEAHORSE_STOCK_SIGN;
     name = seahorse_key_get_name_markup (skey, 0);
     
@@ -355,7 +359,7 @@ names_populate (SeahorseWidget *swidget, GtkTreeStore *store, SeahorsePGPKey *pk
         }
         
         /* Pass it to 'DiscoverKeys' for resolution/download */
-        keys = seahorse_context_discover_keys (SCTX_APP (), SEAHORSE_PGP, rawids);
+        keys = seahorse_context_discover_objects (SCTX_APP (), SEAHORSE_PGP, rawids);
         g_slist_free (rawids);
         rawids = NULL;
         
@@ -382,7 +386,7 @@ do_names (SeahorseWidget *swidget)
     skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
     pkey = SEAHORSE_PGP_KEY (skey);
     
-    if (seahorse_key_get_etype (skey) != SKEY_PRIVATE)
+    if (seahorse_key_get_usage (skey) != SEAHORSE_USAGE_PRIVATE_KEY)
         return;
 
     /* Clear/create table store */
@@ -434,7 +438,7 @@ do_names_signals (SeahorseWidget *swidget)
     
     skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
     
-    if (seahorse_key_get_etype (skey) != SKEY_PRIVATE)
+    if (seahorse_key_get_usage (skey) != SEAHORSE_USAGE_PRIVATE_KEY)
         return;
 
     glade_xml_signal_connect_data (swidget->xml, "on_names_add",
@@ -571,26 +575,26 @@ owner_photo_primary_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 static void
 set_photoid_state(SeahorseWidget *swidget, SeahorsePGPKey *pkey)
 {
-    SeahorseKeyEType etype; 
+    SeahorseUsage etype; 
     GtkWidget *photo_image;
 
     gpgmex_photo_id_t photoid;
 
-    etype = seahorse_key_get_etype (SEAHORSE_KEY(pkey));
+    etype = seahorse_key_get_usage (SEAHORSE_KEY(pkey));
     photoid = (gpgmex_photo_id_t)g_object_get_data (G_OBJECT (swidget), 
                                                     "current-photoid");
 
     /* Show when adding a photo is possible */
     show_glade_widget (swidget, "owner-photo-add-button", 
-                       etype == SKEY_PRIVATE);
+                       etype == SEAHORSE_USAGE_PRIVATE_KEY);
 
     /* Show when we have a photo to set as primary */
     show_glade_widget (swidget, "owner-photo-primary-button", 
-                       etype == SKEY_PRIVATE && photoid);
+                       etype == SEAHORSE_USAGE_PRIVATE_KEY && photoid);
 
     /* Display this when there are any photo ids */
     show_glade_widget (swidget, "owner-photo-delete-button", 
-                       etype == SKEY_PRIVATE && photoid != NULL);
+                       etype == SEAHORSE_USAGE_PRIVATE_KEY && photoid != NULL);
 
     /* Sensitive when not the first photo id */
     sensitive_glade_widget (swidget, "owner-photo-previous-button", 
@@ -611,7 +615,7 @@ set_photoid_state(SeahorseWidget *swidget, SeahorsePGPKey *pkey)
     if (photo_image) {
         if (!photoid || !photoid->photo)
             gtk_image_set_from_stock (GTK_IMAGE (photo_image), 
-                etype == SKEY_PRIVATE ? SEAHORSE_STOCK_SECRET : SEAHORSE_STOCK_KEY, (GtkIconSize)-1);
+                etype == SEAHORSE_USAGE_PRIVATE_KEY ? SEAHORSE_STOCK_SECRET : SEAHORSE_STOCK_KEY, (GtkIconSize)-1);
         else 
             gtk_image_set_from_pixbuf (GTK_IMAGE (photo_image), photoid->photo);
     }
@@ -735,7 +739,7 @@ owner_passphrase_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
     SeahorseKey *skey;
     skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
     
-    if (seahorse_key_get_etype (skey) == SKEY_PRIVATE)
+    if (seahorse_key_get_usage (skey) == SEAHORSE_USAGE_PRIVATE_KEY)
         seahorse_pgp_key_pair_op_change_pass (SEAHORSE_PGP_KEY (skey));
 }
 
@@ -743,11 +747,11 @@ static void
 do_owner_signals (SeahorseWidget *swidget)
 { 
     SeahorseKey *skey;
-    SeahorseKeyEType etype;
+    SeahorseUsage etype;
     GtkWidget *frame;
     
     skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
-    etype = seahorse_key_get_etype (skey);
+    etype = seahorse_key_get_usage (skey);
     
     glade_xml_signal_connect_data (swidget->xml, "on_owner_sign_button_clicked",
                                 G_CALLBACK (owner_sign_button_clicked), swidget);
@@ -758,7 +762,7 @@ do_owner_signals (SeahorseWidget *swidget)
     glade_xml_signal_connect_data(swidget->xml, "on_image_eventbox_scroll_event", 
                                 G_CALLBACK(photoid_button_pressed), swidget);
     
-    if (etype == SKEY_PRIVATE ) {
+    if (etype == SEAHORSE_USAGE_PRIVATE_KEY ) {
         glade_xml_signal_connect_data (swidget->xml, "on_owner_photo_primary_button_clicked",
                 G_CALLBACK (owner_photo_primary_button_clicked), swidget);
         glade_xml_signal_connect_data (swidget->xml, "on_owner_photo_add_button_clicked",
@@ -1008,7 +1012,7 @@ trust_changed (GtkComboBox *selection, SeahorseWidget *swidget)
 static void
 details_export_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 {
-    SeahorseKeySource *sksrc;
+    SeahorseSource *sksrc;
     SeahorseOperation *op;
     SeahorseKey *skey;
     GtkDialog *dialog;
@@ -1032,14 +1036,14 @@ details_export_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
         return;
     
     sksrc = seahorse_key_get_source (skey);
-    g_assert (SEAHORSE_IS_KEY_SOURCE (sksrc));
+    g_assert (SEAHORSE_IS_SOURCE (sksrc));
     
 	file = g_file_new_for_uri (uri);
 	output = g_file_replace (file, NULL, FALSE, 0, NULL, &err);  
 	g_object_unref (file);
     
 	if (output) {
-		op = seahorse_key_source_export (sksrc, keys, TRUE, G_OUTPUT_STREAM (output));
+		op = seahorse_source_export (sksrc, keys, TRUE, G_OUTPUT_STREAM (output));
     
 		seahorse_operation_wait (op);
 		g_object_unref (output);
@@ -1086,7 +1090,7 @@ static void
 setup_details_trust (SeahorseWidget *swidget)
 {
     SeahorseKey *skey;
-    SeahorseKeyEType etype;
+    SeahorseUsage etype;
     GtkWidget *widget;
     GtkListStore *model;
     GtkTreeIter iter;
@@ -1095,7 +1099,7 @@ setup_details_trust (SeahorseWidget *swidget)
     DBG_PRINT(("KeyProperties: Setting up Trust Combo Box Store\n"));
     
     skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
-    etype = seahorse_key_get_etype (skey);
+    etype = seahorse_key_get_usage (skey);
     
     widget = glade_xml_get_widget (swidget->xml, "details-trust-combobox");
     
@@ -1109,7 +1113,7 @@ setup_details_trust (SeahorseWidget *swidget)
     /* Initialize the store */
     model = gtk_list_store_newv (TRUST_N_COLUMNS, (GType*)trust_columns);
     
-    if (etype != SKEY_PRIVATE) {
+    if (etype != SEAHORSE_USAGE_PRIVATE_KEY) {
         gtk_list_store_append (model, &iter);
         gtk_list_store_set (model, &iter,
                             TRUST_LABEL, _("Unknown"),
@@ -1134,7 +1138,7 @@ setup_details_trust (SeahorseWidget *swidget)
                         TRUST_LABEL, _("Full"),
                         TRUST_VALIDITY,  SEAHORSE_VALIDITY_FULL,
                         -1);
-    if (etype == SKEY_PRIVATE) {
+    if (etype == SEAHORSE_USAGE_PRIVATE_KEY) {
         gtk_list_store_append (model, &iter);
         gtk_list_store_set (model, &iter,
                             TRUST_LABEL, _("Ultimate"),
@@ -1151,16 +1155,16 @@ static void
 do_details_signals (SeahorseWidget *swidget) 
 { 
     SeahorseKey *skey;
-    SeahorseKeyEType etype;
+    SeahorseUsage etype;
     
     skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
-    etype = seahorse_key_get_etype (skey);
+    etype = seahorse_key_get_usage (skey);
     
     /* 
      * if not the key owner, disable most everything
      * if key owner, add the callbacks to the subkey buttons
      */
-     if (etype == SKEY_PUBLIC ) {
+     if (etype == SEAHORSE_USAGE_PUBLIC_KEY ) {
          show_glade_widget (swidget, "details-actions-label", FALSE);
          show_glade_widget (swidget, "details-export-button", FALSE);
          show_glade_widget (swidget, "details-add-button", FALSE);
@@ -1247,7 +1251,7 @@ do_details (SeahorseWidget *swidget)
 
     widget = glade_xml_get_widget (swidget->xml, "details-expires-label");
     if (widget) {
-        if (seahorse_key_get_location (skey) == SKEY_LOC_REMOTE)
+        if (seahorse_key_get_location (skey) == SEAHORSE_LOCATION_REMOTE)
             fp_label = NULL;
         else if (subkey->expires == 0)
             fp_label = g_strdup (_("Never"));
@@ -1257,7 +1261,7 @@ do_details (SeahorseWidget *swidget)
         g_free (fp_label);
     }
 
-    show_glade_widget (swidget, "details-trust-combobox", keyloc == SKEY_LOC_LOCAL);
+    show_glade_widget (swidget, "details-trust-combobox", keyloc == SEAHORSE_LOCATION_LOCAL);
     widget = glade_xml_get_widget (swidget->xml, "details-trust-combobox");
     
     if (widget) {
@@ -1408,23 +1412,28 @@ static void
 trust_update_row (SeahorseKeyModel *skmodel, SeahorseKey *skey, 
                   GtkTreeIter *iter, SeahorseWidget *swidget)
 {
-    gboolean trusted = FALSE;
-    const gchar *icon;
-    gchar *name;    
+	SeahorseObject *preferred;
+	gboolean trusted = FALSE;
+	const gchar *icon;
+	gchar *name;    
     
-    /* Always use the most preferred key for this keyid */
-    if (skey->preferred) {
-        while (skey->preferred)
-            skey = skey->preferred;
-        seahorse_key_model_set_row_key (skmodel, iter, skey);
-    }
+    	/* Always use the most preferred key for this keyid */
+	preferred = seahorse_object_get_preferred (SEAHORSE_OBJECT (skey));
+	if (SEAHORSE_IS_KEY (preferred)) {
+		while (SEAHORSE_IS_KEY (preferred)) {
+			skey = SEAHORSE_KEY (preferred);
+			preferred = seahorse_object_get_preferred (preferred);
+		}
+		seahorse_key_model_set_row_key (skmodel, iter, skey);
+	}
 
-    if (seahorse_key_get_etype (skey) == SKEY_PRIVATE) 
+
+    if (seahorse_key_get_usage (skey) == SEAHORSE_USAGE_PRIVATE_KEY) 
         trusted = TRUE;
     else if (seahorse_key_get_flags (skey) & SKEY_FLAG_TRUSTED)
         trusted = TRUE;
     
-    icon = seahorse_key_get_location (skey) < SKEY_LOC_LOCAL ? 
+    icon = seahorse_key_get_location (skey) < SEAHORSE_LOCATION_LOCAL ? 
                 GTK_STOCK_DIALOG_QUESTION : SEAHORSE_STOCK_SIGN;
     name = seahorse_key_get_display_name (skey);
     
@@ -1477,7 +1486,7 @@ signatures_populate_model (SeahorseWidget *swidget, SeahorseKeyModel *skmodel)
         rawids = unique_slist_strings (rawids);
         
         /* Pass it to 'DiscoverKeys' for resolution/download */
-        keys = seahorse_context_discover_keys (SCTX_APP (), SEAHORSE_PGP, rawids);
+        keys = seahorse_context_discover_objects (SCTX_APP (), SEAHORSE_PGP, rawids);
         g_slist_free (rawids);
         rawids = NULL;
         
@@ -1516,13 +1525,13 @@ static void
 do_trust_signals (SeahorseWidget *swidget)
 {
     SeahorseKey *skey;
-    SeahorseKeyEType etype;
+    SeahorseUsage etype;
     gchar *user;
     
     skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
-    etype = seahorse_key_get_etype (skey);
+    etype = seahorse_key_get_usage (skey);
     
-    if (etype != SKEY_PUBLIC)
+    if (etype != SEAHORSE_USAGE_PUBLIC_KEY)
         return;
     
     set_glade_image (swidget, "image-good1", "seahorse-sign-ok");
@@ -1532,7 +1541,7 @@ do_trust_signals (SeahorseWidget *swidget)
                                    G_CALLBACK (trust_sign_clicked), swidget);
     /* TODO: Hookup revoke handler */
     
-    if (etype == SKEY_PUBLIC ) {
+    if (etype == SEAHORSE_USAGE_PUBLIC_KEY ) {
         
         show_glade_widget (swidget, "signatures-revoke-button", FALSE);
         show_glade_widget (swidget, "signatures-delete-button", FALSE);
@@ -1587,11 +1596,11 @@ do_trust (SeahorseWidget *swidget)
     pkey = SEAHORSE_PGP_KEY (skey);
     keyloc = seahorse_key_get_location (skey);
     
-    if (seahorse_key_get_etype (skey) != SKEY_PUBLIC)
+    if (seahorse_key_get_usage (skey) != SEAHORSE_USAGE_PUBLIC_KEY)
         return;
     
     /* Remote keys */
-    if (keyloc < SKEY_LOC_LOCAL) {
+    if (keyloc < SEAHORSE_LOCATION_LOCAL) {
         
         show_glade_widget (swidget, "manual-trust-area", FALSE);
         show_glade_widget (swidget, "manage-trust-area", TRUE);
@@ -1805,7 +1814,7 @@ setup_public_properties (SeahorsePGPKey *pkey, GtkWindow *parent)
 
     widget = glade_xml_get_widget (swidget->xml, swidget->name);
     g_signal_connect (widget, "response", G_CALLBACK (properties_response), swidget);
-    g_signal_connect (GTK_OBJECT (widget), "destroy", G_CALLBACK (properties_destroyed), swidget);
+    g_signal_connect (widget, "destroy", G_CALLBACK (properties_destroyed), swidget);
     g_signal_connect_after (pkey, "changed", G_CALLBACK (key_changed), swidget);
     g_signal_connect_after (pkey, "destroy", G_CALLBACK (key_destroyed), swidget);
 
@@ -1842,7 +1851,7 @@ setup_private_properties (SeahorsePGPKey *pkey, GtkWindow *parent)
 
     widget = glade_xml_get_widget (swidget->xml, swidget->name);
     g_signal_connect (widget, "response", G_CALLBACK (properties_response), swidget);
-    g_signal_connect (GTK_OBJECT (widget), "destroy", G_CALLBACK (properties_destroyed), swidget);
+    g_signal_connect (widget, "destroy", G_CALLBACK (properties_destroyed), swidget);
     g_signal_connect_after (pkey, "changed", G_CALLBACK (key_changed), swidget);
     g_signal_connect_after (pkey, "destroy", G_CALLBACK (key_destroyed), swidget);
 
@@ -1868,26 +1877,26 @@ setup_private_properties (SeahorsePGPKey *pkey, GtkWindow *parent)
 void
 seahorse_pgp_key_properties_show (SeahorsePGPKey *pkey, GtkWindow *parent)
 {
-    SeahorseKey *skey = SEAHORSE_KEY (pkey);
-    SeahorseKeySource *sksrc;
+    SeahorseObject *sobj = SEAHORSE_OBJECT (pkey);
+    SeahorseSource *sksrc;
     SeahorseWidget *swidget;
     gboolean remote;
 
-    remote = seahorse_key_get_location (skey) == SKEY_LOC_REMOTE;
+    remote = seahorse_object_get_location (sobj) == SEAHORSE_LOCATION_REMOTE;
 
     /* Reload the key to make sure to get all the props */
-    sksrc = seahorse_key_get_source (skey);
+    sksrc = seahorse_object_get_source (sobj);
     g_return_if_fail (sksrc != NULL);
     
     /* Don't trigger the import of remote keys if possible */
     if (!remote) {
         /* This causes the key source to get any specific info about the key */
-        seahorse_key_source_load_sync (sksrc, seahorse_key_get_keyid (skey));
-        skey = seahorse_context_get_key (SCTX_APP(), sksrc, seahorse_key_get_keyid (skey));
-        g_return_if_fail (skey != NULL);
+        seahorse_source_load_sync (sksrc, seahorse_object_get_id (sobj));
+        sobj = seahorse_context_get_object (SCTX_APP(), sksrc, seahorse_object_get_id (sobj));
+        g_return_if_fail (sobj != NULL);
     }
     
-    if (seahorse_key_get_etype (skey) == SKEY_PUBLIC)
+    if (seahorse_object_get_usage (sobj) == SEAHORSE_USAGE_PUBLIC_KEY)
         swidget = setup_public_properties (pkey, parent);
     else
         swidget = setup_private_properties (pkey, parent);       

@@ -22,7 +22,7 @@
 /** 
  * SeahorseSSHSource: A key source for SSH keys. 
  * 
- * - Derived from SeahorseKeySource
+ * - Derived from SeahorseSource
  * - Lists all the keys in ~/.ssh/ by searching through every file.
  * - Loads public keys from ~/.ssh/authorized_keys and ~/.ssh/other_keys.seahorse
  * - Adds the keys it loads to the SeahorseContext.
@@ -31,15 +31,15 @@
  * Properties:
  *  ktype: (GQuark) The ktype (ie: SEAHORSE_SSH) of keys originating from this 
            key source.
- *  location: (SeahorseKeyLoc) The location of keys that come from this 
- *         source. (ie: SKEY_LOC_LOCAL)
+ *  location: (SeahorseLocation) The location of keys that come from this 
+ *         source. (ie: SEAHORSE_LOCATION_LOCAL)
  */
  
 #ifndef __SEAHORSE_SSH_SOURCE_H__
 #define __SEAHORSE_SSH_SOURCE_H__
 
 #include "seahorse-ssh-key.h"
-#include "seahorse-key-source.h"
+#include "seahorse-source.h"
 
 #define SEAHORSE_TYPE_SSH_SOURCE            (seahorse_ssh_source_get_type ())
 #define SEAHORSE_SSH_SOURCE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_SSH_SOURCE, SeahorseSSHSource))
@@ -54,14 +54,14 @@ typedef struct _SeahorseSSHSourceClass SeahorseSSHSourceClass;
 typedef struct _SeahorseSSHSourcePrivate SeahorseSSHSourcePrivate;
 
 struct _SeahorseSSHSource {
-    SeahorseKeySource parent;
+    SeahorseSource parent;
     
     /*< private >*/
     SeahorseSSHSourcePrivate *priv;
 };
 
 struct _SeahorseSSHSourceClass {
-    SeahorseKeySourceClass parent_class;
+    SeahorseSourceClass parent_class;
 };
 
 GType                seahorse_ssh_source_get_type           (void);

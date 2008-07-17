@@ -69,14 +69,14 @@ struct _SeahorseGKeyringSourcePrivate {
     gchar *keyring_name;                    /* The key ring name */
 };
 
-G_DEFINE_TYPE (SeahorseGKeyringSource, seahorse_gkeyring_source, SEAHORSE_TYPE_KEY_SOURCE);
+G_DEFINE_TYPE (SeahorseGKeyringSource, seahorse_gkeyring_source, SEAHORSE_TYPE_SOURCE);
 
 /* Forward decls */
 
 static void         key_changed             (SeahorseKey *skey, SeahorseKeyChange change, 
-                                             SeahorseKeySource *sksrc);
+                                             SeahorseSource *sksrc);
 
-static void         key_destroyed           (SeahorseKey *skey, SeahorseKeySource *sksrc);
+static void         key_destroyed           (SeahorseKey *skey, SeahorseSource *sksrc);
 
 /* -----------------------------------------------------------------------------
  * LIST OPERATION 
@@ -197,8 +197,8 @@ have_complete_item (SeahorseListOperation *lop)
         g_hash_table_remove (lop->checks, GUINT_TO_POINTER (keyid));
     
     g_assert (SEAHORSE_IS_GKEYRING_SOURCE (lop->gsrc));
-    prev = SEAHORSE_GKEYRING_ITEM (seahorse_context_get_key (SCTX_APP (), 
-                                   SEAHORSE_KEY_SOURCE (lop->gsrc), keyid));
+    prev = SEAHORSE_GKEYRING_ITEM (seahorse_context_get_object (SCTX_APP (), 
+                                   SEAHORSE_SOURCE (lop->gsrc), keyid));
 
     /* Check if we can just replace the key on the object */
     if (prev != NULL) {
@@ -213,15 +213,15 @@ have_complete_item (SeahorseListOperation *lop)
         return TRUE;
     }
     
-    git = seahorse_gkeyring_item_new (SEAHORSE_KEY_SOURCE (lop->gsrc), lop->current_id, 
+    git = seahorse_gkeyring_item_new (SEAHORSE_SOURCE (lop->gsrc), lop->current_id, 
                                       lop->current_info, lop->current_attrs, lop->current_acl);
  
     /* We listen in to get notified of changes on this key */
-    g_signal_connect (git, "changed", G_CALLBACK (key_changed), SEAHORSE_KEY_SOURCE (lop->gsrc));
-    g_signal_connect (git, "destroy", G_CALLBACK (key_destroyed), SEAHORSE_KEY_SOURCE (lop->gsrc));
+    g_signal_connect (git, "changed", G_CALLBACK (key_changed), SEAHORSE_SOURCE (lop->gsrc));
+    g_signal_connect (git, "destroy", G_CALLBACK (key_destroyed), SEAHORSE_SOURCE (lop->gsrc));
 
     /* Add to context */ 
-    seahorse_context_take_key (SCTX_APP (), SEAHORSE_KEY (git));
+    seahorse_context_take_object (SCTX_APP (), SEAHORSE_OBJECT (git));
 
     lop->current_info = NULL;
     lop->current_acl = NULL;
@@ -302,15 +302,15 @@ item_acl_ready (GnomeKeyringResult result, GList *acl, SeahorseListOperation *lo
 
 /* Remove the given key from the context */
 static void
-remove_key_from_context (gpointer kt, SeahorseKey *dummy, SeahorseKeySource *sksrc)
+remove_key_from_context (gpointer kt, SeahorseKey *dummy, SeahorseSource *sksrc)
 {
     /* This function gets called as a GHFunc on the lop->checks hashtable. */
     GQuark keyid = GPOINTER_TO_UINT (kt);
-    SeahorseKey *skey;
+    SeahorseObject *sobj;
     
-    skey = seahorse_context_get_key (SCTX_APP (), sksrc, keyid);
-    if (skey != NULL)
-        seahorse_context_remove_key (SCTX_APP (), skey);
+    sobj = seahorse_context_get_object (SCTX_APP (), sksrc, keyid);
+    if (sobj != NULL)
+        seahorse_context_remove_object (SCTX_APP (), sobj);
 }
 
 static void
@@ -334,7 +334,7 @@ process_next_item (SeahorseListOperation *lop)
         
         if (lop->checks)
             g_hash_table_foreach (lop->checks, (GHFunc)remove_key_from_context, 
-                                  SEAHORSE_KEY_SOURCE (lop->gsrc));
+                                  SEAHORSE_SOURCE (lop->gsrc));
         
         seahorse_operation_mark_done (SEAHORSE_OPERATION (lop), FALSE, NULL);
         return;
@@ -412,9 +412,9 @@ start_list_operation (SeahorseGKeyringSource *gsrc, GQuark keyid)
     
     /* When loading new keys prepare a list of current */
     lop->checks = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, NULL);
-    keys = seahorse_context_get_keys (SCTX_APP (), SEAHORSE_KEY_SOURCE (gsrc));
+    keys = seahorse_context_get_objects (SCTX_APP (), SEAHORSE_SOURCE (gsrc));
     for (l = keys; l; l = g_list_next (l))
-        g_hash_table_insert (lop->checks, GUINT_TO_POINTER (seahorse_key_get_keyid (l->data)), 
+        g_hash_table_insert (lop->checks, GUINT_TO_POINTER (seahorse_object_get_id (l->data)), 
                              GUINT_TO_POINTER (TRUE));
     g_list_free (keys);
     
@@ -496,7 +496,7 @@ seahorse_list_operation_cancel (SeahorseOperation *operation)
  */
 
 static void
-key_changed (SeahorseKey *skey, SeahorseKeyChange change, SeahorseKeySource *sksrc)
+key_changed (SeahorseKey *skey, SeahorseKeyChange change, SeahorseSource *sksrc)
 {
     /* TODO: We need to fix these key change flags. Currently the only thing
      * that sets 'ALL' is when we replace a key in an skey. We don't 
@@ -505,11 +505,11 @@ key_changed (SeahorseKey *skey, SeahorseKeyChange change, SeahorseKeySource *sks
     if (change == SKEY_CHANGE_ALL)
         return;
 
-    seahorse_key_source_load_async (sksrc, seahorse_key_get_keyid (skey));
+    seahorse_source_load_async (sksrc, seahorse_key_get_keyid (skey));
 }
 
 static void
-key_destroyed (SeahorseKey *skey, SeahorseKeySource *sksrc)
+key_destroyed (SeahorseKey *skey, SeahorseSource *sksrc)
 {
     g_signal_handlers_disconnect_by_func (skey, key_changed, sksrc);
     g_signal_handlers_disconnect_by_func (skey, key_destroyed, sksrc);
@@ -551,7 +551,7 @@ seahorse_gkeyring_source_get_property (GObject *object, guint prop_id, GValue *v
         g_value_set_string (value, _("Password"));
         break;
     case PROP_LOCATION:
-        g_value_set_uint (value, SKEY_LOC_LOCAL);
+        g_value_set_uint (value, SEAHORSE_LOCATION_LOCAL);
         break;
     }
 }
@@ -573,12 +573,12 @@ seahorse_gkeyring_source_set_property (GObject *object, guint prop_id, const GVa
 }
 
 static SeahorseOperation*
-seahorse_gkeyring_source_load (SeahorseKeySource *src, GQuark keyid)
+seahorse_gkeyring_source_load (SeahorseSource *src, GQuark keyid)
 {
     SeahorseGKeyringSource *gsrc;
     SeahorseListOperation *lop;
     
-    g_assert (SEAHORSE_IS_KEY_SOURCE (src));
+    g_assert (SEAHORSE_IS_SOURCE (src));
     gsrc = SEAHORSE_GKEYRING_SOURCE (src);
     
     lop = start_list_operation (gsrc, keyid);
@@ -589,7 +589,7 @@ seahorse_gkeyring_source_load (SeahorseKeySource *src, GQuark keyid)
 }
 
 static SeahorseOperation* 
-seahorse_gkeyring_source_import (SeahorseKeySource *sksrc, GInputStream *input)
+seahorse_gkeyring_source_import (SeahorseSource *sksrc, GInputStream *input)
 {
 	GError *err = NULL;
 
@@ -602,7 +602,7 @@ seahorse_gkeyring_source_import (SeahorseKeySource *sksrc, GInputStream *input)
 }
 
 static SeahorseOperation* 
-seahorse_gkeyring_source_export (SeahorseKeySource *sksrc, GList *keys, 
+seahorse_gkeyring_source_export (SeahorseSource *sksrc, GList *keys, 
                                  gboolean complete, GOutputStream *output)
 {
 	GError *err = NULL;
@@ -616,7 +616,7 @@ seahorse_gkeyring_source_export (SeahorseKeySource *sksrc, GList *keys,
 }
 
 static gboolean            
-seahorse_gkeyring_source_remove (SeahorseKeySource *sksrc, SeahorseKey *skey,
+seahorse_gkeyring_source_remove (SeahorseSource *sksrc, SeahorseObject *sobj,
                                  guint name, GError **err)
 {
     SeahorseGKeyringItem *git;
@@ -624,8 +624,8 @@ seahorse_gkeyring_source_remove (SeahorseKeySource *sksrc, SeahorseKey *skey,
     GnomeKeyringResult res;
     gboolean ret;
     
-    g_return_val_if_fail (SEAHORSE_IS_GKEYRING_ITEM (skey), FALSE);
-    git = SEAHORSE_GKEYRING_ITEM (skey);
+    g_return_val_if_fail (SEAHORSE_IS_GKEYRING_ITEM (sobj), FALSE);
+    git = SEAHORSE_GKEYRING_ITEM (sobj);
 
     g_return_val_if_fail (SEAHORSE_IS_GKEYRING_SOURCE (sksrc), FALSE);
     gsrc = SEAHORSE_GKEYRING_SOURCE (sksrc);
@@ -637,8 +637,8 @@ seahorse_gkeyring_source_remove (SeahorseKeySource *sksrc, SeahorseKey *skey,
     ret = seahorse_gkeyring_operation_parse_error (res, err);
     
     if (ret) {
-        seahorse_context_remove_key (SCTX_APP (), skey);
-        seahorse_key_source_load_async (sksrc, 0);
+        seahorse_context_remove_object (SCTX_APP (), sobj);
+        seahorse_source_load_async (sksrc, 0);
     }
     
     return ret;
@@ -691,7 +691,7 @@ static void
 seahorse_gkeyring_source_class_init (SeahorseGKeyringSourceClass *klass)
 {
     GObjectClass *gobject_class;
-    SeahorseKeySourceClass *key_class;
+    SeahorseSourceClass *key_class;
     
     seahorse_gkeyring_source_parent_class = g_type_class_peek_parent (klass);
     
@@ -702,7 +702,7 @@ seahorse_gkeyring_source_class_init (SeahorseGKeyringSourceClass *klass)
     gobject_class->set_property = seahorse_gkeyring_source_set_property;
     gobject_class->get_property = seahorse_gkeyring_source_get_property;
     
-    key_class = SEAHORSE_KEY_SOURCE_CLASS (klass);    
+    key_class = SEAHORSE_SOURCE_CLASS (klass);    
     key_class->load = seahorse_gkeyring_source_load;
     key_class->import = seahorse_gkeyring_source_import;
     key_class->export = seahorse_gkeyring_source_export;
@@ -721,8 +721,8 @@ seahorse_gkeyring_source_class_init (SeahorseGKeyringSourceClass *klass)
                              NULL, G_PARAM_READABLE));
 
     g_object_class_install_property (gobject_class, PROP_LOCATION,
-        g_param_spec_uint ("location", "Key Location", "Where the key is stored. See SeahorseKeyLoc", 
-                           0, G_MAXUINT, SKEY_LOC_INVALID, G_PARAM_READABLE));    
+        g_param_spec_uint ("location", "Key Location", "Where the key is stored. See SeahorseLocation", 
+                           0, G_MAXUINT, SEAHORSE_LOCATION_INVALID, G_PARAM_READABLE));    
     
     
 	seahorse_registry_register_type (NULL, SEAHORSE_TYPE_GKEYRING_SOURCE, "key-source", "local", SEAHORSE_GKR_STR, NULL);

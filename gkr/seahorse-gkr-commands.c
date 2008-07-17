@@ -25,7 +25,7 @@
 #include <seahorse-view.h>
 #include <glib/gi18n-lib.h>
 #include <seahorse-util.h>
-#include <seahorse-key-source.h>
+#include <seahorse-source.h>
 #include <common/seahorse-registry.h>
 #include "seahorse-gkr.h"
 
@@ -43,23 +43,23 @@ enum  {
 	SEAHORSE_GKEYRING_COMMANDS_UI_DEFINITION,
 	SEAHORSE_GKEYRING_COMMANDS_COMMAND_ACTIONS
 };
-static void seahorse_gkeyring_commands_real_show_properties (SeahorseCommands* base, SeahorseKey* key);
-static void seahorse_gkeyring_commands_real_delete_keys (SeahorseCommands* base, GList* keys, GError** error);
+static void seahorse_gkeyring_commands_real_show_properties (SeahorseCommands* base, SeahorseObject* key);
+static void seahorse_gkeyring_commands_real_delete_objects (SeahorseCommands* base, GList* keys, GError** error);
 static gpointer seahorse_gkeyring_commands_parent_class = NULL;
 static void seahorse_gkeyring_commands_dispose (GObject * obj);
 
 
 
-static void seahorse_gkeyring_commands_real_show_properties (SeahorseCommands* base, SeahorseKey* key) {
+static void seahorse_gkeyring_commands_real_show_properties (SeahorseCommands* base, SeahorseObject* key) {
 	SeahorseGKeyringCommands * self;
 	self = SEAHORSE_GKEYRING_COMMANDS (base);
-	g_return_if_fail (SEAHORSE_IS_KEY (key));
-	g_return_if_fail (seahorse_key_get_ktype (key) == SEAHORSE_GKEYRING_TYPE);
+	g_return_if_fail (SEAHORSE_IS_OBJECT (key));
+	g_return_if_fail (seahorse_object_get_tag (key) == SEAHORSE_GKEYRING_TYPE);
 	seahorse_gkeyring_item_properties_show (SEAHORSE_GKEYRING_ITEM (key), seahorse_view_get_window (seahorse_commands_get_view (SEAHORSE_COMMANDS (self))));
 }
 
 
-static void seahorse_gkeyring_commands_real_delete_keys (SeahorseCommands* base, GList* keys, GError** error) {
+static void seahorse_gkeyring_commands_real_delete_objects (SeahorseCommands* base, GList* keys, GError** error) {
 	SeahorseGKeyringCommands * self;
 	GError * inner_error;
 	guint num;
@@ -75,14 +75,14 @@ static void seahorse_gkeyring_commands_real_delete_keys (SeahorseCommands* base,
 	if (num == 1) {
 		char* _tmp0;
 		_tmp0 = NULL;
-		prompt = (_tmp0 = g_strdup_printf (_ ("Are you sure you want to delete the password '%s'?"), seahorse_key_get_display_name (((SeahorseKey*) (((SeahorseKey*) (keys->data)))))), (prompt = (g_free (prompt), NULL)), _tmp0);
+		prompt = (_tmp0 = g_strdup_printf (_ ("Are you sure you want to delete the password '%s'?"), seahorse_object_get_description (((SeahorseObject*) (((SeahorseObject*) (keys->data)))))), (prompt = (g_free (prompt), NULL)), _tmp0);
 	} else {
 		char* _tmp1;
 		_tmp1 = NULL;
 		prompt = (_tmp1 = g_strdup_printf (_ ("Are you sure you want to delete %d passwords?"), num), (prompt = (g_free (prompt), NULL)), _tmp1);
 	}
 	if (seahorse_util_prompt_delete (prompt)) {
-		seahorse_key_source_delete_keys (keys, &inner_error);
+		seahorse_source_delete_objects (keys, &inner_error);
 		if (inner_error != NULL) {
 			g_propagate_error (error, inner_error);
 			prompt = (g_free (prompt), NULL);
@@ -149,7 +149,7 @@ static void seahorse_gkeyring_commands_class_init (SeahorseGKeyringCommandsClass
 	G_OBJECT_CLASS (klass)->get_property = seahorse_gkeyring_commands_get_property;
 	G_OBJECT_CLASS (klass)->dispose = seahorse_gkeyring_commands_dispose;
 	SEAHORSE_COMMANDS_CLASS (klass)->show_properties = seahorse_gkeyring_commands_real_show_properties;
-	SEAHORSE_COMMANDS_CLASS (klass)->delete_keys = seahorse_gkeyring_commands_real_delete_keys;
+	SEAHORSE_COMMANDS_CLASS (klass)->delete_objects = seahorse_gkeyring_commands_real_delete_objects;
 	g_object_class_override_property (G_OBJECT_CLASS (klass), SEAHORSE_GKEYRING_COMMANDS_KTYPE, "ktype");
 	g_object_class_override_property (G_OBJECT_CLASS (klass), SEAHORSE_GKEYRING_COMMANDS_UI_DEFINITION, "ui-definition");
 	g_object_class_override_property (G_OBJECT_CLASS (klass), SEAHORSE_GKEYRING_COMMANDS_COMMAND_ACTIONS, "command-actions");

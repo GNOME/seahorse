@@ -22,6 +22,7 @@
 #include "config.h"
 
 #include "seahorse-gconf.h"
+#include "seahorse-key.h"
 
 #include "seahorse-pgp-module.h"
 #include "seahorse-pgp-keysets.h"
@@ -32,16 +33,22 @@
 
 static void
 pgp_signers_gconf_notify (GConfClient *client, guint id, GConfEntry *entry, 
-                          SeahorseKeyset *skset)
+                          SeahorseSet *skset)
 {
     /* Default key changed, refresh */
-    seahorse_keyset_refresh (skset);
+    seahorse_set_refresh (skset);
 }
 
 static gboolean 
-pgp_signers_match (SeahorseKey *key, gpointer data)
+pgp_signers_match (SeahorseObject *obj, gpointer data)
 {
-    SeahorseKey *defkey = seahorse_context_get_default_key (SCTX_APP ());
+    SeahorseKey *key, *defkey;
+    
+    if (!SEAHORSE_IS_KEY (obj))
+	    return FALSE;
+    
+    key = SEAHORSE_KEY (obj);
+    defkey = seahorse_context_get_default_key (SCTX_APP ());
     
     /* Default key overrides all, and becomes the only signer available*/
     if (defkey && seahorse_key_get_keyid (key) != seahorse_key_get_keyid (defkey))
@@ -50,20 +57,20 @@ pgp_signers_match (SeahorseKey *key, gpointer data)
     return TRUE;
 }
 
-SeahorseKeyset*     
+SeahorseSet*     
 seahorse_keyset_pgp_signers_new ()
 {
-    SeahorseKeyPredicate *pred = g_new0(SeahorseKeyPredicate, 1);
-    SeahorseKeyset *skset;
+    SeahorseObjectPredicate *pred = g_new0(SeahorseObjectPredicate, 1);
+    SeahorseSet *skset;
     
-    pred->location = SKEY_LOC_LOCAL;
-    pred->ktype = SEAHORSE_PGP;
-    pred->etype = SKEY_PRIVATE;
+    pred->location = SEAHORSE_LOCATION_LOCAL;
+    pred->id = SEAHORSE_PGP;
+    pred->usage = SEAHORSE_USAGE_PRIVATE_KEY;
     pred->flags = SKEY_FLAG_CAN_SIGN;
     pred->nflags = SKEY_FLAG_EXPIRED | SKEY_FLAG_REVOKED | SKEY_FLAG_DISABLED;
     pred->custom = pgp_signers_match;
     
-    skset = seahorse_keyset_new_full (pred);
+    skset = seahorse_set_new_full (pred);
     g_object_set_data_full (G_OBJECT (skset), "pgp-signers-predicate", pred, g_free);
     
     seahorse_gconf_notify_lazy (SEAHORSE_DEFAULT_KEY, 

@@ -41,7 +41,7 @@ SeahorsePGPKey*
 seahorse_signer_get (GtkWindow *parent)
 {
     SeahorseWidget *swidget;
-    SeahorseKeyset *skset;
+    SeahorseSet *skset;
     SeahorseKey *skey = NULL;
     GtkWidget *combo;
     GtkWidget *widget;
@@ -52,7 +52,7 @@ seahorse_signer_get (GtkWindow *parent)
     guint nkeys;
 
     skset = seahorse_keyset_pgp_signers_new ();
-    nkeys = seahorse_keyset_get_count (skset);
+    nkeys = seahorse_set_get_count (skset);
     
     /* If no signing keys then we can't sign */
     if (nkeys == 0) {
@@ -65,7 +65,7 @@ seahorse_signer_get (GtkWindow *parent)
     
     /* If only one key (probably default) then return it immediately */
     if (nkeys == 1) {
-        GList *keys = seahorse_keyset_get_keys (skset);
+        GList *keys = seahorse_set_get_objects (skset);
         skey = SEAHORSE_KEY (keys->data);
         
         g_list_free (keys);

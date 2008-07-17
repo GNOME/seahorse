@@ -22,20 +22,20 @@
 /** 
  * SeahorseGKeyringSource: A key source for gnome-keyring credentials
  * 
- * - Derived from SeahorseKeySource
+ * - Derived from SeahorseSource
  * - Adds the keys it loads to the SeahorseContext.
  * 
  * Properties:
  *  ktype: (GQuark) The ktype (ie: SEAHORSE_GKR) of keys originating from this 
            key source.
- *  location: (SeahorseKeyLoc) The location of keys that come from this 
- *         source. (ie: SKEY_LOC_LOCAL)
+ *  location: (SeahorseLocation) The location of keys that come from this 
+ *         source. (ie: SEAHORSE_LOCATION_LOCAL)
  */
  
 #ifndef __SEAHORSE_GKEYRING_SOURCE_H__
 #define __SEAHORSE_GKEYRING_SOURCE_H__
 
-#include "seahorse-key-source.h"
+#include "seahorse-source.h"
 
 #define SEAHORSE_TYPE_GKEYRING_SOURCE            (seahorse_gkeyring_source_get_type ())
 #define SEAHORSE_GKEYRING_SOURCE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_GKEYRING_SOURCE, SeahorseGKeyringSource))
@@ -49,14 +49,14 @@ typedef struct _SeahorseGKeyringSourceClass SeahorseGKeyringSourceClass;
 typedef struct _SeahorseGKeyringSourcePrivate SeahorseGKeyringSourcePrivate;
 
 struct _SeahorseGKeyringSource {
-    SeahorseKeySource parent;
+    SeahorseSource parent;
     
     /*< private >*/
     SeahorseGKeyringSourcePrivate *pv;
 };
 
 struct _SeahorseGKeyringSourceClass {
-    SeahorseKeySourceClass parent_class;
+    SeahorseSourceClass parent_class;
 };
 
 GType                    seahorse_gkeyring_source_get_type          (void);

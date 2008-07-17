@@ -62,38 +62,38 @@ namespace Seahorse.Pgp {
 			}
 		}
 		
-		public override void show_properties (Seahorse.Key key) {
-			return_if_fail (key.ktype == Seahorse.Pgp.TYPE);
+		public override void show_properties (Object key) {
+			return_if_fail (key.tag == Seahorse.Pgp.TYPE);
 			KeyProperties.show ((Pgp.Key)key, view.window);
 		}
 		
-		public override void delete_keys (List<Key> keys) throws GLib.Error {
+		public override void delete_objects (List<Object> keys) throws GLib.Error {
 			uint num = keys.length();
 			if (num == 0)
 				return;
 			
 			string prompt;
 			if (num == 1)
-				prompt = _("Are you sure you want to delete the PGP key '%s'?").printf(keys.data.display_name);
+				prompt = _("Are you sure you want to delete the PGP key '%s'?").printf(keys.data.description);
 			else
 				prompt = _("Are you sure you want to delete %d PGP keys?").printf(num);
 			
 			if (Util.prompt_delete (prompt))
-				KeySource.delete_keys (keys);
+				Seahorse.Source.delete_objects (keys);
 		}
 
 		private void on_key_sign (Action action) {
 			uint uid;
-			var key = view.get_selected_key_and_uid (out uid);
-			if (key != null && key.ktype == Seahorse.Pgp.TYPE)
+			var key = view.get_selected_object_and_uid (out uid);
+			if (key != null && key.tag == Seahorse.Pgp.TYPE)
 				Sign.prompt ((Pgp.Key)key, uid, view.window);
 		}
 		
 		private void on_view_selection_changed (View view) {
-			List<weak Key> keys = view.get_selected_keys ();
+			var keys = view.get_selected_objects ();
 			bool enable = (keys != null);
-			foreach (Key key in keys) {
-				if (key.ktype != Seahorse.Pgp.TYPE) {
+			foreach (var key in keys) {
+				if (key.tag != Seahorse.Pgp.TYPE) {
 					enable = false;
 					break;
 				}

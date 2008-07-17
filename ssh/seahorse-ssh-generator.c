@@ -24,8 +24,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <seahorse-context.h>
-#include <seahorse-key.h>
-#include <seahorse-key-source.h>
+#include <seahorse-types.h>
+#include <seahorse-source.h>
 #include <seahorse-ssh-dialogs.h>
 #include <seahorse-ssh-source.h>
 #include <config.h>
@@ -53,12 +53,12 @@ static const GtkActionEntry SEAHORSE_SSH_GENERATOR_GENERATE_ENTRIES[] = {{"ssh-g
 
 
 static void seahorse_ssh_generator_on_ssh_generate (SeahorseSSHGenerator* self, GtkAction* action) {
-	SeahorseKeySource* _tmp0;
-	SeahorseKeySource* sksrc;
+	SeahorseSource* _tmp0;
+	SeahorseSource* sksrc;
 	g_return_if_fail (SEAHORSE_SSH_IS_GENERATOR (self));
 	g_return_if_fail (GTK_IS_ACTION (action));
 	_tmp0 = NULL;
-	sksrc = (_tmp0 = seahorse_context_find_key_source (seahorse_context_for_app (), SEAHORSE_SSH_TYPE, SKEY_LOC_LOCAL), (_tmp0 == NULL ? NULL : g_object_ref (_tmp0)));
+	sksrc = (_tmp0 = seahorse_context_find_source (seahorse_context_for_app (), SEAHORSE_SSH_TYPE, SEAHORSE_LOCATION_LOCAL), (_tmp0 == NULL ? NULL : g_object_ref (_tmp0)));
 	g_return_if_fail (sksrc != NULL);
 	seahorse_ssh_generate_show (SEAHORSE_SSH_SOURCE (sksrc), NULL);
 	(sksrc == NULL ? NULL : (sksrc = (g_object_unref (sksrc), NULL)));

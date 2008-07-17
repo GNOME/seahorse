@@ -26,6 +26,7 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 
+#include "seahorse-key.h"
 #include "seahorse-service.h"
 #include "seahorse-util.h"
 
@@ -39,7 +40,7 @@ enum {
     LAST_SIGNAL
 };
 
-G_DEFINE_TYPE (SeahorseServiceKeyset, seahorse_service_keyset, SEAHORSE_TYPE_KEYSET);
+G_DEFINE_TYPE (SeahorseServiceKeyset, seahorse_service_keyset, SEAHORSE_TYPE_SET);
 static guint signals[LAST_SIGNAL] = { 0 };
 
 /* -----------------------------------------------------------------------------
@@ -91,24 +92,26 @@ gboolean
 seahorse_service_keyset_list_keys (SeahorseServiceKeyset *keyset, gchar ***keys, 
                                    GError **error)
 {
-    GList *k, *l;
-    GArray *a;
-    gchar *id;
-    guint nuids, i;
+	GList *k, *l;
+	GArray *a;
+	gchar *id;
+	guint nuids, i;
     
-    k = seahorse_keyset_get_keys (SEAHORSE_KEYSET (keyset));
-    a = g_array_new (TRUE, TRUE, sizeof (gchar*));
+	k = seahorse_set_get_objects (SEAHORSE_SET (keyset));
+	a = g_array_new (TRUE, TRUE, sizeof (gchar*));
     
-    for (l = k; l; l = g_list_next (l)) {
-        id = seahorse_context_key_to_dbus (SCTX_APP (), SEAHORSE_KEY (l->data), 0);
-        g_array_append_val (a, id);
+	for (l = k; l; l = g_list_next (l)) {
+		id = seahorse_context_object_to_dbus (SCTX_APP (), SEAHORSE_OBJECT (l->data), 0);
+		g_array_append_val (a, id);
         
-        nuids = seahorse_key_get_num_names (SEAHORSE_KEY (l->data));
-        for (i = 1; i < nuids; i++) {
-            id = seahorse_context_key_to_dbus (SCTX_APP (), SEAHORSE_KEY (l->data), i);
-            g_array_append_val (a, id);
-        }
-    }
+		if (SEAHORSE_IS_KEY (l->data)) {
+			nuids = seahorse_key_get_num_names (SEAHORSE_KEY (l->data));
+			for (i = 1; i < nuids; i++) {
+				id = seahorse_context_object_to_dbus (SCTX_APP (), SEAHORSE_OBJECT (l->data), i);
+				g_array_append_val (a, id);
+			}
+		}
+	}
     
     *keys = (gchar**)g_array_free (a, FALSE);
     return TRUE;
@@ -118,17 +121,18 @@ gboolean
 seahorse_service_keyset_get_key_field (SeahorseService *svc, gchar *key, gchar *field,
                                        gboolean *has, GValue *value, GError **error)
 {
-    SeahorseKey *skey;
+    SeahorseObject *sobj;
     guint uid;
 
-    skey = seahorse_context_key_from_dbus (SCTX_APP(), key, &uid);
-    if (!skey) {
+    sobj = seahorse_context_object_from_dbus (SCTX_APP(), key, &uid);
+    if (!sobj) {
         g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID, 
                      _("Invalid or unrecognized key: %s"), key);
         return FALSE;
     }
  
-    if (seahorse_key_lookup_property (skey, uid, field, value)) {
+    if (SEAHORSE_IS_KEY (sobj) && 
+        seahorse_key_lookup_property (SEAHORSE_KEY (sobj), uid, field, value)) {
         *has = TRUE;
         
     } else {
@@ -146,29 +150,31 @@ gboolean
 seahorse_service_keyset_get_key_fields (SeahorseService *svc, gchar *key, gchar **fields,
                                         GHashTable **values, GError **error)
 {
-    SeahorseKey *skey;
-    GValue *value;
-    guint uid;
+	SeahorseObject *sobj;
+	GValue *value;
+	guint uid;
     
-    skey = seahorse_context_key_from_dbus (SCTX_APP(), key, &uid);
-    if (!skey) {
-        g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID, 
-                     _("Invalid or unrecognized key: %s"), key);
-        return FALSE;
-    }
+	sobj = seahorse_context_object_from_dbus (SCTX_APP(), key, &uid);
+	if (!sobj) {
+		g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID, 
+		             _("Invalid or unrecognized key: %s"), key);
+		return FALSE;
+	}
 
-    *values = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, value_free);
+	*values = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, value_free);
     
-    while (*fields) {
-        value = g_new0 (GValue, 1);
-        if (seahorse_key_lookup_property (skey, uid, *fields, value))
-            g_hash_table_insert (*values, g_strdup (*fields), value);
-        else
-            g_free (value);
-        fields++;
-    }
-    
-    return TRUE; 
+	if (SEAHORSE_IS_KEY (sobj)) {
+		while (*fields) {
+			value = g_new0 (GValue, 1);
+			if (seahorse_key_lookup_property (SEAHORSE_KEY (sobj), uid, *fields, value))
+				g_hash_table_insert (*values, g_strdup (*fields), value);
+			else
+				g_free (value);
+			fields++;
+		}
+	}
+	
+	return TRUE; 
 }
 
 gboolean        
@@ -184,7 +190,7 @@ seahorse_service_keyset_discover_keys (SeahorseServiceKeyset *keyset, const gcha
     
     /* Check to make sure the key ids are valid */
     for (k = keyids; *k; k++) {
-        keyid = seahorse_key_source_canonize_keyid (keyset->ktype, *k);
+        keyid = seahorse_source_canonize_id (keyset->ktype, *k);
         if (!keyid) {
             g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID, 
                          _("Invalid key id: %s"), *k);
@@ -194,13 +200,13 @@ seahorse_service_keyset_discover_keys (SeahorseServiceKeyset *keyset, const gcha
     }
     
     /* Pass it on to do the work */
-    lkeys = seahorse_context_discover_keys (SCTX_APP (), keyset->ktype, rawids);
+    lkeys = seahorse_context_discover_objects (SCTX_APP (), keyset->ktype, rawids);
     g_slist_free (rawids);
     
     /* Prepare return value */
     akeys = g_array_new (TRUE, TRUE, sizeof (gchar*));
     for (l = lkeys; l; l = g_list_next (l)) {
-        id = seahorse_context_key_to_dbus (SCTX_APP(), SEAHORSE_KEY (l->data), 0);
+        id = seahorse_context_object_to_dbus (SCTX_APP(), SEAHORSE_OBJECT (l->data), 0);
         akeys = g_array_append_val (akeys, id);
     }
     *keys = (gchar**)g_array_free (akeys, FALSE);
@@ -232,13 +238,15 @@ seahorse_service_keyset_match_keys (SeahorseServiceKeyset *keyset, gchar **patte
     results = g_array_new (TRUE, TRUE, sizeof (gchar*));
     
 
-    lkeys = seahorse_context_find_keys (SCTX_APP (), keyset->ktype, SKEY_ETYPE_NONE, 
-                                        (flags & MATCH_KEYS_LOCAL_ONLY) ? SKEY_LOC_LOCAL : SKEY_LOC_INVALID);
+    lkeys = seahorse_context_find_objects (SCTX_APP (), keyset->ktype, SEAHORSE_USAGE_NONE, 
+                                           (flags & MATCH_KEYS_LOCAL_ONLY) ? SEAHORSE_LOCATION_LOCAL : SEAHORSE_LOCATION_INVALID);
     for (l = lkeys; l; l = g_list_next(l)) {
         
         if (remaining->len <= 0)
             break;
 
+        if (!SEAHORSE_IS_KEY (l->data))
+            continue;
         skey = SEAHORSE_KEY (l->data);
         
         /* Note that match_remove_patterns frees value */
@@ -246,14 +254,14 @@ seahorse_service_keyset_match_keys (SeahorseServiceKeyset *keyset, gchar **patte
         /* Main name */        
         value = seahorse_key_get_display_name (skey);
         if (match_remove_patterns (remaining, value)) {
-            id = seahorse_context_key_to_dbus (SCTX_APP (), skey, 0);
+            id = seahorse_context_object_to_dbus (SCTX_APP (), SEAHORSE_OBJECT (skey), 0);
             g_array_append_val (results, id);
         }
         
         /* Key ID */
         value = g_strdup (seahorse_key_get_rawid (seahorse_key_get_keyid (skey)));
         if (match_remove_patterns (remaining, value)) {
-            id = seahorse_context_key_to_dbus (SCTX_APP (), skey, 0);
+            id = seahorse_context_object_to_dbus (SCTX_APP (), SEAHORSE_OBJECT (skey), 0);
             g_array_append_val (results, id);
         }
         
@@ -264,7 +272,7 @@ seahorse_service_keyset_match_keys (SeahorseServiceKeyset *keyset, gchar **patte
             /* UID name */
             value = seahorse_key_get_name (skey, i);
             if (match_remove_patterns (remaining, value)) {
-                id = seahorse_context_key_to_dbus (SCTX_APP (), skey, i);
+                id = seahorse_context_object_to_dbus (SCTX_APP (), SEAHORSE_OBJECT (skey), i);
                 g_array_append_val (results, id);
                 break;
             }
@@ -272,7 +280,7 @@ seahorse_service_keyset_match_keys (SeahorseServiceKeyset *keyset, gchar **patte
             /* UID email */
             value = seahorse_key_get_name_cn (skey, i);
             if (match_remove_patterns (remaining, value)) {
-                id = seahorse_context_key_to_dbus (SCTX_APP (), skey, i);
+                id = seahorse_context_object_to_dbus (SCTX_APP (), SEAHORSE_OBJECT (skey), i);
                 g_array_append_val (results, id);
                 break;
             }
@@ -303,26 +311,27 @@ seahorse_service_keyset_match_keys (SeahorseServiceKeyset *keyset, gchar **patte
  */
 
 static void
-seahorse_service_keyset_added (SeahorseKeyset *skset, SeahorseKey *skey, 
+seahorse_service_keyset_added (SeahorseSet *skset, SeahorseObject *sobj, 
                                gpointer userdata)
 {
-    gchar *id;
-    guint uids, i;
+	gchar *id;
+	guint uids = 0, i;
     
-    uids = seahorse_key_get_num_names (skey);
-    uids = (uids == 0) ? 1 : uids;
+	if (SEAHORSE_IS_KEY (sobj))
+		uids = seahorse_key_get_num_names (SEAHORSE_KEY (sobj));
+	uids = (uids == 0) ? 1 : uids;
 
-    for (i = 0; i < uids; i++) {    
-        id = seahorse_context_key_to_dbus (SCTX_APP (), skey, i);
-        g_signal_emit (SEAHORSE_SERVICE_KEYSET (skset), signals[KEY_ADDED], 0, id);
-        g_free (id);        
-    }
+	for (i = 0; i < uids; i++) {    
+		id = seahorse_context_object_to_dbus (SCTX_APP (), sobj, i);
+		g_signal_emit (SEAHORSE_SERVICE_KEYSET (skset), signals[KEY_ADDED], 0, id);
+		g_free (id);        
+	}
     
-    seahorse_keyset_set_closure (skset, skey, GUINT_TO_POINTER (uids));
+	seahorse_set_set_closure (skset, sobj, GUINT_TO_POINTER (uids));
 }
 
 static void
-seahorse_service_keyset_removed (SeahorseKeyset *skset, SeahorseKey *skey, 
+seahorse_service_keyset_removed (SeahorseSet *skset, SeahorseObject *sobj, 
                                  gpointer closure, gpointer userdata)
 {
     gchar *id;
@@ -332,44 +341,45 @@ seahorse_service_keyset_removed (SeahorseKeyset *skset, SeahorseKey *skey,
     uids = (uids == 0) ? 1 : uids;
     
     for (i = 0; i < uids; i++) {
-        id = seahorse_context_key_to_dbus (SCTX_APP (), skey, i);
+        id = seahorse_context_object_to_dbus (SCTX_APP (), sobj, i);
         g_signal_emit (SEAHORSE_SERVICE_KEYSET (skset), signals[KEY_REMOVED], 0, id);
         g_free (id);
     }
 }
 
 static void
-seahorse_service_keyset_changed (SeahorseKeyset *skset, SeahorseKey *skey, 
-                                 SeahorseKeyChange change, gpointer closure, 
+seahorse_service_keyset_changed (SeahorseSet *skset, SeahorseObject *sobj, 
+                                 SeahorseObjectChange change, gpointer closure, 
                                  gpointer userdata)
 {
     gchar *id;
-    guint uids, euids, i;
+    guint uids = 0, euids, i;
     
     /* Adding or removing uids means we do a add/remove */
-    uids = seahorse_key_get_num_names (skey);
+    if (SEAHORSE_IS_KEY (sobj))
+        uids = seahorse_key_get_num_names (SEAHORSE_KEY (sobj));
     uids = (uids == 0) ? 1 : uids;
     
     euids = GPOINTER_TO_UINT (closure);
     if (euids != uids)
-        seahorse_keyset_set_closure (skset, skey, GUINT_TO_POINTER (uids));
+        seahorse_set_set_closure (skset, sobj, GUINT_TO_POINTER (uids));
 
     if (euids < uids) {
         for (i = euids; i < uids; i++) {
-            id = seahorse_context_key_to_dbus (SCTX_APP (), skey, i);
+            id = seahorse_context_object_to_dbus (SCTX_APP (), sobj, i);
             g_signal_emit (SEAHORSE_SERVICE_KEYSET (skset), signals[KEY_ADDED], 0, id);
             g_free (id);
         }
     } else if (euids > uids) {
         for (i = uids; i < euids; i++) {
-            id = seahorse_context_key_to_dbus (SCTX_APP (), skey, i);
+            id = seahorse_context_object_to_dbus (SCTX_APP (), sobj, i);
             g_signal_emit (SEAHORSE_SERVICE_KEYSET (skset), signals[KEY_REMOVED], 0, id);
             g_free (id);
         }
     }
 
     for (i = 0; i < uids; i++) {
-        id = seahorse_context_key_to_dbus (SCTX_APP (), skey, i);
+        id = seahorse_context_object_to_dbus (SCTX_APP (), sobj, i);
         g_signal_emit (SEAHORSE_SERVICE_KEYSET (skset), signals[KEY_CHANGED], 0, id);
         g_free (id);
     }
@@ -412,18 +422,18 @@ seahorse_service_keyset_class_init (SeahorseServiceKeysetClass *klass)
  * PUBLIC METHODS
  */
  
-SeahorseKeyset* 
-seahorse_service_keyset_new (GQuark ktype, SeahorseKeyLoc location)
+SeahorseSet* 
+seahorse_service_keyset_new (GQuark ktype, SeahorseLocation location)
 {
     SeahorseServiceKeyset *skset;
-    SeahorseKeyPredicate *pred = g_new0(SeahorseKeyPredicate, 1);
+    SeahorseObjectPredicate *pred = g_new0(SeahorseObjectPredicate, 1);
     
-    pred->ktype = ktype;
+    pred->tag = ktype;
     pred->location = location;
     
     skset = g_object_new (SEAHORSE_TYPE_SERVICE_KEYSET, "predicate", pred, NULL);
     g_object_set_data_full (G_OBJECT (skset), "quick-predicate", pred, g_free);
     
     skset->ktype = ktype;
-    return SEAHORSE_KEYSET (skset);
+    return SEAHORSE_SET (skset);
 }

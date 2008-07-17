@@ -22,7 +22,7 @@
 /** 
  * SeahorsePGPSource: A key source for PGP keys retrieved from GPGME. 
  * 
- * - Derived from SeahorseKeySource
+ * - Derived from SeahorseSource
  * - Since GPGME represents secret keys as seperate from public keys, this
  *   class takes care to combine them into one logical SeahorsePGPKey object. 
  * - Adds the keys it loads to the SeahorseContext.
@@ -33,14 +33,14 @@
  * Properties:
  *  ktype: (GQuark) The ktype (ie: SEAHORSE_PGP) of keys originating from this 
            key source.
- *  location: (SeahorseKeyLoc) The location of keys that come from this 
- *         source. (ie: SKEY_LOC_LOCAL, SKEY_LOC_REMOTE)
+ *  location: (SeahorseLocation) The location of keys that come from this 
+ *         source. (ie: SEAHORSE_LOCATION_LOCAL, SEAHORSE_LOCATION_REMOTE)
  */
  
 #ifndef __SEAHORSE_PGP_SOURCE_H__
 #define __SEAHORSE_PGP_SOURCE_H__
 
-#include "seahorse-key-source.h"
+#include "seahorse-source.h"
 
 #include <gpgme.h>
 
@@ -56,7 +56,7 @@ typedef struct _SeahorsePGPSourceClass SeahorsePGPSourceClass;
 typedef struct _SeahorsePGPSourcePrivate SeahorsePGPSourcePrivate;
 
 struct _SeahorsePGPSource {
-    SeahorseKeySource parent;
+    SeahorseSource parent;
     
     /*< public >*/
     gpgme_ctx_t gctx;
@@ -66,7 +66,7 @@ struct _SeahorsePGPSource {
 };
 
 struct _SeahorsePGPSourceClass {
-    SeahorseKeySourceClass parent_class;
+    SeahorseSourceClass parent_class;
 };
 
 GType                seahorse_pgp_source_get_type       (void);

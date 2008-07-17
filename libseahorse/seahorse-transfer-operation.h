@@ -28,15 +28,15 @@
  * - Import them into the 'to' key source.
  *
  * Properties:
- *  from-key-source: (SeahorseKeySource) From key source 
- *  to-key-source: (SeahorseKeySource) To key source
+ *  from-key-source: (SeahorseSource) From key source 
+ *  to-key-source: (SeahorseSource) To key source
  */
  
 #ifndef __SEAHORSE_TRANSFER_OPERATION_H__
 #define __SEAHORSE_TRANSFER_OPERATION_H__
 
 #include "seahorse-operation.h"
-#include "seahorse-key-source.h"
+#include "seahorse-source.h"
 
 #define SEAHORSE_TYPE_TRANSFER_OPERATION            (seahorse_transfer_operation_get_type ())
 #define SEAHORSE_TRANSFER_OPERATION(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_TRANSFER_OPERATION, SeahorseTransferOperation))
@@ -47,13 +47,13 @@
 
 DECLARE_OPERATION (Transfer, transfer)
     /*< public >*/
-    SeahorseKeySource *from;
-    SeahorseKeySource *to;
+    SeahorseSource *from;
+    SeahorseSource *to;
 END_DECLARE_OPERATION
 
 SeahorseOperation*      seahorse_transfer_operation_new     (const gchar *message,
-                                                             SeahorseKeySource *from,
-                                                             SeahorseKeySource *to,
+                                                             SeahorseSource *from,
+                                                             SeahorseSource *to,
                                                              GSList *keyids);
 
 #endif /* __SEAHORSE_TRANSFER_OPERATION_H__ */

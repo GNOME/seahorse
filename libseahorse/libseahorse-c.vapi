@@ -22,41 +22,24 @@
 [CCode (cprefix = "Seahorse", lower_case_cprefix = "seahorse_")]
 namespace Seahorse {
 
-        [CCode (cheader_filename = "seahorse-key-source.h")]
-        public class KeySource : GLib.Object {
+        [CCode (cheader_filename = "seahorse-source.h")]
+        public class Source : GLib.Object {
 		public GLib.Quark ktype { get; }
-		public static Operation export_keys (GLib.List<Key> keys, GLib.OutputStream output);
-		public static void delete_keys (GLib.List<Key> keys) throws GLib.Error;
+		public static Operation export_objects (GLib.List<Object> objects, GLib.OutputStream output);
+		public static void delete_objects (GLib.List<Object> objects) throws GLib.Error;
 		
-		public virtual Operation load (GLib.Quark keyid);
+		public virtual Operation load (GLib.Quark id);
 		public virtual Operation search (string match);
 		public virtual Operation import (GLib.InputStream input);
-		public virtual Operation export (GLib.List<weak Key> keys, bool complete, GLib.OutputStream output);
-		public virtual Operation export_raw (GLib.List<GLib.Quark> keyids, GLib.OutputStream output);
-		public virtual void remove (Key key, uint name) throws GLib.Error; 
+		public virtual Operation export (GLib.List<weak Object> objects, bool complete, GLib.OutputStream output);
+		public virtual Operation export_raw (GLib.List<GLib.Quark> ids, GLib.OutputStream output);
+		public virtual void remove (Object object, uint name) throws GLib.Error; 
         }
         
         [CCode (cheader_filename = "seahorse-key.h")]
-        public class Key : Gtk.Object {
-        	[CCode (cprefix = "SKEY_LOC_")]
-        	public static enum Loc {
-        		INVALID = 0,
-			MISSING = 10,
-			SEARCHING = 20,
-			REMOTE = 50,
-			LOCAL = 100
-        	}
-        	
-        	[CCode (cprefix = "SKEY_")]
-        	public static enum EType {
-        		ETYPE_NONE = 0,
-        		SYMMETRIC = 1,
-        		PUBLIC = 2,
-        		PRIVATE = 3,
-        		CREDENTIALS
-        	}
+        public class Key : Seahorse.Object {
 
-        	[CCode (cprefix = "SKEY_FLAG_")]
+	       	[CCode (cprefix = "SKEY_FLAG_")]
         	public static enum Flag {
 			IS_VALID =    0x0001,
 			CAN_ENCRYPT = 0x0002,
@@ -69,28 +52,14 @@ namespace Seahorse {
 
 		public GLib.Quark ktype { get; }
 		public GLib.Quark keyid { get; }
-		public EType etype { get; }
+		public Usage usage { get; }
 		public string display_name { get; }
         }
         
-	public delegate bool KeyPredicateFunc (Key key);
-        
-	[CCode (cheader_filename = "seahorse-key.h")]
-	public struct KeyPredicate {
-		public GLib.Quark ktype;
-		public GLib.Quark keyid;
-		public Key.Loc location;
-		public Key.EType etype;
-		public uint flags;
-		public uint nflags;
-		public weak KeySource sksrc;
-		public KeyPredicateFunc custom;
-	}
-
-	[CCode (cheader_filename = "seahorse-keyset.h")]
-	public class Keyset : GLib.Object {
-		public Keyset.full (ref KeyPredicate pred); 
-		public bool has_key (Key key);
+	[CCode (cheader_filename = "seahorse-set.h")]
+	public class Set : GLib.Object {
+		public Set.full (ref Object.Predicate pred); 
+		public bool has_object (Object obj);
 	}
 	
 	public delegate void DoneFunc (Operation op);
@@ -115,11 +84,11 @@ namespace Seahorse {
 	public class Context : Gtk.Object {
 		public static weak Context for_app ();
 		public uint count { get; }
-		public weak KeySource find_key_source (GLib.Quark ktype, Key.Loc location);
-		public void add_key_source (KeySource sksrc);
-		public weak Key? find_key (GLib.Quark ktype, Key.Loc loc);
-		public GLib.List<weak Key> find_keys (GLib.Quark ktype, Key.EType etype, Key.Loc loc);
-		public Operation transfer_keys (GLib.List<Key> keys, KeySource? to);
+		public weak Source find_source (GLib.Quark ktype, Location location);
+		public void add_source (Source sksrc);
+		public weak Object? find_object (GLib.Quark ktype, Location loc);
+		public GLib.List<weak Object> find_objects (GLib.Quark ktype, Usage usage, Location loc);
+		public Operation transfer_objects (GLib.List<Object> objects, Source? to);
 		public void destroy ();		
 	}
 
@@ -201,7 +170,7 @@ namespace Seahorse {
 	
 	[CCode (cheader_filename = "seahorse-key-manager-store.h")]
 	public class KeyManagerStore : GLib.Object {
-		public KeyManagerStore(Keyset keyset, Gtk.TreeView view);
+		public KeyManagerStore(Set set, Gtk.TreeView view);
 		public static GLib.List<weak Key> get_selected_keys (Gtk.TreeView view);
 		public static void set_selected_keys (Gtk.TreeView view, GLib.List<Key> keys);
 		public static weak Key? get_selected_key (Gtk.TreeView view, out uint uid);
