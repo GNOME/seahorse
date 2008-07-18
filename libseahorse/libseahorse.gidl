@@ -14,6 +14,7 @@
 		<member name="SEAHORSE_USAGE_PUBLIC_KEY"/>
 		<member name="SEAHORSE_USAGE_PRIVATE_KEY"/>
 		<member name="SEAHORSE_USAGE_CREDENTIALS"/>
+		<member name="SEAHORSE_USAGE_IDENTITY"/>
 		<member name="SEAHORSE_USAGE_OTHER"/>
 	</enum>
 	<object name="Commands" parent="GLib.Object" type-name="SeahorseCommands" get-type="seahorse_commands_get_type">
@@ -72,9 +73,9 @@
 		<property name="flags" type="uint" readable="1"/>
 		<property name="source" type="Seahorse.Source*" readable="1" writable="1"/>
 		<property name="preferred" type="Seahorse.Object*" readable="1" writable="1"/>
-		<property name="description" type="string*" readable="1"/>
+		<property name="display_name" type="string*" readable="1"/>
 		<property name="markup" type="string*" readable="1"/>
-		<property name="stock_icon" type="string*" readable="1"/>
+		<property name="stock_id" type="string*" readable="1"/>
 		<property name="parent" type="Seahorse.Object*" readable="1" writable="1"/>
 		<signal name="changed">
 			<parameters>
@@ -174,13 +175,6 @@
 				<parameter name="objects" type="GLib.List*"/>
 			</parameters>
 			<return-type type="void"/>
-		</method>
-		<method name="get_selected_object_and_uid" symbol="seahorse_view_get_selected_object_and_uid">
-			<parameters>
-				<parameter name="self" type="Seahorse.View*"/>
-				<parameter name="uid" type="uint" direction="out" transfer="full"/>
-			</parameters>
-			<return-type type="Seahorse.Object*"/>
 		</method>
 		<property name="selected" type="Seahorse.Object*" readable="1" writable="1"/>
 		<property name="current_set" type="Seahorse.Set*" readable="1"/>

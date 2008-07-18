@@ -39,7 +39,7 @@
 struct _SeahorseKeyserverResultsPrivate {
 	char* _search_string;
 	GtkTreeView* _view;
-	GtkActionGroup* _key_actions;
+	GtkActionGroup* _object_actions;
 	SeahorseKeyManagerStore* _store;
 	SeahorseSet* _objects;
 	SeahorseObjectPredicate _pred;
@@ -54,7 +54,6 @@ enum  {
 static SeahorseKeyserverResults* seahorse_keyserver_results_new (const char* search_text);
 static GList* seahorse_keyserver_results_real_get_selected_objects (SeahorseView* base);
 static void seahorse_keyserver_results_real_set_selected_objects (SeahorseView* base, GList* keys);
-static SeahorseObject* seahorse_keyserver_results_real_get_selected_object_and_uid (SeahorseView* base, guint* uid);
 static gboolean seahorse_keyserver_results_on_filter_objects (SeahorseKeyserverResults* self, SeahorseObject* obj);
 static gboolean _seahorse_keyserver_results_fire_selection_changed_gsource_func (gpointer self);
 static void seahorse_keyserver_results_on_view_selection_changed (SeahorseKeyserverResults* self, GtkTreeSelection* selection);
@@ -140,7 +139,7 @@ void seahorse_keyserver_results_show (SeahorseOperation* op, GtkWindow* parent, 
 static GList* seahorse_keyserver_results_real_get_selected_objects (SeahorseView* base) {
 	SeahorseKeyserverResults * self;
 	self = SEAHORSE_KEYSERVER_RESULTS (base);
-	return seahorse_key_manager_store_get_selected_keys (self->priv->_view);
+	return seahorse_key_manager_store_get_selected_objects (self->priv->_view);
 }
 
 
@@ -148,14 +147,7 @@ static void seahorse_keyserver_results_real_set_selected_objects (SeahorseView* 
 	SeahorseKeyserverResults * self;
 	self = SEAHORSE_KEYSERVER_RESULTS (base);
 	g_return_if_fail (keys != NULL);
-	seahorse_key_manager_store_set_selected_keys (self->priv->_view, keys);
-}
-
-
-static SeahorseObject* seahorse_keyserver_results_real_get_selected_object_and_uid (SeahorseView* base, guint* uid) {
-	SeahorseKeyserverResults * self;
-	self = SEAHORSE_KEYSERVER_RESULTS (base);
-	return SEAHORSE_OBJECT (seahorse_key_manager_store_get_selected_key (self->priv->_view, &(*uid)));
+	seahorse_key_manager_store_set_selected_objects (self->priv->_view, keys);
 }
 
 
@@ -190,18 +182,18 @@ static void seahorse_keyserver_results_on_view_selection_changed (SeahorseKeyser
 
 
 static void seahorse_keyserver_results_on_row_activated (SeahorseKeyserverResults* self, GtkTreeView* view, GtkTreePath* path, GtkTreeViewColumn* column) {
-	SeahorseKey* _tmp0;
-	SeahorseKey* key;
+	SeahorseObject* _tmp0;
+	SeahorseObject* obj;
 	g_return_if_fail (SEAHORSE_IS_KEYSERVER_RESULTS (self));
 	g_return_if_fail (GTK_IS_TREE_VIEW (view));
 	g_return_if_fail (path != NULL);
 	g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (column));
 	_tmp0 = NULL;
-	key = (_tmp0 = seahorse_key_manager_store_get_key_from_path (view, path, NULL), (_tmp0 == NULL ? NULL : g_object_ref (_tmp0)));
-	if (key != NULL) {
-		seahorse_viewer_show_properties (SEAHORSE_VIEWER (self), SEAHORSE_OBJECT (key));
+	obj = (_tmp0 = seahorse_key_manager_store_get_object_from_path (view, path), (_tmp0 == NULL ? NULL : g_object_ref (_tmp0)));
+	if (obj != NULL) {
+		seahorse_viewer_show_properties (SEAHORSE_VIEWER (self), obj);
 	}
-	(key == NULL ? NULL : (key = (g_object_unref (key), NULL)));
+	(obj == NULL ? NULL : (obj = (g_object_unref (obj), NULL)));
 }
 
 
@@ -315,7 +307,7 @@ static gboolean seahorse_keyserver_results_fire_selection_changed (SeahorseKeyse
 	selection = (_tmp0 = gtk_tree_view_get_selection (self->priv->_view), (_tmp0 == NULL ? NULL : g_object_ref (_tmp0)));
 	rows = gtk_tree_selection_count_selected_rows (selection);
 	seahorse_viewer_set_numbered_status (SEAHORSE_VIEWER (self), ngettext ("Selected %d key", "Selected %d keys", rows), rows);
-	gtk_action_group_set_sensitive (self->priv->_key_actions, rows > 0);
+	gtk_action_group_set_sensitive (self->priv->_object_actions, rows > 0);
 	g_signal_emit_by_name (G_OBJECT (SEAHORSE_VIEW (self)), "selection-changed");
 	return (_tmp1 = FALSE, (selection == NULL ? NULL : (selection = (g_object_unref (selection), NULL))), _tmp1);
 }
@@ -338,12 +330,13 @@ static void seahorse_keyserver_results_set_search (SeahorseKeyserverResults* sel
 	_tmp2 = NULL;
 	self->priv->_search_string = (_tmp2 = g_utf8_casefold (g_strstrip (str), -1), (self->priv->_search_string = (g_free (self->priv->_search_string), NULL)), _tmp2);
 	str = (g_free (str), NULL);
+	g_object_notify (((GObject *) (self)), "search");
 }
 
 
 static SeahorseObject* seahorse_keyserver_results_real_get_selected (SeahorseKeyserverResults* self) {
 	g_return_val_if_fail (SEAHORSE_IS_KEYSERVER_RESULTS (self), NULL);
-	return SEAHORSE_OBJECT (seahorse_key_manager_store_get_selected_key (self->priv->_view, NULL));
+	return seahorse_key_manager_store_get_selected_object (self->priv->_view);
 }
 
 
@@ -356,6 +349,7 @@ static void seahorse_keyserver_results_real_set_selected (SeahorseKeyserverResul
 	}
 	seahorse_viewer_set_selected_objects (SEAHORSE_VIEWER (self), keys);
 	(keys == NULL ? NULL : (keys = (g_list_free (keys), NULL)));
+	g_object_notify (((GObject *) (self)), "selected");
 }
 
 
@@ -460,12 +454,12 @@ static GObject * seahorse_keyserver_results_constructor (GType type, guint n_con
 		g_signal_connect_object (gtk_action_group_get_action (actions, "remote-find"), "activate", ((GCallback) (_seahorse_keyserver_results_on_remote_find_gtk_action_activate)), self, 0);
 		seahorse_viewer_include_actions (SEAHORSE_VIEWER (self), actions);
 		_tmp4 = NULL;
-		self->priv->_key_actions = (_tmp4 = gtk_action_group_new ("key"), (self->priv->_key_actions == NULL ? NULL : (self->priv->_key_actions = (g_object_unref (self->priv->_key_actions), NULL))), _tmp4);
-		gtk_action_group_set_translation_domain (self->priv->_key_actions, GETTEXT_PACKAGE);
-		gtk_action_group_add_actions (self->priv->_key_actions, SEAHORSE_KEYSERVER_RESULTS_KEY_ENTRIES, G_N_ELEMENTS (SEAHORSE_KEYSERVER_RESULTS_KEY_ENTRIES), self);
-		g_signal_connect_object (gtk_action_group_get_action (self->priv->_key_actions, "key-import-keyring"), "activate", ((GCallback) (_seahorse_keyserver_results_on_key_import_keyring_gtk_action_activate)), self, 0);
-		g_object_set (gtk_action_group_get_action (self->priv->_key_actions, "key-import-keyring"), "is-important", TRUE, NULL);
-		seahorse_viewer_include_actions (SEAHORSE_VIEWER (self), self->priv->_key_actions);
+		self->priv->_object_actions = (_tmp4 = gtk_action_group_new ("key"), (self->priv->_object_actions == NULL ? NULL : (self->priv->_object_actions = (g_object_unref (self->priv->_object_actions), NULL))), _tmp4);
+		gtk_action_group_set_translation_domain (self->priv->_object_actions, GETTEXT_PACKAGE);
+		gtk_action_group_add_actions (self->priv->_object_actions, SEAHORSE_KEYSERVER_RESULTS_KEY_ENTRIES, G_N_ELEMENTS (SEAHORSE_KEYSERVER_RESULTS_KEY_ENTRIES), self);
+		g_signal_connect_object (gtk_action_group_get_action (self->priv->_object_actions, "key-import-keyring"), "activate", ((GCallback) (_seahorse_keyserver_results_on_key_import_keyring_gtk_action_activate)), self, 0);
+		g_object_set (gtk_action_group_get_action (self->priv->_object_actions, "key-import-keyring"), "is-important", TRUE, NULL);
+		seahorse_viewer_include_actions (SEAHORSE_VIEWER (self), self->priv->_object_actions);
 		/* init key list & selection settings */
 		_tmp7 = NULL;
 		_tmp6 = NULL;
@@ -542,7 +536,6 @@ static void seahorse_keyserver_results_class_init (SeahorseKeyserverResultsClass
 	G_OBJECT_CLASS (klass)->dispose = seahorse_keyserver_results_dispose;
 	SEAHORSE_VIEWER_CLASS (klass)->get_selected_objects = seahorse_keyserver_results_real_get_selected_objects;
 	SEAHORSE_VIEWER_CLASS (klass)->set_selected_objects = seahorse_keyserver_results_real_set_selected_objects;
-	SEAHORSE_VIEWER_CLASS (klass)->get_selected_object_and_uid = seahorse_keyserver_results_real_get_selected_object_and_uid;
 	g_object_class_install_property (G_OBJECT_CLASS (klass), SEAHORSE_KEYSERVER_RESULTS_SEARCH, g_param_spec_string ("search", "search", "search", NULL, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
 	g_object_class_override_property (G_OBJECT_CLASS (klass), SEAHORSE_KEYSERVER_RESULTS_SELECTED, "selected");
 }
@@ -552,7 +545,6 @@ static void seahorse_keyserver_results_seahorse_view_interface_init (SeahorseVie
 	seahorse_keyserver_results_seahorse_view_parent_iface = g_type_interface_peek_parent (iface);
 	iface->get_selected_objects = seahorse_keyserver_results_real_get_selected_objects;
 	iface->set_selected_objects = seahorse_keyserver_results_real_set_selected_objects;
-	iface->get_selected_object_and_uid = seahorse_keyserver_results_real_get_selected_object_and_uid;
 }
 
 
@@ -566,7 +558,7 @@ static void seahorse_keyserver_results_dispose (GObject * obj) {
 	self = SEAHORSE_KEYSERVER_RESULTS (obj);
 	self->priv->_search_string = (g_free (self->priv->_search_string), NULL);
 	(self->priv->_view == NULL ? NULL : (self->priv->_view = (g_object_unref (self->priv->_view), NULL)));
-	(self->priv->_key_actions == NULL ? NULL : (self->priv->_key_actions = (g_object_unref (self->priv->_key_actions), NULL)));
+	(self->priv->_object_actions == NULL ? NULL : (self->priv->_object_actions = (g_object_unref (self->priv->_object_actions), NULL)));
 	(self->priv->_store == NULL ? NULL : (self->priv->_store = (g_object_unref (self->priv->_store), NULL)));
 	(self->priv->_objects == NULL ? NULL : (self->priv->_objects = (g_object_unref (self->priv->_objects), NULL)));
 	G_OBJECT_CLASS (seahorse_keyserver_results_parent_class)->dispose (obj);

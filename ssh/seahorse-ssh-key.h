@@ -33,7 +33,7 @@
  *   trust: (SeahorseValidity) Trust for the key.
  *   expires: (gulong) Date this key expires or 0.
  *   length: (guint) The length of the key in bits.
- *   stock-id: (gpointer/string) The stock icon id.
+ *   stock-id: (string) The stock icon id.
  */
  
 #ifndef __SEAHORSE_SSH_KEY_H__

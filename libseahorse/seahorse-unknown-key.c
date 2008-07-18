@@ -134,8 +134,7 @@ seahorse_unknown_key_get_property (GObject *object, guint prop_id,
         g_value_set_ulong (value, 0);
         break;
     case PROP_STOCK_ID:
-        /* We use a pointer so we don't copy the string every time */
-        g_value_set_pointer (value, "");
+        g_value_set_string (value, "");
         break;
     }
 }
@@ -211,8 +210,8 @@ seahorse_unknown_key_class_init (SeahorseUnknownKeyClass *klass)
                            0, G_MAXULONG, 0, G_PARAM_READABLE));
                            
     g_object_class_install_property (gobject_class, PROP_STOCK_ID,
-        g_param_spec_pointer ("stock-id", "The stock icon", "The stock icon id",
-                              G_PARAM_READABLE));
+        g_param_spec_string ("stock-id", "The stock icon", "The stock icon id",
+                             "", G_PARAM_READABLE));
 
 }
 

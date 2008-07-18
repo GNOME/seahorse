@@ -21,9 +21,16 @@
  
 [CCode (cprefix = "SeahorsePGP", lower_case_cprefix = "seahorse_pgp_")]
 namespace Seahorse.Pgp {
+	
         [CCode (cheader_filename = "seahorse-pgp-dialogs.h")]
         public class Sign : GLib.Object {
 		public static void prompt (Key key, uint uid, Gtk.Window parent);
+        }
+
+        [CCode (cheader_filename = "seahorse-pgp-dialogs.h")]
+        public class Delete : GLib.Object {
+		public static void show (GLib.List<Key> keys);
+		public static void userid_show (Key key, uint index);
         }
 
         [CCode (cheader_filename = "seahorse-pgp-dialogs.h")]
@@ -45,5 +52,10 @@ namespace Seahorse.Pgp {
         public class Key : Seahorse.Key {
         
         }
+
+	[CCode (cheader_filename = "seahorse-pgp-uid.h")]
+	public class Uid : Seahorse.Object {
+		public uint index { get; }
+	}
 }
 

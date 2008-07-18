@@ -305,7 +305,7 @@ namespace Seahorse {
 				if (object.usage == Usage.PRIVATE_KEY) {
 					string prompt;
 					if (num == 1)
-						prompt = _("%s is a private key. Are you sure you want to proceed?").printf(objects.data.description);
+						prompt = _("%s is a private key. Are you sure you want to proceed?").printf(objects.data.display_name);
 					else
 						prompt = _("One or more of the deleted keys are private keys. Are you sure you want to proceed?");
 					if (!Util.prompt_delete (prompt))

@@ -43,13 +43,11 @@ struct _SeahorseViewIface {
 	GTypeInterface parent_iface;
 	GList* (*get_selected_objects) (SeahorseView* self);
 	void (*set_selected_objects) (SeahorseView* self, GList* objects);
-	SeahorseObject* (*get_selected_object_and_uid) (SeahorseView* self, guint* uid);
 };
 
 
 GList* seahorse_view_get_selected_objects (SeahorseView* self);
 void seahorse_view_set_selected_objects (SeahorseView* self, GList* objects);
-SeahorseObject* seahorse_view_get_selected_object_and_uid (SeahorseView* self, guint* uid);
 SeahorseObject* seahorse_view_get_selected (SeahorseView* self);
 void seahorse_view_set_selected (SeahorseView* self, SeahorseObject* value);
 SeahorseSet* seahorse_view_get_current_set (SeahorseView* self);

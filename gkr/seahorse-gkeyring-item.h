@@ -33,7 +33,7 @@
  *   trust: (SeahorseValidity) Trust for the key.
  *   expires: (gulong) Date this key expires or 0.
  *   length: (gint) The length of the key in bits.
- *   stock-id: (gpointer/string) The stock icon id.
+ *   stock-id: (string) The stock icon id.
  */
  
 #ifndef __SEAHORSE_GKEYRING_ITEM_H__

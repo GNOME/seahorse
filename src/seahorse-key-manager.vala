@@ -278,7 +278,7 @@ namespace Seahorse {
 			TabInfo* tab = get_tab_info ();
 			if (tab == null)
 				return new List<weak Object>();
-			return KeyManagerStore.get_selected_keys (tab->view);
+			return KeyManagerStore.get_selected_objects (tab->view);
 		}
 		
 		public override void set_selected_objects (List<Object> objects) {
@@ -308,7 +308,7 @@ namespace Seahorse {
 				}
 				
 				/* Select the objects on that tab */
-				KeyManagerStore.set_selected_keys (tab->view, list);
+				KeyManagerStore.set_selected_objects (tab->view, list);
 			}
 			
 			/* Change to the tab with the most objects */
@@ -321,20 +321,13 @@ namespace Seahorse {
 				TabInfo* tab = get_tab_info ();
 				if (tab == null)
 					return null;
-				return KeyManagerStore.get_selected_key (tab->view, null);
+				return KeyManagerStore.get_selected_object (tab->view);
 			}
 			set {
 				List<weak Object> objects = new List<weak Object>();
 				objects.prepend (value);
 				set_selected_objects (objects);
 			}
-		}
-		
-		public override weak Object? get_selected_object_and_uid (out uint uid) {
-			TabInfo* tab = get_tab_info ();
-			if (tab == null)
-				return null;
-			return KeyManagerStore.get_selected_key (tab->view, out uid);
 		}
 		
 		private TabInfo* get_tab_for_object (Object obj) {
@@ -435,9 +428,9 @@ namespace Seahorse {
 		
 		private void on_row_activated (Gtk.TreeView view, Gtk.TreePath path, 
 		                               Gtk.TreeViewColumn column) {
-			Key key = KeyManagerStore.get_key_from_path (view, path, null);
-			if (key != null)
-				show_properties (key);
+			Object obj = KeyManagerStore.get_object_from_path (view, path);
+			if (obj != null)
+				show_properties (obj);
 		}
 
 		private bool on_key_list_button_pressed (Gtk.Widget widget, Gdk.EventButton event) {

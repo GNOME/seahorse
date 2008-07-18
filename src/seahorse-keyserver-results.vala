@@ -28,7 +28,7 @@ namespace Seahorse {
 	
 		private string _search_string;
 		private Gtk.TreeView _view;
-		private Gtk.ActionGroup _key_actions;
+		private Gtk.ActionGroup _object_actions;
 		private KeyManagerStore _store;
 		private Set _objects; 
 		private Object.Predicate _pred;
@@ -86,12 +86,12 @@ namespace Seahorse {
 			actions.get_action ("remote-find").activate += on_remote_find;
 			include_actions (actions);
 			
-			_key_actions = new Gtk.ActionGroup("key");
-			_key_actions.set_translation_domain (Config.GETTEXT_PACKAGE);
-			_key_actions.add_actions (KEY_ENTRIES, this);
-			_key_actions.get_action ("key-import-keyring").activate += on_key_import_keyring;
-			_key_actions.get_action ("key-import-keyring").is_important = true;
-			include_actions (_key_actions);
+			_object_actions = new Gtk.ActionGroup("key");
+			_object_actions.set_translation_domain (Config.GETTEXT_PACKAGE);
+			_object_actions.add_actions (KEY_ENTRIES, this);
+			_object_actions.get_action ("key-import-keyring").activate += on_key_import_keyring;
+			_object_actions.get_action ("key-import-keyring").is_important = true;
+			include_actions (_object_actions);
 
 
 			/* init key list & selection settings */
@@ -143,15 +143,15 @@ namespace Seahorse {
 		}
 		
 		public override List<weak Object> get_selected_objects () {
-			return KeyManagerStore.get_selected_keys (_view);
+			return KeyManagerStore.get_selected_objects (_view);
 		}
 		
 		public override void set_selected_objects (List<Object> keys) {
-			KeyManagerStore.set_selected_keys (_view, keys);
+			KeyManagerStore.set_selected_objects (_view, keys);
 		}
 		
 		public override weak Object? selected {
-			get { return KeyManagerStore.get_selected_key (_view, null); }
+			get { return KeyManagerStore.get_selected_object (_view); }
 			set { 
 				List<weak Object> keys = new List<weak Object>();
 				if (value != null)
@@ -160,10 +160,6 @@ namespace Seahorse {
 			}
 		}
 		
-		public override weak Object? get_selected_object_and_uid (out uint uid) {
-			return KeyManagerStore.get_selected_key (_view, out uid);
-		}
-
 		private bool on_filter_objects (Object obj) {
 			if (_search_string.len() == 0)
 				return true;
@@ -178,9 +174,9 @@ namespace Seahorse {
 		
 		private void on_row_activated (Gtk.TreeView view, Gtk.TreePath path, 
 		                               Gtk.TreeViewColumn column) {
-			Key key = KeyManagerStore.get_key_from_path (view, path, null);
-			if (key != null)
-				show_properties (key);
+			Object? obj = KeyManagerStore.get_object_from_path (view, path);
+			if (obj != null)
+				show_properties (obj);
 		}
 
 		private bool on_key_list_button_pressed (Gtk.Widget widget, Gdk.EventButton event) {
@@ -251,7 +247,7 @@ namespace Seahorse {
 			set_numbered_status (Bugs.ngettext ("Selected %d key", 
 			                                    "Selected %d keys", rows), rows);
 
-			_key_actions.set_sensitive (rows > 0);
+			_object_actions.set_sensitive (rows > 0);
 			this.selection_changed();
 			
 			return false;

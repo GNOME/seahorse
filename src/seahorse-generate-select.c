@@ -258,11 +258,11 @@ static GObject * seahorse_generate_select_constructor (GType type, guint n_const
 		_tmp13 = NULL;
 		_tmp12 = NULL;
 		self->priv->_view = (_tmp13 = (_tmp12 = GTK_TREE_VIEW (seahorse_widget_get_widget (SEAHORSE_WIDGET (self), "keytype-tree")), (_tmp12 == NULL ? NULL : g_object_ref (_tmp12))), (self->priv->_view == NULL ? NULL : (self->priv->_view = (g_object_unref (self->priv->_view), NULL))), _tmp13);
-		pixcell = g_object_ref_sink (gtk_cell_renderer_pixbuf_new ());
+		pixcell = g_object_ref_sink (((GtkCellRendererPixbuf*) (gtk_cell_renderer_pixbuf_new ())));
 		g_object_set (pixcell, "stock-size", ((guint) (GTK_ICON_SIZE_DIALOG)), NULL);
 		gtk_tree_view_insert_column_with_attributes (self->priv->_view, -1, "", GTK_CELL_RENDERER (pixcell), "stock-id", SEAHORSE_GENERATE_SELECT_COLUMN_ICON, NULL, NULL);
 		_tmp15 = NULL;
-		gtk_tree_view_insert_column_with_attributes (self->priv->_view, -1, "", GTK_CELL_RENDERER ((_tmp15 = g_object_ref_sink (gtk_cell_renderer_text_new ()))), "markup", SEAHORSE_GENERATE_SELECT_COLUMN_TEXT, NULL, NULL);
+		gtk_tree_view_insert_column_with_attributes (self->priv->_view, -1, "", GTK_CELL_RENDERER ((_tmp15 = g_object_ref_sink (((GtkCellRendererText*) (gtk_cell_renderer_text_new ()))))), "markup", SEAHORSE_GENERATE_SELECT_COLUMN_TEXT, NULL, NULL);
 		(_tmp15 == NULL ? NULL : (_tmp15 = (g_object_unref (_tmp15), NULL)));
 		gtk_tree_view_set_model (self->priv->_view, GTK_TREE_MODEL (self->priv->_store));
 		/* Setup selection, select first item */

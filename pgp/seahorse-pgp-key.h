@@ -34,7 +34,7 @@
  *   trust: (SeahorseValidity) Trust for the key.
  *   expires: (gulong) Date this key expires or 0.
  *   length: (gint) The length of the key in bits.
- *   stock-id: (gpointer/string) The stock icon id.
+ *   stock-id: (string) The stock icon id.
  */
  
 #ifndef __SEAHORSE_PGP_KEY_H__
@@ -45,9 +45,10 @@
 
 #include "seahorse-key.h"
 
-#include "pgp/seahorse-pgp-module.h"
 #include "pgp/seahorse-gpgmex.h"
+#include "pgp/seahorse-pgp-module.h"
 #include "pgp/seahorse-pgp-source.h"
+#include "pgp/seahorse-pgp-uid.h"
 
 enum {
     SKEY_PGPSIG_TRUSTED = 0x0001,
@@ -76,6 +77,7 @@ struct _SeahorsePGPKey {
     gpgme_key_t                 pubkey;         /* The public key */
     gpgme_key_t                 seckey;         /* The secret key */
     gpgmex_photo_id_t           photoids;       /* List of photos */
+    GList                       *uids;		/* All the UID objects */
 };
 
 struct _SeahorsePGPKeyClass {
@@ -93,22 +95,11 @@ guint           seahorse_pgp_key_get_num_subkeys      (SeahorsePGPKey   *pkey);
 gpgme_subkey_t  seahorse_pgp_key_get_nth_subkey       (SeahorsePGPKey   *pkey,
                                                        guint            index);
 
-guint           seahorse_pgp_key_get_num_userids      (SeahorsePGPKey   *pkey);
+guint           seahorse_pgp_key_get_num_uids         (SeahorsePGPKey *pkey);
 
-gpgme_user_id_t seahorse_pgp_key_get_nth_userid       (SeahorsePGPKey   *pkey,
-                                                       guint            index);
+SeahorsePGPUid* seahorse_pgp_key_get_uid              (SeahorsePGPKey *pkey, 
+                                                       guint index);
 
-gchar*          seahorse_pgp_key_get_userid           (SeahorsePGPKey   *pkey,
-                                                       guint            index);
-
-gchar*          seahorse_pgp_key_get_userid_name      (SeahorsePGPKey   *pkey,
-                                                       guint            index);
-
-gchar*          seahorse_pgp_key_get_userid_email     (SeahorsePGPKey   *pkey,
-                                                       guint            index);
-
-gchar*          seahorse_pgp_key_get_userid_comment   (SeahorsePGPKey   *pkey,
-                                                       guint            index);
                                                        
 const gchar*    seahorse_pgp_key_get_algo             (SeahorsePGPKey   *pkey,
                                                        guint            index);

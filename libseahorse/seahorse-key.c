@@ -34,7 +34,9 @@ enum {
     PROP_KEY_DESC,
     PROP_KTYPE,
     PROP_ETYPE,
-    PROP_LOADED
+    PROP_LOADED,
+    PROP_MARKUP,
+    PROP_DISPLAY_NAME
 };
 
 /* Special fields */
@@ -86,6 +88,12 @@ seahorse_key_get_property (GObject *object, guint prop_id, GValue *value,
 	/* Pass on to SeahorseObject */
 	g_object_get_property(object, "id", value);
         break;
+    case PROP_MARKUP:
+	g_value_take_string (value, seahorse_key_get_name_markup (skey, 0));
+	break;
+    case PROP_DISPLAY_NAME:
+	g_value_take_string (value, seahorse_key_get_name_cn (skey, 0));
+	break;
     case PROP_RAW_ID:
         g_value_set_string (value, skey->rawid);
         break;
@@ -150,6 +158,14 @@ seahorse_key_class_init (SeahorseKeyClass *klass)
     g_object_class_install_property (gobject_class, PROP_LOADED,
         g_param_spec_uint ("loaded", "Loaded Information", "Which parts of the key are loaded. See SeahorseKeyLoaded", 
                            0, G_MAXUINT, SKEY_INFO_NONE, G_PARAM_READABLE));
+
+    g_object_class_install_property (gobject_class, PROP_DISPLAY_NAME,
+        g_param_spec_string ("display-name", "Key Label", "Label of this key",
+                             NULL, G_PARAM_READABLE));
+
+    g_object_class_install_property (gobject_class, PROP_MARKUP,
+        g_param_spec_string ("markup", "Key Label Markup", "Markup for this key",
+                             NULL, G_PARAM_READABLE));
 
     /* Some special fields */
     special_properties[PROP_SPECIAL_KEY_ID] = g_quark_from_static_string ("key-id");
@@ -379,10 +395,10 @@ seahorse_key_get_length (SeahorseKey *skey)
     return length;
 }
 
-const gchar*
+gchar*
 seahorse_key_get_stock_id (SeahorseKey *skey)
 {
-    const gchar* stock_id;
+    gchar* stock_id;
     g_object_get (skey, "stock-id", &stock_id, NULL);
     return stock_id;
 }

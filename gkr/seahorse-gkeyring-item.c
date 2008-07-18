@@ -378,17 +378,17 @@ seahorse_gkeyring_item_get_property (GObject *object, guint prop_id,
         switch (git->info ? gnome_keyring_item_info_get_type (git->info) : -1)
         {
         case GNOME_KEYRING_ITEM_GENERIC_SECRET:
-            g_value_set_pointer (value, GNOME_STOCK_AUTHENTICATION);
+            g_value_set_string (value, GNOME_STOCK_AUTHENTICATION);
             break;
         case GNOME_KEYRING_ITEM_NETWORK_PASSWORD:
-            g_value_set_pointer (value, is_network_item (git, "http") ? 
+            g_value_set_string (value, is_network_item (git, "http") ? 
                     SEAHORSE_THEMED_WEBBROWSER : GTK_STOCK_NETWORK);
             break;
         case GNOME_KEYRING_ITEM_NOTE:
-            g_value_set_pointer (value, GNOME_STOCK_BOOK_OPEN);
+            g_value_set_string (value, GNOME_STOCK_BOOK_OPEN);
             break;
         default:
-            g_value_set_pointer (value, GNOME_STOCK_BLANK);
+            g_value_set_string (value, GNOME_STOCK_BLANK);
             break;
         }        
         break;
@@ -520,8 +520,8 @@ seahorse_gkeyring_item_class_init (SeahorseGKeyringItemClass *klass)
                            0, G_MAXUINT, 0, G_PARAM_READABLE));
                            
     g_object_class_install_property (gobject_class, PROP_STOCK_ID,
-        g_param_spec_pointer ("stock-id", "The stock icon", "The stock icon id",
-                              G_PARAM_READABLE));
+        g_param_spec_string ("stock-id", "The stock icon", "The stock icon id",
+                             NULL, G_PARAM_READABLE));
 
 }
 

@@ -60,6 +60,7 @@ libseahorse_la_SOURCES = \
 	seahorse-context.c seahorse-context.h \
 	seahorse-widget.c seahorse-widget.h \
 	seahorse-set.c seahorse-set.h \
+	seahorse-set-model.c seahorse-set-model.h \
 	seahorse-key-model.c seahorse-key-model.h \
 	seahorse-util.c seahorse-util.h \
 	seahorse-validity.c seahorse-validity.h \

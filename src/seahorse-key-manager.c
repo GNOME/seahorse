@@ -94,7 +94,6 @@ GType seahorse_key_manager_tabs_get_type (void);
 static SeahorseKeyManager* seahorse_key_manager_new (const char* ident);
 static GList* seahorse_key_manager_real_get_selected_objects (SeahorseView* base);
 static void seahorse_key_manager_real_set_selected_objects (SeahorseView* base, GList* objects);
-static SeahorseObject* seahorse_key_manager_real_get_selected_object_and_uid (SeahorseView* base, guint* uid);
 static SeahorseKeyManagerTabInfo* seahorse_key_manager_get_tab_for_object (SeahorseKeyManager* self, SeahorseObject* obj);
 static GtkTreeView* seahorse_key_manager_get_current_view (SeahorseKeyManager* self);
 static guint seahorse_key_manager_get_tab_id (SeahorseKeyManager* self, SeahorseKeyManagerTabInfo* tab);
@@ -235,7 +234,7 @@ static GList* seahorse_key_manager_real_get_selected_objects (SeahorseView* base
 	if (tab == NULL) {
 		return NULL;
 	}
-	return seahorse_key_manager_store_get_selected_keys ((*tab).view);
+	return seahorse_key_manager_store_get_selected_objects ((*tab).view);
 }
 
 
@@ -292,7 +291,7 @@ static void seahorse_key_manager_real_set_selected_objects (SeahorseView* base, 
 				highest_tab = tab;
 			}
 			/* Select the objects on that tab */
-			seahorse_key_manager_store_set_selected_keys ((*tab).view, list);
+			seahorse_key_manager_store_set_selected_objects ((*tab).view, list);
 		}
 	}
 	/* Change to the tab with the most objects */
@@ -300,18 +299,6 @@ static void seahorse_key_manager_real_set_selected_objects (SeahorseView* base, 
 		seahorse_key_manager_set_tab_current (self, highest_tab);
 	}
 	tab_lists = (_vala_array_free (tab_lists, tab_lists_length1, ((GDestroyNotify) (g_list_free))), NULL);
-}
-
-
-static SeahorseObject* seahorse_key_manager_real_get_selected_object_and_uid (SeahorseView* base, guint* uid) {
-	SeahorseKeyManager * self;
-	SeahorseKeyManagerTabInfo* tab;
-	self = SEAHORSE_KEY_MANAGER (base);
-	tab = seahorse_key_manager_get_tab_info (self, -1);
-	if (tab == NULL) {
-		return NULL;
-	}
-	return SEAHORSE_OBJECT (seahorse_key_manager_store_get_selected_key ((*tab).view, &(*uid)));
 }
 
 
@@ -485,18 +472,18 @@ static void seahorse_key_manager_on_view_selection_changed (SeahorseKeyManager* 
 
 
 static void seahorse_key_manager_on_row_activated (SeahorseKeyManager* self, GtkTreeView* view, GtkTreePath* path, GtkTreeViewColumn* column) {
-	SeahorseKey* _tmp0;
-	SeahorseKey* key;
+	SeahorseObject* _tmp0;
+	SeahorseObject* obj;
 	g_return_if_fail (SEAHORSE_IS_KEY_MANAGER (self));
 	g_return_if_fail (GTK_IS_TREE_VIEW (view));
 	g_return_if_fail (path != NULL);
 	g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (column));
 	_tmp0 = NULL;
-	key = (_tmp0 = seahorse_key_manager_store_get_key_from_path (view, path, NULL), (_tmp0 == NULL ? NULL : g_object_ref (_tmp0)));
-	if (key != NULL) {
-		seahorse_viewer_show_properties (SEAHORSE_VIEWER (self), SEAHORSE_OBJECT (key));
+	obj = (_tmp0 = seahorse_key_manager_store_get_object_from_path (view, path), (_tmp0 == NULL ? NULL : g_object_ref (_tmp0)));
+	if (obj != NULL) {
+		seahorse_viewer_show_properties (SEAHORSE_VIEWER (self), obj);
 	}
-	(key == NULL ? NULL : (key = (g_object_unref (key), NULL)));
+	(obj == NULL ? NULL : (obj = (g_object_unref (obj), NULL)));
 }
 
 
@@ -707,7 +694,7 @@ static void seahorse_key_manager_import_text (SeahorseKeyManager* self, const ch
 	 * BUG: We cast to get around this bug:
 	 * http://bugzilla.gnome.org/show_bug.cgi?id=540662
 	 */
-	input = G_MEMORY_INPUT_STREAM (g_memory_input_stream_new_from_data (text, len, g_free));
+	input = G_MEMORY_INPUT_STREAM (((GMemoryInputStream*) (g_memory_input_stream_new_from_data (text, len, g_free))));
 	op = seahorse_source_import (sksrc, G_INPUT_STREAM (input));
 	seahorse_progress_show (op, _ ("Importing Keys"), TRUE);
 	seahorse_operation_watch (op, _seahorse_key_manager_imported_keys_seahorse_done_func, self, NULL, NULL);
@@ -1013,7 +1000,7 @@ static SeahorseObject* seahorse_key_manager_real_get_selected (SeahorseKeyManage
 	if (tab == NULL) {
 		return NULL;
 	}
-	return SEAHORSE_OBJECT (seahorse_key_manager_store_get_selected_key ((*tab).view, NULL));
+	return seahorse_key_manager_store_get_selected_object ((*tab).view);
 }
 
 
@@ -1024,6 +1011,7 @@ static void seahorse_key_manager_real_set_selected (SeahorseKeyManager* self, Se
 	objects = g_list_prepend (objects, value);
 	seahorse_viewer_set_selected_objects (SEAHORSE_VIEWER (self), objects);
 	(objects == NULL ? NULL : (objects = (g_list_free (objects), NULL)));
+	g_object_notify (((GObject *) (self)), "selected");
 }
 
 
@@ -1232,21 +1220,21 @@ static GObject * seahorse_key_manager_constructor (GType type, guint n_construct
 					GtkLabel* _tmp17;
 					GtkToolItem* item;
 					/* Insert a separator to right align the filter */
-					sep = g_object_ref_sink (gtk_separator_tool_item_new ());
+					sep = g_object_ref_sink (((GtkSeparatorToolItem*) (gtk_separator_tool_item_new ())));
 					gtk_separator_tool_item_set_draw (sep, FALSE);
 					gtk_tool_item_set_expand (GTK_TOOL_ITEM (sep), TRUE);
 					gtk_widget_show_all (GTK_WIDGET (sep));
 					gtk_toolbar_insert (toolbar, GTK_TOOL_ITEM (sep), -1);
 					/* Insert a filter bar */
-					box = GTK_BOX (g_object_ref_sink (gtk_hbox_new (FALSE, 0)));
+					box = GTK_BOX (g_object_ref_sink (((GtkHBox*) (gtk_hbox_new (FALSE, 0)))));
 					_tmp15 = NULL;
-					gtk_box_pack_start (box, GTK_WIDGET ((_tmp15 = g_object_ref_sink (gtk_label_new (_ ("Filter:"))))), FALSE, TRUE, ((guint) (3)));
+					gtk_box_pack_start (box, GTK_WIDGET ((_tmp15 = g_object_ref_sink (((GtkLabel*) (gtk_label_new (_ ("Filter:"))))))), FALSE, TRUE, ((guint) (3)));
 					(_tmp15 == NULL ? NULL : (_tmp15 = (g_object_unref (_tmp15), NULL)));
 					_tmp16 = NULL;
-					self->priv->_filter_entry = (_tmp16 = g_object_ref_sink (gtk_entry_new ()), (self->priv->_filter_entry == NULL ? NULL : (self->priv->_filter_entry = (g_object_unref (self->priv->_filter_entry), NULL))), _tmp16);
+					self->priv->_filter_entry = (_tmp16 = g_object_ref_sink (((GtkEntry*) (gtk_entry_new ()))), (self->priv->_filter_entry == NULL ? NULL : (self->priv->_filter_entry = (g_object_unref (self->priv->_filter_entry), NULL))), _tmp16);
 					gtk_box_pack_start (box, GTK_WIDGET (self->priv->_filter_entry), FALSE, TRUE, ((guint) (0)));
 					_tmp17 = NULL;
-					gtk_box_pack_start (box, GTK_WIDGET ((_tmp17 = g_object_ref_sink (gtk_label_new (NULL)))), FALSE, FALSE, ((guint) (0)));
+					gtk_box_pack_start (box, GTK_WIDGET ((_tmp17 = g_object_ref_sink (((GtkLabel*) (gtk_label_new (NULL)))))), FALSE, FALSE, ((guint) (0)));
 					(_tmp17 == NULL ? NULL : (_tmp17 = (g_object_unref (_tmp17), NULL)));
 					gtk_widget_show_all (GTK_WIDGET (box));
 					item = g_object_ref_sink (gtk_tool_item_new ());
@@ -1334,7 +1322,6 @@ static void seahorse_key_manager_class_init (SeahorseKeyManagerClass * klass) {
 	G_OBJECT_CLASS (klass)->dispose = seahorse_key_manager_dispose;
 	SEAHORSE_VIEWER_CLASS (klass)->get_selected_objects = seahorse_key_manager_real_get_selected_objects;
 	SEAHORSE_VIEWER_CLASS (klass)->set_selected_objects = seahorse_key_manager_real_set_selected_objects;
-	SEAHORSE_VIEWER_CLASS (klass)->get_selected_object_and_uid = seahorse_key_manager_real_get_selected_object_and_uid;
 	g_object_class_override_property (G_OBJECT_CLASS (klass), SEAHORSE_KEY_MANAGER_SELECTED, "selected");
 }
 
@@ -1343,7 +1330,6 @@ static void seahorse_key_manager_seahorse_view_interface_init (SeahorseViewIface
 	seahorse_key_manager_seahorse_view_parent_iface = g_type_interface_peek_parent (iface);
 	iface->get_selected_objects = seahorse_key_manager_real_get_selected_objects;
 	iface->set_selected_objects = seahorse_key_manager_real_set_selected_objects;
-	iface->get_selected_object_and_uid = seahorse_key_manager_real_get_selected_object_and_uid;
 }
 
 

@@ -21,9 +21,9 @@ enum  {
 	SEAHORSE_OBJECT_FLAGS,
 	SEAHORSE_OBJECT_SOURCE,
 	SEAHORSE_OBJECT_PREFERRED,
-	SEAHORSE_OBJECT_DESCRIPTION,
+	SEAHORSE_OBJECT_DISPLAY_NAME,
 	SEAHORSE_OBJECT_MARKUP,
-	SEAHORSE_OBJECT_STOCK_ICON,
+	SEAHORSE_OBJECT_STOCK_ID,
 	SEAHORSE_OBJECT_PARENT
 };
 static void seahorse_object_register_child (SeahorseObject* self, SeahorseObject* child);
@@ -97,6 +97,7 @@ void seahorse_object_set_location (SeahorseObject* self, SeahorseLocation value)
 	g_return_if_fail (SEAHORSE_IS_OBJECT (self));
 	self->_location = value;
 	seahorse_object_fire_changed (self, SEAHORSE_OBJECT_CHANGE_LOCATION);
+	g_object_notify (((GObject *) (self)), "location");
 }
 
 
@@ -127,6 +128,7 @@ void seahorse_object_set_source (SeahorseObject* self, SeahorseSource* value) {
 	if (self->priv->_source != NULL) {
 		g_object_add_weak_pointer (G_OBJECT (self->priv->_source), &self->priv->_source);
 	}
+	g_object_notify (((GObject *) (self)), "source");
 }
 
 
@@ -149,12 +151,13 @@ void seahorse_object_set_preferred (SeahorseObject* self, SeahorseObject* value)
 		g_object_add_weak_pointer (G_OBJECT (self->priv->_preferred), &self->priv->_preferred);
 	}
 	seahorse_object_fire_changed (self, SEAHORSE_OBJECT_CHANGE_PREFERRED);
+	g_object_notify (((GObject *) (self)), "preferred");
 }
 
 
-char* seahorse_object_get_description (SeahorseObject* self) {
+char* seahorse_object_get_display_name (SeahorseObject* self) {
 	char* value;
-	g_object_get (G_OBJECT (self), "description", &value, NULL);
+	g_object_get (G_OBJECT (self), "display-name", &value, NULL);
 	return value;
 }
 
@@ -166,9 +169,9 @@ char* seahorse_object_get_markup (SeahorseObject* self) {
 }
 
 
-char* seahorse_object_get_stock_icon (SeahorseObject* self) {
+char* seahorse_object_get_stock_id (SeahorseObject* self) {
 	char* value;
-	g_object_get (G_OBJECT (self), "stock-icon", &value, NULL);
+	g_object_get (G_OBJECT (self), "stock-id", &value, NULL);
 	return value;
 }
 
@@ -181,6 +184,10 @@ SeahorseObject* seahorse_object_get_parent (SeahorseObject* self) {
 
 void seahorse_object_set_parent (SeahorseObject* self, SeahorseObject* value) {
 	g_return_if_fail (SEAHORSE_IS_OBJECT (self));
+	g_assert (self->priv->_parent != self);
+	if (value == self->priv->_parent) {
+		return;
+	}
 	/* Set the new parent/child relationship */
 	if (self->priv->_parent != NULL) {
 		seahorse_object_unregister_child (self->priv->_parent, self);
@@ -191,6 +198,7 @@ void seahorse_object_set_parent (SeahorseObject* self, SeahorseObject* value) {
 	g_assert (self->priv->_parent == value);
 	/* Fire a signal to let watchers know this changed */
 	g_signal_emit_by_name (G_OBJECT (self), "hierarchy");
+	g_object_notify (((GObject *) (self)), "parent");
 }
 
 
@@ -315,9 +323,9 @@ static void seahorse_object_class_init (SeahorseObjectClass * klass) {
 	g_object_class_install_property (G_OBJECT_CLASS (klass), SEAHORSE_OBJECT_FLAGS, g_param_spec_uint ("flags", "flags", "flags", 0, G_MAXUINT, 0U, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
 	g_object_class_install_property (G_OBJECT_CLASS (klass), SEAHORSE_OBJECT_SOURCE, g_param_spec_object ("source", "source", "source", SEAHORSE_TYPE_SOURCE, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE | G_PARAM_WRITABLE));
 	g_object_class_install_property (G_OBJECT_CLASS (klass), SEAHORSE_OBJECT_PREFERRED, g_param_spec_object ("preferred", "preferred", "preferred", SEAHORSE_TYPE_OBJECT, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE | G_PARAM_WRITABLE));
-	g_object_class_install_property (G_OBJECT_CLASS (klass), SEAHORSE_OBJECT_DESCRIPTION, g_param_spec_string ("description", "description", "description", NULL, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
+	g_object_class_install_property (G_OBJECT_CLASS (klass), SEAHORSE_OBJECT_DISPLAY_NAME, g_param_spec_string ("display-name", "display-name", "display-name", NULL, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
 	g_object_class_install_property (G_OBJECT_CLASS (klass), SEAHORSE_OBJECT_MARKUP, g_param_spec_string ("markup", "markup", "markup", NULL, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
-	g_object_class_install_property (G_OBJECT_CLASS (klass), SEAHORSE_OBJECT_STOCK_ICON, g_param_spec_string ("stock-icon", "stock-icon", "stock-icon", NULL, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
+	g_object_class_install_property (G_OBJECT_CLASS (klass), SEAHORSE_OBJECT_STOCK_ID, g_param_spec_string ("stock-id", "stock-id", "stock-id", NULL, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
 	g_object_class_install_property (G_OBJECT_CLASS (klass), SEAHORSE_OBJECT_PARENT, g_param_spec_object ("parent", "parent", "parent", SEAHORSE_TYPE_OBJECT, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE | G_PARAM_WRITABLE));
 	g_signal_new ("changed", SEAHORSE_TYPE_OBJECT, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__ENUM, G_TYPE_NONE, 1, SEAHORSE_OBJECT_TYPE_CHANGE);
 	g_signal_new ("hierarchy", SEAHORSE_TYPE_OBJECT, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
@@ -336,6 +344,8 @@ static void seahorse_object_dispose (GObject * obj) {
 	{
 		SeahorseObject* _tmp0;
 		SeahorseObject* new_parent;
+		/* Fire our destroy signal, so that any watchers can go away */
+		g_signal_emit_by_name (G_OBJECT (self), "destroy");
 		if (self->priv->_source != NULL) {
 			g_object_remove_weak_pointer (G_OBJECT (self->priv->_source), &self->priv->_source);
 		}
@@ -369,11 +379,8 @@ static void seahorse_object_dispose (GObject * obj) {
 				}
 			}
 		}
-		/* Fire our destroy signal, so that any watchers can go away */
-		g_signal_emit_by_name (G_OBJECT (self), "destroy");
 		(new_parent == NULL ? NULL : (new_parent = (g_object_unref (new_parent), NULL)));
 	}
-	(self->attached_to == NULL ? NULL : (self->attached_to = (g_object_unref (self->attached_to), NULL)));
 	G_OBJECT_CLASS (seahorse_object_parent_class)->dispose (obj);
 }
 

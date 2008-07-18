@@ -107,21 +107,25 @@ namespace Seahorse {
 			}
 		}
 		
-		public Context attached_to;
+		public weak Context attached_to;
 		
 		public signal void changed(Change what);
 		public signal void hierarchy();
 		public signal void destroy();
 		
-		public abstract string# description { get; }
+		public abstract string# display_name { get; }
 		public abstract string# markup { get; }
-		public abstract weak string# stock_icon { get; }
+		public abstract weak string# stock_id { get; }
 		
 		public Object? parent { 
 			get {
 				return _parent;
 			}
 			set {
+				assert (_parent != this);
+				if (value == _parent)
+					return;
+				
 				/* Set the new parent/child relationship */
 				if(_parent != null)
 					_parent.unregister_child(this);
@@ -155,7 +159,10 @@ namespace Seahorse {
 		}
 		
 		~Object () {
-			
+
+			/* Fire our destroy signal, so that any watchers can go away */
+			this.destroy();
+
 			if (_source != null)
 				_source.remove_weak_pointer (&_source);
 			if (_preferred != null)
@@ -176,9 +183,6 @@ namespace Seahorse {
 				/* Fire signal to let anyone know this has moved */
 				child.hierarchy();
 			}
-			
-			/* Fire our destroy signal, so that any watchers can go away */
-			this.destroy();
 		}
 		
 		private void register_child(Object child)

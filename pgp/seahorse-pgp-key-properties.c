@@ -789,7 +789,7 @@ do_owner (SeahorseWidget *swidget)
 {
     SeahorseKey *skey;
     SeahorsePGPKey *pkey;
-    gpgme_user_id_t uid;
+    SeahorsePGPUid *uid;
     GtkWidget *widget;
     GtkCellRenderer *renderer;
     GtkListStore *store;
@@ -834,9 +834,10 @@ do_owner (SeahorseWidget *swidget)
                        (flags & SKEY_FLAG_REVOKED) || (flags & SKEY_FLAG_DISABLED)));
 
     /* Hide or show the uids area */
-    show_glade_widget (swidget, "uids-area", seahorse_pgp_key_get_num_userids (pkey) > 1);
-
-    if ((text = seahorse_pgp_key_get_userid_name (pkey, 0)) != NULL) {
+    show_glade_widget (swidget, "uids-area", seahorse_pgp_key_get_num_uids (pkey) > 1);
+    uid = seahorse_pgp_key_get_uid (pkey, 0);
+    
+    if ((text = seahorse_pgp_uid_get_name (uid)) != NULL) {
         widget = glade_xml_get_widget (swidget->xml, "owner-name-label");
         gtk_label_set_text (GTK_LABEL (widget), text);  
 
@@ -845,13 +846,13 @@ do_owner (SeahorseWidget *swidget)
         g_free (text);
     }
 
-    if ((text = seahorse_pgp_key_get_userid_email (pkey, 0)) != NULL) {
+    if ((text = seahorse_pgp_uid_get_email (uid)) != NULL) {
         widget = glade_xml_get_widget (swidget->xml, "owner-email-label");
         gtk_label_set_text (GTK_LABEL (widget), text);  
         g_free (text);
     }
 
-    if ((text = seahorse_pgp_key_get_userid_comment (pkey, 0)) != NULL) {
+    if ((text = seahorse_pgp_uid_get_comment (uid)) != NULL) {
         widget = glade_xml_get_widget (swidget->xml, "owner-comment-label");
         gtk_label_set_text (GTK_LABEL (widget), text);  
         g_free (text);
@@ -886,7 +887,7 @@ do_owner (SeahorseWidget *swidget)
                                                          "markup", UID_MARKUP, NULL);
         }
     
-        for (i = 1, uid = pkey->pubkey->uids; uid; uid = uid->next, i++) {
+        for (i = 1; i <= seahorse_pgp_key_get_num_uids (pkey); i++) {
     
             markup = seahorse_key_get_name_markup (SEAHORSE_KEY (pkey), i - 1);
     
@@ -1548,7 +1549,7 @@ do_trust_signals (SeahorseWidget *swidget)
         show_glade_widget (swidget, "signatures-empty-label", FALSE);
         
         /* Fill in trust labels with name .This only happens once, so it sits here. */
-        user = seahorse_pgp_key_get_userid_name (SEAHORSE_PGP_KEY (skey), 0);
+        user = seahorse_key_get_name (skey, 0);
         printf_glade_widget (swidget, "trust-marginal-check", user);
         printf_glade_widget (swidget, "trust-sign-label", user);
         printf_glade_widget (swidget, "trust-revoke-label", user);

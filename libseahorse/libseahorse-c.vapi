@@ -171,10 +171,10 @@ namespace Seahorse {
 	[CCode (cheader_filename = "seahorse-key-manager-store.h")]
 	public class KeyManagerStore : GLib.Object {
 		public KeyManagerStore(Set set, Gtk.TreeView view);
-		public static GLib.List<weak Key> get_selected_keys (Gtk.TreeView view);
-		public static void set_selected_keys (Gtk.TreeView view, GLib.List<Key> keys);
-		public static weak Key? get_selected_key (Gtk.TreeView view, out uint uid);
-		public static weak Key? get_key_from_path (Gtk.TreeView view, Gtk.TreePath path, out uint uid);
+		public static GLib.List<weak Object> get_selected_objects (Gtk.TreeView view);
+		public static void set_selected_objects (Gtk.TreeView view, GLib.List<Object> objects);
+		public static weak Object? get_selected_object (Gtk.TreeView view);
+		public static weak Object? get_object_from_path (Gtk.TreeView view, Gtk.TreePath path);
 	}
 	
 	[CCode (cheader_filename = "seahorse-windows.h")]

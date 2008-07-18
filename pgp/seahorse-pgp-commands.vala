@@ -62,31 +62,44 @@ namespace Seahorse.Pgp {
 			}
 		}
 		
-		public override void show_properties (Object key) {
-			return_if_fail (key.tag == Seahorse.Pgp.TYPE);
-			KeyProperties.show ((Pgp.Key)key, view.window);
+		public override void show_properties (Object obj) {
+			return_if_fail (obj.tag == Seahorse.Pgp.TYPE);
+			if (obj.get_type() == typeof (Pgp.Uid))
+				obj = obj.parent;
+			return_if_fail (obj.get_type() == typeof (Pgp.Key));
+			KeyProperties.show ((Pgp.Key)obj, view.window);
 		}
 		
-		public override void delete_objects (List<Object> keys) throws GLib.Error {
-			uint num = keys.length();
+		public override void delete_objects (List<Object> objects) throws GLib.Error {
+			uint num = objects.length();
 			if (num == 0)
 				return;
 			
-			string prompt;
-			if (num == 1)
-				prompt = _("Are you sure you want to delete the PGP key '%s'?").printf(keys.data.description);
-			else
-				prompt = _("Are you sure you want to delete %d PGP keys?").printf(num);
+			foreach (var obj in objects) {
+
+				/* 
+				 * Delete all the user ids first, if parent key is 
+				 * not on the chopping block already.
+				 */
+
+				if (obj.get_type() == typeof (Pgp.Uid)) {
+					Pgp.Uid uid = (Pgp.Uid)obj;
+					if (objects.find(uid.parent) == null)
+						Delete.userid_show ((Pgp.Key)uid.parent, uid.index);
+					objects.remove (obj);
+				} else {
+					return_if_fail (obj.get_type() != typeof (Pgp.Key));
+				}
+			}
 			
-			if (Util.prompt_delete (prompt))
-				Seahorse.Source.delete_objects (keys);
+			Delete.show(objects);
 		}
 
 		private void on_key_sign (Action action) {
-			uint uid;
-			var key = view.get_selected_object_and_uid (out uid);
+			var key = view.selected;
+			/* TODO: Make signing a specific UID work again */
 			if (key != null && key.tag == Seahorse.Pgp.TYPE)
-				Sign.prompt ((Pgp.Key)key, uid, view.window);
+				Sign.prompt ((Pgp.Key)key, 0, view.window);
 		}
 		
 		private void on_view_selection_changed (View view) {

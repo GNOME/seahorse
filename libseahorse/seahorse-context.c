@@ -128,10 +128,10 @@ seahorse_context_init (SeahorseContext *sctx)
     
 }
 
-static gboolean
-remove_each (gpointer object, gpointer value, gpointer user_data)
+static void
+hash_to_slist (gpointer object, gpointer value, gpointer user_data)
 {
-    return TRUE;
+	*((GSList**)user_data) = g_slist_prepend (*((GSList**)user_data), value);
 }
 
 /* release all references */
@@ -139,13 +139,16 @@ static void
 seahorse_context_dispose (GObject *gobject)
 {
     SeahorseContext *sctx;
-    GSList *l;
+    GSList *objects, *l;
     
     sctx = SEAHORSE_CONTEXT (gobject);
     
-    /* All the objects */
-    g_hash_table_foreach_remove (sctx->pv->objects_by_source, remove_each, NULL);
-    g_hash_table_foreach_remove (sctx->pv->objects_by_type, remove_each, NULL);
+    /* Release all the objects */
+    objects = NULL;
+    g_hash_table_foreach (sctx->pv->objects_by_source, hash_to_slist, &objects);
+    for (l = objects; l; l = g_slist_next (l)) 
+	    seahorse_context_remove_object (sctx, l->data);
+    g_slist_free (objects);
 
     /* Gconf notification */
     if (sctx->pv->notify_id)

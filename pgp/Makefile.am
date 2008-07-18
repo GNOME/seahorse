@@ -80,6 +80,7 @@ libseahorse_pgp_la_SOURCES = \
 	seahorse-pgp-revoke.c \
 	seahorse-pgp-source.c seahorse-pgp-source.h \
 	seahorse-pgp-sign.c \
+	seahorse-pgp-uid.c seahorse-pgp-uid.h \
 	seahorse-signer.c seahorse-pgp-dialogs.h \
 	$(VALA_CFILES) $(VALA_HFILES) \
 	$(KEYSERVER_SRCS) \

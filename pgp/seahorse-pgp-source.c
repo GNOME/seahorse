@@ -648,7 +648,6 @@ monitor_gpg_homedir (GFileMonitor *handle, GFile *file, GFile *other_file,
 	gchar *name;
 	
 	if (event_type == G_FILE_MONITOR_EVENT_CHANGED || 
-	    event_type == G_FILE_MONITOR_EVENT_CHANGES_DONE_HINT ||
 	    event_type == G_FILE_MONITOR_EVENT_DELETED ||
 	    event_type == G_FILE_MONITOR_EVENT_CREATED) {
 

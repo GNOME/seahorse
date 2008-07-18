@@ -75,7 +75,7 @@ static void seahorse_gkeyring_commands_real_delete_objects (SeahorseCommands* ba
 	if (num == 1) {
 		char* _tmp0;
 		_tmp0 = NULL;
-		prompt = (_tmp0 = g_strdup_printf (_ ("Are you sure you want to delete the password '%s'?"), seahorse_object_get_description (((SeahorseObject*) (((SeahorseObject*) (keys->data)))))), (prompt = (g_free (prompt), NULL)), _tmp0);
+		prompt = (_tmp0 = g_strdup_printf (_ ("Are you sure you want to delete the password '%s'?"), seahorse_object_get_display_name (((SeahorseObject*) (((SeahorseObject*) (keys->data)))))), (prompt = (g_free (prompt), NULL)), _tmp0);
 	} else {
 		char* _tmp1;
 		_tmp1 = NULL;

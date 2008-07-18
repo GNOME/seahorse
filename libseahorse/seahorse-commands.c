@@ -36,14 +36,30 @@ enum  {
 	SEAHORSE_COMMANDS_COMMAND_ACTIONS,
 	SEAHORSE_COMMANDS_UI_DEFINITION
 };
+static void seahorse_commands_real_show_properties (SeahorseCommands* self, SeahorseObject* obj);
+static void seahorse_commands_real_delete_objects (SeahorseCommands* self, GList* obj, GError** error);
 static void seahorse_commands_set_view (SeahorseCommands* self, SeahorseView* value);
 static gpointer seahorse_commands_parent_class = NULL;
 static void seahorse_commands_dispose (GObject * obj);
 
 
 
+static void seahorse_commands_real_show_properties (SeahorseCommands* self, SeahorseObject* obj) {
+	g_return_if_fail (SEAHORSE_IS_COMMANDS (self));
+	g_critical ("Type `%s' does not implement abstract method `seahorse_commands_show_properties'", g_type_name (G_TYPE_FROM_INSTANCE (self)));
+	return;
+}
+
+
 void seahorse_commands_show_properties (SeahorseCommands* self, SeahorseObject* obj) {
 	SEAHORSE_COMMANDS_GET_CLASS (self)->show_properties (self, obj);
+}
+
+
+static void seahorse_commands_real_delete_objects (SeahorseCommands* self, GList* obj, GError** error) {
+	g_return_if_fail (SEAHORSE_IS_COMMANDS (self));
+	g_critical ("Type `%s' does not implement abstract method `seahorse_commands_delete_objects'", g_type_name (G_TYPE_FROM_INSTANCE (self)));
+	return;
 }
 
 
@@ -65,6 +81,7 @@ static void seahorse_commands_set_view (SeahorseCommands* self, SeahorseView* va
 	_tmp2 = NULL;
 	_tmp1 = NULL;
 	self->priv->_view = (_tmp2 = (_tmp1 = value, (_tmp1 == NULL ? NULL : g_object_ref (_tmp1))), (self->priv->_view == NULL ? NULL : (self->priv->_view = (g_object_unref (self->priv->_view), NULL))), _tmp2);
+	g_object_notify (((GObject *) (self)), "view");
 }
 
 
@@ -126,6 +143,8 @@ static void seahorse_commands_class_init (SeahorseCommandsClass * klass) {
 	G_OBJECT_CLASS (klass)->get_property = seahorse_commands_get_property;
 	G_OBJECT_CLASS (klass)->set_property = seahorse_commands_set_property;
 	G_OBJECT_CLASS (klass)->dispose = seahorse_commands_dispose;
+	SEAHORSE_COMMANDS_CLASS (klass)->show_properties = seahorse_commands_real_show_properties;
+	SEAHORSE_COMMANDS_CLASS (klass)->delete_objects = seahorse_commands_real_delete_objects;
 	g_object_class_install_property (G_OBJECT_CLASS (klass), SEAHORSE_COMMANDS_VIEW, g_param_spec_object ("view", "view", "view", SEAHORSE_TYPE_VIEW, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
 	g_object_class_install_property (G_OBJECT_CLASS (klass), SEAHORSE_COMMANDS_KTYPE, g_param_spec_uint ("ktype", "ktype", "ktype", 0, G_MAXUINT, 0U, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
 	g_object_class_install_property (G_OBJECT_CLASS (klass), SEAHORSE_COMMANDS_COMMAND_ACTIONS, g_param_spec_object ("command-actions", "command-actions", "command-actions", GTK_TYPE_ACTION_GROUP, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));

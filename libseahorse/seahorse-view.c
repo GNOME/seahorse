@@ -37,11 +37,6 @@ void seahorse_view_set_selected_objects (SeahorseView* self, GList* objects) {
 }
 
 
-SeahorseObject* seahorse_view_get_selected_object_and_uid (SeahorseView* self, guint* uid) {
-	return SEAHORSE_VIEW_GET_INTERFACE (self)->get_selected_object_and_uid (self, uid);
-}
-
-
 SeahorseObject* seahorse_view_get_selected (SeahorseView* self) {
 	SeahorseObject* value;
 	g_object_get (G_OBJECT (self), "selected", &value, NULL);

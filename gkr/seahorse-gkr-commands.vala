@@ -60,7 +60,7 @@ namespace Seahorse.Gkr {
 			
 			string prompt;
 			if (num == 1)
-				prompt = _("Are you sure you want to delete the password '%s'?").printf(keys.data.description);
+				prompt = _("Are you sure you want to delete the password '%s'?").printf(keys.data.display_name);
 			else
 				prompt = _("Are you sure you want to delete %d passwords?").printf(num);
 			

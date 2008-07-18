@@ -27,7 +27,7 @@
 
 #include "seahorse-context.h"
 #include "seahorse-set.h"
-#include "seahorse-key-model.h"
+#include "seahorse-set-model.h"
 
 #define SEAHORSE_TYPE_KEY_MANAGER_STORE             (seahorse_key_manager_store_get_type ())
 #define SEAHORSE_KEY_MANAGER_STORE(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_KEY_MANAGER_STORE, SeahorseKeyManagerStore))
@@ -41,39 +41,34 @@ typedef struct _SeahorseKeyManagerStorePriv SeahorseKeyManagerStorePriv;
 typedef struct _SeahorseKeyManagerStoreClass SeahorseKeyManagerStoreClass;
 
 typedef enum _SeahorseKeyManagerStoreMode {
-    KEY_STORE_MODE_ALL,
-    KEY_STORE_MODE_FILTERED
+	KEY_STORE_MODE_ALL,
+	KEY_STORE_MODE_FILTERED
 } SeahorseKeyManagerStoreMode;
 
 struct _SeahorseKeyManagerStore {
-    SeahorseKeyModel               parent;
- 
-    /*< public >*/
-    SeahorseSet                 *skset;
-    
-    /*< private >*/
-    SeahorseKeyManagerStorePriv    *priv;
+	SeahorseSetModel               parent;
+	
+	/*< private >*/
+	SeahorseKeyManagerStorePriv    *priv;
 };
 
 struct _SeahorseKeyManagerStoreClass {
-    SeahorseKeyModelClass           parent_class;
+	SeahorseSetModelClass           parent_class;
 };
 
-SeahorseKeyManagerStore*   seahorse_key_manager_store_new       (SeahorseSet *skset,
-                                                                 GtkTreeView *view);
+SeahorseKeyManagerStore*   seahorse_key_manager_store_new                    (SeahorseSet *skset,
+                                                                              GtkTreeView *view);
 
-SeahorseKey*        seahorse_key_manager_store_get_key_from_path (GtkTreeView *view,
-                                                                  GtkTreePath *path,
-                                                                  guint *uid);
+SeahorseObject*            seahorse_key_manager_store_get_object_from_path   (GtkTreeView *view,
+                                                                              GtkTreePath *path);
 
-GList*              seahorse_key_manager_store_get_all_keys      (GtkTreeView *view);
+GList*                     seahorse_key_manager_store_get_all_objects        (GtkTreeView *view);
 
-void                seahorse_key_manager_store_set_selected_keys (GtkTreeView *view,
-                                                                  GList* keys);
+void                       seahorse_key_manager_store_set_selected_objects   (GtkTreeView *view,
+                                                                              GList* objects);
                                                              
-GList*              seahorse_key_manager_store_get_selected_keys (GtkTreeView *view);
+GList*                     seahorse_key_manager_store_get_selected_objects   (GtkTreeView *view);
 
-SeahorseKey*        seahorse_key_manager_store_get_selected_key  (GtkTreeView *view,
-                                                                  guint *uid);
+SeahorseObject*            seahorse_key_manager_store_get_selected_object    (GtkTreeView *view);
 
 #endif /* __SEAHORSE_KEY_MANAGER_STORE_H__ */

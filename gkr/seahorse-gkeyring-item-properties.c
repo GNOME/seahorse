@@ -64,6 +64,7 @@ do_main (SeahorseWidget *swidget)
     GtkWidget *widget;
     gchar *text;
     const gchar *label;
+    gchar *stock_id;
     gboolean network = FALSE;
 
     key = SEAHORSE_KEY_WIDGET (swidget)->skey;
@@ -71,9 +72,11 @@ do_main (SeahorseWidget *swidget)
 
     /* Image */
     widget = seahorse_widget_get_widget (swidget, "key-image");
-    if (widget)
-        gtk_image_set_from_stock (GTK_IMAGE (widget), seahorse_key_get_stock_id (key), 
-                                  GTK_ICON_SIZE_DIALOG);
+    if (widget) {
+        stock_id = seahorse_key_get_stock_id (key);
+        gtk_image_set_from_stock (GTK_IMAGE (widget), stock_id, GTK_ICON_SIZE_DIALOG);
+        g_free (stock_id);
+    }
 
     /* Description */
     widget = seahorse_widget_get_widget (swidget, "description-field");

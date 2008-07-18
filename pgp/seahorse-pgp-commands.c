@@ -24,8 +24,7 @@
 #include <seahorse-pgp-dialogs.h>
 #include <seahorse-pgp-key.h>
 #include <seahorse-view.h>
-#include <seahorse-util.h>
-#include <seahorse-source.h>
+#include <seahorse-pgp-uid.h>
 #include <config.h>
 #include <common/seahorse-registry.h>
 #include "seahorse-pgp.h"
@@ -44,8 +43,8 @@ enum  {
 	SEAHORSE_PGP_COMMANDS_UI_DEFINITION,
 	SEAHORSE_PGP_COMMANDS_COMMAND_ACTIONS
 };
-static void seahorse_pgp_commands_real_show_properties (SeahorseCommands* base, SeahorseObject* key);
-static void seahorse_pgp_commands_real_delete_objects (SeahorseCommands* base, GList* keys, GError** error);
+static void seahorse_pgp_commands_real_show_properties (SeahorseCommands* base, SeahorseObject* obj);
+static void seahorse_pgp_commands_real_delete_objects (SeahorseCommands* base, GList* objects, GError** error);
 static void seahorse_pgp_commands_on_key_sign (SeahorsePGPCommands* self, GtkAction* action);
 static void seahorse_pgp_commands_on_view_selection_changed (SeahorsePGPCommands* self, SeahorseView* view);
 static void _seahorse_pgp_commands_on_key_sign_gtk_action_activate (GtkAction* _sender, gpointer self);
@@ -58,60 +57,73 @@ static const GtkActionEntry SEAHORSE_PGP_COMMANDS_COMMAND_ENTRIES[] = {{"key-sig
 static const char* SEAHORSE_PGP_COMMANDS_UI_DEF = "\n\t\t\t<ui>\n\t\t\t\n\t\t\t<menubar>\n\t\t\t\t<menu name='Key' action='key-menu'>\n\t\t\t\t\t<placeholder name=\"KeyCommands\">\n\t\t\t\t\t\t<menuitem action=\"key-sign\"/>\n\t\t\t\t\t</placeholder>\n\t\t\t\t</menu>\n\t\t\t</menubar>\n\t\t\t\n\t\t\t<toolbar name=\"MainToolbar\">\n\t\t\t\t<placeholder name=\"ToolItems\">\n\t\t\t\t\t<toolitem action=\"key-sign\"/>\n\t\t\t\t</placeholder>\n\t\t\t</toolbar>\n\n\t\t\t<popup name=\"KeyPopup\">\n\t\t\t\t<menuitem action=\"key-sign\"/>\n\t\t\t</popup>\n    \n\t\t\t</ui>\n\t\t";
 
 
-static void seahorse_pgp_commands_real_show_properties (SeahorseCommands* base, SeahorseObject* key) {
+static void seahorse_pgp_commands_real_show_properties (SeahorseCommands* base, SeahorseObject* obj) {
 	SeahorsePGPCommands * self;
 	self = SEAHORSE_PGP_COMMANDS (base);
-	g_return_if_fail (SEAHORSE_IS_OBJECT (key));
-	g_return_if_fail (seahorse_object_get_tag (key) == SEAHORSE_PGP_TYPE);
-	seahorse_pgp_key_properties_show (SEAHORSE_PGP_KEY (key), seahorse_view_get_window (seahorse_commands_get_view (SEAHORSE_COMMANDS (self))));
+	g_return_if_fail (SEAHORSE_IS_OBJECT (obj));
+	g_return_if_fail (seahorse_object_get_tag (obj) == SEAHORSE_PGP_TYPE);
+	if (G_TYPE_FROM_INSTANCE (G_OBJECT (obj)) == SEAHORSE_PGP_TYPE_UID) {
+		obj = seahorse_object_get_parent (obj);
+	}
+	g_return_if_fail (G_TYPE_FROM_INSTANCE (G_OBJECT (obj)) == SEAHORSE_PGP_TYPE_KEY);
+	seahorse_pgp_key_properties_show (SEAHORSE_PGP_KEY (obj), seahorse_view_get_window (seahorse_commands_get_view (SEAHORSE_COMMANDS (self))));
 }
 
 
-static void seahorse_pgp_commands_real_delete_objects (SeahorseCommands* base, GList* keys, GError** error) {
+static void seahorse_pgp_commands_real_delete_objects (SeahorseCommands* base, GList* objects, GError** error) {
 	SeahorsePGPCommands * self;
-	GError * inner_error;
 	guint num;
-	char* prompt;
 	self = SEAHORSE_PGP_COMMANDS (base);
-	g_return_if_fail (keys != NULL);
-	inner_error = NULL;
-	num = g_list_length (keys);
+	g_return_if_fail (objects != NULL);
+	num = g_list_length (objects);
 	if (num == 0) {
 		return;
 	}
-	prompt = NULL;
-	if (num == 1) {
-		char* _tmp0;
-		_tmp0 = NULL;
-		prompt = (_tmp0 = g_strdup_printf (_ ("Are you sure you want to delete the PGP key '%s'?"), seahorse_object_get_description (((SeahorseObject*) (((SeahorseObject*) (keys->data)))))), (prompt = (g_free (prompt), NULL)), _tmp0);
-	} else {
-		char* _tmp1;
-		_tmp1 = NULL;
-		prompt = (_tmp1 = g_strdup_printf (_ ("Are you sure you want to delete %d PGP keys?"), num), (prompt = (g_free (prompt), NULL)), _tmp1);
-	}
-	if (seahorse_util_prompt_delete (prompt)) {
-		seahorse_source_delete_objects (keys, &inner_error);
-		if (inner_error != NULL) {
-			g_propagate_error (error, inner_error);
-			prompt = (g_free (prompt), NULL);
-			return;
+	{
+		GList* obj_collection;
+		GList* obj_it;
+		obj_collection = objects;
+		for (obj_it = obj_collection; obj_it != NULL; obj_it = obj_it->next) {
+			SeahorseObject* _tmp1;
+			SeahorseObject* obj;
+			_tmp1 = NULL;
+			obj = (_tmp1 = ((SeahorseObject*) (obj_it->data)), (_tmp1 == NULL ? NULL : g_object_ref (_tmp1)));
+			{
+				/* 
+				 * Delete all the user ids first, if parent key is 
+				 * not on the chopping block already.
+				 */
+				if (G_TYPE_FROM_INSTANCE (G_OBJECT (obj)) == SEAHORSE_PGP_TYPE_UID) {
+					SeahorsePGPUid* _tmp0;
+					SeahorsePGPUid* uid;
+					_tmp0 = NULL;
+					uid = (_tmp0 = SEAHORSE_PGP_UID (obj), (_tmp0 == NULL ? NULL : g_object_ref (_tmp0)));
+					if (g_list_find (objects, seahorse_object_get_parent (SEAHORSE_OBJECT (uid))) == NULL) {
+						seahorse_pgp_delete_userid_show (SEAHORSE_PGP_KEY (seahorse_object_get_parent (SEAHORSE_OBJECT (uid))), seahorse_pgp_uid_get_index (uid));
+					}
+					objects = g_list_remove (objects, obj);
+					(uid == NULL ? NULL : (uid = (g_object_unref (uid), NULL)));
+				} else {
+					g_return_if_fail (G_TYPE_FROM_INSTANCE (G_OBJECT (obj)) != SEAHORSE_PGP_TYPE_KEY);
+				}
+				(obj == NULL ? NULL : (obj = (g_object_unref (obj), NULL)));
+			}
 		}
 	}
-	prompt = (g_free (prompt), NULL);
+	seahorse_pgp_delete_show (objects);
 }
 
 
 static void seahorse_pgp_commands_on_key_sign (SeahorsePGPCommands* self, GtkAction* action) {
-	guint uid;
 	SeahorseObject* _tmp0;
 	SeahorseObject* key;
 	g_return_if_fail (SEAHORSE_PGP_IS_COMMANDS (self));
 	g_return_if_fail (GTK_IS_ACTION (action));
-	uid = 0U;
 	_tmp0 = NULL;
-	key = (_tmp0 = seahorse_view_get_selected_object_and_uid (seahorse_commands_get_view (SEAHORSE_COMMANDS (self)), &uid), (_tmp0 == NULL ? NULL : g_object_ref (_tmp0)));
+	key = (_tmp0 = seahorse_view_get_selected (seahorse_commands_get_view (SEAHORSE_COMMANDS (self))), (_tmp0 == NULL ? NULL : g_object_ref (_tmp0)));
+	/* TODO: Make signing a specific UID work again */
 	if (key != NULL && seahorse_object_get_tag (key) == SEAHORSE_PGP_TYPE) {
-		seahorse_pgp_sign_prompt (SEAHORSE_PGP_KEY (key), uid, seahorse_view_get_window (seahorse_commands_get_view (SEAHORSE_COMMANDS (self))));
+		seahorse_pgp_sign_prompt (SEAHORSE_PGP_KEY (key), ((guint) (0)), seahorse_view_get_window (seahorse_commands_get_view (SEAHORSE_COMMANDS (self))));
 	}
 	(key == NULL ? NULL : (key = (g_object_unref (key), NULL)));
 }

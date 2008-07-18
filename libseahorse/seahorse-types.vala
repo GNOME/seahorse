@@ -19,6 +19,7 @@ namespace Seahorse {
 		PUBLIC_KEY = 2,
 		PRIVATE_KEY = 3,
 		CREDENTIALS = 4,
+		IDENTITY = 5,
 		OTHER = 10
 	}
 }

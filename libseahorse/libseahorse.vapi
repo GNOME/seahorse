@@ -17,6 +17,7 @@ namespace Seahorse {
 		PUBLIC_KEY,
 		PRIVATE_KEY,
 		CREDENTIALS,
+		IDENTITY,
 		OTHER
 	}
 	[CCode (cheader_filename = "seahorse-commands.h")]
@@ -46,7 +47,7 @@ namespace Seahorse {
 		protected Seahorse.Location _location;
 		protected Seahorse.Usage _usage;
 		protected uint _flags;
-		public Seahorse.Context attached_to;
+		public weak Seahorse.Context attached_to;
 		public GLib.List<weak Seahorse.Object> get_children ();
 		protected void fire_changed (Seahorse.Object.Change what);
 		public GLib.Quark tag { get; }
@@ -56,9 +57,9 @@ namespace Seahorse {
 		public uint flags { get; }
 		public Seahorse.Source source { get; set; }
 		public Seahorse.Object preferred { get; set; }
-		public abstract string# description { get; }
+		public abstract string# display_name { get; }
 		public abstract string# markup { get; }
-		public abstract string# stock_icon { get; }
+		public abstract string# stock_id { get; }
 		public Seahorse.Object? parent { get; set; }
 		public signal void changed (Seahorse.Object.Change what);
 		public signal void hierarchy ();
@@ -92,7 +93,6 @@ namespace Seahorse {
 	public interface View : GLib.Object {
 		public abstract GLib.List<weak Seahorse.Object> get_selected_objects ();
 		public abstract void set_selected_objects (GLib.List<Seahorse.Object> objects);
-		public abstract weak Seahorse.Object? get_selected_object_and_uid (out uint uid);
 		public abstract Seahorse.Object? selected { get; set; }
 		public abstract Seahorse.Set? current_set { get; }
 		public abstract Gtk.Window window { get; }

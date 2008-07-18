@@ -27,7 +27,6 @@ namespace Seahorse {
 		
 		public abstract GLib.List<weak Object> get_selected_objects ();
 		public abstract void set_selected_objects (GLib.List<Object> objects);
-		public abstract weak Object? get_selected_object_and_uid (out uint uid);
 
 		public abstract weak Object? selected { get; set; }		
 		public abstract weak Set? current_set { get; }
