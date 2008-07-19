@@ -752,7 +752,7 @@ seahorse_ssh_operation_upload (SeahorseSSHSource *ssrc, GList *keys,
     	g_return_val_if_fail (output, NULL);
     	
     	/* Buffer for what we send to the server */
-    	op = seahorse_source_export (SEAHORSE_SOURCE (ssrc), keys, FALSE, G_OUTPUT_STREAM (output));
+    	op = seahorse_source_export (SEAHORSE_SOURCE (ssrc), keys, G_OUTPUT_STREAM (output));
     	g_return_val_if_fail (op != NULL, NULL);
     
     /* 

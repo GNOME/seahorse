@@ -583,7 +583,7 @@ seahorse_ssh_source_import (SeahorseSource *sksrc, GInputStream *input)
 
 static SeahorseOperation* 
 seahorse_ssh_source_export (SeahorseSource *sksrc, GList *keys, 
-                            gboolean complete, GOutputStream *output)
+                            GOutputStream *output)
 {
     SeahorseSSHKeyData *keydata;
     SeahorseOperation *op;
@@ -609,21 +609,8 @@ seahorse_ssh_source_export (SeahorseSource *sksrc, GList *keys,
         g_object_get (skey, "key-data", &keydata, NULL);
         g_return_val_if_fail (keydata, NULL);
         
-        /* Complete key means the private key */
-        if (complete && keydata->privfile) {
-            
-            /* And then the data itself */
-            if (!g_file_get_contents (keydata->privfile, &raw, NULL, &error)) {
-                raw = results = NULL;
-            } else {
-                /* Add the seahorse specific prefix */
-                results = g_strdup_printf ("%s %s\n%s\n", SSH_KEY_SECRET_SIG, 
-                                           keydata->comment ? keydata->comment : "",
-                                           raw);
-            }
-           
-        /* Public key. We should already have the data loaded */
-        } else if (keydata->pubfile) { 
+        /* We should already have the data loaded */
+        if (keydata->pubfile) { 
             g_assert (keydata->rawdata);
             results = g_strdup_printf ("%s\n", keydata->rawdata);
             
@@ -939,4 +926,31 @@ seahorse_ssh_source_file_for_public (SeahorseSSHSource *ssrc, gboolean authorize
 {
     return g_build_filename (ssrc->priv->ssh_homedir, 
             authorized ? AUTHORIZED_KEYS_FILE : OTHER_KEYS_FILE, NULL);
+}
+
+guchar*
+seahorse_ssh_source_export_private (SeahorseSSHSource *ssrc, SeahorseSSHKey *skey,
+                                    gsize *n_results, GError **err)
+{
+	SeahorseSSHKeyData *keydata;
+	gchar *results;
+	
+	g_return_val_if_fail (SEAHORSE_IS_SSH_SOURCE (ssrc), NULL);
+	g_return_val_if_fail (SEAHORSE_IS_SSH_KEY (skey), NULL);
+	g_return_val_if_fail (n_results, NULL);
+	g_return_val_if_fail (!err || !*err, NULL);
+	
+	g_object_get (skey, "key-data", &keydata, NULL);
+	g_return_val_if_fail (keydata, NULL);
+
+	if (!keydata->privfile) {
+		g_set_error (err, SEAHORSE_ERROR, 0, "%s", _("No private key file is available for this key."));
+		return NULL;
+	}
+
+        /* And then the data itself */
+        if (!g_file_get_contents (keydata->privfile, &results, n_results, err))
+        	return NULL;
+        
+        return (guchar*)results;
 }

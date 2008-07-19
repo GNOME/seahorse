@@ -845,7 +845,7 @@ seahorse_util_chooser_show_archive_files (GtkDialog *dialog)
 }
 
 void
-seahorse_util_chooser_set_filename (GtkDialog *dialog, GList *keys)
+seahorse_util_chooser_set_filename_full (GtkDialog *dialog, GList *keys)
 {
     gchar *t = NULL;
     
@@ -854,6 +854,14 @@ seahorse_util_chooser_set_filename (GtkDialog *dialog, GList *keys)
         gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), t);
         g_free (t);
     }
+}
+
+void
+seahorse_util_chooser_set_filename (GtkDialog *dialog, SeahorseKey *skey)
+{
+	GList *keys = g_list_append (NULL, skey);
+	seahorse_util_chooser_set_filename_full (dialog, keys);
+	g_list_free (keys);
 }
     
 gchar*      

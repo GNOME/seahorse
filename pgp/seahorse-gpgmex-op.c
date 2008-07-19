@@ -65,14 +65,15 @@ gpgmex_op_export_secret  (gpgme_ctx_t ctx,
 {
     gchar *output = NULL;
     gpgme_error_t err;
-    gboolean armor;
     gchar *args;
     
     g_return_val_if_fail (pattern != NULL, GPG_E (GPG_ERR_INV_VALUE));
-    /* TODO: Use the context's arguments for armor */
-    armor = gpgme_get_armor (ctx) ? TRUE : FALSE;
-    args = g_strdup_printf ("%s --export-secret-key '%s'", 
-                            armor ? "--armor" : "",
+    
+    /* 
+     * We have to use armor mode, because otherwise below 
+     * string stuff doesn't work 
+     */
+    args = g_strdup_printf ("--armor --export-secret-key '%s'", 
                             pattern);
     
     err = execute_gpg_command (ctx, args, &output, NULL);

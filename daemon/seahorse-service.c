@@ -206,7 +206,7 @@ seahorse_service_export_keys (SeahorseService *svc, gchar *ktype,
         g_return_val_if_fail (sksrc != NULL, FALSE);
         
         /* We pass our own data object, to which data is appended */
-        op = seahorse_source_export (sksrc, l, FALSE, G_OUTPUT_STREAM (output));
+        op = seahorse_source_export (sksrc, l, G_OUTPUT_STREAM (output));
         g_return_val_if_fail (op != NULL, FALSE);
 
         g_list_free (l);

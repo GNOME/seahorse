@@ -202,56 +202,66 @@ passphrase_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 }
 
 static void
+export_complete (GFile *file, GAsyncResult *result, guchar *contents)
+{
+	GError *err = NULL;
+	gchar *uri;
+	
+	g_free (contents);
+	
+	if (!g_file_replace_contents_finish (file, result, NULL, &err)) {
+		uri = g_file_get_uri (file);
+	        seahorse_util_handle_error (err, _("Couldn't export key to \"%s\""),
+	                                    seahorse_util_uri_get_last (uri));
+	        g_clear_error (&err);
+	        g_free (uri);
+	}
+}
+
+static void
 export_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 {
-    SeahorseSource *sksrc;
-    SeahorseOperation *op;
-    SeahorseKey *skey;
-    GFileOutputStream *output;
-    GFile *file;
-    GtkDialog *dialog;
-    gchar* uri = NULL;
-    GError *err = NULL;
-    GList *keys = NULL;
+	SeahorseSource *sksrc;
+	SeahorseKey *skey;
+	GFile *file;
+	GtkDialog *dialog;
+	guchar *results;
+	gsize n_results;
+	gchar* uri = NULL;
+	GError *err = NULL;
 
-    skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
-    keys = g_list_prepend (keys, skey);
-
-    dialog = seahorse_util_chooser_save_new (_("Export Complete Key"), 
-                                             GTK_WINDOW (seahorse_widget_get_toplevel (swidget)));
-    seahorse_util_chooser_show_key_files (dialog);
-    seahorse_util_chooser_set_filename (dialog, keys);
-
-    uri = seahorse_util_chooser_save_prompt (dialog);
-    gtk_widget_destroy (GTK_WIDGET (dialog));
-    if(!uri) 
-        return;
-    
-    sksrc = seahorse_key_get_source (skey);
-    g_assert (SEAHORSE_IS_SOURCE (sksrc));
-    
-	file = g_file_new_for_uri (uri);
-	output = g_file_replace (file, NULL, FALSE, 0, NULL, &err);  
-	g_object_unref (file);
+	skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
+	g_return_if_fail (SEAHORSE_IS_SSH_KEY (skey));
+	sksrc = seahorse_object_get_source (SEAHORSE_OBJECT (skey));
+	g_return_if_fail (SEAHORSE_IS_SSH_SOURCE (sksrc));
 	
-	if (output) {
-		op = seahorse_source_export (sksrc, keys, TRUE, G_OUTPUT_STREAM (output));
-    
-		seahorse_operation_wait (op);
-		g_object_unref (output);
-		
-		if (!seahorse_operation_is_successful (op))
-			seahorse_operation_copy_error (op, &err);
+	dialog = seahorse_util_chooser_save_new (_("Export Complete Key"), 
+	                                         GTK_WINDOW (seahorse_widget_get_toplevel (swidget)));
+	seahorse_util_chooser_show_key_files (dialog);
+	seahorse_util_chooser_set_filename (dialog, skey);
+
+	uri = seahorse_util_chooser_save_prompt (dialog);
+	if (!uri) 
+		return;
+	
+	results = seahorse_ssh_source_export_private (SEAHORSE_SSH_SOURCE (sksrc), 
+	                                              SEAHORSE_SSH_KEY (skey),
+	                                              &n_results, &err);
+	
+	if (results) {
+		g_return_if_fail (err == NULL);
+		file = g_file_new_for_uri (uri);
+		g_file_replace_contents_async (file, (gchar*)results, n_results, NULL, FALSE, 
+		                               G_FILE_CREATE_PRIVATE, NULL, 
+		                               (GAsyncReadyCallback)export_complete, results);
 	}
-    
-    if (err) {
-        seahorse_util_handle_error (err, _("Couldn't export key to \"%s\""),
-                                    seahorse_util_uri_get_last (uri));
-        g_clear_error (&err);
-    }
-    
-    g_free (uri);
-    g_list_free (keys);
+	
+	if (err) {
+	        seahorse_util_handle_error (err, _("Couldn't export key."));
+	        g_clear_error (&err);
+	}
+	
+	g_free (uri);
 }
 
 static void 

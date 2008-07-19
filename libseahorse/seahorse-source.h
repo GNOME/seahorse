@@ -122,8 +122,7 @@ typedef struct _SeahorseSourceClass {
      * 
      * Returns: The export operation
      */    
-    SeahorseOperation* (*export) (SeahorseSource *sksrc, GList *objects, 
-                                  gboolean complete, GOutputStream *output);
+    SeahorseOperation* (*export) (SeahorseSource *sksrc, GList *objects, GOutputStream *output);
 
     /**
      * export_raw
@@ -189,7 +188,6 @@ gboolean            seahorse_source_delete_objects        (GList *objects,
 
 SeahorseOperation*  seahorse_source_export                (SeahorseSource *sksrc,
                                                            GList *objects,
-                                                           gboolean complete,
                                                            GOutputStream *output);
 
 SeahorseOperation*  seahorse_source_export_raw            (SeahorseSource *sksrc, 

@@ -602,8 +602,7 @@ seahorse_gkeyring_source_import (SeahorseSource *sksrc, GInputStream *input)
 }
 
 static SeahorseOperation* 
-seahorse_gkeyring_source_export (SeahorseSource *sksrc, GList *keys, 
-                                 gboolean complete, GOutputStream *output)
+seahorse_gkeyring_source_export (SeahorseSource *sksrc, GList *keys, GOutputStream *output)
 {
 	GError *err = NULL;
     

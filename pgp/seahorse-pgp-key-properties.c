@@ -1011,56 +1011,70 @@ trust_changed (GtkComboBox *selection, SeahorseWidget *swidget)
 }
 
 static void
+export_complete (GFile *file, GAsyncResult *result, gchar *contents)
+{
+	GError *err = NULL;
+	gchar *uri;
+	
+	free (contents);
+
+	if (!g_file_replace_contents_finish (file, result, NULL, &err)) {
+		uri = g_file_get_uri (file);
+	        seahorse_util_handle_error (err, _("Couldn't export key to \"%s\""),
+	                                    seahorse_util_uri_get_last (uri));
+	        g_clear_error (&err);
+	        g_free (uri);
+	}
+}
+
+static void
 details_export_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 {
-    SeahorseSource *sksrc;
-    SeahorseOperation *op;
-    SeahorseKey *skey;
-    GtkDialog *dialog;
-    gchar* uri = NULL;
-    GError *err = NULL;
-    GFile *file;
-    GFileOutputStream *output;
-    GList *keys = NULL;
+	SeahorseKey *skey;
+	SeahorsePGPKey *pkey;
+	GtkDialog *dialog;
+	gchar* uri = NULL;
+	GError *err = NULL;
+	GFile *file;
+	gpgme_error_t gerr;
+	gpgme_ctx_t ctx;
+	gpgme_data_t data;
+	gchar *results;
+	gsize n_results;
     
-    skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
-    keys = g_list_prepend (NULL, skey);
+	skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
+	pkey = SEAHORSE_PGP_KEY (skey);
+	
+	dialog = seahorse_util_chooser_save_new (_("Export Complete Key"), 
+	                                         GTK_WINDOW (seahorse_widget_get_toplevel (swidget)));
+	seahorse_util_chooser_show_key_files (dialog);
+	seahorse_util_chooser_set_filename (dialog, skey);
     
-    dialog = seahorse_util_chooser_save_new (_("Export Complete Key"), 
-                                             GTK_WINDOW (seahorse_widget_get_toplevel (swidget)));
-    seahorse_util_chooser_show_key_files (dialog);
-    seahorse_util_chooser_set_filename (dialog, keys);
-    
-    uri = seahorse_util_chooser_save_prompt (dialog);
-    gtk_widget_destroy (GTK_WIDGET (dialog));
-    if(!uri) 
-        return;
-    
-    sksrc = seahorse_key_get_source (skey);
-    g_assert (SEAHORSE_IS_SOURCE (sksrc));
-    
-	file = g_file_new_for_uri (uri);
-	output = g_file_replace (file, NULL, FALSE, 0, NULL, &err);  
-	g_object_unref (file);
-    
-	if (output) {
-		op = seahorse_source_export (sksrc, keys, TRUE, G_OUTPUT_STREAM (output));
-    
-		seahorse_operation_wait (op);
-		g_object_unref (output);
-        
-		if (!seahorse_operation_is_successful (op))
-			seahorse_operation_copy_error (op, &err);
-	}
-    
-	if (err) {
-		seahorse_util_handle_error (err, _("Couldn't export key to \"%s\""),
-		                            seahorse_util_uri_get_last (uri));
+	uri = seahorse_util_chooser_save_prompt (dialog);
+	if (!uri) 
+		return;
+	
+	/* Export to a data block */
+	gerr = gpgme_data_new (&data);
+	g_return_if_fail (GPG_IS_OK (gerr));
+	ctx = seahorse_pgp_source_new_context ();
+	g_return_if_fail (ctx);
+	gerr = gpgmex_op_export_secret (ctx, seahorse_pgp_key_get_id (pkey->seckey, 0), data);
+	gpgme_release (ctx);
+	results = gpgme_data_release_and_get_mem (data, &n_results);
+
+	if (GPG_IS_OK (gerr)) {
+		file = g_file_new_for_uri (uri);
+		g_file_replace_contents_async (file, results, n_results, NULL, FALSE, 
+		                               G_FILE_CREATE_PRIVATE, NULL, 
+		                               (GAsyncReadyCallback)export_complete, results);
+	} else {
+		seahorse_gpgme_to_error (gerr, &err);
+		seahorse_util_handle_error (err, _("Couldn't export key."));
 		g_clear_error (&err);
 	}
-    
-    g_list_free (keys);
-    g_free (uri);
+	
+	g_free (uri);
 }
 
 /*

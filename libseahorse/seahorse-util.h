@@ -38,6 +38,8 @@
 const AvahiPoll* seahorse_util_dns_sd_get_poll ();
 #endif
 
+struct _SeahorseKey;
+
 typedef enum {
     SEAHORSE_CRYPT_SUFFIX,
     SEAHORSE_SIG_SUFFIX,
@@ -118,8 +120,11 @@ void        seahorse_util_chooser_show_key_files        (GtkDialog *dialog);
 
 void        seahorse_util_chooser_show_archive_files    (GtkDialog *dialog);
 
-void        seahorse_util_chooser_set_filename          (GtkDialog *dialog, 
+void        seahorse_util_chooser_set_filename_full     (GtkDialog *dialog, 
                                                          GList *keys);
+
+void        seahorse_util_chooser_set_filename          (GtkDialog *dialog, 
+                                                         struct _SeahorseKey *skey);
 
 gchar*      seahorse_util_chooser_open_prompt           (GtkDialog *dialog);
 

@@ -489,7 +489,7 @@ export_keys_to_output (GList *objects, GOutputStream *output, GError **error)
 			mop = seahorse_multi_operation_new ();
 
 		/* We pass our own data object, to which data is appended */
-		op = seahorse_source_export (sksrc, objects, FALSE, output);
+		op = seahorse_source_export (sksrc, objects, output);
 		g_return_val_if_fail (op != NULL, FALSE);
 
 		seahorse_multi_operation_take (mop, op);

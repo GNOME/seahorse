@@ -213,7 +213,7 @@ seahorse_source_export_objects (GList *objects, GOutputStream *output)
         }
         
         /* We pass our own data object, to which data is appended */
-        op = seahorse_source_export (sksrc, objects, FALSE, output);
+        op = seahorse_source_export (sksrc, objects, output);
         g_return_val_if_fail (op != NULL, FALSE);
 
         g_list_free (objects);
@@ -260,8 +260,7 @@ seahorse_source_delete_objects (GList *objects, GError **error)
 }
 
 SeahorseOperation* 
-seahorse_source_export (SeahorseSource *sksrc, GList *objects, 
-                        gboolean complete, GOutputStream *output)
+seahorse_source_export (SeahorseSource *sksrc, GList *objects, GOutputStream *output)
 {
 	SeahorseSourceClass *klass;
 	SeahorseOperation *op;
@@ -273,7 +272,7 @@ seahorse_source_export (SeahorseSource *sksrc, GList *objects,
 	
 	klass = SEAHORSE_SOURCE_GET_CLASS (sksrc);   
 	if (klass->export)
-		return (*klass->export) (sksrc, objects, complete, output);
+		return (*klass->export) (sksrc, objects, output);
 
 	/* Either export or export_raw must be implemented */
 	g_return_val_if_fail (klass->export_raw != NULL, NULL);
@@ -316,7 +315,7 @@ seahorse_source_export_raw (SeahorseSource *sksrc, GSList *ids, GOutputStream *o
 	}
     
 	objects = g_list_reverse (objects);
-	op = (*klass->export) (sksrc, objects, FALSE, output);
+	op = (*klass->export) (sksrc, objects, output);
 	g_list_free (objects);
 	return op;
 }

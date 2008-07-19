@@ -78,4 +78,10 @@ gchar*               seahorse_ssh_source_file_for_public    (SeahorseSSHSource *
 gchar*               seahorse_ssh_source_file_for_algorithm (SeahorseSSHSource *ssrc,
                                                              guint algo);
 
+guchar*              seahorse_ssh_source_export_private     (SeahorseSSHSource *ssrc,
+                                                             SeahorseSSHKey *skey,
+                                                             gsize *n_results,
+                                                             GError **err);
+
+
 #endif /* __SEAHORSE_SSH_SOURCE_H__ */
