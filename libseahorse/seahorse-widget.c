@@ -153,6 +153,9 @@ seahorse_widget_constructor (GType type, guint n_props, GObjectConstructParam* p
         gtk_window_resize (window, width, height);
     }
     
+    g_free (widthkey);
+    g_free (heightkey);
+    
     return obj;
 }
 
