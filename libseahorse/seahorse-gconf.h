@@ -44,6 +44,8 @@
 
 #define KEYSHARING_KEY              SEAHORSE_SCHEMAS "/sharing/sharing_enabled"
 
+#define WINDOW_SIZE                SEAHORSE_SCHEMAS "/windows/"
+
 void            seahorse_gconf_disconnect        ();
 
 void            seahorse_gconf_set_boolean       (const char         *key, 
