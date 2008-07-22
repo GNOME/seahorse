@@ -146,6 +146,10 @@ seahorse_progress_status_set_operation (SeahorseWidget *swidget,
     
     prev = SEAHORSE_OPERATION (g_object_get_data (G_OBJECT (swidget), "operation"));
     if (prev) {
+	    
+        /* If it's the same operation, just ignore */
+        if (prev == operation)
+            return;
         
         /* If the previous one was a multi operation, just piggy back this one in */
         if (SEAHORSE_IS_MULTI_OPERATION (prev)) {

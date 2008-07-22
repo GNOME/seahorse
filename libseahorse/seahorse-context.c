@@ -797,7 +797,7 @@ seahorse_context_load_remote_objects (SeahorseContext *sctx, const gchar *search
             g_free (uri);
         }
 
-        if (op != NULL) {
+        if (mop == NULL && op != NULL) {
             mop = seahorse_multi_operation_new ();
             seahorse_multi_operation_take (mop, op);
         }
