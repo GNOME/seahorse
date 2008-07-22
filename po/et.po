@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Seahorse HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-05-06 17:29+0000\n"
-"PO-Revision-Date: 2008-05-31 10:41+0300\n"
+"POT-Creation-Date: 2008-07-09 11:30+0000\n"
+"PO-Revision-Date: 2008-07-11 09:06+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -308,8 +308,8 @@ msgid ""
 "The key server to publish PGP keys to. Or empty to suppress publishing of "
 "PGP keys."
 msgstr ""
-"PGP-võtmete avalikustamiseks kasutatav võtmeserver. Kui võtmeid ei soovita "
-"avalikustada, siis on see tühi."
+"PGP-võtmete avaldamiseks kasutatav võtmeserver. Kui võtmeid ei soovita "
+"avadada, siis on see tühi."
 
 #: ../data/seahorse.schemas.in.h:28
 msgid ""
@@ -363,10 +363,131 @@ msgstr "Veebiparool"
 msgid "Network Password"
 msgstr "Võrguparool"
 
-#: ../gkr/seahorse-gkeyring-item.c:261 ../gkr/seahorse-gkeyring-source.c:551
-#: ../src/seahorse-gkeyring-item-properties.c:121
+#: ../gkr/seahorse-gkeyring-item.c:261
+#: ../gkr/seahorse-gkeyring-item-properties.c:123
+#: ../gkr/seahorse-gkeyring-source.c:551
 msgid "Password"
 msgstr "Parool"
+
+#: ../gkr/seahorse-gkeyring-item-properties.c:95
+msgid "Access a network share or resource"
+msgstr "Ligipääs võrgus olevale kataloogile või ressursile"
+
+#: ../gkr/seahorse-gkeyring-item-properties.c:99
+msgid "Access a website"
+msgstr "Ligipääs veebisaidile"
+
+#: ../gkr/seahorse-gkeyring-item-properties.c:103
+msgid "Unlocks a PGP key"
+msgstr "PGP-võtme lukust lahtivõtmine"
+
+#: ../gkr/seahorse-gkeyring-item-properties.c:106
+msgid "Unlocks a Secure Shell key"
+msgstr "Secure Shell'i võtme lukust lahtivõtmine"
+
+#: ../gkr/seahorse-gkeyring-item-properties.c:109
+msgid "Saved password or login"
+msgstr "Salvestatud parool või konto"
+
+#: ../gkr/seahorse-gkeyring-item-properties.c:123
+msgid "Network Credentials"
+msgstr "Võrgutõendid"
+
+#: ../gkr/seahorse-gkeyring-item-properties.c:184
+msgid "Couldn't change password."
+msgstr "Parooli pole võimalik muuta."
+
+#: ../gkr/seahorse-gkeyring-item-properties.c:292
+msgid "Couldn't set description."
+msgstr "Kirjeldust pole võimalik määrata."
+
+#: ../gkr/seahorse-gkeyring-item-properties.c:502
+msgid "Couldn't set application access."
+msgstr "Rakenduse ligipääsu pole võimalik määrata."
+
+#: ../gkr/seahorse-gkeyring-item-properties.glade.h:1
+msgid "<b>Password:</b>"
+msgstr "<b>Parool:</b>"
+
+#: ../gkr/seahorse-gkeyring-item-properties.glade.h:2
+msgid "<b>Path:</b>"
+msgstr "<b>Rada:</b>"
+
+#: ../gkr/seahorse-gkeyring-item-properties.glade.h:3
+msgid "<b>Permissions:</b>"
+msgstr "<b>Pääsuõigused:</b>"
+
+#: ../gkr/seahorse-gkeyring-item-properties.glade.h:4
+#: ../pgp/seahorse-pgp-public-key-properties.glade.h:9
+#: ../ssh/seahorse-ssh-key-properties.glade.h:9
+msgid "<b>Technical Details:</b>"
+msgstr "<b>Tehnilised üksikasjad:</b>"
+
+#: ../gkr/seahorse-gkeyring-item-properties.glade.h:5
+msgid "Applications"
+msgstr "Rakendused"
+
+#: ../gkr/seahorse-gkeyring-item-properties.glade.h:6
+#: ../pgp/seahorse-pgp-private-key-properties.glade.h:23
+#: ../pgp/seahorse-pgp-public-key-properties.glade.h:20
+#: ../ssh/seahorse-ssh-key-properties.glade.h:17
+msgid "Details"
+msgstr "Üksikasjad"
+
+#: ../gkr/seahorse-gkeyring-item-properties.glade.h:7
+#: ../ssh/seahorse-ssh-key-properties.glade.h:19
+msgid "Key"
+msgstr "Võti"
+
+#: ../gkr/seahorse-gkeyring-item-properties.glade.h:8
+#: ../pgp/seahorse-pgp-private-key-properties.glade.h:30
+#: ../pgp/seahorse-pgp-public-key-properties.glade.h:30
+#: ../ssh/seahorse-ssh-key-properties.glade.h:20
+msgid "Key Properties"
+msgstr "Võtme omadused"
+
+#: ../gkr/seahorse-gkeyring-item-properties.glade.h:9
+msgid "Login:"
+msgstr "Konto:"
+
+#: ../gkr/seahorse-gkeyring-item-properties.glade.h:10
+msgid "Server:"
+msgstr "Server:"
+
+#: ../gkr/seahorse-gkeyring-item-properties.glade.h:11
+msgid "Show pass_word"
+msgstr "_Parooli näidatakse"
+
+#: ../gkr/seahorse-gkeyring-item-properties.glade.h:12
+#: ../pgp/seahorse-pgp-private-key-properties.glade.h:42
+#: ../pgp/seahorse-pgp-public-key-properties.glade.h:36
+msgid "Type:"
+msgstr "Liik:"
+
+#. To translators: This is the noun not the verb.
+#: ../gkr/seahorse-gkeyring-item-properties.glade.h:14
+msgid "Use:"
+msgstr "Kasutus:"
+
+#. To translators: This is the infinitive not the imperative.
+#: ../gkr/seahorse-gkeyring-item-properties.glade.h:16
+msgid "_Delete"
+msgstr "_Kustutamine"
+
+#: ../gkr/seahorse-gkeyring-item-properties.glade.h:17
+#: ../pgp/seahorse-revoke.glade.h:5
+msgid "_Description:"
+msgstr "_Kirjeldus:"
+
+#. To translators: This is the infinitive not the imperative.
+#: ../gkr/seahorse-gkeyring-item-properties.glade.h:19
+msgid "_Read"
+msgstr "_Lugemine"
+
+#. To translators: This is the infinitive not the imperative.
+#: ../gkr/seahorse-gkeyring-item-properties.glade.h:21
+msgid "_Write"
+msgstr "_Kirjutamine"
 
 #: ../gkr/seahorse-gkeyring-operation.c:205
 msgid "Access to the key ring was denied"
@@ -410,42 +531,57 @@ msgstr "Võtme vastuvõtmine"
 msgid "Listing passwords"
 msgstr "Paroolide nimekirja kuvamine"
 
-#: ../libcryptui/cryptui-key-chooser.c:156
+#: ../gkr/seahorse-gkr-commands.vala:63
+#, c-format
+msgid "Are you sure you want to delete the password '%s'?"
+msgstr "Kas sa soovid parooli '%s' kustutada?"
+
+#: ../gkr/seahorse-gkr-commands.vala:65
+#, c-format
+msgid "Are you sure you want to delete %d passwords?"
+msgstr "Kas sa soovid %d parooli kustutada?"
+
+#: ../libcryptui/cryptui-key-chooser.c:173
 msgid "All Keys"
 msgstr "Kõik võtmed"
 
-#: ../libcryptui/cryptui-key-chooser.c:157
+#: ../libcryptui/cryptui-key-chooser.c:174
 msgid "Selected Recipients"
 msgstr "Valitud adressaadid"
 
-#: ../libcryptui/cryptui-key-chooser.c:158
+#: ../libcryptui/cryptui-key-chooser.c:175
 msgid "Search Results"
 msgstr "Otsingutulemused"
 
 #. Filter Label
-#: ../libcryptui/cryptui-key-chooser.c:168
+#: ../libcryptui/cryptui-key-chooser.c:185
 msgid "Search _for:"
 msgstr "Otsitakse _fraasi:"
 
-#. Sign Label
-#: ../libcryptui/cryptui-key-chooser.c:223
-msgid "_Sign message as:"
-msgstr "_Sõnum allkirjastakse kui:"
-
-#: ../libcryptui/cryptui-key-chooser.c:235
+#: ../libcryptui/cryptui-key-chooser.c:243
 msgid "None (Don't Sign)"
 msgstr "Ei allkirjastata"
 
+#: ../libcryptui/cryptui-key-chooser.c:256
+#, c-format
+msgid "Sign this message as %s"
+msgstr ""
+
+#. Sign Label
+#: ../libcryptui/cryptui-key-chooser.c:278
+msgid "_Sign message as:"
+msgstr "_Sõnum allkirjastakse kui:"
+
 #. TODO: Icons
 #: ../libcryptui/cryptui-key-list.c:117
-#: ../src/seahorse-key-manager-store.c:946
-#: ../src/seahorse-key-properties.c:885
+#: ../pgp/seahorse-pgp-key-properties.c:881
+#: ../src/seahorse-key-manager-store.c:1072
 msgid "Name"
 msgstr "Nimi"
 
 #: ../libcryptui/cryptui-key-list.c:120
-#: ../src/seahorse-key-manager-store.c:958
-#: ../src/seahorse-key-properties.c:1714
+#: ../pgp/seahorse-pgp-key-properties.c:1712
+#: ../src/seahorse-key-manager-store.c:1084
 msgid "Key ID"
 msgstr "Võtme ID"
 
@@ -722,7 +858,7 @@ msgstr ""
 
 #: ../libseahorse/seahorse-add-keyring.glade.h:4
 #: ../libseahorse/seahorse-add-keyserver.glade.h:5
-#: ../src/seahorse-ssh-upload.glade.h:3
+#: ../ssh/seahorse-ssh-upload.glade.h:3
 msgid "The host name or address of the server."
 msgstr "Serveri hostinimi või aadress."
 
@@ -805,7 +941,7 @@ msgstr "Kohandatud"
 
 #: ../libseahorse/seahorse-prefs.c:434
 msgid "None: Don't publish keys"
-msgstr "Puudub: võtmeid ei avalikustata"
+msgstr "Puudub: võtmeid ei avaldata"
 
 #: ../libseahorse/seahorse-prefs-keyrings.c:207
 msgid "<i>Automatically unlocked when user logs in.</i>"
@@ -936,46 +1072,46 @@ msgstr "Tundmatu võti"
 msgid "Unavailable Key"
 msgstr "Võti pole saadaval"
 
-#: ../libseahorse/seahorse-util.c:154
+#: ../libseahorse/seahorse-util.c:191
 msgid "%Y-%m-%d"
 msgstr "%d. %m %Y"
 
-#: ../libseahorse/seahorse-util.c:380
+#: ../libseahorse/seahorse-util.c:417
 msgid "Key Data"
 msgstr "Võtme andmed"
 
-#: ../libseahorse/seahorse-util.c:382
+#: ../libseahorse/seahorse-util.c:419
 msgid "Multiple Keys"
 msgstr "Mitu võtit"
 
-#: ../libseahorse/seahorse-util.c:638
+#: ../libseahorse/seahorse-util.c:675
 msgid "Couldn't run file-roller"
 msgstr "Käsku file-roller pole võimalik käivitada"
 
-#: ../libseahorse/seahorse-util.c:643
+#: ../libseahorse/seahorse-util.c:681
 msgid "Couldn't package files"
 msgstr "Faile pole võimalik pakkida"
 
-#: ../libseahorse/seahorse-util.c:644
+#: ../libseahorse/seahorse-util.c:682
 msgid "The file-roller process did not complete successfully"
 msgstr "file-roller'i protsess ei lõpetanud veatult"
 
 #. Filter for PGP keys. We also include *.asc, as in many
 #. cases that extension is associated with text/plain
-#: ../libseahorse/seahorse-util.c:753
+#: ../libseahorse/seahorse-util.c:791
 msgid "All key files"
 msgstr "Kõik võtmefailid"
 
-#: ../libseahorse/seahorse-util.c:764 ../libseahorse/seahorse-util.c:804
-#: ../src/seahorse-photos.c:243
+#: ../libseahorse/seahorse-util.c:802 ../libseahorse/seahorse-util.c:842
+#: ../pgp/seahorse-pgp-photos.c:242
 msgid "All files"
 msgstr "Kõik failid"
 
-#: ../libseahorse/seahorse-util.c:797
+#: ../libseahorse/seahorse-util.c:835
 msgid "Archive files"
 msgstr "Arhiivifailid"
 
-#: ../libseahorse/seahorse-util.c:838
+#: ../libseahorse/seahorse-util.c:876
 msgid ""
 "<b>A file already exists with this name.</b>\n"
 "\n"
@@ -985,29 +1121,34 @@ msgstr ""
 "\n"
 "Kas sa soovid seda asendada uue failiga?"
 
-#: ../libseahorse/seahorse-util.c:841
+#: ../libseahorse/seahorse-util.c:879
 msgid "_Replace"
 msgstr "_Asenda"
 
 #: ../libseahorse/seahorse-validity.c:32 ../pgp/seahorse-pgp-key.c:698
-#: ../src/seahorse-key-properties.c:1116
+#: ../pgp/seahorse-pgp-key-properties.c:1115
 msgid "Unknown"
 msgstr "Tundmatu"
 
-#: ../libseahorse/seahorse-validity.c:34 ../src/seahorse-key-properties.c:1122
-#: ../src/seahorse-key-properties.c:1254 ../src/seahorse-key-properties.c:1326
+#: ../libseahorse/seahorse-validity.c:34
+#: ../pgp/seahorse-pgp-key-properties.c:1121
+#: ../pgp/seahorse-pgp-key-properties.c:1253
+#: ../pgp/seahorse-pgp-key-properties.c:1325
 msgid "Never"
 msgstr "Mitte kunagi"
 
-#: ../libseahorse/seahorse-validity.c:36 ../src/seahorse-key-properties.c:1129
+#: ../libseahorse/seahorse-validity.c:36
+#: ../pgp/seahorse-pgp-key-properties.c:1128
 msgid "Marginal"
 msgstr "Vähesel määral"
 
-#: ../libseahorse/seahorse-validity.c:38 ../src/seahorse-key-properties.c:1135
+#: ../libseahorse/seahorse-validity.c:38
+#: ../pgp/seahorse-pgp-key-properties.c:1134
 msgid "Full"
 msgstr "Täielik"
 
-#: ../libseahorse/seahorse-validity.c:40 ../src/seahorse-key-properties.c:1141
+#: ../libseahorse/seahorse-validity.c:40
+#: ../pgp/seahorse-pgp-key-properties.c:1140
 msgid "Ultimate"
 msgstr "Ülim"
 
@@ -1015,7 +1156,8 @@ msgstr "Ülim"
 msgid "Disabled"
 msgstr "Keelatud"
 
-#: ../libseahorse/seahorse-validity.c:44 ../src/seahorse-key-properties.c:1322
+#: ../libseahorse/seahorse-validity.c:44
+#: ../pgp/seahorse-pgp-key-properties.c:1321
 msgid "Revoked"
 msgstr "Tühistatud"
 
@@ -1023,6 +1165,85 @@ msgstr "Tühistatud"
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Abiteavet pole võimalik kuvada: %s"
+
+#: ../libcryptui/cryptui.c:211
+msgid ""
+"No encryption keys were found with which to perform the operation you "
+"requested.  The program <b>Passwords and Encryption Keys</b> will now be "
+"started so that you may either create a key or import one."
+msgstr ""
+
+#: ../pgp/seahorse-add-subkey.glade.h:1
+msgid "Expiration Date:"
+msgstr "Aegumiskuupäev:"
+
+#: ../pgp/seahorse-add-subkey.glade.h:2
+msgid "Generate a new subkey"
+msgstr "Uue alamvõtme genereerimine"
+
+#: ../pgp/seahorse-add-subkey.glade.h:3
+msgid "If key never expires"
+msgstr "Kui võti ei aegu kunagi"
+
+#: ../pgp/seahorse-add-subkey.glade.h:4
+msgid "Key _Length:"
+msgstr "Võtme _pikkus:"
+
+#: ../pgp/seahorse-add-subkey.glade.h:5
+msgid "Key _Type:"
+msgstr "_Võtme liik:"
+
+#: ../pgp/seahorse-add-subkey.glade.h:6
+msgid "Length of Key"
+msgstr "Võtme pikkus"
+
+#: ../pgp/seahorse-add-subkey.glade.h:7
+msgid "Never E_xpires"
+msgstr "Ei aegu _kunagi"
+
+#: ../pgp/seahorse-add-uid.glade.h:1
+msgid "Add User ID"
+msgstr "Kasutaja ID lisamine"
+
+#: ../pgp/seahorse-add-uid.glade.h:2
+msgid "Create the new user ID"
+msgstr "Uue kasutaja-ID loomine"
+
+#: ../pgp/seahorse-add-uid.glade.h:3 ../pgp/seahorse-pgp-generate.glade.h:8
+msgid "Full _Name:"
+msgstr "_Täisnimi:"
+
+#: ../pgp/seahorse-add-uid.glade.h:4
+msgid "Key Co_mment:"
+msgstr "Võtme _kommentaar:"
+
+#: ../pgp/seahorse-add-uid.glade.h:5
+msgid "Must be at least 5 characters long"
+msgstr "Peab olema vähemalt viie märgi pikkune"
+
+#: ../pgp/seahorse-add-uid.glade.h:6
+msgid "Optional comment describing key"
+msgstr "Valikuline kommentaar võtme kirjeldamiseks"
+
+#: ../pgp/seahorse-add-uid.glade.h:7
+msgid "Optional email address"
+msgstr "Valikuline e-posti aadress"
+
+#: ../pgp/seahorse-add-uid.glade.h:8 ../pgp/seahorse-pgp-generate.glade.h:14
+msgid "_Email Address:"
+msgstr "_E-posti aadress:"
+
+#: ../pgp/seahorse-expires.glade.h:1
+msgid "C_hange"
+msgstr "_Muuda"
+
+#: ../pgp/seahorse-expires.glade.h:2 ../pgp/seahorse-revoke.glade.h:4
+msgid "Revoke key"
+msgstr "Võtme tühistamine"
+
+#: ../pgp/seahorse-expires.glade.h:3
+msgid "_Never expires"
+msgstr "_Ei aegu kunagi"
 
 #: ../pgp/seahorse-gpgmex-util.c:55
 msgid "Decryption failed. You probably do not have the decryption key."
@@ -1054,8 +1275,8 @@ msgid "Retrieving keys..."
 msgstr "Võtmete vastuvõtmine..."
 
 #: ../pgp/seahorse-hkp-source.c:732 ../pgp/seahorse-ldap-source.c:1269
-#: ../pgp/seahorse-pgp-source.c:440 ../pgp/seahorse-server-source.c:213
-#: ../src/seahorse-generate-select.c:144
+#: ../pgp/seahorse-pgp-generator.vala:29 ../pgp/seahorse-pgp-source.c:440
+#: ../pgp/seahorse-server-source.c:213
 msgid "PGP Key"
 msgstr "PGP-võti"
 
@@ -1104,19 +1325,702 @@ msgstr "Kaugvõtmete vastuvõtmine..."
 msgid "Sending keys to key server..."
 msgstr "Võtmete saamine võtmeserverisse..."
 
+#: ../pgp/seahorse-pgp-add-subkey.c:166
+msgid "Couldn't add subkey"
+msgstr "Alamvõtit pole võimalik lisada"
+
+#: ../pgp/seahorse-pgp-add-subkey.c:187
+#, c-format
+msgid "Add subkey to %s"
+msgstr "Alamvõtme lisamine omanikule %s"
+
+#: ../pgp/seahorse-pgp-add-subkey.c:204 ../pgp/seahorse-pgp-generate.c:51
+msgid "DSA (sign only)"
+msgstr "DSA (ainult allkirjastamiseks)"
+
+#: ../pgp/seahorse-pgp-add-subkey.c:212
+msgid "ElGamal (encrypt only)"
+msgstr "ElGamal (ainult krüptimiseks)"
+
+#: ../pgp/seahorse-pgp-add-subkey.c:218 ../pgp/seahorse-pgp-generate.c:52
+msgid "RSA (sign only)"
+msgstr "RSA (ainult allkirjastamiseks)"
+
+#: ../pgp/seahorse-pgp-add-subkey.c:224
+msgid "RSA (encrypt only)"
+msgstr "RSA (ainult krüptimiseks)"
+
+#: ../pgp/seahorse-pgp-add-uid.c:85
+msgid "Couldn't add user id"
+msgstr "Kasutaja ID-d pole võimalik lisada"
+
+#: ../pgp/seahorse-pgp-add-uid.c:107
+#, c-format
+msgid "Add user ID to %s"
+msgstr "Võtmele %s kasutaja ID lisamine"
+
+#: ../pgp/seahorse-pgp-commands.vala:29
+msgid "_Sign Key..."
+msgstr "_Allkirjasta võti..."
+
+#: ../pgp/seahorse-pgp-commands.vala:30
+msgid "Sign public key"
+msgstr "Avaliku võtme allkirjastamine"
+
+#: ../pgp/seahorse-pgp-commands.vala:77
+#, c-format
+msgid "Are you sure you want to delete the PGP key '%s'?"
+msgstr "Kas sa soovid PGP-võtme '%s' kustutada?"
+
+#: ../pgp/seahorse-pgp-commands.vala:79
+#, c-format
+msgid "Are you sure you want to delete %d PGP keys?"
+msgstr "Kas sa soovid %d PGP-võtit kustutada?"
+
+#: ../pgp/seahorse-pgp-delete.c:41 ../ssh/seahorse-delete.c:41
+#, c-format
+msgid ""
+"%s is a private key. Make sure you have a backup. Do you still want to "
+"delete it?"
+msgstr ""
+"%s on salajane võti. Veendu, et sul oleks sellest võtmest varukoopia. Kas sa "
+"soovid seda võtit kustutada?"
+
+#: ../pgp/seahorse-pgp-delete.c:75 ../ssh/seahorse-delete.c:75
+#, c-format
+msgid "Are you sure you want to permanently delete %s?"
+msgstr "Kas sa soovid '%s' jäädavalt kustutada?"
+
+#: ../pgp/seahorse-pgp-delete.c:81 ../ssh/seahorse-delete.c:81
+#, c-format
+msgid "Are you sure you want to permanently delete %d key?"
+msgid_plural "Are you sure you want to permanently delete %d keys?"
+msgstr[0] "Kas sa soovid %d võtme jäädavalt kustutada?"
+msgstr[1] "Kas sa soovid %d võtit jäädavalt kustutada?"
+
+#: ../pgp/seahorse-pgp-delete.c:125 ../ssh/seahorse-delete.c:125
+msgid "Couldn't delete key"
+msgstr "Võtit pole võimalik kustutada"
+
+#: ../pgp/seahorse-pgp-delete.c:142 ../ssh/seahorse-delete.c:142
+#, c-format
+msgid "Are you sure you want to permanently delete subkey %d of %s?"
+msgstr "Kas sa soovid jäädavalt kustutada omaniku %2$s alamvõtme %1$d?"
+
+#: ../pgp/seahorse-pgp-delete.c:165 ../ssh/seahorse-delete.c:165
+msgid "Couldn't delete subkey"
+msgstr "Alamvõtit pole võimalik kustutada"
+
+#: ../pgp/seahorse-pgp-delete.c:184 ../ssh/seahorse-delete.c:184
+#, c-format
+msgid "Are you sure you want to permanently delete the '%s' user ID?"
+msgstr "Kas sa soovid kasutaja ID '%s' jäädavalt kustutada?"
+
+#: ../pgp/seahorse-pgp-delete.c:209 ../ssh/seahorse-delete.c:209
+msgid "Couldn't delete user id"
+msgstr "Kasutaja ID-d pole võimalik kustutada"
+
+#: ../pgp/seahorse-pgp-expires.c:70
+msgid "Couldn't change expiry date"
+msgstr "Aegumise kuupäeva pole võimalik muuta"
+
+#: ../pgp/seahorse-pgp-expires.c:134
+#, c-format
+msgid "Expiry for Subkey %d of %s"
+msgstr "Omaniku %2$s %1$d. alamvõtme aegumise määramine"
+
+#: ../pgp/seahorse-pgp-expires.c:136
+#, c-format
+msgid "Expiry for %s"
+msgstr "Omaniku %s võtme aegumise määramine"
+
+#: ../pgp/seahorse-pgp-generate.c:50
+msgid "DSA Elgamal"
+msgstr "DSA Elgamal"
+
+#: ../pgp/seahorse-pgp-generate.c:61
+msgid "Couldn't generate PGP key"
+msgstr "PGP-võtit pole võimalik genereerida"
+
+#: ../pgp/seahorse-pgp-generate.c:168
+msgid "Passphrase for New PGP Key"
+msgstr "Uue PGP-võtme parool"
+
+#: ../pgp/seahorse-pgp-generate.c:169
+msgid "Enter the passphrase for your new key twice."
+msgstr "Sisesta oma uuele võtmele parool (2 korda)."
+
+#: ../pgp/seahorse-pgp-generate.c:178
+msgid "Couldn't generate key"
+msgstr "Võtit pole võimalik genereerida"
+
+#: ../pgp/seahorse-pgp-generate.c:180
+msgid "Generating key"
+msgstr "Võtme genereerimine"
+
+#: ../pgp/seahorse-pgp-generate.glade.h:1
+#: ../ssh/seahorse-ssh-generate.glade.h:1
+msgid "<b>_Advanced key options</b>"
+msgstr "<b>Võt_me laiendatud valikud</b>"
+
+#: ../pgp/seahorse-pgp-generate.glade.h:2
+msgid "A PGP key allows you to encrypt email or files to other people."
+msgstr "PGP-võti võimaldab sul teistele saatmiseks krüptida e-posti või faile."
+
+#: ../pgp/seahorse-pgp-generate.glade.h:3
+msgid "Algorithms here"
+msgstr "Siia tulevad algoritmid"
+
+#: ../pgp/seahorse-pgp-generate.glade.h:4
+msgid "C_reate"
+msgstr "L_oo"
+
+#: ../pgp/seahorse-pgp-generate.glade.h:5
+msgid "Create a PGP Key"
+msgstr "PGP-võtme loomine"
+
+#: ../pgp/seahorse-pgp-generate.glade.h:6
+msgid "E_xpiration Date:"
+msgstr "Ae_gumiskuupäev:"
+
+#: ../pgp/seahorse-pgp-generate.glade.h:7
+#: ../ssh/seahorse-ssh-generate.glade.h:7
+msgid "Encryption _Type:"
+msgstr "_Krüptimise liik:"
+
+#: ../pgp/seahorse-pgp-generate.glade.h:9
+msgid "Generate a new key"
+msgstr "Uue võtme genereerimine"
+
+#: ../pgp/seahorse-pgp-generate.glade.h:10
+#: ../ssh/seahorse-ssh-generate.glade.h:10
+msgid "Key _Strength (bits):"
+msgstr "Võtme _pikkus (bittides):"
+
+#: ../pgp/seahorse-pgp-generate.glade.h:11
+msgid "Ne_ver Expires"
+msgstr "_Ei aegu kunagi"
+
+#: ../pgp/seahorse-pgp-generate.glade.h:12
+msgid "New PGP Key"
+msgstr "Uus PGP-võti"
+
+#: ../pgp/seahorse-pgp-generate.glade.h:13
+msgid "_Comment:"
+msgstr "_Kommentaar:"
+
+#: ../pgp/seahorse-pgp-generator.vala:30
+msgid "Used to encrypt email and files"
+msgstr "Kasutatakse e-posti ja failide krüptimiseks"
+
 #: ../pgp/seahorse-pgp-key.c:166
-#: ../src/seahorse-pgp-public-key-properties.glade.h:32
+#: ../pgp/seahorse-pgp-public-key-properties.glade.h:32
 msgid "Public PGP Key"
 msgstr "Avalik PGP-võti"
 
 #: ../pgp/seahorse-pgp-key.c:169
-#: ../src/seahorse-pgp-private-key-properties.glade.h:36
+#: ../pgp/seahorse-pgp-private-key-properties.glade.h:36
 msgid "Private PGP Key"
 msgstr "Salajane PGP-võti"
 
 #: ../pgp/seahorse-pgp-key.c:700
 msgid "ElGamal"
 msgstr "ElGamal"
+
+#: ../pgp/seahorse-pgp-key-properties.c:215
+msgid "Couldn't change primary user ID"
+msgstr "Peamist kasutaja ID-d pole võimalik muuta"
+
+#: ../pgp/seahorse-pgp-key-properties.c:313
+#: ../pgp/seahorse-pgp-key-properties.c:1433
+msgid "[Unknown]"
+msgstr "[Tundmatu]"
+
+#: ../pgp/seahorse-pgp-key-properties.c:411
+#: ../pgp/seahorse-pgp-key-properties.c:1709
+msgid "Name/Email"
+msgstr "Nimi/E-post"
+
+#: ../pgp/seahorse-pgp-key-properties.c:416
+msgid "Signature ID"
+msgstr "Allkirja ID"
+
+#: ../pgp/seahorse-pgp-key-properties.c:568
+msgid "Couldn't change primary photo"
+msgstr "Peamist fotot pole võimalik muuta"
+
+#: ../pgp/seahorse-pgp-key-properties.c:816
+msgid "(unknown)"
+msgstr "(tundmatu)"
+
+#: ../pgp/seahorse-pgp-key-properties.c:819
+#, c-format
+msgid "This key expired on: %s"
+msgstr "See võti aegus: %s"
+
+#: ../pgp/seahorse-pgp-key-properties.c:1002
+#: ../pgp/seahorse-pgp-key-properties.c:1402
+msgid "Unable to change trust"
+msgstr "Usaldust pole võimalik muuta"
+
+#: ../pgp/seahorse-pgp-key-properties.c:1024
+#: ../ssh/seahorse-ssh-key-properties.c:220
+msgid "Export Complete Key"
+msgstr "Võtme täielik eksport"
+
+#: ../pgp/seahorse-pgp-key-properties.c:1052 ../src/seahorse-viewer.vala:399
+#: ../ssh/seahorse-ssh-key-properties.c:248
+#, c-format
+msgid "Couldn't export key to \"%s\""
+msgstr "Võtit pole asukohale \"%s\" võimalik eksportida"
+
+#: ../pgp/seahorse-pgp-key-properties.c:1297
+msgid "ID"
+msgstr "ID"
+
+#. The key type column
+#: ../pgp/seahorse-pgp-key-properties.c:1300
+#: ../src/seahorse-key-manager-store.c:1103
+msgid "Type"
+msgstr "Liik"
+
+#: ../pgp/seahorse-pgp-key-properties.c:1303
+msgid "Created"
+msgstr "Loodud"
+
+#: ../pgp/seahorse-pgp-key-properties.c:1306
+msgid "Expires"
+msgstr "Aegumine"
+
+#: ../pgp/seahorse-pgp-key-properties.c:1309
+msgid "Status"
+msgstr "Olek"
+
+#: ../pgp/seahorse-pgp-key-properties.c:1312
+msgid "Strength"
+msgstr "Tugevus"
+
+#: ../pgp/seahorse-pgp-key-properties.c:1321
+#: ../pgp/seahorse-pgp-key-properties.c:1322
+msgid "Good"
+msgstr "Hea"
+
+#: ../pgp/seahorse-pgp-key-properties.c:1322
+#: ../src/seahorse-key-manager-store.c:323
+msgid "Expired"
+msgstr "Aegunud"
+
+#: ../pgp/seahorse-pgp-photos.c:73
+#, c-format
+msgid ""
+"<big><b>The photo is too large</b></big>\n"
+"The recommended size for a photo on your key is %d x %d pixels."
+msgstr ""
+"<big><b>Foto on liiga suur</b></big>\n"
+"Võtmele lisatava foto soovituslik suutus on %d x %d pikslit."
+
+#: ../pgp/seahorse-pgp-photos.c:78
+msgid "_Don't Resize"
+msgstr "Ä_ra muuda suurust"
+
+#: ../pgp/seahorse-pgp-photos.c:79
+msgid "_Resize"
+msgstr "_Muuda suurust"
+
+#: ../pgp/seahorse-pgp-photos.c:128
+#, c-format
+msgid ""
+"This is not a image file, or an unrecognized kind of image file. Try to use "
+"a JPEG image."
+msgstr ""
+"See pole pildifail või on selle pildifail tundmatut liiki. Proovi kasutada "
+"JPEG-pilti."
+
+#: ../pgp/seahorse-pgp-photos.c:224
+msgid "All image files"
+msgstr "Kõik pildifailid"
+
+#: ../pgp/seahorse-pgp-photos.c:237
+msgid "All JPEG files"
+msgstr "Kõik JPEG-failid"
+
+#: ../pgp/seahorse-pgp-photos.c:261
+msgid "Choose Photo to Add to Key"
+msgstr "Võtmele lisatava foto valimine"
+
+#: ../pgp/seahorse-pgp-photos.c:290 ../pgp/seahorse-pgp-photos.c:294
+msgid "Couldn't add photo"
+msgstr "Fotot pole võimalik lisada"
+
+#: ../pgp/seahorse-pgp-photos.c:291
+msgid "The file could not be loaded. It may be in an invalid format"
+msgstr "Faili pole võimalik laadida. Võib-olla on see vigases vormingus."
+
+#: ../pgp/seahorse-pgp-photos.c:321
+msgid "Are you sure you want to remove the current photo from your key?"
+msgstr "Kas soovid võtmelt eemaldada seal praegu olevat fotot?"
+
+#: ../pgp/seahorse-pgp-photos.c:334
+msgid "Couldn't delete photo"
+msgstr "Fotot pole võimalik kustutada"
+
+#: ../pgp/seahorse-pgp-private-key-properties.glade.h:1
+msgid "<b>Actions</b>"
+msgstr "<b>Tegevused</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.glade.h:2
+#: ../pgp/seahorse-pgp-public-key-properties.glade.h:1
+msgid "<b>Comment:</b>"
+msgstr "<b>Kommentaar:</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.glade.h:3
+msgid "<b>Dates</b>"
+msgstr "<b>Kuupäevad</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.glade.h:4
+#: ../pgp/seahorse-pgp-public-key-properties.glade.h:3
+msgid "<b>Email:</b>"
+msgstr "<b>E-post:</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.glade.h:5
+msgid "<b>Fingerprint</b>"
+msgstr "<b>Sõrmejälg</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.glade.h:6
+#: ../pgp/seahorse-pgp-public-key-properties.glade.h:6
+msgid "<b>Key ID:</b>"
+msgstr "<b>Võtme ID:</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.glade.h:7
+msgid "<b>Key Names and Signatures</b>"
+msgstr "<b>Võtme nimed ja allkirjad</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.glade.h:8
+#: ../pgp/seahorse-pgp-public-key-properties.glade.h:7
+#: ../ssh/seahorse-ssh-key-properties.glade.h:7
+msgid "<b>Name:</b>"
+msgstr "<b>Nimi:</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.glade.h:9
+#: ../pgp/seahorse-pgp-public-key-properties.glade.h:8
+msgid "<b>Photo </b>"
+msgstr "<b>Foto </b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.glade.h:10
+msgid "<b>Technical Details</b>"
+msgstr "<b>Tehnilised üksikasjad</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.glade.h:11
+#: ../pgp/seahorse-pgp-public-key-properties.glade.h:10
+msgid "<b>This key has been revoked</b>"
+msgstr "<b>See võti on tühistatud</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.glade.h:12
+#: ../pgp/seahorse-pgp-public-key-properties.glade.h:11
+msgid "<b>This key has expired</b>"
+msgstr "<b>See võti on aegunud</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.glade.h:13
+#: ../pgp/seahorse-pgp-public-key-properties.glade.h:12
+#: ../ssh/seahorse-ssh-key-properties.glade.h:11
+msgid "<b>Type:</b>"
+msgstr "<b>Liik:</b>"
+
+#. To translators: This is the noun not the verb.
+#: ../pgp/seahorse-pgp-private-key-properties.glade.h:15
+#: ../pgp/seahorse-pgp-public-key-properties.glade.h:14
+#: ../ssh/seahorse-ssh-key-properties.glade.h:13
+msgid "<b>Use:</b>"
+msgstr "<b>Kasutus:</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.glade.h:16
+#: ../pgp/seahorse-pgp-public-key-properties.glade.h:18
+msgid "<b>_Subkeys</b>"
+msgstr "<b>Alam_võtmed</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.glade.h:17
+msgid "Add"
+msgstr "Lisa"
+
+#: ../pgp/seahorse-pgp-private-key-properties.glade.h:18
+msgid "Add a photo to this key"
+msgstr "Sellele võtmele foto lisamine"
+
+#: ../pgp/seahorse-pgp-private-key-properties.glade.h:19
+#: ../ssh/seahorse-ssh-key-properties.glade.h:16
+msgid "Change _Passphrase"
+msgstr "Muuda _parooli"
+
+#: ../pgp/seahorse-pgp-private-key-properties.glade.h:20
+#: ../pgp/seahorse-pgp-public-key-properties.glade.h:19
+msgid "Created:"
+msgstr "Loodud:"
+
+#: ../pgp/seahorse-pgp-private-key-properties.glade.h:21
+msgid "Decrypt files and email sent to you."
+msgstr "Sinule saadetud e-posti ja failide lahtikrüptimiseks."
+
+#: ../pgp/seahorse-pgp-private-key-properties.glade.h:22
+msgid "Delete"
+msgstr "Kustuta"
+
+#: ../pgp/seahorse-pgp-private-key-properties.glade.h:24
+msgid "Expire"
+msgstr "Määra aegumine"
+
+#: ../pgp/seahorse-pgp-private-key-properties.glade.h:25
+#: ../pgp/seahorse-pgp-public-key-properties.glade.h:22
+msgid "Expires:"
+msgstr "Aegub:"
+
+#: ../pgp/seahorse-pgp-private-key-properties.glade.h:26
+msgid "Export"
+msgstr "Ekspordi"
+
+#: ../pgp/seahorse-pgp-private-key-properties.glade.h:27
+msgid "Go to next photo"
+msgstr "Järgmisele fotole liikumine"
+
+#: ../pgp/seahorse-pgp-private-key-properties.glade.h:28
+msgid "Go to previous photo"
+msgstr "Eelmisele fotole liikumine"
+
+#: ../pgp/seahorse-pgp-private-key-properties.glade.h:29
+#: ../pgp/seahorse-pgp-public-key-properties.glade.h:29
+msgid "Key ID:"
+msgstr "Võtme ID:"
+
+#: ../pgp/seahorse-pgp-private-key-properties.glade.h:31
+msgid "Make this photo the primary photo"
+msgstr "Selle foto määramine peamiseks fotoks"
+
+#: ../pgp/seahorse-pgp-private-key-properties.glade.h:32
+msgid "Names and Signatures"
+msgstr "Nimed ja allkirjad"
+
+#: ../pgp/seahorse-pgp-private-key-properties.glade.h:33
+msgid "Override Owner _Trust:"
+msgstr "Omaniku _usalduse asendamine:"
+
+#: ../pgp/seahorse-pgp-private-key-properties.glade.h:34
+#: ../pgp/seahorse-pgp-public-key-properties.glade.h:31
+msgid "Owner"
+msgstr "Omanik"
+
+#: ../pgp/seahorse-pgp-private-key-properties.glade.h:35
+msgid "Primary"
+msgstr "Peamine"
+
+#: ../pgp/seahorse-pgp-private-key-properties.glade.h:37
+msgid "Remove this photo from this key"
+msgstr "Sellelt võtmelt foto eemaldamine"
+
+#: ../pgp/seahorse-pgp-private-key-properties.glade.h:38
+msgid "Revoke"
+msgstr "Tühista"
+
+#: ../pgp/seahorse-pgp-private-key-properties.glade.h:39
+msgid "Sign"
+msgstr "Allkirjasta"
+
+#: ../pgp/seahorse-pgp-private-key-properties.glade.h:40
+#: ../pgp/seahorse-pgp-public-key-properties.glade.h:33
+msgid "Strength:"
+msgstr "Tugevus:"
+
+#: ../pgp/seahorse-pgp-private-key-properties.glade.h:41
+#: ../pgp/seahorse-pgp-public-key-properties.glade.h:34
+msgid "The owner of the key revoked the key. It can no longer be used."
+msgstr "Selle võtme omanik tühistas võtme. Seda pole võimalik rohkem kasutada."
+
+#: ../pgp/seahorse-pgp-private-key-properties.glade.h:43
+msgid ""
+"Unknown\n"
+"Never\n"
+"Marginal\n"
+"Full\n"
+"Ultimate"
+msgstr ""
+"Tundmatu\n"
+"Ei iial\n"
+"Vähesel määral\n"
+"Täielik\n"
+"Ülim"
+
+#: ../pgp/seahorse-pgp-private-key-properties.glade.h:48
+msgid "_Add Name"
+msgstr "Lisa _nimi"
+
+#: ../pgp/seahorse-pgp-private-key-properties.glade.h:49
+msgid "_Export Complete Key:"
+msgstr "Võtme täielik _eksport:"
+
+#: ../pgp/seahorse-pgp-public-key-properties.glade.h:2
+msgid "<b>Dates:</b>"
+msgstr "<b>Kuupäevad:</b>"
+
+#: ../pgp/seahorse-pgp-public-key-properties.glade.h:4
+#: ../ssh/seahorse-ssh-key-properties.glade.h:4
+msgid "<b>Fingerprint:</b>"
+msgstr "<b>Sõrmejälg:</b>"
+
+#: ../pgp/seahorse-pgp-public-key-properties.glade.h:5
+msgid "<b>Indicate Trust:</b>"
+msgstr "<b>Usaldusmäär:</b>"
+
+#: ../pgp/seahorse-pgp-public-key-properties.glade.h:15
+msgid "<b>Your trust of this key</b>"
+msgstr "<b>Sinu usaldus selle võtme vastu</b>"
+
+#: ../pgp/seahorse-pgp-public-key-properties.glade.h:16
+msgid "<b>_Other Names:</b>"
+msgstr "<b>_Teised nimed:</b>"
+
+#: ../pgp/seahorse-pgp-public-key-properties.glade.h:17
+msgid "<b>_People who have signed this key:</b>"
+msgstr "<b>Selle võtme allkirjastanud _inimesed:</b>"
+
+#: ../pgp/seahorse-pgp-public-key-properties.glade.h:21
+msgid "Encrypt files and email to the key's owner "
+msgstr "Failide ja e-posti krüptimiseks võtme omaniku jaoks"
+
+#: ../pgp/seahorse-pgp-public-key-properties.glade.h:24
+#, no-c-format
+msgid "I trust signatures from '%s' on other keys"
+msgstr "Usaldan isiku '%s' poolt teistele võtmetele antud allkirju"
+
+#: ../pgp/seahorse-pgp-public-key-properties.glade.h:26
+#, no-c-format
+msgid ""
+"If you believe that the person that owns this key is '%s', <i>sign</i> this "
+"key:"
+msgstr ""
+"Kui sa usud, et selle võtme omanik on '%s', siis <i>allkirjasta</i> see võti:"
+
+#: ../pgp/seahorse-pgp-public-key-properties.glade.h:28
+#, no-c-format
+msgid ""
+"If you no longer trust that '%s' owns this key, <i>revoke</i> your signature:"
+msgstr ""
+"Kui sa ei usalda kauem, et selle võtme omanik on '%s', siis <i>tühista</i> "
+"oma allkiri:"
+
+#. Trust column
+#: ../pgp/seahorse-pgp-public-key-properties.glade.h:35
+#: ../src/seahorse-key-manager-store.c:1097
+msgid "Trust"
+msgstr "Usaldus"
+
+#: ../pgp/seahorse-pgp-public-key-properties.glade.h:37
+msgid ""
+"Unknown\n"
+"Never\n"
+"Marginally\n"
+"Fully\n"
+"Ultimately"
+msgstr ""
+"Tundmatu\n"
+"Ei iial\n"
+"Vähesel määral\n"
+"Täielikult\n"
+"Ülimalt"
+
+#: ../pgp/seahorse-pgp-public-key-properties.glade.h:42
+msgid "You _Trust the Owner:"
+msgstr "Sinu _usaldus omaniku vastu:"
+
+#: ../pgp/seahorse-pgp-public-key-properties.glade.h:43
+msgid "Your trust is manually specified on the <i>Details</i> tab."
+msgstr "Sinu usaldus on käsitsi määratud kaardi <i>Üksikasjad</i> alt."
+
+#: ../pgp/seahorse-pgp-public-key-properties.glade.h:44
+msgid "_Only display the signatures of people I trust"
+msgstr "_Kuvatakse ainult minu poolt usaldatavaid inimesi"
+
+#: ../pgp/seahorse-pgp-public-key-properties.glade.h:45
+msgid "_Revoke Signature"
+msgstr "_Tühista allkiri"
+
+#: ../pgp/seahorse-pgp-public-key-properties.glade.h:46
+msgid "_Sign this Key"
+msgstr "A_llkirjasta see võti"
+
+#: ../pgp/seahorse-pgp-revoke.c:75
+msgid "Couldn't revoke subkey"
+msgstr "Alamvõtit pole võimalik tühistada"
+
+#: ../pgp/seahorse-pgp-revoke.c:102
+#, c-format
+msgid "Revoke Subkey %d of %s"
+msgstr "Omaniku %2$s %1$d. alamvõtme tühistamine"
+
+#: ../pgp/seahorse-pgp-revoke.c:104
+#, c-format
+msgid "Revoke %s"
+msgstr "Omaniku %s võtme tühistamine"
+
+#: ../pgp/seahorse-pgp-revoke.c:115
+msgid "No reason"
+msgstr "Põhjendus puudub"
+
+#: ../pgp/seahorse-pgp-revoke.c:116
+msgid "No reason for revoking key"
+msgstr "Võtme tühistamisele pole põhjendust määratud"
+
+#: ../pgp/seahorse-pgp-revoke.c:122
+msgid "Compromised"
+msgstr "Kompromiteeritud"
+
+#: ../pgp/seahorse-pgp-revoke.c:123
+msgid "Key has been compromised"
+msgstr "Võti on kompromiteeritud"
+
+#: ../pgp/seahorse-pgp-revoke.c:129
+msgid "Superseded"
+msgstr "Asendatud"
+
+#: ../pgp/seahorse-pgp-revoke.c:130
+msgid "Key has been superseded"
+msgstr "Võti on asendatud"
+
+#: ../pgp/seahorse-pgp-revoke.c:136
+msgid "Not Used"
+msgstr "Pole kasutusel"
+
+#: ../pgp/seahorse-pgp-revoke.c:137
+msgid "Key is no longer used"
+msgstr "Võti pole enam kasutusel"
+
+#: ../pgp/seahorse-pgp-revoke.c:176
+#, c-format
+msgid ""
+"You are about to add %s as a revoker for %s. This operation cannot be "
+"undone! Are you sure you want to continue?"
+msgstr ""
+"Sa oled lisamas omaniku %1$s võtmele tühistajat %2$s. Seda tegevust pole "
+"võimalik hiljem tagasi pöörata. Oled sa valmis jätkama?"
+
+#: ../pgp/seahorse-pgp-revoke.c:191
+msgid "Couldn't add revoker"
+msgstr "Tühistajat pole võimalik lisada"
+
+#: ../pgp/seahorse-pgp-sign.c:96
+msgid "Couldn't sign key"
+msgstr "Võtit pole võimalik allkirjastada"
+
+#. TODO: We should be giving an error message that allows them to
+#. generate or import a key
+#: ../pgp/seahorse-pgp-sign.c:159 ../pgp/seahorse-signer.c:61
+msgid "No keys usable for signing"
+msgstr "Puuduvad allkirjastamiseks sobilikud võtmed"
+
+#: ../pgp/seahorse-pgp-sign.c:160
+msgid ""
+"You have no personal PGP keys that can be used to indicate your trust of "
+"this key."
+msgstr ""
+"Sul pole isiklikke PGP-võtmeid, mida saaks kasutada selle võtme usaldatavuse "
+"määramiseks."
 
 #: ../pgp/seahorse-pgp-source.c:97
 #, c-format
@@ -1163,14 +2067,29 @@ msgstr ""
 "sellest, et arvuti kellaaeg on tulevikus või puudub enese poolt loodud "
 "allkiri."
 
-#: ../pgp/seahorse-pgp-source.c:1022 ../src/seahorse-key-manager.c:455
-#: ../src/seahorse-key-manager.c:502
+#: ../pgp/seahorse-pgp-source.c:1022 ../src/seahorse-key-manager.vala:559
 msgid "Importing Keys"
 msgstr "Võtmete importimine"
 
 #: ../pgp/seahorse-pgp-source.c:1060
 msgid "Exporting Keys"
 msgstr "Võtmete eksportimine"
+
+#: ../pgp/seahorse-revoke.glade.h:1
+msgid "Optional description of revocation"
+msgstr "Tühistamise põhjuste võimalik kirjeldus"
+
+#: ../pgp/seahorse-revoke.glade.h:2
+msgid "Re_voke"
+msgstr "_Tühista"
+
+#: ../pgp/seahorse-revoke.glade.h:3
+msgid "Reason for revoking the key"
+msgstr "Võtme tühistamise põhjus"
+
+#: ../pgp/seahorse-revoke.glade.h:6
+msgid "_Reason:"
+msgstr "_Põhjus:"
 
 #: ../pgp/seahorse-server-source.c:470
 msgid "LDAP Key Server"
@@ -1180,11 +2099,93 @@ msgstr "LDAP võtmeserver"
 msgid "HTTP Key Server"
 msgstr "HTTP võtmeserver"
 
-#. TODO: We should be giving an error message that allows them to
-#. generate or import a key
-#: ../pgp/seahorse-signer.c:61 ../src/seahorse-sign.c:163
-msgid "No keys usable for signing"
-msgstr "Puuduvad allkirjastamiseks sobilikud võtmed"
+#: ../pgp/seahorse-sign.glade.h:1
+msgid "<b>How carefully have you checked this key?</b>"
+msgstr "<b>Kui hoolikalt sa seda võtit kontrollisid?</b>"
+
+#: ../pgp/seahorse-sign.glade.h:2
+msgid "<b>How others will see this signature:</b>"
+msgstr "<b>Kuidas teised seda allkirja peaksid nägema:</b>"
+
+#: ../pgp/seahorse-sign.glade.h:3
+msgid "<b>Sign key as:</b>"
+msgstr "<b>Võtmed allkirjastatakse kui:</b>"
+
+#: ../pgp/seahorse-sign.glade.h:4
+msgid ""
+"<i>Casually:</i> means you have done a casual verification that the key\n"
+"is owned by the person who claims to own it. For example, you could\n"
+"read the key fingerprint to the owner over the phone. "
+msgstr ""
+"<i>Pealiskaudselt</i> täehdab, et sa oled mitte põgusalt kontrollinud, kas \n"
+"võti kuulub isikule, kes väidab selle võtme enesele kuuluvat. Näiteks on \n"
+"võtme omanik telefonitsi kinnitanud võtme sõrmejälje vastavust."
+
+#: ../pgp/seahorse-sign.glade.h:7
+msgid "<i>Key Name</i>"
+msgstr "<i>Võtme nimi</i>"
+
+#: ../pgp/seahorse-sign.glade.h:8
+msgid ""
+"<i>Not at all:</i> means you believe the key is owned by the person who \n"
+"claims to own it, but you could not or did not verify this to be a fact."
+msgstr ""
+"<i>Mitte üldse</i> tähendab, et sa usud selle võtme kuuluvat isikule, kes \n"
+"väidab selle võtme enesele kuuluvat, kuid sul pole olnud võimalik seda \n"
+"asjaolu kontrollida või pole sa lihtsalt seda teinud."
+
+#: ../pgp/seahorse-sign.glade.h:10
+msgid ""
+"<i>Very Carefully:</i> Select this only if you are absolutely sure that "
+"this\n"
+"key is genuine."
+msgstr ""
+"<i>Väga hoolikalt</i> - vali see ainult juhul, kui sa oled täiesti kindel, \n"
+"et see võti kuulub selle omanikule."
+
+#: ../pgp/seahorse-sign.glade.h:12
+msgid "By signing you indicate your trust that this key belongs to:"
+msgstr ""
+"Allkirjastamisega näitad sa, et usaldad sellele omanikule kuuluvat võtit:"
+
+#: ../pgp/seahorse-sign.glade.h:13
+msgid "I can _revoke this signature at a later date."
+msgstr "Mul on võimalus hiljem seda allkirja tü_histada."
+
+#: ../pgp/seahorse-sign.glade.h:14
+msgid ""
+"You could use a hard to forge photo identification (such as a passport) \n"
+"to personally check that the name on the key is correct. You should \n"
+"have also used email to check that the email address belongs to the\n"
+"owner."
+msgstr ""
+"Selle valiku jaoks peaks sa olema ise kontrollinud selle inimese isikut \n"
+"tõendavat pildiga dokumenti (näiteks ID-kaarti või passi). Samuti peaks\n"
+"sa olema kontrollinud, kas e-posti aadress vastab omanikule."
+
+#: ../pgp/seahorse-sign.glade.h:18
+msgid "_Casually"
+msgstr "_Pealiskaudselt"
+
+#: ../pgp/seahorse-sign.glade.h:19
+msgid "_Not at all"
+msgstr "_Mitte üldse"
+
+#: ../pgp/seahorse-sign.glade.h:20
+msgid "_Others may not see this signature"
+msgstr "_Teised ei tohi seda allkirja näha"
+
+#: ../pgp/seahorse-sign.glade.h:21
+msgid "_Sign"
+msgstr "All_kirjasta"
+
+#: ../pgp/seahorse-sign.glade.h:22
+msgid "_Signer:"
+msgstr "_Allkirjastaja:"
+
+#: ../pgp/seahorse-sign.glade.h:23
+msgid "_Very Carefully"
+msgstr "_Väga hoolikalt"
 
 #: ../pgp/seahorse-signer.c:62
 msgid ""
@@ -1197,103 +2198,9 @@ msgstr ""
 msgid "_Sign message with key:"
 msgstr "A_llkirjasta sõnum järgneva võtmega:"
 
-#: ../src/main.c:73 ../src/seahorse-key-manager.c:884
+#: ../src/main.c:73 ../src/seahorse-viewer.vala:229
 msgid "Encryption Key Manager"
 msgstr "Krüptimisvõtmete haldur"
-
-#: ../src/seahorse-add-subkey.c:167
-msgid "Couldn't add subkey"
-msgstr "Alamvõtit pole võimalik lisada"
-
-#: ../src/seahorse-add-subkey.c:188
-#, c-format
-msgid "Add subkey to %s"
-msgstr "Alamvõtme lisamine omanikule %s"
-
-#: ../src/seahorse-add-subkey.c:205 ../src/seahorse-pgp-generate.c:52
-msgid "DSA (sign only)"
-msgstr "DSA (ainult allkirjastamiseks)"
-
-#: ../src/seahorse-add-subkey.c:213
-msgid "ElGamal (encrypt only)"
-msgstr "ElGamal (ainult krüptimiseks)"
-
-#: ../src/seahorse-add-subkey.c:219 ../src/seahorse-pgp-generate.c:53
-msgid "RSA (sign only)"
-msgstr "RSA (ainult allkirjastamiseks)"
-
-#: ../src/seahorse-add-subkey.c:225
-msgid "RSA (encrypt only)"
-msgstr "RSA (ainult krüptimiseks)"
-
-#: ../src/seahorse-add-subkey.glade.h:1
-msgid "Expiration Date:"
-msgstr "Aegumiskuupäev:"
-
-#: ../src/seahorse-add-subkey.glade.h:2
-msgid "Generate a new subkey"
-msgstr "Uue alamvõtme genereerimine"
-
-#: ../src/seahorse-add-subkey.glade.h:3
-msgid "If key never expires"
-msgstr "Kui võti ei aegu kunagi"
-
-#: ../src/seahorse-add-subkey.glade.h:4
-msgid "Key _Length:"
-msgstr "Võtme _pikkus:"
-
-#: ../src/seahorse-add-subkey.glade.h:5
-msgid "Key _Type:"
-msgstr "_Võtme liik:"
-
-#: ../src/seahorse-add-subkey.glade.h:6
-msgid "Length of Key"
-msgstr "Võtme pikkus"
-
-#: ../src/seahorse-add-subkey.glade.h:7
-msgid "Never E_xpires"
-msgstr "Ei aegu _kunagi"
-
-#: ../src/seahorse-add-uid.c:86
-msgid "Couldn't add user id"
-msgstr "Kasutaja ID-d pole võimalik lisada"
-
-#: ../src/seahorse-add-uid.c:108
-#, c-format
-msgid "Add user ID to %s"
-msgstr "Võtmele %s kasutaja ID lisamine"
-
-#: ../src/seahorse-add-uid.glade.h:1
-msgid "Add User ID"
-msgstr "Kasutaja ID lisamine"
-
-#: ../src/seahorse-add-uid.glade.h:2
-msgid "Create the new user ID"
-msgstr "Uue kasutaja-ID loomine"
-
-#: ../src/seahorse-add-uid.glade.h:3 ../src/seahorse-pgp-generate.glade.h:8
-msgid "Full _Name:"
-msgstr "_Täisnimi:"
-
-#: ../src/seahorse-add-uid.glade.h:4
-msgid "Key Co_mment:"
-msgstr "Võtme _kommentaar:"
-
-#: ../src/seahorse-add-uid.glade.h:5
-msgid "Must be at least 5 characters long"
-msgstr "Peab olema vähemalt viie märgi pikkune"
-
-#: ../src/seahorse-add-uid.glade.h:6
-msgid "Optional comment describing key"
-msgstr "Valikuline kommentaar võtme kirjeldamiseks"
-
-#: ../src/seahorse-add-uid.glade.h:7
-msgid "Optional email address"
-msgstr "Valikuline e-posti aadress"
-
-#: ../src/seahorse-add-uid.glade.h:8 ../src/seahorse-pgp-generate.glade.h:14
-msgid "_Email Address:"
-msgstr "_E-posti aadress:"
 
 #: ../src/seahorse-change-passphrase.glade.h:1
 msgid "Change Passphrase"
@@ -1311,97 +2218,13 @@ msgstr "Uue parooli kinnitus"
 msgid "New _Passphrase:"
 msgstr "Uus _parool:"
 
-#: ../src/seahorse-delete.c:42
-#, c-format
-msgid ""
-"%s is a private key. Make sure you have a backup. Do you still want to "
-"delete it?"
-msgstr ""
-"%s on salajane võti. Veendu, et sul oleks sellest võtmest varukoopia. Kas sa "
-"soovid seda võtit kustutada?"
-
-#: ../src/seahorse-delete.c:76
-#, c-format
-msgid "Are you sure you want to permanently delete %s?"
-msgstr "Kas sa soovid '%s' jäädavalt kustutada?"
-
-#: ../src/seahorse-delete.c:82
-#, c-format
-msgid "Are you sure you want to permanently delete %d key?"
-msgid_plural "Are you sure you want to permanently delete %d keys?"
-msgstr[0] "Kas sa soovid %d võtme jäädavalt kustutada?"
-msgstr[1] "Kas sa soovid %d võtit jäädavalt kustutada?"
-
-#: ../src/seahorse-delete.c:126
-msgid "Couldn't delete key"
-msgstr "Võtit pole võimalik kustutada"
-
-#: ../src/seahorse-delete.c:141
-#, c-format
-msgid "Are you sure you want to permanently delete subkey %d of %s?"
-msgstr "Kas sa soovid jäädavalt kustutada omaniku %2$s alamvõtme %1$d?"
-
-#: ../src/seahorse-delete.c:164
-msgid "Couldn't delete subkey"
-msgstr "Alamvõtit pole võimalik kustutada"
-
-#: ../src/seahorse-delete.c:183
-#, c-format
-msgid "Are you sure you want to permanently delete the '%s' user ID?"
-msgstr "Kas sa soovid kasutaja ID '%s' jäädavalt kustutada?"
-
-#: ../src/seahorse-delete.c:208
-msgid "Couldn't delete user id"
-msgstr "Kasutaja ID-d pole võimalik kustutada"
-
 #: ../src/seahorse.desktop.in.in.h:1
 msgid "Manage your passwords and encryption keys"
 msgstr "Sinu paroolide ja krüptimisvõtmete haldamine"
 
-#: ../src/seahorse.desktop.in.in.h:2 ../src/seahorse-key-manager.c:1354
-#, c-format
+#: ../src/seahorse.desktop.in.in.h:2 ../src/seahorse-key-manager.vala:142
 msgid "Passwords and Encryption Keys"
 msgstr "Paroolid ja krüptimisvõtmed"
-
-#: ../src/seahorse-expires.c:71
-msgid "Couldn't change expiry date"
-msgstr "Aegumise kuupäeva pole võimalik muuta"
-
-#: ../src/seahorse-expires.c:135
-#, c-format
-msgid "Expiry for Subkey %d of %s"
-msgstr "Omaniku %2$s %1$d. alamvõtme aegumise määramine"
-
-#: ../src/seahorse-expires.c:137
-#, c-format
-msgid "Expiry for %s"
-msgstr "Omaniku %s võtme aegumise määramine"
-
-#: ../src/seahorse-expires.glade.h:1
-msgid "C_hange"
-msgstr "_Muuda"
-
-#: ../src/seahorse-expires.glade.h:2 ../src/seahorse-revoke.glade.h:4
-msgid "Revoke key"
-msgstr "Võtme tühistamine"
-
-#: ../src/seahorse-expires.glade.h:3
-msgid "_Never expires"
-msgstr "_Ei aegu kunagi"
-
-#: ../src/seahorse-generate-select.c:145
-msgid "Used to encrypt email and files"
-msgstr "Kasutatakse e-posti ja failide krüptimiseks"
-
-#: ../src/seahorse-generate-select.c:147
-#: ../src/seahorse-ssh-key-properties.glade.h:21 ../ssh/seahorse-ssh-key.c:96
-#: ../ssh/seahorse-ssh-key.c:100 ../ssh/seahorse-ssh-source.c:753
-msgid "Secure Shell Key"
-msgstr "Secure shell'i võti"
-
-#: ../src/seahorse-generate-select.c:148
-msgid "Used to access other computers (eg: via a terminal)"
-msgstr "Teistele arvutitele ligipääsuks (näiteks terminali kaudu)"
 
 #: ../src/seahorse-generate-select.glade.h:1
 msgid "<b>_Select the kind of key you wish to create:</b>"
@@ -1414,403 +2237,6 @@ msgstr "_Jätka"
 #: ../src/seahorse-generate-select.glade.h:3
 msgid "Create a New Key"
 msgstr "Uue võtme loomine"
-
-#: ../src/seahorse-gkeyring-item-properties.c:95
-msgid "Access a network share or resource"
-msgstr "Ligipääs võrgus olevale kataloogile või ressursile"
-
-#: ../src/seahorse-gkeyring-item-properties.c:99
-msgid "Access a website"
-msgstr "Ligipääs veebisaidile"
-
-#: ../src/seahorse-gkeyring-item-properties.c:103
-msgid "Unlocks a PGP key"
-msgstr "PGP-võtme lukust lahtivõtmine"
-
-#: ../src/seahorse-gkeyring-item-properties.c:106
-msgid "Unlocks a Secure Shell key"
-msgstr "Secure Shell'i võtme lukust lahtivõtmine"
-
-#: ../src/seahorse-gkeyring-item-properties.c:109
-msgid "Saved password or login"
-msgstr "Salvestatud parool või konto"
-
-#: ../src/seahorse-gkeyring-item-properties.c:121
-msgid "Network Credentials"
-msgstr "Võrgutõendid"
-
-#: ../src/seahorse-gkeyring-item-properties.c:182
-msgid "Couldn't change password."
-msgstr "Parooli pole võimalik muuta."
-
-#: ../src/seahorse-gkeyring-item-properties.c:289
-msgid "Couldn't set description."
-msgstr "Kirjeldust pole võimalik määrata."
-
-#: ../src/seahorse-gkeyring-item-properties.c:498
-msgid "Couldn't set application access."
-msgstr "Rakenduse ligipääsu pole võimalik määrata."
-
-#: ../src/seahorse-gkeyring-item-properties.glade.h:1
-msgid "<b>Password:</b>"
-msgstr "<b>Parool:</b>"
-
-#: ../src/seahorse-gkeyring-item-properties.glade.h:2
-msgid "<b>Path:</b>"
-msgstr "<b>Rada:</b>"
-
-#: ../src/seahorse-gkeyring-item-properties.glade.h:3
-msgid "<b>Permissions:</b>"
-msgstr "<b>Pääsuõigused:</b>"
-
-#: ../src/seahorse-gkeyring-item-properties.glade.h:4
-#: ../src/seahorse-pgp-public-key-properties.glade.h:9
-#: ../src/seahorse-ssh-key-properties.glade.h:9
-msgid "<b>Technical Details:</b>"
-msgstr "<b>Tehnilised üksikasjad:</b>"
-
-#: ../src/seahorse-gkeyring-item-properties.glade.h:5
-msgid "Applications"
-msgstr "Rakendused"
-
-#: ../src/seahorse-gkeyring-item-properties.glade.h:6
-#: ../src/seahorse-pgp-private-key-properties.glade.h:23
-#: ../src/seahorse-pgp-public-key-properties.glade.h:20
-#: ../src/seahorse-ssh-key-properties.glade.h:17
-msgid "Details"
-msgstr "Üksikasjad"
-
-#: ../src/seahorse-gkeyring-item-properties.glade.h:7
-#: ../src/seahorse-ssh-key-properties.glade.h:19
-msgid "Key"
-msgstr "Võti"
-
-#: ../src/seahorse-gkeyring-item-properties.glade.h:8
-#: ../src/seahorse-pgp-private-key-properties.glade.h:30
-#: ../src/seahorse-pgp-public-key-properties.glade.h:30
-#: ../src/seahorse-ssh-key-properties.glade.h:20
-msgid "Key Properties"
-msgstr "Võtme omadused"
-
-#: ../src/seahorse-gkeyring-item-properties.glade.h:9
-msgid "Login:"
-msgstr "Konto:"
-
-#: ../src/seahorse-gkeyring-item-properties.glade.h:10
-msgid "Server:"
-msgstr "Server:"
-
-#: ../src/seahorse-gkeyring-item-properties.glade.h:11
-msgid "Show pass_word"
-msgstr "_Parooli näidatakse"
-
-#: ../src/seahorse-gkeyring-item-properties.glade.h:12
-#: ../src/seahorse-pgp-private-key-properties.glade.h:42
-#: ../src/seahorse-pgp-public-key-properties.glade.h:36
-msgid "Type:"
-msgstr "Liik:"
-
-#. To translators: This is the noun not the verb.
-#: ../src/seahorse-gkeyring-item-properties.glade.h:14
-msgid "Use:"
-msgstr "Kasutus:"
-
-#. To translators: This is the infinitive not the imperative.
-#: ../src/seahorse-gkeyring-item-properties.glade.h:16
-msgid "_Delete"
-msgstr "_Kustutamine"
-
-#: ../src/seahorse-gkeyring-item-properties.glade.h:17
-#: ../src/seahorse-revoke.glade.h:5
-msgid "_Description:"
-msgstr "_Kirjeldus:"
-
-#. To translators: This is the infinitive not the imperative.
-#: ../src/seahorse-gkeyring-item-properties.glade.h:19
-msgid "_Read"
-msgstr "_Lugemine"
-
-#. To translators: This is the infinitive not the imperative.
-#: ../src/seahorse-gkeyring-item-properties.glade.h:21
-msgid "_Write"
-msgstr "_Kirjutamine"
-
-#: ../src/seahorse-key-manager.c:389 ../src/seahorse-key-manager.c:464
-#: ../src/seahorse-key-manager.c:487
-msgid "Couldn't import keys"
-msgstr "Võtmeid pole võimalik importida"
-
-#: ../src/seahorse-key-manager.c:398
-#, c-format
-msgid "Imported %d key"
-msgid_plural "Imported %d keys"
-msgstr[0] "Imporditud %d võti"
-msgstr[1] "Imporditud %d võtit"
-
-#: ../src/seahorse-key-manager.c:442
-msgid "Couldn't read file"
-msgstr "Faili pole võimalik lugeda"
-
-#: ../src/seahorse-key-manager.c:487
-msgid "Unrecognized key type, or invalid data format"
-msgstr "Tundmatu võtme liik või on andmed vigased"
-
-#: ../src/seahorse-key-manager.c:515 ../ssh/seahorse-ssh-operation.c:1093
-msgid "Import Key"
-msgstr "Võtme importimine"
-
-#: ../src/seahorse-key-manager.c:561 ../src/seahorse-keyserver-results.c:226
-msgid "Couldn't retrieve data from key server"
-msgstr "Võtit pole võtmeserverist võimalik vastu võtta"
-
-#: ../src/seahorse-key-manager.c:579 ../src/seahorse-keyserver-results.c:244
-#, c-format
-msgid "Copied %d key"
-msgid_plural "Copied %d keys"
-msgstr[0] "Kopeeritud %d võti"
-msgstr[1] "Kopeeritud %d võtit"
-
-#: ../src/seahorse-key-manager.c:608 ../src/seahorse-keyserver-results.c:201
-#: ../src/seahorse-keyserver-results.c:274
-msgid "Retrieving keys"
-msgstr "Võtmete vastuvõtmine"
-
-#: ../src/seahorse-key-manager.c:634
-msgid "Couldn't export key"
-msgstr "Võtit pole võimalik eksportida"
-
-#: ../src/seahorse-key-manager.c:655
-msgid "Export public key"
-msgstr "Avaliku võtme eksportimine"
-
-#: ../src/seahorse-key-manager.c:669 ../src/seahorse-key-properties.c:1055
-#: ../src/seahorse-ssh-key-properties.c:244
-#, c-format
-msgid "Couldn't export key to \"%s\""
-msgstr "Võtit pole asukohale \"%s\" võimalik eksportida"
-
-#: ../src/seahorse-key-manager.c:682
-msgid "Exporting keys"
-msgstr "Võtmete eksportimine"
-
-#: ../src/seahorse-key-manager.c:701
-msgid "Back up Key Rings to Archive"
-msgstr "Võtmerõngaste varundamine arhiivi"
-
-#: ../src/seahorse-key-manager.c:856
-msgid "Contributions:"
-msgstr "Kaasaaitajad:"
-
-#: ../src/seahorse-key-manager.c:882
-msgid "seahorse"
-msgstr "seahorse"
-
-#: ../src/seahorse-key-manager.c:889
-msgid "translator-credits"
-msgstr ""
-"Priit Laes <amd@store20.com>, 2007.\n"
-"Ivar Smolin <okul@linux.ee>, 2007, 2008."
-
-#: ../src/seahorse-key-manager.c:892
-msgid "Seahorse Project Homepage"
-msgstr "Seahorse projekti koduleht"
-
-#: ../src/seahorse-key-manager.c:965 ../src/seahorse-keyserver-results.c:315
-#, c-format
-msgid "Selected %d key"
-msgid_plural "Selected %d keys"
-msgstr[0] "Valitud %d võti"
-msgstr[1] "Valitud %d võtit"
-
-#. Top menu items
-#: ../src/seahorse-key-manager.c:1232 ../src/seahorse-keyserver-results.c:394
-msgid "_Key"
-msgstr "Võ_ti"
-
-#: ../src/seahorse-key-manager.c:1233 ../src/seahorse-keyserver-results.c:395
-msgid "_Edit"
-msgstr "_Redaktor"
-
-#: ../src/seahorse-key-manager.c:1234
-msgid "_View"
-msgstr "_Vaade"
-
-#: ../src/seahorse-key-manager.c:1235 ../src/seahorse-keyserver-results.c:396
-msgid "_Help"
-msgstr "A_bi"
-
-#. Key Actions
-#: ../src/seahorse-key-manager.c:1238
-msgid "_Create New Key..."
-msgstr "Loo _uus võti..."
-
-#: ../src/seahorse-key-manager.c:1239
-msgid "Create a new personal key"
-msgstr "Uue isikliku võtme loomine"
-
-#: ../src/seahorse-key-manager.c:1240
-msgid "_Import..."
-msgstr "_Impordi..."
-
-#: ../src/seahorse-key-manager.c:1241
-msgid "Import keys into your key ring from a file"
-msgstr "Failis olevate võtmete importimine võtmerõngasse"
-
-#: ../src/seahorse-key-manager.c:1242
-msgid "_Back up Key Rings..."
-msgstr "_Varunda võtmerõngad..."
-
-#: ../src/seahorse-key-manager.c:1243
-msgid "Back up all keys"
-msgstr "Kõikidest võtmetest varukoopia loomine"
-
-#: ../src/seahorse-key-manager.c:1244
-msgid "Paste _Keys"
-msgstr "_Aseta võtmed"
-
-#: ../src/seahorse-key-manager.c:1245
-msgid "Import keys from the clipboard"
-msgstr "Võtmete importimine lõikepuhvrist"
-
-#: ../src/seahorse-key-manager.c:1247
-msgid "_Quit"
-msgstr "_Välju"
-
-#: ../src/seahorse-key-manager.c:1248
-msgid "Close this program"
-msgstr "Programmi sulgemine"
-
-#: ../src/seahorse-key-manager.c:1249
-msgid "Prefere_nces"
-msgstr "_Eelistused"
-
-#: ../src/seahorse-key-manager.c:1250
-msgid "Change preferences for this program"
-msgstr "Programmi eelistuste määramine"
-
-#: ../src/seahorse-key-manager.c:1251
-msgid "_About"
-msgstr "_Programmist lähemalt"
-
-#: ../src/seahorse-key-manager.c:1252
-msgid "About this program"
-msgstr "Programmist lähemalt..."
-
-#: ../src/seahorse-key-manager.c:1254
-msgid "_Remote"
-msgstr "_Kaugvalikud"
-
-#: ../src/seahorse-key-manager.c:1256 ../src/seahorse-keyserver-results.c:400
-msgid "_Contents"
-msgstr "_Sisu"
-
-#: ../src/seahorse-key-manager.c:1257 ../src/seahorse-keyserver-results.c:401
-msgid "Show Seahorse help"
-msgstr "Seahorse abiteabe näitamine"
-
-#: ../src/seahorse-key-manager.c:1261
-msgid "T_ypes"
-msgstr "_Liigid"
-
-#: ../src/seahorse-key-manager.c:1262
-msgid "Show type column"
-msgstr "Liigi veeru näitamine"
-
-#: ../src/seahorse-key-manager.c:1263
-msgid "_Expiry"
-msgstr "_Aegumine"
-
-#: ../src/seahorse-key-manager.c:1264
-msgid "Show expiry column"
-msgstr "Aegumise veeru näitamine"
-
-#: ../src/seahorse-key-manager.c:1265
-msgid "_Trust"
-msgstr "_Usaldus"
-
-#: ../src/seahorse-key-manager.c:1266
-msgid "Show owner trust column"
-msgstr "Omaniku usaldamise veeru näitamine"
-
-#: ../src/seahorse-key-manager.c:1267
-msgid "_Validity"
-msgstr "_Kehtivus"
-
-#: ../src/seahorse-key-manager.c:1268
-msgid "Show validity column"
-msgstr "Kehtivuse veeru näitamine"
-
-#: ../src/seahorse-key-manager.c:1272 ../src/seahorse-keyserver-results.c:412
-msgid "P_roperties"
-msgstr "_Omadused"
-
-#: ../src/seahorse-key-manager.c:1273 ../src/seahorse-keyserver-results.c:413
-msgid "Show key properties"
-msgstr "Võtme omaduste näitamine"
-
-#: ../src/seahorse-key-manager.c:1274
-msgid "E_xport Public Key..."
-msgstr "_Ekspordi avalik võti..."
-
-#: ../src/seahorse-key-manager.c:1275
-msgid "Export public part of key to a file"
-msgstr "Võtme avaliku osa eksportimine faili"
-
-#: ../src/seahorse-key-manager.c:1276
-msgid "_Copy Public Key"
-msgstr "_Kopeeri avalik võti"
-
-#: ../src/seahorse-key-manager.c:1277
-msgid "Copy public part of selected keys to the clipboard"
-msgstr "Valitud võtmete avaliku osa kopeerimine lõikepuhvrisse"
-
-#: ../src/seahorse-key-manager.c:1278
-msgid "_Delete Key"
-msgstr "Ku_stuta võti"
-
-#: ../src/seahorse-key-manager.c:1279
-msgid "Delete selected keys"
-msgstr "Valitud võtmete kustutamine"
-
-#: ../src/seahorse-key-manager.c:1283
-msgid "_Sign..."
-msgstr "_Allkirjasta..."
-
-#: ../src/seahorse-key-manager.c:1284
-msgid "Sign public key"
-msgstr "Avaliku võtme allkirjastamine"
-
-#: ../src/seahorse-key-manager.c:1288
-msgid "Set Up Computer for _Secure Shell..."
-msgstr "Määra _Secure Shell'i jaoks arvuti..."
-
-#: ../src/seahorse-key-manager.c:1289
-msgid ""
-"Send public Secure Shell key to another machine, and enable logins using "
-"that key."
-msgstr ""
-"Secure Shell'i võtme saatmine teise masinasse ja selle võtme abil "
-"sisselogimise lubamine."
-
-#: ../src/seahorse-key-manager.c:1293 ../src/seahorse-keyserver-results.c:421
-msgid "_Find Remote Keys..."
-msgstr "_Otsi võtmeid võrgust..."
-
-#: ../src/seahorse-key-manager.c:1294 ../src/seahorse-keyserver-results.c:422
-msgid "Search for keys on a key server"
-msgstr "Võtmete otsimine võtmeserverist"
-
-#: ../src/seahorse-key-manager.c:1295
-msgid "_Sync and Publish Keys..."
-msgstr "Sü_nkroniseeri ja avalikusta võtmed..."
-
-#: ../src/seahorse-key-manager.c:1296
-msgid "Publish and/or synchronize your keys with those online."
-msgstr "Sinu võtmete avaldamine ja/või sünkroniseerimine võtmeserveriga."
-
-#: ../src/seahorse-key-manager.c:1467
-msgid "Filter:"
-msgstr "Filter:"
 
 #: ../src/seahorse-key-manager.glade.h:1
 msgid "<big><b>First time options:</b></big>"
@@ -1837,7 +2263,7 @@ msgid "To get started with encryption you will need keys."
 msgstr "Krüptimise jaoks on sul kõigepealt tarvis võtmeid."
 
 #: ../src/seahorse-key-manager.glade.h:7
-#: ../src/seahorse-keyserver-results.c:410
+#: ../src/seahorse-keyserver-results.vala:53
 msgid "_Import"
 msgstr "_Impordi"
 
@@ -1849,180 +2275,185 @@ msgstr "_Paroolid"
 msgid "_Trusted Keys"
 msgstr "_Usaldusväärsed võtmed"
 
-#: ../src/seahorse-key-manager-store.c:304
-#: ../src/seahorse-key-properties.c:1323
-msgid "Expired"
-msgstr "Aegunud"
+#: ../src/seahorse-key-manager.vala:105
+#: ../src/seahorse-keyserver-results.vala:37
+msgid "_Remote"
+msgstr "_Kaugvalikud"
 
-#: ../src/seahorse-key-manager-store.c:357
+#: ../src/seahorse-key-manager.vala:107
+msgid "_Quit"
+msgstr "_Välju"
+
+#: ../src/seahorse-key-manager.vala:108
+msgid "Close this program"
+msgstr "Programmi sulgemine"
+
+#: ../src/seahorse-key-manager.vala:110
+msgid "_Create New Key..."
+msgstr "Loo _uus võti..."
+
+#: ../src/seahorse-key-manager.vala:111
+msgid "Create a new personal key"
+msgstr "Uue isikliku võtme loomine"
+
+#: ../src/seahorse-key-manager.vala:112
+msgid "_Import..."
+msgstr "_Impordi..."
+
+#: ../src/seahorse-key-manager.vala:113
+msgid "Import keys into your key ring from a file"
+msgstr "Failis olevate võtmete importimine võtmerõngasse"
+
+#: ../src/seahorse-key-manager.vala:114
+msgid "Paste _Keys"
+msgstr "_Aseta võtmed"
+
+#: ../src/seahorse-key-manager.vala:115
+msgid "Import keys from the clipboard"
+msgstr "Võtmete importimine lõikepuhvrist"
+
+#: ../src/seahorse-key-manager.vala:119
+#: ../src/seahorse-keyserver-results.vala:48
+msgid "_Find Remote Keys..."
+msgstr "_Otsi võtmeid võrgust..."
+
+#: ../src/seahorse-key-manager.vala:120
+#: ../src/seahorse-keyserver-results.vala:49
+msgid "Search for keys on a key server"
+msgstr "Võtmete otsimine võtmeserverist"
+
+#: ../src/seahorse-key-manager.vala:121
+msgid "_Sync and Publish Keys..."
+msgstr "Sü_nkroniseeri ja avalikusta võtmed..."
+
+#: ../src/seahorse-key-manager.vala:122
+msgid "Publish and/or synchronize your keys with those online."
+msgstr "Sinu võtmete avaldamine ja/või sünkroniseerimine võtmeserveriga."
+
+#: ../src/seahorse-key-manager.vala:126
+msgid "T_ypes"
+msgstr "_Liigid"
+
+#: ../src/seahorse-key-manager.vala:126
+msgid "Show type column"
+msgstr "Liigi veeru näitamine"
+
+#: ../src/seahorse-key-manager.vala:127
+msgid "_Expiry"
+msgstr "_Aegumine"
+
+#: ../src/seahorse-key-manager.vala:127
+msgid "Show expiry column"
+msgstr "Aegumise veeru näitamine"
+
+#: ../src/seahorse-key-manager.vala:128
+msgid "_Trust"
+msgstr "_Usaldus"
+
+#: ../src/seahorse-key-manager.vala:128
+msgid "Show owner trust column"
+msgstr "Omaniku usaldamise veeru näitamine"
+
+#: ../src/seahorse-key-manager.vala:129
+msgid "_Validity"
+msgstr "_Kehtivus"
+
+#: ../src/seahorse-key-manager.vala:129
+msgid "Show validity column"
+msgstr "Kehtivuse veeru näitamine"
+
+#: ../src/seahorse-key-manager.vala:224
+msgid "Filter:"
+msgstr "Filter:"
+
+#: ../src/seahorse-key-manager.vala:469 ../src/seahorse-key-manager.vala:516
+#: ../src/seahorse-key-manager.vala:543
+#: ../src/seahorse-keyserver-results.vala:214
+msgid "Couldn't import keys"
+msgstr "Võtmeid pole võimalik importida"
+
+#: ../src/seahorse-key-manager.vala:473
+#: ../src/seahorse-keyserver-results.vala:218
+msgid "Imported keys"
+msgstr "Imporditud võtmed"
+
+#: ../src/seahorse-key-manager.vala:511
+msgid "Importing keys"
+msgstr "Võtmete importimine"
+
+#: ../src/seahorse-key-manager.vala:520 ../ssh/seahorse-ssh-operation.c:1094
+msgid "Import Key"
+msgstr "Võtme importimine"
+
+#: ../src/seahorse-key-manager.vala:544
+msgid "Unrecognized key type, or invalid data format"
+msgstr "Tundmatu võtme liik või on andmed vigased"
+
+#: ../src/seahorse-key-manager.vala:692
+#: ../src/seahorse-keyserver-results.vala:250
+#, c-format
+msgid "Selected %d key"
+msgid_plural "Selected %d keys"
+msgstr[0] "Valitud %d võti"
+msgstr[1] "Valitud %d võtit"
+
+#: ../src/seahorse-key-manager-store.c:376
 msgid "User ID"
 msgstr "Kasutaja ID"
 
-#: ../src/seahorse-key-manager-store.c:690
-msgid "Couldn't retrieve key data"
-msgstr "Võtme andmeid pole võimalik vastu võtta"
+#: ../src/seahorse-key-manager-store.c:852 ../src/seahorse-viewer.vala:374
+msgid "Couldn't export keys"
+msgstr "Võtmeid pole võimalik eksportida"
 
-#: ../src/seahorse-key-manager-store.c:721
-msgid "Couldn't write key to file"
-msgstr "Võtit pole võimalik faili kirjutada"
-
-#: ../src/seahorse-key-manager-store.c:964
+#: ../src/seahorse-key-manager-store.c:1090
 msgid "Validity"
 msgstr "Kehtivus"
 
-#. Trust column
-#: ../src/seahorse-key-manager-store.c:971
-#: ../src/seahorse-pgp-public-key-properties.glade.h:35
-msgid "Trust"
-msgstr "Usaldus"
-
-#. The key type column
-#: ../src/seahorse-key-manager-store.c:977
-#: ../src/seahorse-key-properties.c:1301
-msgid "Type"
-msgstr "Liik"
-
 #. Expiry date column
-#: ../src/seahorse-key-manager-store.c:983
+#: ../src/seahorse-key-manager-store.c:1109
 msgid "Expiration Date"
 msgstr "Aegumiskuupäev"
 
-#: ../src/seahorse-key-properties.c:222
-msgid "Couldn't change primary user ID"
-msgstr "Peamist kasutaja ID-d pole võimalik muuta"
-
-#: ../src/seahorse-key-properties.c:318 ../src/seahorse-key-properties.c:1434
-msgid "[Unknown]"
-msgstr "[Tundmatu]"
-
-#: ../src/seahorse-key-properties.c:416 ../src/seahorse-key-properties.c:1711
-msgid "Name/Email"
-msgstr "Nimi/E-post"
-
-#: ../src/seahorse-key-properties.c:421
-msgid "Signature ID"
-msgstr "Allkirja ID"
-
-#: ../src/seahorse-key-properties.c:572
-msgid "Couldn't change primary photo"
-msgstr "Peamist fotot pole võimalik muuta"
-
-#: ../src/seahorse-key-properties.c:820
-msgid "(unknown)"
-msgstr "(tundmatu)"
-
-#: ../src/seahorse-key-properties.c:823
-#, c-format
-msgid "This key expired on: %s"
-msgstr "See võti aegus: %s"
-
-#: ../src/seahorse-key-properties.c:1006 ../src/seahorse-key-properties.c:1403
-msgid "Unable to change trust"
-msgstr "Usaldust pole võimalik muuta"
-
-#: ../src/seahorse-key-properties.c:1028
-#: ../src/seahorse-ssh-key-properties.c:217
-msgid "Export Complete Key"
-msgstr "Võtme täielik eksport"
-
-#: ../src/seahorse-key-properties.c:1298
-msgid "ID"
-msgstr "ID"
-
-#: ../src/seahorse-key-properties.c:1304
-msgid "Created"
-msgstr "Loodud"
-
-#: ../src/seahorse-key-properties.c:1307
-msgid "Expires"
-msgstr "Aegumine"
-
-#: ../src/seahorse-key-properties.c:1310
-msgid "Status"
-msgstr "Olek"
-
-#: ../src/seahorse-key-properties.c:1313
-msgid "Strength"
-msgstr "Tugevus"
-
-#: ../src/seahorse-key-properties.c:1322 ../src/seahorse-key-properties.c:1323
-msgid "Good"
-msgstr "Hea"
-
-#: ../src/seahorse-keyserver-results.c:109
-msgid "Couldn't import keys into key ring"
-msgstr "Võtmeid pole võtmerõngasse võimalik importida"
-
-#: ../src/seahorse-keyserver-results.c:130
-msgid "Importing keys from key servers"
-msgstr "Võtmete importimine serverist"
-
-#: ../src/seahorse-keyserver-results.c:149
-#: ../src/seahorse-keyserver-results.c:188
-#, c-format
-msgid "Couldn't write keys to file: %s"
-msgstr "Võtmeid pole võimalik faili kirjutada: %s"
-
-#: ../src/seahorse-keyserver-results.c:173
-msgid "Save Remote Keys"
-msgstr "Kaugvõtmete salvestamine"
-
-#: ../src/seahorse-keyserver-results.c:368
-msgid "No matching keys found"
-msgstr "Vastavaid võtmeid ei leitud"
-
-#: ../src/seahorse-keyserver-results.c:398
+#: ../src/seahorse-keyserver-results.vala:39
 msgid "_Close"
 msgstr "_Sulge"
 
-#: ../src/seahorse-keyserver-results.c:399
+#: ../src/seahorse-keyserver-results.vala:40
 msgid "Close this window"
 msgstr "Selle akna sulgemine"
 
-#: ../src/seahorse-keyserver-results.c:403
+#: ../src/seahorse-keyserver-results.vala:41
 msgid "_Expand All"
 msgstr "La_ienda kõik"
 
-#: ../src/seahorse-keyserver-results.c:404
+#: ../src/seahorse-keyserver-results.vala:42
 msgid "Expand all listings"
 msgstr "Kõigi nimekirjade avamine"
 
-#: ../src/seahorse-keyserver-results.c:405
+#: ../src/seahorse-keyserver-results.vala:43
 msgid "_Collapse All"
 msgstr "A_henda kõik"
 
-#: ../src/seahorse-keyserver-results.c:406
+#: ../src/seahorse-keyserver-results.vala:44
 msgid "Collapse all listings"
 msgstr "Kõigi nimekirjade ahendamine"
 
-#: ../src/seahorse-keyserver-results.c:411
+#: ../src/seahorse-keyserver-results.vala:54
 msgid "Import selected keys to local key ring"
 msgstr "Valitud võtmete importimine kohalikku võtmerõngasse"
 
-#: ../src/seahorse-keyserver-results.c:414
-msgid "Save Key As..."
-msgstr "Salvesta võti kui..."
-
-#: ../src/seahorse-keyserver-results.c:415
-msgid "Save selected keys as a file"
-msgstr "Vailitud võtmete salvestamine faili"
-
-#: ../src/seahorse-keyserver-results.c:416
-msgid "_Copy Key"
-msgstr "_Kopeeri võti"
-
-#: ../src/seahorse-keyserver-results.c:417
-msgid "Copy selected keys to the clipboard"
-msgstr "Valitud võtmete kopeerimine lõikelauale"
-
-#: ../src/seahorse-keyserver-results.c:479
+#: ../src/seahorse-keyserver-results.vala:65
 msgid "Remote Keys"
 msgstr "Kaugvõtmed"
 
-#: ../src/seahorse-keyserver-results.c:481
+#: ../src/seahorse-keyserver-results.vala:67
 #, c-format
 msgid "Remote Keys Containing '%s'"
 msgstr "Stringi '%s' sisaldavad kaugvõtmed"
+
+#: ../src/seahorse-keyserver-results.vala:229
+msgid "Importing keys from key servers"
+msgstr "Võtmete importimine serverist"
 
 #: ../src/seahorse-keyserver-search.glade.h:1
 msgid "<b>Key Servers:</b>"
@@ -2057,28 +2488,27 @@ msgid "_Search for keys containing: "
 msgstr "O_tsitakse järgnevat stringi sisaldavaid võtmeid: "
 
 #: ../src/seahorse-keyserver-sync.c:45
-#, c-format
-msgid "Couldn't publish keys to server: %s"
-msgstr "Võtmeid pole võimalik serverisse publitseerida: %s"
+msgid "Couldn't publish keys to server"
+msgstr "Võtmeid pole võimalik serveris avaldada"
 
-#: ../src/seahorse-keyserver-sync.c:60
+#: ../src/seahorse-keyserver-sync.c:61
 #, c-format
 msgid "Couldn't retrieve keys from server: %s"
 msgstr "Võtmeid pole võimalik serverist vastu võtta: %s"
 
-#: ../src/seahorse-keyserver-sync.c:148
+#: ../src/seahorse-keyserver-sync.c:155
 #, c-format
 msgid "<b>%d key is selected for synchronizing</b>"
 msgid_plural "<b>%d keys are selected for synchronizing</b>"
 msgstr[0] "<b>Sünkroniseerimiseks on valitud %d võti</b>"
 msgstr[1] "<b>Sünkroniseerimiseks on valitud %d võtit</b>"
 
-#: ../src/seahorse-keyserver-sync.c:215
+#: ../src/seahorse-keyserver-sync.c:222
 msgid "Synchronizing keys"
 msgstr "Võtmete sünkroniseerimine"
 
 #. Show the progress window if necessary
-#: ../src/seahorse-keyserver-sync.c:247
+#: ../src/seahorse-keyserver-sync.c:254
 msgid "Synchronizing keys..."
 msgstr "Võtmete sünkroniseerimine..."
 
@@ -2118,628 +2548,163 @@ msgstr "_Võtmeserverid"
 msgid "_Sync"
 msgstr "_Sünkroniseeri"
 
-#: ../src/seahorse-multi-encrypt.glade.h:1
-msgid "<b>You have selected multiple files or folders</b>"
-msgstr "<b>Sul on valitud mitu võtit või kataloogi</b>"
+#. Top menu items
+#: ../src/seahorse-viewer.vala:36
+msgid "_Key"
+msgstr "Võ_ti"
 
-#: ../src/seahorse-multi-encrypt.glade.h:2
-msgid ""
-"Because the files are located remotely, each file will be encrypted "
-"separately."
-msgstr "Kuna failid pole kohalikul kettal, siis krüptitakse iga fail eraldi."
+#: ../src/seahorse-viewer.vala:37
+msgid "_Edit"
+msgstr "_Redaktor"
 
-#: ../src/seahorse-multi-encrypt.glade.h:3
-msgid "Encrypt Multiple Files"
-msgstr "Mitme faili krüptimine"
+#: ../src/seahorse-viewer.vala:38
+msgid "_View"
+msgstr "_Vaade"
 
-#: ../src/seahorse-multi-encrypt.glade.h:4
-msgid "Encrypt each file separately"
-msgstr "Iga fail krüptitakse eraldi"
+#: ../src/seahorse-viewer.vala:39
+msgid "_Help"
+msgstr "A_bi"
 
-#: ../src/seahorse-multi-encrypt.glade.h:5
-msgid "Encrypt packed together in a package"
-msgstr "Krüptitud tulemus on pakitud ühte pakki"
+#: ../src/seahorse-viewer.vala:41
+msgid "Prefere_nces"
+msgstr "_Eelistused"
 
-#: ../src/seahorse-multi-encrypt.glade.h:6
-msgid "Package Name:"
-msgstr "Paki nimi:"
+#: ../src/seahorse-viewer.vala:42
+msgid "Change preferences for this program"
+msgstr "Programmi eelistuste määramine"
 
-#: ../src/seahorse-multi-encrypt.glade.h:7
-msgid "Packaging:"
-msgstr "Pakkimine:"
+#: ../src/seahorse-viewer.vala:43
+msgid "_About"
+msgstr "_Programmist lähemalt"
 
-#: ../src/seahorse-multi-encrypt.glade.h:8
-msgid "encrypted-package"
-msgstr "krüptitud-pakk"
+#: ../src/seahorse-viewer.vala:44
+msgid "About this program"
+msgstr "Programmist lähemalt..."
 
-#: ../src/seahorse-pgp-generate.c:51
-msgid "DSA Elgamal"
-msgstr "DSA Elgamal"
+#: ../src/seahorse-viewer.vala:45
+msgid "_Contents"
+msgstr "_Sisu"
 
-#: ../src/seahorse-pgp-generate.c:62
-msgid "Couldn't generate PGP key"
-msgstr "PGP-võtit pole võimalik genereerida"
+#: ../src/seahorse-viewer.vala:46
+msgid "Show Seahorse help"
+msgstr "Seahorse abiteabe näitamine"
 
-#: ../src/seahorse-pgp-generate.c:168
-msgid "Passphrase for New PGP Key"
-msgstr "Uue PGP-võtme parool"
+#: ../src/seahorse-viewer.vala:50
+msgid "P_roperties"
+msgstr "_Omadused"
 
-#: ../src/seahorse-pgp-generate.c:169
-msgid "Enter the passphrase for your new key twice."
-msgstr "Sisesta oma uuele võtmele parool (2 korda)."
+#: ../src/seahorse-viewer.vala:51
+msgid "Show key properties"
+msgstr "Võtme omaduste näitamine"
 
-#: ../src/seahorse-pgp-generate.c:178
-msgid "Couldn't generate key"
-msgstr "Võtit pole võimalik genereerida"
+#: ../src/seahorse-viewer.vala:52
+msgid "E_xport Public Key..."
+msgstr "_Ekspordi avalik võti..."
 
-#: ../src/seahorse-pgp-generate.c:180
-msgid "Generating key"
-msgstr "Võtme genereerimine"
+#: ../src/seahorse-viewer.vala:53
+msgid "Export public part of key to a file"
+msgstr "Võtme avaliku osa eksportimine faili"
 
-#: ../src/seahorse-pgp-generate.glade.h:1
-#: ../src/seahorse-ssh-generate.glade.h:1
-msgid "<b>_Advanced key options</b>"
-msgstr "<b>Võt_me laiendatud valikud</b>"
+#: ../src/seahorse-viewer.vala:54
+msgid "_Copy Public Key"
+msgstr "_Kopeeri avalik võti"
 
-#: ../src/seahorse-pgp-generate.glade.h:2
-msgid "A PGP key allows you to encrypt email or files to other people."
-msgstr "PGP-võti võimaldab sul teistele saatmiseks krüptida e-posti või faile."
+#: ../src/seahorse-viewer.vala:55
+msgid "Copy public part of selected keys to the clipboard"
+msgstr "Valitud võtmete avaliku osa kopeerimine lõikepuhvrisse"
 
-#: ../src/seahorse-pgp-generate.glade.h:3
-msgid "Algorithms here"
-msgstr "Siia tulevad algoritmid"
+#: ../src/seahorse-viewer.vala:56
+msgid "_Delete Key"
+msgstr "Ku_stuta võti"
 
-#: ../src/seahorse-pgp-generate.glade.h:4
-msgid "C_reate"
-msgstr "L_oo"
+#: ../src/seahorse-viewer.vala:57
+msgid "Delete selected keys"
+msgstr "Valitud võtmete kustutamine"
 
-#: ../src/seahorse-pgp-generate.glade.h:5
-msgid "Create a PGP Key"
-msgstr "PGP-võtme loomine"
+#: ../src/seahorse-viewer.vala:203
+msgid "Contributions:"
+msgstr "Kaasaaitajad:"
 
-#: ../src/seahorse-pgp-generate.glade.h:6
-msgid "E_xpiration Date:"
-msgstr "Ae_gumiskuupäev:"
-
-#: ../src/seahorse-pgp-generate.glade.h:7
-#: ../src/seahorse-ssh-generate.glade.h:7
-msgid "Encryption _Type:"
-msgstr "_Krüptimise liik:"
-
-#: ../src/seahorse-pgp-generate.glade.h:9
-msgid "Generate a new key"
-msgstr "Uue võtme genereerimine"
-
-#: ../src/seahorse-pgp-generate.glade.h:10
-#: ../src/seahorse-ssh-generate.glade.h:10
-msgid "Key _Strength (bits):"
-msgstr "Võtme _pikkus (bittides):"
-
-#: ../src/seahorse-pgp-generate.glade.h:11
-msgid "Ne_ver Expires"
-msgstr "_Ei aegu kunagi"
-
-#: ../src/seahorse-pgp-generate.glade.h:12
-msgid "New PGP Key"
-msgstr "Uus PGP-võti"
-
-#: ../src/seahorse-pgp-generate.glade.h:13
-msgid "_Comment:"
-msgstr "_Kommentaar:"
-
-#: ../src/seahorse-pgp-private-key-properties.glade.h:1
-msgid "<b>Actions</b>"
-msgstr "<b>Tegevused</b>"
-
-#: ../src/seahorse-pgp-private-key-properties.glade.h:2
-#: ../src/seahorse-pgp-public-key-properties.glade.h:1
-msgid "<b>Comment:</b>"
-msgstr "<b>Kommentaar:</b>"
-
-#: ../src/seahorse-pgp-private-key-properties.glade.h:3
-msgid "<b>Dates</b>"
-msgstr "<b>Kuupäevad</b>"
-
-#: ../src/seahorse-pgp-private-key-properties.glade.h:4
-#: ../src/seahorse-pgp-public-key-properties.glade.h:3
-msgid "<b>Email:</b>"
-msgstr "<b>E-post:</b>"
-
-#: ../src/seahorse-pgp-private-key-properties.glade.h:5
-msgid "<b>Fingerprint</b>"
-msgstr "<b>Sõrmejälg</b>"
-
-#: ../src/seahorse-pgp-private-key-properties.glade.h:6
-#: ../src/seahorse-pgp-public-key-properties.glade.h:6
-msgid "<b>Key ID:</b>"
-msgstr "<b>Võtme ID:</b>"
-
-#: ../src/seahorse-pgp-private-key-properties.glade.h:7
-msgid "<b>Key Names and Signatures</b>"
-msgstr "<b>Võtme nimed ja allkirjad</b>"
-
-#: ../src/seahorse-pgp-private-key-properties.glade.h:8
-#: ../src/seahorse-pgp-public-key-properties.glade.h:7
-#: ../src/seahorse-ssh-key-properties.glade.h:7
-msgid "<b>Name:</b>"
-msgstr "<b>Nimi:</b>"
-
-#: ../src/seahorse-pgp-private-key-properties.glade.h:9
-#: ../src/seahorse-pgp-public-key-properties.glade.h:8
-msgid "<b>Photo </b>"
-msgstr "<b>Foto </b>"
-
-#: ../src/seahorse-pgp-private-key-properties.glade.h:10
-msgid "<b>Technical Details</b>"
-msgstr "<b>Tehnilised üksikasjad</b>"
-
-#: ../src/seahorse-pgp-private-key-properties.glade.h:11
-#: ../src/seahorse-pgp-public-key-properties.glade.h:10
-msgid "<b>This key has been revoked</b>"
-msgstr "<b>See võti on tühistatud</b>"
-
-#: ../src/seahorse-pgp-private-key-properties.glade.h:12
-#: ../src/seahorse-pgp-public-key-properties.glade.h:11
-msgid "<b>This key has expired</b>"
-msgstr "<b>See võti on aegunud</b>"
-
-#: ../src/seahorse-pgp-private-key-properties.glade.h:13
-#: ../src/seahorse-pgp-public-key-properties.glade.h:12
-#: ../src/seahorse-ssh-key-properties.glade.h:11
-msgid "<b>Type:</b>"
-msgstr "<b>Liik:</b>"
-
-#. To translators: This is the noun not the verb.
-#: ../src/seahorse-pgp-private-key-properties.glade.h:15
-#: ../src/seahorse-pgp-public-key-properties.glade.h:14
-#: ../src/seahorse-ssh-key-properties.glade.h:13
-msgid "<b>Use:</b>"
-msgstr "<b>Kasutus:</b>"
-
-#: ../src/seahorse-pgp-private-key-properties.glade.h:16
-#: ../src/seahorse-pgp-public-key-properties.glade.h:18
-msgid "<b>_Subkeys</b>"
-msgstr "<b>Alam_võtmed</b>"
-
-#: ../src/seahorse-pgp-private-key-properties.glade.h:17
-msgid "Add"
-msgstr "Lisa"
-
-#: ../src/seahorse-pgp-private-key-properties.glade.h:18
-msgid "Add a photo to this key"
-msgstr "Sellele võtmele foto lisamine"
-
-#: ../src/seahorse-pgp-private-key-properties.glade.h:19
-#: ../src/seahorse-ssh-key-properties.glade.h:16
-msgid "Change _Passphrase"
-msgstr "Muuda _parooli"
-
-#: ../src/seahorse-pgp-private-key-properties.glade.h:20
-#: ../src/seahorse-pgp-public-key-properties.glade.h:19
-msgid "Created:"
-msgstr "Loodud:"
-
-#: ../src/seahorse-pgp-private-key-properties.glade.h:21
-msgid "Decrypt files and email sent to you."
-msgstr "Sinule saadetud e-posti ja failide lahtikrüptimiseks."
-
-#: ../src/seahorse-pgp-private-key-properties.glade.h:22
-msgid "Delete"
-msgstr "Kustuta"
-
-#: ../src/seahorse-pgp-private-key-properties.glade.h:24
-msgid "Expire"
-msgstr "Määra aegumine"
-
-#: ../src/seahorse-pgp-private-key-properties.glade.h:25
-#: ../src/seahorse-pgp-public-key-properties.glade.h:22
-msgid "Expires:"
-msgstr "Aegub:"
-
-#: ../src/seahorse-pgp-private-key-properties.glade.h:26
-msgid "Export"
-msgstr "Ekspordi"
-
-#: ../src/seahorse-pgp-private-key-properties.glade.h:27
-msgid "Go to next photo"
-msgstr "Järgmisele fotole liikumine"
-
-#: ../src/seahorse-pgp-private-key-properties.glade.h:28
-msgid "Go to previous photo"
-msgstr "Eelmisele fotole liikumine"
-
-#: ../src/seahorse-pgp-private-key-properties.glade.h:29
-#: ../src/seahorse-pgp-public-key-properties.glade.h:29
-msgid "Key ID:"
-msgstr "Võtme ID:"
-
-#: ../src/seahorse-pgp-private-key-properties.glade.h:31
-msgid "Make this photo the primary photo"
-msgstr "Selle foto määramine peamiseks fotoks"
-
-#: ../src/seahorse-pgp-private-key-properties.glade.h:32
-msgid "Names and Signatures"
-msgstr "Nimed ja allkirjad"
-
-#: ../src/seahorse-pgp-private-key-properties.glade.h:33
-msgid "Override Owner _Trust:"
-msgstr "Omaniku _usalduse asendamine:"
-
-#: ../src/seahorse-pgp-private-key-properties.glade.h:34
-#: ../src/seahorse-pgp-public-key-properties.glade.h:31
-msgid "Owner"
-msgstr "Omanik"
-
-#: ../src/seahorse-pgp-private-key-properties.glade.h:35
-msgid "Primary"
-msgstr "Peamine"
-
-#: ../src/seahorse-pgp-private-key-properties.glade.h:37
-msgid "Remove this photo from this key"
-msgstr "Sellelt võtmelt foto eemaldamine"
-
-#: ../src/seahorse-pgp-private-key-properties.glade.h:38
-msgid "Revoke"
-msgstr "Tühista"
-
-#: ../src/seahorse-pgp-private-key-properties.glade.h:39
-msgid "Sign"
-msgstr "Allkirjasta"
-
-#: ../src/seahorse-pgp-private-key-properties.glade.h:40
-#: ../src/seahorse-pgp-public-key-properties.glade.h:33
-msgid "Strength:"
-msgstr "Tugevus:"
-
-#: ../src/seahorse-pgp-private-key-properties.glade.h:41
-#: ../src/seahorse-pgp-public-key-properties.glade.h:34
-msgid "The owner of the key revoked the key. It can no longer be used."
-msgstr "Selle võtme omanik tühistas võtme. Seda pole võimalik rohkem kasutada."
-
-#: ../src/seahorse-pgp-private-key-properties.glade.h:43
-msgid ""
-"Unknown\n"
-"Never\n"
-"Marginal\n"
-"Full\n"
-"Ultimate"
+#: ../src/seahorse-viewer.vala:231
+msgid "translator-credits"
 msgstr ""
-"Tundmatu\n"
-"Ei iial\n"
-"Vähesel määral\n"
-"Täielik\n"
-"Ülim"
+"Priit Laes <amd@store20.com>, 2007.\n"
+"Ivar Smolin <okul@linux.ee>, 2007, 2008."
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:48
-msgid "_Add Name"
-msgstr "Lisa _nimi"
+#: ../src/seahorse-viewer.vala:234
+msgid "Seahorse Project Homepage"
+msgstr "Seahorse projekti koduleht"
 
-#: ../src/seahorse-pgp-private-key-properties.glade.h:49
-msgid "_Export Complete Key:"
-msgstr "Võtme täielik _eksport:"
+#: ../src/seahorse-viewer.vala:288
+msgid "Couldn't delete keys."
+msgstr "Võtmeid pole võimalik kustutada."
 
-#: ../src/seahorse-pgp-public-key-properties.glade.h:2
-msgid "<b>Dates:</b>"
-msgstr "<b>Kuupäevad:</b>"
-
-#: ../src/seahorse-pgp-public-key-properties.glade.h:4
-#: ../src/seahorse-ssh-key-properties.glade.h:4
-msgid "<b>Fingerprint:</b>"
-msgstr "<b>Sõrmejälg:</b>"
-
-#: ../src/seahorse-pgp-public-key-properties.glade.h:5
-msgid "<b>Indicate Trust:</b>"
-msgstr "<b>Usaldusmäär:</b>"
-
-#: ../src/seahorse-pgp-public-key-properties.glade.h:15
-msgid "<b>Your trust of this key</b>"
-msgstr "<b>Sinu usaldus selle võtme vastu</b>"
-
-#: ../src/seahorse-pgp-public-key-properties.glade.h:16
-msgid "<b>_Other Names:</b>"
-msgstr "<b>_Teised nimed:</b>"
-
-#: ../src/seahorse-pgp-public-key-properties.glade.h:17
-msgid "<b>_People who have signed this key:</b>"
-msgstr "<b>Selle võtme allkirjastanud _inimesed:</b>"
-
-#: ../src/seahorse-pgp-public-key-properties.glade.h:21
-msgid "Encrypt files and email to the key's owner "
-msgstr "Failide ja e-posti krüptimiseks võtme omaniku jaoks"
-
-#: ../src/seahorse-pgp-public-key-properties.glade.h:24
-#, no-c-format
-msgid "I trust signatures from '%s' on other keys"
-msgstr "Usaldan isiku '%s' poolt teistele võtmetele antud allkirju"
-
-#: ../src/seahorse-pgp-public-key-properties.glade.h:26
-#, no-c-format
-msgid ""
-"If you believe that the person that owns this key is '%s', <i>sign</i> this "
-"key:"
-msgstr ""
-"Kui sa usud, et selle võtme omanik on '%s', siis <i>allkirjasta</i> see võti:"
-
-#: ../src/seahorse-pgp-public-key-properties.glade.h:28
-#, no-c-format
-msgid ""
-"If you no longer trust that '%s' owns this key, <i>revoke</i> your signature:"
-msgstr ""
-"Kui sa ei usalda kauem, et selle võtme omanik on '%s', siis <i>tühista</i> "
-"oma allkiri:"
-
-#: ../src/seahorse-pgp-public-key-properties.glade.h:37
-msgid ""
-"Unknown\n"
-"Never\n"
-"Marginally\n"
-"Fully\n"
-"Ultimately"
-msgstr ""
-"Tundmatu\n"
-"Ei iial\n"
-"Vähesel määral\n"
-"Täielikult\n"
-"Ülimalt"
-
-#: ../src/seahorse-pgp-public-key-properties.glade.h:42
-msgid "You _Trust the Owner:"
-msgstr "Sinu _usaldus omaniku vastu:"
-
-#: ../src/seahorse-pgp-public-key-properties.glade.h:43
-msgid "Your trust is manually specified on the <i>Details</i> tab."
-msgstr "Sinu usaldus on käsitsi määratud kaardi <i>Üksikasjad</i> alt."
-
-#: ../src/seahorse-pgp-public-key-properties.glade.h:44
-msgid "_Only display the signatures of people I trust"
-msgstr "_Kuvatakse ainult minu poolt usaldatavaid inimesi"
-
-#: ../src/seahorse-pgp-public-key-properties.glade.h:45
-msgid "_Revoke Signature"
-msgstr "_Tühista allkiri"
-
-#: ../src/seahorse-pgp-public-key-properties.glade.h:46
-msgid "_Sign this Key"
-msgstr "A_llkirjasta see võti"
-
-#: ../src/seahorse-photos.c:74
+#: ../src/seahorse-viewer.vala:308
 #, c-format
+msgid "%s is a private key. Are you sure you want to proceed?"
+msgstr "%s on salajane võti. Soovid sa jätkata?"
+
+#: ../src/seahorse-viewer.vala:310
 msgid ""
-"<big><b>The photo is too large</b></big>\n"
-"The recommended size for a photo on your key is %d x %d pixels."
+"One or more of the deleted keys are private keys. Are you sure you want to "
+"proceed?"
 msgstr ""
-"<big><b>Foto on liiga suur</b></big>\n"
-"Võtmele lisatava foto soovituslik suutus on %d x %d pikslit."
 
-#: ../src/seahorse-photos.c:79
-msgid "_Don't Resize"
-msgstr "Ä_ra muuda suurust"
+#: ../src/seahorse-viewer.vala:338
+msgid "Couldn't retrieve data from key server"
+msgstr "Võtit pole võtmeserverist võimalik vastu võtta"
 
-#: ../src/seahorse-photos.c:80
-msgid "_Resize"
-msgstr "_Muuda suurust"
+#: ../src/seahorse-viewer.vala:356
+msgid "Copied keys"
+msgstr "Kopeeritud võtmed"
 
-#: ../src/seahorse-photos.c:129
+#: ../src/seahorse-viewer.vala:368
+msgid "Retrieving keys"
+msgstr "Võtmete vastuvõtmine"
+
+#: ../src/seahorse-viewer.vala:383
+msgid "Export public key"
+msgstr "Avaliku võtme eksportimine"
+
+#: ../src/seahorse-viewer.vala:395
+msgid "Exporting keys"
+msgstr "Võtmete eksportimine"
+
+#: ../ssh/seahorse-ssh-askpass.c:101
+msgid "Enter your Secure Shell passphrase:"
+msgstr "Sisesta oma Secure Shell'i parool"
+
+#: ../ssh/seahorse-ssh-commands.vala:29
+msgid "Configure Key for _Secure Shell..."
+msgstr "_Secure Shell'i võtme seadistamine..."
+
+#: ../ssh/seahorse-ssh-commands.vala:30
+msgid ""
+"Send public Secure Shell key to another machine, and enable logins using "
+"that key."
+msgstr ""
+"Secure Shell'i võtme saatmine teise masinasse ja selle võtme abil "
+"sisselogimise lubamine."
+
+#: ../ssh/seahorse-ssh-commands.vala:77
 #, c-format
-msgid ""
-"This is not a image file, or an unrecognized kind of image file. Try to use "
-"a JPEG image."
-msgstr ""
-"See pole pildifail või on selle pildifail tundmatut liiki. Proovi kasutada "
-"JPEG-pilti."
+msgid "Are you sure you want to delete the secure shell key '%s'?"
+msgstr "Kas sa soovid SSH-võtme '%s' kustutada?"
 
-#: ../src/seahorse-photos.c:225
-msgid "All image files"
-msgstr "Kõik pildifailid"
-
-#: ../src/seahorse-photos.c:238
-msgid "All JPEG files"
-msgstr "Kõik JPEG-failid"
-
-#: ../src/seahorse-photos.c:262
-msgid "Choose Photo to Add to Key"
-msgstr "Võtmele lisatava foto valimine"
-
-#: ../src/seahorse-photos.c:289 ../src/seahorse-photos.c:293
-msgid "Couldn't add photo"
-msgstr "Fotot pole võimalik lisada"
-
-#: ../src/seahorse-photos.c:290
-msgid "The file could not be loaded. It may be in an invalid format"
-msgstr "Faili pole võimalik laadida. Võib-olla on see vigases vormingus."
-
-#: ../src/seahorse-photos.c:320
-msgid "Are you sure you want to remove the current photo from your key?"
-msgstr "Kas soovid võtmelt eemaldada seal praegu olevat fotot?"
-
-#: ../src/seahorse-photos.c:333
-msgid "Couldn't delete photo"
-msgstr "Fotot pole võimalik kustutada"
-
-#: ../src/seahorse-revoke.c:76
-msgid "Couldn't revoke subkey"
-msgstr "Alamvõtit pole võimalik tühistada"
-
-#: ../src/seahorse-revoke.c:103
+#: ../ssh/seahorse-ssh-commands.vala:79
 #, c-format
-msgid "Revoke Subkey %d of %s"
-msgstr "Omaniku %2$s %1$d. alamvõtme tühistamine"
+msgid "Are you sure you want to delete %d secure shell keys?"
+msgstr "Kas sa soovid %d SSH-võtit kustutada?"
 
-#: ../src/seahorse-revoke.c:105
-#, c-format
-msgid "Revoke %s"
-msgstr "Omaniku %s võtme tühistamine"
-
-#: ../src/seahorse-revoke.c:116
-msgid "No reason"
-msgstr "Põhjendus puudub"
-
-#: ../src/seahorse-revoke.c:117
-msgid "No reason for revoking key"
-msgstr "Võtme tühistamisele pole põhjendust määratud"
-
-#: ../src/seahorse-revoke.c:123
-msgid "Compromised"
-msgstr "Kompromiteeritud"
-
-#: ../src/seahorse-revoke.c:124
-msgid "Key has been compromised"
-msgstr "Võti on kompromiteeritud"
-
-#: ../src/seahorse-revoke.c:130
-msgid "Superseded"
-msgstr "Asendatud"
-
-#: ../src/seahorse-revoke.c:131
-msgid "Key has been superseded"
-msgstr "Võti on asendatud"
-
-#: ../src/seahorse-revoke.c:137
-msgid "Not Used"
-msgstr "Pole kasutusel"
-
-#: ../src/seahorse-revoke.c:138
-msgid "Key is no longer used"
-msgstr "Võti pole enam kasutusel"
-
-#: ../src/seahorse-revoke.c:177
-#, c-format
-msgid ""
-"You are about to add %s as a revoker for %s. This operation cannot be "
-"undone! Are you sure you want to continue?"
-msgstr ""
-"Sa oled lisamas omaniku %1$s võtmele tühistajat %2$s. Seda tegevust pole "
-"võimalik hiljem tagasi pöörata. Oled sa valmis jätkama?"
-
-#: ../src/seahorse-revoke.c:192
-msgid "Couldn't add revoker"
-msgstr "Tühistajat pole võimalik lisada"
-
-#: ../src/seahorse-revoke.glade.h:1
-msgid "Optional description of revocation"
-msgstr "Tühistamise põhjuste võimalik kirjeldus"
-
-#: ../src/seahorse-revoke.glade.h:2
-msgid "Re_voke"
-msgstr "_Tühista"
-
-#: ../src/seahorse-revoke.glade.h:3
-msgid "Reason for revoking the key"
-msgstr "Võtme tühistamise põhjus"
-
-#: ../src/seahorse-revoke.glade.h:6
-msgid "_Reason:"
-msgstr "_Põhjus:"
-
-#: ../src/seahorse-sign.c:101
-msgid "Couldn't sign key"
-msgstr "Võtit pole võimalik allkirjastada"
-
-#: ../src/seahorse-sign.c:164
-msgid ""
-"You have no personal PGP keys that can be used to indicate your trust of "
-"this key."
-msgstr ""
-"Sul pole isiklikke PGP-võtmeid, mida saaks kasutada selle võtme usaldatavuse "
-"määramiseks."
-
-#: ../src/seahorse-sign.glade.h:1
-msgid "<b>How carefully have you checked this key?</b>"
-msgstr "<b>Kui hoolikalt sa seda võtit kontrollisid?</b>"
-
-#: ../src/seahorse-sign.glade.h:2
-msgid "<b>How others will see this signature:</b>"
-msgstr "<b>Kuidas teised seda allkirja peaksid nägema:</b>"
-
-#: ../src/seahorse-sign.glade.h:3
-msgid "<b>Sign key as:</b>"
-msgstr "<b>Võtmed allkirjastatakse kui:</b>"
-
-#: ../src/seahorse-sign.glade.h:4
-msgid ""
-"<i>Casually:</i> means you have done a casual verification that the key\n"
-"is owned by the person who claims to own it. For example, you could\n"
-"read the key fingerprint to the owner over the phone. "
-msgstr ""
-"<i>Pealiskaudselt</i> täehdab, et sa oled mitte põgusalt kontrollinud, kas \n"
-"võti kuulub isikule, kes väidab selle võtme enesele kuuluvat. Näiteks on \n"
-"võtme omanik telefonitsi kinnitanud võtme sõrmejälje vastavust."
-
-#: ../src/seahorse-sign.glade.h:7
-msgid "<i>Key Name</i>"
-msgstr "<i>Võtme nimi</i>"
-
-#: ../src/seahorse-sign.glade.h:8
-msgid ""
-"<i>Not at all:</i> means you believe the key is owned by the person who \n"
-"claims to own it, but you could not or did not verify this to be a fact."
-msgstr ""
-"<i>Mitte üldse</i> tähendab, et sa usud selle võtme kuuluvat isikule, kes \n"
-"väidab selle võtme enesele kuuluvat, kuid sul pole olnud võimalik seda \n"
-"asjaolu kontrollida või pole sa lihtsalt seda teinud."
-
-#: ../src/seahorse-sign.glade.h:10
-msgid ""
-"<i>Very Carefully:</i> Select this only if you are absolutely sure that "
-"this\n"
-"key is genuine."
-msgstr ""
-"<i>Väga hoolikalt</i> - vali see ainult juhul, kui sa oled täiesti kindel, \n"
-"et see võti kuulub selle omanikule."
-
-#: ../src/seahorse-sign.glade.h:12
-msgid "By signing you indicate your trust that this key belongs to:"
-msgstr ""
-"Allkirjastamisega näitad sa, et usaldad sellele omanikule kuuluvat võtit:"
-
-#: ../src/seahorse-sign.glade.h:13
-msgid "I can _revoke this signature at a later date."
-msgstr "Mul on võimalus hiljem seda allkirja tü_histada."
-
-#: ../src/seahorse-sign.glade.h:14
-msgid ""
-"You could use a hard to forge photo identification (such as a passport) \n"
-"to personally check that the name on the key is correct. You should \n"
-"have also used email to check that the email address belongs to the\n"
-"owner."
-msgstr ""
-"Selle valiku jaoks peaks sa olema ise kontrollinud selle inimese isikut \n"
-"tõendavat pildiga dokumenti (näiteks ID-kaarti või passi). Samuti peaks\n"
-"sa olema kontrollinud, kas e-posti aadress vastab omanikule."
-
-#: ../src/seahorse-sign.glade.h:18
-msgid "_Casually"
-msgstr "_Pealiskaudselt"
-
-#: ../src/seahorse-sign.glade.h:19
-msgid "_Not at all"
-msgstr "_Mitte üldse"
-
-#: ../src/seahorse-sign.glade.h:20
-msgid "_Others may not see this signature"
-msgstr "_Teised ei tohi seda allkirja näha"
-
-#: ../src/seahorse-sign.glade.h:21
-msgid "_Sign"
-msgstr "All_kirjasta"
-
-#: ../src/seahorse-sign.glade.h:22
-msgid "_Signer:"
-msgstr "_Allkirjastaja:"
-
-#: ../src/seahorse-sign.glade.h:23
-msgid "_Very Carefully"
-msgstr "_Väga hoolikalt"
-
-#: ../src/seahorse-ssh-generate.c:47
+#: ../ssh/seahorse-ssh-generate.c:47
 msgid "Couldn't generate Secure Shell key"
 msgstr "Secure Shell'i võtit pole võimalik luua"
 
-#: ../src/seahorse-ssh-generate.c:153
+#: ../ssh/seahorse-ssh-generate.c:154
 msgid "Creating Secure Shell Key"
 msgstr "Secure Shell'i võtme loomine"
 
-#: ../src/seahorse-ssh-generate.glade.h:2
+#: ../ssh/seahorse-ssh-generate.glade.h:2
 msgid ""
 "<i>Use your email address, and any other reminder\n"
 " you need about what this key is for.</i>"
@@ -2747,7 +2712,7 @@ msgstr ""
 "<i>Sisesta siia näiteks oma e-posti aadress või mõni\n"
 "muu string, mis aitab võtme otstarvet meeles pidada.</i>"
 
-#: ../src/seahorse-ssh-generate.glade.h:4
+#: ../ssh/seahorse-ssh-generate.glade.h:4
 msgid ""
 "A Secure Shell (SSH) key lets you connect securely to trusted\n"
 "computers using SSH, without entering a different password \n"
@@ -2757,7 +2722,7 @@ msgstr ""
 "ühenduda teistesse arvutitesse ilma, et sa peaksid iga arvuti\n"
 "jaoks parooli sisestama."
 
-#: ../src/seahorse-ssh-generate.glade.h:8
+#: ../ssh/seahorse-ssh-generate.glade.h:8
 msgid ""
 "If there is already a computer you want to use this key with, you \n"
 "can set up that computer to recognize your key now. "
@@ -2765,120 +2730,31 @@ msgstr ""
 "Kui sa soovid mõnes arvutis seda võtit kasutada, siis on võimalik\n"
 "panna see arvuti sinu võtit ära tundma."
 
-#: ../src/seahorse-ssh-generate.glade.h:11
+#: ../ssh/seahorse-ssh-generate.glade.h:11
 msgid "New Secure Shell Key"
 msgstr "Uus Secure Shell'i võti"
 
-#: ../src/seahorse-ssh-generate.glade.h:12
+#: ../ssh/seahorse-ssh-generate.glade.h:12
 msgid "_Create and Set Up"
 msgstr "L_oo võti ja säti paika"
 
-#: ../src/seahorse-ssh-generate.glade.h:13
+#: ../ssh/seahorse-ssh-generate.glade.h:13
 msgid "_Just Create Key"
 msgstr "Loo ainult _võti"
 
-#: ../src/seahorse-ssh-generate.glade.h:14
+#: ../ssh/seahorse-ssh-generate.glade.h:14
 msgid "_Key Description:"
 msgstr "_Võtme kirjeldus:"
 
-#: ../src/seahorse-ssh-key-properties.c:118
-msgid "Couldn't rename key."
-msgstr "Võtit pole võimalik ümber nimetada."
+#: ../ssh/seahorse-ssh-generator.vala:29 ../ssh/seahorse-ssh-key.c:96
+#: ../ssh/seahorse-ssh-key.c:100 ../ssh/seahorse-ssh-key-properties.glade.h:21
+#: ../ssh/seahorse-ssh-source.c:753
+msgid "Secure Shell Key"
+msgstr "Secure shell'i võti"
 
-#: ../src/seahorse-ssh-key-properties.c:158
-msgid "Couldn't change authorization for key."
-msgstr "Võtme autoriseerimist pole võimalik muuta."
-
-#: ../src/seahorse-ssh-key-properties.c:172
-msgid "Couldn't change passhrase for key."
-msgstr "Võtme parooli pole võimalik muuta."
-
-#: ../src/seahorse-ssh-key-properties.glade.h:1
-msgid "/home/nate/.ssh/blah_rsa"
-msgstr "/home/nate/.ssh/blah_rsa"
-
-#: ../src/seahorse-ssh-key-properties.glade.h:2
-msgid "00:00:00:00:00"
-msgstr "00:00:00:00:00"
-
-#: ../src/seahorse-ssh-key-properties.glade.h:3
-msgid "<b>Algorithm:</b>"
-msgstr "<b>Algoritm:</b>"
-
-#: ../src/seahorse-ssh-key-properties.glade.h:5
-msgid "<b>Identifier:</b>"
-msgstr "<b>Identifikaator:</b>"
-
-#: ../src/seahorse-ssh-key-properties.glade.h:6
-msgid "<b>Location:</b>"
-msgstr "<b>Asukoht:</b>"
-
-#: ../src/seahorse-ssh-key-properties.glade.h:8
-msgid "<b>Strength:</b>"
-msgstr "<b>Tugevus:</b>"
-
-#: ../src/seahorse-ssh-key-properties.glade.h:10
-msgid "<b>Trust</b>"
-msgstr "<b>Usaldus</b>"
-
-#: ../src/seahorse-ssh-key-properties.glade.h:15
-#, no-c-format
-msgid "<i>This only applies to the '%s'</i> account."
-msgstr "<i>See rakendub ainult kontole '%s'.</i>"
-
-#: ../src/seahorse-ssh-key-properties.glade.h:18
-msgid "E_xport Complete Key"
-msgstr "_Ekspordi kogu võti"
-
-#: ../src/seahorse-ssh-key-properties.glade.h:22
-msgid "The owner of this key is _authorized to connect to this computer"
-msgstr "Selle võtme omanik on _volitatud sellesse arvutisse ühenduma"
-
-#: ../src/seahorse-ssh-key-properties.glade.h:23
-msgid "Used to connect to other computers."
-msgstr "Kasutatakse teistesse arvutitesse ühendumiseks."
-
-#: ../src/seahorse-ssh-upload.c:46
-msgid "Couldn't configure Secure Shell keys on remote computer."
-msgstr "Secure Shell'i võtit pole võimalik võrguarvuti jaoks seadistama."
-
-#. Show the progress window if necessary
-#: ../src/seahorse-ssh-upload.c:181
-msgid "Configuring Secure Shell Keys..."
-msgstr "Secure Shell'i võtmete seadistamine..."
-
-#: ../src/seahorse-ssh-upload.glade.h:1
-msgid "<i>eg: fileserver.example.com</i>"
-msgstr "<i>näiteks: failiserver.example.com</i>"
-
-#: ../src/seahorse-ssh-upload.glade.h:2
-msgid "Set Up Computer for SSH Connection"
-msgstr "SSH ühendusele arvuti määramine"
-
-#: ../src/seahorse-ssh-upload.glade.h:4
-msgid ""
-"To use your Secure Shell key with another computer that\n"
-"uses SSH, you must already have a login account on that \n"
-"computer."
-msgstr ""
-"Secure Shell'i võtme kasutamisel võrguarvutisse\n"
-"sisselogimiseks peab sul olema selles arvutis konto."
-
-#: ../src/seahorse-ssh-upload.glade.h:7
-msgid "_Computer Name:"
-msgstr "_Arvuti nimi:"
-
-#: ../src/seahorse-ssh-upload.glade.h:8
-msgid "_Login Name:"
-msgstr "_Konto nimi:"
-
-#: ../src/seahorse-ssh-upload.glade.h:9
-msgid "_Set Up"
-msgstr "_Määra"
-
-#: ../ssh/seahorse-ssh-askpass.c:101
-msgid "Enter your Secure Shell passphrase:"
-msgstr "Sisesta oma Secure Shell'i parool"
+#: ../ssh/seahorse-ssh-generator.vala:30
+msgid "Used to access other computers (eg: via a terminal)"
+msgstr "Teistele arvutitele ligipääsuks (näiteks terminali kaudu)"
 
 #: ../ssh/seahorse-ssh-key.c:92
 msgid "(Unreadable Secure Shell Key)"
@@ -2892,79 +2768,254 @@ msgstr "Secure Shell'i salajane võti"
 msgid "Public Secure Shell Key"
 msgstr "Secure Shell'i avalik võti"
 
-#: ../ssh/seahorse-ssh-operation.c:137 ../ssh/seahorse-ssh-operation.c:699
+#: ../ssh/seahorse-ssh-key-properties.c:118
+msgid "Couldn't rename key."
+msgstr "Võtit pole võimalik ümber nimetada."
+
+#: ../ssh/seahorse-ssh-key-properties.c:159
+msgid "Couldn't change authorization for key."
+msgstr "Võtme autoriseerimist pole võimalik muuta."
+
+#: ../ssh/seahorse-ssh-key-properties.c:174
+msgid "Couldn't change passhrase for key."
+msgstr "Võtme parooli pole võimalik muuta."
+
+#: ../ssh/seahorse-ssh-key-properties.glade.h:1
+msgid "/home/nate/.ssh/blah_rsa"
+msgstr "/home/nate/.ssh/blah_rsa"
+
+#: ../ssh/seahorse-ssh-key-properties.glade.h:2
+msgid "00:00:00:00:00"
+msgstr "00:00:00:00:00"
+
+#: ../ssh/seahorse-ssh-key-properties.glade.h:3
+msgid "<b>Algorithm:</b>"
+msgstr "<b>Algoritm:</b>"
+
+#: ../ssh/seahorse-ssh-key-properties.glade.h:5
+msgid "<b>Identifier:</b>"
+msgstr "<b>Identifikaator:</b>"
+
+#: ../ssh/seahorse-ssh-key-properties.glade.h:6
+msgid "<b>Location:</b>"
+msgstr "<b>Asukoht:</b>"
+
+#: ../ssh/seahorse-ssh-key-properties.glade.h:8
+msgid "<b>Strength:</b>"
+msgstr "<b>Tugevus:</b>"
+
+#: ../ssh/seahorse-ssh-key-properties.glade.h:10
+msgid "<b>Trust</b>"
+msgstr "<b>Usaldus</b>"
+
+#: ../ssh/seahorse-ssh-key-properties.glade.h:15
+#, no-c-format
+msgid "<i>This only applies to the '%s'</i> account."
+msgstr "<i>See rakendub ainult kontole '%s'.</i>"
+
+#: ../ssh/seahorse-ssh-key-properties.glade.h:18
+msgid "E_xport Complete Key"
+msgstr "_Ekspordi kogu võti"
+
+#: ../ssh/seahorse-ssh-key-properties.glade.h:22
+msgid "The owner of this key is _authorized to connect to this computer"
+msgstr "Selle võtme omanik on _volitatud sellesse arvutisse ühenduma"
+
+#: ../ssh/seahorse-ssh-key-properties.glade.h:23
+msgid "Used to connect to other computers."
+msgstr "Kasutatakse teistesse arvutitesse ühendumiseks."
+
+#: ../ssh/seahorse-ssh-operation.c:138 ../ssh/seahorse-ssh-operation.c:700
 #, c-format
 msgid "The SSH command was terminated unexpectedly."
 msgstr "SSH käsk katkestas ootamatult."
 
-#: ../ssh/seahorse-ssh-operation.c:145 ../ssh/seahorse-ssh-operation.c:706
+#: ../ssh/seahorse-ssh-operation.c:146 ../ssh/seahorse-ssh-operation.c:707
 msgid "The SSH command failed."
 msgstr "Tõrge SSH käsu täitmisel."
 
-#: ../ssh/seahorse-ssh-operation.c:443
+#: ../ssh/seahorse-ssh-operation.c:444
 msgid "Secure Shell key"
 msgstr "Secure Shell'i võti"
 
-#: ../ssh/seahorse-ssh-operation.c:447
+#: ../ssh/seahorse-ssh-operation.c:448
 msgid "Passphrase:"
 msgstr "Parool:"
 
 #. Just prompt over and over again
-#: ../ssh/seahorse-ssh-operation.c:729
+#: ../ssh/seahorse-ssh-operation.c:730
 msgid "Secure Shell Passphrase"
 msgstr "Secure Shell'i parool"
 
-#: ../ssh/seahorse-ssh-operation.c:817
+#: ../ssh/seahorse-ssh-operation.c:818
 msgid "Old Key Passphrase"
 msgstr "Võtme vana parool"
 
-#: ../ssh/seahorse-ssh-operation.c:818
+#: ../ssh/seahorse-ssh-operation.c:819
 #, c-format
 msgid "Enter the old passphrase for: %s"
 msgstr "Sisesta vana parool järgnevale võtmele: %s"
 
-#: ../ssh/seahorse-ssh-operation.c:822
+#: ../ssh/seahorse-ssh-operation.c:823
 msgid "New Key Passphrase"
 msgstr "Uue võtme parool"
 
-#: ../ssh/seahorse-ssh-operation.c:823
+#: ../ssh/seahorse-ssh-operation.c:824
 #, c-format
 msgid "Enter the new passphrase for: %s"
 msgstr "Sisesta uus parool järgnevale võtmele: %s"
 
-#: ../ssh/seahorse-ssh-operation.c:831
+#: ../ssh/seahorse-ssh-operation.c:832
 msgid "Enter Key Passphrase"
 msgstr "Võtme parooli sisestamine"
 
-#: ../ssh/seahorse-ssh-operation.c:899
+#: ../ssh/seahorse-ssh-operation.c:900
 msgid "Passphrase for New Secure Shell Key"
 msgstr "Parool uuele Secure Shelli võtmele"
 
-#: ../ssh/seahorse-ssh-operation.c:900
+#: ../ssh/seahorse-ssh-operation.c:901
 msgid "Enter a passphrase for your new Secure Shell key."
 msgstr "Sisesta oma Secure Shell'i võtmele parool."
 
-#: ../ssh/seahorse-ssh-operation.c:1035
+#: ../ssh/seahorse-ssh-operation.c:1036
 msgid "Secure Shell Key Passphrase"
 msgstr "Secure Shell'i võtme parool"
 
-#: ../ssh/seahorse-ssh-operation.c:1035
+#: ../ssh/seahorse-ssh-operation.c:1036
 #, c-format
 msgid "Enter the passphrase for: %s"
 msgstr "Parooli sisestamine: %s"
 
-#: ../ssh/seahorse-ssh-operation.c:1036
+#: ../ssh/seahorse-ssh-operation.c:1037
 msgid "Save this passphrase in my keyring"
 msgstr "Salvestada selle võtme parool minu võtmerõngasse"
 
-#: ../ssh/seahorse-ssh-operation.c:1089
+#: ../ssh/seahorse-ssh-operation.c:1090
 #, c-format
 msgid "Importing key: %s"
 msgstr "Võtme importimine: %s"
 
-#: ../ssh/seahorse-ssh-operation.c:1091
+#: ../ssh/seahorse-ssh-operation.c:1092
 msgid "Importing key. Enter passphrase"
 msgstr "Võtme importimine. Sisesta parool"
+
+#: ../ssh/seahorse-ssh-upload.c:45
+msgid "Couldn't configure Secure Shell keys on remote computer."
+msgstr "Secure Shell'i võtit pole võimalik võrguarvuti jaoks seadistama."
+
+#. Show the progress window if necessary
+#: ../ssh/seahorse-ssh-upload.c:181
+msgid "Configuring Secure Shell Keys..."
+msgstr "Secure Shell'i võtmete seadistamine..."
+
+#: ../ssh/seahorse-ssh-upload.glade.h:1
+msgid "<i>eg: fileserver.example.com</i>"
+msgstr "<i>näiteks: failiserver.example.com</i>"
+
+#: ../ssh/seahorse-ssh-upload.glade.h:2
+msgid "Set Up Computer for SSH Connection"
+msgstr "SSH ühendusele arvuti määramine"
+
+#: ../ssh/seahorse-ssh-upload.glade.h:4
+msgid ""
+"To use your Secure Shell key with another computer that\n"
+"uses SSH, you must already have a login account on that \n"
+"computer."
+msgstr ""
+"Secure Shell'i võtme kasutamisel võrguarvutisse\n"
+"sisselogimiseks peab sul olema selles arvutis konto."
+
+#: ../ssh/seahorse-ssh-upload.glade.h:7
+msgid "_Computer Name:"
+msgstr "_Arvuti nimi:"
+
+#: ../ssh/seahorse-ssh-upload.glade.h:8
+msgid "_Login Name:"
+msgstr "_Konto nimi:"
+
+#: ../ssh/seahorse-ssh-upload.glade.h:9
+msgid "_Set Up"
+msgstr "_Määra"
+
+#~ msgid "Imported %d key"
+#~ msgid_plural "Imported %d keys"
+#~ msgstr[0] "Imporditud %d võti"
+#~ msgstr[1] "Imporditud %d võtit"
+
+#~ msgid "Couldn't read file"
+#~ msgstr "Faili pole võimalik lugeda"
+
+#~ msgid "Back up Key Rings to Archive"
+#~ msgstr "Võtmerõngaste varundamine arhiivi"
+
+#~ msgid "seahorse"
+#~ msgstr "seahorse"
+
+#~ msgid "_Back up Key Rings..."
+#~ msgstr "_Varunda võtmerõngad..."
+
+#~ msgid "Back up all keys"
+#~ msgstr "Kõikidest võtmetest varukoopia loomine"
+
+#~ msgid "Set Up Computer for _Secure Shell..."
+#~ msgstr "Määra _Secure Shell'i jaoks arvuti..."
+
+#~ msgid "Couldn't retrieve key data"
+#~ msgstr "Võtme andmeid pole võimalik vastu võtta"
+
+#~ msgid "Couldn't write key to file"
+#~ msgstr "Võtit pole võimalik faili kirjutada"
+
+#~ msgid "Couldn't import keys into key ring"
+#~ msgstr "Võtmeid pole võtmerõngasse võimalik importida"
+
+#~ msgid "Couldn't write keys to file: %s"
+#~ msgstr "Võtmeid pole võimalik faili kirjutada: %s"
+
+#~ msgid "Save Remote Keys"
+#~ msgstr "Kaugvõtmete salvestamine"
+
+#~ msgid "No matching keys found"
+#~ msgstr "Vastavaid võtmeid ei leitud"
+
+#~ msgid "Save Key As..."
+#~ msgstr "Salvesta võti kui..."
+
+#~ msgid "Save selected keys as a file"
+#~ msgstr "Vailitud võtmete salvestamine faili"
+
+#~ msgid "_Copy Key"
+#~ msgstr "_Kopeeri võti"
+
+#~ msgid "Copy selected keys to the clipboard"
+#~ msgstr "Valitud võtmete kopeerimine lõikelauale"
+
+#~ msgid "<b>You have selected multiple files or folders</b>"
+#~ msgstr "<b>Sul on valitud mitu võtit või kataloogi</b>"
+
+#~ msgid ""
+#~ "Because the files are located remotely, each file will be encrypted "
+#~ "separately."
+#~ msgstr ""
+#~ "Kuna failid pole kohalikul kettal, siis krüptitakse iga fail eraldi."
+
+#~ msgid "Encrypt Multiple Files"
+#~ msgstr "Mitme faili krüptimine"
+
+#~ msgid "Encrypt each file separately"
+#~ msgstr "Iga fail krüptitakse eraldi"
+
+#~ msgid "Encrypt packed together in a package"
+#~ msgstr "Krüptitud tulemus on pakitud ühte pakki"
+
+#~ msgid "Package Name:"
+#~ msgstr "Paki nimi:"
+
+#~ msgid "Packaging:"
+#~ msgstr "Pakkimine:"
+
+#~ msgid "encrypted-package"
+#~ msgstr "krüptitud-pakk"
 
 #~ msgid "Please enter a passphrase to use."
 #~ msgstr "Palun sisesta kasutatav parool."
@@ -3420,9 +3471,6 @@ msgstr "Võtme importimine. Sisesta parool"
 
 #~ msgid "Importing keys ..."
 #~ msgstr "Võtmete importimine..."
-
-#~ msgid "Imported key"
-#~ msgstr "Imporditud võti"
 
 #~ msgid "Choose Decrypted File Name for '%s'"
 #~ msgstr "'%s' lahtikrüptitud faili nime valimine"
