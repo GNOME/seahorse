@@ -15,6 +15,8 @@ INCLUDES = -I$(top_builddir) \
 	-DLIBCRYPTUI_API_SUBJECT_TO_CHANGE \
 	-DGETTEXT_PACKAGE=\""seahorse\""
 
+AM_LDFLAGS = @NETLIBS@
+
 VALA_SRCS = \
 	seahorse-ssh.vala \
 	seahorse-ssh-commands.vala \
