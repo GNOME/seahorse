@@ -611,7 +611,9 @@ resolved_callback (gpointer unused, guint status, SeahorseLDAPOperation *lop)
 {
     guint port = LDAP_PORT;
     gchar *server = NULL;
+    struct berval cred;
     gchar *t;
+    int rc;
     
     g_object_get (lop->lsrc, "key-server", &server, NULL);
     g_return_if_fail (server && server[0]);
@@ -640,18 +642,18 @@ resolved_callback (gpointer unused, guint status, SeahorseLDAPOperation *lop)
     
     {
         /* Now that we've resolved our address, connect via IP */
-        const char *ip;
-        ip = soup_address_get_physical (lop->addr);
-        g_return_if_fail (ip != NULL);
-        
-        lop->ldap = ldap_init (ip, port);
+        gchar *url;
+
+        url = g_strdup_printf ("ldap://%s:%u", soup_address_get_physical (lop->addr), port);
+        ldap_initialize (&(lop->ldap), url);
+        g_free (url);
         g_return_if_fail (lop->ldap != NULL);
     }
     
 #else /* WITH_SOUP */
     
     /* No async DNS resolve, let libldap handle resolving synchronously */
-    lop->ldap = ldap_init (server, port);
+    ldap_initialize (&(lop->ldap), server);
     g_return_if_fail (lop->ldap != NULL);    
     
 #endif /* WITH_SOUP */
@@ -665,9 +667,11 @@ resolved_callback (gpointer unused, guint status, SeahorseLDAPOperation *lop)
     g_free (server);
     
     /* Start the bind operation */
-    lop->ldap_op = ldap_simple_bind (lop->ldap, NULL, NULL);
-    if (lop->ldap_op == -1) 
-        fail_ldap_operation (lop, 0);
+    cred.bv_val = "";
+    cred.bv_len = 0;
+    rc = ldap_sasl_bind (lop->ldap, NULL, LDAP_SASL_SIMPLE, &cred, NULL, NULL, &(lop->ldap_op));
+    if (rc != LDAP_SUCCESS) 
+        fail_ldap_operation (lop, rc);
         
     else   /* This starts looking for results */
         lop->stag = g_idle_add_full (G_PRIORITY_DEFAULT_IDLE, 
