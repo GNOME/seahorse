@@ -64,6 +64,8 @@ struct _SeahorseServiceDiscoveryPriv {
 #ifdef WITH_SHARING
     AvahiClient *client;
     AvahiServiceBrowser *browser;
+#else
+    char no_use;
 #endif
 };
 
