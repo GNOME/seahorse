@@ -130,7 +130,7 @@ parse_key_data (gchar *line, SeahorseSSHKeyData *data)
     g_strchomp (line);
         
     /* Decode it, and parse binary stuff */
-    bytes = seahorse_base64_decode (line, &len);
+    bytes = g_base64_decode (line, &len);
     ret = parse_key_blob (bytes, len, data);
     g_free (bytes);
     

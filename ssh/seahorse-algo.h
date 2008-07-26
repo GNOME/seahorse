@@ -44,54 +44,6 @@ void seahorse_md5_init(md5_ctx_t* context);
 void seahorse_md5_update(md5_ctx_t* context, const void* buf, unsigned len);
 void seahorse_md5_final(unsigned char digest[MD5_LEN], md5_ctx_t* context);
 
-
-
-/* gbase64.h - Base64 coding functions
- *
- *  Copyright (C) 2005  Alexander Larsson <alexl@redhat.com>
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public
- * License along with this library; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
- */
-
-#include <glib/gtypes.h>
-
-G_BEGIN_DECLS
-
-gsize   seahorse_base64_encode_step  (const guchar *in,
-			       gsize         len,
-			       gboolean      break_lines,
-			       gchar        *out,
-			       gint         *state,
-			       gint         *save);
-gsize   seahorse_base64_encode_close (gboolean      break_lines,
-			       gchar        *out,
-			       gint         *state,
-			       gint         *save);
-gchar*  seahorse_base64_encode       (const guchar *data,
-			       gsize         len) G_GNUC_MALLOC;
-gsize   seahorse_base64_decode_step  (const gchar  *in,
-			       gsize         len,
-			       guchar       *out,
-			       gint         *state,
-			       guint        *save);
-guchar *seahorse_base64_decode       (const gchar  *text,
-			       gsize        *out_len) G_GNUC_MALLOC;
-
-G_END_DECLS
-
 #endif /* __SEAHORSE_ALGO_H__ */
 
 
