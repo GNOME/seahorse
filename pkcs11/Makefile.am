@@ -19,6 +19,9 @@ VALA_SRCS = \
 	seahorse-pkcs11.vala
 	
 VALA_VAPIS = \
+	p11.vapi \
+	gp11.vapi \
+	$(top_srcdir)/bugs.vapi \
 	$(top_srcdir)/config.vapi \
 	$(top_srcdir)/libseahorse/libseahorse-c.vapi \
 	$(top_srcdir)/libseahorse/libseahorse.vapi

@@ -20,4 +20,8 @@ namespace Bugs {
 	/* http://bugzilla.gnome.org/show_bug.cgi?id=540713 */
 	[CCode (cname="gtk_notebook_page_num")]
 	public int notebook_page_num (Gtk.Notebook notebook, Gtk.Widget widget);
+	
+	/* http://bugzilla.gnome.org/show_bug.cgi?id=544871 */
+	[CCode (cname="g_base64_encode")]
+	public string base64_encode (uchar* data, size_t length);
 }
