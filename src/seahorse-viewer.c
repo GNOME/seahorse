@@ -64,6 +64,8 @@ static SeahorseObject* seahorse_viewer_real_get_selected_object_and_uid (Seahors
 static void seahorse_viewer_on_ui_add_widget (SeahorseViewer* self, GtkUIManager* ui, GtkWidget* widget);
 static void seahorse_viewer_on_app_preferences (SeahorseViewer* self, GtkAction* action);
 static void _seahorse_viewer_on_about_link_clicked_gtk_about_dialog_activate_link_func (GtkAboutDialog* about, const char* link_, gpointer self);
+static void __lambda0 (GtkAboutDialog* about, gint resp, SeahorseViewer* self);
+static void ___lambda0_gtk_dialog_response (GtkAboutDialog* _sender, gint response_id, gpointer self);
 static void seahorse_viewer_on_app_about (SeahorseViewer* self, GtkAction* action);
 static void seahorse_viewer_on_about_link_clicked (GtkAboutDialog* about, const char* url);
 static void seahorse_viewer_on_help_show (SeahorseViewer* self, GtkAction* action);
@@ -253,6 +255,17 @@ static void _seahorse_viewer_on_about_link_clicked_gtk_about_dialog_activate_lin
 }
 
 
+static void __lambda0 (GtkAboutDialog* about, gint resp, SeahorseViewer* self) {
+	g_return_if_fail (GTK_IS_ABOUT_DIALOG (about));
+	gtk_widget_hide (GTK_WIDGET (about));
+}
+
+
+static void ___lambda0_gtk_dialog_response (GtkAboutDialog* _sender, gint response_id, gpointer self) {
+	__lambda0 (_sender, response_id, self);
+}
+
+
 static void seahorse_viewer_on_app_about (SeahorseViewer* self, GtkAction* action) {
 	char** _tmp2;
 	gint authors_length1;
@@ -295,6 +308,7 @@ static void seahorse_viewer_on_app_about (SeahorseViewer* self, GtkAction* actio
 	gtk_about_dialog_set_logo_icon_name (about, "seahorse");
 	gtk_about_dialog_set_website (about, "http://www.gnome.org/projects/seahorse");
 	gtk_about_dialog_set_website_label (about, _ ("Seahorse Project Homepage"));
+	g_signal_connect_object (GTK_DIALOG (about), "response", ((GCallback) (___lambda0_gtk_dialog_response)), self, 0);
 	gtk_dialog_run (GTK_DIALOG (about));
 	authors = (_vala_array_free (authors, authors_length1, ((GDestroyNotify) (g_free))), NULL);
 	documenters = (_vala_array_free (documenters, documenters_length1, ((GDestroyNotify) (g_free))), NULL);
@@ -324,7 +338,7 @@ static void seahorse_viewer_on_about_link_clicked (GtkAboutDialog* about, const 
 		ex = inner_error;
 		inner_error = NULL;
 		{
-			g_warning ("seahorse-viewer.vala:243: couldn't launch url: %s: %s", url, ex->message);
+			g_warning ("seahorse-viewer.vala:244: couldn't launch url: %s: %s", url, ex->message);
 			(ex == NULL ? NULL : (ex = (g_error_free (ex), NULL)));
 		}
 	}

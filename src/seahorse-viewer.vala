@@ -233,6 +233,7 @@ namespace Seahorse {
 			about.website = "http://www.gnome.org/projects/seahorse";
 			about.website_label = _("Seahorse Project Homepage");
 			
+			about.response += (about, resp) => { about.hide(); };
 			about.run();
 		}
 		
