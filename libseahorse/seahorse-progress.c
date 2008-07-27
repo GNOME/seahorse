@@ -119,6 +119,7 @@ operation_done (SeahorseOperation *operation, SeahorseWidget *swidget)
     }
     
     operation_progress (operation, "", 0.0, swidget);
+    g_object_set_data (G_OBJECT (swidget), "operation", NULL);
 }
 
 static void
@@ -153,6 +154,7 @@ seahorse_progress_status_set_operation (SeahorseWidget *swidget,
         
         /* If the previous one was a multi operation, just piggy back this one in */
         if (SEAHORSE_IS_MULTI_OPERATION (prev)) {
+       	    g_object_ref (operation);
             seahorse_multi_operation_take (SEAHORSE_MULTI_OPERATION (prev), operation);
             return;
         }
