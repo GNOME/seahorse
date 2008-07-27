@@ -274,11 +274,11 @@ seahorse_xx_operation_cancel (SeahorseOperation *operation)
         }                                                                                       \
         return operation_type;                                                                  \
     }                                                                                           \
-    static GObjectClass *operation_parent_class = NULL;                                         \
+    static GObjectClass *opx##_operation_parent_class = NULL;                                         \
     static void seahorse_##opx##_operation_class_init (Seahorse##Opx##OperationClass *klass) {  \
         GObjectClass *gobject_class  = G_OBJECT_CLASS (klass);                                  \
         SeahorseOperationClass *op_class = SEAHORSE_OPERATION_CLASS (klass);                    \
-        operation_parent_class = g_type_class_peek_parent (klass);                              \
+        opx##_operation_parent_class = g_type_class_peek_parent (klass);                              \
         op_class->cancel = seahorse_##opx##_operation_cancel;                                   \
         gobject_class->dispose = seahorse_##opx##_operation_dispose;                            \
         gobject_class->finalize = seahorse_##opx##_operation_finalize;                          \

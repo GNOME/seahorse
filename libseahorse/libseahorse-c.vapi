@@ -26,7 +26,7 @@ namespace Seahorse {
         public class Source : GLib.Object {
 		public GLib.Quark ktype { get; }
 		public static Operation export_objects (GLib.List<Object> objects, GLib.OutputStream output);
-		public static void delete_objects (GLib.List<Object> objects) throws GLib.Error;
+		public static Operation delete_objects (GLib.List<Object> objects);
 		
 		public virtual Operation load (GLib.Quark id);
 		public virtual Operation search (string match);
@@ -134,10 +134,10 @@ namespace Seahorse {
 		public string chooser_open_prompt (Gtk.Dialog dialog);
 		
 		public void handle_error (GLib.Error ex, string format, ...);
-		public void show_error (Gtk.Widget parent, string heading, string description);
-		public bool prompt_delete (string text);
+		public void show_error (Gtk.Widget? parent, string heading, string description);
+		public bool prompt_delete (string text, Gtk.Widget? parent = null);
 		
-		public string uri_get_last (string uri);
+		public weak string uri_get_last (string uri);
 		public GLib.Quark detect_file_type (string uri);
 		public GLib.Quark detect_data_type (string text, long len);	
 	}

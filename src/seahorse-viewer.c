@@ -25,12 +25,12 @@
 #include <seahorse-preferences.h>
 #include <gio/gio.h>
 #include <seahorse-commands.h>
-#include <seahorse-util.h>
-#include <seahorse-types.h>
 #include <seahorse-operation.h>
+#include <seahorse-progress.h>
+#include <seahorse-types.h>
+#include <seahorse-util.h>
 #include <gdk/gdk.h>
 #include <seahorse-source.h>
-#include <seahorse-progress.h>
 #include <common/seahorse-registry.h>
 
 
@@ -69,6 +69,8 @@ static void seahorse_viewer_on_about_link_clicked (GtkAboutDialog* about, const 
 static void seahorse_viewer_on_help_show (SeahorseViewer* self, GtkAction* action);
 static void seahorse_viewer_on_key_properties (SeahorseViewer* self, GtkAction* action);
 static gint seahorse_viewer_compare_by_tag (SeahorseViewer* self, SeahorseObject* one, SeahorseObject* two);
+static void seahorse_viewer_on_delete_complete (SeahorseViewer* self, SeahorseOperation* op);
+static void _seahorse_viewer_on_delete_complete_seahorse_done_func (SeahorseOperation* op, gpointer self);
 static void seahorse_viewer_delete_object_batch (SeahorseViewer* self, GList* objects);
 static void seahorse_viewer_on_key_delete (SeahorseViewer* self, GtkAction* action);
 static void seahorse_viewer_on_copy_complete (SeahorseViewer* self, SeahorseOperation* op);
@@ -392,38 +394,40 @@ static gint seahorse_viewer_compare_by_tag (SeahorseViewer* self, SeahorseObject
 }
 
 
+static void seahorse_viewer_on_delete_complete (SeahorseViewer* self, SeahorseOperation* op) {
+	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
+	g_return_if_fail (SEAHORSE_IS_OPERATION (op));
+	if (!seahorse_operation_is_successful (op)) {
+		seahorse_operation_display_error (op, _ ("Couldn't delete."), GTK_WIDGET (seahorse_view_get_window (SEAHORSE_VIEW (self))));
+	}
+}
+
+
+static void _seahorse_viewer_on_delete_complete_seahorse_done_func (SeahorseOperation* op, gpointer self) {
+	seahorse_viewer_on_delete_complete (self, op);
+}
+
+
 static void seahorse_viewer_delete_object_batch (SeahorseViewer* self, GList* objects) {
-	GError * inner_error;
 	SeahorseCommands* _tmp0;
 	SeahorseCommands* commands;
+	SeahorseOperation* op;
 	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
 	g_return_if_fail (objects != NULL);
-	inner_error = NULL;
 	g_assert (objects != NULL);
 	_tmp0 = NULL;
 	commands = (_tmp0 = ((SeahorseCommands*) (g_hash_table_lookup (self->priv->_commands, GINT_TO_POINTER (seahorse_object_get_tag (((SeahorseObject*) (((SeahorseObject*) (objects->data))))))))), (_tmp0 == NULL ? NULL : g_object_ref (_tmp0)));
-	{
-		if (commands != NULL) {
-			seahorse_commands_delete_objects (commands, objects, &inner_error);
-			if (inner_error != NULL) {
-				goto __catch1_g_error;
-			}
-		}
+	if (commands == NULL) {
+		(commands == NULL ? NULL : (commands = (g_object_unref (commands), NULL)));
+		return;
 	}
-	goto __finally1;
-	__catch1_g_error:
-	{
-		GError * ex;
-		ex = inner_error;
-		inner_error = NULL;
-		{
-			seahorse_util_handle_error (ex, _ ("Couldn't delete."), seahorse_view_get_window (SEAHORSE_VIEW (self)), NULL);
-			(ex == NULL ? NULL : (ex = (g_error_free (ex), NULL)));
-		}
+	op = seahorse_commands_delete_objects (commands, objects);
+	if (op != NULL) {
+		seahorse_progress_show (op, _ ("Deleting..."), TRUE);
+		seahorse_operation_watch (op, _seahorse_viewer_on_delete_complete_seahorse_done_func, self, NULL, NULL);
 	}
-	__finally1:
-	;
 	(commands == NULL ? NULL : (commands = (g_object_unref (commands), NULL)));
+	(op == NULL ? NULL : (op = (g_object_unref (op), NULL)));
 }
 
 
@@ -471,7 +475,7 @@ static void seahorse_viewer_on_key_delete (SeahorseViewer* self, GtkAction* acti
 						_tmp2 = NULL;
 						prompt = (_tmp3 = (_tmp2 = _ ("One or more of the deleted keys are private keys. Are you sure you want to proceed?"), (_tmp2 == NULL ? NULL : g_strdup (_tmp2))), (prompt = (g_free (prompt), NULL)), _tmp3);
 					}
-					if (!seahorse_util_prompt_delete (prompt)) {
+					if (!seahorse_util_prompt_delete (prompt, GTK_WIDGET (seahorse_view_get_window (SEAHORSE_VIEW (self))))) {
 						prompt = (g_free (prompt), NULL);
 						(objects == NULL ? NULL : (objects = (g_list_free (objects), NULL)));
 						(batch == NULL ? NULL : (batch = (g_list_free (batch), NULL)));
@@ -630,7 +634,7 @@ static void seahorse_viewer_on_key_export_file (SeahorseViewer* self, GtkAction*
 			file = g_file_new_for_uri (uri);
 			output = G_OUTPUT_STREAM (g_file_replace (file, NULL, FALSE, 0, NULL, &inner_error));
 			if (inner_error != NULL) {
-				goto __catch2_g_error;
+				goto __catch1_g_error;
 			}
 			op = seahorse_source_export_objects (objects, output);
 			seahorse_progress_show (op, _ ("Exporting keys"), TRUE);
@@ -639,17 +643,14 @@ static void seahorse_viewer_on_key_export_file (SeahorseViewer* self, GtkAction*
 			(output == NULL ? NULL : (output = (g_object_unref (output), NULL)));
 			(op == NULL ? NULL : (op = (g_object_unref (op), NULL)));
 		}
-		goto __finally2;
-		__catch2_g_error:
+		goto __finally1;
+		__catch1_g_error:
 		{
 			GError * ex;
 			ex = inner_error;
 			inner_error = NULL;
 			{
-				char* _tmp1;
-				_tmp1 = NULL;
-				seahorse_util_handle_error (ex, _ ("Couldn't export key to \"%s\""), (_tmp1 = seahorse_util_uri_get_last (uri)), NULL);
-				_tmp1 = (g_free (_tmp1), NULL);
+				seahorse_util_handle_error (ex, _ ("Couldn't export key to \"%s\""), seahorse_util_uri_get_last (uri), NULL);
 				(ex == NULL ? NULL : (ex = (g_error_free (ex), NULL)));
 				(objects == NULL ? NULL : (objects = (g_list_free (objects), NULL)));
 				(dialog == NULL ? NULL : (dialog = (g_object_unref (dialog), NULL)));
@@ -657,7 +658,7 @@ static void seahorse_viewer_on_key_export_file (SeahorseViewer* self, GtkAction*
 				return;
 			}
 		}
-		__finally2:
+		__finally1:
 		;
 	}
 	(objects == NULL ? NULL : (objects = (g_list_free (objects), NULL)));
@@ -796,12 +797,12 @@ static GObject * seahorse_viewer_constructor (GType type, guint n_construct_prop
 			path = g_strdup_printf ("%sseahorse-%s.ui", SEAHORSE_GLADEDIR, seahorse_widget_get_name (SEAHORSE_WIDGET (self)));
 			gtk_ui_manager_add_ui_from_file (self->priv->_ui_manager, path, &inner_error);
 			if (inner_error != NULL) {
-				goto __catch3_g_error;
+				goto __catch2_g_error;
 			}
 			path = (g_free (path), NULL);
 		}
-		goto __finally3;
-		__catch3_g_error:
+		goto __finally2;
+		__catch2_g_error:
 		{
 			GError * ex;
 			ex = inner_error;
@@ -811,7 +812,7 @@ static GObject * seahorse_viewer_constructor (GType type, guint n_construct_prop
 				(ex == NULL ? NULL : (ex = (g_error_free (ex), NULL)));
 			}
 		}
-		__finally3:
+		__finally2:
 		;
 		_tmp1 = NULL;
 		win = (_tmp1 = seahorse_widget_get_toplevel (SEAHORSE_WIDGET (self)), (_tmp1 == NULL ? NULL : g_object_ref (_tmp1)));

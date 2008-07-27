@@ -200,7 +200,7 @@ seahorse_hkp_operation_dispose (GObject *gobject)
         hop->session = NULL;
     }
     
-    G_OBJECT_CLASS (operation_parent_class)->dispose (gobject);  
+    G_OBJECT_CLASS (hkp_operation_parent_class)->dispose (gobject);  
 }
 
 static void 
@@ -211,7 +211,7 @@ seahorse_hkp_operation_finalize (GObject *gobject)
     g_assert (hop->hsrc == NULL);
     g_assert (hop->session == NULL);
     
-    G_OBJECT_CLASS (operation_parent_class)->finalize (gobject);  
+    G_OBJECT_CLASS (hkp_operation_parent_class)->finalize (gobject);  
 }
 
 static void 

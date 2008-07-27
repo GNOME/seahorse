@@ -66,7 +66,6 @@ libseahorse_pgp_la_SOURCES = \
 	seahorse-gpg-options.c seahorse-gpg-options.h \
 	seahorse-pgp-add-subkey.c \
 	seahorse-pgp-add-uid.c \
-	seahorse-pgp-delete.c \
 	seahorse-pgp-error.c \
 	seahorse-pgp-expires.c \
 	seahorse-pgp-generate.c \

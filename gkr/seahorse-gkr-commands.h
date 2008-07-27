@@ -26,6 +26,7 @@
 #include <glib-object.h>
 #include <seahorse-commands.h>
 #include <seahorse-object.h>
+#include <seahorse-operation.h>
 #include <stdlib.h>
 #include <string.h>
 #include <gtk/gtk.h>

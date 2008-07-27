@@ -142,15 +142,12 @@ typedef struct _SeahorseSourceClass {
      * remove
      * @sksrc: The #SeahorseSource to delete the object from.
      * @object: A object to delete.
-     * @name: UID/name to delete, or 0 for main object.
-     * @error: Error code when not successful.
      * 
      * Delete the objects from the object source. 
      *
-     * Returns: Whether successful or not.
+     * Returns: The remove operation.
      */
-    gboolean (*remove) (SeahorseSource *sksrc, struct _SeahorseObject *sobj,  
-                        guint name, GError **error);
+    SeahorseOperation* (*remove) (SeahorseSource *sksrc, struct _SeahorseObject *sobj);
     
 } SeahorseSourceClass;
 
@@ -183,8 +180,7 @@ gboolean            seahorse_source_import_sync           (SeahorseSource *sksrc
 SeahorseOperation*  seahorse_source_export_objects        (GList *objects, 
                                                            GOutputStream *output);
 
-gboolean            seahorse_source_delete_objects        (GList *objects, 
-                                                           GError **error);
+SeahorseOperation*  seahorse_source_delete_objects        (GList *objects);
 
 SeahorseOperation*  seahorse_source_export                (SeahorseSource *sksrc,
                                                            GList *objects,
@@ -194,10 +190,8 @@ SeahorseOperation*  seahorse_source_export_raw            (SeahorseSource *sksrc
                                                            GSList *ids, 
                                                            GOutputStream *output);
 
-gboolean            seahorse_source_remove                (SeahorseSource *sksrc,
-                                                           struct _SeahorseObject *sobj,
-                                                           guint name,
-                                                           GError **error);
+SeahorseOperation*  seahorse_source_remove                (SeahorseSource *sksrc,
+                                                           struct _SeahorseObject *sobj);
 
 GQuark              seahorse_source_get_ktype             (SeahorseSource *sksrc);
 

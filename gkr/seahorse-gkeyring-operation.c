@@ -154,7 +154,7 @@ seahorse_gkeyring_operation_dispose (GObject *gobject)
     /* The above cancel should have stopped this */
     g_assert (pv->request == NULL);
     
-    G_OBJECT_CLASS (operation_parent_class)->dispose (gobject);  
+    G_OBJECT_CLASS (gkeyring_operation_parent_class)->dispose (gobject);  
 }
 
 static void 
@@ -166,7 +166,7 @@ seahorse_gkeyring_operation_finalize (GObject *gobject)
     g_assert (!gop->gsrc);
     g_assert (!pv->request);
     
-    G_OBJECT_CLASS (operation_parent_class)->finalize (gobject);  
+    G_OBJECT_CLASS (gkeyring_operation_parent_class)->finalize (gobject);  
 }
 
 static void 

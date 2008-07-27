@@ -276,16 +276,23 @@ namespace Seahorse {
 				return 1;
 			return 0;
 		}
+
+		private void on_delete_complete (Operation op) {
+			if (!op.is_successful ())
+				op.display_error (_("Couldn't delete."), window);
+		}
 		
 		private void delete_object_batch (List<Object> objects) {
 			assert (objects != null);
 			var commands = _commands.lookup(objects.data.tag);
 			
-			try {
-				if (commands != null)
-					commands.delete_objects (objects);
-			} catch (GLib.Error ex) {
-				Util.handle_error (ex, _("Couldn't delete."), window);
+			if (commands == null) 
+				return;
+			
+			Operation? op = commands.delete_objects (objects);
+			if (op != null) {
+				Progress.show (op, _("Deleting..."), true);
+				op.watch (on_delete_complete, null);
 			}
 		}
 		
@@ -308,7 +315,7 @@ namespace Seahorse {
 						prompt = _("%s is a private key. Are you sure you want to proceed?").printf(objects.data.display_name);
 					else
 						prompt = _("One or more of the deleted keys are private keys. Are you sure you want to proceed?");
-					if (!Util.prompt_delete (prompt))
+					if (!Util.prompt_delete (prompt, window))
 						return;
 				}
 			}

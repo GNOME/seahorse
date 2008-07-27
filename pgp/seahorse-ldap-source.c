@@ -390,7 +390,7 @@ seahorse_ldap_operation_dispose (GObject *gobject)
         lop->stag = 0;
     }
         
-    G_OBJECT_CLASS (operation_parent_class)->dispose (gobject);  
+    G_OBJECT_CLASS (ldap_operation_parent_class)->dispose (gobject);  
 }
 
 static void 
@@ -403,7 +403,7 @@ seahorse_ldap_operation_finalize (GObject *gobject)
     g_assert (lop->stag == 0);
     g_assert (lop->ldap == NULL);
     
-    G_OBJECT_CLASS (operation_parent_class)->finalize (gobject);  
+    G_OBJECT_CLASS (ldap_operation_parent_class)->finalize (gobject);  
 }
 
 static void 

@@ -220,10 +220,29 @@ static void
 names_delete_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 {
 	SeahorseKey *skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
+	SeahorsePGPKey *pkey = SEAHORSE_PGP_KEY (skey);
 	gint index = names_get_selected_uid (swidget);
+	gboolean ret;
+	gchar *userid, *message; 
+	gpgme_error_t gerr;
     
-	if (index >= 1) 
-		seahorse_pgp_delete_userid_show (skey, index);
+	if (index < 1)
+		return;
+	
+	/* TODO: This whole index thing is messed up */
+	userid = seahorse_key_get_name (skey, index - 1);
+	message = g_strdup_printf (_("Are you sure you want to permanently delete the '%s' user ID?"), userid);
+	g_free (userid);
+	
+	ret = seahorse_util_prompt_delete (message, seahorse_widget_get_toplevel (swidget));
+	g_free (message);
+	
+	if (ret == FALSE)
+		return;
+	
+	gerr = seahorse_pgp_key_op_del_uid (pkey, index);
+	if (!GPG_IS_OK (gerr))
+		seahorse_pgp_handle_gpgme_error (gerr, _("Couldn't delete user ID"));
 }
 
 static void 
@@ -967,8 +986,26 @@ static void
 details_del_subkey_button_clicked (GtkButton *button, SeahorseWidget *swidget)
 {
 	SeahorseKey *skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
+	SeahorsePGPKey *pkey = SEAHORSE_PGP_KEY (skey);
+	guint index = get_selected_subkey (swidget);
+	gboolean ret;
+	gchar *userid, *message; 
+	gpgme_error_t err;
 
-	seahorse_pgp_delete_subkey_new (SEAHORSE_PGP_KEY (skey), get_selected_subkey (swidget));
+	userid = seahorse_key_get_name (SEAHORSE_KEY (pkey), 0);
+	message = g_strdup_printf (_("Are you sure you want to permanently delete subkey %d of %s?"),
+	                           index, userid);
+	g_free (userid);
+	
+	ret = seahorse_util_prompt_delete (message, seahorse_widget_get_toplevel (swidget));
+	g_free (message);
+	
+	if (ret == FALSE)
+		return;
+	
+	err = seahorse_pgp_key_op_del_subkey (pkey, index);
+	if (!GPG_IS_OK (err))
+		seahorse_pgp_handle_gpgme_error (err, _("Couldn't delete subkey"));
 }
 
 static void

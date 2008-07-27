@@ -266,12 +266,9 @@ static SeahorseOperation*  seahorse_pgp_source_import           (SeahorseSource 
                                                                  GInputStream *input);
 static SeahorseOperation*  seahorse_pgp_source_export           (SeahorseSource *sksrc, 
                                                                  GList *keys,
-                                                                 gboolean complete, 
                                                                  GOutputStream *output);
-static gboolean            seahorse_pgp_source_remove           (SeahorseSource *sksrc, 
-                                                                 SeahorseObject *sobj,
-                                                                 guint name, 
-                                                                 GError **error);
+static SeahorseOperation*  seahorse_pgp_source_remove           (SeahorseSource *sksrc, 
+                                                                 SeahorseObject *sobj);
 
 /* Other forward decls */
 static void                monitor_gpg_homedir                  (GFileMonitor *handle, 
@@ -702,7 +699,7 @@ seahorse_load_operation_dispose (GObject *gobject)
         lop->psrc = NULL;
     }
 
-    G_OBJECT_CLASS (operation_parent_class)->dispose (gobject);  
+    G_OBJECT_CLASS (load_operation_parent_class)->dispose (gobject);
 }
 
 static void 
@@ -719,7 +716,7 @@ seahorse_load_operation_finalize (GObject *gobject)
     if (lop->ctx)
         gpgme_release (lop->ctx);
         
-    G_OBJECT_CLASS (operation_parent_class)->finalize (gobject);  
+    G_OBJECT_CLASS (load_operation_parent_class)->finalize (gobject);
 }
 
 static void 
@@ -1018,18 +1015,16 @@ seahorse_pgp_source_import (SeahorseSource *sksrc, GInputStream *input)
 }
 
 static SeahorseOperation* 
-seahorse_pgp_source_export (SeahorseSource *sksrc, GList *keys, 
-                            gboolean complete, GOutputStream *output)
+seahorse_pgp_source_export (SeahorseSource *sksrc, GList *keys, GOutputStream *output)
 {
-    SeahorsePGPOperation *pop;
-    SeahorsePGPSource *psrc;
-    SeahorsePGPKey *pkey;
-    SeahorseKey *skey;
-    ExportContext *ctx;
-    gpgme_error_t gerr = GPG_OK;
-    gpgme_data_t data;
-    const gchar *keyid;
-    GList *l;
+	SeahorsePGPOperation *pop;
+	SeahorsePGPSource *psrc;
+	SeahorsePGPKey *pkey;
+	SeahorseKey *skey;
+	ExportContext *ctx;
+	gpgme_data_t data;
+	const gchar *keyid;
+	GList *l;
     
     	g_return_val_if_fail (SEAHORSE_IS_PGP_SOURCE (sksrc), NULL);
     	g_return_val_if_fail (output == NULL || G_IS_OUTPUT_STREAM (output), NULL);
@@ -1056,63 +1051,57 @@ seahorse_pgp_source_export (SeahorseSource *sksrc, GList *keys,
         ctx->data = data;
         g_object_set_data_full (G_OBJECT (pop), "export-context", ctx, free_export_context);
     
-    for (l = keys; l != NULL; l = g_list_next (l)) {
+        for (l = keys; l != NULL; l = g_list_next (l)) {
+        	
+        	/* Ignore PGP Uids */
+        	if (SEAHORSE_IS_PGP_UID (l->data))
+        		continue;
         
-        g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (l->data), NULL);
-        pkey = SEAHORSE_PGP_KEY (l->data);
+        	g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (l->data), NULL);
+        	pkey = SEAHORSE_PGP_KEY (l->data);
         
-        skey = SEAHORSE_KEY (l->data);       
-        g_return_val_if_fail (seahorse_object_get_source (SEAHORSE_OBJECT (skey)) == sksrc, NULL);
+        	skey = SEAHORSE_KEY (l->data);       
+        	g_return_val_if_fail (seahorse_object_get_source (SEAHORSE_OBJECT (skey)) == sksrc, NULL);
         
-        /* Building list */
-        keyid = seahorse_pgp_key_get_id (pkey->pubkey, 0);
-        g_array_append_val (ctx->keyids, keyid);
-        
-        /* Exporting of secret keys is synchronous */
-        if (complete && SEAHORSE_OBJECT (skey)->_usage == SEAHORSE_USAGE_PRIVATE_KEY) {
-            
-            gerr = gpgmex_op_export_secret (pop->gctx, 
-                        seahorse_pgp_key_get_id (pkey->seckey, 0), data);
-            
-            if (!GPG_IS_OK (gerr))
-                break;
+        	/* Building list */
+        	keyid = seahorse_pgp_key_get_id (pkey->pubkey, 0);
+        	g_array_append_val (ctx->keyids, keyid);
         }
-    }
 
-    if (!GPG_IS_OK (gerr))
-        seahorse_pgp_operation_mark_failed (pop, gerr);
-    else
-    {
         g_signal_connect (pop, "results", G_CALLBACK (export_key_callback), ctx);
         export_key_callback (pop, ctx);
-    }
     
-    return SEAHORSE_OPERATION (pop);
+        return SEAHORSE_OPERATION (pop);
 }
 
-static gboolean            
-seahorse_pgp_source_remove (SeahorseSource *sksrc, SeahorseObject *sobj,
-                            guint name, GError **error)
+static SeahorseOperation*          
+seahorse_pgp_source_remove (SeahorseSource *sksrc, SeahorseObject *sobj)
 {
-    gpgme_error_t gerr;
+	SeahorseObject *parent;
+	GError *error = NULL;
+	gpgme_error_t gerr;
     
-    g_assert (!error || !*error);
-    g_assert (seahorse_object_get_source (sobj) == sksrc);
+	g_return_val_if_fail (SEAHORSE_IS_SOURCE (sksrc), NULL);
+	g_return_val_if_fail (SEAHORSE_IS_OBJECT (sobj), NULL);
+	g_return_val_if_fail (seahorse_object_get_source (sobj) == sksrc, NULL);
 
-    if (name > 0)
-        gerr = seahorse_pgp_key_op_del_uid (SEAHORSE_PGP_KEY (sobj), name);
-    else if (seahorse_object_get_usage (sobj) == SEAHORSE_USAGE_PRIVATE_KEY) 
-        gerr = seahorse_pgp_key_pair_op_delete (SEAHORSE_PGP_KEY (sobj));
-    else 
-        gerr = seahorse_pgp_key_op_delete (SEAHORSE_PGP_KEY (sobj));
+	if (SEAHORSE_IS_PGP_UID (sobj)) {
+		parent = seahorse_object_get_parent (sobj);
+		g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (parent), NULL);
+		gerr = seahorse_pgp_key_op_del_uid (SEAHORSE_PGP_KEY (parent), 
+		                                    SEAHORSE_PGP_UID (sobj)->index + 1);
+	} else if (SEAHORSE_IS_PGP_KEY (sobj)) {
+		if (seahorse_object_get_usage (sobj) == SEAHORSE_USAGE_PRIVATE_KEY) 
+			gerr = seahorse_pgp_key_pair_op_delete (SEAHORSE_PGP_KEY (sobj));
+		else 
+			gerr = seahorse_pgp_key_op_delete (SEAHORSE_PGP_KEY (sobj));
+	} else {
+		g_return_val_if_reached (NULL);
+	}
     
-    if (!GPG_IS_OK (gerr)) {
-        seahorse_gpgme_to_error (gerr, error);
-        return FALSE;
-    }
-    
-    seahorse_source_load_async (sksrc, 0);
-    return TRUE;
+	if (!GPG_IS_OK (gerr)) 
+		seahorse_gpgme_to_error (gerr, &error);
+	return seahorse_operation_new_complete (error);
 }
 
 /* -------------------------------------------------------------------------- 

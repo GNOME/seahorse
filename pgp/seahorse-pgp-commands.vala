@@ -70,29 +70,61 @@ namespace Seahorse.Pgp {
 			KeyProperties.show ((Pgp.Key)obj, view.window);
 		}
 		
-		public override void delete_objects (List<Object> objects) throws GLib.Error {
+		public override Operation? delete_objects (List<Object> objects) {
 			uint num = objects.length();
 			if (num == 0)
-				return;
+				return null;
 			
+			int num_keys = 0;
+			int num_identities = 0;
+			string message;
+			
+			/* 
+			 * Go through and validate all what we have to delete, 
+			 * removing UIDs where the parent Key is also on the 
+			 * chopping block.
+			 */ 
+			GLib.List<Object> to_delete = new GLib.List<Object>();
 			foreach (var obj in objects) {
-
-				/* 
-				 * Delete all the user ids first, if parent key is 
-				 * not on the chopping block already.
-				 */
-
-				if (obj.get_type() == typeof (Pgp.Uid)) {
-					Pgp.Uid uid = (Pgp.Uid)obj;
-					if (objects.find(uid.parent) == null)
-						Delete.userid_show ((Pgp.Key)uid.parent, uid.index);
-					objects.remove (obj);
-				} else {
-					return_if_fail (obj.get_type() != typeof (Pgp.Key));
+				switch (obj.get_type()) {
+				case typeof (Pgp.Uid):
+					if (objects.find(obj.parent) == null) {
+						to_delete.prepend(obj);
+						++num_identities;
+					}
+					break;
+					
+				case typeof (Pgp.Key):
+					to_delete.prepend(obj);
+					++num_keys;
+					break;
 				}
 			}
+
+			/* Figure out a good prompt message */
+			uint length = to_delete.length ();
+			switch (length) {
+			case 0:
+				return null;
+			case 1:
+				message = _("Are you sure you want to permanently delete %s?").printf(to_delete.data.display_name);
+				break;
+			default:
+				if (num_keys > 0 && num_identities > 0) 
+					message = _("Are you sure you want to permanently delete %d keys and identities?").printf(length);
+				else if (num_keys > 0)
+					message = _("Are you sure you want to permanently delete %d keys?").printf(length);
+				else if (num_identities > 0)
+					message = _("Are you sure you want to permanently delete %d identities?").printf(length);
+				else
+					assert_not_reached();
+				break;
+			}
+
+			if (!Util.prompt_delete(message, view.window))
+				return null;
 			
-			Delete.show(objects);
+			return Seahorse.Source.delete_objects(to_delete);
 		}
 
 		private void on_key_sign (Action action) {

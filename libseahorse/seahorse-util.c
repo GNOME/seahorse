@@ -108,12 +108,24 @@ seahorse_util_handle_error (GError* err, const char* desc, ...)
 }    
 
 gboolean
-seahorse_util_prompt_delete (const gchar *text)
+seahorse_util_prompt_delete (const gchar *text, GtkWidget *parent)
 {
 	GtkWidget *warning, *button;
 	gint response;
 	
-	warning = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
+	if (parent) {
+		if (!GTK_IS_WIDGET (parent)) {
+			g_warn_if_reached ();
+			parent = NULL;
+		} else {
+			if (!GTK_IS_WINDOW (parent)) 
+				parent = gtk_widget_get_toplevel (parent);
+			if (!GTK_IS_WINDOW (parent) && GTK_WIDGET_TOPLEVEL (parent))
+				parent = NULL;
+		}
+	}
+	
+	warning = gtk_message_dialog_new (GTK_WINDOW (parent), GTK_DIALOG_MODAL,
 	                                  GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE,
 	                                  "%s", text);
     

@@ -24,6 +24,7 @@
 
 #include <glib.h>
 #include <glib-object.h>
+#include <seahorse-operation.h>
 #include <gtk/gtk.h>
 #include <stdlib.h>
 #include <string.h>
@@ -52,12 +53,12 @@ struct _SeahorseCommands {
 struct _SeahorseCommandsClass {
 	GObjectClass parent_class;
 	void (*show_properties) (SeahorseCommands* self, SeahorseObject* obj);
-	void (*delete_objects) (SeahorseCommands* self, GList* obj, GError** error);
+	SeahorseOperation* (*delete_objects) (SeahorseCommands* self, GList* obj);
 };
 
 
 void seahorse_commands_show_properties (SeahorseCommands* self, SeahorseObject* obj);
-void seahorse_commands_delete_objects (SeahorseCommands* self, GList* obj, GError** error);
+SeahorseOperation* seahorse_commands_delete_objects (SeahorseCommands* self, GList* obj);
 SeahorseView* seahorse_commands_get_view (SeahorseCommands* self);
 GQuark seahorse_commands_get_ktype (SeahorseCommands* self);
 GtkActionGroup* seahorse_commands_get_command_actions (SeahorseCommands* self);

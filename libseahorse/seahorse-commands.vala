@@ -39,6 +39,6 @@ namespace Seahorse {
 		
 		public abstract void show_properties (Object obj);
 		
-		public abstract void delete_objects (List<Object> obj) throws GLib.Error;
+		public abstract Operation? delete_objects (List<Object> obj);
 	}
 }

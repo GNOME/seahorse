@@ -23,7 +23,7 @@ namespace Seahorse {
 	[CCode (cheader_filename = "seahorse-commands.h")]
 	public abstract class Commands : GLib.Object {
 		public abstract void show_properties (Seahorse.Object obj);
-		public abstract void delete_objects (GLib.List<Seahorse.Object> obj) throws GLib.Error;
+		public abstract Seahorse.Operation? delete_objects (GLib.List<Seahorse.Object> obj);
 		public Seahorse.View view { get; construct; }
 		public abstract GLib.Quark ktype { get; }
 		public abstract Gtk.ActionGroup command_actions { get; }

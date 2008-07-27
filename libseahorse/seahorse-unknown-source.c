@@ -83,13 +83,12 @@ seahorse_unknown_source_export_raw (SeahorseSource *sksrc, GSList *ids,
     return NULL;
 }
 
-static gboolean            
-seahorse_unknown_source_remove (SeahorseSource *sksrc, SeahorseObject *sobj,
-                                guint name, GError **error)
+static SeahorseOperation*           
+seahorse_unknown_source_remove (SeahorseSource *sksrc, SeahorseObject *sobj)
 {
     g_return_val_if_fail (sksrc == seahorse_object_get_source (sobj), FALSE);
     seahorse_context_remove_object (SCTX_APP (), sobj);
-    return TRUE;
+    return seahorse_operation_new_complete (NULL);
 }
 
 static void 

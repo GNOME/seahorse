@@ -24,7 +24,8 @@
 #include <seahorse-pgp-dialogs.h>
 #include <seahorse-pgp-key.h>
 #include <seahorse-view.h>
-#include <seahorse-pgp-uid.h>
+#include <seahorse-util.h>
+#include <seahorse-source.h>
 #include <config.h>
 #include <common/seahorse-registry.h>
 #include "seahorse-pgp.h"
@@ -44,7 +45,8 @@ enum  {
 	SEAHORSE_PGP_COMMANDS_COMMAND_ACTIONS
 };
 static void seahorse_pgp_commands_real_show_properties (SeahorseCommands* base, SeahorseObject* obj);
-static void seahorse_pgp_commands_real_delete_objects (SeahorseCommands* base, GList* objects, GError** error);
+static void _g_list_free_g_object_unref (GList* self);
+static SeahorseOperation* seahorse_pgp_commands_real_delete_objects (SeahorseCommands* base, GList* objects);
 static void seahorse_pgp_commands_on_key_sign (SeahorsePGPCommands* self, GtkAction* action);
 static void seahorse_pgp_commands_on_view_selection_changed (SeahorsePGPCommands* self, SeahorseView* view);
 static void _seahorse_pgp_commands_on_key_sign_gtk_action_activate (GtkAction* _sender, gpointer self);
@@ -70,47 +72,114 @@ static void seahorse_pgp_commands_real_show_properties (SeahorseCommands* base, 
 }
 
 
-static void seahorse_pgp_commands_real_delete_objects (SeahorseCommands* base, GList* objects, GError** error) {
+static void _g_list_free_g_object_unref (GList* self) {
+	g_list_foreach (self, ((GFunc) (g_object_unref)), NULL);
+	g_list_free (self);
+}
+
+
+static SeahorseOperation* seahorse_pgp_commands_real_delete_objects (SeahorseCommands* base, GList* objects) {
 	SeahorsePGPCommands * self;
 	guint num;
+	gint num_keys;
+	gint num_identities;
+	char* message;
+	GList* to_delete;
+	guint length;
+	guint _tmp10;
+	SeahorseOperation* _tmp12;
 	self = SEAHORSE_PGP_COMMANDS (base);
-	g_return_if_fail (objects != NULL);
+	g_return_val_if_fail (objects != NULL, NULL);
 	num = g_list_length (objects);
 	if (num == 0) {
-		return;
+		return NULL;
 	}
+	num_keys = 0;
+	num_identities = 0;
+	message = NULL;
+	/* 
+	 * Go through and validate all what we have to delete, 
+	 * removing UIDs where the parent Key is also on the 
+	 * chopping block.
+	 */
+	to_delete = NULL;
 	{
 		GList* obj_collection;
 		GList* obj_it;
 		obj_collection = objects;
 		for (obj_it = obj_collection; obj_it != NULL; obj_it = obj_it->next) {
-			SeahorseObject* _tmp1;
+			SeahorseObject* _tmp4;
 			SeahorseObject* obj;
-			_tmp1 = NULL;
-			obj = (_tmp1 = ((SeahorseObject*) (obj_it->data)), (_tmp1 == NULL ? NULL : g_object_ref (_tmp1)));
+			_tmp4 = NULL;
+			obj = (_tmp4 = ((SeahorseObject*) (obj_it->data)), (_tmp4 == NULL ? NULL : g_object_ref (_tmp4)));
 			{
-				/* 
-				 * Delete all the user ids first, if parent key is 
-				 * not on the chopping block already.
-				 */
-				if (G_TYPE_FROM_INSTANCE (G_OBJECT (obj)) == SEAHORSE_PGP_TYPE_UID) {
-					SeahorsePGPUid* _tmp0;
-					SeahorsePGPUid* uid;
-					_tmp0 = NULL;
-					uid = (_tmp0 = SEAHORSE_PGP_UID (obj), (_tmp0 == NULL ? NULL : g_object_ref (_tmp0)));
-					if (g_list_find (objects, seahorse_object_get_parent (SEAHORSE_OBJECT (uid))) == NULL) {
-						seahorse_pgp_delete_userid_show (SEAHORSE_PGP_KEY (seahorse_object_get_parent (SEAHORSE_OBJECT (uid))), seahorse_pgp_uid_get_index (uid));
+				GType _tmp3;
+				_tmp3 = G_TYPE_FROM_INSTANCE (G_OBJECT (obj));
+				if (_tmp3 == SEAHORSE_PGP_TYPE_UID)
+				do {
+					if (g_list_find (objects, seahorse_object_get_parent (obj)) == NULL) {
+						SeahorseObject* _tmp1;
+						_tmp1 = NULL;
+						to_delete = g_list_prepend (to_delete, (_tmp1 = obj, (_tmp1 == NULL ? NULL : g_object_ref (_tmp1))));
+						num_identities = num_identities + 1;
 					}
-					objects = g_list_remove (objects, obj);
-					(uid == NULL ? NULL : (uid = (g_object_unref (uid), NULL)));
-				} else {
-					g_return_if_fail (G_TYPE_FROM_INSTANCE (G_OBJECT (obj)) != SEAHORSE_PGP_TYPE_KEY);
-				}
+					break;
+				} while (0); else if (_tmp3 == SEAHORSE_PGP_TYPE_KEY)
+				do {
+					SeahorseObject* _tmp2;
+					_tmp2 = NULL;
+					to_delete = g_list_prepend (to_delete, (_tmp2 = obj, (_tmp2 == NULL ? NULL : g_object_ref (_tmp2))));
+					num_keys = num_keys + 1;
+					break;
+				} while (0);
 				(obj == NULL ? NULL : (obj = (g_object_unref (obj), NULL)));
 			}
 		}
 	}
-	seahorse_pgp_delete_show (objects);
+	/* Figure out a good prompt message */
+	length = g_list_length (to_delete);
+	_tmp10 = length;
+	if (_tmp10 == 0)
+	do {
+		SeahorseOperation* _tmp5;
+		_tmp5 = NULL;
+		return (_tmp5 = NULL, (message = (g_free (message), NULL)), (to_delete == NULL ? NULL : (to_delete = (_g_list_free_g_object_unref (to_delete), NULL))), _tmp5);
+	} while (0); else if (_tmp10 == 1)
+	do {
+		char* _tmp6;
+		_tmp6 = NULL;
+		message = (_tmp6 = g_strdup_printf (_ ("Are you sure you want to permanently delete %s?"), seahorse_object_get_display_name (((SeahorseObject*) (((SeahorseObject*) (to_delete->data)))))), (message = (g_free (message), NULL)), _tmp6);
+		break;
+	} while (0); else
+	do {
+		if (num_keys > 0 && num_identities > 0) {
+			char* _tmp7;
+			_tmp7 = NULL;
+			message = (_tmp7 = g_strdup_printf (_ ("Are you sure you want to permanently delete %d keys and identities?"), length), (message = (g_free (message), NULL)), _tmp7);
+		} else {
+			if (num_keys > 0) {
+				char* _tmp8;
+				_tmp8 = NULL;
+				message = (_tmp8 = g_strdup_printf (_ ("Are you sure you want to permanently delete %d keys?"), length), (message = (g_free (message), NULL)), _tmp8);
+			} else {
+				if (num_identities > 0) {
+					char* _tmp9;
+					_tmp9 = NULL;
+					message = (_tmp9 = g_strdup_printf (_ ("Are you sure you want to permanently delete %d identities?"), length), (message = (g_free (message), NULL)), _tmp9);
+				} else {
+					g_assert_not_reached ();
+				}
+			}
+		}
+		break;
+	} while (0);
+	if (!seahorse_util_prompt_delete (message, GTK_WIDGET (seahorse_view_get_window (seahorse_commands_get_view (SEAHORSE_COMMANDS (self)))))) {
+		SeahorseOperation* _tmp11;
+		_tmp11 = NULL;
+		return (_tmp11 = NULL, (message = (g_free (message), NULL)), (to_delete == NULL ? NULL : (to_delete = (_g_list_free_g_object_unref (to_delete), NULL))), _tmp11);
+	}
+	_tmp12 = NULL;
+	return (_tmp12 = seahorse_source_delete_objects (to_delete), (message = (g_free (message), NULL)), (to_delete == NULL ? NULL : (to_delete = (_g_list_free_g_object_unref (to_delete), NULL))), _tmp12);
 }
 
 

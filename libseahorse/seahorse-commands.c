@@ -37,7 +37,7 @@ enum  {
 	SEAHORSE_COMMANDS_UI_DEFINITION
 };
 static void seahorse_commands_real_show_properties (SeahorseCommands* self, SeahorseObject* obj);
-static void seahorse_commands_real_delete_objects (SeahorseCommands* self, GList* obj, GError** error);
+static SeahorseOperation* seahorse_commands_real_delete_objects (SeahorseCommands* self, GList* obj);
 static void seahorse_commands_set_view (SeahorseCommands* self, SeahorseView* value);
 static gpointer seahorse_commands_parent_class = NULL;
 static void seahorse_commands_dispose (GObject * obj);
@@ -56,15 +56,15 @@ void seahorse_commands_show_properties (SeahorseCommands* self, SeahorseObject* 
 }
 
 
-static void seahorse_commands_real_delete_objects (SeahorseCommands* self, GList* obj, GError** error) {
-	g_return_if_fail (SEAHORSE_IS_COMMANDS (self));
+static SeahorseOperation* seahorse_commands_real_delete_objects (SeahorseCommands* self, GList* obj) {
+	g_return_val_if_fail (SEAHORSE_IS_COMMANDS (self), NULL);
 	g_critical ("Type `%s' does not implement abstract method `seahorse_commands_delete_objects'", g_type_name (G_TYPE_FROM_INSTANCE (self)));
-	return;
+	return NULL;
 }
 
 
-void seahorse_commands_delete_objects (SeahorseCommands* self, GList* obj, GError** error) {
-	SEAHORSE_COMMANDS_GET_CLASS (self)->delete_objects (self, obj, error);
+SeahorseOperation* seahorse_commands_delete_objects (SeahorseCommands* self, GList* obj) {
+	return SEAHORSE_COMMANDS_GET_CLASS (self)->delete_objects (self, obj);
 }
 
 

@@ -236,27 +236,42 @@ seahorse_source_export_objects (GList *objects, GOutputStream *output)
     return op;
 }
 
-gboolean
-seahorse_source_delete_objects (GList *objects, GError **error)
+SeahorseOperation*
+seahorse_source_delete_objects (GList *objects)
 {
-	GList *l;
+	SeahorseOperation *op = NULL;
+	SeahorseMultiOperation *mop = NULL;
 	SeahorseSource *sksrc;
 	SeahorseObject *sobj;
+	GList *l;
 
 	for (l = objects; l; l = g_list_next (l)) {
 		
-		g_assert (SEAHORSE_IS_OBJECT (l->data));
 		sobj = SEAHORSE_OBJECT (l->data);
-
-		/* Delete from this source */        
+		g_return_val_if_fail (SEAHORSE_IS_OBJECT (sobj), NULL);;
+		
+		/* Export from this object source */        
 		sksrc = seahorse_object_get_source (sobj);
-		g_return_val_if_fail (sksrc != NULL, FALSE);
+		g_return_val_if_fail (sksrc != NULL, NULL);
 
-		if (!seahorse_source_remove (sksrc, sobj, 0, error))
-			return FALSE;
+		if (op != NULL) {
+			if (mop == NULL)
+				mop = seahorse_multi_operation_new ();
+			seahorse_multi_operation_take (mop, op);
+		}
+
+		/* We pass our own data object, to which data is appended */
+		op = seahorse_source_remove (sksrc, l->data);
+		g_return_val_if_fail (op != NULL, NULL);
 	}
     
-	return TRUE;
+	if (mop) 
+		op = SEAHORSE_OPERATION (mop);
+    
+	if (!op) 
+		op = seahorse_operation_new_complete (NULL);
+    
+	return op;
 }
 
 SeahorseOperation* 
@@ -320,19 +335,20 @@ seahorse_source_export_raw (SeahorseSource *sksrc, GSList *ids, GOutputStream *o
 	return op;
 }
 
-gboolean            
-seahorse_source_remove (SeahorseSource *sksrc, SeahorseObject *sobj, guint name, GError **error)
+SeahorseOperation*           
+seahorse_source_remove (SeahorseSource *src, SeahorseObject *sobj)
 {
-    SeahorseSourceClass *klass;
+	SeahorseSourceClass *klass;
+
+	g_return_val_if_fail (SEAHORSE_IS_SOURCE (src), NULL);
+	g_return_val_if_fail (SEAHORSE_IS_OBJECT (sobj), NULL);
+	g_return_val_if_fail (seahorse_object_get_source (sobj) == src, NULL);
     
-    g_assert (!error || !*error);
-    g_return_val_if_fail (seahorse_object_get_source (sobj) == sksrc, FALSE);
+	g_return_val_if_fail (SEAHORSE_IS_SOURCE (src), FALSE);
+	klass = SEAHORSE_SOURCE_GET_CLASS (src);
+	g_return_val_if_fail (klass->remove != NULL, FALSE);
     
-    g_return_val_if_fail (SEAHORSE_IS_SOURCE (sksrc), FALSE);
-    klass = SEAHORSE_SOURCE_GET_CLASS (sksrc);
-    g_return_val_if_fail (klass->remove != NULL, FALSE);
-    
-    return (*klass->remove) (sksrc, sobj, name, error);    
+	return (*klass->remove) (src, sobj);    
 }
                                                
 GQuark              

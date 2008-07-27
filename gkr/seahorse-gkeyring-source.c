@@ -445,7 +445,7 @@ seahorse_list_operation_dispose (GObject *gobject)
     /* The above cancel should have stopped this */
     g_assert (lop->request == NULL);
 
-    G_OBJECT_CLASS (operation_parent_class)->dispose (gobject);  
+    G_OBJECT_CLASS (list_operation_parent_class)->dispose (gobject);  
 }
 
 static void 
@@ -475,7 +475,7 @@ seahorse_list_operation_finalize (GObject *gobject)
     /* The above cancel should have stopped this */
     g_assert (lop->request == NULL);
 
-    G_OBJECT_CLASS (operation_parent_class)->finalize (gobject);  
+    G_OBJECT_CLASS (list_operation_parent_class)->finalize (gobject);
 }
 
 static void 
@@ -489,6 +489,131 @@ seahorse_list_operation_cancel (SeahorseOperation *operation)
     
     if (seahorse_operation_is_running (operation))
         seahorse_operation_mark_done (operation, TRUE, NULL);
+}
+
+/* -----------------------------------------------------------------------------
+ * REMOVE OPERATION 
+ */
+
+#define SEAHORSE_TYPE_REMOVE_OPERATION            (seahorse_remove_operation_get_type ())
+#define SEAHORSE_REMOVE_OPERATION(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_REMOVE_OPERATION, SeahorseRemoveOperation))
+#define SEAHORSE_REMOVE_OPERATION_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_REMOVE_OPERATION, SeahorseRemoveOperationClass))
+#define SEAHORSE_IS_REMOVE_OPERATION(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_REMOVE_OPERATION))
+#define SEAHORSE_IS_REMOVE_OPERATION_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_REMOVE_OPERATION))
+#define SEAHORSE_REMOVE_OPERATION_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_REMOVE_OPERATION, SeahorseRemoveOperationClass))
+
+DECLARE_OPERATION (Remove, remove)
+
+	SeahorseGKeyringSource *gsrc;
+	SeahorseGKeyringItem *gitem;
+	gpointer request;
+
+END_DECLARE_OPERATION
+
+IMPLEMENT_OPERATION (Remove, remove)
+
+static void 
+remove_item_ready (GnomeKeyringResult result, SeahorseRemoveOperation *rop)
+{
+	GError *err = NULL;
+	if (result == GNOME_KEYRING_RESULT_CANCELLED)
+		return;
+    
+	rop->request = NULL;
+
+	if (result != GNOME_KEYRING_RESULT_OK) {
+		if (seahorse_operation_is_running (SEAHORSE_OPERATION (rop))) {
+			seahorse_gkeyring_operation_parse_error (result, &err);
+			g_assert (err != NULL);
+			seahorse_operation_mark_done (SEAHORSE_OPERATION (rop), FALSE, err);
+		}
+		return;
+	}
+    
+	seahorse_context_remove_object (SCTX_APP (), SEAHORSE_OBJECT (rop->gitem));
+	seahorse_operation_mark_done (SEAHORSE_OPERATION (rop), FALSE, NULL);
+}
+
+static SeahorseRemoveOperation*
+start_remove_operation (SeahorseGKeyringSource *gsrc, SeahorseGKeyringItem *gitem)
+{
+	SeahorseRemoveOperation *rop;
+
+	g_assert (SEAHORSE_IS_GKEYRING_SOURCE (gsrc));
+	g_assert (SEAHORSE_IS_GKEYRING_ITEM (gitem));
+	
+	rop = g_object_new (SEAHORSE_TYPE_REMOVE_OPERATION, NULL);
+	rop->gsrc = gsrc;
+	g_object_ref (gsrc);
+	rop->gitem = gitem;
+	g_object_ref (gitem);
+	
+	seahorse_operation_mark_start (SEAHORSE_OPERATION (rop));
+    
+	/* Start listing of ids */
+	seahorse_operation_mark_progress (SEAHORSE_OPERATION (rop), _("Removing item"), -1);
+	rop->request = gnome_keyring_item_delete (gsrc->pv->keyring_name, gitem->item_id, 
+	                    (GnomeKeyringOperationDoneCallback)remove_item_ready, rop, NULL);
+    
+	return rop;
+}
+
+static void 
+seahorse_remove_operation_init (SeahorseRemoveOperation *rop)
+{
+	/* Everything already set to zero */
+}
+
+static void 
+seahorse_remove_operation_dispose (GObject *gobject)
+{
+	SeahorseRemoveOperation *rop = SEAHORSE_REMOVE_OPERATION (gobject);
+    
+	/* Cancel it if it's still running */
+	if (seahorse_operation_is_running (SEAHORSE_OPERATION (rop)))
+		seahorse_remove_operation_cancel (SEAHORSE_OPERATION (rop));
+	g_assert (!seahorse_operation_is_running (SEAHORSE_OPERATION (rop)));
+    
+	/* The above cancel should have stopped this */
+	g_assert (rop->request == NULL);
+	
+	if (rop->gsrc)
+		g_object_unref (rop->gsrc);
+	rop->gsrc = NULL;
+	
+	if (rop->gitem)
+		g_object_unref (rop->gitem);
+	rop->gitem = NULL;
+
+	G_OBJECT_CLASS (remove_operation_parent_class)->dispose (gobject);  
+}
+
+static void 
+seahorse_remove_operation_finalize (GObject *gobject)
+{
+	SeahorseRemoveOperation *rop = SEAHORSE_REMOVE_OPERATION (gobject);
+	g_assert (!seahorse_operation_is_running (SEAHORSE_OPERATION (rop)));
+    
+	g_assert (rop->gsrc == NULL);
+	g_assert (rop->gitem == NULL);
+    
+	/* The above cancel should have stopped this */
+	g_assert (rop->request == NULL);
+
+	G_OBJECT_CLASS (remove_operation_parent_class)->finalize (gobject);  
+}
+
+static void 
+seahorse_remove_operation_cancel (SeahorseOperation *operation)
+{
+	SeahorseRemoveOperation *rop = SEAHORSE_REMOVE_OPERATION (operation);    
+
+	if (rop->request)
+		gnome_keyring_cancel_request (rop->request);
+	rop->request = NULL;
+    
+	if (seahorse_operation_is_running (operation))
+		seahorse_operation_mark_done (operation, TRUE, NULL);
 }
 
 /* -----------------------------------------------------------------------------
@@ -614,14 +739,11 @@ seahorse_gkeyring_source_export (SeahorseSource *sksrc, GList *keys, GOutputStre
 	return seahorse_operation_new_complete (err);    
 }
 
-static gboolean            
-seahorse_gkeyring_source_remove (SeahorseSource *sksrc, SeahorseObject *sobj,
-                                 guint name, GError **err)
+static SeahorseOperation*            
+seahorse_gkeyring_source_remove (SeahorseSource *sksrc, SeahorseObject *sobj)
 {
     SeahorseGKeyringItem *git;
     SeahorseGKeyringSource *gsrc;
-    GnomeKeyringResult res;
-    gboolean ret;
     
     g_return_val_if_fail (SEAHORSE_IS_GKEYRING_ITEM (sobj), FALSE);
     git = SEAHORSE_GKEYRING_ITEM (sobj);
@@ -629,18 +751,7 @@ seahorse_gkeyring_source_remove (SeahorseSource *sksrc, SeahorseObject *sobj,
     g_return_val_if_fail (SEAHORSE_IS_GKEYRING_SOURCE (sksrc), FALSE);
     gsrc = SEAHORSE_GKEYRING_SOURCE (sksrc);
 
-    /* Don't have multiple names */
-    g_return_val_if_fail (name == 0, FALSE);
-   
-    res = gnome_keyring_item_delete_sync (gsrc->pv->keyring_name, git->item_id);
-    ret = seahorse_gkeyring_operation_parse_error (res, err);
-    
-    if (ret) {
-        seahorse_context_remove_object (SCTX_APP (), sobj);
-        seahorse_source_load_async (sksrc, 0);
-    }
-    
-    return ret;
+    return SEAHORSE_OPERATION (start_remove_operation (gsrc, git));
 }
 
 static void

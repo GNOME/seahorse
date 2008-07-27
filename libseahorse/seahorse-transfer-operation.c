@@ -304,7 +304,7 @@ seahorse_transfer_operation_dispose (GObject *gobject)
     }
     pv->operation = NULL;
     
-    G_OBJECT_CLASS (operation_parent_class)->dispose (gobject);
+    G_OBJECT_CLASS (transfer_operation_parent_class)->dispose (gobject);
 }
 
 static void 
@@ -330,7 +330,7 @@ seahorse_transfer_operation_finalize (GObject *gobject)
     g_free (pv->message);
     pv->message = NULL;
     
-    G_OBJECT_CLASS (operation_parent_class)->finalize (gobject);
+    G_OBJECT_CLASS (transfer_operation_parent_class)->finalize (gobject);
 }
 
 static void 

@@ -143,8 +143,12 @@ update_uids (SeahorsePGPKey *pkey)
 {
 	gpgme_user_id_t guid;
 	SeahorsePGPUid *uid;
+	SeahorseSource *source;
 	GList *l;
 	guint index = 1;
+	
+	source = seahorse_object_get_source (SEAHORSE_OBJECT (pkey));
+	g_return_if_fail (SEAHORSE_IS_PGP_SOURCE (source));
 	
 	l = pkey->uids;
 	guid = pkey->pubkey ? pkey->pubkey->uids : NULL;
@@ -157,12 +161,12 @@ update_uids (SeahorsePGPKey *pkey)
 		
 		/* Remove if no uid */
 		if (!guid) {
-			pkey->uids = g_list_remove (pkey->uids, uid);
 			seahorse_object_set_parent (l->data, NULL);			
+			pkey->uids = g_list_remove (pkey->uids, uid);
 			g_object_unref (uid);
 		} else {
 			/* Bring this UID up to date */
-			g_object_set (uid, "userid", guid, "index", index, NULL);
+			g_object_set (uid, "userid", guid, "index", index, "source", source, NULL);
 			++index;
 		}
 
@@ -173,7 +177,7 @@ update_uids (SeahorsePGPKey *pkey)
 	/* Add new UIDs */
 	while (guid != NULL) {
 		uid = seahorse_pgp_uid_new (pkey->pubkey, guid);
-		g_object_set (uid, "index", index, NULL);
+		g_object_set (uid, "index", index, "source", source, NULL);
 		++index;
 		pkey->uids = g_list_append (pkey->uids, uid);
 		guid = guid->next;

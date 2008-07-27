@@ -514,7 +514,7 @@ seahorse_ssh_operation_dispose (GObject *gobject)
         gtk_widget_destroy (GTK_WIDGET (pv->prompt_dialog));
     pv->prompt_dialog = NULL;
     
-    G_OBJECT_CLASS (operation_parent_class)->dispose (gobject);  
+    G_OBJECT_CLASS (ssh_operation_parent_class)->dispose (gobject);  
 }
 
 static void 
@@ -557,7 +557,7 @@ seahorse_ssh_operation_finalize (GObject *gobject)
     g_assert (pv->pid == 0 && pv->wpid == 0);
     g_assert (pv->io_askpass == NULL && pv->stag_askpass == 0);
     
-    G_OBJECT_CLASS (operation_parent_class)->finalize (gobject);  
+    G_OBJECT_CLASS (ssh_operation_parent_class)->finalize (gobject);  
 }
 
 static void 

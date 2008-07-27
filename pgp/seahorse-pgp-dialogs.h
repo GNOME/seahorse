@@ -70,10 +70,4 @@ gboolean        seahorse_pgp_photo_delete           (SeahorsePGPKey *pkey,
                                                      GtkWindow *parent,
                                                      gpgmex_photo_id_t photo);
 
-void            seahorse_pgp_delete_subkey_new      (SeahorsePGPKey *pkey,
-                                                     guint index);
-
-void            seahorse_pgp_delete_userid_show     (SeahorseKey *skey, 
-                                                     guint index);
-
 #endif /* __SEAHORSE_PGP_DIALOGS_H__ */

@@ -647,18 +647,18 @@ seahorse_ssh_source_export (SeahorseSource *sksrc, GList *keys,
     	return op;
 }
 
-static gboolean            
-seahorse_ssh_source_remove (SeahorseSource *sksrc, SeahorseObject *sobj,
-                            guint name, GError **err)
+static SeahorseOperation*
+seahorse_ssh_source_remove (SeahorseSource *sksrc, SeahorseObject *sobj)
 {
     SeahorseSSHKeyData *keydata = NULL;
     SeahorseSSHSource *ssrc = SEAHORSE_SSH_SOURCE (sksrc);
     gboolean ret = TRUE;
+    GError *err = NULL;
     gchar *fullpath;
     
-    g_assert (name == 0);
-    g_assert (seahorse_object_get_source (sobj) == sksrc);
-    g_assert (!err || !*err);
+    g_return_val_if_fail (SEAHORSE_IS_SSH_SOURCE (sksrc), NULL);
+    g_return_val_if_fail (SEAHORSE_IS_SSH_KEY (sksrc), NULL);
+    g_return_val_if_fail (seahorse_object_get_source (sobj) == sksrc, NULL);
 
     g_object_get (sobj, "key-data", &keydata, NULL);
     g_return_val_if_fail (keydata, FALSE);
@@ -668,15 +668,13 @@ seahorse_ssh_source_remove (SeahorseSource *sksrc, SeahorseObject *sobj,
         
         /* Take just that line out of the file */
         if (keydata->pubfile) {
-            if (!seahorse_ssh_key_data_filter_file (keydata->pubfile, NULL, keydata, err))
-                ret = FALSE;
+            seahorse_ssh_key_data_filter_file (keydata->pubfile, NULL, keydata, &err);
         }
         
         /* Make sure to take it out of any other files too */
         if (ret && keydata->authorized) {
             fullpath = seahorse_ssh_source_file_for_public (ssrc, FALSE);
-            if (!seahorse_ssh_key_data_filter_file (fullpath, NULL, keydata, err))
-                ret = FALSE;
+            seahorse_ssh_key_data_filter_file (fullpath, NULL, keydata, &err);
             g_free (fullpath);
         }
         
@@ -686,25 +684,23 @@ seahorse_ssh_source_remove (SeahorseSource *sksrc, SeahorseObject *sobj,
         
         if (keydata->pubfile) {
             if (g_unlink (keydata->pubfile) == -1) {
-                g_set_error (err, G_FILE_ERROR, g_file_error_from_errno (errno), 
+                g_set_error (&err, G_FILE_ERROR, g_file_error_from_errno (errno), 
                              "%s", g_strerror (errno));
-                ret = FALSE;
             }
         }
 
         if (ret && keydata->privfile) {
             if (g_unlink (keydata->privfile) == -1) {
-                g_set_error (err, G_FILE_ERROR, g_file_error_from_errno (errno), 
+                g_set_error (&err, G_FILE_ERROR, g_file_error_from_errno (errno), 
                              "%s", g_strerror (errno));
-                ret = FALSE;
             }
         }
     }
-    
-    if (ret)
+
+    if (err == NULL)
         seahorse_context_remove_object (SCTX_APP (), sobj);
 
-    return ret;
+    return seahorse_operation_new_complete (err);
 }
 
 static void 

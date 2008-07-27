@@ -589,7 +589,7 @@ static void seahorse_key_manager_import_files (SeahorseKeyManager* self, char** 
 					file = g_file_new_for_uri (uri);
 					input = g_file_read (file, NULL, &inner_error);
 					if (inner_error != NULL) {
-						goto __catch4_g_error;
+						goto __catch3_g_error;
 					}
 					op = seahorse_source_import (sksrc, G_INPUT_STREAM (input));
 					seahorse_multi_operation_take (mop, op);
@@ -597,8 +597,8 @@ static void seahorse_key_manager_import_files (SeahorseKeyManager* self, char** 
 					(input == NULL ? NULL : (input = (g_object_unref (input), NULL)));
 					(op == NULL ? NULL : (op = (g_object_unref (op), NULL)));
 				}
-				goto __finally4;
-				__catch4_g_error:
+				goto __finally3;
+				__catch3_g_error:
 				{
 					GError * ex;
 					ex = inner_error;
@@ -611,7 +611,7 @@ static void seahorse_key_manager_import_files (SeahorseKeyManager* self, char** 
 						continue;
 					}
 				}
-				__finally4:
+				__finally3:
 				;
 				uri = (g_free (uri), NULL);
 				(sksrc == NULL ? NULL : (sksrc = (g_object_unref (sksrc), NULL)));

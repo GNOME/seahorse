@@ -53,10 +53,10 @@ namespace Seahorse.Gkr {
 			ItemProperties.show ((Gkr.Item)key, view.window);
 		}
 		
-		public override void delete_objects (List<Object> keys) throws GLib.Error {
+		public override Operation? delete_objects (List<Object> keys) {
 			uint num = keys.length();
 			if (num == 0)
-				return;
+				return null;
 			
 			string prompt;
 			if (num == 1)
@@ -64,8 +64,10 @@ namespace Seahorse.Gkr {
 			else
 				prompt = _("Are you sure you want to delete %d passwords?").printf(num);
 			
-			if (Util.prompt_delete (prompt))
-				Seahorse.Source.delete_objects (keys);
+			if (!Util.prompt_delete (prompt, view.window))
+				return null;
+			
+			return Seahorse.Source.delete_objects (keys);
 		}
 	}
 }
