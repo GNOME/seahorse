@@ -30,6 +30,8 @@
 #include "seahorse-operation.h"
 #include "seahorse-util.h"
 
+#include "common/seahorse-registry.h"
+
 #include <glib/gstdio.h>
 
 #include <string.h>

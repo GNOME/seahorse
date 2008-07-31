@@ -26,8 +26,6 @@
 
 G_BEGIN_DECLS
 
-typedef GType (*SeahorseRegisterType) (void);
-
 #define SEAHORSE_TYPE_REGISTRY             (seahorse_registry_get_type())
 #define SEAHORSE_REGISTRY(obj)             (G_TYPE_CHECK_INSTANCE_CAST((obj), SEAHORSE_TYPE_REGISTRY, SeahorseRegistry))
 #define SEAHORSE_REGISTRY_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST((klass), SEAHORSE_TYPE_REGISTRY, GObject))
@@ -50,9 +48,6 @@ struct _SeahorseRegistryClass {
 GType                seahorse_registry_get_type        (void) G_GNUC_CONST;
 
 SeahorseRegistry*    seahorse_registry_get             (void);
-
-void                 seahorse_registry_load_types      (SeahorseRegistry *registry, 
-                                                        const SeahorseRegisterType *types);
 
 void                 seahorse_registry_register_type   (SeahorseRegistry *registry, 
                                                         GType type, const gchar *category, 

@@ -211,17 +211,18 @@ int main(int argc, char* argv[])
     seahorse_gtkstock_init ();
     seahorse_gtkstock_add_icons (daemon_icons);
     
+    /* Make the default SeahorseContext */
+    seahorse_context_new (SEAHORSE_CONTEXT_APP | SEAHORSE_CONTEXT_DAEMON);
+
     /* Load the various components */
 #ifdef WITH_PGP
-    seahorse_registry_load_types (NULL, SEAHORSE_PGP_REGISTRY);
+    seahorse_pgp_module_init ();
 #endif
 #ifdef WITH_SSH
-    seahorse_registry_load_types (NULL, SEAHORSE_SSH_REGISTRY);
+    seahorse_ssh_module_init ();
 #endif
-
-    /* Make the default SeahorseContext */
-    seahorse_context_new (SEAHORSE_CONTEXT_APP | SEAHORSE_CONTEXT_DAEMON, 0);
-    op = seahorse_context_load_local_objects (SCTX_APP ());
+    
+    op = seahorse_context_refresh_local (NULL);
     g_object_unref (op);
     
     /* Initialize the various daemon components */

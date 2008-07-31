@@ -36,6 +36,8 @@
 #include "seahorse-servers.h"
 #include "seahorse-util.h"
 
+#include "common/seahorse-registry.h"
+
 #include <libsoup/soup.h>
 
 #ifdef WITH_HKP

@@ -22,11 +22,9 @@
 #ifndef SEASSH_H_
 #define SEASSH_H_
 
-#include "common/seahorse-registry.h"
-
 #define SEAHORSE_SSH_STR                     "openssh"
 #define SEAHORSE_SSH                         (g_quark_from_static_string (SEAHORSE_SSH_STR))
 
-extern const SeahorseRegisterType SEAHORSE_SSH_REGISTRY[];
+void         seahorse_ssh_module_init        (void);
 
 #endif /*SEASSH_H_*/

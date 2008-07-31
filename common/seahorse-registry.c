@@ -183,23 +183,6 @@ seahorse_registry_get (void)
 }
 
 void
-seahorse_registry_load_types (SeahorseRegistry *registry, const SeahorseRegisterType *types)
-{
-	GType type;
-	gpointer klass;
-	
-	while (*types) {
-		type = (*types) ();
-		g_return_if_fail (type);
-		
-		klass = g_type_class_ref (type);
-		g_type_class_unref (klass);
-		
-		++types;
-	}
-}
-
-void
 seahorse_registry_register_type (SeahorseRegistry *registry, GType type, 
                             const gchar *category, ...)
 {

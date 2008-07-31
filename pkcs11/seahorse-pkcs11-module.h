@@ -22,11 +22,9 @@
 #ifndef SEAHORSE_PKCS11_H_
 #define SEAHORSE_PKCS11_H_
 
-#include "common/seahorse-registry.h"
-
 #define SEAHORSE_PKCS11_STR                  "pkcs11"
 #define SEAHORSE_PKCS11                      (g_quark_from_static_string (SEAHORSE_PKCS11_STR))
 
-extern const SeahorseRegisterType SEAHORSE_PKCS11_REGISTRY[];
+void         seahorse_pkcs11_module_init     (void);
 
 #endif /*SEAHORSE_PKCS11_H_*/

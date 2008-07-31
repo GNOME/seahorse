@@ -23,6 +23,8 @@
 
 #include "seahorse-pkcs11-module.h"
 
-const SeahorseRegisterType SEAHORSE_PKCS11_REGISTRY[] = {
-	NULL
-};
+void
+seahorse_pkcs11_module_init (void)
+{
+	
+}

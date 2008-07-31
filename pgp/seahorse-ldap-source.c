@@ -36,6 +36,8 @@
 #include "seahorse-servers.h"
 #include "seahorse-util.h"
 
+#include "common/seahorse-registry.h"
+
 #include <ldap.h>
 
 #ifdef WITH_SOUP

@@ -27,9 +27,18 @@
 #include "seahorse-ssh-generator.h"
 #include "seahorse-ssh-source.h"
 
-const SeahorseRegisterType SEAHORSE_SSH_REGISTRY[] = {
-	seahorse_ssh_source_get_type,
-	seahorse_ssh_commands_get_type,
-	seahorse_ssh_generator_get_type,
-	NULL
-};
+#include "seahorse-context.h"
+
+void
+seahorse_ssh_module_init (void)
+{
+	SeahorseSource *source;
+
+	/* Always have a default pgp source added */
+	source = g_object_new (SEAHORSE_TYPE_SSH_SOURCE, NULL);
+	seahorse_context_take_source (NULL, source);
+
+	g_type_class_unref (g_type_class_ref (SEAHORSE_TYPE_SSH_SOURCE));
+	g_type_class_unref (g_type_class_ref (SEAHORSE_SSH_TYPE_COMMANDS));
+	g_type_class_unref (g_type_class_ref (SEAHORSE_SSH_TYPE_GENERATOR));
+}

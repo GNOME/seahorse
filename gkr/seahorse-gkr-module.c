@@ -26,8 +26,18 @@
 #include "seahorse-gkr-commands.h"
 #include "seahorse-gkeyring-source.h"
 
-const SeahorseRegisterType SEAHORSE_GKR_REGISTRY[] = {
-	seahorse_gkeyring_source_get_type,
-	seahorse_gkeyring_commands_get_type,
-	NULL
-};
+#include "seahorse-context.h"
+
+void
+seahorse_gkr_module_init (void)
+{
+	SeahorseSource *source;
+
+	/* Always have a default keyring source added */
+	source = g_object_new (SEAHORSE_TYPE_GKEYRING_SOURCE, NULL);
+	seahorse_context_take_source (NULL, source);
+
+	/* Let these classes register themselves */
+	g_type_class_unref (g_type_class_ref (SEAHORSE_TYPE_GKEYRING_SOURCE));
+	g_type_class_unref (g_type_class_ref (SEAHORSE_GKEYRING_TYPE_COMMANDS));
+}

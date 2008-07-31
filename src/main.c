@@ -68,20 +68,21 @@ main (int argc, char **argv)
     /* Insert Icons into Stock */ 
     seahorse_gtkstock_init ();
     
+    /* Make the default SeahorseContext */
+    seahorse_context_new (SEAHORSE_CONTEXT_APP);
+
     /* Initialize the various components */
 #ifdef WITH_PGP
-    seahorse_registry_load_types (NULL, SEAHORSE_PGP_REGISTRY);
+    seahorse_pgp_module_init ();
 #endif
 #ifdef WITH_SSH
-    seahorse_registry_load_types (NULL, SEAHORSE_SSH_REGISTRY);
+    seahorse_ssh_module_init ();
 #endif
-    
-    /* Make the default SeahorseContext */
-    seahorse_context_new (SEAHORSE_CONTEXT_APP, 0);
-    op = seahorse_context_load_local_objects (SCTX_APP ());
+
+    op = seahorse_context_refresh_local (SCTX_APP ());
 
     /* Load these components after loading local keys */
-    seahorse_registry_load_types (NULL, SEAHORSE_GKR_REGISTRY);
+    seahorse_gkr_module_init ();
 
     seahorse_key_manager_show (op);
     g_signal_connect_after (SCTX_APP (), "destroy", gtk_main_quit, NULL);

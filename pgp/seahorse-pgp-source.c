@@ -37,6 +37,8 @@
 #include "seahorse-libdialogs.h"
 #include "seahorse-passphrase.h"
 
+#include "common/seahorse-registry.h"
+
 #include <gio/gio.h>
 
 #include <stdlib.h>

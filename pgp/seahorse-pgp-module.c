@@ -33,16 +33,25 @@
 #ifdef WITH_HKP
 #include "seahorse-hkp-source.h"
 #endif
+
+#include "seahorse-context.h"
 	
-const SeahorseRegisterType SEAHORSE_PGP_REGISTRY[] = {
-	seahorse_pgp_source_get_type,
-	seahorse_pgp_commands_get_type,
-	seahorse_pgp_generator_get_type,
+void
+seahorse_pgp_module_init (void)
+{
+	SeahorseSource *source;
+
+	/* Always have a default pgp source added */
+	source = g_object_new (SEAHORSE_TYPE_PGP_SOURCE, NULL);
+	seahorse_context_take_source (NULL, source);
+
+	g_type_class_unref (g_type_class_ref (SEAHORSE_TYPE_PGP_SOURCE));
+	g_type_class_unref (g_type_class_ref (SEAHORSE_PGP_TYPE_COMMANDS));
+	g_type_class_unref (g_type_class_ref (SEAHORSE_PGP_TYPE_GENERATOR));
 #ifdef WITH_LDAP
-	seahorse_ldap_source_get_type,
+	g_type_class_unref (g_type_class_ref (SEAHORSE_TYPE_LDAP_SOURCE));
 #endif
 #ifdef WITH_HKP
-	seahorse_hkp_source_get_type,
-#endif
-	NULL
-};
+	g_type_class_unref (g_type_class_ref (SEAHORSE_TYPE_HKP_SOURCE));
+#endif 
+}

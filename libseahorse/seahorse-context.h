@@ -25,7 +25,8 @@
  * together. 
  *
  * - Usually there's only one SeahorseContext per process created by passing 
- *   |TRUE| to |seahorse_context_new|, and accessed via the |SCTX_APP| macro.
+ *   |SEAHORSE_CONTEXT_APP| to |seahorse_context_new|, and accessed via 
+ *   the |SCTX_APP| macro.
  * - Retains the list of all valid struct _SeahorseObject objects. 
  * - Has a collection of SeahorseSource objects which add objects to the 
  *   SeahorseContext. 
@@ -96,8 +97,7 @@ GType               seahorse_context_get_type           (void);
 
 SeahorseContext*    seahorse_context_for_app            (void);
 
-SeahorseContext*    seahorse_context_new                (guint              flags,
-                                                         guint              ktype);
+SeahorseContext*    seahorse_context_new                (guint              flags);
 
 void                seahorse_context_destroy            (SeahorseContext    *sctx);
 
@@ -162,12 +162,12 @@ SeahorseServiceDiscovery*
 
 struct _SeahorseKey*   seahorse_context_get_default_key (SeahorseContext    *sctx);
 
-SeahorseOperation*  seahorse_context_load_local_objects (SeahorseContext    *sctx);
+SeahorseOperation*  seahorse_context_refresh_local         (SeahorseContext    *sctx);
 
-void                seahorse_context_load_local_objects_async (SeahorseContext *sctx);
+void                seahorse_context_refresh_local_async   (SeahorseContext *sctx);
 
-SeahorseOperation*  seahorse_context_load_remote_objects      (SeahorseContext    *sctx,
-                                                               const gchar        *search);
+SeahorseOperation*  seahorse_context_search_remote         (SeahorseContext    *sctx,
+                                                            const gchar        *search);
 
 SeahorseOperation*  seahorse_context_transfer_objects   (SeahorseContext    *sctx, 
                                                          GList              *objs, 

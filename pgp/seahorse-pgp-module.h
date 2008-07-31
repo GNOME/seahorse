@@ -22,11 +22,9 @@
 #ifndef SEAHORSEPGP_H_
 #define SEAHORSEPGP_H_
 
-#include "common/seahorse-registry.h"
-
 #define SEAHORSE_PGP_STR                     "openpgp"
 #define SEAHORSE_PGP                         (g_quark_from_static_string (SEAHORSE_PGP_STR))
 
-extern const SeahorseRegisterType SEAHORSE_PGP_REGISTRY[];
+void         seahorse_pgp_module_init        (void);
 
 #endif /*SEAHORSEPGP_H_*/
