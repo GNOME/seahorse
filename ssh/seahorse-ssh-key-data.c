@@ -90,7 +90,7 @@ parse_key_blob (guchar *bytes, gsize len, SeahorseSSHKeyData *data)
     for (i = 0; i < MD5_LEN; i++) {
         char hex[4];
         snprintf (hex, sizeof (hex), "%02x:", (int)(digest[i]));
-        strncat (fingerprint, hex, MD5_LEN * 3 + 1);
+        strncat (fingerprint, hex, MD5_LEN * 3 - strlen (fingerprint));
     }
 
     /* Remove the trailing ':' character */
