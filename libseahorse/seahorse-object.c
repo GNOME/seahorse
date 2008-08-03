@@ -121,6 +121,9 @@ SeahorseSource* seahorse_object_get_source (SeahorseObject* self) {
 
 void seahorse_object_set_source (SeahorseObject* self, SeahorseSource* value) {
 	g_return_if_fail (SEAHORSE_IS_OBJECT (self));
+	if (value == self->priv->_source) {
+		return;
+	}
 	if (self->priv->_source != NULL) {
 		g_object_remove_weak_pointer (G_OBJECT (self->priv->_source), &self->priv->_source);
 	}

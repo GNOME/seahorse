@@ -58,6 +58,12 @@ else
 SSH_LDADD = 
 endif
 
+if WITH_PKCS11
+PKCS11_LDADD = $(top_builddir)/pkcs11/libseahorse-pkcs11.la
+else
+PKCS11_LDADD = 
+endif
+
 bin_PROGRAMS = seahorse
 
 seahorse_SOURCES = main.c \
@@ -72,6 +78,7 @@ seahorse_LDADD = \
 	$(top_builddir)/libseahorse/libseahorse.la \
 	$(PGP_LDADD) \
 	$(SSH_LDADD) \
+	$(PKCS11_LDADD) \
 	$(top_builddir)/gkr/libseahorse-gkr.la \
 	$(top_builddir)/common/libseahorse-common.la \
 	$(top_builddir)/libcryptui/libcryptui.la \

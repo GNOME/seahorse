@@ -41,6 +41,10 @@
 #include "ssh/seahorse-ssh-module.h"
 #endif
 
+#ifdef WITH_PKCS11
+#include "pkcs11/seahorse-pkcs11-module.h"
+#endif
+
 #include "gkr/seahorse-gkr-module.h"
 
 #include <locale.h>
@@ -77,6 +81,9 @@ main (int argc, char **argv)
 #endif
 #ifdef WITH_SSH
     seahorse_ssh_module_init ();
+#endif
+#ifdef WITH_PKCS11
+    seahorse_pkcs11_module_init ();
 #endif
 
     op = seahorse_context_refresh_local (SCTX_APP ());

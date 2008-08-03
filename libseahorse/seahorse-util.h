@@ -68,7 +68,7 @@ void        seahorse_util_handle_error          (GError*            err,
 gboolean    seahorse_util_prompt_delete         (const gchar *text,
                                                  GtkWidget *parent);
 
-gchar*      seahorse_util_read_to_text          (GInputStream *     input,
+guchar*     seahorse_util_read_to_memory        (GInputStream *     input,
                                                  guint              *len);
 
 guint       seahorse_util_read_data_block       (GString            *buf, 
@@ -164,6 +164,8 @@ gboolean    seahorse_util_string_slist_equal  (GSList *sl1, GSList *sl2);
 gboolean    seahorse_util_string_is_whitespace (const gchar *text);
 
 void        seahorse_util_string_trim_whitespace (gchar *text);
+
+gchar*      seahorse_util_hex_encode (gconstpointer value, gsize length);
 
 void        seahorse_util_determine_popup_menu_position  (GtkMenu *menu,
                                                            int *x,

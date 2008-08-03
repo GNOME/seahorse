@@ -315,7 +315,7 @@ seahorse_context_find_source (SeahorseContext *sctx, GQuark ktype,
     
     if (!sctx)
         sctx = seahorse_context_for_app ();
-    g_return_if_fail (SEAHORSE_IS_CONTEXT (sctx));
+    g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), NULL);
 
     for (l = sctx->pv->sources; l; l = g_slist_next (l)) {
         ks = SEAHORSE_SOURCE (l->data);
@@ -351,7 +351,7 @@ seahorse_context_find_sources (SeahorseContext *sctx, GQuark ktype,
     
     if (!sctx)
         sctx = seahorse_context_for_app ();
-    g_return_if_fail (SEAHORSE_IS_CONTEXT (sctx));
+    g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), NULL);
 
     for (l = sctx->pv->sources; l; l = g_slist_next (l)) {
         ks = SEAHORSE_SOURCE (l->data);
@@ -382,7 +382,7 @@ seahorse_context_remote_source (SeahorseContext *sctx, const gchar *uri)
 
     if (!sctx)
         sctx = seahorse_context_for_app ();
-    g_return_if_fail (SEAHORSE_IS_CONTEXT (sctx));
+    g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), NULL);
 
     for (l = sctx->pv->sources; l; l = g_slist_next (l)) {
         ks = SEAHORSE_SOURCE (l->data);
@@ -543,7 +543,7 @@ seahorse_context_get_count (SeahorseContext *sctx)
 {
     if (!sctx)
         sctx = seahorse_context_for_app ();
-    g_return_if_fail (SEAHORSE_IS_CONTEXT (sctx));
+    g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), 0);
     return g_hash_table_size (sctx->pv->objects_by_source);
 }
 
@@ -555,7 +555,7 @@ seahorse_context_get_object (SeahorseContext *sctx, SeahorseSource *sksrc,
     
     if (!sctx)
         sctx = seahorse_context_for_app ();
-    g_return_if_fail (SEAHORSE_IS_CONTEXT (sctx));
+    g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), NULL);
     g_return_val_if_fail (SEAHORSE_IS_SOURCE (sksrc), NULL);
     
     k = hashkey_by_source (sksrc, id);
@@ -592,7 +592,7 @@ seahorse_context_get_objects (SeahorseContext *sctx, SeahorseSource *sksrc)
 
     if (!sctx)
         sctx = seahorse_context_for_app ();
-    g_return_if_fail (SEAHORSE_IS_CONTEXT (sctx));
+    g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), NULL);
     g_return_val_if_fail (sksrc == NULL || SEAHORSE_IS_SOURCE (sksrc), NULL);
 
     memset (&kp, 0, sizeof (kp));
@@ -613,7 +613,7 @@ seahorse_context_find_object (SeahorseContext *sctx, GQuark id, SeahorseLocation
 
     if (!sctx)
         sctx = seahorse_context_for_app ();
-    g_return_if_fail (SEAHORSE_IS_CONTEXT (sctx));
+    g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), NULL);
 
     sobj = (SeahorseObject*)g_hash_table_lookup (sctx->pv->objects_by_type, GUINT_TO_POINTER (id));
     while (sobj) {
@@ -641,7 +641,7 @@ seahorse_context_find_objects (SeahorseContext *sctx, GQuark ktype,
 
     if (!sctx)
         sctx = seahorse_context_for_app ();
-    g_return_if_fail (SEAHORSE_IS_CONTEXT (sctx));
+    g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), NULL);
     
     pred.tag = ktype;
     pred.usage = usage;
@@ -657,7 +657,7 @@ seahorse_context_find_objects_full (SeahorseContext *sctx, SeahorseObjectPredica
 
     if (!sctx)
         sctx = seahorse_context_for_app ();
-    g_return_if_fail (SEAHORSE_IS_CONTEXT (sctx));
+    g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), NULL);
 
     memset (&km, 0, sizeof (km));
     
@@ -720,7 +720,7 @@ seahorse_context_get_default_key (SeahorseContext *sctx)
     
     if (!sctx)
         sctx = seahorse_context_for_app ();
-    g_return_if_fail (SEAHORSE_IS_CONTEXT (sctx));
+    g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), NULL);
 
     /* TODO: All of this needs to take multiple key types into account */
     
@@ -750,7 +750,7 @@ seahorse_context_get_discovery (SeahorseContext *sctx)
 {
     if (!sctx)
         sctx = seahorse_context_for_app ();
-    g_return_if_fail (SEAHORSE_IS_CONTEXT (sctx));
+    g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), NULL);
     g_return_val_if_fail (sctx->pv->discovery != NULL, NULL);
     
     return sctx->pv->discovery;
@@ -766,7 +766,7 @@ seahorse_context_refresh_local (SeahorseContext *sctx)
     
     if (!sctx)
         sctx = seahorse_context_for_app ();
-    g_return_if_fail (SEAHORSE_IS_CONTEXT (sctx));
+    g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), NULL);
 
     for (l = sctx->pv->sources; l; l = g_slist_next (l)) {
         ks = SEAHORSE_SOURCE (l->data);
@@ -815,7 +815,7 @@ seahorse_context_search_remote (SeahorseContext *sctx, const gchar *search)
     
     if (!sctx)
         sctx = seahorse_context_for_app ();
-    g_return_if_fail (SEAHORSE_IS_CONTEXT (sctx));
+    g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), NULL);
     
     /* Get a list of all selected key servers */
     names = seahorse_gconf_get_string_list (LASTSERVERS_KEY);
@@ -938,7 +938,7 @@ seahorse_context_transfer_objects (SeahorseContext *sctx, GList *objects,
 
     if (!sctx)
         sctx = seahorse_context_for_app ();
-    g_return_if_fail (SEAHORSE_IS_CONTEXT (sctx));
+    g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), NULL);
 
     objects = g_list_copy (objects);
     
@@ -1020,7 +1020,7 @@ seahorse_context_retrieve_objects (SeahorseContext *sctx, GQuark ktype,
     
     if (!sctx)
         sctx = seahorse_context_for_app ();
-    g_return_if_fail (SEAHORSE_IS_CONTEXT (sctx));
+    g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), NULL);
 
     if (!to) {
         to = seahorse_context_find_source (sctx, ktype, SEAHORSE_LOCATION_LOCAL);
@@ -1074,7 +1074,7 @@ seahorse_context_discover_objects (SeahorseContext *sctx, GQuark ktype,
 
     if (!sctx)
         sctx = seahorse_context_for_app ();
-    g_return_if_fail (SEAHORSE_IS_CONTEXT (sctx));
+    g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), NULL);
 
     /* Check all the ids */
     for (l = rawids; l; l = g_slist_next (l)) {

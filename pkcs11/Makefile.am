@@ -16,7 +16,9 @@ INCLUDES = -I$(top_builddir) \
 	-DGETTEXT_PACKAGE=\""seahorse\""
 
 VALA_SRCS = \
-	seahorse-pkcs11.vala
+	seahorse-pkcs11.vala \
+	seahorse-pkcs11-certificate.vala \
+	seahorse-pkcs11-source.vala
 	
 VALA_VAPIS = \
 	p11.vapi \

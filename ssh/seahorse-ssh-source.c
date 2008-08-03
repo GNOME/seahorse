@@ -569,7 +569,7 @@ seahorse_ssh_source_import (SeahorseSource *sksrc, GInputStream *input)
     	g_return_val_if_fail (SEAHORSE_IS_SSH_SOURCE (ssrc), NULL);
     	g_return_val_if_fail (G_IS_INPUT_STREAM (input), NULL);
 
-    	contents = seahorse_util_read_to_text (input, NULL);
+    	contents = (gchar*)seahorse_util_read_to_memory (input, NULL);
     
     memset (&ctx, 0, sizeof (ctx));
     ctx.ssrc = ssrc;

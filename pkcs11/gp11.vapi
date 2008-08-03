@@ -7,6 +7,7 @@ namespace GP11 {
 
 	public weak string message_from_rv (uint rv);
 	
+	[Compact]
 	[CCode (dup_function = "gp11_attribute_dup", free_function = "gp11_attribute_free")]
 	public class Attribute {
 		public ulong type;
@@ -171,6 +172,8 @@ namespace GP11 {
 
 	public class Object : GLib.Object {
 		public static Object from_handle(Session session, uint handle);
+		[CCode (cname = "gp11_objects_from_handle_array")]
+		public static GLib.List<Object> from_handle_array(Session session, GP11.Attribute attr);
 		
 		public weak Module module { get; }
 		public weak Session session { get; }

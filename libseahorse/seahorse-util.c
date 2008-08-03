@@ -231,7 +231,7 @@ seahorse_util_set_text_view_string (GtkTextView *view, GString *string)
 }
 
 /**
- * seahorse_util_read_to_text:
+ * seahorse_util_read_to_memory:
  * @data: Data to write
  * @len: Length of the data
  *
@@ -239,8 +239,8 @@ seahorse_util_set_text_view_string (GtkTextView *view, GString *string)
  *
  * Returns: The string read from data
  **/
-gchar*
-seahorse_util_read_to_text (GInputStream *input, guint *len)
+guchar*
+seahorse_util_read_to_memory (GInputStream *input, guint *len)
 {
 	gint size = 128;
 	gchar *buffer, *text;
@@ -266,7 +266,7 @@ seahorse_util_read_to_text (GInputStream *input, guint *len)
 	g_string_free (string, FALSE);
 	g_free (buffer);
 	
-	return text;
+	return (guchar*)text;
 }
 
 /** 
@@ -1239,6 +1239,23 @@ seahorse_util_string_trim_whitespace (gchar *text)
 
     *e = 0;
     g_memmove (text, b, (e + 1) - b);
+}
+
+gchar*
+seahorse_util_hex_encode (gconstpointer value, gsize length)
+{
+	GString *result;
+	gsize i;
+	
+	result = g_string_sized_new ((length * 2) + 1);
+
+	for (i = 0; i < length; i++) {
+		char hex[3];
+		snprintf (hex, sizeof (hex), "%02x", (int)(((guchar*)value)[i]));
+		g_string_append (result, hex);
+	}
+
+	return g_string_free (result, FALSE);
 }
 
 /* Callback to determine where a popup menu should be placed */

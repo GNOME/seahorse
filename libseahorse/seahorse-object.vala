@@ -84,6 +84,8 @@ namespace Seahorse {
 		public Source source {
 			get { return _source; }
 			set { 	
+				if (value == _source)
+					return;
 				if (_source != null)
 					_source.remove_weak_pointer (&_source);
 				_source = value;

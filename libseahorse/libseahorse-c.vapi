@@ -22,6 +22,9 @@
 [CCode (cprefix = "Seahorse", lower_case_cprefix = "seahorse_")]
 namespace Seahorse {
 
+	[CCode (cname = "SEAHORSE_ERROR", cheader_filename = "seahorse-util.h")]
+	public GLib.Quark ERROR_DOMAIN;
+
         [CCode (cheader_filename = "seahorse-source.h")]
         public class Source : GLib.Object {
 		public GLib.Quark ktype { get; }
@@ -67,12 +70,19 @@ namespace Seahorse {
 
 	[CCode (cheader_filename = "seahorse-operation.h")]
 	public class Operation : GLib.Object {
-		public Operation.complete();
+		public Operation.complete(GLib.Error* error);
 		public bool is_successful ();
 		public bool is_running ();
 		public void display_error (string heading, Gtk.Widget? parent);
 		public void* get_result ();
 		public void watch (DoneFunc? done, ProgressFunc? progress);
+		
+		public virtual void cancel ();
+		
+		protected void mark_start ();
+		[CCode (cname = "seahorse_operation_mark_progress_full")]
+		protected void mark_progress(string? text, int at, int total);
+		protected void mark_done (bool cancelled, GLib.Error?# error);
 	}
 
 	[CCode (cheader_filename = "seahorse-operation.h")]
@@ -86,6 +96,10 @@ namespace Seahorse {
 		public uint count { get; }
 		public weak Source find_source (GLib.Quark ktype, Location location);
 		public void add_source (Source sksrc);
+		public void add_object (Object object);
+		public weak Object? get_object (Source src, GLib.Quark id);
+		public GLib.List<weak Object> get_objects (Source src);
+		public void remove_object(Object object);
 		public weak Object? find_object (GLib.Quark ktype, Location loc);
 		public GLib.List<weak Object> find_objects (GLib.Quark ktype, Usage usage, Location loc);
 		public Operation transfer_objects (GLib.List<Object> objects, Source? to);
@@ -121,6 +135,17 @@ namespace Seahorse {
 		public void status_set_operation (Widget widget, Operation op);
 	}
 	
+       	[CCode (cprefix = "SEAHORSE_VALIDITY_")]
+       	public static enum Validity {
+		REVOKED,
+		DISABLED,
+		UNKNOWN,
+		NEVER,
+		MARGINAL,
+		FULL,
+		ULTIMATE
+	}
+
 	[CCode (cheader_filename = "seahorse-util.h")]
 	namespace Util {
 		public uint memory_output_length (GLib.MemoryOutputStream output);
@@ -139,7 +164,16 @@ namespace Seahorse {
 		
 		public weak string uri_get_last (string uri);
 		public GLib.Quark detect_file_type (string uri);
-		public GLib.Quark detect_data_type (string text, long len);	
+		public GLib.Quark detect_data_type (string text, long len);
+		
+		[CCode (cname = "seahorse_validity_get_string", cheader_filename = "seahorse-validity.h")]
+		public weak string validity_to_string(Validity validity);	
+		
+		public string hex_encode(void* data, ulong len);
+		public string get_date_string(ulong date);
+		
+		[CCode (array_length_type = "guint")]
+		public uchar[] read_to_memory(GLib.InputStream input);
 	}
 
 	[CCode (cheader_filename = "seahorse-gconf.h", cprefix = "SeahorseGConf", lower_case_cprefix = "seahorse_gconf_")]
