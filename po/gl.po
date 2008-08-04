@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-07-28 21:25+0200\n"
-"PO-Revision-Date: 2008-07-28 21:26+0200\n"
+"POT-Creation-Date: 2008-08-04 20:40+0200\n"
+"PO-Revision-Date: 2008-08-04 20:41+0200\n"
 "Last-Translator: Ignacio Casal Quinteiro <icq@svn.gnome.org>\n"
 "Language-Team: Galego <proxecto@trasno.net>\n"
 "MIME-Version: 1.0\n"
@@ -1184,6 +1184,27 @@ msgstr ""
 "solicitou. Agora iniciarase o programa <b>Contrasinais e chaves de cifrado</"
 "b> para que poida crear unha chave ou importala."
 
+#. TODO: Calculate something from the subject?
+#: ../pkcs11/seahorse-pkcs11-certificate.vala:26
+msgid "Certificate"
+msgstr "Certificado"
+
+#: ../pkcs11/seahorse-pkcs11-source.vala:33
+msgid "X509 Certificate"
+msgstr "Certificado X509"
+
+#: ../pkcs11/seahorse-pkcs11-source.vala:120
+msgid "Loading..."
+msgstr "Cargando..."
+
+#: ../pkcs11/seahorse-pkcs11-source.vala:381
+msgid "Invalid or unrecognized object."
+msgstr "Obxecto non válido ou non recoñecido."
+
+#: ../pkcs11/seahorse-pkcs11-source.vala:398
+msgid "Exporting is not yet supported."
+msgstr "A exportación non está todavía soportada."
+
 #: ../pgp/seahorse-add-subkey.glade.h:1
 msgid "Expiration Date:"
 msgstr "Data de caducidade:"
@@ -1260,86 +1281,86 @@ msgstr "_Nunca caduca"
 msgid "Decryption failed. You probably do not have the decryption key."
 msgstr "O descifrado fallou. Non ten, probablemente, a chave de descifrado."
 
-#: ../pgp/seahorse-hkp-source.c:329
+#: ../pgp/seahorse-hkp-source.c:331
 #, c-format
 msgid "Search was not specific enough. Server '%s' found too many keys."
 msgstr ""
 "A busca non foi o suficientemente específica. O servidor '%s' encontrou "
 "demasiadas chaves."
 
-#: ../pgp/seahorse-hkp-source.c:331
+#: ../pgp/seahorse-hkp-source.c:333
 #, c-format
 msgid "Couldn't communicate with server '%s': %s"
 msgstr "Non se puido comunicar co servidor '%s': %s"
 
-#: ../pgp/seahorse-hkp-source.c:551
+#: ../pgp/seahorse-hkp-source.c:553
 msgid "Searching for keys..."
 msgstr "Procurando chaves..."
 
-#: ../pgp/seahorse-hkp-source.c:622
+#: ../pgp/seahorse-hkp-source.c:624
 msgid "Uploading keys..."
 msgstr "Enviando chaves..."
 
-#: ../pgp/seahorse-hkp-source.c:700
+#: ../pgp/seahorse-hkp-source.c:702
 msgid "Retrieving keys..."
 msgstr "Obtendo chaves..."
 
-#: ../pgp/seahorse-hkp-source.c:733 ../pgp/seahorse-ldap-source.c:1274
-#: ../pgp/seahorse-pgp-generator.vala:29 ../pgp/seahorse-pgp-source.c:441
+#: ../pgp/seahorse-hkp-source.c:735 ../pgp/seahorse-ldap-source.c:1276
+#: ../pgp/seahorse-pgp-generator.vala:29 ../pgp/seahorse-pgp-source.c:443
 #: ../pgp/seahorse-server-source.c:209
 msgid "PGP Key"
 msgstr "Chave PGP"
 
-#: ../pgp/seahorse-hkp-source.c:767
+#: ../pgp/seahorse-hkp-source.c:769
 #, c-format
 msgid "Searching for keys on: %s"
 msgstr "Buscando chaves en: %s"
 
 #. The ldap_cb and chain_cb were set in seahorse_ldap_operation_start
-#: ../pgp/seahorse-hkp-source.c:864 ../pgp/seahorse-hkp-source.c:937
-#: ../pgp/seahorse-ldap-source.c:663
+#: ../pgp/seahorse-hkp-source.c:866 ../pgp/seahorse-hkp-source.c:939
+#: ../pgp/seahorse-ldap-source.c:665
 #, c-format
 msgid "Connecting to: %s"
 msgstr "Conectando con: %s"
 
-#: ../pgp/seahorse-hkp-source.c:973
+#: ../pgp/seahorse-hkp-source.c:975
 msgid "HTTP Key Server"
 msgstr "Servidor de chaves HTTP"
 
-#: ../pgp/seahorse-ldap-source.c:454
+#: ../pgp/seahorse-ldap-source.c:456
 #, c-format
 msgid "Couldn't communicate with '%s': %s"
 msgstr "Non se puido comunicar con '%s': %s"
 
-#: ../pgp/seahorse-ldap-source.c:636
+#: ../pgp/seahorse-ldap-source.c:638
 #, c-format
 msgid "Couldn't resolve address: %s"
 msgstr "Non se puido resolver o enderezo: %s"
 
-#: ../pgp/seahorse-ldap-source.c:714
+#: ../pgp/seahorse-ldap-source.c:716
 #, c-format
 msgid "Resolving server address: %s"
 msgstr "Resolvendo o enderezo do servidor: %s"
 
-#: ../pgp/seahorse-ldap-source.c:918
+#: ../pgp/seahorse-ldap-source.c:920
 #, c-format
 msgid "Searching for keys containing '%s'..."
 msgstr "Buscando chaves que conteñan '%s'..."
 
-#: ../pgp/seahorse-ldap-source.c:945
+#: ../pgp/seahorse-ldap-source.c:947
 #, c-format
 msgid "Searching for key id '%s'..."
 msgstr "Buscando a chave co id '%s'..."
 
-#: ../pgp/seahorse-ldap-source.c:1050
+#: ../pgp/seahorse-ldap-source.c:1052
 msgid "Retrieving remote keys..."
 msgstr "Obtendo chaves remotas..."
 
-#: ../pgp/seahorse-ldap-source.c:1182
+#: ../pgp/seahorse-ldap-source.c:1184
 msgid "Sending keys to key server..."
 msgstr "Enviando as chaves ao servidor de chaves..."
 
-#: ../pgp/seahorse-ldap-source.c:1414
+#: ../pgp/seahorse-ldap-source.c:1416
 msgid "LDAP Key Server"
 msgstr "Servidor de chaves LDAP"
 
@@ -2033,43 +2054,43 @@ msgstr ""
 "Non ten ningunha chave persoal PGP que se poida usar para indicar a súa "
 "confianza nesta chave."
 
-#: ../pgp/seahorse-pgp-source.c:98
+#: ../pgp/seahorse-pgp-source.c:100
 #, c-format
 msgid "Wrong passphrase."
 msgstr "A frase de paso é incorrecta."
 
-#: ../pgp/seahorse-pgp-source.c:102
+#: ../pgp/seahorse-pgp-source.c:104
 #, c-format
 msgid "Enter new passphrase for '%s'"
 msgstr "Introduza unha frase de paso nova para '%s'"
 
-#: ../pgp/seahorse-pgp-source.c:104
+#: ../pgp/seahorse-pgp-source.c:106
 #, c-format
 msgid "Enter passphrase for '%s'"
 msgstr "Introduza a frase de paso para '%s'"
 
-#: ../pgp/seahorse-pgp-source.c:107
+#: ../pgp/seahorse-pgp-source.c:109
 #: ../src/seahorse-change-passphrase.glade.h:4
 msgid "Enter new passphrase"
 msgstr "Introduza a frase de paso nova"
 
-#: ../pgp/seahorse-pgp-source.c:109
+#: ../pgp/seahorse-pgp-source.c:111
 msgid "Enter passphrase"
 msgstr "Introduza a frase de paso"
 
 #. TODO: We can use the GPGME progress to make this more accurate
-#: ../pgp/seahorse-pgp-source.c:800
+#: ../pgp/seahorse-pgp-source.c:802
 #, c-format
 msgid "Loaded %d key"
 msgid_plural "Loaded %d keys"
 msgstr[0] "%d chave cargada"
 msgstr[1] "%d chaves cargadas"
 
-#: ../pgp/seahorse-pgp-source.c:855
+#: ../pgp/seahorse-pgp-source.c:857
 msgid "Loading Keys..."
 msgstr "Cargando chaves..."
 
-#: ../pgp/seahorse-pgp-source.c:898
+#: ../pgp/seahorse-pgp-source.c:900
 msgid ""
 "Invalid key data (missing UIDs). This may be due to a computer with a date "
 "set in the future or a missing self-signature."
@@ -2077,11 +2098,11 @@ msgstr ""
 "Os datos da chave non son válidos (faltan UIDs). Isto pode deberse a un "
 "equipo cunha data establecida no futuro ou a unha sinatura persoal que falta."
 
-#: ../pgp/seahorse-pgp-source.c:998 ../src/seahorse-key-manager.vala:552
+#: ../pgp/seahorse-pgp-source.c:1000 ../src/seahorse-key-manager.vala:552
 msgid "Importing Keys"
 msgstr "Importando chaves"
 
-#: ../pgp/seahorse-pgp-source.c:1034
+#: ../pgp/seahorse-pgp-source.c:1036
 msgid "Exporting Keys"
 msgstr "Exportando chaves"
 
@@ -2204,7 +2225,7 @@ msgstr ""
 msgid "_Sign message with key:"
 msgstr "A_sinar a mensaxe coa chave:"
 
-#: ../src/main.c:66 ../src/seahorse-viewer.vala:229
+#: ../src/main.c:70 ../src/seahorse-viewer.vala:229
 msgid "Encryption Key Manager"
 msgstr "Xestor de chaves de cifrado"
 
@@ -2759,7 +2780,7 @@ msgstr "Descrición da _chave:"
 
 #: ../ssh/seahorse-ssh-generator.vala:29 ../ssh/seahorse-ssh-key.c:97
 #: ../ssh/seahorse-ssh-key.c:101 ../ssh/seahorse-ssh-key-properties.glade.h:21
-#: ../ssh/seahorse-ssh-source.c:724
+#: ../ssh/seahorse-ssh-source.c:726
 msgid "Secure Shell Key"
 msgstr "Chave de intérprete de comandos seguro (SSH)"
 
@@ -2914,7 +2935,7 @@ msgstr "Importando a chave: %s"
 msgid "Importing key. Enter passphrase"
 msgstr "Importando a chave. Introduza a frase de paso"
 
-#: ../ssh/seahorse-ssh-source.c:943
+#: ../ssh/seahorse-ssh-source.c:945
 msgid "No private key file is available for this key."
 msgstr "Non hai ningun ficheiro de chave privada para esta chave."
 
