@@ -53,6 +53,8 @@ libseahorse_pkcs11_la_LIBADD = \
 glade_DATA = 
 
 EXTRA_DIST = \
+	gp11.vapi \
+	p11.vapi \
 	$(glade_DATA) \
 	vala-build.stamp \
 	$(VALA_CFILES) $(VALA_HFILES) \
