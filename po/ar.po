@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-07-29 02:21+0100\n"
+"POT-Creation-Date: 2008-08-06 09:24+0100\n"
 "PO-Revision-Date: 2008-02-06 20:59+0200\n"
 "Last-Translator: Khaled Hosny <khaledhosny@eglug.org>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
@@ -1179,6 +1179,29 @@ msgid ""
 "started so that you may either create a key or import one."
 msgstr ""
 
+#. TODO: Calculate something from the subject?
+#: ../pkcs11/seahorse-pkcs11-certificate.vala:26
+msgid "Certificate"
+msgstr ""
+
+#: ../pkcs11/seahorse-pkcs11-source.vala:33
+msgid "X509 Certificate"
+msgstr ""
+
+#: ../pkcs11/seahorse-pkcs11-source.vala:120
+#, fuzzy
+msgid "Loading..."
+msgstr "يجري تحميل المفاتيح..."
+
+#: ../pkcs11/seahorse-pkcs11-source.vala:381
+#, fuzzy
+msgid "Invalid or unrecognized object."
+msgstr "مفتاح مجهول أو غير صالح: %s"
+
+#: ../pkcs11/seahorse-pkcs11-source.vala:398
+msgid "Exporting is not yet supported."
+msgstr ""
+
 #: ../pgp/seahorse-add-subkey.glade.h:1
 msgid "Expiration Date:"
 msgstr "تاريخ الانتهاء:"
@@ -1255,84 +1278,84 @@ msgstr "لا _ينتهي أبدا"
 msgid "Decryption failed. You probably do not have the decryption key."
 msgstr "فشل استخراج التعمية. ؤبما لا تملك مفتاح التعمية."
 
-#: ../pgp/seahorse-hkp-source.c:329
+#: ../pgp/seahorse-hkp-source.c:331
 #, c-format
 msgid "Search was not specific enough. Server '%s' found too many keys."
 msgstr "البحث لم يكن محددًا بما فيه الكفاية. وجد الخادوم '%s' مفاتيح كثيرة جدًا."
 
-#: ../pgp/seahorse-hkp-source.c:331
+#: ../pgp/seahorse-hkp-source.c:333
 #, c-format
 msgid "Couldn't communicate with server '%s': %s"
 msgstr "تعذّر التواصل مع الخادوم '%s': %s"
 
-#: ../pgp/seahorse-hkp-source.c:551
+#: ../pgp/seahorse-hkp-source.c:553
 msgid "Searching for keys..."
 msgstr "يبحث عن المفاتيح..."
 
-#: ../pgp/seahorse-hkp-source.c:622
+#: ../pgp/seahorse-hkp-source.c:624
 msgid "Uploading keys..."
 msgstr "يرفع المفاتيح..."
 
-#: ../pgp/seahorse-hkp-source.c:700
+#: ../pgp/seahorse-hkp-source.c:702
 msgid "Retrieving keys..."
 msgstr "يجلب المفاتيح..."
 
-#: ../pgp/seahorse-hkp-source.c:733 ../pgp/seahorse-ldap-source.c:1274
-#: ../pgp/seahorse-pgp-generator.vala:29 ../pgp/seahorse-pgp-source.c:441
+#: ../pgp/seahorse-hkp-source.c:735 ../pgp/seahorse-ldap-source.c:1276
+#: ../pgp/seahorse-pgp-generator.vala:29 ../pgp/seahorse-pgp-source.c:443
 #: ../pgp/seahorse-server-source.c:209
 msgid "PGP Key"
 msgstr "مفتاح PGP"
 
-#: ../pgp/seahorse-hkp-source.c:767
+#: ../pgp/seahorse-hkp-source.c:769
 #, c-format
 msgid "Searching for keys on: %s"
 msgstr "يبحث عن المفاتيح على: %s"
 
 #. The ldap_cb and chain_cb were set in seahorse_ldap_operation_start
-#: ../pgp/seahorse-hkp-source.c:864 ../pgp/seahorse-hkp-source.c:937
-#: ../pgp/seahorse-ldap-source.c:663
+#: ../pgp/seahorse-hkp-source.c:866 ../pgp/seahorse-hkp-source.c:939
+#: ../pgp/seahorse-ldap-source.c:665
 #, c-format
 msgid "Connecting to: %s"
 msgstr "يتصل بـ: %s"
 
-#: ../pgp/seahorse-hkp-source.c:973
+#: ../pgp/seahorse-hkp-source.c:975
 msgid "HTTP Key Server"
 msgstr "خادوم مفاتيح HTTP"
 
-#: ../pgp/seahorse-ldap-source.c:454
+#: ../pgp/seahorse-ldap-source.c:456
 #, c-format
 msgid "Couldn't communicate with '%s': %s"
 msgstr "تعذّر التواصل مع '%s': %s"
 
-#: ../pgp/seahorse-ldap-source.c:636
+#: ../pgp/seahorse-ldap-source.c:638
 #, c-format
 msgid "Couldn't resolve address: %s"
 msgstr "تعذّر حل العنوان: %s"
 
-#: ../pgp/seahorse-ldap-source.c:714
+#: ../pgp/seahorse-ldap-source.c:716
 #, c-format
 msgid "Resolving server address: %s"
 msgstr "يجري حل عنوان الخادوم: %s"
 
-#: ../pgp/seahorse-ldap-source.c:918
+#: ../pgp/seahorse-ldap-source.c:920
 #, c-format
 msgid "Searching for keys containing '%s'..."
 msgstr "يبحث عن المفاتيح التي تحتوي '%s'..."
 
-#: ../pgp/seahorse-ldap-source.c:945
+#: ../pgp/seahorse-ldap-source.c:947
 #, c-format
 msgid "Searching for key id '%s'..."
 msgstr "يبحث عن هويّة المفتاح '%s'..."
 
-#: ../pgp/seahorse-ldap-source.c:1050
+#: ../pgp/seahorse-ldap-source.c:1052
 msgid "Retrieving remote keys..."
 msgstr "يجلب المفاتيح البعيدة..."
 
-#: ../pgp/seahorse-ldap-source.c:1182
+#: ../pgp/seahorse-ldap-source.c:1184
 msgid "Sending keys to key server..."
 msgstr "يرسل المفاتيح لخادوم المفاتيح..."
 
-#: ../pgp/seahorse-ldap-source.c:1414
+#: ../pgp/seahorse-ldap-source.c:1416
 msgid "LDAP Key Server"
 msgstr "خادوم مفاتيح LDAP"
 
@@ -2021,32 +2044,32 @@ msgid ""
 "this key."
 msgstr "لا تملك مفتاح PGP شخصي يُمكن استخدامه ليبيِّن ثقتك في هذا المفتاح."
 
-#: ../pgp/seahorse-pgp-source.c:98
+#: ../pgp/seahorse-pgp-source.c:100
 #, c-format
 msgid "Wrong passphrase."
 msgstr "عبارة السر خاطئة."
 
-#: ../pgp/seahorse-pgp-source.c:102
+#: ../pgp/seahorse-pgp-source.c:104
 #, c-format
 msgid "Enter new passphrase for '%s'"
 msgstr "أدخل عبارة سر جديدة لـ'%s'"
 
-#: ../pgp/seahorse-pgp-source.c:104
+#: ../pgp/seahorse-pgp-source.c:106
 #, c-format
 msgid "Enter passphrase for '%s'"
 msgstr "أدخل عبارة السر لـ'%s'"
 
-#: ../pgp/seahorse-pgp-source.c:107
+#: ../pgp/seahorse-pgp-source.c:109
 #: ../src/seahorse-change-passphrase.glade.h:4
 msgid "Enter new passphrase"
 msgstr "أدخل عبارة سر جديدة"
 
-#: ../pgp/seahorse-pgp-source.c:109
+#: ../pgp/seahorse-pgp-source.c:111
 msgid "Enter passphrase"
 msgstr "أدخل عبارة السر"
 
 #. TODO: We can use the GPGME progress to make this more accurate
-#: ../pgp/seahorse-pgp-source.c:800
+#: ../pgp/seahorse-pgp-source.c:802
 #, c-format
 msgid "Loaded %d key"
 msgid_plural "Loaded %d keys"
@@ -2057,11 +2080,11 @@ msgstr[3] "حُمِّلت %Id مفاتيح"
 msgstr[4] "حُمِّل %Id مفتاحا"
 msgstr[5] "حُمِّل %Id مفتاح"
 
-#: ../pgp/seahorse-pgp-source.c:855
+#: ../pgp/seahorse-pgp-source.c:857
 msgid "Loading Keys..."
 msgstr "يجري تحميل المفاتيح..."
 
-#: ../pgp/seahorse-pgp-source.c:898
+#: ../pgp/seahorse-pgp-source.c:900
 msgid ""
 "Invalid key data (missing UIDs). This may be due to a computer with a date "
 "set in the future or a missing self-signature."
@@ -2069,11 +2092,11 @@ msgstr ""
 "بيانات غير صالحة (تفتقد UID). قد يكون هذا بسبب حاسوب ضُبط تاريخه إلى تاريخ "
 "مستقبلي أو لفقد التوقيع الذاتي."
 
-#: ../pgp/seahorse-pgp-source.c:998 ../src/seahorse-key-manager.vala:552
+#: ../pgp/seahorse-pgp-source.c:1000 ../src/seahorse-key-manager.vala:552
 msgid "Importing Keys"
 msgstr "يستورد المفاتيح"
 
-#: ../pgp/seahorse-pgp-source.c:1034
+#: ../pgp/seahorse-pgp-source.c:1036
 msgid "Exporting Keys"
 msgstr "يحمّل المفاتيح"
 
@@ -2188,7 +2211,7 @@ msgstr "لا توجد مفاتيح PGP شخصية يمكن استخدامها ل
 msgid "_Sign message with key:"
 msgstr "_وقّع الرسالة بالمفتاح:"
 
-#: ../src/main.c:66 ../src/seahorse-viewer.vala:229
+#: ../src/main.c:70 ../src/seahorse-viewer.vala:229
 msgid "Encryption Key Manager"
 msgstr "مدير مفاتيح التعمية"
 
@@ -2752,7 +2775,7 @@ msgstr "و_صف المفتاح:"
 
 #: ../ssh/seahorse-ssh-generator.vala:29 ../ssh/seahorse-ssh-key.c:97
 #: ../ssh/seahorse-ssh-key.c:101 ../ssh/seahorse-ssh-key-properties.glade.h:21
-#: ../ssh/seahorse-ssh-source.c:724
+#: ../ssh/seahorse-ssh-source.c:726
 msgid "Secure Shell Key"
 msgstr "مفتاح صدفة آمنة"
 
@@ -2903,7 +2926,7 @@ msgstr "استيراد المفتاح: %s"
 msgid "Importing key. Enter passphrase"
 msgstr "يستورد المفتاح. أدخل عبارة السر"
 
-#: ../ssh/seahorse-ssh-source.c:943
+#: ../ssh/seahorse-ssh-source.c:945
 msgid "No private key file is available for this key."
 msgstr ""
 
