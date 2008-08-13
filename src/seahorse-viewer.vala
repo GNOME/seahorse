@@ -40,7 +40,7 @@ namespace Seahorse {
 
 			{ "app-preferences", Gtk.STOCK_PREFERENCES, N_("Prefere_nces"), null,
 			  	N_("Change preferences for this program"), null },
-			{ "app-about", "gnome-stock-about", N_("_About"), null, 
+			{ "app-about", "gtk-about", N_("_About"), null, 
 			  	N_("About this program"), null }, 
     			{ "help-show", Gtk.STOCK_HELP, N_("_Contents"), "F1",
 			  	N_("Show Seahorse help"), null } 
@@ -235,6 +235,7 @@ namespace Seahorse {
 			
 			about.response += (about, resp) => { about.hide(); };
 			about.run();
+			about.destroy();
 		}
 		
 		private static void on_about_link_clicked (Gtk.AboutDialog about, string url) {

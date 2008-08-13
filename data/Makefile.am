@@ -1,3 +1,4 @@
+SUBDIRS = icons
 
 @INTLTOOL_SCHEMAS_RULE@
 

@@ -1,8 +1,6 @@
 
 icon48dir = $(datadir)/pixmaps/seahorse/48x48/
-icon48_DATA = seahorse.png \
-                seahorse-preferences.png \
-                seahorse-applet.png \
+icon48_DATA = seahorse-applet.png \
                 seahorse-applet-encrypted.png \
                 seahorse-applet-key.png \
                 seahorse-applet-signed.png \
@@ -18,13 +16,7 @@ icon48_DATA = seahorse.png \
                 seahorse-sign-ok.png \
                 seahorse-sign-unknown.png
 
-pixmapdir = $(datadir)/pixmaps/
-pixmap_DATA = seahorse.png \
-                seahorse-preferences.png
-
 desktop_iconsdir   = $(datadir)/icons/hicolor/48x48/apps
-desktop_icons_DATA = seahorse.png \
-                seahorse-preferences.png \
-                seahorse-applet.png
+desktop_icons_DATA = seahorse-applet.png
 
 EXTRA_DIST = $(icon48_DATA)

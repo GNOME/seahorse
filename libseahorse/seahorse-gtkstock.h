@@ -27,7 +27,6 @@
 #define _SEAHORSE_GTKSTOCK_H_
 
 /* The default stock icons */
-#define SEAHORSE_STOCK_SEAHORSE     "seahorse"
 #define SEAHORSE_STOCK_KEY          "seahorse-key"
 #define SEAHORSE_STOCK_SECRET       "seahorse-key-personal"
 #define SEAHORSE_STOCK_KEY_SSH      "seahorse-key-ssh"

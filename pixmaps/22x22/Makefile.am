@@ -1,8 +1,6 @@
 
 icon22dir = $(datadir)/pixmaps/seahorse/22x22/
-icon22_DATA = seahorse.png \
-                seahorse-preferences.png \
-                seahorse-applet-encrypted.png \
+icon22_DATA = seahorse-applet-encrypted.png \
                 seahorse-applet-key.png \
                 seahorse-applet-signed.png \
                 seahorse-applet-text.png \
@@ -16,9 +14,7 @@ icon22_DATA = seahorse.png \
                 seahorse-sign-ok.png \
                 seahorse-sign-bad.png
 
-iconsrc = seahorse.svg \
-                seahorse-preferences.svg \
-                seahorse-applet-encrypted.svg \
+iconsrc = seahorse-applet-encrypted.svg \
                 seahorse-applet-key.svg \
                 seahorse-applet-signed.svg \
                 seahorse-applet-text.svg \
@@ -32,8 +28,4 @@ iconsrc = seahorse.svg \
                 seahorse-sign-ok.svg \
                 seahorse-sign-bad.svg
 
-desktop_iconsdir   = $(datadir)/icons/hicolor/22x22/apps
-desktop_icons_DATA = seahorse.svg \
-                seahorse-preferences.svg
-                
 EXTRA_DIST = $(iconsrc) $(icon22_DATA)

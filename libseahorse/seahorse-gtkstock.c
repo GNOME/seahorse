@@ -30,7 +30,6 @@
 #include "seahorse-gtkstock.h"
 
 static const gchar *seahorse_icons[] = {
-    SEAHORSE_STOCK_SEAHORSE,
     SEAHORSE_STOCK_KEY,
     SEAHORSE_STOCK_SECRET,
     SEAHORSE_STOCK_KEY_SSH,
