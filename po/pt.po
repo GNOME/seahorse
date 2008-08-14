@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.24\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-07-30 00:24+0100\n"
-"PO-Revision-Date: 2008-07-30 00:40+0000\n"
+"POT-Creation-Date: 2008-08-14 23:10+0100\n"
+"PO-Revision-Date: 2008-08-14 23:15+0000\n"
 "Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
 "Language-Team: Portuguese <gnome_pt@yahoogroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -125,10 +125,12 @@ msgid "Key is not a valid recipient for encryption: %s"
 msgstr "A chave não é um destinatário válido para encriptação: %s"
 
 #: ../daemon/seahorse-service-crypto.c:275
+#, c-format
 msgid "No recipients specified"
 msgstr "Nenhum destinatário especificado"
 
 #: ../daemon/seahorse-service-crypto.c:341
+#, c-format
 msgid "No signer specified"
 msgstr "Nenhum assinante especificado"
 
@@ -901,6 +903,7 @@ msgstr[0] "%i chave importada"
 msgstr[1] "%i chaves importadas"
 
 #: ../libseahorse/seahorse-notification.c:572
+#, c-format
 msgid "Imported a key for"
 msgid_plural "Imported keys for"
 msgstr[0] "Importada uma chave para"
@@ -1166,7 +1169,7 @@ msgstr "Inactivo"
 msgid "Revoked"
 msgstr "Revogada"
 
-#: ../libseahorse/seahorse-widget.c:367
+#: ../libseahorse/seahorse-widget.c:363
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Incapaz de apresentar ajuda: %s"
@@ -1180,6 +1183,27 @@ msgstr ""
 "Não foram encontradas chaves de encriptação com as quais realizar a operação "
 "que pediu. A aplicação <b>Senhas e Chaves de Encriptação</b> será agora "
 "iniciada para que possa ou criar uma chave ou importar uma."
+
+#. TODO: Calculate something from the subject?
+#: ../pkcs11/seahorse-pkcs11-certificate.vala:26
+msgid "Certificate"
+msgstr "Certificado"
+
+#: ../pkcs11/seahorse-pkcs11-source.vala:33
+msgid "X509 Certificate"
+msgstr "Certificado X509"
+
+#: ../pkcs11/seahorse-pkcs11-source.vala:120
+msgid "Loading..."
+msgstr "A Ler..."
+
+#: ../pkcs11/seahorse-pkcs11-source.vala:381
+msgid "Invalid or unrecognized object."
+msgstr "Objecto inválido ou não reconhecido."
+
+#: ../pkcs11/seahorse-pkcs11-source.vala:398
+msgid "Exporting is not yet supported."
+msgstr "Exportar ainda não é suportado."
 
 #: ../pgp/seahorse-add-subkey.glade.h:1
 msgid "Expiration Date:"
@@ -1258,86 +1282,86 @@ msgid "Decryption failed. You probably do not have the decryption key."
 msgstr ""
 "Falha ao desencriptar. Provavelmente não possui a chave de desencriptação."
 
-#: ../pgp/seahorse-hkp-source.c:329
+#: ../pgp/seahorse-hkp-source.c:331
 #, c-format
 msgid "Search was not specific enough. Server '%s' found too many keys."
 msgstr ""
 "A procura não foi suficientemente específica. O servidor '%s' devolveu "
 "demasiadas chaves."
 
-#: ../pgp/seahorse-hkp-source.c:331
+#: ../pgp/seahorse-hkp-source.c:333
 #, c-format
 msgid "Couldn't communicate with server '%s': %s"
 msgstr "Incapaz de comunicar com o servidor '%s': %s"
 
-#: ../pgp/seahorse-hkp-source.c:551
+#: ../pgp/seahorse-hkp-source.c:553
 msgid "Searching for keys..."
 msgstr "A procurar chaves..."
 
-#: ../pgp/seahorse-hkp-source.c:622
+#: ../pgp/seahorse-hkp-source.c:624
 msgid "Uploading keys..."
 msgstr "A enviar chaves..."
 
-#: ../pgp/seahorse-hkp-source.c:700
+#: ../pgp/seahorse-hkp-source.c:702
 msgid "Retrieving keys..."
 msgstr "A obter chaves..."
 
-#: ../pgp/seahorse-hkp-source.c:733 ../pgp/seahorse-ldap-source.c:1274
-#: ../pgp/seahorse-pgp-generator.vala:29 ../pgp/seahorse-pgp-source.c:441
+#: ../pgp/seahorse-hkp-source.c:735 ../pgp/seahorse-ldap-source.c:1276
+#: ../pgp/seahorse-pgp-generator.vala:29 ../pgp/seahorse-pgp-source.c:443
 #: ../pgp/seahorse-server-source.c:209
 msgid "PGP Key"
 msgstr "Chave PGP"
 
-#: ../pgp/seahorse-hkp-source.c:767
+#: ../pgp/seahorse-hkp-source.c:769
 #, c-format
 msgid "Searching for keys on: %s"
 msgstr "A procurar chaves em: %s"
 
 #. The ldap_cb and chain_cb were set in seahorse_ldap_operation_start
-#: ../pgp/seahorse-hkp-source.c:864 ../pgp/seahorse-hkp-source.c:937
-#: ../pgp/seahorse-ldap-source.c:663
+#: ../pgp/seahorse-hkp-source.c:866 ../pgp/seahorse-hkp-source.c:939
+#: ../pgp/seahorse-ldap-source.c:665
 #, c-format
 msgid "Connecting to: %s"
 msgstr "A ligar-se a: %s"
 
-#: ../pgp/seahorse-hkp-source.c:973
+#: ../pgp/seahorse-hkp-source.c:975
 msgid "HTTP Key Server"
 msgstr "Servidor de Chaves HTTP"
 
-#: ../pgp/seahorse-ldap-source.c:454
+#: ../pgp/seahorse-ldap-source.c:456
 #, c-format
 msgid "Couldn't communicate with '%s': %s"
 msgstr "Incapaz de comunicar com '%s': %s"
 
-#: ../pgp/seahorse-ldap-source.c:636
+#: ../pgp/seahorse-ldap-source.c:638
 #, c-format
 msgid "Couldn't resolve address: %s"
 msgstr "Incapaz de resolver o endereço: %s"
 
-#: ../pgp/seahorse-ldap-source.c:714
+#: ../pgp/seahorse-ldap-source.c:716
 #, c-format
 msgid "Resolving server address: %s"
 msgstr "A resolver o endereço do servidor: %s"
 
-#: ../pgp/seahorse-ldap-source.c:918
+#: ../pgp/seahorse-ldap-source.c:920
 #, c-format
 msgid "Searching for keys containing '%s'..."
 msgstr "A procurar chaves que contenham '%s'..."
 
-#: ../pgp/seahorse-ldap-source.c:945
+#: ../pgp/seahorse-ldap-source.c:947
 #, c-format
 msgid "Searching for key id '%s'..."
 msgstr "A procurar o id de chave '%s'..."
 
-#: ../pgp/seahorse-ldap-source.c:1050
+#: ../pgp/seahorse-ldap-source.c:1052
 msgid "Retrieving remote keys..."
 msgstr "A obter as chaves remotas..."
 
-#: ../pgp/seahorse-ldap-source.c:1182
+#: ../pgp/seahorse-ldap-source.c:1184
 msgid "Sending keys to key server..."
 msgstr "A enviar as chaves para um servidor de chaves..."
 
-#: ../pgp/seahorse-ldap-source.c:1414
+#: ../pgp/seahorse-ldap-source.c:1416
 msgid "LDAP Key Server"
 msgstr "Servidor de Chaves LDAP"
 
@@ -1391,7 +1415,8 @@ msgstr "Tem a certeza de que deseja apagar definitivamente %s?"
 #: ../pgp/seahorse-pgp-commands.vala:114
 #, c-format
 msgid "Are you sure you want to permanently delete %d keys and identities?"
-msgstr "Tem a certeza de que deseja apagar definitivamente %d chaves e identidades?"
+msgstr ""
+"Tem a certeza de que deseja apagar definitivamente %d chaves e identidades?"
 
 #: ../pgp/seahorse-pgp-commands.vala:116
 #, c-format
@@ -1572,7 +1597,7 @@ msgstr "Incapaz de apagar a subchave"
 msgid "Unable to change trust"
 msgstr "Incapaz de alterar confiança"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1060 ../src/seahorse-viewer.vala:407
+#: ../pgp/seahorse-pgp-key-properties.c:1060 ../src/seahorse-viewer.vala:408
 #: ../ssh/seahorse-ssh-key-properties.c:214
 #, c-format
 msgid "Couldn't export key to \"%s\""
@@ -1637,6 +1662,7 @@ msgid "_Resize"
 msgstr "_Redimensionar"
 
 #: ../pgp/seahorse-pgp-photos.c:128
+#, c-format
 msgid ""
 "This is not a image file, or an unrecognized kind of image file. Try to use "
 "a JPEG image."
@@ -1902,8 +1928,7 @@ msgstr "Confio em assinaturas de '%s' em outras chaves"
 msgid ""
 "If you believe that the person that owns this key is '%s', <i>sign</i> this "
 "key:"
-msgstr ""
-"Se acredita que a pessoa que detém esta chave é '%s', <i>assine-a</i>:"
+msgstr "Se acredita que a pessoa que detém esta chave é '%s', <i>assine-a</i>:"
 
 #: ../pgp/seahorse-pgp-public-key-properties.glade.h:28
 #, no-c-format
@@ -2031,42 +2056,43 @@ msgstr ""
 "Não possui chaves PGP pessoais que possam ser utilizadas para indicar a sua "
 "confiança nesta chave."
 
-#: ../pgp/seahorse-pgp-source.c:98
+#: ../pgp/seahorse-pgp-source.c:100
+#, c-format
 msgid "Wrong passphrase."
 msgstr "Frase-senha incorrecta."
 
-#: ../pgp/seahorse-pgp-source.c:102
+#: ../pgp/seahorse-pgp-source.c:104
 #, c-format
 msgid "Enter new passphrase for '%s'"
 msgstr "Introduza uma nova frase-senha para '%s'"
 
-#: ../pgp/seahorse-pgp-source.c:104
+#: ../pgp/seahorse-pgp-source.c:106
 #, c-format
 msgid "Enter passphrase for '%s'"
 msgstr "Introduza a frase-senha para '%s'"
 
-#: ../pgp/seahorse-pgp-source.c:107
+#: ../pgp/seahorse-pgp-source.c:109
 #: ../src/seahorse-change-passphrase.glade.h:4
 msgid "Enter new passphrase"
 msgstr "Introduza a nova frase-senha"
 
-#: ../pgp/seahorse-pgp-source.c:109
+#: ../pgp/seahorse-pgp-source.c:111
 msgid "Enter passphrase"
 msgstr "Introduza a frase-senha"
 
 #. TODO: We can use the GPGME progress to make this more accurate
-#: ../pgp/seahorse-pgp-source.c:800
+#: ../pgp/seahorse-pgp-source.c:802
 #, c-format
 msgid "Loaded %d key"
 msgid_plural "Loaded %d keys"
 msgstr[0] "%d chave lida"
 msgstr[1] "%d chaves lidas"
 
-#: ../pgp/seahorse-pgp-source.c:855
+#: ../pgp/seahorse-pgp-source.c:857
 msgid "Loading Keys..."
 msgstr "A Ler as Chaves..."
 
-#: ../pgp/seahorse-pgp-source.c:898
+#: ../pgp/seahorse-pgp-source.c:900
 msgid ""
 "Invalid key data (missing UIDs). This may be due to a computer with a date "
 "set in the future or a missing self-signature."
@@ -2074,11 +2100,11 @@ msgstr ""
 "Dados de chave inválidos (faltam UIDs). Isto pode dever-se a um computador "
 "com a data definida para o futuro ou uma assinatura pessoal em falta."
 
-#: ../pgp/seahorse-pgp-source.c:998 ../src/seahorse-key-manager.vala:552
+#: ../pgp/seahorse-pgp-source.c:1000 ../src/seahorse-key-manager.vala:552
 msgid "Importing Keys"
 msgstr "A Importar Chaves"
 
-#: ../pgp/seahorse-pgp-source.c:1034
+#: ../pgp/seahorse-pgp-source.c:1036
 msgid "Exporting Keys"
 msgstr "A Exportar Chaves"
 
@@ -2196,7 +2222,7 @@ msgstr ""
 msgid "_Sign message with key:"
 msgstr "_Assinar a mensagem com a chave:"
 
-#: ../src/main.c:66 ../src/seahorse-viewer.vala:229
+#: ../src/main.c:70 ../src/seahorse-viewer.vala:229
 msgid "Encryption Key Manager"
 msgstr "Gestor de Chaves de Encriptação"
 
@@ -2395,7 +2421,7 @@ msgid_plural "Selected %d keys"
 msgstr[0] "%d chave seleccionada"
 msgstr[1] "%d chaves seleccionadas"
 
-#: ../src/seahorse-key-manager-store.c:644 ../src/seahorse-viewer.vala:382
+#: ../src/seahorse-key-manager-store.c:644 ../src/seahorse-viewer.vala:383
 msgid "Couldn't export keys"
 msgstr "Incapaz de exportar as chaves"
 
@@ -2629,20 +2655,20 @@ msgstr "Duarte Loreto <happyguy_pt@hotmail.com>"
 msgid "Seahorse Project Homepage"
 msgstr "Página do Projecto Seahorse"
 
-#: ../src/seahorse-viewer.vala:283
+#: ../src/seahorse-viewer.vala:284
 msgid "Couldn't delete."
 msgstr "Incapaz de apagar."
 
-#: ../src/seahorse-viewer.vala:295
+#: ../src/seahorse-viewer.vala:296
 msgid "Deleting..."
 msgstr "A apagar..."
 
-#: ../src/seahorse-viewer.vala:316
+#: ../src/seahorse-viewer.vala:317
 #, c-format
 msgid "%s is a private key. Are you sure you want to proceed?"
 msgstr "%s é uma chave privada. Tem a certeza de que deseja continuar?"
 
-#: ../src/seahorse-viewer.vala:318
+#: ../src/seahorse-viewer.vala:319
 msgid ""
 "One or more of the deleted keys are private keys. Are you sure you want to "
 "proceed?"
@@ -2650,23 +2676,23 @@ msgstr ""
 "Uma ou mais das chaves apagadas são chaves privadas. Tem a certeza de que "
 "deseja continuar?"
 
-#: ../src/seahorse-viewer.vala:346
+#: ../src/seahorse-viewer.vala:347
 msgid "Couldn't retrieve data from key server"
 msgstr "Incapaz de obter os dados do servidor de chaves"
 
-#: ../src/seahorse-viewer.vala:364
+#: ../src/seahorse-viewer.vala:365
 msgid "Copied keys"
 msgstr "Chaves copiadas"
 
-#: ../src/seahorse-viewer.vala:376
+#: ../src/seahorse-viewer.vala:377
 msgid "Retrieving keys"
 msgstr "A obter as chaves"
 
-#: ../src/seahorse-viewer.vala:391
+#: ../src/seahorse-viewer.vala:392
 msgid "Export public key"
 msgstr "Exportar chave pública"
 
-#: ../src/seahorse-viewer.vala:403
+#: ../src/seahorse-viewer.vala:404
 msgid "Exporting keys"
 msgstr "A exportar chaves"
 
@@ -2748,7 +2774,7 @@ msgstr "_Descrição da Chave:"
 
 #: ../ssh/seahorse-ssh-generator.vala:29 ../ssh/seahorse-ssh-key.c:97
 #: ../ssh/seahorse-ssh-key.c:101 ../ssh/seahorse-ssh-key-properties.glade.h:21
-#: ../ssh/seahorse-ssh-source.c:724
+#: ../ssh/seahorse-ssh-source.c:726
 msgid "Secure Shell Key"
 msgstr "Chave de Consola Segura"
 
@@ -2827,6 +2853,7 @@ msgid "Used to connect to other computers."
 msgstr "Utilizada para se ligar a outros computadores."
 
 #: ../ssh/seahorse-ssh-operation.c:138 ../ssh/seahorse-ssh-operation.c:700
+#, c-format
 msgid "The SSH command was terminated unexpectedly."
 msgstr "O comando SSH terminou inesperadamente."
 
@@ -2899,7 +2926,7 @@ msgstr "A importar a chave: %s"
 msgid "Importing key. Enter passphrase"
 msgstr "A importar a chave. Introduza a frase-senha"
 
-#: ../ssh/seahorse-ssh-source.c:943
+#: ../ssh/seahorse-ssh-source.c:945
 msgid "No private key file is available for this key."
 msgstr "Não está disponível nenhum ficheiro de chave privada para esta chave."
 
