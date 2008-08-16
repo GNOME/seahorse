@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse 2.21.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-07-28 20:09+0200\n"
-"PO-Revision-Date: 2008-07-28 20:10+0200\n"
+"POT-Creation-Date: 2008-08-17 01:13+0200\n"
+"PO-Revision-Date: 2008-08-17 01:14+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -1157,7 +1157,7 @@ msgstr "Deaktivert"
 msgid "Revoked"
 msgstr "Tilbakekalt"
 
-#: ../libseahorse/seahorse-widget.c:367
+#: ../libseahorse/seahorse-widget.c:363
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Kunne ikke vise hjelp: %s"
@@ -1171,6 +1171,27 @@ msgstr ""
 "Fant ingen krypteringsnøkler for å utføre operasjonen du forespurte. "
 "Programmet <b>Passord og krypteringsnøkler</b> vil nå startes slik at du kan "
 "lage en nøkkel eller importere en."
+
+#. TODO: Calculate something from the subject?
+#: ../pkcs11/seahorse-pkcs11-certificate.vala:26
+msgid "Certificate"
+msgstr "Sertifikat"
+
+#: ../pkcs11/seahorse-pkcs11-source.vala:33
+msgid "X509 Certificate"
+msgstr "X.509-sertifikat"
+
+#: ../pkcs11/seahorse-pkcs11-source.vala:120
+msgid "Loading..."
+msgstr "Laster..."
+
+#: ../pkcs11/seahorse-pkcs11-source.vala:381
+msgid "Invalid or unrecognized object."
+msgstr "Ugyldig eller ugjenkjentt nøkkel: %s"
+
+#: ../pkcs11/seahorse-pkcs11-source.vala:398
+msgid "Exporting is not yet supported."
+msgstr "Eksport er ikke støttet ennå."
 
 #: ../pgp/seahorse-add-subkey.glade.h:1
 msgid "Expiration Date:"
@@ -1248,84 +1269,84 @@ msgstr "_Går aldri ut"
 msgid "Decryption failed. You probably do not have the decryption key."
 msgstr "Dekryptering feilet. Du har muligens ikke dekrypteringsnøkkelen."
 
-#: ../pgp/seahorse-hkp-source.c:329
+#: ../pgp/seahorse-hkp-source.c:331
 #, c-format
 msgid "Search was not specific enough. Server '%s' found too many keys."
 msgstr "Søket var ikke spesifikt nok. Serveren '%s' fant for mange nøkler."
 
-#: ../pgp/seahorse-hkp-source.c:331
+#: ../pgp/seahorse-hkp-source.c:333
 #, c-format
 msgid "Couldn't communicate with server '%s': %s"
 msgstr "Kunne ikke kommunisere med tjener «%s»: %s"
 
-#: ../pgp/seahorse-hkp-source.c:551
+#: ../pgp/seahorse-hkp-source.c:553
 msgid "Searching for keys..."
 msgstr "Søker etter nøkler..."
 
-#: ../pgp/seahorse-hkp-source.c:622
+#: ../pgp/seahorse-hkp-source.c:624
 msgid "Uploading keys..."
 msgstr "Laster opp nøkler..."
 
-#: ../pgp/seahorse-hkp-source.c:700
+#: ../pgp/seahorse-hkp-source.c:702
 msgid "Retrieving keys..."
 msgstr "Henter nøkler..."
 
-#: ../pgp/seahorse-hkp-source.c:733 ../pgp/seahorse-ldap-source.c:1274
-#: ../pgp/seahorse-pgp-generator.vala:29 ../pgp/seahorse-pgp-source.c:441
+#: ../pgp/seahorse-hkp-source.c:735 ../pgp/seahorse-ldap-source.c:1276
+#: ../pgp/seahorse-pgp-generator.vala:29 ../pgp/seahorse-pgp-source.c:443
 #: ../pgp/seahorse-server-source.c:209
 msgid "PGP Key"
 msgstr "PGP-nøkkel"
 
-#: ../pgp/seahorse-hkp-source.c:767
+#: ../pgp/seahorse-hkp-source.c:769
 #, c-format
 msgid "Searching for keys on: %s"
 msgstr "Søker etter nøkler på: %s"
 
 #. The ldap_cb and chain_cb were set in seahorse_ldap_operation_start
-#: ../pgp/seahorse-hkp-source.c:864 ../pgp/seahorse-hkp-source.c:937
-#: ../pgp/seahorse-ldap-source.c:663
+#: ../pgp/seahorse-hkp-source.c:866 ../pgp/seahorse-hkp-source.c:939
+#: ../pgp/seahorse-ldap-source.c:665
 #, c-format
 msgid "Connecting to: %s"
 msgstr "Kobler til: %s"
 
-#: ../pgp/seahorse-hkp-source.c:973
+#: ../pgp/seahorse-hkp-source.c:975
 msgid "HTTP Key Server"
 msgstr "HTTP nøkkeltjener"
 
-#: ../pgp/seahorse-ldap-source.c:454
+#: ../pgp/seahorse-ldap-source.c:456
 #, c-format
 msgid "Couldn't communicate with '%s': %s"
 msgstr "Kunne ikke kommunisere med «%s»: %s"
 
-#: ../pgp/seahorse-ldap-source.c:636
+#: ../pgp/seahorse-ldap-source.c:638
 #, c-format
 msgid "Couldn't resolve address: %s"
 msgstr "Kunne ikke slå opp adresse: %s"
 
-#: ../pgp/seahorse-ldap-source.c:714
+#: ../pgp/seahorse-ldap-source.c:716
 #, c-format
 msgid "Resolving server address: %s"
 msgstr "Slår opp tjeneradresse: %s"
 
-#: ../pgp/seahorse-ldap-source.c:918
+#: ../pgp/seahorse-ldap-source.c:920
 #, c-format
 msgid "Searching for keys containing '%s'..."
 msgstr "Søker etter nøkler som inneholder «%s»..."
 
-#: ../pgp/seahorse-ldap-source.c:945
+#: ../pgp/seahorse-ldap-source.c:947
 #, c-format
 msgid "Searching for key id '%s'..."
 msgstr "Søker etter nøkkel-ID «%s»..."
 
-#: ../pgp/seahorse-ldap-source.c:1050
+#: ../pgp/seahorse-ldap-source.c:1052
 msgid "Retrieving remote keys..."
 msgstr "Henter eksterne nøkler..."
 
-#: ../pgp/seahorse-ldap-source.c:1182
+#: ../pgp/seahorse-ldap-source.c:1184
 msgid "Sending keys to key server..."
 msgstr "Sender nøkler til en nøkkeltjener..."
 
-#: ../pgp/seahorse-ldap-source.c:1414
+#: ../pgp/seahorse-ldap-source.c:1416
 msgid "LDAP Key Server"
 msgstr "LDAP nøkkeltjener"
 
@@ -1556,7 +1577,7 @@ msgstr "Kunne ikke slette undernøkkel"
 msgid "Unable to change trust"
 msgstr "Kan ikke endre tillitsforhold"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1060 ../src/seahorse-viewer.vala:407
+#: ../pgp/seahorse-pgp-key-properties.c:1060 ../src/seahorse-viewer.vala:408
 #: ../ssh/seahorse-ssh-key-properties.c:214
 #, c-format
 msgid "Couldn't export key to \"%s\""
@@ -2018,43 +2039,43 @@ msgstr ""
 "Du har ingen personlige PGP-nøkler som kan brukes for å indikere din tillit "
 "til denne nøkkelen."
 
-#: ../pgp/seahorse-pgp-source.c:98
+#: ../pgp/seahorse-pgp-source.c:100
 #, c-format
 msgid "Wrong passphrase."
 msgstr "Feil passordfrase."
 
-#: ../pgp/seahorse-pgp-source.c:102
+#: ../pgp/seahorse-pgp-source.c:104
 #, c-format
 msgid "Enter new passphrase for '%s'"
 msgstr "Oppgi ny passordfrase for «%s»"
 
-#: ../pgp/seahorse-pgp-source.c:104
+#: ../pgp/seahorse-pgp-source.c:106
 #, c-format
 msgid "Enter passphrase for '%s'"
 msgstr "Oppgi passordfrase for «%s»"
 
-#: ../pgp/seahorse-pgp-source.c:107
+#: ../pgp/seahorse-pgp-source.c:109
 #: ../src/seahorse-change-passphrase.glade.h:4
 msgid "Enter new passphrase"
 msgstr "Oppgi nytt passord"
 
-#: ../pgp/seahorse-pgp-source.c:109
+#: ../pgp/seahorse-pgp-source.c:111
 msgid "Enter passphrase"
 msgstr "Oppgi passordfrase"
 
 #. TODO: We can use the GPGME progress to make this more accurate
-#: ../pgp/seahorse-pgp-source.c:800
+#: ../pgp/seahorse-pgp-source.c:802
 #, c-format
 msgid "Loaded %d key"
 msgid_plural "Loaded %d keys"
 msgstr[0] "Lastet %d nøkkel"
 msgstr[1] "Lastet %d nøkler"
 
-#: ../pgp/seahorse-pgp-source.c:855
+#: ../pgp/seahorse-pgp-source.c:857
 msgid "Loading Keys..."
 msgstr "Laster nøkler..."
 
-#: ../pgp/seahorse-pgp-source.c:898
+#: ../pgp/seahorse-pgp-source.c:900
 msgid ""
 "Invalid key data (missing UIDs). This may be due to a computer with a date "
 "set in the future or a missing self-signature."
@@ -2062,11 +2083,11 @@ msgstr ""
 "Ugyldige nøkkeldata (mangler UIDer). Dette kan være forårsaket av en "
 "datamaskin med datoen satt i fremtiden eller en manglende selvsignering."
 
-#: ../pgp/seahorse-pgp-source.c:998 ../src/seahorse-key-manager.vala:552
+#: ../pgp/seahorse-pgp-source.c:1000 ../src/seahorse-key-manager.vala:552
 msgid "Importing Keys"
 msgstr "Importerer nøkler"
 
-#: ../pgp/seahorse-pgp-source.c:1034
+#: ../pgp/seahorse-pgp-source.c:1036
 msgid "Exporting Keys"
 msgstr "Eksporterer nøkler"
 
@@ -2184,7 +2205,7 @@ msgstr ""
 msgid "_Sign message with key:"
 msgstr "_Signer melding med nøkkel:"
 
-#: ../src/main.c:66 ../src/seahorse-viewer.vala:229
+#: ../src/main.c:70 ../src/seahorse-viewer.vala:229
 msgid "Encryption Key Manager"
 msgstr "Håndtering av krypteringsnøkler"
 
@@ -2383,7 +2404,7 @@ msgid_plural "Selected %d keys"
 msgstr[0] "%d nøkkel valgt"
 msgstr[1] "%d nøkler valgt"
 
-#: ../src/seahorse-key-manager-store.c:644 ../src/seahorse-viewer.vala:382
+#: ../src/seahorse-key-manager-store.c:644 ../src/seahorse-viewer.vala:383
 msgid "Couldn't export keys"
 msgstr "Kunne ikke eksportere nøkler"
 
@@ -2617,20 +2638,20 @@ msgstr ""
 msgid "Seahorse Project Homepage"
 msgstr "Hjemmesiden til Seahorse-prosjektet"
 
-#: ../src/seahorse-viewer.vala:283
+#: ../src/seahorse-viewer.vala:284
 msgid "Couldn't delete."
 msgstr "Kunne ikke slette."
 
-#: ../src/seahorse-viewer.vala:295
+#: ../src/seahorse-viewer.vala:296
 msgid "Deleting..."
 msgstr "Sletter..."
 
-#: ../src/seahorse-viewer.vala:316
+#: ../src/seahorse-viewer.vala:317
 #, c-format
 msgid "%s is a private key. Are you sure you want to proceed?"
 msgstr "%s er en privat nøkkel. Er du sikker på at du vil fortsette?"
 
-#: ../src/seahorse-viewer.vala:318
+#: ../src/seahorse-viewer.vala:319
 msgid ""
 "One or more of the deleted keys are private keys. Are you sure you want to "
 "proceed?"
@@ -2638,23 +2659,23 @@ msgstr ""
 "En eller flere av nøklene som skal slettes er private nøkler. Er du sikker "
 "på at du vil fortsette?"
 
-#: ../src/seahorse-viewer.vala:346
+#: ../src/seahorse-viewer.vala:347
 msgid "Couldn't retrieve data from key server"
 msgstr "Kunne ikke hente data fra nøkkeltjener"
 
-#: ../src/seahorse-viewer.vala:364
+#: ../src/seahorse-viewer.vala:365
 msgid "Copied keys"
 msgstr "Kopierte nøkler"
 
-#: ../src/seahorse-viewer.vala:376
+#: ../src/seahorse-viewer.vala:377
 msgid "Retrieving keys"
 msgstr "Henter nøkler"
 
-#: ../src/seahorse-viewer.vala:391
+#: ../src/seahorse-viewer.vala:392
 msgid "Export public key"
 msgstr "Eksporter offentlig nøkkel"
 
-#: ../src/seahorse-viewer.vala:403
+#: ../src/seahorse-viewer.vala:404
 msgid "Exporting keys"
 msgstr "Eksporterer nøkler"
 
@@ -2736,7 +2757,7 @@ msgstr "Nø_kkelbeskrivelse:"
 
 #: ../ssh/seahorse-ssh-generator.vala:29 ../ssh/seahorse-ssh-key.c:97
 #: ../ssh/seahorse-ssh-key.c:101 ../ssh/seahorse-ssh-key-properties.glade.h:21
-#: ../ssh/seahorse-ssh-source.c:724
+#: ../ssh/seahorse-ssh-source.c:726
 msgid "Secure Shell Key"
 msgstr "Nøkkel for sikkert skall"
 
@@ -2888,7 +2909,7 @@ msgstr "Importerer nøkkel: %s"
 msgid "Importing key. Enter passphrase"
 msgstr "Importerer nøkkel. Oppgi passord"
 
-#: ../ssh/seahorse-ssh-source.c:943
+#: ../ssh/seahorse-ssh-source.c:945
 msgid "No private key file is available for this key."
 msgstr "Ingen privat nøkkelfil er tilgjengelig for denne nøkkelen."
 
