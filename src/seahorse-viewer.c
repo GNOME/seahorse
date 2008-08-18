@@ -92,7 +92,7 @@ static SeahorseViewIface* seahorse_viewer_seahorse_view_parent_iface = NULL;
 static void seahorse_viewer_dispose (GObject * obj);
 static void _vala_array_free (gpointer array, gint array_length, GDestroyNotify destroy_func);
 
-static const GtkActionEntry SEAHORSE_VIEWER_UI_ENTRIES[] = {{"key-menu", NULL, N_ ("_Key")}, {"edit-menu", NULL, N_ ("_Edit")}, {"view-menu", NULL, N_ ("_View")}, {"help-menu", NULL, N_ ("_Help")}, {"app-preferences", GTK_STOCK_PREFERENCES, N_ ("Prefere_nces"), NULL, N_ ("Change preferences for this program"), ((GCallback) (NULL))}, {"app-about", "gnome-stock-about", N_ ("_About"), NULL, N_ ("About this program"), ((GCallback) (NULL))}, {"help-show", GTK_STOCK_HELP, N_ ("_Contents"), "F1", N_ ("Show Seahorse help"), ((GCallback) (NULL))}};
+static const GtkActionEntry SEAHORSE_VIEWER_UI_ENTRIES[] = {{"key-menu", NULL, N_ ("_Key")}, {"edit-menu", NULL, N_ ("_Edit")}, {"view-menu", NULL, N_ ("_View")}, {"help-menu", NULL, N_ ("_Help")}, {"app-preferences", GTK_STOCK_PREFERENCES, N_ ("Prefere_nces"), NULL, N_ ("Change preferences for this program"), ((GCallback) (NULL))}, {"app-about", "gtk-about", N_ ("_About"), NULL, N_ ("About this program"), ((GCallback) (NULL))}, {"help-show", GTK_STOCK_HELP, N_ ("_Contents"), "F1", N_ ("Show Seahorse help"), ((GCallback) (NULL))}};
 static const GtkActionEntry SEAHORSE_VIEWER_KEY_ENTRIES[] = {{"key-properties", GTK_STOCK_PROPERTIES, N_ ("P_roperties"), NULL, N_ ("Show key properties"), ((GCallback) (NULL))}, {"key-export-file", GTK_STOCK_SAVE_AS, N_ ("E_xport Public Key..."), NULL, N_ ("Export public part of key to a file"), ((GCallback) (NULL))}, {"key-export-clipboard", GTK_STOCK_COPY, N_ ("_Copy Public Key"), "<control>C", N_ ("Copy public part of selected keys to the clipboard"), ((GCallback) (NULL))}, {"key-delete", GTK_STOCK_DELETE, N_ ("_Delete Key"), NULL, N_ ("Delete selected keys"), ((GCallback) (NULL))}};
 
 
@@ -310,6 +310,7 @@ static void seahorse_viewer_on_app_about (SeahorseViewer* self, GtkAction* actio
 	gtk_about_dialog_set_website_label (about, _ ("Seahorse Project Homepage"));
 	g_signal_connect_object (GTK_DIALOG (about), "response", ((GCallback) (___lambda0_gtk_dialog_response)), self, 0);
 	gtk_dialog_run (GTK_DIALOG (about));
+	gtk_object_destroy (GTK_OBJECT (about));
 	authors = (_vala_array_free (authors, authors_length1, ((GDestroyNotify) (g_free))), NULL);
 	documenters = (_vala_array_free (documenters, documenters_length1, ((GDestroyNotify) (g_free))), NULL);
 	artists = (_vala_array_free (artists, artists_length1, ((GDestroyNotify) (g_free))), NULL);
@@ -338,7 +339,7 @@ static void seahorse_viewer_on_about_link_clicked (GtkAboutDialog* about, const 
 		ex = inner_error;
 		inner_error = NULL;
 		{
-			g_warning ("seahorse-viewer.vala:244: couldn't launch url: %s: %s", url, ex->message);
+			g_warning ("seahorse-viewer.vala:245: couldn't launch url: %s: %s", url, ex->message);
 			(ex == NULL ? NULL : (ex = (g_error_free (ex), NULL)));
 		}
 	}
