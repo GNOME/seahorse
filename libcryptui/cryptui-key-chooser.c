@@ -448,7 +448,7 @@ cryptui_key_chooser_class_init (CryptUIKeyChooserClass *klass)
         g_param_spec_uint ("mode", "Display Mode", "Display mode for chooser",
                            0, 0x0FFFFFFF, 0, G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE));
     
-    g_object_class_install_property (gclass, PROP_MODE,
+    g_object_class_install_property (gclass, PROP_ENFORCE_PREFS,
         g_param_spec_boolean ("enforce-prefs", "Enforce User Preferences", "Enforce user preferences",
                               TRUE, G_PARAM_READWRITE));
     
