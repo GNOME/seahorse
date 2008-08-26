@@ -31,7 +31,7 @@ seahorse_validity_get_string (SeahorseValidity validity)
 		case SEAHORSE_VALIDITY_UNKNOWN:
 			return _("Unknown");
 		case SEAHORSE_VALIDITY_NEVER:
-			return _("Never");
+			return C_("Validity", "Never");
 		case SEAHORSE_VALIDITY_MARGINAL:
 			return _("Marginal");
 		case SEAHORSE_VALIDITY_FULL:

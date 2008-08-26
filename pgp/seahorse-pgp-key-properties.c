@@ -1174,7 +1174,7 @@ setup_details_trust (SeahorseWidget *swidget)
        
         gtk_list_store_append (model, &iter);
         gtk_list_store_set (model, &iter,
-                            TRUST_LABEL, _("Never"),
+                            TRUST_LABEL, C_("Validity","Never"),
                             TRUST_VALIDITY,  SEAHORSE_VALIDITY_NEVER,
                             -1);
     }
@@ -1306,7 +1306,7 @@ do_details (SeahorseWidget *swidget)
         if (seahorse_key_get_location (skey) == SEAHORSE_LOCATION_REMOTE)
             fp_label = NULL;
         else if (subkey->expires == 0)
-            fp_label = g_strdup (_("Never"));
+            fp_label = g_strdup (C_("Expires", "Never"));
         else
             fp_label = seahorse_util_get_display_date_string (subkey->expires);
         gtk_label_set_text (GTK_LABEL (widget), fp_label);
@@ -1378,7 +1378,7 @@ do_details (SeahorseWidget *swidget)
         status = subkey->expired ? _("Expired") : _("Good");
 
         if (subkey->expires == 0)
-            expiration_date = g_strdup (_("Never"));
+            expiration_date = g_strdup (C_("Expires", "Never"));
         else
             expiration_date = seahorse_util_get_display_date_string (subkey->expires);
 
