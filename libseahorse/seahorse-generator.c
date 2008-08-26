@@ -33,12 +33,7 @@ static gpointer seahorse_generator_parent_class = NULL;
 
 
 GtkActionGroup* seahorse_generator_get_actions (SeahorseGenerator* self) {
-	GtkActionGroup* value;
-	g_object_get (G_OBJECT (self), "actions", &value, NULL);
-	if (value != NULL) {
-		g_object_unref (value);
-	}
-	return value;
+	return SEAHORSE_GENERATOR_GET_CLASS (self)->get_actions (self);
 }
 
 
@@ -66,7 +61,7 @@ static void seahorse_generator_instance_init (SeahorseGenerator * self) {
 
 GType seahorse_generator_get_type (void) {
 	static GType seahorse_generator_type_id = 0;
-	if (G_UNLIKELY (seahorse_generator_type_id == 0)) {
+	if (seahorse_generator_type_id == 0) {
 		static const GTypeInfo g_define_type_info = { sizeof (SeahorseGeneratorClass), (GBaseInitFunc) NULL, (GBaseFinalizeFunc) NULL, (GClassInitFunc) seahorse_generator_class_init, (GClassFinalizeFunc) NULL, NULL, sizeof (SeahorseGenerator), 0, (GInstanceInitFunc) seahorse_generator_instance_init };
 		seahorse_generator_type_id = g_type_register_static (G_TYPE_OBJECT, "SeahorseGenerator", &g_define_type_info, G_TYPE_FLAG_ABSTRACT);
 	}

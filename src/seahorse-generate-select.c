@@ -20,10 +20,10 @@
  */
 
 #include "seahorse-generate-select.h"
+#include <seahorse-generator.h>
 #include <common/seahorse-registry.h>
 #include <stdlib.h>
 #include <string.h>
-#include <seahorse-generator.h>
 
 
 #define SEAHORSE_GENERATE_SELECT_TYPE_COLUMN (seahorse_generate_select_column_get_type ())
@@ -58,7 +58,7 @@ static void _seahorse_generate_select_on_row_activated_gtk_tree_view_row_activat
 static void _seahorse_generate_select_on_response_gtk_dialog_response (GtkDialog* _sender, gint response_id, gpointer self);
 static GObject * seahorse_generate_select_constructor (GType type, guint n_construct_properties, GObjectConstructParam * construct_properties);
 static gpointer seahorse_generate_select_parent_class = NULL;
-static void seahorse_generate_select_dispose (GObject * obj);
+static void seahorse_generate_select_finalize (GObject * obj);
 static void _vala_array_free (gpointer array, gint array_length, GDestroyNotify destroy_func);
 
 static const char* SEAHORSE_GENERATE_SELECT_TEMPLATE = "<span size=\"larger\" weight=\"bold\">%s</span>\n%s";
@@ -285,7 +285,7 @@ static void seahorse_generate_select_class_init (SeahorseGenerateSelectClass * k
 	seahorse_generate_select_parent_class = g_type_class_peek_parent (klass);
 	g_type_class_add_private (klass, sizeof (SeahorseGenerateSelectPrivate));
 	G_OBJECT_CLASS (klass)->constructor = seahorse_generate_select_constructor;
-	G_OBJECT_CLASS (klass)->dispose = seahorse_generate_select_dispose;
+	G_OBJECT_CLASS (klass)->finalize = seahorse_generate_select_finalize;
 }
 
 
@@ -294,20 +294,20 @@ static void seahorse_generate_select_instance_init (SeahorseGenerateSelect * sel
 }
 
 
-static void seahorse_generate_select_dispose (GObject * obj) {
+static void seahorse_generate_select_finalize (GObject * obj) {
 	SeahorseGenerateSelect * self;
 	self = SEAHORSE_GENERATE_SELECT (obj);
 	(self->priv->_store == NULL ? NULL : (self->priv->_store = (g_object_unref (self->priv->_store), NULL)));
 	(self->priv->_view == NULL ? NULL : (self->priv->_view = (g_object_unref (self->priv->_view), NULL)));
 	(self->priv->_dialog == NULL ? NULL : (self->priv->_dialog = (g_object_unref (self->priv->_dialog), NULL)));
 	self->priv->_generators = (_vala_array_free (self->priv->_generators, self->priv->_generators_length1, ((GDestroyNotify) (g_object_unref))), NULL);
-	G_OBJECT_CLASS (seahorse_generate_select_parent_class)->dispose (obj);
+	G_OBJECT_CLASS (seahorse_generate_select_parent_class)->finalize (obj);
 }
 
 
 GType seahorse_generate_select_get_type (void) {
 	static GType seahorse_generate_select_type_id = 0;
-	if (G_UNLIKELY (seahorse_generate_select_type_id == 0)) {
+	if (seahorse_generate_select_type_id == 0) {
 		static const GTypeInfo g_define_type_info = { sizeof (SeahorseGenerateSelectClass), (GBaseInitFunc) NULL, (GBaseFinalizeFunc) NULL, (GClassInitFunc) seahorse_generate_select_class_init, (GClassFinalizeFunc) NULL, NULL, sizeof (SeahorseGenerateSelect), 0, (GInstanceInitFunc) seahorse_generate_select_instance_init };
 		seahorse_generate_select_type_id = g_type_register_static (SEAHORSE_TYPE_WIDGET, "SeahorseGenerateSelect", &g_define_type_info, 0);
 	}

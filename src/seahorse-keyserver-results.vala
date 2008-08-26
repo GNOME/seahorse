@@ -24,7 +24,7 @@ using Gtk;
 using GLib;
 
 namespace Seahorse {
-	public class KeyserverResults : Viewer, View {
+	public class KeyserverResults : Viewer {
 	
 		private string _search_string;
 		private Gtk.TreeView _view;

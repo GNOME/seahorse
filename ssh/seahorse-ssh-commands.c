@@ -53,7 +53,7 @@ static void _seahorse_ssh_commands_on_ssh_upload_gtk_action_activate (GtkAction*
 static void _seahorse_ssh_commands_on_view_selection_changed_seahorse_view_selection_changed (SeahorseView* _sender, gpointer self);
 static GObject * seahorse_ssh_commands_constructor (GType type, guint n_construct_properties, GObjectConstructParam * construct_properties);
 static gpointer seahorse_ssh_commands_parent_class = NULL;
-static void seahorse_ssh_commands_dispose (GObject * obj);
+static void seahorse_ssh_commands_finalize (GObject * obj);
 
 static const GtkActionEntry SEAHORSE_SSH_COMMANDS_COMMAND_ENTRIES[] = {{"remote-ssh-upload", NULL, N_ ("Configure Key for _Secure Shell..."), "", N_ ("Send public Secure Shell key to another machine, and enable logins using that key."), ((GCallback) (NULL))}};
 static const char* SEAHORSE_SSH_COMMANDS_UI_DEF = "\n\t\t\t<ui>\n\t\t\t\n\t\t\t<menubar>\n\t\t\t\t<menu name='Remote' action='remote-menu'>\n\t\t\t\t\t<menuitem action='remote-ssh-upload'/>\n\t\t\t\t</menu>\n\t\t\t</menubar>\n\t\t\t\n\t\t\t<popup name=\"KeyPopup\">\n\t\t\t\t<menuitem action=\"remote-ssh-upload\"/>\n\t\t\t</popup>\n\t\t\t\n\t\t\t</ui>\n\t\t";
@@ -160,15 +160,17 @@ SeahorseSSHCommands* seahorse_ssh_commands_new (void) {
 }
 
 
-static GQuark seahorse_ssh_commands_real_get_ktype (SeahorseSSHCommands* self) {
-	g_return_val_if_fail (SEAHORSE_SSH_IS_COMMANDS (self), 0U);
+static GQuark seahorse_ssh_commands_real_get_ktype (SeahorseCommands* base) {
+	SeahorseSSHCommands* self;
+	self = SEAHORSE_SSH_COMMANDS (base);
 	return SEAHORSE_SSH_TYPE;
 }
 
 
-static char* seahorse_ssh_commands_real_get_ui_definition (SeahorseSSHCommands* self) {
+static char* seahorse_ssh_commands_real_get_ui_definition (SeahorseCommands* base) {
+	SeahorseSSHCommands* self;
 	const char* _tmp0;
-	g_return_val_if_fail (SEAHORSE_SSH_IS_COMMANDS (self), NULL);
+	self = SEAHORSE_SSH_COMMANDS (base);
 	_tmp0 = NULL;
 	return (_tmp0 = SEAHORSE_SSH_COMMANDS_UI_DEF, (_tmp0 == NULL ? NULL : g_strdup (_tmp0)));
 }
@@ -179,8 +181,9 @@ static void _seahorse_ssh_commands_on_ssh_upload_gtk_action_activate (GtkAction*
 }
 
 
-static GtkActionGroup* seahorse_ssh_commands_real_get_command_actions (SeahorseSSHCommands* self) {
-	g_return_val_if_fail (SEAHORSE_SSH_IS_COMMANDS (self), NULL);
+static GtkActionGroup* seahorse_ssh_commands_real_get_command_actions (SeahorseCommands* base) {
+	SeahorseSSHCommands* self;
+	self = SEAHORSE_SSH_COMMANDS (base);
 	if (self->priv->_command_actions == NULL) {
 		GtkActionGroup* _tmp0;
 		_tmp0 = NULL;
@@ -220,13 +223,13 @@ static void seahorse_ssh_commands_get_property (GObject * object, guint property
 	self = SEAHORSE_SSH_COMMANDS (object);
 	switch (property_id) {
 		case SEAHORSE_SSH_COMMANDS_KTYPE:
-		g_value_set_uint (value, seahorse_ssh_commands_real_get_ktype (self));
+		g_value_set_uint (value, seahorse_commands_get_ktype (SEAHORSE_COMMANDS (self)));
 		break;
 		case SEAHORSE_SSH_COMMANDS_UI_DEFINITION:
-		g_value_set_string (value, seahorse_ssh_commands_real_get_ui_definition (self));
+		g_value_set_string (value, seahorse_commands_get_ui_definition (SEAHORSE_COMMANDS (self)));
 		break;
 		case SEAHORSE_SSH_COMMANDS_COMMAND_ACTIONS:
-		g_value_set_object (value, seahorse_ssh_commands_real_get_command_actions (self));
+		g_value_set_object (value, seahorse_commands_get_command_actions (SEAHORSE_COMMANDS (self)));
 		break;
 		default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -240,9 +243,12 @@ static void seahorse_ssh_commands_class_init (SeahorseSSHCommandsClass * klass) 
 	g_type_class_add_private (klass, sizeof (SeahorseSSHCommandsPrivate));
 	G_OBJECT_CLASS (klass)->get_property = seahorse_ssh_commands_get_property;
 	G_OBJECT_CLASS (klass)->constructor = seahorse_ssh_commands_constructor;
-	G_OBJECT_CLASS (klass)->dispose = seahorse_ssh_commands_dispose;
+	G_OBJECT_CLASS (klass)->finalize = seahorse_ssh_commands_finalize;
 	SEAHORSE_COMMANDS_CLASS (klass)->show_properties = seahorse_ssh_commands_real_show_properties;
 	SEAHORSE_COMMANDS_CLASS (klass)->delete_objects = seahorse_ssh_commands_real_delete_objects;
+	SEAHORSE_COMMANDS_CLASS (klass)->get_ktype = seahorse_ssh_commands_real_get_ktype;
+	SEAHORSE_COMMANDS_CLASS (klass)->get_ui_definition = seahorse_ssh_commands_real_get_ui_definition;
+	SEAHORSE_COMMANDS_CLASS (klass)->get_command_actions = seahorse_ssh_commands_real_get_command_actions;
 	g_object_class_override_property (G_OBJECT_CLASS (klass), SEAHORSE_SSH_COMMANDS_KTYPE, "ktype");
 	g_object_class_override_property (G_OBJECT_CLASS (klass), SEAHORSE_SSH_COMMANDS_UI_DEFINITION, "ui-definition");
 	g_object_class_override_property (G_OBJECT_CLASS (klass), SEAHORSE_SSH_COMMANDS_COMMAND_ACTIONS, "command-actions");
@@ -259,17 +265,17 @@ static void seahorse_ssh_commands_instance_init (SeahorseSSHCommands * self) {
 }
 
 
-static void seahorse_ssh_commands_dispose (GObject * obj) {
+static void seahorse_ssh_commands_finalize (GObject * obj) {
 	SeahorseSSHCommands * self;
 	self = SEAHORSE_SSH_COMMANDS (obj);
 	(self->priv->_command_actions == NULL ? NULL : (self->priv->_command_actions = (g_object_unref (self->priv->_command_actions), NULL)));
-	G_OBJECT_CLASS (seahorse_ssh_commands_parent_class)->dispose (obj);
+	G_OBJECT_CLASS (seahorse_ssh_commands_parent_class)->finalize (obj);
 }
 
 
 GType seahorse_ssh_commands_get_type (void) {
 	static GType seahorse_ssh_commands_type_id = 0;
-	if (G_UNLIKELY (seahorse_ssh_commands_type_id == 0)) {
+	if (seahorse_ssh_commands_type_id == 0) {
 		static const GTypeInfo g_define_type_info = { sizeof (SeahorseSSHCommandsClass), (GBaseInitFunc) NULL, (GBaseFinalizeFunc) NULL, (GClassInitFunc) seahorse_ssh_commands_class_init, (GClassFinalizeFunc) NULL, NULL, sizeof (SeahorseSSHCommands), 0, (GInstanceInitFunc) seahorse_ssh_commands_instance_init };
 		seahorse_ssh_commands_type_id = g_type_register_static (SEAHORSE_TYPE_COMMANDS, "SeahorseSSHCommands", &g_define_type_info, 0);
 	}

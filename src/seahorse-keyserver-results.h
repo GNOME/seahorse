@@ -24,7 +24,6 @@
 
 #include <glib.h>
 #include <glib-object.h>
-#include <seahorse-view.h>
 #include <seahorse-operation.h>
 #include <gtk/gtk.h>
 #include <stdlib.h>

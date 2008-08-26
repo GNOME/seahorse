@@ -24,7 +24,7 @@ using Gtk;
 using GLib;
 
 namespace Seahorse {
-	public class KeyManager : Viewer, View {
+	public class KeyManager : Viewer {
 	
 		private Gtk.Notebook _notebook;
 		private Gtk.ActionGroup _view_actions;
@@ -193,6 +193,7 @@ namespace Seahorse {
 			get_toplevel().delete_event += on_delete_event;
 			
 			/* first time signals */
+			((Gtk.Button)get_widget("help-button")).clicked += on_help_show;
 			((Gtk.Button)get_widget("import-button")).clicked += on_import_button_clicked;
 			((Gtk.Button)get_widget("new-button")).clicked += on_new_button_clicked;
 			
@@ -731,6 +732,10 @@ namespace Seahorse {
 			
 			/* Monitor loading progress */
 			Progress.status_set_operation (this, op);
+		}
+		
+		private void on_help_show (Gtk.Button button) {
+			show_help ();
 		}
 	}
 }

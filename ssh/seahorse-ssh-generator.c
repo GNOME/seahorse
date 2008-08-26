@@ -47,7 +47,7 @@ enum  {
 static void seahorse_ssh_generator_on_ssh_generate (SeahorseSSHGenerator* self, GtkAction* action);
 static void _seahorse_ssh_generator_on_ssh_generate_gtk_action_activate (GtkAction* _sender, gpointer self);
 static gpointer seahorse_ssh_generator_parent_class = NULL;
-static void seahorse_ssh_generator_dispose (GObject * obj);
+static void seahorse_ssh_generator_finalize (GObject * obj);
 
 static const GtkActionEntry SEAHORSE_SSH_GENERATOR_GENERATE_ENTRIES[] = {{"ssh-generate-key", SEAHORSE_SSH_STOCK_ICON, N_ ("Secure Shell Key"), NULL, N_ ("Used to access other computers (eg: via a terminal)"), ((GCallback) (NULL))}};
 
@@ -77,8 +77,9 @@ static void _seahorse_ssh_generator_on_ssh_generate_gtk_action_activate (GtkActi
 }
 
 
-static GtkActionGroup* seahorse_ssh_generator_real_get_actions (SeahorseSSHGenerator* self) {
-	g_return_val_if_fail (SEAHORSE_SSH_IS_GENERATOR (self), NULL);
+static GtkActionGroup* seahorse_ssh_generator_real_get_actions (SeahorseGenerator* base) {
+	SeahorseSSHGenerator* self;
+	self = SEAHORSE_SSH_GENERATOR (base);
 	if (self->priv->_generate_actions == NULL) {
 		GtkActionGroup* _tmp0;
 		_tmp0 = NULL;
@@ -96,7 +97,7 @@ static void seahorse_ssh_generator_get_property (GObject * object, guint propert
 	self = SEAHORSE_SSH_GENERATOR (object);
 	switch (property_id) {
 		case SEAHORSE_SSH_GENERATOR_ACTIONS:
-		g_value_set_object (value, seahorse_ssh_generator_real_get_actions (self));
+		g_value_set_object (value, seahorse_generator_get_actions (SEAHORSE_GENERATOR (self)));
 		break;
 		default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -109,7 +110,8 @@ static void seahorse_ssh_generator_class_init (SeahorseSSHGeneratorClass * klass
 	seahorse_ssh_generator_parent_class = g_type_class_peek_parent (klass);
 	g_type_class_add_private (klass, sizeof (SeahorseSSHGeneratorPrivate));
 	G_OBJECT_CLASS (klass)->get_property = seahorse_ssh_generator_get_property;
-	G_OBJECT_CLASS (klass)->dispose = seahorse_ssh_generator_dispose;
+	G_OBJECT_CLASS (klass)->finalize = seahorse_ssh_generator_finalize;
+	SEAHORSE_GENERATOR_CLASS (klass)->get_actions = seahorse_ssh_generator_real_get_actions;
 	g_object_class_override_property (G_OBJECT_CLASS (klass), SEAHORSE_SSH_GENERATOR_ACTIONS, "actions");
 	{
 		/* Register this class as a generator */
@@ -124,17 +126,17 @@ static void seahorse_ssh_generator_instance_init (SeahorseSSHGenerator * self) {
 }
 
 
-static void seahorse_ssh_generator_dispose (GObject * obj) {
+static void seahorse_ssh_generator_finalize (GObject * obj) {
 	SeahorseSSHGenerator * self;
 	self = SEAHORSE_SSH_GENERATOR (obj);
 	(self->priv->_generate_actions == NULL ? NULL : (self->priv->_generate_actions = (g_object_unref (self->priv->_generate_actions), NULL)));
-	G_OBJECT_CLASS (seahorse_ssh_generator_parent_class)->dispose (obj);
+	G_OBJECT_CLASS (seahorse_ssh_generator_parent_class)->finalize (obj);
 }
 
 
 GType seahorse_ssh_generator_get_type (void) {
 	static GType seahorse_ssh_generator_type_id = 0;
-	if (G_UNLIKELY (seahorse_ssh_generator_type_id == 0)) {
+	if (seahorse_ssh_generator_type_id == 0) {
 		static const GTypeInfo g_define_type_info = { sizeof (SeahorseSSHGeneratorClass), (GBaseInitFunc) NULL, (GBaseFinalizeFunc) NULL, (GClassInitFunc) seahorse_ssh_generator_class_init, (GClassFinalizeFunc) NULL, NULL, sizeof (SeahorseSSHGenerator), 0, (GInstanceInitFunc) seahorse_ssh_generator_instance_init };
 		seahorse_ssh_generator_type_id = g_type_register_static (SEAHORSE_TYPE_GENERATOR, "SeahorseSSHGenerator", &g_define_type_info, 0);
 	}

@@ -54,6 +54,9 @@ struct _SeahorseCommandsClass {
 	GObjectClass parent_class;
 	void (*show_properties) (SeahorseCommands* self, SeahorseObject* obj);
 	SeahorseOperation* (*delete_objects) (SeahorseCommands* self, GList* obj);
+	GQuark (*get_ktype) (SeahorseCommands* self);
+	GtkActionGroup* (*get_command_actions) (SeahorseCommands* self);
+	char* (*get_ui_definition) (SeahorseCommands* self);
 };
 
 

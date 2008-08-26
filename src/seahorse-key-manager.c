@@ -92,8 +92,8 @@ enum  {
 GType seahorse_key_manager_targets_get_type (void);
 GType seahorse_key_manager_tabs_get_type (void);
 static SeahorseKeyManager* seahorse_key_manager_new (const char* ident);
-static GList* seahorse_key_manager_real_get_selected_objects (SeahorseView* base);
-static void seahorse_key_manager_real_set_selected_objects (SeahorseView* base, GList* objects);
+static GList* seahorse_key_manager_real_get_selected_objects (SeahorseViewer* base);
+static void seahorse_key_manager_real_set_selected_objects (SeahorseViewer* base, GList* objects);
 static SeahorseKeyManagerTabInfo* seahorse_key_manager_get_tab_for_object (SeahorseKeyManager* self, SeahorseObject* obj);
 static GtkTreeView* seahorse_key_manager_get_current_view (SeahorseKeyManager* self);
 static guint seahorse_key_manager_get_tab_id (SeahorseKeyManager* self, SeahorseKeyManagerTabInfo* tab);
@@ -136,6 +136,7 @@ static void seahorse_key_manager_on_gconf_notify (SeahorseKeyManager* self, GCon
 static gboolean seahorse_key_manager_fire_selection_changed (SeahorseKeyManager* self);
 static void seahorse_key_manager_on_tab_changed (SeahorseKeyManager* self, GtkNotebook* notebook, void* unused, guint page_num);
 static void seahorse_key_manager_load_gnome_keyring_items (SeahorseKeyManager* self);
+static void seahorse_key_manager_on_help_show (SeahorseKeyManager* self, GtkButton* button);
 static void _seahorse_key_manager_on_app_quit_gtk_action_activate (GtkAction* _sender, gpointer self);
 static void _seahorse_key_manager_on_key_generate_gtk_action_activate (GtkAction* _sender, gpointer self);
 static void _seahorse_key_manager_on_key_import_file_gtk_action_activate (GtkAction* _sender, gpointer self);
@@ -148,6 +149,7 @@ static void _seahorse_key_manager_on_view_trust_activate_gtk_action_activate (Gt
 static void _seahorse_key_manager_on_view_validity_activate_gtk_action_activate (GtkToggleAction* _sender, gpointer self);
 static void _seahorse_key_manager_on_gconf_notify_gconf_client_notify_func (GConfClient* client, guint cnxn_id, GConfEntry* entry, gpointer self);
 static gboolean _seahorse_key_manager_on_delete_event_gtk_widget_delete_event (GtkWidget* _sender, GdkEvent* event, gpointer self);
+static void _seahorse_key_manager_on_help_show_gtk_button_clicked (GtkButton* _sender, gpointer self);
 static void _seahorse_key_manager_on_import_button_clicked_gtk_button_clicked (GtkButton* _sender, gpointer self);
 static void _seahorse_key_manager_on_new_button_clicked_gtk_button_clicked (GtkButton* _sender, gpointer self);
 static void _seahorse_key_manager_on_tab_changed_gtk_notebook_switch_page (GtkNotebook* _sender, void* page, guint page_num, gpointer self);
@@ -156,8 +158,7 @@ static void _seahorse_key_manager_on_target_drag_data_received_gtk_widget_drag_d
 static gboolean _seahorse_key_manager_on_first_timer_gsource_func (gpointer self);
 static GObject * seahorse_key_manager_constructor (GType type, guint n_construct_properties, GObjectConstructParam * construct_properties);
 static gpointer seahorse_key_manager_parent_class = NULL;
-static SeahorseViewIface* seahorse_key_manager_seahorse_view_parent_iface = NULL;
-static void seahorse_key_manager_dispose (GObject * obj);
+static void seahorse_key_manager_finalize (GObject * obj);
 static void _vala_array_free (gpointer array, gint array_length, GDestroyNotify destroy_func);
 static int _vala_strcmp0 (const char * str1, const char * str2);
 
@@ -226,7 +227,7 @@ GtkWindow* seahorse_key_manager_show (SeahorseOperation* op) {
 }
 
 
-static GList* seahorse_key_manager_real_get_selected_objects (SeahorseView* base) {
+static GList* seahorse_key_manager_real_get_selected_objects (SeahorseViewer* base) {
 	SeahorseKeyManager * self;
 	SeahorseKeyManagerTabInfo* tab;
 	self = SEAHORSE_KEY_MANAGER (base);
@@ -238,7 +239,7 @@ static GList* seahorse_key_manager_real_get_selected_objects (SeahorseView* base
 }
 
 
-static void seahorse_key_manager_real_set_selected_objects (SeahorseView* base, GList* objects) {
+static void seahorse_key_manager_real_set_selected_objects (SeahorseViewer* base, GList* objects) {
 	SeahorseKeyManager * self;
 	GList** _tmp1;
 	gint tab_lists_length1;
@@ -993,9 +994,17 @@ static void seahorse_key_manager_load_gnome_keyring_items (SeahorseKeyManager* s
 }
 
 
-static SeahorseObject* seahorse_key_manager_real_get_selected (SeahorseKeyManager* self) {
+static void seahorse_key_manager_on_help_show (SeahorseKeyManager* self, GtkButton* button) {
+	g_return_if_fail (SEAHORSE_IS_KEY_MANAGER (self));
+	g_return_if_fail (GTK_IS_BUTTON (button));
+	seahorse_widget_show_help (SEAHORSE_WIDGET (self));
+}
+
+
+static SeahorseObject* seahorse_key_manager_real_get_selected (SeahorseViewer* base) {
+	SeahorseKeyManager* self;
 	SeahorseKeyManagerTabInfo* tab;
-	g_return_val_if_fail (SEAHORSE_IS_KEY_MANAGER (self), NULL);
+	self = SEAHORSE_KEY_MANAGER (base);
 	tab = seahorse_key_manager_get_tab_info (self, -1);
 	if (tab == NULL) {
 		return NULL;
@@ -1004,9 +1013,10 @@ static SeahorseObject* seahorse_key_manager_real_get_selected (SeahorseKeyManage
 }
 
 
-static void seahorse_key_manager_real_set_selected (SeahorseKeyManager* self, SeahorseObject* value) {
+static void seahorse_key_manager_real_set_selected (SeahorseViewer* base, SeahorseObject* value) {
+	SeahorseKeyManager* self;
 	GList* objects;
-	g_return_if_fail (SEAHORSE_IS_KEY_MANAGER (self));
+	self = SEAHORSE_KEY_MANAGER (base);
 	objects = NULL;
 	objects = g_list_prepend (objects, value);
 	seahorse_viewer_set_selected_objects (SEAHORSE_VIEWER (self), objects);
@@ -1072,6 +1082,11 @@ static void _seahorse_key_manager_on_gconf_notify_gconf_client_notify_func (GCon
 
 static gboolean _seahorse_key_manager_on_delete_event_gtk_widget_delete_event (GtkWidget* _sender, GdkEvent* event, gpointer self) {
 	return seahorse_key_manager_on_delete_event (self, _sender, event);
+}
+
+
+static void _seahorse_key_manager_on_help_show_gtk_button_clicked (GtkButton* _sender, gpointer self) {
+	seahorse_key_manager_on_help_show (self, _sender);
 }
 
 
@@ -1194,6 +1209,7 @@ static GObject * seahorse_key_manager_constructor (GType type, guint n_construct
 		/* close event */
 		g_signal_connect_object (seahorse_widget_get_toplevel (SEAHORSE_WIDGET (self)), "delete-event", ((GCallback) (_seahorse_key_manager_on_delete_event_gtk_widget_delete_event)), self, 0);
 		/* first time signals */
+		g_signal_connect_object ((GTK_BUTTON (seahorse_widget_get_widget (SEAHORSE_WIDGET (self), "help-button"))), "clicked", ((GCallback) (_seahorse_key_manager_on_help_show_gtk_button_clicked)), self, 0);
 		g_signal_connect_object ((GTK_BUTTON (seahorse_widget_get_widget (SEAHORSE_WIDGET (self), "import-button"))), "clicked", ((GCallback) (_seahorse_key_manager_on_import_button_clicked_gtk_button_clicked)), self, 0);
 		g_signal_connect_object ((GTK_BUTTON (seahorse_widget_get_widget (SEAHORSE_WIDGET (self), "new-button"))), "clicked", ((GCallback) (_seahorse_key_manager_on_new_button_clicked_gtk_button_clicked)), self, 0);
 		/* The notebook */
@@ -1290,7 +1306,7 @@ static void seahorse_key_manager_get_property (GObject * object, guint property_
 	self = SEAHORSE_KEY_MANAGER (object);
 	switch (property_id) {
 		case SEAHORSE_KEY_MANAGER_SELECTED:
-		g_value_set_object (value, seahorse_key_manager_real_get_selected (self));
+		g_value_set_object (value, seahorse_viewer_get_selected (SEAHORSE_VIEWER (self)));
 		break;
 		default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -1304,7 +1320,7 @@ static void seahorse_key_manager_set_property (GObject * object, guint property_
 	self = SEAHORSE_KEY_MANAGER (object);
 	switch (property_id) {
 		case SEAHORSE_KEY_MANAGER_SELECTED:
-		seahorse_key_manager_real_set_selected (self, g_value_get_object (value));
+		seahorse_viewer_set_selected (SEAHORSE_VIEWER (self), g_value_get_object (value));
 		break;
 		default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -1319,17 +1335,12 @@ static void seahorse_key_manager_class_init (SeahorseKeyManagerClass * klass) {
 	G_OBJECT_CLASS (klass)->get_property = seahorse_key_manager_get_property;
 	G_OBJECT_CLASS (klass)->set_property = seahorse_key_manager_set_property;
 	G_OBJECT_CLASS (klass)->constructor = seahorse_key_manager_constructor;
-	G_OBJECT_CLASS (klass)->dispose = seahorse_key_manager_dispose;
+	G_OBJECT_CLASS (klass)->finalize = seahorse_key_manager_finalize;
 	SEAHORSE_VIEWER_CLASS (klass)->get_selected_objects = seahorse_key_manager_real_get_selected_objects;
 	SEAHORSE_VIEWER_CLASS (klass)->set_selected_objects = seahorse_key_manager_real_set_selected_objects;
+	SEAHORSE_VIEWER_CLASS (klass)->get_selected = seahorse_key_manager_real_get_selected;
+	SEAHORSE_VIEWER_CLASS (klass)->set_selected = seahorse_key_manager_real_set_selected;
 	g_object_class_override_property (G_OBJECT_CLASS (klass), SEAHORSE_KEY_MANAGER_SELECTED, "selected");
-}
-
-
-static void seahorse_key_manager_seahorse_view_interface_init (SeahorseViewIface * iface) {
-	seahorse_key_manager_seahorse_view_parent_iface = g_type_interface_peek_parent (iface);
-	iface->get_selected_objects = seahorse_key_manager_real_get_selected_objects;
-	iface->set_selected_objects = seahorse_key_manager_real_set_selected_objects;
 }
 
 
@@ -1338,24 +1349,22 @@ static void seahorse_key_manager_instance_init (SeahorseKeyManager * self) {
 }
 
 
-static void seahorse_key_manager_dispose (GObject * obj) {
+static void seahorse_key_manager_finalize (GObject * obj) {
 	SeahorseKeyManager * self;
 	self = SEAHORSE_KEY_MANAGER (obj);
 	(self->priv->_notebook == NULL ? NULL : (self->priv->_notebook = (g_object_unref (self->priv->_notebook), NULL)));
 	(self->priv->_view_actions == NULL ? NULL : (self->priv->_view_actions = (g_object_unref (self->priv->_view_actions), NULL)));
 	(self->priv->_filter_entry == NULL ? NULL : (self->priv->_filter_entry = (g_object_unref (self->priv->_filter_entry), NULL)));
 	self->priv->_tabs = (g_free (self->priv->_tabs), NULL);
-	G_OBJECT_CLASS (seahorse_key_manager_parent_class)->dispose (obj);
+	G_OBJECT_CLASS (seahorse_key_manager_parent_class)->finalize (obj);
 }
 
 
 GType seahorse_key_manager_get_type (void) {
 	static GType seahorse_key_manager_type_id = 0;
-	if (G_UNLIKELY (seahorse_key_manager_type_id == 0)) {
+	if (seahorse_key_manager_type_id == 0) {
 		static const GTypeInfo g_define_type_info = { sizeof (SeahorseKeyManagerClass), (GBaseInitFunc) NULL, (GBaseFinalizeFunc) NULL, (GClassInitFunc) seahorse_key_manager_class_init, (GClassFinalizeFunc) NULL, NULL, sizeof (SeahorseKeyManager), 0, (GInstanceInitFunc) seahorse_key_manager_instance_init };
-		static const GInterfaceInfo seahorse_view_info = { (GInterfaceInitFunc) seahorse_key_manager_seahorse_view_interface_init, (GInterfaceFinalizeFunc) NULL, NULL};
 		seahorse_key_manager_type_id = g_type_register_static (SEAHORSE_TYPE_VIEWER, "SeahorseKeyManager", &g_define_type_info, 0);
-		g_type_add_interface_static (seahorse_key_manager_type_id, SEAHORSE_TYPE_VIEW, &seahorse_view_info);
 	}
 	return seahorse_key_manager_type_id;
 }

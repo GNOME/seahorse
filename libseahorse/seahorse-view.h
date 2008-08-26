@@ -43,6 +43,10 @@ struct _SeahorseViewIface {
 	GTypeInterface parent_iface;
 	GList* (*get_selected_objects) (SeahorseView* self);
 	void (*set_selected_objects) (SeahorseView* self, GList* objects);
+	SeahorseObject* (*get_selected) (SeahorseView* self);
+	void (*set_selected) (SeahorseView* self, SeahorseObject* value);
+	SeahorseSet* (*get_current_set) (SeahorseView* self);
+	GtkWindow* (*get_window) (SeahorseView* self);
 };
 
 

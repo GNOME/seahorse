@@ -44,7 +44,7 @@ static GType seahorse_servers_server_info_get_type (void);
 static gpointer seahorse_servers_server_info_ref (gpointer instance);
 static void seahorse_servers_server_info_unref (gpointer instance);
 static gpointer seahorse_servers_parent_class = NULL;
-static void seahorse_servers_dispose (GObject * obj);
+static void seahorse_servers_finalize (GObject * obj);
 static void _vala_array_free (gpointer array, gint array_length, GDestroyNotify destroy_func);
 
 
@@ -252,7 +252,7 @@ static void seahorse_servers_server_info_instance_init (SeahorseServersServerInf
 
 static GType seahorse_servers_server_info_get_type (void) {
 	static GType seahorse_servers_server_info_type_id = 0;
-	if (G_UNLIKELY (seahorse_servers_server_info_type_id == 0)) {
+	if (seahorse_servers_server_info_type_id == 0) {
 		static const GTypeInfo g_define_type_info = { sizeof (SeahorseServersServerInfoClass), (GBaseInitFunc) NULL, (GBaseFinalizeFunc) NULL, (GClassInitFunc) seahorse_servers_server_info_class_init, (GClassFinalizeFunc) NULL, NULL, sizeof (SeahorseServersServerInfo), 0, (GInstanceInitFunc) seahorse_servers_server_info_instance_init };
 		static const GTypeFundamentalInfo g_define_type_fundamental_info = { (G_TYPE_FLAG_CLASSED | G_TYPE_FLAG_INSTANTIATABLE | G_TYPE_FLAG_DERIVABLE | G_TYPE_FLAG_DEEP_DERIVABLE) };
 		seahorse_servers_server_info_type_id = g_type_register_fundamental (g_type_fundamental_next (), "SeahorseServersServerInfo", &g_define_type_info, &g_define_type_fundamental_info, 0);
@@ -280,7 +280,7 @@ static void seahorse_servers_server_info_unref (gpointer instance) {
 
 static void seahorse_servers_class_init (SeahorseServersClass * klass) {
 	seahorse_servers_parent_class = g_type_class_peek_parent (klass);
-	G_OBJECT_CLASS (klass)->dispose = seahorse_servers_dispose;
+	G_OBJECT_CLASS (klass)->finalize = seahorse_servers_finalize;
 	{
 		GHashTable* _tmp0;
 		/* TODO: What do we specify to free ServerInfo? */
@@ -294,16 +294,16 @@ static void seahorse_servers_instance_init (SeahorseServers * self) {
 }
 
 
-static void seahorse_servers_dispose (GObject * obj) {
+static void seahorse_servers_finalize (GObject * obj) {
 	SeahorseServers * self;
 	self = SEAHORSE_SERVERS (obj);
-	G_OBJECT_CLASS (seahorse_servers_parent_class)->dispose (obj);
+	G_OBJECT_CLASS (seahorse_servers_parent_class)->finalize (obj);
 }
 
 
 GType seahorse_servers_get_type (void) {
 	static GType seahorse_servers_type_id = 0;
-	if (G_UNLIKELY (seahorse_servers_type_id == 0)) {
+	if (seahorse_servers_type_id == 0) {
 		static const GTypeInfo g_define_type_info = { sizeof (SeahorseServersClass), (GBaseInitFunc) NULL, (GBaseFinalizeFunc) NULL, (GClassInitFunc) seahorse_servers_class_init, (GClassFinalizeFunc) NULL, NULL, sizeof (SeahorseServers), 0, (GInstanceInitFunc) seahorse_servers_instance_init };
 		seahorse_servers_type_id = g_type_register_static (G_TYPE_OBJECT, "SeahorseServers", &g_define_type_info, 0);
 	}

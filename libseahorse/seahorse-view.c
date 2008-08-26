@@ -38,37 +38,22 @@ void seahorse_view_set_selected_objects (SeahorseView* self, GList* objects) {
 
 
 SeahorseObject* seahorse_view_get_selected (SeahorseView* self) {
-	SeahorseObject* value;
-	g_object_get (G_OBJECT (self), "selected", &value, NULL);
-	if (value != NULL) {
-		g_object_unref (value);
-	}
-	return value;
+	return SEAHORSE_VIEW_GET_INTERFACE (self)->get_selected (self);
 }
 
 
 void seahorse_view_set_selected (SeahorseView* self, SeahorseObject* value) {
-	g_object_set (G_OBJECT (self), "selected", value, NULL);
+	SEAHORSE_VIEW_GET_INTERFACE (self)->set_selected (self, value);
 }
 
 
 SeahorseSet* seahorse_view_get_current_set (SeahorseView* self) {
-	SeahorseSet* value;
-	g_object_get (G_OBJECT (self), "current-set", &value, NULL);
-	if (value != NULL) {
-		g_object_unref (value);
-	}
-	return value;
+	return SEAHORSE_VIEW_GET_INTERFACE (self)->get_current_set (self);
 }
 
 
 GtkWindow* seahorse_view_get_window (SeahorseView* self) {
-	GtkWindow* value;
-	g_object_get (G_OBJECT (self), "window", &value, NULL);
-	if (value != NULL) {
-		g_object_unref (value);
-	}
-	return value;
+	return SEAHORSE_VIEW_GET_INTERFACE (self)->get_window (self);
 }
 
 
@@ -86,7 +71,7 @@ static void seahorse_view_base_init (SeahorseViewIface * iface) {
 
 GType seahorse_view_get_type (void) {
 	static GType seahorse_view_type_id = 0;
-	if (G_UNLIKELY (seahorse_view_type_id == 0)) {
+	if (seahorse_view_type_id == 0) {
 		static const GTypeInfo g_define_type_info = { sizeof (SeahorseViewIface), (GBaseInitFunc) seahorse_view_base_init, (GBaseFinalizeFunc) NULL, (GClassInitFunc) NULL, (GClassFinalizeFunc) NULL, NULL, 0, 0, (GInstanceInitFunc) NULL };
 		seahorse_view_type_id = g_type_register_static (G_TYPE_INTERFACE, "SeahorseView", &g_define_type_info, 0);
 		g_type_interface_add_prerequisite (seahorse_view_type_id, G_TYPE_OBJECT);

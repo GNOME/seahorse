@@ -52,8 +52,8 @@ enum  {
 	SEAHORSE_KEYSERVER_RESULTS_SELECTED
 };
 static SeahorseKeyserverResults* seahorse_keyserver_results_new (const char* search_text);
-static GList* seahorse_keyserver_results_real_get_selected_objects (SeahorseView* base);
-static void seahorse_keyserver_results_real_set_selected_objects (SeahorseView* base, GList* keys);
+static GList* seahorse_keyserver_results_real_get_selected_objects (SeahorseViewer* base);
+static void seahorse_keyserver_results_real_set_selected_objects (SeahorseViewer* base, GList* keys);
 static gboolean seahorse_keyserver_results_on_filter_objects (SeahorseKeyserverResults* self, SeahorseObject* obj);
 static gboolean _seahorse_keyserver_results_fire_selection_changed_gsource_func (gpointer self);
 static void seahorse_keyserver_results_on_view_selection_changed (SeahorseKeyserverResults* self, GtkTreeSelection* selection);
@@ -82,8 +82,7 @@ static gboolean _seahorse_keyserver_results_on_key_list_popup_menu_gtk_widget_po
 static gboolean _seahorse_keyserver_results_on_filter_objects_seahorse_object_predicate_func (SeahorseObject* obj, gpointer self);
 static GObject * seahorse_keyserver_results_constructor (GType type, guint n_construct_properties, GObjectConstructParam * construct_properties);
 static gpointer seahorse_keyserver_results_parent_class = NULL;
-static SeahorseViewIface* seahorse_keyserver_results_seahorse_view_parent_iface = NULL;
-static void seahorse_keyserver_results_dispose (GObject * obj);
+static void seahorse_keyserver_results_finalize (GObject * obj);
 
 static const GtkActionEntry SEAHORSE_KEYSERVER_RESULTS_GENERAL_ENTRIES[] = {{"remote-menu", NULL, N_ ("_Remote")}, {"app-close", GTK_STOCK_CLOSE, N_ ("_Close"), "<control>W", N_ ("Close this window"), ((GCallback) (NULL))}, {"view-expand-all", GTK_STOCK_ADD, N_ ("_Expand All"), NULL, N_ ("Expand all listings"), ((GCallback) (NULL))}, {"view-collapse-all", GTK_STOCK_REMOVE, N_ ("_Collapse All"), NULL, N_ ("Collapse all listings"), ((GCallback) (NULL))}};
 static const GtkActionEntry SEAHORSE_KEYSERVER_RESULTS_SERVER_ENTRIES[] = {{"remote-find", GTK_STOCK_FIND, N_ ("_Find Remote Keys..."), "", N_ ("Search for keys on a key server"), ((GCallback) (NULL))}};
@@ -136,14 +135,14 @@ void seahorse_keyserver_results_show (SeahorseOperation* op, GtkWindow* parent, 
 }
 
 
-static GList* seahorse_keyserver_results_real_get_selected_objects (SeahorseView* base) {
+static GList* seahorse_keyserver_results_real_get_selected_objects (SeahorseViewer* base) {
 	SeahorseKeyserverResults * self;
 	self = SEAHORSE_KEYSERVER_RESULTS (base);
 	return seahorse_key_manager_store_get_selected_objects (self->priv->_view);
 }
 
 
-static void seahorse_keyserver_results_real_set_selected_objects (SeahorseView* base, GList* keys) {
+static void seahorse_keyserver_results_real_set_selected_objects (SeahorseViewer* base, GList* keys) {
 	SeahorseKeyserverResults * self;
 	self = SEAHORSE_KEYSERVER_RESULTS (base);
 	g_return_if_fail (keys != NULL);
@@ -334,15 +333,17 @@ static void seahorse_keyserver_results_set_search (SeahorseKeyserverResults* sel
 }
 
 
-static SeahorseObject* seahorse_keyserver_results_real_get_selected (SeahorseKeyserverResults* self) {
-	g_return_val_if_fail (SEAHORSE_IS_KEYSERVER_RESULTS (self), NULL);
+static SeahorseObject* seahorse_keyserver_results_real_get_selected (SeahorseViewer* base) {
+	SeahorseKeyserverResults* self;
+	self = SEAHORSE_KEYSERVER_RESULTS (base);
 	return seahorse_key_manager_store_get_selected_object (self->priv->_view);
 }
 
 
-static void seahorse_keyserver_results_real_set_selected (SeahorseKeyserverResults* self, SeahorseObject* value) {
+static void seahorse_keyserver_results_real_set_selected (SeahorseViewer* base, SeahorseObject* value) {
+	SeahorseKeyserverResults* self;
 	GList* keys;
-	g_return_if_fail (SEAHORSE_IS_KEYSERVER_RESULTS (self));
+	self = SEAHORSE_KEYSERVER_RESULTS (base);
 	keys = NULL;
 	if (value != NULL) {
 		keys = g_list_prepend (keys, value);
@@ -501,7 +502,7 @@ static void seahorse_keyserver_results_get_property (GObject * object, guint pro
 		g_value_set_string (value, seahorse_keyserver_results_get_search (self));
 		break;
 		case SEAHORSE_KEYSERVER_RESULTS_SELECTED:
-		g_value_set_object (value, seahorse_keyserver_results_real_get_selected (self));
+		g_value_set_object (value, seahorse_viewer_get_selected (SEAHORSE_VIEWER (self)));
 		break;
 		default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -518,7 +519,7 @@ static void seahorse_keyserver_results_set_property (GObject * object, guint pro
 		seahorse_keyserver_results_set_search (self, g_value_get_string (value));
 		break;
 		case SEAHORSE_KEYSERVER_RESULTS_SELECTED:
-		seahorse_keyserver_results_real_set_selected (self, g_value_get_object (value));
+		seahorse_viewer_set_selected (SEAHORSE_VIEWER (self), g_value_get_object (value));
 		break;
 		default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -533,18 +534,13 @@ static void seahorse_keyserver_results_class_init (SeahorseKeyserverResultsClass
 	G_OBJECT_CLASS (klass)->get_property = seahorse_keyserver_results_get_property;
 	G_OBJECT_CLASS (klass)->set_property = seahorse_keyserver_results_set_property;
 	G_OBJECT_CLASS (klass)->constructor = seahorse_keyserver_results_constructor;
-	G_OBJECT_CLASS (klass)->dispose = seahorse_keyserver_results_dispose;
+	G_OBJECT_CLASS (klass)->finalize = seahorse_keyserver_results_finalize;
 	SEAHORSE_VIEWER_CLASS (klass)->get_selected_objects = seahorse_keyserver_results_real_get_selected_objects;
 	SEAHORSE_VIEWER_CLASS (klass)->set_selected_objects = seahorse_keyserver_results_real_set_selected_objects;
+	SEAHORSE_VIEWER_CLASS (klass)->get_selected = seahorse_keyserver_results_real_get_selected;
+	SEAHORSE_VIEWER_CLASS (klass)->set_selected = seahorse_keyserver_results_real_set_selected;
 	g_object_class_install_property (G_OBJECT_CLASS (klass), SEAHORSE_KEYSERVER_RESULTS_SEARCH, g_param_spec_string ("search", "search", "search", NULL, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
 	g_object_class_override_property (G_OBJECT_CLASS (klass), SEAHORSE_KEYSERVER_RESULTS_SELECTED, "selected");
-}
-
-
-static void seahorse_keyserver_results_seahorse_view_interface_init (SeahorseViewIface * iface) {
-	seahorse_keyserver_results_seahorse_view_parent_iface = g_type_interface_peek_parent (iface);
-	iface->get_selected_objects = seahorse_keyserver_results_real_get_selected_objects;
-	iface->set_selected_objects = seahorse_keyserver_results_real_set_selected_objects;
 }
 
 
@@ -553,7 +549,7 @@ static void seahorse_keyserver_results_instance_init (SeahorseKeyserverResults *
 }
 
 
-static void seahorse_keyserver_results_dispose (GObject * obj) {
+static void seahorse_keyserver_results_finalize (GObject * obj) {
 	SeahorseKeyserverResults * self;
 	self = SEAHORSE_KEYSERVER_RESULTS (obj);
 	self->priv->_search_string = (g_free (self->priv->_search_string), NULL);
@@ -561,17 +557,15 @@ static void seahorse_keyserver_results_dispose (GObject * obj) {
 	(self->priv->_object_actions == NULL ? NULL : (self->priv->_object_actions = (g_object_unref (self->priv->_object_actions), NULL)));
 	(self->priv->_store == NULL ? NULL : (self->priv->_store = (g_object_unref (self->priv->_store), NULL)));
 	(self->priv->_objects == NULL ? NULL : (self->priv->_objects = (g_object_unref (self->priv->_objects), NULL)));
-	G_OBJECT_CLASS (seahorse_keyserver_results_parent_class)->dispose (obj);
+	G_OBJECT_CLASS (seahorse_keyserver_results_parent_class)->finalize (obj);
 }
 
 
 GType seahorse_keyserver_results_get_type (void) {
 	static GType seahorse_keyserver_results_type_id = 0;
-	if (G_UNLIKELY (seahorse_keyserver_results_type_id == 0)) {
+	if (seahorse_keyserver_results_type_id == 0) {
 		static const GTypeInfo g_define_type_info = { sizeof (SeahorseKeyserverResultsClass), (GBaseInitFunc) NULL, (GBaseFinalizeFunc) NULL, (GClassInitFunc) seahorse_keyserver_results_class_init, (GClassFinalizeFunc) NULL, NULL, sizeof (SeahorseKeyserverResults), 0, (GInstanceInitFunc) seahorse_keyserver_results_instance_init };
-		static const GInterfaceInfo seahorse_view_info = { (GInterfaceInitFunc) seahorse_keyserver_results_seahorse_view_interface_init, (GInterfaceFinalizeFunc) NULL, NULL};
 		seahorse_keyserver_results_type_id = g_type_register_static (SEAHORSE_TYPE_VIEWER, "SeahorseKeyserverResults", &g_define_type_info, 0);
-		g_type_add_interface_static (seahorse_keyserver_results_type_id, SEAHORSE_TYPE_VIEW, &seahorse_view_info);
 	}
 	return seahorse_keyserver_results_type_id;
 }

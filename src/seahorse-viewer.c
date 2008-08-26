@@ -89,10 +89,10 @@ static void _seahorse_viewer_on_selection_changed_seahorse_view_selection_change
 static GObject * seahorse_viewer_constructor (GType type, guint n_construct_properties, GObjectConstructParam * construct_properties);
 static gpointer seahorse_viewer_parent_class = NULL;
 static SeahorseViewIface* seahorse_viewer_seahorse_view_parent_iface = NULL;
-static void seahorse_viewer_dispose (GObject * obj);
+static void seahorse_viewer_finalize (GObject * obj);
 static void _vala_array_free (gpointer array, gint array_length, GDestroyNotify destroy_func);
 
-static const GtkActionEntry SEAHORSE_VIEWER_UI_ENTRIES[] = {{"key-menu", NULL, N_ ("_Key")}, {"edit-menu", NULL, N_ ("_Edit")}, {"view-menu", NULL, N_ ("_View")}, {"help-menu", NULL, N_ ("_Help")}, {"app-preferences", GTK_STOCK_PREFERENCES, N_ ("Prefere_nces"), NULL, N_ ("Change preferences for this program"), ((GCallback) (NULL))}, {"app-about", "gnome-stock-about", N_ ("_About"), NULL, N_ ("About this program"), ((GCallback) (NULL))}, {"help-show", GTK_STOCK_HELP, N_ ("_Contents"), "F1", N_ ("Show Seahorse help"), ((GCallback) (NULL))}};
+static const GtkActionEntry SEAHORSE_VIEWER_UI_ENTRIES[] = {{"key-menu", NULL, N_ ("_Key")}, {"edit-menu", NULL, N_ ("_Edit")}, {"view-menu", NULL, N_ ("_View")}, {"help-menu", NULL, N_ ("_Help")}, {"app-preferences", GTK_STOCK_PREFERENCES, N_ ("Prefere_nces"), NULL, N_ ("Change preferences for this program"), ((GCallback) (NULL))}, {"app-about", "gtk-about", N_ ("_About"), NULL, N_ ("About this program"), ((GCallback) (NULL))}, {"help-show", GTK_STOCK_HELP, N_ ("_Contents"), "F1", N_ ("Show Seahorse help"), ((GCallback) (NULL))}};
 static const GtkActionEntry SEAHORSE_VIEWER_KEY_ENTRIES[] = {{"key-properties", GTK_STOCK_PROPERTIES, N_ ("P_roperties"), NULL, N_ ("Show key properties"), ((GCallback) (NULL))}, {"key-export-file", GTK_STOCK_SAVE_AS, N_ ("E_xport Public Key..."), NULL, N_ ("Export public part of key to a file"), ((GCallback) (NULL))}, {"key-export-clipboard", GTK_STOCK_COPY, N_ ("_Copy Public Key"), "<control>C", N_ ("Copy public part of selected keys to the clipboard"), ((GCallback) (NULL))}, {"key-delete", GTK_STOCK_DELETE, N_ ("_Delete Key"), NULL, N_ ("Delete selected keys"), ((GCallback) (NULL))}};
 
 
@@ -310,6 +310,7 @@ static void seahorse_viewer_on_app_about (SeahorseViewer* self, GtkAction* actio
 	gtk_about_dialog_set_website_label (about, _ ("Seahorse Project Homepage"));
 	g_signal_connect_object (GTK_DIALOG (about), "response", ((GCallback) (___lambda0_gtk_dialog_response)), self, 0);
 	gtk_dialog_run (GTK_DIALOG (about));
+	gtk_object_destroy (GTK_OBJECT (about));
 	authors = (_vala_array_free (authors, authors_length1, ((GDestroyNotify) (g_free))), NULL);
 	documenters = (_vala_array_free (documenters, documenters_length1, ((GDestroyNotify) (g_free))), NULL);
 	artists = (_vala_array_free (artists, artists_length1, ((GDestroyNotify) (g_free))), NULL);
@@ -338,7 +339,7 @@ static void seahorse_viewer_on_about_link_clicked (GtkAboutDialog* about, const 
 		ex = inner_error;
 		inner_error = NULL;
 		{
-			g_warning ("seahorse-viewer.vala:244: couldn't launch url: %s: %s", url, ex->message);
+			g_warning ("seahorse-viewer.vala:245: couldn't launch url: %s: %s", url, ex->message);
 			(ex == NULL ? NULL : (ex = (g_error_free (ex), NULL)));
 		}
 	}
@@ -720,30 +721,27 @@ void seahorse_viewer_set_numbered_status (SeahorseViewer* self, const char* text
 
 
 SeahorseObject* seahorse_viewer_get_selected (SeahorseViewer* self) {
-	SeahorseObject* value;
-	g_object_get (G_OBJECT (self), "selected", &value, NULL);
-	if (value != NULL) {
-		g_object_unref (value);
-	}
-	return value;
+	return SEAHORSE_VIEWER_GET_CLASS (self)->get_selected (self);
 }
 
 
-static SeahorseObject* seahorse_viewer_real_get_selected (SeahorseViewer* self) {
-	g_return_val_if_fail (SEAHORSE_IS_VIEWER (self), NULL);
+static SeahorseObject* seahorse_viewer_real_get_selected (SeahorseViewer* base) {
+	SeahorseViewer* self;
+	self = base;
 	/* Must be overridden */
 	return NULL;
 }
 
 
 void seahorse_viewer_set_selected (SeahorseViewer* self, SeahorseObject* value) {
-	g_object_set (G_OBJECT (self), "selected", value, NULL);
+	SEAHORSE_VIEWER_GET_CLASS (self)->set_selected (self, value);
 }
 
 
-static void seahorse_viewer_real_set_selected (SeahorseViewer* self, SeahorseObject* value) {
+static void seahorse_viewer_real_set_selected (SeahorseViewer* base, SeahorseObject* value) {
+	SeahorseViewer* self;
 	GList* objects;
-	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
+	self = base;
 	objects = NULL;
 	objects = g_list_prepend (objects, value);
 	seahorse_viewer_set_selected_objects (self, objects);
@@ -753,24 +751,21 @@ static void seahorse_viewer_real_set_selected (SeahorseViewer* self, SeahorseObj
 
 
 SeahorseSet* seahorse_viewer_get_current_set (SeahorseViewer* self) {
-	SeahorseSet* value;
-	g_object_get (G_OBJECT (self), "current-set", &value, NULL);
-	if (value != NULL) {
-		g_object_unref (value);
-	}
-	return value;
+	return SEAHORSE_VIEWER_GET_CLASS (self)->get_current_set (self);
 }
 
 
-static SeahorseSet* seahorse_viewer_real_get_current_set (SeahorseViewer* self) {
-	g_return_val_if_fail (SEAHORSE_IS_VIEWER (self), NULL);
+static SeahorseSet* seahorse_viewer_real_get_current_set (SeahorseViewer* base) {
+	SeahorseViewer* self;
+	self = base;
 	/* Must be overridden */
 	return NULL;
 }
 
 
-static GtkWindow* seahorse_viewer_real_get_window (SeahorseViewer* self) {
-	g_return_val_if_fail (SEAHORSE_IS_VIEWER (self), NULL);
+static GtkWindow* seahorse_viewer_real_get_window (SeahorseView* base) {
+	SeahorseViewer* self;
+	self = SEAHORSE_VIEWER (base);
 	return GTK_WINDOW (seahorse_widget_get_toplevel (SEAHORSE_WIDGET (self)));
 }
 
@@ -890,13 +885,13 @@ static void seahorse_viewer_get_property (GObject * object, guint property_id, G
 	self = SEAHORSE_VIEWER (object);
 	switch (property_id) {
 		case SEAHORSE_VIEWER_SELECTED:
-		g_value_set_object (value, seahorse_viewer_real_get_selected (self));
+		g_value_set_object (value, seahorse_viewer_get_selected (self));
 		break;
 		case SEAHORSE_VIEWER_CURRENT_SET:
-		g_value_set_object (value, seahorse_viewer_real_get_current_set (self));
+		g_value_set_object (value, seahorse_viewer_get_current_set (self));
 		break;
 		case SEAHORSE_VIEWER_WINDOW:
-		g_value_set_object (value, seahorse_viewer_real_get_window (self));
+		g_value_set_object (value, seahorse_view_get_window (SEAHORSE_VIEW (self)));
 		break;
 		default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -910,7 +905,7 @@ static void seahorse_viewer_set_property (GObject * object, guint property_id, c
 	self = SEAHORSE_VIEWER (object);
 	switch (property_id) {
 		case SEAHORSE_VIEWER_SELECTED:
-		seahorse_viewer_real_set_selected (self, g_value_get_object (value));
+		seahorse_viewer_set_selected (self, g_value_get_object (value));
 		break;
 		default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -925,10 +920,13 @@ static void seahorse_viewer_class_init (SeahorseViewerClass * klass) {
 	G_OBJECT_CLASS (klass)->get_property = seahorse_viewer_get_property;
 	G_OBJECT_CLASS (klass)->set_property = seahorse_viewer_set_property;
 	G_OBJECT_CLASS (klass)->constructor = seahorse_viewer_constructor;
-	G_OBJECT_CLASS (klass)->dispose = seahorse_viewer_dispose;
+	G_OBJECT_CLASS (klass)->finalize = seahorse_viewer_finalize;
 	SEAHORSE_VIEWER_CLASS (klass)->get_selected_objects = seahorse_viewer_real_get_selected_objects;
 	SEAHORSE_VIEWER_CLASS (klass)->set_selected_objects = seahorse_viewer_real_set_selected_objects;
 	SEAHORSE_VIEWER_CLASS (klass)->get_selected_object_and_uid = seahorse_viewer_real_get_selected_object_and_uid;
+	SEAHORSE_VIEWER_CLASS (klass)->get_selected = seahorse_viewer_real_get_selected;
+	SEAHORSE_VIEWER_CLASS (klass)->set_selected = seahorse_viewer_real_set_selected;
+	SEAHORSE_VIEWER_CLASS (klass)->get_current_set = seahorse_viewer_real_get_current_set;
 	g_object_class_override_property (G_OBJECT_CLASS (klass), SEAHORSE_VIEWER_SELECTED, "selected");
 	g_object_class_override_property (G_OBJECT_CLASS (klass), SEAHORSE_VIEWER_CURRENT_SET, "current-set");
 	g_object_class_override_property (G_OBJECT_CLASS (klass), SEAHORSE_VIEWER_WINDOW, "window");
@@ -939,6 +937,10 @@ static void seahorse_viewer_seahorse_view_interface_init (SeahorseViewIface * if
 	seahorse_viewer_seahorse_view_parent_iface = g_type_interface_peek_parent (iface);
 	iface->get_selected_objects = seahorse_viewer_get_selected_objects;
 	iface->set_selected_objects = seahorse_viewer_set_selected_objects;
+	iface->get_selected = seahorse_viewer_get_selected;
+	iface->set_selected = seahorse_viewer_set_selected;
+	iface->get_current_set = seahorse_viewer_get_current_set;
+	iface->get_window = seahorse_viewer_real_get_window;
 }
 
 
@@ -947,19 +949,19 @@ static void seahorse_viewer_instance_init (SeahorseViewer * self) {
 }
 
 
-static void seahorse_viewer_dispose (GObject * obj) {
+static void seahorse_viewer_finalize (GObject * obj) {
 	SeahorseViewer * self;
 	self = SEAHORSE_VIEWER (obj);
 	(self->priv->_ui_manager == NULL ? NULL : (self->priv->_ui_manager = (g_object_unref (self->priv->_ui_manager), NULL)));
 	(self->priv->_object_actions == NULL ? NULL : (self->priv->_object_actions = (g_object_unref (self->priv->_object_actions), NULL)));
 	(self->priv->_commands == NULL ? NULL : (self->priv->_commands = (g_hash_table_unref (self->priv->_commands), NULL)));
-	G_OBJECT_CLASS (seahorse_viewer_parent_class)->dispose (obj);
+	G_OBJECT_CLASS (seahorse_viewer_parent_class)->finalize (obj);
 }
 
 
 GType seahorse_viewer_get_type (void) {
 	static GType seahorse_viewer_type_id = 0;
-	if (G_UNLIKELY (seahorse_viewer_type_id == 0)) {
+	if (seahorse_viewer_type_id == 0) {
 		static const GTypeInfo g_define_type_info = { sizeof (SeahorseViewerClass), (GBaseInitFunc) NULL, (GBaseFinalizeFunc) NULL, (GClassInitFunc) seahorse_viewer_class_init, (GClassFinalizeFunc) NULL, NULL, sizeof (SeahorseViewer), 0, (GInstanceInitFunc) seahorse_viewer_instance_init };
 		static const GInterfaceInfo seahorse_view_info = { (GInterfaceInitFunc) seahorse_viewer_seahorse_view_interface_init, (GInterfaceFinalizeFunc) NULL, NULL};
 		seahorse_viewer_type_id = g_type_register_static (SEAHORSE_TYPE_WIDGET, "SeahorseViewer", &g_define_type_info, G_TYPE_FLAG_ABSTRACT);

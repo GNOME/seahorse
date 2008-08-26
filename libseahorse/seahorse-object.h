@@ -41,6 +41,9 @@ struct _SeahorseObject {
 
 struct _SeahorseObjectClass {
 	GObjectClass parent_class;
+	char* (*get_display_name) (SeahorseObject* self);
+	char* (*get_markup) (SeahorseObject* self);
+	char* (*get_stock_id) (SeahorseObject* self);
 };
 
 /* INTERFACE -------------------------------------------------- 

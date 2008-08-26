@@ -47,6 +47,7 @@ struct _SeahorseGenerator {
 
 struct _SeahorseGeneratorClass {
 	GObjectClass parent_class;
+	GtkActionGroup* (*get_actions) (SeahorseGenerator* self);
 };
 
 

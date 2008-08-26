@@ -46,7 +46,7 @@ enum  {
 static void seahorse_gkeyring_commands_real_show_properties (SeahorseCommands* base, SeahorseObject* key);
 static SeahorseOperation* seahorse_gkeyring_commands_real_delete_objects (SeahorseCommands* base, GList* keys);
 static gpointer seahorse_gkeyring_commands_parent_class = NULL;
-static void seahorse_gkeyring_commands_dispose (GObject * obj);
+static void seahorse_gkeyring_commands_finalize (GObject * obj);
 
 
 
@@ -97,20 +97,23 @@ SeahorseGKeyringCommands* seahorse_gkeyring_commands_new (void) {
 }
 
 
-static GQuark seahorse_gkeyring_commands_real_get_ktype (SeahorseGKeyringCommands* self) {
-	g_return_val_if_fail (SEAHORSE_GKEYRING_IS_COMMANDS (self), 0U);
+static GQuark seahorse_gkeyring_commands_real_get_ktype (SeahorseCommands* base) {
+	SeahorseGKeyringCommands* self;
+	self = SEAHORSE_GKEYRING_COMMANDS (base);
 	return SEAHORSE_GKEYRING_TYPE;
 }
 
 
-static char* seahorse_gkeyring_commands_real_get_ui_definition (SeahorseGKeyringCommands* self) {
-	g_return_val_if_fail (SEAHORSE_GKEYRING_IS_COMMANDS (self), NULL);
+static char* seahorse_gkeyring_commands_real_get_ui_definition (SeahorseCommands* base) {
+	SeahorseGKeyringCommands* self;
+	self = SEAHORSE_GKEYRING_COMMANDS (base);
 	return g_strdup ("");
 }
 
 
-static GtkActionGroup* seahorse_gkeyring_commands_real_get_command_actions (SeahorseGKeyringCommands* self) {
-	g_return_val_if_fail (SEAHORSE_GKEYRING_IS_COMMANDS (self), NULL);
+static GtkActionGroup* seahorse_gkeyring_commands_real_get_command_actions (SeahorseCommands* base) {
+	SeahorseGKeyringCommands* self;
+	self = SEAHORSE_GKEYRING_COMMANDS (base);
 	if (self->priv->_actions == NULL) {
 		GtkActionGroup* _tmp0;
 		_tmp0 = NULL;
@@ -125,13 +128,13 @@ static void seahorse_gkeyring_commands_get_property (GObject * object, guint pro
 	self = SEAHORSE_GKEYRING_COMMANDS (object);
 	switch (property_id) {
 		case SEAHORSE_GKEYRING_COMMANDS_KTYPE:
-		g_value_set_uint (value, seahorse_gkeyring_commands_real_get_ktype (self));
+		g_value_set_uint (value, seahorse_commands_get_ktype (SEAHORSE_COMMANDS (self)));
 		break;
 		case SEAHORSE_GKEYRING_COMMANDS_UI_DEFINITION:
-		g_value_set_string (value, seahorse_gkeyring_commands_real_get_ui_definition (self));
+		g_value_set_string (value, seahorse_commands_get_ui_definition (SEAHORSE_COMMANDS (self)));
 		break;
 		case SEAHORSE_GKEYRING_COMMANDS_COMMAND_ACTIONS:
-		g_value_set_object (value, seahorse_gkeyring_commands_real_get_command_actions (self));
+		g_value_set_object (value, seahorse_commands_get_command_actions (SEAHORSE_COMMANDS (self)));
 		break;
 		default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -144,9 +147,12 @@ static void seahorse_gkeyring_commands_class_init (SeahorseGKeyringCommandsClass
 	seahorse_gkeyring_commands_parent_class = g_type_class_peek_parent (klass);
 	g_type_class_add_private (klass, sizeof (SeahorseGKeyringCommandsPrivate));
 	G_OBJECT_CLASS (klass)->get_property = seahorse_gkeyring_commands_get_property;
-	G_OBJECT_CLASS (klass)->dispose = seahorse_gkeyring_commands_dispose;
+	G_OBJECT_CLASS (klass)->finalize = seahorse_gkeyring_commands_finalize;
 	SEAHORSE_COMMANDS_CLASS (klass)->show_properties = seahorse_gkeyring_commands_real_show_properties;
 	SEAHORSE_COMMANDS_CLASS (klass)->delete_objects = seahorse_gkeyring_commands_real_delete_objects;
+	SEAHORSE_COMMANDS_CLASS (klass)->get_ktype = seahorse_gkeyring_commands_real_get_ktype;
+	SEAHORSE_COMMANDS_CLASS (klass)->get_ui_definition = seahorse_gkeyring_commands_real_get_ui_definition;
+	SEAHORSE_COMMANDS_CLASS (klass)->get_command_actions = seahorse_gkeyring_commands_real_get_command_actions;
 	g_object_class_override_property (G_OBJECT_CLASS (klass), SEAHORSE_GKEYRING_COMMANDS_KTYPE, "ktype");
 	g_object_class_override_property (G_OBJECT_CLASS (klass), SEAHORSE_GKEYRING_COMMANDS_UI_DEFINITION, "ui-definition");
 	g_object_class_override_property (G_OBJECT_CLASS (klass), SEAHORSE_GKEYRING_COMMANDS_COMMAND_ACTIONS, "command-actions");
@@ -162,17 +168,17 @@ static void seahorse_gkeyring_commands_instance_init (SeahorseGKeyringCommands *
 }
 
 
-static void seahorse_gkeyring_commands_dispose (GObject * obj) {
+static void seahorse_gkeyring_commands_finalize (GObject * obj) {
 	SeahorseGKeyringCommands * self;
 	self = SEAHORSE_GKEYRING_COMMANDS (obj);
 	(self->priv->_actions == NULL ? NULL : (self->priv->_actions = (g_object_unref (self->priv->_actions), NULL)));
-	G_OBJECT_CLASS (seahorse_gkeyring_commands_parent_class)->dispose (obj);
+	G_OBJECT_CLASS (seahorse_gkeyring_commands_parent_class)->finalize (obj);
 }
 
 
 GType seahorse_gkeyring_commands_get_type (void) {
 	static GType seahorse_gkeyring_commands_type_id = 0;
-	if (G_UNLIKELY (seahorse_gkeyring_commands_type_id == 0)) {
+	if (seahorse_gkeyring_commands_type_id == 0) {
 		static const GTypeInfo g_define_type_info = { sizeof (SeahorseGKeyringCommandsClass), (GBaseInitFunc) NULL, (GBaseFinalizeFunc) NULL, (GClassInitFunc) seahorse_gkeyring_commands_class_init, (GClassFinalizeFunc) NULL, NULL, sizeof (SeahorseGKeyringCommands), 0, (GInstanceInitFunc) seahorse_gkeyring_commands_instance_init };
 		seahorse_gkeyring_commands_type_id = g_type_register_static (SEAHORSE_TYPE_COMMANDS, "SeahorseGKeyringCommands", &g_define_type_info, 0);
 	}

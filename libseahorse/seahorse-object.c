@@ -30,7 +30,7 @@ static void seahorse_object_register_child (SeahorseObject* self, SeahorseObject
 static void seahorse_object_unregister_child (SeahorseObject* self, SeahorseObject* child);
 static GObject * seahorse_object_constructor (GType type, guint n_construct_properties, GObjectConstructParam * construct_properties);
 static gpointer seahorse_object_parent_class = NULL;
-static void seahorse_object_dispose (GObject * obj);
+static void seahorse_object_finalize (GObject * obj);
 
 
 
@@ -159,23 +159,17 @@ void seahorse_object_set_preferred (SeahorseObject* self, SeahorseObject* value)
 
 
 char* seahorse_object_get_display_name (SeahorseObject* self) {
-	char* value;
-	g_object_get (G_OBJECT (self), "display-name", &value, NULL);
-	return value;
+	return SEAHORSE_OBJECT_GET_CLASS (self)->get_display_name (self);
 }
 
 
 char* seahorse_object_get_markup (SeahorseObject* self) {
-	char* value;
-	g_object_get (G_OBJECT (self), "markup", &value, NULL);
-	return value;
+	return SEAHORSE_OBJECT_GET_CLASS (self)->get_markup (self);
 }
 
 
 char* seahorse_object_get_stock_id (SeahorseObject* self) {
-	char* value;
-	g_object_get (G_OBJECT (self), "stock-id", &value, NULL);
-	return value;
+	return SEAHORSE_OBJECT_GET_CLASS (self)->get_stock_id (self);
 }
 
 
@@ -318,7 +312,7 @@ static void seahorse_object_class_init (SeahorseObjectClass * klass) {
 	G_OBJECT_CLASS (klass)->get_property = seahorse_object_get_property;
 	G_OBJECT_CLASS (klass)->set_property = seahorse_object_set_property;
 	G_OBJECT_CLASS (klass)->constructor = seahorse_object_constructor;
-	G_OBJECT_CLASS (klass)->dispose = seahorse_object_dispose;
+	G_OBJECT_CLASS (klass)->finalize = seahorse_object_finalize;
 	g_object_class_install_property (G_OBJECT_CLASS (klass), SEAHORSE_OBJECT_TAG, g_param_spec_uint ("tag", "tag", "tag", 0, G_MAXUINT, 0U, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
 	g_object_class_install_property (G_OBJECT_CLASS (klass), SEAHORSE_OBJECT_ID, g_param_spec_uint ("id", "id", "id", 0, G_MAXUINT, 0U, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
 	g_object_class_install_property (G_OBJECT_CLASS (klass), SEAHORSE_OBJECT_LOCATION, g_param_spec_enum ("location", "location", "location", SEAHORSE_TYPE_LOCATION, 0, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE | G_PARAM_WRITABLE));
@@ -341,7 +335,7 @@ static void seahorse_object_instance_init (SeahorseObject * self) {
 }
 
 
-static void seahorse_object_dispose (GObject * obj) {
+static void seahorse_object_finalize (GObject * obj) {
 	SeahorseObject * self;
 	self = SEAHORSE_OBJECT (obj);
 	{
@@ -384,13 +378,13 @@ static void seahorse_object_dispose (GObject * obj) {
 		}
 		(new_parent == NULL ? NULL : (new_parent = (g_object_unref (new_parent), NULL)));
 	}
-	G_OBJECT_CLASS (seahorse_object_parent_class)->dispose (obj);
+	G_OBJECT_CLASS (seahorse_object_parent_class)->finalize (obj);
 }
 
 
 GType seahorse_object_get_type (void) {
 	static GType seahorse_object_type_id = 0;
-	if (G_UNLIKELY (seahorse_object_type_id == 0)) {
+	if (seahorse_object_type_id == 0) {
 		static const GTypeInfo g_define_type_info = { sizeof (SeahorseObjectClass), (GBaseInitFunc) NULL, (GBaseFinalizeFunc) NULL, (GClassInitFunc) seahorse_object_class_init, (GClassFinalizeFunc) NULL, NULL, sizeof (SeahorseObject), 0, (GInstanceInitFunc) seahorse_object_instance_init };
 		seahorse_object_type_id = g_type_register_static (G_TYPE_OBJECT, "SeahorseObject", &g_define_type_info, G_TYPE_FLAG_ABSTRACT);
 	}

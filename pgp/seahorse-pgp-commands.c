@@ -53,7 +53,7 @@ static void _seahorse_pgp_commands_on_key_sign_gtk_action_activate (GtkAction* _
 static void _seahorse_pgp_commands_on_view_selection_changed_seahorse_view_selection_changed (SeahorseView* _sender, gpointer self);
 static GObject * seahorse_pgp_commands_constructor (GType type, guint n_construct_properties, GObjectConstructParam * construct_properties);
 static gpointer seahorse_pgp_commands_parent_class = NULL;
-static void seahorse_pgp_commands_dispose (GObject * obj);
+static void seahorse_pgp_commands_finalize (GObject * obj);
 
 static const GtkActionEntry SEAHORSE_PGP_COMMANDS_COMMAND_ENTRIES[] = {{"key-sign", GTK_STOCK_INDEX, N_ ("_Sign Key..."), "", N_ ("Sign public key"), ((GCallback) (NULL))}};
 static const char* SEAHORSE_PGP_COMMANDS_UI_DEF = "\n\t\t\t<ui>\n\t\t\t\n\t\t\t<menubar>\n\t\t\t\t<menu name='Key' action='key-menu'>\n\t\t\t\t\t<placeholder name=\"KeyCommands\">\n\t\t\t\t\t\t<menuitem action=\"key-sign\"/>\n\t\t\t\t\t</placeholder>\n\t\t\t\t</menu>\n\t\t\t</menubar>\n\t\t\t\n\t\t\t<toolbar name=\"MainToolbar\">\n\t\t\t\t<placeholder name=\"ToolItems\">\n\t\t\t\t\t<toolitem action=\"key-sign\"/>\n\t\t\t\t</placeholder>\n\t\t\t</toolbar>\n\n\t\t\t<popup name=\"KeyPopup\">\n\t\t\t\t<menuitem action=\"key-sign\"/>\n\t\t\t</popup>\n    \n\t\t\t</ui>\n\t\t";
@@ -232,15 +232,17 @@ SeahorsePGPCommands* seahorse_pgp_commands_new (void) {
 }
 
 
-static GQuark seahorse_pgp_commands_real_get_ktype (SeahorsePGPCommands* self) {
-	g_return_val_if_fail (SEAHORSE_PGP_IS_COMMANDS (self), 0U);
+static GQuark seahorse_pgp_commands_real_get_ktype (SeahorseCommands* base) {
+	SeahorsePGPCommands* self;
+	self = SEAHORSE_PGP_COMMANDS (base);
 	return SEAHORSE_PGP_TYPE;
 }
 
 
-static char* seahorse_pgp_commands_real_get_ui_definition (SeahorsePGPCommands* self) {
+static char* seahorse_pgp_commands_real_get_ui_definition (SeahorseCommands* base) {
+	SeahorsePGPCommands* self;
 	const char* _tmp0;
-	g_return_val_if_fail (SEAHORSE_PGP_IS_COMMANDS (self), NULL);
+	self = SEAHORSE_PGP_COMMANDS (base);
 	_tmp0 = NULL;
 	return (_tmp0 = SEAHORSE_PGP_COMMANDS_UI_DEF, (_tmp0 == NULL ? NULL : g_strdup (_tmp0)));
 }
@@ -251,8 +253,9 @@ static void _seahorse_pgp_commands_on_key_sign_gtk_action_activate (GtkAction* _
 }
 
 
-static GtkActionGroup* seahorse_pgp_commands_real_get_command_actions (SeahorsePGPCommands* self) {
-	g_return_val_if_fail (SEAHORSE_PGP_IS_COMMANDS (self), NULL);
+static GtkActionGroup* seahorse_pgp_commands_real_get_command_actions (SeahorseCommands* base) {
+	SeahorsePGPCommands* self;
+	self = SEAHORSE_PGP_COMMANDS (base);
 	if (self->priv->_command_actions == NULL) {
 		GtkActionGroup* _tmp0;
 		_tmp0 = NULL;
@@ -292,13 +295,13 @@ static void seahorse_pgp_commands_get_property (GObject * object, guint property
 	self = SEAHORSE_PGP_COMMANDS (object);
 	switch (property_id) {
 		case SEAHORSE_PGP_COMMANDS_KTYPE:
-		g_value_set_uint (value, seahorse_pgp_commands_real_get_ktype (self));
+		g_value_set_uint (value, seahorse_commands_get_ktype (SEAHORSE_COMMANDS (self)));
 		break;
 		case SEAHORSE_PGP_COMMANDS_UI_DEFINITION:
-		g_value_set_string (value, seahorse_pgp_commands_real_get_ui_definition (self));
+		g_value_set_string (value, seahorse_commands_get_ui_definition (SEAHORSE_COMMANDS (self)));
 		break;
 		case SEAHORSE_PGP_COMMANDS_COMMAND_ACTIONS:
-		g_value_set_object (value, seahorse_pgp_commands_real_get_command_actions (self));
+		g_value_set_object (value, seahorse_commands_get_command_actions (SEAHORSE_COMMANDS (self)));
 		break;
 		default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -312,9 +315,12 @@ static void seahorse_pgp_commands_class_init (SeahorsePGPCommandsClass * klass) 
 	g_type_class_add_private (klass, sizeof (SeahorsePGPCommandsPrivate));
 	G_OBJECT_CLASS (klass)->get_property = seahorse_pgp_commands_get_property;
 	G_OBJECT_CLASS (klass)->constructor = seahorse_pgp_commands_constructor;
-	G_OBJECT_CLASS (klass)->dispose = seahorse_pgp_commands_dispose;
+	G_OBJECT_CLASS (klass)->finalize = seahorse_pgp_commands_finalize;
 	SEAHORSE_COMMANDS_CLASS (klass)->show_properties = seahorse_pgp_commands_real_show_properties;
 	SEAHORSE_COMMANDS_CLASS (klass)->delete_objects = seahorse_pgp_commands_real_delete_objects;
+	SEAHORSE_COMMANDS_CLASS (klass)->get_ktype = seahorse_pgp_commands_real_get_ktype;
+	SEAHORSE_COMMANDS_CLASS (klass)->get_ui_definition = seahorse_pgp_commands_real_get_ui_definition;
+	SEAHORSE_COMMANDS_CLASS (klass)->get_command_actions = seahorse_pgp_commands_real_get_command_actions;
 	g_object_class_override_property (G_OBJECT_CLASS (klass), SEAHORSE_PGP_COMMANDS_KTYPE, "ktype");
 	g_object_class_override_property (G_OBJECT_CLASS (klass), SEAHORSE_PGP_COMMANDS_UI_DEFINITION, "ui-definition");
 	g_object_class_override_property (G_OBJECT_CLASS (klass), SEAHORSE_PGP_COMMANDS_COMMAND_ACTIONS, "command-actions");
@@ -331,17 +337,17 @@ static void seahorse_pgp_commands_instance_init (SeahorsePGPCommands * self) {
 }
 
 
-static void seahorse_pgp_commands_dispose (GObject * obj) {
+static void seahorse_pgp_commands_finalize (GObject * obj) {
 	SeahorsePGPCommands * self;
 	self = SEAHORSE_PGP_COMMANDS (obj);
 	(self->priv->_command_actions == NULL ? NULL : (self->priv->_command_actions = (g_object_unref (self->priv->_command_actions), NULL)));
-	G_OBJECT_CLASS (seahorse_pgp_commands_parent_class)->dispose (obj);
+	G_OBJECT_CLASS (seahorse_pgp_commands_parent_class)->finalize (obj);
 }
 
 
 GType seahorse_pgp_commands_get_type (void) {
 	static GType seahorse_pgp_commands_type_id = 0;
-	if (G_UNLIKELY (seahorse_pgp_commands_type_id == 0)) {
+	if (seahorse_pgp_commands_type_id == 0) {
 		static const GTypeInfo g_define_type_info = { sizeof (SeahorsePGPCommandsClass), (GBaseInitFunc) NULL, (GBaseFinalizeFunc) NULL, (GClassInitFunc) seahorse_pgp_commands_class_init, (GClassFinalizeFunc) NULL, NULL, sizeof (SeahorsePGPCommands), 0, (GInstanceInitFunc) seahorse_pgp_commands_instance_init };
 		seahorse_pgp_commands_type_id = g_type_register_static (SEAHORSE_TYPE_COMMANDS, "SeahorsePGPCommands", &g_define_type_info, 0);
 	}

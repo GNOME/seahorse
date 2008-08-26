@@ -56,6 +56,9 @@ struct _SeahorseViewerClass {
 	GList* (*get_selected_objects) (SeahorseViewer* self);
 	void (*set_selected_objects) (SeahorseViewer* self, GList* objects);
 	SeahorseObject* (*get_selected_object_and_uid) (SeahorseViewer* self, guint* uid);
+	SeahorseObject* (*get_selected) (SeahorseViewer* self);
+	void (*set_selected) (SeahorseViewer* self, SeahorseObject* value);
+	SeahorseSet* (*get_current_set) (SeahorseViewer* self);
 };
 
 
