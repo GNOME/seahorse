@@ -2,7 +2,7 @@
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
 "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
 	<!ENTITY legal SYSTEM "legal.xml">
-	<!ENTITY appversion "0.9.9">
+	<!ENTITY appversion "2.24.x">
 	<!ENTITY manrevision "3.1">
 	<!ENTITY date "July 2005">
 	<!ENTITY app "Passwords and Encryption Keys">
@@ -51,6 +51,16 @@
 			<publishername>Seahorse Project</publishername>
 		</publisher>
 		<revhistory>
+			<revision>
+				<revnumber>&app; Manual V0.10.1</revnumber>
+				<date>August 2008</date>
+				<revdescription>
+					<para role="author">
+						Adam Schreiber
+						<email>sadam@clemson.edu</email>
+					</para>
+				</revdescription>	
+			</revision>
 			<revision>
 				<revnumber>&app; Manual V0.9.1</revnumber>
 				<date>November 2006</date>
@@ -123,32 +133,6 @@
       <ulink url="http://www.gnupg.org" type="http">Gnu Privacy Guard (GPG)</ulink> and 
       integrates with multiple components of the <ulink url="http://www.gnome.org">GNOME</ulink> desktop. 
     </para>
- 			<para>
-				Features of <application>&app;</application> include:
-			<itemizedlist>
-				<listitem>
-					<para>
-						A drop-in replacement for <application>gpg-agent</application>
-					</para>
-				</listitem>
-				<listitem>
-					<para>
-						A DNS-SD HKP &key; server
-					</para>
-				</listitem>
-				<listitem>
-					<para>
-						Plugins for <application><ulink url="ghelp:gedit" type="help">Gedit</ulink></application>, <application><ulink url="ghelp:user-guide?nautilus">Nautilus</ulink></application> 
-						and <application><ulink url="ghelp:epiphany">Epiphany</ulink></application>
-					</para>
-				</listitem>
-				<listitem>
-					<para>
-						A panel applet for encrypting text on the clipboard
-					</para>
-				</listitem>
-			</itemizedlist>
-			</para>
 			<para>
 				With <application>&app;</application> you can:
 				<itemizedlist>
@@ -164,12 +148,6 @@
 				</listitem>
 				<listitem>
 					<para>Backup your keys and keyring,</para>
-				</listitem>
-				<listitem>
-					<para>Cache your passphrase so you don't have to keep typing it,</para>
-				</listitem>
-				<listitem>
-					<para>Encrypt and decrypt the clipboard.</para>
 				</listitem>
 				</itemizedlist>
 			</para>
@@ -1311,357 +1289,51 @@
 			</itemizedlist>		
 		</para>
 	</sect1>
-
-  <sect1 id="file-manager">
-    <title>File Manager Integration</title>
-    <para>
-      <application>&app;</application> integrates with <application><ulink url="ghelp:user-guide?nautilus">Nautilus</ulink></application>.  You can encrypt, decrypt, sign and verify files as well as import public keys from the file manager window without launching <application>&app;</application>.
-    </para>
-    <sect2 id="encrypt-fm">
-      <title>Encrypting Files</title>
-      <para>
-	To encrypt files from the file manager, perform the following steps:
-	<itemizedlist>
-	  <listitem>
-	    <para>
-	      Select one or more files from the file manager,
-	    </para>
-	  </listitem>
-	  <listitem>
-	    <para>   
-	      Right click on any selected file and choose <guimenuitem>Encrypt</guimenuitem>,
-	    </para>
-	  </listitem>
-	  <listitem>
-	    <para>
-	      Select the people you would like to encrypt the file to, and then click <guibutton>OK</guibutton>.
-	    </para>
-	  </listitem>
-	</itemizedlist>
-      </para>
-    </sect2>
-    <sect2 id="sign-fm">
-      <title>Signing Files</title>
-      <para>
-	To sign files from the file manager, perform the following steps:
-	<itemizedlist>
-	  <listitem>
-	    <para>
-	      Select one or more files from the file manager,
-	    </para>
-	  </listitem>
-	  <listitem>
-	    <para>
-	      Right click on any selected file and choose <guimenuitem>Sign</guimenuitem>,
-	    </para>
-	  </listitem>
-	  <listitem>
-	    <para>
-	      If asked, enter the passphrase of your private key.
-	    </para>
-	  </listitem>
-	</itemizedlist>
-      </para>
-    </sect2>
-    <sect2 id="decrypt-fm">
-      <title>Decrypting Files</title>
-      <para>
-	To decrypt an encrypted file from the file manager, perform the following steps:
-	<itemizedlist>
-	  <listitem>
-	    <para>
-	      Double click on the file you want to decrypt,
-	    </para>
-	  </listitem>
-	  <listitem>
-	    <para>
-	      If asked, enter the passphrase of your private key.
-	    </para>
-	  </listitem>
-	</itemizedlist>
-      </para>
-    </sect2>
-    <sect2 id="verify-fm">
-      <title>Verifing Signatures</title> 
-      <para>
-	To verify files, simply double click on the the detached signature file.
-      </para>
-      <note><para>Detached signature file names often take the form
-	  &lt;file name&gt;.sig</para></note>
-    </sect2>
-  </sect1>
   
-  <sect1 id="text-editor">
-    <title>Text Editor Integration</title>
-    <para>
-      To enable Text Encryption plugin in <application><ulink url="ghelp:gedit" type="help">Gedit</ulink></application>, the GNOME text editor, perform the following steps:
-      <itemizedlist>
-	<listitem>
-	  <para>
-	    Run <application>Gedit</application> by choosing 
-	    <menuchoice>
-	      <guimenu>Applications</guimenu>
-	      <guimenuitem>Accessories</guimenuitem>
-	      <guimenuitem>Text Editor</guimenuitem>
-	    </menuchoice>,
-	    </para>
-	</listitem>
-	<listitem>
-	  <para>
-	    Choose      
-	    <menuchoice>
-	      <guimenu>Edit</guimenu>
-	      <guimenuitem>Preferences</guimenuitem>
-	    </menuchoice>,
-	  </para>
-	</listitem>
-	<listitem>
-	  <para>
-	    In the <guilabel>Plugin</guilabel> tab, select the <guilabel>Text Encryption</guilabel> plugin.
-	  </para>
-	</listitem>
-      </itemizedlist>
-    </para>
-    <sect2 id="encrypt-te">
-      <title>Encrypting Text</title>
-      <para>
-	To encrypt a selection of text from <application>Gedit</application>, perform the following steps:
-	<itemizedlist>
-	  <listitem>
-	    <para>
-	      Select the text you want to encrypt, and choose 
-	      <menuchoice>
-		<guimenu>Edit</guimenu>
-		<guimenuitem>Encrypt</guimenuitem>
-	      </menuchoice>,
-	    </para>
-	  </listitem>
-	  <listitem>
-	    <para>
-	      Select the people you want to encrypt the text to, and click <guilabel>OK</guilabel>.
-	    </para>
-	  </listitem>
-	</itemizedlist>
-	You can now copy or save the encrypted text.
-      </para>
-    </sect2>
-    <sect2 id="sign-te">
-      <title>Signing Text</title>
-      <para>
-	To sign a selection of text from <application>Gedit</application>, perform the following steps:
-	<itemizedlist>
-	  <listitem>
-	    <para>
-	      Select the text you want to sign and choose 
-	      <menuchoice>
-		<guimenu>Edit</guimenu>
-		<guimenuitem>Sign</guimenuitem>
-	      </menuchoice>,
-	      </para>
-	  </listitem>
-	  <listitem>
-	    <para>
-	      If asked, enter the passphrase of your private key.
-	    </para>
-	  </listitem>
-	</itemizedlist>
-	You can now copy or save the signed text.
-      </para>
-    </sect2>
-    <sect2 id="decryptverify-te">
-      <title>Decrypting/Verifing Text</title>
-      <para>
-	To decrypt and/or verify a selection of text from <application>Gedit</application>, perform the following steps:
-	<itemizedlist>
-	  <listitem>
-	    <para>
-	      Select the text you want to decrypt/verify and choose 
-	      <menuchoice>
-		<guimenu>Edit</guimenu>
-		<guimenuitem>Decrypt/Verify</guimenuitem>
-	      </menuchoice>,
-	      </para>
-	  </listitem>
-	  <listitem>
-	    <para>
-	      If asked, enter the passphrase of your private key.
-	    </para>
-	  </listitem>
-	</itemizedlist>
-	You can now copy or save the decrypted text.
-      </para>
-    </sect2>
-  </sect1>
-  
-  <sect1 id="preferences">
+  <sect1 id="prefs">
     <title>Preferences</title>
     <para>
-      This section describes the preferences settable in <application>&app;</application>.
-    </para>
-
-    <sect2 id="view-preferences">
-      <title>View preferences</title>
-      <para>
-	These options control which columns are visible in the key manager. 
-      </para>
-      <para>
-	To access these options choose 
-	<menuchoice>
-	  <guimenu>View</guimenu>
-	</menuchoice> 
-	from the menubar.
-      </para>
-      <para>
-	<variablelist>
-	  <varlistentry>
-	    <term><guimenuitem>Types</guimenuitem></term>
-	    <listitem>
-	      <para>
-		Shows the <guilabel>Type</guilabel> column, indicating whether the key 
-		is an OpenPGP, SSH key or a S/MIME certificate.
-	      </para>
-	      <note>
-		<para>
-		  Certificates are not yet supported.
-		</para>
-	      </note>
-	    </listitem>
-	  </varlistentry>
-	  <varlistentry>
-	    <term><guimenuitem>Expiry</guimenuitem></term>
-	    <listitem>
-	      <para>
-		Shows the <guilabel>Expiration Date</guilabel> column, indicating the date 
-		after which a key can no longer be used to encrypt or to sign.
-	      </para>
-	    </listitem>
-	  </varlistentry>
-	  <varlistentry>
-	    <term><guimenuitem>Trust</guimenuitem></term>
-	    <listitem>
-	      <para>
-		Shows the <guilabel>Trust</guilabel> column, indicating the level at which you trust 
-		the person to verify the identity of other people when they sign keys.
-	      </para>
-	    </listitem>
-	  </varlistentry>
-	  <varlistentry>
-	    <term><guimenuitem>Validity</guimenuitem></term>
-	    <listitem>
-	      <para>
-		Shows the <guilabel>Validity</guilabel> column, indicating how well you know the key belongs to 
-		the person claiming it as their own.
-	      </para>
-	    </listitem>
-	  </varlistentry>
-	</variablelist>
-      </para>
-    </sect2>
-    
-    <sect2 id="encrypt-pref">
-      <title>Encryption Preferences</title>
-      <para>
-	This section describes the preferences settable by choosing 
-	<menuchoice>
-	  <guimenu>System</guimenu>
-	  <guimenuitem>Preferences</guimenuitem>
-	  <guimenuitem>Encryption Preferences</guimenuitem>
-	</menuchoice> from the panel or
+      This section describes the preferences settable in <application>&app;</application> by choosing 
 	<menuchoice>
 	  <guimenu>Edit</guimenu>
 	  <guimenuitem>Preferences</guimenuitem>
 	</menuchoice> from within <application>&app;</application>.
       </para>
-      
-      <sect3 id="prefs">
-	<title>Encryption Settings</title>
-	<para>
-	</para>
-	<variablelist>
-	  <varlistentry>
-	    <term><guilabel>Default Key</guilabel></term>
-	    <listitem>
-	      <para>
-		This is the key that will be used by  <application>&app;</application> to sign files. 
-		It will also be the key that files will be encrypted to 
-		if encrypt to self is selected.
-	      </para>
-	    </listitem>
-	  </varlistentry>
-	  <varlistentry>
-	    <term><guilabel>When encrypting, always include myself as a recipient</guilabel></term>
-	    <listitem>
-	      <para>
-		Sets the encrypt to self option, whether or not you will be added to the recipients list for 
-		all files encrypted by <application>&app;</application>.
-	      </para>
-	      <note>
-		<para>
-		  If you do not select this and you do not select yourself as a 
-		  recipient you will not be unable to decrypt any files you encrypt.
-		</para>
-	      </note>
-	    </listitem>
-	  </varlistentry>
-	</variablelist>
-      </sect3>
-      
-      <sect3 id="password-cache">
-	<title>Passphrase Cache</title>
-	<para>
-	  Enabling <application>&app;</application>'s passphrase caching ability will allow you to 
-	  perform many operations that require entering your passphrase without 
-	  re-entering it every time. <command>seahorse-daemon</command> takes the 
-	  place of <command>gpg-agent</command>. Letting the cached passphrases 
-	  expire is usually a good idea. This will then require re-entering your 
-	  passphrase, but adds security.
-	</para>
-	<variablelist>
-	  <varlistentry>
-	    <term><guilabel>Never remember passphrases</guilabel></term>
-	    <listitem>
-	      <para>
-		Sets to not remember any passphrase.
-	      </para>
-	    </listitem>
-	  </varlistentry>
-	  <varlistentry>
-	    <term><guilabel>Remember passphrases for ... minutes</guilabel></term>
-	    <listitem>
-	      <para>
-		Sets the amount of time, in minutes, for storing passphrases. 
-		Use the spin box to set the desired time.
-	      </para>
-	    </listitem>
-	  </varlistentry>
-	  <varlistentry>
-	    <term><guilabel>Always remember passphrases whenever logged in</guilabel></term>
-	    <listitem>
-	      <para>
-		Sets to remember any passphrases whenever you are logged in the session.
-	      </para>
-	    </listitem>
-	  </varlistentry>
-	  <varlistentry>
-	    <term><guilabel>Ask me before using a cached passphrase</guilabel></term>
-	    <listitem>
-	      <para>
-		Sets to ask you before using a stored passphrase.
-	      </para>
-	    </listitem>
-	  </varlistentry>
-	  <varlistentry>
-	    <term><guilabel>Automatically load Secure Shell keys</guilabel></term>
-	    <listitem>
-	      <para>
-		Sets to automatically cache any Secure Shell key.
-	      </para>
-	    </listitem>
-	  </varlistentry>
-	</variablelist>
-      </sect3>
 
-      <sect3 id="key-servers">
+        <sect2 id="keyring">
+        	<title>Password Keyrings</title>
+        	<sect3>
+        	    <title>Creating Keyrings</title>
+            	<para>
+            	    You can create a new keyring by pressing <guibutton>Add Keyring</guibutton>. 
+            	    Enter a name for the new keyring and press <guibutton>Add</guibutton>.
+            	</para>
+        	</sect3>
+        	<sect3>
+        	    <title>Changing Keyring Passwords</title>
+            	<para>
+            	  To change the unlock password of the keyring, first select the appropriate keyring and then 
+            	  press <guibutton>Change Unlock Password</guibutton> button. You will then be prompted to
+            	  type the old password in the <guilabel>Old password</guilabel> text box, the new password in the
+            	  <guilabel>New password</guilabel> text box and
+            	  confirm it in the <guilabel>Confirm password</guilabel> text box. 
+            	  To apply the settings, press <guibutton>Change</guibutton>.
+            	  If the old password is correct, you will get a status
+            	  message indicating the success of the operation. If the
+            	  old password is not correct you will be asked to check
+            	  its correctness. 
+            	</para>
+        	</sect3>
+        	<sect3>
+        	    <title>Removing Keyrings</title>
+        	    <para>
+        	        To remove a keyring, , first select the appropriate keyring and then 
+            	  press <guibutton>Remove Keyring</guibutton> button.
+        	    </para>
+        	</sect3>
+        </sect2>
+
+    <sect2 id="key-servers">
 	<title>Key Servers</title>
 	<para>
 	  Keep your and other's keys up to date by syncing keys periodically with 
@@ -1695,9 +1367,9 @@
 	    </listitem>
 	  </varlistentry>
 	</variablelist>
-      </sect3>
+      </sect2>
 
-      <sect3 id="key-sharing">
+      <sect2 id="key-sharing">
 	<title>Key Sharing</title>
 	<para>
 	  Key Sharing is provided by DNS-SD, also known as Bonjour or Rendevous.  
@@ -1705,36 +1377,7 @@
 	  to the remote search dialog. Using these local "key servers" will most 
 	  likely be faster than accessing remote servers.
 	</para>
-      </sect3>
-
-      <sect3 id="keyring">
-	<title>GNOME Keyring</title>
-	<para>
-	  You can change the password of the default key ring created
-	  the first time you saved a password, a passphrase to
-	  access a SSH server or any other secret during a GNOME
-	  session.
-	</para>
-	<para>
-	  To change the master password of the key ring, type the
-	  original password in the <guilabel>Original Master
-	    Password</guilabel> text box, the new password in the
-	  <guilabel>New Master Password</guilabel> text box and
-	  confirm it in the <guilabel>Confirm Master
-	    Password</guilabel> text box. To apply the settings, press
-	  <guibutton>Apply</guibutton>.
-	  If the original master password is correct, you will get a status
-	  message indicating the success of the operation. If the
-	  master password is not correct you will be asked to check
-	  its correctness. 
-	</para>
-	<para>
-	  To clear all the text boxes,
-	  press <guibutton>Clear</guibutton>.
-	</para>
-      </sect3>
-
-    </sect2>
+      </sect2>
   </sect1>
       
     <sect1 id="about">
