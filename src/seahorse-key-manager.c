@@ -135,6 +135,8 @@ static void seahorse_key_manager_on_view_trust_activate (SeahorseKeyManager* sel
 static void seahorse_key_manager_on_gconf_notify (SeahorseKeyManager* self, GConfClient* client, guint cnxn_id, GConfEntry* entry);
 static gboolean seahorse_key_manager_fire_selection_changed (SeahorseKeyManager* self);
 static void seahorse_key_manager_on_tab_changed (SeahorseKeyManager* self, GtkNotebook* notebook, void* unused, guint page_num);
+static void __lambda0 (SeahorseOperation* op, SeahorseKeyManager* self);
+static void ___lambda0_seahorse_done_func (SeahorseOperation* op, gpointer self);
 static void seahorse_key_manager_load_gnome_keyring_items (SeahorseKeyManager* self);
 static void seahorse_key_manager_on_help_show (SeahorseKeyManager* self, GtkButton* button);
 static void _seahorse_key_manager_on_app_quit_gtk_action_activate (GtkAction* _sender, gpointer self);
@@ -974,6 +976,19 @@ static void seahorse_key_manager_on_tab_changed (SeahorseKeyManager* self, GtkNo
 }
 
 
+static void __lambda0 (SeahorseOperation* op, SeahorseKeyManager* self) {
+	g_return_if_fail (SEAHORSE_IS_OPERATION (op));
+	if (seahorse_operation_is_successful (op)) {
+		self->priv->_loaded_gnome_keyring = TRUE;
+	}
+}
+
+
+static void ___lambda0_seahorse_done_func (SeahorseOperation* op, gpointer self) {
+	__lambda0 (op, self);
+}
+
+
 static void seahorse_key_manager_load_gnome_keyring_items (SeahorseKeyManager* self) {
 	GType type;
 	SeahorseSource* sksrc;
@@ -989,6 +1004,7 @@ static void seahorse_key_manager_load_gnome_keyring_items (SeahorseKeyManager* s
 	op = seahorse_source_load (sksrc, ((GQuark) (0)));
 	/* Monitor loading progress */
 	seahorse_progress_status_set_operation (SEAHORSE_WIDGET (self), op);
+	seahorse_operation_watch (op, ___lambda0_seahorse_done_func, self, NULL, NULL);
 	(sksrc == NULL ? NULL : (sksrc = (g_object_unref (sksrc), NULL)));
 	(op == NULL ? NULL : (op = (g_object_unref (op), NULL)));
 }

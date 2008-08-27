@@ -732,6 +732,12 @@ namespace Seahorse {
 			
 			/* Monitor loading progress */
 			Progress.status_set_operation (this, op);
+			
+			/* After load completes set loaded to TRUE */
+			op.watch ((op) => {if (op.is_successful ())
+                                _loaded_gnome_keyring = true;
+                            },  
+                      null);
 		}
 		
 		private void on_help_show (Gtk.Button button) {
