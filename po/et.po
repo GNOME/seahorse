@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Seahorse HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-04 01:44+0000\n"
-"PO-Revision-Date: 2008-08-18 21:54+0300\n"
+"POT-Creation-Date: 2008-08-26 21:43+0000\n"
+"PO-Revision-Date: 2008-08-27 07:44+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -592,19 +592,20 @@ msgstr "Võtme ID"
 
 #: ../libegg/egg-datetime.c:313
 msgid "Display flags"
-msgstr ""
+msgstr "Kuvamislipud"
 
 #: ../libegg/egg-datetime.c:314
 msgid "Displayed date and/or time properties"
-msgstr ""
+msgstr "Kuvatava kuupäeva ja/või aja omadused"
 
 #: ../libegg/egg-datetime.c:319
 msgid "Lazy mode"
-msgstr ""
+msgstr "Laisk režiim"
 
 #: ../libegg/egg-datetime.c:320
 msgid "Lazy mode doesn't normalize entered date and time values"
 msgstr ""
+"Laisk režiim ei normaliseeri sisestatud kuupäeva ja kellaaja väärtuseid"
 
 #: ../libegg/egg-datetime.c:325
 msgid "Year"
@@ -757,7 +758,7 @@ msgstr ""
 #.
 #: ../libegg/egg-datetime.c:470
 msgid "calendar:week_start:0"
-msgstr ""
+msgstr "calendar:week_start:1"
 
 #: ../libegg/egg-datetime.c:492
 msgid "Date"
@@ -765,7 +766,7 @@ msgstr "Kuupäev"
 
 #: ../libegg/egg-datetime.c:492
 msgid "Enter the date directly"
-msgstr ""
+msgstr "Kuupäeva sisestamine käsitsi"
 
 #: ../libegg/egg-datetime.c:499
 msgid "Select Date"
@@ -781,7 +782,7 @@ msgstr "Aeg"
 
 #: ../libegg/egg-datetime.c:517
 msgid "Enter the time directly"
-msgstr ""
+msgstr "Aja sisestamine käsitsi"
 
 #: ../libegg/egg-datetime.c:524
 msgid "Select Time"
@@ -1137,8 +1138,7 @@ msgstr "Tundmatu"
 
 #: ../libseahorse/seahorse-validity.c:34
 #: ../pgp/seahorse-pgp-key-properties.c:1177
-#: ../pgp/seahorse-pgp-key-properties.c:1309
-#: ../pgp/seahorse-pgp-key-properties.c:1381
+msgctxt "Validity"
 msgid "Never"
 msgstr "Mitte kunagi"
 
@@ -1166,7 +1166,7 @@ msgstr "Keelatud"
 msgid "Revoked"
 msgstr "Tühistatud"
 
-#: ../libseahorse/seahorse-widget.c:367
+#: ../libseahorse/seahorse-widget.c:363
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Abiteavet pole võimalik kuvada: %s"
@@ -1586,7 +1586,7 @@ msgstr "Alamvõtit pole võimalik kustutada"
 msgid "Unable to change trust"
 msgstr "Usaldust pole võimalik muuta"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1060 ../src/seahorse-viewer.vala:407
+#: ../pgp/seahorse-pgp-key-properties.c:1060 ../src/seahorse-viewer.vala:408
 #: ../ssh/seahorse-ssh-key-properties.c:214
 #, c-format
 msgid "Couldn't export key to \"%s\""
@@ -1601,6 +1601,12 @@ msgstr "Võtme täielik eksport"
 #: ../ssh/seahorse-ssh-key-properties.c:260
 msgid "Couldn't export key."
 msgstr "Võtit pole võimalik eksportida."
+
+#: ../pgp/seahorse-pgp-key-properties.c:1309
+#: ../pgp/seahorse-pgp-key-properties.c:1381
+msgctxt "Expires"
+msgid "Never"
+msgstr "Mitte kunagi"
 
 #: ../pgp/seahorse-pgp-key-properties.c:1353
 msgid "ID"
@@ -2412,7 +2418,7 @@ msgid_plural "Selected %d keys"
 msgstr[0] "Valitud %d võti"
 msgstr[1] "Valitud %d võtit"
 
-#: ../src/seahorse-key-manager-store.c:644 ../src/seahorse-viewer.vala:382
+#: ../src/seahorse-key-manager-store.c:644 ../src/seahorse-viewer.vala:383
 msgid "Couldn't export keys"
 msgstr "Võtmeid pole võimalik eksportida"
 
@@ -2646,20 +2652,20 @@ msgstr ""
 msgid "Seahorse Project Homepage"
 msgstr "Seahorse projekti koduleht"
 
-#: ../src/seahorse-viewer.vala:283
+#: ../src/seahorse-viewer.vala:284
 msgid "Couldn't delete."
 msgstr "Pole võimalik kustutada."
 
-#: ../src/seahorse-viewer.vala:295
+#: ../src/seahorse-viewer.vala:296
 msgid "Deleting..."
 msgstr "Kustutamine..."
 
-#: ../src/seahorse-viewer.vala:316
+#: ../src/seahorse-viewer.vala:317
 #, c-format
 msgid "%s is a private key. Are you sure you want to proceed?"
 msgstr "%s on salajane võti. Soovid sa jätkata?"
 
-#: ../src/seahorse-viewer.vala:318
+#: ../src/seahorse-viewer.vala:319
 msgid ""
 "One or more of the deleted keys are private keys. Are you sure you want to "
 "proceed?"
@@ -2667,23 +2673,23 @@ msgstr ""
 "Kustutatavate võtmete hulgas on vähemalt üks salajane võti. Kas soovid "
 "jätkata?"
 
-#: ../src/seahorse-viewer.vala:346
+#: ../src/seahorse-viewer.vala:347
 msgid "Couldn't retrieve data from key server"
 msgstr "Võtit pole võtmeserverist võimalik vastu võtta"
 
-#: ../src/seahorse-viewer.vala:364
+#: ../src/seahorse-viewer.vala:365
 msgid "Copied keys"
 msgstr "Kopeeritud võtmed"
 
-#: ../src/seahorse-viewer.vala:376
+#: ../src/seahorse-viewer.vala:377
 msgid "Retrieving keys"
 msgstr "Võtmete vastuvõtmine"
 
-#: ../src/seahorse-viewer.vala:391
+#: ../src/seahorse-viewer.vala:392
 msgid "Export public key"
 msgstr "Avaliku võtme eksportimine"
 
-#: ../src/seahorse-viewer.vala:403
+#: ../src/seahorse-viewer.vala:404
 msgid "Exporting keys"
 msgstr "Võtmete eksportimine"
 
@@ -2957,635 +2963,3 @@ msgstr "_Konto nimi:"
 #: ../ssh/seahorse-ssh-upload.glade.h:9
 msgid "_Set Up"
 msgstr "_Määra"
-
-#~ msgid "Are you sure you want to delete the PGP key '%s'?"
-#~ msgstr "Kas sa soovid PGP-võtme '%s' kustutada?"
-
-#~ msgid "Are you sure you want to delete %d PGP keys?"
-#~ msgstr "Kas sa soovid %d PGP-võtit kustutada?"
-
-#~ msgid ""
-#~ "%s is a private key. Make sure you have a backup. Do you still want to "
-#~ "delete it?"
-#~ msgstr ""
-#~ "%s on salajane võti. Veendu, et sul oleks sellest võtmest varukoopia. Kas "
-#~ "sa soovid seda võtit kustutada?"
-
-#~ msgid "Couldn't delete key"
-#~ msgstr "Võtit pole võimalik kustutada"
-
-#~ msgid "User ID"
-#~ msgstr "Kasutaja ID"
-
-#~ msgid "Imported %d key"
-#~ msgid_plural "Imported %d keys"
-#~ msgstr[0] "Imporditud %d võti"
-#~ msgstr[1] "Imporditud %d võtit"
-
-#~ msgid "Couldn't read file"
-#~ msgstr "Faili pole võimalik lugeda"
-
-#~ msgid "Back up Key Rings to Archive"
-#~ msgstr "Võtmerõngaste varundamine arhiivi"
-
-#~ msgid "seahorse"
-#~ msgstr "seahorse"
-
-#~ msgid "_Back up Key Rings..."
-#~ msgstr "_Varunda võtmerõngad..."
-
-#~ msgid "Back up all keys"
-#~ msgstr "Kõikidest võtmetest varukoopia loomine"
-
-#~ msgid "Set Up Computer for _Secure Shell..."
-#~ msgstr "Määra _Secure Shell'i jaoks arvuti..."
-
-#~ msgid "Couldn't retrieve key data"
-#~ msgstr "Võtme andmeid pole võimalik vastu võtta"
-
-#~ msgid "Couldn't write key to file"
-#~ msgstr "Võtit pole võimalik faili kirjutada"
-
-#~ msgid "Couldn't import keys into key ring"
-#~ msgstr "Võtmeid pole võtmerõngasse võimalik importida"
-
-#~ msgid "Couldn't write keys to file: %s"
-#~ msgstr "Võtmeid pole võimalik faili kirjutada: %s"
-
-#~ msgid "Save Remote Keys"
-#~ msgstr "Kaugvõtmete salvestamine"
-
-#~ msgid "No matching keys found"
-#~ msgstr "Vastavaid võtmeid ei leitud"
-
-#~ msgid "Save Key As..."
-#~ msgstr "Salvesta võti kui..."
-
-#~ msgid "Save selected keys as a file"
-#~ msgstr "Vailitud võtmete salvestamine faili"
-
-#~ msgid "_Copy Key"
-#~ msgstr "_Kopeeri võti"
-
-#~ msgid "Copy selected keys to the clipboard"
-#~ msgstr "Valitud võtmete kopeerimine lõikelauale"
-
-#~ msgid "<b>You have selected multiple files or folders</b>"
-#~ msgstr "<b>Sul on valitud mitu võtit või kataloogi</b>"
-
-#~ msgid ""
-#~ "Because the files are located remotely, each file will be encrypted "
-#~ "separately."
-#~ msgstr ""
-#~ "Kuna failid pole kohalikul kettal, siis krüptitakse iga fail eraldi."
-
-#~ msgid "Encrypt Multiple Files"
-#~ msgstr "Mitme faili krüptimine"
-
-#~ msgid "Encrypt each file separately"
-#~ msgstr "Iga fail krüptitakse eraldi"
-
-#~ msgid "Encrypt packed together in a package"
-#~ msgstr "Krüptitud tulemus on pakitud ühte pakki"
-
-#~ msgid "Package Name:"
-#~ msgstr "Paki nimi:"
-
-#~ msgid "Packaging:"
-#~ msgstr "Pakkimine:"
-
-#~ msgid "encrypted-package"
-#~ msgstr "krüptitud-pakk"
-
-#~ msgid "Please enter a passphrase to use."
-#~ msgstr "Palun sisesta kasutatav parool."
-
-#~ msgid "Unparseable Key ID"
-#~ msgstr "Analüüsimatu võtme ID"
-
-#~ msgid "Unknown/Invalid Key"
-#~ msgstr "Tundmatu/vigane võti"
-
-#~ msgid "PGP Key: %s"
-#~ msgstr "PGP-võti: %s"
-
-#~ msgid ""
-#~ "<b>Warning</b>: Your system is not configured to cache passphrases in "
-#~ "secure memory."
-#~ msgstr ""
-#~ "<b>Hoiatus</b>: Sinu süsteem pole seadistatud paroolide hoidmiseks "
-#~ "turvalises mälus."
-
-#~ msgid "Cache _Preferences"
-#~ msgstr "Puhvri _eelistused"
-
-#~ msgid "Cached Encryption Keys"
-#~ msgstr "Puhverdatud krüptimisvõtmed"
-
-#~ msgid "Change passphrase cache settings."
-#~ msgstr "Paroolipuhvrite sätete muutmine."
-
-#~ msgid "Clear passphrase cache"
-#~ msgstr "Paroolipuhvri tühjendamine"
-
-#~ msgid "_Clear Cache"
-#~ msgstr "_Tühjenda puhver"
-
-#~ msgid "_Show Window"
-#~ msgstr "_Näita akent"
-
-#~ msgid "Do not daemonize seahorse-agent"
-#~ msgstr "seahorse-agent ei lähe deemoniks"
-
-#~ msgid "Print variables in for a C type shell"
-#~ msgstr "Muutujate printimine C-tüüpi kestprogrammi jaoks"
-
-#~ msgid "Display environment variables (the default)"
-#~ msgstr "Keskkonnamuutujate kuvamine (vaikimisi)"
-
-#~ msgid "Execute other arguments on the command line"
-#~ msgstr "Teiste argumentide käivitamine käsureal"
-
-#~ msgid "Allow GPG agent request from any display"
-#~ msgstr "GPG agendi päringud on lubatud igalt kuvalt"
-
-#~ msgid "command..."
-#~ msgstr "käsk..."
-
-#~ msgid "Encryption Key Agent (Seahorse)"
-#~ msgstr "Krüptimisvõtmete agent (Seahorse)"
-
-#~ msgid "no command specified to execute"
-#~ msgstr "käivitamiseks pole käsku määratud"
-
-#~ msgid "Authorize Passphrase Access"
-#~ msgstr "Parooliligipääsu autoriseerimine"
-
-#~ msgid "The passphrase is cached in memory."
-#~ msgstr "Parool on puhvermälus."
-
-#~ msgid "Always ask me before using a cached passphrase"
-#~ msgstr "Seda küsitakse alati enne puhverdatud parooli kasutamist"
-
-#~ msgid "_Authorize"
-#~ msgstr "_Autoriseeri"
-
-#~ msgid "Key Name"
-#~ msgstr "Võtme nimi"
-
-#~ msgid ""
-#~ "After performing an decrypt or verify operation from the applet, display "
-#~ "the resulting text in a window."
-#~ msgstr ""
-#~ "Pärast rakendist käivitatud lahtikrüptimist või verifitseerimist "
-#~ "kuvatakse tulemus eraldi aknas."
-
-#~ msgid ""
-#~ "After performing an encrypt or signing operation from the applet, display "
-#~ "the resulting text in a window."
-#~ msgstr ""
-#~ "Pärast rakendi poolt teostatud krüptimist või allkirjastamit kuvatakse "
-#~ "tulemus eraldi aknas."
-
-#~ msgid "Display cache reminder in the notification area"
-#~ msgstr "Puhvri meeldetuletuse kuvamine teatealal"
-
-#~ msgid "Display clipboard after decrypting"
-#~ msgstr "Lõikelaua sisu kuvamine pärast lahtikrüptimist"
-
-#~ msgid "Display clipboard after encrypting"
-#~ msgstr "Lõikelaua sisu kuvamine pärast krüptimist"
-
-#~ msgid "Expire passwords in the cache"
-#~ msgstr "Puhvris olevate paroolide aegumine"
-
-#~ msgid ""
-#~ "If set to 'gnome' uses gnome-keyring to cache passwords. When set to "
-#~ "'internal' uses internal cache."
-#~ msgstr ""
-#~ "Väärtuse 'gnome' korral kasutatakse paroolide puhverdamiseks GNOME "
-#~ "võtmerõngast (gnome-keyring), väärtuse 'internal' korral aga sisemist "
-#~ "puhvrit."
-
-#~ msgid "Prompt before using GPG passwords in cache"
-#~ msgstr "Kinnituse küsimine enne puhvris olevate GPG paroolide kasutamise"
-
-#~ msgid ""
-#~ "Reflect the contents of the clipboard (whether encrypted, signed, etc...) "
-#~ "in the panel applet icon."
-#~ msgstr ""
-#~ "Lõikelaua sisu (kui see on krüptitud või allkirjastatus vms.) kohta "
-#~ "vastukaja näitamine paneelirakendi ikoonil."
-
-#~ msgid ""
-#~ "Set to 'true' to enable display of the cache reminder in the notification "
-#~ "area of your panel."
-#~ msgstr ""
-#~ "Kui määratud, siis on puhvri meeldetuletuse kuvamine paneeli teatealal "
-#~ "lubatud."
-
-#~ msgid ""
-#~ "Set to 'true' to have seahorse-agent prompt before giving out passwords "
-#~ "it has cached."
-#~ msgstr ""
-#~ "Kui märgitud, siis seahorse-agent küsib enne iga puhverdatud parooli "
-#~ "väljaandmist kinnitust."
-
-#~ msgid "Show clipboard state in panel"
-#~ msgstr "Lõikelaua oleku näitamine paneelil"
-
-#~ msgid "The time (in minutes) to cache GPG passwords"
-#~ msgstr "GPG paroolide puhverdamise kestus (minutites)"
-
-#~ msgid ""
-#~ "This is the amount of time, specified in minutes, to cache GPG passwords "
-#~ "in seahorse-agent."
-#~ msgstr "Aeg, mille kestel seahorse-agent puhverdab GPG paroole (minutites)."
-
-#~ msgid ""
-#~ "This option enables the GPG password cache in the seahorse-agent program. "
-#~ "The 'use-agent' setting in gpg.conf affects this setting."
-#~ msgstr ""
-#~ "Selle võtme abil lubatakse GPG paroolide puhverdamine programmi seahorse-"
-#~ "agent poolt. Selle võtmega on seotud failis gpg.conf olev 'use-agent' "
-#~ "parameeter."
-
-#~ msgid ""
-#~ "When set, seahorse-agent expires GPG passwords in its cache after a "
-#~ "period of time."
-#~ msgstr ""
-#~ "Kui määratud, siis seahorse-agent määrab puhvris olevad GPG paroolid "
-#~ "pärast teatavat ajaperioodi aegunuks."
-
-#~ msgid "Where to store cached passwords."
-#~ msgstr "Kus puhverdatud paroole säilitatakse."
-
-#~ msgid "Whether the GPG password cache is enabled"
-#~ msgstr "Kas GPG paroolipuhver on lubatud või mitte"
-
-#~ msgid "None. Prompt for a key."
-#~ msgstr "Puudub. Võtme kohta kuvatakse dialoog."
-
-#~ msgid "<b>Default Key</b>"
-#~ msgstr "<b>Vaikimisi võti</b>"
-
-#~ msgid "<b>Remember PGP Passphrases</b>"
-#~ msgstr "<b>PGP-paroolide meeldejätmine</b>"
-
-#~ msgid "<i>A supported PGP passphrase caching agent is not running.</i>"
-#~ msgstr "<i>Toetatud PGP-paroolide puhverdamisagent ei tööta.</i>"
-
-#~ msgid "<i>This key is used to sign messages when no other key is chosen</i>"
-#~ msgstr ""
-#~ "<i>Seda võtit kasutatakse sõnumite allkirjastamiseks juhul, kui selleks "
-#~ "pole ühtegi teist võtit valitud</i>"
-
-#~ msgid "As_k me before using a cached passphrase"
-#~ msgstr "E_nne puhverdatud parooli kasutamist küsitakse kinnitust"
-
-#~ msgid "Encryption"
-#~ msgstr "Krüptimine"
-
-#~ msgid "PGP Passphrases"
-#~ msgstr "PGP-paroolid"
-
-#~ msgid "Show _icon in status area when passphrases are in memory"
-#~ msgstr "Mälus olevate paroolide korral näidatakse olekupiirkonnas _ikooni"
-
-#~ msgid "When _encrypting, always include myself as a recipient"
-#~ msgstr "Krüptimisel määratakse alati ka _ennast saajate hulka"
-
-#~ msgid "_Always remember passphrases whenever logged in"
-#~ msgstr "Paroole peetakse meeles kuni _ollakse sisse logitud"
-
-#~ msgid "_Default key:"
-#~ msgstr "_Vaikimisi võti:"
-
-#~ msgid "_Never remember passphrases"
-#~ msgstr "Paroole _ei jäeta kunagi meelde"
-
-#~ msgid "_Remember passphrases for"
-#~ msgstr "_Paroole peetakse meeles kuni"
-
-#~ msgid "Couldn't set permissions on backup file."
-#~ msgstr "Varufailile pole võimalik pääsuõiguseid määrata."
-
-#~ msgid "Clipboard Text Encryption"
-#~ msgstr "Lõikepuhvri teksti krüptimine"
-
-#~ msgid "Encrypt, decrypt or sign the clipboard (uses PGP type encryption)."
-#~ msgstr ""
-#~ "Lõikelaua krüptimine, lahtikrüptimine ja allkirjastamine (PGP-krüptimise "
-#~ "abil."
-
-#~ msgid "Seahorse Applet Factory"
-#~ msgstr "Seahorse rakendi Factory"
-
-#~ msgid "_Preferences"
-#~ msgstr "_Eelistused"
-
-#~ msgid "seahorse-applet"
-#~ msgstr "seahorse-rakend"
-
-#~ msgid "Use PGP/GPG to encrypt/decrypt/sign/verify/import the clipboard."
-#~ msgstr ""
-#~ "PGP/GPG kasutamine lõikepuhvri sisu krüptimiseks, lahtikrüptimiseks, "
-#~ "allkirjastamiseks, verifitseerimiseks ja importimiseks."
-
-#~ msgid "Choose Recipient Keys"
-#~ msgstr "Adressaatide võtmete valimine"
-
-#~ msgid "Encrypted Text"
-#~ msgstr "Krüptitud tekst"
-
-#~ msgid "Encryption Failed"
-#~ msgstr "Tõrge krüptimisel"
-
-#~ msgid "The clipboard could not be encrypted."
-#~ msgstr "Lõikelaua sisu pole võimalik krüptida."
-
-#~ msgid "Choose Key to Sign with"
-#~ msgstr "Allkirjastamiseks võtme valimine"
-
-#~ msgid "Signed Text"
-#~ msgstr "Allkirjastatud tekst"
-
-#~ msgid "Signing Failed"
-#~ msgstr "Tõrge allkirjastamisel"
-
-#~ msgid "The clipboard could not be Signed."
-#~ msgstr "Lõikelaua sisu pole võimalik allkirjastada."
-
-#~ msgid "Import Failed"
-#~ msgstr "Tõrge importimisel"
-
-#~ msgid "Keys were found but not imported."
-#~ msgstr "Võtmed leiti, kuid neid ei imporditud."
-
-#~ msgid "Decrypting Failed"
-#~ msgstr "Tõrge lahtikrüptimisel"
-
-#~ msgid "Text may be malformed."
-#~ msgstr "Teksti võib olla vigaselt vormindatud"
-
-#~ msgid "No PGP key or message was found on clipboard"
-#~ msgstr "Lõikelaualt ei leitud ei PGP-võtit ega ka sõnumit"
-
-#~ msgid "No PGP data found."
-#~ msgstr "PGP andmeid ei leitud."
-
-#~ msgid "Decrypted Text"
-#~ msgstr "Dekrüptitud tekst"
-
-#~ msgid "Could not display the help file"
-#~ msgstr "Abifaili pole võimalik kuvada"
-
-#~ msgid "_Encrypt Clipboard"
-#~ msgstr "_Krüpti lõikepuhvri sisu"
-
-#~ msgid "_Sign Clipboard"
-#~ msgstr "_Allkirjasta lõikepuhvri sisu"
-
-#~ msgid "_Decrypt/Verify Clipboard"
-#~ msgstr "_Dekrüpti/verifitseeri lõikepuhvri sisu"
-
-#~ msgid "_Import Keys from Clipboard"
-#~ msgstr "_Impordi lõikepuhvris olevad võtmed"
-
-#~ msgid "Encryption Applet"
-#~ msgstr "Krüptimisrakend"
-
-#~ msgid "<b>Display clipboard contents after:</b>"
-#~ msgstr "<b>Lõikepuhvri sisu näidatakse pärast:</b>"
-
-#~ msgid "Clipboard Encryption Preferences"
-#~ msgstr "Lõikepuhvri krüptimise eelistused"
-
-#~ msgid "_Decrypting or verifying the clipboard"
-#~ msgstr "Lõikepuhvri la_htikrüptimist või verifitseerimist"
-
-#~ msgid "_Encrypting or signing the clipboard"
-#~ msgstr "Lõikepuhvri _krüptimist või allkirjastamist"
-
-#~ msgid "_Show clipboard state in panel"
-#~ msgstr "_Lõikepuhvri olekut näidatakse paneelil"
-
-#~ msgid "_Encrypt"
-#~ msgstr "_Krüpti"
-
-#~ msgid "_Decrypt/Verify"
-#~ msgstr "K_rüpti lahti/verifitseeri"
-
-#~ msgid "_Import Key"
-#~ msgstr "_Impordi võti"
-
-#~ msgid "Couldn't connect to seahorse-daemon"
-#~ msgstr "Deemoniga seahorse-daemon pole võimalik ühenduda"
-
-#~ msgid "Encrypted text"
-#~ msgstr "Krüptitud tekst"
-
-#~ msgid "Couldn't encrypt text"
-#~ msgstr "Teksti pole võimalik krüptida"
-
-#~ msgid "Keys found but not imported"
-#~ msgstr "Võtmed leiti, kuid neid ei imporditud"
-
-#~ msgid "Couldn't decrypt text"
-#~ msgstr "Teksti pole võimalik lahti krüptida"
-
-#~ msgid "Couldn't verify text"
-#~ msgstr "Teksti pole võimalik verifitseerida"
-
-#~ msgid "No encrypted or signed text is selected."
-#~ msgstr "Krüptitud või allkirjastatud teksti pole valitud."
-
-#~ msgid "Decrypted text"
-#~ msgstr "Dekrüptitud tekst"
-
-#~ msgid "Verified text"
-#~ msgstr "Verifitseeritud tekst"
-
-#~ msgid "Signed text"
-#~ msgstr "Allkirjastatud tekst"
-
-#~ msgid "Couldn't sign text"
-#~ msgstr "Teksti pole võimalik allkirjastada"
-
-#~ msgid "_Encrypt..."
-#~ msgstr "_Krüpti..."
-
-#~ msgid "Encrypt the selected text"
-#~ msgstr "Valitud teksti krüptimine"
-
-#~ msgid "Decr_ypt/Verify"
-#~ msgstr "_Dekrüpti/verifitseeri"
-
-#~ msgid "Decrypt and/or Verify text"
-#~ msgstr "Teksti lahtikrüptimine ja/või verifitseerimine"
-
-#~ msgid "Sig_n..."
-#~ msgstr "_Allkirjasta..."
-
-#~ msgid "Sign the selected text"
-#~ msgstr "Valitud teksti allkirjastamine"
-
-#~ msgid "Enable the seahorse encryption plugin for gedit."
-#~ msgstr "Gedit'i seahorse krüptimisplugina lubamine."
-
-#~ msgid "Enable the seahorse gedit plugin"
-#~ msgstr "Seahorse gedit plugina lubamine"
-
-#~ msgid "Text Encryption"
-#~ msgstr "Teksti krüptimine"
-
-#~ msgid "This plugin performs encryption operations on text."
-#~ msgstr "Selle plugina abil krüptitakse teksti."
-
-#~ msgid "Encrypt..."
-#~ msgstr "Krüpti..."
-
-#~ msgid "Encrypt (and optionally sign) the selected file"
-#~ msgid_plural "Encrypt the selected files"
-#~ msgstr[0] "Valitud faili krüptimine (võimalus ka allkirjastada)"
-#~ msgstr[1] "Valitud failide krüptimine"
-
-#~ msgid "Sign the selected file"
-#~ msgid_plural "Sign the selected files"
-#~ msgstr[0] "Valitud faili allkirjastamine"
-#~ msgstr[1] "Valitud failide allkirjastamine"
-
-#~ msgid "For internal use"
-#~ msgstr "Sisemiseks kasutuseks"
-
-#~ msgid "Encryption Preferences"
-#~ msgstr "Krüptimiseelistused"
-
-#~ msgid "Configure key servers and other encryption settings"
-#~ msgstr "Võtmeserverite ja teiste krüptosätete määramine"
-
-#~ msgid "Encryption and Keyrings"
-#~ msgstr "Krüptimine ja võtmerõngad"
-
-#~ msgid "Import keys from the file"
-#~ msgstr "Võtmete importimine failist"
-
-#~ msgid "Encrypt file"
-#~ msgstr "Faili krüptimine"
-
-#~ msgid "Sign file with default key"
-#~ msgstr "Faili allkirjastamine vaikimisi võtmega"
-
-#~ msgid "Encrypt and sign file with default key"
-#~ msgstr "Faili krüptimine ja allkirjastamine vaikimisi võtmega"
-
-#~ msgid "Decrypt encrypted file"
-#~ msgstr "Krüptitud faili lahtikrüptimine"
-
-#~ msgid "Verify signature file"
-#~ msgstr "Allkirjafaili verifitseerimine"
-
-#~ msgid "Read list of URIs on standard in"
-#~ msgstr "URI-de loetelu lugemine standardsisendist"
-
-#~ msgid "file..."
-#~ msgstr "fail..."
-
-#~ msgid "Choose Recipients"
-#~ msgstr "Saajate valimine"
-
-#~ msgid "Couldn't load keys"
-#~ msgstr "Võtmeid pole võimalik laadida"
-
-#~ msgid "Choose Encrypted File Name for '%s'"
-#~ msgstr "Määra '%s' jaoks krüptitud faili nimi"
-
-#~ msgid "Choose Signer"
-#~ msgstr "Allkirjastaja valimine"
-
-#~ msgid "Choose Signature File Name for '%s'"
-#~ msgstr "Määra '%s' jaoks allkirjafaili nimi"
-
-#~ msgid "Import is complete"
-#~ msgstr "Võtmete importimine on lõpule viidud"
-
-#~ msgid "Importing keys ..."
-#~ msgstr "Võtmete importimine..."
-
-#~ msgid "Choose Decrypted File Name for '%s'"
-#~ msgstr "'%s' lahtikrüptitud faili nime valimine"
-
-#~ msgid "Choose Original File for '%s'"
-#~ msgstr "Faili '%s' algupärase faili valimine"
-
-#~ msgid "No valid signatures found"
-#~ msgstr "Kehtivaid allkirju ei leitud"
-
-#~ msgid "File Encryption Tool"
-#~ msgstr "Failide krüptimise tööriist"
-
-#~ msgid "Encrypting"
-#~ msgstr "Krüptimine"
-
-#~ msgid "Couldn't encrypt file: %s"
-#~ msgstr "Faili pole võimalik krüptida: %s"
-
-#~ msgid "Signing"
-#~ msgstr "Allkirjastamine"
-
-#~ msgid "Couldn't sign file: %s"
-#~ msgstr "Faili pole võimalik allkirjastada: %s"
-
-#~ msgid "Importing"
-#~ msgstr "Importimine"
-
-#~ msgid "Couldn't import keys from file: %s"
-#~ msgstr "Falist pole võimalik võtmeid importida: %s"
-
-#~ msgid "Decrypting"
-#~ msgstr "Dekrüptimine"
-
-#~ msgid "Couldn't decrypt file: %s"
-#~ msgstr "Faili pole võimalik lahti krüptida: %s"
-
-#~ msgid "Verifying"
-#~ msgstr "Verifitseerimine"
-
-#~ msgid "Couldn't verify file: %s"
-#~ msgstr "Faili pole võimalik verifitseerida: %s"
-
-#~ msgid "You have selected %d file "
-#~ msgid_plural "You have selected %d files "
-#~ msgstr[0] "Sa oled valinud %d faili"
-#~ msgstr[1] "Sa oled valinud %d faili"
-
-#~ msgid "and %d folder"
-#~ msgid_plural "and %d folders"
-#~ msgstr[0] "ja %d kataloogi"
-#~ msgstr[1] "ja %d kataloogi"
-
-#~ msgid "<b>%s%s</b>"
-#~ msgstr "<b>%s%s</b>"
-
-#~ msgid "You have selected %d files"
-#~ msgstr "Sa oled valinud %d faili"
-
-#~ msgid "You have selected %d folder"
-#~ msgid_plural "You have selected %d folders"
-#~ msgstr[0] "Sa oled valinud %d kataloogi"
-#~ msgstr[1] "Sa oled valinud %d kataloogi"
-
-#~ msgid "Couldn't list files"
-#~ msgstr "Failide nimekirja pole võimalik töödelda"
-
-#~ msgid "Remote Encryption Keys"
-#~ msgstr "Krüptimise kaugvõtmed"
-
-#~ msgid "Decrypt File"
-#~ msgstr "Faili lahtikrüptimine"
-
-#~ msgid "I have checked that this key belongs to '%s'"
-#~ msgstr "Olen veendunud, et selle võtme omanik on '%s'"
-
-#~ msgid "Verify Signature"
-#~ msgstr "Allkirja verifitseerimine"
