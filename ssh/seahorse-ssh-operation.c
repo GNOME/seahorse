@@ -738,7 +738,7 @@ seahorse_ssh_operation_upload (SeahorseSSHSource *ssrc, GList *keys,
     SeahorseOperation *op;
     GMemoryOutputStream *output;
     gchar *data;
-    size_t length;
+    size_t length, size, strl;
     gchar *cmd;
     
     g_return_val_if_fail (keys != NULL, NULL);
@@ -783,7 +783,7 @@ seahorse_ssh_operation_upload (SeahorseSSHSource *ssrc, GList *keys,
                            port ? port : "");
     
 	data = g_memory_output_stream_get_data (output);
-	length = seahorse_util_memory_output_length (output);
+	length = strlen (data);
 	g_object_unref (output);
     
 	op = seahorse_ssh_operation_new (ssrc, cmd, data, length, NULL);
