@@ -38,14 +38,14 @@ enum  {
 };
 static void seahorse_pkcs11_certificate_rebuild (SeahorsePkcs11Certificate* self);
 static gpointer seahorse_pkcs11_certificate_parent_class = NULL;
-static void seahorse_pkcs11_certificate_dispose (GObject * obj);
+static void seahorse_pkcs11_certificate_finalize (GObject * obj);
 
 
 
 SeahorsePkcs11Certificate* seahorse_pkcs11_certificate_new (GP11Object* object, GP11Attributes* attributes) {
 	SeahorsePkcs11Certificate * self;
 	g_return_val_if_fail (GP11_IS_OBJECT (object), NULL);
-	g_return_val_if_fail (attributes != NULL, NULL);
+	g_return_val_if_fail (GP11_IS_ATTRIBUTES (attributes), NULL);
 	self = g_object_newv (SEAHORSE_PKCS11_TYPE_CERTIFICATE, 0, NULL);
 	seahorse_pkcs11_certificate_set_pkcs11_object (self, object);
 	seahorse_pkcs11_certificate_set_pkcs11_attributes (self, attributes);
@@ -110,9 +110,10 @@ void seahorse_pkcs11_certificate_set_pkcs11_attributes (SeahorsePkcs11Certificat
 }
 
 
-static char* seahorse_pkcs11_certificate_real_get_display_name (SeahorsePkcs11Certificate* self) {
+static char* seahorse_pkcs11_certificate_real_get_display_name (SeahorseObject* base) {
+	SeahorsePkcs11Certificate* self;
 	const char* _tmp4;
-	g_return_val_if_fail (SEAHORSE_PKCS11_IS_CERTIFICATE (self), NULL);
+	self = SEAHORSE_PKCS11_CERTIFICATE (base);
 	if (self->priv->_pkcs11_attributes != NULL) {
 		char* label;
 		char* _tmp2;
@@ -122,7 +123,9 @@ static char* seahorse_pkcs11_certificate_real_get_display_name (SeahorsePkcs11Ce
 		_tmp2 = NULL;
 		_tmp0 = NULL;
 		if ((_tmp1 = gp11_attributes_find_string (self->priv->_pkcs11_attributes, CKA_LABEL, &_tmp0), label = (_tmp2 = _tmp0, (label = (g_free (label), NULL)), _tmp2), _tmp1)) {
-			return label;
+			if (label != NULL) {
+				return label;
+			}
 		}
 		label = (g_free (label), NULL);
 	}
@@ -149,8 +152,9 @@ char* seahorse_pkcs11_certificate_get_display_id (SeahorsePkcs11Certificate* sel
 }
 
 
-static char* seahorse_pkcs11_certificate_real_get_markup (SeahorsePkcs11Certificate* self) {
-	g_return_val_if_fail (SEAHORSE_PKCS11_IS_CERTIFICATE (self), NULL);
+static char* seahorse_pkcs11_certificate_real_get_markup (SeahorseObject* base) {
+	SeahorsePkcs11Certificate* self;
+	self = SEAHORSE_PKCS11_CERTIFICATE (base);
 	return g_markup_escape_text (seahorse_object_get_display_name (SEAHORSE_OBJECT (self)), -1);
 }
 
@@ -242,8 +246,9 @@ char* seahorse_pkcs11_certificate_get_expires_str (SeahorsePkcs11Certificate* se
 }
 
 
-static char* seahorse_pkcs11_certificate_real_get_stock_id (SeahorsePkcs11Certificate* self) {
-	g_return_val_if_fail (SEAHORSE_PKCS11_IS_CERTIFICATE (self), NULL);
+static char* seahorse_pkcs11_certificate_real_get_stock_id (SeahorseObject* base) {
+	SeahorsePkcs11Certificate* self;
+	self = SEAHORSE_PKCS11_CERTIFICATE (base);
 	/* TODO: A certificate icon */
 	return g_strdup ("");
 }
@@ -260,13 +265,13 @@ static void seahorse_pkcs11_certificate_get_property (GObject * object, guint pr
 		g_value_set_pointer (value, seahorse_pkcs11_certificate_get_pkcs11_attributes (self));
 		break;
 		case SEAHORSE_PKCS11_CERTIFICATE_DISPLAY_NAME:
-		g_value_set_string (value, seahorse_pkcs11_certificate_real_get_display_name (self));
+		g_value_set_string (value, seahorse_object_get_display_name (SEAHORSE_OBJECT (self)));
 		break;
 		case SEAHORSE_PKCS11_CERTIFICATE_DISPLAY_ID:
 		g_value_set_string (value, seahorse_pkcs11_certificate_get_display_id (self));
 		break;
 		case SEAHORSE_PKCS11_CERTIFICATE_MARKUP:
-		g_value_set_string (value, seahorse_pkcs11_certificate_real_get_markup (self));
+		g_value_set_string (value, seahorse_object_get_markup (SEAHORSE_OBJECT (self)));
 		break;
 		case SEAHORSE_PKCS11_CERTIFICATE_SIMPLE_NAME:
 		g_value_set_string (value, seahorse_pkcs11_certificate_get_simple_name (self));
@@ -293,7 +298,7 @@ static void seahorse_pkcs11_certificate_get_property (GObject * object, guint pr
 		g_value_set_string (value, seahorse_pkcs11_certificate_get_expires_str (self));
 		break;
 		case SEAHORSE_PKCS11_CERTIFICATE_STOCK_ID:
-		g_value_set_string (value, seahorse_pkcs11_certificate_real_get_stock_id (self));
+		g_value_set_string (value, seahorse_object_get_stock_id (SEAHORSE_OBJECT (self)));
 		break;
 		default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -324,7 +329,10 @@ static void seahorse_pkcs11_certificate_class_init (SeahorsePkcs11CertificateCla
 	g_type_class_add_private (klass, sizeof (SeahorsePkcs11CertificatePrivate));
 	G_OBJECT_CLASS (klass)->get_property = seahorse_pkcs11_certificate_get_property;
 	G_OBJECT_CLASS (klass)->set_property = seahorse_pkcs11_certificate_set_property;
-	G_OBJECT_CLASS (klass)->dispose = seahorse_pkcs11_certificate_dispose;
+	G_OBJECT_CLASS (klass)->finalize = seahorse_pkcs11_certificate_finalize;
+	SEAHORSE_OBJECT_CLASS (klass)->get_display_name = seahorse_pkcs11_certificate_real_get_display_name;
+	SEAHORSE_OBJECT_CLASS (klass)->get_markup = seahorse_pkcs11_certificate_real_get_markup;
+	SEAHORSE_OBJECT_CLASS (klass)->get_stock_id = seahorse_pkcs11_certificate_real_get_stock_id;
 	g_object_class_install_property (G_OBJECT_CLASS (klass), SEAHORSE_PKCS11_CERTIFICATE_PKCS11_OBJECT, g_param_spec_object ("pkcs11-object", "pkcs11-object", "pkcs11-object", GP11_TYPE_OBJECT, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE | G_PARAM_WRITABLE));
 	g_object_class_install_property (G_OBJECT_CLASS (klass), SEAHORSE_PKCS11_CERTIFICATE_PKCS11_ATTRIBUTES, g_param_spec_pointer ("pkcs11-attributes", "pkcs11-attributes", "pkcs11-attributes", G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE | G_PARAM_WRITABLE));
 	g_object_class_override_property (G_OBJECT_CLASS (klass), SEAHORSE_PKCS11_CERTIFICATE_DISPLAY_NAME, "display-name");
@@ -347,18 +355,18 @@ static void seahorse_pkcs11_certificate_instance_init (SeahorsePkcs11Certificate
 }
 
 
-static void seahorse_pkcs11_certificate_dispose (GObject * obj) {
+static void seahorse_pkcs11_certificate_finalize (GObject * obj) {
 	SeahorsePkcs11Certificate * self;
 	self = SEAHORSE_PKCS11_CERTIFICATE (obj);
 	(self->priv->_pkcs11_object == NULL ? NULL : (self->priv->_pkcs11_object = (g_object_unref (self->priv->_pkcs11_object), NULL)));
 	(self->priv->_pkcs11_attributes == NULL ? NULL : (self->priv->_pkcs11_attributes = (gp11_attributes_unref (self->priv->_pkcs11_attributes), NULL)));
-	G_OBJECT_CLASS (seahorse_pkcs11_certificate_parent_class)->dispose (obj);
+	G_OBJECT_CLASS (seahorse_pkcs11_certificate_parent_class)->finalize (obj);
 }
 
 
 GType seahorse_pkcs11_certificate_get_type (void) {
 	static GType seahorse_pkcs11_certificate_type_id = 0;
-	if (G_UNLIKELY (seahorse_pkcs11_certificate_type_id == 0)) {
+	if (seahorse_pkcs11_certificate_type_id == 0) {
 		static const GTypeInfo g_define_type_info = { sizeof (SeahorsePkcs11CertificateClass), (GBaseInitFunc) NULL, (GBaseFinalizeFunc) NULL, (GClassInitFunc) seahorse_pkcs11_certificate_class_init, (GClassFinalizeFunc) NULL, NULL, sizeof (SeahorsePkcs11Certificate), 0, (GInstanceInitFunc) seahorse_pkcs11_certificate_instance_init };
 		seahorse_pkcs11_certificate_type_id = g_type_register_static (SEAHORSE_TYPE_OBJECT, "SeahorsePkcs11Certificate", &g_define_type_info, 0);
 	}

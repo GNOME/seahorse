@@ -25,6 +25,7 @@
 #include <glib.h>
 #include <glib-object.h>
 #include <gp11.h>
+#include <gp11-hacks.h>
 
 G_BEGIN_DECLS
 

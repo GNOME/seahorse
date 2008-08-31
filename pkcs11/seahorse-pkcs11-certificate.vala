@@ -17,9 +17,11 @@ namespace Seahorse.Pkcs11 {
 		public override string# display_name {
 			get { 
 				if (_pkcs11_attributes != null) {
-					string label;
-					if (_pkcs11_attributes.find_string(P11.CKA_LABEL, out label))
-						return label;
+					string? label;
+					if (_pkcs11_attributes.find_string(P11.CKA_LABEL, out label)) {
+						if (label != null)
+							return label;
+					}
 				}
 				
 				/* TODO: Calculate something from the subject? */

@@ -175,7 +175,7 @@ static void seahorse_pkcs11_source_updater_set_source (SeahorsePkcs11SourceUpdat
 static void _seahorse_pkcs11_source_updater_on_open_session_gasync_ready_callback (GObject* source_object, GAsyncResult* res, gpointer self);
 static GObject * seahorse_pkcs11_source_updater_constructor (GType type, guint n_construct_properties, GObjectConstructParam * construct_properties);
 static gpointer seahorse_pkcs11_source_updater_parent_class = NULL;
-static void seahorse_pkcs11_source_updater_dispose (GObject * obj);
+static void seahorse_pkcs11_source_updater_finalize (GObject * obj);
 static GType seahorse_pkcs11_source_updater_get_type (void);
 struct _SeahorsePkcs11SourceRefresherPrivate {
 	GHashTable* _checks;
@@ -193,7 +193,7 @@ static void ___lambda0_gh_func (void* key, void* value, gpointer self);
 static void seahorse_pkcs11_source_refresher_on_find_objects (SeahorsePkcs11SourceRefresher* self, GObject* obj, GAsyncResult* result);
 static GObject * seahorse_pkcs11_source_refresher_constructor (GType type, guint n_construct_properties, GObjectConstructParam * construct_properties);
 static gpointer seahorse_pkcs11_source_refresher_parent_class = NULL;
-static void seahorse_pkcs11_source_refresher_dispose (GObject * obj);
+static void seahorse_pkcs11_source_refresher_finalize (GObject * obj);
 static GType seahorse_pkcs11_source_refresher_get_type (void);
 struct _SeahorsePkcs11SourceLoaderPrivate {
 	GP11Attributes* _unique_attrs;
@@ -211,7 +211,7 @@ static void seahorse_pkcs11_source_loader_on_find_objects (SeahorsePkcs11SourceL
 static GP11Attributes* seahorse_pkcs11_source_loader_get_unique_attrs (SeahorsePkcs11SourceLoader* self);
 static void seahorse_pkcs11_source_loader_set_unique_attrs (SeahorsePkcs11SourceLoader* self, GP11Attributes* value);
 static gpointer seahorse_pkcs11_source_loader_parent_class = NULL;
-static void seahorse_pkcs11_source_loader_dispose (GObject * obj);
+static void seahorse_pkcs11_source_loader_finalize (GObject * obj);
 static GType seahorse_pkcs11_source_loader_get_type (void);
 struct _SeahorsePkcs11SourceImporterPrivate {
 	GP11Attributes* _import_data;
@@ -230,7 +230,7 @@ static void seahorse_pkcs11_source_importer_on_create_object (SeahorsePkcs11Sour
 static void seahorse_pkcs11_source_importer_on_get_attribute (SeahorsePkcs11SourceImporter* self, GObject* obj, GAsyncResult* result);
 static GP11Attributes* seahorse_pkcs11_source_importer_get_import_data (SeahorsePkcs11SourceImporter* self);
 static gpointer seahorse_pkcs11_source_importer_parent_class = NULL;
-static void seahorse_pkcs11_source_importer_dispose (GObject * obj);
+static void seahorse_pkcs11_source_importer_finalize (GObject * obj);
 static GType seahorse_pkcs11_source_importer_get_type (void);
 struct _SeahorsePkcs11SourceRemoverPrivate {
 	GCancellable* _cancellable;
@@ -256,10 +256,10 @@ static void seahorse_pkcs11_source_remover_set_certificate (SeahorsePkcs11Source
 static void _seahorse_pkcs11_source_remover_on_destroy_object_gasync_ready_callback (GObject* source_object, GAsyncResult* res, gpointer self);
 static GObject * seahorse_pkcs11_source_remover_constructor (GType type, guint n_construct_properties, GObjectConstructParam * construct_properties);
 static gpointer seahorse_pkcs11_source_remover_parent_class = NULL;
-static void seahorse_pkcs11_source_remover_dispose (GObject * obj);
+static void seahorse_pkcs11_source_remover_finalize (GObject * obj);
 static GType seahorse_pkcs11_source_remover_get_type (void);
 static gpointer seahorse_pkcs11_source_parent_class = NULL;
-static void seahorse_pkcs11_source_dispose (GObject * obj);
+static void seahorse_pkcs11_source_finalize (GObject * obj);
 
 static const guint SEAHORSE_PKCS11_ATTRIBUTE_TYPES[] = {CKA_LABEL, CKA_ID, CKA_CLASS, CKA_TOKEN, CKA_GNOME_USER_TRUST, CKA_START_DATE, CKA_END_DATE};
 
@@ -375,7 +375,7 @@ static void seahorse_pkcs11_source_receive_object (SeahorsePkcs11Source* self, G
 	SeahorsePkcs11Certificate* _tmp3;
 	g_return_if_fail (SEAHORSE_PKCS11_IS_SOURCE (self));
 	g_return_if_fail (GP11_IS_OBJECT (object));
-	g_return_if_fail (attrs != NULL);
+	g_return_if_fail (GP11_IS_ATTRIBUTES (attrs));
 	/* Build up an identifier for this object */
 	id = seahorse_pkcs11_id_from_attributes (attrs);
 	g_return_if_fail (id != 0);
@@ -712,7 +712,7 @@ static void seahorse_pkcs11_source_updater_class_init (SeahorsePkcs11SourceUpdat
 	G_OBJECT_CLASS (klass)->get_property = seahorse_pkcs11_source_updater_get_property;
 	G_OBJECT_CLASS (klass)->set_property = seahorse_pkcs11_source_updater_set_property;
 	G_OBJECT_CLASS (klass)->constructor = seahorse_pkcs11_source_updater_constructor;
-	G_OBJECT_CLASS (klass)->dispose = seahorse_pkcs11_source_updater_dispose;
+	G_OBJECT_CLASS (klass)->finalize = seahorse_pkcs11_source_updater_finalize;
 	SEAHORSE_PKCS11_SOURCE_UPDATER_CLASS (klass)->load_objects = seahorse_pkcs11_source_updater_real_load_objects;
 	SEAHORSE_OPERATION_CLASS (klass)->cancel = seahorse_pkcs11_source_updater_real_cancel;
 	g_object_class_install_property (G_OBJECT_CLASS (klass), SEAHORSE_PKCS11_SOURCE_UPDATER_CANCELLABLE, g_param_spec_object ("cancellable", "cancellable", "cancellable", G_TYPE_CANCELLABLE, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
@@ -725,20 +725,20 @@ static void seahorse_pkcs11_source_updater_instance_init (SeahorsePkcs11SourceUp
 }
 
 
-static void seahorse_pkcs11_source_updater_dispose (GObject * obj) {
+static void seahorse_pkcs11_source_updater_finalize (GObject * obj) {
 	SeahorsePkcs11SourceUpdater * self;
 	self = SEAHORSE_PKCS11_SOURCE_UPDATER (obj);
 	(self->priv->_cancellable == NULL ? NULL : (self->priv->_cancellable = (g_object_unref (self->priv->_cancellable), NULL)));
 	(self->_source == NULL ? NULL : (self->_source = (g_object_unref (self->_source), NULL)));
 	(self->_session == NULL ? NULL : (self->_session = (g_object_unref (self->_session), NULL)));
 	(self->priv->_objects == NULL ? NULL : (self->priv->_objects = (_g_list_free_g_object_unref (self->priv->_objects), NULL)));
-	G_OBJECT_CLASS (seahorse_pkcs11_source_updater_parent_class)->dispose (obj);
+	G_OBJECT_CLASS (seahorse_pkcs11_source_updater_parent_class)->finalize (obj);
 }
 
 
 static GType seahorse_pkcs11_source_updater_get_type (void) {
 	static GType seahorse_pkcs11_source_updater_type_id = 0;
-	if (G_UNLIKELY (seahorse_pkcs11_source_updater_type_id == 0)) {
+	if (seahorse_pkcs11_source_updater_type_id == 0) {
 		static const GTypeInfo g_define_type_info = { sizeof (SeahorsePkcs11SourceUpdaterClass), (GBaseInitFunc) NULL, (GBaseFinalizeFunc) NULL, (GClassInitFunc) seahorse_pkcs11_source_updater_class_init, (GClassFinalizeFunc) NULL, NULL, sizeof (SeahorsePkcs11SourceUpdater), 0, (GInstanceInitFunc) seahorse_pkcs11_source_updater_instance_init };
 		seahorse_pkcs11_source_updater_type_id = g_type_register_static (SEAHORSE_TYPE_OPERATION, "SeahorsePkcs11SourceUpdater", &g_define_type_info, G_TYPE_FLAG_ABSTRACT);
 	}
@@ -901,7 +901,7 @@ static void seahorse_pkcs11_source_refresher_class_init (SeahorsePkcs11SourceRef
 	seahorse_pkcs11_source_refresher_parent_class = g_type_class_peek_parent (klass);
 	g_type_class_add_private (klass, sizeof (SeahorsePkcs11SourceRefresherPrivate));
 	G_OBJECT_CLASS (klass)->constructor = seahorse_pkcs11_source_refresher_constructor;
-	G_OBJECT_CLASS (klass)->dispose = seahorse_pkcs11_source_refresher_dispose;
+	G_OBJECT_CLASS (klass)->finalize = seahorse_pkcs11_source_refresher_finalize;
 	SEAHORSE_PKCS11_SOURCE_UPDATER_CLASS (klass)->load_objects = seahorse_pkcs11_source_refresher_real_load_objects;
 }
 
@@ -911,17 +911,17 @@ static void seahorse_pkcs11_source_refresher_instance_init (SeahorsePkcs11Source
 }
 
 
-static void seahorse_pkcs11_source_refresher_dispose (GObject * obj) {
+static void seahorse_pkcs11_source_refresher_finalize (GObject * obj) {
 	SeahorsePkcs11SourceRefresher * self;
 	self = SEAHORSE_PKCS11_SOURCE_REFRESHER (obj);
 	(self->priv->_checks == NULL ? NULL : (self->priv->_checks = (g_hash_table_unref (self->priv->_checks), NULL)));
-	G_OBJECT_CLASS (seahorse_pkcs11_source_refresher_parent_class)->dispose (obj);
+	G_OBJECT_CLASS (seahorse_pkcs11_source_refresher_parent_class)->finalize (obj);
 }
 
 
 static GType seahorse_pkcs11_source_refresher_get_type (void) {
 	static GType seahorse_pkcs11_source_refresher_type_id = 0;
-	if (G_UNLIKELY (seahorse_pkcs11_source_refresher_type_id == 0)) {
+	if (seahorse_pkcs11_source_refresher_type_id == 0) {
 		static const GTypeInfo g_define_type_info = { sizeof (SeahorsePkcs11SourceRefresherClass), (GBaseInitFunc) NULL, (GBaseFinalizeFunc) NULL, (GClassInitFunc) seahorse_pkcs11_source_refresher_class_init, (GClassFinalizeFunc) NULL, NULL, sizeof (SeahorsePkcs11SourceRefresher), 0, (GInstanceInitFunc) seahorse_pkcs11_source_refresher_instance_init };
 		seahorse_pkcs11_source_refresher_type_id = g_type_register_static (SEAHORSE_PKCS11_SOURCE_TYPE_UPDATER, "SeahorsePkcs11SourceRefresher", &g_define_type_info, 0);
 	}
@@ -934,7 +934,7 @@ static SeahorsePkcs11SourceLoader* seahorse_pkcs11_source_loader_new (SeahorsePk
 	GParameter * __params_it;
 	SeahorsePkcs11SourceLoader * self;
 	g_return_val_if_fail (SEAHORSE_PKCS11_IS_SOURCE (source), NULL);
-	g_return_val_if_fail (unique_attrs != NULL, NULL);
+	g_return_val_if_fail (GP11_IS_ATTRIBUTES (unique_attrs), NULL);
 	__params = g_new0 (GParameter, 2);
 	__params_it = __params;
 	__params_it->name = "source";
@@ -1056,7 +1056,7 @@ static void seahorse_pkcs11_source_loader_class_init (SeahorsePkcs11SourceLoader
 	g_type_class_add_private (klass, sizeof (SeahorsePkcs11SourceLoaderPrivate));
 	G_OBJECT_CLASS (klass)->get_property = seahorse_pkcs11_source_loader_get_property;
 	G_OBJECT_CLASS (klass)->set_property = seahorse_pkcs11_source_loader_set_property;
-	G_OBJECT_CLASS (klass)->dispose = seahorse_pkcs11_source_loader_dispose;
+	G_OBJECT_CLASS (klass)->finalize = seahorse_pkcs11_source_loader_finalize;
 	SEAHORSE_PKCS11_SOURCE_UPDATER_CLASS (klass)->load_objects = seahorse_pkcs11_source_loader_real_load_objects;
 	g_object_class_install_property (G_OBJECT_CLASS (klass), SEAHORSE_PKCS11_SOURCE_LOADER_UNIQUE_ATTRS, g_param_spec_pointer ("unique-attrs", "unique-attrs", "unique-attrs", G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
 }
@@ -1067,17 +1067,17 @@ static void seahorse_pkcs11_source_loader_instance_init (SeahorsePkcs11SourceLoa
 }
 
 
-static void seahorse_pkcs11_source_loader_dispose (GObject * obj) {
+static void seahorse_pkcs11_source_loader_finalize (GObject * obj) {
 	SeahorsePkcs11SourceLoader * self;
 	self = SEAHORSE_PKCS11_SOURCE_LOADER (obj);
 	(self->priv->_unique_attrs == NULL ? NULL : (self->priv->_unique_attrs = (gp11_attributes_unref (self->priv->_unique_attrs), NULL)));
-	G_OBJECT_CLASS (seahorse_pkcs11_source_loader_parent_class)->dispose (obj);
+	G_OBJECT_CLASS (seahorse_pkcs11_source_loader_parent_class)->finalize (obj);
 }
 
 
 static GType seahorse_pkcs11_source_loader_get_type (void) {
 	static GType seahorse_pkcs11_source_loader_type_id = 0;
-	if (G_UNLIKELY (seahorse_pkcs11_source_loader_type_id == 0)) {
+	if (seahorse_pkcs11_source_loader_type_id == 0) {
 		static const GTypeInfo g_define_type_info = { sizeof (SeahorsePkcs11SourceLoaderClass), (GBaseInitFunc) NULL, (GBaseFinalizeFunc) NULL, (GClassInitFunc) seahorse_pkcs11_source_loader_class_init, (GClassFinalizeFunc) NULL, NULL, sizeof (SeahorsePkcs11SourceLoader), 0, (GInstanceInitFunc) seahorse_pkcs11_source_loader_instance_init };
 		seahorse_pkcs11_source_loader_type_id = g_type_register_static (SEAHORSE_PKCS11_SOURCE_TYPE_UPDATER, "SeahorsePkcs11SourceLoader", &g_define_type_info, 0);
 	}
@@ -1090,7 +1090,7 @@ static SeahorsePkcs11SourceImporter* seahorse_pkcs11_source_importer_new (Seahor
 	GParameter * __params_it;
 	SeahorsePkcs11SourceImporter * self;
 	g_return_val_if_fail (SEAHORSE_PKCS11_IS_SOURCE (source), NULL);
-	g_return_val_if_fail (import != NULL, NULL);
+	g_return_val_if_fail (GP11_IS_ATTRIBUTES (import), NULL);
 	__params = g_new0 (GParameter, 1);
 	__params_it = __params;
 	__params_it->name = "source";
@@ -1237,7 +1237,7 @@ static void seahorse_pkcs11_source_importer_class_init (SeahorsePkcs11SourceImpo
 	seahorse_pkcs11_source_importer_parent_class = g_type_class_peek_parent (klass);
 	g_type_class_add_private (klass, sizeof (SeahorsePkcs11SourceImporterPrivate));
 	G_OBJECT_CLASS (klass)->get_property = seahorse_pkcs11_source_importer_get_property;
-	G_OBJECT_CLASS (klass)->dispose = seahorse_pkcs11_source_importer_dispose;
+	G_OBJECT_CLASS (klass)->finalize = seahorse_pkcs11_source_importer_finalize;
 	SEAHORSE_PKCS11_SOURCE_UPDATER_CLASS (klass)->load_objects = seahorse_pkcs11_source_importer_real_load_objects;
 	g_object_class_install_property (G_OBJECT_CLASS (klass), SEAHORSE_PKCS11_SOURCE_IMPORTER_IMPORT_DATA, g_param_spec_pointer ("import-data", "import-data", "import-data", G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
 }
@@ -1248,17 +1248,17 @@ static void seahorse_pkcs11_source_importer_instance_init (SeahorsePkcs11SourceI
 }
 
 
-static void seahorse_pkcs11_source_importer_dispose (GObject * obj) {
+static void seahorse_pkcs11_source_importer_finalize (GObject * obj) {
 	SeahorsePkcs11SourceImporter * self;
 	self = SEAHORSE_PKCS11_SOURCE_IMPORTER (obj);
 	(self->priv->_import_data == NULL ? NULL : (self->priv->_import_data = (gp11_attributes_unref (self->priv->_import_data), NULL)));
-	G_OBJECT_CLASS (seahorse_pkcs11_source_importer_parent_class)->dispose (obj);
+	G_OBJECT_CLASS (seahorse_pkcs11_source_importer_parent_class)->finalize (obj);
 }
 
 
 static GType seahorse_pkcs11_source_importer_get_type (void) {
 	static GType seahorse_pkcs11_source_importer_type_id = 0;
-	if (G_UNLIKELY (seahorse_pkcs11_source_importer_type_id == 0)) {
+	if (seahorse_pkcs11_source_importer_type_id == 0) {
 		static const GTypeInfo g_define_type_info = { sizeof (SeahorsePkcs11SourceImporterClass), (GBaseInitFunc) NULL, (GBaseFinalizeFunc) NULL, (GClassInitFunc) seahorse_pkcs11_source_importer_class_init, (GClassFinalizeFunc) NULL, NULL, sizeof (SeahorsePkcs11SourceImporter), 0, (GInstanceInitFunc) seahorse_pkcs11_source_importer_instance_init };
 		seahorse_pkcs11_source_importer_type_id = g_type_register_static (SEAHORSE_PKCS11_SOURCE_TYPE_UPDATER, "SeahorsePkcs11SourceImporter", &g_define_type_info, 0);
 	}
@@ -1446,7 +1446,7 @@ static void seahorse_pkcs11_source_remover_class_init (SeahorsePkcs11SourceRemov
 	G_OBJECT_CLASS (klass)->get_property = seahorse_pkcs11_source_remover_get_property;
 	G_OBJECT_CLASS (klass)->set_property = seahorse_pkcs11_source_remover_set_property;
 	G_OBJECT_CLASS (klass)->constructor = seahorse_pkcs11_source_remover_constructor;
-	G_OBJECT_CLASS (klass)->dispose = seahorse_pkcs11_source_remover_dispose;
+	G_OBJECT_CLASS (klass)->finalize = seahorse_pkcs11_source_remover_finalize;
 	SEAHORSE_OPERATION_CLASS (klass)->cancel = seahorse_pkcs11_source_remover_real_cancel;
 	g_object_class_install_property (G_OBJECT_CLASS (klass), SEAHORSE_PKCS11_SOURCE_REMOVER_CANCELLABLE, g_param_spec_object ("cancellable", "cancellable", "cancellable", G_TYPE_CANCELLABLE, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
 	g_object_class_install_property (G_OBJECT_CLASS (klass), SEAHORSE_PKCS11_SOURCE_REMOVER_SOURCE, g_param_spec_object ("source", "source", "source", SEAHORSE_PKCS11_TYPE_SOURCE, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
@@ -1459,19 +1459,19 @@ static void seahorse_pkcs11_source_remover_instance_init (SeahorsePkcs11SourceRe
 }
 
 
-static void seahorse_pkcs11_source_remover_dispose (GObject * obj) {
+static void seahorse_pkcs11_source_remover_finalize (GObject * obj) {
 	SeahorsePkcs11SourceRemover * self;
 	self = SEAHORSE_PKCS11_SOURCE_REMOVER (obj);
 	(self->priv->_cancellable == NULL ? NULL : (self->priv->_cancellable = (g_object_unref (self->priv->_cancellable), NULL)));
 	(self->priv->_source == NULL ? NULL : (self->priv->_source = (g_object_unref (self->priv->_source), NULL)));
 	(self->priv->_certificate == NULL ? NULL : (self->priv->_certificate = (g_object_unref (self->priv->_certificate), NULL)));
-	G_OBJECT_CLASS (seahorse_pkcs11_source_remover_parent_class)->dispose (obj);
+	G_OBJECT_CLASS (seahorse_pkcs11_source_remover_parent_class)->finalize (obj);
 }
 
 
 static GType seahorse_pkcs11_source_remover_get_type (void) {
 	static GType seahorse_pkcs11_source_remover_type_id = 0;
-	if (G_UNLIKELY (seahorse_pkcs11_source_remover_type_id == 0)) {
+	if (seahorse_pkcs11_source_remover_type_id == 0) {
 		static const GTypeInfo g_define_type_info = { sizeof (SeahorsePkcs11SourceRemoverClass), (GBaseInitFunc) NULL, (GBaseFinalizeFunc) NULL, (GClassInitFunc) seahorse_pkcs11_source_remover_class_init, (GClassFinalizeFunc) NULL, NULL, sizeof (SeahorsePkcs11SourceRemover), 0, (GInstanceInitFunc) seahorse_pkcs11_source_remover_instance_init };
 		seahorse_pkcs11_source_remover_type_id = g_type_register_static (SEAHORSE_TYPE_OPERATION, "SeahorsePkcs11SourceRemover", &g_define_type_info, 0);
 	}
@@ -1521,7 +1521,7 @@ static void seahorse_pkcs11_source_class_init (SeahorsePkcs11SourceClass * klass
 	g_type_class_add_private (klass, sizeof (SeahorsePkcs11SourcePrivate));
 	G_OBJECT_CLASS (klass)->get_property = seahorse_pkcs11_source_get_property;
 	G_OBJECT_CLASS (klass)->set_property = seahorse_pkcs11_source_set_property;
-	G_OBJECT_CLASS (klass)->dispose = seahorse_pkcs11_source_dispose;
+	G_OBJECT_CLASS (klass)->finalize = seahorse_pkcs11_source_finalize;
 	SEAHORSE_SOURCE_CLASS (klass)->load = seahorse_pkcs11_source_real_load;
 	SEAHORSE_PKCS11_SOURCE_CLASS (klass)->import = seahorse_pkcs11_source_real_import;
 	SEAHORSE_PKCS11_SOURCE_CLASS (klass)->export = seahorse_pkcs11_source_real_export;
@@ -1538,17 +1538,17 @@ static void seahorse_pkcs11_source_instance_init (SeahorsePkcs11Source * self) {
 }
 
 
-static void seahorse_pkcs11_source_dispose (GObject * obj) {
+static void seahorse_pkcs11_source_finalize (GObject * obj) {
 	SeahorsePkcs11Source * self;
 	self = SEAHORSE_PKCS11_SOURCE (obj);
 	(self->priv->_slot == NULL ? NULL : (self->priv->_slot = (g_object_unref (self->priv->_slot), NULL)));
-	G_OBJECT_CLASS (seahorse_pkcs11_source_parent_class)->dispose (obj);
+	G_OBJECT_CLASS (seahorse_pkcs11_source_parent_class)->finalize (obj);
 }
 
 
 GType seahorse_pkcs11_source_get_type (void) {
 	static GType seahorse_pkcs11_source_type_id = 0;
-	if (G_UNLIKELY (seahorse_pkcs11_source_type_id == 0)) {
+	if (seahorse_pkcs11_source_type_id == 0) {
 		static const GTypeInfo g_define_type_info = { sizeof (SeahorsePkcs11SourceClass), (GBaseInitFunc) NULL, (GBaseFinalizeFunc) NULL, (GClassInitFunc) seahorse_pkcs11_source_class_init, (GClassFinalizeFunc) NULL, NULL, sizeof (SeahorsePkcs11Source), 0, (GInstanceInitFunc) seahorse_pkcs11_source_instance_init };
 		seahorse_pkcs11_source_type_id = g_type_register_static (SEAHORSE_TYPE_SOURCE, "SeahorsePkcs11Source", &g_define_type_info, 0);
 	}

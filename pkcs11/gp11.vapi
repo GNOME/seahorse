@@ -2,7 +2,7 @@
  * These bindings will move into gnome-keyring once vala is more accepted in 
  * the desktop.
  */ 
-[CCode (cheader_filename = "gp11.h", cprefix = "GP11", lower_case_cprefix = "gp11_")]
+[CCode (cheader_filename = "gp11.h,gp11-hacks.h", cprefix = "GP11", lower_case_cprefix = "gp11_")]
 namespace GP11 {
 
 	public weak string message_from_rv (uint rv);

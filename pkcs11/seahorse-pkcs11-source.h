@@ -6,6 +6,7 @@
 #include <glib-object.h>
 #include <seahorse-source.h>
 #include <gp11.h>
+#include <gp11-hacks.h>
 #include <seahorse-operation.h>
 #include <gio/gio.h>
 #include <seahorse-object.h>
