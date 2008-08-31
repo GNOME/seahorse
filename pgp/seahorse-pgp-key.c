@@ -161,7 +161,7 @@ update_uids (SeahorsePGPKey *pkey)
 		
 		/* Remove if no uid */
 		if (!guid) {
-			seahorse_object_set_parent (l->data, NULL);			
+			seahorse_object_set_parent (SEAHORSE_OBJECT (uid), NULL);			
 			pkey->uids = g_list_remove (pkey->uids, uid);
 			g_object_unref (uid);
 		} else {
