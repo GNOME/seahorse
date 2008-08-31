@@ -543,11 +543,7 @@ namespace Seahorse {
 			Source sksrc = Context.for_app().find_source (ktype, Location.LOCAL);
 			return_if_fail (sksrc != null);
 
-			/* 
-			 * BUG: We cast to get around this bug:
-			 * http://bugzilla.gnome.org/show_bug.cgi?id=540662
-			 */
-			var input = (MemoryInputStream)new MemoryInputStream.from_data (text, len, g_free);
+			var input = Util.memory_input_string (text, len);
 			Operation op = sksrc.import (input);
 			
 			Progress.show (op, _("Importing Keys"), true);

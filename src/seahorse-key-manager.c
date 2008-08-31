@@ -693,11 +693,7 @@ static void seahorse_key_manager_import_text (SeahorseKeyManager* self, const ch
 	_tmp0 = NULL;
 	sksrc = (_tmp0 = seahorse_context_find_source (seahorse_context_for_app (), ktype, SEAHORSE_LOCATION_LOCAL), (_tmp0 == NULL ? NULL : g_object_ref (_tmp0)));
 	g_return_if_fail (sksrc != NULL);
-	/* 
-	 * BUG: We cast to get around this bug:
-	 * http://bugzilla.gnome.org/show_bug.cgi?id=540662
-	 */
-	input = G_MEMORY_INPUT_STREAM (((GMemoryInputStream*) (g_memory_input_stream_new_from_data (text, len, g_free))));
+	input = seahorse_util_memory_input_string (text, len);
 	op = seahorse_source_import (sksrc, G_INPUT_STREAM (input));
 	seahorse_progress_show (op, _ ("Importing Keys"), TRUE);
 	seahorse_operation_watch (op, _seahorse_key_manager_imported_keys_seahorse_done_func, self, NULL, NULL);

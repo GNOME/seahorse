@@ -325,6 +325,13 @@ seahorse_util_read_data_block (GString *buf, GInputStream *input,
     return copied;
 }
 
+GMemoryInputStream*
+seahorse_util_memory_input_string (const gchar *string, gsize length)
+{
+	g_return_val_if_fail (string, NULL);
+	return G_MEMORY_INPUT_STREAM (g_memory_input_stream_new_from_data (g_strndup (string, length), length, g_free));
+}
+
 gsize
 seahorse_util_memory_output_length (GMemoryOutputStream *output)
 {

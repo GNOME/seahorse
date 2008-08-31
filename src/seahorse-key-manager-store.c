@@ -68,7 +68,7 @@ static const SeahorseSetModelColumn column_info[] = {
 	{ "type", G_TYPE_STRING, "type" },
 	{ "expires-str", G_TYPE_STRING, "expires" },
 	{ "validity", G_TYPE_INT, "validity" },
-	{ "expires", G_TYPE_LONG, "expires" },
+	{ "expires", G_TYPE_ULONG, "expires" },
 	{ "trust", G_TYPE_INT, "trust" }
 };
 

@@ -174,6 +174,8 @@ namespace Seahorse {
 		
 		[CCode (array_length_type = "guint")]
 		public uchar[] read_to_memory(GLib.InputStream input);
+		
+		public GLib.MemoryInputStream memory_input_string(string text, long len);
 	}
 
 	[CCode (cheader_filename = "seahorse-gconf.h", cprefix = "SeahorseGConf", lower_case_cprefix = "seahorse_gconf_")]

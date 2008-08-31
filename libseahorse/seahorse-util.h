@@ -76,6 +76,9 @@ guint       seahorse_util_read_data_block       (GString            *buf,
                                                  const gchar        *start, 
                                                  const gchar*       end);
 
+GMemoryInputStream*
+            seahorse_util_memory_input_string   (const gchar *string, gsize length);
+
 gsize       seahorse_util_memory_output_length  (GMemoryOutputStream *output);
 
 gboolean    seahorse_util_print_fd          (int fd, 
