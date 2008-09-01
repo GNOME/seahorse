@@ -349,7 +349,7 @@ namespace Seahorse {
 			}
 			
 			GLib.Object result = (GLib.Object)op.get_result ();
-			return_if_fail (result != null && result.get_type () != typeof (MemoryOutputStream));
+			return_if_fail (result != null && result.get_type () == typeof (MemoryOutputStream));
 			MemoryOutputStream output = (MemoryOutputStream)result;
 			
 			weak string text = (string)output.get_data ();

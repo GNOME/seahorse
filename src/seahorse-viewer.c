@@ -554,7 +554,7 @@ static void seahorse_viewer_on_copy_complete (SeahorseViewer* self, SeahorseOper
 	}
 	_tmp0 = NULL;
 	result = (_tmp0 = G_OBJECT (seahorse_operation_get_result (op)), (_tmp0 == NULL ? NULL : g_object_ref (_tmp0)));
-	g_return_if_fail (result != NULL && G_TYPE_FROM_INSTANCE (result) != G_TYPE_MEMORY_OUTPUT_STREAM);
+	g_return_if_fail (result != NULL && G_TYPE_FROM_INSTANCE (result) == G_TYPE_MEMORY_OUTPUT_STREAM);
 	_tmp1 = NULL;
 	output = (_tmp1 = G_MEMORY_OUTPUT_STREAM (result), (_tmp1 == NULL ? NULL : g_object_ref (_tmp1)));
 	text = ((const char*) (g_memory_output_stream_get_data (output)));
