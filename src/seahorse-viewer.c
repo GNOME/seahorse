@@ -699,7 +699,7 @@ void seahorse_viewer_set_status (SeahorseViewer* self, const char* text) {
 	g_return_if_fail (text != NULL);
 	_tmp0 = NULL;
 	widget = (_tmp0 = seahorse_widget_get_widget (SEAHORSE_WIDGET (self), "status"), (_tmp0 == NULL ? NULL : g_object_ref (_tmp0)));
-	g_return_if_fail (widget != NULL || G_TYPE_FROM_INSTANCE (G_OBJECT (widget)) != GTK_TYPE_STATUSBAR);
+	g_return_if_fail (widget != NULL && G_TYPE_FROM_INSTANCE (G_OBJECT (widget)) == GTK_TYPE_STATUSBAR);
 	_tmp1 = NULL;
 	status = (_tmp1 = GTK_STATUSBAR (widget), (_tmp1 == NULL ? NULL : g_object_ref (_tmp1)));
 	id = gtk_statusbar_get_context_id (status, "key-manager");

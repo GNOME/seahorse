@@ -419,7 +419,7 @@ namespace Seahorse {
 		
 		protected void set_status (string text) {
 			Gtk.Widget widget = get_widget ("status");
-			return_if_fail (widget != null || widget.get_type() != typeof (Gtk.Statusbar));
+			return_if_fail (widget != null && widget.get_type() == typeof (Gtk.Statusbar));
 			
 			Gtk.Statusbar status = (Gtk.Statusbar)widget;
 			uint id = status.get_context_id ("key-manager");
