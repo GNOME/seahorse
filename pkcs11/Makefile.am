@@ -55,6 +55,7 @@ glade_DATA =
 EXTRA_DIST = \
 	gp11.vapi \
 	p11.vapi \
+	gp11-hacks.h \
 	$(glade_DATA) \
 	vala-build.stamp \
 	$(VALA_CFILES) $(VALA_HFILES) \
