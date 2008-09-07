@@ -248,7 +248,7 @@ static void seahorse_keyserver_results_imported_keys (SeahorseKeyserverResults* 
 	g_return_if_fail (SEAHORSE_IS_KEYSERVER_RESULTS (self));
 	g_return_if_fail (SEAHORSE_IS_OPERATION (op));
 	if (!seahorse_operation_is_successful (op)) {
-		seahorse_operation_display_error (op, _ ("Couldn't import keys"), GTK_WIDGET (seahorse_view_get_window (SEAHORSE_VIEW (self))));
+		seahorse_operation_display_error (op, _ ("Couldn't import keys"), GTK_WIDGET (seahorse_viewer_get_window (SEAHORSE_VIEWER (self))));
 		return;
 	}
 	seahorse_viewer_set_status (SEAHORSE_VIEWER (self), _ ("Imported keys"));
@@ -282,7 +282,7 @@ static void seahorse_keyserver_results_on_key_import_keyring (SeahorseKeyserverR
 static void seahorse_keyserver_results_on_remote_find (SeahorseKeyserverResults* self, GtkAction* action) {
 	g_return_if_fail (SEAHORSE_IS_KEYSERVER_RESULTS (self));
 	g_return_if_fail (GTK_IS_ACTION (action));
-	seahorse_keyserver_search_show (seahorse_view_get_window (SEAHORSE_VIEW (self)));
+	seahorse_keyserver_search_show (seahorse_viewer_get_window (SEAHORSE_VIEWER (self)));
 }
 
 
@@ -436,7 +436,7 @@ static GObject * seahorse_keyserver_results_constructor (GType type, guint n_con
 			_tmp2 = NULL;
 			title = (_tmp2 = g_strdup_printf (_ ("Remote Keys Containing '%s'"), self->priv->_search_string), (title = (g_free (title), NULL)), _tmp2);
 		}
-		gtk_window_set_title (seahorse_view_get_window (SEAHORSE_VIEW (self)), title);
+		gtk_window_set_title (seahorse_viewer_get_window (SEAHORSE_VIEWER (self)), title);
 		/* 
 		 * We hook callbacks up here for now because of a compiler warning. See:
 		 * http://bugzilla.gnome.org/show_bug.cgi?id=539483

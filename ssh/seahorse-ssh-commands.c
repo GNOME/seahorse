@@ -167,12 +167,10 @@ static GQuark seahorse_ssh_commands_real_get_ktype (SeahorseCommands* base) {
 }
 
 
-static char* seahorse_ssh_commands_real_get_ui_definition (SeahorseCommands* base) {
+static const char* seahorse_ssh_commands_real_get_ui_definition (SeahorseCommands* base) {
 	SeahorseSSHCommands* self;
-	const char* _tmp0;
 	self = SEAHORSE_SSH_COMMANDS (base);
-	_tmp0 = NULL;
-	return (_tmp0 = SEAHORSE_SSH_COMMANDS_UI_DEF, (_tmp0 == NULL ? NULL : g_strdup (_tmp0)));
+	return SEAHORSE_SSH_COMMANDS_UI_DEF;
 }
 
 

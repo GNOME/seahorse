@@ -104,10 +104,10 @@ static GQuark seahorse_gkeyring_commands_real_get_ktype (SeahorseCommands* base)
 }
 
 
-static char* seahorse_gkeyring_commands_real_get_ui_definition (SeahorseCommands* base) {
+static const char* seahorse_gkeyring_commands_real_get_ui_definition (SeahorseCommands* base) {
 	SeahorseGKeyringCommands* self;
 	self = SEAHORSE_GKEYRING_COMMANDS (base);
-	return g_strdup ("");
+	return "";
 }
 
 

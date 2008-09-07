@@ -46,7 +46,7 @@ namespace Seahorse.Pgp {
 			get { return Seahorse.Pgp.TYPE; } 
 		} 
 		
-		public override string# ui_definition { 
+		public override weak string ui_definition { 
 			get { return UI_DEF; } 
 		}
 		

@@ -95,7 +95,7 @@ GtkActionGroup* seahorse_commands_get_command_actions (SeahorseCommands* self) {
 }
 
 
-char* seahorse_commands_get_ui_definition (SeahorseCommands* self) {
+const char* seahorse_commands_get_ui_definition (SeahorseCommands* self) {
 	return SEAHORSE_COMMANDS_GET_CLASS (self)->get_ui_definition (self);
 }
 

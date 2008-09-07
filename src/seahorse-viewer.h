@@ -22,61 +22,86 @@
 #ifndef __SEAHORSE_VIEWER_H__
 #define __SEAHORSE_VIEWER_H__
 
-#include <glib.h>
 #include <glib-object.h>
-#include <seahorse-widget.h>
-#include <seahorse-view.h>
-#include <gtk/gtk.h>
-#include <seahorse-object.h>
-#include <stdlib.h>
-#include <string.h>
-#include <seahorse-set.h>
 
-G_BEGIN_DECLS
+#include "seahorse-object.h"
+#include "seahorse-set.h"
+#include "seahorse-view.h"
+#include "seahorse-widget.h"
 
-
-#define SEAHORSE_TYPE_VIEWER (seahorse_viewer_get_type ())
-#define SEAHORSE_VIEWER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_VIEWER, SeahorseViewer))
-#define SEAHORSE_VIEWER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_VIEWER, SeahorseViewerClass))
-#define SEAHORSE_IS_VIEWER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_VIEWER))
-#define SEAHORSE_IS_VIEWER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_VIEWER))
-#define SEAHORSE_VIEWER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_VIEWER, SeahorseViewerClass))
+#define SEAHORSE_TYPE_VIEWER               (seahorse_viewer_get_type ())
+#define SEAHORSE_VIEWER(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_VIEWER, SeahorseViewer))
+#define SEAHORSE_VIEWER_CLASS(klass)       (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_VIEWER, SeahorseViewerClass))
+#define SEAHORSE_IS_VIEWER(obj)            (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_VIEWER))
+#define SEAHORSE_IS_VIEWER_CLASS(klass)    (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_VIEWER))
+#define SEAHORSE_VIEWER_GET_CLASS(obj)     (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_VIEWER, SeahorseViewerClass))
 
 typedef struct _SeahorseViewer SeahorseViewer;
 typedef struct _SeahorseViewerClass SeahorseViewerClass;
 typedef struct _SeahorseViewerPrivate SeahorseViewerPrivate;
-
+    
 struct _SeahorseViewer {
-	SeahorseWidget parent_instance;
-	SeahorseViewerPrivate * priv;
+	SeahorseWidget parent;
 };
 
 struct _SeahorseViewerClass {
-	SeahorseWidgetClass parent_class;
+	SeahorseWidgetClass parent;
+    
+	/* virtual -------------------------------------------------------- */
+    
 	GList* (*get_selected_objects) (SeahorseViewer* self);
+	
 	void (*set_selected_objects) (SeahorseViewer* self, GList* objects);
+	
 	SeahorseObject* (*get_selected_object_and_uid) (SeahorseViewer* self, guint* uid);
+	
 	SeahorseObject* (*get_selected) (SeahorseViewer* self);
+	
 	void (*set_selected) (SeahorseViewer* self, SeahorseObject* value);
+	
 	SeahorseSet* (*get_current_set) (SeahorseViewer* self);
+    
+	/* signals --------------------------------------------------------- */
+    
+	void (*signal)   (SeahorseViewer *viewer);
 };
 
+GType               seahorse_viewer_get_type                        (void);
 
-void seahorse_viewer_ensure_updated (SeahorseViewer* self);
-void seahorse_viewer_include_actions (SeahorseViewer* self, GtkActionGroup* actions);
-GList* seahorse_viewer_get_selected_objects (SeahorseViewer* self);
-void seahorse_viewer_set_selected_objects (SeahorseViewer* self, GList* objects);
-SeahorseObject* seahorse_viewer_get_selected_object_and_uid (SeahorseViewer* self, guint* uid);
-void seahorse_viewer_show_context_menu (SeahorseViewer* self, guint button, guint time);
-void seahorse_viewer_show_properties (SeahorseViewer* self, SeahorseObject* obj);
-void seahorse_viewer_set_status (SeahorseViewer* self, const char* text);
-void seahorse_viewer_set_numbered_status (SeahorseViewer* self, const char* text, gint num);
-SeahorseObject* seahorse_viewer_get_selected (SeahorseViewer* self);
-void seahorse_viewer_set_selected (SeahorseViewer* self, SeahorseObject* value);
-SeahorseSet* seahorse_viewer_get_current_set (SeahorseViewer* self);
-GType seahorse_viewer_get_type (void);
+void                seahorse_viewer_ensure_updated                  (SeahorseViewer* self);
 
+void                seahorse_viewer_include_actions                 (SeahorseViewer* self, 
+                                                                     GtkActionGroup* actions);
 
-G_END_DECLS
+GList*              seahorse_viewer_get_selected_objects            (SeahorseViewer* self);
 
-#endif
+void                seahorse_viewer_set_selected_objects            (SeahorseViewer* self, 
+                                                                     GList* objects);
+
+SeahorseObject*     seahorse_viewer_get_selected_object_and_uid     (SeahorseViewer* self, 
+                                                                     guint* uid);
+
+void                seahorse_viewer_show_context_menu               (SeahorseViewer* self, 
+                                                                     guint button, 
+                                                                     guint time);
+
+void                seahorse_viewer_show_properties                 (SeahorseViewer* self, 
+                                                                     SeahorseObject* obj);
+
+void                seahorse_viewer_set_status                      (SeahorseViewer* self, 
+                                                                     const char* text);
+
+void                seahorse_viewer_set_numbered_status             (SeahorseViewer* self, 
+                                                                     const char* text, 
+                                                                     gint num);
+
+SeahorseObject*     seahorse_viewer_get_selected                    (SeahorseViewer* self);
+
+void                seahorse_viewer_set_selected                    (SeahorseViewer* self, 
+                                                                     SeahorseObject* value);
+
+SeahorseSet*        seahorse_viewer_get_current_set                 (SeahorseViewer* self);
+
+GtkWindow*          seahorse_viewer_get_window                      (SeahorseViewer* self);
+
+#endif /* __SEAHORSE_VIEWER_H__ */

@@ -35,7 +35,7 @@ namespace Seahorse {
 		
 		public abstract ActionGroup command_actions { get; }
 
-		public abstract string# ui_definition { get; }
+		public abstract weak string ui_definition { get; }
 		
 		public abstract void show_properties (Object obj);
 		

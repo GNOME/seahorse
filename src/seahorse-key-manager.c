@@ -520,14 +520,14 @@ static gboolean seahorse_key_manager_on_key_list_popup_menu (SeahorseKeyManager*
 static void seahorse_key_manager_on_key_generate (SeahorseKeyManager* self, GtkAction* action) {
 	g_return_if_fail (SEAHORSE_IS_KEY_MANAGER (self));
 	g_return_if_fail (GTK_IS_ACTION (action));
-	seahorse_generate_select_show (seahorse_view_get_window (SEAHORSE_VIEW (self)));
+	seahorse_generate_select_show (seahorse_viewer_get_window (SEAHORSE_VIEWER (self)));
 }
 
 
 static void seahorse_key_manager_on_new_button_clicked (SeahorseKeyManager* self, GtkWidget* widget) {
 	g_return_if_fail (SEAHORSE_IS_KEY_MANAGER (self));
 	g_return_if_fail (GTK_IS_WIDGET (widget));
-	seahorse_generate_select_show (seahorse_view_get_window (SEAHORSE_VIEW (self)));
+	seahorse_generate_select_show (seahorse_viewer_get_window (SEAHORSE_VIEWER (self)));
 }
 
 
@@ -535,7 +535,7 @@ static void seahorse_key_manager_imported_keys (SeahorseKeyManager* self, Seahor
 	g_return_if_fail (SEAHORSE_IS_KEY_MANAGER (self));
 	g_return_if_fail (SEAHORSE_IS_OPERATION (op));
 	if (!seahorse_operation_is_successful (op)) {
-		seahorse_operation_display_error (op, _ ("Couldn't import keys"), GTK_WIDGET (seahorse_view_get_window (SEAHORSE_VIEW (self))));
+		seahorse_operation_display_error (op, _ ("Couldn't import keys"), GTK_WIDGET (seahorse_viewer_get_window (SEAHORSE_VIEWER (self))));
 		return;
 	}
 	seahorse_viewer_set_status (SEAHORSE_VIEWER (self), _ ("Imported keys"));
@@ -592,7 +592,7 @@ static void seahorse_key_manager_import_files (SeahorseKeyManager* self, char** 
 					file = g_file_new_for_uri (uri);
 					input = g_file_read (file, NULL, &inner_error);
 					if (inner_error != NULL) {
-						goto __catch3_g_error;
+						goto __catch0_g_error;
 					}
 					op = seahorse_source_import (sksrc, G_INPUT_STREAM (input));
 					seahorse_multi_operation_take (mop, op);
@@ -600,8 +600,8 @@ static void seahorse_key_manager_import_files (SeahorseKeyManager* self, char** 
 					(input == NULL ? NULL : (input = (g_object_unref (input), NULL)));
 					(op == NULL ? NULL : (op = (g_object_unref (op), NULL)));
 				}
-				goto __finally3;
-				__catch3_g_error:
+				goto __finally0;
+				__catch0_g_error:
 				{
 					GError * ex;
 					ex = inner_error;
@@ -614,7 +614,7 @@ static void seahorse_key_manager_import_files (SeahorseKeyManager* self, char** 
 						continue;
 					}
 				}
-				__finally3:
+				__finally0:
 				;
 				uri = (g_free (uri), NULL);
 				(sksrc == NULL ? NULL : (sksrc = (g_object_unref (sksrc), NULL)));
@@ -626,7 +626,7 @@ static void seahorse_key_manager_import_files (SeahorseKeyManager* self, char** 
 		seahorse_operation_watch (SEAHORSE_OPERATION (mop), _seahorse_key_manager_imported_keys_seahorse_done_func, self, NULL, NULL);
 	}
 	if (errmsg->len == 0) {
-		seahorse_util_show_error (GTK_WIDGET (seahorse_view_get_window (SEAHORSE_VIEW (self))), _ ("Couldn't import keys"), errmsg->str);
+		seahorse_util_show_error (GTK_WIDGET (seahorse_viewer_get_window (SEAHORSE_VIEWER (self))), _ ("Couldn't import keys"), errmsg->str);
 	}
 	(mop == NULL ? NULL : (mop = (g_object_unref (mop), NULL)));
 	(errmsg == NULL ? NULL : (errmsg = (g_string_free (errmsg, TRUE), NULL)));
@@ -639,7 +639,7 @@ static void seahorse_key_manager_import_prompt (SeahorseKeyManager* self) {
 	char* uri;
 	g_return_if_fail (SEAHORSE_IS_KEY_MANAGER (self));
 	_tmp0 = NULL;
-	dialog = (_tmp0 = seahorse_util_chooser_open_new (_ ("Import Key"), seahorse_view_get_window (SEAHORSE_VIEW (self))), (_tmp0 == NULL ? NULL : g_object_ref (_tmp0)));
+	dialog = (_tmp0 = seahorse_util_chooser_open_new (_ ("Import Key"), seahorse_viewer_get_window (SEAHORSE_VIEWER (self))), (_tmp0 == NULL ? NULL : g_object_ref (_tmp0)));
 	seahorse_util_chooser_show_key_files (dialog);
 	uri = seahorse_util_chooser_open_prompt (dialog);
 	if (uri != NULL) {
@@ -686,7 +686,7 @@ static void seahorse_key_manager_import_text (SeahorseKeyManager* self, const ch
 	len = g_utf8_strlen (text, -1);
 	ktype = seahorse_util_detect_data_type (text, len);
 	if (ktype == 0) {
-		seahorse_util_show_error (GTK_WIDGET (seahorse_view_get_window (SEAHORSE_VIEW (self))), _ ("Couldn't import keys"), _ ("Unrecognized key type, or invalid data format"));
+		seahorse_util_show_error (GTK_WIDGET (seahorse_viewer_get_window (SEAHORSE_VIEWER (self))), _ ("Couldn't import keys"), _ ("Unrecognized key type, or invalid data format"));
 		return;
 	}
 	/* All our supported key types have a local key source */
@@ -770,7 +770,7 @@ static void seahorse_key_manager_on_key_import_clipboard (SeahorseKeyManager* se
 static void seahorse_key_manager_on_remote_find (SeahorseKeyManager* self, GtkAction* action) {
 	g_return_if_fail (SEAHORSE_IS_KEY_MANAGER (self));
 	g_return_if_fail (GTK_IS_ACTION (action));
-	seahorse_keyserver_search_show (seahorse_view_get_window (SEAHORSE_VIEW (self)));
+	seahorse_keyserver_search_show (seahorse_viewer_get_window (SEAHORSE_VIEWER (self)));
 }
 
 
@@ -784,7 +784,7 @@ static void seahorse_key_manager_on_remote_sync (SeahorseKeyManager* self, GtkAc
 		_tmp0 = NULL;
 		objects = (_tmp0 = seahorse_context_find_objects (seahorse_context_for_app (), ((GQuark) (0)), 0, SEAHORSE_LOCATION_LOCAL), (objects == NULL ? NULL : (objects = (g_list_free (objects), NULL))), _tmp0);
 	}
-	seahorse_keyserver_sync_show (objects, seahorse_view_get_window (SEAHORSE_VIEW (self)));
+	seahorse_keyserver_sync_show (objects, seahorse_viewer_get_window (SEAHORSE_VIEWER (self)));
 	(objects == NULL ? NULL : (objects = (g_list_free (objects), NULL)));
 }
 
@@ -1172,7 +1172,7 @@ static GObject * seahorse_key_manager_constructor (GType type, guint n_construct
 		_tmp3 = NULL;
 		_tmp2 = NULL;
 		self->priv->_notebook = (_tmp3 = (_tmp2 = GTK_NOTEBOOK (seahorse_widget_get_widget (SEAHORSE_WIDGET (self), "notebook")), (_tmp2 == NULL ? NULL : g_object_ref (_tmp2))), (self->priv->_notebook == NULL ? NULL : (self->priv->_notebook = (g_object_unref (self->priv->_notebook), NULL))), _tmp3);
-		gtk_window_set_title (seahorse_view_get_window (SEAHORSE_VIEW (self)), _ ("Passwords and Encryption Keys"));
+		gtk_window_set_title (seahorse_viewer_get_window (SEAHORSE_VIEWER (self)), _ ("Passwords and Encryption Keys"));
 		/* 
 		 * We hook callbacks up here for now because of a compiler warning. See:
 		 * http://bugzilla.gnome.org/show_bug.cgi?id=539483
@@ -1294,12 +1294,12 @@ static GObject * seahorse_key_manager_constructor (GType type, guint n_construct
 		_tmp21 = NULL;
 		_tmp20 = NULL;
 		entries = (_tmp21 = (_tmp20 = g_new0 (GtkTargetEntry, 0), _tmp20), entries_length1 = 0, _tmp21);
-		gtk_drag_dest_set (GTK_WIDGET (seahorse_view_get_window (SEAHORSE_VIEW (self))), GTK_DEST_DEFAULT_ALL, entries, entries_length1, GDK_ACTION_COPY);
+		gtk_drag_dest_set (GTK_WIDGET (seahorse_viewer_get_window (SEAHORSE_VIEWER (self))), GTK_DEST_DEFAULT_ALL, entries, entries_length1, GDK_ACTION_COPY);
 		targets = gtk_target_list_new (entries, ((guint) (0)));
 		gtk_target_list_add_uri_targets (targets, ((guint) (SEAHORSE_KEY_MANAGER_TARGETS_URIS)));
 		gtk_target_list_add_text_targets (targets, ((guint) (SEAHORSE_KEY_MANAGER_TARGETS_PLAIN)));
-		gtk_drag_dest_set_target_list (GTK_WIDGET (seahorse_view_get_window (SEAHORSE_VIEW (self))), targets);
-		g_signal_connect_object (GTK_WIDGET (seahorse_view_get_window (SEAHORSE_VIEW (self))), "drag-data-received", ((GCallback) (_seahorse_key_manager_on_target_drag_data_received_gtk_widget_drag_data_received)), self, 0);
+		gtk_drag_dest_set_target_list (GTK_WIDGET (seahorse_viewer_get_window (SEAHORSE_VIEWER (self))), targets);
+		g_signal_connect_object (GTK_WIDGET (seahorse_viewer_get_window (SEAHORSE_VIEWER (self))), "drag-data-received", ((GCallback) (_seahorse_key_manager_on_target_drag_data_received_gtk_widget_drag_data_received)), self, 0);
 		/* To show first time dialog */
 		g_timeout_add (((guint) (1000)), _seahorse_key_manager_on_first_timer_gsource_func, self);
 		g_signal_emit_by_name (G_OBJECT (SEAHORSE_VIEW (self)), "selection-changed");

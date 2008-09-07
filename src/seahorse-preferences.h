@@ -22,6 +22,8 @@
 #ifndef __SEAHORSE_PREFERENCES_H__
 #define __SEAHORSE_PREFERENCES_H__
 
+#include <gtk/gtk.h>
+
 #define LISTING_SCHEMAS SEAHORSE_SCHEMAS "/listing"
 #define SHOW_VALIDITY_KEY LISTING_SCHEMAS "/show_validity"
 #define SHOW_EXPIRES_KEY LISTING_SCHEMAS "/show_expires"

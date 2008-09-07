@@ -152,6 +152,7 @@ namespace Seahorse {
 		
 		public weak Gtk.Dialog chooser_save_new (string title, Gtk.Window? parent);
 		public void chooser_show_key_files (Gtk.Dialog dialog);
+		[CCode (cname = "seahorse_chooser_set_filename_full")]
 		public void chooser_set_filename (Gtk.Dialog dialog, GLib.List<Key> keys);
 		public string chooser_save_prompt (Gtk.Dialog dialog);
 		
@@ -221,5 +222,21 @@ namespace Seahorse {
 	[CCode (cheader_filename = "seahorse-windows.h")]
 	public class KeyserverSync : GLib.Object {
 		public static weak Gtk.Window show (GLib.List<Key> keys, Gtk.Window parent);
+	}
+	
+	[CCode (cheader_filename = "seahorse-viewer.h")]
+	public abstract class Viewer : Widget, View {
+		protected void ensure_updated ();
+		protected void include_actions (Gtk.ActionGroup actions);
+		public virtual GLib.List<weak Object> get_selected_objects ();
+		public virtual void set_selected_objects (GLib.List<Object> objects);
+		public virtual weak Object? selected { get; set; }
+		public virtual weak Set? current_set { get; }
+		public virtual weak Object? get_selected_object_and_uid (out uint uid);
+		public Gtk.Window window { get; } 
+		protected void show_context_menu (uint button, uint time);
+		protected void show_properties (Object obj);
+		protected void set_status (string text);
+		protected void set_numbered_status (string text, int num);
 	}
 }

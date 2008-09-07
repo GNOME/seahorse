@@ -36,7 +36,7 @@ namespace Seahorse.Gkr {
 			get { return Seahorse.Gkr.TYPE; } 
 		} 
 		
-		public override string# ui_definition { 
+		public override weak string ui_definition { 
 			get { return ""; } 
 		}
 		

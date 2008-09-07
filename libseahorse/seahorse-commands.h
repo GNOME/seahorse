@@ -56,7 +56,7 @@ struct _SeahorseCommandsClass {
 	SeahorseOperation* (*delete_objects) (SeahorseCommands* self, GList* obj);
 	GQuark (*get_ktype) (SeahorseCommands* self);
 	GtkActionGroup* (*get_command_actions) (SeahorseCommands* self);
-	char* (*get_ui_definition) (SeahorseCommands* self);
+	const char* (*get_ui_definition) (SeahorseCommands* self);
 };
 
 
@@ -65,7 +65,7 @@ SeahorseOperation* seahorse_commands_delete_objects (SeahorseCommands* self, GLi
 SeahorseView* seahorse_commands_get_view (SeahorseCommands* self);
 GQuark seahorse_commands_get_ktype (SeahorseCommands* self);
 GtkActionGroup* seahorse_commands_get_command_actions (SeahorseCommands* self);
-char* seahorse_commands_get_ui_definition (SeahorseCommands* self);
+const char* seahorse_commands_get_ui_definition (SeahorseCommands* self);
 GType seahorse_commands_get_type (void);
 
 

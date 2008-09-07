@@ -24,10 +24,10 @@
 
 #include <glib.h>
 #include <glib-object.h>
+#include <seahorse-viewer.h>
 #include <gtk/gtk.h>
 #include <seahorse-operation.h>
 #include <seahorse-object.h>
-#include "seahorse-viewer.h"
 
 G_BEGIN_DECLS
 

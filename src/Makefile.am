@@ -17,7 +17,6 @@ INCLUDES = -I$(top_builddir) \
 	-DGETTEXT_PACKAGE=\""seahorse\""
 
 VALA_SRCS = \
-	seahorse-viewer.vala \
 	seahorse-generate-select.vala \
 	seahorse-key-manager.vala \
 	seahorse-keyserver-results.vala
@@ -70,6 +69,7 @@ seahorse_SOURCES = main.c \
 	seahorse-preferences.c seahorse-preferences.h \
 	eggtreemultidnd.c eggtreemultidnd.h \
 	seahorse-key-manager-store.c seahorse-key-manager-store.h \
+	seahorse-viewer.c seahorse-viewer.h \
 	seahorse-windows.h \
 	$(KEYSERVER_SRCS) \
 	$(VALA_CFILES) $(VALA_HFILES)

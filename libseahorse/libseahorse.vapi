@@ -27,7 +27,7 @@ namespace Seahorse {
 		public Seahorse.View view { get; construct; }
 		public abstract GLib.Quark ktype { get; }
 		public abstract Gtk.ActionGroup command_actions { get; }
-		public abstract string# ui_definition { get; }
+		public abstract string ui_definition { get; }
 	}
 	[CCode (cheader_filename = "seahorse-generator.h")]
 	public abstract class Generator : GLib.Object {

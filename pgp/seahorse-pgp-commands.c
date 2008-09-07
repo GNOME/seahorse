@@ -239,12 +239,10 @@ static GQuark seahorse_pgp_commands_real_get_ktype (SeahorseCommands* base) {
 }
 
 
-static char* seahorse_pgp_commands_real_get_ui_definition (SeahorseCommands* base) {
+static const char* seahorse_pgp_commands_real_get_ui_definition (SeahorseCommands* base) {
 	SeahorsePGPCommands* self;
-	const char* _tmp0;
 	self = SEAHORSE_PGP_COMMANDS (base);
-	_tmp0 = NULL;
-	return (_tmp0 = SEAHORSE_PGP_COMMANDS_UI_DEF, (_tmp0 == NULL ? NULL : g_strdup (_tmp0)));
+	return SEAHORSE_PGP_COMMANDS_UI_DEF;
 }
 
 
