@@ -119,10 +119,17 @@ seahorse_key_object_finalize (GObject *gobject)
     G_OBJECT_CLASS (seahorse_key_parent_class)->finalize (gobject);
 }
 
+static gchar*
+seahorse_key_get_markup (SeahorseObject *obj)
+{
+	return seahorse_key_get_name_markup (SEAHORSE_KEY (obj), 0);
+}
+
 static void
 seahorse_key_class_init (SeahorseKeyClass *klass)
 {
     GObjectClass *gobject_class;
+    SeahorseObjectClass *object_class;
     
     seahorse_key_parent_class = g_type_class_peek_parent (klass);
     gobject_class = G_OBJECT_CLASS (klass);
@@ -130,6 +137,11 @@ seahorse_key_class_init (SeahorseKeyClass *klass)
     gobject_class->finalize = seahorse_key_object_finalize;
     gobject_class->set_property = seahorse_key_set_property;
     gobject_class->get_property = seahorse_key_get_property;
+    
+    object_class = SEAHORSE_OBJECT_CLASS (klass);
+    object_class->get_display_name = (gpointer)seahorse_key_get_display_name;
+    object_class->get_markup = seahorse_key_get_markup;
+    object_class->get_stock_id = (gpointer)seahorse_key_get_stock_id;
     
     g_object_class_install_property (gobject_class, PROP_KEY_SOURCE,
         g_param_spec_object ("key-source", "Key Source", "Key Source that this key belongs to", 
