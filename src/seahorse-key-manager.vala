@@ -496,7 +496,7 @@ namespace Seahorse {
 					mop.take (op);
 					
 				} catch (GLib.Error ex) {
-					errmsg.append_printf ("%s: %s", uri, ex.message);
+					errmsg.append_printf ("%s: %s\n", uri, ex.message);
 					continue;
 				}
 			}
@@ -506,7 +506,7 @@ namespace Seahorse {
 				mop.watch (imported_keys, null);
 			}
 			
-			if (errmsg.len == 0)
+			if (errmsg.len > 0)
 				Util.show_error (window, _("Couldn't import keys"), errmsg.str);
 		}
 		

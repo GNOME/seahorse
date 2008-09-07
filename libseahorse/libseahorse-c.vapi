@@ -87,7 +87,7 @@ namespace Seahorse {
 
 	[CCode (cheader_filename = "seahorse-operation.h")]
 	public class MultiOperation : Operation {
-		public void take (Operation op);
+		public void take (Operation# op);
 	}
 	
 	[CCode (cheader_filename = "seahorse-context.h")]

@@ -562,10 +562,10 @@ static void seahorse_key_manager_import_files (SeahorseKeyManager* self, char** 
 		uri_collection = uris;
 		uri_collection_length1 = uris_length1;
 		for (uri_it = 0; (uris_length1 != -1 && uri_it < uris_length1) || (uris_length1 == -1 && uri_collection[uri_it] != NULL); uri_it = uri_it + 1) {
-			const char* _tmp1;
+			const char* _tmp2;
 			char* uri;
-			_tmp1 = NULL;
-			uri = (_tmp1 = uri_collection[uri_it], (_tmp1 == NULL ? NULL : g_strdup (_tmp1)));
+			_tmp2 = NULL;
+			uri = (_tmp2 = uri_collection[uri_it], (_tmp2 == NULL ? NULL : g_strdup (_tmp2)));
 			{
 				GQuark ktype;
 				SeahorseSource* _tmp0;
@@ -589,13 +589,15 @@ static void seahorse_key_manager_import_files (SeahorseKeyManager* self, char** 
 					GFile* file;
 					GFileInputStream* input;
 					SeahorseOperation* op;
+					SeahorseOperation* _tmp1;
 					file = g_file_new_for_uri (uri);
 					input = g_file_read (file, NULL, &inner_error);
 					if (inner_error != NULL) {
 						goto __catch0_g_error;
 					}
 					op = seahorse_source_import (sksrc, G_INPUT_STREAM (input));
-					seahorse_multi_operation_take (mop, op);
+					_tmp1 = NULL;
+					seahorse_multi_operation_take (mop, (_tmp1 = op, (_tmp1 == NULL ? NULL : g_object_ref (_tmp1))));
 					(file == NULL ? NULL : (file = (g_object_unref (file), NULL)));
 					(input == NULL ? NULL : (input = (g_object_unref (input), NULL)));
 					(op == NULL ? NULL : (op = (g_object_unref (op), NULL)));
@@ -607,7 +609,7 @@ static void seahorse_key_manager_import_files (SeahorseKeyManager* self, char** 
 					ex = inner_error;
 					inner_error = NULL;
 					{
-						g_string_append_printf (errmsg, "%s: %s", uri, ex->message);
+						g_string_append_printf (errmsg, "%s: %s\n", uri, ex->message);
 						(ex == NULL ? NULL : (ex = (g_error_free (ex), NULL)));
 						uri = (g_free (uri), NULL);
 						(sksrc == NULL ? NULL : (sksrc = (g_object_unref (sksrc), NULL)));
@@ -625,7 +627,7 @@ static void seahorse_key_manager_import_files (SeahorseKeyManager* self, char** 
 		seahorse_progress_show (SEAHORSE_OPERATION (mop), _ ("Importing keys"), TRUE);
 		seahorse_operation_watch (SEAHORSE_OPERATION (mop), _seahorse_key_manager_imported_keys_seahorse_done_func, self, NULL, NULL);
 	}
-	if (errmsg->len == 0) {
+	if (errmsg->len > 0) {
 		seahorse_util_show_error (GTK_WIDGET (seahorse_viewer_get_window (SEAHORSE_VIEWER (self))), _ ("Couldn't import keys"), errmsg->str);
 	}
 	(mop == NULL ? NULL : (mop = (g_object_unref (mop), NULL)));
