@@ -1004,7 +1004,7 @@ seahorse_secure_entry_focus_in (GtkWidget *widget, GdkEventFocus *event)
     return FALSE;
 }
 
-static gint
+static gboolean
 seahorse_secure_entry_focus_out (GtkWidget *widget, GdkEventFocus *event)
 {
     SeahorseSecureEntry *entry = SEAHORSE_SECURE_ENTRY (widget);

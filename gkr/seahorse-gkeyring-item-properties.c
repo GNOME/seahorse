@@ -247,7 +247,7 @@ password_expander_activate (GtkExpander *expander, SeahorseWidget *swidget)
         
         /* Now watch for changes in the password */
         g_signal_connect (widget, "activate", G_CALLBACK (password_activate), swidget);
-        g_signal_connect (widget, "focus-out-event", G_CALLBACK (password_focus_out), swidget);
+        g_signal_connect_after (widget, "focus-out-event", G_CALLBACK (password_focus_out), swidget);
     }
     
     /* Always have a hidden password when opening box */
