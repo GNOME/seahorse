@@ -1,11 +1,6 @@
 
 icon22dir = $(datadir)/pixmaps/seahorse/22x22/
-icon22_DATA = seahorse-applet-encrypted.png \
-                seahorse-applet-key.png \
-                seahorse-applet-signed.png \
-                seahorse-applet-text.png \
-                seahorse-applet-unknown.png \
-                seahorse-key.png \
+icon22_DATA =   seahorse-key.png \
                 seahorse-key-personal.png \
                 seahorse-key-ssh.png \
                 seahorse-person.png \
@@ -14,12 +9,7 @@ icon22_DATA = seahorse-applet-encrypted.png \
                 seahorse-sign-ok.png \
                 seahorse-sign-bad.png
 
-iconsrc = seahorse-applet-encrypted.svg \
-                seahorse-applet-key.svg \
-                seahorse-applet-signed.svg \
-                seahorse-applet-text.svg \
-                seahorse-applet-unknown.svg \
-                seahorse-key.svg \
+iconsrc =       seahorse-key.svg \
                 seahorse-key-personal.svg \
                 seahorse-key-ssh.svg \
                 seahorse-person.svg \
