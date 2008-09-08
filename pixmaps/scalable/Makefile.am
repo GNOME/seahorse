@@ -1,7 +1,3 @@
-
-pixmapdir = $(datadir)/pixmaps/
-pixmap_DATA = seahorse-applet.svg
-
 iconsvgdir = $(datadir)/pixmaps/seahorse/scalable/
 iconsvg_DATA =  seahorse-key.svg \
                 seahorse-key-personal.svg \
