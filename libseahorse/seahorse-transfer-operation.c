@@ -187,29 +187,35 @@ export_done (SeahorseOperation *op, SeahorseTransferOperation *top)
         return;
     }
     
-    DEBUG_OPERATION (("[transfer] starting import\n"));
-    
     	/* Build an input stream for this */
 	data = g_memory_output_stream_get_data (pv->output);
 	size = seahorse_util_memory_output_length (pv->output);
+	
+	if(!size) {
+		seahorse_operation_mark_done (SEAHORSE_OPERATION (top), FALSE, NULL);
+		return;
+	}
+	
+	DEBUG_OPERATION (("[transfer] starting import\n"));
+	    
 	g_return_if_fail (data);
 
 	input = g_memory_input_stream_new_from_data (g_memdup (data, size), size, g_free);
 	g_return_if_fail (input);
-	
+
 	/* This frees data */
 	pv->operation = seahorse_source_import (top->to, input);
 	g_return_if_fail (pv->operation != NULL);
-	
+
 	g_object_unref (input);
-    
-    /* And mark us as started */
-    seahorse_operation_mark_start (SEAHORSE_OPERATION (top));
-    seahorse_operation_mark_progress (SEAHORSE_OPERATION (top), pv->message ? pv->message : 
-                                      seahorse_operation_get_message (pv->operation), 0.5);
-    
-    seahorse_operation_watch (pv->operation, (SeahorseDoneFunc)import_done, top,
-                              (SeahorseProgressFunc)import_progress, top);
+
+	/* And mark us as started */
+	seahorse_operation_mark_start (SEAHORSE_OPERATION (top));
+	seahorse_operation_mark_progress (SEAHORSE_OPERATION (top), pv->message ? pv->message : 
+					  seahorse_operation_get_message (pv->operation), 0.5);
+
+	seahorse_operation_watch (pv->operation, (SeahorseDoneFunc)import_done, top,
+				  (SeahorseProgressFunc)import_progress, top);
 }
 
 
