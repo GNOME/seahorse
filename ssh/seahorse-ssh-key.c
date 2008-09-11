@@ -123,6 +123,7 @@ changed_key (SeahorseSSHKey *skey)
         obj->_location = SEAHORSE_LOCATION_LOCAL;
         key->loaded = SKEY_INFO_COMPLETE;
         obj->_flags = skey->keydata->authorized ? SKEY_FLAG_TRUSTED : 0;
+        obj->_flags |= SKEY_FLAG_EXPORTABLE;
         
         if (skey->keydata->privfile) {
             obj->_usage = SEAHORSE_USAGE_PRIVATE_KEY;

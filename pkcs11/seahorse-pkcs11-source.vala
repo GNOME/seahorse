@@ -10,7 +10,8 @@ namespace Seahorse.Pkcs11 {
 		P11.CKA_TOKEN,
 		P11.CKA_GNOME_USER_TRUST,
 		P11.CKA_START_DATE,
-		P11.CKA_END_DATE
+		P11.CKA_END_DATE,
+		P11.CKA_EXTRACTABLE
 	};
 	
 	public class Source : Seahorse.Source {

@@ -50,7 +50,8 @@ namespace Seahorse {
 			EXPIRED =     0x0100,
 			REVOKED =     0x0200,
 			DISABLED =    0x0400,
-			TRUSTED =     0x1000
+			TRUSTED =     0x1000,
+			EXPORTABLE =  0x00100000
         	}
 
 		public GLib.Quark ktype { get; }

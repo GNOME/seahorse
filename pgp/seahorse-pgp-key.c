@@ -245,7 +245,7 @@ changed_key (SeahorsePGPKey *pkey)
             skey->loaded = SKEY_INFO_BASIC;
         
         /* The flags */
-        obj->_flags = 0;
+        obj->_flags = SKEY_FLAG_EXPORTABLE;
     
         if (!pkey->pubkey->disabled && !pkey->pubkey->expired && 
             !pkey->pubkey->revoked && !pkey->pubkey->invalid)

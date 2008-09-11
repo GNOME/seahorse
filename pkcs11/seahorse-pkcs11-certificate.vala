@@ -133,7 +133,14 @@ namespace Seahorse.Pkcs11 {
 				_id = id_from_attributes(_pkcs11_attributes);
 				_location = Location.LOCAL;
 				_usage = Usage.PUBLIC_KEY;
+				
+				bool exportable;
+				if(!_pkcs11_attributes.find_boolean(P11.CKA_EXTRACTABLE, out exportable))
+					exportable = false;
+				
 				_flags = 0;
+				if(exportable)
+					_flags = Key.Flag.EXPORTABLE;
 				
 				/* TODO: Expiry, revoked, disabled etc... */
 				

@@ -62,10 +62,18 @@ static void seahorse_pkcs11_certificate_rebuild (SeahorsePkcs11Certificate* self
 		SEAHORSE_OBJECT (self)->_usage = SEAHORSE_USAGE_NONE;
 		SEAHORSE_OBJECT (self)->_flags = ((guint) (SKEY_FLAG_DISABLED));
 	} else {
+		gboolean exportable;
 		SEAHORSE_OBJECT (self)->_id = seahorse_pkcs11_id_from_attributes (self->priv->_pkcs11_attributes);
 		SEAHORSE_OBJECT (self)->_location = SEAHORSE_LOCATION_LOCAL;
 		SEAHORSE_OBJECT (self)->_usage = SEAHORSE_USAGE_PUBLIC_KEY;
+		exportable = FALSE;
+		if (!gp11_attributes_find_boolean (self->priv->_pkcs11_attributes, CKA_EXTRACTABLE, &exportable)) {
+			exportable = FALSE;
+		}
 		SEAHORSE_OBJECT (self)->_flags = ((guint) (0));
+		if (exportable) {
+			SEAHORSE_OBJECT (self)->_flags = ((guint) (SKEY_FLAG_EXPORTABLE));
+		}
 		/* TODO: Expiry, revoked, disabled etc... */
 		if (seahorse_pkcs11_certificate_get_trust (self) >= ((gint) (SEAHORSE_VALIDITY_MARGINAL))) {
 			SEAHORSE_OBJECT (self)->_flags = SEAHORSE_OBJECT (self)->_flags | (SKEY_FLAG_TRUSTED);

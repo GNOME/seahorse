@@ -22,6 +22,7 @@
 #include "config.h"
 
 #include "seahorse-commands.h"
+#include "seahorse-key.h"
 #include "seahorse-preferences.h"
 #include "seahorse-progress.h"
 #include "seahorse-util.h"
@@ -43,6 +44,7 @@ enum {
 struct _SeahorseViewerPrivate {
 	GtkUIManager *ui_manager;
 	GtkActionGroup *object_actions;
+	GtkActionGroup *export_actions;
 	GHashTable *commands;
 };
 
@@ -175,6 +177,21 @@ on_key_properties (GtkAction* action, SeahorseViewer* self)
 		seahorse_viewer_show_properties (self, seahorse_viewer_get_selected (self));
 }
 
+static GList*
+objects_prune_non_exportable (GList *objects)
+{
+	GList *exportable = NULL;
+	GList *l;
+	
+	for (l = objects; l; l = g_list_next (l)) {
+		if (seahorse_object_get_flags (l->data) & SKEY_FLAG_EXPORTABLE)
+			exportable = g_list_append (exportable, l->data);
+	}
+	
+	g_list_free (objects);
+	return exportable;
+}
+
 static void 
 on_export_done (SeahorseOperation* op, SeahorseViewer* self) 
 {
@@ -198,7 +215,8 @@ on_key_export_file (GtkAction* action, SeahorseViewer* self)
 	g_return_if_fail (GTK_IS_ACTION (action));
 	
 	objects = seahorse_viewer_get_selected_objects (self);
-	if (objects == NULL) 
+	objects = objects_prune_non_exportable (objects);
+	if (objects == NULL)
 		return;
 
 	dialog = seahorse_util_chooser_save_new (_("Export public key"), 
@@ -276,6 +294,7 @@ on_key_export_clipboard (GtkAction* action, SeahorseViewer* self)
 	g_return_if_fail (GTK_IS_ACTION (action));
 	
 	objects = seahorse_viewer_get_selected_objects (self);
+	objects = objects_prune_non_exportable (objects);
 	if (objects == NULL)
 		return;
 
@@ -409,12 +428,15 @@ on_key_delete (GtkAction* action, SeahorseViewer* self)
 static const GtkActionEntry KEY_ENTRIES[] = {
 	{ "key-properties", GTK_STOCK_PROPERTIES, N_("P_roperties"), NULL,
 	  N_("Show key properties"), G_CALLBACK (on_key_properties) }, 
+	{ "key-delete", GTK_STOCK_DELETE, N_("_Delete Key"), NULL,
+	  N_("Delete selected keys"), G_CALLBACK (on_key_delete) }
+};
+
+static const GtkActionEntry EXPORT_ENTRIES[] = {
 	{ "key-export-file", GTK_STOCK_SAVE_AS, N_("E_xport Public Key..."), NULL,
 	  N_("Export public part of key to a file"), G_CALLBACK (on_key_export_file) },
 	{ "key-export-clipboard", GTK_STOCK_COPY, N_("_Copy Public Key"), "<control>C",
-	  N_("Copy public part of selected keys to the clipboard"), G_CALLBACK (on_key_export_clipboard) },
-	{ "key-delete", GTK_STOCK_DELETE, N_("_Delete Key"), NULL,
-	  N_("Delete selected keys"), G_CALLBACK (on_key_delete) }
+	  N_("Copy public part of selected keys to the clipboard"), G_CALLBACK (on_key_export_clipboard) }
 };
 		
 static void 
@@ -437,17 +459,33 @@ include_basic_actions (SeahorseViewer* self)
 	/* Mark the properties toolbar button as important */
 	g_object_set (gtk_action_group_get_action (pv->object_actions, "key-properties"), "is-important", TRUE, NULL);
 	seahorse_viewer_include_actions (self, pv->object_actions);
+	
+	pv->export_actions = gtk_action_group_new ("export");
+	gtk_action_group_set_translation_domain (pv->export_actions, GETTEXT_PACKAGE);
+	gtk_action_group_add_actions (pv->export_actions, EXPORT_ENTRIES, G_N_ELEMENTS (EXPORT_ENTRIES), self);
+	seahorse_viewer_include_actions (self, pv->export_actions);
 }
 
 static void 
 on_selection_changed (SeahorseView* view, SeahorseViewer* self) 
 {
 	SeahorseViewerPrivate *pv = SEAHORSE_VIEWER_GET_PRIVATE (self);
-
+	gboolean exportable = FALSE;
+	GList *objects;
+	
 	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
 	g_return_if_fail (SEAHORSE_IS_VIEW (view));
 	
+	/* Enable if anything is selected */
 	gtk_action_group_set_sensitive (pv->object_actions, seahorse_view_get_selected (view) != NULL);
+	
+	objects = seahorse_viewer_get_selected_objects (self);
+	objects = objects_prune_non_exportable (objects);
+	exportable = (objects != NULL);
+	g_list_free (objects);
+	
+	/* Enable if any exportable objects are selected */
+	gtk_action_group_set_sensitive (pv->export_actions, exportable);
 }
 
 static void 
@@ -574,6 +612,10 @@ seahorse_viewer_dispose (GObject *obj)
 		g_object_unref (pv->object_actions);
 	pv->object_actions = NULL;
 	
+	if (pv->export_actions)
+		g_object_unref (pv->export_actions);
+	pv->export_actions = NULL;
+	
 	if (pv->commands)
 		g_hash_table_unref (pv->commands);
 	pv->commands = NULL;
@@ -587,6 +629,7 @@ seahorse_viewer_finalize (GObject *obj)
 	SeahorseViewerPrivate *pv = SEAHORSE_VIEWER_GET_PRIVATE(obj);
 	
 	g_assert (pv->object_actions == NULL);
+	g_assert (pv->export_actions == NULL);
 	g_assert (pv->commands == NULL);
 	g_assert (pv->ui_manager == NULL);
 

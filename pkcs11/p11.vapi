@@ -3,6 +3,7 @@
 namespace P11 {
 	const uint CKA_CLASS;
 	const uint CKA_END_DATE;
+	const uint CKA_EXTRACTABLE;
 	const uint CKA_GNOME_IMPORT_OBJECTS;
 	const uint CKA_GNOME_IMPORT_TOKEN;
 	const uint CKA_GNOME_USER_TRUST;

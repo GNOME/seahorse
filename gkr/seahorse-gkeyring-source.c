@@ -60,6 +60,7 @@ enum {
     PROP_0,
     PROP_KEYRING_NAME,
     PROP_KEY_TYPE,
+    PROP_FLAGS,
     PROP_KEY_DESC,
     PROP_LOCATION
 };
@@ -672,6 +673,9 @@ seahorse_gkeyring_source_get_property (GObject *object, guint prop_id, GValue *v
     case PROP_KEY_TYPE:
         g_value_set_uint (value, SEAHORSE_GKR);
         break;
+    case PROP_FLAGS:
+	g_value_set_uint (value, 0);
+	break;
     case PROP_KEY_DESC:
         g_value_set_string (value, _("Password"));
         break;
@@ -825,6 +829,10 @@ seahorse_gkeyring_source_class_init (SeahorseGKeyringSourceClass *klass)
     g_object_class_install_property (gobject_class, PROP_KEY_TYPE,
         g_param_spec_uint ("key-type", "Key Type", "Key type that originates from this key source.", 
                            0, G_MAXUINT, SKEY_UNKNOWN, G_PARAM_READABLE));
+    
+    g_object_class_install_property (gobject_class, PROP_FLAGS,
+        g_param_spec_uint ("flags", "Flags", "Object Source flags.", 
+                           0, G_MAXUINT, 0, G_PARAM_READABLE));
 
     g_object_class_install_property (gobject_class, PROP_KEY_DESC,
         g_param_spec_string ("key-desc", "Key Desc", "Description for keys that originate here.",
