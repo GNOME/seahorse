@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-06 09:02+0100\n"
+"POT-Creation-Date: 2008-09-07 12:48+0000\n"
 "PO-Revision-Date: 2008-03-03 06:35+0000\n"
 "Last-Translator: Philip Withnall <pwithnall@svn.gnome.org>\n"
 "Language-Team:  <en@li.org>\n"
@@ -1129,6 +1129,12 @@ msgstr "_Replace"
 msgid "Unknown"
 msgstr "Unknown"
 
+#: ../libseahorse/seahorse-validity.c:34
+#: ../pgp/seahorse-pgp-key-properties.c:1177
+msgctxt "Validity"
+msgid "Never"
+msgstr "Never"
+
 #: ../libseahorse/seahorse-validity.c:36
 #: ../pgp/seahorse-pgp-key-properties.c:1184
 msgid "Marginal"
@@ -1573,7 +1579,7 @@ msgstr "Couldn't delete subkey"
 msgid "Unable to change trust"
 msgstr "Unable to change trust"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1060 ../src/seahorse-viewer.vala:408
+#: ../pgp/seahorse-pgp-key-properties.c:1060
 #: ../ssh/seahorse-ssh-key-properties.c:214
 #, c-format
 msgid "Couldn't export key to \"%s\""
@@ -1588,6 +1594,12 @@ msgstr "Export Complete Key"
 #: ../ssh/seahorse-ssh-key-properties.c:260
 msgid "Couldn't export key."
 msgstr "Couldn't export key."
+
+#: ../pgp/seahorse-pgp-key-properties.c:1309
+#: ../pgp/seahorse-pgp-key-properties.c:1381
+msgctxt "Expires"
+msgid "Never"
+msgstr "Never"
 
 #: ../pgp/seahorse-pgp-key-properties.c:1353
 msgid "ID"
@@ -2198,7 +2210,7 @@ msgstr ""
 msgid "_Sign message with key:"
 msgstr "_Sign message with key:"
 
-#: ../src/main.c:70 ../src/seahorse-viewer.vala:229
+#: ../src/main.c:70
 msgid "Encryption Key Manager"
 msgstr "Encryption Key Manager"
 
@@ -2397,7 +2409,7 @@ msgid_plural "Selected %d keys"
 msgstr[0] "Selected %d key"
 msgstr[1] "Selected %d keys"
 
-#: ../src/seahorse-key-manager-store.c:644 ../src/seahorse-viewer.vala:383
+#: ../src/seahorse-key-manager-store.c:644
 msgid "Couldn't export keys"
 msgstr "Couldn't export keys"
 
@@ -2543,136 +2555,6 @@ msgstr "_Key Servers"
 #: ../src/seahorse-keyserver-sync.glade.h:6
 msgid "_Sync"
 msgstr "_Sync"
-
-#. Top menu items
-#: ../src/seahorse-viewer.vala:36
-msgid "_Key"
-msgstr "_Key"
-
-#: ../src/seahorse-viewer.vala:37
-msgid "_Edit"
-msgstr "_Edit"
-
-#: ../src/seahorse-viewer.vala:38
-msgid "_View"
-msgstr "_View"
-
-#: ../src/seahorse-viewer.vala:39
-msgid "_Help"
-msgstr "_Help"
-
-#: ../src/seahorse-viewer.vala:41
-msgid "Prefere_nces"
-msgstr "Prefere_nces"
-
-#: ../src/seahorse-viewer.vala:42
-msgid "Change preferences for this program"
-msgstr "Change preferences for this program"
-
-#: ../src/seahorse-viewer.vala:43
-msgid "_About"
-msgstr "_About"
-
-#: ../src/seahorse-viewer.vala:44
-msgid "About this program"
-msgstr "About this program"
-
-#: ../src/seahorse-viewer.vala:45
-msgid "_Contents"
-msgstr "_Contents"
-
-#: ../src/seahorse-viewer.vala:46
-msgid "Show Seahorse help"
-msgstr "Show Seahorse help"
-
-#: ../src/seahorse-viewer.vala:50
-msgid "P_roperties"
-msgstr "P_roperties"
-
-#: ../src/seahorse-viewer.vala:51
-msgid "Show key properties"
-msgstr "Show key properties"
-
-#: ../src/seahorse-viewer.vala:52
-msgid "E_xport Public Key..."
-msgstr "E_xport Public Key..."
-
-#: ../src/seahorse-viewer.vala:53
-msgid "Export public part of key to a file"
-msgstr "Export public part of key to a file"
-
-#: ../src/seahorse-viewer.vala:54
-msgid "_Copy Public Key"
-msgstr "_Copy Public Key"
-
-#: ../src/seahorse-viewer.vala:55
-msgid "Copy public part of selected keys to the clipboard"
-msgstr "Copy public part of selected keys to the clipboard"
-
-#: ../src/seahorse-viewer.vala:56
-msgid "_Delete Key"
-msgstr "_Delete Key"
-
-#: ../src/seahorse-viewer.vala:57
-msgid "Delete selected keys"
-msgstr "Delete selected keys"
-
-#: ../src/seahorse-viewer.vala:203
-msgid "Contributions:"
-msgstr "Contributions:"
-
-#: ../src/seahorse-viewer.vala:231
-msgid "translator-credits"
-msgstr ""
-"Abigail Brady <morwen@evilmagi_c.org>\n"
-"Bastien Nocera <hadess@hadess.net>\n"
-"Gareth Owen <gowen72@yahoo.com>\n"
-"David Lodge <dave@cirt.net>"
-
-#: ../src/seahorse-viewer.vala:234
-msgid "Seahorse Project Homepage"
-msgstr "Seahorse Project Homepage"
-
-#: ../src/seahorse-viewer.vala:284
-msgid "Couldn't delete."
-msgstr "Couldn't delete."
-
-#: ../src/seahorse-viewer.vala:296
-msgid "Deleting..."
-msgstr "Deleting..."
-
-#: ../src/seahorse-viewer.vala:317
-#, c-format
-msgid "%s is a private key. Are you sure you want to proceed?"
-msgstr "%s is a private key. Are you sure you want to proceed?"
-
-#: ../src/seahorse-viewer.vala:319
-msgid ""
-"One or more of the deleted keys are private keys. Are you sure you want to "
-"proceed?"
-msgstr ""
-"One or more of the deleted keys are private keys. Are you sure you want to "
-"proceed?"
-
-#: ../src/seahorse-viewer.vala:347
-msgid "Couldn't retrieve data from key server"
-msgstr "Couldn't retrieve data from key server"
-
-#: ../src/seahorse-viewer.vala:365
-msgid "Copied keys"
-msgstr "Copied keys"
-
-#: ../src/seahorse-viewer.vala:377
-msgid "Retrieving keys"
-msgstr "Retrieving keys"
-
-#: ../src/seahorse-viewer.vala:392
-msgid "Export public key"
-msgstr "Export public key"
-
-#: ../src/seahorse-viewer.vala:404
-msgid "Exporting keys"
-msgstr "Exporting keys"
 
 #: ../ssh/seahorse-ssh-askpass.c:101
 msgid "Enter your Secure Shell passphrase:"
@@ -2946,6 +2828,104 @@ msgstr "_Login Name:"
 msgid "_Set Up"
 msgstr "_Set Up"
 
+#~ msgid "_Key"
+#~ msgstr "_Key"
+
+#~ msgid "_Edit"
+#~ msgstr "_Edit"
+
+#~ msgid "_View"
+#~ msgstr "_View"
+
+#~ msgid "_Help"
+#~ msgstr "_Help"
+
+#~ msgid "Prefere_nces"
+#~ msgstr "Prefere_nces"
+
+#~ msgid "Change preferences for this program"
+#~ msgstr "Change preferences for this program"
+
+#~ msgid "_About"
+#~ msgstr "_About"
+
+#~ msgid "About this program"
+#~ msgstr "About this program"
+
+#~ msgid "_Contents"
+#~ msgstr "_Contents"
+
+#~ msgid "Show Seahorse help"
+#~ msgstr "Show Seahorse help"
+
+#~ msgid "P_roperties"
+#~ msgstr "P_roperties"
+
+#~ msgid "Show key properties"
+#~ msgstr "Show key properties"
+
+#~ msgid "E_xport Public Key..."
+#~ msgstr "E_xport Public Key..."
+
+#~ msgid "Export public part of key to a file"
+#~ msgstr "Export public part of key to a file"
+
+#~ msgid "_Copy Public Key"
+#~ msgstr "_Copy Public Key"
+
+#~ msgid "Copy public part of selected keys to the clipboard"
+#~ msgstr "Copy public part of selected keys to the clipboard"
+
+#~ msgid "_Delete Key"
+#~ msgstr "_Delete Key"
+
+#~ msgid "Delete selected keys"
+#~ msgstr "Delete selected keys"
+
+#~ msgid "Contributions:"
+#~ msgstr "Contributions:"
+
+#~ msgid "translator-credits"
+#~ msgstr ""
+#~ "Abigail Brady <morwen@evilmagi_c.org>\n"
+#~ "Bastien Nocera <hadess@hadess.net>\n"
+#~ "Gareth Owen <gowen72@yahoo.com>\n"
+#~ "David Lodge <dave@cirt.net>"
+
+#~ msgid "Seahorse Project Homepage"
+#~ msgstr "Seahorse Project Homepage"
+
+#~ msgid "Couldn't delete."
+#~ msgstr "Couldn't delete."
+
+#~ msgid "Deleting..."
+#~ msgstr "Deleting..."
+
+#~ msgid "%s is a private key. Are you sure you want to proceed?"
+#~ msgstr "%s is a private key. Are you sure you want to proceed?"
+
+#~ msgid ""
+#~ "One or more of the deleted keys are private keys. Are you sure you want "
+#~ "to proceed?"
+#~ msgstr ""
+#~ "One or more of the deleted keys are private keys. Are you sure you want "
+#~ "to proceed?"
+
+#~ msgid "Couldn't retrieve data from key server"
+#~ msgstr "Couldn't retrieve data from key server"
+
+#~ msgid "Copied keys"
+#~ msgstr "Copied keys"
+
+#~ msgid "Retrieving keys"
+#~ msgstr "Retrieving keys"
+
+#~ msgid "Export public key"
+#~ msgstr "Export public key"
+
+#~ msgid "Exporting keys"
+#~ msgstr "Exporting keys"
+
 #~ msgid "Please enter a passphrase to use."
 #~ msgstr "Please enter a passphrase to use."
 
@@ -3157,9 +3137,6 @@ msgstr "_Set Up"
 
 #~ msgid "Couldn't set permissions on backup file."
 #~ msgstr "Couldn't set permissions on backup file."
-
-#~ msgid "Never"
-#~ msgstr "Never"
 
 #~ msgid "Clipboard Text Encryption"
 #~ msgstr "Clipboard Text Encryption"
