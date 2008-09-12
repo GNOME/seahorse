@@ -64,7 +64,7 @@ seahorse_keyset_pgp_signers_new ()
     SeahorseSet *skset;
     
     pred->location = SEAHORSE_LOCATION_LOCAL;
-    pred->id = SEAHORSE_PGP;
+    pred->tag = SEAHORSE_PGP;
     pred->usage = SEAHORSE_USAGE_PRIVATE_KEY;
     pred->flags = SKEY_FLAG_CAN_SIGN;
     pred->nflags = SKEY_FLAG_EXPIRED | SKEY_FLAG_REVOKED | SKEY_FLAG_DISABLED;
