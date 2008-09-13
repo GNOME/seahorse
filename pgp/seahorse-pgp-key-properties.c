@@ -44,6 +44,11 @@
 
 #define NOTEBOOK "notebook"
 
+/* Forward declarations */
+static void properties_response (GtkDialog *dialog, int response, SeahorseWidget *swidget);
+static void properties_destroyed (GtkObject *object, SeahorseWidget *swidget);
+
+
 static void 
 show_glade_widget (SeahorseWidget *swidget, const gchar *name, gboolean show)
 {
@@ -1829,7 +1834,9 @@ key_changed (SeahorseKey *skey, SeahorseKeyChange change, SeahorseWidget *swidge
 static void
 key_destroyed (GtkObject *object, SeahorseWidget *swidget)
 {
-    seahorse_widget_destroy (swidget);
+	GtkWidget *widget = seahorse_widget_get_toplevel(swidget);
+	g_signal_handlers_disconnect_by_func (widget, properties_destroyed, swidget); 
+	g_signal_handlers_disconnect_by_func (widget, properties_response, swidget);
 }
 
 static void
@@ -1864,7 +1871,7 @@ setup_public_properties (SeahorsePGPKey *pkey, GtkWindow *parent)
     if (swidget == NULL)
         return NULL;
 
-    widget = glade_xml_get_widget (swidget->xml, swidget->name);
+    widget = seahorse_widget_get_toplevel(swidget);
     g_signal_connect (widget, "response", G_CALLBACK (properties_response), swidget);
     g_signal_connect (widget, "destroy", G_CALLBACK (properties_destroyed), swidget);
     g_signal_connect_after (pkey, "changed", G_CALLBACK (key_changed), swidget);

@@ -88,7 +88,7 @@ seahorse_key_widget_class_init (SeahorseKeyWidgetClass *klass)
 	g_object_class_install_property (gobject_class, PROP_KEY,
 		g_param_spec_object ("key",  "Seahorse Key",
 				     "Seahorse Key of this widget",
-				    SEAHORSE_TYPE_KEY, G_PARAM_READWRITE));
+				    SEAHORSE_TYPE_KEY, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 	g_object_class_install_property (gobject_class, PROP_INDEX,
 		g_param_spec_uint ("index", "Attribute index",
 				   "Index of attribute in key, 0 being none",
@@ -108,6 +108,7 @@ seahorse_key_widget_finalize (GObject *gobject)
     skwidget = SEAHORSE_KEY_WIDGET (gobject);
     swidget = SEAHORSE_WIDGET (skwidget);
     
+    g_return_if_fail (SEAHORSE_IS_KEY (skwidget->skey));
     keyid = seahorse_key_get_keyid (skwidget->skey);
     
     /* get widgets hash from types */
@@ -136,8 +137,11 @@ seahorse_key_widget_finalize (GObject *gobject)
     }
     
     g_signal_handlers_disconnect_by_func (skwidget->skey, seahorse_key_widget_destroyed, skwidget);
-    
+
     G_OBJECT_CLASS (parent_class)->finalize (gobject);
+    
+    g_object_unref (skwidget->skey);
+    skwidget->skey = NULL;
 }
 
 static void
@@ -154,6 +158,7 @@ seahorse_key_widget_set_property (GObject *object, guint prop_id,
 		/* Refs key and connects to 'destroy' signal */
 		case PROP_KEY:
 			skwidget->skey = g_value_get_object (value);
+			g_object_ref (skwidget->skey);
 			g_signal_connect_after (skwidget->skey, "destroy",
 				G_CALLBACK (seahorse_key_widget_destroyed), skwidget);
 			break;
