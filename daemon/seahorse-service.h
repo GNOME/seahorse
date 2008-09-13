@@ -31,12 +31,14 @@ G_BEGIN_DECLS
 
 /* TODO: This needs to be refined */
 enum {
+    SEAHORSE_DBUS_ERROR_CANCELLED = -1,
     SEAHORSE_DBUS_ERROR_INVALID = 1,
     SEAHORSE_DBUS_ERROR_CRYPTO = 2,
     SEAHORSE_DBUS_ERROR_NOTIMPLEMENTED = 100
 };
 
-#define SEAHORSE_DBUS_ERROR  g_quark_from_static_string ("seahorse")
+#define SEAHORSE_DBUS_ERROR  	  g_quark_from_static_string ("org.gnome.seahorse.Error.Failed")
+#define SEAHORSE_DBUS_CANCELLED   g_quark_from_static_string ("org.gnome.seahorse.Error.Cancelled")
 
 typedef struct _SeahorseService SeahorseService;
 typedef struct _SeahorseServiceClass SeahorseServiceClass;

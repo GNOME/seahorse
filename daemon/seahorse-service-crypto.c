@@ -79,7 +79,12 @@ process_crypto_result (SeahorsePGPOperation *pop, gpgme_error_t gstarterr,
     /* Wait for it to finish (can run main loop stuff) */
     seahorse_operation_wait (SEAHORSE_OPERATION (pop));
     
-    if (seahorse_operation_is_successful (SEAHORSE_OPERATION (pop))) {
+    if (seahorse_operation_is_cancelled (SEAHORSE_OPERATION (pop))) {
+	    
+	    g_set_error (error, SEAHORSE_DBUS_CANCELLED, 0, "%s", "");
+	    return FALSE;
+    
+    } else if (seahorse_operation_is_successful (SEAHORSE_OPERATION (pop))) {
         
         data = gpgme_data_release_and_get_mem (cryptdata, &len);
         *result = g_strndup (data, len);
