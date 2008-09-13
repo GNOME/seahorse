@@ -1379,8 +1379,12 @@ do_details (SeahorseWidget *swidget)
 
         subkey = seahorse_pgp_key_get_nth_subkey (pkey, key);
 
-        status = subkey->revoked ? _("Revoked") : _("Good");
-        status = subkey->expired ? _("Expired") : _("Good");
+        if (subkey->revoked)
+        	status = _("Revoked");
+        else if (subkey->expired)
+        	status = _("Expired");
+        else
+        	status = _("Good");
 
         if (subkey->expires == 0)
             expiration_date = g_strdup (C_("Expires", "Never"));
