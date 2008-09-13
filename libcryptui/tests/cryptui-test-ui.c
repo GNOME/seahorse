@@ -87,7 +87,7 @@ main (int argc, char **argv)
     
     keyset = cryptui_keyset_new ("openpgp", TRUE);
     if (argc > 1) {
-        if (g_ascii_strcasecmp (argv[1], "plain")) {
+        if (g_ascii_strcasecmp (argv[1], "plain") == 0) {
             show_ui_dialog (keyset);
             return 0;
         } 

@@ -149,6 +149,7 @@ cryptui_prompt_recipients (CryptUIKeyset *keyset, const gchar *title,
     chooser = cryptui_key_chooser_new (keyset, mode);
     gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
     gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox), GTK_WIDGET (chooser));
+    gtk_window_set_default_size (GTK_WINDOW (dialog), 400, -1);
     
     g_signal_connect (chooser, "changed", G_CALLBACK (selection_changed), dialog);
     selection_changed (chooser, dialog);
@@ -190,6 +191,7 @@ cryptui_prompt_signer (CryptUIKeyset *keyset, const gchar *title)
                                                CRYPTUI_KEY_CHOOSER_MUSTSIGN);
     gtk_container_set_border_width (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox), 5);
     gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox), GTK_WIDGET (chooser));
+    gtk_window_set_default_size (GTK_WINDOW (dialog), 400, -1);
     
     gtk_widget_show_all (dialog);
     if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT) {
