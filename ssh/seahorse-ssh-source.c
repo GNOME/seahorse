@@ -659,7 +659,7 @@ seahorse_ssh_source_remove (SeahorseSource *sksrc, SeahorseObject *sobj)
     gchar *fullpath;
     
     g_return_val_if_fail (SEAHORSE_IS_SSH_SOURCE (sksrc), NULL);
-    g_return_val_if_fail (SEAHORSE_IS_SSH_KEY (sksrc), NULL);
+    g_return_val_if_fail (SEAHORSE_IS_SSH_KEY (sobj), NULL);
     g_return_val_if_fail (seahorse_object_get_source (sobj) == sksrc, NULL);
 
     g_object_get (sobj, "key-data", &keydata, NULL);
