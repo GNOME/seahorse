@@ -37,6 +37,7 @@ append_text_column (GtkTreeView *view, const gchar *label, const gint index)
 
     renderer = gtk_cell_renderer_text_new ();
     column = gtk_tree_view_column_new_with_attributes (label, renderer, "text", index, NULL);
+    g_object_set (G_OBJECT (renderer), "ellipsize", PANGO_ELLIPSIZE_END, NULL);
     gtk_tree_view_column_set_resizable (column, TRUE);
     gtk_tree_view_append_column (view, column);
 
@@ -89,7 +90,9 @@ cryptui_key_list_setup (GtkTreeView *view, CryptUIKeyStore *ckstore,
     GtkTreeViewColumn *col;
     GtkTreeSelection *sel;
     GtkCellRenderer *renderer;
-
+    PangoLayout *layout;
+    int width = 0;
+    
     gtk_tree_view_set_model (view, GTK_TREE_MODEL (ckstore));
     sel = gtk_tree_view_get_selection (view);
  
@@ -114,11 +117,19 @@ cryptui_key_list_setup (GtkTreeView *view, CryptUIKeyStore *ckstore,
     
     /* TODO: Icons */
  
+    /* The name column */
     col = append_text_column (view, _("Name"), CRYPTUI_KEY_STORE_NAME);
     gtk_tree_view_column_set_sort_column_id (col, CRYPTUI_KEY_STORE_NAME);
+    gtk_tree_view_column_set_expand (col, TRUE);
 
+    /* The keyid column */
     col = append_text_column (view, _("Key ID"), CRYPTUI_KEY_STORE_KEYID);
     gtk_tree_view_column_set_sort_column_id (col, CRYPTUI_KEY_STORE_KEYID);
+    
+    /* Calculate a good minimum width for 8 character keyid */
+    layout = gtk_widget_create_pango_layout (GTK_WIDGET (view), "DDDDDDDD");
+    pango_layout_get_pixel_size (layout, &width, NULL); 
+    gtk_tree_view_column_set_min_width (col, width);
     
     gtk_tree_view_set_rules_hint (view, TRUE);
     gtk_widget_set_size_request (GTK_WIDGET (view), 500, 250);
