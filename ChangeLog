@@ -1,5 +1,11 @@
 2008-09-14  Stef Walter  <stef@memberwebs.com>
 
+	* src/seahorse-key-manager-store.c: Disconnect from 'sort-changed'
+	when closing down a key manager window. This prevents gconf
+	notifications after window is gone away. See bug #546686
+	
+2008-09-14  Stef Walter  <stef@memberwebs.com>
+
 	* libseahorse/seahorse-widget.c: Ignore erroneous negative
 	window sizes. 
 	

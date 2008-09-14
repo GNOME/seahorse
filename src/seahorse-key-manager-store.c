@@ -744,7 +744,9 @@ static void
 seahorse_key_manager_store_finalize (GObject *gobject)
 {
     SeahorseKeyManagerStore *skstore = SEAHORSE_KEY_MANAGER_STORE (gobject);
-    
+
+    g_signal_handlers_disconnect_by_func (skstore->priv->sort, sort_changed, skstore);
+
     /* These were allocated in the constructor */
     g_object_unref (skstore->priv->sort);
     g_object_unref (skstore->priv->filter);
