@@ -42,9 +42,9 @@ void seahorse_pkcs11_certificate_set_pkcs11_attributes (SeahorsePkcs11Certificat
 char* seahorse_pkcs11_certificate_get_display_id (SeahorsePkcs11Certificate* self);
 const char* seahorse_pkcs11_certificate_get_simple_name (SeahorsePkcs11Certificate* self);
 char* seahorse_pkcs11_certificate_get_fingerprint (SeahorsePkcs11Certificate* self);
-gint seahorse_pkcs11_certificate_get_validity (SeahorsePkcs11Certificate* self);
+guint seahorse_pkcs11_certificate_get_validity (SeahorsePkcs11Certificate* self);
 char* seahorse_pkcs11_certificate_get_validity_str (SeahorsePkcs11Certificate* self);
-gint seahorse_pkcs11_certificate_get_trust (SeahorsePkcs11Certificate* self);
+guint seahorse_pkcs11_certificate_get_trust (SeahorsePkcs11Certificate* self);
 char* seahorse_pkcs11_certificate_get_trust_str (SeahorsePkcs11Certificate* self);
 gulong seahorse_pkcs11_certificate_get_expires (SeahorsePkcs11Certificate* self);
 char* seahorse_pkcs11_certificate_get_expires_str (SeahorsePkcs11Certificate* self);

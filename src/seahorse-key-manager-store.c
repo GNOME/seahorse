@@ -59,7 +59,7 @@ enum {
 };
 
 static const SeahorseSetModelColumn column_info[] = {
-	{ "usage", G_TYPE_INT, "usage" },
+	{ "usage", G_TYPE_UINT, "usage" },
 	{ "stock-id", G_TYPE_STRING, NULL },
 	{ "markup", G_TYPE_STRING, "name" },
 	{ "display-id", G_TYPE_STRING, "id" },
@@ -67,9 +67,9 @@ static const SeahorseSetModelColumn column_info[] = {
 	{ "trust-str", G_TYPE_STRING, "trust" },
 	{ "type", G_TYPE_STRING, "type" },
 	{ "expires-str", G_TYPE_STRING, "expires" },
-	{ "validity", G_TYPE_INT, "validity" },
+	{ "validity", G_TYPE_UINT, "validity" },
 	{ "expires", G_TYPE_ULONG, "expires" },
-	{ "trust", G_TYPE_INT, "trust" }
+	{ "trust", G_TYPE_UINT, "trust" }
 };
 
 enum {
@@ -158,8 +158,7 @@ key_store_from_model (GtkTreeModel *model)
     if (SEAHORSE_IS_KEY_MANAGER_STORE (model))
         return SEAHORSE_KEY_MANAGER_STORE (model);
     
-    g_assert_not_reached ();
-    return NULL;
+    g_return_val_if_reached (NULL);
 }
 
 /* Given an iterator find the associated object */
@@ -171,6 +170,7 @@ object_from_iterator (GtkTreeModel* model, GtkTreeIter* iter)
 	/* Convert to base iter if necessary */
 	if (!SEAHORSE_IS_KEY_MANAGER_STORE (model)) {
 		SeahorseKeyManagerStore* skstore = key_store_from_model (model);
+		g_return_val_if_fail (SEAHORSE_IS_KEY_MANAGER_STORE (skstore), NULL);
 		get_base_iter (skstore, &i, iter);
         
 		iter = &i;
@@ -352,8 +352,8 @@ gconf_notification (GConfClient *gclient, guint id, GConfEntry *entry, GtkTreeVi
     g_assert (GTK_IS_TREE_VIEW (view));
     
     if (g_str_equal (key, KEY_MANAGER_SORT_KEY)) {
-        skstore = key_store_from_model (gtk_tree_view_get_model(view));
-        g_return_if_fail (skstore != NULL);
+        skstore = key_store_from_model (gtk_tree_view_get_model (view));
+        g_return_if_fail (SEAHORSE_IS_KEY_MANAGER_STORE (skstore));
         set_sort_to (skstore, gconf_value_get_string (gconf_entry_get_value (entry)));
     }
     
@@ -902,6 +902,7 @@ seahorse_key_manager_store_get_all_objects (GtkTreeView *view)
     
     g_return_val_if_fail (GTK_IS_TREE_VIEW (view), NULL);
     skstore = key_store_from_model (gtk_tree_view_get_model (view));
+    g_return_val_if_fail (SEAHORSE_IS_KEY_MANAGER_STORE (skstore), NULL);
     return seahorse_set_get_objects (SEAHORSE_SET_MODEL (skstore)->set);
 }
 

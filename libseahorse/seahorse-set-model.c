@@ -389,7 +389,6 @@ seahorse_set_model_get_value (GtkTreeModel *tree_model, GtkTreeIter *iter,
 	spec = g_object_class_find_property (G_OBJECT_GET_CLASS (sobj), property);
 	if (spec) {
 		if (spec->value_type != type) {
-			g_value_set_string (value, "");
 			g_warning ("%s property of %s class was of type %s instead of type %s", 
 			           property, G_OBJECT_TYPE_NAME (sobj), 
 			           g_type_name (spec->value_type), g_type_name (type));

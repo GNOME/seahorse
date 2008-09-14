@@ -188,11 +188,11 @@ char* seahorse_pkcs11_certificate_get_fingerprint (SeahorsePkcs11Certificate* se
 }
 
 
-gint seahorse_pkcs11_certificate_get_validity (SeahorsePkcs11Certificate* self) {
-	g_return_val_if_fail (SEAHORSE_PKCS11_IS_CERTIFICATE (self), 0);
+guint seahorse_pkcs11_certificate_get_validity (SeahorsePkcs11Certificate* self) {
+	g_return_val_if_fail (SEAHORSE_PKCS11_IS_CERTIFICATE (self), 0U);
 	/* TODO: We need to implement proper validity checking */
 	;
-	return ((gint) (SEAHORSE_VALIDITY_UNKNOWN));
+	return ((guint) (SEAHORSE_VALIDITY_UNKNOWN));
 }
 
 
@@ -204,21 +204,21 @@ char* seahorse_pkcs11_certificate_get_validity_str (SeahorsePkcs11Certificate* s
 }
 
 
-gint seahorse_pkcs11_certificate_get_trust (SeahorsePkcs11Certificate* self) {
+guint seahorse_pkcs11_certificate_get_trust (SeahorsePkcs11Certificate* self) {
 	gulong trust;
-	g_return_val_if_fail (SEAHORSE_PKCS11_IS_CERTIFICATE (self), 0);
+	g_return_val_if_fail (SEAHORSE_PKCS11_IS_CERTIFICATE (self), 0U);
 	trust = 0UL;
 	if (self->priv->_pkcs11_attributes == NULL || !gp11_attributes_find_ulong (self->priv->_pkcs11_attributes, CKA_GNOME_USER_TRUST, &trust)) {
-		return ((gint) (SEAHORSE_VALIDITY_UNKNOWN));
+		return ((guint) (SEAHORSE_VALIDITY_UNKNOWN));
 	}
 	if (trust == CKT_GNOME_TRUSTED) {
-		return ((gint) (SEAHORSE_VALIDITY_FULL));
+		return ((guint) (SEAHORSE_VALIDITY_FULL));
 	} else {
 		if (trust == CKT_GNOME_UNTRUSTED) {
-			return ((gint) (SEAHORSE_VALIDITY_NEVER));
+			return ((guint) (SEAHORSE_VALIDITY_NEVER));
 		}
 	}
-	return ((gint) (SEAHORSE_VALIDITY_UNKNOWN));
+	return ((guint) (SEAHORSE_VALIDITY_UNKNOWN));
 }
 
 
@@ -288,13 +288,13 @@ static void seahorse_pkcs11_certificate_get_property (GObject * object, guint pr
 		g_value_set_string (value, seahorse_pkcs11_certificate_get_fingerprint (self));
 		break;
 		case SEAHORSE_PKCS11_CERTIFICATE_VALIDITY:
-		g_value_set_int (value, seahorse_pkcs11_certificate_get_validity (self));
+		g_value_set_uint (value, seahorse_pkcs11_certificate_get_validity (self));
 		break;
 		case SEAHORSE_PKCS11_CERTIFICATE_VALIDITY_STR:
 		g_value_set_string (value, seahorse_pkcs11_certificate_get_validity_str (self));
 		break;
 		case SEAHORSE_PKCS11_CERTIFICATE_TRUST:
-		g_value_set_int (value, seahorse_pkcs11_certificate_get_trust (self));
+		g_value_set_uint (value, seahorse_pkcs11_certificate_get_trust (self));
 		break;
 		case SEAHORSE_PKCS11_CERTIFICATE_TRUST_STR:
 		g_value_set_string (value, seahorse_pkcs11_certificate_get_trust_str (self));
@@ -348,9 +348,9 @@ static void seahorse_pkcs11_certificate_class_init (SeahorsePkcs11CertificateCla
 	g_object_class_override_property (G_OBJECT_CLASS (klass), SEAHORSE_PKCS11_CERTIFICATE_MARKUP, "markup");
 	g_object_class_install_property (G_OBJECT_CLASS (klass), SEAHORSE_PKCS11_CERTIFICATE_SIMPLE_NAME, g_param_spec_string ("simple-name", "simple-name", "simple-name", NULL, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
 	g_object_class_install_property (G_OBJECT_CLASS (klass), SEAHORSE_PKCS11_CERTIFICATE_FINGERPRINT, g_param_spec_string ("fingerprint", "fingerprint", "fingerprint", NULL, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
-	g_object_class_install_property (G_OBJECT_CLASS (klass), SEAHORSE_PKCS11_CERTIFICATE_VALIDITY, g_param_spec_int ("validity", "validity", "validity", G_MININT, G_MAXINT, 0, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
+	g_object_class_install_property (G_OBJECT_CLASS (klass), SEAHORSE_PKCS11_CERTIFICATE_VALIDITY, g_param_spec_uint ("validity", "validity", "validity", 0, G_MAXUINT, 0U, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
 	g_object_class_install_property (G_OBJECT_CLASS (klass), SEAHORSE_PKCS11_CERTIFICATE_VALIDITY_STR, g_param_spec_string ("validity-str", "validity-str", "validity-str", NULL, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
-	g_object_class_install_property (G_OBJECT_CLASS (klass), SEAHORSE_PKCS11_CERTIFICATE_TRUST, g_param_spec_int ("trust", "trust", "trust", G_MININT, G_MAXINT, 0, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
+	g_object_class_install_property (G_OBJECT_CLASS (klass), SEAHORSE_PKCS11_CERTIFICATE_TRUST, g_param_spec_uint ("trust", "trust", "trust", 0, G_MAXUINT, 0U, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
 	g_object_class_install_property (G_OBJECT_CLASS (klass), SEAHORSE_PKCS11_CERTIFICATE_TRUST_STR, g_param_spec_string ("trust-str", "trust-str", "trust-str", NULL, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
 	g_object_class_install_property (G_OBJECT_CLASS (klass), SEAHORSE_PKCS11_CERTIFICATE_EXPIRES, g_param_spec_ulong ("expires", "expires", "expires", 0, G_MAXULONG, 0UL, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
 	g_object_class_install_property (G_OBJECT_CLASS (klass), SEAHORSE_PKCS11_CERTIFICATE_EXPIRES_STR, g_param_spec_string ("expires-str", "expires-str", "expires-str", NULL, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));

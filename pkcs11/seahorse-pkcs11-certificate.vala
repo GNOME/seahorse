@@ -58,7 +58,7 @@ namespace Seahorse.Pkcs11 {
 			}
 		}
 		
-		public int validity { 
+		public uint validity { 
 			get { 
 				/* TODO: We need to implement proper validity checking */; 
 				return Validity.UNKNOWN;
@@ -69,7 +69,7 @@ namespace Seahorse.Pkcs11 {
 			get { return Util.validity_to_string((Seahorse.Validity)validity); }
 		}
 
-		public int trust {
+		public uint trust {
 			get { 
 				ulong trust;
 				if (_pkcs11_attributes == null ||
