@@ -22,6 +22,8 @@
 
 #include <glib/gi18n.h>
 
+#include <string.h>
+
 #include "seahorse-validity.h"
 
 const gchar*

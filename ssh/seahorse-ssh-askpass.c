@@ -37,7 +37,7 @@ static gchar*
 askpass_command (const gchar *cmd, const gchar *arg)
 {
     const gchar* env;
-    gchar *t;
+    gchar *t, *ret;
     int fd;
         
     /* Try an open the connection with seahorse */
@@ -68,7 +68,7 @@ askpass_command (const gchar *cmd, const gchar *arg)
     
     /* Read the setting */
     t = g_new0 (gchar, 512);
-    fgets (t, 512, seahorse_link);
+    ret = fgets (t, 512, seahorse_link);
     
     /* Make sure it worked */
     if (ferror (seahorse_link)) {
@@ -107,7 +107,8 @@ int main (int argc, char* argv[])
     if (pass == NULL)
         return 1;
     
-    write (1, pass, strlen (pass));
+    if (write (1, pass, strlen (pass)) != strlen (pass))
+	    g_warning ("couldn't write out password properly");
     for (p = pass; *p; p++) 
         *p = 0;
     g_free (pass);

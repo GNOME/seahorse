@@ -480,7 +480,7 @@ seahorse_hkp_server_start(GError **err)
     
     soup_server = soup_server_new (SOUP_SERVER_PORT, port, NULL);
     if (!soup_server) {
-        g_set_error (err, HKP_SERVER_ERROR, errno, g_strdup (strerror (errno)));
+        g_set_error (err, HKP_SERVER_ERROR, errno, "%s", g_strerror (errno));
         return FALSE;
     }
 

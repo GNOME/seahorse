@@ -41,7 +41,7 @@ handle_gio_error (GError *err)
 	g_return_val_if_fail (err, -1);
 	
 	if (err->message)
-		g_message (err->message);
+		g_message ("%s", err->message);
 	
 	switch (err->code) {
 	case G_IO_ERROR_FAILED:

@@ -481,7 +481,7 @@ result_callback (SeahorseLDAPOperation *lop)
         switch (r) {   
         case -1: /* Strange system error */
             seahorse_operation_mark_done (SEAHORSE_OPERATION (lop), FALSE, 
-                g_error_new (LDAP_ERROR_DOMAIN, errno, strerror(errno)));
+                g_error_new (LDAP_ERROR_DOMAIN, errno, "%s", g_strerror (errno)));
             return FALSE;
         
         case 0: /* Timeout exceeded */

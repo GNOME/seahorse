@@ -315,7 +315,7 @@ fail_hkp_operation (SeahorseHKPOperation *hop, SoupMessage *msg, const gchar *te
     g_object_get (hop->hsrc, "key-server", &server, NULL);
 
     if (text) {
-        error = g_error_new (HKP_ERROR_DOMAIN, msg ? msg->status_code : 0, text);
+        error = g_error_new (HKP_ERROR_DOMAIN, msg ? msg->status_code : 0, "%s", text);
 
     } else if (msg) {
         /* Make the body lower case, and no tags */

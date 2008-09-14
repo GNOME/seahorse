@@ -52,14 +52,14 @@ create_file (const gchar *file, mode_t mode, GError **err)
     
     if ((fd = open (file, O_CREAT | O_TRUNC | O_WRONLY, mode)) == -1) {
         g_set_error (err, G_IO_CHANNEL_ERROR, g_io_channel_error_from_errno (errno),
-                     strerror (errno));     
+                     "%s", g_strerror (errno));
         return FALSE;
     }
 
     /* Write the header when we make a new file */
     if (write (fd, GPG_CONF_HEADER, strlen (GPG_CONF_HEADER)) == -1) {
         g_set_error (err, G_IO_CHANNEL_ERROR, g_io_channel_error_from_errno (errno),
-                     strerror (errno));     
+                     "%s", strerror (errno));
     }
     
     close (fd);
@@ -92,7 +92,7 @@ find_config_file (gboolean read, GError **err)
         if (mkdir (gpg_homedir, 0700) == -1) {
             g_set_error (err, G_IO_CHANNEL_ERROR, 
                          g_io_channel_error_from_errno (errno),
-                         strerror (errno));     
+                         "%s", strerror (errno));
             return NULL;
         }
     }

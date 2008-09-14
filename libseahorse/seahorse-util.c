@@ -79,7 +79,7 @@ seahorse_util_show_error (GtkWidget *parent, const gchar *heading, const gchar *
 	
 	error = gtk_message_dialog_new_with_markup (GTK_WINDOW (parent), 
 	                                            GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR,
-	                                            GTK_BUTTONS_CLOSE, text);
+	                                            GTK_BUTTONS_CLOSE, "%s", text);
 	g_free (text);
 	
 	gtk_dialog_run (GTK_DIALOG (error));
@@ -686,7 +686,7 @@ seahorse_util_uris_package (const gchar* package, const char** uris)
     	g_object_unref (fpackage);
 
     if (out) {
-        g_print (out);
+        g_print ("%s", out);
         g_free (out);
     }
     

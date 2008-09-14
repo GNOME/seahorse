@@ -98,7 +98,9 @@ daemonize ()
             open ("/dev/null", O_WRONLY, 0666);
             open ("/dev/null", O_WRONLY, 0666);
 
-            chdir ("/tmp");
+            if (chdir ("/tmp") < 0)
+                warn ("couldn't change to /tmp directory");
+            
             return; /* Child process returns */
         };
     }
