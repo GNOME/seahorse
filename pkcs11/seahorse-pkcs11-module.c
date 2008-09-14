@@ -27,7 +27,8 @@
 #include "seahorse-gconf.h"
 #include "seahorse-util.h"
 
-#include "gp11/gp11.h"
+#include <gp11.h>
+
 void
 seahorse_pkcs11_module_init (void)
 {

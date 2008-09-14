@@ -3,7 +3,7 @@
 
 namespace Seahorse.Pkcs11 {
 	
-	static const uint[] ATTRIBUTE_TYPES = {
+	static const ulong[] ATTRIBUTE_TYPES = {
 		P11.CKA_LABEL,
 		P11.CKA_ID,
 		P11.CKA_CLASS,

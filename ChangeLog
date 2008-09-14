@@ -56,6 +56,16 @@
 	* libcryptui/cryptui-key-list.c: Fix column widths, and 
 	elipsize long text in key listing. Fixes bug #551426
 	Patch by Adam Schreiber.
+
+2008-09-12  Joe Orton  <jorton@redhat.com>
+ 
+ 	* pkcs11/seahorse-pkcs11-module.c: Include gp11.h without
+ 	directory prefix.
+ 
+ 	* pkcs11/p11.vapi:
+ 	* pkcs11/gp11.vapi:
+ 	* pkcs11/seahorse-pkcs11-source.vala: Treat attribute types
+ 	as ulong not uint, to prevent truncation warnings from the compiler.
 	
 2008-09-12  Stef Walter  <stef@memberwebs.com>
 

@@ -20,11 +20,11 @@ namespace GP11 {
 		public uchar* value;
 		public ulong length;
 				
-		public Attribute.new_boolean (uint attr_type, bool val);
-		public Attribute.new_date (uint attr_type, GLib.Date date);
-		public Attribute.new_ulong (uint attr_type, ulong val);
-		public Attribute.new_string (uint attr_type, string val);
-		public Attribute(uint attr_type, uchar[] value);
+		public Attribute.new_boolean (ulong attr_type, bool val);
+		public Attribute.new_date (ulong attr_type, GLib.Date date);
+		public Attribute.new_ulong (ulong attr_type, ulong val);
+		public Attribute.new_string (ulong attr_type, string val);
+		public Attribute(ulong attr_type, uchar[] value);
 		public bool get_boolean();
 		public ulong get_ulong();
 		public string get_string();
@@ -38,16 +38,16 @@ namespace GP11 {
 		public uint count { get; }
 		public Attribute at(uint index);
 		public void add(Attribute attr);
-		public void add_data(uint attr_type, uchar[] value);
-		public void add_boolean(uint attr_type, bool val);
-		public void add_date (uint attr_type, GLib.Date date);
-		public void add_ulong (uint attr_type, ulong val);
-		public void add_string (uint attr_type, string val);
-		public weak Attribute? find(uint attr_type);
-		public bool find_boolean(uint attr_type, out bool val);
-		public bool find_ulong(uint attr_type, out ulong val);
-		public bool find_string(uint attr_type, out string val);
-		public bool find_date(uint attr_type, out GLib.Date date);
+		public void add_data(ulong attr_type, uchar[] value);
+		public void add_boolean(ulong attr_type, bool val);
+		public void add_date (ulong attr_type, GLib.Date date);
+		public void add_ulong (ulong attr_type, ulong val);
+		public void add_string (ulong attr_type, string val);
+		public weak Attribute? find(ulong attr_type);
+		public bool find_boolean(ulong attr_type, out bool val);
+		public bool find_ulong(ulong attr_type, out ulong val);
+		public bool find_string(ulong attr_type, out string val);
+		public bool find_date(ulong attr_type, out GLib.Date date);
 	}	
 
 	[CCode (dup_function = "gp11_module_info_dup", free_function = "gp11_module_info_free")]
@@ -192,16 +192,16 @@ namespace GP11 {
 		public void set_attributes_finish(GLib.AsyncResult result) throws GLib.Error;
 
 		[CCode (cname = "gp11_object_get_full")]
-		public Attributes get_attributes(uint[] attr_types, GLib.Cancellable? cancellable = null) throws GLib.Error;
+		public Attributes get_attributes(ulong[] attr_types, GLib.Cancellable? cancellable = null) throws GLib.Error;
 		[CCode (cname = "gp11_object_get_async")]
-		public void get_attributes_async(uint[] attr_types, GLib.Cancellable? cancellable, GLib.AsyncReadyCallback callback);
+		public void get_attributes_async(ulong[] attr_types, GLib.Cancellable? cancellable, GLib.AsyncReadyCallback callback);
 		[CCode (cname = "gp11_object_get_finish")]
 		public Attributes get_attributes_finish(GLib.AsyncResult result) throws GLib.Error;
 		
 		[CCode (cname = "gp11_object_get_one_full")]
-		public Attribute get_attribute(uint attr_type, GLib.Cancellable? cancellable = null) throws GLib.Error;
+		public Attribute get_attribute(ulong attr_type, GLib.Cancellable? cancellable = null) throws GLib.Error;
 		[CCode (cname = "gp11_object_get_one_async")]
-		public void get_attribute_async(uint attr_type, GLib.Cancellable? cancellable, GLib.AsyncReadyCallback callback);
+		public void get_attribute_async(ulong attr_type, GLib.Cancellable? cancellable, GLib.AsyncReadyCallback callback);
 		[CCode (cname = "gp11_object_get_one_finish")]
 		public Attribute get_attribute_finish(GLib.AsyncResult result) throws GLib.Error;
 	}

@@ -261,7 +261,7 @@ static GType seahorse_pkcs11_source_remover_get_type (void);
 static gpointer seahorse_pkcs11_source_parent_class = NULL;
 static void seahorse_pkcs11_source_finalize (GObject * obj);
 
-static const guint SEAHORSE_PKCS11_ATTRIBUTE_TYPES[] = {CKA_LABEL, CKA_ID, CKA_CLASS, CKA_TOKEN, CKA_GNOME_USER_TRUST, CKA_START_DATE, CKA_END_DATE, CKA_EXTRACTABLE};
+static const gulong SEAHORSE_PKCS11_ATTRIBUTE_TYPES[] = {CKA_LABEL, CKA_ID, CKA_CLASS, CKA_TOKEN, CKA_GNOME_USER_TRUST, CKA_START_DATE, CKA_END_DATE, CKA_EXTRACTABLE};
 
 
 /* ---------------------------------------------------------------------------------
