@@ -182,13 +182,22 @@ int main(int argc, char* argv[])
 {
     SeahorseOperation *op;
     GOptionContext *octx = NULL;
+    GError *error = NULL;
 
+    g_thread_init (NULL);
+    
     seahorse_secure_memory_init ();
     
     octx = g_option_context_new ("");
     g_option_context_add_main_entries (octx, options, GETTEXT_PACKAGE);
 
-    gtk_init_with_args (&argc, &argv, _("Encryption Daemon (Seahorse)"), (GOptionEntry *) options, GETTEXT_PACKAGE, NULL);
+    if (!gtk_init_with_args (&argc, &argv, _("Encryption Daemon (Seahorse)"), 
+                             (GOptionEntry *)options, GETTEXT_PACKAGE, &error)) {
+	    g_printerr ("seahorse-daemon: %s\n", error->message);
+	    g_error_free (error);
+	    exit (1);
+    }
+	    
 
     /* 
      * All functions after this point have to print messages 

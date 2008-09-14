@@ -57,7 +57,10 @@ int
 main (int argc, char **argv)
 {
     SeahorseOperation *op = NULL;
+    GError *error = NULL;
     int ret = 0;
+
+    g_thread_init (NULL);
 
     seahorse_secure_memory_init ();
     
@@ -67,7 +70,11 @@ main (int argc, char **argv)
     textdomain (GETTEXT_PACKAGE);
 #endif
 
-    gtk_init_with_args (&argc, &argv, _("Encryption Key Manager"), NULL, GETTEXT_PACKAGE, NULL);
+    if (!gtk_init_with_args (&argc, &argv, _("Encryption Key Manager"), NULL, GETTEXT_PACKAGE, &error)) {
+        g_printerr ("seahorse: %s\n", error->message);
+        g_error_free (error);
+        exit (1);
+    }
 
     /* Insert Icons into Stock */ 
     seahorse_gtkstock_init ();
