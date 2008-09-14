@@ -148,7 +148,7 @@ seahorse_widget_constructor (GType type, guint n_props, GObjectConstructParam* p
     heightkey = g_strdup_printf ("%s%s%s", WINDOW_SIZE, swidget->name, "_height");
     height = seahorse_gconf_get_integer (heightkey);
 
-    if (width != 0 && height != 0) {
+    if (width > 0 && height > 0) {
         window = GTK_WINDOW (seahorse_widget_get_toplevel (swidget));
         gtk_window_resize (window, width, height);
     }
