@@ -90,22 +90,28 @@ key_press (GtkWidget *widget, GdkEventKey *event, gpointer data)
     return FALSE;
 }
 
-static void
+static gboolean
 grab_keyboard (GtkWidget *win, GdkEvent *event, gpointer data)
 {
 #ifndef _DEBUG
-    if (gdk_keyboard_grab (win->window, FALSE, gdk_event_get_time (event)))
-        g_critical ("could not grab keyboard");
+	if (!g_object_get_data (G_OBJECT (win), "keyboard-grabbed"))
+		if (gdk_keyboard_grab (win->window, FALSE, gdk_event_get_time (event)))
+			g_message ("could not grab keyboard");
+	g_object_set_data (G_OBJECT (win), "keyboard-grabbed", GINT_TO_POINTER (TRUE));
 #endif
+	return FALSE;
 }
 
 /* ungrab_keyboard - remove grab */
-static void
+static gboolean
 ungrab_keyboard (GtkWidget *win, GdkEvent *event, gpointer data)
 {
 #ifndef _DEBUG
-    gdk_keyboard_ungrab (gdk_event_get_time (event));
+	if (g_object_get_data (G_OBJECT (win), "keyboard-grabbed"))
+		gdk_keyboard_ungrab (gdk_event_get_time (event));
+	g_object_set_data (G_OBJECT (win), "keyboard-grabbed", NULL);
 #endif
+	return FALSE;
 }
 
 /* When enter is pressed in the confirm entry, move */
@@ -135,6 +141,22 @@ entry_changed (GtkEditable *editable, GtkDialog *dialog)
     gtk_dialog_set_response_sensitive (dialog, GTK_RESPONSE_ACCEPT, 
                                        strcmp (seahorse_secure_entry_get_text (entry), 
                                                seahorse_secure_entry_get_text (confirm)) == 0);
+}
+
+static gboolean
+window_state_changed (GtkWidget *win, GdkEventWindowState *event, gpointer data)
+{
+	GdkWindowState state = gdk_window_get_state (win->window);
+	
+	if (state & GDK_WINDOW_STATE_WITHDRAWN ||
+	    state & GDK_WINDOW_STATE_ICONIFIED ||
+	    state & GDK_WINDOW_STATE_FULLSCREEN ||
+	    state & GDK_WINDOW_STATE_MAXIMIZED)
+	    	ungrab_keyboard (win, (GdkEvent*)event, data);
+	else
+		grab_keyboard (win, (GdkEvent*)event, data);
+		
+	return FALSE;
 }
 
 static void
@@ -181,11 +203,10 @@ seahorse_passphrase_prompt_show (const gchar *title, const gchar *description,
 
     dialog = GTK_DIALOG (w);
 
-    g_signal_connect (G_OBJECT (dialog), "size-request",
-                      G_CALLBACK (constrain_size), NULL);
-
+    g_signal_connect (G_OBJECT (dialog), "size-request", G_CALLBACK (constrain_size), NULL);
     g_signal_connect (G_OBJECT (dialog), "map-event", G_CALLBACK (grab_keyboard), NULL);
     g_signal_connect (G_OBJECT (dialog), "unmap-event", G_CALLBACK (ungrab_keyboard), NULL);
+    g_signal_connect (G_OBJECT (dialog), "window-state-event", G_CALLBACK (window_state_changed), NULL); 
 
     wvbox = gtk_vbox_new (FALSE, HIG_LARGE * 2);
     gtk_container_add (GTK_CONTAINER (dialog->vbox), wvbox);
@@ -276,7 +297,9 @@ seahorse_passphrase_prompt_show (const gchar *title, const gchar *description,
     g_signal_connect (dialog, "key_press_event", G_CALLBACK (key_press), NULL);
 
     gtk_window_set_position (GTK_WINDOW (dialog), GTK_WIN_POS_CENTER);
-    gtk_window_set_keep_above(GTK_WINDOW (dialog), TRUE);
+    gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);    
+    gtk_window_set_type_hint (GTK_WINDOW (dialog), GDK_WINDOW_TYPE_HINT_NORMAL);
+    gtk_window_set_keep_above (GTK_WINDOW (dialog), TRUE);
     gtk_widget_show_all (GTK_WIDGET (dialog));
     gdk_window_focus (GTK_WIDGET (dialog)->window, GDK_CURRENT_TIME);
 
