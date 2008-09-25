@@ -164,7 +164,7 @@ namespace Seahorse {
 			if (_search_string.len() == 0)
 				return true;
 			string name = ((Key)obj).display_name;
-			return (name.casefold().str(_search_string) != null); 
+			return ((name != null) && (name.casefold().str(_search_string) != null)); 
 		}
 
 		private void on_view_selection_changed (Gtk.TreeSelection selection)
