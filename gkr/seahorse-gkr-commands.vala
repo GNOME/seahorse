@@ -59,10 +59,9 @@ namespace Seahorse.Gkr {
 				return null;
 			
 			string prompt;
-			if (num == 1)
-				prompt = _("Are you sure you want to delete the password '%s'?").printf(keys.data.display_name);
-			else
-				prompt = _("Are you sure you want to delete %d passwords?").printf(num);
+			
+			prompt = Bugs.ngettext ("Are you sure you want to delete the password '%s'?", 
+			                   "Are you sure you want to delete %d passwords?", (int) num).printf (num);
 			
 			if (!Util.prompt_delete (prompt, view.window))
 				return null;

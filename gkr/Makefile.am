@@ -21,6 +21,7 @@ VALA_SRCS = \
 
 VALA_VAPIS = \
 	libseahorse-gkr-c.vapi \
+	$(top_srcdir)/bugs.vapi \
 	$(top_srcdir)/config.vapi \
 	$(top_srcdir)/libseahorse/libseahorse-c.vapi \
 	$(top_srcdir)/libseahorse/libseahorse.vapi
