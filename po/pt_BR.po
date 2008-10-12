@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-30 16:36-0400\n"
+"POT-Creation-Date: 2008-10-11 21:11+0000\n"
 "PO-Revision-Date: 2008-08-27 00:55-0300\n"
 "Last-Translator: Leonardo Ferreira Fontenelle <leonardof@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-l10n-br@listas.cipsga.org.br>\n"
@@ -23,7 +23,7 @@ msgstr ""
 
 #: ../daemon/seahorse-daemon.c:66
 msgid "Do not run seahorse-daemon as a daemon"
-msgstr "Não iniciar o seahorse-daemon como serviço"
+msgstr "Não iniciar o seahorse-daemon como daemon"
 
 #: ../daemon/seahorse-daemon.c:84
 msgid "couldn't fork process"
@@ -512,7 +512,7 @@ msgstr "Não existe tal chaveiro"
 
 #: ../gkr/seahorse-gkeyring-operation.c:217
 msgid "Couldn't communicate with key ring daemon"
-msgstr "Não foi possível comunicar com o serviço de chaveiro"
+msgstr "Não foi possível comunicar com o daemon de chaveiro"
 
 #: ../gkr/seahorse-gkeyring-operation.c:220
 msgid "The item already exists"
@@ -542,14 +542,11 @@ msgid "Removing item"
 msgstr "Removendo item"
 
 #: ../gkr/seahorse-gkr-commands.vala:63
-#, c-format
+#, fuzzy, c-format
 msgid "Are you sure you want to delete the password '%s'?"
-msgstr "Você tem certeza que deseja excluir a senha \"%s\"?"
-
-#: ../gkr/seahorse-gkr-commands.vala:65
-#, c-format
-msgid "Are you sure you want to delete %d passwords?"
-msgstr "Você tem certeza de que deseja excluir %d senhas?"
+msgid_plural "Are you sure you want to delete %d passwords?"
+msgstr[0] "Você tem certeza que deseja excluir a senha \"%s\"?"
+msgstr[1] "Você tem certeza que deseja excluir a senha \"%s\"?"
 
 #: ../libcryptui/cryptui-key-chooser.c:173
 msgid "All Keys"
@@ -611,7 +608,7 @@ msgstr "Modo preguiçoso"
 
 #: ../libegg/egg-datetime.c:320
 msgid "Lazy mode doesn't normalize entered date and time values"
-msgstr "Modo preguiçoso não normaliza valores de data e hora inseridos."
+msgstr "O modo preguiçoso não normaliza valores de data e hora inseridos"
 
 #: ../libegg/egg-datetime.c:325
 msgid "Year"
@@ -1144,6 +1141,12 @@ msgstr "_Substituir"
 msgid "Unknown"
 msgstr "Desconhecido"
 
+#: ../libseahorse/seahorse-validity.c:36
+#: ../pgp/seahorse-pgp-key-properties.c:1182
+msgctxt "Validity"
+msgid "Never"
+msgstr "Nunca"
+
 #: ../libseahorse/seahorse-validity.c:38
 #: ../pgp/seahorse-pgp-key-properties.c:1189
 msgid "Marginal"
@@ -1598,7 +1601,7 @@ msgstr "Não foi possível excluir a subchave"
 msgid "Unable to change trust"
 msgstr "Não foi possível alterar a confiança"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1065
+#: ../pgp/seahorse-pgp-key-properties.c:1065 ../src/seahorse-viewer.c:235
 #: ../ssh/seahorse-ssh-key-properties.c:214
 #, c-format
 msgid "Couldn't export key to \"%s\""
@@ -1613,6 +1616,12 @@ msgstr "Exportar chave completa"
 #: ../ssh/seahorse-ssh-key-properties.c:260
 msgid "Couldn't export key."
 msgstr "Não foi possível exportar chave."
+
+#: ../pgp/seahorse-pgp-key-properties.c:1314
+#: ../pgp/seahorse-pgp-key-properties.c:1390
+msgctxt "Expires"
+msgid "Never"
+msgstr "Nunca"
 
 #: ../pgp/seahorse-pgp-key-properties.c:1358
 msgid "ID"
@@ -2224,7 +2233,7 @@ msgstr ""
 msgid "_Sign message with key:"
 msgstr "_Assinar mensagem com chave:"
 
-#: ../src/main.c:73
+#: ../src/main.c:73 ../src/seahorse-viewer.c:133
 msgid "Encryption Key Manager"
 msgstr "Gerenciador de chaves de criptografia"
 
@@ -2424,7 +2433,7 @@ msgid_plural "Selected %d keys"
 msgstr[0] "%d chave selecionada"
 msgstr[1] "%d chaves selecionadas"
 
-#: ../src/seahorse-key-manager-store.c:644
+#: ../src/seahorse-key-manager-store.c:644 ../src/seahorse-viewer.c:202
 msgid "Couldn't export keys"
 msgstr "Não foi possível exportar chaves"
 
@@ -2570,6 +2579,138 @@ msgstr "Servidores de _chaves"
 #: ../src/seahorse-keyserver-sync.glade.h:6
 msgid "_Sync"
 msgstr "_Sincronizar"
+
+#: ../src/seahorse-viewer.c:104
+msgid "Contributions:"
+msgstr "Contribuições:"
+
+#: ../src/seahorse-viewer.c:135
+msgid "translator-credits"
+msgstr ""
+"Fábio Rafael da Rosa <f2r@users.sourceforge.net>\n"
+"Max Reinhold Jahnke <jahnke@brfree.com.br>\n"
+"Raphael Higino <In memoriam>\n"
+"Luiz Armesto <luiz.armesto@gmail.com>\n"
+"Djavan Fagundes <dnoway@gmail.com>"
+
+#: ../src/seahorse-viewer.c:138
+msgid "Seahorse Project Homepage"
+msgstr "Página do Projeto Seahorse"
+
+#. Top menu items
+#: ../src/seahorse-viewer.c:157
+msgid "_Key"
+msgstr "_Chaves"
+
+#: ../src/seahorse-viewer.c:158
+msgid "_Edit"
+msgstr "_Editar"
+
+#: ../src/seahorse-viewer.c:159
+msgid "_View"
+msgstr "_Ver"
+
+#: ../src/seahorse-viewer.c:160
+msgid "_Help"
+msgstr "Aj_uda"
+
+#: ../src/seahorse-viewer.c:162
+msgid "Prefere_nces"
+msgstr "Preferê_ncias"
+
+#: ../src/seahorse-viewer.c:163
+msgid "Change preferences for this program"
+msgstr "Alterar preferências para este programa"
+
+#: ../src/seahorse-viewer.c:164
+msgid "_About"
+msgstr "_Sobre"
+
+#: ../src/seahorse-viewer.c:165
+msgid "About this program"
+msgstr "Sobre este programa"
+
+#: ../src/seahorse-viewer.c:166
+msgid "_Contents"
+msgstr "S_umário"
+
+#: ../src/seahorse-viewer.c:167
+msgid "Show Seahorse help"
+msgstr "Mostrar ajuda do Seahorse"
+
+#: ../src/seahorse-viewer.c:222
+msgid "Export public key"
+msgstr "Exportar chave pública"
+
+#: ../src/seahorse-viewer.c:240
+msgid "Exporting keys"
+msgstr "Exportando chaves"
+
+#: ../src/seahorse-viewer.c:265
+msgid "Couldn't retrieve data from key server"
+msgstr "Não foi possível recuperar dados do servidor"
+
+#: ../src/seahorse-viewer.c:283
+msgid "Copied keys"
+msgstr "Chave copiada"
+
+#: ../src/seahorse-viewer.c:303
+msgid "Retrieving keys"
+msgstr "Recuperando chaves"
+
+#: ../src/seahorse-viewer.c:338
+msgid "Couldn't delete."
+msgstr "Não foi possível excluir."
+
+#: ../src/seahorse-viewer.c:359
+msgid "Deleting..."
+msgstr "Excluindo..."
+
+#: ../src/seahorse-viewer.c:392
+#, c-format
+msgid "%s is a private key. Are you sure you want to proceed?"
+msgstr "%s é uma chave privada. Você tem certeza que deseja continuar?"
+
+#: ../src/seahorse-viewer.c:395
+msgid ""
+"One or more of the deleted keys are private keys. Are you sure you want to "
+"proceed?"
+msgstr ""
+"Uma ou mais das chaves deletadas são chaves privadas. Você tem certeza que "
+"deseja continuar?"
+
+#: ../src/seahorse-viewer.c:429
+msgid "P_roperties"
+msgstr "_Propriedades"
+
+#: ../src/seahorse-viewer.c:430
+msgid "Show key properties"
+msgstr "Mostra propriedades da chave"
+
+#: ../src/seahorse-viewer.c:431
+msgid "_Delete Key"
+msgstr "E_xcluir chave"
+
+#: ../src/seahorse-viewer.c:432
+msgid "Delete selected keys"
+msgstr "Excluir chaves selecionadas"
+
+#: ../src/seahorse-viewer.c:436
+msgid "E_xport Public Key..."
+msgstr "E_xportar Chave Pública..."
+
+#: ../src/seahorse-viewer.c:437
+msgid "Export public part of key to a file"
+msgstr "Exporta parte pública da chave para um arquivo"
+
+#: ../src/seahorse-viewer.c:438
+msgid "_Copy Public Key"
+msgstr "_Copiar chave pública"
+
+#: ../src/seahorse-viewer.c:439
+msgid "Copy public part of selected keys to the clipboard"
+msgstr ""
+"Copiar parte pública das chaves selecionadas para área de transferência"
 
 #: ../ssh/seahorse-ssh-askpass.c:101
 msgid "Enter your Secure Shell passphrase:"
@@ -2843,113 +2984,8 @@ msgstr "_Usuário:"
 msgid "_Set Up"
 msgstr "C_onfigurar"
 
-#~ msgctxt "Validity"
-#~ msgid "Never"
-#~ msgstr "Nunca"
-
-#~ msgctxt "Expires"
-#~ msgid "Never"
-#~ msgstr "Nunca"
-
-#~ msgid "_Key"
-#~ msgstr "_Chaves"
-
-#~ msgid "_Edit"
-#~ msgstr "_Editar"
-
-#~ msgid "_View"
-#~ msgstr "_Ver"
-
-#~ msgid "_Help"
-#~ msgstr "Aj_uda"
-
-#~ msgid "Prefere_nces"
-#~ msgstr "Preferê_ncias"
-
-#~ msgid "Change preferences for this program"
-#~ msgstr "Alterar preferências para este programa"
-
-#~ msgid "_About"
-#~ msgstr "_Sobre"
-
-#~ msgid "About this program"
-#~ msgstr "Sobre este programa"
-
-#~ msgid "_Contents"
-#~ msgstr "S_umário"
-
-#~ msgid "Show Seahorse help"
-#~ msgstr "Mostrar ajuda do Seahorse"
-
-#~ msgid "P_roperties"
-#~ msgstr "_Propriedades"
-
-#~ msgid "Show key properties"
-#~ msgstr "Mostra propriedades da chave"
-
-#~ msgid "E_xport Public Key..."
-#~ msgstr "E_xportar Chave Pública..."
-
-#~ msgid "Export public part of key to a file"
-#~ msgstr "Exporta parte pública da chave para um arquivo"
-
-#~ msgid "_Copy Public Key"
-#~ msgstr "_Copiar chave pública"
-
-#~ msgid "Copy public part of selected keys to the clipboard"
-#~ msgstr ""
-#~ "Copiar parte pública das chaves selecionadas para área de transferência"
-
-#~ msgid "_Delete Key"
-#~ msgstr "E_xcluir chave"
-
-#~ msgid "Delete selected keys"
-#~ msgstr "Excluir chaves selecionadas"
-
-#~ msgid "Contributions:"
-#~ msgstr "Contribuições:"
-
-#~ msgid "translator-credits"
-#~ msgstr ""
-#~ "Fábio Rafael da Rosa <f2r@users.sourceforge.net>\n"
-#~ "Max Reinhold Jahnke <jahnke@brfree.com.br>\n"
-#~ "Raphael Higino <In memoriam>\n"
-#~ "Luiz Armesto <luiz.armesto@gmail.com>\n"
-#~ "Djavan Fagundes <dnoway@gmail.com>"
-
-#~ msgid "Seahorse Project Homepage"
-#~ msgstr "Página do Projeto Seahorse"
-
-#~ msgid "Couldn't delete."
-#~ msgstr "Não foi possível excluir."
-
-#~ msgid "Deleting..."
-#~ msgstr "Excluindo..."
-
-#~ msgid "%s is a private key. Are you sure you want to proceed?"
-#~ msgstr "%s é uma chave privada. Você tem certeza que deseja continuar?"
-
-#~ msgid ""
-#~ "One or more of the deleted keys are private keys. Are you sure you want "
-#~ "to proceed?"
-#~ msgstr ""
-#~ "Uma ou mais das chaves deletadas são chaves privadas. Você tem certeza "
-#~ "que deseja continuar?"
-
-#~ msgid "Couldn't retrieve data from key server"
-#~ msgstr "Não foi possível recuperar dados do servidor"
-
-#~ msgid "Copied keys"
-#~ msgstr "Chave copiada"
-
-#~ msgid "Retrieving keys"
-#~ msgstr "Recuperando chaves"
-
-#~ msgid "Export public key"
-#~ msgstr "Exportar chave pública"
-
-#~ msgid "Exporting keys"
-#~ msgstr "Exportando chaves"
+#~ msgid "Are you sure you want to delete %d passwords?"
+#~ msgstr "Você tem certeza de que deseja excluir %d senhas?"
 
 #~ msgid "Please enter a passphrase to use."
 #~ msgstr "Por favor, digite uma frase secreta para ser usada."
@@ -2989,4 +3025,4 @@ msgstr "C_onfigurar"
 #~ msgstr "_Mostrar Janela"
 
 #~ msgid "Do not daemonize seahorse-agent"
-#~ msgstr "Não iniciar o seahorse-agent como serviço"
+#~ msgstr "Não iniciar o seahorse-agent como daemon"
