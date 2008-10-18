@@ -148,7 +148,7 @@ update_uids (SeahorsePGPKey *pkey)
 	guint index = 1;
 	
 	source = seahorse_object_get_source (SEAHORSE_OBJECT (pkey));
-	g_return_if_fail (SEAHORSE_IS_PGP_SOURCE (source));
+	g_return_if_fail (SEAHORSE_IS_SOURCE (source));
 	
 	l = pkey->uids;
 	guid = pkey->pubkey ? pkey->pubkey->uids : NULL;
