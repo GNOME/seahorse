@@ -1017,7 +1017,7 @@ cryptui_key_store_set_selected_key (CryptUIKeyStore *ckstore, GtkTreeView *view,
 {
     GtkTreeModel* model = GTK_TREE_MODEL (ckstore->priv->store);
     GtkTreeSelection *sel;
-    GtkTreeIter iter;
+    GtkTreeIter iter, sel_iter;
     const gchar *key;
     gboolean have;
     
@@ -1033,16 +1033,19 @@ cryptui_key_store_set_selected_key (CryptUIKeyStore *ckstore, GtkTreeView *view,
             /* Is this row in our selection? */
             gtk_tree_model_get (model, &iter, CRYPTUI_KEY_STORE_KEY, &key, -1);
             have = (key && strcmp (selkey, key) == 0) ? TRUE : FALSE;
-            
-            /* Using checks so change data store */
-            if (ckstore->priv->use_checks)
+
+            if (ckstore->priv->use_checks) {
+                /* Using checks so change data store */
                 gtk_tree_store_set (ckstore->priv->store, &iter, CRYPTUI_KEY_STORE_CHECK, have, -1);
-                
-            /* Using normal selection */
-            else if (have)
-                gtk_tree_selection_select_iter (sel, &iter);
-            else
-                gtk_tree_selection_unselect_iter (sel, &iter);
+            } else {
+                key_store_get_view_iter (ckstore, &iter, &sel_iter);
+
+                /* Using normal selection */
+                if (have)
+                    gtk_tree_selection_select_iter (sel, &sel_iter);
+                else
+                    gtk_tree_selection_unselect_iter (sel, &sel_iter);
+            }
             
         } while (gtk_tree_model_iter_next (model, &iter));
     }
