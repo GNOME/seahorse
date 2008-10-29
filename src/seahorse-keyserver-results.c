@@ -58,7 +58,7 @@ static gboolean seahorse_keyserver_results_on_filter_objects (SeahorseKeyserverR
 static gboolean _seahorse_keyserver_results_fire_selection_changed_gsource_func (gpointer self);
 static void seahorse_keyserver_results_on_view_selection_changed (SeahorseKeyserverResults* self, GtkTreeSelection* selection);
 static void seahorse_keyserver_results_on_row_activated (SeahorseKeyserverResults* self, GtkTreeView* view, GtkTreePath* path, GtkTreeViewColumn* column);
-static gboolean seahorse_keyserver_results_on_key_list_button_pressed (SeahorseKeyserverResults* self, GtkWidget* widget, GdkEventButton* event);
+static gboolean seahorse_keyserver_results_on_key_list_button_pressed (SeahorseKeyserverResults* self, GtkTreeView* view, GdkEventButton* event);
 static gboolean seahorse_keyserver_results_on_key_list_popup_menu (SeahorseKeyserverResults* self, GtkTreeView* view);
 static void seahorse_keyserver_results_on_view_expand_all (SeahorseKeyserverResults* self, GtkAction* action);
 static void seahorse_keyserver_results_on_view_collapse_all (SeahorseKeyserverResults* self, GtkAction* action);
@@ -196,9 +196,9 @@ static void seahorse_keyserver_results_on_row_activated (SeahorseKeyserverResult
 }
 
 
-static gboolean seahorse_keyserver_results_on_key_list_button_pressed (SeahorseKeyserverResults* self, GtkWidget* widget, GdkEventButton* event) {
+static gboolean seahorse_keyserver_results_on_key_list_button_pressed (SeahorseKeyserverResults* self, GtkTreeView* view, GdkEventButton* event) {
 	g_return_val_if_fail (SEAHORSE_IS_KEYSERVER_RESULTS (self), FALSE);
-	g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+	g_return_val_if_fail (GTK_IS_TREE_VIEW (view), FALSE);
 	if ((*event).button == 3) {
 		seahorse_viewer_show_context_menu (SEAHORSE_VIEWER (self), (*event).button, (*event).time);
 	}

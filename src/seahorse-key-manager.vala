@@ -434,7 +434,7 @@ namespace Seahorse {
 				show_properties (obj);
 		}
 
-		private bool on_key_list_button_pressed (Gtk.Widget widget, Gdk.EventButton event) {
+		private bool on_key_list_button_pressed (Gtk.TreeView view, Gdk.EventButton event) {
 			if (event.button == 3)
 				show_context_menu (event.button, event.time);
 			return false;
@@ -453,7 +453,7 @@ namespace Seahorse {
 			GenerateSelect.show (window);
 		}
 		
-		private void on_new_button_clicked (Gtk.Widget widget) {
+		private void on_new_button_clicked (Gtk.Button button) {
 			GenerateSelect.show (window);
 		}
 		
@@ -525,7 +525,7 @@ namespace Seahorse {
 			import_prompt ();	
 		}
 		
-		private void on_import_button_clicked (Gtk.Widget widget) {
+		private void on_import_button_clicked (Gtk.Button button) {
 			import_prompt ();
 		}
 		

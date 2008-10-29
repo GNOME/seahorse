@@ -109,16 +109,16 @@ static void seahorse_key_manager_on_filter_changed (SeahorseKeyManager* self, Gt
 static gboolean _seahorse_key_manager_fire_selection_changed_gsource_func (gpointer self);
 static void seahorse_key_manager_on_view_selection_changed (SeahorseKeyManager* self, GtkTreeSelection* selection);
 static void seahorse_key_manager_on_row_activated (SeahorseKeyManager* self, GtkTreeView* view, GtkTreePath* path, GtkTreeViewColumn* column);
-static gboolean seahorse_key_manager_on_key_list_button_pressed (SeahorseKeyManager* self, GtkWidget* widget, GdkEventButton* event);
+static gboolean seahorse_key_manager_on_key_list_button_pressed (SeahorseKeyManager* self, GtkTreeView* view, GdkEventButton* event);
 static gboolean seahorse_key_manager_on_key_list_popup_menu (SeahorseKeyManager* self, GtkTreeView* view);
 static void seahorse_key_manager_on_key_generate (SeahorseKeyManager* self, GtkAction* action);
-static void seahorse_key_manager_on_new_button_clicked (SeahorseKeyManager* self, GtkWidget* widget);
+static void seahorse_key_manager_on_new_button_clicked (SeahorseKeyManager* self, GtkButton* button);
 static void seahorse_key_manager_imported_keys (SeahorseKeyManager* self, SeahorseOperation* op);
 static void _seahorse_key_manager_imported_keys_seahorse_done_func (SeahorseOperation* op, gpointer self);
 static void seahorse_key_manager_import_files (SeahorseKeyManager* self, char** uris, int uris_length1);
 static void seahorse_key_manager_import_prompt (SeahorseKeyManager* self);
 static void seahorse_key_manager_on_key_import_file (SeahorseKeyManager* self, GtkAction* action);
-static void seahorse_key_manager_on_import_button_clicked (SeahorseKeyManager* self, GtkWidget* widget);
+static void seahorse_key_manager_on_import_button_clicked (SeahorseKeyManager* self, GtkButton* button);
 static void seahorse_key_manager_import_text (SeahorseKeyManager* self, const char* text);
 static void seahorse_key_manager_on_target_drag_data_received (SeahorseKeyManager* self, GtkWindow* window, GdkDragContext* context, gint x, gint y, GtkSelectionData* selection_data, guint info, guint time_);
 static void seahorse_key_manager_clipboard_received (SeahorseKeyManager* self, GtkClipboard* board, const char* text);
@@ -490,9 +490,9 @@ static void seahorse_key_manager_on_row_activated (SeahorseKeyManager* self, Gtk
 }
 
 
-static gboolean seahorse_key_manager_on_key_list_button_pressed (SeahorseKeyManager* self, GtkWidget* widget, GdkEventButton* event) {
+static gboolean seahorse_key_manager_on_key_list_button_pressed (SeahorseKeyManager* self, GtkTreeView* view, GdkEventButton* event) {
 	g_return_val_if_fail (SEAHORSE_IS_KEY_MANAGER (self), FALSE);
-	g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+	g_return_val_if_fail (GTK_IS_TREE_VIEW (view), FALSE);
 	if ((*event).button == 3) {
 		seahorse_viewer_show_context_menu (SEAHORSE_VIEWER (self), (*event).button, (*event).time);
 	}
@@ -524,9 +524,9 @@ static void seahorse_key_manager_on_key_generate (SeahorseKeyManager* self, GtkA
 }
 
 
-static void seahorse_key_manager_on_new_button_clicked (SeahorseKeyManager* self, GtkWidget* widget) {
+static void seahorse_key_manager_on_new_button_clicked (SeahorseKeyManager* self, GtkButton* button) {
 	g_return_if_fail (SEAHORSE_IS_KEY_MANAGER (self));
-	g_return_if_fail (GTK_IS_WIDGET (widget));
+	g_return_if_fail (GTK_IS_BUTTON (button));
 	seahorse_generate_select_show (seahorse_viewer_get_window (SEAHORSE_VIEWER (self)));
 }
 
@@ -669,9 +669,9 @@ static void seahorse_key_manager_on_key_import_file (SeahorseKeyManager* self, G
 }
 
 
-static void seahorse_key_manager_on_import_button_clicked (SeahorseKeyManager* self, GtkWidget* widget) {
+static void seahorse_key_manager_on_import_button_clicked (SeahorseKeyManager* self, GtkButton* button) {
 	g_return_if_fail (SEAHORSE_IS_KEY_MANAGER (self));
-	g_return_if_fail (GTK_IS_WIDGET (widget));
+	g_return_if_fail (GTK_IS_BUTTON (button));
 	seahorse_key_manager_import_prompt (self);
 }
 

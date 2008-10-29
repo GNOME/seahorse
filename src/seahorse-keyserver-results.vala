@@ -179,7 +179,7 @@ namespace Seahorse {
 				show_properties (obj);
 		}
 
-		private bool on_key_list_button_pressed (Gtk.Widget widget, Gdk.EventButton event) {
+		private bool on_key_list_button_pressed (Gtk.TreeView view, Gdk.EventButton event) {
 			if (event.button == 3)
 				show_context_menu (event.button, event.time);
 			return false;
