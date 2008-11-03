@@ -22,8 +22,7 @@
 #ifndef __SEAHORSE_SERVICE_H__
 #define __SEAHORSE_SERVICE_H__
 
-#include <glib/gerror.h>
-#include <glib-object.h>
+#include <glib.h>
 
 #include "seahorse-set.h"
 
