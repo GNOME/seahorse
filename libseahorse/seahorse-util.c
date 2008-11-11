@@ -77,9 +77,10 @@ seahorse_util_show_error (GtkWidget *parent, const gchar *heading, const gchar *
 		}
 	}
 	
-	error = gtk_message_dialog_new_with_markup (GTK_WINDOW (parent), 
-	                                            GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR,
-	                                            GTK_BUTTONS_CLOSE, "%s", text);
+	error = gtk_message_dialog_new (GTK_WINDOW (parent), 
+	                                GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR,
+	                                GTK_BUTTONS_CLOSE, NULL);
+	gtk_message_dialog_set_markup (error, text);
 	g_free (text);
 	
 	gtk_dialog_run (GTK_DIALOG (error));
