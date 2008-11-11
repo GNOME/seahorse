@@ -460,6 +460,39 @@ prompt_passphrase (SeahorseSSHOperation *sop, const gchar* title, const gchar* m
     return seahorse_passphrase_prompt_get (pv->prompt_dialog);
 }
 
+static const gchar* 
+prompt_password (SeahorseSSHOperation *sop, const gchar* title, const gchar* message,
+                 const gchar* check, gboolean confirm)
+{
+    SeahorseSSHOperationPrivate *pv = SEAHORSE_SSH_OPERATION_GET_PRIVATE (sop);
+    gchar *display;
+    gchar *msg;
+    
+    if (pv->prompt_dialog)
+        gtk_widget_destroy (GTK_WIDGET (pv->prompt_dialog));
+    
+    if (pv->prompt_skey)
+        display = seahorse_key_get_display_name (pv->prompt_skey);
+    else 
+        display = g_strdup (_("Secure Shell key"));
+    msg = g_strdup_printf (message, display);
+    g_free (display);
+
+    pv->prompt_dialog = seahorse_passphrase_prompt_show (title, msg, _("Password:"), 
+                                                         check, confirm);
+    g_free (msg);
+    
+    /* Run and check if cancelled? */
+    if (gtk_dialog_run (pv->prompt_dialog) != GTK_RESPONSE_ACCEPT) {
+        gtk_widget_destroy (GTK_WIDGET (pv->prompt_dialog));
+        pv->prompt_dialog = NULL;
+        return NULL;
+    }
+    
+    gtk_widget_hide (GTK_WIDGET (pv->prompt_dialog));
+    return seahorse_passphrase_prompt_get (pv->prompt_dialog);
+}
+
 /* -----------------------------------------------------------------------------
  * OBJECT 
  */
@@ -727,7 +760,7 @@ upload_password_cb (SeahorseSSHOperation *sop, const gchar* msg)
     DEBUG_OPERATION (("in upload_password_cb\n"));
 
     /* Just prompt over and over again */
-    return prompt_passphrase (sop, _("Secure Shell Passphrase"), msg, NULL, FALSE);
+    return prompt_password (sop, _("Remote Host Password"), msg, NULL, FALSE);
 }
 
 SeahorseOperation*  
