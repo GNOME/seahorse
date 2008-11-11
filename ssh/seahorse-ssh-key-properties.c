@@ -171,7 +171,7 @@ passphrase_done (SeahorseOperation *op, SeahorseWidget *swidget)
 
     if (!seahorse_operation_is_successful (op)) {
         seahorse_operation_copy_error (op, &err);
-        seahorse_util_handle_error (err, _("Couldn't change passhrase for key."));
+        seahorse_util_handle_error (err, _("Couldn't change passphrase for key."));
         g_clear_error (&err);
     }
     
