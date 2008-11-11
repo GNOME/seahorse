@@ -85,8 +85,6 @@ askpass_command (const gchar *cmd, const gchar *arg)
 int main (int argc, char* argv[])
 {
     gchar *pass, *message, *p;
-    
-    gtk_init (&argc, &argv);
 
     bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
     bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
