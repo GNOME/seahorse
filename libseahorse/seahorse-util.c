@@ -53,18 +53,12 @@ static const gchar *bad_filename_chars = "/\\<>|";
 void
 seahorse_util_show_error (GtkWidget *parent, const gchar *heading, const gchar *message)
 {
-	GtkWidget *error;
-	gchar *text;
+	GtkWidget *dialog;
     
 	g_return_if_fail (message || heading);
 	if (!message)
 		message = "";
     
-	if (heading)
-		text = g_strconcat("<big><b>", heading, "</b></big>\n\n", message, NULL);
-	else
-		text = g_strdup (message);
-	
 	if (parent) {
 		if (!GTK_IS_WIDGET (parent)) {
 			g_warn_if_reached ();
@@ -77,14 +71,22 @@ seahorse_util_show_error (GtkWidget *parent, const gchar *heading, const gchar *
 		}
 	}
 	
-	error = gtk_message_dialog_new (GTK_WINDOW (parent), 
+	dialog = gtk_message_dialog_new (GTK_WINDOW (parent), 
 	                                GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR,
 	                                GTK_BUTTONS_CLOSE, NULL);
-	gtk_message_dialog_set_markup (error, text);
-	g_free (text);
+	if (heading)
+	    g_object_set (G_OBJECT (dialog),
+	                  "text", heading,
+	                  "secondary-text", message,
+	                  NULL);
+    else
+        g_object_set (G_OBJECT (dialog),
+	                  "text", message,
+	                  NULL);
 	
-	gtk_dialog_run (GTK_DIALOG (error));
-	gtk_widget_destroy (error);
+	
+	gtk_dialog_run (GTK_DIALOG (dialog));
+	gtk_widget_destroy (dialog);
 }
 
 void
