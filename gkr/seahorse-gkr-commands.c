@@ -78,7 +78,7 @@ static SeahorseOperation* seahorse_gkeyring_commands_real_delete_objects (Seahor
 	} else {
 		char* _tmp2;
 		_tmp2 = NULL;
-		prompt = (_tmp2 = g_strdup_printf (_ ("Are you sure you want to delete %d passwords?"), num), (prompt = (g_free (prompt), NULL)), _tmp2);
+		prompt = (_tmp2 = g_strdup_printf (ngettext ("Are you sure you want to delete %d password?", "Are you sure you want to delete %d passwords?", ((gint) (num))), num), (prompt = (g_free (prompt), NULL)), _tmp2);
 	}
 	if (!seahorse_util_prompt_delete (prompt, GTK_WIDGET (seahorse_view_get_window (seahorse_commands_get_view (SEAHORSE_COMMANDS (self)))))) {
 		SeahorseOperation* _tmp3;
