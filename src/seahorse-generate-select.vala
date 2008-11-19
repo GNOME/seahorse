@@ -121,7 +121,7 @@ namespace Seahorse {
 		private void on_row_activated (Gtk.TreeView view, Gtk.TreePath path, Gtk.TreeViewColumn col) 
 		{
 			fire_selected_action ();
-			
+			base.destroy ();
 		}
 		
 		private void on_response (Gtk.Dialog dialog, int response)

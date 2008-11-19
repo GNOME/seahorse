@@ -140,6 +140,7 @@ static void seahorse_generate_select_on_row_activated (SeahorseGenerateSelect* s
 	g_return_if_fail (path != NULL);
 	g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (col));
 	seahorse_generate_select_fire_selected_action (self);
+	seahorse_widget_destroy (SEAHORSE_WIDGET (self));
 }
 
 
