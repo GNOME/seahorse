@@ -150,7 +150,7 @@ signature_row_activated(GtkTreeView *treeview, GtkTreePath *path, GtkTreeViewCol
     
 	if (skey != NULL) {
 	   if (SEAHORSE_IS_PGP_KEY (skey))
-	       seahorse_pgp_key_properties_show (SEAHORSE_PGP_KEY (skey), GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)));
+	       seahorse_pgp_key_properties_show (SEAHORSE_PGP_KEY (skey), GTK_WINDOW (gtk_widget_get_parent (seahorse_widget_get_toplevel (swidget))));
     }
 }
 
