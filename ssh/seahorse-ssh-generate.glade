@@ -2,7 +2,6 @@
 <!DOCTYPE glade-interface SYSTEM "http://glade.gnome.org/glade-2.0.dtd">
 
 <glade-interface>
-<requires lib="gnome"/>
 
 <widget class="GtkDialog" id="ssh-generate">
   <property name="border_width">5</property>
@@ -336,6 +335,7 @@ for each of them.</property>
 			      <property name="max_length">0</property>
 			      <property name="text"></property>
 			      <property name="has_frame">True</property>
+			      <property name="invisible_char">●</property>
 			      <property name="activates_default">True</property>
 			    </widget>
 			    <packing>
@@ -559,7 +559,7 @@ DSA</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">False</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">2048 512 8192 1 10 10</property>
+				  <property name="adjustment">2048 512 8192 512 10 0</property>
 				</widget>
 			      </child>
 			    </widget>
