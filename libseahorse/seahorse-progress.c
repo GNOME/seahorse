@@ -270,7 +270,10 @@ progress_show (SeahorseOperation *operation)
     /* Release our reference on the operation when this window is destroyed */    
     g_object_set_data_full (G_OBJECT (swidget), "operation", operation, 
                             (GDestroyNotify)g_object_unref);    
-        
+
+    w = glade_xml_get_widget (swidget->xml, swidget->name);
+    gtk_window_move (w, 10, 10);
+
     /* Setup the title */
     title = (const gchar*)g_object_get_data (G_OBJECT (operation), "progress-title");
     if (title) {
