@@ -229,6 +229,7 @@ monitor_ssh_homedir (GFileMonitor *handle, GFile *file, GFile *other_file,
 	if (event_type != G_FILE_MONITOR_EVENT_DELETED && 
 	    !ends_with (path, AUTHORIZED_KEYS_FILE) &&
 	    !ends_with (path, OTHER_KEYS_FILE) && 
+		!ends_with (path, ".pub") &&
 	    !check_file_for_ssh_private (ssrc, path)) {
 		g_free (path);
 		return;
