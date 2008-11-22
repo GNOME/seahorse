@@ -19,6 +19,8 @@
  * 02111-1307, USA.  
  */
 
+#include "config.h"
+
 #include "seahorse-xxx.h"
 
 enum {
@@ -76,8 +78,8 @@ seahorse_xxx_init (SeahorseXxx *self)
 static void
 seahorse_xxx_dispose (GObject *obj)
 {
-	SeahorseXxxPrivate *pv = SEAHORSE_XXX_GET_PRIVATE (obj);
 	SeahorseXxx *self = SEAHORSE_XXX (obj);
+	SeahorseXxxPrivate *pv = SEAHORSE_XXX_GET_PRIVATE (self);
     
 	G_OBJECT_CLASS (seahorse_xxx_parent_class)->dispose (obj);
 }
@@ -85,8 +87,8 @@ seahorse_xxx_dispose (GObject *obj)
 static void
 seahorse_xxx_finalize (GObject *obj)
 {
-	SeahorseXxxPrivate *pv = SEAHORSE_XXX_GET_PRIVATE (obj);
 	SeahorseXxx *self = SEAHORSE_XXX (obj);
+	SeahorseXxxPrivate *pv = SEAHORSE_XXX_GET_PRIVATE (self);
 
 	G_OBJECT_CLASS (seahorse_xxx_parent_class)->finalize (obj);
 }
@@ -95,8 +97,8 @@ static void
 seahorse_xxx_set_property (GObject *obj, guint prop_id, const GValue *value, 
                            GParamSpec *pspec)
 {
-	SeahorseXxxPrivate *pv = SEAHORSE_XXX_GET_PRIVATE (obj);
 	SeahorseXxx *self = SEAHORSE_XXX (obj);
+	SeahorseXxxPrivate *pv = SEAHORSE_XXX_GET_PRIVATE (self);
 	
 	switch (prop_id) {
 	case PROP_XXX:
@@ -111,8 +113,8 @@ static void
 seahorse_xxx_get_property (GObject *obj, guint prop_id, GValue *value, 
                            GParamSpec *pspec)
 {
-	SeahorseXxxPrivate *pv = SEAHORSE_XXX_GET_PRIVATE (obj);
 	SeahorseXxx *self = SEAHORSE_XXX (obj);
+	SeahorseXxxPrivate *pv = SEAHORSE_XXX_GET_PRIVATE (self);
 	
 	switch (prop_id) {
 	case PROP_XXX:
