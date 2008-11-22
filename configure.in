@@ -392,30 +392,6 @@ fi
 SEAHORSE_CFLAGS="$SEAHORSE_CFLAGS $DBUS_CFLAGS"
 SEAHORSE_LIBS="$SEAHORSE_LIBS $DBUS_LIBS"
 
-dnl ****************************************************************************
-dnl LIBCRYPTUI
-dnl ****************************************************************************
-   
-if test "$enable_dbus" != "yes"; then
-    echo "disabling libcryptui: no dbus support"
-else
-    
-    LIBCRYPTUI_LT_RELEASE=$LIBCRYPTUI_CURRENT:$LIBCRYPTUI_REVISION:$LIBCRYPTUI_AGE
-    AC_SUBST(LIBCRYPTUI_LT_RELEASE)
-
-    LIBCRYPTUI_MAJOR=$LIBCRYPTUI_CURRENT.$LIBCRYPTUI_REVISION
-    AC_SUBST(LIBCRYPTUI_MAJOR)
-    
-    PKG_CHECK_MODULES(LIBCRYPTUI, gtk+-2.0 >= 2.10.0 gconf-2.0)
-
-    LIBCRYPTUI_CFLAGS="$LIBCRYPTUI_CFLAGS $DBUS_CFLAGS"
-    LIBCRYPTUI_LIBS="$LIBCRYPTUI_LIBS $DBUS_LIBS" 
-        
-    AC_SUBST(LIBCRYPTUI_CFLAGS)
-    AC_SUBST(LIBCRYPTUI_LIBS)
-fi
-
-   
 dnl *******************
 dnl LIBNOTIFY
 dnl *******************
@@ -528,6 +504,34 @@ if test "$enable_tests" != "yes"; then
 fi
 
 AM_CONDITIONAL(WITH_TESTS, test "$enable_tests" == "yes")
+
+dnl ****************************************************************************
+dnl LIBCRYPTUI
+dnl ****************************************************************************
+   
+LIBCRYPTUI_LT_RELEASE=$LIBCRYPTUI_CURRENT:$LIBCRYPTUI_REVISION:$LIBCRYPTUI_AGE
+AC_SUBST(LIBCRYPTUI_LT_RELEASE)
+
+LIBCRYPTUI_MAJOR=$LIBCRYPTUI_CURRENT.$LIBCRYPTUI_REVISION
+AC_SUBST(LIBCRYPTUI_MAJOR)
+    
+PKG_CHECK_MODULES(LIBCRYPTUI, gtk+-2.0 >= 2.10.0 gconf-2.0)
+
+NEED_LIBTASN1_VERSION=0.3.4
+
+AM_PATH_LIBTASN1($NEED_LIBTASN1_VERSION, ,
+	AC_MSG_ERROR([[
+*** 
+*** LibtASN1 ${NEED_LIBTASN1_VERSION} was not found. 
+]]))
+
+libtasn=yes
+
+LIBCRYPTUI_CFLAGS="$LIBCRYPTUI_CFLAGS $DBUS_CFLAGS $LIBTASN1_CFLAGS"
+LIBCRYPTUI_LIBS="$LIBCRYPTUI_LIBS $DBUS_LIBS $LIBTASN1_LIBS" 
+
+AC_SUBST(LIBCRYPTUI_CFLAGS)
+AC_SUBST(LIBCRYPTUI_LIBS)
 
 dnl ****************************************************************************
 

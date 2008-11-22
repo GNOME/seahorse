@@ -78,22 +78,57 @@ show_chooser_dialog (CryptUIKeyset *keyset)
     }
 }
 
+static void
+print_keyset (CryptUIKeyset *keyset)
+{
+    GList *keys, *l;
+    gboolean cache = FALSE;
+    gchar *name;
+    guint flags;
+    
+    keys = cryptui_keyset_get_keys (keyset);
+    
+    for(l = keys; l; l = g_list_next (l)) {
+        g_print ("key: %s\n", (gchar*)l->data);
+        
+        /* Test half of them cached, half not */
+        if (cache)
+            cryptui_keyset_cache_key (keyset, (gchar*)l->data);
+        cache = !cache;
+        
+        name = cryptui_keyset_key_display_name (keyset, (gchar*)l->data);
+        g_print ("     name: %s\n", name);
+        g_free (name);
+        
+        name = cryptui_keyset_key_display_id (keyset, (gchar*)l->data);
+        g_print ("     id: %s\n", name);
+        g_free (name);
+        
+        flags = cryptui_keyset_key_flags (keyset, (gchar*)l->data);
+        g_print ("     flags: %d\n", flags);
+    }
+}
+
 int
 main (int argc, char **argv)
 {
     CryptUIKeyset *keyset;
+    const gchar *arg = "normal";
     
     gtk_init(&argc, &argv);
     
     keyset = cryptui_keyset_new ("openpgp", TRUE);
-    if (argc > 1) {
-        if (g_ascii_strcasecmp (argv[1], "plain") == 0) {
-            show_ui_dialog (keyset);
-            return 0;
-        } 
-    }
-
-    /* The default */
-    show_chooser_dialog (keyset);
+    if (argc > 1)
+	    arg = argv[1];
+	    
+    if (g_ascii_strcasecmp (arg, "plain") == 0) 
+	    show_ui_dialog (keyset);
+    else if (g_ascii_strcasecmp (arg, "normal") == 0)
+	    show_chooser_dialog (keyset);
+    else if (g_ascii_strcasecmp (arg, "keyset") == 0)
+	    print_keyset (keyset);
+    else
+	    g_warning ("must specify something valid to display");
+	    
     return 0;
 }

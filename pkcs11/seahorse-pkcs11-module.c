@@ -22,6 +22,8 @@
 #include "config.h"
 
 #include "seahorse-pkcs11-module.h"
+
+#include "seahorse-pkcs11-commands.h"
 #include "seahorse-pkcs11-source.h"
 
 #include "seahorse-gconf.h"
@@ -66,4 +68,5 @@ seahorse_pkcs11_module_init (void)
 
 	/* Let these register themselves */
 	g_type_class_unref (g_type_class_ref (SEAHORSE_PKCS11_TYPE_SOURCE));
+	g_type_class_unref (g_type_class_ref (SEAHORSE_PKCS11_TYPE_COMMANDS));
 }

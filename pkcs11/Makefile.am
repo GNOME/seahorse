@@ -17,12 +17,12 @@ INCLUDES = -I$(top_builddir) \
 
 VALA_SRCS = \
 	seahorse-pkcs11.vala \
-	seahorse-pkcs11-certificate.vala \
 	seahorse-pkcs11-source.vala
 	
 VALA_VAPIS = \
 	p11.vapi \
 	gp11.vapi \
+	libseahorse-pkcs11-c.vapi \
 	$(top_srcdir)/bugs.vapi \
 	$(top_srcdir)/config.vapi \
 	$(top_srcdir)/libseahorse/libseahorse-c.vapi \
@@ -43,6 +43,8 @@ BUILT_SOURCES = \
 noinst_LTLIBRARIES = libseahorse-pkcs11.la
 
 libseahorse_pkcs11_la_SOURCES = \
+	seahorse-pkcs11-certificate.c seahorse-pkcs11-certificate.h \
+	seahorse-pkcs11-commands.c seahorse-pkcs11-commands.h \
 	seahorse-pkcs11-module.c seahorse-pkcs11-module.h \
 	$(VALA_CFILES) $(VALA_HFILES)
 
@@ -58,6 +60,7 @@ EXTRA_DIST = \
 	gp11-hacks.h \
 	$(glade_DATA) \
 	vala-build.stamp \
+	libseahorse-pkcs11-c.vapi \
 	$(VALA_CFILES) $(VALA_HFILES) \
 	$(VALA_SRCS)
 

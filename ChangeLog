@@ -1,3 +1,54 @@
+2008-11-22  Stef Walter  <stef@memberwebs.com>
+
+	* libcryptui/crui-asn1.c: (added)
+	* libcryptui/crui-asn1.h: (added)
+	* libcryptui/pk.asn: (added)
+	* libcryptui/pkix.asn: (added)
+	* libcryptui/tests/unit-test-asn1.c: (added)
+	* configure.in: Add libtasn1 depdencency and ASN.1 parsing functionality
+	to libcryptui.
+	
+	* libcryptui/crui-util.c: (added)
+	* libcryptui/crui-util.h: (added)
+	* libcryptui/crui-x509-cert.c: (added)
+	* libcryptui/crui-x509-cert.h: (added)
+	* libcryptui/crui-x509-simple.c: (added)
+	* libcryptui/crui-x509-simple.h: (added)
+	* libcryptui/tests/unit-test-util.c: (added)
+	* libcryptui/tests/unit-test-x509-cert.c: (added)
+	* libcryptui/tests/files/test-certificate-1.der: (added) Add interface 
+	that represents a certificate, and a basic file loader.
+	
+	* libcryptui/crui-x509-cert-basics.c: (added)
+	* libcryptui/crui-x509-cert-basics.h: (added)
+	* libcryptui/crui-x509-cert-basics.glade: (added)
+	* libcryptui/crui-x509-cert-basics.ui: (added)
+	* libcryptui/crui-x509-cert-dialog.c: (added)
+	* libcryptui/crui-x509-cert-dialog.h: (added)
+	* libcryptui/tests/crui-show.c: (added) Add a basic UI display for a X509
+	certificate.
+	
+	* libcryptui/gtest-helpers.c: (added)
+	* libcryptui/gtest-helpers.h: (added)
+	* libcryptui/gtest-prep.sh: (added)
+	* libcryptui/Makefile.am: Add unit testing to libcryptui for new functionality.
+	
+	* libcryptui/tests/cryptui-test-keyset.c: (removed)
+	* libcryptui/tests/cryptui-test-ui.c: 
+	* libcryptui/Makefile.am: Reorganize old tests.
+	
+	* pkcs11/libseahorse-pkcs11-c.vapi: (added)
+	* pkcs11/Makefile.am:
+	* pkcs11/seahorse-pkcs11-certificate.c:
+	* pkcs11/seahorse-pkcs11-certificate.h:
+	* pkcs11/seahorse-pkcs11-certificate.vala: (removed)
+	* pkcs11/seahorse-pkcs11-commands.c: (added)
+	* pkcs11/seahorse-pkcs11-commands.h: (added)
+	* pkcs11/seahorse-pkcs11-module.c:
+	* pkcs11/seahorse-pkcs11-source.vala: Use the new X509 display for certificates
+	in seahorse. Very simple beginnings. Rework SeahorsePkcs11Certificate. No longer
+	written in vala.
+	
 2008-11-20  Adam Schreiber  <sadam@clemson.edu>
 
     * libseahorse/seahorse-progress.c: Put progress dialog in upper left corner.

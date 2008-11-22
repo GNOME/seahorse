@@ -11,7 +11,8 @@ namespace Seahorse.Pkcs11 {
 		P11.CKA_GNOME_USER_TRUST,
 		P11.CKA_START_DATE,
 		P11.CKA_END_DATE,
-		P11.CKA_EXTRACTABLE
+		P11.CKA_EXTRACTABLE,
+		P11.CKA_VALUE
 	};
 	
 	public class Source : Seahorse.Source {
@@ -427,6 +428,7 @@ namespace Seahorse.Pkcs11 {
 			
 			/* Create a new object */
 			cert = new Pkcs11.Certificate(object, attrs);
+			cert.source = this;
 			Context.for_app().add_object(cert);
 		}
 	}

@@ -4,9 +4,9 @@
 #include <pkcs11g.h>
 #include <seahorse-util.h>
 #include <glib/gi18n-lib.h>
+#include <seahorse-pkcs11-certificate.h>
 #include <seahorse-context.h>
 #include "seahorse-pkcs11.h"
-#include "seahorse-pkcs11-certificate.h"
 
 
 #define SEAHORSE_PKCS11_SOURCE_TYPE_UPDATER (seahorse_pkcs11_source_updater_get_type ())
@@ -261,7 +261,7 @@ static GType seahorse_pkcs11_source_remover_get_type (void);
 static gpointer seahorse_pkcs11_source_parent_class = NULL;
 static void seahorse_pkcs11_source_finalize (GObject * obj);
 
-static const gulong SEAHORSE_PKCS11_ATTRIBUTE_TYPES[] = {CKA_LABEL, CKA_ID, CKA_CLASS, CKA_TOKEN, CKA_GNOME_USER_TRUST, CKA_START_DATE, CKA_END_DATE, CKA_EXTRACTABLE};
+static const gulong SEAHORSE_PKCS11_ATTRIBUTE_TYPES[] = {CKA_LABEL, CKA_ID, CKA_CLASS, CKA_TOKEN, CKA_GNOME_USER_TRUST, CKA_START_DATE, CKA_END_DATE, CKA_EXTRACTABLE, CKA_VALUE};
 
 
 /* ---------------------------------------------------------------------------------
@@ -399,6 +399,7 @@ static void seahorse_pkcs11_source_receive_object (SeahorsePkcs11Source* self, G
 	/* Create a new object */
 	_tmp3 = NULL;
 	cert = (_tmp3 = seahorse_pkcs11_certificate_new (object, attrs), (cert == NULL ? NULL : (cert = (g_object_unref (cert), NULL))), _tmp3);
+	seahorse_object_set_source (SEAHORSE_OBJECT (cert), SEAHORSE_SOURCE (self));
 	seahorse_context_add_object (seahorse_context_for_app (), SEAHORSE_OBJECT (cert));
 	(cert == NULL ? NULL : (cert = (g_object_unref (cert), NULL)));
 	(prev == NULL ? NULL : (prev = (g_object_unref (prev), NULL)));
