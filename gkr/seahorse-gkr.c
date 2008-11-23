@@ -20,14 +20,4 @@
  */
 
 #include "seahorse-gkr.h"
-#include <stdlib.h>
-#include <string.h>
-
-
-
-
-
-
-
-
 

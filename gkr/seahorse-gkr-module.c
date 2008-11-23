@@ -24,7 +24,7 @@
 #include "seahorse-gkr-module.h"
 
 #include "seahorse-gkr-commands.h"
-#include "seahorse-gkeyring-source.h"
+#include "seahorse-gkr-source.h"
 
 #include "seahorse-context.h"
 
@@ -34,10 +34,10 @@ seahorse_gkr_module_init (void)
 	SeahorseSource *source;
 
 	/* Always have a default keyring source added */
-	source = g_object_new (SEAHORSE_TYPE_GKEYRING_SOURCE, NULL);
+	source = g_object_new (SEAHORSE_TYPE_GKR_SOURCE, NULL);
 	seahorse_context_take_source (NULL, source);
 
 	/* Let these classes register themselves */
-	g_type_class_unref (g_type_class_ref (SEAHORSE_TYPE_GKEYRING_SOURCE));
-	g_type_class_unref (g_type_class_ref (SEAHORSE_GKEYRING_TYPE_COMMANDS));
+	g_type_class_unref (g_type_class_ref (SEAHORSE_TYPE_GKR_SOURCE));
+	g_type_class_unref (g_type_class_ref (SEAHORSE_TYPE_GKR_COMMANDS));
 }

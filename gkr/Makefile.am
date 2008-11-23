@@ -15,39 +15,17 @@ INCLUDES = -I$(top_builddir) \
 	-DLIBCRYPTUI_API_SUBJECT_TO_CHANGE \
 	-DGETTEXT_PACKAGE=\""seahorse\""
 
-VALA_SRCS = \
-	seahorse-gkr.vala \
-	seahorse-gkr-commands.vala
-
-VALA_VAPIS = \
-	libseahorse-gkr-c.vapi \
-	$(top_srcdir)/bugs.vapi \
-	$(top_srcdir)/config.vapi \
-	$(top_srcdir)/libseahorse/libseahorse-c.vapi \
-	$(top_srcdir)/libseahorse/libseahorse.vapi
-	
-VALA_CFILES = $(VALA_SRCS:.vala=.c)
-VALA_HFILES = $(VALA_SRCS:.vala=.h)
-
-SUFFIXES = .vala .c .h
-
-vala-build.stamp: $(VALA_SRCS) $(VALA_VAPIS)
-	$(VALAC) -C $(VALA_PKGS) $(VALA_VAPIS) $(VALA_SRCS)
-	date +'%s' > $@
-
-BUILT_SOURCES = \
-	vala-build.stamp
-
 noinst_LTLIBRARIES = libseahorse-gkr.la
 
 libseahorse_gkr_la_SOURCES = \
-	seahorse-gkr-module.c seahorse-gkr-module.h \
+	seahorse-gkr.c seahorse-gkr.h \
+	seahorse-gkr-commands.c seahorse-gkr-commands.h \
 	seahorse-gkr-dialogs.h \
-	seahorse-gkeyring-item.c seahorse-gkeyring-item.h \
-	seahorse-gkeyring-source.c seahorse-gkeyring-source.h \
-	seahorse-gkeyring-operation.c seahorse-gkeyring-operation.h \
-	seahorse-gkeyring-item-properties.c \
-	$(VALA_CFILES) $(VALA_HFILES)
+	seahorse-gkr-item.c seahorse-gkr-item.h \
+	seahorse-gkr-item-properties.c \
+	seahorse-gkr-module.c seahorse-gkr-module.h \
+	seahorse-gkr-operation.c seahorse-gkr-operation.h \
+	seahorse-gkr-source.c seahorse-gkr-source.h
 	
 libseahorse_gkr_la_LIBADD = \
 	$(top_builddir)/libseahorse/libseahorse.la \
@@ -55,15 +33,8 @@ libseahorse_gkr_la_LIBADD = \
 	$(top_builddir)/libcryptui/libcryptui.la
 
 glade_DATA = \
-	seahorse-gkeyring-item-properties.glade
+	seahorse-gkr-item-properties.glade
 
 EXTRA_DIST = \
-	$(glade_DATA) \
-	libseahorse-gkr-c.vapi \
-	vala-build.stamp \
-	$(VALA_CFILES) $(VALA_HFILES) \
-	$(VALA_SRCS)
-
-vala-clean:
-	rm -f vala-build.stamp $(VALA_CFILES) $(VALA_HFILES)
+	$(glade_DATA)
 

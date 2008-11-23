@@ -27,11 +27,8 @@
 
 G_BEGIN_DECLS
 
-
-
-#define SEAHORSE_GKEYRING_TYPE_STR "gnome-keyring"
-#define SEAHORSE_GKEYRING_TYPE g_quark_from_string ("gnome-keyring")
-
+#define SEAHORSE_GKR_TYPE_STR "gnome-keyring"
+#define SEAHORSE_GKR_TYPE g_quark_from_string ("gnome-keyring")
 
 G_END_DECLS
 

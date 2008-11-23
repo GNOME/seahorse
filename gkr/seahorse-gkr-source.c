@@ -27,13 +27,13 @@
 
 #include <glib/gi18n.h>
 
-#include "seahorse-gkeyring-source.h"
+#include "seahorse-gkr-source.h"
 #include "seahorse-operation.h"
 #include "seahorse-util.h"
-#include "seahorse-gkeyring-item.h"
+#include "seahorse-gkr-item.h"
 #include "seahorse-secure-memory.h"
 #include "seahorse-passphrase.h"
-#include "seahorse-gkeyring-operation.h"
+#include "seahorse-gkr-operation.h"
 
 #include "common/seahorse-registry.h"
 
@@ -65,12 +65,12 @@ enum {
     PROP_LOCATION
 };
 
-struct _SeahorseGKeyringSourcePrivate {
+struct _SeahorseGkrSourcePrivate {
     SeahorseMultiOperation *operations;     /* A list of all current operations */    
     gchar *keyring_name;                    /* The key ring name */
 };
 
-G_DEFINE_TYPE (SeahorseGKeyringSource, seahorse_gkeyring_source, SEAHORSE_TYPE_SOURCE);
+G_DEFINE_TYPE (SeahorseGkrSource, seahorse_gkr_source, SEAHORSE_TYPE_SOURCE);
 
 /* Forward decls */
 
@@ -99,7 +99,7 @@ enum {
 
 DECLARE_OPERATION (List, list)
 
-    SeahorseGKeyringSource *gsrc;
+    SeahorseGkrSource *gsrc;
 
     GList *remaining;
     guint total;
@@ -170,7 +170,7 @@ keyring_operation_failed (SeahorseListOperation *lop, GnomeKeyringResult result)
         gnome_keyring_cancel_request (lop->request_acl);
     lop->request_acl = NULL;
     
-    seahorse_gkeyring_operation_parse_error (result, &err);
+    seahorse_gkr_operation_parse_error (result, &err);
     g_assert (err != NULL);
     
     seahorse_operation_mark_done (op, FALSE, err);
@@ -179,8 +179,8 @@ keyring_operation_failed (SeahorseListOperation *lop, GnomeKeyringResult result)
 static gboolean
 have_complete_item (SeahorseListOperation *lop)
 {
-    SeahorseGKeyringItem *git = NULL;
-    SeahorseGKeyringItem *prev;
+    SeahorseGkrItem *git = NULL;
+    SeahorseGkrItem *prev;
     GQuark keyid;
     
     g_assert (lop->current_id);
@@ -190,15 +190,15 @@ have_complete_item (SeahorseListOperation *lop)
     
     g_assert (lop->current_info);
   
-    keyid = seahorse_gkeyring_item_get_cannonical (lop->current_id);
+    keyid = seahorse_gkr_item_get_cannonical (lop->current_id);
     g_return_val_if_fail (keyid, FALSE);
     
     /* Mark this key as seen */
     if (lop->checks)
         g_hash_table_remove (lop->checks, GUINT_TO_POINTER (keyid));
     
-    g_assert (SEAHORSE_IS_GKEYRING_SOURCE (lop->gsrc));
-    prev = SEAHORSE_GKEYRING_ITEM (seahorse_context_get_object (SCTX_APP (), 
+    g_assert (SEAHORSE_IS_GKR_SOURCE (lop->gsrc));
+    prev = SEAHORSE_GKR_ITEM (seahorse_context_get_object (SCTX_APP (), 
                                    SEAHORSE_SOURCE (lop->gsrc), keyid));
 
     /* Check if we can just replace the key on the object */
@@ -214,7 +214,7 @@ have_complete_item (SeahorseListOperation *lop)
         return TRUE;
     }
     
-    git = seahorse_gkeyring_item_new (SEAHORSE_SOURCE (lop->gsrc), lop->current_id, 
+    git = seahorse_gkr_item_new (SEAHORSE_SOURCE (lop->gsrc), lop->current_id, 
                                       lop->current_info, lop->current_attrs, lop->current_acl);
  
     /* We listen in to get notified of changes on this key */
@@ -318,7 +318,7 @@ static void
 process_next_item (SeahorseListOperation *lop)
 {
     g_assert (lop);
-    g_assert (SEAHORSE_IS_GKEYRING_SOURCE (lop->gsrc));
+    g_assert (SEAHORSE_IS_GKR_SOURCE (lop->gsrc));
 
     seahorse_operation_mark_progress_full (SEAHORSE_OPERATION (lop), NULL, 
                                            lop->total - g_list_length (lop->remaining), 
@@ -381,12 +381,12 @@ keyring_ids_ready (GnomeKeyringResult result, GList *list, SeahorseListOperation
 }
 
 static SeahorseListOperation*
-start_list_operation (SeahorseGKeyringSource *gsrc, GQuark keyid)
+start_list_operation (SeahorseGkrSource *gsrc, GQuark keyid)
 {
     SeahorseListOperation *lop;
     GList *keys, *l;
 
-    g_assert (SEAHORSE_IS_GKEYRING_SOURCE (gsrc));
+    g_assert (SEAHORSE_IS_GKR_SOURCE (gsrc));
 
     lop = g_object_new (SEAHORSE_TYPE_LIST_OPERATION, NULL);
     lop->gsrc = gsrc;
@@ -505,8 +505,8 @@ seahorse_list_operation_cancel (SeahorseOperation *operation)
 
 DECLARE_OPERATION (Remove, remove)
 
-	SeahorseGKeyringSource *gsrc;
-	SeahorseGKeyringItem *gitem;
+	SeahorseGkrSource *gsrc;
+	SeahorseGkrItem *gitem;
 	gpointer request;
 
 END_DECLARE_OPERATION
@@ -524,7 +524,7 @@ remove_item_ready (GnomeKeyringResult result, SeahorseRemoveOperation *rop)
 
 	if (result != GNOME_KEYRING_RESULT_OK) {
 		if (seahorse_operation_is_running (SEAHORSE_OPERATION (rop))) {
-			seahorse_gkeyring_operation_parse_error (result, &err);
+			seahorse_gkr_operation_parse_error (result, &err);
 			g_assert (err != NULL);
 			seahorse_operation_mark_done (SEAHORSE_OPERATION (rop), FALSE, err);
 		}
@@ -536,12 +536,12 @@ remove_item_ready (GnomeKeyringResult result, SeahorseRemoveOperation *rop)
 }
 
 static SeahorseRemoveOperation*
-start_remove_operation (SeahorseGKeyringSource *gsrc, SeahorseGKeyringItem *gitem)
+start_remove_operation (SeahorseGkrSource *gsrc, SeahorseGkrItem *gitem)
 {
 	SeahorseRemoveOperation *rop;
 
-	g_assert (SEAHORSE_IS_GKEYRING_SOURCE (gsrc));
-	g_assert (SEAHORSE_IS_GKEYRING_ITEM (gitem));
+	g_assert (SEAHORSE_IS_GKR_SOURCE (gsrc));
+	g_assert (SEAHORSE_IS_GKR_ITEM (gitem));
 	
 	rop = g_object_new (SEAHORSE_TYPE_REMOVE_OPERATION, NULL);
 	rop->gsrc = gsrc;
@@ -646,25 +646,25 @@ key_destroyed (SeahorseKey *skey, SeahorseSource *sksrc)
  */
 
 static void
-seahorse_gkeyring_source_init (SeahorseGKeyringSource *gsrc)
+seahorse_gkr_source_init (SeahorseGkrSource *gsrc)
 {
     /* init private vars */
-    gsrc->pv = g_new0 (SeahorseGKeyringSourcePrivate, 1);
+    gsrc->pv = g_new0 (SeahorseGkrSourcePrivate, 1);
     gsrc->pv->operations = seahorse_multi_operation_new ();
 }
 
 static GObject*  
-seahorse_gkeyring_source_constructor (GType type, guint n_props, GObjectConstructParam* props)
+seahorse_gkr_source_constructor (GType type, guint n_props, GObjectConstructParam* props)
 {
-    GObject* obj = G_OBJECT_CLASS (seahorse_gkeyring_source_parent_class)->constructor (type, n_props, props);
+    GObject* obj = G_OBJECT_CLASS (seahorse_gkr_source_parent_class)->constructor (type, n_props, props);
     return obj;
 }
 
 static void 
-seahorse_gkeyring_source_get_property (GObject *object, guint prop_id, GValue *value, 
+seahorse_gkr_source_get_property (GObject *object, guint prop_id, GValue *value, 
                                        GParamSpec *pspec)
 {
-    SeahorseGKeyringSource *gsrc = SEAHORSE_GKEYRING_SOURCE (object);
+    SeahorseGkrSource *gsrc = SEAHORSE_GKR_SOURCE (object);
 
     switch (prop_id) {
     case PROP_KEYRING_NAME:
@@ -686,10 +686,10 @@ seahorse_gkeyring_source_get_property (GObject *object, guint prop_id, GValue *v
 }
 
 static void 
-seahorse_gkeyring_source_set_property (GObject *object, guint prop_id, const GValue *value, 
+seahorse_gkr_source_set_property (GObject *object, guint prop_id, const GValue *value, 
                                        GParamSpec *pspec)
 {
-    SeahorseGKeyringSource *gsrc = SEAHORSE_GKEYRING_SOURCE (object);
+    SeahorseGkrSource *gsrc = SEAHORSE_GKR_SOURCE (object);
 
     switch (prop_id) {
     case PROP_KEYRING_NAME:
@@ -702,13 +702,13 @@ seahorse_gkeyring_source_set_property (GObject *object, guint prop_id, const GVa
 }
 
 static SeahorseOperation*
-seahorse_gkeyring_source_load (SeahorseSource *src, GQuark keyid)
+seahorse_gkr_source_load (SeahorseSource *src, GQuark keyid)
 {
-    SeahorseGKeyringSource *gsrc;
+    SeahorseGkrSource *gsrc;
     SeahorseListOperation *lop;
     
     g_assert (SEAHORSE_IS_SOURCE (src));
-    gsrc = SEAHORSE_GKEYRING_SOURCE (src);
+    gsrc = SEAHORSE_GKR_SOURCE (src);
     
     lop = start_list_operation (gsrc, keyid);
     seahorse_multi_operation_take (gsrc->pv->operations, SEAHORSE_OPERATION (lop));
@@ -718,11 +718,11 @@ seahorse_gkeyring_source_load (SeahorseSource *src, GQuark keyid)
 }
 
 static SeahorseOperation* 
-seahorse_gkeyring_source_import (SeahorseSource *sksrc, GInputStream *input)
+seahorse_gkr_source_import (SeahorseSource *sksrc, GInputStream *input)
 {
 	GError *err = NULL;
 
-	g_return_val_if_fail (SEAHORSE_IS_GKEYRING_SOURCE (sksrc), NULL);
+	g_return_val_if_fail (SEAHORSE_IS_GKR_SOURCE (sksrc), NULL);
 	g_return_val_if_fail (G_IS_INPUT_STREAM (input), NULL);
 
 	/* TODO: Implement properly */
@@ -731,11 +731,11 @@ seahorse_gkeyring_source_import (SeahorseSource *sksrc, GInputStream *input)
 }
 
 static SeahorseOperation* 
-seahorse_gkeyring_source_export (SeahorseSource *sksrc, GList *keys, GOutputStream *output)
+seahorse_gkr_source_export (SeahorseSource *sksrc, GList *keys, GOutputStream *output)
 {
 	GError *err = NULL;
     
-	g_return_val_if_fail (SEAHORSE_IS_GKEYRING_SOURCE (sksrc), NULL);
+	g_return_val_if_fail (SEAHORSE_IS_GKR_SOURCE (sksrc), NULL);
 	g_return_val_if_fail (G_IS_OUTPUT_STREAM (output), NULL);
     
 	/* TODO: Implement properly */
@@ -744,24 +744,24 @@ seahorse_gkeyring_source_export (SeahorseSource *sksrc, GList *keys, GOutputStre
 }
 
 static SeahorseOperation*            
-seahorse_gkeyring_source_remove (SeahorseSource *sksrc, SeahorseObject *sobj)
+seahorse_gkr_source_remove (SeahorseSource *sksrc, SeahorseObject *sobj)
 {
-    SeahorseGKeyringItem *git;
-    SeahorseGKeyringSource *gsrc;
+    SeahorseGkrItem *git;
+    SeahorseGkrSource *gsrc;
     
-    g_return_val_if_fail (SEAHORSE_IS_GKEYRING_ITEM (sobj), FALSE);
-    git = SEAHORSE_GKEYRING_ITEM (sobj);
+    g_return_val_if_fail (SEAHORSE_IS_GKR_ITEM (sobj), FALSE);
+    git = SEAHORSE_GKR_ITEM (sobj);
 
-    g_return_val_if_fail (SEAHORSE_IS_GKEYRING_SOURCE (sksrc), FALSE);
-    gsrc = SEAHORSE_GKEYRING_SOURCE (sksrc);
+    g_return_val_if_fail (SEAHORSE_IS_GKR_SOURCE (sksrc), FALSE);
+    gsrc = SEAHORSE_GKR_SOURCE (sksrc);
 
     return SEAHORSE_OPERATION (start_remove_operation (gsrc, git));
 }
 
 static void
-seahorse_gkeyring_source_dispose (GObject *gobject)
+seahorse_gkr_source_dispose (GObject *gobject)
 {
-    SeahorseGKeyringSource *gsrc;
+    SeahorseGkrSource *gsrc;
     
     /*
      * Note that after this executes the rest of the object should
@@ -771,7 +771,7 @@ seahorse_gkeyring_source_dispose (GObject *gobject)
      * This function should also be able to run multiple times.
      */
   
-    gsrc = SEAHORSE_GKEYRING_SOURCE (gobject);
+    gsrc = SEAHORSE_GKR_SOURCE (gobject);
     g_assert (gsrc->pv);
     
     /* Clear out all operations */
@@ -782,15 +782,15 @@ seahorse_gkeyring_source_dispose (GObject *gobject)
         gsrc->pv->operations = NULL;
     }
 
-    G_OBJECT_CLASS (seahorse_gkeyring_source_parent_class)->dispose (gobject);
+    G_OBJECT_CLASS (seahorse_gkr_source_parent_class)->dispose (gobject);
 }
 
 static void
-seahorse_gkeyring_source_finalize (GObject *gobject)
+seahorse_gkr_source_finalize (GObject *gobject)
 {
-    SeahorseGKeyringSource *gsrc;
+    SeahorseGkrSource *gsrc;
   
-    gsrc = SEAHORSE_GKEYRING_SOURCE (gobject);
+    gsrc = SEAHORSE_GKR_SOURCE (gobject);
     g_assert (gsrc->pv);
     
     g_assert (gsrc->pv->operations == NULL);
@@ -798,29 +798,29 @@ seahorse_gkeyring_source_finalize (GObject *gobject)
     g_free (gsrc->pv->keyring_name);
     g_free (gsrc->pv);
     
-    G_OBJECT_CLASS (seahorse_gkeyring_source_parent_class)->finalize (gobject);
+    G_OBJECT_CLASS (seahorse_gkr_source_parent_class)->finalize (gobject);
 }
 
 static void
-seahorse_gkeyring_source_class_init (SeahorseGKeyringSourceClass *klass)
+seahorse_gkr_source_class_init (SeahorseGkrSourceClass *klass)
 {
     GObjectClass *gobject_class;
     SeahorseSourceClass *key_class;
     
-    seahorse_gkeyring_source_parent_class = g_type_class_peek_parent (klass);
+    seahorse_gkr_source_parent_class = g_type_class_peek_parent (klass);
     
     gobject_class = G_OBJECT_CLASS (klass);
-    gobject_class->constructor = seahorse_gkeyring_source_constructor;
-    gobject_class->dispose = seahorse_gkeyring_source_dispose;
-    gobject_class->finalize = seahorse_gkeyring_source_finalize;
-    gobject_class->set_property = seahorse_gkeyring_source_set_property;
-    gobject_class->get_property = seahorse_gkeyring_source_get_property;
+    gobject_class->constructor = seahorse_gkr_source_constructor;
+    gobject_class->dispose = seahorse_gkr_source_dispose;
+    gobject_class->finalize = seahorse_gkr_source_finalize;
+    gobject_class->set_property = seahorse_gkr_source_set_property;
+    gobject_class->get_property = seahorse_gkr_source_get_property;
     
     key_class = SEAHORSE_SOURCE_CLASS (klass);    
-    key_class->load = seahorse_gkeyring_source_load;
-    key_class->import = seahorse_gkeyring_source_import;
-    key_class->export = seahorse_gkeyring_source_export;
-    key_class->remove = seahorse_gkeyring_source_remove;
+    key_class->load = seahorse_gkr_source_load;
+    key_class->import = seahorse_gkr_source_import;
+    key_class->export = seahorse_gkr_source_export;
+    key_class->remove = seahorse_gkr_source_remove;
 
     g_object_class_install_property (gobject_class, PROP_KEYRING_NAME,
         g_param_spec_string ("keyring-name", "Keyring Name", "GNOME Keyring name",
@@ -843,21 +843,21 @@ seahorse_gkeyring_source_class_init (SeahorseGKeyringSourceClass *klass)
                            0, G_MAXUINT, SEAHORSE_LOCATION_INVALID, G_PARAM_READABLE));    
     
     
-	seahorse_registry_register_type (NULL, SEAHORSE_TYPE_GKEYRING_SOURCE, "key-source", "local", SEAHORSE_GKR_STR, NULL);
+	seahorse_registry_register_type (NULL, SEAHORSE_TYPE_GKR_SOURCE, "key-source", "local", SEAHORSE_GKR_STR, NULL);
 }
 
 /* -------------------------------------------------------------------------- 
  * PUBLIC
  */
 
-SeahorseGKeyringSource*
-seahorse_gkeyring_source_new (const gchar *keyring_name)
+SeahorseGkrSource*
+seahorse_gkr_source_new (const gchar *keyring_name)
 {
-   return g_object_new (SEAHORSE_TYPE_GKEYRING_SOURCE, "keyring-name", keyring_name, NULL);
+   return g_object_new (SEAHORSE_TYPE_GKR_SOURCE, "keyring-name", keyring_name, NULL);
 }   
 
 const gchar*
-seahorse_gkeyring_source_get_keyring_name (SeahorseGKeyringSource *gsrc)
+seahorse_gkr_source_get_keyring_name (SeahorseGkrSource *gsrc)
 {
     return gsrc->pv->keyring_name;
 }

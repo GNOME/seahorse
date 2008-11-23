@@ -22,43 +22,31 @@
 #ifndef __SEAHORSE_GKR_COMMANDS_H__
 #define __SEAHORSE_GKR_COMMANDS_H__
 
-#include <glib.h>
+#include "seahorse-commands.h"
+
 #include <glib-object.h>
-#include <seahorse-commands.h>
-#include <seahorse-object.h>
-#include <seahorse-operation.h>
-#include <stdlib.h>
-#include <string.h>
-#include <gtk/gtk.h>
 
-G_BEGIN_DECLS
+#define SEAHORSE_TYPE_GKR_COMMANDS               (seahorse_gkr_commands_get_type ())
+#define SEAHORSE_GKR_COMMANDS(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_GKR_COMMANDS, SeahorseGkrCommands))
+#define SEAHORSE_GKR_COMMANDS_CLASS(klass)       (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_GKR_COMMANDS, SeahorseGkrCommandsClass))
+#define SEAHORSE_IS_GKR_COMMANDS(obj)            (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_GKR_COMMANDS))
+#define SEAHORSE_IS_GKR_COMMANDS_CLASS(klass)    (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_GKR_COMMANDS))
+#define SEAHORSE_GKR_COMMANDS_GET_CLASS(obj)     (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_GKR_COMMANDS, SeahorseGkrCommandsClass))
 
-
-#define SEAHORSE_GKEYRING_TYPE_COMMANDS (seahorse_gkeyring_commands_get_type ())
-#define SEAHORSE_GKEYRING_COMMANDS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_GKEYRING_TYPE_COMMANDS, SeahorseGKeyringCommands))
-#define SEAHORSE_GKEYRING_COMMANDS_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_GKEYRING_TYPE_COMMANDS, SeahorseGKeyringCommandsClass))
-#define SEAHORSE_GKEYRING_IS_COMMANDS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_GKEYRING_TYPE_COMMANDS))
-#define SEAHORSE_GKEYRING_IS_COMMANDS_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_GKEYRING_TYPE_COMMANDS))
-#define SEAHORSE_GKEYRING_COMMANDS_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_GKEYRING_TYPE_COMMANDS, SeahorseGKeyringCommandsClass))
-
-typedef struct _SeahorseGKeyringCommands SeahorseGKeyringCommands;
-typedef struct _SeahorseGKeyringCommandsClass SeahorseGKeyringCommandsClass;
-typedef struct _SeahorseGKeyringCommandsPrivate SeahorseGKeyringCommandsPrivate;
-
-struct _SeahorseGKeyringCommands {
-	SeahorseCommands parent_instance;
-	SeahorseGKeyringCommandsPrivate * priv;
+typedef struct _SeahorseGkrCommands SeahorseGkrCommands;
+typedef struct _SeahorseGkrCommandsClass SeahorseGkrCommandsClass;
+typedef struct _SeahorseGkrCommandsPrivate SeahorseGkrCommandsPrivate;
+    
+struct _SeahorseGkrCommands {
+	SeahorseCommands parent;
 };
 
-struct _SeahorseGKeyringCommandsClass {
+struct _SeahorseGkrCommandsClass {
 	SeahorseCommandsClass parent_class;
 };
 
+GType                  seahorse_gkr_commands_get_type               (void);
 
-SeahorseGKeyringCommands* seahorse_gkeyring_commands_new (void);
-GType seahorse_gkeyring_commands_get_type (void);
+SeahorseGkrCommands*   seahorse_gkr_commands_new                    (void);
 
-
-G_END_DECLS
-
-#endif
+#endif /* __SEAHORSE_GKR_COMMANDS_H__ */

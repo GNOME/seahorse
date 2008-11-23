@@ -29,22 +29,22 @@
 #include "seahorse-secure-memory.h"
 #include "seahorse-secure-entry.h"
 
-#include "gkr/seahorse-gkeyring-item.h"
-#include "gkr/seahorse-gkeyring-source.h"
-#include "gkr/seahorse-gkeyring-operation.h"
+#include "seahorse-gkr-item.h"
+#include "seahorse-gkr-source.h"
+#include "seahorse-gkr-operation.h"
 
 /* -----------------------------------------------------------------------------
  * MAIN TAB 
  */
 
 static void
-load_password (SeahorseWidget *swidget, SeahorseGKeyringItem *git)
+load_password (SeahorseWidget *swidget, SeahorseGkrItem *git)
 {
     SeahorseSecureEntry *entry;
     gchar *secret;
     
     entry = SEAHORSE_SECURE_ENTRY (g_object_get_data (G_OBJECT (swidget), 
-                                             "secure-password-entry"));
+                                   "secure-password-entry"));
     if (entry) {
         
         /* Retrieve initial password. Try to keep it safe */
@@ -60,7 +60,7 @@ static void
 do_main (SeahorseWidget *swidget)
 {
     SeahorseKey *key;
-    SeahorseGKeyringItem *git;
+    SeahorseGkrItem *git;
     GtkWidget *widget;
     gchar *text;
     const gchar *label;
@@ -68,7 +68,7 @@ do_main (SeahorseWidget *swidget)
     gboolean network = FALSE;
 
     key = SEAHORSE_KEY_WIDGET (swidget)->skey;
-    git = SEAHORSE_GKEYRING_ITEM (key);
+    git = SEAHORSE_GKR_ITEM (key);
 
     /* Image */
     widget = seahorse_widget_get_widget (swidget, "key-image");
@@ -81,7 +81,7 @@ do_main (SeahorseWidget *swidget)
     /* Description */
     widget = seahorse_widget_get_widget (swidget, "description-field");
     if (widget) {
-        text = seahorse_gkeyring_item_get_description (git);
+        text = seahorse_gkr_item_get_description (git);
         gtk_entry_set_text (GTK_ENTRY (widget), text ? text : "");
         g_free (text);
     }
@@ -93,22 +93,22 @@ do_main (SeahorseWidget *swidget)
     g_free (text);
 
     /* Use and type */
-    switch (seahorse_gkeyring_item_get_use (git)) {
-    case SEAHORSE_GKEYRING_USE_NETWORK:
+    switch (seahorse_gkr_item_get_use (git)) {
+    case SEAHORSE_GKR_USE_NETWORK:
         label = _("Access a network share or resource");
         network = TRUE;
         break;
-    case SEAHORSE_GKEYRING_USE_WEB:
+    case SEAHORSE_GKR_USE_WEB:
         label = _("Access a website");
         network = TRUE;
         break;
-    case SEAHORSE_GKEYRING_USE_PGP:
+    case SEAHORSE_GKR_USE_PGP:
         label = _("Unlocks a PGP key");
         break;
-    case SEAHORSE_GKEYRING_USE_SSH:
+    case SEAHORSE_GKR_USE_SSH:
         label = _("Unlocks a Secure Shell key");
         break;
-    case SEAHORSE_GKEYRING_USE_OTHER:
+    case SEAHORSE_GKR_USE_OTHER:
         label = _("Saved password or login");
         break;
     default:
@@ -132,12 +132,12 @@ do_main (SeahorseWidget *swidget)
     seahorse_widget_set_visible (swidget, "login-field", network);
     
     if (network) {
-        label = seahorse_gkeyring_item_get_attribute (git, "server");
+        label = seahorse_gkr_item_get_attribute (git, "server");
         widget = seahorse_widget_get_widget (swidget, "server-field");
         if (widget)
             gtk_label_set_text (GTK_LABEL (widget), label);
         
-        label = seahorse_gkeyring_item_get_attribute (git, "user");
+        label = seahorse_gkr_item_get_attribute (git, "user");
         widget = seahorse_widget_get_widget (swidget, "login-field");
         if (widget)
             gtk_label_set_text (GTK_LABEL (widget), label);
@@ -150,14 +150,14 @@ static void
 password_activate (SeahorseSecureEntry *entry, SeahorseWidget *swidget)
 {
     SeahorseKey *key;
-    SeahorseGKeyringItem *git;
+    SeahorseGkrItem *git;
     SeahorseOperation *op;
     GnomeKeyringItemInfo *info;
     GtkWidget *widget;
     GError *err = NULL;
     
     key = SEAHORSE_KEY_WIDGET (swidget)->skey;
-    git = SEAHORSE_GKEYRING_ITEM (key);
+    git = SEAHORSE_GKR_ITEM (key);
 
     widget = seahorse_widget_get_widget (swidget, "password-expander");
     g_return_if_fail (widget);
@@ -176,7 +176,7 @@ password_activate (SeahorseSecureEntry *entry, SeahorseWidget *swidget)
 
     gtk_widget_set_sensitive (GTK_WIDGET (entry), FALSE);
     
-    op = seahorse_gkeyring_operation_update_info (git, info);
+    op = seahorse_gkr_operation_update_info (git, info);
     gnome_keyring_item_info_free (info);
     
     /* This is usually a quick operation */
@@ -216,12 +216,12 @@ static void
 password_expander_activate (GtkExpander *expander, SeahorseWidget *swidget)
 {
     SeahorseKey *key;
-    SeahorseGKeyringItem *git;
+    SeahorseGkrItem *git;
     GtkWidget *widget;
     GtkWidget *box;
 
     key = SEAHORSE_KEY_WIDGET (swidget)->skey;
-    git = SEAHORSE_GKEYRING_ITEM (key);
+    git = SEAHORSE_GKR_ITEM (key);
 
     if (!gtk_expander_get_expanded (expander))
         return;
@@ -260,7 +260,7 @@ static void
 description_activate (GtkWidget *entry, SeahorseWidget *swidget)
 {
     SeahorseKey *key;
-    SeahorseGKeyringItem *git;
+    SeahorseGkrItem *git;
     SeahorseOperation *op;
     GnomeKeyringItemInfo *info;
     const gchar *text;
@@ -268,10 +268,10 @@ description_activate (GtkWidget *entry, SeahorseWidget *swidget)
     GError *err = NULL;
     
     key = SEAHORSE_KEY_WIDGET (swidget)->skey;
-    git = SEAHORSE_GKEYRING_ITEM (key);
+    git = SEAHORSE_GKR_ITEM (key);
 
     text = gtk_entry_get_text (GTK_ENTRY (entry));
-    original = seahorse_gkeyring_item_get_description (git);
+    original = seahorse_gkr_item_get_description (git);
     
     /* Make sure not the same */
     if (text == original || g_utf8_collate (text, original ? original : "") == 0) {
@@ -284,7 +284,7 @@ description_activate (GtkWidget *entry, SeahorseWidget *swidget)
     WITH_SECURE_MEM (info = gnome_keyring_item_info_copy (git->info));
     gnome_keyring_item_info_set_display_name (info, text);
     
-    op = seahorse_gkeyring_operation_update_info (git, info);
+    op = seahorse_gkr_operation_update_info (git, info);
     gnome_keyring_item_info_free (info);
     
     /* This is usually a quick operation */
@@ -317,13 +317,13 @@ static void
 do_details (SeahorseWidget *swidget)
 {
     SeahorseKey *key;
-    SeahorseGKeyringItem *git;
+    SeahorseGkrItem *git;
     GString *details;
     GtkWidget *widget;
     guint i;
 
     key = SEAHORSE_KEY_WIDGET (swidget)->skey;
-    git = SEAHORSE_GKEYRING_ITEM (key);
+    git = SEAHORSE_GKR_ITEM (key);
 
     details = g_string_new (NULL);
     
@@ -393,7 +393,7 @@ static void
 update_application_details (SeahorseWidget *swidget)
 {
     SeahorseKey *key;
-    SeahorseGKeyringItem *git;
+    SeahorseGkrItem *git;
     GnomeKeyringAccessControl *ac;
     GtkLabel *label;
     GtkToggleButton *toggle;
@@ -402,7 +402,7 @@ update_application_details (SeahorseWidget *swidget)
     gchar *path;
     
     key = SEAHORSE_KEY_WIDGET (swidget)->skey;
-    git = SEAHORSE_GKEYRING_ITEM (key);
+    git = SEAHORSE_GKR_ITEM (key);
 
     index = selected_application_index (swidget);
     if (index < 0) {
@@ -462,7 +462,7 @@ static void
 application_access_toggled (GtkCheckButton *check, SeahorseWidget *swidget)
 {
     SeahorseKey *key;
-    SeahorseGKeyringItem *git;
+    SeahorseGkrItem *git;
     SeahorseOperation *op;
     GnomeKeyringAccessType access;
     GnomeKeyringAccessControl *ac;
@@ -475,7 +475,7 @@ application_access_toggled (GtkCheckButton *check, SeahorseWidget *swidget)
         return;
     
     key = SEAHORSE_KEY_WIDGET (swidget)->skey;
-    git = SEAHORSE_GKEYRING_ITEM (key);
+    git = SEAHORSE_GKR_ITEM (key);
 
     index = selected_application_index (swidget);
     g_return_if_fail (index >= 0);
@@ -496,7 +496,7 @@ application_access_toggled (GtkCheckButton *check, SeahorseWidget *swidget)
 
         seahorse_widget_set_sensitive (swidget, "application-details", FALSE);
         
-        op = seahorse_gkeyring_operation_update_acl (git, acl);
+        op = seahorse_gkr_operation_update_acl (git, acl);
         g_return_if_fail (op);
         
         seahorse_operation_wait (op);
@@ -517,7 +517,7 @@ static void
 do_application (SeahorseWidget *swidget)
 {
     SeahorseKey *key;
-    SeahorseGKeyringItem *git;
+    SeahorseGkrItem *git;
     GtkTreeView *tree;
     GtkListStore *store;
     GtkTreeModel *model;
@@ -530,7 +530,7 @@ do_application (SeahorseWidget *swidget)
     gchar *display;
 
     key = SEAHORSE_KEY_WIDGET (swidget)->skey;
-    git = SEAHORSE_GKEYRING_ITEM (key);
+    git = SEAHORSE_GKR_ITEM (key);
 
     tree = GTK_TREE_VIEW (seahorse_widget_get_widget (swidget, "application-list"));
     g_return_if_fail (tree);
@@ -614,14 +614,14 @@ properties_response (GtkDialog *dialog, int response, SeahorseWidget *swidget)
 }
 
 void
-seahorse_gkeyring_item_properties_show (SeahorseGKeyringItem *git, GtkWindow *parent)
+seahorse_gkr_item_properties_show (SeahorseGkrItem *git, GtkWindow *parent)
 {
     SeahorseKey *key = SEAHORSE_KEY (git);
     SeahorseSource *sksrc;
     SeahorseWidget *swidget = NULL;
     GtkWidget *widget;
 
-    swidget = seahorse_key_widget_new ("gkeyring-item-properties",
+    swidget = seahorse_key_widget_new ("gkr-item-properties",
                                        parent, 
                                        key);    
     

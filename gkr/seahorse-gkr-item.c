@@ -27,7 +27,7 @@
 
 #include "seahorse-context.h"
 #include "seahorse-source.h"
-#include "seahorse-gkeyring-item.h"
+#include "seahorse-gkr-item.h"
 #include "seahorse-gtkstock.h"
 #include "seahorse-util.h"
 #include "seahorse-secure-memory.h"
@@ -62,7 +62,7 @@ enum {
     PROP_STOCK_ID
 };
 
-G_DEFINE_TYPE (SeahorseGKeyringItem, seahorse_gkeyring_item, SEAHORSE_TYPE_KEY);
+G_DEFINE_TYPE (SeahorseGkrItem, seahorse_gkr_item, SEAHORSE_TYPE_KEY);
 
 /* -----------------------------------------------------------------------------
  * INTERNAL HELPERS
@@ -88,7 +88,7 @@ find_attribute_int (GnomeKeyringAttributeList *attrs, const gchar *name)
 
 
 static gboolean
-is_network_item (SeahorseGKeyringItem *git, const gchar *match)
+is_network_item (SeahorseGkrItem *git, const gchar *match)
 {
     const gchar *protocol;
     if(gnome_keyring_item_info_get_type (git->info) != GNOME_KEYRING_ITEM_NETWORK_PASSWORD)
@@ -97,12 +97,12 @@ is_network_item (SeahorseGKeyringItem *git, const gchar *match)
     if (!match)
         return TRUE;
     
-    protocol = seahorse_gkeyring_item_get_attribute (git, "protocol");
+    protocol = seahorse_gkr_item_get_attribute (git, "protocol");
     return protocol && g_ascii_strncasecmp (protocol, match, strlen (match)) == 0;
 }
 
 static gboolean 
-is_custom_display_name (SeahorseGKeyringItem *git, const gchar *display)
+is_custom_display_name (SeahorseGkrItem *git, const gchar *display)
 {
     const gchar *user;
     const gchar *server;
@@ -124,9 +124,9 @@ is_custom_display_name (SeahorseGKeyringItem *git, const gchar *display)
      * customized display names and ignore the generated ones.
      */
     
-    user = seahorse_gkeyring_item_get_attribute (git, "user");
-    server = seahorse_gkeyring_item_get_attribute (git, "server");
-    object = seahorse_gkeyring_item_get_attribute (git, "object");
+    user = seahorse_gkr_item_get_attribute (git, "user");
+    server = seahorse_gkr_item_get_attribute (git, "server");
+    object = seahorse_gkr_item_get_attribute (git, "object");
     port = find_attribute_int (git->attributes, "port");
     
     if (!server)
@@ -148,7 +148,7 @@ is_custom_display_name (SeahorseGKeyringItem *git, const gchar *display)
 }
 
 static gchar*
-calc_display_name (SeahorseGKeyringItem *git, gboolean always)
+calc_display_name (SeahorseGkrItem *git, gboolean always)
 {
     const gchar *val;
     gchar *display;
@@ -164,7 +164,7 @@ calc_display_name (SeahorseGKeyringItem *git, gboolean always)
         
         /* HTTP usually has a the realm as the "object" display that */
         if (is_network_item (git, "http") && git->attributes) {
-            val = seahorse_gkeyring_item_get_attribute (git, "object");
+            val = seahorse_gkr_item_get_attribute (git, "object");
             if (val && val[0]) {
                 g_free (display);
                 return g_strdup (val);
@@ -173,7 +173,7 @@ calc_display_name (SeahorseGKeyringItem *git, gboolean always)
         
         /* Display the server name as a last resort */
         if (always) {
-            val = seahorse_gkeyring_item_get_attribute (git, "server");
+            val = seahorse_gkr_item_get_attribute (git, "server");
             if (val && val[0]) {
                 g_free (display);
                 return g_strdup (val);
@@ -185,7 +185,7 @@ calc_display_name (SeahorseGKeyringItem *git, gboolean always)
 }
 
 static gchar*
-calc_network_item_markup (SeahorseGKeyringItem *git)
+calc_network_item_markup (SeahorseGkrItem *git)
 {
     const gchar *object;
     const gchar *user;
@@ -196,10 +196,10 @@ calc_network_item_markup (SeahorseGKeyringItem *git)
     gchar *display = NULL;
     gchar *ret;
     
-    server = seahorse_gkeyring_item_get_attribute (git, "server");
-    protocol = seahorse_gkeyring_item_get_attribute (git, "protocol");
-    object = seahorse_gkeyring_item_get_attribute (git, "object");
-    user = seahorse_gkeyring_item_get_attribute (git, "user");
+    server = seahorse_gkr_item_get_attribute (git, "server");
+    protocol = seahorse_gkr_item_get_attribute (git, "protocol");
+    object = seahorse_gkr_item_get_attribute (git, "object");
+    user = seahorse_gkr_item_get_attribute (git, "user");
 
     if (!protocol)
         return NULL;
@@ -228,7 +228,7 @@ calc_network_item_markup (SeahorseGKeyringItem *git)
 }
 
 static void
-changed_key (SeahorseGKeyringItem *git)
+changed_key (SeahorseGkrItem *git)
 {
     SeahorseKey *skey = SEAHORSE_KEY (git);
     SeahorseObject *obj = SEAHORSE_OBJECT (git);
@@ -254,7 +254,7 @@ changed_key (SeahorseGKeyringItem *git)
     obj->_location = SEAHORSE_LOCATION_LOCAL;
     obj->_usage = SEAHORSE_USAGE_CREDENTIALS;
     obj->_flags = 0;
-    obj->_id = seahorse_gkeyring_item_get_cannonical (git->item_id);
+    obj->_id = seahorse_gkr_item_get_cannonical (git->item_id);
 
     if (is_network_item (git, "http")) 
         skey->keydesc = _("Web Password");
@@ -271,31 +271,31 @@ changed_key (SeahorseGKeyringItem *git)
  */
 
 static void
-seahorse_gkeyring_item_init (SeahorseGKeyringItem *git)
+seahorse_gkr_item_init (SeahorseGkrItem *git)
 {
 
 }
 
 static guint 
-seahorse_gkeyring_item_get_num_names (SeahorseKey *git)
+seahorse_gkr_item_get_num_names (SeahorseKey *git)
 {
     /* Always one name */
     return 1;
 }
 
 static gchar* 
-seahorse_gkeyring_item_get_name (SeahorseKey *skey, guint index)
+seahorse_gkr_item_get_name (SeahorseKey *skey, guint index)
 {
-    SeahorseGKeyringItem *git = SEAHORSE_GKEYRING_ITEM (skey);
+    SeahorseGkrItem *git = SEAHORSE_GKR_ITEM (skey);
     
     g_return_val_if_fail (index == 0, NULL);
     return calc_display_name (git, TRUE);
 }
 
 static gchar* 
-seahorse_gkeyring_item_get_name_markup (SeahorseKey *skey, guint index)
+seahorse_gkr_item_get_name_markup (SeahorseKey *skey, guint index)
 {
-    SeahorseGKeyringItem *git = SEAHORSE_GKEYRING_ITEM (skey);
+    SeahorseGkrItem *git = SEAHORSE_GKR_ITEM (skey);
     gchar *t, *markup = NULL;
     
     g_return_val_if_fail (index == 0, NULL);
@@ -315,24 +315,24 @@ seahorse_gkeyring_item_get_name_markup (SeahorseKey *skey, guint index)
 }
 
 static gchar* 
-seahorse_gkeyring_item_get_name_cn (SeahorseKey *skey, guint index)
+seahorse_gkr_item_get_name_cn (SeahorseKey *skey, guint index)
 {
     g_return_val_if_fail (index == 0, NULL);
     return NULL;
 }
 
 static SeahorseValidity  
-seahorse_gkeyring_item_get_name_validity  (SeahorseKey *skey, guint index)
+seahorse_gkr_item_get_name_validity  (SeahorseKey *skey, guint index)
 {
     g_return_val_if_fail (index == 0, SEAHORSE_VALIDITY_UNKNOWN);
     return SEAHORSE_VALIDITY_FULL;
 }
 
 static void
-seahorse_gkeyring_item_get_property (GObject *object, guint prop_id,
-                                     GValue *value, GParamSpec *pspec)
+seahorse_gkr_item_get_property (GObject *object, guint prop_id,
+                                GValue *value, GParamSpec *pspec)
 {
-    SeahorseGKeyringItem *git = SEAHORSE_GKEYRING_ITEM (object);
+    SeahorseGkrItem *git = SEAHORSE_GKR_ITEM (object);
     SeahorseKey *skey = SEAHORSE_KEY (object);
     
     switch (prop_id) {
@@ -349,13 +349,13 @@ seahorse_gkeyring_item_get_property (GObject *object, guint prop_id,
     	g_value_set_pointer (value, git->acl);
     	break;
     case PROP_DISPLAY_NAME:
-        g_value_take_string (value, seahorse_gkeyring_item_get_name (skey, 0));
+        g_value_take_string (value, seahorse_gkr_item_get_name (skey, 0));
         break;
     case PROP_DISPLAY_ID:
         g_value_set_string (value, seahorse_key_get_short_keyid (skey));
         break;
     case PROP_SIMPLE_NAME:
-        g_value_take_string (value, seahorse_gkeyring_item_get_name (skey, 0));
+        g_value_take_string (value, seahorse_gkr_item_get_name (skey, 0));
         break;
     case PROP_FINGERPRINT:
         g_value_set_string (value, seahorse_key_get_short_keyid (skey));
@@ -396,10 +396,10 @@ seahorse_gkeyring_item_get_property (GObject *object, guint prop_id,
 }
 
 static void
-seahorse_gkeyring_item_set_property (GObject *object, guint prop_id, const GValue *value, 
-                                     GParamSpec *pspec)
+seahorse_gkr_item_set_property (GObject *object, guint prop_id, const GValue *value, 
+                                GParamSpec *pspec)
 {
-    SeahorseGKeyringItem *git = SEAHORSE_GKEYRING_ITEM (object);
+    SeahorseGkrItem *git = SEAHORSE_GKR_ITEM (object);
     
     switch (prop_id) {
     case PROP_ITEM_ID:
@@ -432,9 +432,9 @@ seahorse_gkeyring_item_set_property (GObject *object, guint prop_id, const GValu
 }
 
 static void
-seahorse_gkeyring_item_object_finalize (GObject *gobject)
+seahorse_gkr_item_object_finalize (GObject *gobject)
 {
-    SeahorseGKeyringItem *git = SEAHORSE_GKEYRING_ITEM (gobject);
+    SeahorseGkrItem *git = SEAHORSE_GKR_ITEM (gobject);
     
     if (git->info)
         gnome_keyring_item_info_free (git->info);
@@ -447,29 +447,29 @@ seahorse_gkeyring_item_object_finalize (GObject *gobject)
     gnome_keyring_acl_free (git->acl);
     git->acl = NULL;
     
-    G_OBJECT_CLASS (seahorse_gkeyring_item_parent_class)->finalize (gobject);
+    G_OBJECT_CLASS (seahorse_gkr_item_parent_class)->finalize (gobject);
 }
 
 static void
-seahorse_gkeyring_item_class_init (SeahorseGKeyringItemClass *klass)
+seahorse_gkr_item_class_init (SeahorseGkrItemClass *klass)
 {
     GObjectClass *gobject_class;
     SeahorseKeyClass *key_class;
     
-    seahorse_gkeyring_item_parent_class = g_type_class_peek_parent (klass);
+    seahorse_gkr_item_parent_class = g_type_class_peek_parent (klass);
     gobject_class = G_OBJECT_CLASS (klass);
     
-    gobject_class->finalize = seahorse_gkeyring_item_object_finalize;
-    gobject_class->set_property = seahorse_gkeyring_item_set_property;
-    gobject_class->get_property = seahorse_gkeyring_item_get_property;
+    gobject_class->finalize = seahorse_gkr_item_object_finalize;
+    gobject_class->set_property = seahorse_gkr_item_set_property;
+    gobject_class->get_property = seahorse_gkr_item_get_property;
     
     key_class = SEAHORSE_KEY_CLASS (klass);
     
-    key_class->get_num_names = seahorse_gkeyring_item_get_num_names;
-    key_class->get_name = seahorse_gkeyring_item_get_name;
-    key_class->get_name_markup = seahorse_gkeyring_item_get_name_markup;
-    key_class->get_name_cn = seahorse_gkeyring_item_get_name_cn;
-    key_class->get_name_validity = seahorse_gkeyring_item_get_name_validity;
+    key_class->get_num_names = seahorse_gkr_item_get_num_names;
+    key_class->get_name = seahorse_gkr_item_get_name;
+    key_class->get_name_markup = seahorse_gkr_item_get_name_markup;
+    key_class->get_name_cn = seahorse_gkr_item_get_name_cn;
+    key_class->get_name_validity = seahorse_gkr_item_get_name_validity;
     
     g_object_class_install_property (gobject_class, PROP_ITEM_ID,
         g_param_spec_uint ("item-id", "Item ID", "GNOME Keyring Item ID", 
@@ -529,26 +529,25 @@ seahorse_gkeyring_item_class_init (SeahorseGKeyringItemClass *klass)
  * PUBLIC 
  */
 
-SeahorseGKeyringItem* 
-seahorse_gkeyring_item_new (SeahorseSource *sksrc, guint32 item_id, 
-                            GnomeKeyringItemInfo *info, GnomeKeyringAttributeList *attributes, 
-                            GList *acl)
+SeahorseGkrItem* 
+seahorse_gkr_item_new (SeahorseSource *sksrc, guint32 item_id, GnomeKeyringItemInfo *info, 
+                       GnomeKeyringAttributeList *attributes, GList *acl)
 {
-    SeahorseGKeyringItem *git;
-    git = g_object_new (SEAHORSE_TYPE_GKEYRING_ITEM, "key-source", sksrc, 
+    SeahorseGkrItem *git;
+    git = g_object_new (SEAHORSE_TYPE_GKR_ITEM, "key-source", sksrc, 
                         "item-id", item_id, "item-info", info, 
                         "item-attributes", attributes, "item-acl", acl, NULL);
     return git;
 }
 
 gchar*
-seahorse_gkeyring_item_get_description  (SeahorseGKeyringItem *git)
+seahorse_gkr_item_get_description  (SeahorseGkrItem *git)
 {
     return calc_display_name (git, FALSE);
 }
 
 const gchar*
-seahorse_gkeyring_item_get_attribute (SeahorseGKeyringItem *git, const gchar *name)
+seahorse_gkr_item_get_attribute (SeahorseGkrItem *git, const gchar *name)
 {
     guint i;
     
@@ -565,37 +564,37 @@ seahorse_gkeyring_item_get_attribute (SeahorseGKeyringItem *git, const gchar *na
     return NULL;
 }
 
-SeahorseGKeyringUse
-seahorse_gkeyring_item_get_use (SeahorseGKeyringItem *git)
+SeahorseGkrUse
+seahorse_gkr_item_get_use (SeahorseGkrItem *git)
 {
     const gchar *val;
     
     /* Network passwords */
     if (gnome_keyring_item_info_get_type (git->info) == GNOME_KEYRING_ITEM_NETWORK_PASSWORD) {
         if (is_network_item (git, "http"))
-            return SEAHORSE_GKEYRING_USE_WEB;
-        return SEAHORSE_GKEYRING_USE_NETWORK;
+            return SEAHORSE_GKR_USE_WEB;
+        return SEAHORSE_GKR_USE_NETWORK;
     }
     
     if (git->attributes) {
-        val = seahorse_gkeyring_item_get_attribute (git, "seahorse-key-type");
+        val = seahorse_gkr_item_get_attribute (git, "seahorse-key-type");
         if (val) {
 #ifdef WITH_PGP
         	if (strcmp (val, SEAHORSE_PGP_STR) == 0)
-        		return SEAHORSE_GKEYRING_USE_PGP;
+        		return SEAHORSE_GKR_USE_PGP;
 #endif
 #ifdef WITH_SSH
         	if (strcmp (val, SEAHORSE_SSH_STR) == 0)
-        		return SEAHORSE_GKEYRING_USE_SSH;
+        		return SEAHORSE_GKR_USE_SSH;
 #endif
         }
     }
     
-    return SEAHORSE_GKEYRING_USE_OTHER;
+    return SEAHORSE_GKR_USE_OTHER;
 }
 
 GQuark
-seahorse_gkeyring_item_get_cannonical (guint32 item_id)
+seahorse_gkr_item_get_cannonical (guint32 item_id)
 {
     #define BUF_LEN (G_N_ELEMENTS (SEAHORSE_GKR_STR) + 16)
     gchar buf[BUF_LEN];

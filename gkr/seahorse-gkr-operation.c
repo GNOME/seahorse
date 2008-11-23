@@ -27,7 +27,7 @@
 
 #include <glib/gi18n.h>
 
-#include "seahorse-gkeyring-operation.h"
+#include "seahorse-gkr-operation.h"
 #include "seahorse-util.h"
 #include "seahorse-passphrase.h"
 
@@ -51,29 +51,29 @@
  * DEFINITIONS
  */
  
-typedef struct _SeahorseGKeyringOperationPrivate {
+typedef struct _SeahorseGkrOperationPrivate {
     
     gpointer request;
     GQuark keyid;
     
-} SeahorseGKeyringOperationPrivate;
+} SeahorseGkrOperationPrivate;
 
 enum {
     PROP_0,
     PROP_KEY_SOURCE
 };
 
-#define SEAHORSE_GKEYRING_OPERATION_GET_PRIVATE(obj)  \
-    (G_TYPE_INSTANCE_GET_PRIVATE ((obj), SEAHORSE_TYPE_GKEYRING_OPERATION, SeahorseGKeyringOperationPrivate))
+#define SEAHORSE_GKR_OPERATION_GET_PRIVATE(obj)  \
+    (G_TYPE_INSTANCE_GET_PRIVATE ((obj), SEAHORSE_TYPE_GKR_OPERATION, SeahorseGkrOperationPrivate))
 
 /* TODO: This is just nasty. Gotta get rid of these weird macros */
-IMPLEMENT_OPERATION_PROPS(GKeyring, gkeyring)
+IMPLEMENT_OPERATION_PROPS(Gkr, gkr)
 
     g_object_class_install_property (gobject_class, PROP_KEY_SOURCE,
-        g_param_spec_object ("key-source", "GKeyring Source", "Key source this operation works on.", 
-                             SEAHORSE_TYPE_GKEYRING_SOURCE, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY ));
+        g_param_spec_object ("key-source", "Gkr Source", "Key source this operation works on.", 
+                             SEAHORSE_TYPE_GKR_SOURCE, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY ));
 
-    g_type_class_add_private (gobject_class, sizeof (SeahorseGKeyringOperationPrivate));
+    g_type_class_add_private (gobject_class, sizeof (SeahorseGkrOperationPrivate));
 
 END_IMPLEMENT_OPERATION_PROPS
 
@@ -82,7 +82,7 @@ END_IMPLEMENT_OPERATION_PROPS
  */
 
 static gboolean
-check_operation_result (SeahorseGKeyringOperation *gop, GnomeKeyringResult result)
+check_operation_result (SeahorseGkrOperation *gop, GnomeKeyringResult result)
 {
     GError *err = NULL;
     gboolean success;
@@ -91,7 +91,7 @@ check_operation_result (SeahorseGKeyringOperation *gop, GnomeKeyringResult resul
     if (result == GNOME_KEYRING_RESULT_CANCELLED)
         return FALSE;
     
-    success = seahorse_gkeyring_operation_parse_error (result, &err);
+    success = seahorse_gkr_operation_parse_error (result, &err);
     g_assert (!success || !err);
     
     seahorse_operation_mark_done (SEAHORSE_OPERATION (gop), FALSE, err);
@@ -103,32 +103,32 @@ check_operation_result (SeahorseGKeyringOperation *gop, GnomeKeyringResult resul
  */
 
 static void 
-seahorse_gkeyring_operation_init (SeahorseGKeyringOperation *sop)
+seahorse_gkr_operation_init (SeahorseGkrOperation *sop)
 {
 
 }
 
 static void 
-seahorse_gkeyring_operation_set_property (GObject *gobject, guint prop_id, 
+seahorse_gkr_operation_set_property (GObject *gobject, guint prop_id, 
                                           const GValue *value, GParamSpec *pspec)
 {
-    SeahorseGKeyringOperation *gop = SEAHORSE_GKEYRING_OPERATION (gobject);
+    SeahorseGkrOperation *gop = SEAHORSE_GKR_OPERATION (gobject);
     
     switch (prop_id) {
     case PROP_KEY_SOURCE:
         if (gop->gsrc)
             g_object_unref (gop->gsrc);
-        gop->gsrc = SEAHORSE_GKEYRING_SOURCE (g_object_ref (g_value_get_object (value)));
+        gop->gsrc = SEAHORSE_GKR_SOURCE (g_object_ref (g_value_get_object (value)));
         break;
     }
     
 }
 
 static void 
-seahorse_gkeyring_operation_get_property (GObject *gobject, guint prop_id, 
-                                          GValue *value, GParamSpec *pspec)
+seahorse_gkr_operation_get_property (GObject *gobject, guint prop_id, 
+                                     GValue *value, GParamSpec *pspec)
 {
-    SeahorseGKeyringOperation *gop = SEAHORSE_GKEYRING_OPERATION (gobject);
+    SeahorseGkrOperation *gop = SEAHORSE_GKR_OPERATION (gobject);
     
     switch (prop_id) {
     case PROP_KEY_SOURCE:
@@ -138,13 +138,13 @@ seahorse_gkeyring_operation_get_property (GObject *gobject, guint prop_id,
 }
 
 static void 
-seahorse_gkeyring_operation_dispose (GObject *gobject)
+seahorse_gkr_operation_dispose (GObject *gobject)
 {
-    SeahorseGKeyringOperation *gop = SEAHORSE_GKEYRING_OPERATION (gobject);
-    SeahorseGKeyringOperationPrivate *pv = SEAHORSE_GKEYRING_OPERATION_GET_PRIVATE (gop);
+    SeahorseGkrOperation *gop = SEAHORSE_GKR_OPERATION (gobject);
+    SeahorseGkrOperationPrivate *pv = SEAHORSE_GKR_OPERATION_GET_PRIVATE (gop);
 
     if (seahorse_operation_is_running (SEAHORSE_OPERATION (gop)))
-        seahorse_gkeyring_operation_cancel (SEAHORSE_OPERATION (gop));
+        seahorse_gkr_operation_cancel (SEAHORSE_OPERATION (gop));
     g_assert (!seahorse_operation_is_running (SEAHORSE_OPERATION (gop)));
     
     if (gop->gsrc)
@@ -154,26 +154,26 @@ seahorse_gkeyring_operation_dispose (GObject *gobject)
     /* The above cancel should have stopped this */
     g_assert (pv->request == NULL);
     
-    G_OBJECT_CLASS (gkeyring_operation_parent_class)->dispose (gobject);  
+    G_OBJECT_CLASS (gkr_operation_parent_class)->dispose (gobject);  
 }
 
 static void 
-seahorse_gkeyring_operation_finalize (GObject *gobject)
+seahorse_gkr_operation_finalize (GObject *gobject)
 {
-    SeahorseGKeyringOperation *gop = SEAHORSE_GKEYRING_OPERATION (gobject);
-    SeahorseGKeyringOperationPrivate *pv = SEAHORSE_GKEYRING_OPERATION_GET_PRIVATE (gop);
+    SeahorseGkrOperation *gop = SEAHORSE_GKR_OPERATION (gobject);
+    SeahorseGkrOperationPrivate *pv = SEAHORSE_GKR_OPERATION_GET_PRIVATE (gop);
     
     g_assert (!gop->gsrc);
     g_assert (!pv->request);
     
-    G_OBJECT_CLASS (gkeyring_operation_parent_class)->finalize (gobject);  
+    G_OBJECT_CLASS (gkr_operation_parent_class)->finalize (gobject);  
 }
 
 static void 
-seahorse_gkeyring_operation_cancel (SeahorseOperation *operation)
+seahorse_gkr_operation_cancel (SeahorseOperation *operation)
 {
-    SeahorseGKeyringOperation *sop = SEAHORSE_GKEYRING_OPERATION (operation);    
-    SeahorseGKeyringOperationPrivate *pv = SEAHORSE_GKEYRING_OPERATION_GET_PRIVATE (sop);
+    SeahorseGkrOperation *sop = SEAHORSE_GKR_OPERATION (operation);    
+    SeahorseGkrOperationPrivate *pv = SEAHORSE_GKR_OPERATION_GET_PRIVATE (sop);
 
     if (pv->request)
         gnome_keyring_cancel_request (pv->request);
@@ -188,7 +188,7 @@ seahorse_gkeyring_operation_cancel (SeahorseOperation *operation)
  */
 
 gboolean
-seahorse_gkeyring_operation_parse_error (GnomeKeyringResult result, GError **err)
+seahorse_gkr_operation_parse_error (GnomeKeyringResult result, GError **err)
 {
     static GQuark errorq = 0;
     const gchar *message = NULL;
@@ -239,14 +239,14 @@ seahorse_gkeyring_operation_parse_error (GnomeKeyringResult result, GError **err
  */
 
 static void 
-basic_operation_done (GnomeKeyringResult result, SeahorseGKeyringOperation *gop)
+basic_operation_done (GnomeKeyringResult result, SeahorseGkrOperation *gop)
 {
-    SeahorseGKeyringOperationPrivate *pv;
+    SeahorseGkrOperationPrivate *pv;
 
     if (!check_operation_result (gop, result))
         return;
     
-    pv = SEAHORSE_GKEYRING_OPERATION_GET_PRIVATE (gop);
+    pv = SEAHORSE_GKR_OPERATION_GET_PRIVATE (gop);
 
     /* When operation is successful reload the key */
     g_return_if_fail (pv->keyid != 0);
@@ -254,23 +254,23 @@ basic_operation_done (GnomeKeyringResult result, SeahorseGKeyringOperation *gop)
 }
 
 SeahorseOperation*
-seahorse_gkeyring_operation_update_info (SeahorseGKeyringItem *git, GnomeKeyringItemInfo *info)
+seahorse_gkr_operation_update_info (SeahorseGkrItem *git, GnomeKeyringItemInfo *info)
 {
     SeahorseSource *sksrc;
-    SeahorseGKeyringOperation *gop;
-    SeahorseGKeyringOperationPrivate *pv;
+    SeahorseGkrOperation *gop;
+    SeahorseGkrOperationPrivate *pv;
     const gchar *keyring_name;
     
-    g_return_val_if_fail (SEAHORSE_IS_GKEYRING_ITEM (git), NULL);
+    g_return_val_if_fail (SEAHORSE_IS_GKR_ITEM (git), NULL);
     
     sksrc = seahorse_key_get_source (SEAHORSE_KEY (git));
-    g_return_val_if_fail (SEAHORSE_IS_GKEYRING_SOURCE (sksrc), NULL);
+    g_return_val_if_fail (SEAHORSE_IS_GKR_SOURCE (sksrc), NULL);
     
-    gop = g_object_new (SEAHORSE_TYPE_GKEYRING_OPERATION, 
-                        "key-source", SEAHORSE_GKEYRING_SOURCE (sksrc), NULL);
-    pv = SEAHORSE_GKEYRING_OPERATION_GET_PRIVATE (gop);
+    gop = g_object_new (SEAHORSE_TYPE_GKR_OPERATION, 
+                        "key-source", SEAHORSE_GKR_SOURCE (sksrc), NULL);
+    pv = SEAHORSE_GKR_OPERATION_GET_PRIVATE (gop);
     
-    keyring_name = seahorse_gkeyring_source_get_keyring_name (SEAHORSE_GKEYRING_SOURCE (sksrc));
+    keyring_name = seahorse_gkr_source_get_keyring_name (SEAHORSE_GKR_SOURCE (sksrc));
     pv->keyid = seahorse_key_get_keyid (SEAHORSE_KEY (git));
     
     /* Start actual save request */
@@ -286,23 +286,23 @@ seahorse_gkeyring_operation_update_info (SeahorseGKeyringItem *git, GnomeKeyring
 }
 
 SeahorseOperation*
-seahorse_gkeyring_operation_update_acl (SeahorseGKeyringItem *git, GList *acl)
+seahorse_gkr_operation_update_acl (SeahorseGkrItem *git, GList *acl)
 {
     SeahorseSource *sksrc;
-    SeahorseGKeyringOperation *gop;
-    SeahorseGKeyringOperationPrivate *pv;
+    SeahorseGkrOperation *gop;
+    SeahorseGkrOperationPrivate *pv;
     const gchar *keyring_name;
     
-    g_return_val_if_fail (SEAHORSE_IS_GKEYRING_ITEM (git), NULL);
+    g_return_val_if_fail (SEAHORSE_IS_GKR_ITEM (git), NULL);
     
     sksrc = seahorse_key_get_source (SEAHORSE_KEY (git));
-    g_return_val_if_fail (SEAHORSE_IS_GKEYRING_SOURCE (sksrc), NULL);
+    g_return_val_if_fail (SEAHORSE_IS_GKR_SOURCE (sksrc), NULL);
     
-    gop = g_object_new (SEAHORSE_TYPE_GKEYRING_OPERATION, 
-                        "key-source", SEAHORSE_GKEYRING_SOURCE (sksrc), NULL);
-    pv = SEAHORSE_GKEYRING_OPERATION_GET_PRIVATE (gop);
+    gop = g_object_new (SEAHORSE_TYPE_GKR_OPERATION, 
+                        "key-source", SEAHORSE_GKR_SOURCE (sksrc), NULL);
+    pv = SEAHORSE_GKR_OPERATION_GET_PRIVATE (gop);
     
-    keyring_name = seahorse_gkeyring_source_get_keyring_name (SEAHORSE_GKEYRING_SOURCE (sksrc));
+    keyring_name = seahorse_gkr_source_get_keyring_name (SEAHORSE_GKR_SOURCE (sksrc));
     pv->keyid = seahorse_key_get_keyid (SEAHORSE_KEY (git));
     
     /* Start actual save request */
