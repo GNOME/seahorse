@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: seahorse.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=seahorse&amp;component=general\n"
-"POT-Creation-Date: 2008-11-19 01:52+0000\n"
-"PO-Revision-Date: 2008-11-22 18:33+0100\n"
+"POT-Creation-Date: 2008-11-22 23:43+0000\n"
+"PO-Revision-Date: 2008-11-23 12:18+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -556,6 +556,92 @@ msgid "Are you sure you want to delete %d password?"
 msgid_plural "Are you sure you want to delete %d passwords?"
 msgstr[0] "¿Está seguro de que desea eliminar %d contraseña?"
 msgstr[1] "¿Está seguro de que desea eliminar %d contraseñas?"
+
+#: ../libcryptui/crui-x509-cert-basics.c:65
+msgid "<i>Not Part of Certificate</i>"
+msgstr "<i>No es parte del certificado</i>"
+
+#: ../libcryptui/crui-x509-cert-basics.c:86
+msgid "<i>unknown</i>"
+msgstr "<i>desconocido</i>"
+
+#: ../libcryptui/crui-x509-cert-basics.glade.h:1
+msgid "<Not Part of Certificate>"
+msgstr "<No es parte del certificado>"
+
+#: ../libcryptui/crui-x509-cert-basics.glade.h:2
+msgid "<b>Fingerprints</b>"
+msgstr "<b>Huellas</b>"
+
+#: ../libcryptui/crui-x509-cert-basics.glade.h:3
+msgid "<b>Issued By</b>"
+msgstr "<b>Emitido por</b>"
+
+#: ../libcryptui/crui-x509-cert-basics.glade.h:4
+msgid "<b>Issued To</b>"
+msgstr "<b>Emitido para</b>"
+
+#: ../libcryptui/crui-x509-cert-basics.glade.h:5
+msgid "<b>This certificate has been verified for the following uses:</b>"
+msgstr "<b>Este certificado ha sido verificado para los siguientes usos:</b>"
+
+#: ../libcryptui/crui-x509-cert-basics.glade.h:6
+msgid "<b>Validity</b>"
+msgstr "<b>Validez</b>"
+
+#: ../libcryptui/crui-x509-cert-basics.glade.h:7
+msgid "Common Name (CN)"
+msgstr "Nombre común (CN)"
+
+#: ../libcryptui/crui-x509-cert-basics.glade.h:8
+msgid "Email Recipient Certificate"
+msgstr "Certificado del destinatario del correo-e"
+
+#: ../libcryptui/crui-x509-cert-basics.glade.h:9
+msgid "Email Signer Certificate"
+msgstr "Certificado del firmante del correo-e"
+
+#: ../libcryptui/crui-x509-cert-basics.glade.h:10
+msgid "Expires On"
+msgstr "Caduca el"
+
+#: ../libcryptui/crui-x509-cert-basics.glade.h:11
+msgid "Issued On"
+msgstr "Emitido el"
+
+#: ../libcryptui/crui-x509-cert-basics.glade.h:12
+msgid "MD5 Fingerprint"
+msgstr "Huella MD5"
+
+#: ../libcryptui/crui-x509-cert-basics.glade.h:13
+msgid "Organization (O)"
+msgstr "Organización (O)"
+
+#: ../libcryptui/crui-x509-cert-basics.glade.h:14
+msgid "Organizational Unit (OU)"
+msgstr "Unidad organizativa (OU)"
+
+#: ../libcryptui/crui-x509-cert-basics.glade.h:15
+msgid "SHA1 Fingerprint"
+msgstr "Huella SHA1"
+
+#: ../libcryptui/crui-x509-cert-basics.glade.h:16
+msgid "SSL Client Certificate"
+msgstr "Certificado de cliente SSL"
+
+#: ../libcryptui/crui-x509-cert-basics.glade.h:17
+msgid "SSL Server Certificate"
+msgstr "Certificado de servidor SSL"
+
+#: ../libcryptui/crui-x509-cert-basics.glade.h:18
+msgid "Serial Number"
+msgstr "Número de serie"
+
+#. TODO: Calculate something from the subject?
+#: ../libcryptui/crui-x509-cert-dialog.c:65
+#: ../pkcs11/seahorse-pkcs11-certificate.c:242
+msgid "Certificate"
+msgstr "Certificado"
 
 #: ../libcryptui/cryptui-key-chooser.c:173
 msgid "All Keys"
@@ -1198,24 +1284,30 @@ msgstr ""
 "solicitó. Ahora se iniciará el programa <b>Contraseñas y claves de cifrado</"
 "b> para que puede crear una clave o importarla."
 
-#. TODO: Calculate something from the subject?
-#: ../pkcs11/seahorse-pkcs11-certificate.vala:28
-msgid "Certificate"
-msgstr "Certificado"
+#: ../pkcs11/seahorse-pkcs11-commands.c:110
+#, c-format
+msgid "Are you sure you want to delete the certificate '%s'?"
+msgstr "¿Está seguro de que desea eliminar el certificado «%s»?"
 
-#: ../pkcs11/seahorse-pkcs11-source.vala:34
+#: ../pkcs11/seahorse-pkcs11-commands.c:113
+#: ../ssh/seahorse-ssh-commands.vala:79
+#, c-format
+msgid "Are you sure you want to delete %d secure shell keys?"
+msgstr "¿Está seguro de que desea eliminar las %d claves de shell seguras?"
+
+#: ../pkcs11/seahorse-pkcs11-source.vala:35
 msgid "X509 Certificate"
 msgstr "Certificado X509"
 
-#: ../pkcs11/seahorse-pkcs11-source.vala:121
+#: ../pkcs11/seahorse-pkcs11-source.vala:122
 msgid "Loading..."
 msgstr "Cargando…"
 
-#: ../pkcs11/seahorse-pkcs11-source.vala:382
+#: ../pkcs11/seahorse-pkcs11-source.vala:383
 msgid "Invalid or unrecognized object."
 msgstr "Objeto no válido o no reconocido."
 
-#: ../pkcs11/seahorse-pkcs11-source.vala:399
+#: ../pkcs11/seahorse-pkcs11-source.vala:400
 msgid "Exporting is not yet supported."
 msgstr "La exportación aún no está soportada."
 
@@ -2737,11 +2829,6 @@ msgstr ""
 msgid "Are you sure you want to delete the secure shell key '%s'?"
 msgstr "¿Está seguro de que desea eliminar la clave de shell segura «%s»?"
 
-#: ../ssh/seahorse-ssh-commands.vala:79
-#, c-format
-msgid "Are you sure you want to delete %d secure shell keys?"
-msgstr "¿Está seguro de que desea eliminar las %d claves de shell seguras?"
-
 #: ../ssh/seahorse-ssh-generate.c:47
 msgid "Couldn't generate Secure Shell key"
 msgstr "No se pudo generar la clave de shell segura"
@@ -2794,7 +2881,7 @@ msgstr "_Descripción de la clave:"
 
 #: ../ssh/seahorse-ssh-generator.vala:29 ../ssh/seahorse-ssh-key.c:97
 #: ../ssh/seahorse-ssh-key.c:101 ../ssh/seahorse-ssh-key-properties.glade.h:21
-#: ../ssh/seahorse-ssh-source.c:726
+#: ../ssh/seahorse-ssh-source.c:727
 msgid "Secure Shell Key"
 msgstr "Clave de shell segura"
 
@@ -2946,7 +3033,7 @@ msgstr "Importando clave: %s"
 msgid "Importing key. Enter passphrase"
 msgstr "Importando clave: Introduzca la frase de paso"
 
-#: ../ssh/seahorse-ssh-source.c:945
+#: ../ssh/seahorse-ssh-source.c:946
 msgid "No private key file is available for this key."
 msgstr "No existe un archivo de clave privada disponible para esta clave."
 
