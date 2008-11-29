@@ -38,7 +38,6 @@
 #include <seahorse-preferences.h>
 #include <gconf/gconf-client.h>
 #include <gconf/gconf.h>
-#include <common/seahorse-registry.h>
 #include <config.h>
 #include "seahorse-generate-select.h"
 
@@ -78,7 +77,6 @@ struct _SeahorseKeyManagerPrivate {
 	GtkEntry* _filter_entry;
 	GQuark _track_selected_id;
 	guint _track_selected_tab;
-	gboolean _loaded_gnome_keyring;
 	SeahorseKeyManagerTabInfo* _tabs;
 	gint _tabs_length1;
 };
@@ -134,9 +132,6 @@ static void seahorse_key_manager_on_view_trust_activate (SeahorseKeyManager* sel
 static void seahorse_key_manager_on_gconf_notify (SeahorseKeyManager* self, GConfClient* client, guint cnxn_id, GConfEntry* entry);
 static gboolean seahorse_key_manager_fire_selection_changed (SeahorseKeyManager* self);
 static void seahorse_key_manager_on_tab_changed (SeahorseKeyManager* self, GtkNotebook* notebook, void* unused, guint page_num);
-static void __lambda0 (SeahorseOperation* op, SeahorseKeyManager* self);
-static void ___lambda0_seahorse_done_func (SeahorseOperation* op, gpointer self);
-static void seahorse_key_manager_load_gnome_keyring_items (SeahorseKeyManager* self);
 static void seahorse_key_manager_on_help_show (SeahorseKeyManager* self, GtkButton* button);
 static void _seahorse_key_manager_on_app_quit_gtk_action_activate (GtkAction* _sender, gpointer self);
 static void _seahorse_key_manager_on_key_generate_gtk_action_activate (GtkAction* _sender, gpointer self);
@@ -963,47 +958,6 @@ static void seahorse_key_manager_on_tab_changed (SeahorseKeyManager* self, GtkNo
 	/* Don't track the selected key when tab is changed on purpose */
 	self->priv->_track_selected_id = ((GQuark) (0));
 	seahorse_key_manager_fire_selection_changed (self);
-	/* 
-	 * Because gnome-keyring can throw prompts etc... we delay loading 
-	 * of the gnome key ring items until we first access them. 
-	 */
-	if (seahorse_key_manager_get_tab_id (self, seahorse_key_manager_get_tab_info (self, ((gint) (page_num)))) == SEAHORSE_KEY_MANAGER_TABS_PASSWORD) {
-		seahorse_key_manager_load_gnome_keyring_items (self);
-	}
-}
-
-
-static void __lambda0 (SeahorseOperation* op, SeahorseKeyManager* self) {
-	g_return_if_fail (SEAHORSE_IS_OPERATION (op));
-	if (seahorse_operation_is_successful (op)) {
-		self->priv->_loaded_gnome_keyring = TRUE;
-	}
-}
-
-
-static void ___lambda0_seahorse_done_func (SeahorseOperation* op, gpointer self) {
-	__lambda0 (op, self);
-}
-
-
-static void seahorse_key_manager_load_gnome_keyring_items (SeahorseKeyManager* self) {
-	GType type;
-	SeahorseSource* sksrc;
-	SeahorseOperation* op;
-	g_return_if_fail (SEAHORSE_IS_KEY_MANAGER (self));
-	if (self->priv->_loaded_gnome_keyring) {
-		return;
-	}
-	type = seahorse_registry_find_type (seahorse_registry_get (), "gnome-keyring", "local", "source", NULL, NULL);
-	g_return_if_fail (type != 0);
-	sksrc = SEAHORSE_SOURCE (g_object_new (type, NULL, NULL));
-	seahorse_context_add_source (seahorse_context_for_app (), sksrc);
-	op = seahorse_source_load (sksrc, ((GQuark) (0)));
-	/* Monitor loading progress */
-	seahorse_progress_status_set_operation (SEAHORSE_WIDGET (self), op);
-	seahorse_operation_watch (op, ___lambda0_seahorse_done_func, self, NULL, NULL);
-	(sksrc == NULL ? NULL : (sksrc = (g_object_unref (sksrc), NULL)));
-	(op == NULL ? NULL : (op = (g_object_unref (op), NULL)));
 }
 
 
@@ -1167,7 +1121,6 @@ static GObject * seahorse_key_manager_constructor (GType type, guint n_construct
 		GtkTargetEntry* _tmp20;
 		GtkTargetEntry* entries;
 		GtkTargetList* targets;
-		self->priv->_loaded_gnome_keyring = FALSE;
 		_tmp1 = NULL;
 		self->priv->_tabs = (_tmp1 = g_new0 (SeahorseKeyManagerTabInfo, (_tmp0 = ((gint) (SEAHORSE_KEY_MANAGER_TABS_NUM_TABS)))), (self->priv->_tabs = (g_free (self->priv->_tabs), NULL)), self->priv->_tabs_length1 = _tmp0, _tmp1);
 		_tmp3 = NULL;

@@ -92,11 +92,9 @@ main (int argc, char **argv)
 #ifdef WITH_PKCS11
     seahorse_pkcs11_module_init ();
 #endif
+    seahorse_gkr_module_init ();
 
     op = seahorse_context_refresh_local (SCTX_APP ());
-
-    /* Load these components after loading local keys */
-    seahorse_gkr_module_init ();
 
     seahorse_key_manager_show (op);
     g_signal_connect_after (SCTX_APP (), "destroy", gtk_main_quit, NULL);

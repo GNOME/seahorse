@@ -31,7 +31,6 @@ namespace Seahorse {
 		private Gtk.Entry _filter_entry;
 		private Quark _track_selected_id;
 		private uint _track_selected_tab;
-		private bool _loaded_gnome_keyring;
 		
 		private enum Targets {
 			PLAIN,
@@ -134,7 +133,6 @@ namespace Seahorse {
 		}
 		
 		construct {
-			_loaded_gnome_keyring = false;
 			_tabs = new TabInfo[(int)Tabs.NUM_TABS];
 			
 			_notebook = (Gtk.Notebook)get_widget ("notebook");
@@ -704,38 +702,8 @@ namespace Seahorse {
 			/* Don't track the selected key when tab is changed on purpose */
 			_track_selected_id = 0;
 			fire_selection_changed ();
-    
-			/* 
-			 * Because gnome-keyring can throw prompts etc... we delay loading 
-			 * of the gnome key ring items until we first access them. 
-			 */
-    
-    			if (get_tab_id (get_tab_info ((int)page_num)) == Tabs.PASSWORD)
-        			load_gnome_keyring_items ();
 		}
 
-		private void load_gnome_keyring_items () {
-			
-			if (_loaded_gnome_keyring)
-				return;
-			
-			GLib.Type type = Registry.get().find_type ("gnome-keyring", "local", "source", null);
-			return_if_fail (type != 0);
-
-			var sksrc = (Source)GLib.Object.new (type, null);
-			Context.for_app().add_source (sksrc);
-			Operation op = sksrc.load (0);
-			
-			/* Monitor loading progress */
-			Progress.status_set_operation (this, op);
-			
-			/* After load completes set loaded to TRUE */
-			op.watch ((op) => {if (op.is_successful ())
-                                _loaded_gnome_keyring = true;
-                            },  
-                      null);
-		}
-		
 		private void on_help_show (Gtk.Button button) {
 			show_help ();
 		}

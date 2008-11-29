@@ -1,5 +1,25 @@
 2008-11-29  Stef Walter  <stef@memberwebs.com>
 
+	* libseahorse/seahorse-object.c:
+	* libseahorse/seahorse-object.h: Better checks to not notify if the 
+	value being set on a property is the same.
+
+	* libseahorse/seahorse-operation.c: Some additional 
+	safety debugging checks.
+	
+	* gkr/seahorse-gkr-item.c:
+	* gkr/seahorse-gkr-item.h:
+	* gkr/seahorse-gkr-item-properties.c:
+	* gkr/seahorse-gkr-module.c:
+	* gkr/seahorse-gkr-operation.c:
+	* gkr/seahorse-gkr-source.c: Load item info, attributes and ACL 
+	on demand. Rework dialog so it's more event driven.
+	
+	* src/main.c:
+	* src/seahorse-key-manager.vala: Load gnome-keyring items on startup.
+
+2008-11-29  Stef Walter  <stef@memberwebs.com>
+
 	* common/Makefile.am:
 	* common/seahorse-bind.c: (added)
 	* common/seahorse-bind.h: (added)

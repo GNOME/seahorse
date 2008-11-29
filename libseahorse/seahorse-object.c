@@ -73,6 +73,8 @@ struct _SeahorseObjectPrivate {
 	SeahorseLocation location;
 	SeahorseUsage usage;
 	guint flags;
+	
+	gboolean realized;
 };
 
 G_DEFINE_TYPE (SeahorseObject, seahorse_object, G_TYPE_OBJECT);
@@ -105,20 +107,60 @@ unregister_child (SeahorseObject* self, SeahorseObject* child)
 	self->pv->children = g_list_remove (self->pv->children, child);
 }
 
+static gboolean
+set_string_storage (const gchar *value, gchar **storage)
+{
+	g_assert (storage);
+
+	if (value == NULL)
+		value = "";
+	
+	if (!value || !*storage || !g_str_equal (value, *storage)) {
+		g_free (*storage);
+		*storage = g_strdup (value);
+		return TRUE;
+	}
+	
+	return FALSE;
+}
+
+static gboolean
+take_string_storage (gchar *value, gchar **storage)
+{
+	g_assert (storage);
+	
+	if (value == NULL)
+		value = g_strdup ("");
+	
+	if (!value || !*storage || !g_str_equal (value, *storage)) {
+		g_free (*storage);
+		*storage = value;
+		return TRUE;
+	}
+	
+	g_free (value);
+	return FALSE;
+}
+
 static void
 recalculate_id (SeahorseObject *self)
 {
 	const gchar *str;
 	const gchar *at;
+	GQuark tag;
 	gchar *result;
 	gsize len;
 
 	/* No id, clear any tag and auto generated identifer */
 	if (!self->pv->id) {
-		self->pv->tag = 0; 
+		if (self->pv->tag != 0) {
+			self->pv->tag = 0;
+			g_object_notify (G_OBJECT (self), "tag");
+		}
+			
 		if (!self->pv->identifier_explicit) {
-			g_free (self->pv->identifier);
-			self->pv->identifier = g_strdup ("");
+			if (set_string_storage ("", &self->pv->identifier))
+				g_object_notify (G_OBJECT (self), "identifier");
 		}
 		
 	/* Have hande, configure tag and auto generated identifer */
@@ -128,12 +170,17 @@ recalculate_id (SeahorseObject *self)
 		at = strchr (str, ':');
 		
 		result = g_strndup (str, at ? at - str : len);
-		self->pv->tag = g_quark_from_string (result);
+		tag = g_quark_from_string (result);
 		g_free (result);
+
+		if (tag != self->pv->tag) {
+			self->pv->tag = tag;
+			g_object_notify (G_OBJECT (self), "tag");
+		}
 		
 		if (!self->pv->identifier_explicit) {
-			g_free (self->pv->identifier);
-			self->pv->identifier = g_strdup (at ? at + 1 : "");
+			if (set_string_storage (at ? at + 1 : "", &self->pv->identifier))
+				g_object_notify (G_OBJECT (self), "identifier");
 		}
 	}
 }
@@ -142,13 +189,14 @@ static void
 recalculate_label (SeahorseObject *self)
 {
 	if (!self->pv->markup_explicit) {
-		g_free (self->pv->markup);
-		self->pv->markup = g_markup_escape_text (self->pv->label ? self->pv->label : "", -1);
+		if (take_string_storage (g_markup_escape_text (self->pv->label ? self->pv->label : "", -1),
+		                         &self->pv->markup))
+			g_object_notify (G_OBJECT (self), "markup");
 	}
 
 	if (!self->pv->nickname_explicit) {
-		g_free (self->pv->nickname);
-		self->pv->nickname = g_strdup (self->pv->label);
+		if (set_string_storage (self->pv->label, &self->pv->nickname))
+			g_object_notify (G_OBJECT (self), "nickname");
 	}
 }
 
@@ -158,7 +206,6 @@ recalculate_usage (SeahorseObject *self)
 	const gchar *desc;
 	
 	if (!self->pv->description_explicit) {
-		g_free (self->pv->description);
 		
 		switch (self->pv->usage) {
 		case SEAHORSE_USAGE_SYMMETRIC_KEY:
@@ -181,7 +228,8 @@ recalculate_usage (SeahorseObject *self)
 			break;
 		}
 		
-		self->pv->description = g_strdup (desc); 
+		if (set_string_storage (desc, &self->pv->description))
+			g_object_notify (G_OBJECT (self), "description");
 	}
 }
 
@@ -346,7 +394,11 @@ seahorse_object_set_property (GObject *obj, guint prop_id, const GValue *value,
                               GParamSpec *pspec)
 {
 	SeahorseObject *self = SEAHORSE_OBJECT (obj);
-
+	SeahorseLocation loc;
+	SeahorseUsage usage;
+	guint flags;
+	GQuark id;
+	
 	switch (prop_id) {
 	case PROP_CONTEXT:
 		if (self->pv->context) 
@@ -366,62 +418,100 @@ seahorse_object_set_property (GObject *obj, guint prop_id, const GValue *value,
 		seahorse_object_set_parent (self, SEAHORSE_OBJECT (g_value_get_object (value)));
 		break;
 	case PROP_ID:
-		self->pv->id = g_value_get_uint (value);
-		g_object_notify (obj, "id");
-		recalculate_id (self);
+		id = g_value_get_uint (value);
+		if (id != self->pv->id) {
+			self->pv->id = id;
+			g_object_freeze_notify (obj);
+			g_object_notify (obj, "id");
+			recalculate_id (self);
+			g_object_thaw_notify (obj);
+		}
 		break;
 	case PROP_LABEL:
-		g_free (self->pv->label);
-		self->pv->label = g_value_dup_string (value);
-		g_object_notify (obj, "label");
-		recalculate_label (self);
+		if (set_string_storage (g_value_get_string (value), &self->pv->label)) {
+			g_object_freeze_notify (obj);
+			g_object_notify (obj, "label");
+			recalculate_label (self);
+			g_object_thaw_notify (obj);
+		}
 		break;
 	case PROP_NICKNAME:
-		g_free (self->pv->nickname);
-		self->pv->nickname = g_value_dup_string (value);
-		self->pv->nickname_explicit = TRUE;
-		g_object_notify (obj, "nickname");
+		if (set_string_storage (g_value_get_string (value), &self->pv->nickname)) {
+			self->pv->nickname_explicit = TRUE;
+			g_object_notify (obj, "nickname");
+		}
 		break;
 	case PROP_MARKUP:
-		g_free (self->pv->markup);
-		self->pv->markup = g_value_dup_string (value);
-		self->pv->markup_explicit = TRUE;
-		g_object_notify (obj, "markup");
+		if (set_string_storage (g_value_get_string (value), &self->pv->markup)) {
+			self->pv->markup_explicit = TRUE;
+			g_object_notify (obj, "markup");
+		}
 		break;
 	case PROP_DESCRIPTION:
-		g_free (self->pv->description);
-		self->pv->description = g_value_dup_string (value);
-		self->pv->description_explicit = TRUE;
-		g_object_notify (obj, "description");
+		if (set_string_storage (g_value_get_string (value), &self->pv->description)) {
+			self->pv->description_explicit = TRUE;
+			g_object_notify (obj, "description");
+		}
 		break;
 	case PROP_ICON:
-		g_free (self->pv->icon);
-		self->pv->icon = g_value_dup_string (value);
-		g_object_notify (obj, "icon");
+		if (set_string_storage (g_value_get_string (value), &self->pv->icon))
+			g_object_notify (obj, "icon");
 		break;
 	case PROP_IDENTIFIER:
-		g_free (self->pv->identifier);
-		self->pv->identifier = g_value_dup_string (value);
-		self->pv->identifier_explicit = TRUE;
-		g_object_notify (obj, "identifier");
+		if (set_string_storage (g_value_get_string (value), &self->pv->identifier)) {
+			self->pv->identifier_explicit = TRUE;
+			g_object_notify (obj, "identifier");
+		}
 		break;
 	case PROP_LOCATION:
-		self->pv->location = g_value_get_enum (value);
-		g_object_notify (obj, "location");
+		loc = g_value_get_enum (value);
+		if (loc != self->pv->location) {
+			self->pv->location = loc;
+			g_object_notify (obj, "location");
+		}
 		break;
 	case PROP_USAGE:
-		self->pv->usage = g_value_get_enum (value);
-		g_object_notify (obj, "usage");
-		recalculate_usage (self);
+		usage = g_value_get_enum (value);
+		if (usage != self->pv->usage) {
+			self->pv->usage = usage;
+			g_object_freeze_notify (obj);
+			g_object_notify (obj, "usage");
+			recalculate_usage (self);
+			g_object_thaw_notify (obj);
+		}
 		break;
 	case PROP_FLAGS:
-		self->pv->flags = g_value_get_uint (value);
-		g_object_notify (obj, "flags");
+		flags = g_value_get_uint (value);
+		if (flags != self->pv->flags) {
+			self->pv->flags = flags;
+			g_object_notify (obj, "flags");
+		}
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
 		break;
 	}
+}
+
+static void 
+seahorse_object_real_realize (SeahorseObject *self)
+{
+	/* 
+	 * We do nothing by default. It's up to the derived class
+	 * to override this and realize themselves when called.
+	 */
+	
+	self->pv->realized = TRUE;
+}
+
+static void 
+seahorse_object_real_flush (SeahorseObject *self)
+{
+	/* 
+	 * We do nothing by default. It's up to the derived class
+	 * to override this and flush themselves when called.
+	 */
+	self->pv->realized = FALSE;
 }
 
 static void
@@ -436,7 +526,10 @@ seahorse_object_class_init (SeahorseObjectClass *klass)
 	gobject_class->finalize = seahorse_object_finalize;
 	gobject_class->set_property = seahorse_object_set_property;
 	gobject_class->get_property = seahorse_object_get_property;
-    
+	
+	klass->realize = seahorse_object_real_realize;
+	klass->flush = seahorse_object_real_flush;
+	
 	g_object_class_install_property (gobject_class, PROP_SOURCE,
 	           g_param_spec_object ("source", "Object Source", "Source the Object came from", 
 	                                SEAHORSE_TYPE_SOURCE, G_PARAM_READWRITE));
@@ -506,6 +599,7 @@ GQuark
 seahorse_object_get_id (SeahorseObject *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), 0);
+	seahorse_object_realize (self);
 	return self->pv->id;
 }
 
@@ -513,6 +607,7 @@ GQuark
 seahorse_object_get_tag (SeahorseObject *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), 0);
+	seahorse_object_realize (self);
 	return self->pv->tag;	
 }
 
@@ -520,6 +615,7 @@ SeahorseSource*
 seahorse_object_get_source (SeahorseObject *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), NULL);
+	seahorse_object_realize (self);
 	return self->pv->source;	
 }
 
@@ -545,6 +641,7 @@ SeahorseContext*
 seahorse_object_get_context (SeahorseObject *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), NULL);
+	seahorse_object_realize (self);
 	return self->pv->context;
 }
 
@@ -552,6 +649,7 @@ SeahorseObject*
 seahorse_object_get_preferred (SeahorseObject *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), NULL);
+	seahorse_object_realize (self);
 	return self->pv->preferred;
 }
 
@@ -577,6 +675,7 @@ SeahorseObject*
 seahorse_object_get_parent (SeahorseObject *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), NULL);
+	seahorse_object_realize (self);
 	return self->pv->parent;
 }
 
@@ -606,6 +705,7 @@ GList*
 seahorse_object_get_children (SeahorseObject *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), NULL);
+	seahorse_object_realize (self);
 	return g_list_copy (self->pv->children);
 }
 
@@ -620,6 +720,7 @@ const gchar*
 seahorse_object_get_label (SeahorseObject *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), NULL);
+	seahorse_object_realize (self);
 	return self->pv->label;
 }
 
@@ -627,6 +728,7 @@ const gchar*
 seahorse_object_get_markup (SeahorseObject *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), NULL);
+	seahorse_object_realize (self);
 	return self->pv->markup;
 }
 
@@ -634,6 +736,7 @@ const gchar*
 seahorse_object_get_nickname (SeahorseObject *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), NULL);
+	seahorse_object_realize (self);
 	return self->pv->nickname;
 }
 
@@ -641,6 +744,7 @@ const gchar*
 seahorse_object_get_description (SeahorseObject *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), NULL);
+	seahorse_object_realize (self);
 	return self->pv->description;
 }
 
@@ -648,6 +752,7 @@ const gchar*
 seahorse_object_get_icon (SeahorseObject *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), NULL);
+	seahorse_object_realize (self);
 	return self->pv->icon;
 }
 
@@ -655,6 +760,7 @@ const gchar*
 seahorse_object_get_identifier (SeahorseObject *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), NULL);
+	seahorse_object_realize (self);
 	return self->pv->identifier;	
 }
 
@@ -662,6 +768,7 @@ SeahorseLocation
 seahorse_object_get_location (SeahorseObject *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), SEAHORSE_LOCATION_INVALID);
+	seahorse_object_realize (self);
 	return self->pv->location;
 }
 
@@ -669,6 +776,7 @@ SeahorseUsage
 seahorse_object_get_usage (SeahorseObject *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), SEAHORSE_USAGE_NONE);
+	seahorse_object_realize (self);
 	return self->pv->usage;	
 }
 
@@ -676,6 +784,7 @@ guint
 seahorse_object_get_flags (SeahorseObject *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), 0);
+	seahorse_object_realize (self);
 	return self->pv->flags;	
 }
 
@@ -721,6 +830,39 @@ seahorse_object_lookup_property (SeahorseObject *self, const gchar *field, GValu
 	return TRUE; 
 }
 
+void
+seahorse_object_realize (SeahorseObject *self)
+{
+	SeahorseObjectClass *klass;
+	g_return_if_fail (SEAHORSE_IS_OBJECT (self));
+	if (self->pv->realized)
+		return;
+	klass = SEAHORSE_OBJECT_GET_CLASS (self);
+	g_return_if_fail (klass->realize);
+	(klass->realize) (self);
+}
+
+void
+seahorse_object_flush (SeahorseObject *self)
+{
+	SeahorseObjectClass *klass;
+	g_return_if_fail (SEAHORSE_IS_OBJECT (self));
+	klass = SEAHORSE_OBJECT_GET_CLASS (self);
+	g_return_if_fail (klass->flush);
+	(klass->flush) (self);
+}
+
+void
+seahorse_object_refresh (SeahorseObject *self)
+{
+	g_return_if_fail (SEAHORSE_IS_OBJECT (self));
+
+	g_object_freeze_notify (G_OBJECT (self));
+	seahorse_object_flush (self);
+	seahorse_object_realize (self);
+	g_object_thaw_notify (G_OBJECT (self));
+}
+
 gboolean 
 seahorse_object_predicate_match (SeahorseObjectPredicate *self, SeahorseObject* obj) 
 {
@@ -728,6 +870,8 @@ seahorse_object_predicate_match (SeahorseObjectPredicate *self, SeahorseObject* 
 	
 	g_return_val_if_fail (SEAHORSE_IS_OBJECT (obj), FALSE);
 	pv = obj->pv;
+	
+	seahorse_object_realize (obj);
 	
 	/* Check all the fields */
 	if (self->tag != 0 && self->tag != pv->tag)

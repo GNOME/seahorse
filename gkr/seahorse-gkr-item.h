@@ -49,38 +49,55 @@ typedef enum {
 
 typedef struct _SeahorseGkrItem SeahorseGkrItem;
 typedef struct _SeahorseGkrItemClass SeahorseGkrItemClass;
+typedef struct _SeahorseGkrItemPrivate SeahorseGkrItemPrivate;
 
 struct _SeahorseGkrItem {
-    SeahorseObject              parent;
-
-    /*< public >*/
-    guint32                     item_id;
-    GnomeKeyringItemInfo        *info;
-    GnomeKeyringAttributeList   *attributes;
-    GList                       *acl;
+	SeahorseObject parent;
+	SeahorseGkrItemPrivate *pv;
 };
 
 struct _SeahorseGkrItemClass {
     SeahorseObjectClass         parent_class;
 };
 
-SeahorseGkrItem*        seahorse_gkr_item_new              (SeahorseSource *sksrc,
-                                                            guint32 item_id, 
-                                                            GnomeKeyringItemInfo *info,
-                                                            GnomeKeyringAttributeList *attributes,
-                                                            GList *acl);
+GType                        seahorse_gkr_item_get_type           (void);
 
-GType                   seahorse_gkr_item_get_type         (void);
+SeahorseGkrItem*             seahorse_gkr_item_new                (SeahorseSource *source,
+                                                                   const gchar *keyring_name,
+                                                                   guint32 item_id);
 
-GQuark                  seahorse_gkr_item_get_cannonical   (guint32 item_id);
+guint32                      seahorse_gkr_item_get_item_id        (SeahorseGkrItem *self);
 
-gchar*                  seahorse_gkr_item_get_description  (SeahorseGkrItem *git);
+const gchar*                 seahorse_gkr_item_get_keyring_name   (SeahorseGkrItem *self);
 
-const gchar*            seahorse_gkr_item_get_attribute    (SeahorseGkrItem *git, 
-                                                            const gchar *name);
+GnomeKeyringItemInfo*        seahorse_gkr_item_get_info           (SeahorseGkrItem *self);
 
-SeahorseGkrUse          seahorse_gkr_item_get_use          (SeahorseGkrItem *git);
+void                         seahorse_gkr_item_set_info           (SeahorseGkrItem *self,
+                                                                   GnomeKeyringItemInfo* info);
 
-const gchar* 		seahorse_gkr_find_string_attribute (GnomeKeyringAttributeList *attrs, const gchar *name);
+gboolean                     seahorse_gkr_item_has_secret         (SeahorseGkrItem *self);
+
+const gchar*                 seahorse_gkr_item_get_secret         (SeahorseGkrItem *self);
+
+GnomeKeyringAttributeList*   seahorse_gkr_item_get_attributes     (SeahorseGkrItem *self);
+
+void                         seahorse_gkr_item_set_attributes     (SeahorseGkrItem *self,
+                                                                   GnomeKeyringAttributeList* attrs);
+
+const gchar*                 seahorse_gkr_item_get_attribute      (SeahorseGkrItem *self, 
+                                                                   const gchar *name);
+
+const gchar* 		     seahorse_gkr_find_string_attribute   (GnomeKeyringAttributeList *attrs, 
+             		                                           const gchar *name);
+
+GList*                       seahorse_gkr_item_get_acl            (SeahorseGkrItem *self);
+
+void                         seahorse_gkr_item_set_acl            (SeahorseGkrItem *self,
+                                                                   GList* acl);
+
+GQuark                       seahorse_gkr_item_get_cannonical     (const gchar *keyring_name, 
+                                                                   guint32 item_id);
+
+SeahorseGkrUse               seahorse_gkr_item_get_use            (SeahorseGkrItem *self);
 
 #endif /* __SEAHORSE_GKR_ITEM_H__ */

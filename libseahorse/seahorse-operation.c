@@ -226,15 +226,18 @@ seahorse_operation_cancel (SeahorseOperation *op)
 void
 seahorse_operation_copy_error  (SeahorseOperation *op, GError **err)
 {
-    g_return_if_fail (err == NULL || *err == NULL);
-    if (err) 
-        *err = op->error ? g_error_copy (op->error) : NULL;
+	g_return_if_fail (SEAHORSE_IS_OPERATION (op));
+	g_return_if_fail (err == NULL || *err == NULL);
+    
+	if (err) 
+		*err = op->error ? g_error_copy (op->error) : NULL;
 }
 
 const GError*       
 seahorse_operation_get_error (SeahorseOperation *op)
 {
-    return op->error;
+	g_return_val_if_fail (SEAHORSE_IS_OPERATION (op), NULL);
+	return op->error;
 }
 
 void
@@ -249,19 +252,26 @@ seahorse_operation_display_error (SeahorseOperation *operation,
 gpointer
 seahorse_operation_get_result (SeahorseOperation *op)
 {
-    return op->result;
+	g_return_val_if_fail (SEAHORSE_IS_OPERATION (op), NULL);
+	return op->result;
 }
 
 void                
 seahorse_operation_wait (SeahorseOperation *op)
 {
-    seahorse_util_wait_until (!seahorse_operation_is_running (op));
+	g_return_if_fail (SEAHORSE_IS_OPERATION (op));
+
+	g_object_ref (op);
+	seahorse_util_wait_until (!seahorse_operation_is_running (op));
+	g_object_unref (op);
 }
 
 void
 seahorse_operation_watch (SeahorseOperation *operation, SeahorseDoneFunc done_callback,
                           gpointer donedata, SeahorseProgressFunc progress_callback, gpointer progdata)
 {
+    g_return_if_fail (SEAHORSE_IS_OPERATION (operation));
+
     if (!seahorse_operation_is_running (operation)) {
         if (done_callback)
             (done_callback) (operation, donedata);

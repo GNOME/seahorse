@@ -84,210 +84,36 @@ G_DEFINE_TYPE (SeahorseGkrSource, seahorse_gkr_source, SEAHORSE_TYPE_SOURCE);
 #define SEAHORSE_IS_LIST_OPERATION_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_LIST_OPERATION))
 #define SEAHORSE_LIST_OPERATION_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_LIST_OPERATION, SeahorseListOperationClass))
 
-enum {
-    PART_INFO = 0x01,
-    PART_ATTRS = 0x02,
-    PART_ACL = 0x04
-};
-
 DECLARE_OPERATION (List, list)
 
     SeahorseGkrSource *gsrc;
-
-    GList *remaining;
-    guint total;
-    
-    guint32 current_parts;
-    guint32 current_id;
-    guint32 info_flags;
-    GnomeKeyringItemInfo *current_info;
-    GnomeKeyringAttributeList *current_attrs;
-    GList *current_acl;
-    
     gpointer request;
-    gpointer request_attrs;
-    gpointer request_acl;
-    
     GHashTable *checks;
 
 END_DECLARE_OPERATION
 
 IMPLEMENT_OPERATION (List, list)
 
-static void     process_next_item       (SeahorseListOperation *lop);
-
-static guint32
-parse_keyid (GQuark keyid)
-{
-    const gchar *string;
-    const gchar *num;
-    gint ret;
-    char *t;
-    
-    string = g_quark_to_string (keyid);
-    if (!string)
-        return 0;
-    
-    num = strchr (string, ':');
-    if (!num)
-        return 0;
-    
-    ret = strtol (num + 1, &t, 16);
-    if (ret < 0 || *t)
-        return 0;
-    
-    return (guint32)ret;
-}
-
 static void
 keyring_operation_failed (SeahorseListOperation *lop, GnomeKeyringResult result)
 {
-    SeahorseOperation *op = SEAHORSE_OPERATION (lop);
-    GError *err = NULL;
+	SeahorseOperation *op = SEAHORSE_OPERATION (lop);
+	GError *err = NULL;
     
-    g_assert (result != GNOME_KEYRING_RESULT_OK);
-    g_assert (result != GNOME_KEYRING_RESULT_CANCELLED);
+	g_assert (result != GNOME_KEYRING_RESULT_OK);
+	g_assert (result != GNOME_KEYRING_RESULT_CANCELLED);
     
-    if (!seahorse_operation_is_running (op))
-        return;
+	if (!seahorse_operation_is_running (op))
+		return;
     
-    if (lop->request)
-        gnome_keyring_cancel_request (lop->request);
-    lop->request = NULL;
-
-    if (lop->request_attrs)
-        gnome_keyring_cancel_request (lop->request_attrs);
-    lop->request_attrs = NULL;
-
-    if (lop->request_acl)
-        gnome_keyring_cancel_request (lop->request_acl);
-    lop->request_acl = NULL;
+	if (lop->request)
+	    gnome_keyring_cancel_request (lop->request);
+	lop->request = NULL;
     
-    seahorse_gkr_operation_parse_error (result, &err);
-    g_assert (err != NULL);
+	seahorse_gkr_operation_parse_error (result, &err);
+	g_assert (err != NULL);
     
-    seahorse_operation_mark_done (op, FALSE, err);
-}
-
-static gboolean
-have_complete_item (SeahorseListOperation *lop)
-{
-    SeahorseGkrItem *git = NULL;
-    SeahorseGkrItem *prev;
-    GQuark keyid;
-    
-    g_assert (lop->current_id);
-    
-    if (lop->current_parts != (PART_INFO | PART_ATTRS | PART_ACL))
-        return FALSE;
-    
-    g_assert (lop->current_info);
-  
-    keyid = seahorse_gkr_item_get_cannonical (lop->current_id);
-    g_return_val_if_fail (keyid, FALSE);
-    
-    /* Mark this key as seen */
-    if (lop->checks)
-        g_hash_table_remove (lop->checks, GUINT_TO_POINTER (keyid));
-    
-    g_assert (SEAHORSE_IS_GKR_SOURCE (lop->gsrc));
-    prev = SEAHORSE_GKR_ITEM (seahorse_context_get_object (SCTX_APP (), 
-                                   SEAHORSE_SOURCE (lop->gsrc), keyid));
-
-    /* Check if we can just replace the key on the object */
-    if (prev != NULL) {
-        g_object_set (prev, "item-info", lop->current_info, NULL);
-        if (lop->current_attrs)
-            g_object_set (prev, "item-attributes", lop->current_attrs, NULL);
-        g_object_set (prev, "item-acl", lop->current_acl, NULL);
-		
-        lop->current_info = NULL;
-        lop->current_acl = NULL;
-        lop->current_attrs = NULL;
-        return TRUE;
-    }
-    
-    git = seahorse_gkr_item_new (SEAHORSE_SOURCE (lop->gsrc), lop->current_id, 
-                                      lop->current_info, lop->current_attrs, lop->current_acl);
- 
-    /* Add to context */ 
-    seahorse_context_take_object (SCTX_APP (), SEAHORSE_OBJECT (git));
-
-    lop->current_info = NULL;
-    lop->current_acl = NULL;
-    lop->current_attrs = NULL;
-    return TRUE;
-}
-
-static void 
-item_info_ready (GnomeKeyringResult result, GnomeKeyringItemInfo *info, 
-                 SeahorseListOperation *lop)
-{
-    if (result == GNOME_KEYRING_RESULT_CANCELLED)
-        return;
-    
-    lop->request = NULL;
-
-    if (result != GNOME_KEYRING_RESULT_OK) {
-        keyring_operation_failed (lop, result);
-        return;
-    }
-    
-    g_assert (lop->current_id);
-    g_assert (!lop->current_info);
-    
-    lop->current_info = gnome_keyring_item_info_copy (info);
-    lop->current_parts |= PART_INFO;
-    
-    if (have_complete_item (lop))
-        process_next_item (lop);
-}
-
-static void 
-item_attrs_ready (GnomeKeyringResult result, GnomeKeyringAttributeList *attributes, 
-                 SeahorseListOperation *lop)
-{
-    if (result == GNOME_KEYRING_RESULT_CANCELLED)
-        return;
-    
-    lop->request_attrs = NULL;
-
-    if (result != GNOME_KEYRING_RESULT_OK) {
-        keyring_operation_failed (lop, result);
-        return;
-    }
-    
-    g_assert (lop->current_id);
-    g_assert (!lop->current_attrs);
-    
-    lop->current_attrs = gnome_keyring_attribute_list_copy (attributes);
-    lop->current_parts |= PART_ATTRS;
-    
-    if (have_complete_item (lop))
-        process_next_item (lop);
-}
-
-static void 
-item_acl_ready (GnomeKeyringResult result, GList *acl, SeahorseListOperation *lop)
-{
-    if (result == GNOME_KEYRING_RESULT_CANCELLED)
-        return;
-    
-    lop->request_acl = NULL;
-
-    if (result != GNOME_KEYRING_RESULT_OK) {
-        keyring_operation_failed (lop, result);
-        return;
-    }
-    
-    g_assert (lop->current_id);
-    g_assert (!lop->current_acl);
-    
-    lop->current_acl = gnome_keyring_acl_copy (acl);
-    lop->current_parts |= PART_ACL;
-    
-    if (have_complete_item (lop))
-        process_next_item (lop);
+	seahorse_operation_mark_done (op, FALSE, err);
 }
 
 /* Remove the given key from the context */
@@ -303,117 +129,83 @@ remove_key_from_context (gpointer kt, SeahorseObject *dummy, SeahorseSource *sks
         seahorse_context_remove_object (SCTX_APP (), sobj);
 }
 
-static void
-process_next_item (SeahorseListOperation *lop)
-{
-    g_assert (lop);
-    g_assert (SEAHORSE_IS_GKR_SOURCE (lop->gsrc));
-
-    seahorse_operation_mark_progress_full (SEAHORSE_OPERATION (lop), NULL, 
-                                           lop->total - g_list_length (lop->remaining), 
-                                           lop->total);
-    
-   lop->current_id = 0;
-   lop->current_parts = 0;
-   g_assert (!lop->current_info);
-   g_assert (!lop->current_attrs);
-   g_assert (!lop->current_acl);
-    
-    /* Check if we're done */
-    if (g_list_length (lop->remaining) == 0) {
-        
-        if (lop->checks)
-            g_hash_table_foreach (lop->checks, (GHFunc)remove_key_from_context, 
-                                  SEAHORSE_SOURCE (lop->gsrc));
-        
-        seahorse_operation_mark_done (SEAHORSE_OPERATION (lop), FALSE, NULL);
-        return;
-    }
-    
-    /* Start the next item */
-    g_assert (lop->current_id == 0);
-    lop->current_id = GPOINTER_TO_UINT (lop->remaining->data);
-    lop->remaining = g_list_delete_link (lop->remaining, lop->remaining);
-    
-    g_assert (!lop->request);
-
-    /* The various callbacks agree on when the item is fully loaded */
-    lop->request = gnome_keyring_item_get_info_full (lop->gsrc->pv->keyring_name, 
-                                lop->current_id, lop->info_flags, 
-                                (GnomeKeyringOperationGetItemInfoCallback)item_info_ready, lop, NULL);
-
-    lop->request_attrs = gnome_keyring_item_get_attributes (lop->gsrc->pv->keyring_name, lop->current_id, 
-                                (GnomeKeyringOperationGetAttributesCallback)item_attrs_ready, lop, NULL);
-	                            
-    lop->request_acl = gnome_keyring_item_get_acl (lop->gsrc->pv->keyring_name, lop->current_id, 
-                                (GnomeKeyringOperationGetListCallback)item_acl_ready, lop, NULL);
-}
-
 static void 
 keyring_ids_ready (GnomeKeyringResult result, GList *list, SeahorseListOperation *lop)
 {
-    if (result == GNOME_KEYRING_RESULT_CANCELLED)
-        return;
+	SeahorseGkrItem *git;
+	gchar *keyring_name;
+	guint32 item_id;
+	GQuark id;
+	
+	if (result == GNOME_KEYRING_RESULT_CANCELLED)
+		return;
     
-    lop->request = NULL;
+	lop->request = NULL;
 
-    if (result != GNOME_KEYRING_RESULT_OK) {
-        keyring_operation_failed (lop, result);
-        return;
-    }
+	if (result != GNOME_KEYRING_RESULT_OK) {
+		keyring_operation_failed (lop, result);
+		return;
+	}
+	
+	g_object_get (lop->gsrc, "keyring-name", &keyring_name, NULL);
+	g_return_if_fail (keyring_name);
     
-    g_assert (lop->remaining == NULL);
-    lop->remaining = g_list_copy (list);
-    lop->total = g_list_length (list);
-    
-    process_next_item (lop);
+	while (list) {
+		item_id = GPOINTER_TO_UINT (list->data);
+		id = seahorse_gkr_item_get_cannonical (keyring_name, item_id);
+		
+		git = SEAHORSE_GKR_ITEM (seahorse_context_get_object (SCTX_APP (), 
+		                                                      SEAHORSE_SOURCE (lop->gsrc), id));
+		if (!git) {
+			git = seahorse_gkr_item_new (SEAHORSE_SOURCE (lop->gsrc), keyring_name, item_id);
+
+			/* Add to context */ 
+			seahorse_context_take_object (SCTX_APP (), SEAHORSE_OBJECT (git));
+		}
+		
+		if (lop->checks)
+			g_hash_table_remove (lop->checks, GUINT_TO_POINTER (id));
+		
+		list = g_list_next (list);
+	}
+	
+	if (lop->checks)
+        	g_hash_table_foreach (lop->checks, (GHFunc)remove_key_from_context, 
+        	                      SEAHORSE_SOURCE (lop->gsrc));
+        
+        seahorse_operation_mark_done (SEAHORSE_OPERATION (lop), FALSE, NULL);
+
 }
 
 static SeahorseListOperation*
-start_list_operation (SeahorseGkrSource *gsrc, GQuark keyid)
+start_list_operation (SeahorseGkrSource *gsrc)
 {
-    SeahorseListOperation *lop;
-    GList *keys, *l;
+	SeahorseListOperation *lop;
+	GList *keys, *l;
 
-    g_assert (SEAHORSE_IS_GKR_SOURCE (gsrc));
+	g_assert (SEAHORSE_IS_GKR_SOURCE (gsrc));
 
-    lop = g_object_new (SEAHORSE_TYPE_LIST_OPERATION, NULL);
-    lop->gsrc = gsrc;
+	lop = g_object_new (SEAHORSE_TYPE_LIST_OPERATION, NULL);
+	lop->gsrc = gsrc;
     
-    seahorse_operation_mark_start (SEAHORSE_OPERATION (lop));
+	seahorse_operation_mark_start (SEAHORSE_OPERATION (lop));
+  
+	/* When loading new keys prepare a list of current */
+	lop->checks = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, NULL);
+	keys = seahorse_context_get_objects (SCTX_APP (), SEAHORSE_SOURCE (gsrc));
+	for (l = keys; l; l = g_list_next (l))
+		g_hash_table_insert (lop->checks, GUINT_TO_POINTER (seahorse_object_get_id (l->data)), 
+		                     GUINT_TO_POINTER (TRUE));
+	g_list_free (keys);
     
-    /* When we know which key to load go directly to step two */
-    if (keyid) {
-        guint32 id;
-        
-        id = parse_keyid (keyid);
-        g_return_val_if_fail (id != 0, NULL);
-        
-        lop->remaining = g_list_prepend (lop->remaining, GUINT_TO_POINTER (id));
-        lop->total = 1;
-        
-        /* Load everything including the secret */
-        lop->info_flags = GNOME_KEYRING_ITEM_INFO_ALL;
-        
-        seahorse_operation_mark_progress (SEAHORSE_OPERATION (lop), _("Retrieving key"), -1);
-        process_next_item (lop);
-        return lop;
-    }
+	/* Start listing of ids */
+	seahorse_operation_mark_progress (SEAHORSE_OPERATION (lop), _("Listing passwords"), -1);
+	g_object_ref (lop);
+	lop->request = gnome_keyring_list_item_ids (gsrc->pv->keyring_name, 
+	                                            (GnomeKeyringOperationGetListCallback)keyring_ids_ready, 
+	                                            lop, g_object_unref);
     
-    /* When loading new keys prepare a list of current */
-    lop->checks = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, NULL);
-    keys = seahorse_context_get_objects (SCTX_APP (), SEAHORSE_SOURCE (gsrc));
-    for (l = keys; l; l = g_list_next (l))
-        g_hash_table_insert (lop->checks, GUINT_TO_POINTER (seahorse_object_get_id (l->data)), 
-                             GUINT_TO_POINTER (TRUE));
-    g_list_free (keys);
-    
-    /* Start listing of ids */
-    seahorse_operation_mark_progress (SEAHORSE_OPERATION (lop), _("Listing passwords"), -1);
-    lop->request = gnome_keyring_list_item_ids (gsrc->pv->keyring_name, 
-                    (GnomeKeyringOperationGetListCallback)keyring_ids_ready, lop, NULL);
-    
-    return lop;
+	return lop;
 }
 
 static void 
@@ -443,20 +235,6 @@ seahorse_list_operation_finalize (GObject *gobject)
 {
     SeahorseListOperation *lop = SEAHORSE_LIST_OPERATION (gobject);
     g_assert (!seahorse_operation_is_running (SEAHORSE_OPERATION (lop)));
-    
-    if (lop->remaining)
-        g_list_free (lop->remaining);
-    lop->remaining = NULL;
-    
-    if (lop->current_info)
-        gnome_keyring_item_info_free (lop->current_info);
-    lop->current_info = NULL;
-    if (lop->current_attrs)
-        gnome_keyring_attribute_list_free (lop->current_attrs);
-    lop->current_attrs = NULL;
-    if (lop->current_acl)
-        gnome_keyring_acl_free (lop->current_acl);
-    lop->current_acl = NULL;
     
     if (lop->checks)
         g_hash_table_destroy (lop->checks);
@@ -495,7 +273,7 @@ seahorse_list_operation_cancel (SeahorseOperation *operation)
 DECLARE_OPERATION (Remove, remove)
 
 	SeahorseGkrSource *gsrc;
-	SeahorseGkrItem *gitem;
+	SeahorseGkrItem *item;
 	gpointer request;
 
 END_DECLARE_OPERATION
@@ -520,30 +298,33 @@ remove_item_ready (GnomeKeyringResult result, SeahorseRemoveOperation *rop)
 		return;
 	}
     
-	seahorse_context_remove_object (SCTX_APP (), SEAHORSE_OBJECT (rop->gitem));
+	seahorse_context_remove_object (SCTX_APP (), SEAHORSE_OBJECT (rop->item));
 	seahorse_operation_mark_done (SEAHORSE_OPERATION (rop), FALSE, NULL);
 }
 
 static SeahorseRemoveOperation*
-start_remove_operation (SeahorseGkrSource *gsrc, SeahorseGkrItem *gitem)
+start_remove_operation (SeahorseGkrSource *gsrc, SeahorseGkrItem *git)
 {
 	SeahorseRemoveOperation *rop;
 
 	g_assert (SEAHORSE_IS_GKR_SOURCE (gsrc));
-	g_assert (SEAHORSE_IS_GKR_ITEM (gitem));
+	g_assert (SEAHORSE_IS_GKR_ITEM (git));
 	
 	rop = g_object_new (SEAHORSE_TYPE_REMOVE_OPERATION, NULL);
 	rop->gsrc = gsrc;
 	g_object_ref (gsrc);
-	rop->gitem = gitem;
-	g_object_ref (gitem);
+	rop->item = git;
+	g_object_ref (git);
 	
 	seahorse_operation_mark_start (SEAHORSE_OPERATION (rop));
     
 	/* Start listing of ids */
 	seahorse_operation_mark_progress (SEAHORSE_OPERATION (rop), _("Removing item"), -1);
-	rop->request = gnome_keyring_item_delete (gsrc->pv->keyring_name, gitem->item_id, 
-	                    (GnomeKeyringOperationDoneCallback)remove_item_ready, rop, NULL);
+	g_object_ref (rop);
+	rop->request = gnome_keyring_item_delete (seahorse_gkr_item_get_keyring_name (git), 
+	                                          seahorse_gkr_item_get_item_id (git), 
+	                                          (GnomeKeyringOperationDoneCallback)remove_item_ready, 
+	                                          rop, g_object_unref);
     
 	return rop;
 }
@@ -571,9 +352,9 @@ seahorse_remove_operation_dispose (GObject *gobject)
 		g_object_unref (rop->gsrc);
 	rop->gsrc = NULL;
 	
-	if (rop->gitem)
-		g_object_unref (rop->gitem);
-	rop->gitem = NULL;
+	if (rop->item)
+		g_object_unref (rop->item);
+	rop->item = NULL;
 
 	G_OBJECT_CLASS (remove_operation_parent_class)->dispose (gobject);  
 }
@@ -585,7 +366,7 @@ seahorse_remove_operation_finalize (GObject *gobject)
 	g_assert (!seahorse_operation_is_running (SEAHORSE_OPERATION (rop)));
     
 	g_assert (rop->gsrc == NULL);
-	g_assert (rop->gitem == NULL);
+	g_assert (rop->item == NULL);
     
 	/* The above cancel should have stopped this */
 	g_assert (rop->request == NULL);
@@ -679,7 +460,9 @@ seahorse_gkr_source_load (SeahorseSource *src, GQuark keyid)
     g_assert (SEAHORSE_IS_SOURCE (src));
     gsrc = SEAHORSE_GKR_SOURCE (src);
     
-    lop = start_list_operation (gsrc, keyid);
+    /* TODO: Loading a specific key? */
+    
+    lop = start_list_operation (gsrc);
     seahorse_multi_operation_take (gsrc->pv->operations, SEAHORSE_OPERATION (lop));
     
     g_object_ref (lop);

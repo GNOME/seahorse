@@ -54,7 +54,7 @@
 typedef struct _SeahorseGkrOperationPrivate {
     
     gpointer request;
-    GQuark keyid;
+    SeahorseObject *object;
     
 } SeahorseGkrOperationPrivate;
 
@@ -151,6 +151,10 @@ seahorse_gkr_operation_dispose (GObject *gobject)
         g_object_unref (gop->gsrc);
     gop->gsrc = NULL;
     
+    if (pv->object)
+        g_object_unref (pv->object);
+    pv->object = NULL;
+    
     /* The above cancel should have stopped this */
     g_assert (pv->request == NULL);
     
@@ -243,14 +247,14 @@ basic_operation_done (GnomeKeyringResult result, SeahorseGkrOperation *gop)
 {
     SeahorseGkrOperationPrivate *pv;
 
+    pv = SEAHORSE_GKR_OPERATION_GET_PRIVATE (gop);
+    pv->request = NULL;
+
     if (!check_operation_result (gop, result))
         return;
     
-    pv = SEAHORSE_GKR_OPERATION_GET_PRIVATE (gop);
-
     /* When operation is successful reload the key */
-    g_return_if_fail (pv->keyid != 0);
-    seahorse_source_load_async (SEAHORSE_SOURCE (gop->gsrc), pv->keyid);
+    seahorse_object_refresh (SEAHORSE_OBJECT (pv->object));
 }
 
 SeahorseOperation*
@@ -259,7 +263,6 @@ seahorse_gkr_operation_update_info (SeahorseGkrItem *git, GnomeKeyringItemInfo *
     SeahorseSource *sksrc;
     SeahorseGkrOperation *gop;
     SeahorseGkrOperationPrivate *pv;
-    const gchar *keyring_name;
     
     g_return_val_if_fail (SEAHORSE_IS_GKR_ITEM (git), NULL);
     
@@ -270,13 +273,15 @@ seahorse_gkr_operation_update_info (SeahorseGkrItem *git, GnomeKeyringItemInfo *
                         "source", SEAHORSE_GKR_SOURCE (sksrc), NULL);
     pv = SEAHORSE_GKR_OPERATION_GET_PRIVATE (gop);
     
-    keyring_name = seahorse_gkr_source_get_keyring_name (SEAHORSE_GKR_SOURCE (sksrc));
-    pv->keyid = seahorse_object_get_id (SEAHORSE_OBJECT (git));
+    g_object_ref (git);
+    pv->object = SEAHORSE_OBJECT (git);
     
     /* Start actual save request */
-    pv->request = gnome_keyring_item_set_info (keyring_name, git->item_id, info, 
+    g_object_ref (gop);
+    pv->request = gnome_keyring_item_set_info (seahorse_gkr_item_get_keyring_name (git),
+                                               seahorse_gkr_item_get_item_id (git), info, 
                                                (GnomeKeyringOperationDoneCallback)basic_operation_done,
-                                               gop, NULL);
+                                               gop, g_object_unref);
     g_return_val_if_fail (pv->request, NULL);
     
     seahorse_operation_mark_start (SEAHORSE_OPERATION (gop));
@@ -291,7 +296,6 @@ seahorse_gkr_operation_update_acl (SeahorseGkrItem *git, GList *acl)
     SeahorseSource *sksrc;
     SeahorseGkrOperation *gop;
     SeahorseGkrOperationPrivate *pv;
-    const gchar *keyring_name;
     
     g_return_val_if_fail (SEAHORSE_IS_GKR_ITEM (git), NULL);
     
@@ -302,13 +306,15 @@ seahorse_gkr_operation_update_acl (SeahorseGkrItem *git, GList *acl)
                         "source", SEAHORSE_GKR_SOURCE (sksrc), NULL);
     pv = SEAHORSE_GKR_OPERATION_GET_PRIVATE (gop);
     
-    keyring_name = seahorse_gkr_source_get_keyring_name (SEAHORSE_GKR_SOURCE (sksrc));
-    pv->keyid = seahorse_object_get_id (SEAHORSE_OBJECT (git));
+    g_object_ref (git);
+    pv->object = SEAHORSE_OBJECT (git);
     
     /* Start actual save request */
-    pv->request = gnome_keyring_item_set_acl (keyring_name, git->item_id, acl, 
+    g_object_ref (gop);
+    pv->request = gnome_keyring_item_set_acl (seahorse_gkr_item_get_keyring_name (git), 
+                                              seahorse_gkr_item_get_item_id (git), acl, 
                                               (GnomeKeyringOperationDoneCallback)basic_operation_done,
-                                              gop, NULL);
+                                              gop, g_object_unref);
     g_return_val_if_fail (pv->request, NULL);
     
     seahorse_operation_mark_start (SEAHORSE_OPERATION (gop));

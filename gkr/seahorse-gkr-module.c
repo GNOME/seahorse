@@ -28,14 +28,25 @@
 
 #include "seahorse-context.h"
 
+#include <gnome-keyring.h>
+
 void
 seahorse_gkr_module_init (void)
 {
 	SeahorseSource *source;
+	GnomeKeyringResult result;
+	gchar *keyring;
 
-	/* Always have a default keyring source added */
-	source = g_object_new (SEAHORSE_TYPE_GKR_SOURCE, NULL);
-	seahorse_context_take_source (NULL, source);
+	/* Create a keyring for the default gnome keyring */
+	result = gnome_keyring_get_default_keyring_sync (&keyring);
+	if (result != GNOME_KEYRING_RESULT_OK) {
+		g_warning ("couldn't get default gnome-keyring keyring: %s",
+		           gnome_keyring_result_to_message (result));
+	} else {
+		source = SEAHORSE_SOURCE (seahorse_gkr_source_new (keyring));
+		g_free (keyring);
+		seahorse_context_take_source (NULL, source);
+	}
 
 	/* Let these classes register themselves */
 	g_type_class_unref (g_type_class_ref (SEAHORSE_TYPE_GKR_SOURCE));

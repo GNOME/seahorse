@@ -67,11 +67,21 @@ struct _SeahorseObject {
 
 struct _SeahorseObjectClass {
 	GObjectClass parent_class;
+	
+	/* virtual methods ------------------------------------------------- */
+
+	void (*realize) (SeahorseObject *self);
+	
+	void (*flush) (SeahorseObject *self);
 };
 
 GType               seahorse_object_get_type               (void);
 
 SeahorseObject*     seahorse_object_new                    (void);
+
+void                seahorse_object_realize                (SeahorseObject *self);
+
+void                seahorse_object_refresh                (SeahorseObject *self);
 
 GQuark              seahorse_object_get_id                 (SeahorseObject *self);
 
