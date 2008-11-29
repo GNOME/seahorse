@@ -32,27 +32,19 @@
 #include "seahorse-ssh-key.h"
 #include "seahorse-ssh-operation.h"
 #include "seahorse-gtkstock.h"
+#include "seahorse-validity.h"
 
 enum {
     PROP_0,
     PROP_KEY_DATA,
-    PROP_DISPLAY_NAME,
-    PROP_DISPLAY_ID,
-    PROP_SIMPLE_NAME,
     PROP_FINGERPRINT,
     PROP_VALIDITY,
     PROP_TRUST,
     PROP_EXPIRES,
-    PROP_LENGTH,
-    PROP_STOCK_ID
+    PROP_LENGTH
 };
 
-struct _SeahorseSSHKeyPrivate {
-    gchar *displayname;
-    gchar *simplename;
-};
-
-G_DEFINE_TYPE (SeahorseSSHKey, seahorse_ssh_key, SEAHORSE_TYPE_KEY);
+G_DEFINE_TYPE (SeahorseSSHKey, seahorse_ssh_key, SEAHORSE_TYPE_OBJECT);
 
 /* -----------------------------------------------------------------------------
  * INTERNAL 
@@ -70,128 +62,89 @@ parse_first_word (const gchar *line)
 }
 
 static void
-changed_key (SeahorseSSHKey *skey)
+changed_key (SeahorseSSHKey *self)
 {
-    SeahorseKey *key = SEAHORSE_KEY (skey);
-    SeahorseObject *obj = SEAHORSE_OBJECT (skey);
-
-    g_free (skey->priv->displayname);
-    skey->priv->displayname = NULL;
+	SeahorseObject *obj = SEAHORSE_OBJECT (self);
+	SeahorseUsage usage;
+	const gchar *description = NULL;
+	const gchar *display = NULL;
+	gchar *simple = NULL;
     
-    g_free (skey->priv->simplename);
-    skey->priv->simplename = NULL;
-    
-    if (skey->keydata) {
+	if (self->keydata) {
 
-        /* Try to make display and simple names */
-        if (skey->keydata->comment) {
-            skey->priv->displayname = g_strdup (skey->keydata->comment);
-            skey->priv->simplename = parse_first_word (skey->keydata->comment);
+  		 /* Try to make display and simple names */
+		if (self->keydata->comment) {
+			display = self->keydata->comment;
+			simple = parse_first_word (self->keydata->comment);
             
-        /* No names when not even the fingerpint loaded */
-        } else if (!skey->keydata->fingerprint) {
-            skey->priv->displayname = g_strdup (_("(Unreadable Secure Shell Key)"));
+		/* No names when not even the fingerpint loaded */
+		} else if (!self->keydata->fingerprint) {
+			display = _("(Unreadable Secure Shell Key)");
+
+		/* No comment, but loaded */        
+		} else {
+			display = _("Secure Shell Key");
+		}
     
-        /* No comment, but loaded */        
-        } else {
-            skey->priv->displayname = g_strdup (_("Secure Shell Key"));
-        }
+		if (simple == NULL)
+			simple = g_strdup (_("Secure Shell Key"));
+	}
     
-        if (skey->priv->simplename == NULL)
-            skey->priv->simplename = g_strdup (_("Secure Shell Key"));
+	if (!self->keydata || !self->keydata->fingerprint) {
         
-    }
-    
-    /* Now start setting the main SeahorseKey fields */
-    obj->_tag = SEAHORSE_SSH;
-    obj->_id = 0;
-    
-    if (!skey->keydata || !skey->keydata->fingerprint) {
-        
-        obj->_location = SEAHORSE_LOCATION_INVALID;
-        obj->_usage = SEAHORSE_USAGE_NONE;
-        key->loaded = SKEY_INFO_NONE;
-        obj->_flags = SKEY_FLAG_DISABLED;
-        key->keydesc = _("Invalid");
-        key->rawid = NULL;
-        
-    } else {
-    
-        /* The key id */
-        obj->_id = seahorse_ssh_key_get_cannonical_id (skey->keydata->fingerprint);
-        key->rawid = skey->keydata->fingerprint;
-        obj->_location = SEAHORSE_LOCATION_LOCAL;
-        key->loaded = SKEY_INFO_COMPLETE;
-        obj->_flags = skey->keydata->authorized ? SKEY_FLAG_TRUSTED : 0;
-        obj->_flags |= SKEY_FLAG_EXPORTABLE;
-        
-        if (skey->keydata->privfile) {
-            obj->_usage = SEAHORSE_USAGE_PRIVATE_KEY;
-            key->keydesc = _("Private Secure Shell Key");
-        } else {
-            obj->_usage = SEAHORSE_USAGE_PUBLIC_KEY;
-            key->keydesc = _("Public Secure Shell Key");
-        }
-    }
-    
-    if (!obj->_id)
-        obj->_id = g_quark_from_string (SEAHORSE_SSH_STR ":UNKNOWN ");
-    
-    seahorse_object_fire_changed (obj, SKEY_CHANGE_ALL);
+		g_object_set (self,
+		              "id", 0,
+		              "label", "",
+		              "icon", NULL,
+		              "usage", SEAHORSE_USAGE_NONE,
+		              "description", _("Invalid"),		              
+		              "nickname", "",
+		              "location", SEAHORSE_LOCATION_INVALID,
+		              "flags", SEAHORSE_FLAG_DISABLED,
+		              NULL);
+		return;
+		
+	} 
+
+	if (self->keydata->privfile) {
+		usage = SEAHORSE_USAGE_PRIVATE_KEY;
+		description = _("Private Secure Shell Key");
+	} else {
+		usage = SEAHORSE_USAGE_PUBLIC_KEY;
+		description = _("Public Secure Shell Key");
+	}
+
+	g_object_set (obj,
+	              "id", seahorse_ssh_key_get_cannonical_id (self->keydata->fingerprint),
+	              "label", display,
+	              "icon", SEAHORSE_STOCK_KEY_SSH,
+	              "usage", usage,
+	              "nickname", simple,
+	              "description", description,
+	              "location", SEAHORSE_LOCATION_LOCAL,
+	              "flags", (self->keydata->authorized ? SEAHORSE_FLAG_TRUSTED : 0) | SEAHORSE_FLAG_EXPORTABLE,
+	              NULL);
 }
 
 static guint 
 calc_validity (SeahorseSSHKey *skey)
 {
-    if (skey->keydata->privfile)
-        return SEAHORSE_VALIDITY_ULTIMATE;
-    return 0;
+	if (skey->keydata->privfile)
+		return SEAHORSE_VALIDITY_ULTIMATE;
+	return 0;
 }
 
 static guint
 calc_trust (SeahorseSSHKey *skey)
 {
-    if (skey->keydata->authorized)
-        return SEAHORSE_VALIDITY_FULL;
-    return 0;
+	if (skey->keydata->authorized)
+		return SEAHORSE_VALIDITY_FULL;
+	return 0;
 }
 
 /* -----------------------------------------------------------------------------
  * OBJECT 
  */
-
-static guint 
-seahorse_ssh_key_get_num_names (SeahorseKey *key)
-{
-    return 1;
-}
-
-static gchar* 
-seahorse_ssh_key_get_name (SeahorseKey *key, guint index)
-{
-    SeahorseSSHKey *skey;
-    
-    g_assert (SEAHORSE_IS_SSH_KEY (key));
-    skey = SEAHORSE_SSH_KEY (key);
-    
-    g_assert (index == 0);
-
-    return g_strdup (skey->priv->displayname);
-}
-
-static gchar* 
-seahorse_ssh_key_get_name_cn (SeahorseKey *skey, guint index)
-{
-    g_assert (index != 0);
-    return NULL;
-}
-
-static SeahorseValidity  
-seahorse_ssh_key_get_name_validity  (SeahorseKey *skey, guint index)
-{
-    g_return_val_if_fail (index == 0, SEAHORSE_VALIDITY_UNKNOWN);
-    return calc_validity (SEAHORSE_SSH_KEY (skey));
-}
 
 static void
 seahorse_ssh_key_get_property (GObject *object, guint prop_id,
@@ -202,15 +155,6 @@ seahorse_ssh_key_get_property (GObject *object, guint prop_id,
     switch (prop_id) {
     case PROP_KEY_DATA:
         g_value_set_pointer (value, skey->keydata);
-        break;
-    case PROP_DISPLAY_NAME:
-        g_value_set_string (value, skey->priv->displayname);
-        break;
-    case PROP_DISPLAY_ID:
-        g_value_set_string (value, seahorse_key_get_short_keyid (SEAHORSE_KEY (skey))); 
-        break;
-    case PROP_SIMPLE_NAME:        
-        g_value_set_string (value, skey->priv->simplename);
         break;
     case PROP_FINGERPRINT:
         g_value_set_string (value, skey->keydata ? skey->keydata->fingerprint : NULL);
@@ -226,9 +170,6 @@ seahorse_ssh_key_get_property (GObject *object, guint prop_id,
         break;
     case PROP_LENGTH:
         g_value_set_uint (value, skey->keydata ? skey->keydata->length : 0);
-        break;
-    case PROP_STOCK_ID:
-        g_value_set_string (value, SEAHORSE_STOCK_KEY_SSH);
         break;
     }
 }
@@ -258,56 +199,32 @@ seahorse_ssh_key_finalize (GObject *gobject)
 {
     SeahorseSSHKey *skey = SEAHORSE_SSH_KEY (gobject);
     
-    g_free (skey->priv->displayname);
-    g_free (skey->priv->simplename);
-    g_free (skey->priv);
-    skey->priv = NULL;
-    
     seahorse_ssh_key_data_free (skey->keydata);
     
     G_OBJECT_CLASS (seahorse_ssh_key_parent_class)->finalize (gobject);
 }
 
 static void
-seahorse_ssh_key_init (SeahorseSSHKey *skey)
+seahorse_ssh_key_init (SeahorseSSHKey *self)
 {
-    /* init private vars */
-    skey->priv = g_new0 (SeahorseSSHKeyPrivate, 1);
+	
 }
 
 static void
 seahorse_ssh_key_class_init (SeahorseSSHKeyClass *klass)
 {
     GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-    SeahorseKeyClass *key_class = SEAHORSE_KEY_CLASS (klass);
     
     seahorse_ssh_key_parent_class = g_type_class_peek_parent (klass);
     
     gobject_class->finalize = seahorse_ssh_key_finalize;
     gobject_class->set_property = seahorse_ssh_key_set_property;
     gobject_class->get_property = seahorse_ssh_key_get_property;
-
-    key_class->get_num_names = seahorse_ssh_key_get_num_names;
-    key_class->get_name = seahorse_ssh_key_get_name;
-    key_class->get_name_cn = seahorse_ssh_key_get_name_cn;
-    key_class->get_name_validity = seahorse_ssh_key_get_name_validity;
     
     g_object_class_install_property (gobject_class, PROP_KEY_DATA,
         g_param_spec_pointer ("key-data", "SSH Key Data", "SSH key data pointer",
                               G_PARAM_READWRITE));
 
-    g_object_class_install_property (gobject_class, PROP_DISPLAY_NAME,
-        g_param_spec_string ("display-name", "Display Name", "User Displayable name for this key",
-                             "", G_PARAM_READABLE));
-
-    g_object_class_install_property (gobject_class, PROP_DISPLAY_ID,
-        g_param_spec_string ("display-id", "Display ID", "User Displayable id for this key",
-                             "", G_PARAM_READABLE));
-                      
-    g_object_class_install_property (gobject_class, PROP_SIMPLE_NAME,
-        g_param_spec_string ("simple-name", "Simple Name", "Simple name for this key",
-                             "", G_PARAM_READABLE));
-                      
     g_object_class_install_property (gobject_class, PROP_FINGERPRINT,
         g_param_spec_string ("fingerprint", "Fingerprint", "Unique fingerprint for this key",
                              "", G_PARAM_READABLE));
@@ -327,10 +244,6 @@ seahorse_ssh_key_class_init (SeahorseSSHKeyClass *klass)
     g_object_class_install_property (gobject_class, PROP_LENGTH,
         g_param_spec_uint ("length", "Length of", "The length of this key",
                            0, G_MAXUINT, 0, G_PARAM_READABLE));
-                           
-    g_object_class_install_property (gobject_class, PROP_STOCK_ID,
-        g_param_spec_string ("stock-id", "The stock icon", "The stock icon id",
-                             NULL, G_PARAM_READABLE));
 }
 
 /* -----------------------------------------------------------------------------
@@ -341,7 +254,7 @@ SeahorseSSHKey*
 seahorse_ssh_key_new (SeahorseSource *sksrc, SeahorseSSHKeyData *data)
 {
     SeahorseSSHKey *skey;
-    skey = g_object_new (SEAHORSE_TYPE_SSH_KEY, "key-source", sksrc, 
+    skey = g_object_new (SEAHORSE_TYPE_SSH_KEY, "source", sksrc, 
                          "key-data", data, NULL);
     return skey;
 }
@@ -414,3 +327,18 @@ seahorse_ssh_key_get_cannonical_id (const gchar *id)
     return ret;
 }
 
+gchar*
+seahorse_ssh_key_get_fingerprint (SeahorseSSHKey *self)
+{
+	gchar *fpr;
+	g_object_get (self, "fingerprint", &fpr, NULL);
+	return fpr;	
+}
+
+SeahorseValidity
+seahorse_ssh_key_get_trust (SeahorseSSHKey *self)
+{
+    guint validity;
+    g_object_get (self, "trust", &validity, NULL);
+    return validity;
+}

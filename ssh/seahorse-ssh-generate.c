@@ -135,7 +135,7 @@ on_response (GtkDialog *dialog, guint response, SeahorseWidget *swidget)
         bits = 2048;
     }
     
-    src = SEAHORSE_SSH_SOURCE (g_object_get_data (G_OBJECT (swidget), "key-source"));
+    src = SEAHORSE_SSH_SOURCE (g_object_get_data (G_OBJECT (swidget), "source"));
     g_return_if_fail (SEAHORSE_IS_SSH_SOURCE (src));
     
     /* We start creation */
@@ -176,7 +176,7 @@ seahorse_ssh_generate_show (SeahorseSSHSource *src, GtkWindow *parent)
     gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
     
     g_object_ref (src);
-    g_object_set_data_full (G_OBJECT (swidget), "key-source", src, g_object_unref);
+    g_object_set_data_full (G_OBJECT (swidget), "source", src, g_object_unref);
     
     g_signal_connect (G_OBJECT (seahorse_widget_get_widget (swidget, "algorithm-choice")), "changed", 
                     G_CALLBACK (on_change), swidget);

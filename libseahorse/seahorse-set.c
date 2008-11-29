@@ -73,7 +73,7 @@ remove_object  (SeahorseObject *sobj, gpointer closure, SeahorseSet *skset)
 static gboolean
 maybe_add_object (SeahorseSet *skset, SeahorseObject *sobj)
 {
-    if (!seahorse_context_owns_object (SCTX_APP (), sobj))
+    if (seahorse_object_get_context (sobj) != SCTX_APP ())
         return FALSE;
 
     if (g_hash_table_lookup (skset->pv->objects, sobj))
@@ -121,8 +121,7 @@ object_removed (SeahorseContext *sctx, SeahorseObject *sobj, SeahorseSet *skset)
 }
 
 static void
-object_changed (SeahorseContext *sctx, SeahorseObject *sobj, SeahorseObjectChange change,
-                SeahorseSet *skset)
+object_changed (SeahorseContext *sctx, SeahorseObject *sobj, SeahorseSet *skset)
 {
     gpointer closure = g_hash_table_lookup (skset->pv->objects, sobj);
 
@@ -137,7 +136,7 @@ object_changed (SeahorseContext *sctx, SeahorseObject *sobj, SeahorseObjectChang
             if (closure == GINT_TO_POINTER (TRUE))
                 closure = NULL;
             
-            g_signal_emit (skset, signals[CHANGED], 0, sobj, change, closure);
+            g_signal_emit (skset, signals[CHANGED], 0, sobj, closure);
         }
         
     /* Not in our set yet */
@@ -256,7 +255,7 @@ seahorse_set_class_init (SeahorseSetClass *klass)
     
     signals[CHANGED] = g_signal_new ("changed", SEAHORSE_TYPE_SET, 
                 G_SIGNAL_RUN_FIRST, G_STRUCT_OFFSET (SeahorseSetClass, changed),
-                NULL, NULL, seahorse_marshal_VOID__OBJECT_UINT_POINTER, G_TYPE_NONE, 3, SEAHORSE_TYPE_OBJECT, G_TYPE_UINT, G_TYPE_POINTER);
+                NULL, NULL, seahorse_marshal_VOID__OBJECT_POINTER, G_TYPE_NONE, 2, SEAHORSE_TYPE_OBJECT, G_TYPE_POINTER);
                 
     signals[SET_CHANGED] = g_signal_new ("set-changed", SEAHORSE_TYPE_SET,
                 G_SIGNAL_RUN_FIRST, G_STRUCT_OFFSET (SeahorseSetClass, set_changed),

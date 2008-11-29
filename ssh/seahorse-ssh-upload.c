@@ -86,7 +86,7 @@ upload_via_source (const gchar *user, const gchar *host, const gchar *port, GLis
     SeahorseMultiOperation *mop = NULL;
     SeahorseOperation *op = NULL;
     SeahorseSource *sksrc;
-    SeahorseKey *skey;
+    SeahorseObject *object;
     GList *next;
     
     seahorse_util_objects_sort (keys);
@@ -97,11 +97,11 @@ upload_via_source (const gchar *user, const gchar *host, const gchar *port, GLis
         /* Break off one set (same keysource) */
         next = seahorse_util_objects_splice (keys);
         
-        g_assert (SEAHORSE_IS_KEY (keys->data));
-        skey = SEAHORSE_KEY (keys->data);
+        g_assert (SEAHORSE_IS_OBJECT (keys->data));
+        object = SEAHORSE_OBJECT (keys->data);
 
         /* Upload via this key source */        
-        sksrc = seahorse_key_get_source (skey);
+        sksrc = seahorse_object_get_source (object);
         g_return_val_if_fail (sksrc != NULL, NULL);
         
         g_return_val_if_fail (SEAHORSE_IS_SSH_SOURCE (sksrc), NULL);

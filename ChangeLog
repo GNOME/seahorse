@@ -1,3 +1,99 @@
+2008-11-29  Stef Walter  <stef@memberwebs.com>
+
+	* common/Makefile.am:
+	* common/seahorse-bind.c: (added)
+	* common/seahorse-bind.h: (added)
+	Added generic property binding from one object to another.
+	
+	* daemon/seahorse-service.c:
+	* daemon/seahorse-service-crypto.c:
+	* daemon/seahorse-service-keyset.c:
+	* gkr/seahorse-gkr-commands.c:
+	* gkr/seahorse-gkr-item.c:
+	* gkr/seahorse-gkr-item.h:
+	* gkr/seahorse-gkr-item-properties.c:
+	* gkr/seahorse-gkr-operation.c:
+	* gkr/seahorse-gkr-source.c:
+	* libseahorse/libseahorse.vapi:
+	* libseahorse/libseahorse-c.vapi:
+	* libseahorse/Makefile.am:
+	* libseahorse/seahorse-combo-keys.c:
+	* libseahorse/seahorse-combo-keys.h:
+	* libseahorse/seahorse-context.c:
+	* libseahorse/seahorse-context.h:
+	* libseahorse/seahorse-gtkstock.h:
+	* libseahorse/seahorse-key.c: (removed)
+	* libseahorse/seahorse-key.h: (removed)
+	* libseahorse/seahorse-key-model.c: (moved to seahorse-object-model.c)
+	* libseahorse/seahorse-key-model.h: (moved to seahorse-object-model.h)
+	* libseahorse/seahorse-keyserver-control.c:
+	* libseahorse/seahorse-key-widget.c: (moved to seahorse-object-widget.c)
+	* libseahorse/seahorse-key-widget.h: (moved to seahorse-object-widget.h)
+	* libseahorse/seahorse-notification.c:
+	* libseahorse/seahorse-object.c:
+	* libseahorse/seahorse-object.h:
+	* libseahorse/seahorse-object.vala: (removed)
+	* libseahorse/seahorse-object-model.c: (moved from seahorse-key-model.c)
+	* libseahorse/seahorse-object-model.h: (moved from seahorse-key-model.h)
+	* libseahorse/seahorse-object-widget.c: (moved from seahorse-key-widget.c)
+	* libseahorse/seahorse-object-widget.h: (moved from seahorse-key-widget.h)
+	* libseahorse/seahorse-progress.c:
+	* libseahorse/seahorse-set.c:
+	* libseahorse/seahorse-set.h:
+	* libseahorse/seahorse-set-model.c:
+	* libseahorse/seahorse-source.c:
+	* libseahorse/seahorse-types.c:
+	* libseahorse/seahorse-types.h:
+	* libseahorse/seahorse-types.vala: (removed)
+	* libseahorse/seahorse-unknown.c: (moved from seahorse-unknown-key.c)
+	* libseahorse/seahorse-unknown.h: (moved from seahorse-unknown-key.h)
+	* libseahorse/seahorse-unknown-key.c: (moved to seahorse-unknown.c)
+	* libseahorse/seahorse-unknown-key.h: (moved from seahorse-unknown.h)
+	* libseahorse/seahorse-unknown-source.c:
+	* libseahorse/seahorse-util.c:
+	* libseahorse/seahorse-util.h:
+	* pgp/libseahorse-pgp-c.vapi:
+	* pgp/seahorse-hkp-source.c:
+	* pgp/seahorse-ldap-source.c:
+	* pgp/seahorse-pgp-add-subkey.c:
+	* pgp/seahorse-pgp-add-uid.c:
+	* pgp/seahorse-pgp-commands.vala:
+	* pgp/seahorse-pgp-expires.c:
+	* pgp/seahorse-pgp-generate.c:
+	* pgp/seahorse-pgp-key.c:
+	* pgp/seahorse-pgp-key.h:
+	* pgp/seahorse-pgp-key-op.c:
+	* pgp/seahorse-pgp-key-properties.c:
+	* pgp/seahorse-pgp-keysets.c:
+	* pgp/seahorse-pgp-revoke.c:
+	* pgp/seahorse-pgp-sign.c:
+	* pgp/seahorse-pgp-source.c:
+	* pgp/seahorse-pgp-uid.c:
+	* pgp/seahorse-pgp-uid.h:
+	* pgp/seahorse-server-source.c:
+	* pgp/seahorse-signer.c:
+	* pkcs11/seahorse-pkcs11-certificate.c:
+	* pkcs11/seahorse-pkcs11-certificate.h:
+	* pkcs11/seahorse-pkcs11-commands.c:
+	* src/seahorse-key-manager.vala:
+	* src/seahorse-key-manager-store.c:
+	* src/seahorse-keyserver-results.vala:
+	* src/seahorse-keyserver-sync.c:
+	* src/seahorse-viewer.c:
+	* ssh/libseahorse-ssh-c.vapi:
+	* ssh/seahorse-ssh-commands.vala:
+	* ssh/seahorse-ssh-generate.c:
+	* ssh/seahorse-ssh-key.c:
+	* ssh/seahorse-ssh-key.h:
+	* ssh/seahorse-ssh-key-properties.c:
+	* ssh/seahorse-ssh-operation.c:
+	* ssh/seahorse-ssh-source.c:
+	* ssh/seahorse-ssh-upload.c:
+	Major refactoring. Remove SeahorseKey and use SeahorseObject directly. Remove the 
+	changed signal from keys, and use GObject 'notify' signal instead. Standardize 
+	set of properties, with all the common properties handled by SeahorseObject. 
+	Cleanup concept of child objects. 
+	
 2008-11-23  Stef Walter  <stef@memberwebs.com>
 	
 	* gkr/libseahorse-gkr-c.vapi: (removed)

@@ -19,31 +19,15 @@
  * Boston, MA 02111-1307, USA.
  */
 
-/**
- * SeahorseSSHKey: Represents a SSH key 
- * 
- * - Derived from SeahorseKey
- * 
- * Properties:
- *   display-name: (gchar*) The display name for the key.
- *   display-id: (gchar*) The display id for the key.
- *   simple-name: (gchar*) Shortened display name for the key (for use in files etc...).
- *   fingerprint: (gchar*) Displayable fingerprint for the key.
- *   validity: (SeahorseValidity) The key validity.
- *   trust: (SeahorseValidity) Trust for the key.
- *   expires: (gulong) Date this key expires or 0.
- *   length: (guint) The length of the key in bits.
- *   stock-id: (string) The stock icon id.
- */
- 
 #ifndef __SEAHORSE_SSH_KEY_H__
 #define __SEAHORSE_SSH_KEY_H__
 
 #include <gtk/gtk.h>
 
-#include "seahorse-key.h"
-#include "seahorse-source.h"
+#include "seahorse-object.h"
 #include "seahorse-operation.h"
+#include "seahorse-source.h"
+#include "seahorse-validity.h"
 
 #include "seahorse-ssh-module.h"
 #include "seahorse-ssh-key-data.h"
@@ -63,7 +47,7 @@ typedef struct _SeahorseSSHKeyClass SeahorseSSHKeyClass;
 typedef struct _SeahorseSSHKeyPrivate SeahorseSSHKeyPrivate;
 
 struct _SeahorseSSHKey {
-    SeahorseKey	parent;
+    SeahorseObject	parent;
 
     /*< public >*/
     struct _SeahorseSSHKeyData *keydata;
@@ -74,7 +58,7 @@ struct _SeahorseSSHKey {
 
 
 struct _SeahorseSSHKeyClass {
-    SeahorseKeyClass            parent_class;
+    SeahorseObjectClass            parent_class;
 };
 
 SeahorseSSHKey*         seahorse_ssh_key_new                  (SeahorseSource *sksrc, 
@@ -94,5 +78,8 @@ SeahorseOperation*      seahorse_ssh_key_op_change_passphrase (SeahorseSSHKey *s
 
 GQuark                  seahorse_ssh_key_get_cannonical_id    (const gchar *id);
 
+SeahorseValidity        seahorse_ssh_key_get_trust            (SeahorseSSHKey *self);
+
+gchar*                  seahorse_ssh_key_get_fingerprint      (SeahorseSSHKey *self);
 
 #endif /* __SEAHORSE_KEY_H__ */

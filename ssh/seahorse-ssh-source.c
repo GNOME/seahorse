@@ -142,24 +142,6 @@ check_file_for_ssh_private (SeahorseSSHSource *ssrc, const gchar *filename)
 }
 
 static void
-key_changed (SeahorseKey *skey, SeahorseKeyChange change, SeahorseSource *sksrc)
-{
-    /* TODO: We need to fix these key change flags. Currently the only thing
-     * that sets 'ALL' is when we replace a key in an skey. We don't 
-     * need to reload in that case */
-    
-    if (change != SKEY_CHANGE_ALL)
-        seahorse_source_load_async (sksrc, seahorse_key_get_keyid (skey));
-}
-
-static void
-key_destroyed (SeahorseKey *skey, SeahorseSource *sksrc)
-{
-    g_signal_handlers_disconnect_by_func (skey, key_changed, sksrc);
-    g_signal_handlers_disconnect_by_func (skey, key_destroyed, sksrc);
-}
-
-static void
 cancel_scheduled_refresh (SeahorseSSHSource *ssrc)
 {
     if (ssrc->priv->scheduled_refresh != 0) {
@@ -170,7 +152,7 @@ cancel_scheduled_refresh (SeahorseSSHSource *ssrc)
 }
 
 static void
-remove_key_from_context (gpointer hkey, SeahorseKey *dummy, SeahorseSSHSource *ssrc)
+remove_key_from_context (gpointer hkey, SeahorseObject *dummy, SeahorseSSHSource *ssrc)
 {
     GQuark keyid = GPOINTER_TO_UINT (hkey);
     SeahorseObject *sobj;
@@ -321,11 +303,7 @@ ssh_key_from_data (SeahorseSSHSource *ssrc, LoadContext *ctx,
     /* Create a new key */        
     g_assert (keydata);
     skey = seahorse_ssh_key_new (sksrc, keydata);
-            
-    /* We listen in to get notified of changes on this key */
-    g_signal_connect (skey, "changed", G_CALLBACK (key_changed), sksrc);
-    g_signal_connect (skey, "destroy", G_CALLBACK (key_destroyed), sksrc);
-        
+
     seahorse_context_take_object (SCTX_APP (), SEAHORSE_OBJECT (skey));
     return skey;
 }
@@ -593,7 +571,7 @@ seahorse_ssh_source_export (SeahorseSource *sksrc, GList *keys,
     gchar *results = NULL;
     gchar *raw = NULL;
     GError *error = NULL;
-    SeahorseKey *skey;
+    SeahorseObject *object;
     GList *l;
     gsize written;
     
@@ -601,15 +579,15 @@ seahorse_ssh_source_export (SeahorseSource *sksrc, GList *keys,
     g_return_val_if_fail (G_IS_OUTPUT_STREAM (output), NULL);
     
     for (l = keys; l; l = g_list_next (l)) {
-        skey = SEAHORSE_KEY (l->data);
+        object = SEAHORSE_OBJECT (l->data);
         
-        g_assert (SEAHORSE_IS_SSH_KEY (skey));
+        g_assert (SEAHORSE_IS_SSH_KEY (object));
         
         results = NULL;
         raw = NULL;
         
         keydata = NULL;
-        g_object_get (skey, "key-data", &keydata, NULL);
+        g_object_get (object, "key-data", &keydata, NULL);
         g_return_val_if_fail (keydata, NULL);
         
         /* We should already have the data loaded */
@@ -823,7 +801,7 @@ seahorse_ssh_source_class_init (SeahorseSSHSourceClass *klass)
  
     g_object_class_install_property (gobject_class, PROP_KEY_TYPE,
         g_param_spec_uint ("key-type", "Key Type", "Key type that originates from this key source.", 
-                           0, G_MAXUINT, SKEY_UNKNOWN, G_PARAM_READABLE));
+                           0, G_MAXUINT, SEAHORSE_TAG_INVALID, G_PARAM_READABLE));
 
     g_object_class_install_property (gobject_class, PROP_KEY_DESC,
         g_param_spec_string ("key-desc", "Key Desc", "Description for keys that originate here.",
@@ -837,7 +815,7 @@ seahorse_ssh_source_class_init (SeahorseSSHSourceClass *klass)
         g_param_spec_string ("base-directory", "Key directory", "Directory where the keys are stored",
                              NULL, G_PARAM_READABLE));
     
-	seahorse_registry_register_type (NULL, SEAHORSE_TYPE_SSH_SOURCE, "key-source", "local", SEAHORSE_SSH_STR, NULL);
+	seahorse_registry_register_type (NULL, SEAHORSE_TYPE_SSH_SOURCE, "source", "local", SEAHORSE_SSH_STR, NULL);
 }
 
 /* -----------------------------------------------------------------------------

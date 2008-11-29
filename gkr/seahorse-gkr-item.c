@@ -34,10 +34,10 @@
 
 /* For gnome-keyring secret type ids */
 #ifdef WITH_PGP
-#include "pgp/seahorse-pgp-key.h"
+#include "pgp/seahorse-pgp.h"
 #endif
 #ifdef WITH_SSH
-#include "ssh/seahorse-ssh-key.h"
+#include "ssh/seahorse-ssh.h"
 #endif 
 
 /* XXX Copied from libgnomeui */
@@ -51,18 +51,10 @@ enum {
     PROP_ITEM_INFO,
     PROP_ITEM_ATTRIBUTES,
     PROP_ITEM_ACL,
-    PROP_DISPLAY_NAME,
-    PROP_DISPLAY_ID,
-    PROP_SIMPLE_NAME,
-    PROP_FINGERPRINT,
-    PROP_VALIDITY,
-    PROP_TRUST,
-    PROP_EXPIRES,
-    PROP_LENGTH,
-    PROP_STOCK_ID
+    PROP_USE
 };
 
-G_DEFINE_TYPE (SeahorseGkrItem, seahorse_gkr_item, SEAHORSE_TYPE_KEY);
+G_DEFINE_TYPE (SeahorseGkrItem, seahorse_gkr_item, SEAHORSE_TYPE_OBJECT);
 
 /* -----------------------------------------------------------------------------
  * INTERNAL HELPERS
@@ -227,78 +219,11 @@ calc_network_item_markup (SeahorseGkrItem *git)
     return ret;
 }
 
-static void
-changed_key (SeahorseGkrItem *git)
-{
-    SeahorseKey *skey = SEAHORSE_KEY (git);
-    SeahorseObject *obj = SEAHORSE_OBJECT (git);
-    gchar *secret;
-
-    if (!git->info) {
-        
-        obj->_location = SEAHORSE_LOCATION_INVALID;
-        obj->_usage = SEAHORSE_USAGE_NONE;
-        skey->loaded = SKEY_INFO_NONE;
-        obj->_flags = SKEY_FLAG_DISABLED;
-        skey->keydesc = _("Invalid");
-        skey->rawid = NULL;
-        obj->_id = 0;
-        return;
-    } 
-
-    WITH_SECURE_MEM ((secret = gnome_keyring_item_info_get_secret (git->info)));
-    skey->loaded = (secret == NULL) ? SKEY_INFO_BASIC : SKEY_INFO_COMPLETE;
-    g_free (secret);
-
-    obj->_tag = SEAHORSE_GKR;
-    obj->_location = SEAHORSE_LOCATION_LOCAL;
-    obj->_usage = SEAHORSE_USAGE_CREDENTIALS;
-    obj->_flags = 0;
-    obj->_id = seahorse_gkr_item_get_cannonical (git->item_id);
-
-    if (is_network_item (git, "http")) 
-        skey->keydesc = _("Web Password");
-    else if (is_network_item (git, NULL)) 
-        skey->keydesc = _("Network Password");
-    else
-        skey->keydesc = _("Password");
-    
-    seahorse_object_fire_changed (SEAHORSE_OBJECT (skey), SEAHORSE_OBJECT_CHANGE_ALL);
-}
-
-/* -----------------------------------------------------------------------------
- * OBJECT 
- */
-
-static void
-seahorse_gkr_item_init (SeahorseGkrItem *git)
-{
-
-}
-
-static guint 
-seahorse_gkr_item_get_num_names (SeahorseKey *git)
-{
-    /* Always one name */
-    return 1;
-}
-
 static gchar* 
-seahorse_gkr_item_get_name (SeahorseKey *skey, guint index)
+calc_name_markup (SeahorseGkrItem *git)
 {
-    SeahorseGkrItem *git = SEAHORSE_GKR_ITEM (skey);
-    
-    g_return_val_if_fail (index == 0, NULL);
-    return calc_display_name (git, TRUE);
-}
-
-static gchar* 
-seahorse_gkr_item_get_name_markup (SeahorseKey *skey, guint index)
-{
-    SeahorseGkrItem *git = SEAHORSE_GKR_ITEM (skey);
     gchar *t, *markup = NULL;
     
-    g_return_val_if_fail (index == 0, NULL);
     g_return_val_if_fail (git->info != NULL, NULL);
     
     /* Only do our special markup for network passwords */
@@ -314,18 +239,88 @@ seahorse_gkr_item_get_name_markup (SeahorseKey *skey, guint index)
     return markup;
 }
 
-static gchar* 
-seahorse_gkr_item_get_name_cn (SeahorseKey *skey, guint index)
+static void
+changed_key (SeahorseGkrItem *git)
 {
-    g_return_val_if_fail (index == 0, NULL);
-    return NULL;
+	const gchar *description;
+	gboolean loaded;
+	gchar *secret;
+	gchar *display;
+	gchar *markup;
+	gchar *identifier;
+	const gchar *icon;
+
+	if (!git->info) {
+        
+		g_object_set (git,
+		              "id", 0,
+		              "label", "",
+		              "icon", NULL,
+		              "markup", "",
+		              "identifier", "",
+		              "description", _("Invalid"),
+		              "flags", SEAHORSE_FLAG_DISABLED,
+		              NULL);
+		return;
+	}
+
+	WITH_SECURE_MEM ((secret = gnome_keyring_item_info_get_secret (git->info)));
+	loaded = (secret == NULL);
+	g_free (secret);
+	
+	if (is_network_item (git, "http")) 
+		description = _("Web Password");
+	else if (is_network_item (git, NULL)) 
+		description = _("Network Password");
+	else
+		description = _("Password");
+
+	display = calc_display_name (git, TRUE);
+	markup = calc_name_markup(git);
+	identifier = g_strdup_printf ("%u", git->item_id);
+
+	/* We use a pointer so we don't copy the string every time */
+	switch (git->info ? gnome_keyring_item_info_get_type (git->info) : -1)
+	{
+	case GNOME_KEYRING_ITEM_GENERIC_SECRET:
+		icon = GNOME_STOCK_AUTHENTICATION;
+		break;
+	case GNOME_KEYRING_ITEM_NETWORK_PASSWORD:
+		icon = is_network_item (git, "http") ? SEAHORSE_THEMED_WEBBROWSER : GTK_STOCK_NETWORK;
+		break;
+	case GNOME_KEYRING_ITEM_NOTE:
+		icon = GNOME_STOCK_BOOK_OPEN;
+		break;
+	default:
+        	icon = GNOME_STOCK_BLANK;
+        	break;
+        }
+	
+	g_object_set (git,
+	              "id", seahorse_gkr_item_get_cannonical (git->item_id),
+	              "label", display,
+	              "icon", icon,
+	              "markup", markup,
+	              "identifier", identifier,
+	              "description", description,
+	              "flags", 0,
+	              NULL);
+	
+	g_free (display);
+	g_free (markup);
+	g_free (identifier);
 }
 
-static SeahorseValidity  
-seahorse_gkr_item_get_name_validity  (SeahorseKey *skey, guint index)
+/* -----------------------------------------------------------------------------
+ * OBJECT 
+ */
+
+static void
+seahorse_gkr_item_init (SeahorseGkrItem *git)
 {
-    g_return_val_if_fail (index == 0, SEAHORSE_VALIDITY_UNKNOWN);
-    return SEAHORSE_VALIDITY_FULL;
+	g_object_set (git, 
+	              "usage", SEAHORSE_USAGE_CREDENTIALS,
+	              NULL);
 }
 
 static void
@@ -333,7 +328,6 @@ seahorse_gkr_item_get_property (GObject *object, guint prop_id,
                                 GValue *value, GParamSpec *pspec)
 {
     SeahorseGkrItem *git = SEAHORSE_GKR_ITEM (object);
-    SeahorseKey *skey = SEAHORSE_KEY (object);
     
     switch (prop_id) {
     case PROP_ITEM_ID:
@@ -348,50 +342,9 @@ seahorse_gkr_item_get_property (GObject *object, guint prop_id,
     case PROP_ITEM_ACL:
     	g_value_set_pointer (value, git->acl);
     	break;
-    case PROP_DISPLAY_NAME:
-        g_value_take_string (value, seahorse_gkr_item_get_name (skey, 0));
-        break;
-    case PROP_DISPLAY_ID:
-        g_value_set_string (value, seahorse_key_get_short_keyid (skey));
-        break;
-    case PROP_SIMPLE_NAME:
-        g_value_take_string (value, seahorse_gkr_item_get_name (skey, 0));
-        break;
-    case PROP_FINGERPRINT:
-        g_value_set_string (value, seahorse_key_get_short_keyid (skey));
-        break;
-    case PROP_VALIDITY:
-        g_value_set_uint (value, SEAHORSE_VALIDITY_FULL);
-        break;
-    case PROP_TRUST:
-        g_value_set_uint (value, SEAHORSE_VALIDITY_UNKNOWN);
-        break;
-    case PROP_EXPIRES:
-        g_value_set_ulong (value, 0);
-        break;
-    case PROP_LENGTH:
-        g_value_set_uint (value, 0);
-        break;
-
-    case PROP_STOCK_ID:
-        /* We use a pointer so we don't copy the string every time */
-        switch (git->info ? gnome_keyring_item_info_get_type (git->info) : -1)
-        {
-        case GNOME_KEYRING_ITEM_GENERIC_SECRET:
-            g_value_set_string (value, GNOME_STOCK_AUTHENTICATION);
-            break;
-        case GNOME_KEYRING_ITEM_NETWORK_PASSWORD:
-            g_value_set_string (value, is_network_item (git, "http") ? 
-                    SEAHORSE_THEMED_WEBBROWSER : GTK_STOCK_NETWORK);
-            break;
-        case GNOME_KEYRING_ITEM_NOTE:
-            g_value_set_string (value, GNOME_STOCK_BOOK_OPEN);
-            break;
-        default:
-            g_value_set_string (value, GNOME_STOCK_BLANK);
-            break;
-        }        
-        break;
+    case PROP_USE:
+	g_value_set_uint (value, seahorse_gkr_item_get_use (git));
+	break;
     }
 }
 
@@ -454,7 +407,6 @@ static void
 seahorse_gkr_item_class_init (SeahorseGkrItemClass *klass)
 {
     GObjectClass *gobject_class;
-    SeahorseKeyClass *key_class;
     
     seahorse_gkr_item_parent_class = g_type_class_peek_parent (klass);
     gobject_class = G_OBJECT_CLASS (klass);
@@ -462,14 +414,6 @@ seahorse_gkr_item_class_init (SeahorseGkrItemClass *klass)
     gobject_class->finalize = seahorse_gkr_item_object_finalize;
     gobject_class->set_property = seahorse_gkr_item_set_property;
     gobject_class->get_property = seahorse_gkr_item_get_property;
-    
-    key_class = SEAHORSE_KEY_CLASS (klass);
-    
-    key_class->get_num_names = seahorse_gkr_item_get_num_names;
-    key_class->get_name = seahorse_gkr_item_get_name;
-    key_class->get_name_markup = seahorse_gkr_item_get_name_markup;
-    key_class->get_name_cn = seahorse_gkr_item_get_name_cn;
-    key_class->get_name_validity = seahorse_gkr_item_get_name_validity;
     
     g_object_class_install_property (gobject_class, PROP_ITEM_ID,
         g_param_spec_uint ("item-id", "Item ID", "GNOME Keyring Item ID", 
@@ -487,42 +431,9 @@ seahorse_gkr_item_class_init (SeahorseGkrItemClass *klass)
         g_param_spec_pointer ("item-acl", "Item ACL", "GNOME Keyring Item ACL",
                               G_PARAM_READWRITE));
 
-    g_object_class_install_property (gobject_class, PROP_DISPLAY_NAME,
-        g_param_spec_string ("display-name", "Display Name", "User Displayable name for this key",
-                             "", G_PARAM_READABLE));
-                      
-    g_object_class_install_property (gobject_class, PROP_DISPLAY_ID,
-        g_param_spec_string ("display-id", "Display ID", "User Displayable id for this key",
-                             "", G_PARAM_READABLE));
-                      
-    g_object_class_install_property (gobject_class, PROP_SIMPLE_NAME,
-        g_param_spec_string ("simple-name", "Simple Name", "Simple name for this key",
-                             "", G_PARAM_READABLE));
-                      
-    g_object_class_install_property (gobject_class, PROP_FINGERPRINT,
-        g_param_spec_string ("fingerprint", "Fingerprint", "Unique fingerprint for this key",
-                             "", G_PARAM_READABLE));
-
-    g_object_class_install_property (gobject_class, PROP_VALIDITY,
-        g_param_spec_uint ("validity", "Validity", "Validity of this key",
-                           0, G_MAXUINT, 0, G_PARAM_READABLE));
-
-    g_object_class_install_property (gobject_class, PROP_TRUST,
-        g_param_spec_uint ("trust", "Trust", "Trust in this key",
-                           0, G_MAXUINT, 0, G_PARAM_READABLE));
-
-    g_object_class_install_property (gobject_class, PROP_EXPIRES,
-        g_param_spec_ulong ("expires", "Expires On", "Date this key expires on",
-                           0, G_MAXULONG, 0, G_PARAM_READABLE));
-
-    g_object_class_install_property (gobject_class, PROP_LENGTH,
-        g_param_spec_uint ("length", "Length", "The length of this key.",
-                           0, G_MAXUINT, 0, G_PARAM_READABLE));
-                           
-    g_object_class_install_property (gobject_class, PROP_STOCK_ID,
-        g_param_spec_string ("stock-id", "The stock icon", "The stock icon id",
-                             NULL, G_PARAM_READABLE));
-
+    g_object_class_install_property (gobject_class, PROP_USE,
+        g_param_spec_uint ("use", "Use", "Item is used for", 
+                           0, G_MAXUINT, 0, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 }
 
 /* -----------------------------------------------------------------------------
@@ -534,7 +445,7 @@ seahorse_gkr_item_new (SeahorseSource *sksrc, guint32 item_id, GnomeKeyringItemI
                        GnomeKeyringAttributeList *attributes, GList *acl)
 {
     SeahorseGkrItem *git;
-    git = g_object_new (SEAHORSE_TYPE_GKR_ITEM, "key-source", sksrc, 
+    git = g_object_new (SEAHORSE_TYPE_GKR_ITEM, "source", sksrc, 
                         "item-id", item_id, "item-info", info, 
                         "item-attributes", attributes, "item-acl", acl, NULL);
     return git;
@@ -543,25 +454,17 @@ seahorse_gkr_item_new (SeahorseSource *sksrc, guint32 item_id, GnomeKeyringItemI
 gchar*
 seahorse_gkr_item_get_description  (SeahorseGkrItem *git)
 {
-    return calc_display_name (git, FALSE);
+	g_return_val_if_fail (SEAHORSE_IS_GKR_ITEM (git), NULL);
+	return calc_display_name (git, FALSE);
 }
 
 const gchar*
 seahorse_gkr_item_get_attribute (SeahorseGkrItem *git, const gchar *name)
 {
-    guint i;
-    
+    g_return_val_if_fail (SEAHORSE_IS_GKR_ITEM (git), NULL);
     if (!git->attributes)
         return NULL;
-    
-    for (i = 0; i < git->attributes->len; i++) {
-        GnomeKeyringAttribute *attr = &(gnome_keyring_attribute_list_index (git->attributes, i));
-        if (g_ascii_strcasecmp (name, attr->name) == 0 && 
-            attr->type == GNOME_KEYRING_ATTRIBUTE_TYPE_STRING)
-            return attr->value.string;
-    }
-    
-    return NULL;
+    return seahorse_gkr_find_string_attribute (git->attributes, name);
 }
 
 SeahorseGkrUse
@@ -580,11 +483,11 @@ seahorse_gkr_item_get_use (SeahorseGkrItem *git)
         val = seahorse_gkr_item_get_attribute (git, "seahorse-key-type");
         if (val) {
 #ifdef WITH_PGP
-        	if (strcmp (val, SEAHORSE_PGP_STR) == 0)
+        	if (strcmp (val, SEAHORSE_PGP_TYPE_STR) == 0)
         		return SEAHORSE_GKR_USE_PGP;
 #endif
 #ifdef WITH_SSH
-        	if (strcmp (val, SEAHORSE_SSH_STR) == 0)
+        	if (strcmp (val, SEAHORSE_SSH_TYPE_STR) == 0)
         		return SEAHORSE_GKR_USE_SSH;
 #endif
         }
@@ -604,3 +507,20 @@ seahorse_gkr_item_get_cannonical (guint32 item_id)
     return g_quark_from_string (buf);
 }
 
+const gchar*
+seahorse_gkr_find_string_attribute (GnomeKeyringAttributeList *attrs, const gchar *name)
+{
+	guint i;
+	
+	g_return_val_if_fail (attrs, NULL);
+	g_return_val_if_fail (name, NULL);
+
+	for (i = 0; i < attrs->len; i++) {
+		GnomeKeyringAttribute *attr = &(gnome_keyring_attribute_list_index (attrs, i));
+		if (g_ascii_strcasecmp (name, attr->name) == 0 && 
+				attr->type == GNOME_KEYRING_ATTRIBUTE_TYPE_STRING)
+			return attr->value.string;
+	}
+	    
+	return NULL;
+}

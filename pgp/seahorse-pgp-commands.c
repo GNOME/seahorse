@@ -148,7 +148,7 @@ static SeahorseOperation* seahorse_pgp_commands_real_delete_objects (SeahorseCom
 	do {
 		char* _tmp6;
 		_tmp6 = NULL;
-		message = (_tmp6 = g_strdup_printf (_ ("Are you sure you want to permanently delete %s?"), seahorse_object_get_display_name (((SeahorseObject*) (((SeahorseObject*) (to_delete->data)))))), (message = (g_free (message), NULL)), _tmp6);
+		message = (_tmp6 = g_strdup_printf (_ ("Are you sure you want to permanently delete %s?"), seahorse_object_get_label (((SeahorseObject*) (((SeahorseObject*) (to_delete->data)))))), (message = (g_free (message), NULL)), _tmp6);
 		break;
 	} while (0); else
 	do {

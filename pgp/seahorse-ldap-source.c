@@ -761,7 +761,6 @@ add_key (SeahorseLDAPSource *ssrc, gpgme_key_t key)
     if (prev != NULL) {
         g_return_if_fail (SEAHORSE_IS_PGP_KEY (prev));
         gpgmex_combine_keys (SEAHORSE_PGP_KEY (prev)->pubkey, key);
-        seahorse_object_fire_changed (prev, SKEY_CHANGE_UIDS);
         return;
     }
 
@@ -1296,7 +1295,7 @@ seahorse_ldap_source_load (SeahorseSource *src, GQuark keyid)
         return seahorse_operation_new_complete (NULL);
 
     lop = start_search_operation_fpr (SEAHORSE_LDAP_SOURCE (src), 
-                                      seahorse_key_get_rawid (keyid));
+                                      seahorse_pgp_key_get_rawid (keyid));
     g_return_val_if_fail (lop != NULL, NULL);
 
     seahorse_server_source_take_operation (SEAHORSE_SERVER_SOURCE (src),
@@ -1376,7 +1375,7 @@ seahorse_ldap_source_export_raw (SeahorseSource *sksrc, GSList *keyids,
     
     for (l = keyids; l; l = g_slist_next (l)) 
         fingerprints = g_slist_prepend (fingerprints, 
-            g_strdup (seahorse_key_get_rawid (GPOINTER_TO_UINT (l->data))));
+            g_strdup (seahorse_pgp_key_get_rawid (GPOINTER_TO_UINT (l->data))));
     fingerprints = g_slist_reverse (fingerprints);
 
     lop = start_get_operation_multiple (lsrc, fingerprints, output);
@@ -1406,13 +1405,13 @@ seahorse_ldap_source_class_init (SeahorseLDAPSourceClass *klass)
     
 	g_object_class_install_property (gobject_class, PROP_KEY_TYPE,
 	        g_param_spec_uint ("key-type", "Key Type", "Key type that originates from this key source.", 
-	                           0, G_MAXUINT, SKEY_UNKNOWN, G_PARAM_READABLE));
+	                           0, G_MAXUINT, SEAHORSE_TAG_INVALID, G_PARAM_READABLE));
 
 	g_object_class_install_property (gobject_class, PROP_KEY_DESC,
 	        g_param_spec_string ("key-desc", "Key Desc", "Description for keys that originate here.",
 	                             NULL, G_PARAM_READABLE));
 	    
-	seahorse_registry_register_type (NULL, SEAHORSE_TYPE_LDAP_SOURCE, "key-source", "remote", SEAHORSE_PGP_STR, NULL);
+	seahorse_registry_register_type (NULL, SEAHORSE_TYPE_LDAP_SOURCE, "source", "remote", SEAHORSE_PGP_STR, NULL);
 	seahorse_servers_register_type ("ldap", _("LDAP Key Server"), seahorse_ldap_is_valid_uri);
 }
 

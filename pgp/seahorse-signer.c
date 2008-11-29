@@ -42,7 +42,7 @@ seahorse_signer_get (GtkWindow *parent)
 {
     SeahorseWidget *swidget;
     SeahorseSet *skset;
-    SeahorseKey *skey = NULL;
+    SeahorseObject *object = NULL;
     GtkWidget *combo;
     GtkWidget *widget;
     gint response;
@@ -66,13 +66,13 @@ seahorse_signer_get (GtkWindow *parent)
     /* If only one key (probably default) then return it immediately */
     if (nkeys == 1) {
         GList *keys = seahorse_set_get_objects (skset);
-        skey = SEAHORSE_KEY (keys->data);
+        object = SEAHORSE_OBJECT (keys->data);
         
         g_list_free (keys);
         g_object_unref (skset);
 
-        g_assert (SEAHORSE_IS_PGP_KEY (skey));
-        return SEAHORSE_PGP_KEY (skey);
+        g_assert (SEAHORSE_IS_PGP_KEY (object));
+        return SEAHORSE_PGP_KEY (object);
     }
     
     swidget = seahorse_widget_new ("signer", parent);
@@ -105,14 +105,14 @@ seahorse_signer_get (GtkWindow *parent)
     }
 
     if (ok) {
-        skey = seahorse_combo_keys_get_active (GTK_COMBO_BOX (combo));
-        g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (skey), NULL);
+        object = seahorse_combo_keys_get_active (GTK_COMBO_BOX (combo));
+        g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (object), NULL);
 
         /* Save this as the last key signed with */
-        seahorse_gconf_set_string (SEAHORSE_LASTSIGNER_KEY, skey == NULL ? 
-                        "" : g_quark_to_string (seahorse_key_get_keyid (skey)));
+        seahorse_gconf_set_string (SEAHORSE_LASTSIGNER_KEY, object == NULL ? 
+                        "" : g_quark_to_string (seahorse_object_get_id (object)));
     }
     
     seahorse_widget_destroy (swidget);
-    return SEAHORSE_PGP_KEY (skey);
+    return SEAHORSE_PGP_KEY (object);
 }

@@ -19,26 +19,13 @@
  * Boston, MA 02111-1307, USA.
  */
 
-/**
- * SeahorsePGPUid: Represents a PGP UID loaded via GPGME.
- * 
- * - Derived from SeahorseKey
- * 
- * Properties:
- *   label: (gchar*) The display name for the UID.
- *   markup: 
- *   simple-name: 
- *   validity: (SeahorseValidity) The key validity.
- *   stock-id: 
- */
- 
 #ifndef __SEAHORSE_PGP_UID_H__
 #define __SEAHORSE_PGP_UID_H__
 
 #include <gtk/gtk.h>
 #include <gpgme.h>
 
-#include "seahorse-key.h"
+#include "seahorse-object.h"
 
 #include "pgp/seahorse-pgp-module.h"
 #include "pgp/seahorse-gpgmex.h"

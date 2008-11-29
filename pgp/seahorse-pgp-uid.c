@@ -34,12 +34,8 @@ enum {
 	PROP_PUBKEY,
 	PROP_USERID,
 	PROP_INDEX,
-	PROP_DISPLAY_NAME,
-	PROP_MARKUP,
-	PROP_SIMPLE_NAME,
 	PROP_VALIDITY,
-	PROP_VALIDITY_STR,
-	PROP_STOCK_ID
+	PROP_VALIDITY_STR
 };
 
 G_DEFINE_TYPE (SeahorsePGPUid, seahorse_pgp_uid, SEAHORSE_TYPE_OBJECT);
@@ -75,43 +71,53 @@ convert_string (const gchar *str, gboolean escape)
 }
 
 static void
-changed_uid (SeahorsePGPUid *uid)
+changed_uid (SeahorsePGPUid *self)
 {
-	SeahorseObject *obj = SEAHORSE_OBJECT (uid);
-    
-	obj->_id = 0;
-	obj->_tag = SEAHORSE_PGP;
-    
-	if (!uid->userid || !uid->pubkey) {
+	SeahorseObject *obj = SEAHORSE_OBJECT (self);
+	SeahorseLocation loc;
+	GQuark id = 0;
+	gchar *name, *markup;
+	
+	if (!self->userid || !self->pubkey) {
         
-		obj->_usage = SEAHORSE_USAGE_NONE;
-		obj->_flags = SKEY_FLAG_DISABLED;
-        
-	} else {
+		g_object_set (self,
+		              "id", id,
+		              "label", "",
+		              "usage", SEAHORSE_USAGE_NONE,
+		              "markup", "",
+		              "location", SEAHORSE_LOCATION_INVALID,
+		              "flags", SEAHORSE_FLAG_DISABLED,
+		              NULL);
+		return;
 		
-		/* The key id */
-		if (uid->pubkey->subkeys)
-			obj->_id = seahorse_pgp_key_get_cannonical_id (uid->pubkey->subkeys->keyid);
-        
-		/* The location */
-		if (uid->pubkey->keylist_mode & GPGME_KEYLIST_MODE_EXTERN && 
-		    obj->_location <= SEAHORSE_LOCATION_REMOTE)
-			obj->_location = SEAHORSE_LOCATION_REMOTE;
-        
-		else if (obj->_location <= SEAHORSE_LOCATION_LOCAL)
-			obj->_location = SEAHORSE_LOCATION_LOCAL;
-        
-		/* The type */
-		obj->_usage = SEAHORSE_USAGE_IDENTITY;
+	} 
+		
+	/* The key id */
+	if (self->pubkey->subkeys)
+		id = seahorse_pgp_key_get_cannonical_id (self->pubkey->subkeys->keyid);
 
-		/* The flags */
-		obj->_flags = 0;
-	}
-    
-	if (!obj->_id)
-		obj->_id = g_quark_from_string (SEAHORSE_PGP_STR ":UNKNOWN UNKNOWN ");
-    
-	seahorse_object_fire_changed (obj, SEAHORSE_OBJECT_CHANGE_ALL);
+	/* The location */
+	loc = seahorse_object_get_location (obj);
+	if (self->pubkey->keylist_mode & GPGME_KEYLIST_MODE_EXTERN && 
+	    loc <= SEAHORSE_LOCATION_REMOTE)
+		loc = SEAHORSE_LOCATION_REMOTE;
+
+	else if (loc <= SEAHORSE_LOCATION_LOCAL)
+		loc = SEAHORSE_LOCATION_LOCAL;
+
+	name = seahorse_pgp_uid_get_display_name (self);
+	markup = seahorse_pgp_uid_get_markup (self, 0);
+	
+	g_object_set (self,
+		      "id", id,
+		      "label", name,
+		      "markup", markup,
+		      "usage", SEAHORSE_USAGE_IDENTITY,
+		      "flags", 0,
+		      NULL);
+	
+	g_free (name);
+	g_free (markup);
 }
 
 /* -----------------------------------------------------------------------------
@@ -121,7 +127,9 @@ changed_uid (SeahorsePGPUid *uid)
 static void
 seahorse_pgp_uid_init (SeahorsePGPUid *uid)
 {
-    
+	g_object_set (uid, 
+	              "icon", "",
+	              NULL);
 }
 
 static void
@@ -140,23 +148,11 @@ seahorse_pgp_uid_get_property (GObject *object, guint prop_id,
 	case PROP_INDEX:
 		g_value_set_uint (value, uid->index);
 		break;
-	case PROP_DISPLAY_NAME:
-		g_value_take_string (value, seahorse_pgp_uid_get_display_name (uid));
-		break;
-	case PROP_MARKUP:
-		g_value_take_string (value, seahorse_pgp_uid_get_markup (uid, 0));
-		break;
-	case PROP_SIMPLE_NAME:        
-		g_value_take_string (value, seahorse_pgp_uid_get_name (uid));
-		break;
 	case PROP_VALIDITY:
 		g_value_set_uint (value, seahorse_pgp_uid_get_validity (uid));
 		break;
 	case PROP_VALIDITY_STR:
 		g_value_set_string (value, seahorse_validity_get_string (seahorse_pgp_uid_get_validity (uid)));
-		break;
-	case PROP_STOCK_ID:
-		g_value_set_string (value, ""); 
 		break;
 	}
 }
@@ -219,18 +215,6 @@ seahorse_pgp_uid_class_init (SeahorsePGPUidClass *klass)
 	g_object_class_install_property (gobject_class, PROP_INDEX,
 	        g_param_spec_uint ("index", "Index", "Gpgme User ID Index",
 	                           0, G_MAXUINT, 0, G_PARAM_READWRITE));
-
-	g_object_class_install_property (gobject_class, PROP_DISPLAY_NAME,
-	        g_param_spec_string ("display-name", "Display Name", "User Displayable name for this uid",
-	                             "", G_PARAM_READABLE));
-
-	g_object_class_install_property (gobject_class, PROP_MARKUP,
-	        g_param_spec_string ("markup", "Display Markup", "GLib Markup",
-	                             "", G_PARAM_READABLE));
-                      
-	g_object_class_install_property (gobject_class, PROP_SIMPLE_NAME,
-	        g_param_spec_string ("simple-name", "Simple Name", "Simple name for this user id",
-	                             "", G_PARAM_READABLE));
          
 	g_object_class_install_property (gobject_class, PROP_VALIDITY,
 	        g_param_spec_uint ("validity", "Validity", "Validity of this identity",
@@ -239,10 +223,6 @@ seahorse_pgp_uid_class_init (SeahorsePGPUidClass *klass)
         g_object_class_install_property (gobject_class, PROP_VALIDITY_STR,
                 g_param_spec_string ("validity-str", "Validity String", "Validity of this identity as a string",
                                      "", G_PARAM_READABLE));
-
-        g_object_class_install_property (gobject_class, PROP_STOCK_ID,
-                g_param_spec_string ("stock-id", "The stock icon", "The stock icon id",
-                                     NULL, G_PARAM_READABLE));
 }
 
 /* -----------------------------------------------------------------------------

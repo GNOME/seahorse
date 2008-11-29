@@ -159,7 +159,7 @@ on_response (GtkDialog *dialog, guint response, SeahorseWidget *swidget)
         egg_datetime_get_as_time_t (EGG_DATETIME (widget), &expires);
     }
 
-    sksrc = SEAHORSE_PGP_SOURCE (g_object_get_data (G_OBJECT (swidget), "key-source"));
+    sksrc = SEAHORSE_PGP_SOURCE (g_object_get_data (G_OBJECT (swidget), "source"));
     g_assert (SEAHORSE_IS_PGP_SOURCE (sksrc));
     
     /* Less confusing with less on the screen */
@@ -271,7 +271,7 @@ seahorse_pgp_generate_show (SeahorsePGPSource *sksrc, GtkWindow *parent)
     gtk_box_pack_start (GTK_BOX (widget), egg_datetime_new_from_time_t (expires), TRUE, TRUE, 0);
     
     g_object_ref (sksrc);
-    g_object_set_data_full (G_OBJECT (swidget), "key-source", sksrc, g_object_unref);
+    g_object_set_data_full (G_OBJECT (swidget), "source", sksrc, g_object_unref);
     
     glade_xml_signal_connect_data (swidget->xml, "on_entry_changed",
                                    G_CALLBACK (entry_changed), swidget);

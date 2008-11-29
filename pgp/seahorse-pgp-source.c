@@ -312,7 +312,7 @@ seahorse_pgp_source_class_init (SeahorsePGPSourceClass *klass)
  
     g_object_class_install_property (gobject_class, PROP_KEY_TYPE,
         g_param_spec_uint ("key-type", "Key Type", "Key type that originates from this key source.", 
-                           0, G_MAXUINT, SKEY_UNKNOWN, G_PARAM_READABLE));
+                           0, G_MAXUINT, SEAHORSE_TAG_INVALID, G_PARAM_READABLE));
                            
     g_object_class_install_property (gobject_class, PROP_KEY_DESC,
         g_param_spec_string ("key-desc", "Key Desc", "Description for keys that originate here.",
@@ -322,7 +322,7 @@ seahorse_pgp_source_class_init (SeahorsePGPSourceClass *klass)
         g_param_spec_uint ("location", "Key Location", "Where the key is stored. See SeahorseLocation", 
                            0, G_MAXUINT, SEAHORSE_LOCATION_INVALID, G_PARAM_READABLE));    
     
-	seahorse_registry_register_type (NULL, SEAHORSE_TYPE_PGP_SOURCE, "key-source", "local", SEAHORSE_PGP_STR, NULL);
+	seahorse_registry_register_type (NULL, SEAHORSE_TYPE_PGP_SOURCE, "source", "local", SEAHORSE_PGP_STR, NULL);
 
 }
 
@@ -452,67 +452,9 @@ seahorse_pgp_source_get_property (GObject *object, guint prop_id, GValue *value,
  * HELPERS 
  */
 
-
-static void
-key_changed (SeahorseKey *skey, SeahorseKeyChange change, SeahorseSource *sksrc)
-{
-    SeahorsePGPKey *pkey;
-    SeahorsePGPSource *psrc;
-    SeahorseUsage etype;
-    SeahorseLoadOperation *lop;
-    const gchar *patterns[2];
-    guint parts;
-    
-    /* TODO: We need to fix these key change flags. Currently the only thing
-     * that sets 'ALL' is when we replace a key in an skey. We don't 
-     * need to reload in that case */
-    
-    if (change == SKEY_CHANGE_ALL)
-        return;
-    
-    etype = seahorse_key_get_usage (skey);
-    
-    g_return_if_fail (SEAHORSE_IS_PGP_KEY (skey));
-    pkey = SEAHORSE_PGP_KEY (skey);
-    g_return_if_fail (pkey->pubkey);
-    
-    psrc = SEAHORSE_PGP_SOURCE (seahorse_key_get_source (skey));
-    g_assert (SEAHORSE_IS_PGP_SOURCE (psrc));
-    
-    patterns[0] = seahorse_pgp_key_get_id (pkey->pubkey, 0);
-    patterns[1] = NULL;
-    
-    parts = 0;
-    if (seahorse_key_get_loaded (skey) == SKEY_INFO_COMPLETE) {
-        parts |= LOAD_FULL;
-        if (change == SKEY_CHANGE_PHOTOS || change == SKEY_CHANGE_UIDS)
-            parts |= LOAD_PHOTOS;
-    }
-    
-    /* Schedule a dummy refresh. This blocks all monitoring for a while */
-    cancel_scheduled_refresh (psrc);
-    psrc->pv->scheduled_refresh = g_timeout_add (500, scheduled_dummy, psrc);
-    DEBUG_REFRESH ("scheduled a dummy refresh\n");
-    
-    lop = seahorse_load_operation_start (psrc, patterns, parts, FALSE);
-    seahorse_multi_operation_take (psrc->pv->operations, SEAHORSE_OPERATION (lop));
-
-    if (etype == SEAHORSE_USAGE_PRIVATE_KEY) {
-        lop = seahorse_load_operation_start (psrc, patterns, parts, TRUE);
-        seahorse_multi_operation_take (psrc->pv->operations, SEAHORSE_OPERATION (lop));
-    }
-}
-
-static void
-key_destroyed (SeahorseKey *skey, SeahorseSource *sksrc)
-{
-    g_signal_handlers_disconnect_by_func (skey, key_changed, sksrc);
-    g_signal_handlers_disconnect_by_func (skey, key_destroyed, sksrc);
-}
-
 /* Remove the given key from the context */
 static void
-remove_key_from_context (gpointer kt, SeahorseKey *dummy, SeahorsePGPSource *psrc)
+remove_key_from_context (gpointer kt, SeahorseObject *dummy, SeahorsePGPSource *psrc)
 {
     /* This function gets called as a GHRFunc on the lctx->checks hashtable. */
     GQuark keyid = GPOINTER_TO_UINT (kt);
@@ -590,10 +532,6 @@ add_key_to_context (SeahorsePGPSource *psrc, gpgme_key_t key, gpgmex_photo_id_t 
     if (pkey == NULL)
         pkey = seahorse_pgp_key_new (SEAHORSE_SOURCE (psrc), key, NULL);
     
-    /* We listen in to get notified of changes on this key */
-    g_signal_connect (pkey, "changed", G_CALLBACK (key_changed), SEAHORSE_SOURCE (psrc));
-    g_signal_connect (pkey, "destroy", G_CALLBACK (key_destroyed), SEAHORSE_SOURCE (psrc));
-
     /* Add to context */ 
     seahorse_context_take_object (SCTX_APP (), SEAHORSE_OBJECT (pkey));
 
@@ -963,7 +901,7 @@ seahorse_pgp_source_load (SeahorseSource *src, GQuark keyid)
     DEBUG_REFRESH ("scheduled a dummy refresh\n");
  
     if (keyid)
-        match = seahorse_key_get_rawid (keyid);
+        match = seahorse_pgp_key_get_rawid (keyid);
     
     patterns[0] = match;
     patterns[1] = NULL;
@@ -1022,7 +960,7 @@ seahorse_pgp_source_export (SeahorseSource *sksrc, GList *keys, GOutputStream *o
 	SeahorsePGPOperation *pop;
 	SeahorsePGPSource *psrc;
 	SeahorsePGPKey *pkey;
-	SeahorseKey *skey;
+	SeahorseObject *object;
 	ExportContext *ctx;
 	gpgme_data_t data;
 	const gchar *keyid;
@@ -1062,8 +1000,8 @@ seahorse_pgp_source_export (SeahorseSource *sksrc, GList *keys, GOutputStream *o
         	g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (l->data), NULL);
         	pkey = SEAHORSE_PGP_KEY (l->data);
         
-        	skey = SEAHORSE_KEY (l->data);       
-        	g_return_val_if_fail (seahorse_object_get_source (SEAHORSE_OBJECT (skey)) == sksrc, NULL);
+        	object = SEAHORSE_OBJECT (l->data);
+        	g_return_val_if_fail (seahorse_object_get_source (object) == sksrc, NULL);
         
         	/* Building list */
         	keyid = seahorse_pgp_key_get_id (pkey->pubkey, 0);

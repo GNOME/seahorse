@@ -19,23 +19,6 @@
  * Boston, MA 02111-1307, USA.
  */
 
-/**
- * SeahorseCredential: Represents a gnome-keyring item 
- * 
- * - Derived from SeahorseKey
- * 
- * Properties:
- *   display-name: (gchar*) The display name for the key.
- *   display-id: (gchar*) The keyid to display.
- *   simple-name: (gchar*) Shortened display name for the key (for use in files etc...).
- *   fingerprint: (gchar*) Displayable fingerprint for the key.
- *   validity: (SeahorseValidity) The key validity.
- *   trust: (SeahorseValidity) Trust for the key.
- *   expires: (gulong) Date this key expires or 0.
- *   length: (gint) The length of the key in bits.
- *   stock-id: (string) The stock icon id.
- */
- 
 #ifndef __SEAHORSE_GKR_ITEM_H__
 #define __SEAHORSE_GKR_ITEM_H__
 
@@ -44,7 +27,7 @@
 
 #include "seahorse-gkr-module.h"
 
-#include "seahorse-key.h"
+#include "seahorse-object.h"
 #include "seahorse-source.h"
 
 typedef enum {
@@ -68,7 +51,7 @@ typedef struct _SeahorseGkrItem SeahorseGkrItem;
 typedef struct _SeahorseGkrItemClass SeahorseGkrItemClass;
 
 struct _SeahorseGkrItem {
-    SeahorseKey                 parent;
+    SeahorseObject              parent;
 
     /*< public >*/
     guint32                     item_id;
@@ -78,7 +61,7 @@ struct _SeahorseGkrItem {
 };
 
 struct _SeahorseGkrItemClass {
-    SeahorseKeyClass            parent_class;
+    SeahorseObjectClass         parent_class;
 };
 
 SeahorseGkrItem*        seahorse_gkr_item_new              (SeahorseSource *sksrc,
@@ -97,5 +80,7 @@ const gchar*            seahorse_gkr_item_get_attribute    (SeahorseGkrItem *git
                                                             const gchar *name);
 
 SeahorseGkrUse          seahorse_gkr_item_get_use          (SeahorseGkrItem *git);
+
+const gchar* 		seahorse_gkr_find_string_attribute (GnomeKeyringAttributeList *attrs, const gchar *name);
 
 #endif /* __SEAHORSE_GKR_ITEM_H__ */

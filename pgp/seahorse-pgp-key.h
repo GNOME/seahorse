@@ -19,31 +19,13 @@
  * Boston, MA 02111-1307, USA.
  */
 
-/**
- * SeahorsePGPKey: Represents a PGP key loaded via GPGME.
- * 
- * - Derived from SeahorseKey
- * - Stuff from seahorse-key-op.c should eventually be merged in here.
- * 
- * Properties:
- *   display-name: (gchar*) The display name for the key.
- *   display-id: (gchar*) The keyid to display.
- *   simple-name: (gchar*) Shortened display name for the key (for use in files etc...).
- *   fingerprint: (gchar*) Displayable fingerprint for the key.
- *   validity: (SeahorseValidity) The key validity.
- *   trust: (SeahorseValidity) Trust for the key.
- *   expires: (gulong) Date this key expires or 0.
- *   length: (gint) The length of the key in bits.
- *   stock-id: (string) The stock icon id.
- */
- 
 #ifndef __SEAHORSE_PGP_KEY_H__
 #define __SEAHORSE_PGP_KEY_H__
 
 #include <gtk/gtk.h>
 #include <gpgme.h>
 
-#include "seahorse-key.h"
+#include "seahorse-object.h"
 
 #include "pgp/seahorse-gpgmex.h"
 #include "pgp/seahorse-pgp-module.h"
@@ -54,6 +36,12 @@ enum {
     SKEY_PGPSIG_TRUSTED = 0x0001,
     SKEY_PGPSIG_PERSONAL = 0x0002
 };
+
+typedef enum {
+    SKEY_INFO_NONE,     /* We have no information on this key */
+    SKEY_INFO_BASIC,    /* We have the usual basic quick info loaded */
+    SKEY_INFO_COMPLETE  /* All info */
+} SeahorseKeyInfo;
 
 #define SEAHORSE_TYPE_PGP_KEY            (seahorse_pgp_key_get_type ())
 
@@ -71,22 +59,26 @@ typedef struct _SeahorsePGPKey SeahorsePGPKey;
 typedef struct _SeahorsePGPKeyClass SeahorsePGPKeyClass;
 
 struct _SeahorsePGPKey {
-    SeahorseKey	                parent;
+    SeahorseObject              parent;
 
     /*< public >*/
     gpgme_key_t                 pubkey;         /* The public key */
     gpgme_key_t                 seckey;         /* The secret key */
     gpgmex_photo_id_t           photoids;       /* List of photos */
     GList                       *uids;		/* All the UID objects */
+    SeahorseKeyInfo		loaded;		/* What's loaded */
+    
 };
 
 struct _SeahorsePGPKeyClass {
-    SeahorseKeyClass            parent_class;
+    SeahorseObjectClass         parent_class;
 };
 
 SeahorsePGPKey* seahorse_pgp_key_new                  (SeahorseSource *sksrc,
                                                        gpgme_key_t        pubkey,
                                                        gpgme_key_t        seckey);
+
+void            seahorse_pgp_key_reload               (SeahorsePGPKey *pkey);
 
 GType           seahorse_pgp_key_get_type             (void);
 
@@ -100,12 +92,21 @@ guint           seahorse_pgp_key_get_num_uids         (SeahorsePGPKey *pkey);
 SeahorsePGPUid* seahorse_pgp_key_get_uid              (SeahorsePGPKey *pkey, 
                                                        guint index);
 
-                                                       
+gulong          seahorse_pgp_key_get_expires          (SeahorsePGPKey *self);
+
+gchar*          seahorse_pgp_key_get_expires_str      (SeahorsePGPKey *self);
+
+gchar*          seahorse_pgp_key_get_fingerprint      (SeahorsePGPKey *self);
+
+SeahorseValidity seahorse_pgp_key_get_trust           (SeahorsePGPKey *self);
+
 const gchar*    seahorse_pgp_key_get_algo             (SeahorsePGPKey   *pkey,
                                                        guint            index);
 
 const gchar*    seahorse_pgp_key_get_id               (gpgme_key_t      key,
                                                        guint            index);
+
+const gchar*    seahorse_pgp_key_get_rawid            (GQuark keyid);
 
 guint           seahorse_pgp_key_get_num_photoids     (SeahorsePGPKey   *pkey);
  

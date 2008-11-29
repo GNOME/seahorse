@@ -22,33 +22,34 @@
 
 #include "config.h"
 
-#include <glib/gi18n.h>
-
-#include "seahorse-key-widget.h"
-#include "seahorse-util.h"
-#include "seahorse-set.h"
-#include "seahorse-gtkstock.h"
 #include "seahorse-combo-keys.h"
 #include "seahorse-gconf.h"
+#include "seahorse-gtkstock.h"
+#include "seahorse-object-widget.h"
+#include "seahorse-set.h"
+#include "seahorse-util.h"
 
 #include "pgp/seahorse-pgp-dialogs.h"
 #include "pgp/seahorse-pgp-key-op.h"
 #include "pgp/seahorse-pgp-keysets.h"
 
+#include <glib/gi18n.h>
+
 static gboolean
 ok_clicked (SeahorseWidget *swidget)
 {
-    SeahorseKeyWidget *skwidget;
+    SeahorseObjectWidget *skwidget;
     SeahorseSignCheck check;
     SeahorseSignOptions options = 0;
-    SeahorseKey *signer;
+    SeahorseObject *signer;
     GtkWidget *w;
     gpgme_error_t err;
-    SeahorseKey *skey;
+    SeahorseObject *object;
     GList *keys;
+    guint index;
     
-    skwidget = SEAHORSE_KEY_WIDGET (swidget);
-    skey = skwidget->skey;
+    skwidget = SEAHORSE_OBJECT_WIDGET (swidget);
+    object = skwidget->object;
     
     /* Figure out choice */
     check = SIGN_CHECK_NO_ANSWER;
@@ -87,11 +88,12 @@ ok_clicked (SeahorseWidget *swidget)
     signer = seahorse_combo_keys_get_active (GTK_COMBO_BOX (w));
     
     g_assert (!signer || (SEAHORSE_IS_PGP_KEY (signer) && 
-                          seahorse_key_get_usage (signer) == SEAHORSE_USAGE_PRIVATE_KEY));
+                          seahorse_object_get_usage (SEAHORSE_OBJECT (signer)) == SEAHORSE_USAGE_PRIVATE_KEY));
     
-    err = seahorse_pgp_key_op_sign (SEAHORSE_PGP_KEY (skey), 
+    index = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (swidget), "index"));
+    err = seahorse_pgp_key_op_sign (SEAHORSE_PGP_KEY (object), 
                                     SEAHORSE_PGP_KEY (signer), 
-                                    skwidget->index + 1, check, options);
+                                    index + 1, check, options);
     if (!GPG_IS_OK (err))
         seahorse_pgp_handle_gpgme_error (err, _("Couldn't sign key"));
     
@@ -99,7 +101,7 @@ ok_clicked (SeahorseWidget *swidget)
     
 #ifdef WITH_KEYSERVER
     if (GPG_IS_OK (err) && seahorse_gconf_get_boolean (AUTOSYNC_KEY)) {
-        keys = g_list_append (NULL, skey);
+        keys = g_list_append (NULL, object);
         /* TODO: This cross module dependency needs to be fixed */
         /* seahorse_keyserver_sync (keys); */
         g_list_free (keys);
@@ -139,14 +141,14 @@ choice_toggled (GtkToggleButton *toggle, SeahorseWidget *swidget)
 }
 
 void
-seahorse_pgp_sign_prompt (SeahorsePGPKey *pkey, guint uid, GtkWindow *parent)
+seahorse_pgp_sign_prompt (SeahorsePGPKey *pkey, guint index, GtkWindow *parent)
 {
     SeahorseSet *skset;
     GtkWidget *w;
     gint response;
     SeahorseWidget *swidget;
     gboolean do_sign = TRUE;
-    gchar *t;
+    SeahorsePGPUid *uid;
     gchar *userid;
 
     /* Some initial checks */
@@ -161,19 +163,19 @@ seahorse_pgp_sign_prompt (SeahorsePGPKey *pkey, guint uid, GtkWindow *parent)
         return;
     }
 
-    swidget = seahorse_key_widget_new_with_index ("sign", parent, SEAHORSE_KEY (pkey), uid);
+    swidget = seahorse_object_widget_new ("sign", parent, SEAHORSE_OBJECT (pkey));
     g_return_if_fail (swidget != NULL);
+    
+    g_object_set_data (G_OBJECT (swidget), "index", GUINT_TO_POINTER (index));
 
     /* ... Except for when calling this, which is messed up */
     w = glade_xml_get_widget (swidget->xml, "sign-uid-text");
     g_return_if_fail (w != NULL);
-    t = seahorse_key_get_name (SEAHORSE_KEY (pkey), uid);
-    userid = g_markup_escape_text (t, -1);
-    g_free (t);
-    t = g_strdup_printf ("<i>%s</i>", userid);
+    uid = seahorse_pgp_key_get_uid (pkey, index);
+    g_return_if_fail (uid);
+    userid = g_markup_printf_escaped("<i>%s</i>", seahorse_object_get_label (SEAHORSE_OBJECT (uid)));
+    gtk_label_set_markup (GTK_LABEL (w), userid);
     g_free (userid);
-    gtk_label_set_markup (GTK_LABEL (w), t);
-    g_free (t);
     
     /* Uncheck all selections */
     w = glade_xml_get_widget (swidget->xml, "sign-choice-not");

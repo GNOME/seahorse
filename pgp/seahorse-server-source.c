@@ -90,7 +90,7 @@ seahorse_server_source_class_init (SeahorseServerSourceClass *klass)
     
     g_object_class_install_property (gobject_class, PROP_KEY_TYPE,
         g_param_spec_uint ("key-type", "Key Type", "Key type that originates from this key source.", 
-                           0, G_MAXUINT, SKEY_UNKNOWN, G_PARAM_READABLE));
+                           0, G_MAXUINT, SEAHORSE_TAG_INVALID, G_PARAM_READABLE));
 
     g_object_class_install_property (gobject_class, PROP_KEY_DESC,
         g_param_spec_string ("key-desc", "Key Desc", "Description for keys that originate here.",
@@ -285,7 +285,6 @@ seahorse_server_source_add_key (SeahorseServerSource *ssrc, gpgme_key_t key)
     if (prev != NULL) {
         g_return_if_fail (SEAHORSE_IS_PGP_KEY (prev));
         combine_keys (ssrc, SEAHORSE_PGP_KEY (prev)->pubkey, key);
-        seahorse_object_fire_changed (prev, SKEY_CHANGE_UIDS);
         return;
     }
 

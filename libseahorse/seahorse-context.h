@@ -83,7 +83,7 @@ struct _SeahorseContextClass {
     void (*removed) (SeahorseContext *sctx, struct _SeahorseObject *sobj);
     
     /* This object has changed */
-    void (*changed) (SeahorseContext *sctx, struct _SeahorseObject *sobj, int change);
+    void (*changed) (SeahorseContext *sctx, struct _SeahorseObject *sobj);
 };
 
 enum SeahorseContextType {
@@ -154,13 +154,11 @@ GList*              seahorse_context_find_objects_full  (SeahorseContext *sctx,
 void                seahorse_context_remove_object      (SeahorseContext *sctx,
                                                          struct _SeahorseObject *sobj);
 
-gboolean            seahorse_context_owns_object        (SeahorseContext *sctx,
-                                                         struct _SeahorseObject *sobj);
-
 SeahorseServiceDiscovery*
                     seahorse_context_get_discovery      (SeahorseContext    *sctx);
 
-struct _SeahorseKey*   seahorse_context_get_default_key (SeahorseContext    *sctx);
+struct _SeahorseObject*   
+                    seahorse_context_get_default_key    (SeahorseContext    *sctx);
 
 SeahorseOperation*  seahorse_context_refresh_local         (SeahorseContext    *sctx);
 
@@ -183,15 +181,12 @@ GList*              seahorse_context_discover_objects   (SeahorseContext    *sct
                                                          GSList             *ids);
 
 struct _SeahorseObject*     seahorse_context_object_from_dbus   (SeahorseContext    *sctx,
-                                                         const gchar        *dbusid,
-                                                         guint              *uid);
+                                                         const gchar        *dbusid);
 
 gchar*              seahorse_context_object_to_dbus     (SeahorseContext    *sctx,
-                                                         struct _SeahorseObject *sobj,
-                                                         guint              uid);
+                                                         struct _SeahorseObject *sobj);
 
 gchar*              seahorse_context_id_to_dbus         (SeahorseContext    *sctx,
-                                                         GQuark             id, 
-                                                         guint              uid);
+                                                         GQuark             id);
 
 #endif /* __SEAHORSE_CONTEXT_H__ */

@@ -83,7 +83,7 @@ static SeahorseOperation* seahorse_ssh_commands_real_delete_objects (SeahorseCom
 	if (num == 1) {
 		char* _tmp1;
 		_tmp1 = NULL;
-		prompt = (_tmp1 = g_strdup_printf (_ ("Are you sure you want to delete the secure shell key '%s'?"), seahorse_object_get_display_name (((SeahorseObject*) (((SeahorseObject*) (keys->data)))))), (prompt = (g_free (prompt), NULL)), _tmp1);
+		prompt = (_tmp1 = g_strdup_printf (_ ("Are you sure you want to delete the secure shell key '%s'?"), seahorse_object_get_label (((SeahorseObject*) (((SeahorseObject*) (keys->data)))))), (prompt = (g_free (prompt), NULL)), _tmp1);
 	} else {
 		char* _tmp2;
 		_tmp2 = NULL;

@@ -60,9 +60,9 @@ enum {
 
 static const SeahorseSetModelColumn column_info[] = {
 	{ "usage", G_TYPE_UINT, "usage" },
-	{ "stock-id", G_TYPE_STRING, NULL },
-	{ "markup", G_TYPE_STRING, "name" },
-	{ "display-id", G_TYPE_STRING, "id" },
+	{ "icon", G_TYPE_STRING, NULL },
+	{ "markup", G_TYPE_STRING, "label" },
+	{ "identifier", G_TYPE_STRING, "id" },
 	{ "validity-str", G_TYPE_STRING, "validity" },
 	{ "trust-str", G_TYPE_STRING, "trust" },
 	{ "type", G_TYPE_STRING, "type" },
@@ -630,7 +630,7 @@ drag_end (GtkWidget *widget, GdkDragContext *context, SeahorseKeyManagerStore *s
 	if (skstore->priv->drag_destination && !skstore->priv->drag_error) {
 		g_return_if_fail (skstore->priv->drag_objects);
 	
-		name = seahorse_util_filename_for_keys (skstore->priv->drag_objects);
+		name = seahorse_util_filename_for_objects (skstore->priv->drag_objects);
 		g_return_if_fail (name);
 	
 		filename = g_build_filename (skstore->priv->drag_destination, name, NULL);

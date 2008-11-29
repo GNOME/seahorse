@@ -42,7 +42,7 @@ namespace Seahorse.Ssh {
         }
         
         [CCode (cheader_filename = "seahorse-ssh-key.h")]
-        public class Key : Seahorse.Key {
+        public class Key : Seahorse.Object {
         
         }
 }

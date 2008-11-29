@@ -59,13 +59,6 @@
 			</parameters>
 			<return-type type="GLib.List*" transfer="full"/>
 		</method>
-		<method name="fire_changed" symbol="seahorse_object_fire_changed">
-			<parameters>
-				<parameter name="self" type="Seahorse.Object*"/>
-				<parameter name="what" type="Seahorse.Object.Change"/>
-			</parameters>
-			<return-type type="void"/>
-		</method>
 		<property name="tag" type="GLib.Quark" readable="1"/>
 		<property name="id" type="GLib.Quark" readable="1"/>
 		<property name="location" type="Seahorse.Location" readable="1" writable="1"/>
@@ -77,12 +70,6 @@
 		<property name="markup" type="string*" readable="1"/>
 		<property name="stock_id" type="string*" readable="1"/>
 		<property name="parent" type="Seahorse.Object*" readable="1" writable="1"/>
-		<signal name="changed">
-			<parameters>
-				<parameter name="what" type="Seahorse.Object.Change"/>
-			</parameters>
-			<return-type type="void"/>
-		</signal>
 		<signal name="hierarchy">
 			<parameters>
 			</parameters>

@@ -36,8 +36,6 @@ enum {
     PROP_0,
     PROP_PUBKEY,
     PROP_SECKEY,
-    PROP_DISPLAY_NAME,
-    PROP_DISPLAY_ID,
     PROP_SIMPLE_NAME,
     PROP_FINGERPRINT,
     PROP_VALIDITY,
@@ -46,11 +44,10 @@ enum {
     PROP_TRUST_STR,
     PROP_EXPIRES,
     PROP_EXPIRES_STR,
-    PROP_LENGTH,
-    PROP_STOCK_ID
+    PROP_LENGTH
 };
 
-G_DEFINE_TYPE (SeahorsePGPKey, seahorse_pgp_key, SEAHORSE_TYPE_KEY);
+G_DEFINE_TYPE (SeahorsePGPKey, seahorse_pgp_key, SEAHORSE_TYPE_OBJECT);
 
 /* -----------------------------------------------------------------------------
  * INTERNAL HELPERS
@@ -138,6 +135,25 @@ calc_short_name (SeahorsePGPKey *pkey)
 	return uid ? seahorse_pgp_uid_get_name (uid) : NULL;
 }
 
+static gchar* 
+calc_name (SeahorsePGPKey *self)
+{
+	SeahorsePGPUid *uid;
+	g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (self), NULL);
+	uid = g_list_nth_data (self->uids, 0);
+	return uid ? seahorse_pgp_uid_get_display_name (uid) : NULL;
+}
+
+static gchar* 
+calc_markup (SeahorsePGPKey *self)
+{
+	SeahorsePGPUid *uid;
+	g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (self), NULL);
+	uid = g_list_nth_data (self->uids, 0);
+	return uid ? seahorse_pgp_uid_get_markup (uid, seahorse_object_get_flags (SEAHORSE_OBJECT (self))) : NULL;
+}
+
+
 static void 
 update_uids (SeahorsePGPKey *pkey)
 {
@@ -192,91 +208,111 @@ update_uids (SeahorsePGPKey *pkey)
 }
 
 static void
-changed_key (SeahorsePGPKey *pkey)
+changed_key (SeahorsePGPKey *self)
 {
-    SeahorseKey *skey = SEAHORSE_KEY (pkey);
-    SeahorseObject *obj = SEAHORSE_OBJECT (pkey);
-    
-    obj->_id = 0;
-    obj->_tag = SEAHORSE_PGP;
-    
-    if (!pkey->pubkey) {
-        
-        obj->_location = SEAHORSE_LOCATION_INVALID;
-        obj->_usage = SEAHORSE_USAGE_NONE;
-        skey->loaded = SKEY_INFO_NONE;
-        obj->_flags = SKEY_FLAG_DISABLED;
-        skey->keydesc = _("Invalid");
-        skey->rawid = NULL;
-        
-    } else {
-    
-        /* Update the sub UIDs */
-        update_uids (pkey);
+	SeahorseObject *obj = SEAHORSE_OBJECT (self);
+	SeahorseLocation loc;
+	SeahorseUsage usage;
+	const gchar *description, *icon, *identifier;
+	gchar *name, *markup, *nickname;
+	GQuark id;
+	guint flags;
 	
-        /* The key id */
-        if (pkey->pubkey->subkeys) {
-            obj->_id = seahorse_pgp_key_get_cannonical_id (pkey->pubkey->subkeys->keyid);
-            skey->rawid = pkey->pubkey->subkeys->keyid;
-        }
-        
-        /* The location */
-        if (pkey->pubkey->keylist_mode & GPGME_KEYLIST_MODE_EXTERN && 
-            obj->_location <= SEAHORSE_LOCATION_REMOTE)
-            obj->_location = SEAHORSE_LOCATION_REMOTE;
-        
-        else if (obj->_location <= SEAHORSE_LOCATION_LOCAL)
-            obj->_location = SEAHORSE_LOCATION_LOCAL;
-        
-        /* The type */
-        if (pkey->seckey) {
-            obj->_usage = SEAHORSE_USAGE_PRIVATE_KEY;
-            skey->keydesc = _("Private PGP Key");
-        } else {
-            obj->_usage = SEAHORSE_USAGE_PUBLIC_KEY;
-            skey->keydesc = _("Public PGP Key");
-        }
+	if (!self->pubkey) {
+		
+		self->loaded = SKEY_INFO_NONE;
+		g_object_set (obj,
+		              "id", 0,
+		              "label", "",
+		              "icon", NULL,
+		              "usage", SEAHORSE_USAGE_NONE,
+		              "markup", "",
+		              "idenitfier", "",
+		              "nickname", "",
+		              "description", _("Invalid"),
+		              "location", SEAHORSE_LOCATION_INVALID,
+		              "flags", SEAHORSE_FLAG_DISABLED,
+		              NULL);
+		return;
+	}
 
-        /* The info loaded */
-        if (pkey->pubkey->keylist_mode & GPGME_KEYLIST_MODE_SIGS && 
-            skey->loaded < SKEY_INFO_COMPLETE)
-            skey->loaded = SKEY_INFO_COMPLETE;
-        else if (skey->loaded < SKEY_INFO_BASIC)
-            skey->loaded = SKEY_INFO_BASIC;
-        
-        /* The flags */
-        obj->_flags = SKEY_FLAG_EXPORTABLE;
-    
-        if (!pkey->pubkey->disabled && !pkey->pubkey->expired && 
-            !pkey->pubkey->revoked && !pkey->pubkey->invalid)
-        {
-            if (calc_validity (pkey) >= SEAHORSE_VALIDITY_MARGINAL)
-                obj->_flags |= SKEY_FLAG_IS_VALID;
-            if (pkey->pubkey->can_encrypt)
-                obj->_flags |= SKEY_FLAG_CAN_ENCRYPT;
-            if (pkey->seckey && pkey->pubkey->can_sign)
-                obj->_flags |= SKEY_FLAG_CAN_SIGN;
-        }
-        
-        if (pkey->pubkey->expired)
-            obj->_flags |= SKEY_FLAG_EXPIRED;
-        
-        if (pkey->pubkey->revoked)
-            obj->_flags |= SKEY_FLAG_REVOKED;
-        
-        if (pkey->pubkey->disabled)
-            obj->_flags |= SKEY_FLAG_DISABLED;
-        
-        if (calc_trust (pkey) >= SEAHORSE_VALIDITY_MARGINAL && 
-            !pkey->pubkey->revoked && !pkey->pubkey->disabled && 
-            !pkey->pubkey->expired)
-            obj->_flags |= SKEY_FLAG_TRUSTED;
-    }
-    
-    if (!obj->_id)
-	    obj->_id = g_quark_from_string (SEAHORSE_PGP_STR ":UNKNOWN UNKNOWN ");
-    
-    seahorse_object_fire_changed (obj, SEAHORSE_OBJECT_CHANGE_ALL);
+	/* Update the sub UIDs */
+	update_uids (self);
+
+	/* The key id */
+	id = 0;
+	identifier = NULL;
+	if (self->pubkey->subkeys) {
+		id = seahorse_pgp_key_get_cannonical_id (self->pubkey->subkeys->keyid);
+		identifier = self->pubkey->subkeys->keyid;
+	}
+
+	/* The location */
+	loc = seahorse_object_get_location (obj);
+	if (self->pubkey->keylist_mode & GPGME_KEYLIST_MODE_EXTERN && 
+	    loc <= SEAHORSE_LOCATION_REMOTE)
+		loc = SEAHORSE_LOCATION_REMOTE;
+	else if (loc <= SEAHORSE_LOCATION_LOCAL)
+		loc = SEAHORSE_LOCATION_LOCAL;
+
+	/* The type */
+	if (self->seckey) {
+		usage = SEAHORSE_USAGE_PRIVATE_KEY;
+		description = _("Private PGP Key");
+		icon = SEAHORSE_STOCK_SECRET;
+	} else {
+		usage = SEAHORSE_USAGE_PUBLIC_KEY;
+		description = _("Public PGP Key");
+		icon = SEAHORSE_STOCK_KEY;
+	}
+
+	/* The flags */
+	flags = SEAHORSE_FLAG_EXPORTABLE;
+
+	if (!self->pubkey->disabled && !self->pubkey->expired && 
+	    !self->pubkey->revoked && !self->pubkey->invalid) {
+		if (calc_validity (self) >= SEAHORSE_VALIDITY_MARGINAL)
+			flags |= SEAHORSE_FLAG_IS_VALID;
+		if (self->pubkey->can_encrypt)
+			flags |= SEAHORSE_FLAG_CAN_ENCRYPT;
+		if (self->seckey && self->pubkey->can_sign)
+			flags |= SEAHORSE_FLAG_CAN_SIGN;
+	}
+
+	if (self->pubkey->expired)
+		flags |= SEAHORSE_FLAG_EXPIRED;
+
+	if (self->pubkey->revoked)
+		flags |= SEAHORSE_FLAG_REVOKED;
+
+	if (self->pubkey->disabled)
+		flags |= SEAHORSE_FLAG_DISABLED;
+
+	if (calc_trust (self) >= SEAHORSE_VALIDITY_MARGINAL && 
+	    !self->pubkey->revoked && !self->pubkey->disabled && 
+	    !self->pubkey->expired)
+		flags |= SEAHORSE_FLAG_TRUSTED;
+	
+	name = calc_name (self);
+	markup = calc_markup (self);
+	nickname = calc_short_name (self);
+	
+	g_object_set (obj,
+		      "id", id,
+		      "label", name,
+		      "icon", icon,
+		      "usage", usage,
+		      "markup", markup,
+		      "nickname", nickname,
+		      "identifier", identifier,
+		      "description", description,
+		      "location", loc,
+		      "flags", flags,
+		      NULL);
+	
+	g_free (name);
+	g_free (markup);
+	g_free (nickname);
 }
 
 
@@ -287,131 +323,59 @@ changed_key (SeahorsePGPKey *pkey)
 static void
 seahorse_pgp_key_init (SeahorsePGPKey *pkey)
 {
-    
+
 }
 
-static guint 
-seahorse_pgp_key_get_num_names (SeahorseKey *skey)
-{
-	SeahorsePGPKey *pkey;
-    	g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (skey), 0);
-    	pkey = SEAHORSE_PGP_KEY (skey);
-    	return g_list_length (pkey->uids);
-}
-
-static gchar* 
-seahorse_pgp_key_get_name (SeahorseKey *skey, guint index)
-{
-	SeahorsePGPKey *pkey;
-	SeahorsePGPUid *uid;
-	g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (skey), NULL);
-	pkey = SEAHORSE_PGP_KEY (skey);
-	uid = g_list_nth_data (pkey->uids, index);
-	return uid ? seahorse_pgp_uid_get_display_name (uid) : NULL;
-}
-
-static gchar* 
-seahorse_pgp_key_get_name_markup (SeahorseKey *skey, guint index)
-{
-	SeahorsePGPKey *pkey;
-	SeahorsePGPUid *uid;
-	g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (skey), NULL);
-	pkey = SEAHORSE_PGP_KEY (skey);
-	uid = g_list_nth_data (pkey->uids, index);
-	return uid ? seahorse_pgp_uid_get_markup (uid, seahorse_key_get_flags (skey)) : NULL;
-}
-
-static gchar* 
-seahorse_pgp_key_get_name_cn (SeahorseKey *skey, guint index)
-{
-	SeahorsePGPKey *pkey;
-	SeahorsePGPUid *uid;
-	g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (skey), NULL);
-	pkey = SEAHORSE_PGP_KEY (skey);
-	uid = g_list_nth_data (pkey->uids, index);
-	return uid ? seahorse_pgp_uid_get_email (uid) : NULL;
-}
-
-static SeahorseValidity  
-seahorse_pgp_key_get_name_validity  (SeahorseKey *skey, guint index)
-{
-	SeahorsePGPKey *pkey;
-	SeahorsePGPUid *uid;
-	g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (skey), SEAHORSE_VALIDITY_UNKNOWN);
-	pkey = SEAHORSE_PGP_KEY (skey);
-	uid = g_list_nth_data (pkey->uids, index);
-
-	if (pkey->pubkey->revoked)
-		return SEAHORSE_VALIDITY_REVOKED;
-	if (pkey->pubkey->disabled)
-		return SEAHORSE_VALIDITY_DISABLED;
-    
-	return uid ? seahorse_pgp_uid_get_validity (uid) : SEAHORSE_VALIDITY_UNKNOWN;
-}
 
 static void
 seahorse_pgp_key_get_property (GObject *object, guint prop_id,
                                GValue *value, GParamSpec *pspec)
 {
-    SeahorsePGPKey *pkey = SEAHORSE_PGP_KEY (object);
-    SeahorseKey *skey = SEAHORSE_KEY (object);
-    gchar *expires;
+	SeahorsePGPKey *self = SEAHORSE_PGP_KEY (object);
+	gchar *expires;
     
-    switch (prop_id) {
-    case PROP_PUBKEY:
-        g_value_set_pointer (value, pkey->pubkey);
-        break;
-    case PROP_SECKEY:
-        g_value_set_pointer (value, pkey->seckey);
-        break;
-    case PROP_DISPLAY_NAME:
-        g_value_take_string (value, seahorse_pgp_key_get_name (SEAHORSE_KEY (pkey), 0));
-        break;
-    case PROP_DISPLAY_ID:
-        g_value_set_string (value, seahorse_key_get_short_keyid (SEAHORSE_KEY (pkey)));
-        break;
-    case PROP_SIMPLE_NAME:        
-        g_value_take_string (value, calc_short_name(pkey));
-        break;
-    case PROP_FINGERPRINT:
-        g_value_take_string (value, calc_fingerprint(pkey));
-        break;
-    case PROP_VALIDITY:
-        g_value_set_uint (value, calc_validity (pkey));
-        break;
-    case PROP_VALIDITY_STR:
-	g_value_set_string (value, seahorse_validity_get_string (calc_validity (pkey)));
-	break;
-    case PROP_TRUST:
-        g_value_set_uint (value, calc_trust (pkey));
-        break;
-    case PROP_TRUST_STR:
-	g_value_set_string (value, seahorse_validity_get_string (calc_trust (pkey)));
-	break;
-    case PROP_EXPIRES:
-        if (pkey->pubkey)
-            g_value_set_ulong (value, pkey->pubkey->subkeys->expires);
-        break;
-    case PROP_EXPIRES_STR:
-	if (seahorse_key_get_flags (skey) & SKEY_FLAG_EXPIRED) {
-		expires = g_strdup (_("Expired"));
-	} else {
-		if (pkey->pubkey->subkeys->expires == 0)
-	                expires = g_strdup ("");
-		else 
-			expires = seahorse_util_get_date_string (pkey->pubkey->subkeys->expires);
+	switch (prop_id) {
+	case PROP_PUBKEY:
+		g_value_set_pointer (value, self->pubkey);
+		break;
+	case PROP_SECKEY:
+		g_value_set_pointer (value, self->seckey);
+		break;
+	case PROP_FINGERPRINT:
+		g_value_take_string (value, calc_fingerprint (self));
+		break;
+	case PROP_VALIDITY:
+		g_value_set_uint (value, calc_validity (self));
+		break;
+	case PROP_VALIDITY_STR:
+		g_value_set_string (value, seahorse_validity_get_string (calc_validity (self)));
+		break;
+	case PROP_TRUST:
+		g_value_set_uint (value, calc_trust (self));
+		break;
+	case PROP_TRUST_STR:
+		g_value_set_string (value, seahorse_validity_get_string (calc_trust (self)));
+		break;
+	case PROP_EXPIRES:
+		if (self->pubkey)
+			g_value_set_ulong (value, self->pubkey->subkeys->expires);
+		break;
+	case PROP_EXPIRES_STR:
+		if (seahorse_object_get_flags (SEAHORSE_OBJECT (self)) & SEAHORSE_FLAG_EXPIRED) {
+			expires = g_strdup (_("Expired"));
+		} else {
+			if (self->pubkey->subkeys->expires == 0)
+				expires = g_strdup ("");
+			else 
+				expires = seahorse_util_get_date_string (self->pubkey->subkeys->expires);
+		}
+		g_value_take_string (value, expires);
+		break;
+	case PROP_LENGTH:
+		if (self->pubkey)
+			g_value_set_uint (value, self->pubkey->subkeys->length);
+		break;
 	}
-	g_value_take_string (value, expires);
-	break;
-    case PROP_LENGTH:
-        if (pkey->pubkey)
-            g_value_set_uint (value, pkey->pubkey->subkeys->length);
-        break;
-    case PROP_STOCK_ID:
-        g_value_set_string (value, 
-            SEAHORSE_OBJECT (skey)->_usage == SEAHORSE_USAGE_PRIVATE_KEY ? SEAHORSE_STOCK_SECRET : SEAHORSE_STOCK_KEY);
-        break;
-    }
 }
 
 static void
@@ -482,7 +446,6 @@ static void
 seahorse_pgp_key_class_init (SeahorsePGPKeyClass *klass)
 {
     GObjectClass *gobject_class;
-    SeahorseKeyClass *key_class;
     
     seahorse_pgp_key_parent_class = g_type_class_peek_parent (klass);
     gobject_class = G_OBJECT_CLASS (klass);
@@ -492,14 +455,6 @@ seahorse_pgp_key_class_init (SeahorsePGPKeyClass *klass)
     gobject_class->set_property = seahorse_pgp_key_set_property;
     gobject_class->get_property = seahorse_pgp_key_get_property;
     
-    key_class = SEAHORSE_KEY_CLASS (klass);
-    
-    key_class->get_num_names = seahorse_pgp_key_get_num_names;
-    key_class->get_name = seahorse_pgp_key_get_name;
-    key_class->get_name_cn = seahorse_pgp_key_get_name_cn;
-    key_class->get_name_markup = seahorse_pgp_key_get_name_markup;
-    key_class->get_name_validity = seahorse_pgp_key_get_name_validity;
-    
     g_object_class_install_property (gobject_class, PROP_PUBKEY,
         g_param_spec_pointer ("pubkey", "Gpgme Public Key", "Gpgme Public Key that this object represents",
                               G_PARAM_READWRITE));
@@ -507,18 +462,6 @@ seahorse_pgp_key_class_init (SeahorsePGPKeyClass *klass)
     g_object_class_install_property (gobject_class, PROP_SECKEY,
         g_param_spec_pointer ("seckey", "Gpgme Secret Key", "Gpgme Secret Key that this object represents",
                               G_PARAM_READWRITE));
-                      
-    g_object_class_install_property (gobject_class, PROP_DISPLAY_NAME,
-        g_param_spec_string ("display-name", "Display Name", "User Displayable name for this key",
-                             "", G_PARAM_READABLE));
-                      
-    g_object_class_install_property (gobject_class, PROP_DISPLAY_ID,
-        g_param_spec_string ("display-id", "Display ID", "User Displayable id for this key",
-                             "", G_PARAM_READABLE));
-                      
-    g_object_class_install_property (gobject_class, PROP_SIMPLE_NAME,
-        g_param_spec_string ("simple-name", "Simple Name", "Simple name for this key",
-                             "", G_PARAM_READABLE));
                       
     g_object_class_install_property (gobject_class, PROP_FINGERPRINT,
         g_param_spec_string ("fingerprint", "Fingerprint", "Unique fingerprint for this key",
@@ -551,11 +494,6 @@ seahorse_pgp_key_class_init (SeahorsePGPKeyClass *klass)
     g_object_class_install_property (gobject_class, PROP_LENGTH,
         g_param_spec_uint ("length", "Length", "The length of this key.",
                            0, G_MAXUINT, 0, G_PARAM_READABLE));
-                           
-    g_object_class_install_property (gobject_class, PROP_STOCK_ID,
-        g_param_spec_string ("stock-id", "The stock icon", "The stock icon id",
-                             NULL, G_PARAM_READABLE));
-
 }
 
 
@@ -577,7 +515,7 @@ seahorse_pgp_key_new (SeahorseSource *sksrc, gpgme_key_t pubkey,
                       gpgme_key_t seckey)
 {
     SeahorsePGPKey *pkey;
-    pkey = g_object_new (SEAHORSE_TYPE_PGP_KEY, "key-source", sksrc,
+    pkey = g_object_new (SEAHORSE_TYPE_PGP_KEY, "source", sksrc,
                          "pubkey", pubkey, "seckey", seckey, NULL);
     return pkey;
 }
@@ -811,7 +749,7 @@ seahorse_pgp_key_get_sigtype (SeahorsePGPKey *pkey, gpgme_key_sig_t signature)
     if (sobj) {
         if (seahorse_object_get_usage (sobj) == SEAHORSE_USAGE_PRIVATE_KEY) 
             return SKEY_PGPSIG_TRUSTED | SKEY_PGPSIG_PERSONAL;
-        if (seahorse_object_get_flags (sobj) & SKEY_FLAG_TRUSTED)
+        if (seahorse_object_get_flags (sobj) & SEAHORSE_FLAG_TRUSTED)
             return SKEY_PGPSIG_TRUSTED;
     }
 
@@ -854,4 +792,59 @@ seahorse_pgp_key_get_cannonical_id (const gchar *id)
     g_free (t);
     
     return keyid;
+}
+
+const gchar* 
+seahorse_pgp_key_get_rawid (GQuark keyid)
+{
+	const gchar* id, *rawid;
+	
+	id = g_quark_to_string (keyid);
+	g_return_val_if_fail (id != NULL, NULL);
+	
+	rawid = strchr (id, ':');
+	return rawid ? rawid + 1 : id;
+}
+
+void
+seahorse_pgp_key_reload (SeahorsePGPKey *pkey)
+{
+	SeahorseSource *src;
+	
+	g_return_if_fail (SEAHORSE_IS_PGP_KEY (pkey));
+	src = seahorse_object_get_source (SEAHORSE_OBJECT (pkey));
+	g_return_if_fail (SEAHORSE_IS_PGP_SOURCE (src));
+	seahorse_source_load_async (src, seahorse_object_get_id (SEAHORSE_OBJECT (pkey)));
+}
+
+gulong
+seahorse_pgp_key_get_expires (SeahorsePGPKey *self)
+{
+	gulong expires;
+	g_object_get (self, "expires", &expires, NULL);
+	return expires;
+}
+
+gchar*
+seahorse_pgp_key_get_expires_str (SeahorsePGPKey *self)
+{
+	gchar *expires;
+	g_object_get (self, "expires-str", &expires, NULL);
+	return expires;
+}
+
+gchar*
+seahorse_pgp_key_get_fingerprint (SeahorsePGPKey *self)
+{
+	gchar *fpr;
+	g_object_get (self, "fingerprint", &fpr, NULL);
+	return fpr;	
+}
+
+SeahorseValidity
+seahorse_pgp_key_get_trust (SeahorsePGPKey *self)
+{
+    guint validity;
+    g_object_get (self, "trust", &validity, NULL);
+    return validity;
 }

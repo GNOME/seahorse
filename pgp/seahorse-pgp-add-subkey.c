@@ -25,7 +25,7 @@
 
 #include "egg-datetime.h"
  
-#include "seahorse-key-widget.h"
+#include "seahorse-object-widget.h"
 #include "seahorse-util.h"
 
 #include "seahorse-pgp-dialogs.h"
@@ -108,7 +108,7 @@ never_expires_toggled (GtkToggleButton *togglebutton, SeahorseWidget *swidget)
 static void
 ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 {
-	SeahorseKeyWidget *skwidget;
+	SeahorseObjectWidget *skwidget;
 	SeahorseKeyEncType real_type;
 	gint type;
 	guint length;
@@ -119,7 +119,7 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 	GtkTreeModel *model;
     GtkTreeIter iter;
 	
-	skwidget = SEAHORSE_KEY_WIDGET (swidget);
+	skwidget = SEAHORSE_OBJECT_WIDGET (swidget);
 	
 	combo = GTK_COMBO_BOX (glade_xml_get_widget (swidget->xml, "type"));
 	gtk_combo_box_get_active_iter (combo, &iter);
@@ -158,7 +158,7 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 	
 	widget = glade_xml_get_widget (swidget->xml, swidget->name);
 	gtk_widget_set_sensitive (widget, FALSE);
-	err = seahorse_pgp_key_pair_op_add_subkey (SEAHORSE_PGP_KEY (skwidget->skey), 
+	err = seahorse_pgp_key_pair_op_add_subkey (SEAHORSE_PGP_KEY (skwidget->object), 
                                            real_type, length, expires);
 	gtk_widget_set_sensitive (widget, TRUE);
 	
@@ -172,20 +172,17 @@ void
 seahorse_pgp_add_subkey_new (SeahorsePGPKey *pkey, GtkWindow *parent)
 {
 	SeahorseWidget *swidget;
-    gchar *userid;
-    GtkComboBox* combo;
-    GtkTreeModel *model;
-    GtkTreeIter iter;
-    GtkCellRenderer *renderer;
-    GtkWidget *widget;
+	GtkComboBox* combo;
+	GtkTreeModel *model;
+	GtkTreeIter iter;
+	GtkCellRenderer *renderer;
+	GtkWidget *widget;
 	
-	swidget = seahorse_key_widget_new ("add-subkey", parent, SEAHORSE_KEY (pkey));
+	swidget = seahorse_object_widget_new ("add-subkey", parent, SEAHORSE_OBJECT (pkey));
 	g_return_if_fail (swidget != NULL);
 	
-    userid = seahorse_key_get_name (SEAHORSE_KEY (pkey), 0);
 	gtk_window_set_title (GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)),
-		g_strdup_printf (_("Add subkey to %s"), userid));
-    g_free (userid);
+		g_strdup_printf (_("Add subkey to %s"), seahorse_object_get_label (SEAHORSE_OBJECT (pkey))));
     
     combo = GTK_COMBO_BOX (glade_xml_get_widget (swidget->xml, "type"));
     model = GTK_TREE_MODEL (gtk_list_store_new (N_COLUMNS, G_TYPE_STRING, G_TYPE_INT));

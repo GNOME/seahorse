@@ -22,9 +22,9 @@
 
 #include "config.h"
 
-#include "seahorse-util.h"
-#include "seahorse-key.h"
 #include "seahorse-gconf.h"
+#include "seahorse-object.h"
+#include "seahorse-util.h"
 
 #include "pgp/seahorse-pgp-module.h"
 
@@ -424,28 +424,28 @@ seahorse_util_printf_fd (int fd, const char* fmt, ...)
 
 
 gchar*      
-seahorse_util_filename_for_keys (GList *keys)
+seahorse_util_filename_for_objects (GList *objects)
 {
-    SeahorseKey *skey;
-    gchar *t, *r;
+	SeahorseObject *object;
+	const gchar *name;
+	gchar *filename;
     
-    g_return_val_if_fail (g_list_length (keys) > 0, NULL);
+	g_return_val_if_fail (g_list_length (objects) > 0, NULL);
 
-    if (g_list_length (keys) == 1) {
-        g_return_val_if_fail (SEAHORSE_IS_KEY (keys->data), NULL);
-        skey = SEAHORSE_KEY (keys->data);
-        t = seahorse_key_get_simple_name (skey);
-        if (t == NULL)
-            t = g_strdup (_("Key Data"));
-    } else {
-        t = g_strdup (_("Multiple Keys"));
-    }
+	if (g_list_length (objects) == 1) {
+		g_return_val_if_fail (SEAHORSE_IS_OBJECT (objects->data), NULL);
+		object = SEAHORSE_OBJECT (objects->data);
+		name = seahorse_object_get_nickname (object);
+		if (name == NULL)
+			name = _("Key Data");
+	} else {
+		name = _("Multiple Keys");
+	}
     
-    g_strstrip (t);
-    g_strdelimit (t, bad_filename_chars, '_');
-    r = g_strconcat (t, SEAHORSE_EXT_ASC, NULL);
-    g_free (t);
-    return r;
+	filename = g_strconcat (name, SEAHORSE_EXT_ASC, NULL);
+	g_strstrip (filename);
+	g_strdelimit (filename, bad_filename_chars, '_');
+	return filename;
 }
 
 /** 
@@ -867,23 +867,23 @@ seahorse_util_chooser_show_archive_files (GtkDialog *dialog)
 }
 
 void
-seahorse_util_chooser_set_filename_full (GtkDialog *dialog, GList *keys)
+seahorse_util_chooser_set_filename_full (GtkDialog *dialog, GList *objects)
 {
     gchar *t = NULL;
     
-    if (g_list_length (keys) > 0) {
-        t = seahorse_util_filename_for_keys (keys);
+    if (g_list_length (objects) > 0) {
+        t = seahorse_util_filename_for_objects (objects);
         gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), t);
         g_free (t);
     }
 }
 
 void
-seahorse_util_chooser_set_filename (GtkDialog *dialog, SeahorseKey *skey)
+seahorse_util_chooser_set_filename (GtkDialog *dialog, SeahorseObject *object)
 {
-	GList *keys = g_list_append (NULL, skey);
-	seahorse_util_chooser_set_filename_full (dialog, keys);
-	g_list_free (keys);
+	GList *objects = g_list_append (NULL, object);
+	seahorse_util_chooser_set_filename_full (dialog, objects);
+	g_list_free (objects);
 }
     
 gchar*      

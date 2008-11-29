@@ -24,7 +24,7 @@ namespace Seahorse {
 
 	[CCode (cname = "SEAHORSE_ERROR", cheader_filename = "seahorse-util.h")]
 	public GLib.Quark ERROR_DOMAIN;
-
+	
         [CCode (cheader_filename = "seahorse-source.h")]
         public class Source : GLib.Object {
 		public GLib.Quark ktype { get; }
@@ -37,27 +37,6 @@ namespace Seahorse {
 		public virtual Operation export (GLib.List<weak Object> objects, bool complete, GLib.OutputStream output);
 		public virtual Operation export_raw (GLib.List<GLib.Quark> ids, GLib.OutputStream output);
 		public virtual void remove (Object object, uint name) throws GLib.Error; 
-        }
-        
-        [CCode (cheader_filename = "seahorse-key.h")]
-        public class Key : Seahorse.Object {
-
-	       	[CCode (cprefix = "SKEY_FLAG_")]
-        	public static enum Flag {
-			IS_VALID =    0x0001,
-			CAN_ENCRYPT = 0x0002,
-			CAN_SIGN =    0x0004,
-			EXPIRED =     0x0100,
-			REVOKED =     0x0200,
-			DISABLED =    0x0400,
-			TRUSTED =     0x1000,
-			EXPORTABLE =  0x00100000
-        	}
-
-		public GLib.Quark ktype { get; }
-		public GLib.Quark keyid { get; }
-		public Usage usage { get; }
-		public string display_name { get; }
         }
         
 	[CCode (cheader_filename = "seahorse-set.h")]
@@ -154,7 +133,7 @@ namespace Seahorse {
 		public weak Gtk.Dialog chooser_save_new (string title, Gtk.Window? parent);
 		public void chooser_show_key_files (Gtk.Dialog dialog);
 		[CCode (cname = "seahorse_chooser_set_filename_full")]
-		public void chooser_set_filename (Gtk.Dialog dialog, GLib.List<Key> keys);
+		public void chooser_set_filename (Gtk.Dialog dialog, GLib.List<Object> keys);
 		public string chooser_save_prompt (Gtk.Dialog dialog);
 		
 		public weak Gtk.Dialog chooser_open_new (string title, Gtk.Window? parent);
@@ -222,7 +201,7 @@ namespace Seahorse {
 	
 	[CCode (cheader_filename = "seahorse-windows.h")]
 	public class KeyserverSync : GLib.Object {
-		public static weak Gtk.Window show (GLib.List<Key> keys, Gtk.Window parent);
+		public static weak Gtk.Window show (GLib.List<Object> keys, Gtk.Window parent);
 	}
 	
 	[CCode (cheader_filename = "seahorse-viewer.h")]

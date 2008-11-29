@@ -49,7 +49,7 @@ namespace Seahorse.Pgp {
         }
         
         [CCode (cheader_filename = "seahorse-pgp-key.h")]
-        public class Key : Seahorse.Key {
+        public class Key : Seahorse.Object {
         
         }
 

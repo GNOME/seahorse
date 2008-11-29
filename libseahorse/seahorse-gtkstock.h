@@ -26,6 +26,8 @@
 #ifndef _SEAHORSE_GTKSTOCK_H_
 #define _SEAHORSE_GTKSTOCK_H_
 
+#include <glib.h>
+
 /* The default stock icons */
 #define SEAHORSE_STOCK_KEY          "seahorse-key"
 #define SEAHORSE_STOCK_SECRET       "seahorse-key-personal"

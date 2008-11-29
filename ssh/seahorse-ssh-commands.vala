@@ -74,7 +74,7 @@ namespace Seahorse.Ssh {
 			
 			string prompt;
 			if (num == 1)
-				prompt = _("Are you sure you want to delete the secure shell key '%s'?").printf(keys.data.display_name);
+				prompt = _("Are you sure you want to delete the secure shell key '%s'?").printf(keys.data.label);
 			else
 				prompt = _("Are you sure you want to delete %d secure shell keys?").printf(num);
 			

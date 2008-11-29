@@ -106,7 +106,7 @@ seahorse_pkcs11_commands_delete_objects (SeahorseCommands *cmds, GList *objects)
 	num = g_list_length (objects);
 	
 	if (num == 1) {
-		display = seahorse_object_get_display_name (SEAHORSE_OBJECT (objects->data));
+		display = seahorse_object_get_label (SEAHORSE_OBJECT (objects->data));
 		prompt = g_strdup_printf (_("Are you sure you want to delete the certificate '%s'?"), display);
 		g_free (display);
 	} else {
@@ -233,7 +233,8 @@ seahorse_pkcs11_commands_class_init (SeahorsePkcs11CommandsClass *klass)
 	slot_certificate_window = g_quark_from_static_string ("seahorse-pkcs11-commands-window");
 
 	/* Register this as a source of commands */
-	seahorse_registry_register_type (seahorse_registry_get (), SEAHORSE_PKCS11_TYPE_COMMANDS, "commands", NULL);
+	seahorse_registry_register_type (seahorse_registry_get (), SEAHORSE_PKCS11_TYPE_COMMANDS, 
+	                                 SEAHORSE_PKCS11_TYPE_STR, "commands", NULL);
 }
 
 /* -----------------------------------------------------------------------------

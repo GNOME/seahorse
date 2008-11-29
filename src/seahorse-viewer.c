@@ -22,7 +22,7 @@
 #include "config.h"
 
 #include "seahorse-commands.h"
-#include "seahorse-key.h"
+#include "seahorse-object.h"
 #include "seahorse-preferences.h"
 #include "seahorse-progress.h"
 #include "seahorse-util.h"
@@ -184,7 +184,7 @@ objects_prune_non_exportable (GList *objects)
 	GList *l;
 	
 	for (l = objects; l; l = g_list_next (l)) {
-		if (seahorse_object_get_flags (l->data) & SKEY_FLAG_EXPORTABLE)
+		if (seahorse_object_get_flags (l->data) & SEAHORSE_FLAG_EXPORTABLE)
 			exportable = g_list_append (exportable, l->data);
 	}
 	
@@ -390,7 +390,7 @@ on_key_delete (GtkAction* action, SeahorseViewer* self)
 			gchar* prompt = NULL;
 			if (num == 1)
 				prompt = g_strdup_printf (_("%s is a private key. Are you sure you want to proceed?"), 
-				                          seahorse_object_get_display_name (object));
+				                          seahorse_object_get_label (object));
 			else
 				prompt = g_strdup (_("One or more of the deleted keys are private keys. Are you sure you want to proceed?"));
 						

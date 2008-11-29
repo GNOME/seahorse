@@ -19,9 +19,12 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include "config.h"
+
 #include "seahorse-combo-keys.h"
-#include "seahorse-key.h"
+
 #include "seahorse-gconf.h"
+#include "seahorse-object.h"
 
 enum {
   COMBO_STRING,
@@ -34,42 +37,40 @@ enum {
  */
 
 static void
-key_added (SeahorseSet *skset, SeahorseKey *skey, GtkComboBox *combo)
+object_added (SeahorseSet *skset, SeahorseObject *object, GtkComboBox *combo)
 {
     GtkListStore *model;
     GtkTreeIter iter;
-    gchar *userid;
+    const gchar *userid;
     
-    g_return_if_fail (skey != NULL);
+    g_return_if_fail (SEAHORSE_IS_OBJECT (object));
     g_return_if_fail (combo != NULL);
     
     model = GTK_LIST_STORE (gtk_combo_box_get_model (combo));
     
-    userid = seahorse_key_get_display_name (skey);
+    userid = seahorse_object_get_label (object);
 
     gtk_list_store_append (model, &iter);
     gtk_list_store_set (model, &iter,
                         COMBO_STRING, userid,
-                        COMBO_POINTER, skey,
+                        COMBO_POINTER, object,
                         -1);
-
-    g_free (userid);
     
-    seahorse_set_set_closure (skset, SEAHORSE_OBJECT (skey), GINT_TO_POINTER (TRUE));
+    seahorse_set_set_closure (skset, object, GINT_TO_POINTER (TRUE));
 }
 
 static void
-key_changed (SeahorseSet *skset, SeahorseKey *skey, SeahorseKeyChange change, 
-             GtkWidget *closure, GtkComboBox *combo)
+object_changed (SeahorseSet *skset, SeahorseObject *object, 
+                GtkWidget *closure, GtkComboBox *combo)
 {
     GtkTreeModel *model;
     GtkTreeIter iter;
     gboolean valid;
-    gchar *userid;
+    const gchar *userid;
     gpointer pntr;
-    SeahorseKey *skeyfrommodel;
+    SeahorseObject *frommodel;
     
-    g_return_if_fail (skey != NULL);
+    g_return_if_fail (SEAHORSE_IS_OBJECT (object));
 
     model = gtk_combo_box_get_model (combo);
     valid = gtk_tree_model_get_iter_first (model, &iter);
@@ -79,33 +80,32 @@ key_changed (SeahorseSet *skset, SeahorseKey *skey, SeahorseKeyChange change,
                             COMBO_POINTER, &pntr,
                             -1);
                             
-        skeyfrommodel = SEAHORSE_KEY (pntr);
+        frommodel = SEAHORSE_OBJECT (pntr);
         
-        if (skeyfrommodel == skey) {
-        userid = seahorse_key_get_display_name (skey);
+        if (frommodel == object) {
+        userid = seahorse_object_get_label (object);
             gtk_list_store_set (GTK_LIST_STORE (model), &iter,
                                 COMBO_STRING, userid,
                                 -1);
                                 
-        g_free (userid);
             break;
-    }
+        }
     
         valid = gtk_tree_model_iter_next (model, &iter);
     }
 }
 
 static void
-key_removed (SeahorseSet *skset, SeahorseKey *skey, GtkWidget *closure, 
-             GtkComboBox *combo)
+object_removed (SeahorseSet *skset, SeahorseObject *object, 
+                GtkWidget *closure, GtkComboBox *combo)
 {
     GtkTreeModel *model;
     GtkTreeIter iter;
     gpointer pntr;
     gboolean valid;
-    SeahorseKey *skeyfrommodel;
+    SeahorseObject *frommodel;
     
-    g_return_if_fail (skey != NULL);
+    g_return_if_fail (SEAHORSE_IS_OBJECT (object));
     g_return_if_fail (combo != NULL);
 
     model = gtk_combo_box_get_model (combo);
@@ -116,9 +116,9 @@ key_removed (SeahorseSet *skset, SeahorseKey *skey, GtkWidget *closure,
                             COMBO_POINTER, &pntr,
                             -1);
                             
-        skeyfrommodel = SEAHORSE_KEY (pntr);
+        frommodel = SEAHORSE_OBJECT (pntr);
         
-        if (skeyfrommodel == skey) {
+        if (frommodel == object) {
             gtk_list_store_remove (GTK_LIST_STORE (model), &iter);
                                 
             break;
@@ -131,9 +131,9 @@ key_removed (SeahorseSet *skset, SeahorseKey *skey, GtkWidget *closure,
 static void
 combo_destroyed (GtkComboBox *combo, SeahorseSet *skset)
 {
-    g_signal_handlers_disconnect_by_func (skset, key_added, combo);
-    g_signal_handlers_disconnect_by_func (skset, key_changed, combo);
-    g_signal_handlers_disconnect_by_func (skset, key_removed, combo);
+    g_signal_handlers_disconnect_by_func (skset, object_added, combo);
+    g_signal_handlers_disconnect_by_func (skset, object_changed, combo);
+    g_signal_handlers_disconnect_by_func (skset, object_removed, combo);
 }
 
 /* -----------------------------------------------------------------------------
@@ -147,8 +147,8 @@ seahorse_combo_keys_attach (GtkComboBox *combo, SeahorseSet *skset,
     GtkTreeModel *model;
     GtkTreeIter iter;
     GtkCellRenderer *renderer;
-    SeahorseKey *skey;
-    GList *l, *keys;
+    SeahorseObject *object;
+    GList *l, *objects;
 
     /* Setup the None Option */
     model = gtk_combo_box_get_model (combo);
@@ -164,17 +164,17 @@ seahorse_combo_keys_attach (GtkComboBox *combo, SeahorseSet *skset,
                                        "text", COMBO_STRING);                            
     }
 
-    /* Setup the key list */
-    keys = seahorse_set_get_objects (skset);  
-    for (l = keys; l != NULL; l = g_list_next (l)) {
-        skey = SEAHORSE_KEY (l->data);
-        key_added (skset, skey, combo);
+    /* Setup the object list */
+    objects = seahorse_set_get_objects (skset);  
+    for (l = objects; l != NULL; l = g_list_next (l)) {
+        object = SEAHORSE_OBJECT (l->data);
+        object_added (skset, object, combo);
     }
-    g_list_free (keys);
+    g_list_free (objects);
 
-    g_signal_connect_after (skset, "added", G_CALLBACK (key_added), combo);
-    g_signal_connect_after (skset, "changed", G_CALLBACK (key_changed), combo);
-    g_signal_connect_after (skset, "removed", G_CALLBACK (key_removed), combo);
+    g_signal_connect_after (skset, "added", G_CALLBACK (object_added), combo);
+    g_signal_connect_after (skset, "changed", G_CALLBACK (object_changed), combo);
+    g_signal_connect_after (skset, "removed", G_CALLBACK (object_removed), combo);
 
     if (none_option) {
         gtk_list_store_prepend (GTK_LIST_STORE (model), &iter);
@@ -195,9 +195,9 @@ seahorse_combo_keys_attach (GtkComboBox *combo, SeahorseSet *skset,
 }
 
 void
-seahorse_combo_keys_set_active_id (GtkComboBox *combo, GQuark keyid)
+seahorse_combo_keys_set_active_id (GtkComboBox *combo, GQuark id)
 {
-    SeahorseKey *skey;
+    SeahorseObject *object;
     GtkTreeModel *model;
     GtkTreeIter iter;
     gboolean valid;
@@ -217,15 +217,15 @@ seahorse_combo_keys_set_active_id (GtkComboBox *combo, GQuark keyid)
                             COMBO_POINTER, &pointer,
                             -1);
                             
-        skey = SEAHORSE_KEY (pointer);
+        object = SEAHORSE_OBJECT (pointer);
         
-        if (!keyid) {
-            if (!skey) {
+        if (!id) {
+            if (!object) {
                 gtk_combo_box_set_active_iter (combo, &iter);
                 break;
             }
-        } else if (skey != NULL) {
-            if (keyid == seahorse_key_get_keyid (skey)) {
+        } else if (object != NULL) {
+            if (id == seahorse_object_get_id (object)) {
                 gtk_combo_box_set_active_iter (combo, &iter);
                 break;
             }
@@ -237,13 +237,13 @@ seahorse_combo_keys_set_active_id (GtkComboBox *combo, GQuark keyid)
 }
 
 void 
-seahorse_combo_keys_set_active (GtkComboBox *combo, SeahorseKey *skey)
+seahorse_combo_keys_set_active (GtkComboBox *combo, SeahorseObject *object)
 {
     seahorse_combo_keys_set_active_id (combo, 
-                skey == NULL ? 0 : seahorse_key_get_keyid (skey));
+                object == NULL ? 0 : seahorse_object_get_id (object));
 }
 
-SeahorseKey* 
+SeahorseObject* 
 seahorse_combo_keys_get_active (GtkComboBox *combo)
 {
     GtkTreeModel *model;
@@ -261,12 +261,12 @@ seahorse_combo_keys_get_active (GtkComboBox *combo)
                         COMBO_POINTER, &pointer,
                         -1);
 
-    return SEAHORSE_KEY (pointer);
+    return SEAHORSE_OBJECT (pointer);
 }
 
 GQuark 
 seahorse_combo_keys_get_active_id (GtkComboBox *combo)
 {
-    SeahorseKey *skey = seahorse_combo_keys_get_active (combo);
-    return skey == NULL ? 0 : seahorse_key_get_keyid (skey);
+    SeahorseObject *object = seahorse_combo_keys_get_active (combo);
+    return object == NULL ? 0 : seahorse_object_get_id (object);
 }

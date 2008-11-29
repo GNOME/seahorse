@@ -23,9 +23,10 @@
 
 #include <glib/gi18n.h>
 
-#include "seahorse-context.h"
 #include "seahorse-unknown-source.h"
-#include "seahorse-unknown-key.h"
+
+#include "seahorse-context.h"
+#include "seahorse-unknown.h"
 
 #include "common/seahorse-registry.h"
 
@@ -147,7 +148,7 @@ seahorse_unknown_source_class_init (SeahorseUnknownSourceClass *klass)
  
     g_object_class_install_property (gobject_class, PROP_KEY_TYPE,
         g_param_spec_uint ("key-type", "Key Type", "Key type that originates from this key source.", 
-                           0, G_MAXUINT, SKEY_UNKNOWN, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+                           0, G_MAXUINT, SEAHORSE_TAG_INVALID, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
     g_object_class_install_property (gobject_class, PROP_KEY_DESC,
         g_param_spec_string ("key-desc", "Key Desc", "Description for keys that originate here.",
@@ -157,7 +158,7 @@ seahorse_unknown_source_class_init (SeahorseUnknownSourceClass *klass)
         g_param_spec_uint ("location", "Key Location", "Where the key is stored. See SeahorseLocation", 
                            0, G_MAXUINT, SEAHORSE_LOCATION_MISSING, G_PARAM_READABLE));    
     
-	seahorse_registry_register_type (NULL, SEAHORSE_TYPE_UNKNOWN_SOURCE, "key-source", NULL);
+	seahorse_registry_register_type (NULL, SEAHORSE_TYPE_UNKNOWN_SOURCE, "source", NULL);
 }
 
 /* -----------------------------------------------------------------------------
@@ -180,12 +181,12 @@ seahorse_unknown_source_add_object (SeahorseUnknownSource *usrc, GQuark id,
 
     sobj = seahorse_context_get_object (SCTX_APP (), SEAHORSE_SOURCE (usrc), id);
     if (!sobj) {
-        sobj = SEAHORSE_OBJECT (seahorse_unknown_key_new (usrc, id));
+        sobj = SEAHORSE_OBJECT (seahorse_unknown_new (usrc, id, NULL));
         seahorse_context_add_object (SCTX_APP (), sobj);
     }
     
     if (search) {
-        sobj->_location = SEAHORSE_LOCATION_SEARCHING;
+        g_object_set (sobj, "location", SEAHORSE_LOCATION_SEARCHING, NULL);
         seahorse_operation_watch (search, (SeahorseDoneFunc) search_done, sobj, NULL, NULL);
     }
     

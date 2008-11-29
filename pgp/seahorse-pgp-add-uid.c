@@ -25,7 +25,7 @@
 
 #include <glib/gi18n.h>
  
-#include "seahorse-key-widget.h"
+#include "seahorse-object-widget.h"
 #include "seahorse-util.h"
 
 #include "seahorse-pgp-dialogs.h"
@@ -66,11 +66,11 @@ email_changed (GtkEditable *editable, SeahorseWidget *swidget)
 static void
 ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 {
-	SeahorseKey *skey;
+	SeahorseObject *object;
 	const gchar *name, *email, *comment;
 	gpgme_error_t err;
 	
-	skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
+	object = SEAHORSE_OBJECT_WIDGET (swidget)->object;
 	
 	name = gtk_entry_get_text (GTK_ENTRY (
 		glade_xml_get_widget (swidget->xml, NAME)));
@@ -79,7 +79,7 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 	comment = gtk_entry_get_text (GTK_ENTRY (
 		glade_xml_get_widget (swidget->xml, "comment")));
 	
-	err = seahorse_pgp_key_pair_op_add_uid (SEAHORSE_PGP_KEY (skey),
+	err = seahorse_pgp_key_pair_op_add_uid (SEAHORSE_PGP_KEY (object),
 		                                name, email, comment);
 	if (!GPG_IS_OK (err))
 		seahorse_pgp_handle_gpgme_error (err, _("Couldn't add user id"));
@@ -97,15 +97,14 @@ void
 seahorse_pgp_add_uid_new (SeahorsePGPKey *pkey, GtkWindow *parent)
 {
 	SeahorseWidget *swidget;
-    gchar *userid;
+	const gchar *userid;
 	
-	swidget = seahorse_key_widget_new ("add-uid", parent, SEAHORSE_KEY (pkey));
+	swidget = seahorse_object_widget_new ("add-uid", parent, SEAHORSE_OBJECT (pkey));
 	g_return_if_fail (swidget != NULL);
 	
-    userid = seahorse_key_get_name (SEAHORSE_KEY (pkey), 0);
+	userid = seahorse_object_get_label (SEAHORSE_OBJECT (pkey));
 	gtk_window_set_title (GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)),
 		g_strdup_printf (_("Add user ID to %s"), userid));
-    g_free (userid);
   
 	glade_xml_signal_connect_data (swidget->xml, "ok_clicked",
 		G_CALLBACK (ok_clicked), swidget);

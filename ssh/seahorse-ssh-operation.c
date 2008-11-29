@@ -86,7 +86,7 @@ typedef struct _SeahorseSSHOperationPrivate {
     PasswordCallback password_cb;
     
     /* Prompt information */
-    SeahorseKey *prompt_skey;
+    SeahorseObject *prompt_skey;
     GtkDialog *prompt_dialog;
     guint prompt_requests;
     
@@ -112,7 +112,7 @@ enum {
 IMPLEMENT_OPERATION_PROPS(SSH, ssh)
 
     g_object_class_install_property (gobject_class, PROP_KEY_SOURCE,
-        g_param_spec_object ("key-source", "SSH Key Source", "Key source this operation works on.", 
+        g_param_spec_object ("source", "SSH Key Source", "Key source this operation works on.", 
                              SEAHORSE_TYPE_SSH_SOURCE, G_PARAM_READABLE));
 
     g_type_class_add_private (gobject_class, sizeof (SeahorseSSHOperationPrivate));
@@ -432,18 +432,17 @@ prompt_passphrase (SeahorseSSHOperation *sop, const gchar* title, const gchar* m
                    const gchar* check, gboolean confirm)
 {
     SeahorseSSHOperationPrivate *pv = SEAHORSE_SSH_OPERATION_GET_PRIVATE (sop);
-    gchar *display;
+    const gchar *display;
     gchar *msg;
     
     if (pv->prompt_dialog)
         gtk_widget_destroy (GTK_WIDGET (pv->prompt_dialog));
     
     if (pv->prompt_skey)
-        display = seahorse_key_get_display_name (pv->prompt_skey);
+        display = seahorse_object_get_label (pv->prompt_skey);
     else 
-        display = g_strdup (_("Secure Shell key"));
+        display = _("Secure Shell key");
     msg = g_strdup_printf (message, display);
-    g_free (display);
 
     pv->prompt_dialog = seahorse_passphrase_prompt_show (title, msg, _("Passphrase:"), 
                                                          check, confirm);
@@ -465,18 +464,17 @@ prompt_password (SeahorseSSHOperation *sop, const gchar* title, const gchar* mes
                  const gchar* check, gboolean confirm)
 {
     SeahorseSSHOperationPrivate *pv = SEAHORSE_SSH_OPERATION_GET_PRIVATE (sop);
-    gchar *display;
+    const gchar *display;
     gchar *msg;
     
     if (pv->prompt_dialog)
         gtk_widget_destroy (GTK_WIDGET (pv->prompt_dialog));
     
     if (pv->prompt_skey)
-        display = seahorse_key_get_display_name (pv->prompt_skey);
+        display = seahorse_object_get_label (pv->prompt_skey);
     else 
         display = g_strdup (_("Secure Shell key"));
     msg = g_strdup_printf (message, display);
-    g_free (display);
 
     pv->prompt_dialog = seahorse_passphrase_prompt_show (title, msg, _("Password:"), 
                                                          check, confirm);
@@ -632,7 +630,7 @@ seahorse_ssh_operation_new (SeahorseSSHSource *ssrc, const gchar *command,
     pv = SEAHORSE_SSH_OPERATION_GET_PRIVATE (sop);
 
     sop->sksrc = ssrc;
-    pv->prompt_skey = SEAHORSE_KEY (skey);
+    pv->prompt_skey = SEAHORSE_OBJECT (skey);
     
     DEBUG_OPERATION (("SSHOP: Executing SSH command: %s\n", command));
     
@@ -771,7 +769,7 @@ seahorse_ssh_operation_upload (SeahorseSSHSource *ssrc, GList *keys,
     SeahorseOperation *op;
     GMemoryOutputStream *output;
     gchar *data;
-    size_t length, size, strl;
+    size_t length;
     gchar *cmd;
     
     g_return_val_if_fail (keys != NULL, NULL);
@@ -874,7 +872,7 @@ change_result_cb (SeahorseSSHOperation *sop)
     SeahorseSSHOperationPrivate *pv = SEAHORSE_SSH_OPERATION_GET_PRIVATE (sop);
     if (pv->prompt_skey)
         seahorse_source_load_async (SEAHORSE_SOURCE (sop->sksrc), 
-                                        seahorse_key_get_keyid (pv->prompt_skey));
+                                        seahorse_object_get_id (pv->prompt_skey));
 }
 
 SeahorseOperation*
@@ -888,7 +886,7 @@ seahorse_ssh_operation_change_passphrase (SeahorseSSHKey *skey)
     g_return_val_if_fail (SEAHORSE_IS_SSH_KEY (skey), NULL);
     g_return_val_if_fail (skey->keydata && skey->keydata->privfile, NULL);
     
-    ssrc = seahorse_key_get_source (SEAHORSE_KEY (skey));
+    ssrc = seahorse_object_get_source (SEAHORSE_OBJECT (skey));
     g_return_val_if_fail (SEAHORSE_IS_SSH_SOURCE (ssrc), NULL);
     
     cmd = g_strdup_printf (SSH_KEYGEN_PATH " -p -f '%s'", skey->keydata->privfile);
@@ -974,114 +972,6 @@ seahorse_ssh_operation_generate (SeahorseSSHSource *src, const gchar *email,
     
     return op;
 }
-
-/* -----------------------------------------------------------------------------
- * LOAD KEY INTO AGENT
- */ 
-
-#if 0
-#define KEYRING_ATTR_TYPE "seahorse-key-type"
-#define KEYRING_ATTR_KEYID "openssh-keyid"
-#define KEYRING_VAL_SSH "openssh"
-
-static gchar*
-get_keyring_passphrase (SeahorseKey *skey)
-{
-    GnomeKeyringAttributeList *attributes = NULL;
-    GnomeKeyringResult res;
-    GList *found_items;
-    GnomeKeyringFound *found;
-    gchar *ret = NULL;
-    const gchar *id;
-    
-    g_assert (skey != NULL);
-    id = seahorse_key_get_rawid (seahorse_key_get_keyid (skey));
-    
-    attributes = gnome_keyring_attribute_list_new ();
-    gnome_keyring_attribute_list_append_string (attributes, KEYRING_ATTR_KEYID, id);
-    res = gnome_keyring_find_items_sync (GNOME_KEYRING_ITEM_GENERIC_SECRET, attributes, 
-                                         &found_items);
-    gnome_keyring_attribute_list_free (attributes);
-        
-    if (res != GNOME_KEYRING_RESULT_OK) {
-        if (res != GNOME_KEYRING_RESULT_DENIED)
-            g_warning ("couldn't search keyring: (code %d)", res);
-            
-    } else {
-        
-        if (found_items && found_items->data) {
-            found = (GnomeKeyringFound*)found_items->data;
-            if (found->secret)
-                ret = g_strdup (found->secret);
-        }
-            
-        gnome_keyring_found_list_free (found_items);
-    }
-    
-    return ret;
-}
-
-static void 
-set_keyring_passphrase (SeahorseKey *skey, const gchar *pass)
-{
-    const gchar *keyring = NULL;
-    GnomeKeyringResult res;
-    GnomeKeyringAttributeList *attributes = NULL;
-    guint item_id;
-    const gchar *id;
-    gchar *display;
-    
-    g_assert ((skey != NULL) && (pass != NULL));
-    
-    id = seahorse_key_get_rawid (seahorse_key_get_keyid (skey));
-    g_assert (id != NULL);
-    display = seahorse_key_get_display_name (skey);
-    
-    attributes = gnome_keyring_attribute_list_new ();
-    gnome_keyring_attribute_list_append_string (attributes, KEYRING_ATTR_TYPE, 
-                                                KEYRING_VAL_SSH);
-    gnome_keyring_attribute_list_append_string (attributes, KEYRING_ATTR_KEYID, id);
-    res = gnome_keyring_item_create_sync (keyring, GNOME_KEYRING_ITEM_GENERIC_SECRET, 
-                                          display, attributes, pass, TRUE, &item_id);
-    gnome_keyring_attribute_list_free (attributes);
-        
-    if (res != GNOME_KEYRING_RESULT_OK)
-        g_warning ("Couldn't store password in keyring: (code %d)", res);
-}
-
-static const gchar*
-load_password_cb (SeahorseSSHOperation *sop, const gchar* msg)
-{
-    SeahorseSSHOperationPrivate *pv = SEAHORSE_SSH_OPERATION_GET_PRIVATE (sop);
-    gchar* pass;
-
-    DEBUG_OPERATION (("in load_password_cb\n"));
-    
-    if (pv->prompt_requests <= 0) {
-        pass = get_keyring_passphrase (pv->prompt_skey);
-        if (pass != NULL) {
-            g_object_set_data_full (G_OBJECT (sop), "load-keyring-passphrase", pass, g_free);
-            return pass;
-        }
-        pv->prompt_requests++;
-    }
-    
-    return prompt_passphrase (sop, _("Secure Shell Key Passphrase"), _("Enter the passphrase for: %s"), 
-                              _("Save this passphrase in my keyring"), FALSE);
-}
-
-static void
-load_result_cb (SeahorseSSHOperation *sop)
-{
-    SeahorseSSHOperationPrivate *pv = SEAHORSE_SSH_OPERATION_GET_PRIVATE (sop);
-    const gchar* pass;
-    
-    if (pv->prompt_dialog && seahorse_passphrase_prompt_checked (pv->prompt_dialog)) {
-        pass = seahorse_passphrase_prompt_get (pv->prompt_dialog);
-        set_keyring_passphrase (pv->prompt_skey, pass);
-    }
-}
-#endif
 
 /* -----------------------------------------------------------------------------
  * IMPORT A PUBLIC KEY 
@@ -1250,7 +1140,7 @@ seahorse_ssh_operation_authorize (SeahorseSSHSource *ssrc, SeahorseSSHKey *skey,
     /* Just reload that one key */
     if (!err)
         seahorse_source_load (SEAHORSE_SOURCE (ssrc), 
-                                  seahorse_key_get_keyid (SEAHORSE_KEY (skey)));
+                                  seahorse_object_get_id (SEAHORSE_OBJECT (skey)));
     
     return seahorse_operation_new_complete (err);
 }

@@ -20,30 +20,33 @@
  */
 #include "config.h"
 
-#include <glib/gi18n.h>
-
-#include "seahorse-key-widget.h"
-
 #include "seahorse-gtkstock.h"
-#include "seahorse-key.h"
+#include "seahorse-object.h"
+#include "seahorse-object-widget.h"
 #include "seahorse-util.h"
+#include "seahorse-validity.h"
+
+#include "common/seahorse-bind.h"
 
 #include "ssh/seahorse-ssh-key.h"
 #include "ssh/seahorse-ssh-operation.h"
+
+#include <glib/gi18n.h>
 
 #define NOTEBOOK "notebook"
 
 static void
 do_main (SeahorseWidget *swidget)
 {
-    SeahorseKey *key;
+    SeahorseObject *object;
     SeahorseSSHKey *skey;
     GtkWidget *widget;
     gchar *text;
+    const gchar *label;
     const gchar *template;
 
-    key = SEAHORSE_KEY_WIDGET (swidget)->skey;
-    skey = SEAHORSE_SSH_KEY (key);
+    object = SEAHORSE_OBJECT_WIDGET (swidget)->object;
+    skey = SEAHORSE_SSH_KEY (object);
 
     /* Image */
     widget = seahorse_widget_get_widget (swidget, "key-image");
@@ -51,20 +54,18 @@ do_main (SeahorseWidget *swidget)
         gtk_image_set_from_stock (GTK_IMAGE (widget), SEAHORSE_STOCK_KEY_SSH, GTK_ICON_SIZE_DIALOG);
 
     /* Name and title */
-    text = seahorse_key_get_display_name (key);
+    label = seahorse_object_get_label (object);
     widget = seahorse_widget_get_widget (swidget, "comment-entry");
     if (widget)
-        gtk_entry_set_text (GTK_ENTRY (widget), text);
+        gtk_entry_set_text (GTK_ENTRY (widget), label);
     widget = seahorse_widget_get_toplevel (swidget);
-    gtk_window_set_title (GTK_WINDOW (widget), text);
-    g_free (text);
+    gtk_window_set_title (GTK_WINDOW (widget), label);
 
     /* Key id */
     widget = glade_xml_get_widget (swidget->xml, "id-label");
     if (widget) {
-        text = seahorse_key_get_display_id (key);
-        gtk_label_set_text (GTK_LABEL (widget), text);
-        g_free (text);
+        label = seahorse_object_get_identifier (object);
+        gtk_label_set_text (GTK_LABEL (widget), label);
     }
     
     /* Put in message */
@@ -79,13 +80,13 @@ do_main (SeahorseWidget *swidget)
     widget = seahorse_widget_get_widget (swidget, "trust-check");
     g_return_if_fail (widget != NULL);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), 
-                                  seahorse_key_get_trust (key) >= SEAHORSE_VALIDITY_FULL);
+                                  seahorse_ssh_key_get_trust (skey) >= SEAHORSE_VALIDITY_FULL);
 }
 
 static void
 comment_activate (GtkWidget *entry, SeahorseWidget *swidget)
 {
-    SeahorseKey *key;
+    SeahorseObject *object;
     SeahorseSSHKey *skey;
     SeahorseSource *sksrc;
     SeahorseOperation *op;
@@ -93,9 +94,9 @@ comment_activate (GtkWidget *entry, SeahorseWidget *swidget)
     gchar *comment;
     GError *err = NULL;
     
-    key = SEAHORSE_KEY_WIDGET (swidget)->skey;
-    skey = SEAHORSE_SSH_KEY (key);
-    sksrc = seahorse_key_get_source (key);
+    object = SEAHORSE_OBJECT_WIDGET (swidget)->object;
+    skey = SEAHORSE_SSH_KEY (object);
+    sksrc = seahorse_object_get_source (object);
     g_return_if_fail (SEAHORSE_IS_SSH_SOURCE (sksrc));
     
     text = gtk_entry_get_text (GTK_ENTRY (entry));
@@ -135,14 +136,14 @@ trust_toggled (GtkToggleButton *button, SeahorseWidget *swidget)
 {
     SeahorseSource *sksrc;
     SeahorseOperation *op;
-    SeahorseKey *key;
+    SeahorseObject *object;
     SeahorseSSHKey *skey;
     gboolean authorize;
     GError *err = NULL;
 
-    key = SEAHORSE_KEY_WIDGET (swidget)->skey;
-    skey = SEAHORSE_SSH_KEY (key);
-    sksrc = seahorse_key_get_source (key);
+    object = SEAHORSE_OBJECT_WIDGET (swidget)->object;
+    skey = SEAHORSE_SSH_KEY (object);
+    sksrc = seahorse_object_get_source (object);
     g_return_if_fail (SEAHORSE_IS_SSH_SOURCE (sksrc));
     
     authorize = gtk_toggle_button_get_active (button);
@@ -184,17 +185,17 @@ static void
 passphrase_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 {
     SeahorseOperation *op;
-    SeahorseKey *skey;
+    SeahorseObject *object;
     GtkWidget *w;
     
-    skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
-    g_assert (SEAHORSE_IS_SSH_KEY (skey));
+    object = SEAHORSE_OBJECT_WIDGET (swidget)->object;
+    g_assert (SEAHORSE_IS_SSH_KEY (object));
 
     w = glade_xml_get_widget (swidget->xml, "passphrase-button");
     g_return_if_fail (w != NULL);
     gtk_widget_set_sensitive (w, FALSE);
     
-    op = seahorse_ssh_operation_change_passphrase (SEAHORSE_SSH_KEY (skey));
+    op = seahorse_ssh_operation_change_passphrase (SEAHORSE_SSH_KEY (object));
     seahorse_operation_watch (op, (SeahorseDoneFunc)passphrase_done, swidget, NULL, NULL);
 
     /* Running operations ref themselves */
@@ -222,7 +223,7 @@ static void
 export_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 {
 	SeahorseSource *sksrc;
-	SeahorseKey *skey;
+	SeahorseObject *object;
 	GFile *file;
 	GtkDialog *dialog;
 	guchar *results;
@@ -230,22 +231,22 @@ export_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 	gchar* uri = NULL;
 	GError *err = NULL;
 
-	skey = SEAHORSE_KEY_WIDGET (swidget)->skey;
-	g_return_if_fail (SEAHORSE_IS_SSH_KEY (skey));
-	sksrc = seahorse_object_get_source (SEAHORSE_OBJECT (skey));
+	object = SEAHORSE_OBJECT_WIDGET (swidget)->object;
+	g_return_if_fail (SEAHORSE_IS_SSH_KEY (object));
+	sksrc = seahorse_object_get_source (object);
 	g_return_if_fail (SEAHORSE_IS_SSH_SOURCE (sksrc));
 	
 	dialog = seahorse_util_chooser_save_new (_("Export Complete Key"), 
 	                                         GTK_WINDOW (seahorse_widget_get_toplevel (swidget)));
 	seahorse_util_chooser_show_key_files (dialog);
-	seahorse_util_chooser_set_filename (dialog, skey);
+	seahorse_util_chooser_set_filename (dialog, object);
 
 	uri = seahorse_util_chooser_save_prompt (dialog);
 	if (!uri) 
 		return;
 	
 	results = seahorse_ssh_source_export_private (SEAHORSE_SSH_SOURCE (sksrc), 
-	                                              SEAHORSE_SSH_KEY (skey),
+	                                              SEAHORSE_SSH_KEY (object),
 	                                              &n_results, &err);
 	
 	if (results) {
@@ -267,18 +268,18 @@ export_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 static void 
 do_details (SeahorseWidget *swidget)
 {
-    SeahorseKey *key;
+    SeahorseObject *object;
     SeahorseSSHKey *skey;
     GtkWidget *widget;
     const gchar *label;
     gchar *text;
 
-    key = SEAHORSE_KEY_WIDGET (swidget)->skey;
-    skey = SEAHORSE_SSH_KEY (key);
+    object = SEAHORSE_OBJECT_WIDGET (swidget)->object;
+    skey = SEAHORSE_SSH_KEY (object);
 
     widget = glade_xml_get_widget (swidget->xml, "fingerprint-label");
     if (widget) {
-        text = seahorse_key_get_fingerprint (key); 
+        text = seahorse_ssh_key_get_fingerprint (skey);
         gtk_label_set_text (GTK_LABEL (widget), text);
         g_free (text);
     }
@@ -301,29 +302,13 @@ do_details (SeahorseWidget *swidget)
         gtk_label_set_text (GTK_LABEL (widget), text);
         g_free (text);
     }
-
 }
 
 static void
-key_changed (SeahorseKey *skey, SeahorseKeyChange change, SeahorseWidget *swidget)
+key_notify (SeahorseObject *object, SeahorseWidget *swidget)
 {
     do_main (swidget);
     do_details (swidget);
-}
-
-static void
-key_destroyed (GtkObject *object, SeahorseWidget *swidget)
-{
-    seahorse_widget_destroy (swidget);
-}
-
-static void
-properties_destroyed (GtkObject *object, SeahorseWidget *swidget)
-{
-    g_signal_handlers_disconnect_by_func (SEAHORSE_KEY_WIDGET (swidget)->skey,
-                                          key_changed, swidget);
-    g_signal_handlers_disconnect_by_func (SEAHORSE_KEY_WIDGET (swidget)->skey,
-                                          key_destroyed, swidget);
 }
 
 static void
@@ -340,23 +325,15 @@ properties_response (GtkDialog *dialog, int response, SeahorseWidget *swidget)
 void
 seahorse_ssh_key_properties_show (SeahorseSSHKey *skey, GtkWindow *parent)
 {
-    SeahorseKey *key = SEAHORSE_KEY (skey);
+    SeahorseObject *object = SEAHORSE_OBJECT (skey);
     SeahorseWidget *swidget = NULL;
     GtkWidget *widget;
 
-    swidget = seahorse_key_widget_new ("ssh-key-properties",
-                                       parent,
-                                       key);    
+    swidget = seahorse_object_widget_new ("ssh-key-properties", parent, object);
     
     /* This happens if the window is already open */
     if (swidget == NULL)
         return;
-
-    widget = glade_xml_get_widget (swidget->xml, swidget->name);
-    g_signal_connect (widget, "response", G_CALLBACK (properties_response), swidget);
-    g_signal_connect (widget, "destroy", G_CALLBACK (properties_destroyed), swidget);
-    g_signal_connect_after (skey, "changed", G_CALLBACK (key_changed), swidget);
-    g_signal_connect_after (skey, "destroy", G_CALLBACK (key_destroyed), swidget);
 
     /* 
      * The signals don't need to keep getting connected. Everytime a key changes the
@@ -375,7 +352,7 @@ seahorse_ssh_key_properties_show (SeahorseSSHKey *skey, GtkWindow *parent)
     g_signal_connect (widget, "activate", G_CALLBACK (comment_activate), swidget);
     g_signal_connect (widget, "focus-out-event", G_CALLBACK (comment_focus_out), swidget);
 
-    if (seahorse_key_get_usage (key) == SEAHORSE_USAGE_PRIVATE_KEY) {
+    if (seahorse_object_get_usage (object) == SEAHORSE_USAGE_PRIVATE_KEY) {
         glade_xml_signal_connect_data (swidget->xml, "export_button_clicked",
                                        G_CALLBACK (export_button_clicked), swidget);
         glade_xml_signal_connect_data (swidget->xml, "passphrase_button_clicked",
@@ -387,6 +364,9 @@ seahorse_ssh_key_properties_show (SeahorseSSHKey *skey, GtkWindow *parent)
         seahorse_widget_set_visible (swidget, "export-button", FALSE);
     }
 
-    if (swidget)
-        seahorse_widget_show (swidget);
+    widget = glade_xml_get_widget (swidget->xml, swidget->name);
+    g_signal_connect (widget, "response", G_CALLBACK (properties_response), swidget);
+    seahorse_bind_objects (NULL, skey, (SeahorseTransfer)key_notify, swidget);
+
+    seahorse_widget_show (swidget);
 }

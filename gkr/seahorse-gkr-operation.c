@@ -70,7 +70,7 @@ enum {
 IMPLEMENT_OPERATION_PROPS(Gkr, gkr)
 
     g_object_class_install_property (gobject_class, PROP_KEY_SOURCE,
-        g_param_spec_object ("key-source", "Gkr Source", "Key source this operation works on.", 
+        g_param_spec_object ("source", "Gkr Source", "Key source this operation works on.", 
                              SEAHORSE_TYPE_GKR_SOURCE, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY ));
 
     g_type_class_add_private (gobject_class, sizeof (SeahorseGkrOperationPrivate));
@@ -263,15 +263,15 @@ seahorse_gkr_operation_update_info (SeahorseGkrItem *git, GnomeKeyringItemInfo *
     
     g_return_val_if_fail (SEAHORSE_IS_GKR_ITEM (git), NULL);
     
-    sksrc = seahorse_key_get_source (SEAHORSE_KEY (git));
+    sksrc = seahorse_object_get_source (SEAHORSE_OBJECT (git));
     g_return_val_if_fail (SEAHORSE_IS_GKR_SOURCE (sksrc), NULL);
     
     gop = g_object_new (SEAHORSE_TYPE_GKR_OPERATION, 
-                        "key-source", SEAHORSE_GKR_SOURCE (sksrc), NULL);
+                        "source", SEAHORSE_GKR_SOURCE (sksrc), NULL);
     pv = SEAHORSE_GKR_OPERATION_GET_PRIVATE (gop);
     
     keyring_name = seahorse_gkr_source_get_keyring_name (SEAHORSE_GKR_SOURCE (sksrc));
-    pv->keyid = seahorse_key_get_keyid (SEAHORSE_KEY (git));
+    pv->keyid = seahorse_object_get_id (SEAHORSE_OBJECT (git));
     
     /* Start actual save request */
     pv->request = gnome_keyring_item_set_info (keyring_name, git->item_id, info, 
@@ -295,15 +295,15 @@ seahorse_gkr_operation_update_acl (SeahorseGkrItem *git, GList *acl)
     
     g_return_val_if_fail (SEAHORSE_IS_GKR_ITEM (git), NULL);
     
-    sksrc = seahorse_key_get_source (SEAHORSE_KEY (git));
+    sksrc = seahorse_object_get_source (SEAHORSE_OBJECT (git));
     g_return_val_if_fail (SEAHORSE_IS_GKR_SOURCE (sksrc), NULL);
     
     gop = g_object_new (SEAHORSE_TYPE_GKR_OPERATION, 
-                        "key-source", SEAHORSE_GKR_SOURCE (sksrc), NULL);
+                        "source", SEAHORSE_GKR_SOURCE (sksrc), NULL);
     pv = SEAHORSE_GKR_OPERATION_GET_PRIVATE (gop);
     
     keyring_name = seahorse_gkr_source_get_keyring_name (SEAHORSE_GKR_SOURCE (sksrc));
-    pv->keyid = seahorse_key_get_keyid (SEAHORSE_KEY (git));
+    pv->keyid = seahorse_object_get_id (SEAHORSE_OBJECT (git));
     
     /* Start actual save request */
     pv->request = gnome_keyring_item_set_acl (keyring_name, git->item_id, acl, 

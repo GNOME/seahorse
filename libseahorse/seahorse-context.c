@@ -33,10 +33,11 @@
 #include "seahorse-marshal.h"
 #include "seahorse-servers.h"
 #include "seahorse-transfer-operation.h"
+#include "seahorse-unknown.h"
 #include "seahorse-unknown-source.h"
-#include "seahorse-unknown-key.h"
 #include "seahorse-util.h"
 
+#include "common/seahorse-bind.h"
 #include "common/seahorse-registry.h"
 
 #ifdef WITH_PGP
@@ -103,7 +104,7 @@ seahorse_context_class_init (SeahorseContextClass *klass)
                 NULL, NULL, g_cclosure_marshal_VOID__OBJECT, G_TYPE_NONE, 1, SEAHORSE_TYPE_OBJECT);    
     signals[CHANGED] = g_signal_new ("changed", SEAHORSE_TYPE_CONTEXT, 
                 G_SIGNAL_RUN_FIRST, G_STRUCT_OFFSET (SeahorseContextClass, changed),
-                NULL, NULL, seahorse_marshal_VOID__OBJECT_UINT, G_TYPE_NONE, 2, SEAHORSE_TYPE_OBJECT, G_TYPE_UINT);    
+                NULL, NULL, g_cclosure_marshal_VOID__OBJECT, G_TYPE_NONE, 1, SEAHORSE_TYPE_OBJECT);    
 }
 
 /* init context, private vars, set prefs, connect signals */
@@ -320,7 +321,7 @@ seahorse_context_find_source (SeahorseContext *sctx, GQuark ktype,
     for (l = sctx->pv->sources; l; l = g_slist_next (l)) {
         ks = SEAHORSE_SOURCE (l->data);
         
-        if (ktype != SKEY_UNKNOWN && 
+        if (ktype != SEAHORSE_TAG_INVALID && 
             seahorse_source_get_ktype (ks) != ktype)
             continue;
         
@@ -332,7 +333,7 @@ seahorse_context_find_source (SeahorseContext *sctx, GQuark ktype,
     }
     
     /* If we don't have an unknown source for this type, create it */
-    if (location == SEAHORSE_LOCATION_MISSING && location != SKEY_UNKNOWN) {
+    if (location == SEAHORSE_LOCATION_MISSING && location != SEAHORSE_TAG_INVALID) {
         ks = SEAHORSE_SOURCE (seahorse_unknown_source_new (ktype));
         seahorse_context_add_source (sctx, ks);
         return ks;
@@ -356,7 +357,7 @@ seahorse_context_find_sources (SeahorseContext *sctx, GQuark ktype,
     for (l = sctx->pv->sources; l; l = g_slist_next (l)) {
         ks = SEAHORSE_SOURCE (l->data);
         
-        if (ktype != SKEY_UNKNOWN && 
+        if (ktype != SEAHORSE_TAG_INVALID && 
             seahorse_source_get_ktype (ks) != ktype)
             continue;
         
@@ -418,16 +419,9 @@ seahorse_context_remote_source (SeahorseContext *sctx, const gchar *uri)
 
 
 static void
-object_changed (SeahorseObject *sobj, SeahorseKeyChange change, SeahorseContext *sctx)
+object_notify (SeahorseObject *sobj, SeahorseContext *sctx)
 {
-    g_signal_emit (sctx, signals[CHANGED], 0, sobj, change);
-}
-
-static void
-object_destroyed (SeahorseObject *sobj, SeahorseContext *sctx)
-{
-    /* When objects are destroyed elsewhere */
-    seahorse_context_remove_object (sctx, sobj);
+	g_signal_emit (sctx, signals[CHANGED], 0, sobj);
 }
 
 static gpointer                 
@@ -518,8 +512,7 @@ seahorse_context_take_object (SeahorseContext *sctx, SeahorseObject *sobj)
         sctx = seahorse_context_for_app ();
     g_return_if_fail (SEAHORSE_IS_CONTEXT (sctx));
     g_return_if_fail (SEAHORSE_IS_OBJECT (sobj));
-    g_return_if_fail (sobj->_id != 0);
-    g_return_if_fail (!sobj->attached_to);
+    g_return_if_fail (seahorse_object_get_id (sobj) != 0);
     
     ks = hashkey_by_source (seahorse_object_get_source (sobj), 
                             seahorse_object_get_id (sobj));
@@ -528,14 +521,13 @@ seahorse_context_take_object (SeahorseContext *sctx, SeahorseObject *sobj)
 
     g_object_ref (sobj);
 
-    sobj->attached_to = sctx;
+    g_object_set (sobj, "context", sctx, NULL);
     g_hash_table_replace (sctx->pv->objects_by_source, ks, sobj);
     setup_objects_by_type (sctx, sobj, TRUE);
     g_signal_emit (sctx, signals[ADDED], 0, sobj);
     g_object_unref (sobj);
     
-    g_signal_connect (sobj, "changed", G_CALLBACK (object_changed), sctx);
-    g_signal_connect (sobj, "destroy", G_CALLBACK (object_destroyed), sctx);
+    seahorse_bind_objects (NULL, sobj, (SeahorseTransfer)object_notify, sctx);
 }
 
 guint
@@ -668,12 +660,6 @@ seahorse_context_find_objects_full (SeahorseContext *sctx, SeahorseObjectPredica
     return km.objects; 
 }
 
-gboolean
-seahorse_context_owns_object (SeahorseContext *sctx, SeahorseObject *sobj)
-{
-    return sobj->attached_to == sctx;
-}
-
 void 
 seahorse_context_remove_object (SeahorseContext *sctx, SeahorseObject *sobj)
 {
@@ -688,12 +674,11 @@ seahorse_context_remove_object (SeahorseContext *sctx, SeahorseObject *sobj)
                            seahorse_object_get_id (sobj));
     
     if (g_hash_table_lookup (sctx->pv->objects_by_source, k)) {
-        g_return_if_fail (sobj->attached_to == sctx);
+        g_return_if_fail (seahorse_object_get_context (sobj) == sctx);
 
         g_object_ref (sobj);
-        g_signal_handlers_disconnect_by_func (sobj, object_changed, sctx);
-        g_signal_handlers_disconnect_by_func (sobj, object_destroyed, sctx);
-        sobj->attached_to = NULL;
+        g_signal_handlers_disconnect_by_func (sobj, object_notify, sctx);
+        g_object_set (sobj, "context", NULL, NULL);
         g_hash_table_remove (sctx->pv->objects_by_source, k);
         setup_objects_by_type (sctx, sobj, FALSE);
         g_signal_emit (sctx, signals[REMOVED], 0, sobj);    
@@ -712,7 +697,7 @@ seahorse_context_remove_object (SeahorseContext *sctx, SeahorseObject *sobj)
  * 
  * Returns: the secret key that's the default key 
  */
-SeahorseKey*
+SeahorseObject*
 seahorse_context_get_default_key (SeahorseContext *sctx)
 {
     SeahorseObject *sobj = NULL;
@@ -732,9 +717,7 @@ seahorse_context_get_default_key (SeahorseContext *sctx)
     
     g_free (id);
     
-    if (SEAHORSE_IS_KEY (sobj))
-	    return SEAHORSE_KEY (sobj);
-    return NULL;
+    return sobj;
 }
 
 /**
@@ -1152,54 +1135,25 @@ seahorse_context_discover_objects (SeahorseContext *sctx, GQuark ktype,
 }
 
 SeahorseObject*
-seahorse_context_object_from_dbus (SeahorseContext *sctx, const gchar *key, guint *uid)
+seahorse_context_object_from_dbus (SeahorseContext *sctx, const gchar *key)
 {
     SeahorseObject *sobj;
-    const gchar *t = NULL;
-    gchar *x, *alloc = NULL;
-    
-    /* Find the second colon, if any */
-    t = strchr (key, ':');
-    if (t != NULL) {
-        t = strchr (t + 1, ':');
-        if(t != NULL) {
-            key = alloc = g_strndup (key, t - key);
-            ++t;
-        }
-    }
     
     /* This will always get the most preferred key */
     sobj = seahorse_context_find_object (sctx, g_quark_from_string (key), 
                                          SEAHORSE_LOCATION_INVALID);
     
-    if (uid)
-        *uid = 0;
-        
-    /* Parse out the uid */
-    if (SEAHORSE_IS_KEY (sobj) && sobj && t) {
-        glong l = strtol (t, &x, 10);
-            
-        /* Make sure it's valid */
-        if (*x || l < 0 || l >= seahorse_key_get_num_names (SEAHORSE_KEY (sobj)))
-            sobj = NULL;
-        else if (uid)
-            *uid = (guint)l;
-    }
-    
     return sobj;
 }
 
 gchar*
-seahorse_context_object_to_dbus (SeahorseContext *sctx, SeahorseObject *sobj, guint uid)
+seahorse_context_object_to_dbus (SeahorseContext *sctx, SeahorseObject *sobj)
 {
-    return seahorse_context_id_to_dbus (sctx, seahorse_object_get_id (sobj), uid);
+    return seahorse_context_id_to_dbus (sctx, seahorse_object_get_id (sobj));
 }
 
 gchar*
-seahorse_context_id_to_dbus (SeahorseContext* sctx, GQuark id, guint uid)
+seahorse_context_id_to_dbus (SeahorseContext* sctx, GQuark id)
 {
-    if (uid == 0)
-        return g_strdup (g_quark_to_string (id));
-    else
-        return g_strdup_printf ("%s:%d", g_quark_to_string (id), uid);
+	return g_strdup (g_quark_to_string (id));
 }

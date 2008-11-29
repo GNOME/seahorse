@@ -80,8 +80,7 @@ struct _SeahorseSetClass {
     void (*removed) (SeahorseSet *skset, SeahorseObject *sobj, gpointer closure);
     
     /* One of the key's attributes has changed */
-    void (*changed) (SeahorseSet *skset, SeahorseObject *sobj, 
-                     SeahorseObjectChange change, gpointer closure);
+    void (*changed) (SeahorseSet *skset, SeahorseObject *sobj, gpointer closure);
     
     /* The set of keys changed */
     void (*set_changed) (SeahorseSet *skset);

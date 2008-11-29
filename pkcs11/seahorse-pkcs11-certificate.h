@@ -62,10 +62,6 @@ GP11Attributes*             seahorse_pkcs11_certificate_get_pkcs11_attributes  (
 void                        seahorse_pkcs11_certificate_set_pkcs11_attributes  (SeahorsePkcs11Certificate* self, 
                                                                                 GP11Attributes* value);
 
-gchar*                      seahorse_pkcs11_certificate_get_display_id         (SeahorsePkcs11Certificate* self);
-
-gchar*                      seahorse_pkcs11_certificate_get_simple_name        (SeahorsePkcs11Certificate* self);
-
 gchar*                      seahorse_pkcs11_certificate_get_fingerprint        (SeahorsePkcs11Certificate* self);
 
 guint                       seahorse_pkcs11_certificate_get_validity           (SeahorsePkcs11Certificate* self);

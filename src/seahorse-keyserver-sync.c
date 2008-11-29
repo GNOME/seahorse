@@ -25,8 +25,8 @@
 
 #include "seahorse-context.h"
 #include "seahorse-gconf.h"
-#include "seahorse-key.h"
 #include "seahorse-keyserver-sync.h"
+#include "seahorse-object.h"
 #include "seahorse-progress.h"
 #include "seahorse-preferences.h"
 #include "seahorse-servers.h"
@@ -167,7 +167,7 @@ seahorse_keyserver_sync_show (GList *keys, GtkWindow *parent)
                       GINT_TO_POINTER (notify_id));
 
     keys = g_list_copy (keys);
-    g_return_val_if_fail (!keys || SEAHORSE_IS_KEY (keys->data), win);
+    g_return_val_if_fail (!keys || SEAHORSE_IS_OBJECT (keys->data), win);
     g_object_set_data_full (G_OBJECT (swidget), "publish-keys", keys, 
                             (GDestroyNotify)g_list_free);
     
@@ -194,12 +194,12 @@ seahorse_keyserver_sync (GList *keys)
     if (!keys)
         return;
     
-    g_assert (SEAHORSE_IS_KEY (keys->data));
+    g_assert (SEAHORSE_IS_OBJECT (keys->data));
     
     /* Build a keyid list */
     for (k = keys; k; k = g_list_next (k)) 
         keyids = g_slist_prepend (keyids, 
-                    GUINT_TO_POINTER (seahorse_key_get_keyid (SEAHORSE_KEY (k->data))));
+                    GUINT_TO_POINTER (seahorse_object_get_id (SEAHORSE_OBJECT (k->data))));
 
     mop = seahorse_multi_operation_new ();
 

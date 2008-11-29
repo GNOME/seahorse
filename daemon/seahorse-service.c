@@ -28,13 +28,13 @@
 
 #include <dbus/dbus-glib-bindings.h>
 
-#include "seahorse-daemon.h"
-#include "seahorse-key.h"
-#include "seahorse-service.h"
 #include "seahorse-context.h"
+#include "seahorse-daemon.h"
+#include "seahorse-libdialogs.h"
+#include "seahorse-object.h"
+#include "seahorse-service.h"
 #include "seahorse-source.h"
 #include "seahorse-util.h"
-#include "seahorse-libdialogs.h"
 
 #include <gio/gio.h>
 
@@ -145,7 +145,7 @@ seahorse_service_import_keys (SeahorseService *svc, gchar *ktype,
     a = g_array_new (TRUE, TRUE, sizeof (gchar*));
     for (l = (GList*)seahorse_operation_get_result (op); l; l = g_list_next (l)) {
         t = seahorse_context_id_to_dbus (SCTX_APP (), 
-                                seahorse_object_get_id (SEAHORSE_OBJECT (l->data)), 0);
+                                seahorse_object_get_id (SEAHORSE_OBJECT (l->data)));
         g_array_append_val (a, t);
         keynum = keynum + 1;
     }
@@ -176,7 +176,7 @@ seahorse_service_export_keys (SeahorseService *svc, gchar *ktype,
     type = g_quark_from_string (ktype);
     
     while (*keys) {
-        sobj = seahorse_context_object_from_dbus (SCTX_APP (), *keys, 0);
+        sobj = seahorse_context_object_from_dbus (SCTX_APP (), *keys);
         
         if (!sobj || seahorse_object_get_tag (sobj) != type) {
             g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID, 
@@ -274,8 +274,7 @@ seahorse_service_added (SeahorseContext *sctx, SeahorseObject *sobj, SeahorseSer
 }
 
 static void
-seahorse_service_changed (SeahorseContext *sctx, SeahorseObject *sobj, 
-                          SeahorseObjectChange change, SeahorseService *svc)
+seahorse_service_changed (SeahorseContext *sctx, SeahorseObject *sobj, SeahorseService *svc)
 {
     /* Do the same thing as when a key is added */
     GQuark ktype = seahorse_object_get_tag (sobj);
@@ -322,7 +321,7 @@ seahorse_service_init (SeahorseService *svc)
                                           g_free, g_object_unref);
     
     /* Fill in keysets for any keys already in the context */
-    srcs = seahorse_context_find_sources (SCTX_APP (), SKEY_UNKNOWN, SEAHORSE_LOCATION_LOCAL);
+    srcs = seahorse_context_find_sources (SCTX_APP (), SEAHORSE_TAG_INVALID, SEAHORSE_LOCATION_LOCAL);
     for (l = srcs; l; l = g_slist_next (l)) 
         add_key_source (svc, seahorse_source_get_ktype (SEAHORSE_SOURCE (l->data)));
     g_slist_free (srcs);

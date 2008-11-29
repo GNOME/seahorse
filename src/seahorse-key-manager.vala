@@ -67,7 +67,7 @@ namespace Seahorse {
 			Location.LOCAL,                         /* location */
 			Usage.PUBLIC_KEY,                       /* usage */
 			0,                                      /* flags */
-			Key.Flag.TRUSTED | Key.Flag.IS_VALID,   /* nflags */
+			Object.Flag.TRUSTED | Object.Flag.IS_VALID,   /* nflags */
 			null                                    /* sksrc */
 		};
 		
@@ -76,7 +76,7 @@ namespace Seahorse {
 			0,                                      /* id */
 			Location.LOCAL,                         /* location */
 			Usage.PUBLIC_KEY,                       /* usage */
-			Key.Flag.TRUSTED | Key.Flag.IS_VALID,   /* flags */
+			Object.Flag.TRUSTED | Object.Flag.IS_VALID,   /* flags */
 			0,                                      /* nflags */
 			null                                    /* sksrc */
 		};
@@ -719,7 +719,7 @@ namespace Seahorse {
 			if (_loaded_gnome_keyring)
 				return;
 			
-			GLib.Type type = Registry.get().find_type ("gnome-keyring", "local", "key-source", null);
+			GLib.Type type = Registry.get().find_type ("gnome-keyring", "local", "source", null);
 			return_if_fail (type != 0);
 
 			var sksrc = (Source)GLib.Object.new (type, null);

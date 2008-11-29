@@ -21,7 +21,6 @@
 
 #include "seahorse-key-manager.h"
 #include <seahorse-types.h>
-#include <seahorse-key.h>
 #include <glib/gi18n-lib.h>
 #include <stdlib.h>
 #include <string.h>
@@ -164,8 +163,8 @@ static void seahorse_key_manager_finalize (GObject * obj);
 static void _vala_array_free (gpointer array, gint array_length, GDestroyNotify destroy_func);
 static int _vala_strcmp0 (const char * str1, const char * str2);
 
-static const SeahorseObjectPredicate SEAHORSE_KEY_MANAGER_PRED_PUBLIC = {((GQuark) (0)), ((GQuark) (0)), SEAHORSE_LOCATION_LOCAL, SEAHORSE_USAGE_PUBLIC_KEY, ((guint) (0)), ((guint) (SKEY_FLAG_TRUSTED | SKEY_FLAG_IS_VALID)), NULL};
-static const SeahorseObjectPredicate SEAHORSE_KEY_MANAGER_PRED_TRUSTED = {((GQuark) (0)), ((GQuark) (0)), SEAHORSE_LOCATION_LOCAL, SEAHORSE_USAGE_PUBLIC_KEY, ((guint) (SKEY_FLAG_TRUSTED | SKEY_FLAG_IS_VALID)), ((guint) (0)), NULL};
+static const SeahorseObjectPredicate SEAHORSE_KEY_MANAGER_PRED_PUBLIC = {((GQuark) (0)), ((GQuark) (0)), SEAHORSE_LOCATION_LOCAL, SEAHORSE_USAGE_PUBLIC_KEY, ((guint) (0)), ((guint) (SEAHORSE_FLAG_TRUSTED | SEAHORSE_FLAG_IS_VALID)), NULL};
+static const SeahorseObjectPredicate SEAHORSE_KEY_MANAGER_PRED_TRUSTED = {((GQuark) (0)), ((GQuark) (0)), SEAHORSE_LOCATION_LOCAL, SEAHORSE_USAGE_PUBLIC_KEY, ((guint) (SEAHORSE_FLAG_TRUSTED | SEAHORSE_FLAG_IS_VALID)), ((guint) (0)), NULL};
 static const SeahorseObjectPredicate SEAHORSE_KEY_MANAGER_PRED_PRIVATE = {((GQuark) (0)), ((GQuark) (0)), SEAHORSE_LOCATION_LOCAL, SEAHORSE_USAGE_PRIVATE_KEY, ((guint) (0)), ((guint) (0)), NULL};
 static const SeahorseObjectPredicate SEAHORSE_KEY_MANAGER_PRED_PASSWORD = {((GQuark) (0)), ((GQuark) (0)), SEAHORSE_LOCATION_LOCAL, SEAHORSE_USAGE_CREDENTIALS, ((guint) (0)), ((guint) (0)), NULL};
 static const GtkActionEntry SEAHORSE_KEY_MANAGER_GENERAL_ENTRIES[] = {{"remote-menu", NULL, N_ ("_Remote")}, {"app-quit", GTK_STOCK_QUIT, N_ ("_Quit"), "<control>Q", N_ ("Close this program"), ((GCallback) (NULL))}, {"key-generate", GTK_STOCK_NEW, N_ ("_Create New Key..."), "<control>N", N_ ("Create a new personal key"), ((GCallback) (NULL))}, {"key-import-file", GTK_STOCK_OPEN, N_ ("_Import..."), "<control>I", N_ ("Import keys into your key ring from a file"), ((GCallback) (NULL))}, {"key-import-clipboard", GTK_STOCK_PASTE, N_ ("Paste _Keys"), "<control>V", N_ ("Import keys from the clipboard"), ((GCallback) (NULL))}};
@@ -995,7 +994,7 @@ static void seahorse_key_manager_load_gnome_keyring_items (SeahorseKeyManager* s
 	if (self->priv->_loaded_gnome_keyring) {
 		return;
 	}
-	type = seahorse_registry_find_type (seahorse_registry_get (), "gnome-keyring", "local", "key-source", NULL, NULL);
+	type = seahorse_registry_find_type (seahorse_registry_get (), "gnome-keyring", "local", "source", NULL, NULL);
 	g_return_if_fail (type != 0);
 	sksrc = SEAHORSE_SOURCE (g_object_new (type, NULL, NULL));
 	seahorse_context_add_source (seahorse_context_for_app (), sksrc);

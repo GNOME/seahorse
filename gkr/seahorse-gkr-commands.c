@@ -71,7 +71,7 @@ seahorse_gkr_commands_show_properties (SeahorseCommands* base, SeahorseObject* o
 static SeahorseOperation* 
 seahorse_gkr_commands_delete_objects (SeahorseCommands* base, GList* objects) 
 {
-	gchar *prompt, *display;
+	gchar *prompt;
 	GtkWidget *parent;
 	gboolean ret;
 	guint num;
@@ -81,9 +81,8 @@ seahorse_gkr_commands_delete_objects (SeahorseCommands* base, GList* objects)
 		return NULL;
 
 	if (num == 1) {
-		display = seahorse_object_get_display_name (SEAHORSE_OBJECT (objects->data));
-		prompt = g_strdup_printf (_ ("Are you sure you want to delete the password '%s'?"), display);
-		g_free (display);
+		prompt = g_strdup_printf (_ ("Are you sure you want to delete the password '%s'?"), 
+		                          seahorse_object_get_label (SEAHORSE_OBJECT (objects->data)));
 	} else {
 		prompt = g_strdup_printf (ngettext ("Are you sure you want to delete %d password?", 
 		                                    "Are you sure you want to delete %d passwords?", 

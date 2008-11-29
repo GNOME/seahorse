@@ -29,10 +29,10 @@
 #ifndef __SEAHORSE_COMBO_KEYS_H__
 #define __SEAHORSE_COMBO_KEYS_H__
 
-#include <gtk/gtk.h>
-
-#include "seahorse-key.h"
+#include "seahorse-object.h"
 #include "seahorse-set.h"
+
+#include <gtk/gtk.h>
 
 void                        seahorse_combo_keys_attach              (GtkComboBox *combo,
                                                                      SeahorseSet *skset,
@@ -42,9 +42,9 @@ void                        seahorse_combo_keys_set_active_id       (GtkComboBox
                                                                      GQuark keyid);
 
 void                        seahorse_combo_keys_set_active          (GtkComboBox *combo,
-                                                                     SeahorseKey *skey);
+                                                                     SeahorseObject *object);
 
-SeahorseKey*                seahorse_combo_keys_get_active          (GtkComboBox *combo);
+SeahorseObject*             seahorse_combo_keys_get_active          (GtkComboBox *combo);
 
 GQuark                      seahorse_combo_keys_get_active_id       (GtkComboBox *combo);
 

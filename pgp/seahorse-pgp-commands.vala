@@ -107,7 +107,7 @@ namespace Seahorse.Pgp {
 			case 0:
 				return null;
 			case 1:
-				message = _("Are you sure you want to permanently delete %s?").printf(to_delete.data.display_name);
+				message = _("Are you sure you want to permanently delete %s?").printf(to_delete.data.label);
 				break;
 			default:
 				if (num_keys > 0 && num_identities > 0) 

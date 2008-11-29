@@ -514,7 +514,6 @@ add_key (SeahorseHKPSource *ssrc, gpgme_key_t key)
     if (prev != NULL) {
         g_return_if_fail (SEAHORSE_IS_PGP_KEY (prev));
         gpgmex_combine_keys (SEAHORSE_PGP_KEY (prev)->pubkey, key);
-        seahorse_object_fire_changed (prev, SKEY_CHANGE_UIDS);
         return;
     }
 
@@ -795,7 +794,7 @@ seahorse_hkp_source_load (SeahorseSource *src, GQuark keyid)
         return seahorse_operation_new_complete (NULL);
 
     /* TODO: Does this actually work? */
-    return seahorse_hkp_source_search (src, seahorse_key_get_rawid (keyid));        
+    return seahorse_hkp_source_search (src, seahorse_pgp_key_get_rawid (keyid));
 }
 
 static SeahorseOperation* 
@@ -914,7 +913,7 @@ seahorse_hkp_source_export_raw (SeahorseSource *sksrc, GSList *keyids,
     for (l = keyids; l; l = g_slist_next (l)) {
 
         /* Get the key id and limit it to 8 characters */
-        fpr = (const char*)seahorse_key_get_rawid (GPOINTER_TO_UINT (l->data));
+        fpr = seahorse_pgp_key_get_rawid (GPOINTER_TO_UINT (l->data));
         len = strlen (fpr);
         if (len > 8)
             fpr += (len - 8);
@@ -965,13 +964,13 @@ seahorse_hkp_source_class_init (SeahorseHKPSourceClass *klass)
 
 	g_object_class_install_property (gobject_class, PROP_KEY_TYPE,
 	        g_param_spec_uint ("key-type", "Key Type", "Key type that originates from this key source.", 
-	                           0, G_MAXUINT, SKEY_UNKNOWN, G_PARAM_READABLE));
+	                           0, G_MAXUINT, SEAHORSE_TAG_INVALID, G_PARAM_READABLE));
 
 	g_object_class_install_property (gobject_class, PROP_KEY_DESC,
 	        g_param_spec_string ("key-desc", "Key Desc", "Description for keys that originate here.",
 	                             NULL, G_PARAM_READABLE));
 	    
-	seahorse_registry_register_type (NULL, SEAHORSE_TYPE_HKP_SOURCE, "key-source", "remote", SEAHORSE_PGP_STR, NULL);
+	seahorse_registry_register_type (NULL, SEAHORSE_TYPE_HKP_SOURCE, "source", "remote", SEAHORSE_PGP_STR, NULL);
 	seahorse_servers_register_type ("hkp", _("HTTP Key Server"), seahorse_hkp_is_valid_uri);
 }
 

@@ -22,7 +22,6 @@
 #include "seahorse-context.h"
 #include "seahorse-gconf.h"
 #include "seahorse-keyserver-control.h"
-#include "seahorse-key.h"
 #include "seahorse-servers.h"
 #include "seahorse-util.h"
 

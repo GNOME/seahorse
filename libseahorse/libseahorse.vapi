@@ -35,21 +35,21 @@ namespace Seahorse {
 	}
 	[CCode (cheader_filename = "seahorse-object.h")]
 	public abstract class Object : GLib.Object {
-		[CCode (cprefix = "SEAHORSE_OBJECT_CHANGE_", cheader_filename = "seahorse-object.h")]
-		public enum Change {
-			ALL,
-			LOCATION,
-			PREFERRED,
-			MAX
-		}
-		protected GLib.Quark _tag;
-		protected GLib.Quark _id;
-		protected Seahorse.Location _location;
-		protected Seahorse.Usage _usage;
-		protected uint _flags;
-		public weak Seahorse.Context attached_to;
+
+ 	       	[CCode (cprefix = "SEAHORSE_FLAG_")]
+         	public static enum Flag {
+ 			IS_VALID =    0x0001,
+ 			CAN_ENCRYPT = 0x0002,
+ 			CAN_SIGN =    0x0004,
+ 			EXPIRED =     0x0100,
+ 			REVOKED =     0x0200,
+ 			DISABLED =    0x0400,
+ 			TRUSTED =     0x1000,
+ 			EXPORTABLE =  0x00100000
+         	}
+
+		public weak Seahorse.Context context;
 		public GLib.List<weak Seahorse.Object> get_children ();
-		protected void fire_changed (Seahorse.Object.Change what);
 		public GLib.Quark tag { get; }
 		public GLib.Quark id { get; }
 		public Seahorse.Location location { get; set; }
@@ -57,13 +57,10 @@ namespace Seahorse {
 		public uint flags { get; }
 		public Seahorse.Source source { get; set; }
 		public Seahorse.Object preferred { get; set; }
-		public abstract string# display_name { get; }
+		public abstract string# label { get; }
 		public abstract string# markup { get; }
-		public abstract string# stock_id { get; }
+		public abstract string# icon { get; }
 		public Seahorse.Object? parent { get; set; }
-		public signal void changed (Seahorse.Object.Change what);
-		public signal void hierarchy ();
-		public signal void destroy ();
 		[CCode (cheader_filename = "seahorse-object.h")]
 		public struct Predicate {
 			public GLib.Quark tag;

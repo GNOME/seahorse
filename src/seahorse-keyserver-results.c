@@ -25,7 +25,6 @@
 #include <glib/gi18n-lib.h>
 #include <seahorse-widget.h>
 #include <seahorse-progress.h>
-#include <seahorse-key.h>
 #include <gdk/gdk.h>
 #include <seahorse-context.h>
 #include <seahorse-source.h>
@@ -162,7 +161,7 @@ static gboolean seahorse_keyserver_results_on_filter_objects (SeahorseKeyserverR
 		return TRUE;
 	}
 	_tmp1 = NULL;
-	name = (_tmp1 = seahorse_key_get_display_name ((SEAHORSE_KEY (obj))), (_tmp1 == NULL ? NULL : g_strdup (_tmp1)));
+	name = (_tmp1 = seahorse_object_get_label (obj), (_tmp1 == NULL ? NULL : g_strdup (_tmp1)));
 	_tmp2 = NULL;
 	return (_tmp4 = (_tmp3 = ((name != NULL) && (strstr ((_tmp2 = g_utf8_casefold (name, -1)), self->priv->_search_string) != NULL)), (_tmp2 = (g_free (_tmp2), NULL)), _tmp3), (name = (g_free (name), NULL)), _tmp4);
 }

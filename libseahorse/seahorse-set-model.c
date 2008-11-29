@@ -20,6 +20,8 @@
 
 #include "seahorse-set-model.h"
 
+#include <string.h>
+
 enum {
 	PROP_0,
 	PROP_SET
@@ -75,7 +77,7 @@ iter_for_node (SeahorseSetModelPrivate *pv, GNode *node, GtkTreeIter *iter)
 }
 
 static void
-key_hierarchy (SeahorseObject *sobj, SeahorseSetModel *smodel)
+key_hierarchy (SeahorseObject *sobj, GParamSpec *spec, SeahorseSetModel *smodel)
 {
 	SeahorseSetModelPrivate *pv = SEAHORSE_SET_MODEL_GET_PRIVATE (smodel);
 
@@ -121,7 +123,7 @@ add_object (SeahorseSetModel *smodel, SeahorseObject *sobj)
 	had = parent_node->children ? TRUE : FALSE;
 	node = g_node_append_data (parent_node, sobj);
 	g_hash_table_insert (pv->object_to_node, sobj, node);
-	g_signal_connect (sobj, "hierarchy", G_CALLBACK (key_hierarchy), smodel);
+	g_signal_connect (sobj, "notify::parent", G_CALLBACK (key_hierarchy), smodel);
 
 	pv->last_stamp++;
 
@@ -254,7 +256,7 @@ set_removed (SeahorseSet *set, SeahorseObject *sobj, gpointer closure,
 }
 
 static void
-set_changed (SeahorseSet *set, SeahorseObject *sobj, SeahorseObjectChange change, 
+set_changed (SeahorseSet *set, SeahorseObject *sobj, 
              gpointer closure, SeahorseSetModel *smodel)
 {
 	SeahorseSetModelPrivate *pv = SEAHORSE_SET_MODEL_GET_PRIVATE (smodel);

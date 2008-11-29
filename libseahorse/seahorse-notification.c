@@ -29,10 +29,11 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 
-#include "seahorse-key.h"
-#include "seahorse-object.h"
 #include "seahorse-libdialogs.h"
+#include "seahorse-object.h"
 #include "seahorse-util.h"
+
+#include "libcryptui/cryptui.h"
 
 #ifdef HAVE_LIBNOTIFY
 #include <libnotify/notify.h>
@@ -72,7 +73,7 @@ G_DEFINE_TYPE (SeahorseNotification, seahorse_notification, G_TYPE_OBJECT);
  */
 
 /* Forward Declaration */
-static void object_changed (SeahorseObject *sobj, SeahorseObjectChange change, SeahorseNotification *snotif);
+static void object_notify (SeahorseObject *sobj, GParamSpec *spec, SeahorseNotification *snotif);
 
 static void
 insert_key_field (GString *res, const gchar *id, const gchar *field)
@@ -81,22 +82,21 @@ insert_key_field (GString *res, const gchar *id, const gchar *field)
     GValue value;
     GValue svalue;
     gchar *str;
-    guint uid;
     
-    sobj = seahorse_context_object_from_dbus (SCTX_APP (), id, &uid);
-    if (!sobj || !SEAHORSE_IS_KEY (sobj)) {
+    sobj = seahorse_context_object_from_dbus (SCTX_APP (), id);
+    if (!sobj || !SEAHORSE_IS_OBJECT (sobj)) {
         g_warning ("key '%s' in key text does not exist", id);
         return;
     }
     
     /* A default field */
     if (!field)
-        field = "display-name";
+        field = "label";
     
     memset (&value, 0, sizeof (value));
     memset (&svalue, 0, sizeof (value));
     
-    if (seahorse_key_lookup_property (SEAHORSE_KEY (sobj), uid, field, &value)) {
+    if (seahorse_object_lookup_property (SEAHORSE_OBJECT (sobj), field, &value)) {
         g_value_init (&svalue, G_TYPE_STRING);
         if (g_value_transform (&value, &svalue)) {
             str = g_markup_escape_text (g_value_get_string (&svalue), -1);
@@ -365,7 +365,7 @@ setup_fallback_notification (SeahorseNotification *snotif, gboolean urgent,
 }
 
 static void 
-object_changed (SeahorseObject *sobj, SeahorseObjectChange change, SeahorseNotification *snotif)
+object_notify (SeahorseObject *sobj, GParamSpec *spec, SeahorseNotification *snotif)
 {
     if (!snotif->widget)
         return;
@@ -402,10 +402,10 @@ keys_start_element (GMarkupParseContext *ctx, const gchar *element_name,
             g_warning ("key text <key> element requires the following attributes\n"
                        "     <key id=\"xxxxx\" field=\"xxxxx\"/>");
         
-        sobj = seahorse_context_object_from_dbus (SCTX_APP (), key, NULL);
+        sobj = seahorse_context_object_from_dbus (SCTX_APP (), key);
         if (sobj) {
             snotif->objects = g_list_append (snotif->objects, sobj);
-            g_signal_connect (sobj, "changed", G_CALLBACK (object_changed), snotif);
+            g_signal_connect (sobj, "notify", G_CALLBACK (object_notify), snotif);
         }
     }
     
@@ -440,7 +440,7 @@ seahorse_notification_dispose (GObject *gobject)
     snotif->widget = NULL;
     
     for (l = snotif->objects; l; l = g_list_next (l)) 
-        g_signal_handlers_disconnect_by_func (l->data, object_changed, snotif);
+        g_signal_handlers_disconnect_by_func (l->data, object_notify, snotif);
     g_list_free (snotif->objects);
     snotif->objects = NULL;
     
@@ -572,7 +572,7 @@ seahorse_notify_import (guint keynum, gchar **keys)
         body = g_strdup_printf(ngettext("Imported a key for", "Imported keys for", keynum));
         
         for (keyptr = keys; *keyptr; keyptr++) {
-            t = g_strdup_printf ("%s\n<key id='%s' field=\"display-name\"/>", body, *keyptr);
+            t = g_strdup_printf ("%s\n<key id='%s' field=\"label\"/>", body, *keyptr);
             g_free (body);
             body = t;
         }

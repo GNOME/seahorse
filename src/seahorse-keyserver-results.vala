@@ -163,7 +163,7 @@ namespace Seahorse {
 		private bool on_filter_objects (Object obj) {
 			if (_search_string.len() == 0)
 				return true;
-			string name = ((Key)obj).display_name;
+			string name = obj.label;
 			return ((name != null) && (name.casefold().str(_search_string) != null)); 
 		}
 

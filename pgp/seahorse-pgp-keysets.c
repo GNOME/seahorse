@@ -22,7 +22,7 @@
 #include "config.h"
 
 #include "seahorse-gconf.h"
-#include "seahorse-key.h"
+#include "seahorse-object.h"
 
 #include "seahorse-pgp-module.h"
 #include "seahorse-pgp-keysets.h"
@@ -42,16 +42,15 @@ pgp_signers_gconf_notify (GConfClient *client, guint id, GConfEntry *entry,
 static gboolean 
 pgp_signers_match (SeahorseObject *obj, gpointer data)
 {
-    SeahorseKey *key, *defkey;
+    SeahorseObject *defkey;
     
-    if (!SEAHORSE_IS_KEY (obj))
+    if (!SEAHORSE_IS_OBJECT (obj))
 	    return FALSE;
     
-    key = SEAHORSE_KEY (obj);
     defkey = seahorse_context_get_default_key (SCTX_APP ());
     
     /* Default key overrides all, and becomes the only signer available*/
-    if (defkey && seahorse_key_get_keyid (key) != seahorse_key_get_keyid (defkey))
+    if (defkey && seahorse_object_get_id (obj) != seahorse_object_get_id (defkey))
         return FALSE;
     
     return TRUE;
@@ -60,14 +59,14 @@ pgp_signers_match (SeahorseObject *obj, gpointer data)
 SeahorseSet*     
 seahorse_keyset_pgp_signers_new ()
 {
-    SeahorseObjectPredicate *pred = g_new0(SeahorseObjectPredicate, 1);
+    SeahorseObjectPredicate *pred = g_new0 (SeahorseObjectPredicate, 1);
     SeahorseSet *skset;
     
     pred->location = SEAHORSE_LOCATION_LOCAL;
     pred->tag = SEAHORSE_PGP;
     pred->usage = SEAHORSE_USAGE_PRIVATE_KEY;
-    pred->flags = SKEY_FLAG_CAN_SIGN;
-    pred->nflags = SKEY_FLAG_EXPIRED | SKEY_FLAG_REVOKED | SKEY_FLAG_DISABLED;
+    pred->flags = SEAHORSE_FLAG_CAN_SIGN;
+    pred->nflags = SEAHORSE_FLAG_EXPIRED | SEAHORSE_FLAG_REVOKED | SEAHORSE_FLAG_DISABLED;
     pred->custom = pgp_signers_match;
     
     skset = seahorse_set_new_full (pred);

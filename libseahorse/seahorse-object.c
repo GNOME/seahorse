@@ -1,396 +1,753 @@
+/* 
+ * Seahorse
+ * 
+ * Copyright (C) 2008 Stefan Walter
+ * 
+ * This program is free software; you can redistribute it and/or modify 
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *  
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *  
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+ * 02111-1307, USA.  
+ */
 
-#include <seahorse-object.h>
+#include "config.h"
 
+#include "seahorse-object.h"
 
+#include "seahorse-context.h"
+#include "seahorse-source.h"
 
+#include "string.h"
+
+#include <glib/gi18n.h>
+
+enum {
+	PROP_0,
+	PROP_CONTEXT,
+	PROP_SOURCE,
+	PROP_PREFERRED,
+	PROP_PARENT,
+	PROP_ID,
+	PROP_TAG,
+	PROP_LABEL,
+	PROP_MARKUP,
+	PROP_NICKNAME,
+	PROP_DESCRIPTION,
+	PROP_ICON,
+	PROP_IDENTIFIER,
+	PROP_LOCATION,
+	PROP_USAGE,
+	PROP_FLAGS
+};
 
 struct _SeahorseObjectPrivate {
-	SeahorseSource* _source;
-	SeahorseObject* _preferred;
-	SeahorseObject* _parent;
-	GList* _children;
+	GQuark id;
+	GQuark tag;
+
+	SeahorseSource *source;
+	SeahorseContext *context;
+	SeahorseObject *preferred;
+	SeahorseObject *parent;
+	GList *children;
+	
+	gchar *label;
+	gchar *markup;
+	gboolean markup_explicit;
+	gchar *nickname;
+	gboolean nickname_explicit;
+	gchar *description;
+	gboolean description_explicit;
+	gchar *icon;
+	gchar *identifier;
+	gboolean identifier_explicit;
+	
+	SeahorseLocation location;
+	SeahorseUsage usage;
+	guint flags;
 };
 
-#define SEAHORSE_OBJECT_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), SEAHORSE_TYPE_OBJECT, SeahorseObjectPrivate))
-enum  {
-	SEAHORSE_OBJECT_DUMMY_PROPERTY,
-	SEAHORSE_OBJECT_TAG,
-	SEAHORSE_OBJECT_ID,
-	SEAHORSE_OBJECT_LOCATION,
-	SEAHORSE_OBJECT_USAGE,
-	SEAHORSE_OBJECT_FLAGS,
-	SEAHORSE_OBJECT_SOURCE,
-	SEAHORSE_OBJECT_PREFERRED,
-	SEAHORSE_OBJECT_DISPLAY_NAME,
-	SEAHORSE_OBJECT_MARKUP,
-	SEAHORSE_OBJECT_STOCK_ID,
-	SEAHORSE_OBJECT_PARENT
-};
-static void seahorse_object_register_child (SeahorseObject* self, SeahorseObject* child);
-static void seahorse_object_unregister_child (SeahorseObject* self, SeahorseObject* child);
-static GObject * seahorse_object_constructor (GType type, guint n_construct_properties, GObjectConstructParam * construct_properties);
-static gpointer seahorse_object_parent_class = NULL;
-static void seahorse_object_finalize (GObject * obj);
+G_DEFINE_TYPE (SeahorseObject, seahorse_object, G_TYPE_OBJECT);
 
+/* -----------------------------------------------------------------------------
+ * INTERNAL 
+ */
 
+static void 
+register_child (SeahorseObject* self, SeahorseObject* child) 
+{
+	g_assert (SEAHORSE_IS_OBJECT (self));
+	g_assert (SEAHORSE_IS_OBJECT (child));
+	g_assert (self != child);
+	g_assert (child->pv->parent == NULL);
+	
+	child->pv->parent = self;
+	self->pv->children = g_list_append (self->pv->children, child);
+}
 
+static void 
+unregister_child (SeahorseObject* self, SeahorseObject* child) 
+{
+	g_assert (SEAHORSE_IS_OBJECT (self));
+	g_assert (SEAHORSE_IS_OBJECT (child));
+	g_assert (self != child);
+	g_assert (child->pv->parent == self);
+	
+	child->pv->parent = NULL;
+	self->pv->children = g_list_remove (self->pv->children, child);
+}
 
-GType seahorse_object_change_get_type (void) {
-	static GType seahorse_object_change_type_id = 0;
-	if (G_UNLIKELY (seahorse_object_change_type_id == 0)) {
-		static const GEnumValue values[] = {{SEAHORSE_OBJECT_CHANGE_ALL, "SEAHORSE_OBJECT_CHANGE_ALL", "all"}, {SEAHORSE_OBJECT_CHANGE_LOCATION, "SEAHORSE_OBJECT_CHANGE_LOCATION", "location"}, {SEAHORSE_OBJECT_CHANGE_PREFERRED, "SEAHORSE_OBJECT_CHANGE_PREFERRED", "preferred"}, {SEAHORSE_OBJECT_CHANGE_MAX, "SEAHORSE_OBJECT_CHANGE_MAX", "max"}, {0, NULL, NULL}};
-		seahorse_object_change_type_id = g_enum_register_static ("SeahorseObjectChange", values);
+static void
+recalculate_id (SeahorseObject *self)
+{
+	const gchar *str;
+	const gchar *at;
+	gchar *result;
+	gsize len;
+
+	/* No id, clear any tag and auto generated identifer */
+	if (!self->pv->id) {
+		self->pv->tag = 0; 
+		if (!self->pv->identifier_explicit) {
+			g_free (self->pv->identifier);
+			self->pv->identifier = g_strdup ("");
+		}
+		
+	/* Have hande, configure tag and auto generated identifer */
+	} else {
+		str = g_quark_to_string (self->pv->id);
+		len = strlen (str);
+		at = strchr (str, ':');
+		
+		result = g_strndup (str, at ? at - str : len);
+		self->pv->tag = g_quark_from_string (result);
+		g_free (result);
+		
+		if (!self->pv->identifier_explicit) {
+			g_free (self->pv->identifier);
+			self->pv->identifier = g_strdup (at ? at + 1 : "");
+		}
 	}
-	return seahorse_object_change_type_id;
 }
 
-
-GList* seahorse_object_get_children (SeahorseObject* self) {
-	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), NULL);
-	return g_list_copy (self->priv->_children);
-}
-
-
-void seahorse_object_fire_changed (SeahorseObject* self, SeahorseObjectChange what) {
-	g_return_if_fail (SEAHORSE_IS_OBJECT (self));
-	g_signal_emit_by_name (G_OBJECT (self), "changed", what);
-}
-
-
-static void seahorse_object_register_child (SeahorseObject* self, SeahorseObject* child) {
-	g_return_if_fail (SEAHORSE_IS_OBJECT (self));
-	g_return_if_fail (SEAHORSE_IS_OBJECT (child));
-	g_assert (child->priv->_parent == NULL);
-	child->priv->_parent = self;
-	self->priv->_children = g_list_append (self->priv->_children, child);
-}
-
-
-static void seahorse_object_unregister_child (SeahorseObject* self, SeahorseObject* child) {
-	g_return_if_fail (SEAHORSE_IS_OBJECT (self));
-	g_return_if_fail (SEAHORSE_IS_OBJECT (child));
-	g_assert (child->priv->_parent == self);
-	child->priv->_parent = NULL;
-	self->priv->_children = g_list_remove (self->priv->_children, child);
-}
-
-
-GQuark seahorse_object_get_tag (SeahorseObject* self) {
-	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), 0U);
-	return self->_tag;
-}
-
-
-GQuark seahorse_object_get_id (SeahorseObject* self) {
-	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), 0U);
-	return self->_id;
-}
-
-
-SeahorseLocation seahorse_object_get_location (SeahorseObject* self) {
-	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), 0);
-	return self->_location;
-}
-
-
-void seahorse_object_set_location (SeahorseObject* self, SeahorseLocation value) {
-	g_return_if_fail (SEAHORSE_IS_OBJECT (self));
-	self->_location = value;
-	seahorse_object_fire_changed (self, SEAHORSE_OBJECT_CHANGE_LOCATION);
-	g_object_notify (((GObject *) (self)), "location");
-}
-
-
-SeahorseUsage seahorse_object_get_usage (SeahorseObject* self) {
-	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), 0);
-	return self->_usage;
-}
-
-
-guint seahorse_object_get_flags (SeahorseObject* self) {
-	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), 0U);
-	return self->_flags;
-}
-
-
-SeahorseSource* seahorse_object_get_source (SeahorseObject* self) {
-	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), NULL);
-	return self->priv->_source;
-}
-
-
-void seahorse_object_set_source (SeahorseObject* self, SeahorseSource* value) {
-	g_return_if_fail (SEAHORSE_IS_OBJECT (self));
-	if (value == self->priv->_source) {
-		return;
+static void
+recalculate_label (SeahorseObject *self)
+{
+	if (!self->pv->markup_explicit) {
+		g_free (self->pv->markup);
+		self->pv->markup = g_markup_escape_text (self->pv->label ? self->pv->label : "", -1);
 	}
-	if (self->priv->_source != NULL) {
-		g_object_remove_weak_pointer (G_OBJECT (self->priv->_source), &self->priv->_source);
+
+	if (!self->pv->nickname_explicit) {
+		g_free (self->pv->nickname);
+		self->pv->nickname = g_strdup (self->pv->label);
 	}
-	self->priv->_source = value;
-	if (self->priv->_source != NULL) {
-		g_object_add_weak_pointer (G_OBJECT (self->priv->_source), &self->priv->_source);
-	}
-	g_object_notify (((GObject *) (self)), "source");
 }
 
-
-SeahorseObject* seahorse_object_get_preferred (SeahorseObject* self) {
-	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), NULL);
-	return self->priv->_preferred;
-}
-
-
-void seahorse_object_set_preferred (SeahorseObject* self, SeahorseObject* value) {
-	g_return_if_fail (SEAHORSE_IS_OBJECT (self));
-	if (self->priv->_preferred == value) {
-		return;
-	}
-	if (self->priv->_preferred != NULL) {
-		g_object_remove_weak_pointer (G_OBJECT (self->priv->_preferred), &self->priv->_preferred);
-	}
-	self->priv->_preferred = value;
-	if (self->priv->_preferred != NULL) {
-		g_object_add_weak_pointer (G_OBJECT (self->priv->_preferred), &self->priv->_preferred);
-	}
-	seahorse_object_fire_changed (self, SEAHORSE_OBJECT_CHANGE_PREFERRED);
-	g_object_notify (((GObject *) (self)), "preferred");
-}
-
-
-char* seahorse_object_get_display_name (SeahorseObject* self) {
-	return SEAHORSE_OBJECT_GET_CLASS (self)->get_display_name (self);
-}
-
-
-char* seahorse_object_get_markup (SeahorseObject* self) {
-	return SEAHORSE_OBJECT_GET_CLASS (self)->get_markup (self);
-}
-
-
-char* seahorse_object_get_stock_id (SeahorseObject* self) {
-	return SEAHORSE_OBJECT_GET_CLASS (self)->get_stock_id (self);
-}
-
-
-SeahorseObject* seahorse_object_get_parent (SeahorseObject* self) {
-	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), NULL);
-	return self->priv->_parent;
-}
-
-
-void seahorse_object_set_parent (SeahorseObject* self, SeahorseObject* value) {
-	g_return_if_fail (SEAHORSE_IS_OBJECT (self));
-	g_assert (self->priv->_parent != self);
-	if (value == self->priv->_parent) {
-		return;
-	}
-	/* Set the new parent/child relationship */
-	if (self->priv->_parent != NULL) {
-		seahorse_object_unregister_child (self->priv->_parent, self);
-	}
-	if (value != NULL) {
-		seahorse_object_register_child (value, self);
-	}
-	g_assert (self->priv->_parent == value);
-	/* Fire a signal to let watchers know this changed */
-	g_signal_emit_by_name (G_OBJECT (self), "hierarchy");
-	g_object_notify (((GObject *) (self)), "parent");
-}
-
-
-static GObject * seahorse_object_constructor (GType type, guint n_construct_properties, GObjectConstructParam * construct_properties) {
-	GObject * obj;
-	SeahorseObjectClass * klass;
-	GObjectClass * parent_class;
-	SeahorseObject * self;
-	klass = SEAHORSE_OBJECT_CLASS (g_type_class_peek (SEAHORSE_TYPE_OBJECT));
-	parent_class = G_OBJECT_CLASS (g_type_class_peek_parent (klass));
-	obj = parent_class->constructor (type, n_construct_properties, construct_properties);
-	self = SEAHORSE_OBJECT (obj);
-	{
-		self->priv->_parent = NULL;
-		self->priv->_children = NULL;
-	}
-	return obj;
-}
-
-
-gboolean seahorse_object_predicate_match (SeahorseObjectPredicate *self, SeahorseObject* obj) {
-	g_return_val_if_fail (SEAHORSE_IS_OBJECT (obj), FALSE);
-	/* Check all the fields */
-	if ((*self).tag != 0 && ((*self).tag != obj->_tag)) {
-		return FALSE;
-	}
-	if ((*self).id != 0 && ((*self).id != obj->_id)) {
-		return FALSE;
-	}
-	if ((*self).location != 0 && ((*self).location != obj->_location)) {
-		return FALSE;
-	}
-	if ((*self).usage != 0 && ((*self).usage != obj->_usage)) {
-		return FALSE;
-	}
-	if ((*self).flags != 0 && ((*self).flags & obj->_flags) == 0) {
-		return FALSE;
-	}
-	if ((*self).nflags != 0 && ((*self).nflags & obj->_flags) != 0) {
-		return FALSE;
-	}
-	if ((*self).source != NULL && ((*self).source != obj->priv->_source)) {
-		return FALSE;
-	}
-	/* And any custom stuff */
-	if ((*self).custom != NULL && !(*self).custom (obj, (*self).custom_target)) {
-		return FALSE;
-	}
-	return TRUE;
-}
-
-
-static void seahorse_object_get_property (GObject * object, guint property_id, GValue * value, GParamSpec * pspec) {
-	SeahorseObject * self;
-	self = SEAHORSE_OBJECT (object);
-	switch (property_id) {
-		case SEAHORSE_OBJECT_TAG:
-		g_value_set_uint (value, seahorse_object_get_tag (self));
-		break;
-		case SEAHORSE_OBJECT_ID:
-		g_value_set_uint (value, seahorse_object_get_id (self));
-		break;
-		case SEAHORSE_OBJECT_LOCATION:
-		g_value_set_enum (value, seahorse_object_get_location (self));
-		break;
-		case SEAHORSE_OBJECT_USAGE:
-		g_value_set_enum (value, seahorse_object_get_usage (self));
-		break;
-		case SEAHORSE_OBJECT_FLAGS:
-		g_value_set_uint (value, seahorse_object_get_flags (self));
-		break;
-		case SEAHORSE_OBJECT_SOURCE:
-		g_value_set_object (value, seahorse_object_get_source (self));
-		break;
-		case SEAHORSE_OBJECT_PREFERRED:
-		g_value_set_object (value, seahorse_object_get_preferred (self));
-		break;
-		case SEAHORSE_OBJECT_PARENT:
-		g_value_set_object (value, seahorse_object_get_parent (self));
-		break;
+static void
+recalculate_usage (SeahorseObject *self)
+{
+	const gchar *desc;
+	
+	if (!self->pv->description_explicit) {
+		g_free (self->pv->description);
+		
+		switch (self->pv->usage) {
+		case SEAHORSE_USAGE_SYMMETRIC_KEY:
+			desc = _("Symmetric Key");
+			break;
+		case SEAHORSE_USAGE_PUBLIC_KEY:
+			desc = _("Public Key");
+			break;
+		case SEAHORSE_USAGE_PRIVATE_KEY:
+			desc = _("Private Key");
+			break;
+		case SEAHORSE_USAGE_CREDENTIALS:
+			desc = _("Credentials");
+			break;
+		case SEAHORSE_USAGE_IDENTITY:
+			desc = _("Identity");
+			break;
 		default:
-		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
-		break;
+			desc = "";
+			break;
+		}
+		
+		self->pv->description = g_strdup (desc); 
 	}
 }
 
 
-static void seahorse_object_set_property (GObject * object, guint property_id, const GValue * value, GParamSpec * pspec) {
-	SeahorseObject * self;
-	self = SEAHORSE_OBJECT (object);
-	switch (property_id) {
-		case SEAHORSE_OBJECT_LOCATION:
-		seahorse_object_set_location (self, g_value_get_enum (value));
-		break;
-		case SEAHORSE_OBJECT_SOURCE:
-		seahorse_object_set_source (self, g_value_get_object (value));
-		break;
-		case SEAHORSE_OBJECT_PREFERRED:
-		seahorse_object_set_preferred (self, g_value_get_object (value));
-		break;
-		case SEAHORSE_OBJECT_PARENT:
-		seahorse_object_set_parent (self, g_value_get_object (value));
-		break;
-		default:
-		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
-		break;
+/* -----------------------------------------------------------------------------
+ * OBJECT 
+ */
+
+static void
+seahorse_object_init (SeahorseObject *self)
+{
+	self->pv = G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_TYPE_OBJECT, 
+	                                        SeahorseObjectPrivate);
+	self->pv->label = g_strdup ("");
+	self->pv->markup = g_strdup ("");
+	self->pv->description = g_strdup ("");
+	self->pv->icon = g_strdup ("gtk-missing-image");
+	self->pv->identifier = g_strdup ("");
+	self->pv->location = SEAHORSE_LOCATION_LOCAL;
+}
+
+static void
+seahorse_object_dispose (GObject *obj)
+{
+	SeahorseObject *self = SEAHORSE_OBJECT (obj);
+	SeahorseObject *parent;
+	GList *l;
+	
+	if (self->pv->context != NULL) {
+		seahorse_context_remove_object (self->pv->context, self);
+		g_assert (self->pv->context == NULL);
 	}
-}
-
-
-static void seahorse_object_class_init (SeahorseObjectClass * klass) {
-	seahorse_object_parent_class = g_type_class_peek_parent (klass);
-	g_type_class_add_private (klass, sizeof (SeahorseObjectPrivate));
-	G_OBJECT_CLASS (klass)->get_property = seahorse_object_get_property;
-	G_OBJECT_CLASS (klass)->set_property = seahorse_object_set_property;
-	G_OBJECT_CLASS (klass)->constructor = seahorse_object_constructor;
-	G_OBJECT_CLASS (klass)->finalize = seahorse_object_finalize;
-	g_object_class_install_property (G_OBJECT_CLASS (klass), SEAHORSE_OBJECT_TAG, g_param_spec_uint ("tag", "tag", "tag", 0, G_MAXUINT, 0U, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
-	g_object_class_install_property (G_OBJECT_CLASS (klass), SEAHORSE_OBJECT_ID, g_param_spec_uint ("id", "id", "id", 0, G_MAXUINT, 0U, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
-	g_object_class_install_property (G_OBJECT_CLASS (klass), SEAHORSE_OBJECT_LOCATION, g_param_spec_enum ("location", "location", "location", SEAHORSE_TYPE_LOCATION, 0, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE | G_PARAM_WRITABLE));
-	g_object_class_install_property (G_OBJECT_CLASS (klass), SEAHORSE_OBJECT_USAGE, g_param_spec_enum ("usage", "usage", "usage", SEAHORSE_TYPE_USAGE, 0, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
-	g_object_class_install_property (G_OBJECT_CLASS (klass), SEAHORSE_OBJECT_FLAGS, g_param_spec_uint ("flags", "flags", "flags", 0, G_MAXUINT, 0U, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
-	g_object_class_install_property (G_OBJECT_CLASS (klass), SEAHORSE_OBJECT_SOURCE, g_param_spec_object ("source", "source", "source", SEAHORSE_TYPE_SOURCE, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE | G_PARAM_WRITABLE));
-	g_object_class_install_property (G_OBJECT_CLASS (klass), SEAHORSE_OBJECT_PREFERRED, g_param_spec_object ("preferred", "preferred", "preferred", SEAHORSE_TYPE_OBJECT, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE | G_PARAM_WRITABLE));
-	g_object_class_install_property (G_OBJECT_CLASS (klass), SEAHORSE_OBJECT_DISPLAY_NAME, g_param_spec_string ("display-name", "display-name", "display-name", NULL, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
-	g_object_class_install_property (G_OBJECT_CLASS (klass), SEAHORSE_OBJECT_MARKUP, g_param_spec_string ("markup", "markup", "markup", NULL, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
-	g_object_class_install_property (G_OBJECT_CLASS (klass), SEAHORSE_OBJECT_STOCK_ID, g_param_spec_string ("stock-id", "stock-id", "stock-id", NULL, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
-	g_object_class_install_property (G_OBJECT_CLASS (klass), SEAHORSE_OBJECT_PARENT, g_param_spec_object ("parent", "parent", "parent", SEAHORSE_TYPE_OBJECT, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE | G_PARAM_WRITABLE));
-	g_signal_new ("changed", SEAHORSE_TYPE_OBJECT, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__ENUM, G_TYPE_NONE, 1, SEAHORSE_OBJECT_TYPE_CHANGE);
-	g_signal_new ("hierarchy", SEAHORSE_TYPE_OBJECT, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
-	g_signal_new ("destroy", SEAHORSE_TYPE_OBJECT, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
-}
-
-
-static void seahorse_object_instance_init (SeahorseObject * self) {
-	self->priv = SEAHORSE_OBJECT_GET_PRIVATE (self);
-}
-
-
-static void seahorse_object_finalize (GObject * obj) {
-	SeahorseObject * self;
-	self = SEAHORSE_OBJECT (obj);
-	{
-		SeahorseObject* _tmp0;
-		SeahorseObject* new_parent;
-		/* Fire our destroy signal, so that any watchers can go away */
-		g_signal_emit_by_name (G_OBJECT (self), "destroy");
-		if (self->priv->_source != NULL) {
-			g_object_remove_weak_pointer (G_OBJECT (self->priv->_source), &self->priv->_source);
-		}
-		if (self->priv->_preferred != NULL) {
-			g_object_remove_weak_pointer (G_OBJECT (self->priv->_source), &self->priv->_preferred);
-		}
-		/* 
-		 * When an object is destroyed, we reparent all
-		 * children to this objects parent. If no parent
-		 * of this object, all children become root objects.
-		 */
-		_tmp0 = NULL;
-		new_parent = (_tmp0 = self->priv->_parent, (_tmp0 == NULL ? NULL : g_object_ref (_tmp0)));
-		{
-			GList* child_collection;
-			GList* child_it;
-			child_collection = self->priv->_children;
-			for (child_it = child_collection; child_it != NULL; child_it = child_it->next) {
-				SeahorseObject* _tmp1;
-				SeahorseObject* child;
-				_tmp1 = NULL;
-				child = (_tmp1 = ((SeahorseObject*) (child_it->data)), (_tmp1 == NULL ? NULL : g_object_ref (_tmp1)));
-				{
-					seahorse_object_unregister_child (self, child);
-					if (new_parent != NULL) {
-						seahorse_object_register_child (new_parent, child);
-					}
-					/* Fire signal to let anyone know this has moved */
-					g_signal_emit_by_name (G_OBJECT (child), "hierarchy");
-					(child == NULL ? NULL : (child = (g_object_unref (child), NULL)));
-				}
-			}
-		}
-		(new_parent == NULL ? NULL : (new_parent = (g_object_unref (new_parent), NULL)));
+	
+	if (self->pv->source != NULL) {
+		g_object_remove_weak_pointer (G_OBJECT (self->pv->source), (gpointer*)&self->pv->source);
+		self->pv->source = NULL;
 	}
+	
+	if (self->pv->preferred != NULL) {
+		g_object_remove_weak_pointer (G_OBJECT (self->pv->source), (gpointer*)&self->pv->preferred);
+		self->pv->preferred = NULL;
+	}
+
+	/* 
+	 * When an object is destroyed, we reparent all
+	 * children to this objects parent. If no parent
+	 * of this object, all children become root objects.
+	 */
+
+	parent = self->pv->parent;
+	if (parent)
+		g_object_ref (parent);
+	
+	for (l = self->pv->children; l; l = g_list_next (l)) {
+		g_return_if_fail (SEAHORSE_IS_OBJECT (l->data));
+		seahorse_object_set_parent (l->data, parent);
+	}
+
+	if (parent)
+		g_object_unref (parent);
+	
+	g_assert (self->pv->children == NULL);
+	
+	/* Now remove this object from its parent */
+	seahorse_object_set_parent (self, NULL);
+	
+	G_OBJECT_CLASS (seahorse_object_parent_class)->dispose (obj);	
+}
+
+static void
+seahorse_object_finalize (GObject *obj)
+{
+	SeahorseObject *self = SEAHORSE_OBJECT (obj);
+	
+	g_assert (self->pv->source == NULL);
+	g_assert (self->pv->preferred == NULL);
+	g_assert (self->pv->parent == NULL);
+	g_assert (self->pv->context == NULL);
+	g_assert (self->pv->children == NULL);
+	
+	g_free (self->pv->label);
+	self->pv->label = NULL;
+	
+	g_free (self->pv->markup);
+	self->pv->markup = NULL;
+	
+	g_free (self->pv->nickname);
+	self->pv->nickname = NULL;
+	
+	g_free (self->pv->description);
+	self->pv->description = NULL;
+	
+	g_free (self->pv->icon);
+	self->pv->icon = NULL;
+	
+	g_free (self->pv->identifier);
+	self->pv->identifier = NULL;
+
 	G_OBJECT_CLASS (seahorse_object_parent_class)->finalize (obj);
 }
 
-
-GType seahorse_object_get_type (void) {
-	static GType seahorse_object_type_id = 0;
-	if (seahorse_object_type_id == 0) {
-		static const GTypeInfo g_define_type_info = { sizeof (SeahorseObjectClass), (GBaseInitFunc) NULL, (GBaseFinalizeFunc) NULL, (GClassInitFunc) seahorse_object_class_init, (GClassFinalizeFunc) NULL, NULL, sizeof (SeahorseObject), 0, (GInstanceInitFunc) seahorse_object_instance_init };
-		seahorse_object_type_id = g_type_register_static (G_TYPE_OBJECT, "SeahorseObject", &g_define_type_info, G_TYPE_FLAG_ABSTRACT);
+static void
+seahorse_object_get_property (GObject *obj, guint prop_id, GValue *value, 
+                           GParamSpec *pspec)
+{
+	SeahorseObject *self = SEAHORSE_OBJECT (obj);
+	
+	switch (prop_id) {
+	case PROP_CONTEXT:
+		g_value_set_object (value, self->pv->context);
+		break;
+	case PROP_SOURCE:
+		g_value_set_object (value, self->pv->source);
+		break;
+	case PROP_PREFERRED:
+		g_value_set_object (value, self->pv->preferred);
+		break;
+	case PROP_PARENT:
+		g_value_set_object (value, self->pv->parent);
+		break;
+	case PROP_ID:
+		g_value_set_uint (value, self->pv->id);
+		break;
+	case PROP_TAG:
+		g_value_set_uint (value, self->pv->tag);
+		break;
+	case PROP_LABEL:
+		g_value_set_string (value, self->pv->label);
+		break;
+	case PROP_NICKNAME:
+		g_value_set_string (value, self->pv->nickname);
+		break;
+	case PROP_MARKUP:
+		g_value_set_string (value, self->pv->markup);
+		break;
+	case PROP_DESCRIPTION:
+		g_value_set_string (value, self->pv->description);
+		break;
+	case PROP_ICON:
+		g_value_set_string (value, self->pv->icon);
+		break;
+	case PROP_IDENTIFIER:
+		g_value_set_string (value, self->pv->identifier);
+		break;
+	case PROP_LOCATION:
+		g_value_set_enum (value, self->pv->location);
+		break;
+	case PROP_USAGE:
+		g_value_set_enum (value, self->pv->usage);
+		break;
+	case PROP_FLAGS:
+		g_value_set_uint (value, self->pv->flags);
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
+		break;
 	}
-	return seahorse_object_type_id;
 }
 
+static void
+seahorse_object_set_property (GObject *obj, guint prop_id, const GValue *value, 
+                              GParamSpec *pspec)
+{
+	SeahorseObject *self = SEAHORSE_OBJECT (obj);
 
+	switch (prop_id) {
+	case PROP_CONTEXT:
+		if (self->pv->context) 
+			g_object_remove_weak_pointer (G_OBJECT (self->pv->context), (gpointer*)&self->pv->context);
+		self->pv->context = SEAHORSE_CONTEXT (g_value_get_object (value));
+		if (self->pv->context != NULL)
+			g_object_add_weak_pointer (G_OBJECT (self->pv->context), (gpointer*)&self->pv->context);
+		g_object_notify (G_OBJECT (self), "context");
+		break;
+	case PROP_SOURCE:
+		seahorse_object_set_source (self, SEAHORSE_SOURCE (g_value_get_object (value)));
+		break;
+	case PROP_PREFERRED:
+		seahorse_object_set_preferred (self, SEAHORSE_OBJECT (g_value_get_object (value)));
+		break;
+	case PROP_PARENT:
+		seahorse_object_set_parent (self, SEAHORSE_OBJECT (g_value_get_object (value)));
+		break;
+	case PROP_ID:
+		self->pv->id = g_value_get_uint (value);
+		g_object_notify (obj, "id");
+		recalculate_id (self);
+		break;
+	case PROP_LABEL:
+		g_free (self->pv->label);
+		self->pv->label = g_value_dup_string (value);
+		g_object_notify (obj, "label");
+		recalculate_label (self);
+		break;
+	case PROP_NICKNAME:
+		g_free (self->pv->nickname);
+		self->pv->nickname = g_value_dup_string (value);
+		self->pv->nickname_explicit = TRUE;
+		g_object_notify (obj, "nickname");
+		break;
+	case PROP_MARKUP:
+		g_free (self->pv->markup);
+		self->pv->markup = g_value_dup_string (value);
+		self->pv->markup_explicit = TRUE;
+		g_object_notify (obj, "markup");
+		break;
+	case PROP_DESCRIPTION:
+		g_free (self->pv->description);
+		self->pv->description = g_value_dup_string (value);
+		self->pv->description_explicit = TRUE;
+		g_object_notify (obj, "description");
+		break;
+	case PROP_ICON:
+		g_free (self->pv->icon);
+		self->pv->icon = g_value_dup_string (value);
+		g_object_notify (obj, "icon");
+		break;
+	case PROP_IDENTIFIER:
+		g_free (self->pv->identifier);
+		self->pv->identifier = g_value_dup_string (value);
+		self->pv->identifier_explicit = TRUE;
+		g_object_notify (obj, "identifier");
+		break;
+	case PROP_LOCATION:
+		self->pv->location = g_value_get_enum (value);
+		g_object_notify (obj, "location");
+		break;
+	case PROP_USAGE:
+		self->pv->usage = g_value_get_enum (value);
+		g_object_notify (obj, "usage");
+		recalculate_usage (self);
+		break;
+	case PROP_FLAGS:
+		self->pv->flags = g_value_get_uint (value);
+		g_object_notify (obj, "flags");
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
+		break;
+	}
+}
 
+static void
+seahorse_object_class_init (SeahorseObjectClass *klass)
+{
+	GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+    
+	seahorse_object_parent_class = g_type_class_peek_parent (klass);
+	g_type_class_add_private (klass, sizeof (SeahorseObjectPrivate));
 
+	gobject_class->dispose = seahorse_object_dispose;
+	gobject_class->finalize = seahorse_object_finalize;
+	gobject_class->set_property = seahorse_object_set_property;
+	gobject_class->get_property = seahorse_object_get_property;
+    
+	g_object_class_install_property (gobject_class, PROP_SOURCE,
+	           g_param_spec_object ("source", "Object Source", "Source the Object came from", 
+	                                SEAHORSE_TYPE_SOURCE, G_PARAM_READWRITE));
+
+	g_object_class_install_property (gobject_class, PROP_CONTEXT,
+	           g_param_spec_object ("context", "Context for object", "Object that this context belongs to", 
+	                                SEAHORSE_TYPE_CONTEXT, G_PARAM_READWRITE));
+
+	g_object_class_install_property (gobject_class, PROP_PREFERRED,
+	           g_param_spec_object ("preferred", "Preferred Object", "An object to prefer over this one", 
+	                                SEAHORSE_TYPE_OBJECT, G_PARAM_READWRITE));
+    
+	g_object_class_install_property (gobject_class, PROP_PREFERRED,
+	           g_param_spec_object ("parent", "Parent Object", "This object's parent in the tree.", 
+	                                SEAHORSE_TYPE_OBJECT, G_PARAM_READWRITE));
+	
+	g_object_class_install_property (gobject_class, PROP_ID,
+	           g_param_spec_uint ("id", "Object ID", "This object's ID.", 
+	                              0, G_MAXUINT, 0, G_PARAM_READWRITE));
+	
+	g_object_class_install_property (gobject_class, PROP_TAG,
+	           g_param_spec_uint ("tag", "Object Type Tag", "This object's type tag.", 
+	                              0, G_MAXUINT, 0, G_PARAM_READABLE));
+	
+	g_object_class_install_property (gobject_class, PROP_LABEL,
+	           g_param_spec_string ("label", "Object Display Label", "This object's displayable label.", 
+	                                "", G_PARAM_READWRITE));
+
+	g_object_class_install_property (gobject_class, PROP_NICKNAME,
+	           g_param_spec_string ("nickname", "Object Short Name", "This object's short name.", 
+	                                "", G_PARAM_READWRITE));
+	
+	g_object_class_install_property (gobject_class, PROP_ICON,
+	           g_param_spec_string ("icon", "Object Icon", "Stock ID for object.", 
+	                                "", G_PARAM_READWRITE));
+	
+	g_object_class_install_property (gobject_class, PROP_MARKUP,
+	           g_param_spec_string ("markup", "Object Display Markup", "This object's displayable markup.", 
+	                                "", G_PARAM_READWRITE));
+	
+	g_object_class_install_property (gobject_class, PROP_DESCRIPTION,
+	           g_param_spec_string ("description", "Object Description", "Description of the type of object", 
+	                                "", G_PARAM_READWRITE));
+	
+	g_object_class_install_property (gobject_class, PROP_IDENTIFIER,
+	           g_param_spec_string ("identifier", "Object Identifier", "Displayable ID for the object.", 
+	                                "", G_PARAM_READWRITE));
+	
+	g_object_class_install_property (gobject_class, PROP_LOCATION,
+	           g_param_spec_enum ("location", "Object Location", "Where the object is located.", 
+	                              SEAHORSE_TYPE_LOCATION, SEAHORSE_LOCATION_INVALID, G_PARAM_READWRITE));
+	
+	g_object_class_install_property (gobject_class, PROP_USAGE,
+	           g_param_spec_enum ("usage", "Object Usage", "How this object is used.", 
+	                              SEAHORSE_TYPE_USAGE, SEAHORSE_USAGE_NONE, G_PARAM_READWRITE));
+
+	g_object_class_install_property (gobject_class, PROP_FLAGS,
+	           g_param_spec_uint ("flags", "Object Flags", "This object's flags.", 
+	                              0, G_MAXUINT, 0, G_PARAM_READWRITE));
+}
+
+/* -----------------------------------------------------------------------------
+ * PUBLIC 
+ */
+
+GQuark
+seahorse_object_get_id (SeahorseObject *self)
+{
+	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), 0);
+	return self->pv->id;
+}
+
+GQuark
+seahorse_object_get_tag (SeahorseObject *self)
+{
+	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), 0);
+	return self->pv->tag;	
+}
+
+SeahorseSource*
+seahorse_object_get_source (SeahorseObject *self)
+{
+	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), NULL);
+	return self->pv->source;	
+}
+
+void
+seahorse_object_set_source (SeahorseObject *self, SeahorseSource *value)
+{
+	g_return_if_fail (SEAHORSE_IS_OBJECT (self));
+	
+	if (value == self->pv->source)
+		return;
+
+	if (self->pv->source) 
+		g_object_remove_weak_pointer (G_OBJECT (self->pv->source), (gpointer*)&self->pv->source);
+
+	self->pv->source = value;
+	if (self->pv->source != NULL)
+		g_object_add_weak_pointer (G_OBJECT (self->pv->source), (gpointer*)&self->pv->source);
+
+	g_object_notify (G_OBJECT (self), "source");
+}
+
+SeahorseContext*
+seahorse_object_get_context (SeahorseObject *self)
+{
+	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), NULL);
+	return self->pv->context;
+}
+
+SeahorseObject*
+seahorse_object_get_preferred (SeahorseObject *self)
+{
+	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), NULL);
+	return self->pv->preferred;
+}
+
+void
+seahorse_object_set_preferred (SeahorseObject *self, SeahorseObject *value)
+{
+	g_return_if_fail (SEAHORSE_IS_OBJECT (self));
+	
+	if (self->pv->preferred == value)
+		return;
+
+	if (self->pv->preferred)
+		g_object_remove_weak_pointer (G_OBJECT (self->pv->preferred), (gpointer*)&self->pv->preferred);
+
+	self->pv->preferred = value;
+	if (self->pv->preferred != NULL)
+		g_object_add_weak_pointer (G_OBJECT (self->pv->preferred), (gpointer*)&self->pv->preferred);
+
+	g_object_notify (G_OBJECT (self), "preferred");
+}
+
+SeahorseObject*
+seahorse_object_get_parent (SeahorseObject *self)
+{
+	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), NULL);
+	return self->pv->parent;
+}
+
+void
+seahorse_object_set_parent (SeahorseObject *self, SeahorseObject *value)
+{
+	g_return_if_fail (SEAHORSE_IS_OBJECT (self));
+	g_return_if_fail (self->pv->parent != self);
+	g_return_if_fail (value != self);
+	
+	if (value == self->pv->parent)
+		return;
+	
+	/* Set the new parent/child relationship */
+	if (self->pv->parent != NULL)
+		unregister_child (self->pv->parent, self);
+
+	if (value != NULL)
+		register_child (value, self);
+	
+	g_assert (self->pv->parent == value);
+
+	g_object_notify (G_OBJECT (self), "parent");
+}
+ 
+GList*
+seahorse_object_get_children (SeahorseObject *self)
+{
+	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), NULL);
+	return g_list_copy (self->pv->children);
+}
+
+SeahorseObject*
+seahorse_object_get_nth_child (SeahorseObject *self, guint index)
+{
+	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), NULL);
+	return SEAHORSE_OBJECT (g_list_nth_data (self->pv->children, index));
+}
+
+const gchar*
+seahorse_object_get_label (SeahorseObject *self)
+{
+	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), NULL);
+	return self->pv->label;
+}
+
+const gchar*
+seahorse_object_get_markup (SeahorseObject *self)
+{
+	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), NULL);
+	return self->pv->markup;
+}
+
+const gchar*
+seahorse_object_get_nickname (SeahorseObject *self)
+{
+	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), NULL);
+	return self->pv->nickname;
+}
+
+const gchar*
+seahorse_object_get_description (SeahorseObject *self)
+{
+	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), NULL);
+	return self->pv->description;
+}
+
+const gchar*
+seahorse_object_get_icon (SeahorseObject *self)
+{
+	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), NULL);
+	return self->pv->icon;
+}
+
+const gchar*
+seahorse_object_get_identifier (SeahorseObject *self)
+{
+	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), NULL);
+	return self->pv->identifier;	
+}
+
+SeahorseLocation
+seahorse_object_get_location (SeahorseObject *self)
+{
+	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), SEAHORSE_LOCATION_INVALID);
+	return self->pv->location;
+}
+
+SeahorseUsage
+seahorse_object_get_usage (SeahorseObject *self)
+{
+	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), SEAHORSE_USAGE_NONE);
+	return self->pv->usage;	
+}
+
+guint
+seahorse_object_get_flags (SeahorseObject *self)
+{
+	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), 0);
+	return self->pv->flags;	
+}
+
+gboolean
+seahorse_object_lookup_property (SeahorseObject *self, const gchar *field, GValue *value)
+{
+	GParamSpec *spec;
+	
+	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), FALSE);
+	g_return_val_if_fail (field, FALSE);
+	g_return_val_if_fail (value, FALSE);
+	
+	spec = g_object_class_find_property (G_OBJECT_GET_CLASS (self), field);
+	if (!spec) {
+		/* Some name mapping to new style names */
+		if (g_str_equal (field, "simple-name"))
+			field = "nickname";
+		else if (g_str_equal (field, "key-id"))
+			field = "identifier";
+		else if (g_str_equal (field, "display-name"))
+			field = "label";
+		else if (g_str_equal (field, "key-desc"))
+			field = "description";
+		else if (g_str_equal (field, "ktype"))
+			field = "tag";
+		else if (g_str_equal (field, "etype"))
+			field = "usage";
+		else if (g_str_equal (field, "display-id"))
+			field = "identifier";
+		else if (g_str_equal (field, "stock-id"))
+			field = "icon";
+		else 
+			return FALSE;
+	
+		/* Try again */
+		spec = g_object_class_find_property (G_OBJECT_GET_CLASS (self), field);
+		if (!spec)
+			return FALSE;
+	}
+
+	g_value_init (value, spec->value_type);
+	g_object_get_property (G_OBJECT (self), field, value);
+	return TRUE; 
+}
+
+gboolean 
+seahorse_object_predicate_match (SeahorseObjectPredicate *self, SeahorseObject* obj) 
+{
+	SeahorseObjectPrivate *pv;
+	
+	g_return_val_if_fail (SEAHORSE_IS_OBJECT (obj), FALSE);
+	pv = obj->pv;
+	
+	/* Check all the fields */
+	if (self->tag != 0 && self->tag != pv->tag)
+		return FALSE;
+	if (self->id != 0 && self->id != pv->id)
+		return FALSE;
+	if (self->location != 0 && self->location != pv->location)
+		return FALSE;
+	if (self->usage != 0 && self->usage != pv->usage) 
+		return FALSE;
+	if (self->flags != 0 && (self->flags & pv->flags) == 0) 
+		return FALSE;
+	if (self->nflags != 0 && (self->nflags & pv->flags) != 0)
+		return FALSE;
+	if (self->source != NULL && self->source != pv->source)
+		return FALSE;
+
+	/* And any custom stuff */
+	if (self->custom != NULL && !self->custom (obj, self->custom_target)) 
+		return FALSE;
+
+	return TRUE;
+}
