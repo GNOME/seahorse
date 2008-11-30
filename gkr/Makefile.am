@@ -23,6 +23,8 @@ libseahorse_gkr_la_SOURCES = \
 	seahorse-gkr-dialogs.h \
 	seahorse-gkr-item.c seahorse-gkr-item.h \
 	seahorse-gkr-item-properties.c \
+	seahorse-gkr-keyring.c seahorse-gkr-keyring.h \
+	seahorse-gkr-keyring-properties.c \
 	seahorse-gkr-module.c seahorse-gkr-module.h \
 	seahorse-gkr-operation.c seahorse-gkr-operation.h \
 	seahorse-gkr-source.c seahorse-gkr-source.h
@@ -33,7 +35,8 @@ libseahorse_gkr_la_LIBADD = \
 	$(top_builddir)/libcryptui/libcryptui.la
 
 glade_DATA = \
-	seahorse-gkr-item-properties.glade
+	seahorse-gkr-item-properties.glade \
+	seahorse-gkr-keyring.glade
 
 EXTRA_DIST = \
 	$(glade_DATA)

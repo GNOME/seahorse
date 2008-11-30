@@ -91,6 +91,8 @@ enum SeahorseContextType {
     SEAHORSE_CONTEXT_DAEMON = 2,
 };
 
+typedef void (*SeahorseObjectFunc) (struct _SeahorseObject *obj, gpointer user_data);
+
 #define             SCTX_APP()                          (seahorse_context_for_app ())
 
 GType               seahorse_context_get_type           (void);
@@ -148,9 +150,14 @@ GList*              seahorse_context_find_objects       (SeahorseContext    *sct
                                                          SeahorseUsage      usage,
                                                          SeahorseLocation   location);
 
-GList*              seahorse_context_find_objects_full  (SeahorseContext *sctx,
+GList*              seahorse_context_find_objects_full  (SeahorseContext *self,
                                                          struct _SeahorseObjectPredicate *skpred);
-                                                         
+
+void                seahorse_context_for_objects_full   (SeahorseContext *self,
+                                                         struct _SeahorseObjectPredicate *skpred,
+                                                         SeahorseObjectFunc func,
+                                                         gpointer user_data);
+
 void                seahorse_context_remove_object      (SeahorseContext *sctx,
                                                          struct _SeahorseObject *sobj);
 

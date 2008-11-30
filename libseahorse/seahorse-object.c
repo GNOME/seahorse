@@ -878,6 +878,8 @@ seahorse_object_predicate_match (SeahorseObjectPredicate *self, SeahorseObject* 
 		return FALSE;
 	if (self->id != 0 && self->id != pv->id)
 		return FALSE;
+	if (self->type != 0 && self->type != G_OBJECT_TYPE (obj))
+		return FALSE;
 	if (self->location != 0 && self->location != pv->location)
 		return FALSE;
 	if (self->usage != 0 && self->usage != pv->usage) 
@@ -894,4 +896,10 @@ seahorse_object_predicate_match (SeahorseObjectPredicate *self, SeahorseObject* 
 		return FALSE;
 
 	return TRUE;
+}
+
+void
+seahorse_object_predicate_clear (SeahorseObjectPredicate *self)
+{
+	memset (self, 0, sizeof (*self));
 }

@@ -115,7 +115,7 @@ namespace Seahorse {
 			_pred.usage = Usage.PUBLIC_KEY;
 			_pred.location = Location.REMOTE;
 			_pred.custom = on_filter_objects;
-			  
+			
 			/* Our set all nicely filtered */
 			_objects = new Set.full (ref _pred);
 			_store = new KeyManagerStore (_objects, _view);

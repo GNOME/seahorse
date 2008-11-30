@@ -27,13 +27,15 @@
 
 #include <glib/gi18n.h>
 
-#include "seahorse-gkr-source.h"
 #include "seahorse-operation.h"
 #include "seahorse-util.h"
-#include "seahorse-gkr-item.h"
 #include "seahorse-secure-memory.h"
 #include "seahorse-passphrase.h"
+
+#include "seahorse-gkr-item.h"
+#include "seahorse-gkr-keyring.h"
 #include "seahorse-gkr-operation.h"
+#include "seahorse-gkr-source.h"
 
 #include "common/seahorse-registry.h"
 
@@ -66,8 +68,9 @@ enum {
 };
 
 struct _SeahorseGkrSourcePrivate {
-    SeahorseMultiOperation *operations;     /* A list of all current operations */    
-    gchar *keyring_name;                    /* The key ring name */
+	SeahorseMultiOperation *operations;     /* A list of all current operations */    
+	gchar *keyring_name;                    /* The key ring name */
+	SeahorseObject *keyring_object;		/* Object which represents the whole keyring */
 };
 
 G_DEFINE_TYPE (SeahorseGkrSource, seahorse_gkr_source, SEAHORSE_TYPE_SOURCE);
@@ -160,6 +163,7 @@ keyring_ids_ready (GnomeKeyringResult result, GList *list, SeahorseListOperation
 			git = seahorse_gkr_item_new (SEAHORSE_SOURCE (lop->gsrc), keyring_name, item_id);
 
 			/* Add to context */ 
+			seahorse_object_set_parent (SEAHORSE_OBJECT (git), lop->gsrc->pv->keyring_object);
 			seahorse_context_take_object (SCTX_APP (), SEAHORSE_OBJECT (git));
 		}
 		
@@ -177,11 +181,19 @@ keyring_ids_ready (GnomeKeyringResult result, GList *list, SeahorseListOperation
 
 }
 
+static void
+insert_id_hashtable (SeahorseObject *object, gpointer user_data)
+{
+	g_hash_table_insert ((GHashTable*)user_data, 
+	                     GUINT_TO_POINTER (seahorse_object_get_id (object)),
+	                     GUINT_TO_POINTER (TRUE));
+}
+
 static SeahorseListOperation*
 start_list_operation (SeahorseGkrSource *gsrc)
 {
 	SeahorseListOperation *lop;
-	GList *keys, *l;
+	SeahorseObjectPredicate pred;
 
 	g_assert (SEAHORSE_IS_GKR_SOURCE (gsrc));
 
@@ -192,11 +204,10 @@ start_list_operation (SeahorseGkrSource *gsrc)
   
 	/* When loading new keys prepare a list of current */
 	lop->checks = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, NULL);
-	keys = seahorse_context_get_objects (SCTX_APP (), SEAHORSE_SOURCE (gsrc));
-	for (l = keys; l; l = g_list_next (l))
-		g_hash_table_insert (lop->checks, GUINT_TO_POINTER (seahorse_object_get_id (l->data)), 
-		                     GUINT_TO_POINTER (TRUE));
-	g_list_free (keys);
+	seahorse_object_predicate_clear (&pred);
+	pred.source = SEAHORSE_SOURCE (gsrc);
+	pred.type = SEAHORSE_TYPE_GKR_ITEM;
+	seahorse_context_for_objects_full (SCTX_APP (), &pred, insert_id_hashtable, lop->checks);
     
 	/* Start listing of ids */
 	seahorse_operation_mark_progress (SEAHORSE_OPERATION (lop), _("Listing passwords"), -1);
@@ -406,8 +417,18 @@ seahorse_gkr_source_init (SeahorseGkrSource *gsrc)
 static GObject*  
 seahorse_gkr_source_constructor (GType type, guint n_props, GObjectConstructParam* props)
 {
-    GObject* obj = G_OBJECT_CLASS (seahorse_gkr_source_parent_class)->constructor (type, n_props, props);
-    return obj;
+	GObject* obj = G_OBJECT_CLASS (seahorse_gkr_source_parent_class)->constructor (type, n_props, props);
+	SeahorseGkrSource *self = NULL;
+	
+	if (obj) {
+		self = SEAHORSE_GKR_SOURCE (obj);
+		
+		/* Add the initial keyring folder style object */
+		self->pv->keyring_object = SEAHORSE_OBJECT (seahorse_gkr_keyring_new (self->pv->keyring_name));
+		seahorse_context_add_object (SCTX_APP (), self->pv->keyring_object);
+	}
+	
+	return obj;
 }
 
 static void 
@@ -533,6 +554,11 @@ seahorse_gkr_source_dispose (GObject *gobject)
         g_object_unref (gsrc->pv->operations);
         gsrc->pv->operations = NULL;
     }
+    
+    /* The keyring object */
+    if (gsrc->pv->keyring_object)
+	    g_object_unref (gsrc->pv->keyring_object);
+    gsrc->pv->keyring_object = NULL;
 
     G_OBJECT_CLASS (seahorse_gkr_source_parent_class)->dispose (gobject);
 }

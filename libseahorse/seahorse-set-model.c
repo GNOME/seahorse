@@ -206,12 +206,16 @@ remove_object (SeahorseSetModel *smodel, SeahorseObject *sobj)
 {
 	SeahorseSetModelPrivate *pv = SEAHORSE_SET_MODEL_GET_PRIVATE (smodel);
 	GNode *node;
+	GNode *parent;
 	SeahorseObject *parent_obj;
 
 	node = g_hash_table_lookup (pv->object_to_node, sobj);
 	g_assert (node);
 	g_assert (node != pv->root_node);
 	g_assert (node->data == sobj);
+	
+	parent = node->parent;
+	g_assert (parent);
 	
 	/* Remove this object and any children */
 	g_node_traverse (node, G_POST_ORDER, G_TRAVERSE_ALL, -1, 
@@ -221,9 +225,12 @@ remove_object (SeahorseSetModel *smodel, SeahorseObject *sobj)
 	 * Now check if the parent of this object is actually in the set, or was 
 	 * just added for the sake of holding the child (see add_object above)
 	 */
-	parent_obj = seahorse_object_get_parent (sobj);
-	if (parent_obj && !seahorse_set_has_object (smodel->set, parent_obj))
-		remove_object (smodel, sobj);
+	if (parent != pv->root_node && g_node_n_children (parent) == 0) {
+		parent_obj = seahorse_object_get_parent (sobj);
+		g_return_if_fail (parent_obj);
+		if (!seahorse_set_has_object (smodel->set, parent_obj))
+			remove_object (smodel, parent_obj);
+	}
 }
 
 static void

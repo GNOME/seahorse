@@ -139,6 +139,7 @@ typedef struct _SeahorseObjectPredicate SeahorseObjectPredicate;
 struct _SeahorseObjectPredicate {
 	GQuark tag;
 	GQuark id;
+	GType type;
 	SeahorseLocation location;
 	SeahorseUsage usage;
 	guint flags;
@@ -147,6 +148,8 @@ struct _SeahorseObjectPredicate {
 	SeahorseObjectPredicateFunc custom;
 	gpointer custom_target;
 };
+
+void               seahorse_object_predicate_clear         (SeahorseObjectPredicate *self);
 
 gboolean           seahorse_object_predicate_match         (SeahorseObjectPredicate *self, 
                                                             SeahorseObject *obj);

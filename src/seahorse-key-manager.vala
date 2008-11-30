@@ -61,43 +61,47 @@ namespace Seahorse {
 		private TabInfo[] _tabs;
 
 		private static const Object.Predicate PRED_PUBLIC = {
-			0,                                      /* ktype */
+			0,                                      /* tag */
 			0,                                      /* id */
+			0,                                      /* type */
 			Location.LOCAL,                         /* location */
 			Usage.PUBLIC_KEY,                       /* usage */
 			0,                                      /* flags */
 			Object.Flag.TRUSTED | Object.Flag.IS_VALID,   /* nflags */
-			null                                    /* sksrc */
+			null                                    /* source */
 		};
 		
 		private static const Object.Predicate PRED_TRUSTED = {
-			0,                                      /* ktype */
+			0,                                      /* tag */
 			0,                                      /* id */
+			0,                                      /* type */
 			Location.LOCAL,                         /* location */
 			Usage.PUBLIC_KEY,                       /* usage */
 			Object.Flag.TRUSTED | Object.Flag.IS_VALID,   /* flags */
 			0,                                      /* nflags */
-			null                                    /* sksrc */
+			null                                    /* source */
 		};
 		
 		private static const Object.Predicate PRED_PRIVATE = {
-			0,                                      /* ktype */
+			0,                                      /* tag */
 			0,                                      /* id */
+			0,                                      /* type */
 			Location.LOCAL,                         /* location */
 			Usage.PRIVATE_KEY,                      /* usage */
 			0,                                      /* flags */
 			0,                                      /* nflags */
-			null                                    /* sksrc */
+			null                                    /* source */
 		};
 
 		private static const Object.Predicate PRED_PASSWORD = {
-			0,                                      /* ktype */
+			0,                                      /* tag */
 		 	0,                                      /* id */
+		 	0,                                      /* type */
 			Location.LOCAL,                         /* location */
 			Usage.CREDENTIALS,                      /* usage */
 			0,                                      /* flags */
 			0,                                      /* nflags */
-			null                                    /* sksrc */
+			null                                    /* source */
 		};
 		
 		private static const Gtk.ActionEntry[] GENERAL_ENTRIES = {

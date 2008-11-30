@@ -65,6 +65,7 @@ namespace Seahorse {
 		public struct Predicate {
 			public GLib.Quark tag;
 			public GLib.Quark id;
+			public GLib.Type type;
 			public Seahorse.Location location;
 			public Seahorse.Usage usage;
 			public uint flags;
@@ -72,6 +73,7 @@ namespace Seahorse {
 			public weak Seahorse.Source? source;
 			public Seahorse.Object.PredicateFunc? custom;
 			public bool match (Seahorse.Object obj);
+			public void clear ();
 		}
 		[CCode (cheader_filename = "seahorse-object.h")]
 		public delegate bool PredicateFunc (Seahorse.Object obj);

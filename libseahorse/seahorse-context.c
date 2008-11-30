@@ -419,7 +419,7 @@ seahorse_context_remote_source (SeahorseContext *sctx, const gchar *uri)
 
 
 static void
-object_notify (SeahorseObject *sobj, SeahorseContext *sctx)
+object_notify (SeahorseObject *sobj, GParamSpec *spec, SeahorseContext *sctx)
 {
 	g_signal_emit (sctx, signals[CHANGED], 0, sobj);
 }
@@ -527,7 +527,7 @@ seahorse_context_take_object (SeahorseContext *sctx, SeahorseObject *sobj)
     g_signal_emit (sctx, signals[ADDED], 0, sobj);
     g_object_unref (sobj);
     
-    seahorse_bind_objects (NULL, sobj, (SeahorseTransfer)object_notify, sctx);
+    g_signal_connect (sobj, "notify", G_CALLBACK (object_notify), sctx);
 }
 
 guint
@@ -555,47 +555,93 @@ seahorse_context_get_object (SeahorseContext *sctx, SeahorseSource *sksrc,
 }
 
 typedef struct _ObjectMatcher {
-    
-    SeahorseObjectPredicate *kp;
-    gboolean many;
-    GList *objects;
-    
+	SeahorseObjectPredicate *kp;
+	gboolean many;
+	SeahorseObjectFunc func;
+	gpointer user_data;
 } ObjectMatcher;
 
 gboolean
 find_matching_objects (gpointer key, SeahorseObject *sobj, ObjectMatcher *km)
 {
-    if (km->kp && seahorse_object_predicate_match (km->kp, SEAHORSE_OBJECT (sobj)))
-        km->objects = g_list_prepend (km->objects, sobj);
+	gboolean matched;
+	
+	if (km->kp && seahorse_object_predicate_match (km->kp, SEAHORSE_OBJECT (sobj))) {
+		matched = TRUE;
+		(km->func) (sobj, km->user_data);
+	}
 
-    /* Terminate search */
-    if (!km->many && km->objects)
-        return TRUE;
+	/* Terminate search */
+	if (!km->many && matched)
+		return TRUE;
 
-    /* Keep going */
-    return FALSE;
+	/* Keep going */
+	return FALSE;
 }
 
-GList*             
-seahorse_context_get_objects (SeahorseContext *sctx, SeahorseSource *sksrc)
+static void
+add_object_to_list (SeahorseObject *object, gpointer user_data)
 {
-    SeahorseObjectPredicate kp;
-    ObjectMatcher km;
+	GList** list = (GList**)user_data;
+	*list = g_list_prepend (*list, object);
+}
 
-    if (!sctx)
-        sctx = seahorse_context_for_app ();
-    g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), NULL);
-    g_return_val_if_fail (sksrc == NULL || SEAHORSE_IS_SOURCE (sksrc), NULL);
+GList*
+seahorse_context_find_objects_full (SeahorseContext *self, SeahorseObjectPredicate *pred)
+{
+	GList *list = NULL;
+	ObjectMatcher km;
 
-    memset (&kp, 0, sizeof (kp));
-    memset (&km, 0, sizeof (km));
-    
-    km.kp = &kp;
-    km.many = TRUE;
-    kp.source = sksrc;
-    
-    g_hash_table_find (sctx->pv->objects_by_source, (GHRFunc)find_matching_objects, &km);
-    return km.objects;
+	if (!self)
+		self = seahorse_context_for_app ();
+	g_return_val_if_fail (SEAHORSE_IS_CONTEXT (self), NULL);
+	g_return_val_if_fail (pred, NULL);
+
+	memset (&km, 0, sizeof (km));
+	km.kp = pred;
+	km.many = TRUE;
+	km.func = add_object_to_list;
+	km.user_data = &list;
+
+	g_hash_table_find (self->pv->objects_by_source, (GHRFunc)find_matching_objects, &km);
+	return list; 
+}
+
+void
+seahorse_context_for_objects_full (SeahorseContext *self, SeahorseObjectPredicate *pred,
+                                   SeahorseObjectFunc func, gpointer user_data)
+{
+	ObjectMatcher km;
+
+	if (!self)
+		self = seahorse_context_for_app ();
+	g_return_if_fail (SEAHORSE_IS_CONTEXT (self));
+	g_return_if_fail (pred);
+	g_return_if_fail (func);
+
+	memset (&km, 0, sizeof (km));
+	km.kp = pred;
+	km.many = TRUE;
+	km.func = func;
+	km.user_data = user_data;
+
+	g_hash_table_find (self->pv->objects_by_source, (GHRFunc)find_matching_objects, &km);
+}
+
+GList*
+seahorse_context_get_objects (SeahorseContext *self, SeahorseSource *source)
+{
+	SeahorseObjectPredicate pred;
+
+	if (!self)
+		self = seahorse_context_for_app ();
+	g_return_val_if_fail (SEAHORSE_IS_CONTEXT (self), NULL);
+	g_return_val_if_fail (source == NULL || SEAHORSE_IS_SOURCE (source), NULL);
+
+	seahorse_object_predicate_clear (&pred);
+	pred.source = source;
+	
+	return seahorse_context_find_objects_full (self, &pred);
 }
 
 SeahorseObject*        
@@ -640,24 +686,6 @@ seahorse_context_find_objects (SeahorseContext *sctx, GQuark ktype,
     pred.location = location;
     
     return seahorse_context_find_objects_full (sctx, &pred);
-}
-
-GList*
-seahorse_context_find_objects_full (SeahorseContext *sctx, SeahorseObjectPredicate *skpred)
-{
-    ObjectMatcher km;
-
-    if (!sctx)
-        sctx = seahorse_context_for_app ();
-    g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), NULL);
-
-    memset (&km, 0, sizeof (km));
-    
-    km.kp = skpred;
-    km.many = TRUE;
-    
-    g_hash_table_find (sctx->pv->objects_by_source, (GHRFunc)find_matching_objects, &km);
-    return km.objects; 
 }
 
 void 

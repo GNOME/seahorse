@@ -61,11 +61,20 @@ G_DEFINE_TYPE (SeahorseGkrCommands, seahorse_gkr_commands, SEAHORSE_TYPE_COMMAND
 static void 
 seahorse_gkr_commands_show_properties (SeahorseCommands* base, SeahorseObject* object) 
 {
+	GtkWindow *window;
+
 	g_return_if_fail (SEAHORSE_IS_OBJECT (object));
 	g_return_if_fail (seahorse_object_get_tag (object) == SEAHORSE_GKR_TYPE);
+
+	window = seahorse_view_get_window (seahorse_commands_get_view (base));
+	if (G_OBJECT_TYPE (object) == SEAHORSE_TYPE_GKR_ITEM) 
+		seahorse_gkr_item_properties_show (SEAHORSE_GKR_ITEM (object), window); 
 	
-	seahorse_gkr_item_properties_show (SEAHORSE_GKR_ITEM (object), 
-	                                   seahorse_view_get_window (seahorse_commands_get_view (base)));
+	else if (G_OBJECT_TYPE (object) == SEAHORSE_TYPE_GKR_KEYRING) 
+		seahorse_gkr_keyring_properties_show (SEAHORSE_GKR_KEYRING (object), window);
+	
+	else
+		g_return_if_reached ();
 }
 
 static SeahorseOperation* 
