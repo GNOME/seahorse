@@ -1,0 +1,531 @@
+@@image: 'figures/seahorse-window.png'; md5=d52b0902a24b89d5aadc50e64f471c7d
+
+Manual del contrasenyes i claus de xifratge
+
+2005, 2006, 2007, 2008
+
+Jacob Perkins i Adam Schreiber
+
+Projecte del Seahorse
+
+Teniu permís per a copiar, distribuir i/o modificar aquest document, sota els termes de la Llicència de documentació lliure GNU (GFDL), versió 1.1 o qualsevol versió publicada posteriorment per la Free Software Foundation, sense seccions invariants, sense texts de portada i sense texts de contraportada. Podeu trobar una còpia de la GFDL en aquest <ulink type="help" url="ghelp:fdl">enllaç</ulink> o en el fitxer COPYING-DOCS distribuït amb aquest manual.
+
+Aquest manual forma part d'una col·lecció de manuals del GNOME distribuïts sota la GFDL. Si voleu distribuir aquest manual independentment de la col·lecció, podeu fer-ho afegint una còpia de la llicència al manual, tal com es descriu a la secció 6 de la llicència.
+
+Molts dels noms que les empreses utilitzen per a distingir els seus productes i serveis es consideren marques comercials. Quan aquests noms apareguin en qualsevol documentació del GNOME, si els membres del Projecte de documentació del GNOME han estat avisats pel que fa a les marques, els noms apareixeran en majúscules o amb les inicials en majúscules.
+
+EL DOCUMENT S'OFEREIX «TAL COM ÉS», SENSE CAP TIPUS DE GARANTIA, NI EXPLÍCITA NI IMPLÍCITA; AIXÒ INCLOU, SENSE LIMITAR-S'HI, LES GARANTIES QUE EL DOCUMENT O LA VERSIÓ MODIFICADA DEL DOCUMENT NO TINGUI DEFECTES, SIGUI COMERCIALITZABLE, SIGUI ADEQUAT PER A UN ÚS CONCRET O NO INFRINGEIXI CAP LLEI. TOT EL RISC PEL QUE FA A LA QUALITAT, EXACTITUD I RENDIMENT DEL DOCUMENT O LA VERSIÓ MODIFICADA DEL DOCUMENT ÉS VOSTRE. EN CAS QUE EL DOCUMENT RESULTÉS DEFECTUÓS EN QUALSEVOL ASPECTE, VÓS (NO PAS L'ESCRIPTOR INICIAL, L'AUTOR O CAP ALTRE COL·LABORADOR) ASSUMIU TOT EL COST DE MANTENIMENT, REPARACIÓ O CORRECCIÓ. AQUESTA RENÚNCIA DE GARANTIA CONSTITUEIX UNA PART ESSENCIAL D'AQUESTA LLICÈNCIA. NO S'AUTORITZA L'ÚS DE CAP DOCUMENT O VERSIÓ MODIFICADA DEL DOCUMENT EXCEPTE SOTA AQUESTA RENÚNCIA DE GARANTIA; I
+
+EN CAP CAS I SOTA CAP INTERPRETACIÓ LEGAL, JA SIGUI PER AGREUJAMENT (INCLOENT-HI LA NEGLIGÈNCIA), CONTRACTE O ALTRE CAS, L'AUTOR, L'ESCRIPTOR ORIGINAL, QUALSEVOL DELS COL·LABORADORS O DISTRIBUÏDORS DEL DOCUMENT O UNA VERSIÓ MODIFICADA DEL DOCUMENT NI CAP PROVEÏDOR D'AQUESTES PARTS NO SERAN RESPONSABLES DAVANT DE NINGÚ PER CAP DANY DIRECTE, INDIRECTE, ESPECIAL, ACCIDENTAL O CONSECUTIU DE QUALSEVOL TIPUS; AIXÒ INCLOU, SENSE LIMITAR-S'HI, ELS DANYS PER PÈRDUA DE CLIENTS, INTERRUPCIONS DE LA FEINA, FALLADA O MALFUNCIONAMENT DE L'ORDINADOR, O QUALSEVOL ALTRA PÈRDUA O DANY RELACIONAT AMB L'ÚS DEL DOCUMENT I LES VERSIONS MODIFICADES DEL DOCUMENT, FINS I TOT SI S'HA INFORMAT AQUESTA PART DE LA POSSIBILITAT D'AQUESTS DANYS.
+
+EL DOCUMENT I LES VERSIONS MODIFICADES DEL DOCUMENT S'OFEREIXEN SOTA ELS TERMES DE LA LLICÈNCIA DE DOCUMENTACIÓ LLIURE DE GNU, TENINT EN COMPTE QUE: <placeholder-1/>
+
+Jacob
+
+Perkins
+
+Adam
+
+Schreiber
+
+sadam@clemson.edu
+
+Manual del contrasenyes i claus de xifratge v0.10.1
+
+Agost de 2008
+
+Adam Schreiber <email>sadam@clemson.edu</email>
+
+Manual del contrasenyes i claus de xifratge v0.9.1
+
+Novembre de 2006
+
+Milo Casagrande <email>milo_casagrande@yahoo.it</email>
+
+Manual del contrasenyes i claus de xifratge v0.9.0
+
+Juliol de 2005
+
+Manual del contrasenyes i claus de xifratge v0.7.0
+
+Febrer de 2003
+
+Jacob Perkins
+
+Aquest manual descriu la versió 2.24.x del contrasenyes i claus de xifratge
+
+Comentaris
+
+Per a informar d'un error o fer algun suggeriment sobre l'aplicació <application>contrasenyes i claus de xifratge</application> o aquest manual, seguiu les indicacions a la <ulink url="ghelp:gnome-feedback" type="help">pàgina de comentaris del GNOME</ulink>.
+
+El <application>contrasenyes i claus de xifratge</application> és una aplicació per a gestionar les claus de xifratge per a l'escriptori GNOME.
+
+Seahorse
+
+seahorse
+
+Claus de xifratge
+
+Introducció
+
+Podeu utilitzar el <application>contrasenyes i claus de xifratge</application> per a crear i gestionar claus <acronym>PGP</acronym> i <acronym>SSH</acronym>.
+
+El <application>contrasenyes i claus de xifratge</application> proporciona un frontal a moltes de les funcions del <ulink url="http://www.gnupg.org" type="http">GNU Privacy Guard (GPG)</ulink> i s'integra amb múltiples components de l'escriptori del <ulink url="http://www.gnome.org">GNOME</ulink>.
+
+Crear i gestionar claus PGP i SSH.
+
+Exportar i importar claus PGP i SSH.
+
+Compartir les vostres claus amb altres.
+
+Fer copies de seguretat de les claus i de l'anell de claus.
+
+Amb el <application>contrasenyes i claus de xifratge</application> podeu: <placeholder-1/>
+
+Primers passos
+
+Com iniciar el <application>contrasenyes i claus de xifratge</application>
+
+Podeu iniciar el <application>contrasenyes i claus de xifratge</application> de les maneres següents:
+
+Menú <guimenu>Aplicacions</guimenu>
+
+Trieu <menuchoice><guimenu>Altres</guimenu><guimenuitem>Contrasenyes i claus de xifratge</guimenuitem></menuchoice>.
+
+Línia d'ordres
+
+Introduïu <command>seahorse</command> i premeu <keycap>Retorn</keycap>.
+
+Quan inicieu el <application>contrasenyes i claus de xifratge</application>
+
+Quan inicieu el <application>contrasenyes i claus de xifratge</application>, es mostrarà la finestra <guilabel>Contrasenyes i claus de xifratge</guilabel>.
+
+La finestra del <application>contrasenyes i claus de xifratge</application>
+
+Contrasenyes i claus de xifratge
+
+Mostra la finestra del <placeholder-1/>.
+
+La finestra del <application>contrasenyes i claus de xifratge</application> conté els elements següents:
+
+Barra de menú
+
+Els menús a la barra de menú contenen totes les ordres que necessiteu per a realitzar tasques amb el <application>contrasenyes i claus de xifratge</application>.
+
+Barra d'eines
+
+Utilitzeu la barra d'eines per a accedir ràpidament a les ordres més utilitzades.
+
+Pestanyes de claus i contrasenyes
+
+Proporciona accés a les claus i contrasenyes de l'anell de claus.
+
+Opcions de primer cop
+
+Proporciona un accés ràpid a accions útils per als usuaris principiants. Des d'aquí podeu:
+
+Navegar pel sistema d'ajuda.
+
+Importar claus a l'anell de claus.
+
+Crear claus noves.
+
+Creació de claus OpenPGP
+
+L'OpenPGP és un protocol no propietari per a xifrar correus electrònics amb la utilització de claus criptogràfiques públiques basades amb el <acronym>PGP</acronym>. Aquest defineix formats estàndard per als missatges xifrats, signatures, claus privades i certificats per a intercanviar claus públiques.
+
+La criptografia amb clau pública és un concepte que involucra la utilització de dues claus: una <emphasis>clau pública</emphasis>, que podeu donar a qualsevol amb qui us voleu comunicar, i una <emphasis>clau privada</emphasis> que és privada i s'ha de mantenir en secret.
+
+Trieu <menuchoice><guimenu>Clau</guimenu><guimenuitem>Crea una clau nova</guimenuitem></menuchoice>
+
+Seleccioneu <guilabel>Clau PGP</guilabel> i feu clic a <guibutton>Continua</guibutton>
+
+Introduïu el vostre nom complet (nom i cognoms), la vostra adreça de correu electrònic i qualsevol informació addicional. També podeu especificar opcions avançades per a la clau: vegeu a sota.
+
+Feu clic a <guibutton>Crea</guibutton> per a crear la nova parella de claus.
+
+S'obrirà el diàleg <guilabel>Contrasenya per a la clau PGP</guilabel>. Introduïu dos cops la contrasenya per a la clau nova.
+
+Per a crear claus OpenPGP: <placeholder-1/>
+
+Utilitzeu procediments similars per a generar una contrasenya robusta quan trieu una contrasenya. La principal diferència entre aquesta contrasenya respecte les altres contrasenyes és que en aquesta els espais són caràcters vàlids.
+
+Opcions avançades
+
+Expandiu la secció <guibutton>Opcions avançades de la clau</guibutton> per a especificar les opcions següents de la clau nova:
+
+Tipus de xifratge
+
+Aquest camp especifica els algoritmes de xifratge que s'utilitzen per a generar les vostres claus.
+
+<acronym>DSA</acronym> ElGamal
+
+Aquesta és l'opció suggerida ja que us permet xifrar, desxifrar, signar i verificar quan sigui necessari.
+
+DSA
+
+Només us permetrà signar.
+
+RSA
+
+Força de la clau (bits)
+
+Aquesta és la longitud de la clau en bits. Com més llarga la clau, més segura serà, proporcionant una contrasenya robusta. No obstant, realitzar qualsevol operació amb una clau llarga necessitarà més temps que si utilitzeu una clau més curta. Els valors acceptables estan entre 1024 i 4096 bits. Com a mínim es recomana 2048 bits.
+
+Data de venciment
+
+Signeu la clau nova amb l'antiga abans que venci per a mantenir el vostre estat de confiança.
+
+Aquesta és la data en què la clau deixarà de ser útil per a realitzar xifrats o signar operacions. 6 mesos és un temps raonable a establir. Haureu de canviar la data de venciment o generar una clau o subclau nova després de que passi aquest període de temps. <placeholder-1/>
+
+Creació de claus de l'intèrpret d'ordres segur
+
+L'intèrpret d'ordres segur (<acronym>SSH</acronym>) és una manera d'entrar a un ordinador remot per a executar-hi ordres. Les claus SSH s'utilitzen en sistemes d'autenticació basats en claus, com una alternativa al sistema d'autenticació predeterminat basat en contrasenya. Amb el sistema d'autenticació basat en clau no hi ha cap necessitat d'introduir manualment una contrasenya per a autenticar-se.
+
+Les claus de l'intèrpret d'ordres segur es componen de dues claus: una <emphasis>clau privada</emphasis>, que s'ha de mantenir en secret, i una <emphasis>clau pública</emphasis> que es pot pujar a qualsevol ordinador on necessiteu accedir.
+
+Per a crear una clau de l'intèrpret d'ordres segur:
+
+Seleccioneu <guilabel>Clau d'intèrpret d'ordres segur</guilabel> i feu clic a <guibutton>Continua</guibutton>
+
+Introduïu una descripció per a la utilitat de la clau. Podeu utilitzar el vostre correu electrònic o qualsevol altre recordatori. També podeu especificar opcions avançades per a la clau, vegeu a sota.
+
+Feu clic a <guibutton>Només crea la clau</guibutton> per a crear la clau nova o a <guibutton>Crea i configura</guibutton> per a crear la clau i configurar un altre ordinador per a utilitzar-la com a autenticació.
+
+S'obrirà el diàleg <guilabel>Contrasenya per a la clau nova de l'intèrpret d'ordres segur</guilabel>. Introduïu dos cops la contrasenya per a la clau nova.
+
+Expandiu la secció <guilabel>Opcions avançades de la clau</guilabel> per a especificar les opcions següents per a una clau nova:
+
+Aquest camp especifica els algoritmes de xifrat utilitzats per a generar la vostra clau.
+
+Utilitzeu l'algoritme <emphasis>Rivest-ShamirAdleman</emphasis> (<acronym>RSA</acronym>) per a crear la clau SSH. Aquesta és l'opció preferida i més segura.
+
+Utilitzeu el <emphasis>Digital Signature Algorithm</emphasis> (<acronym>DSA</acronym>) per a crear la clau SSH.
+
+Propietats de la clau OpenPGP
+
+Les descripcions d'aquesta secció s'apliquen a totes les claus OpenPGP.
+
+Seleccioneu la clau <acronym>PGP</acronym> des de la finestra principal.
+
+Feu-hi doble clic o trieu <guilabel>Propietats</guilabel> a la barra d'eines.
+
+Seleccioneu la pestanya <guilabel>Detalls</guilabel>.
+
+Per a visualitzar les propietats d'una clau <acronym>PGP</acronym>: <placeholder-1/>
+
+Propietats
+
+Empremta digital
+
+L'empremta digital és una cadena de caràcters única que identifica exactament una clau.
+
+Identificador de la clau
+
+L'identificador de la clau és semblant a l'empremta digital. Tanmateix l'identificador de la clau només conté els últims 8 caràcters de l'empremta digital. La majoria de cops és possible identificar una clau amb només l'identificador de la clau, però a vegades dues claus poden tenir el mateix identificador.
+
+Tipus
+
+Especifica l'algoritme de xifrat utilitzat per a generar una clau. Les claus DSA només poden signar. Les claus ElGamal s'utilitzen per a xifrar.
+
+Creada
+
+Indica la data en què es va crear la clau.
+
+Venç
+
+Indica la data en què la clau no es podrà utilitzar més.
+
+Força
+
+Una clau llarga no és suficient per a substituir la utilització d'una contrasenya dèbil.
+
+Indica la longitud en bits d'una clau. En general com més llarga la clau, més seguretat proporciona. <placeholder-1/>
+
+Confiança
+
+La confiança és un indicador de com de segur esteu sobre l'habilitat d'una persona per a estendre correctament la xarxa de confiança. Quan us trobeu amb una clau que no heu signat, la validesa de la clau d'aquesta persona es determinarà en base a les signatures que ha obtingut i quin grau de confiança teniu o no amb la gent que ha fet aquestes signatures. Per defecte, una clau desconeguda necessitarà tres signatures marginals o una signatura de completa confiança.
+
+<guilabel>Desconegut</guilabel>: no sabeu amb certesa l'habilitat de la persona per a signar correctament claus.
+
+<guilabel>Mai</guilabel>: aquesta persona no pot signar correctament claus.
+
+<guilabel>Marginal</guilabel>: aquesta persona comprova un identificador fotogràfic abans de signar una clau, però no necessàriament comprova els identificadors.
+
+<guilabel>Completa</guilabel>: aquesta persona comprova cada un dels identificadors fotogràfics abans de signar-les (ex. només signen claus que realment pertanyen a la persona que sol·licita la signatura).
+
+<guilabel>Absoluta</guilabel>: aquest nivell de confiança només s'hauria d'assignar a les vostres claus.
+
+Com habilitar i inhabilitar claus
+
+Quan una clau està habilitada, aquesta es pot utilitzar per a realitzar operacions de xifrat. Quan una clau està inhabilitada, no es pot utilitzar per a xifrar o verificar signatures realitzades amb ella.
+
+Una clau no es pot utilitzar més per a realitzar operacions de clau després que hagi vençut. Canviar la data de venciment d'una clau a una data del futur la torna a habilitar. Una bona pràctica general seria tenir una clau mestra que mai venç i diverses subclaus que estiguessin signades per la clau mestra.
+
+Identificadors d'usuari
+
+Els identificadors d'usuari permeten que una sola clau s'utilitzi per a diverses identitats i adreces de correu electrònic.
+
+Nom (comentari) &lt;adreça de correu electrònic&gt;
+
+Normalment tenen la forma de: <placeholder-1/>
+
+Com afegir un identificador d'usuari
+
+Afegir un identificador d'usuari és útil quan voleu tenir un identificador per a la feina i un altre per als amics.
+
+Seleccioneu la clau des de la finestra principal.
+
+Feu-hi doble clic o trieu <guibutton>Propietats</guibutton> a la barra d'eines.
+
+Seleccioneu la pestanya <guilabel>Noms i signatures</guilabel>.
+
+Feu clic a <guibutton>Afegeix un nom</guibutton>.
+
+Per a afegir un identificador d'usuari a una clau: <placeholder-1/>
+
+Després de seguir les instruccions de sobre, se us mostrarà un diàleg per a omplir. Els camps estan detallats a sota.
+
+Nom complet
+
+&lt;nom&gt; &lt;cognom&gt;
+
+Introduïu el vostre nom complet de la forma <placeholder-1/> El segon cognom és opcional.
+
+Com a mínim heu d'introduir 5 caràcters en aquest camp.
+
+Adreça de correu
+
+L'adreça de correu electrònic és com la majoria de gent trobaran la vostra clau a un servidor de claus o un altre proveïdor de claus. Assegureu-vos que és correcte abans de continuar.
+
+<replaceable>&lt;nom d'usuari&gt;</replaceable>@<replaceable>&lt;nom del domini&gt;</replaceable>
+
+Hauria de tenir la forma <placeholder-1/>
+
+Comentari de la clau
+
+El camp de comentari es pot utilitzar per a afegir qualsevol informació addicional al nom mostrat de l'identificador nou. Aquesta informació es pot cercar als servidors de claus.
+
+Identificadors fotogràfics
+
+Els identificadors fotogràfics permeten al propietari d'una clau incrustar una o més fotografies d'un mateix a una clau. Aquestes identitats es poden signar de la mateixa manera que els identificadors d'usuari. Un identificador fotogràfic ha d'estar en format JPEG i es recomana que no sigui més gran de 240x288 píxels.
+
+Si la imatge triada no té el tipus de fitxer o la mida necessària, el <application>contrasenyes i claus de xifratge</application> pot redimensionar-la i convertir-la al vol des de qualsevol format d'imatge compatible amb la biblioteca <acronym>GDK</acronym>.
+
+Com canviar la contrasenya
+
+Feu clic a <guibutton>Canvia la contrasenya</guibutton>.
+
+Per a canviar la contrasenya assignada a una clau: <placeholder-1/>
+
+Introduïu la contrasenya nova i feu clic a <guibutton>D'acord</guibutton>.
+
+Com suprimir una clau
+
+Feu-hi clic amb el botó secundari i trieu <guilabel>Suprimeix la clau</guilabel> o trieu <menuchoice><guimenu>Edita</guimenu><guimenuitem>Suprimeix la clau</guimenuitem></menuchoice>.
+
+Per a suprimir una clau de l'anell de claus: <placeholder-1/>
+
+Podeu suprimir les claus personals, les claus de confiança i les claus obtingudes.
+
+Propietats de les subclaus OpenPGP
+
+Cada clau OpenPGP té una sola clau mestra que només s'utilitza per a signar. Les subclaus s'utilitzen tant per a xifrar com per a signar. D'aquesta manera, si la vostra subclau s'ha compromès, no necessitareu revocar la vostra clau mestra.
+
+Identificador
+
+Aquest és l'identificador de la subclau.
+
+Especifica l'algoritme de xifrat utilitzat per a generar una subclau. Les claus <acronym>DSA</acronym> només poden signar, les claus ElGamal s'utilitzen per a xifrar mentre que les claus <acronym>RSA</acronym> s'utilitzen per a signar o xifrar.
+
+Estat
+
+Indica l'estat de la clau.
+
+Indica la longitud en bits de la clau. En general com més llarga la clau, més seguretat proporciona. <placeholder-1/>
+
+Com afegir una subclau
+
+Per a afegir una subclau a una clau, des de la secció <guilabel>Subclaus</guilabel> feu clic al botó <guibutton>Afegeix</guibutton>.
+
+Tipus de clau
+
+Especifica l'algoritme de xifrat utilitzat per a generar una subclau.
+
+Utilitzeu el <emphasis>Digital Signature Algorithm</emphasis> (<acronym>DSA</acronym>) per a crear la subclau. Aquesta subclau només pot signar.
+
+ElGamal
+
+Utilitzeu l'algoritme <emphasis>ElGamal</emphasis> per a crear la subclau. Aquesta subclau només pot xifrar.
+
+Utilitzeu l'algoritme <emphasis>Rivest-Shamir Adleman</emphasis> (<acronym>RSA</acronym>) per a crear la subclau. Aquesta subclau es pot utilitzar per a signar o xifrar, però heu de crear dues subclaus diferents.
+
+Longitud de la clau
+
+Indica la longitud en bits de la subclau. En general com més llarga la clau, més seguretat proporciona.
+
+Indica la data en què la subclau no es podrà utilitzar més.
+
+Com canviar la data de venciment d'una subclau
+
+Feu clic al botó <guibutton>Venç</guibutton> a l'esquerra.
+
+Des del diàleg de data trieu la data de venciment nova o seleccioneu <guilabel>No venç mai</guilabel> per a què no venci.
+
+Per a canviar la data de venciment d'una subclau, seleccioneu la subclau des de la secció <guilabel>Subclaus</guilabel>, llavors: <placeholder-1/>
+
+Revocar una subclau
+
+Feu clic al botó <guibutton>Revoca</guibutton> a l'esquerra.
+
+Trieu una raó perquè revoqueu la subclau:
+
+Sense motiu
+
+No hi ha cap motiu específic per a revocar la clau.
+
+Compromesa
+
+La clau ha estat compromesa.
+
+Reemplaçada
+
+La clau ha estat reemplaçada per una altra.
+
+No es fa servir
+
+La clau no es fa servir més.
+
+Introduïu una descripció de perquè esteu revocant la clau.
+
+Feu clic a <guibutton>Revoca</guibutton>.
+
+Per a revocar una subclau, seleccioneu la subclau des de la secció <guilabel>Subclaus</guilabel>, llavors: <placeholder-1/>
+
+L'efecte de revocar una subclau és immediat.
+
+Suprimir una subclau
+
+Feu clic al botó <guibutton>Suprimeix</guibutton> a l'esquerra.
+
+Per a suprimir una subclau, seleccioneu la subclau des de la secció <guilabel>Subclaus</guilabel>, llavors: <placeholder-1/>
+
+Propietats de la clau de l'intèrpret d'ordres segur
+
+Les descripcions d'aquesta secció s'apliquen a totes les claus <acronym>SSH</acronym>.
+
+Seleccioneu la clau de l'intèrpret d'ordres segur des de la finestra principal.
+
+Per a visualitzar les propietats d'una clau <acronym>SSH</acronym>: <placeholder-1/>
+
+Algorisme
+
+Especifica l'algoritme de xifrat utilitzat per a generar una clau.
+
+Ubicació
+
+Aquesta és la ubicació on s'ha emmagatzemat la <emphasis>clau privada</emphasis>.
+
+Com suprimir una clau de l'intèrpret d'ordres segur
+
+Seleccioneu la clau <acronym>SSH</acronym> des de la finestra principal.
+
+Feu-hi clic amb el botó secundari i trieu <guilabel>Suprimeix la clau</guilabel> o trieu <menuchoice><guimenu>Edita</guimenu><guimenuitem>Suprimeix la clau</guimenuitem></menuchoice>.
+
+Per a suprimir una clau de l'intèrpret d'ordres segur: <placeholder-1/>
+
+Importació de claus
+
+Per a importar claus trieu <menuchoice><guimenu>Clau</guimenu><guimenuitem>Importa</guimenuitem></menuchoice> i seleccioneu, des del navegador de fitxers, un fitxer que com a mínim contingui una clau pública amb armadura ASCII.
+
+Seleccioneu un bloc de text públic amb armadura ASCII.
+
+Copieu-lo al porta-retalls.
+
+Trieu <menuchoice><guimenu>Edita</guimenu><guimenuitem>Enganxa les claus</guimenuitem></menuchoice>.
+
+La importació també es pot realitzar en enganxar les claus dins del <application>contrasenyes i claus de xifratge</application>: <placeholder-1/>
+
+Exportació de claus
+
+Per a exportar claus, seleccioneu les clau a la finestra principal i trieu <menuchoice><guimenu>Clau</guimenu><guimenuitem>Exporta</guimenuitem></menuchoice>.
+
+Seleccioneu les claus a al finestra principal.
+
+Trieu <menuchoice><guimenu>Edita</guimenu><guimenuitem>Copia les claus</guimenuitem></menuchoice>.
+
+També podeu exportar claus al porta-retalls en un bloc de text amb armadura ASCII: <placeholder-1/>
+
+Realització de còpies de seguretat dels anells de claus
+
+Trieu <menuchoice><guimenu>Clau</guimenu><guimenuitem>Fes una còpia de seguretat dels anells de claus</guimenuitem></menuchoice>.
+
+Introduïu el nom d'un fitxer amb una extensió d'arxiu vàlida i especifiqueu la ubicació on desar l'arxiu.
+
+Podeu triar qualsevol dels tipus d'arxiu que el <application>file-roller</application> admet.
+
+Per a fer una còpia de seguretat dels vostres anells de claus públics i privats a un arxiu: <placeholder-1/><placeholder-2/>
+
+Com signar una clau
+
+Signar la clau d'una altra persona significa que esteu donant confiança a aquesta persona. Abans de signar una clau, hauríeu de comprovar detingudament l'empremta digital de la clau per a assegurar-vos que la clau realment pertany a aquella persona.
+
+Seleccioneu la clau que voleu signar des de les pestanyes <guilabel>Claus de confiança</guilabel> o <guilabel>Altres claus obtingudes</guilabel>.
+
+Trieu <guibutton>Signa</guibutton> des de la barra de menú o <menuchoice><guimenu>Clau</guimenu><guimenuitem>Signa</guimenuitem></menuchoice>.
+
+Seleccioneu amb quina detenció s'ha comprovat la clau.
+
+Indiqueu si la signatura hauria de ser local al vostre anell de claus i si la vostra signatura es pot revocar.
+
+Feu clic a <guibutton>Signa</guibutton>.
+
+Per a signar una clau al vostre anell de claus: <placeholder-1/>
+
+Preferències
+
+Aquesta secció descriu les preferències configurables al <application>contrasenyes i claus de xifratge</application> en triar <menuchoice><guimenu>Edita</guimenu><guimenuitem>Preferències</guimenuitem></menuchoice> des del <application>contrasenyes i claus de xifratge</application>.
+
+Anells de claus de contrasenyes
+
+Com crear anells de claus
+
+Podeu crear un anell de claus nou en prémer <guibutton>Afegeix un anell de claus</guibutton>. Introduïu un nom per a l'anell de claus nou i premeu <guibutton>Afegeix</guibutton>.
+
+Com canviar les contrasenyes dels anells de claus.
+
+Per a canviar la contrasenya de desblocat de l'anell de claus, primer seleccioneu l'anell de claus apropiat i després premeu el botó <guibutton>Canvia la contrasenya de desbloquejat</guibutton>. Se us sol·licitarà que introduïu la contrasenya antiga al quadre de text <guilabel>Contrasenya antiga</guilabel>, la contrasenya nova al quadre de text <guilabel>Contrasenya nova</guilabel> i confirmeu-la al quadre de text <guilabel>Confirmeu la contrasenya</guilabel>. Per a aplicar els paràmetres, premeu <guibutton>Canvia</guibutton>. Si la contrasenya antiga és correcte, obtindreu un missatge d'estat indicant que s'ha realitzat l'operació correctament. Si la contrasenya antiga no és correcte se us sol·licitarà que la comproveu.
+
+Com suprimir anells de claus
+
+Per a suprimir un anell de claus, primer seleccioneu l'anell de claus apropiat i després premeu el botó <guibutton>Suprimeix l'anell de claus</guibutton>.
+
+Servidors de claus
+
+Mantingueu les vostres claus i les dels altres actualitzades sincronitzant les claus periòdicament amb servidors de clau remots. En sincronitzar us assegurareu que teniu les últimes signatures de totes les vostres claus de manera que la xarxa de confiança serà més útil.
+
+El <application>contrasenyes i claus de xifratge</application> proporciona compatibilitat per a servidors de claus HKP i LDAP.
+
+Servidors HKP
+
+Els servidors de claus HKP són servidors de claus normals basats en web com ara el popular <ulink url="hkp://pgp.mit.edu:11371" type="hkp">hkp://pgp.mit.edu:11371</ulink>, també accessible a <ulink url="http://pgp.mit.edu" type="http">http://pgp.mit.edu</ulink>.
+
+LDAP
+
+Servidors de claus <placeholder-1/>
+
+Els servidors de claus <acronym>LDAP</acronym> són menys comuns, però utilitzen el protocol estàndard LDAP per a servir les claus. El <ulink url="ldap://keyserver.pgp.com" type="ldap">ldap://keyserver.pgp.com</ulink> és un bon servidor LDAP.
+
+Compartició de claus
+
+La compartició de claus la proporciona el DNS-SD, també conegut com a Bonjour o Rendevous. Habilitar la compartició de claus afegirà els anells de claus públics del <application>contrasenyes i claus de xifratge</application> local de l'usuari al diàleg de cerca remota. Utilitzar aquests «servidors de claus» locals serà més ràpid que accedir als servidors remots.
+
+Quant al contrasenyes i claus de xifratge
+
+El <application>contrasenyes i claus de xifratge</application>, els seus connectors associats, la miniaplicació de preferències i la miniaplicació del quadre són coneguts col·lectivament com a Seahorse. En Jacob Perkins va escriure el Seahorse. Els mantenidors actuals són en Stef Walter i en Adam Schreiber. En Adam Schreiber ha escrit aquest manual. En Jim Pharis ha dissenyat el lloc web del projecte. Per a obtenir més informació sobre el Seahorse, el projecte, visiteu la <ulink url="http://www.gnome.org/projects/seahorse/" type="http">pàgina web del Seahorse</ulink>.
+
+Per a informar d'un error o fer algun suggeriment relacionat amb aquesta aplicació o aquest manual, seguiu les indicacions a la <ulink url="ghelp:user-guide?feedback-bugs" type="help">secció de comentaris de la guia d'usuari del GNOME</ulink>.
+
+Aquest programa es distribueix sota els termes de la Llicència pública general de GNU tal com publica la Free Software Foundation; tant en la versió 2 de la llicència, o (a la vostra opció) una versió posterior. S'inclou una <ulink url="ghelp:gpl" type="help">còpia d'aquesta llicència</ulink> amb aquesta documentació; se'n pot trobar una altre en el fitxer COPYING inclòs amb el codi font d'aquest programa.
+
+Joan Duran <jodufi@gmail.com>, 2008
