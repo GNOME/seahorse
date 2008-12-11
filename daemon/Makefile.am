@@ -62,9 +62,16 @@ man_MANS = seahorse-daemon.1
 
 glade_DATA = 
 
+#autostart
+desktopdir = $(datadir)/gnome/autostart
+desktop_in_files = seahorse-daemon.desktop.in 
+desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
+@INTLTOOL_DESKTOP_RULE@
+
 EXTRA_DIST = \
     $(man_MANS) \
     $(glade_DATA) \
+    seahorse-daemon.desktop.in \
     seahorse-service.xml \
     seahorse-service-keyset.xml \
     seahorse-service-crypto.xml \
@@ -74,6 +81,8 @@ EXTRA_DIST = \
     org.gnome.seahorse.service.in
 
 CLEANFILES = *.gladep* *.bak \
+    $(desktop_DATA) \
+    seahorse-daemon.desktop.in \
     org.gnome.seahorse.service
 
 # DBUS binding files
