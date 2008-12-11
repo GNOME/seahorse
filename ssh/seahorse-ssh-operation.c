@@ -129,6 +129,11 @@ watch_ssh_process (GPid pid, gint status, SeahorseSSHOperation *sop)
     SeahorseSSHOperationPrivate *pv = SEAHORSE_SSH_OPERATION_GET_PRIVATE (sop);
     
     DEBUG_OPERATION (("SSHOP: SSH process done\n"));
+
+    /* Close off the askpass io channel etc... */
+    if(pv->stag_askpass)
+        g_source_remove (pv->stag_askpass);
+    pv->stag_askpass = 0;
     
     if (seahorse_operation_is_running (SEAHORSE_OPERATION (sop))) {
 
@@ -167,10 +172,6 @@ watch_ssh_process (GPid pid, gint status, SeahorseSSHOperation *sop)
     pv->pid = 0;
     pv->wpid = 0;
     
-    /* Close off the askpass io channel etc... */
-    if(pv->stag_askpass)
-        g_source_remove (pv->stag_askpass);
-    pv->stag_askpass = 0;
     
     if(pv->io_askpass)
         g_io_channel_unref (pv->io_askpass);
