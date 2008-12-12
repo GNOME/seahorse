@@ -238,7 +238,7 @@ void
 seahorse_pgp_generate_show (SeahorsePGPSource *sksrc, GtkWindow *parent)
 {
     SeahorseWidget *swidget;
-    GtkWidget *widget;
+    GtkWidget *widget, *datetime;
     time_t expires;
     guint i;
     
@@ -268,7 +268,10 @@ seahorse_pgp_generate_show (SeahorsePGPSource *sksrc, GtkWindow *parent)
     /* Default expiry date */
     widget = seahorse_widget_get_widget (swidget, "expiry-date-container");
     g_return_if_fail (widget != NULL);
-    gtk_box_pack_start (GTK_BOX (widget), egg_datetime_new_from_time_t (expires), TRUE, TRUE, 0);
+    datetime = egg_datetime_new_from_time_t (expires);
+    gtk_box_pack_start (GTK_BOX (widget), datetime, TRUE, TRUE, 0);
+    gtk_widget_set_sensitive (datetime, FALSE);
+    gtk_widget_show_all (widget);
     
     g_object_ref (sksrc);
     g_object_set_data_full (G_OBJECT (swidget), "source", sksrc, g_object_unref);
