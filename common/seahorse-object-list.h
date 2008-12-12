@@ -19,10 +19,24 @@
  * 02111-1307, USA.  
  */
 
-using GLib;
+#include <glib.h>
+#include <glib-object.h>
 
-namespace Seahorse.Pgp {
-	public static const string TYPE_STR = "openpgp";
-	public static const Quark TYPE = Quark.from_string("openpgp");
-	public static const string STOCK_ICON = "seahorse-key-personal";	
-}
+#ifndef SEAHORSEOBJECTLIST_H_
+#define SEAHORSEOBJECTLIST_H_
+
+#define    SEAHORSE_BOXED_OBJECT_LIST        (seahorse_object_list_type ())
+
+GType      seahorse_object_list_type         (void);
+
+GList*     seahorse_object_list_append       (GList *original, gpointer object);
+
+GList*     seahorse_object_list_prepend      (GList *original, gpointer object);
+
+GList*     seahorse_object_list_remove       (GList *original, gpointer object);
+
+GList*     seahorse_object_list_copy         (GList *original);
+
+void       seahorse_object_list_free         (GList *list);
+
+#endif /* SEAHORSEOBJECTLIST_H_ */

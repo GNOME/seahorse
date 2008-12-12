@@ -273,18 +273,19 @@ void
 seahorse_server_source_add_key (SeahorseServerSource *ssrc, gpgme_key_t key)
 {
     SeahorseObject *prev;
-    SeahorsePGPKey *pkey;
+    SeahorsePgpKey *pkey;
     GQuark keyid;
        
     g_return_if_fail (SEAHORSE_IS_SERVER_SOURCE (ssrc));
+    g_return_if_fail (key && key->subkeys && key->subkeys->keyid);
 
-    keyid = seahorse_pgp_key_get_cannonical_id (seahorse_pgp_key_get_id (key, 0));
+    keyid = seahorse_pgp_key_get_cannonical_id (key->subkeys->keyid);
     prev = seahorse_context_get_object (SCTX_APP (), SEAHORSE_SOURCE (ssrc), keyid);
     
     /* TODO: This function needs reworking after we get more key types */
     if (prev != NULL) {
         g_return_if_fail (SEAHORSE_IS_PGP_KEY (prev));
-        combine_keys (ssrc, SEAHORSE_PGP_KEY (prev)->pubkey, key);
+        combine_keys (ssrc, seahorse_pgp_key_get_public (SEAHORSE_PGP_KEY (prev)), key);
         return;
     }
 

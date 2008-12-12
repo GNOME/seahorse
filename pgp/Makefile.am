@@ -18,7 +18,6 @@ INCLUDES = -I$(top_builddir) \
 	-DGETTEXT_PACKAGE=\""seahorse\""
 
 VALA_SRCS = \
-	seahorse-pgp.vala \
 	seahorse-pgp-commands.vala \
 	seahorse-pgp-generator.vala
 
@@ -64,6 +63,7 @@ libseahorse_pgp_la_SOURCES = \
 	seahorse-gpgme-io.c seahorse-gpgme-io.h \
 	seahorse-gpgmex.h seahorse-gpgmex-op.c seahorse-gpgmex-util.c \
 	seahorse-gpg-options.c seahorse-gpg-options.h \
+	seahorse-pgp.c seahorse-pgp.h \
 	seahorse-pgp-add-subkey.c \
 	seahorse-pgp-add-uid.c \
 	seahorse-pgp-error.c \
@@ -74,11 +74,13 @@ libseahorse_pgp_la_SOURCES = \
 	seahorse-pgp-key-properties.c \
 	seahorse-pgp-keysets.c seahorse-pgp-keysets.h \
 	seahorse-pgp-operation.c seahorse-pgp-operation.h \
+	seahorse-pgp-photo.c seahorse-pgp-photo.h \
 	seahorse-pgp-photos.c \
 	seahorse-pgp-module.c seahorse-pgp-module.h \
 	seahorse-pgp-revoke.c \
 	seahorse-pgp-source.c seahorse-pgp-source.h \
 	seahorse-pgp-sign.c \
+	seahorse-pgp-subkey.c seahorse-pgp-subkey.h \
 	seahorse-pgp-uid.c seahorse-pgp-uid.h \
 	seahorse-signer.c seahorse-pgp-dialogs.h \
 	$(VALA_CFILES) $(VALA_HFILES) \

@@ -58,6 +58,7 @@ seahorse_gpgme_to_error (gpgme_error_t gerr, GError** err)
     		             gpgme_strerror (gerr));
     	}
 }
+
 /* -----------------------------------------------------------------------------
  * DATA
  */
@@ -380,15 +381,16 @@ gpgmex_key_copy_uid (gpgme_key_t key, gpgme_user_id_t userid)
     add_uid_to_key (key, u);
 }
 
-void        
+gpgme_key_t
 gpgmex_key_ref (gpgme_key_t key)
 {
-    g_return_if_fail (key != NULL);
+    g_return_val_if_fail (key != NULL, NULL);
     
     if (key->keylist_mode & SEAHORSE_KEYLIST_MODE) 
         ((sukey*)key)->refs++;
     else
         gpgme_key_ref (key);
+    return key;
 }
     
 void        
@@ -497,34 +499,6 @@ gpgmex_free_keys (gpgme_key_t* keys)
 	while (*k)
 		gpgmex_key_unref (*(k++));
 	g_free (keys);
-}
-
-gpgmex_photo_id_t 
-gpgmex_photo_id_alloc (guint uid)
-{
-    gpgmex_photo_id_t photoid = g_new0 (struct _gpgmex_photo_id, 1);
-    photoid->uid = uid;
-    return photoid;
-}
-
-void        
-gpgmex_photo_id_free (gpgmex_photo_id_t photoid)
-{
-    if (photoid) {
-        if (photoid->photo)
-            g_object_unref (photoid->photo);
-        g_free (photoid);
-    }
-}
-
-void 
-gpgmex_photo_id_free_all (gpgmex_photo_id_t photoid)
-{
-    while (photoid) {
-        gpgmex_photo_id_t next = photoid->next;
-        gpgmex_photo_id_free (photoid);
-        photoid = next;
-    }
 }
 
 /* -----------------------------------------------------------------------------

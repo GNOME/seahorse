@@ -1,3 +1,55 @@
+2008-12-12  Stef Walter  <stef@memberwebs.com>
+
+	* common/seahorse-object-list.c: (added)
+	* common/seahorse-object-list.h: (added)
+	* common/Makefile.am: Aded utility functions for managing lists of objects.
+	
+	* libseahorse/seahorse-object.c:
+	* libseahorse/seahorse-object-model.c:
+	* libseahorse/seahorse-set-model.c: 
+	* src/seahorse-key-manager-store.c: Various object and model fixes
+	to patch corner cases with objects going away.
+	
+	* daemon/seahorse-service-crypto.c: 
+	* pgp/libseahorse-pgp-c.vapi:
+	* pgp/Makefile.am:
+	* pgp/seahorse-expires.glade:
+	* pgp/seahorse-gpgmex.h:
+	* pgp/seahorse-gpgmex-util.c:
+	* pgp/seahorse-hkp-source.c:
+	* pgp/seahorse-ldap-source.c:
+	* pgp/seahorse-pgp.c:
+	* pgp/seahorse-pgp.h:
+	* pgp/seahorse-pgp.vala: (removed)
+	* pgp/seahorse-pgp-add-subkey.c:
+	* pgp/seahorse-pgp-add-uid.c:
+	* pgp/seahorse-pgp-commands.c:
+	* pgp/seahorse-pgp-commands.vala:
+	* pgp/seahorse-pgp-dialogs.h:
+	* pgp/seahorse-pgp-expires.c:
+	* pgp/seahorse-pgp-generator.c:
+	* pgp/seahorse-pgp-key.c: 
+	* pgp/seahorse-pgp-key.h:
+	* pgp/seahorse-pgp-key-op.c:
+	* pgp/seahorse-pgp-key-op.h:
+	* pgp/seahorse-pgp-key-properties.c:
+	* pgp/seahorse-pgp-photo.c: (added)
+	* pgp/seahorse-pgp-photo.c: (added)
+	* pgp/seahorse-pgp-revoke.c: 
+	* pgp/seahorse-pgp-sign.c:
+	* pgp/seahorse-pgp-source.c:
+	* pgp/seahorse-pgp-sign.c:
+	* pgp/seahorse-pgp-source.c:
+	* pgp/seahorse-pgp-subkey.c: (added)
+	* pgp/seahorse-pgp-subkey.h: (added)
+	* pgp/seahorse-pgp-uid.c:
+	* pgp/seahorse-pgp-uid.h:
+	* pgp/seahorse-server-source.c:
+	* pgp/seahorse-signer.c: Refactored how the PGP code works with regard
+	to UIDs and subkeys. These are now separate objects, and keep track of 
+	their own indexes etc.. Operations can be done directly with these objects
+	(ie: sign, revoke etc...)
+	
 2008-12-11  Adam Schreiber  <sadam@clemson.edu>
 
     * pgp/seahorse-pgp-generate.c:

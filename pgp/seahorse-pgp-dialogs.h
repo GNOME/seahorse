@@ -20,54 +20,57 @@
  * Boston, MA 02111-1307, USA.
  */
 
-/**
- * Various UI elements and dialogs used in libseahorse.
+/*
+ * Various UI elements and dialogs used in pgp component.
  */
  
 #ifndef __SEAHORSE_PGP_DIALOGS_H__
 #define __SEAHORSE_PGP_DIALOGS_H__
 
-#include <gtk/gtk.h>
+#include <glib.h>
 
 #include "pgp/seahorse-pgp-key.h"
+#include "pgp/seahorse-pgp-photo.h"
+#include "pgp/seahorse-pgp-subkey.h"
+#include "pgp/seahorse-pgp-uid.h"
 
-void            seahorse_pgp_sign_prompt           (SeahorsePGPKey *pkey,
-                                                    guint uid,
+void            seahorse_pgp_sign_prompt           (SeahorsePgpKey *key,
                                                     GtkWindow *parent);
 
-SeahorsePGPKey* seahorse_signer_get                 (GtkWindow *parent);
+void            seahorse_pgp_sign_prompt_uid       (SeahorsePgpUid *uid,
+                                                    GtkWindow *parent);
 
-void            seahorse_pgp_handle_gpgme_error     (gpgme_error_t err, const gchar* desc, ...);
+SeahorsePgpKey* seahorse_signer_get                 (GtkWindow *parent);
 
-void            seahorse_pgp_key_properties_show    (SeahorsePGPKey *pkey,
+void            seahorse_pgp_handle_gpgme_error     (gpgme_error_t err, 
+                                                     const gchar* desc, ...);
+
+void            seahorse_pgp_key_properties_show    (SeahorsePgpKey *pkey,
                                                      GtkWindow *parent);
 
 void            seahorse_pgp_generate_show          (SeahorsePGPSource *sksrc,
                                                      GtkWindow *parent);
 
-void            seahorse_pgp_add_revoker_new        (SeahorsePGPKey *pkey,
+void            seahorse_pgp_add_revoker_new        (SeahorsePgpKey *pkey,
                                                      GtkWindow *parent);
 
-void            seahorse_pgp_expires_new            (SeahorsePGPKey *pkey,
-                                                     GtkWindow *parent,
-                                                     guint index);
-
-void            seahorse_pgp_add_subkey_new         (SeahorsePGPKey *pkey,
+void            seahorse_pgp_expires_new            (SeahorsePgpSubkey *subkey,
                                                      GtkWindow *parent);
 
-void            seahorse_pgp_add_uid_new            (SeahorsePGPKey *pkey,
+void            seahorse_pgp_add_subkey_new         (SeahorsePgpKey *pkey,
                                                      GtkWindow *parent);
 
-void            seahorse_pgp_revoke_new             (SeahorsePGPKey *pkey,
-                                                     GtkWindow *parent,
-                                                     guint index);
+void            seahorse_pgp_add_uid_new            (SeahorsePgpKey *pkey,
+                                                     GtkWindow *parent);
 
-gboolean        seahorse_pgp_photo_add              (SeahorsePGPKey *pkey, 
+void            seahorse_pgp_revoke_new             (SeahorsePgpSubkey *subkey,
+                                                     GtkWindow *parent);
+
+gboolean        seahorse_pgp_photo_add              (SeahorsePgpKey *pkey, 
                                                      GtkWindow *parent,
                                                      const gchar *path);
                                          
-gboolean        seahorse_pgp_photo_delete           (SeahorsePGPKey *pkey,
-                                                     GtkWindow *parent,
-                                                     gpgmex_photo_id_t photo);
+gboolean        seahorse_pgp_photo_delete           (SeahorsePgpPhoto *photo,
+                                                     GtkWindow *parent);
 
 #endif /* __SEAHORSE_PGP_DIALOGS_H__ */

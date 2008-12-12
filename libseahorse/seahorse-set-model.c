@@ -36,7 +36,7 @@ typedef struct _SeahorseSetModelPrivate {
 	GType *column_types;
 } SeahorseSetModelPrivate;
 
-static void remove_object (SeahorseSetModel *smodel, SeahorseObject *sobj);
+static void remove_object (SeahorseSetModel *smodel, gpointer was_sobj);
 static GNode* add_object (SeahorseSetModel *smodel, SeahorseObject *sobj);
 static void seahorse_set_model_implement_tree_model (GtkTreeModelIface *iface);
 
@@ -76,6 +76,27 @@ iter_for_node (SeahorseSetModelPrivate *pv, GNode *node, GtkTreeIter *iter)
 	iter->user_data2 = node;
 }
 
+static GtkTreePath*
+path_for_node (GNode *node)
+{
+	GtkTreePath *path;
+	gint index;
+
+	g_assert (node);
+	
+	path = gtk_tree_path_new ();
+	for (;;) {
+		if (!node->parent) 
+			break;
+		index = g_node_child_position (node->parent, node);
+		g_assert (index >= 0);
+		gtk_tree_path_prepend_index (path, index);
+		node = node->parent;
+	}
+	
+	return path;
+}
+
 static void
 key_hierarchy (SeahorseObject *sobj, GParamSpec *spec, SeahorseSetModel *smodel)
 {
@@ -87,6 +108,21 @@ key_hierarchy (SeahorseObject *sobj, GParamSpec *spec, SeahorseSetModel *smodel)
 
 	remove_object (smodel, sobj);
 	add_object (smodel, sobj);
+}
+
+void
+gone_object (SeahorseSetModel *smodel, gpointer was_sobj)
+{
+	SeahorseSetModelPrivate *pv = SEAHORSE_SET_MODEL_GET_PRIVATE (smodel);
+	GNode *node;
+	
+	node = g_hash_table_lookup (pv->object_to_node, was_sobj);
+	g_assert (node);
+	
+	/* Mark this object as gone */
+	node->data = NULL;
+	
+	remove_object (smodel, was_sobj);
 }
 
 static GNode*
@@ -122,6 +158,7 @@ add_object (SeahorseSetModel *smodel, SeahorseObject *sobj)
 	g_return_val_if_fail (parent_node, NULL);
 	had = parent_node->children ? TRUE : FALSE;
 	node = g_node_append_data (parent_node, sobj);
+	g_object_weak_ref (G_OBJECT (sobj), (GWeakNotify)gone_object, smodel);
 	g_hash_table_insert (pv->object_to_node, sobj, node);
 	g_signal_connect (sobj, "notify::parent", G_CALLBACK (key_hierarchy), smodel);
 
@@ -169,18 +206,23 @@ remove_each_object (GNode *node, SeahorseSetModel *smodel)
 	if (node == pv->root_node)
 		return FALSE;
 	
-	g_assert (SEAHORSE_IS_OBJECT (node->data));
-	g_assert (g_hash_table_lookup (pv->object_to_node, node->data) == node);
+	/* This can be NULL of the object was finalized */
+	if (node->data != NULL) {
+		g_assert (SEAHORSE_IS_OBJECT (node->data));
+		g_assert (g_hash_table_lookup (pv->object_to_node, node->data) == node);
+	}
 
 	/* Create the path for firing the event */
-	iter_for_node (pv, node, &iter);
-	path = gtk_tree_model_get_path (GTK_TREE_MODEL (smodel), &iter);
+	path = path_for_node (node);
 	g_return_val_if_fail (path, TRUE);
 
 	/* Remove the actual node */
 	parent_node = node->parent;
-	g_hash_table_remove (pv->object_to_node, node->data);
-	g_signal_handlers_disconnect_by_func (node->data, key_hierarchy, smodel);
+	if(node->data) {
+		g_hash_table_remove (pv->object_to_node, node->data);
+		g_signal_handlers_disconnect_by_func (node->data, key_hierarchy, smodel);
+		g_object_weak_unref (G_OBJECT (node->data), (GWeakNotify)gone_object, smodel);
+	}
 	g_node_destroy (node);
 
 	/* Fire signal for this removed row */
@@ -202,17 +244,22 @@ remove_each_object (GNode *node, SeahorseSetModel *smodel)
 }
 
 static void 
-remove_object (SeahorseSetModel *smodel, SeahorseObject *sobj)
+remove_object (SeahorseSetModel *smodel, gpointer was_sobj)
 {
 	SeahorseSetModelPrivate *pv = SEAHORSE_SET_MODEL_GET_PRIVATE (smodel);
 	GNode *node;
 	GNode *parent;
 	SeahorseObject *parent_obj;
 
-	node = g_hash_table_lookup (pv->object_to_node, sobj);
+	node = g_hash_table_lookup (pv->object_to_node, was_sobj);
 	g_assert (node);
 	g_assert (node != pv->root_node);
-	g_assert (node->data == sobj);
+	
+	/* 
+	 * If the object has already dissappeared, then this will be 
+	 * set to null by gone_object().
+	 */
+	g_assert (node->data == was_sobj || node->data == NULL);
 	
 	parent = node->parent;
 	g_assert (parent);
@@ -226,7 +273,7 @@ remove_object (SeahorseSetModel *smodel, SeahorseObject *sobj)
 	 * just added for the sake of holding the child (see add_object above)
 	 */
 	if (parent != pv->root_node && g_node_n_children (parent) == 0) {
-		parent_obj = seahorse_object_get_parent (sobj);
+		parent_obj = SEAHORSE_OBJECT (parent->data);
 		g_return_if_fail (parent_obj);
 		if (!seahorse_set_has_object (smodel->set, parent_obj))
 			remove_object (smodel, parent_obj);
@@ -353,24 +400,12 @@ static GtkTreePath*
 seahorse_set_model_get_path (GtkTreeModel *tree_model, GtkTreeIter *iter)
 {
 	SeahorseSetModelPrivate *pv = SEAHORSE_SET_MODEL_GET_PRIVATE (tree_model);
-	GtkTreePath *path;
 	GNode *node;
-	gint index;
 
 	g_return_val_if_fail (SEAHORSE_SET_MODEL (tree_model), NULL);
 	node = node_for_iter (pv, iter);
 	g_return_val_if_fail (node != NULL, NULL);
-	path = gtk_tree_path_new ();
-	for (;;) {
-		if (!node->parent) 
-			break;
-		index = g_node_child_position (node->parent, node);
-		g_assert (index >= 0);
-		gtk_tree_path_prepend_index (path, index);
-		node = node->parent;
-	}
-
-	return path;
+	return path_for_node (node);
 }
 
 static void
@@ -381,6 +416,7 @@ seahorse_set_model_get_value (GtkTreeModel *tree_model, GtkTreeIter *iter,
 	SeahorseObject *sobj;
 	const gchar *property;
 	GParamSpec *spec;
+	GValue original;
 	GType type;
 
 	g_return_if_fail (SEAHORSE_SET_MODEL (tree_model));
@@ -397,19 +433,35 @@ seahorse_set_model_get_value (GtkTreeModel *tree_model, GtkTreeIter *iter,
 	/* Lookup the property on the object */
 	spec = g_object_class_find_property (G_OBJECT_GET_CLASS (sobj), property);
 	if (spec) {
-		if (spec->value_type != type) {
-			g_warning ("%s property of %s class was of type %s instead of type %s", 
-			           property, G_OBJECT_TYPE_NAME (sobj), 
-			           g_type_name (spec->value_type), g_type_name (type));
-			return;
+		
+		/* Simple, no transformation necessary */
+		if (spec->value_type == type) {
+			g_object_get_property (G_OBJECT (sobj), property, value);
+
+		/* Not the same type, try to transform */
+		} else {
+
+			memset (&original, 0, sizeof (original));
+			g_value_init (&original, spec->value_type);
+			
+			g_object_get_property (G_OBJECT (sobj), property, &original);
+			if (!g_value_transform (&original, value)) { 
+				g_warning ("%s property of %s class was of type %s instead of type %s"
+				           " and cannot be converted", property, G_OBJECT_TYPE_NAME (sobj), 
+				           g_type_name (spec->value_type), g_type_name (type));
+				spec = NULL;
+			}
 		}
 
-		g_object_get_property (G_OBJECT (sobj), property, value);
-
-	} else if (type == G_TYPE_STRING) {
-
+	
+	} 
+	
+	/* No property present */
+	if (spec == NULL) {
+		
 		/* All the number types have sane defaults */
-		g_value_set_string (value, "");
+		if (type == G_TYPE_STRING)
+			g_value_set_string (value, "");
 	}
 }
 

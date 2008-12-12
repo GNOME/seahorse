@@ -33,6 +33,9 @@ G_BEGIN_DECLS
 #define SEAHORSE_PGP_TYPE g_quark_from_string ("openpgp")
 #define SEAHORSE_PGP_STOCK_ICON "seahorse-key-personal"
 
+#define     SEAHORSE_PGP_BOXED_KEY               (seahorse_pgp_boxed_key_type ())
+
+GType       seahorse_pgp_boxed_key_type          (void);
 
 G_END_DECLS
 

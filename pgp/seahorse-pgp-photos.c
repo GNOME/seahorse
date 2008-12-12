@@ -246,7 +246,7 @@ add_image_files (GtkWidget *dialog)
 
 
 gboolean
-seahorse_pgp_photo_add (SeahorsePGPKey *pkey, GtkWindow *parent, const gchar *path)
+seahorse_pgp_photo_add (SeahorsePgpKey *pkey, GtkWindow *parent, const gchar *path)
 {
     gchar *filename = NULL;
     gchar *tempfile = NULL;
@@ -281,7 +281,7 @@ seahorse_pgp_photo_add (SeahorsePGPKey *pkey, GtkWindow *parent, const gchar *pa
         return FALSE;
     }
     
-    gerr = seahorse_pgp_key_op_photoid_add (pkey, tempfile ? tempfile : filename);
+    gerr = seahorse_pgp_key_op_photo_add (pkey, tempfile ? tempfile : filename);
     if (!GPG_IS_OK (gerr)) {
         
         /* A special error value set by seahorse_key_op_photoid_add to 
@@ -307,14 +307,13 @@ seahorse_pgp_photo_add (SeahorsePGPKey *pkey, GtkWindow *parent, const gchar *pa
 }
 
 gboolean
-seahorse_pgp_photo_delete (SeahorsePGPKey *pkey, GtkWindow *parent, gpgmex_photo_id_t photo)
+seahorse_pgp_photo_delete (SeahorsePgpPhoto *photo, GtkWindow *parent)
 {
     gpgme_error_t gerr;
     GtkWidget *dlg;
     gint response; 
 
-    g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (pkey), FALSE);
-    g_return_val_if_fail (photo != NULL, FALSE);
+    g_return_val_if_fail (SEAHORSE_IS_PGP_PHOTO (photo), FALSE);
     
     dlg = gtk_message_dialog_new (parent, GTK_DIALOG_MODAL,
                                   GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE,
@@ -329,7 +328,7 @@ seahorse_pgp_photo_delete (SeahorsePGPKey *pkey, GtkWindow *parent, gpgmex_photo
     if (response != GTK_RESPONSE_ACCEPT)
         return FALSE;
     
-    gerr = seahorse_pgp_key_op_photoid_delete (pkey, photo->uid);
+    gerr = seahorse_pgp_key_op_photo_delete (photo);
     if (!GPG_IS_OK (gerr)) {
 	    seahorse_pgp_handle_gpgme_error (gerr, _("Couldn't delete photo"));
         return FALSE;

@@ -129,9 +129,12 @@ namespace Seahorse.Pgp {
 
 		private void on_key_sign (Action action) {
 			var key = view.selected;
-			/* TODO: Make signing a specific UID work again */
-			if (key != null && key.tag == Seahorse.Pgp.TYPE)
-				Sign.prompt ((Pgp.Key)key, 0, view.window);
+			if (key == null)
+				return;
+			else if (key.get_type () == typeof (Pgp.Key))
+				Sign.prompt ((Pgp.Key)key, view.window);
+			else if (key.get_type () == typeof (Pgp.Uid))
+				Sign.prompt_uid ((Pgp.Uid)key, view.window);
 		}
 		
 		private void on_view_selection_changed (View view) {

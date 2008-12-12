@@ -19,12 +19,17 @@
  * 02111-1307, USA.  
  */
  
-[CCode (cprefix = "SeahorsePGP", lower_case_cprefix = "seahorse_pgp_")]
+[CCode (cprefix = "SeahorsePGP", lower_case_cprefix = "seahorse_pgp_", cheader_filename = "seahorse-pgp.h")]
 namespace Seahorse.Pgp {
+	
+	public static const string TYPE_STR;
+	public static const GLib.Quark TYPE;
+	public static const string STOCK_ICON;	
 	
         [CCode (cheader_filename = "seahorse-pgp-dialogs.h")]
         public class Sign : GLib.Object {
-		public static void prompt (Key key, uint uid, Gtk.Window parent);
+		public static void prompt (Key key, Gtk.Window parent);
+		public static void prompt_uid (Uid uid, Gtk.Window parent);
         }
 
         [CCode (cheader_filename = "seahorse-pgp-dialogs.h")]

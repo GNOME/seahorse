@@ -83,14 +83,6 @@ enum {
     GPGMEX_KEY_DISABLED = 0x02
 };
 
-/* A photo id from a key */
-typedef struct _gpgmex_photo_id {
-    struct _gpgmex_photo_id *next;
-    
-    guint uid;            /* The actual uid used with gpgpme_op_edit */
-    GdkPixbuf *photo;     /* The photo itself */
-} *gpgmex_photo_id_t;
-    
 gpgme_key_t gpgmex_key_alloc         ();
 
 void        gpgmex_key_add_subkey    (gpgme_key_t key,
@@ -113,21 +105,13 @@ void        gpgmex_key_copy_uid      (gpgme_key_t key,
                                       
 int         gpgmex_key_is_gpgme      (gpgme_key_t key);
 
-void        gpgmex_key_ref           (gpgme_key_t key);
+gpgme_key_t gpgmex_key_ref           (gpgme_key_t key);
 
 void        gpgmex_key_unref         (gpgme_key_t key);
 
 void        gpgmex_combine_keys      (gpgme_key_t k, gpgme_key_t key);
 
 void        gpgmex_free_keys         (gpgme_key_t* keys);
-
-gpgmex_photo_id_t 
-            gpgmex_photo_id_alloc    (guint uid);
-            
-void        gpgmex_photo_id_free     (gpgmex_photo_id_t photoid);
-
-void        gpgmex_photo_id_free_all (gpgmex_photo_id_t photoid);
-
 
 /* -----------------------------------------------------------------------------
  * EXTRA FUNCTIONALITY

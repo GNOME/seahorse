@@ -79,8 +79,8 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 	comment = gtk_entry_get_text (GTK_ENTRY (
 		glade_xml_get_widget (swidget->xml, "comment")));
 	
-	err = seahorse_pgp_key_pair_op_add_uid (SEAHORSE_PGP_KEY (object),
-		                                name, email, comment);
+	err = seahorse_pgp_key_op_add_uid (SEAHORSE_PGP_KEY (object),
+	                                   name, email, comment);
 	if (!GPG_IS_OK (err))
 		seahorse_pgp_handle_gpgme_error (err, _("Couldn't add user id"));
 	else
@@ -94,7 +94,7 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
  * Creates a new #SeahorseKeyWidget dialog for adding a user ID to @skey.
  **/
 void
-seahorse_pgp_add_uid_new (SeahorsePGPKey *pkey, GtkWindow *parent)
+seahorse_pgp_add_uid_new (SeahorsePgpKey *pkey, GtkWindow *parent)
 {
 	SeahorseWidget *swidget;
 	const gchar *userid;

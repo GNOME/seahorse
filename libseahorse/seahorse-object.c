@@ -75,6 +75,7 @@ struct _SeahorseObjectPrivate {
 	guint flags;
 	
 	gboolean realized;
+	gboolean realizing;
 };
 
 G_DEFINE_TYPE (SeahorseObject, seahorse_object, G_TYPE_OBJECT);
@@ -837,9 +838,13 @@ seahorse_object_realize (SeahorseObject *self)
 	g_return_if_fail (SEAHORSE_IS_OBJECT (self));
 	if (self->pv->realized)
 		return;
+	if (self->pv->realizing)
+		return;
 	klass = SEAHORSE_OBJECT_GET_CLASS (self);
 	g_return_if_fail (klass->realize);
+	self->pv->realizing = TRUE;
 	(klass->realize) (self);
+	self->pv->realizing = FALSE;
 }
 
 void

@@ -21,14 +21,15 @@
 
 #include "seahorse-pgp-commands.h"
 #include <glib/gi18n-lib.h>
+#include <seahorse-pgp.h>
 #include <seahorse-pgp-dialogs.h>
 #include <seahorse-pgp-key.h>
 #include <seahorse-view.h>
 #include <seahorse-util.h>
 #include <seahorse-source.h>
+#include <seahorse-pgp-uid.h>
 #include <config.h>
 #include <common/seahorse-registry.h>
-#include "seahorse-pgp.h"
 
 
 
@@ -190,9 +191,17 @@ static void seahorse_pgp_commands_on_key_sign (SeahorsePGPCommands* self, GtkAct
 	g_return_if_fail (GTK_IS_ACTION (action));
 	_tmp0 = NULL;
 	key = (_tmp0 = seahorse_view_get_selected (seahorse_commands_get_view (SEAHORSE_COMMANDS (self))), (_tmp0 == NULL ? NULL : g_object_ref (_tmp0)));
-	/* TODO: Make signing a specific UID work again */
-	if (key != NULL && seahorse_object_get_tag (key) == SEAHORSE_PGP_TYPE) {
-		seahorse_pgp_sign_prompt (SEAHORSE_PGP_KEY (key), ((guint) (0)), seahorse_view_get_window (seahorse_commands_get_view (SEAHORSE_COMMANDS (self))));
+	if (key == NULL) {
+		(key == NULL ? NULL : (key = (g_object_unref (key), NULL)));
+		return;
+	} else {
+		if (G_TYPE_FROM_INSTANCE (G_OBJECT (key)) == SEAHORSE_PGP_TYPE_KEY) {
+			seahorse_pgp_sign_prompt (SEAHORSE_PGP_KEY (key), seahorse_view_get_window (seahorse_commands_get_view (SEAHORSE_COMMANDS (self))));
+		} else {
+			if (G_TYPE_FROM_INSTANCE (G_OBJECT (key)) == SEAHORSE_PGP_TYPE_UID) {
+				seahorse_pgp_sign_prompt_uid (SEAHORSE_PGP_UID (key), seahorse_view_get_window (seahorse_commands_get_view (SEAHORSE_COMMANDS (self))));
+			}
+		}
 	}
 	(key == NULL ? NULL : (key = (g_object_unref (key), NULL)));
 }

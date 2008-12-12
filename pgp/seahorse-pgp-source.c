@@ -466,80 +466,75 @@ remove_key_from_context (gpointer kt, SeahorseObject *dummy, SeahorsePGPSource *
 }
 
 /* Add a key to the context  */
-static SeahorsePGPKey*
-add_key_to_context (SeahorsePGPSource *psrc, gpgme_key_t key, gpgmex_photo_id_t photos)
+static SeahorsePgpKey*
+add_key_to_context (SeahorsePGPSource *psrc, gpgme_key_t key)
 {
-    SeahorsePGPKey *pkey = NULL;
-    SeahorsePGPKey *prev;
-    const gchar *id;
-    GQuark keyid;
-    GList *l;
+	SeahorsePgpKey *pkey = NULL;
+	SeahorsePgpKey *prev;
+	const gchar *id;
+	gpgme_key_t seckey;
+	GQuark keyid;
+	GList *l;
     
-    id = seahorse_pgp_key_get_id (key, 0);
-    keyid = seahorse_pgp_key_get_cannonical_id (id);
-    g_return_val_if_fail (keyid, NULL);
+	g_return_val_if_fail (key->subkeys && key->subkeys->keyid, NULL);
     
-    g_assert (SEAHORSE_IS_PGP_SOURCE (psrc));
-    prev = SEAHORSE_PGP_KEY (seahorse_context_get_object (SCTX_APP (), SEAHORSE_SOURCE (psrc), keyid));
+	id = key->subkeys->keyid;
+	keyid = seahorse_pgp_key_get_cannonical_id (id);
+	g_return_val_if_fail (keyid, NULL);
     
-    /* Check if we can just replace the key on the object */
-    if (prev != NULL) {
-        if (key->secret) 
-            g_object_set (prev, "seckey", key, NULL);
-        else
-            g_object_set (prev, "pubkey", key, NULL);
-        
-        if (prev->photoids)
-            gpgmex_photo_id_free_all (prev->photoids);
-        prev->photoids = photos;
-        
-        return prev;
-    }
+	g_assert (SEAHORSE_IS_PGP_SOURCE (psrc));
+	prev = SEAHORSE_PGP_KEY (seahorse_context_get_object (SCTX_APP (), SEAHORSE_SOURCE (psrc), keyid));
     
-    /* Create a new key with secret */    
-    if (key->secret) {
-        pkey = seahorse_pgp_key_new (SEAHORSE_SOURCE (psrc), NULL, key);
+	/* Check if we can just replace the key on the object */
+	if (prev != NULL) {
+		if (key->secret) 
+			g_object_set (prev, "seckey", key, NULL);
+		else
+			g_object_set (prev, "pubkey", key, NULL);
+		return prev;
+	}
+    
+	/* Create a new key with secret */    
+	if (key->secret) {
+		pkey = seahorse_pgp_key_new (SEAHORSE_SOURCE (psrc), NULL, key);
         
-        /* Since we don't have a public key yet, save this away */
-        psrc->pv->orphan_secret = g_list_append (psrc->pv->orphan_secret, pkey);
+		/* Since we don't have a public key yet, save this away */
+		psrc->pv->orphan_secret = g_list_append (psrc->pv->orphan_secret, pkey);
         
-        if (photos)
-            gpgmex_photo_id_free_all (photos);
-        
-        /* No key was loaded as far as everyone is concerned */
-        return NULL;
-    }
+		/* No key was loaded as far as everyone is concerned */
+		return NULL;
+	}
  
-    /* Just a new public key */
+	/* Just a new public key */
 
-    /* Check for orphans */
-    for (l = psrc->pv->orphan_secret; l; l = g_list_next (l)) {
+	/* Check for orphans */
+	for (l = psrc->pv->orphan_secret; l; l = g_list_next (l)) {
         
-        /* Look for a matching key */
-        if (g_str_equal (id, seahorse_pgp_key_get_id (SEAHORSE_PGP_KEY(l->data)->seckey, 0))) {
+		seckey = seahorse_pgp_key_get_private (l->data);
+		g_return_val_if_fail (seckey && seckey->subkeys && seckey->subkeys->keyid, NULL);
+		g_assert (seckey);
+		
+		/* Look for a matching key */
+		if (g_str_equal (id, seckey->subkeys->keyid)) {
             
-            /* Set it up properly */
-            pkey = SEAHORSE_PGP_KEY (l->data);
-            g_object_set (pkey, "pubkey", key, NULL);
+			/* Set it up properly */
+			pkey = SEAHORSE_PGP_KEY (l->data);
+			g_object_set (pkey, "pubkey", key, NULL);
             
-            /* Remove item from orphan list cleanly */
-            psrc->pv->orphan_secret = g_list_remove_link (psrc->pv->orphan_secret, l);
-            g_list_free (l);
-            break;
-        }
-    }
+			/* Remove item from orphan list cleanly */
+			psrc->pv->orphan_secret = g_list_remove_link (psrc->pv->orphan_secret, l);
+			g_list_free (l);
+			break;
+		}
+	}
 
-    if (pkey == NULL)
-        pkey = seahorse_pgp_key_new (SEAHORSE_SOURCE (psrc), key, NULL);
+	if (pkey == NULL)
+		pkey = seahorse_pgp_key_new (SEAHORSE_SOURCE (psrc), key, NULL);
     
-    /* Add to context */ 
-    seahorse_context_take_object (SCTX_APP (), SEAHORSE_OBJECT (pkey));
+	/* Add to context */ 
+	seahorse_context_take_object (SCTX_APP (), SEAHORSE_OBJECT (pkey));
 
-    if (pkey->photoids)
-        gpgmex_photo_id_free_all (pkey->photoids);
-    pkey->photoids = photos;
-    
-    return pkey; 
+	return pkey; 
 }
 
 /* -----------------------------------------------------------------------------
@@ -672,11 +667,9 @@ seahorse_load_operation_cancel (SeahorseOperation *operation)
 static gboolean
 keyload_handler (SeahorseLoadOperation *lop)
 {
-    SeahorsePGPKey *pkey;
-    gpgmex_photo_id_t photos;
+    SeahorsePgpKey *pkey;
     gpgme_key_t key;
     guint batch;
-    const gchar *id;
     GQuark keyid;
     gchar *t;
     
@@ -699,8 +692,8 @@ keyload_handler (SeahorseLoadOperation *lop)
             return FALSE; /* Remove event handler */
         }
         
-        id = seahorse_pgp_key_get_id (key, 0);
-        keyid = seahorse_pgp_key_get_cannonical_id (id);
+        g_return_val_if_fail (key->subkeys && key->subkeys->keyid, FALSE);
+        keyid = seahorse_pgp_key_get_cannonical_id (key->subkeys->keyid);
         
         /* Invalid id from GPG ? */
         if (!keyid) {
@@ -716,13 +709,12 @@ keyload_handler (SeahorseLoadOperation *lop)
 
         }
         
-        /* Load additional info */
-        photos = NULL;
-        if (lop->parts & LOAD_PHOTOS)
-            seahorse_pgp_key_op_photoid_load (lop->psrc, key, &photos);
+        pkey = add_key_to_context (lop->psrc, key);
 
-        pkey = add_key_to_context (lop->psrc, key, photos);
-        
+        /* Load additional info */
+        if (pkey && lop->parts & LOAD_PHOTOS)
+        	seahorse_pgp_key_op_photos_load (pkey);
+
         gpgmex_key_unref (key);
         lop->loaded++;
     }
@@ -959,7 +951,7 @@ seahorse_pgp_source_export (SeahorseSource *sksrc, GList *keys, GOutputStream *o
 {
 	SeahorsePGPOperation *pop;
 	SeahorsePGPSource *psrc;
-	SeahorsePGPKey *pkey;
+	SeahorsePgpKey *pkey;
 	SeahorseObject *object;
 	ExportContext *ctx;
 	gpgme_data_t data;
@@ -1004,7 +996,7 @@ seahorse_pgp_source_export (SeahorseSource *sksrc, GList *keys, GOutputStream *o
         	g_return_val_if_fail (seahorse_object_get_source (object) == sksrc, NULL);
         
         	/* Building list */
-        	keyid = seahorse_pgp_key_get_id (pkey->pubkey, 0);
+        	keyid = seahorse_pgp_key_get_keyid (pkey);
         	g_array_append_val (ctx->keyids, keyid);
         }
 
@@ -1017,7 +1009,6 @@ seahorse_pgp_source_export (SeahorseSource *sksrc, GList *keys, GOutputStream *o
 static SeahorseOperation*          
 seahorse_pgp_source_remove (SeahorseSource *sksrc, SeahorseObject *sobj)
 {
-	SeahorseObject *parent;
 	GError *error = NULL;
 	gpgme_error_t gerr;
     
@@ -1026,13 +1017,10 @@ seahorse_pgp_source_remove (SeahorseSource *sksrc, SeahorseObject *sobj)
 	g_return_val_if_fail (seahorse_object_get_source (sobj) == sksrc, NULL);
 
 	if (SEAHORSE_IS_PGP_UID (sobj)) {
-		parent = seahorse_object_get_parent (sobj);
-		g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (parent), NULL);
-		gerr = seahorse_pgp_key_op_del_uid (SEAHORSE_PGP_KEY (parent), 
-		                                    SEAHORSE_PGP_UID (sobj)->index + 1);
+		gerr = seahorse_pgp_key_op_del_uid (SEAHORSE_PGP_UID (sobj));
 	} else if (SEAHORSE_IS_PGP_KEY (sobj)) {
 		if (seahorse_object_get_usage (sobj) == SEAHORSE_USAGE_PRIVATE_KEY) 
-			gerr = seahorse_pgp_key_pair_op_delete (SEAHORSE_PGP_KEY (sobj));
+			gerr = seahorse_pgp_key_op_delete_pair (SEAHORSE_PGP_KEY (sobj));
 		else 
 			gerr = seahorse_pgp_key_op_delete (SEAHORSE_PGP_KEY (sobj));
 	} else {

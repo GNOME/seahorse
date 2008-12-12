@@ -114,7 +114,7 @@ keylist_to_keys (GList *keys)
 
 	for (i = 0; keys != NULL; keys = g_list_next (keys), i++) {
 		g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (keys->data), recips);
-		recips[i] = SEAHORSE_PGP_KEY (keys->data)->pubkey;
+		recips[i] = seahorse_pgp_key_get_public (keys->data);
 		gpgmex_key_ref (recips[i]);
 	}
 
@@ -306,7 +306,7 @@ seahorse_service_crypto_encrypt_text (SeahorseServiceCrypto *crypto,
     
     /* Do the encryption */
     if (signkey) {
-        gpgme_signers_add (pop->gctx, SEAHORSE_PGP_KEY (signkey)->seckey);
+        gpgme_signers_add (pop->gctx, seahorse_pgp_key_get_private (SEAHORSE_PGP_KEY (signkey)));
         gerr = gpgme_op_encrypt_sign_start (pop->gctx, recips, GPGME_ENCRYPT_ALWAYS_TRUST, 
                                             plain, cipher);
     } else {
@@ -372,7 +372,7 @@ seahorse_service_crypto_sign_text (SeahorseServiceCrypto *crypto, const char *si
     gpgme_set_armor (pop->gctx, TRUE);
 
     /* Do the signage */
-    gpgme_signers_add (pop->gctx, SEAHORSE_PGP_KEY (signkey)->seckey);
+    gpgme_signers_add (pop->gctx, seahorse_pgp_key_get_private (SEAHORSE_PGP_KEY (signkey)));
     gerr = gpgme_op_sign_start (pop->gctx, plain, cipher, GPGME_SIG_MODE_CLEAR);
 
     /* Frees cipher */

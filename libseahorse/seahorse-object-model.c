@@ -95,6 +95,7 @@ key_destroyed (gpointer data, GObject *was)
 	SeahorseObjectRow *skrow = g_hash_table_lookup (pv->rows, was);
 	if (skrow) {
 		skrow->object = NULL;
+		skrow->binding = NULL;
 		g_hash_table_remove (pv->rows, was);
 	}
 }
@@ -153,7 +154,8 @@ key_row_free (SeahorseObjectRow *skrow)
         
     }
     
-    seahorse_bind_disconnect (skrow->binding);
+    if (skrow->binding)
+	    seahorse_bind_disconnect (skrow->binding);
     if (skrow->object)
 	    g_object_weak_unref (G_OBJECT (skrow->object), key_destroyed, skrow->self);
 

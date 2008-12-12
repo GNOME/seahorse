@@ -58,7 +58,7 @@ enum {
     N_COLS
 };
 
-static const SeahorseSetModelColumn column_info[] = {
+static SeahorseSetModelColumn column_info[] = {
 	{ "usage", G_TYPE_UINT, "usage" },
 	{ "icon", G_TYPE_STRING, NULL },
 	{ "markup", G_TYPE_STRING, "label" },

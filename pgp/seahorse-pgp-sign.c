@@ -38,18 +38,12 @@
 static gboolean
 ok_clicked (SeahorseWidget *swidget)
 {
-    SeahorseObjectWidget *skwidget;
     SeahorseSignCheck check;
     SeahorseSignOptions options = 0;
     SeahorseObject *signer;
     GtkWidget *w;
     gpgme_error_t err;
-    SeahorseObject *object;
-    GList *keys;
-    guint index;
-    
-    skwidget = SEAHORSE_OBJECT_WIDGET (swidget);
-    object = skwidget->object;
+    SeahorseObject *to_sign;
     
     /* Figure out choice */
     check = SIGN_CHECK_NO_ANSWER;
@@ -90,23 +84,18 @@ ok_clicked (SeahorseWidget *swidget)
     g_assert (!signer || (SEAHORSE_IS_PGP_KEY (signer) && 
                           seahorse_object_get_usage (SEAHORSE_OBJECT (signer)) == SEAHORSE_USAGE_PRIVATE_KEY));
     
-    index = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (swidget), "index"));
-    err = seahorse_pgp_key_op_sign (SEAHORSE_PGP_KEY (object), 
-                                    SEAHORSE_PGP_KEY (signer), 
-                                    index + 1, check, options);
+    to_sign = g_object_get_data (G_OBJECT (swidget), "to-sign");
+    if (SEAHORSE_IS_PGP_UID (to_sign))
+	    err = seahorse_pgp_key_op_sign_uid (SEAHORSE_PGP_UID (to_sign), SEAHORSE_PGP_KEY (signer), check, options);
+    else if (SEAHORSE_IS_PGP_KEY (to_sign))
+	    err = seahorse_pgp_key_op_sign (SEAHORSE_PGP_KEY (to_sign), SEAHORSE_PGP_KEY (signer), check, options);
+    else
+	    g_assert (FALSE);
+    
     if (!GPG_IS_OK (err))
         seahorse_pgp_handle_gpgme_error (err, _("Couldn't sign key"));
     
     seahorse_widget_destroy (swidget);
-    
-#ifdef WITH_KEYSERVER
-    if (GPG_IS_OK (err) && seahorse_gconf_get_boolean (AUTOSYNC_KEY)) {
-        keys = g_list_append (NULL, object);
-        /* TODO: This cross module dependency needs to be fixed */
-        /* seahorse_keyserver_sync (keys); */
-        g_list_free (keys);
-    }
-#endif
     
     return TRUE;
 }
@@ -140,15 +129,14 @@ choice_toggled (GtkToggleButton *toggle, SeahorseWidget *swidget)
                              gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w)));
 }
 
-void
-seahorse_pgp_sign_prompt (SeahorsePGPKey *pkey, guint index, GtkWindow *parent)
+static void
+sign_internal (SeahorseObject *to_sign, GtkWindow *parent)
 {
     SeahorseSet *skset;
     GtkWidget *w;
     gint response;
     SeahorseWidget *swidget;
     gboolean do_sign = TRUE;
-    SeahorsePGPUid *uid;
     gchar *userid;
 
     /* Some initial checks */
@@ -163,17 +151,16 @@ seahorse_pgp_sign_prompt (SeahorsePGPKey *pkey, guint index, GtkWindow *parent)
         return;
     }
 
-    swidget = seahorse_object_widget_new ("sign", parent, SEAHORSE_OBJECT (pkey));
+    swidget = seahorse_widget_new ("sign", parent);
     g_return_if_fail (swidget != NULL);
     
-    g_object_set_data (G_OBJECT (swidget), "index", GUINT_TO_POINTER (index));
+    g_object_set_data_full (G_OBJECT (swidget), "to-sign", g_object_ref (to_sign), g_object_unref);
 
     /* ... Except for when calling this, which is messed up */
     w = glade_xml_get_widget (swidget->xml, "sign-uid-text");
     g_return_if_fail (w != NULL);
-    uid = seahorse_pgp_key_get_uid (pkey, index);
-    g_return_if_fail (uid);
-    userid = g_markup_printf_escaped("<i>%s</i>", seahorse_object_get_label (SEAHORSE_OBJECT (uid)));
+
+    userid = g_markup_printf_escaped("<i>%s</i>", seahorse_object_get_label (to_sign));
     gtk_label_set_markup (GTK_LABEL (w), userid);
     g_free (userid);
     
@@ -235,4 +222,16 @@ seahorse_pgp_sign_prompt (SeahorsePGPKey *pkey, guint index, GtkWindow *parent)
             break;
         }
     }
+}
+
+void
+seahorse_pgp_sign_prompt (SeahorsePgpKey *to_sign, GtkWindow *parent)
+{
+	sign_internal (SEAHORSE_OBJECT (to_sign), parent);
+}
+
+void
+seahorse_pgp_sign_prompt_uid (SeahorsePgpUid *to_sign, GtkWindow *parent)
+{
+	sign_internal (SEAHORSE_OBJECT (to_sign), parent);
 }

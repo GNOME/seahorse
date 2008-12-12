@@ -22,7 +22,8 @@
 #ifndef __SEAHORSE_PGP_KEY_H__
 #define __SEAHORSE_PGP_KEY_H__
 
-#include <gtk/gtk.h>
+#include <glib-object.h>
+
 #include <gpgme.h>
 
 #include "seahorse-object.h"
@@ -37,106 +38,89 @@ enum {
     SKEY_PGPSIG_PERSONAL = 0x0002
 };
 
-typedef enum {
-    SKEY_INFO_NONE,     /* We have no information on this key */
-    SKEY_INFO_BASIC,    /* We have the usual basic quick info loaded */
-    SKEY_INFO_COMPLETE  /* All info */
-} SeahorseKeyInfo;
-
 #define SEAHORSE_TYPE_PGP_KEY            (seahorse_pgp_key_get_type ())
 
 /* For vala's sake */
-#define SEAHORSE_PGP_TYPE_KEY 		SEAHORSE_TYPE_PGP_KEY
+#define SEAHORSE_PGP_TYPE_KEY            SEAHORSE_TYPE_PGP_KEY
 
-#define SEAHORSE_PGP_KEY(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_PGP_KEY, SeahorsePGPKey))
-#define SEAHORSE_PGP_KEY_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_PGP_KEY, SeahorsePGPKeyClass))
+#define SEAHORSE_PGP_KEY(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_PGP_KEY, SeahorsePgpKey))
+#define SEAHORSE_PGP_KEY_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_PGP_KEY, SeahorsePgpKeyClass))
 #define SEAHORSE_IS_PGP_KEY(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_PGP_KEY))
 #define SEAHORSE_IS_PGP_KEY_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_PGP_KEY))
-#define SEAHORSE_PGP_KEY_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_PGP_KEY, SeahorsePGPKeyClass))
+#define SEAHORSE_PGP_KEY_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_PGP_KEY, SeahorsePgpKeyClass))
 
 
-typedef struct _SeahorsePGPKey SeahorsePGPKey;
-typedef struct _SeahorsePGPKeyClass SeahorsePGPKeyClass;
+typedef struct _SeahorsePgpKey SeahorsePgpKey;
+typedef struct _SeahorsePgpKeyClass SeahorsePgpKeyClass;
+typedef struct _SeahorsePgpKeyPrivate SeahorsePgpKeyPrivate;
 
-struct _SeahorsePGPKey {
-    SeahorseObject              parent;
-
-    /*< public >*/
-    gpgme_key_t                 pubkey;         /* The public key */
-    gpgme_key_t                 seckey;         /* The secret key */
-    gpgmex_photo_id_t           photoids;       /* List of photos */
-    GList                       *uids;		/* All the UID objects */
-    SeahorseKeyInfo		loaded;		/* What's loaded */
-    
+struct _SeahorsePgpKey {
+	SeahorseObject parent;
+	SeahorsePgpKeyPrivate *pv;
 };
 
-struct _SeahorsePGPKeyClass {
-    SeahorseObjectClass         parent_class;
+struct _SeahorsePgpKeyClass {
+	SeahorseObjectClass         parent_class;
 };
 
-SeahorsePGPKey* seahorse_pgp_key_new                  (SeahorseSource *sksrc,
-                                                       gpgme_key_t        pubkey,
-                                                       gpgme_key_t        seckey);
+SeahorsePgpKey*   seahorse_pgp_key_new                  (SeahorseSource *sksrc,
+                                                         gpgme_key_t pubkey,
+                                                         gpgme_key_t seckey);
 
-void            seahorse_pgp_key_reload               (SeahorsePGPKey *pkey);
+GType             seahorse_pgp_key_get_type             (void);
 
-GType           seahorse_pgp_key_get_type             (void);
+gpgme_key_t       seahorse_pgp_key_get_public           (SeahorsePgpKey *self);
 
-guint           seahorse_pgp_key_get_num_subkeys      (SeahorsePGPKey   *pkey);
+void              seahorse_pgp_key_set_public           (SeahorsePgpKey *self,
+                                                         gpgme_key_t key);
 
-gpgme_subkey_t  seahorse_pgp_key_get_nth_subkey       (SeahorsePGPKey   *pkey,
-                                                       guint            index);
+gpgme_key_t       seahorse_pgp_key_get_private          (SeahorsePgpKey *self);
 
-guint           seahorse_pgp_key_get_num_uids         (SeahorsePGPKey *pkey);
+void              seahorse_pgp_key_set_private          (SeahorsePgpKey *self,
+                                                         gpgme_key_t key);
 
-SeahorsePGPUid* seahorse_pgp_key_get_uid              (SeahorsePGPKey *pkey, 
-                                                       guint index);
+GList*            seahorse_pgp_key_get_subkeys          (SeahorsePgpKey *self);
 
-gulong          seahorse_pgp_key_get_expires          (SeahorsePGPKey *self);
+void              seahorse_pgp_key_set_subkeys          (SeahorsePgpKey *self,
+                                                         GList *subkeys);
 
-gchar*          seahorse_pgp_key_get_expires_str      (SeahorsePGPKey *self);
+GList*            seahorse_pgp_key_get_uids             (SeahorsePgpKey *self);
 
-gchar*          seahorse_pgp_key_get_fingerprint      (SeahorsePGPKey *self);
+void              seahorse_pgp_key_set_uids             (SeahorsePgpKey *self,
+                                                         GList *subkeys);
 
-SeahorseValidity seahorse_pgp_key_get_trust           (SeahorsePGPKey *self);
+GList*            seahorse_pgp_key_get_photos           (SeahorsePgpKey *self);
 
-const gchar*    seahorse_pgp_key_get_algo             (SeahorsePGPKey   *pkey,
-                                                       guint            index);
+void              seahorse_pgp_key_set_photos           (SeahorsePgpKey *self,
+                                                         GList *subkeys);
 
-const gchar*    seahorse_pgp_key_get_id               (gpgme_key_t      key,
-                                                       guint            index);
+gchar*            seahorse_pgp_key_get_fingerprint      (SeahorsePgpKey *self);
 
-const gchar*    seahorse_pgp_key_get_rawid            (GQuark keyid);
+SeahorseValidity  seahorse_pgp_key_get_validity         (SeahorsePgpKey *self);
 
-guint           seahorse_pgp_key_get_num_photoids     (SeahorsePGPKey   *pkey);
- 
-gpgmex_photo_id_t seahorse_pgp_key_get_nth_photoid    (SeahorsePGPKey   *pkey,
-                                                       guint            index);                                                    
+const gchar*      seahorse_pgp_key_get_validity_str     (SeahorsePgpKey *self);
 
-gpgmex_photo_id_t seahorse_pgp_key_get_photoid_n      (SeahorsePGPKey   *pkey,
-                                                       guint            uid);
+gulong            seahorse_pgp_key_get_expires          (SeahorsePgpKey *self);
 
-void            seahorse_pgp_key_get_signature_text   (SeahorsePGPKey   *pkey,
-                                                       gpgme_key_sig_t  signature,
-                                                       gchar            **name,
-                                                       gchar            **email,
-                                                       gchar            **comment);
+gchar*            seahorse_pgp_key_get_expires_str      (SeahorsePgpKey *self);
 
-guint           seahorse_pgp_key_get_sigtype          (SeahorsePGPKey   *pkey, 
-                                                       gpgme_key_sig_t  signature);
+SeahorseValidity  seahorse_pgp_key_get_trust            (SeahorsePgpKey *self);
 
-gboolean        seahorse_pgp_key_have_signatures      (SeahorsePGPKey   *pkey,
-                                                       guint            types);
+const gchar*      seahorse_pgp_key_get_trust_str        (SeahorsePgpKey *self);
 
-/* 
- * This function is necessary because the uid stored in a gpgme_user_id_t
- * struct is only usable with gpgme functions.  Problems will be caused if 
- * that uid is used with functions found in seahorse-pgp-key-op.h.  This 
- * function is only to be called with uids from gpgme_user_id_t structs.
- */
-guint           seahorse_pgp_key_get_actual_uid       (SeahorsePGPKey   *pkey,
-                                                       guint            uid);
-                                                       
-GQuark          seahorse_pgp_key_get_cannonical_id     (const gchar *id);
+guint             seahorse_pgp_key_get_length           (SeahorsePgpKey *self);
+
+const gchar*      seahorse_pgp_key_get_algo             (SeahorsePgpKey *self);
+
+GQuark            seahorse_pgp_key_get_cannonical_id    (const gchar *id);
+
+const gchar*      seahorse_pgp_key_get_rawid            (GQuark keyid);
+
+const gchar*      seahorse_pgp_key_get_keyid            (SeahorsePgpKey *self);
+
+gboolean          seahorse_pgp_key_has_keyid            (SeahorsePgpKey *self, 
+                                                         const gchar *keyid);
+
+void              seahorse_pgp_key_refresh_matching     (gpgme_key_t key);
 
 #endif /* __SEAHORSE_KEY_H__ */

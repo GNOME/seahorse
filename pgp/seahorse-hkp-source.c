@@ -505,15 +505,17 @@ static void
 add_key (SeahorseHKPSource *ssrc, gpgme_key_t key)
 {
     SeahorseObject *prev;
-    SeahorsePGPKey *pkey;
+    SeahorsePgpKey *pkey;
     GQuark keyid;
        
-    keyid = seahorse_pgp_key_get_cannonical_id (seahorse_pgp_key_get_id (key, 0));
+    g_return_if_fail (key && key->subkeys && key->subkeys->keyid);
+
+    keyid = seahorse_pgp_key_get_cannonical_id (key->subkeys->keyid);
     prev = seahorse_context_get_object (SCTX_APP (), SEAHORSE_SOURCE (ssrc), keyid);
     
     if (prev != NULL) {
         g_return_if_fail (SEAHORSE_IS_PGP_KEY (prev));
-        gpgmex_combine_keys (SEAHORSE_PGP_KEY (prev)->pubkey, key);
+        gpgmex_combine_keys (seahorse_pgp_key_get_public (SEAHORSE_PGP_KEY (prev)), key);
         return;
     }
 

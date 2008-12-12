@@ -37,7 +37,7 @@
 #include "pgp/seahorse-pgp-key.h"
 #include "pgp/seahorse-pgp-keysets.h"
 
-SeahorsePGPKey*
+SeahorsePgpKey*
 seahorse_signer_get (GtkWindow *parent)
 {
     SeahorseWidget *swidget;

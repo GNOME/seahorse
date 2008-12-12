@@ -20,6 +20,7 @@
  */
 
 #include "seahorse-pgp-generator.h"
+#include <seahorse-pgp.h>
 #include <glib/gi18n-lib.h>
 #include <stdlib.h>
 #include <string.h>
@@ -30,7 +31,6 @@
 #include <seahorse-pgp-source.h>
 #include <config.h>
 #include <common/seahorse-registry.h>
-#include "seahorse-pgp.h"
 
 
 

@@ -35,50 +35,69 @@
 /* For vala's sake */
 #define SEAHORSE_PGP_TYPE_UID 		SEAHORSE_TYPE_PGP_UID
 
-#define SEAHORSE_PGP_UID(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_PGP_UID, SeahorsePGPUid))
-#define SEAHORSE_PGP_UID_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_PGP_UID, SeahorsePGPUidClass))
+#define SEAHORSE_PGP_UID(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_PGP_UID, SeahorsePgpUid))
+#define SEAHORSE_PGP_UID_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_PGP_UID, SeahorsePgpUidClass))
 #define SEAHORSE_IS_PGP_UID(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_PGP_UID))
 #define SEAHORSE_IS_PGP_UID_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_PGP_UID))
-#define SEAHORSE_PGP_UID_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_PGP_UID, SeahorsePGPUidClass))
+#define SEAHORSE_PGP_UID_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_PGP_UID, SeahorsePgpUidClass))
 
+typedef struct _SeahorsePgpUid SeahorsePgpUid;
+typedef struct _SeahorsePgpUidClass SeahorsePgpUidClass;
+typedef struct _SeahorsePgpUidPrivate SeahorsePgpUidPrivate;
 
-typedef struct _SeahorsePGPUid SeahorsePGPUid;
-typedef struct _SeahorsePGPUidClass SeahorsePGPUidClass;
-
-struct _SeahorsePGPUid {
+struct _SeahorsePgpUid {
 	SeahorseObject parent;
-
-	/*< public >*/
-	gpgme_key_t pubkey;         /* The public key that this uid is part of */
-	gpgme_user_id_t userid;     /* The userid referred to */
-	guint index;                /* The index of the UID */
+	SeahorsePgpUidPrivate *pv;
 };
 
-struct _SeahorsePGPUidClass {
+struct _SeahorsePgpUidClass {
 	SeahorseObjectClass parent_class;
 };
 
-SeahorsePGPUid*   seahorse_pgp_uid_new                  (gpgme_key_t pubkey,
-                                                         gpgme_user_id_t userid);
-
 GType             seahorse_pgp_uid_get_type             (void);
 
-gboolean          seahorse_pgp_uid_equal                (SeahorsePGPUid *uid,
+SeahorsePgpUid*   seahorse_pgp_uid_new                  (gpgme_key_t pubkey,
                                                          gpgme_user_id_t userid);
 
-gchar*            seahorse_pgp_uid_get_display_name     (SeahorsePGPUid *uid);
+gpgme_key_t       seahorse_pgp_uid_get_pubkey           (SeahorsePgpUid *self);
 
-gchar*            seahorse_pgp_uid_get_markup           (SeahorsePGPUid *uid, 
+gpgme_user_id_t   seahorse_pgp_uid_get_userid           (SeahorsePgpUid *self);
+
+void              seahorse_pgp_uid_set_userid           (SeahorsePgpUid *self,
+                                                         gpgme_user_id_t userid);
+
+guint             seahorse_pgp_uid_get_gpgme_index      (SeahorsePgpUid *self);
+
+guint             seahorse_pgp_uid_get_actual_index     (SeahorsePgpUid *self);
+
+void              seahorse_pgp_uid_set_actual_index     (SeahorsePgpUid *self,
+                                                         guint actual_index);
+
+SeahorseValidity  seahorse_pgp_uid_get_validity         (SeahorsePgpUid *self);
+
+const gchar*      seahorse_pgp_uid_get_validity_str     (SeahorsePgpUid *self);
+
+
+gchar*            seahorse_pgp_uid_get_name             (SeahorsePgpUid *self);
+
+gchar*            seahorse_pgp_uid_get_email            (SeahorsePgpUid *self);
+
+gchar*            seahorse_pgp_uid_get_comment          (SeahorsePgpUid *self);
+
+gchar*            seahorse_pgp_uid_calc_name            (gpgme_user_id_t userid);
+
+gchar*            seahorse_pgp_uid_calc_label           (gpgme_user_id_t userid);
+
+gchar*            seahorse_pgp_uid_calc_markup          (gpgme_user_id_t userid,
                                                          guint flags);
 
-gchar*            seahorse_pgp_uid_get_name             (SeahorsePGPUid *uid);
+guint             seahorse_pgp_uid_signature_get_type   (gpgme_key_sig_t  signature);
 
-gchar*            seahorse_pgp_uid_get_email            (SeahorsePGPUid *uid);
+void              seahorse_pgp_uid_signature_get_text   (gpgme_key_sig_t  signature,
+                                                         gchar            **name,
+                                                         gchar            **email,
+                                                         gchar            **comment);
 
-gchar*            seahorse_pgp_uid_get_comment          (SeahorsePGPUid *uid);
-                                  
-SeahorseValidity  seahorse_pgp_uid_get_validity         (SeahorsePGPUid *uid);
-
-guint             seahorse_pgp_uid_get_index            (SeahorsePGPUid *uid);
+GQuark            seahorse_pgp_uid_get_cannonical_id    (const gchar *id);
 
 #endif /* __SEAHORSE_PGP_UID_H__ */
