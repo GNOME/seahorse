@@ -25,15 +25,10 @@
 #include <glib.h>
 #include <glib-object.h>
 
-G_BEGIN_DECLS
-
-
 
 #define SEAHORSE_SSH_TYPE_STR "openssh"
 #define SEAHORSE_SSH_TYPE g_quark_from_string ("openssh")
 #define SEAHORSE_SSH_STOCK_ICON "seahorse-key-ssh"
 
-
-G_END_DECLS
 
 #endif

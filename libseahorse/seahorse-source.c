@@ -379,7 +379,7 @@ seahorse_source_canonize_id (GQuark ktype, const gchar *id)
 
 	g_return_val_if_fail (id != NULL, 0);
     
-	type = seahorse_registry_find_type (NULL, "source", g_quark_to_string (ktype), "local", NULL);
+	type = seahorse_registry_object_type (NULL, "source", g_quark_to_string (ktype), "local", NULL);
 	g_return_val_if_fail (type, 0);
 	
 	klass = SEAHORSE_SOURCE_CLASS (g_type_class_peek (type));

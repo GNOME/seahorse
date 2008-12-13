@@ -28,12 +28,55 @@
 #include "seahorse-ssh-dialogs.h"
 #include "seahorse-ssh-source.h"
 #include "seahorse-ssh-key.h"
+#include "seahorse-ssh.h"
 #include "seahorse-ssh-operation.h"
 
 #include "seahorse-widget.h"
 #include "seahorse-util.h"
 #include "seahorse-progress.h"
 #include "seahorse-gtkstock.h"
+
+#include "common/seahorse-registry.h"
+
+/* --------------------------------------------------------------------------
+ * ACTIONS
+ */
+
+static void
+on_ssh_generate_key (GtkAction *action, gpointer unused)
+{
+	SeahorseSource* sksrc;
+	
+	g_return_if_fail (GTK_IS_ACTION (action));
+	
+	sksrc = seahorse_context_find_source (seahorse_context_for_app (), SEAHORSE_SSH_TYPE, SEAHORSE_LOCATION_LOCAL);
+	g_return_if_fail (sksrc != NULL);
+	
+	seahorse_ssh_generate_show (SEAHORSE_SSH_SOURCE (sksrc), NULL);
+}
+
+static const GtkActionEntry ACTION_ENTRIES[] = {
+	{ "ssh-generate-key", SEAHORSE_SSH_STOCK_ICON, N_ ("Secure Shell Key"), "", 
+	  N_("Used to access other computers (eg: via a terminal)"), G_CALLBACK (on_ssh_generate_key) }
+};
+
+void
+seahorse_ssh_generate_register (void)
+{
+	GtkActionGroup *actions;
+	
+	actions = gtk_action_group_new ("ssh-generate");
+
+	gtk_action_group_set_translation_domain (actions, GETTEXT_PACKAGE);
+	gtk_action_group_add_actions (actions, ACTION_ENTRIES, G_N_ELEMENTS (ACTION_ENTRIES), NULL);
+	
+	/* Register this as a generator */
+	seahorse_registry_register_object (NULL, actions, SEAHORSE_SSH_TYPE_STR, "generator", NULL);
+}
+
+/* --------------------------------------------------------------------
+ * DIALOGS
+ */
 
 #define DSA_SIZE 1024
 #define DEFAULT_RSA_SIZE 2048

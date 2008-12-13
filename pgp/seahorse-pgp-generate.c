@@ -33,11 +33,55 @@
 #include "seahorse-progress.h"
 #include "seahorse-gtkstock.h"
 #include "seahorse-passphrase.h"
+#include "seahorse-gtkstock.h"
 
+#include "seahorse-pgp.h"
 #include "seahorse-pgp-dialogs.h"
 #include "seahorse-pgp-key.h"
 #include "seahorse-pgp-key-op.h"
 #include "seahorse-pgp-source.h"
+
+#include "common/seahorse-registry.h"
+
+/* --------------------------------------------------------------------------
+ * ACTIONS
+ */
+
+static void
+on_pgp_generate_key (GtkAction *action, gpointer unused)
+{
+	SeahorseSource* sksrc;
+	
+	g_return_if_fail (GTK_IS_ACTION (action));
+	
+	sksrc = seahorse_context_find_source (seahorse_context_for_app (), SEAHORSE_PGP_TYPE, SEAHORSE_LOCATION_LOCAL);
+	g_return_if_fail (sksrc != NULL);
+	
+	seahorse_pgp_generate_show (SEAHORSE_PGP_SOURCE (sksrc), NULL);
+}
+
+static const GtkActionEntry ACTION_ENTRIES[] = {
+	{ "pgp-generate-key", SEAHORSE_PGP_STOCK_ICON, N_ ("PGP Key"), "", 
+	  N_("Used to encrypt email and files"), G_CALLBACK (on_pgp_generate_key) }
+};
+
+void
+seahorse_pgp_generate_register (void)
+{
+	GtkActionGroup *actions;
+	
+	actions = gtk_action_group_new ("pgp-generate");
+
+	gtk_action_group_set_translation_domain (actions, GETTEXT_PACKAGE);
+	gtk_action_group_add_actions (actions, ACTION_ENTRIES, G_N_ELEMENTS (ACTION_ENTRIES), NULL);
+	
+	/* Register this as a generator */
+	seahorse_registry_register_object (NULL, actions, SEAHORSE_PGP_TYPE_STR, "generator", NULL);
+}
+
+/* --------------------------------------------------------------------------
+ * DIALOGS
+ */
 
 typedef struct _AlgorithmDesc {
     const gchar* desc;

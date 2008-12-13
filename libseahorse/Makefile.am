@@ -16,7 +16,6 @@ INCLUDES = -I$(top_builddir) \
 	-DLIBCRYPTUI_API_SUBJECT_TO_CHANGE
 
 VALA_SRCS = \
-	seahorse-generator.vala \
 	seahorse-servers.vala
 	
 VALA_PKGS = \
@@ -28,16 +27,11 @@ VALA_HFILES = $(VALA_SRCS:.vala=.h)
 
 SUFFIXES = .vala .c .h
 
-vala-build.stamp: $(VALA_SRCS)
-	$(VALAC) -C -X "$(INCLUDES)" --library libseahorse $(VALA_PKGS) $^ --basedir ./
-	date +'%s' > $@
-
 MARSHAL_SRCS = \
 	seahorse-marshal.c seahorse-marshal.h
 
 BUILT_SOURCES = \
-	$(MARSHAL_SRCS) \
-	vala-build.stamp
+	$(MARSHAL_SRCS)
 
 noinst_LTLIBRARIES = libseahorse.la
 
@@ -103,7 +97,6 @@ glade_DATA = \
 	seahorse-notify.glade
 
 EXTRA_DIST = $(glade_DATA) \
-	vala-build.stamp \
 	$(VALA_SRCS) \
 	libseahorse-c.vapi \
 	libseahorse.vapi \
@@ -111,5 +104,7 @@ EXTRA_DIST = $(glade_DATA) \
 	seahorse-marshal.list
 
 vala-clean:
-	rm -f vala-build.stamp $(VALA_CFILES) $(VALA_HFILES)
+	rm -f $(VALA_CFILES) $(VALA_HFILES)
 
+vala-build: $(VALA_SRCS) 
+	$(VALAC) -C -X "$(INCLUDES)" --library libseahorse $(VALA_PKGS) $^ --basedir ./

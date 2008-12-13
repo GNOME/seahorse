@@ -24,7 +24,7 @@
 #include "seahorse-ssh-module.h"
 
 #include "seahorse-ssh-commands.h"
-#include "seahorse-ssh-generator.h"
+#include "seahorse-ssh-dialogs.h"
 #include "seahorse-ssh-source.h"
 
 #include "seahorse-context.h"
@@ -40,5 +40,6 @@ seahorse_ssh_module_init (void)
 
 	g_type_class_unref (g_type_class_ref (SEAHORSE_TYPE_SSH_SOURCE));
 	g_type_class_unref (g_type_class_ref (SEAHORSE_TYPE_SSH_COMMANDS));
-	g_type_class_unref (g_type_class_ref (SEAHORSE_SSH_TYPE_GENERATOR));
+
+	seahorse_ssh_generate_register ();
 }

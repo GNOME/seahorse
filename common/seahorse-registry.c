@@ -25,7 +25,8 @@
 typedef struct _SeahorseRegistryPrivate SeahorseRegistryPrivate;
 
 struct _SeahorseRegistryPrivate {
-	GHashTable *categories;
+	GHashTable *types;
+	GHashTable *objects;
 };
 
 #define SEAHORSE_REGISTRY_GET_PRIVATE(o) \
@@ -57,37 +58,36 @@ keys_to_list (gpointer key, gpointer value, gpointer user_data)
 }
 
 static void
-register_type_for_category (SeahorseRegistry *registry, const gchar *category, GType type)
+register_value_for_category (GHashTable *table, const gchar *category, 
+                             gpointer value, GDestroyNotify destroy_func)
 {
-	SeahorseRegistryPrivate *pv = SEAHORSE_REGISTRY_GET_PRIVATE (registry);
 	GHashTable *set;
 	
-	g_return_if_fail (SEAHORSE_IS_REGISTRY (registry));
+	g_return_if_fail (table);
 	g_return_if_fail (category);
 	g_return_if_fail (category[0]);
 	
-	set = g_hash_table_lookup (pv->categories, category);
+	set = g_hash_table_lookup (table, category);
 	if (!set) {
-		set = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, NULL);
-		g_hash_table_replace (pv->categories, g_strdup (category), set);
+		set = g_hash_table_new_full (g_direct_hash, g_direct_equal, destroy_func, NULL);
+		g_hash_table_replace (table, g_strdup (category), set);
 	}
 	
-	g_hash_table_replace (set, GUINT_TO_POINTER (type), NO_VALUE);
+	g_hash_table_replace (set, value, NO_VALUE);
 }
 
 static GList*
-lookup_types (SeahorseRegistry *registry, const gchar *category, va_list cats)
+lookup_category_values (GHashTable *table, const gchar *category, va_list cats)
 {
-	SeahorseRegistryPrivate *pv = SEAHORSE_REGISTRY_GET_PRIVATE (registry);
 	GList *l, *type, *types = NULL;
 	GHashTable *set;
-	
-	g_return_val_if_fail (SEAHORSE_IS_REGISTRY (registry), NULL);
+
+	g_return_val_if_fail (table, NULL);
 	g_return_val_if_fail (category, NULL);
 	g_return_val_if_fail (category[0], NULL);
 	
 	/* Get the first category */
-	set = g_hash_table_lookup (pv->categories, category);
+	set = g_hash_table_lookup (table, category);
 	if (!set)
 		return NULL;
 	
@@ -95,7 +95,7 @@ lookup_types (SeahorseRegistry *registry, const gchar *category, va_list cats)
 	g_hash_table_foreach (set, keys_to_list, &types);
 	
 	/* 
-	 * Go through the other categories and remove any in results
+	 * Go through the other types and remove any in results
 	 * which we don't find.
 	 */
 	for (;;) {
@@ -105,7 +105,7 @@ lookup_types (SeahorseRegistry *registry, const gchar *category, va_list cats)
 		g_return_val_if_fail (category[0], NULL);
 		
 		/* Lookup this category */
-		set = g_hash_table_lookup (pv->categories, category);
+		set = g_hash_table_lookup (table, category);
 		
 		/* No category, no matches */
 		if (!set) {
@@ -126,6 +126,27 @@ lookup_types (SeahorseRegistry *registry, const gchar *category, va_list cats)
 	return types;
 }
 
+static gpointer
+lookup_category_value (GHashTable *table, const gchar *category, va_list cats)
+{
+	gpointer value = NULL;
+	GList *values;
+	
+	values = lookup_category_values (table, category, cats);
+	if (values)
+		value = values->data;
+	g_list_free (values);
+	return value;
+}
+
+static gint
+object_has_type (gconstpointer object, gconstpointer type)
+{
+	if (G_OBJECT_TYPE (object) == GPOINTER_TO_UINT (type))
+		return 0;
+	return -1;
+}
+
 /* -----------------------------------------------------------------------------
  * OBJECT
  */
@@ -134,15 +155,17 @@ static void
 seahorse_registry_init (SeahorseRegistry *obj)
 {
 	SeahorseRegistryPrivate *pv = SEAHORSE_REGISTRY_GET_PRIVATE (obj);
-	pv->categories = g_hash_table_new_full (g_str_hash, g_str_equal, 
-	                                        g_free, (GDestroyNotify)g_hash_table_destroy);
+	pv->types = g_hash_table_new_full (g_str_hash, g_str_equal, 
+	                                   g_free, (GDestroyNotify)g_hash_table_destroy);
+	pv->objects = g_hash_table_new_full (g_str_hash, g_str_equal, 
+	                                     g_free, (GDestroyNotify)g_hash_table_destroy);
 }
 
 static void
 seahorse_registry_dispose (GObject *obj)
 {
 	SeahorseRegistryPrivate *pv = SEAHORSE_REGISTRY_GET_PRIVATE (obj);
-	g_hash_table_remove_all (pv->categories);
+	g_hash_table_remove_all (pv->types);
 	G_OBJECT_CLASS (seahorse_registry_parent_class)->dispose (obj);
 }
 
@@ -150,7 +173,7 @@ static void
 seahorse_registry_finalize (GObject *obj)
 {
 	SeahorseRegistryPrivate *pv = SEAHORSE_REGISTRY_GET_PRIVATE (obj);
-	g_hash_table_destroy (pv->categories);
+	g_hash_table_destroy (pv->types);
 	G_OBJECT_CLASS (seahorse_registry_parent_class)->finalize (obj);
 }
 
@@ -186,6 +209,7 @@ void
 seahorse_registry_register_type (SeahorseRegistry *registry, GType type, 
                             const gchar *category, ...)
 {
+	SeahorseRegistryPrivate *pv;
 	va_list cats;
 
 	if (!registry)
@@ -195,44 +219,70 @@ seahorse_registry_register_type (SeahorseRegistry *registry, GType type,
 	g_return_if_fail (type);
 	g_return_if_fail (category);
 
-	register_type_for_category (registry, category, type);
+	pv = SEAHORSE_REGISTRY_GET_PRIVATE (registry);
+	register_value_for_category (pv->types, category, GUINT_TO_POINTER (type), NULL);
 	
 	va_start (cats, category);
 	for (;;) {
 		category = va_arg (cats, const gchar*);
 		if (!category)
 			break;
-		register_type_for_category (registry, category, type);
+		register_value_for_category (pv->types, category, GUINT_TO_POINTER (type), NULL);
+	}
+	va_end (cats);
+}
+
+void
+seahorse_registry_register_object (SeahorseRegistry *registry, GObject *object, 
+                                   const gchar *category, ...)
+{
+	SeahorseRegistryPrivate *pv;
+	va_list cats;
+
+	if (!registry)
+		registry = seahorse_registry_get ();
+	
+	g_return_if_fail (SEAHORSE_IS_REGISTRY (registry));
+	g_return_if_fail (G_IS_OBJECT (object));
+	g_return_if_fail (category);
+
+	pv = SEAHORSE_REGISTRY_GET_PRIVATE (registry);
+	register_value_for_category (pv->objects, category, g_object_ref (object), g_object_unref);
+	
+	va_start (cats, category);
+	for (;;) {
+		category = va_arg (cats, const gchar*);
+		if (!category)
+			break;
+		register_value_for_category (pv->objects, category, g_object_ref (object), g_object_unref);
 	}
 	va_end (cats);
 }
 
 GType
-seahorse_registry_find_type (SeahorseRegistry *registry, const gchar *category, ...)
+seahorse_registry_object_type (SeahorseRegistry *registry, const gchar *category, ...)
 {
+	SeahorseRegistryPrivate *pv;
 	va_list cats;
-	GList *types;
 	GType type;
 	
 	if (!registry)
 		registry = seahorse_registry_get ();
 	
 	g_return_val_if_fail (SEAHORSE_IS_REGISTRY (registry), 0);
+	pv = SEAHORSE_REGISTRY_GET_PRIVATE (registry);
 
 	va_start (cats, category);
-	types = lookup_types (registry, category, cats);
+	type = GPOINTER_TO_UINT (lookup_category_value (pv->types, category, cats));
 	va_end (cats);
 
-	type = 0;
-	if (types)
-		type = GPOINTER_TO_UINT (types->data);
-	g_list_free (types);
 	return type;
 }
 
 GList*
-seahorse_registry_find_types (SeahorseRegistry *registry, const gchar *category, ...)
+seahorse_registry_object_types (SeahorseRegistry *registry, const gchar *category, ...)
 {
+	SeahorseRegistryPrivate *pv;
 	va_list cats;
 	GList *types;
 	
@@ -240,10 +290,71 @@ seahorse_registry_find_types (SeahorseRegistry *registry, const gchar *category,
 		registry = seahorse_registry_get ();
 	
 	g_return_val_if_fail (SEAHORSE_IS_REGISTRY (registry), NULL);
+	pv = SEAHORSE_REGISTRY_GET_PRIVATE (registry);
 
 	va_start (cats, category);
-	types = lookup_types (registry, category, cats);
+	types = lookup_category_values (pv->types, category, cats);
 	va_end (cats);
 	
 	return types;
+}
+
+GObject*
+seahorse_registry_object_instance (SeahorseRegistry *registry, const gchar *category, ...)
+{
+	SeahorseRegistryPrivate *pv;
+	va_list cats;
+	GObject *object;
+	GType type;
+	
+	if (!registry)
+		registry = seahorse_registry_get ();
+	
+	g_return_val_if_fail (SEAHORSE_IS_REGISTRY (registry), 0);
+	pv = SEAHORSE_REGISTRY_GET_PRIVATE (registry);
+
+	va_start (cats, category);
+	object = lookup_category_value (pv->objects, category, cats);
+	type = GPOINTER_TO_UINT (lookup_category_value (pv->types, category, cats));
+	va_end (cats);
+
+	if (object) 
+		return g_object_ref (object);
+
+	if (!type)
+		return NULL;
+	
+	return g_object_new (type, NULL);
+}
+
+GList*
+seahorse_registry_object_instances (SeahorseRegistry *registry, const gchar *category, ...)
+{
+	SeahorseRegistryPrivate *pv;
+	va_list cats;
+	GList *objects;
+	GList *types, *l;
+	
+	if (!registry)
+		registry = seahorse_registry_get ();
+	
+	g_return_val_if_fail (SEAHORSE_IS_REGISTRY (registry), 0);
+	pv = SEAHORSE_REGISTRY_GET_PRIVATE (registry);
+
+	va_start (cats, category);
+	objects = lookup_category_values (pv->objects, category, cats);
+	types = lookup_category_values (pv->types, category, cats);
+	va_end (cats);
+
+	for (l = objects; l; l = g_list_next (l))
+		g_object_ref (l->data);
+	
+	/* Instantiate other types if nothing of that type exists */
+	for (l = types; l; l = g_list_next (l)) {
+		if (!g_list_find_custom (objects, l->data, object_has_type))
+			objects = g_list_prepend (objects, g_object_new (GPOINTER_TO_UINT (l->data), NULL));
+	}
+	
+	g_list_free (types);
+	return objects;
 }

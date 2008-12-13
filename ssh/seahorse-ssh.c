@@ -20,6 +20,7 @@
  */
 
 #include "seahorse-ssh.h"
+
 #include <stdlib.h>
 #include <string.h>
 

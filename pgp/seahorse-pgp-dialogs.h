@@ -48,6 +48,8 @@ void            seahorse_pgp_handle_gpgme_error     (gpgme_error_t err,
 void            seahorse_pgp_key_properties_show    (SeahorsePgpKey *pkey,
                                                      GtkWindow *parent);
 
+void            seahorse_pgp_generate_register      (void);
+
 void            seahorse_pgp_generate_show          (SeahorsePGPSource *sksrc,
                                                      GtkWindow *parent);
 

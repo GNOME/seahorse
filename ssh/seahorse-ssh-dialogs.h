@@ -15,4 +15,6 @@ void        seahorse_ssh_key_properties_show   (SeahorseSSHKey *skey,
 void        seahorse_ssh_generate_show         (SeahorseSSHSource *sksrc,
                                                 GtkWindow *parent);
 
+void        seahorse_ssh_generate_register     (void);
+
 #endif /*SEAHORSESSHDIALOGS_H_*/

@@ -63,7 +63,7 @@ seahorse_xxx_constructor (GType type, guint n_props, GObjectConstructParam *prop
 static void
 seahorse_xxx_init (SeahorseXxx *self)
 {
-	self->pv = G_TYPE_INSTANCE_GET_PRIVATE ((o), SEAHORSE_TYPE_XXX, SeahorseXxxPrivate);
+	self->pv = G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_TYPE_XXX, SeahorseXxxPrivate);
 
 }
 

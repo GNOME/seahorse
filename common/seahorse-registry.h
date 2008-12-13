@@ -45,21 +45,33 @@ struct _SeahorseRegistryClass {
 };
 
 /* member functions */
-GType                seahorse_registry_get_type        (void) G_GNUC_CONST;
+GType                seahorse_registry_get_type          (void) G_GNUC_CONST;
 
-SeahorseRegistry*    seahorse_registry_get             (void);
+SeahorseRegistry*    seahorse_registry_get               (void);
 
-void                 seahorse_registry_register_type   (SeahorseRegistry *registry, 
-                                                        GType type, const gchar *category, 
-                                                        ...) G_GNUC_NULL_TERMINATED;
+void                 seahorse_registry_register_type     (SeahorseRegistry *registry, 
+                                                          GType type, const gchar *category, 
+                                                          ...) G_GNUC_NULL_TERMINATED;
 
-GType                seahorse_registry_find_type       (SeahorseRegistry *registry, 
-                                                        const gchar *category,
-                                                        ...) G_GNUC_NULL_TERMINATED;
+void                 seahorse_registry_register_object   (SeahorseRegistry *registry, 
+                                                          GObject *object, const gchar *category, 
+                                                          ...) G_GNUC_NULL_TERMINATED;
 
-GList*               seahorse_registry_find_types      (SeahorseRegistry *registry, 
-                                                        const gchar *category,
-                                                        ...) G_GNUC_NULL_TERMINATED;
+GType                seahorse_registry_object_type       (SeahorseRegistry *registry, 
+                                                          const gchar *category,
+                                                          ...) G_GNUC_NULL_TERMINATED;
+
+GList*               seahorse_registry_object_types      (SeahorseRegistry *registry, 
+                                                          const gchar *category,
+                                                          ...) G_GNUC_NULL_TERMINATED;
+
+GObject*             seahorse_registry_object_instance   (SeahorseRegistry *registry, 
+                                                          const gchar *category,
+                                                          ...) G_GNUC_NULL_TERMINATED;
+
+GList*               seahorse_registry_object_instances  (SeahorseRegistry *registry, 
+                                                          const gchar *category,
+                                                          ...) G_GNUC_NULL_TERMINATED;
 
 G_END_DECLS
 

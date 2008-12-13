@@ -24,18 +24,15 @@
 
 #include <glib.h>
 #include <glib-object.h>
-#include <seahorse-widget.h>
-#include <gtk/gtk.h>
 
-G_BEGIN_DECLS
+#include "seahorse-widget.h"
 
-
-#define SEAHORSE_TYPE_GENERATE_SELECT (seahorse_generate_select_get_type ())
-#define SEAHORSE_GENERATE_SELECT(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_GENERATE_SELECT, SeahorseGenerateSelect))
-#define SEAHORSE_GENERATE_SELECT_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_GENERATE_SELECT, SeahorseGenerateSelectClass))
-#define SEAHORSE_IS_GENERATE_SELECT(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_GENERATE_SELECT))
-#define SEAHORSE_IS_GENERATE_SELECT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_GENERATE_SELECT))
-#define SEAHORSE_GENERATE_SELECT_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_GENERATE_SELECT, SeahorseGenerateSelectClass))
+#define SEAHORSE_TYPE_GENERATE_SELECT             (seahorse_generate_select_get_type ())
+#define SEAHORSE_GENERATE_SELECT(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_GENERATE_SELECT, SeahorseGenerateSelect))
+#define SEAHORSE_GENERATE_SELECT_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_GENERATE_SELECT, SeahorseGenerateSelectClass))
+#define SEAHORSE_IS_GENERATE_SELECT(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_GENERATE_SELECT))
+#define SEAHORSE_IS_GENERATE_SELECT_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_GENERATE_SELECT))
+#define SEAHORSE_GENERATE_SELECT_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_GENERATE_SELECT, SeahorseGenerateSelectClass))
 
 typedef struct _SeahorseGenerateSelect SeahorseGenerateSelect;
 typedef struct _SeahorseGenerateSelectClass SeahorseGenerateSelectClass;
@@ -43,13 +40,12 @@ typedef struct _SeahorseGenerateSelectPrivate SeahorseGenerateSelectPrivate;
 
 struct _SeahorseGenerateSelect {
 	SeahorseWidget parent_instance;
-	SeahorseGenerateSelectPrivate * priv;
+	SeahorseGenerateSelectPrivate *pv;
 };
 
 struct _SeahorseGenerateSelectClass {
 	SeahorseWidgetClass parent_class;
 };
-
 
 void seahorse_generate_select_show (GtkWindow* parent);
 GType seahorse_generate_select_get_type (void);

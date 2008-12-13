@@ -24,8 +24,8 @@
 #include "seahorse-pgp-module.h"
 
 #include "seahorse-pgp-commands.h"
-#include "seahorse-pgp-generator.h"
 #include "seahorse-pgp-source.h"
+#include "seahorse-pgp-dialogs.h"
 
 #ifdef WITH_LDAP
 #include "seahorse-ldap-source.h"
@@ -47,11 +47,12 @@ seahorse_pgp_module_init (void)
 
 	g_type_class_unref (g_type_class_ref (SEAHORSE_TYPE_PGP_SOURCE));
 	g_type_class_unref (g_type_class_ref (SEAHORSE_TYPE_PGP_COMMANDS));
-	g_type_class_unref (g_type_class_ref (SEAHORSE_PGP_TYPE_GENERATOR));
 #ifdef WITH_LDAP
 	g_type_class_unref (g_type_class_ref (SEAHORSE_TYPE_LDAP_SOURCE));
 #endif
 #ifdef WITH_HKP
 	g_type_class_unref (g_type_class_ref (SEAHORSE_TYPE_HKP_SOURCE));
 #endif 
+	
+	seahorse_pgp_generate_register ();
 }
