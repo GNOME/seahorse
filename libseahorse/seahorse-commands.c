@@ -19,152 +19,219 @@
  * 02111-1307, USA.  
  */
 
-#include <seahorse-commands.h>
+#include "config.h"
 
+#include "seahorse-commands.h"
 
-
+enum {
+	PROP_0,
+	PROP_VIEW,
+	PROP_KTYPE,
+	PROP_COMMAND_ACTIONS,
+	PROP_UI_DEFINITION
+};
 
 struct _SeahorseCommandsPrivate {
-	SeahorseView* _view;
+	SeahorseView* view;
 };
 
-#define SEAHORSE_COMMANDS_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), SEAHORSE_TYPE_COMMANDS, SeahorseCommandsPrivate))
-enum  {
-	SEAHORSE_COMMANDS_DUMMY_PROPERTY,
-	SEAHORSE_COMMANDS_VIEW,
-	SEAHORSE_COMMANDS_KTYPE,
-	SEAHORSE_COMMANDS_COMMAND_ACTIONS,
-	SEAHORSE_COMMANDS_UI_DEFINITION
-};
-static void seahorse_commands_real_show_properties (SeahorseCommands* self, SeahorseObject* obj);
-static SeahorseOperation* seahorse_commands_real_delete_objects (SeahorseCommands* self, GList* obj);
-static void seahorse_commands_set_view (SeahorseCommands* self, SeahorseView* value);
-static gpointer seahorse_commands_parent_class = NULL;
-static void seahorse_commands_finalize (GObject * obj);
+G_DEFINE_TYPE (SeahorseCommands, seahorse_commands, G_TYPE_OBJECT);
 
+#define SEAHORSE_COMMANDS_GET_PRIVATE(o) \
+	(G_TYPE_INSTANCE_GET_PRIVATE ((o), SEAHORSE_TYPE_COMMANDS, SeahorseCommandsPrivate))
 
+/* -----------------------------------------------------------------------------
+ * OBJECT 
+ */
 
-static void seahorse_commands_real_show_properties (SeahorseCommands* self, SeahorseObject* obj) {
-	g_return_if_fail (SEAHORSE_IS_COMMANDS (self));
-	g_critical ("Type `%s' does not implement abstract method `seahorse_commands_show_properties'", g_type_name (G_TYPE_FROM_INSTANCE (self)));
+static void 
+seahorse_commands_real_show_properties (SeahorseCommands* self, SeahorseObject* obj) 
+{
+	g_critical ("Type `%s' does not implement abstract method `seahorse_commands_show_properties'", 
+	            g_type_name (G_TYPE_FROM_INSTANCE (self)));
 	return;
 }
 
-
-void seahorse_commands_show_properties (SeahorseCommands* self, SeahorseObject* obj) {
-	SEAHORSE_COMMANDS_GET_CLASS (self)->show_properties (self, obj);
-}
-
-
-static SeahorseOperation* seahorse_commands_real_delete_objects (SeahorseCommands* self, GList* obj) {
-	g_return_val_if_fail (SEAHORSE_IS_COMMANDS (self), NULL);
-	g_critical ("Type `%s' does not implement abstract method `seahorse_commands_delete_objects'", g_type_name (G_TYPE_FROM_INSTANCE (self)));
+static SeahorseOperation* 
+seahorse_commands_real_delete_objects (SeahorseCommands* self, GList* obj) 
+{
+	g_critical ("Type `%s' does not implement abstract method `seahorse_commands_delete_objects'", 
+	            g_type_name (G_TYPE_FROM_INSTANCE (self)));
 	return NULL;
 }
 
-
-SeahorseOperation* seahorse_commands_delete_objects (SeahorseCommands* self, GList* obj) {
-	return SEAHORSE_COMMANDS_GET_CLASS (self)->delete_objects (self, obj);
-}
-
-
-SeahorseView* seahorse_commands_get_view (SeahorseCommands* self) {
-	g_return_val_if_fail (SEAHORSE_IS_COMMANDS (self), NULL);
-	return self->priv->_view;
-}
-
-
-static void seahorse_commands_set_view (SeahorseCommands* self, SeahorseView* value) {
-	SeahorseView* _tmp2;
-	SeahorseView* _tmp1;
-	g_return_if_fail (SEAHORSE_IS_COMMANDS (self));
-	_tmp2 = NULL;
-	_tmp1 = NULL;
-	self->priv->_view = (_tmp2 = (_tmp1 = value, (_tmp1 == NULL ? NULL : g_object_ref (_tmp1))), (self->priv->_view == NULL ? NULL : (self->priv->_view = (g_object_unref (self->priv->_view), NULL))), _tmp2);
-	g_object_notify (((GObject *) (self)), "view");
-}
-
-
-GQuark seahorse_commands_get_ktype (SeahorseCommands* self) {
-	return SEAHORSE_COMMANDS_GET_CLASS (self)->get_ktype (self);
-}
-
-
-GtkActionGroup* seahorse_commands_get_command_actions (SeahorseCommands* self) {
-	return SEAHORSE_COMMANDS_GET_CLASS (self)->get_command_actions (self);
-}
-
-
-const char* seahorse_commands_get_ui_definition (SeahorseCommands* self) {
-	return SEAHORSE_COMMANDS_GET_CLASS (self)->get_ui_definition (self);
-}
-
-
-static void seahorse_commands_get_property (GObject * object, guint property_id, GValue * value, GParamSpec * pspec) {
-	SeahorseCommands * self;
-	self = SEAHORSE_COMMANDS (object);
-	switch (property_id) {
-		case SEAHORSE_COMMANDS_VIEW:
-		g_value_set_object (value, seahorse_commands_get_view (self));
-		break;
-		default:
-		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
-		break;
+static GObject* 
+seahorse_commands_constructor (GType type, guint n_props, GObjectConstructParam *props) 
+{
+	GObject *obj = G_OBJECT_CLASS (seahorse_commands_parent_class)->constructor (type, n_props, props);
+	SeahorseCommands *self = NULL;
+	SeahorseCommandsPrivate *pv;
+	
+	if (obj) {
+		pv = SEAHORSE_COMMANDS_GET_PRIVATE (obj);
+		self = SEAHORSE_COMMANDS (obj);
+		
 	}
+	
+	return obj;
 }
 
-
-static void seahorse_commands_set_property (GObject * object, guint property_id, const GValue * value, GParamSpec * pspec) {
-	SeahorseCommands * self;
-	self = SEAHORSE_COMMANDS (object);
-	switch (property_id) {
-		case SEAHORSE_COMMANDS_VIEW:
-		seahorse_commands_set_view (self, g_value_get_object (value));
-		break;
-		default:
-		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
-		break;
-	}
+static void
+seahorse_commands_init (SeahorseCommands *self)
+{
+	self->pv = SEAHORSE_COMMANDS_GET_PRIVATE (self);
 }
 
-
-static void seahorse_commands_class_init (SeahorseCommandsClass * klass) {
-	seahorse_commands_parent_class = g_type_class_peek_parent (klass);
-	g_type_class_add_private (klass, sizeof (SeahorseCommandsPrivate));
-	G_OBJECT_CLASS (klass)->get_property = seahorse_commands_get_property;
-	G_OBJECT_CLASS (klass)->set_property = seahorse_commands_set_property;
-	G_OBJECT_CLASS (klass)->finalize = seahorse_commands_finalize;
-	SEAHORSE_COMMANDS_CLASS (klass)->show_properties = seahorse_commands_real_show_properties;
-	SEAHORSE_COMMANDS_CLASS (klass)->delete_objects = seahorse_commands_real_delete_objects;
-	g_object_class_install_property (G_OBJECT_CLASS (klass), SEAHORSE_COMMANDS_VIEW, g_param_spec_object ("view", "view", "view", SEAHORSE_TYPE_VIEW, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
-	g_object_class_install_property (G_OBJECT_CLASS (klass), SEAHORSE_COMMANDS_KTYPE, g_param_spec_uint ("ktype", "ktype", "ktype", 0, G_MAXUINT, 0U, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
-	g_object_class_install_property (G_OBJECT_CLASS (klass), SEAHORSE_COMMANDS_COMMAND_ACTIONS, g_param_spec_object ("command-actions", "command-actions", "command-actions", GTK_TYPE_ACTION_GROUP, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
-	g_object_class_install_property (G_OBJECT_CLASS (klass), SEAHORSE_COMMANDS_UI_DEFINITION, g_param_spec_string ("ui-definition", "ui-definition", "ui-definition", NULL, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
+static void
+seahorse_commands_dispose (GObject *obj)
+{
+	SeahorseCommands *self = SEAHORSE_COMMANDS (obj);
+    
+	if (self->pv->view)
+		g_object_remove_weak_pointer (G_OBJECT (self->pv->view), (gpointer*)&self->pv->view);
+	self->pv->view = NULL;
+	
+	G_OBJECT_CLASS (seahorse_commands_parent_class)->dispose (obj);
 }
 
+static void
+seahorse_commands_finalize (GObject *obj)
+{
+	SeahorseCommands *self = SEAHORSE_COMMANDS (obj);
 
-static void seahorse_commands_instance_init (SeahorseCommands * self) {
-	self->priv = SEAHORSE_COMMANDS_GET_PRIVATE (self);
-}
-
-
-static void seahorse_commands_finalize (GObject * obj) {
-	SeahorseCommands * self;
-	self = SEAHORSE_COMMANDS (obj);
-	(self->priv->_view == NULL ? NULL : (self->priv->_view = (g_object_unref (self->priv->_view), NULL)));
+	g_assert (!self->pv->view);
+	
 	G_OBJECT_CLASS (seahorse_commands_parent_class)->finalize (obj);
 }
 
-
-GType seahorse_commands_get_type (void) {
-	static GType seahorse_commands_type_id = 0;
-	if (seahorse_commands_type_id == 0) {
-		static const GTypeInfo g_define_type_info = { sizeof (SeahorseCommandsClass), (GBaseInitFunc) NULL, (GBaseFinalizeFunc) NULL, (GClassInitFunc) seahorse_commands_class_init, (GClassFinalizeFunc) NULL, NULL, sizeof (SeahorseCommands), 0, (GInstanceInitFunc) seahorse_commands_instance_init };
-		seahorse_commands_type_id = g_type_register_static (G_TYPE_OBJECT, "SeahorseCommands", &g_define_type_info, G_TYPE_FLAG_ABSTRACT);
+static void
+seahorse_commands_set_property (GObject *obj, guint prop_id, const GValue *value, 
+                                GParamSpec *pspec)
+{
+	SeahorseCommands *self = SEAHORSE_COMMANDS (obj);
+	
+	switch (prop_id) {
+	case PROP_VIEW:
+		g_return_if_fail (!self->pv->view);
+		self->pv->view = g_value_get_object (value);
+		g_return_if_fail (self->pv->view);
+		g_object_add_weak_pointer (G_OBJECT (self->pv->view), (gpointer*)&self->pv->view);
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
+		break;
 	}
-	return seahorse_commands_type_id;
+}
+
+static void
+seahorse_commands_get_property (GObject *obj, guint prop_id, GValue *value, 
+                           GParamSpec *pspec)
+{
+	SeahorseCommands *self = SEAHORSE_COMMANDS (obj);
+	
+	switch (prop_id) {
+	case PROP_VIEW:
+		g_value_set_object (value, seahorse_commands_get_view (self));
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
+		break;
+	}
+}
+
+static void
+seahorse_commands_class_init (SeahorseCommandsClass *klass)
+{
+	GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+    
+	seahorse_commands_parent_class = g_type_class_peek_parent (klass);
+	g_type_class_add_private (klass, sizeof (SeahorseCommandsPrivate));
+
+	gobject_class->constructor = seahorse_commands_constructor;
+	gobject_class->dispose = seahorse_commands_dispose;
+	gobject_class->finalize = seahorse_commands_finalize;
+	gobject_class->set_property = seahorse_commands_set_property;
+	gobject_class->get_property = seahorse_commands_get_property;
+    
+	SEAHORSE_COMMANDS_CLASS (klass)->show_properties = seahorse_commands_real_show_properties;
+	SEAHORSE_COMMANDS_CLASS (klass)->delete_objects = seahorse_commands_real_delete_objects;
+	
+	g_object_class_install_property (G_OBJECT_CLASS (klass), PROP_VIEW, 
+	         g_param_spec_object ("view", "view", "view", SEAHORSE_TYPE_VIEW, 
+	                              G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+	
+	g_object_class_install_property (G_OBJECT_CLASS (klass), PROP_KTYPE, 
+	         g_param_spec_uint ("ktype", "ktype", "ktype", 
+	                            0, G_MAXUINT, 0U, G_PARAM_READABLE));
+	
+	g_object_class_install_property (G_OBJECT_CLASS (klass), PROP_COMMAND_ACTIONS, 
+	         g_param_spec_object ("command-actions", "command-actions", "command-actions", 
+	                              GTK_TYPE_ACTION_GROUP, G_PARAM_READABLE));
+	
+	g_object_class_install_property (G_OBJECT_CLASS (klass), PROP_UI_DEFINITION, 
+	         g_param_spec_pointer ("ui-definition", "ui-definition", "ui-definition", 
+	                               G_PARAM_READABLE));
+}
+
+/* -----------------------------------------------------------------------------
+ * PUBLIC 
+ */
+
+void 
+seahorse_commands_show_properties (SeahorseCommands* self, SeahorseObject* obj) 
+{
+	g_return_if_fail (SEAHORSE_IS_COMMANDS (self));
+	SEAHORSE_COMMANDS_GET_CLASS (self)->show_properties (self, obj);
+}
+
+SeahorseOperation* 
+seahorse_commands_delete_objects (SeahorseCommands* self, GList* obj) 
+{
+	g_return_val_if_fail (SEAHORSE_IS_COMMANDS (self), NULL);
+	return SEAHORSE_COMMANDS_GET_CLASS (self)->delete_objects (self, obj);
+}
+
+SeahorseView*
+seahorse_commands_get_view (SeahorseCommands* self) 
+{
+	g_return_val_if_fail (SEAHORSE_IS_COMMANDS (self), NULL);
+	return self->pv->view;
+}
+
+GQuark 
+seahorse_commands_get_ktype (SeahorseCommands* self) 
+{
+	GQuark ktype;
+	g_return_val_if_fail (SEAHORSE_IS_COMMANDS (self), 0);
+	g_object_get (self, "ktype", &ktype, NULL);
+	return ktype;
+}
+
+GtkActionGroup*
+seahorse_commands_get_command_actions (SeahorseCommands* self) 
+{
+	GtkActionGroup *actions;
+	g_return_val_if_fail (SEAHORSE_IS_COMMANDS (self), NULL);
+	g_object_get (self, "command-actions", &actions, NULL);
+	if (actions)
+		g_object_unref (actions);
+	return actions;
 }
 
 
+const gchar* 
+seahorse_commands_get_ui_definition (SeahorseCommands* self) 
+{
+	const gchar* ui_definition;
+	g_return_val_if_fail (SEAHORSE_IS_COMMANDS (self), NULL);
+	g_object_get (self, "ui-definition", &ui_definition, NULL);
+	return ui_definition;
+}
 
-
+GtkWindow*
+seahorse_commands_get_window (SeahorseCommands* self)
+{
+	SeahorseView *view = seahorse_commands_get_view (self);
+	g_return_val_if_fail (view, NULL);
+	return seahorse_view_get_window (view);
+}

@@ -24,41 +24,64 @@
 
 #include <glib.h>
 #include <glib-object.h>
-#include <seahorse-set.h>
-#include <gtk/gtk.h>
-#include <seahorse-object.h>
 
-G_BEGIN_DECLS
+#include "seahorse-set.h"
+#include "seahorse-object.h"
 
+typedef struct _SeahorseCommands SeahorseCommands;
 
-#define SEAHORSE_TYPE_VIEW (seahorse_view_get_type ())
-#define SEAHORSE_VIEW(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_VIEW, SeahorseView))
-#define SEAHORSE_IS_VIEW(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_VIEW))
-#define SEAHORSE_VIEW_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), SEAHORSE_TYPE_VIEW, SeahorseViewIface))
+#define SEAHORSE_TYPE_VIEW                 (seahorse_view_get_type ())
+#define SEAHORSE_VIEW(obj)                 (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_VIEW, SeahorseView))
+#define SEAHORSE_IS_VIEW(obj)              (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_VIEW))
+#define SEAHORSE_VIEW_GET_INTERFACE(obj)   (G_TYPE_INSTANCE_GET_INTERFACE ((obj), SEAHORSE_TYPE_VIEW, SeahorseViewIface))
 
 typedef struct _SeahorseView SeahorseView;
 typedef struct _SeahorseViewIface SeahorseViewIface;
 
 struct _SeahorseViewIface {
 	GTypeInterface parent_iface;
-	GList* (*get_selected_objects) (SeahorseView* self);
-	void (*set_selected_objects) (SeahorseView* self, GList* objects);
-	SeahorseObject* (*get_selected) (SeahorseView* self);
-	void (*set_selected) (SeahorseView* self, SeahorseObject* value);
-	SeahorseSet* (*get_current_set) (SeahorseView* self);
-	GtkWindow* (*get_window) (SeahorseView* self);
+
+	/* virtual metdods */
+	GList*          (*get_selected_objects)   (SeahorseView *self);
+	
+	void            (*set_selected_objects)   (SeahorseView *self, GList *objects);
+	
+	SeahorseObject* (*get_selected)           (SeahorseView *self);
+	
+	void            (*set_selected)           (SeahorseView *self, SeahorseObject *value);
+	
+	SeahorseSet*    (*get_current_set)        (SeahorseView *self);
+	
+	GtkWindow*      (*get_window)             (SeahorseView *self);
+	
+	void            (*register_commands)      (SeahorseView *self, SeahorseCommands *commands,
+	                                           GType for_type);
+	
+	void            (*register_ui)            (SeahorseView *self, const gchar *ui_definition,
+	                                           GtkActionGroup *actions);
 };
 
 
-GList* seahorse_view_get_selected_objects (SeahorseView* self);
-void seahorse_view_set_selected_objects (SeahorseView* self, GList* objects);
-SeahorseObject* seahorse_view_get_selected (SeahorseView* self);
-void seahorse_view_set_selected (SeahorseView* self, SeahorseObject* value);
-SeahorseSet* seahorse_view_get_current_set (SeahorseView* self);
-GtkWindow* seahorse_view_get_window (SeahorseView* self);
-GType seahorse_view_get_type (void);
+GType             seahorse_view_get_type                    (void);
 
+GList*            seahorse_view_get_selected_objects        (SeahorseView *self);
 
-G_END_DECLS
+void              seahorse_view_set_selected_objects        (SeahorseView *self, GList *objects);
+
+SeahorseObject*   seahorse_view_get_selected                (SeahorseView *self);
+
+void              seahorse_view_set_selected                (SeahorseView *self, SeahorseObject *value);
+
+SeahorseSet*      seahorse_view_get_current_set             (SeahorseView *self);
+
+GtkWindow*        seahorse_view_get_window                  (SeahorseView *self);
+
+void              seahorse_view_register_ui                 (SeahorseView *self, 
+                                                             const gchar *ui_definition,
+                                                             GtkActionGroup *actions);
+
+void              seahorse_view_register_commands           (SeahorseView *self, 
+                                                             SeahorseCommands *commands,
+                                                             GType for_type);
 
 #endif

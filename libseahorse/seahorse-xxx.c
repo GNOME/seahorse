@@ -40,9 +40,6 @@ struct _SeahorseXxxPrivate {
 
 G_DEFINE_TYPE (SeahorseXxx, seahorse_xxx, G_TYPE_OBJECT);
 
-#define SEAHORSE_XXX_GET_PRIVATE(o) \
-	(G_TYPE_INSTANCE_GET_PRIVATE ((o), SEAHORSE_TYPE_XXX, SeahorseXxxPrivate))
-
 /* -----------------------------------------------------------------------------
  * INTERNAL 
  */
@@ -55,23 +52,18 @@ G_DEFINE_TYPE (SeahorseXxx, seahorse_xxx, G_TYPE_OBJECT);
 static GObject* 
 seahorse_xxx_constructor (GType type, guint n_props, GObjectConstructParam *props) 
 {
-	GObject *obj = G_OBJECT_CLASS (seahorse_xxx_parent_class)->constructor (type, n_props, props);
-	SeahorseXxx *self = NULL;
-	SeahorseXxxPrivate *pv;
+	SeahorseXxx *self = SEAHORSE_XXX (G_OBJECT_CLASS (seahorse_xxx_parent_class)->constructor(type, n_props, props));
+	g_return_val_if_fail (self, NULL);	
+
+
 	
-	if (obj) {
-		pv = SEAHORSE_XXX_GET_PRIVATE (obj);
-		self = SEAHORSE_XXX (obj);
-		
-	}
-	
-	return obj;
+	return G_OBJECT (self);
 }
 
 static void
 seahorse_xxx_init (SeahorseXxx *self)
 {
-	SeahorseXxxPrivate *pv = SEAHORSE_XXX_GET_PRIVATE (obj);
+	self->pv = G_TYPE_INSTANCE_GET_PRIVATE ((o), SEAHORSE_TYPE_XXX, SeahorseXxxPrivate);
 
 }
 
@@ -79,7 +71,6 @@ static void
 seahorse_xxx_dispose (GObject *obj)
 {
 	SeahorseXxx *self = SEAHORSE_XXX (obj);
-	SeahorseXxxPrivate *pv = SEAHORSE_XXX_GET_PRIVATE (self);
     
 	G_OBJECT_CLASS (seahorse_xxx_parent_class)->dispose (obj);
 }
@@ -88,7 +79,6 @@ static void
 seahorse_xxx_finalize (GObject *obj)
 {
 	SeahorseXxx *self = SEAHORSE_XXX (obj);
-	SeahorseXxxPrivate *pv = SEAHORSE_XXX_GET_PRIVATE (self);
 
 	G_OBJECT_CLASS (seahorse_xxx_parent_class)->finalize (obj);
 }
@@ -98,7 +88,6 @@ seahorse_xxx_set_property (GObject *obj, guint prop_id, const GValue *value,
                            GParamSpec *pspec)
 {
 	SeahorseXxx *self = SEAHORSE_XXX (obj);
-	SeahorseXxxPrivate *pv = SEAHORSE_XXX_GET_PRIVATE (self);
 	
 	switch (prop_id) {
 	case PROP_XXX:
@@ -114,7 +103,6 @@ seahorse_xxx_get_property (GObject *obj, guint prop_id, GValue *value,
                            GParamSpec *pspec)
 {
 	SeahorseXxx *self = SEAHORSE_XXX (obj);
-	SeahorseXxxPrivate *pv = SEAHORSE_XXX_GET_PRIVATE (self);
 	
 	switch (prop_id) {
 	case PROP_XXX:

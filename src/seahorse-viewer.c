@@ -29,6 +29,7 @@
 #include "seahorse-view.h"
 #include "seahorse-viewer.h"
 
+#include "common/seahorse-object-list.h"
 #include "common/seahorse-registry.h"
 
 #include <glib/gi18n-lib.h>
@@ -45,6 +46,7 @@ struct _SeahorseViewerPrivate {
 	GtkUIManager *ui_manager;
 	GtkActionGroup *object_actions;
 	GtkActionGroup *export_actions;
+	GList *all_commands;
 	GHashTable *commands;
 };
 
@@ -350,7 +352,7 @@ delete_object_batch (SeahorseViewer* self, GList* objects)
 	g_return_if_fail (objects != NULL);
 	g_assert (objects != NULL);
 	
-	commands = g_hash_table_lookup (pv->commands, GINT_TO_POINTER (seahorse_object_get_tag (objects->data)));
+	commands = g_hash_table_lookup (pv->commands, GINT_TO_POINTER (G_OBJECT_TYPE (objects->data)));
 	if (commands == NULL)
 		return;
 
@@ -558,27 +560,10 @@ seahorse_viewer_constructor (GType type, guint n_props, GObjectConstructParam *p
 		for (l = types; l; l = g_list_next (l)) {
 			GType typ = GPOINTER_TO_INT (l->data);
 			SeahorseCommands *commands;
-			GtkActionGroup *actions;
-			const gchar *uidef;
 			
-			/* Add each commands to our hash table */
 			commands = g_object_new (typ, "view", self, NULL);
-			g_hash_table_insert (pv->commands, GINT_TO_POINTER (seahorse_commands_get_ktype (commands)), commands);
-
-			actions = seahorse_commands_get_command_actions (commands);
-			if (actions != NULL)
-				seahorse_viewer_include_actions (self, actions);
-			g_object_unref (actions);
-			
-			uidef = seahorse_commands_get_ui_definition (commands);
-			if (uidef && uidef[0]) {
-				if (!gtk_ui_manager_add_ui_from_string (pv->ui_manager, uidef, -1, &error)) {
-					g_warning ("couldn't load UI description from commands: %s: %s", G_OBJECT_TYPE_NAME(commands), error->message);
-					g_clear_error (&error);
-				}
-			}
-
-			
+			pv->all_commands = seahorse_object_list_prepend (pv->all_commands, commands);
+			g_object_unref (commands);
 		}
 	}
 	
@@ -594,9 +579,7 @@ seahorse_viewer_init (SeahorseViewer *self)
 	pv->ui_manager = gtk_ui_manager_new ();
 	g_signal_connect (pv->ui_manager, "add-widget", G_CALLBACK (on_add_widget), self);
 
-	pv->commands = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, g_object_unref);
-	
-	
+	pv->commands = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, g_object_unref);	
 }
 
 static void
@@ -617,8 +600,11 @@ seahorse_viewer_dispose (GObject *obj)
 	pv->export_actions = NULL;
 	
 	if (pv->commands)
-		g_hash_table_unref (pv->commands);
+		g_hash_table_destroy (pv->commands);
 	pv->commands = NULL;
+	
+	seahorse_object_list_free (pv->all_commands);
+	pv->all_commands = NULL;
 	
 	G_OBJECT_CLASS (seahorse_viewer_parent_class)->dispose (obj);
 }
@@ -710,6 +696,8 @@ seahorse_viewer_implement_view (SeahorseViewIface *iface)
 	iface->set_selected = (gpointer)seahorse_viewer_set_selected;
 	iface->get_current_set = (gpointer)seahorse_viewer_get_current_set;
 	iface->get_window = (gpointer)seahorse_viewer_get_window;
+	iface->register_ui = (gpointer)seahorse_viewer_register_ui;
+	iface->register_commands = (gpointer)seahorse_viewer_register_commands;
 }
 
 /* -----------------------------------------------------------------------------
@@ -786,7 +774,7 @@ seahorse_viewer_show_properties (SeahorseViewer* self, SeahorseObject* obj)
 	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
 	g_return_if_fail (SEAHORSE_IS_OBJECT (obj));
 	
-	commands = SEAHORSE_COMMANDS (g_hash_table_lookup (pv->commands, GINT_TO_POINTER (seahorse_object_get_tag (obj))));
+	commands = SEAHORSE_COMMANDS (g_hash_table_lookup (pv->commands, GINT_TO_POINTER (G_OBJECT_TYPE (obj))));
 	if (commands != NULL)
 		seahorse_commands_show_properties (commands, obj);
 }
@@ -853,4 +841,32 @@ seahorse_viewer_get_window (SeahorseViewer* self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_VIEWER (self), NULL);
 	return GTK_WINDOW (seahorse_widget_get_toplevel (SEAHORSE_WIDGET (self)));
+}
+
+void
+seahorse_viewer_register_ui (SeahorseViewer *self, const gchar *uidef, GtkActionGroup *actions)
+{
+	SeahorseViewerPrivate *pv = SEAHORSE_VIEWER_GET_PRIVATE (self);
+	GError *error = NULL;
+	
+	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
+
+	if (actions != NULL)
+		seahorse_viewer_include_actions (self, actions);
+	
+	if (uidef && uidef[0]) {
+		if (!gtk_ui_manager_add_ui_from_string (pv->ui_manager, uidef, -1, &error)) {
+			g_warning ("couldn't load UI description: %s", error->message);
+			g_clear_error (&error);
+		}
+	}
+}
+
+void
+seahorse_viewer_register_commands (SeahorseViewer *self, SeahorseCommands *commands, GType for_type)
+{
+	SeahorseViewerPrivate *pv = SEAHORSE_VIEWER_GET_PRIVATE (self);
+	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
+	g_return_if_fail (SEAHORSE_IS_COMMANDS (commands));
+	g_hash_table_insert (pv->commands, GUINT_TO_POINTER (for_type), g_object_ref (commands));
 }

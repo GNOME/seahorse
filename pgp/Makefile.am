@@ -18,7 +18,6 @@ INCLUDES = -I$(top_builddir) \
 	-DGETTEXT_PACKAGE=\""seahorse\""
 
 VALA_SRCS = \
-	seahorse-pgp-commands.vala \
 	seahorse-pgp-generator.vala
 
 VALA_VAPIS = \
@@ -66,6 +65,7 @@ libseahorse_pgp_la_SOURCES = \
 	seahorse-pgp.c seahorse-pgp.h \
 	seahorse-pgp-add-subkey.c \
 	seahorse-pgp-add-uid.c \
+	seahorse-pgp-commands.c seahorse-pgp-commands.h \
 	seahorse-pgp-error.c \
 	seahorse-pgp-expires.c \
 	seahorse-pgp-generate.c \

@@ -35,14 +35,11 @@
 #include <glib/gi18n.h>
 
 enum {
-	PROP_0,
-	PROP_KTYPE,
-	PROP_UI_DEFINITION,
-	PROP_COMMAND_ACTIONS
+	PROP_0
 };
 
 struct _SeahorseGkrCommandsPrivate {
-	GtkActionGroup* command_actions;
+	guint dummy;
 };
 
 G_DEFINE_TYPE (SeahorseGkrCommands, seahorse_gkr_commands, SEAHORSE_TYPE_COMMANDS);
@@ -108,38 +105,21 @@ seahorse_gkr_commands_delete_objects (SeahorseCommands* base, GList* objects)
 	return seahorse_source_delete_objects (objects);
 }
 
-static GQuark 
-seahorse_gkr_commands_get_ktype (SeahorseCommands* base) 
-{
-	return SEAHORSE_GKR_TYPE;
-}
-
-
-static const gchar* 
-seahorse_gkr_commands_get_ui_definition (SeahorseCommands* base) 
-{
-	return "";
-}
-
-
-static GtkActionGroup* 
-seahorse_gkr_commands_get_command_actions (SeahorseCommands* base) 
-{
-	SeahorseGkrCommandsPrivate* pv = SEAHORSE_GKR_COMMANDS_GET_PRIVATE(base);
-	return pv->command_actions;
-}
-
 static GObject* 
 seahorse_gkr_commands_constructor (GType type, guint n_props, GObjectConstructParam *props) 
 {
 	GObject *obj = G_OBJECT_CLASS (seahorse_gkr_commands_parent_class)->constructor (type, n_props, props);
-	SeahorseGkrCommands *self = NULL;
-	SeahorseGkrCommandsPrivate *pv;
+	SeahorseCommands *base = NULL;
+	SeahorseView *view;
 	
 	if (obj) {
-		pv = SEAHORSE_GKR_COMMANDS_GET_PRIVATE (obj);
-		self = SEAHORSE_GKR_COMMANDS (obj);
+		base = SEAHORSE_COMMANDS (obj);
 		
+		view = seahorse_commands_get_view (base);
+		g_return_val_if_fail (view, NULL);
+		
+		seahorse_view_register_commands (view, base, SEAHORSE_TYPE_GKR_KEYRING);
+		seahorse_view_register_commands (view, base, SEAHORSE_TYPE_GKR_ITEM);
 	}
 	
 	return obj;
@@ -148,31 +128,18 @@ seahorse_gkr_commands_constructor (GType type, guint n_props, GObjectConstructPa
 static void
 seahorse_gkr_commands_init (SeahorseGkrCommands *self)
 {
-	SeahorseGkrCommandsPrivate *pv = SEAHORSE_GKR_COMMANDS_GET_PRIVATE (self);
-	pv->command_actions = gtk_action_group_new ("gkr");
+
 }
 
 static void
 seahorse_gkr_commands_dispose (GObject *obj)
 {
-	SeahorseGkrCommands *self = SEAHORSE_GKR_COMMANDS (obj);
-	SeahorseGkrCommandsPrivate *pv = SEAHORSE_GKR_COMMANDS_GET_PRIVATE (self);
-    
-	if (pv->command_actions)
-		g_object_unref (pv->command_actions);
-	pv->command_actions = NULL;
-	
 	G_OBJECT_CLASS (seahorse_gkr_commands_parent_class)->dispose (obj);
 }
 
 static void
 seahorse_gkr_commands_finalize (GObject *obj)
 {
-	SeahorseGkrCommands *self = SEAHORSE_GKR_COMMANDS (obj);
-	SeahorseGkrCommandsPrivate *pv = SEAHORSE_GKR_COMMANDS_GET_PRIVATE (self);
-
-	g_assert (!pv->command_actions);
-	
 	G_OBJECT_CLASS (seahorse_gkr_commands_parent_class)->finalize (obj);
 }
 
@@ -189,20 +156,9 @@ seahorse_gkr_commands_set_property (GObject *obj, guint prop_id, const GValue *v
 
 static void
 seahorse_gkr_commands_get_property (GObject *obj, guint prop_id, GValue *value, 
-                           GParamSpec *pspec)
+                         	  GParamSpec *pspec)
 {
-	SeahorseCommands *base = SEAHORSE_COMMANDS (obj);
-	
 	switch (prop_id) {
-	case PROP_KTYPE:
-		g_value_set_uint (value, seahorse_commands_get_ktype (base));
-		break;
-	case PROP_UI_DEFINITION:
-		g_value_set_string (value, seahorse_commands_get_ui_definition (base));
-		break;
-	case PROP_COMMAND_ACTIONS:
-		g_value_set_object (value, seahorse_commands_get_command_actions (base));
-		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
 		break;
@@ -226,13 +182,6 @@ seahorse_gkr_commands_class_init (SeahorseGkrCommandsClass *klass)
     
 	cmd_class->show_properties = seahorse_gkr_commands_show_properties;
 	cmd_class->delete_objects = seahorse_gkr_commands_delete_objects;
-	cmd_class->get_ktype = seahorse_gkr_commands_get_ktype;
-	cmd_class->get_ui_definition = seahorse_gkr_commands_get_ui_definition;
-	cmd_class->get_command_actions = seahorse_gkr_commands_get_command_actions;
-	
-	g_object_class_override_property (gobject_class, PROP_KTYPE, "ktype");
-	g_object_class_override_property (gobject_class, PROP_UI_DEFINITION, "ui-definition");
-	g_object_class_override_property (gobject_class, PROP_COMMAND_ACTIONS, "command-actions");
 
 	/* Register this class as a commands */
 	seahorse_registry_register_type (seahorse_registry_get (), SEAHORSE_TYPE_GKR_COMMANDS, 

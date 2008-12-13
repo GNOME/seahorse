@@ -104,4 +104,12 @@ SeahorseSet*        seahorse_viewer_get_current_set                 (SeahorseVie
 
 GtkWindow*          seahorse_viewer_get_window                      (SeahorseViewer* self);
 
+void                seahorse_viewer_register_ui                     (SeahorseViewer *self, 
+                                                                     const gchar *uidef, 
+                                                                     GtkActionGroup *actions);
+
+void                seahorse_viewer_register_commands               (SeahorseViewer *self, 
+                                                                     SeahorseCommands *commands, 
+                                                                     GType for_type);
+
 #endif /* __SEAHORSE_VIEWER_H__ */

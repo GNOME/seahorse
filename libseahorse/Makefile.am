@@ -16,10 +16,8 @@ INCLUDES = -I$(top_builddir) \
 	-DLIBCRYPTUI_API_SUBJECT_TO_CHANGE
 
 VALA_SRCS = \
-	seahorse-commands.vala \
 	seahorse-generator.vala \
-	seahorse-servers.vala \
-	seahorse-view.vala
+	seahorse-servers.vala
 	
 VALA_PKGS = \
 	--vapidir . \
@@ -52,6 +50,7 @@ endif
 libseahorse_la_SOURCES = \
 	seahorse-check-button-control.c seahorse-check-button-control.h \
 	seahorse-combo-keys.c seahorse-combo-keys.h \
+	seahorse-commands.c seahorse-commands.h \
 	seahorse-context.c seahorse-context.h \
 	seahorse-dns-sd.c seahorse-dns-sd.h \
 	seahorse-gconf.c seahorse-gconf.h \
@@ -79,6 +78,7 @@ libseahorse_la_SOURCES = \
 	seahorse-unknown-source.c seahorse-unknown-source.h \
 	seahorse-util.c seahorse-util.h \
 	seahorse-validity.c seahorse-validity.h \
+	seahorse-view.c seahorse-view.h \
 	seahorse-widget.c seahorse-widget.h \
 	$(MARSHAL_SRCS) \
 	$(VALA_CFILES) $(VALA_HFILES) \

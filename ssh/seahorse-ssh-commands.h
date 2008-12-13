@@ -24,41 +24,35 @@
 
 #include <glib.h>
 #include <glib-object.h>
-#include <seahorse-commands.h>
-#include <seahorse-object.h>
+
+#include "seahorse-commands.h"
+#include "seahorse-object.h"
 #include <seahorse-operation.h>
-#include <stdlib.h>
-#include <string.h>
-#include <gtk/gtk.h>
-
-G_BEGIN_DECLS
 
 
-#define SEAHORSE_SSH_TYPE_COMMANDS (seahorse_ssh_commands_get_type ())
-#define SEAHORSE_SSH_COMMANDS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_SSH_TYPE_COMMANDS, SeahorseSSHCommands))
-#define SEAHORSE_SSH_COMMANDS_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_SSH_TYPE_COMMANDS, SeahorseSSHCommandsClass))
-#define SEAHORSE_SSH_IS_COMMANDS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_SSH_TYPE_COMMANDS))
-#define SEAHORSE_SSH_IS_COMMANDS_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_SSH_TYPE_COMMANDS))
-#define SEAHORSE_SSH_COMMANDS_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_SSH_TYPE_COMMANDS, SeahorseSSHCommandsClass))
+#define SEAHORSE_TYPE_SSH_COMMANDS                 (seahorse_ssh_commands_get_type ())
+#define SEAHORSE_SSH_COMMANDS(obj)                 (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_SSH_COMMANDS, SeahorseSshCommands))
+#define SEAHORSE_SSH_COMMANDS_CLASS(klass)         (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_SSH_COMMANDS, SeahorseSshCommandsClass))
+#define SEAHORSE_IS_SSH_COMMANDS(obj)              (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_SSH_COMMANDS))
+#define SEAHORSE_IS_SSH_COMMANDS_CLASS(klass)      (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_SSH_COMMANDS))
+#define SEAHORSE_SSH_COMMANDS_GET_CLASS(obj)       (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_SSH_COMMANDS, SeahorseSshCommandsClass))
 
-typedef struct _SeahorseSSHCommands SeahorseSSHCommands;
-typedef struct _SeahorseSSHCommandsClass SeahorseSSHCommandsClass;
-typedef struct _SeahorseSSHCommandsPrivate SeahorseSSHCommandsPrivate;
+typedef struct _SeahorseSshCommands SeahorseSshCommands;
+typedef struct _SeahorseSshCommandsClass SeahorseSshCommandsClass;
+typedef struct _SeahorseSshCommandsPrivate SeahorseSshCommandsPrivate;
 
-struct _SeahorseSSHCommands {
+struct _SeahorseSshCommands {
 	SeahorseCommands parent_instance;
-	SeahorseSSHCommandsPrivate * priv;
+	SeahorseSshCommandsPrivate *pv;
 };
 
-struct _SeahorseSSHCommandsClass {
+struct _SeahorseSshCommandsClass {
 	SeahorseCommandsClass parent_class;
 };
 
+GType                         seahorse_ssh_commands_get_type   (void);
 
-SeahorseSSHCommands* seahorse_ssh_commands_new (void);
-GType seahorse_ssh_commands_get_type (void);
+SeahorseSshCommands*          seahorse_ssh_commands_new        (void);
 
-
-G_END_DECLS
 
 #endif

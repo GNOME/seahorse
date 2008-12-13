@@ -46,7 +46,7 @@ seahorse_pgp_module_init (void)
 	seahorse_context_take_source (NULL, source);
 
 	g_type_class_unref (g_type_class_ref (SEAHORSE_TYPE_PGP_SOURCE));
-	g_type_class_unref (g_type_class_ref (SEAHORSE_PGP_TYPE_COMMANDS));
+	g_type_class_unref (g_type_class_ref (SEAHORSE_TYPE_PGP_COMMANDS));
 	g_type_class_unref (g_type_class_ref (SEAHORSE_PGP_TYPE_GENERATOR));
 #ifdef WITH_LDAP
 	g_type_class_unref (g_type_class_ref (SEAHORSE_TYPE_LDAP_SOURCE));

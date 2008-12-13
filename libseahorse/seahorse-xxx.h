@@ -37,6 +37,7 @@ typedef struct _SeahorseXxxPrivate SeahorseXxxPrivate;
     
 struct _SeahorseXxx {
 	GObject parent;
+	SeahorseXxxPrivate *pv;
 };
 
 struct _SeahorseXxxClass {

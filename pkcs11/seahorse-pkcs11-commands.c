@@ -33,10 +33,7 @@
 #include "libcryptui/crui-x509-cert-dialog.h"
 
 enum {
-	PROP_0,
-	PROP_KTYPE,
-	PROP_UI_DEFINITION,
-	PROP_COMMAND_ACTIONS
+	PROP_0
 };
 
 struct _SeahorsePkcs11CommandsPrivate {
@@ -97,7 +94,7 @@ static SeahorseOperation*
 seahorse_pkcs11_commands_delete_objects (SeahorseCommands *cmds, GList *objects)
 {
 	gchar *prompt;
-	gchar *display;
+	const gchar *display;
 	gboolean ret;
 	guint num;
 	
@@ -108,7 +105,6 @@ seahorse_pkcs11_commands_delete_objects (SeahorseCommands *cmds, GList *objects)
 	if (num == 1) {
 		display = seahorse_object_get_label (SEAHORSE_OBJECT (objects->data));
 		prompt = g_strdup_printf (_("Are you sure you want to delete the certificate '%s'?"), display);
-		g_free (display);
 	} else {
 		prompt = g_strdup_printf (_("Are you sure you want to delete %d secure shell keys?"), num);
 	}
@@ -122,24 +118,28 @@ seahorse_pkcs11_commands_delete_objects (SeahorseCommands *cmds, GList *objects)
 		return NULL;
 }
 
-static GQuark 
-seahorse_pkcs11_commands_get_ktype (SeahorseCommands *base)
+static GObject* 
+seahorse_pkcs11_commands_constructor (GType type, guint n_props, GObjectConstructParam *props) 
 {
-	return SEAHORSE_PKCS11_TYPE;
-}
-
-static const char* 
-seahorse_pkcs11_commands_get_ui_definition (SeahorseCommands *base)
-{
-	return "";
-}
-
-static GtkActionGroup* 
-seahorse_pkcs11_commands_get_command_actions (SeahorseCommands *base)
-{
-	SeahorsePkcs11Commands *self = SEAHORSE_PKCS11_COMMANDS (base);
-	SeahorsePkcs11CommandsPrivate *pv = SEAHORSE_PKCS11_COMMANDS_GET_PRIVATE (self);
-	return pv->action_group;
+	GObject *obj = G_OBJECT_CLASS (seahorse_pkcs11_commands_parent_class)->constructor (type, n_props, props);
+	SeahorsePkcs11CommandsPrivate *pv;
+	SeahorsePkcs11Commands *self = NULL;
+	SeahorseCommands *base;
+	SeahorseView *view;
+	
+	if (obj) {
+		pv = SEAHORSE_PKCS11_COMMANDS_GET_PRIVATE (self);
+		self = SEAHORSE_PKCS11_COMMANDS (obj);
+		base = SEAHORSE_COMMANDS (self);
+	
+		view = seahorse_commands_get_view (base);
+		g_return_val_if_fail (view, NULL);
+		
+		seahorse_view_register_commands (view, base, SEAHORSE_PKCS11_TYPE_CERTIFICATE);
+		seahorse_view_register_ui (view, "", pv->action_group);
+	}
+	
+	return obj;
 }
 
 static void
@@ -188,18 +188,7 @@ static void
 seahorse_pkcs11_commands_get_property (GObject *obj, guint prop_id, GValue *value, 
                                        GParamSpec *pspec)
 {
-	SeahorseCommands *base = SEAHORSE_COMMANDS (obj);
-	
 	switch (prop_id) {
-	case PROP_KTYPE:
-		g_value_set_uint (value, seahorse_pkcs11_commands_get_ktype (base));
-		break;
-	case PROP_UI_DEFINITION:
-		g_value_set_string (value, seahorse_pkcs11_commands_get_ui_definition (base));
-		break;
-	case PROP_COMMAND_ACTIONS:
-		g_value_set_object (value, seahorse_pkcs11_commands_get_command_actions (base));
-		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
 		break;
@@ -222,13 +211,6 @@ seahorse_pkcs11_commands_class_init (SeahorsePkcs11CommandsClass *klass)
     
 	cmd_class->show_properties = seahorse_pkcs11_commands_show_properties;
 	cmd_class->delete_objects = seahorse_pkcs11_commands_delete_objects;
-	cmd_class->get_ktype = seahorse_pkcs11_commands_get_ktype;
-	cmd_class->get_ui_definition = seahorse_pkcs11_commands_get_ui_definition;
-	cmd_class->get_command_actions = seahorse_pkcs11_commands_get_command_actions;
-
-	g_object_class_override_property (gobject_class, PROP_KTYPE, "ktype");
-	g_object_class_override_property (gobject_class, PROP_UI_DEFINITION, "ui-definition");
-	g_object_class_override_property (gobject_class, PROP_COMMAND_ACTIONS, "command-actions");
 
 	slot_certificate_window = g_quark_from_static_string ("seahorse-pkcs11-commands-window");
 

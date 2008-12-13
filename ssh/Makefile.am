@@ -19,7 +19,6 @@ AM_LDFLAGS = @NETLIBS@
 
 VALA_SRCS = \
 	seahorse-ssh.vala \
-	seahorse-ssh-commands.vala \
 	seahorse-ssh-generator.vala
 	
 VALA_VAPIS = \
@@ -45,6 +44,7 @@ noinst_LTLIBRARIES = libseahorse-ssh.la
 libseahorse_ssh_la_SOURCES = \
 	seahorse-ssh-module.c seahorse-ssh-module.h \
 	seahorse-algo.c seahorse-algo.h \
+	seahorse-ssh-commands.c seahorse-ssh-commands.h \
 	seahorse-ssh-dialogs.h \
 	seahorse-ssh-generate.c \
 	seahorse-ssh-key-data.c seahorse-ssh-key-data.h \

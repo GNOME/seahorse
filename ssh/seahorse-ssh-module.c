@@ -39,6 +39,6 @@ seahorse_ssh_module_init (void)
 	seahorse_context_take_source (NULL, source);
 
 	g_type_class_unref (g_type_class_ref (SEAHORSE_TYPE_SSH_SOURCE));
-	g_type_class_unref (g_type_class_ref (SEAHORSE_SSH_TYPE_COMMANDS));
+	g_type_class_unref (g_type_class_ref (SEAHORSE_TYPE_SSH_COMMANDS));
 	g_type_class_unref (g_type_class_ref (SEAHORSE_SSH_TYPE_GENERATOR));
 }

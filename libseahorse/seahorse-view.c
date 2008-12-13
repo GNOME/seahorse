@@ -19,63 +19,110 @@
  * 02111-1307, USA.  
  */
 
-#include <seahorse-view.h>
+#include "seahorse-view.h"
 
-
-
-
-
-
-
-GList* seahorse_view_get_selected_objects (SeahorseView* self) {
+GList* 
+seahorse_view_get_selected_objects (SeahorseView* self) 
+{
+	g_return_val_if_fail (SEAHORSE_VIEW_GET_INTERFACE (self)->get_selected_objects, NULL);
 	return SEAHORSE_VIEW_GET_INTERFACE (self)->get_selected_objects (self);
 }
 
 
-void seahorse_view_set_selected_objects (SeahorseView* self, GList* objects) {
+void 
+seahorse_view_set_selected_objects (SeahorseView* self, GList* objects) 
+{
+	g_return_if_fail (SEAHORSE_VIEW_GET_INTERFACE (self)->set_selected_objects);
 	SEAHORSE_VIEW_GET_INTERFACE (self)->set_selected_objects (self, objects);
 }
 
 
-SeahorseObject* seahorse_view_get_selected (SeahorseView* self) {
+SeahorseObject* 
+seahorse_view_get_selected (SeahorseView* self) 
+{
+	g_return_val_if_fail (SEAHORSE_VIEW_GET_INTERFACE (self)->get_selected, NULL);
 	return SEAHORSE_VIEW_GET_INTERFACE (self)->get_selected (self);
 }
 
 
-void seahorse_view_set_selected (SeahorseView* self, SeahorseObject* value) {
+void 
+seahorse_view_set_selected (SeahorseView* self, SeahorseObject* value) 
+{
+	g_return_if_fail (SEAHORSE_VIEW_GET_INTERFACE (self)->set_selected);
 	SEAHORSE_VIEW_GET_INTERFACE (self)->set_selected (self, value);
 }
 
 
-SeahorseSet* seahorse_view_get_current_set (SeahorseView* self) {
+SeahorseSet* 
+seahorse_view_get_current_set (SeahorseView* self) 
+{
+	g_return_val_if_fail (SEAHORSE_VIEW_GET_INTERFACE (self)->get_current_set, NULL);
 	return SEAHORSE_VIEW_GET_INTERFACE (self)->get_current_set (self);
 }
 
 
-GtkWindow* seahorse_view_get_window (SeahorseView* self) {
+GtkWindow* 
+seahorse_view_get_window (SeahorseView* self) 
+{
+	g_return_val_if_fail (SEAHORSE_VIEW_GET_INTERFACE (self)->get_window, NULL);
 	return SEAHORSE_VIEW_GET_INTERFACE (self)->get_window (self);
 }
 
+void
+seahorse_view_register_commands (SeahorseView *self, SeahorseCommands *commands, 
+                                 GType for_type)
+{
+	g_return_if_fail (SEAHORSE_VIEW_GET_INTERFACE (self)->register_commands);
+	return SEAHORSE_VIEW_GET_INTERFACE (self)->register_commands (self, commands, for_type);
+}
 
-static void seahorse_view_base_init (SeahorseViewIface * iface) {
+void
+seahorse_view_register_ui (SeahorseView *self, const gchar *ui_definition, 
+                           GtkActionGroup *actions)
+{
+	g_return_if_fail (SEAHORSE_VIEW_GET_INTERFACE (self)->register_ui);
+	return SEAHORSE_VIEW_GET_INTERFACE (self)->register_ui (self, ui_definition, actions);
+}
+
+static void 
+seahorse_view_base_init (SeahorseViewIface * iface) 
+{
 	static gboolean initialized = FALSE;
 	if (!initialized) {
 		initialized = TRUE;
-		g_object_interface_install_property (iface, g_param_spec_object ("selected", "selected", "selected", SEAHORSE_TYPE_OBJECT, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE | G_PARAM_WRITABLE));
-		g_object_interface_install_property (iface, g_param_spec_object ("current-set", "current-set", "current-set", SEAHORSE_TYPE_SET, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
-		g_object_interface_install_property (iface, g_param_spec_object ("window", "window", "window", GTK_TYPE_WINDOW, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
-		g_signal_new ("selection_changed", SEAHORSE_TYPE_VIEW, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
+		g_object_interface_install_property (iface, 
+		         g_param_spec_object ("selected", "selected", "selected", 
+		                              SEAHORSE_TYPE_OBJECT, G_PARAM_READWRITE));
+		
+		g_object_interface_install_property (iface, 
+		         g_param_spec_object ("current-set", "current-set", "current-set", 
+		                              SEAHORSE_TYPE_SET, G_PARAM_READABLE));
+		
+		g_object_interface_install_property (iface, 
+		         g_param_spec_object ("window", "window", "window", 
+		                              GTK_TYPE_WINDOW, G_PARAM_READABLE));
+		
+		g_signal_new ("selection_changed", SEAHORSE_TYPE_VIEW, G_SIGNAL_RUN_LAST, 0, NULL, NULL, 
+		              g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
 	}
 }
 
-
-GType seahorse_view_get_type (void) {
+GType 
+seahorse_view_get_type (void) 
+{
 	static GType seahorse_view_type_id = 0;
+	
 	if (seahorse_view_type_id == 0) {
-		static const GTypeInfo g_define_type_info = { sizeof (SeahorseViewIface), (GBaseInitFunc) seahorse_view_base_init, (GBaseFinalizeFunc) NULL, (GClassInitFunc) NULL, (GClassFinalizeFunc) NULL, NULL, 0, 0, (GInstanceInitFunc) NULL };
-		seahorse_view_type_id = g_type_register_static (G_TYPE_INTERFACE, "SeahorseView", &g_define_type_info, 0);
+		static const GTypeInfo type_info = { 
+			sizeof (SeahorseViewIface), (GBaseInitFunc) seahorse_view_base_init, 
+			(GBaseFinalizeFunc) NULL, (GClassInitFunc) NULL, 
+			(GClassFinalizeFunc) NULL, NULL, 0, 0, (GInstanceInitFunc) NULL 
+		};
+		
+		seahorse_view_type_id = g_type_register_static (G_TYPE_INTERFACE, "SeahorseView", &type_info, 0);
 		g_type_interface_add_prerequisite (seahorse_view_type_id, G_TYPE_OBJECT);
 	}
+	
 	return seahorse_view_type_id;
 }
 

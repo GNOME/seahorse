@@ -24,41 +24,35 @@
 
 #include <glib.h>
 #include <glib-object.h>
-#include <seahorse-commands.h>
-#include <seahorse-object.h>
+
+#include "seahorse-commands.h"
+#include "seahorse-object.h"
 #include <seahorse-operation.h>
-#include <stdlib.h>
-#include <string.h>
-#include <gtk/gtk.h>
-
-G_BEGIN_DECLS
 
 
-#define SEAHORSE_PGP_TYPE_COMMANDS (seahorse_pgp_commands_get_type ())
-#define SEAHORSE_PGP_COMMANDS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_PGP_TYPE_COMMANDS, SeahorsePGPCommands))
-#define SEAHORSE_PGP_COMMANDS_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_PGP_TYPE_COMMANDS, SeahorsePGPCommandsClass))
-#define SEAHORSE_PGP_IS_COMMANDS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_PGP_TYPE_COMMANDS))
-#define SEAHORSE_PGP_IS_COMMANDS_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_PGP_TYPE_COMMANDS))
-#define SEAHORSE_PGP_COMMANDS_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_PGP_TYPE_COMMANDS, SeahorsePGPCommandsClass))
+#define SEAHORSE_TYPE_PGP_COMMANDS                 (seahorse_pgp_commands_get_type ())
+#define SEAHORSE_PGP_COMMANDS(obj)                 (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_PGP_COMMANDS, SeahorsePgpCommands))
+#define SEAHORSE_PGP_COMMANDS_CLASS(klass)         (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_PGP_COMMANDS, SeahorsePgpCommandsClass))
+#define SEAHORSE_IS_PGP_COMMANDS(obj)              (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_PGP_COMMANDS))
+#define SEAHORSE_IS_PGP_COMMANDS_CLASS(klass)      (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_PGP_COMMANDS))
+#define SEAHORSE_PGP_COMMANDS_GET_CLASS(obj)       (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_PGP_COMMANDS, SeahorsePgpCommandsClass))
 
-typedef struct _SeahorsePGPCommands SeahorsePGPCommands;
-typedef struct _SeahorsePGPCommandsClass SeahorsePGPCommandsClass;
-typedef struct _SeahorsePGPCommandsPrivate SeahorsePGPCommandsPrivate;
+typedef struct _SeahorsePgpCommands SeahorsePgpCommands;
+typedef struct _SeahorsePgpCommandsClass SeahorsePgpCommandsClass;
+typedef struct _SeahorsePgpCommandsPrivate SeahorsePgpCommandsPrivate;
 
-struct _SeahorsePGPCommands {
+struct _SeahorsePgpCommands {
 	SeahorseCommands parent_instance;
-	SeahorsePGPCommandsPrivate * priv;
+	SeahorsePgpCommandsPrivate *pv;
 };
 
-struct _SeahorsePGPCommandsClass {
+struct _SeahorsePgpCommandsClass {
 	SeahorseCommandsClass parent_class;
 };
 
+GType                         seahorse_pgp_commands_get_type   (void);
 
-SeahorsePGPCommands* seahorse_pgp_commands_new (void);
-GType seahorse_pgp_commands_get_type (void);
+SeahorsePgpCommands*          seahorse_pgp_commands_new        (void);
 
-
-G_END_DECLS
 
 #endif
