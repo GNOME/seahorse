@@ -86,18 +86,14 @@ namespace Seahorse.Pgp {
 			 */ 
 			GLib.List<Object> to_delete = new GLib.List<Object>();
 			foreach (var obj in objects) {
-				switch (obj.get_type()) {
-				case typeof (Pgp.Uid):
+				if (obj.get_type() == typeof (Pgp.Uid)) {
 					if (objects.find(obj.parent) == null) {
 						to_delete.prepend(obj);
 						++num_identities;
 					}
-					break;
-					
-				case typeof (Pgp.Key):
+				} else if (obj.get_type() == typeof (Pgp.Key)) {
 					to_delete.prepend(obj);
 					++num_keys;
-					break;
 				}
 			}
 

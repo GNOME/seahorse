@@ -87,8 +87,8 @@ static SeahorseOperation* seahorse_pgp_commands_real_delete_objects (SeahorseCom
 	char* message;
 	GList* to_delete;
 	guint length;
-	guint _tmp10;
-	SeahorseOperation* _tmp12;
+	guint _tmp9;
+	SeahorseOperation* _tmp11;
 	self = SEAHORSE_PGP_COMMANDS (base);
 	g_return_val_if_fail (objects != NULL, NULL);
 	num = g_list_length (objects);
@@ -109,64 +109,60 @@ static SeahorseOperation* seahorse_pgp_commands_real_delete_objects (SeahorseCom
 		GList* obj_it;
 		obj_collection = objects;
 		for (obj_it = obj_collection; obj_it != NULL; obj_it = obj_it->next) {
-			SeahorseObject* _tmp4;
+			SeahorseObject* _tmp3;
 			SeahorseObject* obj;
-			_tmp4 = NULL;
-			obj = (_tmp4 = ((SeahorseObject*) (obj_it->data)), (_tmp4 == NULL ? NULL : g_object_ref (_tmp4)));
+			_tmp3 = NULL;
+			obj = (_tmp3 = ((SeahorseObject*) (obj_it->data)), (_tmp3 == NULL ? NULL : g_object_ref (_tmp3)));
 			{
-				GType _tmp3;
-				_tmp3 = G_TYPE_FROM_INSTANCE (G_OBJECT (obj));
-				if (_tmp3 == SEAHORSE_PGP_TYPE_UID)
-				do {
+				if (G_TYPE_FROM_INSTANCE (G_OBJECT (obj)) == SEAHORSE_PGP_TYPE_UID) {
 					if (g_list_find (objects, seahorse_object_get_parent (obj)) == NULL) {
 						SeahorseObject* _tmp1;
 						_tmp1 = NULL;
 						to_delete = g_list_prepend (to_delete, (_tmp1 = obj, (_tmp1 == NULL ? NULL : g_object_ref (_tmp1))));
 						num_identities = num_identities + 1;
 					}
-					break;
-				} while (0); else if (_tmp3 == SEAHORSE_PGP_TYPE_KEY)
-				do {
-					SeahorseObject* _tmp2;
-					_tmp2 = NULL;
-					to_delete = g_list_prepend (to_delete, (_tmp2 = obj, (_tmp2 == NULL ? NULL : g_object_ref (_tmp2))));
-					num_keys = num_keys + 1;
-					break;
-				} while (0);
+				} else {
+					if (G_TYPE_FROM_INSTANCE (G_OBJECT (obj)) == SEAHORSE_PGP_TYPE_KEY) {
+						SeahorseObject* _tmp2;
+						_tmp2 = NULL;
+						to_delete = g_list_prepend (to_delete, (_tmp2 = obj, (_tmp2 == NULL ? NULL : g_object_ref (_tmp2))));
+						num_keys = num_keys + 1;
+					}
+				}
 				(obj == NULL ? NULL : (obj = (g_object_unref (obj), NULL)));
 			}
 		}
 	}
 	/* Figure out a good prompt message */
 	length = g_list_length (to_delete);
-	_tmp10 = length;
-	if (_tmp10 == 0)
+	_tmp9 = length;
+	if (_tmp9 == 0)
 	do {
-		SeahorseOperation* _tmp5;
+		SeahorseOperation* _tmp4;
+		_tmp4 = NULL;
+		return (_tmp4 = NULL, (message = (g_free (message), NULL)), (to_delete == NULL ? NULL : (to_delete = (_g_list_free_g_object_unref (to_delete), NULL))), _tmp4);
+	} while (0); else if (_tmp9 == 1)
+	do {
+		char* _tmp5;
 		_tmp5 = NULL;
-		return (_tmp5 = NULL, (message = (g_free (message), NULL)), (to_delete == NULL ? NULL : (to_delete = (_g_list_free_g_object_unref (to_delete), NULL))), _tmp5);
-	} while (0); else if (_tmp10 == 1)
-	do {
-		char* _tmp6;
-		_tmp6 = NULL;
-		message = (_tmp6 = g_strdup_printf (_ ("Are you sure you want to permanently delete %s?"), seahorse_object_get_label (((SeahorseObject*) (((SeahorseObject*) (to_delete->data)))))), (message = (g_free (message), NULL)), _tmp6);
+		message = (_tmp5 = g_strdup_printf (_ ("Are you sure you want to permanently delete %s?"), seahorse_object_get_label (((SeahorseObject*) (((SeahorseObject*) (to_delete->data)))))), (message = (g_free (message), NULL)), _tmp5);
 		break;
 	} while (0); else
 	do {
 		if (num_keys > 0 && num_identities > 0) {
-			char* _tmp7;
-			_tmp7 = NULL;
-			message = (_tmp7 = g_strdup_printf (_ ("Are you sure you want to permanently delete %d keys and identities?"), length), (message = (g_free (message), NULL)), _tmp7);
+			char* _tmp6;
+			_tmp6 = NULL;
+			message = (_tmp6 = g_strdup_printf (_ ("Are you sure you want to permanently delete %d keys and identities?"), length), (message = (g_free (message), NULL)), _tmp6);
 		} else {
 			if (num_keys > 0) {
-				char* _tmp8;
-				_tmp8 = NULL;
-				message = (_tmp8 = g_strdup_printf (_ ("Are you sure you want to permanently delete %d keys?"), length), (message = (g_free (message), NULL)), _tmp8);
+				char* _tmp7;
+				_tmp7 = NULL;
+				message = (_tmp7 = g_strdup_printf (_ ("Are you sure you want to permanently delete %d keys?"), length), (message = (g_free (message), NULL)), _tmp7);
 			} else {
 				if (num_identities > 0) {
-					char* _tmp9;
-					_tmp9 = NULL;
-					message = (_tmp9 = g_strdup_printf (_ ("Are you sure you want to permanently delete %d identities?"), length), (message = (g_free (message), NULL)), _tmp9);
+					char* _tmp8;
+					_tmp8 = NULL;
+					message = (_tmp8 = g_strdup_printf (_ ("Are you sure you want to permanently delete %d identities?"), length), (message = (g_free (message), NULL)), _tmp8);
 				} else {
 					g_assert_not_reached ();
 				}
@@ -175,12 +171,12 @@ static SeahorseOperation* seahorse_pgp_commands_real_delete_objects (SeahorseCom
 		break;
 	} while (0);
 	if (!seahorse_util_prompt_delete (message, GTK_WIDGET (seahorse_view_get_window (seahorse_commands_get_view (SEAHORSE_COMMANDS (self)))))) {
-		SeahorseOperation* _tmp11;
-		_tmp11 = NULL;
-		return (_tmp11 = NULL, (message = (g_free (message), NULL)), (to_delete == NULL ? NULL : (to_delete = (_g_list_free_g_object_unref (to_delete), NULL))), _tmp11);
+		SeahorseOperation* _tmp10;
+		_tmp10 = NULL;
+		return (_tmp10 = NULL, (message = (g_free (message), NULL)), (to_delete == NULL ? NULL : (to_delete = (_g_list_free_g_object_unref (to_delete), NULL))), _tmp10);
 	}
-	_tmp12 = NULL;
-	return (_tmp12 = seahorse_source_delete_objects (to_delete), (message = (g_free (message), NULL)), (to_delete == NULL ? NULL : (to_delete = (_g_list_free_g_object_unref (to_delete), NULL))), _tmp12);
+	_tmp11 = NULL;
+	return (_tmp11 = seahorse_source_delete_objects (to_delete), (message = (g_free (message), NULL)), (to_delete == NULL ? NULL : (to_delete = (_g_list_free_g_object_unref (to_delete), NULL))), _tmp11);
 }
 
 

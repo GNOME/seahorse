@@ -43,7 +43,7 @@ GQuark seahorse_pkcs11_id_from_attributes (GP11Attributes* attrs) {
 	char* _tmp4;
 	char* value;
 	GQuark _tmp5;
-	g_return_val_if_fail (GP11_IS_ATTRIBUTES (attrs), 0U);
+	g_return_val_if_fail (attrs != NULL, 0U);
 	/* These cases should have been covered by the programmer */
 	klass = 0UL;
 	if (!gp11_attributes_find_ulong (attrs, CKA_CLASS, &klass)) {
@@ -74,7 +74,7 @@ gboolean seahorse_pkcs11_id_to_attributes (GQuark id, GP11Attributes* attrs) {
 	gint ckid_length1;
 	guchar* ckid;
 	gboolean _tmp6;
-	g_return_val_if_fail (GP11_IS_ATTRIBUTES (attrs), FALSE);
+	g_return_val_if_fail (attrs != NULL, FALSE);
 	if (id == 0) {
 		return FALSE;
 	}

@@ -375,7 +375,7 @@ static void seahorse_pkcs11_source_receive_object (SeahorsePkcs11Source* self, G
 	SeahorsePkcs11Certificate* _tmp3;
 	g_return_if_fail (SEAHORSE_PKCS11_IS_SOURCE (self));
 	g_return_if_fail (GP11_IS_OBJECT (object));
-	g_return_if_fail (GP11_IS_ATTRIBUTES (attrs));
+	g_return_if_fail (attrs != NULL);
 	/* Build up an identifier for this object */
 	id = seahorse_pkcs11_id_from_attributes (attrs);
 	g_return_if_fail (id != 0);
@@ -935,7 +935,7 @@ static SeahorsePkcs11SourceLoader* seahorse_pkcs11_source_loader_new (SeahorsePk
 	GParameter * __params_it;
 	SeahorsePkcs11SourceLoader * self;
 	g_return_val_if_fail (SEAHORSE_PKCS11_IS_SOURCE (source), NULL);
-	g_return_val_if_fail (GP11_IS_ATTRIBUTES (unique_attrs), NULL);
+	g_return_val_if_fail (unique_attrs != NULL, NULL);
 	__params = g_new0 (GParameter, 2);
 	__params_it = __params;
 	__params_it->name = "source";
@@ -943,7 +943,7 @@ static SeahorsePkcs11SourceLoader* seahorse_pkcs11_source_loader_new (SeahorsePk
 	g_value_set_object (&__params_it->value, source);
 	__params_it++;
 	__params_it->name = "unique-attrs";
-	g_value_init (&__params_it->value, GP11_TYPE_ATTRIBUTES);
+	g_value_init (&__params_it->value, G_TYPE_POINTER);
 	g_value_set_pointer (&__params_it->value, unique_attrs);
 	__params_it++;
 	self = g_object_newv (SEAHORSE_PKCS11_SOURCE_TYPE_LOADER, __params_it - __params, __params);
@@ -1091,7 +1091,7 @@ static SeahorsePkcs11SourceImporter* seahorse_pkcs11_source_importer_new (Seahor
 	GParameter * __params_it;
 	SeahorsePkcs11SourceImporter * self;
 	g_return_val_if_fail (SEAHORSE_PKCS11_IS_SOURCE (source), NULL);
-	g_return_val_if_fail (GP11_IS_ATTRIBUTES (import), NULL);
+	g_return_val_if_fail (import != NULL, NULL);
 	__params = g_new0 (GParameter, 1);
 	__params_it = __params;
 	__params_it->name = "source";
