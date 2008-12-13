@@ -15,18 +15,6 @@ INCLUDES = -I$(top_builddir) \
 	-DEXECDIR=\""$(seahorselibexecbindir)"\" \
 	-DLIBCRYPTUI_API_SUBJECT_TO_CHANGE
 
-VALA_SRCS = \
-	seahorse-servers.vala
-	
-VALA_PKGS = \
-	--vapidir . \
-	--pkg libseahorse-c
-
-VALA_CFILES = $(VALA_SRCS:.vala=.c)
-VALA_HFILES = $(VALA_SRCS:.vala=.h)
-
-SUFFIXES = .vala .c .h
-
 MARSHAL_SRCS = \
 	seahorse-marshal.c seahorse-marshal.h
 
@@ -75,7 +63,6 @@ libseahorse_la_SOURCES = \
 	seahorse-view.c seahorse-view.h \
 	seahorse-widget.c seahorse-widget.h \
 	$(MARSHAL_SRCS) \
-	$(VALA_CFILES) $(VALA_HFILES) \
 	$(KEYSERVER_SRCS)
 	
 libseahorse_la_LIBADD = \
@@ -97,14 +84,4 @@ glade_DATA = \
 	seahorse-notify.glade
 
 EXTRA_DIST = $(glade_DATA) \
-	$(VALA_SRCS) \
-	libseahorse-c.vapi \
-	libseahorse.vapi \
-	$(VALA_CFILES) $(VALA_HFILES) \
 	seahorse-marshal.list
-
-vala-clean:
-	rm -f $(VALA_CFILES) $(VALA_HFILES)
-
-vala-build: $(VALA_SRCS) 
-	$(VALAC) -C -X "$(INCLUDES)" --library libseahorse $(VALA_PKGS) $^ --basedir ./
