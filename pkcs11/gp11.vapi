@@ -31,6 +31,7 @@ namespace GP11 {
 		public void get_data(out uchar* data, out ulong length);
 	}
 
+    [Compact]
 	[CCode (ref_function = "gp11_attributes_ref", unref_function = "gp11_attributes_unref")]
 	public class Attributes {
 		public Attributes ();
