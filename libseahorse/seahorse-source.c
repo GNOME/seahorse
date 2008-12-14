@@ -29,46 +29,59 @@
 
 #include "common/seahorse-registry.h"
 
-G_DEFINE_TYPE (SeahorseSource, seahorse_source, G_TYPE_OBJECT);
-
-/* GObject handlers */
-static void seahorse_source_dispose    (GObject *gobject);
-static void seahorse_source_finalize   (GObject *gobject);
-
-static GObjectClass *parent_class = NULL;
+/* ---------------------------------------------------------------------------------
+ * INTERFACE
+ */
 
 static void
-seahorse_source_class_init (SeahorseSourceClass *klass)
+seahorse_source_base_init (gpointer gobject_class)
 {
-    GObjectClass *gobject_class;
-   
-    parent_class = g_type_class_peek_parent (klass);
-    gobject_class = G_OBJECT_CLASS (klass);
-    
-    gobject_class->dispose = seahorse_source_dispose;
-    gobject_class->finalize = seahorse_source_finalize;
+	static gboolean initialized = FALSE;
+	if (!initialized) {
+		
+		/* Add properties and signals to the interface */
+		g_object_interface_install_property (gobject_class,
+		        g_param_spec_uint ("key-type", "Key Type", "Key type that originates from this key source.", 
+		                           0, G_MAXUINT, SEAHORSE_TAG_INVALID, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+
+		g_object_interface_install_property (gobject_class, 
+		        g_param_spec_string ("key-desc", "Key Desc", "Description for keys that originate here.",
+		                             NULL, G_PARAM_READABLE));
+
+		g_object_interface_install_property (gobject_class, 
+		        g_param_spec_uint ("location", "Key Location", "Where the key is stored. See SeahorseLocation", 
+		                           0, G_MAXUINT, SEAHORSE_LOCATION_MISSING, G_PARAM_READABLE));    
+		
+		initialized = TRUE;
+	}
 }
 
-/* Initialize the object */
-static void
-seahorse_source_init (SeahorseSource *sksrc)
+GType
+seahorse_source_get_type (void)
 {
-
+	static GType type = 0;
+	if (!type) {
+		static const GTypeInfo info = {
+			sizeof (SeahorseSourceIface),
+			seahorse_source_base_init,               /* base init */
+			NULL,             /* base finalize */
+			NULL,             /* class_init */
+			NULL,             /* class finalize */
+			NULL,             /* class data */
+			0,
+			0,                /* n_preallocs */
+			NULL,             /* instance init */
+		};
+		type = g_type_register_static (G_TYPE_INTERFACE, "SeahorseSourceIface", &info, 0);
+		g_type_interface_add_prerequisite (type, G_TYPE_OBJECT);
+	}
+	
+	return type;
 }
 
-/* dispose of all our internal references */
-static void
-seahorse_source_dispose (GObject *gobject)
-{
-    G_OBJECT_CLASS (parent_class)->dispose (gobject);
-}
-
-/* free private vars */
-static void
-seahorse_source_finalize (GObject *gobject)
-{
-    G_OBJECT_CLASS (parent_class)->finalize (gobject);
-}
+/* ---------------------------------------------------------------------------------
+ * PUBLIC
+ */
 
 /**
  * seahorse_source_load
@@ -81,10 +94,10 @@ seahorse_source_finalize (GObject *gobject)
 SeahorseOperation*
 seahorse_source_load (SeahorseSource *sksrc)
 {
-    SeahorseSourceClass *klass;
+    SeahorseSourceIface *klass;
     
     g_return_val_if_fail (SEAHORSE_IS_SOURCE (sksrc), NULL);
-    klass = SEAHORSE_SOURCE_GET_CLASS (sksrc);
+    klass = SEAHORSE_SOURCE_GET_INTERFACE (sksrc);
     g_return_val_if_fail (klass->load != NULL, NULL);
     
     return (*klass->load) (sksrc);
@@ -131,10 +144,10 @@ seahorse_source_load_async (SeahorseSource *sksrc)
 SeahorseOperation*
 seahorse_source_search (SeahorseSource *sksrc, const gchar *match)
 {
-    SeahorseSourceClass *klass;
+    SeahorseSourceIface *klass;
     
     g_return_val_if_fail (SEAHORSE_IS_SOURCE (sksrc), NULL);
-    klass = SEAHORSE_SOURCE_GET_CLASS (sksrc);
+    klass = SEAHORSE_SOURCE_GET_INTERFACE (sksrc);
     g_return_val_if_fail (klass->search != NULL, NULL);
     
     return (*klass->search) (sksrc, match);
@@ -143,12 +156,12 @@ seahorse_source_search (SeahorseSource *sksrc, const gchar *match)
 SeahorseOperation* 
 seahorse_source_import (SeahorseSource *sksrc, GInputStream *input)
 {
-	SeahorseSourceClass *klass;
+	SeahorseSourceIface *klass;
     
 	g_return_val_if_fail (G_IS_INPUT_STREAM (input), NULL);
     
 	g_return_val_if_fail (SEAHORSE_IS_SOURCE (sksrc), NULL);
-	klass = SEAHORSE_SOURCE_GET_CLASS (sksrc);   
+	klass = SEAHORSE_SOURCE_GET_INTERFACE (sksrc);   
 	g_return_val_if_fail (klass->import != NULL, NULL);
     
 	return (*klass->import) (sksrc, input);  
@@ -268,7 +281,7 @@ seahorse_source_delete_objects (GList *objects)
 SeahorseOperation* 
 seahorse_source_export (SeahorseSource *sksrc, GList *objects, GOutputStream *output)
 {
-	SeahorseSourceClass *klass;
+	SeahorseSourceIface *klass;
 	SeahorseOperation *op;
 	GSList *ids = NULL;
 	GList *l;
@@ -276,7 +289,7 @@ seahorse_source_export (SeahorseSource *sksrc, GList *objects, GOutputStream *ou
 	g_return_val_if_fail (SEAHORSE_IS_SOURCE (sksrc), NULL);
 	g_return_val_if_fail (G_IS_OUTPUT_STREAM (output), NULL);
 	
-	klass = SEAHORSE_SOURCE_GET_CLASS (sksrc);   
+	klass = SEAHORSE_SOURCE_GET_INTERFACE (sksrc);   
 	if (klass->export)
 		return (*klass->export) (sksrc, objects, output);
 
@@ -295,7 +308,7 @@ seahorse_source_export (SeahorseSource *sksrc, GList *objects, GOutputStream *ou
 SeahorseOperation* 
 seahorse_source_export_raw (SeahorseSource *sksrc, GSList *ids, GOutputStream *output)
 {
-	SeahorseSourceClass *klass;
+	SeahorseSourceIface *klass;
 	SeahorseOperation *op;
 	SeahorseObject *sobj;
 	GList *objects = NULL;
@@ -304,7 +317,7 @@ seahorse_source_export_raw (SeahorseSource *sksrc, GSList *ids, GOutputStream *o
 	g_return_val_if_fail (SEAHORSE_IS_SOURCE (sksrc), NULL);
 	g_return_val_if_fail (output == NULL || G_IS_OUTPUT_STREAM (output), NULL);
 
-	klass = SEAHORSE_SOURCE_GET_CLASS (sksrc);   
+	klass = SEAHORSE_SOURCE_GET_INTERFACE (sksrc);   
     
 	/* Either export or export_raw must be implemented */
 	if (klass->export_raw)
@@ -340,26 +353,4 @@ seahorse_source_get_location (SeahorseSource *sksrc)
     SeahorseLocation loc;
     g_object_get (sksrc, "location", &loc, NULL);
     return loc;
-}
-
-/* -----------------------------------------------------------------------------
- * CANONICAL IDS 
- */
-
-GQuark
-seahorse_source_canonize_id (GQuark ktype, const gchar *id)
-{
-	SeahorseSourceClass *klass;
-	GType type;
-
-	g_return_val_if_fail (id != NULL, 0);
-    
-	type = seahorse_registry_object_type (NULL, "source", g_quark_to_string (ktype), "local", NULL);
-	g_return_val_if_fail (type, 0);
-	
-	klass = SEAHORSE_SOURCE_CLASS (g_type_class_peek (type));
-	g_return_val_if_fail (klass, 0);
-	
-	g_return_val_if_fail (klass->canonize_id, 0);
-	return (klass->canonize_id) (id);
 }

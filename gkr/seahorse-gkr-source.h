@@ -49,14 +49,12 @@ typedef struct _SeahorseGkrSourceClass SeahorseGkrSourceClass;
 typedef struct _SeahorseGkrSourcePrivate SeahorseGkrSourcePrivate;
 
 struct _SeahorseGkrSource {
-    SeahorseSource parent;
-    
-    /*< private >*/
-    SeahorseGkrSourcePrivate *pv;
+	GObject parent;
+	SeahorseGkrSourcePrivate *pv;
 };
 
 struct _SeahorseGkrSourceClass {
-    SeahorseSourceClass parent_class;
+	GObjectClass parent_class;
 };
 
 GType               seahorse_gkr_source_get_type          (void);

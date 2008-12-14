@@ -50,14 +50,12 @@ typedef struct _SeahorseUnknownSourceClass SeahorseUnknownSourceClass;
 typedef struct _SeahorseUnknownSourcePrivate SeahorseUnknownSourcePrivate;
 
 struct _SeahorseUnknownSource {
-    SeahorseSource parent;
-    
-    /* <public> */
-    GQuark ktype;
+	GObject parent;
+	GQuark ktype;
 };
 
 struct _SeahorseUnknownSourceClass {
-    SeahorseSourceClass parent_class;
+	GObjectClass parent_class;
 };
 
 GType                    seahorse_unknown_source_get_type      (void);

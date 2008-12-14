@@ -54,14 +54,12 @@ typedef struct _SeahorseSSHSourceClass SeahorseSSHSourceClass;
 typedef struct _SeahorseSSHSourcePrivate SeahorseSSHSourcePrivate;
 
 struct _SeahorseSSHSource {
-    SeahorseSource parent;
-    
-    /*< private >*/
-    SeahorseSSHSourcePrivate *priv;
+	GObject parent;
+	SeahorseSSHSourcePrivate *priv;
 };
 
 struct _SeahorseSSHSourceClass {
-    SeahorseSourceClass parent_class;
+	GObjectClass parent_class;
 };
 
 GType                seahorse_ssh_source_get_type           (void);

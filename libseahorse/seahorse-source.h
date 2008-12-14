@@ -48,98 +48,86 @@
 #include <gio/gio.h>
 #include <glib-object.h>
 
-#define SEAHORSE_TYPE_SOURCE            (seahorse_source_get_type ())
-#define SEAHORSE_SOURCE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_SOURCE, SeahorseSource))
-#define SEAHORSE_SOURCE_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_SOURCE, SeahorseSourceClass))
-#define SEAHORSE_IS_SOURCE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_SOURCE))
-#define SEAHORSE_IS_SOURCE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_SOURCE))
-#define SEAHORSE_SOURCE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_SOURCE, SeahorseSourceClass))
+#define SEAHORSE_TYPE_SOURCE                (seahorse_source_get_type ())
+#define SEAHORSE_SOURCE(obj)                (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_SOURCE, SeahorseSource))
+#define SEAHORSE_IS_SOURCE(obj)             (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_SOURCE))
+#define SEAHORSE_SOURCE_GET_INTERFACE(obj)  (G_TYPE_INSTANCE_GET_INTERFACE ((obj), SEAHORSE_TYPE_SOURCE, SeahorseSourceIface))
 
 struct _SeahorseObject;
 
-typedef struct _SeahorseSource {
-    GObject             parent;   
-} SeahorseSource;
+typedef struct _SeahorseSource SeahorseSource;
+typedef struct _SeahorseSourceIface SeahorseSourceIface;
 
-typedef struct _SeahorseSourceClass {
-    GtkObjectClass parent_class;
+struct _SeahorseSourceIface {
+	GTypeInterface parent;
     
-    /* class props ----------------------------------------------------- */
-    const GQuark obj_tag;
-    const gchar *display_name;
-    const gchar **mime_types;
+	/* virtual methods ------------------------------------------------- */
 
-    /* class methods --------------------------------------------------- */
-    
-    GQuark (*canonize_id) (const gchar *id);
-    
-    /* virtual methods ------------------------------------------------- */
+	/**
+	 * load
+	 * @sksrc: The #SeahorseSource.
+	 * 
+	 * Loads the requested objects, and add the objects to SeahorseContext. 
+	 * 
+	 * Returns: The load operation.
+	 */
+	SeahorseOperation* (*load) (SeahorseSource *sksrc);
 
-    /**
-     * load
-     * @sksrc: The #SeahorseSource.
-     * 
-     * Loads the requested objects, and add the objects to SeahorseContext. 
-     * 
-     * Returns: The load operation.
-     */
-    SeahorseOperation* (*load) (SeahorseSource *sksrc);
-
-    /**
-     * search
-     * @sksrc: The #SeahorseSource 
-     * @match: Match text
-     *
-     * Searches for objects in the source.
-     *
-     * Returns: The search operation.
-     */
-    SeahorseOperation* (*search) (SeahorseSource *sksrc, const gchar *match);
+	/**
+	 * search
+	 * @sksrc: The #SeahorseSource 
+	 * @match: Match text
+	 *
+	 * Searches for objects in the source.
+	 *
+	 * Returns: The search operation.
+	 */
+	SeahorseOperation* (*search) (SeahorseSource *sksrc, const gchar *match);
 
     
-    /**
-     * import
-     * @sksrc: The #SeahorseSource to import into.
-     * @input: The data to import.
-     *
-     * Import objects into the source. When operation is 'done' a GList of 
-     * updated objects may be found as the operation result. 
-     * 
-     * Returns: The import operation
-     */
-    SeahorseOperation* (*import) (SeahorseSource *sksrc, GInputStream *input);
+	/**
+	 * import
+	 * @sksrc: The #SeahorseSource to import into.
+	 * @input: The data to import.
+	 *
+	 * Import objects into the source. When operation is 'done' a GList of 
+	 * updated objects may be found as the operation result. 
+	 * 
+	 * Returns: The import operation
+	 */
+	SeahorseOperation* (*import) (SeahorseSource *sksrc, GInputStream *input);
 
-    /**
-     * export
-     * @sksrc: The #SeahorseSource to export from.
-     * @objects: A list of objects to export.
-     * @complete: Whether to export the secret objects too.
-     * @data: Output stream to export to.
-     *
-     * Import objects into the object source. When operation is 'done' the result
-     * of the operation will be a GOutputStream
-     * 
-     * Returns: The export operation
-     */    
-    SeahorseOperation* (*export) (SeahorseSource *sksrc, GList *objects, GOutputStream *output);
+	/**
+	 * export
+	 * @sksrc: The #SeahorseSource to export from.
+	 * @objects: A list of objects to export.
+	 * @complete: Whether to export the secret objects too.
+	 * @data: Output stream to export to.
+	 *
+	 * Import objects into the object source. When operation is 'done' the result
+	 * of the operation will be a GOutputStream
+	 * 
+	 * Returns: The export operation
+	 */    
+	SeahorseOperation* (*export) (SeahorseSource *sksrc, GList *objects, GOutputStream *output);
 
-    /**
-     * export_raw
-     * @sksrc: The #SeahorseSource to export from.
-     * @objects: A list of ids to export.
-     * @data: output stream to export to.
-     *
-     * Import objects into the source. When operation is 'done' the result
-     * of the operation will be a GOutputStream
-     * 
-     * Returns: The export operation
-     */    
-    SeahorseOperation* (*export_raw) (SeahorseSource *sksrc, GSList *ids, 
-                                      GOutputStream *output);
+	/**
+	 * export_raw
+	 * @sksrc: The #SeahorseSource to export from.
+	 * @objects: A list of ids to export.
+	 * @data: output stream to export to.
+	 *
+	 * Import objects into the source. When operation is 'done' the result
+	 * of the operation will be a GOutputStream
+	 * 
+	 * Returns: The export operation
+	 */    
+	SeahorseOperation* (*export_raw) (SeahorseSource *sksrc, GSList *ids, 
+	                                  GOutputStream *output);
     
-} SeahorseSourceClass;
+};
 
-GType       seahorse_source_get_type      (void);
+GType               seahorse_source_get_type             (void) G_GNUC_CONST;
 
 /* Method helper functions ------------------------------------------- */
 
@@ -178,12 +166,5 @@ SeahorseOperation*  seahorse_source_export_raw            (SeahorseSource *sksrc
 GQuark              seahorse_source_get_ktype             (SeahorseSource *sksrc);
 
 SeahorseLocation    seahorse_source_get_location          (SeahorseSource *sksrc);
-
-GQuark              seahorse_source_canonize_id           (GQuark ktype, 
-                                                           const gchar *id);
-
-GQuark              seahorse_source_mime_to_ktype         (const gchar *mimetype);
-
-const gchar*        seahorse_source_type_get_description  (GType type);
 
 #endif /* __SEAHORSE_SOURCE_H__ */

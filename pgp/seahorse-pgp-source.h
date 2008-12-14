@@ -56,17 +56,13 @@ typedef struct _SeahorsePGPSourceClass SeahorsePGPSourceClass;
 typedef struct _SeahorsePGPSourcePrivate SeahorsePGPSourcePrivate;
 
 struct _SeahorsePGPSource {
-    SeahorseSource parent;
-    
-    /*< public >*/
-    gpgme_ctx_t gctx;
-    
-    /*< private >*/
-    SeahorsePGPSourcePrivate *pv;
+	GObject parent;
+	gpgme_ctx_t gctx;
+	SeahorsePGPSourcePrivate *pv;
 };
 
 struct _SeahorsePGPSourceClass {
-    SeahorseSourceClass parent_class;
+	GObjectClass parent_class;
 };
 
 GType                seahorse_pgp_source_get_type       (void);

@@ -73,7 +73,10 @@ struct _SeahorseGkrSourcePrivate {
 	SeahorseObject *keyring_object;		/* Object which represents the whole keyring */
 };
 
-G_DEFINE_TYPE (SeahorseGkrSource, seahorse_gkr_source, SEAHORSE_TYPE_SOURCE);
+static void seahorse_source_iface (SeahorseSourceIface *iface);
+
+G_DEFINE_TYPE_EXTENDED (SeahorseGkrSource, seahorse_gkr_source, G_TYPE_OBJECT, 0,
+                        G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_SOURCE, seahorse_source_iface));
 
 /* -----------------------------------------------------------------------------
  * LIST OPERATION 
@@ -421,7 +424,6 @@ static void
 seahorse_gkr_source_class_init (SeahorseGkrSourceClass *klass)
 {
     GObjectClass *gobject_class;
-    SeahorseSourceClass *key_class;
     
     seahorse_gkr_source_parent_class = g_type_class_peek_parent (klass);
     
@@ -432,32 +434,26 @@ seahorse_gkr_source_class_init (SeahorseGkrSourceClass *klass)
     gobject_class->set_property = seahorse_gkr_source_set_property;
     gobject_class->get_property = seahorse_gkr_source_get_property;
     
-    key_class = SEAHORSE_SOURCE_CLASS (klass);    
-    key_class->load = seahorse_gkr_source_load;
-    key_class->import = seahorse_gkr_source_import;
-
     g_object_class_install_property (gobject_class, PROP_KEYRING_NAME,
         g_param_spec_string ("keyring-name", "Keyring Name", "GNOME Keyring name",
                              NULL, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
-    
-    g_object_class_install_property (gobject_class, PROP_KEY_TYPE,
-        g_param_spec_uint ("key-type", "Key Type", "Key type that originates from this key source.", 
-                           0, G_MAXUINT, SEAHORSE_TAG_INVALID, G_PARAM_READABLE));
-    
+       
     g_object_class_install_property (gobject_class, PROP_FLAGS,
         g_param_spec_uint ("flags", "Flags", "Object Source flags.", 
                            0, G_MAXUINT, 0, G_PARAM_READABLE));
 
-    g_object_class_install_property (gobject_class, PROP_KEY_DESC,
-        g_param_spec_string ("key-desc", "Key Desc", "Description for keys that originate here.",
-                             NULL, G_PARAM_READABLE));
-
-    g_object_class_install_property (gobject_class, PROP_LOCATION,
-        g_param_spec_uint ("location", "Key Location", "Where the key is stored. See SeahorseLocation", 
-                           0, G_MAXUINT, SEAHORSE_LOCATION_INVALID, G_PARAM_READABLE));    
-    
+	g_object_class_override_property (gobject_class, PROP_KEY_TYPE, "key-type");
+	g_object_class_override_property (gobject_class, PROP_KEY_DESC, "key-desc");
+	g_object_class_override_property (gobject_class, PROP_LOCATION, "location");
     
 	seahorse_registry_register_type (NULL, SEAHORSE_TYPE_GKR_SOURCE, "source", "local", SEAHORSE_GKR_STR, NULL);
+}
+
+static void 
+seahorse_source_iface (SeahorseSourceIface *iface)
+{
+	iface->load = seahorse_gkr_source_load;
+	iface->import = seahorse_gkr_source_import;
 }
 
 /* -------------------------------------------------------------------------- 

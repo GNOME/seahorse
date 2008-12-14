@@ -710,10 +710,14 @@ get_callback (SoupSession *session, SoupMessage *msg, SeahorseHKPOperation *hop)
 enum {
     PROP_0,
     PROP_KEY_TYPE,
-    PROP_KEY_DESC
+    PROP_KEY_DESC,
+    PROP_LOCATION
 };
 
-G_DEFINE_TYPE (SeahorseHKPSource, seahorse_hkp_source, SEAHORSE_TYPE_SERVER_SOURCE);
+static void seahorse_source_iface (SeahorseSourceIface *iface);
+
+G_DEFINE_TYPE_EXTENDED (SeahorseHKPSource, seahorse_hkp_source, SEAHORSE_TYPE_SERVER_SOURCE, 0,
+                        G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_SOURCE, seahorse_source_iface));
 
 static void 
 seahorse_hkp_source_init (SeahorseHKPSource *hsrc)
@@ -732,8 +736,19 @@ seahorse_hkp_source_get_property (GObject *object, guint prop_id, GValue *value,
     case PROP_KEY_DESC:
         g_value_set_string (value, _("PGP Key"));
         break;
+    case PROP_LOCATION:
+        g_value_set_uint (value, SEAHORSE_LOCATION_REMOTE);
+        break;
     };        
 }
+
+static void 
+seahorse_hkp_source_set_property (GObject *object, guint prop_id, const GValue *value,
+                                   GParamSpec *pspec)
+{
+
+}
+
 
 static SeahorseOperation*
 seahorse_hkp_source_search (SeahorseSource *src, const gchar *match)
@@ -927,31 +942,30 @@ static void
 seahorse_hkp_source_class_init (SeahorseHKPSourceClass *klass)
 {
 	GObjectClass *gobject_class;
-	SeahorseSourceClass *key_class;
    
 	gobject_class = G_OBJECT_CLASS (klass);
 	gobject_class->get_property = seahorse_hkp_source_get_property;
-
-	key_class = SEAHORSE_SOURCE_CLASS (klass);
-	key_class->canonize_id = seahorse_pgp_key_get_cannonical_id;
-	key_class->search = seahorse_hkp_source_search;
-	key_class->import = seahorse_hkp_source_import;
-	key_class->export_raw = seahorse_hkp_source_export_raw;
-
+	gobject_class->set_property = seahorse_hkp_source_set_property;
+	
 	seahorse_hkp_source_parent_class = g_type_class_peek_parent (klass);
 
-	g_object_class_install_property (gobject_class, PROP_KEY_TYPE,
-	        g_param_spec_uint ("key-type", "Key Type", "Key type that originates from this key source.", 
-	                           0, G_MAXUINT, SEAHORSE_TAG_INVALID, G_PARAM_READABLE));
+	g_object_class_override_property (gobject_class, PROP_KEY_TYPE, "key-type");
+	g_object_class_override_property (gobject_class, PROP_KEY_DESC, "key-desc");
+	g_object_class_override_property (gobject_class, PROP_LOCATION, "location");
 
-	g_object_class_install_property (gobject_class, PROP_KEY_DESC,
-	        g_param_spec_string ("key-desc", "Key Desc", "Description for keys that originate here.",
-	                             NULL, G_PARAM_READABLE));
-	    
 	seahorse_registry_register_type (NULL, SEAHORSE_TYPE_HKP_SOURCE, "source", "remote", SEAHORSE_PGP_STR, NULL);
 	seahorse_servers_register_type ("hkp", _("HTTP Key Server"), seahorse_hkp_is_valid_uri);
+	
+	seahorse_registry_register_function (NULL, seahorse_pgp_key_get_cannonical_id, "canonize", SEAHORSE_PGP_STR, NULL);
 }
 
+static void 
+seahorse_source_iface (SeahorseSourceIface *iface)
+{
+	iface->search = seahorse_hkp_source_search;
+	iface->import = seahorse_hkp_source_import;
+	iface->export_raw = seahorse_hkp_source_export_raw;
+}
 
 /**
  * seahorse_hkp_source_new

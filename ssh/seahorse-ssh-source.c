@@ -86,7 +86,10 @@ typedef struct _ImportContext {
     SeahorseMultiOperation *mop;
 } ImportContext;
 
-G_DEFINE_TYPE (SeahorseSSHSource, seahorse_ssh_source, SEAHORSE_TYPE_SOURCE);
+static void seahorse_source_iface (SeahorseSourceIface *iface);
+
+G_DEFINE_TYPE_EXTENDED (SeahorseSSHSource, seahorse_ssh_source, G_TYPE_OBJECT, 0,
+                        G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_SOURCE, seahorse_source_iface));
 
 #define AUTHORIZED_KEYS_FILE    "authorized_keys"
 #define OTHER_KEYS_FILE         "other_keys.seahorse"
@@ -692,7 +695,6 @@ static void
 seahorse_ssh_source_class_init (SeahorseSSHSourceClass *klass)
 {
     GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-    SeahorseSourceClass *parent_class = SEAHORSE_SOURCE_CLASS (klass);
    
     seahorse_ssh_source_parent_class = g_type_class_peek_parent (klass);
     
@@ -701,28 +703,25 @@ seahorse_ssh_source_class_init (SeahorseSSHSourceClass *klass)
     gobject_class->set_property = seahorse_ssh_source_set_property;
     gobject_class->get_property = seahorse_ssh_source_get_property;
     
-    parent_class->canonize_id = seahorse_ssh_key_get_cannonical_id;
-    parent_class->load = seahorse_ssh_source_load;
-    parent_class->import = seahorse_ssh_source_import;
-    parent_class->export = seahorse_ssh_source_export;
- 
-    g_object_class_install_property (gobject_class, PROP_KEY_TYPE,
-        g_param_spec_uint ("key-type", "Key Type", "Key type that originates from this key source.", 
-                           0, G_MAXUINT, SEAHORSE_TAG_INVALID, G_PARAM_READABLE));
+	g_object_class_override_property (gobject_class, PROP_KEY_TYPE, "key-type");
+	g_object_class_override_property (gobject_class, PROP_KEY_DESC, "key-desc");
+	g_object_class_override_property (gobject_class, PROP_LOCATION, "location");
 
-    g_object_class_install_property (gobject_class, PROP_KEY_DESC,
-        g_param_spec_string ("key-desc", "Key Desc", "Description for keys that originate here.",
-                             NULL, G_PARAM_READABLE));
-
-    g_object_class_install_property (gobject_class, PROP_LOCATION,
-        g_param_spec_uint ("location", "Key Location", "Where the key is stored. See SeahorseLocation", 
-                           0, G_MAXUINT, SEAHORSE_LOCATION_INVALID, G_PARAM_READABLE));    
-                           
     g_object_class_install_property (gobject_class, PROP_BASE_DIRECTORY,
         g_param_spec_string ("base-directory", "Key directory", "Directory where the keys are stored",
                              NULL, G_PARAM_READABLE));
     
 	seahorse_registry_register_type (NULL, SEAHORSE_TYPE_SSH_SOURCE, "source", "local", SEAHORSE_SSH_STR, NULL);
+	
+	seahorse_registry_register_function (NULL, seahorse_ssh_key_get_cannonical_id, "canonize", SEAHORSE_SSH_STR, NULL);
+}
+
+static void 
+seahorse_source_iface (SeahorseSourceIface *iface)
+{
+	iface->load = seahorse_ssh_source_load;
+	iface->import = seahorse_ssh_source_import;
+	iface->export = seahorse_ssh_source_export;
 }
 
 /* -----------------------------------------------------------------------------

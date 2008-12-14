@@ -39,12 +39,12 @@ typedef struct _SeahorsePkcs11SourceClass SeahorsePkcs11SourceClass;
 typedef struct _SeahorsePkcs11SourcePrivate SeahorsePkcs11SourcePrivate;
 
 struct _SeahorsePkcs11Source {
-	SeahorseSource parent;
+	GObject parent;
 	SeahorsePkcs11SourcePrivate *pv;
 };
 
 struct _SeahorsePkcs11SourceClass {
-	SeahorseSourceClass parent_class;
+	GObjectClass parent_class;
 };
 
 GType                  seahorse_pkcs11_source_get_type          (void);

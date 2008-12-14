@@ -196,4 +196,9 @@ gchar*              seahorse_context_object_to_dbus     (SeahorseContext    *sct
 gchar*              seahorse_context_id_to_dbus         (SeahorseContext    *sctx,
                                                          GQuark             id);
 
+
+typedef GQuark (*SeahorseCanonizeFunc) (const gchar *id);
+
+GQuark              seahorse_context_canonize_id        (GQuark ktype, const gchar *id);
+
 #endif /* __SEAHORSE_CONTEXT_H__ */

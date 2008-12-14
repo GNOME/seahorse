@@ -57,6 +57,10 @@ void                 seahorse_registry_register_object   (SeahorseRegistry *regi
                                                           GObject *object, const gchar *category, 
                                                           ...) G_GNUC_NULL_TERMINATED;
 
+void                 seahorse_registry_register_function (SeahorseRegistry *registry, 
+                                                          gpointer func, const gchar *category, 
+                                                          ...) G_GNUC_NULL_TERMINATED;
+
 GType                seahorse_registry_object_type       (SeahorseRegistry *registry, 
                                                           const gchar *category,
                                                           ...) G_GNUC_NULL_TERMINATED;
@@ -71,6 +75,10 @@ GObject*             seahorse_registry_object_instance   (SeahorseRegistry *regi
 
 GList*               seahorse_registry_object_instances  (SeahorseRegistry *registry, 
                                                           const gchar *category,
+                                                          ...) G_GNUC_NULL_TERMINATED;
+
+gpointer             seahorse_registry_lookup_function   (SeahorseRegistry *registry, 
+                                                          const gchar *category, 
                                                           ...) G_GNUC_NULL_TERMINATED;
 
 G_END_DECLS

@@ -1090,7 +1090,7 @@ seahorse_context_discover_objects (SeahorseContext *sctx, GQuark ktype,
     /* Check all the ids */
     for (l = rawids; l; l = g_slist_next (l)) {
         
-        id = seahorse_source_canonize_id (ktype, (gchar*)l->data);
+        id = seahorse_context_canonize_id (ktype, (gchar*)l->data);
         if (!id) {
             /* TODO: Try and match this partial id */
             g_warning ("invalid id: %s", (gchar*)l->data);
@@ -1184,4 +1184,18 @@ gchar*
 seahorse_context_id_to_dbus (SeahorseContext* sctx, GQuark id)
 {
 	return g_strdup (g_quark_to_string (id));
+}
+
+GQuark
+seahorse_context_canonize_id (GQuark ktype, const gchar *id)
+{
+	SeahorseCanonizeFunc canonize;
+
+	g_return_val_if_fail (id != NULL, 0);
+    
+	canonize = seahorse_registry_lookup_function (NULL, "canonize", g_quark_to_string (ktype), NULL);
+	if (!canonize) 
+		return 0;
+	
+	return (canonize) (id);
 }

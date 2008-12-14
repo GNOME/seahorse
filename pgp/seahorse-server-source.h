@@ -55,14 +55,12 @@ typedef struct _SeahorseServerSourceClass SeahorseServerSourceClass;
 typedef struct _SeahorseServerSourcePrivate SeahorseServerSourcePrivate;
 
 struct _SeahorseServerSource {
-    SeahorseSource parent;
-    
-    /*< private >*/
-    SeahorseServerSourcePrivate *priv;
+	GObject parent;
+	SeahorseServerSourcePrivate *priv;
 };
 
 struct _SeahorseServerSourceClass {
-    SeahorseSourceClass parent_class;
+	GObjectClass parent_class;
 };
 
 GType        seahorse_server_source_get_type         (void);
