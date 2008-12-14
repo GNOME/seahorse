@@ -102,7 +102,7 @@ seahorse_pkcs11_source_get_property (GObject *object, guint prop_id, GValue *val
 		g_value_set_string (value, _("X509 Certificates"));
 		break;
 	case PROP_LOCATION:
-		g_value_set_uint (value, SEAHORSE_LOCATION_LOCAL);
+		g_value_set_enum (value, SEAHORSE_LOCATION_LOCAL);
 		break;
 	}
 }

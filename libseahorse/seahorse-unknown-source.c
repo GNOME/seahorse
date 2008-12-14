@@ -89,7 +89,7 @@ seahorse_unknown_source_get_property (GObject *object, guint prop_id, GValue *va
         g_value_set_string (value, _("Unavailable Key"));
         break;
     case PROP_LOCATION:
-        g_value_set_uint (value, SEAHORSE_LOCATION_MISSING);
+        g_value_set_enum (value, SEAHORSE_LOCATION_MISSING);
         break;
     }
 }

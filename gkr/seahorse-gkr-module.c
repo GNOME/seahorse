@@ -33,26 +33,10 @@
 void
 seahorse_gkr_module_init (void)
 {
-	GnomeKeyringResult result;
 	SeahorseSource *source;
-	const gchar *keyring_name;
-	GList *l, *keyrings = NULL;
-	
-	/* List the keyrings and add one per */
-	result = gnome_keyring_list_keyring_names_sync (&keyrings);
-	if (result != GNOME_KEYRING_RESULT_OK) {
-		g_warning ("couldn't get list gnome-keyring keyrings: %s",
-		           gnome_keyring_result_to_message (result));
-	} else {
-		
-		for (l = keyrings; l; l = g_list_next (l)) {
-			keyring_name = (const gchar*)l->data;
-			source = SEAHORSE_SOURCE (seahorse_gkr_source_new (keyring_name));
-			seahorse_context_take_source (NULL, source);
-		}
-		
-		gnome_keyring_string_list_free (keyrings);
-	}
+
+	source = SEAHORSE_SOURCE (seahorse_gkr_source_new ());
+	seahorse_context_take_source (NULL, source);
 	
 	/* Let these classes register themselves */
 	g_type_class_unref (g_type_class_ref (SEAHORSE_TYPE_GKR_SOURCE));

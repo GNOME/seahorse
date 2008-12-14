@@ -56,7 +56,7 @@ struct _SeahorseKeyManagerClass {
  * logic throughout this file. 
  */
 
-GtkWindow*       seahorse_key_manager_show         (SeahorseOperation *op);
+GtkWindow*       seahorse_key_manager_show         (void);
 GType            seahorse_key_manager_get_type     (void);
 
 

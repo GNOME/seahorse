@@ -616,7 +616,7 @@ seahorse_ssh_source_get_property (GObject *object, guint prop_id, GValue *value,
         g_value_set_string (value, _("Secure Shell Key"));
         break;
     case PROP_LOCATION:
-        g_value_set_uint (value, SEAHORSE_LOCATION_LOCAL);
+        g_value_set_enum (value, SEAHORSE_LOCATION_LOCAL);
         break;
     case PROP_BASE_DIRECTORY:
         g_value_set_string (value, ssrc->priv->ssh_homedir);

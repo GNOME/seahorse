@@ -725,6 +725,11 @@ on_gconf_notify (GConfClient* client, guint cnxn_id, GConfEntry* entry, Seahorse
 	gtk_toggle_action_set_active (action, gconf_value_get_bool (entry->value));
 }
 
+static void
+on_refreshing (SeahorseContext *sctx, SeahorseOperation *operation, SeahorseWidget *swidget)
+{
+	seahorse_progress_status_set_operation (swidget, operation);
+}
 
 
 static const GtkActionEntry GENERAL_ENTRIES[] = {
@@ -976,6 +981,7 @@ seahorse_key_manager_constructor (GType type, guint n_props, GObjectConstructPar
 	g_timeout_add_seconds (1, (GSourceFunc)on_first_timer, self);
 	
 	g_signal_emit_by_name (self, "selection-changed");
+	g_signal_connect (seahorse_context_for_app (), "refreshing", G_CALLBACK (on_refreshing), self);
 
 	return G_OBJECT (self);
 }
@@ -1076,9 +1082,8 @@ seahorse_key_manager_class_init (SeahorseKeyManagerClass *klass)
 
 
 GtkWindow* 
-seahorse_key_manager_show (SeahorseOperation* op) 
+seahorse_key_manager_show (void) 
 {
 	SeahorseKeyManager *man = g_object_new (SEAHORSE_TYPE_KEY_MANAGER, "name", "key-manager", NULL);
-	seahorse_progress_status_set_operation (SEAHORSE_WIDGET (man), op);
 	return GTK_WINDOW (seahorse_widget_get_toplevel (SEAHORSE_WIDGET (man)));
 }

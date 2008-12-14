@@ -56,7 +56,6 @@
 int
 main (int argc, char **argv)
 {
-    SeahorseOperation *op = NULL;
     GError *error = NULL;
     int ret = 0;
 
@@ -94,9 +93,11 @@ main (int argc, char **argv)
 #endif
     seahorse_gkr_module_init ();
 
-    op = seahorse_context_refresh_local (SCTX_APP ());
+    seahorse_key_manager_show ();
 
-    seahorse_key_manager_show (op);
+    /* Start the refreshing of the keys */
+    seahorse_context_refresh_auto (NULL);
+
     g_signal_connect_after (SCTX_APP (), "destroy", gtk_main_quit, NULL);
     
     gtk_main ();

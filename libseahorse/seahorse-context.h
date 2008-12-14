@@ -84,6 +84,9 @@ struct _SeahorseContextClass {
     
     /* This object has changed */
     void (*changed) (SeahorseContext *sctx, struct _SeahorseObject *sobj);
+    
+    /* The source is being refreshed */
+    void (*refreshing) (SeahorseContext *sctx, SeahorseOperation *op);
 };
 
 enum SeahorseContextType {
@@ -167,12 +170,10 @@ SeahorseServiceDiscovery*
 struct _SeahorseObject*   
                     seahorse_context_get_default_key    (SeahorseContext    *sctx);
 
-SeahorseOperation*  seahorse_context_refresh_local         (SeahorseContext    *sctx);
+void                seahorse_context_refresh_auto       (SeahorseContext *sctx);
 
-void                seahorse_context_refresh_local_async   (SeahorseContext *sctx);
-
-SeahorseOperation*  seahorse_context_search_remote         (SeahorseContext    *sctx,
-                                                            const gchar        *search);
+SeahorseOperation*  seahorse_context_search_remote      (SeahorseContext    *sctx,
+                                                         const gchar        *search);
 
 SeahorseOperation*  seahorse_context_transfer_objects   (SeahorseContext    *sctx, 
                                                          GList              *objs, 

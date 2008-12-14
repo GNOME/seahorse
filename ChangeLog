@@ -1,3 +1,27 @@
+2008-12-14  Stef Walter  <stef@memberwebs.com>
+
+	* daemon/seahorse-daemon.c:
+	* gkr/seahorse-gkr-item-properties.c:
+	* gkr/seahorse-gkr-keyring.c:
+	* gkr/seahorse-gkr-source.c:
+	* gkr/seahorse-gkr-source.h:
+	* libseahorse/seahorse-context.c:
+	* libseahorse/seahorse-context.h:
+	* libseahorse/seahorse-source.c:
+	* libseahorse/seahorse-unknown-source.c:
+	* pgp/seahorse-hkp-source.c:
+	* pgp/seahorse-ldap-source.c:
+	* pgp/seahorse-pgp-source.c:
+	* pgp/seahorse-server-source.c:
+	* pkcs11/seahorse-pkcs11-source.c:
+	* src/main.c:
+	* src/seahorse-key-manager.h:
+	* src/seahorse-key-manager.c:
+	* ssh/seahorse-ssh-source.c: Make SeahorseGkrKeyring be both
+	a SeahorseObject and a SeahorseSource. Enumerate keyrings 
+	properly. Don't list items in locked keyrings. Refresh 
+	sources as they're added to the context.
+	
 2008-12-14  Adam Schreiber  <sadam@clemson.edu>
 
     * libseahorse/seahorse-transfer-operation.c:

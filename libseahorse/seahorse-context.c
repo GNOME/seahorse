@@ -51,6 +51,7 @@ enum {
     ADDED,
     REMOVED,
     CHANGED,
+    REFRESHING,
     LAST_SIGNAL
 };
 
@@ -75,6 +76,7 @@ struct _SeahorseContextPrivate {
     GHashTable *objects_by_source;          /* See explanation above */
     GHashTable *objects_by_type;            /* See explanation above */
     guint notify_id;                        /* Notify for GConf watch */
+    SeahorseMultiOperation *refresh_ops;    /* Operations for refreshes going on */
     SeahorseServiceDiscovery *discovery;    /* Adds sources from DNS-SD */
 };
 
@@ -105,6 +107,9 @@ seahorse_context_class_init (SeahorseContextClass *klass)
     signals[CHANGED] = g_signal_new ("changed", SEAHORSE_TYPE_CONTEXT, 
                 G_SIGNAL_RUN_FIRST, G_STRUCT_OFFSET (SeahorseContextClass, changed),
                 NULL, NULL, g_cclosure_marshal_VOID__OBJECT, G_TYPE_NONE, 1, SEAHORSE_TYPE_OBJECT);    
+    signals[REFRESHING] = g_signal_new ("refreshing", SEAHORSE_TYPE_CONTEXT, 
+                G_SIGNAL_RUN_FIRST, G_STRUCT_OFFSET (SeahorseContextClass, refreshing),
+                NULL, NULL, g_cclosure_marshal_VOID__OBJECT, G_TYPE_NONE, 1, SEAHORSE_TYPE_OPERATION);    
 }
 
 /* init context, private vars, set prefs, connect signals */
@@ -126,7 +131,6 @@ seahorse_context_init (SeahorseContext *sctx)
     
     /* The context is explicitly destroyed */
     g_object_ref (sctx);
-    
 }
 
 static void
@@ -172,6 +176,10 @@ seahorse_context_dispose (GObject *gobject)
     g_slist_free (sctx->pv->sources);
     sctx->pv->sources = NULL;
     
+    if (sctx->pv->refresh_ops)
+	    g_object_unref (sctx->pv->refresh_ops);
+    sctx->pv->refresh_ops = NULL;
+    
     G_OBJECT_CLASS (seahorse_context_parent_class)->dispose (gobject);
 }
 
@@ -191,6 +199,7 @@ seahorse_context_finalize (GObject *gobject)
     g_assert (sctx->pv->sources == NULL);
     g_assert (sctx->pv->auto_sources == NULL);
     g_assert (sctx->pv->discovery == NULL);
+    g_assert (sctx->pv->refresh_ops == NULL);
     g_free (sctx->pv);
     
     G_OBJECT_CLASS (seahorse_context_parent_class)->finalize (gobject);
@@ -254,33 +263,49 @@ seahorse_context_destroy (SeahorseContext *sctx)
         app_context = NULL;
 }
 
+static gboolean                
+take_source (SeahorseContext *sctx, SeahorseSource *sksrc)
+{
+	SeahorseOperation *operation;
+	
+	g_return_val_if_fail (SEAHORSE_IS_SOURCE (sksrc), FALSE);
+	if (!g_slist_find (sctx->pv->sources, sksrc)) {
+		sctx->pv->sources = g_slist_append (sctx->pv->sources, sksrc);
+		if (sctx->pv->refresh_ops) {
+			operation = seahorse_source_load (sksrc);
+			g_return_val_if_fail (operation, TRUE);
+			seahorse_multi_operation_take (sctx->pv->refresh_ops, operation);
+			g_signal_emit (sctx, signals[REFRESHING], 0, sctx->pv->refresh_ops);
+		}
+		return TRUE;
+	}
+	
+	return FALSE;
+}
+
 void                
 seahorse_context_take_source (SeahorseContext *sctx, SeahorseSource *sksrc)
 {
-    g_return_if_fail (SEAHORSE_IS_SOURCE (sksrc));
+	g_return_if_fail (SEAHORSE_IS_SOURCE (sksrc));
     
-    if (!sctx)
-        sctx = seahorse_context_for_app ();
-    g_return_if_fail (SEAHORSE_IS_CONTEXT (sctx));
+	if (!sctx)
+		sctx = seahorse_context_for_app ();
+	g_return_if_fail (SEAHORSE_IS_CONTEXT (sctx));
 
-    if (!g_slist_find (sctx->pv->sources, sksrc))
-        sctx->pv->sources = g_slist_append (sctx->pv->sources, sksrc);
+	take_source (sctx, sksrc);
 }
 
 void
 seahorse_context_add_source (SeahorseContext *sctx, SeahorseSource *sksrc)
 {
-    g_return_if_fail (SEAHORSE_IS_SOURCE (sksrc));
+	g_return_if_fail (SEAHORSE_IS_SOURCE (sksrc));
+    
+	if (!sctx)
+		sctx = seahorse_context_for_app ();
+	g_return_if_fail (SEAHORSE_IS_CONTEXT (sctx));
 
-    if (!sctx)
-        sctx = seahorse_context_for_app ();
-    g_return_if_fail (SEAHORSE_IS_CONTEXT (sctx));
-    
-    if (g_slist_find (sctx->pv->sources, sksrc))
-        return;
-    
-    sctx->pv->sources = g_slist_append (sctx->pv->sources, sksrc);
-    g_object_ref (sksrc);
+	if (take_source (sctx, sksrc))
+		g_object_ref (sksrc);
 }
     
 void
@@ -767,52 +792,34 @@ seahorse_context_get_discovery (SeahorseContext *sctx)
     return sctx->pv->discovery;
 }
 
-SeahorseOperation*  
-seahorse_context_refresh_local (SeahorseContext *sctx)
-{
-    SeahorseSource *ks;
-    SeahorseMultiOperation *mop = NULL;
-    SeahorseOperation *op = NULL;
-    GSList *l;
-    
-    if (!sctx)
-        sctx = seahorse_context_for_app ();
-    g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), NULL);
-
-    for (l = sctx->pv->sources; l; l = g_slist_next (l)) {
-        ks = SEAHORSE_SOURCE (l->data);
-        
-        if (seahorse_source_get_location (ks) == SEAHORSE_LOCATION_LOCAL) {
-            if (mop == NULL && op != NULL) {
-                mop = seahorse_multi_operation_new ();
-                seahorse_multi_operation_take (mop, op);
-            }
-            
-            op = seahorse_source_load (ks);
-            
-            if (mop != NULL)
-                seahorse_multi_operation_take (mop, op);
-        }
-    }   
-
-    return mop ? SEAHORSE_OPERATION (mop) : op;  
-}
-
-static gboolean 
-refresh_local (SeahorseContext *sctx)
-{
-    SeahorseOperation *op = seahorse_context_refresh_local (sctx);
-    g_return_val_if_fail (op != NULL, FALSE);
-    g_object_unref (op);
-    return FALSE;
-}
-
 void
-seahorse_context_refresh_local_async (SeahorseContext *sctx)
+seahorse_context_refresh_auto (SeahorseContext *sctx)
 {
-    g_idle_add_full (G_PRIORITY_LOW, (GSourceFunc)refresh_local, sctx, NULL);
-}
+	SeahorseSource *ks;
+	SeahorseOperation *op = NULL;
+	GSList *l;
+    
+	if (!sctx)
+		sctx = seahorse_context_for_app ();
+	g_return_if_fail (SEAHORSE_IS_CONTEXT (sctx));
+	
+	if (!sctx->pv->refresh_ops)
+		sctx->pv->refresh_ops = seahorse_multi_operation_new ();
 
+	for (l = sctx->pv->sources; l; l = g_slist_next (l)) {
+		ks = SEAHORSE_SOURCE (l->data);
+        
+		if (seahorse_source_get_location (ks) == SEAHORSE_LOCATION_LOCAL) {
+
+			op = seahorse_source_load (ks);
+			g_return_if_fail (op);
+			seahorse_multi_operation_take (sctx->pv->refresh_ops, op);
+		}
+		
+	}
+	
+	g_signal_emit (sctx, signals[REFRESHING], 0, sctx->pv->refresh_ops);
+}
 
 SeahorseOperation*  
 seahorse_context_search_remote (SeahorseContext *sctx, const gchar *search)

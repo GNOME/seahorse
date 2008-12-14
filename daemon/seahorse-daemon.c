@@ -182,7 +182,6 @@ prepare_logging ()
 
 int main(int argc, char* argv[])
 {
-    SeahorseOperation *op;
     GOptionContext *octx = NULL;
     GError *error = NULL;
 
@@ -233,8 +232,7 @@ int main(int argc, char* argv[])
     seahorse_ssh_module_init ();
 #endif
     
-    op = seahorse_context_refresh_local (NULL);
-    g_object_unref (op);
+    seahorse_context_refresh_auto (NULL);
     
     /* Initialize the various daemon components */
     seahorse_dbus_server_init ();

@@ -59,8 +59,6 @@ struct _SeahorseGkrSourceClass {
 
 GType               seahorse_gkr_source_get_type          (void);
 
-SeahorseGkrSource*  seahorse_gkr_source_new               (const gchar *keyring_name);
-
-const gchar*        seahorse_gkr_source_get_keyring_name  (SeahorseGkrSource *gsrc);
+SeahorseGkrSource*  seahorse_gkr_source_new               (void);
 
 #endif /* __SEAHORSE_GKR_SOURCE_H__ */

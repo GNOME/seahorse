@@ -737,7 +737,7 @@ seahorse_hkp_source_get_property (GObject *object, guint prop_id, GValue *value,
         g_value_set_string (value, _("PGP Key"));
         break;
     case PROP_LOCATION:
-        g_value_set_uint (value, SEAHORSE_LOCATION_REMOTE);
+        g_value_set_enum (value, SEAHORSE_LOCATION_REMOTE);
         break;
     };        
 }

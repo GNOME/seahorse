@@ -42,15 +42,15 @@ seahorse_source_base_init (gpointer gobject_class)
 		/* Add properties and signals to the interface */
 		g_object_interface_install_property (gobject_class,
 		        g_param_spec_uint ("key-type", "Key Type", "Key type that originates from this key source.", 
-		                           0, G_MAXUINT, SEAHORSE_TAG_INVALID, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+		                           0, G_MAXUINT, SEAHORSE_TAG_INVALID, G_PARAM_READABLE));
 
 		g_object_interface_install_property (gobject_class, 
 		        g_param_spec_string ("key-desc", "Key Desc", "Description for keys that originate here.",
 		                             NULL, G_PARAM_READABLE));
 
 		g_object_interface_install_property (gobject_class, 
-		        g_param_spec_uint ("location", "Key Location", "Where the key is stored. See SeahorseLocation", 
-		                           0, G_MAXUINT, SEAHORSE_LOCATION_MISSING, G_PARAM_READABLE));    
+		        g_param_spec_enum ("location", "Key Location", "Where the key is stored. See SeahorseLocation", 
+		                           SEAHORSE_TYPE_LOCATION, SEAHORSE_LOCATION_LOCAL, G_PARAM_READABLE));
 		
 		initialized = TRUE;
 	}

@@ -298,7 +298,7 @@ description_activate (GtkWidget *entry, SeahorseWidget *swidget)
 	SeahorseOperation *op = NULL;
 	GnomeKeyringItemInfo *info;
 	const gchar *text;
-	gchar *original;
+	const gchar *original;
     
 	object = SEAHORSE_OBJECT_WIDGET (swidget)->object;
 	if (!object)
@@ -340,7 +340,6 @@ description_activate (GtkWidget *entry, SeahorseWidget *swidget)
 	gtk_widget_set_sensitive (entry, TRUE);
 	g_object_unref (entry);
 	g_object_unref (git);
-	g_free (original);
     
 	if (op) {
 		if (!seahorse_operation_is_successful (op)) 
