@@ -73,14 +73,13 @@ seahorse_source_finalize (GObject *gobject)
 /**
  * seahorse_source_load
  * @sksrc: A #SeahorseSource object
- * @id: The object to refresh or 0 for all.
  * 
  * Refreshes the #SeahorseSource's internal object listing. 
  * 
  * Returns the asynchronous refresh operation. 
  **/   
 SeahorseOperation*
-seahorse_source_load (SeahorseSource *sksrc, GQuark id)
+seahorse_source_load (SeahorseSource *sksrc)
 {
     SeahorseSourceClass *klass;
     
@@ -88,20 +87,19 @@ seahorse_source_load (SeahorseSource *sksrc, GQuark id)
     klass = SEAHORSE_SOURCE_GET_CLASS (sksrc);
     g_return_val_if_fail (klass->load != NULL, NULL);
     
-    return (*klass->load) (sksrc, id);
+    return (*klass->load) (sksrc);
 }
 
 /**
  * seahorse_source_load_sync
  * @sksrc: A #SeahorseSource object
- * @id: The object to refresh or 0 for all.
  * 
  * Refreshes the #SeahorseSource's internal object listing, and waits for it to complete.
  **/   
 void
-seahorse_source_load_sync (SeahorseSource *sksrc, GQuark id)
+seahorse_source_load_sync (SeahorseSource *sksrc)
 {
-    SeahorseOperation *op = seahorse_source_load (sksrc, id);
+    SeahorseOperation *op = seahorse_source_load (sksrc);
     g_return_if_fail (op != NULL);
     seahorse_operation_wait (op);
     g_object_unref (op);
@@ -110,14 +108,13 @@ seahorse_source_load_sync (SeahorseSource *sksrc, GQuark id)
 /**
  * seahorse_source_load_sync
  * @sksrc: A #SeahorseSource object
- * @id: The object to refresh or 0 for all.
  * 
  * Refreshes the #SeahorseSource's internal object listing. Completes in the background.
  **/   
 void
-seahorse_source_load_async (SeahorseSource *sksrc, GQuark id)
+seahorse_source_load_async (SeahorseSource *sksrc)
 {
-    SeahorseOperation *op = seahorse_source_load (sksrc, id);
+    SeahorseOperation *op = seahorse_source_load (sksrc);
     g_return_if_fail (op != NULL);
     g_object_unref (op);
 }
@@ -241,7 +238,6 @@ seahorse_source_delete_objects (GList *objects)
 {
 	SeahorseOperation *op = NULL;
 	SeahorseMultiOperation *mop = NULL;
-	SeahorseSource *sksrc;
 	SeahorseObject *sobj;
 	GList *l;
 
@@ -250,18 +246,13 @@ seahorse_source_delete_objects (GList *objects)
 		sobj = SEAHORSE_OBJECT (l->data);
 		g_return_val_if_fail (SEAHORSE_IS_OBJECT (sobj), NULL);;
 		
-		/* Export from this object source */        
-		sksrc = seahorse_object_get_source (sobj);
-		g_return_val_if_fail (sksrc != NULL, NULL);
-
 		if (op != NULL) {
 			if (mop == NULL)
 				mop = seahorse_multi_operation_new ();
 			seahorse_multi_operation_take (mop, op);
 		}
 
-		/* We pass our own data object, to which data is appended */
-		op = seahorse_source_remove (sksrc, l->data);
+		op = seahorse_object_delete (sobj);
 		g_return_val_if_fail (op != NULL, NULL);
 	}
     
@@ -334,23 +325,7 @@ seahorse_source_export_raw (SeahorseSource *sksrc, GSList *ids, GOutputStream *o
 	g_list_free (objects);
 	return op;
 }
-
-SeahorseOperation*           
-seahorse_source_remove (SeahorseSource *src, SeahorseObject *sobj)
-{
-	SeahorseSourceClass *klass;
-
-	g_return_val_if_fail (SEAHORSE_IS_SOURCE (src), NULL);
-	g_return_val_if_fail (SEAHORSE_IS_OBJECT (sobj), NULL);
-	g_return_val_if_fail (seahorse_object_get_source (sobj) == src, NULL);
-    
-	g_return_val_if_fail (SEAHORSE_IS_SOURCE (src), FALSE);
-	klass = SEAHORSE_SOURCE_GET_CLASS (src);
-	g_return_val_if_fail (klass->remove != NULL, FALSE);
-    
-	return (*klass->remove) (src, sobj);    
-}
-                                               
+                                     
 GQuark              
 seahorse_source_get_ktype (SeahorseSource *sksrc)
 {

@@ -51,38 +51,19 @@
  * DEFINITIONS
  */
  
-typedef struct _SeahorseGkrOperationPrivate {
-    
-    gpointer request;
-    SeahorseObject *object;
-    
-} SeahorseGkrOperationPrivate;
-
-enum {
-    PROP_0,
-    PROP_KEY_SOURCE
+struct _SeahorseGkrOperationPrivate {
+	gpointer request;
+	SeahorseObject *object;   
 };
 
-#define SEAHORSE_GKR_OPERATION_GET_PRIVATE(obj)  \
-    (G_TYPE_INSTANCE_GET_PRIVATE ((obj), SEAHORSE_TYPE_GKR_OPERATION, SeahorseGkrOperationPrivate))
-
-/* TODO: This is just nasty. Gotta get rid of these weird macros */
-IMPLEMENT_OPERATION_PROPS(Gkr, gkr)
-
-    g_object_class_install_property (gobject_class, PROP_KEY_SOURCE,
-        g_param_spec_object ("source", "Gkr Source", "Key source this operation works on.", 
-                             SEAHORSE_TYPE_GKR_SOURCE, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY ));
-
-    g_type_class_add_private (gobject_class, sizeof (SeahorseGkrOperationPrivate));
-
-END_IMPLEMENT_OPERATION_PROPS
+G_DEFINE_TYPE (SeahorseGkrOperation, seahorse_gkr_operation, SEAHORSE_TYPE_OPERATION);
 
 /* -----------------------------------------------------------------------------
  * HELPERS 
  */
 
 static gboolean
-check_operation_result (SeahorseGkrOperation *gop, GnomeKeyringResult result)
+check_operation_result (SeahorseGkrOperation *self, GnomeKeyringResult result)
 {
     GError *err = NULL;
     gboolean success;
@@ -94,7 +75,7 @@ check_operation_result (SeahorseGkrOperation *gop, GnomeKeyringResult result)
     success = seahorse_gkr_operation_parse_error (result, &err);
     g_assert (!success || !err);
     
-    seahorse_operation_mark_done (SEAHORSE_OPERATION (gop), FALSE, err);
+    seahorse_operation_mark_done (SEAHORSE_OPERATION (self), FALSE, err);
     return success;
 }
 
@@ -103,88 +84,66 @@ check_operation_result (SeahorseGkrOperation *gop, GnomeKeyringResult result)
  */
 
 static void 
-seahorse_gkr_operation_init (SeahorseGkrOperation *sop)
+seahorse_gkr_operation_init (SeahorseGkrOperation *self)
 {
+	self->pv = G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_TYPE_GKR_OPERATION, SeahorseGkrOperationPrivate);
 
-}
-
-static void 
-seahorse_gkr_operation_set_property (GObject *gobject, guint prop_id, 
-                                          const GValue *value, GParamSpec *pspec)
-{
-    SeahorseGkrOperation *gop = SEAHORSE_GKR_OPERATION (gobject);
-    
-    switch (prop_id) {
-    case PROP_KEY_SOURCE:
-        if (gop->gsrc)
-            g_object_unref (gop->gsrc);
-        gop->gsrc = SEAHORSE_GKR_SOURCE (g_object_ref (g_value_get_object (value)));
-        break;
-    }
-    
-}
-
-static void 
-seahorse_gkr_operation_get_property (GObject *gobject, guint prop_id, 
-                                     GValue *value, GParamSpec *pspec)
-{
-    SeahorseGkrOperation *gop = SEAHORSE_GKR_OPERATION (gobject);
-    
-    switch (prop_id) {
-    case PROP_KEY_SOURCE:
-        g_value_set_object (value, gop->gsrc);
-        break;
-    }
 }
 
 static void 
 seahorse_gkr_operation_dispose (GObject *gobject)
 {
-    SeahorseGkrOperation *gop = SEAHORSE_GKR_OPERATION (gobject);
-    SeahorseGkrOperationPrivate *pv = SEAHORSE_GKR_OPERATION_GET_PRIVATE (gop);
+	SeahorseGkrOperation *self = SEAHORSE_GKR_OPERATION (gobject);
 
-    if (seahorse_operation_is_running (SEAHORSE_OPERATION (gop)))
-        seahorse_gkr_operation_cancel (SEAHORSE_OPERATION (gop));
-    g_assert (!seahorse_operation_is_running (SEAHORSE_OPERATION (gop)));
+	if (seahorse_operation_is_running (SEAHORSE_OPERATION (self)))
+		seahorse_operation_cancel (SEAHORSE_OPERATION (self));
+	g_assert (!seahorse_operation_is_running (SEAHORSE_OPERATION (self)));
     
-    if (gop->gsrc)
-        g_object_unref (gop->gsrc);
-    gop->gsrc = NULL;
+	if (self->pv->object)
+		g_object_unref (self->pv->object);
+	self->pv->object = NULL;
     
-    if (pv->object)
-        g_object_unref (pv->object);
-    pv->object = NULL;
+	/* The above cancel should have stopped this */
+	g_assert (self->pv->request == NULL);
     
-    /* The above cancel should have stopped this */
-    g_assert (pv->request == NULL);
-    
-    G_OBJECT_CLASS (gkr_operation_parent_class)->dispose (gobject);  
+	G_OBJECT_CLASS (seahorse_gkr_operation_parent_class)->dispose (gobject);  
 }
 
 static void 
 seahorse_gkr_operation_finalize (GObject *gobject)
 {
-    SeahorseGkrOperation *gop = SEAHORSE_GKR_OPERATION (gobject);
-    SeahorseGkrOperationPrivate *pv = SEAHORSE_GKR_OPERATION_GET_PRIVATE (gop);
+	SeahorseGkrOperation *self = SEAHORSE_GKR_OPERATION (gobject);
     
-    g_assert (!gop->gsrc);
-    g_assert (!pv->request);
+	g_assert (!self->pv->request);
     
-    G_OBJECT_CLASS (gkr_operation_parent_class)->finalize (gobject);  
+	G_OBJECT_CLASS (seahorse_gkr_operation_parent_class)->finalize (gobject);  
 }
 
 static void 
 seahorse_gkr_operation_cancel (SeahorseOperation *operation)
 {
-    SeahorseGkrOperation *sop = SEAHORSE_GKR_OPERATION (operation);    
-    SeahorseGkrOperationPrivate *pv = SEAHORSE_GKR_OPERATION_GET_PRIVATE (sop);
+	SeahorseGkrOperation *self = SEAHORSE_GKR_OPERATION (operation);    
 
-    if (pv->request)
-        gnome_keyring_cancel_request (pv->request);
-    pv->request = NULL;
+	if (self->pv->request)
+		gnome_keyring_cancel_request (self->pv->request);
+	self->pv->request = NULL;
     
-    if (seahorse_operation_is_running (operation))
-        seahorse_operation_mark_done (operation, TRUE, NULL);    
+	if (seahorse_operation_is_running (operation))
+		seahorse_operation_mark_done (operation, TRUE, NULL);    
+}
+
+static void
+seahorse_gkr_operation_class_init (SeahorseGkrOperationClass *klass)
+{
+	GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+    
+	seahorse_gkr_operation_parent_class = g_type_class_peek_parent (klass);
+	g_type_class_add_private (klass, sizeof (SeahorseGkrOperationPrivate));
+
+	gobject_class->dispose = seahorse_gkr_operation_dispose;
+	gobject_class->finalize = seahorse_gkr_operation_finalize;
+	
+	SEAHORSE_OPERATION_CLASS (klass)->cancel = seahorse_gkr_operation_cancel;
 }
 
 /* -----------------------------------------------------------------------------
@@ -243,83 +202,127 @@ seahorse_gkr_operation_parse_error (GnomeKeyringResult result, GError **err)
  */
 
 static void 
-basic_operation_done (GnomeKeyringResult result, SeahorseGkrOperation *gop)
+basic_operation_done (GnomeKeyringResult result, SeahorseGkrOperation *self)
 {
-    SeahorseGkrOperationPrivate *pv;
+	g_assert (SEAHORSE_IS_GKR_OPERATION (self));
+	self->pv->request = NULL;
 
-    pv = SEAHORSE_GKR_OPERATION_GET_PRIVATE (gop);
-    pv->request = NULL;
-
-    if (!check_operation_result (gop, result))
-        return;
+	if (!check_operation_result (self, result))
+		return;
     
-    /* When operation is successful reload the key */
-    seahorse_object_refresh (SEAHORSE_OBJECT (pv->object));
+	/* When operation is successful reload the key */
+	seahorse_object_refresh (SEAHORSE_OBJECT (self->pv->object));
 }
 
 SeahorseOperation*
-seahorse_gkr_operation_update_info (SeahorseGkrItem *git, GnomeKeyringItemInfo *info)
+seahorse_gkr_operation_update_info (SeahorseGkrItem *item, GnomeKeyringItemInfo *info)
 {
-    SeahorseSource *sksrc;
-    SeahorseGkrOperation *gop;
-    SeahorseGkrOperationPrivate *pv;
+	SeahorseGkrOperation *self;
     
-    g_return_val_if_fail (SEAHORSE_IS_GKR_ITEM (git), NULL);
+	g_return_val_if_fail (SEAHORSE_IS_GKR_ITEM (item), NULL);
     
-    sksrc = seahorse_object_get_source (SEAHORSE_OBJECT (git));
-    g_return_val_if_fail (SEAHORSE_IS_GKR_SOURCE (sksrc), NULL);
+	self = g_object_new (SEAHORSE_TYPE_GKR_OPERATION, NULL);
     
-    gop = g_object_new (SEAHORSE_TYPE_GKR_OPERATION, 
-                        "source", SEAHORSE_GKR_SOURCE (sksrc), NULL);
-    pv = SEAHORSE_GKR_OPERATION_GET_PRIVATE (gop);
+	g_object_ref (item);
+	self->pv->object = SEAHORSE_OBJECT (item);
     
-    g_object_ref (git);
-    pv->object = SEAHORSE_OBJECT (git);
+	/* Start actual save request */
+	g_object_ref (self);
+	self->pv->request = gnome_keyring_item_set_info (seahorse_gkr_item_get_keyring_name (item),
+	                                                 seahorse_gkr_item_get_item_id (item), info, 
+	                                                 (GnomeKeyringOperationDoneCallback)basic_operation_done,
+	                                                 self, g_object_unref);
+	g_return_val_if_fail (self->pv->request, NULL);
     
-    /* Start actual save request */
-    g_object_ref (gop);
-    pv->request = gnome_keyring_item_set_info (seahorse_gkr_item_get_keyring_name (git),
-                                               seahorse_gkr_item_get_item_id (git), info, 
-                                               (GnomeKeyringOperationDoneCallback)basic_operation_done,
-                                               gop, g_object_unref);
-    g_return_val_if_fail (pv->request, NULL);
-    
-    seahorse_operation_mark_start (SEAHORSE_OPERATION (gop));
-    seahorse_operation_mark_progress (SEAHORSE_OPERATION (gop), _("Saving item..."), -1);
+	seahorse_operation_mark_start (SEAHORSE_OPERATION (self));
+	seahorse_operation_mark_progress (SEAHORSE_OPERATION (self), _("Saving item..."), -1);
 
-    return SEAHORSE_OPERATION (gop);
+	return SEAHORSE_OPERATION (self);
 }
 
 SeahorseOperation*
-seahorse_gkr_operation_update_acl (SeahorseGkrItem *git, GList *acl)
+seahorse_gkr_operation_update_acl (SeahorseGkrItem *item, GList *acl)
 {
-    SeahorseSource *sksrc;
-    SeahorseGkrOperation *gop;
-    SeahorseGkrOperationPrivate *pv;
+	SeahorseGkrOperation *self;
     
-    g_return_val_if_fail (SEAHORSE_IS_GKR_ITEM (git), NULL);
+	g_return_val_if_fail (SEAHORSE_IS_GKR_ITEM (item), NULL);
     
-    sksrc = seahorse_object_get_source (SEAHORSE_OBJECT (git));
-    g_return_val_if_fail (SEAHORSE_IS_GKR_SOURCE (sksrc), NULL);
-    
-    gop = g_object_new (SEAHORSE_TYPE_GKR_OPERATION, 
-                        "source", SEAHORSE_GKR_SOURCE (sksrc), NULL);
-    pv = SEAHORSE_GKR_OPERATION_GET_PRIVATE (gop);
-    
-    g_object_ref (git);
-    pv->object = SEAHORSE_OBJECT (git);
-    
-    /* Start actual save request */
-    g_object_ref (gop);
-    pv->request = gnome_keyring_item_set_acl (seahorse_gkr_item_get_keyring_name (git), 
-                                              seahorse_gkr_item_get_item_id (git), acl, 
-                                              (GnomeKeyringOperationDoneCallback)basic_operation_done,
-                                              gop, g_object_unref);
-    g_return_val_if_fail (pv->request, NULL);
-    
-    seahorse_operation_mark_start (SEAHORSE_OPERATION (gop));
-    seahorse_operation_mark_progress (SEAHORSE_OPERATION (gop), _("Saving item..."), -1);
+	self = g_object_new (SEAHORSE_TYPE_GKR_OPERATION, NULL);
 
-    return SEAHORSE_OPERATION (gop);
+	g_object_ref (item);
+	self->pv->object = SEAHORSE_OBJECT (item);
+    
+	/* Start actual save request */
+	g_object_ref (self);
+	self->pv->request = gnome_keyring_item_set_acl (seahorse_gkr_item_get_keyring_name (item), 
+	                                                seahorse_gkr_item_get_item_id (item), acl, 
+	                                                (GnomeKeyringOperationDoneCallback)basic_operation_done,
+	                                                self, g_object_unref);
+	g_return_val_if_fail (self->pv->request, NULL);
+    
+	seahorse_operation_mark_start (SEAHORSE_OPERATION (self));
+	seahorse_operation_mark_progress (SEAHORSE_OPERATION (self), _("Saving item..."), -1);
+
+	return SEAHORSE_OPERATION (self);
 }
 
+static void 
+delete_operation_done (GnomeKeyringResult result, SeahorseGkrOperation *self)
+{
+	g_assert (SEAHORSE_IS_GKR_OPERATION (self));
+
+	self->pv->request = NULL;
+	if (check_operation_result (self, result))
+		seahorse_context_remove_object (NULL, self->pv->object);
+}
+
+SeahorseOperation*
+seahorse_gkr_operation_delete_item (SeahorseGkrItem *item)
+{
+	SeahorseGkrOperation *self;
+	    
+	g_return_val_if_fail (SEAHORSE_IS_GKR_ITEM (item), NULL);
+	    
+	self = g_object_new (SEAHORSE_TYPE_GKR_OPERATION, NULL);
+	    
+	g_object_ref (item);
+	self->pv->object = SEAHORSE_OBJECT (item);
+	    
+	/* Start actual save request */
+	g_object_ref (self);
+	self->pv->request = gnome_keyring_item_delete (seahorse_gkr_item_get_keyring_name (item), 
+	                                               seahorse_gkr_item_get_item_id (item), 
+	                                               (GnomeKeyringOperationDoneCallback)delete_operation_done,
+	                                               self, g_object_unref);
+	g_return_val_if_fail (self->pv->request, NULL);
+	
+	seahorse_operation_mark_start (SEAHORSE_OPERATION (self));
+	seahorse_operation_mark_progress (SEAHORSE_OPERATION (self), _("Deleting item..."), -1);
+	
+	return SEAHORSE_OPERATION (self);
+}
+
+SeahorseOperation*
+seahorse_gkr_operation_delete_keyring (SeahorseGkrKeyring *keyring)
+{
+	SeahorseGkrOperation *self;
+	    
+	g_return_val_if_fail (SEAHORSE_IS_GKR_KEYRING (keyring), NULL);
+	    
+	self = g_object_new (SEAHORSE_TYPE_GKR_OPERATION, NULL);
+	
+	g_object_ref (keyring);
+	self->pv->object = SEAHORSE_OBJECT (keyring);
+	    
+	/* Start actual save request */
+	g_object_ref (self);
+	self->pv->request = gnome_keyring_delete (seahorse_gkr_keyring_get_name (keyring), 
+	                                          (GnomeKeyringOperationDoneCallback)delete_operation_done,
+	                                          self, g_object_unref);
+	g_return_val_if_fail (self->pv->request, NULL);
+	
+	seahorse_operation_mark_start (SEAHORSE_OPERATION (self));
+	seahorse_operation_mark_progress (SEAHORSE_OPERATION (self), _("Deleting keyring..."), -1);
+	
+	return SEAHORSE_OPERATION (self);
+}

@@ -18,14 +18,19 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
  * 02111-1307, USA.  
  */
- 
-[CCode (cprefix = "SeahorsePkcs11", lower_case_cprefix = "seahorse_pkcs11_")]
-namespace Seahorse.Pkcs11 {
-        [CCode (cheader_filename = "seahorse-pkcs11-certificate.h")]
-        public class Certificate : Seahorse.Object {
-        	public GP11.Object pkcs11_object { get; set; }
-        	public GP11.Attributes pkcs11_attributes { get; set; }
-        	public Certificate(GP11.Object object, GP11.Attributes attrs);
-        }
-}
 
+#ifndef __SEAHORSE_PKCS11_OPERATIONS_H__
+#define __SEAHORSE_PKCS11_OPERATIONS_H__
+
+#include <glib-object.h>
+
+#include "seahorse-operation.h"
+
+#include "seahorse-pkcs11-object.h"
+#include "seahorse-pkcs11-source.h"
+
+SeahorseOperation*         seahorse_pkcs11_refresher_new   (SeahorsePkcs11Source *source);
+
+SeahorseOperation*         seahorse_pkcs11_deleter_new     (SeahorsePkcs11Object *object);
+
+#endif /* __SEAHORSE_PKCS11_OPERATIONS_H__ */

@@ -1,57 +1,58 @@
+/*
+ * Seahorse
+ *
+ * Copyright (C) 2008 Stefan Walter
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the
+ * Free Software Foundation, Inc.,
+ * 59 Temple Place, Suite 330,
+ * Boston, MA 02111-1307, USA.
+ */
+
 
 #ifndef __SEAHORSE_PKCS11_SOURCE_H__
 #define __SEAHORSE_PKCS11_SOURCE_H__
 
-#include <glib.h>
-#include <glib-object.h>
-#include <seahorse-source.h>
+#include "seahorse-source.h"
+
 #include <gp11.h>
-#include <gp11-hacks.h>
-#include <seahorse-operation.h>
-#include <gio/gio.h>
-#include <seahorse-object.h>
-#include <seahorse-types.h>
-#include <stdlib.h>
-#include <string.h>
 
-G_BEGIN_DECLS
-
-
-#define SEAHORSE_PKCS11_TYPE_SOURCE (seahorse_pkcs11_source_get_type ())
-#define SEAHORSE_PKCS11_SOURCE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_PKCS11_TYPE_SOURCE, SeahorsePkcs11Source))
-#define SEAHORSE_PKCS11_SOURCE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_PKCS11_TYPE_SOURCE, SeahorsePkcs11SourceClass))
-#define SEAHORSE_PKCS11_IS_SOURCE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_PKCS11_TYPE_SOURCE))
-#define SEAHORSE_PKCS11_IS_SOURCE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_PKCS11_TYPE_SOURCE))
-#define SEAHORSE_PKCS11_SOURCE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_PKCS11_TYPE_SOURCE, SeahorsePkcs11SourceClass))
+#define SEAHORSE_TYPE_PKCS11_SOURCE            (seahorse_pkcs11_source_get_type ())
+#define SEAHORSE_PKCS11_SOURCE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_PKCS11_SOURCE, SeahorsePkcs11Source))
+#define SEAHORSE_PKCS11_SOURCE_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_PKCS11_SOURCE, SeahorsePkcs11SourceClass))
+#define SEAHORSE_IS_PKCS11_SOURCE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_PKCS11_SOURCE))
+#define SEAHORSE_IS_PKCS11_SOURCE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_PKCS11_SOURCE))
+#define SEAHORSE_PKCS11_SOURCE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_PKCS11_SOURCE, SeahorsePkcs11SourceClass))
 
 typedef struct _SeahorsePkcs11Source SeahorsePkcs11Source;
 typedef struct _SeahorsePkcs11SourceClass SeahorsePkcs11SourceClass;
 typedef struct _SeahorsePkcs11SourcePrivate SeahorsePkcs11SourcePrivate;
 
 struct _SeahorsePkcs11Source {
-	SeahorseSource parent_instance;
-	SeahorsePkcs11SourcePrivate * priv;
+	SeahorseSource parent;
+	SeahorsePkcs11SourcePrivate *pv;
 };
 
 struct _SeahorsePkcs11SourceClass {
 	SeahorseSourceClass parent_class;
-	SeahorseOperation* (*import) (SeahorsePkcs11Source* self, GInputStream* input);
-	SeahorseOperation* (*export) (SeahorsePkcs11Source* self, GList* objects, GOutputStream* output);
-	SeahorseOperation* (*remove) (SeahorsePkcs11Source* self, SeahorseObject* object);
 };
 
+GType                  seahorse_pkcs11_source_get_type          (void);
 
-SeahorsePkcs11Source* seahorse_pkcs11_source_new (GP11Slot* slot);
-SeahorseOperation* seahorse_pkcs11_source_import (SeahorsePkcs11Source* self, GInputStream* input);
-SeahorseOperation* seahorse_pkcs11_source_export (SeahorsePkcs11Source* self, GList* objects, GOutputStream* output);
-SeahorseOperation* seahorse_pkcs11_source_remove (SeahorsePkcs11Source* self, SeahorseObject* object);
-GP11Slot* seahorse_pkcs11_source_get_slot (SeahorsePkcs11Source* self);
-SeahorseLocation seahorse_pkcs11_source_get_location (SeahorsePkcs11Source* self);
-GQuark seahorse_pkcs11_source_get_key_type (SeahorsePkcs11Source* self);
-const char* seahorse_pkcs11_source_get_key_desc (SeahorsePkcs11Source* self);
-GType seahorse_pkcs11_source_get_type (void);
+SeahorsePkcs11Source*  seahorse_pkcs11_source_new               (GP11Slot *slot);
 
+GP11Slot*              seahorse_pkcs11_source_get_slot          (SeahorsePkcs11Source *self);
 
-G_END_DECLS
+void                   seahorse_pkcs11_source_receive_object    (SeahorsePkcs11Source *self, GP11Object *obj);
 
-#endif
+#endif /* __SEAHORSE_PKCS11_SOURCE_H__ */

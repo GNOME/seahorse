@@ -54,42 +54,9 @@ search_done (SeahorseOperation *op, SeahorseObject *sobj)
  */
 
 static SeahorseOperation*
-seahorse_unknown_source_load (SeahorseSource *src, GQuark id)
-{
-    SeahorseUnknownSource *usrc;
-    
-    g_assert (SEAHORSE_IS_UNKNOWN_SOURCE (src));
-    usrc = SEAHORSE_UNKNOWN_SOURCE (src);
-    
-    if (id) {
-        g_return_val_if_fail (id, NULL);
-        seahorse_unknown_source_add_object (usrc, id, NULL);
-    }
-    
-    return seahorse_operation_new_complete (NULL);
-}
-
-static SeahorseOperation* 
-seahorse_unknown_source_import (SeahorseSource *sksrc, GInputStream *input)
-{
-    g_return_val_if_reached (NULL);
-    return NULL;
-}
-
-static SeahorseOperation* 
-seahorse_unknown_source_export_raw (SeahorseSource *sksrc, GSList *ids, 
-                                    GOutputStream *output)
-{
-    g_return_val_if_reached (NULL);
-    return NULL;
-}
-
-static SeahorseOperation*           
-seahorse_unknown_source_remove (SeahorseSource *sksrc, SeahorseObject *sobj)
-{
-    g_return_val_if_fail (sksrc == seahorse_object_get_source (sobj), FALSE);
-    seahorse_context_remove_object (SCTX_APP (), sobj);
-    return seahorse_operation_new_complete (NULL);
+seahorse_unknown_source_load (SeahorseSource *src)
+{ 
+	return seahorse_operation_new_complete (NULL);
 }
 
 static void 
@@ -142,9 +109,6 @@ seahorse_unknown_source_class_init (SeahorseUnknownSourceClass *klass)
     gobject_class->get_property = seahorse_unknown_source_get_property;
     
     parent_class->load = seahorse_unknown_source_load;
-    parent_class->import = seahorse_unknown_source_import;
-    parent_class->export_raw = seahorse_unknown_source_export_raw;
-    parent_class->remove = seahorse_unknown_source_remove;
  
     g_object_class_install_property (gobject_class, PROP_KEY_TYPE,
         g_param_spec_uint ("key-type", "Key Type", "Key type that originates from this key source.", 

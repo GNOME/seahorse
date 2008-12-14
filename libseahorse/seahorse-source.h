@@ -78,13 +78,12 @@ typedef struct _SeahorseSourceClass {
     /**
      * load
      * @sksrc: The #SeahorseSource.
-     * @id: The object to load or 0 for all the objects.
      * 
      * Loads the requested objects, and add the objects to SeahorseContext. 
      * 
      * Returns: The load operation.
      */
-    SeahorseOperation* (*load) (SeahorseSource *sksrc, GQuark id);
+    SeahorseOperation* (*load) (SeahorseSource *sksrc);
 
     /**
      * search
@@ -137,17 +136,6 @@ typedef struct _SeahorseSourceClass {
      */    
     SeahorseOperation* (*export_raw) (SeahorseSource *sksrc, GSList *ids, 
                                       GOutputStream *output);
-
-    /**
-     * remove
-     * @sksrc: The #SeahorseSource to delete the object from.
-     * @object: A object to delete.
-     * 
-     * Delete the objects from the object source. 
-     *
-     * Returns: The remove operation.
-     */
-    SeahorseOperation* (*remove) (SeahorseSource *sksrc, struct _SeahorseObject *sobj);
     
 } SeahorseSourceClass;
 
@@ -156,14 +144,11 @@ GType       seahorse_source_get_type      (void);
 /* Method helper functions ------------------------------------------- */
 
 
-SeahorseOperation*  seahorse_source_load                  (SeahorseSource *sksrc,
-                                                           GQuark id);
+SeahorseOperation*  seahorse_source_load                  (SeahorseSource *sksrc);
                                                           
-void                seahorse_source_load_sync             (SeahorseSource *sksrc,
-                                                           GQuark keyid);
+void                seahorse_source_load_sync             (SeahorseSource *sksrc);
 
-void                seahorse_source_load_async            (SeahorseSource *sksrc,
-                                                           GQuark id);
+void                seahorse_source_load_async            (SeahorseSource *sksrc);
 
 SeahorseOperation*  seahorse_source_search                (SeahorseSource *sksrc,
                                                            const gchar *match);
@@ -189,9 +174,6 @@ SeahorseOperation*  seahorse_source_export                (SeahorseSource *sksrc
 SeahorseOperation*  seahorse_source_export_raw            (SeahorseSource *sksrc, 
                                                            GSList *ids, 
                                                            GOutputStream *output);
-
-SeahorseOperation*  seahorse_source_remove                (SeahorseSource *sksrc,
-                                                           struct _SeahorseObject *sobj);
 
 GQuark              seahorse_source_get_ktype             (SeahorseSource *sksrc);
 

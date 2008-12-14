@@ -320,7 +320,7 @@ description_activate (GtkWidget *entry, SeahorseWidget *swidget)
     
 	/* Make sure not the same */
 	text = gtk_entry_get_text (GTK_ENTRY (entry));
-	original = gnome_keyring_item_info_get_display_name (info);
+	original = seahorse_object_get_label (object);
 	if (text != original && g_utf8_collate (text, original ? original : "") != 0) {
 		
 		info = gnome_keyring_item_info_copy (info);
@@ -745,7 +745,6 @@ void
 seahorse_gkr_item_properties_show (SeahorseGkrItem *git, GtkWindow *parent)
 {
     SeahorseObject *object = SEAHORSE_OBJECT (git);
-    SeahorseSource *sksrc;
     SeahorseWidget *swidget = NULL;
     GtkWidget *widget;
 
@@ -755,9 +754,7 @@ seahorse_gkr_item_properties_show (SeahorseGkrItem *git, GtkWindow *parent)
     if (swidget == NULL)
         return;
 
-    /* This causes the key source to get any specific info about the key */
-    sksrc = seahorse_object_get_source (SEAHORSE_OBJECT (git));
-    seahorse_source_load_async (sksrc, seahorse_object_get_id (object));
+    seahorse_object_refresh (object);
 
     widget = glade_xml_get_widget (swidget->xml, swidget->name);
     g_signal_connect (widget, "response", G_CALLBACK (properties_response), swidget);

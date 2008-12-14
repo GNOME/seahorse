@@ -23,20 +23,8 @@
 #define __SEAHORSE_PKCS11_H__
 
 #include <glib.h>
-#include <glib-object.h>
-#include <gp11.h>
-#include <gp11-hacks.h>
-
-G_BEGIN_DECLS
-
-
 
 #define SEAHORSE_PKCS11_TYPE_STR "pkcs11"
 #define SEAHORSE_PKCS11_TYPE g_quark_from_string ("pkcs11")
-GQuark seahorse_pkcs11_id_from_attributes (GP11Attributes* attrs);
-gboolean seahorse_pkcs11_id_to_attributes (GQuark id, GP11Attributes* attrs);
-
-
-G_END_DECLS
 
 #endif

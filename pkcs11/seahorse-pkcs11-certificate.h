@@ -26,7 +26,7 @@
 
 #include <glib-object.h>
 
-#include "seahorse-object.h"
+#include "seahorse-pkcs11-object.h"
 
 #define SEAHORSE_PKCS11_TYPE_CERTIFICATE               (seahorse_pkcs11_certificate_get_type ())
 #define SEAHORSE_PKCS11_CERTIFICATE(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_PKCS11_TYPE_CERTIFICATE, SeahorsePkcs11Certificate))
@@ -40,27 +40,17 @@ typedef struct _SeahorsePkcs11CertificateClass SeahorsePkcs11CertificateClass;
 typedef struct _SeahorsePkcs11CertificatePrivate SeahorsePkcs11CertificatePrivate;
     
 struct _SeahorsePkcs11Certificate {
-	SeahorseObject parent;
+	SeahorsePkcs11Object parent;
+	SeahorsePkcs11CertificatePrivate *pv;
 };
 
 struct _SeahorsePkcs11CertificateClass {
-	SeahorseObjectClass parent_class;
+	SeahorsePkcs11ObjectClass parent_class;
 };
 
 GType                       seahorse_pkcs11_certificate_get_type               (void);
 
-SeahorsePkcs11Certificate*  seahorse_pkcs11_certificate_new                    (GP11Object* object, 
-                                                                                GP11Attributes* attributes);
-
-GP11Object*                 seahorse_pkcs11_certificate_get_pkcs11_object      (SeahorsePkcs11Certificate* self);
-
-void                        seahorse_pkcs11_certificate_set_pkcs11_object      (SeahorsePkcs11Certificate* self, 
-                                                                                GP11Object* value);
-
-GP11Attributes*             seahorse_pkcs11_certificate_get_pkcs11_attributes  (SeahorsePkcs11Certificate* self);
-
-void                        seahorse_pkcs11_certificate_set_pkcs11_attributes  (SeahorsePkcs11Certificate* self, 
-                                                                                GP11Attributes* value);
+SeahorsePkcs11Certificate*  seahorse_pkcs11_certificate_new                    (GP11Object* object);
 
 gchar*                      seahorse_pkcs11_certificate_get_fingerprint        (SeahorsePkcs11Certificate* self);
 

@@ -1885,7 +1885,7 @@ seahorse_pgp_key_properties_show (SeahorsePgpKey *pkey, GtkWindow *parent)
     /* Don't trigger the import of remote keys if possible */
     if (!remote) {
         /* This causes the key source to get any specific info about the key */
-        seahorse_source_load_sync (sksrc, seahorse_object_get_id (sobj));
+        seahorse_object_refresh (SEAHORSE_OBJECT (pkey));
         sobj = seahorse_context_get_object (SCTX_APP(), sksrc, seahorse_object_get_id (sobj));
         g_return_if_fail (sobj != NULL);
     }

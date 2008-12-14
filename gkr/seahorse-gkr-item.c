@@ -27,10 +27,12 @@
 
 #include "seahorse-context.h"
 #include "seahorse-source.h"
-#include "seahorse-gkr-item.h"
 #include "seahorse-gtkstock.h"
 #include "seahorse-util.h"
 #include "seahorse-secure-memory.h"
+
+#include "seahorse-gkr-item.h"
+#include "seahorse-gkr-operation.h"
 
 /* For gnome-keyring secret type ids */
 #ifdef WITH_PGP
@@ -137,12 +139,9 @@ received_item_info (GnomeKeyringResult result, GnomeKeyringItemInfo *info, gpoin
 		seahorse_gkr_item_set_info (self, info);
 }
 
-static gboolean
-require_item_info (SeahorseGkrItem *self)
+static void
+load_item_info (SeahorseGkrItem *self)
 {
-	if (self->pv->item_info)
-		return TRUE;
-	
 	/* Already in progress */
 	if (!self->pv->req_info) {
 		g_object_ref (self);
@@ -152,7 +151,13 @@ require_item_info (SeahorseGkrItem *self)
 		                                                       received_item_info,
 		                                                       self, g_object_unref);
 	}
-	
+}
+
+static gboolean
+require_item_info (SeahorseGkrItem *self)
+{
+	if (!self->pv->item_info)
+		load_item_info (self);
 	return self->pv->item_info != NULL;
 }
 
@@ -168,12 +173,9 @@ received_item_secret (GnomeKeyringResult result, GnomeKeyringItemInfo *info, gpo
 	}
 }
 
-static gboolean
-require_item_secret (SeahorseGkrItem *self)
+static void
+load_item_secret (SeahorseGkrItem *self)
 {
-	if (self->pv->item_secret)
-		return TRUE;
-	
 	/* Already in progress */
 	if (!self->pv->req_secret) {
 		g_object_ref (self);
@@ -182,8 +184,14 @@ require_item_secret (SeahorseGkrItem *self)
 		                                                         GNOME_KEYRING_ITEM_INFO_SECRET,
 		                                                         received_item_secret,
 		                                                         self, g_object_unref);
-	}
-	
+	}	
+}
+
+static gboolean
+require_item_secret (SeahorseGkrItem *self)
+{
+	if (!self->pv->item_secret)
+		load_item_secret (self);
 	return self->pv->item_secret != NULL;
 }
 
@@ -196,12 +204,9 @@ received_item_attrs (GnomeKeyringResult result, GnomeKeyringAttributeList *attrs
 		seahorse_gkr_item_set_attributes (self, attrs);
 }
 
-static gboolean
-require_item_attrs (SeahorseGkrItem *self)
+static void
+load_item_attrs (SeahorseGkrItem *self)
 {
-	if (self->pv->item_attrs)
-		return TRUE;
-	
 	/* Already in progress */
 	if (!self->pv->req_attrs) {
 		g_object_ref (self);
@@ -209,8 +214,14 @@ require_item_attrs (SeahorseGkrItem *self)
 		                                                         self->pv->item_id,
 		                                                         received_item_attrs,
 		                                                         self, g_object_unref);
-	}
-	
+	}	
+}
+
+static gboolean
+require_item_attrs (SeahorseGkrItem *self)
+{
+	if (!self->pv->item_attrs)
+		load_item_attrs (self);
 	return self->pv->item_attrs != NULL;
 }
 
@@ -223,12 +234,9 @@ received_item_acl (GnomeKeyringResult result, GList *acl, gpointer data)
 		seahorse_gkr_item_set_acl (self, acl);
 }
 
-static gboolean
-require_item_acl (SeahorseGkrItem *self)
+static void
+load_item_acl (SeahorseGkrItem *self)
 {
-	if (self->pv->item_acl)
-		return TRUE;
-	
 	/* Already in progress */
 	if (!self->pv->req_acl) {
 		g_object_ref (self);
@@ -237,7 +245,13 @@ require_item_acl (SeahorseGkrItem *self)
 		                                                received_item_acl,
 		                                                self, g_object_unref);
 	}
-	
+}
+
+static gboolean
+require_item_acl (SeahorseGkrItem *self)
+{
+	if (!self->pv->item_acl)
+		load_item_acl (self);
 	return self->pv->item_acl != NULL;
 }
 
@@ -499,29 +513,27 @@ seahorse_gkr_item_realize (SeahorseObject *obj)
 }
 
 static void
-seahorse_gkr_item_flush (SeahorseObject *obj)
+seahorse_gkr_item_refresh (SeahorseObject *obj)
 {
 	SeahorseGkrItem *self = SEAHORSE_GKR_ITEM (obj);
-
+	
 	if (self->pv->item_info)
-		gnome_keyring_item_info_free (self->pv->item_info);
-	self->pv->item_info = NULL;
-	g_assert (self->pv->req_info == NULL);
-    
+		load_item_info (self);
 	if (self->pv->item_attrs)
-		gnome_keyring_attribute_list_free (self->pv->item_attrs);
-	self->pv->item_attrs = NULL;
-	g_assert (self->pv->req_attrs == NULL);
-    
-	gnome_keyring_acl_free (self->pv->item_acl);
-	self->pv->item_acl = NULL;
-	g_assert (self->pv->req_acl == NULL);
-	
-	g_free (self->pv->item_secret);
-	self->pv->item_secret = NULL;
-	g_assert (self->pv->req_secret == NULL);
-	
-	SEAHORSE_OBJECT_CLASS (seahorse_gkr_item_parent_class)->flush (obj);
+		load_item_attrs (self);
+	if (self->pv->item_acl)
+		load_item_acl (self);
+	if (self->pv->item_secret)
+		load_item_secret (self);
+
+	SEAHORSE_OBJECT_CLASS (seahorse_gkr_item_parent_class)->refresh (obj);
+}
+
+static SeahorseOperation*
+seahorse_gkr_item_delete (SeahorseObject *obj)
+{
+	SeahorseGkrItem *self = SEAHORSE_GKR_ITEM (obj);
+	return seahorse_gkr_operation_delete_item (self);
 }
 
 static void
@@ -622,9 +634,24 @@ seahorse_gkr_item_finalize (GObject *gobject)
 	g_free (self->pv->keyring_name);
 	self->pv->keyring_name = NULL;
     
-	g_object_freeze_notify (gobject);
-	seahorse_gkr_item_flush (SEAHORSE_OBJECT (self));
+	if (self->pv->item_info)
+		gnome_keyring_item_info_free (self->pv->item_info);
+	self->pv->item_info = NULL;
+	g_assert (self->pv->req_info == NULL);
     
+	if (self->pv->item_attrs)
+		gnome_keyring_attribute_list_free (self->pv->item_attrs);
+	self->pv->item_attrs = NULL;
+	g_assert (self->pv->req_attrs == NULL);
+    
+	gnome_keyring_acl_free (self->pv->item_acl);
+	self->pv->item_acl = NULL;
+	g_assert (self->pv->req_acl == NULL);
+	
+	g_free (self->pv->item_secret);
+	self->pv->item_secret = NULL;
+	g_assert (self->pv->req_secret == NULL);
+	
 	G_OBJECT_CLASS (seahorse_gkr_item_parent_class)->finalize (gobject);
 }
 
@@ -644,7 +671,8 @@ seahorse_gkr_item_class_init (SeahorseGkrItemClass *klass)
 	
 	seahorse_class = SEAHORSE_OBJECT_CLASS (klass);
 	seahorse_class->realize = seahorse_gkr_item_realize;
-	seahorse_class->flush = seahorse_gkr_item_flush;
+	seahorse_class->refresh = seahorse_gkr_item_refresh;
+	seahorse_class->delete = seahorse_gkr_item_delete;
 	
 	g_type_class_add_private (klass, sizeof (SeahorseGkrItemPrivate));
     

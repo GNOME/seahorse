@@ -23,9 +23,6 @@
  * SeahorseGkrOperation: Operations to be done on gnome-keyring items
  * 
  * - Derived from SeahorseOperation
- *
- * Properties:
- *  TODO: 
  */
  
 #ifndef __SEAHORSE_GKR_OPERATION_H__
@@ -34,6 +31,7 @@
 #include "seahorse-operation.h"
 #include "seahorse-gkr-source.h"
 #include "seahorse-gkr-item.h"
+#include "seahorse-gkr-keyring.h"
 
 #define SEAHORSE_TYPE_GKR_OPERATION            (seahorse_gkr_operation_get_type ())
 #define SEAHORSE_GKR_OPERATION(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_GKR_OPERATION, SeahorseGkrOperation))
@@ -42,12 +40,21 @@
 #define SEAHORSE_IS_GKR_OPERATION_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_GKR_OPERATION))
 #define SEAHORSE_GKR_OPERATION_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_GKR_OPERATION, SeahorseGkrOperationClass))
 
-DECLARE_OPERATION (Gkr, gkr)
-
-    /*< public >*/
-    SeahorseGkrSource *gsrc;
+typedef struct _SeahorseGkrOperation SeahorseGkrOperation;
+typedef struct _SeahorseGkrOperationClass SeahorseGkrOperationClass;
+typedef struct _SeahorseGkrOperationPrivate SeahorseGkrOperationPrivate;
     
-END_DECLARE_OPERATION
+struct _SeahorseGkrOperation {
+	SeahorseOperation parent;
+	SeahorseGkrOperationPrivate *pv;
+};
+
+struct _SeahorseGkrOperationClass {
+	SeahorseOperationClass parent_class;
+};
+
+GType                seahorse_gkr_operation_get_type               (void);
+
 
 gboolean             seahorse_gkr_operation_parse_error       (GnomeKeyringResult result, 
                                                                GError **err);
@@ -59,5 +66,11 @@ SeahorseOperation*   seahorse_gkr_operation_update_info       (SeahorseGkrItem *
 /* result: nothing */
 SeahorseOperation*   seahorse_gkr_operation_update_acl        (SeahorseGkrItem *git,
                                                                GList *acl);
+
+/* result: nothing */
+SeahorseOperation*   seahorse_gkr_operation_delete_item       (SeahorseGkrItem *git);
+
+/* result: nothing */
+SeahorseOperation*   seahorse_gkr_operation_delete_keyring    (SeahorseGkrKeyring *git);
 
 #endif /* __SEAHORSE_GKR_OPERATION_H__ */

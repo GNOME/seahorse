@@ -788,7 +788,7 @@ seahorse_context_refresh_local (SeahorseContext *sctx)
                 seahorse_multi_operation_take (mop, op);
             }
             
-            op = seahorse_source_load (ks, 0);
+            op = seahorse_source_load (ks);
             
             if (mop != NULL)
                 seahorse_multi_operation_take (mop, op);

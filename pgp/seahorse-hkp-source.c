@@ -56,9 +56,6 @@
 #define PGP_KEY_BEGIN   "-----BEGIN PGP PUBLIC KEY BLOCK-----"
 #define PGP_KEY_END     "-----END PGP PUBLIC KEY BLOCK-----"
 
-/* Amount of keys to load in a batch */
-#define DEFAULT_LOAD_BATCH 30
-
 #define SOUP_MESSAGE_IS_ERROR(msg) \
     (SOUP_STATUS_IS_TRANSPORT_ERROR((msg)->status_code) || \
      SOUP_STATUS_IS_CLIENT_ERROR((msg)->status_code) || \
@@ -779,26 +776,6 @@ seahorse_hkp_source_search (SeahorseSource *src, const gchar *match)
     return SEAHORSE_OPERATION (hop);
 }
 
-static SeahorseOperation*
-seahorse_hkp_source_load (SeahorseSource *src, GQuark keyid)
-{
-    SeahorseOperation *op;
-    
-    g_assert (SEAHORSE_IS_SOURCE (src));
-    g_assert (SEAHORSE_IS_HKP_SOURCE (src));
-    
-    op = SEAHORSE_SOURCE_CLASS (seahorse_hkp_source_parent_class)->load (src, keyid);
-    if (op != NULL)
-        return op;
-
-    /* No way to find new all or new keys */
-    if (!keyid)
-        return seahorse_operation_new_complete (NULL);
-
-    /* TODO: Does this actually work? */
-    return seahorse_hkp_source_search (src, seahorse_pgp_key_get_rawid (keyid));
-}
-
 static SeahorseOperation* 
 seahorse_hkp_source_import (SeahorseSource *sksrc, GInputStream *input)
 {
@@ -957,7 +934,6 @@ seahorse_hkp_source_class_init (SeahorseHKPSourceClass *klass)
 
 	key_class = SEAHORSE_SOURCE_CLASS (klass);
 	key_class->canonize_id = seahorse_pgp_key_get_cannonical_id;
-	key_class->load = seahorse_hkp_source_load;
 	key_class->search = seahorse_hkp_source_search;
 	key_class->import = seahorse_hkp_source_import;
 	key_class->export_raw = seahorse_hkp_source_export_raw;

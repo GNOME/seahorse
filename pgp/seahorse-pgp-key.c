@@ -100,55 +100,60 @@ load_gpgme_key (GQuark id, int mode, int secret, gpgme_key_t *key)
 	return TRUE;
 }
 
-static gboolean
-require_key_public (SeahorsePgpKey *self, int list_mode)
+static void
+load_key_public (SeahorsePgpKey *self, int list_mode)
 {
 	gpgme_key_t key = NULL;
 	gboolean ret;
 	GQuark id;
 	
-	if (self->pv->pubkey && (self->pv->list_mode & list_mode) == list_mode)
-		return TRUE;
-	
 	list_mode |= self->pv->list_mode;
 	
 	id = seahorse_object_get_id (SEAHORSE_OBJECT (self));
-	g_return_val_if_fail (id, FALSE);
+	g_return_if_fail (id);
 	
 	ret = load_gpgme_key (id, list_mode, FALSE, &key);
-	if (!ret)
-		return FALSE;
+	if (ret) {
+		self->pv->list_mode = list_mode;
+		seahorse_pgp_key_set_public (self, key);
+		gpgmex_key_unref (key);
+	}
+}
+
+static gboolean
+require_key_public (SeahorsePgpKey *self, int list_mode)
+{
+	if (!self->pv->pubkey || (self->pv->list_mode & list_mode) != list_mode)
+		load_key_public (self, list_mode);
+	return self->pv->pubkey && (self->pv->list_mode & list_mode) == list_mode;
+}
+
+static void
+load_key_private (SeahorsePgpKey *self)
+{
+	gpgme_key_t key = NULL;
+	gboolean ret;
+	GQuark id;
 	
-	self->pv->list_mode = list_mode;
-	seahorse_pgp_key_set_public (self, key);
-	gpgmex_key_unref (key);
+	if (!self->pv->has_secret)
+		return;
 	
-	return TRUE;
+	id = seahorse_object_get_id (SEAHORSE_OBJECT (self));
+	g_return_if_fail (id);
+	
+	ret = load_gpgme_key (id, GPGME_KEYLIST_MODE_LOCAL, TRUE, &key);
+	if (ret) {
+		seahorse_pgp_key_set_private (self, key);
+		gpgmex_key_unref (key);
+	}
 }
 
 static gboolean
 require_key_private (SeahorsePgpKey *self)
 {
-	gpgme_key_t key = NULL;
-	gboolean ret;
-	GQuark id;
-	
-	if (self->pv->seckey)
-		return TRUE;
-	if (!self->pv->has_secret)
-		return FALSE;
-	
-	id = seahorse_object_get_id (SEAHORSE_OBJECT (self));
-	g_return_val_if_fail (id, FALSE);
-	
-	ret = load_gpgme_key (id, GPGME_KEYLIST_MODE_LOCAL, TRUE, &key);
-	if (!ret)
-		return FALSE;
-	
-	seahorse_pgp_key_set_private (self, key);
-	gpgmex_key_unref (key);
-	
-	return TRUE;
+	if (!self->pv->seckey)
+		load_key_private (self);
+	return self->pv->seckey != NULL;
 }
 
 static gboolean
@@ -163,22 +168,23 @@ require_key_subkeys (SeahorsePgpKey *self)
 	return require_key_public (self, GPGME_KEYLIST_MODE_LOCAL);
 }
 
+static void
+load_key_photos (SeahorsePgpKey *self)
+{
+	gpgme_error_t gerr;
+	gerr = seahorse_pgp_key_op_photos_load (self);
+	if (!GPG_IS_OK (gerr)) 
+		g_warning ("couldn't load key photos: %s", gpgme_strerror (gerr));
+	else
+		self->pv->photos_loaded = TRUE;
+}
+
 static gboolean
 require_key_photos (SeahorsePgpKey *self)
 {
-	gpgme_error_t gerr;
-	
-	if (self->pv->photos_loaded)
-		return TRUE;
-	
-	gerr = seahorse_pgp_key_op_photos_load (self);
-	if (!GPG_IS_OK (gerr)) {
-		g_warning ("couldn't load key photos: %s", gpgme_strerror (gerr));
-		return FALSE;
-	}
-	
-	self->pv->photos_loaded = TRUE;
-	return TRUE;
+	if (!self->pv->photos_loaded)
+		load_key_photos (self);
+	return self->pv->photos_loaded;
 }
 
 static gchar* 
@@ -408,33 +414,36 @@ seahorse_pgp_key_realize (SeahorseObject *obj)
 }
 
 static void
-seahorse_pgp_key_flush (SeahorseObject *obj)
+seahorse_pgp_key_refresh (SeahorseObject *obj)
 {
 	SeahorsePgpKey *self = SEAHORSE_PGP_KEY (obj);
-	GList *l;
 	
-	/* Free all the attached UIDs */
-	for (l = self->pv->uids; l; l = g_list_next (l))
-		seahorse_object_set_parent (l->data, NULL);
-	seahorse_object_list_free (self->pv->uids);
-	self->pv->uids = NULL;
-
-	/* Free all the attached Photos */
-	seahorse_object_list_free (self->pv->photos);
-	self->pv->photos = NULL;
-	self->pv->photos_loaded = FALSE;
-	
-	/* Free all the attached Subkeys */
-	seahorse_object_list_free (self->pv->subkeys);
-	self->pv->subkeys = NULL;
-
 	if (self->pv->pubkey)
-		gpgmex_key_unref (self->pv->pubkey);
+		load_key_public (self, self->pv->list_mode);
 	if (self->pv->seckey)
-		gpgmex_key_unref (self->pv->seckey);
-	self->pv->pubkey = self->pv->seckey = NULL;
+		load_key_private (self);
+	if (self->pv->photos_loaded)
+		load_key_photos (self);
 
-	SEAHORSE_OBJECT_CLASS (seahorse_pgp_key_parent_class)->flush (obj);
+	SEAHORSE_OBJECT_CLASS (seahorse_pgp_key_parent_class)->refresh (obj);
+}
+
+static SeahorseOperation*
+seahorse_pgp_key_delete (SeahorseObject *obj)
+{
+	SeahorsePgpKey *self = SEAHORSE_PGP_KEY (obj);
+	gpgme_error_t gerr;
+	GError *err = NULL;
+	
+	if (self->pv->seckey)
+		gerr = seahorse_pgp_key_op_delete_pair (self);
+	else
+		gerr = seahorse_pgp_key_op_delete (self);
+	
+	if (!GPG_IS_OK (gerr))
+		seahorse_gpgme_to_error (gerr, &err);
+	
+	return seahorse_operation_new_complete (err);
 }
 
 static void
@@ -514,7 +523,30 @@ seahorse_pgp_key_set_property (GObject *object, guint prop_id, const GValue *val
 static void
 seahorse_pgp_key_object_dispose (GObject *obj)
 {
-	seahorse_pgp_key_flush (SEAHORSE_OBJECT (obj));
+	SeahorsePgpKey *self = SEAHORSE_PGP_KEY (obj);
+	GList *l;
+	
+	/* Free all the attached UIDs */
+	for (l = self->pv->uids; l; l = g_list_next (l))
+		seahorse_object_set_parent (l->data, NULL);
+	seahorse_object_list_free (self->pv->uids);
+	self->pv->uids = NULL;
+
+	/* Free all the attached Photos */
+	seahorse_object_list_free (self->pv->photos);
+	self->pv->photos = NULL;
+	self->pv->photos_loaded = FALSE;
+	
+	/* Free all the attached Subkeys */
+	seahorse_object_list_free (self->pv->subkeys);
+	self->pv->subkeys = NULL;
+
+	if (self->pv->pubkey)
+		gpgmex_key_unref (self->pv->pubkey);
+	if (self->pv->seckey)
+		gpgmex_key_unref (self->pv->seckey);
+	self->pv->pubkey = self->pv->seckey = NULL;
+
 	G_OBJECT_CLASS (seahorse_pgp_key_parent_class)->dispose (obj);
 }
 
@@ -546,9 +578,10 @@ seahorse_pgp_key_class_init (SeahorsePgpKeyClass *klass)
 	gobject_class->set_property = seahorse_pgp_key_set_property;
 	gobject_class->get_property = seahorse_pgp_key_get_property;
 	
-	seahorse_class->flush = seahorse_pgp_key_flush;
+	seahorse_class->refresh = seahorse_pgp_key_refresh;
 	seahorse_class->realize = seahorse_pgp_key_realize;
-    
+	seahorse_class->delete = seahorse_pgp_key_delete;
+	
 	g_object_class_install_property (gobject_class, PROP_PUBKEY,
 	        g_param_spec_boxed ("pubkey", "GPGME Public Key", "GPGME Public Key that this object represents",
 	                            SEAHORSE_PGP_BOXED_KEY, G_PARAM_READWRITE));
@@ -651,17 +684,6 @@ seahorse_pgp_key_get_rawid (GQuark keyid)
 	
 	rawid = strchr (id, ':');
 	return rawid ? rawid + 1 : id;
-}
-
-void
-seahorse_pgp_key_reload (SeahorsePgpKey *pkey)
-{
-	SeahorseSource *src;
-	
-	g_return_if_fail (SEAHORSE_IS_PGP_KEY (pkey));
-	src = seahorse_object_get_source (SEAHORSE_OBJECT (pkey));
-	g_return_if_fail (SEAHORSE_IS_PGP_SOURCE (src));
-	seahorse_source_load_async (src, seahorse_object_get_id (SEAHORSE_OBJECT (pkey)));
 }
 
 gpgme_key_t

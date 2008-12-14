@@ -314,7 +314,7 @@ keyring_default_done (GnomeKeyringResult result, gpointer data)
         src = seahorse_context_find_source (SCTX_APP (), g_quark_from_static_string ("gnome-keyring"), 
                                             SEAHORSE_LOCATION_LOCAL);
         if (src)
-            seahorse_source_load_async (src, 0);
+            seahorse_source_load_async (src);
         
     /* Setting the default keyring failed */
     } else if (result != GNOME_KEYRING_RESULT_CANCELLED) {     

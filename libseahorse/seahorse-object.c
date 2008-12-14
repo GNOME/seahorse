@@ -483,6 +483,8 @@ seahorse_object_set_property (GObject *obj, guint prop_id, const GValue *value,
 		break;
 	case PROP_FLAGS:
 		flags = g_value_get_uint (value);
+		if (!SEAHORSE_OBJECT_GET_CLASS (obj)->delete)
+			flags &= ~SEAHORSE_FLAG_DELETABLE;
 		if (flags != self->pv->flags) {
 			self->pv->flags = flags;
 			g_object_notify (obj, "flags");
@@ -506,13 +508,12 @@ seahorse_object_real_realize (SeahorseObject *self)
 }
 
 static void 
-seahorse_object_real_flush (SeahorseObject *self)
+seahorse_object_real_refresh (SeahorseObject *self)
 {
 	/* 
 	 * We do nothing by default. It's up to the derived class
-	 * to override this and flush themselves when called.
+	 * to override this and refresh themselves when called.
 	 */
-	self->pv->realized = FALSE;
 }
 
 static void
@@ -529,7 +530,7 @@ seahorse_object_class_init (SeahorseObjectClass *klass)
 	gobject_class->get_property = seahorse_object_get_property;
 	
 	klass->realize = seahorse_object_real_realize;
-	klass->flush = seahorse_object_real_flush;
+	klass->refresh = seahorse_object_real_refresh;
 	
 	g_object_class_install_property (gobject_class, PROP_SOURCE,
 	           g_param_spec_object ("source", "Object Source", "Source the Object came from", 
@@ -848,24 +849,23 @@ seahorse_object_realize (SeahorseObject *self)
 }
 
 void
-seahorse_object_flush (SeahorseObject *self)
+seahorse_object_refresh (SeahorseObject *self)
 {
 	SeahorseObjectClass *klass;
 	g_return_if_fail (SEAHORSE_IS_OBJECT (self));
 	klass = SEAHORSE_OBJECT_GET_CLASS (self);
-	g_return_if_fail (klass->flush);
-	(klass->flush) (self);
+	g_return_if_fail (klass->refresh);
+	(klass->refresh) (self);
 }
 
-void
-seahorse_object_refresh (SeahorseObject *self)
+SeahorseOperation*
+seahorse_object_delete (SeahorseObject *self)
 {
-	g_return_if_fail (SEAHORSE_IS_OBJECT (self));
-
-	g_object_freeze_notify (G_OBJECT (self));
-	seahorse_object_flush (self);
-	seahorse_object_realize (self);
-	g_object_thaw_notify (G_OBJECT (self));
+	SeahorseObjectClass *klass;
+	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), NULL);
+	klass = SEAHORSE_OBJECT_GET_CLASS (self);
+	g_return_val_if_fail (klass->delete, NULL);
+	return (klass->delete) (self);
 }
 
 gboolean 

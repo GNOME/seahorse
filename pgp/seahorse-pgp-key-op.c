@@ -1088,7 +1088,6 @@ seahorse_pgp_key_op_set_expires (SeahorsePgpSubkey *subkey, const time_t expires
 	ExpireParm exp_parm;
 	SeahorseEditParm *parms;
 	gpgme_key_t key;
-	gpgme_error_t gerr;
 	
 	g_return_val_if_fail (SEAHORSE_IS_PGP_SUBKEY (subkey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
 	g_return_val_if_fail (expires != seahorse_pgp_subkey_get_expires (subkey), GPG_E (GPG_ERR_INV_VALUE));

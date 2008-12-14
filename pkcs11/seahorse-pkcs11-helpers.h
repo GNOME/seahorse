@@ -19,5 +19,14 @@
  * 02111-1307, USA.  
  */
 
-#include "seahorse-pkcs11.h"
+#ifndef __SEAHORSE_PKCS11_HELPERS_H__
+#define __SEAHORSE_PKCS11_HELPERS_H__
 
+#include <glib.h>
+#include <gp11.h>
+
+GQuark seahorse_pkcs11_id_from_attributes (GP11Attributes* attrs);
+gboolean seahorse_pkcs11_id_to_attributes (GQuark id, GP11Attributes* attrs);
+
+
+#endif

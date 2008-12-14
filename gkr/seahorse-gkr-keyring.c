@@ -23,6 +23,7 @@
 
 #include "seahorse-gkr.h"
 #include "seahorse-gkr-keyring.h"
+#include "seahorse-gkr-operation.h"
 
 enum {
 	PROP_0,
@@ -74,12 +75,9 @@ received_keyring_info (GnomeKeyringResult result, GnomeKeyringInfo *info, gpoint
 	seahorse_gkr_keyring_set_info (self, info);
 }
 
-static gboolean
-require_keyring_info (SeahorseGkrKeyring *self)
+static void
+load_keyring_info (SeahorseGkrKeyring *self)
 {
-	if (self->pv->keyring_info)
-		return TRUE;
-	
 	/* Already in progress */
 	if (!self->pv->req_info) {
 		g_object_ref (self);
@@ -87,7 +85,13 @@ require_keyring_info (SeahorseGkrKeyring *self)
 		                                             received_keyring_info,
 		                                             self, g_object_unref);
 	}
-	
+}
+
+static gboolean
+require_keyring_info (SeahorseGkrKeyring *self)
+{
+	if (!self->pv->keyring_info)
+		load_keyring_info (self);
 	return self->pv->keyring_info != NULL;
 }
 
@@ -121,16 +125,21 @@ seahorse_gkr_keyring_realize (SeahorseObject *obj)
 }
 
 static void
-seahorse_gkr_keyring_flush (SeahorseObject *obj)
+seahorse_gkr_keyring_refresh (SeahorseObject *obj)
 {
 	SeahorseGkrKeyring *self = SEAHORSE_GKR_KEYRING (obj);
 
 	if (self->pv->keyring_info)
-		gnome_keyring_info_free (self->pv->keyring_info);
-	self->pv->keyring_info = NULL;
-	g_assert (self->pv->req_info == NULL);
-    
-	SEAHORSE_OBJECT_CLASS (seahorse_gkr_keyring_parent_class)->flush (obj);
+		load_keyring_info (self);
+	
+	SEAHORSE_OBJECT_CLASS (seahorse_gkr_keyring_parent_class)->refresh (obj);
+}
+
+static SeahorseOperation*
+seahorse_gkr_keyring_delete (SeahorseObject *obj)
+{
+	SeahorseGkrKeyring *self = SEAHORSE_GKR_KEYRING (obj);
+	return seahorse_gkr_operation_delete_keyring (self);
 }
 
 
@@ -167,6 +176,11 @@ seahorse_gkr_keyring_finalize (GObject *obj)
 {
 	SeahorseGkrKeyring *self = SEAHORSE_GKR_KEYRING (obj);
 	
+	if (self->pv->keyring_info)
+		gnome_keyring_info_free (self->pv->keyring_info);
+	self->pv->keyring_info = NULL;
+	g_assert (self->pv->req_info == NULL);
+    
 	g_free (self->pv->keyring_name);
 	self->pv->keyring_name = NULL;
 	
@@ -233,7 +247,8 @@ seahorse_gkr_keyring_class_init (SeahorseGkrKeyringClass *klass)
     
 	seahorse_class = SEAHORSE_OBJECT_CLASS (klass);
 	seahorse_class->realize = seahorse_gkr_keyring_realize;
-	seahorse_class->flush = seahorse_gkr_keyring_flush;
+	seahorse_class->refresh = seahorse_gkr_keyring_refresh;
+	seahorse_class->delete = seahorse_gkr_keyring_delete;
 	
 	g_object_class_install_property (gobject_class, PROP_KEYRING_NAME,
 	           g_param_spec_string ("keyring-name", "Gnome Keyring Name", "Name of keyring.", 

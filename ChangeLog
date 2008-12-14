@@ -1,3 +1,52 @@
+2008-12-13  Stef Walter  <stef@memberwebs.com>
+
+	* gkr/seahorse-gkr-item.c:
+	* gkr/seahorse-gkr-item-properties.c:
+	* gkr/seahorse-gkr-keyring.c:
+	* gkr/seahorse-gkr-operation.c:
+	* gkr/seahorse-gkr-operation.h:
+	* gkr/seahorse-gkr-source.c:
+	* libseahorse/seahorse-context.c:
+	* libseahorse/seahorse-object.c:
+	* libseahorse/seahorse-object.h:
+	* libseahorse/seahorse-prefs-keyrings.c:
+	* libseahorse/seahorse-source.c:
+	* libseahorse/seahorse-source.h:
+	* libseahorse/seahorse-types.h:
+	* libseahorse/seahorse-unknown.c:
+	* libseahorse/seahorse-unknown-source.c:
+	* pgp/seahorse-hkp-source.c:
+	* pgp/seahorse-ldap-source.c:
+	* pgp/seahorse-pgp-key.c:
+	* pgp/seahorse-pgp-key-op.c:
+	* pgp/seahorse-pgp-key-properties.c:
+	* pgp/seahorse-pgp-source.c:
+	* pkcs11/gp11.vapi: (removed)
+	* pkcs11/gp11-hacks.h: (removed)
+	* pkcs11/libseahorse-pkcs11-c.vapi: (removed)
+	* pkcs11/Makefile.am:
+	* pkcs11/p11.vapi: (removed)
+	* pkcs11/seahorse-pkcs11.c:
+	* pkcs11/seahorse-pkcs11.h:
+	* pkcs11/seahorse-pkcs11.vala: (removed)
+	* pkcs11/seahorse-pkcs11-certificate.c:
+	* pkcs11/seahorse-pkcs11-certificate.h:
+	* pkcs11/seahorse-pkcs11-commands.c:
+	* pkcs11/seahorse-pkcs11-helpers.c: (added)
+	* pkcs11/seahorse-pkcs11-helpers.h: (added)
+	* pkcs11/seahorse-pkcs11-module.c:
+	* pkcs11/seahorse-pkcs11-object.c: (added)
+	* pkcs11/seahorse-pkcs11-object.h: (added)
+	* pkcs11/seahorse-pkcs11-operations.c: (added)
+	* pkcs11/seahorse-pkcs11-operations.h: (added)
+	* pkcs11/seahorse-pkcs11-source.c:
+	* pkcs11/seahorse-pkcs11-source.h:
+	* pkcs11/seahorse-pkcs11-source.vala: (removed)
+	Remove delete from the source to the object. The object now 
+	knows how to delete itself (if possible). Change how refresh 
+	works so that an object is always as valid as possible.
+	Rework PKCS#11 objects and sources. 
+	
 2008-12-12  Stef Walter  <stef@memberwebs.com>
 
 	* libseahorse/Makefile.am:

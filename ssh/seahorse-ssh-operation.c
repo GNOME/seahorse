@@ -870,10 +870,9 @@ change_password_cb (SeahorseSSHOperation *sop, const gchar* msg)
 static void
 change_result_cb (SeahorseSSHOperation *sop)
 {
-    SeahorseSSHOperationPrivate *pv = SEAHORSE_SSH_OPERATION_GET_PRIVATE (sop);
-    if (pv->prompt_skey)
-        seahorse_source_load_async (SEAHORSE_SOURCE (sop->sksrc), 
-                                        seahorse_object_get_id (pv->prompt_skey));
+	SeahorseSSHOperationPrivate *pv = SEAHORSE_SSH_OPERATION_GET_PRIVATE (sop);
+	if (pv->prompt_skey)
+		seahorse_object_refresh (SEAHORSE_OBJECT (pv->prompt_skey));
 }
 
 SeahorseOperation*
@@ -1140,8 +1139,7 @@ seahorse_ssh_operation_authorize (SeahorseSSHSource *ssrc, SeahorseSSHKey *skey,
     
     /* Just reload that one key */
     if (!err)
-        seahorse_source_load (SEAHORSE_SOURCE (ssrc), 
-                                  seahorse_object_get_id (SEAHORSE_OBJECT (skey)));
+        seahorse_object_refresh (SEAHORSE_OBJECT (skey));
     
     return seahorse_operation_new_complete (err);
 }

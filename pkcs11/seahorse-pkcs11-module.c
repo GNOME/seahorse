@@ -55,6 +55,7 @@ seahorse_pkcs11_module_init (void)
 		slots = gp11_module_get_slots (module, FALSE);
 		for (s = slots; s; s = g_list_next (s)) {
 			
+			gp11_slot_set_reuse_sessions (s->data, TRUE);
 			source = SEAHORSE_SOURCE (seahorse_pkcs11_source_new (s->data));
 			seahorse_context_take_source (NULL, source);
 		}
@@ -67,6 +68,6 @@ seahorse_pkcs11_module_init (void)
 	seahorse_util_string_slist_free (module_paths);
 
 	/* Let these register themselves */
-	g_type_class_unref (g_type_class_ref (SEAHORSE_PKCS11_TYPE_SOURCE));
+	g_type_class_unref (g_type_class_ref (SEAHORSE_TYPE_PKCS11_SOURCE));
 	g_type_class_unref (g_type_class_ref (SEAHORSE_PKCS11_TYPE_COMMANDS));
 }

@@ -128,7 +128,7 @@ seahorse_pkcs11_commands_constructor (GType type, guint n_props, GObjectConstruc
 	SeahorseView *view;
 	
 	if (obj) {
-		pv = SEAHORSE_PKCS11_COMMANDS_GET_PRIVATE (self);
+		pv = SEAHORSE_PKCS11_COMMANDS_GET_PRIVATE (obj);
 		self = SEAHORSE_PKCS11_COMMANDS (obj);
 		base = SEAHORSE_COMMANDS (self);
 	
@@ -204,6 +204,7 @@ seahorse_pkcs11_commands_class_init (SeahorsePkcs11CommandsClass *klass)
 	seahorse_pkcs11_commands_parent_class = g_type_class_peek_parent (klass);
 	g_type_class_add_private (klass, sizeof (SeahorsePkcs11CommandsPrivate));
 
+	gobject_class->constructor = seahorse_pkcs11_commands_constructor;
 	gobject_class->dispose = seahorse_pkcs11_commands_dispose;
 	gobject_class->finalize = seahorse_pkcs11_commands_finalize;
 	gobject_class->set_property = seahorse_pkcs11_commands_set_property;
