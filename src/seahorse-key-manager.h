@@ -24,20 +24,19 @@
 
 #include <glib.h>
 #include <glib-object.h>
-#include <seahorse-viewer.h>
 #include <gtk/gtk.h>
-#include <seahorse-operation.h>
-#include <seahorse-object.h>
+
+#include "seahorse-viewer.h"
 
 G_BEGIN_DECLS
 
 
-#define SEAHORSE_TYPE_KEY_MANAGER (seahorse_key_manager_get_type ())
-#define SEAHORSE_KEY_MANAGER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_KEY_MANAGER, SeahorseKeyManager))
-#define SEAHORSE_KEY_MANAGER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_KEY_MANAGER, SeahorseKeyManagerClass))
-#define SEAHORSE_IS_KEY_MANAGER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_KEY_MANAGER))
-#define SEAHORSE_IS_KEY_MANAGER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_KEY_MANAGER))
-#define SEAHORSE_KEY_MANAGER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_KEY_MANAGER, SeahorseKeyManagerClass))
+#define SEAHORSE_TYPE_KEY_MANAGER 	      (seahorse_key_manager_get_type ())
+#define SEAHORSE_KEY_MANAGER(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_KEY_MANAGER, SeahorseKeyManager))
+#define SEAHORSE_KEY_MANAGER_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_KEY_MANAGER, SeahorseKeyManagerClass))
+#define SEAHORSE_IS_KEY_MANAGER(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_KEY_MANAGER))
+#define SEAHORSE_IS_KEY_MANAGER_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_KEY_MANAGER))
+#define SEAHORSE_KEY_MANAGER_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_KEY_MANAGER, SeahorseKeyManagerClass))
 
 typedef struct _SeahorseKeyManager SeahorseKeyManager;
 typedef struct _SeahorseKeyManagerClass SeahorseKeyManagerClass;
@@ -45,7 +44,7 @@ typedef struct _SeahorseKeyManagerPrivate SeahorseKeyManagerPrivate;
 
 struct _SeahorseKeyManager {
 	SeahorseViewer parent_instance;
-	SeahorseKeyManagerPrivate * priv;
+	SeahorseKeyManagerPrivate *pv;
 };
 
 struct _SeahorseKeyManagerClass {
@@ -57,8 +56,8 @@ struct _SeahorseKeyManagerClass {
  * logic throughout this file. 
  */
 
-GtkWindow* seahorse_key_manager_show (SeahorseOperation* op);
-GType seahorse_key_manager_get_type (void);
+GtkWindow*       seahorse_key_manager_show         (SeahorseOperation *op);
+GType            seahorse_key_manager_get_type     (void);
 
 
 G_END_DECLS
