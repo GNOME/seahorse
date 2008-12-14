@@ -265,7 +265,7 @@ namespace Seahorse {
 			window.drag_data_received += on_target_drag_data_received;
 			
 			/* To show first time dialog */
-			GLib.Timeout.add (1000, on_first_timer);
+			GLib.Timeout.add_seconds (1, on_first_timer);
 			
 			selection_changed ();
 		}

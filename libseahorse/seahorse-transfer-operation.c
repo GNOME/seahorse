@@ -387,7 +387,7 @@ seahorse_transfer_operation_new (const gchar *message, SeahorseSource *from,
     seahorse_operation_mark_progress (SEAHORSE_OPERATION (top), message, 0.0);
     
     /* We delay and continue from a callback */
-    g_timeout_add (0, (GSourceFunc)start_transfer, top);
+    g_timeout_add_seconds (0, (GSourceFunc)start_transfer, top);
     
     return SEAHORSE_OPERATION (top);
 }

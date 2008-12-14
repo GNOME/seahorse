@@ -322,7 +322,7 @@ seahorse_progress_show (SeahorseOperation *operation, const gchar *title,
     
     /* Show the progress, after one second */
     if (delayed)
-        g_timeout_add (1000, (GSourceFunc)progress_show, operation);
+        g_timeout_add_seconds (1, (GSourceFunc)progress_show, operation);
     
     /* Right away */
     else

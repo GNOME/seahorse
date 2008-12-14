@@ -1255,7 +1255,7 @@ static GObject * seahorse_key_manager_constructor (GType type, guint n_construct
 		gtk_drag_dest_set_target_list (GTK_WIDGET (seahorse_viewer_get_window (SEAHORSE_VIEWER (self))), targets);
 		g_signal_connect_object (GTK_WIDGET (seahorse_viewer_get_window (SEAHORSE_VIEWER (self))), "drag-data-received", ((GCallback) (_seahorse_key_manager_on_target_drag_data_received_gtk_widget_drag_data_received)), self, 0);
 		/* To show first time dialog */
-		g_timeout_add (((guint) (1000)), _seahorse_key_manager_on_first_timer_gsource_func, self);
+		g_timeout_add_seconds (((guint) (1)), _seahorse_key_manager_on_first_timer_gsource_func, self);
 		g_signal_emit_by_name (G_OBJECT (SEAHORSE_VIEW (self)), "selection-changed");
 		(actions == NULL ? NULL : (actions = (g_object_unref (actions), NULL)));
 		(action == NULL ? NULL : (action = (g_object_unref (action), NULL)));
