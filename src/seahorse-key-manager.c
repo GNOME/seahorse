@@ -618,6 +618,7 @@ on_key_import_clipboard (GtkAction* action, SeahorseKeyManager* self)
 	gtk_clipboard_request_text (board, (GtkClipboardTextReceivedFunc)on_clipboard_received, self);
 }
 
+#ifdef WITH_KEYSERVER
 static void 
 on_remote_find (GtkAction* action, SeahorseKeyManager* self) 
 {
@@ -640,6 +641,7 @@ on_remote_sync (GtkAction* action, SeahorseKeyManager* self)
 	seahorse_keyserver_sync_show (objects, seahorse_viewer_get_window (SEAHORSE_VIEWER (self)));
 	g_list_free (objects);
 }
+#endif
 
 static void 
 on_app_quit (GtkAction* action, SeahorseKeyManager* self) 
@@ -744,12 +746,14 @@ static const GtkActionEntry GENERAL_ENTRIES[] = {
 	  N_("Import keys from the clipboard"), G_CALLBACK (on_key_import_clipboard) }
 };
 
+#ifdef WITH_KEYSERVER
 static const GtkActionEntry SERVER_ENTRIES[] = {
 	{ "remote-find", GTK_STOCK_FIND, N_("_Find Remote Keys..."), "", 
 	  N_("Search for keys on a key server"), G_CALLBACK (on_remote_find) }, 
 	{ "remote-sync", GTK_STOCK_REFRESH, N_("_Sync and Publish Keys..."), "", 
 	  N_("Publish and/or synchronize your keys with those online."), G_CALLBACK (on_remote_sync) }
 };
+#endif
 
 static const GtkToggleActionEntry VIEW_ENTRIES[] = {
 	{ "view-type", NULL, N_("T_ypes"), NULL, N_("Show type column"), 
@@ -870,11 +874,13 @@ seahorse_key_manager_constructor (GType type, guint n_props, GObjectConstructPar
 	gtk_action_group_set_translation_domain (actions, GETTEXT_PACKAGE);
 	gtk_action_group_add_actions (actions, GENERAL_ENTRIES, G_N_ELEMENTS (GENERAL_ENTRIES), self);
 	seahorse_viewer_include_actions (SEAHORSE_VIEWER (self), actions);
-	
+
+#ifdef WITH_KEYSERVER	
 	actions = gtk_action_group_new ("keyserver");
 	gtk_action_group_set_translation_domain (actions, GETTEXT_PACKAGE);
 	gtk_action_group_add_actions (actions, SERVER_ENTRIES, G_N_ELEMENTS (SERVER_ENTRIES), self);
 	seahorse_viewer_include_actions (SEAHORSE_VIEWER (self), actions);
+#endif WITH_KEYSERVER
 	
 	self->pv->view_actions = gtk_action_group_new ("view");
 	gtk_action_group_set_translation_domain (self->pv->view_actions, GETTEXT_PACKAGE);

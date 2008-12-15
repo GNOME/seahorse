@@ -24,9 +24,11 @@ VALA_VAPIS = \
 	$(top_srcdir)/config.vapi \
 	$(top_srcdir)/libseahorse/libseahorse-c.vapi \
 	$(top_srcdir)/libseahorse/libseahorse.vapi
-	
+
+if WITH_KEYSERVER	
 VALA_CFILES = $(VALA_SRCS:.vala=.c)
 VALA_HFILES = $(VALA_SRCS:.vala=.h)
+endif
 
 SUFFIXES = .vala .c .h
 
