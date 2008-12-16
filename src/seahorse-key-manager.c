@@ -880,7 +880,7 @@ seahorse_key_manager_constructor (GType type, guint n_props, GObjectConstructPar
 	gtk_action_group_set_translation_domain (actions, GETTEXT_PACKAGE);
 	gtk_action_group_add_actions (actions, SERVER_ENTRIES, G_N_ELEMENTS (SERVER_ENTRIES), self);
 	seahorse_viewer_include_actions (SEAHORSE_VIEWER (self), actions);
-#endif WITH_KEYSERVER
+#endif /* WITH_KEYSERVER */
 	
 	self->pv->view_actions = gtk_action_group_new ("view");
 	gtk_action_group_set_translation_domain (self->pv->view_actions, GETTEXT_PACKAGE);
@@ -1091,5 +1091,6 @@ GtkWindow*
 seahorse_key_manager_show (void) 
 {
 	SeahorseKeyManager *man = g_object_new (SEAHORSE_TYPE_KEY_MANAGER, "name", "key-manager", NULL);
+	g_object_ref_sink (man);
 	return GTK_WINDOW (seahorse_widget_get_toplevel (SEAHORSE_WIDGET (man)));
 }

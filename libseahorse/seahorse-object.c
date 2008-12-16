@@ -249,7 +249,8 @@ seahorse_object_init (SeahorseObject *self)
 	self->pv->description = g_strdup ("");
 	self->pv->icon = g_strdup ("gtk-missing-image");
 	self->pv->identifier = g_strdup ("");
-	self->pv->location = SEAHORSE_LOCATION_LOCAL;
+	self->pv->location = SEAHORSE_LOCATION_INVALID;
+	self->pv->usage = SEAHORSE_USAGE_NONE;
 }
 
 static void
@@ -601,7 +602,8 @@ GQuark
 seahorse_object_get_id (SeahorseObject *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), 0);
-	seahorse_object_realize (self);
+	if (!self->pv->id)
+		seahorse_object_realize (self);
 	return self->pv->id;
 }
 
@@ -609,7 +611,8 @@ GQuark
 seahorse_object_get_tag (SeahorseObject *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), 0);
-	seahorse_object_realize (self);
+	if (!self->pv->tag)
+		seahorse_object_realize (self);
 	return self->pv->tag;	
 }
 
@@ -674,7 +677,6 @@ SeahorseObject*
 seahorse_object_get_parent (SeahorseObject *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), NULL);
-	seahorse_object_realize (self);
 	return self->pv->parent;
 }
 
@@ -767,7 +769,8 @@ SeahorseLocation
 seahorse_object_get_location (SeahorseObject *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), SEAHORSE_LOCATION_INVALID);
-	seahorse_object_realize (self);
+	if (self->pv->location == SEAHORSE_LOCATION_INVALID)
+		seahorse_object_realize (self);
 	return self->pv->location;
 }
 
@@ -775,7 +778,8 @@ SeahorseUsage
 seahorse_object_get_usage (SeahorseObject *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), SEAHORSE_USAGE_NONE);
-	seahorse_object_realize (self);
+	if (self->pv->usage == SEAHORSE_USAGE_NONE)
+		seahorse_object_realize (self);
 	return self->pv->usage;	
 }
 

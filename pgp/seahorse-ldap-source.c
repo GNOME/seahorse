@@ -831,6 +831,7 @@ parse_key_from_ldap_entry (SeahorseLDAPOperation *lop, LDAPMessage *res)
         	list = g_list_prepend (NULL, subkey);
         	seahorse_pgp_key_set_subkeys (key, list);
         	seahorse_object_list_free (list);
+        	g_object_set (key, "location", SEAHORSE_LOCATION_REMOTE, NULL);
         
         	add_key (lop->lsrc, key);
         	g_object_unref (key);

@@ -337,7 +337,6 @@ seahorse_keyserver_results_constructor (GType type, guint n_props, GObjectConstr
 	
 	/* Our predicate for filtering keys */
 	self->pv->pred.tag = g_quark_from_string ("openpgp");
-	self->pv->pred.usage = SEAHORSE_USAGE_PUBLIC_KEY;
 	self->pv->pred.location = SEAHORSE_LOCATION_REMOTE;
 	self->pv->pred.custom = (SeahorseObjectPredicateFunc)on_filter_objects;
 	self->pv->pred.custom_target = self;
@@ -375,6 +374,10 @@ seahorse_keyserver_results_finalize (GObject *obj)
 	if (self->pv->store)
 		g_object_unref (self->pv->store);
 	self->pv->store = NULL;
+	
+	if (self->pv->view)
+		gtk_tree_view_set_model (self->pv->view, NULL);
+	self->pv->view = NULL;
 	
 	G_OBJECT_CLASS (seahorse_keyserver_results_parent_class)->finalize (obj);
 }
@@ -452,12 +455,6 @@ seahorse_keyserver_results_class_init (SeahorseKeyserverResultsClass *klass)
 /* -----------------------------------------------------------------------------
  * PUBLIC 
  */
-
-SeahorseKeyserverResults*
-seahorse_keyserver_results_new (void)
-{
-	return g_object_new (SEAHORSE_TYPE_KEYSERVER_RESULTS, NULL);
-}
 
 void 
 seahorse_keyserver_results_show (SeahorseOperation* op, GtkWindow* parent, const char* search_text) 

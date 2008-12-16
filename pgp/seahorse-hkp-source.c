@@ -431,6 +431,7 @@ parse_hkp_index (const gchar *response)
 
 				key = seahorse_pgp_key_new ();
 				keys = g_list_prepend (keys, key);
+		        	g_object_set (key, "location", SEAHORSE_LOCATION_REMOTE, NULL);
 
 				/* Cut the length and fingerprint */
 				fpr = strchr (v[0], '/');
@@ -502,9 +503,8 @@ parse_hkp_index (const gchar *response)
 			/* TODO: Implement signatures */
             
 		/* Other junk */
-		} else {
+		} else if (key) {
             
-			/* Allocate a new key */
 			seahorse_pgp_key_set_uids (SEAHORSE_PGP_KEY (key), uids);
 			seahorse_object_list_free (uids);
 			seahorse_pgp_key_set_subkeys (SEAHORSE_PGP_KEY (key), subkeys);

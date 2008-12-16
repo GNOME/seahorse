@@ -111,11 +111,10 @@ static void
 get_base_iter (SeahorseKeyManagerStore *skstore, GtkTreeIter *base_iter, 
                const GtkTreeIter *iter)
 {
-    GtkTreeIter i;
-    g_assert (skstore->priv->sort && skstore->priv->filter);
-    
-    gtk_tree_model_sort_convert_iter_to_child_iter (skstore->priv->sort, &i, (GtkTreeIter*)iter);
-    gtk_tree_model_filter_convert_iter_to_child_iter (skstore->priv->filter, base_iter, &i);
+	GtkTreeIter i;
+	g_return_if_fail (skstore->priv->sort && skstore->priv->filter);
+	gtk_tree_model_sort_convert_iter_to_child_iter (skstore->priv->sort, &i, (GtkTreeIter*)iter);
+	gtk_tree_model_filter_convert_iter_to_child_iter (skstore->priv->filter, base_iter, &i);
 }
 
 /* Given a base store iter, get the treeview iter */
@@ -127,6 +126,7 @@ get_upper_iter (SeahorseKeyManagerStore *skstore, GtkTreeIter *upper_iter,
     GtkTreePath *child_path, *path;
     gboolean ret;
     
+    g_return_val_if_fail (skstore->priv->filter, FALSE);
     child_path = gtk_tree_model_get_path (gtk_tree_model_filter_get_model (skstore->priv->filter), 
                                           (GtkTreeIter*)iter);
     g_return_val_if_fail (child_path != NULL, FALSE);
@@ -142,6 +142,7 @@ get_upper_iter (SeahorseKeyManagerStore *skstore, GtkTreeIter *upper_iter,
     if (!ret)
         return FALSE;
   
+    g_return_val_if_fail (skstore->priv->sort, FALSE);
     gtk_tree_model_sort_convert_child_iter_to_iter (skstore->priv->sort, upper_iter, &i);
     return TRUE;
 }
@@ -253,6 +254,7 @@ filter_callback (GtkTreeModel *model, GtkTreeIter *iter, gpointer data)
 static gboolean
 refilter_now (SeahorseKeyManagerStore* skstore)
 {
+    g_return_if_fail (skstore->priv->filter);
     seahorse_set_refresh (SEAHORSE_SET_MODEL (skstore)->set);
     gtk_tree_model_filter_refilter (skstore->priv->filter);    
     skstore->priv->filter_stag = 0;
@@ -301,6 +303,7 @@ set_sort_to (SeahorseKeyManagerStore *skstore, const gchar *name)
     }
     
     if (id != -1) {
+        g_return_if_fail (skstore->priv->sort);
         sort = GTK_TREE_SORTABLE (skstore->priv->sort);
         gtk_tree_sortable_set_sort_column_id (sort, id, ord);
     }
@@ -317,7 +320,8 @@ sort_changed (GtkTreeSortable *sort, gpointer user_data)
     gchar* x;
     
     skstore = SEAHORSE_KEY_MANAGER_STORE (user_data);
-        
+    g_return_if_fail (skstore->priv->sort);
+    
     /* We have a sort so save it */
     if (gtk_tree_sortable_get_sort_column_id (sort, &id, &ord)) {
         if (id >= 0 && id < N_COLS) {
@@ -745,11 +749,16 @@ seahorse_key_manager_store_finalize (GObject *gobject)
 {
     SeahorseKeyManagerStore *skstore = SEAHORSE_KEY_MANAGER_STORE (gobject);
 
-    g_signal_handlers_disconnect_by_func (skstore->priv->sort, sort_changed, skstore);
-
-    /* These were allocated in the constructor */
-    g_object_unref (skstore->priv->sort);
-    g_object_unref (skstore->priv->filter);
+    if (skstore->priv->sort) {
+        g_signal_handlers_disconnect_by_func (skstore->priv->sort, sort_changed, skstore);
+        g_object_remove_weak_pointer (G_OBJECT (skstore->priv->sort), (gpointer*)&skstore->priv->sort);
+        skstore->priv->sort = NULL;
+    }
+    
+    if (skstore->priv->filter) {
+        g_object_remove_weak_pointer (G_OBJECT (skstore->priv->filter), (gpointer*)&skstore->priv->filter);
+        skstore->priv->filter = NULL;
+    }
      
     /* Allocated in property setter */
     g_free (skstore->priv->filter_text); 
@@ -865,7 +874,7 @@ seahorse_key_manager_store_new (SeahorseSet *skset, GtkTreeView *view)
     if ((sort = seahorse_gconf_get_string (KEY_MANAGER_SORT_KEY)) != NULL) {
         set_sort_to (skstore, sort);
         g_free (sort);
-    }  
+    } 
     
     seahorse_gconf_notify_lazy (LISTING_SCHEMAS, (GConfClientNotifyFunc)gconf_notification, 
                                 view, GTK_WIDGET (view));
@@ -880,6 +889,12 @@ seahorse_key_manager_store_new (SeahorseSet *skset, GtkTreeView *view)
     gtk_drag_source_set (GTK_WIDGET (view), GDK_BUTTON1_MASK,
                          store_targets, G_N_ELEMENTS (store_targets), GDK_ACTION_COPY);
 
+    /* We keep track of these but not as a strong reference */
+    g_object_add_weak_pointer (G_OBJECT (skstore->priv->filter), (gpointer*)&skstore->priv->filter);
+    g_object_unref (skstore->priv->filter);
+    g_object_add_weak_pointer (G_OBJECT (skstore->priv->sort), (gpointer*)&skstore->priv->sort);
+    g_object_unref (skstore->priv->sort);
+    
     return skstore;
 }
 

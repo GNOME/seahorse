@@ -280,8 +280,6 @@ seahorse_gpgme_key_realize (SeahorseObject *obj)
 	SeahorseGpgmeKey *self = SEAHORSE_GPGME_KEY (obj);
 	SeahorseLocation loc;
 	SeahorseUsage usage;
-	const gchar *description, *icon, *identifier;
-	GQuark id;
 	guint flags;
 	
 	if (!self->pv->pubkey)
@@ -326,12 +324,6 @@ seahorse_gpgme_key_realize (SeahorseObject *obj)
 
 	g_object_set (obj, "flags", flags, NULL);
 	
-	SEAHORSE_OBJECT_CLASS (seahorse_gpgme_key_parent_class)->realize (obj);
-	
-	/* The key id */
-	g_return_if_fail (self->pv->pubkey->subkeys);
-	identifier = self->pv->pubkey->subkeys->keyid;
-
 	/* The location */
 	loc = seahorse_object_get_location (obj);
 	
@@ -342,23 +334,17 @@ seahorse_gpgme_key_realize (SeahorseObject *obj)
 	else if (loc <= SEAHORSE_LOCATION_LOCAL)
 		loc = SEAHORSE_LOCATION_LOCAL;
 
-	/* The type */
-	if (self->pv->seckey) {
-		usage = SEAHORSE_USAGE_PRIVATE_KEY;
-		description = _("Private GPGME Key");
-		icon = SEAHORSE_STOCK_SECRET;
-	} else {
-		usage = SEAHORSE_USAGE_PUBLIC_KEY;
-		description = _("Public GPGME Key");
-		icon = SEAHORSE_STOCK_KEY;
-	}
+	g_object_set (obj, "location", loc, NULL);
 
-	g_object_set (obj,
-		      "icon", icon,
-		      "usage", usage,
-		      "description", description,
-		      "location", loc,
-		      NULL);
+	/* The type */
+	if (self->pv->seckey)
+		usage = SEAHORSE_USAGE_PRIVATE_KEY;
+	else
+		usage = SEAHORSE_USAGE_PUBLIC_KEY;
+
+	g_object_set (obj, "usage", usage, NULL);
+	
+	SEAHORSE_OBJECT_CLASS (seahorse_gpgme_key_parent_class)->realize (obj);
 }
 
 static void

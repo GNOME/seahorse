@@ -169,7 +169,9 @@ seahorse_pgp_key_realize (SeahorseObject *obj)
 {
 	SeahorsePgpKey *self = SEAHORSE_PGP_KEY (obj);
 	const gchar *identifier, *nickname;
+	const gchar *description, *icon;
 	gchar *markup, *name;
+	SeahorseUsage usage;
 	GList *subkeys;
 	
 	
@@ -183,12 +185,28 @@ seahorse_pgp_key_realize (SeahorseObject *obj)
 	name = calc_name (self);
 	markup = calc_markup (self, seahorse_object_get_flags (obj));
 	nickname = calc_short_name (self);
+	
+	g_object_get (obj, "usage", &usage, NULL);
 		
+	/* The type */
+	if (usage == SEAHORSE_USAGE_PRIVATE_KEY) {
+		description = _("Private PGP Key");
+		icon = SEAHORSE_STOCK_SECRET;
+	} else {
+		description = _("Public PGP Key");
+		icon = SEAHORSE_STOCK_KEY;
+		if (usage == SEAHORSE_USAGE_NONE)
+			g_object_set (obj, "usage", SEAHORSE_USAGE_PUBLIC_KEY, NULL);
+	}
+	
+	
 	g_object_set (obj,
 		      "label", name,
 		      "markup", markup,
 		      "nickname", nickname,
 		      "identifier", identifier,
+		      "description", description,
+		      "icon", icon,
 		      NULL);
 		
 	g_free (markup);
@@ -239,9 +257,10 @@ seahorse_pgp_key_get_property (GObject *object, guint prop_id,
 		g_value_set_string (value, seahorse_pgp_key_get_algo (self));
 		break;
 	case PROP_VALIDITY:
+		g_value_set_uint (value, SEAHORSE_VALIDITY_UNKNOWN);
+		break;
 	case PROP_TRUST:
-		g_warning ("This property %s getter must be overridden in class %s",
-		           pspec->name, G_OBJECT_TYPE_NAME (object));
+		g_value_set_uint (value, SEAHORSE_VALIDITY_UNKNOWN);
 		break;
 	}
 }

@@ -1,3 +1,23 @@
+2008-12-16  Stef Walter  <stef@memberwebs.com>
+
+	* src/seahorse-key-manager-store.c: Fix cyclical reference,
+	with the filter and sort models.
+	
+	* libseahorse/seahorse-context.c: Don't automatically try 
+	and refresh remote key sources.
+	
+	* libseahorse/seahorse-object.c: Don't try to realize properties
+	for which we already have a value.
+
+2008-12-16  Stef Walter  <stef@memberwebs.com>
+	
+	* pgp/seahorse-gpgme-key.c:
+	* pgp/seahorse-hkp-source.c:
+	* pgp/seahorse-ldap-source.c:
+	* pgp/seahorse-pgp-key.c:
+	* src/seahorse-keyserver-results.c: Fix bugs relating to searching
+	for remote keys, that resulted from recent refactoring.
+
 2008-12-15  Stef Walter  <stef@memberwebs.com>
 
 	* libseahorse/seahorse-progress.c: Disconnect properly from 
