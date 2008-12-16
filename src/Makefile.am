@@ -43,12 +43,13 @@ endif
 
 bin_PROGRAMS = seahorse
 
-seahorse_SOURCES = main.c \
+seahorse_SOURCES = \
 	seahorse-preferences.c seahorse-preferences.h \
 	eggtreemultidnd.c eggtreemultidnd.h \
 	seahorse-generate-select.c seahorse-generate-select.h \
 	seahorse-key-manager.c seahorse-key-manager.h \
 	seahorse-key-manager-store.c seahorse-key-manager-store.h \
+	seahorse-main.c \
 	seahorse-viewer.c seahorse-viewer.h \
 	seahorse-windows.h \
 	$(KEYSERVER_SRCS)
