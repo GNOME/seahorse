@@ -268,6 +268,9 @@ remove_object (SeahorseSetModel *smodel, gpointer was_sobj)
 	g_node_traverse (node, G_POST_ORDER, G_TRAVERSE_ALL, -1, 
 	                 (GNodeTraverseFunc)remove_each_object, smodel);
 
+	/* This is needed for objects that went away */
+	g_hash_table_remove (pv->object_to_node, was_sobj);
+
 	/* 
 	 * Now check if the parent of this object is actually in the set, or was 
 	 * just added for the sake of holding the child (see add_object above)
@@ -652,6 +655,7 @@ seahorse_set_model_dispose (GObject *gobject)
 	if (pv->root_node) {
 		g_node_traverse (pv->root_node, G_POST_ORDER, G_TRAVERSE_ALL, -1, 
 				 (GNodeTraverseFunc)remove_each_object, smodel);
+		g_assert (g_hash_table_size (pv->object_to_node) == 0);
 	}
 
 	/* Disconnect from the set */
