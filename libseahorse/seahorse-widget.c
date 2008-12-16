@@ -142,19 +142,21 @@ seahorse_widget_constructor (GType type, guint n_props, GObjectConstructParam* p
     obj = G_OBJECT_CLASS (parent_class)->constructor (type, n_props, props);
     swidget = SEAHORSE_WIDGET (obj);
 
-    widthkey = g_strdup_printf ("%s%s%s", WINDOW_SIZE, swidget->name, "_width");
-    width = seahorse_gconf_get_integer (widthkey);
+    /* Load window size for windows that aren't dialogs */
+    window = GTK_WINDOW (seahorse_widget_get_toplevel (swidget));
+    if (!GTK_IS_DIALOG (window)) {
+	    widthkey = g_strdup_printf ("%s%s%s", WINDOW_SIZE, swidget->name, "_width");
+	    width = seahorse_gconf_get_integer (widthkey);
     
-    heightkey = g_strdup_printf ("%s%s%s", WINDOW_SIZE, swidget->name, "_height");
-    height = seahorse_gconf_get_integer (heightkey);
+	    heightkey = g_strdup_printf ("%s%s%s", WINDOW_SIZE, swidget->name, "_height");
+	    height = seahorse_gconf_get_integer (heightkey);
 
-    if (width > 0 && height > 0) {
-        window = GTK_WINDOW (seahorse_widget_get_toplevel (swidget));
-        gtk_window_resize (window, width, height);
+	    if (width > 0 && height > 0)
+		    gtk_window_resize (window, width, height);
+
+	    g_free (widthkey);
+	    g_free (heightkey);
     }
-    
-    g_free (widthkey);
-    g_free (heightkey);
     
     return obj;
 }
@@ -454,19 +456,23 @@ seahorse_widget_destroy (SeahorseWidget *swidget)
     gint width, height;
 
     g_return_if_fail (swidget != NULL && SEAHORSE_IS_WIDGET (swidget));
-    
-    /* Save window size */
     widget = seahorse_widget_get_toplevel (swidget);
-    gtk_window_get_size (GTK_WINDOW (widget), &width, &height);
     
-    widthkey = g_strdup_printf ("%s%s%s", WINDOW_SIZE, swidget->name, "_width");
-    seahorse_gconf_set_integer (widthkey, width);
+    /* Don't save window size for dialogs */
+    if (!GTK_IS_DIALOG (widget)) {
+
+	    /* Save window size */
+	    gtk_window_get_size (GTK_WINDOW (widget), &width, &height);
     
-    heightkey = g_strdup_printf ("%s%s%s", WINDOW_SIZE, swidget->name, "_height");
-    seahorse_gconf_set_integer (heightkey, height);
+	    widthkey = g_strdup_printf ("%s%s%s", WINDOW_SIZE, swidget->name, "_width");
+	    seahorse_gconf_set_integer (widthkey, width);
     
-    g_free (widthkey);
-    g_free (heightkey);
+	    heightkey = g_strdup_printf ("%s%s%s", WINDOW_SIZE, swidget->name, "_height");
+	    seahorse_gconf_set_integer (heightkey, height);
+    
+	    g_free (widthkey);
+	    g_free (heightkey);
+    }
     
     /* Destroy Widget */
     if (!swidget->destroying) {
