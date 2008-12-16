@@ -114,11 +114,12 @@ operation_done (SeahorseOperation *operation, SeahorseWidget *swidget)
         if (err) {
             operation_progress (operation, err->message, 0.0, swidget);
             g_error_free (err);
-            return;
         }
+    } else {
+	    operation_progress (operation, "", 0.0, swidget);
     }
     
-    operation_progress (operation, "", 0.0, swidget);
+    g_signal_handlers_disconnect_by_func (swidget, disconnect_progress, operation);
     g_object_set_data (G_OBJECT (swidget), "operation", NULL);
 }
 
@@ -127,7 +128,6 @@ disconnect_progress (SeahorseWidget *widget, SeahorseOperation *op)
 {
     g_signal_handlers_disconnect_by_func (op, operation_progress, widget);
     g_signal_handlers_disconnect_by_func (op, operation_done, widget);
-    g_signal_handlers_disconnect_by_func (widget, disconnect_progress, op);
 }
 
 void 

@@ -410,7 +410,7 @@ seahorse_pkcs11_object_cannonical_id (GP11Object *object)
 	/* TODO: This whole ID thing needs rethinking */
 	
 	text = g_strdup_printf("%s:%lu/%lu", SEAHORSE_PKCS11_TYPE_STR, 
-                                         gp11_slot_get_handle (seahorse_pkcs11_source_get_slot (SEAHORSE_PKCS11_SOURCE (seahorse_object_get_source (SEAHORSE_OBJECT (object))))),
+                                         gp11_slot_get_handle (object->slot),
                                          gp11_object_get_handle (object));
 	
 	quark = g_quark_from_string (text);
