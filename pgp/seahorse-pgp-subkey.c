@@ -34,7 +34,7 @@ enum {
 	PROP_0,
 	PROP_INDEX,
 	PROP_KEYID,
-	PROP_VALIDITY,
+	PROP_FLAGS,
 	PROP_LENGTH,
 	PROP_ALGORITHM,
 	PROP_CREATED,
@@ -48,7 +48,7 @@ G_DEFINE_TYPE (SeahorsePgpSubkey, seahorse_pgp_subkey, G_TYPE_OBJECT);
 struct _SeahorsePgpSubkeyPrivate {
 	guint index;
 	gchar *keyid;
-	SeahorseValidity validity;
+	guint flags;
 	guint length;
 	gchar *algorithm;
 	gulong created;
@@ -80,8 +80,8 @@ seahorse_pgp_subkey_get_property (GObject *object, guint prop_id,
 	case PROP_KEYID:
 		g_value_set_string (value, seahorse_pgp_subkey_get_keyid (self));
 		break;
-	case PROP_VALIDITY:
-		g_value_set_uint (value, seahorse_pgp_subkey_get_validity (self));
+	case PROP_FLAGS:
+		g_value_set_uint (value, seahorse_pgp_subkey_get_flags (self));
 		break;
 	case PROP_LENGTH:
 		g_value_set_uint (value, seahorse_pgp_subkey_get_length (self));
@@ -117,8 +117,8 @@ seahorse_pgp_subkey_set_property (GObject *object, guint prop_id, const GValue *
 	case PROP_KEYID:
 		seahorse_pgp_subkey_set_keyid (self, g_value_get_string (value));
 		break;
-	case PROP_VALIDITY:
-		seahorse_pgp_subkey_set_validity (self, g_value_get_uint (value));
+	case PROP_FLAGS:
+		seahorse_pgp_subkey_set_flags (self, g_value_get_uint (value));
 		break;
 	case PROP_LENGTH:
 		seahorse_pgp_subkey_set_length (self, g_value_get_uint (value));
@@ -181,8 +181,8 @@ seahorse_pgp_subkey_class_init (SeahorsePgpSubkeyClass *klass)
                 g_param_spec_string ("keyid", "Key ID", "GPG Key ID",
                                      "", G_PARAM_READWRITE));
 
-        g_object_class_install_property (gobject_class, PROP_VALIDITY,
-	        g_param_spec_uint ("validity", "Validity", "PGP subkey validity",
+        g_object_class_install_property (gobject_class, PROP_FLAGS,
+	        g_param_spec_uint ("flags", "Flags", "PGP subkey flags",
 	                           0, G_MAXUINT, 0, G_PARAM_READWRITE));
 
 	g_object_class_install_property (gobject_class, PROP_LENGTH,
@@ -251,19 +251,19 @@ seahorse_pgp_subkey_set_keyid (SeahorsePgpSubkey *self, const gchar *keyid)
 	g_object_notify (G_OBJECT (self), "keyid");
 }
 
-SeahorseValidity
-seahorse_pgp_subkey_get_validity (SeahorsePgpSubkey *self)
+guint
+seahorse_pgp_subkey_get_flags (SeahorsePgpSubkey *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_PGP_SUBKEY (self), 0);
-	return self->pv->validity;
+	return self->pv->flags;
 }
 
 void
-seahorse_pgp_subkey_set_validity (SeahorsePgpSubkey *self, SeahorseValidity validity)
+seahorse_pgp_subkey_set_flags (SeahorsePgpSubkey *self, guint flags)
 {
 	g_return_if_fail (SEAHORSE_IS_PGP_SUBKEY (self));
-	self->pv->validity = validity;
-	g_object_notify (G_OBJECT (self), "validity");
+	self->pv->flags = flags;
+	g_object_notify (G_OBJECT (self), "flags");
 }
 
 guint

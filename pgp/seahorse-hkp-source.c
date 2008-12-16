@@ -399,10 +399,11 @@ parse_hkp_index (const gchar *response)
 	gchar **v;
 	gchar *line, *t;
     
-	SeahorsePgpKey *key;
+	SeahorsePgpKey *key = NULL;
 	GList *keys = NULL;
 	GList *subkeys = NULL;
 	GList *uids = NULL;
+	guint flags;
     
 	lines = g_strsplit (response, "\n", 0);
     
@@ -424,15 +425,12 @@ parse_hkp_index (const gchar *response)
                 
 			} else {
 				gchar *fingerprint, *fpr = NULL;
-				gboolean revoked = FALSE;
 				const gchar *algo;
 				gboolean has_uid = TRUE;
 				SeahorsePgpSubkey *subkey;
-
-				key = seahorse_pgp_key_new ();
-				keys = g_list_prepend (keys, key);
-		        	g_object_set (key, "location", SEAHORSE_LOCATION_REMOTE, NULL);
-
+				
+				flags = SEAHORSE_FLAG_EXPORTABLE;
+       	
 				/* Cut the length and fingerprint */
 				fpr = strchr (v[0], '/');
 				if (fpr == NULL) {
@@ -462,18 +460,31 @@ parse_hkp_index (const gchar *response)
 				g_strstrip (v[2]);
             
 				if (g_ascii_strcasecmp (v[2], "*** KEY REVOKED ***") == 0) {
-					revoked = TRUE;
+					flags |= SEAHORSE_FLAG_REVOKED;
 					has_uid = FALSE;
 				} 
-                
+				
+				if (key) {
+					seahorse_pgp_key_set_uids (SEAHORSE_PGP_KEY (key), uids);
+					seahorse_object_list_free (uids);
+					seahorse_pgp_key_set_subkeys (SEAHORSE_PGP_KEY (key), subkeys);
+					seahorse_object_list_free (subkeys);
+					uids = subkeys = NULL;
+					key = NULL;
+				}
+
+				key = seahorse_pgp_key_new ();
+				keys = g_list_prepend (keys, key);
+		        	g_object_set (key, "location", SEAHORSE_LOCATION_REMOTE, "flags", 
+		        	              flags, NULL);
+		        	
 				/* Add all the info to the key */
 				subkey = seahorse_pgp_subkey_new ();
 				seahorse_pgp_subkey_set_keyid (subkey, fpr);
 				fingerprint = seahorse_pgp_subkey_calc_fingerprint (fpr);
 				seahorse_pgp_subkey_set_fingerprint (subkey, fingerprint);
 				g_free (fingerprint);
-				if(revoked)
-					seahorse_pgp_subkey_set_validity (subkey, SEAHORSE_VALIDITY_REVOKED);
+				seahorse_pgp_subkey_set_flags (subkey, flags);
 				seahorse_pgp_subkey_set_created (subkey, parse_hkp_date (v[1]));
 				seahorse_pgp_subkey_set_length (subkey, strtol (v[0], NULL, 10));
 				seahorse_pgp_subkey_set_algorithm (subkey, algo);
@@ -502,19 +513,18 @@ parse_hkp_index (const gchar *response)
             
 			/* TODO: Implement signatures */
             
-		/* Other junk */
-		} else if (key) {
-            
-			seahorse_pgp_key_set_uids (SEAHORSE_PGP_KEY (key), uids);
-			seahorse_object_list_free (uids);
-			seahorse_pgp_key_set_subkeys (SEAHORSE_PGP_KEY (key), subkeys);
-			seahorse_object_list_free (subkeys);
-			uids = subkeys = NULL;
-		}
+		} 
 	}
     
 	g_strfreev (lines);
-                        
+
+	if (key) {
+		seahorse_pgp_key_set_uids (SEAHORSE_PGP_KEY (key), uids);
+		seahorse_object_list_free (uids);
+		seahorse_pgp_key_set_subkeys (SEAHORSE_PGP_KEY (key), subkeys);
+		seahorse_object_list_free (subkeys);
+	}
+	
 	return keys; 
 }
 

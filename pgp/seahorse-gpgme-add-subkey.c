@@ -71,34 +71,12 @@ type_changed (GtkComboBox *combo, SeahorseWidget *swidget)
 	}
 }
 
-static GtkWidget *
-get_expires (SeahorseWidget *swidget)
-{
-    GtkWidget *widget;
-    GList *children;
-
-    g_return_val_if_fail (swidget != NULL, NULL);
-
-    widget = seahorse_widget_get_widget (swidget, "table1");
-    g_return_val_if_fail (widget != NULL, NULL);
-
-    children = gtk_container_get_children (GTK_CONTAINER (widget));
-    g_return_val_if_fail (children, NULL);
-
-    /* The fifth element should be expires */
-    widget = g_list_nth_data (children, 5);
-
-    g_list_free (children);
-
-    return widget;
-}
-
 static void
 never_expires_toggled (GtkToggleButton *togglebutton, SeahorseWidget *swidget)
 {
     GtkWidget *widget;
 
-    widget = get_expires (swidget);
+    widget = GTK_WIDGET (g_object_get_data (G_OBJECT (swidget), "expires-datetime"));
     g_return_if_fail (widget);
 
     gtk_widget_set_sensitive (GTK_WIDGET (widget),
@@ -135,7 +113,7 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 	glade_xml_get_widget (swidget->xml, "never_expires"))))
 		expires = 0;
 	else {
-        widget = get_expires (swidget);
+        widget = GTK_WIDGET (g_object_get_data (G_OBJECT (swidget), "expires-datetime"));
         g_return_if_fail (widget);
 
         egg_datetime_get_as_time_t (EGG_DATETIME (widget), &expires);
@@ -176,7 +154,7 @@ seahorse_gpgme_add_subkey_new (SeahorseGpgmeKey *pkey, GtkWindow *parent)
 	GtkTreeModel *model;
 	GtkTreeIter iter;
 	GtkCellRenderer *renderer;
-	GtkWidget *widget;
+	GtkWidget *widget, *datetime;
 	
 	swidget = seahorse_object_widget_new ("add-subkey", parent, SEAHORSE_OBJECT (pkey));
 	g_return_if_fail (swidget != NULL);
@@ -229,7 +207,13 @@ seahorse_gpgme_add_subkey_new (SeahorseGpgmeKey *pkey, GtkWindow *parent)
 	glade_xml_signal_connect_data (swidget->xml, "type_changed",
 		G_CALLBACK (type_changed), swidget);
 
-    widget = seahorse_widget_get_widget (swidget, "table1");
-    g_return_if_fail (widget != NULL);
-    gtk_table_attach_defaults (GTK_TABLE (widget), egg_datetime_new (), 1, 2, 2, 3);
+	
+	widget = seahorse_widget_get_widget (swidget, "datetime-placeholder");
+	g_return_if_fail (widget != NULL);
+
+	datetime = egg_datetime_new ();
+	gtk_container_add (GTK_CONTAINER (widget), datetime);
+	gtk_widget_show (datetime);
+	gtk_widget_set_sensitive (datetime, FALSE);
+	g_object_set_data (G_OBJECT (swidget), "expires-datetime", datetime);
 }

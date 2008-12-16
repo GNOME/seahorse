@@ -202,7 +202,6 @@ seahorse_pgp_key_realize (SeahorseObject *obj)
 			g_object_set (obj, "usage", SEAHORSE_USAGE_PUBLIC_KEY, NULL);
 	}
 	
-	
 	g_object_set (obj,
 		      "label", name,
 		      "markup", markup,
@@ -404,14 +403,15 @@ seahorse_pgp_key_class_init (SeahorsePgpKeyClass *klass)
 GQuark
 seahorse_pgp_key_calc_cannonical_id (const gchar *id)
 {
-	guint len = strlen (id);
+	guint len;
 	GQuark keyid;
 	gchar *t;
+	
+	g_return_val_if_fail (id, 0);
+	len = strlen (id);
     
-	if (len < 16) {
-		g_warning ("invalid keyid (less than 16 chars): %s", id);
-		return 0;
-	}
+	if (len < 16)
+		g_message ("invalid keyid (less than 16 chars): %s", id);
     
 	if (len > 16)
 		id += len - 16;

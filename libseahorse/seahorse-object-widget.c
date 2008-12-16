@@ -99,7 +99,6 @@ seahorse_object_widget_finalize (GObject *gobject)
     SeahorseWidget *swidget;
     SeahorseObjectWidget *self;
     GHashTable *widgets = NULL;
-    GtkWindowGroup *group = NULL;
     GQuark id;
     GtkWidget *widget;
     
@@ -126,7 +125,6 @@ seahorse_object_widget_finalize (GObject *gobject)
     }
 
     widget = seahorse_widget_get_toplevel (swidget);
-    gtk_grab_remove (widget);
 
     /* Remove from parent */
     gtk_window_set_transient_for (GTK_WINDOW (widget), NULL);
@@ -248,10 +246,9 @@ seahorse_object_widget_create (gchar *name, GtkWindow *parent, SeahorseObject *o
         g_hash_table_insert (groups, GUINT_TO_POINTER (id), group);
     }
     
-    /* get window, add it to the group, grab it, return it */
+    /* get window, add it to the group, return it */
     widget = seahorse_widget_get_toplevel (swidget);
     gtk_window_group_add_window (group, GTK_WINDOW (widget));
-    gtk_grab_add (widget);
     
     if (parent != NULL)
         gtk_window_set_transient_for (GTK_WINDOW (widget), parent);

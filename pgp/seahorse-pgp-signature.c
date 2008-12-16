@@ -108,7 +108,8 @@ seahorse_pgp_signature_class_init (SeahorsePgpSignatureClass *klass)
 	GObjectClass *gobject_class = G_OBJECT_CLASS (klass);    
 
 	seahorse_pgp_signature_parent_class = g_type_class_peek_parent (klass);
-
+	g_type_class_add_private (klass, sizeof (SeahorsePgpSignaturePrivate));
+	
 	gobject_class->finalize = seahorse_pgp_signature_finalize;
 	gobject_class->set_property = seahorse_pgp_signature_set_property;
 	gobject_class->get_property = seahorse_pgp_signature_get_property;

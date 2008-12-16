@@ -40,19 +40,25 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 	SeahorseGpgmeSubkey *subkey;
 	gpgme_error_t err;
 	time_t expiry = 0;
-	struct tm t;
+	struct tm when;
 	
 	subkey = SEAHORSE_GPGME_SUBKEY (g_object_get_data (G_OBJECT (swidget), "subkey"));
 	
 	widget = glade_xml_get_widget (swidget->xml, "expire");
 	if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
 		
-		memset (&t, 0, sizeof(t));            
+		memset (&when, 0, sizeof (when));            
 		widget = glade_xml_get_widget (swidget->xml, "calendar");
-		gtk_calendar_get_date (GTK_CALENDAR (widget), (guint*)&(t.tm_year), 
-		                       (guint*)&(t.tm_mon), (guint*)&(t.tm_mday));
-		t.tm_year -= 1900;
-		expiry = mktime (&t);
+		gtk_calendar_get_date (GTK_CALENDAR (widget), (guint*)&(when.tm_year), 
+		                       (guint*)&(when.tm_mon), (guint*)&(when.tm_mday));
+		when.tm_year -= 1900;
+		expiry = mktime (&when);
+
+		if (expiry <= time (NULL)) {
+			seahorse_util_show_error (widget, _("Invalid expiry date"), 
+			                          _("The expiry date must be in the future"));
+			return;
+		}
 	}
 	
 	widget = seahorse_widget_get_widget (swidget, "all-controls");
@@ -96,7 +102,8 @@ seahorse_gpgme_expires_new (SeahorseGpgmeSubkey *subkey, GtkWindow *parent)
 
 	swidget = seahorse_widget_new_allow_multiple ("expires", parent);
 	g_return_if_fail (swidget != NULL);
-	g_object_set_data_full (G_OBJECT (swidget), "subkey", subkey, g_object_unref);
+	g_object_set_data_full (G_OBJECT (swidget), "subkey", 
+	                        g_object_ref (subkey), g_object_unref);
 	
 	glade_xml_signal_connect_data (swidget->xml, "on_calendar_change_button_clicked",
 	                               G_CALLBACK (ok_clicked), swidget);

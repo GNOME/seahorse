@@ -581,7 +581,7 @@ set_photoid_state(SeahorseWidget *swidget, SeahorsePgpKey *pkey)
 	
 	photo = g_object_get_data (G_OBJECT (swidget), "current-photoid");
 	g_return_if_fail (!photo || SEAHORSE_IS_PGP_PHOTO (photo));
-	is_gpgme = (photo && SEAHORSE_IS_GPGME_PHOTO (photo));
+	is_gpgme = SEAHORSE_IS_GPGME_KEY (pkey);
 
 	/* Show when adding a photo is possible */
 	show_glade_widget (swidget, "owner-photo-add-button", 
@@ -589,7 +589,7 @@ set_photoid_state(SeahorseWidget *swidget, SeahorsePgpKey *pkey)
 
 	/* Show when we have a photo to set as primary */
 	show_glade_widget (swidget, "owner-photo-primary-button", 
-	                   is_gpgme && etype == SEAHORSE_USAGE_PRIVATE_KEY && photo);
+	                   is_gpgme && etype == SEAHORSE_USAGE_PRIVATE_KEY && photos && photos->next);
 
 	/* Display this when there are any photo ids */
 	show_glade_widget (swidget, "owner-photo-delete-button", 
@@ -952,6 +952,21 @@ get_selected_subkey (SeahorseWidget *swidget)
 }
 
 static void
+details_subkey_selected (GtkTreeSelection *selection, SeahorseWidget *swidget)
+{
+	SeahorsePgpSubkey* subkey;
+	guint flags = 0;
+	
+	subkey = get_selected_subkey (swidget);
+	if (subkey)
+		flags = seahorse_pgp_subkey_get_flags (subkey);
+	
+	sensitive_glade_widget (swidget, "details-date-button", subkey != NULL);
+	sensitive_glade_widget (swidget, "details-revoke-button", subkey != NULL && !(flags & SEAHORSE_FLAG_REVOKED));
+	sensitive_glade_widget (swidget, "details-delete-button", subkey != NULL);
+}
+
+static void
 details_add_subkey_button_clicked (GtkButton *button, SeahorseWidget *swidget)
 {
 	SeahorseObject *object = SEAHORSE_OBJECT_WIDGET (swidget)->object;
@@ -1099,7 +1114,21 @@ details_export_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 }
 
 static void
-details_calendar_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
+details_expires_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
+{
+	GList *subkeys;
+	SeahorsePgpKey *pkey;
+	
+	pkey = SEAHORSE_PGP_KEY (SEAHORSE_OBJECT_WIDGET (swidget)->object);
+	subkeys = seahorse_pgp_key_get_subkeys (pkey);
+	g_return_if_fail (subkeys);
+	
+	seahorse_gpgme_expires_new (SEAHORSE_GPGME_SUBKEY (subkeys->data), 
+	                            GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)));
+}
+
+static void
+details_expires_subkey_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 {
 	SeahorsePgpSubkey *subkey;
 	SeahorsePgpKey *pkey;
@@ -1190,6 +1219,7 @@ do_details_signals (SeahorseWidget *swidget)
 { 
     SeahorseObject *object;
     SeahorseUsage etype;
+    GtkWidget *widget;
     
     object = SEAHORSE_OBJECT_WIDGET (swidget)->object;
     etype = seahorse_object_get_usage (object);
@@ -1198,7 +1228,7 @@ do_details_signals (SeahorseWidget *swidget)
      * if not the key owner, disable most everything
      * if key owner, add the callbacks to the subkey buttons
      */
-     if (etype == SEAHORSE_USAGE_PUBLIC_KEY ) {
+     if (etype == SEAHORSE_USAGE_PUBLIC_KEY) {
          show_glade_widget (swidget, "details-actions-label", FALSE);
          show_glade_widget (swidget, "details-export-button", FALSE);
          show_glade_widget (swidget, "details-add-button", FALSE);
@@ -1211,15 +1241,21 @@ do_details_signals (SeahorseWidget *swidget)
         glade_xml_signal_connect_data (swidget->xml, "on_details_add_button_clicked", 
                                         G_CALLBACK (details_add_subkey_button_clicked), swidget);
         glade_xml_signal_connect_data (swidget->xml, "on_details_calendar1_button_clicked",
-                                        G_CALLBACK (details_calendar_button_clicked), swidget);
+                                        G_CALLBACK (details_expires_button_clicked), swidget);
         glade_xml_signal_connect_data (swidget->xml, "on_details_calendar2_button_clicked",
-                                        G_CALLBACK (details_calendar_button_clicked), swidget);
+                                        G_CALLBACK (details_expires_subkey_clicked), swidget);
         glade_xml_signal_connect_data (swidget->xml, "on_details_revoke_button_clicked",
                                         G_CALLBACK (details_revoke_subkey_button_clicked), swidget);
         glade_xml_signal_connect_data (swidget->xml, "on_details_delete_button_clicked",
                                         G_CALLBACK (details_del_subkey_button_clicked), swidget);
         glade_xml_signal_connect_data (swidget->xml, "on_details_export_button_clicked",
                                         G_CALLBACK (details_export_button_clicked), swidget);
+        
+        /* Connect so we can enable and disable buttons as subkeys are selected */
+        widget = glade_xml_get_widget (swidget->xml, "details-subkey-tree");
+        g_signal_connect (gtk_tree_view_get_selection (GTK_TREE_VIEW (widget)),
+                          "changed", G_CALLBACK (details_subkey_selected), swidget);
+        details_subkey_selected (NULL, swidget);
     }
     glade_xml_signal_connect_data (swidget->xml, "on_details_trust_changed",
                                    G_CALLBACK (trust_changed), swidget);
@@ -1254,7 +1290,7 @@ do_details (SeahorseWidget *swidget)
 
     widget = glade_xml_get_widget (swidget->xml, "details-id-label");
     if (widget) {
-        label = seahorse_object_get_label (object); 
+        label = seahorse_object_get_identifier (object); 
         gtk_label_set_text (GTK_LABEL (widget), label);
     }
 
@@ -1314,7 +1350,9 @@ do_details (SeahorseWidget *swidget)
                                 -1);
             
             if (trust == seahorse_pgp_key_get_trust (pkey)) {
+                g_signal_handlers_block_by_func (widget, trust_changed, swidget);       	    
                 gtk_combo_box_set_active_iter (GTK_COMBO_BOX (widget),  &iter);
+                g_signal_handlers_unblock_by_func (widget, trust_changed, swidget);       	    
                 break;
             }
             
@@ -1333,6 +1371,7 @@ do_details (SeahorseWidget *swidget)
         
         /* This is our first time so create a store */
         store = gtk_list_store_newv (SUBKEY_N_COLUMNS, (GType*)subkey_columns);
+        gtk_tree_view_set_model (GTK_TREE_VIEW (widget), GTK_TREE_MODEL (store));
 
         /* Make the columns for the view */
         gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (widget), 
@@ -1361,21 +1400,20 @@ do_details (SeahorseWidget *swidget)
 		gchar *expiration_date;
 		gchar *created_date;
 		gulong expires;
+		guint flags;
 		
 		subkey = SEAHORSE_PGP_SUBKEY (l->data);
 		expires = seahorse_pgp_subkey_get_expires (subkey);
-		status = NULL;
+		flags = seahorse_pgp_subkey_get_flags (subkey);
+		status = "";
         
-		if (seahorse_pgp_subkey_get_validity (subkey) == SEAHORSE_VALIDITY_REVOKED) {
+		if (flags & SEAHORSE_FLAG_REVOKED)
 			status = _("Revoked");
-		} else if (expires) {
-			GTimeVal timev;
-			g_get_current_time(&timev);
-			if (expires < timev.tv_sec)
-				status = _("Expired");
-		}
-    
-		if (status == NULL)
+		else if (flags & SEAHORSE_FLAG_EXPIRED)
+			status = _("Expired");
+		else if (flags & SEAHORSE_FLAG_DISABLED)
+			status = _("Disabled");
+		else if (flags & SEAHORSE_FLAG_IS_VALID) 
 			status = _("Good");
 
 		if (expires == 0)

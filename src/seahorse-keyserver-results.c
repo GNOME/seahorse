@@ -176,7 +176,7 @@ imported_keys (SeahorseOperation* op, SeahorseKeyserverResults* self)
 }
 
 static void 
-on_key_import_keyring (SeahorseKeyserverResults* self, GtkAction* action) 
+on_key_import_keyring (GtkAction* action, SeahorseKeyserverResults* self) 
 {
 	GList* keys;
 	SeahorseOperation* op;

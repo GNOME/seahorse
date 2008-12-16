@@ -26,8 +26,6 @@
 
 #include "seahorse-object.h"
 
-#include "seahorse-validity.h"
-
 #define SEAHORSE_TYPE_PGP_SUBKEY            (seahorse_pgp_subkey_get_type ())
 
 #define SEAHORSE_PGP_SUBKEY(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_PGP_SUBKEY, SeahorsePgpSubkey))
@@ -63,10 +61,10 @@ const gchar*        seahorse_pgp_subkey_get_keyid         (SeahorsePgpSubkey *se
 void                seahorse_pgp_subkey_set_keyid         (SeahorsePgpSubkey *self,
                                                            const gchar *keyid);
 
-SeahorseValidity    seahorse_pgp_subkey_get_validity      (SeahorsePgpSubkey *self);
+guint               seahorse_pgp_subkey_get_flags         (SeahorsePgpSubkey *self);
 
-void                seahorse_pgp_subkey_set_validity      (SeahorsePgpSubkey *self,
-                                                           SeahorseValidity validity);
+void                seahorse_pgp_subkey_set_flags         (SeahorsePgpSubkey *self,
+                                                           guint flags);
 
 const gchar*        seahorse_pgp_subkey_get_algorithm     (SeahorsePgpSubkey *self);
 

@@ -102,8 +102,8 @@ on_view_selection_changed (SeahorseView* view, SeahorsePgpCommands* self)
 
 	for (l = keys; l; l = g_list_next (l)) {
 		SeahorseObject* key = SEAHORSE_OBJECT (l->data);
-		if (G_OBJECT_TYPE (key) != SEAHORSE_TYPE_PGP_KEY && 
-		    G_OBJECT_TYPE (key) != SEAHORSE_TYPE_PGP_UID) {
+		if (G_OBJECT_TYPE (key) != SEAHORSE_TYPE_GPGME_KEY && 
+		    G_OBJECT_TYPE (key) != SEAHORSE_TYPE_GPGME_UID) {
 			enable = FALSE;
 			break;
 		}
@@ -126,7 +126,6 @@ static void
 seahorse_pgp_commands_show_properties (SeahorseCommands* base, SeahorseObject* obj) 
 {
 	g_return_if_fail (SEAHORSE_IS_OBJECT (obj));
-	g_return_if_fail (seahorse_object_get_tag (obj) == SEAHORSE_PGP_TYPE);
 	
 	if (G_TYPE_FROM_INSTANCE (G_OBJECT (obj)) == SEAHORSE_TYPE_PGP_UID || 
 	    G_TYPE_FROM_INSTANCE (G_OBJECT (obj)) == SEAHORSE_TYPE_GPGME_UID)

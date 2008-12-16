@@ -76,4 +76,7 @@ gchar*              seahorse_gpgme_uid_calc_label           (gpgme_user_id_t use
 gchar*              seahorse_gpgme_uid_calc_markup          (gpgme_user_id_t userid,
                                                              guint flags);
 
+gboolean            seahorse_gpgme_uid_is_same              (SeahorseGpgmeUid *self,
+                                                             gpgme_user_id_t userid);
+
 #endif /* __SEAHORSE_GPGME_UID_H__ */

@@ -802,6 +802,7 @@ parse_key_from_ldap_entry (SeahorseLDAPOperation *lop, LDAPMessage *res)
         	SeahorsePgpKey *key;
         	SeahorsePgpUid *uid;
                 GList *list;
+                guint flags;
 
         	/* Build up a subkey */
         	subkey = seahorse_pgp_subkey_new ();
@@ -809,19 +810,22 @@ parse_key_from_ldap_entry (SeahorseLDAPOperation *lop, LDAPMessage *res)
         	fingerprint = seahorse_pgp_subkey_calc_fingerprint (fpr);
         	seahorse_pgp_subkey_set_fingerprint (subkey, fingerprint);
         	g_free (fingerprint);
-        	if (revoked)
-        		seahorse_pgp_subkey_set_validity (subkey, SEAHORSE_VALIDITY_REVOKED);
-        	else if (disabled)
-        		seahorse_pgp_subkey_set_validity (subkey, SEAHORSE_VALIDITY_DISABLED);
         	seahorse_pgp_subkey_set_created (subkey, timestamp);
         	seahorse_pgp_subkey_set_expires (subkey, expires);
         	seahorse_pgp_subkey_set_algorithm (subkey, algo);
         	seahorse_pgp_subkey_set_length (subkey, length);
-        	
+
+        	flags = SEAHORSE_FLAG_EXPORTABLE;
+        	if (revoked)
+        		flags |= SEAHORSE_FLAG_REVOKED;
+        	if (disabled)
+        		flags |= SEAHORSE_FLAG_DISABLED;
+       		seahorse_pgp_subkey_set_flags (subkey, flags);
+
         	/* Build up a uid */
         	uid = seahorse_pgp_uid_new (uidstr);
         	if (revoked)
-        		seahorse_pgp_subkey_set_validity (subkey, SEAHORSE_VALIDITY_REVOKED);
+        		seahorse_pgp_uid_set_validity (uid, SEAHORSE_VALIDITY_REVOKED);
         	
         	/* Now build them into a key */
         	key = seahorse_pgp_key_new ();
@@ -831,7 +835,8 @@ parse_key_from_ldap_entry (SeahorseLDAPOperation *lop, LDAPMessage *res)
         	list = g_list_prepend (NULL, subkey);
         	seahorse_pgp_key_set_subkeys (key, list);
         	seahorse_object_list_free (list);
-        	g_object_set (key, "location", SEAHORSE_LOCATION_REMOTE, NULL);
+        	g_object_set (key, "location", SEAHORSE_LOCATION_REMOTE, 
+        	              "flags", flags, NULL);
         
         	add_key (lop->lsrc, key);
         	g_object_unref (key);

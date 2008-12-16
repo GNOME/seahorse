@@ -341,49 +341,49 @@ seahorse_object_get_property (GObject *obj, guint prop_id, GValue *value,
 	
 	switch (prop_id) {
 	case PROP_CONTEXT:
-		g_value_set_object (value, self->pv->context);
+		g_value_set_object (value, seahorse_object_get_context (self));
 		break;
 	case PROP_SOURCE:
-		g_value_set_object (value, self->pv->source);
+		g_value_set_object (value, seahorse_object_get_source (self));
 		break;
 	case PROP_PREFERRED:
-		g_value_set_object (value, self->pv->preferred);
+		g_value_set_object (value, seahorse_object_get_preferred (self));
 		break;
 	case PROP_PARENT:
-		g_value_set_object (value, self->pv->parent);
+		g_value_set_object (value, seahorse_object_get_parent (self));
 		break;
 	case PROP_ID:
-		g_value_set_uint (value, self->pv->id);
+		g_value_set_uint (value, seahorse_object_get_id (self));
 		break;
 	case PROP_TAG:
-		g_value_set_uint (value, self->pv->tag);
+		g_value_set_uint (value, seahorse_object_get_tag (self));
 		break;
 	case PROP_LABEL:
-		g_value_set_string (value, self->pv->label);
+		g_value_set_string (value, seahorse_object_get_label (self));
 		break;
 	case PROP_NICKNAME:
-		g_value_set_string (value, self->pv->nickname);
+		g_value_set_string (value, seahorse_object_get_nickname (self));
 		break;
 	case PROP_MARKUP:
-		g_value_set_string (value, self->pv->markup);
+		g_value_set_string (value, seahorse_object_get_markup (self));
 		break;
 	case PROP_DESCRIPTION:
-		g_value_set_string (value, self->pv->description);
+		g_value_set_string (value, seahorse_object_get_description (self));
 		break;
 	case PROP_ICON:
-		g_value_set_string (value, self->pv->icon);
+		g_value_set_string (value, seahorse_object_get_icon (self));
 		break;
 	case PROP_IDENTIFIER:
-		g_value_set_string (value, self->pv->identifier);
+		g_value_set_string (value, seahorse_object_get_identifier (self));
 		break;
 	case PROP_LOCATION:
-		g_value_set_enum (value, self->pv->location);
+		g_value_set_enum (value, seahorse_object_get_location (self));
 		break;
 	case PROP_USAGE:
-		g_value_set_enum (value, self->pv->usage);
+		g_value_set_enum (value, seahorse_object_get_usage (self));
 		break;
 	case PROP_FLAGS:
-		g_value_set_uint (value, self->pv->flags);
+		g_value_set_uint (value, seahorse_object_get_flags (self));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);

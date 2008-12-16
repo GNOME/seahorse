@@ -176,6 +176,7 @@ seahorse_gpgme_subkey_set_subkey (SeahorseGpgmeSubkey *self, gpgme_subkey_t subk
 	GObject *obj;
 	gpgme_subkey_t sub;
 	gint i, index;
+	guint flags;
 	
 	g_return_if_fail (SEAHORSE_IS_GPGME_SUBKEY (self));
 	g_return_if_fail (subkey);
@@ -214,6 +215,25 @@ seahorse_gpgme_subkey_set_subkey (SeahorseGpgmeSubkey *self, gpgme_subkey_t subk
 	seahorse_pgp_subkey_set_length (base, subkey->length);
 	seahorse_pgp_subkey_set_description (base, description);
 	seahorse_pgp_subkey_set_fingerprint (base, fingerprint);
+	seahorse_pgp_subkey_set_created (base, subkey->timestamp);
+	seahorse_pgp_subkey_set_expires (base, subkey->expires);
+	
+	/* The order below is significant */
+	flags = 0;
+	if (subkey->revoked)
+		flags |= SEAHORSE_FLAG_REVOKED;
+	if (subkey->expired)
+		flags |= SEAHORSE_FLAG_EXPIRED;
+	if (subkey->disabled)
+		flags |= SEAHORSE_FLAG_DISABLED;
+	if (flags == 0 && !subkey->invalid)
+		flags |= SEAHORSE_FLAG_IS_VALID;
+	if (subkey->can_encrypt)
+		flags |= SEAHORSE_FLAG_CAN_ENCRYPT;
+	if (subkey->can_sign)
+		flags |= SEAHORSE_FLAG_CAN_SIGN;
+	
+	seahorse_pgp_subkey_set_flags (base, flags);
 	
 	g_object_notify (obj, "subkey");
 	g_object_thaw_notify (obj);

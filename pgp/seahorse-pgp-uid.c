@@ -57,6 +57,19 @@ struct _SeahorsePgpUidPrivate {
  * INTERNAL HELPERS
  */
 
+static gchar*
+convert_string (const gchar *str)
+{
+	if (!str)
+  	      return NULL;
+    
+	/* If not utf8 valid, assume latin 1 */
+ 	if (!g_utf8_validate (str, -1, NULL))
+ 		return g_convert (str, -1, "UTF-8", "ISO-8859-1", NULL, NULL, NULL);
+
+	return g_strdup (str);
+}
+
 #ifndef HAVE_STRSEP
 /* code taken from glibc-2.2.1/sysdeps/generic/strsep.c */
 char *
@@ -190,15 +203,17 @@ seahorse_pgp_uid_realize (SeahorseObject *obj)
 	SeahorsePgpUid *self = SEAHORSE_PGP_UID (obj);
 	gchar *markup;
 
+	/* Don't realize if no name present */
+	if (!self->pv->name)
+		return;
+
 	self->pv->realized = TRUE;
 	SEAHORSE_OBJECT_CLASS (seahorse_pgp_uid_parent_class)->realize (obj);
 
-	if (self->pv->name) {
-		g_object_set (self, "label", self->pv->name ? self->pv->name : "", NULL);
-		markup = seahorse_pgp_uid_calc_markup (self->pv->name, self->pv->email, self->pv->comment, 0);
-		g_object_set (self, "markup", markup, NULL);
-		g_free (markup);
-	}
+	g_object_set (self, "label", self->pv->name ? self->pv->name : "", NULL);
+	markup = seahorse_pgp_uid_calc_markup (self->pv->name, self->pv->email, self->pv->comment, 0);
+	g_object_set (self, "markup", markup, NULL);
+	g_free (markup);
 }
 
 static void
@@ -401,7 +416,7 @@ seahorse_pgp_uid_set_name (SeahorsePgpUid *self, const gchar *name)
 	g_return_if_fail (SEAHORSE_IS_PGP_UID (self));
 	
 	g_free (self->pv->name);
-	self->pv->name = g_strdup (name);
+	self->pv->name = convert_string (name);
 	
 	obj = G_OBJECT (self);
 	g_object_freeze_notify (obj);
@@ -428,7 +443,7 @@ seahorse_pgp_uid_set_email (SeahorsePgpUid *self, const gchar *email)
 	g_return_if_fail (SEAHORSE_IS_PGP_UID (self));
 	
 	g_free (self->pv->email);
-	self->pv->email = g_strdup (email);
+	self->pv->email = convert_string (email);
 	
 	obj = G_OBJECT (self);
 	g_object_freeze_notify (obj);
@@ -455,7 +470,7 @@ seahorse_pgp_uid_set_comment (SeahorsePgpUid *self, const gchar *comment)
 	g_return_if_fail (SEAHORSE_IS_PGP_UID (self));
 	
 	g_free (self->pv->comment);
-	self->pv->comment = g_strdup (comment);
+	self->pv->comment = convert_string (comment);
 	
 	obj = G_OBJECT (self);
 	g_object_freeze_notify (obj);

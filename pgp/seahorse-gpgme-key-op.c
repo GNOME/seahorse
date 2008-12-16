@@ -556,7 +556,7 @@ seahorse_gpgme_key_op_sign_uid (SeahorseGpgmeUid *uid,  SeahorseGpgmeKey *signer
 	signed_key = seahorse_gpgme_uid_get_pubkey (uid);
 	g_return_val_if_fail (signing_key, GPG_E (GPG_ERR_INV_VALUE));
 	
-	sign_index = seahorse_gpgme_uid_get_gpgme_index (uid) + 1;
+	sign_index = seahorse_gpgme_uid_get_actual_index (uid);
 	
 	return sign_process (signed_key, signing_key, sign_index, check, options);
 }
@@ -2098,7 +2098,7 @@ seahorse_gpgme_key_op_del_uid (SeahorseGpgmeUid *uid)
 	g_return_val_if_fail (key, GPG_E (GPG_ERR_INV_VALUE));
   
 	del_uid_parm.index = seahorse_gpgme_uid_get_actual_index (uid);
-   
+	
 	parms = seahorse_edit_parm_new (DEL_UID_START, del_uid_action,
 	                                del_uid_transit, &del_uid_parm);
  
@@ -2220,7 +2220,7 @@ seahorse_gpgme_key_op_photo_add (SeahorseGpgmeKey *pkey, const gchar *filename)
 	PhotoIdAddParm photoid_add_parm;
 	gpgme_key_t key;
 	
-	g_return_val_if_fail (SEAHORSE_IS_GPGME_KEY (key), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
+	g_return_val_if_fail (SEAHORSE_IS_GPGME_KEY (pkey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
 	g_return_val_if_fail (filename, GPG_E (GPG_ERR_INV_VALUE));
       
 	key = seahorse_gpgme_key_get_public (pkey);
