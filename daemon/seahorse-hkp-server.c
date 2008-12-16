@@ -27,7 +27,7 @@
 
 #include "seahorse-daemon.h"
 
-#include "pgp/seahorse-gpgmex.h"
+#include "pgp/seahorse-gpgme.h"
 
 /* 
  * DEBUG: Set to number other than zero, in order to run HKP 
@@ -350,7 +350,9 @@ lookup_handle_get (SoupMessage *msg, GHashTable *args)
         return lookup_handle_error (msg, "pks request did not include a <b>search</b> property", GPG_OK);
     
     /* Retrieve the key */
-    data = gpgmex_data_new ();
+    gerr = gpgme_data_new (&data);
+    if (!GPG_IS_OK (gerr))
+	    return lookup_handle_error (msg, "Internal error", gerr);
     
     gpgme_set_armor (gpgme_ctx, 1);
     gerr = gpgme_op_export (gpgme_ctx, search, 0, data);

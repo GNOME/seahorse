@@ -29,14 +29,16 @@
 
 #include "seahorse-ldap-source.h"
 
-#include "seahorse-gpgmex.h"
 #include "seahorse-pgp-key.h"
+#include "seahorse-pgp-subkey.h"
+#include "seahorse-pgp-uid.h"
 
 #include "seahorse-operation.h"
 #include "seahorse-servers.h"
 #include "seahorse-util.h"
 
 #include "common/seahorse-registry.h"
+#include "common/seahorse-object-list.h"
 
 #include <ldap.h>
 
@@ -255,29 +257,30 @@ get_date_attribute (LDAP* ld, LDAPMessage *res, const char *attribute)
     return d;         
 }
 
-static gpgme_pubkey_algo_t
+static const gchar*
 get_algo_attribute (LDAP* ld, LDAPMessage *res, const char *attribute)
 {
-    gpgme_pubkey_algo_t a = 0;
-    gchar **vals;
+	const gchar *a = NULL;
+	gchar **vals;
     
-    vals = get_ldap_values (ld, res, attribute);
-    if (!vals)
-        return 0;
+	vals = get_ldap_values (ld, res, attribute);
+	if (!vals)
+		return 0;
     
-    if (vals[0]) {
-        if (g_ascii_strcasecmp (vals[0], "DH/DSS") == 0 || 
-            g_ascii_strcasecmp (vals[0], "Elg") == 0 ||
-            g_ascii_strcasecmp (vals[0], "Elgamal") == 0)
-            a = GPGME_PK_ELG;
-        if (g_ascii_strcasecmp (vals[0], "RSA") == 0)
-            a = GPGME_PK_RSA;
-        if (g_ascii_strcasecmp (vals[0], "DSA") == 0)
-            a = GPGME_PK_DSA;     
-    }
+	if (vals[0]) {
+		if (g_ascii_strcasecmp (vals[0], "DH/DSS") == 0 || 
+		    g_ascii_strcasecmp (vals[0], "Elg") == 0 ||
+		    g_ascii_strcasecmp (vals[0], "Elgamal") == 0 ||
+		    g_ascii_strcasecmp (vals[0], "DSS/DH") == 0)
+			a = "Elgamal";
+		if (g_ascii_strcasecmp (vals[0], "RSA") == 0)
+			a = "RSA";
+		if (g_ascii_strcasecmp (vals[0], "DSA") == 0)
+			a = "DSA";     
+	}
     
-    g_strfreev (vals);
-    return a;
+	g_strfreev (vals);
+	return a;
 }
 
 /* 
@@ -748,68 +751,93 @@ static const char *kPGPAttributes[] = {
 };
 
 static void
-add_key (SeahorseLDAPSource *ssrc, gpgme_key_t key)
+add_key (SeahorseLDAPSource *ssrc, SeahorsePgpKey *key)
 {
-    SeahorseObject *prev;
-    SeahorsePgpKey *pkey;
-    GQuark keyid;
+	SeahorseObject *prev;
+	GQuark keyid;
 
-    g_return_if_fail (key && key->subkeys && key->subkeys->keyid);
-
-    keyid = seahorse_pgp_key_get_cannonical_id (key->subkeys->keyid);
-    prev = seahorse_context_get_object (SCTX_APP (), SEAHORSE_SOURCE (ssrc), keyid);
+	keyid = seahorse_pgp_key_get_cannonical_id (seahorse_pgp_key_get_keyid (key));
+	prev = seahorse_context_get_object (SCTX_APP (), SEAHORSE_SOURCE (ssrc), keyid);
     
-    /* TODO: This function needs reworking after we get more key types */
-    if (prev != NULL) {
-        g_return_if_fail (SEAHORSE_IS_PGP_KEY (prev));
-        gpgmex_combine_keys (seahorse_pgp_key_get_public (SEAHORSE_PGP_KEY (prev)), key);
-        return;
-    }
+	if (prev != NULL) {
+		g_return_if_fail (SEAHORSE_IS_PGP_KEY (prev));
+		seahorse_pgp_key_set_uids (SEAHORSE_PGP_KEY (prev), seahorse_pgp_key_get_uids (key));
+		seahorse_pgp_key_set_subkeys (SEAHORSE_PGP_KEY (prev), seahorse_pgp_key_get_subkeys (key));
+		return;
+	}
 
-    /* A public key */
-    pkey = seahorse_pgp_key_new (SEAHORSE_SOURCE (ssrc), key, NULL);
-
-    /* Add to context */ 
-    seahorse_context_add_object (SCTX_APP (), SEAHORSE_OBJECT (pkey));
+	/* Add to context */ 
+	seahorse_object_set_source (SEAHORSE_OBJECT (key), SEAHORSE_SOURCE (ssrc));
+	seahorse_context_add_object (SCTX_APP (), SEAHORSE_OBJECT (key));
 }
 
 /* Add a key to the key source from an LDAP entry */
 static void
 parse_key_from_ldap_entry (SeahorseLDAPOperation *lop, LDAPMessage *res)
 {
-    gpgme_pubkey_algo_t algo;
-    long int timestamp;
-    long int expires;
-    gpgme_key_t key;
-    gchar *fpr;
-    gchar *uid;
-    guint flags = 0;
-    int length;
+	const gchar *algo;
+	long int timestamp;
+	long int expires;
+        gchar *fpr, *fingerprint;
+        gchar *uidstr;
+        gboolean revoked;
+        gboolean disabled;
+        int length;
         
-    g_assert (SEAHORSE_IS_LDAP_OPERATION (lop));
-    g_return_if_fail (res && ldap_msgtype (res) == LDAP_RES_SEARCH_ENTRY);  
+        g_assert (SEAHORSE_IS_LDAP_OPERATION (lop));
+        g_return_if_fail (res && ldap_msgtype (res) == LDAP_RES_SEARCH_ENTRY);  
     
-    fpr = get_string_attribute (lop->ldap, res, "pgpcertid");
-    uid = get_string_attribute (lop->ldap, res, "pgpuserid");
-    flags |= (get_boolean_attribute (lop->ldap, res, "pgprevoked") ? GPGMEX_KEY_REVOKED : 0);
-    flags |= (get_boolean_attribute (lop->ldap, res, "pgpdisabled") ? GPGMEX_KEY_DISABLED : 0);
-    timestamp = get_date_attribute (lop->ldap, res, "pgpkeycreatetime");
-    expires = get_date_attribute (lop->ldap, res, "pgpkeyexpiretime");
-    algo = get_algo_attribute (lop->ldap, res, "pgpkeytype");
-    length = get_int_attribute (lop->ldap, res, "pgpkeysize");
+        fpr = get_string_attribute (lop->ldap, res, "pgpcertid");
+        uidstr = get_string_attribute (lop->ldap, res, "pgpuserid");
+        revoked = get_boolean_attribute (lop->ldap, res, "pgprevoked");
+        disabled = get_boolean_attribute (lop->ldap, res, "pgpdisabled");
+        timestamp = get_date_attribute (lop->ldap, res, "pgpkeycreatetime");
+        expires = get_date_attribute (lop->ldap, res, "pgpkeyexpiretime");
+        algo = get_algo_attribute (lop->ldap, res, "pgpkeytype");
+        length = get_int_attribute (lop->ldap, res, "pgpkeysize");
     
-    if (fpr && uid) {
-        key = gpgmex_key_alloc ();
-        gpgmex_key_add_subkey (key, fpr, flags, timestamp, 
-                               expires, length, algo);
-        gpgmex_key_add_uid (key, uid, flags);
+        if (fpr && uidstr) {
+
+        	SeahorsePgpSubkey *subkey;
+        	SeahorsePgpKey *key;
+        	SeahorsePgpUid *uid;
+                GList *list;
+
+        	/* Build up a subkey */
+        	subkey = seahorse_pgp_subkey_new ();
+        	seahorse_pgp_subkey_set_keyid (subkey, fpr);
+        	fingerprint = seahorse_pgp_subkey_calc_fingerprint (fpr);
+        	seahorse_pgp_subkey_set_fingerprint (subkey, fingerprint);
+        	g_free (fingerprint);
+        	if (revoked)
+        		seahorse_pgp_subkey_set_validity (subkey, SEAHORSE_VALIDITY_REVOKED);
+        	else if (disabled)
+        		seahorse_pgp_subkey_set_validity (subkey, SEAHORSE_VALIDITY_DISABLED);
+        	seahorse_pgp_subkey_set_created (subkey, timestamp);
+        	seahorse_pgp_subkey_set_expires (subkey, expires);
+        	seahorse_pgp_subkey_set_algorithm (subkey, algo);
+        	seahorse_pgp_subkey_set_length (subkey, length);
+        	
+        	/* Build up a uid */
+        	uid = seahorse_pgp_uid_new (uidstr);
+        	if (revoked)
+        		seahorse_pgp_subkey_set_validity (subkey, SEAHORSE_VALIDITY_REVOKED);
+        	
+        	/* Now build them into a key */
+        	key = seahorse_pgp_key_new ();
+        	list = g_list_prepend (NULL, uid);
+        	seahorse_pgp_key_set_uids (key, list);
+        	seahorse_object_list_free (list);
+        	list = g_list_prepend (NULL, subkey);
+        	seahorse_pgp_key_set_subkeys (key, list);
+        	seahorse_object_list_free (list);
         
-        add_key (lop->lsrc, key);
-        gpgmex_key_unref (key);
-    }
+        	add_key (lop->lsrc, key);
+        	g_object_unref (key);
+        }
     
-    g_free (fpr);
-    g_free (uid);
+        g_free (fpr);
+        g_free (uidstr);
 }
 
 /* Got a search result */

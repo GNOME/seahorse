@@ -30,7 +30,21 @@
 #include <gpgme.h>
 #include <gio/gio.h>
 
-gpgme_data_t        seahorse_gpgme_input_data           (GInputStream* input);
-gpgme_data_t        seahorse_gpgme_output_data          (GOutputStream* output);
+gpgme_data_t        seahorse_gpgme_data_input           (GInputStream* input);
+
+gpgme_data_t        seahorse_gpgme_data_output          (GOutputStream* output);
+
+/* 
+ * GTK/Glib use a model where if allocation fails, the program exits. These 
+ * helper functions extend certain GPGME calls to provide the same behavior.
+ */
+ 
+gpgme_data_t        seahorse_gpgme_data_new          (void);
+
+void                seahorse_gpgme_data_release      (gpgme_data_t data);
+
+int                 seahorse_gpgme_data_write_all    (gpgme_data_t data, const void* buffer, size_t len);
+
+gpgme_data_t        seahorse_gpgme_data_new_from_mem (const char *buffer, size_t size, gboolean copy);
 
 #endif /* __SEAHORSE_GPGME_IO__ */

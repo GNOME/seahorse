@@ -20,7 +20,7 @@
  */
 
 /** 
- * SeahorsePGPSource: A key source for PGP keys retrieved from GPGME. 
+ * SeahorseGpgmeSource: A key source for PGP keys retrieved from GPGME. 
  * 
  * - Derived from SeahorseSource
  * - Since GPGME represents secret keys as seperate from public keys, this
@@ -37,38 +37,38 @@
  *         source. (ie: SEAHORSE_LOCATION_LOCAL, SEAHORSE_LOCATION_REMOTE)
  */
  
-#ifndef __SEAHORSE_PGP_SOURCE_H__
-#define __SEAHORSE_PGP_SOURCE_H__
+#ifndef __SEAHORSE_GPGME_SOURCE_H__
+#define __SEAHORSE_GPGME_SOURCE_H__
 
 #include "seahorse-source.h"
 
 #include <gpgme.h>
 
-#define SEAHORSE_TYPE_PGP_SOURCE            (seahorse_pgp_source_get_type ())
-#define SEAHORSE_PGP_SOURCE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_PGP_SOURCE, SeahorsePGPSource))
-#define SEAHORSE_PGP_SOURCE_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_PGP_SOURCE, SeahorsePGPSourceClass))
-#define SEAHORSE_IS_PGP_SOURCE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_PGP_SOURCE))
-#define SEAHORSE_IS_PGP_SOURCE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_PGP_SOURCE))
-#define SEAHORSE_PGP_SOURCE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_PGP_SOURCE, SeahorsePGPSourceClass))
+#define SEAHORSE_TYPE_GPGME_SOURCE            (seahorse_gpgme_source_get_type ())
+#define SEAHORSE_GPGME_SOURCE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_GPGME_SOURCE, SeahorseGpgmeSource))
+#define SEAHORSE_GPGME_SOURCE_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_GPGME_SOURCE, SeahorseGpgmeSourceClass))
+#define SEAHORSE_IS_GPGME_SOURCE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_GPGME_SOURCE))
+#define SEAHORSE_IS_GPGME_SOURCE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_GPGME_SOURCE))
+#define SEAHORSE_GPGME_SOURCE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_GPGME_SOURCE, SeahorseGpgmeSourceClass))
 
-typedef struct _SeahorsePGPSource SeahorsePGPSource;
-typedef struct _SeahorsePGPSourceClass SeahorsePGPSourceClass;
-typedef struct _SeahorsePGPSourcePrivate SeahorsePGPSourcePrivate;
+typedef struct _SeahorseGpgmeSource SeahorseGpgmeSource;
+typedef struct _SeahorseGpgmeSourceClass SeahorseGpgmeSourceClass;
+typedef struct _SeahorseGpgmeSourcePrivate SeahorseGpgmeSourcePrivate;
 
-struct _SeahorsePGPSource {
+struct _SeahorseGpgmeSource {
 	GObject parent;
 	gpgme_ctx_t gctx;
-	SeahorsePGPSourcePrivate *pv;
+	SeahorseGpgmeSourcePrivate *pv;
 };
 
-struct _SeahorsePGPSourceClass {
+struct _SeahorseGpgmeSourceClass {
 	GObjectClass parent_class;
 };
 
-GType                seahorse_pgp_source_get_type       (void);
+GType                seahorse_gpgme_source_get_type       (void);
 
-SeahorsePGPSource*   seahorse_pgp_source_new            (void);
+SeahorseGpgmeSource*   seahorse_gpgme_source_new            (void);
 
-gpgme_ctx_t          seahorse_pgp_source_new_context    ();
+gpgme_ctx_t          seahorse_gpgme_source_new_context    ();
 
-#endif /* __SEAHORSE_PGP_SOURCE_H__ */
+#endif /* __SEAHORSE_GPGME_SOURCE_H__ */

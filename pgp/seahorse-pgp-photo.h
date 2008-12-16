@@ -23,14 +23,9 @@
 #define __SEAHORSE_PGP_PHOTO_H__
 
 #include <glib-object.h>
-
-#include <gpgme.h>
-
-#include "pgp/seahorse-pgp-module.h"
-#include "pgp/seahorse-gpgmex.h"
+#include <gtk/gtk.h>
 
 #define SEAHORSE_TYPE_PGP_PHOTO            (seahorse_pgp_photo_get_type ())
-
 #define SEAHORSE_PGP_PHOTO(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_PGP_PHOTO, SeahorsePgpPhoto))
 #define SEAHORSE_PGP_PHOTO_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_PGP_PHOTO, SeahorsePgpPhotoClass))
 #define SEAHORSE_IS_PGP_PHOTO(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_PGP_PHOTO))
@@ -52,20 +47,11 @@ struct _SeahorsePgpPhotoClass {
 
 GType               seahorse_pgp_photo_get_type          (void);
 
-SeahorsePgpPhoto*   seahorse_pgp_photo_new               (gpgme_key_t key,
-                                                          GdkPixbuf *pixbuf,
-                                                          guint index);
-
-gpgme_key_t         seahorse_pgp_photo_get_pubkey        (SeahorsePgpPhoto *self);
+SeahorsePgpPhoto*   seahorse_pgp_photo_new               (GdkPixbuf *pixbuf);
 
 GdkPixbuf*          seahorse_pgp_photo_get_pixbuf        (SeahorsePgpPhoto *self);
 
 void                seahorse_pgp_photo_set_pixbuf        (SeahorsePgpPhoto *self,
                                                           GdkPixbuf *pixbuf);
-
-guint               seahorse_pgp_photo_get_index         (SeahorsePgpPhoto *self);
-
-void                seahorse_pgp_photo_set_index         (SeahorsePgpPhoto *self,
-                                                          guint index);
 
 #endif /* __SEAHORSE_PGP_PHOTO_H__ */

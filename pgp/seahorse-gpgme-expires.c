@@ -29,19 +29,20 @@
 #include "seahorse-libdialogs.h"
 #include "seahorse-util.h"
 
-#include "seahorse-pgp-dialogs.h"
-#include "seahorse-pgp-key-op.h"
+#include "seahorse-gpgme-dialogs.h"
+#include "seahorse-gpgme-key-op.h"
+#include "seahorse-gpgme-subkey.h"
 
 static void
 ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 {
 	GtkWidget *widget; 
-	SeahorsePgpSubkey *subkey;
+	SeahorseGpgmeSubkey *subkey;
 	gpgme_error_t err;
 	time_t expiry = 0;
 	struct tm t;
 	
-	subkey = SEAHORSE_PGP_SUBKEY (g_object_get_data (G_OBJECT (swidget), "subkey"));
+	subkey = SEAHORSE_GPGME_SUBKEY (g_object_get_data (G_OBJECT (swidget), "subkey"));
 	
 	widget = glade_xml_get_widget (swidget->xml, "expire");
 	if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
@@ -59,10 +60,10 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 	g_object_ref (swidget);
 	g_object_ref (subkey);
 	
-	if (expiry != seahorse_pgp_subkey_get_expires (subkey)) {
-		err = seahorse_pgp_key_op_set_expires (subkey, expiry);
+	if (expiry != seahorse_pgp_subkey_get_expires (SEAHORSE_PGP_SUBKEY (subkey))) {
+		err = seahorse_gpgme_key_op_set_expires (subkey, expiry);
 		if (!GPG_IS_OK (err))
-			seahorse_pgp_handle_gpgme_error (err, _("Couldn't change expiry date"));
+			seahorse_gpgme_handle_error (err, _("Couldn't change expiry date"));
 	}
     
 	g_object_unref (subkey);
@@ -83,14 +84,15 @@ expires_toggled (GtkWidget *widget, SeahorseWidget *swidget)
 }
 
 void
-seahorse_pgp_expires_new (SeahorsePgpSubkey *subkey, GtkWindow *parent)
+seahorse_gpgme_expires_new (SeahorseGpgmeSubkey *subkey, GtkWindow *parent)
 {
 	SeahorseWidget *swidget;
 	GtkWidget *date, *expire;
 	gulong expires;
-	gchar *label, *title;
+	gchar *title;
+	const gchar *label;
 	
-	g_return_if_fail (subkey != NULL && SEAHORSE_IS_PGP_SUBKEY (subkey));
+	g_return_if_fail (subkey != NULL && SEAHORSE_IS_GPGME_SUBKEY (subkey));
 
 	swidget = seahorse_widget_new_allow_multiple ("expires", parent);
 	g_return_if_fail (swidget != NULL);
@@ -106,7 +108,7 @@ seahorse_pgp_expires_new (SeahorsePgpSubkey *subkey, GtkWindow *parent)
 	glade_xml_signal_connect_data (swidget->xml, "on_expire_toggled",
 	                               G_CALLBACK (expires_toggled), swidget);
 	
-	expires = seahorse_pgp_subkey_get_expires (subkey); 
+	expires = seahorse_pgp_subkey_get_expires (SEAHORSE_PGP_SUBKEY (subkey)); 
 	if (!expires) {
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (expire), TRUE);
 		gtk_widget_set_sensitive (date, FALSE);
@@ -124,9 +126,8 @@ seahorse_pgp_expires_new (SeahorsePgpSubkey *subkey, GtkWindow *parent)
 		}
 	}
 	
-	label = seahorse_pgp_subkey_get_description (subkey);
+	label = seahorse_pgp_subkey_get_description (SEAHORSE_PGP_SUBKEY (subkey));
 	title = g_strdup_printf (_("Expiry: %s"), label);
 	gtk_window_set_title (GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)), title);
 	g_free (title);
-	g_free (label);
 }

@@ -32,8 +32,8 @@
 #include "seahorse-widget.h"
 #include "seahorse-util.h"
 
-#include "seahorse-pgp-dialogs.h"
-#include "seahorse-pgp-key-op.h"
+#include "seahorse-gpgme-dialogs.h"
+#include "seahorse-gpgme-key-op.h"
 
 #define DEFAULT_WIDTH    120
 #define DEFAULT_HEIGHT   150
@@ -246,7 +246,7 @@ add_image_files (GtkWidget *dialog)
 
 
 gboolean
-seahorse_pgp_photo_add (SeahorsePgpKey *pkey, GtkWindow *parent, const gchar *path)
+seahorse_gpgme_photo_add (SeahorseGpgmeKey *pkey, GtkWindow *parent, const gchar *path)
 {
     gchar *filename = NULL;
     gchar *tempfile = NULL;
@@ -255,7 +255,7 @@ seahorse_pgp_photo_add (SeahorsePgpKey *pkey, GtkWindow *parent, const gchar *pa
     GtkDialog *chooser;
     gboolean res = TRUE;
     
-    g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (pkey), FALSE);
+    g_return_val_if_fail (SEAHORSE_IS_GPGME_KEY (pkey), FALSE);
 
     if (NULL == path) {
         chooser = seahorse_util_chooser_open_new (_("Choose Photo to Add to Key"), parent);
@@ -281,7 +281,7 @@ seahorse_pgp_photo_add (SeahorsePgpKey *pkey, GtkWindow *parent, const gchar *pa
         return FALSE;
     }
     
-    gerr = seahorse_pgp_key_op_photo_add (pkey, tempfile ? tempfile : filename);
+    gerr = seahorse_gpgme_key_op_photo_add (pkey, tempfile ? tempfile : filename);
     if (!GPG_IS_OK (gerr)) {
         
         /* A special error value set by seahorse_key_op_photoid_add to 
@@ -291,7 +291,7 @@ seahorse_pgp_photo_add (SeahorsePgpKey *pkey, GtkWindow *parent, const gchar *pa
                                       _("The file could not be loaded. It may be in an invalid format"));
         
         else
-            seahorse_pgp_handle_gpgme_error (gerr, _("Couldn't add photo"));
+            seahorse_gpgme_handle_error (gerr, _("Couldn't add photo"));
 
         res = FALSE;
     }
@@ -307,13 +307,13 @@ seahorse_pgp_photo_add (SeahorsePgpKey *pkey, GtkWindow *parent, const gchar *pa
 }
 
 gboolean
-seahorse_pgp_photo_delete (SeahorsePgpPhoto *photo, GtkWindow *parent)
+seahorse_gpgme_photo_delete (SeahorseGpgmePhoto *photo, GtkWindow *parent)
 {
     gpgme_error_t gerr;
     GtkWidget *dlg;
     gint response; 
 
-    g_return_val_if_fail (SEAHORSE_IS_PGP_PHOTO (photo), FALSE);
+    g_return_val_if_fail (SEAHORSE_IS_GPGME_PHOTO (photo), FALSE);
     
     dlg = gtk_message_dialog_new (parent, GTK_DIALOG_MODAL,
                                   GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE,
@@ -328,9 +328,9 @@ seahorse_pgp_photo_delete (SeahorsePgpPhoto *photo, GtkWindow *parent)
     if (response != GTK_RESPONSE_ACCEPT)
         return FALSE;
     
-    gerr = seahorse_pgp_key_op_photo_delete (photo);
+    gerr = seahorse_gpgme_key_op_photo_delete (photo);
     if (!GPG_IS_OK (gerr)) {
-	    seahorse_pgp_handle_gpgme_error (gerr, _("Couldn't delete photo"));
+	    seahorse_gpgme_handle_error (gerr, _("Couldn't delete photo"));
         return FALSE;
     }
     

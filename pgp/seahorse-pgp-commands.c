@@ -23,6 +23,9 @@
 
 #include <glib/gi18n.h>
 
+#include "seahorse-gpgme-dialogs.h"
+#include "seahorse-gpgme-key.h"
+#include "seahorse-gpgme-uid.h"
 #include "seahorse-pgp.h"
 #include "seahorse-pgp-commands.h"
 #include "seahorse-pgp-dialogs.h"
@@ -78,10 +81,10 @@ on_key_sign (GtkAction* action, SeahorsePgpCommands* self)
 	if (key == NULL)
 		return;
 
-	if (G_TYPE_FROM_INSTANCE (key) == SEAHORSE_TYPE_PGP_KEY) {
-		seahorse_pgp_sign_prompt (SEAHORSE_PGP_KEY (key), seahorse_commands_get_window (SEAHORSE_COMMANDS (self)));
-	} else if (G_TYPE_FROM_INSTANCE (key) == SEAHORSE_TYPE_PGP_UID) {
-		seahorse_pgp_sign_prompt_uid (SEAHORSE_PGP_UID (key), seahorse_commands_get_window (SEAHORSE_COMMANDS (self)));
+	if (G_TYPE_FROM_INSTANCE (key) == SEAHORSE_TYPE_GPGME_KEY) {
+		seahorse_gpgme_sign_prompt (SEAHORSE_GPGME_KEY (key), seahorse_commands_get_window (SEAHORSE_COMMANDS (self)));
+	} else if (G_TYPE_FROM_INSTANCE (key) == SEAHORSE_TYPE_GPGME_UID) {
+		seahorse_gpgme_sign_prompt_uid (SEAHORSE_GPGME_UID (key), seahorse_commands_get_window (SEAHORSE_COMMANDS (self)));
 	}
 }
 
@@ -125,10 +128,12 @@ seahorse_pgp_commands_show_properties (SeahorseCommands* base, SeahorseObject* o
 	g_return_if_fail (SEAHORSE_IS_OBJECT (obj));
 	g_return_if_fail (seahorse_object_get_tag (obj) == SEAHORSE_PGP_TYPE);
 	
-	if (G_TYPE_FROM_INSTANCE (G_OBJECT (obj)) == SEAHORSE_PGP_TYPE_UID)
+	if (G_TYPE_FROM_INSTANCE (G_OBJECT (obj)) == SEAHORSE_TYPE_PGP_UID || 
+	    G_TYPE_FROM_INSTANCE (G_OBJECT (obj)) == SEAHORSE_TYPE_GPGME_UID)
 		obj = seahorse_object_get_parent (obj);
 
-	g_return_if_fail (G_TYPE_FROM_INSTANCE (G_OBJECT (obj)) == SEAHORSE_PGP_TYPE_KEY);
+	g_return_if_fail (G_TYPE_FROM_INSTANCE (G_OBJECT (obj)) == SEAHORSE_TYPE_PGP_KEY || 
+	                  G_TYPE_FROM_INSTANCE (G_OBJECT (obj)) == SEAHORSE_TYPE_GPGME_KEY);
 	seahorse_pgp_key_properties_show (SEAHORSE_PGP_KEY (obj), seahorse_commands_get_window (base));
 }
 
@@ -161,12 +166,12 @@ seahorse_pgp_commands_delete_objects (SeahorseCommands* base, GList* objects)
 	
 	for (l = objects; l; l = g_list_next (l)) {
 		obj = SEAHORSE_OBJECT (l->data);
-		if (G_OBJECT_TYPE (obj) == SEAHORSE_PGP_TYPE_UID) {
+		if (G_OBJECT_TYPE (obj) == SEAHORSE_TYPE_PGP_UID) {
 			if (g_list_find (objects, seahorse_object_get_parent (obj)) == NULL) {
 				to_delete = g_list_prepend (to_delete, obj);
 				++num_identities;
 			}
-		} else if (G_OBJECT_TYPE (obj) == SEAHORSE_PGP_TYPE_KEY) {
+		} else if (G_OBJECT_TYPE (obj) == SEAHORSE_TYPE_PGP_KEY) {
 			to_delete = g_list_prepend (to_delete, obj);
 			++num_keys;
 		}
@@ -231,6 +236,8 @@ seahorse_pgp_commands_constructor (GType type, guint n_props, GObjectConstructPa
 		
 		seahorse_view_register_commands (view, base, SEAHORSE_TYPE_PGP_KEY);
 		seahorse_view_register_commands (view, base, SEAHORSE_TYPE_PGP_UID);
+		seahorse_view_register_commands (view, base, SEAHORSE_TYPE_GPGME_KEY);
+		seahorse_view_register_commands (view, base, SEAHORSE_TYPE_GPGME_UID);
 		seahorse_view_register_ui (view, UI_DEFINITION, self->pv->command_actions);
 	}
 	

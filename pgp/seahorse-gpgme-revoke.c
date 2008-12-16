@@ -29,8 +29,9 @@
 #include "seahorse-libdialogs.h"
 #include "seahorse-util.h"
 
+#include "seahorse-gpgme-dialogs.h"
+#include "seahorse-gpgme-key-op.h"
 #include "seahorse-pgp-dialogs.h"
-#include "seahorse-pgp-key-op.h"
 
 enum {
   COLUMN_TEXT,
@@ -43,7 +44,7 @@ static void
 ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 {
 	SeahorseRevokeReason reason;
-	SeahorsePgpSubkey *subkey;
+	SeahorseGpgmeSubkey *subkey;
 	const gchar *description;
 	gpgme_error_t err;
 	GtkWidget *widget;
@@ -62,26 +63,26 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 	
 	description = gtk_entry_get_text (GTK_ENTRY (glade_xml_get_widget (swidget->xml, "description")));
 	subkey = g_object_get_data (G_OBJECT (swidget), "subkey");
-	g_return_if_fail (SEAHORSE_IS_PGP_SUBKEY (subkey));
+	g_return_if_fail (SEAHORSE_IS_GPGME_SUBKEY (subkey));
 	
-	err = seahorse_pgp_key_op_revoke_subkey (subkey, reason, description);
+	err = seahorse_gpgme_key_op_revoke_subkey (subkey, reason, description);
 	if (!GPG_IS_OK (err))
-		seahorse_pgp_handle_gpgme_error (err, _("Couldn't revoke subkey"));
+		seahorse_gpgme_handle_error (err, _("Couldn't revoke subkey"));
 	seahorse_widget_destroy (swidget);
 }
 
 void
-seahorse_pgp_revoke_new (SeahorsePgpSubkey *subkey, GtkWindow *parent)
+seahorse_gpgme_revoke_new (SeahorseGpgmeSubkey *subkey, GtkWindow *parent)
 {
 	SeahorseWidget *swidget;
 	gchar *title;
-	gchar *label;
+	const gchar *label;
 	GtkWidget *widget;
 	GtkListStore *store;
 	GtkTreeIter iter;
 	GtkCellRenderer *renderer;
 	
-	g_return_if_fail (SEAHORSE_IS_PGP_SUBKEY (subkey));
+	g_return_if_fail (SEAHORSE_IS_GPGME_SUBKEY (subkey));
 	
 	swidget = seahorse_widget_new ("revoke", parent);
 	g_return_if_fail (swidget != NULL);
@@ -89,11 +90,10 @@ seahorse_pgp_revoke_new (SeahorsePgpSubkey *subkey, GtkWindow *parent)
 	glade_xml_signal_connect_data (swidget->xml, "ok_clicked",
 		G_CALLBACK (ok_clicked), swidget);
 	
-	label = seahorse_pgp_subkey_get_description (subkey);
+	label = seahorse_pgp_subkey_get_description (SEAHORSE_PGP_SUBKEY (subkey));
 	title = g_strdup_printf (_("Revoke: %s"), label);
 	gtk_window_set_title (GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)), title);
-	g_free (title);
-	g_free (label);
+	g_free (title);;
 	
 	g_object_set_data (G_OBJECT (swidget), "subkey", subkey);
 
@@ -142,17 +142,17 @@ seahorse_pgp_revoke_new (SeahorsePgpSubkey *subkey, GtkWindow *parent)
 }
 
 void
-seahorse_pgp_add_revoker_new (SeahorsePgpKey *pkey, GtkWindow *parent)
+seahorse_gpgme_add_revoker_new (SeahorseGpgmeKey *pkey, GtkWindow *parent)
 {
-	SeahorsePgpKey *revoker;
+	SeahorseGpgmeKey *revoker;
 	GtkWidget *dialog;
 	gint response;
 	gpgme_error_t err;
 	const gchar *userid1, *userid2;
 	
-	g_return_if_fail (pkey != NULL && SEAHORSE_IS_PGP_KEY (pkey));
+	g_return_if_fail (pkey != NULL && SEAHORSE_IS_GPGME_KEY (pkey));
 
-	revoker = SEAHORSE_PGP_KEY (seahorse_signer_get (parent));
+	revoker = SEAHORSE_GPGME_KEY (seahorse_signer_get (parent));
 	if (revoker == NULL)
 		return;
 	
@@ -171,7 +171,7 @@ seahorse_pgp_add_revoker_new (SeahorsePgpKey *pkey, GtkWindow *parent)
 	if (response != GTK_RESPONSE_YES)
 		return;
 	
-	err = seahorse_pgp_key_op_add_revoker (pkey, revoker);
+	err = seahorse_gpgme_key_op_add_revoker (pkey, revoker);
 	if (!GPG_IS_OK (err))
-		seahorse_pgp_handle_gpgme_error (err, _("Couldn't add revoker"));
+		seahorse_gpgme_handle_error (err, _("Couldn't add revoker"));
 }

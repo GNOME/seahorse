@@ -1,8 +1,7 @@
 /*
  * Seahorse
  *
- * Copyright (C) 2003 Jacob Perkins
- * Copyright (C) 2004-2005 Stefan Walter
+ * Copyright (C) 2004 Stefan Walter
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,20 +19,19 @@
  * Boston, MA 02111-1307, USA.
  */
 
-/*
- * Various UI elements and dialogs used in pgp component.
- */
- 
-#ifndef __SEAHORSE_PGP_DIALOGS_H__
-#define __SEAHORSE_PGP_DIALOGS_H__
+#ifndef __SEAHORSE_GPG_OP_H__
+#define __SEAHORSE_GPG_OP_H__
 
-#include <gtk/gtk.h>
+#include "config.h"
 
-#include "pgp/seahorse-pgp-key.h"
+#include <gpgme.h>
 
-SeahorsePgpKey* seahorse_signer_get                 (GtkWindow *parent);
+gpgme_error_t seahorse_gpg_op_export_secret  (gpgme_ctx_t ctx, 
+                                              const char *pattern,
+                                              gpgme_data_t keydata);
 
-void            seahorse_pgp_key_properties_show    (SeahorsePgpKey *pkey,
-                                                     GtkWindow *parent);
+gpgme_error_t seahorse_gpg_op_num_uids       (gpgme_ctx_t ctx, 
+                                              const char *pattern,
+                                              guint *number);
 
-#endif /* __SEAHORSE_PGP_DIALOGS_H__ */
+#endif /* __SEAHORSE_GPG_OP_H__ */

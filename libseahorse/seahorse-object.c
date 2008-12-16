@@ -617,7 +617,6 @@ SeahorseSource*
 seahorse_object_get_source (SeahorseObject *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), NULL);
-	seahorse_object_realize (self);
 	return self->pv->source;	
 }
 
@@ -643,7 +642,6 @@ SeahorseContext*
 seahorse_object_get_context (SeahorseObject *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), NULL);
-	seahorse_object_realize (self);
 	return self->pv->context;
 }
 
@@ -651,7 +649,6 @@ SeahorseObject*
 seahorse_object_get_preferred (SeahorseObject *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), NULL);
-	seahorse_object_realize (self);
 	return self->pv->preferred;
 }
 

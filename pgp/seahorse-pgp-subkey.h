@@ -24,10 +24,9 @@
 
 #include <glib-object.h>
 
-#include <gpgme.h>
+#include "seahorse-object.h"
 
-#include "pgp/seahorse-pgp-module.h"
-#include "pgp/seahorse-gpgmex.h"
+#include "seahorse-validity.h"
 
 #define SEAHORSE_TYPE_PGP_SUBKEY            (seahorse_pgp_subkey_get_type ())
 
@@ -52,24 +51,57 @@ struct _SeahorsePgpSubkeyClass {
 
 GType               seahorse_pgp_subkey_get_type          (void);
 
-SeahorsePgpSubkey*  seahorse_pgp_subkey_new               (gpgme_key_t pubkey,
-                                                           gpgme_subkey_t subkey);
-
-gpgme_key_t         seahorse_pgp_subkey_get_pubkey        (SeahorsePgpSubkey *self);
-
-gpgme_subkey_t      seahorse_pgp_subkey_get_subkey        (SeahorsePgpSubkey *self);
-
-void                seahorse_pgp_subkey_set_subkey        (SeahorsePgpSubkey *self,
-                                                           gpgme_subkey_t subkey);
+SeahorsePgpSubkey*  seahorse_pgp_subkey_new               (void);
 
 guint               seahorse_pgp_subkey_get_index         (SeahorsePgpSubkey *self);
 
+void                seahorse_pgp_subkey_set_index         (SeahorsePgpSubkey *self,
+                                                           guint index);
+
 const gchar*        seahorse_pgp_subkey_get_keyid         (SeahorsePgpSubkey *self);
+
+void                seahorse_pgp_subkey_set_keyid         (SeahorsePgpSubkey *self,
+                                                           const gchar *keyid);
+
+SeahorseValidity    seahorse_pgp_subkey_get_validity      (SeahorsePgpSubkey *self);
+
+void                seahorse_pgp_subkey_set_validity      (SeahorsePgpSubkey *self,
+                                                           SeahorseValidity validity);
 
 const gchar*        seahorse_pgp_subkey_get_algorithm     (SeahorsePgpSubkey *self);
 
+void                seahorse_pgp_subkey_set_algorithm     (SeahorsePgpSubkey *self,
+                                                           const gchar *algorithm);
+
+guint               seahorse_pgp_subkey_get_length        (SeahorsePgpSubkey *self);
+
+void                seahorse_pgp_subkey_set_length        (SeahorsePgpSubkey *self,
+                                                           guint index);
+
+gulong              seahorse_pgp_subkey_get_created       (SeahorsePgpSubkey *self);
+
+void                seahorse_pgp_subkey_set_created       (SeahorsePgpSubkey *self,
+                                                           gulong created);
+
 gulong              seahorse_pgp_subkey_get_expires       (SeahorsePgpSubkey *self);
 
-gchar*              seahorse_pgp_subkey_get_description   (SeahorsePgpSubkey *self);
+void                seahorse_pgp_subkey_set_expires       (SeahorsePgpSubkey *self,
+                                                           gulong expires);
+
+const gchar*        seahorse_pgp_subkey_get_description   (SeahorsePgpSubkey *self);
+
+void                seahorse_pgp_subkey_set_description   (SeahorsePgpSubkey *self,
+                                                           const gchar *description);
+
+gchar*              seahorse_pgp_subkey_calc_description  (const gchar *name, 
+                                                           guint index); 
+
+const gchar*        seahorse_pgp_subkey_get_fingerprint   (SeahorsePgpSubkey *self);
+
+void                seahorse_pgp_subkey_set_fingerprint   (SeahorsePgpSubkey *self,
+                                                           const gchar *description);
+
+gchar*              seahorse_pgp_subkey_calc_fingerprint  (const gchar *raw_fingerprint); 
+
 
 #endif /* __SEAHORSE_PGP_SUBKEY_H__ */

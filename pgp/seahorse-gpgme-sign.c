@@ -29,8 +29,8 @@
 #include "seahorse-set.h"
 #include "seahorse-util.h"
 
-#include "pgp/seahorse-pgp-dialogs.h"
-#include "pgp/seahorse-pgp-key-op.h"
+#include "pgp/seahorse-gpgme-dialogs.h"
+#include "pgp/seahorse-gpgme-key-op.h"
 #include "pgp/seahorse-pgp-keysets.h"
 
 #include <glib/gi18n.h>
@@ -81,19 +81,19 @@ ok_clicked (SeahorseWidget *swidget)
     g_return_val_if_fail (w != NULL, FALSE);
     signer = seahorse_combo_keys_get_active (GTK_COMBO_BOX (w));
     
-    g_assert (!signer || (SEAHORSE_IS_PGP_KEY (signer) && 
+    g_assert (!signer || (SEAHORSE_IS_GPGME_KEY (signer) && 
                           seahorse_object_get_usage (SEAHORSE_OBJECT (signer)) == SEAHORSE_USAGE_PRIVATE_KEY));
     
     to_sign = g_object_get_data (G_OBJECT (swidget), "to-sign");
-    if (SEAHORSE_IS_PGP_UID (to_sign))
-	    err = seahorse_pgp_key_op_sign_uid (SEAHORSE_PGP_UID (to_sign), SEAHORSE_PGP_KEY (signer), check, options);
-    else if (SEAHORSE_IS_PGP_KEY (to_sign))
-	    err = seahorse_pgp_key_op_sign (SEAHORSE_PGP_KEY (to_sign), SEAHORSE_PGP_KEY (signer), check, options);
+    if (SEAHORSE_IS_GPGME_UID (to_sign))
+	    err = seahorse_gpgme_key_op_sign_uid (SEAHORSE_GPGME_UID (to_sign), SEAHORSE_GPGME_KEY (signer), check, options);
+    else if (SEAHORSE_IS_GPGME_KEY (to_sign))
+	    err = seahorse_gpgme_key_op_sign (SEAHORSE_GPGME_KEY (to_sign), SEAHORSE_GPGME_KEY (signer), check, options);
     else
 	    g_assert (FALSE);
     
     if (!GPG_IS_OK (err))
-        seahorse_pgp_handle_gpgme_error (err, _("Couldn't sign key"));
+        seahorse_gpgme_handle_error (err, _("Couldn't sign key"));
     
     seahorse_widget_destroy (swidget);
     
@@ -225,13 +225,13 @@ sign_internal (SeahorseObject *to_sign, GtkWindow *parent)
 }
 
 void
-seahorse_pgp_sign_prompt (SeahorsePgpKey *to_sign, GtkWindow *parent)
+seahorse_gpgme_sign_prompt (SeahorseGpgmeKey *to_sign, GtkWindow *parent)
 {
 	sign_internal (SEAHORSE_OBJECT (to_sign), parent);
 }
 
 void
-seahorse_pgp_sign_prompt_uid (SeahorsePgpUid *to_sign, GtkWindow *parent)
+seahorse_gpgme_sign_prompt_uid (SeahorseGpgmeUid *to_sign, GtkWindow *parent)
 {
 	sign_internal (SEAHORSE_OBJECT (to_sign), parent);
 }

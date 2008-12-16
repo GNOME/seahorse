@@ -27,9 +27,10 @@
 #include "seahorse-util.h"
 #include "seahorse-libdialogs.h"
 
-#include "pgp/seahorse-pgp-dialogs.h"
-#include "pgp/seahorse-pgp-key.h"
-#include "pgp/seahorse-pgp-operation.h"
+#include "pgp/seahorse-gpgme.h"
+#include "pgp/seahorse-gpgme-dialogs.h"
+#include "pgp/seahorse-gpgme-key.h"
+#include "pgp/seahorse-gpgme-operation.h"
 
 #include <string.h>
 
@@ -61,7 +62,7 @@ seahorse_service_crypto_new ()
 
 /* Returns result in result. Frees pop and cryptdata */
 static gboolean
-process_crypto_result (SeahorsePGPOperation *pop, gpgme_error_t gstarterr, 
+process_crypto_result (SeahorseGpgmeOperation *pop, gpgme_error_t gstarterr, 
                        gpgme_data_t cryptdata, gchar **result, GError **error)
 {
     size_t len;
@@ -113,13 +114,25 @@ keylist_to_keys (GList *keys)
 	recips = g_new0 (gpgme_key_t, g_list_length (keys) + 1);
 
 	for (i = 0; keys != NULL; keys = g_list_next (keys), i++) {
-		g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (keys->data), recips);
-		recips[i] = seahorse_pgp_key_get_public (keys->data);
-		gpgmex_key_ref (recips[i]);
+		g_return_val_if_fail (SEAHORSE_IS_GPGME_KEY (keys->data), recips);
+		recips[i] = seahorse_gpgme_key_get_public (keys->data);
+		gpgme_key_ref (recips[i]);
 	}
 
 	return recips;
 }
+
+static void
+free_keys (gpgme_key_t* keys)
+{
+	gpgme_key_t* k = keys;
+	if (!keys)
+		return;
+	while (*k)
+		gpgme_key_unref (*(k++));
+	g_free (keys);
+}
+
 
 static void
 notify_signatures (const gchar* data, gpgme_verify_result_t status)
@@ -184,8 +197,8 @@ notify_signatures (const gchar* data, gpgme_verify_result_t status)
 		return;
 	default:
 		if (!GPG_IS_OK (status->signatures->status))
-			seahorse_pgp_handle_gpgme_error (status->signatures->status, 
-			                            _("Couldn't verify signature."));
+			seahorse_gpgme_handle_error (status->signatures->status, 
+			                             _("Couldn't verify signature."));
 		return;
 	};
 
@@ -223,7 +236,7 @@ seahorse_service_crypto_encrypt_text (SeahorseServiceCrypto *crypto,
                                       char **crypttext, GError **error)
 {
     GList *recipkeys = NULL;
-    SeahorsePGPOperation *pop; 
+    SeahorseGpgmeOperation *pop; 
     SeahorseObject *signkey = NULL;
     SeahorseObject *skey;
     gpgme_key_t *recips;
@@ -245,7 +258,7 @@ seahorse_service_crypto_encrypt_text (SeahorseServiceCrypto *crypto,
             return FALSE;
         }
         
-        if (!SEAHORSE_IS_PGP_KEY (signkey) || 
+        if (!SEAHORSE_IS_GPGME_KEY (signkey) || 
             !(seahorse_object_get_flags (signkey) & SEAHORSE_FLAG_CAN_SIGN)) {
             g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID,
                          _("Key is not valid for signing: %s"), signer);
@@ -264,7 +277,7 @@ seahorse_service_crypto_encrypt_text (SeahorseServiceCrypto *crypto,
             return FALSE;
         }
         
-        if (!SEAHORSE_IS_PGP_KEY (skey) ||
+        if (!SEAHORSE_IS_GPGME_KEY (skey) ||
             !(seahorse_object_get_flags (skey) & SEAHORSE_FLAG_CAN_ENCRYPT)) {
             g_list_free (recipkeys);
             g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID,
@@ -281,7 +294,7 @@ seahorse_service_crypto_encrypt_text (SeahorseServiceCrypto *crypto,
         return FALSE;
     }
     
-    pop = seahorse_pgp_operation_new (NULL);
+    pop = seahorse_gpgme_operation_new (NULL);
     
     /* new data form text */
     gerr = gpgme_data_new_from_mem (&plain, cleartext, strlen (cleartext), FALSE);
@@ -306,7 +319,7 @@ seahorse_service_crypto_encrypt_text (SeahorseServiceCrypto *crypto,
     
     /* Do the encryption */
     if (signkey) {
-        gpgme_signers_add (pop->gctx, seahorse_pgp_key_get_private (SEAHORSE_PGP_KEY (signkey)));
+        gpgme_signers_add (pop->gctx, seahorse_gpgme_key_get_private (SEAHORSE_GPGME_KEY (signkey)));
         gerr = gpgme_op_encrypt_sign_start (pop->gctx, recips, GPGME_ENCRYPT_ALWAYS_TRUST, 
                                             plain, cipher);
     } else {
@@ -314,7 +327,7 @@ seahorse_service_crypto_encrypt_text (SeahorseServiceCrypto *crypto,
                                        plain, cipher);
     }
     
-    gpgmex_free_keys (recips);
+    free_keys (recips);
 
     /* Frees cipher */
     ret = process_crypto_result (pop, gerr, cipher, crypttext, error);
@@ -331,7 +344,7 @@ seahorse_service_crypto_sign_text (SeahorseServiceCrypto *crypto, const char *si
 {
     SeahorseObject *signkey = NULL;
     gpgme_error_t gerr;
-    SeahorsePGPOperation *pop; 
+    SeahorseGpgmeOperation *pop; 
     gpgme_data_t plain, cipher;
     gboolean ret = TRUE;
     
@@ -352,14 +365,14 @@ seahorse_service_crypto_sign_text (SeahorseServiceCrypto *crypto, const char *si
         return FALSE;
     }
         
-    if (!SEAHORSE_IS_PGP_KEY (signkey) || 
+    if (!SEAHORSE_IS_GPGME_KEY (signkey) || 
         !(seahorse_object_get_flags (signkey) & SEAHORSE_FLAG_CAN_SIGN)) {
         g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID,
                      _("Key is not valid for signing: %s"), signer);
         return FALSE;
     }
     
-    pop = seahorse_pgp_operation_new (NULL);
+    pop = seahorse_gpgme_operation_new (NULL);
     
     /* new data from text */
     gerr = gpgme_data_new_from_mem (&plain, cleartext, strlen (cleartext), FALSE);
@@ -372,7 +385,7 @@ seahorse_service_crypto_sign_text (SeahorseServiceCrypto *crypto, const char *si
     gpgme_set_armor (pop->gctx, TRUE);
 
     /* Do the signage */
-    gpgme_signers_add (pop->gctx, seahorse_pgp_key_get_private (SEAHORSE_PGP_KEY (signkey)));
+    gpgme_signers_add (pop->gctx, seahorse_gpgme_key_get_private (SEAHORSE_GPGME_KEY (signkey)));
     gerr = gpgme_op_sign_start (pop->gctx, plain, cipher, GPGME_SIG_MODE_CLEAR);
 
     /* Frees cipher */
@@ -391,7 +404,7 @@ seahorse_service_crypto_decrypt_text (SeahorseServiceCrypto *crypto,
 {
     gpgme_verify_result_t status;
     gpgme_error_t gerr;
-    SeahorsePGPOperation *pop; 
+    SeahorseGpgmeOperation *pop; 
     gpgme_data_t plain, cipher;
     gboolean ret = TRUE;
     GQuark keyid;
@@ -407,7 +420,7 @@ seahorse_service_crypto_decrypt_text (SeahorseServiceCrypto *crypto,
      * then all this logic will need to change. 
      */
     
-    pop = seahorse_pgp_operation_new (NULL);
+    pop = seahorse_gpgme_operation_new (NULL);
     
     /* new data from text */
     gerr = gpgme_data_new_from_mem (&cipher, crypttext, strlen (crypttext), FALSE);
@@ -454,7 +467,7 @@ seahorse_service_crypto_verify_text (SeahorseServiceCrypto *crypto,
 {
     gpgme_verify_result_t status;
     gpgme_error_t gerr;
-    SeahorsePGPOperation *pop; 
+    SeahorseGpgmeOperation *pop; 
     gpgme_data_t plain, cipher;
     gboolean ret = TRUE;
     GQuark keyid;
@@ -470,7 +483,7 @@ seahorse_service_crypto_verify_text (SeahorseServiceCrypto *crypto,
      * then all this logic will need to change. 
      */
 
-    pop = seahorse_pgp_operation_new (NULL);
+    pop = seahorse_gpgme_operation_new (NULL);
     
     /* new data from text */
     gerr = gpgme_data_new_from_mem (&cipher, crypttext, strlen (crypttext), FALSE);

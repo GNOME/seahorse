@@ -198,7 +198,7 @@ seahorse_util_get_display_date_string (const time_t time)
 	gchar *created_string;
 	
 	if (time == 0)
-		return "0";
+		return g_strdup ("");
 	
 	created_date = g_date_new ();
 	g_date_set_time_t (created_date, time);

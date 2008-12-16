@@ -23,9 +23,9 @@
 
 #include "seahorse-pgp-module.h"
 
+#include "seahorse-gpgme-source.h"
+#include "seahorse-gpgme-dialogs.h"
 #include "seahorse-pgp-commands.h"
-#include "seahorse-pgp-source.h"
-#include "seahorse-pgp-dialogs.h"
 
 #ifdef WITH_LDAP
 #include "seahorse-ldap-source.h"
@@ -42,10 +42,10 @@ seahorse_pgp_module_init (void)
 	SeahorseSource *source;
 
 	/* Always have a default pgp source added */
-	source = g_object_new (SEAHORSE_TYPE_PGP_SOURCE, NULL);
+	source = g_object_new (SEAHORSE_TYPE_GPGME_SOURCE, NULL);
 	seahorse_context_take_source (NULL, source);
 
-	g_type_class_unref (g_type_class_ref (SEAHORSE_TYPE_PGP_SOURCE));
+	g_type_class_unref (g_type_class_ref (SEAHORSE_TYPE_GPGME_SOURCE));
 	g_type_class_unref (g_type_class_ref (SEAHORSE_TYPE_PGP_COMMANDS));
 #ifdef WITH_LDAP
 	g_type_class_unref (g_type_class_ref (SEAHORSE_TYPE_LDAP_SOURCE));
@@ -54,5 +54,5 @@ seahorse_pgp_module_init (void)
 	g_type_class_unref (g_type_class_ref (SEAHORSE_TYPE_HKP_SOURCE));
 #endif 
 	
-	seahorse_pgp_generate_register ();
+	seahorse_gpgme_generate_register ();
 }

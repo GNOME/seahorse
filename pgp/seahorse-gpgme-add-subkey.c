@@ -28,8 +28,8 @@
 #include "seahorse-object-widget.h"
 #include "seahorse-util.h"
 
-#include "seahorse-pgp-dialogs.h"
-#include "seahorse-pgp-key-op.h"
+#include "seahorse-gpgme-dialogs.h"
+#include "seahorse-gpgme-key-op.h"
 
 #define LENGTH "length"
 
@@ -72,7 +72,7 @@ type_changed (GtkComboBox *combo, SeahorseWidget *swidget)
 }
 
 static GtkWidget *
-_seahorse_add_subkey_get_expires (SeahorseWidget *swidget)
+get_expires (SeahorseWidget *swidget)
 {
     GtkWidget *widget;
     GList *children;
@@ -98,7 +98,7 @@ never_expires_toggled (GtkToggleButton *togglebutton, SeahorseWidget *swidget)
 {
     GtkWidget *widget;
 
-    widget = _seahorse_add_subkey_get_expires (swidget);
+    widget = get_expires (swidget);
     g_return_if_fail (widget);
 
     gtk_widget_set_sensitive (GTK_WIDGET (widget),
@@ -135,7 +135,7 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 	glade_xml_get_widget (swidget->xml, "never_expires"))))
 		expires = 0;
 	else {
-        widget = _seahorse_add_subkey_get_expires (swidget);
+        widget = get_expires (swidget);
         g_return_if_fail (widget);
 
         egg_datetime_get_as_time_t (EGG_DATETIME (widget), &expires);
@@ -158,18 +158,18 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 	
 	widget = glade_xml_get_widget (swidget->xml, swidget->name);
 	gtk_widget_set_sensitive (widget, FALSE);
-	err = seahorse_pgp_key_op_add_subkey (SEAHORSE_PGP_KEY (skwidget->object), 
-	                                      real_type, length, expires);
+	err = seahorse_gpgme_key_op_add_subkey (SEAHORSE_GPGME_KEY (skwidget->object), 
+	                                        real_type, length, expires);
 	gtk_widget_set_sensitive (widget, TRUE);
 	
 	if (!GPG_IS_OK (err))
-		seahorse_pgp_handle_gpgme_error (err, _("Couldn't add subkey"));
+		seahorse_gpgme_handle_error (err, _("Couldn't add subkey"));
 
 	seahorse_widget_destroy (swidget);
 }
 
 void
-seahorse_pgp_add_subkey_new (SeahorsePgpKey *pkey, GtkWindow *parent)
+seahorse_gpgme_add_subkey_new (SeahorseGpgmeKey *pkey, GtkWindow *parent)
 {
 	SeahorseWidget *swidget;
 	GtkComboBox* combo;

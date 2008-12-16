@@ -20,15 +20,3 @@
  */
 
 #include "seahorse-pgp.h"
-#include "seahorse-gpgmex.h"
-
-GType
-seahorse_pgp_boxed_key_type (void)
-{
-	static GType type = 0;
-	if (!type)
-		type = g_boxed_type_register_static ("gpgme_key_t", 
-		                                     (GBoxedCopyFunc)gpgmex_key_ref,
-		                                     (GBoxedFreeFunc)gpgmex_key_unref);
-	return type;
-}

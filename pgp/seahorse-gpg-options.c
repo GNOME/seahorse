@@ -34,7 +34,7 @@
 #include "seahorse-util.h"
 #include "seahorse-context.h"
 
-#include "pgp/seahorse-gpgmex.h"
+#include "pgp/seahorse-gpgme.h"
 #include "pgp/seahorse-gpg-options.h"
 
 #define  GPG_CONF_HEADER    "# FILE CREATED BY SEAHORSE\n\n"

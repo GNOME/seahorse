@@ -21,9 +21,8 @@
 
 #include "config.h"
 
-#include "seahorse-gpgme-io.h"
-
-#include "seahorse-gpgmex.h"
+#include "seahorse-gpgme.h"
+#include "seahorse-gpgme-data.h"
 
 #include <glib.h>
 #include <gio/gio.h>
@@ -31,6 +30,7 @@
 #include <gpgme.h>
 
 #include <sys/types.h>
+#include <string.h>
 #include <stdlib.h>
 #include <fcntl.h>
 #include <errno.h>
@@ -224,7 +224,7 @@ static struct gpgme_data_cbs output_cbs =
 };
 
 gpgme_data_t
-seahorse_gpgme_output_data (GOutputStream* output)
+seahorse_gpgme_data_output (GOutputStream* output)
 {
 	gpgme_error_t gerr;
 	gpgme_data_t ret = NULL;
@@ -318,7 +318,7 @@ static struct gpgme_data_cbs input_cbs =
 };
 
 gpgme_data_t
-seahorse_gpgme_input_data (GInputStream* input)
+seahorse_gpgme_data_input (GInputStream* input)
 {
 	gpgme_error_t gerr;
 	gpgme_data_t ret = NULL;
@@ -331,4 +331,85 @@ seahorse_gpgme_input_data (GInputStream* input)
 	
 	g_object_ref (input);
 	return ret;
+}
+
+gpgme_data_t 
+seahorse_gpgme_data_new ()
+{
+	gpgme_error_t gerr;
+	gpgme_data_t data;
+    
+	gerr = gpgme_data_new (&data);
+	if (!GPG_IS_OK (gerr)) {
+		if (gpgme_err_code_to_errno (gerr) == ENOMEM || 
+		    gpgme_err_code (gerr) == GPG_ERR_ENOMEM) {
+                
+			g_error ("%s: failed to allocate gpgme_data_t", G_STRLOC);
+                
+		} else {
+			/* The only reason this should fail is above */
+			g_assert_not_reached ();
+            
+			/* Just in case */
+			abort ();
+		}
+	}
+    
+	return data;
+}
+
+gpgme_data_t
+seahorse_gpgme_data_new_from_mem (const char *buffer, size_t size, gboolean copy)
+{
+	gpgme_data_t data;
+	gpgme_error_t gerr;
+    
+	gerr = gpgme_data_new_from_mem (&data, buffer, size, copy ? 1 : 0);
+	if (!GPG_IS_OK (gerr)) {
+		if (gpgme_err_code_to_errno (gerr) == ENOMEM || 
+		    gpgme_err_code (gerr) == GPG_ERR_ENOMEM) {
+                
+			g_error ("%s: failed to allocate gpgme_data_t", G_STRLOC);
+                
+		} else {
+			/* The only reason this should fail is above */
+			g_assert_not_reached ();
+            
+			/* Just in case */
+			abort ();
+		}
+	}
+    
+	return data;
+}
+
+int 
+seahorse_gpgme_data_write_all (gpgme_data_t data, const void* buffer, size_t len)
+{
+	guchar *text = (guchar*)buffer;
+	gint written = 0;
+    
+	if (len < 0)
+		len = strlen ((gchar*)text);
+    
+	while (len > 0) {
+		written = gpgme_data_write (data, (void*)text, len);
+		if (written < 0) {
+			if (errno == EAGAIN || errno == EINTR)
+				continue;
+			return -1;
+		}
+        
+		len -= written;
+		text += written;
+	}
+    
+	return written;
+}
+
+void
+seahorse_gpgme_data_release (gpgme_data_t data)
+{
+	if (data)
+		gpgme_data_release (data);
 }

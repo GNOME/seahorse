@@ -23,7 +23,8 @@
 #include <gpgme.h>
 #include <string.h>
 
-#include "pgp/seahorse-gpgmex.h"
+#include "pgp/seahorse-gpg-op.h"
+#include "pgp/seahorse-gpgme.h"
 
 static gpgme_error_t
 execute_gpg_command (gpgme_ctx_t ctx, const gchar *args, gchar **std_out, 
@@ -59,9 +60,8 @@ execute_gpg_command (gpgme_ctx_t ctx, const gchar *args, gchar **std_out,
 }
 
 gpgme_error_t        
-gpgmex_op_export_secret  (gpgme_ctx_t ctx, 
-                          const char *pattern,
-                          gpgme_data_t keydata)
+seahorse_gpg_op_export_secret  (gpgme_ctx_t ctx, const char *pattern,
+                                gpgme_data_t keydata)
 {
     gchar *output = NULL;
     gpgme_error_t err;
@@ -90,7 +90,7 @@ gpgmex_op_export_secret  (gpgme_ctx_t ctx,
 }
 
 gpgme_error_t 
-gpgmex_op_num_uids (gpgme_ctx_t ctx, const char *pattern, guint *number)
+seahorse_gpg_op_num_uids (gpgme_ctx_t ctx, const char *pattern, guint *number)
 {
 	 gchar *output = NULL;
     gpgme_error_t err;

@@ -26,7 +26,6 @@
 
 #include <glib/gi18n.h>
 
-#include "seahorse-gpgmex.h"
 #include "seahorse-operation.h"
 #include "seahorse-ldap-source.h"
 #include "seahorse-hkp-source.h"
@@ -216,83 +215,6 @@ seahorse_server_get_property (GObject *object, guint prop_id, GValue *value,
  * HELPERS 
  */
 
-/* Combine information from one key and tack onto others */
-static void 
-combine_keys (SeahorseServerSource *ssrc, gpgme_key_t k, gpgme_key_t key)
-{
-    gpgme_user_id_t uid;
-    gpgme_user_id_t u;
-    gpgme_subkey_t subkey;
-    gpgme_subkey_t s;
-    gboolean found;
-    
-    g_assert (k != NULL);
-    g_assert (key != NULL);
-    
-    /* Go through user ids */
-    for (uid = key->uids; uid != NULL; uid = uid->next) {
-        g_assert (uid->uid);
-        found = FALSE;
-        
-        for (u = k->uids; u != NULL; u = u->next) {
-            g_assert (u->uid);
-            
-            if (strcmp (u->uid, uid->uid) == 0) {
-                found = TRUE;
-                break;
-            }
-        }
-        
-        if (!found)
-            gpgmex_key_copy_uid (k, uid);
-    }
-    
-    /* Go through subkeys */
-    for (subkey = key->subkeys; subkey != NULL; subkey = subkey->next) {
-        g_assert (subkey->fpr);
-        found = FALSE;
-        
-        for (s = k->subkeys; s != NULL; s = s->next) {
-            g_assert (s->fpr);
-            
-            if (strcmp (s->fpr, subkey->fpr) == 0) {
-                found = TRUE;
-                break;
-            }
-        }
-        
-        if (!found)
-            gpgmex_key_copy_subkey (k, subkey);
-    }
-}
-
-void
-seahorse_server_source_add_key (SeahorseServerSource *ssrc, gpgme_key_t key)
-{
-    SeahorseObject *prev;
-    SeahorsePgpKey *pkey;
-    GQuark keyid;
-       
-    g_return_if_fail (SEAHORSE_IS_SERVER_SOURCE (ssrc));
-    g_return_if_fail (key && key->subkeys && key->subkeys->keyid);
-
-    keyid = seahorse_pgp_key_get_cannonical_id (key->subkeys->keyid);
-    prev = seahorse_context_get_object (SCTX_APP (), SEAHORSE_SOURCE (ssrc), keyid);
-    
-    /* TODO: This function needs reworking after we get more key types */
-    if (prev != NULL) {
-        g_return_if_fail (SEAHORSE_IS_PGP_KEY (prev));
-        combine_keys (ssrc, seahorse_pgp_key_get_public (SEAHORSE_PGP_KEY (prev)), key);
-        return;
-    }
-
-    /* A public key */
-    pkey = seahorse_pgp_key_new (SEAHORSE_SOURCE (ssrc), key, NULL);
-
-    /* Add to context */ 
-    seahorse_context_add_object (SCTX_APP (), SEAHORSE_OBJECT (pkey));
-}
- 
 void
 seahorse_server_source_take_operation (SeahorseServerSource *ssrc, SeahorseOperation *op)
 {

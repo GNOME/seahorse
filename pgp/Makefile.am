@@ -38,27 +38,33 @@ KEYSERVER_SRCS =
 endif
 
 libseahorse_pgp_la_SOURCES = \
-	seahorse-gpgme-io.c seahorse-gpgme-io.h \
-	seahorse-gpgmex.h seahorse-gpgmex-op.c seahorse-gpgmex-util.c \
+	seahorse-gpgme.c seahorse-gpgme.h \
+	seahorse-gpgme-add-subkey.c \
+	seahorse-gpgme-add-uid.c \
+	seahorse-gpgme-dialogs.h \
+	seahorse-gpgme-data.c seahorse-gpgme-data.h \
+	seahorse-gpgme-expires.c \
+	seahorse-gpgme-generate.c \
+	seahorse-gpgme-key.c seahorse-gpgme-key.h \
+	seahorse-gpgme-key-op.c seahorse-gpgme-key-op.h \
+	seahorse-gpgme-operation.c seahorse-gpgme-operation.h \
+	seahorse-gpgme-photo.c seahorse-gpgme-photo.h \
+	seahorse-gpgme-photos.c \
+	seahorse-gpgme-revoke.c \
+	seahorse-gpgme-sign.c \
+	seahorse-gpgme-source.c seahorse-gpgme-source.h \
+	seahorse-gpgme-subkey.c seahorse-gpgme-subkey.h \
+	seahorse-gpgme-uid.c seahorse-gpgme-uid.h \
+	seahorse-gpg-op.h seahorse-gpg-op.c \
 	seahorse-gpg-options.c seahorse-gpg-options.h \
 	seahorse-pgp.c seahorse-pgp.h \
-	seahorse-pgp-add-subkey.c \
-	seahorse-pgp-add-uid.c \
 	seahorse-pgp-commands.c seahorse-pgp-commands.h \
-	seahorse-pgp-error.c \
-	seahorse-pgp-expires.c \
-	seahorse-pgp-generate.c \
 	seahorse-pgp-key.c seahorse-pgp-key.h \
-	seahorse-pgp-key-op.c seahorse-pgp-key-op.h \
 	seahorse-pgp-key-properties.c \
 	seahorse-pgp-keysets.c seahorse-pgp-keysets.h \
-	seahorse-pgp-operation.c seahorse-pgp-operation.h \
 	seahorse-pgp-photo.c seahorse-pgp-photo.h \
-	seahorse-pgp-photos.c \
 	seahorse-pgp-module.c seahorse-pgp-module.h \
-	seahorse-pgp-revoke.c \
-	seahorse-pgp-source.c seahorse-pgp-source.h \
-	seahorse-pgp-sign.c \
+	seahorse-pgp-signature.c seahorse-pgp-signature.h \
 	seahorse-pgp-subkey.c seahorse-pgp-subkey.h \
 	seahorse-pgp-uid.c seahorse-pgp-uid.h \
 	seahorse-signer.c seahorse-pgp-dialogs.h \

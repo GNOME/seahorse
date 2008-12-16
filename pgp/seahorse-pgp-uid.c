@@ -22,9 +22,11 @@
 #include "config.h"
 
 #include "seahorse-pgp.h"
-#include "seahorse-gpgmex.h"
 #include "seahorse-pgp-key.h"
 #include "seahorse-pgp-uid.h"
+#include "seahorse-pgp-signature.h"
+
+#include "common/seahorse-object-list.h"
 
 #include <string.h>
 
@@ -32,10 +34,7 @@
 
 enum {
 	PROP_0,
-	PROP_PUBKEY,
-	PROP_USERID,
-	PROP_GPGME_INDEX,
-	PROP_ACTUAL_INDEX,
+	PROP_SIGNATURES,
 	PROP_VALIDITY,
 	PROP_VALIDITY_STR,
 	PROP_NAME,
@@ -46,112 +45,167 @@ enum {
 G_DEFINE_TYPE (SeahorsePgpUid, seahorse_pgp_uid, SEAHORSE_TYPE_OBJECT);
 
 struct _SeahorsePgpUidPrivate {
-	gpgme_key_t pubkey;         /* The public key that this uid is part of */
-	gpgme_user_id_t userid;     /* The userid referred to */
-	guint gpgme_index;          /* The GPGME index of the UID */
-	gint actual_index;          /* The actual index of this UID */
+	GList *signatures;
+	SeahorseValidity validity;
+	gboolean realized;
+	gchar *name;
+	gchar *email;
+	gchar *comment;
 };
 
 /* -----------------------------------------------------------------------------
  * INTERNAL HELPERS
  */
 
-static gchar*
-convert_string (const gchar *str, gboolean escape)
+#ifndef HAVE_STRSEP
+/* code taken from glibc-2.2.1/sysdeps/generic/strsep.c */
+char *
+strsep (char **stringp, const char *delim)
 {
-	gchar *t, *ret;
-    
-	if (!str)
-  	      return NULL;
-    
-	/* If not utf8 valid, assume latin 1 */
- 	if (!g_utf8_validate (str, -1, NULL)) {
- 		ret = g_convert (str, -1, "UTF-8", "ISO-8859-1", NULL, NULL, NULL);
- 		if (escape) {
- 			t = ret;
- 			ret = g_markup_escape_text (t, -1);
- 			g_free (t);
- 		}
-        
- 		return ret;
- 	}
+    char *begin, *end;
 
- 	if (escape)
- 		return g_markup_escape_text (str, -1);
- 	else
- 		return g_strdup (str);
+    begin = *stringp;
+    if (begin == NULL)
+        return NULL;
+
+      /* A frequent case is when the delimiter string contains only one
+         character.  Here we don't need to call the expensive `strpbrk'
+         function and instead work using `strchr'.  */
+      if (delim[0] == '\0' || delim[1] == '\0') {
+        char ch = delim[0];
+
+        if (ch == '\0')
+            end = NULL; 
+        else {
+            if (*begin == ch)
+                end = begin;
+            else if (*begin == '\0')
+                end = NULL;
+            else
+                end = strchr (begin + 1, ch);
+        }
+    } else
+        /* Find the end of the token.  */
+        end = strpbrk (begin, delim);
+
+    if (end) {
+      /* Terminate the token and set *STRINGP past NUL character.  */
+      *end++ = '\0';
+      *stringp = end;
+    } else
+        /* No more delimiters; this is the last token.  */
+        *stringp = NULL;
+
+    return begin;
 }
+#endif /*HAVE_STRSEP*/
 
+/* Copied from GPGME */
 static void
-changed_uid (SeahorsePgpUid *self)
+parse_user_id (const gchar *uid, gchar **name, gchar **email, gchar **comment)
 {
-	SeahorseObject *obj = SEAHORSE_OBJECT (self);
-	SeahorseLocation loc;
-	gchar *name, *markup;
-	
-	g_return_if_fail (self->pv->pubkey);
-	
-	if (!self->pv->userid) {
-        
-		g_object_set (self,
-		              "label", "",
-		              "usage", SEAHORSE_USAGE_NONE,
-		              "markup", "",
-		              "location", SEAHORSE_LOCATION_INVALID,
-		              "flags", SEAHORSE_FLAG_DISABLED,
-		              NULL);
-		return;
-		
-	} 
-		
-	/* The location */
-	loc = seahorse_object_get_location (obj);
-	if (self->pv->pubkey->keylist_mode & GPGME_KEYLIST_MODE_EXTERN && 
-	    loc <= SEAHORSE_LOCATION_REMOTE)
-		loc = SEAHORSE_LOCATION_REMOTE;
+    gchar *src, *tail, *x;
+    int in_name = 0;
+    int in_email = 0;
+    int in_comment = 0;
 
-	else if (loc <= SEAHORSE_LOCATION_LOCAL)
-		loc = SEAHORSE_LOCATION_LOCAL;
-
-	name = seahorse_pgp_uid_calc_label (self->pv->userid);
-	markup = seahorse_pgp_uid_calc_markup (self->pv->userid, 0);
-	
-	g_object_set (self,
-		      "label", name,
-		      "markup", markup,
-		      "usage", SEAHORSE_USAGE_IDENTITY,
-		      "flags", 0,
-		      NULL);
-	
-	g_free (name);
-	g_free (markup);
+    x = tail = src = g_strdup (uid);
+    
+    while (*src) {
+        if (in_email) {
+	        if (*src == '<')
+	            /* Not legal but anyway.  */
+	            in_email++;
+	        else if (*src == '>') {
+	            if (!--in_email && !*email) {
+		            *email = tail;
+                    *src = 0;
+                    tail = src + 1;
+		        }
+	        }
+	    } else if (in_comment) {
+	        if (*src == '(')
+	            in_comment++;
+	        else if (*src == ')') {
+	            if (!--in_comment && !*comment) {
+		            *comment = tail;
+                    *src = 0;
+                    tail = src + 1;
+		        }
+	        }
+	    } else if (*src == '<') {
+	        if (in_name) {
+	            if (!*name) {
+		            *name = tail;
+                    *src = 0;
+                    tail = src + 1;
+		        }
+	            in_name = 0;
+	        }
+	        in_email = 1;
+	    } else if (*src == '(') {
+	        if (in_name) {
+	            if (!*name) {
+		            *name = tail;
+                    *src = 0;
+                    tail = src + 1;
+		        }
+	            in_name = 0;
+	        }
+	        in_comment = 1;
+	    } else if (!in_name && *src != ' ' && *src != '\t') {
+	        in_name = 1;
+	    }    
+        src++;
+    }
+ 
+    if (in_name) {
+        if (!*name) {
+	        *name = tail;
+            *src = 0;
+            tail = src + 1;
+	    }
+    }
+ 
+    /* Let unused parts point to an EOS.  */
+    *name = g_strdup (*name ? *name : "");
+    *email = g_strdup (*email ? *email : "");
+    *comment = g_strdup (*comment ? *comment : "");
+    
+    g_strstrip (*name);
+    g_strstrip (*email);
+    g_strstrip (*comment);
+    
+    g_free (x);
 }
+
 
 /* -----------------------------------------------------------------------------
  * OBJECT 
  */
 
 static void
+seahorse_pgp_uid_realize (SeahorseObject *obj)
+{
+	SeahorsePgpUid *self = SEAHORSE_PGP_UID (obj);
+	gchar *markup;
+
+	self->pv->realized = TRUE;
+	SEAHORSE_OBJECT_CLASS (seahorse_pgp_uid_parent_class)->realize (obj);
+
+	if (self->pv->name) {
+		g_object_set (self, "label", self->pv->name ? self->pv->name : "", NULL);
+		markup = seahorse_pgp_uid_calc_markup (self->pv->name, self->pv->email, self->pv->comment, 0);
+		g_object_set (self, "markup", markup, NULL);
+		g_free (markup);
+	}
+}
+
+static void
 seahorse_pgp_uid_init (SeahorsePgpUid *self)
 {
 	self->pv = G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_TYPE_PGP_UID, SeahorsePgpUidPrivate);
-	self->pv->gpgme_index = 0;
-	self->pv->actual_index = -1;
-	g_object_set (self, "icon", "", NULL);
-}
-
-static GObject*
-seahorse_pgp_uid_constructor (GType type, guint n_props, GObjectConstructParam *props)
-{
-	GObject *obj = G_OBJECT_CLASS (seahorse_pgp_uid_parent_class)->constructor (type, n_props, props);
-	SeahorsePgpUid *self = NULL;
-	
-	if (obj) {
-		self = SEAHORSE_PGP_UID (obj);
-		g_return_val_if_fail (self->pv->pubkey, NULL);
-	}
-	
-	return obj;
+	g_object_set (self, "icon", "", "usage", SEAHORSE_USAGE_IDENTITY, NULL);
 }
 
 static void
@@ -161,17 +215,8 @@ seahorse_pgp_uid_get_property (GObject *object, guint prop_id,
 	SeahorsePgpUid *self = SEAHORSE_PGP_UID (object);
 	
 	switch (prop_id) {
-	case PROP_PUBKEY:
-		g_value_set_boxed (value, seahorse_pgp_uid_get_pubkey (self));
-		break;
-	case PROP_USERID:
-		g_value_set_pointer (value, seahorse_pgp_uid_get_userid (self));
-		break;
-	case PROP_GPGME_INDEX:
-		g_value_set_uint (value, seahorse_pgp_uid_get_gpgme_index (self));
-		break;
-	case PROP_ACTUAL_INDEX:
-		g_value_set_uint (value, seahorse_pgp_uid_get_actual_index (self));
+	case PROP_SIGNATURES:
+		g_value_set_boxed (value, seahorse_pgp_uid_get_signatures (self));
 		break;
 	case PROP_VALIDITY:
 		g_value_set_uint (value, seahorse_pgp_uid_get_validity (self));
@@ -180,13 +225,13 @@ seahorse_pgp_uid_get_property (GObject *object, guint prop_id,
 		g_value_set_string (value, seahorse_pgp_uid_get_validity_str (self));
 		break;
 	case PROP_NAME:
-		g_value_take_string (value, seahorse_pgp_uid_get_name (self));
+		g_value_set_string (value, seahorse_pgp_uid_get_name (self));
 		break;
 	case PROP_EMAIL:
-		g_value_take_string (value, seahorse_pgp_uid_get_email (self));
+		g_value_set_string (value, seahorse_pgp_uid_get_email (self));
 		break;
 	case PROP_COMMENT:
-		g_value_take_string (value, seahorse_pgp_uid_get_comment (self));
+		g_value_set_string (value, seahorse_pgp_uid_get_comment (self));
 		break;
 	}
 }
@@ -198,17 +243,20 @@ seahorse_pgp_uid_set_property (GObject *object, guint prop_id, const GValue *val
 	SeahorsePgpUid *self = SEAHORSE_PGP_UID (object);
 
 	switch (prop_id) {
-	case PROP_PUBKEY:
-		g_return_if_fail (!self->pv->pubkey);
-		self->pv->pubkey = g_value_get_boxed (value);
-		if (self->pv->pubkey)
-			gpgmex_key_ref (self->pv->pubkey);
+	case PROP_SIGNATURES:
+		seahorse_pgp_uid_set_signatures (self, g_value_get_boxed (value));
 		break;
-	case PROP_ACTUAL_INDEX:
-		seahorse_pgp_uid_set_actual_index (self, g_value_get_uint (value));
+	case PROP_VALIDITY:
+		seahorse_pgp_uid_set_validity (self, g_value_get_uint (value));
 		break;
-	case PROP_USERID:
-		seahorse_pgp_uid_set_userid (self, g_value_get_pointer (value));
+	case PROP_NAME:
+		seahorse_pgp_uid_set_name (self, g_value_get_string (value));
+		break;
+	case PROP_EMAIL:
+		seahorse_pgp_uid_set_email (self, g_value_get_string (value));
+		break;
+	case PROP_COMMENT:
+		seahorse_pgp_uid_set_comment (self, g_value_get_string (value));
 		break;
 	}
 }
@@ -218,11 +266,17 @@ seahorse_pgp_uid_object_finalize (GObject *gobject)
 {
 	SeahorsePgpUid *self = SEAHORSE_PGP_UID (gobject);
 
-	/* Unref the key */
-	if (self->pv->pubkey)
-		gpgmex_key_unref (self->pv->pubkey);
-	self->pv->pubkey = NULL;
-	self->pv->userid = NULL;
+	seahorse_object_list_free (self->pv->signatures);
+	self->pv->signatures = NULL;
+	
+	g_free (self->pv->name);
+	self->pv->name = NULL;
+	
+	g_free (self->pv->email);
+	self->pv->email = NULL;
+	
+	g_free (self->pv->comment);
+	self->pv->comment = NULL;
     
 	G_OBJECT_CLASS (seahorse_pgp_uid_parent_class)->finalize (gobject);
 }
@@ -235,30 +289,15 @@ seahorse_pgp_uid_class_init (SeahorsePgpUidClass *klass)
 	seahorse_pgp_uid_parent_class = g_type_class_peek_parent (klass);
 	g_type_class_add_private (klass, sizeof (SeahorsePgpUidPrivate));
 
-	gobject_class->constructor = seahorse_pgp_uid_constructor;
 	gobject_class->finalize = seahorse_pgp_uid_object_finalize;
 	gobject_class->set_property = seahorse_pgp_uid_set_property;
 	gobject_class->get_property = seahorse_pgp_uid_get_property;
     
-	g_object_class_install_property (gobject_class, PROP_PUBKEY,
-	        g_param_spec_boxed ("pubkey", "Public Key", "GPGME Public Key that this uid is on",
-	                            SEAHORSE_PGP_BOXED_KEY, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
-
-	g_object_class_install_property (gobject_class, PROP_USERID,
-	        g_param_spec_pointer ("userid", "User ID", "GPGME User ID",
-	                              G_PARAM_READWRITE));
-                      
-	g_object_class_install_property (gobject_class, PROP_GPGME_INDEX,
-	        g_param_spec_uint ("gpgme-index", "GPGME Index", "GPGME User ID Index",
-	                           0, G_MAXUINT, 0, G_PARAM_READWRITE));
+	SEAHORSE_OBJECT_CLASS (klass)->realize = seahorse_pgp_uid_realize;
 	
-	g_object_class_install_property (gobject_class, PROP_ACTUAL_INDEX,
-	        g_param_spec_uint ("actual-index", "Actual Index", "Actual GPG Index",
-	                           0, G_MAXUINT, 0, G_PARAM_READWRITE));
-         
 	g_object_class_install_property (gobject_class, PROP_VALIDITY,
 	        g_param_spec_uint ("validity", "Validity", "Validity of this identity",
-	                           0, G_MAXUINT, 0, G_PARAM_READABLE));
+	                           0, G_MAXUINT, 0, G_PARAM_READWRITE));
 
         g_object_class_install_property (gobject_class, PROP_VALIDITY_STR,
                 g_param_spec_string ("validity-str", "Validity String", "Validity of this identity as a string",
@@ -266,113 +305,77 @@ seahorse_pgp_uid_class_init (SeahorsePgpUidClass *klass)
         
         g_object_class_install_property (gobject_class, PROP_NAME,
                 g_param_spec_string ("name", "Name", "User ID name",
-                                     "", G_PARAM_READABLE));
+                                     "", G_PARAM_READWRITE));
 
         g_object_class_install_property (gobject_class, PROP_EMAIL,
                 g_param_spec_string ("email", "Email", "User ID email",
-                                     "", G_PARAM_READABLE));
+                                     "", G_PARAM_READWRITE));
 
         g_object_class_install_property (gobject_class, PROP_COMMENT,
                 g_param_spec_string ("comment", "Comment", "User ID comment",
-                                     "", G_PARAM_READABLE));
+                                     "", G_PARAM_READWRITE));
+        
+        g_object_class_install_property (gobject_class, PROP_SIGNATURES,
+                g_param_spec_boxed ("signatures", "Signatures", "Signatures on this UID",
+                                    SEAHORSE_BOXED_OBJECT_LIST, G_PARAM_READWRITE));
 }
 
 /* -----------------------------------------------------------------------------
  * PUBLIC 
  */
 
-SeahorsePgpUid* 
-seahorse_pgp_uid_new (gpgme_key_t pubkey, gpgme_user_id_t userid) 
+SeahorsePgpUid*
+seahorse_pgp_uid_new (const gchar *uid_string)
 {
-	return g_object_new (SEAHORSE_TYPE_PGP_UID, 
-	                     "pubkey", pubkey, 
-	                     "userid", userid, NULL);
+	SeahorsePgpUid *uid;
+	gchar *name = NULL;
+	gchar *email = NULL;
+	gchar *comment = NULL;
+	
+	if (uid_string)
+		parse_user_id (uid_string, &name, &email, &comment);
+	
+	uid = g_object_new (SEAHORSE_TYPE_PGP_UID, "name", name, "email", email, "comment", comment, NULL);
+	
+	g_free (name);
+	g_free (comment);
+	g_free (email);
+	
+	return uid;
 }
 
-
-gpgme_key_t
-seahorse_pgp_uid_get_pubkey (SeahorsePgpUid *self)
+GList*
+seahorse_pgp_uid_get_signatures (SeahorsePgpUid *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_PGP_UID (self), NULL);
-	g_return_val_if_fail (self->pv->pubkey, NULL);
-	return self->pv->pubkey;
-}
-
-gpgme_user_id_t
-seahorse_pgp_uid_get_userid (SeahorsePgpUid *self)
-{
-	g_return_val_if_fail (SEAHORSE_IS_PGP_UID (self), NULL);
-	g_return_val_if_fail (self->pv->userid, NULL);
-	return self->pv->userid;
+	return self->pv->signatures;
 }
 
 void
-seahorse_pgp_uid_set_userid (SeahorsePgpUid *self, gpgme_user_id_t userid)
-{
-	GObject *obj;
-	gpgme_user_id_t uid;
-	gint index, i;
-	
-	g_return_if_fail (SEAHORSE_IS_PGP_UID (self));
-	g_return_if_fail (userid);
-	
-	/* Make sure that this userid is in the pubkey */
-	index = -1;
-	for (i = 0, uid = self->pv->pubkey->uids; uid; ++i, uid = uid->next) {
-		if(userid == uid) {
-			index = i;
-			break;
-		}
-	}
-	
-	g_return_if_fail (index >= 0);
-	
-	self->pv->userid = userid;
-	self->pv->gpgme_index = index;
-	
-	obj = G_OBJECT (self);
-	g_object_freeze_notify (obj);
-	changed_uid (self);
-	g_object_notify (obj, "userid");
-	g_object_notify (obj, "gpgme_index");
-	g_object_notify (obj, "name");
-	g_object_notify (obj, "email");
-	g_object_notify (obj, "comment");
-	g_object_notify (obj, "validity");
-	g_object_notify (obj, "validity-str");
-	g_object_thaw_notify (obj);
-}
-
-guint
-seahorse_pgp_uid_get_gpgme_index (SeahorsePgpUid *self)
-{
-	g_return_val_if_fail (SEAHORSE_IS_PGP_UID (self), 0);
-	return self->pv->gpgme_index;
-}
-
-guint
-seahorse_pgp_uid_get_actual_index (SeahorsePgpUid *self)
-{
-	g_return_val_if_fail (SEAHORSE_IS_PGP_UID (self), 0);
-	if(self->pv->actual_index < 0)
-		return self->pv->gpgme_index;
-	return self->pv->actual_index;
-}
-
-void
-seahorse_pgp_uid_set_actual_index (SeahorsePgpUid *self, guint actual_index)
+seahorse_pgp_uid_set_signatures (SeahorsePgpUid *self, GList *signatures)
 {
 	g_return_if_fail (SEAHORSE_IS_PGP_UID (self));
-	self->pv->actual_index = actual_index;
-	g_object_notify (G_OBJECT (self), "actual-index");
+	
+	seahorse_object_list_free (self->pv->signatures);
+	self->pv->signatures = seahorse_object_list_copy (signatures);
+	
+	g_object_notify (G_OBJECT (self), "signatures");	
 }
 
 SeahorseValidity
 seahorse_pgp_uid_get_validity (SeahorsePgpUid *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_PGP_UID (self), SEAHORSE_VALIDITY_UNKNOWN);
-	g_return_val_if_fail (self->pv->userid, SEAHORSE_VALIDITY_UNKNOWN);
-	return gpgmex_validity_to_seahorse (self->pv->userid->validity);
+	return self->pv->validity;
+}
+
+void
+seahorse_pgp_uid_set_validity (SeahorsePgpUid *self, SeahorseValidity validity)
+{
+	g_return_if_fail (SEAHORSE_IS_PGP_UID (self));
+	self->pv->validity = validity;
+	g_object_notify (G_OBJECT (self), "validity");
+	g_object_notify (G_OBJECT (self), "validity-str");
 }
 
 const gchar*
@@ -381,59 +384,124 @@ seahorse_pgp_uid_get_validity_str (SeahorsePgpUid *self)
 	return seahorse_validity_get_string (seahorse_pgp_uid_get_validity (self));
 }
 
-gchar*
+const gchar*
 seahorse_pgp_uid_get_name (SeahorsePgpUid *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_PGP_UID (self), NULL);
-	g_return_val_if_fail (self->pv->userid, NULL);
-	return convert_string (self->pv->userid->name, FALSE);
+	if (!self->pv->name)
+		self->pv->name = g_strdup ("");
+	return self->pv->name;
 }
 
-gchar*
+void
+seahorse_pgp_uid_set_name (SeahorsePgpUid *self, const gchar *name)
+{
+	GObject *obj;
+	
+	g_return_if_fail (SEAHORSE_IS_PGP_UID (self));
+	
+	g_free (self->pv->name);
+	self->pv->name = g_strdup (name);
+	
+	obj = G_OBJECT (self);
+	g_object_freeze_notify (obj);
+	if (self->pv->realized)
+		seahorse_pgp_uid_realize (SEAHORSE_OBJECT (self));
+	g_object_notify (obj, "name");
+	g_object_thaw_notify (obj);
+}
+
+const gchar*
 seahorse_pgp_uid_get_email (SeahorsePgpUid *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_PGP_UID (self), NULL);
-	g_return_val_if_fail (self->pv->userid, NULL);
-	return convert_string (self->pv->userid->email, FALSE);
+	if (!self->pv->email)
+		self->pv->email = g_strdup ("");
+	return self->pv->email;
 }
 
-gchar*
+void
+seahorse_pgp_uid_set_email (SeahorsePgpUid *self, const gchar *email)
+{
+	GObject *obj;
+	
+	g_return_if_fail (SEAHORSE_IS_PGP_UID (self));
+	
+	g_free (self->pv->email);
+	self->pv->email = g_strdup (email);
+	
+	obj = G_OBJECT (self);
+	g_object_freeze_notify (obj);
+	if (self->pv->realized)
+		seahorse_pgp_uid_realize (SEAHORSE_OBJECT (self));
+	g_object_notify (obj, "email");
+	g_object_thaw_notify (obj);
+}
+
+const gchar*
 seahorse_pgp_uid_get_comment (SeahorsePgpUid *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_PGP_UID (self), NULL);
-	g_return_val_if_fail (self->pv->userid, NULL);
-	return convert_string (self->pv->userid->comment, FALSE);
+	if (!self->pv->comment)
+		self->pv->comment = g_strdup ("");
+	return self->pv->comment;
+}
+
+void
+seahorse_pgp_uid_set_comment (SeahorsePgpUid *self, const gchar *comment)
+{
+	GObject *obj;
+	
+	g_return_if_fail (SEAHORSE_IS_PGP_UID (self));
+	
+	g_free (self->pv->comment);
+	self->pv->comment = g_strdup (comment);
+	
+	obj = G_OBJECT (self);
+	g_object_freeze_notify (obj);
+	if (self->pv->realized)
+		seahorse_pgp_uid_realize (SEAHORSE_OBJECT (self));
+	g_object_notify (obj, "comment");
+	g_object_thaw_notify (obj);
 }
 
 gchar*
-seahorse_pgp_uid_calc_label (gpgme_user_id_t userid)
+seahorse_pgp_uid_calc_label (const gchar *name, const gchar *email, 
+                             const gchar *comment)
 {
-	g_return_val_if_fail (userid, NULL);
-	return convert_string (userid->uid, FALSE);
+	GString *string;
+
+	g_return_val_if_fail (name, NULL);
+
+	string = g_string_new ("");
+	g_string_append (string, name);
+	
+	if (email && email[0]) {
+		g_string_append (string, " <");
+		g_string_append (string, email);
+		g_string_append (string, ">");
+	}
+	
+	if (comment && comment[0]) {
+		g_string_append (string, " (");
+		g_string_append (string, comment);
+		g_string_append (string, ")");
+	}
+	
+	return g_string_free (string, FALSE);
 }
 
 gchar*
-seahorse_pgp_uid_calc_name (gpgme_user_id_t userid)
+seahorse_pgp_uid_calc_markup (const gchar *name, const gchar *email, 
+                              const gchar *comment, guint flags)
 {
-	g_return_val_if_fail (userid, NULL);
-	return convert_string (userid->name, FALSE);
-}
-
-gchar*
-seahorse_pgp_uid_calc_markup (gpgme_user_id_t userid, guint flags)
-{
-	gchar *email, *name, *comment, *ret;
 	const gchar *format;
 	gboolean strike = FALSE;
 
-	g_return_val_if_fail (userid, NULL);
+	g_return_val_if_fail (name, NULL);
 	
-	name = convert_string (userid->name, TRUE);
-	email = convert_string (userid->email, TRUE);
-	comment = convert_string (userid->comment, TRUE);
-
-	if (userid->revoked || flags & CRYPTUI_FLAG_EXPIRED || 
-	    flags & CRYPTUI_FLAG_REVOKED || flags & CRYPTUI_FLAG_DISABLED)
+	if (flags & SEAHORSE_FLAG_EXPIRED || flags & SEAHORSE_FLAG_REVOKED || 
+	    flags & SEAHORSE_FLAG_DISABLED)
 		strike = TRUE;
 	    
 	if (strike)
@@ -441,51 +509,10 @@ seahorse_pgp_uid_calc_markup (gpgme_user_id_t userid, guint flags)
 	else
 		format = "%s<span foreground='#555555' size='small' rise='0'>%s%s%s%s%s</span>";
 		
-	ret = g_markup_printf_escaped (format, name,
+	return g_markup_printf_escaped (format, name,
 	 	          email && email[0] ? "  " : "",
 	 	          email && email[0] ? email : "",
 	 	          comment && comment[0] ? "  '" : "",
 	 	          comment && comment[0] ? comment : "",
 	 	          comment && comment[0] ? "'" : "");
-	    
-	g_free (name);
-	g_free (comment);
-	g_free (email);
-	    
-	return ret;
-}
-
-void
-seahorse_pgp_uid_signature_get_text (gpgme_key_sig_t signature,
-                                     gchar **name, gchar **email, gchar **comment)
-{
-	g_return_if_fail (signature != NULL);
-    
-	if (name)
-		*name = signature->name ? convert_string (signature->name, FALSE) : NULL;
-	if (email)
-		*email = signature->email ? convert_string (signature->email, FALSE) : NULL;
-	if (comment)
-		*comment = signature->comment ? convert_string (signature->comment, FALSE) : NULL;
-}
-
-guint         
-seahorse_pgp_uid_signature_get_type (gpgme_key_sig_t signature)
-{
-	SeahorseObject *sobj;
-	GQuark id;
-
-	g_return_val_if_fail (signature != NULL, 0);
-    
-	id = seahorse_pgp_key_get_cannonical_id (signature->keyid);
-	sobj = seahorse_context_find_object (SCTX_APP (), id, SEAHORSE_LOCATION_LOCAL);
-    
-	if (sobj) {
-		if (seahorse_object_get_usage (sobj) == SEAHORSE_USAGE_PRIVATE_KEY) 
-			return SKEY_PGPSIG_TRUSTED | SKEY_PGPSIG_PERSONAL;
-		if (seahorse_object_get_flags (sobj) & SEAHORSE_FLAG_TRUSTED)
-			return SKEY_PGPSIG_TRUSTED;
-	}
-
-	return 0;
 }

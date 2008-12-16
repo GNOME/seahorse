@@ -23,14 +23,14 @@
 
 #include <glib/gi18n.h>
 #include <string.h>
-#include "seahorse-pgp-source.h"
+#include "seahorse-gpgme-source.h"
 
-#include "seahorse-gpgme-io.h"
-#include "seahorse-gpgmex.h"
+#include "seahorse-gpgme-data.h"
+#include "seahorse-gpgme.h"
+#include "seahorse-gpgme-key-op.h"
+#include "seahorse-gpgme-operation.h"
 #include "seahorse-gpg-options.h"
 #include "seahorse-pgp-key.h"
-#include "seahorse-pgp-key-op.h"
-#include "seahorse-pgp-operation.h"
 
 #include "seahorse-operation.h"
 #include "seahorse-util.h"
@@ -170,7 +170,7 @@ init_gpgme (gpgme_ctx_t *ctx)
 
 DECLARE_OPERATION (Load, load)
     /*< private >*/
-    SeahorsePGPSource *psrc;        /* Key source to add keys to when found */
+    SeahorseGpgmeSource *psrc;        /* Key source to add keys to when found */
     gpgme_ctx_t ctx;                /* GPGME context we're loading from */
     gboolean secret;                /* Loading secret keys */
     guint loaded;                   /* Number of keys we've loaded */
@@ -182,7 +182,7 @@ END_DECLARE_OPERATION
 
 IMPLEMENT_OPERATION (Load, load)
 
-static SeahorseLoadOperation*   seahorse_load_operation_start   (SeahorsePGPSource *psrc, 
+static SeahorseLoadOperation*   seahorse_load_operation_start   (SeahorseGpgmeSource *psrc, 
                                                                  const gchar **pattern, 
                                                                  guint parts,
                                                                  gboolean secret);
@@ -211,7 +211,7 @@ free_export_context (gpointer p)
 }
 
 static void
-export_key_callback (SeahorsePGPOperation *pop, ExportContext *ctx)
+export_key_callback (SeahorseGpgmeOperation *pop, ExportContext *ctx)
 {
     gpgme_error_t gerr;
     GError *err = NULL;
@@ -236,7 +236,7 @@ export_key_callback (SeahorsePGPOperation *pop, ExportContext *ctx)
     ctx->at++;
     
     if (!GPG_IS_OK (gerr))
-        seahorse_pgp_operation_mark_failed (pop, gerr);
+        seahorse_gpgme_operation_mark_failed (pop, gerr);
 }
 
 
@@ -244,7 +244,7 @@ export_key_callback (SeahorsePGPOperation *pop, ExportContext *ctx)
  * PGP Source
  */
     
-struct _SeahorsePGPSourcePrivate {
+struct _SeahorseGpgmeSourcePrivate {
     guint scheduled_refresh;                /* Source for refresh timeout */
     GFileMonitor *monitor_handle;           /* For monitoring the .gnupg directory */
     SeahorseMultiOperation *operations;     /* A list of all current operations */    
@@ -253,23 +253,23 @@ struct _SeahorsePGPSourcePrivate {
 
 static void seahorse_source_iface (SeahorseSourceIface *iface);
 
-G_DEFINE_TYPE_EXTENDED (SeahorsePGPSource, seahorse_pgp_source, G_TYPE_OBJECT, 0,
+G_DEFINE_TYPE_EXTENDED (SeahorseGpgmeSource, seahorse_gpgme_source, G_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_SOURCE, seahorse_source_iface));
 
 /* GObject handlers */
-static void seahorse_pgp_source_dispose         (GObject *gobject);
-static void seahorse_pgp_source_finalize        (GObject *gobject);
-static void seahorse_pgp_source_set_property    (GObject *object, guint prop_id, 
+static void seahorse_gpgme_source_dispose         (GObject *gobject);
+static void seahorse_gpgme_source_finalize        (GObject *gobject);
+static void seahorse_gpgme_source_set_property    (GObject *object, guint prop_id, 
                                                  const GValue *value, GParamSpec *pspec);
-static void seahorse_pgp_source_get_property    (GObject *object, guint prop_id,
+static void seahorse_gpgme_source_get_property    (GObject *object, guint prop_id,
                                                  GValue *value, GParamSpec *pspec);
 
 /* SeahorseSource methods */
-static SeahorseOperation*  seahorse_pgp_source_load             (SeahorseSource *src);
+static SeahorseOperation*  seahorse_gpgme_source_load             (SeahorseSource *src);
 
-static SeahorseOperation*  seahorse_pgp_source_import           (SeahorseSource *sksrc, 
+static SeahorseOperation*  seahorse_gpgme_source_import           (SeahorseSource *sksrc, 
                                                                  GInputStream *input);
-static SeahorseOperation*  seahorse_pgp_source_export           (SeahorseSource *sksrc, 
+static SeahorseOperation*  seahorse_gpgme_source_export           (SeahorseSource *sksrc, 
                                                                  GList *keys,
                                                                  GOutputStream *output);
 
@@ -279,13 +279,13 @@ static void                monitor_gpg_homedir                  (GFileMonitor *h
                                                                  GFile *other_file,
                                                                  GFileMonitorEvent event_type,
                                                                  gpointer user_data);
-static void                cancel_scheduled_refresh             (SeahorsePGPSource *psrc);
+static void                cancel_scheduled_refresh             (SeahorseGpgmeSource *psrc);
                                                                  
 static GObjectClass *parent_class = NULL;
 
 /* Initialize the basic class stuff */
 static void
-seahorse_pgp_source_class_init (SeahorsePGPSourceClass *klass)
+seahorse_gpgme_source_class_init (SeahorseGpgmeSourceClass *klass)
 {
     GObjectClass *gobject_class;
     
@@ -298,16 +298,16 @@ seahorse_pgp_source_class_init (SeahorsePGPSourceClass *klass)
    
     parent_class = g_type_class_peek_parent (klass);
     gobject_class = G_OBJECT_CLASS (klass);
-    gobject_class->dispose = seahorse_pgp_source_dispose;
-    gobject_class->finalize = seahorse_pgp_source_finalize;
-    gobject_class->set_property = seahorse_pgp_source_set_property;
-    gobject_class->get_property = seahorse_pgp_source_get_property;
+    gobject_class->dispose = seahorse_gpgme_source_dispose;
+    gobject_class->finalize = seahorse_gpgme_source_finalize;
+    gobject_class->set_property = seahorse_gpgme_source_set_property;
+    gobject_class->get_property = seahorse_gpgme_source_get_property;
  
 	g_object_class_override_property (gobject_class, PROP_KEY_TYPE, "key-type");
 	g_object_class_override_property (gobject_class, PROP_KEY_DESC, "key-desc");
 	g_object_class_override_property (gobject_class, PROP_LOCATION, "location");
 	
-	seahorse_registry_register_type (NULL, SEAHORSE_TYPE_PGP_SOURCE, "source", "local", SEAHORSE_PGP_STR, NULL);
+	seahorse_registry_register_type (NULL, SEAHORSE_TYPE_GPGME_SOURCE, "source", "local", SEAHORSE_PGP_STR, NULL);
 
 	seahorse_registry_register_function (NULL, seahorse_pgp_key_get_cannonical_id, "canonize", SEAHORSE_PGP_STR, NULL);
 }
@@ -315,15 +315,15 @@ seahorse_pgp_source_class_init (SeahorsePGPSourceClass *klass)
 static void 
 seahorse_source_iface (SeahorseSourceIface *iface)
 {
-	iface->load = seahorse_pgp_source_load;
-	iface->import = seahorse_pgp_source_import;
-	iface->export = seahorse_pgp_source_export;
+	iface->load = seahorse_gpgme_source_load;
+	iface->import = seahorse_gpgme_source_import;
+	iface->export = seahorse_gpgme_source_export;
 }
 
 
 /* init context, private vars, set prefs, connect signals */
 static void
-seahorse_pgp_source_init (SeahorsePGPSource *psrc)
+seahorse_gpgme_source_init (SeahorseGpgmeSource *psrc)
 {
 	gpgme_error_t gerr;
 	GError *err = NULL;
@@ -334,7 +334,7 @@ seahorse_pgp_source_init (SeahorsePGPSource *psrc)
 	g_return_if_fail (GPG_IS_OK (gerr));
     
 	/* init private vars */
-	psrc->pv = g_new0 (SeahorsePGPSourcePrivate, 1);
+	psrc->pv = g_new0 (SeahorseGpgmeSourcePrivate, 1);
     
 	psrc->pv->operations = seahorse_multi_operation_new ();
     
@@ -359,9 +359,9 @@ seahorse_pgp_source_init (SeahorsePGPSource *psrc)
 
 /* dispose of all our internal references */
 static void
-seahorse_pgp_source_dispose (GObject *gobject)
+seahorse_gpgme_source_dispose (GObject *gobject)
 {
-    SeahorsePGPSource *psrc;
+    SeahorseGpgmeSource *psrc;
     GList *l;
     
     /*
@@ -372,7 +372,7 @@ seahorse_pgp_source_dispose (GObject *gobject)
      * This function should also be able to run multiple times.
      */
   
-    psrc = SEAHORSE_PGP_SOURCE (gobject);
+    psrc = SEAHORSE_GPGME_SOURCE (gobject);
     g_assert (psrc->pv);
     
     /* Clear out all operations */
@@ -403,11 +403,11 @@ seahorse_pgp_source_dispose (GObject *gobject)
 
 /* free private vars */
 static void
-seahorse_pgp_source_finalize (GObject *gobject)
+seahorse_gpgme_source_finalize (GObject *gobject)
 {
-    SeahorsePGPSource *psrc;
+    SeahorseGpgmeSource *psrc;
   
-    psrc = SEAHORSE_PGP_SOURCE (gobject);
+    psrc = SEAHORSE_GPGME_SOURCE (gobject);
     g_assert (psrc->pv);
     
     /* All monitoring and scheduling should be done */
@@ -420,14 +420,14 @@ seahorse_pgp_source_finalize (GObject *gobject)
 }
 
 static void 
-seahorse_pgp_source_set_property (GObject *object, guint prop_id, const GValue *value, 
+seahorse_gpgme_source_set_property (GObject *object, guint prop_id, const GValue *value, 
                                   GParamSpec *pspec)
 {
     
 }
 
 static void 
-seahorse_pgp_source_get_property (GObject *object, guint prop_id, GValue *value, 
+seahorse_gpgme_source_get_property (GObject *object, guint prop_id, GValue *value, 
                                   GParamSpec *pspec)
 {
     switch (prop_id) {
@@ -449,7 +449,7 @@ seahorse_pgp_source_get_property (GObject *object, guint prop_id, GValue *value,
 
 /* Remove the given key from the context */
 static void
-remove_key_from_context (gpointer kt, SeahorseObject *dummy, SeahorsePGPSource *psrc)
+remove_key_from_context (gpointer kt, SeahorseObject *dummy, SeahorseGpgmeSource *psrc)
 {
     /* This function gets called as a GHRFunc on the lctx->checks hashtable. */
     GQuark keyid = GPOINTER_TO_UINT (kt);
@@ -461,11 +461,11 @@ remove_key_from_context (gpointer kt, SeahorseObject *dummy, SeahorsePGPSource *
 }
 
 /* Add a key to the context  */
-static SeahorsePgpKey*
-add_key_to_context (SeahorsePGPSource *psrc, gpgme_key_t key)
+static SeahorseGpgmeKey*
+add_key_to_context (SeahorseGpgmeSource *psrc, gpgme_key_t key)
 {
-	SeahorsePgpKey *pkey = NULL;
-	SeahorsePgpKey *prev;
+	SeahorseGpgmeKey *pkey = NULL;
+	SeahorseGpgmeKey *prev;
 	const gchar *id;
 	gpgme_key_t seckey;
 	GQuark keyid;
@@ -477,8 +477,8 @@ add_key_to_context (SeahorsePGPSource *psrc, gpgme_key_t key)
 	keyid = seahorse_pgp_key_get_cannonical_id (id);
 	g_return_val_if_fail (keyid, NULL);
     
-	g_assert (SEAHORSE_IS_PGP_SOURCE (psrc));
-	prev = SEAHORSE_PGP_KEY (seahorse_context_get_object (SCTX_APP (), SEAHORSE_SOURCE (psrc), keyid));
+	g_assert (SEAHORSE_IS_GPGME_SOURCE (psrc));
+	prev = SEAHORSE_GPGME_KEY (seahorse_context_get_object (SCTX_APP (), SEAHORSE_SOURCE (psrc), keyid));
     
 	/* Check if we can just replace the key on the object */
 	if (prev != NULL) {
@@ -491,7 +491,7 @@ add_key_to_context (SeahorsePGPSource *psrc, gpgme_key_t key)
     
 	/* Create a new key with secret */    
 	if (key->secret) {
-		pkey = seahorse_pgp_key_new (SEAHORSE_SOURCE (psrc), NULL, key);
+		pkey = seahorse_gpgme_key_new (SEAHORSE_SOURCE (psrc), NULL, key);
         
 		/* Since we don't have a public key yet, save this away */
 		psrc->pv->orphan_secret = g_list_append (psrc->pv->orphan_secret, pkey);
@@ -505,7 +505,7 @@ add_key_to_context (SeahorsePGPSource *psrc, gpgme_key_t key)
 	/* Check for orphans */
 	for (l = psrc->pv->orphan_secret; l; l = g_list_next (l)) {
         
-		seckey = seahorse_pgp_key_get_private (l->data);
+		seckey = seahorse_gpgme_key_get_private (l->data);
 		g_return_val_if_fail (seckey && seckey->subkeys && seckey->subkeys->keyid, NULL);
 		g_assert (seckey);
 		
@@ -513,7 +513,7 @@ add_key_to_context (SeahorsePGPSource *psrc, gpgme_key_t key)
 		if (g_str_equal (id, seckey->subkeys->keyid)) {
             
 			/* Set it up properly */
-			pkey = SEAHORSE_PGP_KEY (l->data);
+			pkey = SEAHORSE_GPGME_KEY (l->data);
 			g_object_set (pkey, "pubkey", key, NULL);
             
 			/* Remove item from orphan list cleanly */
@@ -524,7 +524,7 @@ add_key_to_context (SeahorsePGPSource *psrc, gpgme_key_t key)
 	}
 
 	if (pkey == NULL)
-		pkey = seahorse_pgp_key_new (SEAHORSE_SOURCE (psrc), key, NULL);
+		pkey = seahorse_gpgme_key_new (SEAHORSE_SOURCE (psrc), key, NULL);
     
 	/* Add to context */ 
 	seahorse_context_take_object (SCTX_APP (), SEAHORSE_OBJECT (pkey));
@@ -539,7 +539,7 @@ add_key_to_context (SeahorsePGPSource *psrc, gpgme_key_t key)
 static gboolean
 scheduled_refresh (gpointer data)
 {
-    SeahorsePGPSource *psrc = SEAHORSE_PGP_SOURCE (data);
+    SeahorseGpgmeSource *psrc = SEAHORSE_GPGME_SOURCE (data);
 
     DEBUG_REFRESH ("scheduled refresh event ocurring now\n");
     cancel_scheduled_refresh (psrc);
@@ -551,14 +551,14 @@ scheduled_refresh (gpointer data)
 static gboolean
 scheduled_dummy (gpointer data)
 {
-    SeahorsePGPSource *psrc = SEAHORSE_PGP_SOURCE (data);
+    SeahorseGpgmeSource *psrc = SEAHORSE_GPGME_SOURCE (data);
     DEBUG_REFRESH ("dummy refresh event occurring now\n");
     psrc->pv->scheduled_refresh = 0;
     return FALSE; /* don't run again */    
 }
 
 static void
-cancel_scheduled_refresh (SeahorsePGPSource *psrc)
+cancel_scheduled_refresh (SeahorseGpgmeSource *psrc)
 {
     if (psrc->pv->scheduled_refresh != 0) {
         DEBUG_REFRESH ("cancelling scheduled refresh event\n");
@@ -571,7 +571,7 @@ static void
 monitor_gpg_homedir (GFileMonitor *handle, GFile *file, GFile *other_file,
                      GFileMonitorEvent event_type, gpointer user_data)
 {
-	SeahorsePGPSource *psrc = SEAHORSE_PGP_SOURCE (user_data);
+	SeahorseGpgmeSource *psrc = SEAHORSE_GPGME_SOURCE (user_data);
 	gchar *name;
 	
 	if (event_type == G_FILE_MONITOR_EVENT_CHANGED || 
@@ -662,7 +662,7 @@ seahorse_load_operation_cancel (SeahorseOperation *operation)
 static gboolean
 keyload_handler (SeahorseLoadOperation *lop)
 {
-    SeahorsePgpKey *pkey;
+    SeahorseGpgmeKey *pkey;
     gpgme_key_t key;
     guint batch;
     GQuark keyid;
@@ -692,7 +692,7 @@ keyload_handler (SeahorseLoadOperation *lop)
         
         /* Invalid id from GPG ? */
         if (!keyid) {
-            gpgmex_key_unref (key);
+            gpgme_key_unref (key);
             continue;
         }
         
@@ -708,9 +708,9 @@ keyload_handler (SeahorseLoadOperation *lop)
 
         /* Load additional info */
         if (pkey && lop->parts & LOAD_PHOTOS)
-        	seahorse_pgp_key_op_photos_load (pkey);
+        	seahorse_gpgme_key_op_photos_load (pkey);
 
-        gpgmex_key_unref (key);
+        gpgme_key_unref (key);
         lop->loaded++;
     }
     
@@ -732,16 +732,16 @@ keyload_handler (SeahorseLoadOperation *lop)
 }
 
 static SeahorseLoadOperation*
-seahorse_load_operation_start (SeahorsePGPSource *psrc, const gchar **pattern, 
+seahorse_load_operation_start (SeahorseGpgmeSource *psrc, const gchar **pattern, 
                                guint parts, gboolean secret)
 {
-    SeahorsePGPSourcePrivate *priv;
+    SeahorseGpgmeSourcePrivate *priv;
     SeahorseLoadOperation *lop;
     gpgme_error_t err;
     GList *keys, *l;
     SeahorseObject *sobj;
     
-    g_assert (SEAHORSE_IS_PGP_SOURCE (psrc));
+    g_assert (SEAHORSE_IS_GPGME_SOURCE (psrc));
     priv = psrc->pv;
 
     lop = g_object_new (SEAHORSE_TYPE_LOAD_OPERATION, NULL);    
@@ -788,7 +788,7 @@ seahorse_load_operation_start (SeahorsePGPSource *psrc, const gchar **pattern,
 }    
 
 static void
-prepare_import_results (SeahorsePGPOperation *pop, SeahorsePGPSource *psrc)
+prepare_import_results (SeahorseGpgmeOperation *pop, SeahorseGpgmeSource *psrc)
 {
     SeahorseObject *sobj;
     SeahorseLoadOperation *lop;
@@ -872,13 +872,13 @@ prepare_import_results (SeahorsePGPOperation *pop, SeahorsePGPSource *psrc)
  */
 
 static SeahorseOperation*
-seahorse_pgp_source_load (SeahorseSource *src)
+seahorse_gpgme_source_load (SeahorseSource *src)
 {
-    SeahorsePGPSource *psrc;
+    SeahorseGpgmeSource *psrc;
     SeahorseLoadOperation *lop;
     
     g_assert (SEAHORSE_IS_SOURCE (src));
-    psrc = SEAHORSE_PGP_SOURCE (src);
+    psrc = SEAHORSE_GPGME_SOURCE (src);
     
     /* Schedule a dummy refresh. This blocks all monitoring for a while */
     cancel_scheduled_refresh (psrc);
@@ -900,55 +900,55 @@ seahorse_pgp_source_load (SeahorseSource *src)
 }
 
 static SeahorseOperation* 
-seahorse_pgp_source_import (SeahorseSource *sksrc, GInputStream *input)
+seahorse_gpgme_source_import (SeahorseSource *sksrc, GInputStream *input)
 {
-	SeahorsePGPOperation *pop;
-	SeahorsePGPSource *psrc;
+	SeahorseGpgmeOperation *pop;
+	SeahorseGpgmeSource *psrc;
 	gpgme_error_t gerr;
 	gpgme_data_t data;
     
-    	g_return_val_if_fail (SEAHORSE_IS_PGP_SOURCE (sksrc), NULL);
-    	psrc = SEAHORSE_PGP_SOURCE (sksrc);
+    	g_return_val_if_fail (SEAHORSE_IS_GPGME_SOURCE (sksrc), NULL);
+    	psrc = SEAHORSE_GPGME_SOURCE (sksrc);
     
     	g_return_val_if_fail (G_IS_INPUT_STREAM (input), NULL);
     
-    	pop = seahorse_pgp_operation_new (_("Importing Keys"));
+    	pop = seahorse_gpgme_operation_new (_("Importing Keys"));
     	g_return_val_if_fail (pop != NULL, NULL);
     
-	data = seahorse_gpgme_input_data (input);
+	data = seahorse_gpgme_data_input (input);
 	g_return_val_if_fail (data, NULL);
     
 	gerr = gpgme_op_import_start (pop->gctx, data);
     
 	g_signal_connect (pop, "results", G_CALLBACK (prepare_import_results), psrc);
 	g_object_set_data_full (G_OBJECT (pop), "source-data", data, 
-	                        (GDestroyNotify)gpgmex_data_release);
+	                        (GDestroyNotify)gpgme_data_release);
     
 	/* Couldn't start import */
 	if (!GPG_IS_OK (gerr))
-		seahorse_pgp_operation_mark_failed (pop, gerr);
+		seahorse_gpgme_operation_mark_failed (pop, gerr);
     
 	return SEAHORSE_OPERATION (pop);
 }
 
 static SeahorseOperation* 
-seahorse_pgp_source_export (SeahorseSource *sksrc, GList *keys, GOutputStream *output)
+seahorse_gpgme_source_export (SeahorseSource *sksrc, GList *keys, GOutputStream *output)
 {
-	SeahorsePGPOperation *pop;
-	SeahorsePGPSource *psrc;
-	SeahorsePgpKey *pkey;
+	SeahorseGpgmeOperation *pop;
+	SeahorseGpgmeSource *psrc;
+	SeahorseGpgmeKey *pkey;
 	SeahorseObject *object;
 	ExportContext *ctx;
 	gpgme_data_t data;
 	const gchar *keyid;
 	GList *l;
     
-    	g_return_val_if_fail (SEAHORSE_IS_PGP_SOURCE (sksrc), NULL);
+    	g_return_val_if_fail (SEAHORSE_IS_GPGME_SOURCE (sksrc), NULL);
     	g_return_val_if_fail (output == NULL || G_IS_OUTPUT_STREAM (output), NULL);
     
-    	psrc = SEAHORSE_PGP_SOURCE (sksrc);
+    	psrc = SEAHORSE_GPGME_SOURCE (sksrc);
 
-    	pop = seahorse_pgp_operation_new (_("Exporting Keys"));
+    	pop = seahorse_gpgme_operation_new (_("Exporting Keys"));
     	g_return_val_if_fail (pop != NULL, NULL);
 
 	g_object_ref (output);
@@ -958,7 +958,7 @@ seahorse_pgp_source_export (SeahorseSource *sksrc, GList *keys, GOutputStream *o
         gpgme_set_armor (pop->gctx, TRUE);
         gpgme_set_textmode (pop->gctx, TRUE);
         
-        data = seahorse_gpgme_output_data (output);
+        data = seahorse_gpgme_data_output (output);
         g_return_val_if_fail (data, NULL);
 
         /* Export context for asynchronous export */
@@ -975,13 +975,13 @@ seahorse_pgp_source_export (SeahorseSource *sksrc, GList *keys, GOutputStream *o
         		continue;
         
         	g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (l->data), NULL);
-        	pkey = SEAHORSE_PGP_KEY (l->data);
+        	pkey = SEAHORSE_GPGME_KEY (l->data);
         
         	object = SEAHORSE_OBJECT (l->data);
         	g_return_val_if_fail (seahorse_object_get_source (object) == sksrc, NULL);
         
         	/* Building list */
-        	keyid = seahorse_pgp_key_get_keyid (pkey);
+        	keyid = seahorse_pgp_key_get_keyid (SEAHORSE_PGP_KEY (pkey));
         	g_array_append_val (ctx->keyids, keyid);
         }
 
@@ -996,20 +996,20 @@ seahorse_pgp_source_export (SeahorseSource *sksrc, GList *keys, GOutputStream *o
  */
 
 /**
- * seahorse_pgp_source_new
+ * seahorse_gpgme_source_new
  * 
  * Creates a new PGP key source
  * 
  * Returns: The key source.
  **/
-SeahorsePGPSource*
-seahorse_pgp_source_new (void)
+SeahorseGpgmeSource*
+seahorse_gpgme_source_new (void)
 {
-   return g_object_new (SEAHORSE_TYPE_PGP_SOURCE, NULL);
+   return g_object_new (SEAHORSE_TYPE_GPGME_SOURCE, NULL);
 }   
 
 gpgme_ctx_t          
-seahorse_pgp_source_new_context ()
+seahorse_gpgme_source_new_context ()
 {
     gpgme_ctx_t ctx = NULL;
     g_return_val_if_fail (GPG_IS_OK (init_gpgme (&ctx)), NULL);

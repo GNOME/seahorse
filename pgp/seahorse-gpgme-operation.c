@@ -23,9 +23,9 @@
 
 #include "seahorse-util.h"
 
-#include "pgp/seahorse-gpgmex.h"
-#include "pgp/seahorse-pgp-operation.h"
-#include "pgp/seahorse-pgp-source.h"
+#include "pgp/seahorse-gpgme.h"
+#include "pgp/seahorse-gpgme-operation.h"
+#include "pgp/seahorse-gpgme-source.h"
 
 #define DEBUG_OPERATION_ENABLE 0
 
@@ -48,7 +48,7 @@
  */
  
 typedef struct _WatchData {
-    SeahorsePGPOperation *op;   /* The operation we're working with */
+    SeahorseGpgmeOperation *op;   /* The operation we're working with */
     gint stag;                  /* IO watch source tag */
     gboolean registered;        /* Whether this watch is currently registered */
 
@@ -64,14 +64,14 @@ typedef struct _WatchData {
 #define READ_CONDITION (G_IO_IN | G_IO_HUP | G_IO_ERR)
 #define WRITE_CONDITION (G_IO_OUT | G_IO_ERR)
 
-typedef struct _SeahorsePGPOperationPrivate {
+typedef struct _SeahorseGpgmeOperationPrivate {
     gpgme_ctx_t gctx;               /* The context we watch for the async op to complete */
     gchar *message;                 /* A progress message to display (or NULL for GPGME messages) */
     struct gpgme_io_cbs io_cbs;     /* The GPGME IO callback vtable */
     GList *watches;                 /* Watches GPGME asked us to track */
     gboolean busy;                  /* If the context is currently executing something */
     guint def_total;                /* Default total */
-} SeahorsePGPOperationPrivate;
+} SeahorseGpgmeOperationPrivate;
 
 enum {
     PROP_0,
@@ -87,11 +87,11 @@ enum {
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
-#define SEAHORSE_PGP_OPERATION_GET_PRIVATE(obj)  \
-    (G_TYPE_INSTANCE_GET_PRIVATE ((obj), SEAHORSE_TYPE_PGP_OPERATION, SeahorsePGPOperationPrivate))
+#define SEAHORSE_GPGME_OPERATION_GET_PRIVATE(obj)  \
+    (G_TYPE_INSTANCE_GET_PRIVATE ((obj), SEAHORSE_TYPE_GPGME_OPERATION, SeahorseGpgmeOperationPrivate))
 
 /* TODO: This is just nasty. Gotta get rid of these weird macros */
-IMPLEMENT_OPERATION_PROPS(PGP, pgp)
+IMPLEMENT_OPERATION_PROPS(Gpgme, gpgme)
 
     g_object_class_install_property (gobject_class, PROP_GCTX,
         g_param_spec_pointer ("gctx", "GPGME Context", "GPGME Context that this operation is watching.", 
@@ -105,11 +105,11 @@ IMPLEMENT_OPERATION_PROPS(PGP, pgp)
         g_param_spec_uint ("default-total", "Default Total", "Default total to use instead of GPGME's progress total.",
                            0, G_MAXUINT, 0, G_PARAM_READABLE | G_PARAM_WRITABLE));
 
-    signals[RESULTS] = g_signal_new ("results", SEAHORSE_TYPE_PGP_OPERATION, 
-                G_SIGNAL_RUN_LAST, G_STRUCT_OFFSET (SeahorsePGPOperationClass, results),
+    signals[RESULTS] = g_signal_new ("results", SEAHORSE_TYPE_GPGME_OPERATION, 
+                G_SIGNAL_RUN_LAST, G_STRUCT_OFFSET (SeahorseGpgmeOperationClass, results),
                 NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
 
-    g_type_class_add_private (gobject_class, sizeof (SeahorsePGPOperationPrivate));
+    g_type_class_add_private (gobject_class, sizeof (SeahorseGpgmeOperationPrivate));
 
 END_IMPLEMENT_OPERATION_PROPS
 
@@ -122,7 +122,7 @@ END_IMPLEMENT_OPERATION_PROPS
 static gboolean
 io_callback (GIOChannel *source, GIOCondition condition, WatchData *watch)
 {
-    DEBUG_OPERATION (("PGPOP: io for GPGME on %d\n", watch->fd));
+    DEBUG_OPERATION (("GPGME OP: io for GPGME on %d\n", watch->fd));
     (watch->fnc) (watch->fnc_data, g_io_channel_unix_get_fd (source));
     return TRUE;
 }
@@ -136,7 +136,7 @@ register_watch (WatchData *watch)
     if (watch->registered)
         return;
     
-    DEBUG_OPERATION (("PGPOP: registering watch %d\n", watch->fd));
+    DEBUG_OPERATION (("GPGME OP: registering watch %d\n", watch->fd));
     
     channel = g_io_channel_unix_new (watch->fd);
     watch->stag = g_io_add_watch_full (channel, G_PRIORITY_DEFAULT, 
@@ -153,7 +153,7 @@ unregister_watch (WatchData *watch)
     if (!watch->registered)
         return;
     
-    DEBUG_OPERATION (("PGPOP: unregistering watch %d\n", watch->fd));
+    DEBUG_OPERATION (("GPGME OP: unregistering watch %d\n", watch->fd));
     
     g_source_remove (watch->stag);
     watch->stag = 0;
@@ -169,10 +169,10 @@ static void
 progress_cb (void *data, const char *what, int type, 
              int current, int total)
 {
-    SeahorsePGPOperation *pop = SEAHORSE_PGP_OPERATION (data);
-    SeahorsePGPOperationPrivate *pv = SEAHORSE_PGP_OPERATION_GET_PRIVATE (pop);
+    SeahorseGpgmeOperation *pop = SEAHORSE_GPGME_OPERATION (data);
+    SeahorseGpgmeOperationPrivate *pv = SEAHORSE_GPGME_OPERATION_GET_PRIVATE (pop);
     
-    DEBUG_OPERATION (("PGPOP: got progress: %s %d/%d\n", what, current, total));
+    DEBUG_OPERATION (("GPGME OP: got progress: %s %d/%d\n", what, current, total));
     
     if (total <= 0)
         total = pv->def_total;
@@ -188,8 +188,8 @@ static gpg_error_t
 register_cb (void *data, int fd, int dir, gpgme_io_cb_t fnc, void *fnc_data, 
              void **tag)
 {
-    SeahorsePGPOperation *pop = SEAHORSE_PGP_OPERATION (data);
-    SeahorsePGPOperationPrivate *pv = SEAHORSE_PGP_OPERATION_GET_PRIVATE (pop);
+    SeahorseGpgmeOperation *pop = SEAHORSE_GPGME_OPERATION (data);
+    SeahorseGpgmeOperationPrivate *pv = SEAHORSE_GPGME_OPERATION_GET_PRIVATE (pop);
     WatchData *watch;
     
     DEBUG_OPERATION (("PGPOP: request to register watch %d\n", fd));
@@ -219,10 +219,10 @@ register_cb (void *data, int fd, int dir, gpgme_io_cb_t fnc, void *fnc_data,
 static void
 remove_cb (void *tag)
 {
-    SeahorsePGPOperationPrivate *pv;
+    SeahorseGpgmeOperationPrivate *pv;
     WatchData *watch = (WatchData*)tag;
 
-    pv = SEAHORSE_PGP_OPERATION_GET_PRIVATE (watch->op);
+    pv = SEAHORSE_GPGME_OPERATION_GET_PRIVATE (watch->op);
 
     DEBUG_OPERATION (("PGPOP: request to remove watch %d\n", watch->fd));
     
@@ -235,8 +235,8 @@ remove_cb (void *tag)
 static void
 event_cb (void *data, gpgme_event_io_t type, void *type_data)
 {
-    SeahorsePGPOperation *pop = SEAHORSE_PGP_OPERATION (data);
-    SeahorsePGPOperationPrivate *pv = SEAHORSE_PGP_OPERATION_GET_PRIVATE (pop);
+    SeahorseGpgmeOperation *pop = SEAHORSE_GPGME_OPERATION (data);
+    SeahorseGpgmeOperationPrivate *pv = SEAHORSE_GPGME_OPERATION_GET_PRIVATE (pop);
     gpg_error_t *gerr;
     GError *error = NULL;
     GList *list;
@@ -318,11 +318,11 @@ event_cb (void *data, gpgme_event_io_t type, void *type_data)
  */
 
 static void 
-seahorse_pgp_operation_init (SeahorsePGPOperation *pop)
+seahorse_gpgme_operation_init (SeahorseGpgmeOperation *pop)
 {
-    SeahorsePGPOperationPrivate *pv = SEAHORSE_PGP_OPERATION_GET_PRIVATE (pop);
+    SeahorseGpgmeOperationPrivate *pv = SEAHORSE_GPGME_OPERATION_GET_PRIVATE (pop);
     
-    pop->gctx = seahorse_pgp_source_new_context ();
+    pop->gctx = seahorse_gpgme_source_new_context ();
     g_return_if_fail (pop->gctx != NULL);
     
     pv->busy = FALSE;
@@ -338,11 +338,11 @@ seahorse_pgp_operation_init (SeahorsePGPOperation *pop)
 }
 
 static void 
-seahorse_pgp_operation_set_property (GObject *gobject, guint prop_id, 
+seahorse_gpgme_operation_set_property (GObject *gobject, guint prop_id, 
                                      const GValue *value, GParamSpec *pspec)
 {
-    SeahorsePGPOperation *pop = SEAHORSE_PGP_OPERATION (gobject);
-    SeahorsePGPOperationPrivate *pv = SEAHORSE_PGP_OPERATION_GET_PRIVATE (pop);
+    SeahorseGpgmeOperation *pop = SEAHORSE_GPGME_OPERATION (gobject);
+    SeahorseGpgmeOperationPrivate *pv = SEAHORSE_GPGME_OPERATION_GET_PRIVATE (pop);
     
     switch (prop_id) {
     case PROP_MESSAGE:
@@ -356,11 +356,11 @@ seahorse_pgp_operation_set_property (GObject *gobject, guint prop_id,
 }
 
 static void 
-seahorse_pgp_operation_get_property (GObject *gobject, guint prop_id, 
+seahorse_gpgme_operation_get_property (GObject *gobject, guint prop_id, 
                                      GValue *value, GParamSpec *pspec)
 {
-    SeahorsePGPOperation *pop = SEAHORSE_PGP_OPERATION (gobject);
-    SeahorsePGPOperationPrivate *pv = SEAHORSE_PGP_OPERATION_GET_PRIVATE (pop);
+    SeahorseGpgmeOperation *pop = SEAHORSE_GPGME_OPERATION (gobject);
+    SeahorseGpgmeOperationPrivate *pv = SEAHORSE_GPGME_OPERATION_GET_PRIVATE (pop);
     
     switch (prop_id) {
     case PROP_GCTX:
@@ -375,21 +375,21 @@ seahorse_pgp_operation_get_property (GObject *gobject, guint prop_id,
 }
 
 static void 
-seahorse_pgp_operation_dispose (GObject *gobject)
+seahorse_gpgme_operation_dispose (GObject *gobject)
 {
     /* Nothing to do */
-    G_OBJECT_CLASS (pgp_operation_parent_class)->dispose (gobject);
+    G_OBJECT_CLASS (gpgme_operation_parent_class)->dispose (gobject);
 }
 
 static void 
-seahorse_pgp_operation_finalize (GObject *gobject)
+seahorse_gpgme_operation_finalize (GObject *gobject)
 {
-    SeahorsePGPOperation *pop = SEAHORSE_PGP_OPERATION (gobject);
-    SeahorsePGPOperationPrivate *pv = SEAHORSE_PGP_OPERATION_GET_PRIVATE (pop);
+    SeahorseGpgmeOperation *pop = SEAHORSE_GPGME_OPERATION (gobject);
+    SeahorseGpgmeOperationPrivate *pv = SEAHORSE_GPGME_OPERATION_GET_PRIVATE (pop);
     GList *list;
     
     if (pv->busy) {
-        g_critical ("NASTY BUG. Disposing of a SeahorsePGPOperation while GPGME is "
+        g_critical ("NASTY BUG. Disposing of a SeahorseGpgmeOperation while GPGME is "
                     "still performing an operation. SeahorseOperation should ref"
                     "itself while active");
     }
@@ -410,14 +410,14 @@ seahorse_pgp_operation_finalize (GObject *gobject)
     g_free (pv->message);
     pv->message = NULL;
     
-    G_OBJECT_CLASS (pgp_operation_parent_class)->finalize (gobject);
+    G_OBJECT_CLASS (gpgme_operation_parent_class)->finalize (gobject);
 }
 
 static void 
-seahorse_pgp_operation_cancel (SeahorseOperation *operation)
+seahorse_gpgme_operation_cancel (SeahorseOperation *operation)
 {
-    SeahorsePGPOperation *pop = SEAHORSE_PGP_OPERATION (operation);
-    SeahorsePGPOperationPrivate *pv = SEAHORSE_PGP_OPERATION_GET_PRIVATE (pop);
+    SeahorseGpgmeOperation *pop = SEAHORSE_GPGME_OPERATION (operation);
+    SeahorseGpgmeOperationPrivate *pv = SEAHORSE_GPGME_OPERATION_GET_PRIVATE (pop);
     
     g_return_if_fail (seahorse_operation_is_running (operation));
     g_return_if_fail (pop->gctx != NULL);
@@ -431,14 +431,14 @@ seahorse_pgp_operation_cancel (SeahorseOperation *operation)
  * PUBLIC METHODS
  */
 
-SeahorsePGPOperation*
-seahorse_pgp_operation_new (const gchar *message)
+SeahorseGpgmeOperation*
+seahorse_gpgme_operation_new (const gchar *message)
 {
-    return g_object_new (SEAHORSE_TYPE_PGP_OPERATION, "message", message, NULL);
+    return g_object_new (SEAHORSE_TYPE_GPGME_OPERATION, "message", message, NULL);
 }
 
 void
-seahorse_pgp_operation_mark_failed (SeahorsePGPOperation *pop, gpgme_error_t gerr)
+seahorse_gpgme_operation_mark_failed (SeahorseGpgmeOperation *pop, gpgme_error_t gerr)
 {
     SeahorseOperation *op = SEAHORSE_OPERATION (pop);
     GError *err = NULL;

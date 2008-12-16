@@ -19,7 +19,7 @@
  * Boston, MA 02111-1307, USA.
  */
  
-#include <config.h>
+#include "config.h"
  
 #include <stdlib.h>
 #include <string.h>
@@ -28,8 +28,9 @@
 
 #include "seahorse-hkp-source.h"
 
-#include "seahorse-gpgmex.h"
 #include "seahorse-pgp-key.h"
+#include "seahorse-pgp-subkey.h"
+#include "seahorse-pgp-uid.h"
 
 #include "seahorse-gconf.h"
 #include "seahorse-operation.h"
@@ -37,6 +38,7 @@
 #include "seahorse-util.h"
 
 #include "common/seahorse-registry.h"
+#include "common/seahorse-object-list.h"
 
 #include <libsoup/soup.h>
 
@@ -385,142 +387,155 @@ parse_hkp_date (const gchar *text)
 static GList*
 parse_hkp_index (const gchar *response)
 {
-    /* 
-     * Luckily enough, both the HKP server and NAI HKP interface to their
-     * LDAP server are close enough in output so the same function can
-     * parse them both. 
-     */
+	/* 
+	 * Luckily enough, both the HKP server and NAI HKP interface to their
+	 * LDAP server are close enough in output so the same function can
+	 * parse them both. 
+	 */
 
-    /* pub  2048/<a href="/pks/lookup?op=get&search=0x3CB3B415">3CB3B415</a> 1998/04/03 David M. Shaw &lt;<a href="/pks/lookup?op=get&search=0x3CB3B415">dshaw@jabberwocky.com</a>&gt; */
+	/* pub  2048/<a href="/pks/lookup?op=get&search=0x3CB3B415">3CB3B415</a> 1998/04/03 David M. Shaw &lt;<a href="/pks/lookup?op=get&search=0x3CB3B415">dshaw@jabberwocky.com</a>&gt; */
 
-    gchar **lines, **l;
-    gchar **v;
-    gchar *line, *t;
+	gchar **lines, **l;
+	gchar **v;
+	gchar *line, *t;
     
-    GList *keys = NULL;
-    gpgme_key_t key = NULL;
+	SeahorsePgpKey *key;
+	GList *keys = NULL;
+	GList *subkeys = NULL;
+	GList *uids = NULL;
     
-    lines = g_strsplit (response, "\n", 0);
+	lines = g_strsplit (response, "\n", 0);
     
-    for (l = lines; *l; l++) {
+	for (l = lines; *l; l++) {
 
-        line = *l;
-        dehtmlize(line);
+		line = *l;
+		dehtmlize (line);
 
-        /* Start a new key */
-        if (g_ascii_strncasecmp (line, "pub ", 4) == 0) {
+		/* Start a new key */
+		if (g_ascii_strncasecmp (line, "pub ", 4) == 0) {
             
-            t = line + 4;
-            while (*t && g_ascii_isspace (*t))
-                t++;
+			t = line + 4;
+			while (*t && g_ascii_isspace (*t))
+				t++;
             
-            v = g_strsplit_set (t, " ", 3);
-            if (!v[0] || !v[1] || !v[2]) {
-                g_warning ("Invalid key line from server: %s", line);
+			v = g_strsplit_set (t, " ", 3);
+			if (!v[0] || !v[1] || !v[2]) {
+				g_warning ("Invalid key line from server: %s", line);
                 
-            } else {
-                gchar *fpr = NULL;
-                unsigned int flags = 0;
-                gpgme_pubkey_algo_t algo;
-                gboolean has_uid = TRUE;
+			} else {
+				gchar *fingerprint, *fpr = NULL;
+				gboolean revoked = FALSE;
+				const gchar *algo;
+				gboolean has_uid = TRUE;
+				SeahorsePgpSubkey *subkey;
 
-                /* Allocate a new key */
-                key = gpgmex_key_alloc ();
-                g_return_val_if_fail (key != NULL, keys);
-                keys = g_list_prepend (keys, key);
-                
-                /* Cut the length and fingerprint */
-                fpr = strchr (v[0], '/');
-                if (fpr == NULL) {
-                    g_warning ("couldn't find key fingerprint in line from server: %s", line);
-                    fpr = "";
-                } else {
-                    *(fpr++) = 0;
-                }
-                
-                /* Check out the key type */
-                switch (g_ascii_toupper (v[0][strlen(v[0]) - 1])) {
-                case 'D':
-                    algo = GPGME_PK_DSA;
-                    break;
-                case 'R':
-                    algo = GPGME_PK_RSA;
-                    break;
-                default:
-                    algo = 0;
-                    break;
-                };
+				key = seahorse_pgp_key_new ();
+				keys = g_list_prepend (keys, key);
 
-                /* Format the date for our parse function */
-                g_strdelimit (v[1], "/", '-');
+				/* Cut the length and fingerprint */
+				fpr = strchr (v[0], '/');
+				if (fpr == NULL) {
+					g_warning ("couldn't find key fingerprint in line from server: %s", line);
+					fpr = "";
+				} else {
+					*(fpr++) = 0;
+				}
                 
-                /* Cleanup the UID */
-                g_strstrip (v[2]);
-            
-                if (g_ascii_strcasecmp (v[2], "*** KEY REVOKED ***") == 0) {
-                    flags |= GPGMEX_KEY_REVOKED;
-                    has_uid = FALSE;
-                } 
-                
-                /* Add all the info to the key */
-                gpgmex_key_add_subkey (key, fpr, flags, 
-                                       parse_hkp_date (v[1]), 
-                                       0, strtol (v[0], NULL, 10), algo);
+				/* Check out the key type */
+				switch (g_ascii_toupper (v[0][strlen(v[0]) - 1])) {
+				case 'D':
+					algo = "DSA";
+					break;
+				case 'R':
+					algo = "RSA";
+					break;
+				default:
+					algo = "";
+					break;
+				};
 
-                /* And the UID if one was found */                
-                if (has_uid)
-                    gpgmex_key_add_uid (key, v[2], 0);
-            }
+				/* Format the date for our parse function */
+				g_strdelimit (v[1], "/", '-');
+                
+				/* Cleanup the UID */
+				g_strstrip (v[2]);
             
-            g_strfreev (v);
+				if (g_ascii_strcasecmp (v[2], "*** KEY REVOKED ***") == 0) {
+					revoked = TRUE;
+					has_uid = FALSE;
+				} 
+                
+				/* Add all the info to the key */
+				subkey = seahorse_pgp_subkey_new ();
+				seahorse_pgp_subkey_set_keyid (subkey, fpr);
+				fingerprint = seahorse_pgp_subkey_calc_fingerprint (fpr);
+				seahorse_pgp_subkey_set_fingerprint (subkey, fingerprint);
+				g_free (fingerprint);
+				if(revoked)
+					seahorse_pgp_subkey_set_validity (subkey, SEAHORSE_VALIDITY_REVOKED);
+				seahorse_pgp_subkey_set_created (subkey, parse_hkp_date (v[1]));
+				seahorse_pgp_subkey_set_length (subkey, strtol (v[0], NULL, 10));
+				seahorse_pgp_subkey_set_algorithm (subkey, algo);
+				subkeys = g_list_prepend (subkeys, subkey);
+
+				/* And the UID if one was found */                
+				if (has_uid) {
+					SeahorsePgpUid *uid = seahorse_pgp_uid_new (v[2]);
+					uids = g_list_prepend (uids, uid);
+				}
+			}
             
-        /* A UID for the key */
-        } else if (key && g_ascii_strncasecmp (line, "    ", 4) == 0) {
+			g_strfreev (v);
             
-            g_strstrip (line);
-            gpgmex_key_add_uid (key, line, 0);
+		/* A UID for the key */
+		} else if (key && g_ascii_strncasecmp (line, "    ", 4) == 0) {
             
-        /* Signatures */
-        } else if (key && g_ascii_strncasecmp (line, "sig ", 4) == 0) {
+			SeahorsePgpUid *uid;
+			
+			g_strstrip (line);
+			uid = seahorse_pgp_uid_new (line);
+			uids = g_list_prepend (uids, uid);
             
-            /* TODO: Implement signatures */
+		/* Signatures */
+		} else if (key && g_ascii_strncasecmp (line, "sig ", 4) == 0) {
             
-        /* Other junk */
-        } else {
+			/* TODO: Implement signatures */
             
-            /* The end of the key */
-            key = NULL;
-        }
-    }
+		/* Other junk */
+		} else {
+            
+			/* Allocate a new key */
+			seahorse_pgp_key_set_uids (SEAHORSE_PGP_KEY (key), uids);
+			seahorse_object_list_free (uids);
+			seahorse_pgp_key_set_subkeys (SEAHORSE_PGP_KEY (key), subkeys);
+			seahorse_object_list_free (subkeys);
+			uids = subkeys = NULL;
+		}
+	}
     
-    g_strfreev (lines);
+	g_strfreev (lines);
                         
-    return keys; 
+	return keys; 
 }
 
 static void
-add_key (SeahorseHKPSource *ssrc, gpgme_key_t key)
+add_key (SeahorseHKPSource *ssrc, SeahorsePgpKey *key)
 {
-    SeahorseObject *prev;
-    SeahorsePgpKey *pkey;
-    GQuark keyid;
+	SeahorseObject *prev;
+	GQuark keyid;
        
-    g_return_if_fail (key && key->subkeys && key->subkeys->keyid);
+	keyid = seahorse_pgp_key_get_cannonical_id (seahorse_pgp_key_get_keyid (key));
+	prev = seahorse_context_get_object (SCTX_APP (), SEAHORSE_SOURCE (ssrc), keyid);
+	if (prev != NULL) {
+		g_return_if_fail (SEAHORSE_IS_PGP_KEY (prev));
+		seahorse_pgp_key_set_uids (SEAHORSE_PGP_KEY (prev), seahorse_pgp_key_get_uids (key));
+		seahorse_pgp_key_set_subkeys (SEAHORSE_PGP_KEY (prev), seahorse_pgp_key_get_subkeys (key));
+		return;
+	}
 
-    keyid = seahorse_pgp_key_get_cannonical_id (key->subkeys->keyid);
-    prev = seahorse_context_get_object (SCTX_APP (), SEAHORSE_SOURCE (ssrc), keyid);
-    
-    if (prev != NULL) {
-        g_return_if_fail (SEAHORSE_IS_PGP_KEY (prev));
-        gpgmex_combine_keys (seahorse_pgp_key_get_public (SEAHORSE_PGP_KEY (prev)), key);
-        return;
-    }
-
-    /* A public key */
-    pkey = seahorse_pgp_key_new (SEAHORSE_SOURCE (ssrc), key, NULL);
-
-    /* Add to context */ 
-    seahorse_context_add_object (SCTX_APP (), SEAHORSE_OBJECT (pkey));
+	/* Add to context */ 
+	seahorse_object_set_source (SEAHORSE_OBJECT (key), SEAHORSE_SOURCE (ssrc));
+	seahorse_context_add_object (SCTX_APP (), SEAHORSE_OBJECT (key));
 }
 
 static void 
@@ -538,12 +553,9 @@ refresh_callback (SoupSession *session, SoupMessage *msg, SeahorseHKPOperation *
     
     keys = parse_hkp_index (msg->response_body->data);
     
-    for (k = keys; k; k = g_list_next (k)) {
-        add_key (hop->hsrc, (gpgme_key_t)(k->data));
-        gpgmex_key_unref ((gpgme_key_t)(k->data));
-    }
-    
-    g_list_free (keys);
+    for (k = keys; k; k = g_list_next (k))
+        add_key (hop->hsrc, SEAHORSE_PGP_KEY (k->data));
+    seahorse_object_list_free (keys);
 
     if (--hop->requests <= 0)
         seahorse_operation_mark_done (SEAHORSE_OPERATION (hop), FALSE, NULL);

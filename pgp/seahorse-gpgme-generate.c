@@ -36,10 +36,11 @@
 #include "seahorse-gtkstock.h"
 
 #include "seahorse-pgp.h"
-#include "seahorse-pgp-dialogs.h"
-#include "seahorse-pgp-key.h"
-#include "seahorse-pgp-key-op.h"
-#include "seahorse-pgp-source.h"
+#include "seahorse-gpgme.h"
+#include "seahorse-gpgme-dialogs.h"
+#include "seahorse-gpgme-key.h"
+#include "seahorse-gpgme-key-op.h"
+#include "seahorse-gpgme-source.h"
 
 #include "common/seahorse-registry.h"
 
@@ -57,7 +58,7 @@ on_pgp_generate_key (GtkAction *action, gpointer unused)
 	sksrc = seahorse_context_find_source (seahorse_context_for_app (), SEAHORSE_PGP_TYPE, SEAHORSE_LOCATION_LOCAL);
 	g_return_if_fail (sksrc != NULL);
 	
-	seahorse_pgp_generate_show (SEAHORSE_PGP_SOURCE (sksrc), NULL);
+	seahorse_gpgme_generate_show (SEAHORSE_GPGME_SOURCE (sksrc), NULL);
 }
 
 static const GtkActionEntry ACTION_ENTRIES[] = {
@@ -66,17 +67,17 @@ static const GtkActionEntry ACTION_ENTRIES[] = {
 };
 
 void
-seahorse_pgp_generate_register (void)
+seahorse_gpgme_generate_register (void)
 {
 	GtkActionGroup *actions;
 	
-	actions = gtk_action_group_new ("pgp-generate");
+	actions = gtk_action_group_new ("gpgme-generate");
 
 	gtk_action_group_set_translation_domain (actions, GETTEXT_PACKAGE);
 	gtk_action_group_add_actions (actions, ACTION_ENTRIES, G_N_ELEMENTS (ACTION_ENTRIES), NULL);
 	
 	/* Register this as a generator */
-	seahorse_registry_register_object (NULL, actions, SEAHORSE_PGP_TYPE_STR, "generator", NULL);
+	seahorse_registry_register_object (NULL, G_OBJECT (actions), SEAHORSE_PGP_TYPE_STR, "generator", NULL);
 }
 
 /* --------------------------------------------------------------------------
@@ -108,7 +109,7 @@ completion_handler (SeahorseOperation *op, gpointer data)
 }
 
 static GtkWidget *
-_seahorse_pgp_generate_get_expiry_date (SeahorseWidget *swidget)
+get_expiry_date (SeahorseWidget *swidget)
 {
     GtkWidget *widget;
     GList *children;
@@ -132,7 +133,7 @@ _seahorse_pgp_generate_get_expiry_date (SeahorseWidget *swidget)
 static void
 on_response (GtkDialog *dialog, guint response, SeahorseWidget *swidget)
 {
-    SeahorsePGPSource *sksrc;
+    SeahorseGpgmeSource *sksrc;
     SeahorseOperation *op;
     GtkWidget *widget;
     gchar *name;
@@ -197,14 +198,14 @@ on_response (GtkDialog *dialog, guint response, SeahorseWidget *swidget)
     if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
         expires = 0;
     else {
-        widget = _seahorse_pgp_generate_get_expiry_date (swidget);
+        widget = get_expiry_date (swidget);
         g_return_if_fail (widget);
 
         egg_datetime_get_as_time_t (EGG_DATETIME (widget), &expires);
     }
 
-    sksrc = SEAHORSE_PGP_SOURCE (g_object_get_data (G_OBJECT (swidget), "source"));
-    g_assert (SEAHORSE_IS_PGP_SOURCE (sksrc));
+    sksrc = SEAHORSE_GPGME_SOURCE (g_object_get_data (G_OBJECT (swidget), "source"));
+    g_assert (SEAHORSE_IS_GPGME_SOURCE (sksrc));
     
     /* Less confusing with less on the screen */
     gtk_widget_hide (seahorse_widget_get_toplevel (swidget));
@@ -215,11 +216,11 @@ on_response (GtkDialog *dialog, guint response, SeahorseWidget *swidget)
     if (gtk_dialog_run (dialog) == GTK_RESPONSE_ACCEPT)
     {
         pass = seahorse_passphrase_prompt_get (dialog);
-        op = seahorse_pgp_key_op_generate (sksrc, name, email, comment,
-                                           pass, type, bits, expires, &gerr);
+        op = seahorse_gpgme_key_op_generate (sksrc, name, email, comment,
+                                             pass, type, bits, expires, &gerr);
     
         if (!GPG_IS_OK (gerr)) {
-            seahorse_pgp_handle_gpgme_error (gerr, _("Couldn't generate key"));
+            seahorse_gpgme_handle_error (gerr, _("Couldn't generate key"));
         } else {
             seahorse_progress_show (op, _("Generating key"), TRUE);
             seahorse_operation_watch (op, (SeahorseDoneFunc)completion_handler, NULL, NULL, NULL);
@@ -255,7 +256,7 @@ expires_toggled (GtkToggleButton *button, SeahorseWidget *swidget)
 {
     GtkWidget *widget;
     
-    widget = _seahorse_pgp_generate_get_expiry_date (swidget);
+    widget = get_expiry_date (swidget);
     g_return_if_fail (widget);
 
     gtk_widget_set_sensitive (widget, !gtk_toggle_button_get_active (button));
@@ -279,7 +280,7 @@ algorithm_changed (GtkComboBox *combo, SeahorseWidget *swidget)
 }
 
 void
-seahorse_pgp_generate_show (SeahorsePGPSource *sksrc, GtkWindow *parent)
+seahorse_gpgme_generate_show (SeahorseGpgmeSource *sksrc, GtkWindow *parent)
 {
     SeahorseWidget *swidget;
     GtkWidget *widget, *datetime;
