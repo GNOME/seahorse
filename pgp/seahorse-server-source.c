@@ -33,6 +33,8 @@
 #include "seahorse-util.h"
 #include "seahorse-pgp-key.h"
 
+#include "common/seahorse-registry.h"
+
 enum {
     PROP_0,
     PROP_KEY_TYPE,
@@ -98,7 +100,7 @@ seahorse_server_source_class_init (SeahorseServerSourceClass *klass)
                                  "Key Server full URI", "",
                                  G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE));
     
-	seahorse_registry_register_function (NULL, seahorse_pgp_key_get_cannonical_id, "canonize", SEAHORSE_PGP_STR, NULL);
+	seahorse_registry_register_function (NULL, seahorse_pgp_key_calc_cannonical_id, "canonize", SEAHORSE_PGP_STR, NULL);
 }
 
 static void 

@@ -72,6 +72,7 @@ changed_key (SeahorseSSHKey *self)
 	SeahorseUsage usage;
 	const gchar *description = NULL;
 	const gchar *display = NULL;
+	gchar *identifier;
 	gchar *simple = NULL;
     
 	if (self->keydata) {
@@ -117,17 +118,22 @@ changed_key (SeahorseSSHKey *self)
 		usage = SEAHORSE_USAGE_PUBLIC_KEY;
 		description = _("Public Secure Shell Key");
 	}
+	
+	identifier = seahorse_ssh_key_calc_identifier (self->keydata->fingerprint);
 
 	g_object_set (obj,
-	              "id", seahorse_ssh_key_get_cannonical_id (self->keydata->fingerprint),
+	              "id", seahorse_ssh_key_calc_cannonical_id (self->keydata->fingerprint),
 	              "label", display,
 	              "icon", SEAHORSE_STOCK_KEY_SSH,
 	              "usage", usage,
 	              "nickname", simple,
 	              "description", description,
 	              "location", SEAHORSE_LOCATION_LOCAL,
+	              "identifier", identifier,
 	              "flags", (self->keydata->authorized ? SEAHORSE_FLAG_TRUSTED : 0) | SEAHORSE_FLAG_EXPORTABLE,
 	              NULL);
+	
+	g_free (identifier);
 }
 
 static guint 
@@ -360,7 +366,7 @@ seahorse_ssh_key_get_location (SeahorseSSHKey *skey)
 }
 
 GQuark
-seahorse_ssh_key_get_cannonical_id (const gchar *id)
+seahorse_ssh_key_calc_cannonical_id (const gchar *id)
 {
     #define SSH_ID_SIZE 16
     gchar *hex, *canonical_id = g_malloc0 (SSH_ID_SIZE + 1);
@@ -383,6 +389,26 @@ seahorse_ssh_key_get_cannonical_id (const gchar *id)
     g_free (hex);
     
     return ret;
+}
+
+
+gchar*
+seahorse_ssh_key_calc_identifier (const gchar *id)
+{
+	#define SSH_IDENTIFIER_SIZE 8
+	gchar *canonical_id = g_malloc0 (SSH_IDENTIFIER_SIZE + 1);
+	gint i, off, len = strlen (id);
+
+	/* Strip out all non alpha numeric chars and limit length to SSH_ID_SIZE */
+	for (i = len, off = SSH_IDENTIFIER_SIZE; i >= 0 && off > 0; --i) {
+		if (g_ascii_isalnum (id[i]))
+			canonical_id[--off] = g_ascii_toupper (id[i]);
+	}
+    
+	/* Not enough characters */
+	g_return_val_if_fail (off == 0, NULL);
+
+	return canonical_id;
 }
 
 gchar*

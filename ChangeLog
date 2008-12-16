@@ -6,6 +6,23 @@
 	* src/seahorse-key-manager.c: Fix erroneous unref of widget
 	owned by glade.
 	
+	* daemon/seahorse-service-crypto.c:
+	* pgp/seahorse-gpgme-key.c:
+	* pgp/seahorse-gpgme-key-op.c:
+	* pgp/seahorse-gpgme-source.c:
+	* pgp/seahorse-hkp-source.c:
+	* pgp/seahorse-ldap-source.c:
+	* pgp/seahorse-pgp-key.c:
+	* pgp/seahorse-pgp-key.h:
+	* pgp/seahorse-pgp-signature.c:
+	* pgp/seahorse-server-source.c: Add function for calculating 
+	displayable identifier. Rename other PGP key ID related functions
+	to have 'calc' in the name instead of 'get. 
+	
+	* ssh/seahorse-ssh-key.c: 
+	* ssh/seahorse-ssh-key.h:
+	* ssh/seahorse-ssh-source.c: Explicitly set SSH key displayable ID.
+	
 2008-12-16  Stef Walter  <stef@memberwebs.com>
 
 	* src/Makefile.am:

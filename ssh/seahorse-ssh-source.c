@@ -255,7 +255,7 @@ ssh_key_from_data (SeahorseSSHSource *ssrc, LoadContext *ctx,
     }
 
     /* Make sure it's valid */
-    keyid = seahorse_ssh_key_get_cannonical_id (keydata->fingerprint);
+    keyid = seahorse_ssh_key_calc_cannonical_id (keydata->fingerprint);
     g_return_val_if_fail (keyid, NULL);
 
     /* Does this key exist in the context? */
@@ -713,7 +713,7 @@ seahorse_ssh_source_class_init (SeahorseSSHSourceClass *klass)
     
 	seahorse_registry_register_type (NULL, SEAHORSE_TYPE_SSH_SOURCE, "source", "local", SEAHORSE_SSH_STR, NULL);
 	
-	seahorse_registry_register_function (NULL, seahorse_ssh_key_get_cannonical_id, "canonize", SEAHORSE_SSH_STR, NULL);
+	seahorse_registry_register_function (NULL, seahorse_ssh_key_calc_cannonical_id, "canonize", SEAHORSE_SSH_STR, NULL);
 }
 
 static void 

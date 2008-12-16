@@ -140,7 +140,7 @@ _seahorse_pgp_key_set_subkeys (SeahorsePgpKey *self, GList *subkeys)
 	seahorse_object_list_free (self->pv->subkeys);
 	self->pv->subkeys = seahorse_object_list_copy (subkeys);
 	
-	id = seahorse_pgp_key_get_cannonical_id (seahorse_pgp_subkey_get_keyid (subkeys->data));
+	id = seahorse_pgp_key_calc_cannonical_id (seahorse_pgp_subkey_get_keyid (subkeys->data));
 	g_object_set (self, "id", id, NULL); 
 	
 	g_object_notify (G_OBJECT (self), "subkeys");
@@ -168,19 +168,22 @@ static void
 seahorse_pgp_key_realize (SeahorseObject *obj)
 {
 	SeahorsePgpKey *self = SEAHORSE_PGP_KEY (obj);
-	const gchar *identifier, *nickname;
+	const gchar *nickname, *keyid;
 	const gchar *description, *icon;
-	gchar *markup, *name;
+	gchar *markup, *name, *identifier;
 	SeahorseUsage usage;
 	GList *subkeys;
 	
 	
 	SEAHORSE_OBJECT_CLASS (seahorse_pgp_key_parent_class)->realize (obj);
 	
-	identifier = "";
 	subkeys = seahorse_pgp_key_get_subkeys (self);
-	if (subkeys)
-		identifier = seahorse_pgp_subkey_get_keyid (subkeys->data);
+	if (subkeys) {
+		keyid = seahorse_pgp_subkey_get_keyid (subkeys->data);
+		identifier = seahorse_pgp_key_calc_identifier (keyid);
+	} else {
+		identifier = g_strdup ("");
+	}
 
 	name = calc_name (self);
 	markup = calc_markup (self, seahorse_object_get_flags (obj));
@@ -209,6 +212,7 @@ seahorse_pgp_key_realize (SeahorseObject *obj)
 		      "icon", icon,
 		      NULL);
 		
+	g_free (identifier);
 	g_free (markup);
 	g_free (name);
 }
@@ -398,7 +402,7 @@ seahorse_pgp_key_class_init (SeahorsePgpKeyClass *klass)
  */
 
 GQuark
-seahorse_pgp_key_get_cannonical_id (const gchar *id)
+seahorse_pgp_key_calc_cannonical_id (const gchar *id)
 {
 	guint len = strlen (id);
 	GQuark keyid;
@@ -420,7 +424,7 @@ seahorse_pgp_key_get_cannonical_id (const gchar *id)
 }
 
 const gchar* 
-seahorse_pgp_key_get_rawid (GQuark keyid)
+seahorse_pgp_key_calc_rawid (GQuark keyid)
 {
 	const gchar* id, *rawid;
 	
@@ -429,6 +433,20 @@ seahorse_pgp_key_get_rawid (GQuark keyid)
 	
 	rawid = strchr (id, ':');
 	return rawid ? rawid + 1 : id;
+}
+
+gchar*
+seahorse_pgp_key_calc_identifier (const gchar *keyid)
+{
+	guint len;
+	
+	g_return_val_if_fail (keyid, NULL);
+	
+	len = strlen (keyid);
+	if (len > 8)
+		keyid += len - 8;
+	
+	return g_strdup (keyid);
 }
 
 SeahorsePgpKey*

@@ -189,7 +189,7 @@ seahorse_pgp_signature_get_sigtype (SeahorsePgpSignature *self)
 
 	g_return_val_if_fail (SEAHORSE_IS_PGP_SIGNATURE (self), 0);
     
-	id = seahorse_pgp_key_get_cannonical_id (self->pv->keyid);
+	id = seahorse_pgp_key_calc_cannonical_id (self->pv->keyid);
 	sobj = seahorse_context_find_object (SCTX_APP (), id, SEAHORSE_LOCATION_LOCAL);
     
 	if (sobj) {

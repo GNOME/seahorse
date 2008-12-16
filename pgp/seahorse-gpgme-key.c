@@ -70,7 +70,7 @@ load_gpgme_key (GQuark id, int mode, int secret, gpgme_key_t *key)
 	
 	ctx = seahorse_gpgme_source_new_context ();
 	gpgme_set_keylist_mode (ctx, mode);
-	gerr = gpgme_op_keylist_start (ctx, seahorse_pgp_key_get_rawid (id), secret);
+	gerr = gpgme_op_keylist_start (ctx, seahorse_pgp_key_calc_rawid (id), secret);
 	if (GPG_IS_OK (gerr)) {
 		gerr = gpgme_op_keylist_next (ctx, key);
 		gpgme_op_keylist_end (ctx);
@@ -649,7 +649,7 @@ seahorse_gpgme_key_refresh_matching (gpgme_key_t key)
 	
 	memset (&pred, 0, sizeof (pred));
 	pred.type = SEAHORSE_TYPE_GPGME_KEY;
-	pred.id = seahorse_pgp_key_get_cannonical_id (key->subkeys->keyid);
+	pred.id = seahorse_pgp_key_calc_cannonical_id (key->subkeys->keyid);
 	
 	seahorse_context_for_objects_full (NULL, &pred, refresh_each_object, NULL);
 }

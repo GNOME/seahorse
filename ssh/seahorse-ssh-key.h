@@ -76,10 +76,12 @@ const gchar*            seahorse_ssh_key_get_location         (SeahorseSSHKey *s
                                                                    
 SeahorseOperation*      seahorse_ssh_key_op_change_passphrase (SeahorseSSHKey *skey);
 
-GQuark                  seahorse_ssh_key_get_cannonical_id    (const gchar *id);
-
 SeahorseValidity        seahorse_ssh_key_get_trust            (SeahorseSSHKey *self);
 
 gchar*                  seahorse_ssh_key_get_fingerprint      (SeahorseSSHKey *self);
+
+GQuark                  seahorse_ssh_key_calc_cannonical_id    (const gchar *id);
+
+gchar*                  seahorse_ssh_key_calc_identifier      (const gchar *id);
 
 #endif /* __SEAHORSE_KEY_H__ */

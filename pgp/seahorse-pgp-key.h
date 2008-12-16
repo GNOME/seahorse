@@ -102,13 +102,15 @@ guint             seahorse_pgp_key_get_length           (SeahorsePgpKey *self);
 
 const gchar*      seahorse_pgp_key_get_algo             (SeahorsePgpKey *self);
 
-GQuark            seahorse_pgp_key_get_cannonical_id    (const gchar *id);
-
-const gchar*      seahorse_pgp_key_get_rawid            (GQuark keyid);
-
 const gchar*      seahorse_pgp_key_get_keyid            (SeahorsePgpKey *self);
 
 gboolean          seahorse_pgp_key_has_keyid            (SeahorsePgpKey *self, 
                                                          const gchar *keyid);
+
+gchar*            seahorse_pgp_key_calc_identifier      (const gchar *keyid);
+
+GQuark            seahorse_pgp_key_calc_cannonical_id   (const gchar *id);
+
+const gchar*      seahorse_pgp_key_calc_rawid           (GQuark keyid);
 
 #endif /* __SEAHORSE_KEY_H__ */

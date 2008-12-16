@@ -1227,7 +1227,7 @@ seahorse_gpgme_key_op_add_revoker (SeahorseGpgmeKey *pkey, SeahorseGpgmeKey *rev
 	g_return_val_if_fail (id, GPG_E (GPG_ERR_INV_VALUE));
 	
 	parms = seahorse_edit_parm_new (ADD_REVOKER_START, add_revoker_action,
-	                                add_revoker_transit, (gpointer)seahorse_pgp_key_get_rawid (id));
+	                                add_revoker_transit, (gpointer)seahorse_pgp_key_calc_rawid (id));
 	
 	return edit_key (pkey, parms);
 }

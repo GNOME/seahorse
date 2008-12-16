@@ -309,7 +309,7 @@ seahorse_gpgme_source_class_init (SeahorseGpgmeSourceClass *klass)
 	
 	seahorse_registry_register_type (NULL, SEAHORSE_TYPE_GPGME_SOURCE, "source", "local", SEAHORSE_PGP_STR, NULL);
 
-	seahorse_registry_register_function (NULL, seahorse_pgp_key_get_cannonical_id, "canonize", SEAHORSE_PGP_STR, NULL);
+	seahorse_registry_register_function (NULL, seahorse_pgp_key_calc_cannonical_id, "canonize", SEAHORSE_PGP_STR, NULL);
 }
 
 static void 
@@ -474,7 +474,7 @@ add_key_to_context (SeahorseGpgmeSource *psrc, gpgme_key_t key)
 	g_return_val_if_fail (key->subkeys && key->subkeys->keyid, NULL);
     
 	id = key->subkeys->keyid;
-	keyid = seahorse_pgp_key_get_cannonical_id (id);
+	keyid = seahorse_pgp_key_calc_cannonical_id (id);
 	g_return_val_if_fail (keyid, NULL);
     
 	g_assert (SEAHORSE_IS_GPGME_SOURCE (psrc));
@@ -688,7 +688,7 @@ keyload_handler (SeahorseLoadOperation *lop)
         }
         
         g_return_val_if_fail (key->subkeys && key->subkeys->keyid, FALSE);
-        keyid = seahorse_pgp_key_get_cannonical_id (key->subkeys->keyid);
+        keyid = seahorse_pgp_key_calc_cannonical_id (key->subkeys->keyid);
         
         /* Invalid id from GPG ? */
         if (!keyid) {
@@ -846,7 +846,7 @@ prepare_import_results (SeahorseGpgmeOperation *pop, SeahorseGpgmeSource *psrc)
             if (!GPG_IS_OK (import->result))
                 continue;
             
-            keyid = seahorse_pgp_key_get_cannonical_id (import->fpr);
+            keyid = seahorse_pgp_key_calc_cannonical_id (import->fpr);
             if (!keyid) {
                 g_warning ("imported non key with strange keyid: %s", import->fpr);
                 continue;
