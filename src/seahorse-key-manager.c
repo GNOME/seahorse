@@ -643,13 +643,20 @@ on_remote_sync (GtkAction* action, SeahorseKeyManager* self)
 }
 #endif
 
+static gboolean
+quit_app_later (gpointer unused)
+{
+	seahorse_context_destroy (seahorse_context_for_app ());
+	return FALSE;
+}
+
+
 static void 
 on_app_quit (GtkAction* action, SeahorseKeyManager* self) 
 {
 	g_return_if_fail (SEAHORSE_IS_KEY_MANAGER (self));
-	g_return_if_fail (action == NULL || GTK_IS_ACTION (action));
-	
-	seahorse_context_destroy (seahorse_context_for_app ());
+	g_return_if_fail (GTK_IS_ACTION (action));
+	g_idle_add (quit_app_later, NULL);
 }
 
 /* When this window closes we quit seahorse */
@@ -658,7 +665,7 @@ on_delete_event (GtkWidget* widget, GdkEvent* event, SeahorseKeyManager* self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_KEY_MANAGER (self), FALSE);
 	g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
-	on_app_quit (NULL, self);
+	g_idle_add (quit_app_later, NULL);
 	return TRUE;
 }
 
@@ -1004,10 +1011,6 @@ seahorse_key_manager_finalize (GObject *obj)
 {
 	SeahorseKeyManager *self = SEAHORSE_KEY_MANAGER (obj);
 	gint i;
-	
-	if (self->pv->notebook)
-		g_object_unref (self->pv->notebook);
-	self->pv->notebook = NULL;
 	
 	if (self->pv->view_actions)
 		g_object_unref (self->pv->view_actions);
