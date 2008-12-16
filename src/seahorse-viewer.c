@@ -156,7 +156,7 @@ on_help_show (GtkAction* action, SeahorseViewer* self)
 static const GtkActionEntry UI_ENTRIES[] = {
 
 	/* Top menu items */
-	{ "key-menu", NULL, N_("_Key") },
+	{ "file-menu", NULL, N_("_File") },
 	{ "edit-menu", NULL, N_("_Edit") },
 	{ "view-menu", NULL, N_("_View") },
 	{ "help-menu", NULL, N_("_Help") },
@@ -428,17 +428,17 @@ on_key_delete (GtkAction* action, SeahorseViewer* self)
 }
 		
 static const GtkActionEntry KEY_ENTRIES[] = {
-	{ "key-properties", GTK_STOCK_PROPERTIES, N_("P_roperties"), NULL,
-	  N_("Show key properties"), G_CALLBACK (on_key_properties) }, 
-	{ "key-delete", GTK_STOCK_DELETE, N_("_Delete Key"), NULL,
-	  N_("Delete selected keys"), G_CALLBACK (on_key_delete) }
+	{ "show-properties", GTK_STOCK_PROPERTIES, N_("P_roperties"), NULL,
+	  N_("Show properties"), G_CALLBACK (on_key_properties) }, 
+	{ "edit-delete", GTK_STOCK_DELETE, N_("_Delete"), NULL,
+	  N_("Delete selected items"), G_CALLBACK (on_key_delete) }
 };
 
 static const GtkActionEntry EXPORT_ENTRIES[] = {
-	{ "key-export-file", GTK_STOCK_SAVE_AS, N_("E_xport Public Key..."), NULL,
-	  N_("Export public part of key to a file"), G_CALLBACK (on_key_export_file) },
-	{ "key-export-clipboard", GTK_STOCK_COPY, N_("_Copy Public Key"), "<control>C",
-	  N_("Copy public part of selected keys to the clipboard"), G_CALLBACK (on_key_export_clipboard) }
+	{ "file-export", GTK_STOCK_SAVE_AS, N_("E_xport..."), NULL,
+	  N_("Export to a file"), G_CALLBACK (on_key_export_file) },
+	{ "edit-export-clipboard", GTK_STOCK_COPY, N_("_Copy"), "<control>C",
+	  N_("Copy to the clipboard"), G_CALLBACK (on_key_export_clipboard) }
 };
 		
 static void 
@@ -459,7 +459,7 @@ include_basic_actions (SeahorseViewer* self)
 	gtk_action_group_set_translation_domain (pv->object_actions, GETTEXT_PACKAGE);
 	gtk_action_group_add_actions (pv->object_actions, KEY_ENTRIES, G_N_ELEMENTS (KEY_ENTRIES), self);
 	/* Mark the properties toolbar button as important */
-	g_object_set (gtk_action_group_get_action (pv->object_actions, "key-properties"), "is-important", TRUE, NULL);
+	g_object_set (gtk_action_group_get_action (pv->object_actions, "show-properties"), "is-important", TRUE, NULL);
 	seahorse_viewer_include_actions (self, pv->object_actions);
 	
 	pv->export_actions = gtk_action_group_new ("export");

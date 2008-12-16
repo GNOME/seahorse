@@ -1,23 +1,19 @@
 <ui>
 	<menubar>
-		<menu name="Key" action="key-menu">
-			<menuitem action="key-generate"/>
-			<menuitem action="key-import-file"/>
-			<menuitem action="key-export-file"/>
+		<menu name="File" action="file-menu">
+			<menuitem action="file-new"/>
+			<menuitem action="file-import"/>
+			<menuitem action="file-export"/>
 			<separator/>
-			<placeholder name="KeyCommands">
-<!-- TODO: Need to implement properly for different key types
-				<menuitem action="key-backup"/>
-
--->
+			<placeholder name="FileCommands">
 			</placeholder>
 			<separator/>
 			<menuitem action="app-quit"/>
 		</menu>
 		<menu name="Edit" action="edit-menu">
-			<menuitem action="key-export-clipboard"/>
-			<menuitem action="key-import-clipboard"/>
-			<menuitem action="key-delete"/>
+			<menuitem action="edit-export-clipboard"/>
+			<menuitem action="edit-import-clipboard"/>
+			<menuitem action="edit-delete"/>
 			<separator/>
 			<menuitem action="app-preferences"/>
 		</menu>
@@ -40,20 +36,19 @@
   
 	<toolbar name="MainToolbar">
 		<placeholder name="ToolItems">
-			<toolitem action="key-properties"/>
-			<toolitem action="key-export-file"/>
+			<toolitem action="show-properties"/>
+			<toolitem action="file-export"/>
 			<toolitem action="key-sign"/>
 			<toolitem action="remote-find"/>
 		</placeholder>
 	</toolbar>
 	
 	<popup name="KeyPopup">
-		<menuitem action="key-properties"/>
+		<menuitem action="show-properties"/>
 		<separator/>
-		<menuitem action="key-export-file"/>
-		<menuitem action="key-export-clipboard"/>
-		<menuitem action="key-delete"/>
-		<menuitem action="remote-sync"/>
+		<menuitem action="file-export"/>
+		<menuitem action="edit-export-clipboard"/>
+		<menuitem action="edit-delete"/>
 	</popup>
 	
 </ui>

@@ -48,8 +48,8 @@ G_DEFINE_TYPE (SeahorsePgpCommands, seahorse_pgp_commands, SEAHORSE_TYPE_COMMAND
 static const char* UI_DEFINITION = ""\
 "<ui>"\
 "	<menubar>"\
-"		<menu name='Key' action='key-menu'> "\
-"			<placeholder name='KeyCommands'>"\
+"		<menu name='File' action='file-menu'> "\
+"			<placeholder name='FileCommands'>"\
 "				<menuitem action='key-sign'/>"\
 "			</placeholder>"\
 "		</menu>"\
@@ -166,12 +166,12 @@ seahorse_pgp_commands_delete_objects (SeahorseCommands* base, GList* objects)
 	
 	for (l = objects; l; l = g_list_next (l)) {
 		obj = SEAHORSE_OBJECT (l->data);
-		if (G_OBJECT_TYPE (obj) == SEAHORSE_TYPE_PGP_UID) {
+		if (G_OBJECT_TYPE (obj) == SEAHORSE_TYPE_GPGME_UID) {
 			if (g_list_find (objects, seahorse_object_get_parent (obj)) == NULL) {
 				to_delete = g_list_prepend (to_delete, obj);
 				++num_identities;
 			}
-		} else if (G_OBJECT_TYPE (obj) == SEAHORSE_TYPE_PGP_KEY) {
+		} else if (G_OBJECT_TYPE (obj) == SEAHORSE_TYPE_GPGME_KEY) {
 			to_delete = g_list_prepend (to_delete, obj);
 			++num_keys;
 		}

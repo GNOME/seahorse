@@ -332,7 +332,7 @@ on_key_list_popup_menu (GtkTreeView* view, SeahorseKeyManager* self)
 }
 
 static void 
-on_key_generate (GtkAction* action, SeahorseKeyManager* self) 
+on_file_new (GtkAction* action, SeahorseKeyManager* self) 
 {
 	g_return_if_fail (SEAHORSE_IS_KEY_MANAGER (self));
 	g_return_if_fail (GTK_IS_ACTION (action));
@@ -745,12 +745,12 @@ static const GtkActionEntry GENERAL_ENTRIES[] = {
 	{ "remote-menu", NULL, N_("_Remote") }, 
 	{ "app-quit", GTK_STOCK_QUIT, N_("_Quit"), "<control>Q", 
 	  N_("Close this program"), G_CALLBACK (on_app_quit) }, 
-	{ "key-generate", GTK_STOCK_NEW, N_("_Create New Key..."), "<control>N", 
-	  N_("Create a new personal key"), G_CALLBACK (on_key_generate) }, 
-	{ "key-import-file", GTK_STOCK_OPEN, N_("_Import..."), "<control>I", 
-	  N_("Import keys into your key ring from a file"), G_CALLBACK (on_key_import_file) }, 
-	{ "key-import-clipboard", GTK_STOCK_PASTE, N_("Paste _Keys"), "<control>V", 
-	  N_("Import keys from the clipboard"), G_CALLBACK (on_key_import_clipboard) }
+	{ "file-new", GTK_STOCK_NEW, N_("_New..."), "<control>N", 
+	  N_("Create a new key or item"), G_CALLBACK (on_file_new) }, 
+	{ "file-import", GTK_STOCK_OPEN, N_("_Import..."), "<control>I", 
+	  N_("Import from a file"), G_CALLBACK (on_key_import_file) }, 
+	{ "edit-import-clipboard", GTK_STOCK_PASTE, N_("_Paste"), "<control>V", 
+	  N_("Import from the clipboard"), G_CALLBACK (on_key_import_clipboard) }
 };
 
 #ifdef WITH_KEYSERVER
