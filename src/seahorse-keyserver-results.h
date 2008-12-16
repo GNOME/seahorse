@@ -24,22 +24,21 @@
 
 #include <glib.h>
 #include <glib-object.h>
+#include <gtk/gtk.h>
+
 #include <seahorse-viewer.h>
 #include <seahorse-operation.h>
-#include <gtk/gtk.h>
-#include <stdlib.h>
-#include <string.h>
 #include <seahorse-object.h>
 
 G_BEGIN_DECLS
 
 
-#define SEAHORSE_TYPE_KEYSERVER_RESULTS (seahorse_keyserver_results_get_type ())
-#define SEAHORSE_KEYSERVER_RESULTS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_KEYSERVER_RESULTS, SeahorseKeyserverResults))
-#define SEAHORSE_KEYSERVER_RESULTS_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_KEYSERVER_RESULTS, SeahorseKeyserverResultsClass))
-#define SEAHORSE_IS_KEYSERVER_RESULTS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_KEYSERVER_RESULTS))
-#define SEAHORSE_IS_KEYSERVER_RESULTS_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_KEYSERVER_RESULTS))
-#define SEAHORSE_KEYSERVER_RESULTS_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_KEYSERVER_RESULTS, SeahorseKeyserverResultsClass))
+#define SEAHORSE_TYPE_KEYSERVER_RESULTS              (seahorse_keyserver_results_get_type ())
+#define SEAHORSE_KEYSERVER_RESULTS(obj)              (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_KEYSERVER_RESULTS, SeahorseKeyserverResults))
+#define SEAHORSE_KEYSERVER_RESULTS_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_KEYSERVER_RESULTS, SeahorseKeyserverResultsClass))
+#define SEAHORSE_IS_KEYSERVER_RESULTS(obj)           (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_KEYSERVER_RESULTS))
+#define SEAHORSE_IS_KEYSERVER_RESULTS_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_KEYSERVER_RESULTS))
+#define SEAHORSE_KEYSERVER_RESULTS_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_KEYSERVER_RESULTS, SeahorseKeyserverResultsClass))
 
 typedef struct _SeahorseKeyserverResults SeahorseKeyserverResults;
 typedef struct _SeahorseKeyserverResultsClass SeahorseKeyserverResultsClass;
@@ -47,17 +46,19 @@ typedef struct _SeahorseKeyserverResultsPrivate SeahorseKeyserverResultsPrivate;
 
 struct _SeahorseKeyserverResults {
 	SeahorseViewer parent_instance;
-	SeahorseKeyserverResultsPrivate * priv;
+	SeahorseKeyserverResultsPrivate *pv;
 };
 
 struct _SeahorseKeyserverResultsClass {
 	SeahorseViewerClass parent_class;
 };
 
+GType            seahorse_keyserver_results_get_type         (void);
 
-void seahorse_keyserver_results_show (SeahorseOperation* op, GtkWindow* parent, const char* search_text);
-const char* seahorse_keyserver_results_get_search (SeahorseKeyserverResults* self);
-GType seahorse_keyserver_results_get_type (void);
+void             seahorse_keyserver_results_show             (SeahorseOperation* op, GtkWindow* parent, 
+                                                              const char* search_text);
+
+const gchar*     seahorse_keyserver_results_get_search       (SeahorseKeyserverResults* self);
 
 
 G_END_DECLS

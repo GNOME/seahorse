@@ -16,31 +16,9 @@ INCLUDES = -I$(top_builddir) \
 	-DLIBCRYPTUI_API_SUBJECT_TO_CHANGE \
 	-DGETTEXT_PACKAGE=\""seahorse\""
 
-VALA_SRCS = \
-	seahorse-keyserver-results.vala
-	
-VALA_VAPIS = \
-	$(top_srcdir)/bugs.vapi \
-	$(top_srcdir)/config.vapi \
-	$(top_srcdir)/libseahorse/libseahorse-c.vapi \
-	$(top_srcdir)/libseahorse/libseahorse.vapi
-
-if WITH_KEYSERVER	
-VALA_CFILES = $(VALA_SRCS:.vala=.c)
-VALA_HFILES = $(VALA_SRCS:.vala=.h)
-endif
-
-SUFFIXES = .vala .c .h
-
-vala-build.stamp: $(VALA_SRCS) $(VALA_VAPIS)
-	$(VALAC) -C $(VALA_PKGS) $(VALA_VAPIS) $(VALA_SRCS)
-	date +'%s' > $@
-
-BUILT_SOURCES = \
-	vala-build.stamp
-
 if WITH_KEYSERVER
 KEYSERVER_SRCS = seahorse-keyserver-search.c seahorse-keyserver-sync.c seahorse-keyserver-sync.h
+KEYSERVER_SRCS += seahorse-keyserver-results.c seahorse-keyserver-results.h
 else
 KEYSERVER_SRCS = 
 endif
@@ -73,8 +51,7 @@ seahorse_SOURCES = main.c \
 	seahorse-key-manager-store.c seahorse-key-manager-store.h \
 	seahorse-viewer.c seahorse-viewer.h \
 	seahorse-windows.h \
-	$(KEYSERVER_SRCS) \
-	$(VALA_CFILES) $(VALA_HFILES)
+	$(KEYSERVER_SRCS)
 
 seahorse_LDADD = \
 	$(top_builddir)/libseahorse/libseahorse.la \
@@ -104,15 +81,8 @@ desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 
 EXTRA_DIST = \
 	$(glade_DATA) \
-	seahorse.desktop.in.in \
-	vala-build.stamp \
-	$(VALA_CFILES) $(VALA_HFILES) \
-	$(VALA_SRCS)
+	seahorse.desktop.in.in
 
 CLEANFILES = *.gladep* *.bak \
     $(desktop_DATA) \
     seahorse.desktop.in 
-
-vala-clean:
-	rm -f vala-build.stamp $(VALA_CFILES) $(VALA_HFILES)
-
