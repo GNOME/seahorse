@@ -25,6 +25,10 @@
 	
 	* libseahorse/seahorse-widget.c: Don't save window sizes for dialogs.
 	
+	* libseahorse/seahorse-object-widget.c: Fix assertion when closing windows.
+	The window group is the one of the transient parent, and we were trying to 
+	fiddle with it directly. 
+	
 2008-12-16  Stef Walter  <stef@memberwebs.com>
 
 	* src/Makefile.am:

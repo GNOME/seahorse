@@ -124,15 +124,12 @@ seahorse_object_widget_finalize (GObject *gobject)
             }
         }
     }
-    
-    /* get group from groups */
-    group = g_hash_table_lookup (groups, GUINT_TO_POINTER (id));
-    /* if have a group, remove grab & window */
-    if (group != NULL) {
-        widget = glade_xml_get_widget (swidget->xml, swidget->name);
-        gtk_grab_remove (widget);
-        gtk_window_group_remove_window (group, GTK_WINDOW (widget));
-    }
+
+    widget = seahorse_widget_get_toplevel (swidget);
+    gtk_grab_remove (widget);
+
+    /* Remove from parent */
+    gtk_window_set_transient_for (GTK_WINDOW (widget), NULL);
     
     if (self->object)
 	    g_object_weak_unref (G_OBJECT (self->object), seahorse_object_widget_destroyed, self); 
