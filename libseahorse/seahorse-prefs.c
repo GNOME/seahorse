@@ -37,9 +37,6 @@
 /* From seahorse-prefs-cache.c */
 void seahorse_prefs_cache (SeahorseWidget *widget);
 
-/* From sehorse-prefs-keyrings.c */
-void seahorse_prefs_keyrings (SeahorseWidget *widget);
-
 /* Key Server Prefs --------------------------------------------------------- */
 
 #ifdef WITH_KEYSERVER
@@ -501,8 +498,6 @@ seahorse_prefs_new (GtkWindow *parent)
     g_return_val_if_fail (GTK_IS_WIDGET (widget), swidget);
     seahorse_prefs_remove_tab (swidget, widget);
 #endif    
-
-    seahorse_prefs_keyrings (swidget);
 
     seahorse_widget_show (swidget);
     return swidget;

@@ -45,7 +45,6 @@ libseahorse_la_SOURCES = \
 	seahorse-operation.c seahorse-operation.h \
 	seahorse-passphrase.c seahorse-passphrase.h \
 	seahorse-prefs.c seahorse-prefs.h \
-	seahorse-prefs-keyrings.c \
 	seahorse-progress.c seahorse-progress.h \
 	seahorse-secure-memory.c seahorse-secure-memory.h \
 	seahorse-secure-entry.c seahorse-secure-entry.h \
@@ -78,7 +77,6 @@ seahorse-marshal.c: seahorse-marshal.list $(GLIB_GENMARSHAL)
 
 glade_DATA = \
 	seahorse-prefs.glade \
-	seahorse-add-keyring.glade \
 	seahorse-add-keyserver.glade \
 	seahorse-progress.glade \
 	seahorse-notify.glade

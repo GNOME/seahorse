@@ -23,7 +23,9 @@
 
 #include "seahorse-gkr-module.h"
 
-#include "seahorse-gkr-commands.h"
+#include "seahorse-gkr-dialogs.h"
+#include "seahorse-gkr-item-commands.h"
+#include "seahorse-gkr-keyring-commands.h"
 #include "seahorse-gkr-source.h"
 
 #include "seahorse-context.h"
@@ -40,5 +42,6 @@ seahorse_gkr_module_init (void)
 	
 	/* Let these classes register themselves */
 	g_type_class_unref (g_type_class_ref (SEAHORSE_TYPE_GKR_SOURCE));
-	g_type_class_unref (g_type_class_ref (SEAHORSE_TYPE_GKR_COMMANDS));
+	g_type_class_unref (g_type_class_ref (SEAHORSE_TYPE_GKR_ITEM_COMMANDS));
+	g_type_class_unref (g_type_class_ref (SEAHORSE_TYPE_GKR_KEYRING_COMMANDS));
 }

@@ -25,6 +25,6 @@
 #define SEAHORSE_GKR_STR                     "gnome-keyring"
 #define SEAHORSE_GKR                         (g_quark_from_static_string (SEAHORSE_GKR_STR))
 
-void         seahorse_gkr_module_init        (void);
+void             seahorse_gkr_module_init        (void);
 
 #endif /*SEAHORSEGKR_H_*/
