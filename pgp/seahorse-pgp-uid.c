@@ -221,6 +221,7 @@ seahorse_pgp_uid_init (SeahorsePgpUid *self)
 {
 	self->pv = G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_TYPE_PGP_UID, SeahorsePgpUidPrivate);
 	g_object_set (self, "icon", "", "usage", SEAHORSE_USAGE_IDENTITY, NULL);
+	g_object_set (self, "tag", SEAHORSE_PGP_TYPE, NULL);
 }
 
 static void

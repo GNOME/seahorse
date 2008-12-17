@@ -54,6 +54,7 @@ static const char* UI_DEFINITION = ""\
 "	</popup>"\
 "</ui>";
 
+static SeahorseObjectPredicate commands_predicate = { 0, };
 
 /* -----------------------------------------------------------------------------
  * INTERNAL 
@@ -62,49 +63,22 @@ static const char* UI_DEFINITION = ""\
 static void 
 on_ssh_upload (GtkAction* action, SeahorseSshCommands* self) 
 {
+	SeahorseView *view;
 	GList* ssh_keys;
-	GList* keys, *l;
 
 	g_return_if_fail (SEAHORSE_IS_SSH_COMMANDS (self));
 	g_return_if_fail (GTK_IS_ACTION (action));
 	
-	ssh_keys = NULL;
-	keys = seahorse_view_get_selected_objects (seahorse_commands_get_view (SEAHORSE_COMMANDS (self)));
+	view = seahorse_commands_get_view (SEAHORSE_COMMANDS (self));
+	ssh_keys = seahorse_view_get_selected_matching (view, &commands_predicate);
+	if (ssh_keys == NULL)
+		return;
 	
-	for (l = keys; l; l = g_list_next (l)) {
-		SeahorseObject* key = SEAHORSE_OBJECT (l->data);
-		if (seahorse_object_get_tag (key) == SEAHORSE_SSH_TYPE && 
-		    seahorse_object_get_usage (key) == SEAHORSE_USAGE_PRIVATE_KEY) 
-			ssh_keys = g_list_append (ssh_keys, SEAHORSE_SSH_KEY (key));
-	}
-
+	/* Indicate what we're actually going to operate on */
+	seahorse_view_set_selected_objects (view, ssh_keys);
+	
 	seahorse_ssh_upload_prompt (ssh_keys, seahorse_commands_get_window (SEAHORSE_COMMANDS (self)));
-	g_list_free (keys);
-}
-
-static void 
-on_view_selection_changed (SeahorseView* view, SeahorseSshCommands* self) 
-{
-	GList* keys, *l;
-	gboolean enable;
-	
-	g_return_if_fail (SEAHORSE_IS_SSH_COMMANDS (self));
-	g_return_if_fail (SEAHORSE_IS_VIEW (view));
-	
-	keys = seahorse_view_get_selected_objects (view);
-	enable = (keys != NULL);
-
-	for (l = keys; l; l = g_list_next (l)) {
-		SeahorseObject* key = SEAHORSE_OBJECT (l->data);
-		if (seahorse_object_get_tag (key) != SEAHORSE_SSH_TYPE ||
-		    seahorse_object_get_usage (key) != SEAHORSE_USAGE_PRIVATE_KEY) {
-			enable = FALSE;
-			break;
-		}
-	}
-
-	gtk_action_group_set_sensitive (self->pv->command_actions, enable);
-	g_list_free (keys);
+	g_list_free (ssh_keys);
 }
 
 static const GtkActionEntry COMMAND_ENTRIES[] = {
@@ -165,15 +139,14 @@ seahorse_ssh_commands_constructor (GType type, guint n_props, GObjectConstructPa
 	
 		view = seahorse_commands_get_view (SEAHORSE_COMMANDS (self));
 		g_return_val_if_fail (view, NULL);
-		g_signal_connect (view, "selection-changed", G_CALLBACK (on_view_selection_changed), self);
 		
 		self->pv->command_actions = gtk_action_group_new ("ssh");
 		gtk_action_group_set_translation_domain (self->pv->command_actions, GETTEXT_PACKAGE);
 		gtk_action_group_add_actions (self->pv->command_actions, COMMAND_ENTRIES, 
 		                              G_N_ELEMENTS (COMMAND_ENTRIES), self);
 		
-		seahorse_view_register_commands (view, base, SEAHORSE_TYPE_SSH_KEY);
-		seahorse_view_register_ui (view, UI_DEFINITION, self->pv->command_actions);
+		seahorse_view_register_commands (view, &commands_predicate, base);
+		seahorse_view_register_ui (view, &commands_predicate, UI_DEFINITION, self->pv->command_actions);
 	}
 	
 	return obj;
@@ -247,6 +220,9 @@ seahorse_ssh_commands_class_init (SeahorseSshCommandsClass *klass)
 	SEAHORSE_COMMANDS_CLASS (klass)->show_properties = seahorse_ssh_commands_show_properties;
 	SEAHORSE_COMMANDS_CLASS (klass)->delete_objects = seahorse_ssh_commands_delete_objects;
 
+	commands_predicate.type = SEAHORSE_TYPE_SSH_KEY;
+	commands_predicate.usage = SEAHORSE_USAGE_PRIVATE_KEY;
+	
 	/* Register this class as a commands */
 	seahorse_registry_register_type (seahorse_registry_get (), SEAHORSE_TYPE_SSH_COMMANDS, 
 	                                 SEAHORSE_SSH_TYPE_STR, "commands", NULL, NULL);

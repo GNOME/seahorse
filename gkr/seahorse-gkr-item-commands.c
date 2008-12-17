@@ -36,6 +36,8 @@
 
 G_DEFINE_TYPE (SeahorseGkrItemCommands, seahorse_gkr_item_commands, SEAHORSE_TYPE_COMMANDS);
 
+static SeahorseObjectPredicate commands_predicate = { 0, };
+
 /* -----------------------------------------------------------------------------
  * INTERNAL 
  */
@@ -102,7 +104,7 @@ seahorse_gkr_item_commands_constructor (GType type, guint n_props, GObjectConstr
 		base = SEAHORSE_COMMANDS (obj);
 		view = seahorse_commands_get_view (base);
 		g_return_val_if_fail (view, NULL);
-		seahorse_view_register_commands (view, base, SEAHORSE_TYPE_GKR_ITEM);
+		seahorse_view_register_commands (view, &commands_predicate, base);
 	}
 	
 	return obj;
@@ -126,6 +128,9 @@ seahorse_gkr_item_commands_class_init (SeahorseGkrItemCommandsClass *klass)
 
 	cmd_class->show_properties = seahorse_gkr_item_commands_show_properties;
 	cmd_class->delete_objects = seahorse_gkr_item_commands_delete_objects;
+	
+	/* Setup the predicate that matches our commands */
+	commands_predicate.type = SEAHORSE_TYPE_GKR_ITEM;
 
 	/* Register this class as a commands */
 	seahorse_registry_register_type (seahorse_registry_get (), SEAHORSE_TYPE_GKR_ITEM_COMMANDS, 

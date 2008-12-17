@@ -64,6 +64,9 @@ static const char* UI_DEFINITION = ""\
 "	</popup>"\
 "</ui>";
 
+static SeahorseObjectPredicate actions_predicate = { 0 };
+static SeahorseObjectPredicate commands_predicate = { 0 };
+
 /* -----------------------------------------------------------------------------
  * INTERNAL 
  */
@@ -71,46 +74,29 @@ static const char* UI_DEFINITION = ""\
 static void 
 on_key_sign (GtkAction* action, SeahorsePgpCommands* self) 
 {
-	SeahorseObject* key;
+	SeahorseView *view;
+	GtkWindow *window;
+	GList *keys;
 
 	g_return_if_fail (SEAHORSE_IS_PGP_COMMANDS (self));
 	g_return_if_fail (GTK_IS_ACTION (action));
 	
-	key = seahorse_view_get_selected (seahorse_commands_get_view (SEAHORSE_COMMANDS (self)));
+	view = seahorse_commands_get_view (SEAHORSE_COMMANDS (self));
+	keys = seahorse_view_get_selected_matching (view, &actions_predicate);
 	
-	if (key == NULL)
+	if (keys == NULL)
 		return;
 
-	if (G_TYPE_FROM_INSTANCE (key) == SEAHORSE_TYPE_GPGME_KEY) {
-		seahorse_gpgme_sign_prompt (SEAHORSE_GPGME_KEY (key), seahorse_commands_get_window (SEAHORSE_COMMANDS (self)));
-	} else if (G_TYPE_FROM_INSTANCE (key) == SEAHORSE_TYPE_GPGME_UID) {
-		seahorse_gpgme_sign_prompt_uid (SEAHORSE_GPGME_UID (key), seahorse_commands_get_window (SEAHORSE_COMMANDS (self)));
-	}
-}
+	/* Indicate what we're actually going to operate on */
+	seahorse_view_set_selected (view, keys->data);
 
-static void 
-on_view_selection_changed (SeahorseView* view, SeahorsePgpCommands* self) 
-{
-	GList* keys, *l;
-	gboolean enable;
+	window = seahorse_commands_get_window (SEAHORSE_COMMANDS (self));
 	
-	g_return_if_fail (SEAHORSE_IS_PGP_COMMANDS (self));
-	g_return_if_fail (SEAHORSE_IS_VIEW (view));
-	
-	keys = seahorse_view_get_selected_objects (view);
-	enable = (keys != NULL);
-
-	for (l = keys; l; l = g_list_next (l)) {
-		SeahorseObject* key = SEAHORSE_OBJECT (l->data);
-		if (G_OBJECT_TYPE (key) != SEAHORSE_TYPE_GPGME_KEY && 
-		    G_OBJECT_TYPE (key) != SEAHORSE_TYPE_GPGME_UID) {
-			enable = FALSE;
-			break;
-		}
+	if (G_TYPE_FROM_INSTANCE (keys->data) == SEAHORSE_TYPE_GPGME_KEY) {
+		seahorse_gpgme_sign_prompt (SEAHORSE_GPGME_KEY (keys->data), window);
+	} else if (G_TYPE_FROM_INSTANCE (keys->data) == SEAHORSE_TYPE_GPGME_UID) {
+		seahorse_gpgme_sign_prompt_uid (SEAHORSE_GPGME_UID (keys->data), window);
 	}
-
-	gtk_action_group_set_sensitive (self->pv->command_actions, enable);
-	g_list_free (keys);
 }
 
 static const GtkActionEntry COMMAND_ENTRIES[] = {
@@ -226,18 +212,14 @@ seahorse_pgp_commands_constructor (GType type, guint n_props, GObjectConstructPa
 	
 		view = seahorse_commands_get_view (base);
 		g_return_val_if_fail (view, NULL);
-		g_signal_connect (view, "selection-changed", G_CALLBACK (on_view_selection_changed), self);
 		
 		self->pv->command_actions = gtk_action_group_new ("pgp");
 		gtk_action_group_set_translation_domain (self->pv->command_actions, GETTEXT_PACKAGE);
 		gtk_action_group_add_actions (self->pv->command_actions, COMMAND_ENTRIES, 
 		                              G_N_ELEMENTS (COMMAND_ENTRIES), self);
 		
-		seahorse_view_register_commands (view, base, SEAHORSE_TYPE_PGP_KEY);
-		seahorse_view_register_commands (view, base, SEAHORSE_TYPE_PGP_UID);
-		seahorse_view_register_commands (view, base, SEAHORSE_TYPE_GPGME_KEY);
-		seahorse_view_register_commands (view, base, SEAHORSE_TYPE_GPGME_UID);
-		seahorse_view_register_ui (view, UI_DEFINITION, self->pv->command_actions);
+		seahorse_view_register_commands (view, &commands_predicate, base);
+		seahorse_view_register_ui (view, &actions_predicate, UI_DEFINITION, self->pv->command_actions);
 	}
 	
 	return obj;
@@ -311,6 +293,11 @@ seahorse_pgp_commands_class_init (SeahorsePgpCommandsClass *klass)
 	SEAHORSE_COMMANDS_CLASS (klass)->show_properties = seahorse_pgp_commands_show_properties;
 	SEAHORSE_COMMANDS_CLASS (klass)->delete_objects = seahorse_pgp_commands_delete_objects;
 	
+	/* Setup predicate for matching entries for these commands */
+	commands_predicate.tag = SEAHORSE_PGP_TYPE;
+	actions_predicate.tag = SEAHORSE_PGP_TYPE;
+	actions_predicate.location = SEAHORSE_LOCATION_LOCAL;
+
 	/* Register this class as a commands */
 	seahorse_registry_register_type (seahorse_registry_get (), SEAHORSE_TYPE_PGP_COMMANDS, 
 	                                 SEAHORSE_PGP_TYPE_STR, "commands", NULL, NULL);

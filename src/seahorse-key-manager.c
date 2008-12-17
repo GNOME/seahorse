@@ -33,6 +33,8 @@
 #include "seahorse-progress.h"
 #include "seahorse-util.h"
 
+#include "gkr/seahorse-gkr.h"
+
 #include <glib/gi18n.h>
 
 enum {
@@ -70,7 +72,7 @@ enum  {
 	TAB_NUM_TABS
 } SeahorseKeyManagerTabs;
 
-static const SeahorseObjectPredicate PRED_PUBLIC = {
+static SeahorseObjectPredicate pred_public = {
 	0, 
 	0, 
 	0, 
@@ -81,7 +83,7 @@ static const SeahorseObjectPredicate PRED_PUBLIC = {
 	NULL 
 };
 
-static const SeahorseObjectPredicate PRED_TRUSTED = {
+static SeahorseObjectPredicate pred_trusted = {
 	0, 
 	0, 
 	0, 
@@ -92,7 +94,7 @@ static const SeahorseObjectPredicate PRED_TRUSTED = {
 	NULL
 };
 
-static const SeahorseObjectPredicate PRED_PRIVATE = {
+static SeahorseObjectPredicate pred_private = {
 	0, 
 	0, 
 	0, 
@@ -103,12 +105,12 @@ static const SeahorseObjectPredicate PRED_PRIVATE = {
 	NULL
 };
 
-static const SeahorseObjectPredicate PRED_PASSWORD = {
+static SeahorseObjectPredicate pred_password = {
 	0, 
-	0, 
+	0, /* Tag filled in later */ 
 	0, 
 	SEAHORSE_LOCATION_LOCAL, 
-	SEAHORSE_USAGE_CREDENTIALS, 
+	0, 
 	0, 
 	0, 
 	NULL
@@ -967,10 +969,11 @@ seahorse_key_manager_constructor (GType type, guint n_props, GObjectConstructPar
 	                         G_CALLBACK (on_filter_changed), self, 0);
 	
 	/* Initialize the tabs, and associate them up */
-	initialize_tab (self, "pub-key-tab", TAB_PUBLIC, "pub-key-list", &PRED_PUBLIC);
-	initialize_tab (self, "trust-key-tab", TAB_TRUSTED, "trust-key-list", &PRED_TRUSTED);
-	initialize_tab (self, "sec-key-tab", TAB_PRIVATE, "sec-key-list", &PRED_PRIVATE);
-	initialize_tab (self, "password-tab", TAB_PASSWORD, "password-list", &PRED_PASSWORD);
+	initialize_tab (self, "pub-key-tab", TAB_PUBLIC, "pub-key-list", &pred_public);
+	initialize_tab (self, "trust-key-tab", TAB_TRUSTED, "trust-key-list", &pred_trusted);
+	initialize_tab (self, "sec-key-tab", TAB_PRIVATE, "sec-key-list", &pred_private);
+	pred_password.tag = SEAHORSE_GKR_TYPE;
+	initialize_tab (self, "password-tab", TAB_PASSWORD, "password-list", &pred_password);
 	
 	/* Set focus to the current key list */
 	widget = GTK_WIDGET (get_current_view (self));

@@ -47,6 +47,8 @@ G_DEFINE_TYPE (SeahorsePkcs11Commands, seahorse_pkcs11_commands, SEAHORSE_TYPE_C
 #define SEAHORSE_PKCS11_COMMANDS_GET_PRIVATE(o) \
 	(G_TYPE_INSTANCE_GET_PRIVATE ((o), SEAHORSE_PKCS11_TYPE_COMMANDS, SeahorsePkcs11CommandsPrivate))
 
+static SeahorseObjectPredicate commands_predicate = { 0, };
+
 /* -----------------------------------------------------------------------------
  * INTERNAL 
  */
@@ -106,7 +108,7 @@ seahorse_pkcs11_commands_delete_objects (SeahorseCommands *cmds, GList *objects)
 		display = seahorse_object_get_label (SEAHORSE_OBJECT (objects->data));
 		prompt = g_strdup_printf (_("Are you sure you want to delete the certificate '%s'?"), display);
 	} else {
-		prompt = g_strdup_printf (_("Are you sure you want to delete %d secure shell keys?"), num);
+		prompt = g_strdup_printf (_("Are you sure you want to delete %d certificates?"), num);
 	}
 	
 	ret = seahorse_util_prompt_delete (prompt, GTK_WIDGET (seahorse_view_get_window (seahorse_commands_get_view (cmds))));
@@ -135,8 +137,8 @@ seahorse_pkcs11_commands_constructor (GType type, guint n_props, GObjectConstruc
 		view = seahorse_commands_get_view (base);
 		g_return_val_if_fail (view, NULL);
 		
-		seahorse_view_register_commands (view, base, SEAHORSE_PKCS11_TYPE_CERTIFICATE);
-		seahorse_view_register_ui (view, "", pv->action_group);
+		seahorse_view_register_commands (view, &commands_predicate, base);
+		seahorse_view_register_ui (view, &commands_predicate, "", pv->action_group);
 	}
 	
 	return obj;
@@ -215,6 +217,8 @@ seahorse_pkcs11_commands_class_init (SeahorsePkcs11CommandsClass *klass)
 
 	slot_certificate_window = g_quark_from_static_string ("seahorse-pkcs11-commands-window");
 
+	commands_predicate.type = SEAHORSE_PKCS11_TYPE_CERTIFICATE;
+		
 	/* Register this as a source of commands */
 	seahorse_registry_register_type (seahorse_registry_get (), SEAHORSE_PKCS11_TYPE_COMMANDS, 
 	                                 SEAHORSE_PKCS11_TYPE_STR, "commands", NULL);

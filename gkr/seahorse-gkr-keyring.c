@@ -420,6 +420,7 @@ static void
 seahorse_gkr_keyring_init (SeahorseGkrKeyring *self)
 {
 	self->pv = G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_TYPE_GKR_KEYRING, SeahorseGkrKeyringPrivate);
+	g_object_set (self, "tag", SEAHORSE_GKR_TYPE, NULL);
 }
 
 static void

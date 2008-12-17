@@ -52,6 +52,7 @@ enum {
 struct _SeahorseObjectPrivate {
 	GQuark id;
 	GQuark tag;
+	gboolean tag_explicit;
 
 	SeahorseSource *source;
 	SeahorseContext *context;
@@ -154,7 +155,7 @@ recalculate_id (SeahorseObject *self)
 
 	/* No id, clear any tag and auto generated identifer */
 	if (!self->pv->id) {
-		if (self->pv->tag != 0) {
+		if (!self->pv->tag_explicit) {
 			self->pv->tag = 0;
 			g_object_notify (G_OBJECT (self), "tag");
 		}
@@ -170,13 +171,15 @@ recalculate_id (SeahorseObject *self)
 		len = strlen (str);
 		at = strchr (str, ':');
 		
-		result = g_strndup (str, at ? at - str : len);
-		tag = g_quark_from_string (result);
-		g_free (result);
-
-		if (tag != self->pv->tag) {
-			self->pv->tag = tag;
-			g_object_notify (G_OBJECT (self), "tag");
+		if (!self->pv->tag_explicit) {
+			result = g_strndup (str, at ? at - str : len);
+			tag = g_quark_from_string (result);
+			g_free (result);
+			
+			if (tag != self->pv->tag) {
+				self->pv->tag = tag;
+				g_object_notify (G_OBJECT (self), "tag");
+			}
 		}
 		
 		if (!self->pv->identifier_explicit) {
@@ -399,7 +402,7 @@ seahorse_object_set_property (GObject *obj, guint prop_id, const GValue *value,
 	SeahorseLocation loc;
 	SeahorseUsage usage;
 	guint flags;
-	GQuark id;
+	GQuark quark;
 	
 	switch (prop_id) {
 	case PROP_CONTEXT:
@@ -420,13 +423,21 @@ seahorse_object_set_property (GObject *obj, guint prop_id, const GValue *value,
 		seahorse_object_set_parent (self, SEAHORSE_OBJECT (g_value_get_object (value)));
 		break;
 	case PROP_ID:
-		id = g_value_get_uint (value);
-		if (id != self->pv->id) {
-			self->pv->id = id;
+		quark = g_value_get_uint (value);
+		if (quark != self->pv->id) {
+			self->pv->id = quark;
 			g_object_freeze_notify (obj);
 			g_object_notify (obj, "id");
 			recalculate_id (self);
 			g_object_thaw_notify (obj);
+		}
+		break;
+	case PROP_TAG:
+		quark = g_value_get_uint (value);
+		if (quark != self->pv->tag) {
+			self->pv->tag = quark;
+			self->pv->tag_explicit = TRUE;
+			g_object_notify (obj, "tag");
 		}
 		break;
 	case PROP_LABEL:
@@ -484,7 +495,9 @@ seahorse_object_set_property (GObject *obj, guint prop_id, const GValue *value,
 		break;
 	case PROP_FLAGS:
 		flags = g_value_get_uint (value);
-		if (!SEAHORSE_OBJECT_GET_CLASS (obj)->delete)
+		if (SEAHORSE_OBJECT_GET_CLASS (obj)->delete)
+			flags |= SEAHORSE_FLAG_DELETABLE;
+		else 
 			flags &= ~SEAHORSE_FLAG_DELETABLE;
 		if (flags != self->pv->flags) {
 			self->pv->flags = flags;
@@ -555,7 +568,7 @@ seahorse_object_class_init (SeahorseObjectClass *klass)
 	
 	g_object_class_install_property (gobject_class, PROP_TAG,
 	           g_param_spec_uint ("tag", "Object Type Tag", "This object's type tag.", 
-	                              0, G_MAXUINT, 0, G_PARAM_READABLE));
+	                              0, G_MAXUINT, 0, G_PARAM_READWRITE));
 	
 	g_object_class_install_property (gobject_class, PROP_LABEL,
 	           g_param_spec_string ("label", "Object Display Label", "This object's displayable label.", 

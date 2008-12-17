@@ -40,6 +40,8 @@ enum {
 
 G_DEFINE_TYPE (SeahorseGkrKeyringCommands, seahorse_gkr_keyring_commands, SEAHORSE_TYPE_COMMANDS);
 
+static SeahorseObjectPredicate commands_predicate = { 0, };
+
 /* -----------------------------------------------------------------------------
  * INTERNAL 
  */
@@ -101,7 +103,7 @@ seahorse_gkr_keyring_commands_constructor (GType type, guint n_props, GObjectCon
 		base = SEAHORSE_COMMANDS (obj);
 		view = seahorse_commands_get_view (base);
 		g_return_val_if_fail (view, NULL);
-		seahorse_view_register_commands (view, base, SEAHORSE_TYPE_GKR_KEYRING);
+		seahorse_view_register_commands (view, &commands_predicate, base);
 	}
 	
 	return obj;
@@ -111,28 +113,6 @@ static void
 seahorse_gkr_keyring_commands_init (SeahorseGkrKeyringCommands *self)
 {
 
-}
-
-static void
-seahorse_gkr_keyring_commands_set_property (GObject *obj, guint prop_id, const GValue *value, 
-                           GParamSpec *pspec)
-{
-	switch (prop_id) {
-	default:
-		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
-		break;
-	}
-}
-
-static void
-seahorse_gkr_keyring_commands_get_property (GObject *obj, guint prop_id, GValue *value, 
-                         	  GParamSpec *pspec)
-{
-	switch (prop_id) {
-	default:
-		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
-		break;
-	}
 }
 
 static void
@@ -149,10 +129,12 @@ seahorse_gkr_keyring_commands_class_init (SeahorseGkrKeyringCommandsClass *klass
 	cmd_class->show_properties = seahorse_gkr_keyring_commands_show_properties;
 	cmd_class->delete_objects = seahorse_gkr_keyring_commands_delete_objects;
 
+	/* Setup the predicate for these commands */
+	commands_predicate.type = SEAHORSE_TYPE_GKR_KEYRING;
+	
 	/* Register this class as a commands */
 	seahorse_registry_register_type (seahorse_registry_get (), SEAHORSE_TYPE_GKR_KEYRING_COMMANDS, 
 	                                 SEAHORSE_GKR_TYPE_STR, "commands", NULL, NULL);
-	
 	
 	/* Register this as a generator */
 	actions = gtk_action_group_new ("gkr-generate");

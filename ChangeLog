@@ -1,5 +1,29 @@
 2008-12-16  Stef Walter  <stef@memberwebs.com>
 
+	* libseahorse/seahorse-object.c:
+	* gkr/seahorse-gkr-item.c:
+	* gkr/seahorse-gkr-keyring.c: 
+	* pgp/seahorse-pgp-uid.c: Allow 'tag' property to be directly set.
+	This is useful for matching in predicates.
+	
+	* gkr/seahorse-gkr-item-commands.c:
+	* gkr/seahorse-gkr-keyring-commands.c:
+	* libseahorse/seahorse-types.h:
+	* libseahorse/seahorse-view.c:
+	* libseahorse/seahorse-view.h:
+	* pgp/seahorse-pgp-commands.c:
+	* pkcs11/seahorse-pkcs11-commands.c:
+	* src/seahorse-key-manager.c:
+	* src/seahorse-viewer.c:
+	* src/seahorse-viewer.h:
+	* ssh/seahorse-ssh-commansd.c: Use predicates to enable and disable 
+	commands in the view. Fine tune exporting and deleting based on exportable and 
+	deletable flags. Select objects being operated on, when not all 
+	objects apply for the current operation. Hide commands that are not
+	applicable for the currently selected objects. 
+	
+2008-12-16  Stef Walter  <stef@memberwebs.com>
+
 	* libseahorse/seahorse-object.c: Lots of fixes on when to 
 	realize objects.
 	
