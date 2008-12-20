@@ -24,7 +24,8 @@ libseahorse_pkcs11_la_SOURCES = \
 	seahorse-pkcs11-helpers.c seahorse-pkcs11-helpers.h \
 	seahorse-pkcs11-object.c seahorse-pkcs11-object.h \
 	seahorse-pkcs11-operations.c seahorse-pkcs11-operations.h \
-	seahorse-pkcs11-source.c seahorse-pkcs11-source.h
+	seahorse-pkcs11-source.c seahorse-pkcs11-source.h\
+	seahorse-pkcs11.c seahorse-pkcs11.h
 
 libseahorse_pkcs11_la_LIBADD = \
 	$(top_builddir)/libseahorse/libseahorse.la \
