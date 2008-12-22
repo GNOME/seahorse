@@ -99,15 +99,21 @@ upload_handler (SeahorseOperation *op, SeahorseWidget *swidget)
     GList *keys;
     
     if (!seahorse_operation_is_successful (op) ||
-        seahorse_operation_is_cancelled (op))
+        seahorse_operation_is_cancelled (op)) {
+		seahorse_widget_destroy (swidget);
         return;
+	}
     
     skey = SEAHORSE_SSH_KEY (seahorse_operation_get_result (op));
-    g_return_if_fail (SEAHORSE_IS_SSH_KEY (skey));
-    
+	if (!SEAHORSE_IS_SSH_KEY (skey)) {
+		seahorse_widget_destroy (swidget);
+		return;
+	}
+	
     keys = g_list_append (NULL, skey);
     seahorse_ssh_upload_prompt (keys, GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)));
     g_list_free (keys);
+	seahorse_widget_destroy (swidget);
 }
 
 static void
@@ -189,10 +195,12 @@ on_response (GtkDialog *dialog, guint response, SeahorseWidget *swidget)
     seahorse_operation_watch (op, (SeahorseDoneFunc)completion_handler, NULL, NULL, NULL);
     
     /* When completed upload */
-    if (upload)
+    if (upload) {
         seahorse_operation_watch (op, (SeahorseDoneFunc)upload_handler, swidget, NULL, NULL);
-    
-    seahorse_widget_destroy (swidget);
+		seahorse_widget_set_visible (swidget, swidget->name, FALSE);
+	}
+	else
+		seahorse_widget_destroy (swidget);
     
     seahorse_progress_show (op, _("Creating Secure Shell Key"), TRUE);
     g_object_unref (op);
