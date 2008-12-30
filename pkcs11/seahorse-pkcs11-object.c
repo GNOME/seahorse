@@ -72,13 +72,11 @@ received_object_attributes (GObject *object, GAsyncResult *result, gpointer user
 	g_object_unref (self->pv->request_attributes);
 	self->pv->request_attributes = NULL;
 
-	if (attrs == NULL) {
+	if (attrs == NULL)
 		g_message ("couldn't load attributes for pkcs#11 object: %s",
 		           err && err->message ? err->message : "");
-	} else {
+	else
 		seahorse_pkcs11_object_set_pkcs11_attributes (self, attrs);
-		gp11_attributes_unref (attrs);
-	}
 
 	g_object_unref (self);
 }
@@ -88,8 +86,8 @@ load_object_attributes (SeahorsePkcs11Object *self, const gulong *attr_types,
                         gsize n_attr_types)
 {
 	gboolean added = FALSE;
+	GP11Attributes *attrs;
 	GP11Attribute *attr;
-	GArray *array;
 	gsize i;
 	
 	g_assert (SEAHORSE_PKCS11_IS_OBJECT (self));
@@ -124,19 +122,19 @@ load_object_attributes (SeahorsePkcs11Object *self, const gulong *attr_types,
 	 * ones that we alrady have plus the ones that are requested.
 	 */
 	
-	array = g_array_new (FALSE, TRUE, sizeof (gulong));
+	attrs = gp11_attributes_new ();
 	for (i = 0; i < gp11_attributes_count (self->pv->pkcs11_attributes); ++i) {
 		attr = gp11_attributes_at (self->pv->pkcs11_attributes, i);
 		g_return_if_fail (attr);
-		g_array_append_val (array, attr->type);
+		gp11_attributes_add_empty (attrs, attr->type);
 	}
 
 	/* Off we go to load them all */
 	self->pv->request_attributes = g_cancellable_new ();
-	gp11_object_get_async (self->pv->pkcs11_object, (gulong*)array->data, array->len, 
-	                       self->pv->request_attributes, received_object_attributes, g_object_ref (self));
+	gp11_object_get_async (self->pv->pkcs11_object, attrs, self->pv->request_attributes, 
+	                       received_object_attributes, g_object_ref (self));
 	
-	g_array_free (array, TRUE);
+	gp11_attributes_unref (attrs);
 }
 
 /* -----------------------------------------------------------------------------
@@ -341,17 +339,19 @@ seahorse_pkcs11_object_set_pkcs11_attributes (SeahorsePkcs11Object* self, GP11At
 	g_return_if_fail (SEAHORSE_PKCS11_IS_OBJECT (self));
 	g_return_if_fail (value);
 	
+	if (value)
+		gp11_attributes_ref (value);
 	if (self->pv->pkcs11_attributes)
 		gp11_attributes_unref (self->pv->pkcs11_attributes);
 	self->pv->pkcs11_attributes = value;
-	if (self->pv->pkcs11_attributes)
-		gp11_attributes_ref (self->pv->pkcs11_attributes);
 	
 	obj = G_OBJECT (self);
 	g_object_freeze_notify (obj);
 	seahorse_pkcs11_object_realize (SEAHORSE_OBJECT (obj));
 	g_object_notify (obj, "pkcs11-attributes");
 	g_object_thaw_notify (obj);
+	
+	gp11_attributes_find (self->pv->pkcs11_attributes, CKA_LABEL);
 }
 
 gulong
@@ -410,7 +410,7 @@ seahorse_pkcs11_object_cannonical_id (GP11Object *object)
 	/* TODO: This whole ID thing needs rethinking */
 	
 	text = g_strdup_printf("%s:%lu/%lu", SEAHORSE_PKCS11_TYPE_STR, 
-                                         gp11_slot_get_handle (object->slot),
+                                         gp11_slot_get_handle (gp11_object_get_slot (object)),
                                          gp11_object_get_handle (object));
 	
 	quark = g_quark_from_string (text);
