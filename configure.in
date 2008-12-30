@@ -315,7 +315,7 @@ dnl ****************************************************************************
 dnl GNOME-KEYRING
 dnl ****************************************************************************
 
-PKG_CHECK_MODULES([GNOME_KEYRING], [gnome-keyring-1],
+PKG_CHECK_MODULES([GNOME_KEYRING], gnome-keyring-1 >= 2.25.3,
                   [enable_gnome_keyring=yes],[enable_gnome_keyring=no])
 
 if test "$enable_gnome_keyring" = "no"; then
