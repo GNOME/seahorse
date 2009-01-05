@@ -52,10 +52,9 @@ seahorse_pkcs11_module_init (void)
 			continue;
 		}
 		
+		gp11_module_set_pool_sessions (module, TRUE);
 		slots = gp11_module_get_slots (module, FALSE);
 		for (s = slots; s; s = g_list_next (s)) {
-			
-			gp11_slot_set_reuse_sessions (s->data, TRUE);
 			source = SEAHORSE_SOURCE (seahorse_pkcs11_source_new (s->data));
 			seahorse_context_take_source (NULL, source);
 		}
