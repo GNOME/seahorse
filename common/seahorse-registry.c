@@ -87,7 +87,7 @@ lookup_category_values (GHashTable *table, const gchar *category, va_list cats)
 	g_return_val_if_fail (category[0], NULL);
 	
 	/* Get the first category */
-	set = g_hash_table_lookup (table, g_quark_try_string (category));
+	set = g_hash_table_lookup (table, GUINT_TO_POINTER (g_quark_try_string (category)));
 	if (!set)
 		return NULL;
 	
@@ -105,7 +105,7 @@ lookup_category_values (GHashTable *table, const gchar *category, va_list cats)
 		g_return_val_if_fail (category[0], NULL);
 		
 		/* Lookup this category */
-		set = g_hash_table_lookup (table, g_quark_try_string (category));
+		set = g_hash_table_lookup (table, GUINT_TO_POINTER (g_quark_try_string (category)));
 		
 		/* No category, no matches */
 		if (!set) {
@@ -402,7 +402,7 @@ seahorse_registry_lookup_function (SeahorseRegistry *registry, const gchar *cate
 	pv = SEAHORSE_REGISTRY_GET_PRIVATE (registry);
 
 	va_start (cats, category);
-	func = GPOINTER_TO_UINT (lookup_category_value (pv->functions, category, cats));
+	func = lookup_category_value (pv->functions, category, cats);
 	va_end (cats);
 
 	return func;
