@@ -63,7 +63,7 @@ man_MANS = seahorse-daemon.1
 glade_DATA = 
 
 #autostart
-desktopdir = $(datadir)/gnome/autostart
+desktopdir = $(sysconfdir)/xdg/autostart
 desktop_in_files = seahorse-daemon.desktop.in 
 desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 @INTLTOOL_DESKTOP_RULE@
