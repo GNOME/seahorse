@@ -771,6 +771,25 @@ seahorse_hkp_source_set_property (GObject *object, guint prop_id, const GValue *
 
 }
 
+static gboolean
+is_hex_keyid (const gchar *match)
+{
+    const gchar *t;
+    
+    t = match;
+    
+    if (strlen (match) != 8)
+        return FALSE;
+    
+    while (*t != NULL) {
+        if (!((*t >= 0x30 && *t <= 0x39) || (*t >= 0x41 && *t <= 0x46) || (*t >= 0x61 && *t <= 0x66)))
+            return FALSE;
+            
+        t++;
+    }
+    
+    return TRUE;
+}
 
 static SeahorseOperation*
 seahorse_hkp_source_search (SeahorseSource *src, const gchar *match)
@@ -780,6 +799,7 @@ seahorse_hkp_source_search (SeahorseSource *src, const gchar *match)
     GHashTable *form;
     gchar *t;
     SoupURI *uri;
+    gchar hexfpr[11];
     
     g_assert (SEAHORSE_IS_SOURCE (src));
     g_assert (SEAHORSE_IS_HKP_SOURCE (src));
@@ -791,7 +811,15 @@ seahorse_hkp_source_search (SeahorseSource *src, const gchar *match)
     
     form = g_hash_table_new (g_str_hash, g_str_equal);
     g_hash_table_insert (form, "op", "index");
-    g_hash_table_insert (form, "search", (char *)match);
+    
+    if (is_hex_keyid (match)) {
+        strncpy (hexfpr, "0x", 3);
+        strncpy (hexfpr + 2, match, 9);
+        
+        g_hash_table_insert (form, "search", hexfpr);
+    } else 
+        g_hash_table_insert (form, "search", (char *)match);
+        
     soup_uri_set_query_from_form (uri, form);
     g_hash_table_destroy (form);
     
