@@ -29,7 +29,7 @@
 #include "seahorse-util.h"
 #include "seahorse-validity.h"
 
-#include "libcryptui/crui-x509-cert.h"
+#include <gcr/gcr-certificate.h>
 
 #include <pkcs11.h>
 #include <pkcs11g.h>
@@ -58,10 +58,10 @@ struct _SeahorsePkcs11CertificatePrivate {
 	GP11Attribute der_value;
 };
 
-static void seahorse_pkcs11_certificate_iface (CruiX509CertIface *iface);
+static void seahorse_pkcs11_certificate_iface (GcrCertificateIface *iface);
 
-G_DEFINE_TYPE_EXTENDED (SeahorsePkcs11Certificate, seahorse_pkcs11_certificate, SEAHORSE_PKCS11_TYPE_OBJECT, 0,
-                        G_IMPLEMENT_INTERFACE (CRUI_TYPE_X509_CERT, seahorse_pkcs11_certificate_iface));
+G_DEFINE_TYPE_WITH_CODE (SeahorsePkcs11Certificate, seahorse_pkcs11_certificate, SEAHORSE_PKCS11_TYPE_OBJECT, 
+                         G_IMPLEMENT_INTERFACE (GCR_TYPE_CERTIFICATE, seahorse_pkcs11_certificate_iface));
 
 /* -----------------------------------------------------------------------------
  * INTERNAL 
@@ -262,7 +262,7 @@ seahorse_pkcs11_certificate_class_init (SeahorsePkcs11CertificateClass *klass)
 }
 
 const guchar*
-seahorse_pkcs11_certificate_get_der_data (CruiX509Cert *cert, gsize *n_length)
+seahorse_pkcs11_certificate_get_der_data (GcrCertificate *cert, gsize *n_length)
 {
 	SeahorsePkcs11Object *obj = SEAHORSE_PKCS11_OBJECT (cert);
 	SeahorsePkcs11Certificate *self = SEAHORSE_PKCS11_CERTIFICATE (cert);
@@ -292,7 +292,7 @@ seahorse_pkcs11_certificate_get_der_data (CruiX509Cert *cert, gsize *n_length)
 }
 
 static void 
-seahorse_pkcs11_certificate_iface (CruiX509CertIface *iface)
+seahorse_pkcs11_certificate_iface (GcrCertificateIface *iface)
 {
 	iface->get_der_data = (gpointer)seahorse_pkcs11_certificate_get_der_data;
 }

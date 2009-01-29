@@ -13,12 +13,14 @@ INCLUDES = -I$(top_builddir) \
 	-DLOCALEDIR=\"$(localedir)\" \
 	-DEXECDIR=\""$(seahorselibexecbindir)"\" \
 	-DLIBCRYPTUI_API_SUBJECT_TO_CHANGE \
+	-DGCR_API_SUBJECT_TO_CHANGE \
 	-DGETTEXT_PACKAGE=\""seahorse\""
 
 noinst_LTLIBRARIES = libseahorse-pkcs11.la
 
 libseahorse_pkcs11_la_SOURCES = \
 	seahorse-pkcs11-certificate.c seahorse-pkcs11-certificate.h \
+	seahorse-pkcs11-certificate-props.c seahorse-pkcs11-certificate-props.h \
 	seahorse-pkcs11-commands.c seahorse-pkcs11-commands.h \
 	seahorse-pkcs11-module.c seahorse-pkcs11-module.h \
 	seahorse-pkcs11-helpers.c seahorse-pkcs11-helpers.h \

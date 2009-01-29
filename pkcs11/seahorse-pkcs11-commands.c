@@ -25,12 +25,11 @@
 
 #include "seahorse-pkcs11.h"
 #include "seahorse-pkcs11-certificate.h"
+#include "seahorse-pkcs11-certificate-props.h"
 
 #include "seahorse-util.h"
 
 #include "common/seahorse-registry.h"
-
-#include "libcryptui/crui-x509-cert-dialog.h"
 
 enum {
 	PROP_0
@@ -83,7 +82,7 @@ seahorse_pkcs11_commands_show_properties (SeahorseCommands *cmds, SeahorseObject
 	}
 	
 	/* Create a new dialog for the certificate */
-	window = GTK_WINDOW (crui_x509_cert_dialog_new (CRUI_X509_CERT (object)));
+	window = GTK_WINDOW (seahorse_pkcs11_certificate_props_new (GCR_CERTIFICATE (object)));
 	gtk_window_set_transient_for (window, seahorse_view_get_window (seahorse_commands_get_view (cmds)));
 	g_object_set_qdata (G_OBJECT (object), slot_certificate_window, window);
 	gtk_widget_show (GTK_WIDGET (window));
