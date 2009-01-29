@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse 2.25.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-12 16:01+0100\n"
-"PO-Revision-Date: 2009-01-12 16:06+0100\n"
+"POT-Creation-Date: 2009-01-29 16:28+0100\n"
+"PO-Revision-Date: 2009-01-29 16:29+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -455,6 +455,7 @@ msgid "Applications"
 msgstr "Programmer"
 
 #: ../gkr/seahorse-gkr-item-properties.glade.h:6
+#: ../pkcs11/seahorse-pkcs11-certificate-props.c:71
 #: ../pgp/seahorse-pgp-private-key-properties.glade.h:23
 #: ../pgp/seahorse-pgp-public-key-properties.glade.h:20
 #: ../ssh/seahorse-ssh-key-properties.glade.h:17
@@ -593,103 +594,13 @@ msgid "Password Keyring"
 msgstr "Nøkkelringer for passord"
 
 #: ../gkr/seahorse-gkr-keyring-commands.c:58
-#, fuzzy
 msgid "Used to store application and network passwords"
-msgstr "_Lokasjon for passord for programmer:"
+msgstr "Brukes til å lagre passord for programmer og nettverk"
 
 #: ../gkr/seahorse-gkr-keyring-commands.c:89
-#, fuzzy, c-format
+#, c-format
 msgid "Are you sure you want to delete the password keyring '%s'?"
-msgstr "Er du sikker på at du vil slette passordet «%s»?"
-
-#: ../libcryptui/crui-x509-cert-basics.c:65
-msgid "<i>Not Part of Certificate</i>"
-msgstr "<i>Ikke del av sertifikat</i>"
-
-#: ../libcryptui/crui-x509-cert-basics.c:86
-msgid "<i>unknown</i>"
-msgstr "<i>ukjent</i>"
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:1
-msgid "<Not Part of Certificate>"
-msgstr "<Ikke en del av sertifikatet>"
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:2
-msgid "<b>Fingerprints</b>"
-msgstr "<b>Fingeravtrykk</b>"
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:3
-msgid "<b>Issued By</b>"
-msgstr "<b>Utstedt av</b>"
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:4
-msgid "<b>Issued To</b>"
-msgstr "<b>Utstedt til</b>"
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:5
-msgid "<b>This certificate has been verified for the following uses:</b>"
-msgstr ""
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:6
-msgid "<b>Validity</b>"
-msgstr "<b>Validitet</b>"
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:7
-msgid "Common Name (CN)"
-msgstr ""
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:8
-#, fuzzy
-msgid "Email Recipient Certificate"
-msgstr "Ingen mottakere oppgitt"
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:9
-#, fuzzy
-msgid "Email Signer Certificate"
-msgstr "Sertifikat"
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:10
-msgid "Expires On"
-msgstr "Utgår"
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:11
-msgid "Issued On"
-msgstr "Utstedt"
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:12
-msgid "MD5 Fingerprint"
-msgstr "MD5-fingeravtrykk"
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:13
-msgid "Organization (O)"
-msgstr "Organisasjon (O)"
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:14
-msgid "Organizational Unit (OU)"
-msgstr "Organisasjonsenhet (OU)"
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:15
-msgid "SHA1 Fingerprint"
-msgstr "SHA1-fingeravtrykk"
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:16
-#, fuzzy
-msgid "SSL Client Certificate"
-msgstr "Sertifikat"
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:17
-#, fuzzy
-msgid "SSL Server Certificate"
-msgstr "Sertifikat"
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:18
-msgid "Serial Number"
-msgstr "Serienummer"
-
-#: ../libcryptui/crui-x509-cert-dialog.c:65
-#: ../pkcs11/seahorse-pkcs11-certificate.c:107
-msgid "Certificate"
-msgstr "Sertifikat"
+msgstr "Er du sikker på at du vil slette passordnøkkelring «%s»?"
 
 #: ../libcryptui/cryptui-key-chooser.c:173
 msgid "All Keys"
@@ -1039,19 +950,16 @@ msgid "Notification Messages"
 msgstr "Varslingsmeldinger"
 
 #: ../libseahorse/seahorse-object.c:216
-#, fuzzy
 msgid "Symmetric Key"
-msgstr "Synkroniser nøkler"
+msgstr "Symmetrisk nøkkel"
 
 #: ../libseahorse/seahorse-object.c:219
-#, fuzzy
 msgid "Public Key"
-msgstr "Offentlig PGP-nøkkel"
+msgstr "Offentlig nøkkel"
 
 #: ../libseahorse/seahorse-object.c:222
-#, fuzzy
 msgid "Private Key"
-msgstr "Privat PGP-nøkkel"
+msgstr "Privat nøkkel"
 
 #: ../libseahorse/seahorse-object.c:225
 msgid "Credentials"
@@ -1260,15 +1168,20 @@ msgstr ""
 "Programmet <b>Passord og krypteringsnøkler</b> vil nå startes slik at du kan "
 "lage en nøkkel eller importere en."
 
-#: ../pkcs11/seahorse-pkcs11-commands.c:109
+#: ../pkcs11/seahorse-pkcs11-commands.c:108
 #, c-format
 msgid "Are you sure you want to delete the certificate '%s'?"
 msgstr "Er du sikker på at du vil slette sertifikatet «%s»?"
 
-#: ../pkcs11/seahorse-pkcs11-commands.c:111
+#: ../pkcs11/seahorse-pkcs11-commands.c:110
 #, c-format
 msgid "Are you sure you want to delete %d certificates?"
 msgstr "Er du sikker på at du vil slette %d sertifikater?"
+
+#: ../pkcs11/seahorse-pkcs11-certificate.c:107
+#: ../pkcs11/seahorse-pkcs11-certificate-props.c:67
+msgid "Certificate"
+msgstr "Sertifikat"
 
 #: ../pgp/seahorse-add-subkey.glade.h:1
 msgid "Expiration Date:"
@@ -1386,7 +1299,7 @@ msgstr "Ugyldig utløpsdato"
 
 #: ../pgp/seahorse-gpgme-expires.c:59
 msgid "The expiry date must be in the future"
-msgstr ""
+msgstr "Uløpsdato må være i framtiden"
 
 #: ../pgp/seahorse-gpgme-expires.c:72
 msgid "Couldn't change expiry date"
@@ -1635,19 +1548,19 @@ msgstr "Laster opp nøkler..."
 msgid "Retrieving keys..."
 msgstr "Henter nøkler..."
 
-#: ../pgp/seahorse-hkp-source.c:804
+#: ../pgp/seahorse-hkp-source.c:832
 #, c-format
 msgid "Searching for keys on: %s"
 msgstr "Søker etter nøkler på: %s"
 
 #. The ldap_cb and chain_cb were set in seahorse_ldap_operation_start
-#: ../pgp/seahorse-hkp-source.c:881 ../pgp/seahorse-hkp-source.c:954
+#: ../pgp/seahorse-hkp-source.c:909 ../pgp/seahorse-hkp-source.c:982
 #: ../pgp/seahorse-ldap-source.c:668
 #, c-format
 msgid "Connecting to: %s"
 msgstr "Kobler til: %s"
 
-#: ../pgp/seahorse-hkp-source.c:979
+#: ../pgp/seahorse-hkp-source.c:1007
 msgid "HTTP Key Server"
 msgstr "HTTP nøkkeltjener"
 
@@ -2702,9 +2615,8 @@ msgid "Couldn't change authorization for key."
 msgstr "Kunne ikke endre autorisasjon for nøkkelen."
 
 #: ../ssh/seahorse-ssh-key-properties.c:175
-#, fuzzy
 msgid "Couldn't change passphrase for key."
-msgstr "Kunne ikke endre passordfrasen for nøkkelen."
+msgstr "Kunne ikke endre passordfrasen for nøkkel."
 
 #: ../ssh/seahorse-ssh-key-properties.glade.h:1
 msgid "/home/nate/.ssh/blah_rsa"
@@ -2771,9 +2683,8 @@ msgstr "Passordfrase:"
 
 #. Just prompt over and over again
 #: ../ssh/seahorse-ssh-operation.c:762
-#, fuzzy
 msgid "Remote Host Password"
-msgstr "Nettverkspassord"
+msgstr "Passord for ekstern vert"
 
 #: ../ssh/seahorse-ssh-operation.c:850
 msgid "Old Key Passphrase"
@@ -2832,9 +2743,8 @@ msgid "Configuring Secure Shell Keys..."
 msgstr "Konfigurerer Secure Shell-nøkler..."
 
 #: ../ssh/seahorse-ssh-upload.glade.h:1
-#, fuzzy
 msgid "<i>eg: fileserver.example.com:port</i>"
-msgstr "<i>f.eks: filserver.eksempel.no</i>"
+msgstr "<i>f.eks: filserver.eksempel.no:port</i>"
 
 #: ../ssh/seahorse-ssh-upload.glade.h:2
 msgid "Set Up Computer for SSH Connection"
@@ -2861,4 +2771,3 @@ msgstr "På_loggingsnavn:"
 #: ../ssh/seahorse-ssh-upload.glade.h:9
 msgid "_Set Up"
 msgstr "_Sett opp"
-
