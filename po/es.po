@@ -9,9 +9,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse.HEAD\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=seahorse&amp;component=general\n"
-"POT-Creation-Date: 2008-12-21 16:18+0000\n"
-"PO-Revision-Date: 2009-01-06 11:35+0100\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
+"product=seahorse&component=general\n"
+"POT-Creation-Date: 2009-01-30 04:50+0000\n"
+"PO-Revision-Date: 2009-01-30 13:33+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -205,11 +206,13 @@ msgstr ""
 
 #: ../data/seahorse.schemas.in.h:6
 msgid "Controls the visibility of the type column for the key manager."
-msgstr "Controla la visibilidad de la columna de tipo del administrador de claves."
+msgstr ""
+"Controla la visibilidad de la columna de tipo del administrador de claves."
 
 #: ../data/seahorse.schemas.in.h:7
 msgid "Controls the visibility of the validity column for the key manager."
-msgstr "Controla la visibilidad de la columna de validez del administrador de claves."
+msgstr ""
+"Controla la visibilidad de la columna de validez del administrador de claves."
 
 #: ../data/seahorse.schemas.in.h:8
 msgid "Enable DNS-SD sharing"
@@ -332,7 +335,8 @@ msgid "The last search pattern searched for against a key server."
 msgstr "El último patrón de búsqueda usado en un servidor de claves."
 
 #: ../data/seahorse.schemas.in.h:30
-msgid "This specifies the default key to use for certain operations, mainly signing."
+msgid ""
+"This specifies the default key to use for certain operations, mainly signing."
 msgstr ""
 "Esto especifica la clave predeterminada que se usa para ciertas operaciones, "
 "principalmente para la firma."
@@ -469,6 +473,7 @@ msgid "Applications"
 msgstr "Aplicaciones"
 
 #: ../gkr/seahorse-gkr-item-properties.glade.h:6
+#: ../pkcs11/seahorse-pkcs11-certificate-props.c:71
 #: ../pgp/seahorse-pgp-private-key-properties.glade.h:23
 #: ../pgp/seahorse-pgp-public-key-properties.glade.h:20
 #: ../ssh/seahorse-ssh-key-properties.glade.h:17
@@ -602,103 +607,34 @@ msgstr "Borrando depósito de claves..."
 msgid "Listing password keyrings"
 msgstr "Listando contraseñas"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:57
+#: ../gkr/seahorse-gkr-keyring-commands.c:64
 msgid "Password Keyring"
 msgstr "Depósitos de contraseñas"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:58
+#: ../gkr/seahorse-gkr-keyring-commands.c:65
 msgid "Used to store application and network passwords"
 msgstr "_Ubicación para las contraseñas de aplicaciones:"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:89
+#: ../gkr/seahorse-gkr-keyring-commands.c:78
+#| msgid "Couldn't change password."
+msgid "Couldn't change keyring password"
+msgstr "No se pudo cambiar la contraseña del depósito"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:105
+#| msgid "Change Passphrase"
+msgid "Change Password"
+msgstr "Cambiar contraseña"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:106
+msgid "Change the unlock password of the password storage keyring"
+msgstr ""
+"Cambiar la contraseña de desbloqueo del depósito de almacenamiento de "
+"contraseñas"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:137
 #, c-format
 msgid "Are you sure you want to delete the password keyring '%s'?"
 msgstr "¿Está seguro de que desea eliminar la contraseña «%s»?"
-
-#: ../libcryptui/crui-x509-cert-basics.c:65
-msgid "<i>Not Part of Certificate</i>"
-msgstr "<i>No es parte del certificado</i>"
-
-#: ../libcryptui/crui-x509-cert-basics.c:86
-msgid "<i>unknown</i>"
-msgstr "<i>desconocido</i>"
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:1
-msgid "<Not Part of Certificate>"
-msgstr "<No es parte del certificado>"
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:2
-msgid "<b>Fingerprints</b>"
-msgstr "<b>Huellas</b>"
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:3
-msgid "<b>Issued By</b>"
-msgstr "<b>Emitido por</b>"
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:4
-msgid "<b>Issued To</b>"
-msgstr "<b>Emitido para</b>"
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:5
-msgid "<b>This certificate has been verified for the following uses:</b>"
-msgstr "<b>Este certificado ha sido verificado para los siguientes usos:</b>"
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:6
-msgid "<b>Validity</b>"
-msgstr "<b>Validez</b>"
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:7
-msgid "Common Name (CN)"
-msgstr "Nombre común (CN)"
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:8
-msgid "Email Recipient Certificate"
-msgstr "Certificado del destinatario del correo-e"
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:9
-msgid "Email Signer Certificate"
-msgstr "Certificado del firmante del correo-e"
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:10
-msgid "Expires On"
-msgstr "Caduca el"
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:11
-msgid "Issued On"
-msgstr "Emitido el"
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:12
-msgid "MD5 Fingerprint"
-msgstr "Huella MD5"
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:13
-msgid "Organization (O)"
-msgstr "Organización (O)"
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:14
-msgid "Organizational Unit (OU)"
-msgstr "Unidad organizativa (OU)"
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:15
-msgid "SHA1 Fingerprint"
-msgstr "Huella SHA1"
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:16
-msgid "SSL Client Certificate"
-msgstr "Certificado de cliente SSL"
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:17
-msgid "SSL Server Certificate"
-msgstr "Certificado de servidor SSL"
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:18
-msgid "Serial Number"
-msgstr "Número de serie"
-
-#: ../libcryptui/crui-x509-cert-dialog.c:65
-#: ../pkcs11/seahorse-pkcs11-certificate.c:107
-msgid "Certificate"
-msgstr "Certificado"
 
 #: ../libcryptui/cryptui-key-chooser.c:173
 msgid "All Keys"
@@ -1269,15 +1205,20 @@ msgstr ""
 "solicitó. Ahora se iniciará el programa <b>Contraseñas y claves de cifrado</"
 "b> para que puede crear una clave o importarla."
 
-#: ../pkcs11/seahorse-pkcs11-commands.c:109
+#: ../pkcs11/seahorse-pkcs11-commands.c:108
 #, c-format
 msgid "Are you sure you want to delete the certificate '%s'?"
 msgstr "¿Está seguro de que desea eliminar el certificado «%s»?"
 
-#: ../pkcs11/seahorse-pkcs11-commands.c:111
+#: ../pkcs11/seahorse-pkcs11-commands.c:110
 #, c-format
 msgid "Are you sure you want to delete %d certificates?"
 msgstr "¿Está seguro de que desea eliminar %d certificados?"
+
+#: ../pkcs11/seahorse-pkcs11-certificate.c:107
+#: ../pkcs11/seahorse-pkcs11-certificate-props.c:67
+msgid "Certificate"
+msgstr "Certificado"
 
 #: ../pgp/seahorse-add-subkey.glade.h:1
 msgid "Expiration Date:"
@@ -1646,19 +1587,19 @@ msgstr "Subiendo claves…"
 msgid "Retrieving keys..."
 msgstr "Obteniendo claves…"
 
-#: ../pgp/seahorse-hkp-source.c:804
+#: ../pgp/seahorse-hkp-source.c:832
 #, c-format
 msgid "Searching for keys on: %s"
 msgstr "Buscando claves en: «%s»"
 
 #. The ldap_cb and chain_cb were set in seahorse_ldap_operation_start
-#: ../pgp/seahorse-hkp-source.c:881 ../pgp/seahorse-hkp-source.c:954
+#: ../pgp/seahorse-hkp-source.c:909 ../pgp/seahorse-hkp-source.c:982
 #: ../pgp/seahorse-ldap-source.c:668
 #, c-format
 msgid "Connecting to: %s"
 msgstr "Conectando con: %s"
 
-#: ../pgp/seahorse-hkp-source.c:979
+#: ../pgp/seahorse-hkp-source.c:1007
 msgid "HTTP Key Server"
 msgstr "Servidor de claves HTTP"
 
@@ -1715,7 +1656,8 @@ msgstr "¿Está seguro de que desea eliminar permanentemente %s?"
 #: ../pgp/seahorse-pgp-commands.c:176
 #, c-format
 msgid "Are you sure you want to permanently delete %d keys and identities?"
-msgstr "¿Está seguro de que desea eliminar permanentemente %d claves e identidades?"
+msgstr ""
+"¿Está seguro de que desea eliminar permanentemente %d claves e identidades?"
 
 #: ../pgp/seahorse-pgp-commands.c:178
 #, c-format
@@ -1799,7 +1741,8 @@ msgstr "No se puede cambiar el ID de usuario primario"
 #: ../pgp/seahorse-pgp-key-properties.c:241
 #, c-format
 msgid "Are you sure you want to permanently delete the '%s' user ID?"
-msgstr "¿Está seguro de que desea eliminar permanentemente el ID de usuario «%s»?"
+msgstr ""
+"¿Está seguro de que desea eliminar permanentemente el ID de usuario «%s»?"
 
 #: ../pgp/seahorse-pgp-key-properties.c:251
 msgid "Couldn't delete user ID"
@@ -1835,7 +1778,8 @@ msgstr "Esta clave caducó el: %s"
 #: ../pgp/seahorse-pgp-key-properties.c:997
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
-msgstr "¿Está seguro de que desea eliminar permanentemente la subclave %d de %s?"
+msgstr ""
+"¿Está seguro de que desea eliminar permanentemente la subclave %d de %s?"
 
 #: ../pgp/seahorse-pgp-key-properties.c:1006
 msgid "Couldn't delete subkey"
@@ -2123,11 +2067,13 @@ msgstr "Confío en las firmas de «%s» de otras claves"
 msgid ""
 "If you believe that the person that owns this key is '%s', <i>sign</i> this "
 "key:"
-msgstr "Si cree que el propietario de esta clave es «%s», <i>firme</i> esta clave:"
+msgstr ""
+"Si cree que el propietario de esta clave es «%s», <i>firme</i> esta clave:"
 
 #: ../pgp/seahorse-pgp-public-key-properties.glade.h:28
 #, no-c-format
-msgid "If you no longer trust that '%s' owns this key, <i>revoke</i> your signature:"
+msgid ""
+"If you no longer trust that '%s' owns this key, <i>revoke</i> your signature:"
 msgstr ""
 "Si no confía más en que «%s» sea el propietario de esta clave, <i>revoque</i> "
 "su firma:"
@@ -2158,7 +2104,8 @@ msgstr "Usted _confía en el propietario:"
 
 #: ../pgp/seahorse-pgp-public-key-properties.glade.h:43
 msgid "Your trust is manually specified on the <i>Details</i> tab."
-msgstr "Su confianza está especificada manualmente en la solapa <i>Detalles</i>."
+msgstr ""
+"Su confianza está especificada manualmente en la solapa <i>Detalles</i>."
 
 #: ../pgp/seahorse-pgp-public-key-properties.glade.h:44
 msgid "_Only display the signatures of people I trust"
@@ -2282,7 +2229,8 @@ msgid "_Very Carefully"
 msgstr "_Muy cuidadosamente"
 
 #: ../pgp/seahorse-signer.c:62
-msgid "You have no personal PGP keys that can be used to sign a document or message."
+msgid ""
+"You have no personal PGP keys that can be used to sign a document or message."
 msgstr ""
 "No tiene claves PGP personales que se puedan usar para firmar un documento o "
 "mensaje."
@@ -2480,7 +2428,7 @@ msgstr "Contribuciones:"
 #: ../src/seahorse-viewer.c:169
 msgid "translator-credits"
 msgstr ""
-"Jorge González <jorgegonz@svn.gnome.org>, 2007-2008\n"
+"Jorge González <jorgegonz@svn.gnome.org>, 2007-2009\n"
 "Francisco F. Serrador <serrador@cvs.gnome.org>, 2004, 2005, 2006\n"
 "Germán Poo-Caamaño <gpoo@ubiobio.cl>, 2003\n"
 "José Carlos García Sogo <jsogo@debian.org>, 2002, 2003"
@@ -2639,7 +2587,7 @@ msgstr "Usado para acceder a otros equipos (por ej con un terminal)"
 msgid "Couldn't generate Secure Shell key"
 msgstr "No se pudo generar la clave de shell segura"
 
-#: ../ssh/seahorse-ssh-generate.c:197
+#: ../ssh/seahorse-ssh-generate.c:205
 msgid "Creating Secure Shell Key"
 msgstr "Crear la clave de shell segura"
 
@@ -2752,7 +2700,8 @@ msgstr "E_xportar la clave completa"
 
 #: ../ssh/seahorse-ssh-key-properties.glade.h:22
 msgid "The owner of this key is _authorized to connect to this computer"
-msgstr "El propietario de esta clave está _autorizado para conectar a este equipo"
+msgstr ""
+"El propietario de esta clave está _autorizado para conectar a este equipo"
 
 #: ../ssh/seahorse-ssh-key-properties.glade.h:23
 msgid "Used to connect to other computers."
@@ -2865,3 +2814,63 @@ msgstr "_Usuario:"
 msgid "_Set Up"
 msgstr "_Configuración"
 
+#~ msgid "<i>Not Part of Certificate</i>"
+#~ msgstr "<i>No es parte del certificado</i>"
+
+#~ msgid "<i>unknown</i>"
+#~ msgstr "<i>desconocido</i>"
+
+#~ msgid "<Not Part of Certificate>"
+#~ msgstr "<No es parte del certificado>"
+
+#~ msgid "<b>Fingerprints</b>"
+#~ msgstr "<b>Huellas</b>"
+
+#~ msgid "<b>Issued By</b>"
+#~ msgstr "<b>Emitido por</b>"
+
+#~ msgid "<b>Issued To</b>"
+#~ msgstr "<b>Emitido para</b>"
+
+#~ msgid "<b>This certificate has been verified for the following uses:</b>"
+#~ msgstr ""
+#~ "<b>Este certificado ha sido verificado para los siguientes usos:</b>"
+
+#~ msgid "<b>Validity</b>"
+#~ msgstr "<b>Validez</b>"
+
+#~ msgid "Common Name (CN)"
+#~ msgstr "Nombre común (CN)"
+
+#~ msgid "Email Recipient Certificate"
+#~ msgstr "Certificado del destinatario del correo-e"
+
+#~ msgid "Email Signer Certificate"
+#~ msgstr "Certificado del firmante del correo-e"
+
+#~ msgid "Expires On"
+#~ msgstr "Caduca el"
+
+#~ msgid "Issued On"
+#~ msgstr "Emitido el"
+
+#~ msgid "MD5 Fingerprint"
+#~ msgstr "Huella MD5"
+
+#~ msgid "Organization (O)"
+#~ msgstr "Organización (O)"
+
+#~ msgid "Organizational Unit (OU)"
+#~ msgstr "Unidad organizativa (OU)"
+
+#~ msgid "SHA1 Fingerprint"
+#~ msgstr "Huella SHA1"
+
+#~ msgid "SSL Client Certificate"
+#~ msgstr "Certificado de cliente SSL"
+
+#~ msgid "SSL Server Certificate"
+#~ msgstr "Certificado de servidor SSL"
+
+#~ msgid "Serial Number"
+#~ msgstr "Número de serie"
