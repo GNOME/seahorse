@@ -541,7 +541,7 @@ static void
 seahorse_gkr_item_init (SeahorseGkrItem *self)
 {
 	self->pv = G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_TYPE_GKR_ITEM, SeahorseGkrItemPrivate);
-	g_object_set (self, "usage", SEAHORSE_USAGE_CREDENTIALS, "tag", SEAHORSE_GKR_TYPE, NULL);
+	g_object_set (self, "usage", SEAHORSE_USAGE_CREDENTIALS, "tag", SEAHORSE_GKR_TYPE, "location", SEAHORSE_LOCATION_LOCAL, NULL);
 }
 
 static GObject* 
