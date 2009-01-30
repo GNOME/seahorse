@@ -40,6 +40,7 @@
 #define SEAHORSE_STOCK_SHARING      "seahorse-share-keys"
 
 #define SEAHORSE_THEMED_WEBBROWSER  "web-browser"
+#define SEAHORSE_THEMED_FOLDER      "folder"
 
 void    seahorse_gtkstock_init          (void);
 
