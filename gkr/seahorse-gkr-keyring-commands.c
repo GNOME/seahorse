@@ -40,7 +40,14 @@ enum {
 
 G_DEFINE_TYPE (SeahorseGkrKeyringCommands, seahorse_gkr_keyring_commands, SEAHORSE_TYPE_COMMANDS);
 
-static SeahorseObjectPredicate commands_predicate = { 0, };
+static const char* UI_KEYRING = ""\
+"<ui>"\
+"	<popup name='KeyPopup'>"\
+"		<menuitem action='keyring-password'/>"\
+"	</popup>"\
+"</ui>";
+
+static SeahorseObjectPredicate keyring_predicate = { 0, };
 
 /* -----------------------------------------------------------------------------
  * INTERNAL 
@@ -53,9 +60,50 @@ on_gkr_add_keyring (GtkAction *action, gpointer unused)
 	seahorse_gkr_add_keyring_show (NULL);
 }
 
-static const GtkActionEntry ACTION_ENTRIES[] = {
-	{ "gkr-add-keyring", "folder", N_ ("Password Keyring"), "", 
+static const GtkActionEntry ENTRIES_NEW[] = {
+	{ "gkr-add-keyring", "folder", N_("Password Keyring"), "",
 	  N_("Used to store application and network passwords"), G_CALLBACK (on_gkr_add_keyring) }
+};
+
+static void
+on_change_password_done (GnomeKeyringResult result, gpointer user_data)
+{
+	SeahorseView *view;
+
+	if (result != GNOME_KEYRING_RESULT_OK &&
+	    result != GNOME_KEYRING_RESULT_DENIED &&
+	    result != GNOME_KEYRING_RESULT_CANCELLED) {
+		view = seahorse_commands_get_view (SEAHORSE_COMMANDS (user_data));
+		seahorse_util_show_error (GTK_WIDGET (seahorse_view_get_window (view)),
+		                          _("Couldn't change keyring password"),
+		                          gnome_keyring_result_to_message (result));
+	}
+}
+
+static void
+on_keyring_password (GtkAction *action, SeahorseGkrKeyringCommands *self)
+{
+	SeahorseView *view;
+	SeahorseGkrKeyring *keyring;
+	GList *keys, *l;
+
+	g_return_if_fail (SEAHORSE_IS_GKR_KEYRING_COMMANDS (self));
+	g_return_if_fail (GTK_IS_ACTION (action));
+
+	view = seahorse_commands_get_view (SEAHORSE_COMMANDS (self));
+	keys = seahorse_view_get_selected_matching (view, &keyring_predicate);
+
+	for (l = keys; l; l = g_list_next (l)) {
+		keyring = SEAHORSE_GKR_KEYRING (l->data);
+		g_return_if_fail (SEAHORSE_IS_GKR_KEYRING (l->data));
+		gnome_keyring_change_password (seahorse_gkr_keyring_get_name (l->data), NULL, NULL,
+		                               on_change_password_done, g_object_ref (self), g_object_unref);
+	}
+}
+
+static const GtkActionEntry ENTRIES_KEYRING[] = {
+	{ "keyring-password", NULL, N_ ("Change Password"), "",
+	  N_("Change the unlock password of the password storage keyring"), G_CALLBACK (on_keyring_password) }
 };
 
 /* -----------------------------------------------------------------------------
@@ -97,15 +145,22 @@ seahorse_gkr_keyring_commands_constructor (GType type, guint n_props, GObjectCon
 {
 	GObject *obj = G_OBJECT_CLASS (seahorse_gkr_keyring_commands_parent_class)->constructor (type, n_props, props);
 	SeahorseCommands *base = NULL;
+	GtkActionGroup *actions;
 	SeahorseView *view;
 	
 	if (obj) {
 		base = SEAHORSE_COMMANDS (obj);
 		view = seahorse_commands_get_view (base);
 		g_return_val_if_fail (view, NULL);
-		seahorse_view_register_commands (view, &commands_predicate, base);
+		seahorse_view_register_commands (view, &keyring_predicate, base);
+
+		actions = gtk_action_group_new ("pgp");
+		gtk_action_group_set_translation_domain (actions, GETTEXT_PACKAGE);
+		gtk_action_group_add_actions (actions, ENTRIES_KEYRING, G_N_ELEMENTS (ENTRIES_KEYRING), obj);
+		seahorse_view_register_ui (view, &keyring_predicate, UI_KEYRING, actions);
+		g_object_unref (actions);
 	}
-	
+
 	return obj;
 }
 
@@ -130,7 +185,7 @@ seahorse_gkr_keyring_commands_class_init (SeahorseGkrKeyringCommandsClass *klass
 	cmd_class->delete_objects = seahorse_gkr_keyring_commands_delete_objects;
 
 	/* Setup the predicate for these commands */
-	commands_predicate.type = SEAHORSE_TYPE_GKR_KEYRING;
+	keyring_predicate.type = SEAHORSE_TYPE_GKR_KEYRING;
 	
 	/* Register this class as a commands */
 	seahorse_registry_register_type (seahorse_registry_get (), SEAHORSE_TYPE_GKR_KEYRING_COMMANDS, 
@@ -139,7 +194,7 @@ seahorse_gkr_keyring_commands_class_init (SeahorseGkrKeyringCommandsClass *klass
 	/* Register this as a generator */
 	actions = gtk_action_group_new ("gkr-generate");
 	gtk_action_group_set_translation_domain (actions, GETTEXT_PACKAGE);
-	gtk_action_group_add_actions (actions, ACTION_ENTRIES, G_N_ELEMENTS (ACTION_ENTRIES), NULL);
+	gtk_action_group_add_actions (actions, ENTRIES_NEW, G_N_ELEMENTS (ENTRIES_NEW), NULL);
 	seahorse_registry_register_object (NULL, G_OBJECT (actions), SEAHORSE_GKR_TYPE_STR, "generator", NULL);
 }
 
