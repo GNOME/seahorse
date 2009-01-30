@@ -36,54 +36,6 @@
 #define NOTEBOOK "notebook"
 
 static void
-do_main (SeahorseWidget *swidget)
-{
-    SeahorseObject *object;
-    SeahorseSSHKey *skey;
-    GtkWidget *widget;
-    gchar *text;
-    const gchar *label;
-    const gchar *template;
-
-    object = SEAHORSE_OBJECT_WIDGET (swidget)->object;
-    skey = SEAHORSE_SSH_KEY (object);
-
-    /* Image */
-    widget = seahorse_widget_get_widget (swidget, "key-image");
-    if (widget)
-        gtk_image_set_from_stock (GTK_IMAGE (widget), SEAHORSE_STOCK_KEY_SSH, GTK_ICON_SIZE_DIALOG);
-
-    /* Name and title */
-    label = seahorse_object_get_label (object);
-    widget = seahorse_widget_get_widget (swidget, "comment-entry");
-    if (widget)
-        gtk_entry_set_text (GTK_ENTRY (widget), label);
-    widget = seahorse_widget_get_toplevel (swidget);
-    gtk_window_set_title (GTK_WINDOW (widget), label);
-
-    /* Key id */
-    widget = glade_xml_get_widget (swidget->xml, "id-label");
-    if (widget) {
-        label = seahorse_object_get_identifier (object);
-        gtk_label_set_text (GTK_LABEL (widget), label);
-    }
-    
-    /* Put in message */
-    widget = seahorse_widget_get_widget (swidget, "trust-message");
-    g_return_if_fail (widget != NULL);
-    template = gtk_label_get_label (GTK_LABEL (widget));
-    text = g_strdup_printf (template, g_get_user_name ());
-    gtk_label_set_markup (GTK_LABEL (widget), text);
-    g_free (text);
-    
-    /* Setup the check */
-    widget = seahorse_widget_get_widget (swidget, "trust-check");
-    g_return_if_fail (widget != NULL);
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), 
-                                  seahorse_ssh_key_get_trust (skey) >= SEAHORSE_VALIDITY_FULL);
-}
-
-static void
 comment_activate (GtkWidget *entry, SeahorseWidget *swidget)
 {
     SeahorseObject *object;
@@ -263,6 +215,57 @@ export_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 	}
 	
 	g_free (uri);
+}
+
+static void
+do_main (SeahorseWidget *swidget)
+{
+    SeahorseObject *object;
+    SeahorseSSHKey *skey;
+    GtkWidget *widget;
+    gchar *text;
+    const gchar *label;
+    const gchar *template;
+
+    object = SEAHORSE_OBJECT_WIDGET (swidget)->object;
+    skey = SEAHORSE_SSH_KEY (object);
+
+    /* Image */
+    widget = seahorse_widget_get_widget (swidget, "key-image");
+    if (widget)
+        gtk_image_set_from_stock (GTK_IMAGE (widget), SEAHORSE_STOCK_KEY_SSH, GTK_ICON_SIZE_DIALOG);
+
+    /* Name and title */
+    label = seahorse_object_get_label (object);
+    widget = seahorse_widget_get_widget (swidget, "comment-entry");
+    if (widget)
+        gtk_entry_set_text (GTK_ENTRY (widget), label);
+    widget = seahorse_widget_get_toplevel (swidget);
+    gtk_window_set_title (GTK_WINDOW (widget), label);
+
+    /* Key id */
+    widget = glade_xml_get_widget (swidget->xml, "id-label");
+    if (widget) {
+        label = seahorse_object_get_identifier (object);
+        gtk_label_set_text (GTK_LABEL (widget), label);
+    }
+    
+    /* Put in message */
+    widget = seahorse_widget_get_widget (swidget, "trust-message");
+    g_return_if_fail (widget != NULL);
+    template = gtk_label_get_label (GTK_LABEL (widget));
+    text = g_strdup_printf (template, g_get_user_name ());
+    gtk_label_set_markup (GTK_LABEL (widget), text);
+    g_free (text);
+    
+    /* Setup the check */
+    widget = seahorse_widget_get_widget (swidget, "trust-check");
+    g_return_if_fail (widget != NULL);
+    
+    g_signal_handlers_block_by_func (widget, trust_toggled, swidget);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), 
+                                  seahorse_ssh_key_get_trust (skey) >= SEAHORSE_VALIDITY_FULL);
+    g_signal_handlers_unblock_by_func (widget, trust_toggled, swidget);
 }
 
 static void 
