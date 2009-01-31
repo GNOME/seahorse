@@ -553,6 +553,16 @@ AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE", [Name of the gettext dom
 AM_GLIB_GNU_GETTEXT
 
 dnl ****************************************************************************
+## here we get the flags we'll actually use
+PKG_CHECK_MODULES(EGG, gtk+-2.0 >= 2.5.0)
+AC_SUBST(EGG_LIBS)
+AC_SUBST(EGG_CFLAGS)
+
+PKG_CHECK_MODULES(EGG_SMCLIENT, gtk+-2.0)
+AC_SUBST(EGG_SMCLIENT_LIBS)
+AC_SUBST(EGG_SMCLIENT_CFLAGS)
+
+dnl ****************************************************************************
 
 AC_OUTPUT([
 Makefile
