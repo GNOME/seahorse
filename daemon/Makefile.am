@@ -6,13 +6,15 @@ pixmapsdir = $(datadir)/pixmaps/
 INCLUDES = -I$(top_builddir) \
 	-I$(top_srcdir) \
 	-I$(top_srcdir)/libcryptui \
+	-I$(top_srcdir)/libegg \
 	-I$(top_srcdir)/libseahorse \
 	$(SEAHORSE_CFLAGS) \
 	-DDATA_DIR=\""$(datadir)"\" \
 	-DSEAHORSE_GLADEDIR=\""$(gladedir)"\" \
 	-DLOCALEDIR=\""$(localedir)"\" \
 	-DPIXMAPSDIR=\""$(pixmapsdir)"\" \
-	-DLIBCRYPTUI_API_SUBJECT_TO_CHANGE
+	-DLIBCRYPTUI_API_SUBJECT_TO_CHANGE \
+	-DAUTOSTARTDIR=\""$(sysconfdir)/xdg/autostart"\"
 
 bin_PROGRAMS = seahorse-daemon
 
@@ -56,6 +58,7 @@ seahorse_daemon_LDADD = \
 	$(top_builddir)/common/libseahorse-common.la \
 	$(top_builddir)/libcryptui/libcryptui.la \
 	$(top_builddir)/libegg/libeggdatetime.la \
+	$(top_builddir)/libegg/libeggsmclient.la \
 	$(SEAHORSE_LIBS)
 
 man_MANS = seahorse-daemon.1

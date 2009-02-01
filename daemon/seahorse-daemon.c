@@ -39,6 +39,9 @@
 #include "ssh/seahorse-ssh-module.h"
 #endif
 
+#include "libegg/eggsmclient.h"
+#include "libegg/eggdesktopfile.h"
+
 #include <glib/gi18n.h>
 
 #include <sys/types.h>
@@ -124,6 +127,14 @@ unix_signal (int signal)
 }
 
 static void
+smclient_quit (EggSMClient *smclient, gpointer data)
+{
+    daemon_quit = TRUE;
+    if (daemon_running)
+        gtk_main_quit ();    
+}
+
+static void
 log_handler (const gchar *log_domain, GLogLevelFlags log_level, 
              const gchar *message, gpointer user_data)
 {
@@ -191,6 +202,7 @@ int main(int argc, char* argv[])
     
     octx = g_option_context_new ("");
     g_option_context_add_main_entries (octx, options, GETTEXT_PACKAGE);
+    g_option_context_add_group (octx, egg_sm_client_get_option_group ());
 
     if (!gtk_init_with_args (&argc, &argv, _("Encryption Daemon (Seahorse)"), 
                              (GOptionEntry *)options, GETTEXT_PACKAGE, &error)) {
@@ -198,11 +210,13 @@ int main(int argc, char* argv[])
 	    g_error_free (error);
 	    exit (1);
     }
-	    
-
-    /* 
-     * All functions after this point have to print messages 
-     * nicely and not just called exit() 
+     	 
+	g_signal_connect (egg_sm_client_get (), "quit", G_CALLBACK (smclient_quit), NULL);
+    egg_set_desktop_file(AUTOSTARTDIR "/seahorse-daemon.desktop");
+    
+    /*
+     * All functions after this point have to print messages
+     * nicely and not just called exit()
      */
     daemonize ();
 
@@ -212,15 +226,15 @@ int main(int argc, char* argv[])
 
     /* Force gconf to reconnect after daemonizing */
     if (!daemon_no_daemonize)
-        seahorse_gconf_disconnect ();    
-        
+        seahorse_gconf_disconnect ();
+
     /* We log to the syslog */
     prepare_logging ();
 
     /* Insert Icons into Stock */
     seahorse_gtkstock_init ();
-    seahorse_gtkstock_add_icons (daemon_icons);
-    
+    seahorse_gtkstock_add_icons (daemon_icons); 
+   
     /* Make the default SeahorseContext */
     seahorse_context_new (SEAHORSE_CONTEXT_APP | SEAHORSE_CONTEXT_DAEMON);
 
@@ -255,6 +269,7 @@ int main(int argc, char* argv[])
     
     seahorse_dbus_server_cleanup ();
 
+    g_option_context_free (octx);
     seahorse_context_destroy (SCTX_APP ());
     seahorse_cleanup_perform ();
 
