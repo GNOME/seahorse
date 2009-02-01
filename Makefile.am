@@ -33,7 +33,8 @@ SUBDIRS = libegg \
 	data \
 	help \
 	pixmaps \
-	daemon 
+	daemon \
+	reference
 
 EXTRA_DIST = \
     AUTHORS \
@@ -64,7 +65,8 @@ DISTCLEANFILES = \
     
 DISTCHECK_CONFIGURE_FLAGS = \
     --disable-scrollkeeper \
-    --disable-update-mime-database
-
+    --disable-update-mime-database \
+    --enable-gtk-doc
+    
 distuninstallcheck:
 	@:

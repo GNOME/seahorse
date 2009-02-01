@@ -32,6 +32,7 @@ AC_PROG_INTLTOOL([0.35.0])
 AM_PROG_LIBTOOL
 AM_GCONF_SOURCE_2
 GNOME_DOC_INIT
+GTK_DOC_CHECK([1.9])
 
 dnl Get the off_t size right
 AC_SYS_LARGEFILE
@@ -538,6 +539,19 @@ libtasn=yes
 LIBCRYPTUI_CFLAGS="$LIBCRYPTUI_CFLAGS $DBUS_CFLAGS $LIBTASN1_CFLAGS"
 LIBCRYPTUI_LIBS="$LIBCRYPTUI_LIBS $DBUS_LIBS $LIBTASN1_LIBS" 
 
+cryptuitargetlib=libcryptui.la
+AC_SUBST(cryptuitargetlib)
+
+GLIB_PREFIX="`$PKG_CONFIG --variable=prefix glib-2.0`"
+ATK_PREFIX="`$PKG_CONFIG --variable=prefix atk`"
+PANGO_PREFIX="`$PKG_CONFIG --variable=prefix pango`"
+CAIRO_PREFIX="`pkg-config --variable=prefix cairo`" 
+
+AC_SUBST(GLIB_PREFIX)
+AC_SUBST(ATK_PREFIX)
+AC_SUBST(PANGO_PREFIX)
+AC_SUBST(CAIRO_PREFIX) 
+
 AC_SUBST(LIBCRYPTUI_CFLAGS)
 AC_SUBST(LIBCRYPTUI_LIBS)
 
@@ -599,6 +613,9 @@ src/seahorse.desktop.in
 daemon/seahorse-daemon.desktop.in
 ssh/Makefile
 daemon/Makefile
+reference/Makefile
+reference/libcryptui/Makefile
+reference/libcryptui/version.xml
 ])
 
 dnl ****************************************************************************

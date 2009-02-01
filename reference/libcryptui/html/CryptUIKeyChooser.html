@@ -1,0 +1,457 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>CryptUIKeyChooser</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
+<link rel="start" href="index.html" title="libcryptui Reference Manual">
+<link rel="up" href="ch01.html" title="libcryptui Objects and Functions">
+<link rel="prev" href="libcryptui-cryptui-key-list.html" title="cryptui-key-list">
+<link rel="next" href="CryptUIKeyStore.html" title="CryptUIKeyStore">
+<meta name="generator" content="GTK-Doc V1.10 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+<link rel="chapter" href="ch01.html" title="libcryptui Objects and Functions">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="libcryptui-cryptui-key-list.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="ch01.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">libcryptui Reference Manual</th>
+<td><a accesskey="n" href="CryptUIKeyStore.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts"><nobr><a href="#CryptUIKeyChooser.synopsis" class="shortcut">Top</a>
+                   | 
+                  <a href="#CryptUIKeyChooser.description" class="shortcut">Description</a>
+                   | 
+                  <a href="#CryptUIKeyChooser.object-hierarchy" class="shortcut">Object Hierarchy</a>
+                   | 
+                  <a href="#CryptUIKeyChooser.implemented-interfaces" class="shortcut">Implemented Interfaces</a>
+                   | 
+                  <a href="#CryptUIKeyChooser.properties" class="shortcut">Properties</a>
+                   | 
+                  <a href="#CryptUIKeyChooser.signals" class="shortcut">Signals</a></nobr></td></tr>
+</table>
+<div class="refentry" lang="en">
+<a name="CryptUIKeyChooser"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2><span class="refentrytitle"><a name="CryptUIKeyChooser.top_of_page"></a>CryptUIKeyChooser</span></h2>
+<p>CryptUIKeyChooser</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<a name="CryptUIKeyChooser.synopsis"></a><h2>Synopsis</h2>
+<pre class="synopsis">
+enum                <a class="link" href="CryptUIKeyChooser.html#CryptUIKeyChooserMode" title="enum CryptUIKeyChooserMode">CryptUIKeyChooserMode</a>;
+                    <a class="link" href="CryptUIKeyChooser.html#CryptUIKeyChooserPriv" title="CryptUIKeyChooserPriv">CryptUIKeyChooserPriv</a>;
+                    <a class="link" href="CryptUIKeyChooser.html#CryptUIKeyChooser-struct" title="CryptUIKeyChooser">CryptUIKeyChooser</a>;
+<a class="link" href="CryptUIKeyChooser.html" title="CryptUIKeyChooser">CryptUIKeyChooser</a>*  <a class="link" href="CryptUIKeyChooser.html#cryptui-key-chooser-new" title="cryptui_key_chooser_new ()">cryptui_key_chooser_new</a>             (<a class="link" href="CryptUIKeyset.html" title="CryptUIKeyset">CryptUIKeyset</a> *ckset,
+                                                         <a class="link" href="CryptUIKeyChooser.html#CryptUIKeyChooserMode" title="enum CryptUIKeyChooserMode">CryptUIKeyChooserMode</a> mode);
+<a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a>            <a class="link" href="CryptUIKeyChooser.html#cryptui-key-chooser-get-enforce-prefs" title="cryptui_key_chooser_get_enforce_prefs ()">cryptui_key_chooser_get_enforce_prefs</a>
+                                                        (<a class="link" href="CryptUIKeyChooser.html" title="CryptUIKeyChooser">CryptUIKeyChooser</a> *chooser);
+void                <a class="link" href="CryptUIKeyChooser.html#cryptui-key-chooser-set-enforce-prefs" title="cryptui_key_chooser_set_enforce_prefs ()">cryptui_key_chooser_set_enforce_prefs</a>
+                                                        (<a class="link" href="CryptUIKeyChooser.html" title="CryptUIKeyChooser">CryptUIKeyChooser</a> *chooser,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a> enforce_prefs);
+<a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a>            <a class="link" href="CryptUIKeyChooser.html#cryptui-key-chooser-have-recipients" title="cryptui_key_chooser_have_recipients ()">cryptui_key_chooser_have_recipients</a> (<a class="link" href="CryptUIKeyChooser.html" title="CryptUIKeyChooser">CryptUIKeyChooser</a> *chooser);
+<a
+href="../glib/glib-Doubly-Linked-Lists.html#GList"
+>GList</a>*              <a class="link" href="CryptUIKeyChooser.html#cryptui-key-chooser-get-recipients" title="cryptui_key_chooser_get_recipients ()">cryptui_key_chooser_get_recipients</a>  (<a class="link" href="CryptUIKeyChooser.html" title="CryptUIKeyChooser">CryptUIKeyChooser</a> *chooser);
+void                <a class="link" href="CryptUIKeyChooser.html#cryptui-key-chooser-set-recipients" title="cryptui_key_chooser_set_recipients ()">cryptui_key_chooser_set_recipients</a>  (<a class="link" href="CryptUIKeyChooser.html" title="CryptUIKeyChooser">CryptUIKeyChooser</a> *chooser,
+                                                         <a
+href="../glib/glib-Doubly-Linked-Lists.html#GList"
+>GList</a> *keys);
+const <a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a>*        <a class="link" href="CryptUIKeyChooser.html#cryptui-key-chooser-get-signer" title="cryptui_key_chooser_get_signer ()">cryptui_key_chooser_get_signer</a>      (<a class="link" href="CryptUIKeyChooser.html" title="CryptUIKeyChooser">CryptUIKeyChooser</a> *chooser);
+void                <a class="link" href="CryptUIKeyChooser.html#cryptui-key-chooser-set-signer" title="cryptui_key_chooser_set_signer ()">cryptui_key_chooser_set_signer</a>      (<a class="link" href="CryptUIKeyChooser.html" title="CryptUIKeyChooser">CryptUIKeyChooser</a> *chooser,
+                                                         const <a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a> *key);
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="CryptUIKeyChooser.object-hierarchy"></a><h2>Object Hierarchy</h2>
+<pre class="synopsis">
+  <a
+href="../gobject/gobject-The-Base-Object-Type.html#GObject"
+>GObject</a>
+   +----<a
+href="../gobject/gobject-The-Base-Object-Type.html#GInitiallyUnowned"
+>GInitiallyUnowned</a>
+         +----<a
+href="../gtk/GtkObject.html"
+>GtkObject</a>
+               +----<a
+href="../gtk/GtkWidget.html"
+>GtkWidget</a>
+                     +----<a
+href="../gtk/GtkContainer.html"
+>GtkContainer</a>
+                           +----<a
+href="../gtk/GtkBox.html"
+>GtkBox</a>
+                                 +----<a
+href="../gtk/GtkVBox.html"
+>GtkVBox</a>
+                                       +----CryptUIKeyChooser
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="CryptUIKeyChooser.implemented-interfaces"></a><h2>Implemented Interfaces</h2>
+<p>
+CryptUIKeyChooser implements
+ AtkImplementorIface and  <a
+href="../gtk/gtk-gtkbuildable.html#GtkBuildable"
+>GtkBuildable</a>.</p>
+</div>
+<div class="refsect1" lang="en">
+<a name="CryptUIKeyChooser.properties"></a><h2>Properties</h2>
+<pre class="synopsis">
+  "<a class="link" href="CryptUIKeyChooser.html#CryptUIKeyChooser--enforce-prefs" title='The "enforce-prefs" property'>enforce-prefs</a>"            <a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a>              : Read / Write
+  "<a class="link" href="CryptUIKeyChooser.html#CryptUIKeyChooser--keyset" title='The "keyset" property'>keyset</a>"                   <a class="link" href="CryptUIKeyset.html" title="CryptUIKeyset">CryptUIKeyset</a>*        : Read / Write / Construct Only
+  "<a class="link" href="CryptUIKeyChooser.html#CryptUIKeyChooser--mode" title='The "mode" property'>mode</a>"                     <a
+href="../glib/glib-Basic-Types.html#guint"
+>guint</a>                 : Read / Write / Construct Only
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="CryptUIKeyChooser.signals"></a><h2>Signals</h2>
+<pre class="synopsis">
+  "<a class="link" href="CryptUIKeyChooser.html#CryptUIKeyChooser-changed" title='The "changed" signal'>changed</a>"                                        : Run First
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="CryptUIKeyChooser.description"></a><h2>Description</h2>
+<p>
+
+</p>
+</div>
+<div class="refsect1" lang="en">
+<a name="CryptUIKeyChooser.details"></a><h2>Details</h2>
+<div class="refsect2" lang="en">
+<a name="CryptUIKeyChooserMode"></a><h3>enum CryptUIKeyChooserMode</h3>
+<pre class="programlisting">typedef enum _CryptUIKeyChooserMode {
+    CRYPTUI_KEY_CHOOSER_RECIPIENTS =    0x0001,
+    CRYPTUI_KEY_CHOOSER_SIGNER =        0x0002,
+    
+    CRYPTUI_KEY_CHOOSER_MUSTSIGN =      0x0010
+} CryptUIKeyChooserMode;
+</pre>
+<p>
+
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="CryptUIKeyChooserPriv"></a><h3>CryptUIKeyChooserPriv</h3>
+<pre class="programlisting">typedef struct _CryptUIKeyChooserPriv CryptUIKeyChooserPriv;</pre>
+<p>
+
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="CryptUIKeyChooser-struct"></a><h3>CryptUIKeyChooser</h3>
+<pre class="programlisting">typedef struct _CryptUIKeyChooser CryptUIKeyChooser;</pre>
+<p>
+
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="cryptui-key-chooser-new"></a><h3>cryptui_key_chooser_new ()</h3>
+<pre class="programlisting"><a class="link" href="CryptUIKeyChooser.html" title="CryptUIKeyChooser">CryptUIKeyChooser</a>*  cryptui_key_chooser_new             (<a class="link" href="CryptUIKeyset.html" title="CryptUIKeyset">CryptUIKeyset</a> *ckset,
+                                                         <a class="link" href="CryptUIKeyChooser.html#CryptUIKeyChooserMode" title="enum CryptUIKeyChooserMode">CryptUIKeyChooserMode</a> mode);</pre>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>ckset</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>mode</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="cryptui-key-chooser-get-enforce-prefs"></a><h3>cryptui_key_chooser_get_enforce_prefs ()</h3>
+<pre class="programlisting"><a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a>            cryptui_key_chooser_get_enforce_prefs
+                                                        (<a class="link" href="CryptUIKeyChooser.html" title="CryptUIKeyChooser">CryptUIKeyChooser</a> *chooser);</pre>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>chooser</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="cryptui-key-chooser-set-enforce-prefs"></a><h3>cryptui_key_chooser_set_enforce_prefs ()</h3>
+<pre class="programlisting">void                cryptui_key_chooser_set_enforce_prefs
+                                                        (<a class="link" href="CryptUIKeyChooser.html" title="CryptUIKeyChooser">CryptUIKeyChooser</a> *chooser,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a> enforce_prefs);</pre>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>chooser</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>enforce_prefs</code></em> :</span></p></td>
+<td>
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="cryptui-key-chooser-have-recipients"></a><h3>cryptui_key_chooser_have_recipients ()</h3>
+<pre class="programlisting"><a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a>            cryptui_key_chooser_have_recipients (<a class="link" href="CryptUIKeyChooser.html" title="CryptUIKeyChooser">CryptUIKeyChooser</a> *chooser);</pre>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>chooser</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="cryptui-key-chooser-get-recipients"></a><h3>cryptui_key_chooser_get_recipients ()</h3>
+<pre class="programlisting"><a
+href="../glib/glib-Doubly-Linked-Lists.html#GList"
+>GList</a>*              cryptui_key_chooser_get_recipients  (<a class="link" href="CryptUIKeyChooser.html" title="CryptUIKeyChooser">CryptUIKeyChooser</a> *chooser);</pre>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>chooser</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="cryptui-key-chooser-set-recipients"></a><h3>cryptui_key_chooser_set_recipients ()</h3>
+<pre class="programlisting">void                cryptui_key_chooser_set_recipients  (<a class="link" href="CryptUIKeyChooser.html" title="CryptUIKeyChooser">CryptUIKeyChooser</a> *chooser,
+                                                         <a
+href="../glib/glib-Doubly-Linked-Lists.html#GList"
+>GList</a> *keys);</pre>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>chooser</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>keys</code></em> :</span></p></td>
+<td>
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="cryptui-key-chooser-get-signer"></a><h3>cryptui_key_chooser_get_signer ()</h3>
+<pre class="programlisting">const <a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a>*        cryptui_key_chooser_get_signer      (<a class="link" href="CryptUIKeyChooser.html" title="CryptUIKeyChooser">CryptUIKeyChooser</a> *chooser);</pre>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>chooser</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="cryptui-key-chooser-set-signer"></a><h3>cryptui_key_chooser_set_signer ()</h3>
+<pre class="programlisting">void                cryptui_key_chooser_set_signer      (<a class="link" href="CryptUIKeyChooser.html" title="CryptUIKeyChooser">CryptUIKeyChooser</a> *chooser,
+                                                         const <a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a> *key);</pre>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>chooser</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>key</code></em> :</span></p></td>
+<td>
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<div class="refsect1" lang="en">
+<a name="CryptUIKeyChooser.property-details"></a><h2>Property Details</h2>
+<div class="refsect2" lang="en">
+<a name="CryptUIKeyChooser--enforce-prefs"></a><h3>The <code class="literal">"enforce-prefs"</code> property</h3>
+<pre class="programlisting">  "enforce-prefs"            <a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a>              : Read / Write</pre>
+<p>Enforce user preferences.</p>
+<p>Default value: TRUE</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="CryptUIKeyChooser--keyset"></a><h3>The <code class="literal">"keyset"</code> property</h3>
+<pre class="programlisting">  "keyset"                   <a class="link" href="CryptUIKeyset.html" title="CryptUIKeyset">CryptUIKeyset</a>*        : Read / Write / Construct Only</pre>
+<p>Current CryptUI Key Source to use.</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="CryptUIKeyChooser--mode"></a><h3>The <code class="literal">"mode"</code> property</h3>
+<pre class="programlisting">  "mode"                     <a
+href="../glib/glib-Basic-Types.html#guint"
+>guint</a>                 : Read / Write / Construct Only</pre>
+<p>Display mode for chooser.</p>
+<p>Allowed values: &lt;= 268435455</p>
+<p>Default value: 0</p>
+</div>
+</div>
+<div class="refsect1" lang="en">
+<a name="CryptUIKeyChooser.signal-details"></a><h2>Signal Details</h2>
+<div class="refsect2" lang="en">
+<a name="CryptUIKeyChooser-changed"></a><h3>The <code class="literal">"changed"</code> signal</h3>
+<pre class="programlisting">void                user_function                      (<a class="link" href="CryptUIKeyChooser.html" title="CryptUIKeyChooser">CryptUIKeyChooser</a> *cryptuikeychooser,
+                                                        <a
+href="../glib/glib-Basic-Types.html#gpointer"
+>gpointer</a>           user_data)              : Run First</pre>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>cryptuikeychooser</code></em> :</span></p></td>
+<td>the object which received the signal.
+
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>user_data</code></em> :</span></p></td>
+<td>user data set when the signal handler was connected.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+</div>
+<div class="footer">
+<hr>
+          Generated by GTK-Doc V1.10</div>
+</body>
+</html>

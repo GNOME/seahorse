@@ -203,6 +203,15 @@ cryptui_prompt_signer (CryptUIKeyset *keyset, const gchar *title)
     return signer;
 }
 
+/**
+ * cryptui_need_to_get_keys:
+ * @void
+ *
+ * This function is called when seahorse needs to be launched to generate a
+ * key or keys or import a key or keys to perform the requested operation.
+ *
+ * Returns: void
+ */
 void                
 cryptui_need_to_get_keys ()
 {

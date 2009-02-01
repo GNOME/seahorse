@@ -1,0 +1,652 @@
+<STRUCT>
+<NAME>CryptUIKeyset</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>CryptUIKeysetClass</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>CryptUIKeysetPrivate</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>CryptUIKeyset</NAME>
+struct _CryptUIKeyset {
+    GtkObject parent;
+
+    /*<private>*/
+    CryptUIKeysetPrivate *priv;
+};
+
+</STRUCT>
+<STRUCT>
+<NAME>CryptUIKeysetClass</NAME>
+struct _CryptUIKeysetClass {
+    GtkObjectClass      parent_class;
+    
+    /* signals --------------------------------------------------------- */
+    
+    /* A key was added to this view */
+    void (*added)   (CryptUIKeyset *keyset, const gchar *key);
+
+    /* Removed a key from this view */
+    void (*removed) (CryptUIKeyset *keyset, const gchar *key, gpointer closure);
+    
+    /* One of the key's attributes has changed */
+    void (*changed) (CryptUIKeyset *keyset, const gchar *key, gpointer closure);    
+};
+
+</STRUCT>
+<MACRO>
+<NAME>CRYPTUI_TYPE_KEYSET</NAME>
+#define CRYPTUI_TYPE_KEYSET               (cryptui_keyset_get_type ())
+</MACRO>
+<MACRO>
+<NAME>CRYPTUI_KEYSET</NAME>
+#define CRYPTUI_KEYSET(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), CRYPTUI_TYPE_KEYSET, CryptUIKeyset))
+</MACRO>
+<MACRO>
+<NAME>CRYPTUI_KEYSET_CLASS</NAME>
+#define CRYPTUI_KEYSET_CLASS(klass)       (G_TYPE_CHECK_CLASS_CAST ((klass), CRYPTUI_TYPE_KEYSET, CryptUIKeysetClass))
+</MACRO>
+<MACRO>
+<NAME>CRYPTUI_IS_KEYSET</NAME>
+#define CRYPTUI_IS_KEYSET(obj)            (G_TYPE_CHECK_INSTANCE_TYPE ((obj), CRYPTUI_TYPE_KEYSET))
+</MACRO>
+<MACRO>
+<NAME>CRYPTUI_IS_KEYSET_CLASS</NAME>
+#define CRYPTUI_IS_KEYSET_CLASS(klass)    (G_TYPE_CHECK_CLASS_TYPE ((klass), CRYPTUI_TYPE_KEYSET))
+</MACRO>
+<MACRO>
+<NAME>CRYPTUI_KEYSET_GET_CLASS</NAME>
+#define CRYPTUI_KEYSET_GET_CLASS(obj)     (G_TYPE_INSTANCE_GET_CLASS ((obj), CRYPTUI_TYPE_KEYSET, CryptUIKeysetClass))
+</MACRO>
+<FUNCTION>
+<NAME>cryptui_keyset_get_type</NAME>
+<RETURNS>GType               </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_keyset_new</NAME>
+<RETURNS>CryptUIKeyset*</RETURNS>
+const gchar *keytype,gboolean expand_keys
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_keyset_has_key</NAME>
+<RETURNS>gboolean            </RETURNS>
+CryptUIKeyset *keyset,const gchar *key
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_keyset_get_keytype</NAME>
+<RETURNS>const gchar*</RETURNS>
+CryptUIKeyset *keyset
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_keyset_get_keys</NAME>
+<RETURNS>GList*</RETURNS>
+CryptUIKeyset *keyset
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_keyset_get_count</NAME>
+<RETURNS>guint               </RETURNS>
+CryptUIKeyset *keyset
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_keyset_refresh</NAME>
+<RETURNS>void                </RETURNS>
+CryptUIKeyset *keyset
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_keyset_get_closure</NAME>
+<RETURNS>gpointer            </RETURNS>
+CryptUIKeyset *keyset,const gchar *key
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_keyset_set_closure</NAME>
+<RETURNS>void                </RETURNS>
+CryptUIKeyset *keyset,const gchar *key,gpointer closure
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_keyset_get_expand_keys</NAME>
+<RETURNS>gboolean            </RETURNS>
+CryptUIKeyset *keyset
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_keyset_set_expand_keys</NAME>
+<RETURNS>void                </RETURNS>
+CryptUIKeyset *keyset,gboolean expand_keys
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_keyset_cache_key</NAME>
+<RETURNS>void                </RETURNS>
+CryptUIKeyset *keyset,const gchar *key
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_keyset_key_get_string</NAME>
+<RETURNS>gchar*</RETURNS>
+CryptUIKeyset *keyset,const gchar *key,const gchar *prop
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_keyset_key_get_uint</NAME>
+<RETURNS>guint               </RETURNS>
+CryptUIKeyset *keyset,const gchar *key,const gchar *prop
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_keyset_key_flags</NAME>
+<RETURNS>guint               </RETURNS>
+CryptUIKeyset *keyset,const gchar *key
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_keyset_key_display_name</NAME>
+<RETURNS>gchar*</RETURNS>
+CryptUIKeyset *keyset,const gchar *key
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_keyset_key_display_id</NAME>
+<RETURNS>gchar*</RETURNS>
+CryptUIKeyset *keyset,const gchar *key
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_keyset_key_raw_keyid</NAME>
+<RETURNS>gchar*</RETURNS>
+CryptUIKeyset *keyset,const gchar *key
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_keyset_keys_raw_keyids</NAME>
+<RETURNS>gchar**</RETURNS>
+CryptUIKeyset *keyset,const gchar **keys
+</FUNCTION>
+<ENUM>
+<NAME>CryptUIEncType</NAME>
+typedef enum {
+    CRYPTUI_ENCTYPE_NONE =       0,
+    CRYPTUI_ENCTYPE_SYMMETRIC =  1,
+    CRYPTUI_ENCTYPE_PUBLIC =     2,
+    CRYPTUI_ENCTYPE_PRIVATE =    3,
+    
+    /* Used internally */
+    _CRYPTUI_ENCTYPE_MAXVALUE
+} CryptUIEncType;
+</ENUM>
+<ENUM>
+<NAME>CryptUIKeyFlags</NAME>
+typedef enum {
+    CRYPTUI_FLAG_IS_VALID =    0x00000001,
+    CRYPTUI_FLAG_CAN_ENCRYPT = 0x00000002,
+    CRYPTUI_FLAG_CAN_SIGN =    0x00000004,
+    CRYPTUI_FLAG_EXPIRED =     0x00000100,
+    CRYPTUI_FLAG_REVOKED =     0x00000200,
+    CRYPTUI_FLAG_DISABLED =    0x00000400,
+    CRYPTUI_FLAG_TRUSTED =     0x00001000,
+    CRYPTUI_FLAG_EXPORTABLE =  0x00100000
+} CryptUIKeyFlags;
+</ENUM>
+<ENUM>
+<NAME>CryptUILocation</NAME>
+typedef enum {
+    CRYPTUI_LOC_INVALID =        0,    /* An invalid key */
+    CRYPTUI_LOC_MISSING =       10,    /* A key we don't know anything about */
+    CRYPTUI_LOC_SEARCHING =     20,    /* A key we're searching for but haven't found yet */
+    CRYPTUI_LOC_REMOTE =        50,    /* A key that we've found is present remotely */
+    CRYPTUI_LOC_LOCAL =        100,    /* A key on the local machine */
+} CryptUILocation;
+</ENUM>
+<ENUM>
+<NAME>CryptUIValidity</NAME>
+typedef enum {
+    CRYPTUI_VALIDITY_REVOKED =   -3,
+    CRYPTUI_VALIDITY_DISABLED =  -2,
+    CRYPTUI_VALIDITY_NEVER =     -1,
+    CRYPTUI_VALIDITY_UNKNOWN =    0,
+    CRYPTUI_VALIDITY_MARGINAL =   1,
+    CRYPTUI_VALIDITY_FULL =       5,
+    CRYPTUI_VALIDITY_ULTIMATE =  10
+} CryptUIValidity;
+</ENUM>
+<FUNCTION>
+<NAME>cryptui_key_get_base</NAME>
+<RETURNS>gchar*</RETURNS>
+const gchar *key
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_key_get_enctype</NAME>
+<RETURNS>CryptUIEncType      </RETURNS>
+const gchar *key
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_display_notification</NAME>
+<RETURNS>void                </RETURNS>
+const gchar *title, const gchar *body,const gchar *icon, gboolean urgent
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_prompt_recipients</NAME>
+<RETURNS>gchar**</RETURNS>
+CryptUIKeyset *keyset,const gchar *title, gchar **signer
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_prompt_signer</NAME>
+<RETURNS>gchar*</RETURNS>
+CryptUIKeyset *keyset, const gchar *title
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_need_to_get_keys</NAME>
+<RETURNS>void                </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>CRYPTUI_TYPE_KEY_COMBO</NAME>
+#define CRYPTUI_TYPE_KEY_COMBO               GTK_TYPE_COMBO_BOX
+</MACRO>
+<MACRO>
+<NAME>CRYPTUI_KEY_COMBO</NAME>
+#define CRYPTUI_KEY_COMBO(obj)               GTK_COMBO_BOX(obj)
+</MACRO>
+<MACRO>
+<NAME>CRYPTUI_KEY_COMBO_CLASS</NAME>
+#define CRYPTUI_KEY_COMBO_CLASS(klass)       GTK_COMBO_BOX_CLASS(klass)
+</MACRO>
+<MACRO>
+<NAME>CRYPTUI_IS_KEY_COMBO</NAME>
+#define CRYPTUI_IS_KEY_COMBO(obj)            GTK_IS_COMBO_BOX(obj)
+</MACRO>
+<MACRO>
+<NAME>CRYPTUI_IS_KEY_COMBO_CLASS</NAME>
+#define CRYPTUI_IS_KEY_COMBO_CLASS(klass)    GTK_IS_COMBO_BOX_CLASS(klass)
+</MACRO>
+<MACRO>
+<NAME>CRYPTUI_KEY_COMBO_GET_CLASS</NAME>
+#define CRYPTUI_KEY_COMBO_GET_CLASS(obj)     GTK_COMBO_BOX_GET_CLASS(obj)
+</MACRO>
+<FUNCTION>
+<NAME>cryptui_key_combo_new</NAME>
+<RETURNS>GtkComboBox*</RETURNS>
+CryptUIKeyStore *ckstore
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_key_combo_setup</NAME>
+<RETURNS>void              </RETURNS>
+GtkComboBox *combo,CryptUIKeyStore *ckstore
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_key_combo_get_key_store</NAME>
+<RETURNS>CryptUIKeyStore*</RETURNS>
+GtkComboBox *combo
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_key_combo_get_keyset</NAME>
+<RETURNS>CryptUIKeyset*</RETURNS>
+GtkComboBox *combo
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_key_combo_set_key</NAME>
+<RETURNS>void              </RETURNS>
+GtkComboBox *combo,const gchar *key
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_key_combo_get_key</NAME>
+<RETURNS>const gchar*</RETURNS>
+GtkComboBox *ckcombo
+</FUNCTION>
+<MACRO>
+<NAME>SEAHORSE_DESKTOP_KEYS</NAME>
+#define SEAHORSE_DESKTOP_KEYS           "/desktop/pgp"
+</MACRO>
+<MACRO>
+<NAME>SEAHORSE_DEFAULT_KEY</NAME>
+#define SEAHORSE_DEFAULT_KEY            SEAHORSE_DESKTOP_KEYS "/default_key"
+</MACRO>
+<MACRO>
+<NAME>SEAHORSE_LASTSIGNER_KEY</NAME>
+#define SEAHORSE_LASTSIGNER_KEY         SEAHORSE_DESKTOP_KEYS "/last_signer"
+</MACRO>
+<MACRO>
+<NAME>SEAHORSE_ENCRYPTSELF_KEY</NAME>
+#define SEAHORSE_ENCRYPTSELF_KEY        SEAHORSE_DESKTOP_KEYS "/encrypt_to_self"
+</MACRO>
+<MACRO>
+<NAME>SEAHORSE_RECIPIENTS_SORT_KEY</NAME>
+#define SEAHORSE_RECIPIENTS_SORT_KEY    SEAHORSE_DESKTOP_KEYS "/recipients/sort_by"
+</MACRO>
+<MACRO>
+<NAME>CRYPTUI_TYPE_KEY_LIST</NAME>
+#define CRYPTUI_TYPE_KEY_LIST               GTK_TYPE_TREE_VIEW
+</MACRO>
+<MACRO>
+<NAME>CRYPTUI_KEY_LIST</NAME>
+#define CRYPTUI_KEY_LIST(obj)               GTK_TREE_VIEW(obj)
+</MACRO>
+<MACRO>
+<NAME>CRYPTUI_KEY_LIST_CLASS</NAME>
+#define CRYPTUI_KEY_LIST_CLASS(klass)       GTK_TREE_VIEW_CLASS(klass)
+</MACRO>
+<MACRO>
+<NAME>CRYPTUI_IS_KEY_LIST</NAME>
+#define CRYPTUI_IS_KEY_LIST(obj)            GTK_IS_TREE_VIEW(obj)
+</MACRO>
+<MACRO>
+<NAME>CRYPTUI_IS_KEY_LIST_CLASS</NAME>
+#define CRYPTUI_IS_KEY_LIST_CLASS(klass)    GTK_IS_TREE_VIEW_CLASS(obj)
+</MACRO>
+<MACRO>
+<NAME>CRYPTUI_KEY_LIST_GET_CLASS</NAME>
+#define CRYPTUI_KEY_LIST_GET_CLASS(obj)     GTK_TREE_VIEW_GET_CLASS(obj)
+</MACRO>
+<FUNCTION>
+<NAME>cryptui_key_list_new</NAME>
+<RETURNS>GtkTreeView*</RETURNS>
+CryptUIKeyStore *ckstore,guint flags
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_key_list_setup</NAME>
+<RETURNS>void              </RETURNS>
+GtkTreeView *view,CryptUIKeyStore *ckstore,guint flags
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_key_list_get_key_store</NAME>
+<RETURNS>CryptUIKeyStore*</RETURNS>
+GtkTreeView *combo
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_key_list_get_keyset</NAME>
+<RETURNS>CryptUIKeyset*</RETURNS>
+GtkTreeView *combo
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_key_list_have_selected_keys</NAME>
+<RETURNS>gboolean          </RETURNS>
+GtkTreeView *view
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_key_list_get_selected_keys</NAME>
+<RETURNS>GList*</RETURNS>
+GtkTreeView *view
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_key_list_set_selected_keys</NAME>
+<RETURNS>void              </RETURNS>
+GtkTreeView *view,GList *keys
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_key_list_get_selected_key</NAME>
+<RETURNS>const gchar*</RETURNS>
+GtkTreeView *view
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_key_list_set_selected_key</NAME>
+<RETURNS>void              </RETURNS>
+GtkTreeView *view,const gchar *key
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_marshal_VOID__STRING_POINTER</NAME>
+<RETURNS>void </RETURNS>
+GClosure     *closure,GValue       *return_value,guint         n_param_values,const GValue *param_values,gpointer      invocation_hint,gpointer      marshal_data
+</FUNCTION>
+<ENUM>
+<NAME>CryptUIKeyChooserMode</NAME>
+typedef enum _CryptUIKeyChooserMode {
+    CRYPTUI_KEY_CHOOSER_RECIPIENTS =    0x0001,
+    CRYPTUI_KEY_CHOOSER_SIGNER =        0x0002,
+    
+    CRYPTUI_KEY_CHOOSER_MUSTSIGN =      0x0010
+} CryptUIKeyChooserMode;
+</ENUM>
+<MACRO>
+<NAME>CRYPTUI_TYPE_KEY_CHOOSER</NAME>
+#define CRYPTUI_TYPE_KEY_CHOOSER             (cryptui_key_chooser_get_type ())
+</MACRO>
+<MACRO>
+<NAME>CRYPTUI_KEY_CHOOSER</NAME>
+#define CRYPTUI_KEY_CHOOSER(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), CRYPTUI_TYPE_KEY_CHOOSER, CryptUIKeyChooser))
+</MACRO>
+<MACRO>
+<NAME>CRYPTUI_KEY_CHOOSER_CLASS</NAME>
+#define CRYPTUI_KEY_CHOOSER_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), CRYPTUI_TYPE_KEY_CHOOSER, CryptUIKeyChooser))
+</MACRO>
+<MACRO>
+<NAME>CRYPTUI_IS_KEY_CHOOSER</NAME>
+#define CRYPTUI_IS_KEY_CHOOSER(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), CRYPTUI_TYPE_KEY_CHOOSER))
+</MACRO>
+<MACRO>
+<NAME>CRYPTUI_IS_KEY_CHOOSER_CLASS</NAME>
+#define CRYPTUI_IS_KEY_CHOOSER_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), CRYPTUI_TYPE_KEY_CHOOSER))
+</MACRO>
+<MACRO>
+<NAME>CRYPTUI_KEY_CHOOSER_GET_CLASS</NAME>
+#define CRYPTUI_KEY_CHOOSER_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), CRYPTUI_TYPE_KEY_CHOOSER, CryptUIKeyChooser))
+</MACRO>
+<STRUCT>
+<NAME>CryptUIKeyChooser</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>CryptUIKeyChooserPriv</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>CryptUIKeyChooserClass</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>CryptUIKeyChooser</NAME>
+struct _CryptUIKeyChooser {
+    GtkVBox               parent;
+ 
+    /*< private >*/
+    CryptUIKeyChooserPriv   *priv;
+};
+
+</STRUCT>
+<STRUCT>
+<NAME>CryptUIKeyChooserClass</NAME>
+struct _CryptUIKeyChooserClass {
+    GtkVBoxClass       parent_class;
+    
+    /* signals --------------------------------------------------------- */
+    
+    /* The key selection changed  */
+    void (*changed)   (CryptUIKeyChooser *chooser);
+};
+
+</STRUCT>
+<FUNCTION>
+<NAME>cryptui_key_chooser_get_type</NAME>
+<RETURNS>GType               </RETURNS>
+
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_key_chooser_new</NAME>
+<RETURNS>CryptUIKeyChooser*</RETURNS>
+CryptUIKeyset *ckset,CryptUIKeyChooserMode mode
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_key_chooser_get_enforce_prefs</NAME>
+<RETURNS>gboolean            </RETURNS>
+CryptUIKeyChooser *chooser
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_key_chooser_set_enforce_prefs</NAME>
+<RETURNS>void                </RETURNS>
+CryptUIKeyChooser *chooser,gboolean enforce_prefs
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_key_chooser_have_recipients</NAME>
+<RETURNS>gboolean            </RETURNS>
+CryptUIKeyChooser *chooser
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_key_chooser_get_recipients</NAME>
+<RETURNS>GList*</RETURNS>
+CryptUIKeyChooser *chooser
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_key_chooser_set_recipients</NAME>
+<RETURNS>void                </RETURNS>
+CryptUIKeyChooser *chooser,GList *keys
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_key_chooser_get_signer</NAME>
+<RETURNS>const gchar*</RETURNS>
+CryptUIKeyChooser *chooser
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_key_chooser_set_signer</NAME>
+<RETURNS>void                </RETURNS>
+CryptUIKeyChooser *chooser,const gchar *key
+</FUNCTION>
+<MACRO>
+<NAME>CRYPTUI_TYPE_KEY_STORE</NAME>
+#define CRYPTUI_TYPE_KEY_STORE             (cryptui_key_store_get_type ())
+</MACRO>
+<MACRO>
+<NAME>CRYPTUI_KEY_STORE</NAME>
+#define CRYPTUI_KEY_STORE(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), CRYPTUI_TYPE_KEY_STORE, CryptUIKeyStore))
+</MACRO>
+<MACRO>
+<NAME>CRYPTUI_KEY_STORE_CLASS</NAME>
+#define CRYPTUI_KEY_STORE_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), CRYPTUI_TYPE_KEY_STORE, CryptUIKeyStore))
+</MACRO>
+<MACRO>
+<NAME>CRYPTUI_IS_KEY_STORE</NAME>
+#define CRYPTUI_IS_KEY_STORE(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), CRYPTUI_TYPE_KEY_STORE))
+</MACRO>
+<MACRO>
+<NAME>CRYPTUI_IS_KEY_STORE_CLASS</NAME>
+#define CRYPTUI_IS_KEY_STORE_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), CRYPTUI_TYPE_KEY_STORE))
+</MACRO>
+<MACRO>
+<NAME>CRYPTUI_KEY_STORE_GET_CLASS</NAME>
+#define CRYPTUI_KEY_STORE_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), CRYPTUI_TYPE_KEY_STORE, CryptUIKeyStore))
+</MACRO>
+<STRUCT>
+<NAME>CryptUIKeyStore</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>CryptUIKeyStorePriv</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>CryptUIKeyStoreClass</NAME>
+</STRUCT>
+<STRUCT>
+<NAME>CryptUIKeyStore</NAME>
+struct _CryptUIKeyStore {
+    GtkTreeModelSort       parent;
+ 
+    /*< public >*/
+    CryptUIKeyset          *ckset;
+    
+    /*< private >*/
+    CryptUIKeyStorePriv    *priv;
+};
+
+</STRUCT>
+<STRUCT>
+<NAME>CryptUIKeyStoreClass</NAME>
+struct _CryptUIKeyStoreClass {
+    GtkTreeModelSortClass       parent_class;
+};
+
+</STRUCT>
+<ENUM>
+<NAME>CryptUIKeyStoreMode</NAME>
+typedef enum _CryptUIKeyStoreMode {
+    CRYPTUI_KEY_STORE_MODE_ALL,
+    CRYPTUI_KEY_STORE_MODE_SELECTED,
+    CRYPTUI_KEY_STORE_MODE_RESULTS
+} CryptUIKeyStoreMode;
+</ENUM>
+<USER_FUNCTION>
+<NAME>CryptUIKeyStoreFilterFunc</NAME>
+<RETURNS>gboolean </RETURNS>
+CryptUIKeyset *ckset, const gchar *key, 
+                                               gpointer user_data
+</USER_FUNCTION>
+<FUNCTION>
+<NAME>cryptui_key_store_get_type</NAME>
+<RETURNS>GType               </RETURNS>
+
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_key_store_new</NAME>
+<RETURNS>CryptUIKeyStore*</RETURNS>
+CryptUIKeyset *keyset,gboolean use_checks,const gchar *none_option
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_key_store_get_keyset</NAME>
+<RETURNS>CryptUIKeyset*</RETURNS>
+CryptUIKeyStore *ckstore
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_key_store_set_sortable</NAME>
+<RETURNS>void                </RETURNS>
+CryptUIKeyStore *ckstore,gboolean sortable
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_key_store_get_sortable</NAME>
+<RETURNS>gboolean            </RETURNS>
+CryptUIKeyStore *ckstore
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_key_store_check_toggled</NAME>
+<RETURNS>void                </RETURNS>
+CryptUIKeyStore *ckstore,GtkTreeView *view,GtkTreeIter *iter
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_key_store_get_iter_from_key</NAME>
+<RETURNS>gboolean            </RETURNS>
+CryptUIKeyStore *ckstore,const gchar *key,GtkTreeIter *iter
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_key_store_get_key_from_iter</NAME>
+<RETURNS>const gchar*</RETURNS>
+CryptUIKeyStore *ckstore,GtkTreeIter *iter
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_key_store_get_key_from_path</NAME>
+<RETURNS>const gchar*</RETURNS>
+CryptUIKeyStore *ckstore,GtkTreePath *path
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_key_store_get_all_keys</NAME>
+<RETURNS>GList*</RETURNS>
+CryptUIKeyStore *ckstore
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_key_store_get_count</NAME>
+<RETURNS>guint               </RETURNS>
+CryptUIKeyStore *ckstore
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_key_store_have_selected_keys</NAME>
+<RETURNS>gboolean            </RETURNS>
+CryptUIKeyStore *ckstore,GtkTreeView *view
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_key_store_get_selected_keys</NAME>
+<RETURNS>GList*</RETURNS>
+CryptUIKeyStore *ckstore,GtkTreeView *view
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_key_store_set_selected_keys</NAME>
+<RETURNS>void                </RETURNS>
+CryptUIKeyStore *ckstore,GtkTreeView *view,GList *keys
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_key_store_get_selected_key</NAME>
+<RETURNS>const gchar*</RETURNS>
+CryptUIKeyStore *ckstore,GtkTreeView *view
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_key_store_set_selected_key</NAME>
+<RETURNS>void                </RETURNS>
+CryptUIKeyStore *ckstore,GtkTreeView *view,const gchar *key
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_key_store_set_search_mode</NAME>
+<RETURNS>void                </RETURNS>
+CryptUIKeyStore *ckstore,CryptUIKeyStoreMode mode
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_key_store_set_search_text</NAME>
+<RETURNS>void                </RETURNS>
+CryptUIKeyStore *ckstore,const gchar *search_text
+</FUNCTION>
+<FUNCTION>
+<NAME>cryptui_key_store_set_filter</NAME>
+<RETURNS>void                </RETURNS>
+CryptUIKeyStore *ckstore,CryptUIKeyStoreFilterFunc func,gpointer user_data
+</FUNCTION>

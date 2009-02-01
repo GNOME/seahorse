@@ -1,0 +1,498 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<refentry id="CryptUIKeyset">
+<refmeta>
+<refentrytitle role="top_of_page" id="CryptUIKeyset.top_of_page">CryptUIKeyset</refentrytitle>
+<manvolnum>3</manvolnum>
+<refmiscinfo>LIBCRYPTUI Library</refmiscinfo>
+</refmeta>
+
+<refnamediv>
+<refname>CryptUIKeyset</refname>
+<refpurpose></refpurpose>
+<!--[<xref linkend="desc" endterm="desc.title"/>]-->
+</refnamediv>
+
+<refsynopsisdiv id="CryptUIKeyset.synopsis" role="synopsis">
+<title role="synopsis.title">Synopsis</title>
+
+<synopsis>
+                    <link linkend="CryptUIKeysetPrivate">CryptUIKeysetPrivate</link>;
+                    <link linkend="CryptUIKeyset-struct">CryptUIKeyset</link>;
+<link linkend="CryptUIKeyset">CryptUIKeyset</link>*      <link linkend="cryptui-keyset-new">cryptui_keyset_new</link>                  (const <link linkend="gchar">gchar</link> *keytype,
+                                                         <link linkend="gboolean">gboolean</link> expand_keys);
+<link linkend="gboolean">gboolean</link>            <link linkend="cryptui-keyset-has-key">cryptui_keyset_has_key</link>              (<link linkend="CryptUIKeyset">CryptUIKeyset</link> *keyset,
+                                                         const <link linkend="gchar">gchar</link> *key);
+const <link linkend="gchar">gchar</link>*        <link linkend="cryptui-keyset-get-keytype">cryptui_keyset_get_keytype</link>          (<link linkend="CryptUIKeyset">CryptUIKeyset</link> *keyset);
+<link linkend="GList">GList</link>*              <link linkend="cryptui-keyset-get-keys">cryptui_keyset_get_keys</link>             (<link linkend="CryptUIKeyset">CryptUIKeyset</link> *keyset);
+<link linkend="guint">guint</link>               <link linkend="cryptui-keyset-get-count">cryptui_keyset_get_count</link>            (<link linkend="CryptUIKeyset">CryptUIKeyset</link> *keyset);
+<link linkend="void">void</link>                <link linkend="cryptui-keyset-refresh">cryptui_keyset_refresh</link>              (<link linkend="CryptUIKeyset">CryptUIKeyset</link> *keyset);
+<link linkend="gpointer">gpointer</link>            <link linkend="cryptui-keyset-get-closure">cryptui_keyset_get_closure</link>          (<link linkend="CryptUIKeyset">CryptUIKeyset</link> *keyset,
+                                                         const <link linkend="gchar">gchar</link> *key);
+<link linkend="void">void</link>                <link linkend="cryptui-keyset-set-closure">cryptui_keyset_set_closure</link>          (<link linkend="CryptUIKeyset">CryptUIKeyset</link> *keyset,
+                                                         const <link linkend="gchar">gchar</link> *key,
+                                                         <link linkend="gpointer">gpointer</link> closure);
+<link linkend="gboolean">gboolean</link>            <link linkend="cryptui-keyset-get-expand-keys">cryptui_keyset_get_expand_keys</link>      (<link linkend="CryptUIKeyset">CryptUIKeyset</link> *keyset);
+<link linkend="void">void</link>                <link linkend="cryptui-keyset-set-expand-keys">cryptui_keyset_set_expand_keys</link>      (<link linkend="CryptUIKeyset">CryptUIKeyset</link> *keyset,
+                                                         <link linkend="gboolean">gboolean</link> expand_keys);
+<link linkend="void">void</link>                <link linkend="cryptui-keyset-cache-key">cryptui_keyset_cache_key</link>            (<link linkend="CryptUIKeyset">CryptUIKeyset</link> *keyset,
+                                                         const <link linkend="gchar">gchar</link> *key);
+<link linkend="gchar">gchar</link>*              <link linkend="cryptui-keyset-key-get-string">cryptui_keyset_key_get_string</link>       (<link linkend="CryptUIKeyset">CryptUIKeyset</link> *keyset,
+                                                         const <link linkend="gchar">gchar</link> *key,
+                                                         const <link linkend="gchar">gchar</link> *prop);
+<link linkend="guint">guint</link>               <link linkend="cryptui-keyset-key-get-uint">cryptui_keyset_key_get_uint</link>         (<link linkend="CryptUIKeyset">CryptUIKeyset</link> *keyset,
+                                                         const <link linkend="gchar">gchar</link> *key,
+                                                         const <link linkend="gchar">gchar</link> *prop);
+<link linkend="guint">guint</link>               <link linkend="cryptui-keyset-key-flags">cryptui_keyset_key_flags</link>            (<link linkend="CryptUIKeyset">CryptUIKeyset</link> *keyset,
+                                                         const <link linkend="gchar">gchar</link> *key);
+<link linkend="gchar">gchar</link>*              <link linkend="cryptui-keyset-key-display-name">cryptui_keyset_key_display_name</link>     (<link linkend="CryptUIKeyset">CryptUIKeyset</link> *keyset,
+                                                         const <link linkend="gchar">gchar</link> *key);
+<link linkend="gchar">gchar</link>*              <link linkend="cryptui-keyset-key-display-id">cryptui_keyset_key_display_id</link>       (<link linkend="CryptUIKeyset">CryptUIKeyset</link> *keyset,
+                                                         const <link linkend="gchar">gchar</link> *key);
+<link linkend="gchar">gchar</link>*              <link linkend="cryptui-keyset-key-raw-keyid">cryptui_keyset_key_raw_keyid</link>        (<link linkend="CryptUIKeyset">CryptUIKeyset</link> *keyset,
+                                                         const <link linkend="gchar">gchar</link> *key);
+<link linkend="gchar">gchar</link>**             <link linkend="cryptui-keyset-keys-raw-keyids">cryptui_keyset_keys_raw_keyids</link>      (<link linkend="CryptUIKeyset">CryptUIKeyset</link> *keyset,
+                                                         const <link linkend="gchar">gchar</link> **keys);
+</synopsis>
+</refsynopsisdiv>
+
+<refsect1 id="CryptUIKeyset.object-hierarchy" role="object_hierarchy">
+<title role="object_hierarchy.title">Object Hierarchy</title>
+<synopsis>
+  <link linkend="GObject">GObject</link>
+   +----CryptUIKeyset
+</synopsis>
+
+</refsect1>
+
+
+
+
+
+<refsect1 id="CryptUIKeyset.properties" role="properties">
+<title role="properties.title">Properties</title>
+<synopsis>
+  &quot;<link linkend="CryptUIKeyset--expand-keys">expand-keys</link>&quot;              <link linkend="gboolean">gboolean</link>              : Read / Write
+  &quot;<link linkend="CryptUIKeyset--keytype">keytype</link>&quot;                  <link linkend="gchar">gchar</link>*                : Read / Write / Construct Only
+</synopsis>
+</refsect1>
+
+<refsect1 id="CryptUIKeyset.signals" role="signal_proto">
+<title role="signal_proto.title">Signals</title>
+<synopsis>
+  &quot;<link linkend="CryptUIKeyset-added">added</link>&quot;                                          : Run First
+  &quot;<link linkend="CryptUIKeyset-changed">changed</link>&quot;                                        : Run First
+  &quot;<link linkend="CryptUIKeyset-removed">removed</link>&quot;                                        : Run First
+</synopsis>
+</refsect1>
+
+
+<refsect1 id="CryptUIKeyset.description" role="desc">
+<title role="desc.title">Description</title>
+<para>
+
+</para>
+</refsect1>
+
+<refsect1 id="CryptUIKeyset.details" role="details">
+<title role="details.title">Details</title>
+<refsect2 id="CryptUIKeysetPrivate" role="struct">
+<title>CryptUIKeysetPrivate</title>
+<indexterm zone="CryptUIKeysetPrivate"><primary>CryptUIKeysetPrivate</primary></indexterm><programlisting>typedef struct _CryptUIKeysetPrivate CryptUIKeysetPrivate;</programlisting>
+<para>
+
+</para></refsect2>
+<refsect2 id="CryptUIKeyset-struct" role="struct">
+<title>CryptUIKeyset</title>
+<indexterm zone="CryptUIKeyset-struct"><primary>CryptUIKeyset</primary></indexterm><programlisting>typedef struct _CryptUIKeyset CryptUIKeyset;</programlisting>
+<para>
+
+</para></refsect2>
+<refsect2 id="cryptui-keyset-new" role="function">
+<title>cryptui_keyset_new ()</title>
+<indexterm zone="cryptui-keyset-new"><primary>cryptui_keyset_new</primary></indexterm><programlisting><link linkend="CryptUIKeyset">CryptUIKeyset</link>*      cryptui_keyset_new                  (const <link linkend="gchar">gchar</link> *keytype,
+                                                         <link linkend="gboolean">gboolean</link> expand_keys);</programlisting>
+<para>
+
+</para><variablelist role="params">
+<varlistentry><term><parameter>keytype</parameter>&nbsp;:</term>
+<listitem><simpara>
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>expand_keys</parameter>&nbsp;:</term>
+<listitem><simpara>
+</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&nbsp;:</term><listitem><simpara>
+
+
+</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="cryptui-keyset-has-key" role="function">
+<title>cryptui_keyset_has_key ()</title>
+<indexterm zone="cryptui-keyset-has-key"><primary>cryptui_keyset_has_key</primary></indexterm><programlisting><link linkend="gboolean">gboolean</link>            cryptui_keyset_has_key              (<link linkend="CryptUIKeyset">CryptUIKeyset</link> *keyset,
+                                                         const <link linkend="gchar">gchar</link> *key);</programlisting>
+<para>
+
+</para><variablelist role="params">
+<varlistentry><term><parameter>keyset</parameter>&nbsp;:</term>
+<listitem><simpara>
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>key</parameter>&nbsp;:</term>
+<listitem><simpara>
+</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&nbsp;:</term><listitem><simpara>
+
+
+</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="cryptui-keyset-get-keytype" role="function">
+<title>cryptui_keyset_get_keytype ()</title>
+<indexterm zone="cryptui-keyset-get-keytype"><primary>cryptui_keyset_get_keytype</primary></indexterm><programlisting>const <link linkend="gchar">gchar</link>*        cryptui_keyset_get_keytype          (<link linkend="CryptUIKeyset">CryptUIKeyset</link> *keyset);</programlisting>
+<para>
+
+</para><variablelist role="params">
+<varlistentry><term><parameter>keyset</parameter>&nbsp;:</term>
+<listitem><simpara>
+</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&nbsp;:</term><listitem><simpara>
+
+
+</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="cryptui-keyset-get-keys" role="function">
+<title>cryptui_keyset_get_keys ()</title>
+<indexterm zone="cryptui-keyset-get-keys"><primary>cryptui_keyset_get_keys</primary></indexterm><programlisting><link linkend="GList">GList</link>*              cryptui_keyset_get_keys             (<link linkend="CryptUIKeyset">CryptUIKeyset</link> *keyset);</programlisting>
+<para>
+
+</para><variablelist role="params">
+<varlistentry><term><parameter>keyset</parameter>&nbsp;:</term>
+<listitem><simpara>
+</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&nbsp;:</term><listitem><simpara>
+
+
+</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="cryptui-keyset-get-count" role="function">
+<title>cryptui_keyset_get_count ()</title>
+<indexterm zone="cryptui-keyset-get-count"><primary>cryptui_keyset_get_count</primary></indexterm><programlisting><link linkend="guint">guint</link>               cryptui_keyset_get_count            (<link linkend="CryptUIKeyset">CryptUIKeyset</link> *keyset);</programlisting>
+<para>
+
+</para><variablelist role="params">
+<varlistentry><term><parameter>keyset</parameter>&nbsp;:</term>
+<listitem><simpara>
+</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&nbsp;:</term><listitem><simpara>
+
+
+</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="cryptui-keyset-refresh" role="function">
+<title>cryptui_keyset_refresh ()</title>
+<indexterm zone="cryptui-keyset-refresh"><primary>cryptui_keyset_refresh</primary></indexterm><programlisting><link linkend="void">void</link>                cryptui_keyset_refresh              (<link linkend="CryptUIKeyset">CryptUIKeyset</link> *keyset);</programlisting>
+<para>
+
+</para><variablelist role="params">
+<varlistentry><term><parameter>keyset</parameter>&nbsp;:</term>
+<listitem><simpara>
+
+
+</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="cryptui-keyset-get-closure" role="function">
+<title>cryptui_keyset_get_closure ()</title>
+<indexterm zone="cryptui-keyset-get-closure"><primary>cryptui_keyset_get_closure</primary></indexterm><programlisting><link linkend="gpointer">gpointer</link>            cryptui_keyset_get_closure          (<link linkend="CryptUIKeyset">CryptUIKeyset</link> *keyset,
+                                                         const <link linkend="gchar">gchar</link> *key);</programlisting>
+<para>
+
+</para><variablelist role="params">
+<varlistentry><term><parameter>keyset</parameter>&nbsp;:</term>
+<listitem><simpara>
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>key</parameter>&nbsp;:</term>
+<listitem><simpara>
+</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&nbsp;:</term><listitem><simpara>
+
+
+</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="cryptui-keyset-set-closure" role="function">
+<title>cryptui_keyset_set_closure ()</title>
+<indexterm zone="cryptui-keyset-set-closure"><primary>cryptui_keyset_set_closure</primary></indexterm><programlisting><link linkend="void">void</link>                cryptui_keyset_set_closure          (<link linkend="CryptUIKeyset">CryptUIKeyset</link> *keyset,
+                                                         const <link linkend="gchar">gchar</link> *key,
+                                                         <link linkend="gpointer">gpointer</link> closure);</programlisting>
+<para>
+
+</para><variablelist role="params">
+<varlistentry><term><parameter>keyset</parameter>&nbsp;:</term>
+<listitem><simpara>
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>key</parameter>&nbsp;:</term>
+<listitem><simpara>
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>closure</parameter>&nbsp;:</term>
+<listitem><simpara>
+
+
+</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="cryptui-keyset-get-expand-keys" role="function">
+<title>cryptui_keyset_get_expand_keys ()</title>
+<indexterm zone="cryptui-keyset-get-expand-keys"><primary>cryptui_keyset_get_expand_keys</primary></indexterm><programlisting><link linkend="gboolean">gboolean</link>            cryptui_keyset_get_expand_keys      (<link linkend="CryptUIKeyset">CryptUIKeyset</link> *keyset);</programlisting>
+<para>
+
+</para><variablelist role="params">
+<varlistentry><term><parameter>keyset</parameter>&nbsp;:</term>
+<listitem><simpara>
+</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&nbsp;:</term><listitem><simpara>
+
+
+</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="cryptui-keyset-set-expand-keys" role="function">
+<title>cryptui_keyset_set_expand_keys ()</title>
+<indexterm zone="cryptui-keyset-set-expand-keys"><primary>cryptui_keyset_set_expand_keys</primary></indexterm><programlisting><link linkend="void">void</link>                cryptui_keyset_set_expand_keys      (<link linkend="CryptUIKeyset">CryptUIKeyset</link> *keyset,
+                                                         <link linkend="gboolean">gboolean</link> expand_keys);</programlisting>
+<para>
+
+</para><variablelist role="params">
+<varlistentry><term><parameter>keyset</parameter>&nbsp;:</term>
+<listitem><simpara>
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>expand_keys</parameter>&nbsp;:</term>
+<listitem><simpara>
+
+
+</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="cryptui-keyset-cache-key" role="function">
+<title>cryptui_keyset_cache_key ()</title>
+<indexterm zone="cryptui-keyset-cache-key"><primary>cryptui_keyset_cache_key</primary></indexterm><programlisting><link linkend="void">void</link>                cryptui_keyset_cache_key            (<link linkend="CryptUIKeyset">CryptUIKeyset</link> *keyset,
+                                                         const <link linkend="gchar">gchar</link> *key);</programlisting>
+<para>
+
+</para><variablelist role="params">
+<varlistentry><term><parameter>keyset</parameter>&nbsp;:</term>
+<listitem><simpara>
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>key</parameter>&nbsp;:</term>
+<listitem><simpara>
+
+
+</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="cryptui-keyset-key-get-string" role="function">
+<title>cryptui_keyset_key_get_string ()</title>
+<indexterm zone="cryptui-keyset-key-get-string"><primary>cryptui_keyset_key_get_string</primary></indexterm><programlisting><link linkend="gchar">gchar</link>*              cryptui_keyset_key_get_string       (<link linkend="CryptUIKeyset">CryptUIKeyset</link> *keyset,
+                                                         const <link linkend="gchar">gchar</link> *key,
+                                                         const <link linkend="gchar">gchar</link> *prop);</programlisting>
+<para>
+
+</para><variablelist role="params">
+<varlistentry><term><parameter>keyset</parameter>&nbsp;:</term>
+<listitem><simpara>
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>key</parameter>&nbsp;:</term>
+<listitem><simpara>
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>prop</parameter>&nbsp;:</term>
+<listitem><simpara>
+</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&nbsp;:</term><listitem><simpara>
+
+
+</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="cryptui-keyset-key-get-uint" role="function">
+<title>cryptui_keyset_key_get_uint ()</title>
+<indexterm zone="cryptui-keyset-key-get-uint"><primary>cryptui_keyset_key_get_uint</primary></indexterm><programlisting><link linkend="guint">guint</link>               cryptui_keyset_key_get_uint         (<link linkend="CryptUIKeyset">CryptUIKeyset</link> *keyset,
+                                                         const <link linkend="gchar">gchar</link> *key,
+                                                         const <link linkend="gchar">gchar</link> *prop);</programlisting>
+<para>
+
+</para><variablelist role="params">
+<varlistentry><term><parameter>keyset</parameter>&nbsp;:</term>
+<listitem><simpara>
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>key</parameter>&nbsp;:</term>
+<listitem><simpara>
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>prop</parameter>&nbsp;:</term>
+<listitem><simpara>
+</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&nbsp;:</term><listitem><simpara>
+
+
+</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="cryptui-keyset-key-flags" role="function">
+<title>cryptui_keyset_key_flags ()</title>
+<indexterm zone="cryptui-keyset-key-flags"><primary>cryptui_keyset_key_flags</primary></indexterm><programlisting><link linkend="guint">guint</link>               cryptui_keyset_key_flags            (<link linkend="CryptUIKeyset">CryptUIKeyset</link> *keyset,
+                                                         const <link linkend="gchar">gchar</link> *key);</programlisting>
+<para>
+
+</para><variablelist role="params">
+<varlistentry><term><parameter>keyset</parameter>&nbsp;:</term>
+<listitem><simpara>
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>key</parameter>&nbsp;:</term>
+<listitem><simpara>
+</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&nbsp;:</term><listitem><simpara>
+
+
+</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="cryptui-keyset-key-display-name" role="function">
+<title>cryptui_keyset_key_display_name ()</title>
+<indexterm zone="cryptui-keyset-key-display-name"><primary>cryptui_keyset_key_display_name</primary></indexterm><programlisting><link linkend="gchar">gchar</link>*              cryptui_keyset_key_display_name     (<link linkend="CryptUIKeyset">CryptUIKeyset</link> *keyset,
+                                                         const <link linkend="gchar">gchar</link> *key);</programlisting>
+<para>
+
+</para><variablelist role="params">
+<varlistentry><term><parameter>keyset</parameter>&nbsp;:</term>
+<listitem><simpara>
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>key</parameter>&nbsp;:</term>
+<listitem><simpara>
+</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&nbsp;:</term><listitem><simpara>
+
+
+</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="cryptui-keyset-key-display-id" role="function">
+<title>cryptui_keyset_key_display_id ()</title>
+<indexterm zone="cryptui-keyset-key-display-id"><primary>cryptui_keyset_key_display_id</primary></indexterm><programlisting><link linkend="gchar">gchar</link>*              cryptui_keyset_key_display_id       (<link linkend="CryptUIKeyset">CryptUIKeyset</link> *keyset,
+                                                         const <link linkend="gchar">gchar</link> *key);</programlisting>
+<para>
+
+</para><variablelist role="params">
+<varlistentry><term><parameter>keyset</parameter>&nbsp;:</term>
+<listitem><simpara>
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>key</parameter>&nbsp;:</term>
+<listitem><simpara>
+</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&nbsp;:</term><listitem><simpara>
+
+
+</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="cryptui-keyset-key-raw-keyid" role="function">
+<title>cryptui_keyset_key_raw_keyid ()</title>
+<indexterm zone="cryptui-keyset-key-raw-keyid"><primary>cryptui_keyset_key_raw_keyid</primary></indexterm><programlisting><link linkend="gchar">gchar</link>*              cryptui_keyset_key_raw_keyid        (<link linkend="CryptUIKeyset">CryptUIKeyset</link> *keyset,
+                                                         const <link linkend="gchar">gchar</link> *key);</programlisting>
+<para>
+
+</para><variablelist role="params">
+<varlistentry><term><parameter>keyset</parameter>&nbsp;:</term>
+<listitem><simpara>
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>key</parameter>&nbsp;:</term>
+<listitem><simpara>
+</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&nbsp;:</term><listitem><simpara>
+
+
+</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="cryptui-keyset-keys-raw-keyids" role="function">
+<title>cryptui_keyset_keys_raw_keyids ()</title>
+<indexterm zone="cryptui-keyset-keys-raw-keyids"><primary>cryptui_keyset_keys_raw_keyids</primary></indexterm><programlisting><link linkend="gchar">gchar</link>**             cryptui_keyset_keys_raw_keyids      (<link linkend="CryptUIKeyset">CryptUIKeyset</link> *keyset,
+                                                         const <link linkend="gchar">gchar</link> **keys);</programlisting>
+<para>
+
+</para><variablelist role="params">
+<varlistentry><term><parameter>keyset</parameter>&nbsp;:</term>
+<listitem><simpara>
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>keys</parameter>&nbsp;:</term>
+<listitem><simpara>
+</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&nbsp;:</term><listitem><simpara>
+
+
+</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+
+</refsect1>
+<refsect1 id="CryptUIKeyset.property-details" role="property_details">
+<title role="property_details.title">Property Details</title>
+<refsect2 id="CryptUIKeyset--expand-keys"><title>The <literal>&quot;expand-keys&quot;</literal> property</title>
+<indexterm zone="CryptUIKeyset--expand-keys"><primary>CryptUIKeyset:expand-keys</primary></indexterm><programlisting>  &quot;expand-keys&quot;              <link linkend="gboolean">gboolean</link>              : Read / Write</programlisting>
+<para>Expand all names in keys.</para><para>Default value: TRUE</para>
+</refsect2>
+<refsect2 id="CryptUIKeyset--keytype"><title>The <literal>&quot;keytype&quot;</literal> property</title>
+<indexterm zone="CryptUIKeyset--keytype"><primary>CryptUIKeyset:keytype</primary></indexterm><programlisting>  &quot;keytype&quot;                  <link linkend="gchar">gchar</link>*                : Read / Write / Construct Only</programlisting>
+<para>Type of keys to be listed.</para><para>Default value: NULL</para>
+</refsect2>
+
+</refsect1>
+
+<refsect1 id="CryptUIKeyset.signal-details" role="signals">
+<title role="signals.title">Signal Details</title>
+<refsect2 id="CryptUIKeyset-added"><title>The <literal>&quot;added&quot;</literal> signal</title>
+<indexterm zone="CryptUIKeyset-added"><primary>CryptUIKeyset::added</primary></indexterm><programlisting><link linkend="void">void</link>                user_function                      (<link linkend="CryptUIKeyset">CryptUIKeyset</link> *cryptuikeyset,
+                                                        <link linkend="gchar">gchar</link>         *arg1,
+                                                        <link linkend="gpointer">gpointer</link>       user_data)          : Run First</programlisting>
+<para>
+
+</para><variablelist role="params">
+<varlistentry><term><parameter>cryptuikeyset</parameter>&nbsp;:</term>
+<listitem><simpara>the object which received the signal.
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>arg1</parameter>&nbsp;:</term>
+<listitem><simpara>
+
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>user_data</parameter>&nbsp;:</term>
+<listitem><simpara>user data set when the signal handler was connected.</simpara></listitem></varlistentry>
+</variablelist></refsect2><refsect2 id="CryptUIKeyset-changed"><title>The <literal>&quot;changed&quot;</literal> signal</title>
+<indexterm zone="CryptUIKeyset-changed"><primary>CryptUIKeyset::changed</primary></indexterm><programlisting><link linkend="void">void</link>                user_function                      (<link linkend="CryptUIKeyset">CryptUIKeyset</link> *cryptuikeyset,
+                                                        <link linkend="gchar">gchar</link>         *arg1,
+                                                        <link linkend="gpointer">gpointer</link>       arg2,
+                                                        <link linkend="gpointer">gpointer</link>       user_data)          : Run First</programlisting>
+<para>
+
+</para><variablelist role="params">
+<varlistentry><term><parameter>cryptuikeyset</parameter>&nbsp;:</term>
+<listitem><simpara>the object which received the signal.
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>arg1</parameter>&nbsp;:</term>
+<listitem><simpara>
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>arg2</parameter>&nbsp;:</term>
+<listitem><simpara>
+
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>user_data</parameter>&nbsp;:</term>
+<listitem><simpara>user data set when the signal handler was connected.</simpara></listitem></varlistentry>
+</variablelist></refsect2><refsect2 id="CryptUIKeyset-removed"><title>The <literal>&quot;removed&quot;</literal> signal</title>
+<indexterm zone="CryptUIKeyset-removed"><primary>CryptUIKeyset::removed</primary></indexterm><programlisting><link linkend="void">void</link>                user_function                      (<link linkend="CryptUIKeyset">CryptUIKeyset</link> *cryptuikeyset,
+                                                        <link linkend="gchar">gchar</link>         *arg1,
+                                                        <link linkend="gpointer">gpointer</link>       arg2,
+                                                        <link linkend="gpointer">gpointer</link>       user_data)          : Run First</programlisting>
+<para>
+
+</para><variablelist role="params">
+<varlistentry><term><parameter>cryptuikeyset</parameter>&nbsp;:</term>
+<listitem><simpara>the object which received the signal.
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>arg1</parameter>&nbsp;:</term>
+<listitem><simpara>
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>arg2</parameter>&nbsp;:</term>
+<listitem><simpara>
+
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>user_data</parameter>&nbsp;:</term>
+<listitem><simpara>user data set when the signal handler was connected.</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+</refsect1>
+
+
+
+</refentry>

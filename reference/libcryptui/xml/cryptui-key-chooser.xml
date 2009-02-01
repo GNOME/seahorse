@@ -1,0 +1,279 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<refentry id="CryptUIKeyChooser">
+<refmeta>
+<refentrytitle role="top_of_page" id="CryptUIKeyChooser.top_of_page">CryptUIKeyChooser</refentrytitle>
+<manvolnum>3</manvolnum>
+<refmiscinfo>LIBCRYPTUI Library</refmiscinfo>
+</refmeta>
+
+<refnamediv>
+<refname>CryptUIKeyChooser</refname>
+<refpurpose></refpurpose>
+<!--[<xref linkend="desc" endterm="desc.title"/>]-->
+</refnamediv>
+
+<refsynopsisdiv id="CryptUIKeyChooser.synopsis" role="synopsis">
+<title role="synopsis.title">Synopsis</title>
+
+<synopsis>
+enum                <link linkend="CryptUIKeyChooserMode">CryptUIKeyChooserMode</link>;
+                    <link linkend="CryptUIKeyChooserPriv">CryptUIKeyChooserPriv</link>;
+                    <link linkend="CryptUIKeyChooser-struct">CryptUIKeyChooser</link>;
+<link linkend="CryptUIKeyChooser">CryptUIKeyChooser</link>*  <link linkend="cryptui-key-chooser-new">cryptui_key_chooser_new</link>             (<link linkend="CryptUIKeyset">CryptUIKeyset</link> *ckset,
+                                                         <link linkend="CryptUIKeyChooserMode">CryptUIKeyChooserMode</link> mode);
+<link linkend="gboolean">gboolean</link>            <link linkend="cryptui-key-chooser-get-enforce-prefs">cryptui_key_chooser_get_enforce_prefs</link>
+                                                        (<link linkend="CryptUIKeyChooser">CryptUIKeyChooser</link> *chooser);
+<link linkend="void">void</link>                <link linkend="cryptui-key-chooser-set-enforce-prefs">cryptui_key_chooser_set_enforce_prefs</link>
+                                                        (<link linkend="CryptUIKeyChooser">CryptUIKeyChooser</link> *chooser,
+                                                         <link linkend="gboolean">gboolean</link> enforce_prefs);
+<link linkend="gboolean">gboolean</link>            <link linkend="cryptui-key-chooser-have-recipients">cryptui_key_chooser_have_recipients</link> (<link linkend="CryptUIKeyChooser">CryptUIKeyChooser</link> *chooser);
+<link linkend="GList">GList</link>*              <link linkend="cryptui-key-chooser-get-recipients">cryptui_key_chooser_get_recipients</link>  (<link linkend="CryptUIKeyChooser">CryptUIKeyChooser</link> *chooser);
+<link linkend="void">void</link>                <link linkend="cryptui-key-chooser-set-recipients">cryptui_key_chooser_set_recipients</link>  (<link linkend="CryptUIKeyChooser">CryptUIKeyChooser</link> *chooser,
+                                                         <link linkend="GList">GList</link> *keys);
+const <link linkend="gchar">gchar</link>*        <link linkend="cryptui-key-chooser-get-signer">cryptui_key_chooser_get_signer</link>      (<link linkend="CryptUIKeyChooser">CryptUIKeyChooser</link> *chooser);
+<link linkend="void">void</link>                <link linkend="cryptui-key-chooser-set-signer">cryptui_key_chooser_set_signer</link>      (<link linkend="CryptUIKeyChooser">CryptUIKeyChooser</link> *chooser,
+                                                         const <link linkend="gchar">gchar</link> *key);
+</synopsis>
+</refsynopsisdiv>
+
+<refsect1 id="CryptUIKeyChooser.object-hierarchy" role="object_hierarchy">
+<title role="object_hierarchy.title">Object Hierarchy</title>
+<synopsis>
+  <link linkend="GObject">GObject</link>
+   +----<link linkend="GInitiallyUnowned">GInitiallyUnowned</link>
+         +----<link linkend="GtkObject">GtkObject</link>
+               +----<link linkend="GtkWidget">GtkWidget</link>
+                     +----<link linkend="GtkContainer">GtkContainer</link>
+                           +----<link linkend="GtkBox">GtkBox</link>
+                                 +----<link linkend="GtkVBox">GtkVBox</link>
+                                       +----CryptUIKeyChooser
+</synopsis>
+
+</refsect1>
+
+
+
+<refsect1 id="CryptUIKeyChooser.implemented-interfaces" role="impl_interfaces">
+<title role="impl_interfaces.title">Implemented Interfaces</title>
+<para>
+CryptUIKeyChooser implements
+ <link linkend="AtkImplementorIface">AtkImplementorIface</link> and  <link linkend="GtkBuildable">GtkBuildable</link>.</para>
+
+</refsect1>
+
+
+<refsect1 id="CryptUIKeyChooser.properties" role="properties">
+<title role="properties.title">Properties</title>
+<synopsis>
+  &quot;<link linkend="CryptUIKeyChooser--enforce-prefs">enforce-prefs</link>&quot;            <link linkend="gboolean">gboolean</link>              : Read / Write
+  &quot;<link linkend="CryptUIKeyChooser--keyset">keyset</link>&quot;                   <link linkend="CryptUIKeyset">CryptUIKeyset</link>*        : Read / Write / Construct Only
+  &quot;<link linkend="CryptUIKeyChooser--mode">mode</link>&quot;                     <link linkend="guint">guint</link>                 : Read / Write / Construct Only
+</synopsis>
+</refsect1>
+
+<refsect1 id="CryptUIKeyChooser.signals" role="signal_proto">
+<title role="signal_proto.title">Signals</title>
+<synopsis>
+  &quot;<link linkend="CryptUIKeyChooser-changed">changed</link>&quot;                                        : Run First
+</synopsis>
+</refsect1>
+
+
+<refsect1 id="CryptUIKeyChooser.description" role="desc">
+<title role="desc.title">Description</title>
+<para>
+
+</para>
+</refsect1>
+
+<refsect1 id="CryptUIKeyChooser.details" role="details">
+<title role="details.title">Details</title>
+<refsect2 id="CryptUIKeyChooserMode" role="enum">
+<title>enum CryptUIKeyChooserMode</title>
+<indexterm zone="CryptUIKeyChooserMode"><primary>CryptUIKeyChooserMode</primary></indexterm><programlisting>typedef enum _CryptUIKeyChooserMode {
+    CRYPTUI_KEY_CHOOSER_RECIPIENTS =    0x0001,
+    CRYPTUI_KEY_CHOOSER_SIGNER =        0x0002,
+    
+    CRYPTUI_KEY_CHOOSER_MUSTSIGN =      0x0010
+} CryptUIKeyChooserMode;
+</programlisting>
+<para>
+
+</para></refsect2>
+<refsect2 id="CryptUIKeyChooserPriv" role="struct">
+<title>CryptUIKeyChooserPriv</title>
+<indexterm zone="CryptUIKeyChooserPriv"><primary>CryptUIKeyChooserPriv</primary></indexterm><programlisting>typedef struct _CryptUIKeyChooserPriv CryptUIKeyChooserPriv;</programlisting>
+<para>
+
+</para></refsect2>
+<refsect2 id="CryptUIKeyChooser-struct" role="struct">
+<title>CryptUIKeyChooser</title>
+<indexterm zone="CryptUIKeyChooser-struct"><primary>CryptUIKeyChooser</primary></indexterm><programlisting>typedef struct _CryptUIKeyChooser CryptUIKeyChooser;</programlisting>
+<para>
+
+</para></refsect2>
+<refsect2 id="cryptui-key-chooser-new" role="function">
+<title>cryptui_key_chooser_new ()</title>
+<indexterm zone="cryptui-key-chooser-new"><primary>cryptui_key_chooser_new</primary></indexterm><programlisting><link linkend="CryptUIKeyChooser">CryptUIKeyChooser</link>*  cryptui_key_chooser_new             (<link linkend="CryptUIKeyset">CryptUIKeyset</link> *ckset,
+                                                         <link linkend="CryptUIKeyChooserMode">CryptUIKeyChooserMode</link> mode);</programlisting>
+<para>
+
+</para><variablelist role="params">
+<varlistentry><term><parameter>ckset</parameter>&nbsp;:</term>
+<listitem><simpara>
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>mode</parameter>&nbsp;:</term>
+<listitem><simpara>
+</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&nbsp;:</term><listitem><simpara>
+
+
+</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="cryptui-key-chooser-get-enforce-prefs" role="function">
+<title>cryptui_key_chooser_get_enforce_prefs ()</title>
+<indexterm zone="cryptui-key-chooser-get-enforce-prefs"><primary>cryptui_key_chooser_get_enforce_prefs</primary></indexterm><programlisting><link linkend="gboolean">gboolean</link>            cryptui_key_chooser_get_enforce_prefs
+                                                        (<link linkend="CryptUIKeyChooser">CryptUIKeyChooser</link> *chooser);</programlisting>
+<para>
+
+</para><variablelist role="params">
+<varlistentry><term><parameter>chooser</parameter>&nbsp;:</term>
+<listitem><simpara>
+</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&nbsp;:</term><listitem><simpara>
+
+
+</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="cryptui-key-chooser-set-enforce-prefs" role="function">
+<title>cryptui_key_chooser_set_enforce_prefs ()</title>
+<indexterm zone="cryptui-key-chooser-set-enforce-prefs"><primary>cryptui_key_chooser_set_enforce_prefs</primary></indexterm><programlisting><link linkend="void">void</link>                cryptui_key_chooser_set_enforce_prefs
+                                                        (<link linkend="CryptUIKeyChooser">CryptUIKeyChooser</link> *chooser,
+                                                         <link linkend="gboolean">gboolean</link> enforce_prefs);</programlisting>
+<para>
+
+</para><variablelist role="params">
+<varlistentry><term><parameter>chooser</parameter>&nbsp;:</term>
+<listitem><simpara>
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>enforce_prefs</parameter>&nbsp;:</term>
+<listitem><simpara>
+
+
+</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="cryptui-key-chooser-have-recipients" role="function">
+<title>cryptui_key_chooser_have_recipients ()</title>
+<indexterm zone="cryptui-key-chooser-have-recipients"><primary>cryptui_key_chooser_have_recipients</primary></indexterm><programlisting><link linkend="gboolean">gboolean</link>            cryptui_key_chooser_have_recipients (<link linkend="CryptUIKeyChooser">CryptUIKeyChooser</link> *chooser);</programlisting>
+<para>
+
+</para><variablelist role="params">
+<varlistentry><term><parameter>chooser</parameter>&nbsp;:</term>
+<listitem><simpara>
+</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&nbsp;:</term><listitem><simpara>
+
+
+</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="cryptui-key-chooser-get-recipients" role="function">
+<title>cryptui_key_chooser_get_recipients ()</title>
+<indexterm zone="cryptui-key-chooser-get-recipients"><primary>cryptui_key_chooser_get_recipients</primary></indexterm><programlisting><link linkend="GList">GList</link>*              cryptui_key_chooser_get_recipients  (<link linkend="CryptUIKeyChooser">CryptUIKeyChooser</link> *chooser);</programlisting>
+<para>
+
+</para><variablelist role="params">
+<varlistentry><term><parameter>chooser</parameter>&nbsp;:</term>
+<listitem><simpara>
+</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&nbsp;:</term><listitem><simpara>
+
+
+</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="cryptui-key-chooser-set-recipients" role="function">
+<title>cryptui_key_chooser_set_recipients ()</title>
+<indexterm zone="cryptui-key-chooser-set-recipients"><primary>cryptui_key_chooser_set_recipients</primary></indexterm><programlisting><link linkend="void">void</link>                cryptui_key_chooser_set_recipients  (<link linkend="CryptUIKeyChooser">CryptUIKeyChooser</link> *chooser,
+                                                         <link linkend="GList">GList</link> *keys);</programlisting>
+<para>
+
+</para><variablelist role="params">
+<varlistentry><term><parameter>chooser</parameter>&nbsp;:</term>
+<listitem><simpara>
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>keys</parameter>&nbsp;:</term>
+<listitem><simpara>
+
+
+</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="cryptui-key-chooser-get-signer" role="function">
+<title>cryptui_key_chooser_get_signer ()</title>
+<indexterm zone="cryptui-key-chooser-get-signer"><primary>cryptui_key_chooser_get_signer</primary></indexterm><programlisting>const <link linkend="gchar">gchar</link>*        cryptui_key_chooser_get_signer      (<link linkend="CryptUIKeyChooser">CryptUIKeyChooser</link> *chooser);</programlisting>
+<para>
+
+</para><variablelist role="params">
+<varlistentry><term><parameter>chooser</parameter>&nbsp;:</term>
+<listitem><simpara>
+</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&nbsp;:</term><listitem><simpara>
+
+
+</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="cryptui-key-chooser-set-signer" role="function">
+<title>cryptui_key_chooser_set_signer ()</title>
+<indexterm zone="cryptui-key-chooser-set-signer"><primary>cryptui_key_chooser_set_signer</primary></indexterm><programlisting><link linkend="void">void</link>                cryptui_key_chooser_set_signer      (<link linkend="CryptUIKeyChooser">CryptUIKeyChooser</link> *chooser,
+                                                         const <link linkend="gchar">gchar</link> *key);</programlisting>
+<para>
+
+</para><variablelist role="params">
+<varlistentry><term><parameter>chooser</parameter>&nbsp;:</term>
+<listitem><simpara>
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>key</parameter>&nbsp;:</term>
+<listitem><simpara>
+
+
+</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+
+</refsect1>
+<refsect1 id="CryptUIKeyChooser.property-details" role="property_details">
+<title role="property_details.title">Property Details</title>
+<refsect2 id="CryptUIKeyChooser--enforce-prefs"><title>The <literal>&quot;enforce-prefs&quot;</literal> property</title>
+<indexterm zone="CryptUIKeyChooser--enforce-prefs"><primary>CryptUIKeyChooser:enforce-prefs</primary></indexterm><programlisting>  &quot;enforce-prefs&quot;            <link linkend="gboolean">gboolean</link>              : Read / Write</programlisting>
+<para>Enforce user preferences.</para><para>Default value: TRUE</para>
+</refsect2>
+<refsect2 id="CryptUIKeyChooser--keyset"><title>The <literal>&quot;keyset&quot;</literal> property</title>
+<indexterm zone="CryptUIKeyChooser--keyset"><primary>CryptUIKeyChooser:keyset</primary></indexterm><programlisting>  &quot;keyset&quot;                   <link linkend="CryptUIKeyset">CryptUIKeyset</link>*        : Read / Write / Construct Only</programlisting>
+<para>Current CryptUI Key Source to use.</para></refsect2>
+<refsect2 id="CryptUIKeyChooser--mode"><title>The <literal>&quot;mode&quot;</literal> property</title>
+<indexterm zone="CryptUIKeyChooser--mode"><primary>CryptUIKeyChooser:mode</primary></indexterm><programlisting>  &quot;mode&quot;                     <link linkend="guint">guint</link>                 : Read / Write / Construct Only</programlisting>
+<para>Display mode for chooser.</para><para>Allowed values: &lt;= 268435455</para>
+<para>Default value: 0</para>
+</refsect2>
+
+</refsect1>
+
+<refsect1 id="CryptUIKeyChooser.signal-details" role="signals">
+<title role="signals.title">Signal Details</title>
+<refsect2 id="CryptUIKeyChooser-changed"><title>The <literal>&quot;changed&quot;</literal> signal</title>
+<indexterm zone="CryptUIKeyChooser-changed"><primary>CryptUIKeyChooser::changed</primary></indexterm><programlisting><link linkend="void">void</link>                user_function                      (<link linkend="CryptUIKeyChooser">CryptUIKeyChooser</link> *cryptuikeychooser,
+                                                        <link linkend="gpointer">gpointer</link>           user_data)              : Run First</programlisting>
+<para>
+
+</para><variablelist role="params">
+<varlistentry><term><parameter>cryptuikeychooser</parameter>&nbsp;:</term>
+<listitem><simpara>the object which received the signal.
+
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>user_data</parameter>&nbsp;:</term>
+<listitem><simpara>user data set when the signal handler was connected.</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+</refsect1>
+
+
+
+</refentry>

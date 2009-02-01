@@ -1,0 +1,925 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>CryptUIKeyset</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
+<link rel="start" href="index.html" title="libcryptui Reference Manual">
+<link rel="up" href="ch01.html" title="libcryptui Objects and Functions">
+<link rel="prev" href="ch01.html" title="libcryptui Objects and Functions">
+<link rel="next" href="libcryptui-cryptui-key-combo.html" title="cryptui-key-combo">
+<meta name="generator" content="GTK-Doc V1.10 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+<link rel="chapter" href="ch01.html" title="libcryptui Objects and Functions">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="ch01.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="ch01.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">libcryptui Reference Manual</th>
+<td><a accesskey="n" href="libcryptui-cryptui-key-combo.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts"><nobr><a href="#CryptUIKeyset.synopsis" class="shortcut">Top</a>
+                   | 
+                  <a href="#CryptUIKeyset.description" class="shortcut">Description</a>
+                   | 
+                  <a href="#CryptUIKeyset.object-hierarchy" class="shortcut">Object Hierarchy</a>
+                   | 
+                  <a href="#CryptUIKeyset.properties" class="shortcut">Properties</a>
+                   | 
+                  <a href="#CryptUIKeyset.signals" class="shortcut">Signals</a></nobr></td></tr>
+</table>
+<div class="refentry" lang="en">
+<a name="CryptUIKeyset"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2><span class="refentrytitle"><a name="CryptUIKeyset.top_of_page"></a>CryptUIKeyset</span></h2>
+<p>CryptUIKeyset</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<a name="CryptUIKeyset.synopsis"></a><h2>Synopsis</h2>
+<pre class="synopsis">
+                    <a class="link" href="CryptUIKeyset.html#CryptUIKeysetPrivate" title="CryptUIKeysetPrivate">CryptUIKeysetPrivate</a>;
+                    <a class="link" href="CryptUIKeyset.html#CryptUIKeyset-struct" title="CryptUIKeyset">CryptUIKeyset</a>;
+<a class="link" href="CryptUIKeyset.html" title="CryptUIKeyset">CryptUIKeyset</a>*      <a class="link" href="CryptUIKeyset.html#cryptui-keyset-new" title="cryptui_keyset_new ()">cryptui_keyset_new</a>                  (const <a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a> *keytype,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a> expand_keys);
+<a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a>            <a class="link" href="CryptUIKeyset.html#cryptui-keyset-has-key" title="cryptui_keyset_has_key ()">cryptui_keyset_has_key</a>              (<a class="link" href="CryptUIKeyset.html" title="CryptUIKeyset">CryptUIKeyset</a> *keyset,
+                                                         const <a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a> *key);
+const <a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a>*        <a class="link" href="CryptUIKeyset.html#cryptui-keyset-get-keytype" title="cryptui_keyset_get_keytype ()">cryptui_keyset_get_keytype</a>          (<a class="link" href="CryptUIKeyset.html" title="CryptUIKeyset">CryptUIKeyset</a> *keyset);
+<a
+href="../glib/glib-Doubly-Linked-Lists.html#GList"
+>GList</a>*              <a class="link" href="CryptUIKeyset.html#cryptui-keyset-get-keys" title="cryptui_keyset_get_keys ()">cryptui_keyset_get_keys</a>             (<a class="link" href="CryptUIKeyset.html" title="CryptUIKeyset">CryptUIKeyset</a> *keyset);
+<a
+href="../glib/glib-Basic-Types.html#guint"
+>guint</a>               <a class="link" href="CryptUIKeyset.html#cryptui-keyset-get-count" title="cryptui_keyset_get_count ()">cryptui_keyset_get_count</a>            (<a class="link" href="CryptUIKeyset.html" title="CryptUIKeyset">CryptUIKeyset</a> *keyset);
+void                <a class="link" href="CryptUIKeyset.html#cryptui-keyset-refresh" title="cryptui_keyset_refresh ()">cryptui_keyset_refresh</a>              (<a class="link" href="CryptUIKeyset.html" title="CryptUIKeyset">CryptUIKeyset</a> *keyset);
+<a
+href="../glib/glib-Basic-Types.html#gpointer"
+>gpointer</a>            <a class="link" href="CryptUIKeyset.html#cryptui-keyset-get-closure" title="cryptui_keyset_get_closure ()">cryptui_keyset_get_closure</a>          (<a class="link" href="CryptUIKeyset.html" title="CryptUIKeyset">CryptUIKeyset</a> *keyset,
+                                                         const <a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a> *key);
+void                <a class="link" href="CryptUIKeyset.html#cryptui-keyset-set-closure" title="cryptui_keyset_set_closure ()">cryptui_keyset_set_closure</a>          (<a class="link" href="CryptUIKeyset.html" title="CryptUIKeyset">CryptUIKeyset</a> *keyset,
+                                                         const <a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a> *key,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gpointer"
+>gpointer</a> closure);
+<a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a>            <a class="link" href="CryptUIKeyset.html#cryptui-keyset-get-expand-keys" title="cryptui_keyset_get_expand_keys ()">cryptui_keyset_get_expand_keys</a>      (<a class="link" href="CryptUIKeyset.html" title="CryptUIKeyset">CryptUIKeyset</a> *keyset);
+void                <a class="link" href="CryptUIKeyset.html#cryptui-keyset-set-expand-keys" title="cryptui_keyset_set_expand_keys ()">cryptui_keyset_set_expand_keys</a>      (<a class="link" href="CryptUIKeyset.html" title="CryptUIKeyset">CryptUIKeyset</a> *keyset,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a> expand_keys);
+void                <a class="link" href="CryptUIKeyset.html#cryptui-keyset-cache-key" title="cryptui_keyset_cache_key ()">cryptui_keyset_cache_key</a>            (<a class="link" href="CryptUIKeyset.html" title="CryptUIKeyset">CryptUIKeyset</a> *keyset,
+                                                         const <a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a> *key);
+<a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a>*              <a class="link" href="CryptUIKeyset.html#cryptui-keyset-key-get-string" title="cryptui_keyset_key_get_string ()">cryptui_keyset_key_get_string</a>       (<a class="link" href="CryptUIKeyset.html" title="CryptUIKeyset">CryptUIKeyset</a> *keyset,
+                                                         const <a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a> *key,
+                                                         const <a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a> *prop);
+<a
+href="../glib/glib-Basic-Types.html#guint"
+>guint</a>               <a class="link" href="CryptUIKeyset.html#cryptui-keyset-key-get-uint" title="cryptui_keyset_key_get_uint ()">cryptui_keyset_key_get_uint</a>         (<a class="link" href="CryptUIKeyset.html" title="CryptUIKeyset">CryptUIKeyset</a> *keyset,
+                                                         const <a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a> *key,
+                                                         const <a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a> *prop);
+<a
+href="../glib/glib-Basic-Types.html#guint"
+>guint</a>               <a class="link" href="CryptUIKeyset.html#cryptui-keyset-key-flags" title="cryptui_keyset_key_flags ()">cryptui_keyset_key_flags</a>            (<a class="link" href="CryptUIKeyset.html" title="CryptUIKeyset">CryptUIKeyset</a> *keyset,
+                                                         const <a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a> *key);
+<a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a>*              <a class="link" href="CryptUIKeyset.html#cryptui-keyset-key-display-name" title="cryptui_keyset_key_display_name ()">cryptui_keyset_key_display_name</a>     (<a class="link" href="CryptUIKeyset.html" title="CryptUIKeyset">CryptUIKeyset</a> *keyset,
+                                                         const <a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a> *key);
+<a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a>*              <a class="link" href="CryptUIKeyset.html#cryptui-keyset-key-display-id" title="cryptui_keyset_key_display_id ()">cryptui_keyset_key_display_id</a>       (<a class="link" href="CryptUIKeyset.html" title="CryptUIKeyset">CryptUIKeyset</a> *keyset,
+                                                         const <a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a> *key);
+<a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a>*              <a class="link" href="CryptUIKeyset.html#cryptui-keyset-key-raw-keyid" title="cryptui_keyset_key_raw_keyid ()">cryptui_keyset_key_raw_keyid</a>        (<a class="link" href="CryptUIKeyset.html" title="CryptUIKeyset">CryptUIKeyset</a> *keyset,
+                                                         const <a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a> *key);
+<a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a>**             <a class="link" href="CryptUIKeyset.html#cryptui-keyset-keys-raw-keyids" title="cryptui_keyset_keys_raw_keyids ()">cryptui_keyset_keys_raw_keyids</a>      (<a class="link" href="CryptUIKeyset.html" title="CryptUIKeyset">CryptUIKeyset</a> *keyset,
+                                                         const <a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a> **keys);
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="CryptUIKeyset.object-hierarchy"></a><h2>Object Hierarchy</h2>
+<pre class="synopsis">
+  <a
+href="../gobject/gobject-The-Base-Object-Type.html#GObject"
+>GObject</a>
+   +----CryptUIKeyset
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="CryptUIKeyset.properties"></a><h2>Properties</h2>
+<pre class="synopsis">
+  "<a class="link" href="CryptUIKeyset.html#CryptUIKeyset--expand-keys" title='The "expand-keys" property'>expand-keys</a>"              <a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a>              : Read / Write
+  "<a class="link" href="CryptUIKeyset.html#CryptUIKeyset--keytype" title='The "keytype" property'>keytype</a>"                  <a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a>*                : Read / Write / Construct Only
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="CryptUIKeyset.signals"></a><h2>Signals</h2>
+<pre class="synopsis">
+  "<a class="link" href="CryptUIKeyset.html#CryptUIKeyset-added" title='The "added" signal'>added</a>"                                          : Run First
+  "<a class="link" href="CryptUIKeyset.html#CryptUIKeyset-changed" title='The "changed" signal'>changed</a>"                                        : Run First
+  "<a class="link" href="CryptUIKeyset.html#CryptUIKeyset-removed" title='The "removed" signal'>removed</a>"                                        : Run First
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="CryptUIKeyset.description"></a><h2>Description</h2>
+<p>
+
+</p>
+</div>
+<div class="refsect1" lang="en">
+<a name="CryptUIKeyset.details"></a><h2>Details</h2>
+<div class="refsect2" lang="en">
+<a name="CryptUIKeysetPrivate"></a><h3>CryptUIKeysetPrivate</h3>
+<pre class="programlisting">typedef struct _CryptUIKeysetPrivate CryptUIKeysetPrivate;</pre>
+<p>
+
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="CryptUIKeyset-struct"></a><h3>CryptUIKeyset</h3>
+<pre class="programlisting">typedef struct _CryptUIKeyset CryptUIKeyset;</pre>
+<p>
+
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="cryptui-keyset-new"></a><h3>cryptui_keyset_new ()</h3>
+<pre class="programlisting"><a class="link" href="CryptUIKeyset.html" title="CryptUIKeyset">CryptUIKeyset</a>*      cryptui_keyset_new                  (const <a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a> *keytype,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a> expand_keys);</pre>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>keytype</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>expand_keys</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="cryptui-keyset-has-key"></a><h3>cryptui_keyset_has_key ()</h3>
+<pre class="programlisting"><a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a>            cryptui_keyset_has_key              (<a class="link" href="CryptUIKeyset.html" title="CryptUIKeyset">CryptUIKeyset</a> *keyset,
+                                                         const <a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a> *key);</pre>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>keyset</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>key</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="cryptui-keyset-get-keytype"></a><h3>cryptui_keyset_get_keytype ()</h3>
+<pre class="programlisting">const <a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a>*        cryptui_keyset_get_keytype          (<a class="link" href="CryptUIKeyset.html" title="CryptUIKeyset">CryptUIKeyset</a> *keyset);</pre>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>keyset</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="cryptui-keyset-get-keys"></a><h3>cryptui_keyset_get_keys ()</h3>
+<pre class="programlisting"><a
+href="../glib/glib-Doubly-Linked-Lists.html#GList"
+>GList</a>*              cryptui_keyset_get_keys             (<a class="link" href="CryptUIKeyset.html" title="CryptUIKeyset">CryptUIKeyset</a> *keyset);</pre>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>keyset</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="cryptui-keyset-get-count"></a><h3>cryptui_keyset_get_count ()</h3>
+<pre class="programlisting"><a
+href="../glib/glib-Basic-Types.html#guint"
+>guint</a>               cryptui_keyset_get_count            (<a class="link" href="CryptUIKeyset.html" title="CryptUIKeyset">CryptUIKeyset</a> *keyset);</pre>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>keyset</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="cryptui-keyset-refresh"></a><h3>cryptui_keyset_refresh ()</h3>
+<pre class="programlisting">void                cryptui_keyset_refresh              (<a class="link" href="CryptUIKeyset.html" title="CryptUIKeyset">CryptUIKeyset</a> *keyset);</pre>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><p><span class="term"><em class="parameter"><code>keyset</code></em> :</span></p></td>
+<td>
+
+
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="cryptui-keyset-get-closure"></a><h3>cryptui_keyset_get_closure ()</h3>
+<pre class="programlisting"><a
+href="../glib/glib-Basic-Types.html#gpointer"
+>gpointer</a>            cryptui_keyset_get_closure          (<a class="link" href="CryptUIKeyset.html" title="CryptUIKeyset">CryptUIKeyset</a> *keyset,
+                                                         const <a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a> *key);</pre>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>keyset</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>key</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="cryptui-keyset-set-closure"></a><h3>cryptui_keyset_set_closure ()</h3>
+<pre class="programlisting">void                cryptui_keyset_set_closure          (<a class="link" href="CryptUIKeyset.html" title="CryptUIKeyset">CryptUIKeyset</a> *keyset,
+                                                         const <a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a> *key,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gpointer"
+>gpointer</a> closure);</pre>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>keyset</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>key</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>closure</code></em> :</span></p></td>
+<td>
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="cryptui-keyset-get-expand-keys"></a><h3>cryptui_keyset_get_expand_keys ()</h3>
+<pre class="programlisting"><a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a>            cryptui_keyset_get_expand_keys      (<a class="link" href="CryptUIKeyset.html" title="CryptUIKeyset">CryptUIKeyset</a> *keyset);</pre>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>keyset</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="cryptui-keyset-set-expand-keys"></a><h3>cryptui_keyset_set_expand_keys ()</h3>
+<pre class="programlisting">void                cryptui_keyset_set_expand_keys      (<a class="link" href="CryptUIKeyset.html" title="CryptUIKeyset">CryptUIKeyset</a> *keyset,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a> expand_keys);</pre>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>keyset</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>expand_keys</code></em> :</span></p></td>
+<td>
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="cryptui-keyset-cache-key"></a><h3>cryptui_keyset_cache_key ()</h3>
+<pre class="programlisting">void                cryptui_keyset_cache_key            (<a class="link" href="CryptUIKeyset.html" title="CryptUIKeyset">CryptUIKeyset</a> *keyset,
+                                                         const <a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a> *key);</pre>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>keyset</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>key</code></em> :</span></p></td>
+<td>
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="cryptui-keyset-key-get-string"></a><h3>cryptui_keyset_key_get_string ()</h3>
+<pre class="programlisting"><a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a>*              cryptui_keyset_key_get_string       (<a class="link" href="CryptUIKeyset.html" title="CryptUIKeyset">CryptUIKeyset</a> *keyset,
+                                                         const <a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a> *key,
+                                                         const <a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a> *prop);</pre>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>keyset</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>key</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>prop</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="cryptui-keyset-key-get-uint"></a><h3>cryptui_keyset_key_get_uint ()</h3>
+<pre class="programlisting"><a
+href="../glib/glib-Basic-Types.html#guint"
+>guint</a>               cryptui_keyset_key_get_uint         (<a class="link" href="CryptUIKeyset.html" title="CryptUIKeyset">CryptUIKeyset</a> *keyset,
+                                                         const <a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a> *key,
+                                                         const <a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a> *prop);</pre>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>keyset</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>key</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>prop</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="cryptui-keyset-key-flags"></a><h3>cryptui_keyset_key_flags ()</h3>
+<pre class="programlisting"><a
+href="../glib/glib-Basic-Types.html#guint"
+>guint</a>               cryptui_keyset_key_flags            (<a class="link" href="CryptUIKeyset.html" title="CryptUIKeyset">CryptUIKeyset</a> *keyset,
+                                                         const <a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a> *key);</pre>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>keyset</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>key</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="cryptui-keyset-key-display-name"></a><h3>cryptui_keyset_key_display_name ()</h3>
+<pre class="programlisting"><a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a>*              cryptui_keyset_key_display_name     (<a class="link" href="CryptUIKeyset.html" title="CryptUIKeyset">CryptUIKeyset</a> *keyset,
+                                                         const <a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a> *key);</pre>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>keyset</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>key</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="cryptui-keyset-key-display-id"></a><h3>cryptui_keyset_key_display_id ()</h3>
+<pre class="programlisting"><a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a>*              cryptui_keyset_key_display_id       (<a class="link" href="CryptUIKeyset.html" title="CryptUIKeyset">CryptUIKeyset</a> *keyset,
+                                                         const <a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a> *key);</pre>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>keyset</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>key</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="cryptui-keyset-key-raw-keyid"></a><h3>cryptui_keyset_key_raw_keyid ()</h3>
+<pre class="programlisting"><a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a>*              cryptui_keyset_key_raw_keyid        (<a class="link" href="CryptUIKeyset.html" title="CryptUIKeyset">CryptUIKeyset</a> *keyset,
+                                                         const <a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a> *key);</pre>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>keyset</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>key</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="cryptui-keyset-keys-raw-keyids"></a><h3>cryptui_keyset_keys_raw_keyids ()</h3>
+<pre class="programlisting"><a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a>**             cryptui_keyset_keys_raw_keyids      (<a class="link" href="CryptUIKeyset.html" title="CryptUIKeyset">CryptUIKeyset</a> *keyset,
+                                                         const <a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a> **keys);</pre>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>keyset</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>keys</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<div class="refsect1" lang="en">
+<a name="CryptUIKeyset.property-details"></a><h2>Property Details</h2>
+<div class="refsect2" lang="en">
+<a name="CryptUIKeyset--expand-keys"></a><h3>The <code class="literal">"expand-keys"</code> property</h3>
+<pre class="programlisting">  "expand-keys"              <a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a>              : Read / Write</pre>
+<p>Expand all names in keys.</p>
+<p>Default value: TRUE</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="CryptUIKeyset--keytype"></a><h3>The <code class="literal">"keytype"</code> property</h3>
+<pre class="programlisting">  "keytype"                  <a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a>*                : Read / Write / Construct Only</pre>
+<p>Type of keys to be listed.</p>
+<p>Default value: NULL</p>
+</div>
+</div>
+<div class="refsect1" lang="en">
+<a name="CryptUIKeyset.signal-details"></a><h2>Signal Details</h2>
+<div class="refsect2" lang="en">
+<a name="CryptUIKeyset-added"></a><h3>The <code class="literal">"added"</code> signal</h3>
+<pre class="programlisting">void                user_function                      (<a class="link" href="CryptUIKeyset.html" title="CryptUIKeyset">CryptUIKeyset</a> *cryptuikeyset,
+                                                        <a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a>         *arg1,
+                                                        <a
+href="../glib/glib-Basic-Types.html#gpointer"
+>gpointer</a>       user_data)          : Run First</pre>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>cryptuikeyset</code></em> :</span></p></td>
+<td>the object which received the signal.
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>arg1</code></em> :</span></p></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>user_data</code></em> :</span></p></td>
+<td>user data set when the signal handler was connected.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="CryptUIKeyset-changed"></a><h3>The <code class="literal">"changed"</code> signal</h3>
+<pre class="programlisting">void                user_function                      (<a class="link" href="CryptUIKeyset.html" title="CryptUIKeyset">CryptUIKeyset</a> *cryptuikeyset,
+                                                        <a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a>         *arg1,
+                                                        <a
+href="../glib/glib-Basic-Types.html#gpointer"
+>gpointer</a>       arg2,
+                                                        <a
+href="../glib/glib-Basic-Types.html#gpointer"
+>gpointer</a>       user_data)          : Run First</pre>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>cryptuikeyset</code></em> :</span></p></td>
+<td>the object which received the signal.
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>arg1</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>arg2</code></em> :</span></p></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>user_data</code></em> :</span></p></td>
+<td>user data set when the signal handler was connected.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="CryptUIKeyset-removed"></a><h3>The <code class="literal">"removed"</code> signal</h3>
+<pre class="programlisting">void                user_function                      (<a class="link" href="CryptUIKeyset.html" title="CryptUIKeyset">CryptUIKeyset</a> *cryptuikeyset,
+                                                        <a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a>         *arg1,
+                                                        <a
+href="../glib/glib-Basic-Types.html#gpointer"
+>gpointer</a>       arg2,
+                                                        <a
+href="../glib/glib-Basic-Types.html#gpointer"
+>gpointer</a>       user_data)          : Run First</pre>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>cryptuikeyset</code></em> :</span></p></td>
+<td>the object which received the signal.
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>arg1</code></em> :</span></p></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>arg2</code></em> :</span></p></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>user_data</code></em> :</span></p></td>
+<td>user data set when the signal handler was connected.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+</div>
+<div class="footer">
+<hr>
+          Generated by GTK-Doc V1.10</div>
+</body>
+</html>
