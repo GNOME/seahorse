@@ -25,7 +25,7 @@
 #include "seahorse-operation.h"
 
 /* Override the DEBUG_OPERATION_ENABLE switch here */
-/* #define DEBUG_OPERATION_ENABLE 0 */
+#define DEBUG_OPERATION_ENABLE 0
 
 #ifndef DEBUG_OPERATION_ENABLE
 #if _DEBUG
