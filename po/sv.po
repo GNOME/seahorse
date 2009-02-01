@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-10 00:02+0100\n"
-"PO-Revision-Date: 2009-01-10 00:12+0100\n"
+"POT-Creation-Date: 2009-02-01 18:08+0100\n"
+"PO-Revision-Date: 2009-02-01 18:09+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -416,6 +416,7 @@ msgid "Applications"
 msgstr "Program"
 
 #: ../gkr/seahorse-gkr-item-properties.glade.h:6
+#: ../pkcs11/seahorse-pkcs11-certificate-props.c:71
 #: ../pgp/seahorse-pgp-private-key-properties.glade.h:23
 #: ../pgp/seahorse-pgp-public-key-properties.glade.h:20
 #: ../ssh/seahorse-ssh-key-properties.glade.h:17
@@ -460,7 +461,7 @@ msgstr "Användning:"
 
 #. To translators: This is the infinitive not the imperative.
 #: ../gkr/seahorse-gkr-item-properties.glade.h:16
-#: ../src/seahorse-viewer.c:495
+#: ../src/seahorse-viewer.c:496
 msgid "_Delete"
 msgstr "_Ta bort"
 
@@ -551,103 +552,30 @@ msgstr "Tar bort nyckelring..."
 msgid "Listing password keyrings"
 msgstr "Listar lösenordsnyckelringar"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:57
+#: ../gkr/seahorse-gkr-keyring-commands.c:64
 msgid "Password Keyring"
 msgstr "Lösenordsnyckelring"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:58
+#: ../gkr/seahorse-gkr-keyring-commands.c:65
 msgid "Used to store application and network passwords"
 msgstr "Används för att lagra program- och nätverkslösenord"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:89
+#: ../gkr/seahorse-gkr-keyring-commands.c:78
+msgid "Couldn't change keyring password"
+msgstr "Kunde inte ändra lösenord för nyckelring"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:105
+msgid "Change Password"
+msgstr "Ändra lösenord"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:106
+msgid "Change the unlock password of the password storage keyring"
+msgstr "Ändra upplåsningslösenordet för nyckelring för lösenordslagring"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:137
 #, c-format
 msgid "Are you sure you want to delete the password keyring '%s'?"
 msgstr "Är du säker på att du vill ta bort lösenordsnyckelringen \"%s\"?"
-
-#: ../libcryptui/crui-x509-cert-basics.c:65
-msgid "<i>Not Part of Certificate</i>"
-msgstr "<i>Inte en del av certifikatet</i>"
-
-#: ../libcryptui/crui-x509-cert-basics.c:86
-msgid "<i>unknown</i>"
-msgstr "<i>okänd</i>"
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:1
-msgid "<Not Part of Certificate>"
-msgstr "<Inte en del av certifikatet>"
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:2
-msgid "<b>Fingerprints</b>"
-msgstr "<b>Fingeravtryck</b>"
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:3
-msgid "<b>Issued By</b>"
-msgstr "<b>Utfärdat av</b>"
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:4
-msgid "<b>Issued To</b>"
-msgstr "<b>Utfärdat till</b>"
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:5
-msgid "<b>This certificate has been verified for the following uses:</b>"
-msgstr "<b>Detta certifikat har verifierats för följande användningsområden:</b>"
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:6
-msgid "<b>Validity</b>"
-msgstr "<b>Giltighet</b>"
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:7
-msgid "Common Name (CN)"
-msgstr ""
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:8
-msgid "Email Recipient Certificate"
-msgstr "Certifikat för e-postmottagare"
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:9
-msgid "Email Signer Certificate"
-msgstr "Certifikat för e-postsignering"
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:10
-msgid "Expires On"
-msgstr "Går ut den"
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:11
-msgid "Issued On"
-msgstr "Utfärdat den"
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:12
-msgid "MD5 Fingerprint"
-msgstr "MD5-fingeravtryck"
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:13
-msgid "Organization (O)"
-msgstr "Organisation (O)"
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:14
-msgid "Organizational Unit (OU)"
-msgstr "Organisationsenhet (OU)"
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:15
-msgid "SHA1 Fingerprint"
-msgstr "SHA1-fingeravtryck"
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:16
-msgid "SSL Client Certificate"
-msgstr "SSL-klientcertifikat"
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:17
-msgid "SSL Server Certificate"
-msgstr "SSL-servercertifikat"
-
-#: ../libcryptui/crui-x509-cert-basics.glade.h:18
-msgid "Serial Number"
-msgstr "Serienummer"
-
-#: ../libcryptui/crui-x509-cert-dialog.c:65
-#: ../pkcs11/seahorse-pkcs11-certificate.c:107
-msgid "Certificate"
-msgstr "Certifikat"
 
 #: ../libcryptui/cryptui-key-chooser.c:173
 msgid "All Keys"
@@ -1012,9 +940,8 @@ msgid "Private Key"
 msgstr "Privat nyckel"
 
 #: ../libseahorse/seahorse-object.c:225
-#, fuzzy
 msgid "Credentials"
-msgstr "Nätverksinloggning"
+msgstr "Inloggningsuppgifter"
 
 #: ../libseahorse/seahorse-object.c:228
 msgid "Identity"
@@ -1070,8 +997,8 @@ msgid "Key Sharing"
 msgstr "Nyckeldelning"
 
 #: ../libseahorse/seahorse-prefs.glade.h:5
-msgid "Password and Encryption Settings"
-msgstr "Inställningar för lösenord och kryptering"
+msgid "Preferences"
+msgstr "Inställningar"
 
 #: ../libseahorse/seahorse-prefs.glade.h:6
 msgid ""
@@ -1207,15 +1134,20 @@ msgstr "Kunde inte visa hjälp: %s"
 msgid "No encryption keys were found with which to perform the operation you requested.  The program <b>Passwords and Encryption Keys</b> will now be started so that you may either create a key or import one."
 msgstr "Inga krypteringsnycklar hittades som kan användas för den begärda åtgärden.  Programmet <b>Lösenord och krypteringsnycklar</b> kommer nu att startas så att du antingen kan skapa eller importera en nyckel."
 
-#: ../pkcs11/seahorse-pkcs11-commands.c:109
+#: ../pkcs11/seahorse-pkcs11-commands.c:108
 #, c-format
 msgid "Are you sure you want to delete the certificate '%s'?"
 msgstr "Är du säker på att du vill ta bort certifikatet \"%s\"?"
 
-#: ../pkcs11/seahorse-pkcs11-commands.c:111
+#: ../pkcs11/seahorse-pkcs11-commands.c:110
 #, c-format
 msgid "Are you sure you want to delete %d certificates?"
 msgstr "Är du säker på att du vill ta bort %d certifikat?"
+
+#: ../pkcs11/seahorse-pkcs11-certificate.c:107
+#: ../pkcs11/seahorse-pkcs11-certificate-props.c:67
+msgid "Certificate"
+msgstr "Certifikat"
 
 #: ../pgp/seahorse-add-subkey.glade.h:1
 msgid "Expiration Date:"
@@ -1575,20 +1507,20 @@ msgstr "Skickar upp nycklar..."
 msgid "Retrieving keys..."
 msgstr "Hämtar nycklar..."
 
-#: ../pgp/seahorse-hkp-source.c:804
+#: ../pgp/seahorse-hkp-source.c:832
 #, c-format
 msgid "Searching for keys on: %s"
 msgstr "Söker efter nycklar på: %s"
 
 #. The ldap_cb and chain_cb were set in seahorse_ldap_operation_start
-#: ../pgp/seahorse-hkp-source.c:881
-#: ../pgp/seahorse-hkp-source.c:954
+#: ../pgp/seahorse-hkp-source.c:909
+#: ../pgp/seahorse-hkp-source.c:982
 #: ../pgp/seahorse-ldap-source.c:668
 #, c-format
 msgid "Connecting to: %s"
 msgstr "Ansluter till: %s"
 
-#: ../pgp/seahorse-hkp-source.c:979
+#: ../pgp/seahorse-hkp-source.c:1007
 msgid "HTTP Key Server"
 msgstr "HTTP-nyckelserver"
 
@@ -1778,19 +1710,19 @@ msgid "Unable to change trust"
 msgstr "Kunde inte ändra tillit"
 
 #: ../pgp/seahorse-pgp-key-properties.c:1056
-#: ../src/seahorse-viewer.c:311
-#: ../ssh/seahorse-ssh-key-properties.c:215
+#: ../src/seahorse-viewer.c:312
+#: ../ssh/seahorse-ssh-key-properties.c:167
 #, c-format
 msgid "Couldn't export key to \"%s\""
 msgstr "Kan inte exportera nyckel till \"%s\""
 
 #: ../pgp/seahorse-pgp-key-properties.c:1084
-#: ../ssh/seahorse-ssh-key-properties.c:239
+#: ../ssh/seahorse-ssh-key-properties.c:191
 msgid "Export Complete Key"
 msgstr "Exportera komplett nyckel"
 
 #: ../pgp/seahorse-pgp-key-properties.c:1109
-#: ../ssh/seahorse-ssh-key-properties.c:261
+#: ../ssh/seahorse-ssh-key-properties.c:213
 msgid "Couldn't export key."
 msgstr "Kunde inte exportera nyckel."
 
@@ -2289,7 +2221,7 @@ msgid "_Trusted Keys"
 msgstr "_Pålitliga nycklar"
 
 #: ../src/seahorse-key-manager-store.c:648
-#: ../src/seahorse-viewer.c:278
+#: ../src/seahorse-viewer.c:279
 msgid "Couldn't export keys"
 msgstr "Kunde inte exportera nycklar"
 
@@ -2426,84 +2358,84 @@ msgstr "Inställni_ngar"
 msgid "Change preferences for this program"
 msgstr "Ändra inställningar för detta program"
 
-#: ../src/seahorse-viewer.c:198
+#: ../src/seahorse-viewer.c:199
 msgid "_About"
 msgstr "_Om"
 
-#: ../src/seahorse-viewer.c:199
+#: ../src/seahorse-viewer.c:200
 msgid "About this program"
 msgstr "Om detta program"
 
-#: ../src/seahorse-viewer.c:200
+#: ../src/seahorse-viewer.c:201
 msgid "_Contents"
 msgstr "_Innehåll"
 
-#: ../src/seahorse-viewer.c:201
+#: ../src/seahorse-viewer.c:202
 msgid "Show Seahorse help"
 msgstr "Visa hjälp för Seahorse"
 
-#: ../src/seahorse-viewer.c:298
+#: ../src/seahorse-viewer.c:299
 msgid "Export public key"
 msgstr "Exportera publik nyckel"
 
-#: ../src/seahorse-viewer.c:316
+#: ../src/seahorse-viewer.c:317
 msgid "Exporting keys"
 msgstr "Exporterar nycklar"
 
-#: ../src/seahorse-viewer.c:341
+#: ../src/seahorse-viewer.c:342
 msgid "Couldn't retrieve data from key server"
 msgstr "Kunde inte hämta data från nyckelserver"
 
-#: ../src/seahorse-viewer.c:359
+#: ../src/seahorse-viewer.c:360
 msgid "Copied keys"
 msgstr "Kopierade nycklar"
 
-#: ../src/seahorse-viewer.c:379
+#: ../src/seahorse-viewer.c:380
 msgid "Retrieving keys"
 msgstr "Hämtar nycklar"
 
-#: ../src/seahorse-viewer.c:394
+#: ../src/seahorse-viewer.c:395
 msgid "Couldn't delete."
 msgstr "Kunde inte ta bort."
 
-#: ../src/seahorse-viewer.c:428
+#: ../src/seahorse-viewer.c:429
 msgid "Deleting..."
 msgstr "Tar bort..."
 
-#: ../src/seahorse-viewer.c:457
+#: ../src/seahorse-viewer.c:458
 #, c-format
 msgid "%s is a private key. Are you sure you want to proceed?"
 msgstr "%s är en privat nyckel. Är du säker på att du vill fortsätta?"
 
-#: ../src/seahorse-viewer.c:460
+#: ../src/seahorse-viewer.c:461
 msgid "One or more of the deleted keys are private keys. Are you sure you want to proceed?"
 msgstr "En eller flera av de borttagna nycklarna är privata nycklar. Är du säker på att du vill fortsätta?"
 
-#: ../src/seahorse-viewer.c:493
+#: ../src/seahorse-viewer.c:494
 msgid "P_roperties"
 msgstr "E_genskaper"
 
-#: ../src/seahorse-viewer.c:494
+#: ../src/seahorse-viewer.c:495
 msgid "Show properties"
 msgstr "Visa egenskaper"
 
-#: ../src/seahorse-viewer.c:496
+#: ../src/seahorse-viewer.c:497
 msgid "Delete selected items"
 msgstr "Ta bort markerade objekt"
 
-#: ../src/seahorse-viewer.c:500
+#: ../src/seahorse-viewer.c:501
 msgid "E_xport..."
 msgstr "E_xportera..."
 
-#: ../src/seahorse-viewer.c:501
+#: ../src/seahorse-viewer.c:502
 msgid "Export to a file"
 msgstr "Exportera till en fil"
 
-#: ../src/seahorse-viewer.c:502
+#: ../src/seahorse-viewer.c:503
 msgid "_Copy"
 msgstr "_Kopiera"
 
-#: ../src/seahorse-viewer.c:503
+#: ../src/seahorse-viewer.c:504
 msgid "Copy to the clipboard"
 msgstr "Kopiera till urklipp"
 
@@ -2607,15 +2539,15 @@ msgstr "Privat Secure Shell-nyckel"
 msgid "Public Secure Shell Key"
 msgstr "Publik Secure Shell-nyckel"
 
-#: ../ssh/seahorse-ssh-key-properties.c:119
+#: ../ssh/seahorse-ssh-key-properties.c:71
 msgid "Couldn't rename key."
 msgstr "Kunde inte byta namn på nyckel."
 
-#: ../ssh/seahorse-ssh-key-properties.c:160
+#: ../ssh/seahorse-ssh-key-properties.c:112
 msgid "Couldn't change authorization for key."
 msgstr "Kunde inte ändra behörighet för nyckel."
 
-#: ../ssh/seahorse-ssh-key-properties.c:175
+#: ../ssh/seahorse-ssh-key-properties.c:127
 msgid "Couldn't change passphrase for key."
 msgstr "Kunde inte ändra lösenfras för nyckel."
 
@@ -2775,6 +2707,47 @@ msgstr "_Inloggningsnamn:"
 msgid "_Set Up"
 msgstr "_Konfigurera"
 
+#~ msgid "<i>Not Part of Certificate</i>"
+#~ msgstr "<i>Inte en del av certifikatet</i>"
+#~ msgid "<i>unknown</i>"
+#~ msgstr "<i>okänd</i>"
+#~ msgid "<Not Part of Certificate>"
+#~ msgstr "<Inte en del av certifikatet>"
+#~ msgid "<b>Fingerprints</b>"
+#~ msgstr "<b>Fingeravtryck</b>"
+#~ msgid "<b>Issued By</b>"
+#~ msgstr "<b>Utfärdat av</b>"
+#~ msgid "<b>Issued To</b>"
+#~ msgstr "<b>Utfärdat till</b>"
+#~ msgid "<b>This certificate has been verified for the following uses:</b>"
+#~ msgstr ""
+#~ "<b>Detta certifikat har verifierats för följande användningsområden:</b>"
+#~ msgid "<b>Validity</b>"
+#~ msgstr "<b>Giltighet</b>"
+#~ msgid "Email Recipient Certificate"
+#~ msgstr "Certifikat för e-postmottagare"
+#~ msgid "Email Signer Certificate"
+#~ msgstr "Certifikat för e-postsignering"
+#~ msgid "Expires On"
+#~ msgstr "Går ut den"
+#~ msgid "Issued On"
+#~ msgstr "Utfärdat den"
+#~ msgid "MD5 Fingerprint"
+#~ msgstr "MD5-fingeravtryck"
+#~ msgid "Organization (O)"
+#~ msgstr "Organisation (O)"
+#~ msgid "Organizational Unit (OU)"
+#~ msgstr "Organisationsenhet (OU)"
+#~ msgid "SHA1 Fingerprint"
+#~ msgstr "SHA1-fingeravtryck"
+#~ msgid "SSL Client Certificate"
+#~ msgstr "SSL-klientcertifikat"
+#~ msgid "SSL Server Certificate"
+#~ msgstr "SSL-servercertifikat"
+#~ msgid "Serial Number"
+#~ msgstr "Serienummer"
+#~ msgid "Password and Encryption Settings"
+#~ msgstr "Inställningar för lösenord och kryptering"
 #~ msgid "Retrieving key"
 #~ msgstr "Hämtar nyckel"
 #~ msgid "Removing item"
@@ -2791,14 +2764,10 @@ msgstr "_Konfigurera"
 #~ msgstr "Kunde inte ta bort nyckelring"
 #~ msgid "Are you sure you want to permanently delete the '%s' keyring?"
 #~ msgstr "Är du säker på att du vill ta bort nyckelringen \"%s\" permanent?"
-#~ msgid "Couldn't change keyring password"
-#~ msgstr "Kunde inte ändra lösenord för nyckelring"
 #~ msgid "<b>Default Keyring</b>"
 #~ msgstr "<b>Standardnyckelring</b>"
 #~ msgid "<b>Password Keyrings</b>"
 #~ msgstr "<b>Lösenordsnyckelringar</b>"
-#~ msgid "Change Unlock _Password"
-#~ msgstr "Ändra upplåsnings_lösenord"
 #~ msgid "_Add Keyring"
 #~ msgstr "_Lägg till nyckelring"
 #~ msgid "_Remove Keyring"
