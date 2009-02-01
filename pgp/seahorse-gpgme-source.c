@@ -74,8 +74,8 @@ enum {
 
 enum {
     PROP_0,
-    PROP_KEY_TYPE,
-    PROP_LOCATION
+    PROP_SOURCE_TAG,
+    PROP_SOURCE_LOCATION
 };
 
 static gpgme_error_t
@@ -302,8 +302,8 @@ seahorse_gpgme_source_class_init (SeahorseGpgmeSourceClass *klass)
     gobject_class->set_property = seahorse_gpgme_source_set_property;
     gobject_class->get_property = seahorse_gpgme_source_get_property;
  
-	g_object_class_override_property (gobject_class, PROP_KEY_TYPE, "key-type");
-	g_object_class_override_property (gobject_class, PROP_LOCATION, "location");
+	g_object_class_override_property (gobject_class, PROP_SOURCE_TAG, "source-tag");
+	g_object_class_override_property (gobject_class, PROP_SOURCE_LOCATION, "source-location");
 	
 	seahorse_registry_register_type (NULL, SEAHORSE_TYPE_GPGME_SOURCE, "source", "local", SEAHORSE_PGP_STR, NULL);
 
@@ -429,10 +429,10 @@ seahorse_gpgme_source_get_property (GObject *object, guint prop_id, GValue *valu
                                   GParamSpec *pspec)
 {
     switch (prop_id) {
-    case PROP_KEY_TYPE:
+    case PROP_SOURCE_TAG:
         g_value_set_uint (value, SEAHORSE_PGP);
         break;
-    case PROP_LOCATION:
+    case PROP_SOURCE_LOCATION:
         g_value_set_enum (value, SEAHORSE_LOCATION_LOCAL);
         break;
     }

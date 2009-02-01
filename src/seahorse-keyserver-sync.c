@@ -215,7 +215,7 @@ seahorse_keyserver_sync (GList *keys)
             continue;
         
         lsksrc = seahorse_context_find_source (SCTX_APP (), 
-                        seahorse_source_get_ktype (sksrc), SEAHORSE_LOCATION_LOCAL);
+                        seahorse_source_get_tag (sksrc), SEAHORSE_LOCATION_LOCAL);
         
         if (lsksrc) {
             op = seahorse_transfer_operation_new (_("Synchronizing keys"), sksrc, lsksrc, keyids);

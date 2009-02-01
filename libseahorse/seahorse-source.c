@@ -41,11 +41,11 @@ seahorse_source_base_init (gpointer gobject_class)
 		
 		/* Add properties and signals to the interface */
 		g_object_interface_install_property (gobject_class,
-		        g_param_spec_uint ("key-type", "Key Type", "Key type that originates from this key source.", 
+		        g_param_spec_uint ("source-tag", "Source Tag", "Tag of objects that come from this source.", 
 		                           0, G_MAXUINT, SEAHORSE_TAG_INVALID, G_PARAM_READABLE));
 
 		g_object_interface_install_property (gobject_class, 
-		        g_param_spec_enum ("location", "Key Location", "Where the key is stored. See SeahorseLocation", 
+		        g_param_spec_enum ("source-location", "Source Location", "Objects in this source are at this location. See SeahorseLocation", 
 		                           SEAHORSE_TYPE_LOCATION, SEAHORSE_LOCATION_LOCAL, G_PARAM_READABLE));
 		
 		initialized = TRUE;
@@ -336,10 +336,10 @@ seahorse_source_export_raw (SeahorseSource *sksrc, GSList *ids, GOutputStream *o
 }
                                      
 GQuark              
-seahorse_source_get_ktype (SeahorseSource *sksrc)
+seahorse_source_get_tag (SeahorseSource *sksrc)
 {
     GQuark ktype;
-    g_object_get (sksrc, "key-type", &ktype, NULL);
+    g_object_get (sksrc, "source-tag", &ktype, NULL);
     return ktype;
 }
 
@@ -347,6 +347,6 @@ SeahorseLocation
 seahorse_source_get_location (SeahorseSource *sksrc)
 {
     SeahorseLocation loc;
-    g_object_get (sksrc, "location", &loc, NULL);
+    g_object_get (sksrc, "source-location", &loc, NULL);
     return loc;
 }

@@ -60,9 +60,9 @@
 
 enum {
     PROP_0,
-    PROP_KEY_TYPE,
-    PROP_FLAGS,
-    PROP_LOCATION
+    PROP_SOURCE_TAG,
+    PROP_SOURCE_LOCATION,
+    PROP_FLAGS
 };
 
 static void seahorse_source_iface (SeahorseSourceIface *iface);
@@ -272,14 +272,14 @@ seahorse_gkr_source_get_property (GObject *object, guint prop_id, GValue *value,
                                        GParamSpec *pspec)
 {
 	switch (prop_id) {
-	case PROP_KEY_TYPE:
+	case PROP_SOURCE_TAG:
 		g_value_set_uint (value, SEAHORSE_GKR);
+		break;
+	case PROP_SOURCE_LOCATION:
+		g_value_set_enum (value, SEAHORSE_LOCATION_LOCAL);
 		break;
 	case PROP_FLAGS:
 		g_value_set_uint (value, 0);
-		break;
-	case PROP_LOCATION:
-		g_value_set_enum (value, SEAHORSE_LOCATION_LOCAL);
 		break;
 	}
 }
@@ -313,8 +313,8 @@ seahorse_gkr_source_class_init (SeahorseGkrSourceClass *klass)
 	         g_param_spec_uint ("flags", "Flags", "Object Source flags.", 
 	                            0, G_MAXUINT, 0, G_PARAM_READABLE));
 
-	g_object_class_override_property (gobject_class, PROP_KEY_TYPE, "key-type");
-	g_object_class_override_property (gobject_class, PROP_LOCATION, "location");
+	g_object_class_override_property (gobject_class, PROP_SOURCE_TAG, "source-tag");
+	g_object_class_override_property (gobject_class, PROP_SOURCE_LOCATION, "source-location");
     
 	seahorse_registry_register_type (NULL, SEAHORSE_TYPE_GKR_SOURCE, "source", "local", SEAHORSE_GKR_STR, NULL);
 }

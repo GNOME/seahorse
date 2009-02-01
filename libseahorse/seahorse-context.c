@@ -348,7 +348,7 @@ seahorse_context_find_source (SeahorseContext *sctx, GQuark ktype,
         ks = SEAHORSE_SOURCE (l->data);
         
         if (ktype != SEAHORSE_TAG_INVALID && 
-            seahorse_source_get_ktype (ks) != ktype)
+            seahorse_source_get_tag (ks) != ktype)
             continue;
         
         if (location != SEAHORSE_LOCATION_INVALID && 
@@ -384,7 +384,7 @@ seahorse_context_find_sources (SeahorseContext *sctx, GQuark ktype,
         ks = SEAHORSE_SOURCE (l->data);
         
         if (ktype != SEAHORSE_TAG_INVALID && 
-            seahorse_source_get_ktype (ks) != ktype)
+            seahorse_source_get_tag (ks) != ktype)
             continue;
         
         if (location != SEAHORSE_LOCATION_INVALID && 
@@ -975,7 +975,7 @@ seahorse_context_transfer_objects (SeahorseContext *sctx, GList *objects,
         /* Export from this key source */
         from = seahorse_object_get_source (sobj);
         g_return_val_if_fail (from != NULL, FALSE);
-        ktype = seahorse_source_get_ktype (from);
+        ktype = seahorse_source_get_tag (from);
         
         /* Find a local keysource to import to */
         if (!to) {
@@ -988,7 +988,7 @@ seahorse_context_transfer_objects (SeahorseContext *sctx, GList *objects,
         }
         
         /* Make sure it's the same type */
-        if (ktype != seahorse_source_get_ktype (to)) {
+        if (ktype != seahorse_source_get_tag (to)) {
             /* TODO: How can we warn caller about this. Do we need to? */
             g_warning ("destination is not of type: %s", 
                        g_quark_to_string (ktype));

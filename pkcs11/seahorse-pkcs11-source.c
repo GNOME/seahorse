@@ -43,9 +43,9 @@
 enum {
     PROP_0,
     PROP_SLOT,
-    PROP_KEY_TYPE,
-    PROP_FLAGS,
-    PROP_LOCATION
+    PROP_SOURCE_TAG,
+    PROP_SOURCE_LOCATION,
+    PROP_FLAGS
 };
 
 struct _SeahorsePkcs11SourcePrivate {
@@ -91,14 +91,14 @@ seahorse_pkcs11_source_get_property (GObject *object, guint prop_id, GValue *val
 	case PROP_SLOT:
 		g_value_set_object (value, self->pv->slot);
 		break;
-	case PROP_KEY_TYPE:
+	case PROP_SOURCE_TAG:
 		g_value_set_uint (value, SEAHORSE_PKCS11_TYPE);
+		break;
+	case PROP_SOURCE_LOCATION:
+		g_value_set_enum (value, SEAHORSE_LOCATION_LOCAL);
 		break;
 	case PROP_FLAGS:
 		g_value_set_uint (value, 0);
-		break;
-	case PROP_LOCATION:
-		g_value_set_enum (value, SEAHORSE_LOCATION_LOCAL);
 		break;
 	}
 }
@@ -171,8 +171,8 @@ seahorse_pkcs11_source_class_init (SeahorsePkcs11SourceClass *klass)
 	         g_param_spec_uint ("flags", "Flags", "Object Source flags.", 
 	                            0, G_MAXUINT, 0, G_PARAM_READABLE));
 
-	g_object_class_override_property (gobject_class, PROP_KEY_TYPE, "key-type");
-	g_object_class_override_property (gobject_class, PROP_LOCATION, "location");
+	g_object_class_override_property (gobject_class, PROP_SOURCE_TAG, "source-tag");
+	g_object_class_override_property (gobject_class, PROP_SOURCE_LOCATION, "source-location");
     
 	seahorse_registry_register_type (NULL, SEAHORSE_TYPE_PKCS11_SOURCE, "source", "local", SEAHORSE_PKCS11_TYPE_STR, NULL);
 }

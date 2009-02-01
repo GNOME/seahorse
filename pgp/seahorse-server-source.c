@@ -37,8 +37,8 @@
 
 enum {
     PROP_0,
-    PROP_KEY_TYPE,
-    PROP_LOCATION,
+    PROP_SOURCE_TAG,
+    PROP_SOURCE_LOCATION,
     PROP_KEY_SERVER,
     PROP_URI
 };
@@ -85,8 +85,8 @@ seahorse_server_source_class_init (SeahorseServerSourceClass *klass)
     gobject_class->set_property = seahorse_server_set_property;
     gobject_class->get_property = seahorse_server_get_property;
 
-	g_object_class_override_property (gobject_class, PROP_KEY_TYPE, "key-type");
-	g_object_class_override_property (gobject_class, PROP_LOCATION, "location");
+	g_object_class_override_property (gobject_class, PROP_SOURCE_TAG, "source-tag");
+	g_object_class_override_property (gobject_class, PROP_SOURCE_LOCATION, "source-location");
 	
     g_object_class_install_property (gobject_class, PROP_KEY_SERVER,
             g_param_spec_string ("key-server", "Key Server",
@@ -198,10 +198,10 @@ seahorse_server_get_property (GObject *object, guint prop_id, GValue *value,
     case PROP_URI:
         g_value_set_string (value, ssrc->priv->uri);
         break;
-    case PROP_KEY_TYPE:
+    case PROP_SOURCE_TAG:
         g_value_set_uint (value, SEAHORSE_PGP);
         break;
-    case PROP_LOCATION:
+    case PROP_SOURCE_LOCATION:
         g_value_set_enum (value, SEAHORSE_LOCATION_REMOTE);
         break;
     }        

@@ -1286,8 +1286,8 @@ start_send_operation_multiple (SeahorseLDAPSource *lsrc, GSList *keys)
  
 enum {
     PROP_0,
-    PROP_KEY_TYPE,
-    PROP_LOCATION
+    PROP_SOURCE_TAG,
+    PROP_SOURCE_LOCATION
 };
 
 static void seahorse_source_iface (SeahorseSourceIface *iface);
@@ -1306,10 +1306,10 @@ seahorse_ldap_source_get_property (GObject *object, guint prop_id, GValue *value
                                    GParamSpec *pspec)
 {
     switch (prop_id) {
-    case PROP_KEY_TYPE:
+    case PROP_SOURCE_TAG:
         g_value_set_uint (value, SEAHORSE_PGP);
         break;
-    case PROP_LOCATION:
+    case PROP_SOURCE_LOCATION:
         g_value_set_enum (value, SEAHORSE_LOCATION_REMOTE);
         break;
     };        
@@ -1414,8 +1414,8 @@ seahorse_ldap_source_class_init (SeahorseLDAPSourceClass *klass)
 
 	seahorse_ldap_source_parent_class = g_type_class_peek_parent (klass);
     
-	g_object_class_override_property (gobject_class, PROP_KEY_TYPE, "key-type");
-	g_object_class_override_property (gobject_class, PROP_LOCATION, "location");
+	g_object_class_override_property (gobject_class, PROP_SOURCE_TAG, "source-tag");
+	g_object_class_override_property (gobject_class, PROP_SOURCE_LOCATION, "source-location");
 	    
 	seahorse_registry_register_type (NULL, SEAHORSE_TYPE_LDAP_SOURCE, "source", "remote", SEAHORSE_PGP_STR, NULL);
 	seahorse_servers_register_type ("ldap", _("LDAP Key Server"), seahorse_ldap_is_valid_uri);

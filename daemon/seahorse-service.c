@@ -323,7 +323,7 @@ seahorse_service_init (SeahorseService *svc)
     /* Fill in keysets for any keys already in the context */
     srcs = seahorse_context_find_sources (SCTX_APP (), SEAHORSE_TAG_INVALID, SEAHORSE_LOCATION_LOCAL);
     for (l = srcs; l; l = g_slist_next (l)) 
-        add_key_source (svc, seahorse_source_get_ktype (SEAHORSE_SOURCE (l->data)));
+        add_key_source (svc, seahorse_source_get_tag (SEAHORSE_SOURCE (l->data)));
     g_slist_free (srcs);
     
     /* And now listen for new key types */

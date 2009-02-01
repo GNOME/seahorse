@@ -162,7 +162,7 @@ SeahorseOperation*  seahorse_source_export_raw            (SeahorseSource *sksrc
                                                            GSList *ids, 
                                                            GOutputStream *output);
 
-GQuark              seahorse_source_get_ktype             (SeahorseSource *sksrc);
+GQuark              seahorse_source_get_tag               (SeahorseSource *sksrc);
 
 SeahorseLocation    seahorse_source_get_location          (SeahorseSource *sksrc);
 

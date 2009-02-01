@@ -198,15 +198,6 @@ seahorse_commands_get_view (SeahorseCommands* self)
 	return self->pv->view;
 }
 
-GQuark 
-seahorse_commands_get_ktype (SeahorseCommands* self) 
-{
-	GQuark ktype;
-	g_return_val_if_fail (SEAHORSE_IS_COMMANDS (self), 0);
-	g_object_get (self, "ktype", &ktype, NULL);
-	return ktype;
-}
-
 GtkActionGroup*
 seahorse_commands_get_command_actions (SeahorseCommands* self) 
 {

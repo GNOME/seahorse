@@ -32,8 +32,8 @@
 
 enum {
     PROP_0,
-    PROP_KEY_TYPE,
-    PROP_LOCATION
+    PROP_SOURCE_TAG,
+    PROP_SOURCE_LOCATION
 };
 
 static void seahorse_source_iface (SeahorseSourceIface *iface);
@@ -48,7 +48,7 @@ G_DEFINE_TYPE_EXTENDED (SeahorseUnknownSource, seahorse_unknown_source, G_TYPE_O
 static void
 search_done (SeahorseOperation *op, SeahorseObject *sobj)
 {
-	g_object_set (sobj, "location", SEAHORSE_LOCATION_MISSING, NULL);
+	g_object_set (sobj, "source-location", SEAHORSE_LOCATION_MISSING, NULL);
 }
 
 /* -----------------------------------------------------------------------------
@@ -68,7 +68,7 @@ seahorse_unknown_source_set_property (GObject *object, guint prop_id, const GVal
     SeahorseUnknownSource *usrc = SEAHORSE_UNKNOWN_SOURCE (object);
     
     switch (prop_id) {
-    case PROP_KEY_TYPE:
+    case PROP_SOURCE_TAG:
         usrc->ktype = g_value_get_uint (value);
         break;
     }
@@ -81,10 +81,10 @@ seahorse_unknown_source_get_property (GObject *object, guint prop_id, GValue *va
     SeahorseUnknownSource *usrc = SEAHORSE_UNKNOWN_SOURCE (object);
     
     switch (prop_id) {
-    case PROP_KEY_TYPE:
+    case PROP_SOURCE_TAG:
         g_value_set_uint (value, usrc->ktype);
         break;
-    case PROP_LOCATION:
+    case PROP_SOURCE_LOCATION:
         g_value_set_enum (value, SEAHORSE_LOCATION_MISSING);
         break;
     }
@@ -106,8 +106,8 @@ seahorse_unknown_source_class_init (SeahorseUnknownSourceClass *klass)
 	gobject_class->set_property = seahorse_unknown_source_set_property;
 	gobject_class->get_property = seahorse_unknown_source_get_property;
     
-	g_object_class_override_property (gobject_class, PROP_KEY_TYPE, "key-type");
-	g_object_class_override_property (gobject_class, PROP_LOCATION, "location");
+	g_object_class_override_property (gobject_class, PROP_SOURCE_TAG, "source-tag");
+	g_object_class_override_property (gobject_class, PROP_SOURCE_LOCATION, "source-location");
     
 	seahorse_registry_register_type (NULL, SEAHORSE_TYPE_UNKNOWN_SOURCE, "source", NULL);
 }
@@ -125,7 +125,7 @@ seahorse_source_iface (SeahorseSourceIface *iface)
 SeahorseUnknownSource*
 seahorse_unknown_source_new (GQuark ktype)
 {
-   return g_object_new (SEAHORSE_TYPE_UNKNOWN_SOURCE, "key-type", ktype, NULL);
+   return g_object_new (SEAHORSE_TYPE_UNKNOWN_SOURCE, "source-tag", ktype, NULL);
 }
 
 SeahorseObject*                     
@@ -143,7 +143,7 @@ seahorse_unknown_source_add_object (SeahorseUnknownSource *usrc, GQuark id,
     }
     
     if (search) {
-        g_object_set (sobj, "location", SEAHORSE_LOCATION_SEARCHING, NULL);
+        g_object_set (sobj, "source-location", SEAHORSE_LOCATION_SEARCHING, NULL);
         seahorse_operation_watch (search, (SeahorseDoneFunc) search_done, sobj, NULL, NULL);
     }
     
