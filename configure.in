@@ -198,6 +198,12 @@ AC_MSG_CHECKING([LDAP keyserver support])
 AC_ARG_ENABLE(ldap,
 [  --disable-ldap          disable LDAP keyserver interface],
     try_ldap=$enableval, try_ldap=yes)
+
+if test "$enable_pgp" != "yes"; then
+	echo "LDAP keyserver interface requires PGP support"
+	try_ldap=no
+fi
+
 AC_MSG_RESULT($try_ldap)
 with_ldap=no
 
@@ -270,7 +276,12 @@ AC_ARG_ENABLE(hkp,
         AC_HELP_STRING([--disable-hkp],
         [disable HKP keyserver interface]))
 
-# HKP tests 
+# HKP tests
+if test "$enable_pgp" != "yes"; then
+	echo "HKP keyserver interface requires PGP support"
+	enable_hkp=no
+fi
+ 
 if test "$enable_hkp" = "no"; then
     echo "disabling HKP keyserver interface"
 else
