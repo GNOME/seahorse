@@ -157,6 +157,10 @@ on_keyring_names (GnomeKeyringResult result, GList *list, SeahorseListOperation 
 	for (l = list; l; l = g_list_next (l)) {
 		keyring_name = l->data;
 		
+		/* Don't show the 'session' keyring */
+		if (g_str_equal (keyring_name, "session"))
+			continue;
+		
 		/* Register a new keyring if possible */
 		if (!g_hash_table_remove (checks, keyring_name)) {
 			keyring = seahorse_gkr_keyring_new (keyring_name);
