@@ -298,17 +298,46 @@ set_added (SeahorseSet *set, SeahorseObject *sobj, SeahorseSetModel *smodel)
 	add_object (smodel, sobj);
 }
 
+typedef struct {
+	SeahorseSet *set;
+	gboolean found;
+} find_node_in_set_args;
+
+static gboolean
+find_node_in_set (GNode *node, gpointer user_data)
+{
+	find_node_in_set_args *args = user_data;
+	if (seahorse_set_has_object (args->set, node->data)) {
+		args->found = TRUE;
+		return TRUE;
+	}
+
+	/* Continue traversal */
+	return FALSE;
+}
+
 static void
 set_removed (SeahorseSet *set, SeahorseObject *sobj, gpointer closure, 
              SeahorseSetModel *smodel) 
 {
 	SeahorseSetModelPrivate *pv = SEAHORSE_SET_MODEL_GET_PRIVATE (smodel);
-
+	find_node_in_set_args args = { set, FALSE };
+	GNode *node;
+	
 	g_return_if_fail (SEAHORSE_SET_MODEL (smodel));
 	g_return_if_fail (SEAHORSE_IS_OBJECT (sobj));
 
 	/* This should always already be added */
-	g_return_if_fail (g_hash_table_lookup (pv->object_to_node, sobj) != NULL);
+	node = g_hash_table_lookup (pv->object_to_node, sobj);
+	g_return_if_fail (node != NULL);
+	
+	/* See if a child is still in the set? */
+	g_node_traverse (node, G_IN_ORDER, G_TRAVERSE_ALL, -1, find_node_in_set, &args);
+	
+	/* It has a child in the set, don't remove it */
+	if (args.found != FALSE)
+		return;
+	
 	remove_object (smodel, sobj);
 }
 
