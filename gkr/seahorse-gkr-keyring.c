@@ -267,7 +267,6 @@ seahorse_gkr_list_operation_class_init (SeahorseGkrListOperationClass *klass)
 enum {
 	PROP_0,
 	PROP_KEY_TYPE,
-	PROP_KEY_DESC,
 	PROP_LOCATION,
 	PROP_KEYRING_NAME,
 	PROP_KEYRING_INFO
@@ -474,9 +473,6 @@ seahorse_gkr_keyring_get_property (GObject *obj, guint prop_id, GValue *value,
 	case PROP_KEY_TYPE:
 		g_value_set_uint (value, SEAHORSE_GKR_TYPE);
 		break;
-	case PROP_KEY_DESC:
-		g_value_set_string (value, _("Passwords"));
-		break;
 	case PROP_LOCATION:
 		g_value_set_enum (value, SEAHORSE_LOCATION_LOCAL);
 		break;
@@ -512,7 +508,6 @@ seahorse_gkr_keyring_class_init (SeahorseGkrKeyringClass *klass)
 	seahorse_class->delete = seahorse_gkr_keyring_delete;
 	
 	g_object_class_override_property (gobject_class, PROP_KEY_TYPE, "key-type");
-	g_object_class_override_property (gobject_class, PROP_KEY_DESC, "key-desc");
 	g_object_class_override_property (gobject_class, PROP_LOCATION, "location");
 
 	g_object_class_install_property (gobject_class, PROP_KEYRING_NAME,

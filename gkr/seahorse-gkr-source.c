@@ -62,7 +62,6 @@ enum {
     PROP_0,
     PROP_KEY_TYPE,
     PROP_FLAGS,
-    PROP_KEY_DESC,
     PROP_LOCATION
 };
 
@@ -279,9 +278,6 @@ seahorse_gkr_source_get_property (GObject *object, guint prop_id, GValue *value,
 	case PROP_FLAGS:
 		g_value_set_uint (value, 0);
 		break;
-	case PROP_KEY_DESC:
-		g_value_set_string (value, _("Password"));
-		break;
 	case PROP_LOCATION:
 		g_value_set_enum (value, SEAHORSE_LOCATION_LOCAL);
 		break;
@@ -318,7 +314,6 @@ seahorse_gkr_source_class_init (SeahorseGkrSourceClass *klass)
 	                            0, G_MAXUINT, 0, G_PARAM_READABLE));
 
 	g_object_class_override_property (gobject_class, PROP_KEY_TYPE, "key-type");
-	g_object_class_override_property (gobject_class, PROP_KEY_DESC, "key-desc");
 	g_object_class_override_property (gobject_class, PROP_LOCATION, "location");
     
 	seahorse_registry_register_type (NULL, SEAHORSE_TYPE_GKR_SOURCE, "source", "local", SEAHORSE_GKR_STR, NULL);

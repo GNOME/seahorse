@@ -33,7 +33,6 @@
 enum {
     PROP_0,
     PROP_KEY_TYPE,
-    PROP_KEY_DESC,
     PROP_LOCATION
 };
 
@@ -85,9 +84,6 @@ seahorse_unknown_source_get_property (GObject *object, guint prop_id, GValue *va
     case PROP_KEY_TYPE:
         g_value_set_uint (value, usrc->ktype);
         break;
-    case PROP_KEY_DESC:
-        g_value_set_string (value, _("Unavailable Key"));
-        break;
     case PROP_LOCATION:
         g_value_set_enum (value, SEAHORSE_LOCATION_MISSING);
         break;
@@ -111,7 +107,6 @@ seahorse_unknown_source_class_init (SeahorseUnknownSourceClass *klass)
 	gobject_class->get_property = seahorse_unknown_source_get_property;
     
 	g_object_class_override_property (gobject_class, PROP_KEY_TYPE, "key-type");
-	g_object_class_override_property (gobject_class, PROP_KEY_DESC, "key-desc");
 	g_object_class_override_property (gobject_class, PROP_LOCATION, "location");
     
 	seahorse_registry_register_type (NULL, SEAHORSE_TYPE_UNKNOWN_SOURCE, "source", NULL);

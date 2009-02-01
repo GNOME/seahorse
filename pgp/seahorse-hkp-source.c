@@ -732,7 +732,6 @@ get_callback (SoupSession *session, SoupMessage *msg, SeahorseHKPOperation *hop)
 enum {
     PROP_0,
     PROP_KEY_TYPE,
-    PROP_KEY_DESC,
     PROP_LOCATION
 };
 
@@ -754,9 +753,6 @@ seahorse_hkp_source_get_property (GObject *object, guint prop_id, GValue *value,
     switch (prop_id) {
     case PROP_KEY_TYPE:
         g_value_set_uint (value, SEAHORSE_PGP);
-        break;
-    case PROP_KEY_DESC:
-        g_value_set_string (value, _("PGP Key"));
         break;
     case PROP_LOCATION:
         g_value_set_enum (value, SEAHORSE_LOCATION_REMOTE);
@@ -1000,7 +996,6 @@ seahorse_hkp_source_class_init (SeahorseHKPSourceClass *klass)
 	seahorse_hkp_source_parent_class = g_type_class_peek_parent (klass);
 
 	g_object_class_override_property (gobject_class, PROP_KEY_TYPE, "key-type");
-	g_object_class_override_property (gobject_class, PROP_KEY_DESC, "key-desc");
 	g_object_class_override_property (gobject_class, PROP_LOCATION, "location");
 
 	seahorse_registry_register_type (NULL, SEAHORSE_TYPE_HKP_SOURCE, "source", "remote", SEAHORSE_PGP_STR, NULL);
