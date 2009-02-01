@@ -39,6 +39,7 @@ typedef struct _SeahorseGkrKeyringCommandsPrivate SeahorseGkrKeyringCommandsPriv
     
 struct _SeahorseGkrKeyringCommands {
 	SeahorseCommands parent;
+	SeahorseGkrKeyringCommandsPrivate *pv;
 };
 
 struct _SeahorseGkrKeyringCommandsClass {
