@@ -37,6 +37,7 @@
 struct _SeahorseGkrKeyringCommandsPrivate {
 	GtkAction *action_lock;
 	GtkAction *action_unlock;
+	GtkAction *action_default;
 };
 
 G_DEFINE_TYPE (SeahorseGkrKeyringCommands, seahorse_gkr_keyring_commands, SEAHORSE_TYPE_COMMANDS);
@@ -44,6 +45,7 @@ G_DEFINE_TYPE (SeahorseGkrKeyringCommands, seahorse_gkr_keyring_commands, SEAHOR
 static const char* UI_KEYRING = ""\
 "<ui>"\
 "	<popup name='KeyPopup'>"\
+"		<menuitem action='keyring-default'/>"\
 "		<menuitem action='keyring-lock'/>"\
 "		<menuitem action='keyring-unlock'/>"\
 "		<menuitem action='keyring-password'/>"\
@@ -145,6 +147,42 @@ on_keyring_lock (GtkAction *action, SeahorseGkrKeyringCommands *self)
 }
 
 static void
+on_set_default_keyring_done (GnomeKeyringResult result, gpointer user_data)
+{
+	SeahorseView *view;
+
+	if (result != GNOME_KEYRING_RESULT_OK &&
+	    result != GNOME_KEYRING_RESULT_DENIED &&
+	    result != GNOME_KEYRING_RESULT_CANCELLED) {
+		view = seahorse_commands_get_view (SEAHORSE_COMMANDS (user_data));
+		seahorse_util_show_error (GTK_WIDGET (seahorse_view_get_window (view)),
+		                          _("Couldn't set default keyring"),
+		                          gnome_keyring_result_to_message (result));
+	}
+}
+
+static void
+on_keyring_default (GtkAction *action, SeahorseGkrKeyringCommands *self)
+{
+	SeahorseView *view;
+	GList *keys;
+
+	g_return_if_fail (SEAHORSE_IS_GKR_KEYRING_COMMANDS (self));
+	g_return_if_fail (GTK_IS_ACTION (action));
+
+	view = seahorse_commands_get_view (SEAHORSE_COMMANDS (self));
+	keys = seahorse_view_get_selected_matching (view, &keyring_predicate);
+
+	if (keys) {
+		gnome_keyring_set_default_keyring (seahorse_gkr_keyring_get_name (keys->data), 
+		                                   on_set_default_keyring_done, g_object_ref (self), g_object_unref);
+	}
+	
+	g_list_free (keys);
+
+}
+
+static void
 on_change_password_done (GnomeKeyringResult result, gpointer user_data)
 {
 	SeahorseView *view;
@@ -183,11 +221,13 @@ on_keyring_password (GtkAction *action, SeahorseGkrKeyringCommands *self)
 }
 
 static const GtkActionEntry ENTRIES_KEYRING[] = {
-	{ "keyring-lock", NULL, N_ ("Lock"), "",
+	{ "keyring-lock", NULL, N_("_Lock"), "",
 	  N_("Lock the password storage keyring so a master password is required to unlock it."), G_CALLBACK (on_keyring_lock) },
-	{ "keyring-unlock", NULL, N_ ("Unlock"), "",
+	{ "keyring-unlock", NULL, N_("_Unlock"), "",
 	  N_("Unlock the password storage keyring with a master password so it is available for use."), G_CALLBACK (on_keyring_unlock) },
-	{ "keyring-password", NULL, N_ ("Change Password"), "",
+	{ "keyring-default", NULL, N_("_Set as default"), "",
+	  N_("Applications usually store new passwords in the default keyring."), G_CALLBACK (on_keyring_default) },
+	{ "keyring-password", NULL, N_("Change _Password"), "",
 	  N_("Change the unlock password of the password storage keyring"), G_CALLBACK (on_keyring_password) }
 };
 
@@ -197,6 +237,7 @@ on_view_selection_changed (SeahorseView *view, SeahorseGkrKeyringCommands *self)
 	GnomeKeyringInfo *info;
 	gboolean locked = FALSE;
 	gboolean unlocked = FALSE;
+	gboolean can_default = FALSE;
 	GList *keys, *l;
 	
 	g_return_if_fail (SEAHORSE_IS_VIEW (view));
@@ -210,6 +251,8 @@ on_view_selection_changed (SeahorseView *view, SeahorseGkrKeyringCommands *self)
 				locked = TRUE;
 			else 
 				unlocked = TRUE;
+			if (!seahorse_gkr_keyring_get_is_default (l->data))
+				can_default = TRUE;
 		}
 	}
 	
@@ -217,6 +260,7 @@ on_view_selection_changed (SeahorseView *view, SeahorseGkrKeyringCommands *self)
 	
 	gtk_action_set_sensitive (self->pv->action_lock, unlocked);
 	gtk_action_set_sensitive (self->pv->action_unlock, locked);
+	gtk_action_set_sensitive (self->pv->action_default, can_default);
 }
 
 /* -----------------------------------------------------------------------------
@@ -272,6 +316,7 @@ seahorse_gkr_keyring_commands_constructor (GType type, guint n_props, GObjectCon
 	seahorse_view_register_ui (view, &keyring_predicate, UI_KEYRING, actions);
 	self->pv->action_lock = g_object_ref (gtk_action_group_get_action (actions, "keyring-lock"));
 	self->pv->action_unlock = g_object_ref (gtk_action_group_get_action (actions, "keyring-unlock"));
+	self->pv->action_default = g_object_ref (gtk_action_group_get_action (actions, "keyring-default"));
 	g_object_unref (actions);
 	
 	/* Watch and wait for selection changes and diddle lock/unlock */ 
@@ -296,6 +341,9 @@ seahorse_gkr_keyring_commands_finalize (GObject *obj)
 	
 	g_object_unref (self->pv->action_unlock);
 	self->pv->action_unlock = NULL;
+	
+	g_object_unref (self->pv->action_default);
+	self->pv->action_default = NULL;
 	
 	G_OBJECT_CLASS (seahorse_gkr_keyring_commands_parent_class)->finalize (obj);
 }
