@@ -61,4 +61,6 @@ GType               seahorse_gkr_source_get_type          (void);
 
 SeahorseGkrSource*  seahorse_gkr_source_new               (void);
 
+SeahorseGkrSource*  seahorse_gkr_source_default           (void);
+
 #endif /* __SEAHORSE_GKR_SOURCE_H__ */

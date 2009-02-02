@@ -70,6 +70,8 @@ static void seahorse_source_iface (SeahorseSourceIface *iface);
 G_DEFINE_TYPE_EXTENDED (SeahorseGkrSource, seahorse_gkr_source, G_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_SOURCE, seahorse_source_iface));
 
+static SeahorseGkrSource *default_source = NULL;
+
 /* -----------------------------------------------------------------------------
  * LIST OPERATION 
  */
@@ -313,6 +315,21 @@ on_list_operation_done (SeahorseOperation *op, gpointer userdata)
  * OBJECT
  */
 
+
+static GObject* 
+seahorse_gkr_source_constructor (GType type, guint n_props, GObjectConstructParam *props)
+{
+	SeahorseGkrSource *self = SEAHORSE_GKR_SOURCE (G_OBJECT_CLASS (seahorse_gkr_source_parent_class)->constructor (type, n_props, props));
+	
+	g_return_val_if_fail (SEAHORSE_IS_GKR_SOURCE (self), NULL);
+	
+	if (default_source == NULL)
+		default_source = self;
+
+	return G_OBJECT (self);
+
+}
+
 static void
 seahorse_gkr_source_init (SeahorseGkrSource *self)
 {
@@ -344,6 +361,17 @@ seahorse_gkr_source_set_property (GObject *object, guint prop_id, const GValue *
 }
 
 static void
+seahorse_gkr_source_finalize (GObject *obj)
+{
+	SeahorseGkrSource *self = SEAHORSE_GKR_SOURCE (obj);
+
+	if (default_source == self)
+		default_source = NULL;
+	
+	G_OBJECT_CLASS (seahorse_gkr_source_parent_class)->finalize (obj);
+}
+
+static void
 seahorse_gkr_source_class_init (SeahorseGkrSourceClass *klass)
 {
 	GObjectClass *gobject_class;
@@ -351,8 +379,10 @@ seahorse_gkr_source_class_init (SeahorseGkrSourceClass *klass)
 	seahorse_gkr_source_parent_class = g_type_class_peek_parent (klass);
 
 	gobject_class = G_OBJECT_CLASS (klass);
+	gobject_class->constructor = seahorse_gkr_source_constructor;
 	gobject_class->set_property = seahorse_gkr_source_set_property;
 	gobject_class->get_property = seahorse_gkr_source_get_property;
+	gobject_class->finalize = seahorse_gkr_source_finalize;
     
 	g_object_class_install_property (gobject_class, PROP_FLAGS,
 	         g_param_spec_uint ("flags", "Flags", "Object Source flags.", 
@@ -393,3 +423,10 @@ seahorse_gkr_source_new (void)
 {
    return g_object_new (SEAHORSE_TYPE_GKR_SOURCE, NULL);
 }   
+
+SeahorseGkrSource*
+seahorse_gkr_source_default (void)
+{
+	g_return_val_if_fail (default_source, NULL);
+	return default_source;
+}
