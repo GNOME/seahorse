@@ -59,4 +59,9 @@ GnomeKeyringInfo*    seahorse_gkr_keyring_get_info         (SeahorseGkrKeyring *
 void                 seahorse_gkr_keyring_set_info         (SeahorseGkrKeyring *self,
                                                             GnomeKeyringInfo *info);
 
+gboolean             seahorse_gkr_keyring_get_is_default   (SeahorseGkrKeyring *self);
+
+void                 seahorse_gkr_keyring_set_is_default   (SeahorseGkrKeyring *self,
+                                                            gboolean is_default);
+
 #endif /* __SEAHORSE_GKR_KEYRING_H__ */

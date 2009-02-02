@@ -269,11 +269,13 @@ enum {
 	PROP_SOURCE_TAG,
 	PROP_SOURCE_LOCATION,
 	PROP_KEYRING_NAME,
-	PROP_KEYRING_INFO
+	PROP_KEYRING_INFO,
+	PROP_IS_DEFAULT
 };
 
 struct _SeahorseGkrKeyringPrivate {
 	gchar *keyring_name;
+	gboolean is_default;
 	
 	gpointer req_info;
 	GnomeKeyringInfo *keyring_info;
@@ -457,6 +459,9 @@ seahorse_gkr_keyring_set_property (GObject *obj, guint prop_id, const GValue *va
 	case PROP_KEYRING_INFO:
 		seahorse_gkr_keyring_set_info (self, g_value_get_boxed (value));
 		break;
+	case PROP_IS_DEFAULT:
+		seahorse_gkr_keyring_set_is_default (self, g_value_get_boolean (value));
+		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
 		break;
@@ -481,6 +486,9 @@ seahorse_gkr_keyring_get_property (GObject *obj, guint prop_id, GValue *value,
 		break;
 	case PROP_KEYRING_INFO:
 		g_value_set_boxed (value, seahorse_gkr_keyring_get_info (self));
+		break;
+	case PROP_IS_DEFAULT:
+		g_value_set_boolean (value, seahorse_gkr_keyring_get_is_default (self));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
@@ -517,6 +525,10 @@ seahorse_gkr_keyring_class_init (SeahorseGkrKeyringClass *klass)
 	g_object_class_install_property (gobject_class, PROP_KEYRING_INFO,
 	           g_param_spec_boxed ("keyring-info", "Gnome Keyring Info", "Info about keyring.", 
 	                               boxed_type_keyring_info (), G_PARAM_READWRITE));
+	
+	g_object_class_install_property (gobject_class, PROP_IS_DEFAULT,
+	           g_param_spec_boolean ("is-default", "Is default", "Is the default keyring.",
+	                                 FALSE, G_PARAM_READWRITE));
 }
 
 static void 
@@ -569,4 +581,19 @@ seahorse_gkr_keyring_set_info (SeahorseGkrKeyring *self, GnomeKeyringInfo *info)
 	seahorse_gkr_keyring_realize (SEAHORSE_OBJECT (self));
 	g_object_notify (obj, "keyring-info");
 	g_object_thaw_notify (obj);
+}
+
+gboolean
+seahorse_gkr_keyring_get_is_default (SeahorseGkrKeyring *self)
+{
+	g_return_val_if_fail (SEAHORSE_IS_GKR_KEYRING (self), FALSE);
+	return self->pv->is_default;
+}
+
+void
+seahorse_gkr_keyring_set_is_default (SeahorseGkrKeyring *self, gboolean is_default)
+{
+	g_return_if_fail (SEAHORSE_IS_GKR_KEYRING (self));
+	self->pv->is_default = is_default;
+	g_object_notify (G_OBJECT (self), "is-default");
 }

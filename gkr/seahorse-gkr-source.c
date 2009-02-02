@@ -262,6 +262,54 @@ seahorse_list_operation_class_init (SeahorseListOperationClass *klass)
 }
 
 /* -----------------------------------------------------------------------------
+ * INTERNAL
+ */
+
+static void
+update_each_default_keyring (SeahorseObject *object, gpointer user_data)
+{
+	const gchar *default_name = user_data;
+	const gchar *keyring_name; 
+	gboolean is_default;
+	
+	keyring_name = seahorse_gkr_keyring_get_name (SEAHORSE_GKR_KEYRING (object));
+	g_return_if_fail (keyring_name);
+	
+	/* Remember default keyring could be null in strange circumstances */
+	is_default = default_name && g_str_equal (keyring_name, default_name);
+	g_object_set (object, "is-default", is_default, NULL);
+}
+
+static void
+on_get_default_keyring (GnomeKeyringResult result, const gchar *default_name, gpointer user_data)
+{
+	SeahorseGkrSource *self = user_data;
+	SeahorseObjectPredicate pred;
+	
+	g_return_if_fail (SEAHORSE_IS_GKR_SOURCE (self));
+
+	if (result != GNOME_KEYRING_RESULT_OK) {
+		if (result != GNOME_KEYRING_RESULT_CANCELLED)
+			g_warning ("couldn't get default keyring name: %s", gnome_keyring_result_to_message (result));
+		return;
+	}
+	
+	seahorse_object_predicate_clear (&pred);
+	pred.source = SEAHORSE_SOURCE (self);
+	pred.type = SEAHORSE_TYPE_GKR_KEYRING;
+	seahorse_context_for_objects_full (NULL, &pred, update_each_default_keyring, (gpointer)default_name);
+}
+
+static void
+on_list_operation_done (SeahorseOperation *op, gpointer userdata)
+{
+	SeahorseGkrSource *self = userdata;
+	g_return_if_fail (SEAHORSE_IS_GKR_SOURCE (self));
+	
+	gnome_keyring_get_default_keyring (on_get_default_keyring, g_object_ref (self), g_object_unref);
+}
+
+/* -----------------------------------------------------------------------------
  * OBJECT
  */
 
@@ -295,13 +343,6 @@ seahorse_gkr_source_set_property (GObject *object, guint prop_id, const GValue *
 
 }
 
-static SeahorseOperation*
-seahorse_gkr_source_load (SeahorseSource *src)
-{
-	SeahorseGkrSource *self = SEAHORSE_GKR_SOURCE (src);
-	return start_list_operation (self);
-}
-
 static void
 seahorse_gkr_source_class_init (SeahorseGkrSourceClass *klass)
 {
@@ -321,6 +362,20 @@ seahorse_gkr_source_class_init (SeahorseGkrSourceClass *klass)
 	g_object_class_override_property (gobject_class, PROP_SOURCE_LOCATION, "source-location");
     
 	seahorse_registry_register_type (NULL, SEAHORSE_TYPE_GKR_SOURCE, "source", "local", SEAHORSE_GKR_STR, NULL);
+}
+
+static SeahorseOperation*
+seahorse_gkr_source_load (SeahorseSource *src)
+{
+	SeahorseGkrSource *self = SEAHORSE_GKR_SOURCE (src);
+	SeahorseOperation *op = start_list_operation (self);
+	
+	g_return_val_if_fail (op, NULL);
+	
+	/* Hook into the results of the above operation, and look for default */
+	seahorse_operation_watch (op, on_list_operation_done, src, NULL, NULL);
+	
+	return op;
 }
 
 static void 
