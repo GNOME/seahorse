@@ -26,6 +26,7 @@
 #include "seahorse-gkr.h"
 #include "seahorse-gkr-keyring.h"
 #include "seahorse-gkr-dialogs.h"
+#include "seahorse-gkr-source.h"
 
 #include "common/seahorse-registry.h"
 
@@ -59,6 +60,23 @@ static SeahorseObjectPredicate keyring_predicate = { 0, };
  */
 
 static void
+refresh_all_keyrings (void)
+{
+	SeahorseOperation *op;
+
+	op = seahorse_source_load (SEAHORSE_SOURCE (seahorse_gkr_source_default ()));
+	
+	/* 
+	 * HACK: Major hack alert. This whole area needs some serious refactoring,
+	 * so for now we're just going to let any viewers listen in on this
+	 * operation like so:
+	 */
+	g_signal_emit_by_name (seahorse_context_for_app (), "refreshing", op);
+	
+	g_object_unref (op);
+}
+
+static void
 on_gkr_add_keyring (GtkAction *action, gpointer unused)
 {
 	g_return_if_fail (GTK_IS_ACTION (action));
@@ -83,6 +101,8 @@ on_keyring_unlock_done (GnomeKeyringResult result, gpointer user_data)
 		                          _("Couldn't unlock keyring"),
 		                          gnome_keyring_result_to_message (result));
 	}
+	
+	refresh_all_keyrings ();
 }
 
 static void 
@@ -121,6 +141,8 @@ on_keyring_lock_done (GnomeKeyringResult result, gpointer user_data)
 		                          _("Couldn't lock keyring"),
 		                          gnome_keyring_result_to_message (result));
 	}
+	
+	refresh_all_keyrings ();
 }
 
 static void 
@@ -159,6 +181,8 @@ on_set_default_keyring_done (GnomeKeyringResult result, gpointer user_data)
 		                          _("Couldn't set default keyring"),
 		                          gnome_keyring_result_to_message (result));
 	}
+	
+	refresh_all_keyrings ();
 }
 
 static void
@@ -195,6 +219,8 @@ on_change_password_done (GnomeKeyringResult result, gpointer user_data)
 		                          _("Couldn't change keyring password"),
 		                          gnome_keyring_result_to_message (result));
 	}
+	
+	refresh_all_keyrings ();
 }
 
 static void
