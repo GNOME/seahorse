@@ -266,18 +266,9 @@ seahorse_context_destroy (SeahorseContext *sctx)
 static gboolean                
 take_source (SeahorseContext *sctx, SeahorseSource *sksrc)
 {
-	SeahorseOperation *operation;
-	
 	g_return_val_if_fail (SEAHORSE_IS_SOURCE (sksrc), FALSE);
 	if (!g_slist_find (sctx->pv->sources, sksrc)) {
 		sctx->pv->sources = g_slist_append (sctx->pv->sources, sksrc);
-		if (seahorse_source_get_location (sksrc) == SEAHORSE_LOCATION_LOCAL && 
-		    sctx->pv->refresh_ops != NULL) {
-			operation = seahorse_source_load (sksrc);
-			g_return_val_if_fail (operation, TRUE);
-			seahorse_multi_operation_take (sctx->pv->refresh_ops, operation);
-			g_signal_emit (sctx, signals[REFRESHING], 0, sctx->pv->refresh_ops);
-		}
 		return TRUE;
 	}
 	
