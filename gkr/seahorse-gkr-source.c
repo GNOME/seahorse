@@ -91,6 +91,7 @@ struct _SeahorseListOperation {
 	SeahorseOperation parent;
 	SeahorseGkrSource *gsrc;
 	gpointer request;
+	SeahorseOperation *loads;
 };
 
 struct _SeahorseListOperationClass {
@@ -98,6 +99,33 @@ struct _SeahorseListOperationClass {
 };
 
 G_DEFINE_TYPE (SeahorseListOperation, seahorse_list_operation, SEAHORSE_TYPE_OPERATION);
+
+static void
+on_loads_complete (SeahorseOperation *op, gpointer user_data)
+{
+	SeahorseListOperation *self = user_data;
+	GError *error = NULL;
+	
+	g_return_if_fail (SEAHORSE_IS_LIST_OPERATION (self));
+	g_return_if_fail (self->loads == op);
+	
+	seahorse_operation_copy_error (op, &error);
+	seahorse_operation_mark_done (SEAHORSE_OPERATION (self), 
+	                              seahorse_operation_is_cancelled (op),
+	                              error);
+}
+
+static void
+on_loads_progress (SeahorseOperation *op, const gchar *status, gdouble progress, gpointer user_data)
+{
+	SeahorseListOperation *self = user_data;
+	
+	g_return_if_fail (SEAHORSE_IS_LIST_OPERATION (self));
+	g_return_if_fail (self->loads == op);
+
+	seahorse_operation_mark_progress (SEAHORSE_OPERATION (self),
+	                                  status, progress);
+}
 
 static void
 remove_each_keyring_from_context (const gchar *keyring_name, SeahorseObject *keyring, 
@@ -120,6 +148,7 @@ on_keyring_names (GnomeKeyringResult result, GList *list, SeahorseListOperation 
 {
 	SeahorseGkrKeyring *keyring;
 	SeahorseObjectPredicate pred;
+	SeahorseOperation *oper;
 	GError *err = NULL;
 	gchar *keyring_name;
 	GHashTable *checks;
@@ -163,20 +192,32 @@ on_keyring_names (GnomeKeyringResult result, GList *list, SeahorseListOperation 
 		if (g_str_equal (keyring_name, "session"))
 			continue;
 		
-		/* Register a new keyring if possible */
-		if (!g_hash_table_remove (checks, keyring_name)) {
+		keyring = g_hash_table_lookup (checks, keyring_name);
+
+		/* Already have a keyring */
+		if (keyring != NULL) {
+			g_object_ref (keyring);
+			g_hash_table_remove (checks, keyring_name);
+			
+		/* Create a new keyring for this one */
+		} else {
 			keyring = seahorse_gkr_keyring_new (keyring_name);
 			g_object_set (keyring, "source", self->gsrc, NULL);
 			seahorse_context_add_source (NULL, SEAHORSE_SOURCE (keyring));
-			seahorse_context_take_object (NULL, SEAHORSE_OBJECT (keyring));
+			seahorse_context_add_object (NULL, SEAHORSE_OBJECT (keyring));
 		}
 		
+		/* Refresh the keyring as well, and track the load */
+		oper = seahorse_source_load (SEAHORSE_SOURCE (keyring));
+		seahorse_multi_operation_take (SEAHORSE_MULTI_OPERATION (self->loads), oper);
+		g_object_unref (keyring);
 	}
 	
 	g_hash_table_foreach (checks, (GHFunc)remove_each_keyring_from_context, NULL);
 	g_hash_table_destroy (checks);
         
-        seahorse_operation_mark_done (SEAHORSE_OPERATION (self), FALSE, NULL);
+	/* Watch the loads until they're done */
+	seahorse_operation_watch (self->loads, on_loads_complete, self, on_loads_progress, self);
 }
 
 static SeahorseOperation*
@@ -208,6 +249,9 @@ seahorse_list_operation_cancel (SeahorseOperation *operation)
 	if (self->request)
 		gnome_keyring_cancel_request (self->request);
 	self->request = NULL;
+	
+	if (seahorse_operation_is_running (self->loads))
+		seahorse_operation_cancel (self->loads);
     
 	if (seahorse_operation_is_running (operation))
 		seahorse_operation_mark_done (operation, TRUE, NULL);
@@ -217,6 +261,7 @@ static void
 seahorse_list_operation_init (SeahorseListOperation *self)
 {
 	/* Everything already set to zero */
+	self->loads = SEAHORSE_OPERATION (seahorse_multi_operation_new ());
 }
 
 static void 
@@ -229,8 +274,9 @@ seahorse_list_operation_dispose (GObject *gobject)
 		seahorse_list_operation_cancel (SEAHORSE_OPERATION (self));
 	g_assert (!seahorse_operation_is_running (SEAHORSE_OPERATION (self)));
     
-	/* The above cancel should have stopped this */
+	/* The above cancel should have stopped these */
 	g_assert (self->request == NULL);
+	g_return_if_fail (!seahorse_operation_is_running (self->loads));
 	
 	if (self->gsrc)
 		g_object_unref (self->gsrc);
@@ -247,6 +293,9 @@ seahorse_list_operation_finalize (GObject *gobject)
     
 	/* The above cancel should have stopped this */
 	g_assert (self->request == NULL);
+	
+	g_object_unref (self->loads);
+	self->loads = NULL;
 
 	G_OBJECT_CLASS (seahorse_list_operation_parent_class)->finalize (gobject);
 }
