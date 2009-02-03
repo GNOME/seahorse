@@ -90,11 +90,11 @@ CLEANFILES = *.gladep* *.bak \
 
 # DBUS binding files
 seahorse-service-bindings.h: seahorse-service.xml
-	dbus-binding-tool --prefix=seahorse_service --mode=glib-server --output=$@ $(srcdir)/$<
+	dbus-binding-tool --prefix=seahorse_service --mode=glib-server --output=$@ $<
 seahorse-service-keyset-bindings.h: seahorse-service-keyset.xml
-	dbus-binding-tool --prefix=seahorse_service_keyset --mode=glib-server --output=$@ $(srcdir)/$<
+	dbus-binding-tool --prefix=seahorse_service_keyset --mode=glib-server --output=$@ $<
 seahorse-service-crypto-bindings.h: seahorse-service-crypto.xml
-	dbus-binding-tool --prefix=seahorse_service_crypto --mode=glib-server --output=$@ $(srcdir)/$<
+	dbus-binding-tool --prefix=seahorse_service_crypto --mode=glib-server --output=$@ $<
 
 # Dbus service file
 servicedir = $(datadir)/dbus-1/services/
