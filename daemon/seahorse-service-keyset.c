@@ -102,13 +102,19 @@ seahorse_service_keyset_list_keys (SeahorseServiceKeyset *keyset, gchar ***keys,
 	objects = seahorse_set_get_objects (SEAHORSE_SET (keyset));
 	for (l = objects; l; l = g_list_next (l)) {
 		id = seahorse_context_object_to_dbus (SCTX_APP (), SEAHORSE_OBJECT (l->data));
-		g_array_append_val (array, id);
+		if (id == NULL)
+			g_warning ("object has no identifier usable over dbus");
+		else
+			g_array_append_val (array, id);
 
 		/* Children of the object */
 		children = seahorse_object_get_children (SEAHORSE_OBJECT (l->data));
 		for (k = children; k; k = g_list_next (k)) {
 			id = seahorse_context_object_to_dbus (SCTX_APP (), SEAHORSE_OBJECT (k->data));
-			g_array_append_val (array, id);
+			if (id == NULL)
+				g_warning ("child object has no identifier usable over dbus");
+			else
+				g_array_append_val (array, id);
 		}
 	}
     
