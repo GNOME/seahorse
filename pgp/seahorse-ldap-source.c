@@ -756,7 +756,7 @@ add_key (SeahorseLDAPSource *ssrc, SeahorsePgpKey *key)
 	SeahorseObject *prev;
 	GQuark keyid;
 
-	keyid = seahorse_pgp_key_calc_cannonical_id (seahorse_pgp_key_get_keyid (key));
+	keyid = seahorse_pgp_key_canonize_id (seahorse_pgp_key_get_keyid (key));
 	prev = seahorse_context_get_object (SCTX_APP (), SEAHORSE_SOURCE (ssrc), keyid);
     
 	if (prev != NULL) {
@@ -1420,7 +1420,7 @@ seahorse_ldap_source_class_init (SeahorseLDAPSourceClass *klass)
 	seahorse_registry_register_type (NULL, SEAHORSE_TYPE_LDAP_SOURCE, "source", "remote", SEAHORSE_PGP_STR, NULL);
 	seahorse_servers_register_type ("ldap", _("LDAP Key Server"), seahorse_ldap_is_valid_uri);
 
-	seahorse_registry_register_function (NULL, seahorse_pgp_key_calc_cannonical_id, "canonize", SEAHORSE_PGP_STR, NULL);
+	seahorse_registry_register_function (NULL, seahorse_pgp_key_canonize_id, "canonize", SEAHORSE_PGP_STR, NULL);
 }
 
 static void 

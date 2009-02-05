@@ -140,7 +140,7 @@ _seahorse_pgp_key_set_subkeys (SeahorsePgpKey *self, GList *subkeys)
 	seahorse_object_list_free (self->pv->subkeys);
 	self->pv->subkeys = seahorse_object_list_copy (subkeys);
 	
-	id = seahorse_pgp_key_calc_cannonical_id (seahorse_pgp_subkey_get_keyid (subkeys->data));
+	id = seahorse_pgp_key_canonize_id (seahorse_pgp_subkey_get_keyid (subkeys->data));
 	g_object_set (self, "id", id, NULL); 
 	
 	g_object_notify (G_OBJECT (self), "subkeys");
@@ -401,38 +401,50 @@ seahorse_pgp_key_class_init (SeahorsePgpKeyClass *klass)
  */
 
 GQuark
-seahorse_pgp_key_calc_cannonical_id (const gchar *id)
+seahorse_pgp_key_canonize_id (const gchar *keyid)
+{
+	gchar *str;
+	GQuark id;
+	
+	str = seahorse_pgp_key_calc_id (keyid, 0);
+	g_return_val_if_fail (str, 0);
+	
+	id = g_quark_from_string (str);
+	g_free (str);
+	
+	return id;
+}
+
+gchar*
+seahorse_pgp_key_calc_id (const gchar *keyid, guint index)
 {
 	guint len;
-	GQuark keyid;
-	gchar *t;
 	
-	g_return_val_if_fail (id, 0);
-	len = strlen (id);
+	g_return_val_if_fail (keyid, 0);
+	len = strlen (keyid);
     
 	if (len < 16)
-		g_message ("invalid keyid (less than 16 chars): %s", id);
+		g_message ("invalid keyid (less than 16 chars): %s", keyid);
     
 	if (len > 16)
-		id += len - 16;
+		keyid += len - 16;
     
-	t = g_strdup_printf ("%s:%s", SEAHORSE_PGP_STR, id);
-	keyid = g_quark_from_string (t);
-	g_free (t);
-    
-	return keyid;
+	if (index == 0)
+		return g_strdup_printf ("%s:%s", SEAHORSE_PGP_STR, keyid);
+	else
+		return g_strdup_printf ("%s:%s:%u", SEAHORSE_PGP_STR, keyid, index);
 }
 
 const gchar* 
-seahorse_pgp_key_calc_rawid (GQuark keyid)
+seahorse_pgp_key_calc_rawid (GQuark id)
 {
-	const gchar* id, *rawid;
+	const gchar* keyid, *strid;
 	
-	id = g_quark_to_string (keyid);
-	g_return_val_if_fail (id != NULL, NULL);
+	strid = g_quark_to_string (id);
+	g_return_val_if_fail (strid != NULL, NULL);
 	
-	rawid = strchr (id, ':');
-	return rawid ? rawid + 1 : id;
+	keyid = strchr (strid, ':');
+	return keyid ? keyid + 1 : strid;
 }
 
 gchar*

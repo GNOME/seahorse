@@ -109,8 +109,11 @@ gboolean          seahorse_pgp_key_has_keyid            (SeahorsePgpKey *self,
 
 gchar*            seahorse_pgp_key_calc_identifier      (const gchar *keyid);
 
-GQuark            seahorse_pgp_key_calc_cannonical_id   (const gchar *id);
+gchar*            seahorse_pgp_key_calc_id              (const gchar *keyid,
+                                                         guint index);
 
-const gchar*      seahorse_pgp_key_calc_rawid           (GQuark keyid);
+const gchar*      seahorse_pgp_key_calc_rawid           (GQuark id);
+
+GQuark            seahorse_pgp_key_canonize_id          (const gchar *keyid);
 
 #endif /* __SEAHORSE_KEY_H__ */

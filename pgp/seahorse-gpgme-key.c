@@ -673,7 +673,7 @@ seahorse_gpgme_key_refresh_matching (gpgme_key_t key)
 	
 	memset (&pred, 0, sizeof (pred));
 	pred.type = SEAHORSE_TYPE_GPGME_KEY;
-	pred.id = seahorse_pgp_key_calc_cannonical_id (key->subkeys->keyid);
+	pred.id = seahorse_pgp_key_canonize_id (key->subkeys->keyid);
 	
 	seahorse_context_for_objects_full (NULL, &pred, refresh_each_object, NULL);
 }

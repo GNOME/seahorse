@@ -9,6 +9,17 @@
 	* daemon/seahorse-service-keyset.c: Don't return objects without ids
 	via libcryptui. Fixes bug #570454
 
+	* daemon/seahorse-service-crypto.c:
+	* pgp/seahorse-gpgme-key.c:
+	* pgp/seahorse-gpgme-source.c:
+	* pgp/seahorse-hkp-source.c:
+	* pgp/seahorse-ldap-source.c:
+	* pgp/seahorse-pgp-key.c:
+	* pgp/seahorse-pgp-key.h:
+	* pgp/seahorse-pgp-signature.c:
+	* pgp/seahorse-server-source.c: Rework functions for converting pgp keyids
+	into object ids, including the canonize id function. 
+
 2009-02-04  Adam Schreiber  <sadam@clemson.edu>
 
     * pgp/seahorse-sign.glade:
