@@ -1,3 +1,11 @@
+if WITH_TESTS
+TESTS_DIR = tests
+else
+TESTS_DIR = 
+endif
+
+SUBDIRS = . $(TESTS_DIR)
+
 # -----------------------------------------------------------------
 # LIBRARY HEADERS
 # 
