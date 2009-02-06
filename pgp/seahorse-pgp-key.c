@@ -108,16 +108,20 @@ _seahorse_pgp_key_set_uids (SeahorsePgpKey *self, GList *uids)
 	g_return_if_fail (SEAHORSE_IS_PGP_KEY (self));
 
 	/* Remove the parent on each old one */
-	for (l = self->pv->uids; l; l = g_list_next (l)) 
+	for (l = self->pv->uids; l; l = g_list_next (l)) {
+		seahorse_context_remove_object (seahorse_context_for_app (), l->data);
 		seahorse_object_set_parent (l->data, NULL);
+	}
 
 	seahorse_object_list_free (self->pv->uids);
 	self->pv->uids = seahorse_object_list_copy (uids);
 
 	/* Set parent and source on each new one, except the first */
-	for (l = self->pv->uids ? g_list_next (self->pv->uids) : NULL;
-	     l; l = g_list_next (l))
-		seahorse_object_set_parent (l->data, SEAHORSE_OBJECT (self));
+	for (l = self->pv->uids; l; l = g_list_next (l)) {
+		if (l != self->pv->uids)
+			seahorse_object_set_parent (l->data, SEAHORSE_OBJECT (self));
+		seahorse_context_add_object (seahorse_context_for_app (), l->data);
+	}
 	
 	g_object_notify (G_OBJECT (self), "uids");
 }
@@ -295,8 +299,10 @@ seahorse_pgp_key_object_dispose (GObject *obj)
 	GList *l;
 	
 	/* Free all the attached UIDs */
-	for (l = self->pv->uids; l; l = g_list_next (l))
+	for (l = self->pv->uids; l; l = g_list_next (l)) {
+		seahorse_context_remove_object (seahorse_context_for_app (), l->data);
 		seahorse_object_set_parent (l->data, NULL);
+	}
 	seahorse_object_list_free (self->pv->uids);
 	self->pv->uids = NULL;
 
