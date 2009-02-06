@@ -1,3 +1,11 @@
+2009-02-05  Stef Walter  <stef@memberwebs.com>
+
+	* libseahorse/seahorse-context.c: 
+	* libseahorse/seahorse-context.h: Ref objects while the 
+	context is being destroyed, so that removing an object 
+	that was removed by another object doesn't crash. We need
+	a new ownership model....
+
 2009-02-04  Stef Walter  <stef@memberwebs.com>
 
 	* configure.in:

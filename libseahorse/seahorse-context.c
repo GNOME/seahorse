@@ -134,9 +134,9 @@ seahorse_context_init (SeahorseContext *sctx)
 }
 
 static void
-hash_to_slist (gpointer object, gpointer value, gpointer user_data)
+hash_to_ref_slist (gpointer object, gpointer value, gpointer user_data)
 {
-	*((GSList**)user_data) = g_slist_prepend (*((GSList**)user_data), value);
+	*((GSList**)user_data) = g_slist_prepend (*((GSList**)user_data), g_object_ref (value));
 }
 
 /* release all references */
@@ -150,9 +150,11 @@ seahorse_context_dispose (GObject *gobject)
     
     /* Release all the objects */
     objects = NULL;
-    g_hash_table_foreach (sctx->pv->objects_by_source, hash_to_slist, &objects);
-    for (l = objects; l; l = g_slist_next (l)) 
-	    seahorse_context_remove_object (sctx, l->data);
+    g_hash_table_foreach (sctx->pv->objects_by_source, hash_to_ref_slist, &objects);
+    for (l = objects; l; l = g_slist_next (l)) {
+            seahorse_context_remove_object (sctx, l->data);
+            g_object_unref (l->data);
+    }
     g_slist_free (objects);
 
     /* Gconf notification */
@@ -703,6 +705,26 @@ seahorse_context_find_objects (SeahorseContext *sctx, GQuark ktype,
     pred.location = location;
     
     return seahorse_context_find_objects_full (sctx, &pred);
+}
+
+static void
+verify_each_object (gpointer key, gpointer value, gpointer user_data)
+{
+	gpointer k;
+
+	g_assert (SEAHORSE_IS_OBJECT (value));
+	k = hashkey_by_source (seahorse_object_get_source (value), 
+	                       seahorse_object_get_id (value));
+	g_assert (k == key);
+}
+
+void
+seahorse_context_verify_objects (SeahorseContext *self)
+{
+	if (!self)
+		self = seahorse_context_for_app ();
+	g_return_if_fail (SEAHORSE_IS_CONTEXT (self));
+	g_hash_table_foreach (self->pv->objects_by_source, verify_each_object, self);
 }
 
 void 

@@ -161,6 +161,8 @@ void                seahorse_context_for_objects_full   (SeahorseContext *self,
                                                          SeahorseObjectFunc func,
                                                          gpointer user_data);
 
+void                seahorse_context_verify_objects     (SeahorseContext *self);
+
 void                seahorse_context_remove_object      (SeahorseContext *sctx,
                                                          struct _SeahorseObject *sobj);
 
