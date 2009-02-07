@@ -49,7 +49,7 @@ G_DEFINE_TYPE_EXTENDED (SeahorseUnknownSource, seahorse_unknown_source, G_TYPE_O
 static void
 search_done (SeahorseOperation *op, SeahorseObject *sobj)
 {
-	g_object_set (sobj, "source-location", SEAHORSE_LOCATION_MISSING, NULL);
+	g_object_set (sobj, "location", SEAHORSE_LOCATION_MISSING, NULL);
 }
 
 /* -----------------------------------------------------------------------------
@@ -156,8 +156,10 @@ seahorse_unknown_source_add_object (SeahorseUnknownSource *usrc, GQuark id,
     }
     
     if (search) {
-        g_object_set (sobj, "source-location", SEAHORSE_LOCATION_SEARCHING, NULL);
+        g_object_set (sobj, "location", SEAHORSE_LOCATION_SEARCHING, NULL);
         seahorse_operation_watch (search, (SeahorseDoneFunc) search_done, sobj, NULL, NULL);
+    } else {
+        g_object_set (sobj, "location", SEAHORSE_LOCATION_MISSING, NULL);
     }
     
     return sobj;
