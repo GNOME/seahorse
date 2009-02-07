@@ -33,7 +33,8 @@
 enum {
     PROP_0,
     PROP_SOURCE_TAG,
-    PROP_SOURCE_LOCATION
+    PROP_SOURCE_LOCATION,
+    PROP_CONSTRUCT_TAG,
 };
 
 static void seahorse_source_iface (SeahorseSourceIface *iface);
@@ -68,7 +69,7 @@ seahorse_unknown_source_set_property (GObject *object, guint prop_id, const GVal
     SeahorseUnknownSource *usrc = SEAHORSE_UNKNOWN_SOURCE (object);
     
     switch (prop_id) {
-    case PROP_SOURCE_TAG:
+    case PROP_CONSTRUCT_TAG:
         usrc->ktype = g_value_get_uint (value);
         break;
     }
@@ -82,6 +83,9 @@ seahorse_unknown_source_get_property (GObject *object, guint prop_id, GValue *va
     
     switch (prop_id) {
     case PROP_SOURCE_TAG:
+        g_value_set_uint (value, usrc->ktype);
+        break;
+    case PROP_CONSTRUCT_TAG:
         g_value_set_uint (value, usrc->ktype);
         break;
     case PROP_SOURCE_LOCATION:
@@ -108,6 +112,15 @@ seahorse_unknown_source_class_init (SeahorseUnknownSourceClass *klass)
     
 	g_object_class_override_property (gobject_class, PROP_SOURCE_TAG, "source-tag");
 	g_object_class_override_property (gobject_class, PROP_SOURCE_LOCATION, "source-location");
+	
+	/* 
+	 * This is a writable construct only property that lets us construct this  
+	 * class with different 'source-tag' property. The 'source-tag' property
+	 * is read-only, and so we can't use it directly.
+	 */
+	g_object_class_install_property (gobject_class, PROP_CONSTRUCT_TAG, 
+	         g_param_spec_uint ("construct-tag", "Construct Tag", "Set source-tag during construction of object",
+	                            0, G_MAXUINT, 0, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
     
 	seahorse_registry_register_type (NULL, SEAHORSE_TYPE_UNKNOWN_SOURCE, "source", NULL);
 }
@@ -125,7 +138,7 @@ seahorse_source_iface (SeahorseSourceIface *iface)
 SeahorseUnknownSource*
 seahorse_unknown_source_new (GQuark ktype)
 {
-   return g_object_new (SEAHORSE_TYPE_UNKNOWN_SOURCE, "source-tag", ktype, NULL);
+   return g_object_new (SEAHORSE_TYPE_UNKNOWN_SOURCE, "construct-tag", ktype, NULL);
 }
 
 SeahorseObject*                     
