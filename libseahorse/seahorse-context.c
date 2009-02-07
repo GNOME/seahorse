@@ -1094,6 +1094,7 @@ GList*
 seahorse_context_discover_objects (SeahorseContext *sctx, GQuark ktype, 
                                    GSList *rawids)
 {
+    SeahorseOperation *op = NULL;
     GList *robjects = NULL;
     GQuark id = 0;
     GSList *todiscover = NULL;
@@ -1101,7 +1102,6 @@ seahorse_context_discover_objects (SeahorseContext *sctx, GQuark ktype,
     SeahorseSource *sksrc;
     SeahorseObject* sobj;
     SeahorseLocation loc;
-    SeahorseOperation *op;
     GSList *l;
 
     if (!sctx)
@@ -1159,27 +1159,27 @@ seahorse_context_discover_objects (SeahorseContext *sctx, GQuark ktype,
         /* Running operations ref themselves */
         g_object_unref (op);
     }
-    
+
     /* Start a discover process on all todiscover */
     if (seahorse_gconf_get_boolean (AUTORETRIEVE_KEY) && todiscover) {
         op = seahorse_context_retrieve_objects (sctx, ktype, todiscover, NULL);
-
-        /* Add unknown objects for all these */
-        sksrc = seahorse_context_find_source (sctx, ktype, SEAHORSE_LOCATION_MISSING);
-        for (l = todiscover; l; l = g_slist_next (l)) {
-            if (sksrc) {
-                sobj = seahorse_unknown_source_add_object (SEAHORSE_UNKNOWN_SOURCE (sksrc), 
-                                                           GPOINTER_TO_UINT (l->data), op);
-                robjects = g_list_prepend (robjects, sobj);
-            }
-        }
-        
-        g_slist_free (todiscover);
         
         /* Running operations ref themselves */
         g_object_unref (op);
     }
-    
+
+    /* Add unknown objects for all these */
+    sksrc = seahorse_context_find_source (sctx, ktype, SEAHORSE_LOCATION_MISSING);
+    for (l = todiscover; l; l = g_slist_next (l)) {
+        if (sksrc) {
+            sobj = seahorse_unknown_source_add_object (SEAHORSE_UNKNOWN_SOURCE (sksrc), 
+                                                       GPOINTER_TO_UINT (l->data), op);
+            robjects = g_list_prepend (robjects, sobj);
+        }
+    }
+
+    g_slist_free (todiscover);
+
     return robjects;
 }
 
