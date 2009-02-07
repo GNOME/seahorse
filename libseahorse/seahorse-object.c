@@ -832,6 +832,8 @@ seahorse_object_lookup_property (SeahorseObject *self, const gchar *field, GValu
 			field = "identifier";
 		else if (g_str_equal (field, "stock-id"))
 			field = "icon";
+		else if (g_str_equal (field, "raw-id"))
+			field = "identifier";
 		else 
 			return FALSE;
 	
