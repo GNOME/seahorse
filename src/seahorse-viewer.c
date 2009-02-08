@@ -654,7 +654,7 @@ seahorse_viewer_constructor (GType type, guint n_props, GObjectConstructParam *p
 		/* Setup the commands */
 		types = seahorse_registry_object_types (seahorse_registry_get (), "commands", NULL, NULL);
 		for (l = types; l; l = g_list_next (l)) {
-			GType typ = GPOINTER_TO_INT (l->data);
+			GType typ = GPOINTER_TO_SIZE (l->data);
 			SeahorseCommands *commands;
 			
 			commands = g_object_new (typ, "view", self, NULL);

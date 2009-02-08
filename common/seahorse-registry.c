@@ -142,7 +142,7 @@ lookup_category_value (GHashTable *table, const gchar *category, va_list cats)
 static gint
 object_has_type (gconstpointer object, gconstpointer type)
 {
-	if (G_OBJECT_TYPE (object) == GPOINTER_TO_UINT (type))
+	if (G_OBJECT_TYPE (object) == GPOINTER_TO_SIZE (type))
 		return 0;
 	return -1;
 }
@@ -222,14 +222,14 @@ seahorse_registry_register_type (SeahorseRegistry *registry, GType type,
 	g_return_if_fail (category);
 
 	pv = SEAHORSE_REGISTRY_GET_PRIVATE (registry);
-	register_value_for_category (pv->types, g_quark_from_string (category), GUINT_TO_POINTER (type), NULL);
+	register_value_for_category (pv->types, g_quark_from_string (category), GSIZE_TO_POINTER (type), NULL);
 	
 	va_start (cats, category);
 	for (;;) {
 		category = va_arg (cats, const gchar*);
 		if (!category)
 			break;
-		register_value_for_category (pv->types, g_quark_from_string (category), GUINT_TO_POINTER (type), NULL);
+		register_value_for_category (pv->types, g_quark_from_string (category), GSIZE_TO_POINTER (type), NULL);
 	}
 	va_end (cats);
 }
@@ -302,7 +302,7 @@ seahorse_registry_object_type (SeahorseRegistry *registry, const gchar *category
 	pv = SEAHORSE_REGISTRY_GET_PRIVATE (registry);
 
 	va_start (cats, category);
-	type = GPOINTER_TO_UINT (lookup_category_value (pv->types, category, cats));
+	type = GPOINTER_TO_SIZE (lookup_category_value (pv->types, category, cats));
 	va_end (cats);
 
 	return type;
@@ -344,7 +344,7 @@ seahorse_registry_object_instance (SeahorseRegistry *registry, const gchar *cate
 
 	va_start (cats, category);
 	object = lookup_category_value (pv->objects, category, cats);
-	type = GPOINTER_TO_UINT (lookup_category_value (pv->types, category, cats));
+	type = GPOINTER_TO_SIZE (lookup_category_value (pv->types, category, cats));
 	va_end (cats);
 
 	if (object) 
@@ -381,7 +381,7 @@ seahorse_registry_object_instances (SeahorseRegistry *registry, const gchar *cat
 	/* Instantiate other types if nothing of that type exists */
 	for (l = types; l; l = g_list_next (l)) {
 		if (!g_list_find_custom (objects, l->data, object_has_type))
-			objects = g_list_prepend (objects, g_object_new (GPOINTER_TO_UINT (l->data), NULL));
+			objects = g_list_prepend (objects, g_object_new (GPOINTER_TO_SIZE (l->data), NULL));
 	}
 	
 	g_list_free (types);
