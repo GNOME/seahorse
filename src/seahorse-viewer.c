@@ -493,7 +493,7 @@ show_properties_for_selected (SeahorseViewer *self, SeahorseCommands *commands,
 static const GtkActionEntry KEY_ENTRIES[] = {
 	{ "show-properties", GTK_STOCK_PROPERTIES, N_("P_roperties"), NULL,
 	  N_("Show properties"), G_CALLBACK (on_key_properties) },
-	{ "edit-delete", GTK_STOCK_DELETE, N_("_Delete"), NULL,
+	{ "edit-delete", GTK_STOCK_DELETE, NC_("This text refers to deleting an item from its type's backing store.", "_Delete"), NULL,
 	  N_("Delete selected items"), G_CALLBACK (on_key_delete) }
 };
 
