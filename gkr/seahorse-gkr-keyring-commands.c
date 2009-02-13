@@ -312,6 +312,7 @@ seahorse_gkr_keyring_commands_show_properties (SeahorseCommands* base, SeahorseO
 static SeahorseOperation* 
 seahorse_gkr_keyring_commands_delete_objects (SeahorseCommands* base, GList* objects) 
 {
+	SeahorseOperation *oper = NULL;
 	gchar *prompt;
 	
 	if (!objects)
@@ -320,7 +321,12 @@ seahorse_gkr_keyring_commands_delete_objects (SeahorseCommands* base, GList* obj
 	prompt = g_strdup_printf (_ ("Are you sure you want to delete the password keyring '%s'?"), 
 	                          seahorse_object_get_label (objects->data));
 
-	return seahorse_object_delete (objects->data);
+	if (seahorse_util_prompt_delete (prompt, GTK_WIDGET (seahorse_commands_get_window (base))))
+		oper = seahorse_object_delete (objects->data);
+		
+	g_free (prompt);
+	
+	return oper;
 }
 
 static GObject* 
