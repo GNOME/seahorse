@@ -22,6 +22,7 @@
 
 #include "seahorse-gkr-dialogs.h"
 #include "seahorse-gkr-keyring.h"
+#include "seahorse-gkr-source.h"
 
 #include "seahorse-widget.h"
 #include "seahorse-util.h"
@@ -106,6 +107,8 @@ static void
 keyring_add_done (GnomeKeyringResult result, gpointer data)
 {
 	SeahorseWidget *swidget = SEAHORSE_WIDGET (data);
+	SeahorseOperation *op;
+
 	g_return_if_fail (swidget);
 
 	/* Clear the operation without cancelling it since it is complete */
@@ -113,8 +116,17 @@ keyring_add_done (GnomeKeyringResult result, gpointer data)
     
 	/* Successful. Update the listings and stuff. */
 	if (result == GNOME_KEYRING_RESULT_OK) {
-		/* TODO: refresh_keyrings (swidget); */
-        
+		
+		op = seahorse_source_load (SEAHORSE_SOURCE (seahorse_gkr_source_default ()));
+		
+		/* 
+		 * HACK: Major hack alert. This whole area needs some serious refactoring,
+		 * so for now we're just going to let any viewers listen in on this
+		 * operation like so:
+		 */
+		g_signal_emit_by_name (seahorse_context_for_app (), "refreshing", op);
+		g_object_unref (op);
+
 	/* Setting the default keyring failed */
 	} else if (result != GNOME_KEYRING_RESULT_CANCELLED) {     
 		seahorse_util_show_error (seahorse_widget_get_toplevel (swidget),
