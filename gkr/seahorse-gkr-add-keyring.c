@@ -121,6 +121,8 @@ keyring_add_done (GnomeKeyringResult result, gpointer data)
 		                          _("Couldn't add keyring"),
 		                          gnome_keyring_result_to_message (result));
 	}
+	
+	seahorse_widget_destroy (swidget);
 }
 
 static void
@@ -150,12 +152,10 @@ properties_response (GtkDialog *dialog, int response, SeahorseWidget *swidget)
 		keyring = gtk_entry_get_text (entry);
 		g_return_if_fail (keyring && keyring[0]);
 	    
-		request = gnome_keyring_create (keyring, NULL, keyring_add_done, swidget, NULL);
+		request = gnome_keyring_create (keyring, NULL, keyring_add_done, g_object_ref (swidget), g_object_unref);
 		g_return_if_fail (request);
 		setup_request (swidget, request);
 	}
-
-	seahorse_widget_destroy (swidget);
 }
 
 void
@@ -177,4 +177,7 @@ seahorse_gkr_add_keyring_show (GtkWindow *parent)
 
 	widget = seahorse_widget_get_toplevel (swidget);
 	g_signal_connect (widget, "response", G_CALLBACK (properties_response), swidget);
+	
+	gtk_widget_show (widget);
+	gtk_window_present (GTK_WINDOW (widget));
 }
