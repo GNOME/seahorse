@@ -26,7 +26,7 @@ IGNORE_HFILES=
 # if $(DOC_MODULE).types is non-empty.
 INCLUDES = \
 	-I$(top_srcdir) 	\
-	-I$(../../libcryptui) 	\
+	-I../../libcryptui 	\
 	-DGTK_ENABLE_BROKEN
 	
 CFLAGS = $(GTK_CFLAGS)
