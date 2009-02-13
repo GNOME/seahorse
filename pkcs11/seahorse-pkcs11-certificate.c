@@ -39,7 +39,7 @@
 static const gulong REQUIRED_ATTRS[] = {
 	CKA_VALUE,
 	CKA_ID,
-	CKA_GNOME_USER_TRUST,
+	CKA_TRUSTED,
 	CKA_END_DATE
 };
 
@@ -344,19 +344,11 @@ seahorse_pkcs11_certificate_get_trust (SeahorsePkcs11Certificate* self)
 
 	g_return_val_if_fail (SEAHORSE_PKCS11_IS_CERTIFICATE (self), 0);
 
-	attr = seahorse_pkcs11_object_require_attribute (SEAHORSE_PKCS11_OBJECT (self), CKA_GNOME_USER_TRUST);
-	if (!attr)
-		return SEAHORSE_VALIDITY_UNKNOWN;
-
-	switch (gp11_attribute_get_ulong (attr)) 
-	{
-	case CKT_GNOME_TRUSTED:
+	attr = seahorse_pkcs11_object_require_attribute (SEAHORSE_PKCS11_OBJECT (self), CKA_TRUSTED);
+	if (attr && gp11_attribute_get_boolean (attr))
 		return SEAHORSE_VALIDITY_FULL;
-	case CKT_GNOME_UNTRUSTED:
-		return SEAHORSE_VALIDITY_NEVER;
-	default:
-		return SEAHORSE_VALIDITY_UNKNOWN;
-	}
+
+	return SEAHORSE_VALIDITY_UNKNOWN;
 }
 
 const char* 

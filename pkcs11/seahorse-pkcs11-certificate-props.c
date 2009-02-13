@@ -21,6 +21,7 @@
 
 #include "config.h"
 
+#include "seahorse-pkcs11-certificate.h"
 #include "seahorse-pkcs11-certificate-props.h"
 
 #include <gcr/gcr-certificate-basics-widget.h>
@@ -156,14 +157,14 @@ seahorse_pkcs11_certificate_props_class_init (SeahorsePkcs11CertificatePropsClas
 
 	g_object_class_install_property (gobject_class, PROP_CERTIFICATE,
 	           g_param_spec_object ("certificate", "Certificate", "Certificate to display", 
-	                                SEAHORSE_TYPE_X509_CERT, G_PARAM_READWRITE));
+	                                SEAHORSE_PKCS11_TYPE_CERTIFICATE, G_PARAM_READWRITE));
 }
 
 /* -----------------------------------------------------------------------------
  * PUBLIC 
  */
 
-SeahorsePkcs11CertificateProps*
+GtkDialog*
 seahorse_pkcs11_certificate_props_new (GcrCertificate *cert)
 {
 	return g_object_new (SEAHORSE_TYPE_PKCS11_CERTIFICATE_PROPS, "certificate", cert, NULL);
