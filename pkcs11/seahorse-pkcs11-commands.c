@@ -110,7 +110,7 @@ seahorse_pkcs11_commands_delete_objects (SeahorseCommands *cmds, GList *objects)
 		prompt = g_strdup_printf (ngettext (
 				"Are you sure you want to delete %d certificate?",
 				"Are you sure you want to delete %d certificates?",
-				num) num);
+				num), num);
 	}
 	
 	ret = seahorse_util_prompt_delete (prompt, GTK_WIDGET (seahorse_view_get_window (seahorse_commands_get_view (cmds))));
