@@ -357,6 +357,7 @@ on_copy_complete (SeahorseOperation* op, SeahorseViewer* self)
 
 	board = gtk_clipboard_get (atom);
 	gtk_clipboard_set_text (board, text, (gint)size);
+	/* Translators: "Copied" is a verb (used as a status indicator), not an adjective for the word "keys" */
 	seahorse_viewer_set_status (self, _ ("Copied keys"));
 }
 
