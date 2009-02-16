@@ -351,8 +351,8 @@ seahorse_gkr_keyring_realize (SeahorseObject *obj)
 	SeahorseGkrKeyring *self = SEAHORSE_GKR_KEYRING (obj);
 	gchar *name, *markup;
 	
-	name = g_strdup_printf ("Passwords: %s", self->pv->keyring_name);
-	markup = g_markup_printf_escaped ("<b>Passwords:</b> %s", self->pv->keyring_name);
+	name = g_strdup_printf (_("Passwords: %s"), self->pv->keyring_name);
+	markup = g_markup_printf_escaped (_("<b>Passwords:</b> %s"), self->pv->keyring_name);
 	
 	g_object_set (self,
 	              "label", name,
