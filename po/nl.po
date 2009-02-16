@@ -28,8 +28,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Seahorse\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-14 21:30+0100\n"
-"PO-Revision-Date: 2009-02-14 21:30+0100\n"
+"POT-Creation-Date: 2009-02-16 18:40+0100\n"
+"PO-Revision-Date: 2009-02-16 18:48+0100\n"
 "Last-Translator: Wouter Bolsterlee <wbolster@gnome.org>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
@@ -486,9 +486,9 @@ msgid "Applications"
 msgstr "Toepassingen"
 
 #: ../gkr/seahorse-gkr-item-properties.glade.h:6
-#: ../pkcs11/seahorse-pkcs11-certificate-props.c:72
 #: ../pgp/seahorse-pgp-private-key-properties.glade.h:23
 #: ../pgp/seahorse-pgp-public-key-properties.glade.h:20
+#: ../pkcs11/seahorse-pkcs11-certificate-props.c:72
 #: ../ssh/seahorse-ssh-key-properties.glade.h:17
 msgid "Details"
 msgstr "Details"
@@ -553,68 +553,15 @@ msgstr "_Schrijven"
 msgid "Listing passwords"
 msgstr "Wachtwoordlijst opbouwen"
 
-#. To translators: This is the noun not the verb.
-#: ../gkr/seahorse-gkr-keyring.glade.h:2
-#: ../pgp/seahorse-pgp-private-key-properties.glade.h:20
-#: ../pgp/seahorse-pgp-public-key-properties.glade.h:19
-msgid "Created:"
-msgstr "Aangemaakt:"
+#: ../gkr/seahorse-gkr-keyring.c:354
+#, c-format
+msgid "Passwords: %s"
+msgstr "Wachtwoorden: %s"
 
-#: ../gkr/seahorse-gkr-keyring.glade.h:3
-msgid "Keyring"
-msgstr "Sleutelbos"
-
-#: ../gkr/seahorse-gkr-keyring.glade.h:4
-msgid "Keyring Properties"
-msgstr "Sleutelbos-eigenschappen"
-
-#: ../gkr/seahorse-gkr-keyring.glade.h:5
-msgid "_Name:"
-msgstr "_Naam:"
-
-#: ../gkr/seahorse-gkr-operation.c:168
-msgid "Access to the key ring was denied"
-msgstr "Toegang tot sleutelbos geweigerd"
-
-#: ../gkr/seahorse-gkr-operation.c:171
-msgid "The gnome-keyring daemon is not running"
-msgstr "De Gnome sleutelbos-voorziening is niet actief"
-
-#: ../gkr/seahorse-gkr-operation.c:174
-msgid "The key ring has already been unlocked"
-msgstr "Sleutelbos is reeds geopend"
-
-#: ../gkr/seahorse-gkr-operation.c:177
-msgid "No such key ring exists"
-msgstr "Deze sleutelbos bestaat niet"
-
-#: ../gkr/seahorse-gkr-operation.c:180
-msgid "Couldn't communicate with key ring daemon"
-msgstr "Kan niet met de sleutelbos-voorziening communiceren"
-
-#: ../gkr/seahorse-gkr-operation.c:183
-msgid "The item already exists"
-msgstr "Dit item bestaat al"
-
-#: ../gkr/seahorse-gkr-operation.c:189
-msgid "Internal error accessing gnome-keyring"
-msgstr "Interne fout bij openen van de Gnome sleutelbos"
-
-#: ../gkr/seahorse-gkr-operation.c:238 ../gkr/seahorse-gkr-operation.c:264
-msgid "Saving item..."
-msgstr "Item opslaan…"
-
-#: ../gkr/seahorse-gkr-operation.c:300
-msgid "Deleting item..."
-msgstr "Item verwijderen…"
-
-#: ../gkr/seahorse-gkr-operation.c:325
-msgid "Deleting keyring..."
-msgstr "Sleutelbos verwijderen…"
-
-#: ../gkr/seahorse-gkr-source.c:234
-msgid "Listing password keyrings"
-msgstr "Lijst van wachtwoordsleutelbossen maken"
+#: ../gkr/seahorse-gkr-keyring.c:355
+#, c-format
+msgid "<b>Passwords:</b> %s"
+msgstr "<b>Wachtwoorden:</b> %s"
 
 #: ../gkr/seahorse-gkr-keyring-commands.c:87
 msgid "Password Keyring"
@@ -685,6 +632,82 @@ msgstr "Het ontgrendelwachtwoord van de wachtwoordsleutelbos veranderen"
 #, c-format
 msgid "Are you sure you want to delete the password keyring '%s'?"
 msgstr "Weet u zeker dat u de wachtwoordsleutelbos ‘%s’ wilt verwijderen?"
+
+#. -----------------------------------------------------------------------------
+#. * PUBLIC
+#.
+#. To translators: This is the noun not the verb.
+#: ../gkr/seahorse-gkr-keyring.glade.h:2
+#: ../pgp/seahorse-pgp-private-key-properties.glade.h:20
+#: ../pgp/seahorse-pgp-public-key-properties.glade.h:19
+msgid "Created:"
+msgstr "Aangemaakt:"
+
+#: ../gkr/seahorse-gkr-keyring.glade.h:3
+msgid "Keyring"
+msgstr "Sleutelbos"
+
+#: ../gkr/seahorse-gkr-keyring.glade.h:4
+msgid "Keyring Properties"
+msgstr "Sleutelbos-eigenschappen"
+
+#: ../gkr/seahorse-gkr-keyring.glade.h:5
+msgid "_Name:"
+msgstr "_Naam:"
+
+#: ../gkr/seahorse-gkr-operation.c:168
+msgid "Access to the key ring was denied"
+msgstr "Toegang tot sleutelbos geweigerd"
+
+#: ../gkr/seahorse-gkr-operation.c:171
+msgid "The gnome-keyring daemon is not running"
+msgstr "De Gnome sleutelbos-voorziening is niet actief"
+
+#: ../gkr/seahorse-gkr-operation.c:174
+msgid "The key ring has already been unlocked"
+msgstr "Sleutelbos is reeds geopend"
+
+#: ../gkr/seahorse-gkr-operation.c:177
+msgid "No such key ring exists"
+msgstr "Deze sleutelbos bestaat niet"
+
+#: ../gkr/seahorse-gkr-operation.c:180
+msgid "Couldn't communicate with key ring daemon"
+msgstr "Kan niet met de sleutelbos-voorziening communiceren"
+
+#: ../gkr/seahorse-gkr-operation.c:183
+msgid "The item already exists"
+msgstr "Dit item bestaat al"
+
+#: ../gkr/seahorse-gkr-operation.c:189
+msgid "Internal error accessing gnome-keyring"
+msgstr "Interne fout bij openen van de Gnome sleutelbos"
+
+#: ../gkr/seahorse-gkr-operation.c:238 ../gkr/seahorse-gkr-operation.c:264
+msgid "Saving item..."
+msgstr "Item opslaan…"
+
+#: ../gkr/seahorse-gkr-operation.c:300
+msgid "Deleting item..."
+msgstr "Item verwijderen…"
+
+#: ../gkr/seahorse-gkr-operation.c:325
+msgid "Deleting keyring..."
+msgstr "Sleutelbos verwijderen…"
+
+#: ../gkr/seahorse-gkr-source.c:234
+msgid "Listing password keyrings"
+msgstr "Lijst van wachtwoordsleutelbossen maken"
+
+#: ../libcryptui/cryptui.c:222
+msgid ""
+"No encryption keys were found with which to perform the operation you "
+"requested.  The program <b>Passwords and Encryption Keys</b> will now be "
+"started so that you may either create a key or import one."
+msgstr ""
+"Er zijn geen encryptiesleutels gevonden voor de bewerking die u wilt "
+"uitvoeren. De toepassing ‘Wachtwoorden en sleutels’ zal nu gestart worden, "
+"zodat een nieuwe sleutel gemaakt of geïmporteerd kan worden."
 
 #: ../libcryptui/cryptui-key-chooser.c:173
 msgid "All Keys"
@@ -1118,6 +1141,9 @@ msgid "Credentials"
 msgstr "Aanmeldgegevens"
 
 #: ../libseahorse/seahorse-object.c:228
+msgctxt ""
+"This object is a means of storing items such as name, email address, etc. "
+"that make up one's digital identity."
 msgid "Identity"
 msgstr "Identiteit"
 
@@ -1307,33 +1333,6 @@ msgstr "Ingetrokken"
 msgid "Could not display help: %s"
 msgstr "Kon de hulp niet weergeven: %s"
 
-#: ../libcryptui/cryptui.c:222
-msgid ""
-"No encryption keys were found with which to perform the operation you "
-"requested.  The program <b>Passwords and Encryption Keys</b> will now be "
-"started so that you may either create a key or import one."
-msgstr ""
-"Er zijn geen encryptiesleutels gevonden voor de bewerking die u wilt "
-"uitvoeren. De toepassing ‘Wachtwoorden en sleutels’ zal nu gestart worden, "
-"zodat een nieuwe sleutel gemaakt of geïmporteerd kan worden."
-
-#: ../pkcs11/seahorse-pkcs11-commands.c:108
-#, c-format
-msgid "Are you sure you want to delete the certificate '%s'?"
-msgstr "Weet u zeker dat u het certificaat ‘%s’ wilt verwijderen?"
-
-#: ../pkcs11/seahorse-pkcs11-commands.c:111
-#, c-format
-msgid "Are you sure you want to delete %d certificate?"
-msgid_plural "Are you sure you want to delete %d certificates?"
-msgstr[0] "Weet u zeker dat u %d certificaat wilt verwijderen?"
-msgstr[1] "Weet u zeker dat u %d certificaten wilt verwijderen?"
-
-#: ../pkcs11/seahorse-pkcs11-certificate.c:107
-#: ../pkcs11/seahorse-pkcs11-certificate-props.c:68
-msgid "Certificate"
-msgstr "Certificaat"
-
 #: ../pgp/seahorse-add-subkey.glade.h:1
 msgid "Expiration Date:"
 msgstr "Verloopdatum:"
@@ -1407,11 +1406,6 @@ msgstr "Sleutel intrekken"
 msgid "_Never expires"
 msgstr "Verloopt _nooit"
 
-#: ../pgp/seahorse-gpgme.c:51
-msgid "Decryption failed. You probably do not have the decryption key."
-msgstr ""
-"Ontcijferen mislukt. Waarschijnlijk is de ontcijfersleutel niet beschikbaar."
-
 #: ../pgp/seahorse-gpgme-add-subkey.c:144
 msgid "Couldn't add subkey"
 msgstr "Kon subsleutel niet toevoegen"
@@ -1445,6 +1439,11 @@ msgstr "Kon gebruiker-id niet toevoegen"
 #, c-format
 msgid "Add user ID to %s"
 msgstr "Gebruiker-id aan %s toevoegen"
+
+#: ../pgp/seahorse-gpgme.c:51
+msgid "Decryption failed. You probably do not have the decryption key."
+msgstr ""
+"Ontcijferen mislukt. Waarschijnlijk is de ontcijfersleutel niet beschikbaar."
 
 #: ../pgp/seahorse-gpgme-expires.c:58
 msgid "Invalid expiry date"
@@ -1666,7 +1665,7 @@ msgstr ""
 "een incorrecte datum ingesteld heeft, of dat de sleutel onjuist ondertekend "
 "is."
 
-#: ../pgp/seahorse-gpgme-source.c:910
+#: ../pgp/seahorse-gpgme-source.c:910 ../src/seahorse-key-manager.c:564
 msgid "Importing Keys"
 msgstr "Sleutels importeren"
 
@@ -2252,6 +2251,17 @@ msgstr "Reden tot intrekken van sleutel"
 msgid "_Reason:"
 msgstr "_Reden:"
 
+#: ../pgp/seahorse-signer.c:62
+msgid ""
+"You have no personal PGP keys that can be used to sign a document or message."
+msgstr ""
+"U heeft geen persoonlijke PGP-sleutels die te gebruiken zijn om een document "
+"of bericht mee te ondertekenen."
+
+#: ../pgp/seahorse-signer.glade.h:1
+msgid "_Sign message with key:"
+msgstr "Bestand _ondertekenen met sleutel:"
+
 #: ../pgp/seahorse-sign.glade.h:1
 msgid "<b>How carefully have you checked this key?</b>"
 msgstr "<b>Hoe zorgvuldig heeft u deze sleutel gecontroleerd?</b>"
@@ -2347,16 +2357,22 @@ msgstr "_Ondertekenaar:"
 msgid "_Very Carefully"
 msgstr "_Uiterst zorgvuldig"
 
-#: ../pgp/seahorse-signer.c:62
-msgid ""
-"You have no personal PGP keys that can be used to sign a document or message."
-msgstr ""
-"U heeft geen persoonlijke PGP-sleutels die te gebruiken zijn om een document "
-"of bericht mee te ondertekenen."
+#: ../pkcs11/seahorse-pkcs11-certificate.c:107
+#: ../pkcs11/seahorse-pkcs11-certificate-props.c:68
+msgid "Certificate"
+msgstr "Certificaat"
 
-#: ../pgp/seahorse-signer.glade.h:1
-msgid "_Sign message with key:"
-msgstr "Bestand _ondertekenen met sleutel:"
+#: ../pkcs11/seahorse-pkcs11-commands.c:108
+#, c-format
+msgid "Are you sure you want to delete the certificate '%s'?"
+msgstr "Weet u zeker dat u het certificaat ‘%s’ wilt verwijderen?"
+
+#: ../pkcs11/seahorse-pkcs11-commands.c:111
+#, c-format
+msgid "Are you sure you want to delete %d certificate?"
+msgid_plural "Are you sure you want to delete %d certificates?"
+msgstr[0] "Weet u zeker dat u %d certificaat wilt verwijderen?"
+msgstr[1] "Weet u zeker dat u %d certificaten wilt verwijderen?"
 
 #: ../src/seahorse-change-passphrase.glade.h:1
 msgid "Change Passphrase"
@@ -2378,7 +2394,7 @@ msgstr "Nieuwe _wachtwoordzin:"
 msgid "Manage your passwords and encryption keys"
 msgstr "Uw cryptografische sleutels en wachtwoorden beheren"
 
-#: ../src/seahorse.desktop.in.in.h:2
+#: ../src/seahorse.desktop.in.in.h:2 ../src/seahorse-key-manager.c:880
 msgid "Passwords and Encryption Keys"
 msgstr "Wachtwoorden en sleutels"
 
@@ -2394,6 +2410,122 @@ msgstr "D_oorgaan"
 #: ../src/seahorse-generate-select.glade.h:3
 msgid "Create New ..."
 msgstr "Nieuwe aanmaken…"
+
+#: ../src/seahorse-key-manager.c:245 ../src/seahorse-keyserver-results.c:84
+#, c-format
+msgid "Selected %d key"
+msgid_plural "Selected %d keys"
+msgstr[0] "%d sleutel geselecteerd"
+msgstr[1] "%d sleutels geselecteerd"
+
+#: ../src/seahorse-key-manager.c:430 ../src/seahorse-key-manager.c:490
+#: ../src/seahorse-key-manager.c:553 ../src/seahorse-keyserver-results.c:170
+msgid "Couldn't import keys"
+msgstr "Kon sleutels niet importeren"
+
+#: ../src/seahorse-key-manager.c:435 ../src/seahorse-keyserver-results.c:175
+msgid "Imported keys"
+msgstr "Geïmporteerde sleutels"
+
+#: ../src/seahorse-key-manager.c:484
+msgid "Importing keys"
+msgstr "Sleutels importeren"
+
+#: ../src/seahorse-key-manager.c:507 ../ssh/seahorse-ssh-operation.c:1017
+msgid "Import Key"
+msgstr "Sleutel importeren"
+
+#: ../src/seahorse-key-manager.c:553
+msgid "Unrecognized key type, or invalid data format"
+msgstr "Onbekend sleuteltype of ongeldige dataopmaak"
+
+#: ../src/seahorse-key-manager.c:747 ../src/seahorse-keyserver-results.c:221
+msgid "_Remote"
+msgstr "_Remote"
+
+#: ../src/seahorse-key-manager.c:748
+msgid "_Quit"
+msgstr "A_fsluiten"
+
+#: ../src/seahorse-key-manager.c:749
+msgid "Close this program"
+msgstr "Deze toepassing afsluiten"
+
+#: ../src/seahorse-key-manager.c:750
+msgid "_New..."
+msgstr "_New…"
+
+#: ../src/seahorse-key-manager.c:751
+msgid "Create a new key or item"
+msgstr "Nieuwe sleutel of nieuw item aanmaken"
+
+#: ../src/seahorse-key-manager.c:752
+msgid "_Import..."
+msgstr "_Importeren…"
+
+#: ../src/seahorse-key-manager.c:753
+msgid "Import from a file"
+msgstr "Uit bestand importeren…"
+
+#: ../src/seahorse-key-manager.c:754
+msgid "_Paste"
+msgstr "_Plakken"
+
+#: ../src/seahorse-key-manager.c:755
+msgid "Import from the clipboard"
+msgstr "Sleutels van klembord importeren"
+
+#: ../src/seahorse-key-manager.c:760 ../src/seahorse-keyserver-results.c:231
+msgid "_Find Remote Keys..."
+msgstr "Sleutels op afstand _zoeken…"
+
+#: ../src/seahorse-key-manager.c:761 ../src/seahorse-keyserver-results.c:232
+msgid "Search for keys on a key server"
+msgstr "Zoeken naar sleutels op een sleutelserver"
+
+#: ../src/seahorse-key-manager.c:762
+msgid "_Sync and Publish Keys..."
+msgstr "_Sleutels synchroniseren en publiceren…"
+
+#: ../src/seahorse-key-manager.c:763
+msgid "Publish and/or synchronize your keys with those online."
+msgstr "Sleutels delen en synchroniseren met on-line sleutels"
+
+#: ../src/seahorse-key-manager.c:768
+msgid "T_ypes"
+msgstr "T_ypes"
+
+#: ../src/seahorse-key-manager.c:768
+msgid "Show type column"
+msgstr "Type-kolom tonen in de sleutelbeheerder"
+
+#: ../src/seahorse-key-manager.c:770
+msgid "_Expiry"
+msgstr "_Verloopdatum"
+
+#: ../src/seahorse-key-manager.c:770
+msgid "Show expiry column"
+msgstr "Verloopdatum-kolom tonen"
+
+#: ../src/seahorse-key-manager.c:772
+msgid "_Trust"
+msgstr "_Vertrouwen"
+
+#: ../src/seahorse-key-manager.c:772
+msgid "Show owner trust column"
+msgstr "Vertrouwen-kolom tonen"
+
+#: ../src/seahorse-key-manager.c:774
+msgid "_Validity"
+msgstr "_Geldigheid"
+
+#: ../src/seahorse-key-manager.c:774
+msgid "Show validity column"
+msgstr "Geldigheid-kolom tonen"
+
+#: ../src/seahorse-key-manager.c:951
+msgid "Filter:"
+msgstr "Filter:"
 
 #: ../src/seahorse-key-manager.glade.h:1
 msgid "<big><b>First time options:</b></big>"
@@ -2422,6 +2554,7 @@ msgid "To get started with encryption you will need keys."
 msgstr "Om te kunnen met versleutelen zijn er sleutels nodig."
 
 #: ../src/seahorse-key-manager.glade.h:7
+#: ../src/seahorse-keyserver-results.c:236
 msgid "_Import"
 msgstr "_Importeren"
 
@@ -2445,6 +2578,47 @@ msgstr "Geldigheid"
 #: ../src/seahorse-key-manager-store.c:865
 msgid "Expiration Date"
 msgstr "Verloopdatum"
+
+#: ../src/seahorse-keyserver-results.c:194
+msgid "Importing keys from key servers"
+msgstr "Sleutels importeren van sleutelservers"
+
+#: ../src/seahorse-keyserver-results.c:222
+msgid "_Close"
+msgstr "Sl_uiten"
+
+#: ../src/seahorse-keyserver-results.c:223
+msgid "Close this window"
+msgstr "Dit venster sluiten"
+
+#: ../src/seahorse-keyserver-results.c:224
+msgid "_Expand All"
+msgstr "Alles uit_klappen"
+
+#: ../src/seahorse-keyserver-results.c:225
+msgid "Expand all listings"
+msgstr "Alle lijsten uitklappen"
+
+#: ../src/seahorse-keyserver-results.c:226
+msgid "_Collapse All"
+msgstr "Alles inkla_ppen"
+
+#: ../src/seahorse-keyserver-results.c:227
+msgid "Collapse all listings"
+msgstr "Alle lijsten inklappen"
+
+#: ../src/seahorse-keyserver-results.c:237
+msgid "Import selected keys to local key ring"
+msgstr "Geselecteerde sleutels importeren in locale sleutelbos"
+
+#: ../src/seahorse-keyserver-results.c:294
+msgid "Remote Keys"
+msgstr "Sleutels op afstand"
+
+#: ../src/seahorse-keyserver-results.c:296
+#, c-format
+msgid "Remote Keys Containing '%s'"
+msgstr "Sleutels op afstand met ‘%s’"
 
 #: ../src/seahorse-keyserver-search.glade.h:1
 msgid "<b>Key Servers:</b>"
@@ -2897,10 +3071,6 @@ msgstr "Sleutel importeren: %s"
 msgid "Importing key. Enter passphrase"
 msgstr "Sleutel importeren. Voer wachtwooord in"
 
-#: ../ssh/seahorse-ssh-operation.c:1017
-msgid "Import Key"
-msgstr "Sleutel importeren"
-
 #: ../ssh/seahorse-ssh-source.c:825
 msgid "No private key file is available for this key."
 msgstr "Er is geen privé-sleutel beschikbaar voor deze sleutel."
@@ -3002,18 +3172,6 @@ msgstr "In_stellen"
 #~ msgid "Expiry for Subkey %d of %s"
 #~ msgstr "Verloopdatum van subsleutel %d van %s"
 
-#~ msgid "Create a New Key"
-#~ msgstr "Nieuwe sleutel aanmaken"
-
-#~ msgid "_Remote"
-#~ msgstr "_Remote"
-
-#~ msgid "_Quit"
-#~ msgstr "A_fsluiten"
-
-#~ msgid "Close this program"
-#~ msgstr "Deze toepassing afsluiten"
-
 #~ msgid "Create a new personal key"
 #~ msgstr "Nieuwe persoonlijke sleutel maken…"
 
@@ -3022,92 +3180,6 @@ msgstr "In_stellen"
 
 #~ msgid "Paste _Keys"
 #~ msgstr "Sleutels kpla_ken"
-
-#~ msgid "Import keys from the clipboard"
-#~ msgstr "Sleutels van klembord importeren"
-
-#~ msgid "_Find Remote Keys..."
-#~ msgstr "Sleutels op afstand _zoeken…"
-
-#~ msgid "Search for keys on a key server"
-#~ msgstr "Zoeken naar sleutels op een sleutelserver"
-
-#~ msgid "_Sync and Publish Keys..."
-#~ msgstr "_Sleutels synchroniseren en publiceren…"
-
-#~ msgid "Publish and/or synchronize your keys with those online."
-#~ msgstr "Sleutels delen en synchroniseren met on-line sleutels"
-
-#~ msgid "T_ypes"
-#~ msgstr "T_ypes"
-
-#~ msgid "Show type column"
-#~ msgstr "Type-kolom tonen in de sleutelbeheerder"
-
-#~ msgid "_Expiry"
-#~ msgstr "_Verloopdatum"
-
-#~ msgid "Show expiry column"
-#~ msgstr "Verloopdatum-kolom tonen"
-
-#~ msgid "_Trust"
-#~ msgstr "_Vertrouwen"
-
-#~ msgid "Show owner trust column"
-#~ msgstr "Vertrouwen-kolom tonen"
-
-#~ msgid "_Validity"
-#~ msgstr "_Geldigheid"
-
-#~ msgid "Show validity column"
-#~ msgstr "Geldigheid-kolom tonen"
-
-#~ msgid "Couldn't import keys"
-#~ msgstr "Kon sleutels niet importeren"
-
-#~ msgid "Imported keys"
-#~ msgstr "Geïmporteerde sleutels"
-
-#~ msgid "Importing keys"
-#~ msgstr "Sleutels importeren"
-
-#~ msgid "Unrecognized key type, or invalid data format"
-#~ msgstr "Onbekend sleuteltype of ongeldige dataopmaak"
-
-#~ msgid "Selected %d key"
-#~ msgid_plural "Selected %d keys"
-#~ msgstr[0] "%d sleutel geselecteerd"
-#~ msgstr[1] "%d sleutels geselecteerd"
-
-#~ msgid "_Close"
-#~ msgstr "Sl_uiten"
-
-#~ msgid "Close this window"
-#~ msgstr "Dit venster sluiten"
-
-#~ msgid "_Expand All"
-#~ msgstr "Alles uit_klappen"
-
-#~ msgid "Expand all listings"
-#~ msgstr "Alle lijsten uitklappen"
-
-#~ msgid "_Collapse All"
-#~ msgstr "Alles inkla_ppen"
-
-#~ msgid "Collapse all listings"
-#~ msgstr "Alle lijsten inklappen"
-
-#~ msgid "Import selected keys to local key ring"
-#~ msgstr "Geselecteerde sleutels importeren in locale sleutelbos"
-
-#~ msgid "Remote Keys"
-#~ msgstr "Sleutels op afstand"
-
-#~ msgid "Remote Keys Containing '%s'"
-#~ msgstr "Sleutels op afstand met ‘%s’"
-
-#~ msgid "Importing keys from key servers"
-#~ msgstr "Sleutels importeren van sleutelservers"
 
 #~ msgid "Secure Shell Passphrase"
 #~ msgstr "SSH-wachtwoordzin"
@@ -3531,9 +3603,6 @@ msgstr "In_stellen"
 
 #~ msgid "Encryption and Keyrings"
 #~ msgstr "Encryptie en sleutelbossen"
-
-#~ msgid "Import keys from the file"
-#~ msgstr "Sleutels uit bestand importeren"
 
 #~ msgid "Encrypt file"
 #~ msgstr "Bestand versleutelen"
