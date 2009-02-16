@@ -9,9 +9,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse.HEAD.hu\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=seahorse&component=general\n"
-"POT-Creation-Date: 2009-02-04 18:28+0000\n"
-"PO-Revision-Date: 2009-02-09 23:07+0100\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-02-16 15:54+0100\n"
+"PO-Revision-Date: 2009-02-16 15:40+0100\n"
 "Last-Translator: Gabor Kelemen <kelemeng@gnome.hu>\n"
 "Language-Team: Hungarian <gnome@fsf.hu>\n"
 "MIME-Version: 1.0\n"
@@ -37,7 +37,6 @@ msgid "Encryption Daemon (Seahorse)"
 msgstr "Titkosítási démon (Seahorse)"
 
 #: ../daemon/seahorse-daemon.desktop.in.in.h:1
-#| msgid "Show Seahorse help"
 msgid "Seahorse Daemon"
 msgstr "Seahorse démon"
 
@@ -46,8 +45,8 @@ msgstr "Seahorse démon"
 msgid "Invalid or unrecognized key type: %s"
 msgstr "Érvénytelen vagy ismeretlen kulcstípus: %s"
 
-#: ../daemon/seahorse-service.c:183 ../daemon/seahorse-service-keyset.c:129
-#: ../daemon/seahorse-service-keyset.c:158
+#: ../daemon/seahorse-service.c:183 ../daemon/seahorse-service-keyset.c:135
+#: ../daemon/seahorse-service-keyset.c:164
 #, c-format
 msgid "Invalid or unrecognized key: %s"
 msgstr "Érvénytelen vagy ismeretlen kulcs: %s"
@@ -152,7 +151,7 @@ msgstr "A kulcstípus érvénytelen a visszafejtéshez: %s"
 msgid "Invalid key type for verifying: %s"
 msgstr "A kulcstípus érvénytelen az ellenőrzéshez: %s"
 
-#: ../daemon/seahorse-service-keyset.c:194
+#: ../daemon/seahorse-service-keyset.c:200
 #, c-format
 msgid "Invalid key id: %s"
 msgstr "Érvénytelen kulcsazonosító: %s"
@@ -329,7 +328,8 @@ msgid "The last search pattern searched for against a key server."
 msgstr "A kulcskiszolgálón utoljára keresett minta."
 
 #: ../data/seahorse.schemas.in.h:30
-msgid "This specifies the default key to use for certain operations, mainly signing."
+msgid ""
+"This specifies the default key to use for certain operations, mainly signing."
 msgstr ""
 "Ez megadja az alapértelmezett kulcsot bizonyos műveletekhez, főképp "
 "aláíráshoz."
@@ -368,7 +368,8 @@ msgstr "Új kulcstartónév:"
 msgid ""
 "Please choose a name for the new keyring. You will be prompted for an unlock "
 "password."
-msgstr "Válassza ki az új kulcstartó nevét. A program bekéri a feloldási jelszót."
+msgstr ""
+"Válassza ki az új kulcstartó nevét. A program bekéri a feloldási jelszót."
 
 #: ../gkr/seahorse-add-keyring.glade.h:4
 #: ../libseahorse/seahorse-add-keyserver.glade.h:5
@@ -376,7 +377,7 @@ msgstr "Válassza ki az új kulcstartó nevét. A program bekéri a feloldási j
 msgid "The host name or address of the server."
 msgstr "A kiszolgáló neve vagy címe."
 
-#: ../gkr/seahorse-gkr-add-keyring.c:121
+#: ../gkr/seahorse-gkr-add-keyring.c:133
 msgid "Couldn't add keyring"
 msgstr "Nem sikerült a kulcstartót hozzáadni"
 
@@ -399,7 +400,6 @@ msgstr "Biztosan törölni akarja a(z) „%s” jelszót?"
 
 #: ../gkr/seahorse-gkr-item-commands.c:81
 #, c-format
-#| msgid "Are you sure you want to delete %d passwords?"
 msgid "Are you sure you want to delete %d password?"
 msgid_plural "Are you sure you want to delete %d passwords?"
 msgstr[0] "Biztosan törölni akar %d jelszót?"
@@ -464,9 +464,9 @@ msgid "Applications"
 msgstr "Alkalmazások"
 
 #: ../gkr/seahorse-gkr-item-properties.glade.h:6
-#: ../pkcs11/seahorse-pkcs11-certificate-props.c:71
 #: ../pgp/seahorse-pgp-private-key-properties.glade.h:23
 #: ../pgp/seahorse-pgp-public-key-properties.glade.h:20
+#: ../pkcs11/seahorse-pkcs11-certificate-props.c:72
 #: ../ssh/seahorse-ssh-key-properties.glade.h:17
 msgid "Details"
 msgstr "Részletek"
@@ -507,8 +507,8 @@ msgstr "Típus:"
 msgid "Use:"
 msgstr "Használat:"
 
-#. To translators: This is the infinitive not the imperative.
-#: ../gkr/seahorse-gkr-item-properties.glade.h:16 ../src/seahorse-viewer.c:496
+#. To translators: This is the infinitive not the imperative.  This string refers to the ability of an application to delete this secret from its key ring.
+#: ../gkr/seahorse-gkr-item-properties.glade.h:16
 msgid "_Delete"
 msgstr "_Törlés"
 
@@ -531,6 +531,89 @@ msgstr "Í_rás"
 msgid "Listing passwords"
 msgstr "Jelszavak felsorolása"
 
+#: ../gkr/seahorse-gkr-keyring.c:354
+#, c-format
+msgid "Passwords: %s"
+msgstr "Jelszavak: %s"
+
+#: ../gkr/seahorse-gkr-keyring.c:355
+#, c-format
+msgid "<b>Passwords:</b> %s"
+msgstr "<b>Jelszavak:</b> %s"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:87
+msgid "Password Keyring"
+msgstr "Jelszókulcstartó"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:88
+msgid "Used to store application and network passwords"
+msgstr "Alkalmazás- és hálózati jelszavak tárolására használatos"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:101
+msgid "Couldn't unlock keyring"
+msgstr "Nem sikerült a kulcstartót feloldani"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:141
+msgid "Couldn't lock keyring"
+msgstr "Nem sikerült a kulcstartót zárolni"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:181
+msgid "Couldn't set default keyring"
+msgstr "Nem sikerült beállítani az alapértelmezett kulcstartót"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:219
+msgid "Couldn't change keyring password"
+msgstr "Nem lehet megváltoztatni a kulcstartó jelszavát"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:250
+msgid "_Lock"
+msgstr "_Zárolás"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:251
+msgid ""
+"Lock the password storage keyring so a master password is required to unlock "
+"it."
+msgstr ""
+"A jelszótároló kulcstartó zárolása, a feloldásához mesterjelszó lesz "
+"szükséges."
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:252
+msgid "_Unlock"
+msgstr "_Feloldás"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:253
+msgid ""
+"Unlock the password storage keyring with a master password so it is "
+"available for use."
+msgstr ""
+"A jelszótároló kulcstartó feloldása mesterjelszóval, így használható lesz."
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:254
+msgid "_Set as default"
+msgstr "_Beállítás alapértelmezettként"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:255
+msgid "Applications usually store new passwords in the default keyring."
+msgstr ""
+"Az alkalmazások általában az alapértelmezett kulcstartón tárolják a "
+"jelszavakat."
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:256
+msgid "Change _Password"
+msgstr "Jelszó meg_változtatása"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:257
+msgid "Change the unlock password of the password storage keyring"
+msgstr "A jelszótároló kulcstartó feloldási jelszavának módosítása"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:321
+#, c-format
+msgid "Are you sure you want to delete the password keyring '%s'?"
+msgstr "Biztosan törölni akarja a(z) „%s” jelszótároló kulcstartót?"
+
+#. -----------------------------------------------------------------------------
+#. * PUBLIC
+#.
 #. To translators: This is the noun not the verb.
 #: ../gkr/seahorse-gkr-keyring.glade.h:2
 #: ../pgp/seahorse-pgp-private-key-properties.glade.h:20
@@ -539,17 +622,14 @@ msgid "Created:"
 msgstr "Létrehozva:"
 
 #: ../gkr/seahorse-gkr-keyring.glade.h:3
-#| msgid "Key Sharing"
 msgid "Keyring"
 msgstr "Kulcstartó"
 
 #: ../gkr/seahorse-gkr-keyring.glade.h:4
-#| msgid "Key Properties"
 msgid "Keyring Properties"
 msgstr "Kulcstartó tulajdonságai"
 
 #: ../gkr/seahorse-gkr-keyring.glade.h:5
-#| msgid "Name"
 msgid "_Name:"
 msgstr "_Név:"
 
@@ -586,91 +666,26 @@ msgid "Saving item..."
 msgstr "Elem mentése…"
 
 #: ../gkr/seahorse-gkr-operation.c:300
-#| msgid "Deleting..."
 msgid "Deleting item..."
 msgstr "Elem törlése…"
 
 #: ../gkr/seahorse-gkr-operation.c:325
-#| msgid "Deleting..."
 msgid "Deleting keyring..."
 msgstr "Kulcstartó törlése…"
 
 #: ../gkr/seahorse-gkr-source.c:234
-#| msgid "Listing passwords"
 msgid "Listing password keyrings"
 msgstr "Jelszókulcstartók felsorolása"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:87
-#| msgid "Password Keyrings"
-msgid "Password Keyring"
-msgstr "Jelszókulcstartó"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:88
-#| msgid "_Location for application passwords:"
-msgid "Used to store application and network passwords"
-msgstr "Alkalmazás- és hálózati jelszavak tárolására használatos"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:101
-#| msgid "Couldn't add keyring"
-msgid "Couldn't unlock keyring"
-msgstr "Nem sikerült a kulcstartót feloldani"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:141
-#| msgid "Couldn't add keyring"
-msgid "Couldn't lock keyring"
-msgstr "Nem sikerült a kulcstartót zárolni"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:181
-#| msgid "Couldn't set default password keyring"
-msgid "Couldn't set default keyring"
-msgstr "Nem sikerült beállítani az alapértelmezett kulcstartót"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:219
-msgid "Couldn't change keyring password"
-msgstr "Nem lehet megváltoztatni a kulcstartó jelszavát"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:250
-msgid "_Lock"
-msgstr "_Zárolás"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:251
+#: ../libcryptui/cryptui.c:222
 msgid ""
-"Lock the password storage keyring so a master password is required to unlock "
-"it."
-msgstr "A jelszótároló kulcstartó zárolása, a feloldásához mesterjelszó lesz szükséges."
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:252
-msgid "_Unlock"
-msgstr "_Feloldás"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:253
-msgid ""
-"Unlock the password storage keyring with a master password so it is "
-"available for use."
-msgstr "A jelszótároló kulcstartó feloldása mesterjelszóval, így használható lesz."
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:254
-msgid "_Set as default"
-msgstr "_Beállítás alapértelmezettként"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:255
-msgid "Applications usually store new passwords in the default keyring."
-msgstr "Az alkalmazások általában az alapértelmezett kulcstartón tárolják a jelszavakat."
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:256
-#| msgid "Change Unlock _Password"
-msgid "Change _Password"
-msgstr "Jelszó meg_változtatása"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:257
-msgid "Change the unlock password of the password storage keyring"
-msgstr "A jelszótároló kulcstartó feloldási jelszavának módosítása"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:320
-#, c-format
-#| msgid "Are you sure you want to delete the password '%s'?"
-msgid "Are you sure you want to delete the password keyring '%s'?"
-msgstr "Biztosan törölni akarja a(z) „%s” jelszótároló kulcstartót?"
+"No encryption keys were found with which to perform the operation you "
+"requested.  The program <b>Passwords and Encryption Keys</b> will now be "
+"started so that you may either create a key or import one."
+msgstr ""
+"Nem találhatók titkosítási kulcsok, amelyekkel a kért műveletet végre "
+"lehetne hajtani. Elindul a <b>Jelszavak és titkosítási kulcsok</b> program, "
+"amellyel létrehozhat vagy importálhat egyet."
 
 #: ../libcryptui/cryptui-key-chooser.c:173
 msgid "All Keys"
@@ -1083,22 +1098,18 @@ msgid "Notification Messages"
 msgstr "Értesítési üzenetek"
 
 #: ../libseahorse/seahorse-object.c:216
-#| msgid "Sync Keys"
 msgid "Symmetric Key"
 msgstr "Szimmetrikus kulcs"
 
 #: ../libseahorse/seahorse-object.c:219
-#| msgid "Public PGP Key"
 msgid "Public Key"
 msgstr "Nyilvános kulcs"
 
 #: ../libseahorse/seahorse-object.c:222
-#| msgid "Private PGP Key"
 msgid "Private Key"
 msgstr "Magánkulcs"
 
 #: ../libseahorse/seahorse-object.c:225
-#| msgid "Network Credentials"
 msgid "Credentials"
 msgstr "Hitelesítési adatok"
 
@@ -1160,7 +1171,6 @@ msgid "Key Sharing"
 msgstr "Kulcsmegosztás"
 
 #: ../libseahorse/seahorse-prefs.glade.h:5
-#| msgid "Prefere_nces"
 msgid "Preferences"
 msgstr "Beállítások"
 
@@ -1257,12 +1267,6 @@ msgstr "_Csere"
 msgid "Unknown"
 msgstr "Ismeretlen"
 
-#: ../libseahorse/seahorse-validity.c:36
-#: ../pgp/seahorse-pgp-key-properties.c:1188
-msgctxt "Validity"
-msgid "Never"
-msgstr "Soha"
-
 #: ../libseahorse/seahorse-validity.c:38
 #: ../pgp/seahorse-pgp-key-properties.c:1195
 msgid "Marginal"
@@ -1292,33 +1296,6 @@ msgstr "Visszavonva"
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Nem lehet megjeleníteni a súgót: %s"
-
-#: ../libcryptui/cryptui.c:222
-msgid ""
-"No encryption keys were found with which to perform the operation you "
-"requested.  The program <b>Passwords and Encryption Keys</b> will now be "
-"started so that you may either create a key or import one."
-msgstr ""
-"Nem találhatók titkosítási kulcsok, amelyekkel a kért műveletet végre "
-"lehetne hajtani. Elindul a <b>Jelszavak és titkosítási kulcsok</b> program, "
-"amellyel létrehozhat vagy importálhat egyet."
-
-#: ../pkcs11/seahorse-pkcs11-commands.c:108
-#, c-format
-#| msgid "Are you sure you want to delete the password '%s'?"
-msgid "Are you sure you want to delete the certificate '%s'?"
-msgstr "Biztosan törölni akarja a(z) „%s” tanúsítványt?"
-
-#: ../pkcs11/seahorse-pkcs11-commands.c:110
-#, c-format
-#| msgid "Are you sure you want to delete %d passwords?"
-msgid "Are you sure you want to delete %d certificates?"
-msgstr "Biztosan törölni akar %d tanúsítványt?"
-
-#: ../pkcs11/seahorse-pkcs11-certificate.c:107
-#: ../pkcs11/seahorse-pkcs11-certificate-props.c:67
-msgid "Certificate"
-msgstr "Tanúsítvány"
 
 #: ../pgp/seahorse-add-subkey.glade.h:1
 msgid "Expiration Date:"
@@ -1392,12 +1369,6 @@ msgstr "Kulcs visszavonása"
 msgid "_Never expires"
 msgstr "S_oha nem jár le"
 
-#: ../pgp/seahorse-gpgme.c:51
-msgid "Decryption failed. You probably do not have the decryption key."
-msgstr ""
-"A visszafejtés meghiúsult. Valószínűleg nem rendelkezik a visszafejtési "
-"kulccsal."
-
 #: ../pgp/seahorse-gpgme-add-subkey.c:144
 msgid "Couldn't add subkey"
 msgstr "Nem sikerült részkulcsot hozzáadni"
@@ -1432,8 +1403,13 @@ msgstr "Nem sikerült felhasználóazonosítót hozzáadni"
 msgid "Add user ID to %s"
 msgstr "Felhasználóazonosító hozzáadása -> %s"
 
+#: ../pgp/seahorse-gpgme.c:51
+msgid "Decryption failed. You probably do not have the decryption key."
+msgstr ""
+"A visszafejtés meghiúsult. Valószínűleg nem rendelkezik a visszafejtési "
+"kulccsal."
+
 #: ../pgp/seahorse-gpgme-expires.c:58
-#| msgid "Invalid Signature"
 msgid "Invalid expiry date"
 msgstr "Érvénytelen lejárati dátum"
 
@@ -1447,7 +1423,6 @@ msgstr "Nem lehet megváltoztatni a lejárati dátumot"
 
 #: ../pgp/seahorse-gpgme-expires.c:137
 #, c-format
-#| msgid "Expiry for %s"
 msgid "Expiry: %s"
 msgstr "Lejárat: %s"
 
@@ -1505,7 +1480,8 @@ msgstr "Át_méretezés"
 msgid ""
 "This is not a image file, or an unrecognized kind of image file. Try to use "
 "a JPEG image."
-msgstr "Ez nem képfájl vagy típusa nem ismerhető fel. Próbáljon JPEG fájlt használni."
+msgstr ""
+"Ez nem képfájl vagy típusa nem ismerhető fel. Próbáljon JPEG fájlt használni."
 
 #: ../pgp/seahorse-gpgme-photos.c:224
 msgid "All image files"
@@ -1541,7 +1517,6 @@ msgstr "Nem sikerült a részkulcsot visszavonni"
 
 #: ../pgp/seahorse-gpgme-revoke.c:94
 #, c-format
-#| msgid "Revoke %s"
 msgid "Revoke: %s"
 msgstr "Visszavonás: %s"
 
@@ -1604,7 +1579,8 @@ msgstr "Nincsenek az aláíráshoz megfelelő kulcsok"
 msgid ""
 "You have no personal PGP keys that can be used to indicate your trust of "
 "this key."
-msgstr "Nincsenek titkos PGP kulcsai, amelyekkel jelezhetné a bizalmát a kulcsban."
+msgstr ""
+"Nincsenek titkos PGP kulcsai, amelyekkel jelezhetné a bizalmát a kulcsban."
 
 #: ../pgp/seahorse-gpgme-source.c:99
 #, c-format
@@ -1650,7 +1626,7 @@ msgstr ""
 "Érvénytelen kulcsadatok (hiányzó felhasználói azonosítók). Ezt egy jövőbe "
 "állított dátumú számítógép vagy hiányzó önaláírás okozhatja."
 
-#: ../pgp/seahorse-gpgme-source.c:910
+#: ../pgp/seahorse-gpgme-source.c:910 ../src/seahorse-key-manager.c:564
 msgid "Importing Keys"
 msgstr "Kulcsok importálása"
 
@@ -1665,7 +1641,8 @@ msgstr "ElGamal"
 #: ../pgp/seahorse-hkp-source.c:330
 #, c-format
 msgid "Search was not specific enough. Server '%s' found too many keys."
-msgstr "A keresés nem volt elég egyedi. A(z) „%s” kiszolgáló túl sok kulcsot talált."
+msgstr ""
+"A keresés nem volt elég egyedi. A(z) „%s” kiszolgáló túl sok kulcsot talált."
 
 #: ../pgp/seahorse-hkp-source.c:332
 #, c-format
@@ -1772,7 +1749,8 @@ msgstr "<b>_Haladó kulcsbeállítások</b>"
 
 #: ../pgp/seahorse-pgp-generate.glade.h:2
 msgid "A PGP key allows you to encrypt email or files to other people."
-msgstr "A PGP kulcs lehetővé teszi e-mailek vagy fájlok titkosítását mások számára."
+msgstr ""
+"A PGP kulcs lehetővé teszi e-mailek vagy fájlok titkosítását mások számára."
 
 #: ../pgp/seahorse-pgp-generate.glade.h:3
 msgid "Algorithms here"
@@ -1816,17 +1794,17 @@ msgstr "Új PGP kulcs"
 msgid "_Comment:"
 msgstr "_Megjegyzés:"
 
-#: ../pgp/seahorse-pgp-key.c:196
+#: ../pgp/seahorse-pgp-key.c:200
 #: ../pgp/seahorse-pgp-private-key-properties.glade.h:36
 msgid "Private PGP Key"
 msgstr "Titkos PGP kulcs"
 
-#: ../pgp/seahorse-pgp-key.c:199
+#: ../pgp/seahorse-pgp-key.c:203
 #: ../pgp/seahorse-pgp-public-key-properties.glade.h:32
 msgid "Public PGP Key"
 msgstr "Nyilvános PGP kulcs"
 
-#: ../pgp/seahorse-pgp-key.c:565 ../pgp/seahorse-pgp-key-properties.c:1413
+#: ../pgp/seahorse-pgp-key.c:583 ../pgp/seahorse-pgp-key-properties.c:1413
 msgid "Expired"
 msgstr "Lejárt"
 
@@ -1899,12 +1877,6 @@ msgstr "Teljes kulcs exportálása"
 #: ../ssh/seahorse-ssh-key-properties.c:213
 msgid "Couldn't export key."
 msgstr "Nem sikerült exportálni a kulcsot."
-
-#: ../pgp/seahorse-pgp-key-properties.c:1331
-#: ../pgp/seahorse-pgp-key-properties.c:1420
-msgctxt "Expires"
-msgid "Never"
-msgstr "Soha"
 
 #. The key type column
 #: ../pgp/seahorse-pgp-key-properties.c:1381
@@ -2029,7 +2001,7 @@ msgstr "Törlés"
 
 #: ../pgp/seahorse-pgp-private-key-properties.glade.h:24
 msgid "Expire"
-msgstr "Lejár"
+msgstr "Lejárt"
 
 #: ../pgp/seahorse-pgp-private-key-properties.glade.h:25
 #: ../pgp/seahorse-pgp-public-key-properties.glade.h:22
@@ -2080,7 +2052,7 @@ msgstr "Fénykép eltávolítása a kulcsról"
 
 #: ../pgp/seahorse-pgp-private-key-properties.glade.h:38
 msgid "Revoke"
-msgstr "Visszavonás"
+msgstr "Visszavonva"
 
 #: ../pgp/seahorse-pgp-private-key-properties.glade.h:39
 msgid "Sign"
@@ -2163,7 +2135,8 @@ msgstr ""
 
 #: ../pgp/seahorse-pgp-public-key-properties.glade.h:28
 #, no-c-format
-msgid "If you no longer trust that '%s' owns this key, <i>revoke</i> your signature:"
+msgid ""
+"If you no longer trust that '%s' owns this key, <i>revoke</i> your signature:"
 msgstr ""
 "Ha már nem biztos abban, hogy a kulcs „%s” tulajdona, <i>vonja vissza</i> az "
 "aláírását:"
@@ -2210,7 +2183,6 @@ msgstr "K_ulcs aláírása"
 
 #: ../pgp/seahorse-pgp-subkey.c:371
 #, c-format
-#| msgid "Revoke Subkey %d of %s"
 msgid "Subkey %d of %s"
 msgstr "%2$s %1$d részkulcsa"
 
@@ -2230,6 +2202,17 @@ msgstr "A kulcs visszavonásának oka"
 msgid "_Reason:"
 msgstr "_Ok:"
 
+#: ../pgp/seahorse-signer.c:62
+msgid ""
+"You have no personal PGP keys that can be used to sign a document or message."
+msgstr ""
+"Nincsenek dokumentumok vagy üzenetek aláírására használható személyes PGP "
+"kulcsai."
+
+#: ../pgp/seahorse-signer.glade.h:1
+msgid "_Sign message with key:"
+msgstr "Aláírás a kö_vetkező kulccsal:"
+
 #: ../pgp/seahorse-sign.glade.h:1
 msgid "<b>How carefully have you checked this key?</b>"
 msgstr "<b>Mennyire alaposan ellenőrizte ezt a kulcsot?</b>"
@@ -2243,34 +2226,28 @@ msgid "<b>Sign key as:</b>"
 msgstr "<b>Kulcs aláírása mint:</b>"
 
 #: ../pgp/seahorse-sign.glade.h:4
-#| msgid ""
-#| "<i>Casually:</i> means you have done a casual verification that the key\n"
-#| "is owned by the person who claims to own it. For example, you could\n"
-#| "read the key fingerprint to the owner over the phone. "
 msgid ""
 "<i>Casually:</i> means you have done a casual verification that the key is "
 "owned by the person who claims to own it. For example, you could read the "
 "key fingerprint to the owner over the phone. "
-msgstr "<i>Szokásos módon:</i> azaz a megszokott módon ellenőrizte, hogy a kulcs ahhoz tartozik, aki a tulajdonosnak mondja magát. Például beolvashatta a kulcs ujjlenyomatát a tulajdonosnak a telefonba."
+msgstr ""
+"<i>Szokásos módon:</i> azaz a megszokott módon ellenőrizte, hogy a kulcs "
+"ahhoz tartozik, aki a tulajdonosnak mondja magát. Például beolvashatta a "
+"kulcs ujjlenyomatát a tulajdonosnak a telefonba."
 
 #: ../pgp/seahorse-sign.glade.h:5
 msgid "<i>Key Name</i>"
 msgstr "<i>Kulcs neve</i>"
 
 #: ../pgp/seahorse-sign.glade.h:6
-#| msgid ""
-#| "<i>Not at all:</i> means you believe the key is owned by the person who \n"
-#| "claims to own it, but you could not or did not verify this to be a fact."
 msgid ""
 "<i>Not at all:</i> means you believe the key is owned by the person who "
 "claims to own it, but you could not or did not verify this to be a fact."
-msgstr "<i>Egyáltalán nem:</i> azaz elhiszi, hogy a kulcs ahhoz tartozik, aki a tulajdonosnak mondja magát, de nem ellenőrizte ennek valóságalapját."
+msgstr ""
+"<i>Egyáltalán nem:</i> azaz elhiszi, hogy a kulcs ahhoz tartozik, aki a "
+"tulajdonosnak mondja magát, de nem ellenőrizte ennek valóságalapját."
 
 #: ../pgp/seahorse-sign.glade.h:7
-#| msgid ""
-#| "<i>Very Carefully:</i> Select this only if you are absolutely sure that "
-#| "this\n"
-#| "key is genuine."
 msgid ""
 "<i>Very Carefully:</i> Select this only if you are absolutely sure that this "
 "key is genuine."
@@ -2287,21 +2264,18 @@ msgid "I can _revoke this signature at a later date."
 msgstr "Később _visszavonhatom ezt az aláírást."
 
 #: ../pgp/seahorse-sign.glade.h:10
-#| msgid "_Sign Key..."
 msgid "Sign Key"
 msgstr "Kulcs aláírása"
 
 #: ../pgp/seahorse-sign.glade.h:11
-#| msgid ""
-#| "You could use a hard to forge photo identification (such as a passport) \n"
-#| "to personally check that the name on the key is correct. You should \n"
-#| "have also used email to check that the email address belongs to the\n"
-#| "owner."
 msgid ""
 "You could use a hard to forge photo identification (such as a passport) to "
 "personally check that the name on the key is correct. You should have also "
 "used email to check that the email address belongs to the owner."
-msgstr "A kulcson található név helyességének ellenőrzéséhez használhat nehezen hamisítható fényképes azonosítást (például útlevél). Ezen kívül e-mailben is ellenőrizze, hogy az e-mail cím a tulajdonoshoz tartozik."
+msgstr ""
+"A kulcson található név helyességének ellenőrzéséhez használhat nehezen "
+"hamisítható fényképes azonosítást (például útlevél). Ezen kívül e-mailben is "
+"ellenőrizze, hogy az e-mail cím a tulajdonoshoz tartozik."
 
 #: ../pgp/seahorse-sign.glade.h:12
 msgid "_Casually"
@@ -2327,15 +2301,22 @@ msgstr "_Aláíró:"
 msgid "_Very Carefully"
 msgstr "N_agyon alaposan"
 
-#: ../pgp/seahorse-signer.c:62
-msgid "You have no personal PGP keys that can be used to sign a document or message."
-msgstr ""
-"Nincsenek dokumentumok vagy üzenetek aláírására használható személyes PGP "
-"kulcsai."
+#: ../pkcs11/seahorse-pkcs11-certificate.c:107
+#: ../pkcs11/seahorse-pkcs11-certificate-props.c:68
+msgid "Certificate"
+msgstr "Tanúsítvány"
 
-#: ../pgp/seahorse-signer.glade.h:1
-msgid "_Sign message with key:"
-msgstr "Aláírás a kö_vetkező kulccsal:"
+#: ../pkcs11/seahorse-pkcs11-commands.c:108
+#, c-format
+msgid "Are you sure you want to delete the certificate '%s'?"
+msgstr "Biztosan törölni akarja a(z) „%s” tanúsítványt?"
+
+#: ../pkcs11/seahorse-pkcs11-commands.c:111
+#, c-format
+msgid "Are you sure you want to delete %d certificate?"
+msgid_plural "Are you sure you want to delete %d certificates?"
+msgstr[0] "Biztosan törölni akar %d tanúsítványt?"
+msgstr[1] "Biztosan törölni akar %d tanúsítványt?"
 
 #: ../src/seahorse-change-passphrase.glade.h:1
 msgid "Change Passphrase"
@@ -2357,12 +2338,11 @@ msgstr "Új _jelmondat:"
 msgid "Manage your passwords and encryption keys"
 msgstr "Jelszavak és titkosítási kulcsok kezelése"
 
-#: ../src/seahorse.desktop.in.in.h:2
+#: ../src/seahorse.desktop.in.in.h:2 ../src/seahorse-key-manager.c:880
 msgid "Passwords and Encryption Keys"
 msgstr "Jelszavak és titkosítási kulcsok"
 
 #: ../src/seahorse-generate-select.glade.h:1
-#| msgid "<b>_Select the kind of key you wish to create:</b>"
 msgid "<b>_Select the type of item to create:</b>"
 msgstr "<b>_Válassza ki az előállítandó elem típusát:</b>"
 
@@ -2371,9 +2351,116 @@ msgid "C_ontinue"
 msgstr "_Folytatás"
 
 #: ../src/seahorse-generate-select.glade.h:3
-#| msgid "_Create New Key..."
 msgid "Create New ..."
 msgstr "Új létrehozása…"
+
+#: ../src/seahorse-key-manager.c:245 ../src/seahorse-keyserver-results.c:84
+#, c-format
+msgid "Selected %d key"
+msgid_plural "Selected %d keys"
+msgstr[0] "%d kulcs kiválasztva"
+msgstr[1] "%d kulcs kiválasztva"
+
+#: ../src/seahorse-key-manager.c:430 ../src/seahorse-key-manager.c:490
+#: ../src/seahorse-key-manager.c:553 ../src/seahorse-keyserver-results.c:170
+msgid "Couldn't import keys"
+msgstr "Nem sikerült a kulcsok importálása"
+
+#: ../src/seahorse-key-manager.c:435 ../src/seahorse-keyserver-results.c:175
+msgid "Imported keys"
+msgstr "Importált kulcsok"
+
+#: ../src/seahorse-key-manager.c:484
+msgid "Importing keys"
+msgstr "Kulcsok importálása"
+
+#: ../src/seahorse-key-manager.c:507 ../ssh/seahorse-ssh-operation.c:1017
+msgid "Import Key"
+msgstr "Kulcs importálása"
+
+#: ../src/seahorse-key-manager.c:553
+msgid "Unrecognized key type, or invalid data format"
+msgstr "Ismeretlen kulcstípus vagy érvénytelen adatformátum"
+
+#: ../src/seahorse-key-manager.c:747 ../src/seahorse-keyserver-results.c:221
+msgid "_Remote"
+msgstr "Tá_voli"
+
+#: ../src/seahorse-key-manager.c:749
+msgid "Close this program"
+msgstr "A program bezárása"
+
+#: ../src/seahorse-key-manager.c:750
+msgid "_New..."
+msgstr "Ú_j…"
+
+#: ../src/seahorse-key-manager.c:751
+msgid "Create a new key or item"
+msgstr "Új kulcs vagy elem készítése"
+
+#: ../src/seahorse-key-manager.c:752
+msgid "_Import..."
+msgstr "_Importálás…"
+
+#: ../src/seahorse-key-manager.c:753
+msgid "Import from a file"
+msgstr "Importálás fájlból"
+
+#: ../src/seahorse-key-manager.c:755
+msgid "Import from the clipboard"
+msgstr "Importálás a vágólapról"
+
+#: ../src/seahorse-key-manager.c:760 ../src/seahorse-keyserver-results.c:231
+msgid "_Find Remote Keys..."
+msgstr "Táv_oli kulcsok keresése…"
+
+#: ../src/seahorse-key-manager.c:761 ../src/seahorse-keyserver-results.c:232
+msgid "Search for keys on a key server"
+msgstr "Kulcsok keresése egy kulcskiszolgálón"
+
+#: ../src/seahorse-key-manager.c:762
+msgid "_Sync and Publish Keys..."
+msgstr "Kulcsok szinkronizálása és _közzététele…"
+
+#: ../src/seahorse-key-manager.c:763
+msgid "Publish and/or synchronize your keys with those online."
+msgstr "Kulcsainak közzététele és/vagy szinkronizálása az online lévőkkel."
+
+#: ../src/seahorse-key-manager.c:768
+msgid "T_ypes"
+msgstr "_Típus"
+
+#: ../src/seahorse-key-manager.c:768
+msgid "Show type column"
+msgstr "A Típus oszlop mutatása"
+
+#: ../src/seahorse-key-manager.c:770
+msgid "_Expiry"
+msgstr "_Lejár"
+
+#: ../src/seahorse-key-manager.c:770
+msgid "Show expiry column"
+msgstr "A Lejár oszlop mutatása"
+
+#: ../src/seahorse-key-manager.c:772
+msgid "_Trust"
+msgstr "_Megbízhatóság"
+
+#: ../src/seahorse-key-manager.c:772
+msgid "Show owner trust column"
+msgstr "A Megbízhatóság oszlop mutatása"
+
+#: ../src/seahorse-key-manager.c:774
+msgid "_Validity"
+msgstr "Ér_vényesség"
+
+#: ../src/seahorse-key-manager.c:774
+msgid "Show validity column"
+msgstr "Az Érvényesség oszlop mutatása"
+
+#: ../src/seahorse-key-manager.c:951
+msgid "Filter:"
+msgstr "Szűrő:"
 
 #: ../src/seahorse-key-manager.glade.h:1
 msgid "<big><b>First time options:</b></big>"
@@ -2400,6 +2487,7 @@ msgid "To get started with encryption you will need keys."
 msgstr "A titkosítás elkezdéséhez kulcsokra lesz szüksége."
 
 #: ../src/seahorse-key-manager.glade.h:7
+#: ../src/seahorse-keyserver-results.c:236
 msgid "_Import"
 msgstr "_Importálás"
 
@@ -2423,6 +2511,43 @@ msgstr "Érvényesség"
 #: ../src/seahorse-key-manager-store.c:865
 msgid "Expiration Date"
 msgstr "Lejárati idő"
+
+#: ../src/seahorse-keyserver-results.c:194
+msgid "Importing keys from key servers"
+msgstr "Kulcsok importálása kulcskiszolgálókról"
+
+#: ../src/seahorse-keyserver-results.c:223
+msgid "Close this window"
+msgstr "Ezen ablak bezárása"
+
+#: ../src/seahorse-keyserver-results.c:224
+msgid "_Expand All"
+msgstr "Összes _kibontása"
+
+#: ../src/seahorse-keyserver-results.c:225
+msgid "Expand all listings"
+msgstr "Minden lista kibontása"
+
+#: ../src/seahorse-keyserver-results.c:226
+msgid "_Collapse All"
+msgstr "Összes össze_csukása"
+
+#: ../src/seahorse-keyserver-results.c:227
+msgid "Collapse all listings"
+msgstr "Minden lista összecsukása"
+
+#: ../src/seahorse-keyserver-results.c:237
+msgid "Import selected keys to local key ring"
+msgstr "Kiválasztott kulcsok importálása a helyi kulcstartóra"
+
+#: ../src/seahorse-keyserver-results.c:294
+msgid "Remote Keys"
+msgstr "Távoli kulcsok"
+
+#: ../src/seahorse-keyserver-results.c:296
+#, c-format
+msgid "Remote Keys Containing '%s'"
+msgstr "„%s” kifejezést tartalmazó távoli kulcsok"
 
 #: ../src/seahorse-keyserver-search.glade.h:1
 msgid "<b>Key Servers:</b>"
@@ -2539,7 +2664,6 @@ msgstr "A Seahorse projekt honlapja"
 
 #. Top menu items
 #: ../src/seahorse-viewer.c:191
-#| msgid "Filter:"
 msgid "_File"
 msgstr "_Fájl"
 
@@ -2555,17 +2679,9 @@ msgstr "_Nézet"
 msgid "_Help"
 msgstr "_Súgó"
 
-#: ../src/seahorse-viewer.c:196
-msgid "Prefere_nces"
-msgstr "_Beállítások"
-
 #: ../src/seahorse-viewer.c:197
 msgid "Change preferences for this program"
 msgstr "Ezen program beállításainak megváltoztatása"
-
-#: ../src/seahorse-viewer.c:199
-msgid "_About"
-msgstr "_Névjegy"
 
 #: ../src/seahorse-viewer.c:200
 msgid "About this program"
@@ -2591,63 +2707,51 @@ msgstr "Kulcsok exportálása"
 msgid "Couldn't retrieve data from key server"
 msgstr "Nem sikerült az adatokat letölteni a kulcskiszolgálóról"
 
-#: ../src/seahorse-viewer.c:360
+#. Translators: "Copied" is a verb (used as a status indicator), not an adjective for the word "keys"
+#: ../src/seahorse-viewer.c:361
 msgid "Copied keys"
 msgstr "Másolt kulcsok"
 
-#: ../src/seahorse-viewer.c:380
+#: ../src/seahorse-viewer.c:381
 msgid "Retrieving keys"
 msgstr "Kulcsok letöltése"
 
-#: ../src/seahorse-viewer.c:395
+#: ../src/seahorse-viewer.c:396
 msgid "Couldn't delete."
 msgstr "Nem törölhető."
 
-#: ../src/seahorse-viewer.c:429
+#: ../src/seahorse-viewer.c:430
 msgid "Deleting..."
 msgstr "Törlés…"
 
-#: ../src/seahorse-viewer.c:458
+#: ../src/seahorse-viewer.c:459
 #, c-format
 msgid "%s is a private key. Are you sure you want to proceed?"
 msgstr "%s egy személyes kulcs. Biztosan folytatja?"
 
-#: ../src/seahorse-viewer.c:461
+#: ../src/seahorse-viewer.c:462
 msgid ""
 "One or more of the deleted keys are private keys. Are you sure you want to "
 "proceed?"
 msgstr "A törölt kulcsok közül legalább egy személyes. Biztosan folytatja?"
 
-#: ../src/seahorse-viewer.c:494
-msgid "P_roperties"
-msgstr "_Tulajdonságok"
-
-#: ../src/seahorse-viewer.c:495
-#| msgid "Show key properties"
+#: ../src/seahorse-viewer.c:496
 msgid "Show properties"
 msgstr "Tulajdonságok megjelenítése"
 
-#: ../src/seahorse-viewer.c:497
-#| msgid "Delete selected keys"
+#: ../src/seahorse-viewer.c:498
 msgid "Delete selected items"
 msgstr "Kijelölt elemek törlése"
 
-#: ../src/seahorse-viewer.c:501
-#| msgid "_Import..."
+#: ../src/seahorse-viewer.c:502
 msgid "E_xport..."
 msgstr "_Exportálás…"
 
-#: ../src/seahorse-viewer.c:502
-#| msgid "Export public part of key to a file"
+#: ../src/seahorse-viewer.c:503
 msgid "Export to a file"
 msgstr "Exportálás fájlba"
 
-#: ../src/seahorse-viewer.c:503
-msgid "_Copy"
-msgstr "_Másolás"
-
-#: ../src/seahorse-viewer.c:504
-#| msgid "Import keys from the clipboard"
+#: ../src/seahorse-viewer.c:505
 msgid "Copy to the clipboard"
 msgstr "Másolás a vágólapra"
 
@@ -2695,32 +2799,28 @@ msgid "Creating Secure Shell Key"
 msgstr "SSH kulcs előállítása"
 
 #: ../ssh/seahorse-ssh-generate.glade.h:2
-#| msgid ""
-#| "<i>Use your email address, and any other reminder\n"
-#| " you need about what this key is for.</i>"
 msgid ""
 "<i>Use your email address, and any other reminder you need about what this "
 "key is for.</i>"
-msgstr "<i>Használja az e-mail címét és bármely más emlékeztetőt, hogy ne felejtse el, mire való a kulcs.</i>"
+msgstr ""
+"<i>Használja az e-mail címét és bármely más emlékeztetőt, hogy ne felejtse "
+"el, mire való a kulcs.</i>"
 
 #: ../ssh/seahorse-ssh-generate.glade.h:3
-#| msgid ""
-#| "A Secure Shell (SSH) key lets you connect securely to trusted\n"
-#| "computers using SSH, without entering a different password \n"
-#| "for each of them."
 msgid ""
 "A Secure Shell (SSH) key lets you connect securely to trusted computers "
 "using SSH, without entering a different password for each of them."
-msgstr "Az SSH kulcs lehetővé teszi a biztonságos csatlakozást megbízható, SSH-t használó számítógépekhez különböző jelszavak használata nélkül."
+msgstr ""
+"Az SSH kulcs lehetővé teszi a biztonságos csatlakozást megbízható, SSH-t "
+"használó számítógépekhez különböző jelszavak használata nélkül."
 
 #: ../ssh/seahorse-ssh-generate.glade.h:5
-#| msgid ""
-#| "If there is already a computer you want to use this key with, you \n"
-#| "can set up that computer to recognize your key now. "
 msgid ""
 "If there is already a computer you want to use this key with, you can set up "
 "that computer to recognize your key now. "
-msgstr "Ha van olyan számítógép, amelyhez a kulcsot kívánja használni, akkor beállíthatja a számítógépet a kulcs felismerésére. "
+msgstr ""
+"Ha van olyan számítógép, amelyhez a kulcsot kívánja használni, akkor "
+"beállíthatja a számítógépet a kulcs felismerésére. "
 
 #: ../ssh/seahorse-ssh-generate.glade.h:7
 msgid "New Secure Shell Key"
@@ -2763,7 +2863,6 @@ msgid "Couldn't change authorization for key."
 msgstr "Nem sikerült megváltoztatni a kulcs hitelesítését."
 
 #: ../ssh/seahorse-ssh-key-properties.c:127
-#| msgid "Couldn't change passhrase for key."
 msgid "Couldn't change passphrase for key."
 msgstr "Nem sikerült megváltoztatni a kulcs jelmondatát."
 
@@ -2831,7 +2930,6 @@ msgstr "Jelmondat:"
 
 #. Just prompt over and over again
 #: ../ssh/seahorse-ssh-operation.c:762
-#| msgid "Network Password"
 msgid "Remote Host Password"
 msgstr "Távoli gép jelszava"
 
@@ -2874,10 +2972,6 @@ msgstr "Kulcs importálása: %s"
 msgid "Importing key. Enter passphrase"
 msgstr "Kulcs importálása. Írja be a jelmondatot"
 
-#: ../ssh/seahorse-ssh-operation.c:1017
-msgid "Import Key"
-msgstr "Kulcs importálása"
-
 #: ../ssh/seahorse-ssh-source.c:825
 msgid "No private key file is available for this key."
 msgstr "Nem áll rendelkezésre személyeskulcsfájl ehhez a kulcshoz."
@@ -2892,7 +2986,6 @@ msgid "Configuring Secure Shell Keys..."
 msgstr "SSH kulcsok beállítása…"
 
 #: ../ssh/seahorse-ssh-upload.glade.h:1
-#| msgid "<i>eg: fileserver.example.com</i>"
 msgid "<i>eg: fileserver.example.com:port</i>"
 msgstr "<i>például: fájlkiszolgáló.példa.hu:port</i>"
 
@@ -2901,14 +2994,12 @@ msgid "Set Up Computer for SSH Connection"
 msgstr "Számítógép beállítása SSH kapcsolathoz"
 
 #: ../ssh/seahorse-ssh-upload.glade.h:4
-#| msgid ""
-#| "To use your Secure Shell key with another computer that\n"
-#| "uses SSH, you must already have a login account on that \n"
-#| "computer."
 msgid ""
 "To use your Secure Shell key with another computer that uses SSH, you must "
 "already have a login account on that computer."
-msgstr "Másik, SSH-t használó számítógépen SSH kulcs használatához már rendelkeznie kell felhasználói fiókkal az adott gépre."
+msgstr ""
+"Másik, SSH-t használó számítógépen SSH kulcs használatához már rendelkeznie "
+"kell felhasználói fiókkal az adott gépre."
 
 #: ../ssh/seahorse-ssh-upload.glade.h:5
 msgid "_Computer Name:"
@@ -2922,3 +3013,10 @@ msgstr "Bejelentkezési _név:"
 msgid "_Set Up"
 msgstr "_Beállítás"
 
+#, fuzzy
+#~ msgid "_Expire"
+#~ msgstr "Lejár"
+
+#, fuzzy
+#~ msgid "_Revoke"
+#~ msgstr "Visszavonás"
