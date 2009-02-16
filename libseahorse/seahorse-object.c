@@ -225,7 +225,7 @@ recalculate_usage (SeahorseObject *self)
 			desc = _("Credentials");
 			break;
 		case SEAHORSE_USAGE_IDENTITY:
-			desc = _("Identity");
+			desc = C_("This object is a means of storing items such as name, email address, etc. that make up one's digital identity.", "Identity");
 			break;
 		default:
 			desc = "";
